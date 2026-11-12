@@ -1,5 +1,7 @@
 # GO — the offer names what the seat holds: a goal's seat-holders are read from the ledger, and a creation row shows the seat
 
+Reconciled: 2026-11-12, U5d closure — folded **A-32** and **A-33**. Seat changes ship realm-wide (A-32, with presence, jurisdiction and telling built as the test arm), so the build-time deposit of public seats' holders as record-channel claims agrees with the shipped reach. A death is not learned with the seat (A-33): a goal's `seat_holders` may name a holder the person does not yet know is dead, and the offer must not correct him. §4's creation row lists a cohort as a cohort; whether a cohort may be played is not ruled; under A-56 a played cohort would be offered the heavy moves only.
+
 ## Status: PROPOSED
 
 Carries F-PES-GO-03 and F-PES-GO-10 of `audits/16_PESSIMIST_GO.md` (§2.1, §1.5). Lanes IN, CHAR (the

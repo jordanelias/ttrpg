@@ -1,5 +1,7 @@
 # MB · the manager's battle: standing orders, a general's action at each window, a replayable command list, an honest report; one resolver for the commanded and the delegated mode
 
+Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` Part 2) — four rulings folded. (1) **A-3** answers §1: the field returns its end state and the host reads `Won`, `Lost` or `Drawn`; it is no longer listed for Jordan, and Layer 1's "the return type is `Margin`" is narrowed for the field on his word (amendment text owed with A-3, not applied here). (2) **A-1** answers the addendum's §B11 item 1: §5 and §8 are the conforming form (one call at every depth; the estimate is the resolver sampled). (3) **A-4** rewrites §7's second read: an officers' duel is **called by the module at its window** through a `duel` callable the adapter built (nested, depth 1, cap 1, the typed result `NESTING-CAP`), never "resolved by the host": the adapter runs before and after the field, not at a window (`U5b_MB_rulings_in_the_field.md` §3; `U5b_PC_rulings_in_the_fight.md` §1). (4) **A-2**: `officer` and `standing_orders` are columns of the unit row; a unit holds no claim or memory. The module's Command draws (`rally`, an order's obedience) take the commander's two inputs on the one sampler (A-5, A-6, A-7; `U5b_MB_rulings_in_the_field.md` §1). §6's `fortune` discloses the friction draw and decides nothing about it: D-34 is held (`audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md` §7 item 2).
+
 ## Status: PROPOSED
 
 Folded: 2026-11-12 by `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md` (rows B-2, B-3, B-4, B-9, R-10). Nothing here is deleted. The sources read confirm the design: orders few, set before contact and released by a prearranged signal are what a pre-modern commander had (`research/historical/mass_battle_maneuver_sequences_grounding.md` §1 step 5; `…_movement_and_behaviour_grounding.md` E3). Four amendments. (1) **An order takes effect by a draw** (Command and Discipline against an obstacle by kind of order): at once, a tick late, or not at this trigger. The draw is the module's and is made whoever issued the order, so §5's "the module draws nothing on its behalf" becomes "the module draws the same for a standing order, a decider's action and a replayed intervention"; gate 1 (a decider returning `none`: equal outcome and equal draw count) and gate 2 (replay) hold as written. Detail: `26_MASS_BATTLE_maneuver_orders.md` §1. (2) **Triggers**: `enemy_broken` and `in_lull` join §2's set; behaviours `pursue`, `reform`, `feign` join it (same file §2). (3) **The lull between bouts is a window** with three actions of its own, `relieve`, `reform`, `commit` (`26_MASS_BATTLE_cell_scale_and_time.md` §3); §4's two windows inside an engagement stand. (4) **§7's last sentence**: the command-zero rout of a whole army does not stay unreached; it becomes a stand draw per unit (`26_MASS_BATTLE_rout_pursuit_and_giving_ground.md` §1). Also: §1's band is what the land ruling reads (A-57, A-58): a conceded defender is the aggressor's `Won` and loses the ground (`26_MASS_BATTLE_aggression_and_land.md` §2).
@@ -55,8 +57,8 @@ DRAWN otherwise
 
 (after `unopposed` and `invested`, as now). The rule is the first lane's; only its owner moves, from the
 module to the host's one grading function, which is where `combat_degree` reads a scene. `massbattle.py`'s
-`_grade` returns shares and flags and no word for who won. Listed for Jordan in the addendum's §B11
-(item 3) because it extends the combat exemption to the field; the alternative there is a margin.
+`_grade` returns shares and flags and no word for who won. *(Reconciled: answered by Jordan, A-3: an end
+state, won, lost or drawn; the margin alternative is not taken.)*
 
 ### 2. Standing orders on the unit row (R-39)
 
@@ -160,8 +162,10 @@ asks for, and not two calculations that agree on average, which it refuses.
 
 Unit row `officer`: a person id. The host puts him on the typed input with his unit. Three reads, in
 this order of landing: the general's span counts officers (built, `armies.py:204-245`); an officer's
-unit in contact with an enemy officer's unit at a window is a **duel contact**, resolved by the host
-through `combat.round` as `03_PC_duel_round_and_approach.md` §5 specifies, one round a window; an officer
+unit in contact with an enemy officer's unit at a window is a **duel contact**, *(Reconciled, A-4:)*
+resolved **by the module at that window** through the `duel` callable its adapter handed it (the
+`combat.round` role, nested at depth 1 under a cap of 1; `03_PC_duel_round_and_approach_B.md` §4 and
+step 5), one round a window, the two `DuelState`s in the module's loop frame; an officer
 felled or yielded erodes **his unit's** morale by `cascade_morale_hit`, scaled by that unit's own
 discipline (never a flat amount, never the army: the PC lane's borrowed constraint, T-PC-15). The
 engine's command-zero instant rout of a whole army (`battle_loop.py:411-413`) stays unreached.

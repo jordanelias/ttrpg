@@ -1,5 +1,7 @@
 # ARCS 01 — a case is a delta on the realm, with beats and three controls
 
+Reconciled: 2026-11-12, U5d closure — folded **A-44**, **A-50** and **A-51**. A case is a delta on the realm; the realm is now a generated cast of about 94 persons plus kin under a cap (A-44) with some bounded starting state drawn (A-50), and it has run a five-year prologue before play (A-51; the year's length is read from the code: `queries/world_q.py::season_of_year` takes it as `len(season_factor_draw)`, which ships `()`, so no year is declared at the shipped fixtures and the swept arms declare four seasons; five years is five times the declared length, twenty seasons under a four-entry table, and the prologue needs a declared year, `21_PROCEDURAL_C_prologue_and_case_seeds.md` as reconciled). So: the delta is applied to the world **after** generation and before the prologue where it states a standing fact, and after the prologue where it states the opening situation; knowledge seeded "as prehistory through the fold" is seeded inside those five years, not as a single pre-tick pass. The three controls stand; each is read on a fixed generation seed so a beat's absence in the off-arm is not a difference of cast.
+
 ## Status: PROPOSED
 
 Source: `audits/12_ARCS_adjudication.md` §2.2, §5, §6 rows 9 and 16. Extends

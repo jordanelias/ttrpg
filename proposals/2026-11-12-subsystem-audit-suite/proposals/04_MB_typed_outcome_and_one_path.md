@@ -1,5 +1,7 @@
 # MB · a typed outcome, one code path, no hidden inputs
 
+Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` Part 2) — four changes. (1) **A-3**: `FieldOutcome.verdict` is withdrawn; the record carries the end state per side and the host reads the band (`04_MB_manager_battle_one_resolver.md` §1). `ended` and `turns` stand. (2) The list of roles and keywords that leave the menu (§2, fifth bullet) is merged with the pessimist's measured list into one: `U5b_MB_residue.md` §1. (3) §4's `MassBattleInput.command: tuple = (4, 4)` becomes `commanders` (each side's trained `command` score and talent levels, A-6 and A-7; the 1 to 7 span derived by one header table): `U5b_MB_rulings_in_the_field.md` §1. (4) The outcome gains the fields later proposals add to it, each named by its owner: `rallied`, `pursuit_loss` and the dead / taken split (`16_PESSIMIST_MB_rout_has_two_exits.md`; `26_MASS_BATTLE_rout_pursuit_and_giving_ground.md`), `report` and `interventions` (the manager proposal). A-29 (declared floats) leaves §1's quantising of shares at the seam as written. A-1: §2's removal of the two unreached loops is Layer 1 §27.2 conformance, confirmed.
+
 ## Status: PROPOSED
 
 Lane MB (seam edits IN). Carries R-04, R-05, R-08, R-09, R-10, R-15, R-21 of `audits/04_MB_audit.md`
@@ -47,7 +49,7 @@ class SideOutcome:
 
 @dataclass(frozen=True)
 class FieldOutcome:
-    verdict: str               # 'won' | 'lost' | 'drawn'  (attacker's; proposal 04_MB_headcount_grade_and_scale)
+    # (Reconciled, A-3) no `verdict`: the host's `field_degree` reads the band off the two sides' flags
     ended: str                 # 'rout' | 'concession' | 'time'
     turns: int                 # ticks run
     attacker: SideOutcome
@@ -56,7 +58,7 @@ class FieldOutcome:
 
 Shares are integers on the exported body scale (`condition_scale` arrives on the input), so the seam is
 the point where the engine's floats are quantised (`architecture/holonic_ARCHITECTURE.md` §48).
-`__post_init__` refuses a `verdict` or `ended` outside its set.
+`__post_init__` refuses an `ended` outside its set.
 
 Army path: a part is a cohort. Each subformation's surviving fraction is applied to the troops each
 cohort assigned to it (`armyrecord`'s `assigned` rows, carried on `OrderOfBattle` as

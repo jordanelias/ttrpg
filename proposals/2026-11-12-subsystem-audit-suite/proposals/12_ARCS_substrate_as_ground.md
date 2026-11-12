@@ -1,5 +1,7 @@
 # ARCS 03 — the world's substrate as ground: a Site kind, not a gauge
 
+Reconciled: 2026-11-12, U5d closure — folded **A-40** and **A-43**, which answer the two questions this file was held for. S-1: Option A, ground, is ruled (the wearing-down is a real condition of places; one Site per territory; no new entity kind), so the hold is lifted for the world half and the edits land as written, with the wear and the damage bands drawn on the four-band ladder (A-54) and the break rule of `16_PESSIMIST_WR_B_the_calamity_strains_and_breaks.md`. S-2: neither option was taken; at zero Coherence a person keeps seats and goals and cannot be understood by others. The person half's "calibrated, lossy way of speaking" is replaced by `U5d_WR_zero_coherence_unknowable.md` (legibility scales what others read of his reasons, his predictability, his regard and his speech). Stages 7 and 8 of the audit's sequence no longer wait.
+
 ## Status: PROPOSED — held back for Jordan (audit §11, S-1 and S-2). Not ratified by merge.
 
 Source: `audits/12_ARCS_adjudication.md` §4 (M-SUB, M-PERC), §5 stages 7 and 8, §6 row 18.

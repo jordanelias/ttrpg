@@ -1,5 +1,7 @@
 # MB · the squad of named characters on a formation grid: the scale below a mass battle, on the duel round
 
+Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` Part 2) — A-4 and Layer 1 §44.3 folded; the grid, the row rule, the sheet, the outcome and the gates stand. (1) The squad's exchange loop and its per-person `DuelState`s cannot live in a wrapper (a wrapper holds no state, decides nothing and drives no clock, `architecture/holonic_ARCHITECTURE.md:1679-1686`; PC addendum F-PC-19). §3's host becomes a **registered entry**, `modules/mass_battle/squad.py::resolve_squad(inp: SquadInput, rng, *, duel, deciders=None) -> FieldOutcome`, reached by a sixth composition row; it holds the states in its own frame and calls the `duel` callable its adapter built (the `combat.round` role, nested at depth 1 under a cap of 1). `engine/season/seam/wrappers/squad.py` is not created; the scale rule stays in `seam/wrappers/mass_battle.py::resolve` as routing (`U5b_MB_rulings_in_the_field.md` §3). (2) It builds on `03_PC_duel_round_and_approach_B.md` (state in the calling loop's frame), not the first PC proposal. (3) A-3: the band is read by the host off the outcome, as for troops. (4) The three conflicts named at the foot are answered: the scale rule is routing between two entries of one module, not a second engine (A-1); the grid suspension's undecided case is one provider call with frame-local state (A-4) and the in-round consult is admitted by A-9; the carried `DuelState` never reaches the world, so the held seeded-damage step is not decided by it.
+
 ## Status: PROPOSED
 
 Grounded: 2026-11-12 by `audits/24_GROUNDING_GAMES.md` (GM-01 to GM-03; GC-8, GC-9) — Ogre Battle is now sourced as a battle referent (`research/game_precedent_suite/grounding/ogre_battle.md`). Two notes added in place: the stated reason for not adopting "a member's row decides what it does" no longer holds, and "who can be reached" is not established as what the referents share. No edit of the proposal was changed; the choice between the two row rules is the MB lane's.
@@ -82,11 +84,13 @@ What a member brings is on the member:
 
 ### 3. The host (pairing policy; no resolver of its own)
 
-New `engine/season/seam/wrappers/squad.py`, called by the mass-battle provider for a squad field. It
-calls the PC lane's `combat.round` composition role and nothing else in any module.
+*(Reconciled, A-4 / Layer 1 §44.3:)* a registered entry, `modules/mass_battle/squad.py::resolve_squad`,
+reached by its own composition row and handed a `duel` callable (the PC lane's `combat.round` role,
+built by the adapter through `nested_entry`); it calls nothing else in any module. ~~New
+`engine/season/seam/wrappers/squad.py`, called by the mass-battle provider for a squad field.~~
 
 ```
-state: one DuelState per person (the PC proposal's record), held here for the length of the field
+state: one DuelState per person (the PC proposal's record), held in this entry's loop frame for the length of the call
 each exchange (at most FIELD_EXCHANGES, the troop file's header; seed 3, the engine's three phases):
     for each standing member, in initiative order (the round's own; the host adds none):
         target = his standing order's target word, resolved on the grid:
@@ -142,12 +146,12 @@ on `field.won` needs (first audit §5.5).
 | file (owner) | edit |
 |---|---|
 | `engine/season/seam/wrappers/mass_battle.py` (IN) | the scale rule; dispatch to the squad host |
-| `engine/season/seam/wrappers/squad.py` (IN, new) | the host above; reaches combat by `composition.require('combat.round')` |
+| `modules/mass_battle/squad.py` (MB, new) *(Reconciled)*; `references/module_contracts.yaml` (a composition row `mass_battle.resolve_squad`); `engine/season/queries/inputs.py` (`SquadInput`) | the entry above; it is handed `duel`, which the adapter resolves by `composition.require('combat.round')` through `nested_entry` |
 | `engine/season/rosters.yaml: record_kinds` (IN) | the standing-order Record's `subject_matter` gains `places` and per-person `standing_orders` |
 | `references/troops.yaml: deployment` (MB) | `field_exchanges`, the grid's `rows` and `files` |
 | `engine/engine_params/battle_orders.json` via `tools/export_battle_orders.py` (MB) | the squad's `conditions` and `responses` closed sets |
 | `modules/combat/` (PC) | nothing beyond the PC proposal's round entry |
-| `modules/mass_battle/` (MB) | nothing |
+| `modules/mass_battle/` (MB) | the new `squad.py` only; the cell engine is untouched |
 
 ## Gate (execution artifacts)
 
@@ -160,8 +164,8 @@ on `field.won` needs (first audit §5.5).
    (asserted on the trace, with a count of exchanges checked, so the loop cannot pass by not running).
 4. Delegated against commanded: a decider that returns each member's standing-order response gives the
    same outcome and the same draw count as no decider.
-5. `git grep -n "modules.combat" engine/season/seam/wrappers/squad.py` prints nothing (the role, not an
-   import).
+5. `git grep -n "modules.combat" modules/mass_battle/squad.py engine/season/seam/wrappers/mass_battle.py`
+   prints nothing (the role, not an import).
 6. A side with one cohort member is not a squad: the field goes to `resolve_field`.
 
 ## Falsifier

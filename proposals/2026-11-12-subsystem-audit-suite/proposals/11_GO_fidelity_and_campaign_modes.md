@@ -1,5 +1,7 @@
 # GO — one mode, three fidelities, one campaign frame: what the mode documents become in code
 
+Reconciled: 2026-11-12, U5d closure — folded **A-49**, **A-48**, **A-1** and **A-53**. §4 built E1 (the truth is never shown) "because it needs nothing"; A-49 rules E2 on top of it: after a line ends and no continuation is taken, the client may show the developer's chain (`harness/chronicle.py`'s reading of the log); never in play, and never when a continuation would carry the truth to the next seat. Step added to §4: one host-side reading, gated on the line's end and on no continuation. §3's display cap stays the client's constant; triage of the question list is player gameplay (A-48). A world that fails its checks is replaced by the next seed by default, with play-it behind a setting (A-53), stated in the campaign frame.
+
 ## Status: PROPOSED
 
 Carries `audits/11_GO_audit_addendum_B.md` §B3.4, §B3.5, §B3.7 and resolutions R56, R60–R65. Lane: GO

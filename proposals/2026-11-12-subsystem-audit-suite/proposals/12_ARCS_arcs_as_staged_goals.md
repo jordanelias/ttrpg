@@ -1,5 +1,7 @@
 # ARCS 02 — a counter becomes a resolve: staged goals armed by what a person learns
 
+Reconciled: 2026-11-12, U5d closure — folded **A-47** (a threshold may open a mandatory scene, never decide it), **A-16** and **A-24**. Kept: a counter becomes stages of the holder's goal, each armed by a claim in his own ledger; a stage names no act and no outcome. Added: when a goal's last stage is armed the holder's next question on that goal is **mandatory** (it cannot be passed over for another; for a player it must be answered, A-48), so the world can corner a character; what he then does is his choice among the offered acts and its result is the drawn band. Step rewritten: the stage row gains `opens: mandatory | ordinary` (default `ordinary`), read at the one formation site; the gate for ARC-47 gains an arm in which the armed stage's question is first on her slate in every seed while her act and its band vary across seeds. Murder as an own-motive act is lawful, rarely (A-16), so NPC-088's and ARC-31's last stages may arm a killing; its gate and its draw are `22_HAPPENINGS_C_a_killing_is_a_crime_someone_commits.md`'s.
+
 ## Status: PROPOSED
 
 Source: `audits/12_ARCS_adjudication.md` §4 (M-LATENT, M-AIM), §5 stage 5, §6 row 1, §9 (c1, c2).

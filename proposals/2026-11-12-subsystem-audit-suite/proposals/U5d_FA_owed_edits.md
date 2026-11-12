@@ -6,7 +6,7 @@ Author: U5d closure lane (Fable), 2026-11-12. Carries rows of `audits/06_FA_audi
 R-16, R-18, R-21), `audits/06_FA_audit_addendum_B.md` §B6.1 (R-27, R-29) and `audits/16_PESSIMIST_FA.md`
 (F-PES-FA-02's detained officer, F-PES-FA-08, F-PES-FA-09, F-PES-FA-11), under
 `unified/DECISIONS_ANSWERED.md` A-19, A-22, A-23, A-35, A-36 and A-42. Each section is one ordered,
-executable item: owner, edit, gate, falsifier, movers, dependencies. Land order: §7 (no code), §8, §9,
+executable item: owner, edit, gate, falsifier, movers, dependencies. Land order: §7 (no code), §10, §8, §9,
 §2, §3, §1, §4, §6, §5.
 
 ## What it changes in `engine/season/` at runtime
@@ -133,6 +133,20 @@ Gate: `python -m engine.season.harness.register --requirements` still loads.
   withdraw it.
 - **Falsifier.** The Record left with no live holder.
 - **Movers.** Runs with a succession after an `issue`. Declared.
+
+## §10 — a seat exists whether or not it is filled (F-PES-GAME-13)
+
+- **Owner.** `engine/season/harness/populated.py::build_realm` (`:1014`), where an `Office` is minted
+  with its first holder (`:1740`, `:1801`).
+- **Edit.** Every row of `offices.yaml: seats` is built as an `Office` at build, seated where its holder
+  is in the cast and vacant where he is not (a cast cap, a generated cast that omits him, a death in the
+  prologue). A vacant seat is offered by `world_q.vacancies` as any other.
+- **Gate.** `build_realm(0, cap=0)` holds one `Office` per `offices.yaml` row and no seat-`hold` (the
+  GAME pessimist's `x5_extremes.py 0 3` line reads `offices=0` today).
+- **Falsifier.** A seat row with no `Office` in any built world.
+- **Movers.** None at the shipped cast (every row has its holder); worlds built under a cap or by the
+  generated cast (A-44) move, declared.
+- **Depends on.** `21_PROCEDURAL_B_cast_and_seats.md` reads the same rows.
 
 ## NERS (E last)
 

@@ -2,7 +2,7 @@
 
 ## Status: REFERENCE (companion to `DECISIONS_FOR_JORDAN.md`; resolves nothing at runtime; not canon)
 
-**Every decision except D-34 and D-35 is answered or ladder-closed (2026-11-12); the third column shows the answer taken, not a recommendation. `DECISIONS_ANSWERED.md` governs. Full context, options and costs for each line are in `DECISIONS_FOR_JORDAN.md` under the same id.**
+**Every decision is answered or ladder-closed (2026-11-12); the third column shows the answer taken, not a recommendation. `DECISIONS_ANSWERED.md` governs. Full context, options and costs for each line are in `DECISIONS_FOR_JORDAN.md` under the same id.**
 
 | id | decision | status and answer taken |
 |---|---|---|
@@ -39,8 +39,8 @@
 | D-31 | Swearing to a seat | LADDER (ladder table) — B / B / A (a drawn and seen crisis of faith; a drawn scruple; swearing to a seat a draw against the seat) |
 | D-32 | Construing a contract | ANSWERED (A-27) — A: his own interest |
 | D-33 | Tie and knot | ANSWERED (A-28) — A: split |
-| D-34 | Luck in battle | OPEN (held) — held for the mass-battle history adjudication (`audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md`) |
-| D-35 | Numbers in the melee dice | OPEN (held) — held for the mass-battle history adjudication (`audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md`) |
+| D-34 | Luck in battle | ANSWERED (A-59) — B, plus: order friction from command; unit prowess from troops, equipment and subformation; no static side value |
+| D-35 | Numbers in the melee dice | ANSWERED (A-60) — A, through frontage, depth and endurance |
 | D-36 | Organising verbs | LADDER (ladder table) — A: three organising verbs |
 | D-37 | Integer state | ANSWERED (A-29) — B: declared floats now |
 | D-38 | Port randomness | ANSWERED (A-30) — A: one draw per key |

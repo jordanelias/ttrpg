@@ -1147,7 +1147,7 @@ agrees.
 ## Group 9 · Battle balance: luck, numbers and organisation
 
 ### D-34 · Luck in battle: decides it, or tips it · MB, DICE
-**OPEN** — held for the mass-battle history adjudication (`audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md`)
+**ANSWERED** (A-59, Jordan): B, with order friction a function of command (learned skill plus social and mental attributes) and each unit's own prowess from troops, equipment and subformation tactics; a static side-wide value is misleading
 
 
 **The situation.** Each army's dice in a battle are multiplied by one hidden random factor drawn before
@@ -1181,7 +1181,7 @@ standing orders and composition (D-01, D-02) decide much.
 `audits/16_PESSIMIST_DICE.md` §6.
 
 ### D-35 · Do troop numbers stay in the melee dice? · MB
-**OPEN** — held for the mass-battle history adjudication (`audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md`)
+**ANSWERED** (A-60, Jordan): A, numbers act through frontage, depth and endurance
 
 
 **The situation.** Your directive of 2026-07-08 says battle pools come "solely from the subunit troop type,

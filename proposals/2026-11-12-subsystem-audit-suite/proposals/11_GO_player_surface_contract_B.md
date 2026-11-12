@@ -1,5 +1,7 @@
 # GO — the player-surface contract, B: four readings and one scene pair, for every subsystem
 
+Reconciled: 2026-11-12, U5d closure — folded **A-48** (the slate is a list of questions for the player; NPCs take the first), **A-9** (a turn is a short sequence), **A-47**, **A-43** and **A-1**. §1 (R77: "the Scene Slate is `View.questions` in attention order with the scene budget; no second generator") stands for the generator and gains the choice: the player is offered the ordered list and picks which questions to attend within the budget; an NPC takes the first (`question_aggregation_rule = "first"` stays the NPC's rule). A question opened by a threshold is marked mandatory and cannot be passed over (A-47). The scene pair carries a scene's steps in the chooser's order, a step able to hang on the band of the one before (A-9). Auto-resolve is the same call without a decider (A-1), as §6 has it. A shown person carries a legibility band and, at low legibility, no reasons (`U5d_WR_zero_coherence_unknowable.md`). The player/NPC difference A-48 introduces is confined to which question is attended; the resolver is one.
+
 ## Status: PROPOSED
 
 Supersedes `11_GO_player_surface_contract.md` (SURF). Carries `audits/11_GO_audit_addendum_B.md`

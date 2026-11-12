@@ -1,5 +1,7 @@
 # GO — the float contract: one accumulation rule, one owner for each transcendental, and a recorded log
 
+Reconciled: 2026-11-12, U5d closure — folded **A-29** (declared floats now). Part C's proposed reading is the ruled one: Layer 1 step 13 is amended to name the float contract (text owed, drafted by the unification stage, not applied by a suite lane), integer state stays possible later, and the audit's §11 survivor is closed. Parts A and B land as written. Consequence recorded for the save: a save is a state snapshot (`U5d_GO_owed_edits.md` §1).
+
 ## Status: PROPOSED
 
 Carries audit finding F-GO-02 and F-GO-12 (`audits/11_GO_audit.md`). Lane: GO, IN (PC and MB route

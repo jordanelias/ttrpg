@@ -1,5 +1,7 @@
 # MB · the headcount field: one survivor share, one scale, a drawn field
 
+Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` Part 2) — three rulings folded. (1) **A-3**: the field returns its end state and the host reads the band; the module-side `verdict` this file adds to `_grade` is withdrawn in favour of `04_MB_manager_battle_one_resolver.md` §1 (`_grade` returns shares and the `routed` / `conceded` flags; `seam/ladder.py::field_degree` reads `Won`, `Lost` or `Drawn` by the same three-line rule stated below). The rule, the `Drawn` band, the one share and the one scale stand. (2) **A-57, A-58**: on `Drawn` the defender keeps the land; this file's "no mover; nobody arrives" is kept and is its own choice (`26_MASS_BATTLE_aggression_and_land.md` §2); on `Won` onto land another holds the title and its seats pass by `U5d_FA_land_and_seats_pass_on_a_won_march.md`, after this file's writes. (3) **A-4 and the squad**: `field_subunits="person"` stays the arm for a side of persons facing troops; a field of two sides of named persons only goes to the squad entry (`U5b_MB_rulings_in_the_field.md` §3). `field_walls_dr=3` keeps its value and changes its unit when `16_PESSIMIST_MB_partition_and_the_pair_rule.md` edit 3 lands (walls as dice on the attacker's roll, not armour subtracted from damage); the module's dice are the one sampler (A-5; same file §1).
+
 ## Status: PROPOSED
 
 Folded: 2026-11-12 by `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md` (rows R-10, R-7, R-2, S-1). Nothing here is deleted. (1) **The three-valued verdict is the historical definition of a result** (one side "finally broke and fled", or neither did: `research/historical/mass_battle_casualties_and_results_grounding.md` A11, D4) and is what rulings A-57 and A-58 read: on a march onto land another holds, `won` passes the land and its seats, `drawn` leaves the defender holding, `lost` takes nothing in either direction (`U5d_FA_land_and_seats_pass_on_a_won_march.md`; `26_MASS_BATTLE_aggression_and_land.md` §2). A conceded defender is `won` for the aggressor under the rule in this file and so loses the ground. (2) **On `Drawn`, "no mover" stands**: A-58 settles the land and does not say where the aggressor's army then is; this file's write is kept and that question is listed open, not assumed. (3) **A drawn bout is not yet a drawn battle**: with `max_bouts` above 1 the wrapper fights again in the same scene and returns one band (`26_MASS_BATTLE_cell_scale_and_time.md` §3); at 1, this file is unchanged. (4) The one weight-to-troops owner puts season armies at 60 to 900 men, which is what fixes the cell's scale at sixteen men (same file §1). (5) The measured loser-to-winner loss of this path can be read against Krentz's table as a ratio (`26_MASS_BATTLE_calibration_targets.md` T-2).
@@ -48,7 +50,7 @@ step 5, R-03 step 4 (`Invested` is already a band nobody wins; the module alread
 
 - `_grade(unit_a, unit_b)`: delete the `by_troops` parameter and its `else` branch. Both shares are
   `unit.hp / max(1.0, unit.hp_max)`.
-- `_grade` returns `verdict` in place of `attacker_wins` and `degree`:
+- *(Reconciled, A-3:)* `_grade` returns each side's share and its `routed` / `conceded` flags, and **no** `verdict`; the rule below is evaluated by the host's `field_degree`, where `combat_degree` reads a scene. ~~`_grade` returns `verdict` in place of `attacker_wins` and `degree`:~~
 
   ```
   a_out = unit_a.routed or unit_conceded(unit_a)
@@ -81,10 +83,10 @@ H-354 closed by the `Drawn` band; H-359 `default:` → `person` shipped; H-308 �
 **`engine/season/rosters.yaml`**, **`verb_table.yaml`**: the field-degree band roster gains `Drawn`;
 `march` gains a `Drawn` row: writes `(Person, body)`, emits `field.drawn`. No arrival kind.
 
-**`engine/season/seam/ladder.py::field_degree`**: reads `result["verdict"]` (`won`, `lost`, `drawn`),
+**`engine/season/seam/ladder.py::field_degree`**: *(Reconciled, A-3:)* reads the two sides' `routed` and `conceded` flags off the typed outcome and applies the rule above (`Won`, `Lost`, `Drawn`),
 after `unopposed` and `invested`.
 
-**`engine/season/seam/wrappers/mass_battle.py::resolve`**: lifts `verdict` to the top level in place of
+**`engine/season/seam/wrappers/mass_battle.py::resolve`**: *(Reconciled:)* lifts the typed outcome's two sides in place of
 `attacker_wins`; `winner` is `claimants`, `other` or `[]`. `field_estimate` tallies four bands.
 
 **`engine/season/loop/effects_combat.py::_eff_march`**

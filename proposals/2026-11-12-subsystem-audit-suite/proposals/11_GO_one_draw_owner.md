@@ -1,5 +1,7 @@
 # GO — one draw owner: a single uniform primitive, owned samplers, one constructor
 
+Reconciled: 2026-11-12, U5d closure — folded **A-30** (port randomness: one draw per key; no recorder) and **A-5** (the bell curve everywhere; the port carries one sampler). Kept: one constructor (`draw.seeded`), every unseeded fallback refuses (R6, R8). Withdrawn: the steps that re-specify GO-16 as a recorder of the one primitive and that test the port by replay (R7, R9); the port implements the same keyed hash as the oracle, so there is nothing to record. "Owned samplers as functions of one uniform" narrows to the one sampler A-5 leaves (`roll_net_continuous`'s family); the whole-dice samplers are deleted with the exact-odds table, not ported. The carrying text for the keyed draw is `16_PESSIMIST_GO_keyed_draw_no_recorder.md`; the Layer 1 row (`04` §C.12, "a seeded `RandomNumberGenerator` threaded like `World`") is rewritten by the ruling (text owed, not applied). One re-pin of every seeded result, declared.
+
 ## Status: PROPOSED
 
 Carries audit findings F-GO-03 and part of F-GO-01 (`audits/11_GO_audit.md`). Lane: GO, IN (PC and MB

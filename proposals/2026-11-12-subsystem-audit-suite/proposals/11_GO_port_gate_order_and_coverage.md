@@ -1,5 +1,7 @@
 # GO — the port gate: what it freezes, in what order, and what it must cover
 
+Reconciled: 2026-11-12, U5d closure — folded **A-30**, **A-29** and **A-5**. GO-16 (the draw recorder) is not built: §2's order drops it and GO-08 loses the draw-log digest and gains draw vectors (`16_PESSIMIST_GO_keyed_draw_no_recorder.md`); the pins gain the surface block of `16_PESSIMIST_GO_surface_pins.md`. The freeze of §1 is of contracts; the behaviour pins are re-recorded once for the keyed draw and once for the one sampler (A-5 moves every season hash), each a declared mover named in the card. §3's module pins take inputs built by the seam, with the mass battle returning an end state (A-3).
+
 ## Status: PROPOSED
 
 Carries audit findings F-GO-01, F-GO-04, F-GO-05, F-GO-06 and the mass-battle part of F-GO-08

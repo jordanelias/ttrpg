@@ -1,5 +1,7 @@
 # GAME — the propagation reading counts what moved, not what was written about
 
+Reconciled: 2026-11-12, U5d closure — folded **A-15**, **A-19** and **A-57 / A-58**: the game gate's clauses (`person.died` and `tenure.closed` among the causes of another's executed act; the played skeleton differing between seeds) now have producers the rulings order: natural death, the deed race for an empty throne, and a won march passing land and seats. The reading gains one column, tenure changes by cause (death, term, revocation, claim, conquest). No other step changes.
+
 ## Status: PROPOSED
 
 Source: `audits/16_PESSIMIST_GAME.md` F-PES-GAME-01, F-PES-GAME-02, §1.1, §1.2. Read at `4995824`.

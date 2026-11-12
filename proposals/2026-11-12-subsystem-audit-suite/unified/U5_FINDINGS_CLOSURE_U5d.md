@@ -421,3 +421,171 @@ Carriers: **STRAND** = `09_WR_strand_conclusion.md`; **INSTR** = `09_WR_story_in
 | §5, §6, §7 lists | false N-lines; premises; stories | RESOLVED-BY | none owed beyond the rows above | — |
 | §8 (items listed for other lanes) | illness not yet graded; the lattice flip a fixed-function collapse | RESOLVED-BY | PES-WR-C; PES-WR-B edits 1–2 before MOTION edit 1's flip | — |
 
+---
+
+# Part 4 — GO (the port gate and the player surface)
+
+Carriers: **DRAW** = `11_GO_one_draw_owner.md`; **FLOAT** = `11_GO_float_contract.md`; **GATE** =
+`11_GO_port_gate_order_and_coverage.md`; **SURF** = `11_GO_player_surface_contract.md` (superseded);
+**SURF-B** = `11_GO_player_surface_contract_B.md`; **MODES** = `11_GO_fidelity_and_campaign_modes.md`;
+**REF** = `11_GO_design_reference_disposition.md`; **TEXT** = `11_GO_pointer_and_stale_text_resolutions.md`;
+**KEYED** = `16_PESSIMIST_GO_keyed_draw_no_recorder.md`; **PINS** = `16_PESSIMIST_GO_surface_pins.md`;
+**HELD** = `16_PESSIMIST_GO_the_offer_names_what_is_held.md`; **WHY** =
+`16_PESSIMIST_GO_a_witness_may_connect_what_he_holds.md`; **OWED-GO** = `U5d_GO_owed_edits.md` (written
+by this lane).
+
+## 4.1 `audits/11_GO_audit.md`
+
+| id | claim (one line) | disposition | carrier · section | evidence |
+|---|---|---|---|---|
+| F-GO-01 | the pinned slices barely enter the two largest modules | RESOLVED-BY | GATE §3 (R1); PINS (the surface block) | combat entered 0/2/4 times, a fought field 0/0/1 (E4) |
+| F-GO-02 | the float contract is unstated; Layer 1 and the plan disagree | RESOLVED-BY | FLOAT A, B, C as reconciled (A-29: declared floats now; the Layer 1 text for step 13 is owed, not applied) | `04:1130`; 1,245 floats folded a season |
+| F-GO-03 | draws are built in two places; replay never tests the port's samplers | RESOLVED-BY | KEYED (A-30: one draw per key, no recorder) with DRAW as reconciled (one constructor and one sampler kept; the recorder and replay withdrawn) | `combat.py:397` (E4) |
+| F-GO-04 | 91 mass-battle tunables read from the environment and exported nowhere | RESOLVED-BY | GATE §5 (R10) | the audit's count |
+| F-GO-05 | halts have no portable form; GO-10 covers four sites | RESOLVED-BY | GATE §4 (R11) | 172 in-loop raises |
+| F-GO-06 | the gate freezes behaviour while the game is being invented; two edges wrong | RESOLVED-BY | GATE §1, §2 (R12, R13, R14) | — |
+| F-GO-07 | what the player is shown has an owner for the choice and none for the reason or the result | RESOLVED-BY | SURF-B §1–§4 (supersedes SURF §1–§4) | — |
+| F-GO-08 | PLAYABLE exists at one seam | RESOLVED-BY | SURF-B §6 (corrected by F-GO-18: two kinds of play) as reconciled (A-9: a turn is a short sequence); GATE §3 | — |
+| F-GO-09 | no save; the canonical encoding cannot rebuild a world | RESOLVED-BY | OWED-GO §1 (R44's snapshot, as a plan with a round-trip gate; A-29 makes a save a state snapshot and A-30 keeps a seed a world) | `state/world.py:390`; no decoder (grep) |
+| F-GO-10 | stale and contradictory text at the pointers a porter reads first | RESOLVED-BY | TEXT 1–13 | the audit's table |
+| F-GO-11 | the digest test's control half is spent | RESOLVED-BY | TEXT 11 (R32) | `test_go07_canonical_digest.py:282-311` `[not re-opened]` |
+| F-GO-12 | the determinism controls vary the hash seed, not the interpreter | RESOLVED-BY | FLOAT (removes the cause at its owner); no guard (§0.1 pt 5) | the audit's E5: no drift reproduced at seed 0 |
+| GO-07, GO-13, GO-14 | listed closed; verified closed | STALE-FALSE-POSITIVE | none owed (GO-07's test trimmed by TEXT 11) | E3, E5, E8 |
+| GO-09, GO-11, GO-01, GO-05 | open; early landings | RESOLVED-BY | GATE §2 (R13, R14); TEXT 8, 9 | — |
+| GO-10, GO-12, GO-08, GO-15 | open; under-scoped or mis-shaped | RESOLVED-BY | GATE §4, §5, §3, §1; DRAW (R8: every unseeded fallback refuses) | — |
+| GO-16 | the draw recorder; premise false | SUPERSEDED | A-30: not built; KEYED | PES-GO §1.1 |
+| GO-06 | cross-repo reader, held | RESOLVED-BY | none owed (correctly held; another repository) | — |
+| ED-1054 | stale navigation open since 2026-06-30 | RESOLVED-BY | TEXT (R35: closed; the banners are its resolution) | — |
+| Strategy Part VIII items 1–8 (R36–R43) | open items | SUPERSEDED | closed by the ladder in the audit (the Key substrate retired; the oracle by ED-1050; no stat vector; §C.12) | R42 `[UNVERIFIED]` in the audit: stays marked |
+| R1, R10–R14 | pins; tunables; halts; freeze; edges | RESOLVED-BY | GATE §1–§5 | — |
+| R2, R3, R4 | float sums; transcendentals; "slice 3" | RESOLVED-BY | FLOAT A, B | — |
+| R5, §11 survivor | step 13's "integer domain" | SUPERSEDED | A-29 (declared floats now; integer state stays possible); FLOAT C | — |
+| R6, R8 | one constructor; fallbacks refuse | RESOLVED-BY | DRAW | — |
+| R7, R9, R33 | replay of the port's samplers; what GO-16 records; "statistical parity" | SUPERSEDED | A-30 and A-5: the port implements the same keyed hash and the one sampler; nothing is recorded or replayed | — |
+| R15–R20 | offer rows; `explain`; aftermath; scar Events; "a player must be able to"; PLAYABLE | SUPERSEDED | by SURF-B (R50–R57, R72–R78), which corrects R17 and R20 | addendum §B6.2 |
+| R21, R36–R43, R47 | superseded or irrelevant items | RESOLVED-BY | none owed | — |
+| R22–R32, R34, R35 | pointer and stale text | RESOLVED-BY | TEXT 1–13 | — |
+| R44 | no save | RESOLVED-BY | OWED-GO §1 | — |
+| R45, R46 | the UI design set; "witnessed" fidelity | RESOLVED-BY | SURF-B; MODES §2 (R62 refines R46) | — |
+| §13 arcs represented today (ARC-R16, ARC-25, -36, -38, NPC-012, -033, -007; ARC-47, -R19, EMG-C2 as epistemics) | the world acts unattended; hidden quantities | STALE-FALSE-POSITIVE | none owed (represented) | 749 acts, 13,379 Events a season (E3) |
+| §13 ARC-R16 summary, ARC-46 history, ARC-24 | readings a person lacks | RESOLVED-BY | SURF-B §3–§4 (`receipt`, `account`); SURF-B §2 for a history over his own claims | E7 |
+| §13 ARC-14, ARC-17 ("a single threshold stat", "a fixed lookup") | wrongly stated (a player/NPC fork) | RESOLVED-BY | restated by the audit; A-47 keeps the threshold as the opener of a mandatory scene, never the decider | — |
+| §13 "players must be able to X" (53 needs), the 16 `WAITS-ON-PLAYER` cases | per verb | RESOLVED-BY | SURF-B §2 (`OFFER-CONTAINS`); each act is its verb lane's | 23 of 67 verbs execute (E10) |
+| §13 ARC-09, NPC-088 and others cross-listed | not GO's | SUPERSEDED | U5a (CORE, CHAR) | — |
+| §14 (capability surface; R31) | may a field bind to an attribute | RESOLVED-BY | TEXT 10 | `descriptors.json` |
+
+## 4.2 `audits/11_GO_audit_addendum_B.md`
+
+| id | claim (one line) | disposition | carrier · section | evidence |
+|---|---|---|---|---|
+| F-GO-13 | the UI set's content-level half is not in the tree | RESOLVED-BY | REF (R48: not reconstructed; the oracle's readings are the specification) | — |
+| F-GO-14 | the newest UI document carries two dead tracks; its repair plan stopped | RESOLVED-BY | REF (R49) | — |
+| F-GO-15 | no shared surface vocabulary; six lane dialects | RESOLVED-BY | SURF-B (R50) | — |
+| F-GO-16 | a person cannot read what his own act came to | RESOLVED-BY | SURF-B §3 (`receipt`), with the measure corrected by F-PES-GO-11 (6 to 8%, three inquiry verbs) | — |
+| F-GO-17 | `AftermathRow.own_act` cannot be computed | RESOLVED-BY | SURF-B §4 (R52) | — |
+| F-GO-18 | two kinds of play; two choice surfaces missed | RESOLVED-BY | SURF-B §6 (R53, R54) | — |
+| F-GO-19 | the offer is three to five times the legible size | RESOLVED-BY | SURF-B §2 (R55); MODES §3 (R56) as reconciled (A-48: the player triages a list of questions) | up to 544 rows (F-PES-GO-09) |
+| F-GO-20 | the Godot specification contradicts Layer 1 at five points | RESOLVED-BY | REF edit 1 (R66–R71) | — |
+| F-GO-21 | two opposite answers to "what does the player know" | RESOLVED-BY | REF (R58, R59); the end-of-campaign half is A-49 | — |
+| R48–R78 | thirty-one resolutions | RESOLVED-BY | SURF-B (R50–R55, R57, R72–R74, R76–R78), MODES (R56, R60–R65), REF (R48, R49, R58, R59, R66–R71, R75) | — |
+| R77 | the Scene Slate has no generator | SUPERSEDED | A-48: the slate is a list of questions offered to the player; NPCs take the first; SURF-B §1 as reconciled | — |
+| §B6.3 survivor | may the end of a campaign show what the person never knew | SUPERSEDED | A-49 (reveal after the line ends and no continuation is taken; never in play); MODES §4 as reconciled (E2 added on top of E1) | — |
+
+## 4.3 `audits/16_PESSIMIST_GO.md`
+
+| id | claim (one line) | disposition | carrier · section | evidence |
+|---|---|---|---|---|
+| F-PES-GO-01 | the parity contract cannot see the player's surface | RESOLVED-BY | PINS | — |
+| F-PES-GO-02 | GO-16 is a false N-line | RESOLVED-BY | KEYED (A-30) | PES-GO §1.1 cut |
+| F-PES-GO-03 | the offer names persons the seat does not know | RESOLVED-BY | HELD §1–§3 (seat news ships realm-wide, A-32) | `seat_holders` |
+| F-PES-GO-04 | "why" is `None` by construction | RESOLVED-BY | WHY | `Seen.why` |
+| F-PES-GO-05 | believed odds answer on 0.8% of candidates | RESOLVED-BY | `10_DICE_believed_odds_have_a_prior.md` (U5a's; the pessimist's three edits listed for CHAR and DICE); OWED-GO §2 records the order | — |
+| F-PES-GO-06 | what a person learns of others' acts is nothing for most | RESOLVED-BY | WHY; `18_DETERMINISM_notice_is_a_draw.md` (U5a) | 57 to 62% |
+| F-PES-GO-07 | the offer is half inert | RESOLVED-BY | `16_PESSIMIST_CORE_a_refusal_is_remembered.md`, `16_PESSIMIST_FI_D_withhold_what_has_no_product.md` (U5a, U5c); GO adds no filter (resolution 5) | 21% of acts on fifteen rows |
+| F-PES-GO-08 | PLAYABLE's reach is one person's one verb | RESOLVED-BY | SURF-B §6; "one code path" shown for all 83 seats (resolution 11) | E2 |
+| F-PES-GO-09 | the offer's size has a tail of up to 544 rows | RESOLVED-BY | SURF-B §2; MODES §3; A-48 | — |
+| F-PES-GO-10 | the creation sheet cannot tell seats apart and offers 37 cohorts | RESOLVED-BY | HELD §4 (`CreationRow.holdings`, `cohort`); `U5d_SE_cohort_heavy_moves_and_caste.md` (a cohort forms the heavy moves only; whether one may be played is not ruled) | — |
+| F-PES-GO-11 | corrects F-GO-16's measure | RESOLVED-BY | made in the audit | — |
+| F-PES-GO-12 | no exported word for any Event kind or verb | RESOLVED-BY | PINS (words for kinds and verbs) | — |
+| F-PES-GO-13 | exit line 4 lists a check that reports drift and passes | RESOLVED-BY | OWED-GO §3 (a card edit at B10-20's open) | the tool's own text |
+| resolutions 1–11 | decided | RESOLVED-BY | PINS (1), KEYED (2), HELD (3, 6), WHY (9); 4 → F-PES-GO-05's row; 5 none; 7 → `03_PC_typed_outcome_one_door.md` (U5b) and OWED-GO §2; 8 → OWED-GO §3; 10, 11 statements | — |
+| §7 survivor | the draw | SUPERSEDED | A-30 | — |
+
+---
+
+# Part 5 — ARCS (`audits/12_ARCS_adjudication.md`)
+
+Carriers: **CASE** = `12_ARCS_case_on_the_realm.md` (extends `01_CORE_case_setup_and_beats.md`, U5a's);
+**STAGED** = `12_ARCS_arcs_as_staged_goals.md`; **GROUND-T** = `12_ARCS_substrate_as_ground.md`;
+**CITED** = `12_ARCS_cited_evidence.md`. The adjudication numbers no findings; its rows are the fifteen
+mechanisms of §4, the twenty resolutions of §6, the tables of §5 and §7 to §10, and two survivors.
+
+| id | claim (one line) | disposition | carrier · section | evidence |
+|---|---|---|---|---|
+| §3 (the per-case table, 143 cases) | each case's unreached core needs, by mechanism | RESOLVED-BY | the mechanism rows below; no case is closed separately | the generated mapping (`arcs_work/census.py`, §12) `[not re-run]` |
+| M-CASE | a case built from its own people, seats, records and dates; beats read by a run with a control | RESOLVED-BY | `01_CORE_case_setup_and_beats.md` as extended by CASE as reconciled (A-44, A-50, A-51: the case is a delta on a generated, seeded realm that has run its five-year prologue) | template builder; no need read (§2.2) |
+| M-LATENT | 84 core needs are a counter, clock or scalar that fires with nobody deciding | RESOLVED-BY | STAGED as reconciled (A-47: the armed last stage opens a mandatory scene; the crossing decides nothing); `02_CHAR_goal_lean_on_its_own_question.md` | `state/world.py:64-107`; `loop/matter.py:132-135` `[not re-opened]` |
+| M-INFO | information that travels, is withheld, is found | SUPERSEDED | FI's closure (U5c: `08_FI_01`, `_02`, `_03`); death news apart (A-33) | `told_by` 64 of 93,760 claims |
+| M-SEAT | an office that does its business | RESOLVED-BY | Part 1 (DECREE, REMIT, TERMS, TERMS-B, CAPS-FA) and the institutions kit (Part 7); "passive effects of holding a seat" are now lawful (A-12) | `confer` 70/0, `revoke` 15/0 |
+| M-PERC | the Thread, person side | RESOLVED-BY | GROUND-T (person half) as reconciled; `09_WR_B_threadwork_session_and_practitioner.md`; `U5d_WR_zero_coherence_unknowable.md` (A-43) | `harness/loops.py:96`; `write_matrix.yaml:200-206` |
+| M-SUB | the Thread, world side | RESOLVED-BY | GROUND-T as reconciled (A-40: ground, one Site per territory; the hold is lifted) with `16_PESSIMIST_WR_B_the_calamity_strains_and_breaks.md` | no carrier (grep, §12) |
+| M-AIM | the chooser reads what an act would do | SUPERSEDED | CHAR's closure (U5a: `02_CHAR_goal_lean_on_its_own_question.md`, `02_CHAR_choice_alignment.md`) | F-CHAR-01 |
+| M-SIT | a sitting that binds | SUPERSEDED | SC's closure (U5c: `05_SC_playable_hearing_B.md` and siblings) | — |
+| M-REGARD | the interior moves | SUPERSEDED | U5a (`02_CHAR_scar_cap_and_regard_unit.md`) | F-CHAR-03 |
+| M-REC | a record as an object with consequence | RESOLVED-BY | CITED as reconciled (admission and the strike are draws: `19_LACUNA_admission_rides_the_citing_draw.md`; the interface is `08_FI_05_evidence-interface_B.md`) | H-75 |
+| M-CAP | persons differ in what they can do | SUPERSEDED | U5a (`unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md`; A-7 two inputs) | — |
+| M-FIELD | force at scale with lasting consequences | SUPERSEDED | U5b (`04_MB_*`, `03_PC_exits_withdrawal_recovery.md`); the land and its seats pass by `U5d_FA_land_and_seats_pass_on_a_won_march.md` | `march` never attempted in the corpus |
+| M-STORES | material economy | RESOLVED-BY | Part 2 (GROUND, ARCN) | — |
+| M-ABROAD | powers beyond the map, through persons | RESOLVED-BY | `15_INSTITUTIONS_BYZANTINE_D_the_empire_at_a_distance.md` and `15_INSTITUTIONS_COLONIAL_B_distance.md` (the far superior is one seat, `off_altonian_court`) | §6 row 12 ("none written") |
+| M-PLAYER | a player's seat (16 cases) | RESOLVED-BY | `01_CORE_case_setup_and_beats.md`; `11_GO_player_surface_contract_B.md` (`OFFER-CONTAINS`) | `play_surface.dispatching_chooser` has no caller in the runner |
+| M-SPAN | long arcs (`MAX_SEASONS = 6`) | RESOLVED-BY | `01_CORE_claim_fade_as_read.md` (U5a) | `loop/matter.py` |
+| §5 (staged sequence, stages 0–8) | the order that unlocks cases | RESOLVED-BY | none owed: an ordering input to the suite's one landing order; stages 7 and 8 no longer wait (A-40, A-43) | — |
+| §5 scripting-drift table (ARC-14, -17, -11, NPC-011, ARC-52, -55, -46, NPC-020 N8, ARC-22, ARC-01 N5) | needs that can only be met by special-casing | RESOLVED-BY | the non-script form in the table; two are changed by rulings: the "auto-resolve at a ceiling" needs gain a mandatory scene (A-47); "an unpredictable family death" is natural death at a rate (A-15), never an event card | — |
+| §6 rows 1, 7, 17 | social counters; struck mechanics; ARC-55's circle | RESOLVED-BY | STAGED | — |
+| §6 rows 2, 3, 4, 5, 10, 11, 13, 14, 15, 19, 20 | a faction "chooses"; fixed lookup; "GM-judged"; a skill gates; registry values; collisions; lost head; ordinary knowledge; unauthored goals | RESOLVED-BY | none owed (decided by ladder steps 1–3 in the audit; A-11 confirms row 5) | — |
+| §6 row 6, S-2 | Coherence at zero | SUPERSEDED | A-43; `U5d_WR_zero_coherence_unknowable.md` | — |
+| §6 rows 8, 9, 16 | spans as prose; case text against the roster; `knows:` | RESOLVED-BY | `01_CORE_case_setup_and_beats.md`; CASE (knowledge seeded as prehistory through the fold; the prologue is five years, A-51) | `populated.py:647` |
+| §6 row 12 | off-map superiors decide things | RESOLVED-BY | as M-ABROAD | — |
+| §6 row 18 | the SCN loops contradict themselves on exits | RESOLVED-BY | GROUND-T (its condition, M-SUB built, is met by A-40) | — |
+| S-1 | does the world itself decay | SUPERSEDED | A-40 (ground) | — |
+| §7 (traits the model cannot carry) | temper; personal goals; doubt; "resonant style"; a weakness; typed relationships; sensitivity; Coherence | RESOLVED-BY | `02_CHAR_resolve_and_temper.md`, STAGED, `10_DICE_advantage_sources_for_the_arcs.md` (U5a); `14_VERBS_SOCIAL2_D_tie.md` (U5c; A-28 splits `tie` and `knot`); kin are generated (A-44, `21_PROCEDURAL_B_cast_and_seats.md`) | — |
+| §8, §9 (capability; the chooser) | what the corpus implies | SUPERSEDED | U5a | — |
+| §10 e1–e6 (cited items; tiers; corroboration; venue; wrong conclusions; planted evidence) | typed evidence and argument | RESOLVED-BY | CITED as reconciled; U5c's evidence carriers (EVID, ADM, VERD); e3 holds by construction; the ladder's D-44 and D-45 keep wrong conclusions to lies and forgeries | — |
+
+---
+
+# Part 6 — the GAME pessimist (`audits/16_PESSIMIST_GAME.md`)
+
+Carriers: **CAUSE** = `16_PESSIMIST_GAME_standing_occasions_carry_their_cause.md`; **WDRAW** =
+`16_PESSIMIST_GAME_the_world_draws.md` (as reconciled to A-54); **CONSEQ** =
+`16_PESSIMIST_GAME_consequence_reading.md`.
+
+| id | claim (one line) | disposition | carrier · section | evidence |
+|---|---|---|---|---|
+| F-PES-GAME-01 | the world's skeleton does not respond to its people | RESOLVED-BY | CONSEQ (the reading); the first ring (§7.2) is the order of the carriers it names | X1 |
+| F-PES-GAME-02 | no consequence crosses a seam | RESOLVED-BY | CONSEQ; the ring | §1.2 seam matrix |
+| F-PES-GAME-03 | the acts that close a story carry no cause | RESOLVED-BY | CAUSE | — |
+| F-PES-GAME-04 | in computed play the game is a fixed function of state | RESOLVED-BY | the determinism carriers (`18_DETERMINISM_*`, closed by U5a Part 6) and each verb lane's band rows; A-24 makes the standing rule govern earlier fixed-outcome rulings | sweep C-01 to C-15 |
+| F-PES-GAME-05 | the world's own motion is fixed and synchronized | RESOLVED-BY | WDRAW as reconciled, that is `09_WR_B_draws_not_thresholds.md` edits 1–2 (A-54) | 37 of 37 cohorts in step |
+| F-PES-GAME-06 | rest cures starvation | RESOLVED-BY | `16_PESSIMIST_SE_A` edit 4; `03_PC_exits_withdrawal_recovery.md` Part C (U5b) | — |
+| F-PES-GAME-07 | the largest news in the realm does not travel | RESOLVED-BY | U5c's FI carriers (`08_FI_02_rumour-that-travels.md`, `U5c_FI_residue.md`) under A-32 and A-33 (the seat by its reach; the death by presence, trail and telling) | the King's death held by 16, then 17 |
+| F-PES-GAME-08 | a vacant seat has one route, and it is the heir's | RESOLVED-BY | `22_HAPPENINGS_B_the_throne_is_never_stranded.md` as reconciled (A-19) | X2 |
+| F-PES-GAME-09 | most persons are downstream of nobody and upstream of nobody | RESOLVED-BY | none of its own: the formation proposals of each verb lane and FI's rumour; CONSEQ reads reach | reach 0.6 |
+| F-PES-GAME-10 | a player-king who does nothing loses nothing | RESOLVED-BY | the ring; in particular `06_FA_decree_binds.md` (defiance has a cost) and natural death (A-15) | §2.5 |
+| F-PES-GAME-11 | the provided arcs conflict with two standing rules as specified | SUPERSEDED | A-47; STAGED and `09_WR_provided_arcs.md` as reconciled | `ENDINGS_CLASSIFIED.yaml` |
+| F-PES-GAME-12 | three `met` requirements are met on a channel that carries paper | RESOLVED-BY | CONSEQ | — |
+| F-PES-GAME-13 | offices exist only where the cast seats them | RESOLVED-BY | `U5d_FA_owed_edits.md` §10 (every `offices.yaml` row is built, seated or vacant); the generated cast (A-44) fills them | `x5_extremes.py 0 3`: `offices=0` |
+| W-1 | nobody can die of age or illness | SUPERSEDED | A-15 | 0 natural deaths in every run |
+| W-2 | every harvest the same | RESOLVED-BY | plan B10-18 CL-EVENTS (2) with `09_WR_B_weather_with_memory_and_the_year.md` as reconciled (A-54) | `yield.taken` 111 at every seed |
+| W-3, W-4 | who suffers in a famine; every Site decays alike | RESOLVED-BY | WDRAW as reconciled | — |
+| W-5 | nobody lets an intent slip; nothing is confided | SUPERSEDED | U5a and U5c own `intent_disclosure` and `telling_privacy`; the audit's `[UNVERIFIED]` stays marked (this lane did not find a carrier that turns either on) | both draws never taken |
+| G-1 | the realm is identical at every seed | SUPERSEDED | A-50 and A-44; `21_PROCEDURAL_B`, `_D` as reconciled | 22 of 22 components equal |
+| G-2 | one authored situation yields the one death | SUPERSEDED | U5b (`03_PC_duel_chain_reach.md`); murder is lawful, rarely (A-16), `22_HAPPENINGS_C_a_killing_is_a_crime_someone_commits.md` | `p_npc_013` at seeds 1 and 2 |
+| G-3 | the heir, always, at once, unopposed | SUPERSEDED | A-19; sweep C-07, C-11 | X2 |
+| G-4 | eighteen verbs refused at every attempt | SUPERSEDED | the verb lanes' formation proposals (U5b, U5c) | 1,585 of 7,940 acts |
+| §7.2 (the first ring; the game gate) | the shortest order in which one consequence crosses one seam | RESOLVED-BY | none owed: an ordering input; its step 1 "natural death on (Jordan's)" is answered (A-15) | today every clause fails |
+| J-1 | a land with no people | SUPERSEDED | the ladder's D-72 (leave a lord over an empty land) | ED-IN-0255 |
+| J-2 | cohorts as full actors | SUPERSEDED | A-56; `U5d_SE_cohort_heavy_moves_and_caste.md` | X6 |
+| J-3 | arcs that end on a threshold | SUPERSEDED | A-47 | — |
+| J-4 | the realm is one realm | SUPERSEDED | A-50 | — |
+

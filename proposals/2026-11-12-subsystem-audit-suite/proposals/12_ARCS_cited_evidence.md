@@ -1,5 +1,7 @@
 # ARCS 04 — evidence that is held and cited: what the cases require of a hearing
 
+Reconciled: 2026-11-12, U5d closure — folded the standing rule (A-24; `audits/18_DETERMINISM_SWEEP.md` D-01, D-02) and the reconciliation this file's own Status line asks for. "The arrangement admits; a contradiction strikes" are not fixed functions of state: admission rides the citing draw (`19_LACUNA_admission_rides_the_citing_draw.md`) and a contradiction is a rebuttal that is itself drawn (`05_SC_evidence_and_rebuttal_B.md`, which supersedes the hearing proposal this file names). This file's `proofs` edit is carried as one member of the one obstacle form (`U5c_SC_one_obstacle_form.md`); the typed interface between a held Record and a room is `08_FI_05_evidence-interface_B.md`. Kept from this file: a held Record counts; possession can be found out. An appeal is admitted on new grounds only (A-39), which is what gives a newly found Record its use after a verdict.
+
 ## Status: PROPOSED — to be reconciled with the SC lane's hearing proposals (`05_SC_playable_hearing.md`, `05_SC_contest_record_on_event.md`, `05_SC_arrangement_rows_that_bind.md`), which this lane did not open. Ownership of proceedings is ruled (ED-SC-0033..0039) and is not changed.
 
 Source: `audits/12_ARCS_adjudication.md` §4 (M-REC), §10 (e1–e6).

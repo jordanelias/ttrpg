@@ -1,5 +1,7 @@
 # GAME — an act on a standing occasion names the Event that opened it
 
+Reconciled: 2026-11-12, U5d closure — folded **A-47** and **A-33**. A mandatory scene opened by a threshold carries as its cause the Event that armed the last stage, by this file's rule. An act formed on a vacancy cites the seat's news; it does not cite the death unless the actor holds a claim of it (A-33). No step changes.
+
 ## Status: PROPOSED
 
 Source: `audits/16_PESSIMIST_GAME.md` F-PES-GAME-03; premise 2.1 link 4. Read at `4995824`. Reference

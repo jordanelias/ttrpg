@@ -1,5 +1,7 @@
 # GO — the draw is a function of its key: no generator, no recorder, no replay
 
+Reconciled: 2026-11-12, U5d closure — folded **A-30**: Jordan chose option A (the draw is a function of its key). The "one question to Jordan" is closed; the Layer 1 row is rewritten by the ruling (text owed, not applied). With A-5 the sampler the key feeds is the one bell-curve sampler. No step changes.
+
 ## Status: PROPOSED — touches a ratified Layer 1 row; returned to Jordan with two options (audit §7)
 
 Carries F-PES-GO-02 of `audits/16_PESSIMIST_GO.md` (§1.1). Lanes GO, IN (PC, MB and DICE touch their
