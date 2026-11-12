@@ -33,7 +33,7 @@ one clause each and is to land with or after CP-T09-02.
   naming the pair exists.
 - Today a war is one person's edge. A dead person's edges are deleted with him (first audit §4), so a
   war ends by its declarer's death. Layer 1 records the opposite fear as an open gap, F.32
-  (`04:1232`): "the declarer dies and the war can be ended by nobody … the repair is an edge subjected
+  (`04:1233`): "the declarer dies and the war can be ended by nobody … the repair is an edge subjected
   to *the seat's holder*, and the design has no Tenure that changes hands."
 - CP-T09-02 (d) adds rallying: any member of either faction may `commit` to the war. CP-T09-03 (c)
   ends it "when no committer is left" (plan home file `:183-184`, `:229-231`). Together: peace needs

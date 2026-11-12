@@ -8,6 +8,8 @@ Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.
 
 **Lands in batch:** B34. **Depends on:** `05_SC_playable_hearing_B.md` (B24; its decider reads `deciders`), `11_GO_player_surface_contract_B.md` (B34), `engine/dice_engine/draw.py` and the A-30 key (B06), `28_CORE_scene_access_A_occupancy_and_precedence.md` (B28; the `engaged` clause the Folded line names).
 
+Reconciled: 2026-11-12, A-97: the nesting-cap paragraph's "Layer 1 text is owed" is rewritten to the applied state (nodes `L1-A4`, `L1-A72`; `04:182`, rows 22 `:1048` and 19 `:1045`). This file was not on `unified/work/L1_PROPAGATION.md`'s list; found by a second grep.
+
 ## Status: PROPOSED
 
 Source: `audits/01_CORE_audit_addendum_B.md` F-CORE-13, §4.4, §7.1. Read at `785bc62`.
@@ -64,7 +66,7 @@ role invoked from inside another role's call (a duel round called from a field) 
 `seam.contest` at `depth + 1`; beyond `Fixtures.contest_nesting_cap` (1, U1 ledger P-01) the call returns the
 typed `Refusal(depth_cap)` (D-U1-11b), so a battle may call one duel round and a duel round calls nothing.
 The person-supplied decider handed through the adapter is one declared class of adapter input (A-4; its
-Layer 1 text is owed, `OWED_TO_UNIFICATION.md` §A).
+Layer 1 text is APPLIED, 2026-11-12, A-97, nodes `L1-A4` and `L1-A72`: `04:182`, PART D rows 22 `:1048` and 19 `:1045`).
 
 ### 2 · owner `engine/season/seam/wrappers/_entry.py` — the party test, once
 

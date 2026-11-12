@@ -11,6 +11,8 @@ file's emitter is the RESOLVE-side step `31_WR_B` commit 1 composes on, dial at 
 table's reader row and `write_matrix` row (verified at the tree), the gate, the For-Jordan section.
 Reconciled: 2026-11-12, wave-3 mop-up (`unified/work/W3_5b_DONE.md` "For another lane", W3-5a item; `unified/U1_OWNERS_AND_VOCABULARY.md` F-43): the crisis switch is `Fixtures.crisis_arm`, values `rule` (control, today's function) and `drawn` (ships, A-24), where this file said `crisis_draw: off|on`. The test file name `test_crisis_draw.py` and its `test_off_*` function names are unchanged. No prior `crisis_arm` exists in the tree (`engine/season`), so nothing else renames. U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "highest-held" → "strongest" (glossary *stands for*: "held" is above the mid-point).
 
+Reconciled: 2026-11-12, A-97 (`unified/work/L1_APPLIED.md` §`L1-A92`, `unified/work/L1_PROPAGATION.md`): the "until Jordan answers J-U3-01" clause of the consumers line is rewritten: J-U3-01 is A-92, its `04` §B.2 / row 18 text is applied (`04:251`, `:1044`), and `sway_gain` at 0 now waits on the calibration batch only (`unified/DECISIONS_ANSWERED.md` A-92: "the dial ships at zero until the calibration batch sets it"). The "For Jordan" heading's "superseding ledger row is owed" (`ED-IN-0261`) is likewise rewritten to the applied state, node `L1-A24`.
+
 ## Status: PROPOSED
 
 Lands in batch: **B10** (IN/CHAR; one re-pin when `crisis_arm` is `drawn`). Depends on: `engine/dice_engine/draw.py`
@@ -20,7 +22,7 @@ and the A-30 key function (`16_PESSIMIST_GO_keyed_draw_no_recorder.md` with `11_
 `16_PESSIMIST_CORE_the_record_holds_what_changed.md` (B09, emits `scar.taken` only). Consumers that compose on this
 file: `20_NARRATIVE_A_stands_for.md` edit 4b (passes `reading="stands"`, B38), `20_NARRATIVE_E` (its edit 3 is struck in
 favour of this), `31_WR_B_the_revival_gathers.md` commit 1 (the sway is a drawn term at this RESOLVE-side step, its dial
-`sway_gain` at 0 until Jordan answers J-U3-01; built under Option 1, `unified/U3_JORDAN_CALLS.md`).
+`sway_gain` at 0 until the calibration batch sets it; J-U3-01 is ANSWERED as A-92 (Option 1) and its Layer 1 text is APPLIED, 2026-11-12, A-97, node `L1-A92`: `04:251`, PART D row 18 `:1044`, so the sway conforms; the dial waits on calibration alone and on no amendment).
 
 **Words.** *Conviction* is the affiliation-intensity map on `Person` (DR `affiliation_roster`); a *creed* in this
 file is one affiliation of that map, never the map. "Highest/lowest-intensity" replaces the earlier
@@ -202,7 +204,7 @@ close). Tier: `opus` for the band table and the `will` assignment (the judgment 
 (U3 §1 item 11). Order of edits: fixtures at the control → roster table and site → reader signature →
 emitter with the Event → `crisis_arm: drawn` in its own commit.
 
-## For Jordan (CLOSED by A-24, 2026-11-12: Option B taken, the roll lands and `crisis_arm` ships `drawn`; ED-IN-0261's "rolls nothing" is superseded, its superseding ledger row is owed, `OWED_TO_UNIFICATION.md` §A. Kept as the finding.)
+## For Jordan (CLOSED by A-24, 2026-11-12: Option B taken, the roll lands and `crisis_arm` ships `drawn`; ED-IN-0261's "rolls nothing" is superseded, its superseding ledger row is written, 2026-11-12, A-97, node `L1-A24`: `ED-IN-0261` in `registers/editorial_ledger_in.jsonl`. Kept as the finding.)
 
 The band table's four writes and the lowest-intensity selector are this lane's choices at ladder step 5 and
 are stated as assumptions. One conflict is named and not resolved: `ED-IN-0261`'s superseding row folds

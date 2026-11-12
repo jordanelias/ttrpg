@@ -83,14 +83,14 @@ here; its roles, uses table, typed-record table and reason trail are adopted wit
 # references/descriptor_registry.yaml
 capabilities:
   source: "U1; A-6, A-7, A-11 (2026-11-12)"
-  kinds:   [skill, aptitude, trait]           # closed. The ten attributes are defined in `attributes:` and are not re-defined
-  grows_by: [train, practice, use, fixed]      # closed; each names a rule the engine implements
+  kinds:   [skill]                            # closed, one member (A-98 (4)); a row of any other kind is refused. The ten attributes are defined in `attributes:`, the traits in `traits:` (§2a); neither is re-defined here
+  grows_by: [train, practice, use]             # closed; each names a rule the engine implements (`fixed` left with the traits, §2a)
   untrained: [default, none]                   # closed; what a non-holder brings (§4)
   rows:
     argue:
       kind: skill
       gloss: "Makes a case to someone's face and moves them by it."    # required; refused if empty
-      base: attr.social.charisma               # the governing attribute: the TALENT input of §4
+      base: attr.social.charisma               # the governing attribute: the attribute input of §4
       opposed_by: attr.mind.will               # optional; the attribute a person subject resists with, else `base`; `none` = nobody's rating opposes it
       scale: [0, 7]                            # floor and ceiling of the held rank
       untrained: default
@@ -100,18 +100,21 @@ capabilities:
 
 | field | owner lane's proposal it comes from | reader |
 |---|---|---|
-| `kind` | MAP §B; CORE Edit 1 | the exporter's `--check` (refuses a `dice` use of a trait) |
+| `kind` | MAP §B; CORE Edit 1; A-98 (4) (one member) | the exporter's `--check`: refuses a row whose kind is not `skill` (a leftover `aptitude` or `trait` row) and an id that is also a trait id (§2a). The old refusal of "a `dice` use of a trait" now lives in the uses loader, which refuses a trait key at any role but `edge` (§2a; U1-A step 4) |
 | `gloss` | `02_CHAR_capability_definitions.md` Edit 1 | `decision/sheet.py::describe`; the reason trail |
 | `base`, `opposed_by` | CORE Edit 1; MAP §B; `copying.opposed_by: none` (OBS §2) | the two inputs of §4 |
 | `scale` | MAP §B; F-DICE-23 | `data/cast.py`; `loop/effects_combat.py::raised_capability` (a rank never passes its ceiling) |
 | `untrained` | CORE Edit 9; MAP §B, narrowed by A-7 (§4) | the pool reader |
 | `grows_by` | CORE Edit 1; MAP §B | `_eff_train`, `world_q.practice`, `_grown` |
 
-Kinds, in the tradition's words: a **skill** is a learned rating that gives dice; an **aptitude** is a rated
-knack that gives no dice of its own and acts through use rows; a **trait** is held or not (scale `[0, 1]`)
-and acts through use rows. An **ability** is not a fourth kind: it is a trait or aptitude whose use row names
-its scene's site (`02_CHAR_audit_addendum_B.md` §B4 (c)). A capability is never lost (no loss rule exists;
-adding one is a new growth rule, which is code and a decision). A new capability is a row.
+One kind (A-98 (4), superseding the three kinds this section first wrote): a **skill** is a learned rank a
+person holds and can train; his number in it is his **skill score**. A skill's use rows say where it changes an
+outcome; most give dice, and a skill whose use rows give none (`insight`, formerly the one *aptitude*) is still a
+skill. An aptitude is an attribute (A-98 (1)), defined in `attributes:` and never here. The held-or-not
+dispositions (formerly kind *trait*) are not skills and are defined in their own roster (§2a). An **ability**
+is not a kind: it is a skill whose use row names its scene's site (`02_CHAR_audit_addendum_B.md` §B4 (c), as
+A-98 restates it). A skill is never lost (no loss rule exists; adding one is a new growth rule, which is code and
+a decision). A new skill is a row.
 
 **The rows, all lanes (each lands in its own lane's commit, definition row before any verb cell or use row names it).**
 
@@ -123,13 +126,56 @@ adding one is a new growth rule, which is code and a decision). A new capability
 | `arms` | skill | `attr.body.agility` | — | default | train, practice, use | CORE (existing; `vocation_attribute` row) |
 | `deception` | skill | `attr.social.grace` | `attr.mind.perception` | default | train, practice | SC (`05_SC_hearing_capabilities.md`) |
 | `law` | skill | `attr.mind.acuity` | — | default | train, practice | SC; FA (the judge's; `judgment` withdrawn) |
-| `insight` | aptitude | `attr.social.attunement` | — | none | train, practice | SC (never rolled; `bench_reading`) |
+| `insight` | skill (A-98 (4); was `aptitude`) | `attr.social.attunement` | — | none | train, practice | SC (never rolled: its one use row is `judgement` at `bench_reading`, no `dice` row) |
 | `command` | skill | `attr.social.charisma` | `none` | default | train, practice | MB (`27_MB_A` §1; A-59) |
 | `healing` | skill | `[ASSUMPTION: attr.mind.focus; PC's tend lane names it]` | `none` | default | train, practice | PC (`tend`) |
-| `moved_by_evidence`, `moved_by_consequence`, `moved_by_authority`, `moved_by_solidarity` | trait | — | — | none | fixed | CHAR (`02_CHAR_which_ground_moves_whom.md`); seated from `npc_registry.yaml: resonant_style` |
+
+The four `moved_by_*` rows this table carried as kind `trait` are not skills (A-98 (4) `[ASSUMPTION]`): they are
+the trait roster of §2a. `arms` is the one **martial skill** today (A-98 (3): a person's skill score in the
+skills used in fighting).
 
 `rhetoric` is not a row (D-U1-03): the hearing's `argue` and `impugn` moves draw on `argue`, its `procedure` and
-`definition` rungs on `law`. The governance capability FA proposed as `judgment` is `law`.
+`definition` rungs on `law`. The governance skill FA proposed as `judgment` is `law`.
+
+## §2a · The trait roster: home, loader, refusals (A-98 (4); ordered coding instructions)
+
+`[ASSUMPTION, A-98 (4): the four held-or-not dispositions are not skills in any ordinary sense; they leave the
+skill table and are a separate roster, a person's traits; reversible, listed for Jordan.]` What a trait is is
+vocabulary, so it lives where the skill roster lives and for the same reasons (§1's ladder: step 4, the
+registry holds every *what a thing is* roster of a person; step 5, a module and the port read the substrate
+leaf). How the season uses a trait stays a `capability_uses` row (§3), as for a skill. Order (each step lands in
+batch U1-A, after step 1, in one commit with its revert separable; the CHAR lane authors the four rows at U1-C):
+
+1. **Home.** `references/descriptor_registry.yaml`: a `traits:` block beside `capabilities:`, schema
+   `{source, scale: [0, 1], seated_from: npc_registry.yaml#resonant_style, rows: {<id>: {gloss, seated_by}}}`, where
+   `seated_by` is the one `resonant_style` value that seats the trait (`evidence`, `consequence`, `authority`,
+   `solidarity`); the four rows' glosses are `02_CHAR_which_ground_moves_whom.md` edit 1's, with `kind`,
+   `untrained` and `grows_by` dropped (a trait is held or not, is never trained and never grows).
+2. **Exporter.** `tools/export_descriptors.py`: a `_trait_roster(reg)` validator beside `_capability_roster`,
+   refusing an empty `gloss`, a `scale` other than `[0, 1]`, a `seated_by` value used twice, and an id that is also
+   a row of `capabilities:` (one id, one roster). Added to the export dict; re-derive
+   `engine/engine_params/descriptors.json` with the tool, never by hand; `--check` stays blocking.
+3. **Reader.** `engine/substrate/descriptors.py`: `TraitRow` (frozen dataclass: `id`, `gloss`, `seated_by`),
+   `TRAITS: Mapping[str, TraitRow]`, `trait(id) -> TraitRow` (raises naming the roster).
+4. **Loader and holding.** `engine/season/data/cast.py`: `traits_of(row) -> frozenset[str]` replaces
+   `02_CHAR_which_ground_moves_whom.md` edit 4's `susceptibility_of`: it maps the cast row's `resonant_style:`
+   value through `descriptors.TRAITS[*].seated_by` (no second roster: `rosters.yaml: susceptibilities` is not
+   created), refuses a value no trait row names, and never writes into `Person.capability` (the skill map holds
+   skills only). Where the person holds his traits is a carrier field `Person.traits: frozenset` with its
+   `write_matrix.yaml` row (written at build only) `[ASSUMPTION: a new `Person` field is a declared hash mover if
+   `World.content_hash()` encodes it; the batch reads the pins before and after and declares the result; the
+   alternative that moves nothing, reading `resonant_style` through a build-time map keyed by person id, is a
+   second store and is not taken]`.
+5. **Uses.** `data/rosters.py::_load_capability_uses` accepts a `key` that names a trait only at role `edge` with
+   `per: held`, and refuses a trait key at any other role (this is the old "refuses a `dice` use of a trait",
+   restated for two rosters), a `per` other than `held` on a trait key, and a key that is in neither roster nor an
+   attribute or registry key. The `edge` reader reads `1` if the subject holds the trait, else `0`.
+
+**Tests** (`engine/season/tests/test_u1_capability_surface.py`, U1-A): `test_a_trait_id_that_is_also_a_skill_is_refused`;
+`test_a_trait_key_outside_role_edge_is_refused`; `test_a_trait_never_enters_person_capability`;
+`test_an_unknown_resonant_style_is_refused`. **Check.** `python tools/export_descriptors.py --check` green with the
+block and refusing with a planted `scale: [0, 2]`. **Falsifier.** A `dice` row keyed on `moved_by_evidence` that
+loads; a cast row's trait found in `Person.capability`.
 
 ## §3 · The roles, the sites and the uses table
 
@@ -141,9 +187,9 @@ capability changes an outcome is a row (`use`, `role`, `key`, `side`, `when`, `l
 implied by `role` (`judgement` is `about_mid`, `gate` is `at_least`). Seven amendments, each forced by an answer or
 by a contradiction between lanes:
 
-1. **`key` gains two selectors** beside a capability id and a registry key: `verb` means the *trained rank* of
-   the capability the verb's row names, and `verb.base` means that capability's *governing attribute* (the
-   talent). A-7 needs both addressable. A row may still name an attribute key outright (the `notice` and `field`
+1. **`key` gains two selectors** beside a skill id, a trait id (§2a) and a registry key: `verb` means the
+   *skill score* in the skill the verb's row names, and `verb.base` means that skill's *governing attribute*.
+   A-7 needs both addressable. A row may still name an attribute key outright (the `notice` and `field`
    rows below do).
 2. **`per` gains `mid`** beside `held` and `rank`: signed steps of the held value from its scale's mid-point
    (above counts for the side named, below counts against). It is how an attribute acts as levels (§4). One
@@ -182,7 +228,7 @@ by a contradiction between lanes:
 | `task` | the task route's input builder (`18_DETERMINISM_task_draw_for_uncontested_verbs.md`) | as `social_roll`, with `opposes` reading the stand-in (nobody opposite) | IN, verb lanes |
 | `fight` | `seam/wrappers/combat.py::combat_input` → `PersonalCombatInput` (applied by the module) | `dice · verb · each`; `opposes · verb · each`; `resource · attr.body.endurance · each`; `threshold · attr.body.strength · each` (the carry shortfall, D-U1-11d); `edge · attributes · each` carried raw on `.attributes` and applied by the module's own sigma (`wrapper.py:316-320`) | PC |
 | `field` | `seam/wrappers/mass_battle.py::command_record` → `CommandRecord` | `dice · command · each`; `edge · attr.social.charisma · each · per: mid`; `edge · attr.mind.acuity · each · per: mid` (`27_MB_A` §1, each `level: talent_level`); `threshold` for a troop kind's `strength` is the troop table's, not a person's | MB |
-| `notice` | WITNESS's per-holder projection built at the barrier (`18_DETERMINISM_notice_is_a_draw.md`, C-U5a-14) | `dice · inquiry · actor`; `edge · attr.mind.perception · actor · per: mid` `[ASSUMPTION; medium; the FI lane confirms: noticing in passing is the fieldwork skill with Perception as its talent, AR-24]` | FI |
+| `notice` | WITNESS's per-holder projection built at the barrier (`18_DETERMINISM_notice_is_a_draw.md`, C-U5a-14) | `dice · inquiry · actor`; `edge · attr.mind.perception · actor · per: mid` `[ASSUMPTION; medium; the FI lane confirms: noticing in passing is the fieldwork skill with Perception as its governing attribute, AR-24]` | FI |
 | `kit` | `combat_systems.act_cost`'s caller (host-side shortfall) | `threshold · attr.body.strength · each` | PC |
 | `settlement_effect` | the place's seasonal draw (`09_WR_world_motion` / A-54) | `edge · <the work's capability> · steward · per: mid` — the steward (holder of the seat whose rung is the place's treasury rung) adds levels to the **place's** draw; the place, not the steward, is the roller (D-U1-09) | SE |
 | `rate` sites (`labour`) | `pool.py::rate` | `rate · verb · actor · gain: effect_rate_gain`, only on a row with `magnitude: rate` that is **not** a task row (D-U1-09) | SE |
@@ -203,12 +249,12 @@ fixtures; their values are set by the joint calibration A-5, A-6, A-7 and A-26 c
 
 | part | rule | input (who, what) | owner of the rule | answer |
 |---|---|---|---|---|
-| **dice** | `pool = pool_of(score, addends, pool_add, pool_floor) = max(pool_floor, score + addends + pool_add)` | the roller's **training**: the trained rank of the verb's capability, else the untrained score; `addends` = the registered pool addends (practice; helpers) | `sigma_leverage.pool_of`, called by `seam/wrappers/pool.py::faculty` and by `modules/combat/core.py` | A-6. `pool_add` and `pool_floor` live at 6 and 5 (`modules/combat/core.py:51-52`, the only regime ever calibrated; lane 29's tuning) |
-| **talent** | named levels by `per: mid` on the governing attribute: for the roller above the mid-point, against below | the roller's **attribute** (`verb.base`) | `seam/wrappers/sigma.py::advantage_sigma` (the `edge` reader) | A-7. Size per step: fixture `talent_level`, live `minor` |
-| **the opponent** | `opposed_ob(score, opposition_rate) = opposition_rate × max(0, score)`, on the opponent's **trained score** (his rank in the capability the verb's row names as opposed, else the same one), never his pool: no base dice, no practice addend, no seat | the subject's **training** | `sigma_leverage.opposed_ob`, one function for both modules | A-26, A-79. `opposition_rate`: control 0.5, live `MU_PER_DIE` |
+| **dice** | `pool = pool_of(score, addends, pool_add, pool_floor) = max(pool_floor, score + addends + pool_add)` | the roller's **skill score**: his rank in the verb's skill, else the untrained score; `addends` = the registered pool addends (practice; helpers) | `sigma_leverage.pool_of`, called by `seam/wrappers/pool.py::faculty` and by `modules/combat/core.py` | A-6. `pool_add` and `pool_floor` live at 6 and 5 (`modules/combat/core.py:51-52`, the only regime ever calibrated; lane 29's tuning) |
+| **governing attribute** | named levels by `per: mid` on the governing attribute: for the roller above the mid-point, against below | the roller's **attribute** (`verb.base`) | `seam/wrappers/sigma.py::advantage_sigma` (the `edge` reader) | A-7. Size per step: fixture `talent_level`, live `minor` |
+| **the opponent** | `opposed_ob(score, opposition_rate) = opposition_rate × max(0, score)`, on the opponent's **skill score** (his rank in the skill the verb's row names as opposed, else the same one), never his pool: no base dice, no practice addend, no seat | the subject's **skill score** | `sigma_leverage.opposed_ob`, one function for both modules | A-26, A-79. `opposition_rate`: control 0.5, live `MU_PER_DIE` |
 | **the even line** | the social and task composer's first term: `even_line(pool_add) = MU_PER_DIE × pool_add`; absent from the fight, whose defence layer spends the defender's base | — | `sigma_leverage.even_line` | A-79 (the base dice are never part of the opposition) |
 | **the difficulty** | the verb row's `difficulty:` level, sized by `difficulty_ob` (live 0 / 0.5 / 1 / 1.5 above the even line) | — | `roll.py::obstacle` | `13_SC_tuning_tables.md` T1; OBS §4 |
-| **the opponent's talent** | levels against the roller, `per: mid` on the subject's `opposed_by` attribute (else `base`) | the subject's **attribute** | the same `edge` reader | A-7 |
+| **the opponent's attribute** | levels against the roller, `per: mid` on the subject's `opposed_by` attribute (else `base`) | the subject's **attribute** | the same `edge` reader | A-7 |
 | **nobody opposite** | the stand-in: `opposed_ob(pool_default, opposition_rate)` on the even line; a capability whose `opposed_by` is `none` takes it too | — | `roll.py::obstacle` | C-04; `obstacle_default` is deleted |
 | **the situation** | hostile terms add to the obstacle (OBS's roster); favourable ones are levels for the roller | `circumstance` and `edge` rows; OBS §2–§3 | `roll.py::obstacle`; `advantage_sigma` | A-25 |
 | **a seat** | the exercised seat's `modifier:` as one `office` level for the actor; a seat above his as `rank_gap` | `Act.via`; the subject's seats | the `office` source; OBS member 6 | A-12 (§3 item 6) |
@@ -217,8 +263,8 @@ fixtures; their values are set by the joint calibration A-5, A-6, A-7 and A-26 c
 | **the odds shown and believed** | the closed form of the same sampler (`band_odds` keeps its name and signature and stops enumerating faces) | — | `sigma_leverage.band_odds` | A-5 |
 
 **What A-7 retires.** The fold of the two by `max` (CR-20's "the larger of the attribute and the held
-key", `pool.py::faculty:96-99` today). Training gives dice; talent gives levels; they are never added into one
-number and never substituted for one another. `untrained: attribute` is therefore removed from the closed set.
+key", `pool.py::faculty:96-99` today). The skill score gives dice; the governing attribute gives levels; they are
+never added into one number and never substituted for one another. `untrained: attribute` is therefore removed from the closed set.
 Precedent for this assignment (ladder step 4): ED-901, the one two-input regime the tree has ratified (the pool
 from learned skill plus six, floor five; attributes acting through sigma), and A-6's own wording (*a skill
 score* plus a base). The register's illustration of A-7 (the attribute sets the dice and the skill sets the
@@ -231,7 +277,7 @@ magnitude) under `untrained: default`, and nothing under `none`. A holder's scor
 `max(untrained score, rank)`, so a first rank is never a loss and `raised_capability` may mint a key
 (`01_CORE_capability_authoring_surface.md` Edit 9, kept). `[ASSUMPTION; medium; revert: the never-minted rule]`.
 
-**Unauthored talent.** A person with no authored attribute reads the scale's mid-point,
+**Unauthored attribute.** A person with no authored attribute reads the scale's mid-point,
 `(descriptors.ATTRIBUTE_FLOOR + ATTRIBUTE_CEILING) / 2` (4 on 1–7): zero levels either way. The mid-point is
 derived, never stored (the precedent: `decision/options.py:1631`, `COMPETENCE_MID`, the same expression for the
 told-claim credit's `about_mid`; `per: mid` reads that one constant, moved to the substrate leaf beside the bounds). The registry's `default: 1` is
@@ -265,7 +311,7 @@ The nine rows that have a value today keep it.
   an id at a rank (`02_CHAR_capability_definitions.md` Edit 3). `data/cast.py` validates every id against
   `CAPABILITIES` and every rank against the row's `scale`, and refuses a cast-row key it does not read
   (`UNREAD_KEYS`, same proposal Edit 4).
-- With two inputs, talent must be live for the roll to mean what A-7 says. `build_realm(cast_attributes=…)` ships
+- With two inputs, the governing attribute must be live for the roll to mean what A-7 says. `build_realm(cast_attributes=…)` ships
   **on** (lane A already flips it, B). With CAP Part B the seating of unauthored values stops (the mid-point is
   read), so the switch then gates only the authored `stats:` (the content is Jordan's and the CHAR content pass's,
   CAP Part C; a declared mover).
@@ -295,21 +341,22 @@ constant or pool arithmetic.
 # engine/substrate/descriptors.py (leaf; modules, the season and the port's exporter read it)
 CAPABILITIES: Mapping[str, CapabilityRow]          # id -> (kind, gloss, base, opposed_by, floor, ceiling, untrained, grows_by)
 capability(id) -> CapabilityRow                    # raises naming the roster
-ATTRIBUTE_FLOOR, ATTRIBUTE_CEILING                 # existing; the talent mid-point is derived from them
+ATTRIBUTE_FLOOR, ATTRIBUTE_CEILING                 # existing; the attribute mid-point is derived from them
+TRAITS: Mapping[str, TraitRow]; trait(id)          # the trait roster (§2a)
 
 # engine/dice_engine/sigma_leverage.py (pure; host and modules import it)
 pool_of(score, addends, pool_add, pool_floor) -> int
-opposed_ob(score, rate) -> float                   # the operand is a trained score, never a pool
+opposed_ob(score, rate) -> float                   # the operand is a skill score, never a pool
 even_line(pool_add) -> float
 
 # engine/season/seam/wrappers/pool.py (host; the one pool reader)
-score(w, p, verb) -> int                           # training: max(untrained score, held rank); no addend, no attribute
-talent(p, verb) -> int | None                      # the governing attribute as held; None = unauthored (reads as the mid-point)
+score(w, p, verb) -> int                           # the skill score: max(untrained score, held rank); no addend, no attribute
+talent(p, verb) -> int | None                      # the governing attribute as held; None = unauthored (reads as the mid-point). Proposed name; the batch names it `governing_attribute` (A-98: "talent" is retired)
 faculty(w, p, verb) -> int                         # pool_of(score, Σ addends, pool_add, pool_floor)
 rate(w, p, verb) -> Fraction                       # about_mid on score; 1 unless the row declares magnitude: rate (D-U1-09)
 
 # engine/season/seam/wrappers/sigma.py (host)
-advantage_sigma(fx, operands) -> float             # signed named levels: effort, wounds, office, proofs, favour, …, and the `edge` rows (talent among them)
+advantage_sigma(fx, operands) -> float             # signed named levels: effort, wounds, office, proofs, favour, …, and the `edge` rows (the governing attribute's among them)
 obstacle_operands(w, act, row) -> tuple            # (name, raw, step) per obstacle_terms member (OBS §1); the `capability` member sums hostile `circumstance` rows
 # the returned record gains `fed_by`: (use, role, key, side, value, contributed) per contributing row
 
@@ -330,8 +377,8 @@ Typed inputs carry the composed values and no module reads a table (`04` §A.2):
 
 **Check of the surface (CAP carries it).** Delete the `capabilities:` block and the load refuses; delete a
 contested row's `capability:` and the load refuses naming the row; re-point `argue`'s `base` and the
-talent levels of an `argue` follow the new attribute with no edit to code; plant a trait row and one
-hearer's odds move and nobody else's; give a seat row `modifier: minor` and only acts made through that seat
+attribute levels of an `argue` follow the new attribute with no edit to code; plant a trait on one hearer and
+his odds move and nobody else's; give a seat row `modifier: minor` and only acts made through that seat
 before its own body move. If any of these needs a Python edit to take effect, the surface is not the owner.
 
 ## §9 · What each lane cites this file for
@@ -347,13 +394,14 @@ before its own body move. If any of these needs a Python edit to take effect, th
 | PC | `fight`'s rows; `scores`, `addends`, `pool_add`, `pool_floor`, `opposition_rate` carried raw; `healing`; abilities as rows once the lever roster is exported; an approach is an `edge` row, never a pool rule |
 | MB | the `field` site: `command`'s definition and its three use rows, `CommandRecord`; a troop kind's `strength` is the troop table's |
 | FI, WR | `notice` and `task` as sites; `thread`; a finding names the capability that surfaced it through `fed_by` |
-| GO | the sheet shows `gloss`, rank, talent and the terms of `fed_by`; R-09's by-person conjunct is this surface's execution check: *two actors at different pools: yes* on a non-combat verb in `aperture`, with no monkeypatched addend |
+| GO | the sheet shows `gloss`, rank (the skill score), the governing attribute, the traits held and the terms of `fed_by`; R-09's by-person conjunct is this surface's execution check: *two actors at different pools: yes* on a non-combat verb in `aperture`, with no monkeypatched addend |
 
 ## §10 · What this does not decide
 
 The values of `pool_add`, `pool_floor`, `talent_level`, `opposition_rate`, `difficulty_ob` at ship (lane 29's tuning
 and the joint calibration); the per-seat `modifier:` values (the institutions and FA lanes' content); Health's form
-and the other derived resources (Jordan's AR-58, open); the content of any cast row; the base attribute of `healing`;
+and the other derived scores (Jordan's AR-58, open; A-98 (5) names the family, inventory
+`unified/work/A98_DERIVED_SCORES.md`); the content of any cast row; the base attribute of `healing`;
 whether the in-fight wound sizes (`CFG WOUND_ATK_OB`, `WOUND_DEF_OB`) and the season's `wound_step` are set by one
 calibration (PC's batch; `U1_OWNERS_AND_VOCABULARY.md` R-27).
 

@@ -10,6 +10,8 @@ whole-dice history; gates 2 and 3 restated as properties on the closed form; A-6
 real number), C3-N26 ("16.5 %" is whole-dice history, unrelated to the throughput file's). Changed: edit 6, the
 gate, the cost table's status; the evidence is kept and marked.
 
+Reconciled: 2026-11-12, A-97: "Layer 1 step 13, text owed" is rewritten to the applied state (node `L1-A29`, `04:1131`). This file was not on `unified/work/L1_PROPAGATION.md`'s list; found by a second grep.
+
 ## Status: PROPOSED
 
 Lands in batch: **B05** (IN/DICE, SC). Depends on: `U5a_DICE_owed_edits.md` §1 row 3 (`_chance_floor_cap` solved on the
@@ -118,8 +120,8 @@ time to choose the form. The size of the bend is Jordan's to tune and is exposed
 
    and make `soft_cap`'s body `return saturate(net_sigma, M_MAX)` (the same expression; the parity
    goldens are the control and do not move). `math.tanh` is a transcendental the port must match: it is
-   listed in the declared float contract that A-29 orders (Layer 1 step 13, text owed,
-   `OWED_TO_UNIFICATION.md` §A) and checked by the `fmath` vectors (`11_GO_float_contract.md` Part A; no
+   listed in the declared float contract that A-29 orders (Layer 1 step 13, APPLIED
+   2026-11-12, A-97, node `L1-A29`: `04:1131`) and checked by the `fmath` vectors (`11_GO_float_contract.md` Part A; no
    recorder, C3-L3).
 2. **`modules/social_contest/roll.py::obstacle`**. Old:
 

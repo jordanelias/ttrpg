@@ -12,6 +12,8 @@ U1 glossary *rung* ("ladder" for a chain of seats → "chain of seats"; the requ
 Resolved at the tree: `utter`'s row carries `requires: "—"` and `emits_on_refusal: []` (read 2026-11-12), so the edit
 adds a refusal kind (inv. 4).
 
+Reconciled: 2026-11-12, A-97: the cite of `04`'s "two cells that are not predicates" paragraph moved from `:1203-1208` to `:1204-1209` (PART D row 52 was inserted at `04:1082`, so every `04` line after `:1081` moved by +1; opened at `04:1204-1209`). No clause of this file waited on a Layer 1 amendment.
+
 ## Status: PROPOSED
 
 Lands in batch: **B21** (FA), after `06_FA_remit_grant_by_row.md`, `14_VERBS_BINDING_C_turnover.md` and
@@ -108,7 +110,7 @@ reading): the Queen consort's `off_widow_regent` row. See "Interaction" below.
    for mood `WAR`, `Existence(world_q.members(subject))`, `Existence(world_q.members(value))` and
    `Relation(actor in members(subject) or members(value))`, plus `may_wage`'s conjunct as
    `06_FA_war_lives_in_seats_B.md` edit 1 writes it. `subject != value` is a payload well-formedness refusal at
-   Act construction (`04` `:1203-1208`), not a predicate. The row gains `emits_on_refusal: [utter.refused]`
+   Act construction (`04` `:1204-1209`), not a predicate. The row gains `emits_on_refusal: [utter.refused]`
    (the clause that can now fail needs a kind, inv. 4). No `_req_utter` is written. The stem name `admitted` is
    this file's proposal, not an existing stem.
 

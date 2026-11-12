@@ -4,6 +4,8 @@
 
 ## Read at: the working tree of branch `ccr-62958c70-0kjhsw`, HEAD `181548b`, 2026-11-12. Producer: Opus lane U3. Companion: `unified/U3_CONFLICT_LEDGER.md` (the decisions this order applies, cited `C3-…`).
 
+Reconciled: 2026-11-12, A-97 (`unified/work/L1_APPLIED.md`, `unified/work/L1_PROPAGATION.md`): every Layer 1 amendment node is APPLIED, so §1.4 is rewritten to show none as gating a batch and the in-batch mentions (B05 step 5, B06, B08, B21, B38, B41) are rewritten to match; the table's last column names only what a batch's own proposal holds back. `L1-A26` is added as a CODE node beside the held ones.
+
 Reconciled: 2026-11-12, U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "fought scene" → "fight" (glossary *scene*); "the riposte" (`18_DETERMINISM_no_certain_matchup.md`) → "the riposte" (glossary *riposte*); "knockout" → "removal test" (glossary *removal test*; file names keep their words).
 
 ## 0. How this order was built, and what it is not
@@ -26,7 +28,7 @@ one or inside a batch, and (3) removing every edge that points forward, each wit
 (§4.1: 91 edges; SPLIT 59, REV 12, LATER 12, SUP 7, LANDED 1; row 91, LATER, added by U6 R-A). The batch graph that
 remains is acyclic (checked by script: every kept edge points to a batch of lower order). **Inside a batch** the
 order was not checked at first; §1.2 checks it, §1.3 checks that each gate's instrument exists by its batch, and
-§1.4 places the Layer 1 amendments as gate nodes (U6 R-A).
+§1.4 records the Layer 1 amendments, once placed as gate nodes (U6 R-A) and now all APPLIED (A-97).
 
 **What decides the grouping.** STAGES.md step 6's rules: owners and hash-equal work first, the batches every
 requirement stands on (the one roll, the keyed draw, the capability home) first by dependency; hash movers
@@ -91,8 +93,8 @@ CLAUDE.md §7).
    folded, C3-A3) with `10_DICE_one_score_two_roles` edits A–C (OBS step 0; Edit A is CAP row B1, Edit B is row B4;
    C3-V1) → OBS step 1a carrying `05_SC_obstacle_difficulty_and_modifiers_B` → `16_PESSIMIST_SC_A` (1b) →
    `05_SC_contest_record_on_event` (2, with `U5c_SC_proceedings_residue` §1) → `13_SC_tuning_tables` commit 1 (3) →
-   `13_SC_calibration` test, read red (4) → T13 commit 2, CAL green (5; the bench seats' `modifier:` held null until
-   `L1-A12`, §1.4) → `05_SC_opposed_obstacle_parity` (0.4) →
+   `13_SC_calibration` test, read red (4) → T13 commit 2, CAL green (5; the bench seats' `modifier:` column loads null first, T13's control arm;
+   Layer 1 admits it, `L1-A12` APPLIED, §1.4) → `05_SC_opposed_obstacle_parity` (0.4) →
    `16_PESSIMIST_DICE_soft_ceiling` → `16_PESSIMIST_DICE_task_difficulty_and_throughput` (code part) → `29_DICE`
    rows 2–4 and 8 → `U5b_PC_rulings_in_the_fight` §2–§3 (UPR §5 row 4) → `10_DICE_advantage_sources_for_the_arcs`
    → `10_DICE_believed_odds_have_a_prior` → `01_CORE_tests_shipped_world_falsifiers` R-09 row. Gate:
@@ -101,7 +103,7 @@ CLAUDE.md §7).
 7. **B06 keyed draw (IN/GO; one re-pin).** `11_GO_float_contract` Part A (`fmath`, the leaf `draw.py` imports;
    U6 R-A) → `11_GO_one_draw_owner` with `16_PESSIMIST_GO_keyed_draw_no_recorder` (one commit pair: `H2` and `Draw.u`
    in `draw.py`, C3-V2 → `draw_factory` returns `seeded` → the two outside generators and the four fallbacks) →
-   `11_GO_float_contract` Part B as C3-L3 (vectors) and Part C's text (owed, `L1-A29`) → `U5d_GO_owed_edits` →
+   `11_GO_float_contract` Part B as C3-L3 (vectors) and Part C's text (APPLIED, `L1-A29`, `04:1131`; nothing to land) → `U5d_GO_owed_edits` →
    `11_GO_pointer…` item 5. Gate: same seed twice, same hash; `engine/tests/test_draw.py` (the scan with its three
    named harness controls, the `(key, n) → u` and sampler vectors held in the test) and `engine/tests/test_fmath.py`;
    the vectors' **export** round-trip moves to B41, which builds the exporter (§1.3).
@@ -111,7 +113,7 @@ CLAUDE.md §7).
    five readings, the throughput reading among them (C-U5a-07); the loader accepts shapes (a) and (b) and refuses
    a band-keyed route row (planted).
 9. **B08 scene order (IN; one re-pin).** `16_PESSIMIST_CORE_a_scene_runs_in_its_own_order` edits 1–4 (edit 5 is
-   Layer 1 text owed; the live arm waits on `L1-A9`, §1.4) → `18_DETERMINISM_rival_acts_in_one_fold`. Gate: `interactions_per_scene = 1` equal; the
+   Layer 1 text, APPLIED, `L1-A9`, §1.4, and dropped from the file) → `18_DETERMINISM_rival_acts_in_one_fold`. Gate: `interactions_per_scene = 1` equal; the
    four readings.
 10. **B09 memory (IN).** `01_CORE_claim_fade_as_read` → `16_PESSIMIST_CORE_a_refusal_is_remembered` with
     `U5a_DICE_owed_edits` §4 and VRES §3 → `16_PESSIMIST_SC_B_one_reader_of_a_ledger` →
@@ -174,7 +176,7 @@ CLAUDE.md §7).
     `04_MB_playable_field_scenario` A, C, D → `27_MB_D` → `17_CENSUS_REST_2` W1.
 21. **B21 FA governance (FA).** The order of C3-D5, with three moves by U6 R-A (edges in §1.2): `06_FA_seat_terms_and_turnover`
     → `06_FA_remit_grant_by_row` → `06_FA_seat_terms_by_body_B` → `14_VERBS_BINDING_A` → `U5d_FA_owed_edits` §2
-    (custody) → `14_VERBS_BINDING_C` at control (its `revoke`/`succeed` draws, `rank_step` 0 until `L1-A12`) →
+    (custody) → `14_VERBS_BINDING_C` at control (its `revoke`/`succeed` draws, `rank_step` 0 as its control arm; `L1-A12` APPLIED) →
     `22_HAPPENINGS_B` edits 1–2 (moved after BIND_C: it "binds on" BIND_C's `succeed` draw, `22_HAPPENINGS_B…:8`, `:19`)
     → `06_FA_decree_binds` edits 1–2 → `16_PESSIMIST_FA_C` (the command predicate) → `06_FA_decree_binds` edit 3 (who
     is bound reads the predicate, A-22) → `16_PESSIMIST_FA_A` (after HAP_B, C3-K9) → `14_VERBS_BINDING_D` →
@@ -235,7 +237,7 @@ CLAUDE.md §7).
     `20_NARRATIVE_C` (moved first of the three: NARR_B and 28C each say it "lands first"; U6 R-A) → `20_NARRATIVE_B`
     (carrying `30_WR_D` commit 1) → `28_CORE_scene_access_C` (C3-D8) → `20_NARRATIVE_D` commit 1 → `20_NARRATIVE_E`
     (not edit 1) → `30_WR_B` → `30_WR_G` → `31_WR_A` (its commit 4, the `creed:` values) → `20_NARRATIVE_D`'s later
-    commits → `31_WR_B` (C3-L6; `sway_gain` 0 until `L1-A92`) → `30_WR_A` (with `09_WR_B_draws` edit 4 and the
+    commits → `31_WR_B` (C3-L6; `sway_gain` 0 until the calibration batch; `L1-A92` APPLIED) → `30_WR_A` (with `09_WR_B_draws` edit 4 and the
     weather's era part) → `30_WR_C` → `23_STORY_A` (C3-L14) → `30_WR_D` → `30_WR_E` → `30_GO_F` → `31_WR_C` (moved
     after `30_GO_F`, which its Depends names; U6 R-A) → `U5d_SE_cohort_heavy_moves_and_caste`.
 39. **B39 procedural generation and cases (WR).** `21_PROCEDURAL_A` → `_B` → `_E` → `21_PROCEDURAL_C` (the prologue and
@@ -247,7 +249,7 @@ CLAUDE.md §7).
     `_PAPACY_F` (each with A-80's entrenched-world arm, C3-C12) → the four grounding files in the order
     `_BYZANTINE_grounding` → `_VENICE_grounding_E` → `_COLONIAL_grounding_F` (which names VENICE_grounding_E edits 1
     and 3 among its Depends; U6 R-A) → `_PAPACY_grounding` → `_SYNTHESIS_E`.
-41. **B41 GO port gate (GO; after `L1-A29` and `L1-A30`, §1.4).** `16_PESSIMIST_GO_surface_pins` (GO-08 builds
+41. **B41 GO port gate (GO; `L1-A29` and `L1-A30` APPLIED, so no Layer 1 predecessor, §1.4).** `16_PESSIMIST_GO_surface_pins` (GO-08 builds
     `tools/export_oracle_pins.py` and `harness/port_oracle.py`) → `11_GO_port_gate_order_and_coverage`. Gate: the
     pins and vectors it names, **including the B06 `fmath` and `(key, n) → u` vectors' export round-trip moved here**
     (`export_oracle_pins.py --check` reds on an edited vector; §1.3); no draw or float log (C3-L3).
@@ -372,34 +374,33 @@ Batches not listed (B09 to B11, B16, B18, B23, B25 to B27, B29 to B31, B34, B35,
 which name existing harness commands or §6.1/§6.2 instruments written inside the batch; none names a tool another
 batch creates.
 
-### 1.4 Layer 1 amendments as gate nodes (Jordan's act; text drafted in `unified/U3_LAYER1_AMENDMENTS.md`)
+### 1.4 Layer 1 amendments: all APPLIED, no batch is gated on one (Jordan, A-97; text in `unified/U3_LAYER1_AMENDMENTS.md`)
 
-A node `L1-…` is Jordan applying one drafted amendment (both halves, PART B/C and PART D). It has no predecessor in the
-batch graph, so it adds no cycle. Each batch lands at the dormant form the amendments table names; only the arm named
-here waits on the node.
+Reconciled: 2026-11-12, A-97 (`ED-IN-0358`; `unified/work/L1_APPLIED.md`, `unified/work/L1_PROPAGATION.md`). This section
+once placed each drafted amendment as a gate node `L1-…` that a batch's live arm waited on, with a dormant form that
+landed without it. **Every `L1` node below is APPLIED to Layer 1**, so **no batch is gated on any of them**: each batch
+lands its live arm. The last column names only what a batch's own proposal still holds back, for a reason of its own (its
+control arm, a dial at zero, a measurement flip); none of it is a Layer 1 condition. A node had no predecessor in the
+batch graph, so it added no cycle and removing it adds none.
 
-**APPLIED 2026-11-12 (Jordan, A-97; `ED-IN-0358`).** Every `L1` node below is applied to Layer 1 (lines in
-`U3_LAYER1_AMENDMENTS.md` and `work/L1_APPLIED.md`), so no arm in this table waits any longer: each batch may land its
-live arm, still behind its own revert or dial where its proposal names one. `L1-A96` (A-96) is added.
-
-| node | the arm that waits on it (batch) | dormant form that lands without it |
-|---|---|---|
-| `L1-A3` APPLIED | the host grading the field by its end state; B23's land rules on `Won` (B17, B23) | `FieldOutcome` carries the end-state flags beside the margin; the ladder grades the margin `[ASSUMPTION]` |
-| `L1-A4` APPLIED | any new person-supplied callable across a seam: B20's field decider, B30's `duel` (B20, B30) | the built `decide=host.decide` (`seam/wrappers/combat.py:395`), as built |
-| `L1-A72` APPLIED | B30's wrapper handing `duel` into the field (B30) | the `contest_nesting_cap` fixture and `nested_entry` with no caller |
-| `L1-A9` APPLIED | `interactions_per_scene` above 1; the rival-acts draw over scenes (B08) | B08 edits 1–4 at `interactions_per_scene = 1` |
-| `L1-A64` APPLIED | `precedence_level` set (B28) | the person key at control (`precedence_level` `None`) |
-| `L1-A12` APPLIED | any non-null seat `modifier:` (OBS step 5's bench die, B05; B19; B32–B33); `rank_step` above 0 (B21) | the column loaded null; `rank_step` 0 |
-| `L1-A13` APPLIED | any authored `passes_through`, `hand_term`, `audit_at_exit` (B32, B33) | the keys accepted and absent |
-| `L1-A20` APPLIED | `at_war` narrowed to seat holders that may muster (B21) | `may_wage` built; `at_war` as today |
-| `L1-A29` APPLIED | B41's reading of step 13's done-when (B41) | B06 whole (hash EQUAL) |
-| `L1-A30` APPLIED | B41's port draw (B41) | B06 whole, under R-C's reading that `n` is part of the key |
-| `L1-A92` APPLIED | `sway_gain` above 0 (the calibration batch after B38) | the RESOLVE-side sway at `sway_gain` 0 (B10 host, B38) |
-| `L1-A62` APPLIED | none (A-62: build nothing) | — |
-| `L1-A96` APPLIED (with `L1-A96b`, the `detention` gate basis) | the Failure branch forming the guard's `capture` (B37) | the Failure writing `fight.stopped` alone |
+| node | status, and the Layer 1 line (`04` unless said) | batch(es) it concerned | what the batch still holds back for its own reason |
+|---|---|---|---|
+| `L1-A3` | APPLIED `:777`, `:786`, row 24 `:1050` | B17, B23 | nothing; the host grades the field by its end state |
+| `L1-A4` | APPLIED `:182`, row 22 `:1048` | B16, B20, B30 | nothing; the built `decide=host.decide` (`seam/wrappers/combat.py:395`) is the declared class |
+| `L1-A72` | APPLIED row 19 `:1045`; `hol:1396` | B30 | B30's wrapper hands `duel` into the field in B30's own order (the `contest_nesting_cap` fixture and `nested_entry` land first, UPR §1) |
+| `L1-A9` | APPLIED `:662`, rows 29 `:1056`, 36 `:1065`, 41a `:1071`, F.26 `:1227` | B08, B28 | `interactions_per_scene = 1` is B08's gate control (hash equal), not a Layer 1 form |
+| `L1-A64` | APPLIED row 36 `:1065`, F.26 `:1227` | B28 | `precedence_level` `None` ships first and flips to `minor` / `major` in B28's commit 8 if its gate rows pass (`28_CORE_scene_access_A…`) |
+| `L1-A12` | APPLIED `:331`, `:351`, row 33 `:1062` | B05, B19, B21, B32, B33 | the seat `modifier:` column loads null first (the `13_SC_tuning_tables` control arm); `rank_step` 0 is BIND_C's control arm |
+| `L1-A13` | APPLIED `:331` | B32, B33 | the three keys are authored with the institutions content, not before; `dignity` is not among them |
+| `L1-A20` | APPLIED `:460`, row 48 `:1078`, F.32 `:1233` | B21, B22, B23 | none from Layer 1 (`06_FA_war_lives_in_seats_B.md` edits 1–3 are the code) |
+| `L1-A29` | APPLIED step 13 `:1131` (was `:1130`) | B06, B41 | none; B41 reads step 13 as amended |
+| `L1-A30` | APPLIED `:927`, `:953`, `:959`, row 35 `:1064` | B06, B41 | none; the port builds no generator object |
+| `L1-A92` | APPLIED `:251`, row 18 `:1044` | B10, B38 | `sway_gain` 0 until the calibration batch after B38 sets it (A-92) |
+| `L1-A62` | APPLIED row 51 `:1081` | none | none (A-62: build nothing) |
+| `L1-A96` and `L1-A96b` | APPLIED `:177`, `:654`, rows 1 `:1026`, 41 `:1070`, new row 52 `:1082`; the `detention` clause `:619`, row 10a `:1036` | B37 | `22_HAPPENINGS_C` ships at its control (`enmity_floor` unreachable: the context never holds); the Failure branch forms the guard's `capture` where the context is on |
 
 `L1-A22`, `L1-A24`, `L1-A77`, `L1-A85` are ledger rows (APPLIED 2026-11-12 as superseding rows under `ED-IN-0256`, `ED-IN-0261`, `ED-MB-0016`, `ED-IN-0352`), once to be co-committed with B21, B10, B19 and B23/B38; `L1-A17`, `L1-A60`
-and `L1-A84` are reference text. None of them is a gate.
+and `L1-A84` are reference text and stay HELD (A-97: canon and the strife master are not Layer 1); `L1-A26` is a CODE node (`degree_from_net`'s docstring, B05) and stays with its batch. None of them is a gate.
 
 
 ## 2. The batch graph
