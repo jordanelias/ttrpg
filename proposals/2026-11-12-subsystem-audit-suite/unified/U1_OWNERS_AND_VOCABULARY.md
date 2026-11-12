@@ -144,8 +144,8 @@ Three facts, three owners (one each); lane A's interim rosters retire into them 
 | a task's **difficulty** | a `difficulty:` cell on the verb's own row (`engine/season/verb_table.yaml`, P), naming a member of the closed roster `rosters.yaml: difficulty_levels` (`plain routine demanding hard`, P); the size of each level is the fixture table `Fixtures.difficulty_ob` (P, NUMBER row); required on every rolled row, refused at load where absent | `rosters.yaml: task_difficulty` (B), `verb: number`, closed over the social roll's verbs | **retired at OBS §4 step 1a**: each of its nine rows becomes `difficulty: routine` (the control arm C-04 orders: routine 1 + the stand-in 1.0 = today's 2.0 for an inquiry; routine 1 + 2/2 = 2.0 against an ordinary person) |
 | the **content** (who is how good; which task is harder) | Jordan's and the CHAR content pass (CAP Part C) | lane A ships every person at 2 and every task at a calibration | the suite assumes the defaults until authored; charge 3 ("Ob always 2 is wrong") stays **not met in the shipped realm** until Part C (OWED §E) |
 
-Ladder: step 4 for the mid-point (`held_reading`'s midpoint is derived from `AFFILIATION_FLOOR`/`CEILING` the same
-way, `engine/substrate/descriptors.py:144-145`); step 4 for the difficulty home (the verb's facts live on its row:
+Ladder: step 4 for the mid-point (the tree already derives the attribute mid-point this way for the told-claim
+credit: `engine/season/decision/options.py:1631`, `COMPETENCE_MID = (ATTRIBUTE_FLOOR + ATTRIBUTE_CEILING) / 2`, T); step 4 for the difficulty home (the verb's facts live on its row:
 F-CORE-18, U1 §1's `capability:` column; a side roster keyed by verb is the shape U1 already refused); step 5 for
 one level ladder (the four named levels are what `13_SC_calibration.md` C1 is stated on; a per-verb float would be a
 second ladder for the same quantity). Hash: retiring `task_difficulty` into `routine` rows is hash-equal at the
