@@ -2,6 +2,8 @@
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-13) — the precedence draw is the one sampler's (A-5). Under Jordan's answer A-9 the fold orders scenes, so a rivalry group is a group of scenes and is re-ordered among the positions it holds. First reading for gate 1: reversing the hash order flips 1 of 175 round-0 acts (realm, seed 0; `audits/16_PESSIMIST_CORE.md` E-07). Layer 1: this fills `04` F.26 and keeps D-36 (rank never breaks a tie).
 
+Folded: 2026-11-12 by `audits/28_SCENE_ACCESS.md` (ruling A-64). Nothing here is deleted; one rivalry key is added and the Layer-1 sentence in the line above is narrowed for that key alone. (1) `rival_key` gains `("round", person)`: a person's own scene and every scene holding a face-to-face interaction that names him are one group, re-ordered by this file's rule, among the positions the group already holds. For that key the draw's pool is the ordinary score with levels for office rank and a kept appointment, since a claim on a person's time has no skill of its own; the roller, the stream and the re-order are this file's (`28_CORE_scene_access_A_occupancy_and_precedence.md` §4). (2) *"keeps D-36"* holds for this file's own keys (a seat, a Record, a larder). For the person key A-64 makes office rank a weight of the draw and never a sort; the amendment to `04` PART D row 36 is drafted in that file and applied only by Jordan. (3) Gate 1's count should report the person key apart: 2, 5 and 4 executed and 31, 48 and 26 attempted rounds with rival visitors at seeds 0, 1, 2 (two seasons; audit §1.3).
+
 ## Status: PROPOSED
 
 Source: `audits/18_DETERMINISM_SWEEP.md` C-11. Standing rule: `AUDIT_BRIEF.md` (Jordan, 2026-11-12):

@@ -2,6 +2,8 @@
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-22, C-27) — `challenge`: MATTER emits `challenge.declined` at the due tick and writes no `Person.stance`; the challenger's satisfaction is his own later `forgive`. `commit` and `forgive` take the route shape with flat `writes:` (`U5c_VERBS_residue_and_governance_owner.md` §1). `carry`'s draw in §1 supersedes the docketing row of `13_SC_draw_for_unrolled_contests.md`.
 
+Folded: 2026-11-12 by `audits/28_SCENE_ACCESS.md` (ruling A-64). Nothing here is deleted; three edges are named. (1) §1's `carry` draw gains a leverage source on the carrier's side, `waiting`: one level per rebuff the log records of the petition carried (`28_CORE_scene_access_C_the_petition_that_waits.md` §2). `backlog` stays the obstacle term it is, so a much-rebuffed paper meets a full docket with both in the roll. (2) `carry.refused` (*declined by the room*) is one of the rebuff kinds that file counts, so this row's Failure is what later strengthens the same paper. (3) §4's drawn `commit` is the grant of an appointment when its Proposition is an ask for audience, and then carries a declared term (`28_CORE_scene_access_B_appointments.md` §2); §3's `challenge` and §2's `forgive` are two of the ways a petitioner kept waiting ends the matter, the first through the `dispute` conjunct once CR-88 counts his rebuffs as origins, the second by his own draw.
+
 ## Status: PROPOSED
 
 Batch S1-D of `audits/14_VERBS_SOCIAL1.md` §14. Authored in part by Fable; completed by Opus after the

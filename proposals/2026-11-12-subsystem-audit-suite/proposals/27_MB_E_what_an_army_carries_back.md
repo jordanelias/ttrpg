@@ -167,7 +167,8 @@ band  ->  aftermath.regroup_share[band] of the fled return to `assigned`; the re
     that round.
   For the injured the like act is `tend`, as above.
 - `aftermath.return: off` is the control: nobody returns. `aftermath.acting: off` is the reversible arm: the
-  three acts change nothing, and only the unprompted draw runs.
+  recall's further draw and the muster's term are not applied, and only the unprompted draw runs. The rally
+  on the field is its own proposal's draw and is not switched by this.
 - What the page-read source says is about a rally on the field, not a return afterwards: light troops
   "simply turned and ran, and then rallied once they had temporarily outdistanced pursuit", and a leader
   stops a panic in person (MV P1, P2). It is the ground for the field's rally draw by troop weight

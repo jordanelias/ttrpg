@@ -256,7 +256,7 @@ One tension, named and not resolved: the keyed draw (A-30) is a precondition of 
 the test is run before A-30 lands, the instrument must build its own per-purpose streams, and that builder
 is test code, not engine code.
 
-## 9. For Jordan
+## 9. For Jordan (both items answered: A-77, A-78)
 
 1. **If the test says the multiplier can go, does it go?** A-59 says lower, and its record says test removal.
    `27_MB_C` §4 states the criterion in advance. *(a) Ship zero* when the criterion's first arm passes: every

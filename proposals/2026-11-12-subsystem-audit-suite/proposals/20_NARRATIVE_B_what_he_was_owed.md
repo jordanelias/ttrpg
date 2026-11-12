@@ -2,6 +2,8 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-12**, **A-23** and the story lane's R-11. A due that lapses under an empty seat is laid at the door of the believed holder of a seat that may fill it (`U5d_STORY_owed_edits.md` §3). A holder in custody forms no act through his seat (A-23), so his dues can lapse while he is held; whom the wronged man then blames is read from his own claims as for any lapse, and this lane adds no rule for it. No step is removed.
 
+Folded: 2026-11-12 by `audits/28_SCENE_ACCESS.md` (ruling A-64). Nothing here is deleted; edit 5's owed petition clause is carried by `28_CORE_scene_access_C_the_petition_that_waits.md` §1. `dues_unmet(p, x)` gains its second clause there: a petition of `p`'s addressed to `x` of which he holds a claim that it lapsed or was returned, and a promise of `x`'s to receive him that ended at its term while he was turned away. A separate, lighter term, `waiting_valence × kept_waiting(p, x)`, reads his own claims of being kept waiting at `x`'s door (the Event `visitor.kept_waiting`) and fades as they fade. The `[UNVERIFIED]` in edit 5 (what the lapse's deposit names) stands: that file relies on `U5c_SC_proceedings_residue.md` §4 item 6 appending the `lapsed` stage to the petition Record.
+
 ## Status: PROPOSED
 
 Source: `audits/20_NARRATIVE_CHURN.md` F-NARR-02 (an omission has no author), F-NARR-03 (an office owes

@@ -265,8 +265,10 @@ the share in which exactly one side reaches Success):
 
 Set beside P2's chosen row: the fight's 65.7 / 63.0, 78.0 / 75.2 / 74.3, 92.3 / 91.0 against the argument's
 65.6 / 63.0, 77.9 / 73.9, 92.0 / 90.6. **The two contests share one better-one-wins curve to within a point
-and a half at every gap measured.** That is not tuned in; it follows from pricing a point of training at
-0.4 on both sides of both rolls. The "decided exchange" is arithmetic on the one act that exists, not a
+and a half at every gap measured.** No value was tuned to produce the match. It is not shown here to be
+more than a property of these two contests at these values (the fight's curve also rests on its damage and
+defence layers), which is why the proposal's gate 6 and its second falsifier hold the two curves together
+explicitly rather than assuming it. The "decided exchange" is arithmetic on the one act that exists, not a
 built mechanism: an exchange pair is decided 38 to 51% of the time, so the expected count of pairs to a
 decision is 2.0 to 2.6, inside the bound of three. Under today's rate on the same sampler the equals drift
 (Failure 60.1, 62.1, 63.9, 66.1% at ranks 0, 2, 4, 7) and the worse arguer is priced harder than the
@@ -293,6 +295,21 @@ The extremes: rank 0 arguing against rank 7 on a `hard` matter composes 6.7 agai
 reads 1.4% Partial-or-better before the per-pool ceiling (`roll.py::_chance_floor_cap`, H-213) lifts it to
 its floor; the same pair on a `routine` matter reads 4.6%. The ceiling is the argument's bound against a
 wall and is `16_PESSIMIST_DICE_soft_ceiling.md`'s to shape. No cell reads 0 or 1.
+
+### 5.1 The five properties of the draw (`skills/resolution-diagnostic`; evidence for the NERS reading, not a verdict)
+
+| property | attack made on the chosen rule | outcome |
+|---|---|---|
+| P-i legible odds | is any part of the defender surfaced as a bare number the player cannot name? | failed for the rule: training is one named obstacle term (`opposition`), the base one (`even`), aptitude and wounds named levels. Not new and not this lane's: the fight's trace carries its assembled advantage as a σ float (`wrapper.py:333`, `net_sigma`) |
+| P-ii uniform leverage | training is an obstacle shift, so its leverage falls with the root of the roller's pool: 0.4 ÷ (0.8 × √pool) is 0.20σ a rank at pool 6, 0.18σ at 8, 0.14σ at 13, where a level is 0.25σ at every pool (algebra) | **intended, with its cost stated.** A-26 prices an opponent per point, and the roller's own dice grow at the same 0.4, so the gap is what is priced. Cost, measured: one rank of gap is worth two to four points less of the better man's share at a base of rank 4 or 5 than at rank 2 (P2: 65.7 against 63.0; 78.0 against 75.2 and 74.3) |
+| P-iii bounded, monotonic | does the obstacle wall at the extreme, and does any step fail to bite? | failed. P4 falls at every step. Rank 0 against rank 7 in a fight: pool 6 against obstacle 2.8 reads 41.9% Partial-or-better and 23.8% Success-or-better before the defence layer (closed form), so a novice still lands on a master. In the argument the per-pool ceiling is the bound. `max(0, score)` clamps the operand only and no rank is below 0 |
+| P-iv graded, recoverable | does either contest collapse a band? | failed: four bands in both; the fight's Partial is a graze or a bind (`wrapper.py:347-350`) |
+| P-v right engine | a second draw path or ladder? fractional obstacles on whole dice? | failed after `U5a_DICE_owed_edits.md` §1: one sampler; the rule makes fractional obstacles routine (0.4, 0.8, 1.2), which the bell curve takes natively. The two-sided roll, a second draw per exchange, is refused (§4 P6) |
+
+Phase 4 (loops): a wound puts levels against its bearer, which earns him more wounds. The loop is bounded
+(the soft cap; the fight ends) and is not damped. Its measured gain at the chosen arm: the first man
+wounded still wins 27.2% of fights and the lead changes in 45.2%, against 24.2% and 35.2% shipped, so the
+longer fight weakens the snowball rather than feeding it.
 
 ---
 
@@ -350,7 +367,8 @@ A-26's, the scale A-31's, the two inputs A-7's, the wound A-8's, and the operand
 |---|---|---|
 | J-U5b-01 (`unified/U5_FINDINGS_CLOSURE_U5b.md` §5.2) | answered by A-71 | closed by this file: neither listed option; one rule on the trained score. Option B as listed there (0.4 of the defender's pool in the fight) is form 2, refused by measurement |
 | C-U5b-02 (CAP row B5 against A-31) | U5b decided "two declared regimes" | **superseded** (ladder step 1, A-71): one fixture, one rate; `fight_opposition_rate` is not created. `Folded:` on `U5b_PC_rulings_in_the_fight.md` |
-| `U5a_capability_home_and_two_inputs.md` rows B4, B5; `U1` §4 row *the opponent* | the operand is the opponent's pool | **amended** in place (`Folded:`): the operand is the trained score; the pool's base is the even line. Every social figure is unchanged; the fight is what the amendment protects |
+| `U5a_capability_home_and_two_inputs.md` rows B4, B5 | the operand is the opponent's pool | **amended** in place (`Folded:`): the operand is the trained score; the pool's base is the even line. Every social figure is unchanged; the fight is what the amendment protects |
+| `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §4, row *the opponent* | the same sentence | **owed the same amendment; not edited by this lane** (outside the files it was given). Until it is, U1 and U5a disagree by one word |
 | F-PES-PC-01 (a fight is two blows) | `audits/16_PESSIMIST_PC.md` | stands; A-31's scale is the fix; this file's gate 2 reads it at the obstacle it will ship with |
 | the pessimist's fourth row of §6.3 (0.4 × pool − 1: 5.65 turns, 3.48 blows, 5.3%) | same | reproduced (5.63, 3.49, 5.5%); it is form 3 at 1.0 |
 | `05_SC_opposed_obstacle_parity.md` (the carrier of the rate) | option B's edit 1 | stands with one change: the composed obstacle is the even line plus the product; its whole-dice tables are history |

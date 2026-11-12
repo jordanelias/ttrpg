@@ -31,4 +31,6 @@ Jordan, 2026-11-12: *"Once we finish all lanes, the unification pass will update
 
 ## Standing constraints for every stage
 
+Every Fable proposal and recommendation must carry instructions to code it in the game (`AUDIT_BRIEF.md`, last section), so that v12 can take it as a batch item. Unification test 9 (`UNIFICATION_BRIEF.md`) checks it; v12 does not accept an item that lacks them.
+
 Read `AUDIT_BRIEF.md`'s standing rules and `unified/DECISIONS_ANSWERED.md` first. Nothing deterministic; ground every claim in the repository; do not guess. One round of review per deliverable, then stop (CLAUDE.md §0). No lane edits code, canon, a registry or a ruling; implementation lanes land the plan.

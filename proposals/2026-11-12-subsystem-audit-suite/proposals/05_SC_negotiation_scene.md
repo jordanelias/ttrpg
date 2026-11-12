@@ -2,6 +2,8 @@
 
 Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-06 — no *contest* roll decides consent, but the consenting party's choice is sampled (the one chooser's sampler), so acceptance is a draw whose odds his pursuits set.
 
+Folded: 2026-11-12 by `audits/28_SCENE_ACCESS.md` (rulings A-63, A-64). Nothing here is deleted. A meeting of two parties under a `disposal: mutual` row is a scene with both in it: each party who moves is engaged for that round, and the meeting is a scene received for the one who did not open it (`28_CORE_scene_access_A_occupancy_and_precedence.md` §2, §3). A party already engaged elsewhere that round is not at the table and the meeting does not open: the opener's act is refused at `occupied`, and he may call again, ask for an appointment or send his terms on paper (`28_CORE_scene_access_B_appointments.md` §4). Consent is unchanged: still each party's own sampled act.
+
 ## Status: PROPOSED — design-first (depends on the `exchange` verb's operands and on `05_SC_playable_hearing_B.md`)
 
 Source: `audits/05_SC_audit_addendum_B.md` §B4, G-51. Intent of high weight, not ruled: R-19 (fears

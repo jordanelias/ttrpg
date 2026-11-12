@@ -48,6 +48,8 @@ and it edits the suite's own documents to make them agree. It changes no code an
    named.
 
 
+9. **Implementation-ready (Jordan, 2026-11-12: *"all Fable work proposals recommendations will require instructions on how to code / implement in game so that it can be passed off to workplan v12"*).** Every proposal and recommendation carries instructions a later batch can execute without re-deriving them: exact files and symbols (the single owner), order of edits, data rows or schema, call sites, named tests, the gate (an execution artifact and its expected reading), the falsifier and control, declared hash movers, dependencies, what lands it, cost class and tier. The unification lanes check this for every proposal in their family, list the deficient ones in `unified/U4_DOCUMENT_STATUS.md` as INCOMPLETE with what is missing, and complete them where the missing part is decidable from the repository; what cannot be completed is returned to the lane that owns it or listed for the v12 stage with its reason.
+
 ## Closure rule and the extended authority (Jordan, 2026-11-12: *"Fable permission to resolve all issues/gaps/findings as required while ensuring commensurate"*)
 
 Fable lanes may now **resolve every issue, gap and finding in the suite** as required, and must do so
