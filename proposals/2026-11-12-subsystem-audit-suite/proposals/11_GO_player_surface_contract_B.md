@@ -46,9 +46,9 @@ the plain run (addendum §B7, E-B3 to E-B5). One person at one seed is a reading
    ids (`carriers.py:358-371`); `Claim.doer` is "the holder's own id when the claim records HIS OWN
    act" (`:372-381`). Neither holds an act id.
 4. **The offer is flat.** Five deliberations showed 22, 32, 33, 32 and 38 candidates (157 rows in a
-   season) over 33 distinct verbs. Twenty-three verbs appeared on every sheet whatever the question
-   (`forge`, `sabotage`, `conceal`, `challenge`, …); five appeared once (`petition`, `tend`, `lie`,
-   `commit`, `argue`). `Candidate` carries `verb`, `subject`, `operands`; its `why` was removed because
+   season) over 33 distinct verbs. Twenty-one verbs were offered five times across the five sheets,
+   whatever the question (`forge`, `sabotage`, `conceal`, `challenge`, …), and `train` twenty times;
+   five appeared once (`petition`, `tend`, `lie`, `commit`, `argue`). `Candidate` carries `verb`, `subject`, `operands`; its `why` was removed because
    nothing read it (`carriers.py:591-595`). Nothing tells a client which rows answer the question in
    front of the person and which are the standing menu.
 5. **Play is of two kinds and the first contract named one.** A duel's turns are not season acts, so

@@ -704,3 +704,194 @@ Ratification summary for this lane: nothing in these files is RATIFIED by its ow
 - **Conflicts / stale:** the SC-05 deletion would orphan modules the SC audit may reference.
 - **Open items:** IN-44 rows; SC-05 timing (scheduling call); CR-38/CR-39.
 
+### proposals/2026-10-21-verb-key-rows.md
+- **What it is:** [READ PARTLY: lines 1-60, 112-140 and the ## / ### heading index of 346 lines; the §2 disposition table (lines 167-346) not opened line by line] Part 1 of 3 of "Verb key rows": every folded name of Jordan's uploaded verb list (~120 names) given one disposition (KEY / DERIVED / PARKED) and the key rows needed; static reading, 2026-10-21.
+- **Status:** "PROPOSED (2026-10-21). Not ratified ... Static reading. No season, probe or test ran ... No proposed row was loaded; every claim that a skeleton loads is unverified." (:2). Reading: PROPOSED, never built as written; the verb table has since grown (62 rows per B10-18b), so which keys landed is [UNVERIFIED].
+- **Bears on:** CORE, SC, PC, MB, FI, FA, SE, WR, CHAR.
+- **Content that matters:**
+  - Terminology trap: here a "key" is "a verb's own row in `verb_table.yaml` that reaches the world through the host's code" (:42-45). It is NOT the retired Key substrate (ED-IN-0232; `keys.py`, echo transport) — same word, unrelated sense; the doc predates or ignores that retirement.
+  - The requirements any new row meets at import: K-1 (row fields), K-2 (writes are `write_matrix.yaml` rows), K-3 (refusal kind for every failable clause), K-4 (effect or declared decline; `manifest/registry.py:599,:637`), K-5 (seven alignment cells or `uncelled:` line), K-6 (a `verb_capability` key only if a pool is rolled and differs; only two entries, `tell`/`speak` → `copying`), K-7 (optional creed cell) (:48-110).
+  - Disposition test in order: PARKED (needs unbuilt mechanism) → KEY (a reader keyed by verb name must tell it apart, or precondition/write/Event kind differs) → DERIVED (recovery predicate) (:112-139). `appoint` is `confer` on a seat whose `conferral` is `appointed`; no row may add a basis (ED-IN-0256, `conferral_bases` closed).
+  - Names folded into `tell` that the game can tell apart: `confide`, `praise`, `insult`, `threaten` (own rows); `confess`, `confront` (recoverable by predicate); `counsel`, `warn`, `testify`, `flatter` not with confidence (:34-39).
+  - Recommends one host rename `examine` → `search` (:30).
+- **Conflicts / stale:** the verb count (46 names in its import) differs from 56 (thrust-layer) and 62 (B10-18b). Uses "key" for what the repo's later rulings retired under the word Key (see above).
+- **Open items:** §7 says "None survives CLAUDE.md §0's five answer-it-first tests" (part 3 :317).
+
+### proposals/2026-10-21-verb-key-rows_part2.md
+- **What it is:** [READ PARTLY: heading index of 540 lines and lines 1-9 only] Part 2: §3.0-§3.1.9, the key rows' skeletons.
+- **Status:** same PROPOSED status as part 1 (:2).
+- **Bears on:** PC, MB, SC, FI, WR.
+- **Content that matters:**
+  - Nine key skeletons: `accept` (KEY on `fight`, shipped, one amendment), `hire_troops` (on `levy`), `sack` (on `pillage`), `confide` (on `tell`: shared contest, no body), `praise` and `insult` (rows on `tell`'s prize), `audit` and `scout` (on `survey`), `teach` (on `train`) (:55-494).
+  - §3.0 states "the rules every skeleton below follows" (:11).
+  - [SKIPPED: /home/user/ttrpg/proposals/2026-10-21-verb-key-rows_part2.md body, lines 10-540 — not opened; per-skeleton cell values unread]
+- **Conflicts / stale:** `levy` was renamed `requisition` (#482) per CL-TROOP in B10-19, so `hire_troops` on `levy` is stale-named.
+- **Open items:** none read.
+
+### proposals/2026-10-21-verb-key-rows_part3.md
+- **What it is:** [READ PARTLY: lines 214-345 (§6 cost and ordering, §7) and heading index of 320 lines; §3.1.10-§5 not opened] Part 3: `propose`/`allege` (on `utter`), `threaten` (on `tell`), parked keys, why no per-row value fan, host-row edits, cost and ordering.
+- **Status:** same PROPOSED status (:2).
+- **Bears on:** SC, CORE, FA, FI.
+- **Content that matters:**
+  - Cost table (:216-226): 6 new rows with host built (`confide`, `praise`, `insult`, `threaten`, `propose`, `allege`), 5 once host exists, 1 amended (`accept`), 11 waiting (`assassinate`, `capture`, `champion`, `besiege`, `testify`, `flatter`, `track`, `coup`, `repay`, `bargain`, `navigate`).
+  - Ordering (:260-277): buildable now: `accept`'s kind, `confide`, `threaten`, `propose`/`allege`, `commit` one-per-actor decline, `release`/`transfer` earned kinds, the rename; `praise`/`insult` only after H-194 ships `stance_polarity: declared` (under `legacy` the stance term cannot separate them).
+  - Hash/emission moves (:295-315): `confide` makes `confidence.broken` emittable (never emitted at `telling_privacy: 0`); `threaten` deposits an intent claim not present at `intent_disclosure: 0.0`; the `examine` → `search` rename moves every `examine` act id.
+  - Three fold lines in the upload are wrong against code: `designate`/`elect` as bases, `annex` under `seize`, peace as a covenant term (peace is release of a war commit) (:289-293).
+  - Chooser growth is formula-only, unmeasured: `confide` adds |T|·|K| candidates (`tell`'s count again) (:243-257).
+- **Conflicts / stale:** the thrust-layer register's wrong-kind formation tax (28.7% of acts) would rise with 6+ new rows that form on every referent; this file's chooser-growth note does not account for it.
+- **Open items:** §7: none.
+
+### proposals/2026-10-22-system-description/ctl/control.py
+- **What it is:** [READ IN FULL, 28 lines] Scratch control script from the system-description suite: runs `build_realm(seed)` for N seasons with the shipped chooser and prints per-verb attempted/ok counts and ~17 event-kind counts.
+- **Status:** script, no Status line. Reading: historical instrument; hard-codes `sys.path.insert(0, "/home/user/ttrpg")`.
+- **Bears on:** CORE, PROCESS.
+- **Content that matters:**
+  - Classifies a refusal by event-kind SUFFIX (`refused`, `unavailable`, `unauthorized`, `unheard`, `ineligible`, `untold`, `none`, `blocked`, `undecided`) on the FIRST cause only (:12-19) — the suffix rule the thrust-layer register's P1 replaced with the driver's `emits_on_refusal` rule (`01` §1; the narration proposal's rule "over-counts degree bands").
+  - Imports `build_realm, SeasonDriver, make_chooser, resolvable_verbs, H, draw_factory` from `engine.season.harness.populated` (:4) — a re-export surface that may have moved; [UNVERIFIED by grep].
+  - Reports `capability nonempty` and `pursuits empty` counts (:27), `live oblige`, cap-200 ledgers (:26) — the source of the "capability empty for 429 of 430" style figures.
+- **Conflicts / stale:** suffix refusal definition; `d.resolved` omits graded/contested admission refusals (thrust-layer G-02), so `acts=` undercounts.
+- **Open items:** none.
+
+### proposals/2026-10-23-subsystem-completion/2026-10-23-subsystem-completion-00-index.md
+- **What it is:** [READ IN FULL, lines 1-106 of 108] Index for ten subsystem-completion proposal files (T01-T10), with cross-file rulings R1-R12, order of landing, the eight asks, hash movers and Layer-1 touches.
+- **Status:** "PROPOSED ... every item, ruling and ask here is held back ... **Since adopted as v10 positions (ED-IN-0299); AQ-X1, Ask B and Ask C are answered in `workplans/valoria_master_workplan_v10_part6.md` M1, M3 and M4 (ED-IN-0301).**" (:2). Reading: live as the home of v10 positions; deleted with a FORK row when its last position lands (:4).
+- **Bears on:** CORE, DICE, CHAR, PC, MB, SC, FI, WR, SE, FA, PROCESS.
+- **Content that matters:**
+  - Method: ten Opus authors, four read-only critics (BLOCKS 7/4/4/4), one fix pass, "not audited a second time" (:15-24). Several measurements come from probe scripts "not in the repository" (:20).
+  - 83 live items of 89 headings across ten files; per-file item counts and asks table (:28-44, :71-82).
+  - Rulings between files (:55-70): R1 one odds function — player's Act interface shows TRUE odds (AX-7), NPC choosing uses BELIEVED inputs only (AX-2), no chooser score term; R2 one owner of the H-213 obstacle ceiling (CP-T01-06; first-drafted `2·pool` cap produces 302 cells where more dice do worse); R3 `faculty(p, verb)` is the one function for person capacity; R6 CP-T03-00 (both parties of a fight take their band) "roughly doubles combat deaths in a closed cast"; R7 ED-IN-0279 resolved for loser only; R8 Layer-1 touches split into Asks.
+  - Eight asks survived: AQ-X1 (does expected success enter NPC score), AQ-T02-1 (which ties carry a seated player's line), Ask A (what is a raised troop), Ask B (what a fought field writes), Ask C (field fought a round later; Layer 1 amendment), JA-1 (may a holder burn what he holds), A1 (what a person becomes on crossing), A1 (who may declare war) (:99-110).
+  - Schema movers: `body_ceiling`, `Site.locked`, resting-band field on `Person`, place index, `w._estates`, `travel_leg` as `(dest, points, path)` (:122-126).
+- **Conflicts / stale:** `tools/validate_ed_citations.py` reports `OPEN_AS_BASIS` for ED-IN-0202 and ED-WR-0011 (:27-29). §6 names CLAUDE.md §5's `engine/autoload/dice_engine.py` as nonexistent — "since fixed by #507" (:104-105).
+- **Open items:** two unreconciled interface demands (T10 accepted T04's siege leg that T04 dropped; T03 parked `rescue`) (:98-101); 06's "asked 0" vs JA-1.
+
+### proposals/2026-10-23-subsystem-completion/2026-10-23-subsystem-completion-01-resolution-and-dice.md
+- **What it is:** [READ PARTLY: lines 1-5, heading index, §6-§7 (lines 260-296) of 296] T01 completion proposal: dice and resolution. Items CP-T01-01..06.
+- **Status:** "PROPOSED ... held back for Jordan's adoption" (:2); home of v10 positions (:3). Reading: live as positions' spec; AQ-X1 later answered.
+- **Bears on:** DICE, SC, CHAR, CORE.
+- **Content that matters:**
+  - Items: CP-T01-01 one faculty owner for the social roll's pool; -02 practice arm (three numbers "nobody's", ships at cap 0, swept); -03 exact odds, one function, two input modes (mode (b) answers `None` for most person subjects since no claim carries capability); -04 fraction of a margin worth its fraction; -05 `effort`; -06 ceiling solved per pool so every admitted roll keeps a chance and more dice never do worse (:69-176).
+  - CP-T01-06 changes an `assumption`-graded swept fixture (`hole_register.yaml:4592`, H-213); at pool 2 a hostile term costs up to 16 points of Partial+ (26% → 10%) (§7).
+  - AQ-X1 laid out: (a) no, NPCs act from values; (b) yes, as a weighting of existing terms (:262-268). Recommendation: none. Later answered in v10 M1.
+  - "Residual S defects": three methods for a fraction on whole dice; combat's 5% floor vs social 10% chance floor = two methods for one guarantee (§7).
+  - Notes `CLAUDE.md` §5's nonexistent `engine/autoload/dice_engine.py` path (fixed in #507).
+- **Conflicts / stale:** D-1/"live discrete path read .581 against .430 at 2D" in B10-18c is a related DICE discrepancy.
+- **Open items:** the `effort` magnitude is "[OPEN — Jordan tuning]".
+
+### proposals/2026-10-23-subsystem-completion/2026-10-23-subsystem-completion-02-season-persons-choosing.md
+- **What it is:** [READ PARTLY: lines 1-5, heading index, §6-§7 (lines 411-461) of 461] T02: season, persons, chooser. Items CP-T02-01..08.
+- **Status:** "PROPOSED ... held back" (:2); home of v10 positions. Reading: live positions' spec.
+- **Bears on:** CORE, CHAR, FA, WR.
+- **Content that matters:**
+  - Items: CP-T02-01 a death names the seats it empties (H-230 limit 1); -02 a built seat keeps its authored id (H-230 limit 2); -03 an ambition can be met or breached (`aim_state`, which the thrust design's M20 text builds on); -04 the superior hears an office's aim met/breached; -05 causes a person has heard of are ambitions on offer; -06 the seated person's line continues or ends; -07 the seated person sees every question; -08 Act interface shows true odds (:76-280).
+  - AQ-T02-1: which ties carry a seated player's line past death (a) heir title only, (b) title then oath (recommended), (c) title, oath, followers (:411-424).
+  - Risk: CP-T02-01 makes every vacated seat a claim in every ledger, so `confer`/`oblige` form on it and mostly refuse (H-203's scene tax) (:447-450). `aim_state` is a World read for `seat_holders` inheriting ED-IN-0292 (2).
+  - Declines: no score term, no odds function, no pack_scenes effort slot, no births (ED-WR-0011).
+- **Conflicts / stale:** CP-T02-05 "may be false": if REM-21's own-referent stamp already carries heard-of Propositions the item is cut (:450).
+- **Open items:** AQ-T02-1.
+
+### proposals/2026-10-23-subsystem-completion/2026-10-23-subsystem-completion-03-personal-combat.md
+- **What it is:** [READ PARTLY: lines 1-5, 17-60 (genre loop), 363-398 (§6-§7) and heading index of 398] T03: personal combat. Items CP-T03-00..11.
+- **Status:** "PROPOSED ... held back" (:2). Reading: live positions' spec; many items now in B10-11.
+- **Bears on:** PC, CHAR, SC, MB, CORE.
+- **Content that matters:**
+  - Genre-loop gap table G1-G12 (:17-48): kit/training absent in season (only `end` varies: `MC/fight.py:45`; plate 90.0%, spear 95.5%, history 5 87.8%); choosing a fight is no risk to the chooser (actor never written, 33 of 59 realm calls felled the actor, none written); NPC score reads verb identity and stance only; `challenge` writes nothing and 0 of 39 `accept`s answer a challenge; `tend` restores to 1000 in one act and 0 of 75 computed `tend`s executed.
+  - CP-T03-00 "both parties of a fight take their band" is the repair; "roughly doubles combat deaths" in a closed cast (§7); Measurement: seeds 0-2, two seasons, deaths and acts per season, no number predicted.
+  - CP-T03-07 `body_ceiling` (lasting mark; schema mover); CP-T03-09 `capture` (single combat-to-custody route, gate `warrant`/force basis); CP-T03-10 `rescue` PARKED; CP-T03-11 guards cut into IN-59.
+  - `world_q.guard_weight` was said by docstrings to exist but "does not exist" at HEAD `2decf4a` (later landed: thrust-layer cites it at `world_q.py:1250-1277`); `may_warrant` does not read the warrant Record (`gate.py:822-826`).
+  - No `engine/season` module reads `engine/engine_params/` today (grep) (:397-398).
+- **Conflicts / stale:** the `world_q.guard_weight` absence was true at that HEAD, false at the thrust-layer's HEAD. PC-10a/PC-10b "not built" at that HEAD; PC-10a later landed (inert).
+- **Open items:** JQ-2 gates CP-T03-03/-04; AQ-X1; ED-IN-0296; T04 Ask B (carried, no new ask).
+
+### proposals/2026-10-23-subsystem-completion/2026-10-23-subsystem-completion-04-mass-battle.md
+- **What it is:** [READ PARTLY: lines 1-5, heading index, §6 asks (lines 466-545) of 566] T04: mass battle. Items CP-T04-01..10.
+- **Status:** "PROPOSED ... held back" (:2). Reading: live positions' spec; B10-12 closed most.
+- **Bears on:** MB, CHAR, FA, SE.
+- **Content that matters:**
+  - Items: CP-T04-01 a side is its persons (one subunit per commanding person, casualties by that subunit; a weight-1 subunit at or above 80 troops); -02 `marshal`; -03 retreat in good order; -04 field fought a round after declared (Ask C); -05 graded walls; -06 `besiege`; -07 `surrender`; -08 `field_estimate`; -09 CUT; -10 raise and keep a force (Ask A) (:90-336).
+  - Ask A: (A) troop stock in `Rung.stores` (amends Layer 1 `04:793`,`:802`), (P/P') a company `Person` (breaks ED-WR-0011), (B) typed troop row, (A+M-1) field force that travels; recommendation A now, M-1 later. Under A "armies are counts that eat where they stand and fight for whoever holds their walls" (:468-482). Ask B: ED-IN-0279 resolved for the loser only (casualties, morale decrease, grudge token); options (a) as built, (b) winners take engine casualties, (c) survivors move a grade, (d) captives via T03's `capture`; recommendation (b)+(d) (:485-504). Ask C: amend `04:177`/`:541-545` so ENCOUNTER fights a declared field a round later; recommendation (b).
+  - "Not raised": a march needs no war (no item reads `at_war`, FA owns); death in battle superseded by J-C-19; weight→troop value is JQ-4; `sack` declined; no separate `muster` row.
+- **Conflicts / stale:** mass-battle design intent in AUDIT_BRIEF (cell-based approach; weapon-carry trade-off) is not discussed here: T04 centres on subunit-per-commander and troop stock, not cells. Whether Ask B/C answers (M3, M4) went (a) or (b): `CP-T04-04` and `-10` are HELD per B10-12, so Ask C (b) and Ask A are unanswered/held.
+- **Open items:** Ask A (M3), Ask C (M4 (b)); both still HELD in B10-Z/B10-12.
+
+### proposals/2026-10-23-subsystem-completion/2026-10-23-subsystem-completion-05-social-contest.md
+- **What it is:** [READ PARTLY: lines 1-5, heading index, §6-§7 (lines 408-461) of 461] T05: social contest and proceedings. Items CP-T05-01..05.
+- **Status:** "PROPOSED ... held back" (:2). Reading: live positions' spec; B10-13/B10-18c build over it.
+- **Bears on:** SC, FA, CHAR, DICE.
+- **Content that matters:**
+  - Items: -01 the verdict hears the bench; -02 the bench remembers the hearing and the accused may answer (new `subject_may_be_self` column); -03 a failed telling is realised; -04 formation for the proceedings verbs (two classes, one docket question); -05 questioning is part of the hearing (CP-T05-05 later CUT) (:85-257).
+  - New asks: none. Candidates answered by ladder (§6): a verdict reads the party's whole record (no charge carrier exists, H-227); defence half under the shipped ceiling is T01 CP-T01-06's.
+  - Risk: at HEAD the room bites only at net >= 1.0 (the net is an integer); under `obstacle_ceiling` 2 = `obstacle_default` a favourable bench cannot raise a verdict above Ob 2 — only the case against bites (§7). `opposed` reads every deed of the party's, not the charged one (H-216): "a man of ill repute is bound more easily for anything". Testimony of violence does not reach the verdict as evidence (a told killing names nobody).
+  - CP-T05-03 lowers `news.told` volume, thinning the information loop (OV §5.2).
+- **Conflicts / stale:** detective/noir design intent of AUDIT_BRIEF (fieldwork-SC bearing) is not engaged here; the file models proceedings (bench/verdict), not social interrogation as play.
+- **Open items:** `reception` magnitudes unmeasured; J-C-6 (may a person lie) carried; `seen.who` on a told copy [ASSUMPTION].
+
+### proposals/2026-10-23-subsystem-completion/2026-10-23-subsystem-completion-06-fieldwork-and-information.md
+- **What it is:** [READ PARTLY: lines 1-5, heading index, §6-§7 (lines 226-262) of 262] T06: fieldwork and information. Items CP-T06-01..09.
+- **Status:** "PROPOSED ... held back" (:2). Reading: live positions' spec; B10-14 builds them.
+- **Bears on:** FI, WR, SC, CORE.
+- **Content that matters:**
+  - Items: -01 a deed that writes a place or an alias leaves a trail; -02 `surveil` finds covert deeds at the place it watches; -03 a Partial closes the deed, not the hand; -04 a refused/failed inquiry teaches its actor his reads (reverses remediation DEC-12; H-111, RS-21); -05 the person questioned answers by his own act; -06 `inquiry` key (CUT later); -07 a cover can borrow another's name; -08 paper can be burned (PARKED on JA-1); -09 the room files a covered deed under the hand (:72-155).
+  - JA-1 only ask: may a holder burn what he holds? `destroy_record` is WITHHELD (`data/fixtures.py:924-933`); H-156 registered "both defensible"; no recommendation (:228-238).
+  - At shipped odds Failure F 0.74: "three of four inquiries on a real trail would deposit a false hand" so Failure-misleads declined until odds move (`T01 CP-T01-01, -06`); at pool 2 vs Ob 2 three of four inquiries fail (§7).
+  - Risks: realm may reach no trail; the anchor claim leaks (an uncovered deed's hand reaches every admitted witness), so inquiry matters only where nobody was admitted or a cover stood.
+  - Does not do: verifier, case object, plot carrier, Exposure meter, wrong-guess gauge, `disguise`, `infiltrate`, `bribe`, `eavesdrop`, `decipher`, `shadow`.
+- **Conflicts / stale:** AUDIT_BRIEF's detective/noir intent (case-building, clues) vs this file's explicit "no case object": a tension an FI audit must weigh. SM-3 "investigation is not a contest seam".
+- **Open items:** JA-1; the frame's reach unmeasured; ledger pressure from CP-T06-04.
+
+### proposals/2026-10-23-subsystem-completion/2026-10-23-subsystem-completion-07-threadwork.md
+- **What it is:** [READ PARTLY: lines 1-5, heading index, §6-§7 (lines 447-493) of 493] T07: threadwork. Items CP-T07-01..11.
+- **Status:** "PROPOSED ... held back" (:2). Reading: live positions' spec; B10-15 builds.
+- **Bears on:** WR, PC, CHAR.
+- **Content that matters:**
+  - Items: -01 the practitioner on the Person (later CUT, folded into -02); -02 Leap stage and one working host; -03 `weave`/`lock` on Sites; -04 `mend` (reshaped so it never closes another's Tenure: a `locked` Site field); -05 equilibrium decided by place; -06 recovery as a projection; -07 permanent set; -08 crossing as witnessed breach; -09 every thread row celled; -10 what `thread_read` finds; -11 `ward` (:86-346).
+  - Ask A1: what does a person become when he crosses the latch? (a) stays a person, rewritten, (b) leaves the cast and becomes a standing strain on his territory; nothing waits, the slot ships `none` (:447-458).
+  - Risks: only four persons seed TS >= 30 in the registry; NPCs never stop (chooser has no state term reading displacement, `choose.py:130-151`); weave strong if IN-35's weight stays 0; lock as griefing (Locked Zone is canon).
+  - Does not do: `dissolve` (PARKED), collective workings, `pull`, involuntary Leap knots, co-movement cards, threadcut beings.
+- **Conflicts / stale:** thrust-layer P8 shows 0 threadwork modules loaded in a season: these are the items that would load them.
+- **Open items:** A1; WR-01.
+
+### proposals/2026-10-23-subsystem-completion/2026-10-23-subsystem-completion-08-settlements-governance-economy.md
+- **What it is:** [READ PARTLY: lines 1-5 and heading index of 151 lines] T08 part 1: settlements, governance, economy (CP-T08-01..05).
+- **Status:** "PROPOSED ... held back" (:2). Reading: live positions' spec; B10-16 builds.
+- **Bears on:** SE, FA, WR, CORE.
+- **Content that matters:**
+  - Items: -01 hands make the yield (`labour_mode`); -02 places are endowed by their ground; -03 stores spoil; -04 `craft`; -05 price read off the place, trade between places (:73-136).
+  - Index says 88 rows addressed, 9/10 items live, knobs held at JQ-6 (hunger).
+  - [SKIPPED: bodies of CP-T08-01..05, lines 6-151 — not opened]
+- **Conflicts / stale:** none verified.
+- **Open items:** none read.
+
+### proposals/2026-10-23-subsystem-completion/2026-10-23-subsystem-completion-08-settlements-governance-economy_part2.md
+- **What it is:** [READ PARTLY: lines 1-5 and heading index of 188 lines] T08 part 2 (CP-T08-06..10).
+- **Status:** "PROPOSED ... held back" (:2).
+- **Bears on:** SE, FA, CORE.
+- **Content that matters:**
+  - Items: -06 the settlement's mood `unrest(w, S)`; -07 a standing levy via the `tax` edict; -08 the upkeep payment gets a question; -09 withdrawn (succession) in favour of CP-T02-01/02; -10 holding costs past a limit (:9-65).
+  - [SKIPPED: bodies — not opened]
+- **Conflicts / stale:** none verified.
+- **Open items:** none read.
+
+### proposals/2026-10-23-subsystem-completion/2026-10-23-subsystem-completion-09-factions-war-diplomacy.md
+- **What it is:** [READ PARTLY: lines 1-5, heading index and §6 (lines 615-660) of 689] T09: factions, war, diplomacy. Items CP-T09-01..09.
+- **Status:** "PROPOSED ... held back" (:2). Reading: live positions' spec; B10-17 builds.
+- **Bears on:** FA, SC, CORE, CHAR.
+- **Content that matters:**
+  - Items: -01 allegiance follows opinion (join/leave/switch); -02 `declare` (a war has a producer, occasion, target set); -03 alliance and peace as acts on the war Proposition; -04 land with no holder taken by plurality occupation; -05 fief for the sworn; -06 Crown's ducal seat refilled (data only; `appointed` basis [ASSUMPTION]); -07 `recruit` and seat's obligees in its army; -08 `dispatch` sends; -09 `conspire` (:113-431).
+  - A1 ask: who may declare war — any `dispatch` seat (wars frequent, local) vs creed subject's faction head only (wars rare; King dies in season 0 in every seed so the faction cannot declare). `faction_q.head` is "always None" (`FQ:116-147`) so verbs-15's option two is unbuildable as written; default option one (:615-640).
+  - Under `remit_default`, `dispatch` is 25 of 32 seats (T09 §1).
+  - Not raised: whether a treaty binds the signer or the seat (the signer); territories seizable (GD-1 makes control of all 15 territories the victory, `RY:2584-2585`).
+- **Conflicts / stale:** "King dies in season 0 in every seed" interacts with the thrust-layer deaths (16 of 20 seat-holders) and the succession (IN-61) stoppage.
+- **Open items:** A1; FA-01 trade-demand clause held on ED-IN-0298.
+
+### proposals/2026-10-23-subsystem-completion/2026-10-23-subsystem-completion-10-world-travel-survival-npc-life.md
+- **What it is:** [READ PARTLY: lines 1-5 and heading index (items, §5-§7) of 564 lines] T10: world, travel, survival, NPC life. Items CP-T10-01..09.
+- **Status:** "PROPOSED ... held back" (:2). Reading: live positions' spec; B10-18 builds.
+- **Bears on:** WR, SE, CHAR, PC.
+- **Content that matters:**
+  - Items: -01 journey priced by route (`travel_leg` as `(dest, points, path)`); -02 Calamity costs the traveller; -03 the year turns (`year_length`); -04 recovery costs time and care; -05 bodies clock wounds before they kill; -06 kin; -07 an estate passes by its heir's claim (`w._estates`); -08 `marry`; -09 deeds done to me and mine (:111-353).
+  - Index: 89 rows addressed; no asks; ED-WR-0011 cited as closed cast "for now" (provisional) and the validator does not accept `status=ruled` as resolved.
+  - [SKIPPED: bodies and §6-§7 (lines 524-564) — not opened]
+- **Conflicts / stale:** CP-T10-04's rising body arm and `tend_share` [ASSUMPTION 0.5] interact with CP-T03-07 `body_ceiling` (ruling R5).
+- **Open items:** none read.
+

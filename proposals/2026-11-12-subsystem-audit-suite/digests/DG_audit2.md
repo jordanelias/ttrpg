@@ -128,3 +128,138 @@ Lane: the surviving audit corpus under `.audit/` (archived-not-canon; context an
   - Method note: ~4.5M subagent tokens (:4) as an example of cost for this style of audit.
 - **Conflicts / stale:** All file:line cites are July 2026 and `units.py` has grown (recalc_size now at :2982 still without the guard, per one grep); `PER_CELL`/`POOL_QUALITY_MODEL` defaults and gauge band results should be re-run before relying on any pass count. Whether DG-6..16 were ruled later: `[UNVERIFIED]` here (check HANDOFF_MB / ED-MB ledger).
 - **Open items:** Section 7c list (trace E2; ablate H7/H8; E4 rescue test; quantify E7); DG-6 is named the rate-limiting ruling.
+
+### .audit/2026-07-09-comparative-governance-research/comparative_governance_research_v1.md
+- **What it is:** Round-2 historical-precedent research (Byzantium, China, Japan, HRE, Venice, Renaissance Italy, Habsburg Spain) with a 58-proposal judge pass; 22-agent workflow, Sonnet research/fact-check then one Opus judge (FA+SE lanes, 2026-07-09).
+- **Status:** "FILED ... Not itself canon — a research/synthesis artifact the docket items cite as provenance." Reading: research (tier 3), historical; items filed as ED-FA-0018..0034 / ED-SE-0018..0044.
+- **Bears on:** FA, SE, CHAR (rank ladders), CORE (Directive/AP model).
+- **Content that matters:**
+  - Premise corrections: the Guild ladder is NOT missing (`faction_politics_v30.md` §2.5 already authors Apprentice..Grand Guildmaster; finding A-03 describes the superseded five-rank draft); the one truly empty rank surface is the Crown Administrative branch (§1.1b) (:19, :144-145).
+  - Result 44 kept / 14 cut; seven proposals competed for the Administrative void and CHN-2 Imperial Examination Ladder won, shipped `needs_jordan` (:145-147, :166).
+  - Synthesis bundles: S-1 Consolidated Command = BYZ-6 (doux, pooled AP `2+ΣFacilityTier`) + IT-5 (Legation split); S-2 governor-oversight toolkit = Podestà (appointer-liability) + Corregidor overlay on prior SE-7; S-3 guild-regulation suite; S-4 guild ladder fork; S-5 locked-extraction-figure substrate = SE-JP2 Kokudaka Survey + HAB-5 Encabezamiento (:280-290).
+  - Twenty-one `needs_jordan` forks listed (:306-326), e.g. Office/Dignity split, Valido track, Chancellery Gatekeeper deception of the player, irreversible Crush the Estates, Reichsacht, Mediatize.
+  - Execution record: 12 P1 items authored as PROPOSED prose into `faction_politics_v30.md` §1.0b/§1.0c/§1.0d/§2.5a, `governance_play_redesign_v1.md` §1.1a/§1.3a/b/c, `settlement_layer_v30.md` §3.3b/c; Compact opened as a 5th Ledger tag family (:332-355).
+  - Anti-fabrication: every magnitude is a "shape proposal", not sim-calibrated (:359).
+- **Conflicts / stale:** All landings are into design `.md` (now `.designs/`) — prose, not mechanism (CLAUDE.md §0.05); whether `engine/season/` models Directive/AP/Ledger/Π/Compact at all is `[UNVERIFIED]`. References `sim/*.py` (dissolved) and `faction_action.py`. The ED rows named should be checked against `registers/editorial_ledger_fa*.jsonl` for current status.
+- **Open items:** the whole needs_jordan queue, unauthored promote-ready P2/P3 (CHN-6, HRE-2/3/4, VEN-SE-2, IT-1/2, HAB-1/4), card-deck triggers (Cell Revolt etc.) only noted inline.
+
+### .audit/2026-07-12-governance-compendium/00_index.md
+- **What it is:** Index of the Governance Consolidated Compendium v1: parts 21-210 (94 event cards), 30 (12 ripple chains), 40-45, tier3/tier4 registers, 44 re-evals (lane IN, cross-cutting SE/FA/GO, 2026-07-12).
+- **Status:** "PROPOSED ... Read-only research consolidation. NOT canon; nothing here flips a Status: line." Reading: reference-only; the decision surface lives in `architecture/governance_consolidation_v1.md` §6 (named :13-16, :58) which is outside this assignment.
+- **Bears on:** SE, FA, CORE (Directive/AP/Π model), WR (event deck).
+- **Content that matters:**
+  - Event corpus: 94 historical cards in 10 categories (succession 8, blockade 10, siege 10, earthquake 9, flood/drought 10, famine 9, plague 9, climate 9, debasement 10, trade-monopoly 10) plus 58-card grounded deck and 28-card Goldenfurt deck, about 180 cards combined (:22-29).
+  - Four pre-existing built substrates it reconciles against: `sim/territory/`, `goldenfurt_slice`, 500-seed `settlement_mgmt_stress_01`, the march/hierarchy layer (:53).
+  - Proposed canon touchpoints: `faction_politics_v30.md`, `settlement_layer_v30.md`, `governance_play_redesign_v1.md`, `governance_ripple_substrate_v1.md` (:54).
+  - Triage of the 58 comparative-governance proposals: 12 authored / 9 promote-ready / 23 needs-Jordan / 14 cut (:44).
+- **Conflicts / stale:** `sim/territory/` and `tests/sim/settlement_mgmt_stress_01/` named as built substrate; `sim/` is dissolved so the reconciliation claims need re-checking against `engine/season/` `[UNVERIFIED]`. Links `event_cards/*` and `reeval/*` are not in this assignment (not on disk list given).
+- **Open items:** all of it is unratified; start-here pointer is the consolidation doc's five architecture reconciliations (Compact vs Leverage, §1.0d vs Goldenfurt recall, event-model fork, Mandate carrier, AP model) (:13-15).
+
+### .audit/2026-07-12-governance-compendium/40_roster_officer_system.md
+- **What it is:** Part 40, NPC Roster / Officer / Advancement ("Ascendancy") system: 8 mechanisms, ~96 historical cases in categories A-J, system design and open rulings (lane IN, 2026-07-12).
+- **Status:** "PROPOSED / provisional ... Jordan-vetoable; nothing here is ratified canon". Reading: reference/design proposal.
+- **COVERAGE NOTE:** read lines 1-330 and 560-621 plus the heading map; categories B-J case tables (:326-489) and the cross-reference §40.4 (:490-532) not read line by line.
+- **Bears on:** CHAR (NPC ambition/advancement), FA (Standing ladder), SE, CORE.
+- **Content that matters:**
+  - Eight mechanisms M1 patronage, M2 credentialed merit, M3 kinship, M4 court favoritism, M5 bureaucratic chokepoint, M6 venality, M7 armed retinue, M8 ideological authority; each carries its own downfall shape (:30-39).
+  - Design: one `ConsolidationEngine` with `scale_binding` in {settlement, court, lineage}, reusing the settlement ambition engine's field grammar (`goal/method/timeline/progress/trajectory`); the court binding is gated on the Standing ladder and Knots graph (existing), not the unbuilt settlement registry (:61-90).
+  - NPCs climb the SAME Standing ladder as the player; off-ladder auxiliary meters (`shadow_standing`, `moral_authority`, `renown`, `service_rank`, Dignity, custody-bonus) substitute or force ratification; flag `player_seats_are_contestable` is the Jordan toggle (:92-125).
+  - `power_base` enum {patronage, merit, kinship, bureaucratic, military, purchased, ideological} types both the climb driver and the exploitable downfall ("every action pays what it buys") (:196-268).
+  - Naming: system "Ascendancy"; roles Retainer/Patron/Advisor; "officer" reserved for mass-battle unit commander (~20 of 96 entries collide) (:270-298).
+  - Genuine architectural gaps: Mandate separable-from-possession (`custodian_id` != `holder_id`), in-transit Key interception, dormant/hidden tags, co_leadership state (:561-569); all depend on the retired Key substrate for emission (:222).
+- **Conflicts / stale:** Emission "through the Key substrate" (:222) conflicts with ED-IN-0232 retirement. Mass-battle "officer" term collision is real in the MB lane vocabulary.
+- **Open items:** `player_seats_are_contestable` ruling; parallel-track-count question (needs_jordan item 3); lineage binding Jordan-gated (:84).
+
+### .audit/2026-07-12-governance-compendium/41_proactive_scale_menus.md
+- **What it is:** Part 41, proactive player-action menus at four scales (Organization / Settlement / Territory / Faction) from ~72 historical proposals (lane IN, 2026-07-12).
+- **Status:** "PROPOSED / research-derived ... Numbers are deliberately absent by design". Reading: reference/design proposal.
+- **COVERAGE NOTE:** read lines 1-200 (framing; settlement S1-S14, organization O1-O15, territory T1-T19, faction F1-F14, cross-scale X1-X2) and the heading map; X3+, §2F, §3 concrete menus, §4 reuse ledger, §5 cross-refs, §6 gaps (:200-494) not read in full.
+- **Bears on:** SE, FA, CORE (action menus), GO (UI menus).
+- **Content that matters:**
+  - Four scales are four kinds of managed thing: Organization = membership dispersed across places it doesn't own; Settlement = one place's homeostat (only scale with built machinery); Territory = connective tissue between settlements (explicitly unbuilt gap, BYZ-6/IT-5); Faction = the polity's rules (:22-89).
+  - Organization and Territory are orthogonal axes (Ottoman sanjak vs akıncı corps) (:81-89).
+  - New levers proposed with named identity: Relay Tier 0-3 (T1), Territory Reserve Pool (T2/T10), Cordon-Complete flag (T4/T5), Beacon Network tier 0-3 (T6), Surveyed flag (T7), Grant Ledger (T8), Governance-Mode Local/Appointed (T9), Muster tag (T11), Centralization dial (F12), `codified_law` propagation-scope flag (F5) (:151-190).
+  - Org-scale proposals reuse the Investigate resolver inward (Visitation, Audit Branch) and give Org its own AP pool and Standing ladder (O1, O5, O14) (:129-143).
+  - Governing constraint: reuse Prosperity/Order/Defense/Treasury/Weight; add state only when it changes the KIND of decision (:14-18).
+- **Conflicts / stale:** Settlement scale "only scale with fully-built machinery" cites `governance_play_redesign_v1` which is itself a PROPOSAL (per interface_report). Whether `engine/season/` has any Territory/Org entity: `[UNVERIFIED]`.
+- **Open items:** §6 design-taste rulings owed (:438); BYZ-6/IT-5 cross-reference in §5A.
+
+### .audit/2026-07-12-governance-compendium/42_action_verb_catalogue.md
+- **What it is:** Part 42, deduped catalogue of 109 domain-action/verb proposals extracted from the 94 event cards, grouped by parent verb (Develop, Fortify, Keep Order, Hold Court, Sponsor, Treat, Levy, Investigate, Directive, NEW) (lane IN, 2026-07-12).
+- **Status:** "PROPOSED ... none of this has been ratified". Reading: reference index.
+- **COVERAGE NOTE:** read lines 1-70 (Develop and part of Fortify groups); remaining groups and §2.11 reskin clusters (:70-254) not read.
+- **Bears on:** SE, FA, CORE.
+- **Content that matters:**
+  - Eight base verbs already in the governance model: Develop, Fortify, Keep Order, Hold Court, Sponsor, Treat, Levy, Investigate (+ Directive) (:20-22).
+  - Many verbs gate on hidden environmental stats (SiltLevel, SalinityLevel, SubsidenceRisk) and on tags (`Overcrowding`, `route-diversified`, `Rebuild-to-Code`) (:47-70).
+  - Gated unlocks: Lighthouse only purchasable after a storm Crisis; Standing Fleet / Coalition Fortify Pool must be banked before the Crisis (:55, :65-66).
+- **Conflicts / stale:** Depends on the HEV-* event-card files and the 2026-07-10 catalogue (not in this assignment).
+- **Open items:** §2.11 reskin clusters flagged for a ratification pass (:36-38).
+
+### .audit/2026-07-12-governance-compendium/43_directive_types.md
+- **What it is:** Part 43, proposed Directive-type expansion beyond the six live types (Extract, Tax, Suppress, Install, Host, Cede): Embargo, Multilateral Embargo, Recall, Quarter, Nationalize Charter, Sovereign Bargain (lane IN, 2026-07-12).
+- **Status:** "PROPOSED (research-derived; not yet ratified ...)". Reading: reference design proposal.
+- **Bears on:** SE, FA, CORE (Directive enum).
+- **Content that matters:**
+  - Central finding: all six live Directives target the settlement they are issued to; Embargo/Multilateral Embargo target a THIRD party via own trade, Recall targets a standing force, Quarter compels a method (:11, :109).
+  - Embargo's Comply/Bargain/Defy is resolved by the settlement asked to enforce it (License Exception as Bargain); Multilateral Embargo structurally removes Bargain, leaving Comply/Defy (:19-34).
+  - Recall (disband appanage military) vs Toluid/Kongo; Quarter creates a ratchet (Force-method hardens Actor-Disposition and removes Consent method) (:37-55).
+  - Nationalize Charter and Sovereign Bargain are Directive-adjacent (arbitration-resolved / Standing-6+ rank-gated), unresolved as enum members (:57-76, :109).
+  - Trigger predicates are written as pseudo-code over Π, Grudge, Standing, Fiscal Stance (e.g. :23, :34).
+- **Conflicts / stale:** The "six live types" claim is the catalogue's framing; the working tree's Directive enum in `engine/season/` (if any) is `[UNVERIFIED]`.
+- **Open items:** enum membership of Nationalize Charter and Sovereign Bargain (:109).
+
+### .audit/2026-07-12-governance-compendium/44_standing_institutions.md
+- **What it is:** Part 44: catalogue of build-once "standing crisis-defusing institutions" plus a synthesis classifying crises as recoverable dips vs terminal doom-loops and mapping stress-test patterns A-H to institutions (lane IN, 2026-07-12).
+- **Status:** "PROPOSED (research-derived; not yet ratified ...)". Reading: reference design synthesis; the strongest bridge document between the event research and the stress test.
+- **Bears on:** SE, FA, CORE (balance/crisis architecture), WR.
+- **Content that matters:**
+  - Class definition: build-once, family-scoped, self-consuming/self-funding, and its signature is DECOUPLING (Water Board decouples flood funding from war Directive; Granary StockLevel decouples famine buffer from Treasury) (:23-36). Anti-institution example: Refuge Walls writes the `Overcrowding` tag that triggers Epidemic (:36).
+  - Stress-test patterns: A Demotion spiral 7/7 ("tragic-downfall arc is the default"); B Π runaway pinning at the R-4 cliff Π7->8 ~6/7; C Compact/Assessment deterministic strip below subsistence ~4/7; D cell-revolt stacking ~6/7; E patron-lapse un-shielding; F Clerk-Corruption loaded gun ~6/7; G Suspicion->Recall on undefined threshold; H Mandate saturation hides collapse (`Mandate=clamp(round(7T/(T+6)))`, a revolt moved rounded Mandate not at all) (:149-160).
+  - Appeals succeed 0/6 across seeds (~20-31% vs a Std-7 adjudicator); mid dice_pool rolls ~55% (:160).
+  - The "Loop" clause in each card is a latent recoverability classifier; the discriminating bit is whether a standing institution was built before the trigger (:166-182).
+  - Load-bearing result: every material-axis doom-loop (Prosperity, Order, Treasury, Defense, Π) has an institution circuit-breaker; NO institution breaks the Standing/rank loops (A, E, G) which need substrate tuning (survivable Appeal Ob, successes retiring failure Keys, defined Suspicion->Recall constant) (:245-252).
+  - Odds-contract divergence: deck promises linear `d_sigma` (base 50% + 10%/pt, floor .05, cap .90) but the engine `sigma_leverage.p_success()` is a normal-CDF (base_Ob 3, pool 7, +major: 78% vs ~90%) (:266).
+  - Beacon Network / Relay Tier contingent on an unauthored inter-settlement latency model (`engine_clock` doc:null) (:267); tag-family proliferation (Compact, Concession, Outlawed, Capital-Posture, Muster) needs consolidation (:268); Organization economy unspecified (:269).
+- **Conflicts / stale:** Pattern H quotes a Mandate formula that may differ from the current `engine/season/` Mandate carrier; `sigma_leverage.p_success` named as CANONICAL is in dissolved `sim/` (the DICE owner is now `engine/dice_engine/dice_engine.py` per CLAUDE.md §5) `[UNVERIFIED]`. Stress-test run is on the PR#119 provisional governance mechanics, not `engine/season/`.
+- **Open items:** subsistence-floor clamp on §1.3a; Π relief valve (VEN-SE-5 Scuole Grandi) and Grudge half-life; Suspicion->Recall constant; ship the institution menu and Crisis-card system as one loop (:271).
+
+### .audit/2026-07-12-governance-compendium/45_hidden_longfuse_stats.md
+- **What it is:** Part 45: proposed hidden long-fuse environmental stats (SiltLevel, OreGrade, SalinityLevel, SubsidenceRisk, ...) with a per-stat "track vs abstract to Prosperity" decision framework (lane IN, 2026-07-12).
+- **Status:** "PROPOSED — needs a granularity ruling". Reading: reference; honours Jordan's standing "abstract, don't over-granulate" ruling.
+- **COVERAGE NOTE:** read lines 1-70 (framework, SiltLevel, OreGrade, SalinityLevel); SubsidenceRisk onward and the per-stat recommendation table (§3) at :70-151 not read.
+- **Bears on:** SE, WR, CORE.
+- **Content that matters:**
+  - Default for every stat is "folds into Prosperity/Order drift, no dedicated tracker" unless one of three tests holds: fuse is cross-settlement, multi-decade, or an institution needs a legible number to gate on (:11-27).
+  - The crux: Prosperity is local, so cross-settlement fuses (Yellow River siltation->downstream RisingWaterLevel; Fens reclamation->SubsidenceRisk) cannot be abstracted without a tracked handoff (:15).
+  - SalinityLevel crossing a final threshold is irreversible (Sumer->Akkad), vs SiltLevel recoverable via Dredge/Magistracy (:59-68, :37-46).
+- **Conflicts / stale:** none checked.
+- **Open items:** per-stat ruling (§3), which the file frames as owed to a follow-up authoring pass.
+
+### .audit/2026-07-12-governance-compendium/tier3_proposal_status_closure.md
+- **What it is:** Proposal-Status Closure Register: triage of all 58 comparative-governance proposals against NERS audit (2026-07-11) and the stress test (2026-07-12) (lane IN, 2026-07-12).
+- **Status:** "PROVISIONAL / consolidation artifact ... Nothing here is ratified canon". Reading: reference map; verdicts are advisory.
+- **COVERAGE NOTE:** read lines 1-110 (provenance, cohorts, 12 authored + 9 promote-ready tables); needs-Jordan table (:105+), cut list, vindicated-rejected (§3.7), collected rulings (§3.9) and un-adjudicated list (§3.10) up to :448 not read.
+- **Bears on:** FA, SE, CORE.
+- **Content that matters:**
+  - Cohorts 12 authored (PR#119) / 9 promote-ready / 23 needs-Jordan / 14 cut; EDs ED-FA-0018..0034, ED-SE-0018..0044 (:38-51).
+  - The `reeval/` directory (44 per-proposal re-evals) is EMPTY: the re-evaluation was delivered only as the stress-test synthesis (:28-34) — so the 00_index claim of "44 re-evaluated" is stale.
+  - Only 2 of the 12 built PR#119 items are clean KEEP (HAB-5, HAB-7); 8 REFINE, 2 MERGE (SE-JP1 Bind the Cells, CHN-9 Kaochengfa) requiring deletion of landed subsections; ED-1094 means merge = ratification so fixes had to land inside the PR (:79-85).
+  - IT-7 Seggio: stress test found a terminal lock (no governance-scale force/seizure resolver); §1.3a Compact/Survey lock substrate is a deterministic below-subsistence strip needing a clamp (:66-68, :74).
+  - HRE-4 Borrow is a canonical pledge shape that other Levy pledge variants should collapse into (:95); IT-2 condotta touches four flat-scalar `faction.Mil` read sites including `massbattle.py::_faction_to_unit` (:103).
+- **Conflicts / stale:** Contradicts 00_index claim that `reeval/reeval_*.md` re-evaluates all 44 (directory empty, :28). Whether PR#119 merged and which fixes landed `[UNVERIFIED]`.
+- **Open items:** the 23 needs-Jordan forks; 3 un-adjudicated (IT-6, CHN-7, VEN-SE-3).
+
+### .audit/2026-07-12-governance-compendium/tier4_discovered_open_work.md
+- **What it is:** Discovered Open-Work Register: pre-existing open items from Goldenfurt v1.1 backlog, the 2026-06-22 baseline territory audit and the 500-seed stress test (lane IN, 2026-07-12).
+- **Status:** none stated (scope note: "not new design content ... work-intake queue"). Reading: reference register, partly stale.
+- **Bears on:** SE, FA, CORE, WR.
+- **Content that matters:**
+  - Settlement-type taxonomy drift F1/H3: canonical §1.2 defines 8 types but the registry has 11 (adds Village, Fortress-City, Cathedral-City); "Village" is used by ~18 spoke settlements with no stats/facility slots/actor counts; "structural root of 7 stress-test findings" (:70, :88).
+  - Open gaps G2 (church infrastructure keyed per-territory not per-settlement) and G3 (unused `PT_GAIN_*/CI_GAIN_TEMPLAR/ORDER_GAIN_*` constants never applied) (:68-69).
+  - Ledger-family divergence: built `ledger.py` `TAG_KINDS={Precedent,Grudge,Debt,Reputation,Leverage}` vs proposed `Compact` as 5th family; and §1.0d Performance Audit likely duplicates Goldenfurt G606 recall (:96-105).
+  - Numeric tuning still pending the §9 sweep: AP curve `AP=2+facility_tier(+1 Seat/Cathedral)`, Π band, suspicion->recall threshold (:30-32).
+  - 24 NERS probes in the stress harness specified but never executed, so NERS "confirmed" verdicts may be unvalidated (:90).
+  - Predicate grammar too weak for event-history triggers (sim-F4, High) (:26).
+- **Conflicts / stale:** `sim/territory/registry.py` and `tests/sim/settlement_mgmt_stress_01/` named as built; `sim/` is dissolved. G1 reported closed; `Compact` vs `Leverage` conflict named as unreconciled.
+- **Open items:** everything in the tables marked ⏳/Open.

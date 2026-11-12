@@ -23,7 +23,7 @@ an answer the engine returns.
 ## The problem, with evidence
 
 1. **One score is three pools** (F-DICE-17). A person's score is read once
-   (`seam/wrappers/pool.py::faculty`) and then is the pool in a social roll, the pool less six with a
+   (`seam/wrappers/pool.py::faculty`) and then is the pool in a social roll, itself plus six with a
    floor of five in a fight (`modules/combat/core.py:54-58`), and nothing on a field. Equal scores of
    3: Success-or-better 28.6 % in the social roll, 67.7 % in a fight (addendum E-B03). The rule that
    makes the difference is two literals inside a module. Jordan's Ruling C (2026-08-23): *"All pools
@@ -89,8 +89,9 @@ Three things that are **not** roles, so that nobody adds them as one:
 | bound | value shipped | owner |
 |---|---|---|
 | attribute scale | 1 to 7 (floor 1: AR-05) | `references/descriptor_registry.yaml: attributes.scale` |
-| a skill's scale | 0 to 7 | the capability's own row (§B) |
-| pool floor for a person | 1 die (social), 5 dice (fight) | the `dice` row's `floor` fixture (§C) |
+| a skill's scale | 0 to 7 (today a rank has **no** ceiling: `raised_capability` adds one without a bound, `loop/effects_combat.py:262-268`) | the capability's own row (§B) |
+| the least a person brings | 0 in the social roll (a pool of zero is refused by S27.4 on the returned pair, `sigma.py:544-546`, as pinned for a held 0); 5 dice in a fight | the `dice` row's `floor` fixture (§C) |
+| the least the roller deals | 1 die (`sigma_leverage._dice_dealt`); for a person it decides no outcome (a zero pool's one die is rolled and the act refused; a fight's pool is at least 5) | the dice engine; the addendum's §5.1 removes it for aggregates |
 | the opposed divisor | 2 (ruled) | `sigma_leverage.opposed_ob`, one function (§G edit 5) |
 | the obstacle's floor against a favourable term | `OB_MIN` (1) | `sigma_leverage.OB_MIN` |
 | the obstacle's ceiling | solved per pool from `obstacle_ceiling` (2) | `roll.py::_chance_floor_cap`, fixtures |
@@ -124,7 +125,7 @@ tables:
 | `kind` | `skill`: a learned rating that gives dice, started from an attribute. `aptitude`: a rated knack that gives no dice of its own and acts through `edge`, `addend`, `rate` or `judgement` rows. `trait`: unrated (held or not; scale `[0, 1]`), acting through `edge`, `circumstance` or `judgement` rows. `attribute`: one of the ten, defined in `descriptor_registry.yaml` and **not** re-defined here; the kind exists so a uses row may name an attribute key | — | `data/rosters.py::_load_capabilities` (refuses a `dice` use of a trait, a rank above `scale`, a `base` outside the ten) |
 | `base` | the attribute a skill's pool starts from | a registry key | `pool.py::_authored_attribute` (through the derived `VOCATION_ATTRIBUTE`) |
 | `opposed_by` (optional) | the attribute a person subject opposes it with, when not `base` | a registry key | `pool.py::_opposing_attribute` (through `VOCATION_OPPOSED_BY`) |
-| `scale` | floor and ceiling of the held rank | whole numbers | `data/cast.py` at world build; `_eff_train` (a rank may not pass the ceiling) |
+| `scale` | floor and ceiling of the held rank | whole numbers | `data/cast.py` at world build (part one); `loop/effects_combat.py::raised_capability`, which today raises a rank without any ceiling (part two: a mover only for a rank that would pass the ceiling) |
 | `untrained` | what a non-holder brings: `default` (`pool_default`), `attribute` (the base attribute, else `pool_default`), `none` (nothing: traits and aptitudes) | — | `pool.py::score` |
 | `grows_by` | `train` (`_eff_train`), `practice` (the practice addend, from the act log), `use` (a fight that drew blood raises it), `fixed` | — | `loop/effects_combat.py` (`_eff_train`, `_grown`); `queries/world_q.py::practice` |
 
@@ -175,8 +176,9 @@ Closed both ways, as `vocation_attribute` is: a site that no reader registers is
 field its role does not take is refused; a reader whose site has no row for a role reads *no
 capability* (zero dice added, zero sigma, zero term, a factor of 1, unknown for a gate), never a
 default. Four new fixtures carry values that are literals today, each with a hole-register row graded
-`assumption` under H-126 and a three-point sweep: `social_pool_add` (0), `social_pool_floor` (1),
-`combat_pool_add` (6), `combat_pool_floor` (5).
+`assumption` under H-126 and a three-point sweep: `social_pool_add` (0), `social_pool_floor` (0),
+`combat_pool_add` (6), `combat_pool_floor` (5). The rule they parameterise is one line, the same at
+every site: `pool = max(floor, score + addends + add)`.
 
 `verb_capability` stays as it is (verb → capability id). Whether it is a roster or a column on the
 verb's row (CORE's edit 3) is the same fact in either place; `VERB_CAPABILITY` is the interface.
@@ -263,12 +265,12 @@ capability required to attempt are not expressible at all, which is the rulings'
    agreement).
 3. `engine/season/data/fixtures.py` (IN). The four pool fixtures of §C at today's values, with their
    hole-register rows.
-4. `engine/season/seam/wrappers/pool.py` (IN). `faculty` reads `add` and `floor` from its site's `dice`
-   row (`max(floor, base + add) + addends`; at 0 and 1 this is today's arithmetic, since a held 0 with
-   no attribute stays *"under one die"* only where the floor fixture is 0: the row ships `floor: 1` for
-   a person **unless** the two pinned tests of a held 0 hold it at 0, in which case the fixture ships 0
-   and the hash decides which; stated so the choice is made by the run and not by this sentence). One
-   registered addend, `capability_addend`, reads the `addend` rows (none ship).
+4. `engine/season/seam/wrappers/pool.py` (IN). `faculty` reads `add` and `floor` from the `social_roll`
+   site's `dice` row and returns `max(floor, score + addends + add)`; at 0 and 0 that is today's
+   `base + addends`, so a held 0 stays under one die and is refused by S27.4 as
+   `engine/season/tests/test_odds_of.py` pins. Combat keeps receiving `score + addends` and applies its
+   own row's two operands (edit 8), which is today's `max(5, faculty + 6)`. One registered addend,
+   `capability_addend`, reads the `addend` rows (none ship).
 5. `engine/dice_engine/sigma_leverage.py` (IN). `opposed_ob(score) -> float`, the ruled divisor once;
    `modules/social_contest/roll.py:141` and `modules/combat/core.py:124` call it.
 6. `engine/season/seam/wrappers/sigma.py` (IN). `ADVANTAGE_SOURCES["capability"]` and
@@ -285,7 +287,8 @@ capability required to attempt are not expressible at all, which is the rulings'
 
 **Part two (movers; other proposals, in order).** `10_DICE_one_score_two_roles.md`; the signed channel
 of `10_DICE_advantage_sources_for_the_arcs.md` and the addendum's §5.4 wound term; CORE's edit 9 (a
-first rank is never a loss); the verb rows of SC and FA; content (CHAR, PC, MB).
+first rank is never a loss); `raised_capability` reading the row's ceiling (control: no ceiling,
+today's bytes); the verb rows of SC and FA; content (CHAR, PC, MB).
 
 ## The gate (execution artifacts)
 
@@ -304,14 +307,15 @@ figure and nothing else:
 
 - Re-point `argue`'s `base` to `attr.mind.perception`: `odds_of` for an `argue` follows the actor's
   Perception and ignores his Presence.
-- Set `combat_pool_add` to 0 and `combat_pool_floor` to 1: a fight's pool equals the social pool for
-  the same person and verb (the F-DICE-17 table's third column becomes its first, under combat's
+- Set `combat_pool_add` and `combat_pool_floor` to 0: a fight's pool equals the social pool for the
+  same person and verb (the F-DICE-17 table's third column becomes its first, under combat's
   sampler).
 - Plant the trait row of §E and give a hearer the trait: `odds_of` for an `argue` at him equals
   `record_odds(pool, ob, -0.5)`; for a `tell` at him it is unchanged; with the row removed both are
   unchanged.
-- Plant a `circumstance` row with a gain of 0.25 on an attribute the actor holds at 4: the composed
-  obstacle rises by exactly 1.0 below the ceiling, and `fed_by` names the row.
+- Plant a `circumstance` row with a gain of 0.25 on an attribute the actor holds at 4, on the uncapped
+  arm (`obstacle_ceiling` `None`): the composed obstacle rises by exactly 1.0, and `fed_by` names the
+  row. On the shipped arm the rise is clipped at the pool's cap, as a hostile room's is.
 - A row naming a level outside `LEVEL_SIGMA`, a fixture that is not registered, a `dice` use of a
   trait, or a site no reader registers refuses at import.
 

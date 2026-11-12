@@ -1009,15 +1009,6 @@ Lane: archived design documents under `.designs/` (README, `_architecture`, arti
 - **Conflicts / stale:** none.
 - **Open items:** none.
 
-### .designs/systems/fieldwork/reference/fieldwork_summary.md
-- **What it is:** fieldwork spec §11 three-mode summary table (TTRPG, Board Game, Hybrid, Godot).
-- **Status:** "DESIGN — canonical subsystem file". Reading: historical map of mode mapping.
-- **Bears on:** FI, GO.
-- **Content that matters:**
-  - Godot column: navigable map + POI nodes, Journal + Evidence Track progress bar, dialogue + Disposition meter, TS gates POI visibility, per-territory Exposure meter (:16-25).
-- **Conflicts / stale:** three-mode structure discarded.
-- **Open items:** none.
-
 ### .designs/systems/fieldwork/reference/fieldwork_socializing.md
 - **What it is:** fieldwork spec §5 Socializing: Disposition track, social actions, Sincerity Gate, information gates, Beliefs, Knot integration, Niflhel toolkit (PP-632, ED-912).
 - **Status:** "DESIGN — canonical subsystem file. PP-632 applied 2026-04-13" but the body already carries ED-912 amendments. Reading: live design intent for social fieldwork; mixes two Ob rules internally.
@@ -1030,6 +1021,15 @@ Lane: archived design documents under `.designs/` (README, `_architecture`, arti
   - Knots (ED-912): prerequisites Disposition +5, TS >= 30 for one party, PC Bonds >= 5, count < `floor(Bonds/2)+1`, no existing Knot; tiers Distant/Close; formation Spirit pool vs Ob 2 (OW forms Close, Success Distant); strain gauge -5..+5, rupture at +5, Tempered at -5; effects: no seasonal decay, +1D on social actions, shared Composure buffer (:120-145). Breaking: rupture sets Disposition -3 and 4 Composure damage; loss costs Coherence -1 and 4 Composure; simultaneous rupture cap `floor(Composure x 0.75)` min 4 (PP-633) (:147-155). Note editorial doc says rupture sets -4 and 5 Composure (stale).
 - **Conflicts / stale:** knots code `form_knot` constants (flow skeleton) vs these values; editorial doc still lists PP-632 values; Niflhel dissolved.
 - **Open items:** "NPC-Initiated Social Engagement (§5.9)" appears in the index but not in this part.
+
+### .designs/systems/fieldwork/reference/fieldwork_summary.md
+- **What it is:** fieldwork spec §11 three-mode summary table (TTRPG, Board Game, Hybrid, Godot).
+- **Status:** "DESIGN — canonical subsystem file". Reading: historical map of mode mapping.
+- **Bears on:** FI, GO.
+- **Content that matters:**
+  - Godot column: navigable map + POI nodes, Journal + Evidence Track progress bar, dialogue + Disposition meter, TS gates POI visibility, per-territory Exposure meter (:16-25).
+- **Conflicts / stale:** three-mode structure discarded.
+- **Open items:** none.
 
 ### .designs/systems/fieldwork/reference/fieldwork_v30_index.md
 - **What it is:** generated heading/size index (2026-04-18) of the parent `fieldwork_v30.md` v1.1 (~16.8k tokens), whose parts are the sibling `fieldwork_*.md` files.
@@ -1139,20 +1139,6 @@ Lane: archived design documents under `.designs/` (README, `_architecture`, arti
 - **Conflicts / stale:** "Game Master" notes; Niflhel mention already redirected; Varfell Path B (WR 4 = "Edeyja substantive contact") is struck.
 - **Open items:** pronoun/name confirmation editorial.
 
-### .designs/systems/npcs/reference/npcs_flow_skeleton_v1.md
-- **What it is:** traced flow skeleton (at commit `6545067`) of NPC code, which lives outside `systems/npcs/` (zero `.py` files): `systems/world/sim/npe.py`, `engine/autoload/npc_ai.py`.
-- **Status:** "REFERENCE — traced structure only". Reading: historical trace; the census of what NPC code existed and was dead.
-- **Bears on:** CHAR, WR, CORE.
-- **Content that matters:**
-  - NPE: `generate_npc` (ecology weights from Territory accord/prosperity via `canonical_accord`; Tier-1 archetype seed with Stance per active issue, worldview convictions, compromise category, volatility, loyalty; Tier-2 deviation roll with `DEVIATION_DIE_MAX` that flips one of four axes, with a fifth hidden-allegiance branch that computes but is never applied) (:53-75, :137).
-  - `simulate_npc_actions`: for same-territory NPC pairs sharing a conviction with exactly-adjacent Stances, roll d6 against average Volatility, drift both one step, emit `NPCAction('stance_drift')`; its return is discarded by accounting (:76-88, :100).
-  - `generate_npc` has no production call site; mc_v18 records a `stubwire` marker `generate_npc(world-gen|season-tick)`, with a golden pinning `npcs_generated == 0` (:132).
-  - `npc_ai.select_action`/`evaluate_priority_stack` are stub no-ops with no callers (:133); `npc_behavior` contract declares Procedures B/C/D/E flows against `sim_module: none`; `npc_memory` contract has no code at all (:134).
-  - `role` param never read; `PIETY_HIGH/LOW` never used (Territory has no piety field) (:46, :138).
-  - `CURRENT.md`'s NPC head is `npc_behavior_v30` while the contract's `doc:` was repointed to a doc under `systems/factions/` (:139).
-- **Conflicts / stale:** the CHAR lane should confirm whether `engine/season/` supplies NPC generation/decisions in place of these; the audit-brief intent on the AI chooser is not met by this code.
-- **Open items:** none; gap table is the content.
-
 ### .designs/systems/npcs/reference/npc_behavior_system_v1.md
 - **What it is:** the original NPC ethical-stance and resonance behaviour system v1 (2026-04-13): Stance Triangle, named-NPC triangles, Beliefs and Scars, decision procedure, arc state machines, Resonant Style targeting, framework drift, and seven-level faction priority trees.
 - **Status:** "SUPERSEDED — canonical doc is designs/systems/npc_behavior_v30.md ... Retained as historical reference" (:11). Reading: superseded by v30 (and later by whatever engine/season carries) but it is the most complete extant statement of the NPC decision procedure and AI-chooser intent in this lane.
@@ -1204,6 +1190,15 @@ Lane: archived design documents under `.designs/` (README, `_architecture`, arti
 - **Conflicts / stale:** the assassination backstory removal (infill :84) vs earlier text; Niflhel/Coup Counter assumptions; empty paragraphs (Maret, Vossen, etc. have gaps between headings because prose moved to infill).
 - **Open items:** Torsvald TS threshold "GM discretion (TS 40? 45?)" (:69); NPC name pending for the Prudence Cardinal.
 
+### .designs/systems/npcs/reference/npc_character_analyses_v30_index.md
+- **What it is:** generated heading/size index (2026-04-20) of the NPC character analyses (~4.8k tokens).
+- **Status:** none stated ("Status: DESIGN" in the indexed doc). Reading: historical map.
+- **Bears on:** ARCS, CHAR.
+- **Content that matters:**
+  - 13 roster NPCs + 11 ruler/named NPCs; heaviest entries Lenneth (587 tokens), Almud (420), Baralta (412) (:77-89). Dalla Virke 12 tokens, Prudence Cardinal 18 tokens, Vaynard 14, Klapp 14 in the skeleton show that most prose is in the infill.
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
 ### .designs/systems/npcs/reference/npc_character_analyses_v30_infill.md
 - **What it is:** prose infill of the NPC character analyses with historical parallels per NPC.
 - **Status:** "Status: DESIGN" (:13). Reading: reference character design; richest narrative-hook source for ARCS.
@@ -1214,15 +1209,6 @@ Lane: archived design documents under `.designs/` (README, `_architecture`, arti
 - **Conflicts / stale:** Baralta "does not question the Church's theology" (:109) refined by the ED-732 supplement in the skeleton; "TC"/"CV" terminology; Coup Counter mechanics.
 - **Open items:** Cardinals Klapp, Olafsson, Jarnstal mostly "unchanged" with no body in this part.
 
-### .designs/systems/npcs/reference/npc_character_analyses_v30_index.md
-- **What it is:** generated heading/size index (2026-04-20) of the NPC character analyses (~4.8k tokens).
-- **Status:** none stated ("Status: DESIGN" in the indexed doc). Reading: historical map.
-- **Bears on:** ARCS, CHAR.
-- **Content that matters:**
-  - 13 roster NPCs + 11 ruler/named NPCs; heaviest entries Lenneth (587 tokens), Almud (420), Baralta (412) (:77-89). Dalla Virke 12 tokens, Prudence Cardinal 18 tokens, Vaynard 14, Klapp 14 in the skeleton show that most prose is in the infill.
-- **Conflicts / stale:** none.
-- **Open items:** none.
-
 ### .designs/systems/npcs/reference/npc_roster_v30_index.md
 - **What it is:** generated heading/size index (2026-04-19) of "Named NPC Roster" (~8.7k tokens), skeleton body not in this lane.
 - **Status:** indexed doc "Status: CANONICAL" (:24). Reading: historical map.
@@ -1230,7 +1216,7 @@ Lane: archived design documents under `.designs/` (README, `_architecture`, arti
 - **Content that matters:**
   - 13 roster NPCs with titles: Edeyja, Maret Uln, Yrsa Vossen, Sæmund Haelgrund, Sigrid Torsvald, Halvar Brandt, Annika Feldhaus, Peder Almstedt, Gerik Strand, Dalla Virke, Doux Alexios Laskaris, Rikard Solberg, Aldric Tormann (Prudence Cardinal) (:28-40).
   - A "Mode Interface Matrix" (4.5k tokens) and "Mode Coverage Summary": each NPC must have presence in at least 2 of 3 modes (:43-58). Summary Table, Cross-Reference Faction Axis Positions, Stat Blocks, and "Caste System Impact on Roster NPCs" (:41-63).
-- **Conflicts / stale:** the cast gets name "Aldric Tormann" in the roster vs "[Name Pending]" in analyses; "Sigrid Torsvald" vs "Sigrid Torsvald/Torsvald/Torsvald" spellings in other docs.
+- **Conflicts / stale:** the cast gets name "Aldric Tormann" in the roster vs "[Name Pending]" in analyses.
 - **Open items:** Stat Blocks "to be generated after identities are confirmed" (infill :112).
 
 ### .designs/systems/npcs/reference/npc_roster_v30_infill.md
@@ -1243,8 +1229,22 @@ Lane: archived design documents under `.designs/` (README, `_architecture`, arti
   - Niflhel is not a coordinated faction but a constellation of syndicate houses (Virke family one of several) (:61).
   - Caste system as load-bearing: Feldhaus/Virke profit, Almstedt preserves, Prudence Cardinal's extraction deepens, Haelgrund enforces, Strand's frustration rebukes; "NPCs collectively reproduce the caste without intending to" (:114-130).
   - Mode bridges: how each NPC's compromise expresses in TTRPG (personal choice), BG (stat delay or card trigger) and Hybrid (Zoom In) (:85-109).
-- **Conflicts / stale:** the named-flaw approach is a design for a scripted-flaw NPC AI (risk of scripting drift if hard-coded per entity); modes. 
+- **Conflicts / stale:** the named-flaw approach is a design for a scripted-flaw NPC AI (risk of scripting drift if hard-coded per entity); three-mode (TTRPG/BG/Hybrid) bridging text presumes a GM.
 - **Open items:** ED-NEW-24 (RM internal split on Crown patronage) (:116); stat blocks pending.
+
+### .designs/systems/npcs/reference/npcs_flow_skeleton_v1.md
+- **What it is:** traced flow skeleton (at commit `6545067`) of NPC code, which lives outside `systems/npcs/` (zero `.py` files): `systems/world/sim/npe.py`, `engine/autoload/npc_ai.py`.
+- **Status:** "REFERENCE — traced structure only". Reading: historical trace; the census of what NPC code existed and was dead.
+- **Bears on:** CHAR, WR, CORE.
+- **Content that matters:**
+  - NPE: `generate_npc` (ecology weights from Territory accord/prosperity via `canonical_accord`; Tier-1 archetype seed with Stance per active issue, worldview convictions, compromise category, volatility, loyalty; Tier-2 deviation roll with `DEVIATION_DIE_MAX` that flips one of four axes, with a fifth hidden-allegiance branch that computes but is never applied) (:53-75, :137).
+  - `simulate_npc_actions`: for same-territory NPC pairs sharing a conviction with exactly-adjacent Stances, roll d6 against average Volatility, drift both one step, emit `NPCAction('stance_drift')`; its return is discarded by accounting (:76-88, :100).
+  - `generate_npc` has no production call site; mc_v18 records a `stubwire` marker `generate_npc(world-gen|season-tick)`, with a golden pinning `npcs_generated == 0` (:132).
+  - `npc_ai.select_action`/`evaluate_priority_stack` are stub no-ops with no callers (:133); `npc_behavior` contract declares Procedures B/C/D/E flows against `sim_module: none`; `npc_memory` contract has no code at all (:134).
+  - `role` param never read; `PIETY_HIGH/LOW` never used (Territory has no piety field) (:46, :138).
+  - `CURRENT.md`'s NPC head is `npc_behavior_v30` while the contract's `doc:` was repointed to a doc under `systems/factions/` (:139).
+- **Conflicts / stale:** the CHAR lane should confirm whether `engine/season/` supplies NPC generation/decisions in place of these; the audit-brief intent on the AI chooser is not met by this code.
+- **Open items:** none; gap table is the content.
 
 ### .designs/systems/overview/reference/clock_registry_v30.md
 - **What it is:** Valoria Clock & Track Registry (created 2026-04-08, updated 2026-06-24): the "single source of truth" table of every clock, track and counter with ranges, starts and source docs. Skeleton.
@@ -1294,3 +1294,39 @@ Lane: archived design documents under `.designs/` (README, `_architecture`, arti
 - **Conflicts / stale:** the victory threshold 15 vs "11/15 territories" in canon docs (GD-1); module-level globals `scene_slate._queue` and `victory._qualifying_streak` not world-scoped (:136, :138).
 - **Open items:** none; every row is a traced gap.
 
+## Cross-subsystem leads
+
+- **CORE / CHAR / WR (narrative render):** the articulation skeleton shows Tier 1 protagonist lens, Tier 3 chronicle entry and Tier 2 trigger evaluation were all stubs with zero callers, and 10 of 13 subscribed trigger types had no emitter (`articulation_flow_skeleton_v1.md` :130-137). The design intent (cut scenes, chronicle, "Why?" causal-chain diagnostic) lives in `key_substrate_v30.md` §5.4, `integration_proposal_v30_index.md` Part 4/6 and `campaign_architecture_v30_index.md` Part 7. The WR/CORE lanes should check whether `engine/season/harness/chronicle.py` is the successor and whether the "Why?" walk exists.
+- **CHAR / FI / SC (NPC AI chooser):** the fullest statement of intended NPC decision logic is `npc_behavior_system_v1.md` §1-§5 and §8 (Stance Triangle, Decision Fork with Scar count, Resonant Style targeting, seven-level priority template, Framework Drift) plus the "named Behavioral AI flaw" per NPC in `npc_roster_v30_infill.md`. `political_dynamics_keys_migration_v30.md` adds Procedures B-E (Concern, Project, Opinion Drift, Off-Screen Interaction, Gossip, 10-memory cap). The audit brief's AI-chooser intent should be compared with these; the named-flaw approach is a scripting-drift risk if encoded per entity.
+- **CHAR / FA (Conviction vocabulary):** three rosters coexist in the design set: 7 values (`npc_behavior_system_v1`), 13 with a 4-axis matrix (`key_substrate_v30` §2.5, PP-684/718), and 9 in code (`conviction.py`; single owner `descriptor_registry.yaml:conviction_roster`). Also two unrelated "conviction" stats: per-character Convictions and the per-territory Piety Track originally called "Conviction (PT)" (`conviction_track_v30.md`). Name collisions flagged in `governance_type_registry_v1.md` §2.8 (Prosperity, Disposition, Guild Favour, Standing, Mandate).
+- **FA / SE / SC (legitimacy and consent):** Legitimacy/Popular Support are "declared but inert in `sim/`" per `governance_consolidation_v1.md`, `governance_type_registry_v1.md` and `ners_vsg_reconciliation_v1.md` (E5, lps_inert_check 100/100), yet the ruled hierarchy (`scale_hierarchy_v1.md`, per the reconciliation doc) makes L/PS the consent modulator on the governance-type cascade. Mandate has two meanings (faction meter vs settlement-derived `round(7T/(T+K))`, retired as collapse carrier by D4). Compare with `engine/season` faction/settlement state.
+- **FA / WR (hierarchy and territory):** B12 ruling: Settlement -> Territory (new tier) -> Province (formed only while a common faction holder) -> Duchy -> Country; overrules PP-726 fracturing, which `fractional_province_ownership_v30.md` and `session_a_spec_patches.md` still implement. SE and FA lanes should not audit against the older fracture rules.
+- **FA (succession, treaties, transfer):** `faction_succession_split_v30.md` (two-stage resolution, 60/40 splits, RM settlement emergence at Order = 0), `treaty_expiration_v30.md` (per-arc 90% lapse as a Crown-nerf lever), `parliamentary_transfer_v30.md` (CB-gated transfer, 8 CB sources) and `factions_flow_skeleton_v1.md` (`world.casus_belli` has no production writer so most CB sources are dead; `mass_seizure` and treaty-expiration functions have no callers; Varfell and Hafenmark have no faction-unique action).
+- **FI / SC (detective play):** `fieldwork_investigation.md` (Evidence Track, reliability tags, Desperate Trail with "every failure is a clue", contested investigation via Concealment Ob, Thread-Read), `fieldwork_exposure.md` (Cover and Exposure with faction responses), `fieldwork_socializing.md` (Disposition table, Knots), `investigation_systems_v30_index.md` (NPC Population Engine, Scene-as-Graph, Case Board, Dialogue Lattice, Five-Filter Response Matrix) and `fieldwork_flow_skeleton_v1.md` (all of these are stubs). The Case Board/Dialogue Lattice bodies are not in this lane (index only).
+- **MB / FA / PC (mass battle seam and combat plan):** `mass_battle_flow_skeleton_v1.md` records the strategic Unit mapping (one Line subunit, Mil as power) as an unanswered design question, the adapter degree ladder as non-canonical, and `rally_check`/`threadwork_check` hooks as empty. `military_layer_v30.md` carries the faction-to-unit bridge (Military ceilings, muster, Experience, Wealth-Zero degradation). `phase4_5_plan_v1.md` carries the primitive/convergence/tradition principles and unbuilt Phases 4/5 (game-theoretic psychology, abilities-as-access); `combat_flow_skeleton_v1.md` shows a contact axis already exists in the traced code.
+- **SE / WR (clocks and MS):** `ms_budget.md` (all MS drain/recovery sources, seasonal cap +/-10, four late-game paths), `clock_registry_v30.md` (clock inventory), `overview_flow_skeleton_v1.md` (Turmoil, PI, Strain, IP were dead clocks; Political Stability victory gate permanently satisfied). Check each against `engine/season/` clock owners.
+- **ARCS:** `edeyja_npc.md`, `baralta_v30.md`, `npc_character_analyses_v30(.infill).md` and `npc_roster_v30_infill.md` hold per-NPC flaws, historical parallels and arc ladders (Edeyja access by expedition season and TS band; Haelgrund hidden TS 12; Torsvald TS 35; Laskaris IP sandbagging flip; Solberg stabilising bias; Prudence Cardinal Parish Revolt). `conflict_architecture_proposal.md` carries the Royal Assassination fuse (S8-S12 window; Almud/Lenneth/Torben sub-roll) and graduated Löwenritter autonomy.
+- **PROCESS / all:** `decision_policy_v1.md` §2 precedence (measured engine behaviour outranks mechanical canon; §3 metaphysical canon tier never ruled) is the origin of CLAUDE.md §0.05's direction; `repository_keep_set_v1.md` explains why this tree is "information only".
+
+## Likely stale or superseded
+
+- **Retired apparatus (ED-IN-0232):** `key_substrate_v30.md`, `key_type_registry_v30.md`, `key_echo_armature_v1.md`, `propagation_spec_v1.md`, `_architecture_flow_skeleton_v1.md`, `articulation_flow_skeleton_v1.md`, `political_dynamics_keys_migration_v30.md`, `governance_ripple_substrate_v1.md` (Key-emission and resolution-quality bridge), `governance_type_registry_v1.md` §4 (`Field` sketch on the armature), `holonic_container_doctrine_v1.md` §1 cross-map. Their rulings (OF-7 deferred-apply, OF-B1 no re-entry, ER-2 symmetric continuity, per-tick termination theorems) describe a mechanism that no longer exists; the season-as-tick ordering and ORD-1/ORD-2 discipline are the part with a successor.
+- **Superseded or struck mechanics:** `early_game_ignition_analysis.md` (by `conflict_architecture_proposal.md`); `npc_behavior_system_v1.md` (by `npc_behavior_v30`); `varfell_path_b_v30.md` and its infill (GD-1 strikes it); `conviction_track_v30.md` §4.2, §4.3, §6, §7 (GD-1) and §4.1 and CI-75 pacing (PP-421); Niflhel as faction (dissolved), VTM, Intelligence stat, Public Instability, Coup Counter (replaced by graduated autonomy), Popular Will (STRUCK per registry note), TCV (renamed PV).
+- **Pre-d+sigma combat:** `combat_c4_draft_v0.md` entirely (d10 pool, TN 7, stance counter-table, `1D + History` out-of-range gate); `combat_reference_v1.md` §1-§5, §8 (Feint versus roll, resolution-order table, TN matrix, Fibonacci group), ranged tables; `canonical_registry.md` combat/pool rows.
+- **Three-mode (TTRPG/BG/Hybrid) texts with a GM:** `hybrid_gaps_v30(.infill).md`, `fieldwork_bg/hybrid/summary`, `military_layer_v30.md` §1-§2 (BG token model), `mass_battle_v30_infill.md` Part B, `scale_transitions_v30_infill.md` (GM final call on scope); the videogame mode spec discards these but the index is only a stub here.
+- **Terminology drift inside files marked CANONICAL:** TC/CV/RS/Theocracy Counter in `conviction_track_v30_infill/index`, `faction_politics_v30_index`, `ci_political_v30_index`; "13-step cascade" vs 6-step accounting; Disposition rules (`fieldwork_editorial.md` PP-632 values vs `fieldwork_socializing.md` ED-912; line 62 of socializing still says direct subtraction).
+- **Stale registers and plan docs:** `clock_registry_v30.md` conflicting Torben/Intel/PW rows; `repo_state_armature_v1.md` (describes a banner and `review_core.py`, both retired); `repository_keep_set_v1.md` counts; `phase4_5_plan_v1.md` statuses (2026-07-01).
+- **Dated traces:** all `*_flow_skeleton_v1.md` anchors (commit `6545067` etc.) predate the engine/season rebuild and several moves (`modules/`, `engine/substrate/composition`), so every file:line is [UNVERIFIED] now.
+
+## Items that could change an audit finding
+
+- **F-CORE (season loop / clocks):** `overview_flow_skeleton_v1.md` :177-179 lists dead clocks (Turmoil never written so the Political Stability victory gate is always satisfied; PI and Strain never read or written; IP writer a stub) and a dead `VICTORY_THRESHOLD = 11` param against a live 15. If `engine/season` kept any of these, a CORE finding on inert clocks or on the victory gate needs a falsifier. `propagation_spec_v1.md` :75 records a deliberate one-tick arc/year cadence offset (arc fires season%4==1, year-end season%4==0) "not a bug"; a CORE audit that flags cadence misalignment should check it.
+- **F-CHAR-01..03, 05, 14 (chooser, interior, knowledge, refusal rate):** the design intent for NPC deliberation (`npc_behavior_system_v1.md` Decision Fork, Scar thresholds, Stability <= 1 -> Autonomy, Resonant Style as the lever by which others move a person) and for memory/opinion/concern/project/gossip (`political_dynamics_keys_migration_v30.md` Procedures B-E, salience clamp 0..3 with horizon factors 1.5/1.0/0.5, concern regeneration cooldown, project stall >= 8 / complete >= 10) is documented and can be used as a standard for the findings that the chooser does not read what an act would do and that the interior does not move. `characters_flow_skeleton_v1.md` gap 7 (scar landed nowhere for a roster-name mismatch) is the same class as F-CHAR-04 (runaway scar) and F-CHAR-06 (headline cannot fail).
+- **F-FA-01..04 (decree, turnover, war, military verbs):** `faction_systems_overview_v30.md`, `faction_succession_split_v30.md` (leader loss opens a contest unless a sole heir has Disposition >= +3 and Standing >= 4; gap G thresholds), `parliamentary_transfer_v30.md`, `baralta_crown_claim_v30.md`, `factions_flow_skeleton_v1.md` (GD-2 mandatory response false; Varfell/Hafenmark have no unique action; `world.casus_belli` unwritten). If an FA finding claims "power does not change hands" or "war has no producer", these supply the intended rules and the earlier dead-code census to cross-check.
+- **F-SE-01..04, 12 (economy, population, hunger, world never grows):** `fractional_province_ownership_v30.md`, `franchise_v30.md` (Franchise-weighted national Influence), `governance_consolidation_v1.md` E7 (no positive-feedback path; Flourishing 3.7 vs 659 per seed), `ners_vsg_reconciliation_v1.md` (unaugmented Pi term pins 298/300 settlements at ceiling; E1+E3+E7 must be bundled). A SE finding on a one-way-down or runaway dynamic is supported by this prior record.
+- **F-FI-01..03, 09, 10 (unwitnessed facts, broadcast, investigation does not play, evidence untyped, detective borrowings not built):** `fieldwork_investigation.md` reliability-tag table and half-value Inert Knowledge rule, `fieldwork_flow_skeleton_v1.md` (all investigation entry points are stubs; no scene ever queued), `investigation_systems_v30_index.md` (Case Board, Scene-as-Graph, Dialogue Lattice, Five-Filter Chain exist only as design). These are the standard for F-FI-03/09; `fieldwork_exposure.md` Cover/Exposure thresholds table is the intended covertness mechanic.
+- **F-PC-01, 02, 09, 13, 14 (combat unreached, same fighter, tradition layer unreachable, design intent, NPC not an agent):** `combat_currency_v1.md` (U10 activation; `IMPOSITION_GATE=False`; per-fight texture instrument), `phase4_5_plan_v1.md` (Phases 4/5 unbuilt at 2026-07-01), `combat_flow_skeleton_v1.md` (contact axis `grab_available`/`grab_outcome` exists in traced code, `engagement` has no outside caller), `ability_armature.md` (`seize` dead lever), `tradition_decomposition_v1.md`.
+- **F-MB-01..03, 05, 14 (battle scale, headcount ratio, no natural trigger, two code paths, individual attributes):** `mass_battle_flow_skeleton_v1.md` :189-194 (adapter Unit mapping unanswered, degree ladder non-canonical, multi-unit orchestration unreached), `military_layer_v30.md` (Experience, Military ceiling, Wealth-Zero degradation, siege pool `Mil + 3`), `mass_battle_v30_index.md` (v4.10 per-sub-unit rout/Morale/Discipline canon).
+- **F-WR-01, 03, 04 (stories do not escalate, story bar cannot fail, world's readings have no reader):** `ms_budget.md` (MS dynamics), `conflict_architecture_proposal.md` (assassination fuse, bishop appointment, black markets), `early_game_ignition_analysis.md` §2 (six historical ignition mechanisms as a design checklist), `tensions_pair_validation.md`. The decision to cut the Tensions Deck to 6 cards/draw 1 is a design precedent for ignition by structure rather than events.
+- **F-GO / ARCS adjudication:** `fieldwork_godot.md` (UI blockers A-02, DA-03, B-03, A-05; Journal and Inert Knowledge UI treatment), `edeyja_npc.md` access ladder, `npc_roster_v30_infill.md` named flaws as testable behaviours.
+- **Self-contradicting design inputs (design-doc claims should not be cited as correct):** Mass Seizure Ob has two forms (`2 + Fort + max(0, 3 - PT)` in `conviction_track_v30.md` vs `10 - PT - infrastructure` in `ci_political_v30.md`), Piety Yield differs between `conviction_track_v30` (PT 5 +1, PT 4 +0.5, else 0) and `military_layer_v30` (PT 3 +0.25 then +0.5), starting capital Accord 3 vs 4, Composure/Stamina/Concentration formulas disagree across `canonical_registry`, `clock_registry_v30`, `combat_reference_v1`; a finding that treats any one of these as "the canon" needs the code to arbitrate.

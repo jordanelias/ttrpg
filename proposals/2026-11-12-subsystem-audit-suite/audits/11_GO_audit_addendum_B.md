@@ -112,7 +112,8 @@ proposals/*.md` in the suite finds only GO's files (§B7 E-B6).
 **Touches.** R-04, and the standing requirement's "one code path". **Consequence.** Each lane's
 design is sound alone; together they are six dialects (`CLAUDE.md` §10, shape divergence), a port
 re-implements six, and a player learns six. SE's and FA's summaries also read world truth
-(`world_q.hunger`), which is right for a developer's instrument and wrong as the steward's own view.
+(`world_q.hunger`; `digest(w, since)` over `w.log`), which is right for a developer's instrument and
+wrong as the steward's or the duke's own view.
 **Minimal fix.** One protocol: five readings and one scene pair (SURF-B), and one transcript runner
 every scenario prints through (SURF-B §8). R50, R74.
 
@@ -177,11 +178,11 @@ subsystem uses which.
 ### F-GO-19 · degrades narrative · the offer is three to five times the size the design set calls legible, and nothing in it says which rows are about the matter in hand
 
 **Evidence** (E-B3; one person, one seed, a reading). Five deliberations showed 22, 32, 33, 32 and
-38 candidates with budgets 5, 5, 4, 3, 2: 157 rows in a season. Twenty-three verbs appeared on all
-five sheets (`forge`, `sabotage`, `conceal`, `challenge`, `exchange`, `surveil`, …; `train` four
-times a sheet); five verbs appeared once (`petition`, `tend`, `lie`, `commit`, `argue`). The
-question changed each time (`need`, then four `claim_landed`, each `about` a different claim) and
-the view carried 7 to 12 separate questions. `Candidate.why` was deleted because nothing read it
+38 candidates with budgets 5, 5, 4, 3, 2: 157 rows in a season. Twenty-one verbs were offered five
+times across the five sheets (`forge`, `sabotage`, `conceal`, `challenge`, `exchange`, `surveil`,
+`speak`, …) and `train` twenty times; five verbs appeared once (`petition`, `tend`, `lie`, `commit`,
+`argue`). The question changed each time (`need`, then four `claim_landed`, each `about` a different
+claim) and the view carried up to 12 separate questions. `Candidate.why` was deleted because nothing read it
 (`carriers.py:591-595`). The design intent: 5–8 options a decision (`valoria_ui_ux_v4.md` §5.2), 12
 visible Slate entries (`v4_1` §2.5), a load score of 8.0 or less with "every player decision …
 meaningful and non-obvious" (`cogload_moderate_target.md`).
