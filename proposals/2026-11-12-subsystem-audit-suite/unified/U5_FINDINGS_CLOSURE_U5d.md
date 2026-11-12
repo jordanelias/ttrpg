@@ -733,3 +733,226 @@ carried mechanisms, three gaps, eleven batches and its decisions.
 | J-1 | are named persons born in play | JORDAN | (a) births on, in STORY-B's shape behind `birth_rate`: houses continue or fail, a regency has a child at its centre, the cast grows; (b) no births: the cast is what the build and the prologue made, minors come of age, every line is finite. Not answered by A-15 (deaths) or A-51 (which orders no births or ageing pass for the prologue). STORY-B's marriage and majority land under either | — |
 | §8.3 (twelve items "already Jordan's") | defaults under which no batch waited | SUPERSEDED | eleven are answered: A-15, A-16, A-19, A-24 (D-27, D-28), A-9, A-46, A-55, A-38, A-33 and the ladder's D-69; where the answer differs from the plan's default the batch is re-read in STORY-D's head line (A-9: S-67 completes in E-2; A-46: the Split is a strife move; A-38: the verdict names the petitioner). One stays open: the form of fortune in a field (D-34, held for `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md`; U5b's) | — |
 
+---
+
+# Part 7 — the institutions kit (`audits/15_INSTITUTIONS_*.md`)
+
+These five documents are designs and plans in proposal form; their closable items are the collision
+ledger, the Layer 1 meetings, each lane's decided resolutions and survivors, and the re-grounding
+additions. Carriers: **SYN-A…E** = `15_INSTITUTIONS_SYNTHESIS_A…E_*.md`; **VEN-A…D**, **VEN-E** (the
+grounding file `…VENICE_grounding_E_what_the_tree_adds.md`); **COL-A…E**, **COL-F** (`…COLONIAL_grounding_F_…`);
+**PAP-A…F**, **PAP-G** (`…PAPACY_grounding_mechanisms.md`); **BYZ-A…F**, **BYZ-G**
+(`…BYZANTINE_grounding_mechanisms.md`). Re-grounding status at the time of writing: all four grounding
+proposals exist on disk; PAP-G and BYZ-G carry their own table of the rulings; VEN-E and COL-F cited
+none and carry this lane's `Reconciled:` line. The Venice, Medici and colonial re-grounding sections
+(§17, §16) were read at their headings and their proposals' outlines only (see Coverage).
+
+## 7.1 `audits/15_INSTITUTIONS_SYNTHESIS.md`
+
+| id | claim (one line) | disposition | carrier · section | evidence |
+|---|---|---|---|---|
+| X-01 to X-11 | registries, records and the founding order: one `instruments.yaml`; no rival roster of forms; a certificate is a Record with `recites`; one meaning of "roll"; the order as seeded deeds (3, 2, 1); one `legitimacy` function; `presumption_gain` ships 0; two keepers; `debt`; `charter` and `staple`; `warrant` and `commission` | RESOLVED-BY | SYN-A edit 1; SYN-B; the family files' own `Reconciled:` lines (audit §2.1's last column) | the ledger's rows, read at 105 characters a cell |
+| X-12 to X-18 | seat rows, bodies, procedures: `audit_at_exit`; one far superior `off_altonian_court`; two distances; the ballot is SC's; two non-collisions; Hafenmark's heir title | RESOLVED-BY | COL-C, VEN-C, BYZ-D, COL-B, PAP-B (as reconciled); X-15 on A-14; X-16, X-17 are STALE-FALSE-POSITIVE by the audit's own finding (not collisions); X-18 by COL-D edit 4 | — |
+| X-19 to X-22, X-30 | obstacle terms and fixtures: named terms for BYZ's steps; `oath_step` withdrawn; `provisional_term` is VB-C's; one control style; one currency model | RESOLVED-BY | SYN-A §3.4 to §3.6; `U5c_SC_one_obstacle_form.md` (the one composer); the dignity "precedence" step dropped by X-19 is lawful again under A-12 and is not re-added (BYZ-A as reconciled) | — |
+| X-23 to X-29 | verb rows rewritten by more than one lane (`confer`, `revoke`, `succeed`, `issue`, `carry`, `requisition`, `transfer`, `seize`, the answer to a writ) | SUPERSEDED | the verb lanes own each row (U5c: VB-C, VB-D, SOCIAL1-B, -D, MATERIAL-B, -D); the kit supplies terms | audit §3.5 |
+| X-31, X-32, X-33 | `person_q.excused`; one scenario style; a form's `basis` | RESOLVED-BY | SYN-C edit 1; SYN-D §1; PAP-D (A-21, A-22 rule the two bases) | — |
+| items listed outside the four families (three names for distance; `rank_gap` against `standing`; the content key `standing`; three names for the graded route; `dues_unmet` against `breaches`) | names that collide across lanes | SUPERSEDED | U5c's conflict ledger (`unified/U5_CONFLICTS_U5c.md`) and `U5c_SC_one_obstacle_form.md`; `dues_unmet` and `breaches` stay two halves (NARR-B reads the oath, COL-A the instrument) `[unverified that U5c lists each]` | — |
+| §3, §5, §6, §7 (the one kit; the interlock map; structural conflicts; the commensuration test) | design | RESOLVED-BY | SYN-A, SYN-C, SYN-D | — |
+| §4 (the deed ledger), §4.6 (canon wording A1 to A4) | legitimacy as believed deeds; the canon amendment drafted | RESOLVED-BY | SYN-B as reconciled; the canon edit is owed by A-17 and applied by no suite lane | `canon/03_canonical_timeline.md:76, :90, :96` `[not re-opened]` |
+| §8.1 (the Layer 1 statement, fourteen rows) | the kit against AX-1, AX-2, AX-4, T-k, AX-5, AX-6, §B.7, §B.8, §B.13, §C.11 | RESOLVED-BY | SYN-A (no module, no stored quantity, no trigger); two rows change by ruling: "§B.7 a seat adds no verb and no modifier" (A-12) and the `Seat` tuple (A-13); amendment texts owed, not applied | `04_CODE_ARCHITECTURE.md` §B.7 `[not re-opened by this lane]` |
+| L-1 | intent "office" as a modifier against §B.7 | SUPERSEDED | A-12 | — |
+| L-2 | seats that are paid, routed and audited against the `Seat` tuple | SUPERSEDED | A-13 | — |
+| L-3 | a vote may not be a count of commitments | SUPERSEDED | A-14 | — |
+| L-4 | `dues`, `audits_due`, `hands_open`, `recalls` read the World to hand a person a referent | DISPUTED | the audit grades it CONVENTION and names it without resolving; this lane's evidence: `world_q.vacancies` does the same today and Layer 1 accepts it as the occasion pattern, so no edit is planned; the finding stays for U2's conformance matrix | `queries/world_q.py` (`vacancies`) `[not re-opened]` |
+| L-5 | "a registered module" against institutions as the loop's verbs | SUPERSEDED | A-10 | — |
+| §9 (the implementation plan, batches I-0 to I-9) | the kit's landing order | RESOLVED-BY | SYN-E as reconciled | — |
+| §10 item 1 | the south's part in the Secession War | SUPERSEDED | A-17, A-18 | — |
+| §10 item 2 | may the head of the Church strip a Church officer | SUPERSEDED | A-35; PAP-B item 4 un-held | — |
+| §10 item 3 | can anyone judge the Confessor | SUPERSEDED | A-36 (nobody; the council is dropped) | — |
+| §10 item 4 | forced labour keyed on caste | SUPERSEDED | A-41 (neither option; regard, vote blocks, informal tiers), A-42; `U5d_SE_cohort_heavy_moves_and_caste.md` | — |
+| §10 "closed here" (eight family items) | answerable at issue or entry; the empire's names; a barred order; lay investiture; a roll closed by blood; Schoenland; a house as its own faction; sale of office | RESOLVED-BY | as the audit's table (per-row keys and content; no form `purchase`); the register lists them as answered ("Not yours") | — |
+| §10 "carried" (four open questions of other lanes) | proclaimed or delivered; orders down the chain; swearing to a seat; governance's home | SUPERSEDED | A-21; A-22; the ladder's D-31 under A-24 (a draw against the seat); A-10 | — |
+
+## 7.2 The four family audits
+
+| id | claim (one line) | disposition | carrier · section | evidence |
+|---|---|---|---|---|
+| VENICE §14.1 resolutions 1–14 | the debt un-deferred; no creditor's lever; ballots drawn; `lot`; `binds_bases`; terms by body; Schoenland authored; a house head as the actor; kind-denominated instruments; no purchase basis; the roll by warrant; Key-era hooks irrelevant; a suspended act returns to the docket | RESOLVED-BY | VEN-B (1–3, 10), VEN-C (4–7, 12, 13), VEN-D (8, 9, 14); 11 none owed | — |
+| VENICE §14.2 items 1–3 | a roll closed by blood; Schoenland's constitution; a house on a hearth with no faction | RESOLVED-BY | closed by the synthesis (§10 table): no; authored as marked assumption (VEN-D); every house belongs to a faction | — |
+| VENICE §17 (re-grounding: corrections; mechanisms M-1 to M-13; what stays memory-grade) | what the tree's research adds | RESOLVED-BY | VEN-E edits 1–7 as reconciled; memory-grade claims stay marked in the audit and are relied on by no edit `[section read at its headings]` | `unified/RESEARCH_MAP_INSTITUTIONS_B.md` `[not opened]` |
+| COLONIAL §11 item 1 | the canon sentence on the south | SUPERSEDED | A-17 | — |
+| COLONIAL §11 item 2 | may an office be sold | RESOLVED-BY | closed by the synthesis (composed `transfer` then `confer`; no `purchase` form) | #453 row 38 `[not re-opened]` |
+| COLONIAL §11 item 3 | forced labour keyed on caste | SUPERSEDED | A-41 | — |
+| COLONIAL §3 to §10, §12 to §14 (distance; the play-facing model; the accomplishment ledger; verbs; scenario; plan) | design | RESOLVED-BY | COL-A to -E as reconciled (COL-D's hold released by A-17; its edit 5 rewritten on the land rulings) | — |
+| COLONIAL §16 (re-grounding: corrections; mechanisms M-14 to M-28) | what the tree's research adds | RESOLVED-BY | COL-F edits 1–8 as reconciled `[section read at its headings]` | — |
+| PAPACY F-PAP-01 to F-PAP-10 | the audit's findings on what the tree holds (among them: the Confessor housed in a market, -04; `off_cardinal_fortitude` commanding through the unruled `dispatch`, -08; a verdict by count, -09; an absent party judged, -10) | RESOLVED-BY | PAP-A (R-1, R-4, R-5, R-14), PAP-B (R-3, R-6, R-9), PAP-C (R-2, R-12, R-13, R-17), PAP-D (R-7, R-8, R-16) `[F-PAP-01, -02, -03, -05, -06, -07 were not opened one by one; they are closed through the resolution rows that cite them]` | — |
+| PAPACY R-1 to R-17 | seventeen decided resolutions | RESOLVED-BY | as above; R-10, R-15 none owed; R-11 (the canon sentence) SUPERSEDED in effect by A-17 | — |
+| PAPACY §13 item 1 | the head strips an officer | SUPERSEDED | A-35 | — |
+| PAPACY §13 item 2 | judging the Confessor | SUPERSEDED | A-36; PAP-E item 5 and procedure P-13 dropped | — |
+| PAPACY §13 item 3 | lay investiture on ducal ground | RESOLVED-BY | closed by the synthesis (per-row `patronage` content) | — |
+| PAPACY §13 item 4 (a note) | canon lines and the attestation counts | SUPERSEDED | A-17, A-18 for the order; the counts stay Jordan's content | — |
+| PAPACY §15 (re-grounding) | what the tree's research adds | RESOLVED-BY | PAP-G items 1–8 (its own rulings table folds A-13, A-14, A-21, A-35, A-36, A-37) | — |
+| BYZANTINE §14 item 1 | an order answerable at issue or at entry | RESOLVED-BY | BYZ-C as reconciled (a per-row key; under A-21 the terms travel with the news and the hands act on the entered instrument) | — |
+| BYZANTINE §14 item 2 | who credits Varfell's deed | SUPERSEDED | A-18 | — |
+| BYZANTINE §14 item 3 | the names at the empire's centre | RESOLVED-BY | BYZ-D (placeholders marked; names are content) | — |
+| BYZANTINE §14 item 4 | a barred order for the bureaux | RESOLVED-BY | closed by the synthesis (no bar; the deed order bars a clerk by his odds) and by the audit's own re-grounding note (the 2026-07-12 closure ruled the form) | — |
+| BYZANTINE §17 (the standing rule checked), §18 (re-grounding) | fixed outcomes in its own text; what the research adds | RESOLVED-BY | BYZ-A to -F as reconciled by the synthesis (X-19, X-22); BYZ-G items 1–5 (its own rulings table folds A-12, A-13, A-17, A-18, A-21) | — |
+
+---
+
+# Part 12 — the determinism sweep (`audits/18_DETERMINISM_SWEEP.md`)
+
+U5a closed the sweep row by row (`unified/U5_FINDINGS_CLOSURE_U5a.md` Part 6: D-01 to D-11, C-01 to
+C-15, and §3's nine items). Those dispositions stand and are not repeated. The rows it handed to this
+family:
+
+| id | claim (one line) | disposition | carrier · section | evidence |
+|---|---|---|---|---|
+| D-07 | a levy raises as asked | RESOLVED-BY | `06_FA_levy_through_the_seat_B.md` (eligibility only; the turnout is `recruit`'s graded draw, U5b) | the file's D-07 note |
+| D-08 | succession and set-up acts certain | RESOLVED-BY | `06_FA_playable_scenario.md` as reconciled (A-19); VB-C | — |
+| D-09 | inheritance by rule | SUPERSEDED | A-19 (the deed race); `22_HAPPENINGS_B` | — |
+| D-10 | "governing acts do not roll" | RESOLVED-BY | overruled in `07_SE_audit_addendum_B.md`; the route is `18_DETERMINISM_task_draw_for_uncontested_verbs.md`; a steward's skill bears on the harvest draw (A-54) | — |
+| C-07 (FA's share) | the binding acts take effect with certainty | RESOLVED-BY | VB-C, VB-D (U5c) with Part 1's carriers | `issue` 49, `release` 4 |
+| §3: WR's thresholds become draws | — | RESOLVED-BY | `09_WR_B_draws_not_thresholds.md` (A-54 confirms the form) | — |
+| §3: the institutions' deterministic text | — | RESOLVED-BY | the synthesis's X-19, X-22 and each family file's `Reconciled:` line; PAP's R-16 refuses the automatic sentence | — |
+| §3: the GAME pessimist's count | one definition of a draw | RESOLVED-BY | an Event that carries a degree (the sweep's own); `16_PESSIMIST_GAME_consequence_reading.md` reads on it | 7.8 to 10.8% of acts drawn |
+| `:110` (`world_q.subsistence_draw` listed as drawn) | the SE pessimist reads it as arithmetic | DISPUTED | both readings recorded (`U5d_SE_owed_edits.md` §8); this lane did not open the function; settled in effect when the hungry body is drawn (`09_WR_B_draws_not_thresholds.md` edit 2) | `[not re-opened]` |
+
+---
+
+# Part 13 — the land rulings (A-57, A-58, A-65 to A-70), which arrived during this closure
+
+| id | claim (one line) | disposition | carrier · section | evidence |
+|---|---|---|---|---|
+| D-20 as re-ruled | what a won battle does to land and seats | RESOLVED-BY | LAND (`U5d_FA_land_and_seats_pass_on_a_won_march.md`): rules 1–9, edits 1–7 | `_eff_march`, `_seize_rung`, `_take_hold`, `occupies`, `gate.py:291-300` (each opened) |
+| `26_MASS_BATTLE_aggression_and_land.md` §3 row 5 (the uninvited rescuer) | does the land pass when the beaten army was not the holder's | SUPERSEDED | A-65, A-66 (he chooses); LAND rule 4 | — |
+| the same file §2, §4 (an unopposed entry; a drawn aggressor's station; a drawn defender; what is carried home; leave and a guest; presence by leave) | open land cases | SUPERSEDED | A-67 to A-70; LAND rules 5–8, decisions D5, D6, D8 | — |
+| A-66's marked assumption | is seizure a default or an act the victor forms | RESOLVED-BY | LAND, "The settled rules" 1–2: confirmed at the owner; `seize` is the existing act | `_seize_rung` docstring |
+| A-68's marked assumption (the parliament's referent) | "the kingdom parliament is functional" has no working state in code | JORDAN | (A) the Court Parliament when it is built (the rule waits; until then every unopposed entry is read on tension, regard and war alone); (B) any working realm bench stands in now (`world_q.parliament_sits`, built behind a fixture). LAND builds (B) switchable to (A) | body `Court Parliament` in `rosters.yaml: office_bodies`; arrangement `parliamentary_debate`; no seat in the body; `offices.yaml:150` "RULED AND NOT BUILT, H-90" (all opened) |
+
+Listed for other families (not edited by this lane; each assumed title passes only by a separate act or
+by presence, and is now consistent with A-66 or needs one line): `04_MB_playable_field_scenario.md:57`
+(its end condition "`seize` after occupation" agrees with A-66 and should add the seats, U5b);
+`14_VERBS_MATERIAL_D_paper.md` §6 (`seize` of an occupied place gains the seats and the leave
+conjunct, U5c); `14_VERBS_MILITARY_A_movement.md` (an unopposed arrival takes the entry draw, U5b).
+
+---
+
+# Proposals this lane wrote (carriers for findings that had none, and for rulings with no carrier)
+
+| file | what it carries |
+|---|---|
+| `U5d_FA_land_and_seats_pass_on_a_won_march.md` | the title write under the land rulings A-57, A-58, A-65 to A-70: a field writes presence; the victor seizes, occupies or withdraws; a seizure carries the seats; leave is not occupation; the unopposed entry's graded reading; the parliament's referent (flagged) |
+| `U5d_FA_owed_edits.md` | ten FA items: the consort's remit with the deed race; custody suspends acts through a seat (A-23); the head's strip and the Confessor's exemption (A-35, A-36); faction weight on the authored franchise (A-42); what an order orders; one purse per rung; register re-grades; one head per faction; a writ is the seat's; a seat exists whether or not it is filled |
+| `U5d_SE_owed_edits.md` | ten SE items decided with no file (register edits, CR-49's class, `Rung.envelope`, the ration's kinds, the relief ladder's top, builder notes, trade kinds, the sweep's one line, readers or deletions, the stocking gate arm) |
+| `U5d_SE_cohort_heavy_moves_and_caste.md` | A-56 (a cohort forms seven heavy moves; the `riot` row) and A-41 / A-42 (caste in regard, vote blocks and a practice table of informal tiers) |
+| `U5d_WR_owed_edits.md` | an execution read as a killing; the order in which WR's draws land; a believed wound cleared; one roster sentence |
+| `U5d_WR_zero_coherence_unknowable.md` | A-43: legibility as the one dial on what others read of a practitioner; continuity kept |
+| `U5d_GO_owed_edits.md` | the save snapshot with a round-trip gate (F-GO-09); two cross-lane orders; one card line |
+| `U5d_STORY_owed_edits.md` | five story decisions that named an owner and no file (a besieged larder, a burned granary, blame under an empty seat, the opener's edge, a mutual felling) |
+
+# Part R — rulings folded into existing proposals
+
+Ninety-two proposals carry a head line `Reconciled: 2026-11-12, U5d closure — …` that names the ruling
+and the steps rewritten; the author's line is kept in every file and no finding was deleted. By ruling
+(the files' own lines are the record; this table is an index):
+
+| ruling | folded into |
+|---|---|
+| A-5 (bell curve), A-7 (two inputs) | `11_GO_one_draw_owner`, `11_GO_port_gate_order_and_coverage`, `16_PESSIMIST_GO_keyed_draw_no_recorder`, `09_WR_threadwork_module`, `09_WR_B_threadwork_session_and_practitioner`, `16_PESSIMIST_WR_A`, `23_STORY_A`, `15_…PAPACY_C`, `_F`, `06_FA_office_capabilities` |
+| A-9, A-48 (a scene is a short sequence; the slate) | `11_GO_player_surface_contract_B`, `11_GO_fidelity_and_campaign_modes`, `23_STORY_A`, `23_STORY_D` |
+| A-10 (governance is the loop's verbs) | `06_FA_playable_scenario`, `06_FA_shortest_loop_B`, `15_…SYNTHESIS_A`, `_D` |
+| A-12 (a seat may carry a modifier), A-13 (three seat facts) | `06_FA_office_capabilities`, `07_SE_capability_rate_B`, `07_SE_capability_and_chooser_surface`, `07_SE_arc_needs`, `20_NARRATIVE_B`, `15_…SYNTHESIS_A`, `_D`, `_E`, `15_…BYZANTINE_A`, `_B`, `_C`, `15_…COLONIAL_C`, `15_…VENICE_C`, `…VENICE_grounding_E` |
+| A-14 (a vote is a draw on the voter) | `06_FA_seat_terms_and_turnover`, `15_…PAPACY_B`, `_F`, `15_…VENICE_C`, `15_…SYNTHESIS_A`, `_D`, `…VENICE_grounding_E` |
+| A-15 (natural death on) | `06_FA_seat_terms_and_turnover`, `06_FA_seat_terms_by_body_B`, `07_SE_population_census`, `09_WR_provided_arcs`, `16_PESSIMIST_WR_C`, `20_NARRATIVE_F`, `21_PROCEDURAL_B`, `_C`, `22_HAPPENINGS_A`, `_D`, `23_STORY_B`, `_D`, `15_…BYZANTINE_E`, `15_…PAPACY_F`, `16_PESSIMIST_GAME_consequence_reading` |
+| A-16 (murder, rarely) | `12_ARCS_arcs_as_staged_goals`, `21_PROCEDURAL_C`, `22_HAPPENINGS_C`, `_D`, `23_STORY_D` |
+| A-17, A-18 (the south; Varfell's deed) | `15_…SYNTHESIS_B`, `15_…COLONIAL_D`, `…COLONIAL_grounding_F`, `15_…PAPACY_C`, `15_…BYZANTINE_A` |
+| A-19 (the crown by the deed race) | `06_FA_playable_scenario`, `06_FA_remit_grant_by_row`, `16_PESSIMIST_FA_A`, `_B`, `21_PROCEDURAL_B`, `22_HAPPENINGS_B`, `_D`, `23_STORY_B`, `_D`, `15_…SYNTHESIS_B`, `15_…COLONIAL_D`, `15_…BYZANTINE_E`, `16_PESSIMIST_GAME_consequence_reading` |
+| A-20 (war lives in the seats that wage it) | `06_FA_war_lives_in_seats_B`, `16_PESSIMIST_FA_B` |
+| A-21 (decrees proclaimed), A-22 (command) | `06_FA_decree_binds`, `06_FA_levy_through_the_seat_B`, `06_FA_playable_scenario`, `16_PESSIMIST_FA_C`, `15_…SYNTHESIS_A`, `15_…PAPACY_D`, `15_…BYZANTINE_C`, `_D`, `15_…COLONIAL_A`, `_B`, `…COLONIAL_grounding_F` |
+| A-23 (custody suspends the seat) | `06_FA_decree_binds`, `06_FA_remit_grant_by_row`, `07_SE_treasury_granary_B`, `20_NARRATIVE_B`, `22_HAPPENINGS_B`, `_C`, `15_…SYNTHESIS_C` |
+| A-24 (the standing rule over earlier rulings) | `06_FA_decree_binds`, `12_ARCS_cited_evidence`, `20_NARRATIVE_E`, `15_…VENICE_C`, `23_STORY_D` |
+| A-29, A-30 (floats; one draw per key) | `11_GO_float_contract`, `11_GO_one_draw_owner`, `11_GO_port_gate_order_and_coverage`, `16_PESSIMIST_GO_keyed_draw_no_recorder` |
+| A-32, A-33 (seat news; death news apart) | `16_PESSIMIST_GO_the_offer_names_what_is_held`, `09_WR_B_chronicle_that_tells`, `20_NARRATIVE_C`, `21_PROCEDURAL_C`, `22_HAPPENINGS_A`, `_B`, `16_PESSIMIST_GAME_standing_occasions_carry_their_cause` |
+| A-35, A-36 (the head strips an officer; nobody judges the Confessor) | `06_FA_seat_terms_and_turnover`, `06_FA_seat_terms_by_body_B`, `15_…PAPACY_B`, `_D`, `_E`, `_F`, `15_…SYNTHESIS_C`, `_E`, `15_…BYZANTINE_E` |
+| A-37, A-38, A-39 | `16_PESSIMIST_FA_A`, `15_…PAPACY_D`, `15_…COLONIAL_A`, `23_STORY_A`, `_D`, `12_ARCS_cited_evidence` |
+| A-40 (the wear is ground), A-43 (zero coherence) | `09_WR_world_motion`, `09_WR_threadwork_module`, `09_WR_B_threadwork_session_and_practitioner`, `09_WR_B_chronicle_that_tells`, `16_PESSIMIST_WR_B`, `_D`, `12_ARCS_substrate_as_ground`, `21_PROCEDURAL_C`, `11_GO_player_surface_contract_B` |
+| A-41, A-42 (caste; franchise) | `15_…SYNTHESIS_A`, `_E`, `15_…COLONIAL_A`, `…COLONIAL_grounding_F`, `15_…VENICE_C`, `21_PROCEDURAL_B` |
+| A-44 (generated cast) | `12_ARCS_case_on_the_realm`, `21_PROCEDURAL_B`, `23_STORY_B` |
+| A-45, A-46 (strife strands; the Split) | `09_WR_strand_conclusion`, `09_WR_B_readings_of_closure_and_tension`, `20_NARRATIVE_D`, `_F`, `23_STORY_D` |
+| A-47 (a threshold opens a mandatory scene) | `06_FA_decree_binds`, `06_FA_shortest_loop_B`, `09_WR_provided_arcs`, `09_WR_B_draws_not_thresholds`, `16_PESSIMIST_WR_D`, `12_ARCS_arcs_as_staged_goals`, `16_PESSIMIST_GAME_standing_occasions_carry_their_cause`, `21_PROCEDURAL_D`, `11_GO_player_surface_contract_B` |
+| A-49 (the end reveal) | `11_GO_fidelity_and_campaign_modes`, `09_WR_B_chronicle_that_tells` |
+| A-50 (seeded start), A-53 | `07_SE_ground_and_granaries`, `07_SE_valley_scenario`, `12_ARCS_case_on_the_realm`, `21_PROCEDURAL_A`, `_D`, `23_STORY_E`, `11_GO_fidelity_and_campaign_modes` |
+| A-51 (the five-year prologue) | `07_SE_population_regrowth_B`, `12_ARCS_case_on_the_realm`, `20_NARRATIVE_E`, `21_PROCEDURAL_A`, `_C`, `22_HAPPENINGS_A`, `23_STORY_B`, `_D`, `_E` |
+| A-52 (the docket after its test) | `21_PROCEDURAL_D` |
+| A-54 (world motion on the four-band ladder) | `07_SE_ground_and_granaries`, `07_SE_capability_rate_B`, `07_SE_valley_scenario`, `16_PESSIMIST_SE_B`, `16_PESSIMIST_GAME_the_world_draws`, `09_WR_world_motion`, `09_WR_B_weather_with_memory_and_the_year`, `09_WR_B_draws_not_thresholds`, `16_PESSIMIST_WR_A`, `_B`, `20_NARRATIVE_E`, `21_PROCEDURAL_A`, `23_STORY_C`, `_E` |
+| A-55 (fixed map), the ladder's D-69 | `23_STORY_C`, `09_WR_world_motion`, `07_SE_population_regrowth_B`, `21_PROCEDURAL_A`, `16_PESSIMIST_SE_A` |
+| A-56 (the common people's heavy moves) | `07_SE_population_census`, `07_SE_capability_and_chooser_surface`, `07_SE_valley_scenario`, `07_SE_arc_needs`, `23_STORY_E`, `16_PESSIMIST_GO_the_offer_names_what_is_held` |
+| A-57, A-58, A-65 to A-70 (land) | `06_FA_war_lives_in_seats_B`, `14_VERBS_BINDING_E_war_seats`, `16_PESSIMIST_FA_A`, `_B`, `06_FA_shortest_loop_B`, `07_SE_campaign_supply_and_muster`, `07_SE_treasury_granary_B`, `09_WR_world_motion`, `09_WR_B_draws_not_thresholds`, `16_PESSIMIST_WR_A`, `22_HAPPENINGS_B`, `_D`, `16_PESSIMIST_GAME_consequence_reading`, `23_STORY_D`, `15_…SYNTHESIS_B`, `15_…COLONIAL_B`, `_D`, `…COLONIAL_grounding_F`, `15_…PAPACY_C` |
+
+**The two premises the story-enablement lane assumed**, reconciled in `23_STORY_B_a_house_continues.md`
+and `23_STORY_D_story_census_and_gate.md`: (1) natural death and `majority_age` go live (A-15 orders the
+ages authored, which is the condition STORY-B's own loader refusal names); (2) the prologue is five
+years (A-51), counted on a declared year. The year has no shipped owner today
+(`queries/world_q.py::season_of_year` reads `len(season_factor_draw)`, which ships `()`); its owner is
+the roster `20_NARRATIVE_E_the_year_and_the_reason.md` edit 1 adds, which every age in seasons and the
+prologue's length now depend on.
+
+# Jordan — what survives in this family (two items; each with two options in its row)
+
+1. **Are named persons born in play?** (Part 11, J-1.) (a) births on, in STORY-B's shape behind
+   `birth_rate`; (b) no births: the cast is what the build and the five-year prologue made.
+2. **What stands for "the kingdom parliament is functional"?** (Part 13; A-68's own marked assumption.)
+   (A) the Court Parliament when it is built; (B) any working realm bench now.
+
+Everything else the audits of this family listed for Jordan is answered by A-1 to A-70 or by the
+ladder-closed table, in its row. Marked assumptions that were not escalated, each with its revert at the
+site: to whom a seized place's seats pass (LAND D3); the levels and band map of the unopposed entry's
+draw (LAND D6); the `riot` row's cells and every caste tier (COHORT); the legibility curve (UNKNOWABLE).
+
+# Coverage (what this lane read, and how)
+
+This family is about 2.4 MB of audits and 1.2 MB of proposals; it was not read in full, and that is
+stated so that no row is taken as a second reader's full pass.
+
+- **Read in full:** `CLAUDE.md`, `UNIFICATION_BRIEF.md`, `unified/DECISIONS_ANSWERED.md` (as it grew to
+  A-70), `unified/DECISIONS_QUICKSHEET.md`; the head and Part 6 of `U5_FINDINGS_CLOSURE_U5a.md` and the
+  head, tail and first tables of `U5_FINDINGS_CLOSURE_U5c.md`; `26_MASS_BATTLE_aggression_and_land.md`.
+- **Read at their decision surfaces** (finding headings and fix lines; every §6 disposition and
+  resolution table; survivors; proposal lists; arcs tables), with long table cells cut at 75 to 400
+  characters: the two FA, two SE, two WR and two GO audits; `16_PESSIMIST_{GAME,FA,SE,WR,GO}`;
+  `12_ARCS_adjudication` (§3's 143-row table was not read; it is closed through §4's mechanisms);
+  `20`, `21`, `22`, `23`; `18` (verdict and outline; its rows are U5a's).
+- **Institutions:** the synthesis's collision ledger, Layer 1 section, commensuration tables and
+  survivors; the Venice and Papacy resolution and survivor sections; the Byzantine and Colonial survivor
+  sections; the four re-grounding sections **at their headings only**, and the four grounding proposals
+  at their outlines (PAP-G's and BYZ-G's rulings tables in full). The historical sections (§1 to §3 of
+  each family audit) were not read.
+- **Proposals:** the ten `06_FA_*` and three `16_PESSIMIST_FA_*` at their runtime statement, resolution
+  and edits; every other proposal of the family at its title, source line, status line and runtime
+  statement, a subset also at its resolution (`16_PESSIMIST_SE_A`, `_B`, `16_PESSIMIST_GAME_*`,
+  `09_WR_B_draws_not_thresholds`, `09_WR_B_weather…`, `23_STORY_B`, `_C`, `21_PROCEDURAL_C` PG-4,
+  `12_ARCS_cited_evidence`). A `Reconciled:` line therefore names the ruling and the step it changes as
+  far as that reading reached; where a file's body holds a further passage built on the overruled
+  answer, the head line governs it and the passage is not individually rewritten.
+- **Not read:** `digests/`, `dossiers/`, `census/`, `unified/DECISIONS_FOR_JORDAN.md` beyond four
+  entries, `unified/RESEARCH_MAP_INSTITUTIONS_A/B.md`, `architecture/meta/04_CODE_ARCHITECTURE.md`
+  (cited through the audits; Layer 1 conformance is U2's), `audits/26_*`, `27_*`.
+- **Code opened to ground a claim:** `engine/season/loop/effects_combat.py::_eff_march`;
+  `loop/effects_information.py` (`_take_hold`, `_seize_rung`); `loop/effects_shared.py::occupying_faction`;
+  `state/gate.py` (`_seat_grants`, `seat_faction`, the `seizure` basis, `may_seize`);
+  `queries/world_q.py` (`season_of_year`, `faction_holding`, `opinion_of`'s head, function index);
+  `queries/person_q.py` (function index, `heritage_regard`); `queries/faction_q.py::head`;
+  `decision/options.py:132-139`; `data/fixtures.py` (`season_factor_draw`, `withheld_verbs`,
+  `bench_quorum`); `rosters.yaml` (`march_target_kinds`, `office_bodies`); `offices.yaml` (`off_king`,
+  `off_parliamentary_clerk`, the Parliament note); `arrangements.yaml: parliamentary_debate`;
+  `verb_table.yaml` (the verb roster; `succeed`, `petition`); `write_matrix.yaml` (`coherence`);
+  `harness/populated.py` (the Office mint sites). Nothing was run but read-only greps and two YAML
+  loads; no pytest; no file outside this suite directory was edited; nothing was committed.
+- **Rulings that arrived late and are not folded here** because they belong to other families: A-59 to
+  A-62 (mass battle, CORE), A-63 and A-64 (a visit occupies its counterparty; precedence, appointments,
+  a petition that intensifies while it waits). A-64 touches `petition`, which FA's seats receive; no FA
+  proposal was rewritten for it.
+
+**Counts.** 550 rows: RESOLVED-BY 425, SUPERSEDED 110, STALE-FALSE-POSITIVE 10, DISPUTED 3, JORDAN 2.
+A row may close several ids that share one decision; ids are named in the row.
