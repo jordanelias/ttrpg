@@ -209,6 +209,7 @@ Not in this batch, and where each is: `04_MB_unit_loadout_and_weapon_in_hand_B` 
 - HASH MOVERS: none ("step 3 none at its default").
 - DEPENDS ON: V12 B31.06 (the `entry` rows); V12 Batch B22 (B22.03: `FieldOutcome.stamina_left`, `last_field`, `field_input`'s per-part reading; `14_VERBS_MILITARY_A`'s march band, B22.08; B22.16's ration debit); EXISTS-IN-TREE `engine/season/queries/inputs.py::MassBattleInput`, `seam/wrappers/mass_battle.py::field_input`, `massbattle.py::resolve_field`, `config.py::STAMINA_MAX`.
 - GLOSSARY: *entry stamina* (new row, if absent): "the share of full stamina a side starts a field with".
+- NAMES: the copied "a second field in one season round" and "the count of fields this round" mean the lap (B04, `PCR-4`; A-101): the code counts fields per lap.
 - COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B31's producer; `Item: B31.07`, `[skip ci]`.
 

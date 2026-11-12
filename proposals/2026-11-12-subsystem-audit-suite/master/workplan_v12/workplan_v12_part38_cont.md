@@ -237,3 +237,121 @@ Placed here by `V12_STRUCTURE_part2.md` §5.6's first rule: PAP_E, the next memb
 - GLOSSARY: none.
 - COST and TIER: content; `sonnet`, `medium`.
 - LANDS IT: B33's producer; `Item: B33.32`, `[skip ci]`.
+
+### B33.33 — what the one asked owes: `owed_to` · VEN_A edit 3 · BUILD · HASH EQUAL
+- SOURCE: VEN_A "The quantity and its two channels" (the `read from` and `lifted by` rows), "Exact edits" 3; X-20, X-29, X-31 (its first `Reconciled:` line: "an `oblige` counts only if `gate.py::sworn_to` counts it"); `SYN_A` §4 (`owed_to`); AX-2 (no world read on the person side).
+- ADVANCES: none of the nine; D-5's one lawful effect of an obligation (the odds of his own answer).
+- INSTRUCTION:
+  0. Open the tree: `grep -n "def owed_to" engine/season/queries/person_q.py`; if B32 landed it, record the reading and its body and stop (the item lands nothing; its test is still written).
+  1. "**`engine/season/queries/person_q.py`**: one reader, `owed_to(p, holder_seats, held_terms) -> (whole, lapsing)`: the counts of the person's own live edges of the two shapes above. Person-side: it reads `p.tenures` only." The two shapes: "(a) a live, un-imposed `oblige` whose object is a seat the **actor** (or, for the hostile half, the other party) holds; (b) a live `commit` to a Proposition that is the `terms` of a Record that person holds (a covenant or, with proposal B, a debt). Each such edge counts 1; an edge whose `term` matures within one season counts `obligation_arrears`" (the fixture lands in B33.34; until then the reader returns the lapsing count apart, `(whole, lapsing)`, and applies no weight). "An `oblige` counts only if `gate.py::sworn_to` counts it" (an obedience carrying `OBEYED_WRIT` is not an oath for the odds). The `excused` lift is B33.45's ("until it lands no edge is excused").
+  2. Create `S/tests/test_inst_ven_a.py` (the source's named test) with `test_owed_to_counts_his_own_edges` (a person sworn to the King's seat and committed to a covenant's terms the actor holds reads `(2, 0)`; one whose oath matures this season reads `(1, 1)`; an `OBEYED_WRIT` obedience counts 0) and `test_owed_to_reads_only_his_tenures` (it is called with no `World`), written before step 1 and read red `[ASSUMPTION: test names (E-3)]`.
+- WHERE: `S/queries/person_q.py` (`owed_to`); NEW `S/tests/test_inst_ven_a.py`.
+- TESTS: the two above.
+- FALSIFIER and CONTROL: "Mutation: read the **actor's** edges instead of the counterparty's; the hand-built pair then shows no difference and the gate reddens" (read at B33.34). Control: nothing calls `owed_to` yet; the realm hash equals B33.32's reading.
+- GATE: `python -m pytest engine/season/tests/test_inst_ven_a.py -q` → pass.
+- HASH MOVERS: none.
+- DEPENDS ON: EXISTS-IN-TREE `S/state/gate.py::sworn_to`; V12 Batch B28 (`OBEYED_WRIT`); V12 Batch B32 (`SYN_A` §4).
+- GLOSSARY: row *obligation* — its owner column gains `person_q.owed_to`; "owed": what a man owes another by an oath or an undertaking he himself made.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B33's producer; `Item: B33.33`, `[skip ci]`.
+
+### B33.34 — `obligation` as levels; three fixtures at control; member 12 widened; the host's operands · VEN_A edits 1, 2, 4, 5 · BUILD · HASH EQUAL
+- SOURCE: VEN_A "The quantity and its two channels" (all rows), "Exact edits" 1, 2, 4, 5, 6, "Gate", "Falsifier"; C3-C10, A-25 (what helps the roller is levels; nothing lowers the obstacle); F-39; `U5c_SC_one_obstacle_form.md` §3 (`obligation` after `favour`); `SYN_A` §2 (`advantage_sources`), §5.
+- ADVANCES: none of the nine; "the King's ask of a sworn duke is likelier to be met than of a stranger".
+- INSTRUCTION (one commit: `S/seam/wrappers/sigma.py` refuses an `ADVANTAGE_SOURCES` set that differs from the roster's, so the roster row and its function land together):
+  0. Open the tree: `rosters.yaml: advantage_sources` (an `obligation` member?), `data/fixtures.py` (`obligation_level`, `obligation_arrears`, `sealed_obligation`?), `sigma.py::ADVANTAGE_SOURCES`, `roll.py::obstacle`'s member 12; record which B32 landed; write only what is absent.
+  1. Edit 1: "**`engine/season/rosters.yaml: advantage_sources`** (OBS §3; this edit lands after it): add the source `obligation` after `favour`, with the rows above (`read_from`, `size`, `applies_to`)": `read_from` the counterparty's `owed_to` toward the actor; `size` "one `obligation_level` per whole unit of the count, on the leverage channel, under the soft cap `M_MAX`"; `applies_to` "every contested act with a person counterparty (`argue`, `petition` once contested by SC's hearing, `speak` where a bench member is rolled, `interrogate`, `interview`); and the answer rolls of `comply` / `evade / defy` where FA's repair makes them rolls", and, from this batch, `requisition` (B33.04: "`obligation` where persons residing under the place are sworn to the exercised seat", read as the residing cohort's own `owed_to` toward the exercised seat) and `carry` at a hand (B33.07: "where the maker and the clerk are sworn to one seat"). "the room: both halves multiplied by `sealed_obligation` when the act is heard under an arrangement row with `records_dissent: false`". "**Cross-lane request (SC owner):** OBS member 12 `commitment`'s read gains the counterparty's `owed_to` toward the other party of the heard matter; `obstacle_terms` gains no member" — landed here, at the member's reader, "at `commitment_ob` per unit, as a live commit to the contrary does" `[ASSUMPTION: the hostile half folds into `commitment` — basis: … reversible by U1]` (VEN_A).
+  2. Edit 2: "**`engine/season/data/fixtures.py`**: three fixtures, each with a hole-register row and a sweep: `obligation_level: None` (swept {None, `minor`, `moderate`}; proposed `minor`), `obligation_arrears: 1.0` (swept {0.5, 1.0}; proposed 0.5), `sealed_obligation: 1.0` (swept {0, 0.5, 1.0}; proposed 0). `obligation_step` is not added. Shipped values are the control arm; every value is recalibrated with OBS §4 step 5 (A-5, A-6, A-7, A-26). `[ASSUMPTION; medium; Jordan to correct; revert: the control values]`."
+  3. Edit 4: "**`engine/season/seam/wrappers/sigma.py::contest_input`** …: carry three raw operands: the counterparty's `owed_to` toward the actor, his `owed_to` toward the opposing party where the matter has one, and the docketed arrangement row's `records_dissent`. The host sums nothing."
+  4. Edit 5: "**`engine/season/seam/wrappers/sigma.py::ADVANTAGE_SOURCES`**: the `obligation` source returns the actor's levels from the carried operand (the other side's list empty); **`modules/social_contest/roll.py::obstacle`**: member 12 adds the carried hostile count at `commitment_ob`. Both are recorded in the `levels` and `terms` SC-P1 writes on the Event." Edit 6: "**No `verb_table.yaml` row changes.**"
+  5. `test_inst_ven_a.py` gains the gate's tests, written before steps 1–4 and read red.
+- WHERE: `S/rosters.yaml` (`advantage_sources.obligation`); `S/data/fixtures.py` (three fixtures); `S/hole_register.yaml` (three NUMBER rows, block slots 4–6); `S/seam/wrappers/sigma.py` (`contest_input`, `ADVANTAGE_SOURCES`); `S/queries/inputs.py` (`SocialContestInput`: the three operands); `modules/social_contest/roll.py` (`obstacle`, member 12); `S/tests/test_inst_ven_a.py`.
+- TESTS: `test_an_obliged_counterparty_gives_a_level` ("one `argue` at a person with a live `oblige` to the actor's seat, and the same act at a person without, same seed stream: the recorded `levels` differ by exactly `obligation` and the `terms` are equal"); `test_an_oath_to_the_other_party_widens_commitment` ("the counterparty obliged to the other party of a docketed matter: the `terms` differ in `commitment` and the `levels` are equal"); `test_a_sealed_room_collects_nothing` ("the same hand-built act heard under `council_of_state` (`records_dissent: false`) with `sealed_obligation: 0` carries no `obligation` level"); `test_the_cap_leaves_failure_possible` ("with `obligation_level: major` and ten edges the soft cap (`M_MAX`) must still leave a non-zero chance of Failure") — the first three at `obligation_level: minor` planted in the test `[ASSUMPTION: test names (E-3)]`.
+- FALSIFIER and CONTROL: "The control: any hash move at arm 0. Mutation: read the **actor's** edges instead of the counterparty's … A planted certainty: … if an obliged man can be made unable to refuse, the term has become a lever and D-5 is broken." Control (arm 0): "`obligation_level` None, member 12 unwidened: content hash equal to the pre-item hash at build and at each season".
+- GATE: `python -m pytest engine/season/tests/test_inst_ven_a.py -q` → pass; arm 0 at seeds 0, 1, 2, two seasons (three in the source; A-114) → content hash equal to B33.33's reading at build, one and two seasons; arm 1 (`minor`, planted by a fixture override in the probe, not shipped): "every contested act whose counterparty is NPC-050, NPC-052 or NPC-070 and whose actor holds `off_king` carries the term; the band counts of asks to obliged and to unobliged counterparties are **read and reported** for the three seeds" — quoted in the commit body; `python tools/ci_sim_fabrication_check.py` → exit 0. `opus` reads the seeded arm's band table (VEN_A's tier line).
+- HASH MOVERS: none at ship ("Hash EQUAL at ship; the fixture change is a declared mover and its own commit": B98's).
+- DEPENDS ON: V12 B33.33; V12 Batch B05 (`U5c_SC_one_obstacle_form`, `05_SC_obstacle_difficulty_and_modifiers_B`, `05_SC_contest_record_on_event`: the roster, the leverage channel, `M_MAX`, `commitment_ob`, the recorded `terms` and `levels`); EXISTS-IN-TREE `S/rosters.yaml: advantage_sources`, `S/seam/wrappers/sigma.py::ADVANTAGE_SOURCES` (and its set check), `::contest_input`, `S/arrangements.yaml: council_of_state`.
+- GLOSSARY: row *obligation* — "obligation" (the leverage source): levels for a man asking someone who owes him, as an obligation is called in; owner `rosters.yaml: advantage_sources.obligation`; refused: `oath_step`, `obligation_step`.
+- IDS: H block slots 4–6 (`obligation_level`, `obligation_arrears`, `sealed_obligation`).
+- COST and TIER: small build; `sonnet`, `high`; `opus` on the band table.
+- LANDS IT: B33's producer; `Item: B33.34`, `[skip ci]`.
+
+### B33.35 — the `debt` kind, its operands and the distraint's one check · VEN_B edit 1 · BUILD · HASH EQUAL
+- SOURCE: VEN_B "Exact edits" 1, "The resolution" (Kind, Parties, Recourse (b)); X-09; K-14 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md:1478`); D-5; `SYN_A` §2 (both roster rows are listed there as VEN-B edit 1's).
+- ADVANCES: none of the nine; ARC-15 N1, NPC-037 N2, SCN-12 N2 (VEN_B, the problem).
+- INSTRUCTION:
+  0. Open the tree: `rosters.yaml: record_kinds` (`debt`?), `record_sourced_operands` (`debt`?), `instruments.yaml: forms` (the `debt` form row, `SYN_A`); record which B32 landed; write only what is absent.
+  1. "**`engine/season/rosters.yaml: record_kinds.values`**: add `debt: [terms, to, kind, amount, at]`, with a note stating the derived parties and that it is K-14 un-deferred. **`record_sourced_operands.values`**: add `debt: {subject: terms, kind: kind, amount: amount}` (the reservation …). `to` is **not** mapped: a `transfer`'s `to` is a rung and the bond's `to` is a person; the place is read from `at` by the effect … **`warrant_sourced` is NOT edited.** … The distraint instead forms through `record_sourced_operands`' second reader (a held Record answers the operands it maps): the officer who holds the lapsed bond forms `requisition` with `kind` and `amount` from it, and the effect reads the debtor's `reside` rung as the place."
+  2. "The one new check is in `_eff_requisition` …: an act formed on a `debt` declines unless the bond reads lapsed (last stage matured, `world_q.owed > 0`) and takes no more than the uncounted amount." (`_eff_requisition` as B33.04 left it; by symbol.)
+  3. Create `S/tests/test_inst_ven_b.py` (the source's named test; "the hand-built chain is its first function", built up through B33.38) with `test_a_debt_row_loads_and_maps_its_operands` and `test_distraint_takes_only_a_lapsed_bond_s_remainder`, written before steps 1–2 and read red `[ASSUMPTION: test names (E-3)]`.
+- WHERE: `S/rosters.yaml` (`record_kinds`, `record_sourced_operands`); `S/loop/effects_governance.py::_eff_requisition` (by symbol); NEW `S/tests/test_inst_ven_b.py`.
+- TESTS: the two above.
+- FALSIFIER and CONTROL: "D-5: a hand-built act by the creditor that closes the debtor's `commit` is `NotYours` at the gate" (`test_the_creditor_cannot_close_the_debtor_s_commit`, here). Control: "with the `debt` row absent from `record_kinds`, the pre-item hash at build and at three seasons" — read at two (A-114).
+- GATE: `python -m pytest engine/season/tests/test_inst_ven_b.py -q` → pass; the realm hash at seed 0, one season → equal to B33.34's reading.
+- HASH MOVERS: none ("With no act naming `kind` and `amount` (every computed `covenant` today) nothing moves: hash EQUAL").
+- DEPENDS ON: V12 Batch B32 (`SYN_A` §1 the `debt` form, §4 `world_q.owed`, `dues`, `breaches`); V12 B33.04 (`_eff_requisition`'s band dispatch); EXISTS-IN-TREE `S/rosters.yaml: record_kinds`, `record_sourced_operands`, `warrant_sourced`.
+- GLOSSARY: row *debt* (owner `rosters.yaml: record_kinds.debt`; "debt": a bond the creditor holds for an undertaking the debtor owns; refused "loan" for the document).
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B33's producer; `Item: B33.35`, `[skip ci]`.
+
+### B33.36 — `covenant` mints a bond · VEN_B edit 2 · BUILD · HASH EQUAL
+- SOURCE: VEN_B "Exact edits" 2, "What it changes" 1.
+- ADVANCES: none of the nine; credit at every scale.
+- INSTRUCTION: "**`engine/season/loop/effects_information.py::_eff_covenant`**: if the act's payload names `kind` and `amount`, mint through `_mint_document(w, a, "debt", …)`; refuse (`covenant.refused`) a `kind` off `matter_kinds` or an `amount` that is not a positive whole number; else today's body. One mint." `Record.stages` are the due dates ("the last is the maturity"), declared through `_declared_stages` as any Record's.
+- WHERE: `S/loop/effects_information.py` (`_eff_covenant`); `S/tests/test_inst_ven_b.py`.
+- TESTS: `test_covenant_with_kind_and_amount_mints_a_debt` (the chain's first steps: "utter → commit → covenant (a `debt` exists, held by the lender)"); `test_a_bad_kind_or_amount_is_refused` `[ASSUMPTION: test names (E-3)]`, red first.
+- FALSIFIER and CONTROL: a `covenant` with no `kind` and `amount` minting a `debt`. Control: today's `dispensation` mint unchanged for every computed covenant.
+- GATE: `python -m pytest engine/season/tests/test_inst_ven_b.py -q` → pass.
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B33.35; EXISTS-IN-TREE `S/loop/effects_information.py::_eff_covenant`, `::_mint_document`, `S/rosters.yaml: matter_kinds`.
+- GLOSSARY: none.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B33's producer; `Item: B33.36`, `[skip ci]`.
+
+### B33.37 — a payment to the bond's place counts toward it · VEN_B edits 3–4 · BUILD · HASH EQUAL
+- SOURCE: VEN_B "Exact edits" 3 and 4, "The resolution" (Discharge, Lapse), "Gate" first and third bullets, "Falsifier" (the mutation); C3-C7; `SYN_A` §4 (`owed`).
+- ADVANCES: none of the nine.
+- INSTRUCTION: edit 3 is no reader: "The amount is `world_q.owed` (SYN-A §4); the creditor's and the debtor's occasions are `world_q.dues` and `world_q.breaches` … `debt_state`, `debts_held` and `debts_owed` are not added." Edit 4: "**`engine/season/loop/effects_economy.py::_eff_transfer`**: no new write. When the act's question is about a `debt` Record and its `to` is that bond's `at`, the Event carries the Record among its subjects so `world_q.owed` can count it. A `transfer` to another rung counts nothing." The lapse is read, not emitted: "after the last stage's `term.matured`, a bond with `owed > 0` is lapsed when read … WITNESS deposits the `term.matured` to the holder and the committed debtors". `loop/matter.py` is not edited (edit 5 withdrawn).
+- WHERE: `S/loop/effects_economy.py` (`_eff_transfer`); `S/tests/test_inst_ven_b.py`.
+- TESTS: the chain continued: "→ advance (`transfer`) → part payment (state `running`, counted) → … last stage matures (`term.matured`; `world_q.owed > 0`; the holder holds the WITNESS claim of the maturity) … Asserted: no Event of kind `debt.lapsed` exists and `loop/matter.py` wrote no `Record.stages` cell"; "Conservation: the sum of stores by kind over all rungs is unchanged by every act of the chain"; the mutation arm `test_payment_to_the_wrong_place_counts_nothing` `[ASSUMPTION: test names (E-3)]`.
+- FALSIFIER and CONTROL: "Mutation: count a `transfer` to a rung other than `at`; the 'pay the wrong place' arm must then lapse and does not." Control: every `transfer` not on a `debt` question is unchanged.
+- GATE: `python -m pytest engine/season/tests/test_inst_ven_b.py -q` → pass; `git diff <batch-start-sha> -- engine/season/loop/matter.py` → empty.
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B33.36; V12 Batch B32 (`world_q.owed`); EXISTS-IN-TREE `S/loop/effects_economy.py::_eff_transfer`.
+- GLOSSARY: none.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B33's producer; `Item: B33.37`, `[skip ci]`.
+
+### B33.38 — a suit for debt; the loan's terms at control · VEN_B edits 6–7 · BUILD · HASH EQUAL
+- SOURCE: VEN_B "Exact edits" 6, 7, "The resolution" (the reckoning, Recourse (a)), "Gate" (the chain's last steps), "Falsifier" (the draw); A-39; `audits/15_INSTITUTIONS_VENICE.md` §8 (the `stakes_ob` row for `debt`: "amount ÷ the asked rung's stores of that kind, capped at 2 | {off, on} | off").
+- ADVANCES: none of the nine; "a king cannot be sued" ends.
+- INSTRUCTION:
+  1. Edit 6, `S/arrangements.yaml`, one row (B32 may have added it, `SYN_A` §6: open first, write only if absent):
+     ```yaml
+        - id:               debt_suit
+          disposal:          bench
+          bench_basis:        determine
+          floor:              open
+          records_dissent:    true
+          venue_min_rank:     settlement
+          term_required:      true
+          appeal_basis:       determine
+          interposed:         [person, document]
+          order:              alternating
+          proofs:             [record, testimony, oath]
+          disposes:           ban
+          disposal_reach:      settlement
+     ```
+     "`disposes: ban` is the Success-or-better kind until SC-P4's band-keyed form lands, after which the row reads as stated above. `[ASSUMPTION; medium; SC's to correct]`." SC-P4 is in the tree from B27, so the row lands band-keyed as the Recourse paragraph states it: "Overwhelming `ban` (the debt-bar …) or `detain`; Success an `oblige` to the creditor's seat (service); Partial a new stage on the bond; Failure an acquittal (SC-P6), after which the bond can no longer be cited before that bench": `disposes: {Overwhelming: ban, Success: oblige, Partial: Record}` `[ASSUMPTION: Partial's "a new stage on the bond" is written as the `Record` cell (the bond re-wound at CR-36's Record site); if that site cannot wind a stage on an existing Record, Partial is left out of the map and the receipt says so]`. "An appeal … is admitted only on new grounds" (A-39; the loader's ground check is B24a's carrier).
+  2. Edit 7: "**`engine/season/data/fixtures.py`**: `credit_terms` (owed ÷ advanced by the loan ask's band, used only where a computed act names no amount): proposed `{Overwhelming: 1.1, Success: 1.25, Partial: 1.5}`, shipped flat 1.0, swept. `stakes_ob` (SC's table) gains the `debt` reading in the audit's §8" — `stakes_ob.debt`: "amount ÷ the asked rung's stores of that kind, capped at 2", shipped `off` (the audit's control).
+  3. The reckoning is no edit: "a `petition` to the debtor with the Record cited. It is the ask of proposal A, with the debtor's live `commit` as `obligation` levels for the creditor and the bond as `proofs` levels" (B33.34; `proofs` B05). Bands are `petition`'s.
+- WHERE: `S/arrangements.yaml` (`debt_suit`); `S/data/fixtures.py` (`credit_terms`; `stakes_ob.debt`); `S/hole_register.yaml` (NUMBER row, block slot 7: `credit_terms`); `S/tests/test_inst_ven_b.py`.
+- TESTS: the chain's end: "reckoning rolled at each band by seed selection (Partial winds a stage) → … → suit under `debt_suit` → a `ban` that refuses a `confer` inside the bench's purview and admits one outside"; `test_the_reckoning_is_drawn` ("over the reckoning's seeds at a fixed position, more than one band occurs (an assertion that asserts it observed at least two)") `[ASSUMPTION: test names (E-3)]`.
+- FALSIFIER and CONTROL: the draw falsifier above. Control: `credit_terms` flat 1.0 and `stakes_ob.debt` off (shipped).
+- GATE: `python -m pytest engine/season/tests/test_inst_ven_b.py -q` → pass; "Seeded: a spine fixture with one stocked hearth and its head seat … seeds 0–2, six seasons: bonds minted, reckoning bands, lapses and suits are **read and reported**. If no bond is minted the reading says so" — at two seasons (A-114) on `harness/scarce.py`'s governed arm (a hand-stocked `Rung.stores`), quoted in the commit body. `opus` reads the reckoning's band table (VEN_B's tier line).
+- HASH MOVERS: none (no computed act names an amount; the fixtures ship at control).
+- DEPENDS ON: V12 B33.37; V12 Batch B27 (SC-P4, SC-P6); V12 Batch B24a (the appeal ground, through B27); V12 Batch B12c (`07_SE_treasury_granary_B`'s stocked stores, through B12c); EXISTS-IN-TREE `S/data/fixtures.py` `stakes_ob`, `S/harness/scarce.py`.
+- GLOSSARY: none (*debt*, B33.35).
+- IDS: H block slot 7 (`credit_terms`).
+- COST and TIER: small build; `sonnet`, `high`; `opus` on the band table.
+- LANDS IT: B33's producer; `Item: B33.38`, `[skip ci]`.

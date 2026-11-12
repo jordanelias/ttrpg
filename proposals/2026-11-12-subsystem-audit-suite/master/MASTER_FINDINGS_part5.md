@@ -262,7 +262,11 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 
 ## SE — settlements and the economy
 
-<!-- SYNTHESIS:SE -->
+**What is wrong.** A correct, conserved, well-factored accounting kernel under a world that gives it nothing to account for (`audits/07_SE_audit.md` §0): no scarcity, no differentiation, no population dynamics. Every settlement is the same economic object (F-SE-01: three sites each, 8 of 37 settlements in no polygon); population is a constant that can only fall, falls whole and invisibly (F-SE-02); the only hunger event is a world-generation artefact pinned by a test (F-SE-03); the geography feeds the battlefield and nothing else (F-SE-06); there is no settlement scenario (F-SE-13); the people of a town act as one individual (F-SE-14). The pessimist (`16_PESSIMIST_SE.md` §0) took the food from eleven of 37 towns by hand: no grain moved toward them, no one left, traded, learned of it or was blamed; the starving healed themselves by `tend` each season (F-PES-SE-01; with F-PES-GAME-06, rest cures starvation); nothing in the layer is drawn (F-PES-SE-02); a founding cannot fail (F-PES-SE-06).
+
+**What was decided.** The world's motion is the one four-band ladder, drawn (A-54); a fixed map, an empty founded household may lapse (A-55); the common people's heavy moves (A-56, with caste in regard, vote blocks and tiers, A-41, A-42); farm work an act (D-68); famine reports once (D-69); a lord left over an empty land (D-72); hidden places (A-109).
+
+**What is built where.** **B12a, B12b, B12c** (one SE+WR close each, D-12) carry 60 RESOLVED-BY rows: ground and granaries, the treasury granary, the population census and its rising arm, hunger that binds, the material verbs and the valley scenario, `IS-B3-SE-06`'s build in B12c; B11F1 the cohort rows (CR-106, CR-107); B22 the army's supply; B38 the cohorts' heavy moves; B39 the lean year and a founded place that can fail. **What stays open:** `07_SE_capability_rate_B` is INCOMPLETE on two blocking items (a labour verb row and its caller, `U4_TRACEABILITY.md` §3); "no domain-action mechanism exists" (G-7); the B10-16 gates entry is BLOCKED; one DISPUTED row (F-SE-15).
 
 **Rows: 85** (RESOLVED-BY 72 · SUPERSEDED 11 · STALE/FP 1 · DISPUTED 1 · JORDAN 0).
 
@@ -358,7 +362,11 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 
 ## WR — the world's motion, stories and threadwork
 
-<!-- SYNTHESIS:WR -->
+**What is wrong.** A sound causal substrate and not yet a source of narrative (`audits/09_WR_audit.md` §0): seasons tick scene by scene, every Event carries its causes, nothing is triggered; but six seasons at seeds 0 and 1 produce no ending and one death (F-WR-01); strands collapse into one (F-WR-02); the story bar cannot fail (F-WR-03); the world's own motion ships off (F-WR-04); threadwork is not in the game and is not a module (F-WR-05); the realm closes by clock, not by act (F-WR-13); the chronicle prints who and when, never what (F-WR-14). The pessimist (`16_PESSIMIST_WR.md` §0): clocks that keep time for nobody; idle for 41 seasons the realm is one ramp in 37 identical places, its first noticeable Event at season 20; no story in computed play has a turn (F-PES-WR-01). Eras and regimes (`30_*` §0): the engine has strife and calls its realm-wide scope an era, with no era, no regime beyond a credit factor, no momentum that is a person's.
+
+**What was decided.** The Thread wears places down, one site per territory (A-40); arcs end when a threshold opens a scene, never decides it (A-47); strands several and each able to end (A-45); eras, regimes and the houses' stances (A-82 to A-91, `_part2` §4.5, §4.6); A-92's lean (`L1-A92`); reveal only after the line ends (A-49); world cards draw bounded starting state (A-50); five years of prologue (A-51).
+
+**What is built where.** B03 makes threadwork a module (edit 3); B12a-c the world's motion and the draws (33 RESOLVED-BY rows); B35 the Thread (the `Person.coherence` writer first); **B36** the story instruments that can fail (18 rows); B37p kin and life; B38 the eras, regimes, strands and the stances; B39 generation. **What stays open:** the strife master's five sentences (held, A-84); `30_WR_G` commit 1 does not build as written (P-31-5); the cast's opinion values (content).
 
 **Rows: 83** (RESOLVED-BY 71 · SUPERSEDED 9 · STALE/FP 3 · DISPUTED 0 · JORDAN 0).
 
@@ -452,7 +460,11 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 
 ## DICE — the resolution substrate
 
-<!-- SYNTHESIS:DICE -->
+**What is wrong.** The best-owned code in the tree, fed a constant (`audits/10_DICE_audit.md` §0): the face rule, the margin ladder and the exact odds each have one owner and the odds stated are the odds dealt (Failure 70.4 % dealt against 74.0 % exact at the pair 265 of 284 rolls used), but 564 of 568 graded rolls are at pool 2 with leverage 0.0 (F-DICE-01); the default outcome is nothing and the top band cannot occur (F-DICE-02); holding a score makes a person easier to oppose (F-DICE-03); two samplers sit half a success apart (F-DICE-05); one score feeds three pools (F-DICE-17); a field battle reads no person (F-DICE-18). The pessimist (`16_PESSIMIST_DICE.md` §0): the dice are sound and decide almost nothing; in 282 of 284 graded rolls no state changes (F-PES-DICE-01); at the shipped pair "everything draws" means "little happens" (F-PES-DICE-02). The one opposed rule (`29_ONE_OPPOSED_RULE.md` §0): one rule serves fight and argument and meets Jordan's three goals at once.
+
+**What was decided.** The bell curve everywhere (A-5), score plus a base (A-6), two inputs (A-7), a wound a level (A-8), declared floats (A-29), one draw per key (A-30), the one opposed rule (A-26, A-71, A-79); luck in battle by named draws (A-59, A-77; D-34, the one JORDAN row here).
+
+**What is built where.** B04 the skill home (10 RESOLVED-BY rows); **B05** the one roll (34 rows: one roller, one score, the obstacle composer, the believed odds' prior, `29_DICE_one_opposed_rule_form_and_tuning`, the `degree_from_net` docstring); B06 the keyed draw and the float contract (GO's carriers); B07 the task draw. **What stays open:** the joint calibration (`_part2` §5.1); the proposals built on whole dice are rewritten (A-5's consequence), and the SC tuning tables recomputed in B05.
 
 **Rows: 77** (RESOLVED-BY 49 · SUPERSEDED 24 · STALE/FP 3 · DISPUTED 0 · JORDAN 1).
 
@@ -540,7 +552,11 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 
 ## GO — the port gate and the player surface
 
-<!-- SYNTHESIS:GO -->
+**What is wrong.** GO here is the oracle half of a port contract of which one position in ten is built, and that one holds: the realm's hash is identical under three `PYTHONHASHSEED` values and three CPython minors, every draw of a computed season is keyed, and the played and automated seasons are one code path (`audits/11_GO_audit.md` §0). The contract the port gate would freeze does not yet prove a port: its slices enter the combat engine 0, 2 and 4 times and fight one field battle across seeds 0–2 (F-GO-01); the float contract was unstated (F-GO-02); draws were built in two places (F-GO-03); 91 mass-battle tunables read from the environment and are exported nowhere (F-GO-04); PLAYABLE exists at one seam (F-GO-08); there is no save (F-GO-09); six lane dialects and no shared surface vocabulary (F-GO-15). The pessimist (`16_PESSIMIST_GO.md` §0): the port gate as planned would certify a game no player can read, and cannot tell; 160 to 194 times in a two-season run the offer names a person the seat holds no claim about (F-PES-GO-01, -08; F-GO-19, the offer is three to five times the legible size).
+
+**What was decided.** Declared floats (A-29) and one draw per key with no recorder (A-30), both in Layer 1; the scene slate is a list of questions for the player, NPCs take the first (A-48); reveal after the line ends (A-49); no engine version is asserted (ED-GO-0002).
+
+**What is built where.** B03 and B03g the early port landings (GO-09, GO-11, GO-01, GO-05, `--check` live before B04); B06 the float contract and the one draw owner (12 RESOLVED-BY rows); **B34** the player surface contract, fidelity and campaign modes, `Scene.cost` (16 rows); **B41** the port gate's order and coverage and the surface pins. **What stays open:** GO-06 and H-5 need a `valoria-game` checkout (BLOCKED); the surface pins' values (content); "no end state reaches a client and no save" is carried, not built (`U4_TRACEABILITY.md` §3).
 
 **Rows: 62** (RESOLVED-BY 51 · SUPERSEDED 9 · STALE/FP 2 · DISPUTED 0 · JORDAN 0).
 

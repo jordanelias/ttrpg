@@ -24,12 +24,12 @@
 |---|---|---|---|---|---|
 | B38.51 | the `riot` row's design | `U5d_SE_cohort_heavy_moves_and_caste` edit 3 (D-18) | DESIGN-FIRST | EQUAL | Batch B36 (lands at the batch's open, before B38.01) |
 | B38.52 | the goal rows' `axis:` values, drafted and landed | U4 §3.4 DEP-NOCARRIER for `31_WR_C`; `V12_STRUCTURE_part2.md` §5.7 (D-19) | CONTENT | EQUAL | Batch B36 (lands at the batch's open, after B38.51) |
-| B38.53 | a member who thinks ill of his own side finds its creed among his occasions | `20_NARRATIVE_D` edit 3 | BUILD | EQUAL | the first half's `20_NARRATIVE_D` commit 1 and `31_WR_A` commit 4 |
+| B38.53 | a member who thinks ill of his own side finds its creed among his occasions | `20_NARRATIVE_D` edit 3 | BUILD | EQUAL | B38.14, B38.15, B38.25 |
 | B38.54 | leaving a creed or a head seat is a move of the era (A-46, narrow) | `20_NARRATIVE_D` edit 4 | POINTER (`B12a.05`) | — | Batch B12c |
-| B38.55 | the sway draw at RESOLVE, dial at zero | `31_WR_B` commit 1 (A-92) | BUILD | EQUAL (`sway_gain` 0) | B38.53; the first half's `30_WR_G` commit 5, `31_WR_A` commits 1–4 |
+| B38.55 | the sway draw at RESOLVE, dial at zero | `31_WR_B` commit 1 (A-92) | BUILD | EQUAL (`sway_gain` 0) | B38.53; B38.19, B38.20, B38.23, B38.24, B38.25 |
 | B38.56 | cohorts may take their holder's regime core at build, switch off | `31_WR_B` commit 2 | BUILD | EQUAL (`cohort_convictions` False) | B38.55 |
 | B38.57 | the era: who rules and whether the realm is troubled; the turn rule | `30_WR_A` commit 1 (A-84, A-86) | BUILD | EQUAL | B38.56 |
-| B38.58 | what a person believes the era to be | `30_WR_A` commit 2 | BUILD | EQUAL | B38.57; the first half's `20_NARRATIVE_C` commits 1–2 |
+| B38.58 | what a person believes the era to be | `30_WR_A` commit 2 | BUILD | EQUAL | B38.57; B38.04, B38.05 |
 | B38.59 | the era's named conditions, each read as its emitter exists; A-103's row | `30_WR_A` commit 4 with the weather's era part (`dearth`) | BUILD | EQUAL | B38.57 |
 | B38.60 | a strand concludes on its closing move's drawn degree | `09_WR_B_draws_not_thresholds` edit 4 | BUILD | MOVER(behaviour) | B38.59; Batch B07, Batch B12c |
 | B38.61 | a vacant head seat is a mandatory question for those who may claim it, switch off | `30_WR_A` commit 3 (A-47) | BUILD | EQUAL (`era_mandatory_vacancy` False) | B38.57; Batch B10, Batch B21 |
@@ -40,7 +40,7 @@
 | B38.66 | a staked row pays its stake by degree; the stakes roster | `23_STORY_A` edit 2 | BUILD | EQUAL (`shortfall_scale` off, no row staked) | B38.65 |
 | B38.67 | a contested outcome is witnessed as done to its counterparty | `23_STORY_A` edit 3 | BUILD | MOVER(behaviour) | B38.66; Batch B11 |
 | B38.68 | the attempts reader and the chronicle's six words | `23_STORY_A` edits 4–5 | BUILD | EQUAL | B38.67 |
-| B38.69 | the estimate window and the renewed tie in `dues_unmet` | `30_WR_D` commit 1 | POINTER (the first half's `20_NARRATIVE_B` first commit) | — | — |
+| B38.69 | the estimate window and the renewed tie in `dues_unmet` | `30_WR_D` commit 1 | POINTER (B38.07) | — | — |
 | B38.70 | nine feedback paths declared as LOOP rows | `30_WR_D` commit 2 | BUILD | EQUAL | B38.68; Batch B11F2 (CR-98's rows) |
 | B38.71 | the cascade census: entrenched arm, fork lift, shapes E-01 to E-13, clauses C7 to C13 | `30_WR_E` | BUILD | EQUAL | B38.70; Batch B36 |
 | B38.72 | a held seat still moves the spine (A-80) | `IS-B3-FA-03` | READING (R-1) | — | B38.71; Batch B21 |
@@ -94,7 +94,7 @@
 - LANDS IT: B38's producer; `Item: B38.52`, `[skip ci]`.
 
 ### B38.53 — a member who thinks ill of his own side finds its creed among his occasions · `20_NARRATIVE_D` edit 3 · BUILD · HASH EQUAL
-- SOURCE: `proposals/20_NARRATIVE_D_his_own_side.md` "What it changes" item 2, "Exact edits" 3, "The gate" 3, "The falsifier"; U3 §1.2 row B38 item 6 ("NARR_D commit 1 before; its later commits after `31_WR_A` commit 4"); rulings A-46, A-83; closes F-NARR-05 with the first half's commit 1.
+- SOURCE: `proposals/20_NARRATIVE_D_his_own_side.md` "What it changes" item 2, "Exact edits" 3, "The gate" 3, "The falsifier"; U3 §1.2 row B38 item 6 ("NARR_D commit 1 before; its later commits after `31_WR_A` commit 4"); rulings A-46, A-83; closes F-NARR-05 with B38.14.
 - ADVANCES: none of the nine; A-83 and LOOP row L10 (`30_WR_D` §2; switch `stamp_own_side`).
 - INSTRUCTION (edit 3, copied): "**`engine/season/queries/world_q.py` — a stamp term, and its splice in `questions_for`.**
   ```python
@@ -118,7 +118,7 @@
 ### B38.54 — leaving a creed or a head seat is a move of the era · `20_NARRATIVE_D` edit 4 · POINTER (`B12a.05`)
 - What the pointed section does: `20_NARRATIVE_D` edit 4 is "the narrow form A-46 rules": "`commitment.ended` joins a strand when the released edge's object is a faction's creed Proposition or its `head_seat` …; every other `commitment.ended` stays `never`". The same step is `09_WR_strand_conclusion.md` edit 2's A-46 step ("the move roster gains one kind, a `release` whose released edge's object is a faction's creed Proposition … or that faction's `head_seat`"), landed in Batch B12a as `B12a.05` (one keyed predicate in `flows_in`'s move filter).
 - Target files and symbols: `S/queries/world_q.py::flows_in` (the move filter), `rosters.yaml: strife_kinds` (as `B12a.05` left them).
-- Gate: the source's test `test_routine_release_does_not_join_a_strand_and_a_creed_release_does` is `B12a.05`'s `test_a_release_of_a_creed_commit_is_a_move_and_a_routine_release_is_not` (`S/tests/test_strife_flows.py`): read green at this batch's close (B38.99), now that the first half's `creed:` rows name real creed Propositions. Not re-written here: one owner.
+- Gate: the source's test `test_routine_release_does_not_join_a_strand_and_a_creed_release_does` is `B12a.05`'s `test_a_release_of_a_creed_commit_is_a_move_and_a_routine_release_is_not` (`S/tests/test_strife_flows.py`): read green at this batch's close (B38.99), now that B38.25's `creed:` rows name real creed Propositions. Not re-written here: one owner.
 
 ### B38.55 — the sway draw at RESOLVE, its dial at zero · `31_WR_B` commit 1 · BUILD · HASH EQUAL
 - SOURCE: `proposals/31_WR_B_the_revival_gathers.md` "The resolution, decided" 1–6, "Instructions to code" commit 1 steps 1–5, "The falsifier", "Layer 1"; rulings A-24, A-80, A-81, A-83, A-89, A-91 (3), A-92 (J-U3-01, Option 1: "the dial ships at zero until the calibration batch sets it"); `unified/U3_CONFLICT_LEDGER.md` C3-L6 (WITNESS stays ledger-only); closes F-31-07 (the machinery; its setting is B98's).
@@ -148,7 +148,7 @@
 - FALSIFIER and CONTROL: the source's: "The same persons stepping the same way at every seed: the draw is not keyed or the pool swamps the obstacle; it is a script"; "A step with no claim landing that round: it read the World or a clock"; "A person at `caste_order` 0 stepping toward `royal_order` as often as one at 4, over 200 planted draws: the link term is not among the levels." Control: `sway_gain` 0 (shipped): the realm hash equal to the previous item's.
 - GATE: `python -m pytest S/tests/test_sway.py -q` → pass, `checked >= 8`; `python -m engine.season.harness.register --check` → exit 0 (the four NUMBER rows); `PYTHONHASHSEED=0` realm hash at seed 0, one season → equal to B38.53's reading.
 - HASH MOVERS: none at `sway_gain` 0; above 0 "a declared mover for every person who has taken in a deed by a member of a faction with a `creed:` row" (B98 sets it, A-92).
-- DEPENDS ON: EXISTS-IN-TREE `S/loop/resolve.py::_conviction_crisis`, `S/queries/person_q.py::regard`, `::conviction_stand`, `::recent_claims`, `S/data/verbs.py::DEED_KINDS`, `S/data/affiliations.py::conviction_map`, `S/data/cast.py::STANCE_MAX`, `engine/dice_engine/sigma_leverage.py::LEVEL_SIGMA`, `::levels_to_net_sigma`, `::net_boost`, `::roll_net_continuous`; V12 Batch B10 (`16_PESSIMIST_CHAR_A`, the drawn crisis "must be drawn first, or it overwrites what sway moves"; `02_CHAR_resolve_and_temper.md`, the temper term); V12 `B04.24` (`pool_of`); V12 the first half's `31_WR_A` commits 1–4 (`OPINION_LINKS`, `FACTION_CREED`, `round_half_up`, the `creed:` rows) and `30_WR_G` commit 5 (`circle_of`; "lands without it with `in_circle` False").
+- DEPENDS ON: EXISTS-IN-TREE `S/loop/resolve.py::_conviction_crisis`, `S/queries/person_q.py::regard`, `::conviction_stand`, `::recent_claims`, `S/data/verbs.py::DEED_KINDS`, `S/data/affiliations.py::conviction_map`, `S/data/cast.py::STANCE_MAX`, `engine/dice_engine/sigma_leverage.py::LEVEL_SIGMA`, `::levels_to_net_sigma`, `::net_boost`, `::roll_net_continuous`; V12 Batch B10 (`16_PESSIMIST_CHAR_A`, the drawn crisis "must be drawn first, or it overwrites what sway moves"; `02_CHAR_resolve_and_temper.md`, the temper term); V12 `B04.24` (`pool_of`); V12 B38.19, B38.20, B38.24, B38.25 (`31_WR_A` commits 1–4: `OPINION_LINKS`, `FACTION_CREED`, `round_half_up`, the `creed:` rows) and B38.23 (`30_WR_G` commit 5: `circle_of`; "lands without it with `in_circle` False").
 - GLOSSARY: new row *sway*: "a man's stand on an affiliation moving one step toward or away from a side's creed because of a deed of theirs he took in, settled by a draw, as a crowd is swayed"; owner `person_q.sway_odds`; rejected: "drift" (a slow unaimed change), "conversion" (the crisis's word).
 - NAMES: the key's `round` → `lap` (`("sway", tick, lap, p, claim.id)`; B04.01); "his own claims' `round`/tick stamps" → `lap`/tick.
 - IDS: H block slots 13–16 (four NUMBER rows).
@@ -164,7 +164,7 @@
 - FALSIFIER and CONTROL: a cohort under a faction with no `REGIME_CORES` row given a conviction; the same half-step settled the same way at every seed (the draw is not keyed). Control: `cohort_convictions` False → `build_realm(0)`'s hash equal to the previous item's.
 - GATE: `python -m pytest S/tests/test_territorial_subsistence.py -q` → pass; `PYTHONHASHSEED=0` `build_realm(s)` content hash at s = 0 → equal to the previous item's.
 - HASH MOVERS: none at False; "`True` a **declared build-hash mover**" (B98 sets it; `DIALS AT CONTROL`).
-- DEPENDS ON: EXISTS-IN-TREE `S/harness/populated.py::seat_cohorts` (moved to `S/boot/realm.py` by V12 Batch B03c); V12 the first half's `31_WR_A` (`REGIME_CORES`); V12 B38.55.
+- DEPENDS ON: EXISTS-IN-TREE `S/harness/populated.py::seat_cohorts` (moved to `S/boot/realm.py` by V12 Batch B03c); V12 B38.24 (`31_WR_A` commit 3: `REGIME_CORES`); V12 B38.55.
 - GLOSSARY: none.
 - NAMES: `harness/populated.py::seat_cohorts` → `boot/realm.py::seat_cohorts` (§5.10, B03c row).
 - COST and TIER: edit; `sonnet`, `high`.
@@ -187,7 +187,7 @@
 - FALSIFIER and CONTROL: the source's: "An era count that differs between `strands_block` read before and after a no-op season (the reading stored something or read live state): the replay is wrong"; "Two eras with the same `rule` and both with no conditions, adjacent (a cut with no turn)"; "The rename falsifier failing (a key crept in)". Control: "the planted world with no hold on any head seat reads one era, `vacant`, at every length of log"; `build_realm(0)` and the one- and two-season hashes equal to the previous item's.
 - GATE: `PYTHONHASHSEED=0 python -m engine.season.harness.strife 2 0 --strands` → "every era line names `rule=held` and the head seat's holder; the first era has `opened_by=None`; the march strand of P-1 (opening `march.declared`) opens `troubled` and the two petition strands do not" (the source's P-1 strand id is a reading at its SHA, not a target; how many eras the seed prints "is recorded in the commit, not predicted here"); `python -m pytest S/tests/test_strife_flows.py -q` → pass; realm hash at seed 0, one and two seasons → equal to B38.56's.
 - HASH MOVERS: none ("No step of the loop reads either").
-- DEPENDS ON: EXISTS-IN-TREE `S/queries/world_q.py::Era`, `::_eras`, `::open_era`, `::_concluded`, `::faction_holding`, `::governing_hold`, `CONTENT_OPENING_KINDS`, `REALM_KIND`, `S/data/rosters.py::HEAD_SEAT`, `S/state/gate.py::TENURE_CLOSED`, `S/harness/strife.py::strands_block`; V12 the first half's `30_WR_B` (the `regimes` reading, for A-86's branch); V12 Batch B10 (`16_PESSIMIST_CHAR_A`).
+- DEPENDS ON: EXISTS-IN-TREE `S/queries/world_q.py::Era`, `::_eras`, `::open_era`, `::_concluded`, `::faction_holding`, `::governing_hold`, `CONTENT_OPENING_KINDS`, `REALM_KIND`, `S/data/rosters.py::HEAD_SEAT`, `S/state/gate.py::TENURE_CLOSED`, `S/harness/strife.py::strands_block`; V12 B38.17 (`30_WR_B` commit 1: `creed_bodies`, used by B38.59's A-86 branch); V12 Batch B10 (`16_PESSIMIST_CHAR_A`).
 - GLOSSARY: row *era*: owner column → `world_q.Era`, `world_q.era_turns` (code), "reign" and "realm-rung slot" kept as rejected; *era rule standing*, *era condition* get no row of their own (rosters named in the *era* row).
 - IDS: ED block slot 1 (the rosters' `cite:`).
 - COST and TIER: small build; `sonnet`, `high`; the turn rule read by an `opus` critic (the source: "a third-tier critic on the turn rule").
@@ -202,7 +202,7 @@
 - FALSIFIER and CONTROL: `era_known` changing with no claim landing (it read live state); a signature that takes a `World` (AX-2). Control: realm hash equal (nothing in the loop reads it).
 - GATE: `python -m pytest S/tests/test_strife_flows.py -q` → pass, the new test not skipped; realm hash at seed 0, one season → equal to B38.57's.
 - HASH MOVERS: none.
-- DEPENDS ON: EXISTS-IN-TREE `S/queries/person_q.py::legitimacy` (the `holder` precedent); V12 the first half's `20_NARRATIVE_C` commits 1–2 (`believed_holder`, `held_by`); V12 B38.57.
+- DEPENDS ON: EXISTS-IN-TREE `S/queries/person_q.py::legitimacy` (the `holder` precedent); V12 B38.04, B38.05 (`20_NARRATIVE_C` commits 1–2: `believed_holder`, `held_by`); V12 B38.57.
 - GLOSSARY: none.
 - COST and TIER: edit; `sonnet`, `high`.
 - LANDS IT: B38's producer; `Item: B38.58`, `[skip ci]`.
@@ -289,13 +289,13 @@
 - ADVANCES: none of the nine; A-80 ("failing to conclude is a state with consequences"); clause C12 and shape E-09 (B38.71).
 - INSTRUCTION (commit 2, copied): "`engine/season/harness/strife.py::strands_block` and `harness/storybar.py`'s `on_season` hook.
   1. `strife.py`: `def held_by_anyone(w, strand, known) -> bool`, where `known` is `{pid: flows_known(w, p)}` computed once per block: true if some living person has an unconcluded strand (`concluded_known`) whose referents meet `strand.subject`. `def strand_state(w, strand, known) -> str` in `("open", "concluded", "dormant")`. The strand line gains `state=<…> subject=<n ids> between|inside`.
-  2. `storybar.py --strands-life`: snapshots `{strand id: state}` each season; prints `revived=<n>` (dormant at season k, a new move by k+1) and `dormant=<n>`; per rung kind the number of open strands (so 'several, at several rungs' is read, not assumed)." The states (copied): "`dormant`: open in the world reading, and no living person holds an open strand of his own reading that shares its subject …; `revived`: a strand that was dormant at a season's end and gains a move in a later season". `between|inside` reads the first half's `30_WR_B` creed bodies.
+  2. `storybar.py --strands-life`: snapshots `{strand id: state}` each season; prints `revived=<n>` (dormant at season k, a new move by k+1) and `dormant=<n>`; per rung kind the number of open strands (so 'several, at several rungs' is read, not assumed)." The states (copied): "`dormant`: open in the world reading, and no living person holds an open strand of his own reading that shares its subject …; `revived`: a strand that was dormant at a season's end and gains a move in a later season". `between|inside` reads B38.17's creed bodies (`creed_bodies`).
 - WHERE: `S/harness/strife.py` (NEW `held_by_anyone`, NEW `strand_state`; `strands_block`); `S/harness/storybar.py` (NEW flag `--strands-life`; the `on_season` hook); `S/tests/test_strife_instrument.py`.
 - TESTS: in `S/tests/test_strife_instrument.py`, written before the edit and read red: `test_a_strand_nobody_remembers_reads_dormant` ("planted: an `arrest.made` in the log, a live `detain`, every ledger emptied of it"); `test_a_new_move_on_a_dormant_strand_reads_revived`.
 - FALSIFIER and CONTROL: "`dormant` printed for a strand some living person holds open (the join through subjects is wrong)." Control: the harness reads and writes nothing: realm hash equal.
 - GATE: `python -m pytest S/tests/test_strife_instrument.py -q` → pass; `PYTHONHASHSEED=0 python -m engine.season.harness.storybar --base-seed 0 --n 3 --seasons 2 --arms off off --strands-life` → `revived=` and `dormant=` printed per season, both arms EQUAL; realm hash at seed 0, one season → equal to B38.63's.
 - HASH MOVERS: none (harness).
-- DEPENDS ON: EXISTS-IN-TREE `S/harness/strife.py::strands_block`, `S/queries/world_q.py::flows_known`, `::concluded_known`; V12 B38.62 (`Strand.subject`); V12 the first half's `30_WR_B` commit (its `harness/storybar.py` edit, the predecessor on that file).
+- DEPENDS ON: EXISTS-IN-TREE `S/harness/strife.py::strands_block`, `S/queries/world_q.py::flows_known`, `::concluded_known`; V12 B38.62 (`Strand.subject`); V12 B38.24 (the predecessor on `harness/storybar.py`: B38.02 → B38.12 → B38.18 → B38.21 → B38.22 → B38.24 → this item, C3-K7).
 - GLOSSARY: row *strand*: add the states *dormant* ("open in the world, held by no living person: as a dormant volcano is still there and quiet") and *revived* ("dormant, then moved again"), owner `harness/strife.py::strand_state` (code).
 - COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B38's producer; `Item: B38.64`, `[skip ci]`.
@@ -378,8 +378,8 @@
 - COST and TIER: edit; `sonnet`, `high`.
 - LANDS IT: B38's producer; `Item: B38.68`, `[skip ci]`.
 
-### B38.69 — the estimate window and the renewed tie in `dues_unmet` · `30_WR_D` commit 1 · POINTER (the first half's `20_NARRATIVE_B` first commit)
-- What the pointed section does: `30_WR_D` commit 1 makes `person_q.dues_unmet(p, x, window)` count only lapses inside the estimate window and net a lapse followed by a renewed tie ("Never below 0"), with `regard` passing `fx.get("estimate_window_seasons")`; the source: "Land commit 1 inside `20_NARRATIVE_B`'s first commit (it changes that proposal's edit 1 before it ships)". U3 §1 item 38: "`20_NARRATIVE_B` (carrying `30_WR_D` commit 1)": the first half.
+### B38.69 — the estimate window and the renewed tie in `dues_unmet` · `30_WR_D` commit 1 · POINTER (B38.07)
+- What the pointed section does: `30_WR_D` commit 1 makes `person_q.dues_unmet(p, x, window)` count only lapses inside the estimate window and net a lapse followed by a renewed tie ("Never below 0"), with `regard` passing `fx.get("estimate_window_seasons")`; the source: "Land commit 1 inside `20_NARRATIVE_B`'s first commit (it changes that proposal's edit 1 before it ships)". U3 §1 item 38: "`20_NARRATIVE_B` (carrying `30_WR_D` commit 1)": B38.07.
 - Target files and symbols: `S/queries/person_q.py::dues_unmet`, `::regard`; `S/tests/test_narrative_dues.py` (`test_a_lapse_older_than_the_window_is_not_counted`, `test_a_renewed_tie_nets_the_lapse_before_it`, `test_two_lapses_and_one_renewal_count_one`, `test_the_count_is_never_negative`).
 - Gate: those four tests, read green in the batch gate (`test_narrative_dues.py` is in its pytest line). Not re-written here.
 
@@ -423,7 +423,7 @@
 - FALSIFIER and CONTROL: "A fork lift above 1 on the planted coincidence: the groups are not built from one history"; "The entrenched arm changing an uncontested draw (compare the uncontested Events of the two arms up to the first contested one: equal)"; "A shape E-xx above 0 under `edge_null` at the log's rate"; "Any content hash moving". Control: realm hash equal.
 - GATE (the source's, at two seasons, A-114): `PYTHONHASHSEED=0 python -m engine.season.harness.storybar --base-seed 0 --n 3 --seasons 2 --arms off off --null-scenes --stories` → EQUAL arms, STORY-D's control shapes above 0, E-01 to E-13 each a count or `n/a (no emitter)`, the `null_scenes` line quoted (C9: its asserted zero is read at B38.99); `PYTHONHASHSEED=0 python -m engine.season.harness.storybar --base-seed 0 --n 3 --seasons 2 --arms off entrenched --stories --null-scenes` (three seasons in the source; A-114) → S-43 and E-02 at 0 in the entrenched arm, C8 read and quoted; `PYTHONHASHSEED=0 python -m engine.season.harness.storybar --base-seed 0 --seasons 2 --draw-seeds 0 1 2 3 4 5 6 7 --cascade L15` (three seasons in the source; A-114) → the retry loop's lift, "recorded either way"; `python -m pytest S/tests/test_storybar.py -q` → pass; realm hash at seed 0, one season → equal to B38.70's.
 - HASH MOVERS: none ("No hash moves").
-- DEPENDS ON: V12 `B02.20` (`null_scenes`); V12 Batch B36 (`23_STORY_D`: `Shape`, `SHAPES`, `stories`, `--stories`, `--pin-rolls`, `Beat`; `09_WR_story_instruments_that_can_fail.md`: arms, `edge_null`; `20_NARRATIVE_F`); EXISTS-IN-TREE `S/harness/storybar.py::ARMS`, `::fork`, `::draw_seed_arm`, `S/harness/chronicle.py::consequence_chains`; V12 B38.57 (`era_turns`), B38.64 (`revived`), B38.70 (the LOOP ids `CASCADES` keys on), the first half's `30_WR_B` (`--regimes`) and `30_WR_G` (custom).
+- DEPENDS ON: V12 `B02.20` (`null_scenes`); V12 Batch B36 (`23_STORY_D`: `Shape`, `SHAPES`, `stories`, `--stories`, `--pin-rolls`, `Beat`; `09_WR_story_instruments_that_can_fail.md`: arms, `edge_null`; `20_NARRATIVE_F`); EXISTS-IN-TREE `S/harness/storybar.py::ARMS`, `::fork`, `::draw_seed_arm`, `S/harness/chronicle.py::consequence_chains`; V12 B38.57 (`era_turns`), B38.64 (`revived`), B38.70 (the LOOP ids `CASCADES` keys on), B38.18 (`30_WR_B` commit 2: `--regimes`) and B38.23 (`30_WR_G` commit 5: custom).
 - GLOSSARY: none (the clauses and shapes are an instrument's table; *entrenched arm* is glossed in its docstring: "every contested draw pinned to the challenger's Failure: the holder always holds").
 - COST and TIER: small build; `sonnet`, `high`; "a third-tier critic on the fork lift's grouping": `opus` (`valoria-critic`).
 - LANDS IT: B38's producer; `Item: B38.71`, `[skip ci]`.
@@ -440,7 +440,7 @@ A reading quoted at the close: no code, no commit of its own; its text is R-1 of
 - FALSIFIER and CONTROL: the source's: "Varfell `rising` at five seeds of five with identical gaps: the trend is built in" (read at B98's flip, not here, at `sway_gain` 0: every gap `stalled`). Control: realm hash equal.
 - GATE: `python -m engine.season.harness.register --check` → exit 0 (G13 on L17); `python -m engine.season.harness.loops` → declared against derived, quoted; `PYTHONHASHSEED=0 python -m engine.season.harness.storybar --base-seed 0 --n 3 --seasons 2 --arms off off --regimes` → per core row a `gap` and a word; `python -m pytest S/tests/test_storybar.py -q` → pass. The source's arm gate (`--seasons 6 --arms sway_off sway_on --regimes --stories`, expected readings 1–6) is B98's reading of `sway_gain` (at two seasons, A-114), not this commit's.
 - HASH MOVERS: none.
-- DEPENDS ON: V12 B38.71 (the predecessor on `harness/storybar.py`); V12 B38.55; V12 the first half's `30_WR_B` commit 2 (`--regimes`, `formed`, `ended`) and `31_WR_A` (`REGIME_CORES`, the authored cores); EXISTS-IN-TREE `S/harness/loops.py::DECLARED_CYCLES`.
+- DEPENDS ON: V12 B38.71 (the predecessor on `harness/storybar.py`); V12 B38.55; V12 B38.18 (`30_WR_B` commit 2: `--regimes`, `formed`, `ended`) and B38.24 (`31_WR_A` commit 3: `REGIME_CORES`, the authored cores); EXISTS-IN-TREE `S/harness/loops.py::DECLARED_CYCLES`.
 - GLOSSARY: none (`rising`, `stalled`, `falling` are plain words printed by the instrument).
 - IDS: H block slot 30 (L17).
 - COST and TIER: edit; `sonnet`, `high`.
