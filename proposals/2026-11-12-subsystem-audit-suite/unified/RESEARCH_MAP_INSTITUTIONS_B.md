@@ -214,7 +214,7 @@ source found in the tree, the claim stays memory-grade. Row ids are used in the 
 | C-8 | Ragusa and the Danegeld (§2.1) | `[TREE: T10]` | `FASE:176`; `HCC:56` (with no defence banked, only compliance is open), `:167` (tribute withheld, then the sack) | **AGREES** |
 | C-9 | the resident, the subsidiary treaty, lapse (§2.1) | `[MEMORY]` | — | **SILENT** |
 | C-10 | hostage-kin; sons raised at the overlord's court (§2.1) | `[TREE]`; `[MEMORY]` | `PMP:132`, `:502-506` (the **cost** is the mechanism: two establishments and the processions); `PHS:144`; `HCC:43` (heirs kept at court against heirs left as governors); `RTP:360-363`; `faction_politics_v30:123-131` (archived) | **AGREES** |
-| C-11 | venality: the *paulette* (§2.1 answer 1) | `[TREE: T2, T5]` | `FASE:101`, `:130`; `RTP:488-491`; `CGR:132`; **`RTP:518-521`: colonial offices cheaper the farther from the capital, and the same distance weakens the audit; the buyer seats an ally on the reviewing bench** | **AGREES**, and adds distance in the price and in the audit |
+| C-11 | venality: the *paulette* (§2.1 answer 1) | `[TREE: T2, T5]` | `FASE:101`, `:130`; `RTP:488-491`; `CGR:132`; **`RTP:518-521`: colonial offices cheaper the farther from the capital, and the same distance weakens the audit; the buyer seats an ally on the reviewing bench** | **AGREES**; sources the lane's own rule that an audit weakens with the opener's distance (`15_INSTITUTIONS_COLONIAL_C` edit 2), and adds the price and the captured bench |
 | C-12 | *mita*, *repartimiento*, corvée, *encomienda* (§2.2) | `[MEMORY]` | `PGS:95` (T2): the mit'a pooled rotational labour and "was reciprocal": it writes a debt owed back, not a flat grievance; `PGS:127` (F8, the *devshirme* as levy of persons). *Encomienda* and *repartimiento*: — . Nearest: revenue without governance, `CGR:160` (pronoia), `PGS:101` (timar) | **PARTIAL**, and **CORRECTS** the framing: the tree's labour draft carries a return |
 | C-13 | settler societies; the charter dispute (§2.3) | `[MEMORY]` | `HCC:71` (billeting by force narrows the governor's own later choices: 1765 to 1774); `HCC:138` (the far colony that would not adopt local practice and was let go); `CGR:103` (colonists by charter, a rooted militia under a rotating governor); `PGS:107` (one charter for every town founded under it: revoke one and all are shaken); `PGS:85` (an order founds and rules its own settlement); `RTP:574-577` (franchise by church membership) | **PARTIAL**: headright and the assemblies stay memory-grade |
 | C-14 | soldier-settlers (§2.3) | `[TREE: T8]` | `FASE:152-159`; `PGS:104-105`, `:108` (a permanent defence that can turn to refusal) | **AGREES** |
@@ -256,7 +256,11 @@ and the decree that lands by a roll. What stays memory-grade is detail inside th
 
 ## 4. Mechanisms the research describes that the two designs did not carry
 
-Each is written as an executable edit in the grounding proposal named. None adds a carrier type.
+Each is carried by the edit of the grounding proposal named, or is marked as composed from existing
+parts (a gate or a reading, no edit) or as already carried and now sourced. None adds a carrier type, a
+verb or an obstacle term; the two grounding proposals between them add one form row (`condotta`), one
+arrangement row (`guild_debt_suit`), two clause keys (`stage`, `after:`) and one enum value
+(`over: any`).
 
 | # | mechanism | source | family | carried by |
 |---|---|---|---|---|
@@ -275,19 +279,19 @@ Each is written as an executable edit in the grounding proposal named. None adds
 | M-13 | **The body of the excluded**: a brotherhood with its own ladder for those the roll shuts out | `CGR:98`; `PGS:81` | Venice | VENICE grounding edit 7 (content) |
 | M-14 | **Portability as leverage**: a privileged body's threat to carry its privilege to a rival host | `PGS:84` | both | COLONIAL grounding edit 5 |
 | M-15 | **The decree's bearer**: an order's odds improve with an enforcing agent of the issuer present at the addressee's place | `PMP:491-494` | Colonial | COLONIAL grounding edit 1 |
-| M-16 | **Assessment as a resisted act**, and the gap between the figure on the record and the store on the ground as what an audit samples | `PMP:485-489`, `:641`; `05_COLLISIONS_AND_RESIDUE.md:32` (the grammar gap this needs) | Colonial | COLONIAL grounding edit 2 |
-| M-17 | **Distance in the audit and in the price of an office**; the officer's man on the bench | `RTP:518-521`, `:483-486` | Colonial | COLONIAL grounding edit 2 |
-| M-18 | **The lord's duty to reward**: service answered and nothing granted breaks the bond from the lord's side; a war that wins no ground cannot pay its victors | `PHS:457-461`; `CPS` Japan 3.2 | Colonial | COLONIAL grounding edit 3 (a second `due` on `homage`) |
-| M-19 | **The hostage as pupil, and the cost as the mechanism**: the ward serves in the host's household and returns the host's man; the sender pays for two establishments | `RTP:360-363`; `PMP:502-506`; `HCC:43` | Colonial | COLONIAL grounding edit 4 |
+| M-16 | **Assessment as a resisted act**, and the gap between the figure on the record and the store on the ground as what an audit samples | `PMP:485-489`, `:641`; `05_COLLISIONS_AND_RESIDUE.md:32` (the grammar gap this needs) | Colonial | COLONIAL grounding edit 6 (a printed reading; the lane's levy and audit rows already read a held assessment and the officer's books) |
+| M-17 | **Distance in the audit and in the price of an office**; the officer's man on the bench | `RTP:518-521`, `:483-486` | Colonial | already carried, now sourced: `15_INSTITUTIONS_COLONIAL_C` edit 2 (the opener's `remove` enters the hearing); the man on the bench is the kit's `obligation` term; the price arises only under the audit's §11 item 2 |
+| M-18 | **The lord's duty to reward**: service answered and nothing granted breaks the bond from the lord's side; a war that wins no ground cannot pay its victors | `PHS:457-461`; `CPS` Japan 3.2 | Colonial | COLONIAL grounding edit 2 (a clause key `after:` and a second `due` on `homage`) |
+| M-19 | **The hostage as pupil, and the cost as the mechanism**: the ward serves in the host's household and returns the host's man; the sender pays for two establishments | `RTP:360-363`; `PMP:502-506`; `HCC:43` | Colonial | COLONIAL grounding edit 3 |
 | M-20 | **The labour draft owes a return** | `PGS:95` | Colonial | COLONIAL grounding edit 7 (bears on §11 item 3 only) |
-| M-21 | **Revenue without governance**: a named community's dues assigned to a holder who does not rule it, for service | `CGR:160`; `PGS:101` | Colonial | COLONIAL grounding edit 5 (the `farm` row without its seat) |
-| M-22 | **The life farm hardens**: reclaimed early it is an act of administration, late it is a revolt | `RTP:523-526`; `FASE:101` | Colonial | COLONIAL grounding edit 5 |
+| M-21 | **Revenue without governance**: a named community's dues assigned to a holder who does not rule it, for service | `CGR:160`; `PGS:101` | Colonial | COLONIAL grounding edit 5 (composed: a `tithe` naming a lay holder's rung, and his own oath) |
+| M-22 | **The life farm hardens**: reclaimed early it is an act of administration, late it is a revolt | `RTP:523-526`; `FASE:101` | Colonial | COLONIAL grounding edit 4 (`farm: hardens: true`) |
 | M-23 | **The company under a superior by class of decision**; the licensing office and the merchant body as two seats | `PGS:147`; `CGR:134`; `GPC_part6:165-175` | Colonial | COLONIAL grounding edit 5 |
 | M-24 | **Invited entry**: a party to a civil quarrel brings the outside power in; a failing commune gives itself to a foreign lord | `PA:64-98`; `GM:290-291`; `CPS:267-268` | both | COLONIAL grounding edit 8 (a story and its reading) |
 | M-25 | **Billeting ratchets**: lodging troops by force lowers regard and narrows the governor's later choices | `HCC:71`; compendium `43:47-55` | Colonial | COLONIAL grounding edit 8 |
 | M-26 | **The post let go**: a far place that adapts to its ground loses the centre's regard, and a centre that stops paying loses the place by lapse | `HCC:138` | Colonial | COLONIAL grounding edit 8 |
-| M-27 | **Certainty of detection against severity of sanction** as two dials | `PMP:142-144`, `:496-500` | both | COLONIAL grounding edit 2 (a sweep, no rule) |
-| M-28 | **The privilege with a patron**: a grant that stands only while a named backer does | `settlement_layer_v30:646-669` (archived; ED-SE-0021) | both | COLONIAL grounding edit 5 |
+| M-27 | **Certainty of detection against severity of sanction** as two dials | `PMP:142-144`, `:496-500` | both | COLONIAL grounding edit 6 (a sweep, no rule) |
+| M-28 | **The privilege with a patron**: a grant that stands only while a named backer does | `settlement_layer_v30:646-669` (archived; ED-SE-0021) | both | no edit: already open through `charter`'s fee at the grantor's succession (colonial audit §6.2, note); a reading in its §8 |
 
 **Tried and not taken** (the research describes it; the design has a reason): a per-verb authority table
 for the territory (`PGS:148`): the two officers' disjoint `remit_acts` already are that table; a relay or
