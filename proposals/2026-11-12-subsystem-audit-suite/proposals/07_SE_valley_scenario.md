@@ -3,6 +3,7 @@
 Reconciled: 2026-11-12, U5d closure — folded **A-54**, **A-50** and **A-56**. The scenario's seasons draw their harvest on the four-band ladder with the steward's skill as named levels on the place's draw (wave 3, D-U1-09, replacing "in the pool"), so the player's stewardship is felt as odds; its three towns' starting stores may be drawn within the fixture's bounds; its cohorts form the heavy moves only, so a starved town answers by petition, flight, refusal or riot. The P-13 change stands (the granary at the steward's seat rung).
 
 Reconciled: 2026-11-12, wave 3 (W3-3) — D-U1-09 applied to the head's A-54 phrase (the steward's skill is named levels at site `settlement_effect`, not a pool term); 7b-7 (a named pytest file for the loader's refusals and the gate's three readings, the CLI commands kept as the readable form); tier and batch added (R3 7b-0; U3 B12, last). R3 §1's question whether "one code path" is met by sharing `SeasonDriver` only is answered by the file as written: the valley runs the unmodified driver, the registered entries and the shipped chooser, and a played seat is the existing `dispatching_chooser`, `[ASSUMPTION: U3 left no row on it — basis: CLAUDE.md §0 "one code path" names the loop, which is shared]`.
+Reconciled: 2026-11-12, wave-3 mop-up (`unified/work/W3_5b_DONE.md` "For another lane", W3-3 item): the loader's closed key set admits `age_years`, `conferral`, `sworn_to`, `holders` and the prehistory `to:` that `23_STORY_E` needs (§4(a), after the example), with a named test.
 
 ## Status: PROPOSED
 
@@ -94,6 +95,15 @@ Until `field` is a site kind (CP-T08-02), the file uses `harbour` for the field 
 still differentiates the seam village; the loader refuses a kind `rosters.yaml: site_kinds` does not hold,
 so the file cannot run ahead of the roster.
 
+The loader holds a closed key set per section and refuses an unknown key by name. Beyond the keys shown above
+it admits the ones `23_STORY_E_first_playable_the_lean_year.md` needs: on a person `age_years` (read through
+`22_HAPPENINGS_A` edit 1's writer, `Person.born = -(age_years × len(SEASONS_OF_YEAR))`; this loader writes no
+`born` itself), on a seat `conferral`, `sworn_to` (one key added to this file's `off_steward` row, not a second
+declaration of it) and `holders` (a seat with several holders, beside the singular `holder`), and on a
+prehistory petition the `to:` of `12_ARCS_case_on_the_realm.md` §3 item 3's `setup.prehistory` rows.
+`[ASSUMPTION: the prehistory rows reach this loader through the case file that carries them, not through a
+section of `valley.yaml` — basis: this file declares no prehistory section; STORY_E writes its own.]`
+
 **(b) `engine/season/harness/valley.py`** (structure and interface):
 
 ```python
@@ -134,6 +144,9 @@ band below `fed`; `hoard` refuses every such candidate. `auto` is the shipped ch
 - **Control.** `--policy auto` twice at one seed gives one hash.
 - **Named tests (7b-7).** New file `engine/season/tests/test_valley.py`: `test_auto_twice_gives_one_hash`,
   `test_valley_yaml_refuses_a_site_kind_the_roster_lacks`,
+  `test_valley_yaml_admits_the_story_keys_and_refuses_an_unknown_one` (a person with `age_years`, a seat with
+  `conferral`/`sworn_to`/`holders` load; a key outside the set is refused by name; control: the same file
+  without the keys loads unchanged),
   `test_hoard_and_relieve_end_differently_or_the_finding_is_reported` (asserts that it asserted over the
   three seeds; a same-hash result is reported, not failed, per the falsifier above).
 

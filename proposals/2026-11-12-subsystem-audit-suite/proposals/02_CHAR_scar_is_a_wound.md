@@ -3,6 +3,7 @@
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` §4) — amended by `U5a_CHAR_owed_amendments.md` §6 (F-PES-CHAR-11: a fully scarred person's shift is not skipped). The scar write's Event is `16_PESSIMIST_CORE_the_record_holds_what_changed.md` edit 2 (`scar.taken`, logged, fanned out to nobody).
 
 Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.2 row (CONFORMS, one open fact), §2 row A-24/A-47, §7, §7b-T; `unified/U1_GLOSSARY.md` *scar*; `unified/U3_CONFLICT_LEDGER.md` C3-Y8; `unified/U3_DEPENDENCY_ORDER.md` node B10, §6.2). Changed: "the thresholds, the crisis and the dormant readers are untouched" is reworded to the rulings — a crossing of 3 is the **trigger of a drawn, seen crisis of faith** (A-24; `16_PESSIMIST_CHAR_A_a_crisis_of_faith_is_drawn_and_told.md`) and a threshold opens, never decides (A-47); the open fact is settled at the tree (`write_matrix.yaml:263-270`: `(Person, scar)` is `steps: [RES, ENC]`, `class: ACTS`, a field write the gate admits in either direction; its `emits` names `scar.taken` only, so vindication's decrement declares `scar.healed` on the same row, `[ASSUMPTION]`); in the body the count is a **scar** (glossary; the title stays); the scratch probe becomes a named test; lands-it and tier.
+Reconciled: 2026-11-12, wave-3 mop-up (`unified/work/W3_5b_DONE.md` "For another lane", W3-2 item; `20_NARRATIVE_A_stands_for.md` edit 5): the `primary` arm's affiliation threshold is `person_q.stands_for` (one owner), `scar_affiliation_floor` is not added; the writer of `stands_for` (B10 before B38) is marked `[ASSUMPTION]` in the `person_q.py` edit.
 
 **Lands in batch:** B10, co-landing with `02_CHAR_scar_cap_and_regard_unit.md` (one fixture `scar_season_cap`, C-U5a-06; C3-Y8). **Depends on:** `16_PESSIMIST_CORE_the_record_holds_what_changed.md` (B09, `scar.taken`).
 
@@ -71,7 +72,7 @@ Each value is `[ASSUMPTION; medium; Jordan to correct]` and reverts alone.
 
 | # | fixture | control (ships) | proposed live | what it does |
 |---|---|---|---|---|
-| 1 | `scar_hold` | `any` (today: held above zero) | `primary` | only a person's **primary** elements can be scarred: the fewest top-weighted pursuits whose weights sum to at least `scar_primary_mass` (0.6, PP-684's lower bound for the primary band), and affiliations held at intensity 3 or more of 5 |
+| 1 | `scar_hold` | `any` (today: held above zero) | `primary` | only a person's **primary** elements can be scarred: the fewest top-weighted pursuits whose weights sum to at least `scar_primary_mass` (0.6, PP-684's lower bound for the primary band), and affiliations the person stands for (`person_q.stands_for`, intensity 3 or more of 5) |
 | 2 | `scar_lean_floor` | `0.0` (today: the sign test) | `0.2` | an act violates a pursuit only when `pursuit_lean(verb, e) < −floor`; swept 0, 0.2, 0.4 |
 | 3 | `scar_season_cap` | `None` | `person` | at most one count per person per season, on the element most violated (largest weight × \|lean\|, ties by name). The first lane's arm, `element` (one per person per element), is the middle point of this fixture's sweep |
 | 4 | `scar_vindication` | `off` | `on` | a witnessed act whose lean on a primary element is above `+scar_lean_floor` removes one count from that element, never below 0, at most once per person per season |
@@ -85,7 +86,14 @@ primary the first to be scarred by it. The arm stays swept.
 - **`queries/person_q.py`** (owner of the predicate). `_held(weights, violated, floor_rule)` takes the
   rule: `any` as today; `primary` computes the primary set once per person per call from
   `p.pursuits` (sort by weight descending, name ascending; take until the sum reaches
-  `scar_primary_mass`) and from `p.conviction` (intensity at or above `scar_affiliation_floor`).
+  `scar_primary_mass`) and, for affiliations, from `person_q.stands_for(p, "stands")` (`20_NARRATIVE_A_stands_for.md`
+  edit 1: held above the scale's midpoint, which on the `0-5` scale of `references/descriptor_registry.yaml`
+  is intensity 3 or more). This file writes no second threshold and adds no `scar_affiliation_floor`
+  (`20_NARRATIVE_A` edit 5: one owner). This file lands in B10 and `stands_for` in B38, so whichever lands first
+  writes the function. `[ASSUMPTION: this file, landing first, writes `stands_for` with the `"stands"` arm
+  only, and `20_NARRATIVE_A` edit 1 then adds the `any` arm, the `held_readings` roster and the fixture —
+  basis: `20_NARRATIVE_A`'s cost-class paragraph leaves the writer to whichever lands first; B10 precedes
+  B38; reversible by moving the function body into either file.]`
   `_pursuits_violated_by(verb, floor=0.0)` compares against `−floor`; a twin
   `_pursuits_upheld_by(verb, floor)` returns the elements with lean above `+floor`. `broken_by`
   and a new `upheld_by` pass the fixtures through. No `World`.
@@ -97,7 +105,7 @@ primary the first to be scarred by it. The arm stays swept.
   `steps: [RES, ENC]`, `class: ACTS`) admits the write in either direction; its `emits` gains `scar.healed`
   for the decrement so the log's derived roster accepts it (`04` §B.13 invariant 7) `[ASSUMPTION: the kind's
   name]`.
-- **`data/fixtures.py`**: the four fixtures and `scar_primary_mass`, `scar_affiliation_floor`, each
+- **`data/fixtures.py`**: the four fixtures and `scar_primary_mass` (no `scar_affiliation_floor`: the affiliation threshold is `stands_for`'s), each
   with its hole-register row under H-128's precedent (declare, default, sweep).
 - **`harness/`**: no new instrument. The gate is the named test below (the scratch probe restated).
 

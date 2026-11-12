@@ -3,6 +3,7 @@
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-15, C-16) — §1's `argument.held` row and §3's second bullet are withdrawn as duplicates (carried once by `16_PESSIMIST_SC_D_an_argument_moves_someone.md` edit 1 and `16_PESSIMIST_SC_C_a_verdict_names_its_party.md` edit 1). §6 is read as the decision register's D-74, taken B: fix the witness code, not Layer 1. No lane applies a Layer 1 hunk; a read no refactor removes is listed for an amendment text. §4's budget row lands last, with `test_n3` read before and after.
 
 Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.5 row FI-04 (CONFORMS; §4 budget row same defect as CHAR B1), §7 (INCOMPLETE: §6 names no symbols), §7b-T; `unified/U3_CONFLICT_LEDGER.md` C3-L8; `unified/U3_DEPENDENCY_ORDER.md` node B11, §4.1 row 11; `DECISIONS_ANSWERED.md` D-74). The body follows its head and the decisions: §1's `argument.held` row and §3's second bullet are removed (withdrawn as duplicates, carried once by `16_PESSIMIST_SC_D` edit 1 and `16_PESSIMIST_SC_C` edit 1); **§4's budget row is deleted** (C3-L8: `budget_office_bonus` is removed, carried by `U5a_CORE_owed_edits.md` §H; the head's "lands last" is overtaken); §6 is D-74 (fix the witness code, not Layer 1) with its symbols named; §5's `[UNVERIFIED]` on ED-FI-0002 is settled (it lives in `registers/editorial_ledger_fi_archive.jsonl`); named tests; lands-it and tier. The three reads no refactor removes are listed for an amendment text (receipt), not applied.
+Reconciled: 2026-11-12, wave-3 mop-up (`unified/work/W3_4a_DONE.md` "For another lane", second item; A-81, C3-C11): §1 gains the paragraph narrowing `undeposited_kinds` so a failed inquiry leaves the actor's own claim.
 
 **Lands in batch:** B11 (each row independent; one commit each); the `17_CENSUS_REST_1_deletions` row that needs this file lands with it (U3 §4.1 row 11).
 
@@ -25,6 +26,20 @@ receipts name the prisoner and the seat. §4: a writ lapses. §5–§6: nothing.
 | `verb_table.yaml`, the six inquiry rows' `emits_on_refusal` | `finding.none` | `inquiry.refused` | CP-T05-03 split `tell.refused` from `news.untold` |
 | same rows, `Failure` band | `finding.none` | unchanged | — |
 | `rosters.yaml: undeposited_kinds` | `[finding.none]` | `[finding.none, inquiry.refused]` until CP-T06-04 lands, then per that card | — |
+
+**A-81 on the same roster (wave-3 mop-up; `unified/work/W3_4a_DONE.md` "For another lane", second item).** At the
+tree the roster's reason is that "a refused inquiry deposits nothing, and no `finding.none` is deposited" (`rosters.yaml:
+undeposited_kinds` source; `loop/witness.py:381-386` drops the kind before any deposit). A-81 (every scene writes a
+durable change, a failure included) cannot hold for an inquiry whose `Failure` is `finding.none` and is dropped. The
+verb files that rely on it (`14_VERBS_MATERIAL_E`, `14_VERBS_PHYSICAL_C`, `14_VERBS_PHYSICAL_D`) plant the actor's own
+`(subject, <verb>.failed, True)` claim at a `Failure`. So the roster's rule is narrowed here: `finding.none` no longer
+fans to nobody; it leaves the actor's own claim and nothing to the other present persons (the skip arm's other purpose,
+no deposit of "he found nothing" to bystanders, is kept). The mechanism in `witness.py` (a second roster, or a per-kind
+audience on this one) is chosen when `witness.py:381` is edited. `[ASSUMPTION: the actor-only audience is the narrowest
+reading that meets A-81 and keeps H-111's no-bystander intent — basis: H-111's text in `rosters.yaml`; reversible by
+returning the kind to the skip list and giving the claim to the verb files' own Failure cell.]` Named test:
+`engine/season/tests/test_fi_small_edits.py::test_failed_inquiry_leaves_the_actors_own_claim` (the count of failed
+inquiries with zero durable writes is 0; control: the roster as shipped, count > 0).
 
 (`argue`'s `Partial` rename to `argument.held` is withdrawn here: carried once by
 `16_PESSIMIST_SC_D_an_argument_moves_someone.md` edit 1, C-15.)

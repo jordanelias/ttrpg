@@ -2,6 +2,7 @@
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-25) — the prize `an order` is not added: `issue` and `dispatch` contest `a standing` (same hearer, same step; `U5c_VERBS_residue_and_governance_owner.md` §2). The term `standing` is `rank_gap`; a writ's band is the content key `force`. §13.4 decision 1 is answered (Jordan, A-22: command): commit D2 ships behind its revert. A decree is proclaimed (A-21).
 Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — the head applied to the body (`unified/work/R4_READ.md` §1.1, §2, 7b.3): every `an order` → `a standing` and edit 7 deleted; `standing` (the term) → `rank_gap` (U1 R-21, D-U1-01); A-21 answers FA §11 item 1 and corrects item 10 and gate D3 (an answer forms on any writ that is learned of; `force` enters the answer rows' obstacle); D4's dependency corrected at the tree (`loop/effects_migration.py::_relocate` exists, `:98`; the missing piece is a `dispatch` effect and its destination operand, CP-T09-08, which no suite proposal carries: `unified/U3_DEPENDENCY_ORDER.md` §6.3); A-81 (C3-C11), A-30 keys, U3 batch B21, R4 7b.0 block.
+Reconciled: 2026-11-12, wave-3 mop-up (`unified/work/W3_5a_DONE.md` row 13 and Close, "for another lane"): D2 edits 3-5 compose on `16_PESSIMIST_FA_C_under_the_seat.md`'s one `commands` body in `queries/world_q.py`; edit 3 no longer writes `state/gate.py::commands`.
 
 ## Status: PROPOSED
 
@@ -51,8 +52,8 @@ All are declared movers for the realm. (2) is §13.4 decision 1 of the audit and
 - **Command, not territory** (decision 1, taken here behind a revert): a seat commands (a) its sworn men,
   a live `oblige` to `via`; (b) the holders of seats `via` may revoke (`may_revoke`, the gate's own
   predicate); (c) the unseated persons within `via`'s purview. Everyone else may be petitioned, not
-  ordered. One predicate, `state/gate.py::commands(w, actor, via, person) -> bool`, beside
-  `purview_reaches`; one `requires` basis value, `command`.
+  ordered. One predicate, `commands(w, actor, via, person) -> bool`, whose one body is
+  `queries/world_q.py::commands` (`16_PESSIMIST_FA_C_under_the_seat.md` edit 1); one `requires` basis value, `command`.
 - **The draw**: prize `a standing`, opponent `to`, through the one obstacle composer: `difficulty`
   `routine`, `opposition` (his trained score, A-79, D-U1-02), `regard` (his stance toward the issuer),
   `rank_gap` (OBS §2 member 6).
@@ -73,11 +74,15 @@ All are declared movers for the realm. (2) is §13.4 decision 1 of the audit and
 
 **Commit D2 — command.**
 
-3. `state/gate.py`: `commands(w, actor, via, person) -> bool`, the three clauses above, each read through
-   its one owner (`w.tenures` for the `oblige`; `may_revoke` over the person's live seats;
-   `purview_reaches` and `seat_holds` for the unseated). Docstring names decision 1 and the revert.
-4. `data/requires.py`: the `basis` form gains the value `command`, dispatched to `commands` exactly as
-   `purview` is (a value of an existing form, not a new stem).
+3. *(One owner, wave-3 mop-up: `16_PESSIMIST_FA_C_under_the_seat.md` edit 1 writes the one body,
+   `commands(w, actor, via, person_id) -> bool` in `queries/world_q.py`, taking this file's name and the
+   tree's `(w, actor, via, …)` signature, and lands first in B21. This commit writes no second body in
+   `state/gate.py`; the three clauses (`w.tenures` for the `oblige`; `may_revoke` over the person's live
+   seats; `purview_reaches` and `seat_holds` for the unseated) and the docstring naming decision 1 and the
+   revert are FA_C's.)*
+4. `data/requires.py`: the `basis` form gains the value `command`, dispatched to `world_q.commands`
+   (FA_C edit 1) exactly as `purview` is (a value of an existing form, not a new stem). FA_C edit 2 makes
+   the same change; whichever of the two lands second finds it made and adds nothing.
 5. `verb_table.yaml`, `issue`: the `authority` conjunct's `basis: purview` → `basis: command`;
    `requires:` prose and `refusal_note` amended (*"`issue.unauthorized` -- the SEAT: none exercised grants
    `issue`, or it does not command the executor"*). `[ASSUMPTION; medium; Jordan to correct; revert:

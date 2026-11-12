@@ -1,6 +1,7 @@
 # U5d-FA — land after a march: who stands where, who may take what, and the seats that go with the land (rulings A-57 to A-70)
 
 Reconciled: 2026-11-12, wave 3 (W3-3) — C3-L7 (edit 1: no new `conquest` gate basis; the seats anchored on the seized rung close by the existing `T-o` revocation basis under a new `revocation:` value `holder_of_rung`, data plus its `REVOCATION_RULES` entry), corrected at the tree in two places: `Act.via` is a typed seat id (`state/carriers.py:721`), so the basis is exercised through the seizer's licensing seat and the new rule reads his holdings, not "`via` = his new hold"; and the `claim` basis C3-L7 names for re-opening the seat admits only an heir under a `successions` row (`state/gate.py:236-253`), so the seizer's opening is not admitted by it and is written below as D3's revert (the seats stand vacant for the ordinary `conferral` path) with the two-option note; C3-L12 (the taking is the aggressor's chosen `seize` act, already this file's D1; the field writes no title); A-76 ("For Jordan" block deleted; D7 is ruled B, built switchable); A-85 (D6's pool gains the realm's strife level; the `ED-IN-0352` (3) clause is owed text); 7b-9 (d) (`passage_granted` placed and tested); D8's `[unverified]` deed-lean home resolved at the tree (`data/verbs.py::align_kind`, `:2101-2113`); tier and batch (R3 7b-0; U3 B23).
+Reconciled: 2026-11-12, wave-3 mop-up (`unified/work/W3_4a_DONE.md` row 7 and "For another lane", first item; C3-L7): the cession case (`14_VERBS_BINDING_E_war_seats.md`'s `surrender`) named beside the won-field case; edit 2 no longer has `_eff_surrender` pass `seats=` (its actor is the yielder and closes no seats; they pass by the receiver's own act); the `seize_place` name stays `[ASSUMPTION]`.
 
 ## Status: PROPOSED (a plan for a later implementation lane; nothing here was executed)
 
@@ -93,11 +94,21 @@ change and needs Jordan's amendment (`04:377`: "§C.2's pseudocode is the curren
 owed, not applied. This file builds (i). **INCOMPLETE:** whether (i) meets A-58 is U3's to re-check
 against C3-L7 (listed in the wave-3 receipt).
 
+**The cession case, beside the won-field case (C3-L7; `14_VERBS_BINDING_E_war_seats.md`'s `surrender`).** A
+surrender under siege is the aggressor's win by concession (A-3), but its actor is the **yielder**, not the
+receiver (`_eff_surrender` returns `NO_CHANGE` when `receiver == a.actor`; `loop/effects_information.py:1092-1124`),
+and `_take_hold` there writes only the rung's hold to `to=receiver`. The seats anchored on the place have other
+persons as holders and `04` §C.2 lists no basis by which the yielder's act closes their holds, so the cession
+writes no `seats=` and closes none. Those seats pass exactly as after a won field, by the **receiver's** own act
+through the same `revocation: holder_of_rung` rows: once he holds the rung, he closes them and fills them by the
+existing bases, or chooses not to (A-66). The title half of a won march is `14_VERBS_MATERIAL_D_paper.md`'s
+`seize_place` `[ASSUMPTION: the name — that file marks it; G-03's fallback `occupy` collides with A-66's
+"occupy without seizing"]`, whose act is the seizer's own; so only that act and `_seize_rung` pass `seats=`.
+
 **2. `engine/season/loop/effects_information.py::_take_hold`** (`:978`, the one tail of a title
 changing hands) gains `seats: tuple = ()`: each `(office_id, sitting_hold)` anchored on the seized rung
 (helper `seats_on(w, rid, faction)` beside it, decision D2) is closed in the same `perform` by the `T-o`
-basis of edit 1, each edge named in the Change; none is opened (reading (i) above). `_seize_rung` (`:1038`) and `_eff_surrender` (`:1092`; a cession is a title write, and
-a surrender under siege is the aggressor's win by concession, A-3) pass it; the Record half of `seize`
+basis of edit 1, each edge named in the Change; none is opened (reading (i) above). `_seize_rung` (`:1038`) passes it; `_eff_surrender` (`:1092`) does NOT (see "The cession case" below); the Record half of `seize`
 passes nothing. `rung.seized` names the seats in its changes; no new kind.
 
 **3. `engine/season/queries/world_q.py::occupies`** (`:2152`) gains two conjuncts: not
@@ -143,7 +154,8 @@ Hand-built arms on one world, each a single change from the first, in the two te
 wins on a held territory with a seat anchored on it carrying `revocation: holder_of_rung`, then seizes →
 the rung is the seizer's and the seat's old holder is closed (vacant, offered by `vacancies`; reading
 (i) of edit 1); (a′) the same with that seat's `revocation:` null → the seat keeps its holder (C3-L7's
-control);
+control); (a″) a `surrender` of the same place under siege → the rung is the receiver's and the anchored
+seat keeps its holder until the receiver's own `revoke` (the cession case; BIND_E's gate reads it);
 (b) wins and does nothing → no tenure moves, `occupies` true, the holder still holds; (c) wins and
 leaves → `occupies` false; (d) `Lost` → nobody arrives, `seize` refused; (e) a seat on the duchy above
 keeps its holder in every arm; (f) a faction present under a live covenant is refused `seize`, admitted

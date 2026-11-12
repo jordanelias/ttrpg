@@ -1,6 +1,7 @@
 # WR-31-A — the houses' regime cores and the cast's values on the opinion axes: five roster rows, three decided cells, a link table, and the 46 rows
 
 Reconciled: 2026-11-12, wave 3 (W3-3) — R3 §2 (A-91: Jordan took lane 31's A in all four of J-31-1 to J-31-4): the Status no longer lists four items for Jordan, and the cells A-91 grounds move from `a` to `g` in §4: NPC-050's `solmund_orthodoxy` 4 (A-91 (1)); the Valorsmark fault line's two holders, NPC-036 the Marshal (PR, MI) and NPC-008 the Clerk (PR, MI already `g`) (A-91 (2)); the Restoration Movement's `royal_order` 1 on NPC-041, NPC-087, NPC-088 (NPC-003 already `g`) (A-91 (4)); the Revival's populace starting at the core (A-91 (3)) is carried by `31_WR_B` commit 2's cohort seeding, not by a cast cell here. One reading is marked `[UNVERIFIED]` at NPC-036 (R3 §2: whether PR 2 / MI 3 reads as standing for the militarism end only depends on `20_NARRATIVE_A`'s `stands_for` threshold, R5's lane). Batch (U3 B38). Tier already named.
+Reconciled: 2026-11-12, wave-3 mop-up (`unified/work/W3_5b_DONE.md` "For another lane", W3-3 item): the commit table's row 4 now says `20_NARRATIVE_D` owns only the key, loader and readers and that commit 4 here is the declared mover.
 
 ## Status: PROPOSED (Jordan's A-87 to A-91 are the cores and the four answered items; every cast cell marked `a` is `[ASSUMPTION; medium; Jordan to correct]`)
 
@@ -18,7 +19,7 @@ Completes `30_WR_G_regime_opinions_and_the_pull_of_ones_own.md` commit 2 (the ca
 | 1 | five affiliations join the roster (`caste_order`, `royal_order`, `parliamentary_rule`, `militarism`, `einhir_folk`); 35 `incompatible` cells keyed (1 `true`, 2 `false`, 32 `null`); **no** `concerns:` key added; a `vowed:` list keeps the shared vow column off the five | EQUAL (nobody holds them); `engine/engine_params/descriptors.json` re-derived, declared |
 | 2 | the 46 cast rows' values on the five new poles; 12 existing `solmund_orthodoxy` cells re-authored under A-89; `einhir_folk` joins concern `einhir` | **declared build-hash mover** (every seeded realm run); the caste estimate `heritage_regard` now means over two poles |
 | 3 | `rosters.yaml: regime_cores` (six rows) and `tables.opinion_links` (five rows), with their loaders; `person_q.closeness`, `person_q.link_fit`, `world_q.core_standing` | EQUAL (data with readings only; nothing in the loop reads them) |
-| 4 | four faction rows gain `creed:` signs on the new poles (`20_NARRATIVE_D` edit 1's key) | EQUAL until `20_NARRATIVE_D` commit 2's reader ships; then a declared mover with it |
+| 4 | the faction rows of commit 4 below gain `creed:` signs on the new poles (`20_NARRATIVE_D` edit 1's key; that file owns only the key, its loader and the readers) | EQUAL until `20_NARRATIVE_D` commit 1's reader ships; then this commit is the declared mover (`opinion_of` changes for everyone standing on a pole) |
 
 ## 1. The rows (commit 1) — amends `30_WR_G` §2
 

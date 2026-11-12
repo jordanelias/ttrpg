@@ -3,6 +3,7 @@
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-06) — item 1 is amended by `02_CHAR_scar_is_a_wound.md` (F-CHAR-17: a cap per element bounds the rate, not the stock). There is one fixture `scar_season_cap` with the domain `None | element | person`; this file's cap is its `element` arm and its gate (*median per-person maximum ≤ 4*) is replaced by that proposal's (a share strictly between 0 and 1 at eight seasons), because the old gate passes while every person is in crisis. Items 2 and 3 and the Addendum stand; item 3 gains the `stance_scale` fixture of `U5a_CHAR_owed_amendments.md` §2.
 
 Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.2 row (AMBIGUOUS, same pick as U1 §1, for the `regard_sign` column), §7, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` §3 *regard* (the stance row's unit), ledger S-13, S-14; `unified/U3_CONFLICT_LEDGER.md` C3-K3, C3-Y8; `unified/U3_DEPENDENCY_ORDER.md` node B10, §6.2). The body follows its head: item 1's gate (*median ≤ 4*) is replaced by `02_CHAR_scar_is_a_wound.md`'s (a share strictly between 0 and 1 at eight seasons) and the fixture's domain is `None | element | person`; the per-tick tally's reset site is settled at the tree (`loop/driver.py:468`, `w.draw = 0` at the start of each tick, the precedent; driver-local scratch, `04` PART D row 34); the Addendum's `regard_sign` column names its Layer 1 ambiguity at the site (`04` §B.13 against §C.4, picked as the column by U1 §1's reasoning; B4 third disposition) and carries `17_CENSUS_C1A_02` W4's term once (C3-K3); scratch probes marked; named tests; lands-it and tier.
+Reconciled: 2026-11-12, wave-3 mop-up (`unified/work/W3_5b_DONE.md` "For another lane", W3-2 item; `20_NARRATIVE_C_who_holds_what.md` edit 5): the Addendum's proposed first `regard_sign` values gain `-1` on `release` (the one row listing `tie` in its `domain:`; later tie-ending rows take it by the same reading). The W4 (`beneficiary`) carriage is unchanged: already here.
 
 **Lands in batch:** B10, co-landing with `02_CHAR_scar_is_a_wound.md` (C3-Y8). **Depends on:** `U5a_CHAR_owed_amendments.md` §2 (B10, `stance_scale`).
 
@@ -174,7 +175,10 @@ disposition); `04` is not edited. This is the one term `17_CENSUS_C1A_02_wires_a
 `contested_against_subject()`, else `+1`), so adding the column moves no hash. Authoring a row's sign
 is then verb-table content. Proposed first values, each [ASSUMPTION; medium; Jordan to correct; revert:
 delete the cell]: `-1` on `challenge`, `sabotage`, `seize`, `raze`, `requisition`, `open_case`,
-`petition` and `forge`; `0` on `interview`, `surveil`, `examine`, `research` and `move` (regard for a
+`petition` and `forge`, and on `release` (the row that ends a tie to its subject: uncontested, so under
+`declared` it took `+regard` and a man was likelier to leave a lord he honours; `20_NARRATIVE_C` edit 5 and
+its gate 4 read this cell; `release` is the one row whose `domain:` lists `tie`, `verb_table.yaml:1341`, so
+any later row that ends a tie to its subject takes `-1` by the same reasoning); `0` on `interview`, `surveil`, `examine`, `research` and `move` (regard for a
 person says nothing about whether to look into him or travel to him). `subject_is_opponent` keeps its
 other reader, the self-subject decline, untouched.
 

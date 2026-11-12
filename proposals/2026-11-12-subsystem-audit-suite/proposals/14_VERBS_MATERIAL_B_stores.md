@@ -3,6 +3,7 @@
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-21, C-22) — `carriage` is the roster member `distance` (`U5c_SC_one_obstacle_form.md` §2). Each row takes the route shape with flat `writes:` scaled by `task_fraction`, or declares `contests:` where two bands write different cells (`U5c_VERBS_residue_and_governance_owner.md` §1).
 
 Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — the head applied to the body (`unified/work/R4_READ.md` §1.2, 7b.4; F-R4-01, F-R4-08, F-R4-09): the three rows take shape (a) (flat `writes:`/`emits:`, magnitude through `graded_amount` on `task_fraction`, the failed draw in `emits_on_refusal`'s `draw` clause); `carriage`/`carriage_step` → OBS member `distance` with its fixture `distance_step` (U1 D-U1-11k, R-22), landed here as the member's first reader (OBS §4 step 6+); `delivery_share` is a sweep arm of `task_fraction`, not a second table (D-U1-11l); `exchange_terms` stays as the row's own content table (it scales the rate, a different quantity; U1 §3 "cost / price"); `graded_acts` → `graded_tasks` (D-U1-11i); `requisition.rendered` (BYZ_B) left to the landing order (C3-Y7); `distinct` is added to the loader's closed key set (R4 §1.2, N5); C3-R7 (G-13's fallback is the plan); A-81 (C3-C11), A-30, U3 batch B12, R4 7b.0 block.
+Reconciled: 2026-11-12, wave-3 mop-up (`unified/work/W3_4b_DONE.md` "For another lane", MATERIAL-B item): Partial's remainder is read by `bills_due`, not deposited. `requisition.rendered` stays open (carried to the v12 stage, `W3_MOPUP_DONE.md`).
 
 ## Status: PROPOSED
 
@@ -140,6 +141,11 @@ computed requisitions were `requisition.unauthorized`, each formed for a seat gr
 emit different kinds and move the row to shape (b) (`contests: "a task"`). This file lands first (B12)
 with the flat kind; if the kind is adopted, BYZ_B's batch (B33) converts the row (C3-Y7). The kind's name
 is U1's and is not decided in U1's ledger at this reading.
+
+At Partial the requisition moves half (`task_fraction`, rounded up to whole units; BYZ_B request 2 asks for at
+least 1). The remainder still owed is not deposited by `_eff_requisition`: BYZ_B's `world_q.bills_due(w, p)`
+reads it when read (`loop/witness` is the one writer of claims, `04` §A.2), so this row writes only the moved
+amount.
 
 `_eff_requisition`: `_shift(src, dst, kind, graded_amount(w, res, amount))` (the magnitude ladder: what
 the collectors bring in). `Fixtures stakes_ob` (SC-B's table) gains `requisition: 0.5`. The `regard`

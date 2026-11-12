@@ -1,6 +1,6 @@
 # CHAR (pessimist) A — a crisis of faith is drawn, keeps its direction, and is told
 
-Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-09) — the roll is confirmed by Jordan's answer A-24 (D-26, D-27): Option B; `crisis_draw` ships `on`; ED-IN-0261's *rolls nothing* is superseded by that ruling. This file is the emitter of `conviction.moved` (the CORE record proposal emits `scar.taken` only). The draw is the one sampler's (A-5) and its pool follows the one pool rule with the held intensity as the score (U1 architecture §4), so `crisis_obstacle` is set at the calibration, not at 1.
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-09) — the roll is confirmed by Jordan's answer A-24 (D-26, D-27): Option B; `crisis_arm` ships `drawn`; ED-IN-0261's *rolls nothing* is superseded by that ruling. This file is the emitter of `conviction.moved` (the CORE record proposal emits `scar.taken` only). The draw is the one sampler's (A-5) and its pool follows the one pool rule with the held intensity as the score (U1 architecture §4), so `crisis_obstacle` is set at the calibration, not at 1.
 
 Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §2 (A-5/A-6/A-7: the roll's pool,
 obstacle and talent rewritten in body item 2; A-30: the ordinal draw replaced by a keyed draw; A-24: "For Jordan"
@@ -9,10 +9,11 @@ CLOSED), §1 (the Event names the person only by its receipt, `04` §B.9 `:433`;
 file's emitter is the RESOLVE-side step `31_WR_B` commit 1 composes on, dial at zero), C3-Y8, B10; U1 glossary
 *conviction*, *stands for*; U1 architecture §3 (a new site `crisis`). Changed: item 2, item 4's wording, the edits
 table's reader row and `write_matrix` row (verified at the tree), the gate, the For-Jordan section.
+Reconciled: 2026-11-12, wave-3 mop-up (`unified/work/W3_5b_DONE.md` "For another lane", W3-5a item; `unified/U1_OWNERS_AND_VOCABULARY.md` F-43): the crisis switch is `Fixtures.crisis_arm`, values `rule` (control, today's function) and `drawn` (ships, A-24), where this file said `crisis_draw: off|on`. The test file name `test_crisis_draw.py` and its `test_off_*` function names are unchanged. No prior `crisis_arm` exists in the tree (`engine/season`), so nothing else renames.
 
 ## Status: PROPOSED
 
-Lands in batch: **B10** (IN/CHAR; one re-pin when `crisis_draw` is `on`). Depends on: `engine/dice_engine/draw.py`
+Lands in batch: **B10** (IN/CHAR; one re-pin when `crisis_arm` is `drawn`). Depends on: `engine/dice_engine/draw.py`
 and the A-30 key function (`16_PESSIMIST_GO_keyed_draw_no_recorder.md` with `11_GO_one_draw_owner.md`, B06);
 `seam/wrappers/pool.py` / `sigma_leverage.pool_of` (U1 architecture §11 batch U1-B, B05); `02_CHAR_capability_definitions.md`
 (B04); `02_CHAR_scar_cap_and_regard_unit.md` and `02_CHAR_scar_is_a_wound.md` (B10, land before this);
@@ -35,7 +36,7 @@ decide WHEN a crisis is reached; this decides WHAT a crisis does.
 `queries/person_q.py::conviction_after_crisis` stops being a fixed function of `(conviction, scar)`.
 `loop/resolve.py::_conviction_crisis` rolls one draw per person in crisis, grades it on the four-band
 ladder, writes the band's result, and emits one Event that WITNESS deposits for the person himself and
-for those present. With the new fixture `crisis_draw` at its control (`off`) the function is today's and
+for those present. With the new fixture `crisis_arm` at its control (`rule`) the function is today's and
 the hash is EQUAL. Shipped `on` it is a declared mover: every run in which a crisis fires re-records.
 
 ## The problem, with evidence
@@ -134,7 +135,7 @@ the one interior event a chronicle has.
 
 | file | edit |
 |---|---|
-| `engine/season/data/fixtures.py` | `crisis_draw="on"` (swept `off` control / `on`, A-24 ships `on`), `crisis_obstacle=<calibration>` (a difficulty level, no shipped literal), each with its `[ASSUMPTION; medium; Jordan to correct; revert: crisis_draw off]` line and a hole-register row (id from `references/id_reservations.yaml` `next_free` at build) |
+| `engine/season/data/fixtures.py` | `crisis_arm="drawn"` (swept `rule` control / `drawn`, A-24 ships `drawn`; U1 F-43's name and values), `crisis_obstacle=<calibration>` (a difficulty level, no shipped literal), each with its `[ASSUMPTION; medium; Jordan to correct; revert: crisis_arm rule]` line and a hole-register row (id from `references/id_reservations.yaml` `next_free` at build) |
 | `engine/season/rosters.yaml` | `tables.crisis_bands` (the table above, four rows, each a list of typed writes); the loader in `data/rosters.py` refuses a band off the ladder or a write off the three it knows (`intensity`, `scar`, `branch`); `capability_use_sites` gains `crisis`; `tables.capability_uses` gains the `edge` row of item 2 |
 | `engine/season/queries/person_q.py::conviction_after_crisis` | one composed signature (C3-K2): `(p, among=None, band=None, shared=False, reading="any") -> (conviction, scar_delta)`; `band=None` is today's function exactly (the control); selector `min` when `shared`; the Failure arm's third case. `reading="any"` is the value at which `held_reading` is hash-equal; `20_NARRATIVE_A_stands_for.md` edit 4b later passes `"stands"`, so the Failure arm's fold candidates become the creeds the person stands for |
 | `engine/season/loop/resolve.py::_conviction_crisis` | for each scarred person with a creed at the threshold: draw (item 2's key), grade, ask the reader, write `conviction` and the scar reset through the gate in one `w.write`, emit `conviction.moved` |
@@ -159,7 +160,7 @@ receipt names the person), `test_two_seeds_move_different_persons` (gate 2),
 `python -m engine.season.harness.decision_spread --season` is not the instrument; the gate is a seeded
 run through the season loop, `build_realm`, seeds 0 to 3, three seasons, shipped chooser:
 
-1. `crisis_draw: off` reproduces today's hashes (`5ab73af2`, `bacd687f`, `52ff67bc` at seed 0).
+1. `crisis_arm: rule` reproduces today's hashes (`5ab73af2`, `bacd687f`, `52ff67bc` at seed 0).
 2. `on`: the set of persons whose conviction moved differs between at least two seeds, and at least one
    person in crisis at some seed holds (band Success or better). Today both are false.
 3. Of the persons whose highest-intensity creed changes, the count whose new top creed is one they held at
@@ -195,13 +196,13 @@ with an inquisition case (ARC cases that turn on apostasy), not by loosening the
 
 Small build (one reader's signature, one writer, one table, two fixtures, one Event kind already
 declared). Design-first only in the band table's values, which are marked for Jordan. Hash movers
-declared: none at `crisis_draw: off`; every run in which a crisis fires, at `on` (one re-pin at B10's
+declared: none at `crisis_arm: rule`; every run in which a crisis fires, at `drawn` (one re-pin at B10's
 close). Tier: `opus` for the band table and the `will` assignment (the judgment nodes), then `sonnet`, effort
 `high`, for the edits and tests. Lands it: B10, after the scar proposals and before `_CHAR_B`, `_CHAR_C`
 (U3 §1 item 11). Order of edits: fixtures at the control → roster table and site → reader signature →
-emitter with the Event → `crisis_draw: on` in its own commit.
+emitter with the Event → `crisis_arm: drawn` in its own commit.
 
-## For Jordan (CLOSED by A-24, 2026-11-12: Option B taken, the roll lands and `crisis_draw` ships `on`; ED-IN-0261's "rolls nothing" is superseded, its superseding ledger row is owed, `OWED_TO_UNIFICATION.md` §A. Kept as the finding.)
+## For Jordan (CLOSED by A-24, 2026-11-12: Option B taken, the roll lands and `crisis_arm` ships `drawn`; ED-IN-0261's "rolls nothing" is superseded, its superseding ledger row is owed, `OWED_TO_UNIFICATION.md` §A. Kept as the finding.)
 
 The band table's four writes and the lowest-intensity selector are this lane's choices at ladder step 5 and
 are stated as assumptions. One conflict is named and not resolved: `ED-IN-0261`'s superseding row folds

@@ -8,6 +8,7 @@ over v11; tests; tier); U3 C3-K6 (this file adds the three `covert_kinds` member
 per-kind keys `leaves`, `fade`, `channels` to every member, these three included, in B39), B11, §6.2; A-33 (news of a
 death travels by presence, trail and telling: this file is the trail); U1 glossary *rung* ("his own ladder" → "his own
 chain of seats"). Changed: edit 2's target, edit 4's wording, the gate's probe rows.
+Reconciled: 2026-11-12, wave-3 mop-up (`unified/work/W3_5b_DONE.md` "For another lane", W3-3 item): edit 1 states the `leaves` channels of the three members (PROC_C's draft, taken as this file's, `[ASSUMPTION]`).
 
 ## Status: PROPOSED
 
@@ -69,7 +70,13 @@ readings into an actor's ledger: `p4_detective.py`'s `(paper, exists:Record, 1)`
 ## Edits, by owner
 
 1. **`engine/season/rosters.yaml: covert_kinds`** gains the deeds done **to a person**:
-   `person.died`, `body.changed`, `person.captured`. (Data. `trail_of` already keeps only Events a
+   `person.died`, `body.changed`, `person.captured`. Each member also names where its trail lies, in the `leaves`
+   map `21_PROCEDURAL_C_prologue_and_case_seeds.md` (f) adds for every member (C3-K6): `person.died:
+   [body_changed, co_located, site_changed]`, `body.changed: [body_changed, co_located]`, `person.captured:
+   [co_located, tenure_closed]`, from that file's closed channel set. `[ASSUMPTION: the three maps are PROC_C's
+   draft, taken here as this file's own — basis: PROC_C (f) says this lane corrects them and each channel is a
+   thing the kind's own write changes: a death writes a Person's body and happens at a place, a capture closes
+   or opens a custody edge; reversible by editing the three lines.]` (Data. `trail_of` already keeps only Events a
    person did, so MATTER's `body.changed` from hunger is no trail; `holds_trail` already excludes a
    finder who witnessed the deed.) B10-14 schedules the place and alias deeds (CP-T06-01: *"a deed
    that writes a place or an alias leaves a trail"*, so `site.damaged`, `rung.razed`, `cover.assumed`)
