@@ -55,7 +55,7 @@ Every row of the two families, placed by that test. The bands' meanings are each
 2. **One pool rule, two inputs** (A-6, A-7; U1 §4): the pool is `max(pool_floor, score + addends +
    pool_add)` on the actor's trained score; the governing attribute gives talent levels. `command` and
    `wayfaring` (MIL S2) are definition rows on U1's surface (`references/descriptor_registry.yaml`), from
-   which `verb_capability` derives; `command` is the same row `U5b_MB_rulings_in_the_field.md` §1 reads.
+   which `verb_capability` derives; `command` is one row, defined once by `proposals/27_MB_*` (A-59: a learned skill with social and mental attributes) and read by the six army rows and by the field.
 3. **A favourable circumstance is a level for the roller, never an obstacle subtraction** (A-25; U5c's
    C-01). The rows written with a minus sign become named levels on the leverage channel:
    `sworn_there` (`migrate`), `cohort_committed`, `footing_war` (`recruit`), `levy` (`discharge_troops`),
@@ -182,6 +182,9 @@ could not have stood in. **Movers.** Fields in which a mustered member is detain
 | `thread_read`'s Site half | "waits on the Thread substrate, which has no carrier": A-40 rules the Thread is ground, one site a territory, no new entity kind; the half is unblocked and is WR's to plan (`09_WR_*`, U5d's) | U5d |
 | a commander's death | A-15 turns natural death on, so MIL-C Edit 6 (the successor takes up the roll; the dispersal draw) is reached in ordinary play; nothing changes in it | MIL-C |
 | H-309 | absence is not vacancy (MIL-A's note); A-23 adds that custody, not absence, suspends a seat's acts | — |
+| A-63, A-64 (an interaction occupies its counterparty; precedence by rung; appointments) | the edit is CORE's, with A-9's scene order (`16_PESSIMIST_CORE_a_scene_runs_in_its_own_order.md`). For these families: a `train` occupies the pupil; a `fight`, `capture` or `accept` scene already holds both parties; an `arrest` is not a visit (D-25: no officer need stand beside the prisoner), so it debits nobody's scene; a `move` that arrives where a busy person is finds him unavailable that round, which is a miss and not a dead end | U5a |
+| A-62 (a refused act's receipt: #353 holds) | no row here writes a changes list on a refusal: the `with`, `room`, `muster_room` and `surplus` reads ride `Event.observed` (REM-29's shape), and the `draw` clause of a task row is an emitted kind with no write | — |
+| A-59, A-60, A-61 (battle luck; numbers; the rout floor) | not verb-side: `order_unit`'s result is what the field's obedience draw (A-59) is later taken on; the muster's `command` pool is the same capability | `proposals/27_MB_*`; U5b Part 2 |
 
 ## Who lands it, and dependencies
 

@@ -125,7 +125,7 @@ a `march` Candidate is scored under `odds_weighting: believed`.
 |---|---|
 | CL-TROOP | answered against ED-IN-0306 for the stock (the army Record, recruiting and presets exist); what remains is the population cost of raising, which is SE's (`07_SE_population_census.md`, by title); the row is re-scoped to that |
 | MB-08 | split: "who marches where" is scheduled (`14_VERBS_PHYSICAL_B` B1's `Field` class; CHAR's cells); the map generator stays LEAVE |
-| CR-12 | its hold "for Jordan" is re-pointed to D-35 as adjudicated by `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md` R-8; the build order is `04_MB_cr12_linear_law.md`'s |
+| CR-12 | its hold "for Jordan" is lifted: D-35 is answered (A-60, numbers out of the melee dice); the build order is `04_MB_cr12_linear_law.md`'s |
 | CR-52 | built after the opportunity-key edit (`14_VERBS_MILITARY_C` Edit 5) |
 | CP-T04-04 | unchanged (held on Ask C (b)); the bouts of `26_MASS_BATTLE_cell_scale_and_time.md` §3 give later engagements inside the scene |
 
