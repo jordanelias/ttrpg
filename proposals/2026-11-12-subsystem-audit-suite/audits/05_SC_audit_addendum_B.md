@@ -1,5 +1,7 @@
 # SC — adversarial steelman audit, addendum B
 
+Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-01, D-02, D-03 — B4.2's `answer` is a rolled move; "held evidence is deterministic" replaced; faults move odds (silence no longer concedes); G-65 re-resolved at ladder step 1; NPC-001's row restated.
+
 ## Status: REFERENCE (an audit addendum; resolves nothing at runtime)
 
 Authored in part by Fable; completed by Opus after the Fable usage limit (2026-11-12).
@@ -296,26 +298,30 @@ row by data:
 | move | needs | resolved by | effect on the board |
 |---|---|---|---|
 | **present** an item | an unplayed filed item of his side, of a kind the row admits | no draw (an item is what it is) | it stands on the live rung at its weight |
-| **answer** a standing item | a filed item that contradicts it (same subject and predicate, different value), or a finding that names it forged | no draw: the heavier stands | the target is struck, or halved if heavier |
+| **answer** a standing item | a filed item that contradicts it (same subject and predicate, different value), or a finding that names it forged | one draw (Reconciled, D-02): the answerer's pool against the answer's difficulty plus the weight difference | by band: Failure stands, Partial both halved, Success struck, Overwhelming struck with the origin-wide strike or fault |
 | **argue** the live rung | nothing held | one draw on the same `roll`, his capability for the row's speech kind against the other side's score | an argument stands (Success or better), half-stands and brings a subsidiary point forward (Partial), or does not |
 | **impugn** a source | a filed deed-claim about the person an opposing item comes from | one draw | every item of that origin is halved; on Failure the impugner carries a level against him for the sitting |
 | **concede** the rung | — | no draw | the matter descends one rung; his items on the conceded rung leave the board; witnessed |
 | **rest** | — | — | nothing; when all rest in turn, the sitting closes |
 
-Held evidence is deterministic and argument is rolled. That is the classical division the three-lens
-audit recovered (`3L/05` §4.2: the orator cannot make a contract more probative, only choose when to
-produce it), it is how Pentiment scores an accusation (points for each fact found, plus background),
-and it answers the brief's question directly: a case's strength comes from what is held, filed and
-left standing; skill decides argument and the closing draw.
+*(Reconciled, D-01/D-02: the first writing read "held evidence is deterministic and argument is
+rolled"; under the standing rule that is replaced.)* Held evidence sets the odds and argument is
+rolled; whether an item survives an answer is itself a draw whose obstacle the weights set. The
+division the three-lens audit recovered (`3L/05` §4.2: the orator cannot make a contract more
+probative, only choose when to produce it) survives as *where* the weight enters (the obstacle, not
+the pool); a case's strength comes from what is held, filed and left standing, and no item stands or
+falls with certainty.
 
 ### B4.3 How a round resolves without a GM
 
 The module applies the move's row to the board, checks the row's faults, and passes the turn in the
-arrangement's `order`. Faults are deterministic conditions on the typed board (data, per row):
-*self-contradiction* (a side's own two standing items disagree: the lighter is struck and a level
-counts against it); *silence* (the side that bears the rung rests with nothing standing on it, or the
-other side rests under an unanswered standing item: the rung is conceded); *forgery found* (an item
-struck by a finding: every item of that origin is struck); *irrelevance* (an item presented on a rung
+arrangement's `order`. Faults are conditions on the typed board (data, per row) that move the odds,
+never the verdict (Reconciled, D-03):
+*self-contradiction* (a side's own two standing items disagree: the lighter is withdrawn and a level
+counts against it — bookkeeping of his own file); *silence* (the side that bears the rung rests with
+nothing standing on it, or the other side rests under an unanswered standing item: two levels against
+it on the closing draw, not an automatic concession); *forgery found* (recorded only when an answer
+grades Overwhelming: every item of that origin is struck); *irrelevance* (an item presented on a rung
 it does not bear on enters at half; the row may count strikes). The sitting ends when all rest, when
 every attendee's `effort` is spent, or when the ladder has nowhere to descend. Then **one closing
 draw** — today's `roll`, by the calling act's actor — reads the board as its room term through the
@@ -470,7 +476,7 @@ SC-P5 is superseded.
 | G-62 | how an NPC-versus-NPC contest gets its obstacle | the same host builder with no branch; every operand is read from the persons, the row and the docket | 5 | same |
 | G-63 | SC-P5 (HELD BACK) and H-288 against the clarification | option B not adopted; "equal means even" and H-288 as a requirement moot; H-127 superseded; its exact-odds instrument kept | 1 | same |
 | G-64 | two proposals name a roster `obstacle_terms` with different members (DICE: `[capability]`) | one roster; DICE's `capability` circumstance sum is one member; the input field is `capability_terms` | 4 | same |
-| G-65 | FI's E-6 enters and strikes evidence only at the citing `speak`'s Success; the sitting's `present` and `answer` are draw-free | deterministic entering and standing in the room and out of it; the verdict stays a draw; FI's file to be reconciled by the orchestrator | 5 | `evidence_and_rebuttal_B` |
+| G-65 | FI's E-6 enters and strikes evidence only at the citing `speak`'s Success; the sitting's `present` and `answer` are draw-free | *(Reconciled, D-01)* filing draw-free bookkeeping; standing against an answer decided by the answering act's graded draw, one rule in the room and out of it, shared with FI's E-6 (both files edited); admission's draw is `19_LACUNA`'s; the verdict stays a draw | 1 (the standing rule, 2026-11-12) | `evidence_and_rebuttal_B` |
 | G-66 | the module cannot import the owner of "contradicts" | `decision/options.py::contradicts`, exposed once from `_pair`'s rule; the host hands each exhibit its `pairs` as data | 4 | `evidence_and_rebuttal_B` |
 | G-67 | CORE's edit 8 (`lie` → `copying`, `determine` → `argue`) against `deception` and `law` | sequenced: CORE's values ship first (no new rows); SC-B3 re-points one cell each when its four rows land | 5 | SC-B3 |
 | G-68 | SC-B1 would restate the bound the obstacle proposal must decide anyway | folded: one proposal owns the bound order | 5 | `obstacle_difficulty_and_modifiers_B` |
@@ -486,7 +492,7 @@ clarification of the obstacle (G-63): **the lane has no survivor**.
 | ARC-10 | explosive tangential evidence mid-contest, for a benefit and a wider cost | SC-P3 edit 2 | a late filing (the same round as the sitting, so the other side has no round to answer) presented in the room; the wider cost is the told deposit of a cited item (`08_FI_05`) |
 | ARC-42 | cite an established, verifiable fact as a distinct move; an insider's testimony weighs more | SC-P3, SC-P7 | `present` of a `record`; weight by remove and origin (`evidence_and_rebuttal_B`) |
 | NPC-085 | citing precedent improves the odds | waits on CR-36/37 | unchanged dependency; the `resolution` Record is then an admitted `record` |
-| NPC-001 | unmoved by rhetoric, moved by evidence | SC-P7 | a trait row on `argue`; items are deterministic, so evidence moves him by construction |
+| NPC-001 | unmoved by rhetoric, moved by evidence | SC-P7 | a trait row on `argue`; items move the obstacle, so evidence shifts his odds by construction and never decides him (Reconciled, D-01) |
 | NPC-071 | appeal to rule against appeal to circumstance | SC-P7 | the rung argued (`definition` against `justification`) and a trait row keyed on it |
 | EMG-X6 | an asymmetric proceeding | SC-P4 | the row's `bears:`, `admits:`, disclosure and counsel keys gain their reader in the sitting |
 | EMG-C4 | a champion substituted mid-contest | SC-P3 | an advocate is a `Speaker` on the party's side; substitution falls between sittings |

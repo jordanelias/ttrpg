@@ -1,5 +1,7 @@
 # FA-B2 — men are levied through a seat, as stores are: who may raise, discharge and first muster a faction's army
 
+Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-07 — note added that the levy's turnout is a graded draw (MILITARY's `recruit`); this file decides eligibility only.
+
 ## Status: PROPOSED
 
 Source: `audits/06_FA_audit_addendum_B.md` F-FA-15, §B4.1 (the levy and command rows), §B6.1 R-24;
@@ -61,6 +63,11 @@ the Record is still the order of battle and its holder still commands it, as Jor
 Command passes as a Record passes: by `give`, or by `seize` through a warrant when a dismissed
 commander will not hand over the roll (`seize`'s subject is "a Record or a settlement"). No rule for
 that is added.
+
+*(Reconciled, D-07: this file decides only WHO MAY ASK — an eligibility, which the standing rule
+permits. How many answer the levy is a draw, never the asked amount with certainty: `recruit`'s
+graded turnout is `14_VERBS_MILITARY.md` §3's (a hated seat raises fewer than a loved one, by the band),
+and `give`/`seize` of the roll are drawn where their own verb rows say so.)*
 
 ## Exact edits, by owner
 

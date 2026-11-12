@@ -1,5 +1,7 @@
 # SC-B2 — Negotiation as the same sitting under a mutual disposal: no draw decides consent
 
+Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-06 — no *contest* roll decides consent, but the consenting party's choice is sampled (the one chooser's sampler), so acceptance is a draw whose odds his pursuits set.
+
 ## Status: PROPOSED — design-first (depends on the `exchange` verb's operands and on `05_SC_playable_hearing_B.md`)
 
 Source: `audits/05_SC_audit_addendum_B.md` §B4, G-51. Intent of high weight, not ruled: R-19 (fears
@@ -59,7 +61,10 @@ precondition; if a party's stores no longer cover it at MATTER, his act is refus
 is broken as any `oblige` is. All rest without acceptance: nothing is opened; the sitting's
 exchanges are still written to the case file and witnessed.
 
-**How each side chooses.** The hearing's decider, unchanged: each legal move is a Candidate, valued
+**How each side chooses.** *(Reconciled, D-06: consent stays a choice, and the choice is a draw —
+the decider samples through the one chooser's sampler, `05_SC_playable_hearing_B.md` "Who decides", so a
+good offer is likely accepted and never certainly; the standing rule and R-29 are both met.)* The
+hearing's decider: each legal move is a Candidate, valued
 by the believed worth of the board the move leaves. For `accept`, that is the offer's terms in his own
 pursuits; for `offer`, his belief of what the other will accept (`closing_odds` has no meaning here;
 the decider reads the other's standing offer and its own claims about him). No special case for a

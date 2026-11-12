@@ -386,7 +386,7 @@ The four graded acts (full rows in `…_B_distance.md`; band effects graded and 
 
 | act | what the draw decides | pool | obstacle terms (SC-B names; `remove` new) | Overwhelming · Success · Partial · Failure |
 |---|---|---|---|---|
-| `requisition` (a levy) | **what the place yields** | `stewardship` (a new vocation, by FA-P6's interface) + SC's `standing_dice` when through a seat | `difficulty` routine + `remove` + `stakes` (share of the place's store demanded: `levy_ob`, ≤¼ 0, ≤½ 0.5, more 1.0) + `regard` (the place's cohort toward the actor) − `evidence` (a held assessment of the place, §4.3; a grant the cohort has heard of) | full amount and the actor learns the store's true size · full amount · half (floor), the rest stays · nothing moves, `requisition.refused`, witnessed |
+| `requisition` (a levy) | **what the place yields** | `stewardship` (a new vocation, by FA-P6's interface) + SC's `standing_dice` when through a seat | `difficulty` routine + `remove` + `stakes` (share of the place's store demanded: `levy_ob`, ≤¼ 0, ≤½ 0.5, more 1.0) + `regard` (the place's cohort toward the actor) − `evidence` (a held `faction_sheet` Record naming the place among its holdings, the existing `survey` product; a grant the cohort has heard of) | full amount and the actor learns the store's true size · full amount · half (floor), the rest stays · nothing moves, `requisition.refused`, witnessed |
 | `transfer` between two places (a payment, a tribute, a convoy) | **whether it arrives** | `stewardship` of the carrier | `difficulty` plain + `remove` + `stakes` (amount, as above) + 1.0 if a territory on the path holds a faction at war with the sender (`world_q.at_war`) | all arrives (O and S) · half arrives, half stays at the origin · nothing moves, the season's carriage is spent |
 | `issue` to an addressee elsewhere (an order) | **whether the order carries its force** | `copying` (the existing clerk's vocation) + `standing_dice` | `difficulty` routine + `remove` + `opposition` (addressee's score ÷ 2) + `regard` (addressee toward issuer) − `oath_step` 0.5 if the addressee holds a live sworn `oblige` to the seat | terms arrive whole **and** every witness of the delivery can attest it (a later defiance is provable) · terms arrive whole · terms arrive open to reading: `construe` forms for the addressee ("I obey but do not execute") · the addressee learns a writ exists and not its terms; reissue is the recovery |
 | `seize` (a taking under a writ) | **whether the taking holds** | `stewardship` + `standing_dice` | `difficulty` demanding + `remove` + `regard` (the holder's) + `stakes` (the Tenure it closes) − `evidence` (the warrant held) | taken, uncontested · taken, and the dispossessed holds a claim to petition on · the thing is sealed, not taken (a `detain`-like hold the next act or a hearing resolves) · refused, witnessed |
@@ -485,7 +485,7 @@ chooses to do.
 
 | form | made by | what it is | confers | due | forbears | historical shape |
 |---|---|---|---|---|---|---|
-| `homage` | covenant | the bond of a conquest-founded house to the crown | — | grantee: attends a `convene`d sitting once a year; answers a muster. grantor: confirms at each succession | grantor: `revoke`/`seize` over the grantee's ground | fief; the settlement of 200 AG (canon :88) |
+| `homage` | covenant | the bond of a conquest-founded house to the crown | — | grantee: a relief (`transfer.made` to the grantor's rung) once at each succession of either seat. grantor: re-issues the instrument at each succession (`renewal: both`). The muster and the summons are not clauses: the live `oblige` already licenses them (`may_muster`'s oath clause, CP-T09-07 (b); `dispatch` to sworn men, CP-T09-08) | grantor: `tenure.closed` by `revoke`, `rung.seized`, `requisition.taken` over the grantee's ground | fief; the settlement of 200 AG (canon :88) |
 | `land_grant` | issue | unheld or taken ground given for settlement | a `Lord`-post seat at the ground, `conferral: appointed`, heritable by a `successions` title | grantee: a `rung.founded` within the term, or the grant reverts | grantor: `requisition` over the ground for the first term | military colony, headright `[TREE T8; MEMORY]` |
 | `march` | issue | a frontier held on wide powers | a warden's seat with `dispatch` and `determine` at a pass or gate territory | grantee: a `garrison` kept in repair (`site.restored`) | grantor: `open_case` over the warden's men | marcher lordship `[TREE T8]` |
 | `farm` | covenant | the revenue of a ground sold for a term | a farmer's seat with `issue` (hence `requisition`) at the ground, term 4 | grantee: an advance once, a rent each season, both `transfer.made` to the grantor's rung | grantor: `requisition` over the ground while it runs | publicani, iltizam `[TREE T2]` |
@@ -601,11 +601,12 @@ reading the room takes is the hearing's draw.**
    ruling this lane asks of FA (`state/gate.py::FILLED_BY["annex"]`): ladder step 4, on Jordan's own
    statement that the three founding seats were won this way.
 
-**(e) What a conquest-founded house owes and is owed** is the `homage` row (§4.3): it owes attendance and
-the muster; it is owed confirmation at each succession and the grantor's forbearance on its ground
-(canon :88, "ducal authority cannot be unilaterally overridden"). The three built oaths (§1.4) gain that
-form as content. A king who levies inside a duchy has breached, visibly; a duke who does not come when
-`convene`d has breached, visibly; each breach is the other's licence.
+**(e) What a conquest-founded house owes and is owed** is the `homage` row (§4.3): it owes the muster and the
+summons (by the oath itself) and a relief at each succession; it is owed confirmation at each succession
+and the grantor's forbearance on its ground (canon :88, "ducal authority cannot be unilaterally
+overridden"). The three built oaths (§1.4) gain that form as content. A king who levies inside a duchy
+has breached, visibly; a duke who withholds the relief from a new king has breached, visibly; each breach
+is the other's licence, and what either then does about it is a choice followed by a draw.
 
 ---
 
@@ -673,4 +674,236 @@ reactions and not as a realm-wide modifier.
 
 ---
 
-(§7 onward is appended below.)
+## 7. Tuning dimensions
+
+Stated on the SC lane's dimension table (`audits/13_SC_contest_interrogation.md` §2 and §5; its five
+tuning tables are the owners, this lane adds rows and one term and no table of its own).
+
+| dimension | how it enters this family's rolls | owner (single) |
+|---|---|---|
+| **distance** (new) | `remove`, on every graded act through a seat | `world_q.remove`; `data/fixtures.py: remove_step`, `border_hops` |
+| **venue** | the audit sits on the governed ground (open floor: the governed speak); the calling-in sits at the grantor's court (the grantor's bench, his `reception`); a levy's venue is the place levied | `arrangements.yaml` rows `audit`, `quo_warranto` and their `standard:` (SC's T2) |
+| **personality** | the farmer who presses or remits, the governor who goes native or stays the centre's man, the Katepano who probes or invades are **the chooser's** reading of pursuits (CHAR §0A; `02_CHAR_goal_lean_on_its_own_question.md`); in a roll, temperament is leverage by a matched appeal, never an obstacle term (SC's ruling, kept) | `npcs.yaml`, cohort temperaments; `advantage_sources` |
+| **affiliation** | `altonian_civics` (the collaborator's creed), `einhir_restoration`, `solmund_orthodoxy` reach every roll **through `regard`** by `person_q.heritage_regard` (CR-31), and so set a southern cohort's resistance to a northern collector with no new term | `references/descriptor_registry.yaml: affiliation_roster`; SC's T3 |
+| **office** | SC's `standing_dice` when the actor holds a seat of the body whose business it is; a grant's `confers:` seat is what gives a farmer or factor those dice | SC's T4; `offices.yaml` |
+| **evidence** | a held assessment (`faction.surveyed`'s Record) for a levy; the warrant for a seizure; the instrument and its age for a calling-in; sworn complaints and accounts for an audit; a `recognition` for a deed-claim | SC's T5 (`proof_step`); `prescription_seasons` |
+| **stakes** | the share of a store demanded; the Tenure a verdict opens or closes | SC's T4 `stakes_ob`; new table `levy_ob` beside it |
+| **publicity** | authored into the row's `standard` (SC's R-5): the audit's open floor is a harder room for the officer | `arrangements.yaml` |
+| **season** | none as a global modifier (SC's R-6, kept): a lean season reaches a levy through the cohort's hunger-moved `regard` and through the share a fixed demand now is of a smaller store. **That is Scott's invariance-under-dearth, obtained with no rule for it** | — |
+
+## 8. Emergent narrative with no player
+
+Each row is a story the institution produces by itself, the conditions it arises under, and the reading
+that would show it happened **and could fail to**. None is an event; each is persons' acts.
+
+| story | arises when | instrument reading (a fold over the Event log; none is built, each is a `harness/` report of `strife.py`'s kind) | how it can fail to show |
+|---|---|---|---|
+| **The farmer becomes a power** | a `farm` runs; the farmer's levies succeed; he pays his men from the surplus | the farmer's `establishment_of(seat)` exceeds the grantor's local establishment; at term's end the audit is not opened, or is opened and acquits | no farm is ever granted (formation); every levy fails (`remove` too dear) |
+| **The dearth revolt** | a fixed rent meets a short store; the farmer demands a larger share to make it; the cohort's regard falls; the next levy's odds fall; he sends for force | a `requisition.refused` followed within two seasons by `march.declared` or `petition.filed` naming the farmer, in the same territory | the farmer remits (the chooser prefers regard); stores never run short |
+| **The over-mighty warden** | a `march` grant; fields won on the frontier; locals swear to the warden's seat | `oblige` edges to the warden's seat from persons resident in the march exceed those to the grantor's; a calling-in is opened, or never dares to be | no field is fought at the pass |
+| **The charter that hardened** | a `charter` or `staple` older than `prescription_seasons`; a new holder of the grantor's seat wants the revenue | a `quo_warranto` case whose holder cites an instrument with age weight ≥ 1; its verdict; other holders' `regard` for the mover after it | no succession at the grantor's seat; the successor confirms for the fee |
+| **The client changes patron** | a tributary or sworn house holds `kept < 0` on its lord's side (protection not given, a levy inside its immunity) and a rival offers a `covenant` | a `tenure.closed` (an `oblige` released) followed by `duty.taken` to another faction's seat by the same person | no rival is within reach to offer; news of the breach never arrives |
+| **The recalled governor does not come** | an `issue` of recall rolls Partial or Failure at `remove`, or lands and is defied | `compliance.withheld` or `terms.distorted` by a seat-holder on a writ naming his own seat, then the issuer's next act toward him | the order lands whole and he obeys |
+| **The contained institution outgrows the grant** | an `immunity` holder's establishment and stores grow behind the grantor's forbearance | the immunity holder's seat count and treasury against the grantor's over seasons; the first `breaches` occasion on either side | the grantor breaches early and wins the field |
+| **The metropole's man on the spot** | the Katepano, at `border_hops` from her superior, marches or treats on her own reading; the court hears a season later what an envoy told it | an Altonian `march.declared` or `covenant.offered` with no prior `dispensation.issued` from the court seat naming it; then the court's answer | the court's orders always arrive (remove 0 arm) |
+| **The ward who stayed** | a `wardship` runs; the ward's regard for the host's house rises (CHAR's regard) | the ward's `stance_toward` host and home over seasons; at term, a `residence.changed` home, or none | CHAR's regard does not move (F-CHAR-03 today) |
+
+## 9. Playable standalone and integrated
+
+**First scenario: "The Farm of the Southern Tolls".** Ground: `terr_T6` Stillhelm (Crown, calamity-
+adjacent, "population uneasy", a gate to Askeheim, heritage gradient high: canon :100). Fixture: the
+realm as built plus one seeded `farm` instrument: grantor `off_lord_treasurer`, a farmer's seat
+established at `terr_T6` (term 4 seasons), an advance paid, a rent due each season. Three seats to play:
+
+- **the farmer** (the player's default): each season, how large a share to demand of which settlement
+  (the levy's stakes), whether to go there himself (`remove` 0) or send (`dispatch`), whether to remit in
+  a lean season, whether to pay his men (`transfer`, upkeep) or pocket it, whether to commission an
+  assessment (`survey`) first. He sees the roll's terms (SC-P1's term list on the Event) and so why a
+  levy fell short.
+- **the Lord Treasurer**: whether to grant, to whom (the bid), whether to levy inside the farm (a
+  breach), whether to send an inspector, whether to open the audit and before which bench.
+- **a Stillhelm hearth head**: pay, hide stores (`conceal`), `petition`, testify, `migrate` (exit),
+  swear to the farmer or to the Restoration Movement.
+
+End conditions: the term matures and the audit is determined (four graded endings by band), or the
+farmer's `hold` closes earlier by recall, release, death or a field. Stable continuation: the farm is
+renewed, re-let to a rival, or the ground reverts. **One code path:** the scenario is the season loop on a
+realm with one extra instrument and one extra seat; nothing in it is harness-only. Entry point: a
+`harness/exercises.py` case (the existing player-proxy surface, `play_surface.py`), per FA's
+`06_FA_playable_scenario.md` and SC's `05_SC_playable_hearing_B.md`, which this scenario composes and
+does not replace: the audit *is* SC's playable hearing with this lane's row.
+
+**Execution artifact (the gate for the whole plan).** `python -m engine.season.harness.<report> 6 S` for
+S in 0..4, `PYTHONHASHSEED=0`, six seasons (`MAX_SEASONS`), NPC chooser in all three seats, prints per
+seed: levies attempted and their bands; rent `transfer`s attempted and their bands; `kept` as each of the
+two parties reads it at each season's end; petitions filed; whether the audit was opened and its band.
+**Pass:** across the five seeds at least two different audit bands occur and at least one levy lands in
+each of three bands (the outcome is not a function of the fixture). **Control:** the same seeds with the
+instrument absent: no farmer's seat, no levy through it, hash equal to the base realm. **Planted
+failure:** force every roll's band to Success; the five seeds then agree on every count, and the pass
+condition reddens. Five seeds are five trajectories, not a rate; no balance claim is made from them.
+
+**Second scenario: "The Katepano's Latitude"** (the M-ABROAD arcs; after proposal B). `build_realm(S,
+foreign=True)` plus the court seat (§12 batch 2): play the Katepano (probe, press, treat, demand the
+ward, obey or construe the court), or the King's envoy.
+
+What is missing today for either: the instrument registry and its three Queries; the four graded rows;
+`remove`; the two arrangement rows; CR-29's reach; FA-P1 and FA-P3; SC's hearing reach (H-254); a
+`stewardship` vocation with at least two persons holding different scores. Each is a named batch in §12.
+
+## 10. Interfaces to other institutions
+
+Named primitives and verbs only. **Exports** are what this family builds and the others may use;
+**imports** are what it needs from them. The synthesis lane should read the first row of each block
+first: it is where the lanes are likeliest to have built the same thing twice.
+
+**Shared with every family (the reconciliation point):**
+- `instruments.yaml` (registry; row schema §4.2). This family authors ten rows. A papal bull, a privilege
+  of a doge, an imperial chrysobull, a bank's bill and a guild's charter are, by this lane's reading,
+  further rows of the same file. If another lane has proposed a second registry for grants or treaties,
+  **one of the two should die**; this lane's claim is only that the keys `due`, `forbears`, `confers`,
+  `term`, `renewal`, `lapse`, `hardens` are sufficient for its ten.
+- `world_q.dues`, `person_q.kept`, `world_q.breaches` (the three readers of any instrument).
+- `remove` (obstacle term) and `world_q.remove` (Query).
+- `recognition` (an instrument form: a seat certifies a deed). Authored here only as far as §5.3 (c)
+  needs; its home is the crown and Church lanes.
+
+| with | exports (this family → them) | imports (them → this family) |
+|---|---|---|
+| **the crown** (deed-monarchy, court, succession) | `homage` (form) and its `due`/`forbears`; `FILLED_BY["annex"]` by conquest; `person_q.accomplishment` and `presumption_gain`; the three seeded Secession deeds; `quo_warranto` (arrangement row); `audit` (arrangement row) for any appointed seat | the `succession` arrangement row (`disposes: hold`, CR-35); `successions` titles for ducal seats; the crown's `recognition`; `confer` with FA-P3's `term:`; `revoke` under FA-P1's recall occasion |
+| **the Church** | `immunity` (form): the containment grant as a held instrument with a grantor's `forbears`; the border rule (missionaries are persons who cross and `tell`); `land_grant` usable for a mission's ground | consecration as a `recognition`; `excommunication_deliberation`'s `ban` as the sanction that releases sworn men from an oath (the Church lane decides whether a `ban` on a lord is a ground for his vassals' `release`; this family reads only that the oath is no longer live); the parish seat (advowson) if that lane builds it `[TREE: SE-8]` |
+| **the Byzantine-style bureaucracy** (Altonia; any salaried administration) | `remove`; the graded `issue` (an order's force at a distance); `audit` (the residencia) and the inspector by `dispatch`; the far superior's seat (`off_altonian_court`, M-ABROAD) with `appointed` / `rung_above_same_faction` on the Katepano and the Kommerkiarios, so that recall exists | the ranks, seals and clerks' sequence that decide **how many hands an order passes through** (this family treats an `issue` as one roll; if that lane makes it several, `remove` enters each); the `stewardship` and `copying` vocations' definitions and any office that adds dice; rotation rules as `term:` values |
+| **the merchant republics and banking houses** | `staple` and `charter` (forms); the factor's seat at a trade place; the graded `transfer` (carriage) as the risk a bill of exchange exists to avoid; `tribute` (form) as the shape of a dividend | credit (a loan against future `due`s; the advance on a `farm` is their business as soon as it is borrowed); the embargo (a body's members forbearing `exchange` with a named party, `[TREE: FA-9]`); Schoenland's seats and persons (IN-36's residue "Schoenland as persons") and its election or lot procedures; `exchange`'s price |
+| **guilds and orders** (as the brief's synthesis list names them) | `charter`; `quo_warranto` | the body's internal election |
+| **the peoples under them** (cohorts, hearths) | the cohort as the levy's counterparty (`regard`); `petition`, testimony at an `audit`, `migrate` as exit | CHAR's regard movement; SE's stores, hunger bands and census |
+
+## 11. Survivors for Jordan
+
+Three, after the five-step ladder. Everything else in this file was answered by a ruling, the plan,
+precedent or the architecture and is recorded where it was decided.
+
+1. **The canon sentence on the south's part in the Secession War** (`canon/03_canonical_timeline.md:76,
+   :96`; ratified text; §5.2 row 2). Jordan's statement makes the first Duke of Varfell the third-ranked
+   victor. *Option A:* reword canon so the south fought, ranked third, and was **relegated in the
+   settlement despite the deed**: Varfell's grievance is then a claim on the same ledger as Baralta's (a
+   deed under-rewarded), and Vaynard is a pretender within the order. *Option B:* keep the canon wording
+   and read the first Duke of Varfell's accomplishment as recognised later and grudgingly: Varfell stands
+   half outside the ledger, and Vaynard is a revolutionary against it. The two are different games for
+   every southern character. (This lane's seeding, §5.3 (b), fits A and needs one count changed for B.)
+2. **May an office be sold?** The `farm` sells a revenue for a term, with an audit at the end; that is
+   inside every ruling. **Venality** is a seat conferred for a payment, heritable, with the audit waived
+   (the *paulette*; `[TREE: SE-7]` left it `needs_jordan`: "does Valoria sell offices?"). *Option A:* a
+   form `purchase` exists (`confers:` a seat with a `successions` title, `forbears:` the grantor's
+   `open_case` over it): the crown can raise money fast and loses the seat for good, and a class of
+   office-owning families appears who are nobles by purchase, **directly against nobility by deed**.
+   *Option B:* no such form: every seat stays answerable, and money buys only farms and staples. A makes
+   "deed against purse" a standing conflict of the setting; B keeps the deed-order unmixed.
+3. **Forced labour keyed on caste.** The historical family includes labour drafts on a subject people
+   (§2.2). In Valoria the subject people exists and is canon (the southern Einhir). *Option A:* a form
+   `corvee` (a levy of hands: a cohort's seasons of `site.worked` owed to a grantee's site) may be issued
+   over southern ground: the caste becomes an extraction institution with persons, seats and an audit,
+   and its abolition is a playable fight over an instrument. *Option B:* the caste stays what canon calls
+   it, "informal", with no instrument: it acts only through `regard` (`heritage_regard`), and nobody in
+   the world can grant or abolish it by an act. This is a tone decision about canon and is not this
+   lane's to take.
+
+Decided here and **not** escalated, with the ladder step: the foreign superior as one seated person
+(step 4, Altonia's two seats and ARCS §6 row 12); a non-victory ending `reabsorption` (`holds: {post:
+King}`, `under: Altonia`) by `theocracy`'s precedent (step 4; the endings roster's own second row;
+proposal B carries it as content `[ASSUMPTION; Jordan to correct]`); `off_duchess_hafenmark` to
+`inheritance` (step 4); no stored suspicion or legitimacy (step 1, Layer 1); no new verb (step 5).
+
+## 12. Implementation plan
+
+Ordered, gated, against the present code. Cost classes: **edit** (data or a few lines at one owner),
+**small build** (one Query or loader with its tests), **design-first** (needs a decision or another
+lane's shape before it can be written). Every batch ends with the one test file covering it; the suite
+runs once at the close (CLAUDE.md §0.4). Dependencies on other lanes are named, not rebuilt.
+
+| batch | what lands | files (owner) | class | needs first | gate (execution artifact) and falsifier |
+|---|---|---|---|---|---|
+| **C-1 instruments** (proposal A) | `instruments.yaml` + `data/instruments.py`; `form` content key on `dispensation`; `choice_sourced` rows for `covenant` and `issue`; `world_q.dues`, `person_q.kept`, `world_q.breaches`; ten rows | `engine/season/instruments.yaml` (new), `data/instruments.py` (new), `data/files.py`, `rosters.yaml: record_kinds, choice_sourced`, `queries/world_q.py`, `queries/person_q.py` | small build | `covenant` and `issue` forming on what the actor knows (`14_VERBS_SOCIAL2_A`, BINDING lane) | with the file empty, `build_realm(0)` hash EQUAL; with one hand-placed `tribute`, the payer's question carries the payee's rung in the due season and not after a matching `transfer.made`; planted: drop the period test and the occasion never returns in the next period |
+| **C-2 distance** (proposal B) | `world_q.remove`; `remove` in `obstacle_terms`; fixtures `remove_step`, `border_hops`, `levy_ob`; `requisition`, `transfer`, `issue`, `seize` graded; reach rows for CR-29's map; the court seat and `ALT-0`; `reabsorption` ending | `queries/world_q.py`, `rosters.yaml`, `data/fixtures.py`, `verb_table.yaml` (four rows), `offices.yaml: foreign_seats`, `rosters.yaml: foreign_cast, endings`, `references/npc_registry.yaml` (one person) | small build ×2; the four rows are **declared hash movers** | SC-B (the obstacle form and `obstacle_terms`); CR-29; a `stewardship` vocation (FA-P6's interface; CHAR/CORE own the definition) | the same levy by the same actor at 0 and at 4 hops, 400 seeded draws each, shows band shares that differ in the direction of the term and overlap (neither arm is all one band); `remove_step: 0` reproduces the 0-hop shares; a realm Event deposits no claim at `set_alt_1` in its own tick |
+| **C-3 audit and calling-in** (proposal C) | arrangement rows `audit`, `quo_warranto`; `prescription_seasons`; governor and farmer `term:` content | `arrangements.yaml`, `data/fixtures.py`, `offices.yaml` | edit | SC-P4 (band-keyed `disposes:`), SC's hearing reach (H-254, `05_SC_playable_hearing_B.md`), FA-P3 (`term:`), `05_SC_acquittal.md` | on a hand-built hearing, 400 seeded `determine` draws with and without three sworn complaints held by the bench show different band shares, both with spread; an instrument aged 0 and aged 16 seasons likewise |
+| **C-4 the ledger of accomplishment** (proposal D) | `person_q.accomplishment`; `presumption_gain`; three seeded founders and deeds; `homage` on the three built oaths; `off_duchess_hafenmark` to `inheritance`; `FILLED_BY["annex"]` | `queries/person_q.py`, `data/fixtures.py`, `harness/populated.py` (seeding, through the gate), `offices.yaml`, `rosters.yaml: successions`, `state/gate.py` | small build; seeding is a declared mover | C-1; ARCS' prehistory route (`12_ARCS_case_on_the_realm.md`); CR-35 for the hearing route; §11 item 1 for the counts | at `build_realm(0)`, for a majority of the cast `accomplishment(p, king) > accomplishment(p, duchess) > accomplishment(p, duke_varfell)`, and with `presumption_gain: 0` all three read their own deeds only; planted: reverse two seeded counts and the order reverses |
+| **C-5 the scenario** (proposal E) | the `farm` fixture on `terr_T6`; the report; the second scenario's fixture | `engine/season/cases/exercises/` (one case), `harness/` (one report, `strife.py`'s kind) | small build | C-1 to C-3; FA's and SC's playable scenarios; CHAR's regard movement for the dearth story | §9's execution artifact, its control and its planted failure |
+
+**What each batch unblocks among the nine requirements** (`dossiers/00_NINE.md`, read by name only):
+C-1 consequence and propagation through governance (a treaty that is kept or broken is read by a later
+decision); C-2 non-omniscient characters and probabilistic chains at the strategic scale; C-3 strategic
+and management actions with a hearing as their consequence; C-4 memory and attitude toward houses; C-5
+the standing playable-standalone requirement for this institution.
+
+## 13. Provided arcs and characters
+
+Read at the rows of `audits/12_ARCS_adjudication.md` (the case files themselves were not opened by this
+lane; `[ARCS]`). That audit ranks **M-ABROAD** ("powers beyond the map, through persons … none written;
+§6 row 12") as owned by nobody; this lane takes it.
+
+| case | need (short, `[ARCS]`) | represented today? | change | proposal | depends on |
+|---|---|---|---|---|---|
+| NPC-089 Zoe Palaiologina | a frontier governor chooses a posture; a superior may recall (N1, N2, N6) | seat and goals authored; no superior; her court hears everything at once | the court seat; the border rule; graded `issue` at `border_hops` | B | CR-29 |
+| ARC-25 The Schoenland Pivot | a neutral third party evaluates on externally visible facts and aligns | Schoenland has a cohort and no person | Schoenland's seats are the merchant-republic lane's; this lane supplies the border rule (it sees only what crossed) and `staple`/`tribute` as what it can offer | A, B | IN-36 residue; republics lane |
+| ARC-20, ARC-45 The Tutoring Demand | a formal demand, its two answers, a person sent away | no carrier (the gauge "Invasion Pressure" is refused by Layer 1, ARCS rank 1) | the demand is a `wardship` offered by `covenant` from an Altonian seat; compliance is the ward's `migrate`; refusal is a claim the Katepano holds | A | C-1; ARCS' staged goals for the "threshold" |
+| NSC-05 Torben in Altonia | a held person's allegiance moves; retrieval by force | no carrier for being held abroad by agreement | `wardship`'s `forbears` (return) and its breach as licence; the allegiance is CHAR's regard | A | CHAR regard; MB for the retrieval |
+| ARC-38 The Sandcastle Alliance | agents of rival external powers; off-map superiors decide (N2) | no off-map superior | the court seat pattern | B | — |
+| NPC-083 Hedda Kronvald | a governor spends limited means; her authority issues directives; the settlement makes demands | seats and stores exist; orders bind nobody | graded `issue`; `audit`; the levy roll; `dues` as the settlement's demands | B, C | FA-P1; SE treasury |
+| ARC-36 The Tithe That Fed the Enemy | a levy optimised by one actor feeds another | `requisition` unrolled, treasury empty | the levy roll; `farm`/`tribute` forms | A, B | SE `07_SE_treasury_granary_B.md` |
+| ARC-17 The Sinigaglia Dinner | a superior's response to a subordinate's disloyalty | FA-P1's recall | the recall that may not arrive (§8) | B | FA-P1 |
+
+Soonest: NPC-089 and ARC-38 (content plus the border rule), then NPC-083, then the tutoring pair.
+
+## 14. Capability and chooser surface
+
+(a) **Capabilities this family's rolls read:** `stewardship` (levy, carriage, seizure; new vocation, to be
+defined once in the surface `01_CORE_capability_authoring_surface.md` and `02_CHAR_capability_definitions.md`
+propose, by FA-P6's two-row pattern in `rosters.yaml: verb_capability` and `vocation_attribute`; the name
+is Jordan's) and `copying` (drafting and delivering an order; existing). `judgment` (FA-P6) for the two
+benches. Standing dice by office (SC's T4). Nothing is hard-coded: every number above names its fixture.
+(b) **RPG axioms implemented:** skill supplies dice and gates nothing; difficulty class composed of task
+plus situational modifiers; range penalty (`remove`); degrees of success with partial success as a real
+outcome; a contract as a tracked obligation; reputation as each observer's own tally. **Lacking, and a
+designer would expect it:** a reaction roll for a population (here it is the cohort's `regard` entering
+the levy, not a separate roll).
+(c) **Chooser** (CHAR's statement, `audits/02_CHAR_audit.md` §0A, cited): every decision in this family
+is a seated person's through the one chooser: whether to grant, how much to demand, whether to pay,
+whether to obey, whether to open the audit. The player takes any of those seats through the same
+candidates. **No NPC rule is hard-coded here**; `dues` and `breaches` only stamp referents, as
+`vacancies` does. What makes these NPCs characterful is that the same breach is answered with a petition
+by one holder and a march by another, and the reason trail is the instrument, the clause and the claim
+(`01_CORE_reason_trail_in_the_act_store.md`).
+
+## 15. Research transfer and evidence log
+
+**Transferred (changes what is built):** the governor problem and its three answers `[TREE T5]` → `audit`,
+`term:`, the inspector; tax farming `[TREE T2]` → `farm`; prescription and quo warranto `[TREE T4]` →
+`hardens`, `quo_warranto`; the oath as the only tie `[TREE Carolingian §1.8; HRE]` → already the engine's
+purview rule; tribute's two poles `[TREE T10]` → `tribute` with and without the grantor's `due`;
+conquest terms `[TREE T6]` → `capitulation`; hostage-kin `[TREE Shogunate §1.9]` → `wardship`;
+invariance under dearth `[TREE T3]` → obtained from the levy's stakes, no rule; elective-but-dynastic
+`[TREE HRE §1]` → §5.2 row 3; ministeriales `[TREE HRE §6]` → exported to the bureaucracy lane, not used.
+**Tried and did not transfer:** per-settlement Legitimacy and Popular Support scalars, the suspicion
+track, `governor_emergence` (`[TREE]` Step 3: all are stored social quantities Layer 1 refuses; each is
+re-expressed as a fold); the Hansa embargo (the republics lane's); immediacy and mediatization (no
+`province` rung exists to mediate through); transit times (no source, and no need). **Nulls:** the tree
+names no shipped game that models an audit at the end of a governor's term with testimony from the
+governed, and none that makes a charter's age evidence; this lane found none in
+`research/game_precedent_suite/` by grep and did not read that suite in full `[UNVERIFIED]`.
+**Memory-grade and unused for any number:** everything marked `[MEMORY]` in §2.
+
+**Evidence log** (`PYTHONHASHSEED=0`; outputs under `scratchpad/runs/INST_COLONIAL/`):
+- E-1 `probe_build.py` → `probe_build.txt`: `build_realm(0)`, no season; hash
+  `600d8b27147478e158553552cc1409a5`; the counts, oaths, purview readings, foreign rungs, site kinds and
+  empty treasuries quoted in §1.4.
+- E-2 `grep -rn` over `research/` for the chartered-company, viceroyalty, settler, Mongol and entrepôt
+  terms: matches only in `research/by_lane/` cross-references and the historical action catalogue's
+  one-line crisis list; no research file on those subjects.
+- E-3 a load of `verb_table.yaml` printing `contests:` and `emits:` per row: `requisition`, `transfer`,
+  `exchange`, `seize`, `issue`, `covenant`, `revoke`, `confer`, `oblige`, `release` carry no `contests:`
+  and a flat `emits:`; fourteen rows are banded.
+- Not run: `pytest`; `aperture`; `corpus_run`; any seeded season. Every reading of computed play in this
+  file is quoted from the lane audit named beside it.
+- Not opened: `decision/options.py`, `loop/witness.py`, `data/verbs.py` beyond grep, `state/world.py`,
+  the case files, `audits/02_CHAR_audit.md` beyond its section list, the SE and MB audits, the digests
+  (`digests/DG_*`; this lane read the research and the registries they digest directly), `.audit/`.
+  Claims that rest on those are quoted from the file that made them and marked.

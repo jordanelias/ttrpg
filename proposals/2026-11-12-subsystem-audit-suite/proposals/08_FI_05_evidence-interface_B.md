@@ -1,5 +1,7 @@
 # 08 · FI · 05-B — The evidence interface a contest consumes (supersedes `08_FI_05_evidence-interface.md`)
 
+Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-01 — E-6's strike is graded by the answering draw's band, one rule with SC's `_B`; admission left to `19_LACUNA_admission_rides_the_citing_draw.md`.
+
 ## Status: PROPOSED (an interface statement; the consumer is SC's and design-first there)
 
 Supersedes `08_FI_05_evidence-interface.md` (first FI lane). Carries `audits/08_FI_audit.md` F-FI-09, R-29 and
@@ -84,7 +86,13 @@ it.
    stands lower by the path that exists, and each judge's `record` of him re-grades whatever he passed on.
 
 **E-6. An answer is a rolled act; no item decides a case.** A contradiction or an impeachment strikes an
-entered item only when the answering `speak` itself grades `Success` or better (SC-P8 edit 3). The verdict
+entered item only when the answering `speak` itself grades `Success` or better (SC-P8 edit 3).
+*(Reconciled, D-01: graded as `05_SC_evidence_and_rebuttal_B.md` `standing` rules 1–2 now state it, so
+the two lanes hold one rule: Failure the item stands, Partial both halved, Success struck, Overwhelming
+struck with the origin-wide strike or fault; the weights enter the answer's obstacle, never the band.
+Whether ADMISSION rides the citing `speak`'s band (this file's E-2) or filing is draw-free (SC's `_B`)
+is left to `19_LACUNA_admission_rides_the_citing_draw.md`, which owns that question; either way no item
+is admitted or struck with certainty by the paperwork alone.)* The verdict
 remains `determine`'s roll, moved by `proof_step` per standing item through `world_q.hearing` (SC-P8 edit
 4). A false item that answers a true one strikes it; that is the risk a forger runs and the reason a
 finding matters.

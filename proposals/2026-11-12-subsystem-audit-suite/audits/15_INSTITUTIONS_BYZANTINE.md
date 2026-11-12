@@ -340,4 +340,254 @@ The shape is constant across them:
 
 Points 1 to 5 are what §6 builds.
 
+## 3. Adaptation: what is kept, what is changed, and why
+
+| piece | kept | changed | why |
+|---|---|---|---|
+| Office and dignity (§2.1) | two tenures per person; the dignity outlives the office | no `Title` type: a dignity is a seat row with `remit_acts: []` and a `dignity:` grade, exactly as `off_heir` already is | Layer 1 §B.7 ("there is no `Title` type", `offices.yaml:8`); IN-61's precedent |
+| Promotion by ceremony | public, before the order, citing why | the "why" is a **deed the conferrer holds a claim of**; the ceremony is the draw of `confer` and what it publishes | the fixed point: rank is recognised accomplishment; §0.05: the reason must be a thing code reads |
+| The roga (§2.2) | yearly, by rank, from the conferring seat, in person | no ceremony object: `transfer` through the seat, renewing termed oaths | `_renewals` is built; `oblige_term` is already a year |
+| Purchase of dignity | possible, and corrosive | no purchase rule: a payment is itself a deed (`transfer.made`) a conferrer may cite; each observer judges that deed by his own pursuits | no second route to rank (an S defect); the corruption is legible because the citation is public |
+| The sekreta (§2.3) | no seat finishes an act of state alone | not seven bureaux: **the bodies canon already names**, with one seat each until a seat needs more | the Ministries ruling (`rosters.yaml:2261`): "ONE `Ministries` ROW STANDS until a seat needs a ministry" |
+| The paperwork chain (§2.4) | named hands; entry is proof; a hand may pass, hold or return | hands are `Record.stages` labels; passing is the existing verb `carry`, drawn; fees are not a rule (a gift moves the clerk's regard, which sets his odds and his ranking) | reuse; fees as a rule would be a second currency |
+| The fisc (§2.5) | income rises through appointed hands; the shortcut that pays with the source is the decay | `requisition` drawn and graded; no cadastre object beyond `survey`'s Record; tax-farm and revenue-grant are **later, design-first** | they need SE's stores to mean something first (`07_SE_treasury_granary_B.md`) |
+| Themes (§2.6) | one man with sword and purse is strong and dangerous; the centre holds him by other men's oaths, a clock and a home army | "consolidated command" is a seat row naming both `dispatch` and `issue`; the centre's line is an `oblige` from the provincial fiscal seat to the central one | `06_FA_remit_grant_by_row.md` makes remit a row's; `gate.py::purview_reaches`' oath clause (IN-40) is the reporting line |
+| The throne-barred servant (§2.7) | safe because barred, strong by access, falls with the patron | no body, no mutilation: a **bar the person takes on by oath** (a seat row whose `binds` names it). Named "chamberlain" | the tree's naming note; AX-1 (a person's own act); whether the Crown has such an order at all is §14 item 4 |
+| Emperor and patriarch (§2.8) | short list, then appointment; consent given once, at a price | **not built here**: stated as an interface to the papacy lane; the Church of Solmund is co-sovereign in canon, so caesaropapism is a position persons hold (Baralta), not the realm's rule | canon (`03_canonical_timeline.md:82`, `:105`); FA audit §11 item 3 |
+| Succession (§2.9) | legitimacy is success recognised by constituencies; the old house's presumption; ineligibility, not death | acclamation is the draw of `succeed`; the heir's title is odds, not outcome; blinding and tonsure are the existing `ban` | the standing rule; RS-27 ("the heir still has to claim their throne"); `ban` is built |
+| The demes (§2.10) | an open-floor occasion where standing is performed to a crowd that answers | cohorts are the crowd (`cohorts.yaml`); one arrangement row, `acclamation`; no faction of the circus | ED-IN-0255 (a population is a person at weight above one) |
+| Guard and army (§2.11) | oath to person, to pay, to seat | all three are `oblige` edges differing in object and term; nothing new | `offices.yaml:196` already swears the Grand Master to `off_king`, the seat |
+| Power at distance (§2.12) | titles and stipends to clients; heirs as pupils; a gate with a keeper; old orders | the centre is **one authored person** off the map; distance is the term of a hand; the treaty is `covenant` | ARCS adjudication row 12 ("generate a person"); FA's CP-T09-03 |
+| Mandate of Heaven; a state church for Altonia; eunuchs as a caste; the hippodrome as a place | nothing | cut | the tree's own limit; no carrier in canon; the naming note; no venue need the `acclamation` row does not meet |
+
+**Canon check (P-01 to P-15, `canon/02_canon_constraints.md:42-56`).** The foundations govern the
+Thread, rendering and monstrosity; this design touches three. *P-08 and P-13* (the Forgetting is an
+epistemological barrier, not record destruction): the Roll and every register are `mundane` knowledge
+(`rosters.yaml: knowledge_kinds`); no document here carries, restores or gates Thread knowledge, and the
+Altonian destruction of records stays a political grievance (`03_canonical_timeline.md:66`). *P-04* (no
+alignment): the empire is an order some persons want (`altonian_civics`) and others want purged; no
+row marks it villainous. *GD-1* (`04_game_design_constraints.md:27`): one victory path; nothing here
+adds an ending, and "Altonian Theocracy" stays struck. No conflict found.
+
+## 4. Commensurate: every quantity in a unit the engine already has
+
+| institutional quantity | engine unit | owner (the file code reads) | sweep |
+|---|---|---|---|
+| a deed | an event-kind claim `(doer, kind, True)` in a ledger, scored by `deed_term` | `queries/person_q.py`; kinds from `data/verbs.py::DEED_KINDS` | none (exists) |
+| a founding deed | the same claim with a **seat** as its subject | authored once in `offices.yaml: founding`, deposited at build | confidence by order: 1.0 / 0.8 / 0.6 of full (A); flat (control) |
+| presumption | a term of `legitimacy`, `presumption_gain` × Σ founding claims | `data/fixtures.py: presumption_gain` (new) | 0 (control) / 0.5 / 1.0 |
+| dignity grade | an int 1 to 5 on a seat row | `offices.yaml: seats[].dignity` (new key) | 3, 5, 7 grades |
+| stipend | units of `coin` per sworn person per term | `offices.yaml: seats[].upkeep` → `Office.upkeep` (field exists, `carriers.py:1052`) | H-158's 0 / 1 / 3 as the base; by grade 1, 1, 2, 3, 5 |
+| the pay year | 4 seasons | `fixtures: oblige_term` (exists, shipped 4, H-159) | None / 1 / 4 |
+| a hand's patience | seasons a document may sit with a body | `rosters.yaml: office_bodies.term` (new map), default `fixtures: record_stage_term` (exists, 1) | 1 / 2 / 4 |
+| distance to the centre | the same: the term of the body that carries the post | same | 1 / 2 / 4 |
+| tax | units of a `matter_kinds` member moved rung to rung | `requisition` (`Rung.stores`, conserved) | amount by degree: 1, 1, ½, 0 |
+| degree of any procedure | Overwhelming · Success · Partial · Failure | `engine/dice_engine/dice_engine.py::degree_from_net` | none |
+| odds of any procedure | pool = `faculty(w, p, verb)`; obstacle = difficulty + named modifiers | `seam/wrappers/pool.py`; `modules/social_contest/roll.py::obstacle` in the form `05_SC_obstacle_difficulty_and_modifiers_B.md` gives it | per term, as that proposal sweeps |
+| scale | the seat's rung, a `rung_kinds` member | `offices.yaml: seats[].rung` | none |
+| publicity | an arrangement's `floor` and who is present | `arrangements.yaml` | open / closed |
+
+One ladder of degrees, one pool-and-obstacle form, the eight rungs, the season, the five matter kinds.
+Nothing is denominated in a private unit: there is no "prestige", "influence" or "court favour" stock.
+Favour is one person's regard for another, computed when read (`person_q.regard`).
+
+## 5. The play-facing model: primitives reused, and the three additions with their cut tests
+
+| primitive | exists as | this design's use |
+|---|---|---|
+| seat | `Office` row (`offices.yaml`) | offices, dignities, hands of the chain, the centre |
+| body | `rosters.yaml: office_bodies` | the bureaux; a hand is a body |
+| procedure | `arrangements.yaml` row | `acclamation` (new row); enrolment under `parliamentary_debate` |
+| instrument | `Record` of a `record_kinds` kind, with `stages` | writs, petitions, treaties, the Roll |
+| claim | `Claim` in a ledger | deeds, founding deeds, a clerk's reason for a return |
+| obligation | `oblige` Tenure with a `term` | the stipend bond; the reporting line; the guard's oath |
+| patron-client edge | no edge: `regard` (stance + deeds) plus an `oblige` where sworn | patronage is regard earned by conferrals and gifts, read by the odds and by the chooser |
+| treasury | `Rung.stores` at the seat's rung | the fisc |
+| jurisdiction | `gate.py::purview_reaches` (containment plus oath) | who may tax, enter, confer |
+| sanction | `ban`, `detain`; a closed `hold` | disqualification; recall |
+
+**New, with the cut test (NERS: what dies without it).**
+
+1. **Record kind `roll`** (`rosters.yaml: record_kinds`, keys `[entries]`). *Cut:* the founding order
+   then lives only in ledgers. Nothing can be held, withheld, consulted, forged, seized or amended, so
+   NPC-008's custody (a `core` need) has no object, "who certifies a deed" has no answer, and a house
+   can be raised only by fiat. N holds bottom-up (a clerk's power), top-down (a parliament amends it),
+   laterally (`research`, `forge`, `destroy_record` reach it with no new row).
+2. **Seat-row keys `dignity:`, `passes_through:`, `founding:`** (`offices.yaml`). *Cut `dignity`:*
+   stipends cannot differ by rank and the court is flat. *Cut `passes_through`:* every writ is in force
+   at issue, the clerk has no hand, and NPC-008, NPC-009 and NPC-011's delay all die. *Cut `founding`:*
+   the two ducal houses read 0.000 (E-1) and the fixed point is prose.
+3. **Arrangement row `acclamation`.** *Cut:* no open-floor occasion exists at which a deed is told to
+   a crowd; ceremony has no room and publicity is a constant.
+
+Considered and **not** added: a patron-client tenure kind (regard and `oblige` already say it; a
+third edge would be two ladders for one quantity); a `dignity` or `prestige` stock (Layer 1 refuses a
+stored aggregate); a `countersign`, `acclaim`, `audit`, `enrol` or `blind` verb (§8); a bureau type; a
+faction-level "bureaucracy" stat; the Key-based directive enum of the compendium (retired, ED-IN-0232).
+
+## 6. Legitimacy in a conquest-founded order: deed, dignity, office, stipend
+
+This section answers the fixed point. It extends `person_q.legitimacy`, the deed claims, `confer` and
+`succeed`; it adds no nobility system.
+
+### 6.1 Four things that are easy to confuse, each with one carrier
+
+| thing | what it is | carrier | whose truth | does it age? |
+|---|---|---|---|---|
+| **deed** | something a person did | a deed claim about him in someone's ledger | each observer's, by his own pursuits | yes: `legitimacy` reads a window |
+| **founding deed** | the deed a seat was won by | a deed claim whose subject is the **seat** | each observer's | no |
+| **dignity** | a deed the court has recognised | a `hold` on a seat row with no remit | the world's | for life |
+| **office** | power delegated | a `hold` on a seat row with a remit | the world's | revocable, often termed |
+| **stipend** | what the conferring seat owes the holder | a termed `oblige`, renewed by `transfer` | the world's (conserved) | yearly |
+
+A deed is private opinion until recognised. A dignity is the recognition: it does not add to anyone's
+regard by existing; it **publishes the deed** it cites, and the published deed moves regard through
+`deeds_judged`'s told half, as any heard deed does. So the court of precedence, in a deed order, is
+one thing: the machine that turns what a man did into what everybody has heard he did, and pays him
+for it.
+
+### 6.2 The rule, in one formula
+
+```
+legitimacy(p, holder, seat) = stance_toward(p, holder)                                   (stored; exists)
+                            + Σ deed_term(p, c)  over holder's deeds p holds from the window   (exists)
+                            + presumption_gain · Σ deed_term(p, c) · c.confidence/full
+                                   over the founding claims about `seat` p holds               (new term)
+```
+
+The third term is read **unless `p` holds a claim that `holder` took the seat by force** (a
+`standing_routes: dominance` deed of `holder`'s whose subject is the seat or its rung). It is
+person-side (no World, AX-2): a villager who has not heard of the coup still credits the throne. The
+scoring is `deed_term`, the weighting by confidence is `world_q.reception`'s own, so no second
+methodology enters (NERS-S).
+
+What each clause of the fixed point becomes:
+
+| the fixed point asks | answer |
+|---|---|
+| what counts as a deed | any `DEED_KINDS` claim; what it is *worth* is each observer's pursuits against the `alignment` table. A field won is worth most to those who prize honour; a granary filled, to those who prize stewardship |
+| who certifies it | a seat whose holder `confer`s a dignity citing it (the Crown; a duke for his duchy; the Confessor for the Church's own); for the **founding order**, the Roll, amended only by a determination of the Court Parliament |
+| what it costs to claim it | the conferrer: a stipend for life out of his seat's rung. The claimant of a place on the Roll: a `petition`, a clerk's hand, a hearing, and the draw at each |
+| how it passes to heirs | the founding claim's subject is the seat, so it serves whoever fills the seat lawfully (by `succeed`, by election, by conferral). It is a presumption, and the second term still ages: an heir who does nothing is credited only with what his house did |
+| how it fails to pass | a holder known to have taken the seat by force reads no presumption; a dignity is not heritable at all (it is a `hold` that ends with its holder) |
+| how a rival's deed unseats it | a rival's own windowed deeds, widely told, can exceed presumption plus the holder's deeds in enough persons' eyes; those persons' readings are the odds of his claim (§7.0, `succeed`) and of every recall and defiance on the way. No threshold fires anything |
+| how a new accomplishment raises a house | enrolment: a deed is petitioned, carried, heard and determined onto the Roll; from then it is a founding claim for that seat, which does not age. Enrolment converts a deed that fades into a presumption that does not |
+| what a conquest-founded house owes and is owed | owes: an oath to the seat above (`offices.yaml:196`: both dukes and the Grand Master are sworn to `off_king`) and what the oath's terms name. Is owed: its place on the Roll, and the stipend of any dignity it holds, each year |
+| the ranked order | `founding: {order: 1 | 2 | 3}` on the three seats; read as the confidence of the founding claim. It sets how much presumption a seat carries. It decides nothing |
+
+### 6.3 How appointment, title and salary interact with rank by accomplishment
+
+1. **A noble by deed needs the court for only one thing: that the deed be heard and outlast him.**
+   Without a dignity his deed ages out of the window and his son inherits nothing. So the war-nobility
+   comes to court, and the court's price is an oath.
+2. **The Crown needs the court because conquest gave it land and no hands.** Offices go to those who
+   can run them (the clerks of the inherited bureaux, whose seats carry no dignity and whose persons
+   lean `altonian_civics`); dignities go to those who have done something. The King is the only person
+   who confers both.
+3. **Title without office** is the loyal opposition: paid, ranked, heard first, commanding nothing.
+   **Office without title** is the clerk: he enters or returns every decree, and nobody rises when he
+   comes in. **Both** is the over-mighty subject. **Neither**, with deeds, is the general on the
+   frontier whom everyone has heard of and the Roll has not. All four arise from two independent
+   `hold`s and one ledger; none is a state anyone stores.
+4. **Salary is the test of the whole.** Each dignity conferred is a yearly debt of the conferring
+   seat. A king who honours every deed cannot pay; one who honours none is surrounded by men whose
+   deeds are aging. Unpaid, a term matures, the oath ends (`term.matured`, built), and the seat's
+   purview no longer reaches that man's people (`purview_reaches`' oath clause). The court shrinks
+   from the bottom of the roll upward only if the payer chooses that order: `_renewals` pays
+   soonest-maturing first, and whom to pay when the fisc is short is a choice.
+5. **The clerks are the founding order's custodians and its hostages.** They hold the Roll. A petition
+   to enrol a new deed passes their hand; they may be regarded, courted, replaced, or purged as
+   Altonian residue (`purge_altonia`), at which point nothing can be entered at all.
+
+### 6.4 Why this is not a second ladder
+
+The only numbers stored are a seat row's `dignity` (read for the stipend) and a founding entry's
+`order` (read for a claim's confidence). Standing itself is never stored: it is computed per observer,
+when read, by the function that already computes it. Two persons disagree about who outranks whom,
+and both readings are real. The Roll is a document and can be wrong.
+
+## 7. Expression in play
+
+### 7.0 The five draws
+
+Each is an existing row given `contests:`, a `counterparty:` where one exists, per-degree `writes:` and
+`emits:` (the shape `arrest` and `determine` already have), a pool from `verb_capability` and an
+obstacle in the SC lane's form. The rows belong to the verb lanes (`14_VERBS_BINDING` for `confer`,
+`revoke`, `succeed`; `14_VERBS_MATERIAL` for `requisition`; the social family for `carry`); where a
+lane's text makes one of these a fixed function of state, this section is the correction the standing
+rule orders, and the receipt lists it for that lane. A fixture `procedure_draws: on | off` (shipped
+`on`) exists only so a gate has a control arm that reproduces today's hash.
+
+| verb | the draw | Overwhelming | Success | Partial | Failure (recoverable) |
+|---|---|---|---|---|---|
+| `confer` (investiture) | conferrer's pool against the receiving order | hold opens; the cited deed is published at full confidence to all the channel reaches | hold opens; deed published | hold opens **provisional**: a term of `provisional_term` seasons whatever the row says; a second conferral confirms it | no hold; `conferral.declined`; the seat stays open and the man is not barred; try again next season |
+| `revoke` (recall) | revoker's pool against the holder's standing | hold closes now | hold closes now | hold closes at the season's end; the holder acts until then | hold stands; `recall.defied`; the revoker holds a deed claim against him (the ground for an `arrest` or a `march`) |
+| `carry` (a hand of the chain) | the clerk's pool against the document | entered; the next hand's term is halved | entered; passes to the next hand | **held over**: the hand's term re-winds once; nothing lost but a season | **returned** to its maker unentered, with the clerk's reason as a claim; the maker may issue again |
+| `requisition` (collection) | the collector's pool against the place | full amount; emits `requisition.rendered` (not a dominance kind) | full amount; `requisition.taken` | half the amount; the remainder stands as a shortfall claim the seat holds | nothing moves; `requisition.resisted`; the place's people hold the attempt as a deed |
+| `succeed` (accession) | the claimant's pool against the seat | hold opens; no live rival claim survives | hold opens | hold opens **provisional** (termed); rival claims stay live | no hold; the title is not spent; the seat stays vacant and any eligible person may claim next season |
+
+The odds, by source (every term is a named obstacle term or the pool; none is a flat office bonus,
+which Layer 1 §B.7 refuses):
+
+| source | enters as | read from |
+|---|---|---|
+| the person acting | the pool | `faculty(w, p, verb)`: `verb_capability` → `vocation_attribute`; `06_FA_office_capabilities.md` adds the governance vocations |
+| the task | `difficulty` | by the rung kind of the seat or place acted on (a realm seat is harder to fill than a hearth's), and for `requisition` the amount against the place's stores |
+| the counterparty's standing | `opposition` | the body's or the place's regard for the counterparty, `world_q.reception`'s sum |
+| patronage | `favourable` / `hostile` | the counterparty's `regard` for the actor; a live `oblige` between them |
+| venue | `standard` | the arrangement's `floor` (an open floor raises it) and how many are present |
+| affiliation | `favourable` / `hostile` | `conviction_stand(p, altonian_civics)` for an act of procedure; `INCOMPATIBLE` pairs between actor and counterparty |
+| evidence | `favourable` | a cited deed claim, weighed as `world_q.proofs` weighs one; a held Record of the matter |
+| precedence | `favourable` | the conferee's or claimant's live dignity grade and the seat's founding confidence, each one step at most |
+| the season | `stakes` | the place's `hunger_bands` band for a collection |
+
+### 7.1 Piece by piece
+
+| piece | who acts | verb | venue | roll | written | who reads it, and decides differently |
+|---|---|---|---|---|---|---|
+| honour a deed | a seat-holder with `confer` | `confer` on a dignity row, citing a deed claim he holds | his seat's rung; an `acclamation` if convened | §7.0 | a `hold`; a termed `oblige` of the conferee to the conferring seat; told deed claims | everyone reached: `regard` for the conferee rises or falls by their own pursuits; rivals with unrecognised deeds hold the conferral as a deed of the conferrer's |
+| pay the court | the holder of the paying seat | `transfer` through the seat | the seat's rung | none (conservation; a term's clock) | stores moved; terms renewed, soonest first | the paid: `transfer.made` is a deed of the payer's. The unpaid: at maturity the oath ends and they are free of the seat's purview |
+| fill the fisc | a seat with `issue` whose purview reaches the place | `requisition` | the place | §7.0 | stores moved up to the seat's rung; a shortfall claim on Partial | the place's people (`stability` counts a `requisition.taken`); the seat above, which sees its own stores |
+| send an order | a seat with `issue` | `issue` | his rung | `issue`'s own | a writ with one stage per body in the seat's `passes_through` | the clerks of the first body, who are now offered `carry` on it |
+| enter or return it | a seat-holder of the body named by the open stage | `carry` | the body's rung | §7.0 | the stage passed, re-wound or closed as returned | on the last entry the writ becomes **answerable**: its addressees are offered `comply`, `evade / defy`, `construe` (`06_FA_decree_binds.md`), each itself a choice and a draw |
+| sit on it | the same clerk | no act | — | none: a clock | at the stage's maturity MATTER returns the writ to its maker | the issuer learns his writ came back; his regard for that body's seat-holders moves; `revoke` becomes worth ranking |
+| petition | anyone | `petition`, then `carry` by a hand | where he is | §7.0 for each hand | a docket item when the last hand enters it | the bench at the next sitting |
+| enrol a deed | a petitioner; a clerk; the Court Parliament | `petition` → `carry` → `speak` → `determine` under `parliamentary_debate` | a convened sitting, open floor | `determine`'s own | an entry on the Roll; founding claims deposited on those the Record's channel reaches | every later reading of that seat's holder |
+| consult the Roll | anyone present where it is held | `research` | the clerk's rung | graded inquiry, obstacle raised by `forgery_quality` | finding claims | a claimant deciding whether to press; a rival deciding whether to `forge` |
+| govern at a distance | the centre's seat; the frontier seat | `issue` through `passes_through: [the post]`; `comply` and its siblings | two places | as above | a writ that is answerable seasons after it was written | the governor acts on the last order he has; the centre judges him on one he never got |
+| inspect a governor | a seat with `dispatch`; the person sent | `dispatch`, then `survey` or `research`, then `tell` | the province | the inquiry's own | a `faction_sheet` Record; claims | the centre's next `revoke` or `confer` |
+| keep a treaty | two trade seats | `covenant`; `petition` for an exception; `seize` on a breach | the gate | their own | a covenant Record; a petition; a seized cargo | the counterparty official; both treasuries |
+| acclaim | a claimant; the crowd | `convene` an `acclamation`; `speak`; `commit` | an open floor in the capital | `speak`'s own; then `succeed`, §7.0 | told deed claims; commits | the guard, the court and the crowd, each a set of persons whose regard is the claim's opposition term |
+| disqualify a rival | a bench | `determine` under `tribunal` (disposes `ban`) | closed or admitted floor | `determine`'s own | a `ban` scoped to the banning seat's purview (FA audit R-06) | the banned man's `succeed` and any `confer` on him are refused at eligibility; `pardon` can undo it |
+
+## 8. Verbs and contests, against the 67
+
+No verb is added. Twenty-three rows are used; five gain a draw (§7.0); one is widened.
+
+| need | verb | state today (`audits/06_FA_audit.md` E-3; `14_VERBS_BINDING.md` §0) | what this design asks of it |
+|---|---|---|---|
+| appoint, honour | `confer` | formed 5, attempted 0 | the draw; a dignity row requires a cited deed (`own_ledger`); the conferee's termed oath |
+| recall | `revoke` | formed 5; refused by construction | the draw; FA's R-03 (reads `subject`) |
+| accede | `succeed` | formed 0 at the horizon | the draw; the title as odds |
+| pay | `transfer` | executes; renews nothing (no termed oath exists) | content only: termed oaths and upkeep |
+| tax | `requisition` | attempted 1, refused 1 | the draw and its four bands |
+| order | `issue` | executed 19 of 26; binds nobody | stages from `passes_through` |
+| enter a document | `carry` | petition-only | **widened** to any Record with an open hand stage whose body the actor holds a seat of; the draw |
+| answer an order | `comply`, `evade / defy`, `construe` | 0 of 33, 0 of 5, 0 of 7 | FA's; formed when the writ is answerable |
+| ask | `petition` | 20 of 20 | none |
+| treat | `covenant` | 0 of 10 | CP-T09-03 |
+| inspect | `dispatch`, `survey`, `research`, `tell` | execute; `dispatch` writes nothing | CP-T09-08 |
+| assemble | `convene`, `open_case`, `speak`, `determine` | `convene` 12; `determine` 0 | SC's proposals; a Record disposal site for `parliamentary_debate` (CR-36) |
+| believe, swear, leave | `commit`, `oblige`, `release` | 65 of 65; 26 of 26; 0 of 15 | none |
+| falsify, destroy, take | `forge`, `destroy_record`, `seize` | built | `forge` able to make a `roll` or a writ (today it makes a `faction_sheet` only): a later edit |
+| disqualify, restore | `determine` (`ban`), `pardon` | built, hand-built reach | none |
+
+**Candidates folded, with the cut test.** *countersign*, *register*, *seal*: each is `carry` on a
+named stage; a separate verb would differ only in the label. *acclaim*: `speak` at an `acclamation`
+and `commit`; nothing an acclaim verb would write is not written by those. *audit*: `dispatch` plus
+`survey` or `research`. *enrol*: `determine` disposing a Record. *blind*, *tonsure*: `ban`; a
+mutilation that cannot be pardoned is a ban no seat may pardon, which is content. *bribe*: `give`,
+whose effect on the clerk's regard is the whole of what a bribe does. *farm a tax*: a `covenant` whose
+terms name a `requisition` right, design-first (§12, batch G).
+
 *(continues)*

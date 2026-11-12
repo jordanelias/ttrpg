@@ -111,5 +111,96 @@ result-record field whose only reader is a test, because the host adapter that w
 edit, W1; 11 carried by named proposals) · LABEL 0. Census misreadings inside the dead kernel are counted
 DEAD, not FP.
 
+## 2. C3 — registry keys no code names (14 rows)
+
+| rows | reading at the loader | decision | evidence |
+|---|---|---|---|
+| `venues.yaml` `quarters.{City, Cathedral-City, Fortress-City, Fortress, Town, Village}` and `buildings.{same six}` (12 rows) | read by subscript on the geography file's `type:` value: `ven["quarters"][kind]`, `ven["buildings"][kind]` (`harness/populated.py:1197,1201`), with a refusal for a type that has no row (`:1191-1195`) | **FP** ×12 | the key is a data value, never a literal in code |
+| `venues.yaml` `seats.Parliament` | iterated: `ven["seats"]` (`populated.py:1283`), and cross-checked against `seat_precedence` with a refusal (`:239-250`) | **FP** | — |
+| `rosters.yaml` `knowledge_kinds` | **true: nothing reads it**, and the roster says so itself (`rosters.yaml:1763-1777`: "no code reads this roster, so `thread_substrate` gates nothing yet", H-85). No claim, record or subject carries a kind for it to gate over. `12_ARCS_adjudication.md` row 19 relies on it as "the owner; the gate applies to the kinds it names" with an `[UNVERIFIED: roster not opened at the row]` mark; opened here, it gates nothing | **WIRE** (W3): the cases that need the distinction are NPC-086 N3, NPC-087 N2, NPC-088 N6 (ARCS row 19) | `grep -rn knowledge_kinds engine modules tools tests references` → the roster and the H-85 row only |
+
+**C3 totals (14):** FP 13 · WIRE 1.
+
+## 3. C5 — hole-register pointers (16 rows as given; 837 pointers re-derived)
+
+**The census read the wrong tree.** `census.py` resolved a pointer by `ROOT / p`, and when that failed (the
+register writes paths relative to `engine/season/`: `loop/effects.py`, `queries/person_q.py`), fell back to
+the first file of that basename anywhere under the repository (`ROOT.rglob(basename)[:1]`). That landed on
+a locked, stale worktree (`.claude/worktrees/agent-a737f996de1fa4752`, at `1424aa7`) or on an unrelated
+file of the same name (`proposals/2026-08-31-shape-tracer/tracer/probes.py`). Eleven of the 16 rows were
+therefore checked against a file that is not the game, and pointers that resolve in the stale copy but not
+in the working tree were not flagged at all. **C1 is exposed to the same defect only if it walks the same
+roots; it walks `engine`, `modules`, `systems`, `tools`, `references` (`census.py:17-29`), not `.claude/`,
+so it is not.** Re-derived here against the working tree, resolving relative to `engine/season/` first
+(`scratchpad/census_rest/c5.py`; 837 `site:`/`owner:` pointers).
+
+`site:` and `owner:` are read by code for non-emptiness only (`harness/register.py:215`); every correction
+below is text.
+
+### 3a. The 16 rows as given
+
+| row | reading in the working tree | decision |
+|---|---|---|
+| H-72 `site` `queries/readers.py` | no such file; `LedgerReader` is `queries/person_q.py:994` | **LABEL** |
+| H-138 `owner` `tests/test_season_shape.py:8103-8112` | the `norm` helper is at `:11363` and `:11445`; the same field's `loop/effects.py -- _eff_transfer` is `loop/effects_economy.py:215` | **LABEL** (both) |
+| H-148 `site`, H-152 `owner` `loop/effects.py::_eff_march` | `loop/effects_combat.py:451`; `effects.py` neither defines nor re-exports it | **LABEL** ×2 |
+| H-155 `site` `witness.py:189` | the `isinstance(held.value, (int, float))` branch is `witness.py:220` | **LABEL** (cite the function, drop the line) |
+| H-207 `owner` `decision/options.py::aggregate_questions` | `decision/questions.py:54` | **LABEL** |
+| H-210 `owner` `workplans/valoria_master_workplan_v9_part6.md` | retired, `FORK:c1374059` (`restructure_ledger.md:3015`) | **LABEL** |
+| H-230 `owner` `workplans/valoria_master_workplan_v9_part5.md` | retired, `FORK:c1374059` (`:3014`) | **LABEL** |
+| H-238 `owner` `workplans/valoria_master_workplan_v9.md` §0.5 | retired (`:3010`); the rule it cites is carried at `workplans/valoria_master_workplan_v11.md:40` (P9) | **LABEL** |
+| H-220 `owner` `harness/probes.py::Ev` | exists: `engine/season/harness/probes.py:326`. The census opened another `probes.py` | **FP** |
+| H-224 `owner` `decision/choose.py::unrest_pull` | absent on purpose: the row records that it "was built and REVERTED at B-U's close" | **FP** (the pointer names a reverted symbol and says so) |
+| H-357 `owner` `queries/person_q.py::lie_said_of` | exists: `:1236` | **FP** (stale worktree) |
+| H-358 `owner` `queries/person_q.py::heritage_regard` | exists: `:468` | **FP** (stale worktree) |
+| H-361 `site` ×3 `_eff_marshal`, `standing_order`, `_fanned_choices` | exist: `effects_information.py:340`, `world_q.py:2300`, `options.py:1343` | **FP** ×3 (stale worktree) |
+
+### 3b. What the corrected resolution adds (rows the census missed)
+
+One cause covers most of them: `loop/effects.py` was split into `effects_{army,combat,economy,founding,governance,information,migration,shared}.py`,
+and the register still names the old file. `effects.py` re-exports three names (`_renewals`,
+`_oblige_term`, `_eff_kill`; `effects.py:85,101-102`), so those pointers still import; the rest do not.
+
+| row · field | pointer | defined at | decision |
+|---|---|---|---|
+| H-152 `site` | `loop/effects.py::_eff_march` | `loop/effects_combat.py:451` | **LABEL** |
+| H-140 `owner` | `effects.py` `_eff_move` | `loop/effects_migration.py` | **LABEL** |
+| H-156 `owner` | `effects.py` `_eff_commit` | `loop/effects_information.py` | **LABEL** |
+| H-43 `default` | `effects.py` `_eff_petition` | `loop/effects_information.py` | **LABEL** |
+| H-105 `hole`, H-164 `hole` and `owner` | `effects.py` `_rise` | `loop/effects_economy.py` | **LABEL** ×3 |
+| H-158 `site`, H-174 `owner` | `loop/effects.py::_renewals` | `loop/effects_economy.py:321` (re-exported) | **LABEL** ×2 (name the owner, not the re-export) |
+| H-159 `site` | `loop/effects.py::_oblige_term` | `loop/effects_shared.py:93` (re-exported) | **LABEL** |
+| H-126, H-245, H-246, H-247 `site` | `seam/wrappers/sigma.py::faculty` | `seam/wrappers/pool.py:78` | **LABEL** ×4 |
+| H-245 `owner` | `seam/wrappers/sigma.py::register_pool_addend` | `seam/wrappers/pool.py:41` | **LABEL** |
+| H-172 `owner` | `decision/options.py::belief_contradicts` | `epistemic.py:72` | **LABEL** |
+| H-174 `owner` | `queries/world_q.py::home_of` | `state/containment.py:73` (imported by `world_q`) | **LABEL** |
+| H-79 `site` | `loop/driver.py::SeasonDriver.witness` | `loop/witness.py:339`, bound onto the class at the foot of `driver.py` (`:574-585`) | **FP** (bound, as the file says) |
+| H-213 `owner` | `seam/wrappers/sigma.py::_obstacle_of` | deleted; the row says "was deleted at this step" | **FP** |
+| H-127, H-150, H-175, H-240, H-312, H-358 | a bare filename after its full path was given once in the same field | resolve | **FP** ×6 |
+| H-153 `site`, H-222 `owner` | `19_PLAN.md` | `proposals/2026-09-05-proceedings-subsystem/19_PLAN.md` (unique by basename) | **FP** ×2 |
+
+**C5 totals:** as given 16 → LABEL 9 · FP 7. Added by the corrected resolution 28 → LABEL 17 · FP 11.
+Exact replacement text: `proposals/17_CENSUS_REST_3_corrections.md` §A.
+
+## 4. C6 — composition and contract targets (0 rows as given; verified, then extended)
+
+**The empty table is correct for what it measured.** Every `target:` in
+`references/module_contracts.yaml` was imported and its symbol taken with `getattr`: 16 targets, 0
+failures; `python tools/export_composition.py --check` → `OK — 16 role(s), every target resolved; wiring
+valid for 26 module(s)` (probe P-2). The census checked `target:` keys only. The same file's `modules:`
+block (26 rows) is where the pointers that do not resolve are:
+
+| row | reading | decision | carried by |
+|---|---|---|---|
+| `combat` `wiring.build: unwired`, and its note | false. `combat.fight` is a registered `verb_call` entry (`module_contracts.yaml:58-62`) and `fight` executed 13 times in the corpus run (seed 0). The note describes a campaign driver, `DISPATCH_COMBAT_BRIDGE`, `scene_slate.queue_scene`, `combat_bridge.py:37` and `scene_dispatch.py:37`, none of which exists | **LABEL** | correction C-1 |
+| `mass_battle` `sim_module:` absent ("until the MB lane adds it"), note names `systems/mass_battle/sim/massbattle.py` as LIVE | the code is `modules/mass_battle/` (`composition_roles: mass_battle.resolve_field`); the note carries two `[SUPERSEDED]` bracketed corrections after a body that is false | **LABEL** | correction C-2 |
+| `social_contest` `sim_module: systems/social_contest/sim/contest/`, note "reached live only via emergency_council" | the registered module is `modules/social_contest/roll.py`; `emergency_council` does not exist | **LABEL** | `05_SC_sc05_kernel_disposition_B.md` edit 1 (its row edit); no second edit here |
+| `threadwork` `sim_module`, `fieldwork` row, the retired-faction rows, 20 `parity: key-log` values | stale | **LABEL** | `09_WR_B_pointer_text_for_the_orchestrator.md`; `08_FI_04_small-edits.md`; `06_FA_hygiene.md` §5; `11_GO_pointer_and_stale_text_resolutions.md` row 8 |
+| 18 rows with `sim_module: none` (`faction_state`, `npc_behavior`, `npc_memory`, `territorial_piety`, `scene_slate`, `game_director`, `scene_timer`, `audit`, `domain_actions`, `settlement_layer`, `settlement_economy`, `ci_political`, `victory`, `faction_politics`, `miraculous_event`, `scenario_authoring`, `clock_registry`, `campaign_architecture`) | each is a contract (`state:`, `transitions:`, `loops:`, `resolver:`) for a module with no code, and each says so in its own fields (`sim_module: none`; `wiring.build: design` or `deferred`). Six notes narrate code "deleted at `28-iii`/`29b`/`29c`/`29d`". Nothing the game or the port reads opens these rows: the port gate reads `composition_roles:` (`11_GO_port_gate_order_and_coverage.md`:73) | 16 rows **FP** (a document that describes absent code and declares it absent is not mislabelled; the stale narration in their notes is accepted and nothing is written, CLAUDE.md §0.1 pt 5). 2 rows **DEAD**: `settlement_economy` and `campaign_architecture` carry `godot: retire`, `port_rank: 9`, and their own notes call them "phantom" and "a consolidation doc, not a runtime module"; nothing joins either by `with:` | deletion batch D4 |
+| 19 path strings in `notes:`/`sources:` that name files which do not exist (`engine/autoload/game_state.py`, `engine/cross_scale/echo_transport.py`, `engine/params/core.md`, `systems/combat/sim/combat.py`, `systems/factions/sim/mass_seizure.py`, `systems/overview/sim/accounting.py`, `tests/valoria/test_faction_l_reconstruction.py`, `tests/valoria/test_public_governance_transfer_key.py`, 11 others) | history written into a registry's notes; none sits in a field a tool resolves (`doc:`, `sim_module:`, `target:` all resolve or are `none`) | accepted, nothing written, except the two inside the `combat` and `mass_battle` rows (C-1, C-2), which a port decision would read | — |
+
+**C6 totals:** as given 0, confirmed 0 by import. Added in the `modules:` block: LABEL 2 new (C-1, C-2)
+plus 4 groups already carried by named proposals · DEAD 2 contract rows (D4) · FP 16.
+
 <!-- APPEND -->
 

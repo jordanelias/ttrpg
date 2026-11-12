@@ -64,6 +64,8 @@ answerer's pool is his own (`speak`'s pool through the one roller), the obstacle
 difficulty plus the weight difference, so a heavy answer to a light item is likely and never certain.
 What E-6 protects survives: no item decides a case, the verdict is still a draw, and one rule serves the
 room and the out-of-room path (`present` stays draw-free as filing; `answer` is rolled in both).
+Whether admission to the file should itself ride the citing act's band (FI's E-2) is
+`19_LACUNA_admission_rides_the_citing_draw.md`'s question; this file defers to it.
 
 ### The three operations, one owner each
 

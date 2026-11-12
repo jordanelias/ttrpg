@@ -1,5 +1,7 @@
 # FA-P4 — a governance scenario that plays: three situations on the spine, a digest, three endings
 
+Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-08 — the heir's `succeed` and the tick-0 set-up acts are draws; a set-up that fails is reported, not forced.
+
 ## Status: PROPOSED
 
 Source: `audits/06_FA_audit.md` F-FA-07, §9, §6.2 R-19, §13 (NPC-020, NPC-031, NPC-083), §15 (b), (d).
@@ -37,7 +39,13 @@ could have produced.
 |---|---|---|
 | `vacancy` | the Count of chain `a` `release`s his seat | the player, as Duke of `a`, is offered `confer` onto it; with FA-P3, a termed seat does the same on a clock |
 | `order` | the Sovereign `issue`s a writ addressed to the player's seat-holder | with FA-P1: `comply`, `evade / defy`, `construe`, and the recall that follows defiance |
-| `succession` | the Sovereign holds a second seat registered in a scenario-local `successions` row to a title the player holds, then `release`s it | the heir's `succeed`; a banned heir is refused |
+| `succession` | the Sovereign holds a second seat registered in a scenario-local `successions` row to a title the player holds, then `release`s it | the heir's `succeed` (a draw with graded bands, `14_VERBS_BINDING_C_turnover.md`: the claim may be contested, delayed or fail); a banned heir is refused (eligibility) |
+
+*(Reconciled, D-08: under the standing rule `release`, `issue`, `confer` and `succeed` resolve by a
+draw once their verb lanes land, so a set-up act at tick 0 can come out otherwise. The scenario does
+not force it: it reports the band its set-up act reached, and a set-up that failed is itself the
+scenario's opening situation (a Count who could not lay his seat down; a writ botched). No seed is
+selected for the outcome.)*
 
 Ladder step 5. The alternative, a second world builder with situations written into state, would be a fork
 of `build` and the thing the standing requirement forbids.

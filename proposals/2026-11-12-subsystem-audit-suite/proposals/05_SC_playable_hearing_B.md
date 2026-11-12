@@ -1,6 +1,6 @@
 # The hearing as the social-contest module's scene: a sitting of exchanges whose closing draw is today's roll
 
-Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-02, D-03 — `answer` is now a rolled move with graded board effects; `silence` adds levels to the closing draw instead of conceding the rung; `forgery_found` only on an Overwhelming answer.
+Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-02, D-03 — `answer` is now a rolled move with graded board effects; `silence` adds levels to the closing draw instead of conceding the rung; `forgery_found` only on an Overwhelming answer; D-06 — the NPC decider samples through the one chooser's sampler instead of taking the top score.
 
 ## Status: PROPOSED — supersedes `05_SC_playable_hearing.md` (SC-P3). Design-first for edits 6 and 8; the rest are small builds.
 
@@ -140,8 +140,11 @@ interior (owner: `decision/`, CHAR's lane). The NPC decider treats each legal mo
 scores it with the chooser's own terms: the believed verdict after the move (`closing_odds` on the
 board the move would leave, weighed by what each band's disposal means to him), less the move's
 cost in his own terms (an item exposed, an enemy made, a concession witnessed, effort). It reads the
-person and the view; it is handed no `World`, draws nothing and writes nothing, the convention REM-31
-states for a combat decider.
+person and the view; it is handed no `World` and writes nothing, the convention REM-31 states for a
+combat decider. *(Reconciled, D-06: it does not take the top score.)* It picks by the one chooser's
+sampler (`decision/choose.py::_sample_order`, `softmax(score / choice_temperature)`), on a keyed
+stream the host hands it (`draw_factory(seed, tick)(person, f"hearing:{matter}:{n}")`), so what an
+NPC does in the room is a draw whose odds his interior sets, never a fixed function of the board.
 
 ## Exact edits, by owner
 

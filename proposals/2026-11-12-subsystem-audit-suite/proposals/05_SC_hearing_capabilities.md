@@ -1,5 +1,7 @@
 # SC-B3 — The social capabilities as rows: rhetoric, law, insight, deception, and what each move and verb draws on
 
+Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-02 — `answer` moved from the draw-free moves to a rolled move with a capability.
+
 ## Status: PROPOSED — extends SC-P7 (`05_SC_capability_surface.md`; one of its rows replaced) and sequences after CORE's and DICE's capability surfaces
 
 Source: `audits/05_SC_audit_addendum_B.md` §B5, G-52, G-53. It adds **rows** to the surface others
@@ -57,7 +59,8 @@ step 5 for the four values.
 | verb `arrest` | as CORE edit 8 (`argue`) until CR-92 | — | CR-92's design; not decided here |
 | move `argue` | by rung: `procedure`, `definition` → `law`; `fact`, `justification` → `rhetoric` | — | the rung argued is what is in issue |
 | move `impugn` | `rhetoric` | — | an attack on a source made to the room |
-| moves `present`, `answer`, `concede`, `rest`, `offer`, `accept` | none (no draw) | — | the loader refuses a `capability:` on a draw-free move and its absence on a rolled one |
+| move `answer` | by rung, as `argue` (Reconciled, D-02: `answer` is a rolled move) | — | answering an item before the room is argument about it; the weights set the obstacle, the answerer's skill the pool |
+| moves `present`, `concede`, `rest`, `offer`, `accept` | none (no contest roll: filing and the party's own choices; `offer`/`accept` are sampled choices, D-06) | — | the loader refuses a `capability:` on a draw-free move and its absence on a rolled one |
 
 **Sequencing, not a conflict.** CORE's edit 8 needs no new definition rows and can ship first; this
 proposal's re-pointing of `lie` and `determine` follows the day the four rows land, each one cell with

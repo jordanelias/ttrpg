@@ -1,5 +1,7 @@
 # FA — adversarial steelman audit, addendum B
 
+Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-09 — the succession translation note now states that a sole heir's inheritance, the election and any split are draws.
+
 ## Status: REFERENCE (an audit; resolves nothing at runtime)
 
 ## Read at: 6eff039 (working tree)
@@ -303,6 +305,10 @@ only by a hand-built act or a test; "lacks" means no code.
   refuses. The part that survives translation is the *trigger matrix* (a sole heir the apparatus
   accepts inherits; otherwise a contest), and CR-35 builds the contest as an election by the faction's
   bench. The split has no owner and should have none until a contest executes: R-30.
+  *(Reconciled, D-09: under the standing rule neither half is certain. A sole accepted heir's
+  `succeed` is a draw whose odds his acceptance sets (`14_VERBS_BINDING_C_turnover.md`); the election
+  is each member's ballot drawn (`13_SC_draw_for_unrolled_contests.md`, the ballot row); and when a
+  split gets an owner it is a draw on the gap, never "the deterministic gap".)*
 - **Treaty expiry at 90 per cent per arc was a balance lever for a stat game.** `treaty_expiration_v30`
   says so itself ("the primary Crown-nerf lever … narratively extreme"). It transfers nothing. The
   shape that does transfer is its alternative, recorded and deferred there: an agreement that lapses

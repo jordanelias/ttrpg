@@ -1,5 +1,7 @@
 # SC-P8 — evidence cited, evidence answered: proofs as typed items on the case file, and rebuttal by a held contradiction
 
+Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-01 — superseded by `05_SC_evidence_and_rebuttal_B.md`, which now keeps this file's draw-at-the-answer rule (edits 2–3) and replaces edit 5's automatic strike on a forgery finding with a rolled, graded answer. No other change.
+
 ## Status: PROPOSED
 
 Source: `audits/05_SC_audit.md` §16 (the detective and noir precedent) and F-SC-14. Builds on SC-P3
