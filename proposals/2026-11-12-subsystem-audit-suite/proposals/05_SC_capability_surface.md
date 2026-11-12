@@ -1,8 +1,8 @@
-# SC-P7 — the social roll's capability inputs as data: complete the vocation rows, one generic advantage source
+# SC-P7 — the social roll's capability inputs as data: complete the capability rows, one generic advantage source
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-02) — its `trait_advantages` source is not a second leverage source: it is read as the `edge` rows of the one `capability` source (`U5c_SC_one_obstacle_form.md` §3), whose home is the one `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` names. Edits 3 and 4 (a judge whom evidence moves more or less) stand, on the leverage channel.
 
-Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.4 row SC-P7, §7; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-07, ledger C-04, C-09, C-12; `unified/U1_GLOSSARY.md` *capability* (not "vocation"); `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §1–§3, §5). SUPERSEDED in part: edits 1–3 are removed from the body and replaced by a pointer table (U1 decides them: `lie` → `deception` on the `capability:` column; `interrogate` → `inquiry` on the column; `trait_advantages` → `edge` rows of `capability_uses` at the `social_roll` site). Edit 4 stands and is completed: a trait is a capability row (kind `trait`, U1 §2), so the believed trait is read under the existing `CAPABILITY_CLAIM` prefix (`seam/wrappers/sigma.py:238`, `"capability:"`) and no `trait:` prefix or roster row is added. The check is restated on the uses table; lands-it and tier added. The "vocation" wording is replaced by "capability" in new text. The ED-IN-0350/A-26 opposition (`/2`) is A-79's `opposed_ob` on the trained score (D-U1-02).
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.4 row SC-P7, §7; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-07, ledger C-04, C-09, C-12; `unified/U1_GLOSSARY.md` *capability* (not "vocation"); `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §1–§3, §5). SUPERSEDED in part: edits 1–3 are removed from the body and replaced by a pointer table (U1 decides them: `lie` → `deception` on the `capability:` column; `interrogate` → `inquiry` on the column; `trait_advantages` → `edge` rows of `capability_uses` at the `social_roll` site). Edit 4 stands and is completed: a trait is a capability row (kind `trait`, U1 §2), so the believed trait is read under the existing `CAPABILITY_CLAIM` prefix (`seam/wrappers/sigma.py:238`, `"capability:"`) and no `trait:` prefix or roster row is added. The check is restated on the uses table; lands-it and tier added. The "vocation" wording is replaced by "capability" in new text. The ED-IN-0350/A-26 opposition (`/2`) is A-79's `opposed_ob` on the trained score (D-U1-02). U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "Ob" → "obstacle" in prose (glossary *obstacle*); "faculty" → "capability"; "vocation" → "capability" (glossary *faculty*, *capability*).
 
 **Lands in batch:** B04 (edit 4 with U1 §11 U1-A; the `edge` reader it feeds is U1-B in B05). **Depends on:** `01_CORE_capability_authoring_surface.md` (the column, B04); `02_CHAR_capability_uses_table.md` (the table, B04); `02_CHAR_which_ground_moves_whom.md` (the first trait rows, B24).
 
@@ -14,7 +14,7 @@ second capability system and no field to the module.
 
 ## What it changes in `engine/season/` at runtime
 
-Edits 1 and 2 are data rows: `lie` and `interrogate` start drawing on a vocation where they roll the
+Edits 1 and 2 are data rows: `lie` and `interrogate` start drawing on a capability where they roll the
 bare default today. In the shipped realm nobody holds a key or an attribute (`aperture 2 0`: pools
 `[2]` for every actor; `build_realm(cast_attributes=False)`), so the hash is unchanged until a cast
 row carries one. Edit 3 lets a trait become an advantage on the social roll by a roster row, with no
@@ -41,7 +41,7 @@ Python function per trait; with no such row authored it is inert.
 ## The resolution, decided
 
 - Rows 1–2 by sibling precedent (ladder step 4). `determine` and `arrest` are NOT decided here: which
-  faculty judges and which resists arrest is CR-92's design (B10-19, *the social attributes acting on
+  capability judges and which resists arrest is CR-92's design (B10-19, *the social attributes acting on
   others*), answered by plan (step 3).
 - A trait reaches the roll through ONE generic member of the existing advantage door, defined in
   data (step 5: the door exists and is closed; a per-trait function is the scale-local dialect §10
@@ -112,7 +112,7 @@ verb its `when` does not name, the match is wrong.
   traits (NPC-001, NPC-071).
 - **R**: customisation of characters by data; anticipation by third parties (a known trait is a
   claim).
-- **S**: one advantage door, one level vocabulary (`LEVEL_SIGMA`), no flat bonus and no Ob edit.
+- **S**: one advantage door, one level vocabulary (`LEVEL_SIGMA`), no flat bonus and no obstacle edit.
 - **E**: one roster, one function, two data rows.
 
 ## Cost class

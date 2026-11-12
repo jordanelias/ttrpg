@@ -2,7 +2,7 @@
 
 Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` §1.5) — order only. A-31 (longer fights) lands the damage scale first; this proposal is the second step of the one combat calibration batch and shares its single re-record (`U5b_PC_rulings_in_the_fight.md` §5 row 5); the approach (`03_PC_duel_round_and_approach_B.md` step 3) lands after both. The prototype readings below are re-taken at the new scale before `DEEP_FRAC` ships.
 
-Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §1 (CONFORMS), §7/§7b (test file, gate
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §1 (CONFORMS), §7/§7b (test file, gate U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "fought scene" → "fight" (glossary *scene*); "the riposte" (`18_DETERMINISM_no_certain_matchup.md`) → "the counterblow" (glossary *counterblow*); the fencing riposte of §4's table is the combat module's own and keeps its name.
 commands, tier); U3 B15, §4.1 row 56 (REV: the calibration batch lands before the round, UPR §5's own order), §6.2
 (`pF_story.py`, `pP_window.py` are not in the repository); U1 glossary *faculty* (retired as a suite word: "trained
 score" in the prototype table). Changed: the gate's committed form, the cost line, one table label.
@@ -10,7 +10,7 @@ score" in the prototype table). Changed: the gate's committed form, the cost lin
 ## Status: PROPOSED
 
 Lands in batch: **B15** (PC; the calibration batch), first of the pessimist rows (UPR §5 row 5: PC_B → PC_D → the
-riposte → PC_A), after the A-31 damage scale (`U5b_PC_rulings_in_the_fight.md`). Depends on: nothing unlanded beyond
+counterblow → PC_A), after the A-31 damage scale (`U5b_PC_rulings_in_the_fight.md`). Depends on: nothing unlanded beyond
 that batch's damage scale.
 
 Source: `audits/16_PESSIMIST_PC.md` §1.3, §2.1, §2.6 (F-PES-PC-04, F-PES-PC-02). Bears on
@@ -21,7 +21,7 @@ addendum's F-PC-17. Reference only (`CLAUDE.md` §0.05); not ratified by being w
 
 Every season fight: the Indes steal, the single-time counter, the displace-and-step-inside, the
 over-commit reopen and the lunge become reachable in about a third of exchanges instead of one in a
-hundred. **Declared hash mover for every world with a fought scene**, and a re-record of the combat
+hundred. **Declared hash mover for every world with a fight**, and a re-record of the combat
 calibration figures. Prototype reading below: the mirror, the skill lever and the weapon matchups read
 inside their control bands; what moves is that depth stops being free.
 

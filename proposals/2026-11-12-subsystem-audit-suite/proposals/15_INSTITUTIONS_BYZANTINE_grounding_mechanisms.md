@@ -1,6 +1,6 @@
 # INST-BYZ-GROUNDING — what the tree's own research adds to the Byzantine design: an ordered plan
 
-Reconciled: 2026-11-12, wave 3 lane W3-4b — applied `R4_READ.md` §1.7 (BYZ_G: CONFORMS; "breach kind of `staple` MISSING until COL_A rows land"), §7 (INCOMPLETE: item 2 blocked), 7b.0; `U3_CONFLICT_LEDGER.md` C3-C10 (a held instrument is a `proofs` level); `U5_FINDINGS_CLOSURE_U5d.md` Part 7.2 (BYZANTINE §14 item 4 closed by the synthesis: no barred order). Changed: item 1 reads the audit as a referent when read and a person opens it (X-12; "nothing is docketed by the engine", VENICE-C §4), so its runtime row and gate no longer docket a matter; item 2's kind is decided at the kit (**the kit emits no breach kind**: `breaches` is a read, SYNTHESIS-A §4; a breach of a forbearance is the forborne act's own success kind, read from COLONIAL-A's `staple` row at landing), and the row ships off until the place filter PAPACY-C requests exists; item 3's last reading and item 5.3 follow the closed §14 item 4; item 4 reads `proofs` levels.
+Reconciled: 2026-11-12, wave 3 lane W3-4b — applied `R4_READ.md` §1.7 (BYZ_G: CONFORMS; "breach kind of `staple` MISSING until COL_A rows land"), §7 (INCOMPLETE: item 2 blocked), 7b.0; `U3_CONFLICT_LEDGER.md` C3-C10 (a held instrument is a `proofs` level); `U5_FINDINGS_CLOSURE_U5d.md` Part 7.2 (BYZANTINE §14 item 4 closed by the synthesis: no barred order). Changed: item 1 reads the audit as a referent when read and a person opens it (X-12; "nothing is docketed by the engine", VENICE-C §4), so its runtime row and gate no longer docket a matter; item 2's kind is decided at the kit (**the kit emits no breach kind**: `breaches` is a read, SYNTHESIS-A §4; a breach of a forbearance is the forborne act's own success kind, read from COLONIAL-A's `staple` row at landing), and the row ships off until the place filter PAPACY-C requests exists; item 3's last reading and item 5.3 follow the closed §14 item 4; item 4 reads `proofs` levels. U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "fisc" → "treasury" (glossary loan words).
 
 ## Status: PROPOSED (an executable plan for a later session; ratifies nothing; nothing here is built)
 
@@ -56,7 +56,7 @@ seats that declare it:
 
 ```yaml
 # engine/season/offices.yaml — added to three existing rows, nothing else on them changes
-  - id: off_lord_treasurer      # NPC-037; the fisc of proposal B
+  - id: off_lord_treasurer      # NPC-037; the treasury of proposal B
     audit_at_exit: audit
   - id: off_katepano            # NPC-089; the frontier post of proposal D
     audit_at_exit: audit

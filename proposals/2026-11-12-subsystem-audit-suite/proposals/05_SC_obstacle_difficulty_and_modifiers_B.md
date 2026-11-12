@@ -2,7 +2,7 @@
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-01 to C-04, C-33) — four readings change; the term list and the reason trail stand. (1) No term is subtracted: the favourable halves of `evidence`, `reception` and `regard` reach the roll as `proofs` and `favour` levels (Jordan, A-25; `16_PESSIMIST_SC_A_what_the_speaker_brings_is_leverage.md` edits 1 to 5), so edit 1's subtract-after-ceiling step and `proof_step` are not built. (2) The roster, the binding table and the record field are `U5c_SC_one_obstacle_form.md` §1's: one `obstacle_operands` tuple in place of edit 4's field per term. (3) `opposition` is never absent: `obstacle_default` is deleted and every rolled row is `routine` at the control arm, in place of edit 2's `demanding` rows. (4) The Status line's "supersedes `05_SC_opposed_obstacle_parity.md`" no longer holds: Jordan's A-26 un-holds that file and it carries the opposition rate.
 
-Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.4 row SC-B, §2 row SC-B, §3 rows *obstacle form*, *roster*, *row difficulty values*, *margin_endings*; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-02, D-U1-04, ledger R-16 to R-20, R-29; `unified/U1_GLOSSARY.md` *difficulty level*; `unified/U3_CONFLICT_LEDGER.md` C3-L5, §9). **SUPERSEDED in part by `U5c_SC_one_obstacle_form.md` (OBS).** The stale body is removed, not left beside the head: the form `bound(…) − favourable`, the ten-member term table, the bound-then-subtract rule, the parity survival table (its score/2 premise is overtaken by A-26 and A-79) and edits 1, 3, 4, 5 and 6 are deleted and replaced by a pointer table to OBS. Two edits survive and are stated here: the verb row's `difficulty:` column (as D-U1-04 decides it: control `routine` on every rolled row, OBS §4 step 1a, replacing this file's `demanding` rows) and `Margin.terms` (the reason line, OBS §5, carried on the Event by SC-P1). The NPC-versus-NPC paragraph and the reason-line example stand, the example restated with no subtracted term. Lands-it and tier added.
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.4 row SC-B, §2 row SC-B, §3 rows *obstacle form*, *roster*, *row difficulty values*, *margin_endings*; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-02, D-U1-04, ledger R-16 to R-20, R-29; `unified/U1_GLOSSARY.md` *difficulty level*; `unified/U3_CONFLICT_LEDGER.md` C3-L5, §9). **SUPERSEDED in part by `U5c_SC_one_obstacle_form.md` (OBS).** The stale body is removed, not left beside the head: the form `bound(…) − favourable`, the ten-member term table, the bound-then-subtract rule, the parity survival table (its score/2 premise is overtaken by A-26 and A-79) and edits 1, 3, 4, 5 and 6 are deleted and replaced by a pointer table to OBS. Two edits survive and are stated here: the verb row's `difficulty:` column (as D-U1-04 decides it: control `routine` on every rolled row, OBS §4 step 1a, replacing this file's `demanding` rows) and `Margin.terms` (the reason line, OBS §5, carried on the Event by SC-P1). The NPC-versus-NPC paragraph and the reason-line example stand, the example restated with no subtracted term. Lands-it and tier added. U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "Ob" → "obstacle" in prose (glossary *obstacle*).
 
 **Lands in batch:** B05 (with OBS steps 1a and 2). **Depends on:** `U5c_SC_one_obstacle_form.md` (B05); `05_SC_contest_record_on_event.md` (B05); `01_CORE_capability_authoring_surface.md` (B04, the column's refusal shape).
 
@@ -39,7 +39,7 @@ Edit 2 now carries the values that reproduce today's obstacle.
   `obstacle_default` (2) where the subject has no score. The act itself contributes nothing: a lie,
   a plea before a tribunal and a question to a neighbour share one base. In the realm nobody holds a
   score, so the base is the flat 2 everywhere (first audit F-SC-03).
-- A held score of 2 composes Ob 1.0 and no score composes 2.0 (H-127's inversion, reproduced by the
+- A held score of 2 composes obstacle 1.0 and no score composes 2.0 (H-127's inversion, reproduced by the
   first audit and by `10_DICE_one_score_two_roles.md`).
 - The room's terms are subtracted before the ceiling, so against a strong opponent they vanish:
   pool 2 against a score of 8, proofs 0 to 4, obstacle 2.842 and odds (0.900, 0.081, 0.019, 0.000) in
@@ -85,7 +85,7 @@ who judges a lie harder than a telling edits one cell; the calibrated values are
 module with the obstacle, plus `("ceiling", −clip)` and `("floor", +lift)` when a bound acted, so that the
 values sum to `ob`; `sigma.resolve`'s result gains `levels` (OBS §5). SC-P1's roster `margin_endings` carries
 `terms` and `levels` in place of its single `room` field (C-06), so every rolled Event says, in the log and
-after a load, *Ob 3.7 = even 2.4 + difficulty 0.5 + opposition 0.8; leverage: proofs +2, favour +1*. The
+after a load, *obstacle 3.7 = even 2.4 + difficulty 0.5 + opposition 0.8; leverage: proofs +2, favour +1*. The
 harness prints that line where it prints the degree. Person-side, `believed_input` fills what a person can
 know: `difficulty`, `standard` and `stakes` are public data and always known; `opposition`, `regard`,
 `reception` and the other side's answers are his claims or unknown (`10_DICE_believed_odds_have_a_prior.md`

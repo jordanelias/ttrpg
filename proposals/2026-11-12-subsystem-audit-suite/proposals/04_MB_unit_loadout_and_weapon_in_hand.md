@@ -2,7 +2,7 @@
 
 Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` Part 2) — **superseded by `04_MB_unit_loadout_and_weapon_in_hand_B.md`** where the two differ; this file's confirmations of the PC proposal's statements about the module (its first table) stand and are what `03_PC_loadout_and_carry.md` now cites. Superseded: §1's roster merge (personal combat's roster holds no missile weapon, pike or lance: addendum C-3; decided instead as one owner a fact, R-36); §2's seven-table list (twelve tables and four name tests); §4's default switch order added by the builder (a default the commander did not write is a rule standing where a choice should be: the doctrine row writes it); §4's last bullet (`PhaseOrder` gains `in_hand`: the decider's return is the manager proposal's `GeneralAction`, whose `order` behaviour carries `in_hand`). Kept by `_B`: `in_hand` as subunit state changed by an order and costing a tick; the cost by personal combat's function, handed in as factors.
 
-Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §1.2 and §7 test 9 (SUPERSEDED, not an instruction: marked at the status line; the confirmations table and the saturation fact kept; the superseded resolution text replaced by a pointer to `_B` that names what `_B` keeps and replaces), §6.1 (c); `U3_DEPENDENCY_ORDER.md` B17 (listed as superseded), §4.1 row 7 (the census deletion edge to this file is SUP: no reader). No test, gate or lands-it is owed: nothing here lands.
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §1.2 and §7 test 9 (SUPERSEDED, not an instruction: marked at the status line; the confirmations table and the saturation fact kept; the superseded resolution text replaced by a pointer to `_B` that names what `_B` keeps and replaces), §6.1 (c); `U3_DEPENDENCY_ORDER.md` B17 (listed as superseded), §4.1 row 7 (the census deletion edge to this file is SUP: no reader). No test, gate or lands-it is owed: nothing here lands. U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "subformation" → "unit" in prose (glossary *unit*).
 
 **Depends on:** nothing. **Lands in batch:** none (B17 lists it as superseded by `_B`).
 
@@ -16,7 +16,7 @@ designer surface. Reference, not mechanism (`CLAUDE.md` §0.05).
 ## What it changes in `engine/season/` at runtime
 
 Nothing while every troop type's secondary is absent (the control, and the shipped data at landing).
-With a secondary authored: a subformation carrying two weapons tires faster and moves slower by the same
+With a secondary authored: a unit carrying two weapons tires faster and moves slower by the same
 function a person's kit is charged by, and a ranged body that is reached draws its sidearm, stops
 shooting and fights as melee troops.
 

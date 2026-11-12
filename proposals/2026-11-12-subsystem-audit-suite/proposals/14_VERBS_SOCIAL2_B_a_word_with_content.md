@@ -1,7 +1,7 @@
 # 14 · VERBS · SOCIAL2 · B — a word with content: what is uttered, how a writ is read, to whom a petition goes, which seats a person knows
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-20, C-21, C-30) — §4: `seed_seats_known`, `seat.held` and `seat_holders_known` are not added; the one reader is `person_q.holders_named` and the one build step `seed_seat_news` (`08_FI_01_claim-sourced-referents.md` edits 1 and 6). `construe_obstacle` and `oblige_obstacle` are the roster members `clarity`, `deference` and `establishment` (`U5c_SC_one_obstacle_form.md` §2). `oblige`'s draw against the seat stands (decision register D-31, taken A under Jordan's A-24). §3's petition `to` fans over `holders_named`. §2's construal toward his own interest is Jordan's A-27.
-Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — the head applied to the body (`unified/work/R4_READ.md` §1.6, 7b.6): §3 and §4 rewritten to C-20 (`person_q.holders_named` and the build step `seed_seat_news` of `08_FI_01_claim-sourced-referents.md` edits 1 and 6; no `seat_holders_known`, `seed_seats_known`, `seat.held`, `to_from` column); `construe_obstacle` and `oblige_obstacle` replaced by OBS members (`clarity`, `deference`, `establishment`, with `rank_gap` and `regard`), and `obstacle_default` (deleted, C-04, D-U1-11j) by the one composer's stand-in; §1's WITNESS trigger keys on a roster `told_on_kinds`, not on the verb (R4 §1.6, `04` PART D 27); §4's "conflict listed for Jordan" closed by D-31 under A-24; C3-N24's scope stated; A-81, A-30, U3 batch B25 and C3-Y10, R4 7b.0 block.
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — the head applied to the body (`unified/work/R4_READ.md` §1.6, 7b.6): §3 and §4 rewritten to C-20 (`person_q.holders_named` and the build step `seed_seat_news` of `08_FI_01_claim-sourced-referents.md` edits 1 and 6; no `seat_holders_known`, `seed_seats_known`, `seat.held`, `to_from` column); `construe_obstacle` and `oblige_obstacle` replaced by OBS members (`clarity`, `deference`, `establishment`, with `rank_gap` and `regard`), and `obstacle_default` (deleted, C-04, D-U1-11j) by the one composer's stand-in; §1's WITNESS trigger keys on a roster `told_on_kinds`, not on the verb (R4 §1.6, `04` PART D 27); §4's "conflict listed for Jordan" closed by D-31 under A-24; C3-N24's scope stated; A-81, A-30, U3 batch B25 and C3-Y10, R4 7b.0 block. U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "obligee" → "sworn man" in prose (glossary *sworn*).
 
 ## Status: PROPOSED
 
@@ -19,7 +19,7 @@ Every computed `utter` mints a Proposition with a subject, a predicate, a value 
 utterer's own ledger or want, where today all are `OUGHT` / `''` / `None`. Every person starts knowing the
 seats over his home and who holds them, so `oblige` forms and `petition` is addressed to a seat-holder
 instead of to the person it is about. `construe` mints the construer's reading. Three outcomes become
-draws: an utterance's uptake by the room, a construal's taking, a seat's admission of an obligee. Each behind a fixture
+draws: an utterance's uptake by the room, a construal's taking, a seat's admission of a sworn man. Each behind a fixture
 whose control reproduces today; declared hash movers at the shipped arm in every world.
 
 ## The problem (evidence)
@@ -164,7 +164,7 @@ predicate and its witness carry are not added.)*
   the joiner's ledger names one (`holders_named`), else the composer's stand-in for a vacant or unknown
   holder (`counterparty: subject` resolves to the seat); obstacle through the one composer: `rank_gap`
   (OBS member 6), the holder's `regard` of the joiner (member 7), `establishment` (member 26,
-  `establishment_step` per 5 obligees). *(The private table `oblige_obstacle` is not added, C-21.)*
+  `establishment_step` per 5 sworn men). *(The private table `oblige_obstacle` is not added, C-21.)*
   `writes:` `Tenure.since`, `Tenure.term` at Ov / Su / Pa, `[]` at Fa; `emits:` `duty.taken` at Ov / Su,
   `duty.probation` at Pa, `duty.refused` at Fa. `_eff_oblige` opens the edge with `degree=res.degree`
   and, at Pa, half `oblige_term` (the term's one owner, `H-159`, read and halved, no second constant).
@@ -186,7 +186,7 @@ predicate and its witness carry are not added.)*
   for others (a fraction strictly between 0 and 1); a planted `Failure` mints the Proposition and
   deposits no told copy.
 - §4: `oblige` formed > 0 at every seed, attempted ≥ 1; across seeds at least one `duty.taken` or
-  `duty.probation` and the obligee in `establishment_of`; a planted `Failure` opens no edge.
+  `duty.probation` and the sworn man in `establishment_of`; a planted `Failure` opens no edge.
 - §3: `to == subject` 0; every `to` holds a seat reaching the petition's `from`.
 - §2 (hand-built: issuer, writ with `HOLDS` terms, two holders, one believing otherwise): at a planted
   `Success` the two holders hold different readings (the row's falsifier, `H-36`); at a planted

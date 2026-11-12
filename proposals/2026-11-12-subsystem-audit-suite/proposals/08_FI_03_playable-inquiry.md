@@ -2,7 +2,7 @@
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-22, C-24) — §2's band gate and §3's graded `reconstruct` that mints a Proposition are read with `U5c_FI_residue.md` §7 and §8. `observes:` is a flat list and `finding_terms` owns which reads a band deposits. `reconstruct` is a graded inquiry that writes nothing and deposits its conclusion to its maker; the committed assertion is his `utter` (the loader refuses a band-keyed `writes:` on a route row, `04` §B.13 invariant 12).
 
-Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.5 row FI-03 (CONFORMS, stale §3), §4 row *conclude*, §7, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-11i, ledger S-21, S-22; `unified/U1_GLOSSARY.md` *task*, *party*; `unified/U3_DEPENDENCY_ORDER.md` node B11). The body follows its head: §2's "evaluated … when the act's band is `Partial` or better" is replaced by `U5c_FI_residue.md` §8 (`observes:` a flat list; `rosters.yaml: finding_terms` owns which reads a band deposits; the gating reads at every band); §3's "`reconstruct` … utters a Proposition … through the `graded_inquiries` route" is replaced by FRES §7 (`reconstruct` writes nothing and deposits a `concluded:` claim to its maker; the committed assertion is his `utter`, carrying `cites` as `Proposition.support`); the accusation's mood is named (`HOLDS`, FRES §7); `graded_inquiries` → `graded_tasks` (D-U1-11i); "patient" → counterparty; the gates are named tests; lands-it and tier. §3's acting-on and §4 stay design-first (INCOMPLETE, reason stated).
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.5 row FI-03 (CONFORMS, stale §3), §4 row *conclude*, §7, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-11i, ledger S-21, S-22; `unified/U1_GLOSSARY.md` *task*, *party*; `unified/U3_DEPENDENCY_ORDER.md` node B11). The body follows its head: §2's "evaluated … when the act's band is `Partial` or better" is replaced by `U5c_FI_residue.md` §8 (`observes:` a flat list; `rosters.yaml: finding_terms` owns which reads a band deposits; the gating reads at every band); §3's "`reconstruct` … utters a Proposition … through the `graded_inquiries` route" is replaced by FRES §7 (`reconstruct` writes nothing and deposits a `concluded:` claim to its maker; the committed assertion is his `utter`, carrying `cites` as `Proposition.support`); the accusation's mood is named (`HOLDS`, FRES §7); `graded_inquiries` → `graded_tasks` (D-U1-11i); "patient" → counterparty; the gates are named tests; lands-it and tier. §3's acting-on and §4 stay design-first (INCOMPLETE, reason stated). U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "graded route" → "task route" (glossary *task*).
 
 **Lands in batch:** B11. **Depends on:** `U5c_FI_residue.md` (B11), `19_LACUNA_conclusion_is_a_committed_assertion.md` (B11), `14_VERBS_SOCIAL2_B_a_word_with_content.md` §1 (B25; typed `utter`) for §3's commit step, B07 (18-A's loader edit, `graded_tasks`).
 
@@ -71,11 +71,11 @@ reads; this column is its non-gating half.
 ## 3. A conclusion (design-first)
 
 What the investigator believes happened is stated in **two acts** (R-27; `U5c_FI_residue.md` §7): the
-graded route refuses a band-keyed `writes:` (`data/verbs.py:848-851`, `:870-874`; `04` §B.13 invariant 12),
+task route refuses a band-keyed `writes:` (`data/verbs.py:848-851`, `:870-874`; `04` §B.13 invariant 12),
 and giving an inquiry a prize would be scripting drift (SM-3).
 - **Value space** (K-37's missing piece): the persons his own ledger names as the doer of a deed he holds a
   claim of — `queries/person_q.py::deed_doer`, which already pairs a deed claim with its sighting.
-- **Product, act 1 (`reconstruct` reasons):** on the graded route (`rosters.yaml: graded_tasks`, renamed from
+- **Product, act 1 (`reconstruct` reasons):** on the task route (`rosters.yaml: graded_tasks`, renamed from
   `graded_inquiries`, D-U1-11i), `writes: []`; at WITNESS one claim is deposited to the maker,
   `(the deed's counterparty or the Record, concluded:<deed kind>, doer)`, source `inferred`, what it shows
   read off `finding_terms` by band (Partial withholds the hand; Success names it; Overwhelming at full

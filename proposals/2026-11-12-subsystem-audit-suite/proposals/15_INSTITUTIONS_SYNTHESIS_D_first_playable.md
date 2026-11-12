@@ -71,7 +71,7 @@ one runner) and step 5.
   <seasons> <seed> [--bands N]`, output to a path the caller gives. Read-only; `harness/strife.py`'s
   kind; no assertion that a story occurs; not a guard and not a standing corpus.
 
-Reconciled: `roga` and `chancery` are case files with `base: spine` (their set-up acts move from Python
+Reconciled: `roga` and `chancery` are case files with `base: spine` (their set-up acts move from Python U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "fisc" → "treasury" (glossary loan words).
 into `setup.prehistory`); The Vacant Chair is a case file with `base: realm` whose one prehistory act is
 the holder's `release`; The Counting-House is a case file with `base: spine` whose seats, stores and
 instruments are its delta, and `counting_house.py` is not written; The Farm of the Southern Tolls is
@@ -90,7 +90,7 @@ setup:
        holder: "NPC-007"}                                   # until batch I-8 authors it in offices.yaml
   instruments: []                                           # the realm's own seeded rows (I-3): two `homage`, one `immunity`
   stores:
-    r_valoria:        {grain: 4}                            # the fisc: less than the year's bill   [ASSUMPTION; sweep ×{0.5, 1, 2}]
+    r_valoria:        {grain: 4}                            # the treasury: less than the year's bill   [ASSUMPTION; sweep ×{0.5, 1, 2}]
     duchy_hafenmark:  {grain: 12}
     duchy_varfell:    {grain: 12}
     terr_T9:          {grain: 10}                           # inside the immunity
@@ -106,10 +106,10 @@ span_seasons:   8
 ```
 
 Stores are in `default_store_kind` (audit X-30). Every number is `[ASSUMPTION]` content with a sweep; the
-only requirement on them is that the fisc is short of the bill and the other chests are not.
+only requirement on them is that the treasury is short of the bill and the other chests are not.
 
 **What the player in `off_king` is shown each season** (FA-P4's `offered`, plus the report): the bill and
-when each sworn term falls due; the fisc; each instrument he is party to with `kept` as his own ledger
+when each sworn term falls due; the treasury; each instrument he is party to with `kept` as his own ledger
 reads it; the persons whose deeds he holds and who hold no dignity; for each resolved act of his, its
 term list.
 
@@ -211,7 +211,7 @@ is the game's draws and its reader is a person deciding a tuning value).
 
 | point | The King's Bill |
 |---|---|
-| a situation | a bill larger than the fisc, a year to meet it, and five other chests that are each somebody's |
+| a situation | a bill larger than the treasury, a year to meet it, and five other chests that are each somebody's |
 | real choices | six ways to meet it, each through a different institution |
 | choices change what happens | terms renew or mature; a duchy is breached or spared; a bond is met or lapses; a people are farmed or not; a sentence is risked or not |
 | consequences | a duke excused of his oath; a house holding a king's paper; a farmer with more men than his grantor; an excommunicated king |

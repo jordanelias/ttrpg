@@ -23,11 +23,11 @@ makes the change; new text only, no retrofit of frozen ids, CLAUDE.md §4).
 | **roll** | one resolution of a pool against an obstacle on the one sampler (`roll_net_continuous`) | `engine/dice_engine/` | "check", "test" (for the same thing); "roll" for a membership list (VEN_C) → **list** | `16_PESSIMIST_PC_A` ("yield check" → "yield roll"); `15_INSTITUTIONS_VENICE_C` ("roll" → "list") |
 | **draw** | one keyed uniform sample `H(seed, tick, subject, purpose)`; every roll is made of draws | `04` D-35; `engine/dice_engine/draw.py` (P) | "a draw" for a stalemate → **drawn** (adjective) or **a draw (end state)** only in the field's end-state sense, never in a sentence that also uses the sampling sense | `26_MASS_BATTLE_aggression…`, A-58 restatements in `U5d_FA_land…` |
 | **pool** | the dice a roller throws: `max(pool_floor, score + addends + pool_add)` | `sigma_leverage.pool_of` (P, D-U1-08); host reader `seam/wrappers/pool.py::faculty` (T) | "faculty" (for the pool), "dice count"; "Pool" names in DR `not_descriptors.pools` (Combat, Argue…) are retired design names | `10_DICE_capability_axiom_map.md` §D, `U5b_PC_rulings_in_the_fight.md` §2 |
-| **score** | a person's trained rank in a capability, or the untrained score where he holds none; what he opposes with | `pool.py::score` (P; B on lane A) | "rating", "prowess" (for a person), "faculty", "history" (CR-85's old field) | `29_DICE` 29-2 (`defender.faculty` → `defender.score`); `03_PC_person_inputs_content.md` Part A |
+| **score** | a person's trained rank in a capability, or the untrained score where he holds none; what he opposes with | `pool.py::score` (P; B on lane A) | "rating", "prowess" (for a person), "faculty", "history" (CR-85's old field); the chooser's valuation of a candidate is the **choice score** in full (U4d), never bare "score" in a sentence that also names a capability score, and never "ordinary score" | `29_DICE` 29-2 (`defender.faculty` → `defender.score`); `03_PC_person_inputs_content.md` Part A |
 | **training** | the score's source: the learned rank; gives dice | `capability_uses` `dice` rows (P) | "skill level", "prowess" | — |
 | **talent** | the governing attribute of a capability, as held (1–7); gives named levels by steps from the scale's mid-point | `capability_uses` `edge` rows `key: verb.base, per: mid` (P) | "aptitude" (a capability kind, below), "base" (for the attribute in prose; `base:` stays the row's key) | `29_DICE` (its "aptitude" → "talent") |
 | **untrained score** | what a non-holder rolls and opposes with | `Fixtures.pool_default` (T) | "ordinary score", "stand-in" (for the score), `obstacle_default` (deleted, C-04) | `16_PESSIMIST_DICE_task_difficulty…`, `10_DICE_one_score_two_roles.md` |
-| **base** (of the pool) | `pool_add`: the dice everyone holds (A-6) | `Fixtures.pool_add` (P) | "base" for a capability's attribute in prose (say "governing attribute") | U1 architecture §2 (done), CAP |
+| **base** (of the pool) | `pool_add`: the dice everyone holds (A-6) | `Fixtures.pool_add` (P) | "base" for a capability's attribute in prose (say "governing attribute"); an army's **base** (A-70, Jordan's word: where it returns on a draw, A-67's "original station") is the ordinary military sense and stays | U1 architecture §2 (done), CAP |
 | **even line** | the base dice's mean, `MU_PER_DIE × pool_add`; the social obstacle's first term | `sigma_leverage.even_line` (P) | — (coined by lane 29; kept, defined at its call site) | — |
 | **obstacle** | what stands against an act, in successes: difficulty + opposition + hostile terms, under the ceiling | `modules/social_contest/roll.py::obstacle`, `modules/combat/core.py::ob_from_defender` | "Ob" in prose (code may keep `ob`); "obstruction" is a different thing (a prior act's refusal, `verb_table.yaml` head) | — |
 | **difficulty** | the act's own term in the obstacle: a named **difficulty level** on the verb row | `verb_table.yaml` `difficulty:` (P), `rosters.yaml: difficulty_levels` (P) | "task difficulty" as a separate table (`task_difficulty`, B, retired D-U1-04) | lane A's branch |
@@ -41,35 +41,35 @@ makes the change; new text only, no retrofit of frozen ids, CLAUDE.md §4).
 | **band** | (1) a degree band; (2) a named range of a quantity with a recorded crossing (`band_floors`, T) | `rosters.yaml: tables.band_floors` (T) | "band" for distance (27_MB_A → **distance step**), for ranks of troop types in a unit (`04_MB_cell_hierarchy` §4 → **layers**), for firmness (30_GO_F → **firmness grade**) | the three files named |
 | **ceiling** | (1) the obstacle's bound per pool (`obstacle_ceiling`); (2) a capability scale's top rank | `Fixtures.obstacle_ceiling` (T); a capability row's `scale` (P) | — say "obstacle ceiling" or "rank ceiling" | — |
 | **stand-in** | the opposition used where nobody stands opposite: `opposed_ob(pool_default)` | OBS §2 | "fallback", "ordinary score" | — |
-| **task** | an act with a draw and nobody opposite (a `graded_tasks` row) | `rosters.yaml: graded_tasks` (P) | "graded inquiry", "graded route", "graded act", "uncontested" | MAT_A–E, PHY_B, PHY_D, MIL_A–D, COL_B |
+| **task** | an act with a draw and nobody opposite (a `graded_tasks` row); the path its draw takes in the fold is the **task route** (U4d) | `rosters.yaml: graded_tasks` (P) | "graded route" (→ task route), "uncontested"; "graded inquiry" as a name for the class (the three inquiry verbs on the roster may be called "graded inquiries", inquiry sense 2); "graded act" stays for its ordinary sense, any act the ladder grades, contested or not | MAT_A–E, PHY_B, PHY_D, MIL_A–D, COL_B |
 | **inquiry** | (1) the capability `inquiry`; (2) a verb that writes nothing and deposits to its actor (`research`, `examine`, `surveil`, `reconstruct`) | DR `capabilities` (P); C-22 | "graded inquiry" for a task | as above |
 | **switch** | an `on/off` (or named-value) fixture | `Fixtures` | "arm" for the value of a switch | every `14_VERBS_*` and `16_*` that writes "arm: off" |
-| **arm** | one setting of an experiment: the control arm and the test arm | — (plain English) | "arm" for a weapon (→ **weapon** / **arms** plural), for a service (`ARM_SHARES` → **branch**), for the capability (`arms`, kept as an id) | `04_MB_campaign_party_economy.md` (`arm` → `branch`) |
+| **arm** | one setting of an experiment: the control arm and the test arm | — (plain English) | "arm" for a weapon (→ **weapon** / **arms** plural), for a service (`ARM_SHARES` → **branch**), for the capability (`arms`, kept as an id) | — (U4d: `04_MB_campaign_party_economy.md` was named here in error; its `veterancy: {arm: off}` is a switch setting, this row's own sense, as W3-1 reported) |
 
-## B. The capability surface
+## B. Capabilities
 
 | term | meaning | owner | rejected / other senses | files to change |
 |---|---|---|---|---|
-| **capability** | a defined, rated thing a person holds: a skill, an aptitude or a trait | DR `capabilities` (P); held on `Person.capability` (T) | "vocation" (code's old name: `data/verbs.py::VOCATIONS`, `rosters.yaml: vocation_attribute`), "faculty", "key" (the retired Key substrate's word, ED-IN-0232) | `06_FA_office_capabilities.md` (`vocation:` → `capability:`), `05_SC_capability_surface.md`, `07_SE_*` |
+| **capability** | a defined, rated thing a person holds: a skill, an aptitude or a trait | DR `capabilities` (P); held on `Person.capability` (T) | "vocation" (code's old name: `data/verbs.py::VOCATIONS`, `rosters.yaml: vocation_attribute`; ordinary "vocation" is a calling or trade, not a skill, so the tree names fail the word test: they are deleted by CAP A2/A3 (OWNERS C-04), and suite prose says "capability" meanwhile, U4d), "faculty", "key" (the retired Key substrate's word, ED-IN-0232; "holds the key at 2" → "holds the capability at 2") | `06_FA_office_capabilities.md` (`vocation:` → `capability:`), `05_SC_capability_surface.md`, `07_SE_*` (U4d: prose done in eleven files) |
 | **skill** | a capability kind: a learned rating that gives dice | DR `capabilities.kinds` (P) | the combat module's `skill` slots (`balance, parry, dodge, bind`) are **combat axes**, not skills | `03_PC_person_inputs_content.md` Part A (slot family `skill` → `axis`) |
 | **aptitude** | a capability kind: a rated knack that gives no dice and acts through use rows | DR (P) | "aptitude" for the attribute (29, A-71's loose use) → **talent** | `29_DICE`, `U5b_PC_rulings` |
-| **trait** | a capability kind held or not (scale `[0, 1]`) | DR (P) | "susceptibility" (the four `moved_by_*` traits are traits; `resonant_style` stays the cast key) | — |
+| **trait** | a capability kind held or not (scale `[0, 1]`) | DR (P) | "susceptibility" as a fourth kind (the four `moved_by_*` traits are traits; `resonant_style` stays the cast key); U4d: "susceptibility" stays as the ordinary description of what such a trait does (he is susceptible to a kind of argument), as `02_CHAR_which_ground_moves_whom.md` uses it | — |
 | **ability** | not a kind: a trait or aptitude whose use row names its scene's site | U1 architecture §2 | "a fourth/fifth kind"; the combat "abilities" (`ABILITIES`) are levers (below) | — |
 | **attribute** | one of the ten on the 1–7 scale | DR `attributes` (T), names NI `attr.*` (T) | display names only in prose for players (Presence, Reason, Spirit, Coordination); keys in data; "Spirit/Will" both resolve to `attr.mind.will` | `02_CHAR_what_an_act_risks.md`, `04_MB_*` ("Spirit" in prose is fine; never invent "Willpower" keys) |
 | **role** (capability) | one of the ten ways a capability changes an outcome (`dice, addend, opposes, edge, circumstance, resource, threshold, rate, judgement, gate`) | `rosters.yaml: capability_roles` (P) | composition **role** (`composition_roles:`, a provider the engine requires) and MB **unit role** (`ShieldWall`…): always qualify ("capability role", "composition role", "unit role") | `04_MB_unit_loadout…_B.md`, `U5b_MB_*` |
 | **site** (capability) | the one reader of a set of use rows (`social_roll`, `fight`, `field`, …) | `rosters.yaml: capability_use_sites` (P) | Layer 1 `Site` (a matter carrier, capitalised) and a training site → always "use site" for this sense | U1 architecture (done) |
-| **edge** (role) | a use row whose value becomes named levels | U1 architecture §3 | a Tenure **edge** (`04` §B.8): write "edge row" for the role, "edge" alone only for a Tenure | `28_CORE_scene_access_A` |
+| **edge** (role) | a use row whose value becomes named levels (ordinary English: "an edge" is an advantage, so the role passes the word test) | U1 architecture §3 | a Tenure **edge** (`04` §B.8): write "edge row" for the role, "edge" alone only for a Tenure. U4d: the Tenure sense is graph vocabulary (a link between a person and a seat or place); ordinary "edge" is a border or an advantage, so it fails the word test as a tree name, see §H | `28_CORE_scene_access_A` |
 | **gate** | (1) the write gate `state/gate.py`; (2) the capability role `gate` (Thread Sensitivity only, A-11); (3) the loader's refusal → **refusal**; (4) a proposal's execution check → **check** in new suite text | `04` §C.2 (1); U1 (2) | "gate" for (3) and (4) in new text | new suite text only |
 | **judgement** | the capability role: a factor about the scale's mid-point | U1 | `judgment` as a capability name (→ `law`, C-U5a-11) | — |
 | **law** | the capability of knowing and applying a forum's rules | DR (P) | `judgment` (FA) | `06_FA_office_capabilities.md` body |
 | **deception** | the capability of making another believe what one knows false | DR (P) | `copying` for a lie | `05_SC_capability_surface.md` edit 1 (withdrawn) |
 | **insight** | the capability of reading a person or a bench; never rolled | DR (P) | "rhetoric" (not created, D-U1-03) | `05_SC_hearing_capabilities.md` |
 | **command** | the capability by which an order takes effect | DR (P, `27_MB_A`) | `MassBattleInput.command` integer (retired), "Command Rating" (NI `mass.command` legacy), "chain of command" for A-22's authority → **command basis** | `04_MB_typed_outcome_and_one_path.md`, `15_INSTITUTIONS_SYNTHESIS_C` |
-| **faculty** | **retired as a suite word.** The code symbol `pool.py::faculty` keeps its name (no retrofit) | — | collides three ways: the pool (code), the attribute Reason (DR/NI alias `Faculty` on `attr.mind.acuity`), "a learned skill" (A-59). Say **pool**, **talent** or **training** | every suite file using "faculty" in prose; DR and NI: drop the `Faculty` alias of `attr.mind.acuity` (an ordered edit for the IN lane; check `tools/names.py` callers first) |
+| **faculty** | **retired as a suite word.** The code symbol `pool.py::faculty` keeps its name (no retrofit) until D-U1-08's split replaces it (§H candidate). Ordinary "faculty" is an inborn power of mind or body (the faculty of speech), so it is kept only where a document means exactly that (`09_WR_B_threadwork_session_and_practitioner.md`, "the faculty judging itself") | — | collides three ways: the pool (code), the attribute Reason (DR/NI alias `Faculty` on `attr.mind.acuity`), "a learned skill" (A-59). Say **pool**, **talent** or **training** | every suite file using "faculty" in prose; DR and NI: drop the `Faculty` alias of `attr.mind.acuity` (an ordered edit for the IN lane; check `tools/names.py` callers first) |
 | **rank** | (1) a capability's held level 0–7; (2) a seat's rung ordinal | (1) the capability row's `scale` (P); (2) `RUNG_KINDS.index` (T) | one word, two ranks in one file (`02_CHAR_capability_definitions.md` `rank_at_least`; 28A `rank_gap`): write "capability rank" and "seat rank"; `hol` §9.2's "rank supplies dice" is the **capability** rank | `02_CHAR_capability_definitions.md`, `28_CORE_scene_access_A` |
 | **rank_gap** | how far the person acted on stands above the actor's exercised seat; an obstacle term | OBS member 6 | `standing`, `standing_step` | BIND_C, S1_D, S2_C, S2_D |
 | **modifier** (seat) | a seat's named level on rolls made through it | `offices.yaml` row `modifier:` (P, D-U1-01a) | "bench die", `standing_dice`, "office weight", "seat addend" | T13 T4, `27_MB_A` §5, `15_INSTITUTIONS_*` |
-| **prowess** | a unit's quality of troops and equipment (A-59) | `27_MB_B` (P) | a person's training (29) | `29_DICE` |
+| **prowess** | a unit's quality of troops and equipment (A-59) | `27_MB_B` (P) | a person's training (29). U4d: ordinary "prowess" is first a person's skill at arms, and Jordan's A-71 says "someone's aptitude/prowess"; the narrowing to units (D-U1-11p) is listed for him (`U4D_FOR_JORDAN.md` J-U4d-03) | `29_DICE` |
 | **lever** | one of the fifteen combat levers | `modules/combat/ability_primitives.py` (T file) | the army-wide strategy "lever" → **strategy**; an approach's "lean" | `U5b_PC_*` |
 
 ## C. People, belief and the interior
@@ -83,14 +83,14 @@ makes the change; new text only, no retrofit of frozen ids, CLAUDE.md §4).
 | **stands for** | holds an affiliation above the scale's mid-point | `person_q.conviction_stand` (T) | "held" in the old sense (above zero) → "stored above zero" | `16_PESSIMIST_CHAR_A` ("highest-held") |
 | **scar** | the count of violations per axis | `04` §B.2 (`scar[axis]`) | "wound" for the scar (`02_CHAR_scar_is_a_wound.md` title stays; body says scar) | `02_CHAR_scar_is_a_wound.md` body |
 | **regard** | one person's disposition toward another, in the stance unit | `person_q.regard` (T) | "favour" (a leverage source, the favourable half), "reception" (an audience's), "opinion" | — |
-| **stance** | a stored row `(referent, valence, weight)` | `04` §B.2; NI `season.stance` | MB unit "stance" (`hold`, `retreat`) → **posture**; `march_postures` (T) is the precedent | `04_MB_*`, `26_*` |
+| **stance** | a stored row `(referent, valence, weight)` | `04` §B.2; NI `season.stance` | MB unit "stance" (`hold`, `retreat`) → **posture**; `march_postures` (T) is the precedent; the MB code field `stance` (`modules/mass_battle/orderofbattle.py`) keeps its name and is written in backticks once (§H candidate) | `04_MB_*`, `26_*` (U4d: done) |
 | **standing** | S18.2's scalar: the gap between what others say of a person and what he holds of himself (`condition_scale`); and the prize `a standing` | `decision/options.py::standing_of` (T); `contest_subsystems.prizes` (T) | rank against an act (`rank_gap`), a document's band (`force`), the bench die (`modifier`), a fight's victor (`prevailed`), a stake on a stance row (→ `regard`, ledger F-40); "standing order" is a fixed MB phrase | D-U1-11a; ledger F-40; BIND_C; S1_B; T13 |
 | **resolve** | the RESOLVE step; `faction_q.resolve` (`04` §B.6.1) | `04` | `person_q.resolve` → `person_q.decisiveness` (D-U1-11m); SOCIAL1_D's pool `resolve` → its capability name | `02_CHAR_resolve_and_temper.md`, `14_VERBS_SOCIAL1_D` |
 | **voice** | on the player surface only: one owned part of one person's score for one candidate | — (coined by CHAR; kept on the surface only) | in code it is a **score term** (`score_terms`, T) | `02_CHAR_voices_and_the_room.md` |
 | **room** | the audience at a hearing as the actor believes it | — | `the_room(w, event_id)` (witnesses' regard, the truth) → `witness_regard`; `margin_endings.room` (retired) | `02_CHAR_voices_and_the_room.md` |
 | **reception** | the audience's disposition toward the speaker; hostile half an obstacle term | `SocialContestInput.reception` (T) | "favour" for the favourable half (→ the `favour` level) | — |
 | **ground** | why one person regards another (`relation_grounds`) | `rosters.yaml: relation_grounds` (P) | the Thread as a condition of places (A-40) → **the Thread** / "worn ground" only with "Thread"; a march's basis → **casus belli** or **claim**; a question's reason (`occasion_grounds`) → **occasion ground** in full | `12_ARCS_substrate_as_ground.md`, `20_NARRATIVE_E` |
-| **regime** | a cluster of persons and bodies sharing opinions to some extent, with a core and a fringe (A-82, A-83) | `rosters.yaml: regime_cores` (P) | "regime" = a creed-exact set (`30_WR_B`) or a three-valued control (NARR_A); never a faction (NARR_D) | `30_WR_B`, `20_NARRATIVE_A` |
+| **regime** | a cluster of persons and bodies sharing opinions to some extent, with a core and a fringe (A-82, A-83) | `rosters.yaml: regime_cores` (P) | "regime" = a creed-exact set (`30_WR_B`) or a three-valued control (NARR_A); never a faction (NARR_D). U4d: ordinary "regime" is a government or a system of rule, so a reader lands on "who governs", not "a camp of shared opinion"; Jordan's own word, listed for him with "camp" as the plain alternative (`U4D_FOR_JORDAN.md` J-U4d-01); not renamed | `30_WR_B`, `20_NARRATIVE_A` |
 | **core / fringe** | a regime's members near / farther from its authored core (`closeness`) | `31_WR_A` (P) | core = creed-exact (`30_WR_B`) | `30_WR_B`, `30_WR_G` |
 | **accord** | the graded agreement of two persons' stands (mean product) | `world_q.accord` (P) | `commensurate` (the three-valued control form, kept as `credit_form sign`'s control), `closeness`, `link_fit` (each a different formula: keep each, name it as the formula it is; no fourth) | `30_WR_G`, `31_WR_A` |
 | **custom** | the axis vector a person believes his circle keeps | `person_q.custom_of` (P) | "customs" (canon: tariffs) | — |
@@ -106,7 +106,7 @@ makes the change; new text only, no retrofit of frozen ids, CLAUDE.md §4).
 | **post** | (1) a seat's label (`Seat.post`); (2) an MB formation place (`front, rear, …`) | `04` §B.7 (1); `troops.yaml: formations` (P*) (2) | always "seat post" or "formation post" | `27_MB_A`, `04_MB_cell_hierarchy_as_data.md` |
 | **officer** | (MB) the person a unit row names to lead it | `hierarchy/units.py::Officer` (T) | a seat-holder → **holder**; "Church officers" (A-35) are holders of Church seats | `15_INSTITUTIONS_PAPACY_*` |
 | **holder** | the person a seat's `hold` Tenure names | `04` §B.8 | "officer", "incumbent" | — |
-| **rung** | an address in the realm (territory, settlement, …) | `04` §B.3 | "ladder" for a chain of seats → **chain of seats** | `16_PESSIMIST_FA_B`, `_C` |
+| **rung** | an address in the realm (territory, settlement, …) | `04` §B.3 | "ladder" for a chain of seats → **chain of seats**. U4d: ordinary "rung" is a step of a ladder, so "a rung of office" (A-64, Jordan's verbatim) passes and "the army marched into the rung" does not; "rung = world side" is Jordan's ruling (ED-IN-0302), so the word is listed for him, not renamed (`U4D_FOR_JORDAN.md` J-U4d-04). Prose says "place" or the kind ("territory", "settlement") where it can, with `Rung` in backticks once | `16_PESSIMIST_FA_B`, `_C` |
 | **territory** | a rung of kind `territory`; counted at read under a `realm` rung | `rosters.yaml: rung_kinds`, `endings` (T) | "province" (the geography file's key `provinces:` is a file name, not a game term) | — |
 | **holding** | a rung a faction holds (`Faction.holdings`) | `04` §B.6.1 | `Holding` referent class (BIND_A) keeps its capital; "hold" as a draw outcome → "a position holds" only in prose | — |
 | **record / Record** | `Record`: a document carrier (petition, writ, army, works…) | `04` §B.5; `rosters.yaml: record_kinds` (T) | `person_q.record(p, teller)` (a teller's reliability) → `reliability`; "typed record" → **dataclass** or "typed input"; the "reading record" (`requirements.yaml`) → **reading** | `05_SC_*` (SC_E), `01_CORE_requirements_reading_record.md` |
@@ -133,25 +133,25 @@ makes the change; new text only, no retrofit of frozen ids, CLAUDE.md §4).
 | **party** | a person on a docket; a party to an instrument | — | a battle's **side**; the person served → **beneficiary**; the one acted on → **counterparty** (`verb_table.yaml: counterparty:`, T); "patient" → counterparty | `16_PESSIMIST_SC_C`, `23_STORY_A`, `02_CHAR_*` |
 | **occupy** | an army holds ground it does not own (A-66) | `world_q.occupies` (P) | a visited person's being busy (A-63) → **engaged** | `28_CORE_scene_access_*` |
 | **command basis** | whom a seat may order (A-22) | `basis: command` (P) | "chain of command", "purview" (a different basis), "under the seat" | `16_PESSIMIST_FA_C`, `14_VERBS_BINDING_D` |
-| **sworn** | a person with a live `oblige` to a seat | `04` §B.7 | "obligee", "establishment" (the Query over the sworn) | — |
+| **sworn** | a person with a live `oblige` to a seat; in prose **a sworn man**, **the men sworn to a seat** | `04` §B.7 | "obligee" (ordinary "obligee" is the party an obligation is owed TO, the seat's side; the tree's `offices.yaml` key `obligees` lists those who owe, so the tree name reads backwards: §H candidate), "establishment" (the Query over the sworn) | U4d: prose done in seven files |
 
 ## E. Mass battle and personal combat
 
 | term | meaning | owner | rejected / other senses | files to change |
 |---|---|---|---|---|
-| **unit** | a row of an army Record (A-2): a troop kind with an officer and orders | `armyrecord.py` (T; Record key `subformations`) | Layer 1 "unit" = `PersonId[]` at weight (`04` §C.5.1: no unit class) — write "unit row"; a person's "unit" → **side** | `03_PC_loadout_and_carry.md` |
-| **formation** | a unit's cell arrangement (`ranks, files, shape`) and the army's layout (`line, envelopment, refused_flank`) | `troops.yaml: formations` (P*) | **subformation** for the arrangement or for a grouping above units (D-U1-11o) | `04_MB_cell_hierarchy_as_data.md`, A-59 restatements |
+| **unit** | a row of an army Record (A-2): a troop kind with an officer and orders | `armyrecord.py` (T; Record key `subformations`) | Layer 1 "unit" = `PersonId[]` at weight (`04` §C.5.1: no unit class) — write "unit row"; a person's "unit" → **side**; "subformation" for a unit in prose (U4d: done in five files; the tree key `subformations` and `orderofbattle.Subformation` keep their names, §H candidate) | `03_PC_loadout_and_carry.md` |
+| **formation** | a unit's cell arrangement (`ranks, files, shape`) and the army's layout (`line, envelopment, refused_flank`) | `troops.yaml: formations` (P*) | **subformation** for the arrangement or for a grouping above units (D-U1-11o). U4d: "subformation" is Jordan's word (A-59: "each unit within subformation", a grouping that holds units), and ordinary military English agrees with him (a formation inside a larger one); D-U1-11o's reading of it as a formation post group is an agent's, so the word is listed for him (`U4D_FOR_JORDAN.md` J-U4d-02) | `04_MB_cell_hierarchy_as_data.md`, A-59 restatements |
 | **cell** | 16 men, about 4 m square | `troops.yaml: deployment.cell_troops` (P*) | squad grid "cell" → **grid place**; alignment-table "cell" stays; lifepath "cells" stays | `04_MB_squad_grid…` |
-| **body** | `Person.body`: the health track | `04` | MB "a body of troops" → **block** | `04_MB_cell_hierarchy`, `27_MB_E` |
-| **posture** | a unit's or march's tactical setting (`hold`, `besiege`…) | `rosters.yaml: march_postures` (T) | "stance" | `04_MB_*` |
-| **approach** | (PC) a lean per phase: `defensive, normal, aggressive` | `modules/combat/vocabulary.py: APPROACHES` (P) | MB `approach_rows` (a starting distance) → **opening distance**; LACUNA `calm/press` → **questioning** (ledger P-03) | `04_MB_cell_hierarchy`, `19_LACUNA_questioning…` |
+| **body** | `Person.body`: the health track | `04` | MB "a body of troops" → **block**. U4d: "body" for an institution (a council, a bench, a house: A-82's "persons and bodies", `06_FA_seat_terms_by_body_B.md`) is the ordinary English sense and stays; never in a sentence that also uses `Person.body` | `04_MB_cell_hierarchy`, `27_MB_E` |
+| **posture** | a unit's or march's tactical setting (`hold`, `besiege`…) | `rosters.yaml: march_postures` (T) | "stance" (the MB code field `stance` on a unit, `orderofbattle.py`, keeps its name: §H candidate) | `04_MB_*` (U4d: prose done in eight files) |
+| **approach** | (PC) a lean per phase: `defensive, normal, aggressive` | `modules/combat/vocabulary.py: APPROACHES` (P) | MB `approach_rows` (a starting distance) → **opening distance**; LACUNA `calm/press` → **questioning** (ledger P-03). A-83's "approaches" (Jordan: how a regime's members do things) is the ordinary sense, compatible with this one; write "manner" or "way of doing things" where a sentence also names the PC lean | `04_MB_cell_hierarchy`, `19_LACUNA_questioning…` |
 | **exchange** | (PC) the `exchange` phase and one roll in it | `PHASES` (P) | the MB squad's round of pairings → **pairing round** (`FIELD_EXCHANGES` keeps its name); the verb `exchange` (trade) stays | `04_MB_squad_grid…` |
 | **bout** | (MB) one 18-tick clash | `troops.yaml: deployment.scale` (P*) | illness or age striking a person (HAP_A) → **spell of illness** / **decline** | `22_HAPPENINGS_A` |
 | **stamina / fatigue** | stamina: the reserve, a share in [0, 1] at every boundary; fatigue: its loss | `MassBattleInput.entry_stamina` (P); `troops.yaml: fatigue` (P*) | Thread Fatigue (NI `thread.thread_fatigue`) is a practitioner's, never "stamina" | `26_MASS_BATTLE_movement…`, `27_MB_E` |
 | **yield** | (PC) a fighter gives up | `fight_endings: yielded` (T) | a Site's produce → **harvest** in new prose (`yield.taken`, `Rung.yield` keep their names) | `07_SE_*` new text |
 | **prevailed** | the fight ending of a party left standing whose opponent fell or yielded | `fight_endings` (P, D-U1-11a) | `standing` | `03_PC_typed_outcome_one_door.md` |
-| **rout / break** | a body's collapse; `rally, withdraw, run` its three end bands | `26_…rout…` (P) | "yield" (PC) at the army scale | — |
-| **riposte** | the deciding blow turned by a draw | `18_DETERMINISM_no_certain_matchup.md` (P) | "upset", "flip" (`UPSET_FLOOR` names the old override) | — |
+| **rout / break** | a unit's or side's collapse (U4d: was "a body's", which this table's *body* row refuses for troops); `rally, withdraw, run` its three end bands | `26_…rout…` (P) | "yield" (PC) at the army scale | — |
+| **counterblow** | the blow the losing fighter lands back at the felling that would decide a fight, turned by one keyed draw; the fight continues from it (renamed by U4d from "riposte": the combat module already has a fencing riposte, `config.py` `RIPOSTE_ON_FAIL`, and the ordinary word is a return thrust after a parry, not this) | `18_DETERMINISM_no_certain_matchup.md` (P; ids `counterblow(turn, by)`, `_wound('counterblow', …)`) | "riposte" (the combat lever's word), "flip" (`UPSET_FLOOR` names the old override); "upset" stays for its ordinary sense, the weaker side winning, which a counterblow can cause | — (U4d: done in nine files) |
 | **nested contest** | a duel round called from inside a field (A-4, depth 1) | `nested_entry` (P) | "nested scene" | — |
 | **loadout / kit** | (person) `(primary, secondary, armour)`; (troop kind) the same three | `world_q.kit_of` (T); `troops.yaml` (P*) | — one primitive, two holders | — |
 | **armour tier** | `none, light, medium, heavy` | `troops.yaml: armour` (P*) | "mail" for `medium` (the `arms_kinds` seed `harness_mail` maps to `medium`) | `03_PC_person_inputs_content.md` |
@@ -166,13 +166,13 @@ makes the change; new text only, no retrofit of frozen ids, CLAUDE.md §4).
 | **check** (of a proposal) | the execution artifact that shows an edit landed (a run, a hash, a test) | — | "gate" (the write gate's word, D-section above) in new text | new suite text |
 | **refusal** | the loader's or the gate's refusal; a precondition failed with no contest | `04` §C.4 | "loss" (a contest that went against), "the gate refuses" for a loader | — |
 | **reading** | a measurement a named instrument prints | — | the `reading:` record on a requirement row keeps its key | — |
-| **pin** | a recorded hash a test compares | `engine/season/tests/_realm_goldens.py` (P) | "golden" (allowed) | — |
+| **pin** | a recorded hash a test compares | `engine/season/tests/_realm_goldens.py` (P) | "golden" (allowed as the tree's process word, CLAUDE.md §7; it is software jargon with no ordinary sense, so new prose says "pin" and keeps "golden" for file and test names) | — |
 | **mover** | an edit declared to change seeded results | — | — | — |
 | **Layer** | always numbered and capitalised (Layer 0, Layer 1, Layer 2) | CLAUDE.md (RULED) | "layer" for an epistemic or narrative layer in code keeps its lower case and its qualifier | — |
 | **loop** | the season loop | CLAUDE.md | the apparatus pathology is "the apparatus loop", never bare (VOC's measured collision) | — |
 | **roll / draw / check / test** | see §A | — | "test" only for a pytest test | `07_SE_*`, `16_PESSIMIST_SE_A` |
-| **wire / reader / orphan** | a declared thing and its caller | `04` ID-13 ("a field nothing reads is not a field") | "cut wire", "dead", "uncalled", "unread": say "has no reader" | `17_CENSUS_*` new text |
-| **knockout** | coined (NARR/16_ nine-gate): suppress one person's choice and count the others' differing acts | — | plain word: **removal test**; kept only with its definition at the call site | `16_PESSIMIST_CORE_the_nine_gate…` |
+| **wire / reader / orphan** | a declared thing and its caller | `04` ID-13 ("a field nothing reads is not a field") | "cut wire", "dead": say "has no reader". U4d: "uncalled" (a function) and "unread" (a field) are ordinary and exact, and stay | `17_CENSUS_*` new text (U4d: `17_CENSUS_REST_2_wiring.md` done) |
+| **removal test** | suppress one person's choice at one round, replay, and count the others' acts that differ (renamed by U4d from the coinage "knockout"; ids `removal_arm`, `--remove`) | `16_PESSIMIST_CORE_the_nine_gate_and_a_knockout_reading.md` (P; the file name keeps its word) | "knockout" | — (U4d: done in four files) |
 | **roga, fisc, Kontor, rector, sekreton, catasto, missus, dedizione, commenda…** | historical loan words in institutions prose | — | prose uses the plain word (stipend, treasury, trading house, …); data ids are plain words (`warrant`, `commission`, `tithe`, already) | `15_INSTITUTIONS_BYZANTINE_*`, `_VENICE_*`, `_COLONIAL_*` |
 
 ## G. Names the naming gate binds
@@ -181,3 +181,93 @@ The canonical name of the god and the Church is **Solmund** (`world.solmund`, NI
 display name is **Church of Solmund** with the alias **Church** (`world.church`). Valorsmark's alias is **Crown**
 (`world.valorsmark`). No suite file may introduce a name for a faction, house or person that `names_index.yaml` or
 `references/proper_noun_registry.yaml` does not carry; a new one is a registry row first.
+
+## H. Rows added by U4d, and tree names that fail the word test
+
+Terms the reconciled proposals use that had no row. The last column is the ordinary-English test (`STAGES.md`):
+**passes** where a reader with no memory of this repository lands on the meaning; **tree name fails** where the
+word is a code identifier whose ordinary sense differs (not renamed here: the plain word is recommended, prose
+uses it and gives the identifier in backticks once, and the rename is a v12 candidate, `OWED_TO_UNIFICATION.md`
+§B).
+
+| term | meaning | owner | rejected / other senses | word test |
+|---|---|---|---|---|
+| **venue** | the place where a sitting or hearing is held (a `Date`'s venue; a bench's seat of judgement) | `state/carriers.py` (T, the `Date` venue) | the SC kernel's "venue preset" is that retired module's word for a hearing type | passes (law: the place a case is heard) |
+| **WITNESS / witness** | WITNESS: the loop step that deposits claims into each holder's own ledger; a witness: a person present at an Event | `04` §A.2 `loop/witness` (T) | `the_room(w, event_id)` → `witness_regard` (see *room*) | passes |
+| **deposit** | WITNESS's write of a claim into a holder's ledger, and the confidence written then | `04` §A.2 (`claim.deposited`, T) | — | passes (to put something in keeping) |
+| **claim** | `Claim`: a statement a person holds about the world, with a confidence; it may be false | `state/carriers.py::Claim` (T) | a right asserted (to land, a throne, a seat: A-19, A-58, A-74) is always "a claim **to** X"; a creed Proposition is named in full | passes (an assertion that may be disputed); the two senses kept apart by "to" |
+| **ledger** | a person's own store of claims; also the deed ledger (institutions) and the ED ledgers (process) | `04` §A.3 `state/ledgers` (T) | — | passes (a book of account, figuratively of what one holds against others) |
+| **Tenure / hold** | a held relation of a person to a seat, place or person (`hold`, `commit`, `oblige`, `reside`, `contain`, …); **hold** is the Tenure by which a holder has a seat | `04` §B.8 (T) | MB posture `hold` (a unit standing its ground) is the ordinary verb and keeps its key | passes (tenure: the holding of an office or land) |
+| **cohort** | a population group: a `Person` at `weight > 1` | `04` S9; `engine/season/cohorts.yaml` (T) | a Roman cohort (a body of troops) is not meant | passes (demographic sense) |
+| **chronicle** | the reader that prints a world's Events in order with their causes | `engine/season/harness/chronicle.py` (T) | — | passes |
+| **carrier** | (1) a Layer 1 state carrier (`Person`, `Office`, `Record`, `Site`, `Rung`, `Event`, …); (2) the proposal that carries an edit ("the carrier") | `state/carriers.py` (T); (2) plain English | — | passes (that which carries) |
+| **channel** | the one route a quantity takes into a roll: leverage enters as named levels on one channel; a seat reaches a roll by two (its `office` level and `rank_gap`) | `sigma_leverage` (T); D-U1-01 | a news "channel" (a `reach` row) is named in full | passes (a means by which something passes) |
+| **key** | (1) a data key (a roster or YAML key, a seat id); (2) a draw's key `H(seed, tick, subject, purpose)` (A-30: "one draw per key") | `engine/dice_engine/draw.py` (P) for (2) | a capability ("holds the key at 2" → "holds the capability"); the retired Key substrate (ED-IN-0232) | passes in senses (1) and (2) |
+| **dial** | a setting that sizes a rate or a weight, shipped at its control value ("a dial at zero") | a `Fixtures` field (T) | — | passes (a control one turns to a level) |
+| **docket / bench / remit** | the matters waiting before a bench; the judges of a court as a body; the acts a seat may perform | `DocketItem`, `Seat.remit_acts` (T) | — | pass (legal and administrative English) |
+| **slate** | the list of questions a season puts to the player (A-48) | `11_GO_player_surface_contract_B.md` (P) | — | passes (a list of candidates or business) |
+| **strife / strand** | the realm's open lines of conflict; one strand opens, grows, joins and ends (A-45) | `world_q.Strand` (P) | "flow" (see *strand* above) | pass |
+| **dataclass** | a typed Python class holding a module's input or outcome | `queries/inputs.py` (T) | "typed record" (U4d: `Record` is the document carrier) | passes for its readers (code prose only) |
+| **choice score** | the chooser's valuation of one candidate act, a sum of score terms | `decision/choose.py` score terms (T) | "ordinary score" (U4d); bare "score" where a capability score is also in the sentence | passes |
+| **fixture** (`Fixtures`) | a named setting in `engine/season/data/fixtures.py::Fixtures` | `data/fixtures.py` (T) | — | **tree name fails**: ordinary "fixture" is a thing fixed in place or a scheduled match. Plain word: **setting**. Rename cost: class and readers in 52 code files; no hash moves [ASSUMPTION: no fixture's class name enters hashed state; not measured] |
+| **obligees** (`offices.yaml` key) | the persons sworn to a seat | `engine/season/offices.yaml` (T) | — | **tree name fails**: ordinary "obligee" is the party an obligation is owed to (the seat), the reverse. Plain word: **sworn**. Cost: 17 code and data files (`harness/obligee_report.py` among them); no hash moves [ASSUMPTION: the key is read at build and becomes `oblige` Tenures, so its name is not in hashed state; not measured] |
+| **subformations** (`armyrecord.KEYS`), `orderofbattle.Subformation` | one unit (a row of the army Record, A-2) | `modules/mass_battle/` (T) | — | **tree name fails** (it names one unit, while ordinary English and Jordan's A-59 mean a group of units). Plain word: **units** / `Unit`. Cost: 9 code and data files; every seeded result with an army moves once [ASSUMPTION: the army Record's keys enter `World.content_hash()`; not measured]. Waits on `U4D_FOR_JORDAN.md` J-U4d-02 |
+| MB **`stance`** (unit field) | a unit's tactical setting | `modules/mass_battle/orderofbattle.py` (T) | Layer 1 `stance` (a stored regard row) | **tree name collides**: both senses are ordinary, but one word names two things. Plain word: **posture** (`march_postures` precedent). Cost: the MB module's unit and strategy code [ASSUMPTION: file count not taken]; hash movement not measured |
+| **`pool.py::faculty`** | the pool reader | `engine/season/seam/wrappers/pool.py` (T) | — | **tree name fails** (ordinary "faculty" is an inborn power). Plain word: **pool**; D-U1-08 already splits it into `score` + addends. Cost: 38 code files mention `faculty`; no hash moves by the rename alone |
+| **storybar** (`harness/storybar.py`) | the story instrument: counts story shapes per arm | `engine/season/harness/storybar.py` (T) | — | **tree name fails** (no ordinary sense). Plain word: **story count** (the *census* row's word). Cost: 18 code files; harness only, no hash moves |
+| **aperture** (`harness/aperture.py`) | per-verb counts of acts attempted, executed and refused over a run | `engine/season/harness/aperture.py` (T) | — | **tree name fails** (an aperture is an opening). Plain word: **act count**. Cost: 23 code files; harness only, no hash moves |
+| **spine** (`governance_spine`) | the hand-built governance test world (thirteen seats) | `engine/season/` builders (T) | — | **tree name fails** (a backbone). Plain word: **governance test world**. Cost: 13 code files; no hash moves by the rename alone |
+| Tenure **edge** | a Tenure seen as a link between a person and a seat, place or person (`one_edge`, "ended edges", `04` AX-6) | `04` §B.8 (T, Layer 1 vocabulary) | the capability role *edge* | **tree name fails** (graph jargon; an edge is a border or an advantage). Plain word: **link**. A Layer 1 wording amendment, not a batch edit alone. Cost: not taken (the word "edge" appears in about 210 tree files in several senses) |
+| `VOCATIONS`, `vocation_attribute` | the tree's old capability roster | `data/verbs.py`, `rosters.yaml` (T) | — | tree name fails ("vocation" is a calling); already ordered deleted by CAP A2/A3 (OWNERS C-04), so not a new candidate |
+
+## I. Record of the U4d pass (2026-11-12)
+
+**Rows checked:** 129 rows of §A–§F plus §G (the naming gate). **Matches fixed:** 246 occurrences in 91 live
+files (88 proposals, `U1_OWNERS_AND_VOCABULARY.md`, `U3_CONFLICT_LEDGER.md`, `U3_DEPENDENCY_ORDER.md`): "Ob" →
+obstacle (19 files), "fought scene" → fight (10), "typed record" → dataclass (11), "vocation" → capability (11),
+"obligee" → sworn man (7), MB "stance" → posture (8), "subformation" (a unit) → unit (6), "graded route" → task
+route (6), "patient" → counterparty (5), "fisc" → treasury (4), "faculty" → capability or score (5), "ordinary
+score" → untrained score (3) or choice score (3), "province" → territory (2), "highest-held" → strongest (2),
+"distance band" → distance step (2), and one file each for "task difficulty", "settled margin", "reading
+record", "cut wire", "aptitude" (the attribute), "key" (a capability). Each file's last `Reconciled:` line names
+its changes; the full ledger is `work/U4D_RENAMES.md`. **Rows added:** 17 rows of terms and 10 rows of tree names (§H), plus
+**counterblow**, **removal test**, **task route** and **choice score** inside existing rows. **Words renamed:**
+riposte → **counterblow** (nine files), knockout → **removal test** (four files). **Tree-name mismatches listed
+as v12 candidates:** eight (§H: `Fixtures`, `obligees`, `subformations`/`Subformation`, MB `stance`,
+`pool.py::faculty`, `storybar`, `aperture`, `governance_spine`) plus one Layer 1 wording (Tenure *edge*).
+**Jordan's terms flagged:** four (`U4D_FOR_JORDAN.md`: regime, subformation, prowess with aptitude, rung).
+**Corrections to rows:** *arm* (a file named in error), *rout* ("a body's" → a unit's or side's), *susceptibility*,
+*upset* (kept in its ordinary sense), *golden*, *uncalled*/*unread*, *graded act*, *base* (an army's base), *body*
+(an institution), *approach* (A-83's sense).
+
+**The word test, word by word** (the lane's list; judged against ordinary English, not the tree's use). *Pass:*
+band, degree, venue, loadout, receipt (an acknowledgement of a transaction), witness, ground, hold, seat, body
+(two ordinary senses, kept apart), claim (with "a claim to" for a right), record, approach, capability, cohort,
+chronicle, deposit, carrier, stake, habit, strand, register, key (data and draw senses), channel, pool (the dice
+pool of tabletop play), score, talent, base, ledger, reading (a meter's figure), passage, lapse, gate (a check
+to pass), site, row, edge (the role: an advantage), member, leverage (influence or advantage), engine, surface
+(the player's surface only; the glossary heading "The capability surface" became "Capabilities"). *Fail, suite
+coinage, renamed:* riposte, knockout. *Fail, tree name, candidate:* faculty, vocation (already ordered), the
+Tenure edge, fixture, obligee, storybar, aperture, spine, `subformations`. *Fail or narrowed, Jordan's word,
+listed:* regime, subformation, prowess (with aptitude), rung (for a place).
+
+**Left as they are** (ordinary-word uses or quotations): "faculty" in Jordan's A-59 quote (`27_MB_A`), in
+`09_WR_B_threadwork_session_and_practitioner.md` ("the faculty judging itself"), in `AUDIT_BRIEF.md` (Disco
+Elysium's faculties) and in code (`def faculty`); "Ob" inside quoted rulings and old text (`16_PESSIMIST_SC_A`
+§*"never an Ob reduction"*, `16_PESSIMIST_SC_D`'s quoted figure, OWNERS charge 3), in "Three-Axis Ob" (the
+threadwork design's name) and in `OB_MIN`, `opposed_ob`; "patient" for a person being tended (`03_PC_exits`,
+`14_VERBS_MATERIAL_A`, `U5c_SC_one_obstacle_form` member 28) and "the patient man" (`28_CORE_C`); "graded
+inquiries" for the three inquiry verbs and "graded act" (ordinary); "upset" (ordinary: the weaker side winning);
+"fallback" (45: a plan's or code's fallback, never the stand-in); "province" in history and the geography file's
+`provinces` key; "set piece" (CL-OPEN's design name); "copying" (the scribe's capability, not a lie); "rhetoric"
+(NPC-001's canon trait, quoted); "susceptibility" (ordinary description); "uncalled", "unread"; "half the score",
+"bench die", "office weight", "settled margin" where a sentence names the retired rule as retired; the historical
+loan words in italics as historical parallels (*sekreton*, *missus*, *catasto*, *commenda*, *dedizione*,
+Kontor glossed as a league chapter); `storybar` in command lines; "obligees" as a YAML key; file names
+(`…_knockout_reading.md`, `…_roga_and_the_fisc.md`, `01_CORE_requirements_reading_record.md`).
+
+**Not checked** (one round): the rejected senses that are common words ("check", "test", "level", "post",
+"step", "price", "cost", "risk", "advantage", "edge", "message", "bonus") were not swept, since most uses are
+ordinary; `IMPLEMENTATION_BRIEF_A.md` (one "fought scene" in a brief, not a proposal); the `unified/` documents
+outside OWNERS and U3 (`DECISIONS_FOR_JORDAN.md`, `U4_*`, `U5_CONFLICTS_*`, `work/`); every `14_VERBS_*` body
+for "stance" in the person sense was read only at the hit lines.

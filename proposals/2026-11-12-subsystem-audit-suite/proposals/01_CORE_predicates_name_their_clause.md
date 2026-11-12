@@ -1,6 +1,6 @@
 # CORE — a governance refusal that never crashes and says which clause refused
 
-Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.1 row (CONFORMS), §7 (INCOMPLETE: clause names for `establish` only; scratch probe; no named test), §7b-17, §7b-T; `unified/U3_DEPENDENCY_ORDER.md` node B09, §6.2). Completed: the clause names of `oblige` and `succeed` are written from the branch comments at `engine/season/loop/predicates.py` (`_req_oblige` `:467`, `_req_succeed` `:183`; `confer`'s are the decorator's, `establish`'s the docstring list), marked `[ASSUMPTION]` for the FA lane to correct; the scratch probe is restated as named tests; the hash literal carries the B01 caveat; lands-it and tier. No other change.
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.1 row (CONFORMS), §7 (INCOMPLETE: clause names for `establish` only; scratch probe; no named test), §7b-17, §7b-T; `unified/U3_DEPENDENCY_ORDER.md` node B09, §6.2). Completed: the clause names of `oblige` and `succeed` are written from the branch comments at `engine/season/loop/predicates.py` (`_req_oblige` `:467`, `_req_succeed` `:183`; `confer`'s are the decorator's, `establish`'s the docstring list), marked `[ASSUMPTION]` for the FA lane to correct; the scratch probe is restated as named tests; the hash literal carries the B01 caveat; lands-it and tier. No other change. U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "obligee" → "sworn man" in prose (glossary *sworn*; the tree key `obligees` keeps its name).
 
 **Lands in batch:** B09 (step one hash EQUAL; step two one commit per row, each a declared mover). **Depends on:** the FA lane's authored kinds for step two (B21 may re-key them; the channel lands here).
 
@@ -79,7 +79,7 @@ numbered list or the branch's own comment:
 |---|---|
 | `establish` | `office resolves`, `rung held`, `conferral basis`, `filler`, `re-founding`, `may fill`, `reduction needs revocation` |
 | `confer` | `office`, `basis`, `conferee`, `purview`, `held`, `displacement` (the decorator below) |
-| `oblige` | `seat` (an opener takes a seat's id), `binds` (the seat's `binds` admits the joiner), `own_seat` (the occupant is not his own seat's obligee), `one_edge` (one edge per person and seat), `banned` (a banned man serves no seat) `[ASSUMPTION: names from the comments at `predicates.py:494-502`]` |
+| `oblige` | `seat` (an opener takes a seat's id), `binds` (the seat's `binds` admits the joiner), `own_seat` (the occupant is not sworn to his own seat), `one_edge` (one edge per person and seat), `banned` (a banned man serves no seat) `[ASSUMPTION: names from the comments at `predicates.py:494-502`]` |
 | `succeed` | `operand` (an unhashable subject; after edit 1 the shared read), `banned` `[ASSUMPTION: from the comments at `predicates.py:192-194`]` |
 
 **Gate.** `probe_predicates.py` (a scratch script, not in the repository) is restated as new tests in

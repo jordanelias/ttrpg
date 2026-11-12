@@ -2,7 +2,7 @@
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-25) — the prize `an order` is not added: `issue` and `dispatch` contest `a standing` (same hearer, same step; `U5c_VERBS_residue_and_governance_owner.md` §2). The term `standing` is `rank_gap`; a writ's band is the content key `force`. §13.4 decision 1 is answered (Jordan, A-22: command): commit D2 ships behind its revert. A decree is proclaimed (A-21).
 Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — the head applied to the body (`unified/work/R4_READ.md` §1.1, §2, 7b.3): every `an order` → `a standing` and edit 7 deleted; `standing` (the term) → `rank_gap` (U1 R-21, D-U1-01); A-21 answers FA §11 item 1 and corrects item 10 and gate D3 (an answer forms on any writ that is learned of; `force` enters the answer rows' obstacle); D4's dependency corrected at the tree (`loop/effects_migration.py::_relocate` exists, `:98`; the missing piece is a `dispatch` effect and its destination operand, CP-T09-08, which no suite proposal carries: `unified/U3_DEPENDENCY_ORDER.md` §6.3); A-81 (C3-C11), A-30 keys, U3 batch B21, R4 7b.0 block.
-Reconciled: 2026-11-12, wave-3 mop-up (`unified/work/W3_5a_DONE.md` row 13 and Close, "for another lane"): D2 edits 3-5 compose on `16_PESSIMIST_FA_C_under_the_seat.md`'s one `commands` body in `queries/world_q.py`; edit 3 no longer writes `state/gate.py::commands`.
+Reconciled: 2026-11-12, wave-3 mop-up (`unified/work/W3_5a_DONE.md` row 13 and Close, "for another lane"): D2 edits 3-5 compose on `16_PESSIMIST_FA_C_under_the_seat.md`'s one `commands` body in `queries/world_q.py`; edit 3 no longer writes `state/gate.py::commands`. U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "obligee" → "sworn man" in prose (glossary *sworn*; the tree key `obligees` keeps its name).
 
 ## Status: PROPOSED
 
@@ -13,7 +13,7 @@ Standing (R4 7b.0 (4)): the pool is the one pool rule (`sigma_leverage.pool_of`,
 
 Source: `audits/14_VERBS_BINDING.md` §0.1, §0.2, §4 (`dispatch`), §6 (`issue`), §13.4 decision 1; batch D.
 Binds on, and does not redo: `06_FA_decree_binds.md` (FA-P1: terms reach the addressee, answers form,
-defiance is an occasion), CP-T09-07 (b) and CP-T09-08 (`dispatch` sends an obligee,
+defiance is an occasion), CP-T09-07 (b) and CP-T09-08 (`dispatch` sends a sworn man,
 `proposals/2026-10-23-subsystem-completion/2026-10-23-subsystem-completion-09-factions-war-diplomacy.md`
 `:398-420`), F-FA-18 / R-27 (what a writ may order, design-first, FA's).
 
@@ -88,7 +88,7 @@ All are declared movers for the realm. (2) is §13.4 decision 1 of the audit and
    `issue`, or it does not command the executor"*). `[ASSUMPTION; medium; Jordan to correct; revert:
    `basis: purview`]`.
 6. `decision/options.py::operand_bags`: for a row whose `authority` conjunct is `basis: command`, fan `to`
-   over the persons the actor can read as commanded person-side: his own seats' obligees (his ledger's
+   over the persons the actor can read as commanded person-side: the men sworn to his own seats (his ledger's
    `duty.taken` claims naming his seat) and the holders his ledger names of seats beneath his. What he
    cannot read stays the fold's refusal.
 
@@ -135,7 +135,7 @@ Order: D1, D2, D3 (after SC-B and FA-P1), D4 (after a carrier of CP-T09-08 exist
 - D3: FA-B4's `recall` scenario, 40 seeds: all four `force` bands occur; at every band, Failure included,
   the Count is offered his answers once he learns of the issue (A-21; FA-P1's gate), and the answer's
   composed obstacle carries `force` (its value differs between a Failure and a Success writ).
-- D4: a seeded run in which a dispatched obligee's `contain` moves at O/S/P and does not at Failure.
+- D4: a seeded run in which a dispatched sworn man's `contain` moves at O/S/P and does not at Failure.
 
 ## Falsifier
 

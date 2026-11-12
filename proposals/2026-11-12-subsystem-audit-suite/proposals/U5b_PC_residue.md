@@ -8,7 +8,7 @@ audit and written into no proposal ("an edit", "recorded for the PC lane"), or a
 handed to this family. Reference only (CLAUDE.md §0.05). Sections are independent unless a dependency is
 named; each is commit-sized.
 
-Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §1.1 (§4 edit 2 VIOLATES `hol` §53 / `04` §C.12 rejection 5: the new `raise ValueError` is replaced by a signature with no default stream, so a missing stream fails at the call site, not by a runtime raise in a path the port reaches), §1.1 and §2 row A-30 (§7's "position after the mortal-wound draw" is a counter: the mark draw takes its own key; §8's private stream is keyed), `U1_OWNERS_AND_VOCABULARY.md` §4 R-27 (§1 names the one calibration that sizes the in-fight wound σ and the season's `wound_step` together), `U1_GLOSSARY.md` *skill* (§1 item 4: the slot family is `axis`), 7b's "`[grep at landing]` sites by grep now" (§2, §4 and §6 resolved at the tree; §6's importer count corrected from three to five), test 9 (`Depends on:` / `Lands in batch:` per section from `U3_DEPENDENCY_ORDER.md`). §10 stays INCOMPLETE (reason at the section).
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §1.1 (§4 edit 2 VIOLATES `hol` §53 / `04` §C.12 rejection 5: the new `raise ValueError` is replaced by a signature with no default stream, so a missing stream fails at the call site, not by a runtime raise in a path the port reaches), §1.1 and §2 row A-30 (§7's "position after the mortal-wound draw" is a counter: the mark draw takes its own key; §8's private stream is keyed), `U1_OWNERS_AND_VOCABULARY.md` §4 R-27 (§1 names the one calibration that sizes the in-fight wound σ and the season's `wound_step` together), `U1_GLOSSARY.md` *skill* (§1 item 4: the slot family is `axis`), 7b's "`[grep at landing]` sites by grep now" (§2, §4 and §6 resolved at the tree; §6's importer count corrected from three to five), test 9 (`Depends on:` / `Lands in batch:` per section from `U3_DEPENDENCY_ORDER.md`). §10 stays INCOMPLETE (reason at the section). U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "fought scene" → "fight" (glossary *scene*); "the riposte" (`18_DETERMINISM_no_certain_matchup.md`) → "the counterblow" (glossary *counterblow*).
 
 **Depends on:** §7 on `14_VERBS_PHYSICAL_A_custody_and_force.md` A3 for item 3's reading only (the keyed draw removes the order dependency); §8 on `10_DICE_believed_odds_have_a_prior.md` Edits A–B (B05); §1's fit and §3's census on the combat calibration batch (B15); all keyed draws on `11_GO_one_draw_owner.md` (B06).
 **Lands in batch:** §2, §4–§10 in B14 (`B14-pc-outcome`, PC; U3 places §7–§8 there); §1 items 1–2 in B14 and the fit (item 3) with B15; §3 in B18 (`B18-pc-content`, before `03_PC_person_inputs_content.md` Part B).
@@ -79,7 +79,7 @@ against a sword is 0 of 2,800. `rosters.yaml: arms_kinds` is empty, so neither r
 1. One workbench instrument, `workbench/balance.py::census(n)`: every startable weapon against every
    other at each armour tier, tracker-true (never `fight`'s integer), printing each cell beyond 95% with
    its disjoint-seed control. It is run **after** the calibration batch (the scale, the bare zone and the
-   riposte each move the cells).
+   counterblow each move the cells).
 2. `03_PC_person_inputs_content.md` Part B admits a kind to `arms_kinds` only with its census row named
    in the commit body: either no cell beyond 95% against the kinds already admitted, or the answering
    kind admitted with it (the estoc with plate).
@@ -194,7 +194,7 @@ Candidate is scored. **Depends on** `10_DICE_believed_odds_have_a_prior.md` Edit
 | row | edit |
 |---|---|
 | H-64 | closed: `fight` is a table row (`verb_table.yaml:733`); the stale symbol in its text stays marked |
-| H-264 | re-pointed: the duel is no longer the only door; `03_PC_duel_chain_reach.md` and A-16's carrier are named as its closers; it closes when `aperture` shows a fought scene from a person's own act |
+| H-264 | re-pointed: the duel is no longer the only door; `03_PC_duel_chain_reach.md` and A-16's carrier are named as its closers; it closes when `aperture` shows a fight from a person's own act |
 | H-349 | re-measured by `16_PESSIMIST_PC.md` §2.3 (light armour 1.5 points; plate a certainty); pointed at `16_PESSIMIST_PC_D` |
 | H-97 | pointed at `U5b_PC_rulings_in_the_fight.md` §3 |
 | H-258 | grade corrected from "closed as an assumption" to "a certainty at the gate (G-22)"; pointed at §7 |

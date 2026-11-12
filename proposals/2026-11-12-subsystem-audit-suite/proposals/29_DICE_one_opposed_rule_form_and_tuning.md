@@ -9,7 +9,7 @@ aptitude/prowess allowing them to defend better without making it a big attritio
 A-7, A-8, A-12, A-25, A-26, A-31, A-59, A-72. Evidence and the rejected forms:
 `audits/29_ONE_OPPOSED_RULE.md` (**AUD**). Reference only (`CLAUDE.md` §0.05).
 
-Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `U3_CONFLICT_LEDGER.md` C3-L1 (the "Layer 1 rows graded" table gains `04` D-29, conforming through `U5a_DICE_owed_edits.md` §1's quantised margin; "no Layer 1 text is owed" now holds), `U1_OWNERS_AND_VOCABULARY.md` D-U1-08 (`faculties` → `scores` + `addends`: item 29-2 steps 2, 4, 6 and 8 and the edit table's row 5 read `defender.score`), `OWED_TO_UNIFICATION.md` §B (the edit table's row 3 rewritten to match item 29-2, which governs), `U1_GLOSSARY.md` *aptitude* / *prowess* (for a person the attribute is **talent** and the trained rank is **training**; prowess is a unit's), `U3_CONFLICT_LEDGER.md` §10 (J-29-01 answered by A-79: CLOSED), U3 §6.1–§6.2 (the two missing test files are written as the batch's first commits; the scratch `p1_grid.py` and `p7_scale.py` readings are carried by `tests/valoria/test_combat_opposed_rule_shape.py`, so no probe is written separately), item 29-5's round half completed from `03_PC_duel_round_and_approach_B.md` as reconciled (the rate rides on `DuelRoundInput.fighters`; the hearing half stays INCOMPLETE); `Depends on:` / `Lands in batch:` from U3 (C3-D4; §4.1 row 22).
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `U3_CONFLICT_LEDGER.md` C3-L1 (the "Layer 1 rows graded" table gains `04` D-29, conforming through `U5a_DICE_owed_edits.md` §1's quantised margin; "no Layer 1 text is owed" now holds), `U1_OWNERS_AND_VOCABULARY.md` D-U1-08 (`faculties` → `scores` + `addends`: item 29-2 steps 2, 4, 6 and 8 and the edit table's row 5 read `defender.score`), `OWED_TO_UNIFICATION.md` §B (the edit table's row 3 rewritten to match item 29-2, which governs), `U1_GLOSSARY.md` *aptitude* / *prowess* (for a person the attribute is **talent** and the trained rank is **training**; prowess is a unit's), `U3_CONFLICT_LEDGER.md` §10 (J-29-01 answered by A-79: CLOSED), U3 §6.1–§6.2 (the two missing test files are written as the batch's first commits; the scratch `p1_grid.py` and `p7_scale.py` readings are carried by `tests/valoria/test_combat_opposed_rule_shape.py`, so no probe is written separately), item 29-5's round half completed from `03_PC_duel_round_and_approach_B.md` as reconciled (the rate rides on `DuelRoundInput.fighters`; the hearing half stays INCOMPLETE); `Depends on:` / `Lands in batch:` from U3 (C3-D4; §4.1 row 22). U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "fought scene" → "fight" (glossary *scene*); "ordinary score" → "untrained score" (glossary *untrained score*); "aptitude" for the attribute → "talent" (glossary *aptitude*, *talent*).
 
 **Depends on:** `U5a_capability_home_and_two_inputs.md` Part A (B04) for row 1; Part B, `U5a_DICE_owed_edits.md` §1 and `U5c_SC_one_obstacle_form.md` steps 0–5 (B05) for rows 2–4, 8; `U5b_PC_rulings_in_the_fight.md` §5 rows 4–5 (B15) for rows 5–7, 9; `03_PC_duel_round_and_approach_B.md` (B16) and `05_SC_playable_hearing_B.md` (B24) for item 29-5.
 **Lands in batch:** row 1 / item 29-1 in B04; rows 2–4 and 8 / items 29-2 (control) and 29-4 in B05; rows 5–7, 9 / item 29-3 in B15; item 29-5 in B30 (U3 §4.1 row 22, SPLIT).
@@ -24,7 +24,7 @@ stands.
 ## What it changes in `engine/season/` at runtime
 
 At the control arm, nothing (`opposition_rate` 0.5 is today's half-score in both modules, byte for byte for
-every score ≥ 0). At the live arm: every exchange of every fought scene is rolled against
+every score ≥ 0). At the live arm: every exchange of every fight is rolled against
 `0.4 × the defender's trained score` where it was `score / 2` (1.0 becomes 0.8 at the season default), in
 the combat calibration batch that already re-records every combat golden once (U5b §5 row 5); every social
 and task roll is composed as `U1` §4 already orders, with its constant now named (the even line), in the
@@ -36,7 +36,7 @@ batch that already moves every seeded result once (U5a Part B). This proposal ad
 opposed_ob(score, rate)  =  rate × max(0, score)                       # the one owner, engine/dice_engine/sigma_leverage.py
 even_line(pool_add)      =  MU_PER_DIE × pool_add                      # same module; derived, never typed (2.4 at 6)
 
-the argument, the task   ob = even_line + difficulty level + opposed_ob(opponent's trained score, or the ordinary score) + hostile terms
+the argument, the task   ob = even_line + difficulty level + opposed_ob(opponent's trained score, or the untrained score) + hostile terms
 the blow                 ob = opposed_ob(defender's trained score)
 every roll               roll_net_continuous(pool) + net_boost(levels for − levels against, pool);   degree_from_net(roll, ob)
 ```
@@ -64,7 +64,7 @@ U5c §2's `max(OB_MIN, …)` never binds and is left as written.
 | `pool_add`, `pool_floor` | fixtures (U5a B2) | 0, 0 | 6, 5 | the even line is 2.4 |
 | `DMG_SCALE` | `modules/combat/core.py:168` (U5b §4) | 1.55 | 1.07 seed (a Success is one Wound Interval) | 3.20 to 4.50 blows; lead change 35.2 to 45.2% |
 | the argument's difficulty ladder | `difficulty_ob` (`13_SC_tuning_tables.md` T1) | 0 / 1 / 2 / 3 | 0 / 0.5 / 1 / 1.5 **above the even line** | equals at `routine` fail 56.9 to 60.1% over ranks 0 to 7, inside `13_SC_calibration.md` C1; Success-or-better 22.2 to 30.1%, at C1's upper edge (0.30) at rank 7, which the calibration step reads |
-| `talent_level` | fixture (U5a B2) | `None` | `minor` | one step of aptitude against: Failure 58.7 to 68.0%, Success-or-better 25.4 to 18.1% (rank-2 equals, `routine`) |
+| `talent_level` | fixture (U5a B2) | `None` | `minor` | one step of talent against: Failure 58.7 to 68.0%, Success-or-better 25.4 to 18.1% (rank-2 equals, `routine`) |
 
 Read together at the live arm:
 
@@ -101,7 +101,7 @@ even line is derived, and the fight's second rate is withdrawn.
   officers' scores are their trained `arms` scores from the one pool reader.
 - **Orders and prowess in the field (A-59).** The obedience draw names `opposed_by: none`
   (`27_MB_A_command_and_the_obedience_draw.md:53`): nobody's rating opposes an order, so it is a task and
-  reads the composer's *nobody opposite* arm (the ordinary score through `opposed_ob`, on the even line). The
+  reads the composer's *nobody opposite* arm (the untrained score through `opposed_ob`, on the even line). The
   melee pair is not opposed (C-U5b-03). So the rule has two sites in a battle, the duel round and the
   obedience draw's stand-in; any later contest of one commander's command against another's calls
   `opposed_ob` on the trained command score and composes no private rate.
@@ -158,7 +158,7 @@ even line is derived, and the fight's second rate is withdrawn.
 
 ## Hash movers
 
-None at the control arm. Live: every fought scene and every combat golden (inside U5b §5 row 5's one
+None at the control arm. Live: every fight and every combat golden (inside U5b §5 row 5's one
 re-record); every graded social and task roll (inside U5a Part B's one re-pin). `terms` gains one entry on
 every social Event that records it (U5c §4 step 2 is already a declared mover for that tuple).
 
@@ -316,7 +316,7 @@ the export are re-recorded once, at the end of that row, not here.
 **Gate.** The new file green with its readings quoted in the commit beside a second run at seeds 800,000
 on (the control for sampling: expected 4.18 turns, 4.50 blows, 0.416). **Falsifier and control.** Any of
 this file's five falsifiers; the control arm is `cfg=dict(CFG, OPPOSITION_RATE=0.5)` with `DMG_SCALE` 1.55,
-which must reproduce 3.35 turns, 3.20 blows, 0.352 at the same seeds. **Hash movers.** Every fought scene;
+which must reproduce 3.35 turns, 3.20 blows, 0.352 at the same seeds. **Hash movers.** Every fight;
 every combat golden; `workbench/data/combat_armour_reference.json`; `engine/engine_params/combat_engine_v1.json`.
 **Depends on.** 29-2; `03_PC_typed_outcome_one_door.md` (U5b §5 row 1), as row 5 already requires.
 
@@ -401,7 +401,7 @@ one-word amendment is prose and is the U5a closure lane's. The Perception lever'
   person's rank reaches a field through his duel. Diagonal: a seat, a wound and an attribute reach the same
   roll by the level channel and cannot be counted in the obstacle as well. Horizontal: the port carries one
   rate.
-- **R.** Training, aptitude and injury are three different things about a person and read differently
+- **R.** Training, talent and injury are three different things about a person and read differently
   afterwards. Complete at the extremes: levels are soft-capped, the rank ceiling bounds the obstacle, the
   mirror is level at every rank, both tails stay open. With no player present, a master and a novice, two
   masters and two novices each produce a fight with a middle.

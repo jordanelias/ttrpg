@@ -1,6 +1,6 @@
 # MB · the commander as a chooser: what he decides, what he is shown, and what each order costs him
 
-Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §1.2 (`officer_pool` showing the true pool VIOLATES `04` D-42) with 7b-16 [DECISION] (the host builds each officer's pool as the commander believes it, from his own claims, `None` when he holds none, shown "unknown"; the "true value until the belief model supplies one" paragraph and INCOMPLETE item 2 removed), §1.2 watch row (`obey_odds` is one draw's band odds from the dice owner, not a field closed form; the manager proposal's §8 refusal is of a field's: stated once), `U1_GLOSSARY.md` *band* (`reach_bands` → `reach_steps`, distance steps), D-U1-11f (`standing_order_cap`); test 9 (INCOMPLETE item 3 closed by order: the manager's §4 lands earlier in B20; `Depends on:` / `Lands in batch:`).
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §1.2 (`officer_pool` showing the true pool VIOLATES `04` D-42) with 7b-16 [DECISION] (the host builds each officer's pool as the commander believes it, from his own claims, `None` when he holds none, shown "unknown"; the "true value until the belief model supplies one" paragraph and INCOMPLETE item 2 removed), §1.2 watch row (`obey_odds` is one draw's band odds from the dice owner, not a field closed form; the manager proposal's §8 refusal is of a field's: stated once), `U1_GLOSSARY.md` *band* (`reach_bands` → `reach_steps`, distance steps), D-U1-11f (`standing_order_cap`); test 9 (INCOMPLETE item 3 closed by order: the manager's §4 lands earlier in B20; `Depends on:` / `Lands in batch:`). U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): MB unit "stance" → "posture" in prose (glossary *stance*, *posture*; the code field `stance` keeps its name).
 
 **Depends on:** `27_MB_A_command_and_the_obedience_draw.md` 27A-3, 27A-4 (B19); `04_MB_manager_battle_one_resolver.md` §2, §4, §5 (B20, earlier in the batch); `10_DICE_believed_odds_have_a_prior.md` (B05) and the believed-estimate route of `U5b_MB_residue.md` §5 for the believed officer pool; `26_MASS_BATTLE_cell_scale_and_time.md` §3 (B19); CHAR's cells for 27D-4.
 **Lands in batch:** B20 (`B20-mb-orders`, MB), after `04_MB_playable_field_scenario.md` A, C, D; 27D-4 returned to CHAR.
@@ -43,7 +43,7 @@ commander) it changes what that commander does at a window. No natural season fi
 |---|---|---|---|
 | in the season, before any field | composition | troop rows; the Record's ops (`armyrecord.OPS`) | `recruit`, `form_unit`, `assign_troops`, `disband_unit` (`14_VERBS_MILITARY_C`, `_D`) |
 | | the formation | `troops.yaml: formations` | `order_unit`, army-level payload |
-| | each unit's post, ranks, files, second weapon, role, stance | the unit row's columns | `order_unit` |
+| | each unit's post, ranks, files, second weapon, role, posture (`stance`) | the unit row's columns | `order_unit` |
 | | each unit's standing orders (at most `standing_order_cap`, D-U1-11f) and the signals they wait on | `battle_orders.json: triggers`, `behaviours` | `order_unit` |
 | | **who commands each unit** | persons of his faction; the row's `officer` | `order_unit` |
 | | **where he rides** | the unit names of his own Record; `commander_post` | `order_unit` |

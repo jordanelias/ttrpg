@@ -1,6 +1,6 @@
 # MB · a unit's own prowess: columns of its row, one function that composes its pool, and no baseline lent by its side
 
-Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `U1_OWNERS_AND_VOCABULARY.md` D-U1-11p (*prowess* is a unit's quality only: already so), D-U1-11o and `U1_GLOSSARY.md` *band* (§1's "subformation" row is the unit's **formation**, its cell arrangement, and `bands` is `layers`), `R1_READ.md` §1.2 (CONFORMS; "no function sums it over an army" stays the author's CONVENTION); `U3_DEPENDENCY_ORDER.md` (node B31; `Depends on:` / `Lands in batch:` added; INCOMPLETE item 1 closed by order, since the troop file lands in B17 before B31). **Order note:** U3's node table puts this file in B31, but 27B-1 and 27B-2 are `04_MB_cr12_linear_law.md` step 2 ("one function returns the pool's base term", that file's first `Folded:` item) and `U5b_MB_rulings_in_the_field.md`'s head item (3) places them in the field calibration batch; so 27B-1/27B-2 land in B19 with CR-12 step 2 and 27B-3/27B-4 in B31 (reported for U3/U4).
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `U1_OWNERS_AND_VOCABULARY.md` D-U1-11p (*prowess* is a unit's quality only: already so), D-U1-11o and `U1_GLOSSARY.md` *band* (§1's "subformation" row is the unit's **formation**, its cell arrangement, and `bands` is `layers`), `R1_READ.md` §1.2 (CONFORMS; "no function sums it over an army" stays the author's CONVENTION); `U3_DEPENDENCY_ORDER.md` (node B31; `Depends on:` / `Lands in batch:` added; INCOMPLETE item 1 closed by order, since the troop file lands in B17 before B31). **Order note:** U3's node table puts this file in B31, but 27B-1 and 27B-2 are `04_MB_cr12_linear_law.md` step 2 ("one function returns the pool's base term", that file's first `Folded:` item) and `U5b_MB_rulings_in_the_field.md`'s head item (3) places them in the field calibration batch; so 27B-1/27B-2 land in B19 with CR-12 step 2 and 27B-3/27B-4 in B31 (reported for U3/U4). U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): MB unit "stance" → "posture" in prose (glossary *stance*, *posture*; the code field `stance` keeps its name).
 
 **Depends on:** 27B-1/27B-2 on nothing unlanded (they are CR-12 step 2); 27B-3/27B-4 on `04_MB_unit_loadout_and_weapon_in_hand_B.md` stage 1 (B17); gate 2 on `04_MB_campaign_party_economy.md` §1 (B31); gate 5 on `04_MB_cell_hierarchy_as_data.md` (B19).
 **Lands in batch:** 27B-1, 27B-2 in B19 (`B19-mb-field-calibration`, first, with CR-12 step 2); 27B-3, 27B-4 in B31 (`B31-mb-loadout-economy`, last; U3 §4.1 row 80).
@@ -60,7 +60,7 @@ it; that literal becomes a troop row with the same values, so nothing moves ther
 | | `armour` tier | troop row | die-equivalents against the attacker's net (`16_PESSIMIST_MB_partition_and_the_pair_rule.md` edit 3); the rally step |
 | | the load | `strength` against the masses carried | `(fatigue_factor, step_factor)` on the column ledger's drain and rest and on the step (`…_B.md` §5; `26_MASS_BATTLE_movement_and_fatigue_as_data.md`) |
 | subformation (A-59's word; the unit's **formation**, its cell arrangement, D-U1-11o) | `ranks`, `files`, `shape`, `distribution`, `layers` (was `bands`) | unit row, defaults on the troop row (`04_MB_cell_hierarchy_as_data.md` §2, §4) | frontage, support depth, fatigue damping, shock absorbed, the wrap resisted |
-| tactics | `role` and its instructions, `stance`, `standing_orders`, `post` | unit row | the stance term, brace, yield, targeting; applied through `obey` (`27_MB_A`) |
+| tactics | `role` and its instructions, `stance`, `standing_orders`, `post` | unit row | the posture term, brace, yield, targeting; applied through `obey` (`27_MB_A`) |
 
 Nothing in the table is new except the last column's statement of where it is read.
 
@@ -78,7 +78,7 @@ for one pair, one tick:
 pool     = prowess * engaged_share(pair)            # the unit's cells in this pair, a cell in m pairs counting 1/m
            * YIELD_POOL_MULT   if yielding and not pocketed
            = 0                 on the tick it changes the arm in hand, and while it re-forms
-levels   = morale + fatigue + stance (own and the enemy's) + ground - the enemy's armour
+levels   = morale + fatigue + posture (own and the enemy's) + ground - the enemy's armour
            + charge shock - brace recoil + (a missile arm in hand, hand to hand)        # summed, capped once
 net      = roll_net_continuous(pool) + net_boost(levels, pool)
 dealt    = K_LINEAR * frontage(pair) * PAY_PER_NET * max(0, net) * (1 + quality)

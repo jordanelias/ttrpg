@@ -1,8 +1,8 @@
-# Census (REST) 2 — wiring: four cut wires this census closes itself, and the ledger of those other proposals carry
+# Census (REST) 2 — wiring: four declared things with no reader that this census connects itself, and the ledger of those other proposals carry
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-20) — W3 stands, with one change to its edits 3–4: the comparison is not a second hand-written read of `thread_sensitivity_gate`. It is a `gate` row of `rosters.yaml: tables.capability_uses` at the site `told_retain` (the row's `side` and `retainable`'s signature are corrected by the wave 3 line below), read through the one reader `capability_admits` (`unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §3 amendment 5, §8). `loop/witness.py` calls `retainable`. Jordan's answer A-11 (a capability never gates, except Thread Sensitivity) admits this gate and no other. W1, W2 and W5 are unchanged.
 
-Reconciled: 2026-11-12, wave 3 lane W3-5b (`unified/work/R5_READ.md` §1 row REST_2 W3 AMBIGUOUS, §2 rows REST_2:W3 and W3 vs A-33, §7, 7b; `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §3 item 5, the site table row `own_state_gate, told_retain`, §8; `unified/U3_DEPENDENCY_ORDER.md` §1 items 20, 24, 32, 35, §4.1 row 85). Changed: (1) W3's edits 3-4 are rewritten to the head: `retainable(p, predicate, fx)` takes the hearer's `Person` and calls `capability_admits(p, "told_retain", fx)`; the old signature `(hearer_sensitivity, gate, predicate)` could not call a reader that takes a `Person` (R5 §1); (2) the use row is U1's (`gate · prac.thread_sensitivity · actor · gain: thread_sensitivity_gate`, the hearer being the person the reader is called on), not the earlier `side: subject`; U1 decides over the U5a head where they differ; (3) W3's Layer 1 placement is stated at the site (R5 §1 pick: a retention rule at WITNESS through the one reader, no `capability` eligibility kind; 04 `:180` lists no Person field among WITNESS's reads, so the site names this); (4) W3's test file and test names; (5) batch and tier lines. W1, W2, W5 unchanged.
+Reconciled: 2026-11-12, wave 3 lane W3-5b (`unified/work/R5_READ.md` §1 row REST_2 W3 AMBIGUOUS, §2 rows REST_2:W3 and W3 vs A-33, §7, 7b; `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §3 item 5, the site table row `own_state_gate, told_retain`, §8; `unified/U3_DEPENDENCY_ORDER.md` §1 items 20, 24, 32, 35, §4.1 row 85). Changed: (1) W3's edits 3-4 are rewritten to the head: `retainable(p, predicate, fx)` takes the hearer's `Person` and calls `capability_admits(p, "told_retain", fx)`; the old signature `(hearer_sensitivity, gate, predicate)` could not call a reader that takes a `Person` (R5 §1); (2) the use row is U1's (`gate · prac.thread_sensitivity · actor · gain: thread_sensitivity_gate`, the hearer being the person the reader is called on), not the earlier `side: subject`; U1 decides over the U5a head where they differ; (3) W3's Layer 1 placement is stated at the site (R5 §1 pick: a retention rule at WITNESS through the one reader, no `capability` eligibility kind; 04 `:180` lists no Person field among WITNESS's reads, so the site names this); (4) W3's test file and test names; (5) batch and tier lines. W1, W2, W5 unchanged. U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "subformation" → "unit" in prose (glossary *unit*); "cut wire" → "declared with no reader" (glossary *wire / reader*).
 
 Depends on: W1 `04_MB_manager_battle_one_resolver.md` §2 (B20); W2 `05_SC_playable_hearing_B.md` (B24); W3 `14_VERBS_PHYSICAL_D_thread_read.md` stage 1 (B35) and U1's capability block (B04: the `capability_uses` table and `capability_admits`); W5 `15_INSTITUTIONS_PAPACY_B_patronage_election_discipline.md` (B32).
 Lands in batch: W1 in B20, W2 in B24, W3 in B35 (after `14_VERBS_PHYSICAL_D` stage 1), W5 in B32 (`U3_DEPENDENCY_ORDER.md` §1, §4.1 row 85, SPLIT). One commit each.
@@ -43,7 +43,7 @@ get that far"). No test constructs one.
 exports and validates. That grammar gives the trigger no operand for *which* ally; this edit supplies it
 and that proposal's row syntax gains it.
 
-**Resolution, decided.** The ally is named, by the subformation's name, on the order; the army builder
+**Resolution, decided.** The ally is named, by the unit's name (its `subformations` row), on the order; the army builder
 resolves the name to the sibling subunit; an order that needs an ally and has none is refused where it
 is built.
 
@@ -251,7 +251,7 @@ constant), leaving the matrix row declared and unwritten like `(Rung, envelope)`
 
 ## Carried by other proposals (no edit here; listed so the wire is not counted twice)
 
-| cut wire (audit row) | carrier |
+| declared with no reader (audit row) | carrier |
 |---|---|
 | `Unit.officers` read at resolution (§1a) | `04_MB_manager_battle_one_resolver.md` §7 |
 | threadwork outcome fields: `just_transitioned`, `net_successes`, `CollectiveResult` ×4, `OpposingResult` ×4 (§1d) | `09_WR_threadwork_module.md`; rule added: a field the host adapter does not read at landing is cut in that commit |

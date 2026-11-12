@@ -4,7 +4,7 @@ Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 (X-04, X-22,
 
 Re-grounded: 2026-11-12 (audit §18) — the scenarios do not change; the report gains five readings, each with the condition under which it fails (`15_INSTITUTIONS_BYZANTINE_grounding_mechanisms.md` item 3): who stayed away, what the hand took, the servant after the reign, what he kept, the lord who outgrew his minister. Two nulls are recorded for this file's premise: of the four policy and court sims the tree verified, none rolls a governance act to fail except partly one (`research/game_precedent_suite/tables/R9_policy_court_sims.md:8-18`), so the drawn court has no shipped precedent; the stipend by title does (`tutorials/T13_koei.md:78`).
 
-Reconciled: 2026-11-12, wave 3 lane W3-4b — applied `R4_READ.md` §1.7 (BYZ_F: "superseded by SYN_D (case files)", body stale), §2 (A-80 row; A-21), §7 (INCOMPLETE: superseded; `procedure_draws` arms), 7b.0, 7b.7 ("add the A-80 arm"); `U3_CONFLICT_LEDGER.md` C3-C12; F-R4-11 (BINDING-C's kind names). Changed: the body now follows this file's first `Reconciled:` line, which it had not: the two situations are case files with `base: spine` and their set-up acts are `setup.prehistory` (no edit to `governance_spine.py`); the digest lines and `bands=N` are the one report's (`harness/institution.py`), with the `roll` line read as `certificates`; stores are `default_store_kind`; the controls are the pinned roll and `task_draw_arm`; papers become **entered**, not answerable (A-21); the line names follow BINDING-C; the A-80 arm is added.
+Reconciled: 2026-11-12, wave 3 lane W3-4b — applied `R4_READ.md` §1.7 (BYZ_F: "superseded by SYN_D (case files)", body stale), §2 (A-80 row; A-21), §7 (INCOMPLETE: superseded; `procedure_draws` arms), 7b.0, 7b.7 ("add the A-80 arm"); `U3_CONFLICT_LEDGER.md` C3-C12; F-R4-11 (BINDING-C's kind names). Changed: the body now follows this file's first `Reconciled:` line, which it had not: the two situations are case files with `base: spine` and their set-up acts are `setup.prehistory` (no edit to `governance_spine.py`); the digest lines and `bands=N` are the one report's (`harness/institution.py`), with the `roll` line read as `certificates`; stores are `default_store_kind`; the controls are the pinned roll and `task_draw_arm`; papers become **entered**, not answerable (A-21); the line names follow BINDING-C; the A-80 arm is added. U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "fisc" → "treasury" (glossary loan words).
 
 ## Status: PROPOSED
 
@@ -25,7 +25,7 @@ one report (SYNTHESIS-D §1). No file under `loop/`, `state/`, `queries/`,
 
 ## The problem (evidence)
 
-- Nothing lets a player enter the court, the fisc or the chancery and face a choice (FA audit
+- Nothing lets a player enter the court, the treasury or the chancery and face a choice (FA audit
   F-FA-07: "there is no FA scenario, digest or end condition"). FA-P4 supplies three situations
   (`vacancy`, `order`, `succession`) and FA-B4 a fourth (`recall`); none turns on money owed or on a
   paper waiting.
@@ -63,7 +63,7 @@ under the case's `setup.seats`, which is data and no branch. `[UNVERIFIED]` that
 hearth holds stores to give; if not, the case's `setup.stores` seeds them.
 
 *What the player is shown each season* (FA-P4's `offered`, grouped by remit act, plus the digest):
-the bill and when it falls; the fisc; each sworn man, his grade, his term's maturity and his regard
+the bill and when it falls; the treasury; each sworn man, his grade, his term's maturity and his regard
 as the player's own ledger gives it; the persons whose deeds the player holds and who hold no
 dignity; the candidates `requisition` (per duchy, with the amount his shortfall claim names),
 `transfer` (per payee), `confer` (per vacant row and known deed).
@@ -84,7 +84,7 @@ returns; his scene budget. *Chosen:* which to `carry` (a draw each), which to le
 `w.tenures`, `w.records` and `Rung.stores` for the season):
 
 ```
-fisc          <rung>: grain 2 · bill due this year 5 · shortfall 3     (default_store_kind)
+treasury          <rung>: grain 2 · bill due this year 5 · shortfall 3     (default_store_kind)
 sworn         renewed 1 · matured 1 · live 3            (per paying seat)
 collected     rendered 0 · taken 1 · partial 1 · resisted 0   (per place; `rendered` while U1 keeps it)
 dignities     held 2 of 4 · conferred 1 · resisted 0 · provisional 0
@@ -138,7 +138,7 @@ the gate): gate 3's hash comparison fails.
 
 | point | `roga` | `chancery` |
 |---|---|---|
-| a situation | a bill larger than the fisc, a year to meet it, a deed unhonoured | papers in hand, more than a budget covers |
+| a situation | a bill larger than the treasury, a year to meet it, a deed unhonoured | papers in hand, more than a budget covers |
 | real choices | whom to tax, whom to pay, whom to honour | which to enter, which to leave |
 | choices change what happens | terms renew or mature; places remember | instruments are entered, return, or lapse |
 | consequences | a matured oath takes a man and his people out of the seat's purview | the issuer's regard, then his recall |

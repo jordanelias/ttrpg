@@ -1,9 +1,9 @@
 # U5c · SC — one obstacle form: one roster, one composer, and a leverage channel for what a party brings
 
-Folded: 2026-11-12, lane 29 (`audits/29_ONE_OPPOSED_RULE.md`; `proposals/29_DICE_one_opposed_rule_form_and_tuning.md` edit 4), on Jordan's A-71 — §2's form gains one leading term and fixes one operand; the roster, the composer, the record and the order stand. `hard = even + difficulty + opposed_ob(score, opposition_rate) + Σ raw_i × step_i`, where `even = MU_PER_DIE × pool_add` (derived in the module; roster member `even`, first, whose host function is the one that carries `pool_add` onto the record, so §1's pairing rule holds) and `opposed_ob` reads the **trained score** of the person opposite, or the ordinary score (`pool_default`) where nobody is. This is the same number as "0.4 × the opponent's pool" in the conformance table above; it is written this way because the fight reads the same `opposed_ob` at the same rate and has no even line. The floor `max(OB_MIN, …)` no longer binds on any social roll (the even line is above it) and is left as written.
+Folded: 2026-11-12, lane 29 (`audits/29_ONE_OPPOSED_RULE.md`; `proposals/29_DICE_one_opposed_rule_form_and_tuning.md` edit 4), on Jordan's A-71 — §2's form gains one leading term and fixes one operand; the roster, the composer, the record and the order stand. `hard = even + difficulty + opposed_ob(score, opposition_rate) + Σ raw_i × step_i`, where `even = MU_PER_DIE × pool_add` (derived in the module; roster member `even`, first, whose host function is the one that carries `pool_add` onto the record, so §1's pairing rule holds) and `opposed_ob` reads the **trained score** of the person opposite, or the untrained score (`pool_default`) where nobody is. This is the same number as "0.4 × the opponent's pool" in the conformance table above; it is written this way because the fight reads the same `opposed_ob` at the same rate and has no even line. The floor `max(OB_MIN, …)` no longer binds on any social roll (the even line is above it) and is left as written.
 
 Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.4 row OBS, §3 rows *seat modifier*, *the opposition*, *the obstacle roster*, §7, §7b-17, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-01, D-U1-02, D-U1-04, D-U1-11j, D-U1-11k, ledger R-16 to R-26; `unified/U1_GLOSSARY.md` *modifier*, *difficulty level*, *rank_gap*; `unified/U3_CONFLICT_LEDGER.md` C3-A3 (2), C3-L5, C3-N9). Changed: §2's form line carries the head's leading term `even` (body brought to the head); §1's score row names the **trained score** (D-U1-02); §1 gains the lane A sentence (C3-A3 (2)); the conflict with U1 §3 item 6 is closed by D-U1-01 — §3 `office` defender column struck ("—"), `office_level` → the exercised seat's `modifier:` (`offices.yaml`), the bench die is that `modifier:`'s first authored value, and the A-12 row of the conformance table says so; §4 step 1a retires lane A's `rosters.yaml: task_difficulty` into the `difficulty:` column (D-U1-04) and step 5's `standing_dice` becomes the bench seats' `modifier:`; the roster's member count is never typed (C3-N9: read `len(rosters.yaml: obstacle_terms.values)` at landing); `remove` is folded into `distance` (D-U1-11k); the leverage roster is written in full with `wounds` (A-8) and `waiting` (28C); the gate's scratch probes become named tests; lands-it and tier added. The choice key for `calm`/`press` is `questioning` (U1 ledger P-03); the leverage source keeps the name `approach`.
-Reconciled: 2026-11-12, wave-3 mop-up (`unified/work/W3_4b_DONE.md` "For another lane", first item; `unified/work/W3_5a_DONE.md` row 12; `unified/U3_CONFLICT_LEDGER.md` C3-C10, F-39): member 12 `commitment` widened to the hearer's `owed_to` edges toward the other party (no 29th member for it); leverage source `obligation` added after `favour` (§3 order and row); member 29 `cross_chain` added for `confer` (FA-B's request). `distance`'s definition is not decided here (carried, `W3_MOPUP_DONE.md`).
+Reconciled: 2026-11-12, wave-3 mop-up (`unified/work/W3_4b_DONE.md` "For another lane", first item; `unified/work/W3_5a_DONE.md` row 12; `unified/U3_CONFLICT_LEDGER.md` C3-C10, F-39): member 12 `commitment` widened to the hearer's `owed_to` edges toward the other party (no 29th member for it); leverage source `obligation` added after `favour` (§3 order and row); member 29 `cross_chain` added for `confer` (FA-B's request). `distance`'s definition is not decided here (carried, `W3_MOPUP_DONE.md`). U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "Ob" → "obstacle" in prose (glossary *obstacle*); "typed record" → "dataclass" (glossary *record*); "ordinary score" → "untrained score" (glossary *untrained score*).
 
 **Lands in batch:** B05 (steps 0–5; step 6+ with each verb proposal's own batch). **Depends on:** B01 (lane A's `obstacle_terms`, `task_difficulty`, `ob_terms`, the starting point), B04 (CAP Part A; `opposed_ob`), `29_DICE_one_opposed_rule_form_and_tuning.md` items 29-1 to 29-4 (B05), `05_SC_contest_record_on_event.md` (B05, the record, C3-L5), `13_SC_tuning_tables.md` (B05). `05_SC_evidence_and_rebuttal_B.md` is a LATER edge (B24; U3 §4.1 row 25).
 
@@ -49,7 +49,7 @@ obstacle is today's 2.0 for every act whose counterparty holds no score. Declare
    PES-A makes them named levels. T13 and the verb proposals add terms of either sign. The module today
    subtracts and clamps (`modules/social_contest/roll.py:142-143`).
 2. **The subtracting form is the one the tree retired for this engine.** `ED-884` (resolved): advantage as
-   an obstacle reduction violated the Ob floor and was reformulated as a shift of the expected net.
+   an obstacle reduction violated the obstacle floor and was reformulated as a shift of the expected net.
    `ED-934` (approved by Jordan) re-ratified it for combat. `ED-1037` (resolved) fixed the same defect in
    the contest engine itself: *"applied sigma-leverage as a clamped Ob-reduction (effective_ob floored at
    OB_MIN=1), reintroducing 1/sqrt(N) impact non-uniformity"*. `rosters.yaml: advantage_sources`' source
@@ -89,7 +89,7 @@ the roster's shape.
 | the score a person rolls and opposes with | `engine/season/seam/wrappers/pool.py::score`, the **trained score** (`max(pool_default, held rank)`; no addend, no seat, no attribute; A-79, D-U1-02) (`10_DICE_one_score_two_roles.md` edit A) |
 | the set of leverage sources | `rosters.yaml: advantage_sources` and `sigma.py::ADVANTAGE_SOURCES` (existing) |
 
-The typed record carries the terms as one field, not one field per term:
+The dataclass carries the terms as one field, not one field per term:
 `SocialContestInput.obstacle_operands: tuple[tuple[str, float, float], ...]` — `(name, raw operand, step)`
 in roster order, built by `sigma.py::obstacle_operands(w, act, row)` through `OBSTACLE_TERMS`. `difficulty`
 and `opposition` keep named fields (`difficulty: float`, `opposition: Optional[float]`, `pool_default: int`)
@@ -131,7 +131,7 @@ the obstacle). The values in `terms` sum exactly to `ob`.
 | # | member | what stands against the act | read from (single owner) | applies to | first stated |
 |---|---|---|---|---|---|
 | 1 | `difficulty` | the act itself | the verb row's `difficulty:` level → fixture table `difficulty_ob` | every rolled act | SC-B; T13 T1 |
-| 2 | `opposition` | the one acted against, or the ordinary score | `pool.py::score`, `opposed_ob` | every rolled act | SC-B; DICE; PES-DICE |
+| 2 | `opposition` | the one acted against, or the untrained score | `pool.py::score`, `opposed_ob` | every rolled act | SC-B; DICE; PES-DICE |
 | 3 | `standard` | what the room demands | the docketed arrangement row's `standard:` level | acts an audience hears on a docketed matter | SC-B; T13 T2 |
 | 4 | `subject` | what the thing examined puts in the way | `Record.forgery_quality`; a cover's `quality` | inquiries | SC-B; S1-C §3 |
 | 5 | `stakes` | the weight of what the act would take or impose | fixture table `stakes_ob` by Tenure kind or share | acts that restrain or take | SC-B; M-B §4 |
@@ -211,12 +211,12 @@ Lanes: SC (the module, `sigma.py`), IN and CORE (the roster, the verb column, th
 ### §5 What a roll records
 
 `Margin` gains `terms` (§2). `sigma.resolve`'s result gains `levels: ((source, aggressor n, defender n), …)`.
-SC-P1's roster carries both, so a log line reads *Ob 2.5 = difficulty 0.5 + opposition 1.5 + rank_gap 0.5;
+SC-P1's roster carries both, so a log line reads *obstacle 2.5 = difficulty 0.5 + opposition 1.5 + rank_gap 0.5;
 leverage: proofs +2, favour +1, effort +1*.
 
 ### §6 Two constraints on every band map that sits on this form
 
-- No row hangs its only effect on Overwhelming: at pool 2 it is dealt 0.00 at Ob 2 and 0.01 at Ob 1 (13 §4
+- No row hangs its only effect on Overwhelming: at pool 2 it is dealt 0.00 at obstacle 2 and 0.01 at obstacle 1 (13 §4
   cell 7; 0 of 284 realm rolls).
 - The default share of a scalar effect by band is one table under one name (C-23): `task_fraction`
   (`18_DETERMINISM_task_draw_for_uncontested_verbs.md` item 4, as U5a reconciled it), first values
@@ -265,7 +265,7 @@ the actor's.
 ## Layer 1 reading (`skills/layer-conformance`, Lens B)
 
 `04` §A.2, the provider row (*owns nothing; reads a projection; returns a `Margin`*): conforms; the module
-composes from a typed record and names no `engine/season` module. `04` §B.2 (the ledger is never read by
+composes from a dataclass and names no `engine/season` module. `04` §B.2 (the ledger is never read by
 another person; F8): every host function above reads the actor's own ledger, a person's interior fields
 (stance rows, pursuits, Tenures), a Record or the docket; grade MECHANICAL only where a test plants a
 ledger read (gate 1's sibling in `test_sc02_reception.py`), otherwise CONVENTION, stated. `04` PART D row 30

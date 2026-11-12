@@ -4,7 +4,7 @@ Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-15) —
 
 Reconciled: 2026-11-12, U5d closure — folded **A-43**, **A-40**, **A-11** and **A-5**. Edit 3 (R-25: `coherence` is world-only for its owner, not an `OWN_STATE_STEMS` member) stands and is joined by its other half, what **others** read of him: `U5d_WR_zero_coherence_unknowable.md` (legibility as the one dial; at zero he keeps seats and goals and cannot be understood). The sentence offering Jordan a visible band for the player's own person is not answered by A-43 (which speaks of what others can know of him) and stays as written. The breach and the strain draws are on the one sampler (A-5); Thread Sensitivity stays the one gate (A-11); a working's subject is a Site (A-40).
 
-Reconciled: 2026-11-12, wave 3 (W3-3) — R3 §1 Option A / 7b-10: `WorkingInput.draw: object` becomes `draws: tuple` of pre-drawn integers, so the module's input is a plain record (`holonic` §45 typed records; the `modules/settlements` precedent); R3 §2 (A-5, A-6, A-7): the strain draw's single-input pool and obstacle are marked `[ASSUMPTION: single input pending U5a]` and pointed at the capability architecture's `thread` site row; the body follows the U5a head (edit 3 point 3 and the falsifier read `account`, not `PersonProjection`); tier and batch added (R3 7b-0; U3 B35).
+Reconciled: 2026-11-12, wave 3 (W3-3) — R3 §1 Option A / 7b-10: `WorkingInput.draw: object` becomes `draws: tuple` of pre-drawn integers, so the module's input is a plain record (`holonic` §45 typed records; the `modules/settlements` precedent); R3 §2 (A-5, A-6, A-7): the strain draw's single-input pool and obstacle are marked `[ASSUMPTION: single input pending U5a]` and pointed at the capability architecture's `thread` site row; the body follows the U5a head (edit 3 point 3 and the falsifier read `account`, not `PersonProjection`); tier and batch added (R3 7b-0; U3 B35). U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "typed record" → "dataclass" (glossary *record*); "Ob" → "obstacle" in prose (glossary *obstacle*).
 
 ## Status: PROPOSED
 
@@ -81,7 +81,7 @@ adds one overlay case to `harness/exercises.py`, which the loop does not import.
 
 ## The edits
 
-### Edit 1 · the session on the typed records (`engine/season/queries/inputs.py`; replaces the first lane's edit 1)
+### Edit 1 · the session on the dataclasses (`engine/season/queries/inputs.py`; replaces the first lane's edit 1)
 
 The first lane's `Practitioner` stands unchanged. `WorkingInput` and `WorkingOutcome` become:
 
@@ -111,7 +111,7 @@ class WorkingOutcome(NamedTuple):
 The parameter file of the first lane's edit 3 gains four rows: `overweave_step` (obstacle added per prior
 operation), `fatigue_scale_per_will` (the fatigue at which strain starts to bite, as a multiple of
 `actor.spirit`), `ops_per_contact` as `focus - k` with `k` a row, and `partial_breadth: next_lower` (R-34);
-the operation table gains a `fatigue_cost` column. Values: the design set's (×5, Focus − 1, +1 Ob),
+the operation table gains a `fatigue_cost` column. Values: the design set's (×5, Focus − 1, +1 obstacle),
 `[ASSUMPTION; medium; Jordan to correct]`, carried as data and read nowhere else.
 
 **No threshold decides an outcome (the brief's standing rule, "we do not do deterministic").** The

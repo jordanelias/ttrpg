@@ -4,7 +4,7 @@ Folded: 2026-11-12, lane 29 (`audits/29_ONE_OPPOSED_RULE.md` §5; `proposals/29_
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-01 to C-04, C-13, C-33, C-35) — five changes; the tables' shape and the order of commits stand. (1) T3's reader `person_q.regard(counterparty, actor, fx)` opens the counterparty's ledger at RESOLVE (`04` §B.2, F8): the reader is `person_q.stance_toward(counterparty, actor)` clamped at `STANCE_MAX`, its hostile half the `regard` term and its favourable half a `favour` level. (2) No table subtracts from the obstacle (Jordan, A-25). (3) Row values: every rolled row `routine` at the control arm; at commit 2 only `interrogate` is `demanding`. (4) Every number here is whole-dice arithmetic at the half-score rate. Jordan's A-5, A-6, A-7 and A-26 move the sampler, the pool rule and the opposition rate, so the tables are recomputed in one step (`U5c_SC_one_obstacle_form.md` §4 step 5). T4's bench modifier stands (A-12). (5) Citations of `05_SC_evidence_and_rebuttal.md` read `05_SC_evidence_and_rebuttal_B.md`.
 
-Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.4 row T13, §2 row T13, §7, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-01, D-U1-01a, D-U1-02, D-U1-04, ledger R-17 to R-21, R-25, R-26; `unified/U1_GLOSSARY.md` *modifier*, *standing*, *difficulty level*; `unified/U3_CONFLICT_LEDGER.md` §9; `unified/U3_DEPENDENCY_ORDER.md` §6.2). The body is brought to its two head lines and to the decisions: the composition is `U5c_SC_one_obstacle_form.md`'s (OBS), not SC-B's; T1's row values are OBS §4's (all `routine` at control; only `interrogate` `demanding` at commit 2) and its basis is lane 29's closed form, the whole-dice figures marked history; T3 reads `person_q.stance_toward` (C-03), hostile half the `regard` term, favourable half the `favour` level, nothing subtracted (A-25); **T4's "standing" die is replaced by the seat row's `modifier:`** read by the `office` leverage source off `Act.via` (D-U1-01, D-U1-01a; the reader `judging_set(w, room)` is not used: one reader), so `standing_dice` and the pool addend are not created and A-12's bench modifier stands as a level; T5 is the `proofs` leverage source (`proof_level`; `proof_step` deleted, OBS §3) with the admission filter kept; "the opposition rate: ruled `score/2`" is replaced by A-26/A-79 (one fixture `opposition_rate`); the gate's scratch probes become named tests; lands-it and tier added. Not applied: C3-N6's "replace 'holds'" for this head — this head makes no C1 claim (row wrong at the tree); the C1 caveat is in `13_SC_calibration.md`. A-12's Layer 1 text (`04` §B.7) is owed (D-U1-01's draft), not applied.
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.4 row T13, §2 row T13, §7, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-01, D-U1-01a, D-U1-02, D-U1-04, ledger R-17 to R-21, R-25, R-26; `unified/U1_GLOSSARY.md` *modifier*, *standing*, *difficulty level*; `unified/U3_CONFLICT_LEDGER.md` §9; `unified/U3_DEPENDENCY_ORDER.md` §6.2). The body is brought to its two head lines and to the decisions: the composition is `U5c_SC_one_obstacle_form.md`'s (OBS), not SC-B's; T1's row values are OBS §4's (all `routine` at control; only `interrogate` `demanding` at commit 2) and its basis is lane 29's closed form, the whole-dice figures marked history; T3 reads `person_q.stance_toward` (C-03), hostile half the `regard` term, favourable half the `favour` level, nothing subtracted (A-25); **T4's "standing" die is replaced by the seat row's `modifier:`** read by the `office` leverage source off `Act.via` (D-U1-01, D-U1-01a; the reader `judging_set(w, room)` is not used: one reader), so `standing_dice` and the pool addend are not created and A-12's bench modifier stands as a level; T5 is the `proofs` leverage source (`proof_level`; `proof_step` deleted, OBS §3) with the admission filter kept; "the opposition rate: ruled `score/2`" is replaced by A-26/A-79 (one fixture `opposition_rate`); the gate's scratch probes become named tests; lands-it and tier added. Not applied: C3-N6's "replace 'holds'" for this head — this head makes no C1 claim (row wrong at the tree); the C1 caveat is in `13_SC_calibration.md`. A-12's Layer 1 text (`04` §B.7) is owed (D-U1-01's draft), not applied. U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "Ob" → "obstacle" in prose (glossary *obstacle*).
 
 **Lands in batch:** B05 (commit 1 at OBS §4 step 3; commit 2 at step 5). **Depends on:** `U5c_SC_one_obstacle_form.md` (B05), `13_SC_calibration.md` (its test file first, B05), `02_CHAR_scar_cap_and_regard_unit.md` item 2 (the stance unit, B10; at control `regard_step` 0 the term reads nothing), U1 §11 U1-D (the seat row's `modifier:` column; T4's values ride commit 2).
 
@@ -37,7 +37,7 @@ Measured in the audit (scripts under the lane's scratch `runs/SC_INT/`, not in t
 history at the half-score rate):
 
 1. In the realm, 270 of 284 rolled social acts (seeds 0–1, two seasons each) roll pool 2 against
-   Ob 2.0; the other fourteen move only by a bench's reception or a forged record (audit §3.2).
+   obstacle 2.0; the other fourteen move only by a bench's reception or a forged record (audit §3.2).
 2. A 54-cell planted grid (venue × temperament × affiliation relation × stance) moves no verb's
    obstacle; a held score of 6 moves `tell`, `argue`, `speak` and does not move `lie`, `determine`,
    `interrogate` or `arrest`, which have no capability key (§3.3).
@@ -67,7 +67,7 @@ a designer edits, a first value with its basis, and the sweep that would set it.
   `routine`). The audit's whole-dice basis (§3.4) is history.
 - **Row values** (`grade: assumption` each; OBS §4, C-04): every rolled row `routine` at the control arm;
   at commit 2 `interrogate` → `demanding`, the inquiries stay `routine`.
-- **Floor**: the composed obstacle is floored at `OB_MIN` after every term (OBS §2), which removes the Ob
+- **Floor**: the composed obstacle is floored at `OB_MIN` after every term (OBS §2), which removes the obstacle
   0.0 cell a held score of 0 gave (audit degenerate cell 3).
 - **Sweep**: the size ladder at {0/1/2/3, 0/0.5/1/1.5, 0/0.75/1.5/2.25}; exact grid at trained ranks 0, 2,
   4, 7.
@@ -104,7 +104,7 @@ a designer edits, a first value with its basis, and the sweep that would set it.
   clamps it for a teller: the hostile half is the obstacle term `regard = regard_step ·
   clamp(−stance / STANCE_MAX, 0, 1)`; the favourable half is the `favour` leverage level (OBS §3). Nothing
   is subtracted (A-25).
-- **Unit**: Ob per full clamp. **First value**: `regard_step` 1.0 (±1.0 Ob at the clamp); control 0.
+- **Unit**: obstacle per full clamp. **First value**: `regard_step` 1.0 (±1.0 obstacle at the clamp); control 0.
   Basis: one full unit of favour moves equals at `routine` by 0.16–0.28 (§3.4, `equals+favour1`), the
   same order as two levels of effort at pool 2 (0.74 → 0.42): a devoted friend is worth a sustained
   effort, not a certainty.
@@ -115,7 +115,7 @@ a designer edits, a first value with its basis, and the sweep that would set it.
 - **Never with a bench**: an act a bench hears reads `reception` instead (SC-B's rule).
 - **Realm note, stated rather than hidden**: in the seeded realm the regard a counterparty holds toward
   the actor is between −0.36 and +0.64 in all but a few rolls (stance rows give 4.0 and 12.5), so at
-  the clamp unit T3 moves an act by under 0.03 Ob until relations are authored
+  the clamp unit T3 moves an act by under 0.03 obstacle until relations are authored
   (`02_CHAR_relations_have_a_ground.md`). That is the content's gap, not the table's.
 - **Sweep**: `regard_step` 0 / 0.5 / 1.0 / 2.0 over a planted ±25 grid.
 - **Falsifier**: SC-B's two-NPC fold (hearer's stance +4×5 vs −4×5): the two Events' term lists differ
@@ -124,7 +124,7 @@ a designer edits, a first value with its basis, and the sweep that would set it.
 ### T4 — the seat's modifier and stakes
 
 - **Stakes** — owner: fixture table `stakes_ob` (OBS §2 member 5), keyed by Tenure kind; first values:
-  `oblige` 0, `detain` 0.5, `ban` 1.0 (Ob). Read for `determine` (the docketed row's `disposes:`) and
+  `oblige` 0, `detain` 0.5, `ban` 1.0 (obstacle). Read for `determine` (the docketed row's `disposes:`) and
   `arrest` (`detain`). Sweep 0 / 0.5× / 1× / 2×.
 - **The seat's modifier (A-12)** — owner: the seat's own row, `engine/season/offices.yaml` key
   `modifier: <a LEVEL_SIGMA name> | null` (D-U1-01a; U1 §11 U1-D), read by one host function, the `office`
@@ -190,7 +190,7 @@ a designer edits, a first value with its basis, and the sweep that would set it.
   `obstacle`: the calibrated arm meets every target in `13_SC_calibration.md` §2 (green at commit 2, red on
   C1 and C8 at commit 1).
 - Commit 1: `build_realm(0)` and `(1)`, two seasons: hashes equal to OBS step 2's landing.
-- Commit 2: the same runs, printed per verb from SC-P1's record (pool, Ob, terms, levels, bands); the
+- Commit 2: the same runs, printed per verb from SC-P1's record (pool, obstacle, terms, levels, bands); the
   obstacle distribution has more than two values for every rolled verb with ≥ 5 rolls (named test
   `test_sc_calibration_targets.py::test_every_rolled_verb_with_five_rolls_shows_more_than_two_obstacles`).
 - The planted grid (`planted_grid.py`, scratch) is restated as

@@ -1,6 +1,6 @@
 # U5c · VERBS — the residue: two shapes for a drawn act with nobody opposite, one prize roster for the governance rows, and four closings
 
-Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — applied `unified/U3_CONFLICT_LEDGER.md` C3-C9 (§4 edit 1 replaced: the fold declines resolver-side, formation reads the party's own ledger; text of `unified/work/R4_READ.md` 7b.1), C3-C11 (the failed draw's durable write, A-81), C3-R1 (18-A's loader edit is the dependency), the U3 batch split (§4.1 rows 28 to 31), R4 §2 on `succeed` (A-19: a docketed rival opposite), U1 D-U1-01 (`rank_gap` is the against-half of the seat's two channels) and D-U1-11i (`graded_tasks`); R4 7b.0 implementation block added. No design change beyond those rows.
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — applied `unified/U3_CONFLICT_LEDGER.md` C3-C9 (§4 edit 1 replaced: the fold declines resolver-side, formation reads the party's own ledger; text of `unified/work/R4_READ.md` 7b.1), C3-C11 (the failed draw's durable write, A-81), C3-R1 (18-A's loader edit is the dependency), the U3 batch split (§4.1 rows 28 to 31), R4 §2 on `succeed` (A-19: a docketed rival opposite), U1 D-U1-01 (`rank_gap` is the against-half of the seat's two channels) and D-U1-11i (`graded_tasks`); R4 7b.0 implementation block added. No design change beyond those rows. U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "patient" → "counterparty" (glossary *party*).
 
 ## Status: PROPOSED (written by the U5c closure lane; a plan for a later implementation lane, executed by nobody here; not ratified by being written, `CLAUDE.md` §2)
 
@@ -185,7 +185,7 @@ do. This overwrites the earlier ruling that a convict has one free release.
    `state/acts` is resolver-side and no person-side Query reaches it.)* `14_VERBS_BINDING_A_formation.md` §1
    keeps `own_edge_declines` (formation reads the row's own `domain:`). A **second** decline, person-side,
    in `decision/options.py::opening_set`: a `release` referent is dropped when the actor's own ledger holds a
-   claim of an Event of kind `matter.determined` (T, `verb_table.yaml:406-408`) whose patient is the actor
+   claim of an Event of kind `matter.determined` (T, `verb_table.yaml:406-408`) whose counterparty is the actor
    and whose object is the referent's edge `[UNVERIFIED: the claim's value shape; read `loop/witness.py`'s
    deposit for `matter.determined` before landing]`; the kinds `ban.opened` and `detention.opened` join the
    decline only if `15_INSTITUTIONS_PAPACY_D` lands them (they are not in the tree). The **fold** check is

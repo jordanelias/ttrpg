@@ -10,7 +10,7 @@ Folded: 2026-11-12 by `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md` (rows R
 
 Grounded: 2026-11-12 by `audits/24_GROUNDING_GAMES.md` (GM-08; GC-8) — the Bannerlord contact menu, memory-grade here, is now read at forum grade as Attack or Send Troops (`research/game_precedent_suite/grounding/bannerlord_encounter_menu.md`). No edit of the proposal changed.
 
-Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §2 rows A-57/A-58/A-66 (§A's end condition rewritten to the aggressor's chosen `seize`; the two head lines that put the transfer in the field's fold corrected by `U3_CONFLICT_LEDGER.md` C3-L12), A-67/A-68/A-70 and 7b-10 (§C: each army returns at once to its station; "both armies remain where they were" removed), A-81/A-80 (gate 7: no band without a durable write), A-59/A-77 (the conflicts line); the U5b head item (2) applied to the body (§E: `army_presets` → `armies_at_build`, `ARM_SHARES` → `troops.yaml: doctrines`, `opportunity_key` is MIL-C's Edit 5; U1 §4 M-20); §1.2 (§B's struck text removed, not left beside the new); D-U1-06 (§D's Observations are `observation_terms` members); `U1_GLOSSARY.md` *round* ("season round" → season); `OWED_TO_UNIFICATION.md` §B (the land rulings A-57 to A-70 in this file); test 9 (the gate's tests, lands-it, tier; `Depends on:` / `Lands in batch:`).
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §2 rows A-57/A-58/A-66 (§A's end condition rewritten to the aggressor's chosen `seize`; the two head lines that put the transfer in the field's fold corrected by `U3_CONFLICT_LEDGER.md` C3-L12), A-67/A-68/A-70 and 7b-10 (§C: each army returns at once to its station; "both armies remain where they were" removed), A-81/A-80 (gate 7: no band without a durable write), A-59/A-77 (the conflicts line); the U5b head item (2) applied to the body (§E: `army_presets` → `armies_at_build`, `ARM_SHARES` → `troops.yaml: doctrines`, `opportunity_key` is MIL-C's Edit 5; U1 §4 M-20); §1.2 (§B's struck text removed, not left beside the new); D-U1-06 (§D's Observations are `observation_terms` members); `U1_GLOSSARY.md` *round* ("season round" → season); `OWED_TO_UNIFICATION.md` §B (the land rulings A-57 to A-70 in this file); test 9 (the gate's tests, lands-it, tier; `Depends on:` / `Lands in batch:`). U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): MB unit "stance" → "posture" in prose (glossary *stance*, *posture*; the code field `stance` keeps its name).
 
 **Depends on:** `04_MB_headcount_grade_and_scale.md` and `04_MB_typed_outcome_and_one_path.md` (B17); `04_MB_manager_battle_one_resolver.md` §4 (B20); for §E `14_VERBS_MILITARY_C_the_muster.md` and `_D` (B22); for §G's land half `U5d_FA_land_and_seats_pass_on_a_won_march.md` (B23); `27_MB_D_the_commander_as_chooser.md` and `27_MB_E_what_an_army_carries_back.md` for the folded items.
 **Lands in batch:** A, B, C, D and G in B20 (`B20-mb-orders`, MB); E in B22 (`B22-mb-armies`; U3 §4.1 rows 69–70, SPLIT); F is design-first and carried by `U5b_MB_residue.md` §5.
@@ -63,7 +63,7 @@ New `engine/season/harness/field_scene.py`:
   him to `auto`. A policy sees `military_menu.menu`, `field_estimate` and, once a field is drawn, the
   last `FieldOutcome`.
 - `Report`: per field, the estimate shown, the choices taken, the outcome record, each named person's
-  `body` and stance before and after, where everyone stands.
+  `body` and posture before and after, where everyone stands.
 
 End condition of the scenario: one faction's seat holds both settlements (by the aggressor's own `seize`
 after a `Won` on a march into held land, A-57, A-58, A-66; C3-L12), or a `surrender`, or the season cap.
@@ -78,7 +78,7 @@ after a `Won` on a march into held land, A-57, A-58, A-66; C3-L12), or a `surren
   `FieldPhaseView(phase, side, parts=((id, share, routed), ...), enemy_in_contact: bool)` for **its own
   side only** and returns *(Reconciled: superseded by `04_MB_manager_battle_one_resolver.md` §4)* a
   `GeneralAction` of `signal | order | rally | withdraw | none`, never the strategy roster; `withdraw` sets
-  the `retreat` stance and `conceded` on every subunit, the primitive `_retreat_orders` already uses.
+  the `retreat` posture and `conceded` on every subunit, the primitive `_retreat_orders` already uses.
 - `engine/season/seam/wrappers/mass_battle.py::resolve` forwards `host.decide` when the host plays a
   claimant or the defending commander, as `seam/wrappers/combat.py:394-395` does for a duel (REM-31; the
   ratified `proposals/2026-10-07-grid-mode-suspension.md`). The `host` keyword is already in the

@@ -1,6 +1,6 @@
 # U5d-STORY — owed edits: five story-enablement decisions that named an owner and no file
 
-Reconciled: 2026-11-12, wave 3 (W3-3) — R3 §2 / U3 §9 (§1's `[unverified]` `besiege` posture) checked at the tree: `rosters.yaml: march_postures` (`:1159`) has `values: [storm]` only; its note says `besiege` "joins this list in its own declared-mover commit" (CP-T04-06, B10-12), so §1 depends on that commit and is INCOMPLETE until a carrier lands it (no proposal in this set carries it). §5's `[not re-opened]` site opened: `modules/combat/wrapper.py:418` returns on `defender.felled` right after the aggressor's blow, before the defender's blow of the same exchange is applied, which is the defect §5 names. Named tests added per section (R3 §7: none were named); batch and tier (U3 B39; R3 7b-0).
+Reconciled: 2026-11-12, wave 3 (W3-3) — R3 §2 / U3 §9 (§1's `[unverified]` `besiege` posture) checked at the tree: `rosters.yaml: march_postures` (`:1159`) has `values: [storm]` only; its note says `besiege` "joins this list in its own declared-mover commit" (CP-T04-06, B10-12), so §1 depends on that commit and is INCOMPLETE until a carrier lands it (no proposal in this set carries it). §5's `[not re-opened]` site opened: `modules/combat/wrapper.py:418` returns on `defender.felled` right after the aggressor's blow, before the defender's blow of the same exchange is applied, which is the defect §5 names. Named tests added per section (R3 §7: none were named); batch and tier (U3 B39; R3 7b-0). U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "fought scene" → "fight" (glossary *scene*).
 
 ## Status: PROPOSED (a plan for a later implementation lane; nothing here was executed)
 
@@ -84,7 +84,7 @@ filled it. §4: an attacker whose victim failed to notice him has a named level 
 - **Gate.** The PC pessimist's 5,000-duel reading shows mutual fellings above 0; test
   `tests/valoria/` beside the combat module's exchange tests,
   `test_both_blows_of_one_exchange_land_before_the_felling_check` (a planted exchange in which each blow
-  fells). **Falsifier.** 0 of 5,000 again. **Movers.** Every fought scene's log. Declared; lands with A-31's recalibration.
+  fells). **Falsifier.** 0 of 5,000 again. **Movers.** Every fight's log. Declared; lands with A-31's recalibration.
 
 ## NERS (E last)
 

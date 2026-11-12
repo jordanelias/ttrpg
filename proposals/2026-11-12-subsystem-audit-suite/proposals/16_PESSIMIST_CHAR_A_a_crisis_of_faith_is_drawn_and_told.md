@@ -9,7 +9,7 @@ CLOSED), §1 (the Event names the person only by its receipt, `04` §B.9 `:433`;
 file's emitter is the RESOLVE-side step `31_WR_B` commit 1 composes on, dial at zero), C3-Y8, B10; U1 glossary
 *conviction*, *stands for*; U1 architecture §3 (a new site `crisis`). Changed: item 2, item 4's wording, the edits
 table's reader row and `write_matrix` row (verified at the tree), the gate, the For-Jordan section.
-Reconciled: 2026-11-12, wave-3 mop-up (`unified/work/W3_5b_DONE.md` "For another lane", W3-5a item; `unified/U1_OWNERS_AND_VOCABULARY.md` F-43): the crisis switch is `Fixtures.crisis_arm`, values `rule` (control, today's function) and `drawn` (ships, A-24), where this file said `crisis_draw: off|on`. The test file name `test_crisis_draw.py` and its `test_off_*` function names are unchanged. No prior `crisis_arm` exists in the tree (`engine/season`), so nothing else renames.
+Reconciled: 2026-11-12, wave-3 mop-up (`unified/work/W3_5b_DONE.md` "For another lane", W3-5a item; `unified/U1_OWNERS_AND_VOCABULARY.md` F-43): the crisis switch is `Fixtures.crisis_arm`, values `rule` (control, today's function) and `drawn` (ships, A-24), where this file said `crisis_draw: off|on`. The test file name `test_crisis_draw.py` and its `test_off_*` function names are unchanged. No prior `crisis_arm` exists in the tree (`engine/season`), so nothing else renames. U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "highest-held" → "strongest" (glossary *stands for*: "held" is above the mid-point).
 
 ## Status: PROPOSED
 
@@ -52,13 +52,13 @@ All figures: `PYTHONHASHSEED=0`, `build_realm`, shipped chooser, no player.
    the same vector at both seeds. `person_q.py:903`: the rule *"ROLLS NOTHING"*.
 2. **Its direction inverts the person.** `x1_extremes.py` asks `conviction_after_crisis` of every cast
    person with his held creeds at the threshold, with no play at all: of 46, **31 have their
-   highest-held creed replaced by the creed it is incompatible with**, 1 is left holding nothing, 14 are
+   strongest creed replaced by the creed it is incompatible with**, 1 is left holding nothing, 14 are
    unchanged (the unbuilt RESTABILISE branch). Every Einhir adherent at intensity 5 (Yrsa Vossen,
    Lenneth Almqvist, Aldric Hann, Magnus Vaynard, Ingrid Stenskald, Njal Torberg, Carin Vedel) becomes
    Solmund-orthodox at 5; the orthodox at 5 (Gustav Linder, Osten Jarnstal) become Einhir at 5; Arne
    Himlensendt and Sæmund Haelgrund (orthodox 5) become `thread_truth` 5. Cause, as the docstring itself
    records (`person_q.py:932-938`): the shared engagement column scars every co-held creed in one act, so
-   all reach the threshold together, the selector takes the HIGHEST-held (`max(crisis, key=held)`), and
+   all reach the threshold together, the selector takes the STRONGEST (`max(crisis, key=held)`), and
    folds it into its incompatible partner, however weakly that partner is held. A man who is orthodox at
    2 and Einhir at 1 ends Einhir at 3: more devout in the rival faith than he ever was in his own.
 3. **Its trigger is not about faith.** The affiliation track is violated by three verbs for every creed

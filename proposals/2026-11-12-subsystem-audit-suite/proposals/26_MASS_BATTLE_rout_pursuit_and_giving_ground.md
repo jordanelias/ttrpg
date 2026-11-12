@@ -4,7 +4,7 @@
 
 Folded: 2026-11-12 by `audits/27_MB_COMMAND_AND_DYNAMIC_STRENGTH.md` (rulings A-59 and A-69). Nothing here is deleted. (1) **A-69** (`unified/DECISIONS_ANSWERED.md:90`: armies carry fatigue and losses back; some losses are injury or flight, so some numbers recuperate) is the ruling for §4's last bullet, "what the field does not decide: who among the hurt dies". The field's fields stand as written; the season-side write divides a part's `fight_loss` by a draw into dead and injured, and for a part that ended routed and unrallied draws the share of its survivors that fled; the men lost in pursuit stay dead or taken. The loss is written on the unit's row and the injured and fled may return by a draw: `27_MB_E_what_an_army_carries_back.md`. **Not established** in the tree's research, and not quoted there: the ratio of dead to injured, the rate and span of recovery, and how many of the fled desert rather than regroup. **Ruled since, A-78** (`unified/DECISIONS_ANSWERED.md:103`): the dead, the captured (§4's `taken`) and the deserters are permanent losses; the injured and those who fled and regrouped return in part with nobody acting. (2) Each part's outcome also carries its end-state word and `stamina_left`, so fatigue is carried on the one ledger. (3) **A-59**: §1's fourth trigger ("the army's general is removed from command") reads the commander's post, a column of the army Record: he falls when the unit he rides with is struck (`27_MB_A_command_and_the_obedience_draw.md` §3). The stand draw, hold-or-chase, rally, recall and `taken` are among the named draws that carry a field's chance once the side-wide multiplier is lowered or removed, and each is listed on the result (`27_MB_C_dynamic_strength_and_the_residual_chance.md` §3). The Command rolls here take the commander's two inputs.
 
-Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §1.2 (`stand_draw` "on the module's own ladder" VIOLATES `hol` §39.4 / `04` D-30: it reads the one ladder `dice_engine.degree_from_net`, as `27_MB_A` §4 and `U5b_MB_rulings_in_the_field.md` §1 already say; §1 and the NERS S line rewritten), §2 row A-61 (§1's "listed for Jordan" sentence answered: a body may break below its floor by the stand draw, built behind the switch with the band-only reading as the control), §2 row A-24 (§3's two no-draw defaults marked as role properties, `[ASSUMPTION]`), A-30 (the stand, hold-or-chase and `taken` draws are keyed), `U1_OWNERS_AND_VOCABULARY.md` D-U1-11e (this file's `FieldOutcome` fields named; U1 assigns `fight_loss` to `26_MASS_BATTLE_cell_scale_and_time.md`, but §4 here is the proposal that defines it: corrected at the proposals, `fight_loss` is declared here); test 9 (the `[UNVERIFIED]` re-targeting site checked: `orchestration.py:2191` is `run_multi_unit_battle`, the harness loop `04_MB_typed_outcome_and_one_path.md` §2 moves out of `modules/`, so it is not the season's re-targeting site; left INCOMPLETE with that reason; tests, lands-it, tier; `Depends on:` / `Lands in batch:`; U3 §4.1 row 66).
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §1.2 (`stand_draw` "on the module's own ladder" VIOLATES `hol` §39.4 / `04` D-30: it reads the one ladder `dice_engine.degree_from_net`, as `27_MB_A` §4 and `U5b_MB_rulings_in_the_field.md` §1 already say; §1 and the NERS S line rewritten), §2 row A-61 (§1's "listed for Jordan" sentence answered: a body may break below its floor by the stand draw, built behind the switch with the band-only reading as the control), §2 row A-24 (§3's two no-draw defaults marked as role properties, `[ASSUMPTION]`), A-30 (the stand, hold-or-chase and `taken` draws are keyed), `U1_OWNERS_AND_VOCABULARY.md` D-U1-11e (this file's `FieldOutcome` fields named; U1 assigns `fight_loss` to `26_MASS_BATTLE_cell_scale_and_time.md`, but §4 here is the proposal that defines it: corrected at the proposals, `fight_loss` is declared here); test 9 (the `[UNVERIFIED]` re-targeting site checked: `orchestration.py:2191` is `run_multi_unit_battle`, the harness loop `04_MB_typed_outcome_and_one_path.md` §2 moves out of `modules/`, so it is not the season's re-targeting site; left INCOMPLETE with that reason; tests, lands-it, tier; `Depends on:` / `Lands in batch:`; U3 §4.1 row 66). U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "Ob" → "obstacle" in prose (glossary *obstacle*).
 
 **Depends on:** `16_PESSIMIST_MB_rout_has_two_exits.md` (B19, amended in place); `04_MB_typed_outcome_and_one_path.md` (B17); `27_MB_A_command_and_the_obedience_draw.md` §3 (B19, the general's post); the officer-felled trigger reaches a field only when `04_MB_manager_battle_one_resolver.md` §7 lands (B30; U3 §4.1 row 66, LATER); named captives' custody on `14_VERBS_PHYSICAL_A_custody_and_force.md` A2 (B29).
 **Lands in batch:** B19 (`B19-mb-field-calibration`, MB), with `16_PESSIMIST_MB_rout_has_two_exits.md`.
@@ -93,7 +93,7 @@ pocketed. No new mechanism.
 
 When the body a unit is fighting breaks and the field goes on:
 
-- the victor draws Discipline against Ob 1, **read with its standing order** for the new trigger
+- the victor draws Discipline against obstacle 1, **read with its standing order** for the new trigger
   `enemy_broken` (`26_MASS_BATTLE_maneuver_orders.md`): ordered `hold`, a Success or better keeps it in hand
   and it takes its next target; a Partial keeps it but costs it a tick; a Failure sends it after the runners.
   Ordered `pursue`, or with no order and a mounted or `Pursue`-role body, it pursues without a draw. A foot
@@ -113,7 +113,7 @@ When the body a unit is fighting breaks and the field goes on:
   ended) and `pursuit_loss` (share lost after it broke), and of the second, `taken` (share of those lost who
   were taken alive).
 - `taken` is a draw at the end of the pursuit, per pursued part, keyed `(field, part, "taken")` (A-30): the
-  pursuer rolls its pool against Ob 2;
+  pursuer rolls its pool against obstacle 2;
   the share taken is 0 on Failure, a quarter on Partial, a half on Success, three-quarters on Overwhelming.
   `[seeds. The only figures read are single battles: Zama, 20,000 dead and about as many captured;
   Cynoscephalae, 8,000 killed and 5,000 taken; Pharsalus, 6,000 to 15,000 killed and 24,000 taken (CR A6,
@@ -132,7 +132,7 @@ When the body a unit is fighting breaks and the field goes on:
 
 ### 5. Rally, by what the troops carry
 
-Amending the pessimist proposal's rally roll (Command against Ob 2, once, at the end of the field): the
+Amending the pessimist proposal's rally roll (Command against obstacle 2, once, at the end of the field): the
 obstacle takes a step from the routed side's troops, weighted by men: `armour.<tier>.rally_step` in the troop
 file, seeds `none: −1`, `light: 0`, `medium: 0`, `heavy: +1`; mounted troops −1. Ground: troops who "simply
 turned and ran, and then rallied once they had temporarily outdistanced pursuit", against "it is hard to

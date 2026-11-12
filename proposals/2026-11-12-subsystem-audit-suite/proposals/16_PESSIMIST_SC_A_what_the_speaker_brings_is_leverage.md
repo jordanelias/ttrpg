@@ -1,6 +1,6 @@
 # 16 · PESSIMIST · SC · A — What the speaker brings is leverage: proofs and a bench's favour as named levels, never an obstacle reduction
 
-Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §2 (A-25 confirms this file's reading: the
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §2 (A-25 confirms this file's reading: the U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "Ob" → "obstacle" in prose (glossary *obstacle*).
 "listed for Jordan" branch is CLOSED and the "if the clarification means favourable terms too" alternative is deleted;
 A-5: the odds tables are whole-dice history and the gate is restated as a property), §1 (CONFORMS), §7/§7b (tests in
 `test_sc02_reception.py`, tier); A-79 / D-U1-02 (the opposition term is `opposed_ob(trained score, opposition_rate)`,
@@ -95,7 +95,7 @@ listed for Jordan in the audit's §5 (item 1) is CLOSED by A-25.
    with its register row (H-216's magnitude becomes `proof_level`'s). `reception_gain` stays and scales
    both halves. Hole-register rows for the two new magnitudes, graded `assumption`, with the sweeps
    above. First values chosen to reproduce today's unclipped odds at pool 2 (table above: 0.65 / 0.57 /
-   0.42 against 0.66 / 0.58 / 0.42 for proofs; a unit of reception was Ob −1.0, which at pool 2 is a
+   0.42 against 0.66 / 0.58 / 0.42 for proofs; a unit of reception was obstacle −1.0, which at pool 2 is a
    boost of 0.88 σ, and `soft_cap(1.0)` is 0.874).
 3. **`engine/season/seam/wrappers/sigma.py`** —
    - `ADVANTAGE_SOURCES = {EFFORT: _effort_levels, "proofs": _proof_levels, "favour": _favour_levels}`

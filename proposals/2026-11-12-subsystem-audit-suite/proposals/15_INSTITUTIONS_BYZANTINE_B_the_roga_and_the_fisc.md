@@ -1,4 +1,4 @@
-# INST-BYZ-B — the yearly stipend and the fisc: what a seat owes its sworn, the bill as a shortfall, and a collection that is drawn
+# INST-BYZ-B — the yearly stipend and the treasury: what a seat owes its sworn, the bill as a shortfall, and a collection that is drawn
 
 Reconciled: 2026-11-12 by `audits/15_INSTITUTIONS_SYNTHESIS.md` §2 (X-19, X-22, X-26, X-27, X-30) — `requisition`'s row is `14_VERBS_MATERIAL_B_stores.md` §4's (graded, no capability row, `stakes` by the share asked, the cohort's `regard`); edit 5 survives as terms on that row (`remove`; `evidence` for a held assessment; `obligation` where the levied are sworn to the seat) and as two requests to that lane (Overwhelming emits `requisition.rendered`, outside the dominance kinds; Partial deposits a shortfall claim for the rest); the hunger band as `stakes`, the `copying` capability row and the `altonian_civics` step are withdrawn; the payment of a stipend is that lane's drawn `transfer`, not arithmetic; the bill's shortfall claim names `default_store_kind`, not `coin`, until `coin` has a producer; `procedure_draws` is not added (the task row's control is `task_draw_arm`). Edits 1 to 4 otherwise stand. Every finding below stands.
 
@@ -6,7 +6,7 @@ Re-grounded: 2026-11-12 (audit §18) — one addition: the treasurer's seat decl
 
 Reconciled: 2026-11-12, U5d closure — folded **A-13**: the exit audit on seats that hold money is one of the three ruled seat facts (the key is `audit_at_exit`, X-12). No step changes.
 
-Reconciled: 2026-11-12, wave 3 lane W3-4b — applied `R4_READ.md` §1.7 (BYZ_B: e4's MATTER deposit AMBIGUOUS, F-R4-02; e5 `requisition.rendered` CONFLICT with MATERIAL-B), §2 (A-25 row: the favourable list becomes levels), §6 (C3-N24: `oblige` 26 of 26), §7 (INCOMPLETE: the bill's claim site; `rendered`), 7b.0, 7b.7 ("the bill is not a MATTER claim: `world_q.upkeep_owed` and a stamp `bills_due(w, p)` … as `vacancies`"); `U3_CONFLICT_LEDGER.md` C3-C7 (MATTER emits `term.matured` only), C3-C10, C3-N24 (name the route), C3-Y7 (MATERIAL-B, B12, lands before this file; the kind's name is U1's). Changed: edit 4's bill is computed when read (a stamp beside `vacancies`), not a claim MATTER deposits; edit 5's body now follows this file's first `Reconciled:` line (the row is MATERIAL-B's; this file supplies terms as levels and two requests; the hunger band, `copying` and `altonian_civics` are removed from the body); the bill names `default_store_kind`, not `coin`; the controls are the task row's (`task_draw_arm`) and the pinned roll; the `oblige` 26 of 26 figure names its route.
+Reconciled: 2026-11-12, wave 3 lane W3-4b — applied `R4_READ.md` §1.7 (BYZ_B: e4's MATTER deposit AMBIGUOUS, F-R4-02; e5 `requisition.rendered` CONFLICT with MATERIAL-B), §2 (A-25 row: the favourable list becomes levels), §6 (C3-N24: `oblige` 26 of 26), §7 (INCOMPLETE: the bill's claim site; `rendered`), 7b.0, 7b.7 ("the bill is not a MATTER claim: `world_q.upkeep_owed` and a stamp `bills_due(w, p)` … as `vacancies`"); `U3_CONFLICT_LEDGER.md` C3-C7 (MATTER emits `term.matured` only), C3-C10, C3-N24 (name the route), C3-Y7 (MATERIAL-B, B12, lands before this file; the kind's name is U1's). Changed: edit 4's bill is computed when read (a stamp beside `vacancies`), not a claim MATTER deposits; edit 5's body now follows this file's first `Reconciled:` line (the row is MATERIAL-B's; this file supplies terms as levels and two requests; the hunger band, `copying` and `altonian_civics` are removed from the body); the bill names `default_store_kind`, not `coin`; the controls are the task row's (`task_draw_arm`) and the pinned roll; the `oblige` 26 of 26 figure names its route. U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "fisc" → "treasury" (glossary loan words).
 
 ## Status: PROPOSED
 
@@ -149,7 +149,7 @@ N: without termed oaths the upkeep machinery has no subject (its own docstring);
 holder has no occasion to pay; without the bands a tax cannot be borne well or badly. All directions:
 the payer (top-down), the paid (bottom-up: his term), the place (lateral: its stores and its memory).
 R: whom to pay first when short is a choice; the no-player half is the unpaid court and the tax
-revolt. Completeness: an empty fisc lapses terms and raises no error. S: the shortfall claim, the
+revolt. Completeness: an empty treasury lapses terms and raises no error. S: the shortfall claim, the
 `transfer`, the `Rung.stores` conservation and the obstacle form are each the existing owner's. E,
 against that: one key, two Queries (one a stamp) and one row's terms and two requests.
 

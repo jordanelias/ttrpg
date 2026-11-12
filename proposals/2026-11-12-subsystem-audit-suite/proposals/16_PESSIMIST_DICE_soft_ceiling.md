@@ -2,7 +2,7 @@
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-13) — stands. Under A-5 the pool's cap is solved on the closed form of the one sampler, and against the largest lawful disadvantage (`U5a_DICE_owed_edits.md` §1 row 3); the tables here are whole-dice figures. Favourable terms are levels, not obstacle reductions (A-25).
 
-Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §2 (A-5: every enumerated figure is
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §2 (A-5: every enumerated figure is U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "Ob" → "obstacle" in prose (glossary *obstacle*).
 whole-dice history; gates 2 and 3 restated as properties on the closed form; A-6: the floor pool is `pool_floor`, so
 "pools 1 to 12" and the one-die case are not reachable in play; A-25: edit 6's "favourable halves subtracted" struck),
 §1 (A-29: `tanh` is named in the declared float contract), §7/§7b (dependency on the closed-form cap, tier); U3 B05,
@@ -77,9 +77,9 @@ No new number: both operands exist. Properties, each checked (`runs/PES_DICE/sof
 
 - identity up to the fixed ceiling, and continuous with slope 1 there;
 - strictly below `cap` for every finite obstacle, so the chance never falls under the 10 % the hard cap
-  holds (lowest chance seen on a 0.005 grid, pools 1 to 12, Ob 1 to 21: 10.0000 %);
+  holds (lowest chance seen on a 0.005 grid, pools 1 to 12, obstacle 1 to 21: 10.0000 %);
 - strictly decreasing chance in the obstacle at pools 3 to 12 over that whole grid, and at pool 2 up to
-  Ob 14.9, where `tanh` is 1.0 in a float (a person's score tops at 7, an Ob of 3.5);
+  obstacle 14.9, where `tanh` is 1.0 in a float (a person's score tops at 7, an obstacle of 3.5);
 - S27.4 unchanged: the largest bounded obstacle ÷ (2 × pool) is 1.0, so no derived pair at a pool of
   one or more is refused, as today;
 - at one die `cap == knee` and the function is today's `min`: one die nets at most 2, and no curve can
@@ -90,7 +90,7 @@ between the knee and the cap, so a strong opposition below a large pool's cap ge
 whole-dice figures, void under A-5; re-derived on the closed form at the calibration. The direction, easier
 between knee and cap, is the finding that survives.)
 
-| pool | raw Ob | hard: Ob, P+ | soft: Ob, P+ |
+| pool | raw obstacle | hard: obstacle, P+ | soft: obstacle, P+ |
 |---|---|---|---|
 | 2 | 2.5 | 2.500, 16.50 % | 2.448, 17.48 % |
 | 2 | 3.0 | 2.842, 10.00 % | 2.699, 12.72 % |

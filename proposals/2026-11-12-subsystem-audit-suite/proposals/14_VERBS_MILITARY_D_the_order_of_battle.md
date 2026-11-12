@@ -2,7 +2,7 @@
 
 Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` Parts 3–4; `U5b_VERBS_military_physical_residue.md`) — (1) **Layer 1**: the four rows write one cell on every band, so each is a task row with **flat** `writes:` and `emits:` (residue §1, shape (a)); `unit.unformed`, `assign.balked`, `unit.balked` and `order.unheeded` are the `draw` clause of `emits_on_refusal`; `disband_unit`'s Partial emits `army.disbanded` only and carries the half that went home as an Observation (`discharged`), not as a second kind; the band still reaches the module as `args['band']`. The roster is `graded_tasks`. (2) **A-5, A-6, A-7, A-25**: one sampler; the pool rule on `command`; `disciplined` is a named level for the roller. (3) **D-36** is closed by the ladder: three organising verbs. **A-2**: `raw` is a column of the unit row. **A-1**: every battle runs the one resolver on what these rows wrote, so `order_unit` matters to a battle nobody watches. (4) Whether a standing order is obeyed in the field now has an owner: the obedience draw of `26_MASS_BATTLE_maneuver_orders.md` (audit 26 B-3).
 
-Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — the head line applied to the body (`unified/work/R4_READ.md` §1.3, 7b.5; F-R4-01): Edit 3's four rows are shape (a) (flat `writes:`/`emits:`, the four Failure kinds in the `draw` refusal clause, `disband_unit`'s Partial half an Observation `discharged`); the `need` conjunct leaves the typed cell (G-04's fallback: asked at formation and by the effect, refused under `write`; C3-R7); Edit 4's `graded_inquiries`/`verb_capability` lines become `graded_tasks` membership and each row's `capability: command` cell (D-U1-07); `disciplined` is a level (C3-C10) and the hostile terms are listed for U1 (INCOMPLETE); Edit 1's module-exported `BANDS` tuple is replaced by the ladder's one `Degree` (`04` §C.5: one ladder; PART D 30); the A-78 fold's "world's motion draw" is replaced by the read of C3-L11; A-81, A-30, U3 batch B22, R4 7b.0 block.
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — the head line applied to the body (`unified/work/R4_READ.md` §1.3, 7b.5; F-R4-01): Edit 3's four rows are shape (a) (flat `writes:`/`emits:`, the four Failure kinds in the `draw` refusal clause, `disband_unit`'s Partial half an Observation `discharged`); the `need` conjunct leaves the typed cell (G-04's fallback: asked at formation and by the effect, refused under `write`; C3-R7); Edit 4's `graded_inquiries`/`verb_capability` lines become `graded_tasks` membership and each row's `capability: command` cell (D-U1-07); `disciplined` is a level (C3-C10) and the hostile terms are listed for U1 (INCOMPLETE); Edit 1's module-exported `BANDS` tuple is replaced by the ladder's one `Degree` (`04` §C.5: one ladder; PART D 30); the A-78 fold's "world's motion draw" is replaced by the read of C3-L11; A-81, A-30, U3 batch B22, R4 7b.0 block. U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "subformation" → "unit" in prose (glossary *unit*; the Record key `subformations` and `orderofbattle.Subformation` keep their names).
 
 ## Status: PROPOSED
 
@@ -47,25 +47,25 @@ being written.
 - `armyrecord.options` already computes `subformation_routs`, `army_routs`, `unassigned` and
   `levy_never_closes` for the menu's display; no NPC reads them
   (`audits/04_MB_audit.md` F-MB-16).
-- Trained troops in no subformation do not fight (`armyrecord.to_order_of_battle`), so an army an
+- Trained troops in no unit (a row of the Record key `subformations`) do not fight (`armyrecord.to_order_of_battle`), so an army an
   NPC only recruits never fields anybody.
 
 ## 3. Exact edits, by owner
 
 **Edit 1 — the module** (`modules/mass_battle/armyrecord.py`; owner MB).
 
-- The subformation row gains `raw: bool` (default `False`; `validate` accepts its absence).
+- The unit row gains `raw: bool` (default `False`; `validate` accepts its absence).
   `to_order_of_battle` passes it to `orderofbattle.Subformation`, which lowers the built unit's
   Discipline by one, floor 1. `[ASSUMPTION; medium; Jordan to correct; revert: the field unread.]`
   One number, in the troop table when it lands (`raw_discipline_step`), in `config.py` until then.
 - `options(q)` gains three booleans beside proposal C's two: `unformed` (trained troops of a kind
-  with no subformation and a free slot), `understrength` (the existing `subformation_routs` test),
-  `off_doctrine` (a subformation whose role, stance, target or fall-back differs from its doctrine
+  with no unit and a free slot), `understrength` (the existing `subformation_routs` test),
+  `off_doctrine` (a unit whose role, posture, target or fall-back differs from its doctrine
   row's, or `facts.footing_wanted != record['footing']`). `unassigned` is the existing advisory.
-- `step(record, op, facts)` for the four ops. `form`: one subformation per kind in `trained` that
+- `step(record, op, facts)` for the four ops. `form`: one unit per kind in `trained` that
   has none, named `<kind>-<n>`, role from the doctrine (`presets.ROLE_OF` today). `assign`: every
-  trained trooper into the subformations of its kind, filling the weakest first. `disband`: every
-  subformation under `SUBUNIT_ROUT_FLOOR`. `order`: for each subformation, the fields that differ
+  trained trooper into the units of its kind, filling the weakest first. `disband`: every
+  unit under `SUBUNIT_ROUT_FLOOR`. `order`: for each unit, the fields that differ
   from the doctrine row's; and `footing` set to `facts.footing_wanted`.
 - `_apply` honours `args['band']` for the four. *(W3-4a, R4 §1.3: no module-exported `BANDS` tuple — a
   second spelling of the ladder's names, `04` §C.5 "ONE ladder", PART D 30.)* The host passes the
@@ -193,7 +193,7 @@ becomes false of the result (its folds now draw) and stays true of the plan; it 
 
 - **Execution artifact.** `aperture 3 s`, s = 0 to 2, `armies_at_build: empty`, after MB's
   `04_MB_headcount_grade_and_scale.md`: all six `army.*` kinds leave the never-emitted list; at
-  least one faction's army holds a subformation with troops assigned by acts that passed through
+  least one faction's army holds a unit with troops assigned by acts that passed through
   DELIBERATE; `_order_of_battle` returns an order of battle for it. With PHYSICAL's `march`
   formation landed: one `field.won`, `field.lost` or `field.drawn` fought from such an army.
 - **The draw.** One hand-built act of each of the four on `build_realm(0)`, 200 seeds: all four

@@ -1,6 +1,6 @@
 # U5c · FI — fieldwork residue: one change to the question loop, the order across three lanes, and the reconciled inquiry rows
 
-Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.4 row FRES (CONFORMS), §7 (INCOMPLETE: scratch probes, no named tests), §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-11i, ledger S-07, S-21, S-22; `unified/U1_GLOSSARY.md` *task*, *inquiry*, *party* ("patient" → counterparty); `unified/U3_DEPENDENCY_ORDER.md` node B11, §6.2). Changed: the four scratch probes the gates read (`r08_probe.py`, `p1_belief.py`, `p1d_where.py`, `fi_arms.py`; none is in the repository) are restated as named tests the batch writes first, with the expected readings quoted here; `graded_inquiries` is `graded_tasks` (D-U1-11i: renamed once in 18-A's commit, B07); §4's "judge whom evidence moves" points at the reconciled carrier (`02_CHAR_which_ground_moves_whom.md`'s `edge` rows; SC-P7 edit 3 is superseded); §7's "patient" is the counterparty (glossary); lands-it and tier. The order, the reconciled slants and the two-act conclusion stand.
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.4 row FRES (CONFORMS), §7 (INCOMPLETE: scratch probes, no named tests), §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-11i, ledger S-07, S-21, S-22; `unified/U1_GLOSSARY.md` *task*, *inquiry*, *party* ("patient" → counterparty); `unified/U3_DEPENDENCY_ORDER.md` node B11, §6.2). Changed: the four scratch probes the gates read (`r08_probe.py`, `p1_belief.py`, `p1d_where.py`, `fi_arms.py`; none is in the repository) are restated as named tests the batch writes first, with the expected readings quoted here; `graded_inquiries` is `graded_tasks` (D-U1-11i: renamed once in 18-A's commit, B07); §4's "judge whom evidence moves" points at the reconciled carrier (`02_CHAR_which_ground_moves_whom.md`'s `edge` rows; SC-P7 edit 3 is superseded); §7's "patient" is the counterparty (glossary); lands-it and tier. The order, the reconciled slants and the two-act conclusion stand. U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "graded route" → "task route" (glossary *task*).
 
 **Lands in batch:** B11 (§1–§3, §6; §7 and §8 inside their sources' batches, B11 and B26). **Depends on:** B07 (`graded_tasks` and 18-A's loader edit), B10 (CHAR's chooser), plan position CR-29 (the `reach` roster) `[PL]`.
 
@@ -130,7 +130,7 @@ wider and carries the `patient_kinds` consequence (`08_FI_04` §3's second bulle
 
 Three proposals grade `reconstruct` and have it mint a Proposition (`08_FI_03` §3,
 `19_LACUNA_conclusion_is_a_committed_assertion.md`, `14_VERBS_MATERIAL_E_knowledge.md` §3). The loader
-refuses that shape: a row on the graded route *"keys its emissions by Degree and writes nothing"*, and a
+refuses that shape: a row on the task route *"keys its emissions by Degree and writes nothing"*, and a
 degree-keyed `writes:` with no `contests:` does not load (`engine/season/data/verbs.py:848-851`, `:870-874`;
 `04` §B.13 invariant 12, §C.4). Giving the row a prize would make an inquiry a contest, which the tree
 rules out (`rosters.yaml: inquiry_modules`, SM-3; the loader's own message: *"giving an inquiry a prize is
@@ -178,7 +178,7 @@ owner of what a finding deposits), `14_VERBS_MATERIAL_E` §2 (the column keyed b
    on a refusal: plan CP-T06-04, unchanged.
 
 So a failed look is not silence (he learns the thing is there and that he was where it is), the content
-is behind the draw, and one table owns the band. The rows stay on the graded route and write nothing.
+is behind the draw, and one table owns the band. The rows stay on the task route and write nothing.
 Gate: `08_FI_07` §2 (b)'s, with the Failure row reading *gating reads only*; `14_VERBS_MATERIAL_E` §5's
 `research` gate unchanged. Falsifier: a `content:` claim deposited at Failure; a second band-keyed table
 beside `finding_terms`.
@@ -186,7 +186,7 @@ beside `finding_terms`.
 ## Layer 1 reading
 
 §1: `decision/` still names no `World`; every referent about another person's state comes from the
-asker's ledger (`04` PART D row 2; ED-IN-0292). §7 and §8: the graded route writes nothing and a deposit
+asker's ledger (`04` PART D row 2; ED-IN-0292). §7 and §8: the task route writes nothing and a deposit
 is WITNESS's INTERIOR write into the holder's own ledger (`04` §A.2 row `loop/witness`; §B.13 invariant 12).
 `Proposition.support` is set at construction on an immutable carrier (`04` §B.6) and has two named
 readers (`record`, the board). Grades: MECHANICAL for the loader's refusal; CONVENTION for the may-read

@@ -1,6 +1,6 @@
 # U5a · CHAR — the owed amendments: what the CHAR audits decided as "an amendment to" another proposal and never wrote
 
-Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.3 rows CHAR owed (§3 (b) VIOLATES; §5 AMBIGUOUS), §2 rows A-47, §7, §7b-8, §7b-T; `unified/U1_GLOSSARY.md` *party* ("patient" → counterparty); `unified/U3_CONFLICT_LEDGER.md` C3-C16; `unified/U3_DEPENDENCY_ORDER.md` node B10, §6.2). Changed: §3 (b)'s keyed emission (a key that is a condition on the actor's ledger, neither a Degree nor a refusal clause, which the loader refuses, `04` §C.4) is replaced by one emission and a reading computed where read, `world_q.commitment_kept` (the D-48 precedent), and its `[UNVERIFIED]` on `release` is settled (`audits/25_GROUNDING_ENGINE.md` G-19 verified, `data/rosters.py:526`); §3's dependency cites A-47; §5's `Scene.decided` names its departure from `04` §B.9 at the site (B4 third disposition; C3-C16); §8 item 2 cites A-24 (D-28 answered: a drawn scruple); "patient" → counterparty (glossary), with `deed_patient` → `deed_counterparty`; the three scratch probes become named tests; lands-it and tier.
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.3 rows CHAR owed (§3 (b) VIOLATES; §5 AMBIGUOUS), §2 rows A-47, §7, §7b-8, §7b-T; `unified/U1_GLOSSARY.md` *party* ("patient" → counterparty); `unified/U3_CONFLICT_LEDGER.md` C3-C16; `unified/U3_DEPENDENCY_ORDER.md` node B10, §6.2). Changed: §3 (b)'s keyed emission (a key that is a condition on the actor's ledger, neither a Degree nor a refusal clause, which the loader refuses, `04` §C.4) is replaced by one emission and a reading computed where read, `world_q.commitment_kept` (the D-48 precedent), and its `[UNVERIFIED]` on `release` is settled (`audits/25_GROUNDING_ENGINE.md` G-19 verified, `data/rosters.py:526`); §3's dependency cites A-47; §5's `Scene.decided` names its departure from `04` §B.9 at the site (B4 third disposition; C3-C16); §8 item 2 cites A-24 (D-28 answered: a drawn scruple); "patient" → counterparty (glossary), with `deed_patient` → `deed_counterparty`; the three scratch probes become named tests; lands-it and tier. U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "patient" → "counterparty" (glossary *party*).
 
 **Lands in batch:** B10 (§3 with `12_ARCS_arcs_as_staged_goals.md`, same batch). **Depends on:** B09 (`01_CORE_reason_trail_in_the_act_store.md`, `02_CHAR_reason_trail_and_small_edits.md` Part A for §5).
 
@@ -216,7 +216,7 @@ or Jordan). The cases' "UNCLEAR: no goal authored" need is an authoring gap, not
 leaves the certainty it was meant to soften, without §3 no ambition in the realm ever ends, without §5 the
 trail lies for half of what persons do. **R.** §3 and §4 are the no-player half: wants that end and
 grievances that are about what was done. **S.** One rule for the deciding term (§5), one `_bond` for every
-deed with a patient (§4), one signature reader for pursuits and creeds (§7). **E (last).** Ten small
+deed with a counterparty (§4), one signature reader for pursuits and creeds (§7). **E (last).** Ten small
 edits on seven existing owners; no new carrier, no new instrument.
 
 ## Cost class

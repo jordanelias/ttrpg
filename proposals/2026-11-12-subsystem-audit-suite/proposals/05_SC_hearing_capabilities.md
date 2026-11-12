@@ -2,7 +2,7 @@
 
 Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-02 — `answer` moved from the draw-free moves to a rolled move with a capability.
 
-Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.4 row SC-B3, §2 rows `bench_reading`, §7, §7b-10, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-01, D-U1-03, D-U1-07, ledger C-09, C-10, S-05; `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §2, §5; `unified/U3_CONFLICT_LEDGER.md` §9 (the `bench_reading` row adopted); `unified/U3_DEPENDENCY_ORDER.md` §4.1 row 13). Changed: **`rhetoric` is struck** (D-U1-03; the title drops it): three new rows, `deception`, `law`, `insight`; `insight` is an `aptitude` with `untrained: none` (U1 §2); `hearing_moves` cells are `argue` (rungs `fact`, `justification`) and `law` (rungs `procedure`, `definition`), `impugn` → `argue`, `answer` → as `argue`; `arrest` is `arms` (U1 §5); the definition home is named (`references/descriptor_registry.yaml: capabilities`); **`bench_reading` is rewritten from a threshold reveal to a drawn deposit** (`04` §B.2 / AX-2 and A-11 and the standing rule *we do not do deterministic*: R2 graded the threshold form VIOLATES; fixture `insight_bench_threshold` deleted); the seat's place on the roll follows D-U1-01; named tests, lands-it and tier added. For another lane (U1's own file): `U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §3's `bench_reading` row and ledger C-22 still carry the threshold form.
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.4 row SC-B3, §2 rows `bench_reading`, §7, §7b-10, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-01, D-U1-03, D-U1-07, ledger C-09, C-10, S-05; `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §2, §5; `unified/U3_CONFLICT_LEDGER.md` §9 (the `bench_reading` row adopted); `unified/U3_DEPENDENCY_ORDER.md` §4.1 row 13). Changed: **`rhetoric` is struck** (D-U1-03; the title drops it): three new rows, `deception`, `law`, `insight`; `insight` is an `aptitude` with `untrained: none` (U1 §2); `hearing_moves` cells are `argue` (rungs `fact`, `justification`) and `law` (rungs `procedure`, `definition`), `impugn` → `argue`, `answer` → as `argue`; `arrest` is `arms` (U1 §5); the definition home is named (`references/descriptor_registry.yaml: capabilities`); **`bench_reading` is rewritten from a threshold reveal to a drawn deposit** (`04` §B.2 / AX-2 and A-11 and the standing rule *we do not do deterministic*: R2 graded the threshold form VIOLATES; fixture `insight_bench_threshold` deleted); the seat's place on the roll follows D-U1-01; named tests, lands-it and tier added. For another lane (U1's own file): `U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §3's `bench_reading` row and ledger C-22 still carry the threshold form. U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "faculty" → "capability"; "vocation" → "capability" (glossary *faculty*, *capability*).
 
 **Lands in batch:** B04 (definition rows; verb cells), B24 (the `hearing_moves` column and `bench_reading`, with `05_SC_playable_hearing_B.md`; U3 §4.1 row 13). **Depends on:** `01_CORE_capability_authoring_surface.md` (B04), `02_CHAR_capability_uses_table.md` (B04), `05_SC_playable_hearing_B.md` (B24, for the moves and the turn view).
 
@@ -24,7 +24,7 @@ unchanged; the gate measures it.
 
 ## The problem (evidence)
 
-1. The social roll has four vocations (`copying`, `argue`, `inquiry`, `arms`), and a liar rolls
+1. The social roll has four capabilities (`copying`, `argue`, `inquiry`, `arms`), and a liar rolls
    either `pool_default` (no `verb_capability` row for `lie` today) or, under SC-P7 and CORE's edit 8,
    `copying`, the copyist's skill (CORE edit 8: *"a lie is a telling of a false value"*). A tribunal's
    `determine` rolls `argue` under CORE's edit 8: a judge's competence is a debater's.
@@ -136,7 +136,7 @@ lean from World rather than from the viewer's own claim. **Control.** Hash EQUAL
 
 - **N**: the provided characters are specified by exactly these distinctions (a jurist, a liar, a
   reader of rooms); top-down a designer adds a social skill as a row; lateral combat already
-  distinguishes its faculties.
+  tells its capabilities apart.
 - **R**: characters differ in what they are good at in a room, by data; the no-player half: an NPC
   forger and an NPC judge differ by rows, not code.
 - **S**: one definition shape, one uses table, one pool reader; insight read through the same

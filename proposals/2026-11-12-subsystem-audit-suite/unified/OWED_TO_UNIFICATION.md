@@ -47,6 +47,18 @@ Collected by the orchestrator from lane receipts, 2026-11-12. Each item names it
 
 - Lane 28 (scene access): `04` PART D row 36 needs Jordan's amendment (text drafted in `proposals/28_CORE_scene_access_A_occupancy_and_precedence.md`); gate rows in proposal A are numbered out of order (9, 11, 12, 10); `research/game_precedent_suite` was not searched for this question; its finding that the 62-of-87 baseline counts acts *about* a person while real meetings are 24/42/31 per two seasons (traffic, not throughput, is the obstacle) should be read against A-63's measurement requirement; three reversible choices are listed in `audits/28_SCENE_ACCESS.md` §11; INCOMPLETE items are in its §14.
 
+- U4d (ordinary-English word test): tree names that fail it, each a candidate v12 batch item (rename at the owner, re-derive, no second copy; plain word, cost and hash movement in `U1_GLOSSARY.md` §H):
+  - `engine/season/data/fixtures.py::Fixtures` → **settings** (52 code files; no hash move assumed).
+  - `offices.yaml` key `obligees` (and `harness/obligee_report.py`) → **sworn** (17 files; no hash move assumed).
+  - army Record key `subformations` / `orderofbattle.Subformation` → **units** / `Unit` (9 files; every army hash moves once, assumed); waits on `U4D_FOR_JORDAN.md` J-U4d-02.
+  - MB unit field `stance` (`modules/mass_battle/orderofbattle.py`) → **posture** (collides with Layer 1 `stance`; file count and hash movement not taken).
+  - `seam/wrappers/pool.py::faculty` → **pool** (or retired by D-U1-08's `score` + addends split; 38 files mention it).
+  - `harness/storybar.py` → **story count** (18 files; harness only).
+  - `harness/aperture.py` → **act count** (23 files; harness only).
+  - `governance_spine` → **governance test world** (13 files).
+  - Layer 1 "edge" for a Tenure → **link** (a Layer 1 wording amendment drafted for Jordan, not a batch edit alone; cost not taken).
+  - `Rung` is Jordan's word (ED-IN-0302): listed in `U4D_FOR_JORDAN.md` J-U4d-04, not a candidate unless he takes option B.
+
 - Lane 30: owed content, not a decision: the three opinion rows of `30_WR_G` §2 (caste, militarism, royal_order: names, whether any new pair strains) and the cast's values on them; until given, the rows are held by nobody; `30_WR_G` commit 2 is INCOMPLETE for that reason. Altonia already exists as a conviction pole; religion exists; politics in part. Lane 30 read audits 09, 11, 12, 15, 21 by head and grep only; `engine/season/cases/*` was left to 12_ARCS. Audit and proposal B have later uncommitted edits at the lane's close: re-read them in full.
 
 ## C. Unchecked or partly read (the stage reads these, or marks them unverified)

@@ -5,7 +5,7 @@ Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-17) —
 Reconciled: 2026-11-12, U5d closure — folded **A-40**, **A-43**, **A-28** and **A-5**. Edits 1, 2 and 4 are superseded by `09_WR_B_threadwork_session_and_practitioner.md`; edit 3 (the tables as one typed file under `engine/engine_params/`) stands. The working's subject is a Site of a territory (A-40). `knot` is the Thread lane's verb after the `tie` / `knot` split (A-28), so this module's verb list gains it and the requirement instrument's count moves. Every thread roll is the one sampler's (A-5). What zero Coherence does is `U5d_WR_zero_coherence_unknowable.md` (A-43): continuity kept, the person unreadable to others.
 
 Reconciled: 2026-11-12, wave 3 (W3-3) — R3 §2 / §1 and C3 §9 (the superseded text of edits 1, 2 and 4 is deleted, not left beside its replacement). Corrected at the documents: R3 asked to delete edits 1, 2 and 4 whole, but the successor keeps two parts of them by name ("the first lane's `Practitioner` stands unchanged"; "the first lane's move stands"), so those two parts are kept and only what the successor replaces is deleted (`WorkingInput`/`WorkingOutcome`, the single composition row, the scenario case); edit 2's sentence on `threadcut.py`, `co_movement.py`, `collective.py` and `opposing.py` now follows the U5a head. Edit 3 gains `knot` (A-28, the head). The gate and the falsifier are narrowed to what this file still lands; tier and batch added (R3 7b-0; U3 B03).
-Reconciled: 2026-11-12, wave-3 mop-up (`unified/work/W3_2_DONE.md` row 60, "for another lane"; A-28): the Thread lane receives `08_FI_08_knots-season-form.md` §1 (a person witnesses through a knot he owns: `epistemic._ch_witness_key`'s `(pid, anchor) in knots` line, index pair owner first, `queries/cache.py:95`) and §4 (a knot's strain is a reading over the owner's own ledger, `person_q.knot_strain`; a rupture is the owner's own `release` of his edge). That file keeps both as their evidence and lands neither; this file's edits 1-4 do not land them either. They land with the Thread lane's batch (B35, `09_WR_B_threadwork_session_and_practitioner.md`), and the kinds and the threshold of §4 stay a design pass.
+Reconciled: 2026-11-12, wave-3 mop-up (`unified/work/W3_2_DONE.md` row 60, "for another lane"; A-28): the Thread lane receives `08_FI_08_knots-season-form.md` §1 (a person witnesses through a knot he owns: `epistemic._ch_witness_key`'s `(pid, anchor) in knots` line, index pair owner first, `queries/cache.py:95`) and §4 (a knot's strain is a reading over the owner's own ledger, `person_q.knot_strain`; a rupture is the owner's own `release` of his edge). That file keeps both as their evidence and lands neither; this file's edits 1-4 do not land them either. They land with the Thread lane's batch (B35, `09_WR_B_threadwork_session_and_practitioner.md`), and the kinds and the threshold of §4 stay a design pass. U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "typed record" → "dataclass" (glossary *record*); "Ob" → "obstacle" in prose (glossary *obstacle*).
 
 ## Status: PROPOSED
 
@@ -41,18 +41,18 @@ conformant, and is hash EQUAL.
    object. Three callers, three actor shapes, one of them the game.
 4. **Precedent.** Settlements had this shape and was moved: IN-07 E1 to E6 made `modules/settlements/` six
    pure entries (`larder_draw`, `subsist`, `produce`, `housing`, `fabric`, `fortification`), each reading a
-   typed record from `queries/inputs.py`, with the host projection in `world_q.py` and every write left in
+   dataclass from `queries/inputs.py`, with the host projection in `world_q.py` and every write left in
    the loop. Fieldwork followed (`fieldwork.find`). Ladder step 4: the tree has decided this shape twice.
 
 ## The resolution, decided
 
-`systems/threadwork/sim/` becomes `modules/threadwork/`: pure entries over typed records, the practitioner's
+`systems/threadwork/sim/` becomes `modules/threadwork/`: pure entries over dataclasses, the practitioner's
 Coherence passed in and returned, never stored; one composition role per entry; the host (season) and the
 standalone harness both build the same input record and both interpret the same outcome record.
 
 ## The edits
 
-### Edit 1 · the typed records (`engine/season/queries/inputs.py`, beside `SubsistInput`)
+### Edit 1 · the dataclasses (`engine/season/queries/inputs.py`, beside `SubsistInput`)
 
 ```python
 class Practitioner(NamedTuple):       # one person, as a working reads him: no id lookup, no duck typing
@@ -98,7 +98,7 @@ expected numbers are unchanged, which is the parity gate.
 
 ### Edit 3 · the constants become data the module reads (see audit §14)
 
-`operations.py:73-168` holds the Ob tables (`DEPTH_OB`, `BREADTH_OB`, `DISTANCE_OB`, `MENDING_OB`), the
+`operations.py:73-168` holds the obstacle tables (`DEPTH_OB`, `BREADTH_OB`, `DISTANCE_OB`, `MENDING_OB`), the
 thread-sensitivity gates (`DEPTH_TS_MINIMUM`, `LEAP_OB_TS_LOW/HIGH`), the cost table
 (`COHERENCE_COST_BY_SCALE`) and three magnitudes tagged invented. They move to one typed file under
 `engine/engine_params/` behind the existing exporter's `--check` (`tools/export_engine_params.py`), the

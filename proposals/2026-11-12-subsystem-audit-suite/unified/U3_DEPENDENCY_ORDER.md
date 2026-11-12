@@ -4,6 +4,8 @@
 
 ## Read at: the working tree of branch `ccr-62958c70-0kjhsw`, HEAD `181548b`, 2026-11-12. Producer: Opus lane U3. Companion: `unified/U3_CONFLICT_LEDGER.md` (the decisions this order applies, cited `C3-…`).
 
+Reconciled: 2026-11-12, U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "fought scene" → "fight" (glossary *scene*); "the riposte" (`18_DETERMINISM_no_certain_matchup.md`) → "the counterblow" (glossary *counterblow*); "knockout" → "removal test" (glossary *removal test*; file names keep their words).
+
 ## 0. How this order was built, and what it is not
 
 **Source of the edges.** The five read lanes' §5 tables (`unified/work/R1_READ.md` to `R5_READ.md`): one row per
@@ -456,12 +458,12 @@ Status codes inside "depends on": every proposal named is PROPOSED (P) and carri
 | `03_PC_typed_outcome_one_door` | B14 | PC | 18_DETERMINISM_no_certain_matchup (B15, cut); U5a_DICE_owed_edits (B05) | — | two declared (`standing`, `fell_to`) | yes | yes / no | R1:377 |
 | `03_PC_weapon_form_at_round_start` | B14 | PC | — | — | armour reference only | yes | yes / no | R1:378 |
 | `03_PC_weapon_records_in_the_export` | B14 | PC (+GO) | — | — | none | yes | yes / no | R1:379 |
-| `16_PESSIMIST_PC_C_what_the_world_keeps_of_a_fight` | B14 | PC | 03_PC_typed_outcome_one_door (B14) | — | every log with a fought scene (`Event.observed` is hashed) | yes (4) | class yes; tier no | R5:533 |
+| `16_PESSIMIST_PC_C_what_the_world_keeps_of_a_fight` | B14 | PC | 03_PC_typed_outcome_one_door (B14) | — | every log with a fight (`Event.observed` is hashed) | yes (4) | class yes; tier no | R5:533 |
 | `U5b_PC_residue` | B14 | PC | 10_DICE_believed_odds_have_a_prior (B05) | — | §7, §8 | yes per section | yes / no | R1:381 |
 | `14_VERBS_PHYSICAL_A_custody_and_force` | B15 | PC | 03_PC_duel_chain_reach (B01); 03_PC_duel_round_and_approach_B (B16, cut); 03_PC_exits_withdrawal_recovery (B16, cut); 06_FA_remit_grant_by_row (B21, cut); LANE-A | — | declared re-records | Y (four test files, unnamed) | build; no tier | R4:467 |
-| `16_PESSIMIST_PC_A_the_yield_is_a_draw` | B15 | PC | 02_CHAR_resolve_and_temper (B10); 03_PC_exits_withdrawal_recovery (B16, cut); 14_VERBS_PHYSICAL_A_custody_and_force (B15) | — | every world with a fought scene | yes (5; probes `pB_yield.py` not in repo | class yes (Small build); tier no | R5:531 |
-| `16_PESSIMIST_PC_B_the_commit_window` | B15 | PC | 03_PC_duel_round_and_approach_B (B16, cut) | — | every world with a fought scene | yes (4) | class yes; tier no | R5:532 |
-| `16_PESSIMIST_PC_D_armour_turns_a_blade_by_a_draw` | B15 | PC | 03_PC_duel_round_and_approach_B (B16, cut); 18_DETERMINISM_no_certain_matchup (B15) | — | every world with a fought scene | yes (4) | class yes; tier no | R5:534 |
+| `16_PESSIMIST_PC_A_the_yield_is_a_draw` | B15 | PC | 02_CHAR_resolve_and_temper (B10); 03_PC_exits_withdrawal_recovery (B16, cut); 14_VERBS_PHYSICAL_A_custody_and_force (B15) | — | every world with a fight | yes (5; probes `pB_yield.py` not in repo | class yes (Small build); tier no | R5:531 |
+| `16_PESSIMIST_PC_B_the_commit_window` | B15 | PC | 03_PC_duel_round_and_approach_B (B16, cut) | — | every world with a fight | yes (4) | class yes; tier no | R5:532 |
+| `16_PESSIMIST_PC_D_armour_turns_a_blade_by_a_draw` | B15 | PC | 03_PC_duel_round_and_approach_B (B16, cut); 18_DETERMINISM_no_certain_matchup (B15) | — | every world with a fight | yes (4) | class yes; tier no | R5:534 |
 | `18_DETERMINISM_no_certain_matchup` | B15 | PC | 03_PC_duel_round_and_approach_B (B16, cut); 03_PC_typed_outcome_one_door (B14); 14_VERBS_PHYSICAL_A_custody_and_force (B15) | — | every world with a decided season fight | yes (3) | class yes (Small edit + re-pin); tier no | R5:555 |
 | `U5b_PC_rulings_in_the_fight` | B15 | PC (+MB) | 14_VERBS_PHYSICAL_A_custody_and_force (B15); 22_HAPPENINGS_C_a_killing_is_a_crime_som (B37, cut); U5a_DICE_owed_edits (B05); U5a_capability_home_and_two_inputs (B04) | — | per section | yes per section | yes / no | R1:380 |
 | `03_PC_duel_round_and_approach` | B16 | PC | 03_PC_duel_round_and_approach_B (B16) | — | step 2 re-seeds every fight | yes | yes / no | R1:372 |
@@ -701,7 +703,7 @@ Categories: **SPLIT** the dependent part lands in the named later batch; **REV**
 | 53 | `14_VERBS_PHYSICAL_A_custody_and_force` (B15) | `03_PC_exits_withdrawal_recovery` (B16) | SPLIT | as row 52 |
 | 54 | `14_VERBS_PHYSICAL_A_custody_and_force` (B15) | `06_FA_remit_grant_by_row` (B21) | SPLIT | as row 52 |
 | 55 | `16_PESSIMIST_PC_A_the_yield_is_a_draw` (B15) | `03_PC_exits_withdrawal_recovery` (B16) | SUP | the exits file's Part B (the yield) is superseded by `16_PESSIMIST_PC_A_the_yield_is_a_draw.md` (A-24: the yield is a draw) |
-| 56 | `16_PESSIMIST_PC_B_the_commit_window` (B15) | `03_PC_duel_round_and_approach_B` (B16) | REV | UPR §5 orders the calibration batch (row 5: PC_B, PC_D, the riposte, PC_A) before the round (row 6, PB steps 1-2): the family's own landing order, step 4 |
+| 56 | `16_PESSIMIST_PC_B_the_commit_window` (B15) | `03_PC_duel_round_and_approach_B` (B16) | REV | UPR §5 orders the calibration batch (row 5: PC_B, PC_D, the counterblow, PC_A) before the round (row 6, PB steps 1-2): the family's own landing order, step 4 |
 | 57 | `16_PESSIMIST_PC_D_armour_turns_a_blade_by_a_draw` (B15) | `03_PC_duel_round_and_approach_B` (B16) | REV | as row 56 |
 | 58 | `18_DETERMINISM_no_certain_matchup` (B15) | `03_PC_duel_round_and_approach_B` (B16) | REV | as row 56 |
 | 59 | `U5b_PC_rulings_in_the_fight` (B15) | `22_HAPPENINGS_C_a_killing_is_a_crime_someone_commits` (B37) | SPLIT | UPR §6 (the opener's first-exchange edge, D-41 after A-16) lands in B37 with HAP_C |
@@ -1018,7 +1020,7 @@ builds it: v12 must place it (from a v11 position that STAGES.md step 5 carries)
 | `_eff_dispatch` (a `dispatch` that sends) | `14_VERBS_BINDING_D` D4, `15_INSTITUTIONS_BYZANTINE_C`/`_D` abroad | **no carrier** in the suite (v11 CP-T09-08); D4 and the hands abroad wait |
 | a writer of `Person.coherence` | `U5d_WR_zero_coherence_unknowable.md`, `14_VERBS_PHYSICAL_D` | **no carrier** in the suite (v11 CP-T07-02, H-47); the readers ship and read nothing until it exists |
 | the Court Parliament's working state | A-68's "parliament functional" | **no carrier** (H-90, unbuilt); A-76's stand-in (a working realm bench, switchable) ships in B23 |
-| `req_forge.py` | `16_PESSIMIST_CORE_the_nine_gate_and_a_knockout_reading.md`'s re-run line | **no carrier**: a scratch script; B02 replaces the line by the knockout arm's `storybar` reading (§6.2 rule) |
+| `req_forge.py` | `16_PESSIMIST_CORE_the_nine_gate_and_a_knockout_reading.md`'s re-run line | **no carrier**: a scratch script; B02 replaces the line by the removal-test arm's `storybar` reading (§6.2 rule) |
 | a goal row carrying `axis:` | `31_WR_C_what_the_stances_feed.md` (all 38 goal rows print `None`) | **no carrier**: authored content; `31_WR_C` ships at its control until the rows are authored |
 
 ---

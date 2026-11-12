@@ -2,7 +2,7 @@
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-01) — this file is the carrier of R-01's and R-02's `measure:`; `01_CORE_requirements_reading_record.md` §2 (a second instrument for the same property) is withdrawn.
 
-Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §1 (P:1 AMBIGUOUS against `04`
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §1 (P:1 AMBIGUOUS against `04` U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "reading record" → "requirement reading"; "knockout" → "removal test" (glossary *reading*, *knockout*); "knockout" → "removal test" (glossary *removal test*; file names keep their words); `knockout_arm` → `removal_arm`, `--knockout` → `--remove`, `test_knockout_replay_arm_reads_zero` → `test_removal_replay_arm_reads_zero`.
 §G.3.1: the regex tightening is the stopgap, the typed `reading:` record of `01_CORE_requirements_reading_record.md`
 replaces it on landing), §7/§7b (named tests replace `req_forge.py`; signatures; tier); U3 C3-K5 (this file keeps
 R-01/R-02 `measure:`; `16_PESSIMIST_GAME_consequence_reading.md`'s `requirements.yaml` edit is withdrawn), C3-K7
@@ -63,7 +63,7 @@ chooser's own draw.
 
 Fix the two holes so the shape check is at least the check it describes. Give R-01 and R-02 a `measure:`
 a session can run, with its control arms in the same command. Do not make the gate execute measures
-(a 25-minute instrument does not belong in a 0.5-second check; F-CORE-03's reading record is the owner
+(a 25-minute instrument does not belong in a 0.5-second check; F-CORE-03's requirement reading is the owner
 of "when was this last run and on what tree").
 
 ## Exact edits, by owner
@@ -84,20 +84,20 @@ of "when was this last run and on what tree").
      that commit.
 2. **`engine/season/harness/storybar.py`** — beside `draw_seed_arm` (same shape, same `fork`, same
    `drive`). Definition, written in the function's docstring and the `--help` text (CLAUDE.md §4): *a
-   knockout is a removal test: suppress one person's choice at one round and count how many of the other
+   removal test: suppress one person's choice at one round and count how many of the other
    persons' acts differ from the unperturbed copy.* Signatures: `drive(seed, seasons, arm, cap=None,
    on_season=None, world=None, draw_seed=None, wrap_chooser=None)` (the existing signature,
    `storybar.py:288`, plus one keyword; `wrap_chooser(chooser) -> chooser`, default `None` = today);
-   `knockout_arm(base, seasons: int, who: str, when: tuple[int, int]) -> dict[tuple, int]`.
-   `knockout_arm(base, seasons, who, when)` runs the copy with the chooser wrapped to return
+   `removal_arm(base, seasons: int, who: str, when: tuple[int, int]) -> dict[tuple, int]`.
+   `removal_arm(base, seasons, who, when)` runs the copy with the chooser wrapped to return
    no scene for person `who` at `(tick, round) == when`, and returns the multiset of the *other*
-   persons' `(actor, tick, round, verb, opportunity, executed|refused)`; a `--knockout PERSON` CLI
+   persons' `(actor, tick, round, verb, opportunity, executed|refused)`; a `--remove PERSON` CLI
    switch prints, against the unperturbed copy: acts differing, persons affected, by `(season, round)`,
-   with three control lines in the same output — **replay** (no knockout: must be 0), **a cohort's
+   with three control lines in the same output — **replay** (nobody removed: must be 0), **a cohort's
    scene**, and **`--draw-seeds`'s existing arm** (the floor). `drive` gains one optional parameter
    (`wrap_chooser`), default `None`, the shipped reading unchanged. About 40 lines; no new module.
 3. **`engine/season/requirements.yaml`** — R-01 and R-02 `measure:` re-pointed to
-   `python -m engine.season.harness.storybar --knockout <most-cited person> --base-seed 0 --seasons 2`,
+   `python -m engine.season.harness.storybar --remove <most-cited person> --base-seed 0 --seasons 2`,
    keeping the corpus `R3` line as a second measure in the comment. The statuses are **not** changed by
    this proposal: what the reading supports is in the audit (§1.2, §3) and is Jordan's to read.
 
@@ -114,12 +114,12 @@ reads it:
   `test_shipped_file_exits_zero` (the control). Command:
   `python -m pytest engine/season/tests/test_check_requirements.py -q`; expected: 4 passed. Written red
   against today's `check_requirements` for arms B-D (the defect), green after edit 1. (Arm A, a bare relabel
-  to `met` with honest measures, still exits 0: that is the limit F-CORE-03's reading record addresses, and
+  to `met` with honest measures, still exits 0: that is the limit F-CORE-03's requirement reading addresses, and
   this proposal says so rather than claim it.)
-- `python -m engine.season.harness.storybar --knockout <most-cited person> --base-seed 0 --seasons 2`: the
+- `python -m engine.season.harness.storybar --remove <most-cited person> --base-seed 0 --seasons 2`: the
   replay line prints 0 differing acts and the baseline hash; the knocked-out line is reported (the audit's
   seed-0 figure came from a scratch probe and is a comparison, not the expected reading). A planted case in
-  `engine/season/tests/test_storybar.py` (exists): `test_knockout_replay_arm_reads_zero`.
+  `engine/season/tests/test_storybar.py` (exists): `test_removal_replay_arm_reads_zero`.
 
 ## Falsifier
 
@@ -131,7 +131,7 @@ is void), or arm B still exits 0.
 - **N.** The nine are the acceptance surface (`requirements.yaml`'s own words). A gate over them that
   accepts `met 9` on a module that does not exist is the one check whose failure would be invisible.
 - **R.** Not a play mechanic; R is not scored.
-- **S.** `knockout_arm` uses `draw_seed_arm`'s method (one built world, forked, one thing varied), so
+- **S.** `removal_arm` uses `draw_seed_arm`'s method (one built world, forked, one thing varied), so
   the two readings are comparable line for line.
 - **E.** Three predicates tightened and one function beside its sibling.
 
@@ -145,4 +145,4 @@ manual instrument wired into no gate.
 ## Note on §0.1 pt 5
 
 No guard is proposed. `check_requirements` exists and is already CI's; this makes its existing claim
-true. `knockout_arm` is a reading, wired into no gate.
+true. `removal_arm` is a reading, wired into no gate.

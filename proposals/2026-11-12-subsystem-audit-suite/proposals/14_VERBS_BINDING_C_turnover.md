@@ -2,7 +2,7 @@
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-25, C-31, C-35) — the term `standing` is the roster member `rank_gap` (licensed by Jordan's A-12; the word `standing` already names a prize). Edit 3's audience is `heard_by: seat_body` on the prize row. `revoke` reads `reception` and not `regard`: a row has an audience or a single hearer, never both. §3's Partial for `succeed` opens termed seats under the existing claim basis and lays the title down; the variant that keeps the title needs a gate basis `04` §C.2 does not list and is not built. §2's `revoke` draw carries A-35 (the head strips an officer by a resistible draw).
 Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — the head's corrections applied to the body (`unified/work/R4_READ.md` §1.1, §2, 7b.3): `standing` → `rank_gap` and `standing_step` → `rank_step` throughout (U1 R-21; the fixture is OBS's, not created here); `revoke` reads `reception`, not `regard`; edit 7's `state/gate.py` clause deleted and `succeed`'s Partial rewritten (C-31); `succeed`'s opposition and audience under A-19; gate C3 read with natural death on (A-15); the pool sentence follows U1 D-U1-01 (a seat helps as the `office` level, never as dice); `provisional_term` stays this file's one fixture at 2 (F-R4-10: U1 F-33 and U3 §11 each passed the value to the other; taken by ladder step 4, `15_INSTITUTIONS_SYNTHESIS_A`'s "`provisional_term` is VB-C's"); A-63/A-64 (C3-C13), A-81 (C3-C11), A-30 keys; U3 batch B21 and C3-D5's commit order; R4 7b.0 block. The Failure kind names stay this file's (F-R4-11; the BYZANTINE heads defer to them).
-Reconciled: 2026-11-12, wave-3 mop-up (`unified/work/W3_5a_DONE.md` row 12, `unified/work/W3_4b_DONE.md` "For another lane"): the `confer` obstacle table gains `cross_chain` (FA-B edit 2; OBS member 29, added in `U5c_SC_one_obstacle_form.md`); `revoke`'s Partial skipping the disposal checked against the 2026-10-21 ruling and marked `[ASSUMPTION]` at edit 6 (the ruling is silent on bands).
+Reconciled: 2026-11-12, wave-3 mop-up (`unified/work/W3_5a_DONE.md` row 12, `unified/work/W3_4b_DONE.md` "For another lane"): the `confer` obstacle table gains `cross_chain` (FA-B edit 2; OBS member 29, added in `U5c_SC_one_obstacle_form.md`); `revoke`'s Partial skipping the disposal checked against the 2026-10-21 ruling and marked `[ASSUMPTION]` at edit 6 (the ruling is silent on bands). U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "vocation" → "capability" in prose (glossary *capability*).
 
 ## Status: PROPOSED
 
@@ -51,7 +51,7 @@ All movers where they bite. In the shipped realm (1) moves nothing until (3) and
 
 **The draw** (audit §0.2; ladder step 3 for the rule, step 4 for the shape: `determine` is the contested
 binding precedent, its degree keyed writes the table's own method). Pool: the one pool rule on the actor's
-trained score in the capability the row names (the governance vocations of FA-P6); the seat he exercises
+trained score in the capability the row names (the governance capabilities of FA-P6); the seat he exercises
 helps him only as the `office` leverage level read off that seat row's `modifier:` (U1 D-U1-01, A-12),
 never as dice. Obstacle, through the one composer (`U5c_SC_one_obstacle_form.md`):
 

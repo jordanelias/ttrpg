@@ -4,7 +4,7 @@ Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-01, C-U
 
 Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.1 row CORE 03, §7 (COMPLETE except lands-it and tier), §7b-T; `unified/U1_GLOSSARY.md` *record / Record*, *reading*; `unified/U3_CONFLICT_LEDGER.md` C3-K5). The withdrawn §2 body (the `chronicle --propagation` reading) is removed and replaced by the head's pointer (stale text is not left beside the decision); the edit list, gate, falsifier and cost class follow; in prose the requirement row carries a **reading** (the `reading:` key keeps its name; "record" is the `Record` carrier, glossary); lands-it and tier added.
 
-Reconciled: 2026-11-12, unification lane U4c (test 9; from `unified/U3_DEPENDENCY_ORDER.md` §3.1, node B02) — dependency line added, which the file lacked: **Depends on:** no other proposal (no inbound edge); it is the first edit of `engine/season/requirements.yaml` and `harness/register.py`, and `01_CORE_tests_shipped_world_falsifiers.md` and `16_PESSIMIST_CORE_the_nine_gate_and_a_knockout_reading.md` depend on it.
+Reconciled: 2026-11-12, unification lane U4c (test 9; from `unified/U3_DEPENDENCY_ORDER.md` §3.1, node B02) — dependency line added, which the file lacked: **Depends on:** no other proposal (no inbound edge); it is the first edit of `engine/season/requirements.yaml` and `harness/register.py`, and `01_CORE_tests_shipped_world_falsifiers.md` and `16_PESSIMIST_CORE_the_nine_gate_and_a_knockout_reading.md` depend on it. U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "knockout" → "removal test" (glossary *removal test*; file names keep their words).
 
 **Lands in batch:** B02 (hash EQUAL). **Serial edge:** first edit of `engine/season/requirements.yaml` (B02 → B03 → B09 → …, U3 §5.1) and of `harness/register.py`.
 
@@ -62,7 +62,7 @@ Edit: `engine/season/requirements.yaml` (nine rows; the `scales:` block is untou
 ### 2. R-01 and R-02's instrument (withdrawn here; carried elsewhere)
 
 Withdrawn (head line; C-U5a-01, C3-K5: one instrument per property). R-01's and R-02's `measure:` is the
-knockout arm of `16_PESSIMIST_CORE_the_nine_gate_and_a_knockout_reading.md` (edits 2–3), with the realm tests
+removal-test arm of `16_PESSIMIST_CORE_the_nine_gate_and_a_knockout_reading.md` (edits 2–3), with the realm tests
 of `01_CORE_tests_shipped_world_falsifiers.md` rows 1–2 as the standing falsifiers. No
 `chronicle --propagation` is built for a `measure:` (`16_PESSIMIST_GAME_consequence_reading.md` may land it as
 an unwired chronicle reading). The two statuses are not moved by this file.

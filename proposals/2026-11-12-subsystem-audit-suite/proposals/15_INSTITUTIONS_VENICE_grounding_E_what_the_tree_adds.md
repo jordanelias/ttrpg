@@ -2,7 +2,7 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-13**, **A-12** and **A-14** (this file was written before the answers were recorded and cites none): the paired officers, the secretary order and the inspection are content on the three ruled seat facts; an appointer who "answers" for his man does so by a drawn hearing, and a body's assent (edit 7) is a ballot of draws on its members. A seat's modifier, if the kit authors one, enters through the one obstacle composer. No edit is withdrawn.
 
-Reconciled: 2026-11-12, wave 3 lane W3-4b — applied `R4_READ.md` §1.7 (VEN_E: CONFORMS; `[UNVERIFIED]` conferral `via`), §7 (COMPLETE, uniform), 7b.0; `U3_CONFLICT_LEDGER.md` C3-L9 (the keys as tables), C3-C10 (levels), C3-N20 (no ordinal for an arrangement row), C3-L12 (title by act); `U1_OWNERS_AND_VOCABULARY.md` D-U1-01 (a seat's modifier is its row's `modifier:` read by the `office` source, superseding the first `Reconciled:` line's "through the one obstacle composer"); `U1_GLOSSARY.md` *roll* (a membership is a **list**). Changed: `cooling_off` and `eligible_from` are table rows (VENICE-C as reconciled); edit 3's `[UNVERIFIED]` is resolved at the tree (`state/attribution.py:91` `causing_act` returns the `Act`, whose `via` is `state/carriers.py:721`); held reports and the pledge's discharge read as `proofs` and `world_q.owed`; the Sforza seizure points to the land rulings' seizure act, not to COL-D's withdrawn `annex`.
+Reconciled: 2026-11-12, wave 3 lane W3-4b — applied `R4_READ.md` §1.7 (VEN_E: CONFORMS; `[UNVERIFIED]` conferral `via`), §7 (COMPLETE, uniform), 7b.0; `U3_CONFLICT_LEDGER.md` C3-L9 (the keys as tables), C3-C10 (levels), C3-N20 (no ordinal for an arrangement row), C3-L12 (title by act); `U1_OWNERS_AND_VOCABULARY.md` D-U1-01 (a seat's modifier is its row's `modifier:` read by the `office` source, superseding the first `Reconciled:` line's "through the one obstacle composer"); `U1_GLOSSARY.md` *roll* (a membership is a **list**). Changed: `cooling_off` and `eligible_from` are table rows (VENICE-C as reconciled); edit 3's `[UNVERIFIED]` is resolved at the tree (`state/attribution.py:91` `causing_act` returns the `Act`, whose `via` is `state/carriers.py:721`); held reports and the pledge's discharge read as `proofs` and `world_q.owed`; the Sforza seizure points to the land rulings' seizure act, not to COL-D's withdrawn `annex`. U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "obligee" → "sworn man" in prose (glossary *sworn*).
 
 ## Status: PROPOSED (an executable plan for a later session; not ratified by being written, CLAUDE.md §2)
 
@@ -311,7 +311,7 @@ clause key, one reader branch, the loader's refusal of an unknown stage). Design
 ## What is not in this proposal, and why
 
 The *commenda*, the merchant galleys, the Monte, the bill of exchange and the bank's partnership form
-remain memory-grade (map §3); nothing here is built on them. The Sforza seizure (an obligee who takes
+remain memory-grade (map §3); nothing here is built on them. The Sforza seizure (a sworn man who takes
 the seat he served) is the land rulings' seizure act after a won march (A-57, A-58, A-66: title and its
 seats pass only by the act the winner forms; C3-L12), not the colonial lane's `annex` (COL-D edit 5 is
 not built), and is not redone. A

@@ -1,6 +1,6 @@
 # 16 · PESSIMIST · SC · D — An argument moves someone: a lost argument moves the arguer, a held one is called held
 
-Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §2 (A-79: the band shares quoted are
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §2 (A-79: the band shares quoted are U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "Ob" → "obstacle" in prose (glossary *obstacle*).
 whole-dice at the old default pair; A-79's centre for an even argument on a routine matter is 59% fail, 16% half-land,
 25% carry, and the tables are re-measured there; A-81: the Partial band's write named; A-80: a held position is a
 source of motion, `30_WR_D_momentum_and_its_brakes.md` §4), §1 (CONFORMS: writes and emits keyed together), §7/§7b
@@ -29,7 +29,7 @@ the rule that today moves the hearer at Success. The Partial band's Event is ren
 
 ## The problem, measured
 
-`p5_argue.py`, 300 seeded arguments, shipped fixtures (pool 2 against Ob 2):
+`p5_argue.py`, 300 seeded arguments, shipped fixtures (pool 2 against obstacle 2):
 
 | band | share | who changed |
 |---|---|---|

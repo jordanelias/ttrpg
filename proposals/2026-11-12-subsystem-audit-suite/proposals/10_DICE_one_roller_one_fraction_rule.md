@@ -2,7 +2,7 @@
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-13) — A-5 (the bell curve everywhere) changes what the owner's roll is. Edit A (`_MARGIN_EPS`) and Edit C (mass battle composes on the owner) stand, with the owner's roll now `roll_net_continuous`; **Edit B (the stochastic die in `roll_net`) is withdrawn** with the whole-dice roll; the gate's *byte-equal goldens* cannot hold and is replaced by one declared re-pin; the falsifier reads: `grep -rn "randint(1, 10)" modules/ engine/season/` prints nothing (addendum C-4). Below one die there is one rule in the owner (`U5a_DICE_owed_edits.md` §1 rows 4–5).
 
-Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §2 row A-5 and 7b-7 ("What it changes", Edit B, gates 1–2 and the falsifier rewritten to the one declared re-pin; Edit B's body removed), `U3_CONFLICT_LEDGER.md` C3-L1 (Edit A is withdrawn: the margin is quantised once at the ladder to integer milli-units, so `_MARGIN_EPS` is not needed; `R1_READ.md` 7b-18 is the same decision), C3-N16 (problem 2's count: 6 with `i*0.1`, 18 with `i/10`), `U5b_MB_rulings_in_the_field.md` §1 row 1 (Edit C's table reads the owner's continuous roll and deletes `roll_pool_fractional`: one rule below one die, in the owner); test 9 (tests, lands-it, tier; `Depends on:` / `Lands in batch:`; C3-D2: the field's sampler swap lands here in B05, before the keyed draw).
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §2 row A-5 and 7b-7 ("What it changes", Edit B, gates 1–2 and the falsifier rewritten to the one declared re-pin; Edit B's body removed), `U3_CONFLICT_LEDGER.md` C3-L1 (Edit A is withdrawn: the margin is quantised once at the ladder to integer milli-units, so `_MARGIN_EPS` is not needed; `R1_READ.md` 7b-18 is the same decision), C3-N16 (problem 2's count: 6 with `i*0.1`, 18 with `i/10`), `U5b_MB_rulings_in_the_field.md` §1 row 1 (Edit C's table reads the owner's continuous roll and deletes `roll_pool_fractional`: one rule below one die, in the owner); test 9 (tests, lands-it, tier; `Depends on:` / `Lands in batch:`; C3-D2: the field's sampler swap lands here in B05, before the keyed draw). U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "Ob" → "obstacle" in prose (glossary *obstacle*).
 
 **Depends on:** `U5a_DICE_owed_edits.md` §1 (B05: the one sampler, the quantised margin, one rule below one die).
 **Lands in batch:** B05 (`B05-one-roll`, IN with MB), with `U5a_DICE_owed_edits.md` §1 row 4 and `U5b_MB_rulings_in_the_field.md` §1 (C3-D2; U3 §4.1 row 18), before `10_DICE_exported_face_rule_and_band_edges.md`.
@@ -37,7 +37,7 @@ every graded draw outside combat moves to the bell curve in one declared re-pin 
 3. **Three rules for one quantity, a fraction of a die.** `sigma_leverage._dice_dealt` rounds
    (`max(1, int(round(pool)))`, and Python rounds half to even: 2.5 deals 2 dice, 3.5 deals 4);
    `roll_net_continuous` samples a Normal at the fractional pool; `roll_pool_fractional` deals the whole
-   part and one more die with probability equal to the fraction. Probe (E-05), Partial-or-better at Ob 2:
+   part and one more die with probability equal to the fraction. Probe (E-05), Partial-or-better at obstacle 2:
    pool 2.49 → 26.00 % by rounding against 32.86 % by the stochastic die; pool 2.51 → 40.00 % against
    33.14 %. Rounding is a 14-point step at the half; the stochastic die is linear and is the same shape
    as `settle_margin`'s rule for a fraction of a margin (CP-T01-04).

@@ -2,7 +2,7 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-22** (command). `under_seat` is rewritten to the ruled three classes: (i) the sworn (a live `oblige` to this seat; the third disjunct, unchanged), (ii) the holder of a seat this seat may revoke (`may_revoke`, replacing the second disjunct "he holds a seat on its ground"), (iii) an **unseated** person in its land (the first disjunct, narrowed: `purview_reaches(seat, place_of(person))` and the person holds no seat). A seated resident who is neither sworn nor revocable is no longer under the seat by living there. A writ to a superior is a petition: edit 2 routes a Person referent who fails `under_seat` to the petition form, not to a refusal. Edit 3 (`dispatch` asks the same predicate) stands; this narrows the ED-IN-0256 (4) basis for `issue` and `dispatch` behind its revert, as the ruling says. Gate arms rewritten: the Duke of Varfell reaches the holders of Varfell seats he may revoke and his sworn men, wherever they live; the Royal Marshal no longer reaches seated residents of other factions.
 
-Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §2 and §1 (A-22: the resolution block,
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §2 and §1 (A-22: the resolution block, U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "obligee" → "sworn man" in prose (glossary *sworn*).
 "What it changes" and the gate rewritten to the three ruled classes; the body no longer carries the old "holds a seat on
 its ground" disjunct), §1 (placement: the predicate is a read-only Query and goes in `queries/world_q.py` beside
 `establishment_of`, not in `state/gate.py`; the `[UNVERIFIED]` import question is resolved at the tree: `world_q` already
@@ -77,7 +77,7 @@ commands(w, actor, via, person_id) -> bool          # queries/world_q.py, beside
      and purview_reaches(w, seat, place_of(w, person_id)))
 ```
 
-Ladder step 1 (A-22) for the three classes; step 4 for the parts: (i) is the obligee relation
+Ladder step 1 (A-22) for the three classes; step 4 for the parts: (i) is the sworn relation
 `_ch_post_remit` already reads (`establishment_of` composes on the gate's `sworn_to`); (ii) is `may_revoke`
 (`state/gate.py:830`), so whom a seat may order and whom it may dismiss are one relation; (iii) is `issue`'s
 cell narrowed to the unseated. No new relation is invented. A court at the capital stays at the capital:
@@ -112,7 +112,7 @@ NEW `engine/season/tests/test_command_basis.py`: `test_sworn_man_is_commanded_wh
 
 - **G1** Duke of Varfell: admitted addressees include the holders of Varfell seats he may revoke and his
   sworn men, wherever they live (with `16_PESSIMIST_FA_A` edit 2 landed, the three Varfell council holders).
-  Restoration leader: still 0 until someone is sworn to his seat (his row lists one obligee, NPC-041; if that
+  Restoration leader: still 0 until someone is sworn to his seat (his row lists one sworn man, NPC-041; if that
   oath is built, 1). Control: the King's unseated residents are unchanged; his reach over seated residents of
   other chains of seats falls (A-22's narrowing).
 - **G2** the Royal Marshal's `dispatch` of the Katepano of Altonia: refused; of an unseated resident of T1

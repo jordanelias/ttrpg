@@ -1,6 +1,6 @@
 # MB · the battle's side of the land ruling: which end state passes the land, and what the field does not decide
 
-Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §2 rows A-65/A-66 and `U3_CONFLICT_LEDGER.md` C3-L12 (a win does not pass the land by itself: the aggressor forms `seize`, occupies without seizing, or withdraws; the uninvited rescuer chooses among the same; §2's and §3's "passes" rows and the rescuer paragraph rewritten; the field's fold writes no title), A-67/A-68/A-70 (§2's `Drawn` bullet: each army returns at once to its station), A-68/A-85 (§3: an unopposed entry onto held land is tolerated or aggression by a draw on the parties' own state modified by the realm's strife; leave is one input to it), A-70 (§4 rewritten as the plain reading, not as this lane's open reading), A-74 (§5: a march may also be thought of on a claim or grievance), C3-L7 (the intro's "gate basis `conquest`" is withdrawn: seats pass by the existing revocation and claim bases); the "Open, named" items 1–4 marked answered; test 9 (tests, lands-it, tier; `Depends on:` / `Lands in batch:`). The FA owner (`U5d_FA_land_and_seats_pass_on_a_won_march.md`, R3) is cited, not edited.
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §2 rows A-65/A-66 and `U3_CONFLICT_LEDGER.md` C3-L12 (a win does not pass the land by itself: the aggressor forms `seize`, occupies without seizing, or withdraws; the uninvited rescuer chooses among the same; §2's and §3's "passes" rows and the rescuer paragraph rewritten; the field's fold writes no title), A-67/A-68/A-70 (§2's `Drawn` bullet: each army returns at once to its station), A-68/A-85 (§3: an unopposed entry onto held land is tolerated or aggression by a draw on the parties' own state modified by the realm's strife; leave is one input to it), A-70 (§4 rewritten as the plain reading, not as this lane's open reading), A-74 (§5: a march may also be thought of on a claim or grievance), C3-L7 (the intro's "gate basis `conquest`" is withdrawn: seats pass by the existing revocation and claim bases); the "Open, named" items 1–4 marked answered; test 9 (tests, lands-it, tier; `Depends on:` / `Lands in batch:`). The FA owner (`U5d_FA_land_and_seats_pass_on_a_won_march.md`, R3) is cited, not edited. U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "province" → "territory" (glossary *territory*).
 
 **Depends on:** `04_MB_headcount_grade_and_scale.md` (B17: the `Drawn` band and its re-homing); `04_MB_manager_battle_one_resolver.md` §1 (B20); `U5d_FA_land_and_seats_pass_on_a_won_march.md` (B23, the title owner); `14_VERBS_MATERIAL_D_paper.md` §6 (`seize`, the carrier of A-66's seizure, C3-L12); the faction lane's reader of a claim or grievance as an occasion to march (A-74, R3).
 **Lands in batch:** B23 (`B23-land`, FA), after `14_VERBS_MATERIAL_D` §6 and before RES-V §2–§3 and UMR §2.
@@ -41,7 +41,7 @@ regard, not a precondition. Marked ASSUMPTION in the record: a march by the hold
 ### 1. The resolver knows none of it
 
 `modules/mass_battle/` receives no holder, no purpose and no leave, and its result carries none. A battle for
-a province and a battle on a road are the same call (ruling A-1). The season reads the band and its own
+a territory and a battle on a road are the same call (ruling A-1). The season reads the band and its own
 world. The falsifier is a `grep` for `hold`, `holder` or `leave` under `modules/mass_battle/`.
 
 ### 2. Which end state is the aggressor's win
@@ -166,7 +166,7 @@ than by `seize`; the module reading who holds the ground.
   what "won" is; this is that agreement. From the defender: holding to a draw keeps the land, and conceding
   loses it, which gives the retreat line a price. Cut section 2 and a rally or a concession is read one way
   by the field and another by the title.
-- **R.** Three ways to lose a province (broken, withdrawn, surrendered) and one way to keep it short of
+- **R.** Three ways to lose a territory (broken, withdrawn, surrendered) and one way to keep it short of
   winning (the draw).
 - **S.** One band, read once; the resolver untouched.
 - **E, against that.** No new mechanism: a table in a docstring and an order of writes.

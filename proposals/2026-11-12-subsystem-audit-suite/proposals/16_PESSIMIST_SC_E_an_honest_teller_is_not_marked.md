@@ -1,6 +1,6 @@
 # 16 · PESSIMIST · SC · E — An honest teller is not marked a liar: a hearer who knows hears true, and a lie has a direction
 
-Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: U3 C3-K1 (one merged body for `_told_value`'s numeric
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: U3 C3-K1 (one merged body for `_told_value`'s numeric U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "Ob" → "obstacle" in prose (glossary *obstacle*).
 branch and `lie_said_of` with `16_PESSIMIST_FI_A_what_a_rumour_can_garble.md` edits 2-3; FI_A lands first and this file
 composes on it, so edits 1-2 below are written over FI_A's `QUANTITY_STEMS` conjunct and negation), `R5_READ.md` §1
 (WITNESS reading the hearer's own ledger at the deposit: a read `04` §A.2 `:180`'s may-read column omits; named here at
@@ -108,7 +108,7 @@ means something.
    in `lie_verbs` is untouched.
 4. **`engine/season/tests/test_cr27_lie.py`** — `test_a_number_moves_one_whole_step…` asserts both
    values; `test_a_lie_to_a_hearer_who_holds_the_cell_firsthand_lowers_the_liars_record…` forces
-   `net=3` (Success) and stands; a new case forces Partial (`net=2` against Ob 2) and asserts the record
+   `net=3` (Success) and stands; a new case forces Partial (`net=2` against obstacle 2) and asserts the record
    is unchanged for liar and honest teller alike.
 
 ## Gate (an execution artifact)

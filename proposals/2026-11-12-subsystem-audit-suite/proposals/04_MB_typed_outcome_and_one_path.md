@@ -6,7 +6,7 @@ Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` Part 2
 
 Folded: 2026-11-12 by `audits/27_MB_COMMAND_AND_DYNAMIC_STRENGTH.md` (rulings A-59 and A-69). Nothing here is deleted. (1) The typed input the Reconciled line's item (3) points to is `CommandRecord` (trained score, addends, levels, post), one for each side's commander and one on each unit row for its officer, with `pool_add`, `pool_floor` and the task obstacle carried raw (`27_MB_A_command_and_the_obedience_draw.md` §2). (2) `FieldOutcome` gains `report.draws` (the named draws and their bands), and each part gains its end-state word and `stamina_left` (`27_MB_C` §3; `27_MB_E` §1, §4). (3) **§1's army-path write** ("each subformation's surviving fraction is applied to the troops each cohort assigned to it ... and summed per cohort", then written to the cohort's body) is the control arm under A-69. With `recuperation: on` the per-unit loss is written to the unit's row by kind, the cohort's body takes the dead share only, and strength is read from the row; the read and the write move in one commit so that no loss is counted twice (`27_MB_E` §2, gate 2).
 
-Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §1.2 config row (AMBIGUOUS, shape divergence from PC) with 7b-13 and `U1_OWNERS_AND_VOCABULARY.md` D-U1-11c (§3: no context variable; `resolve_field` takes `cfg` as an explicit parameter as `fight(inp, rng, decide, cfg)` does; table-shaped content goes to `references/troops.yaml`, scalar engine constants stay literals in `config.py` exported to `mass_battle_v1.json`; `EngineConfig` is the typed in-memory reader of the two, not a home), §2 row A-29 (§1's share quantising is a seam choice, not an integer-state commitment), D-U1-11g / U1 §4 M-23 (§4's `MassBattleInput.command` integer is removed: `CommandRecord` of `27_MB_A` replaces it; §2's `rally_check` pointer follows), D-U1-06 (the draws and the broke-first fact ride `Event.observed` as `observation_terms` members), D-U1-11e (the one `FieldOutcome` field list); test 9 (order of edits, tests, lands-it, tier; `Depends on:` / `Lands in batch:`).
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §1.2 config row (AMBIGUOUS, shape divergence from PC) with 7b-13 and `U1_OWNERS_AND_VOCABULARY.md` D-U1-11c (§3: no context variable; `resolve_field` takes `cfg` as an explicit parameter as `fight(inp, rng, decide, cfg)` does; table-shaped content goes to `references/troops.yaml`, scalar engine constants stay literals in `config.py` exported to `mass_battle_v1.json`; `EngineConfig` is the typed in-memory reader of the two, not a home), §2 row A-29 (§1's share quantising is a seam choice, not an integer-state commitment), D-U1-11g / U1 §4 M-23 (§4's `MassBattleInput.command` integer is removed: `CommandRecord` of `27_MB_A` replaces it; §2's `rally_check` pointer follows), D-U1-06 (the draws and the broke-first fact ride `Event.observed` as `observation_terms` members), D-U1-11e (the one `FieldOutcome` field list); test 9 (order of edits, tests, lands-it, tier; `Depends on:` / `Lands in batch:`). U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "subformation" (a row of `subformations`) → "unit" in prose (glossary *unit*; the Record key keeps its name).
 
 **Depends on:** `04_MB_headcount_grade_and_scale.md` (B17, first).
 **Lands in batch:** B17 (`B17-mb-scale`, MB), with `U5b_MB_residue.md` §1, before `04_MB_unit_loadout_and_weapon_in_hand_B.md` stages 1–2.
@@ -75,7 +75,7 @@ declared nowhere else: `parts, report, interventions` (`04_MB_manager_battle_one
 `stamina_left` (`26_MASS_BATTLE_movement_and_fatigue_as_data.md`); `fight_loss, bouts`
 (`26_MASS_BATTLE_cell_scale_and_time.md`); `report.draws` (`27_MB_C`).
 
-Army path: a part is a cohort. Each subformation's surviving fraction is applied to the troops each
+Army path: a part is a cohort. Each unit's surviving fraction is applied to the troops each
 cohort assigned to it (`armyrecord`'s `assigned` rows, carried on `OrderOfBattle` as
 `drawn: ((subformation, cohort, troops), ...)` in place of `drawn_from`), and summed per cohort.
 `broke_first` is read from the engine's own order of breaking: `battle_loop.run_battle` appends
@@ -143,7 +143,7 @@ the score, keeps its name.)* `config.CMD_CHA_WEIGHT` and `CMD_COG_WEIGHT` move w
 2. `git grep -n "environ" modules/mass_battle` prints nothing.
 3. `python3 tools/ci_golden_modes_check.py`: the three field digests equal (the moves and the config
    object change no arithmetic).
-4. A folded army field in which one subformation routs and another holds leaves the cohorts that fed
+4. A folded army field in which one unit routs and another holds leaves the cohorts that fed
    them with different bodies; a planted "side share for every cohort" reddens it.
 5. `build_realm(0..2)`, one season: content hashes equal to the base at seeds 0 and 1; seed 2 moves only
    if proposal `04_MB_headcount_grade_and_scale.md` has landed.

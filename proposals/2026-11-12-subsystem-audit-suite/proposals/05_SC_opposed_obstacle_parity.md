@@ -4,7 +4,7 @@ Folded: 2026-11-12, lane 29 (`audits/29_ONE_OPPOSED_RULE.md`; `proposals/29_DICE
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-33) — un-held by Jordan's answer A-26 (0.4 per point: an even contest is even). The "HELD BACK" in the Status line below is superseded and this file is the carrier of the rate. Read with two things: the rate's one owner is `opposed_ob` (`U5c_SC_one_obstacle_form.md` §1), and it changes once, in that file's §4 step 5, together with A-5 (the bell curve), A-6 (score plus a base) and A-7 (two inputs), so the 0.4 is set against the re-centred sampler and not the whole-dice one this file measured.
 
-Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.4 row SC-P5, §2 rows SC-P5 Status and A-80, §7, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-02, D-U1-11j, ledger R-07 to R-10, R-16; `unified/U3_CONFLICT_LEDGER.md` C3-C12, `OWED_TO_UNIFICATION.md` §A row on `degree_from_net`'s docstring). Changed: the Status line is no longer HELD BACK (A-26 un-held it; A-79 makes it the one rule for fight and argument); "The two options" is replaced by the decision (option B, at `opposition_rate`); edit 1 reads the opponent's **trained score** and names the even line (D-U1-02); edit 2's "no edit" on H-127 is superseded by C-04 (`obstacle_default` deleted; the stand-in is `opposed_ob(pool_default, opposition_rate)`); the problem tables are marked whole-dice history (A-5); A-80's entrenched-world control is cited (C3-C12); the docstring that still states the 2026-08-14 form is named as owed to B05; lands-it and tier added.
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.4 row SC-P5, §2 rows SC-P5 Status and A-80, §7, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-02, D-U1-11j, ledger R-07 to R-10, R-16; `unified/U3_CONFLICT_LEDGER.md` C3-C12, `OWED_TO_UNIFICATION.md` §A row on `degree_from_net`'s docstring). Changed: the Status line is no longer HELD BACK (A-26 un-held it; A-79 makes it the one rule for fight and argument); "The two options" is replaced by the decision (option B, at `opposition_rate`); edit 1 reads the opponent's **trained score** and names the even line (D-U1-02); edit 2's "no edit" on H-127 is superseded by C-04 (`obstacle_default` deleted; the stand-in is `opposed_ob(pool_default, opposition_rate)`); the problem tables are marked whole-dice history (A-5); A-80's entrenched-world control is cited (C3-C12); the docstring that still states the 2026-08-14 form is named as owed to B05; lands-it and tier added. U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "Ob" → "obstacle" in prose (glossary *obstacle*).
 
 **Lands in batch:** B05 (the joint calibration step, `U5c_SC_one_obstacle_form.md` §4 step 5). **Depends on:** `29_DICE_one_opposed_rule_form_and_tuning.md` item 29-1 (`opposed_ob`, B05), `U5c_SC_one_obstacle_form.md` (B05), `U5a_capability_home_and_two_inputs.md` Part B (the trained score, B05).
 
@@ -26,7 +26,7 @@ A die nets `MU_PER_DIE = 0.4` on average (`engine/dice_engine/dice_engine.py`); 
 of score costs `0.5`. So an actor of score `s` against an opponent of score `s` has a mean margin of
 about `−0.1·s`, and skill makes an even contest worse for the one who acts:
 
-| s (both sides) | Ob = s/2 | P(Failure) | P(Success or better) |
+| s (both sides) | obstacle = s/2 | P(Failure) | P(Success or better) |
 |---|---|---|---|
 | 1 | 0.5 | 0.350 | 0.250 |
 | 2 | 1.0 | 0.420 | 0.260 |
@@ -36,7 +36,7 @@ about `−0.1·s`, and skill makes an even contest worse for the one who acts:
 
 Swapping sides does not swap the result: 6 against 3 succeeds 0.570 of the time, 3 against 6 succeeds
 0.052 (H-288's figures, reproduced). And the stand-in is worth a score of 4: an opponent holding a
-score of 2 composes Ob 1.0, one holding none composes `obstacle_default` 2 (H-127's inversion,
+score of 2 composes obstacle 1.0, one holding none composes `obstacle_default` 2 (H-127's inversion,
 reproduced: P(Failure) 0.42 against 0.74 at pool 2).
 
 *(The tables of this section are whole-dice history: they were measured on the whole-dice social roll

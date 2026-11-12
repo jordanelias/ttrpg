@@ -2,7 +2,7 @@
 
 Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` Parts 3–4; `U5b_VERBS_military_physical_residue.md`) — (1) Stage 1 is the inquiries' form on the one roster `graded_tasks` (not `graded_routes`); stage 2 writes `Person.coherence` on every band, Failure included, so it is a contest row bound to the threadwork provider it re-points to (residue §1, shape (b)). (2) **A-5, A-7**: one sampler; the pool rule on the reader's score; Thread Sensitivity stays the one gate A-11 keeps. (3) **A-40** (the Thread is ground: one site a territory, no new entity kind) unblocks the Site half this file leaves waiting on a substrate; planning it is WR's (U5d's family). (4) **A-43** (zero coherence: a person no longer legible to others): what a `thread_read` of such a person shows is CHAR's and WR's to plan with that ruling; this file's stage 1 deposits a sensitivity reading and nothing about his reasons.
 
-Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — the head applied to the body (`unified/work/R4_READ.md` §1.4, 7b.5): stage 1 is an inquiry on `graded_tasks` (18-A renames the roster once; the `graded_routes` rename is withdrawn, D-U1-11i); stage 2 is a contest row (`contests: "a task"`) bound to the threadwork provider, blocked on its carriers (no writer of `Person.coherence` exists in the suite, `unified/U3_DEPENDENCY_ORDER.md` §6.3); `observes:` is flat with the band in `finding_terms` (C-24); A-81, A-30, U3 batch B35 and edge cut row 85, R4 7b.0 block.
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — the head applied to the body (`unified/work/R4_READ.md` §1.4, 7b.5): stage 1 is an inquiry on `graded_tasks` (18-A renames the roster once; the `graded_routes` rename is withdrawn, D-U1-11i); stage 2 is a contest row (`contests: "a task"`) bound to the threadwork provider, blocked on its carriers (no writer of `Person.coherence` exists in the suite, `unified/U3_DEPENDENCY_ORDER.md` §6.3); `observes:` is flat with the band in `finding_terms` (C-24); A-81, A-30, U3 batch B35 and edge cut row 85, R4 7b.0 block. U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "graded route" → "task route" (glossary *task*).
 
 ## Status: PROPOSED
 
@@ -66,7 +66,7 @@ leaves `Person.coherence` unmoved at Failure.
 
 - **N.** It is the only loop verb of the threadwork arcs (M-PERC: 26 cases). Audit §9.9.
 - **R.** A hidden capacity becomes discoverable, and later a priced and condemned act.
-- **S.** The same graded route and observation deposit as every inquiry. Stage 2 becomes a contest row
+- **S.** The same task route and observation deposit as every inquiry. Stage 2 becomes a contest row
   on the one prize roster, its roll the threadwork module's.
 - **E (last).** Stage 1 is data edits only. Stage 2 is one prize binding and one write.
 

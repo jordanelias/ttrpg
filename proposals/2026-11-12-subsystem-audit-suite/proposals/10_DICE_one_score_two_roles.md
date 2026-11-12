@@ -4,7 +4,7 @@ Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-11, C-U
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-04) — the `opposition_fallback` fixture is not added, and the sentence that a non-person subject is opposed at `obstacle_default` is superseded: opposition is never absent, and where nobody stands opposite the term is `opposed_ob(pool_default)` (`16_PESSIMIST_DICE_task_difficulty_and_throughput.md` (a); `U5c_SC_one_obstacle_form.md` §2). `obstacle_default` is deleted.
 
-Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — the body is brought to its two heads: rows applied: `R1_READ.md` 7b-6 and §2 rows (Edit A: training only, no attribute; Edit B: `_opposition_of` returns the trained score, no `opposition_fallback`; Edit C: U1 §5's values on the verb row's `capability:` column; "What it changes" restated on the one rule; the whole-dice `pool_default / 2` figures removed, one sentence naming the inversion kept), `U1_OWNERS_AND_VOCABULARY.md` D-U1-02 (the first head line's "his pool" corrected to "his trained score"), D-U1-08 (Edit D: `scores` and `addends`, carried by `U5b_PC_rulings_in_the_fight.md` §2), `U3_CONFLICT_LEDGER.md` C3-A3 (Edit A starts from implementation lane A's `pool.py::score` split, `c5bf18a`, with its `max(attr, have)` removed), `U5_CONFLICTS_U5c.md` C-04 (`obstacle_default` deleted; nobody opposite is `opposed_ob(pool_default, rate)`); test 9 (tests, lands-it, tier; `Depends on:` / `Lands in batch:`).
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — the body is brought to its two heads: rows applied: `R1_READ.md` 7b-6 and §2 rows (Edit A: training only, no attribute; Edit B: `_opposition_of` returns the trained score, no `opposition_fallback`; Edit C: U1 §5's values on the verb row's `capability:` column; "What it changes" restated on the one rule; the whole-dice `pool_default / 2` figures removed, one sentence naming the inversion kept), `U1_OWNERS_AND_VOCABULARY.md` D-U1-02 (the first head line's "his pool" corrected to "his trained score"), D-U1-08 (Edit D: `scores` and `addends`, carried by `U5b_PC_rulings_in_the_fight.md` §2), `U3_CONFLICT_LEDGER.md` C3-A3 (Edit A starts from implementation lane A's `pool.py::score` split, `c5bf18a`, with its `max(attr, have)` removed), `U5_CONFLICTS_U5c.md` C-04 (`obstacle_default` deleted; nobody opposite is `opposed_ob(pool_default, rate)`); test 9 (tests, lands-it, tier; `Depends on:` / `Lands in batch:`). U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "Ob" → "obstacle" in prose (glossary *obstacle*); "key" (for a capability) → "capability" (glossary *capability*, *key*).
 
 **Depends on:** `U5a_capability_home_and_two_inputs.md` Part A (B04); `29_DICE_one_opposed_rule_form_and_tuning.md` item 29-1 (`opposed_ob`, B04); `U5c_SC_one_obstacle_form.md` (B05); implementation lane A's branch rebased (B01, C3-A2).
 **Lands in batch:** Edits A and C in B04 (`B04-capability-home`, with OBS step 0, U3 §1 B04); Edit B in B05 (`B05-one-roll`).
@@ -30,8 +30,8 @@ grades a person-opposed roll moves at the live arm; the readings are `29_DICE`'s
 1. **Holding a score makes a person easier to oppose than holding none.** `sigma.py::_opposition_of`
    (`:117-137`) returns the larger of the held key and the held attribute, or `None`; `roll.py::obstacle`
    (`:141`) halves a score and falls to `obstacle_default` on `None`. Probe (audit §12, E-07), pool 2: an
-   unauthored subject → Ob 2.0, Partial-or-better 26.00 %; a subject holding the key at 2 → Ob 1.0,
-   58.00 %; a subject holding an attribute at 1 → Ob 0.5, 73.50 %. The stand-in is worth a score of 4 while
+   unauthored subject → obstacle 2.0, Partial-or-better 26.00 %; a subject holding the capability at 2 → obstacle 1.0,
+   58.00 %; a subject holding an attribute at 1 → obstacle 0.5, 73.50 %. The stand-in is worth a score of 4 while
    the same person rolls as a score of 2. `hole_register.yaml` H-127's `cite:` records this inversion as
    made live at B10-10 and unmeasured.
 2. **The stand-in is being applied outside its stated scope.** H-127's own text: the derivation *"reads
@@ -104,7 +104,7 @@ an `assumption` under H-126's existing sweep; H-312 closes on the `interrogate` 
 **D. `modules/combat/core.py::ob_from_defender` (PC lane, cross-listed, not edited here).** Once `score`
 exists, `PersonalCombatInput` carries `scores` and `addends` raw in place of `faculties` (D-U1-08;
 `U5b_PC_rulings_in_the_fight.md` §2), and the note at `core.py:113-116` is resolved by reading the score for
-the Ob (`opposed_ob`) and `pool_of(score, addends, …)` for the pool. That is the PC lane's edit and its
+the obstacle (`opposed_ob`) and `pool_of(score, addends, …)` for the pool. That is the PC lane's edit and its
 goldens; this proposal only supplies the reader.
 
 ## The gate (execution artifacts)

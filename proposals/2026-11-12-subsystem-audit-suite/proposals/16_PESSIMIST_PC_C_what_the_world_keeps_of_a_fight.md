@@ -2,7 +2,7 @@
 
 Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` §1.5) — one consistency note; no edit changes. A-33 (news of a death travels by presence, trail and telling, apart from the seat's news): the `fell_to_hand` Observation rides the death's own Event, so the killer's name reaches exactly those the death reaches and no further; nothing here widens who learns of it. The scene's `shape` is also what a nested round returns to a field (`U5b_PC_rulings_in_the_fight.md` §1), so an officers' duel inside a battle is retold by the same five facts.
 
-Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §1 (AMBIGUOUS against `04` §C.6: an
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §1 (AMBIGUOUS against `04` §C.6: an U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "fought scene" → "fight" (glossary *scene*); "typed record" → "dataclass" (glossary *record*).
 Observation that names a doer reaches only channels that mint attribution) and §2 (A-33), U1 D-U1-06 (`observed` is the
 one channel; every predicate here is a member of the closed roster `rosters.yaml: observation_terms`, which resolves the
 `[name it at landing]`; `fell_to_hand` and `first_blood` are deposited only through channels whose
@@ -22,9 +22,9 @@ Observation and the victor's member of `fight_endings`, `prevailed` by D-U1-11a)
 
 ## What it changes in `engine/season/` at runtime (first)
 
-Each fought scene's success Events carry up to five more `Observation`s (the scene's shape), and the
+Each fight's success Events carry up to five more `Observation`s (the scene's shape), and the
 `person.died` Event of a felled *actor* carries one naming the standing party. `person_q.deed_doer`
-reads that one before the `seen.who` pairing. **Declared hash mover for every log with a fought scene**
+reads that one before the `seen.who` pairing. **Declared hash mover for every log with a fight**
 (`Event.observed` is hashed). No band, kind, carrier or store is added; nothing is kept between scenes.
 
 ## The problem (evidence)
@@ -118,7 +118,7 @@ The S1 and S7 probes were lane scratch (not in the repository). NEW `tests/valor
 
 ## Falsifier
 
-A fought scene whose Events let a reader recover neither its length nor who struck first; a death in
+A fight whose Events let a reader recover neither its length nor who struck first; a death in
 self-defence after which no witness can name the killer.
 
 ## NERS reading
@@ -132,10 +132,10 @@ self-defence after which no witness can name the killer.
   `fight_turns` and nothing else.
 - **S.** One channel (`observed`), the precedent's; no second store; equal across the two modes.
 - **E, last.** One frozen record, five predicates, one read in `deed_doer`. High against what N and R
-  found; it needs the typed record first.
+  found; it needs the dataclass first.
 
 ## Cost class
 
 Edit, after `03_PC_typed_outcome_one_door.md` Part A. Tier: `sonnet`, effort `high`. Hash movers declared: every log
-with a fought scene (`Event.observed` is hashed); one re-pin at B14's close. Lands it: B14, order the roster members →
+with a fight (`Event.observed` is hashed); one re-pin at B14's close. Lands it: B14, order the roster members →
 `SceneShape` and the module fold → the seam's return → `_eff_kill`'s Observations → `deed_doer` → the chronicle line.

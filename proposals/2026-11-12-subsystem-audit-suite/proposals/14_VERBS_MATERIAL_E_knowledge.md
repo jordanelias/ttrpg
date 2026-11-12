@@ -1,7 +1,7 @@
 # 14 · VERBS · MATERIAL · E — `research` that teaches what it read, `reconstruct` that concludes
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-22, C-24) — §2: `observes:` is a flat list, not keyed by Degree; `finding_terms` owns which reads a band deposits (`U5c_FI_residue.md` §8). §3: `reconstruct` writes nothing and deposits its conclusion to its maker; the Proposition is his `utter` (`U5c_FI_residue.md` §7).
-Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — the head applied to the body (`unified/work/R4_READ.md` §1.2, 7b.4): `research`'s `observes:` is flat and `finding_terms` owns the band (C-24); `reconstruct` is an inquiry (writes nothing; its `Proposition.exists` bands, `conclusion.stated` and the `[UNVERIFIED]` matrix pair are struck; the conclusion is deposited to its maker and the Proposition is his later `utter`, C-22, `19_LACUNA_conclusion_is_a_committed_assertion.md`; U1 S-21); the `evidence` subtraction becomes the `proofs` leverage source (C-01, A-25; C3-C10's rule); `graded_acts` → `graded_tasks` (D-U1-11i); the `present_at` `[UNVERIFIED]` confirmed at the tree (`queries/world_q.py:4574-4577` resolves a Site or a Rung only, so the Record branch through `place_of` is needed); A-81 for `finding.none` (C3-C11), A-30, U3 batch B26, R4 7b.0 block.
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — the head applied to the body (`unified/work/R4_READ.md` §1.2, 7b.4): `research`'s `observes:` is flat and `finding_terms` owns the band (C-24); `reconstruct` is an inquiry (writes nothing; its `Proposition.exists` bands, `conclusion.stated` and the `[UNVERIFIED]` matrix pair are struck; the conclusion is deposited to its maker and the Proposition is his later `utter`, C-22, `19_LACUNA_conclusion_is_a_committed_assertion.md`; U1 S-21); the `evidence` subtraction becomes the `proofs` leverage source (C-01, A-25; C3-C10's rule); `graded_acts` → `graded_tasks` (D-U1-11i); the `present_at` `[UNVERIFIED]` confirmed at the tree (`queries/world_q.py:4574-4577` resolves a Site or a Rung only, so the Record branch through `place_of` is needed); A-81 for `finding.none` (C3-C11), A-30, U3 batch B26, R4 7b.0 block. U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "patient" (the one acted on) → "counterparty", `{deed, patient…}` → `{deed, counterparty…}` (glossary *party*).
 
 ## Status: PROPOSED
 
@@ -80,7 +80,7 @@ Record branch through `place_of` (FI-04 §2's edit; this row depends on it).
 
 ```python
 def concluded_of(ledger, subject, fx) -> "Optional[Concluded]":
-    """What the holder would conclude about `subject`: the newest deed claim he holds whose patient or
+    """What the holder would conclude about `subject`: the newest deed claim he holds whose counterparty or
     object is `subject` (`attributed_deeds` / `is_deed`), the doer `deed_doer` gives it (or None), and the
     number of independent chain roots among his claims of that deed. None where he holds no deed claim on
     it, or already holds a Proposition he uttered concluding on it. `Concluded(deed, doer, roots)`."""
@@ -96,8 +96,8 @@ def concluded_of(ledger, subject, fx) -> "Optional[Concluded]":
    (`Concluded.roots − 1`), soft-capped with every other level. Corroboration makes the conclusion easier to
    reach, which is need e2 of the arc adjudication.
 4. *The product (W3-4a, C-22).* `reconstruct` writes nothing. At a winning band WITNESS deposits the
-   conclusion to its maker as his own firsthand claim (content `{deed, patient, doer}` at Overwhelming and
-   Success, `{deed, patient}` at Partial; the reads `finding_terms` names per band); the HOLDS Proposition
+   conclusion to its maker as his own firsthand claim (content `{deed, counterparty, doer}` at Overwhelming and
+   Success, `{deed, counterparty}` at Partial; the reads `finding_terms` names per band); the HOLDS Proposition
    exists only when he later `utter`s it with `cites` (`19_LACUNA_conclusion_is_a_committed_assertion.md`,
    the one mint of a committed conclusion). At Failure nothing is concluded (`finding.none`; the
    alternative is J-M2 of the audit's §19 and would change this band only).

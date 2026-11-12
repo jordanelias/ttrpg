@@ -2,7 +2,7 @@
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-07, C-U5a-13) — its amendment to `18_DETERMINISM_task_draw_for_uncontested_verbs.md` (item 3, the gate's reading and refusal to ship) is applied in that file. Its amendments to SC's two files are U5c's. Under A-6 and A-26 the unopposed stand-in is an ordinary person's pool times `opposition_rate`; the 16.5 % and 42 % figures are the old regime's and the throughput reading is what replaces them.
 
-Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §2 (A-5, A-6, A-26: (a) restated as the
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §2 (A-5, A-6, A-26: (a) restated as the U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "Ob" → "obstacle" in prose (glossary *obstacle*).
 form; the figures of (b)-(d), "What it changes" and the gate are dropped as whole-dice history; gate 2's property kept),
 §7/§7b (test file, tier); U1 D-U1-02 and architecture §4 (the opposing operand is the **trained score**, never the
 pool, at `opposition_rate`; the stand-in is `opposed_ob(pool_default, opposition_rate)` with the composer's even line
@@ -52,7 +52,7 @@ Exact enumeration through the owner (`band_odds`; `runs/PES_DICE/pure.txt`).
 
 1. **18-A ships the task draw at `obstacle_default`** (*"until [the difficulty column] lands,
    `obstacle_default`"*; cost class: *"it ships at `obstacle_default` without it"*). At the shipped pool
-   that is (2 dice, Ob 2.0): `band_odds(2, 2.0) == (0.74, 0.19, 0.07, 0.0)`. Under 18-A's own
+   that is (2 dice, obstacle 2.0): `band_odds(2, 2.0) == (0.74, 0.19, 0.07, 0.0)`. Under 18-A's own
    `task_fraction` (Partial one half) a converted verb delivers 0.19 × 0.5 + 0.07 = **16.5 %** of the
    effect it delivers today. On the sweep's count of 727 consequential undrawn outcomes in five realm
    seasons, that is about 120. Plain failures write nothing. `obstacle_default` is H-127's stand-in for
@@ -65,7 +65,7 @@ Exact enumeration through the owner (`band_odds`; `runs/PES_DICE/pure.txt`).
    (*"0.42 / 0.58 / 0.74 / 0.83 at pool 2"*) are for an opposed act, where the unscored counterparty adds
    1.0; its falsifier tests *"at equals"* and cannot see the unopposed rows. Those rows are `speak`,
    `research`, `examine`, `surveil` and every one of 18-A's 22 task rows.
-3. **One die cannot succeed at Ob 2.** `band_odds(1, 2.0) == (0.9, 0.1, 0.0, 0.0)`: the first point of
+3. **One die cannot succeed at obstacle 2.** `band_odds(1, 2.0) == (0.9, 0.1, 0.0, 0.0)`: the first point of
    a skill removes the Success band from every default task (F-PES-DICE-06).
 4. **Control: the regime, not the route, is what starves the task draw.** The same fraction at other
    pairs: (2, 1.0) 0.42; (4, 1.0) 0.63; (4, 2.0) 0.40; (5, 1.0) 0.70; (5, 2.0) 0.49.
