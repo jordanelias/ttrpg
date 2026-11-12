@@ -9,7 +9,11 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 
 ## FI — field investigation and knowledge
 
-<!-- SYNTHESIS:FI -->
+**What is wrong.** The information model is a sound basis (the witness barrier, the per-holder ledger, provenance, refraction, clause 4: two people in one realm hold different facts) and the fieldwork game on top of it is not yet a game, because almost nothing a person knows reaches another by a person's act (`audits/08_FI_audit.md` §0; F-FI-02): over three seeds, 0 to 7 of 10,000 to 12,000 held claims arrived by telling. A person's candidates move on a fact he has not witnessed (F-FI-01); investigation resolves and does not play (F-FI-03); a lie deceives only those it changes nothing for (F-FI-04); nothing said can be private and nothing hidden can be found (F-FI-06); the hand that did a killing cannot be passed on (F-FI-11). The pessimist (`16_PESSIMIST_FI.md` §0): the realm's busiest engine informs nobody; 73.7 % of executed acts are information verbs and 93.9 % of 74,510 Events are ledger bookkeeping; cutting every information verb makes the world *more* eventful. The lacuna lane (`19_LACUNA_*` §0): the carriers exist; the one missing act is a conclusion the investigator commits to, bound to its support, that the world answers later.
+
+**What was decided.** A failed attempt on a guarded target is caught (A-96); news of an office travels realm-wide, news of a death by presence, trail and telling (A-32, A-33); a rumour may lose the doer but never replace him, and the engine authors no wrong conclusion (D-44, D-45); a refusal teaches its refuser privately (D-46); finding what is hidden needs its own design (A-109).
+
+**What is built where.** **B11** carries the bulk (73 RESOLVED-BY rows: the claim-sourced referents, a rumour that travels, the playable inquiry, testimony that names a hand, the shortest playable case, the CR-29 reach channel first; the A-109 design item at its open); B24 the evidence interface into the hearing; B25 questioning; B26 the inquiry verbs (`examine`, `seize` a record, `destroy_record`). **What stays open:** which row forms a petition from a held conclusion (`08_FI_03_playable-inquiry:162`, INCOMPLETE); WITNESS's deposit rules unopened by sixteen proposals (`audits/25` U-05); two DISPUTED rows.
 
 **Rows: 105** (RESOLVED-BY 95 · SUPERSEDED 5 · STALE/FP 3 · DISPUTED 2 · JORDAN 0).
 
@@ -125,7 +129,11 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 
 ## FA — factions, offices, war and land
 
-<!-- SYNTHESIS:FA -->
+**What is wrong.** A sound skeleton (authority is a property of the seat exercised; a faction is a derived view; no entity special-cased) without force or turnover (`audits/06_FA_audit.md` §0): 91 decrees in three seasons at seeds 0–2, none held, obeyed or defied (F-FA-01); power does not change hands (F-FA-02); the military verbs are open to clerks (F-FA-03); war has no producer (F-FA-04); there is no FA scenario or end condition (F-FA-07); a defeat costs bodies and never a holding or a seat (F-FA-13); men are levied by whoever minted a paper (F-FA-15). The pessimist (`16_PESSIMIST_FA.md` §0): the realm runs the same with every office empty and with every faction dissolved, inside the noise of the dice; a vacant seat is filled by the Crown or by nobody (F-PES-FA-01); the power to dismiss is one unfillable seat (F-PES-FA-02); royalty by noble conquest is not in the engine (F-PES-FA-06).
+
+**What was decided.** Governance is the loop's own verbs, no module (A-10); a decree is proclaimed (A-21); command, not territory (A-22); custody suspends acts through the seat (A-23); a seat carries a modifier and three optional facts (A-12, A-13, `_part2` §4.3); a vote is a draw (A-14); the crown when the line fails is the deed race (A-19); war lives in the seats that wage it (A-20); a head strips an officer by a resistible draw (A-35), nobody judges the Confessor (A-36); land and the march (A-57 to A-70, A-73, A-74, A-103, `_part2` §4.4); a grant reduction is a revocation (A-105).
+
+**What is built where.** **B21** the governance (51 RESOLVED-BY rows: the decree binds, remit by row, seat terms and turnover, war in the seats, the levy through the seat, the playable scenario and the shortest loop); B21b war (IN-36's cap, the claim as occasion), B21c seats and the Parliament constraint (CR-38 design-first), B21d the arc; B23 land; B32 and B33 the institutions kit; B40 its scenarios. **What stays open:** A-76's stand-in until H-90's Court Parliament; the ducal homes (`_part2` §5.2); one JORDAN row, answered by A-76.
 
 **Rows: 118** (RESOLVED-BY 97 · SUPERSEDED 16 · STALE/FP 4 · DISPUTED 0 · JORDAN 1).
 

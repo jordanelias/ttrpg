@@ -55,7 +55,7 @@ SERIAL EDGES: within the batch: B31.01 first (a design item at the batch's open,
   With other batches, by file (U3 §5.1, `→` is landing order): `references/troops.yaml`, `tools/export_troops.py`, `engine/engine_params/troops.json`, `modules/mass_battle/troop_types/table.py` B17 → B19a → B19 → B31 (A-100); `percell.py` B17 → B19 → B31; `massbattle.py` B17 → B19 → B20 → B31; `armyrecord.py` B19 → B20 → B22 → B31; `orderofbattle.py` B17 → B19 → B20 → B22 → B31 → B32; `modules/mass_battle/config.py` B17 → B19 → B31; `loop/effects_combat.py` B04 → B12 → B14 → B16 → B17 → B19 → B20 → B22 → B23 → B31; `engine/season/rosters.yaml` (hot) … → B30 → B31 → B32 …; `engine/season/seam/wrappers/mass_battle.py` B17 → B19 → B20 → B22 → B31 `[ASSUMPTION: this file's batch list is read from the B22 part and the sources, not from U3 §5.1's row]`.
 PARALLEL: S19 with B33-inst-economy-hands (FA) and B36-wr-story-instruments (WR). Shared files: `engine/season/rosters.yaml` with B33 (B31 edits only `record_kinds.values.army`; different key), `engine/season/verb_table.yaml` with B33 and B36 if B31.09 adds `march`'s write (different rows): kept by hand at merge (§7.3). All three move pins: B31 merges first in the step (§2.1's order, §7.4).
 COST: small builds, three declared flips, one content item; producer `valoria-author` on `sonnet`, `high`; B31.01 (design) and B31.20 (the stated rows and their history checks) on `opus`; the close's terminal critique `opus`; `--trust`/`--spot` supervised on `haiku`.
-EST: 13 h [estimate: §2.4's formula over 22 positions, 0.4 h × 22 + 2.5 h + 2 h for the instrument reading (MBA-09's `--trust`, `--spot`), E-15]
+EST: 13 h [estimate: §2.4's formula over 21 positions, 0.4 h × 21 + 2.5 h + 2 h for the instrument reading (MBA-09's `--trust`, `--spot`), E-15]
 
 | pos | item | source | state | hash | gates on |
 |---|---|---|---|---|---|
@@ -340,7 +340,7 @@ Not in this batch, and where each is: `04_MB_unit_loadout_and_weapon_in_hand_B` 
 - INSTRUCTION (copied): the terrain `pace` column's mounted cells: `forest_broken` **0.6** ("Kriegsspiel 1824: cavalry 250 of 400 paces in light forest (WG K1); Lost Battles: rough ground costs horse double (WG L4)"), `uphill` **0.25** ("Kriegsspiel: 100 of 400 paces up inclines (WG K1)"); every foot cell and `open_flat`, `narrow_pass`, `river_crossing`, `walls` stay 1.0 ("**not established**; no multiplier invented"). Each value carries `status: seed` and its source in a comment.
 - WHERE: `references/troops.yaml` (`terrain.forest_broken.pace`, `terrain.uphill.pace`, mounted); `engine/engine_params/troops.json` (re-derived).
 - TESTS: `tests/valoria/test_mass_battle_terrain.py::test_horse_pace_by_ground` (B31.05) now reads the shipped values, not the test's.
-- FALSIFIER and CONTROL: "horse at three times foot on `uphill`". Control: the revert (every cell 1.0) reproduces B31.16's digests.
+- FALSIFIER and CONTROL: "horse at three times foot on `uphill`". Control: the revert (every cell 1.0) reproduces B31.15's digests.
 - GATE: `python -m pytest tests/valoria/test_mass_battle_terrain.py -q` → pass; `python tools/ci_golden_modes_check.py` → digests read and recorded (moved where a field is fought on those grounds); the realm content hash at seed 0, one season, read.
 - HASH MOVERS: every fought field with a mounted body on `forest_broken` or `uphill`. Declared; B31.99's re-pin.
 - DEPENDS ON: V12 B31.05.
