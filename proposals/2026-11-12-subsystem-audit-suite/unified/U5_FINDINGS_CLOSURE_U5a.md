@@ -719,7 +719,7 @@ the audit's own ledger and is not restated (§Z says what this lane re-read and 
 | §4 `world_q.within` | strife reading, test-only | SUPERSEDED | WR's closure (U5d): the strife proposals decide whether they call it; listed in `unified/U5_CONFLICTS_U5a.md` §3 | the audit's own `[UNVERIFIED]` |
 | §4 report functions, path constants, `operands_for`, the dynamic loaders (the remaining extension names) | test-, tool- or dispatch-reached | STALE-FALSE-POSITIVE | — | audit §4 |
 | §6 item 1 | F-C1A-05 has no owner | RESOLVED-BY | as F-C1A-05 | — |
-| §6 item 2 | W4 changes what NPCs choose once on | RESOLVED-BY | C-U5a-16; the flip is ordered in `U5a_CHAR_owed_amendments.md` §8 with the other chooser flips | — |
+| §6 item 2 | W4 changes what NPCs choose once on | RESOLVED-BY | C-U5a-16; the arm ships at the control, and its flip is a declared-mover commit of its own after `02_CHAR_which_ground_moves_whom.md` lands (A2's own order) | — |
 | §6 item 3 | D2 depends on GO-B | RESOLVED-BY | order stated in A1's `Reconciled:` line; if GO-B is rejected D2 is held | — |
 
 ## 4.2 `audits/17_CENSUS_C1B.md` — 643 rows, the blind-spot table, the Layer-1 note
@@ -803,5 +803,5 @@ R2 W3 is a hard gate, and it is the one gate Jordan's answer A-11 keeps (Thread 
 through the uses table. R2 W5 reads a quorum before `date.fired`: a rule of an institution, which
 `15_INSTITUTIONS_PAPACY_B…` owns. Lens B: A2 W3, R2 W2 and R2 W3's loader sit in `04` §A.2's `data/loaders`
 row; R2 W3's reader in `queries/person_q` takes no token; R2 W1 keeps state inside one `resolve_field`
-call (`holonic` §45). No STRUCTURAL row is touched; B1 D3 and R1 D4 retire files and rows with `FORK:` rows
-as CLAUDE.md §1 requires.
+call (`holonic` §45). No STRUCTURAL row is touched. B1 D3 retires two files with `FORK:` rows, as
+CLAUDE.md §1 requires; R1 retires fields and two contract rows, no file, and writes none.
