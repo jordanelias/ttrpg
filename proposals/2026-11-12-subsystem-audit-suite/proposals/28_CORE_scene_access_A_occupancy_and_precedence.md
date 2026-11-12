@@ -107,7 +107,12 @@ only on a person whose budget is below the round count (a wounded or travelling 
 - **The group.** `loop/resolve.py::rival_key` (the function `18_DETERMINISM_rival_acts_in_one_fold.md`
   adds) gains one key: `("round", person)` for a scene whose actor is that person and for every scene
   holding an occupying act that names him. Groups that share a scene are merged. As in that proposal, a
-  group is re-ordered **among the positions it already holds**, so no scene outside it moves.
+  group is re-ordered **among the positions it already holds**, so no scene outside it moves. A member
+  may thereby fold inside another stratum's run (a visitor's `social` scene in the place of the host's
+  `binding_decision` one). What the strata protect was measured as nothing at seed 0 (0 of 821 acts
+  changed outcome with every act in one stratum, `16_PESSIMIST_CORE_a_scene_runs_in_its_own_order.md`'s
+  evidence); gate row 10 re-reads it. A visitor drawn first who proves not to be where the host is is
+  refused on `with`, seats nobody, and the host's own scene folds in its turn.
 - **The draw.** One net per scene, drawn once: `roll_net(pool_default, rng)` through the one roller
   (A-5), on `draw_factory(seed, tick)(actor, f"precedence:{scene id}")` (`04` PART D row 35: a keyed
   purpose, no counter), with levels added through the one leverage form
