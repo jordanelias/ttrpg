@@ -215,7 +215,7 @@ A theme was a province under a *strategos* who held both the civil and the milit
 soldiers settled on inalienable military lands they held for service `[TREE research/fa_se_historical_precedent_research_v1.md:154; RE-GROUNDED: also research/pre_firearms_formations/03_early_medieval.md:22 ("the state grants land that produces soldiers"; its "roughly 30 themes … 4,000–10,000 troops" is a lead)]`.
 The checks on him were structural. His fiscal officer (the theme's *protonotarios*) and his muster
 officer (its *chartoularios*) answered to the bureaux in the capital, not to him; he served a few
-years and was moved; large themes that had rebelled were split `[TREE research/proactive_governance_scale_research_v1.md:142, X2; reporting lines and tenure MEMORY: Oikonomides, Treadgold]`.
+years and was moved; large themes that had rebelled were split `[TREE research/proactive_governance_scale_research_v1.md:142, X2; reporting lines and tenure MEMORY: Oikonomides, Treadgold. RE-GROUNDED: the reporting lines and the short tenure stay memory-grade for Byzantium; the same check is sourced for Venice's rectors ("fixed terms of 16, 24, or 36 months", .audit/… :99) and for the rule of avoidance and timar rotation (research/fa_se_historical_precedent_research_v1.md:128-129)]`.
 From the later tenth century several themes and their garrisons were grouped under a *doux* or
 *katepano*, stronger against an invader and more dangerous to the throne
 `[TREE .audit/…/comparative_governance_research_v1.md:32; proactive_governance :263: consolidation is one setting of a civil/military flag, and the dangerous one]`.
@@ -305,7 +305,7 @@ sparingly; and trade was let in through named gates only, where *kommerkiarioi* 
 took the duty and enforced the treaty's lists `[MEMORY: *De Administrando Imperio*; the Book of the Eparch is TREE .audit/… :30. RE-GROUNDED: the protocol is TREE research/rhetoric_oratory_contest/rhetoric_oratory_contest_research.md:127 ("a graded protocol of precedence, gifts, and staged audience — diplomacy as ritual hierarchy rather than free negotiation"); the clientage by payment is proposals/2026-09-05-proceedings-subsystem/source/06-part-V-dossiers.md:39 ("Payments made to avoid war were recorded as imperial largesse"; "the excerpts on embassies constitute a precedent file"); hostage heirs have a sourced cousin in *sankin-kotai* (.audit/… :63). The *kommerkiarioi* and their seals stay memory-grade]`.
 A treaty of privilege was a chrysobull like any other grant, and it decayed like one: the exemption
 from duty given to Venice in 1082 for a fleet starved the customs and the native merchants for a
-century and ended in 1204 `[MEMORY for 1082; TREE research/fa_se_historical_precedent_research_v1.md:45 for 1204 as the tree's anchor]`.
+century and ended in 1204 `[MEMORY for 1082; TREE research/fa_se_historical_precedent_research_v1.md:45 for 1204 as the tree's anchor. RE-GROUNDED: 1082 stays memory-grade (no file holds it). A title traded as an instrument is sourced: Byzantine recognition of Charlemagne's imperial title in 812 "in exchange for Frankish renunciation of Venice/Dalmatia claims" (research/governance/governance_modes.md:146)]`.
 Orders to a frontier governor took weeks; he acted on the last one he had.
 **The mechanism:** clientage by title and stipend; heirs as pupils; trade through a gate with a named
 keeper; and a governor far enough away that his orders are always old.

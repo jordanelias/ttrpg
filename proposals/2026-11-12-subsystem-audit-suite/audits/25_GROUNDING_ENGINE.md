@@ -25,7 +25,7 @@ marked "as recorded, not re-run".
 **What this file does not do.** It does not grade a design, and it does not re-audit a fix. A claim about
 history, a game precedent or research is another grounding lane's subject and is not listed.
 
-**Edits made to other suite files** are listed in §9; each edited file carries a `Grounded:` line at its
+**Edits made to other suite files** are listed in §8; each edited file carries a `Grounded:` line at its
 head. No finding of another lane was deleted.
 
 ## 0. Which tree the suite's claims are about
@@ -171,3 +171,101 @@ wrong the mark now says so and the fallback is the edit.
 | V-20 | `present_at` is a requirement stem | `proposals/14_VERBS_MATERIAL_E_knowledge.md:61` | `data/requires.py:852` (a member of `REQUIRES_STEMS`; the rest of that mark was not read) |
 | V-21 | `harness/chronicle.py` has a `--chains` reading | `proposals/01_CORE_requirements_reading_record.md:56-57` | `harness/chronicle.py:50-64`; whether it exposes the count that proposal wants was not checked |
 
+
+## 5. Left marked: what this lane could not settle, and what would
+
+Line numbers in §5 are those of the inventory, taken at `870c661`
+(`runs/GROUND_ENGINE/inventory_raw.txt`); a file this lane edited has since gained two or three lines at
+its head. None of these marks was changed. Nothing here is a queue: each row says what observation
+would settle the mark, for whoever next relies on the claim.
+
+| # | the marks | why not settled here | what would settle it |
+|---|---|---|---|
+| U-01 | **a cause that was not traced in a run**: `02_CHAR_audit.md:306` (which conjunct fails per refused verb); `03_PC_audit.md:143` (which `violence_contexts` reader admitted a fight); `07_SE_audit.md:299`, `16_PESSIMIST_SE.md:642`, `14_VERBS_MATERIAL.md:383` (why `restore` stopped executing since `24f`); `08_FI_audit.md:291`, `:395`, `08_FI_audit_addendum_B.md:139` (unsplit counts; the seven unattributed death claims); `09_WR_audit.md:264` (the one death's causing act); `16_PESSIMIST_WR.md:103`, `:540`; `16_PESSIMIST_SC.md:586`, `:708`; `16_PESSIMIST_PC.md:457`; `16_PESSIMIST_CORE.md:162`; `20_NARRATIVE_CHURN.md:287`; `16_PESSIMIST_FI.md:503` | each needs the specific run re-made with a per-act reading; none is a line to open | the lane's own probe with `aperture`'s `DECIDING READ PER REFUSAL` block or `Event.causes` walked one level, at the seed it names. `24f` is before the clone's boundary, so "what changed since" needs `git fetch --unshallow` |
+| U-02 | **a behaviour over more seasons, seeds or a scale this lane was told not to run**: `01_CORE_audit.md:175` (R-04, `aperture 4 0`, run stopped); `:264` (hot-path timing on the realm); `04_MB_audit.md:580`, `:601`; `04_MB_audit_addendum_B.md:225`, `:261`, `:456`; `10_DICE_audit_addendum_B.md:257`; `16_PESSIMIST_DICE.md:655`; `16_PESSIMIST_SC.md:494`, `:613`; `16_PESSIMIST_FA.md:299`, `:328`; `16_PESSIMIST_PC.md:516`, `:721`; `16_PESSIMIST_WR.md:394`, `:502`; `16_PESSIMIST_FI.md:154`; `09_WR_audit_addendum_B.md:800`; `17_CENSUS_C1B.md:87`; `proposals/09_WR_B_weather_with_memory_and_the_year.md:159`; `proposals/02_CHAR_choice_alignment.md:87` | no long aperture run; one seed | the run each mark names. For R-04 the CORE lane's `runs/CORE/aperture_4_0.txt` exists and was not read to its end by this lane |
+| U-03 | **"the 27 season-5 closures are matured `oblige` terms"**: `09_WR_audit.md:579`, `:733`; `09_WR_audit_addendum_B.md:95-96`, `:327-330`; `16_PESSIMIST_WR.md:417` | the mechanism is verified (V-07) and it is not `oblige`-specific; which Tenure kinds closed is a six-season reading | at seed 0, six seasons: for each `tenure.closed` Event of season 5 with a `matured_term`, the kind of the Tenure it names |
+| U-04 | **a test's behaviour**: `01_CORE_audit.md:178` (R-07's three tests); `16_PESSIMIST_SE.md:456`, `:756` (`test_term_upkeep.py`, `test_in12_raze.py`, read from docstrings); `04_MB_audit_addendum_B.md:802` (`test_flow_skeletons.py`); `proposals/01_CORE_tests_delete_what_cannot_fail.md:105`; `proposals/01_CORE_requirements_reading_record.md:70` | this lane was told to run no pytest | the one test file, run once (CLAUDE.md §0.4 cl.2) |
+| U-05 | **WITNESS's deposit rules, not opened**: `proposals/19_LACUNA_questioning_has_an_approach_and_a_cost.md:27`; `proposals/05_SC_contest_record_on_event.md:87`; `proposals/16_PESSIMIST_SE_A_…md:125`; `proposals/20_NARRATIVE_C_who_holds_what.md:71`; `proposals/20_NARRATIVE_B_what_he_was_owed.md:98`; `proposals/14_VERBS_SOCIAL2_B_a_word_with_content.md:88`, `:145`, `:149`; `proposals/14_VERBS_MILITARY_C_the_muster.md:87`; `proposals/14_VERBS_MATERIAL_A_mending.md:141`; `proposals/14_VERBS_MATERIAL_D_paper.md:160`; `proposals/01_CORE_claim_fade_as_read.md:55-56`, `:63`; `proposals/16_PESSIMIST_FI_B_a_paper_is_about_something.md:65`; `proposals/16_PESSIMIST_FI_D_…md:90`; `14_VERBS_PHYSICAL.md` §5 (the residue of G-33); `14_VERBS_SOCIAL1.md:341`, `:519` | `loop/witness.py` and `epistemic.py::observers_for` were opened only at the lines named in §3. One probe was tried for the first of these and is inconclusive: at seed 0, of five `interview` Events on a living person, the interviewee holds no claim whose predicate is an interview kind, but the probe matched claims by tick and not by source Event (`g4_behaviour.out` (b)) | read `loop/witness.py:537-700` (the fan and the deposit loop) and `epistemic.py:794` on, once, for all of them: they are one function's behaviour asked sixteen ways |
+| U-06 | **a loader, gate or matrix shape the proposal hopes for, not opened**: `proposals/06_FA_seat_terms_by_body_B.md:83`; `proposals/14_VERBS_SOCIAL1_B_…md:53`, `:80`, `:88`; `proposals/14_VERBS_SOCIAL1_D_…md:38`, `:114`; `proposals/14_VERBS_SOCIAL1_A_formation.md:71`, `:93`; `proposals/14_VERBS_SOCIAL1_C_…md:39`, `:60`; `proposals/14_VERBS_SOCIAL2_A_…md:50`; `proposals/14_VERBS_MILITARY_A_movement.md:104`; `proposals/14_VERBS_MILITARY_B_train.md:84`; `proposals/16_PESSIMIST_CHAR_A_…md:101`; `proposals/16_PESSIMIST_CHAR_C_…md:93`; `proposals/16_PESSIMIST_FA_B_…md:89`; `proposals/16_PESSIMIST_FA_C_under_the_seat.md:60`; `proposals/16_PESSIMIST_FA_A_…md:79`, `:115`; `proposals/02_CHAR_scar_cap_and_regard_unit.md:83`; `proposals/02_CHAR_capability_uses_table.md:104`; `proposals/01_CORE_predicates_name_their_clause.md:55`; `proposals/01_CORE_case_setup_and_beats.md:64`; `proposals/08_FI_06_testimony-names-a-hand.md:86`; `proposals/06_FA_war_lives_in_seats_B.md:98`; `proposals/06_FA_remit_grant_by_row.md:74-75`; `proposals/06_FA_office_capabilities.md:73`; `proposals/22_HAPPENINGS_C_…md:86`; `proposals/22_HAPPENINGS_D_…md:82`, `:102`; `proposals/07_SE_campaign_supply_and_muster.md:85`; `proposals/07_SE_capability_rate_B.md:46`, `:80`; `proposals/04_MB_campaign_party_economy.md:74`; `proposals/03_PC_loadout_and_carry.md:8-10`; `proposals/12_ARCS_cited_evidence.md:52`; `proposals/12_ARCS_substrate_as_ground.md:44`; `proposals/12_ARCS_arcs_as_staged_goals.md:42`; `proposals/19_LACUNA_verdict_ladder_and_reversal.md:83`; `proposals/19_LACUNA_conclusion_is_a_committed_assertion.md:78`; `proposals/17_CENSUS_REST_3_corrections.md:94`; `proposals/17_CENSUS_REST_2_wiring.md:188`; `06_FA_audit.md:278`, `:855`; `07_SE_audit.md:466`; `11_GO_audit.md:608`; `12_ARCS_adjudication.md:365`, `:414`, `:467`, `:468`; `16_PESSIMIST_CHAR.md:416`; `16_PESSIMIST_PC.md:474`; `16_PESSIMIST_GAME.md:102`, `:577`; `17_CENSUS_C1A.md:341`, `:365`; `17_CENSUS_REST.md:293` (its bracket), `:411`; `04_MB_audit.md:757`, `:788`, `:1047`, `:1239`; `05_SC_audit.md:299`, `:469`, `:652`; `02_CHAR_audit.md:385`, `:409`, `:888`; `10_DICE_audit.md:508` (the DICE addendum reports it verified; not re-opened here) | time. Each is one line or one function to open; this lane opened the ones several proposals stand on and stopped | open the named function or row. Every one of these proposals states its fallback, so none is blocked; a lane that lands one opens the line first |
+| U-07 | **a proposal's own new conjunct**: `proposals/22_HAPPENINGS_C_…md:20` ("no person at `build_realm(0)` holds both conjuncts") | the conjuncts (`enmity`: wants dead **and** is hostile) are the proposal's, not yet code; there is nothing to read | the proposal's gate, once the reader exists |
+| U-08 | **the institutions family's engine marks**: 55 `[UNVERIFIED]` lines under `audits/15_INSTITUTIONS_*.md` and `proposals/15_INSTITUTIONS_*.md`, about a dozen of them naming code | not reached. Their realm facts are verified (L-01, L-02, L-05) | as U-06 |
+| U-09 | the "about 3.5-fold" growth of raises (`01_CORE_audit_addendum_B.md:365`) | L-24: the 2026-09-05 file set is before the clone's boundary | `git fetch --unshallow`, then the same grep at the commit `04:986` was written |
+
+## 6. Inventory and coverage
+
+`grep -rnEi` for the fourteen marker phrases over `audits/`, `proposals/`, `unified/` at `870c661`: **658
+lines in 208 files**. By kind: 128 lines are in the institutions family (U-08, plus history and precedent,
+another lane's); 158 quote the tree's own `[ASSUMPTION; …]` tags, which are the code's declared
+assumptions and not a claim a suite author failed to check; 112 are coverage statements ("not opened",
+`[SKIPPED: …]`) about documents; **260 are `[UNVERIFIED]` marks outside the institutions family**.
+
+| | count |
+|---|---|
+| load-bearing figures checked (§1) | 24: 19 verified, 4 verified with a correction (L-04, L-10, L-21, and L-16's four definitions), 1 refuted at HEAD (L-19, already known) |
+| Layer 1 passages checked (§2) | 12: 11 as quoted, 1 line corrected (A-09) |
+| marks settled at the line (§3) | 35: 19 verified (G-33 in part), 6 verified with a correction, 10 refuted (seven of them a proposal's hoped-for shape, whose stated fallback now applies) |
+| line citations opened as cited (§4) | 21 |
+| **total checked** | **92: 70 verified, 11 verified with a correction, 11 refuted** |
+| marks left, grouped (§5) | 9 groups. 37 `GROUNDED` tags were written into the suite; `grep -c UNVERIFIED` outside the institutions family and this file now reads 225 lines, about a dozen of which are this lane's own `Grounded:` head lines naming the marks they settled |
+| suite files edited | 35 (§8) |
+
+**What this lane did not do.** It did not open `loop/witness.py` beyond four lines, so every claim about
+what WITNESS deposits is U-05. It did not open `holonic` §43 or §45–§47, which two audits name as the
+ground of their module-conformance claim (`05_SC_audit.md:652` still marks it; `07_SE_audit_addendum_B.md`
+C-4 says it opened them). It ran no test. It re-ran one other lane's long probe (the King) and none of
+the others; a figure in §1 "as recorded" is that lane's saved output re-counted, not a new run. It read
+no document under `.designs/`, `research/` or `registers/` except the five ledger rows named.
+
+## 7. Falsifiers (CLAUDE.md §0.1 pt 3)
+
+- *The realm facts (L-01 to L-06).* Falsifier: `g1_realm.py` printing another count. Control that the
+  probe reads the world other lanes read: its one-season hash equals the hash recorded independently
+  by the determinism and the happenings lanes.
+- *The King (L-18).* Falsifier: `king alive True` after season index 3 at seed 2. It printed `False`,
+  and the hash equals the first run's.
+- *92 % (L-15).* Falsifier: a success-kind Event of an uncontested verb carrying a degree. Zero of 421.
+  Control: every verb with a `contests:` or a route that resolved shows Events with a degree (61, the
+  number the determinism lane's file holds).
+- *The loader refuses a routed row that writes (G-01).* Read, not run: no row was planted, because a
+  plant would edit `verb_table.yaml`. The falsifier is one line, a `writes:` on `research`'s row, and
+  the import of `engine.season.data.verbs` either raising `SystemExit` with the text at `:873-876` or
+  not. An implementation lane should make that observation before relying on this row.
+- *`mustered` does not read `restrained` (G-32).* Read at `:2132-2149`, not run. Falsifier: a hand-built
+  world with a detained faction member under a rung; `mustered` omits him.
+- *An absence claimed by grep* (no `any:`, no `spec=`, no waiver; G-02, G-04, G-06): each is the body of
+  one function read whole, not a search of the tree.
+
+## 8. Edits made to other suite files
+
+Each file carries a `Grounded:` line at its head naming the rows. No finding, resolution row or
+proposal edit was deleted; where a mark was refuted the original claim is still legible inside the
+bracket that corrects it.
+
+| file | what changed |
+|---|---|
+| `proposals/18_DETERMINISM_task_draw_for_uncontested_verbs.md` | step 2 gains the two loader refusals to edit (G-01); step 3's reader path (L-10) |
+| `audits/14_VERBS_MILITARY.md` | S1's two marks settled (G-01, G-14); reader path (L-10) |
+| `audits/14_VERBS_PHYSICAL.md` | four marks settled (G-31 to G-34), one of them against the text; reader path (L-10); `04:237` → `04:260` three times (A-09) |
+| `audits/22_HAPPENINGS.md` | §0 item 2: which gate CR-87 added (L-21) |
+| `audits/04_MB_audit.md`, `audits/06_FA_audit.md`, `proposals/06_FA_office_capabilities.md` | reader path (L-10); FA also G-35 |
+| `audits/08_FI_audit.md` | G-10; R-18's "flagged for Jordan" struck (G-11) |
+| `audits/01_CORE_audit.md` | G-15, G-16 |
+| `audits/05_SC_audit.md`, `audits/16_PESSIMIST_CHAR.md`, `audits/16_PESSIMIST_PC.md`, `audits/16_PESSIMIST_SE.md`, `audits/19_LACUNA_investigation_to_proceedings.md` | one mark each: G-17, G-19, G-22, G-23, G-21 |
+| `audits/21_PROCEDURAL_GENERATION.md` | the 38th settlement rung (L-04) |
+| `audits/13_SC_contest_interrogation.md`, `proposals/14_VERBS_PHYSICAL_C_looking.md` | `04:237` → `04:260` (A-09) |
+| `proposals/14_VERBS_MATERIAL_D_paper.md` | G-02, G-03 |
+| `proposals/14_VERBS_MILITARY_C_the_muster.md`, `proposals/14_VERBS_MILITARY_D_the_order_of_battle.md` | G-04 |
+| `proposals/14_VERBS_MATERIAL_C_works.md`, `proposals/14_VERBS_MATERIAL_B_stores.md` | G-05; G-13 |
+| `proposals/16_PESSIMIST_SE_B_harvest_walls_and_the_supply_gate.md` | G-06 |
+| `proposals/22_HAPPENINGS_A_a_death_is_rare_caused_and_drawn.md`, `proposals/22_HAPPENINGS_B_the_throne_is_never_stranded.md` | G-07, G-08; G-09 |
+| `proposals/03_PC_duel_round_and_approach.md` | G-12 |
+| `proposals/07_SE_kernel_repairs.md`, `proposals/07_SE_population_census.md`, `proposals/07_SE_arc_needs.md` | G-18; G-24; G-27 |
+| `proposals/05_SC_acquittal.md`, `proposals/02_CHAR_offer_what_can_be_done.md`, `proposals/06_FA_playable_scenario.md`, `proposals/08_FI_08_knots-season-form.md`, `proposals/17_CENSUS_REST_1_deletions.md`, `proposals/09_WR_B_draws_not_thresholds.md` | one mark each: G-25, G-26, G-28, G-29, G-30, G-20 |
+
+**For the orchestrator, not edited by this lane.** (1) `AUDIT_BRIEF.md:77` and
+`unified/DECISIONS_ANSWERED.md:7` write "§C.4" for the fidelity rule without naming `03` (A-11). (2)
+The tree's own stale pointers, outside this lane's write scope: `engine/season/verb_table.yaml:1747`
+cites `04:237` for a rule now at `04:260`; `engine/season/rosters.yaml:1417`, `:1424`, `:1509`, `:1566`
+and `loop/effects_combat.py`'s `_eff_train` docstring spell `seam/wrappers/sigma.py::faculty` for a
+function that lives in `pool.py`. (3) G-01 and G-08 change what two proposals must edit; the
+unification lanes' conformance and order tables, if already written, were written before them.

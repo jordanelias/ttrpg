@@ -61,6 +61,11 @@
 | A-51 (D-65) | Depth of the past | Neither offered option. Jordan: *"five years"* | The prologue simulates five years before play (not one; not a generational pass). Everything older stays tradition and hearsay. The prologue's cost is five years of the loop, measured on the loop's own year length (read from the code, not assumed); no births or ageing pass is ordered by this ruling. |
 | A-52 (D-66) | New business in a long game | B: a docket read inside convening, after a test shows cards-at-build runs dry | Amends two plan lines; held behind the test. |
 
+| A-53 (D-67) | A world that fails its checks | A: next seed by default; play-it behind a setting | |
+| A-54 (D-70) | The world's motion | B: the one four-band ladder | Weather, harvest and wear draw on pool (place endurance) against obstacle (season hardship); a steward's skill bears on it. |
+| A-55 (D-71) | Founding and abandoning towns | A: fixed map; an empty founded household may lapse | 'Never adding nodes' stands. |
+| A-56 (D-73) | The common people | B: a few heavy moves (petition, migrate, work, tend, comply or refuse, riot) | Carries A-41's caste tiers and vote blocks; unlocks D-68. |
+
 ### Closed by the five-step ladder, not by Jordan (CLAUDE.md §0; reversible on his word)
 
 Answered by prior ruling, precedent or architecture; recorded so the numbering is whole.
@@ -75,3 +80,8 @@ Answered by prior ruling, precedent or architecture; recorded so the numbering i
 | D-46 | B: his refusal teaches him, privately | Jordan's 'we never want dead ends'; step 5 |
 | D-48 | A: forgetting computed when read | precedent (a crossing is recorded, a level is not); step 4 |
 | D-74 | B: fix the witness code, not Layer 1 | CLAUDE.md §0.05 (a spec edited to match its code checks nothing); step 3 |
+| D-68 | B: farm work an act, sequenced after the cohorts' heavy moves land | its stated condition (D-73 B) is met; step 3 |
+| D-69 | A: famine reports once, never-stocked edge repaired | consistent with the 2026-10-12 ruling; step 3 |
+| D-72 | A: leave a lord over an empty land | recommended until yield, levy and stability bind; step 5 |
+
+Still open: D-34 (luck in battle) and D-35 (numbers in the melee dice) are held for the mass-battle history adjudication now running, which bears on both.
