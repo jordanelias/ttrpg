@@ -88,6 +88,7 @@ the corrections to the first audit, and carries the three findings that have no 
 | F-WR-21 | hygiene (measurement) | 248 of the 322 `condition.worn` Events a season are writes of zero | §2.3 |
 | F-WR-22 | hygiene | three hole rows rest on deaths that no longer occur at their seed | §2.3 |
 | F-WR-23 | hygiene, cross-listed | a believed wound is never cleared, so a mended body still draws `tend` each season | §2.3 |
+| F-WR-24 | degrades narrative (R-09) | the world's wear, the Calamity's strain, the hungry body, a matter's lapse, the realm's endings and a strand's conclusion are fixed functions of state, not draws | §2.6 |
 
 ### 2.2 Corrections to the first audit (`09_WR_audit.md`)
 
@@ -210,7 +211,7 @@ only that R-13 and CP-T10-04 not land without it.
 | R-23 | CP-T10-01's "[GAP: unowned]" person-side price of a leg | a pure function of two settlement ids over loaded geography, handed to `decision/` beside `fx` | 4 (`budget(p, v, k, fx)`) | `09_WR_B_weather_with_memory_and_the_year.md` e3 |
 | R-24 | "banded scalar" capability kind | none; one `aptitude` row and one `at_least` use per edge | 5 | §7 (no file; CHAR's and CORE's proposals) |
 | R-25 | the design forbids a meter the owner reads; the first lane's scenario shows one; the own-state stem precedent would build one | `coherence` is world-only for its owner; not an `OWN_STATE_STEMS` member; `thread_read` does not form on the actor | 3, 4 (AX-7) | threadwork `_B` e3 |
-| R-26 | the Rupture is an ending by every design document and has no expression in `endings` | a `site_band` selector; the row ships absent | 3, 4 (#457 END-VICTORY) | weather `_B` e4 |
+| R-26 | the Rupture is an ending by every design document and has no expression in `endings` | a `site_band` selector as eligibility, reached by a keyed draw (§2.6); the row ships absent | 3, 4 (#457 END-VICTORY); the standing rule | weather `_B` e4 |
 | R-27 | the scheduled weather is memoryless, placeless and biased upward | a spell (coarser keyed draw on parent rung and coarser tick); arm members with mean one | 5 | weather `_B` e1, e2 |
 | R-28 | what a chronicle line is "about" has two owners by line kind (the deleted `Event.subject` carried both, H-107) | an act line: `carriers.subject_of(act)`; an Event line: `attribution.anchor_of(w, e)`; no third reading | 4 | `09_WR_B_chronicle_that_tells.md` |
 | R-29 | strand and storybar readings count `closed` without saying by what | a close is *by act* when the closing Event's causes include an executed act, *by clock* when its driver is MATTER's term or lapse | 5 | `09_WR_B_readings_of_closure_and_tension.md` e1 |
@@ -636,7 +637,7 @@ The standing requirement, point by point. This replaces the first lane's edit 4.
 | **choices, inside a working** (the manual mode) | how many operations to make before leaving contact, each further one a step harder; whether to conceal first; when to stop | none | F-WR-17 (this proposal, edit 1) |
 | **stakes** | the Site's uses and the larder behind them; the practitioner's headroom (his resting point against the human band); exposure to the orthodox witness | Site bands; the oracle's two quantities; `deeds_judged`, `petition`, `arrest` | `Person.coherence` (CP-T07-02); the sign cells firing (CP-T07-09) |
 | **outcome legibility** | each working returns a degree and what it wrote; the practitioner's own state reaches him only through others (§4.3); the witness's claim is a Record a hearing can cite | degrees; WITNESS | the typed `observed` tuple on the outcome; a claim about a practitioner's state that a sensitive can `tell` (CP-T07-10's second finding) |
-| **end condition** | any of: the Site stands above its floor two seasons running with nothing held (restored); the practitioner's resting point leaves the human band (the crossing: CP-T07-08's breach, a person ending); the Site's last use closes (ruin); he is detained on the witness's petition | `endings_reached` has no person-scale row | a scenario's end is the overlay's to state; no new ending carrier is proposed |
+| **end condition** | any of, each reached by a drawn outcome (§2.6): the Site restored by drawn workings and holding two seasons; the breach (CP-T07-08), drawn with odds from how far past his human band he has gone, a person ending; the Site's last use closed by drawn wear (ruin); his detention by a drawn `arrest` on the witness's petition | `endings_reached` has no person-scale row | a scenario's end is the overlay's to state; no new ending carrier is proposed |
 | **instrument** | `aperture` on the fixture: a thread row offered and executed; the chronicle from the crossing backwards (§3.3) | `aperture` | — |
 
 **One code path.** The scenario is `SeasonDriver.season` over a small world with
@@ -790,8 +791,10 @@ and #457's END-VICTORY handle already rules the form: "an ending and victory voc
 holds and seats that the season reports, never an actor". The cut that removed the stored scalar (#457 §5)
 does not remove the ending; it changes what the Query reads, from a number to the bands of Sites. *Decided:*
 the `endings` grammar gains a third selector, `{site_band: <a band_floors band>, of: <site kind or all>}`,
-reached when every selected Site under the realm reads at or below that band; a row using it carries
-`victory: false`. The roster's act-credit clause ("an act opened at least one edge the condition stands
+*eligible* when at least one selected Site under the realm reads at or below that band and **reached by
+a keyed draw** whose odds rise with how much of the fabric has fallen (corrected under the standing rule,
+§2.6: as first written, "reached when every selected Site reads at or below", it was a threshold); a row
+using it carries `victory: false`. The roster's act-credit clause ("an act opened at least one edge the condition stands
 on") is stated for holds and is not applied to a Site selector: a ruin nobody caused is the case the
 ending exists to report (T-b forbids a crossing *producing* an outcome; a reported ending "emits no Event,
 halts nothing and writes nothing"). The **row** (which band, which kinds) is Jordan's content and ships
@@ -945,6 +948,7 @@ first lane's files; the `_B` infix marks a supersession or an addition.
 | `09_WR_B_chronicle_that_tells.md` | F-WR-14; R-28, R-32; §3.8 step 2 | nothing | none: harness render, hash EQUAL |
 | `09_WR_B_weather_with_memory_and_the_year.md` | F-WR-19, F-WR-20; R-23, R-26, R-27; §3.8 step 4 | nothing (sits beside the first lane's `09_WR_world_motion.md`) | e1, e2 only under a declared arm; e3 none until `route_pricing` flips; e4 none (grammar, no row) |
 | `09_WR_B_threadwork_session_and_practitioner.md` | F-WR-17, F-WR-18; R-21, R-22, R-25, R-34; §4.5 | `09_WR_threadwork_module.md` edits 1, 2, 4 (edit 3 stands) | none by itself (as the first lane's) |
+| `09_WR_B_draws_not_thresholds.md` | F-WR-24; R-37 to R-40; the standing rule applied to WR's subject | the *reaching rules* of the first lane's `09_WR_world_motion.md` e1, e3 and the *meaning of terminal* in `09_WR_strand_conclusion.md` e1, e2 (both kept as eligibility) | e1, e2 declared movers behind controls; e3, e4 change readings |
 | `09_WR_B_pointer_text_for_the_orchestrator.md` | the first audit's R-11, R-12, R-20 as text; H-05, H-27, H-159, H-168, H-172 and F-WR-22's three rows | nothing | none: text for files only the orchestrator edits |
 
 ## 9. Evidence log

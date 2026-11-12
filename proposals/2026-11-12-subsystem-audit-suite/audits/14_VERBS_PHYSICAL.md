@@ -1009,7 +1009,9 @@ people there know someone was watching.
    `surveil`, in `loop/witness.py::observers_for`. For an Event whose place is, or lies under, the
    subject Rung of an executed `surveil` by `q` earlier in the same season (the act store's own
    `finding.made` Events of verb `surveil`, read through `causing_act`, so no new state), `q` is an
-   observer at a gain fixed by the surveil's band: Partial sees the deed and not the hand
+   observer. Each such Event is admitted by its own seeded draw at a rate the surveil's band sets
+   (`witness_channels`' rate, a swept value per band), so a success is watchfulness and not omniscience:
+   a deed may still go unseen. What an admitted sighting shows is also set by the band: Partial sees the deed and not the hand
    (`finding_terms`' Partial mask, the same masking), and Success and better see the hand. The channel
    is DATA: `rosters.yaml: witness_channels` gains `surveil` with its band-to-terms reference to
    `finding_terms`. This is canon's "observe… over extended time" without a meter, a watch edge or any
@@ -1238,7 +1240,9 @@ named step.
   what a defeat costs"). The two documents contradict each other. FA-B1 already carries this to Jordan;
   it is restated here because `march` and `raze` both depend on it.
 
-Not surviving, with the step that answered each: arrest's contest of standing or of the body
+Not surviving, with the step that answered each: PC's Part B (`03_PC_exits_withdrawal_recovery.md`,
+filed as Jordan's: is a plain fight to the death?), step 1, superseded by the standing rule of
+2026-11-12 ("we do not do deterministic"), and taken in §3.3 items 6-7; arrest's contest of standing or of the body
 (step 5: composition, §1.3); march without war (step 3: ED-IN-0337); the duel context on `fight`
 (step 5, §3.3); raze re-homing (step 3: Layer 1 §B.8 and H-228's own ladder); surveil's Exposure
 (step 5: claims, not a meter, §8.3).

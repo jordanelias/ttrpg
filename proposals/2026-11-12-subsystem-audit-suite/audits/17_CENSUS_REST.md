@@ -20,15 +20,16 @@ done; a row marked `[UNVERIFIED]` was not opened at the call site.**
 
 **Reading of the census itself.** The script counted `.field =` as the only store. It cannot see a
 positional constructor argument, a keyword it attributed to the declaration, `+=`, item assignment into a
-dict field, or `getattr(self, f"{a}_{b}")`. 22 of the 72 rows are that and nothing else. Of the other 50,
-28 sit in `systems/social_contest/sim/contest/`, which `05_SC_sc05_kernel_disposition_B.md` retires whole;
-13 sit in `systems/threadwork/sim/`, which `09_WR_threadwork_module.md` moves to `modules/threadwork/`;
-and 9 are decided here on their own.
+dict field, or `getattr(self, f"{a}_{b}")`. 25 of the 72 rows are that and nothing else (20 more are the
+same misreading inside the social-contest kernel, which dies anyway). 28 rows sit in
+`systems/social_contest/sim/contest/`, which `05_SC_sc05_kernel_disposition_B.md` retires whole; 13 sit in
+`systems/threadwork/sim/`, which `09_WR_threadwork_module.md` moves to `modules/threadwork/`; the other 31
+are decided here on their own.
 
 Decision codes: **FP** false positive · **DEAD** delete · **WIRE** broken, wire · **LABEL** correct text.
 "T-read" = read by a test only.
 
-### 1a. Engine and modules (25 rows)
+### 1a. Engine and modules (27 rows)
 
 | row | reading at the call site | decision | evidence |
 |---|---|---|---|
@@ -105,9 +106,10 @@ result-record field whose only reader is a test, because the host adapter that w
 | `CollectiveResult.leap_results`, `.lattice_formed`, `.lattice_fractured`, `.operation_result` `collective.py:52-55` | written at three return sites; T-read through `test_threadwork_mending_parity.py:91-94` | **WIRE** ×4, same carrier (per-actor consequences are written by the host from `leap_results`) |
 | `OpposingResult.a_degree`, `.b_degree`, `.a_consequences`, `.b_consequences` `opposing.py:71-76` | written `:266-268`; T-read | **WIRE** ×4, same carrier. Rule for the landing commit: an outcome field the adapter does not read at landing is cut in that commit, not carried inert |
 
-**C2 totals (72):** FP 22 · DEAD 34 (28 with the kernel, 6 in batch D1 incl. `io_contract` in D3) ·
-WIRE 12 (1 new edit W1; 11 carried by named proposals) · residual census FPs inside the dead kernel are
-counted DEAD, not FP.
+**C2 totals (72):** FP 25 · DEAD 35 (28 with the kernel; 6 in batch D1: `pool_size`, `body_function`,
+`merged_cells`, `destabilised`, `any_crisis`, `card_id`; 1 in batch D3: `io_contract`) · WIRE 12 (1 new
+edit, W1; 11 carried by named proposals) · LABEL 0. Census misreadings inside the dead kernel are counted
+DEAD, not FP.
 
 <!-- APPEND -->
 
