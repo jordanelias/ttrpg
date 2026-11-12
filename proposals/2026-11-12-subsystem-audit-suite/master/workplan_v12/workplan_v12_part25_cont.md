@@ -338,7 +338,7 @@ PARALLEL: S14 with B12b (SE+WR), B19a (MB), B21c (FA), B29 (PC). Shared with B21
 - GATE: `python -m pytest engine/season/tests/test_scene_contract.py engine/season/tests/test_rem31_grid_suspension.py engine/season/tests/test_duel_scene.py -q` → pass; `python -m engine.season.harness.scene combat.fight --fixture duel --seed 0` → exit 0, a record, the same record twice.
 - HASH MOVERS: none ("None with no host (gate 2 is the control)"; the stream's mover was B06's, U8).
 - DEPENDS ON: EXISTS-IN-TREE `seam/contest.py::contest`, `seam/wrappers/_entry.py`, `state/ids.py::draw_factory`; V12 Batch B24 (B24.05's `deciders`; `05_SC_playable_hearing_B` edit 4); V12 Batch B16 (`duel_scene.build`, B16.11; the per-claimant combat decider); V12 Batch B06 (the keyed stream); V12 B34.04.
-- GLOSSARY: row *scene instance* is the glossary's (CORE-SC's head: "A module's playable form is a **scene instance** (glossary)"); its owner cell becomes `harness/scene.py::play`.
+- GLOSSARY: the row *scene* names **scene instance** as the word for a module's playable form (ED-IN-0302); a row **scene instance** is added: "one module's scene run alone from a small world, as one staging of a play", owner `harness/scene.py::play`, the row *scene*'s own sense (Layer 1's `Scene`, what the budget counts) kept.
 - NAMES: `CombatTurnView` → `CombatRoundView`; `TURN_CHOICES` → `ROUND_CHOICES` (B16); `Refusal(depth_cap)` is read as the tree's `ContestError("max_depth reached")` until B30 (U3).
 - COST and TIER: edits and a small build; `sonnet`, `high` (CORE-SC "Lands it and tier").
 - LANDS IT: B34's producer; `Item: B34.15`, `[skip ci]`.
