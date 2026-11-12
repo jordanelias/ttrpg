@@ -519,4 +519,53 @@ Format: `file:section` | ruling | the correct reading | the edit. "Head line" = 
 
 Cycle check (this lane's edges only): no cycle among the 59. The edges that **close** a loop with another lane are listed in section 6/7b for U3: VRES §2 <-> OBS (`rank_gap` vs `standing`); BYZ_B e5 <-> MAT_B (`requisition.rendered`); BIND_E <-> PHY_B <-> U5d land proposal (title in the fold vs A-66's act); BIND_C e7 (gate clause) <-> C-31 (resolved, struck).
 
+## 6. Claims for the fact check (test 6)
+
+`| claim | file:section | value | conflicts with (file:section, value) |`. Instruments: `aperture 2 s` = `python -m engine.season.harness.aperture 2 s` (realm, two seasons); G-nn / L-nn = `audits/25_GROUNDING_ENGINE.md`. Where a row says "agrees", the check was against a second document of this suite or the tree; nothing here was re-run by R4.
+
+| claim | file:section | value | conflicts with |
+|---|---|---|---|
+| `oblige` executes in computed play | BYZ_B:problem | "`oblige` executed 26 of 26 at `aperture 2 0` (FA audit E-3)" | **S2_B:problem**: "persons with `seats_named` non-empty: 0 before and after the season at three seeds", and `U5_FINDINGS_CLOSURE_U5c.md` 4.2: `oblige` "unreachable (nobody is told of a seat)". Different instruments or different routes (cohort-seeded vs chooser-formed); not explained in either |
+| Seats at build by rung kind | VEN_D:problem | "territory 17, duchy 10, realm 4, settlement 2" (sum 33) | G L-02 (`g1`): 34 offices (33 persons hold them); one seat of the 34 is on a rung kind VEN_D's list omits |
+| Seats at build | BYZ_A, VEN_*, PAP_* | 34 seats, 18/8/1/7 conferral | agrees (G L-02) |
+| Persons at build | SYN_B, BYZ_A | 83 = 46 cast + 37 cohorts | agrees (G L-01) |
+| Live `oblige` edges at build | VEN_A:E-1, BYZ_B:problem | 4, none termed | agrees (G L-05: `oblige` 4) |
+| Records at build | SYN_B, PAP_C, COL_D | `{'works': 2}` | agrees (G L-05) |
+| Stance rows toward the King | BYZ_A:problem, SYN_B:problem | 13 persons, none toward either duke; mean regard 0.720 / 0.000 / 0.000 | not re-checked by G |
+| `claim.decayed` Events, three seasons, seed 0 | PAP_C:problem, SYN_B:problem | 34,837 | one source (`15_INSTITUTIONS_PAPACY.md` E-1); not in G |
+| `release` | BIND_A:problem | seed 0: 15 attempted, 0 executed, 15 refused; seed 1: 18 / 3 / 15 | agrees with G L-14 (`release` among the 16 refused-only at seed 0, one season) |
+| `establish` | BIND_A:problem | seed 0: 8 / 1 / 7; seed 1: 5 / 0 / 5 | G L-14 lists `establish` refused-only at one season; two seasons here (8 att, 1 ex): consistent if the one execution is season 2 |
+| `convene` | BIND_B:problem | seed 1: 1 refused (same seat, same venue, same tick) | `verb_table.yaml` `convene` note (REM-28): "attempted 18, executed 17, refused 1" (agrees) |
+| `determine` | BIND_B:problem | seed 0: 2 refused at `docket`; seed 1: 3 (`docket` 2, `party` 1) | G L-14: `determine` among refused-only (agrees) |
+| `pardon` | BIND_B:problem | seed 0: formed 8, attempted 0; seed 1: 1 refused after admission | |
+| `confer` / `revoke` / `succeed` | BIND_C:problem | seed 0: `confer` formed 5, attempted 0; `revoke` formed 5, attempted 0; seed 1 both formed 0; `succeed` formed 0; `tenure.opened` 0 at seeds 0-2 | agrees with PAP_F ("`confer` formed 5 times and attempted 0 at seed 0") and BYZ_E ("`revoke`: formed for 5 persons, attempted 0") |
+| `issue` / `dispatch` | BIND_D:problem | the King's five writs all carry `terms` = `p_npc_020`; 4 of 6 `dispatch` orders addressed to the King; 91 later acts cite an `order.given` at seed 0 | single source (`binding_probe_2_1.txt`) |
+| `marshal`, `surrender` | BIND_E:problem | eligible 26, formed 0 at seeds 0 and 1 | G L-14 (corpus: not attempted) agrees |
+| `transfer` | MAT_B:§2 | `mat_probe.py 0 2`: 43 attempted, 2 executed; 24 `to` = giver's own rung, 13 non-rung | `U5_FINDINGS_CLOSURE_U5c.md` 4.4: "2 / 1 / 2 executed" (agrees) |
+| `found` / `build` | MAT_C:§2 | attempted 3 / 4 / 4 and 3 / 4 / 2, executed 0; 819 formations a row at seed 2 (421 petition, 223 text, 93 cover, 46 sheet, 36 works) | sums to 819 (421+223+93+46+36 = 819, agrees internally) |
+| `create_record` | MAT_D:§1-§2 | 231 of 1,529 resolved acts at seed 0; 238 of 238 `text` Records empty; cohorts wrote 115 of 231 | the 1,529 equals G L-16 (b)'s "656 of 1,529 resolved acts" (agrees) |
+| `research` | MAT_E:§2 | 71 / 95 / 67 attempted; 20 / 19 / 19 finds | closure U5c 4.4 (agrees) |
+| `reconstruct` | MAT_E:§3 | 84 / 91 / 113 attempted; 82 / 89 / 110 executed | closure U5c (agrees) |
+| `move`, `migrate` | MIL_A:§2 | `move` formed 83, attempted 55, executed 15, refused 40 (33 declined by the effect); 16 of 17 executed moves to the mover's own rung (H-329); `migrate` 10 executed / 74 refused (room 60, path 13, write 1) | closure U5b 3.1: "55 / 15 / 40", "84 / 10 / 74" (migrate attempted 84 here; 10 + 74 = 84, agrees) |
+| `train` | MIL_B:§2 | formed 83, attempted 85, executed 0; `exists:Person` 39, `with=False` 33, 13 declined by the effect | 39 + 33 + 13 = 85 (agrees internally); "formed 83, attempted 85" (attempted > formed) is unexplained in the file |
+| `with=False` refusals | MIL_A:§2, S1_A:problem, PHY_A | `train` 33, `give` 17, `surveil` 15, `capture` 7; `argue` 31, `lie` 16 (clause `hearer`), `challenge` 13 | PHY_C says `surveil` 22 refusals on `present_at` + `exists:Rung` (a different cut of the same 44) |
+| comply wrong-kind refusals | MIL_C:Edit 3, S1_A:problem, S2_A:problem | MIL_C: REM-25 residue 2 / 3 / 2 a season; S1_A: `comply` 33 `exists:dispensation=0`, `evade / defy` 5, `carry` 9; S2_A: `comply` 16, `evade / defy` 1 `record_subkind` | three counts for one defect from three instruments; none says which (a) |
+| `capture`, `accept`, `arrest`, `fight` | PHY_A:problem | `capture` formed 26, attempted 12, executed 0 (`with` 7, `exists:Person` 3, `individual` 2); `accept` formed 37, 27 of 27 refused `exists:challenge=0`; `arrest` formed 1, attempted 0; `fight` formed 0; corpus 13 `fight` scenes, 8 Felled | closure U5b (agrees) |
+| `march`, `raze` | PHY_B:problem | `march` formed 26, attempted 13, 3 unopposed, 10 refused at ENCOUNTER, 0 fields; `raze` formed 26, attempted 14, refused 14 of 14 | closure U5b (agrees) |
+| `examine`, `surveil`, `thread_read` | PHY_C/D:problem | `examine` formed 1, attempted 0; `surveil` attempted 44, 6 `finding.made`; `thread_read` formed 4, attempted 3, executed 3 | closure U5b (agrees) |
+| `challenge` | S1_A:problem | attempted 84, refused 84 (`with=False` 13 after lane A removes 65 + 6) | closure U5c: "84 / 0 / 84" (agrees) |
+| `utter` | S2_B:problem | 73 / 69 / 68 Propositions, moods `{OUGHT}`, predicates `{''}`, values `{None}` | G L-05: 70 Propositions **at build** (a different moment; agrees) |
+| `tell` success | S2_C:problem | 2 / 1 / 0 a season at seeds 0 / 1 / 2; gate baseline 2/6, 1/13, 0/2 | FI-02's table (R2); not re-checked |
+| Content hashes | S2_A:gate | `5ab73af282d0`, `aa58ef0b71c9`, `a21ab6e12e35` (seeds 0, 1, 2, one season) | G §1: `5ab73af2…` at seed 0 one season (agrees) |
+| Cardinal of Prudence's death | PAP_F:problem | "at seed 1 the Cardinal of Prudence died in three seasons and his seat was empty" | G L-18 (`g2`): `p_npc_013` dies at season index 1 **at seed 2**, captor in `capture`. Different seeds; both can hold |
+| Church seats carrying `determine` | PAP_A (re-grounded), PAP_G | `off_confessor`, `off_cardinal_justice`, `off_senior_inquisitor` | agrees; PAP_B's gate "four electors" is the hand-built arm |
+| `covenant` execution | VEN_B:problem, PAP_G item 3 | "0 of 41 formed covenants executed" (`workplans/valoria_master_workplan_v11_part2.md:23`, read at the line) | S1_A: `covenant` 10 attempted / 10 refused (a different baseline; consistent) |
+| Row counts | SYN_A:gate 2, NERS | "the sixteen forms load"; "sixteen forms, eight keys and thirteen terms" | VEN_E adds `condotta` (17); OBS: 28 members, not thirteen |
+| Number of arrangement rows | BYZ_E:What it changes | "gains a tenth row, `acclamation`" | SYN_A §6 adds nine rows; VEN_E adds a tenth (`guild_debt_suit`): "tenth" depends on landing order |
+| Proposal count in the plan | SYN_E:NERS E | "Ten batches for twenty-six proposals" | SYN_E:Source: "the twenty-one family proposals and this lane's A to D" = 25 |
+| Next free NPC id | COL_B:§4 | NPC-091 ("the registry's last row is NPC-090; 46 rows, checked") | BYZ_D:e1: "the next free NPC id (allocated at landing from `references/id_reservations.yaml`, not here)"; X-13 makes them one seat, one holder; G L-07 (46 cast rows, agrees) |
+| Altonian provinces | BYZ_D:problem | the archived line puts the Doux over "T11/T12", which `valoria_geography_v30.yaml` places in Varfell | named in the file as a disagreement in the tree; unresolved |
+| Reverts of the 2026-10-11 ruling | BYZ_E:problem, PAP_B | "the ruled disposal (an appointed seat revoked costs a ban, 2026-10-21, `gate.py::REVOCATION_DISPOSAL`)" vs PAP_B "overwrites the 2026-10-11 `revocation: null` ruling" | two different rulings (10-21 disposal; 10-11 null revocation); consistent |
+| Fatigue / march figures | MIL_A:Folded (26 M-7) | Vegetius 20 Roman miles in five summer hours; ~15 miles a day for Alexander's army (snippet only); Crécy ~12 miles | "None is a figure to build on" (file); `OWED_TO_UNIFICATION.md` §C: pre-1700 foot pace not established |
+
 <!-- R4-END -->
