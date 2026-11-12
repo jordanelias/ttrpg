@@ -531,3 +531,62 @@ Lane `tests1`: 70 files under `engine/season/tests/` (test files and three helpe
   - No draw: founding is an eligibility-decided act (outcome fixed by state) and `confer` of the Lord goes through the same non-rolled path.
 - **Conflicts / stale:** founding an office has no contest or draw at all (eligibility conjuncts decide) - a bookkeeping/eligibility check by the brief's definition, acceptable.
 - **Open items:** (iii)/(iv) indistinguishable by a test.
+
+### engine/season/tests/test_cr27_lie.py
+- **What it is:** behaviour test, v11 CR-27 (M9 taken (a); H-357; H-198 rule (i)): `lie`, a spoken falsehood on a held cell claim; `lie_said_of` makes the said false at CHOOSE; same row, contest and kinds as `tell`.
+- **Status:** none; live. `Fixtures lie_offered` SHIPPED True. The DEED lie (H-198 rule (ii)) is unbuilt.
+- **Bears on:** FI, SC, CHAR (deception, R-07), WR.
+- **Content that matters:**
+  - A lie to a hearer who holds nothing deposits a false value (8 -> 12, "one whole step of `told_drift_band`'s unit", `ceil(0.5*8)=4` above) with `chain == (T,)` (the liar is the origin), leaves the liar's own cell unchanged, emits only `tell`'s kinds (no `lie.*` kind) (:106-117). A lie to a hearer who holds the cell firsthand lowers the liar's `record(H, T)` below 1.0 while an honest teller's reads >= 1.0 (:120-129). The contest roll is FORCED by stubbing `MODULE_ENTRIES["social_contest.roll"]` to `Margin(net=3, ob=2)` (:70-92): the lie's success is not tested as a draw.
+  - False-value rule: a number moves one whole step, sign-preserving, never across zero (`{8:12, 1:2, -8:-4, -1:-2, 3:5, -3:-1}`); a truth value flips; a held zero, band of zero, non-roster value, deed kind, `seen`, and empty ledger give `None` (nothing false to say) (:172-200). Liar's number and the channel's lossy copy share one owner `person_q.drifted` (monkeypatch both and both read the owner) (:203-213).
+  - The offer is gated in `opening_set` (`lie_offered`), not in `resolvable_verbs()` (:149-152); at False `lie` is absent and `tell` still offered (:140-146).
+  - A deceit's detection is only `record(H,T)` for a hearer holding the cell firsthand; a hearer with no prior can't detect it.
+  - Measured gap pinned: at a live `competence_gain` 0.5 a receiver at Attunement 6 holds a LIE with HIGHER confidence than one at Attunement 2 (`got[KNOWNOT] > got[HOLDER]`), "until CR-83" supplies the lie/truth separator; "THIS ASSERT TURNS RED WHEN CR-83 SUPPLIES THE SEPARATOR; invert it then", plan rule P8 forbids a standing xfail (:251-259). A test deliberately asserting the defect.
+- **Conflicts / stale:** `lie` has no forged-evidence or concealment link; a "lie" is just a drifted number. Brief's lie/forgery questions: no document forgery here.
+- **Open items:** CR-83 (lie/truth separator); deed lie.
+
+### engine/season/tests/test_cr28_propositions_heard.py
+- **What it is:** behaviour test, v11 CR-28 (G-04 (a), CP-T02-05's re-take): `world_q.propositions_heard` stamps Propositions a person has heard of from another as class `Proposition` on the question he answers.
+- **Status:** none; live.
+- **Bears on:** CHAR, WR (narrative propagation), FA (commit), CORE.
+- **Content that matters:**
+  - A claim another's act left (`proposition.uttered`) names the Proposition and the term returns it; his OWN act's claim (`Claim.doer == p.id`) does not; a non-Proposition id the same ledger names is not returned (:52-68).
+  - The stamp: the question carries `(HEARD, "Proposition")` in `q.classes`, and `commit` forms on it; planted failure (term stubbed to `()`) forms no `commit` (H-156 REM-23's tree) (:73-90). With a live `commit` on it `commit` is not formed again (`held_edge_declines`) but `argue` still is (:94-107). Through the real fold the candidate emits `commitment.made` and opens his live `commit` edge on a Proposition another uttered (:112-124).
+  - Realm readings are "commit-body readings, never assertions here".
+- **Conflicts / stale:** imports fixtures across files (`test_in53_vacancy_need`, `test_works_founding`).
+- **Open items:** none.
+
+### engine/season/tests/test_cr30_heritage.py
+- **What it is:** data + behaviour test, v10 CR-30: `Person.heritage` as a read-off descent field and the `marks` term's carrier.
+- **Status:** none; live.
+- **Bears on:** CHAR (identity), FI (what a witness sees), WR (caste/descent politics), ARCS.
+- **Content that matters:**
+  - A co-located witness's `seen` claim reads `marks == (heritage,)` and `who == actor`; an unauthored actor reads `()`; planted failure (`TERM_READERS["marks"]` stubbed to `()`) (:46-58).
+  - Roster: `descriptors.HERITAGES == (northern_einhir, central_einhir, southern_einhir, altonian, schoenlander)`; `HERITAGE_ENGAGES == {southern_einhir: einhir, altonian: altonia}` into `AFFILIATION_CONCERNS`; exporter `export_descriptors.build()` refuses a bad engagement (:65-87). Cast row naming an unrostered heritage refused (`martian`, `Southern_Einhir`, `""`, 3, list, True) (:89-98); no matrix row, gate refuses a write (:101-111).
+  - AUTHORED set pinned exactly: `NPC-020` northern_einhir (King Almud, `canon/03_canonical_timeline.md:138`), `NPC-052` southern_einhir (Duke Magnus Vaynard, `:144`), `NPC-011` altonian, `NPC-012` schoenlander (birthplace rows); 4 of 46 persons carry heritage (:118-133).
+- **Conflicts / stale:** the comment cites `canon/03_canonical_timeline.md` lines. Heritage is read-only descent; only canon-grounded rows.
+- **Open items:** none.
+
+### engine/season/tests/test_cr31_heritage_regard.py
+- **What it is:** behaviour test, v11 CR-31: `person_q.heritage_regard`, `regard`'s third term at `Fixtures heritage_gain` (H-358): the caste estimate. A hearer's creed (`conviction`) vs a teller's seen heritage marks.
+- **Status:** none; live (shipped `heritage_gain` 0.5, `stance_polarity` `declared`) (:168).
+- **Bears on:** CHAR (conviction, bias), FI/SC (credence of a teller), WR.
+- **Content that matters:**
+  - Two hearers equal in stance toward one teller seen as `southern_einhir`, one holding `einhir_restoration: 5` and one `0`, weight the same told claim differently at gain 0.5 and identically at 0 (:73-80). A hearer who never saw the teller marked, or sees a mark that engages no concern, reads the term 0; an absent conviction key reads 0 (not held), a stored 0 is a held rejection and pulls hardest (`-STANCE_MAX`), 5 reads `+STANCE_MAX`, 2/3 symmetric (:82-106). Planted failure: `conviction_stand` sign flipped reverses the pair (:108-114).
+  - The belief is the newest OWN untold `seen` claim marking a heritage (round breaks ties); told or other-person marks don't count (:121-132). The term is in regard's units, scales with the gain, raises on negative/NaN gain, reads the hearer's own ledger alone (:135-154).
+  - Polarity arms: `legacy` ignores the term, `regard`/`declared` read it; on an opponent row (`fight`) `declared` NEGATES it (:161-180).
+  - The one conviction axis wired to a heritage is `einhir_restoration` (and `altonian_civics` for altonian); `HERITAGE_ENGAGES` has two entries.
+- **Conflicts / stale:** the control (`heritage_gain` 0 reproduces the pre-item hash) is "recorded in the commit body, not asserted here: a hash is no pin".
+- **Open items:** none.
+
+### engine/season/tests/test_cr33_lifepaths.py
+- **What it is:** loader + behaviour + hash-control test, v10 CR-33: the 34 lifepaths as creation templates: capability keys HELD, the lifepath never a field (`R.LIFEPATH_TEMPLATES`, `cast.capability_of`).
+- **Status:** none; live. HASH PINS: `BASE` three literals (a64160d4..., 2f6a308e..., 6b7e5242...) behind `revert_cr79` and the expansion stubbed.
+- **Bears on:** CHAR (§14 character creation templates, capability authoring), ARCS (cast), CORE.
+- **Content that matters:**
+  - `len(R.LIFEPATHS) == 34`, the four struck Niflhel ids (`3-NI1..4`) are not members; `set(LIFEPATH_TEMPLATES) == set(LIFEPATHS)`; templates name only `VOCATIONS` values; some map to none (`holds: []`). Loader refusals: unknown vocation, struck id, missing row, duplicate key, empty ground, non-list holds (:89-121).
+  - `cast.capability_of(row, pool_default)` holds each key at `pool_default` and silence is no key; a cast row naming no template (`"3-NI1"`, `"3-cr1"`, `3`, `True`...) refused (:128-139). Registry AUTHORED set pinned: NPC-002 `3-VA1`, NPC-004 `3-CH5`, NPC-005 `3-LO3`, NPC-080 `3-LO3`, NPC-088 `3-CF4` (:78-82).
+  - A planted `lifepath` on NPC-087 (a row with none) builds `capability == {"inquiry": pool_default}`, rolls the same pool on `research` as NPC-084, `train` on `inquiry` executes for the holder (`capability.raised`) and is refused for the other (`train.refused`); the lifepath id is stored nowhere (not in `repr(Person)` and no field named `lifepath`/`vocation`) (:178-203). In the shipped realm the holders are exactly `{p_npc_004, p_npc_088}` plus the planted one: only TWO shipped persons hold any capability key (:184-186).
+  - Control: expansion stubbed reproduces `BASE` (the pre-commit 1-season hash) per seed; expansion on differs at seed 0 (:219-232). The pin comment lists NINE re-pins each with a named revert control.
+- **Conflicts / stale:** the "mover is the one row that maps to a key": the lifepath system yields capability for 2 of 46 NPCs; the rest of the 34 lifepaths map to none or are unused. [CHAR lead: capability data is nearly empty in the shipped game.]
+- **Open items:** none.

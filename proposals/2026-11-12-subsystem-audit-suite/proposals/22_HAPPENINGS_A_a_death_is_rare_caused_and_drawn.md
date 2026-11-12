@@ -165,9 +165,9 @@ in a thousand worlds.
 
 ## Gate (execution artifacts)
 
-- `engine/season/tests/test_in34_bodies.py` (the file covering the bodies pass), three arms on the built
-  realm: (a) control: both rates 0, the hash equals the base hash and no draw is taken; (b) on, 12
-  seasons, seeds 0 to 7 with a null chooser (the pass reads no act): at least one `body.changed` with a
+- `engine/season/tests/test_in34_bodies_clock.py` (the file covering the bodies pass), three arms on the
+  built realm: (a) control: both rates 0, the hash equals the base hash and no draw is taken; (b) on, 12
+  seasons, seeds 0 to 7, with a chooser that returns no scenes (the pass reads no act): at least one `body.changed` with a
   bout in its `observed` at every seed, at least one death across the eight, **no death of a person
   whose body was at or above the top floor at the start of that season**, and every death's `causes[0]`
   a `body.changed`; (c) the same with every person's body planted below the top floor: deaths rise (the
