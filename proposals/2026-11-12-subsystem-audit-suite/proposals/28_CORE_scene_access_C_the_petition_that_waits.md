@@ -155,7 +155,7 @@ one sometimes waits.
 
 | reader | sees | by |
 |---|---|---|
-| the person petitioned | that this man was kept waiting at his door, each time | the `visitor.kept_waiting` Event names him as its subject and he is present; the ask and the petition name him |
+| the person petitioned | that this man was kept waiting at his door, each time | the claim deposited from `visitor.kept_waiting` is about him and he is present (proposal A edit 3); the ask and the petition name him |
 | those present | the same, with the visitor as doer | the ordinary witness deposit; it travels by `tell`, and a lord who keeps petitioners waiting acquires that reputation through `reception` |
 | the bench or clerk who finally reads the paper | `then`, `now`, and the levels standing for the petitioner | the roll's named terms (`U5c_SC_one_obstacle_form.md`'s reason line) |
 | the chronicle and the player's surface | one line per petition from `petition_state`; and a story class, *kept waiting, then …* | `harness/chronicle.py`: a `visitor.kept_waiting` or lapse Event in the cause chain of a later act by the same person toward the same holder or a seat above |
@@ -218,6 +218,94 @@ simultaneous pressures who can substantively address two, with the other two com
 - **S.** *Calculations consistent in methodology*: one grievance function, one leverage form; no second
   ladder for "urgency".
 - **E.** Three reads, one roster, one leverage row, two regard terms.
+
+## Entrenchment moves the world (A-80): what a closed door produces
+
+A person who cannot be reached is a held position. It must be a source of motion. Three parties move:
+
+| party | what the closed door gives him to do (each an existing act, each drawn) | what it leaves in the world |
+|---|---|---|
+| the one kept out | call again; ask for leave; send another; the clerk's hand; the room; over the head; **forge** a writ in the name of a seat above (`forge`, `record.forged`; found out by `examine` or at a hearing); **force**: `capture` and an accepted `challenge` are never kept waiting (proposal A §1), a cohort's refusal and riot, A-16's rare attempt; leave (`migrate`, a released oath); let it go (`forgive`) | claims of each rebuff; a lower regard; a second paper with a larger ask; a forged instrument; a body, a custody or a death; an oath ended; a household gone |
+| the one who holds the door | grant leave to some and not others (proposal B); withdraw it; go where callers are not (`move`: the caller's `with` then fails and the D-46 belief of absence forms); stand behind sworn men (`world_q.guard_weight`, the `audience` stem); answer through a clerk or only in the room | a `commit` with a term; a witnessed break; a reputation in `reception` for keeping petitioners waiting; a backlog |
+| third parties | the intermediary and the clerk are sought, paid and resented (`15_INSTITUTIONS_BYZANTINE_C…`: a `give` to the clerk moves his regard for the giver); the seat above receives the papers that went over a head, so its holder comes to hold claims about his officer; what he does with them is his own choice among acts he already has (`revoke`; A-35's strip by a resistible draw). No rule here makes him act | favours owed; a superior who has been told |
+
+**Four census shapes** (rows for `harness/storybar.py::SHAPES`, `23_STORY_D_story_census_and_gate.md`
+edit 1; opening, turn, close; window in seasons). The opening of each is a rebuff:
+`visitor.kept_waiting`, `carry.refused` or `matter.lapsed`.
+
+| id | name | turn | close | window |
+|---|---|---|---|---|
+| `S-28a` | kept out, got in by another hand | `record.given` or `news.told`, role `same` | `petition.carried`, `matter.advanced`, `matter.carried` or `matter.determined`, role `other` | 4 |
+| `S-28b` | kept out, went over his head | `petition.filed`, role `same` | `petition.carried`, `matter.determined` or `dispensation.issued`, role `other` | 4 |
+| `S-28c` | kept out, turned to other means | `challenge.issued`, `record.forged`, `capture.declared`, `compliance.withheld`, `commitment.ended` or `residence.changed`, role `same` | `person.captured`, `body.changed`, `person.died`, `tenure.closed` or `residence.changed`, role `any` | 4 |
+| `S-28d` | kept out, then given leave | `commitment.made`, role `other` | `news.told`, `argument.won`, `argument.lost` or `record.given`, role `same` | 3 |
+
+A shape whose kinds no row emits yet prints `n/a (no emitter)` by the census's own rule.
+
+**The entrenched-world arm** is gate row 7 below and proposal A's gate row 12: with the door as hard as
+the fixtures make it, the four shapes still occur at a stated rate.
+
+## No scene is still (A-81)
+
+| outcome | the durable change it leaves | who can read it afterwards |
+|---|---|---|
+| a call refused at `occupied` | the kept-waiting claims in the caller's and the host's ledgers (proposal A) | `kept_waiting`; the host's questions; `rebuffs` |
+| a paper declined by the room or returned by a clerk | today the deposits of `carry.refused` only. **Added here:** the declining act appends a stage to the petition Record, `(tick, "declined", act id)`, as the lapse already appends `lapsed` (`U5c_SC_proceedings_residue.md` §4 item 6). The paper carries its own history to whoever next holds it | any holder of the Record (the content deposit); `petition_state`; a bench reading the file |
+| a matter lapsed on the docket | MATTER's write taking the item off, and the `lapsed` stage | as above |
+| the man who waits and does nothing | no scene was spent, so no scene is still; his claims fade by the read | — |
+
+The no-null-scene reading for this file: of the scenes in a run that hold a `carry` or an occupying act,
+the count with no gate write and no `claim.deposited` citing them. Expected 0. Control: the planted
+decline of commit 4 with its stage write removed, where the count is 1.
+
+## Instructions to code it (a batch item for workplan v12)
+
+**Lands by:** the IN lane for commits 1, 2, 5, 6; the SC lane's verb batch for commits 3 and 4 (they
+edit rows that lane owns). `valoria-author` at `sonnet`; one `methodology-close` with its terminal `opus`
+critique per batch. **Cost class:** small build.
+
+| # | files and symbols (single owner) | call sites changed | data rows | named tests (`engine/season/tests/test_scene_access_waiting.py`) |
+|---|---|---|---|---|
+| 1 | `data/rosters.py`: `REBUFF_KINDS` (validated against `data/verbs.py::EVENT_KINDS`); `queries/world_q.py`: `rebuffs`, `petition_state` beside `issuing_seat` (`:1573`), sharing `_creating_act` (`:1590`) | none | `rosters.yaml`: `rebuff_kinds: [visitor.kept_waiting, carry.refused, matter.lapsed]` | `test_rebuffs_counts_what_the_log_holds_and_nothing_else`; `test_petition_state_reads_now_without_writing_the_record` (gate row 2: the Record's encoding byte-identical) |
+| 2 | `queries/person_q.py`: `kept_waiting` beside `held_against` (`:85`); `regard` (`:424`): the `waiting_valence` term; `data/fixtures.py`: `waiting_valence = 0.0` | none (`regard`'s callers are unchanged) | — | `test_kept_waiting_reads_own_ledger_only` (the `decision/` World scan stays green); `test_regard_is_unchanged_at_valence_zero` (hash EQUAL); `test_kept_waiting_fades_to_zero_with_no_write` (gate row 5) |
+| 3 | `queries/person_q.py::dues_unmet`: the second clause | `regard`, and CR-88's `grievance_against` when it exists | — | `test_a_lapsed_paper_and_a_promise_broken_by_a_crowded_day_are_each_one_origin` |
+| 4 | the leverage composer of `U5c_SC_one_obstacle_form.md` §3: the source `waiting`; `loop/effects_information.py::_eff_carry`: at the declining band, append `(tick, "declined", a.id)` to the Record's stages | the composer's callers for `carry`, `speak` and the hearing's closing draw | `rosters.yaml: advantage_sources` gains `waiting` after `custody`; `verb_table.yaml` `carry`: the declining band's `writes:` gains `Record.stages`; `data/fixtures.py`: `waiting_level` (shipped `None`) | `test_three_rebuffs_shift_the_bands_and_fix_none` (gate row 3, 400 seeds per arm); `test_a_declined_paper_carries_a_stage` (the no-null reading; mutation arm: the write removed, the count is 1) |
+| 5 | `harness/storybar.py::SHAPES`: `S-28a` to `S-28d`; `harness/chronicle.py`: the petition line; `harness/access.py`: `kept_waiting` and rebuff counts, `--null-scenes` | none | the four rows above | `test_each_closed_door_shape_matches_a_planted_chain_and_not_its_shuffle` (the census's own null arm) |
+| 6 | the measurement (gate rows 4, 6, 7) and the flips of `waiting_valence` to `0.5` and `waiting_level` to `minor`; one declared re-pin | the goldens' one owner | — | the re-pin |
+
+**Gate row 7 (added; the entrenched-world arm, A-80).** Realm, seeds 0 to 4, six seasons, proposal A's
+arm of row 12 (`occupancy: seat_and_debit`, the strongest `precedence_level`, `appointments: off`): the
+census reads `S-28a` + `S-28b` + `S-28c` at a summed rate of at least one instance per two seasons at
+four seeds of five; `S-28d` reads 0 (no leave can be given in this arm), which is the control that the
+arm is in fact entrenched. `[ASSUMPTION; medium; Jordan to correct: the rate is a seed]`.
+
+**Gate row 8 (added; A-81).** `python -m engine.season.harness.access SEED 4 --null-scenes` at seeds 0
+to 4: 0 scenes holding a `carry` or an occupying act with no durable change.
+
+**Control and falsifier:** every fixture at its control (hash EQUAL); the falsifiers above, plus: the
+entrenched arm reading no more *kept out* stories than the `occupancy: off` arm reads (the door made
+nothing move); a still scene in gate row 8.
+
+**Declared hash movers:** `waiting_valence` and `waiting_level` off their controls where the log holds a
+rebuff; commit 4's stage write wherever a paper is declined (it lands with S1-D's drawn `carry`, which
+is itself a declared mover).
+
+**INCOMPLETE, with what is missing.**
+
+- *Commit 3* rests on `dues_unmet`, which `20_NARRATIVE_B_what_he_was_owed.md` edit 1 proposes and no
+  code holds, and on a person-side reader of whom he believes held a seat
+  (`20_NARRATIVE_C_who_holds_what.md`). Missing: both.
+- *Commit 4's leverage half* rests on the one composer `U5c_SC_one_obstacle_form.md` §3 proposes; today
+  the social wrapper passes `leverage=0.0` (`seam/wrappers/sigma.py:147`, as that lane's audit reads it;
+  not re-opened here). Missing: the composer. *Its stage half* rests on `carry` having a declining band
+  (`14_VERBS_SOCIAL1_D…` §1); today `carry.refused` is a precondition refusal and no effect runs.
+- *`S-28c`'s force and forgery turns* count an act by the kept-out person after his rebuff; whether the
+  cause graph links them (the later act's scene occasion walking back to the kept-waiting claim) depends
+  on that claim raising his question. Missing: the first census reading.
+- *`now` in `petition_state`* is `None` for a petition whose terms' predicate is not a stem the world
+  answers; in computed play today a petition's `to` equals its `subject`
+  (`14_VERBS_SOCIAL2_B…` evidence) and its terms name no quantity. Missing: S2-B §3 and
+  `U5c_SC_proceedings_residue.md` §8 (terms as a Proposition).
 
 ## Cost class
 

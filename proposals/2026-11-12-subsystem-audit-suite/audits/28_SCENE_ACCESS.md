@@ -10,7 +10,9 @@ rung of office prioritized by others when visiting, and for appointments to be m
 where someone is trying to petition but can't get through to person meanwhile the petition content
 intensifies"*), `unified/DECISIONS_ANSWERED.md`. Governed by A-9 (a scene is a short sequence), A-12 (a seat
 carries a modifier), A-13 (seat facts: clerks), A-21 (decrees proclaimed), A-22 (command), A-62 (budget is a
-Query). The edits are carried by three proposals:
+Query), and by three standing requirements given while this lane ran: every recommendation carries
+instructions to code it, A-80 (entrenchment still moves the world) and A-81 (no scene is still); §14
+says how each is met. The edits are carried by three proposals:
 `proposals/28_CORE_scene_access_A_occupancy_and_precedence.md`,
 `proposals/28_CORE_scene_access_B_appointments.md`,
 `proposals/28_CORE_scene_access_C_the_petition_that_waits.md`. No code was edited. All runs
@@ -153,7 +155,11 @@ design does not let it always win (§3).
 `counterparty:` names (derived, seven rows today, no list in code). In a round a person is in one
 scene: his own, or one he is received in. The read is a local of `resolve()`; nothing is stored. A
 visitor who finds the person engaged, or with no scene action left this season, is refused at a new
-clause `occupied` and the Event `visitor.kept_waiting` names the person he came to see. A person
+clause `occupied`; the Event `visitor.kept_waiting` is deposited by WITNESS as a claim about the person
+he came to see, in the caller's ledger and in that person's (an `Event` has no subject, so the one
+reader of what an act names, `epistemic.py::act_refs`, returns the counterparty for this kind). Of the
+seven rows, the two whose prize is `the body` (`accept`, `capture`) **intrude**: they seat the target and
+are never refused at `occupied`, so a closed door stops talk and never a seizure. A person
 received before his own scene folds has that scene deferred to his next round. For the season, the
 budget Query subtracts scenes received beside scenes opened (`loop/deliberate.py:175-176`); the set of
 received scene ids is kept on the driver beside `_realised` and reset each season, and the number is
@@ -254,7 +260,7 @@ summoned man to a guarded place.
   term with more `waiting` levels behind it. Other means: lower regard and, through CR-88's
   `grievance_against`, the existing gates of `challenge`, a released oath, refusal, migration, a cohort's
   riot, and A-16's rare attempt.
-- **Who sees it.** The person petitioned (the Event names him and he is present); those present; the
+- **Who sees it.** The person petitioned (the claim is about him and he is present); those present; the
   bench or clerk (the roll's named terms); the chronicle (one line per petition, and the story class
   *kept waiting, then …*).
 
@@ -397,8 +403,11 @@ grows while its bearer waits; none is cited and none is claimed. `[SKIPPED: rese
 | 10 | a hearing's attendees and a negotiation's parties are assumed free | a sitting seats those who move in it; an engaged attendee is absent and the sitting's `silence` rule applies | 4 | `Folded:` lines |
 | 11 | NARRATIVE_B's petition clause was owed and marked `[UNVERIFIED]` | carried: `dues_unmet`'s second clause | 4 | C §1 |
 | 12 | a questioning occupies nobody (no `counterparty:`, no `with` on `interview`) | named for the row's owner; no edit here | 5 | §2 |
+| 13 | this lane's first draft had the refusal Event name the host as its subject; an `Event` has none (`state/carriers.py:246-262`) and a deposit's subjects come from the actor, the changes and `act_refs` | `act_refs` returns the counterparty for the kept-waiting kind; one call site | 4 | A edit 3 |
+| 14 | read off the `with` conjunct alone, occupancy would turn away a `capture` because its target was in a meeting | a row whose prize is `the body` intrudes: it seats, and is never refused | 1 (A-80), 5 | A §1 |
+| 15 | two Failure bands this plan relies on write nothing (`carry` declined, `commit` refused) | a `declined` stage on the paper; a deposit to the person refused leave | 1 (A-81) | C commit 4; S1-D `Folded:` line |
 
-Twelve resolutions.
+Fifteen resolutions.
 
 ## 11. For Jordan
 
@@ -435,3 +444,46 @@ Layer 1 text owed on his amendment only: `04` PART D row 36 (§8).
 | `git status --short` at the close | — | this audit, the three `28_CORE_scene_access_*` proposals and the seven `Folded:` lines, all inside the suite directory |
 
 No `pytest` was run. No tracked file outside the suite directory was written.
+
+## 14. The three standing requirements given while this lane ran
+
+**Instructions to code it.** Each proposal ends with a section *Instructions to code it (a batch item
+for workplan v12)*: the commits in order, and for each the files and symbols at their single owner, the
+call sites, the data rows, the named tests, then the control, the falsifier, the declared hash movers,
+who lands it and at which tier (`valoria-author` at `sonnet` per commit; one `methodology-close` with its
+terminal `opus` critique per batch). One instrument is named, `engine/season/harness/access.py`, which
+promotes this lane's scratch probes and prints every realm reading the gates ask for. Marked
+**INCOMPLETE**, each with what is missing:
+
+| proposal | item | missing |
+|---|---|---|
+| A | seating a sitting's attendees at ENCOUNTER | the hearing module and the shape that lists attendees (`05_SC_playable_hearing_B.md`) |
+| A | the two throughput floors and the entrenched arm's rate | a first reading on the tree where A-9 and believed co-location have landed; they are seeds |
+| A | `04` PART D row 36 | Jordan's amendment (the text is drafted) |
+| B | the chooser forming the ask | `utter` typed with a `said` (`14_VERBS_SOCIAL2_B…` §1); until then an ask is a hand-built or played act |
+| B | the ask reaching the host as a `commit` referent | not opened: whether `questions_for` admits a claim about another's Proposition whose subject is the host; if not, one reach term |
+| C | `dues_unmet`'s second clause | `dues_unmet` and the believed-holder reader (`20_NARRATIVE_B`, `20_NARRATIVE_C`), neither built |
+| C | the `waiting` leverage source; the `declined` stage | the one leverage composer (`U5c_SC_one_obstacle_form.md` §3); a `carry` with a declining band (`14_VERBS_SOCIAL1_D…` §1) |
+| C | `now` in `petition_state` | petitions whose terms name a quantity (`14_VERBS_SOCIAL2_B…` §3; `U5c_SC_proceedings_residue.md` §8) |
+
+Everything else in the three files is specified to the symbol and can be built as written.
+
+**A-80, entrenchment still moves the world.** This plan makes a person harder to reach, so it must say
+what that produces. For the one kept out: seven ways round, with forgery and force named, and force
+never kept waiting (proposal A §1; proposal C's A-80 table). For the one who holds the door: leave
+granted selectively and withdrawn, going elsewhere, sworn men, the clerk. For third parties: the
+intermediary and the clerk sought and resented, and the seat above told. Four shapes are added to the
+story census (`S-28a` to `S-28d`: got in by another hand; went over his head; turned to other means;
+then given leave), and the **entrenched-world arm** is a gate row in A (row 12) and in C (row 7): with
+occupancy on, the strongest precedence and no appointments, the first three shapes must still occur at
+a stated rate while the fourth reads zero.
+
+**A-81, no scene is still.** Each outcome this plan adds is listed with the durable change it leaves
+(the tables headed *No scene is still* in the three proposals): a call refused at `occupied` leaves a
+claim in two ledgers; an ask leaves a Proposition; a grant leaves a termed Tenure; a lapse or a
+withdrawal leaves the Tenure's end; a declined paper gains a stage. A postponed scene is not a
+resolution and is counted by the starvation row. Two Failure bands owned by the SOCIAL1 lane wrote
+nothing and are named with their writes. The **no-null-scene reading** is in each gate
+(`harness.access --null-scenes`: scenes holding a call, an ask, a grant or a `carry` with no gate write
+and no `claim.deposited` citing them; expected 0), each with a planted control in which the write is
+removed and the count is 1.

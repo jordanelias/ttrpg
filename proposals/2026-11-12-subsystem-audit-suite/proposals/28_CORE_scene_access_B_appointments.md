@@ -55,7 +55,8 @@ its mood live in one new closed table, `rosters.yaml: termed_promises` (edit 1),
 below; no site spells the string.
 
 - **Who forms it.** A person holding his own firsthand claim that he was kept waiting at that host's
-  door (the `visitor.kept_waiting` Event of proposal A names the host as its subject; he is its doer).
+  door (proposal A's `visitor.kept_waiting`: the claim WITNESS deposits is about the host, and he is its
+  doer).
   `decision/options.py` derives the `said` cell from that claim through the operand derivation
   `14_VERBS_SOCIAL2_B_a_word_with_content.md` §1 adds for `utter` (*"a person says what he holds"*): a
   claim of a kind listed in `termed_promises.<predicate>.asked_on` yields
@@ -186,6 +187,7 @@ No edit to the docket. Two statements so the two kinds of appointment do not div
 | 4 | planted: a commit at tick t, `appointment_term` 2 | the edge closes at the MATTER of tick t+2 with `tenure.closed` citing the commit; `appointment_with` is `None` after |
 | 5 | planted: two hosts alike but for their stance toward the asker (minimum, maximum), 400 seeds | the grant rates differ; neither is 0 or 1 |
 | 6 | no schedule | `World.dates` holds the same entries with `appointments` on and off in the planted world; no carrier gains a field |
+| 7 | no still scene (A-81): `python -m engine.season.harness.access SEED 4 --null-scenes`, seeds 0 to 4 | 0 scenes holding an ask or a grant with no gate write and no `claim.deposited` citing them; control: the planted grant with `_eff_commit`'s write removed reads 1 |
 
 If row 2 reads zero at every seed, the shipped chooser does not reach the personal route. That is
 reported as the result; the docket route (§5) then carries A-64 (2) alone, and no further build is
