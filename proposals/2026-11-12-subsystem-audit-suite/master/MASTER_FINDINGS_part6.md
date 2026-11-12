@@ -9,7 +9,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 
 ## The game as a whole (the game pessimist)
 
-<!-- SYNTHESIS:game -->
+**What is wrong.** Run with no player against a control in which nobody acts, the acting realm ends three seasons at seeds 0–2 with the same persons, the same holder in all 34 seats, the same condition on all 322 sites and the same stores (`audits/16_PESSIMIST_GAME.md` §0); every answer to another's act lands in the information, docket or emission-only verbs, and the columns for personal combat, mass battle, settlement and character development are empty. The skeleton does not respond to its people (F-PES-GAME-01); no consequence crosses a seam (-02); the acts that close a story carry no cause (-03); the game is a fixed function of state, 7.8 % of attempts drawn at seed 0 (-04); the world's motion is fixed and synchronized (-05); rest cures starvation (-06); the King's death does not travel (-07); a vacant seat has one route (-08); most persons are upstream and downstream of nobody (-09); a player-king who does nothing loses nothing (-10); three `met` rows are met on paper (-12). **What was decided** is the sum of the subsystem rulings; this block's own carrier is a reading (`16_PESSIMIST_GAME_consequence_reading`, **B02**) and the "first ring" of carriers it orders. **What is built where:** B02 (the reading and the `NULL SCENES` baseline), B09, B12a-c, B16, B21, B38. **What stays open:** the fix is distributed; no single batch closes this block, and the reading at B99 is the test.
 
 **Rows: 26** (RESOLVED-BY 15 · SUPERSEDED 11 · STALE/FP 0 · DISPUTED 0 · JORDAN 0).
 
