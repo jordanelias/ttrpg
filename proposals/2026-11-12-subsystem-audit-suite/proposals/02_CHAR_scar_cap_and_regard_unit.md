@@ -37,7 +37,9 @@ ladder reached as background noise.
 
 The quarantined design carried the closer and the build dropped it. `systems/characters/sim/conviction.py`
 (the retained oracle) holds `SCAR_SEASON_CAP_THREAD = 1`, citing *"Max 1 Scar per season from Thread
-witnessing per NPC"*. `_scar_witnesses` has no such bound and its docstring calls the violation
+witnessing per NPC"* (`conviction_track_v1.md:90`, quarantined, intent only). In that design Thread
+witnessing was the witnessing source; the season loop widened the source to every violating act of any
+verb and kept no cap, so the reading here extends the design's cap to the widened source. `_scar_witnesses` has no such bound and its docstring calls the violation
 predicate *"A CANDIDATE READING, NOT A RULING"*.
 
 **Regard's three addends are in two units.** `regard = stance_toward + judged_gain·judged +

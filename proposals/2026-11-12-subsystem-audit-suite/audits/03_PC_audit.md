@@ -254,6 +254,36 @@ no arms" means "holds an arming sword".** `modules/combat/weapons.py` has 54 rec
 unarmed hand (E2); `kit_of` falls back to the Combatant default. Once an inventory exists, owning no
 weapon will still arm a person. H-265 stands. Fix: in the person-inputs proposal.
 
+**F-PC-13 · blocks the stated design intent (2026-11-12) and R-04's combat conjunct · The module does
+not offer the duel and the grid round as one path, because the round is not exposed and the approach
+does not exist.** Set against the intent, point by point. *Equipment:* one weapon and one armour tier
+per fighter, carried on the record; no off-hand or shield slot; the season supplies the default to
+everyone (F-PC-02). *Skills as levers:* six skill axes and fifteen levers exist in the engine
+(`combatant.py:140-141`, `ability_primitives.py:188-218`) and the record cannot carry any of them.
+*Approach per phase:* absent. The nearest thing is `disp`, fixed for the whole fight, and it is
+monotone: `disp 7` wins 56.3% and is felled less than the mirror, `disp 1` wins 41.4% (E5), so a choice
+built on it as it stands has one right answer. The decider's set is `{engage, withdraw}`
+(`wrapper.py:552-553`). *Moment by moment:* the phase exists (one `engagement`) and a played person is
+asked once per turn, but one provider call runs the whole fight. *Automatic duel round for a grid:*
+absent; no entry fights one round, and damage is zeroed at each call (`wrapper.py:570`), so a pair's
+wounds cannot persist across grid turns. *One code path:* one resolver, and `wrapper.fight` is already
+a loop over `engagement` (`:576-615`), so the joint exists and is hidden. Falsifier: a call that fights
+exactly one round from carried state; none exists. The intent's own design documents agree on the
+shape (the ruled auto/manual duality: one engine at three fidelities, equal in expectation; the WS-7
+scene envelope: an outer loop over `engagement`, wrap never fork; §16). Fix:
+`proposals/03_PC_duel_round_and_approach.md`, which also names five conflicts with ruled or recorded
+items and resolves none.
+
+**F-PC-14 · degrades narrative (R-06, R-08) · Inside a fight an NPC is not an agent.** The chooser
+decides whether to fight; once the scene opens, every NPC engages every turn at disposition 4, yields
+at the same fraction of Health as everyone else under `yield` terms (`config.py:301`), accepts every
+yield, and never withdraws. A played person has a decider (`PlayHost.decide`) and an NPC has none, so
+the two are different kinds of agent here, and the played one's exit is free (F-PC-05), which breaches
+the ruled constraint that played and auto-resolved outcomes agree in expectation. The engine-side
+tactical picks (use-mode, half-sword form, defence mode on a won read) are the engine's by design and
+are not the complaint; the per-turn decision is. Fix: per-party deciders with the NPC's supplied by
+the chooser (the same proposal, §4).
+
 ## 4. Code matters
 
 - **Ownership.** Good: one wound site, one vocabulary leaf with import-time table checks
@@ -365,7 +395,8 @@ multi-combatant scenes (WS-7).
 Each is decided by the first rung of CLAUDE.md §0's ladder that answers it. `P1` to `P4` are the
 proposal files of this lane under `proposals/2026-11-12-subsystem-audit-suite/proposals/`:
 `P1 = 03_PC_duel_chain_reach.md`, `P2 = 03_PC_typed_outcome_one_door.md`,
-`P3 = 03_PC_exits_withdrawal_recovery.md`, `P4 = 03_PC_person_inputs_content.md`.
+`P3 = 03_PC_exits_withdrawal_recovery.md`, `P4 = 03_PC_person_inputs_content.md`,
+`P5 = 03_PC_duel_round_and_approach.md`.
 
 | id | inconsistency, gap or unclear passage | decided resolution | rung | carried by |
 |---|---|---|---|---|
@@ -391,7 +422,14 @@ proposal files of this lane under `proposals/2026-11-12-subsystem-audit-suite/pr
 | R-PC-20 | `state_graph.py` restates control flow nothing executes | keep as reference for the Plan-layer proposal; say so in its docstring; delete if PC-21 does not adopt it | 2 or 3 | P2 app. |
 | R-PC-21 | `combat_systems.py:107-113` flat-tops 38 weapons' tempo, deferred with no position | fold into PC-08's Phase-C recalibration row by name; no fix here (a golden regeneration with no generator) | 3 (the note's own deferral) | none |
 
-Twenty-one resolutions decided. Three questions survive the ladder and are in §11.
+| R-PC-22 | no entry fights one round; a grid or a field cannot call the duel | expose the engagement as `fight.round` with a host-held `DuelState`; `fight` becomes the loop over it | 5 architecture (the engine's own loop; WS-7's "wrap, never fork") | P5 |
+| R-PC-23 | no per-phase approach; the one aggression axis is monotone | a closed set of three approaches as a per-round lean on the existing disposition hooks, shipped only with both ends priced | 3 (the stated intent of 2026-11-12; the held Plan-layer rule that every intent is a trade) | P5 |
+| R-PC-24 | a played person has an in-fight decider and an NPC has none | per-party deciders; the NPC's is the chooser's function, `normal` until CHAR supplies a temperament | 5 architecture (one agent interface) | P5 |
+| R-PC-25 | no edge between a duel and a field | the field's adapter calls the `combat.round` role on a reported contact and hands the field a typed result | 5 architecture (the adapter already calls a second entry by role) | P5 |
+
+Twenty-five resolutions decided. Three questions survive the ladder and are in §11; five conflicts
+between the stated duel-and-grid intent and ruled or recorded items are named in P5 §6 and resolved
+nowhere.
 
 ## 7. Research transfer
 
@@ -455,6 +493,10 @@ the season.
 | 9 | the survivor's grudge (CP-T03-06) with CHAR | CHAR's regard owner; PC supplies the doer on the wound claim | the card's own reading, repeated: a survivor's regard reaches a Candidate | R-07 | design-first | compose |
 | 10 | the opponent model and a tradition carrier (PC-21), or the cut of the ability layer | design file | per PC-21's falsifiers | R-06 | design-first | alone |
 | 11 | hygiene: `net_boost`, constants into `CFG`, dead citations | P2 appendix | `--check` green; goldens unchanged or one declared re-record | port readiness | edit | alone |
+| 12 | the round entry and `fight` as its loop (P5 steps 1 and 2); after steps 2 and 3, before 4 | `modules/combat/fight.py`, `wrapper.py`, `queries/inputs.py`, a second composition row | twelve `round` calls equal one `fight` at three seeds; then one declared re-record for the per-round stream | the stated intent; R-04's combat conjunct; R-03 at the scale of a fight | small build | alone |
+| 13 | the approach, with both ends priced (P5 step 3) | `wrapper.py`, `config.py` | all-`normal` byte-identical; the workbench table: no approach outside `normal`'s control band in a mirror, each best in a named matchup | R-08 (a choice that is not dominated) | small build plus calibration | alone |
+| 14 | per-party deciders and the chooser's NPC decider (P5 step 4) | `fight.py`, `seam/wrappers/combat.py`, `engine/season/decision/` | REM-31's equality; the played-against-auto fidelity reading | R-06, R-08 inside a fight | small build; temperament is CHAR's | compose |
+| 15 | a duel inside a field (P5 step 5) | `seam/wrappers/mass_battle.py`; MB's contact report | a seeded field with two planted officers shows one duel round per field turn | R-04 (scales zoom); SCN-14 | small build here, design-first in MB | compose |
 
 Deletions recommended: the seam's unread return keys (step 2); the `Yield` declaration path if step 8
 does not adopt it; `state_graph.py` if PC-21 does not; the 21 generic abilities if PC-21 does not adopt
@@ -515,6 +557,14 @@ A played duel that resolves correctly is available today by hand (E6). It does n
 no seed, one binary and unpriced choice, no rendered legibility on the loop's path, and no ending
 beyond the fight's.
 
+**Against the stated intent (duel and grid as one path).** Neither mode exists as the intent describes
+it. The duel has no approach to choose and shows nothing between phases; the grid has no round to call
+(F-PC-13). What the present code does supply toward both: the engagement as a pure unit of resolution,
+a typed input, a decider that crosses the boundary as a typed view, and replay equality between played
+and automated runs. The ordered work is P5's five steps, slotted as §8 steps 12 to 15; the standalone
+client of item 3 above should be built on the round entry once step 12 lands, so that the duel it
+plays and a grid's attack are the same call.
+
 ## 10. Interfaces
 
 | with | consumes | emits | real or designed |
@@ -525,7 +575,7 @@ beyond the fight's.
 | SC (social contest, proceedings) | a `challenge` Record and its `stakes` | `duel.yielded` | mechanism executed by hand; 0 in computed play (E7) |
 | FA (factions, seats, war) | the seat a `capture` is exercised through; `Enemy` stamps for the war context | `tenure.closed` naming each emptied seat; a `detain` edge | seats and custody executed (E4); the war context is empty until CR-91 (designed) |
 | SE (settlements, stores) | rung stores as arms | none (a kit is read, not consumed) | executed path over an empty roster |
-| MB (mass battle) | nothing | nothing | none: no duel inside a field, no champion; `effects_combat.py` merely houses `_eff_march` |
+| MB (mass battle) | nothing | nothing | none today: no duel inside a field, no champion; `effects_combat.py` merely houses `_eff_march`. Designed (P5 §5): a duel can be embedded through the same round path. MB needs from combat the `combat.round` composition role, the records `DuelState` / `DuelRoundInput` / `DuelRoundOutcome`, and the guarantee of no held state; combat needs from MB a typed contact report (two named persons, the field turn) and takes back nothing. One field turn is one duel round; a played commander supplies his approach through the same decider, so a fought and an auto-resolved battle run the same rounds. A duel arising from a field is the existing `challenge` and `accept` pair. Constraint carried from research: a person's effect on a unit is a fraction of the unit, never a flat amount |
 | FI (fieldwork) | nothing | a captive for `interrogate` | designed; `interrogate` formed 0 (E7) |
 | WR (world, canon) | nothing | deaths for the chronicle | the death is logged; the fight's content is not |
 | GO (port) | — | `combat_engine_v1.json` | export executed and round-trip green; 18 constants outside it (F-PC-10) |

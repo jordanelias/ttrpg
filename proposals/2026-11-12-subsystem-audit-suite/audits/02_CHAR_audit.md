@@ -29,6 +29,94 @@ are each `partial` in the register for reasons narrower than these; the residues
 broken by inclination; an `ambitions(p)` reader) are closed or nearly moot, and the live residues are
 the ones measured here.
 
+## 0A. NPC and AI-chooser design intent, as established
+
+The other lanes cite this section. It states the intent that can be established from **code plus
+ruling**, marks what is **prose only**, and names where the sources disagree. Where they disagree the
+ruled and built wins (§0.05).
+
+### Established (built, and ruled or registered)
+
+| # | intent | where it is the mechanism | ruling or register row |
+|---|---|---|---|
+| I-1 | **Every person decides, and only persons act.** A faction is a view; its act is a person's act through a seat. The player is a person whose choices come from outside | `loop/deliberate.py:202`; `Act.via`; `harness/play_surface.py::dispatching_chooser` | ED-IN-0201; Layer 1 PART D; H-60 (everyone runs `choose`) |
+| I-2 | **A person decides on his own state and nothing else**: his claims, edges, pursuits, stance, convictions, scars, attributes; a `View` of at most twelve claim ids; the question he was handed; his believed odds | `decision/` (no `World` by path scan), `queries/person_q.py`, `View.odds` | AX-2; Jordan 2026-09-02 (*"our understanding of all other words and actions is subjective and singular"*); H-03 |
+| I-3 | **What a person is after is a weighted vector over fifteen pursuits on seven bipolar axes; religious affiliation is a separate intensity** | `Person.pursuits`, `Person.conviction`; `rosters.yaml: tables.pursuit_projection`, `alignment` | ED-IN-0261; ED-IN-0251; ED-IN-0293 (1), (2) |
+| I-4 | **An ambition is a standing commitment that raises a question every season**; organizations author goals that orient their members' attention | a live `commit` to an OUGHT; `world_q.questions_for` Q4; `attention_key`; `goals.yaml` | H-04; ED-IN-0293 (8), (10) |
+| I-5 | **The option set is computed, never authored**, from the verb table, the person's eligibility, the question's referents and what he does not believe false | `options.opening_set` | H-03, H-94; D2 |
+| I-6 | **A choice is a ranking by values and regard, sampled**: pursuit · alignment (times the believed chance on a contested act) plus regard for the subject, drawn at a temperature | `choose.score_terms`, `_sample_order` | H-66 (the table is invented and swept), H-96, H-194, H-202, H-248 |
+| I-7 | **The person triages against a budget he asks for**; the engine never truncates. Office raises it, wounds and travel lower it | `budget`, `release`, `pack_scenes` | Jordan 2026-09-02 (five scene actions); S26.3; H-28, H-74 |
+| I-8 | **What is true is moved by evidence; what is right is moved by argument and consequence, never by evidence** | WITNESS writes claims only; `argued_pursuits`, `consequence_pursuits` write at RESOLVE | #353 §9.3; AX-3 |
+| I-9 | **Regard is computed when read** from stored stance, judged deeds, told deeds and believed descent; nothing stores an opinion | `person_q.regard` | IN-18 G1; H-192, H-193; ED-IN-0301 |
+| I-10 | **Hearsay is graded when read, by the hearer's relation to the teller** | `options.teller_weight`, `LedgerReader` | CAT-3 |
+| I-11 | **Capability supplies dice and gates nothing** (one declared exception: the Thread Sensitivity gate) | `seam/wrappers/pool.py::faculty`; `OwnStateReader` | #353 §9.2; H-85, H-239 |
+| I-12 | **A population is one person at weight above one**, and subsistence is its concern, not a lord's | `cohorts.yaml`; `Person.is_cohort` | ED-IN-0255; S9 |
+| I-13 | **The cast is closed and authored; nobody is generated on a clock** | `references/npc_registry.yaml` → `data/cast.py` | ED-WR-0011 |
+| I-14 | **The player's sheet ranks and selects; it never forms and never writes** | `decision/sheet.py` | A-25; ED-IN-0349 |
+
+### Ruled, and not yet built (intent with authority and no mechanism)
+
+Deontology as a refusal (ED-IN-0261; built, shipped unarmed). The scar's weight shift at threshold 2
+(ED-IN-0261; built, shipped at 0). Risk appetite and a short, medium or long horizon (ED-IN-0304; no
+carrier). Duty of office and the cost of betrayal (ED-IN-0335, ED-IN-0338; CR-88, design-first).
+Attributes in a person's own choice and on others (ED-IN-0347; CR-93, CR-92, design-first). The ten
+attributes on a person (ED-IN-0328; the carrier ships off).
+
+### Prose only (quarantined design; vocabulary and history, not intent the code follows)
+
+From `npc_behavior_v30.md`, read at §1, §3, §4, §5.0b to §5.1, §8.1, §8.11 and §9: the Stance Triangle
+(Conviction, Ethical Framework, Resonant Style); the four Resonant Styles as a hearer's vulnerability;
+Belief structure and revision; the Decision Procedure and its Decision Fork by scar count; a
+seven-level priority tree per faction; an authored arc map per named NPC; coherence thresholds for
+practitioners; NPC outreach and demand entries addressed to the player. From
+`npc_relational_graph_v30.md` (head only): named edge types between NPCs with strain, capacity and
+rupture. From `player_agency_v30.md` (outline only): Duties, the Scene Slate, Stature progression.
+
+### Where the sources disagree (the ruled and built wins)
+
+| design says | ruled and built | consequence for every lane |
+|---|---|---|
+| thirteen Convictions over four axes (`npc_behavior_v30` §1.2, marked CANONICAL in its own header) | fifteen pursuits over seven axes (ED-IN-0261, the 2026-10-06 row) | no conviction name from the design corpus is a key anything reads |
+| a faction takes a faction-level action each season from a seven-level priority tree (§8) | no faction acts; a seat-holder's own ranking is the faction's conduct (ED-IN-0201) | a per-faction precedence list in any subsystem is scripting drift |
+| named NPCs follow authored arc maps (§5.2) | no arc, story or thread carrier exists (ED-IN-0225); an arc is something an observer reads off the log | an NPC rule keyed on a name or an arc stage is scripting drift |
+| a Decision Fork resolved by scar count, with a crisis table a GM rolls (§4.1, §3.3) | scars shift weights (dormant) and the crisis is a rule that rolls nothing (G-Q6); there is no GM | no lane may assume a referee's judgement |
+| survival overrides conviction when Stability is low (§4.1, §8.1 priority 1) | no term reads need or danger; `urgency` was deleted (REM-44); condition changes the scene count only | an NPC does not save himself; a lane that needs it must say so |
+| officers and functionaries *"do whatever the institution incentivises"* (§4.1) | everyone runs `choose` on his own vector; a cohort holds its territory's temperament | there is no second, simpler chooser for minor persons |
+| presented evidence can crack a conviction (the Evidence style) | evidence moves claims; only argument and consequence move the moral layer (#353 §9.3) | a contest that turns evidence into a changed value must do it through `argue` |
+| Disposition and Knots for the player; a relational graph for NPCs | one stance row type and one `regard` for every pair, the player included | no lane keeps a player-only relationship store |
+| one scar per season from witnessing (`conviction_track` §3, as the retained oracle encodes it) | uncapped | F-CHAR-04; the cap is proposed |
+| `decision_policy_v1.md` is listed as a chooser source | it is the repository's own precedence order for editorial rulings (DRAFT FOR RULING); it says nothing about how an NPC decides | not a source for this intent |
+
+### One chooser interface for a player-proxy and an NPC
+
+**At the season's scale, yes, and it executes.** One signature, `choose(p, v, s, ask_budget) -> Scene[]`.
+`make_chooser` is the NPC; `dispatching_chooser` routes a named person to a callback;
+`development_space` shows the player `make_ranker`'s own list and packs his picks through `release`,
+the NPC's own packing step; `take_ranked` is the control under which the player is the NPC.
+Closed-set options on an act (`choice_sourced`: an order's role and retreat rule, a march's posture)
+reach both through the same candidate list.
+
+**Three limits.** (1) The callback receives the live `Person`, where Layer 1 specifies a frozen copy
+(F-CHAR-12). (2) Inside a contest the interface is a different one: a played person's per-turn
+`decide(view)` at the grid suspension (REM-31); an NPC has no decider there, only the module's default.
+(3) Nothing but tests calls the sheet; there is no client (§9).
+
+### What an NPC needs to be characterful, and legible afterwards
+
+Distinguishable choices need the score to read the situation (F-CHAR-01), the departure from it to be
+the person's (F-CHAR-02), and an interior that moves (F-CHAR-03, F-CHAR-04). Legibility needs a reason
+trail: today only the occasion survives a decision (the question on the `Scene`); `Act.reads` is empty
+(H-343) and `why` was cut from `Candidate`. Proposals: `02_CHAR_goal_lean_on_its_own_question.md`,
+`02_CHAR_resolve_and_temper.md`, `02_CHAR_scar_cap_and_regard_unit.md`, `02_CHAR_choice_alignment.md`,
+`02_CHAR_reason_trail_and_small_edits.md`.
+
+### Scripting drift inside this lane's own scope
+
+None found in `decision/`: every branch reads a row's column or a roster, never a verb or a person by
+name (read in full). Named roster members held as checked literals: `person_q.DOCTRINE_PURSUIT`,
+`RELIGIOUS_CONCERNS`, `data/pursuits.TEMPERAMENT_AXIS`, `options.COMPETENCE_ATTRIBUTE`. The instrument
+`harness/heir_hears.py` names `off_king` and `off_heir`; it is a reader, not a rule.
+
 ## 1. What it is, as coded
 
 **Modules and entry points.**

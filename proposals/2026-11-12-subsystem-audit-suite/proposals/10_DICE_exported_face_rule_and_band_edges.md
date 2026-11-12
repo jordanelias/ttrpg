@@ -41,11 +41,25 @@ any odds display, not on the Python loop.
 ## The resolution, decided
 
 Ladder step 5 for (1) and (2): the architecture's own rule (§0.05, *a fact the engine uses must live
-where code reads it*) and Layer 1's row 181 name the edit. Ladder step 5 for (3) as well: the offset is
-left in place. Combat's balance is measured on its sampler, no surface compares a duel exchange's odds
-with a social roll's (their pools already differ: `faculty + 6` against `faculty`), and re-centring the
-sampler would move every combat golden for a comparability nobody reads. What is corrected is the claim,
-and the port is told which sampler each provider draws from by a field code reads.
+where code reads it*) and Layer 1's row 181 name the edit.
+
+For (3) the offset is left in place. Combat's balance is measured on its sampler, no surface compares a
+duel exchange's odds with a social roll's (their pools already differ: `faculty + 6` against
+`faculty`), and re-centring the sampler would move every combat golden for a comparability nobody
+reads. What is corrected is the claim, and the port is told which sampler each provider draws from by a
+field code reads.
+
+**This part touches a Jordan decision and is therefore also listed in the audit's §11.** ED-833
+(2026-05-15, `jordan_decision`: *"adopt continuous engine; canonical for videogame implementation"*)
+made the Normal sampler the videogame's specification for every system, on a validation of mean and
+standard deviation at pools 5 to 17 (deviation 0.029 and 0.022). The season's social roll was built
+later on whole dice (ED-SC-0037, 2026-09-09: *"we have the sigma leverage d10 resolver in engine to
+use"*; `roll.py:165` calls `roll_net`), and B10-08, ratified on merge, built the exact odds function
+and the fraction rule on those whole dice. The decided reading here is ladder step 1: for the social
+roll the later, specific, ratified build governs, so *"canonical for Godot"* is narrowed to the
+provider that draws from the Normal sampler. Because that narrows ED-833 it is Jordan's to confirm; the
+other option (every provider samples the Normal, as ED-833 says) is stated in §11 with what it costs.
+Edits A, C and D below do not depend on the answer; edit B's second sentence does.
 
 ## The edits
 

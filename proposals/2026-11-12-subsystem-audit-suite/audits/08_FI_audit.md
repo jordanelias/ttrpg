@@ -337,6 +337,43 @@ severed feedback edge that W-A/W-B closed (clause 4 fired 461 times in one seaso
 points ED-FI-0002 at the live ledger; the research file (`research/by_lane/FI_fieldwork_investigation.md`
 §0 item 11) records that it lives in the archive ledger [UNVERIFIED by this audit]. Resolutions in §6.
 
+### F-FI-09 · degrades narrative (R-05, R-06) · Evidence is not a typed input to any contest; three of four detective borrowings are named in the code, not built
+
+**Claim.** What a person holds does not make his case. The one room that reads evidence sums his whole
+ledger; the others read none.
+**Evidence.** `world_q.proofs` `:852` counts every attributed deed claim the speaker holds, zeroed by the
+mirror, and its docstring names both as limits; only `speak` is heard by a room; `argue`, `determine` and
+`interrogate` roll with no evidence operand (H-285, H-301, H-226); `Record.forgery_quality` reaches an
+inquiry's obstacle and no hearing's; `rosters.yaml: proofs` is read by no production code. Against the
+detective precedent the tree names (§16): **typed evidence** is understood and built in another form
+(provenance-typed claims and documents, not the archived design's seven act-typed reliability tags);
+the **case board** is named only (no view of a ledger exists); **reconstruction** is named only
+(`reconstruct` writes nothing); **verification** is understood and deliberately refused (no oracle), and
+the consequence test that was to replace it is unbuilt, so nothing confirms or refutes a conclusion.
+**Falsifier.** A hearing whose band moves when one held item is cited and moves back when it is rebutted.
+None exists; H-285 measured identical bands across three propositions.
+**Narrative consequence.** No cross-examination, no forged exhibit that wins a case, no witness
+discredited by a finding. Trials are rolls.
+**Minimal fix.** `proposals/08_FI_05_evidence-interface.md`: what an item of evidence is, how it is held,
+cited, forged, concealed and contradicted, stated for the SC lane to consume.
+
+### F-FI-10 · degrades narrative (R-06, R-08) · What to say, to whom to confide and what to forge are engine rules, not a person's choices
+
+**Claim.** Three information decisions are made by the engine for every person alike (scripting drift in
+the sense of the NPC-and-chooser charge, §15).
+**Evidence.** *What is told*: `said_of` picks one claim by a fixed comparator and `opening_set` copies it
+onto the Act; the Candidate has no operand for it, so neither a chooser nor a player-proxy can choose
+which thing to tell (`decision/options.py`, the `said` copy; `person_q.py:1165`). *Whether it is
+confided*: `_circle_of` draws on `telling_privacy`, a world chance keyed by the act's id
+(`loop/witness.py:113-138`); the teller does not decide to confide. *What a forgery says*: `_eff_forge`
+always writes the forger in as the faction's head (`_FORGED_SHEET_KEY`); *what a lie says*:
+`lie_said_of` moves a number one whole band upward, the same for every liar.
+**Falsifier.** Two persons with different pursuits, holding the same claims in the same room, telling
+different things. At the shipped `said_slant: newest` they tell the same thing by construction.
+**Minimal fix.** `said` becomes a choice-sourced operand (one Candidate per hearer and per claim among the
+top few by the slant), scored by the existing pursuit and valence terms; confiding becomes an operand of
+the act, not a draw. Carried as §4 of `08_FI_02` (added) and named for CHAR's audit.
+
 ## 4. Code matters
 
 **Ownership and duplication.** Single owners hold where it matters: one gated deposit (`_deposit`), one cap

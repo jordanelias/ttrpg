@@ -11,8 +11,9 @@ NPC-038, ARC-17), §15; hole rows H-260, H-207 (A), H-203; plan position CR-54.
    terms as a content claim. Today only a holder does.
 2. `comply`, `evade / defy` and `construe` form on a writ the person's own ledger names him an addressee of.
    Today they form only on a writ he holds, which in computed play is never.
-3. An issuer who holds a claim that his own writ was defied carries, on the question he answers, the defier
-   and the seats the defier holds as classed referents.
+3. An issuer whose suspicion of a subordinate, folded from his own claims of defied and obeyed writs, has
+   reached a threshold carries, on the question he answers, that person and the seats he holds as classed
+   referents (the recall).
 4. `revoke` reads its office from `subject` as `confer` does, so the row can execute on such a referent.
 
 No stored state, carrier, verb or remit act is added. No hold is minted to anyone but a Record's maker, so
@@ -45,8 +46,9 @@ row says it "must not be read as a public writ", and its terms still reach only 
 
 Ladder: step 3 (Part E's cell) for the formation; step 5 for the route (WITNESS already deposits content
 claims; the addressee test `person_q.addressed_to` and the claim reader `person_q.content_said` already
-exist person-side); step 4 for the motive (CR-54's ratified reading of H-207 (A): a general motive is
-licensed, a special case is not). The choice between a proclaimed decree and a delivered one is listed for
+exist person-side); step 1 for what defiance costs (D5, D6 and E11 are ruled, ED-IN-0046 and ED-IN-0047;
+the carrier question is superseded by ED-IN-0343 to ED-IN-0345); step 4 for the motive (CR-54's ratified
+reading of H-207 (A): a general motive is licensed, a special case is not). The choice between a proclaimed decree and a delivered one is listed for
 Jordan in the audit's §11 item 1, because the two are different games.
 
 ## Exact edits, by owner
@@ -73,11 +75,32 @@ The second clause is the new one; the third closes the standing scene tax the do
 is not public. Every caller (`questions_for`, `admits_audience`) is renamed with it; `admits_audience`
 keeps asking for a *held* writ, since entry on a writ is the paper's.
 
-**4. `engine/season/queries/world_q.py`, a new standing occasion `defied_writs(w, p)`**, `vacancies`' shape:
-for a person who holds a claim of kind `compliance.withheld` whose subject is a writ he made (the creating
-act's actor, read as `may_warrant` reads it), the defier (classed `Person`) and each seat the defier holds
-that `may_revoke` admits through one of `p`'s seats (classed `Office`). Stamped on `out[0]` by the one stamp
-site. It asks the gate's own predicate, so it names no seat the gate would refuse.
+**4. Suspicion as a fold, and the recall as an occasion.** The intent is ruled, and the archived design
+states it (reference only, `CLAUDE.md` §0.05): a Directive is answered by Comply, Bargain or Defy; a Defy
+adds one to a suspicion signal, capped at one a season; at a threshold the superior recalls, audits or
+replaces (`governance_play_redesign_v1.md` §1.4; `governance_consolidation_v1.md` D5, ED-IN-0046). D6
+(ED-IN-0047) makes the accrual cumulative on Jordan's condition that it has a symmetric counter: *"if there
+is a way to advance suspicion from non-compliance, there must be a way to reduce suspicion by
+over-compliance and consistency/predictability."* The verb table records that this waited on "a suspicion
+carrier `engine/season/` does not have". ED-IN-0343 to ED-IN-0345 since ruled that such a quantity is an
+accumulation of events, which CR-89 builds as a fold of the log with no stored value. So:
+
+- `engine/season/queries/person_q.py::suspicion_of(p, other) -> int`, person-side and computed when read:
+  over `p`'s own ledger, plus one for each season in which he holds a claim that `other` withheld compliance
+  on a writ `p` made (at most one a season, the ruled cap), minus one for each season in which he holds a
+  claim that `other` complied and none that he withheld (E11), floored at zero; distinct origins once
+  (ED-IN-0322, as CR-89's believed fold). Nothing is written.
+- `engine/season/queries/world_q.py::recalls(w, p)`, `vacancies`' shape: for each `other` with
+  `suspicion_of(p, other) >= fx.recall_suspicion`, the person (classed `Person`) and each seat he holds that
+  `may_revoke` admits through one of `p`'s seats (classed `Office`), stamped on `out[0]` by the one stamp
+  site. It asks the gate's own predicate, so it names no seat the gate would refuse.
+- `engine/season/data/fixtures.py: recall_suspicion`, shipped `3`, swept `{1, 3, 5}`, with its register row
+  graded `assumption`: the design names a threshold and gives no number; its audit escape is worth two, so
+  the threshold is read as above two `[ASSUMPTION; medium; Jordan to correct; revert: None, the occasion
+  off]`.
+
+Not built here, and named: the Recall as a scene in which the recalled officer answers (SC's hearing); the
+`Submit to audit` escape; Bargain, whose nearest built verb is a `petition` to the issuer naming the writ.
 
 **5. `engine/season/verb_table.yaml: revoke`** gains `referent_named: true` beside its existing
 `referent_class: Office`; **`loop/predicates.py::_req_revoke`** and **`loop/effects_governance.py::_eff_revoke`**
@@ -93,8 +116,10 @@ alignment cells.
 realm at seeds 0 to 2 for three:
 
 - at least one `compliance.given` and one `compliance.withheld` whose actor is an addressee of the writ;
-- after a `compliance.withheld`, the issuer's next delivered question carries the defier's seat as an
-  `Office`-classed referent (read with the spy `harness/heir_hears.py` already uses on `questions_for`);
+- at the sweep arm `recall_suspicion: 1`, after a `compliance.withheld` the issuer's next delivered question
+  carries the defier's seat as an `Office`-classed referent (read with the spy `harness/heir_hears.py`
+  already uses on `questions_for`); at the shipped `3` the same after three defied seasons on a hand-built
+  world, and a complied season between them delays it by one (E11 observed);
 - `revoke` attempted at least once pooled over the realm seeds; if it executes, `aperture` prints it with
   `Act.via` a seat whose `revocation` admits it. If it is attempted and never executes, that is recorded
   and the row stays an R-05 residue: the proposal is kept for the triple, not for `revoke`.
@@ -111,7 +136,7 @@ realm at seeds 0 to 2 for three:
 
 ## What it does not do
 
-No suspicion carrier (ED-FA-0021 D6 stays intent). No delivery of paper. No new consequence written by
+No stored suspicion carrier: D6's accrual and E11's reduction are a fold. No delivery of paper. No new consequence written by
 `comply` itself: what compliance performs is still the separate act the writ's terms name (H-44). No change
 to `covenant`, `petition` or `challenge`.
 
@@ -126,8 +151,9 @@ to `covenant`, `petition` or `challenge`.
   dead man forms for nobody; an answered writ stops being offered.
 - **S.** One methodology: a standing occasion stamping classed referents, as `vacancies` and `writs_held`
   already do. It pauses nothing and hands to SC (`open_case`) and PC (`arrest`) by existing seams.
-- **E, last.** One roster key, one deposit clause, one widened Query, one new Query, one reader swap. No new
-  noun. Against what N and R buy, small.
+- **E, last.** One roster key, one deposit clause, one widened Query, one fold, one occasion, one fixture,
+  one reader swap. One new noun, suspicion, which the design already uses in its ordinary sense. Against
+  what N and R buy, small.
 
 ## Cost class
 

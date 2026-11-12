@@ -150,8 +150,10 @@ Worst first. "Falsifier" is the observation that would have shown the claim wron
   bargains or defies (case NPC-083, `core`) cannot occur.
 - **Minimal fix.** Proposal `06_FA_decree_binds.md`: the terms of a public writ reach its addressees as a
   content claim through the channel that already tells them it was issued; `comply` and its siblings form on
-  a writ the person's own ledger names him an addressee of; a defied writ becomes the issuer's standing
-  occasion, which is the general motive `revoke` lacks (CR-54). No stored state is added.
+  a writ the person's own ledger names him an addressee of; the issuer's suspicion of a subordinate is a
+  fold over his own claims of defied and obeyed writs, as Jordan ruled the accountability loop (D5, D6, E11;
+  §5.2), and at a threshold it becomes the recall occasion, which is the general motive `revoke` lacks
+  (CR-54). No stored state is added.
 
 ### F-FA-02 · blocks R-04's turnover · power does not change hands in computed play
 
@@ -360,6 +362,11 @@ is derived from an oath, never a stored parent (IN-40).
 | case NPC-032: the queen consort has no action economy of her own; `offices.yaml: off_widow_regent` grants her the King's full remit while he lives | the code | the built realm contradicts the character it is meant to simulate (§13) |
 | H-21: a faction's treasury is matter at the rung or office that holds it; code: one pot per rung (H-352) | the code | two factions seated on one rung spend one purse; unreached in play today |
 | 04 §B.6.1 and §F.34: the head resolves from `Tenure.degree`; code: `head_seat` data (CR-86) with the degree branch kept first and unreachable | the code | none in play; a reader of 04 expects a derivation nothing writes |
+| ruled intent (D5, D6 and E11, ED-IN-0046 and ED-IN-0047; `.designs/…/governance_consolidation_v1.md` §6, `governance_play_redesign_v1.md` §1.4): a Directive is answered by Comply, Bargain or Defy; a Defy adds to a suspicion signal, capped one a season, reduced by sustained compliance, and at a threshold the superior recalls, audits or replaces. Code: the answers write nothing; no suspicion; no recall | the code | the one accountability loop Jordan ruled does not exist in the engine (F-FA-01); the proposal builds it as a fold |
+| archived design (`faction_succession_split_v30.md` §2, PROVISIONAL): any faction's leader lost opens a contest unless a sole heir stands well; near-peer claimants split the realm. Code: one `successions` row (the throne); the first valid claim wins; nothing splits | the code | NPC-052 and NPC-081 cannot occur; CR-35 owns the contest, nobody owns the split |
+| archived design (`faction_politics_v30.md` §1.0a, ED-776): demotion is graded (one rank, several, dismissal with a lasting mark, an appeal). Code: a revocation costs a ban or nothing, and there are no ranks (CR-32 transcribes names and order only) | the code | a fall is binary; R-06 scopes the ban, which is the nearest built thing to a graded fall |
+| ruled 2026-07-13 (ED-FA-0001, as quoted in `governance_consolidation_v1.md` §6): four starting factions, the rest emergent. Code: ten roster members, with the Restoration Movement, the Löwenritter and the Guilds seated at build | the code, under the later roster ruling of 2026-09-02 (H-99) | the emergence the earlier ruling asked for has no producer (IN-30 stopped). [UNVERIFIED: ED-FA-0001's last ledger row was not opened] |
+| ruled doctrine (ED-SC-0013, `auto_manual_resolution_duality_v1.md`): one engine at two fidelities; a slate of specific events; a budget of scene actions; what the player does not attend resolves through the NPC chooser | the code agrees in shape (`play_surface`, the scene budget) | none; it is the ground for §9's one code path |
 
 ### 5.3 The scripting-drift test, applied
 
@@ -459,7 +466,7 @@ Each row is decided. "Step" is the rung of the five-step ladder that decided it.
 | id | inconsistency, gap or unclear passage | resolution | step | carried by |
 |---|---|---|---|---|
 | R-01 | A writ reaches no addressee; `comply` requires holding it while Part E's cell requires only a claim of its terms | a public writ's terms reach its addressees as a content claim; `comply`, `evade / defy`, `construe` form on a writ the person's ledger names him an addressee of | 3 (Part E's own cell), then 5 | `06_FA_decree_binds.md`; §11 item 1 |
-| R-02 | Obeying and defying change nothing (H-260) | no new stored state: the issuer's claim of `compliance.withheld` on his own writ is a standing occasion carrying the defier and the defier's seats; a suspicion counter is not built | 5 | `06_FA_decree_binds.md` |
+| R-02 | Obeying and defying change nothing (H-260); the verb table says the consequence waits on a suspicion carrier | the consequence is ruled (D5, D6, E11): suspicion accrues per defied season, falls with compliance, and at a threshold the superior recalls. Built as a person-side fold over the issuer's own claims (`suspicion_of`), never stored, and a recall occasion that carries the subordinate and his seats | 1 (ED-IN-0046, ED-IN-0047; the carrier question superseded by ED-IN-0343 to ED-IN-0345) | `06_FA_decree_binds.md` |
 | R-03 | `revoke` has no motive and reads no `subject` (CR-54) | the defied-writ occasion is the general motive; `revoke` reads its office through `office_named_by` and declares `referent_class: Office`, `referent_named: true` | 4 (CR-54's ratified reading of H-207 (A)) | `06_FA_decree_binds.md` |
 | R-04 | J-8: which seats hold `dispatch`; `off_npc_084` has no row and every remit act | `dispatch` stays a remit act; a seat holds it only if its row names it; `remit_unruled` is deleted; NPC-084's seat gets a row | 4 (the `foreign_seats` rows; IN-64's precedent) | `06_FA_remit_grant_by_row.md` |
 | R-05 | H-91: is `remit:revoke` necessary when purview is sufficient | necessary. Every remit verb is admitted by grant AND basis (`_seat_grants` then the basis, `gate.py:370-375`); the 2026-09-02 purview sentence was superseded by ED-IN-0256 (3) and the 2026-10-12 holdings ruling, which decide the basis and leave the grant to the row. A duke who should revoke is a duke whose row names `revoke`; all three do | 1, then 4 | this table |
@@ -525,6 +532,29 @@ both changed).
 - The `power_base` typology (rise-to-power): built once as a roster and deleted unread; do not rebuild.
 - CK2's priced truce breach: the one case in hand for K-FA-2; it waits on a covenant that something reads.
 
+**From `.designs/` and `.audit/` (referents, never authority).**
+
+- The Directive and its three answers, the suspicion signal and the recall are the archived settlement
+  design's (`.designs/systems/settlements/reference/governance_play_redesign_v1.md` §1.4), consolidated and
+  ruled in `.designs/systems/_architecture/reference/governance_consolidation_v1.md` §6. This is the referent
+  behind `comply`, `evade / defy` and case NPC-083, and it changed this audit's resolution R-02 from "no
+  counter" to "the ruled accrual, as a fold".
+- `.audit/2026-07-12-governance-compendium/43_directive_types.md` lists a typed Directive enum (Extract,
+  Tax, Suppress, Install, Host, Cede) and proposes five more. In code a writ's `terms` name whatever its
+  issuer's question named; which acts a writ may order is H-44's and stays open. Lead, not finding.
+- The same consolidation records two old findings that are now **false or moot**: that legitimacy and
+  popular support are "declared-but-inert in `sim/`" (that tree is dissolved; in the season loop
+  `person_q.legitimacy` is a Query over claims), and that the governance engine is "biased toward negative
+  death-spirals" (measured on a card deck and a predicate sweep the season loop does not contain). Neither
+  is repeated here.
+- Its method note is worth keeping: two harnesses with two jobs, one for whether a season plays and one for
+  whether the distribution is healthy. §9's scenario is the first; `aperture` and `strife` are the second.
+- The archived faction design is a statistics-bearing faction (Wealth, Military, Influence, Stability,
+  Mandate; a Standing matrix; eight casus-belli sources; a 90 to 95 per cent treaty lapse per arc;
+  `faction_systems_overview_v30.md` §2 to §4). Layer 1 refused the stored aggregate, so none of it is a
+  specification. It remains the vocabulary FA-07 holds and the source of CR-91's grounds (four, against the
+  design's eight).
+
 **Nulls.**
 
 - **No source in the corpus treats formal obedience without execution** (a search of `research/` for the
@@ -586,8 +616,9 @@ Step 2 before 3: a term that empties a seat is only interesting once the seat's 
 5. *An end condition.* Three, each a Query: the player holds no seat; the scenario's season count is
    reached; `endings_reached` is non-empty.
 
-**One code path.** By construction: FA's standalone game is the season loop on a small world with one
-person's choices supplied by a callback. No FA code exists outside the loop, so no fork can arise. The risk
+**One code path.** By construction, and by ruled doctrine (ED-SC-0013: one engine at two fidelities, a
+slate of specific events, a budget of scene actions, the unattended resolved by the NPC chooser): FA's
+standalone game is the season loop on a small world with one person's choices supplied by a callback. No FA code exists outside the loop, so no fork can arise. The risk
 is the opposite: harness situation-building must go through effects and the gate, or the scenario plays a
 world the loop cannot produce.
 

@@ -271,8 +271,20 @@ disagreement.
 
 ## Design intent stated by Jordan, 2026-11-12: mass battle
 
-Mass battle is **inspired by the Football Manager games and the Total War series.** Jordan gave no
-further text; read the two references by what each is known for, and test the subsystem against that:
+Mass battle is **inspired by the Football Manager games and the Total War series**, and its referents
+are **Ogre Battle, Unicorn Overlord, Football Manager, Total War and Mount & Blade II: Bannerlord**
+(Jordan, 2026-11-12). Jordan gave no further text; read the references by what each is known for, in the
+repo's research first (`research/game_precedent_suite/tables/R6_mass_battle_campaign.md`, `R2_warband_sandbox.md`,
+`R4_combat_social_rpgs.md`, `tutorials/`, `dispositions/`, `REPO_MENTIONS.md`, the game-precedent companion,
+`research/by_lane/MB_mass_battle.md`; mind the sourcing floor: fan-wiki figures for several of these were
+bot-walled, so shapes are the durable finding, figures are leads), and test the subsystem against that.
+In addition to the two below: from **Ogre Battle and Unicorn Overlord**, units are **small squads of named,
+distinct characters** (classes, equipment, roles) placed on a formation grid, given standing tactical
+**orders or priorities set in advance** (targeting, aggression, retreat conditions), and **resolved
+automatically** while the player manages the composition and the orders; from **Bannerlord**, a
+**campaign-scale party and army economy** (troops recruited, trained, tiered, upkept and lost; companions;
+a commander whose own fighting and leadership matter) feeding **real-time field battles in which the player
+may command, join or auto-resolve**, with the army's quality and morale derived from its individuals.
 
 - from Football Manager: the player acts as a **manager** of a squad of individuals with roles, duties and
   instructions set before and adjusted during the match; a match engine that **resolves the contest

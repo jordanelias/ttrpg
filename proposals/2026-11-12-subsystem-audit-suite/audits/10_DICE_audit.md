@@ -165,6 +165,14 @@ Ranked worst first. "Fix" names the owner; the edits are in the proposal files o
 - **Touches.** R-01, R-02 (a failed act deposits only in witnesses' ledgers), R-09.
 - **Consequence.** Three of four contested acts are non-events, and the band the verb table keys its
   strongest writes on is unreachable for the whole population.
+- **The root, from the design set.** The engine's own design names this regime as its weakest. The
+  armature (`sigma_leverage_engine_armature.md` §A, §G) scopes uniform leverage to the continuous
+  engine, records that ED-836 flags bare pools of 1 to 7 dice as *"shaky"*, and lists the social
+  contest as needing no help because its pools were *"already 5–18D"*; the designed pools were an
+  attribute doubled plus history with a floor of five (`complete_systems_reference.md:138`, `:183`).
+  The built social pool is the score itself (`pool.py:94-100`, CR-20), one to seven dice and two by
+  default. The game follows the code; the cost is this finding: every lumpiness the design assigned to
+  a regime it expected to avoid is the season's ordinary roll.
 - **Minimal fix.** The magnitudes are Jordan's (`pool_default`, H-126). The form is fixable without a
   ruling: `10_DICE_one_score_two_roles.md` takes person-opposed rolls to Ob 1.0, where the bands read
   42 / 32 / 25 / 1 %.
@@ -200,7 +208,10 @@ Ranked worst first. "Fix" names the owner; the edits are in the proposal files o
 - **Claim.** The Normal sampler has the whole-dice roll's mean and variance and not its bands. Under a
   ladder that reads `margin >= 0` it is about half a success harder.
 - **Evidence.** `dice_engine.py:222` and `sigma_leverage.py:420` both say *"statistically equivalent"*;
-  the second adds *"Canonical for Godot"*. `modules/combat/core.py:72-75` records that the local
+  the second adds *"Canonical for Godot"*. The source is ED-833 (2026-05-15, a Jordan decision), which
+  adopted the continuous engine as the videogame's specification on a validation of mean and standard
+  deviation at pools 5 to 17; the armature's own audit listed a *"discrete/continuous divergence"*
+  (its T3) and scoped it as a small-pool caveat. `modules/combat/core.py:72-75` records that the local
   continuity shift was removed when combat moved to the owner's ladder.
 - **Falsifier run.** E-06: Failure, whole dice against Normal: pool 6 / Ob 3, 53.04 against 62.03 %;
   pool 8 / Ob 3, 38.58 against 46.48 %; pool 11 / Ob 4, 37.31 against 44.01 %. Sampled, seed 7,
@@ -211,7 +222,8 @@ Ranked worst first. "Fix" names the owner; the edits are in the proposal files o
   reads *"canonical for Godot"* as covering the social roll, shown odds and dealt odds part by 7 to 12
   points.
 - **Minimal fix.** `10_DICE_exported_face_rule_and_band_edges.md`: correct the two claims and name the
-  sampler per provider where code reads it. The offset itself is left (§6, resolution 5).
+  sampler per provider where code reads it. The offset itself is left (§6, resolution 5). Narrowing
+  *"canonical for Godot"* narrows ED-833, so it is also in §11.
 
 ### F-DICE-06 · degrades narrative · the advantage channel has one member, one sign, and sums to zero
 
@@ -224,6 +236,26 @@ Ranked worst first. "Fix" names the owner; the edits are in the proposal files o
 - **Consequence.** A wound, a favour, a precedent or a threat cannot change a later roll; ARC-53's two
   core needs have no carrier (§13).
 - **Minimal fix.** `10_DICE_advantage_sources_for_the_arcs.md`.
+
+### F-DICE-14 · degrades narrative · the chooser's odds answer for one verb, and "cannot say" reads as certain
+
+(Numbered out of rank order because it was added with the NPC and chooser charge, §15; by severity it
+sits here.)
+
+- **Claim.** The believed-odds query the chooser weighs contested candidates by returns a figure for
+  `determine` alone, the same figure for every person; for every other contested candidate it returns
+  `None`, which the chooser treats as a chance of 1.
+- **Evidence.** `decision/choose.py::odds_weight` (*"return 1.0 if chance is None"*);
+  `sigma.py:286-289` (no claim about the subject → `None`); `sigma.py:383-388` (no believed mode for a
+  fight or a field).
+- **Falsifier run.** E-19, realm, seed 0, one season: 4,929 queries; 102 figures, all `determine`
+  (0.26, 0.4346, 0.5765: the default pair at effort 0, 1, 2); `None` for `march` 3,813 times and for
+  `accept` 1,014 times.
+- **Touches.** R-08 (non-omniscient, non-optimal choice), R-06.
+- **Consequence.** A lord weighs a march as if it could not be lost, and a duellist an acceptance as if
+  he could not fall; knowing nothing of an opponent is the most favourable belief available.
+- **Minimal fix.** `10_DICE_believed_odds_have_a_prior.md` for the social roll; the believed estimate
+  of a fight or a field is the PC and MB lanes', to the interface stated there.
 
 ### F-DICE-07 · hygiene with a port cost · a second roller, and a ladder in two classes
 
@@ -370,6 +402,9 @@ universal bands, Partial a whole success wide (2026-08-14, 2026-08-15). Advantag
 shift (ED-884, ED-934). An obstacle against a person is their score halved plus that instance's
 modifiers. Combat's degree is read off the scene (2026-09-03). No base Ob by scale (2026-09-05).
 Investigation is not made a contest to become gradeable. Capability supplies dice and gates nothing.
+One engine at two fidelities, with `E[auto | event] ≈ E[played | event]` (the auto/manual duality,
+ED-SC-0013, ruled 2026-07-08). The continuous engine as the videogame's specification (ED-833,
+2026-05-15), which the built social roll departs from (§11).
 
 **Where ruling and code agree.** All of the above are executed by the code read, with the exceptions in
 §3.
@@ -383,6 +418,28 @@ Investigation is not made a contest to become gradeable. Capability supplies dic
 - PP-232's *Ob minimum 1* (`OB_MIN`) against a composed obstacle of 0.5 for a subject with a score of 1
   (`roll.py:119-120` says so itself). The fractional-obstacle ruling is later and governs; `OB_MIN` is
   the floor a favourable modifier may not push below, which is how the code uses it.
+- ED-833 (every system samples the Normal in the videogame) against the social roll and the field,
+  which deal whole dice (F-DICE-05; §11).
+
+**Where the design set (archived, intent only) and the code disagree.** Read in full: the four
+documents under `.designs/engine/` and `auto_manual_resolution_duality_v1.md`; read at the passages a
+search for the resolution terms returned: `videogame_mode_spec.md` (§3, §4), `complete_systems_reference.md`,
+`engine_atlas_v1.md`, `cogload_moderate_target.md`, `throughlines_complete.md`; searched and found to
+carry nothing on the draw: the remaining seven.
+- *Pool regime.* The design's pools were an attribute doubled plus history, floor five; the built social
+  pool is the score (F-DICE-02). The game follows the code.
+- *Advantage contributors.* The armature's porting interface (§D) asks each system for a **signed**
+  set of contributors, **gated** by the state they are relevant in. The built channel is unsigned and
+  has one ungated member (F-DICE-06). The intent and resolution 17 agree.
+- *The obstacle against a person.* `videogame_mode_spec.md:174` writes `floor(stat/2) + modifier`; the
+  code halves without flooring, on the later fractional-obstacle ruling. The code governs.
+- *Disposition lowers the obstacle.* `complete_systems_reference.md:197` (`Ob = max(1, base − Disp)`) is
+  the retracted Ob-reduction form; the case corpus's SCN-04 inherits it. Superseded by the mean-shift
+  ruling; the lawful form is an instance modifier on the opposing side or a named level (§13).
+- *The dice as a Godot autoload.* `sim_reference_README.md` maps the dice to an autoload; the package's
+  own head and `holonic_ARCHITECTURE.md` §47 say never. Layer 1 governs.
+- *"All modules are stubs" and the PROVISIONAL status vocabulary* (`sim_reference_CONVENTIONS.md`) are
+  where `engine/dice_engine/__init__.py:8`'s stale status line comes from (F-DICE-13).
 
 **Five properties, as evidence for the NERS reading.**
 
@@ -451,7 +508,7 @@ verbs take no draw, so an *implementation* that can fail after a won contest (AR
 | 2 | The single-owner sweep cannot observe a tolerance | gap in a test | Resolved by 1 (the copy is gone); no new test | 5 | same |
 | 3 | A fraction of a die has three meanings | inconsistency | On whole dice, the fraction is one more die with that probability; `band_odds` enumerates the mixture | 4 (`settle_margin`'s rule for a fraction of a margin) | same |
 | 4 | Half-to-even rounding of a pool | defect | Removed by 3 | 5 | same |
-| 5 | The Normal sampler reads half a success harder than whole dice | inconsistency | Leave the offset (combat is tuned on it; nothing compares the two); correct the two claims; name the sampler per provider | 5 | `proposals/10_DICE_exported_face_rule_and_band_edges.md` |
+| 5 | The Normal sampler reads half a success harder than whole dice | inconsistency | Leave the offset (combat is tuned on it; nothing compares the two); correct the two claims; name the sampler per provider. The narrowing of ED-833 is in §11 | 1 (the later ratified build of the social roll), 5 | `proposals/10_DICE_exported_face_rule_and_band_edges.md` |
 | 6 | Face rule, band edges and `LEVEL_SIGMA` not exported | gap | Module-scope literals at the owner; an assertion ties the per-die pair to the faces | 3 (`04:181`, CLAUDE.md §0.05) | same |
 | 7 | Resolver names: `dice_pool` / `d10_sigma` / `d_sigma`, and a stale combat comment | inconsistency | One vocabulary of three in `module_contracts.yaml`, matched by the wrappers | 5 | same |
 | 8 | A person with no score is opposed at the non-person stand-in; holding a score lowers the obstacle | inconsistency | One score, two roles: the opposing score is the pool's base; the stand-in is for non-persons, as H-127 says | 3 (the ruling; H-127's own text), 4 (combat) | `proposals/10_DICE_one_score_two_roles.md` |
@@ -470,7 +527,12 @@ verbs take no draw, so an *implementation* that can fail after a won contest (AR
 | 21 | CLAUDE.md §7 describes goldens under `engine/tests/` that observe campaign-reachable code | stale Layer 0 sentence | Reword to what the directory holds (one parity golden over pure functions) | 2 | none (Layer 0 is the orchestrator's to edit) |
 | 22 | Mass battle labels a finished battle with the ladder's four names on other thresholds | vocabulary collision | Rename the survivor-ratio label's values in `massbattle.py` (MB lane) | 3 (*"No system keeps its own bands"*) | cross-listed to MB |
 
-Resolutions decided: 22. None overwrites ratified canon or a `(RULED)` item.
+| 23 | A person who holds no claim about an opponent gets no believed chance, and the chooser reads that as 1 | gap; unclear polarity | He assumes an ordinary person (`pool_default`), from the fixtures, never the World | 4 (`faculty`'s own fallback) | `proposals/10_DICE_believed_odds_have_a_prior.md` |
+| 24 | No believed estimate exists for a fight or a field | gap | The interface is stated (a `believed_estimate` provider role returning shares over the provider's own bands); the build is PC's and MB's | 5 | same, edit C |
+| 25 | Nothing of a roll survives it but the band | gap | The record the provider already returns is the reason trail; one optional field on the graded act's first Event, proposed to CORE | 5 | same, edit D |
+
+Resolutions decided: 25. One (resolution 5, in part) narrows a Jordan decision and is listed in §11;
+none of the others overwrites ratified canon or a `(RULED)` item.
 
 ## 7. Research transfer
 
@@ -498,6 +560,16 @@ them (`00_INDEX.md` §3, the "Resolution kernel" row), and none bore on a findin
   opponent-scaled obstacle (40.0 → 16.1 % over equal scores 1 to 8). Its remedy, a band width that
   scales with the pool, contradicts a ruling and is not proposed. On an attribute scale of 1 to 7 the
   band stays between 17 and 40 %.
+
+- *The campaign simulator's through-line, "rich engine, starved input"* (`mc_v18_walkthrough.md` §7,
+  2026-07-16: a 1,905-line battle engine fed one rounded scalar per side). Historical, and it
+  transfers exactly: the season loop repeats it one level down, an exact odds function and a sigma
+  channel fed a constant pool and a zero leverage (F-DICE-01). What it changes: the next build in this
+  subsystem is an input, not a mechanism.
+- *The auto/manual duality (ED-SC-0013; Football Manager's three fidelities of one match engine).*
+  Transfer: the calibration constraint is met by construction only if both fidelities of an event draw
+  from one sampler. That is why F-DICE-05 is filed above hygiene: a played social scene built on the
+  Normal sampler beside an automated one on whole dice would be mode-shopping by 7 to 12 points.
 
 **Tried and did not transfer.**
 - *Karmic dice, pseudo-random distribution, shuffle bags, pity timers, XCOM's hidden aim assist (D_T01
@@ -529,6 +601,7 @@ gives to, another lane.
 | 5 | *Compose (CHAR).* Authored `stats:` for the cast, or a generation rule, and `cast_attributes` on | `references/npc_registry.yaml`, `harness/populated.py` | `aperture 4 0`: *"two actors at different pools: yes"* on a non-combat verb | R-09's by-person conjunct, R-06 | design-first (content is Jordan's) |
 | 6 | *Compose (PC).* A signed advantage channel and `wounds` | `sigma.py`, `rosters.yaml`, `fixtures.py` | nonzero leverage on a graded roll in `aperture`; control arm hash equal | R-02 (a fight's result reaches a later debate), ARC-53 | small build |
 | 7 | *Compose (CORE / GO).* A surface that prints `odds_of` for an act the player is about to choose | the play surface's client, not the engine | a headless callback that reads `v.odds` and logs it beside the dealt band | NERS-E; the playable test of §9 | small build |
+| 7b | *Compose (CHAR).* Believed odds have a prior | `sigma.py::believed_input`, one fixture | the spy of E-19 returns figures for `argue` and `arrest`; control arm hash equal | R-08 (a belief that can be wrong for a reason) | edit, a declared mover |
 | 8 | *Alone, later.* Delete the unreached advantage surface with the kernel | `sigma_leverage.py`, the parity golden | the golden's function floor drops by three; nothing else moves | — | deletion, on Jordan's timing (SM-15) |
 
 Steps 1 and 2 move no hash and can land first. Step 4 before step 5: otherwise authoring a character
@@ -588,11 +661,32 @@ the `ob_from_defender` half of resolution 8 to PC.
 
 ## 11. Survivors for Jordan
 
-None. Every item above was answered on the ladder. Two are declared movers taken at step 3 or 4 and
-marked `[ASSUMPTION; Jordan to correct]` in their proposals with a control arm that reproduces today's
-bytes: the opposition fallback (person-opposed rolls go from 26 % to 58 % Partial-or-better) and the
-wound level. Neither overwrites a ruling; both change how often things happen, so they are named here
-for visibility and not as questions.
+One, listed because its resolution narrows a decision of his.
+
+**Which sampler the videogame's non-combat rolls use (ED-833 against the built social roll).**
+ED-833 (2026-05-15) adopted the Normal sampler as the specification for every system in the videogame.
+The social roll was built on whole dice after ED-SC-0037 (2026-09-09), and B10-08's exact odds and
+fraction rule, ratified on merge, are whole-dice mechanisms. The two are not interchangeable: at the
+shipped pair the whole dice fail 74.0 % of the time and the Normal sampler 85.6 % (E-06).
+
+- **Option A, as built (decided here, ladder step 1).** Whole dice for the social roll and the field;
+  the Normal sampler for personal combat only. As a game: odds a player can count (*two dice, two
+  successes needed*), exact and displayable; a fraction of an obstacle paid in probability; leverage
+  uniform in z but lumpy in points at small pools. The port carries two samplers.
+- **Option B, as ED-833 reads.** Every provider samples the Normal. As a game: fractional pools and
+  obstacles are native, leverage is exactly uniform at every pool, the fraction rule and the exact
+  enumeration are deleted in favour of a closed form; no dice exist to show; and unless the sampler is
+  re-centred by half a success every non-combat act becomes about ten points harder than today. The
+  port carries one sampler. Every season hash moves.
+
+Proposal `10_DICE_exported_face_rule_and_band_edges.md` is written for A and says which of its edits
+depend on it.
+
+Three other items are declared movers taken at step 3 or 4 and marked `[ASSUMPTION; Jordan to correct]`
+in their proposals, each with a control arm that reproduces today's bytes: the opposition fallback
+(person-opposed rolls go from 26 % to 58 % Partial-or-better), the wound level and the believed prior.
+None overwrites a ruling; each changes how often things happen, so they are named here for visibility
+and not as questions.
 
 ## 12. Evidence log
 
@@ -618,7 +712,9 @@ All runs with `PYTHONHASHSEED=0`. Scratchpad:
 | E-15 | inline scan of `engine/season/cases/**/*.yaml` `need:` rows | — | 973 rows; 96 name a draw, a degree or a modifier |
 | E-16 | `probe_props.py`: `band_odds` against `p_success`; named levels; monotonicity; ceiling | — | `props.txt` |
 | E-17 | grep censuses: callers of the display functions, `capped=False`, `BandExtension`, draw sites | — | as cited in §3 |
-| E-18 | `git status --short` | — | this file and four proposal files are the lane's only changes |
+| E-18 | `git status --short` | — | this file and five proposal files are the lane's only changes |
+| E-19 | inline: `sigma.believed_chance` spied during `populated.run(1, 0)` | 0 · 1 | 4,929 queries; 102 figures (`determine`); `None` for `march` 3,813 and `accept` 1,014 |
+| E-20 | design set read (§5): four files under `.designs/engine/` and the duality doctrine in full; five cross-cutting files at their resolution passages; seven searched | — | intent only; the disagreements are listed in §5 |
 
 Not run: `pytest` (by instruction); `aperture 4 0` (R-09's own measure; the CORE lane's run had not
 finished when this was written, and the four-season probe of E-02 reads the same realm).
