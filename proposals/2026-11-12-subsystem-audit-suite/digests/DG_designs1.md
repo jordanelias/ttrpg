@@ -536,3 +536,53 @@ Lane: archived design documents under `.designs/` (README, `_architecture`, arti
 - **Conflicts / stale:** baseline is pre-redesign; `workbench/balance.py` named as live (CLAUDE.md §9 task routing also cites it).
 - **Open items:** tradition channel-leverage equalisation (design-laden, "paradigm-strength = Jordan's call") (:105).
 
+### .designs/systems/combat/combat_engine_v1/reference/combat_throughlines_v1.md
+- **What it is:** design-spine doc (mechanical-tier) naming the co-primordial throughlines of a combat exchange and the commitment = recovery axis.
+- **Status:** "Design-spine doc (mechanical-tier)". Reading: live as intent; formulas need code check.
+- **Bears on:** PC, DICE.
+- **Content that matters:**
+  - Exchange converges on two poles hit vs be hit; every throughline adds a term to `net_sigma` -> `degree` -> hit or riposte (:16-20).
+  - Throughline table: distance/measure, reach, reading, timing/tempo, balance/structure, technique, weapon morphology, commitment/recovery with engine loci (:22-36).
+  - Commitment = recovery: a feint is the minimal-commit pole (`commit 2` already is the feint, so feint dissolved into attack in WS-5) (:44-52).
+  - `overcommit_exposure = max(0, COMMIT_EXPOSE_K*(commit-3)*recoverability_factor) - discipline`; recoverability from footwork, PoB x weight (`mass x pob_frac`; forward-heavy mace 1.74x vs hand-balanced rapier 0.95x), stance, grip/extension; measured poleaxe/mace lose ~5pp in duel (:53-63).
+- **Conflicts / stale:** formulas (`recoverability_factor`, `COMMIT_EXPOSE_K`) belong to `modules/combat/`; check live names [UNVERIFIED].
+- **Open items:** "the same treatment is owed to the others" (other throughlines) (:70).
+
+### .designs/systems/combat/combat_engine_v1/reference/engagement_psychology_recovered.md
+- **What it is:** salvage (scene-combat WS-0) of three uncommitted engagement-psychology docs, reconstructed from audit Reconciliation 3.
+- **Status:** "Reconstructed-from-audit (mechanical-tier)". Reading: historical/provenance; findings feed WS-5.
+- **Bears on:** PC, SC (reading as deliberative game).
+- **Content that matters:**
+  - Already faithful in engine: legibility (point 0.80 hard to read; cut/blunt 1.25; +commit, +lunge), feint as read contest `read_d` vs `read_a` logistic, overcommit exploit (`read_win and commit>=4 -> Indes/sen steal + overcommit_exposure -> riposte`) (:28-40).
+  - Genuine additions: regime-contest lens "The Approach" (biased weights over measure/contact/tempo, NOT a planner), the contact axis clinch/disengage/choke (consumes dead `clinch` weapon field), and Wariness ENG-1 `WARINESS_K*(1-familiarity)` with a mandatory spread-floor so commit distribution {2,3,4,5} cannot collapse (:46-65).
+  - Pre-contact `seize` cut 2026-06-05 after ablation ~0; do not revive (:68-69).
+- **Conflicts / stale:** the original three source docs never committed (only this salvage exists).
+- **Open items:** whether the contact axis was ever built (see phase4_5 plan: not started as of 2026-07-01).
+
+### .designs/systems/combat/combat_engine_v1/reference/phase4_5_plan_v1.md
+- **What it is:** verbatim recovery of an uncommitted plan (`perform-an-intensive-plan-jolly-llama.md`, 2026-06-29) for scene-combat Phases 3/4/5, annotated with execution status as of 2026-07-01.
+- **Status:** per-phase bracketed status; Phase 3 DONE (PR #40, #47), Phase 4 (4a/4b/4c) and Phase 5 NOT STARTED. Reading: historical plan; many principles are stated here and nowhere else.
+- **Bears on:** PC, DICE, SC.
+- **Content that matters:**
+  - The Primitive Principle (a weapon is a label for an aggregate of primitives; never tune per weapon name), the Attack-Defence Convergence Principle (threat without receiving threat; seizing initiative = convergence), and the Tradition-Is-Not-A-Weight Principle (a tradition = curriculum + selection bias; efficacy = weapon primitives x learned ability x state) (:89-93).
+  - Four primitive layers C (9 stats: strength, agi, end, cog, att, spirit, focus, history, disp, each 1-7), W, T, S (:65-71); wrapper contract: pure subsystems, wrapper owns all mutation (:81).
+  - Workstream-0 grounding: `sim_verification_ledger.json` and `grounding_ledger.md` never created (:153-155); honest `[ASSERTED]` / `[FIAT]` flags over forced citations (:157-168).
+  - Phase 3 fixes: `puncture_pressure` key mismatch; blunt transmission scaled by `p_auth/8` (wooden staff transmitted like a steel mace); `REACH_DECAY_K=0.35` FIAT; `wt` and `spd` still read live in `core.py:55` and `systems.py:46` (:181-206).
+  - Phase 4a game-theory layer (Bayesian read, mixed-strategy commit, Stackelberg initiative, struck-line wariness, concentration-lapse error) and 4b/4c unbuilt (:247-283); Phase 5 contact axis unbuilt (:224-236).
+  - WS-7 multi-combatant deferred, ED-911, "DESIGN-ONLY" (:73).
+- **Conflicts / stale:** Phase 4/5 statuses are 2026-07-01; PC lane must verify against `modules/combat/` (the engine may have moved since) [UNVERIFIED].
+- **Open items:** missing grounding ledger files; `wt`/`spd` deletion; `HALFSWORD_HEFT_RELIEF` possibly subsumed by continuous grip-position model.
+
+### .designs/systems/combat/combat_engine_v1/reference/tradition_decomposition_v1.md
+- **What it is:** WS-3 bottom-up decomposition of martial traditions (German, Italian, Japanese, Spanish, English, thin Chinese/Filipino) into technique -> primitive -> node -> gate -> access/bias/tendency records.
+- **Status:** "Decomposition artifact (mechanical-tier)"; update note 2026-06-29 says WS-4 dissolution landed. Reading: provenance for the tradition model.
+- **Bears on:** PC.
+- **Content that matters:**
+  - Old tradition model was a 7-dim scalar channel-weight vector (e.g. `german tactile=1.35`); measured 18.8pp imposition spread and 6.8pp unconditional spread (none lowest at 45.1) (:21-27).
+  - Substrate primitives: measure, tempo, feel/tactile, leverage, perception/visual, precommit, structure/balance; state-graph nodes Approach, AwaitTempo, Exchange{read,commit,mode,roll}, Bind, Riposte, HitLanded (:51-58).
+  - Emergent profiles: German fights to the bind, Italian refuses the bind (cavazione), Japanese wins before the blade moves, Spanish owns the approach geometry, English counters at the true time (:79-129).
+  - Three identities the scalar vector cannot express: Italian bind-refusal, the contact axis, Spanish footwork-as-geometry (:157-160). Spanish `balance` channel 80% suppressed in-engine; Japanese `precommit` fired only in feint (~30%) (:150-151).
+  - Sparse-tradition rule: Chinese one mechanic (burst from reach), Filipino flow, no abilities asserted (:131-138).
+- **Conflicts / stale:** scalar numbers superseded by equal-affinity-budget model (2026-06-29).
+- **Open items:** contact-axis accesses (clinch/disengage/choke) and `seize` retirement remain open.
+

@@ -419,3 +419,25 @@ Lane: game precedent and historical research (`research/`, tier 3). Entries are 
   - Hierarchy bearing: subunit-carried stamina/morale/discipline/rout is exactly the "each level carries its own state" structure Jordan's MB intent asks about; the doc shows it was built engine-direct.
 - **Conflicts / stale:** line numbers (orchestration L413-417, L1647) from June 2026; file names `mass_battle/resolution.py`, `orchestration.py` may have moved (`modules/mass_battle/` now) [UNVERIFIED]; gauge lives in `tests/sim/` (not the shipping `tests/valoria` gate).
 - **Open items:** the ten Jordan-vetoable judgment calls (:111-120), esp. intra-unit cascade, Armour->dr and Endur->stamina bridges, recoil zone-gating.
+
+### research/historical/precedents_warfare.md
+- **What it is:** 2026-04-17 historical precedent analysis for mass battle, army composition, feudal mustering, siege, territory seizure and accord/legitimacy (Crecy, Agincourt, Cannae, Hastings, Austerlitz, Constantinople 1453, Osaka, English levy, Swiss pike militia, Janissaries); companion to `precedents_analysis.md`. Read: §1-§3, §6.4-§8 (lines 1-140, 255-326); §4-§6.3 (lines 141-254) NOT read.
+- **Status:** "ANALYSIS — feeds design refinements"; historical (April 2026, PP-675 era, units and Wealth/Prosperity/Accord vocabulary of the old design).
+- **Bears on:** MB, FA, SE.
+- **Content that matters:**
+  - "Generalship dominates" axiom, `ECP = min(Size, Command) + Command`; general's death two-stage, Command to 0 (:25-28) — the ancestor of today's command-0 rout (`orch:2220-2225`).
+  - Proposed Campaign Supply (units in hostile territory cost Wealth), Service Duration table for Levy 4 seasons / professionals paid, Morale Cascade (rout triggers a friendly Discipline Ob 1 check), siege civilian consequences (Prosperity -1/season), Siege Parley via Social Contest giving Accord 2 vs 1, settlement-type Muster bonuses (Fortress +1 Size for Heavy Infantry and Cavalry) (:34-133).
+  - Post-commit audit (:293-326): committed Campaign Supply (simplified to flat Wealth -1/season), Levy Restriction ("cannot attack outside home territory"), Morale Cascade, Siege Civilian Consequences, Siege Parley, Show of Force, Fortress muster bonus, Accord by acquisition; CUT Militia, Sapper, per-unit supply, Service Duration timer ("bookkeeping, not narrative"). The design criterion: "does this mechanic contribute to the character-world feedback loop that generates emergent narrative?"
+- **Conflicts / stale:** the mechanisms live in the dissolved `designs/`-era military layer; current code lacks campaign supply, rally, siege states (D_T04 rows 9-10, 17). Whether Levy Restriction/Campaign Supply exist anywhere in code [UNVERIFIED].
+- **Open items:** Priority B/C items (Service Duration, Settlement Muster, Trade Mandate, Militia/Sapper) deliberately deferred or cut.
+
+### research/historical/precedents_analysis.md
+- **What it is:** 2026-04-17 historical precedent analysis for theocracy establishment (Papal States, Calvin's Geneva, Iran 1979, Tibet, HRE prince-bishoprics), invasion on the heels of civil war, movements into government, cultural revival/post-occupation governance; maps to Church of Solmund / RM / Altonia mechanics. Read lines 1-60 and 317-398; §2-§5 (lines 60-316) NOT read.
+- **Status:** "ANALYSIS — not a design doc; feeds design refinements"; historical.
+- **Bears on:** FA, WR (Church, RM, Altonia), SC.
+- **Content that matters:**
+  - Five theocracy establishment patterns: vacuum filling, competence-based capture, pre-positioned parallel infrastructure, military-religious alliance, gradual accumulation (:25-31); proposals Pastoral Assumption (low-Ob Church governor in a vacated settlement with a Chapel) and Parish Social Services (+0.5/+1 Stability) — "the Geneva trap" (:51-56).
+  - Priority list of 12 additions (:317-338); self-audit of Church/RM/Altonian interactions (:342-376).
+  - Post-commit audit: Altonian Alignment changed from player action to NPC AI behaviour ("players discover the betrayal through investigation — that IS the narrative moment"); cut RM Accord ceiling (invisible cap = frustration), Mutual Aid, Trade Mandate (:384-397).
+- **Conflicts / stale:** vocabulary (CI, TC, PT, IP, Accord, Mandate, Presence) is the April-2026 design layer; whether those exist in `engine/season/` [UNVERIFIED]. Old World/Papal references are history not code.
+- **Open items:** deprioritized items listed in precedents_warfare §8.

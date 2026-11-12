@@ -409,3 +409,67 @@ Line references are to the file in the entry. `[UNVERIFIED]` marks anything not 
 - **Conflicts / stale:** `02_canon_constraints.md` P-13 ("Forgetting = rendering failure") framed as forgetting, now contradicted; `canon/03_canonical_timeline.md` still uses "the Forgetting" as a named event (:22, :66) - CHAR/FI lanes should treat the Forgetting as inertness, not memory loss.
 - **Open items:** the retracted cost consequence; "does reach bear on what a working costs" (:291-297, deferred to §6.8).
 
+### canon/philosophy/06_operations.md
+- **What it is:** §6 Operations: what an operation is, the Leap, knot formation, knotting/wrapping, collective work, operation-type taxonomy, memory operations, and the unified Coherence-cost account; 402 lines.
+- **Status:** "PROPOSED" (:3). Reading: live reference; carries the richest mechanism-adjacent intent for threadwork cost.
+- **Bears on:** CHAR, PC, WR, DICE (cost model), FI (investigation of Gaps).
+- **Content that matters:**
+  - Operation = "threadwork that requires going beyond oneself as a finite ordinary human"; layer-2 self-maintenance is threadwork but not an operation; every operation requires a Leap; ordinary experience carries no Temporal Disjunction (:14-57).
+  - The Leap suspends the reflexive facing only; layer 1 and the outward facing continue; "an entire suspension of all grounding" struck; not a veil-lifting filter, a change in the *as* (:61-127). Epoché analogy owned: the Leap forfeits the reduction's safety (:119-125).
+  - Knots form involuntarily along the operation channel, are directional, bidirectional in effect, permanent, below the reach of re-engaged self-rendering; permanence is a posit, wrapping would have been compatible (:129-152).
+  - Taxonomy by direction relative to the futural-potential-legible: restorative (needs no holding), manipulative (held by the practitioner), destructive (unmakes harmony; target's dependents orphaned); "scale makes destructive worse, direction makes restorative non-corrosive at any scale" (:179-214). Mending restarts becoming in a Locked Zone; a whole Locked Zone can be Mended without self-defeat if it is restoring equilibrium, not "restoring a remembered state" (which is the Calamity's mechanism) (Ruled 2026-09-07) (:216-247).
+  - Coherence cost has two channels: operational (type x scale, held shape borne by the practitioner) and confrontation (environmental, non-accumulating); restorative work moves the practitioner toward their own equilibrium and self-mending can reach the resting point ("extremely difficult but possible", Ruled 2026-09-08) (:270-330). Practitioner-side resilience = strength of configuration, not sensitivity or imbrication (Ruled 2026-09-09) (:333-350).
+  - Retention roll reconciled: Leap risk = environment x duration plus type x scale; "A Mending in a quiet place is genuinely free. The same Mending at a Gap margin is not" (:373-402).
+  - The target of a manipulative operation also bears Coherence cost (:266-268).
+- **Conflicts / stale:** the word "retention" is used for both the phenomenological term and a dice check (`09_terminology.md` §9.2 says the check should be renamed; this file still says "retention roll", :373). `canon/02_foundations_amendment_leap_mechanism.md` said destructive/manipulative cost are catastrophic and Mending zero; this file adds "understated" (restorative is positive).
+- **Open items:** whether the load is split between Coherence and substrate strain (flagged in 07 §7.5); the knot permanence posit (:143-146); the "retention roll" rename.
+
+### canon/philosophy/07_drift.md
+- **What it is:** §7 Drift: elastic/plastic Coherence model, point of no return, amorality, what produces drift, phenomenology, propagation, observable bands, reality-strain, Coherence-0 reach-gated trajectories; 497 lines.
+- **Status:** "PROPOSED" (:3). Reading: live reference; the most mechanism-shaped foundations file.
+- **Bears on:** CHAR (practitioner state), DICE (any Coherence/TS track), WR, FA (drift through community), ARCS (Vaynard, Almud, Lenneth arcs at Coherence 0).
+- **Content that matters:**
+  - Coherence is DISTANCE from the human equilibrium, not a depleting store; stress displaces the configuration elastically below a threshold and plastically above it, moving the RESTING POINT; the elastic range is a constant of the being; only events deform (no creep); recovery is return over time conditioned on environmental equilibrium, accelerable by mending; sensitivity accrues from exposure independent of stress (:9-74).
+  - Purpose: "Coherence loss exists to make repeated threadwork expensive"; it must bite and must be answerable (rest and mending) (Ruled 2026-09-08) (:83-99).
+  - Two quantities: resting point (moves by permanent set; returns only by deliberate restorative threadwork aimed at the configuration) vs present displacement (returns with rest); eventual crossing out of the human band: "they became other"; past it, working them back to human is restoring a remembered state, i.e. manipulation (:101-170). A veteran presents further gone under the same load without being more fragile (:143-148).
+  - Drift is amoral not neutral ("being moral requires being human"); drifted beings retain preferences and attachments as post-human sensibilities not boundable by human language; no alignment, corruption track or good-to-evil arc (:172-236).
+  - Propagation through two channels: rendering (presence-based) and knots (relationship-based, distance-independent; exile does not protect kin); exposure is bivalent: sensitivity accrues cumulatively, drift only by event (:288-330).
+  - Observable bands: Stable, Dissonant, Fragmented, Fractured, Coherence failure; "numbers are mechanism and not owned by this document"; bands read present displacement except the last; written from the observer's side (:332-380).
+  - Reality-strain: Coherence-0 deep-reach beings, also every manipulative operation (posit, unresolved) and threadcut beings like Solmund, strain the substrate; Coherence 0 outcomes gated by perceptual reach AT THE MOMENT OF PERMANENT LOSS (freefall / relational persistence / reconstitution / reconstitution-and-strain); it gates self-comprehension as well (Ruled 2026-09-07) (:382-497).
+- **Conflicts / stale:** §7.5's split-load posit vs its rival (all load on practitioner while Coherence remains) flagged unresolved (:409-412). Superseded canon files give numeric TS bands 30/50/70/90 that this file refuses to own; whether any code carries them [UNVERIFIED]. P-11 vs §2.7 scope: restorative ops produce none.
+- **Open items:** "what is owed to a being outside the moral register" deliberately unanswered (:231-232); how much strain remains per operation with Coherence remaining.
+
+### canon/philosophy/08_history.md
+- **What it is:** §8 History as a worked case: the Calamity, what came through, relational lattice, cascading collapse, Gaps, Locked Zones, Solmund, the Church, the prophylaxis, the Church's category error, the betrayal; 410 lines.
+- **Status:** "PROPOSED" (:3). Reading: live reference; resolves the Calamity-mechanism and Church-worship questions.
+- **Bears on:** WR, ARCS, FA (Church, Löwenritter, Einhir politics), CHAR.
+- **Content that matters:**
+  - Ruled 2026-09-07: the Calamity is TENSILE on a holding-against reading; "Catastrophe" usage retired; the "directional inversion mid-execution" account is NOT canon (:13-57). The Einhir held a refined arrangement the configurations did not tend toward; it broke "as a balance" taking every associated configuration with it (:42-57).
+  - Surfeit flooded the opening; forms are explained at §4.6; the claim that threadcut beings came through is struck (:59-83). Cascade is physical, epistemic, temporal, relational (:102-120).
+  - A Gap is an absence where something should be (a standing breach in the boundary or the hole where a configuration was removed); not the same as a Locked Zone (Ruled 2026-09-07) (:122-145). Locked Zone = becoming precluded; persists "in a thousand years"; people inside do not accumulate; substrate-side fact (:147-191).
+  - Ruled 2026-09-07: THE CHURCH'S GOD IS SOLMUND (not the Ein Sof); a category error, not a deception; Solmund ceased the work (no external cause), strained reality throughout, misread as miracle (:229-285). Prophylaxis derivable from what Solmund was (unchanging, all-knowing, determining) (:307-320). The moral question about Solmund is "malformed" (non-human, outside the register) (:352-366).
+  - Church persecutes Wardens (Mending) on the same grounds as manipulative practitioners; sincere but structurally incorrect (:369-392). Northern Einhir betrayal is epistemological as much as political (:394-410).
+- **Conflicts / stale:** `canon/03_canonical_timeline.md` (:22) still says the configuration "inverts"; and `canon/philosophy/08` itself retired the "Catastrophe" name while the timeline's heading is "The Einhir Catastrophe" (:21). Timeline also says Solmund "ministry ~7 years / 12 total" while §8.7 says "active for a generation or less" and the Church takes "two to three centuries" vs the timeline's ~200 years [UNVERIFIED which timing the setting wants]. §8.3 retracted paragraph on "larger vessel".
+- **Open items:** whether Solmund understood what was made of him; whether his presence also catalysed flourishing (:359-364).
+
+### canon/philosophy/09_terminology.md
+- **What it is:** §9: the ontical/substrate/ontological scoping, process-vocabulary discipline, the vocabulary reference table; 127 lines.
+- **Status:** "PROPOSED" (:3). Reading: live reference (vocabulary owner for the suite).
+- **Bears on:** PROCESS, WR, CHAR.
+- **Content that matters:**
+  - Ruled 2026-09-07: re-scope the word; "ontological" reserved for the disclosure register (rendering, layer 2); thread-constitution is called "substrate" (normally inapparent, ontic, not a deeper layer); thread sensitivity has two aspects of one capacity (:27-47).
+  - Process vocabulary: idempotent in meaning, idiomatic in choosing (mirrors CLAUDE.md §4); recorded collisions: Calamity/Catastrophe (standardized: Calamity), retention vs "retention roll" (rename owed), Providence (kept for the mode, retired from the tendency) (:64-86).
+  - Vocabulary reference table: Threads, Rendering, Ein Sof, Configuration, Spooling, Layer 1/2/3, Threadwork, Operation, Threadcut, Coherence (present displacement vs resting point), Drift, Thread Sensitivity, Confrontation, Leap, Knotting, Wrapping, Operation type, Orphaned configuration, Temporal Disjunction, Reality-strain, Equilibrium, futural-potential-legible, Imbrication, Providence, Gap, Locked Zone, Harmony, Apperception, The Real (:90-121).
+- **Conflicts / stale:** the vocabulary re-states other sections (the suite's own rule 4 against restatements, `00_standing.md` §0.2); apperception gloss corrected as Kant's (:123-127).
+- **Open items:** the "retention roll" rename (:79-82).
+
+### canon/philosophy/10_constraints.md
+- **What it is:** the live P-01..P-15 canon-constraint table (regenerated against the suite's numbering) with violation tests; 53 lines.
+- **Status:** "PROPOSED" (:3). Reading: live; this is THE statement of P-01..P-15 that lanes check against (CLAUDE.md names `valoria-canon-guard`).
+- **Bears on:** all subsystems (every design is checked against P-01..P-15), WR, CHAR, DICE, PROCESS.
+- **Content that matters:**
+  - Rules, each with a Ref and a yes/no violation test: P-01 inseparability (:25); P-02 monstrosity is surfeit not evil (:26); P-03 rendering constitutive, corrected to remove "GM is the rendering engine - there is no GM; the engine resolves" (:27); P-04 monstrosity ontological, ground: being moral requires being human (:28); P-05 three modes distinct by layer profile (:29); P-06 threadcut lack layer 1, Coherence does not apply (:30); P-07 the ground has no agency AND spooling has no direction (new clause) (:31); P-08 barrier is inertness not amnesia - "Does any mechanic make non-sensitives forget? -> FAIL" (:32); P-09 memory operations messy, costly, detectable (:33); P-10 Coherence indexes commensurability (:34); P-11 Temporal Disjunction universal across operations, scoped so restorative ops produce none (:35); P-12 drift propagation tridimensional through two channels, knots distance-independent (:36); P-13 ontological knowledge not transmissible as propositional content (:37); P-14 every play mode expresses inseparability (:38); P-15 three-layer persistence, deep vs shallow reach not identical, Leap not uniformly risky (:39).
+  - "Numbers are out": no constraint may name a threshold (:13-15). GD-1..GD-3 and the Level-4 hook table not reproduced (:43-53).
+- **Conflicts / stale:** P-11 text reads "universal across operations. Every operation produces some" and the note scopes it so restorative operations produce none: the headline and its scope disagree within one cell (:35). The older `canon/02_canon_constraints.md` P-08/P-13 "Forgetting" (retention instability) is contradicted. Whether the canon-guard skill (`valoria-canon-guard`) cites the superseded `02_canon_constraints.md` rather than this file [UNVERIFIED; one grep would show].
+- **Open items:** none.
+
