@@ -605,8 +605,9 @@ Nothing in §B2 to §B6 rests on a body listed as not read.
   institutional interface is what lagged (§3.5), is confirmed by the full design set and is B3.3's
   first bullet.
 - *The comparative research's twelve "authored" items* landed as text in documents that are now
-  quarantined; two were ratified (ED-FA-0020; ED-FA-0022 and -0023) and none has code (E-B7). Its own
-  premise correction (the Guild ladder exists) holds.
+  quarantined; two were ratified (ED-FA-0020, ledger row read at E-B7; ED-FA-0022 and -0023, by the
+  status line of `faction_politics_v30` §2.5a, their ledger rows not opened) and none has code. Its
+  own premise correction (the Guild ladder exists) holds.
 - *The FA research lane (2026-10-16)* is stale in five places the tree has since moved: `at_war` "has
   no reader" (it has `enemies_heard`); `covenant` "is not a row" (it is); the goals carrier "is
   absent" (`goals.yaml` exists); `levy` (renamed `requisition`); "a faction cannot raise an army" (the

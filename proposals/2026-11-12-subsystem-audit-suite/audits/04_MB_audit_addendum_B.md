@@ -145,7 +145,7 @@ season's army constructor) and fought by `battle_loop.run_battle(..., max_turns=
 | C-5 | §4.1: the two degree ladders, "[UNVERIFIED: whether a test pins them equal]" | the DICE lane opened it: `tests/valoria/test_degree_ladder_single_owner.py:302-309` sweeps only exactly representable values, and the copies differ at 6 of 10,000 tenth-step cells (`audits/10_DICE_audit.md` F-DICE-07; `proposals/10_DICE_one_roller_one_fraction_rule.md`) | cite, do not redo (§B5.3) |
 | C-6 | §5.2: "a field is graded on the one ladder … acceptable: `field_degree` is one owner" | Layer 1 does not accept it: "a subsystem returning a winner has not met the contract" (`architecture/meta/04_CODE_ARCHITECTURE.md:786`; `03_VERBS_AND_LOOPS.md:286-289`). Combat's read-off-the-scene form is a ruled exemption (`seam/ladder.py:193`, Jordan 2026-09-03); the field has none | F-MB-24; §B11 |
 | C-7 | §1.1: "a cell-based tactical battle simulator on a 51 x 51 field … each cell carrying troops, morale, facing" | true of the engine; on the three season constructors every cell is filled to the cap, so the field is fought by a handful of cells (F-MB-20) | the steelman's item 6 ("rich where history says richness matters") fails further than the first audit found: not only below 100 troops, but at every army size the realm can raise |
-| C-8 | §18.1: Ogre Battle "not sourced as a battle referent" | confirmed by a tree-wide search (§B1.3). More of Bannerlord is sourced than the first audit used: speed against party size **and carried weight**, the result screen, desertion of the unpaid and unfed (`tutorials/T02_warband.md:14-22`, tagged V3 there) | §B4.1, §B5.2 |
+| C-8 | §18.1: Ogre Battle "not sourced as a battle referent" | confirmed by a tree-wide search (§B1.3). More of Bannerlord is sourced than the first audit used: speed against party size **and carried weight**, the result screen, desertion of the unpaid and unfed (`tutorials/T02_warband.md:16-20`, tagged V3 there) | §B4.1, §B5.2 |
 | C-9 | §18.2: `rally_check` "kept as the commander's hook" | agreed, and the archived design gives the hook more than a rally: one general's action a turn out of rally, reinforce Discipline, stabilise, fight in person (`mass_battle_v30.md` §A.7 phase 6 step 4), and `pc_formation_system.md` §7 sets the cadence at 5 to 20 windows a battle | §B4.4 |
 
 ### B2.2 New findings
@@ -495,13 +495,13 @@ itself marks it [M] or the tree has nothing. Shapes are the finding; no figure i
 
 | what the manager does | Football Manager | Unicorn Overlord | Ogre Battle | Total War | Bannerlord | in the code |
 |---|---|---|---|---|---|---|
-| **builds the side from individuals** | squad, roles, duties (sourced, `T16:28-30`) | up to five named characters a squad, a leader whose effect applies to the squad (sourced, `T19:106-115`); grid 2 x 3 (memory) | **memory, unsourced in the tree**: a unit of a few characters in front and rear rows, where a member's row decides what it does | units mustered to a general (sourced, `R6` F1) | troops recruited from notables, upgraded with experience, coin and a horse; companions in four roles (sourced, `R2` F1, A5) | the army Record over cohort headcounts: built, dark. Named persons: weight only (first audit F-MB-14) |
-| **sets instructions in advance** | two shapes, team instructions (sourced) | Tactics: a priority list per character, up to two conditions each; an unconditional entry placed first starves the rest (sourced, `T19:150`) | memory: one tactic a unit (whom to strike) | secret deployment, stances (sourced, `R6` F3) | formations by number key; "your troops do nothing until told" (sourced, `T02:18`) | role, stance, target, one fall-back fraction on the record; the engine's triggers, routes and signals have no carrier (F-MB-26) |
-| **sees a prediction** | — | an outcome prediction in the stage preview (sourced, `T19:96`) | — | projected result at contact (first audit) | — | `field_estimate`, the player's only (first audit §16) |
-| **lets it resolve** | match engine (sourced as a loop; that Instant Result is the same engine is **not established**, `T16:78`) | automatic exchange on contact (sourced) | memory | auto-resolve "compares the statistics of all the units": a second calculation (sourced, `R6` F5) | simulated battles (sourced, `R2` F5) | one engine, one call |
-| **intervenes during play** | shouts, substitutions, change of shape (sourced, `T16:33`) | swap, rest, a Valor skill, deploy another squad (sourced, `T19:99`) | memory: change the tactic, play a card, retreat | real-time orders, pause (pause is memory) | fights in person; orders by key; delegate to a sergeant (sourced, `R2` F4) | nothing (first audit F-MB-15) |
-| **reads why** | ratings, match review (sourced, `T16:34`) | — | — | — | a result screen: kills by unit, upgrades, dead, wounded, routed (sourced, `T02:19`) | a band and, on one arm, one name |
-| **keeps a campaign economy** | wages, contracts, training, familiarity with a tactic (sourced) | Honors buy squad count and size (sourced) | memory | upkeep each turn, replenishment on friendly ground (sourced, `R6` E6, M3) | daily food and wages, then morale loss, then desertion; speed falls with party size and carried weight (sourced, `T02:15-16`) | recruiting by site: built, dark. No wage, no upkeep, no experience, no load (§B5.2) |
+| **builds the side from individuals** | squad, roles, duties (sourced, `T16:22`) | up to five named characters a squad, a leader whose effect applies to the squad (sourced, `T19:104-105`); grid 2 x 3 (memory) | **memory, unsourced in the tree**: a unit of a few characters in front and rear rows, where a member's row decides what it does | units mustered to a general (sourced, `R6` F1) | troops recruited from notables, upgraded with experience, coin and a horse; companions in four roles (sourced, `R2` F1, A5) | the army Record over cohort headcounts: built, dark. Named persons: weight only (first audit F-MB-14) |
+| **sets instructions in advance** | two shapes, team instructions (sourced) | Tactics: a priority list per character, up to two conditions each; an unconditional entry placed first starves the rest (sourced, `T19:146`) | memory: one tactic a unit (whom to strike) | secret deployment, stances (sourced, `R6` F3) | formations by number key; "your troops do nothing until told" (sourced, `T02:19`) | role, stance, target, one fall-back fraction on the record; the engine's triggers, routes and signals have no carrier (F-MB-26) |
+| **sees a prediction** | — | an outcome prediction in the stage preview (sourced, `T19:90`) | — | projected result at contact (first audit) | — | `field_estimate`, the player's only (first audit §16) |
+| **lets it resolve** | match engine (sourced as a loop; that Instant Result is the same engine is **not established**, `T16:79`) | automatic exchange on contact (sourced) | memory | auto-resolve "compares the statistics of all the units": a second calculation (sourced, `R6` F5) | simulated battles (sourced, `R2` F5) | one engine, one call |
+| **intervenes during play** | shouts, substitutions, change of shape (sourced, `T16:24`) | swap, rest, a Valor skill, deploy another squad (sourced, `T19:94`) | memory: change the tactic, play a card, retreat | real-time orders, pause (pause is memory) | fights in person; orders by key; delegate to a sergeant (sourced, `R2` F4) | nothing (first audit F-MB-15) |
+| **reads why** | ratings, match review (sourced, `T16:25`) | — | — | — | a result screen: kills by unit, upgrades, dead, wounded, routed (sourced, `T02:20`) | a band and, on one arm, one name |
+| **keeps a campaign economy** | wages, contracts, training, familiarity with a tactic (sourced) | Honors buy squad count and size (sourced) | memory | upkeep each turn, replenishment on friendly ground (sourced, `R6` E6, M3) | daily food and wages, then morale loss, then desertion; speed falls with party size and carried weight (sourced, `T02:16-17`) | recruiting by site: built, dark. No wage, no upkeep, no experience, no load (§B5.2) |
 
 **A sixth precedent the brief does not name and the corpus rates highest:** Dominions, "the closest
 verified precedent to Valoria's shape (one automatic resolver)" (`D_T04` row 27): army setup, squad
@@ -637,4 +637,143 @@ a decider at windows, a report after; cells and troop rows above the line, perso
 - **E, against that.** One field on the record, one closed set of five actions, one list on the input,
   three kinds of line in the report. What a player can intuit: "they will fall back when a third are
   down" is a rule he wrote.
+
+## B5. Interfaces
+
+Each sibling lane's design is cited, not redone. What is stated here is what mass battle needs across the
+edge and where the sibling's text has to change for the two to meet.
+
+### B5.1 With the personal-combat duel round (`audits/03_PC_audit.md`, `03_PC_audit_addendum_B.md`; `proposals/03_PC_*`)
+
+| edge | PC lane's design | what mass battle needs, or supplies | status |
+|---|---|---|---|
+| a duel inside a field | `03_PC_duel_round_and_approach.md` §5: the field reports a contact between two named persons; the host adapter calls `combat.round`; "one field turn is one duel round"; the field receives `DuelContactResult` | **a named person must be somewhere on the field for a contact to exist.** Today he is nowhere (first audit F-MB-14). With `officer` on the unit row he is *with a unit*; the contact is two officers whose units are in contact at a window. The window, not the tick, is the duel round's clock (two a engagement), which matches the archived cadence: "one mass combat turn = one personal combat exchange", at most five (`scale_transitions_v30.md` §3.7, PP-111) | designed on both sides; needs `officer` (§B3.3) and the window (§B4.4) |
+| what a duel does to the field | "a person's effect on a unit is a fraction of the unit's own cohesion, never a flat amount" (PC §5, from `research/by_lane/PC_personal_combat.md` T-PC-15) | accepted. The carrier already exists: an officer felled or yielded is a morale erosion on his unit through `cascade_morale_hit`, scaled by that unit's own discipline, the form the engine uses for a freed attacker (`orchestration.py`, quoted in the synthesis Part D). No army-wide instant rout: the engine's command-zero rout (`battle_loop.py:411-413`) is the failure shape the corpus warns of (first audit §7) | one line in the manager proposal |
+| squads | PC §5.1: a squad exchange is pairings of duel rounds; `StandingOrder` rows; "its owner is the lane that owns squads and orders (MB…)" | owned here: `proposals/04_MB_squad_grid_of_named_characters.md` (§B4.6). Pairing is the host's policy; combat is unchanged | proposal |
+| the carry rule | `03_PC_loadout_and_carry.md`: `carry_demand(weapons: tuple, armour: str)`, reading keys of personal combat's export | **the keyed form cannot serve a troop**, whose primary may be a bow or a pike that the roster lacks (C-3). Needed: the same leaf exposes the mass form, `carry_demand_of(masses: tuple, armour: str)`, which the keyed form calls. One rule, two spellings of its argument; no second function | a one-line amendment the PC lane owns; stated in the `_B` proposal |
+| the weapon in hand | PC: `DuelState.in_hand`; `switch` costs the next action's readiness; an NPC's trigger reads `close_unwieldiness` | the unit's form: `Subunit.in_hand`; the switch costs a tick; triggers `enemy_range`, `flanked`, `volleys_spent`. Same state name, same "costs the next action" rule at both scales (NERS-S) | consistent |
+| the approach | PC: `aggressive`, `normal`, `defensive` per round, calibrated so "no approach beats `normal` … and each approach beats one other in some matchup" | the first audit proposed one roster for both scales. **Not yet:** the unit-scale stance fails exactly the PC lane's bar (F-MB-21). Share the *bar*, not the roster, until the stance passes it | corrected |
+| the grid | PC §6 item 2: the requirements row's "grid-based map combat with units" is read two ways (mass battle's cell field; a tactics grid of individuals) | both exist as different things: the cell field (this subsystem) and the squad grid (§B4.6). The requirements row should name which it counts | cross-listed; CORE's row |
+
+### B5.2 With the campaign layer (`audits/06_FA_audit.md`, `07_SE_audit.md`; their addenda were being written and held no mass-battle section when read)
+
+| what a field needs from the campaign | reading in the sibling audit | reading here | owner |
+|---|---|---|---|
+| a reason for a war and a commander who marches | FA F-FA-03: 26 of 33 seats may `march`; the marchers at seed 0 were a treasurer, a legal advisor, a guild representative and a skald. F-FA-04: "war has no producer and draws no response" | confirms the first audit's F-MB-03 from the other side: the army's holder is its commander (`effects_army.py`), and nothing ties `march` to holding one. Once armies exist, `march` with an army should require its holder; that is FA's grant-by-row (`proposals/06_FA_remit_grant_by_row.md`) | FA |
+| training sites | SE: site kinds `barracks`, `archery_range`, `stable`, `siege_workshop` exist with counts of 0 (`rosters.yaml:1913-1946`) | the realm has **venues** named barracks (`engine/season/npcs.yaml:114`, `b_s_014_barracks`) and no **Site** of kind `barracks`: two things with one name, and only the second trains troops. The first audit's R-07 (plant a training Site at each seat) should plant them where the venues already are | SE (data) |
+| supply | SE: `settlements.provision` built, shipped off; R-SE-22: its ration is a minimum over every eaten kind | unchanged; the Bannerlord shape (unfed, then demoralised, then deserting) needs only the middle link here: a field whose provision bounded its troops starts at a lower morale, by the stance row that already feeds morale-start | SE flips; MB reads |
+| upkeep and desertion | FA H-158: "no computed act pays upkeep" | the archived design has the rule (unpaid professionals lose Discipline each season; levy unaffected: `military_layer_v30.md` §1.7). No carrier exists. Proposed as an `upkeep` column on the troop row and one consequence, in `proposals/04_MB_campaign_party_economy.md`; who pays and from what is FA's and SE's | MB datum; FA, SE acts |
+| veterancy | not in either audit | the archived design's Experience (Fresh, Seasoned, Veteran; +1 Power a step; lost when the unit is destroyed, `military_layer_v30.md` §1.6) and Bannerlord's tiers are the same shape. Carrier: `experience` on the unit row, written by `_eff_march` | MB |
+| the cost of a heavy army on the march | — | sourced shape (Bannerlord: speed falls with size and carried weight). **No march clock exists to slow** (a `march` resolves in the round it is declared, `ED-IN-0301`), so the carry cost cannot bite at campaign scale today. Named, not built: it needs CORE's travel time first | CORE, then MB |
+| captives | first audit §5.5 | unchanged; the squad proposal's outcome names the fallen persons, which is what a `capture` act needs | PC |
+
+### B5.3 With the shared roller (`audits/10_DICE_audit.md` F-DICE-07, F-DICE-08; `proposals/10_DICE_one_roller_one_fraction_rule.md`)
+
+The DICE lane's proposal is accepted as written: mass battle's `roll_pool`, `roll_pool_fractional`,
+`compute_degree` and its sigma functions become calls to the dice engine, with the tolerance moved to the
+owner. Three notes from this side.
+
+1. **It is the first `engine` import in the module.** `modules/mass_battle/` imports nothing from
+   `engine.*` today; the other two registered modules already import the dice engine
+   (`modules/combat/core.py:20-21`, `modules/social_contest/roll.py:60`, as the DICE audit cites). That
+   settles the first audit's open question in §15 for an engine leaf. It does not settle module-to-module
+   import, which the squad grid avoids by going through the composition role.
+2. **Order of landing.** The DICE gate is "mass-battle goldens and the season hash byte-equal". The
+   arrangement change (§B3.4) and the first audit's scale and grade change both move every fought field.
+   DICE's edit should land first, against today's goldens, so that its byte-equality can be read.
+3. **The fractional die and one-cell bodies.** `roll_pool_fractional` is reached twice a fought field
+   (DICE audit). At today's one-to-four-cell bodies a single pair roll decides a body's tick; at
+   calibrated bodies many pairs do. The fraction rule's variance matters more on today's bodies than it
+   will after §B3.4; a calibration made before the arrangement change will not carry over it.
+
+### B5.4 Jordan's stated intent against ratified Layer 1: what each requires, and whether they reconcile
+
+Two Layer 1 rules bear on the intent. Both passages were opened at the lines given. Layer 1 is not edited
+by this lane; where a Layer 1 file needs a change, it is named with its owner.
+
+**(a) "No second resolver. No auto-resolve formula. No fast path."**
+
+| | text | at |
+|---|---|---|
+| Layer 1 | "**No second resolver. No auto-resolve formula. No fast path.**" and: "THIS IS THE REFUSAL WITH NEITHER A MECHANISM NOR A CHEAP TEST. It is enforced by a person noticing." | `architecture/holonic_ARCHITECTURE.md:984-990` (§27.2) |
+| Layer 1 | "A scene is a slice whatever depth it is played at: summarised in a line, narrated, or expanded into its own contest … If a played scene and a summarised one were different objects, they would need to agree *on average* — which is the twenty-year complaint against every auto-resolve in the genre. **They agree exactly, because they are the same slice.**" | `architecture/meta/03_VERBS_AND_LOOPS.md:146-153` (§C.4) |
+| Layer 1 | "no second resolver … CONVENTION" | `04_CODE_ARCHITECTURE.md:761`, `:788` |
+| Jordan, 2026-11-12 | "the choice to **fight a battle or auto-resolve it**, with the two kept consistent" (Total War); "the player may **command, join or auto-resolve**" (Bannerlord); "**resolved automatically** while the player manages the composition and the orders" (Ogre Battle, Unicorn Overlord); and: "**One path.** The cell-level battle that a player commands and the auto-resolved battle … must run the same cell-based resolver" | `AUDIT_BRIEF.md:245-246`, `:311-326` |
+
+*What each side requires.* Layer 1 requires that there be one function that decides a field, at every
+depth, and that a shallower rendering be the same slice, not an estimate of it. Jordan requires that a
+battle can be left to resolve itself and can be commanded, and that the two be consistent.
+
+*Reconcilable without breaking the rule?* **Yes, completely, and Jordan's own "one path" sentence is the
+reconciliation.** "Auto-resolve" names who supplies the decisions, never a formula: the delegated battle
+is `resolve_field` with every decision supplied in advance (standing orders, or a chooser); the commanded
+battle is the same call with a decider at windows. §B4.4's three conditions are what make that "the same
+slice" in Layer 1's sense: one entry, a decider that draws nothing, and a recorded command list under
+which the delegated call returns the identical outcome. The third is the part Layer 1 asks for and the
+genre does not have.
+
+*What Layer 1 forbids that the referents themselves do.* Total War's auto-resolve "compares the statistics
+of all the units" (`R6` F5): a second calculation, the exact thing §C.4 calls the genre's complaint. If the
+referent is read for that shape and not for the choice it offers the player, the intent contradicts
+§27.2 and cannot be reconciled. That reading is put in §B11 with its two options; this lane's reading is
+that the brief excludes it.
+
+*Where the code is on the wrong side of the rule today.*
+
+1. `run_multi_turn_battle` and `run_multi_unit_battle` in the registered tree are a second resolution
+   path with rules the first has not (pursuit by a linear damage form, freed-attacker damage, rally,
+   reserve commitment), and the interactive workbench plays that one by default. The first audit's F-MB-05
+   and R-05 are therefore Layer 1 conformance, not only tidiness.
+2. `field_estimate` is conformant: it is samples of the one resolver on a private stream. The pressure
+   on it is real, though: at about 20 ms a field of 600 a side, 400 samples is some eight seconds, and
+   more after §B3.4. The conformant answers are fewer samples, a cache keyed on the frozen input, or a
+   coarser display; a closed-form estimate would be the auto-resolve formula under another name. Named
+   here because §27.2 says of itself that only a person noticing enforces it.
+3. `_grade`'s four-way label on survivor thresholds is a second ladder (DICE audit, resolution 22). It
+   has no reader; the first audit's R-03 deletes it.
+
+**(b) "Units are persons, at weight. One type; there is no unit class."**
+
+| | text | at |
+|---|---|---|
+| Layer 1 | "**units** — persons, at weight. One type; there is no unit class" · "One scale down, unchanged: a squad is the members of a faction present at a rung, resolved once, every combatant a `Person`." | `03_VERBS_AND_LOOPS.md:258-270` (§E.2.1); the same row at `10_FACTIONS_AND_DEPLOYMENT.md:89`, `:97` |
+| Layer 1 | "`units = PersonId[] at weight` — one type. There is NO unit class, at any scale" | `04_CODE_ARCHITECTURE.md:802` (§C.5.1) |
+| Layer 1, amended | "**AMENDED BY ED-IN-0306 (Jordan, 2026-10-28), for armies only.** An army is no longer only `PersonId[] at weight`: a faction's order of battle (formations, subformations, troop-type assignments, tactic, strategy) is a typed record the season loop reads. The freeze above is unchanged" | `04_CODE_ARCHITECTURE.md:813`; ledger `registers/editorial_ledger_in.jsonl:88` ("This overturns the part of … section C.5.1 … for armies") |
+| Jordan, 2026-11-12 | "army → unit → subformation → troops", each unit with "its own subformation and its own troop types"; from Ogre Battle and Unicorn Overlord, "units are small squads of named, distinct characters" | `AUDIT_BRIEF.md:220-230`, `:311-315` |
+
+*What each side requires.* Layer 1 requires that the season hold no unit object: sides are faction
+views, combatants are persons, and (since the amendment) an army's composition is a typed record frozen
+with the sides. Jordan requires a nested battlefield structure with designer-editable troop types and
+loadouts, and squads of named characters.
+
+*Reconcilable without breaking the rule?* **Yes, on the amended text, in three parts.**
+
+1. *In season state a unit is a row, not a class.* The army is a `Record`; its unit rows name cohort
+   `Person`s and headcounts (`armyrecord.py:13-19`). Everything proposed here adds optional columns to
+   that row (post, ranks, secondary, standing orders, officer, experience) and tables to a data file.
+   No new kind of thing enters the `World`, nothing but a person acts, and the amendment's own list
+   ("formations, subformations, troop-type assignments, tactic, strategy") covers each column but
+   `experience`, which is a fact about the record's own row and is written only by `_eff_march`.
+2. *Inside the module, `Unit` and `Subunit` are values built from the frozen input and discarded at
+   return.* The roster contract governs what the seam is handed ("what it actually forbids: handing the
+   wrapper anything that is not the projection", `04:806-809`), not the resolver's internals.
+3. *The squad of named characters is the un-amended rule, not an exception to it.* "Every combatant a
+   `Person`" is exactly Ogre Battle's and Unicorn Overlord's squad. That is why §B4.6 puts it on the duel
+   round and not in cells: built as a mass-battle unit it would be the unit class the rule refuses.
+
+*What does not reconcile, and is not proposed.* A unit as a first-class thing with identity in the world
+(something a person can hold a claim about, name, remember, swear to): ARC-07's "condition on a unit" asks
+for it, and the first audit re-read that need as claims in the men's ledgers for this reason. It would
+need a further amendment of §C.5.1. Listed in §B11 as the named conflict.
+
+*An inconsistency inside Layer 1, named at the site.* `03_VERBS_AND_LOOPS.md:261` and
+`10_FACTIONS_AND_DEPLOYMENT.md:89` state the rule without the amendment that `04:813` carries. Two rows
+decide one thing differently; the later ruled row governs (ED-IN-0306). The pointer edit to those two
+files is IN's (R-38); it needs no ruling, since the ruling exists.
+
+**(c) The one true non-conformance found on the way: the field returns a winner** (F-MB-24). Layer 1 asks
+for a margin graded on the one ladder (`04:774-786`, `:1050`; `03:273-289`); the field returns a winner
+and the host mints two bands from it. This is not a conflict between Jordan's intent and Layer 1; it is
+code against Layer 1, and by `CLAUDE.md` §0.05 the code changes. How it changes has two defensible forms
+(§B11 item 3).
 

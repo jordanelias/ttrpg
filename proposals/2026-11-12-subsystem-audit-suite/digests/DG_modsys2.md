@@ -268,4 +268,201 @@ Lane: code under `modules/mass_battle/`, `systems/` and `engine/`-adjacent oracl
 - **Conflicts / stale:** `WILSON_Z = 1.96` re-declared at `:31` with the comment "same constant balance.py imports" (a third copy of the method constant, with balance.py's import and server.py's `_wilson`).
 - **Open items:** "bounding skills" (character-gen/economy job) is still unowned.
 
+### systems/combat/combat_engine_v1/workbench/calibrate_generics.py
+- **What it is:** PC dev tooling, 403 lines; calibration instrument for the PC-17 GENERIC lever abilities (ED-PC-0059 item 7): per-cell fights, controls, and a pre-declared PASS/INCONCLUSIVE/FAIL analysis.
+- **Status:** none (code); header: "re-run it now that CR-85 has replaced `history` with `faculty` and deleted its five sigma terms (the plan's PC-17 RE-BASE), and read its limits in ED-PC-0059 before quoting a number" (`:10-11`), i.e. its recorded numbers are acknowledged stale.
+- **Bears on:** PC, DICE
+- **Content that matters:**
+  - Defines the ability-lever structure as three parallel tuples: `LEVERS` (`visual, precommit, tactile, tempo, balance, edge_read, choke_control`), `STEMS` (`keen_eye, reading_intent, blade_feel, timing, footing, hidden_return, quiet_gather`), `TIERS` (`basic, practiced, refined`) (`:21-23`) = 21 generic abilities named `{stem}_{tier}`, taught by a Latin square over the 7 traditions: `teaching_tradition` = `trads[(lever_idx - tier_idx) % 7]` (`:44-46`). Asserted against `AP.ABILITIES[name]['lever'/'tradition']` at run time (`:71-73`): the data lives in `modules/combat/ability_primitives.py`; this file re-derives it (a second statement of the Latin square). Matches F-PC-09 "30 abilities of which 21 are generic calibration instruments".
+  - `BUILD` fixes one (weapon, armour) per lever (`:25-29`; e.g. `choke_control` on poleaxe, `edge_read` on longsword); `KZERO` lists the CFG constants zeroed for the null control (`:31-41`). Control kinds: `main`, `k0`, `k0b`, `mirror`. Discovery recorded in the header: a first run's K-zero control did not null because `LEGIB_SWING_ROOM_K` is a module-level constant outside `CFG` (`:9-10`, `:80-82`) (supports F-PC-10: constants outside the config surface).
+  - Method is rigorous: cluster-ratio Wilson with `n_eff = p(1-p)/Var`, Newcombe CI on differences, pre-declared MONOTONE / WRONG SIGN / CLIFF / DETECTABLE rules set "before the n=10000 run was read" (`:222-235`).
+  - It monkey-patches `S.read_contest`, `S.bind_sigma`, `wrapper._TRACE` and restores them in `finally` (`:115`, `:143`); equipped abilities reach the combatant via `build_levers.build()` forwarding `equipped=` (`:3`).
+  - About 12 minutes on 4 cores at n=10000; output is a JSONL file the caller names; nothing committed.
+- **Conflicts / stale:** `setup(repo)` inserts paths and rebinds module globals (`global BL, wrapper, S, CFG, AP, TRADS`) on every `run_cell` call (`:49-59`, `:68`), a packaging smell (F-PC-11). The three `sys.path.insert` lines use the post-`31b` layout, so the file is current in paths; its numbers are not (header).
+- **Open items:** Re-run after CR-85 (the file says so itself); nothing in the tree records that it was.
+
+### systems/combat/combat_engine_v1/workbench/catalogue.py
+- **What it is:** PC dev tooling, 301 lines; generated value + mechanics catalogue: every per-weapon derived quantity over the startable roster against a neutral fighter, the head x armour coupling matrix, constants and the CFG surface.
+- **Status:** none (code); output header says "GENERATED - do not hand-edit".
+- **Bears on:** PC, DICE
+- **Content that matters:**
+  - `QUANTITIES` (`:88-142`) is a hand-listed registry of 52 per-weapon derivations in four layers: L0 stored (`hands, mass, head_len, grip_len, head`), L1 `geometry.bake` (`curvature, point_concentration, cross_section, edge_keenness, cut, thrust, gap, halfsword`), L2 `weapon_physics` (`heft, agility, percussion_authority, puncture_pressure, handling, hand_guard, blade_guard, spine, edge_lines, grab_hazard, edge_vibration, distraction, facing_pref, hilt_mass, ... defense_affinities`), L3 `combat_systems` (`reach_base, wield_heft, weapon_tempo, close_tempo, leverage, recoverability, lunge_quality, str_demand, ...`). This is the best single map of the weapon structure in PC: a weapon record is `hands, mass, head_len, grip_len, head, geometry` and everything else is derived. It tells the kit/weapon audit that a "weapon" has no authored per-weapon capability list beyond those stored primitives.
+  - `PAIRWISE` (35 functions) and `FIGHTER_ONLY` (20) are hand-listed lists of engine functions with no per-weapon value (`:145-161`): both are import-time references to `S.*`/`core.*` symbols, so a renamed function breaks the catalogue at import (a drift alarm, not a guard).
+  - The neutral fighter is `attributes.DEFAULT`, no skills, no tradition, light armour (`:20-22`, `:48`); every value is "this weapon in a neutral hand".
+  - `coupling_matrix()` documents the A7 finding that native cut tokens return an IDENTICAL coupling for every weapon at a tier because `core.coupling` ignores `eff` for `straight_cut`/`curved_cut` (`:190-194`).
+  - Constants half prints `core.HEAD_MODE, DELIVERY, RESIST, TIER2MAT, GAP_EXPOSURE, PEN_THR, QUAL, COVERAGE_GAP, ...` and the whole `CFG` (`:244-265`); the CFG count is printed, not asserted.
+- **Conflicts / stale:** It imports `capabilities as CAP` (`:42`), so the capability table and the catalogue are coupled; generated output is not stored in the repo (no committed catalogue file found in this lane). The header (`:1-22`) states the principle "the catalogue is a QUERY ... cannot drift from the code" which is the CLAUDE.md 0.05 shape done right.
+- **Open items:** none stated.
+
+### systems/combat/combat_engine_v1/workbench/commentary.py
+- **What it is:** PC dev tooling, 210 lines; sports-commentator transcript of a traced fight with the mechanics underneath each beat (WS-6).
+- **Status:** none (code). Presentation of oracle output.
+- **Bears on:** PC, GO
+- **Content that matters:**
+  - Maps the engine event stream to prose through hand-written tables: `COMMIT_LINE`, `COMMIT_MECH`, `MODE_LINE`, `DEG_LINE`, and `_commit_band(commit)` with hard-coded edges 2.75 / 3.5 / 4.25 (`:15-32`) (the band edges also appear in `probabilities.beta_band_probs` as 0.25/0.5/0.75 of a `2 + 3*Beta` draw: two statements of one bucketing).
+  - Gap: the `separation` reasons table lists `collapse, burst_ceiling, clean_defence, beat_exhaustion` and omits `terms` (`:95-98`) although `state_graph.SEPARATION_REASONS` includes `terms`; a duel-terms separation falls to the default "they separate".
+  - Hard-coded prose facts: "a 5% upset chance is always live" (`:108`; `UPSET_FLOOR=0.05`, `config.py:305`) and "12 turns elapsed" (`:111`; `max_bouts=12`, `wrapper.py:555`) are literals in text rather than reads of the owners.
+  - The beat call weaves commit-depth -> read -> mode -> roll -> outcome (`:115-174`) and attaches `branches` (distribution at each node) from `probabilities.py`: this is the only existing "explain the odds to the player" surface for personal combat; it consumes events, so it is a lead for the GO/UI "explain" surface (F-DICE-14 chooser odds).
+- **Conflicts / stale:** The two literals above can drift from `config.py` and `wrapper.py`. Fighters named in the self-test (`Bryn`, `Halla`) are demo data.
+- **Open items:** The player-facing rendition of a fight (this is the only legible one) is not wired to any season output.
+
+### systems/combat/combat_engine_v1/workbench/narrate.py
+- **What it is:** PC dev tooling, 114 lines; beat-by-beat narration of one traced fight with alternate-branch odds; "text backbone the visual workbench renders".
+- **Status:** none (code).
+- **Bears on:** PC, GO
+- **Content that matters:**
+  - A second narrator beside `commentary.py` (the first is play-by-play with mechanics; this is a terser trace with odds): both consume the same event stream and both call `probabilities`. Two renderers of one stream, each with its own event-kind switch (`commentary.commentate` and `narrate.render`), so a new event kind (`yield`, `withdraw`, `contact`, `disengage`, `wound`) must be added in both; neither handles `yield`, `withdraw`, `contact` or `disengage` events (`narrate.py:39-99`, `commentary.py:55-111`) `[verified by reading both switches]`. The engine has them (`state_graph.TRACE_KINDS`).
+  - Banner "n = 1 - ONE OUTCOME, NOT A PROBABILITY" (`:13`) is the honest-instrument convention.
+- **Conflicts / stale:** Header says it runs as `python -m workbench.narrate (from the engine dir)`; the engine dir is no longer where the code is (31b), so that invocation is stale `[UNVERIFIED]`.
+- **Open items:** none stated.
+
+### systems/combat/combat_engine_v1/workbench/presets.py
+- **What it is:** PC dev tooling, 104 lines; the class-aware tuning surface for the workbench (A canonical read-only, B sim-seed, C tunable CFG, M method) and scratch overlays that never write canon.
+- **Status:** none (code).
+- **Bears on:** PC, DICE
+- **Content that matters:**
+  - `param_surface()` returns four classes: A from `m1_dice_sigma_core` (`PER_DIE[7]`, `TN_STANDARD`) and `r8_parity_harness` (`ATTR_AVG`, `ATTR_MAX`, `EXPECTED_BUDGET`); B from `m1` `LEVEL_SIGMA` (`minor/moderate/strong/major`), `M_MAX`, `SIGMA_N_COEFF`; C = every numeric `config.CFG` entry; M = statistics (trials, Wilson z, band). The dice constants are read from the frozen `tests/sim/v32-combat-balance` harness (`m1`), not from `engine/dice_engine`: the workbench's idea of the canonical d10 numbers is a second owner (cf. F-DICE-05 two samplers, F-DICE-09 typed layer omits dice facts).
+  - `effective_cfg(overrides)` deep-copies `CFG` and REJECTS unknown keys ("a typo, not a new mechanic"); `promote_diff` renders a patch + ledger stub and writes nothing; `save_scratch` writes JSON to `workbench/presets/` (directory not present in the tree).
+  - The `_PRESET_DIR` is created on demand; no presets are committed (verified: `ls workbench` shows `data/`, `static/` only).
+- **Conflicts / stale:** Depends on the frozen `tests/sim/v32-combat-balance` directory (declared "BY DESIGN" at `:19`).
+- **Open items:** none stated.
+
+### systems/combat/combat_engine_v1/workbench/probabilities.py
+- **What it is:** PC dev tooling, 129 lines; branch-probability math for the narrator: degree distribution of one roll, outcome map from degree and mode, commit-band probabilities, per-node distributions.
+- **Status:** none (code).
+- **Bears on:** PC, DICE
+- **Content that matters:**
+  - `degree_distribution(pool, net_sigma, ob)` reconstructs the continuous engine: `net ~ Normal(mu*pool + soft_cap(net_sigma)*sigma_n(pool), sigma_n(pool))`, `sigma_n = 0.8*sqrt(pool)`, banded at `core.band_floor(band, ob)` (`:30-50`). It reads `core.band_floor` (the owner) but gets `mu` and `sigma_n` from `m1_dice_sigma_core` (frozen harness): a copy of the sampler model beside `engine/dice_engine` (F-DICE-05/07). Its falsifier is `tests/valoria/test_combat_ob_from_defender_consumers.py` (`:13-15`).
+  - `outcome_distribution(degree, mode, cfg)` re-implements the wrapper outcome mapping (`wrapper.py:173-198`) from CFG constants (`NEUTRALIZE_PARRY/DODGE/WIND`, `RIPOSTE_CAP`, `RIPOSTE_ON_FAIL`, `PARTIAL_*_GRAZE`, `WIND_BIND_P`, `NEUTRALIZE_OVERWHELM_DROP`) (`:53-80`): a second statement of the outcome rules, and it ignores `exposure` (default 0.0) so the displayed odds are not the engine's for an over-committed attacker.
+  - `beta_band_probs(a,b)` integrates the `commit = 2 + 3*Beta(a,b)` draw numerically with numpy (`:90-101`); the draw form is another second statement of `commit_depth`.
+  - `node_distribution(ev)` covers `commit, read, roll, stophit, approach` only (`:104-118`).
+- **Conflicts / stale:** Line reference `wrapper.py:173-198` in the docstring is a drifting citation `[UNVERIFIED whether still accurate]`. Uses numpy inside a module whose docstring elsewhere says the kernel is "numpy-free since ED-1085" (the engine is numpy-free; this tool is not).
+- **Open items:** none stated.
+
+### systems/combat/combat_engine_v1/workbench/server.py
+- **What it is:** PC dev tooling, 143 lines; a stdlib HTTP server for the Combat Workbench (`/api/trace`, `/api/montecarlo`, `/api/promote`, `/api/save_preset`, `/api/params`), serving `static/index.html`.
+- **Status:** none (code).
+- **Bears on:** PC, GO
+- **Content that matters:**
+  - Builds a fighter from `{label, attrs per attributes.KEYS, weapon, armor, tradition}` only (`_make_fighter`, `:32-36`): no skills, equipped abilities or cross-training reach the UI, so the workbench GUI cannot express the build surface `build_levers.py` measures.
+  - `_wilson` is re-declared here (`:39-46`), identical in form to `balance._wilson` and `build_levers._wilson` and `calibrate_generics.wilson_wins`: four copies of one interval (confirms the PC audit §4 note about `_wilson` in both server.py and balance.py).
+  - Montecarlo is position-swapped (`:65-89`); binds to 127.0.0.1:8765; no auth; dev only.
+- **Conflicts / stale:** `from trace import run_traced_fight` shadows the stdlib `trace` module once this directory is on `sys.path` (F-PC-11 names exactly this).
+- **Open items:** none stated.
+
+### systems/combat/combat_engine_v1/workbench/structure_scan.py
+- **What it is:** PC dev tooling AND a CI guard dependency, 270 lines; AST structural-debt scan of the combat engine: duplicate definitions, zero-caller functions, magic numbers, repeated domain strings, module shape, sys.path inserts, and dead exported keys.
+- **Status:** none (code); "IMPORTABLE (ED-PC-0042): the analysis runs at import; only the REPORT is under __main__".
+- **Bears on:** PC, GO (export), PROCESS
+- **Content that matters:**
+  - Section [H] `dead_exported_keys()` (`:214-218`) compares the typed export `engine/engine_params/combat_engine_v1.json` (sections `cfg`, `core`) with an AST-derived read set of the engine package and returns exported params with no live reader. `tests/valoria/test_combat_invariants.py:59-66,test_no_dead_exported_engine_params` imports it: this is a CLAUDE.md 0.1 pt 5 load-bearing guard (crosses into the exported params). It excludes the workbench as a reader on purpose.
+  - Reads `vocabulary.GUARDED_TOKENS` (the owner) rather than re-listing the 18 tokens (`:133-135`). `zero_caller_functions()` is lazy (about 20 s) and "text-matched, a CANDIDATE list" with two prior false positives recorded (`WoundTracker`, `can_choke`) (`:59-110`).
+  - Shape reading: [C] counts inline numeric literals except `{0,1,2,0.0,1.0,0.5,2.0,3,100,-1}`; [D] vocabulary tokens; [G] counts `sys.path.insert` across engine and workbench files; so the file is the instrument behind F-PC-10 (18 constants outside the export) and F-PC-11 (sys.path smell) `[counts not re-run here]`.
+  - Importing it at module scope parses every `.py` in `modules/combat` + `combat_engine_v1` + `workbench` (`:18-35`): import cost is paid by the shipping gate.
+- **Conflicts / stale:** Docstring on `sys.path` says the import cost was the cause of making section B lazy. Lives under `systems/` while being consumed by `tests/valoria/` as a code import (a test imports a `systems/` dev script).
+- **Open items:** none stated.
+
+### systems/combat/combat_engine_v1/workbench/trace.py
+- **What it is:** PC dev tooling, 27 lines; runs one fight with `wrapper._TRACE` set and returns `(result, events)`.
+- **Status:** none (code).
+- **Bears on:** PC
+- **Content that matters:**
+  - `run_traced_fight(A, B, cfg=None, seed=0, max_bouts=12, **fight_kw)`: sets `wrapper._TRACE = events.append`, seeds a stdlib `random.Random(seed)`, restores `_TRACE` in `finally` (`:14-27`). The only trace seam; used by `state_graph.py`, `commentary.py`, `narrate.py`, `server.py` and `armour_participation.py`/`calibrate_generics.py` use `_TRACE` directly. Passes `terms=`, `decide=`, `yield_decl=` to `wrapper.fight`, the only entry showing the fight can take a decider and a Yield.
+  - Module-global `wrapper._TRACE` is held state set and restored around calls: not re-entrant across threads (the server is `ThreadingHTTPServer`: concurrent `/api/trace` calls would race on `_TRACE`; the docstring says "so concurrent callers are unaffected", which holds only for sequential restore) `[reasoned, not run]`.
+- **Conflicts / stale:** The filename `trace.py` shadows stdlib `trace` (F-PC-11).
+- **Open items:** none stated.
+
+### systems/mass_battle/sim/altonian_reinforcements.py
+- **What it is:** oracle stub, 21 lines; one function that raises `NotImplementedError`.
+- **Status:** `[PROVISIONAL - Pass 2l armature stub 2026-05-17 (Pass 2e canon authoring pending faction contamination audit. Jordan 2026-05-17: "choice lock" ...)]`. Dead.
+- **Bears on:** MB, FA (Hafenmark faction ability), PROCESS.
+- **Content that matters:**
+  - `invoke_altonian_reinforcements(world: GameState)` raises `NotImplementedError` (`:20-21`); `GameState` is an undefined name (annotation is a string only because of `from __future__ import annotations`). Dependencies listed (`sim/autoload/dice_engine`, `sim/peninsular/ip_track`) no longer exist (`ip_track` retired at plan 29a).
+  - The only recorded design fact: Jordan 2026-05-17 "choice lock": once invoked, Hafenmark Standing with the other parliamentaries is permanently locked at <= +1 (`:5`). Nothing implements it.
+  - Verified by grep earlier: imported by nothing (F-MB-10 names it).
+- **Conflicts / stale:** canon source paths `designs/audit/...` and `designs/provincial/altonian_reinforcements_v30.md` are dissolved paths.
+- **Open items:** the "choice lock" mechanism is an unbuilt design commitment (a faction-ability that costs relationship permanently); F-MB-10 recommends deletion with a `FORK:` row.
+
+### systems/mass_battle/sim/engine.py
+- **What it is:** oracle code, 303 lines; "public API wrapper for the mass-battle engine": star-re-exports the whole `modules/mass_battle` namespace, a `MECHANICS` registry with a self-test, and the oracle builders `build_unit`, `build_envelopment`, `build_refused_flank`, `resolve_battle`.
+- **Status:** none (code). Oracle/gauge-facing (`bat.py`, `stress.py`, validators); `engine/season` uses `modules/mass_battle/armies.py` / `orderofbattle.py` instead.
+- **Bears on:** MB.
+- **Content that matters:**
+  - `MECHANICS` (`:41-77`): 31 registered mechanics, each `{fn, toggle, source, status}` with every status `WIRED`; `mechanics_selftest()` asserts each `fn` resolves to a symbol in the module list (`:79-82`). It checks that a name exists, not that it is called: `pursuit`, `recall`, `morale_cascade`, `multi_turn`, `between_turn_recovery` are all "WIRED" here while the season battle never reaches them (see orchestration.py entry). Registry `source` strings cite `mass_battle_v30 section ...` and `audit/lane-c/...` (prose as provenance).
+  - `build_unit` (`:90-124`) builds a single-subunit `Unit` with `troop_type='infantry'` default and derives `unit_type` from `unit_type_for(troop_type)` via the loadout (Jordan 2026-07-02: "Ranged is troop type as per the weapon assigned to troop", `:104-110`): the only place weapon assignment affects behaviour is melee/ranged. Stats `power=4, command=4, discipline=5, morale=6, dr=1` are hard-coded defaults tagged `[canonical: sim_mb_06_v9_historical_spec.md ...]` (a baseline T3 stat line repeated in four signatures).
+  - `build_envelopment` (`:127-221`) and `build_refused_flank` (`:224-281`) are unit-level posture presets (Cannae, Leuctra/Leuthen) composed from `build_army` + timed `Order` queues: `release_tick=4` (CALIBRATED-DEBT), `refuse_range=10` (fixed by measurement after a prior default of 3 never fired because the geometry made it unsatisfiable, ED-MB-0041 FIX, `:225-231`), `APEX=2`, `ENVELOP_WING_GAP`, `REFUSE_ECHELON`. These are the only authored "formation" structures: a spec is a dict `{shape, troop_type, tier, starting_position, role, instructions, stance, orders...}`. `Horseshoe`/`RefusedFlank` shapes are retired (LC-8; Jordan "those are emergent outcomes", `:147`).
+  - `resolve_battle(kind='single'|'multi'|'multi_unit')` routes to `run_battle` / `run_multi_turn_battle` / `run_multi_unit_battle` (`:284-297`): the oracle's three battle shapes; the season uses none of the last two.
+  - Final `__all__` is computed from the union of module `__all__`s (`:302-303`), so adding a name anywhere exports it.
+- **Reads / readers:** `systems/mass_battle/sim/bat.py`, `stress.py`, `validators.py`, `workbench/*`, `test_persubunit_stress.py` import it (`from systems.mass_battle.sim.engine import *`); the walkthrough uses `orderofbattle.build_unit` instead. `engine/season` does not.
+- **Conflicts / stale:** docstring mentions "the sim_mb_sigma.py shim" (not in the tree `[UNVERIFIED]`); `build_unit` parameter comment `speed='Standard'` feeds only the pursuit path the season never runs.
+- **Open items:** none stated.
+
+### systems/mass_battle/sim/walkthrough.py
+- **What it is:** oracle harness, 56 lines unread of 257 (read in full); runs the example battle behind the mass battle walkthrough page and rebuilds the page from `walkthrough_template.html`.
+- **Status:** none (code); declares itself "Reference only, not a source of any value (CLAUDE.md section 0.05)".
+- **Bears on:** MB, GO (page as a presentation of tick state), PROCESS.
+- **Content that matters:**
+  - It fights two `OrderOfBattle`s (`Subformation(name, troop_type, troops, role)` + one `strategy`) built from `walkthrough_example.json` through `orderofbattle.build_unit` and `orchestration.run_battle`, the same path `massbattle.resolve_field` uses for army records (`:3-8`). So the example is the only authored sample of the season-facing army shape: subformation list + one strategy + `morale_start`, `max_turns`, `page_seed`, `sweep_seeds`, `round_digits`.
+  - `_Recorder` uses `sys.setprofile` to log the order of `run_battle`'s direct callees (`:80-111`): an execution artifact of the tick stage order (what the code actually calls, per tick), unusually good evidence for stage-order claims.
+  - It takes the grade from `massbattle._grade(a, b, by_troops=True)` (private import, `:32`) and constants for the page from `config` (`VOLLEY_LETHALITY_SCALE`, `K_SQUARE`, `K_LINEAR`, `TICKS_PER_PHASE`, `ROUT_ONSET_FRAC`, `ROUT_CAP_FRAC`, `SUBUNIT_ROUT_FLOOR`, `ROUT_CASCADE_FRAC`) (`:207-210`): the page reads numbers from the engine, not from prose.
+  - `--role` gives side A's `light_cavalry` a role (`Flanker`, `Feint`): `light_cavalry` is hard-coded as the role-bearing type (`:45`).
+- **Reads / readers:** run as CLI; `tests/valoria/test_design_prose_quarantine.py` mentions "walkthrough" only as a fixture name. Uses `sys.setprofile`, so it must not run under another profiler.
+- **Conflicts / stale:** none found.
+- **Open items:** none stated.
+
+### systems/mass_battle/sim/bat.py
+- **What it is:** oracle gauge, 792 lines (about 530 are comment): the byte-exact DIGEST harness (the "G5 gate"): a fixed battery of 10 matchups x 24 seeds through `engine.resolve_battle(kind='multi')`, hashing the full end-state vector of every trial.
+- **Status:** none (code). Live as a CI gate: `tools/ci_golden_modes_check.py` (three modes) and `tests/valoria/test_mass_battle_byte_exact.py` (two legacy-lattice modes) per the comments (`:32`, `:474-480`).
+- **Bears on:** MB, PROCESS (golden discipline), DICE.
+- **Content that matters:**
+  - Battery (`:112-125`): `mirror, wedge, envelop, cannae, oblique, manipular, cav_charge, cav_braced, cav_shaken, ranged`; all at tier 3 with stats `P4/C4/D5/M6` (`TIER=3`, `N_SEEDS=24`, `SEED_BASE=1_000_000`, `MAX_TURNS=20`, `:51-54`). Shapes are `Line`, `Arrowhead`, `GappedLine`, plus the composed envelopment and refused-flank armies. Only three of the shapes in `ANCHOR_MAP` exist (`Line`, `Arrowhead`, `GappedLine`, `Column`).
+  - Five golden digests in `EXPECTED`: `unit_legacy_mor0`, `cell_legacy_mor0`, `unit_field_mor0`, `cell_field_mor0`, `cell_legacy_mor1` (`:244-653`); key = `{unit|cell}_{legacy|field}_{mor0|mor1}` (`_mode_key`, `:662-717`). Two legacy modes are "gated by nothing in this tree and were NOT re-recorded" (`:248-249`) and are known to mismatch; the three CI-gated modes were re-recorded 2026-11-08 under Python 3.11 (`:245-248`): "the field digests differ under 3.13", so the goldens are interpreter-bound (a determinism limit relevant to the port).
+  - The battery drives `run_multi_turn_battle` (kind `'multi'`): the oracle driver the season does not use. The comment at `:222-224` records "campaign armies are built melee-only (`massbattle.py:84` unit_type='melee'), so volley is unreachable from a campaign" (as of 2026-08-25). The golden digests therefore pin behaviour of the oracle path, with the season's `resolve_field` entry covered by separate tests, not by this file.
+  - The comment history (about 400 lines) is the richest single record of what moved each digest: DG-3/DG-4 pool and sibling morale (2026-07-04), partition invariance (07-08), pool by troop type/quality/numbers not Command (ED-MB-0006, 07-08), octagon as damage multiplier (ED-MB-0018), degree-epsilon (ED-MB-0051), same-side exclusion (ED-MB-0059), the ruled degree ladder (ED-IN-0187), Volley TN 6->7 (ED-MB-0066, "TN7 always. Never change TN anywhere ever."), ammo (A6), `ROUT_CASCADE_FRAC` 1.0->0.6, envelopment-shock as a post-damage discipline check (ED-MB-0075). Each states a control (attribution run or direct instrumentation).
+  - Jordan 2026-08-14 vocabulary ruling embedded here: "We have no 'grid' mode in mass battle. It always occurs on a coordinate field. Only the subunits can be said to be a grid." (`:173-203`); `FIELD_MOVEMENT=0` is "kept ONLY as a byte-exact regression arm", so the audit should treat the integer lattice as legacy (cf. F-MB-20 on the cell grid at season scale).
+  - `trial_vector` hashes `winner, battle_turns, hp, hp_max, morale, discipline, routed` of both units (`:133-143`): not per-cell state, not casualties by source.
+- **Reads / readers:** CLI (`--check`); the two CI/pytest gates above; imports `systems.mass_battle.sim.engine`. `engine/season` does not read it.
+- **Conflicts / stale:** the header refers to `tests/sim/gauge_mb.py` and `coverage_matrix.md` as sources; `ci_golden_modes_check` and `test_mass_battle_byte_exact` are said not to cover the two legacy modes. A `[canonical: ...]` tag on `ANCHOR_MAP` points to `mass_battle_v30.md section deployment`. The `MB_CELL_MORALE` mode key assumes the flag is a recorded axis; the default is ON (`config.py:106`) while the bare 'cell' key says `mor0`.
+- **Open items:** the two ungated legacy digests; the 3.11-vs-3.13 split; "a session with real reference-CI access" to resolve the pre-existing drift (`:628-632`).
+
+### systems/mass_battle/sim/lanchester_signature.py
+- **What it is:** oracle regression, 407 lines; the P-L Lanchester signature checks: LINEAR (melee 4:1), SQUARE (volley 4:1), NO-ANNIHILATION (mirror), and a conserved-quantity exponent fit.
+- **Status:** none (code); run as `python3 -m systems.mass_battle.sim.lanchester_signature` (`:17`). Class-B tolerances, "NOT canonical magnitudes" (`:19-21`).
+- **Bears on:** MB, DICE (attrition law, friction).
+- **Content that matters:**
+  - Thresholds: `LINEAR_BIG_WIN_BAND = (74, 83)` (Dupuy DLEDB "74-83% at 3:1+", cited to a `audit/` doc), `LINEAR_MIN_CASDIFF=20`, `SQUARE_MIN_RATIO=4`, `NOANNIH_MAX_CAS=60`, `BIG_TIER=4` / `SMALL_TIER=2` (800 vs 200 troops = 4:1) (`:43-51`). Seeds 2,000,000+, N=100.
+  - Its own header records that the exponent apparatus was MIS-CITED (ED-MB-0050) and that on repaired data "melee has a clean interior minimum at p=3.20 (cv 0.00245) and volley at p=2.00 (cv 0.00327)" (`:190-197`). The check bars are `LIN_EXP_MAX = 1.4` (melee must fit linear) and `SQ_EXP_MIN = 1.6` (`:169-170`). So by the file's own recorded numbers the melee exponent is 3.2, far above the 1.4 bar: `check_law_exponents` should FAIL on the shipped engine `[UNVERIFIED: not run; reasoned from the file's own header]`. If true, the engine does not obey the "linear melee" law the Lanchester substrate claims (affects F-MB-02, the headcount path's survivor ratio, and the Lanchester design ruling).
+  - Repairs recorded: the no-rout pin did not disable rout because `core.state._stochastic_break` keys on casualty fraction not morale (ED-MB-0050 REPAIR 1; 40/40 melee trajectories routed, fit window 30 of 160 ticks, before the repair); the volley scenario never fired under `stance='hold'` (REPAIR 2; now `balanced + kite`, `VOLLEY_STANCE`, `VOLLEY_INSTRUCTIONS`, `:228-229`). `_best_exponent` refuses a fit whose argmin is on a grid endpoint ("identifiable"), and a non-vacuity assert (`d['checked'] >= n`) guards the loop (`:392-394`). A model of CLAUDE.md 0.1 pts 2 and 3.
+  - `_mk` builds a single-subunit `infantry` Unit with `P4 C4 D5 M6 dr1` (`:69-83`); `_LINE_ANCHOR` columns `{2:10, 3:9, 4:8}` are "inherited" magnitudes the file could not derive (`:53-66`).
+  - `_rout_disabled()` patches `core.state.MB_STOCHASTIC_ROUT` by module global at call time and restores in `finally` (`:232-245`).
+- **Reads / readers:** run as a module; `run()` asserts `LANCHESTER_ENABLED`. `tests/valoria` has a wrapper test `[UNVERIFIED]`. `engine/season` does not read it.
+- **Conflicts / stale:** several `[canonical: mb_lanchester_design.md ...]` tags were found not to resolve and re-labelled JUSTIFIED in-file; the module-wide `LINEAR_MIN_CASDIFF`, `SQUARE_MIN_RATIO`, `NOANNIH_MAX_CAS` tags are "a WEAKER case of the same thing ... filed rather than swept" (`:166-168`).
+- **Open items:** the melee p=3.2 versus the linear-law bar; the three weaker tolerance citations.
+
+### systems/mass_battle/sim/stress.py
+- **What it is:** oracle stress harness, 362 lines; fights armies of at least `troops_floor` per side at battle scale with flags on and measures overlap, idle, edge, fit and fight stats from per-tick snapshots (`walkthrough._Recorder`).
+- **Status:** none (code); "Reference only, not a source of any value (CLAUDE.md section 0.05)". Data: `stress_scenarios.json` (not read in this lane; the file says it holds every tunable number).
+- **Bears on:** MB (season-scale behaviour), GO (port cost: BATTLEFIELD_SIZE), PROCESS.
+- **Content that matters:**
+  - Builds sides four ways: `oob` (the season path: `OrderOfBattle` + `orderofbattle.build_unit`), `army` (`build_army`), `envelopment`, `refused` (`:120-157`). So the army-description shapes in use are exactly these four; the first is the one the season uses.
+  - Measures per battle: `overlap` (body interpenetration by `body_depth`, split same-subunit / same-side other subunit / cross), `idle` (subunit-ticks a live, not-holding subunit did not move and was not in contact; and of those, ones where a same-side subunit WAS in contact: "an ally watching an ally fight"), `edge` (nodes within `edge_margin`, pinned nodes), `fit`, `fight` (`:9-18`, `:182-276`). These are the instruments behind F-MB-20 (the cell grid is not the battlefield at season scale) `[verify against that finding]`.
+  - `--grid N` sets `BATTLEFIELD_SIZE = N` before module load and moves `orderofbattle._A_FRONT_ROW`, `_ANCHOR_COL`, `_MAX_COL` with it (`:70-74`): the season path's deployment rows/columns are module-private constants that must be patched to resize the field (hard-coded deployment geometry in `orderofbattle.py`).
+  - Flags read at import, so "run one arm per process" (`:21`); arms (`shipped`, `all_on`) are in the JSON. Uses `multiprocessing` fork pool and `sys.setprofile`.
+  - `concentration` default is `cell_cap_for(troop_type)` (`:89`): a per-troop-type cell capacity from `config`, i.e. the density by type.
+- **Reads / readers:** CLI only; reuses `walkthrough._Recorder`; imports `modules.mass_battle.armies`, `orderofbattle`, `geometry`, `config`, and `systems.mass_battle.sim.engine`.
+- **Conflicts / stale:** none found.
+- **Open items:** none stated.
+
+### systems/mass_battle/sim/test_persubunit_stress.py
+- **What it is:** oracle regression script, 285 lines (named `test_*` but a script with `main()`, not collected by pytest by default); 18 checks S1-S18 on per-subunit rout/morale/discipline and the typed constructor.
+- **Status:** none (code). Run: `PER_CELL=1 LANCHESTER_ENABLED=1 COMMAND_SIGMA_ENABLED=1 MB_BRACE_ENABLED=1 python3 systems/mass_battle/sim/test_persubunit_stress.py` (`:8`).
+- **Bears on:** MB.
+- **Content that matters:**
+  - Pins per-subunit semantics: `Subunit.of_type` draws `TROOP_TYPE_STATS` presets, unknown type inherits (S1, S12); all-routed unit routs (S2); morale-0 routs (S3); Levy (D1) + Knights Templar (D6) differentiate (S4: "templar pool > levy pool"); `cascade_morale_hit` has no double count (S7); a broken subunit (Disc 0) has pool 0 while siblings fight (S8); `restore_discipline` capped at start (S10); discipline degrades from the subunit's OWN loss not the unit's (S11); between-battle reset restores morale, keeps discipline (S13); `check_drift` is per-subunit (S14); `advance_cells` uses per-subunit discipline (S15); `recalc_size` at 0 routs subunits (S16); `agg_discipline` is troop-weighted (S17).
+  - S18 overrides `BETWEEN_TURN_MORALE_RECOVERY = 1` (`:259-266`) to test the recovery path because the shipped value is 0 (`orchestration.py:1811`): the recovery logic is exercised only under an override, so morale never recovers within a battle in the shipped configuration.
+  - Uses the legacy `advance_cells(...)` signature with `enemy_cells=None` and integer `cell_offsets` (S15), i.e. the legacy-lattice arm's state, not `_node_pos` (the field path).
+- **Reads / readers:** nothing imports it; a manual script. CI coverage `[UNVERIFIED]`.
+- **Conflicts / stale:** `[canonical: designs/provincial/mass_battle_v30.md ...]` and `canon/editorial_ledger.jsonl` citations are dissolved paths.
+- **Open items:** none stated.
+
 <!-- ENTRIES-NEXT -->

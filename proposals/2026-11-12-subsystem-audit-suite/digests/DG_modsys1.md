@@ -185,7 +185,7 @@ Lane scope: code under `engine/` (outside `engine/season/`), `modules/`, and the
 - **Bears on:** CORE, PC, MB, SE, SC, FI.
 - **Content that matters:**
   - Raises `KeyError` for an undeclared role, no default (:53-65); resolution happens once per role per process (cache `_CACHE`, :40).
-  - Docstring promises two `kind: value` roles `contest_side.a`/`.b` that "engine/cross_scale/scene_dispatch.py compares a contest verdict against" (:46-51); `composition.json` has none and `engine/cross_scale/` is not in the tree listing I saw `[UNVERIFIED]`.
+  - Docstring promises two `kind: value` roles `contest_side.a`/`.b` that "engine/cross_scale/scene_dispatch.py compares a contest verdict against" (:46-51); `composition.json` has none and `engine/cross_scale/` does not exist (`ls engine`: `__init__ dice_engine engine_params reference season substrate tests`).
 - **Conflicts / stale:** stale `contest_side` paragraph (see composition.json entry); the `WHY` paragraph cites the deleted old campaign driver and `systems.factions.sim.faction_action` (:5-8).
 - **Open items:** none.
 
@@ -340,3 +340,160 @@ Lane scope: code under `engine/` (outside `engine/season/`), `modules/`, and the
   - The only module in the set that imports from `engine.season.queries.inputs` (:25), i.e. the module depends on the host's record types.
 - **Conflicts / stale:** the 'modules take typed input and import nothing else' rule (CLAUDE.md §3) is satisfied only because the record types live in `engine/season/`; the module cannot be loaded without the season package.
 - **Open items:** the playable (non-automated) fieldwork mode is described as "the seam a PLAYABLE fieldwork mode attaches at" (:20-22); nothing here builds it.
+
+### modules/mass_battle/__init__.py
+- **What it is:** 2-line docstring: the `mass_battle` module is "the reachable closure of `massbattle.py::resolve_field`", moved from `systems/mass_battle/sim/` at plan position 31c; a package whose files import each other by dotted name.
+- **Status:** none; live.
+- **Bears on:** MB, CORE.
+- **Content that matters:**
+  - Directory map (ls): `massbattle.py` (entry, `resolve_field`), `armyrecord.py` (3 of the 5 composition rows), `armies.py`, `orderofbattle.py`, `orchestration.py`, `battle_loop.py`, `percell.py`, `perimeter.py`, `resolution.py`, `rngsource.py`, `terrain.py`, `config.py`, subpackages `core/`, `equipment/`, `hierarchy/`, `troop_types/`.
+- **Conflicts / stale:** the sibling `systems/mass_battle/sim/` still exists with `engine.py`, `bat.py`, `lanchester_signature.py`, `validators.py`, `stress.py` (ls), and `sim_params.json` lists 50+ constants from those files; `systems/mass_battle/sim/engine.py:107` still names `TROOP_LOADOUT/loadout_for` (grep), so the move left a second copy of the oracle behind `[UNVERIFIED how much is a duplicate]`.
+- **Open items:** none.
+
+### modules/mass_battle/battle_loop.py
+- **What it is:** `run_battle(unit_a, unit_b, max_turns=18)`: one engagement turn of up to 18 ticks (3 phases x 6), moved out of `orchestration.py` verbatim (ED-1043).
+- **Status:** none; live; `orchestration` re-exports it, "Nothing imports this module directly" (:7-8). Called by `massbattle.py:67` import chain.
+- **Bears on:** MB, PC (duel inside a battle: none), CORE.
+- **Content that matters:**
+  - Per-tick order (:62-466): draw friction once; `volley_phase` (ranged fire before movement); pre-movement contact halts; `check_orders` then `assign_targets`; cache target centroids (simultaneity); escort positioning; `advance_cells` per moving atom; `resolve_toi_and_commit`; `halt_before_enemy`; cross-side contention; `find_contacts`; stamina drain by contact cells; `resolve_engagements(_cascading)`; simultaneous hp update; per-cell casualty distribution; close ranks; recalc size; drift check; envelopment-shock discipline roll; rout check; at `t % TICKS_PER_PHASE == 0` `phase_boundary`; turn-to-face; separate bodies.
+  - Return value: `{"winner": "A"|"B"|"draw", "turns", "phases", "tick_in_phase", "a_stamina", "b_stamina", "a_hp_pct", "b_hp_pct", "a_morale", "b_morale", "truncated_*", "max_groups"}` (:468-481). The winner is `A` only if the other side is routed and this one not; `unit_conceded` ends the battle early but is graded by `massbattle._grade` (:66-69) (F-MB-04, F-MB-24).
+  - The function imports ~40 names from `orchestration` at call time (:26-35) to avoid a cycle; its flags (`FIELD_MOVEMENT`, `PER_CELL`, `LANCHESTER_ENABLED`, `MB_CELL_DAMAGE`, `MB_CLOSE_RANKS`, `MB_ENVELOP_SHOCK`) are module-level environment-driven switches (F-MB-09). It asserts `FIELD_MOVEMENT => MB_NODE_COHESION` (:42-43).
+  - Volley damage is `volley_dmg * VOLLEY_LETHALITY_SCALE (3)` and is stated to be band-fitting debt (:275-286).
+  - A dead block: `for u in [unit_a, unit_b]: ... if u.command <= 0: u.set_morale(0.0); continue  # rout check below` (:406-413) does nothing but set morale for a zero-Command general; the comment on the loop mentions erosion that was removed.
+- **Conflicts / stale:** the docstring says "max_turns=18 = one battle turn's engagement cap (3 phases)" (:15) but the loop variable `t` is a tick, returned as `turns` (:63, :472), so the return field `turns` means ticks. Several comments cite `designs/provincial/mass_battle_v30.md` and `params/mass_combat.md` (dissolved paths).
+- **Open items:** none in file.
+
+### modules/mass_battle/core/__init__.py
+- **What it is:** 3-line docstring: the resolver layer ("Stage-1 of the bottom-up re-architecture"): pool assembly, exchange, attrition, state transitions; "never imports up the DAG".
+- **Status:** none; live.
+- **Bears on:** MB.
+- **Content that matters:** `core/` holds `attrition.py`, `contact.py`, `exchange.py`, `state.py` (ls). `contact.py` and `state.py` are read in full in this lane; `attrition.py` is outside the assignment.
+- **Conflicts / stale:** `core/state.py` imports `from modules.mass_battle.config import *` and mutates morale on duck-typed objects, so "pure state-in -> state-out" is aspirational: the functions mutate their arguments.
+- **Open items:** none.
+
+### modules/mass_battle/core/contact.py
+- **What it is:** targeting and contact detection: `check_orders`, `assign_targets`, `resolve_cross_side_contention`, `find_contacts` (3 variants), `count_engagements_per_atom`.
+- **Status:** none; live (star-imported into `orchestration`).
+- **Bears on:** MB, PC (reach bodies), CORE (orders).
+- **Content that matters:**
+  - The standing-order vocabulary is a string-trigger mini-language: `immediate`, `tick:N`, `enemy_range:D` (filtered by facing cone, `FOV_HALF_DEG = 180 - REAR_BLIND_DEG/2 = 105`), `ally_at:D` (needs `waypoint_ref`), `own_strength:FRAC`, `signal:NAME` (:66-127). Orders fire in sequence per subunit; an unfired order blocks the later ones (:88-129).
+  - An order's `behavior` dict is applied with `setattr(sub, k, v)` for any key, with special pseudo-fields `fire_signal`, `feign_retreat` and `stance` (sets `_stance_explicit`) (:130-162). `route` is clamped to a path-length budget at issue time (:178-181). So the order surface is open-ended attribute assignment on Subunit, not a closed typed record (F-MB-13, F-MB-26).
+  - Targeting conditions: `nearest` (default), `weakest` (fewest troops), `in_range:N`, direct `order_target_idx`, delay countdown (:201-229); there is no targeting by troop type or role here, so Ogre Battle/Unicorn Overlord style target priorities are absent.
+  - Three contact predicates selected by flags: legacy Chebyshev adjacency (`FIELD_CONTACT` off), snapped-float adjacency (`FIELD_CONTACT`), and the standoff/reach-body version when `FIELD_MOVEMENT` is on (:373-510). Per `hierarchy/units.py:33,40` (grep), `FIELD_MOVEMENT` and `FIELD_CONTACT` default to ON via environment, so the first two are live only when an environment variable or `tools/ci_golden_modes_check.py`'s `FIELD_PINS` turns them off (:34-36).
+  - `resolve_cross_side_contention` returns 0 under `FIELD_MOVEMENT`; the comment records that the claim "co-location is now impossible" was refuted by measurement (875 deep body interpenetrations over 140 snapshots, ED-MB-0061) (:290-307).
+  - The file embeds the continuous-frontage use: contact pairs carry `a_front`/`b_front` from `engaged_frontage` for the Lanchester term (:468-475).
+- **Conflicts / stale:** the docstring's "`dynamic_facings`" and other retired items live in comments only. Heavy historical narration (Crécy, Leuctra) inside docstrings (:238-263) is prose not mechanism.
+- **Open items:** `CONTACT_REACH > 0` widening "UNSPECIFIED and pending Jordan" (:485).
+
+### modules/mass_battle/core/exchange.py
+- **What it is:** combat-pool assembly primitives: `derive_command`, `clamp_command`, `command_base_pool`, `subunit_combat_pool`, `pair_pool_contribution`, `_pair_engaged_troops`, `_stamina_pool_penalty`, `D_YIELD`, `YIELD_POOL_MULT` (223 lines; the assignment listed 87 unread, 60% partial).
+- **Status:** none; live (star-imported into `orchestration`).
+- **Bears on:** MB, CHAR (Command from Charisma/Cognition).
+- **Content that matters:**
+  - Default pool, `POOL_QUALITY_MODEL` ON (config default `'1'`, `POOL_QUALITY_SCALE 0.8`): `raw = atom.eff_power * atom.eff_size * 0.8 + discipline_pen + stamina_pen`, where `pen = -clamp((5 - disc)*0.5, 0, 2)`; Command is absent from this branch (:101-124). The legacy Command branches remain behind `COMMAND_SIGMA_ENABLED` (default `'1'` too) and a plain `min(size, command)+command` branch (:125-128). So a unit's quality is the troop-type's `eff_power` (1-6 from `TROOP_TYPE_STATS`) times headcount; an individual soldier's attributes do not enter (F-MB-14, F-MB-19). Jordan directive 2026-07-08 cited: "abandon combat pools being related to the commander" (:103-113).
+  - `derive_command(charisma, cognition)` is the one place individuals' attributes become a battle number: weighted mean by `CMD_CHA_WEIGHT`/`CMD_COG_WEIGHT`, clamped 1-7 (:57-65); and `command` no longer feeds the combat pool, only morale, hold speed, orders, rout (:6-9).
+  - `pair_pool_contribution` redistributes the subunit's score across a contact pair by actual troops in contact cells plus depth-weighted support from ranks behind (`support_weight(depth, troop_type)`) (:151-185, :188-222); broken cells stop contributing (:209-216).
+  - Per-battle friction: `raw *= unit._friction` (LogNormal draw once per battle, `MB_FRICTION_SIGMA` 1.1, default ON) (:141-147): the battle outcome includes an unattributed random multiplier.
+  - `D_YIELD` and `YIELD_POOL_MULT` are read from environment variables (`os.environ`) at import (:25-29): hidden inputs (F-MB-09).
+- **Conflicts / stale:** the comment says "`MB_YIELD_POCKET` (default OFF)" (:138) but `config.py:272` defaults it to `'1'` (ON); the module docstring's `[canonical: mass_battle_v30.md §A.4 Effective Combat Pool; ED-899 ...]` cites a design doc as authority. The header line count in the assignment (87 lines) disagrees with the file (223 lines); the whole file was read.
+- **Open items:** the [CALIBRATED-DEBT] values for `D_YIELD` (3) and `YIELD_POOL_MULT` (0.35) are reused from other thresholds rather than derived (:19-31).
+
+### modules/mass_battle/core/state.py
+- **What it is:** morale / discipline / rout transitions: `morale_check_phase`, `rout_resolution`, `discipline_check_phase`, plus `_rout_resilience` and `_stochastic_break`.
+- **Status:** none; live (phase boundary).
+- **Bears on:** MB, CHAR (morale/discipline of troop types).
+- **Content that matters:**
+  - Stochastic rout (du Picq): each subunit draws ONE break point in `[ROUT_ONSET_FRAC 0.15, ROUT_CAP_FRAC 0.3]` of casualties, skewed by `resilience = 0.5*disc_norm + 0.5*morale/7` using START discipline and morale (:15-47). Gate `MB_STOCHASTIC_ROUT` (config default `'1'`).
+  - Canonical Size triggers: casualties past 50% lose 1 morale, past 25% lose 1 more, plus unit-broken and exhaustion terms; the sum is capped at 3 then damped by `MORALE_EROSION_DAMP 0.7`, "so the EFFECTIVE cap is -2.1, NOT -3" - a declared divergence (:88-116).
+  - Sibling pull `MORALE_SIBLING_PULL 0.15` toward a phase-start snapshot of troop-weighted sibling morale (:60-87); per-cell morale: cell breaks, contagion, cohesion, and `broken_cell_share() >= CELL_BREAK_ROUT_FRAC` routs the subunit (:136-148).
+  - Rout floor: `atom.eff_morale <= 0 or troop_total() < SUBUNIT_ROUT_FLOOR (80)` (:187).
+  - Discipline degradation: `disc_hits = int(my_loss / DISCIPLINE_LOSS_THRESHOLD)` with cumulative loss over a FIXED threshold, flagged as a shape divergence from canon: "a Discipline-5 veteran degrades on the same loss as a Discipline-1 levy" (:221-235). This is stated and unruled (needs a ruling).
+  - Randomness comes from `rngsource.get()` (:8, :44), one owner of engine randomness.
+- **Conflicts / stale:** the comments state `MB_YIELD_EMERGENT` is "Gated OFF by default" (:98-101) and `MB_STOCHASTIC_ROUT` "only consumed when ... on (else never called)" (:38-39); `config.py:262,181` default both to `'1'` (ON). The "byte-exact" claims in this file hold only for the OFF configuration that the golden battery pins. Mutates its arguments despite `core/__init__`'s "pure" framing.
+- **Open items:** the discipline-degradation shape divergence "can be ruled on deliberately" (:229-230); the yield erosion-brake calibration "stays deferred (needs_jordan)" (:100-101).
+
+### modules/mass_battle/equipment/__init__.py
+- **What it is:** the equipment package: re-exports `weapons`, `armour`, `ARSENAL`, `ARMOURY`, and defines `TROOP_LOADOUT` and `loadout_for(troop_type)`.
+- **Status:** docstring says "NOT YET WIRED into resolution ... data surface" (:10-12); reading: partly wired.
+- **Bears on:** MB, PC (cross-scale mapping), CHAR.
+- **Content that matters:**
+  - `TROOP_LOADOUT` maps each of 14 troop types to a (weapon, armour) name pair: levy (light_cut, none), light_infantry (light_cut, light), heavy_infantry (heavy_cut, medium), cavalry (heavy_cut, heavy), archers/mounted_archers (bow, light), crossbow, sling, artillery (siege, none), knights_templar (heavy_blunt, heavy), pike (pike, medium), spearmen (spear, light), skirmishers (javelin, light), light_cavalry (light_cut, light) (:21-42). A troop type is thus a name that points at one weapon and one armour; no soldier holds a loadout of its own (F-MB-19, F-MB-22).
+  - Contradiction with the docstring: `modules/mass_battle/troop_types/registry.py:10,177` imports `loadout_for` and derives the unit class `'ranged'/'melee'` from the assigned weapon, and `armies.py:283` reads it; `tests/valoria/test_reach_weapon_class.py` pins `loadout_for('pike')`. So the loadout is live for that one derivation (grep).
+  - Nothing links these catalogues to `modules/combat/weapons.py` (54 personal-combat weapons); the mass names (`light_cut`, `heavy_cut`, `bow`, `siege`) are a separate vocabulary (F-MB-19, the cross-scale bridge).
+  - `ARMOURY` tiers equal personal combat's `none/light/medium/heavy` and its materials (armour.py :27-40), the only shared vocabulary between the two scales.
+- **Conflicts / stale:** "INERT (nothing consumes it yet)" (:17-18) is false (registry/armies consume it for unit class). Cites `mass_battle_v30 §B.2` as the source.
+- **Open items:** "the primitive mapping (weapon/armour physics -> speed / DR / lethality) is still being worked out" (:19-20).
+
+### modules/mass_battle/equipment/armour.py
+- **What it is:** the armour catalogue: `ARMOURY = Registry("armour")`, four records, `get`, `dr_vs_piercing`, `tiers`.
+- **Status:** none; live as data.
+- **Bears on:** MB, PC.
+- **Content that matters:**
+  - Four entries `none/light/medium/heavy` with `material` none/cloth/mail/plate and `dr_vs_piercing` 0/1/2/3, all `provisional=True` (:36-40). "The only NUMERIC axis is DR-vs-Piercing ... CANONICAL (Ranged DR table)" (:9-11).
+  - Maps to personal combat's `TIER2MAT` (heavy->plate etc.) "in spirit" (:24-26); the bridge is a comment, not code.
+  - `RANGED_DR_DEFAULT = 2` and `WALLS_DEFENDER_DR = 3` live in `config`/`terrain`, not here (sim_params.json).
+- **Conflicts / stale:** cites `designs/scene/combat_engine_v1/core.py` (path no longer exists; personal combat is `modules/combat/core.py`). Cites `params/mass_combat.md` as canonical.
+- **Open items:** all records `provisional`.
+
+### modules/mass_battle/geometry.py
+- **What it is:** cell layout, formation shapes, octagon facing, support, and circular cell bodies for the mass-battle grid.
+- **Status:** none; live (star-imported).
+- **Bears on:** MB.
+- **Content that matters:**
+  - Formation = one of four shapes in `CELL_PATTERN_FN`: `Line`, `Arrowhead`, `GappedLine`, `Column` (Horseshoe and RefusedFlank retired as Subunit shapes, ED-909 / LC-8) (:48-56). Legacy tier tables: Line `{1:(3,3),2:(5,3),3:(5,5),4:(7,5)}`, GappedLine `{1:(2,2),2:(3,3),3:(4,3),4:(4,4)}`, Arrowhead `tier+2` rows (:11-46); continuous path `footprint_for(shape, troops, concentration, troop_type, width, depth)` builds EXACTLY n cells with n bounded so per-cell troops stay in `[CELL_FLOOR 40, cell_cap_for(troop_type)]` (200, 100 for mounted) (:62-121).
+  - A cell has no identity beyond its `(r, c)` footprint id: troops per cell are a count (`cell_troops`), troop type and discipline are subunit-uniform ("per-cell type doesn't exist yet", per `core/exchange.py:160-163`). A formation is a shape, not a role slot or a named character.
+  - Facing: `octagon_angle` partitions attack direction into GREEN (<45 degrees), YELLOW (45-90), RED (>=90); damage multipliers 1.0/1.5/2.0 (`OCTAGON_DMG_MULT`), defence modifiers 0/-1/-2 (:138-174). The comment records that two earlier citations for these boundaries were false and removed (ED-MB-0061) (:156-171).
+  - Cell body = a circle of radius `CELL_RADIUS 0.5` (Jordan 2026-11-01: "troops have geometry. they cannot overlap"); weapon reach extends only the front along the heading; `reach_reaches(a, b)` is the contact test; `engaged_frontage` is a continuous interval-union width that feeds the Lanchester linear term (:377-532).
+  - Speed per cell: `cell_speed(shape, tier, r, c)` returns 1, 2 only for an Arrowhead front rank (:328-338). A comment says the F-iii dynamic-facings helpers were deleted as write-only (:308-324).
+  - `_oriented_abs_map` imports `modules.mass_battle.hierarchy.units` inside the function to read `FIELD_MOVEMENT`/`MB_NODE_COHESION` at call time (:238-241): a cycle break and a hidden coupling to environment flags. The Fable-audit B1 fix is recorded: iterating the legacy pattern ids lost cells for density-built Arrowheads (:241-247).
+- **Conflicts / stale:** same file name as `modules/combat/geometry.py`. `LINE_ASPECT 1.4` is a "CALIBRATED-DEBT" in `sim_params.json:493` but defines the Column/Line proportions (:70-98).
+- **Open items:** none in file.
+
+### modules/mass_battle/hierarchy/__init__.py
+- **What it is:** 2-line docstring: the unit/subunit data model ("Subunit and Unit are DATA + their own geometry/state methods; resolution lives in core/").
+- **Status:** none; live.
+- **Bears on:** MB.
+- **Content that matters:**
+  - The model file is `hierarchy/units.py` (not assigned); `sim_params.json` shows it carries `COL_WIDTH 1.0`, `_MOVE_PASSES 24`, `_SEPARATE_PASSES 400`, `_SEPARATE_ROUNDS 6`, and `grep` shows ~15 `MB_*`/`FIELD_*` environment switches at its top (lines 23-70, 166).
+- **Conflicts / stale:** the docstring says units are "DATA + their own geometry/state methods; resolution in core/"; `battle_loop.py` calls `atom.advance_cells`, `halt_before_enemy`, `close_ranks`, `drain_stamina` on the units and `core/state.py` calls `atom.erode_morale`, `check_cell_breaks`, so movement and morale mutation live on the data classes. `[UNVERIFIED]` against `units.py` itself, which was not in the assignment.
+- **Open items:** none.
+
+## Cross-subsystem leads
+- **MB + CHAR + CORE (F-MB-14):** the only path from an individual's attributes into a battle number is `derive_command(charisma, cognition)` (`core/exchange.py:57-65`), and since the 2026-07-08 directive Command no longer enters the combat pool; unit strength is `TROOP_TYPE_STATS` power/discipline/morale (1-6) by troop-type name times headcount (`sim_params.json:1722-1802`). Soldiers have no weapon, armour or skill fields in `modules/mass_battle/`.
+- **MB + PC (F-MB-19):** two unconnected vocabularies for equipment: `modules/mass_battle/equipment` (`light_cut`, `heavy_cut`, `bow`, `siege`, `heavy_blunt`, `pike`, `spear`, `javelin`, `sling`, `crossbow`; armour tiers none/light/medium/heavy with DR 0-3) and `modules/combat/weapons.py` (54 weapons; the same four armour tier names and `TIER2MAT`). The only code-level shared tokens are the four tier names. A duel arising inside a mass engagement has no bridge.
+- **PC + CHAR + CORE (F-PC-09, F-PC-12):** the kit a season Person can name is exactly `combat_engine_v1.json kit` (54 weapons, 4 armour tiers; defaults `arming` / `light`); `tradition` appears only in the season wrapper's docstring (`engine/season/seam/wrappers/combat.py:39`) and `combatant.py:126`. There is no approach (aggressive/normal/defensive) table in the export; the only `APPROACH_*` constants are `APPROACH_DISPLACE_K/MAX` (:79-80). `fight.py` has no occurrence of "approach", "aggress" or "defens" (grep).
+- **CORE (composition):** `mass_battle.army_preset` is a registered role the loop never calls (composition.json:41-47). `composition.py`'s docstring describes `contest_side.*` roles that exist nowhere in `composition.json` (and `engine/cross_scale/` does not exist).
+- **DICE + SC + CORE:** `sigma_leverage.degree` is gone from the engine and lives in `systems/social_contest/sim/contest/degree_extension.py` as a contest-only demotion of Overwhelming; `OB_MAX 20` has no live owner (`sim_verification_ledger.json:80`). The engine's single degree owner is `dice_engine.degree_from_net`.
+- **GO + PC (game_constants.json):** the port still varies TN by weapon (5-8), against the oracle's flat TN 7; `MOMENTUM_MAX` (Momentum 0-4) has "no scalar owner in engine/".
+- **FI + WR + PROCESS:** `sim_params.json` mixes game parameters with test fixtures and HTTP status codes; `value_pointer_links.json` links by substring; neither is read by `engine/season/`. The tool artifacts count toward "283 params, 125 cited" but are not a measure of what the loop reads.
+- **MB + PROCESS:** about 86 `os.environ` reads in `modules/mass_battle/` (grep count 91 minus pyc hits) decide behaviour flags; the golden battery pins some off (`tools/ci_golden_modes_check.py` FIELD_PINS, per `core/contact.py:34-36`), so the shipped defaults (many `'1'`) differ from the byte-exact configuration the comments describe.
+
+## Likely stale or superseded
+- `engine/substrate/composition.py:46-51` - the `contest_side.a/.b` `kind: value` paragraph (no such rows; `engine/cross_scale/` absent).
+- `engine/reference/degree-sweep/arm9_forking.py`, `arm9_subj.py`, `sweep_core.py` - cite `shape.py` line numbers, deleted at ED-IN-0203 step 10; their "claims never falsy / opening_set reads no world" findings date from 2026-09 `[UNVERIFIED against current decision/options.py]`.
+- `modules/mass_battle/equipment/__init__.py:10-18` - "NOT YET WIRED / INERT" contradicts `troop_types/registry.py:177` and `armies.py:283`.
+- `modules/mass_battle/core/state.py:38-39, 98-101` and `core/exchange.py:138` - "default OFF" for `MB_STOCHASTIC_ROUT`, `MB_YIELD_EMERGENT`, `MB_YIELD_POCKET`; `config.py` defaults all three to ON (`'1'`).
+- `modules/mass_battle/battle_loop.py:406-413` - a loop that only handles `command <= 0` under a comment about erosion that no longer exists there.
+- `engine/engine_params/names.json` - `substrate.key` row and `EventImpact` legacy tag survive the Key retirement.
+- `engine/engine_params/sim_params.json` - 50+ rows come from `systems/mass_battle/sim/` oracle/test-fixture files, duplicates (`ANCHOR_MAP`, `SEED_BASE`), and citations to dissolved paths.
+- `modules/mass_battle/equipment/armour.py:5-6` - cites `designs/scene/combat_engine_v1/core.py`.
+- `engine/engine_params/value_pointer_links.json` - substring "links" with no semantic content.
+
+## Items that could change an audit finding
+- **F-MB-19 (loadout not read):** CONFIRM with a nuance. `TROOP_LOADOUT` is read, but only to derive `'ranged'/'melee'` unit class (registry.py:177, armies.py:283) and nothing else; pool strength comes from `TROOP_TYPE_STATS`, not weapon or armour. The `equipment/` docstring's "not wired" is half-false.
+- **F-MB-14 (individuals' attributes do not reach the battle):** CONFIRM. `derive_command` is the only attribute-to-battle function and Command is outside the combat pool (`core/exchange.py:101-124`).
+- **F-MB-09 (hidden inputs and held state):** CONFIRM and sharpen: ~86 `os.environ` flags, many defaulting ON, with comments describing the OFF state; `D_YIELD` and `YIELD_POOL_MULT` read env at import.
+- **F-MB-13 / F-MB-26 (choice surfaces priced wrongly; manager vocabulary has no carrier):** CONFIRM. The season carrier is two closed sets (15 roles, three `retreat_at` strings); the in-battle order surface is open `setattr` on Subunit with six trigger strings, and target selection has no role/type priority (`core/contact.py:201-229`).
+- **F-MB-24 / F-MB-04 (field returns a winner / defeat attribution):** CONFIRM at the module level: `run_battle` returns `winner A|B|draw` and `_grade` reads `unit_conceded`.
+- **F-MB-10 (dead and unreached code):** supports: the legacy contact paths (`FIELD_CONTACT` off, plain adjacency), the Command pool branches behind `POOL_QUALITY_MODEL`, `army_preset` role, `TRADITIONS[*]['set'|'mode']` metadata, and the dead `command <= 0` loop remainder in `battle_loop.py`.
+- **F-MB-20 (at season scale the cell grid is not the battlefield):** neutral; `BATTLEFIELD_SIZE 51`, `UNIT_GRID_SIZE 30`, `MAX_TROOPS_PER_UNIT 10000`, `CELL_CAP 200` are the grid constants (sim_params.json:332-520).
+- **F-MB-22 / F-MB-23 (troop types differing by weapon; keyed on type names):** CONFIRM data side: 14 troop types with `(power, discipline, morale)` and `reach` keyed by name in `sim_params.json:1695-1802`; `TRAINING_SITE` is also keyed by name.
+- **F-MB-25 (reference surfaces that contradict code):** supports with the "default OFF" comments and `equipment/__init__.py` "INERT".
+- **F-MB-17 / F-MB-18 (hierarchy, role shapes):** not examined here beyond `hierarchy/__init__.py`; `units.py` was outside the assignment.
+- **F-PC-09 (tradition/ability/morphology-lever layer unreachable from the season):** CONFIRM (tradition appears in the season wrapper only as a docstring; `traditions.py` metadata `set`/`mode` is read by nothing).
+- **F-PC-10 (constants outside the declared home):** CONFIRM with an example: grab-outcome weights `0.15+0.25p`, `0.35-0.25p`, `0.10` are literals in `contact.py:63-69`.
+- **F-PC-11 (bare-import dialect):** CONFIRM in `contact.py:13`, `tradition.py:13,17`, `weapons.py:828,906`; `degree-sweep/__init__.py` adds a second `sys.path` mutation in `engine/`.
+- **F-PC-12 (no unarmed fighter):** CONFIRM: `WEAPONS` has 54 records, none unarmed, none a shield.
+- **F-PC-05 / F-PC-13 (approach surface):** CONFIRM no approach table in `combat_engine_v1.json`, and `modules/combat/fight.py` has no approach term (grep).
+- **F-PC-08 (draw has second owners):** not examined here.
+- **Unanswered question for the designer:** the discipline-degradation rule uses a fixed cumulative-loss threshold rather than a per-turn comparison to the unit's Discipline (state.py:221-235); the author flagged it for a ruling and nothing in the files records one.

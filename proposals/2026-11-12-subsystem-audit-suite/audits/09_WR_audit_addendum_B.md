@@ -495,7 +495,135 @@ returning as a predicate on a band.
 
 ## 5. World motion: travel, survival, weather and the Calamity, as playable and as ambient
 
-<!-- SECTION-5 -->
+**Verdict.** The first audit established that the world's motions ship at their controls (F-WR-04). Read
+against the whole design set, two further things are true. The motions, once flipped as scheduled, still
+do not have the property that makes weather and hardship into story (duration and neighbourhood); and the
+design's organising idea for all of them, a second contest for the world's survival run against the first
+for its rule, has in the season loop neither a reading nor an end.
+
+### 5.1 What the design set asks of world motion
+
+Read: `world/reference/calamity_radiation_v30.md` with its infill (the whole radiation matrix: five
+Mending Stability bands by six distances from Askeheim, the settlement-type modifier, the Southernmost
+Surge, the three classes of threadcut being); `geography_v30.md`, `insurgency_pipeline_v30.md`,
+`miraculous_event_v30.md`, `ms_trajectory_v1.md`, `southernmost_v30.md` (section structure and tables);
+`overview/reference/wc_survival_spine.md` (in full); the live successor
+`proposals/2026-10-23-subsystem-completion/…-10-world-travel-survival-npc-life.md` (§0, CP-T10-01 to -03 in
+full), which is the home of B10-18's positions.
+
+| design idea | where | its ruled re-expression | state at HEAD |
+|---|---|---|---|
+| **Two contests at once**: who governs, and whether the world survives; they "compete for the same resources: player time, faction actions, military assets" and that "IS the game's strategic architecture" | `wc_survival_spine.md` | no stored stability, no cooperation track (#457 §5); the shared resource is the scene budget, the survival work is `restore`, `mend` and relief | **no reading says how the second contest stands** (F-WR-20) |
+| **Radiation by distance**: the same world state means folklore at distance 3 and spontaneous Gaps at distance 1 | `calamity_radiation_v30.md` | the lattice coupling from a source at T15, read as Site bands (IN-35); CP-T10-02's exposure by `radiation_bands` | built dark; no source (first audit R-03) |
+| **The year**: winter is prepared for | T10 §0 G3; CP-T10-03 (`season_terms`: winter yield 0.25, want 1.5, illness 2.0) | a fixture and a roster row | unbuilt: `year_length`, `season_terms` are in no file (§9 EB-06) |
+| **A journey is priced and risky** | T10 §0 G1, G2 | `route`, leg points, exposure at the leg's end | unbuilt: `route_pricing`, `leg_unit`, `exposure_body` are in no file; every leg costs one point |
+| **Hunger is a settlement's**, carried by cohorts; named persons do not eat (ED-IN-0255); hunger "never enters the score" | T10 standing constraints | the larder draw, the body fall, `hunger` bands | runs; binds in season 0 only (first audit F-WR-10) |
+| **One event, three readings**: a miraculous event is a miracle to the Church, a working to Varfell, a threat to the Movement | `miraculous_event_v30.md` §23 | a hearer credits a told claim by whether he and the teller stand in one regime (`regime_gain` 0.5, shipped) | built (CR-79); its inputs are rare (first audit F-WR-07) |
+
+### 5.2 Each motion, as ambient and as playable
+
+"Ambient" is what the motion does with nobody acting. "Playable" is the decision it hands a person, the
+standing requirement's test. The last column is what stands between the motion and a played scene.
+
+| motion | ambient today (shipped) | ambient as scheduled (B10-18) | the decision it should hand someone | what is missing for play |
+|---|---|---|---|---|
+| **weather** | none: `season_factor_draw = ()` | one of three multipliers per territory per season, drawn independently (CL-EVENTS (2)) | relief before the lean season; whose larder is opened; whether to requisition | a shortage that lasts and that neighbours share (F-WR-19) |
+| **the year** | none | winter: a quarter of the yield, half again the want | stock, travel in summer, relieve before winter | nothing beyond CP-T10-03 |
+| **the larder and hunger** | cohorts draw; a short draw lowers a body; season 0 only | CR-22 chooses a per-head need at which it binds | `transfer`, `requisition`, `petition`, `migrate` at the shortfall rung | a body that mends when fed (first audit R-13); the reading of whether any of the four executes (CR-22's exit already asks it) |
+| **bodies: age, illness** | none (deferred, ED-IN-0317) | illness by place and season (CP-T10-05), still at rate 0 | who succeeds; who is tended | Jordan's rates (first audit §11 item 2) |
+| **wounds and recovery** | a wound persists until `tend` | recovery costs time and care (CP-T10-04) | tend or act; rest or travel | nothing beyond CP-T10-04 |
+| **fabric wear** | 322 `condition.worn` a season; no crossing in any run | unchanged | `restore` or let a use close | a floor that is ever crossed: the wound and the weight (first lane e1) |
+| **the Calamity** | none | none scheduled beyond CP-T10-02 | hold the edge or spend elsewhere; send whom into exposure | the source; then B10-15's workings |
+| **travel** | a leg costs one scene point wherever it goes; `move` 21 of 78 executed, `travel.blocked` 77 (seed 0, three seasons) | priced by route, pricing **shipped off** with "[GAP: unowned]: no position gives a chooser a person-side reading of a leg's price" | go yourself or send; near business before far | the person-side price (R-23, below) |
+| **migration** | `migrate` 16 of 116 executed | unchanged | leave want for plenty | SE's (first audit H-168 row) |
+
+**The pattern.** Every row's third column is a number on a schedule and every row's fifth column is a
+reason for someone to act. The plan builds the third and, with two exceptions, has the fifth; the
+exceptions are this lane's to supply.
+
+### 5.3 F-WR-19 · degrades narrative · the scheduled weather has no memory, no neighbours and a mean above one
+
+**Claim.** The live weather arm B10-18 will ship cannot produce the incident the design and the strife
+study both name ("a drought and then famine"), for three reasons that are arithmetic and can be read off
+the code without a run.
+
+**Evidence.** `queries/world_q.py::season_factor_of` (`:1178-1205`): the factor is the constant times one
+outcome drawn uniformly from the current season's entry, keyed on `(world_seed, tick, territory rung id)`.
+(a) *No memory.* The key includes `tick`, so successive seasons are independent draws: with the arm
+`((0.5, 1.0, 2.0),) * 4` a territory has a low season one time in three, two in a row one time in nine,
+three in a row one in twenty-seven. (b) *No neighbours.* The key includes the territory, "two territories
+at one tick draw independently" (docstring; CL-EVENTS (2)'s own falsifier asserts it). With sixteen
+territories in the realm, the chance that a territory and all of its neighbours draw low together falls
+geometrically with their number, so relief by `transfer` from next door is always there and the question
+"whose grain" never becomes "there is no grain". (c) *A mean above one.* The arm's arithmetic mean is
+(0.5 + 1.0 + 2.0) / 3 = 1.167. Yield is scaled by the factor (`ProduceInput.factor`, "the multiplier on
+this season's `yield`") and stores add, so the arm raises the long-run harvest by a sixth relative to its
+own control, in a realm whose stores already grow without a sink (#457 §8: 4,810 to 9,268 in two seasons;
+not re-measured here). The arm is symmetric in ratio and not in sum.
+
+**Falsifier.** A run at the live arm in which one territory reads `shortfall` in two consecutive seasons
+at three seeds; or, for (c), the realm's total stores at season 4 below the control's. CR-73's reading
+("a low draw that bites") is the instrument for the first and is scheduled; neither is run here, so (a)
+and (b) stand as arithmetic and their consequence for hunger is `[UNVERIFIED]` until CR-22.
+
+**Against the literature.** This is apparatus row C9 and G14.Q4 exactly: "Do incidents have duration and
+overlap?" (Sylvester, as reported: "the richness comes when several events interact"). An independent
+draw per season is a one-shot event by construction.
+
+**Touches.** R-01, R-06; NERS-R's no-player half; strife opening A (natural shock).
+
+**Minimal fix.** `09_WR_B_weather_with_memory_and_the_year.md` edits 1 and 2: a *spell* is a second keyed
+draw on a coarser clock and a coarser place (the key drops the low bits of `tick` and takes the territory's
+parent rung), which selects which of the season's entries the fine draw uses; and the arm's members are
+chosen with mean one. Both are fixture data; the control `()` is today's tree. No state is stored: the
+spell a season is in is a function of `(world_seed, tick, rung)`, as the season of the year already is.
+
+### 5.4 F-WR-20 · degrades narrative · the second contest has no reading and no ending
+
+**Claim.** Nothing in the tree says how the world's survival stands, to an instrument or to a person, and
+no ending is reached if it is lost.
+
+**Evidence.** `rosters.yaml: endings` (`:3418-3464`) holds the victory row and says of itself that it is
+"GD-1 minus its sustain, Accord and Stability clauses". Its selector grammar is `{post: …}` or
+`{rung_kind: …}`: it selects *holds*, so no row can be written over the condition of Sites. The design's
+survival terminal ("MS 0, the Rupture: … Campaign ends in catastrophe. No faction wins",
+`threadwork_v30.md` §5.3; "RS 0 = Rupture = all factions lose", `wc_survival_spine.md`) therefore has no
+expression. The readings that would show the contest's state exist and are unread: `closed_uses` and
+`hunger` have one caller each, a report (first audit F-WR-04).
+
+**Resolution (ladder step 3, then 4).** The Rupture is an ending by every design document that names it,
+and #457's END-VICTORY handle already rules the form: "an ending and victory vocabulary … a Query over
+holds and seats that the season reports, never an actor". The cut that removed the stored scalar (#457 §5)
+does not remove the ending; it changes what the Query reads, from a number to the bands of Sites. *Decided:*
+the `endings` grammar gains a third selector, `{site_band: <a band_floors band>, of: <site kind or all>}`,
+reached when every selected Site under the realm reads at or below that band; a row using it carries
+`victory: false`. The roster's act-credit clause ("an act opened at least one edge the condition stands
+on") is stated for holds and is not applied to a Site selector: a ruin nobody caused is the case the
+ending exists to report (T-b forbids a crossing *producing* an outcome; a reported ending "emits no Event,
+halts nothing and writes nothing"). The **row** (which band, which kinds) is Jordan's content and ships
+absent; the grammar is the proposal's edit 4. This is not escalated: both design documents and the
+ratified handle point one way, and shipping the grammar with no row changes no behaviour.
+
+**The survival contest as play.** Because named persons do not eat and hunger never enters the score,
+survival is never a personal meter. Its playable form is a governor's: a settlement with a failing Site
+and a short larder, a budget of scenes, and four answers (`restore`, `transfer`, `requisition`, `petition`)
+against the same budget his rivals are spending on seats. That is the scenario the first audit sketched as
+"hold the valley" (§9.3); what this section adds is its instrument and its end: the reading of §3.4
+counts open incidents by settlement, and a `site_band` ending tells the player the valley was lost.
+
+### 5.5 R-23 · the unowned gap in the journey's price has an answer
+
+CP-T10-01 ships its pricing off because "no position gives a chooser a person-side reading of a leg's
+price". The leg's price is `route(a, b)` over `settlement_adjacency` and `terrain_cost_matrix`, which are
+geography *data*, loaded once by `data/geography.py`, identical for every person and changed by no act.
+`decision/budget.py` already admits a non-World argument on exactly that ground: `budget(p, v, k, fx)`
+(`:18`) takes `fx` because it is identical for every person and "not world state" (`:53`). Yield is linear
+in the factor (`modules/settlements/produce.py:19`, `int(base * (max(0, condition) / scale) * factor)`),
+which is what F-WR-19 (c) rests on. *Decided (ladder step 4, that precedent):* the price a chooser reads is a pure function of
+the two settlement ids and the loaded geography, handed to `decision/` beside `fx`; whether the road is
+open (the border, a `contain` path) stays a World read made at the fold, and a journey priced and then
+blocked is `travel.blocked`, which is how a person learns the road is shut. No person-side World read is
+introduced. Proposal edit 3; the flip of `route_pricing` then waits only on its own paired arm.
 
 ## 6. The 48 primary hole rows not read by the first lane, dispositioned
 
