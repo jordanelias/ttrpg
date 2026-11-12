@@ -1,0 +1,231 @@
+# Workplan v12 — part 18, continued: batch BA1-cast-content
+
+## Status: PROPOSED (the continuation file of part 18 of workplan v12, `V12_STRUCTURE_part2.md` §4.1's `_cont` rule; drafted under `master/workplan_v12/`; unratified input to `methodology-execute`'s 0.1 stop until Jordan adopts v12; resolves nothing at runtime, CLAUDE.md §0.05; not canon)
+
+Words and paths as the head of this part states. `the draft` is the file B04.26 writes, `proposals/2026-11-12-subsystem-audit-suite/proposals/IS_A_11_cast_values_draft.md` (`IS-A-11` stage 1: five tables, (a) to (e), and table (a)'s `manner:` column for `IS-B2-CHAR-07`), as Jordan has corrected it by this batch's open. `CHAR_B` is `proposals/16_PESSIMIST_CHAR_B_a_pursuit_does_what_its_name_says.md`; `ALIGN` is `proposals/02_CHAR_choice_alignment.md`; `REL` is `proposals/02_CHAR_relations_have_a_ground.md`; `CHAR_OWED` is `proposals/U5a_CHAR_owed_amendments.md`; `U1` is `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md`.
+
+---
+
+## Batch BA1-cast-content · lane IN · wave W12 · step S12 · HASH MOVER, one re-pin
+INVOCATION: /methodology-execute Batch BA1-cast-content
+IN-FLIGHT ROW: registers/handoffs/HANDOFF_IN.md, Open table
+GATE: Batch B00-ids
+GATE: Batch B01-laneA
+GATE: Batch B02-tests
+GATE: Batch B04-capability-home
+GATE: Batch B05-one-roll
+GATE: Batch B10-character
+REQUIREMENT: R-06.a, R-08.a, R-09.b; re-read R-06.d, R-06.e → "no excluded verb; no tie at zero choice score; two actors at different pools" (IS-A §12.2, BA1's row); M2 closes here (`V12_STRUCTURE.md` §3: R-06, R-08, R-09 expected to hold; R-07 holds or is one conjunct short). The readings are written into the conjuncts' `reading:` records by BA1.99; no `status:` is edited (A-114: the re-take is B99's).
+SOFT EDGE (not a `GATE`): B15, B19 and B24 "need not wait for it: a calibration that closes first names the control it ran at and is re-read once at this batch's close" (`IS-B2-CHAR-03`; `V12_STRUCTURE.md` §2.1). At S12, B15 may close first: then BA1.99 re-reads B15's Readings R1 (`IS-PC-03`, `aperture 2 s`, s = 0, 1, 2), the one B15 reading a cast row can move (B15's module-scale readings use default fighters); B19 and B24 close after this batch and read its tree.
+BATCH GATE (read once, on the closing tree, `PYTHONHASHSEED=0` on every seeded command):
+  R-09.b: `python -m engine.season.harness.aperture 2 0` → `POOLS ROLLED`: *two actors at different pools: yes* on a non-combat verb, beside the control (B10's close, every person at the default: "no") (`aperture 4 0` in `IS-A-11`, `IS-B2-CHAR-03` and U1-C; two seasons by A-114, the conjunct's own two-season `argv`);
+  R-06.a and R-08.a: `python -m engine.season.harness.corpus_run` → the `RANKING DISCRIMINATION` line with no verb under `RANKING EXCLUDES`, and the tie ordering showing "no tie between candidates of zero choice score for a person holding a vector" (`IS-A-11`'s gate); `python -m engine.season.harness.decision_spread --decisions` at seeds 0 to 2 → no tie among offered candidates of zero choice score;
+  R-06.d re-read: `decision_spread --decisions`, seeds 0–2: "the strict-top share above one half at the shipped τ, beside the control τ"; R-06.e re-read: `decision_spread --persons` → n of n persons carry a pursuit vector;
+  `python -m engine.season.harness.conviction_spread --words` → `signature_breaks: 0` (CHAR_B step 2) and the creed breaks line (CHAR_OWED §7) with each creed's violating set differing from at least one other creed's; `python -m engine.season.harness.decision_spread --signatures` → "no pursuit's single-pursuit holder tops a verb its signature opposes in any reading, and at most two pursuits share a top verb" (CHAR_B gate 2);
+  `python -m pytest engine/season/tests/test_cr20_attributes.py engine/season/tests/test_u1_capability_surface.py engine/season/tests/test_manner_offsets.py engine/season/tests/test_relations.py engine/season/tests/test_pursuit_signatures.py engine/season/tests/test_contest_decider.py -q` → all pass (the last three created by B10; `test_contest_decider.py` by `IS-B2-CHAR-02`);
+  `python tools/export_npc_roster.py --check` → exit 0; `python tools/export_descriptors.py --check` → exit 0 (`IS-A-11` WHERE: "re-run");
+  `IS-B2-CHAR-06`'s three readings (Readings R1 of this block), each against B10's close (`reading @<sha>`);
+  the soft edge's re-read (above), if B15 closed first;
+  `python -m engine.season.harness.register --check` → exit 0; `python -m engine.season.harness.register --requirements` → nine lines, R-06.a, R-08.a and R-09.b each with a `reading:` at this tree, no `status:` moved; `python tools/m1_acceptance.py --summary` → its verdict line quoted;
+  the suites `python tools/tests_for_diff.py --base <batch-start-sha>` names (registries and a loader: the full gates, CLAUDE.md §0.4);
+  the glossary rows each item names, read against the data it landed (STAGES, "The glossary always matches", rule 2): a mismatch fails the close;
+  the close's commit body records `register --requirements` (nine lines), `m1_acceptance --summary`'s verdict line, the named conjuncts' readings with their tree, the `BUILT OUT`, `ENGINES` and `NULL SCENES` lines before (B10's close, `reading @<sha>`) and after, and the batch's measured wall time; the last `Item:` commit (BA1.99) writes the conjuncts' `reading:` records; `status:` is not edited (`IS-A-12`).
+RE-PIN: once, in BA1.99: "the build hash and every season hash; one re-pin, said plainly" (`IS-A-11`): the realm pins in `engine/season/tests/_realm_goldens.py` (B02's one pin file), the build hash, the one-season realm hashes at seeds 0 to 2, and every corpus and test pin that names a cast row's authored value (`test_cr20_attributes.py`, `test_cr19_competence_gain.py`'s `cast_attributes=True` arm, and what `grep -rl _realm_goldens engine/season/tests` lists), read against B10's close (`reading @<sha>`). The commit says "re-pin: cast content (`IS-A-11` stage 2; authored values, ED-1094)".
+IDS: ED-IN 0; H 0
+DIALS AT CONTROL: none left for B98. Set here: the per-verb `difficulty:` levels (BA1.03; B05 retired lane A's `task_difficulty` roster into the column, D-U1-04, each row at `routine`; the levels beyond `routine` are this batch's: the target is R-09.b and `13_SC_calibration` C1, read at B05); the cast's `stats:` over `unauthored_attributes` = 2 (B01.02's DIALS line names BA1 as the setter: BA1.01 authors values for the persons the draft covers; the setting itself is not changed, and persons the draft leaves unauthored keep it: UNDECIDED (3)); `cast_attributes` (BA1.10: on since B01.02). Not touched: `npc_decider_roles` = `()` (`IS-B2-CHAR-02`; its roles are listed by B16, B20, B24); `scar_weight_shift`, `refusal_axis` (CHAR_OWED §8, B10's flips).
+UNDECIDED:
+  (1) `IS-B2-CHAR-03` says "one commit per file above"; `IS-A-11` (the item this batch is, which `IS_CHECK.md` C1's one-owner rule makes govern) lands "the five tables into their owners …, each through its loader". Taken: one item per table and per loader family (BA1.01 to BA1.09), so each loader's refusal and each gate is read alone; `references/npc_registry.yaml` is therefore edited by four items (BA1.01, .02, .08, .09), in that order, each a different key of the cast rows.
+  (2) `IS-B2-CHAR-03`: "Until Jordan supplies or approves the values the batch is not opened"; D-19: "drafted early, landed at its batch, ratified at that batch's merge … values marked `[ASSUMPTION]` or `status: seed`, the batch's PR body listing each for Jordan's correction". D-19 governs (the structure lane's decision, step 4: `IS-A-11` is the precedent it cites). A value the draft carries uncorrected lands with its `[ASSUMPTION]` mark and is listed in the PR body; the PR body may hold a table back (ED-1094).
+  (3) `unauthored_attributes`: whether BA1 changes the setting or only authors over it. Taken (changes less): the setting is not edited; authored rows override it for the persons they name (U1 §6: "the switch then gates only the authored `stats:`").
+  (4) CHAR_B step 3 and CHAR_OWED §7's refusal ("The loader's refusal follows when the breaks read zero"): written here (BA1.07), conditional on the cells, since the cells are this batch's; if B10 already landed it behind a flag, BA1.07 is a POINTER and says so.
+  (5) `IS-A-11`'s gate "`decision_spread --persons`: the cast's pools differ": `--persons` reads the projected pursuit vectors (its docstring at `aa31fd2`), not pools. Taken: the pools are read off `aperture`'s `POOLS ROLLED` (R-09.b); `--persons` is read for R-06.e. `[ASSUMPTION — basis: `engine/season/harness/decision_spread.py` docstring, `--persons`: "Pairwise cosine of the projected vectors"]`
+C(BA1-cast-content): this batch's entries; the plan's head parts; the draft (read whole: it is every value this batch lands); `unified/U1_GLOSSARY.md` rows *attribute*, *skill*, *skill score*, *difficulty level*, *alignment*, *pursuit signature*, *creed*, *relation ground*, *manner*, *goal*;
+  `references/npc_registry.yaml`; `engine/season/data/cast.py` (`attributes_of`, the `capabilities:` loader B04.09 lands, `manner_offset_of` (B10, `IS-B2-CHAR-07`), `relations_of` (B10, REL), `UNREAD_KEYS`); `engine/season/verb_table.yaml` and `engine/season/data/verbs.py` (the `difficulty:` column and its loader, B05; `align_choice`, B10); `engine/season/rosters.yaml` (`difficulty_levels`, `tables.alignment` with its `choices:` block, `pursuit_signatures`, `affiliation_signatures`, `tables.affiliation_engagement`, `relation_grounds`, `manner_offset_axes`); `engine/season/data/pursuits.py`; `engine/season/boot/realm.py` (`build_realm`, `cast_attributes`; B03c moved it from `harness/populated.py`);
+  `engine/season/harness/aperture.py` (`pools_lines`), `corpus_run.py`, `decision_spread.py`, `conviction_spread.py`; `tools/export_npc_roster.py`; `tools/export_descriptors.py`; `engine/season/requirements.yaml` (R-06, R-08, R-09); `engine/season/tests/_realm_goldens.py`; the test files the BATCH GATE names;
+  read only: `ALIGN` "The resolution, decided"; CHAR_B steps 2–3 and its Gate; REL "Exact edits" 2 and 6 and its gate; CHAR_OWED §7, §10; U1 §6, §11 U1-C;
+  instruments: `register`, `tools/m1_acceptance.py`, `tools/tests_for_diff.py`; the closing SHAs of B00, B01, B02, B04, B05, B10 (and B15's, if it closed first); the permanent surface.
+SERIAL EDGES: within the batch: BA1.01 → BA1.02 (the same cast rows, a different key; the attributes and skill scores first, `IS-A-11` table (a) order); BA1.03 independent of the cast rows; BA1.04 → BA1.05 (`tables.alignment`: the choice cells, then the verb cells the signatures read) → BA1.06 (`affiliation_signatures` reads the same reader shape) → BA1.07 (the refusal lands only when both break counts read 0); BA1.08 and BA1.09 after BA1.02 (`npc_registry.yaml`, other keys); BA1.10 after BA1.01 (the switch reads the authored `stats:`); BA1.11 reads the tree BA1.10 leaves; BA1.99 last.
+  With other batches, by file (U3 §5.1 rows; `→` is landing order): `references/npc_registry.yaml`: B04 → B10 → BA1 → B39 (A-44's generated cast); `engine/season/verb_table.yaml`: … → B05 (the `difficulty:` column) → B10 → BA1 → B11, B15, B21 (S12, other rows); `engine/season/rosters.yaml`: … → B10 (the rosters BA1 fills) → BA1 → B11, B15, B21 (S12, other keys); `engine/season/data/pursuits.py`: B10 → BA1.
+PARALLEL: S12 with B15-pc-calibration (PC), B11-fi-readers (FI), B21-fa-governance (FA). Shared files: `engine/season/verb_table.yaml` (BA1: the `difficulty:` cells only), `engine/season/rosters.yaml` (BA1: `tables.alignment`'s cells and `choices:`, `pursuit_signatures`, `affiliation_signatures`, `tables.affiliation_engagement`): different keys and rows from the siblings, kept by hand at merge (`V12_STRUCTURE_part3.md` §7.3); `references/npc_registry.yaml` is BA1's alone in S12. Hash: four movers at S12, merged in §2.1's table order (BA1, B11, B15, B21); BA1 merges first and the later three re-read its after-reading as their baseline (§7.4).
+COST: content (data edits from a drafted table); producer `valoria-author` on `sonnet`, `medium` ("landing `sonnet`, `medium`", `IS-A-11`); the readings that close M2 read by `opus` (the judgment node that gates a requirement, CLAUDE.md §10); no value is an agent's to invent ("the values not an agent's to invent", `IS-B2-CHAR-03`).
+EST: 9.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this block's 12 positions (0.4 h × 12 + 2.5 h close + 2 h for the long readings), `V12_STRUCTURE_part4.md` E-15; §2.2's 6 h counted the instruction items]
+
+| pos | item | source | state | hash | gates on |
+|---|---|---|---|---|---|
+| BA1.01 | the cast's attributes and skill scores | `IS-A-11` stage 2, table (a); `IS-B2-CHAR-03`; U1-C item 1 | CONTENT | MOVER(behaviour) | Batch B04 (B04.09), Batch B05, Batch B10 |
+| BA1.02 | the cast's manner offsets | `IS-B2-CHAR-07` step 5 (table (a)'s `manner:` column) | CONTENT | MOVER(behaviour) | BA1.01; Batch B10 (`IS-B2-CHAR-07` steps 1–4) |
+| BA1.03 | each verb's difficulty beyond `routine` | `IS-A-11` table (b); U1-C item 2 | CONTENT | MOVER(behaviour) | Batch B05 (the `difficulty:` column) |
+| BA1.04 | the choice cells | `IS-A-11` table (c); `ALIGN` (INCOMPLETE, content) | CONTENT | MOVER(behaviour) | Batch B10 (`ALIGN`) |
+| BA1.05 | a pursuit does what its name says: the cells | `IS-A-11` table (c); CHAR_B step 2 | CONTENT | MOVER(behaviour) | BA1.04; Batch B10 (CHAR_B step 1) |
+| BA1.06 | a creed's triggers are about the creed: the rows | `IS-A-11` table (e); CHAR_OWED §7 | CONTENT | MOVER(behaviour) | BA1.05; Batch B10 (CHAR_OWED §7's roster and reader) |
+| BA1.07 | the signature refusal, once the breaks read zero | CHAR_B step 3; CHAR_OWED §7 | BUILD | EQUAL | BA1.05, BA1.06 |
+| BA1.08 | the six relation rows | `IS-A-11` table (d); REL edit 6 | CONTENT | MOVER(behaviour) | BA1.02; Batch B10 (REL edits 1–5) |
+| BA1.09 | two cast rows gain goals | `IS-A-11` table (e); CHAR_OWED §10 | CONTENT | MOVER(behaviour) | BA1.08 |
+| BA1.10 | the switch | `IS-A-11` stage 2 step 2; U1-C ("the switch") | POINTER | — | BA1.01 |
+| BA1.11 | the three CHAR readings | `IS-B2-CHAR-06` | READING | — | BA1.10 |
+| BA1.99 | the re-pin and the readings that close M2 | `IS-A-11` (hash movers); `IS-A-12` | BUILD | MOVER (the re-pin) | BA1.01 to BA1.11 |
+
+### BA1.01 — the cast's attributes and skill scores · `IS-A-11` stage 2, table (a) · CONTENT · HASH MOVER(behaviour)
+- SOURCE: `master/instructions/IS_A_NINE_part2.md` "Item: IS-A-11" (`:263-307`), stage 2 step 1; `master/instructions/IS_B2_SC_FI_CORE_CHAR_part2.md` "Item: IS-B2-CHAR-03" (`:144-149`); U1 §6, §11 U1-C item 1; `V12_STRUCTURE.md` D-19; rulings A-6, A-7, A-98, ED-1094; closes G-3 ("as far as the nine need it").
+- ADVANCES: R-09.b ("two persons resolve the same verb at different pools because they differ"); R-06 ("people differ in what they can do", `IS-B2-CHAR-03`).
+- INSTRUCTION:
+  1. Open the draft's table (a) and `references/npc_registry.yaml`; record in the commit body the draft's commit and Jordan's correction commit (or "uncorrected"), and the count of cast rows in each (a one-line `yaml.safe_load` count; 46 at `aa31fd2`).
+  2. For each cast row of table (a): "the attributes (`stats:`) and the skills with their skill scores (`capabilities:`), keys from the definition rows B04 lands" into that row of `references/npc_registry.yaml`: `stats:` a mapping over the ten attribute keys (U1 §6: "the ten, 1–7"; `data/cast.py::attributes_of` reads it, "legacy spellings resolve"); `capabilities: {<id>: <rank>}` over the `capabilities:` rows of `references/descriptor_registry.yaml` (B04.02, B04.18, B15.07's `healing` if B15 has merged), each rank inside its row's `scale` ("`data/cast.py` validates every id against `CAPABILITIES` and every rank against the row's `scale`, and refuses a cast-row key it does not read (`UNREAD_KEYS`)", U1 §6). A row whose draft cell is `[NO BASIS IN THE TREE]` and was not corrected lands with a YAML comment `# [ASSUMPTION: IS-A-11 draft, uncorrected]` on that key (UNDECIDED (2)); a row the draft leaves empty is left as it is (`stats: null` stays).
+  3. The edit goes through the loaders as they stand: no loader is changed; a refusal at import is a defect of the row, fixed in the row, never in the loader.
+- WHERE: `references/npc_registry.yaml` (each cast row's `stats:`, `capabilities:`).
+- TESTS: none new; `engine/season/tests/test_cr20_attributes.py` and `test_u1_capability_surface.py` (B04) read green; a test that pins an unauthored person's attributes is re-pinned at BA1.99, never weakened.
+- FALSIFIER and CONTROL: "authoring a `stats:` row moves no roll (U1-C's falsifier)" — read as: the seed-0 one-season `POOLS ROLLED` block shows the same pools as B10's close; "control: the row removed, the hash returns" (`IS-B2-CHAR-03`): one planted removal of the first authored row reproduces B10's close build hash (`reading @<sha>`).
+- GATE: `python tools/export_npc_roster.py --check` → exit 0; `python tools/export_descriptors.py --check` → exit 0; `python -m pytest engine/season/tests/test_cr20_attributes.py engine/season/tests/test_u1_capability_surface.py -q` → pass; `python -m engine.season.harness.aperture 1 0` → `POOLS ROLLED` lists at least one non-combat verb with two pools (the two-season reading is the batch gate's); the build hash at seed 0 recorded (moved, declared).
+- HASH MOVERS: "the build hash and every season hash" (`IS-A-11`), for the authored values. Declared; BA1.99.
+- DEPENDS ON: V12 Batch B04-capability-home (B04.02's `capabilities:` block and `CapabilityRow`; B04.09: "a cast row may author skill scores"; B04.12: the unread-key refusal; B04.26: the draft); V12 Batch B05-one-roll (U1-B: the roll with two inputs, so a skill score gives dice and an attribute gives levels); V12 Batch B10-character; EXISTS-IN-TREE `engine/season/data/cast.py::attributes_of`, `references/npc_registry.yaml`.
+- GLOSSARY: none new; *skill score* and *attribute* rows read against the authored rows at the close (the draft uses A-98's words).
+- COST and TIER: content (data edit); `sonnet`, `medium`.
+- LANDS IT: BA1's `valoria-author` producer, `isolation: worktree`; `Item: BA1.01`, `[skip ci]`.
+
+### BA1.02 — the cast's manner offsets · `IS-B2-CHAR-07` step 5 · CONTENT · HASH MOVER(behaviour)
+- SOURCE: `master/instructions/IS_B2_SC_FI_CORE_CHAR_part2.md` "Item: IS-B2-CHAR-07" (`:167-173`) step 5 ("**Content owed.** The cast's offsets are authored content: `[BLOCKED: CONTENT — Jordan, or a content pass he reviews]`, joining `BA1-cast-content` (`IS-A-11`) as one more table"); B04.26 (table (a) "carries a `manner:` column for `IS-B2-CHAR-07`'s three axes, marked "lands in BA1 after B10""); rulings A-108; ED-IN-0261's superseding row; CL-PERSON (`proposals/2026-10-24-character-layers-v2.md` §2).
+- ADVANCES: R-06 ("two persons who want the same things differ in how they go about it").
+- INSTRUCTION: for each cast row whose draft `manner:` cell is filled, write `manner: {<axis>: <offset>}` on its row of `references/npc_registry.yaml`, axes from `rosters.yaml: manner_offset_axes` (`rigid_flexible`, `grandiose_humble`, `deontological_instrumental`), each value inside `±manner_offset_bound` (0.15 as CL-PERSON drafts it). `data/cast.py::manner_offset_of(row)` (B10) refuses "an axis outside the closed set … and a value outside `±manner_offset_bound`": a refusal is fixed in the row. Uncorrected cells as BA1.01 step 2.
+- WHERE: `references/npc_registry.yaml` (each cast row's `manner:`).
+- TESTS: none new; `engine/season/tests/test_manner_offsets.py` (B10) reads green.
+- FALSIFIER and CONTROL: "CL-PERSON's personality (b) falsifier at live offsets (`decision_spread --arms`: no decision moved means the offset is inert)"; control: "zero offsets give `projected_axes` equal to today's for every cast person, and the realm hash equal at seeds 0 to 2" (B10's close reading, `reading @<sha>`).
+- GATE: `python -m pytest engine/season/tests/test_manner_offsets.py -q` → pass; `python -m engine.season.harness.decision_spread --arms` → a decision moved between the authored and the zero-offset arm, quoted; `grep -rn "manner_offset" engine/season --include=*.py` → the carrier, the loader, the write-matrix row's reader and `projected_axes` only (B10's falsifier, re-read).
+- HASH MOVERS: "authoring the offsets (BA1) is a declared mover" (`IS-B2-CHAR-07`). Declared; BA1.99.
+- DEPENDS ON: V12 Batch B10-character (`IS-B2-CHAR-07` steps 1–4: `Person.manner_offset`, `cast.manner_offset_of`, `rosters.yaml: manner_offset_axes`, `fixtures.manner_offset_bound`, `person_q.projected_axes`); V12 BA1.01.
+- GLOSSARY: *manner* — the row's owner column points at `person_q.projected_axes` (pursuits' projection plus the person's own offset, A-108); unchanged if B10 already pointed it.
+- COST and TIER: content; `sonnet`, `medium`.
+- LANDS IT: BA1's producer; `Item: BA1.02`, `[skip ci]`.
+
+### BA1.03 — each verb's difficulty beyond `routine` · `IS-A-11` table (b); U1-C item 2 · CONTENT · HASH MOVER(behaviour)
+- SOURCE: `IS-A-11` stage 1 (b) ("per verb, `difficulty:` where it is not `routine` (starting with `interrogate: demanding`, U1-C item 2)") and stage 2 step 1; U1 §11 U1-C item 2 ("`verb_table.yaml`: per-verb `difficulty:` levels beyond `routine` (Jordan's), starting with OBS §4 step 5's `interrogate: demanding`"); `proposals/U5c_SC_one_obstacle_form.md` §4 step 1a (the column, every rolled row `routine`, D-U1-04) and T13's per-verb values ("`interrogate` and the inquiries `demanding`, `speak` `routine`"); `IS-B2-CHAR-03` ("the per-verb `difficulty:` cells … are in both and are one commit").
+- ADVANCES: R-09.b (the obstacle is not one number in the shipped realm, `IS-B2-CHAR-03`); U1 §6's charge "Ob always 2 is wrong" (lane A).
+- INSTRUCTION: in `engine/season/verb_table.yaml`, each row the draft's table (b) names: `difficulty: <level>` with `<level>` a member of `rosters.yaml: difficulty_levels` (B05); rows the table does not name stay `routine`. The first row is `interrogate: demanding`. The verb loader (B05, `data/verbs.py`) refuses a level outside the roster; a refusal is fixed in the row. Additions go "at the end of their family's block" only where a row is added (none is: this item edits cells).
+- WHERE: `engine/season/verb_table.yaml` (the `difficulty:` cell of each row table (b) names).
+- TESTS: none new; `engine/season/tests/test_sc_calibration_targets.py` (B05) reads green: its grid is stated at `plain` and `routine` on ranks (`29_DICE` row 8), which no cell here moves.
+- FALSIFIER and CONTROL: a row whose `difficulty:` is not a `difficulty_levels` member loads; control: with every cell `routine`, the seed-0 one-season hash equals BA1.02's reading.
+- GATE: `python -m pytest engine/season/tests/test_sc_calibration_targets.py -q` → pass; `python -m engine.season.harness.register --check` → exit 0; `aperture 1 0`'s POOLS ROLLED and its obstacle readings (the `Margin.terms` of a `demanding` act carry a nonzero difficulty term) quoted; the seed-0 hash recorded (moved).
+- HASH MOVERS: every world with an act of a verb whose cell changed. Declared; BA1.99.
+- DEPENDS ON: V12 Batch B05-one-roll (OBS §4 step 1a: the `difficulty:` column, `difficulty_levels`, `difficulty_ob`; `task_difficulty` retired into it); EXISTS-IN-TREE `engine/season/verb_table.yaml` rows.
+- GLOSSARY: none new (*difficulty level* read against the cells).
+- COST and TIER: content; `sonnet`, `medium`.
+- LANDS IT: BA1's producer; `Item: BA1.03`, `[skip ci]`.
+
+### BA1.04 — the choice cells · `IS-A-11` table (c); `ALIGN` · CONTENT · HASH MOVER(behaviour)
+- SOURCE: `IS-A-11` stage 1 (c) ("the alignment cells of `02_CHAR_choice_alignment`"); `proposals/02_CHAR_choice_alignment.md` "The resolution, decided" (the `choices:` block), "INCOMPLETE, content: the cells are Jordan's"; `IS-B2-CHAR-02` "What stays open" ("the cells per key (`approach`, `retreat_at`, `hearing_move`) are content, Jordan's (`02_CHAR_choice_alignment.md:122`)").
+- ADVANCES: R-06.a and R-08.a (a person's reason for a choice is a nonzero term), with BA1.05.
+- INSTRUCTION: `engine/season/rosters.yaml`, inside `tables.alignment`, the optional `choices:` block (B10 landed it empty, "absent or empty is the shipped state"): for each `choice_sourced` key the draft's table (c) names, each value, the cells on the seven pursuit axes (ALIGN's form: "`retreat_at: never: {rigid_flexible: -0.4, grandiose_humble: -0.3}` … illustrative; the cells are Jordan's"). "The loader refuses a key that is not `choice_sourced`, a value outside that key's `CHOICE_RANGES`, and an axis off the roster. No value is required to carry a cell." Keys whose module does not yet consult a decider (`approach` before B16, `hearing_move` before B24) may carry cells now: they are read by `score_terms` where the key is formed and by `make_decider` once `npc_decider_roles` lists the role.
+- WHERE: `engine/season/rosters.yaml` (`tables.alignment.choices`).
+- TESTS: none new; `engine/season/tests/test_contest_decider.py` (B10: `test_opposite_temperaments_pick_differently`) reads green.
+- FALSIFIER and CONTROL: a cell on an axis off the roster loads; control: with the block empty, BA1.03's hash.
+- GATE: `python -m pytest engine/season/tests/test_contest_decider.py -q` → pass; `python -m engine.season.harness.decision_spread --decisions` (seed 0) → the choice-sourced keys' readings quoted; the seed-0 hash recorded.
+- HASH MOVERS: every world in which a `choice_sourced` key with a cell is scored. Declared; BA1.99.
+- DEPENDS ON: V12 Batch B10-character (`ALIGN`: the `choices:` block, `data/verbs.py::align_choice`, the `score_terms` term; `IS-B2-CHAR-02`); EXISTS-IN-TREE `rosters.yaml: choice_sourced`, `tables.alignment`.
+- GLOSSARY: none new (*alignment* row read against the cells).
+- COST and TIER: content; `sonnet`, `medium`.
+- LANDS IT: BA1's producer; `Item: BA1.04`, `[skip ci]`.
+
+### BA1.05 — a pursuit does what its name says: the cells · CHAR_B step 2 · CONTENT · HASH MOVER(behaviour)
+- SOURCE: `proposals/16_PESSIMIST_CHAR_B_a_pursuit_does_what_its_name_says.md` step 2 (`:113-119`), "Gate" 2–3 (`:131-149`); `IS-A-11` stage 1 (c) ("the pursuit-signature cells of `16_PESSIMIST_CHAR_B`"); ED-IN-0261.
+- ADVANCES: R-06.a, R-08.a (`corpus_run`'s `RANKING EXCLUDES` empties as the sparse alignment table fills).
+- INSTRUCTION:
+  1. The reading instrument first (CHAR_B gate 2: "committed first as a `--signatures` mode of `harness/decision_spread.py`"): `engine/season/harness/decision_spread.py --signatures` prints, per pursuit, the top verbs of a single-pursuit holder over live candidates, and flags a top verb the pursuit's `pursuit_signatures` row opposes, and verbs shared as top by more than two pursuits. `[ASSUMPTION: that harness builds a realm and calls `score_terms`; `conviction_spread` declares it builds none — basis: both module docstrings]` (CHAR_B's own mark). It is a mode of an existing harness, not a new tool.
+  2. The cells, in CHAR_B's order: "First the rows for the uncelled verbs a signature names (`forgive`, `pardon`, `tend`, `arrest`, `capture`, `raze`, `sabotage`, `conceal`, `examine`), then the cells of the five loud rows, each change read back through `--words`. A cell is authored in `tables.alignment` and nowhere else; no pursuit × verb override is added, because that would be a second owner of the lean." The values are the draft's table (c).
+- WHERE: `engine/season/harness/decision_spread.py` (the `--signatures` mode); `engine/season/rosters.yaml` (`tables.alignment` verb cells).
+- TESTS: `engine/season/tests/test_pursuit_signatures.py` (B10, CHAR_B step 1) reads green; in the same file, `test_signatures_mode_flags_a_planted_opposed_top_verb` `[ASSUMPTION: test name; E-3]` for the new mode, written before step 1.
+- FALSIFIER and CONTROL: a single-pursuit holder whose top verb its signature opposes; "today four share `forge` and three `utter`" (CHAR_B gate 2's control reading, re-read on B10's tree before the cells).
+- GATE: `python -m engine.season.harness.conviction_spread --words` → "breaks = 0 (`--words` prints `signature_breaks: 0`)"; `python -m engine.season.harness.decision_spread --signatures` → "no pursuit's single-pursuit holder tops a verb its signature opposes in any reading, and at most two pursuits share a top verb"; "The scar's sign test, re-read: no favoured verb of a pursuit is in that pursuit's violated set" (CHAR_B gate 3); the seed-0 hash recorded.
+- STOPS IF: `--words` does not reach 0 with the draft's cells: the item lands the cells it has, records the remaining breaks in the commit body, and BA1.07 becomes a POINTER ("the refusal waits on the breaks"); the remaining cells are listed in the PR body for Jordan.
+- HASH MOVERS: every world (the alignment table scores every candidate of the celled verbs). Declared; BA1.99.
+- DEPENDS ON: V12 Batch B10-character (CHAR_B step 1: `pursuit_signatures`, `signature_breaks()`, `conviction_spread --words`; `test_pursuit_signatures.py`); V12 BA1.04; EXISTS-IN-TREE `engine/season/harness/decision_spread.py`, `conviction_spread.py`.
+- GLOSSARY: *pursuit signature* — owner `rosters.yaml: pursuit_signatures`, read against the cells (B10 created the row; no change unless it still reads "proposed").
+- COST and TIER: content and a small build (the mode); `sonnet`, `medium`; the `--signatures` reading `opus`.
+- LANDS IT: BA1's producer; `Item: BA1.05`, `[skip ci]`.
+
+### BA1.06 — a creed's triggers are about the creed: the rows · CHAR_OWED §7 · CONTENT · HASH MOVER(behaviour)
+- SOURCE: `proposals/U5a_CHAR_owed_amendments.md` §7 (`:170-185`), "INCOMPLETE, content: §7's signature rows … are Jordan's or the CHAR content pass's"; `IS-A-11` stage 1 (e) ("the signature rows … of `U5a_CHAR_owed_amendments` §7"); closes F-PES-CHAR-03 item 3.
+- ADVANCES: R-06 (a believer's crisis is about his creed); with BA1.05, R-06.a.
+- INSTRUCTION: `engine/season/rosters.yaml: affiliation_signatures` (B10 landed the roster's form and its reader): "one row per member of `affiliation_roster`, `{favours: [...], opposes: [...]}`, checked by the same reader shape (`signature_breaks`) against `tables.affiliation_engagement`. Content is Jordan's (`[ASSUMPTION; low]` rows may be proposed by the CHAR content pass); the cells are repaired in that table and nowhere else." The rows and the cell repairs are the draft's table (e).
+- WHERE: `engine/season/rosters.yaml` (`affiliation_signatures` rows; `tables.affiliation_engagement` cells).
+- TESTS: none new; `test_pursuit_signatures.py` reads green (its reader serves both, "same reader").
+- FALSIFIER and CONTROL: "With breaks at zero, the conviction swap still moves the top act in under 5 % of readings (then the engagement gain, not the cells, is what is small: say so and sweep it)" — a finding for the `opus` reader, quoted, not swept here; control: BA1.05's hash.
+- GATE: "`conviction_spread --words` prints the creed breaks; after the cells, each creed's violating set differs from at least one other creed's"; the seed-0 hash recorded.
+- STOPS IF: the creed breaks do not reach 0: as BA1.05's STOPS IF.
+- HASH MOVERS: every world with a person holding a creed. Declared; BA1.99.
+- DEPENDS ON: V12 Batch B10-character (CHAR_OWED §7's edit: the `affiliation_signatures` roster and its reader); V12 BA1.05.
+- GLOSSARY: *creed* row (or *affiliation*): owner column gains `rosters.yaml: affiliation_signatures` `[ASSUMPTION: the row's name in the glossary — basis: CHAR_OWED says "creed" for an `affiliation_roster` member]`.
+- COST and TIER: content; `sonnet`, `medium`.
+- LANDS IT: BA1's producer; `Item: BA1.06`, `[skip ci]`.
+
+### BA1.07 — the signature refusal, once the breaks read zero · CHAR_B step 3; CHAR_OWED §7 · BUILD · HASH EQUAL
+- SOURCE: CHAR_B step 3 (`:121-124`): "When `signature_breaks()` is empty, `data/pursuits.py` raises at import on a non-empty answer, as `data/rosters.py` already does for a roster's own invariants. This is a loader's refusal for one data family (`CLAUDE.md` §0.05), load-bearing on the game: the table decides what every person does."; CHAR_OWED §7 ("The loader's refusal follows when the breaks read zero, as in B's step 3"); UNDECIDED (4).
+- ADVANCES: none of the nine; keeps R-06.a's cells from drifting (a loader refusal, CLAUDE.md §0.05's licensed form).
+- INSTRUCTION: in `engine/season/data/pursuits.py`, at import, after the rosters load: if `signature_breaks()` (and the creed reader's breaks) returns a non-empty answer, raise the loader's refusal naming the pursuit or creed and the clause. If B10 landed this refusal behind a setting, this item is a POINTER to it and only flips nothing (recorded).
+- WHERE: `engine/season/data/pursuits.py`; `engine/season/tests/test_pursuit_signatures.py`.
+- TESTS: CHAR_B's "`test_loader_raises_when_breaks_nonempty` (step 3 only)", written before the edit and read red (no refusal), green after.
+- FALSIFIER and CONTROL: a planted cell that flips a favoured verb's lean below zero imports without a refusal; control: the shipped table imports (breaks 0), and the seed-0 hash equals BA1.06's.
+- GATE: `python -m pytest engine/season/tests/test_pursuit_signatures.py -q` → pass; the seed-0 hash equal to BA1.06's reading.
+- STOPS IF: BA1.05 or BA1.06 stopped with breaks above 0: then this item is not built; its row says "waits on the breaks" and the batch closes without it (the receipt's `NOT DONE`).
+- HASH MOVERS: none.
+- DEPENDS ON: V12 BA1.05, BA1.06; V12 Batch B10-character (`signature_breaks()`, `data/pursuits.py`).
+- GLOSSARY: none.
+- COST and TIER: small build; `sonnet`, `medium`.
+- LANDS IT: BA1's producer; `Item: BA1.07`, `[skip ci]`.
+
+### BA1.08 — the six relation rows · `IS-A-11` table (d); REL edit 6 · CONTENT · HASH MOVER(behaviour)
+- SOURCE: `proposals/02_CHAR_relations_have_a_ground.md` "Exact edits" 2 and 6, "The gate" (a)–(c), "INCOMPLETE, content: the six rows' numbers are placeholders for Jordan"; `IS-A-11` stage 1 (d); `IS-B2-CHAR-03`.
+- ADVANCES: R-06 (a rivalry seeded at build is acted on); R-08.a (the stance term varies across a person's candidates).
+- INSTRUCTION: at the item's open, read `references/npc_registry.yaml` for `relations:` keys B10 may have landed with placeholders, and record them. Then land the draft's table (d) as corrected, replacing any placeholder row: on each holder's cast row, `relations: [{to: <NPC id>, ground: <relation_grounds member>, valence: <-1|+1>, weight: <int>}]`. REL's six (holder, to, ground, valence): "Almud → Lenneth kin +1; Lenneth → Almud kin +1; Baralta → Almud rivalry −1; Almud → Baralta rivalry −1; Ehrenwall → Almud service +1; Vaynard → Baralta rivalry −1"; the weights are the draft's ("the numbers are placeholders"). "`to` is a registry case id (`NPC-050`), mapped to the seated person id (`p_npc_050`) by the same mapping `build_realm` uses"; "`weight` a whole number in the stance row's own unit, bounded by `data/cast.py::STANCE_MAX`". `data/cast.py::relations_of` (B10) refuses an unknown id, ground, valence or an out-of-range weight; a refusal is fixed in the row.
+- WHERE: `references/npc_registry.yaml` (`relations:` on six rows' holders).
+- TESTS: none new; REL's "`test_no_relations_key_is_hash_equal` (a); `test_six_rows_give_eleven_directed_stance_pairs` and `test_a_rival_ranks_hostile_acts_higher_than_a_stranger` (b); `test_each_holder_holds_the_bond_claim_at_build` (c); `test_an_unknown_ground_or_id_is_refused`" (B10's `engine/season/tests/test_relations.py`) read green on the shipped rows: (b) and (c) were written against planted rows at B10 and now read the authored ones.
+- FALSIFIER and CONTROL: "With rows authored, a rival ranks hostile acts on his rival no differently from on a stranger"; control: "No `relations:` key: `build_realm(0).content_hash()` EQUAL" (B10's close).
+- GATE: `python -m pytest engine/season/tests/test_relations.py -q` → pass; "eleven directed pairs hold a stance among the ten (five today); for Almud and Baralta, the rank of a hostile act (`challenge`, `open_case`) on the rival is higher than the same act on a person toward whom he holds no row, and the rank of `confer` on the rival lower" (REL gate (b)), read at `build_realm(0)`; the build hash recorded (moved).
+- HASH MOVERS: "the content is a declared build-hash mover" (REL). Declared; BA1.99.
+- DEPENDS ON: V12 Batch B10-character (REL edits 1–5: `rosters.yaml: relation_grounds`, `cast.relations_of`, the seeder in `boot/realm.py::build_realm`); V12 BA1.02.
+- GLOSSARY: *relation ground* — owner `rosters.yaml: relation_grounds`, read against the rows.
+- COST and TIER: content; `sonnet`, `medium`.
+- LANDS IT: BA1's producer; `Item: BA1.08`, `[skip ci]`.
+
+### BA1.09 — two cast rows gain goals · CHAR_OWED §10 · CONTENT · HASH MOVER(behaviour)
+- SOURCE: `proposals/U5a_CHAR_owed_amendments.md` §10 (`:207-211`); `IS-A-11` stage 1 (e) ("… and goals of `U5a_CHAR_owed_amendments` §7 and §10"); carries `02_CHAR_audit.md` §6.2 row 29.
+- ADVANCES: R-06 (an authored person wants something); `IS-B2-CHAR-01`'s *fulfilled* ending reads a goal.
+- INSTRUCTION: "`references/npc_registry.yaml`, rows NPC-034 and NPC-071: author `goals:` (content; the CHAR content pass or Jordan)", the values the draft's table (e) carries, in the form the other cast rows' `goals:` take (`data/cast.py` reads it; 30 rows carry `goals` at `aa31fd2`, its docstring). "The cases' "UNCLEAR: no goal authored" need is an authoring gap, not an engine need."
+- WHERE: `references/npc_registry.yaml` (rows NPC-034, NPC-071: `goals:`).
+- TESTS: none new.
+- FALSIFIER and CONTROL: one of the two persons holds no live `commit` at build; control: BA1.08's build hash with the two rows removed.
+- GATE: "`data/cast.py` loads; the two persons hold a live `commit` at build" (read at `build_realm(0)`, the two persons' `commit` Tenures listed in the commit body); the build hash recorded.
+- HASH MOVERS: "A declared build-hash mover" (CHAR_OWED §10). Declared; BA1.99.
+- DEPENDS ON: EXISTS-IN-TREE `engine/season/data/cast.py` (the `goals` reader), `references/npc_registry.yaml` rows NPC-034, NPC-071; V12 BA1.08.
+- GLOSSARY: none.
+- COST and TIER: content; `sonnet`, `medium`.
+- LANDS IT: BA1's producer; `Item: BA1.09`, `[skip ci]`.
+
+### BA1.10 — the switch · `IS-A-11` stage 2 step 2 · POINTER
+- What the pointed step does: "`harness/populated.py::build_realm`'s `cast_attributes` default flips to on, in its own commit (U1-C's "the switch")" — after B03c the function is `engine/season/boot/realm.py::build_realm`. B01.02 (lane A's `c5bf18a` step 3) already ships the switch on, at value 2 on every key (B01's note "for the BA1 author": "`IS-A-11` stage 2 step 2 … then finds the switch on and lands only the values"); U1 §6: "With CAP Part B the seating of unauthored values stops …, so the switch then gates only the authored `stats:`".
+- Target: `engine/season/boot/realm.py::build_realm` (`cast_attributes`).
+- Gate: at the batch's open, `grep -n "cast_attributes" engine/season/boot/realm.py` shows the default `True`; recorded in BA1.99's commit body. If it reads `False`, this position becomes a BUILD item in this place: flip the default to `True` in its own commit, a declared mover read at BA1.99, with `test_cr20_attributes.py`'s "`cast_attributes=False` (the shipped control)" docstring and assertion re-pointed to the new default (never weakened).
+
+## Readings (BA1)
+
+- **R1 (BA1.11) — `IS-B2-CHAR-06`, the three CHAR readings** (`master/instructions/IS_B2_SC_FI_CORE_CHAR_part2.md` "Item: IS-B2-CHAR-06", copied): "three readings, quoted at the close of B05, B10 and `BA1-cast-content`, each against the one before: (1) `aperture 4 0` POOLS ROLLED, the line *"two actors at different pools"* per rolled verb (`U5a_capability_home_and_two_inputs.md` Part B gate 4); (2) `python -m engine.season.harness.decision_spread --persons` (distinct pools across the cast); (3) `IS-B2-CORE-04` row 11's share of non-top choices. Expected: (1) stays "no" in the shipped realm at B05 and B10 (the mechanism is in, the content is not) and reads "yes" at the content batch". (1) is read at two seasons, `aperture 2 0` ("four seasons in the source; A-114"); (2) is read as UNDECIDED (5) says. "FALSIFIER and control: a reading taken on a tree whose `aperture` `CONTROL` line reads unequal is void; control: the previous close's after-reading (`reading @<sha>`), not re-taken." Tier: `haiku` extracts.
+
+### BA1.99 — the re-pin and the readings that close M2 · `IS-A-11` (hash movers); `IS-A-12` · BUILD · HASH MOVER (the re-pin)
+- SOURCE: `IS-A-11` ("Hash movers: the build hash and every season hash; one re-pin, said plainly"); `IS-B2-CHAR-03` ("Hash movers: every realm pin, once, at the batch's last commit"); `IS-A-12` (the `reading:` records); `V12_STRUCTURE_part4.md` E-1, E-2; CLAUDE.md §7.
+- ADVANCES: R-06.a, R-08.a, R-09.b (their readings recorded); R-06.d, R-06.e re-read.
+- INSTRUCTION:
+  1. Re-record, once, against B10's close (`reading @<sha>`): the build hash; the realm pins of `engine/season/tests/_realm_goldens.py` at seeds 0 to 2 (one season); every test pin that names an authored value (`grep -rl _realm_goldens engine/season/tests`, and the `cast_attributes=True` arms of `test_cr19_competence_gain.py` and `test_cr20_attributes.py`). The commit says "re-pin: cast content (`IS-A-11` stage 2; authored values, ED-1094; BA1.01 to BA1.09)" and names each pin with its old and new value.
+  2. Run the BATCH GATE's conjunct readings on this tree and write the `reading:` records of R-06.a, R-08.a and R-09.b (and the re-read R-06.d, R-06.e) in `engine/season/requirements.yaml`, each with its tree and its line; `status:` is not edited (A-114).
+  3. If B15 closed before this batch (the soft edge), re-read B15's Readings R1 (`aperture 2 s`, s = 0, 1, 2: `combat.fight`, the fights by ending kind) and quote it beside B15's (`reading @<sha>`).
+  4. The close's readings into the commit body: Readings R1; `register --requirements` (nine lines); `m1_acceptance --summary`'s verdict line; `BUILT OUT`, `ENGINES`, `NULL SCENES` before (B10's close) and after; the measured wall time; the list of every value landed uncorrected (`[ASSUMPTION]`), which the PR body repeats for Jordan (D-19).
+- WHERE: `engine/season/tests/_realm_goldens.py`; the test files step 1 lists; `engine/season/requirements.yaml` (`reading:` records only).
+- TESTS: none new; after step 1 every pinned test passes.
+- FALSIFIER and CONTROL: a pin moved that no BA1 item declared (then the batch moved behaviour it did not declare: the re-pin stops and the batch is `STOPPED`); a conjunct `reading:` whose tree is not this one. Control: B10's close readings.
+- GATE: the BATCH GATE above, every line; `python -m engine.season.harness.register --requirements` → exit 0, nine lines.
+- HASH MOVERS: the batch's one re-pin, here and nowhere else.
+- DEPENDS ON: V12 BA1.01 to BA1.11; V12 Batch B02-tests (`_realm_goldens.py`; `IS-A-01`'s `reading:` record).
+- GLOSSARY: none.
+- COST and TIER: a re-pin and readings; `sonnet`, `high`; the readings read by `opus`.
+- LANDS IT: BA1's producer; `Item: BA1.99`, without `[skip ci]` (the batch's last `Item:` push, CI run 1 of the batch).
+
+| STOP. Batch BA1-cast-content closes here |
+
+Last item written by this part: BA1.99.

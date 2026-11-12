@@ -337,3 +337,5 @@ EST: this half's 23 positions: 0.4 h × 23 = 9.2 h; the batch is 0.4 h × (23 + 
 - Where it lands: `U5b_PC_rulings_in_the_fight` §2–§3 in the second half of this batch (U3 §1 item 6: "→ `U5b_PC_rulings_in_the_fight` §2–§3 (UPR §5 row 4)"), with 29_DICE 29-2 and 29-3 (the fight's rate). Until then `combat_input` fills `faculties` with `score + addends` (B05.09 step 3), so the fight keeps its own literals behind B05.23's flip (UNDECIDED U-4).
 - Files: `modules/combat/core.py`, `engine/season/queries/inputs.py` (`PersonalCombatInput`), `engine/season/seam/wrappers/combat.py` (`combat_input`); NAMES there: flat combat imports → `from modules.combat import …` (B13).
 - Gate: the second half's UPR §2 item; here, `git grep -n "faculties" engine/season/seam/wrappers/combat.py` → still present at B05.23.
+
+*Continued: B05.14 onward, in this part's continuation file (`_cont`), in the same batch block.*
