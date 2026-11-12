@@ -19,7 +19,7 @@ sides hold are never part of the opposition.** Measured on the repository's own 
 
 - **The fight** (0.4 × the defender's score, `DMG_SCALE` 1.07 as A-31 orders): 4.27 turns and 4.50 wounding
   blows where the shipped fight has 3.35 and 3.20; a lead change in 45.2% where it has 35.2%; 0.1% undecided;
-  an attack on an equal draws blood 51.6% of the time, at rank 2 and (within three points) at every rank to 12.
+  an attack on an equal draws blood 52% of the time, at rank 2 and at rank 5 alike.
 - **The better man wins at one curve in both contests.** One rank better wins about two in three, two ranks
   three in four, four ranks nine in ten: the fight reads 65.7 / 78.0 / 92.3% (felled shares, 1,000 fights a
   cell); the argument reads 66 / 78 / 92% of decided exchanges (closed form). Equals are 50.8% and exactly

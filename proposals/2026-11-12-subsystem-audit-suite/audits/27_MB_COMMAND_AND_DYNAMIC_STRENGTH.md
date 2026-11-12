@@ -208,7 +208,8 @@ order stands:
 | `27_MB_E` §1, §3 values | not before the source search, or Jordan's values | A-54's motion draw (WR); custody (PHYSICAL) |
 
 Cross-lane edges: CORE and DICE (the capability row, `band_odds`, the keyed draw of A-30, on which the
-flip-share reading rests); CHAR (the decider's scoring; believed pools); FA and the institutions kit (the
+flip-share reading rests; the even line of an unopposed task, which ruling A-71's lane,
+`audits/29_ONE_OPPOSED_RULE.md`, restates and which `27_MB_A` carries as one number without restating); CHAR (the decider's scoring; believed pools); FA and the institutions kit (the
 seat's modifier; the A-12 text); WR (the motion draw); SE (a cohort's dead; the ration debit); PC (the carry
 leaf; the nested duel).
 

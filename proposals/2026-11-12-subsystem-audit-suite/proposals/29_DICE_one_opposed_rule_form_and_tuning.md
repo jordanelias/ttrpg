@@ -56,7 +56,7 @@ U5c §2's `max(OB_MIN, …)` never binds and is left as written.
 | the operand | `seam/wrappers/pool.py::score` | — | the trained score, no base, no practice addend | 0.1% undecided where the pool operand gives 49.7% |
 | `pool_add`, `pool_floor` | fixtures (U5a B2) | 0, 0 | 6, 5 | the even line is 2.4 |
 | `DMG_SCALE` | `modules/combat/core.py:168` (U5b §4) | 1.55 | 1.07 seed (a Success is one Wound Interval) | 3.20 to 4.50 blows; lead change 35.2 to 45.2% |
-| the argument's difficulty ladder | `difficulty_ob` (`13_SC_tuning_tables.md` T1) | 0 / 1 / 2 / 3 | 0 / 0.5 / 1 / 1.5 **above the even line** | equals at `routine` fail 56.9 to 60.1% over ranks 0 to 7, inside `13_SC_calibration.md` C1 |
+| the argument's difficulty ladder | `difficulty_ob` (`13_SC_tuning_tables.md` T1) | 0 / 1 / 2 / 3 | 0 / 0.5 / 1 / 1.5 **above the even line** | equals at `routine` fail 56.9 to 60.1% over ranks 0 to 7, inside `13_SC_calibration.md` C1; Success-or-better 22.2 to 30.1%, at C1's upper edge (0.30) at rank 7, which the calibration step reads |
 | `talent_level` | fixture (U5a B2) | `None` | `minor` | one step of aptitude against: Failure 58.7 to 68.0%, Success-or-better 25.4 to 18.1% (rank-2 equals, `routine`) |
 
 Read together at the live arm:
@@ -66,7 +66,7 @@ Read together at the live arm:
 | (a) fight length | 4.27 turns, 4.50 blows, lead change 45.2%, 0.1% undecided, 39.3% bloodless turns (shipped: 3.35, 3.20, 35.2%, 0.2%, 40.9%) | 1,200 fights, seeds 0–1,199; control seeds 800,000 on: 4.18, 4.50, 41.6%, 0.5% |
 | (b) the better one wins | fight, felled shares: +1 rank 65.7 / 63.0%; +2: 78.0 / 75.2 / 74.3%; +4: 92.3 / 91.0%; equals 50.8 and 51.4%. Argument, share of decided exchanges: +1: 65.6 / 63.0%; +2: 77.9 / 73.9%; +4: 92.0 / 90.6%; equals 50% | 1,000 fights a cell; closed form checked against 200,000 seeded draws |
 | (c) defence is real | per rank of the defender's training: 6 points off the attacker's wounding share (64.7, 58.2, 52.0, 45.8, 39.0, 27.5% against ranks 0, 1, 2, 3, 4, 6), 8 to 9 off his Overwhelming share, a sixth off his damage a roll. Per step of Agility: 6 points (52.8, 46.8, 40.9, 36.1%) | 600 and 500 traced fights a cell |
-| (c) no big attrition | mirrors at ranks 0, 2, 5, 7, 12: 4.33, 4.28, 4.28, 4.30, 4.29 turns; undecided 0.5, 0.1, 0.2, 0.4, 0.5%; an exchange fails 11.8 to 24.9% | 1,000 fights a cell |
+| (c) no big attrition | mirrors at ranks 0, 2, 5, 7, 12: 4.33, 4.28, 4.28, 4.30, 4.29 turns; undecided 0.5, 0.1, 0.2, 0.4, 0.5%; an exchange fails 11.8, 13.6, 18.2, 20.8, 24.9% (half-score at the same scale: 4.33 to 5.88 turns, 0.5 to 4.1% undecided, 11.8 to 35.5%) | 1,000 fights a cell; band shares from 200 traced fights |
 
 ## Exact edits, by owner (in landing order)
 
@@ -116,8 +116,9 @@ even line is derived, and the fight's second rate is withdrawn.
    57% of rolls.
 3. **The better fighter** (1,000 fights a cell, ranks 3v2, 4v2, 6v2, 5v4, 6v4, 7v5, 7v3): +1 in 60 to 70%,
    +2 in 72 to 82%, +4 in 88 to 95%; the mirror inside 50 ± 3 at two disjoint seed sets.
-4. **No attrition by rank** (mirrors at ranks 0, 2, 5, 7, 12, 1,000 fights each): the longest mean within
-   0.5 turn of the shortest; undecided ≤ 2% in every cell; an exchange's Failure share ≤ 25% in every cell.
+4. **No attrition by rank** (mirrors at ranks 0, 2, 5 and 7, the rank ceiling, 1,000 fights each; rank 12
+   read beside them, not gated): the longest mean within 0.5 turn of the shortest; undecided ≤ 2% in every
+   cell; an exchange's Failure share ≤ 25% in every cell.
 5. **Defence is real** (attacker rank 2 and rank 5 against defenders from two below to four above, 600
    traced fights a cell): the attacker's wounding share falls at every step, by ≥ 4 points a rank between
    two below and two above; his Overwhelming share by ≥ 5.
@@ -128,16 +129,16 @@ even line is derived, and the fight's second rate is withdrawn.
    at +4 (the fight's windows, deliberately the same); one `minor` level against moves P(Failure) by ≥ 0.05.
 7. **Both tails open.** No gated cell at probability 0 or 1; rank 7 against rank 0 in a fight is not 100%
    (`18_DETERMINISM_no_certain_matchup.md` owns the upset inside the fight; this gate reads its result).
-8. **One owner.** `git grep -n "/ 2.0\|/2.0" modules/combat/core.py modules/social_contest/roll.py` shows no
-   obstacle derivation; `git grep -n "opposed_ob" modules engine/season` shows the two module call sites and
-   no third arithmetic.
+8. **One owner.** Read at the two functions: `ob_from_defender` and `obstacle` hold no arithmetic on the
+   opposing score but the call to `opposed_ob`; `git grep -n "opposed_ob" modules engine/season` shows the
+   two module call sites and no third.
 9. **`python tools/export_engine_params.py --check`** green after row 9.
 
 ## Falsifiers
 
-- Equals drift: P(Failure) of an exchange between equals differs by more than 14 points between rank 0 and
-  rank 12 in the fight (measured 13.1 at the chosen arm, 25.1 at the half-score), or by more than 6 between
-  ranks 0 and 7 in the argument at `routine`. Then the rate is not what flattens it.
+- Equals drift: P(Failure) of an exchange between equals differs by more than 13 points between rank 0 and
+  rank 7 in the fight (measured 9.0 at the chosen arm, 16.7 at the half-score, same scale), or by more than
+  6 between ranks 0 and 7 in the argument at `routine`. Then the rate is not what flattens it.
 - The two curves part: at any gap in gate 3 and gate 6 the fight's and the argument's better-one-wins
   shares differ by more than ten points. Then "the same" is false in the one place a player can see it.
 - A fight mirror at any rank to 7 with more than 2% undecided, or more than 45% bloodless turns: the big
@@ -187,8 +188,8 @@ its own). It is listed because A-71's word could be read either way and the two 
   half-lands 16%, carries 25%. A position holds unless effort, evidence, favour or skill moves it.
 - **Option B.** One centre as well: an argument at an equal carries as often as a blow wounds, about one
   time in two (the argument's rows sit one success *below* the even line). Positions change hands as
-  readily as blood is drawn; `13_SC_calibration.md` C1 is rewritten; the realm's talk produces about twice
-  the changes of mind. The reverse (the blow at the argument's centre) is not offered: it is the measured
+  readily as blood is drawn; `13_SC_calibration.md` C1 is rewritten; an equal's argument carries twice as
+  often (25% to about 50%). The reverse (the blow at the argument's centre) is not offered: it is the measured
   attrition, 29 to 50% of fights undecided.
 
 ## NERS reading (E last)

@@ -169,7 +169,10 @@ band      = degree_from_net(net, obstacle)                            # the one 
   `reach`, `distance` and `signal_reach` are seeds with a control (`distance: 0`).
 - **`obey.task`** is the obstacle of a task nobody opposes, by the one rule U1 §4 gives ("nobody opposite":
   the opposition rate times an ordinary person's pool), computed host-side and carried on `MassBattleInput` as
-  one number. The module does not read a fixture table and does not restate the rule.
+  one number. The module does not read a fixture table and does not restate the rule. Ruling A-71 and
+  `audits/29_ONE_OPPOSED_RULE.md` (written during this pass; its verdict read, its plan not) restate what
+  stands against a roll; whatever that lane lands as the even line of an unopposed task is the number carried
+  here, and nothing in this file changes with it.
 - **One draw per key** (A-30): each draw is keyed on (field, tick, unit, purpose `obey`, link), so the draw
   sequence does not depend on who issued the order, and a replay from the interventions list
   (`04_MB_manager_battle_one_resolver.md` §5) reproduces it.

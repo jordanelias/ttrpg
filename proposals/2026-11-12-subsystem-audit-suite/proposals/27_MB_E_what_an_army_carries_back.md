@@ -155,8 +155,8 @@ and reversible by one switch: **they return when recalled, and the recall can be
 - **I do not know how long a season round is in the fiction** (A-51's record says it must be read from the
   code; this lane did not read it), so whether tiredness should outlast a round boundary is not decided here.
   `fatigue.carry_rounds` (0: within a round only) is the parameter, and its control is 0.
-- A drawn aggressor returns to his station at once (A-67, A-68) carrying exactly this: the row's lowered
-  `assigned`, its `absent` men and its `last_field`.
+- A drawn aggressor returns to his station at once (A-67, A-68), and a drawn defender to his own base
+  (A-70), each carrying exactly this: the row's lowered `assigned`, its `absent` men and its `last_field`.
 
 ### 5. Calibration targets (orderings; no historical figure exists to set a band)
 
