@@ -1,5 +1,7 @@
 # 16 · PESSIMIST · PC · C — what the world keeps of a fight: the scene's shape, and the hand that killed
 
+Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` §1.5) — one consistency note; no edit changes. A-33 (news of a death travels by presence, trail and telling, apart from the seat's news): the `fell_to_hand` Observation rides the death's own Event, so the killer's name reaches exactly those the death reaches and no further; nothing here widens who learns of it. The scene's `shape` is also what a nested round returns to a field (`U5b_PC_rulings_in_the_fight.md` §1), so an officers' duel inside a battle is retold by the same five facts.
+
 ## Status: PROPOSED
 
 Source: `audits/16_PESSIMIST_PC.md` §3.3 (F-PES-PC-05, F-PES-PC-06). Extends, and does not restate,

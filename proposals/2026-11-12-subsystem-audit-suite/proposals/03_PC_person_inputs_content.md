@@ -1,5 +1,7 @@
 # PC — per-person combat inputs: the slot interface, a starter inventory, the unarmed fighter, and seeding
 
+Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` §1.1, §1.4, §1.5) — four changes. (1) The authoring home is decided: `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §1–§3 (definitions in `references/descriptor_registry.yaml`, uses in `rosters.yaml: tables.capability_uses`); Part A's slots are that surface's `fight` site, not a second scheme. (2) A-7, A-6: the `pool` slot is the **trained score** alone (dice by the one pool rule); talent is the `attr` family, applied by the module's own sigma; the opponent's obstacle keeps its value (A-31) (`U5b_PC_rulings_in_the_fight.md` §2). (3) Addendum R-PC-43: `technique` and `grab` are not exposed as `skill` slots until a sweep shows them outside the interval, and a skill's bound is its capability row's (`U5b_PC_residue.md` §1). (4) Pessimist R-9: Part B admits a kind only with its census row (`U5b_PC_residue.md` §3). A-11 stands: a capability supplies numbers and gates no act; the tradition's access table gates which technique rows compose, not whether a person may fight.
+
 ## Status: PROPOSED
 
 Lane: PC, with CHAR (who authors a person) and SE (stores as arms). Source: `audits/03_PC_audit.md`
@@ -37,8 +39,8 @@ tuples in the same form, exported in the typed export's `attributes` section:
 | slot family | members (as the engine reads them today) | read at | scale |
 |---|---|---|---|
 | `attr` | `strength, agi, end, att, spirit, focus` | `attributes.SPEC`, by `registry_key` | registry's 1 to 7 |
-| `pool` | `faculty` (dice and the opponent's obstacle) | `core.py:54-58`, `:102-124` | whole number |
-| `skill` | `balance, technique, parry, dodge, bind, grab` | `combat_systems.py:198`, `:345-362`, `:1060`; `contact.py:46` | additive σ bonus, 0 untrained |
+| `pool` | `faculty` *(Reconciled, A-7:)* the party's **trained score** (training gives dice; never the larger of attribute and key). The opponent's obstacle is read from the defender's score at the fight's own rate (A-31) | `core.py:54-58`, `:102-124` | a real number; the pool is `max(pool_floor, score + pool_add)`, unrounded |
+| `skill` | `balance, parry, dodge, bind` *(Reconciled, R-PC-43: `technique` and `grab` measured inside the interval, 50.1% and 47.6% at +1, and are withheld from the slot family until a sweep shows otherwise)*; the engine's read sites for all six stand | `combat_systems.py:198`, `:345-362`, `:1060`; `contact.py:46` | additive σ bonus, 0 untrained |
 | `lever` | `visual, precommit, tactile, tempo, balance, measure, leverage, counter_select, counter_success, anti_overcommit, edge_read, spine_press, edge_grab, choke_control, facing_regime` | `ability_primitives.py:188-218` and its callers | a factor (`*`) or a bonus (`+`) |
 | `temper` | `disp` (the aggression axis) | `combat_systems.py:190-193` | 1 to 7, 4 neutral |
 | `kit` | `weapon`, `armor` | `combatant.py:112` | a `weapons.py` key; an armour tier |
@@ -68,6 +70,11 @@ host-side composition, not module code; the module keeps `ability_factor`'s clam
   loader refuses a key that is not a member, so a wrong name fails at import, not silently]`.
 - The ranking is by the engine's own measured ordering against an arming sword at light armour, not by
   taste; a different ranking is one edit.
+- *(Reconciled, pessimist R-9.)* A kind joins `arms_kinds` only with its row of the roster census named
+  in the commit (`U5b_PC_residue.md` §3): no cell beyond 95% against the kinds already admitted, or its
+  answering kind admitted with it. On the readings taken before the calibration batch, `arms_spear`
+  (99.2 to 99.8% against the arming sword) and `harness_plate` (0 fellings in 2,800) would each fail
+  alone; the census is re-run after that batch and decides.
 
 ## Part C — the unarmed fighter
 

@@ -1,5 +1,7 @@
 # PC — the typed export carries the weapons, the wound model and the physics constants, not their names
 
+Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` §1.4) — item 6 is confirmed from the MB side and named: one owner a fact, not one file (`04_MB_unit_loadout_and_weapon_in_hand_B.md` §2, R-36): an arm's mass lives here when its key is in this roster and in `references/troops.yaml: arms` when it is not, and that loader refuses a mass stated in both. The carry leaf reads the exported `mass` through its keyed spelling and takes bare masses for a troop row (`03_PC_loadout_and_carry.md` as reconciled). A-29 (declared floats) means the `derived` section's 1e-9 parity is stated against the float contract `11_GO_float_contract.md` carries (U5d's), not against integers. No edit below changes.
+
 ## Status: PROPOSED
 
 Lane: PC, with GO (the port reads the export) and MB (one weapon roster). Source:

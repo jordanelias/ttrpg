@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED
 
+Folded: 2026-11-12 by `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md` (rows R-10, R-7, R-2, S-1). Nothing here is deleted. (1) **The three-valued verdict is the historical definition of a result** (one side "finally broke and fled", or neither did: `research/historical/mass_battle_casualties_and_results_grounding.md` A11, D4) and is what rulings A-57 and A-58 read: on a march onto land another holds, `won` passes the land and its seats, `drawn` leaves the defender holding, `lost` takes nothing in either direction (`U5d_FA_land_and_seats_pass_on_a_won_march.md`; `26_MASS_BATTLE_aggression_and_land.md` §2). A conceded defender is `won` for the aggressor under the rule in this file and so loses the ground. (2) **On `Drawn`, "no mover" stands**: A-58 settles the land and does not say where the aggressor's army then is; this file's write is kept and that question is listed open, not assumed. (3) **A drawn bout is not yet a drawn battle**: with `max_bouts` above 1 the wrapper fights again in the same scene and returns one band (`26_MASS_BATTLE_cell_scale_and_time.md` §3); at 1, this file is unchanged. (4) The one weight-to-troops owner puts season armies at 60 to 900 men, which is what fixes the cell's scale at sixteen men (same file §1). (5) The measured loser-to-winner loss of this path can be read against Krentz's table as a ratio (`26_MASS_BATTLE_calibration_targets.md` T-2).
+
 Lane MB (the seam edits are IN). Carries resolutions R-01, R-02, R-03, R-16, R-18, R-19 of
 `audits/04_MB_audit.md` §6.2. Reference, not mechanism (`CLAUDE.md` §0.05).
 

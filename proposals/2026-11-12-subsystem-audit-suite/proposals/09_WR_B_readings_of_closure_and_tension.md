@@ -1,5 +1,7 @@
 # WR · Readings of closure, open situations and idleness, and character ablation as a standing control
 
+Reconciled: 2026-11-12, U5d closure — folded **A-45**. The readings count strands as several (the bounded link of `09_WR_strand_conclusion.md` edit 3 is the ruled form), so "closed by act / by clock" (edit 1) is reported per strand and the one-river reading is kept as the control column.
+
 ## Status: PROPOSED
 
 Carries findings F-WR-13, F-WR-15, F-WR-16 and F-WR-21 of `audits/09_WR_audit_addendum_B.md`, its

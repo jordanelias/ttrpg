@@ -1,5 +1,7 @@
 # WR — three small repairs to the clocks and two readings the story instruments lack
 
+Reconciled: 2026-11-12, U5d closure — folded **A-40** and **A-47**. Edit 2 (`thread_read` forms on a Site) agrees with A-40 (one Site per territory). Edit 1 (a Date due in the past fires; `<=`) is a clock's tick and opens a question; where the question is one of the threshold arcs it is mandatory (A-47) and decides nothing by itself.
+
 ## Status: PROPOSED
 
 Source: `audits/16_PESSIMIST_WR.md` F-PES-WR-01, -04, -05, -09. Read at `d161a61`. Reference only

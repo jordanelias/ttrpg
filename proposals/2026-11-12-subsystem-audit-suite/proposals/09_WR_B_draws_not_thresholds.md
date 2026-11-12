@@ -1,5 +1,7 @@
 # WR · Draws, not thresholds: the world's motions, its endings and a strand's conclusion
 
+Reconciled: 2026-11-12, U5d closure — folded **A-54**, **A-47** and **A-57 / A-58**. A-54 confirms this file's one shape (eligibility by state, then a keyed draw on the shared ladder) for the world's motion; `16_PESSIMIST_GAME_the_world_draws.md`'s table form is withdrawn in its favour. A-47 agrees with edit 3 (an ending's selector is eligibility; the crossing decides nothing). The owed line for FA / MB ("`seize` on an occupation licence … must resolve by a draw against the place's resistance") is narrowed: land another faction holds passes on an aggressor's won march, and that win is the field's drawn end state (A-3), so no second draw is taken there; the line stands for unheld land and for an `Unopposed` entry.
+
 ## Status: PROPOSED
 
 Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-20) — `_seize_rung` takes no draw today (opened); the FA/MB item's premise is confirmed.

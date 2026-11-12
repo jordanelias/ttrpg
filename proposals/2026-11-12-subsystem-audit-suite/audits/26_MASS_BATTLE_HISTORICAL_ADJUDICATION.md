@@ -22,9 +22,11 @@ narrower than the earlier lanes' lists suggest and is the same handful every tim
 before the casualties do; a rout that has an aftermath (rally, pursuit, prisoners) which costs the pursuer;
 orders that take effect by a draw; a battle that is several bouts with lulls in which a commander relieves,
 commits and re-forms; fatigue that arrives with the army and is spent by moving fast; and one stated scale,
-because at the only scale where a body has ranks the missile range in the code is a javelin's. Seven of the
-suite's MB proposals are confirmed by the sources and amended in place; five new proposals carry what was
-missing; one conflict with a value Jordan set (the 15% floor of the rout band) survives the ladder and is in §7.
+because at the only scale where a body has ranks the missile range in the code is a javelin's. Twelve suite
+proposals and the first MB audit are amended in place (a `Folded:` line each); six new proposals carry what
+was missing; one conflict with a value Jordan set (the 15% floor of the rout band) survives the ladder and is
+in §7. Jordan's land rulings A-57 and A-58 arrived during the pass and are folded as row R-10: what a win
+takes of the map is ruled, and the battle's part in it is stated.
 
 **What was sourced.** Two peer-reviewed articles were read in full at the page image (Krentz 1985 on
 hoplite casualties; Sabin 2000 on Roman infantry combat). Du Picq and Clausewitz were read in part through
@@ -133,6 +135,7 @@ game should do. "Owner" is the single file that carries the fact. "Gate" is the 
 | R-7 | What a win is | One side "finally broke and fled" (CR A11); the victor holds the field. | Jordan's ruling A-3: won, lost or drawn, read off which side broke or conceded. | **Agree.** The ruling is the historical definition. Lost Battles' margin against the historical result (WG L8) is a scoring device and does not transfer. | `seam/ladder.py::field_degree` (as the suite proposes) | none added |
 | R-8 | Numbers | The linear law is the one stated for hand-to-hand fighting (CR D8). Depth alone did not win (CR D3). Lost Battles caps how many units may attack from a zone (WG L5). | `04_MB_cr12_linear_law.md` decides that numbers leave the melee dice and act through frontage. | **Agree with that proposal.** Three independent supports. | that proposal | its gate |
 | R-9 | Auto-resolve | Board games have one resolver by construction; the one computer game read with two has two answers (WG reading 7). | Jordan's ruling A-1. | **Agree.** The bouts, the stand draw and the pursuit are all inside the one call or are further calls of it. | none | manager proposal gates 1, 2 |
+| R-10 | **What a win takes of the map** (rulings A-57, A-58, received during this pass) | Research does not settle a ruling. The pages read say a place usually changed hands by terms or a storm after the field (SQ 11). | Code and suite: a won field writes presence, never title (`_eff_march`, as `06_FA_war_lives_in_seats_B.md:37-38` quotes it; not opened by this lane); `seize` takes a Rung's title by occupation (`loop/effects_information.py:1038-1071`, opened; `04_MB_audit.md:617`). | **Ruled:** on a march in force onto land another faction holds, only the aggressor's win passes the land, and its seats with it; a draw or a defender's win leaves the defender holding; unheld ground is outside the rule; purpose is read from the act. MB's part: which end states are the win (rout; concession; a rallied loser still lost; the last bout's band), and that the resolver sees none of it. The write is the FA lane's. | `U5d_FA_land_and_seats_pass_on_a_won_march.md` (the write); `26_MASS_BATTLE_aggression_and_land.md` (the battle side) | that file's four added arms |
 
 ## 4. Where abstraction is right, and where it is not
 
@@ -204,6 +207,13 @@ Two. Each was taken down the five steps and stopped at none.
    draw and the pursuit draw exist, lower the multiplier so that the sum of chance in a field is what it is
    today. The second is a game in which a manager's orders show in the result.
 
+**Named open under the land rulings (A-57, A-58), not escalated by this lane** because the rulings were
+given during the pass and the FA closure lane owns the write: an unopposed entry onto held land; where a
+drawn aggressor's army stands; whether leave shields a guest who attacks his host; whether presence by leave
+is occupation; and the one consequence worth seeing first, that by the rulings' words an uninvited rescuer
+who beats an invader on a third party's land takes that land (unreachable today: no such field can form).
+All five are in `proposals/26_MASS_BATTLE_aggression_and_land.md`.
+
 ## 8. Decisions folded (each edited file carries a `Folded:` line; no finding of another lane was deleted)
 
 | file | what was folded |
@@ -218,10 +228,16 @@ Two. Each was taken down the five steps and stopped at none.
 | `proposals/14_VERBS_MILITARY_A_movement.md` | M-7: the `Partial` band of a march is what enters a field tired; sourced march rates as a cross-reference |
 | `proposals/14_VERBS_MILITARY_D_the_order_of_battle.md` | B-3: the obedience draw it lists for MB now has an owner |
 | `proposals/14_VERBS_PHYSICAL_A_custody_and_force.md` | R-4: men taken in a pursuit arrive as captives under its `war` context |
+| `proposals/14_VERBS_PHYSICAL_B_field_and_ruin.md` | R-10: title on a won field is now ruled; formation by known wars stands as formation; the third-party case recorded |
+| `proposals/04_MB_headcount_grade_and_scale.md` | R-10, R-7: what each verdict does to the land; a drawn bout is not yet a drawn battle |
+| `audits/04_MB_audit.md` | four dated statements at its head (presence-not-title; the research it had not read) |
+
+Not edited: `proposals/06_FA_war_lives_in_seats_B.md`, already reconciled to A-57 and A-58 by the FA closure
+lane; `proposals/U5d_FA_land_and_seats_pass_on_a_won_march.md`, that lane's own.
 
 New proposals: `26_MASS_BATTLE_cell_scale_and_time.md`, `26_MASS_BATTLE_movement_and_fatigue_as_data.md`,
 `26_MASS_BATTLE_rout_pursuit_and_giving_ground.md`, `26_MASS_BATTLE_maneuver_orders.md`,
-`26_MASS_BATTLE_calibration_targets.md`.
+`26_MASS_BATTLE_calibration_targets.md`, `26_MASS_BATTLE_aggression_and_land.md`.
 
 ## 9. Evidence log
 
@@ -231,4 +247,9 @@ outside the repository. Refused or missing: `clausewitz.com` (403, three pages),
 addresses), the *Medieval: Total War* community wiki (403), the Battle Brothers wiki (402), an Army Heritage
 bibliography (404). Code opened at `4573158`: `modules/mass_battle/config.py` (constant lines cited),
 `troop_types/registry.py:1-110`, `geometry.py:328-338`, `terrain.py:1-80`, `hierarchy/units.py:271-340`,
-`orchestration.py:2054-2102`, `:271-273`, `battle_loop.py:405-416`, `orderofbattle.py:67`.
+`orchestration.py:2054-2102`, `:271-273`, `:1810`, `battle_loop.py:405-416`, `orderofbattle.py:67`. For row
+R-10: `unified/DECISIONS_ANSWERED.md:69-87`; `engine/season/verb_table.yaml:300-322`, `:1047-1080`,
+`:1439-1464`; `loop/effects_information.py:1000-1071`; `loop/effects_shared.py:149-165`;
+`rosters.yaml:1159-1171`; `proposals/U5d_FA_land_and_seats_pass_on_a_won_march.md` (first 140 lines). Other
+lanes were writing in the suite directory during this pass (two files changed under this lane's edits and
+were re-read before being amended).

@@ -1,5 +1,7 @@
 # WR · What the provided arcs need from the world, the clocks and the practitioner
 
+Reconciled: 2026-11-12, U5d closure — folded **A-47** (a threshold may open a mandatory scene, never decide it; against the register's recommendation) and **A-15**. Edit 1 ("a private tally becomes a question") is rewritten in one respect: when the tally reaches its count the question is **mandatory** (it is placed first on the person's slate and cannot be declined for another; for the player it heads A-48's list and must be answered), and its outcome is the drawn act the scene resolves; the crossing itself still writes nothing. Edit 4's restatements of the "forced by threshold" and "automatic clock" arcs read "the threshold opens a scene" for all of them (the audit's 19 `forced_by_threshold` cases; the register counts 27 threshold-closed or -forced arcs). Edit 2 (a body that mends when fed) lands after `U5d_WR_owed_edits.md` §3. ARC-02 (a state change with no actor) is now reachable through natural death (A-15).
+
 ## Status: PROPOSED
 
 Carries §13 of `audits/09_WR_audit.md` (the adjudication table is there; this file holds the edits) and

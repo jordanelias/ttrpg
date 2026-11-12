@@ -1,5 +1,7 @@
 # PC — make the duel chain formable: `challenge` on persons with a dispute, `accept` on challenge Records
 
+Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` §1.1) — three additions; no edit below is withdrawn. (1) The falsifier's second link (*an `accept` by the challenged*) needs a delivery this file does not build: the challenged forms `accept` on a challenge **addressed to him and heard of** (`14_VERBS_PHYSICAL_A_custody_and_force.md` A4), and that file's A3 drops `duel` from `fight`'s contexts (a challenger may not attack on his own unaccepted challenge), so A4 lands with or before A3. A-21 keeps a challenge in person, which the row's `with` conjunct already asks. (2) A challenge unanswered by its due tick emits `challenge.declined` (U5c's reconciliation of the SOCIAL verbs, its C-27); declining is a judged deed, not a dead end. (3) A-16 (a person may, rarely, try to kill of his own motive) adds an occasion outside this chain: `22_HAPPENINGS_C_a_killing_is_a_crime_someone_commits.md` (U5d's) is its carrier and `U5b_PC_rulings_in_the_fight.md` §6 the opener's edge; neither changes an edit here.
+
 ## Status: PROPOSED
 
 Lane: PC, with CORE (`decision/options.py` is CORE's file). Source: `audits/03_PC_audit.md` F-PC-01,

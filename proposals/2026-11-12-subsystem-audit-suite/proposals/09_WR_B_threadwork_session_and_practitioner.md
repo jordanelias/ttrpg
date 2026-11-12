@@ -2,6 +2,8 @@
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-15) — where this file names `PersonProjection` as a present reader (the practitioner who cannot read himself), read `account` (`11_GO_player_surface_contract_B.md` §4): the projection is deleted by `17_CENSUS_C1A_01_deletion_batches.md` D2. The property claimed (no Coherence value reachable by the person) is unchanged and is stated of `account`.
 
+Reconciled: 2026-11-12, U5d closure — folded **A-43**, **A-40**, **A-11** and **A-5**. Edit 3 (R-25: `coherence` is world-only for its owner, not an `OWN_STATE_STEMS` member) stands and is joined by its other half, what **others** read of him: `U5d_WR_zero_coherence_unknowable.md` (legibility as the one dial; at zero he keeps seats and goals and cannot be understood). The sentence offering Jordan a visible band for the player's own person is not answered by A-43 (which speaks of what others can know of him) and stays as written. The breach and the strain draws are on the one sampler (A-5); Thread Sensitivity stays the one gate (A-11); a working's subject is a Site (A-40).
+
 ## Status: PROPOSED
 
 Carries findings F-WR-17 and F-WR-18 of `audits/09_WR_audit_addendum_B.md` (§4.2, §4.3), its resolutions

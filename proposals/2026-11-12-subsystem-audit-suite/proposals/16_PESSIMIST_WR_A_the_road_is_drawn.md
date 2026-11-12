@@ -1,5 +1,7 @@
 # WR — the road is drawn: a journey takes its distance in time and can go wrong
 
+Reconciled: 2026-11-12, U5d closure — folded **A-54** and **A-5**: the road's draw is on the one ladder with the one sampler, as written; no step changes. A march's passage is not this file's (an army's arrival is the field's end state); a march into another's held territory is aggression by A-58 and takes land only on a win.
+
 ## Status: PROPOSED
 
 Source: `audits/16_PESSIMIST_WR.md` §2.3, F-PES-WR-06. Read at `d161a61`. Reference only (`CLAUDE.md`

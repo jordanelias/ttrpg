@@ -1,5 +1,7 @@
 # 16 · PESSIMIST · PC · B — the commit window: the deep tier follows the window it is drawn in
 
+Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` §1.5) — order only. A-31 (longer fights) lands the damage scale first; this proposal is the second step of the one combat calibration batch and shares its single re-record (`U5b_PC_rulings_in_the_fight.md` §5 row 5); the approach (`03_PC_duel_round_and_approach_B.md` step 3) lands after both. The prototype readings below are re-taken at the new scale before `DEEP_FRAC` ships.
+
 ## Status: PROPOSED
 
 Source: `audits/16_PESSIMIST_PC.md` §1.3, §2.1, §2.6 (F-PES-PC-04, F-PES-PC-02). Bears on

@@ -1,5 +1,7 @@
 # PC — one loadout and one carry-cost rule for a person and a unit; the weapon in hand as round state
 
+Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` §1.2, §1.4) — the addendum's §B7 amendments and the MB addendum's two corrections are folded. (1) The round it builds on is `03_PC_duel_round_and_approach_B.md` (state in the calling loop's frame; a choice per phase), not the first proposal's. (2) `in_hand` and the half-sword `form` are **one field**: the key of the record currently held (item 5). (3) The leaf takes masses: `carry_demand_of(masses, armour)` is the one body and `carry_demand(weapons, armour)` calls it, because a troop's bow or pike has no key in the personal roster (item 2; MB addendum C-3, R-36). (4) "One roster" is decided as one owner a fact: a weapon's mass lives in personal combat's export when its key is there and in `references/troops.yaml: arms` when it is not, refused if stated in both (item 4; `04_MB_unit_loadout_and_weapon_in_hand_B.md` §2; `03_PC_weapon_records_in_the_export.md` item 6). (5) On the capability surface the carry cost is the `threshold` role with two holders, a person's Strength and a troop row's `strength` (U1 §9). The statements about mass battle marked `[UNVERIFIED]` below are confirmed or corrected in `04_MB_unit_loadout_and_weapon_in_hand.md`'s table.
+
 ## Status: PROPOSED
 
 Lane: PC, with MB (troop loadouts), SE (stores as arms) and CHAR (the capability surface). Source:
@@ -57,9 +59,14 @@ rung 5 for where it lives).
    `engine/substrate/combat_kit.py`, reading the typed export and nothing else, owns one function:
 
    ```python
+   def carry_demand_of(masses: tuple, armour: str) -> float:      # (Reconciled) the ONE body
+       """Strength points demanded by what is CARRIED: D_MASS per kilogram of every carried mass that is
+       not in hand, plus the harness's ARMOR_DEMAND. Reads the export's `cfg`."""
+
    def carry_demand(weapons: tuple, armour: str) -> float:
-       """Strength points demanded by what is CARRIED: D_MASS per kilogram of every weapon in the
-       loadout that is not in hand, plus the harness's ARMOR_DEMAND. Reads the export's `kit` and `cfg`."""
+       """The keyed spelling: looks each weapon's mass up in the export's `weapons` section and calls
+       `carry_demand_of`. A person's kit uses this; a troop row, whose arm may have no key here, uses the
+       mass form. One rule, two spellings of its argument."""
    ```
 
    The export's `kit` section gains each weapon's `mass` (already a field of every record). No new
@@ -74,9 +81,10 @@ rung 5 for where it lives).
    loadout to name weapons the function knows. The prerequisite is one weapon roster or a declared
    key map between `ARSENAL` and `WEAPONS`; which survives is MB's and the holistic stage's call, and
    is the capability surface's equipment question (audit §14).
-5. **The weapon in hand is round state, and changing it costs the round's tempo.** `DuelState` gains
-   `in_hand` (a weapon key; default the primary). The per-phase choice set gains `switch`
-   (`APPROACHES + ('switch', 'withdraw')`): the fighter spends his next action's readiness
+5. **The weapon in hand is round state, and changing it costs the round's tempo.** *(Reconciled:)*
+   `DuelState.form` (PB §2) **is** this field: the key of the record in hand, whether a half-sword form
+   of the primary or the secondary; no second field is added. The choice set a decider may answer at a
+   phase entry gains `switch` beside the approaches (and `withdraw` at the top of a round): the fighter spends his next action's readiness
    (`ACT_THRESHOLD`, the unit the engine already debits, `wrapper.py:279`) and fights the rest of the
    round with the other weapon; the secondary's mass leaves `carry_demand` and the primary's enters.
    An NPC's or a standing order's trigger for it reads what the engine already computes: how badly the
@@ -117,5 +125,7 @@ person with the same loadout and strength score who are charged different demand
 
 ## Cost class
 
-Small build in PC (items 1, 2, 3, 5). Design-first in MB for items 4 and 6 and for the roster merge.
-Depends on `03_PC_duel_round_and_approach.md` steps 1 to 4 for item 5.
+Small build in PC (items 1, 2, 3, 5). Design-first in MB for items 4 and 6 (carried by
+`04_MB_unit_loadout_and_weapon_in_hand_B.md`). *(Reconciled:)* depends on
+`03_PC_duel_round_and_approach_B.md` steps 1 to 4 for item 5 and on
+`03_PC_weapon_records_in_the_export.md` (the `mass` field in the export) for item 2.

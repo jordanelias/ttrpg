@@ -1,5 +1,7 @@
 # WR · Weather with memory and neighbours, a journey priced before it is chosen, and the Rupture as an ending
 
+Reconciled: 2026-11-12, U5d closure — folded **A-54** (the one four-band ladder; against this file's multiplier form). Edits 1–2 are rewritten in what the draw is: the season's and the spell's draws are keyed draws on `degree_from_net`, pool the place's endurance (with its steward's skill, A-54's own words) and obstacle the season's hardship; the spell enters as an obstacle term shared by every territory under the parent rung for the year, not as a multiplier. "Mean one" becomes a calibration target for the band magnitudes (a declared sweep), not a property of a table. The keys (year, parent rung), the control (`()`), edit 3 (the leg's price) and edit 4 (the `site_band` ending reached by a draw) stand.
+
 ## Status: PROPOSED
 
 Carries findings F-WR-19 and F-WR-20 of `audits/09_WR_audit_addendum_B.md` (§5.3, §5.4), its resolutions

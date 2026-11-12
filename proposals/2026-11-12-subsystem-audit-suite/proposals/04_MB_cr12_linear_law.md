@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED
 
+Folded: 2026-11-12 by `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md` (row R-8). Nothing here is deleted; the decision gains three supports from outside the tree, none of which is the reason it is correct (`CLAUDE.md` §0.05). The linear law is the one stated for hand-to-hand fighting, where "one soldier could only ever fight exactly one other soldier at a time" (`research/historical/mass_battle_casualties_and_results_grounding.md` D8, tool-read). Depth and numbers alone did not win Roman battles; fresh men and frontage did (same note D3, read at the page). Sabin's own board game caps how many units may attack from a zone, so numbers act through frontage (`research/historical/mass_battle_wargame_models_grounding.md` L5). No source read gives a win probability by force ratio, so the locked bar of 1.4 has no historical counterpart to be checked against; `26_MASS_BATTLE_calibration_targets.md` T-9 reads the ordering only.
+
 Lane MB. Carries R-06 of `audits/04_MB_audit.md` §6.2; listed in that audit's §11 because it narrows the
 plain words of a standing directive. Supersedes nothing in `proposals/2026-11-08-cr12-melee-attrition-design.md`
 except its §4 conclusion that the question must go to Jordan. Reference, not mechanism (`CLAUDE.md` §0.05).

@@ -1,5 +1,7 @@
 # WR · A strand concludes on a conclusion
 
+Reconciled: 2026-11-12, U5d closure — folded **A-45**, **A-46** and the addendum's standing-rule pass. Edit 3 (bounding the same-doer link: a doer's later deed joins a strand he opened, or joins by its subject) was listed for Jordan as the audit's §11 item 1; A-45 rules it (several strands that can each end), so edit 3 is no longer conditional and its `[ASSUMPTION]` reads as ruled, with the unbounded link kept as the control arm. A-46 adds one strife move: leaving a faction's creed or its head seat (a `release` of that `commit` or that seat-`hold`) is a move of the era; a routine release is not. Step added to edit 2: the move roster gains that kind, keyed on the released edge's object being a faction's creed Proposition or its `head_seat`. Edits 1–2's rules are eligibility; a strand concludes only on its closing move's drawn degree (`09_WR_B_draws_not_thresholds.md` edit 4).
+
 ## Status: PROPOSED
 
 Carries finding F-WR-02 of `audits/09_WR_audit.md`. Evidence ids (E-nn) are that file's §12. One part of it

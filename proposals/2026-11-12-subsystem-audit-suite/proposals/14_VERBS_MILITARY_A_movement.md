@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED
 
+Folded: 2026-11-12 by `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md` (row M-7). Nothing here is deleted; one edge is named and one cross-reference added. (1) **The journey's band reaches the field.** `_relocate` is the one journey body and `_eff_march` calls it; when this proposal's bands land, an army whose march folds the journey's `Partial` ("arrives spent") enters its field at a lower share of stamina, through the one input `entry_stamina` (`16_PESSIMIST_MB_one_stamina_ledger.md` step 3; the value, a seed, is `fatigue.entry.march_partial` in `26_MASS_BATTLE_movement_and_fatigue_as_data.md` §3). `_eff_march` "passes nothing and is unmoved" (Edit 4) until then, and nothing in this file changes. The sourced case is Crécy: an army attacking the same afternoon after a march of about twelve miles, against one "rested and fed" (`research/historical/mass_battle_movement_and_behaviour_grounding.md` T5). (2) **What the tree now holds on march rates**, for whoever sets `journey` difficulties: a Roman training march of 20 Roman miles in five summer hours as usually quoted from Vegetius (tool-read, second-hand); about fifteen miles a day for Alexander's whole army (snippet only); a fighting march made only in the cool with rest days (Arsuf, tool-read). Same note, rows M4 to M6. None is a figure to build on; all three agree that a day's march by an army is tens of kilometres at most and far less under threat.
+
 Batch M-A of `audits/14_VERBS_MILITARY.md` (§2, §5.3). Source findings: F-VM-04, F-VM-05; hole rows
 H-329, H-140, H-309, H-327 (cross-listed), H-168; `AUDIT_BRIEF.md` "Standing rule". Nothing is
 ratified by being written.

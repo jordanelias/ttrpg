@@ -1,5 +1,7 @@
 # WR — the Calamity strains, breaks by a draw, and stops where it is mended
 
+Reconciled: 2026-11-12, U5d closure — folded **A-40** and **A-54**. A-40 rules the wearing-down a real condition of places with one Site per territory: edit 1's "pulled only by a broken Site of its own or a bordering territory" reads on that one Site per territory. The break draw of edit 2 is on the four-band ladder (as written). Edits 1–2 land before any non-zero `lattice_coupling` (`U5d_WR_owed_edits.md` §2 (a)).
+
 ## Status: PROPOSED
 
 Source: `audits/16_PESSIMIST_WR.md` §2.2, F-PES-WR-02, F-PES-WR-11. Read at `d161a61`. Reference only

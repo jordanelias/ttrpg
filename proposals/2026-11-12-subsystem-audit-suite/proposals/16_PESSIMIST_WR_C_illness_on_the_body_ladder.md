@@ -1,5 +1,7 @@
 # WR — illness falls the body by a graded draw; death is the body reaching zero
 
+Reconciled: 2026-11-12, U5d closure — folded **A-15** (natural death on, after the 46 ages are authored). "Ships dark … switches nothing on" no longer holds as the end state: the rate goes live behind the authored ages (`22_HAPPENINGS_A_a_death_is_rare_caused_and_drawn.md` edit 1 owns `Person.born`; this file's edit 4 authors ages into the same field and is merged under it: one writer). The graded bout (a draw on the ladder; death only at body zero) is the form the live rate takes. One re-pin of every seeded result when the rate leaves zero, declared. Order: `U5d_WR_owed_edits.md` §2 (c).
+
 ## Status: PROPOSED
 
 Source: `audits/16_PESSIMIST_WR.md` F-PES-WR-07. Read at `d161a61`. Reference only (`CLAUDE.md` §0.05).

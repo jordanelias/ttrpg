@@ -2,6 +2,8 @@
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-17) — edit 2 is read as amended by the census: `threadcut.py` and `co_movement.py` are deleted whole before the move (`17_CENSUS_C1B_01_deletions.md` D3; exact replacement sentence in `17_CENSUS_C1B_03_corrections.md` C-6); `collective.py` and `opposing.py` move as inputs to `work` through `WorkingInput.helpers` and `WorkingInput.opposed_by` and get no composition row of their own (`17_CENSUS_C1B_02_wires.md` W-3, reading 1); an outcome field the host adapter does not read at landing is cut in that commit, not carried (`17_CENSUS_REST_2_wiring.md`, carried-wires table). Nothing else in this proposal changes; WR's own closure (U5d) owns the rest of it.
 
+Reconciled: 2026-11-12, U5d closure — folded **A-40**, **A-43**, **A-28** and **A-5**. Edits 1, 2 and 4 are superseded by `09_WR_B_threadwork_session_and_practitioner.md`; edit 3 (the tables as one typed file under `engine/engine_params/`) stands. The working's subject is a Site of a territory (A-40). `knot` is the Thread lane's verb after the `tie` / `knot` split (A-28), so this module's verb list gains it and the requirement instrument's count moves. Every thread roll is the one sampler's (A-5). What zero Coherence does is `U5d_WR_zero_coherence_unknowable.md` (A-43): continuity kept, the person unreadable to others.
+
 ## Status: PROPOSED
 
 Carries finding F-WR-05 of `audits/09_WR_audit.md`, its §9 (playable standalone and integrated), its §14

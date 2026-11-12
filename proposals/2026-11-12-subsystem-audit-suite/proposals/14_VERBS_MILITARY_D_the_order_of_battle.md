@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED
 
+Folded: 2026-11-12 by `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md` (rows B-3, M-5, S-1). Nothing here is deleted. (1) **§5's "standing orders obeyed in the field, which is the resolver's draw (listed for MB)" now has an owner**: an order that fires in the field takes effect by a draw on Command and Discipline, at the one site an order is applied (`26_MASS_BATTLE_maneuver_orders.md` §1). **`raw` is read there too**: a raw body's orders are a step harder to obey, beside the one step of Discipline Edit 1 gives it. The season-side draw of this proposal (`order_unit` taken in whole, in part, or not) and that field-side draw are two different acts and do not double-count: one is whether the order was given to the body, the other whether the body carries it out under contact. (2) The doctrine rows this proposal's `step` reads gain the manoeuvre set as data (same file §3); `off_doctrine` compares against them unchanged. (3) The unit row's `ranks` and `files`, which this proposal leaves to `04_MB_cell_hierarchy_as_data.md`, have sourced seeds there now (two cell rows for sword and spear foot, four for pike).
+
 Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-04) — a typed conjunct cannot be waived by a payload key; the proposal's stated fallback is now the edit.
 
 Batch M-D of `audits/14_VERBS_MILITARY.md` (§4, §5.3, §6). Source: F-VM-03; `audits/04_MB_audit.md`

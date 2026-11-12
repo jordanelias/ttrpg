@@ -22,8 +22,10 @@ proposal this lane wrote one under `proposals/U5a_*.md`.
 **Scope read (second reader, in full).** `audits/01_CORE_audit.md`, `01_CORE_audit_addendum_B.md`,
 `01_CORE_audit_addendum_C_tests.md`, `02_CHAR_audit.md`, `02_CHAR_audit_addendum_B.md`, `10_DICE_audit.md`,
 `10_DICE_audit_addendum_B.md`, `16_PESSIMIST_{CORE,CHAR,DICE}.md`, `17_CENSUS_{C1A,C1B,REST}.md`,
-`18_DETERMINISM_SWEEP.md`, `digests/DG_tests1..6.md`, and every proposal named `01_CORE_*`, `02_CHAR_*`,
-`10_DICE_*`, `16_PESSIMIST_{CORE,CHAR,DICE}_*`, `17_CENSUS_*`, `18_DETERMINISM_*`. Coverage notes and
+`18_DETERMINISM_SWEEP.md`, and every proposal named `01_CORE_*`, `02_CHAR_*`, `10_DICE_*`,
+`16_PESSIMIST_{CORE,CHAR,DICE}_*`, `17_CENSUS_*`, `18_DETERMINISM_*`. **Not read in full:** the six test
+digests `digests/DG_tests1..6.md` (their closing sections and every open-items line were read; the
+per-entry bodies were not), and the census ledgers' false-positive rows (tallied). Coverage notes and
 anything not checked are at the end (§Z).
 
 **Companion files.** Conflicts decided: `unified/U5_CONFLICTS_U5a.md`. The one capability authoring

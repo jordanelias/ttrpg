@@ -2,6 +2,8 @@
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-15) — `world_q.projection` / `witnessed` / `PersonProjection` are deleted by `17_CENSUS_C1A_01_deletion_batches.md` D2: the one typed per-person reading is `account` (the person's own ledger) and the host-side `receipt` of `11_GO_player_surface_contract_B.md` §3–§4. The focalized telling (R-32) is therefore a selection over `account`'s rows, marked `saw` or `inferred` from each row's own source, and never over `w.log`; nothing else in this proposal changes.
 
+Reconciled: 2026-11-12, U5d closure — folded **A-49**, **A-33** and **A-43**. The focalized journal is the in-play telling and reveals nothing its holder does not hold; an omniscient reading of the log is shown only after the line ends and no continuation is taken (A-49), so the harness render that reads `w.log` is the end-of-campaign view and never a play surface. A death is told only to those who learned of it by presence, trail or telling, apart from the seat's news (A-33): a line about a vacancy does not carry the death. A person at low legibility appears in others' journals by his acts with no reason line (`U5d_WR_zero_coherence_unknowable.md`).
+
 ## Status: PROPOSED
 
 Carries finding F-WR-14 of `audits/09_WR_audit_addendum_B.md` (§3.3), its resolutions R-28 and R-32, its

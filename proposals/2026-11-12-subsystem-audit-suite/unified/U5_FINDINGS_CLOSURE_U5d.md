@@ -310,3 +310,114 @@ Carriers: **GROUND** = `07_SE_ground_and_granaries.md`; **TREAS-B** = `07_SE_tre
 | J-3 | may a place begin, and may a begun place end | SUPERSEDED | A-55 | SE-9(a) |
 | §5 lists; §6.3 owed | false N-lines; failed premises; items owed to other lanes | RESOLVED-BY | OWED-SE §8–§10; PC's `tend` is U5b's | — |
 
+---
+
+# Part 3 — WR (the world's own motion, story readings, threadwork)
+
+Carriers: **STRAND** = `09_WR_strand_conclusion.md`; **INSTR** = `09_WR_story_instruments_that_can_fail.md`;
+**MOTION** = `09_WR_world_motion.md`; **THREAD** = `09_WR_threadwork_module.md`; **ARCS-WR** =
+`09_WR_provided_arcs.md`; **READ-B** = `09_WR_B_readings_of_closure_and_tension.md`; **CHRON-B** =
+`09_WR_B_chronicle_that_tells.md`; **WEATHER-B** = `09_WR_B_weather_with_memory_and_the_year.md`;
+**THREAD-B** = `09_WR_B_threadwork_session_and_practitioner.md`; **DRAWS** =
+`09_WR_B_draws_not_thresholds.md`; **PTR-B** = `09_WR_B_pointer_text_for_the_orchestrator.md`;
+**PES-WR-A/B/C/D** = `16_PESSIMIST_WR_A…D_*.md`; **OWED-WR** = `U5d_WR_owed_edits.md` and **UNKNOWABLE** =
+`U5d_WR_zero_coherence_unknowable.md` (both written by this lane).
+
+## 3.1 `audits/09_WR_audit.md` — findings, §6, §11, §13
+
+| id | claim (one line) | disposition | carrier · section | evidence |
+|---|---|---|---|---|
+| F-WR-01 | no story in the shipped realm escalates or ends | RESOLVED-BY | INSTR edit 4 (the reading); the closing acts are other lanes' (PC's duel, SC's `determine`, FA's `revoke` and `succeed`: U5b, U5c, Part 1); PES-WR-D edit 4 (`storybar.turns`) | six seasons, seed 0: one strand of 234 moves; 0 deaths |
+| F-WR-02 | a strand's conclusion does not discriminate; strands collapse into one | RESOLVED-BY | STRAND edits 1–3 as reconciled (A-45: several strands that can each end; edit 3 is now the ruled form) with DRAWS edit 4 (concludes on the move's drawn degree) | E-08 |
+| F-WR-03 | the story bar cannot fail, has no forcing arm, and one control is inverted | RESOLVED-BY | INSTR edits 1–3 (R-01, R-02, R-18; plan CR-99 folded into edit 1) | `harness/storybar.py` `[not re-opened]` |
+| F-WR-04 | the world's own motion ships off; the world's readings have no reader | RESOLVED-BY | MOTION edit 1; WEATHER-B edits 1–2 and DRAWS edits 1–2 as reconciled (A-54: one four-band ladder) | fixtures at 0 |
+| F-WR-05 | threadwork is not in the game and is not a module | RESOLVED-BY | THREAD edit 3 (tables as typed data) and THREAD-B edits 1–4 (which supersede THREAD edits 1, 2, 4) | `(Person, coherence)` unproduced, `write_matrix.yaml:200-206` (opened) |
+| F-WR-06 | the victory ending is unreachable on one territory; its register row is stale | RESOLVED-BY | MOTION edit 3 (settled territories), reached by a draw (DRAWS edit 3) | GD-1 |
+| F-WR-07 | the flow stamp's reach hangs on one Event kind | RESOLVED-BY | none of its own (the stamp is correct; its inputs are rare): it reads again once F-WR-01's closing acts execute; H-274 stays open with that note | dose 0 to 28% by seed |
+| F-WR-08 | `ENDINGS_CLASSIFIED.yaml` is prose read by a builder | RESOLVED-BY | ARCS-WR edit 3 (stop planting; correct the path) | `corpus_run.py:656-660` |
+| F-WR-09 | memory decay is half the log and grows | RESOLVED-BY | `01_CORE_claim_fade_as_read.md` (U5a's; the ladder's D-48: forgetting computed when read) | 179,056 `claim.decayed` (E-08) |
+| F-WR-10 | every cohort starves in season 0 and never again | RESOLVED-BY | plan CR-22 with `07_SE_ground_and_granaries.md` as reconciled (the drawn start, A-50) | `body.changed` 37 in season 0 |
+| F-WR-11 | MATTER recovery is silent (H-211) | RESOLVED-BY | ARCS-WR edit 2 (the signed step) with OWED-WR §3 (F-WR-23's body Observation lands with it) | `matter.py:119, :690-711` |
+| F-WR-12 | currency rows point at retired documents | RESOLVED-BY | PTR-B (text for the orchestrator: R-11, R-12, R-20) | `CURRENT.md:36, :28` `[not re-opened]` |
+| §6.1 rows closed at HEAD (H-04, -05, -27, -34, -40, -51, -95, -103, -110, -118, -172, -242, -243, -245 to -247) | listed open or unsure; verified closed | STALE-FALSE-POSITIVE | PTR-B carries the re-grade text for H-05, -27, -172 | the audit's E-07, E-08, E-15 |
+| §6.1 rows "not WR's" (H-32, -65, -107, -129, -130, -135, -139, -150, -164, -167, -168, -185, -209, -215, -216, -223, -225, -227, -230, -278, -283, -287, -291, -307, -311, -326, -350, -356) | another lane's mechanism | SUPERSEDED | the owning closures (U5a, U5b, U5c; Parts 1 and 2 here); the addendum's §6 re-reads each (3.2 below) | — |
+| H-102, H-125, H-159, H-232 | open as a sign, a value, a value, a refusal | RESOLVED-BY | none owed by WR: H-125 is re-derived by CR-22; H-159 is FA's term (Part 1, TERMS-B); H-232 is CHAR's and FA's formation | E-05, E-08 |
+| H-176, H-186, H-235, H-236 | endings; insurgency; the lattice | RESOLVED-BY | MOTION edits 3, 2, 1 | E-13 |
+| H-208, §11 item 2 | natural death deferred | SUPERSEDED | A-15 (on, after the ages are authored); carrier `22_HAPPENINGS_A_a_death_is_rare_caused_and_drawn.md` and PES-WR-C as reconciled | ED-IN-0317 `[not re-opened]` |
+| H-211 | a body only falls | RESOLVED-BY | ARCS-WR edit 2; plan CP-T10-04 | — |
+| H-238 | no corpus thread sensitivity | RESOLVED-BY | none owed (answered at ladder step 1 by the row itself) | E-15 |
+| H-257, R-06 | a real execution reads KL, not XE | RESOLVED-BY | OWED-WR §1 (`strife.py:85`) | — |
+| H-274 | the stamp | RESOLVED-BY | as F-WR-07 | — |
+| B10-15, B10-18, CL-THRUST, CL-OPEN, CR-80, B11-F2/F3, WR-01, HANDOFF_WR item 2 | plan positions | RESOLVED-BY | the plan, with THREAD-B before CP-T07-02 (R-08) and CR-99 folded into INSTR edit 1 | — |
+| R-01, R-02, R-18 | story bar | RESOLVED-BY | INSTR edits 1–3 | — |
+| R-03, R-04, R-05 | lattice source; victory selector; unheld land | RESOLVED-BY | MOTION edits 1, 3, 2 (edit 2 stands under A-57/A-58: ground no party holds is outside the rule) | — |
+| R-07 | a strand concludes on an opening kind | RESOLVED-BY | STRAND edits 1–2 | — |
+| R-08, R-09 | the module; its tables | RESOLVED-BY | THREAD-B; THREAD edit 3 | — |
+| R-10, R-17, R-19 | the empty thrust ladder; sixteen links read 0; live tenures at a move's tick | RESOLVED-BY | none owed (statements recorded in the audit; no code) | — |
+| R-11, R-12, R-20 | pointer text | RESOLVED-BY | PTR-B | — |
+| R-13 | a body only falls | RESOLVED-BY | ARCS-WR edit 2 | — |
+| R-14 | claim decay | RESOLVED-BY | `01_CORE_claim_fade_as_read.md` | — |
+| R-15, R-16 | the planted column; automatic clocks | RESOLVED-BY | ARCS-WR edits 3, 1, 4 as reconciled (A-47: the count opens a mandatory scene) | — |
+| §11 item 1 | the same-doer link | SUPERSEDED | A-45 (several strands) | ED-IN-0316 |
+| §11 item 3 | the slate | SUPERSEDED | A-48 (a list of questions for the player; NPCs take the first); `11_GO_player_surface_contract_B.md` as reconciled | H-54 |
+| §13 ambient decay, bands, the lattice (ARC-05, -48, -27, -43, EMG-C3, NPC-075) | in kind; needs a source | RESOLVED-BY | MOTION edit 1; PES-WR-B | E-07, E-16 |
+| §13 threadwork cases (ARC-48, -05, -41, -42, -09, NPC-002, -004, -005, ARC-51, EMG-X7, -X8, SCN-LOOP-A) | no working exists | RESOLVED-BY | THREAD-B; plan B10-15 (CP-T07-02 to -10); ARC-51's growth is CHAR's | `write_matrix.yaml:206` |
+| §13 private counters (ARC-34, -47, -31, -32, NSC-05, -08, EMG-C1, EMG-10) | a counter forces a step | RESOLVED-BY | ARCS-WR edit 1 as reconciled (A-47) | `world_q.py:162-168` |
+| §13 "wrongly stated" (ARC-47/NSC-08 never decreases; ARC-46 passage of time; ARC-52 a ceiling eliminates) | restated | RESOLVED-BY | ARCS-WR edit 4; A-47 keeps the restatement's core (the crossing decides nothing) and adds that it may open a mandatory scene | — |
+| §13 institutional clocks (ARC-46, -50, EMG-C2, NSC-09, ARC-03, -45) | standing rises by itself | RESOLVED-BY | plan CR-89 (FA; Part 1) | — |
+| §13 ARC-02 | a state-change check with no actor | SUPERSEDED | A-15 | — |
+| §13 ARC-53, SCN-07, ARC-23 | represented today | STALE-FALSE-POSITIVE | none owed | `tend` 37/69 (E-07) |
+| §13 SCN-06, SCN-LOOP-C | drains and restorations summed | RESOLVED-BY | ARCS-WR edit 2 | H-211 |
+| §13 ARC-07, NPC-052, ARC-01, ARC-44 | other lanes' | SUPERSEDED | U5b; Parts 1 and 2 | — |
+| §13 the 19 `forced_by_threshold` cases | misrepresented by a planted holderless date | RESOLVED-BY | ARCS-WR edit 3; A-47 | `corpus_run.py:656-660` |
+| §14 (capability surface; "banded scalar") | asked CHAR for a row kind | SUPERSEDED | the addendum's R-24 (none needed) | — |
+
+## 3.2 `audits/09_WR_audit_addendum_B.md`
+
+| id | claim (one line) | disposition | carrier · section | evidence |
+|---|---|---|---|---|
+| F-WR-13 | the realm closes by clock, not by act (23 lapsed against 3 determined) | RESOLVED-BY | READ-B edit 1 (R-29); the acts that close are other lanes' | three seeds, six seasons |
+| F-WR-14 | the chronicle prints who and when, never what, from no viewpoint | RESOLVED-BY | CHRON-B (R-28, R-32) as reconciled (A-49, A-33, A-43) | `world_q.py:4374-4441` |
+| F-WR-15 | no reading of open situations, tension or idle persons | RESOLVED-BY | READ-B | — |
+| F-WR-16 | flattening every person to the realm mean lowers no story reading | RESOLVED-BY | READ-B (the ablation kept as a reading); the fix is CHAR's (H-283, U5a) | EB-01 |
+| F-WR-17 | threadwork's designed session has no code and no plan position | RESOLVED-BY | THREAD-B edits 1–2 | — |
+| F-WR-18 | the first lane's scenario shows the practitioner his own Coherence band | RESOLVED-BY | THREAD-B edit 3 (R-25); UNKNOWABLE (A-43, for what others read of him) | `data/requires.py:809` |
+| F-WR-19 | the scheduled weather has no memory, no neighbours and a mean of 1.167 | RESOLVED-BY | WEATHER-B edits 1–2 as reconciled (A-54) | — |
+| F-WR-20 | the second contest (the world's survival) has no reading and no ending | RESOLVED-BY | WEATHER-B edit 4; DRAWS edit 3 | — |
+| F-WR-21 | 248 of 322 `condition.worn` Events are writes of zero | RESOLVED-BY | READ-B edit 2 (R-30); `07_SE_kernel_repairs.md` §3 removes the write | EB-07 |
+| F-WR-22 | three hole rows rest on deaths that no longer occur at their seed | RESOLVED-BY | PTR-B (R-31) | — |
+| F-WR-23 | a believed wound is never cleared | RESOLVED-BY | OWED-WR §3 (a body Observation on `tend` and on recovery; owed at PC's and CHAR's owner, sequenced before R-13 and CP-T10-04) | `world_q.py:3806-3812` |
+| F-WR-24 | wear, strain, the hungry body, a lapse, endings and a strand's conclusion are fixed functions of state | RESOLVED-BY | DRAWS edits 1–4 (R-37 to R-40), confirmed in form by A-54 and A-24 | — |
+| §2.2 corrections 1–11 | corrections to the first audit and to this addendum | RESOLVED-BY | made in place; THREAD-B supersedes THREAD edits 1, 2, 4; CHRON-B carries 8; R-25 carries 9 | — |
+| R-21, R-22, R-25, R-34, R-40 | host declaration; cost by direction; coherence world-only for its owner; a Partial's scope; contact, cost and breach drawn | RESOLVED-BY | THREAD-B edits 1–3 | — |
+| R-23, R-26, R-27 | a leg's price; the Rupture's selector; a spell | RESOLVED-BY | WEATHER-B edits 3, 4, 1–2 | — |
+| R-24, R-33, R-35 | no "banded scalar"; no navigation capability; no Approach Training gate | RESOLVED-BY | none owed (A-11 confirms: training gates nothing; Thread Sensitivity is the one gate) | — |
+| R-28, R-32 | what a line is about; the journal's source | RESOLVED-BY | CHRON-B | — |
+| R-29, R-30 | closed by act or by clock; non-zero changes only | RESOLVED-BY | READ-B edits 1–2 | — |
+| R-31 | re-point three rows | RESOLVED-BY | PTR-B | — |
+| R-36 | the Rendering Crisis's four beats | RESOLVED-BY | none owed (the Event alone; the journal tells) | — |
+| R-37, R-38, R-39 | wear drawn; endings drawn; a strand concludes on a drawn degree | RESOLVED-BY | DRAWS edits 1, 3, 4 | — |
+| §6: 19 rows closed at HEAD | H-04, -05, -27, -34, -40, -51, -95, -103, -107, -110, -118, -129, -172, -242, -243, -245, -246, -247, -356 | STALE-FALSE-POSITIVE | PTR-B for the rows whose text is owed | the addendum's table |
+| §6: 6 rows open in this lane | H-102, -125, -135, -159, -164, -208 | RESOLVED-BY | READ-B (H-135's reading); CR-22 (H-125); TERMS-B (H-159); A-15 (H-208); H-102 and H-164 stay open as measured signs with no edit owed | — |
+| §6: 4 rows whose measurement is stale | H-168, -209, -225, -230 | RESOLVED-BY | PTR-B (re-pointed); `U5d_SE_owed_edits.md` §1 for H-168 | — |
+| §6: 20 rows another lane's | read and left | SUPERSEDED | the owning closures | — |
+
+## 3.3 `audits/16_PESSIMIST_WR.md`
+
+| id | claim (one line) | disposition | carrier · section | evidence |
+|---|---|---|---|---|
+| F-PES-WR-01 | no story in computed play has a turn | RESOLVED-BY | PES-WR-D edit 4 (the reading); the closing verbs are FA's, SC's and PC's | — |
+| F-PES-WR-02 | the Calamity has no source, no break and no answer | RESOLVED-BY | PES-WR-B edits 1–3 as reconciled (A-40: the wear is a real condition of places, one Site per territory); MOTION edit 1 lands only with them | — |
+| F-PES-WR-03 | the world's own change is one ramp in 37 places | SUPERSEDED | F-SE-01 (Part 2: GROUND) and F-PES-GAME-05 (Part 6) own it | — |
+| F-PES-WR-04 | CALENDAR can be removed and no reading notices | RESOLVED-BY | PES-WR-D edits 3, 5 (R-1) | the cut arm |
+| F-PES-WR-05 | the Thread is read off letters, finds nothing and costs nothing | RESOLVED-BY | PES-WR-D edit 2 (`referent_class: Site`); THREAD-B | — |
+| F-PES-WR-06 | a journey is free, instant and certain | RESOLVED-BY | PES-WR-A | — |
+| F-PES-WR-07 | the bodies clock is a coin, the same coin for everyone | RESOLVED-BY | PES-WR-C as reconciled (A-15: no longer dark once the ages are authored); `22_HAPPENINGS_A` owns the rate and the bout | `fixtures.py:692` |
+| F-PES-WR-08 | every run is the same run | RESOLVED-BY | none of its own (the sum of F-WR-01 and the world's motion being off); the seeded start (A-50) and the generated cast (A-44) are the differences between seeds, `21_PROCEDURAL_B`, `_D` | — |
+| F-PES-WR-09 | a Date due in the past never fires | RESOLVED-BY | PES-WR-D edit 1 (R-9) | — |
+| F-PES-WR-10 | "pressure" never fires | RESOLVED-BY | PES-WR-D edit 1 | — |
+| F-PES-WR-11 | the band-crossing channel is dead from end to end | RESOLVED-BY | PES-WR-B edit 4 | — |
+| R-1 to R-12 | resolutions | RESOLVED-BY | PES-WR-A (R-5, R-6), -B (R-2, R-3), -C (R-7, R-8), -D (R-1, R-9 to R-12); R-4 is text for the orchestrator (OWED-WR §4) | — |
+| §5, §6, §7 lists | false N-lines; premises; stories | RESOLVED-BY | none owed beyond the rows above | — |
+| §8 (items listed for other lanes) | illness not yet graded; the lattice flip a fixed-function collapse | RESOLVED-BY | PES-WR-C; PES-WR-B edits 1–2 before MOTION edit 1's flip | — |
+

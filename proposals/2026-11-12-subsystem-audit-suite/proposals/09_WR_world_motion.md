@@ -1,5 +1,7 @@
 # WR · The world moves, and its endings can be reached
 
+Reconciled: 2026-11-12, U5d closure — folded **A-40**, **A-54**, **A-55** and **A-57 / A-58**. Edit 1 (the Calamity's source as an authored initial condition): A-40 rules the wearing-down a real condition of places, one Site per territory, no new entity kind, so the source is a Site of the territory and the edit's form stands; its flip waits on `16_PESSIMIST_WR_B_the_calamity_strains_and_breaks.md` edits 1–2 (`U5d_WR_owed_edits.md` §2) and its wear is drawn on the four-band ladder (A-54). Edit 2 (an unheld place is taken by occupation) stands: ground no party holds is outside the land ruling, so `seize` remains its act. The note under edit 3 ("`seize` admits a held, occupied territory") is rewritten: held land entered by a won march passes with its seats in the field's effect (`U5d_FA_land_and_seats_pass_on_a_won_march.md`); `seize` of held land remains only for an `Unopposed` entry. Edit 3's victory selector counts places on the fixed map (A-55) and is reached by a draw.
+
 ## Status: PROPOSED
 
 Carries findings F-WR-04 and F-WR-06 of `audits/09_WR_audit.md`, and its §6 resolutions R-03, R-04, R-05

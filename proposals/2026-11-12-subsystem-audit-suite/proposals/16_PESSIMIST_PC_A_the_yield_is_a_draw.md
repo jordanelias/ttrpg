@@ -1,5 +1,7 @@
 # 16 · PESSIMIST · PC · A — the yield is a draw: whether a wounded fighter gives up is his, and is rolled
 
+Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` §1.5) — the draw's two inputs follow A-7 and A-8 (U1 §4); the form, the site, the bands and the gate stand. (1) **Pool:** dice come from training, never from an attribute, so the pool is the one pool rule on the party's score in the capability the check tests (none is authored for holding one's nerve, so the untrained default: `resolution_pool(pool_default)`), and **Spirit enters as talent levels** (`per: mid`) on the roll, where the first text put it in the dice. (2) **Wounds are a level, not obstacle points:** the obstacle is `YIELD_OB[terms]` alone; the wounds enter as the level `wound_impairment` already gives the wounded side, one ladder for one quantity. (3) The prototype table below was read on the first form and on a three-blow fight; it is re-read after the damage scale (A-31) inside the calibration batch (`U5b_PC_rulings_in_the_fight.md` §5 row 5). The Spirit and modifier sweeps keep their direction by construction (a level for is a level for).
+
 ## Status: PROPOSED
 
 Source: `audits/16_PESSIMIST_PC.md` §2.2 (F-PES-PC-03). Standing rule: `AUDIT_BRIEF.md` (Jordan,
@@ -40,11 +42,14 @@ one number, the same for every person. `14_VERBS_PHYSICAL_A` A3's `context_terms
 fight on.** One site, in `wrapper.fight`, replacing `:600-612`; one roll, through `core.resolve` (the
 owner ladder); every term.
 
-- **Pool:** `core.resolution_pool(c.spirit)`. Spirit is the engine's attribute for this
-  (`attributes.py`: registry key `attr.mind.will`), already carried on the typed input through
-  `PersonalCombatInput.attributes`, so an authored person brings his own.
-- **Obstacle:** `cfg['YIELD_OB'][terms] + c.wt.wounds`: the term sets how much is at stake in stopping,
-  the wounds how hurt he is. `YIELD_OB` is one new `CFG` key, a dict over `DUEL_TERMS`
+- **Pool** *(Reconciled, A-7)*: `core.resolution_pool(score)`, `score` the party's trained score in the
+  capability the check tests, the untrained default where none is authored. **Talent:** Spirit
+  (`attributes.py`: registry key `attr.mind.will`, already carried on `PersonalCombatInput.attributes`)
+  enters as named levels for or against the roll by its distance from the mid-point, so an authored
+  person still brings his own. ~~`core.resolution_pool(c.spirit)`~~
+- **Obstacle** *(Reconciled, A-8)*: `cfg['YIELD_OB'][terms]`: the term sets how much is at stake in
+  stopping. How hurt he is enters as a level against the roll (`wound_impairment`'s per-wound term, the
+  channel the exchange already uses), not as points on the obstacle. ~~`+ c.wt.wounds`~~ `YIELD_OB` is one new `CFG` key, a dict over `DUEL_TERMS`
   (`[SIM-CALIBRATE]`; the exporter collects `CFG` whole).
 - **Modifier (σ):** `inp.resolve[i]`, a new optional field of `PersonalCombatInput` (default `()`,
   which is 0.0 for both): what the host knows that the module does not (what he is fighting for). It

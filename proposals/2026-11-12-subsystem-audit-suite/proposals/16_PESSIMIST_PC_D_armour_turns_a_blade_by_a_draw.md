@@ -1,5 +1,7 @@
 # 16 · PESSIMIST · PC · D — armour turns a blade by a draw: the coverage gap is a chance, not an average
 
+Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` §1.5) — order only. It is the third step of the one combat calibration batch (after the damage scale, A-31, and the commit window) and shares its single re-record (`U5b_PC_rulings_in_the_fight.md` §5 row 5). Its `rng` argument to `core.strike` is the round's private stream once `03_PC_duel_round_and_approach_B.md` step 2 lands; the roster census that gates an inventory (`U5b_PC_residue.md` §3) is run after it.
+
 ## Status: PROPOSED
 
 Source: `audits/16_PESSIMIST_PC.md` §2.3 (F-PES-PC-07). Standing rule: `AUDIT_BRIEF.md` (Jordan,

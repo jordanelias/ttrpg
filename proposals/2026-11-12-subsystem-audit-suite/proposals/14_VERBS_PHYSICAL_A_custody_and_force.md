@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED
 
+Folded: 2026-11-12 by `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md` (row R-4). Nothing here is deleted; one caller is named. A2 puts `capture` under a `war` or `crime` context with custody going to the authority whose act it enforces. The mass-battle lane now proposes that a beaten side's loss in flight is divided by a draw into killed and **taken** (`26_MASS_BATTLE_rout_pursuit_and_giving_ground.md` §4; about half of a beaten Roman-era army's loss could be prisoners, `research/historical/mass_battle_casualties_and_results_grounding.md` A6). Named persons among the taken arrive in custody **by this proposal's custody write, under its `war` context**, with the seat that dispatched the march as the authority; the field writes no custody of its own and no second capture path. A cohort's taken share is a count on the band Event until a place for prisoners exists. Whether a person taken in a rout was captured by a draw of his own or by his unit's is that proposal's (the unit's), and the death draw of A3 item 3 is not reached by it.
+
 Batch P-A of `audits/14_VERBS_PHYSICAL.md` §10.3. Carries that file's §1 to §4 and §0.6 (the standing
 rule). Lands after lane A (`03_PC_duel_chain_reach.md`) and FA-P2 (`06_FA_remit_grant_by_row.md`).
 Reference only (CLAUDE.md §0.05). Authored by Opus completing a Fable lane cut off by the usage limit
