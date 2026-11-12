@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED
 
+Folded: 2026-11-12 by `audits/27_MB_COMMAND_AND_DYNAMIC_STRENGTH.md` (rulings A-69 and A-59). Nothing here is deleted. (1) **§3's `fatigue.entry.second_field: 0.7`** is a flat seed standing where a carried value belongs. Under A-69 a unit's stamina at the end of a field is recorded on its row and is what it enters a second field of the same round with, plus one lull's recovery; the flat seed stays as the fallback for a part with no record (`27_MB_E_what_an_army_carries_back.md` §4). Whether tiredness outlasts a round boundary is not decided: the length of a round in the fiction was not read, and `fatigue.carry_rounds` ships at 0. (2) **A-59**: pace, the carry factors and the fatigue level are terms a unit brings to a pair from its own row; none multiplies its base dice (`27_MB_B_unit_prowess_on_the_row.md` §1, §2). §4's `reform` is an order and takes effect through the obedience draw (`27_MB_A`).
+
 Lane MB. Carries rows M-1 to M-5 and M-7 of `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md`. Extends the
 troop file of `04_MB_unit_loadout_and_weapon_in_hand_B.md` and the ledger of
 `16_PESSIMIST_MB_one_stamina_ledger.md`; depends on both. Source keys as in the audit (**MV**, **CR**, **SQ**,

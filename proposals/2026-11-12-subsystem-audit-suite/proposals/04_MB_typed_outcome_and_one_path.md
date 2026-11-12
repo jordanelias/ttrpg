@@ -4,6 +4,8 @@ Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` Part 2
 
 ## Status: PROPOSED
 
+Folded: 2026-11-12 by `audits/27_MB_COMMAND_AND_DYNAMIC_STRENGTH.md` (rulings A-59 and A-69). Nothing here is deleted. (1) The typed input the Reconciled line's item (3) points to is `CommandRecord` (trained score, addends, levels, post), one for each side's commander and one on each unit row for its officer, with `pool_add`, `pool_floor` and the task obstacle carried raw (`27_MB_A_command_and_the_obedience_draw.md` §2). (2) `FieldOutcome` gains `report.draws` (the named draws and their bands), and each part gains its end-state word and `stamina_left` (`27_MB_C` §3; `27_MB_E` §1, §4). (3) **§1's army-path write** ("each subformation's surviving fraction is applied to the troops each cohort assigned to it ... and summed per cohort", then written to the cohort's body) is the control arm under A-69. With `recuperation: on` the per-unit loss is written to the unit's row by kind, the cohort's body takes the dead share only, and strength is read from the row; the read and the write move in one commit so that no loss is counted twice (`27_MB_E` §2, gate 2).
+
 Lane MB (seam edits IN). Carries R-04, R-05, R-08, R-09, R-10, R-15, R-21 of `audits/04_MB_audit.md`
 §6.2 and the first step of its §14. Reference, not mechanism (`CLAUDE.md` §0.05).
 

@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED
 
+Folded: 2026-11-12 by `audits/27_MB_COMMAND_AND_DYNAMIC_STRENGTH.md` (rulings A-59 and A-69). Nothing here is deleted. (1) **§3's last row** (`MB_FRICTION_SIGMA`, "ruled; read, not proposed", arms 1.1, 0.55, 0) becomes a test with a criterion written before the run: six arms (the three values, each with the named draws on, plus the bare engine and a small named level), five readings, four planted defects, in `27_MB_C_dynamic_strength_and_the_residual_chance.md` §4. It is the reading that tells the multiplier's removal from its lowering. "Friction as shipped and again pinned off" in §3's first sentence stands for every other sweep until that test's commit. (2) **One reading is added to the instrument**: the flip share, the share of fields whose end state changes when one source's draws alone are re-keyed. (3) **Rows T-11 to T-17** join §1's table: orderings for what an army carries back (the recoverable share of a loss, a routed against a standing unit, pursued against unpursued, strength some rounds later, recovery at rest against on the march, the recall of fled men, a second field in one round), in `27_MB_E_what_an_army_carries_back.md` §5. No historical figure for the wounded, for recovery or for the return of fled men exists in the tree, so none of the seven has a band.
+
 Lane MB. Carries rows R-1 to R-5, B-10 and B-11 of `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md`.
 Sources: `research/historical/mass_battle_casualties_and_results_grounding.md` (**CR**),
 `…_movement_and_behaviour_grounding.md` (**MV**), `…_wargame_models_grounding.md` (**WG**). Reference, not

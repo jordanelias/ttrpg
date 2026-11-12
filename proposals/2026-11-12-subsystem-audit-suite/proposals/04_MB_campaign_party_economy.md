@@ -4,6 +4,8 @@ Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` Part 2
 
 ## Status: PROPOSED
 
+Folded: 2026-11-12 by `audits/27_MB_COMMAND_AND_DYNAMIC_STRENGTH.md` (rulings A-59 and A-69). Nothing here is deleted. (1) **A-59**: `experience` is the unit row's term in the quality that `prowess(atom)` turns into dice, added at `orderofbattle._spec_for` as §1 says; `arrears` lowers the unit's steadiness, which is read by the order term, the stand draw and the obedience draw's `unsteady` step (`27_MB_B_unit_prowess_on_the_row.md` §1; `27_MB_A` §4). (2) **A-69**: a unit's losses are written on its own row (`assigned` falls; injured and fled men are held in an `absent` column and may return by a draw), and its strength is then read from the row alone and no longer from the cohort's body share. §1's "a unit destroyed is reset" and the dilution rule read `assigned` after that write; men returning from `absent` are the unit's own and do not dilute its `experience` (`27_MB_E_what_an_army_carries_back.md` §2, §3).
+
 Lane MB for the two data columns and the two battle-side effects; FA and SE own the acts that pay and
 supply (named below, not designed here). Carries R-42 of `audits/04_MB_audit_addendum_B.md` §B6 and its
 §B5.2. Depends on the troop file (`04_MB_unit_loadout_and_weapon_in_hand_B.md` stage 1) and on the first

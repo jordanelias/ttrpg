@@ -27,8 +27,9 @@ tree (same content hash, `bacd687f…`), and it counts every act whose payload h
 with him. Read by the verb row's own `counterparty:` column the figure is 32 of 50; read by the rows that
 require the two to be in one place (the cell asks `with` of the counterparty: `tell`, `argue`, `lie`,
 `give`, `challenge`, `accept`, `capture`) the whole realm executes **24, 42 and 31 face-to-face
-interactions in two seasons at seeds 0, 1, 2, of about 1,700 acts**, because nine attempts in ten are
-refused for want of co-presence before any question of the other man's time arises. A crude occupancy
+interactions in two seasons at seeds 0, 1, 2, of about 1,700 acts**, because four attempts in five are
+refused before any question of the other man's time arises, the largest named cause being that the two
+are not in one place (`with` read False in 125, 136 and 82 refusals). A crude occupancy
 arm (one scene per person per round, the visitor always yielding to the host's own business) halves the
 face-to-face class (24 → 11, 42 → 21, 31 → 15) and moves the realm's executed acts by 0.5% to 3.9%; the
 minimal arm (one visitor per person per round) turns away 2, 7 and 4 visitors. **The single largest
@@ -97,7 +98,35 @@ true as a count and wrong as a measure of people being in two meetings at once.*
 
 ### 1.3 Face-to-face interactions (the class A-63 binds)
 
-FACE_TABLE_PLACEHOLDER
+`face.py`, two seasons each. A face-to-face row is derived, not listed: its typed cell asks the `with`
+relation of the operand its `counterparty:` names (`verb_table.yaml`; today `accept`, `argue`, `capture`,
+`challenge`, `give`, `lie`, `tell`). Office rank is the highest `rung_kinds` index among the rungs of the
+seats a person holds (0 for the seatless), read at the end state.
+
+| reading | seed 0 | seed 1 | seed 2 |
+|---|---|---|---|
+| executed face-to-face acts whose counterparty is another person | 24 | 42 | 29 |
+| (round, counterparty) pairs | 22 | 37 | 25 |
+| of those, the counterparty executes an act of his own that round | 16 (73%) | 24 (65%) | 16 (64%) |
+| of those, the counterparty releases any act that round | 19 | 35 | 24 |
+| pairs with two or more distinct visitors | 2 | 5 | 4 |
+| of those, visitors of differing office rank | 1 | 3 | 3 |
+| executed visits upward / level / downward by office rank | 9 / 9 / 6 | 13 / 17 / 12 | 15 / 8 / 6 |
+| **attempted** face-to-face acts (any outcome) | 185 | 214 | 148 |
+| attempted pairs / with two or more distinct visitors / of differing rank | 137 / 31 / 13 | 144 / 48 / 24 | 106 / 26 / 14 |
+| refused attempts whose recorded read `with` is False | 125 | 136 | 82 |
+| refused attempts carrying no False read (an UNKNOWN read or an earlier clause; not separated, `[UNVERIFIED]` which) | 96 | 108 | 113 |
+| individuals by office rank (0 / 3 / 4 / 6 / 7) | 14 / 2 / 17 / 9 / 4 | same | 14 / 2 / 16 / 9 / 4 |
+
+(`arms.py` counts face-to-face acts by verb and reads 31 at seed 2; two of them name a person removed
+before the run's end, which `face.py` reads at the end state and drops.)
+
+Three readings follow. **(a)** The proportion PES_CORE reported holds on the right class: about two in
+three hosts are doing something of their own in the round they are spoken to. **(b)** The class is
+small: 22 to 37 meetings in two seasons among 46 individuals. **(c)** Rival visitors exist mostly as
+*attempts*: 26 to 48 attempted pairs have more than one visitor against 2 to 5 executed, and about half
+of the attempted rivalries are between visitors of differing office rank. Precedence by rank therefore
+has a subject once visits form on believed co-location, and almost none before.
 
 ### 1.4 Crude occupancy arms (an order of magnitude; not the shipping measurement)
 
