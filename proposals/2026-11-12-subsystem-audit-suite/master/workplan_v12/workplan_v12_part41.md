@@ -249,4 +249,138 @@
 - COST and TIER: edit; `sonnet`, `high`.
 - LANDS IT: B38's producer; `Item: B38.61`, `[skip ci]`.
 
+### B38.62 — a strand is about its subject and its recent moves, switch at `all` · `30_WR_C` commit 1a · BUILD · HASH EQUAL
+- SOURCE: `proposals/30_WR_C_strands_open_grow_join_conclude.md` "The resolution, decided" §1, "Instructions to code" commit 1a steps 1–6, "The falsifier"; rulings A-45 ("or joins by its subject"), A-46; closes F-30-06 (the mechanism).
+- ADVANCES: none of the nine; A-45 (several strands that can each end).
+- INSTRUCTION (commit 1a, copied; line numbers dropped):
+  1. "`STRAND_RECENT = 3` beside `flow_capacity`, tagged `[JUSTIFIED: the study's window for a windowed link, inherited, not fitted]`; `harness/strife.py` becomes `LINK_WINDOW = world_q.STRAND_RECENT` (one owner; the harness already imports `world_q`)."
+  2. "`rosters.yaml`: closed roster `strand_link_rules`, `values: [all, subject_recent]`; `data/fixtures.py`: `strand_links="all"` with the sweep comment `all (control, SHIPPED at 1a) / subject_recent`, refused outside the roster."
+  3. "`_Chain`: add `subject: set` and `subject_parents: set`, filled in `take` when `mv.opens` (`mv.referents`, `_parents(rd, mv.referents)`), merged in `absorb`; add `def recent(self, n) -> set` returning the union of the referents of its last `n` moves by `index`."
+  4. "`_links(m, up, s)` gains `rule: str = "all"`. At `all` its body is today's, line for line. At `subject_recent`: `near = s.subject | s.recent(STRAND_RECENT)`; return true if `m.referents & near or up & near or m.referents & s.subject_parents`; else the same-doer clause as `09_WR_strand_conclusion.md` edit 3 leaves it. `_attach` and the pulled-prior merge pass the rule; `flows_in` and `flows_known` read it once from `w.fixtures.get("strand_links")`."
+  5. "`Strand` gains `subject: frozenset = frozenset()`, set by `_strand_of`."
+  6. Tests (below).
+  The linking rule (§1, copied): "A move links to a strand when: it shares a referent with the strand's **subject**, or one rung step from it; or it shares a referent with one of the strand's **last three moves** …; or the same doer did it and he opened the strand, or the move is itself an opener (`09_WR_strand_conclusion.md` edit 3, unchanged). … `[ASSUMPTION; medium; Jordan to correct; revert: `strand_links: all`]`."
+- WHERE: `S/queries/world_q.py` (NEW `STRAND_RECENT`; `_Chain` (`subject`, `subject_parents`, `recent`, `take`, `absorb`); `_links`; `_attach`; the pulled-prior merge in `flows_in`; `flows_known`; `Strand.subject`; `_strand_of`); `S/harness/strife.py` (`LINK_WINDOW`); `S/rosters.yaml` (`strand_link_rules`); `S/data/fixtures.py` (`strand_links`); `S/tests/test_strife_flows.py`.
+- TESTS: in `S/tests/test_strife_flows.py`, written before the edit and read red: `test_links_all_is_byte_identical` ("the realm's flows before and after, equal"); `test_a_referent_named_long_ago_does_not_merge_two_strands` ("strand X on rung A, strand Y on rung B; X names person K once, then four more X moves; a Y move names K: one strand at `all`, two at `subject_recent`"); `test_capture_then_execution_is_one_strand` ("an `arrest.made`, then a lethal `fight` on the held man within three moves: one strand in both arms"); `test_a_strand_travels` ("a chain of four moves each sharing a referent only with the one before: one strand"); `test_the_person_reading_uses_the_same_rule` ("planted ledger"). "`assert checked >= 5`."
+- FALSIFIER and CONTROL: "The planted capture and execution reading as two strands"; "A strand's `subject` changing when a non-opening move joins". Control: "`all` is today's reading, byte for byte": realm hash at seed 0, one season, equal to B38.61's.
+- GATE: `python -m pytest S/tests/test_strife_flows.py -q` → pass; realm hash at seed 0, one season → equal to B38.61's.
+- HASH MOVERS: none at `all`.
+- DEPENDS ON: EXISTS-IN-TREE `S/queries/world_q.py::_links`, `::_attach`, `::flows_in`, `::flows_known`, `::flow_capacity`, `Strand`, `_Chain`, `S/harness/strife.py::LINK_WINDOW`; V12 Batch B12a (`09_WR_strand_conclusion` edit 3's same-doer clause); V12 B38.60.
+- GLOSSARY: row *strand*: add "a strand's **subject**: the referents of its opening moves", owner `world_q.Strand.subject` (code).
+- COST and TIER: small build; the linking rule a judgment node: producer `opus`, `high` ("commit 1 third tier (opus …), critic second"); critic `sonnet`.
+- LANDS IT: B38's producer; `Item: B38.62`, `[skip ci]`.
+
+### B38.63 — the bounded link rule is flipped on · `30_WR_C` commit 1b · BUILD · HASH MOVER(behaviour)
+- SOURCE: `proposals/30_WR_C_strands_open_grow_join_conclude.md` commit 1b, "The gate", "The falsifier"; A-45.
+- ADVANCES: none of the nine; A-45; the bound on L5 (CR-98's row) and L1.
+- INSTRUCTION (copied): "Flip `strand_links` to `subject_recent`. Pre-change and post-change hashes at seeds 0, 1, 2; the strife guard on against off (CR-99's function if landed, else H-274's method: terminal-code histogram with the stamp reading each arm); re-record shared pins once." The shared pins are re-recorded once, at B38.99 (E-1), not in this commit; this commit records the pre- and post-change hashes in its body.
+- WHERE: `S/data/fixtures.py` (`strand_links`).
+- TESTS: none new; `S/tests/test_strife_flows.py` → pass (its tests name the arm they read).
+- FALSIFIER and CONTROL: "Mean moves per strand below 2 at `subject_recent`: the rule fragments (every move its own strand). Revert to `all` and keep only `09_WR_strand_conclusion.md` edit 3." Control: "the shuffled-membership control of CR-97 (moves re-dealt to strands of the same sizes) must read lower coherence than either arm"; `all` read beside it at the same seeds.
+- GATE: `PYTHONHASHSEED=0 python -m engine.season.harness.strife 2 0 1 2 --strands` at `subject_recent` and at `all` (three seasons in the source; A-114) → "(1) the largest strand's share of strand moves is below the `all` arm's at every seed …; (2) `per rung kind` prints at least one kind below the realm at two seeds or more …; (3) the mean number of moves per strand stays at 2 or more; (4) at least one adjacent pair or drawn link beats its shuffled control at one seed or more, or the block says none does (reported, not required …); (5) the strife guard passes or reads BLIND and says so"; realm hash at seeds 0 to 2, one season → moved, recorded.
+- HASH MOVERS: "a **declared mover** through `flows_known` → `flow_stakes` → `questions_for` (the stamp ships on)". Declared; B38.99's one re-pin.
+- DEPENDS ON: V12 B38.62; EXISTS-IN-TREE or V12 Batch B11F2 (CR-99's guard function, if it landed; else H-274's method, a reading).
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B38's producer; `Item: B38.63`, `[skip ci]`.
+
+### B38.64 — a strand's state: open, concluded, dormant, revived · `30_WR_C` commit 2 · BUILD · HASH EQUAL
+- SOURCE: `proposals/30_WR_C_strands_open_grow_join_conclude.md` §3 (the four states), "Instructions to code" commit 2; C3-K7 (`harness/storybar.py`: after `30_WR_B` (first half), before `30_WR_E` (B38.71)); A-80; R6.
+- ADVANCES: none of the nine; A-80 ("failing to conclude is a state with consequences"); clause C12 and shape E-09 (B38.71).
+- INSTRUCTION (commit 2, copied): "`engine/season/harness/strife.py::strands_block` and `harness/storybar.py`'s `on_season` hook.
+  1. `strife.py`: `def held_by_anyone(w, strand, known) -> bool`, where `known` is `{pid: flows_known(w, p)}` computed once per block: true if some living person has an unconcluded strand (`concluded_known`) whose referents meet `strand.subject`. `def strand_state(w, strand, known) -> str` in `("open", "concluded", "dormant")`. The strand line gains `state=<…> subject=<n ids> between|inside`.
+  2. `storybar.py --strands-life`: snapshots `{strand id: state}` each season; prints `revived=<n>` (dormant at season k, a new move by k+1) and `dormant=<n>`; per rung kind the number of open strands (so 'several, at several rungs' is read, not assumed)." The states (copied): "`dormant`: open in the world reading, and no living person holds an open strand of his own reading that shares its subject …; `revived`: a strand that was dormant at a season's end and gains a move in a later season". `between|inside` reads the first half's `30_WR_B` creed bodies.
+- WHERE: `S/harness/strife.py` (NEW `held_by_anyone`, NEW `strand_state`; `strands_block`); `S/harness/storybar.py` (NEW flag `--strands-life`; the `on_season` hook); `S/tests/test_strife_instrument.py`.
+- TESTS: in `S/tests/test_strife_instrument.py`, written before the edit and read red: `test_a_strand_nobody_remembers_reads_dormant` ("planted: an `arrest.made` in the log, a live `detain`, every ledger emptied of it"); `test_a_new_move_on_a_dormant_strand_reads_revived`.
+- FALSIFIER and CONTROL: "`dormant` printed for a strand some living person holds open (the join through subjects is wrong)." Control: the harness reads and writes nothing: realm hash equal.
+- GATE: `python -m pytest S/tests/test_strife_instrument.py -q` → pass; `PYTHONHASHSEED=0 python -m engine.season.harness.storybar --base-seed 0 --n 3 --seasons 2 --arms off off --strands-life` → `revived=` and `dormant=` printed per season, both arms EQUAL; realm hash at seed 0, one season → equal to B38.63's.
+- HASH MOVERS: none (harness).
+- DEPENDS ON: EXISTS-IN-TREE `S/harness/strife.py::strands_block`, `S/queries/world_q.py::flows_known`, `::concluded_known`; V12 B38.62 (`Strand.subject`); V12 the first half's `30_WR_B` commit (its `harness/storybar.py` edit, the predecessor on that file).
+- GLOSSARY: row *strand*: add the states *dormant* ("open in the world, held by no living person: as a dormant volcano is still there and quiet") and *revived* ("dormant, then moved again"), owner `harness/strife.py::strand_state` (code).
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B38's producer; `Item: B38.64`, `[skip ci]`.
+
+### B38.65 — how far below the bar a failure fell · `23_STORY_A` edit 1 · BUILD · HASH EQUAL
+- SOURCE: `proposals/23_STORY_A_what_a_roll_leaves.md` "Exact edits" 1, "The gate" (tests), "The falsifier"; rulings A-5; `unified/U3_CONFLICT_LEDGER.md` C3-L1 (the margin quantised to milli-units); "Lands in batch: … edits 1-3 one commit each (each hash-equal at `shortfall_scale: off` and with no row staked)".
+- ADVANCES: none of the nine; A-80, A-81 (the Failure band's write, `30_WR_D` §3); story turns S-68 to S-71.
+- INSTRUCTION (edit 1, copied): "**`engine/season/data/rosters.py` — `shortfall_step`, beside `DEGREE_STEP`.**
+  ```python
+  def shortfall_step(settled_margin) -> int:
+      """HOW FAR BELOW THE BAR A FAILURE FELL, in the ladder's own units. 0 for a margin at or above 0
+      or `None`; 1 for -S < m < 0; 2 for -O < m <= -S; 3 for m <= -O, where S and O are the Success and
+      Overwhelming edges the dice engine exports, mirrored. No number is typed here: both edges are read
+      from the one owner, in the units the ladder grades in (integer milli-units of the margin,
+      C3-L1)."""
+  ```
+  It reads the two edges from the dice engine's exported band edges (`10_DICE_exported_face_rule_and_band_edges.md`), so the mirror cannot drift from the ladder. … A magnitude-bearing Failure write is multiplied by it exactly as a Success write is multiplied by `DEGREE_STEP[band]`; a categorical Failure write (a deposit, an edge closed) is unchanged." The argument keeps the source's name `settled_margin`; its docstring says "margin" (glossary *margin*: "settled margin" retired by A-5).
+- WHERE: `S/data/rosters.py` (NEW `shortfall_step`, beside `DEGREE_STEP`); NEW `S/tests/test_stake.py`.
+- TESTS: NEW `S/tests/test_stake.py`, written before the edit and read red: `test_failure_pays_shortfall_steps` (steps 1 to 3 from planted margins; its stake half is read green at B38.66); `test_shortfall_edges_are_read_from_the_dice_engine_not_copied` ("sweep the Overwhelming edge to 4 and check step 3 moves").
+- FALSIFIER and CONTROL: "`shortfall_step` returning 3 for a margin of −2.9 after the dice engine's Overwhelming edge is swept to 4: the edge was copied, not read." Control: no caller yet: realm hash equal.
+- GATE: `python -m pytest S/tests/test_stake.py -q -k "shortfall"` → pass; realm hash at seed 0, one season → equal to B38.64's.
+- HASH MOVERS: none.
+- DEPENDS ON: EXISTS-IN-TREE `S/data/rosters.py::DEGREE_STEP`, `engine/dice_engine/dice_engine.py::degree_from_net`; V12 Batch B05 (`10_DICE_exported_face_rule_and_band_edges.md`: the exported band edges; `05_SC_contest_record_on_event.md`: the margin on `Event.ending`).
+- GLOSSARY: none (*margin* is a row; "shortfall step" is defined in the docstring: how many ladder steps below the bar a failure fell).
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B38's producer; `Item: B38.65`, `[skip ci]`.
+
+### B38.66 — a staked row pays its stake by degree; the stakes roster · `23_STORY_A` edit 2 · BUILD · HASH EQUAL
+- SOURCE: `proposals/23_STORY_A_what_a_roll_leaves.md` "Exact edits" 2 (C3-L14's shape (b)), the gate's tests and clauses 1–3; `unified/U3_CONFLICT_LEDGER.md` C3-L14; `U5c_VERBS_residue_and_governance_owner.md` §1; `04` §B.13 invariant 12.
+- ADVANCES: none of the nine; A-81 (a failed contested act leaves a durable write), LOOP L14.
+- INSTRUCTION (edit 2, copied): "Each staked row declares `contests: "a task"` (the prize row VRES §1 adds to `rosters.yaml: contest_subsystems.prizes`) and carries Degree-keyed `writes:`, its Partial and Failure cells including the stake's cell (`(Person, body)`, `(Rung, stores)` or `(Person, stance)`, the cell its `stakes` member names). `04` §B.13 invariant 12 is this shape's own rule, so the loader needs no exception and `data/verbs.py` is unedited. The size of a stake write is `step × n`, `step` read from the member's fixture and `n` = 1 at Partial and `shortfall_step(settled margin)` at Failure, through one pure size reader beside `shortfall_step`, `data/rosters.py::stake_amount(member, degree, settled_margin) -> int`, which the row's effect calls for its declared cell [ASSUMPTION: medium; the size reader's name and placement — basis: `shortfall_step`'s own placement beside `DEGREE_STEP`; it computes a size and pays nothing]. … The earlier draft's `stake:` row key and `loop/effects_shared.py::_pay_stake` payer are withdrawn (C3-L14 …).
+  ```yaml
+  # rosters.yaml
+  stakes:
+    source: "STORY-A: what an actor puts down on a drawn act. A closed set; each member names the one
+             matrix cell it is paid in and the fixture that sizes one step."
+    values:
+      body:     {cell: [Person, body],  step: stake_body}      # a fall on the body ladder
+      stores:   {cell: [Rung, stores],  step: stake_stores}    # a share of the amount the act moves or prices
+      standing: {cell: [Person, stance], step: stake_standing} # the regard of those present for the actor
+  ```
+  The fold selects `row.writes_at(degree)` and calls the row's effect with it; the stake cell is written there on the actor (body), on the rung the act draws on (stores) or in each present witness's stance toward him (standing), sized by `stake_amount`, which returns 0 at `shortfall_scale == "off"` and at a Success or Overwhelming. The writes emit the matrix rows' own declared kinds (`body.changed`, `stores.changed`, `stance.moved`) …; no kind is added. Fixtures in `data/fixtures.py`, each with a hole-register row graded `assumption` and its sweep: `shortfall_scale = "off"` (control, SHIPPED) `/ "on"`; `stake_body` (proposed: the hunger pass's own `body_step` …); `stake_stores` (proposed one quarter of the amount); `stake_standing` (proposed one deed step in the regard unit `02_CHAR_scar_cap_and_regard_unit.md` fixes). `[ASSUMPTION; medium; Jordan to correct]` on all three sizes." **This item edits no verb row** ("the row's owner lane adopts the stake cells and the shape (b) move; this file edits no row"): the six first rows the source names (`move`, `migrate` → `body`; `found`, `build` → `stores`; `requisition`, `sabotage` → `standing`) are not adopted by any v12 item (`DIALS AT CONTROL`, UNDECIDED (5)).
+- WHERE: `S/rosters.yaml` (NEW `stakes`, at the end of its family's block); `S/data/rosters.py` (NEW `stake_amount`; the `stakes` loader); `S/data/fixtures.py` (`shortfall_scale`, `stake_body`, `stake_stores`, `stake_standing`); `S/hole_register.yaml` (four `assumption` rows); `S/tests/test_stake.py`.
+- TESTS: in `S/tests/test_stake.py`, written before the edit and read red: `test_row_without_stake_pays_nothing`; `test_partial_pays_one_step`; `test_failure_pays_shortfall_steps` (its stake half, on a planted staked row); `test_success_never_pays`; `test_scale_off_reproduces_pinned_hash`; `test_staked_row_loads_as_shape_b_with_no_loader_exception`. The planted staked row lives in the test only.
+- FALSIFIER and CONTROL: "A row with stake cells whose Partial writes nothing, or whose Failure at step 3 pays the same as at step 1: edit 2 is not wired"; "A Success that pays a stake: the rule leaked upward." Control (gate 1): "`off`: every content hash equal to the pins".
+- GATE: `python -m pytest S/tests/test_stake.py -q` → pass; `python -m engine.season.harness.register --check` → exit 0 (the four rows); realm hash at seed 0, one season → equal to B38.65's.
+- HASH MOVERS: none (off, no row staked); on, with a row staked, "a declared hash mover for worlds in which such a row executes".
+- DEPENDS ON: V12 B38.65; EXISTS-IN-TREE `S/write_matrix.yaml` cells `(Person, body)`, `(Rung, stores)`, `(Person, stance)` `[ASSUMPTION: the three cells exist as matrix rows at the batch's open — basis: the source names them as "the matrix rows' own declared kinds"; re-checked at the item's open]`; V12 Batch B07 (`18_DETERMINISM_task_draw_for_uncontested_verbs`: VRES §1's prize row and item 5's move from `task` to a contest); V12 Batch B10 (`02_CHAR_scar_cap_and_regard_unit.md`, the regard unit); MISSING (v12: a carrier is owed — no item adopts a stake on any verb row; owners: the lanes of `move`, `migrate` (MB, SE), `found`, `build` (SE), `requisition`, `sabotage` (SE, FA)).
+- GLOSSARY: row *stake*: owner column → `rosters.yaml: stakes`, `data/rosters.py::stake_amount` (code); rejected column kept.
+- IDS: H block slots 17–20 (the four `assumption` rows).
+- COST and TIER: small build; `sonnet`, `high`; the shape (b) reading was taken by the source's `opus` lane (no judgment node left here).
+- LANDS IT: B38's producer; `Item: B38.66`, `[skip ci]`.
+
+### B38.67 — a contested outcome is witnessed as done to its counterparty · `23_STORY_A` edit 3 · BUILD · HASH MOVER(behaviour)
+- SOURCE: `proposals/23_STORY_A_what_a_roll_leaves.md` "Exact edits" 3, "What it changes" ("the outcome Events of every contested row are witnessed as done *to* the counterparty. Each is a declared hash mover for worlds in which such a row executes"), gate clause 4, "The falsifier"; rulings A-38, A-81; `04` §A.2, §B.9.
+- ADVANCES: none of the nine; A-81 (a loser exists); the durable write of `30_WR_D` §3's Failure row (a claim in the counterparty's ledger counts).
+- INSTRUCTION (edit 3, copied): "**`engine/season/data/verbs.py` — the counterparty is the one a contested outcome was done to.** Derive, at load, `COUNTERPARTY_OPERAND: dict[kind, operand]` from every row that declares `counterparty:`: each kind in that row's `emits` (all bands) maps to the row's counterparty operand. WITNESS's pairing (`08_FI_06`'s owner: the roster and reader that pair a deed with its hand) reads it, deriving the claim's subject from the act's operand through the act store (which WITNESS may read, `04` §A.2), so the Event itself stays targetless (`04` §B.9): a witness of `argument.won` holds *(hearer, argument.won)* with `seen.who` the arguer, and the hearer's regard for the arguer is moved by `_bond` as for any deed done to him. A derivation, not a list: a new contested row is paired by declaring its counterparty. A Partial is held by both and has no loser. (The counterparty is the one acted on; A-38's party a verdict serves is the **beneficiary**, owned by `16_PESSIMIST_SC_C`; two different persons.)"
+- WHERE: `S/data/verbs.py` (NEW `COUNTERPARTY_OPERAND`, derived at load); `S/loop/witness.py` (the pairing reader `08_FI_06` owns, as B11 left it: reads `COUNTERPARTY_OPERAND`); `S/tests/test_stake.py`.
+- TESTS: `S/tests/test_stake.py::test_counterparty_is_derived_from_the_row`, written before the edit and read red; gate clause 4 as a planted test, `[ASSUMPTION: test name; E-3]` `test_a_witness_of_argument_won_holds_it_as_done_to_the_hearer`.
+- FALSIFIER and CONTROL: "Gate clause 4 passing with edit 3 off: the regard moved for another reason and the pairing is unread." Control: a row with no `counterparty:` key pairs as before.
+- GATE: `python -m pytest S/tests/test_stake.py -q` → pass; "For each contested row that executes: at least one witness claim whose subject is the counterparty; the counterparty's computed regard for the actor differs, after the Event, from the same world with edit 3 off" (seed 0, one season, both arms, quoted); realm hash at seed 0, one season → moved (declared), recorded.
+- HASH MOVERS: every seeded world in which a contested row with a `counterparty:` executes: the witness claims' subject and `_bond`'s regard. Declared; B38.99's one re-pin. (The source's head line calls edits 1–3 "hash-equal at `shortfall_scale: off` and with no row staked"; edit 3 has no switch and its own "What it changes" declares it a mover: taken as a mover, UNDECIDED (6).)
+- DEPENDS ON: V12 Batch B11 (`08_FI_06_testimony-names-a-hand.md`: the pairing owner); V12 Batch B10 (`02_CHAR_relations_have_a_ground.md`: `_bond` for every deed with a person as counterparty); EXISTS-IN-TREE `verb_table.yaml` `counterparty:` column (glossary *party*: "`verb_table.yaml: counterparty:`, T"); V12 B38.66.
+- GLOSSARY: row *party*: the *counterparty* entry's owner → `data/verbs.py::COUNTERPARTY_OPERAND` (code).
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B38's producer; `Item: B38.67`, `[skip ci]`.
+
+### B38.68 — the attempts reader and the chronicle's six words · `23_STORY_A` edits 4–5 · BUILD · HASH EQUAL
+- SOURCE: `proposals/23_STORY_A_what_a_roll_leaves.md` "Exact edits" 4 and 5 ("edits 4-5 one commit (harness)"), the story-bar test; ED-FI-0009; F-PES-DICE-05.
+- ADVANCES: none of the nine; S-68 to S-71's readings (`23_STORY_D`'s census).
+- INSTRUCTION (copied): "**4. `engine/season/harness/corpus_run.py` — `attempts_on(w, actor, verb, subject) -> list`**, beside `attempts` (the one owner of made and refused, over the act store): that actor's acts on that aim in log order, each with its band and margin. A harness read. Nothing is deposited (`rosters.yaml: undeposited_kinds`, ED-FI-0009, stands: a failed search is seen by nobody) and no person-side reader is added …
+  **5. `engine/season/harness/chronicle.py::lines`** prints, for a drawn act, one of six words read from `Event.degree` and the kept margin: *triumph* (Overwhelming), *success*, *near thing* (Partial), *narrow failure* (step 1), *failure* (step 2), *disaster* (step 3); and, where `attempts_on` returns more than one act, *at the Nth attempt*."
+- WHERE: `S/harness/corpus_run.py` (NEW `attempts_on`); `S/harness/chronicle.py` (`lines`); `S/tests/test_storybar.py`.
+- TESTS: in `S/tests/test_storybar.py` (exists), the source's story-bar plants, written before the edit and read red, `[ASSUMPTION: test names; E-3]`: `test_a_failure_at_margin_minus_three_and_a_half_reads_disaster_and_one_s68` ("a planted Failure Event with margin −3.5 on a staked row reads *disaster* and one S-68"); `test_a_failure_at_margin_minus_half_reads_narrow_failure_and_no_s68`; `test_no_stake_receipt_no_s68` ("with the stake's receipt removed, no S-68").
+- FALSIFIER and CONTROL: a word printed for an undrawn act (degree `None`); *at the Nth attempt* printed for a first attempt. Control: harness only: realm hash equal.
+- GATE: `python -m pytest S/tests/test_storybar.py -q` → pass; `PYTHONHASHSEED=0 python -m engine.season.harness.chronicle --seed 0 --seasons 2` → drawn acts carry one of the six words; realm hash at seed 0, one season → equal to B38.67's.
+- HASH MOVERS: none.
+- DEPENDS ON: EXISTS-IN-TREE `S/harness/corpus_run.py::attempts`, `S/harness/chronicle.py::lines`; V12 B38.65 (`shortfall_step`); V12 Batch B36 (`23_STORY_D`: `Shape`, S-68 to S-71 in `--stories`).
+- GLOSSARY: none (the six words are presentation, printed by the chronicle; no row).
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B38's producer; `Item: B38.68`, `[skip ci]`.
+
+### B38.69 — the estimate window and the renewed tie in `dues_unmet` · `30_WR_D` commit 1 · POINTER (the first half's `20_NARRATIVE_B` first commit)
+- What the pointed section does: `30_WR_D` commit 1 makes `person_q.dues_unmet(p, x, window)` count only lapses inside the estimate window and net a lapse followed by a renewed tie ("Never below 0"), with `regard` passing `fx.get("estimate_window_seasons")`; the source: "Land commit 1 inside `20_NARRATIVE_B`'s first commit (it changes that proposal's edit 1 before it ships)". U3 §1 item 38: "`20_NARRATIVE_B` (carrying `30_WR_D` commit 1)": the first half.
+- Target files and symbols: `S/queries/person_q.py::dues_unmet`, `::regard`; `S/tests/test_narrative_dues.py` (`test_a_lapse_older_than_the_window_is_not_counted`, `test_a_renewed_tie_nets_the_lapse_before_it`, `test_two_lapses_and_one_renewal_count_one`, `test_the_count_is_never_negative`).
+- Gate: those four tests, read green in the batch gate (`test_narrative_dues.py` is in its pytest line). Not re-written here.
+
 <!-- A41 append point -->
