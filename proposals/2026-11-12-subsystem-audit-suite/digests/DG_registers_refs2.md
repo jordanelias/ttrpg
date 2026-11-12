@@ -258,3 +258,51 @@ The v11 master workplan parts total about 1.4 MB (lines of 500 to 5,000 characte
 - **Conflicts / stale:** the file's own counts ("fifteen questions", "twelve narrow", "seven") are updated in place by later rounds; M13 asks "Do you rule Godot 4.6?" while ED-GO-0002 rules the 4.7 series (superseded, CLAUDE.md says the engine version is ruled by Jordan at ED-GO-0002); M3's `04:793` quote cites Layer 1 as of that date.
 - **Open items:** none "queued" (§1d); but unanswered content items: per-territory weather values, Tensions content, cast attribute values, heritage values, ladder transcription, `regime_gain` (Jordan: "I don't know what regime_gain is"), the 19 distinct named cards [UNVERIFIED].
 
+
+### workplans/valoria_master_workplan_v11_part7.md
+- **What it is:** v11 workplan part 7 (163 lines): T04b, the judgment lanes' ladder tables "verbatim": A1 (88 asks: ledger rows, remediation asks, v9 queue, hole rows) and A2 (59 asks: completion, verb-suite decisions, narration/character/attribute/troop). READ: head and the first rows of each table (~420 chars); the remaining ~140 table rows **[SKIPPED: row bodies — context budget]**.
+- **Status:** "RATIFIED on merge (ED-1094, ED-IN-0299); carried into v11". Reading: historical evidence for the ladder outcomes that part 6 summarises; outcome vocabulary CLOSED-SUPERSEDED / CLOSED-IRRELEVANT / ANSWERED-DOC / ANSWERED-PRECEDENT / TAKEN-ARCH / CARRIED / ESCALATE (:6).
+- **Bears on:** CORE, CHAR, FA, SE, SC, MB, PROCESS.
+- **Content that matters:**
+  - A1-01 (:12): newborn Record as `founding` basis ruled NO by Jordan 2026-10-14 ("just say no for now"), ED-IN-0292's superseding row; cost: no computed `comply` until a writ is `give`n.
+  - A2-01 (:105): should believed chance of success enter the NPC chooser's score: ESCALATE; `ARCHITECTURE_V2.md` §F2 (:509-519) "declare it, default it, sweep it" (becomes M1/CR-17). A2-02 (:106): which ties carry a player's line past death; M7 TAKEN option (b); RS-27: the heir is a title-holder who claims the throne. A2-03/04: troop stock and what a fought field may write: every option amends ratified Layer 1 (`04:793`, `:802`) or breaks ED-WR-0011/RR-2; ED-IN-0279 lost field writes "casualties only, decrease in morale, and a grudge token ... nothing specified for the winner".
+  - Same-label collision flagged: v9's "J-1" is the pursuit-cells fold (answered 2026-10-06) while the troop design's J-1 is Ask A (:107).
+- **Conflicts / stale:** A2-37 re-labelled "taken, contested by #506, asked as M19"; A2-43 stays open with ED-IN-0298; A2-36 stays CLOSED-IRRELEVANT until M3 is answered yes.
+- **Open items:** none new beyond part 6.
+
+### workplans/valoria_master_workplan_v11_part8.md
+- **What it is:** v11 workplan part 8 (279 lines): T06 "the row ledger": every unfixed row v9 produced and where it went. Table 1 hole-register rows (62), Table 2 open editorial ids (19), Table 3 v9's state index (42 rows; 40 here), §5 the nine requirements/failing tests/v9 self-contradictions, §6 verb-suite gap entries, §7 errata, §8 rows with no home, §9 coverage. READ: head, §2 first rows, §5, §8, §9 (~420 chars per line); §2 rows (60), §3, §4, §6, §7 bodies **[SKIPPED]**.
+- **Status:** "RATIFIED on merge (ED-1094, ED-IN-0299); carried into v11"; `paper`. Reading: live disposition ledger; 231 hole-register rows in total are dispositioned across parts 8-9 (:276).
+- **Bears on:** CORE, CHAR, SC, FA, SE, PROCESS.
+- **Content that matters:**
+  - Coverage (:264-279): 61 hole rows with a first-cell row in §2; 11 of 11 editorial ids; 113 of 113 other open ids in part 10; 42 of 42 state-index rows; 40 REM and 89 CP handles; every row of `engine/season/hole_register.yaml` 231 of 231; the coverage script (`ctl/coverage_check.py`) "can fail" (run against a copy with H-205 deleted it exited 1) but checks row existence only, not that a disposition is right; script deleted at B10-09 close two (read at `git show 1ef8d273:...`).
+  - v9 self-contradictions (:175-182): IN-14 state (`ask-then`/B-Z vs BUILD); `ED-IN-0292` (1) IN-61 says PENDING `needs_jordan: true` while PC-10 and the ledger's last row say ruled NO; the Godot heading `godot_conversion_strategy_v1.md:138` removed by GO-03 but v9 still says it carries it; SC-03b's `DEGREES RESOLVED` is UNMET (`corpus_run 0` prints one histogram over every verb; `determine` is foldable-but-never-attempted).
+  - Failing tests (:168-173): `test_forked_status.py` two tests fail only on a shallow clone (`git fetch --unshallow` clears); 3 failed, 1,960 passed at `-01` §2.
+  - Rows with no home (:236-262): H-189 (restabilise needs a rounding rule nobody chose; pursuit-track crisis needs a relation and writer that do not exist), H-190, H-191, H-199 (two-ladder reconciliation refraction ordinal vs `remove_weight` unowned), H-201, H-206 (CP-T02-01 covers the office half; option (b) retaining the closed `hold` person-side and deleting `World._departed` stays LEAVE), H-212, H-224; 8 hole rows and 3 ledger ids have no v10 handle.
+  - Sample rows (:25-26): H-85 verb gate built (`Person.thread_sensitivity`) but the knowledge-KIND gate is not (`thread_substrate` read by no code in `engine/season`); H-166 `found`/`build` refused at `exists:works` (census 121 and 135 refusals over three seeds), M5 taken (B) works as authored world data.
+- **Conflicts / stale:** the "judges disagree" notes (:256-262): H-198 (A1-83 irrelevant vs A2-17 escalate; decided by M9 (a), CR-27), H-214/H-234/ED-IN-0298 (D-1), H-219; D-1 (2026-10-21) recorded only in the PROPOSED remediation file until ED-IN-0300 ratified it.
+- **Open items:** IN-18's placement in B10-02 vs 8 hole rows (H-192..198, H-204) hanging on it; rows held in B10-Z pointing at PC-06 (H-85, H-238, H-239) "a record, not a schedule".
+
+### workplans/valoria_master_workplan_v11_part9.md
+- **What it is:** v11 workplan part 9 (254 lines): row ledger part 2: the other 171 hole-register rows (H-01.. through the v9-period remainder) with v10 status, what closes it, position, batch, ladder; §3 rows needing a new position/question/gap; §4 answers taken; §5 work v9 names that is not a hole row. READ: head, §2's first two rows, §3, §4, §5's first rows (~380 chars); the 171 row bodies **[SKIPPED]**. (Assignment: whole file unread.)
+- **Status:** "RATIFIED on merge (ED-1094, ED-IN-0299); carried into v11"; `paper`; every row was verified against the tree by one producer lane and attacked once by a read-only critic (108 cell edits on 51 rows) (:13).
+- **Bears on:** CORE, CHAR, SC, FA, SE, PC, MB, WR.
+- **Content that matters:**
+  - Row examples showing register drift (:19-20): H-01 "register says 33 rows; tree has 40" `write_matrix.yaml` rows (every row has a `social:` column, `data/matrix.py:163`); H-02 `verb_table.yaml` has 56 verb rows vs register 32, one `resolve` at `loop/resolve.py:944`. `[REGISTER TEXT]` marks rows whose text no longer matches the tree; CR-02 (f) corrects them.
+  - §3 (:195-207) rows that needed a new position: H-137 -> CR-06; H-89 -> CR-07; H-49 -> CR-08 (CENSUS writer); H-101 -> CR-09; H-163 limit 3(a) -> CR-23; H-94/H-132/H-144/H-156 `establish` -> CR-11/CR-25; H-44 nine dispensation term types enumerated nowhere -> LEAVE, "Jordan supplies them"; H-156 ruling half -> M19 / CR-28; H-161 vote-quorum conjunct -> CR-34; H-181 rank ordering -> CR-32.
+  - §4 answers taken (ASSUMPTION with revert): H-56 (a seam may call DELIBERATE inside the fold), H-91, H-92, H-125 (`body_step` 0), H-142, H-143, H-162, H-171.
+  - §5 (:226-232): v9's `source:` fields name v9 in `references/lane_assignments.yaml:19` (no tool reads the field); lane handoff Open-table rows citing v9 files to be re-pointed; `ARC ENDS` is `NOT-COMPUTABLE` (its printed reason names W23/W26, landed); `leverage` is `0.0` by design and person latitude enters through pool only (Jordan 2026-09-06); R-09's `measure:` runs in the `headless` world which seats no `capability`.
+- **Conflicts / stale:** register row texts stale against the tree (above); numbers "231 rows ... 26 formally discharged".
+- **Open items:** H-44; the `[GAP: unowned]` rows listed in §3.
+
+### workplans/valoria_master_workplan_v11_part10.md
+- **What it is:** v11 workplan part 10 (221 lines): row ledger part 3: the other 113 open editorial ids (ED-400..644, ED-646..ED-FA-0004, ED-FA-0005..ED-WR-0006), a closing-row list for adoption step 4b, "what carries the work that stays open", answers taken, new positions, coverage, "not verified". READ: head, §3 (:135-176) table, §1 notes; the 113 §2 rows **[SKIPPED]**. (Assignment: whole file unread.)
+- **Status:** "RATIFIED on merge (ED-1094, ED-IN-0299); carried into v11"; `paper` (74 accepted, 33 edited, 6 rejected and re-homed by the critic).
+- **Bears on:** PROCESS, SC, FA, MB, SE, WR, FI.
+- **Content that matters:**
+  - Flat ids: the frozen `ED-NNN` sequence is written LEAVE even where closed, superseded or irrelevant (as v9 did for ED-400, 539, 567, 647, 1080); a closing row only where live tooling reads it as pending (ED-921 at `engine/season/verb_table.yaml:1472`) (:12).
+  - D-1 row: adoption wrote ED-IN-0300 (D-1 as relayed, ratified by a superseding row 2026-10-26) and ED-IN-0301 ("Confirm all" on the twelve narrow questions) (:13).
+  - §3 (:137-176): 37 ids take one closing row each (24 `closed`, 13 `superseded`); listed ids: ED-644, ED-921, ED-FA-0004/0005/0007/0011/0019/0024/0025/0026, ED-FI-0001/0002, ED-IN-0202/0205/0208, ED-MB-0016/0044/0046/0067/0068/0069..0073/0076/0077, ED-SC-0008/0009/0010/0014/0018/0022, ED-WR-0001/0002/0004; the other 76 take none; rows go in each lane's archive/live ledger file.
+- **Conflicts / stale:** closing rows are "to write at adoption step 4b" - whether executed is [UNVERIFIED]; ED-FA-0002/0003 `closed` and ED-FA-0008..0016 `superseded` are cited as precedent.
+- **Open items:** the 76 unclosed ids carried by positions/LEAVE; §8 "Not verified" (:215) lists unverified claims [SKIPPED].
+

@@ -715,6 +715,8 @@ Ladder steps: 1 superseded · 2 irrelevant · 3 answered by a design document ·
 | 27 | `report.emit` depends on a name bound only under `__main__`; its step text omits ENCOUNTER | import `TRACE` at module scope; derive the step list from `data/matrix.py::Step` | 5 | edit: `harness/report.py` |
 | 28 | `run_cases` calls a case `PLAYABLE` when its declared tokens resolve | rename the verdict `DECLARED-PRESENT`; "playable" is reserved for a played run | 5 (`CLAUDE.md` §4: a word used as it is used outside the repository) | edit: `harness/run_cases.py`, `harness/report.py` |
 
+| 29 | S27.4 has two sites; the fold's reads `Act.obstacle`/`Act.pool`, which no computed act sets | delete the fold arm and the two `Act` fields; `sigma.resolve` is the owner | 1 (`sigma.py:498`: the rule is evaluated on the derived pair) | edit: `loop/resolve.py:1046-1063`, `state/carriers.py:706-707`, one probe |
+
 <!-- APPEND-RESOLUTIONS -->
 
 ## 9. Survivors for Jordan

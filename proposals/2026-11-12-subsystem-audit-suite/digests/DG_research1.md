@@ -812,3 +812,73 @@ Lane: game precedent and historical research (`research/`, tier 3). Entries are 
 - **Bears on:** FA, WR, CHAR.
 - **Content that matters:** synthesis (:18), hooks (:28), detail (:45); grounds legitimacy-collapse hooks on non-MoH precedent: Roman/Byzantine dual-trigger usurpation, Ottoman grand-vizier-as-scapegoat + Janissary revolts, imperial penance/recusatio, Polybian regime cycle (per 00_MANIFEST).
 - **Conflicts / stale:** as above. **Open items:** not read.
+
+### research/pre_firearms_formations/01_ancient.md
+- **What it is:** Chunk A catalogue of ancient formations (~3000-500 BC): Sumer, Egypt, Assyria, Hittite, early Greek, Achaemenid, steppe; 149 lines; first line only read.
+- **Status:** none own (manifest "Chunk A"); reference. **Bears on:** MB (history). **Content that matters:** per-formation template (composition, geometry, equipment dependency, role, vulnerabilities, throughline flags). **Conflicts / stale:** written from model knowledge ("training-data familiarity"), never independently verified (by_lane/MB item 5). **Open items:** not read.
+
+### research/pre_firearms_formations/02_classical.md
+- **What it is:** Chunk B classical antiquity (~500 BC-500 AD): mature phalanx, Macedonian, Hellenistic, Roman manipular and cohort, Carthaginian, Parthian/Sassanid, Han, Mauryan/Gupta; 268 lines; first line only.
+- **Status:** none own; reference. **Bears on:** MB. **Content that matters:** source of the Roman line-relief (T-27) and Cannae template (T-25) throughlines the gauge and `perimeter` work cite. **Conflicts / stale:** as above. **Open items:** not read.
+
+### research/pre_firearms_formations/03_early_medieval.md
+- **What it is:** Chunk C early medieval (~500-1000): Byzantine, Arab, Carolingian, Viking, Anglo-Saxon, Tang/Song, Heian; 302 lines; first line only.
+- **Status:** none own; reference. **Bears on:** MB. **Content that matters:** shield-wall, feigned-retreat (Hastings) background. **Conflicts / stale:** as above. **Open items:** not read.
+
+### research/pre_firearms_formations/04_high_medieval.md
+- **What it is:** Chunk D high medieval (~1000-1300): Norman, Crusader, feudal Europe, Seljuk/Ayyubid, Mongol, Song/Jin, Kamakura, Khmer; 377 lines; first line only.
+- **Status:** none own; reference. **Bears on:** MB. **Content that matters:** Hattin/Arsuf commit-discipline contrast used by T-9. **Conflicts / stale:** as above. **Open items:** not read.
+
+### research/pre_firearms_formations/05_late_med_renaissance_europe.md
+- **What it is:** Chunk E1, weight MAX: Swiss, Landsknechte, English longbow, Hussite, Flemish, Scottish, Burgundian, condottieri, French gendarmes, tercio precursors (~1300-1525); 650 lines; first line + two sample lines only.
+- **Status:** none own; reference. **Bears on:** MB (pike/sword mixed loadouts: Landsknechte "heavier armor than Swiss", pike plus short sword). **Content that matters:** the historical source for a pike unit that also carries swords (Jordan's MB weapon-carry intent) — not extracted here. **Conflicts / stale:** never independently verified. **Open items:** not read; **an MB audit should read this file for pike+sidearm loadout precedent.**
+
+### research/pre_firearms_formations/06_renaissance_islamic_steppe.md
+- **What it is:** Chunk E2, weight MAX: Ottoman pre-firearm, Mamluk furusiyya, Timurid, Safavid Qizilbash, Mongol successors; 421 lines; first line only.
+- **Status:** none own; reference. **Bears on:** MB, FA. **Content that matters:** mamluk hereditary caste excluding own sons; Chaldiran aftermath (Ismail's aura damaged). **Conflicts / stale:** as above. **Open items:** not read.
+
+### research/pre_firearms_formations/07_renaissance_east_asia.md
+- **What it is:** Chunk E3: Sengoku Japan, Ming, Joseon, Dai Viet (~1300-1525); 277 lines; first line only.
+- **Status:** none own; reference. **Bears on:** MB. **Content that matters:** not extracted. **Conflicts / stale:** as above. **Open items:** not read.
+
+### research/pre_firearms_formations/08_pre_columbian.md
+- **What it is:** Chunk E4: Aztec, Inca, Maya, Mississippian, Tarascan (~900-1525); 316 lines; first line only.
+- **Status:** none own; reference. **Bears on:** MB, WR. **Content that matters:** warrior castes, captive-taking for adoption or sacrifice. **Conflicts / stale:** as above. **Open items:** not read.
+
+### research/pre_firearms_formations/09_throughlines_matchup.md
+- **What it is:** Chunk F1: throughlines T-1..T-29 (Part I :13), meta-throughlines M-1..M-8 (Part II :97), matchup matrix (Part III :210, Task 3), cross-reference for F2 (:387); 395 lines; headings only.
+- **Status:** none own; reference. **Bears on:** MB (matchup matrix feeding gauge bands). **Content that matters:** T-9 discipline-timing as universal command skill, T-10 battles decided by secondary commits, T-24 hammer-and-anvil, T-25 Cannae template, T-27 Roman line relief, T-28 grand formation emerges from unit formation, T-29 morale cascade as propagating field (as listed in file 16). **Conflicts / stale:** `[SELF-AUTHORED]` in later files. **Open items:** not read.
+
+### research/pre_firearms_formations/10_battle_phase_choreography.md
+- **What it is:** Chunk F2 (Task 4), "highest-value deliverable for game-design extraction": generic 8-phase framework (0 approach, 1 deployment, 2 skirmish/screening, 3 missile attrition, 4 main contact, 5 decisive commit, ...), per-phase unit choreography, speed/range/frontage/timing tables, archetypes, failure modes, game-design extraction; 547 lines. Read lines 1-28 only.
+- **Status:** contains a "Status" section (not read); reference. **Bears on:** MB (phases, cells, order timing). **Content that matters:** phase table with typical durations (deployment 30 min-3 h, main contact 30 min-4+ h, decisive commit minutes to ~30 min) (:19-30). **Conflicts / stale:** never independently verified. **Open items:** rest not read; relevant to `proposals/2026-09-25-squad-engagement-*` orders/phase design.
+
+### research/pre_firearms_formations/11_throughlines_ners_audit.md
+- **What it is:** all-directions review, NERS applicability and canon-constraint cross-check of the throughlines; 422 lines; first lines only. Marks e.g. T-19 gunpowder transition doctrinal not technical as DEFER pending Valoria's gunpowder status.
+- **Status:** none own; reference, `[SELF-AUTHORED]`-adjacent. **Bears on:** MB, WR. **Conflicts / stale:** gunpowder status unspecified. **Open items:** not read.
+
+### research/pre_firearms_formations/12_moment_by_moment_dynamic_spacing.md
+- **What it is:** "Primary-Source Reconstruction" of dynamic spacing/timing between opposing armies using Xenophon, Asclepiodotus, Aelian, Arrian, Herodotus etc.; 940 lines; first 25 lines read. Declares "training-data familiarity rather than re-fetching" (by_lane/MB item 5).
+- **Status:** none own; reference. **Bears on:** MB (cells, frontage, intervals). **Content that matters:** epistemic note: primary-source numbers unreliable; confidence levels flagged. **Conflicts / stale:** titled primary-source reconstruction but written from memory. **Open items:** not read.
+
+### research/pre_firearms_formations/13_verification_corrections.md
+- **What it is:** verification and correction report on file 12 (author's own check: 5 of 9 battles against Wikipedia, Medium, Britannica; two P1 errors in Panipat per by_lane/MB); 316 lines; first lines only.
+- **Status:** `[SELF-AUTHORED]`; reference. **Bears on:** MB. **Conflicts / stale:** no independent audit recorded. **Open items:** not read.
+
+### research/pre_firearms_formations/14_methodology_audit.md
+- **What it is:** bottom-up design / top-down verification methodology audit (direction coverage tables); 294 lines; first lines only.
+- **Status:** `[SELF-AUTHORED]`; reference. **Bears on:** MB, PROCESS. **Open items:** not read.
+
+### research/pre_firearms_formations/15_methodology_resolutions_handoff.md
+- **What it is:** methodology resolutions plus session handoff; states "counter-play design is now a tagged design-pass deliverable"; 354 lines; first lines only.
+- **Status:** `Status: Resolved` lines; `[SELF-AUTHORED]`. **Bears on:** MB, PROCESS. **Open items:** not read.
+
+### research/pre_firearms_formations/16_historical_vs_gamedesign_audit.md
+- **What it is:** self-audit comparing throughlines T-1..T-29/M-1..M-8 (verified at commit `8d716382`) with game-design proposals from a conversation (FM/Phantom Brigade/Unicorn Overlord/SRPG synthesis for Valoria's single-player constraint); `[SELF-AUTHORED — bias risk]`; 244 lines. Read lines 1-60.
+- **Status:** `[SELF-AUTHORED]`; reference; the "design proposals" exist "only in this conversation" (by_lane/MB). **Bears on:** MB (and the brief's FM/UO intent).
+- **Content that matters:**
+  - Jordan's corrections: strategic-layer throughlines (T-4..T-8, T-13, M-2, M-3, M-7) are scope artifacts, not gaps; "Threadwork is Valoria's firearm-analog" so T-19/T-20/T-21 (gunpowder as doctrinal hinge, 1503-1526 window, mass-cavalry catastrophic failure) map onto threadwork transition (:9-17).
+  - 13 of 29 throughlines "first-class" in the design: bottom-up design with top-down verification (T-28), morale cascade as propagating field (T-29), Cannae (T-25), discipline-timing (T-9), RPS among shock/cavalry/missile (T-3), Roman line-relief (T-27), hammer-and-anvil (T-24), single-shot heavy cavalry charge (T-26, gallop window 30-50 m), terrain-formation interaction (T-37), oblique order (T-11), secondary commits (T-10), combined arms (T-1), command integration (T-2) (:22-39).
+  - Drift 1 (P1): Phantom Brigade-style prediction preview (AI commits first, player scrubs forward) conflicts with T-9 and T-10 because the central command skill is committing without certainty (Hattin vs Arsuf); secondary commits decide battles because they are surprises (Kadesh, Gaugamela, Bannockburn, Ankara) (:56-60). Relevant to "legible post-match analysis" vs pre-battle prediction in the Football Manager / Unicorn Overlord intent.
+- **Conflicts / stale:** acronyms (FM/PB/UO/SRPG) never expanded in-file; object not in repo.
+- **Open items:** Parts III-IV (rest of drift list) not read.

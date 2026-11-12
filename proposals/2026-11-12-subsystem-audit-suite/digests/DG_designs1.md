@@ -937,3 +937,84 @@ Lane: archived design documents under `.designs/` (README, `_architecture`, arti
 - **Conflicts / stale:** "Niflhel social action" (Niflhel dissolved).
 - **Open items:** none.
 
+### .designs/systems/fieldwork/reference/fieldwork_flow_skeleton_v1.md
+- **What it is:** traced flow skeleton (at commit `654506799c63`) of `systems/fieldwork/sim/{fieldwork,investigation,knots}.py`: scene dispatch, Knot formation/strain/rupture/loss.
+- **Status:** "REFERENCE — traced structure only". Reading: historical trace; essential census of how little of fieldwork was live.
+- **Bears on:** FI, CHAR, CORE.
+- **Content that matters:**
+  - `fieldwork.py` and `investigation.py` entry points (`run_fieldwork_scene`, `advance_disposition`, `advance_evidence`, `resolve_npe_response`, `evaluate_dialogue_lattice`, `apply_response_matrix`) are all `stubwire.stub_resolve` typed no-ops; only `fieldwork_knots` has a contract (:152, :157).
+  - No production code ever queues a `fieldwork` or `investigation` scene (only `contest` via Stability Crisis); reached only by a test constructing a `SceneSlot` manually (:153).
+  - `form_knot` is never called in the season loop; mc_v18 records a `stub_resolve` marker literally named `'form_knot(world-gen|season-tick)'` as an "honest deferral"; `world.knots` stays empty (:154).
+  - `form_knot` gates: Bonds >= `KNOT_BONDS_MIN`, Disposition >= `KNOT_DISPOSITION_MIN`, one actor `.ts >= KNOT_TS_MIN_PARTY`, count < `floor(bonds/2)+1`, no existing Knot between the pair, formation roll `roll_pool(pool, tn=KNOT_FORMATION_TN)` branching to Close/Distant/None (:76-87).
+  - Only non-test caller of `sustain_knot` is `threadwork/opposing.py:resolve_opposing_operations`, itself orphaned (:155). `apply_knot_loss` applies only `coherence_delta` and `conviction_scar`; `composure_damage` and `disposition_set_to` are write-only into a dict; the FR-Dissolution wound is structurally unreachable (:159, :161).
+  - `RUPTURE_COHERENCE_LOSS` flagged `[UNVERIFIED post-ED-912]`; `COHERENCE_BAND_STRAIN_PACING` never read (:158, :160).
+- **Conflicts / stale:** the Conviction call used `'Loyalty'` before 2026-08-24 (see characters flow skeleton gap 7).
+- **Open items:** none; this is a gap list.
+
+### .designs/systems/fieldwork/reference/fieldwork_godot.md
+- **What it is:** fieldwork spec §10 Godot video-game implementation (2026-04-13): exploration map architecture, Intelligibility Gradient visualisation, Investigation Journal, Disposition dialogue, dice visualisation, season/clock integration, plus validation findings G10-F01..F07 against `valoria-game@main`.
+- **Status:** "DESIGN — canonical subsystem file"; "No fieldwork implementation exists" at validation. Reading: historical UI/Godot intent.
+- **Bears on:** FI, GO, WR.
+- **Content that matters:**
+  - Intelligibility Gradient: visual presentation by TS band 0-9 default, 10-29 subtle displacement/chromatic aberration near POIs, 30-49 Thread mesh layer, 50-69 persistent overlay, 70+ dissolve at boundaries; Truth-dependent constitution (Truth 5 hellfire palette, Truth 3 ambiguous shimmer, Truth 0 calm structural) (:47-62). POI visibility gates TS >=10 Remnants, >=30 Anomalies, >=50 Breaches (:32-34).
+  - Journal: Active Investigations with Evidence Track, ClueItems with reliability tags, InertKnowledge flagged (grayed, blurred; "your character knows this was said, but cannot fully grasp its implications"), Rumour Board (:63-82).
+  - Disposition drives dialogue gating; social action approaches Read/Converse/Connect/Impress/Negotiate/Rumour; NPC memory requires NarrativeState persistence (:84-96).
+  - Time budget 4-6 time units per season (:115); dice faces 1 skull, 7-9 success, 10 chain/double (:100-109).
+  - Findings: POI system, shaders, Journal, Clock HUD absent; blockers A-02 (`NPCTrajectoryEvaluator` disconnected), DA-03 (`NarrativeState.deserialize()` stub), B-03, A-05 (:130-138).
+- **Conflicts / stale:** `d10 TN 7` dice visualisation vs sigma resolver; GDScript file names reference an early skeleton; whether these blockers persist is a GO-lane check [UNVERIFIED].
+- **Open items:** G10-F07 decision where `ThreadworkSystem.gd` lives.
+
+### .designs/systems/fieldwork/reference/fieldwork_hybrid_v30.md
+- **What it is:** fieldwork spec §9 Hybrid Mode: BG Strategic action sets a Fieldwork Offset that adjusts a TTRPG scene.
+- **Status:** "DESIGN — canonical subsystem file". Reading: historical (hybrid mode discarded).
+- **Bears on:** FI, CORE.
+- **Content that matters:**
+  - Offset by BG degree: Failure -1, Partial +0, Success +1, Overwhelming +2, cap +/-2, applied as Ob reduction to the TTRPG scene, min Ob 1 (:24-26).
+  - Resolution in Cascade Phase: POI discovered -> territory bonus at Accounting; Evidence Track threshold reached -> faction intelligence updated (:27-30). Hybrid season order Strategic then Personal (PP-089) (:34).
+- **Conflicts / stale:** requires a human GM; engine equivalent is the strategic-to-scene seam.
+- **Open items:** none.
+
+### .designs/systems/fieldwork/reference/fieldwork_hybrid_v30_infill.md
+- **What it is:** infill prose for §9 Hybrid Mode.
+- **Status:** "DESIGN — canonical subsystem file". Reading: historical.
+- **Bears on:** FI.
+- **Content that matters:**
+  - Social outcome: NPC Disposition high enough yields faction-level intelligence/support (Domain Echo) (:18).
+  - Bonus Personal Phase scene from a Strategic order replaces one of the standard 2-3 scenes; does not extend the seasonal cap (:20).
+- **Conflicts / stale:** GM grant.
+- **Open items:** none.
+
+### .designs/systems/fieldwork/reference/fieldwork_investigation.md
+- **What it is:** fieldwork spec §4 Investigation: Evidence Track, six actions, evidence quality tags, Desperate Trail, Thread-Read, contested investigation.
+- **Status:** "DESIGN — canonical subsystem file". Reading: the principal design statement for investigation; relevant to the detective-game intent but stated in d10 TTRPG terms.
+- **Bears on:** FI, SC, WR.
+- **Content that matters:**
+  - Evidence Track thresholds 3/5/8 (simple/complex/structural) set by GM and hidden; persistent across scenes; one track per investigation but Exposure per territory; depth-limited resolution (answer limited to deepest depth accessed); resolved investigation yields a Finding with reliability = strongest constituent tag (:16-36).
+  - Six actions: Examine (Cognition), Interview (Attunement), Research (Recall), Surveil (+2 Exposure), Thread-Read (TS >= 30), Reconstruct (Ob = threshold - progress); progress by degree Fail +0/Exp +2 with possible false lead, Partial +1, Success +2, OW +3 and Exposure -1 (:42-58).
+  - Reliability tags Verified / Testimonial / Documentary / Observational / Thread-verified / Unverified / Derived; Thread-verified is Inert Knowledge for non-sensitives (half value) and not admissible in Church Tribunal (:62-77).
+  - Desperate Trail after 3 consecutive failed actions: TN 8, Exposure doubles, GM complication, Partial +2; persists through Compromised; clears on Success/Overwhelming or new season (:81-90). "Investigation failures should never produce 'nothing happens'": every failure is a clue about the opposing forces (:92).
+  - Contested investigation: concealing party rolls Cognition x 2 + History to set a Concealment Ob per action (:112-114).
+- **Conflicts / stale:** Disposition/Ob rules from PP-632 reversed by ED-912; "Memory genre" Contest vocabulary; the flow skeleton shows investigation engine is a stub.
+- **Open items:** none stated.
+
+### .designs/systems/fieldwork/reference/fieldwork_rationale.md
+- **What it is:** fieldwork spec §13 design rationale index (2026-04-13 split from skeleton).
+- **Status:** "CONTENT — rationale only. No mechanical values here." Reading: reference rationale.
+- **Bears on:** FI, WR.
+- **Content that matters:**
+  - Intelligibility Gradient (not Rendering Gradient): rendering is constant (P-01) and what it can process varies (:19-22).
+  - Rendering strain on passive Depth 3+ vs co-movement only for Thread-Read, because P-01 governs manipulations, not perception (:25-29).
+  - Cover = Cognition + History chosen over Attunement; Sincerity Gate uses Spirit not Attunement; Desperate Trail at 3 failures (3D pool TN 7 Ob 2: P(fail) ~25%, three in a row ~1.6%; 4D at TN 8 ~60% viable) (:31-54).
+  - Survey Ob inverse-Proximity; Exposure -> AP cap calibration: fieldwork ~11% of max CI acceleration over 4 seasons (:56-65).
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
+### .designs/systems/fieldwork/reference/fieldwork_summary.md
+- **What it is:** fieldwork spec §11 three-mode summary table (TTRPG, Board Game, Hybrid, Godot).
+- **Status:** "DESIGN — canonical subsystem file". Reading: historical map of mode mapping.
+- **Bears on:** FI, GO.
+- **Content that matters:**
+  - Godot column: navigable map + POI nodes, Journal + Evidence Track progress bar, dialogue + Disposition meter, TS gates POI visibility, per-territory Exposure meter (:16-25).
+- **Conflicts / stale:** three-mode structure discarded.
+- **Open items:** none.
+

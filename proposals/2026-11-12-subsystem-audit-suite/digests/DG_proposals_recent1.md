@@ -563,3 +563,80 @@ Reading-depth note: the assigned set is about 3.3 MB. Entries marked `[READ IN F
 - **Conflicts / stale:** D-V7 `dispatch` rename would overwrite ED-IN-0210.
 - **Open items:** all D-V items; R-10 rename batch.
 
+### proposals/2026-10-16-verbs/2026-10-16-verbs-05-what-verbs-do-to-the-world-1.md
+- **What it is:** Part IV (I): the chooser, the world-state model, the act as a structure, the ordinary-sense lever and four worked examples of how context modulates an outcome. [READ PARTLY: IV.0 finding in full, heading map; IV.1-IV.5 bodies not read]
+- **Status:** "PROPOSED (2016-10-16)... Static reading only: no run was made" (:3). Reading: live proposal.
+- **Bears on:** CHAR (decision layer), CORE, SC, FA.
+- **Content that matters:**
+  - Central finding: the world modulates an act's outcome through about a dozen contextual node kinds; the chooser perceives four (verb identity, subject's stance, actor's own claims, actor's own offices); its value term `damp * sum axis_w * align(c.verb, axis)` reads the verb alone (`decision/choose.py:149`); the urgency term has no `c` in it ("INERT BY CONSTRUCTION", `choose.py:217-238`) (:12-35).
+  - The epistemic counter-argument stands but sharpens it: the chooser should read the person's BELIEFS about modulating nodes, not the world; `opening_set` clause 4 uses beliefs only as a veto (`options.py:84-91`); nothing turns them into a preference (:37-52).
+  - Test for any decision-matrix change: does it let a person's beliefs about modulating nodes move his ranking? (:54-56).
+- **Conflicts / stale:** relation to `ED-IN-0261` pursuit/axis scoring: `score` includes stance_toward; "uniform alignment" arm.
+- **Open items:** IV.11 node-by-node list.
+
+### proposals/2026-10-16-verbs/2026-10-16-verbs-06-what-verbs-do-to-the-world-2.md
+- **What it is:** Part IV (II): effect taxonomy, outcome signatures by role, roles against carriers, a ten-criteria framework, the assessment table, whether the chooser sees modulating nodes, attribute implications, and whether a vector field is needed. [READ PARTLY: heading map only; body not read]
+- **Status:** "PROPOSED (2026-10-16)... Static reading only." (:3). Reading: live proposal.
+- **Bears on:** CORE, CHAR, all subsystems.
+- **Content that matters:**
+  - Sections IV.6 effect taxonomy, IV.7 outcome signatures, IV.8 roles against carriers, IV.9 ten checkable criteria (includes WITNESS CONSISTENCY, per roadmap), IV.10 assessment table, IV.11 does the chooser see the modulators, IV.12 attributes, IV.13 vector-field need (:15-371).
+- **Conflicts / stale:** none noted.
+- **Open items:** IV.13 vector-field question.
+
+### proposals/2026-10-16-verbs/2026-10-16-verbs-07-roadmap-reliability-and-sources.md
+- **What it is:** The integrated roadmap (persons, attributes, verbs), reliability ledger, sources, and retired first-pass trial registry. [READ PARTLY: section 5 roadmap and decision table in full; sections 6-7 and appendix not read]
+- **Status:** "PROPOSED (2026-10-16). Not ratified" (:3). Reading: live proposal; build order is "a dependency order... not ratified".
+- **Bears on:** CHAR, CORE, all subsystems.
+- **Content that matters:**
+  - Five builds need no ruling: B1-B3 (`characters.yaml`, `template_of`, refusals LR1-LR6; `practice_roster`; `seat_template` writes `born`/`capability`), B4 (`Person.thread_sensitivity` + typed `thread_read` gate, H-85), B5 (alignment cells for `carry`, `examine`, `interview`, the empty `selfless` axis) (:8-22).
+  - Seven verb batches V0-V6 in dependency order: V0 rename and re-key (R-10: `pledge`, `lodge`, `watch`, `travel`, `dissolve`; 19 `levy` lines of the hole register re-keyed by sense), V1 shared carriers (finding producer, challenge Record, edict Record, debt Record, route Query, proofs reader), V2 the force (troop stock/field force, order of battle, `muster`, `drill`, `disband`, `marshal`, `supply`, `forage`), V3 threadwork rows, V4 law and custody, V5 seats and factions (`covenant`, `declare` + `at_war` reader, `recruit`, `assign`, `succeed`, `tax`, `ration`, `proclaim`), V6 persons and covert acts (:11-52).
+  - Falsifiers per build, e.g. B6 "two persons differing in one attribute differ in `fight`'s outcome rate against the equal-attribute control"; V5 "a `declare` makes `at_war(a,b)` True and a `war.declared` claim reaches a non-co-located head" (:54-66).
+  - Decision table: J-T1 (recommend B stored), J-T2 (recommend TS, keep ten), J-T4 (none), V-2a (admit gates/caps), R-0 (rerun blind), J-C-6 (persons lie: yes) (:68-79).
+- **Conflicts / stale:** PR numbers (#482, #485) and golden status "confirm the goldens on main" are point-in-time.
+- **Open items:** the five unlocking decisions.
+
+### proposals/2026-10-16-verbs/2026-10-16-verbs-08-engine-findings-from-the-first-trial.md
+- **What it is:** Part V: engine rulings carried from the withdrawn first-pass trial of 108 new verbs (V.2.1-V.2.15), each tagged RETAINED / SUPERSEDED / PARTLY SUPERSEDED. [READ PARTLY: heading map only; bodies not read]
+- **Status:** "PROPOSED (2026-10-17)... its verdict tables, counts and diagrams are withdrawn with the first-pass Part III" (:3). Reading: live for the RETAINED rulings.
+- **Bears on:** CORE, SC, MB, WR, FA.
+- **Content that matters (headings only):**
+  - RETAINED: V.2.1 the value term reads the verb alone so an act's identity decides its form; V.2.2 `record_sourced_operands` gains `kind` and `amount`; V.2.3 a named act on a generic closer is a preset of `release`; V.2.4 a content becomes visible by an earned kind priced by one `deed:` cell; V.2.8 bribe is not oblige (one corruption row); V.2.10 `conceal` is the hub of intrigue; V.2.14 the inquiry yield is the shared dependency of seven verdicts; V.2.15 execution before additions (:36-326).
+  - SUPERSEDED: V.2.6 threadwork three rows over one resolver; V.2.7 thirteen retirements reversed; V.2.9 pivotality changed 28 outcomes; V.2.13 sixteen merges filed against the wrong row. PARTLY: V.2.5 mass-battle six live inside the battle module (force scale first); V.2.12 war is a Proposition plus seat-holders' commits and nothing reads it (:124-310).
+  - V.2.11: the `chronicle` channel is slated for deletion; two named acts need a public route (:269).
+- **Conflicts / stale:** `chronicle` channel deletion vs the narration proposal's use of the `chronicle` WITNESS channel; SC-01 step 13.
+- **Open items:** V.3 decisions.
+
+### proposals/2026-10-16-verbs/2026-10-16-verbs-09-lexicon-personal-combat.md
+- **What it is:** Part VI.1 (PC lane): subsystem mechanic, convention floor, suites (Attack, Duel, Protection/rescue, scene moves), lexicon table with etymologies, dedup/culls, gap coverage, mechanics needed, items for Jordan. [READ PARTLY: header, the organising finding, section 3.9 and Limits; sections 3.1-3.8 tables not read]
+- **Status:** "PROPOSED (2026-10-17). Reference, not canon... Static reading and static lookup only; no run." (:3). Reading: live proposal; where it and the roster (`verbs-03`) disagree the roster governs.
+- **Bears on:** PC (primary), FA, GV, MB.
+- **Content that matters:**
+  - Organising finding: of 15 acts the brief had "folded into `fight`", only ambush, assassinate, shoot, rescue, champion, guard (protect a person) and capture are season-scale choices; strike, parry, dodge, feint, rush, grapple, disarm, disengage, interpose, guard-as-posture are scene moves chosen by the engine "never verbs", home is IN-46 (:23).
+  - Carriers: `fight`, `challenge`, `accept` write `Person.body`, `Person.exists`, `Tenure.until`; `contests: "the body"` -> provider `personal_combat` -> `modules/combat/fight.py:31-69`; `end` is the only derived input (:27-33).
+  - Overriding rulings: R-15 `capture` and GV's `arrest` share one custody mechanic (GV owns `detain` opener); R-24 `challenge` is the duel, SC's challenge-a-claim is `dispute`; R-25 `ambush` is a content of `fight`; R-20 `guard` (body) vs TW `ward` (thread) (:7-14).
+  - Measured by the lane file: 205/400 felled-actor rate, 0-of-12 `accept` link, 1-of-63 cohort party (Limits).
+  - Jordan items: a guard edge (any person may protect any person via an eleventh Tenure kind vs only sworn service to a seat), and custody by a seatless captor (widen `detain`, ED-IN-0288) (3.9).
+- **Conflicts / stale:** `accept` "kept and STRAINED"; K-23 revert struck (`VCD:3`).
+- **Open items:** the two Jordan items; whether `determine` opens live `detain` edges in a shipped run is unmeasured.
+
+### proposals/2026-10-16-verbs/2026-10-16-verbs-10-lexicon-mass-battle.md
+- **What it is:** Part VI.2 (MB lane): force and field - Suites 1 raising/keeping (host `levy`), 2 ordering (host `marshal`), 3 campaign (host `march`), 4 place given up (host `surrender`); lexicon, culls, 57-gap coverage, mechanics, Jordan items. [READ PARTLY: header, organising finding head, section 3.9 head; suites not read]
+- **Status:** "PROPOSED (2026-10-17). Reference, not canon... no run." (:3). Reading: live proposal.
+- **Bears on:** MB (primary), FA, SE.
+- **Content that matters:**
+  - Structural finding: under TS1's default troop body (A) men are counts in a settlement's `Rung.stores` that "fight for whoever holds the walls", but `march`'s arrival moves persons only (`VT:698-701` write `Tenure.*` and `Person.travel_leg`) while TS2 section 4.6 writes casualties on stocks left at origin - so a won march today moves no troops (:27-32).
+  - Overriding rulings: R-01 `recruit` folds into `levy` (terms parameter); R-03 `raze`/`fortify` are GV's `raze`/`build`; R-08 `forage`, `sack` stay MB's, `camp` is WT's parked; R-19 `surrender` MB's, `yield` PC's scene move; R-25 `ambush` has two hosts (:9-16).
+  - Jordan items: does a march between factions require war (CK3 requires, Total War lets the attack start one) (MB-G15); service and pay (levy term/upkeep; default none); the field force M-1 amends Layer 1 and rides J-1; `sack`'s tone (FASE FA-6 `needs_jordan`) (3.9).
+- **Conflicts / stale:** field force M-1 vs TS1's A; HEAD `716c253` as read.
+- **Open items:** D-V5/D-V8/D-V9/D-V20/D-V21 per verbs-04.
+
+### proposals/2026-10-16-verbs/2026-10-16-verbs-11-lexicon-social-contest.md
+- **What it is:** Part VI.3 (SC lane): social contest verbs lexicon, suites, 59-gap coverage, mechanics, Jordan items. [READ PARTLY: section 3.9 head only]
+- **Status:** "PROPOSED (2026-10-17). Reference, not canon" (:3, same form). Reading: live proposal.
+- **Bears on:** SC (primary), FA, GV.
+- **Content that matters:**
+  - Answered without escalation: H-56's held half (SC-01 provider's shape, SC-G26); dyadic vs public persuasion (RHET:355 and the two-row split, SC-G50); whether a threat is a roll (precedent, Suite 3); whether a parliament's decision writes anything (authored data, `ARR:122 disposes: Record`, M5); `open_case` eligibility; `deny` name kept, speech kind renamed.
+  - J-C-6 (D-V4) may a person lie: recommendation yes, built in order proofs reader (M9) first, then `lie` as a row sharing `tell`'s cell and emitting `tell`'s kinds (Suite 7); if no, `lie` is cut and `forge`'s place is re-argued.
+- **Conflicts / stale:** `forge` ships (VT:330) so the world is already foolable by documents.
+- **Open items:** J-C-6; remaining 3.9 items not read.
+

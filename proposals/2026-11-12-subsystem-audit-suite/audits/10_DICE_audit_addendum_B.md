@@ -339,3 +339,267 @@ reason for the rule as avoiding the case that *"would annihilate both sides"* (`
 fixture measured, both sides are annihilated anyway. `total` is a control arm and not shipped, so this
 costs nothing in play; it means the control re-runs *"fighting costs everyone everything"* where its
 note says *"losing costs everything"*. Cross-listed, not adjudicated.
+
+## 4. Capability → axiom → resolver input
+
+The exact interface (field names, units, the reader of each, the authoring tables) is the proposal
+`../proposals/10_DICE_capability_axiom_map.md`. This section is the audit behind it: what the design
+intends, what the code does, and where they part. Design documents are cited for intent only.
+
+### 4.1 The axioms the design intends, in three strata
+
+The tree holds three statements of what a capability is and does, each later one overruling the earlier
+where they meet.
+
+**Stratum 1, the design set (April to July 2026; archived).** `canonical_registry.md` §4 and
+`derived_stats_v30.md`:
+
+| axiom, in the tradition's words | the design's statement | source |
+|---|---|---|
+| ten attributes, rated 1 to 7 | three physical, three mental, three social, one metaphysical; 31 points at creation, one at 5 and the rest at most 4 | `canonical_registry.md:146-150` |
+| skill as bonus dice on an attribute | a History at level 1 to 3 adds that many dice, capped by Recall | `:152-154` |
+| attribute doubled, plus skill, plus a base, gives the pool | `(Primary × 2) + History + 3`, minimum five dice | `:158`; `derived_stats_v30.md` §14.4 |
+| a static obstacle from the opponent's attribute | `Ob = floor(Attribute / 2) + 1` | `canonical_registry.md:164` |
+| the attribute is capacity, a derived resource is state | `derived = attribute × multiplier`; Health, Stamina, Composure, Concentration, Thread Fatigue; equipment changes drain and recovery, never the pool | `derived_stats_v30.md` §1, §3, §14.1 |
+| a condition costs dice, a circumstance moves the obstacle | *"Ob channel reserved for circumstance, dice channel for condition"* (Rattled −1D; out of breath −2D) | `derived_stats_v30.md` §5.1 (ED-939) |
+| a modifier is a whole die or a whole obstacle step | `+1D` and `−1 Ob` throughout the eleven cross-cutting documents; a disposition lowers the obstacle | §1 above |
+| degrees by margin, a resource spent to shift a roll | four bands; Inspiration: +1D, or spent for Ob −1 | `derived_stats_v30.md` §5.3 |
+| scale changes what a stat is worth | a faction rolls its bare stat (1 to 7 dice); a person rolls 5 to 17 | `derived_stats_v30.md` §14.5 |
+
+**Stratum 2, the resolver rulings (May to September 2026).** TN 7 always (ED-IN-0196). One ladder on the
+margin, four bands, for every scale (2026-08-14, 2026-08-15). Advantage is a shift of the mean in sigma,
+never a lowered obstacle (ED-884, ED-934). An obstacle against a person is his corresponding score halved
+plus that instance's modifiers (2026-08-14); no base obstacle by scale (2026-09-05). A wound is a
+fraction of an obstacle, never a die (ED-PC-0005, ED-PC-0006), which overrules the condition-costs-dice
+axiom for wounds. Combat's pool is skill plus six, minimum five, with attributes acting through sigma
+(ED-901). All pools in one document every subsystem calls (Ruling C, 2026-08-23). Capability supplies
+dice and gates nothing (`rosters.yaml:1499-1502`).
+
+**Stratum 3, the attribute rulings (November 2026).** The ten are renamed and re-cut (ED-IN-0328:
+Strength, Coordination, Endurance, Reason, Focus, Perception, Attunement, Presence, Grace, Spirit).
+Histories are eliminated as a roll input; in their place are *"bundles of skills/aptitudes that are
+learned abilities that complement character attributes"* (ED-IN-0330), and *"martial traditions are also
+bundles of skills"* (AR-43a). A skill is *"a constant at the time when used by subsystem … just like any
+other skills or whatever else informs state"* (AR-47, AR-48): grown outside a scene, fixed inside it.
+An attribute's floor is 1 (AR-05). Attributes and capabilities weigh a character's **choice** as well as
+his roll (AR-04). Spirit *"in different contexts you can see … as ignoring obstacle modifiers or adding
+modifiers to dice pool"* (AR-44): one capability, two channels, by context. Different venues *"may
+prioritize grace"*, and a parliament *"would penalize someone who lacks sufficient grace"* (AR-36, AR-36a):
+a capability as a circumstance of the place. Strength prices the wearing and wielding of a kit (AR-10,
+AR-12). Health's form is unresolved (AR-58).
+
+What survives all three strata, and is therefore the intended axiom set: **(i)** a rated attribute and a
+learned skill jointly give dice; **(ii)** the opponent's rating sets a static difficulty; **(iii)**
+advantage and disadvantage are a bounded shift, in named steps; **(iv)** the situation moves the
+difficulty; **(v)** an attribute sizes a resource that drains; **(vi)** an attribute sets what a kit
+costs to bear; **(vii)** capability weighs choices; **(viii)** capability grows by training and by use
+between scenes; **(ix)** capability never forbids an attempt (one named exception, Thread Sensitivity).
+
+### 4.2 The axioms the code implements, per resolver
+
+| axiom | social roll (`modules/social_contest/roll.py`) | personal combat (`modules/combat/`) | field (`modules/mass_battle/`) |
+|---|---|---|---|
+| (i) dice | `max(attribute, key)`, else `pool_default`; plus practice (`pool.py:94-100`) | the same read, then `max(5, faculty + 6)` (`core.py:54-58`) | none from a person; `power × size × 0.8`, less Discipline and stamina dice (`exchange.py:101-124`) |
+| (ii) difficulty from the opponent | held score / 2, else a stand-in of 2.0; ceiling solved per pool (`roll.py:141-154`) | `faculty / 2`, fallback and practice included (`core.py:124`) | the opponent's own rolled net, floored at 1 (`orchestration.py:1308-1309`) |
+| (iii) advantage in steps | named levels through one roster; one member, unsigned (`sigma.py:140-167`) | bare sigma terms summed inside the module (attributes, wounds, kit, tradition), soft-capped | bare sigma and die-equivalents at 0.2σ, soft-capped (`orchestration.py:1225-1260`) |
+| (iv) situation moves difficulty | room terms and forgery quality, three named fields (`roll.py:142-144`) | none on the obstacle (wounds go to sigma) | none on the obstacle; terrain and walls go to sigma and to damage |
+| (v) attribute sizes a resource | none | stamina, concentration, health, per scene (`combatant.py:172-183`) | per-column stamina from a constant 100, not from an attribute (`config.py:154`) |
+| (vi) kit cost | none | Strength demand of the wielded weapon and worn harness, paid in stamina and handling (`combat_systems.py:168-189`) | none (the loadout has one reader, reach; `04_MB_unit_loadout…` confirms by run) |
+| (vii) weighs a choice | believed odds multiply the term (`choose.py::odds_weight`) | believed shares by sampling (`combat.py:239-245`) | none (`believed_chance` is `None` for a field, first audit F-DICE-14) |
+| (viii) growth | `train` +1 on a held key; practice from the act log | a fight that drew blood raises `arms` on survivors (`rosters.yaml:1531`) | none |
+| (ix) never forbids | S27.4 refuses only the impossible (`ob > 2 × pool`) | none | none |
+| sampler | whole dice, exact odds | Normal, half a success harder (first audit F-DICE-05) | whole dice, own roller, stochastic fractional die |
+
+Reading across a row is the finding: of nine intended axioms the social roll executes five, combat seven,
+the field one, and no two resolvers execute (i), (ii) or (iii) the same way (F-DICE-15, F-DICE-17,
+F-DICE-21). Reading down a column, combat is the only resolver in which a character's whole sheet
+matters, and it is the one whose design is unratified (ED-IN-0351).
+
+### 4.3 Where the design and the code part, and which the game follows
+
+| subject | design (stratum) | code | the game follows | cost of the difference |
+|---|---|---|---|---|
+| the pool, outside combat | attribute doubled + skill + 3, floor 5 (1); never re-ruled for the social roll | the score itself, floor 1 | code (B10-08 and B10-10, ratified on merge) | F-DICE-17; the first audit's F-DICE-02 |
+| a skill | bonus dice on top of an attribute (1); a bundle that complements attributes (3) | the larger of the two, so a skill at or below its attribute adds nothing | code | a learned skill is invisible until it passes the attribute; *complement* is not yet a rule anyone wrote |
+| the opposed obstacle | `floor(attr/2) + 1` (1); `score/2 + modifiers` (2) | `score/2`, unfloored, no `+1` | stratum 2 and code agree | none; the `+1` of stratum 1 is superseded |
+| a wound | −1D (1); a fraction of an obstacle (2) | sigma in combat; nothing outside it | code in combat; nothing elsewhere | F-DICE-16 |
+| a condition (strain, fatigue, rattled) | dice (1) | sigma and stamina in combat; one die **and** sigma on a field; nothing in the social roll | code | no carrier for strain in the season (first audit §13, SCN-04, SCN-07) |
+| a modifier's unit | a die or an obstacle step (1); a named sigma level (2) | named levels in one roster; bare sigma in two modules | stratum 2 | every `+1D` in the case corpus and the design set must be restated as a level, an addend or an obstacle term (first audit, resolution 19) |
+| the derived resources | five, sized by attributes (1, 3) | three, in one module, per scene | code | F-DICE-20 |
+| scale changes a stat's worth | intended (1) | unintended: by subsystem, not by scale | code | F-DICE-17 |
+
+### 4.4 The single authoring surface
+
+Decided in the proposal; summarised here so the audit can be read alone. The existing owner is
+`engine/season/rosters.yaml`: `verb_capability` (verb → capability), `vocation_attribute` (capability →
+attribute, and what opposes it), `advantage_sources`, `lifepath_templates`; with
+`references/descriptor_registry.yaml: attributes` for the ten and `references/npc_registry.yaml` for who
+holds what. It is extended by three things and nothing is added beside it:
+
+1. a **definition row** per capability (kind, base attribute, opposition, scale, untrained rule, growth),
+   which `vocation_attribute` becomes;
+2. a closed roster of **roles**, one per axiom of §4.1, each naming the one resolver input it feeds, its
+   unit and its one reader;
+3. one **uses table** (`capability_uses`, the CHAR lane's, with a `role` column) in which every place a
+   capability changes an outcome is a row, the roll's and the choice's alike.
+
+Five other lanes proposed pieces of this. The proposal's §F reconciles them row for row; the one
+difference left for the holistic stage is which file holds the definition rows (this file, as the work
+order directs, or `descriptor_registry.yaml` as `01_CORE_capability_authoring_surface.md` proposes; the
+row is the same in both).
+
+## 5. The shared roller, and what it meets
+
+The first audit's `10_DICE_one_roller_one_fraction_rule.md` stands. Four things it meets were outside its
+reading.
+
+### 5.1 Mass battle's resolver
+
+1. **The falsifier, restated (C-4).** After the edit: `grep -rn "randint(1, 10)" modules/` prints
+   nothing, and under `engine/dice_engine/` the one *call* is `dice_engine.py:212`. The oracle under
+   `engine/reference/` is frozen and is not a roller the game reaches.
+2. **The opposed roll stays** (F-DICE-15) and is named. Its floor becomes
+   `max(sigma_leverage.OB_MIN, b_net)`; the literal `1` is the owner's constant typed twice
+   (`orchestration.py:1308-1309`, `:2185`).
+3. **Below one die there must be one rule, and the first proposal keeps two.** It leaves mass battle's
+   sub-one-die floor in `roll_pool_fractional` as *"mass battle's own"* while the owner floors at one
+   die. Decided here, ladder step 4 (the fraction of a margin, and the fraction of a die above one, are
+   both paid in probability): **the roller deals what it is handed.** `roll_net(pool)` deals
+   `floor(pool)` dice and one more with probability equal to the fraction, for any `pool ≥ 0`; the
+   floor of one die moves to where it is a statement about a *person* (`pool.py::faculty` returns at
+   least 1, the proposal's `pool_rules.floor`), which is what the *minimum pool* axiom means. A unit's
+   pool is an aggregate of troops and may fall below a die. E-B03 shows what the present split costs: at
+   a pool of 0.25 the owner's roller averages 0.400 successes and mass battle's 0.100.
+4. **The boost follows the die (F-DICE-19).** With the same rule in the owner: for a pool under one
+   die, `net_boost` is applied on the draws in which the die is dealt, and not otherwise. Expected
+   boost is then proportional to the pool, a sliver with every advantage still fails when it rolls
+   nothing, and the band edge the 2026-07-24 fix protected stays protected. At or above one die nothing
+   changes (`sqrt(max(1, floor(pool)))` as today). This is a mover for mass-battle goldens that contain
+   a sub-one-die exchange with nonzero sigma; the gate reports the count of such exchanges in the
+   golden batteries before the edit, and zero is a legitimate reading.
+5. **One vocabulary for what is authored (F-DICE-21).** State that is continuous (morale, stamina)
+   stays continuous sigma. The four authored quantities converted at `SIGMA_PER_D` (stance commitment,
+   encirclement, terrain dice, charge recoil) are named levels in the owner's table when the troop and
+   order tables become data (`04_MB_unit_loadout_and_weapon_in_hand.md` §2); until then the constant
+   stays and is exported. Fatigue's second channel, the die at stamina 0, is the condition-costs-dice
+   form the wound ruling retired for wounds; whether it goes is the MB lane's balance call, recorded,
+   not decided.
+6. **Order against the GO lane's draw owner.** `11_GO_one_draw_owner.md` replaces `randint` with an
+   owned function of one uniform at nine sites and re-pins every golden that reaches a d10. Two of the
+   nine are the two d10 rollers. Land the one-roller edit first (stream-equal, no re-pin), then GO's:
+   one site changes instead of two and the goldens move once.
+
+### 5.2 The duel round
+
+`03_PC_duel_round_and_approach.md` makes a fight a loop over `fight.round`, each round on a private
+stream derived from the fight's, with an approach chosen per phase. From the dice side:
+
+- **One path, so the duality holds by construction.** The round a player plays and the round the grid
+  resolves for him draw from the same sampler (`roll_net_continuous`), so the half-success offset of
+  the first audit's F-DICE-05 cannot separate the two modes of a fight. It still separates a fight from
+  a debate; that is unchanged.
+- **An approach is an edge, not a pool rule.** Aggressive, normal and defensive must reach the roll as
+  sigma for the attack and against the defence through the terms the module already sums (the
+  commitment and defence-mode terms), with the three approaches as rows naming levels. An approach
+  that adds dice or moves `ob_from_defender` would be a fourth pool regime (F-DICE-17).
+- **The believed estimate takes the approach as an operand.** The first audit's interface for a
+  fight's believed chance (`believed_estimate`, shares over the provider's own bands) was stated for a
+  whole fight. With rounds, what a person weighs is a round at an approach: the role's signature gains
+  the approach, and the shares are over the round's endings. Stated for the PC lane; nothing is built
+  here.
+- **The round's stream** (`random.Random(rng.getrandbits(64))`) is a tenth construction site for GO's
+  one constructor. Cross-listed to GO.
+- **Wounds inside a round** stay the module's (`wound_impairment`); the season-side wound term of §5.4
+  is applied by the host to non-combat rolls only, so nothing is counted twice.
+
+### 5.3 The weapon-carry cost: one rule, and where it lives
+
+The PC and MB lanes have decided it, and this lane concurs: **the rule is one leaf function,
+`carry_demand(weapons, armour)`, in Strength points, beside `engine/substrate/combat_kit.py`, reading
+the combat module's typed export and nothing else** (`03_PC_loadout_and_carry.md` §2;
+`04_MB_unit_loadout_and_weapon_in_hand.md` §3). A person's fight charges it in `act_cost`; a unit's
+host evaluates the same function over the troop row's loadout and hands the module factors. What the
+resolution lane adds:
+
+- **It is the `threshold` role of the map, and it must stay off the dice.** The shortfall
+  `max(0, carry_demand − strength)` is paid in the currencies each resolver already has for effort:
+  stamina per action and a slower close for a person, stamina drain, slower recovery and a shorter step
+  for a unit. It never changes a pool, an obstacle or a level directly; it reaches the roll only
+  through fatigue's existing channel (a tired fighter's sigma, a tired column's `_fatigue_sigma`). That
+  is what makes it one rule at two scales: the same Strength points, the same shortfall, and each
+  resolver's own conversion of tiredness into odds.
+- **Strength is read from the one surface.** A person's is `Person.attributes["attr.body.strength"]`
+  (the combat spec's default where unauthored); a troop type's is the `strength` cell of the troop
+  table. Both are the same registry key, so the map's row is one row with two holders.
+- **One weapon roster.** `carry_demand` can only be one rule if a pike is one record. The MB proposal's
+  merge onto `modules/combat/weapons.py::WEAPONS` is the precondition; `rosters.yaml: arms_kinds`
+  already names a person's arms by that roster's keys.
+- **The switch draws nothing.** Changing the weapon in hand costs tempo (a person) or a tick (a unit)
+  and takes no draw, so it moves no stream.
+
+### 5.4 The wound term, corrected (replaces edits B to D of the first audit's advantage proposal)
+
+The signed channel (that proposal's edit A) stands. `wounds` is not a member of `advantage_sources`.
+It is the first member of a second, parallel door for the situation, which the map needs in any case
+(§4.1 (iv)):
+
+- `engine/season/rosters.yaml`: a closed, ordered roster `obstacle_terms`, shipped `[wounds]`, on
+  `advantage_sources`' pattern (a member with no binding function, or a function with no member, is
+  refused at import).
+- `seam/wrappers/sigma.py`: `OBSTACLE_TERMS = {"wounds": _wound_term}`, each
+  `fn(fixtures, operands) -> float` in successes, signed, positive is harder. `contest_input` and
+  `believed_input` sum them into one new field, `SocialContestInput.obstacle_terms: float = 0.0`.
+- `modules/social_contest/roll.py::obstacle`: adds `inp.obstacle_terms` where it adds
+  `forgery_quality`, before the ceiling. A favourable sum is clipped at `OB_MIN` as the room is.
+- `_wound_term`: `wound_ob × min(wound_cap, wounds_of(body, body_ceiling))`. Fixtures: `wound_ob`
+  (shipped **0.15**, *ruled*, ED-PC-0006; `None` is the control and today's bytes), `wound_cap` (3),
+  and `wound_band` (the share of `body_ceiling` one wound is: a quarter, so three wounds stand between
+  a person and felling, the design's Endurance-4 table). The last two are
+  `[ASSUMPTION; medium; Jordan to correct]` with hole-register rows and three-point sweeps; the first
+  is not.
+- Gate and falsifier as in the first proposal, with the figures of E-B03 (2.8 points of
+  Partial-or-better per wound at pool 2, Ob 2) in place of the level's.
+
+### 5.5 Order of landing
+
+1. The first audit's steps 1 and 2 (exported faces, edges, levels; context validated). No hash moves.
+2. One roller, with §5.1's items 1 to 4. Stream-equal except sub-one-die exchanges with sigma.
+3. GO's draw owner. One re-pin.
+4. The map's part one (`10_DICE_capability_axiom_map.md`). Hash equal.
+5. One score, two roles (first audit) and the signed channel; then §5.4's wound term.
+6. The carry rule (PC, then MB), after the one weapon roster.
+7. Content (`stats:`, capability rows, troop rows): CHAR, PC, MB.
+
+### 5.6 For Jordan: two items, each already his
+
+Neither is new; each is a measurement added to a question the ledger already holds.
+
+- **The wound's channel.** Option A, as ruled (ED-PC-0005, ED-PC-0006): a fraction of an obstacle,
+  0.15 per wound. As a game: a wound is a small, flat cost whose bite is largest on a middling roll and
+  fades on a large pool (2.4 points at eight dice). Option B, as the first audit proposed and as combat
+  itself spends it: a level against, in sigma. As a game: a wound costs the same share of a roll's
+  spread at every pool (5 to 10 points), so it matters to experts as much as to novices, and it stacks
+  under the soft cap with every other disadvantage. §5.4 is written for A.
+- **What a score is worth outside a fight** (open under ED-IN-0351, which withdrew combat's
+  ratification and reopened the question *"for combat and the social contest"*). Option A, as built:
+  the score is the pool. Equals succeed 28 % of the time; one point is worth eleven. Option B, the
+  regime combat kept: the score plus a base, floor five. Equals succeed about 65 %; one point is worth
+  about five; the Normal approximation and the level table behave as designed; every non-combat band
+  in the game moves. The map makes this one row (`pool_rules`), so the choice is an edit, not a build.
+
+## 6. Evidence log
+
+`PYTHONHASHSEED=0`, `PYTHONPATH` the repository root, `PYTHONDONTWRITEBYTECODE=1`. Scratchpad:
+`/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379/scratchpad/runs/DICE_B/`.
+
+| id | command or probe | seed · scope | outcome |
+|---|---|---|---|
+| E-B01 | `probe_h152.py`: a real `march` folded at RESOLVE then ENCOUNTER under `field_casualty_model` `total`, `scaled_by_degree`, and `total` with `death_subjects` mutated | 0 · the realm at build | `total`: 8 removed, 8 named by `person.died`; control: 0 and 0; mutation: 8 removed, 0 named (`h152.txt`) |
+| E-B02 | ledger rows and rulings opened by hand (§1); greps: `randint(1, 10)` under `modules/` and `engine/`; `WOUND_ATK_OB`; `MB_FRACTIONAL_POOL`; readers of mass battle's equipment registry | — | four `randint` lines; fractional pool default on; the rows as quoted |
+| E-B03 | `probe_axioms.py`: equal-skill bands under each resolver's own rule (exact enumeration over `_die_result` and `degree_from_net`; closed-form Normal for combat); the opposed roll; what one point buys; the design's calibration line; the wound as an obstacle term against a level; mass battle's roller against the owner's below one die | 11 · n 200,000 for the two sampled rows; the rest exact | §2.2 tables (`axioms.txt`) |
+| E-B04 | `probe_inputs.py`: the three host input builders before and after a side is raised to 7 on ten attributes and four keys | 0 · build | `MassBattleInput` equal; combat `faculties` (2, 2) → (7, 2), `ends` (4, 4) → (7, 4); social `pool` 2 → 7, `opposition` `None` → 7.0 on the subject's side (`inputs.txt`) |
+| E-B05 | inline: `_sigma_net_boost(s, floor(0.4))` for s in 1, 1.5, 2, 3 and `compute_degree` against a floor of 1 | — | 0.699, 0.914, 1.044, 1.157; Partial from +2σ with no die |
+| E-B06 | `git status --short` at the end | — | this file and `proposals/10_DICE_capability_axiom_map.md` are this lane's only changes |
+
+Not run: `pytest`; `aperture`; any battle long enough to observe F-DICE-19 in play (marked
+`[UNVERIFIED]` there). The first audit's probes were not re-run; its figures are quoted as it gave them.
