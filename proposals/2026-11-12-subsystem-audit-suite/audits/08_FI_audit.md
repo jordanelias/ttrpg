@@ -630,6 +630,12 @@ Research is tier 3; nothing below settles a design.
 | Felt / Winnow / Select the Unexpected (literature file `04`) | a simulation needs a sifter to surface storyful sequences; coupling sifting to the simulation is where the leverage is; unexpectedness as rarity is a usable ranking | bears on legibility (§9): the causal log (`causes[]`, `claim.deposited` chained to the witnessed act) is a sifting substrate nobody queries. Not an FI build; named for the holistic stage |
 | Historical: pre-modern inquiry was testimonial and procedural (lane file §1.3: oath, denunciation, inquest jury), and the Foscarini affair (wrongful execution on fabricated informer testimony) | four of the six acts are physical or archival, an anachronism; the richest historical material maps to proceedings | `interview` answered by the questioned person's own `tell` or `lie` (CP-T06-05) is the testimonial act; with R-05 and R-08 it produces the Foscarini shape (false testimony, a ruling on it, exposure later) from parts that exist |
 
+The detective and noir games the tree names, which of their borrowings are understood and which only
+named, and the nulls among them, are in §16; the evidence interface they imply for contests is
+`proposals/08_FI_05_evidence-interface.md`. From `.audit/` (lesser weight, superseded by its own Status
+line): the 2026-07-05 narrative-engine record's requirement that a beat leave a followable trail of gossip
+and witnesses, which F-FI-02 measures as unmet.
+
 **Tried and did not transfer.**
 - *Heaven's Vault* (confidence as the number of independent support chains): already built as the noisy-OR
   over distinct origins; it cannot be evaluated while chained claims number 0–7.

@@ -2,7 +2,7 @@
 
 ## Status: PROPOSED
 
-Carries findings F-SE-08, F-SE-10, F-SE-11 and resolutions R-SE-07 to R-SE-10 and R-SE-12 to R-SE-16 of
+Carries findings F-SE-08, F-SE-10, F-SE-11 and resolutions R-SE-07 to R-SE-10 and R-SE-12 to R-SE-15 of
 `audits/07_SE_audit.md`. Each item is an edit at one owner. None needs a ruling; each closes or narrows a
 hole-register row by the five-step ladder, and the step is named.
 

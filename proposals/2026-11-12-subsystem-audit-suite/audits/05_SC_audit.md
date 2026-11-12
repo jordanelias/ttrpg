@@ -464,7 +464,7 @@ H-281 (unread keys; SC-P4), H-210 (forgery quality; read, inert at the fixed cei
 | SC-05 | HELD on B10-18c | decided here | SC-P2 |
 | SC-07 | BLK: a carrier per item | open; P-4 (recorded defeat) gains a carrier with CR-36/37's `resolution` Record | none |
 | NM-W1 | HELD, partly landed | not SC's | — |
-| CR-27, CR-31, CR-55, CR-56, CP-T05-02 (ii)(iii), CP-T05-03, CP-T05-04 | LANDED | landed (`lie` executes in aperture; `matter.lapsed` is declared and not yet seen in 4 seasons at lapse 4, as expected) | none |
+| CR-27, CR-31, CR-55, CR-56, CP-T05-02 (ii)(iii), CP-T05-03, CP-T05-04 | LANDED | landed (`lie` executes in aperture; `matter.lapsed` fires 8 times in season 6 at each seed, the first season `docket_lapse` 4 allows) | none |
 | CR-35, CR-36 | BUILD (B10-17) | open | SC-P4's Record disposal waits on them |
 | CP-T05-05 | CUT (?) | not opened `[UNVERIFIED]` | — |
 
@@ -476,7 +476,7 @@ H-281 (unread keys; SC-P4), H-210 (forgery quality; read, inert at the fixed cei
 | G-02 | SC-05 forwards an extension the live path never applied | forward nothing; keep `BandExtension` in its owner | 5 | SC-P2 |
 | G-03 | `module_contracts.yaml` `social_contest` row describes the kernel | repoint `sim_module`, `resolver`; drop the state row and note | 5 | SC-P2 |
 | G-04 | `sim_params.json` exports kernel constants | re-derive by the exporter after deletion | 4 (exporter is the owner) | SC-P2 |
-| G-05 | `requirements.yaml` scale row says the seam is unbuilt | rewrite the row to the measured state: *roll in loop through seven rows; proceedings close about once in seven seed-seasons* | 3 (code decides) | §8 step 1 |
+| G-05 | `requirements.yaml` scale row says the seam is unbuilt | rewrite the row to the measured state: *roll in loop through seven rows; three determinations in twelve seed-seasons at seeds 0 and 1* | 3 (code decides) | §8 step 1 |
 | G-06 | ten arrangement keys and `speech_kinds` read by nothing | cite a reader at B10-18c's close or delete the key | 4 | SC-P4 |
 | G-07 | a computed case names no arrangement | answered by plan: CR-60, CR-61 | 3 | — |
 | G-08 | a verdict's band changes nothing a reader sees | `disposes:` may be band-keyed | 5 | SC-P4 |
@@ -604,8 +604,8 @@ Proposal files (all `## Status: PROPOSED`; SC-P5 held back):
 3. *Merge, then build (plan).* SC-02's re-source, CP-T05-01, CP-T05-02 (i). Gate: the plan's
    falsifier worlds. Unblocks R-02 inside a hearing (speech changes the verdict); removes F-SC-09.
 4. *Build (plan).* B10-18c in its order. Gate: its exit probes at seeds 0–2.
-5. *Edit.* SC-P6 — acquittal, after CR-61. Gate: its test and the realm probe (docket length no
-   longer monotone). Unblocks R-02, R-09 (a hearing with two ends).
+5. *Edit.* SC-P6 — acquittal, after CR-61. Gate: its test and the realm probe (`matter.dismissed`
+   above 0 at seeds 0–1 over six seasons, where `matter.undetermined` reads 2 and 2 today). Unblocks R-02, R-09 (a hearing with two ends).
 6. *Edit.* SC-P4 — band-keyed `disposes:`; the unread keys go at B10-18c's close. Gate: its test;
    seeded hashes equal. Unblocks categorical outcomes (R-04 contributor).
 7. *Small build.* SC-P3 — `build_hearing`, `--play`. Gate: its two-run artifact. This is the step
