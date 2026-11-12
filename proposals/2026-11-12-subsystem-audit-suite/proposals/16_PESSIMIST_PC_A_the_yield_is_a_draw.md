@@ -1,0 +1,147 @@
+# 16 · PESSIMIST · PC · A — the yield is a draw: whether a wounded fighter gives up is his, and is rolled
+
+## Status: PROPOSED
+
+Source: `audits/16_PESSIMIST_PC.md` §2.2 (F-PES-PC-03). Standing rule: `AUDIT_BRIEF.md` (Jordan,
+2026-11-12, *"we do not do deterministic"*). Composes with, and does not restate,
+`14_VERBS_PHYSICAL_A_custody_and_force.md` A3 (the mortal-wound draw after a felling; `context_terms`)
+and `03_PC_exits_withdrawal_recovery.md` Part B as reconciled by `18_DETERMINISM_SWEEP.md` D-04.
+Reference only (`CLAUDE.md` §0.05); not ratified by being written.
+
+## What it changes in `engine/season/` at runtime (first)
+
+Every season `fight`, `accept` and `capture` scene in which a party is wounded and not felled now takes
+one or more draws on the scene's own `rng` at the end of the turn, and may end in a yield it would not
+have ended in (a `fight` under `death` terms can now end with both men alive) or run on past a line it
+would have stopped at (a duellist can fight on after first blood). **Declared hash mover for every world
+with a fought scene.** `PersonalCombatInput` gains one optional field; the fold gains no band and no
+kind (`duel.yielded` and `Event.ending`'s `yielded` exist).
+
+## The problem (evidence)
+
+`modules/combat/wrapper.py:519-539`, `:600-612`: under `blood` and `yield` terms the fighter who crosses
+the term's line yields at the end of that turn, always, and the surrender is always accepted; under
+`death` terms nobody yields. `pB_yield.py`, 3,000 season-default fights per term, `PYTHONHASHSEED=0`:
+
+| terms | yields | felled | fighters across the line who did not yield | yields above the line |
+|---|---|---|---|---|
+| `death` | 0 | 99.8% | — | — |
+| `blood` | 100.0% | 0 | 0 | 0 |
+| `yield` | 94.4% | 5.6% | 0 | 0 |
+
+Spirit 1 against 7, disposition 1 against 7 and Focus 1 against 7 (1,500 fights each): the highest
+Health fraction at which anyone yields is 0.500 in every arm. The decision to stop is a fixed function of
+one number, the same for every person. `14_VERBS_PHYSICAL_A` A3's `context_terms` will send `crime` and
+`defence` fights to `yield` terms, so after it lands this threshold decides most fights in the game.
+
+## The resolution, decided (ladder step 1: the standing rule answers it)
+
+**At the end of any turn in which a wound gate was crossed on a standing party, that party draws once to
+fight on.** One site, in `wrapper.fight`, replacing `:600-612`; one roll, through `core.resolve` (the
+owner ladder); every term.
+
+- **Pool:** `core.resolution_pool(c.spirit)`. Spirit is the engine's attribute for this
+  (`attributes.py`: registry key `attr.mind.will`), already carried on the typed input through
+  `PersonalCombatInput.attributes`, so an authored person brings his own.
+- **Obstacle:** `cfg['YIELD_OB'][terms] + c.wt.wounds`: the term sets how much is at stake in stopping,
+  the wounds how hurt he is. `YIELD_OB` is one new `CFG` key, a dict over `DUEL_TERMS`
+  (`[SIM-CALIBRATE]`; the exporter collects `CFG` whole).
+- **Modifier (σ):** `inp.resolve[i]`, a new optional field of `PersonalCombatInput` (default `()`,
+  which is 0.0 for both): what the host knows that the module does not (what he is fighting for). It
+  enters as `net_sigma`, under the owner's soft cap, like every other modifier in this module. The host
+  fills it when a reader exists (`02_CHAR_resolve_and_temper.md`'s `person_q.resolve` is the candidate);
+  until then nobody carries one and the draw rests on Spirit and wounds.
+- **Bands (graded, recoverable):**
+  - Failure: he yields. The `yield` event as today (`by`, `turn`, `terms`), plus `degree`.
+  - Partial: he is shaken and fights on: `c.conc −= cfg['CONC_DRAIN_LOSS']` (existing state, existing
+    constant); a `shaken` trace event.
+  - Success: he fights on.
+  - Overwhelming: he rallies: `c.conc = c.conc_max`; a `rallied` trace event.
+- **Two failures in one turn:** as today's tie rule (`_terms_yielder`): the one with the smaller
+  fraction of Health yields; an exact tie yields nobody and the scene ends undecided.
+- **Acceptance.** Under `blood` and `yield` the terms are the acceptance (as today). Under `death` the
+  scene ends with the yielder standing and the event carries `accepted=None`: what the other man does
+  with an unresisting man is the host's (the `Yield` docstring's rule, `wrapper.py:483-497`; the verbs
+  that exist: `fight` again where a context holds, `capture` through a seat, or nothing). The victor's
+  choice is a chooser act, therefore a sampled choice (D-06), and is not designed here.
+- **The burst-breaker reads a new crossing.** `engagement`'s between-beats stop (`:153-154`) today reads
+  standing state (`_terms_met`: anyone has a wound). Once a man can pass his check and fight on, that
+  would end every later engagement at its first beat. It becomes: a party crossed the term's line
+  *during this engagement* (for `blood`, `c.wt.wounds` greater than at `engagement_start`). Measured on
+  the prototype before the change: 16.3% of `blood` duels froze undecided.
+- **`YIELD_HEALTH_FRAC`** stays the `yield` term's burst-breaker line and stops being a decision.
+
+## Prototype reading (in-process, no tracked file touched; `pM_yield_draw.py`)
+
+`fight_p` replays `wrapper.fight`'s turn loop call for call with the block above in place of
+`:600-612`; season-default mirror, 1,500 fights per term; probe values `YIELD_OB = {blood: 4, yield: 2,
+death: 0}`.
+
+| terms | yields | felled | undecided | yielder's Health at yield (q10 / q50 / q90) | yielder had passed an earlier check | checks: Fail / Partial / Success / Overwhelming |
+|---|---|---|---|---|---|---|
+| `blood` | 93.1% | 6.8% | 0.1% | 0.25 / 0.42 / 0.68 | 4.6% | 84.0 / 7.4 / 7.0 / 1.6 |
+| `yield` | 74.5% | 25.2% | 0.3% | 0.12 / 0.35 / 0.68 | 11.9% | 58.2 / 14.9 / 19.1 / 7.8 |
+| `death` | 32.1% | 67.7% | 0.3% | 0.07 / 0.33 / 0.68 | 16.4% | 29.5 / 13.0 / 30.7 / 26.8 |
+
+Controls: an obstacle no pool can fail (−99) reads 99.7% felled under `death` (shipped: 99.8%), every
+check Overwhelming; an obstacle no pool can beat (+99) reads 95.2% yield under `yield` terms.
+
+The person now moves the decision (terms `yield`, A varied against a default B, 1,000 fights): A's share
+of the yields is 55.8% at Spirit 1, 48.3% at 3, 32.9% at 7; with `resolve` +1.0σ 31.9%, −1.0σ 57.1%.
+
+What the reading shows that a value sweep must settle: under `yield` terms the felled share rises from
+5.6% to 25.2% at the probe value, because a man who fights on meets the next Overwhelming blow (audit
+§1.1). That is the premise working ("some fight on, and some of them die for it"), and A3's mortal-wound
+draw then stands between a felling and a death; but the shipped `YIELD_OB` is to be chosen by the gate's
+sweep, not taken from this table.
+
+## Exact edits, by owner
+
+| file | edit |
+|---|---|
+| `modules/combat/config.py` | new key `YIELD_OB={'blood': …, 'yield': …, 'death': …}` with its `[SIM-CALIBRATE]` note and the rule in the gate below; `YIELD_HEALTH_FRAC`'s note restated (the `yield` term's burst-breaker line, no longer the decision) |
+| `modules/combat/wrapper.py` | `:600-612` replaced by the check above (a function `_resolve_check(c, terms, sigma, cfg, rng)` returning the degree; the wrapper applies the band); `engagement` takes the wounds at its own start and `_terms_met` reads a new crossing; the `DUEL TERMS` comment block (`:503-515`) restated; `shaken` and `rallied` added to the trace vocabulary |
+| `engine/season/queries/inputs.py` | `PersonalCombatInput.resolve: tuple = ()` |
+| `modules/combat/fight.py` | passes `inp.resolve or (0.0, 0.0)` to `wrapper.fight(..., resolve=…)` |
+| `engine/season/seam/wrappers/combat.py` | `surrender_of` unchanged (it lifts the same event); `fight_estimate` unchanged (it already tallies `yielded`) |
+| `engine/season/verb_table.yaml`, row `fight` | the `Wounded` and `Untouched` bands declare `duel.yielded`, earned by the yielder alone, as `accept`'s do (`loop/effects_combat.py:234-238`); this is `03_PC_exits_withdrawal_recovery.md` Part B's second bullet, adopted |
+| `engine/engine_params/combat_engine_v1.json` | re-derived by `python tools/export_engine_params.py` (never by hand) |
+
+## Gate (execution artifacts)
+
+1. The audit's `pB_yield.py` reading, re-run: under `yield` and `blood` terms, fighters across the line
+   who did not yield is strictly above 0, and yields above the `yield` line is strictly above 0.
+2. Under `death` terms the season-fight probe (the PC audit's E3, 200 seeds) reads a share of scenes
+   with both parties alive strictly between 0 and 1.
+3. Control: `YIELD_OB` at an unreachable low value reproduces the shipped `death`-terms shares (99.8%
+   felled) and, with the burst-breaker change reverted, the pre-change hash.
+4. The sweep that ships the values: over a grid of `YIELD_OB`, the `blood` mirror's yield share stays
+   above nine in ten (a duel to first blood usually ends at first blood) and the `yield` mirror's
+   felled share is reported beside each grid member; the pick is Jordan's from that table.
+5. `python tools/export_engine_params.py --check` green.
+
+## Falsifier
+
+After the build: 3,000 `yield`-term fights in which every fighter across the line yields and none yields
+above it; or a Spirit 7 fighter who yields as often as a Spirit 1 fighter (shares inside each other's
+interval at n 1,000).
+
+## NERS reading
+
+- **N** (all directions). Top-down: the standing rule and R-09 ask it. Bottom-up: the engine already
+  owns the state (Concentration, wounds) and the roll; no new resolver. Vertical: the season's fold
+  already writes a yielder by his own band. Lateral: the social contest's concession and the field's
+  rout are the same act at other scales and are draws (or proposed as draws) there. Diagonal: the
+  mortal-wound draw (A3) covers what follows a felling and this covers what precedes one; neither covers
+  the other's ground. Horizontal: `capture`, `accept` and `fight` share the one site. Cut it and the
+  beaten survivor, the man who fights on, and the duellist who will not stop at first blood all die.
+- **R.** The half with no player: NPCs now differ in a fight by will. Completeness: at Spirit 0 the pool
+  floors at 5 dice (`POOL_FLOOR`), so the check exists at the extreme.
+- **S.** One ladder, the owner's; the modifier is σ like every other in the module; it pauses nothing
+  (it is read between turns, where `decide` is already consulted).
+- **E, last.** One `CFG` key, one input field, one function; it removes a tie-break special case from
+  the decision (the tie rule survives only for a double failure). High against what N and R found.
+
+## Cost class
+
+Small build. One open value set (the sweep's pick).

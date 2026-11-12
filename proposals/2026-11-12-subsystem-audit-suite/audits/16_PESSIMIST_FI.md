@@ -163,10 +163,11 @@ whole of the realm's person-to-person traffic is twelve claims held with a telle
 **The false beliefs the first FI audit counted as formed by telling (its §1a: "told 0 true / 7
 false"; F-FI-04: "all 7 told cell claims at seed 0 are false") are seven people holding that one man
 exists twice.** Of the seven tellings that landed in two seasons, three said that a person exists.
-What the 102 formed tellings chose to say, by `said_of`'s newest-claim rule: `exists:Person` 36 times,
-`tell.refused` (*"my last telling was refused"*) 9, `proposition.uttered` 3, `cover.assumed` 3,
-`record.created` 3, a bare sighting 3, `train.refused` 2, `stores:grain` 2, `issue.unauthorized` 1,
-`challenge.refused` 1. An existence reading is the acquaintance marker (`known_person_operands`): a
+What the 70 tellings attempted in those two seasons chose to say, by `said_of`'s newest-claim rule
+(and the liar's cell rule): `exists:Person` 36 times, `tell.refused` (*"my last telling was
+refused"*) 9, `proposition.uttered` 3, `cover.assumed` 3, `record.created` 3, a bare sighting 3,
+`room:<person>` 3, `train.refused` 2, `stores:grain` 2, `stores.changed` 2, and one each of
+`issue.unauthorized`, `challenge.refused`, `yield.taken`, `term.matured`. An existence reading is the acquaintance marker (`known_person_operands`): a
 hearer told it comes to know of the man, so the telling is an introduction and has a use. It is also
 a number, so the lossy copy garbles it and the liar inflates it.
 
