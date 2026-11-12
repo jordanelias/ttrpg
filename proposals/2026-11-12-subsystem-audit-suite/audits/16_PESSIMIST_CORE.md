@@ -97,9 +97,59 @@ counts: the order he composes a scene in is not the order it happens in; the per
 simultaneously elsewhere; and the season's log does not show scenes. Does the behaviour correspond to
 the premise? As a *tick*, yes. As a *scene*, the word names a budget unit, not a scene.
 
-### 1.2 "A decision propagates and later decisions depend on it" — see §1.5 (the knockout runs)
+### 1.2 "A decision propagates and later decisions depend on it" — **holds, by a controlled counterfactual; the dependence is mostly not in the record, and it saturates**
 
-`[appended below when the runs finish]`
+*Ordinary meaning.* Had that person not done that thing, other people would later have done otherwise,
+and one could say which and why.
+
+*The notes' account.* A scene cites the question that occasioned it (`Scene.occasion`), the question
+walks to a landed claim, the claim to an Event, the Event to another person's act: `causes[]` *"is the
+substrate of the entire emergent-narrative claim"* (`state/world.py:1496-1499`). R-01 and R-02 read `met`
+on that edge (corpus `R3`) and on a degree sweep whose plants are not detected (F-CORE-03).
+
+*The running code* (`knock.py 0 2`, `knock2.py`: one built realm, forked; in each arm exactly one
+`choose()` call is made to return nothing, everything else replays; ids and draws are
+`H(seed, tick, subject, purpose)`, so removing an act shifts no other draw; the figure is the *other*
+persons' acts that differ from the unperturbed run, by `(actor, season, round, verb, opportunity,
+outcome)`, counted both ways, of about 1,690):
+
+| arm | other persons' acts differing | persons affected (individuals of 45) | first round that differs |
+|---|---|---|---|
+| **control: replay, nothing removed** | **0** (hash `bacd687f…` reproduced) | 0 | — |
+| **control: a cohort's round-0 scene removed** (it tends itself) | **0** | 0 | — |
+| a round-0 scene of an individual **no other act ever cites** (`p_npc_001`) | 236 | 21 (12) | season 1, round 1 |
+| a round-0 scene of a median-cited individual (`p_npc_005`, cited 4 times) | 309 | 33 (15) | season 0, round 1 |
+| a round-0 scene of the most-cited individual (`p_npc_035`, cited 12 times) | 634 | 63 (30) | season 0, round 1 |
+| **that individual's whole season 0 removed** (five scenes) | 625 | 64 (31) | season 0, round 1 |
+| ceiling: the chooser's draw re-seeded for everybody (`storybar`'s existing arm) | 2,760 | 83 (46 of 46) | season 0, round 0 |
+
+1. **It propagates, and the controls say so.** Zero for a replay, zero for a scene that touches nobody,
+   then 236, 309, 634 as the removed scene is cited by 0, 4 and 12 other acts. This is the reading R-01
+   and R-02 lacked: an effect with a null, a dose-ordering and a ceiling. On this evidence the two rows'
+   `met` is better supported than their own `measured:` blocks support it. The steelman holds.
+2. **It saturates.** Removing five scenes of the same person moves 625 acts; removing one moves 634.
+   Past the first perturbation the realm does not respond in proportion: about 130 acts a round differ
+   in season 1 whatever was removed. What a decision buys is *a different season*, not *a consequence of
+   its own size*. A player who withholds one act and one who withholds a season's work change the world
+   by the same amount.
+3. **Most of the dependence is not on the edge the record keeps.** The scene nobody cites still changes
+   236 acts by 21 people, none in its own season, all from round 1 of the next. `causes[]` carries the
+   *occasion* of a scene; it does not carry what else was in the person's View when he scored his
+   options (`view_k = 12` claims of a ledger of several hundred), and that is how an uncited act reaches
+   21 people `[the path is inferred from the code, not traced: UNVERIFIED]`. So an instrument that walks
+   `causes[]` (corpus `R3`, `storybar`, `chronicle`) under-counts dependence, and a narrator who asks
+   *why did these 21 act differently* finds no edge to follow. F-CORE-12 (the reason for an act is not in
+   the world) is the same defect seen from the act; this is it seen from the cause.
+4. **What depends is paper.** The executed acts that differ are `create_record`, `utter`,
+   `reconstruct`, `oblige`, `commit`; the end states differ in records held, propositions, the docket
+   and its dates, and scar. In the largest arm one office that had been established is not, one person
+   lives elsewhere, and three or four of 39 stores differ by a few units. No person, no seat, no site.
+   The GAME lane's null-arm reading (§1.1 there) is the same fact from the other side.
+
+**Verdict on the sentence.** Genre: no surprise; a player's act changes what others do. Intent: yes.
+Words: *propagates* is earned; *depend on it* is true and not retellable. Fix: none at the mechanism;
+the reading goes to the requirements (F-PES-CORE-05), and the unrecorded influence is F-CORE-12's
+proposal (`01_CORE_reason_trail_in_the_act_store.md`), which this evidence makes more urgent.
 
 ### 1.3 "An act that cannot happen is refused and the refusal teaches" — **refused: yes; teaches: no**
 
@@ -137,8 +187,10 @@ deposited"*; and `queries/person_q.py:1415-1418` says it in terms: *"a known per
 is still named and the telling is refused — and the person does NOT learn it from the refusal"*. The
 reason given is sound (a stale `with:` claim would feed tellings); the consequence is that **the most
 common reason an act cannot happen is the one reason the engine has ruled a person can never learn**, so
-clause 4 can never decline it, so the chooser re-forms it every round. `[the per-stem split of the 828
-is appended in §1.6 when `p34.py` finishes]`
+clause 4 can never decline it, so the chooser re-forms it every round. The split by failing read is
+§1.5. Research's `finding.none` (a search that found nothing, carried on the row's `emits_on_refusal`)
+is counted as a refusal above because the driver counts it so; without `research` the figures are 773
+refused of 1,408, 309 retried, **305 refused again and 4 executed**.
 
 The driver adds a second cause on purpose: `_drop_what_was_already_done` filters only what was
 *realised*, so that *"an act attempted and REFUSED in round 0 must be retryable in round 3, because a
@@ -168,7 +220,7 @@ changed — and by how much.
 | **where** | `world_q.event_place(w, e)`: the actor's *live* `contain` edge | of 831 act-caused Events of season 0, 39 answer a different place one season later (a refusal at the cathedral is later "at" the settlement its actor moved to) |
 | **when, within the season** | nothing (`driver.py:557`) | the round is not on the Event |
 | **why** | F-CORE-12 (the reason for an act is not in the world) | cited, not redone |
-| that it was a state change at all | `[the minted-against-logged receipt count is appended in §1.6]` | |
+| that it was a state change at all | a receipt on some Event | 3,914 of 40,494 minted receipts are on no Event (§1.5) |
 
 The gate already holds the answer to the third row. For a `Change` it reads `was = state_of(s)` for every
 subject before applying and compares after (`world.py:1396-1399`, and that comparison is how a no-op is
@@ -193,7 +245,7 @@ record.created | answers 3. Berta utter"* is an index entry, not a retelling. In
 (the `causes[]` edge) is real and held against attack in the CORE audit. Words: `Receipt` promises more
 than an acknowledgement that a write occurred. Fix: F-PES-CORE-02.
 
-### 1.6 The two readings §1.3 and §1.4 left open (`p34.py 0 2`; hash `bacd687f…`, the baseline's)
+### 1.5 The readings §1.3 and §1.4 rest on (`p34.py 0 2`; hash `bacd687f…`, the baseline's)
 
 **Refusals, split by what the refusal's own observation could teach** (525 refused individual acts in two
 seasons; `Event.observed` read off each refusal; the stem lists are `loop/witness.py`'s own
@@ -279,6 +331,6 @@ none for "can I even try" is the sibling inconsistency F-PES-CORE-01's fix remov
 causal edge, a same-season answer channel, and a teaching channel that works where it is wired. Against
 that: a plan queue that is never used, an order rule that decides nothing, a retry rule that pays once in
 a hundred, three receipt fields holding a constant, a log 94% bookkeeping, and five `choose()` calls per
-person per season each composing five scenes to release one. The kernel is legible in its rules and
+person per season each composing a plan to release its head. The kernel is legible in its rules and
 carries roughly as much unexercised structure as exercised. *"Allows the player to intuit complex
 outcomes from simple choices"* fails where the three surprises of §1.1 are.

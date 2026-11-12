@@ -414,3 +414,137 @@ Cross-file pattern noticed early: most files in this family carry a long docstri
   - REM-13: `degrees_by_verb` sums to `degrees`; a lost `tell` beside a found `research` loops up to 120 act ids to find the draw (`raise AssertionError` if none) (`:251-258`); `bands_that_differ` and `emits_and_writes_nothing` tested on planted rows.
 - **Conflicts / stale:** the corpus case pick is trajectory-dependent (comment explains the NPC-090 -> NPC-087 swap), so it is brittle in the F-TEST-02/03 manner, though it asserts a property (`>= 1`), not a count. Contradicts neither F-TEST-01 (corpus, not shipped realm) nor the addendum's R-01 row (which cites `test_n3_`/`_w18_`); this file is an additional R-01 test the addendum did not list.
 - **Open items:** none.
+
+### engine/season/tests/test_in53_vacancy_need.py
+- **What it is:** IN-53 (H-207 "vacancy as need", DECISION 2026-10-13 D1/D2): a vacant seat a person may fill rides as a CLASSED referent (`Question.classes`, a partition beside `referents`) on the question he answers; `confer` forms on it with a conferee who may be himself. Owns shared helpers imported by about a dozen later test files (`_sig`, `_formed`, `_planted`, `_ambition`).
+- **Status:** none. Reading: live.
+- **Bears on:** FA, CHAR, CORE (R-04 management acts formed in computed play).
+- **Content that matters:**
+  - A closed hold adds exactly its seat to the one person whose seat `may_fill` reaches it (`p_king`), on his first question only, keeping its id, source and plain referents; with no vacancy the questions are byte-identical (`repr` equality) with the vacancy reader stubbed to `()`, with an ambition per person so there ARE questions (L6 anti-vacuity) (`:83-136`).
+  - Crowd-out/partition control: every row declaring no `referent_class` forms exactly what the same question forms with classes stripped; `checked >= 3` (`:143-166`); only classed rows form on a classed-only referent; `checked >= 4 and other >= 1` (`:189-214`).
+  - `test_in53v_c_the_declarations_as_built` pins the set of 29 rows declaring a `referent_class` (a 40-line re-record log) and `len(REFERENT_CLASSES) == 8` (`:246, :298-308`) - count/set pins of a roster read from a yaml (F-TEST-03 family; the set is the content of R-05's formation work).
+  - A computed `confer` fills a vacant seat end to end onto another or himself; a conferral on the seat's own holder, a list-valued subject, a nobody and a dead person are refused (`:348-434`) - a seat is filled by a deterministic fold once chosen; no contest.
+  - The U2 fingerprint (`loop/deliberate.py::_inputs_fingerprint`) must move when a classed referent opens or when he is told of a seat under an unchanged question id (`:451-481`).
+- **Conflicts / stale:** (e) realm-execution exit retired 2026-10-13 ("Relax exit rules"). The file keeps a long counter of the `referent_class` rows' growth by item (REM-21..28, CP-T05-04, CR-25, PC-10b, CP-T03-08, B10-12).
+- **Open items:** none.
+
+### engine/season/tests/test_in57_attention_tiers.py
+- **What it is:** v9 IN-57 (RS-22, A-26): `world_q.attention_key`, the order a person answers his questions in, as a tiered read of his own state (0 claim about an ambition's subject, 1 own tenure or seat purview, 2 a deed claim with nonzero valence under his pursuits, 3 standing `need`, 4 the rest incl. echoes of his own acts).
+- **Status:** none. Reading: live.
+- **Bears on:** CHAR, CORE (R-02/R-07: what a person attends to; the AI-chooser design intent).
+- **Content that matters:**
+  - Falsifiers carry controls that show the OLD key (`(order[source], q.id)`) ordered it differently, so each test can fail (`:105-127`, `:198-218`). A claim recording his own act ranks after a foreign-occasioned claim; tier-1 own-act claims are spared (CR-10) (`:153-195`).
+  - The key reads only the asker's own state: the same question keys differently for two persons; one person keys alike under worlds differing only outside his state; the probe set covers all five tiers (`:306-353`).
+  - Scar shift: a person scarred to threshold on a held pursuit reorders tier-2 deed claims between `scar_weight_shift` 0 and 1; MUTATION named (`:248-268`).
+  - Realm exit: over 404 `questions_for` calls in season 1 of `build_realm(0)`, `checked >= 100` (298 hold a tier-0/1 question) and `moved >= 1` (120 first questions changed vs the old key); `stamped >= 1000 and unstamped >= 1000` for `Claim.doer` (`:398-444`).
+- **Conflicts / stale:** the ordering of attention is a deterministic key (not a draw) - the question a person answers first is a fixed function of state; only the chooser over that question's candidates draws. Relevant to the brief's "when in doubt, draw" for the NPC/AI-chooser intent.
+- **Open items:** none.
+
+### engine/season/tests/test_in59_audience.py
+- **What it is:** v9 IN-59(b) (RS-26): the AUDIENCE half of the access gate - `move` and `migrate` carry a `relation of to, audience` conjunct (`world_q.admits_audience`): entering a guarded rung needs a seat, a writ, an oath whose seat reaches it, or nobody guards it (`guard_weight == 0`).
+- **Status:** none. Reading: live.
+- **Bears on:** SE, FA, CHAR (access/status in the court).
+- **Content that matters:**
+  - Falsifier 1: nine cases in one loop with `checked == 9`: stranger, imposed oblige (a sentence is no oath), planted writ with no issuing Event, each limb's out-of-reach variants -> `travel.blocked`; seat-holder, real writ-holder (`issue` through `off_duke`, then handed), sworn man -> `travel.moved` (`:109-168`).
+  - Falsifier 2: unguarded move still executes; the same stranger enters once the guard's oath ends (the refusal is the guard's alone) (`:175-193`). Falsifier 3: `migrate` refused for a stranger, admitted for a sworn man (`:200-206`).
+  - Mutations named per limb (seat / oath / writ / `purview_reaches` / `not t.imposed`) (`:21-30`).
+- **Conflicts / stale:** access is a deterministic standing check with no draw to bluff or bribe (brief's NPC-intent: no persuasion channel to enter a court); relevant to SC/FA.
+- **Open items:** none.
+
+### engine/season/tests/test_in61_heir_hears_vacancy.py
+- **What it is:** CR-26 (IN-61 design-first check 4, executed): when the throne loses its holder, the holder of `off_heir` is handed a question naming `off_king` as a CLASSED `Office` referent; a four-link failure chain (`_failing_link`); planted death and planted `release` arms; seeded arm moved to `harness/heir_hears.py` as a reading.
+- **Status:** none. Reading: live. Also exports `_holder`, `_one_season` imported by `test_in61_succession.py`.
+- **Bears on:** FA, CHAR, WR (succession as emergent drama).
+- **Content that matters:**
+  - Planted death at MATTER and planted `release` both pass links (i)-(iv); a mutation (`World.seat_holds -> []`) turns the death arm red at link (i), with the control reading 0 classed `off_king` referents (`:111-148`).
+  - Explicit disclaimer: a planted arm passing "does NOT make `succeed` executed in computed play"; the seeded reading is "a residue if it is none" and was deleted from the suite for cost (about 220 CPU-seconds) (`:17-25, :66-70`).
+- **Conflicts / stale:** the seeded-arm reading in `harness/heir_hears.py` is the only instrument for whether an heir hears of a real vacancy in play; no test asserts the result.
+- **Open items:** whether the heir hears of the vacancy on seeded realms (seeds 0-2, 4 seasons) is a reading nobody asserts.
+
+### engine/season/tests/test_in61_succession.py
+- **What it is:** v10 IN-61 (RS-27, B10-09): "the heir is a title, the throne is the heir's own claim" (Jordan 2026-10-14): `off_king` basis `inheritance`, `off_heir` basis `appointed`, `rosters.yaml: successions {off_king: off_heir}`, `FILLED_BY` keyed by gate basis, the `succeed` row as the heir's claim.
+- **Status:** none. Reading: live; the contested-succession arms, H-217's `succession` arrangement and the `_disposal` hold site are CR-35's (B10-17), not tested here (`:9-11`).
+- **Bears on:** FA, WR, CHAR (and the brief's named `succession` rule).
+- **Content that matters:**
+  - Claim executes: `succeed` by the title-holder opens the throne hold and closes his title in one write; a claim on a held throne is refused; a claim by anyone but the title-holder is refused at the fold (every other seat-holder, `len(others) >= 5`) and at the gate (with a control that the heir's own write passes) (`:67-125`).
+  - No seat may `confer` the vacant throne (`may_fill` false through all >= 20 seats; control: with `conferral='appointed'` at least one can) (`:128-148`).
+  - One `succeed` opens EVERY vacant seat naming the title and closes the title; a second claim is refused: "first valid claim wins" (`:153-175`).
+  - Heir forms `succeed` after the throne is released and no other person does; "Whether he then executes it is the scorer's draw; it is recorded" - the test PRINTS whether he did and asserts only `if claimed:` (`:180-212`) - a conditional assert whose antecedent is not required (the formation IS required, `(heir, THRONE) in formed`).
+  - Guards: a banned heir is refused until the ban ends (`:217-230`); `has_filler` refuses an orphan inheritance seat (`:242-274`); import checks `check_filled_by`, `check_revocation_disposal`, `check_successions` total over `conferral_bases` (`:279-329`).
+- **Conflicts / stale:** the fixed heir (one registered title, no rival claimants, "first valid claim wins") is the deterministic succession the brief names ("the ruled-in `succession` rules wherever the tree resolves an heir by a fixed order"). The `succeed` claim has no contest or draw once chosen; the design question (contested succession) is deferred to CR-35.
+- **Open items:** contested succession (CR-35 / B10-17); H-217.
+
+### engine/season/tests/test_in62_decision_spread.py
+- **What it is:** v9 IN-62: `decision/choose.py::score_terms` as the single owner of the score's terms, and `harness/decision_spread.py::attribute_top` attributing a top to `pursuit`/`stance`/`draw`/`tiebreak`. Addendum C read this file in full.
+- **Status:** none. Reading: live, with the addendum's F-TEST-12 confirmed (below).
+- **Bears on:** CHAR, CORE (R-06 robust characters, R-08 not perfectly rational).
+- **Content that matters:**
+  - Two hand-built persons differing only in pursuit pick different tops attributed `pursuit` (the `_opposed_pair` scan reads the data owners `to_axes`/`align`, not `score_terms`, so a mutated scorer moves the attribution under test) (`:58-89`); persons with nothing separating candidates read `tiebreak` at temperature 0 and `draw` at the shipped temperature; never `pursuit` (`checked >= 12`) (`:92-106`).
+  - `draw` split into `tie` and `outvoted` with a planted draw stream (Gumbel noise via `_Fixed`) that reverses the leader (`:127-158`).
+  - `score == sum(score_terms)` for every candidate in a seeded realm season, `checked >= 1000` and some nonzero pursuit term (`:256-262`).
+  - The harness top is the real chooser's top at the shipped temperature over all 15+ pursuits (`:194-217`).
+  - `test_in62_under_the_null...` (`:265-286`): applies `revert_cp_t05_02(monkeypatch)` first (the self-plea revert) and requires `seen_null <= {"draw","tiebreak"}` with `checked >= 400`, and that the shipped reading attributes some top to a `pursuit`-containing key. CONFIRMS F-TEST-12: on the shipped tree stance would decide, so the titled claim holds only with the revert; the comment says so (`:266-273`).
+  - The control `apply_control` makes every holder hold the SAME vector and conviction; goals file read empty under `no_goals()` (`:289-311`).
+- **Conflicts / stale:** F-TEST-12 stands (revert in test). The test file imports `revert_cp_t05_02` from `test_cp_t05_02_self_plea`, an inter-file dependency. The plan's hash half is "recorded at the commit, not pinned" (`:21-23`).
+- **Open items:** none (T-20 in the addendum).
+
+### engine/season/tests/test_in64_cast_integration.py
+- **What it is:** v9 IN-64 (ED-IN-0293): the cast integrated - every cast Person holds the fifteen pursuits and a conviction on each affiliation concern (church/einhir/altonia), loaders refuse rather than fill (`data/cast.py`), concerns from `descriptor_registry.yaml: affiliation_roster.concerns` via the export.
+- **Status:** none. Reading: live.
+- **Bears on:** CHAR, ARCS (the provided NPC cast), CORE.
+- **Content that matters:**
+  - Every registry row loads fifteen pursuits and a member of every concern (a 0 counts, IN-63); `checked >= 46` rows (`:46-57`); planted 14-pursuit row and a row without an `altonia` member are refused by name, and every concern refuses alike (`:60-89`).
+  - `export_descriptors.py --check` is red against a moved registry (mutation on a tmp copy) and the exporter refuses unrostered / twice-filed members (`:115-144`).
+  - On `build_realm(0)` no cast person falls back to `seed_pursuits` (calls spied == []), `checked >= 46` persons hold all 15 pursuits and all concerns (`:162-173`); the cast holds no identical full profile (`identical_groups_cast == 0`) with a planted duplicate showing the reader can see one (`:176-206`); `pairs_above_cast <= 37` (a bound from the IN-62 base).
+  - A case with no registry row still falls back to the seeded draw (authoring order) (`:209-225`).
+- **Conflicts / stale:** `test_in64_a_third_unauthored_seat_turns_13d_iii_red` runs another file's test function on a mutated world and expects `AssertionError` (`:228-241`), coupling this file to `test_governance_build.py`.
+- **Open items:** none. This is the strongest existing evidence that provided NPCs carry full profiles (for the brief's ARCS/CHAR charge): 46 registry rows, 15 pursuits each, 3 concerns each.
+
+### engine/season/tests/test_in66_goals_loader.py
+- **What it is:** v9 IN-66 (A-31; ED-IN-0293 (8)): the goals carrier `engine/season/goals.yaml`, its one loader `data/goals.py`, and closed rosters `goal_object_kinds`, `goal_derivations`.
+- **Status:** none. Reading: live.
+- **Bears on:** FA, CHAR, WR (org goals as motives; the brief's NPC/AI design intent).
+- **Content that matters:**
+  - 38+ planted refusals, each ONE mutation of a valid base document, each asserted to raise the tree's refusal type (`Unspecified`/`Forbidden`), carry a message fragment AND name the goal row; the base loads first as control; `len(_PLANTS) >= 38` and unique names (`:154-252`).
+  - Valid base exercises every object kind and every `deed_doers` form once (`:74-90`); derivation ancestry is seat -> body -> faction, a seat may derive from its faction's goal directly (`[ASSUMPTION]`) (`:92-97`); derivations `establishes` / `influences` only; objects: person, seat_holders, rung, deed_doers, orientation (5, `:104-110`).
+  - Roster membership is checked through the one owners (`pursuit()`), not a loader-typed set (`:255-259`). A missing goals file is refused, not read as empty (`:142-146`).
+  - The shipped goals file loads with no row refused (`:113-119`); rung ids are NOT checked here, only at seeding (IN-68).
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
+### engine/season/tests/test_in68_goal_seeding.py
+- **What it is:** v9 IN-68 (A-32): goals reach persons - `harness/populated.py::seed_goals` mints each `goals.yaml` row as an OUGHT Proposition at world-gen and the org's persons `commit` to it; stance rows from loyalty.
+- **Status:** none. Reading: live.
+- **Bears on:** FA, CHAR, WR (R-06 character motive; emergent faction drama).
+- **Content that matters:**
+  - Faction goal reaches members AND head; body goal reaches holders of its seats only; seat goal its holder (`:95-127`); `establishes` removes the parent from the child org's persons, `influences` keeps both, and climbs across factions while the chain stays `influences` (FA-05 finding: `influences` was read by nothing before) (`:138-197`).
+  - Stance row = `cast.stance_from_loyalty` signed by the goal's `stance`; a disloyal member's row (CR-87) names the goal's Proposition at the member band, never the persons; `checked >= 20` (`:223-239`).
+  - `orientation` rows mint no Proposition or commit and the world hash equals the no-goals world (`:204-216`); `goals=False` and an empty goals file build the same realm (hash, census) (`:302-324`).
+  - Refusals: unknown rung, duplicate Proposition id; `cap` drops goals whose person/seats it dropped, counted (`:274-295`). `goal_referents` follows the hold: closing the King's hold names nobody (`:327-345`).
+- **Conflicts / stale:** uses `goals_complete=False` (FA-06's completeness refusal switched off); the real completeness is `test_fa06_org_goals.py`'s `[UNVERIFIED]`.
+- **Open items:** none.
+
+### engine/season/tests/test_in70_opinion_at_read.py
+- **What it is:** v9 IN-70 (RS-23, RS-24): `person_q.opinion` computed at read (pursuit cosine + affiliation term + regard term), reaching choice as the REFERENTS of a question (`world_q.opinion_referents`: a paired deed's doer's faction members where opinion is below indifference).
+- **Status:** none. Reading: live; the module docstring states "nothing is stored" as a design rule (A-29, T-a).
+- **Bears on:** CHAR, FA, WR (R-07 attitude; the brief's NPC intent: opinion of factions).
+- **Content that matters:**
+  - Falsifier 1: equal pursuits and different allegiance (ally vs enemy of the victim) read different faction-level referents: ally's question carries `(VICTIM, KILLER, MATE)`, enemy's `(VICTIM,)` (`:98-111`).
+  - Falsifier 2: devout vs cold on the engaged pole differ by exactly one ladder step (`abs(diff - sign) < 1e-12`, `:143` - approx-like on a derived expression) (`:132-143`); the engaged side follows the goal row's own `stance` (`:146-157`).
+  - Terms each on [-1, +1] from their owners: `opinion == cos + aff + reg` (`:162-174`); nothing stored: hash unchanged, no `opinion`/`sympath` field on `Person`/`World` (`:186-201`).
+  - A hidden hand (no `who`) or a told copy raises no faction (IN-58); a victim removed from the world raises no faction question (H-209 limit stated as a test) (`:114-127, :220-230`).
+- **Conflicts / stale:** opinion is a sum of three terms of a clamped scale - a deterministic reading; its effect on choice is only through which referents a question carries. Also see `test_in23`: legitimacy has no chooser consumer; here an opinion DOES reach choice (via referents).
+- **Open items:** H-209 (owner IN-12 step 5): a dead victim's death claim never becomes a question, so the dead are not avenged by attention.
+
+### engine/season/tests/test_information_cluster.py
+- **What it is:** plan position `20-iii` "the information cluster": the `faction_sheet` Record, `survey` (commission), `forge`, `destroy_record`, read-free-by-holders; a frozen `faction_q.resolve` snapshot; ~5b: sheet consumer (petition addressed to the head the sheet names). 684 lines, read in full.
+- **Status:** none. Reading: live; content owner is `proposals/2026-09-12-emergent-narrative-primitives-v2/01_THE_TEN.md` §F and proposal 14 (Jordan's).
+- **Bears on:** FI (epistemics, documents as evidence), FA, SC, WR (R-07 imperfect knowledge).
+- **Content that matters:**
+  - Four properties each with a control: FROZEN (world moves after a survey, the document does not; a second survey records the move); COMMISSIONED BY AN ACT (a subject under no single faction refused, mints nothing, while a Crown member is surveyed); READ FREE BY HOLDERS (no code was written for it; the content deposit at WITNESS already does: surveyor spends one act, a receiver by `give` spends none, a co-located bystander holds none); FORGEABLE AND DESTRUCTIBLE (a false sheet is a lawful Record indistinguishable in a ledger; `destroy_record` ends the sheet and its hold but the belief survives) (`:342-468`).
+  - `survey` of a Rung subject answers `holder_faction_of`; the mutation (lookup swapped back to `faction_holding`) turns `S`'s survey into `survey.refused` (`:247-275`); dispatch on `class_of` not `in w.rungs` so a person is not read through his own person-rung (`:303-318`).
+  - Forged sheet read differently downstream: the true holder's petition goes to the true head (`p_high`), the forgery holder's to the forger (`p_other`): "it is what the document SAYS, not a flag, that moves the decision" (`:611-629`). `Record.forgery_quality` is read by an examiner's roll only.
+  - Under the shipped class `petition` forms none on a question about a sheet (REM-24 casualty), so the consumer tests run with `petition`'s `referent_class` blanked in-process (`:515-541`).
+  - Realm test (one season, `build_realm(0)`): `for rec in sheets:` asserts per sheet and `assert checked + skipped == len(sheets)` (`:683`). The execution counts were DELETED (v9 §0.5), so with ZERO sheets the loop and the final equality both pass (0 == 0): a loop that asserts nothing when handed nothing, with no `checked >= N` floor. That is an F-TEST-07-class defect the addendum did not list (it counted 7 all-conditional season tests; this file is not named) `[the claim is read from the code; not run]`.
+- **Conflicts / stale:** the docstring says `forge` and `destroy_record` "EXECUTE SINCE v9 IN-45 / IN-26" while the section-6 text cites 4-6 sheets per realm season measured at IN-57.
+- **Open items:** H-169 (2)/(5); nothing here tests that a survey is DONE in play.

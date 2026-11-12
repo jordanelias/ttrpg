@@ -2,7 +2,7 @@
 
 ## Status: PROPOSED
 
-Carries F-PES-CORE-02 and F-PES-CORE-03 of `audits/16_PESSIMIST_CORE.md` (§1.4, §1.6). Reference only
+Carries F-PES-CORE-02 and F-PES-CORE-03 of `audits/16_PESSIMIST_CORE.md` (§1.4, §1.5). Reference only
 (CLAUDE.md §0.05). Two edits at one owner (`state/world.py::World.write`) and two call sites.
 
 ## What it changes in `engine/season/` at runtime (first)

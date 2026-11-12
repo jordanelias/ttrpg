@@ -2,7 +2,7 @@
 
 ## Status: PROPOSED
 
-Carries F-PES-CORE-01 of `audits/16_PESSIMIST_CORE.md` (§1.3, §1.6). Reference only (CLAUDE.md §0.05).
+Carries F-PES-CORE-01 of `audits/16_PESSIMIST_CORE.md` (§1.3, §1.5). Reference only (CLAUDE.md §0.05).
 
 ## What it changes in `engine/season/` at runtime (first)
 
@@ -83,7 +83,7 @@ the driver. **(b)** depositing the `with` read. Ruled out by ED-IN-0282 for the 
 
 ## Gate (an execution artifact, §0.2)
 
-On `build_realm(0)`, three seasons, `PYTHONHASHSEED=0`, the reading of §1.3 and §1.6 re-run:
+On `build_realm(0)`, three seasons, `PYTHONHASHSEED=0`, the reading of §1.3 and §1.5 re-run:
 
 | reading | today | passes when |
 |---|---|---|

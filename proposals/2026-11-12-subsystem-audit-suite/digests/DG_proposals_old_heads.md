@@ -1027,3 +1027,34 @@ HEADS-ONLY lane (350 files, proposals dated before 2026-09-20). Method per file:
 - one line: opportunity audit O-1 room remembers who spoke :40, O-2 obstacle reads hearers' ledger :48, O-3 unmet-want term in `score` :56, O-4 naming the fear :64 (24 headings). Tags SC.
 ### proposals/2026-09-05-proceedings-subsystem/relay/F_FABLE_FIGURE_BANDS.md
 - one line: Fable figure adjudication, Figure 1 three layers (28 atoms) :39, Figure 2 :57, Figure 3 standing/provenance/erosion :75 ... 33 headings. Tags SC.
+### proposals/2026-09-05-proceedings-subsystem/relay/H_FABLE_PLAN.md
+- one line: Fable read-only plan from "fears" to 2026-09-06: shape of the work :34, critical path :40, instructions :60 (PHASE 1 the ledger holds a reading of a pe[rson] :64). Source of `19_PLAN.md`. Tags SC.
+### proposals/2026-09-05-proceedings-subsystem/source/00-INDEX.md
+- one line: vendored study "Standing, Persuasion and the Actor" - eight findings from setting the pre-modern literature of political, forensic and diplomatic proceeding against modern evidence; contents :21. External research (tier 3). Tags SC.
+### proposals/2026-09-05-proceedings-subsystem/source/01-part-0-method.md
+- one line: method and what the evidence can support; what agreement between traditions can and cannot show :13, the borrowed category :39. Tags SC.
+### proposals/2026-09-05-proceedings-subsystem/source/02-part-I-throughlines.md
+- one line: the eight findings S1..S8 (S1 the person is large and psychometrically ... ), each Finding/Derivation/Withdraws; 57 headings. Tags SC, CHAR.
+### proposals/2026-09-05-proceedings-subsystem/source/03-part-II-scenario.md
+- one line: what the scenario fixes before an actor speaks: standing (II.1, provenance :17, "the cut that does the causal work" :39, erosion :43), latitude, evidence. Tags SC.
+### proposals/2026-09-05-proceedings-subsystem/source/04-part-III-actor.md
+- one line: requirement table :23 and the nine capacities :47 (evidenced vs inferred). Tags SC, CHAR.
+### proposals/2026-09-05-proceedings-subsystem/source/05-part-IV-disputes.md
+- one line: four disputes: D1 is standing produced or inherited :9, D2 is deceit permitted :28, D3 is adaptability attainable :40. Tags SC.
+### proposals/2026-09-05-proceedings-subsystem/source/06-part-V-dossiers.md
+- one line: tradition dossiers (Greece :7, Rome :21, Byzantium :37, Carolingian West :47, Ottoman ...). Reference. Tags SC, WR.
+### proposals/2026-09-05-proceedings-subsystem/source/07-part-VI-reading.md
+- one line: reading list (primary :7, modern :31). Reference.
+### proposals/2026-09-05-proceedings-subsystem/source/08-part-VII-apparatus.md
+- one line: provenance and corrections; three correction passes (adversarial self-review :9, external repairs :37, reorganization :58). Reference.
+### proposals/2026-09-05-proceedings-subsystem/source/09-figures.md
+- one line: 27 figures collected (Fig. 1 three layers :15, Fig. 2 corpus's own sequence :54, Fig. 3 standing/provenance/erosion :106, Fig. 4 the discretion gate :145 ...); "nothing here is an instruction". Basis of the 591 atoms. Tags SC.
+### proposals/2026-09-05-proceedings-subsystem/source/ARCHIVE_README.md
+- one line: archive contents of the 33,395-word study assembled September 2026 from an eight-stage session; superseded files kept for provenance :60. Tags SC.
+### proposals/2026-09-05-proceedings-subsystem/source/README.md
+- one line: Status "SOURCE MATERIAL. Not this repository's work, not editable here, and not ratified by anything"; "four things a reader must not do" :34; provenance :62. Tags SC.
+### proposals/2026-09-05-proceedings-subsystem/stress/results.json
+- one line: 38 stress verdicts (ST-01 "the prize a matter routes to a provider" BLOCKED: no roster row; ST-02 seam cannot carry venue+matter+arrangement; ST-03 bench Query answers BLOCKED ...) with finding ids F-nn. Data from 2026-09-07; many findings since closed in SC-01 (21 reconciliation). Read by nothing live (grep of `engine/` hits only the test docstring).
+### proposals/2026-09-05-proceedings-subsystem/stress/stress_proceedings.py
+- one line: 28 logical stress tests against `proposals/2026-09-01-season-loop-tests/trace.../shape.py` tracer; **that tracer file no longer exists** (`ls` shows only README/evidence/session under season-loop-tests), so this script cannot run as written; `engine/season/tests/test_stress_proceedings_rehost.py` re-hosts its decorators/verdicts onto the real engine. Dead as a runnable; live as source of the rehost test.
+

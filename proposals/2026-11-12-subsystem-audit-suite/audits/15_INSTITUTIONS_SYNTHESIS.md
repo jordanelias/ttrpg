@@ -877,5 +877,226 @@ refuses a writing row that is neither contested, graded nor declared bookkeeping
 key. And by one reading in the first playable's report (proposal D): per run, the roll routes used, the
 bands seen per verb, the term names seen, the matter kinds moved, and the two clocks' maturations.
 
+---
+
+## 8. Layer 1 conformance, and where Jordan's intent meets Layer 1
+
+Read against `architecture/meta/04_CODE_ARCHITECTURE.md` at §0, §A.1, §A.2, §B.7 and §B.8 (opened this
+session at those sections; the rest by the family lanes' citations, marked). Grades are that document's:
+STRUCTURAL (the defect has no spelling), MECHANICAL (one path, and it refuses), CONVENTION (a reader
+notices).
+
+### 8.1 The statement, for the whole kit
+
+| Layer 1 row | what the kit does | grade | where it would break |
+|---|---|---|---|
+| **AX-1** only a person acts; a seat enters through `Act.via` (§A.1) | no institution acts. Every procedure is one person's existing verb through a seat. A company, a house, a see and a bureau are seats; a faction stays a Query return (§B.6.1) | MECHANICAL (`Act.actor` is a person id) | a rule that names "the Church" or "the Crown" as a doer. None is written; the CH signature keys on a role template, never a name (`[PAP A]`) |
+| **AX-2** the decision is compiled where `World` is not a name (§A.1) | `legitimacy`'s chain, `kept`, `forborne`, `owed_to` read the person's own ledger and Tenures. The occasions (`dues`, `audits_due`, `hands_open`) are `world_q` functions in `vacancies`' shape that stamp referents; `breaches` reads only the asker's ledger | STRUCTURAL for the `person_q` four (no `World` parameter); CONVENTION for the occasions | see 8.2, L-4 |
+| **AX-4**, §A.2: a module holds no token and writes nothing; typed in, typed out; no held state (`holonic_ARCHITECTURE.md` §43, §45 to §47 `[via CLAUDE.md §3]`) | **no module is added.** The one module the kit touches is `social_contest`: its typed input gains raw operands (the two `owed_to` counts, `records_dissent`, the hop count) and its typed output gains the term names. The host sums nothing; the module stores nothing | STRUCTURAL (no token parameter exists on a module entry) | a host that composes `obligation` or `remove` itself (two composers) |
+| **T-k** one resolver, one ladder (§A.1) | §7.1, §7.2: every procedure on `social_contest.roll` and `degree_from_net`; the ballot is many draws of that kind; the lot is the one draw owner | MECHANICAL (`manifest/registry.py::check_contest_prizes`; the graded route's check) | a second roller for ballots or levies |
+| **AX-5**, **T-n** a matured term cites the act that wound it (§A.1, §B.8) | a hand's stage, a debt's stage, a provisional hold, a stipend term: all on the two existing clocks; `cooling_off` is computed from a closed Tenure's `until` | MECHANICAL | a MATTER pass that decides anything; none is added (`[COL A]` edit 7) |
+| **AX-6**, ID-14 what an act can open an act can close (§B.8) | no Tenure kind is added; an obedience closes by its term or the owner's `release`; a `debt` is a Record, and the debtor's undertaking is his own `commit` | MECHANICAL at load | an obligee-side closer. D-5 forbids it and the kit has none: the creditor's recourse is the ask, the suit, telling and assignment |
+| **§B.7** there is no `Title` type; `establishment` is a Query over `oblige`; a seat does not know its holder | a dignity is a seat row with an empty remit (the `off_heir` precedent); a roll is `establishment_of` a seat (X-04); a certificate names a seat, never "the holder" | STRUCTURAL | a `roll` Record read for membership (two homes for one fact): withdrawn by X-04 |
+| **§B.7** a seat adds no verb and no modifier | no seat-row key of the kit is read by any roll. The dignity "precedence" step is withdrawn (X-19) | STRUCTURAL as the kit stands | see 8.2, L-1: two terms from other lanes |
+| **§B.8** `Tenure.conferrer` is deleted; "who raised whom" is a fact about two people, carried by the opening Act or by an `oblige` | a Cardinal's creatures, a patron's clients: read off the act store (who conferred) and off `oblige` plus `regard`; no field. The key `patronage:` means the right of appointment (advowson), which is a property of the seat; it is not the patron and client relation and should not be read as one | STRUCTURAL | a `patron` pointer on a Tenure or a seat |
+| no stored social quantity (`state/world.py:64-107` `[via COL]`; ED-IN-0343 to 0345) | legitimacy, presumption, `kept`, what is `owed`, suspicion, prescription, a house's standing, a body's capture: every one a fold, computed when read. The stored numbers are row content: a grade, an upkeep, a term | STRUCTURAL (no field exists) | a `prestige`, `piety`, `suspicion` or `credit` stock |
+| no trigger; no threshold that acts (T-c; `strife-00` R1 `[via 20_NARRATIVE]`) | where a reading meets a number (`kept < 0`, `owed > 0`, a pass mark) the only effect is that a referent is offered or a tally is read; the person samples and the act is drawn | CONVENTION | an effect written at MATTER from a count |
+| §B.13 one loader per data family, cross-validated; a declared row has a reader (ID-13) | `instruments.yaml` has one loader, checked against `DEED_KINDS`, `REMIT_ACTS` and the rosters; each of the eight seat keys and each form key has exactly one named reader (§3.1, §3.3) | MECHANICAL at load | a form row no reader reads: SC-P4's rule applies (it leaves with the batch) |
+| §C.11 the explanation contract | every roll's term list is on its Event (SC-P1); every `due` and breach names its instrument and clause; the reason trail runs from the act to the occasion (`01_CORE_reason_trail_in_the_act_store.md`) | MECHANICAL once SC-P1 lands | — |
+| ED-1050 / §C.12: the port validates against the oracle; data crosses as typed artifacts | the kit's facts are YAML rows code reads, never prose; nothing here is bound to a Godot resource | — | — |
+
+**Scripting drift, checked.** No rule names a person, a seat, a faction or an outcome. Every authored row
+that names one is content with a revert (`[ASSUMPTION; Jordan to correct]`). The rename test applies:
+renaming every faction and seat in the seeded rows changes no behaviour.
+
+**Shape divergence, checked.** One clause schema at every rung (a hearth's debt and a realm's tribute);
+one seat row for a throne and a counting-house; one obstacle composer for a ballot, a levy and a plea.
+
+### 8.2 Where Jordan's stated intent and Layer 1 meet — named, not resolved
+
+| # | Jordan's intent | the Layer 1 row | where the suite stands |
+|---|---|---|---|
+| **L-1** | the brief: every piece of an institution states "what roll and what modifiers (personality, affiliation, **office**, evidence, publicity)" | §B.7, graded STRUCTURAL: "a seat adds no verb and no modifier … no bonus field; no modifier column" | the kit adds no office modifier. Two other lanes do: `14_VERBS_BINDING_C`'s `standing` (how far the person stands above or below the exercised seat) and `13_SC_tuning_tables.md` T4's `standing_dice` (a die for a seat on the bench), the latter on the tree's own line "Rank supplies dice and gates nothing". The kit's rows read `standing` as that lane wrote it. Whether rank may be in the odds at all is between the brief and §B.7 |
+| **L-2** | institutions "expressed within play" through seats that are paid, routed and audited | §B.7's `Seat` tuple: `id, post, body?, scope?, remit(acts[], binds), conferral, revocation, upkeep, exists` | five of the eight keys are values of fields the tuple has (`upkeep`; `patronage`, `eligible_from`, `cooling_off` say how it is filled; `dignity` says its remit is empty and grades its upkeep). Three say something the tuple does not: `passes_through` and `hand_term` (whose hands its paper needs), `audit_at_exit` (what follows its close). The spec is not edited to match (CLAUDE.md §0.05); earlier changes to this tuple were Jordan's rulings (`RR-B` limb `B-1`) |
+| **L-3** | "we do not do deterministic": a vote may not be a count of commitments | AX-1 and AX-2: only a person acts, and his choice is made by the one chooser where `World` is not in scope | the ballot (SC's) draws each member's vote inside one person's `determine`; the member did not choose to cast it. It is conformant if a ballot is read as a draw on the member's interior, as his score is when he is opposed; it is not if a vote must be a member's own act, in which case each ballot is a verb he forms and the tally reads those |
+| **L-4** | characters who are not omniscient (the nine requirements, R-08) | AX-2; §C.11 ("a person who holds nothing about a place is owed nothing") | `dues`, `audits_due`, `hands_open` and FA-P1's `recalls` read the World to hand a person a referent, as `vacancies` does today. `[COL A]` narrows `dues` to instruments the person holds or holds a content claim of, which keeps it nearly person-side; `audits_due` is narrowed the same way here (he must hold the `tenure.closed` claim). The idiom itself is CONVENTION |
+| **L-5** | the standing requirement: every subsystem "a registered module (typed input, typed outcome, no held state, reached by composition row)" | PART D rows 1 and 47 `[via FA §11 item 2]`: an institution acting is refused; ED-IN-0283: the faction scale "has no code of its own" | the kit takes FA's option (A): institutions are the loop's own verbs and data, their standalone game is a scenario on the season loop, and no `modules/governance` is built. FA lists the two options for Jordan and this lane does not re-raise it |
+
+---
+
+## 9. The implementation plan
+
+One plan across the four families and the proposals they touch. Full edge list, per-batch gates and the
+family-file-to-batch map: `proposals/15_INSTITUTIONS_SYNTHESIS_E_implementation_plan.md`. Cost classes:
+**edit** (data or a few lines at one owner), **small build** (one reader or loader with its test file),
+**design-first** (needs a decision or another lane's shape).
+
+### 9.1 What must land first, and is nobody's in this family
+
+Nothing institutional plays until five things other lanes own have landed. They are the same five every
+family lane named.
+
+| upstream | proposal or plan position | what the kit cannot do without it |
+|---|---|---|
+| the obstacle as named terms, recorded on the Event | `05_SC_obstacle_difficulty_and_modifiers_B.md`; `05_SC_contest_record_on_event.md`; `13_SC_tuning_tables.md` | `obligation`, `remove`, every term in §3.4 |
+| the institutional verbs draw | `18_DETERMINISM_task_draw_for_uncontested_verbs.md`; `14_VERBS_BINDING_A`, `_C`, `_D`; `13_SC_draw_for_unrolled_contests.md`; `14_VERBS_MATERIAL_B`, `_D`; `14_VERBS_SOCIAL1_B` | every band in every family file |
+| a writ reaches its addressee and is answered | `06_FA_decree_binds.md`; `14_VERBS_BINDING_D` | hands, sanctions, tithe, recall |
+| seats grant by row, end on a term, and can be played | `06_FA_remit_grant_by_row.md`; `06_FA_seat_terms_and_turnover.md`; `06_FA_seat_terms_by_body_B.md`; `06_FA_playable_scenario.md`; `06_FA_shortest_loop_B.md`; `06_FA_office_capabilities.md` | rotation, cooling-off, the runner every scenario uses |
+| stores exist where seats sit | `07_SE_treasury_granary_B.md`; `07_SE_ground_and_granaries.md` | the fisc, the debt, the levy, the farm |
+
+And from the plan: CR-29 (reach), CR-35 and CR-36 (elected seats; the `resolution` Record and its
+disposal site), CR-60 and CR-61 (bench scope; the docketed row and case file), CR-88 (the duty decline),
+CR-74 (the CH signature).
+
+### 9.2 The batches
+
+| batch | what lands | family proposals | this lane's | needs | hash | cost |
+|---|---|---|---|---|---|---|
+| **I-1 the owners** | `instruments.yaml` and its loader and readers, empty; record kinds and content keys; the eight seat keys and their loader; roster members; fixtures at control; the `{venue:}` anchor | COL-A; the key and roster halves of BYZ-A, -B, -C, PAP-B, VEN-B, -C, -D | A | `covenant` and `issue` formation (`14_VERBS_SOCIAL2_A`, `14_VERBS_BINDING_D` D1) for the `form` choice only | EQUAL | small build |
+| **I-2 ties and distance in the odds** | `obligation`; `remove`; (`standing` beside them) | VEN-A; COL-B §1 | — | SC-B, SC-P1; `14_VERBS_BINDING_C` C1 | EQUAL at ship; each fixture flip a mover | small build |
+| **I-3 the deed ledger** | the chain in `legitimacy`; prehistory; four seeded Records; `recites`; dignity rows and the dignity conjuncts on `confer`; Hafenmark's heir title; the `annex` basis | BYZ-A (edits 3, 4, 7); COL-D (edits 4, 5); PAP-C (as reconciled) | B | I-1; CR-36's kind row; `12_ARCS_case_on_the_realm.md`; `14_VERBS_BINDING_C`; `06_FA_remit_grant_by_row.md`; `06_FA_office_capabilities.md` | mover (build) | small build |
+| **I-4 the purse** | `upkeep`, `upkeep_owed`, the bill; `debt`, the reckoning, `debt_suit`; `homage`, `farm`, `tribute` read by `dues`, `kept`, `breaches` | BYZ-B; VEN-B; COL-A's rows in use | A (X-09, X-30) | I-1 to I-3; `14_VERBS_MATERIAL_B`; `07_SE_treasury_granary_B.md`; `13_SC` (the `covenant` draw); `14_VERBS_SOCIAL1_B` §3; SC-P4, SC-P6 | movers | small build ×3 |
+| **I-5 paper and distance** | hands and `carry`; `issue`'s terms and band-gated deposit; the Altonian court, the Doux, the gate's keeper; `altonian_civics` cells; reach rows | BYZ-C; BYZ-D; COL-B §2 to §5 | A (X-13, X-14, X-24, X-25) | I-2; `06_FA_decree_binds.md`; `14_VERBS_BINDING_D`; `13_SC` (`carry`); CR-29; CP-T09-03, CP-T09-08 | movers; foreign arm only for the court | small build + content |
+| **I-6 turnover** | rolls by warrant, `eligible_from`, the lot, `cooling_off`; the Church on its ground; `patronage`; `conclave` and `quorum_share`; the one tally; `succeed`'s audiences; `acclamation` | VEN-C; PAP-A; PAP-B; BYZ-E | A (X-15) | I-1, I-3; `06_FA_seat_terms_and_turnover.md`, `_by_body_B`; `14_VERBS_BINDING_C`; CR-35, CR-36, CR-60; the `13_SC` ballot | EQUAL for the keys; the tally a mover | small build; the tally design-first with SC (it changes CR-34's shipped conjunct) |
+| **I-7 sanction, audit and the calling-in** | `ban.opened`; `avoidance`, `interdict`; `forborne`; the ban's lift of `obligation`; penance; `consecration`; `audit`, `quo_warranto`, prescription; `audits_due` | PAP-D; PAP-C §2; COL-C | C | I-1, I-2, I-6; `14_VERBS_SOCIAL1_B` (`comply`); `06_FA_decree_binds.md`; SC-P4, SC-P6; `05_SC_evidence_and_rebuttal_B.md`; `05_SC_playable_hearing_B.md`; CR-60, CR-61, CR-88, CR-74 | EQUAL until docketed or issued | small build |
+| **I-8 content** | houses, a commune council, Schoenland's seats and benches; sees, the tithe, an exempt house, a legate; the remaining forms in use; the seeded trade treaty | VEN-D; PAP-E 1 to 4; COL-A's other rows | — | I-1 to I-7 as each row needs; `06_FA_remit_grant_by_row.md`; WR's place for Schoenland; `14_VERBS_MATERIAL_B` (`exchange`); Jordan's names | movers per row | edit + small build |
+| **I-9 the playables** | each family's standalone on FA's runner; the integrated first playable in three cuts; the one report | BYZ-F; PAP-F; VEN-D §5; COL-E | D | cut 1: I-4. Cut 2: I-5, I-7. Cut 3: I-7 | none (harness and a case) | small build |
+| **I-10 held** | schism; the council; the head's discipline; a `corvee` form; the kin-bar; BYZ's batch G | PAP-B item 4; PAP-E 5, 6; VEN (the kin-bar); BYZ §12 G | — | Jordan (§10); FA's emergent-faction carrier; `02_CHAR_relations_have_a_ground.md`; readings from I-4 to I-7 | — | design-first |
+
+Order: I-1, then I-2 and I-3 in either order, then I-4; I-5 and I-6 beside each other after I-4; I-7
+after I-6; I-8 as its rows' needs land; I-9 cut by cut. A batch closes with the test files covering it
+and the suite once (CLAUDE.md §0.4); every gate on a draw reports band frequencies over seeds with a
+control, never a single run (§0.1 pt 4).
+
+### 9.3 The first playable: "The Treasurer's Year"
+
+One scenario that cannot be played without crossing institutions. Exact edits and gates:
+`proposals/15_INSTITUTIONS_SYNTHESIS_D_first_playable.md`.
+
+**Situation.** The realm as built, eight seasons. The player-proxy holds the Lord Treasurer's seat
+(NPC-037's: the one seat the Byzantine, Venetian and colonial lanes each gave a part to). At tick 0, by
+the game's own acts under the pinned roll: dignity-holders sworn to the crown whose terms fall due within
+the year; a fisc that holds less than the bill; two duchies with stores, each under a seeded `homage`
+whose `forbears` clause the Treasurer can breach; a house with a stocked chest; the tolls of Stillhelm
+unlet; Himmelenger's stores inside a seeded `immunity`.
+
+**The choice, each season.** How to meet the bill:
+- **tax a duchy** (`requisition` at `remove`, against the cohort's `regard`): a breach of the `homage`
+  the duke's ledger can hold, and his answer is his own;
+- **borrow** (`petition` to the house head, then `covenant`): a `debt` against the treasury, a reckoning
+  at each stage, a lapse if the rung is short;
+- **farm the southern tolls** (`covenant`, form `farm`): an advance now, a rent later, a farmer over an
+  uneasy people, and an `audit` when his hold closes;
+- **levy in Himmelenger**: a breach of the `immunity`, which the Church's goals act against; a sentence
+  and its `avoidance` writ are then drawn against the Treasurer himself;
+- **leave men unpaid**: their terms mature and the crown's purview no longer reaches them.
+
+**What is shown.** The bill, the fisc and who is owed; each instrument he is party to and `kept` as he
+reads it; each roll's term list.
+
+**Endings.** The court kept or lapsed; the bond met, extended or lapsed; the audit's band; the Treasurer
+recalled, banned or still seated at eight seasons. Each is a Query over Tenures and the log.
+
+**Seats to play.** The Treasurer; a Duchess under a breached homage; the house head (lend, refuse, hand
+the bond on); a Stillhelm hearth head; in the third cut a Church bench member.
+
+**Three cuts.** Cut 1 (after I-4): tax, borrow, or leave unpaid. Cut 2 (after I-5 and I-7): the farm and
+its audit, and writs that pass the Ministries' hand. Cut 3 (after I-7): the immunity, the sentence and the
+answers.
+
+**What it merges.** `[BYZ F]`'s `roga` (the bill, the fisc, whom to pay) on the realm instead of the
+spine; `[VEN D]`'s first cut of The Counting-House (one loan, one harvest, one reckoning), from the
+borrower's seat and playable from the lender's; `[COL E]`'s Farm of the Southern Tolls as its second
+cut; `[PAP]`'s third scenario (The Sentence) as its third. `[PAP F]`'s Vacant Chair and `[BYZ F]`'s
+`chancery` remain their families' standalone games and are not merged: each family keeps one scenario
+that exercises it alone (the standing requirement), and this one exercises them together.
+
+**One code path.** `harness/governance_spine.py::play(..., world="realm")` (FA-B4), `play_surface.py`,
+the season loop. The scenario adds seeded rows, tick-0 acts and a reader.
+
+**Gate.** Seeds 0 to 9, eight seasons, the shipped chooser in every seat: at least three of the five ways
+of meeting the bill are attempted across the seeds; at least two different endings occur; in at least one
+seed-season an act by a person who is not the Treasurer is occasioned by an Event of his (a duke's
+`petition` or `release`, a house's `give` of the bond, a hearth's `migrate`). Control: the same seeds
+with `seeded:` empty and the fixtures at control. Planted failure: every roll pinned to Success; the
+seeds must then agree on the ending, or the variety was not the draws'.
+
+---
+
+## 10. Survivors for Jordan
+
+Four. Each was put through the five steps; none is superseded, irrelevant, answered by a design document,
+by precedent, or by what the architecture needs.
+
+**1. The south's part in the Secession War.** (`canon/03_canonical_timeline.md:76`, `:96`: ratified
+text. All four family lanes named it: `[BYZ]` §14 item 2, `[PAP]` §13 item 4, `[VEN]` §4.4 item 1, `[COL]`
+§11 item 1.) Jordan's statement makes the first Duke of Varfell the third-ranked victor; canon calls the
+south peripheral and excluded from the coalition's leadership.
+- *(A) Fought, ranked third, relegated despite it.* Canon is reworded as §4.6 A1 to A3. The founding is
+  one story the whole realm holds; the caste is the grievance of a house whose deed was certified last
+  and whose men were kept out of the settlement's councils. Vaynard is a claimant inside the order, on
+  the same ledger as Baralta.
+- *(B) Acknowledged late and grudgingly.* Canon stands with one sentence added. Varfell's founding deed
+  is held at full in the south and thinly in the north (the seeding tells it only under Varfell's ground
+  and in the chancery). The caste is a gradient in legitimacy itself, and Vaynard is a revolutionary
+  against the order.
+The kit is written for (A) and needs one seeding change for (B). They are different games for every
+southern character.
+
+**2. May the head of the Church strip a Church officer?** (The seven seats are ruled `revocation: null`,
+2026-10-11; FA §11 item 3; `[PAP]` §13 item 1.)
+- *(A) Keep `null`.* Cardinals leave by death, resignation or a ban that bars new seats without
+  unseating. The Church is a set of barons for life; an over-mighty arm can only be outlived.
+- *(B) `head_of_faction`.* The Confessor disciplines by a `revoke` the officer can resist. The Church has
+  internal politics and purges; NPC-038's removal on exposure becomes possible. `[PAP B]` item 4 carries
+  it, shipped off.
+
+**3. Can anyone judge the Confessor?** (`[PAP]` §13 item 2.)
+- *(A) Nobody.* He leaves by death or resignation; a bad Confessor is answered by a rival seat or by
+  violence. The Church is the one institution with no check.
+- *(B) A council, with the throne's concurrence.* The mirror of CR-37 (the throne stripped by a motion
+  and the Holy See's concurrence). Crown and Church are each the other's check.
+
+**4. Forced labour keyed on caste.** (`[COL]` §11 item 3.)
+- *(A) A form `corvee`*: a cohort's seasons of work owed to a grantee's site, issuable over southern
+  ground. The caste becomes an institution with seats and an audit, and its abolition is a fight over an
+  instrument.
+- *(B) No instrument.* The caste stays what canon calls it, informal, acting only through `regard`.
+A decision about the tone of canon.
+
+**Closed here and not escalated**, with the step that closed each:
+
+| the family lane's item | closed by | step |
+|---|---|---|
+| `[BYZ]` §14 item 1: is an order answerable at issue or at entry? | a per-row key: a seat that declares `passes_through` has hands, one that does not has none. Both games are data. FA's own §11 item 1 (proclaimed or delivered) stays FA's | 5 |
+| `[BYZ]` §14 item 3: the names at the empire's centre | the shape is decided (X-13); names are content Jordan authors when he chooses, and placeholders ship marked | 4 (ARCS row 12) |
+| `[BYZ]` §14 item 4: do the bureaux have a barred order? | no bar is built. A clerk has no deed, no certificate and no chain behind him, so his `legitimacy` in every audience is low and his claim to a founding seat is drawn at poor odds. The deed order bars him as the standing rule bars anything: by odds | 5 |
+| `[PAP]` §13 item 3: is lay investiture lawful on ducal ground? | per-row content: sees `[purview, own_faction]`, Himmelenger's seats `[own_faction]`. The work order itself names investiture as a structural conflict to be designed | 3 |
+| `[VEN]` §14.2 item 1: is a roll ever closed by blood? | no: the fixed point | 3 |
+| `[VEN]` §14.2 item 2: Schoenland's constitution | a power beyond the map is persons in seats (ARCS row 12); the seats are authored as marked assumption | 4 |
+| `[VEN]` §14.2 item 3: may a house be its own faction? | every house belongs to a faction now; a house that leaves its guild needs a faction Proposition minted in play, which is the same carrier schism waits on (FA's) | 5 |
+| `[COL]` §11 item 2: may an office be sold? | purchase is composed (a `transfer`, then a `confer`), by the precedent of #453 row 38, and is findable for that reason. No `purchase` form is authored; a heritable, unaudited seat can be written from the existing form keys if Jordan wants one as content | 4 |
+
+---
+
+## 11. Evidence log and what was not read
+
+**Run.** Nothing was run on the engine by this lane: no season, no `aperture`, no `pytest`. Every reading
+of computed play in this file is quoted from the lane named beside it. Two read-only commands:
+`git rev-parse --short HEAD` (`8948603`); `sed -n 525,570p engine/season/queries/person_q.py` and a
+`grep -n` for the reader names of §4.2 (they exist at the lines `[BYZ]` and `[COL]` cite).
+
+**Opened this session:** `CLAUDE.md`; `INSTITUTIONS_BRIEF.md`, `AUDIT_BRIEF.md`, `UNIFICATION_BRIEF.md`,
+in full; the four family audits in full; all twenty-one family proposals in full;
+`05_SC_obstacle_difficulty_and_modifiers_B.md`, `05_SC_arrangement_rows_that_bind.md`,
+`13_SC_draw_for_unrolled_contests.md`, `13_SC_tuning_tables.md` (T4, T5 and the edits),
+`18_DETERMINISM_task_draw_for_uncontested_verbs.md`, `14_VERBS_BINDING_A`, `_C`, `_D`,
+`14_VERBS_MATERIAL_B`, `14_VERBS_SOCIAL1_B`, `06_FA_decree_binds.md`, `06_FA_levy_through_the_seat_B.md`,
+`06_FA_seat_terms_by_body_B.md`, `06_FA_office_capabilities.md`, `12_ARCS_case_on_the_realm.md`, in
+full; `audits/20_NARRATIVE_CHURN.md` to its §7; `canon/03_canonical_timeline.md:70-149`;
+`architecture/meta/04_CODE_ARCHITECTURE.md` §0, §A.1, §A.2, §B.7, §B.8; `audits/06_FA_audit.md` §11.
+
+READ_LOG_PLACEHOLDER
+
 <!-- append-point -->
 

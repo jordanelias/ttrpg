@@ -434,3 +434,51 @@ Lane `tests1`: 70 files under `engine/season/tests/` (test files and three helpe
   - A given `FieldOrder` replaces the attacker's held order, the defender's order stays (:163-196). Own-faction target -> `Unopposed` with samples 0; party gaps -> `PARTY-GAP`; bad `estimate_samples` -> `Forbidden` (:232-253). `odds_of` mode (b) (a believer's figure) is not built for a field (`AQ-X1`) (:260-273); `registry.check_estimate_providers()` refuses an unknown provider name and so does driver construction (:275-283).
 - **Conflicts / stale:** the estimator and the resolver are asserted consistent only at the display, not at the chooser's believed odds (None for fights and fields): an NPC cannot weigh a battle by believed odds. [ties to cp_t03_05]
 - **Open items:** AQ-X1 (mode (b) for fields).
+
+### engine/season/tests/test_cp_t05_02_self_plea.py
+- **What it is:** behaviour test, v10 CP-T05-02 parts (ii) and (iii) (batch B10-13; home T05, `-08` AM-D-02): THE ACCUSED ANSWERS: the guard in `sigma.contest_input` and the `subject_may_be_self` column on `speak`. Part (i) (`hearing`, `hearing_step`) is HELD on SC-02's design and not built.
+- **Status:** none; live. Defines `revert_cp_t05_02` (:42-46), used by other pin tests.
+- **Bears on:** SC (self-plea, accusation, opposition), CHAR (stance sign, `regard`), CORE.
+- **Content that matters:**
+  - Guard: `contest_input` reads NO opposition when the subject IS the actor ("nobody opposes himself"), so a self-plea rolls at `obstacle_default` at any capability he holds (0 or 3 -> the same obstacle); control: the same person as someone else's subject opposes at his capability, `inp.opposition == 3.0` (:59-77). Capability key is `VERB_CAPABILITY["speak"]`.
+  - Self-plea: row column `subject_may_be_self` on `speak` ALONE (`confer` has its own `counterparty_may_be_self`) waives `opening_set`'s self-subject decline; a docketed person holding the docketing claim forms `speak {subject: himself}` and none without the column (:102-113); it executes through the fold at a band (a draw) (:115-119). Loader admits the column only on a row contested against its subject (`opponent_operand() == "subject"`), refuses on `tell` and a string `'true'`; admitted on `determine` (CR-16) (:122-137).
+  - Stance sign: `_stance_arm` under `stance_polarity: declared` negates regard on a row contested against its subject; a self-plea reads `+regard` (-3 for a person he dislikes), an accusation of another reads `+3.0` for the same regard; `regard` arm reads -3.0 for both (:144-163). A past B10-13 Phase 1 A1 fix (`subject != p.id`).
+  - Planted failures are recorded with dates (2026-11-08, reverted) rather than run in suite, except the revert helper and the `monkeypatch` comparison at the stance test.
+- **Conflicts / stale:** the speak/argue contest here has the obstacle fixed at `obstacle_default` regardless of capability for a self-plea: a self-plea is the same fixed-obstacle roll for every pleader, i.e. a pleader's own skill sets only the pool. [UNVERIFIED re brief's evidence-as-input intent: this file shows no evidence enters the self-plea's odds.]
+- **Open items:** `hearing`/`hearing_step` HELD on SC-02's design.
+
+### engine/season/tests/test_cp_t05_03_tell_refused.py
+- **What it is:** behaviour test, v10 CP-T05-03 (batch B10-13; `-08` AM-D-04): a failed telling is realised: `tell`'s `emits_on_refusal` is `tell.refused`; the Failure band keeps `news.untold` on `emits:` alone. Defines `revert_cp_t05_03` (:41-54).
+- **Status:** none; live.
+- **Bears on:** FI/CHAR (tell, knowledge spread), SC (contest loss), CORE (realised vs refused; R-07).
+- **Content that matters:**
+  - A LOST telling (contest ran and went against the teller; roll forced to net 0 vs ob 2 via a `MODULE_ENTRIES["social_contest.roll"]` stub returning `Margin(net, ob=2)`) is attempted once in a season (`news.untold` Failure, one event); a REFUSED one (absent hearer) is `tell.refused` with degree None and re-forms each round (`len(evs) >= 2`); a won telling is `news.told` (:83-102). `asked >= 2` guards that the control can see a re-formation (:79).
+  - Planted failure in-suite: `revert_cp_t05_03` restores the old kind for the refusal, and the lost telling is retried every round (:88-91). Consequences: `news.untold` is now a deed (`is_deed`) and `tell.refused` is not; since CR-27 `lie` emits `tell`'s kinds and no kind of its own, so these kinds map to no single verb (:105-117).
+  - The roll is FORCED by replacing the social_contest module entry (`dataclasses.replace(real, fn=lambda inp, rng: Margin(...))`), i.e. a stubbed draw: tests the loop's handling of a band, not the odds.
+- **Conflicts / stale:** nothing.
+- **Open items:** none.
+
+### engine/season/tests/test_cr03_acquaintance_arm.py
+- **What it is:** a measurement + one hand-built arm, CR-03 (B10-09 close two): half the persons know no one for four seasons. "NOTHING IN THE SHIPPED TREE CHANGES".
+- **Status:** none; live as a measurement record. `[ASSUMPTION; medium; Jordan to correct; revert: use seen claims at CENSUS]` (:66-68).
+- **Bears on:** CHAR, FI (known persons gate `tell/argue/give/covenant/issue`), SC, WR (R-01/R-07 reach), CORE.
+- **Content that matters:**
+  - Measured at the base (4 seasons, seeds 0-2, arm `off`): persons who know nobody 83/83 at build, ~30/75 after four seasons (38-43% still know no one); median/max known 1/7; told claims in all ledgers at s4: 0, 0, 4 (:11-29). `known_persons` has three sources only (an `exists:Person` reading, a `seen` claim's `who`, a told claim's `chain[-1]`) (:8-9).
+  - What the block costs: `tell` forms one Candidate per person the teller knows (`to`); `argue`, `give`, `covenant`, `issue` the same (`VerbRow.known_person_operands`); a person who knows nobody forms none. `argue` is blocked twice over: no question in the realm names a Proposition (formed for 0/0/0 persons) (:37-42). At realm scale the control forms `tell` for 0 persons, the arm for 46 (:31-36).
+  - The test arm: `seed_acquaintance_from_concerns(w, rows)` (defined in the test file, not shipped) writes the committer's OWN `exists:Person` claim of the person concerned-about, from `npcs.yaml` `concerns` rows (46 rows); a 5-person ring; control forms nothing for anyone (`checked == 5*2`), arm forms `tell`/`argue` for the 4 ring persons and not for the stranger; the arm's ledgers differ from the control's by exactly 4 claims (:136-192).
+  - The ask recorded for the close note: "should the realm START with acquaintances?" - a dense versus sparse social graph "changes what the game is"; wiring into `build_realm` is a declared hash mover and NOT done (:62-64).
+- **Conflicts / stale:** the shipped realm starts with no acquaintance (83/83 know nobody at build) so `tell`, `argue`, `give` form for nobody at the start, contrary to R-01/R-07 reach; the later CR-81 (realm acquaintances) file may have answered it - see test_cr81. Docstring numbers are a past measurement; the 'tests' assert only the hand-built ring.
+- **Open items:** the ask above.
+
+### engine/season/tests/test_cr17_odds_weighting.py
+- **What it is:** chooser behaviour + hash/temperature tests, CR-17 (M1, AQ-X1 (b)): a person's believed chance weights the pursuit term of a contested candidate (`decision/choose.py::odds_weight`, `Fixtures.odds_weighting`, H-248). Read to :248 by addendum C; read in full here.
+- **Status:** none; live.
+- **Bears on:** CHAR (chooser, R-06/R-08), SC (argue), DICE (believed odds), CORE.
+- **Content that matters:**
+  - Two persons with EQUAL pursuits and believed chance 0.7 vs 0.1 rank `argue` against an uncontested rival `carry` differently at `believed` and alike at `none`; planted factor-1 weighting reddens it (`pytest.raises(AssertionError, match="one ranking")`) (:101-117, :167-171). A believed `None` ranks and scores exactly as `none`; an uncontested verb is not even asked; the bands asked are the row's own non-empty `writes:` lists, a proper subset of the ladder (:119-164).
+  - The `cells` fixture plants an `argue` alignment cell (`ALIGNMENT[grandiose_humble][argue] = 1.0`) because "`argue` carries no alignment cell in the shipped table" (:57-63): in the shipped game `argue` has no pursuit alignment, so the pursuit term for `argue` is 0 (CHAR/SC lead).
+  - Real reader: pools differing by a `POOL_ADDENDS` entry (monkeypatched) give believed chances equal to `odds_of` mode (b) summed over writing bands, the stronger higher by > 0.2, and rankings part on it; a holder-bound query answers for its holder alone (None for another's act) (:200-230). A driver season hands every View a callable `odds` (`answered >= 1`) (:245-265). `fight` and a foreign actor's act are unknown (None) (:233-242).
+  - TEMPERATURE: `test_tau_is_the_largest_grid_value_above_one_half_strict_top_decided_and_zero_is_the_argmax` at seeds 0-2 on the built realm: shipped `choice_temperature` (0.05) reads > 1/2 of vectored readings strict-top-decided (measured 271/297/273 of 498), every larger grid value reads <= 1/2 (0.1 -> 142/162/141), and tau 0 is the argmax (every reading decided) (:272-305). So at the shipped tau roughly 46% of readings are NOT the top-scored (relevant to R-08).
+  - HASH PINS (:308-367): with `odds_weighting: none` and `choice_temperature 0.1` the one-season `build_realm(0)` reads `content_hash().startswith("eea8eaf8")` and `len(w.log) == 10397`; with capture/challenge/accept withheld `("c1bf72d0", 11016)`; inequality asserted. The pin is read behind EIGHT in-process reverts (`revert_cr79, revert_cr87, revert_cp_t03_04, revert_cp_t03_07, revert_cp_t03_08, revert_cr78, revert_cp_t03_02, revert_cr85`) and a non-shipped fixture pair - F-TEST-02's "world nobody plays" at maximal depth, plus a re-pin log of 8 entries (:354-358). The `ctl` "card's control" is "executed (it was prose in go07 and weather)".
+- **Conflicts / stale:** the hash pin world is not shipped (non-shipped arms, 8 reverts). The "shipped pair does not (685 acts, 11775)" statement ties to a past count.
+- **Open items:** none.

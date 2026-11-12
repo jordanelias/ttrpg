@@ -108,7 +108,7 @@ Verdicts: **HOLDS**, **NARROWED** (holds in a sense the words do not promise, or
 | P1a | a man pursues what he wants | **NARROWED** | 243 commitments are live after three seasons at seed 0 (226 at seed 1) and **0 have ever ended**; 11 of 749 resolved acts in a season answer the actor's own want (first audit). A want is a question he is asked each season; nothing counts toward it and nothing completes or abandons it | -07 |
 | P1b | and is stopped by what he believes | **FAILS** as a belief about what is right; **HOLDS** as a belief about what is so | moral: shipped (`refusal_axis: None`), no candidate refused in 276 readings; armed, all 46 cast refuse `transfer`, `move`, `forge`, `reconstruct`, `exchange` in 276 of 276, so the stop is the realm's and not the man's. Factual: with clause 4 cut, refusals rise 656 to 762 in two seasons, so he does decline what he believes cannot be done | -02 |
 | P2 | two men with different convictions choose differently | **NARROWED** to pursuits; **FAILS** on the field named `conviction` and on the names | swap a man's whole religious affiliation: his top act moves in 6 to 15 of 276 readings (2 to 5%); redraw the same man: it moves in 61%. A man of `love` alone tops `forge` in 266 of 276 | -01, -04 |
-| P3 | a man changes because of what he does and what is done to him | **FAILS on cause, on direction and on trace** | the one change that fires (the crisis) strikes the same six persons at seeds 0 and 1, by a rule with no draw, from witnessing forgeries, emits no Event, and replaces the stronger creed with its rival. Two hostile acts naming a person resolve in two seasons; those targeted by `challenge`, `sabotage` and `lie` regard the actor more warmly afterwards | -03, -08 |
+| P3 | a man changes because of what he does and what is done to him | **FAILS on cause, on direction and on trace** | the one change that fires (the crisis) strikes the same six persons at seeds 0 and 1, by a rule with no draw, from witnessing forgeries, emits no Event, and replaces the stronger creed with its rival. One man's routine paperwork scars him on `love` 20 times. Of 614 resolved acts naming another person in two seasons, 2 are on a row that treats him as an opponent; those targeted by `challenge`, `sabotage` and `lie` regard the actor more warmly afterwards than those given to or tended | -03, -08, -12 |
 | P4 | a man is wrong about the world | **NARROWED** to stale granary counts | of 21,312 beliefs after three seasons, 1,448 are about a present fact; 312 of those are wrong, and 296 of the 312 are the count of grain or salt in a store. Believed odds equal true odds in 46 of 46 priced readings at build | -06 |
 | P5 | a man's reasons are readable afterwards | **FAILS** | `Act.reads` is empty on 2,367 of 2,367 resolved acts (seed 0) and 2,390 of 2,390 (seed 1); 742 scenes carry an occasion (`claim_landed` 658, `need` 84) and nothing of the ranking | -09 |
 | P6 | a skilled man usually beats an unskilled one | **UNREACHED**; **FAILS** by hand for `argue` and `tell` | all 46 cast roll a pool of 2 on all nine verbs that read a skill. PROXY: with the actor's key raised, P(Success or better) rises 0.00, 0.07, 0.17, 0.28, 0.47, 0.61, 0.80 at 1, 2, 3, 4, 6, 8, 12 dice; with the SUBJECT's key raised 0 to 8 it does not move | -05 |
@@ -301,7 +301,8 @@ seconds): `[SKIPPED: zero-person and one-person worlds, hundred-faction worlds �
 ## 4. Findings — ranked worst first
 
 Severity: **B** blocks a requirement, **D** degrades narrative, **H** hygiene. Each: claim; evidence;
-falsifier run and its control; requirement touched; minimal fix at the owner.
+falsifier run and its control; requirement touched; minimal fix at the owner. F-PES-CHAR-12 was
+established last; by rank it sits between -03 and -04.
 
 ### F-PES-CHAR-01 · B · the names on a character do not predict his acts
 
@@ -373,9 +374,11 @@ falsifier run and its control; requirement touched; minimal fix at the owner.
   (a) `02_CHAR_resolve_and_temper.md` gains the test-retest reading as its gate (a person's
   self-agreement must exceed the between-person agreement by a stated margin; today 39% against 17%);
   (b) `02_CHAR_scar_cap_and_regard_unit.md` item 3 (the clamp at `STANCE_MAX`) is necessary and not
-  sufficient: `choose.stance_term` should return regard as a share of `STANCE_MAX` (on ±1, the pursuit
-  term's own range) times the existing gains, behind a fixture whose control is today's value, so that a
-  strong loyalty makes moving against its object rare and not impossible.
+  sufficient, because a clamped stance of 10 still leaves a gap of 800 temperatures:
+  `choose.stance_term` should return regard as a share of `STANCE_MAX` (on ±1, the pursuit term's own
+  range) times a new `stance_scale` fixture whose control is `STANCE_MAX` (today's value exactly) and
+  whose sweep puts a full loyalty at 4, 8 and 16 temperatures, so that a strong loyalty makes moving
+  against its object rare and not impossible.
 
 ### F-PES-CHAR-05 · D · nobody is skilled, everybody fails, and an opponent's skill is not in the roll
 
@@ -544,7 +547,7 @@ whose sheets say what they will do. The rest wait on other lanes' closers (seats
 | 6 | the refusal's *"certain actions"* is no set | `pursuit_axes.refusable`, a closed list | 3 (ED-IN-0261's words) | proposal C, item 1 |
 | 7 | the refusal compares two scales | the axis's share of the projected vector | 5 | proposal C, item 2 |
 | 8 | a refusal leaves no trace | `Scene.forgone`; `scruple.overridden` | 5 | proposal C, item 5 |
-| 9 | the stance term's class gap is hundreds of temperatures | regard as a share of `STANCE_MAX` behind a fixture | 5 | amendment to `02_CHAR_scar_cap_and_regard_unit.md` |
+| 9 | the stance term's class gap is hundreds of temperatures | regard as a share of `STANCE_MAX` times a swept `stance_scale` (control reproduces today) | 5 | amendment to `02_CHAR_scar_cap_and_regard_unit.md` |
 | 10 | a commitment has no end | closed when the holder's own ledger reads it met | 5 | amendment to `12_ARCS_arcs_as_staged_goals.md` |
 | 11 | a non-paired deed ignores its patient | `_bond` for every person-subject deed kind | 4 (paired kinds' precedent) | amendment to `02_CHAR_relations_have_a_ground.md` |
 | 12 | a fully scarred person is unshifted | shift toward the least-scarred | 5 | amendment to `02_CHAR_scar_is_a_wound.md` |

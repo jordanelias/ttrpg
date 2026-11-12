@@ -2,7 +2,7 @@
 
 ## Status: PROPOSED
 
-Carries F-PES-CORE-04 and F-PES-CORE-05 of `audits/16_PESSIMIST_CORE.md` (§3, §1.5). Composes on
+Carries F-PES-CORE-04 and F-PES-CORE-05 of `audits/16_PESSIMIST_CORE.md` (§3, §1.2). Composes on
 `01_CORE_requirements_reading_record.md` (F-CORE-03: a typed `reading:` record per row); it does not
 replace it. Reference only (CLAUDE.md §0.05).
 
@@ -39,7 +39,7 @@ only the known limit that nothing executes a `measure:`:
 
 **(b) R-01 and R-02's `met` rests on a reading with no working control** (F-CORE-03). The cheapest
 reading that could show the property false is a counterfactual, and it was run here (`knock.py 0 2`,
-`knock2.py`; §1.5 of the audit has the table): suppress one `choose()` call of one person in round 0 of
+`knock2.py`; §1.2 of the audit has the table): suppress one `choose()` call of one person in round 0 of
 season 0, replay everything else, and count the other persons' acts that differ. It takes about two
 minutes an arm on the realm and separates three things the present instrument cannot: a decision that is
 cited and changes others, one that is cited by nobody and still changes others, and the floor set by the
@@ -72,7 +72,7 @@ of "when was this last run and on what tree").
 3. **`engine/season/requirements.yaml`** — R-01 and R-02 `measure:` re-pointed to
    `python -m engine.season.harness.storybar --knockout <most-cited person> --base-seed 0 --seasons 2`,
    keeping the corpus `R3` line as a second measure in the comment. The statuses are **not** changed by
-   this proposal: what the reading supports is in the audit (§1.5, §3) and is Jordan's to read.
+   this proposal: what the reading supports is in the audit (§1.2, §3) and is Jordan's to read.
 
 ## Gate (an execution artifact, §0.2)
 
@@ -84,7 +84,7 @@ of "when was this last run and on what tree").
 
 ## Falsifier
 
-The replay control prints a non-zero difference (the wrapper perturbs the run, and every figure in §1.5
+The replay control prints a non-zero difference (the wrapper perturbs the run, and every figure in §1.2
 is void), or arm B still exits 0.
 
 ## NERS reading (E last)
