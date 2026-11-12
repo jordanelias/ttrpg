@@ -37,6 +37,7 @@ EXPECTED RED UNTIL B11.99: `engine/season/tests/test_fi03_trail.py::test_the_rea
 | B11.54 | a numeric lie is formed in both directions | `16_PESSIMIST_SC_E` edits 2–3 | BUILD | MOVER(behaviour) | B11.51 |
 | B11.55 | a hearer who knows the figure hears it as he holds it | `16_PESSIMIST_SC_E` edit 1 | BUILD | MOVER(behaviour) | B11.54 |
 | B11.56 | the lie tests read both directions and the Partial knower | `16_PESSIMIST_SC_E` edit 4 | BUILD | EQUAL | B11.55 |
+| B11.85 | the telling ships `unshared_first` and `seen_since_move`, on the two-hop reading (Patched: P-22) | FRES §6 ("ships `unshared_first` when §2 step 3's gate reads"); `08_FI_02` edits 4, 5 (the arms) | BUILD | MOVER(behaviour) | B11.51, B11.52; the first half's `08_FI_02` items |
 | B11.57 | the fold of v11's B10-14 cards into this batch | `IS-B2-FI-02` | POINTER | — | — |
 | B11.58 | the room files a covered deed under the hand | CP-T06-09 (intake `:466`; AM-D-16) | BUILD | MOVER(behaviour) | the first half's CR-29 items |
 | B11.59 | a deed that writes a place, an alias or a person leaves a trail | CP-T06-01 (intake `:468`) with `16_PESSIMIST_FI_C` edits 1–2 | BUILD | MOVER(behaviour) | B11.58 |
@@ -65,7 +66,7 @@ EXPECTED RED UNTIL B11.99: `engine/season/tests/test_fi03_trail.py::test_the_rea
 | B11.80 | the inquiry finds something in computed play | `IS-B2-FI-06` | READING | — | B11.59 to B11.78 |
 | B11.81 | the null-scene count against B02's | `IS-B2-CORE-03` (1) | READING | — | Batch B02 |
 | B11.82 | the investigation scale's `in_loop:` line | `IS-B2-FI-01` | POINTER | — | B11.80 (written in B11.99) |
-| B11.99 | re-pin and close readings | E-1; `IS-B2-FI-01` (2); `IS-A-12` | BUILD | MOVER (the re-pin) | B11.51 to B11.82 |
+| B11.99 | re-pin and close readings | E-1; `IS-B2-FI-01` (2); `IS-A-12`; `08_FI_01` edit 7 (Patched: P-23) | BUILD | MOVER (the re-pin) | B11.51 to B11.85 |
 
 **UNDECIDED (this half).**
 - U-1 (§2.2 against §5.6). `V12_STRUCTURE.md` §2.2's B11 row lists "intake `:163` and `:464`" after `IS-B2-CHAR-01`; §5.6 places an intake entry immediately before the first item whose source names its id. §5.6 is the within-batch rule and E-8 gives §2.2 only the order of batches, so the CP-T06 cards sit before `16_PESSIMIST_FI_C` (B11.58 to B11.64). The literal §5.6 rule would put CP-T06-03/-04 (named by FRES and `08_FI_04`, first-half members) in the first half; `IS-B2-FI-02` puts them in FRES §2 row 6 with `16_PESSIMIST_FI_C`, which is the reading taken. **If the first half also carries them, one copy is dropped at the head's merge** (H1/H2 check: intake `:466`, `:468`, `:469`, `:470`, `:471` appear once).
@@ -194,6 +195,20 @@ EXPECTED RED UNTIL B11.99: `engine/season/tests/test_fi03_trail.py::test_the_rea
 - GLOSSARY: none.
 - COST and TIER: edit; `sonnet`, medium.
 - LANDS IT: B11's producer; `Item: B11.56`, `[skip ci]`.
+
+### B11.85 — the telling ships `unshared_first` and `seen_since_move`, on the two-hop reading · FRES §6 with `08_FI_02` edits 4–5 · BUILD · HASH MOVER(behaviour) · Patched: P-22
+- SOURCE: `proposals/U5c_FI_residue.md` §6 ("`Fixtures.said_slant` is swept `newest` (control), `unshared`, `unshared_first`; it ships `unshared_first` when §2 step 3's gate reads, and `valence` stays an arm"), §2 row 3 (gate: "two-hop chains above 0 at two of three seeds"; needs `16_PESSIMIST_FI_A` edits 1 to 3 and 5); `proposals/08_FI_02_rumour-that-travels.md` edits 4 ("ships `unshared_first` once the gate reads") and 5 (`telling_hearers`: `known` (control) / `seen_since_move`), "Gate", "Falsifier". The first half's dials line names "this batch's flip item after `16_PESSIMIST_FI_A` edits 1–3 (second half)" and its position table lists "the flip of `said_slant` and `telling_hearers`" in this half; no item carried it until this patch.
+- ADVANCES: R-07 (rumour travels); FRES §2 row 3.
+- INSTRUCTION: `engine/season/data/fixtures.py`: `said_slant` `newest` → `unshared_first` and `telling_hearers` `known` → `seen_since_move`, in one commit, **only if** the gate below reads (FRES §6; the same rule as B11.67's `notice_arm`). If it does not read, neither value moves, both stay at control, and the commit is not made: B98 takes both with this target, and B11.99's commit body says so (`V12_STRUCTURE_part4.md` E-14, D-22).
+- WHERE: `engine/season/data/fixtures.py` (`said_slant`, `telling_hearers`).
+- TESTS: none new: the first half's `08_FI_02` item wrote `engine/season/tests/test_rumour.py` (`test_two_hop_chains_at_two_of_three_seeds` with both arms set in the test, `test_control_reads_no_two_hop_chain`); after the flip the first reads the shipped fixtures.
+- FALSIFIER and CONTROL: 08_FI_02's: "Both arms on and two-hop chains still 0: then the binding attrition is the roll (edit 6's question), and this proposal moved formation without moving traffic. Report it as such; do not tune the slant further." Control: `test_control_reads_no_two_hop_chain` at `newest`/`known` reads 0.
+- GATE: `PYTHONHASHSEED=0 python -m pytest engine/season/tests/test_rumour.py -q` → pass at the shipped fixtures (two-hop chains above 0 at two of seeds 0–2, two seasons; `assert checked >= 3`); the realm hash at seed 0, one season → moved (declared).
+- HASH MOVERS: every seeded world with a telling (the slant and the hearers change who is told what). Declared; B11.99.
+- DEPENDS ON: V12 B11.51 (FI_A edits 1–3), B11.52 (FI_A edit 5's tiers wired); V12 the first half's `08_FI_02` items (`said_slants` text, `present_persons`, `telling_hearers`, `test_rumour.py`).
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `high`; the reading `opus` (whether the gate reads).
+- LANDS IT: B11's producer; `Item: B11.85`, `[skip ci]`.
 
 ### B11.57 — the fold of v11's B10-14 cards into this batch · `IS-B2-FI-02` · POINTER
 - SOURCE: `master/instructions/IS_B2_SC_FI_CORE_CHAR.md` `IS-B2-FI-02`; `master/V11_EVALUATION.md` §7 item 5 (drop CR-94); the intake `:464-471`.
