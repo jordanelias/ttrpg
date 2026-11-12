@@ -587,7 +587,8 @@ In order. Steps 1 to 4 make FA run well alone; 5 to 8 make it compose.
 | 5 | B10-17 close one as planned (`declare`, alliance and peace, occupation), with CP-T09-02's exit counted on a response | plan | `aperture` and `strife` as the card states, plus one later act by a target-faction person citing the declaration | R-04, R-01, R-05 | as planned |
 | 6 | B10-17 close two (`ladders`, election, nomination, deposition), CP-T09-06's data edit | plan | as the cards state; the election's computed reach stays H-80's | R-04 | as planned |
 | 7 | B10-17b (claims, clocks, duty), with §5.3's test applied to each trigger row | plan | CR-90's reading, on against off | R-04, R-06, R-02 | design-first |
-| 8 | Hygiene: stale rows, dead members, the two names, the contract rows | as R-09 to R-15 | `register --check`; the two renames are declared movers | none of THE NINE | edit |
+| 8 | Hygiene: stale rows, dead members, the two names, the contract rows | as R-09 to R-15 (`06_FA_hygiene.md`) | `register --check`; the two renames are declared movers | none of THE NINE | edit |
+| 9 | Vocations for `determine`, `interrogate`, `arrest`; a seat's optional `vocation:`; the conferee ranked; founding content as data (`06_FA_office_capabilities.md`) | `rosters.yaml` (`verb_capability`, `vocation_attribute`), `offices.yaml`, `decision/choose.py`, `loop/predicates.py` | EQUAL at ship; two judges of unequal `judgment` differ over 200 seeds, with an equal-holding control | R-09, R-06 | small build |
 
 Step 1 comes first because every later reading of the military verbs is otherwise taken on a placeholder.
 Step 2 before 3: a term that empties a seat is only interesting once the seat's holder had orders to obey.

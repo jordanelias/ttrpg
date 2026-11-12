@@ -458,3 +458,436 @@ positions; the year (`year_length`, CP-T10-03); weather's live arm; kin, estates
 -08); the deck (CR-80); story openings (CL-OPEN); the thrust ladder's content (`goal_stages: []`); the
 clocks as folds of the log (CR-89); the regime credit term is built (CR-79) but its strand inputs are
 near-empty.
+
+**5.5 The NPC and AI-chooser surface of this lane** (the intent itself is the CHAR lane's to state:
+`02_CHAR_audit.md`, its reconciliation of the NPC and chooser sources; not redone here).
+
+(a) *Behaviours this lane needs.* WR decides nothing: CALENDAR "DECIDES NOTHING" (`calendar.py:35`), a
+crossing "MAY NEVER PRODUCE AN OUTCOME" (`matter.py:103`), a flow "fires nothing". Every consequence of
+the world's motion is somebody's act, so the lane needs five behaviours from the chooser: a governor who
+answers a shortfall (`transfer`, `requisition`); a resident who mends a fabric that crossed a floor
+(`restore`); a seat-holder who convenes for a waiting matter; a practitioner who works at a cost to
+himself; a traveller who weighs a journey. Observed at seeds 0 and 1, three seasons: `transfer` 2 and 3
+executed, `requisition` 0 and 1, `convene` 17 and 15, `restore` attempted 0 times, the practitioner's only
+act `thread_read` (3 and 4), and no journey priced (CP-T10-01 ships its pricing off with "[GAP: unowned]":
+no position gives a chooser a person-side reading of a leg's price).
+(b) *One interface.* Yes. The lane adds no decision path: the player's callback and the shipped chooser
+both receive `choose(p, v, s, ask_budget)` (`harness/play_surface.py::dispatching_chooser`), MATTER and
+CALENDAR take no chooser, and ENCOUNTER's `host` is the one suspension point for both. One asymmetry
+belongs to this file: `question_aggregation_rule = "first"` (`data/fixtures.py:547`) delivers `out[0]` of
+`questions_for` to player and NPC alike, so neither chooses *what to attend to*. The ruled design intent
+for the player is the opposite: a slate of specific events with more opportunities than scene actions,
+"choosing what to attend is the gameplay" (`auto_manual_resolution_duality_v1.md` §1, ED-SC-0013; intent
+only). `questions_for`'s sorted list is that slate in everything but delivery.
+(c) *Hard-coded NPC rules in this lane.* One: `attention_key`'s five tiers (`world_q.py:3857-3989`) are
+the same for every person; a person's pursuits order questions only *within* tiers 0 and 3. Whether a
+zealot attends to a deed before his office, or a steward the reverse, is fixed by tier number and not by
+who he is. The standing-occasion stampers that read the world rather than the person's ledger
+(`vacancies`, `detainees_held`, `matters_awaiting`, `holdings_to_found`, `goal_referents`' `seat_holders`)
+are recorded at their sites as "in tension with AX-7"; they inform rather than decide, and I add nothing
+to those records.
+(d) *Characterful, and legible afterwards.* A person is distinguishable here by what his ledger holds and
+which tier it lands in. The reason trail is half-recorded: an act taken on a `claim_landed` question cites
+the Event it answers (`occasioned_by`), but an act taken on a standing ambition cites nothing "on
+purpose" (`world_q.py:4305-4308`), and the question it answered lives only in the live driver's `Scene`
+(`soak._occasion_row`). At seed 0, three seasons, 690 of 2,630 acts have no antecedent of any class and
+959 only the actor's own (E-07): for 63% of acts the log cannot say what another person or the world did
+to occasion them, and for the 26% with none it cannot say why at all.
+(e) *Missing, as proposals.* The chronicle's `why` column and the interface it needs from CORE
+(`09_WR_story_instruments_that_can_fail.md` edit 5; CHAR's `02_CHAR_reason_trail_and_small_edits.md` owns
+the record); the mender's and the tally-holder's occasions (`09_WR_world_motion.md`,
+`09_WR_provided_arcs.md` edit 1). Tier order by temperament is CHAR's (`02_CHAR_resolve_and_temper.md`);
+this lane needs only that `attention_key` read it from the person.
+
+**5.6 What the full design set adds** (read for intent; §12 lists what was read). Three things change the
+weight of findings and none changes a verdict. (1) The design's frame is two simultaneous contests,
+governance and survival, with "Mending Stability" as the second (`victory_v30.md`, `ms_trajectory_v1.md`,
+`calamity_radiation_v30.md`): F-WR-04 is therefore not a missing feature but half the designed game. The
+code's re-expression (matter wear plus a coupling, no stored scalar) follows later rulings and I accept
+it; the design's radiation-by-distance survives as `radiation_bands` data and the breadth-first order
+IN-35's test asserts. (2) The design's victory text names "all 15 playable territories (T1–T14, T17)",
+which is exactly the settled set of E-13: F-WR-06's fix is the design's own count. (3) The design's
+world-state transitions (Rupture, Occupation, Anarchy) are eras the game continues through, with one true
+terminal; the code's `endings` roster has two rows and no era. That is prose, not yet game, and belongs
+with CR-89 and CL-OPEN rather than with a new carrier. The 2026-08-08 world-churn audit's sentence, "the
+world does not churn because the churn machinery is disconnected, not because it is scripted", was written
+of the retired campaign driver; re-verified against the season loop it holds in kind (F-WR-01, F-WR-04):
+the machinery is built and its inputs do not arrive.
+
+## 6. Hole-register and workplan disposition, and resolutions
+
+### 6.1 Disposition
+
+Rows read in full at their register line: H-176, H-186, H-211, H-235, H-236, H-238, H-257, H-274 (and H-98
+for R-09). The rest of the dossier's 56 primary rows were read at their excerpt and checked against the
+code read for this audit; rows whose subject is another lane's mechanism are marked *not WR's*.
+
+| item | listed | verified | evidence | action |
+|---|---|---|---|---|
+| H-04 `q`'s producer | closed? | closed | `questions_for` runs at every round (E-07: 2,630 acts formed) | none |
+| H-05 world-gen roster | open? | closed by build | `build_realm` seats 83 persons, 37 cohorts | none |
+| H-27 travel-leg ownership | open? | closed in code | `Person.travel_leg`; MATTER ends it (`matter.py:831-843`), `travel.ended` 24 in E-07 | re-grade at the row |
+| H-32 `judging_set_rule` | open? | open, narrowed | `matter` unused, basis constant (`world_q.py:661-681`) | none (SC's) |
+| H-34 establishment size | closed? | closed (moot) | field deleted; `establishment_of` | none |
+| H-40 claim decay clock | closed? | closed | 179,056 `claim.decayed` (E-08) | see R-14 |
+| H-51 what demands an individuation | closed? | closed | `demanded_person` | none |
+| H-65 `requires:` is prose | open? | not WR's | CORE | none |
+| H-95 two scale vocabularies | open? | closed in effect | `corpus_run`: 143 distinct worlds run, no unrepresentable line (E-15) | re-grade at the row |
+| H-102 propagation loop | open? | open as a sign, measured as an edge | cross-person edges 363 to 1,372 (E-05, E-08) | none |
+| H-103 claim decay bound | open? | closed as a bound; its cost is F-WR-09 | E-08 | R-14 |
+| H-107 `Event.subject` | open? | not WR's | CORE | none |
+| H-110 band crossing loses its Event | closed? | closed (dissolved) | no `band_crossed` source | none |
+| H-118 `content_hash` | closed | closed | hashes reproduce (§4.4) | none |
+| H-125 body step | open? | closed in effect (ships 10) | `body.changed` 37 in season 0 | see F-WR-10 |
+| H-129, H-130, H-135, H-139 `World.write` | open? | not WR's | CORE | none |
+| H-150 garrison strength unreachable | open? | not WR's (MB) | — | none |
+| H-159 oblige term | open? | open; live | `tenure.closed` 27 in season 5 at seed 0 (E-08): terms lapse together | FA's |
+| H-164, H-167, H-168 fabric, capacity, migrate | open? | not WR's (SE) | `migrate` 36/217 executed (E-08): H-168's "0 executed" is stale | SE re-reads |
+| H-172 `Claim.round` | open? | closed in effect | same-season cross edges 128, 160, 158 against 0 at one round (E-06, E-07) | re-grade at the row |
+| H-176 no ending reachable | open? | open; **its second cause is stale** | F-WR-06 | R-04 |
+| H-185 authored ought's predicate | open? | not WR's (CHAR) | — | none |
+| H-186 insurgency beyond its first condition | open? | open | `uncontrolled` has one caller, a report | R-05 |
+| H-208 bodies-clock values | closed? | built dark; deferred by ruling | fixtures 0.0 | §11 item 2 |
+| H-209, H-225, H-227, H-230 | open? | not WR's (FI/CHAR/FA) | — | none |
+| H-211 a body only falls | open? | open | `matter.py:119`, `:690-711` | R-13 |
+| H-215, H-216, H-223 | — | not WR's (SC) | — | none |
+| H-232 `pardon`, `raze` formed and refused | open? | open | `raze` 0/51, `pardon` 0/6 (E-08) | CHAR/FA |
+| H-235 lattice coupling | closed? | built dark | weight 0 | R-03 |
+| H-236 no source | (not in dossier) | open | E-13: no Site at T15 | R-03 |
+| H-238 no corpus thread sensitivity | open? | open, answered at ladder step 1 by the row itself | `thread_read` never attempted in `corpus_run` (E-15) | none |
+| H-242, H-243, H-245 to H-247 | closed? | closed as injected numbers | — | none |
+| H-257 a real execution reads KL | open? | open | `strife.py:85` reads `exists` only | R-06 |
+| H-274 the stamp | open? | open; dose near nil | F-WR-07 | none |
+| H-278, H-283, H-287, H-291, H-307, H-311, H-326, H-350, H-356 | open? | not WR's | — | none |
+| B10-15 (12 positions) | open | open; precondition missing | F-WR-05 | R-08 |
+| B10-18 (13 positions) | open | open | CL-EVENTS (2), CR-22, CP-T10-04 answer F-WR-04, -10, -11 | keep order |
+| CL-THRUST | held | landed pieces dormant (`goal_stages: []`) | `stage_referents` returns `()` | R-10 |
+| CL-OPEN, CR-80 | held | held | — | none |
+| B11-F2, B11-F3 | open | open | CR-99's "positive control for the strife guard" is the same need as F-WR-03 | fold CR-99 into `09_WR_story_instruments…` edit 1 |
+| WR-01 | BLK | blocked on a working with a cost in the season | F-WR-05 | follows R-08 |
+| HANDOFF_WR item 2 (own-configuration Mending costs nothing) | open | open; unreached in play | oracle only | decided with B10-15 (CP-T07-04 "a price on self-repair") |
+
+### 6.2 Inconsistencies, gaps and unclear passages: decided resolutions
+
+Ladder steps: 1 superseded · 2 irrelevant · 3 answered by a design document · 4 by precedent · 5 by what
+makes sense for the architecture. Twenty resolutions.
+
+| id | what is inconsistent, missing or unclear | decided resolution | step | carried by |
+|---|---|---|---|---|
+| R-01 | Story bar specified as forcing on against off; code has one arm and says no forcing source is built | add arms composed from the built fixtures; delete the stale sentence | 3 (#457 `STORY-BAR`) | `09_WR_story_instruments_that_can_fail.md` e1 |
+| R-02 | CR-69's control reads above the real log; its test asserts the opposite on a plant | replace with an edge-count-preserving null for the chain reading; keep shuffled-causes for the arc reader, where it holds | 5 | same, e2 |
+| R-03 | The lattice coupling has no source (H-236), so a non-zero weight is not a Calamity | the source is an authored initial condition at T15 behind a build switch; the weight flips after H-165/H-07 | 3 (#457 D1, D-3) and 4 (`guards=`, `foreign=` switches) | `09_WR_world_motion.md` e1 |
+| R-04 | Victory selects 16 territories; canon says 15; H-176 says no verb opens a territory hold | select settled territories; correct H-176's cite | 3 (GD-1) | same, e3 |
+| R-05 | Who may take a place nobody holds (H-166), which leaves H-186's caller unbuildable | the occupier, by the rule `seize` already states | 4 (`_seize_rung`'s licence) | same, e2 |
+| R-06 | A real execution reads KL, not XE (H-257) | `readers_for.victim_held` reads the death's `body` change as well as `exists`, and reads custody from the Event's own `tenure.closed` receipts (emitted with the death since CP-T02-01) rather than from `w.tenures` after removal | 5 | harness edit; named here, two lines in `strife.py:84-87` |
+| R-07 | A strand concludes on an opening kind; the person-side `concludes` list holds content openers | an opening move is never terminal; `concludes` drops content-opening kinds | 3 (strife R6; §4 "cannot conclude on its own opening move") | `09_WR_strand_conclusion.md` e1, e2 |
+| R-08 | Is the missing threadwork module a gap? | yes; move the oracle to `modules/threadwork/` as pure typed entries before CP-T07-02 builds its host | 4 (IN-07 E1 to E6; `fieldwork.find`) | `09_WR_threadwork_module.md` |
+| R-09 | Threadwork's Ob tables and gates are module constants | one typed file under `engine/engine_params/`, read by the module | 3 (CLAUDE.md §0.05, §5) | same, e3 |
+| R-10 | The thrust ladder is built and empty; the arc reader's positives are cohorts uttering | no code change: the ladder waits on content (B6.n); record that `read_arcs`' 21 to 33 persons are utterances and not climbs | 2 | this row |
+| R-11 | `CURRENT.md:36` names a Key-substrate narrative design as the head | the row names the running instruments (`engine/season/harness/storybar.py`, `chronicle.py`, `strife.py`) and the ratified strife master by bare filename; the `.audit/` design is history | 1 (ED-IN-0232 retired its substrate) | orchestrator edit to `CURRENT.md` |
+| R-12 | `CURRENT.md:28` and `module_contracts.yaml:302` name `threadwork_v30.md`, whose Part 3 ED-WR-0010 superseded | the row names the code head (`systems/threadwork/sim/`, then `modules/threadwork/`); the contract's `doc:` stays a quarantined pointer | 1 (ED-WR-0010) | orchestrator edit; `09_WR_threadwork_module.md` e2 |
+| R-13 | A body only falls (H-211) | the signed step and an upward crossing for the body row, behind a fixture shipped off | 3 (r2 §A.4) | `09_WR_provided_arcs.md` e2; CP-T10-04 |
+| R-14 | Claim decay is two thirds of the log by season 6 | decay is read from `(when, tick)` and not written; one Event when a claim's band of confidence changes | 5 | CORE's `01_CORE_claim_fade_as_read.md` (cited, not duplicated) |
+| R-15 | `ENDINGS_CLASSIFIED.yaml` is prose planted into worlds through one column, and is mis-pathed in two cites | stop planting; correct the path | 3 (CLAUDE.md §0.05 cl. 2) | `09_WR_provided_arcs.md` e3 |
+| R-16 | The provided arcs ask for automatic clocks and thresholds that fire | restate each as a person's tally, a fold of the log, or matter wearing; one new registry for the first | 3 (L3 cl. 1, L5) and 1 (CR-89 for the institutional clocks) | same, e1, e4 |
+| R-17 | The sixteen links and the leave-and-rejoin profile read 0 on every run | keep as a reading; stop citing them as evidence either way until a strand has more than one kind of move in order (`PT→PT`, `WN→WN` at their shuffled control in E-07, E-08) | 2 | this row |
+| R-18 | `storybar`'s headline counts refusals | the executed reading is the headline; the all-acts line stays beside it | 5 | `09_WR_story_instruments…` (gate uses `--executed-only`) |
+| R-19 | `march_side` and strand links read live tenures, not the tenures at the move's tick | accept the stated limit; fix only with a log-tick read of holds, which `World` does not offer; not worth a carrier | 5 | this row |
+| R-20 | The NINE's settlement note says `restore` executes in the realm; it is not attempted in three or six seasons at seed 0 | the note is stale; `restore` forms only on a Site-classed referent and none arises while no fabric crosses a floor | 1 (measured, E-07, E-08) | orchestrator edit to `requirements.yaml`'s note |
+
+## 7. Research transfer
+
+Research is tier 3: it informs and never settles (`research/00_INDEX.md` §1). Read: `00_INDEX.md`,
+`by_lane/README.md`, `by_lane/WR_world.md` (§0, §2, §7), `emergent_narrative_literature/07_apparatus.md`
+(gates A to D), and through them the summaries of the companion, EMG, THR and the precedent-nulls file.
+
+**Used, and what each changes.**
+
+| precedent or finding | source | what it changes here |
+|---|---|---|
+| "Generate on demand, never on a clock; a threshold may change options, never act" (CK3; Qud's reify-on-visit) | lane file T-WR-2; convergence of two programmes | confirms S3; and names its cost, which the same row records: political reversals "feel like weather rather than like consequence". F-WR-01 is that cost observed |
+| "An emergent layer built as a single switch will be switched off, and the data behind it becomes decoration" (Guild 3, Bannerlord trait axes) | lane file T-WR-8 | this is F-WR-04 as a precedent failure shape: four world motions behind four fixtures at their controls. It argues for flipping with a measured control, not for more switches; `09_WR_world_motion.md` adds one switch and says so |
+| Memory gates eligibility, not flavour (Dwarf Fortress grudges, CK hooks, the Nemesis vendetta) | EMG, lane file T-WR-5 | the private tally of `09_WR_provided_arcs.md` edit 1 is this shape; it is why a tally is a question and not a counter |
+| Tracking is not expressing; a retelling needs a stage that selects, orders and frames, with a stated criterion (gate D1), and a ranking that beats random in comparison (D4) | literature apparatus | the chronicle is that stage; its criterion (deepest consequence chain) does not beat an edge-count null (F-WR-03). D4 is the test the instrument must pass, and is edit 2 |
+| "Does the same target situation arise through different causal histories and casts across seeds?" (gate B4); "can the design name its target situations and report how often each occurs?" (C2) | literature apparatus | the strife registry is the only place the project names its target situations; C2 is what `ROUTE, NEVER TAKEN` reports |
+| A crisis is a retroactive audit of neglected fabric (Lisbon 1755, the Zwin, the 1315 famine) | historical-concerns catalogue via lane file T-WR-1 | the one historical shape that reached code (wear crossing a floor); it supports the lattice as matter rather than as a scalar |
+| The Tale-Spin effect, oatmeal, apophenia: authored predicate-triggered arcs fail as narrative | THR, lane file T-WR-3 | supports refusing an arc carrier and refusing to plant endings from `ENDINGS_CLASSIFIED` (R-15) |
+
+**Tried, did not transfer.**
+
+- *Storyteller directors* (RimWorld). A director is an agent that is not a person; Layer 1 has none, and
+  the lane file records that the tree's own narrative design dropped it. Not proposed.
+- *King of Dragon Pass advisers.* Expression without simulation; nothing for a loop with no text layer.
+- *The study's sixteen links* as a target. The study's coded paths are not in the repository, the links
+  are `[UNVERIFIED]` hand readings (`strife_moves.yaml:117`), and every run reads 0. They cannot be a bar.
+- *The historical-concerns catalogue as an event deck.* Its triggers bind to stored scalars the plan cut;
+  only its shapes transfer.
+
+**Nulls, which are findings.** No surveyed game or source models a magic that costs the practitioner his
+self (lane file T-WR-6; index §7): every threadwork number is internal, three are tagged "magnitude
+invented" at their definitions, and no precedent can check them. No game certifies that generated content
+is good rather than varied (N-5): the story bar cannot be given a pass mark from precedent, only a null it
+must beat. No game defends a cross-scale bridge whose default state equals its absence: the flow stamp at
+a dose near nil (F-WR-07) is that null arriving.
+
+## 8. Best path forward
+
+Ordered. "Alone" is what the lane needs to run well by itself; "compose" is what it needs from others.
+
+| # | change | file | gate (execution artifact) | unblocks | cost |
+|---|---|---|---|---|---|
+| 1 | Give the story bar its arms, its null and a shape reading; print routes never taken | `harness/storybar.py`, `chronicle.py`, `strife.py`, `tests/test_cr69_chains.py` | the four commands of `09_WR_story_instruments_that_can_fail.md` | every later step's control; R-01, R-02 measures | edit / small build · alone |
+| 2 | An opening move is never terminal; `concludes` drops content openers | `queries/world_q.py::flows_in`, `rosters.yaml: strife_kinds` | `strife 3 0 1 2 --strands`: no opener prints `concluded` | R-01, R-02 through the stamp | edit · alone |
+| 3 | Victory counts settled territories; H-176 corrected | `rosters.yaml: endings`, `world_q._ending_edges` | `test_in27_endings.py` with the new plant | R-04 | edit · alone |
+| 4 | CL-EVENTS commit (2): the weather draw live (already scheduled) | `data/fixtures.py` | storybar `off` against `weather` DIFFER; CR-73's SH reading | R-01, R-06 | edit · alone |
+| 5 | The wound at Askeheim, switch then weight | geography data, `harness/populated.py`, `data/fixtures.py` | crossings ordered by distance from T15; `restore` executed > 0 | R-01, R-05 (`restore`) | small build · alone, then SE (H-165) |
+| 6 | Threadwork as `modules/threadwork/`, typed and stateless | `modules/threadwork/`, `queries/inputs.py`, `module_contracts.yaml`, `engine_params/` | four oracle files green on unchanged numbers; import artifact clean | B10-15; R-05 | small build · alone |
+| 7 | B10-15 in its card's order, on step 6 | per card | per card (`aperture 1 0`: a thread row offered and executed) | R-05, 33 case needs | design-first per position · compose (PC for CR-13, CHAR for cells) |
+| 8 | A private tally raises a question | `rosters.yaml: tally_axes`, `world_q.tally_reached`, `questions_for` | the planted three-claim falsifier | R-06; seven core arc needs | small build · compose (CHAR authors axes) |
+| 9 | A fed body mends, audibly | `loop/matter.py`, `modules/settlements/subsist.py` | MW-11 green with its control | H-211; R-07 | small build · compose (SE) |
+| 10 | An unheld place is taken by occupation | `loop/effects_information.py::_seize_rung` | the occupied and unoccupied plants | H-166, H-186; R-04 | edit · compose (FA, MB) |
+| 11 | Claim fade as a read | CORE's proposal | six-season Events per season flat | soak cost; R-07 | CORE |
+
+**What moves the central ask most** is not in this lane: the closing verbs. Steps 1 to 5 make the world
+move and make its stories measurable; they do not make a duel, a treaty or a judgment execute. Until
+`challenge`/`accept`, `covenant` and `determine` execute at more than a few in five thousand acts (PC, SC,
+FA lanes), the realm will open matters and not close them, whatever this lane ships.
+
+## 9. Playable standalone and integrated
+
+Judged against the standing requirement, point by point. The lane is four things, so four answers.
+
+**9.1 The world clocks (CALENDAR, MATTER, ENCOUNTER).**
+*Playable alone:* not a game and not meant to be one: they offer no choice. What exists as a scenario is
+`harness/scarce.py` (a planted scarcity) and the IN-35 hand-built lattice world; neither has a choice
+surface or an end condition. *One code path:* yes; there is no standalone fork, and the modules MATTER
+calls (`settlements.subsist`, `settlements.produce`) are reached by composition row. *Integrates:* executed
+edges both ways (§10). *Layer 1:* conformant with the three graded exceedances of §4.3. *No GM:* holds.
+*Missing for play:* a survival scenario, which is §9.3.
+
+**9.2 The narrative instruments.** Not gameplay; observers. What a player-facing layer needs from them
+does not exist: nothing presents a strand, an era or an ending to a person. `presented`/`slot_rank`/
+`flow_capacity` compute a presentation nobody reads (§5.3).
+
+**9.3 A world scenario a player could enter today: "hold the valley".**
+
+| element | exists | missing |
+|---|---|---|
+| scenario seed | `build_realm(seed)`; `harness/scarce.py` for a planted scarcity | a small fixture (one territory, three settlements, one seat) so a season costs seconds, not the realm's forty |
+| entry point | `play_surface.dispatching_chooser` binds one person to a callback; `headless.py` runs a case | a named scenario in `exercises.py`'s overlay (no new harness) |
+| choice surface | the verbs `opening_set` forms on the one delivered question | a slate: `question_aggregation_rule = "first"` delivers one question, so the player does not choose what to attend to (§5.5 b) |
+| stakes | larders, bodies, fabric, seats | motion: at shipped fixtures nothing threatens (F-WR-04) |
+| outcome legibility | the player's own ledger; `census`'s hunger and closed-uses report | a person-side reading of a settlement's hunger and a fabric's band (both are World reads today, `world_q.hunger`, `closed_uses`); a reason for others' acts (§5.5 d) |
+| end condition | `endings_reached` (two rows) | a reachable ending (F-WR-06); any survival ending: the design's Rupture has no row and no carrier |
+| instrument | `aperture`, `storybar`, `strife` | one that can fail (F-WR-03) |
+
+Ordered work to close: steps 1, 3, 4, 5 of §8; then the slate (CHAR/GO: deliver the sorted questions to a
+player callback); then a survival ending row once the lattice is live (Jordan's content).
+
+**9.4 Threadwork.** *Playable alone:* no. No scenario, no verbs but `thread_read`, no host. *One code
+path:* no; today there are zero game paths and one oracle path with held state. *Integrates:* no executed
+edge (§10). *Layer 1:* not a registered module (F-WR-05). *Ordered work:* `09_WR_threadwork_module.md`
+edits 1 to 3, then B10-15, then its edit 4 (the scenario).
+
+## 10. Interfaces
+
+| edge | direction | real (executed) or designed | evidence |
+|---|---|---|---|
+| MATTER → SE (`settlements.subsist`, `settlements.produce`) | consumes | real | `matter.py:600`, `:741`; `stores.changed` 185, `yield.taken` 111 (E-07) |
+| MATTER → CHAR (claims of `condition.worn`, `stores.changed`, `body.changed`, shortfall Observations, through WITNESS) | emits | real, but few become acts | acts classed `world` 365 of 2,630 (E-07) |
+| MATTER → FA (a matured `oblige` term closes the edge) | emits | real | `tenure.closed` 27 in season 5 (E-08) |
+| CALENDAR → SC (`date.fired`, docket slots, re-slot) | emits | real | `date.fired` 5, `docket.formed` 7 in two seasons (E-05); `determine` 3 of 6 (E-08) |
+| ENCOUNTER → PC, MB (deferred contests) | calls | real for marches; **no duel reaches it** | `march` Declared 29, Unopposed 6, Lost 1; `fight`/`accept` deaths 0 (E-07) |
+| `questions_for` → CHAR (`decision/`) | emits Questions | real | every act |
+| `flow_stakes` → CHAR (the stamp) | emits classed referents | real, dose near nil | F-WR-07 |
+| `endings_reached` → driver summary | emits | real, always `[]` | E-05 to E-12 |
+| `hunger`, `uncontrolled`, `closed_uses` → anything that decides | emits | **designed only** | one caller each, `populated.census` |
+| threadwork → loop | both | **designed only** | F-WR-05 |
+| `thread_read` → FI (`fieldwork.find`) | consumes | real | 3 and 4 executed (E-07, E-12) |
+| `kit_of` → PC (weapon and armour) | emits | real call, constant answer | `ARMS_KINDS` empty (H-350) |
+| `practice` → DICE (pool addend) | emits | real | registered in `seam/wrappers/pool.py`; `practice_cap` 2 (E-13) |
+| strife readings → GO (presentation) | emits | **designed only** | `presented` has no reader |
+
+## 11. Survivors for Jordan
+
+Three items survive the ladder. Each would overwrite a ratified or ruled item.
+
+1. **The same-doer link (strife A9, ratified ED-IN-0316).** *As ratified:* any two deeds of one doer link
+   two moves into one strand. *Observed:* at six seasons one strand holds all 234 moves and 55 doers
+   (E-08). *Option A, keep:* the realm's strife is one river; R3 ("new events fold into existing flows")
+   and R11 ("one era in lived terms") are served literally, and the era is the only flow a reading need
+   present. As a game: one continuous "the troubles", legible as mood, with no sub-plots to follow.
+   *Option B, bound it* (`09_WR_strand_conclusion.md` edit 3: a doer's later deed joins a strand he opened,
+   or joins by referent): several strands at their own rungs beneath the era, which is R11's other half
+   ("narrative chains within it sit at lower levels"). As a game: named, separable stories that can each
+   end. I cannot choose between two sentences of one ruling.
+2. **Natural death (`illness_rate`, `age_step`; deferred by ED-IN-0317).** *Option A, keep deferred:* no
+   person dies except by another's act; succession is always somebody's doing; with duels refused, seats
+   never empty (0 deaths in six seasons at seed 0). *Option B, a live rate:* seats empty with nobody to
+   blame, and vacancy, obligation and conferral follow (E-11, E-12, E-16). As games: A is a realm of
+   permanent incumbents until violence works; B is a realm whose cast turns over. The evidence is two
+   seeds at one rate and is a direction, not a value; the value is Jordan's, and `age_at_build` must be
+   authored first.
+3. **The slate.** `question_aggregation_rule = "first"` (H-54's precedent) against the ruled auto/manual
+   doctrine (ED-SC-0013: "choosing what to attend is the gameplay"). *Option A:* one question, the engine's
+   pick, for player and NPC alike: a game of answering what arrives. *Option B:* the sorted list offered to
+   the player, the first to NPCs: a game of triage for the player with NPCs unchanged, at the price of the
+   player and the NPC no longer being served identically. Owned by CHAR and GO; listed here because
+   `questions_for` is this lane's file and the conflict is with a standing requirement.
+
+## 12. Evidence log
+
+All runs `PYTHONHASHSEED=0`, shipped fixtures unless stated, full realm (`cap=None`), no pytest. Outputs:
+`/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379/scratchpad/runs/WR/`. `wr_probe.py`,
+`wr_null.py` and `wr_unc.py` are read-only scratch scripts in that directory (they build a realm in
+memory, run seasons, read the log; they write nothing but stdout).
+
+| id | command | seed · seasons | outcome |
+|---|---|---|---|
+| E-01 | `python -m engine.season.harness.chronicle --seed 0 --seasons 2 --chains --min-depth 2` | 0 · 2 | depth 4: `conceal → create_record ×3`; `consequence_acts=446`; `chain_ends=29` |
+| E-02 | `… storybar --base-seed 0 --seasons 2 --draw-seeds 0 1 2` | 0 · 2 | base hash unmutated; draw 0 against 1: chains DIFFER (394), depth DIFFER; 0 against 2: DIFFER (362) |
+| E-03 | `… storybar --base-seed 0 --n 2 --seasons 2 --arms off off --executed-only` | 0, 1 · 2 | EQUAL; pooled cross share 21.4%, max depth 10 |
+| E-04 | `… register --requirements` | — | met 3, not_met 1, partial 5 |
+| E-05 | `wr_probe.py 0 2` | 0 · 2 | season hashes `5ab73af2…`, `bacd687f…`; 1,703 acts, 898 refused; 3 strands, 1 "concluded" (15 marches); person reading 0 of 83; arcs 21, null [1,0,0], unrestricted 53; chain ends ≥2: 29 against shuffled 86 to 97 |
+| E-06 | `wr_probe.py 0 3 1` (`scene_budget` swept to 1) | 0 · 3 | 519 acts; same-season cross edges 0; cross-season 51, 68 |
+| E-07 | `wr_probe.py 0 3` | 0 · 3 | 2,630 acts, 1,440 refused; 74,510 Events; 0 deaths; same-season cross edges 128, 160, 158; 5 strands, 0 concluded, largest 63 moves and 17 doers; all 16 links observed 0; `PT→PT` 13 against control 11.09 |
+| E-08 | `wr_probe.py 0 6` | 0 · 6 | 5,483 acts, 3,124 refused; 273,067 Events, 179,056 `claim.decayed`; `endings == []` ×6; 1 strand, 234 moves, 55 doers; arcs 33, null [2,0,0]; deepest consequence chain 4. Seeds 1 and 2 at six seasons were queued and had not finished when this was written `[UNVERIFIED]` |
+| E-09 | `… strife 2 0`; `… strife 3 0 1 2` | 0 · 2; 0–2 · 3 | OBSERVED 4, UNOBSERVED 8, KIND-ONLY 25, GAP 3; and OBSERVED 6, UNOBSERVED 6, KIND-ONLY 25, GAP 3; terminal codes with no static route: DN |
+| E-10 | `wr_null.py 0 2`; `wr_null.py 1 2` | 0, 1 · 2 | executed depth ≥3: 36 against null 10.8 (6..15); 27 against 9.0 (5..14). Consequence depth ≥3: 2 against 1.2 (0..3); 0 against 1.1 (0..4). 90 of 101 and 92 of 98 answering acts name the antecedent's actor or subject |
+| E-11 | `WR_FORCING=1 wr_probe.py 0 3` (illness 0.05, weather draw, coupling 250) | 0 · 3 | 8 deaths; `tenure.closed` 10; `oblige` 146/277; `confer` 1; `determine` 1; cross share 22.1%; 0 band crossings; `restore` not attempted |
+| E-12 | `wr_probe.py 1 3`; `WR_FORCING=1 wr_probe.py 1 3` | 1 · 3 | off: 1 death, 1 `matter.determined`, cross share 22.3%, 2 "concluded" one-doer march strands, largest strand 45 moves; on: 4 deaths, cross share 24.4% |
+| E-13 | `python -` probe on `build_realm(0)` | 0 · build | 18 territories, 16 in the realm, 15 settled, 15 held; T15 no Site; 7 of 83 persons with a thread sensitivity; `capability` non-empty on 2 |
+| E-14 | `grep` for callers and importers (commands in §3, §4) | — | as cited |
+| E-15 | `python -m engine.season.harness.corpus_run` | 0 | 143 cases; R1, R3, R4, R5 pass 46/46 and 97/97; ENDS NOT-COMPUTABLE; verbs only refused include `accept`, `covenant`, `determine`, `exchange`, `train`; `thread_read` never attempted |
+| E-16 | `wr_unc.py 0 3 on|off`; `wr_unc.py 1 3 on` | 0, 1 · 3 | unheld territories 1 throughout; vacant offices 0, 3, 5 of 35 (seed 0 on), 0, 1, 1 (off), 0, 0, 1 (seed 1 on); band crossings 0 |
+| E-17 | `python -` over `run_cases.load_cases` (keyword tagging of `season_requires`) | — | 143 cases; 167 tagged needs, 79 `core`: COUNTER 87, SUBSTRATE 36, THREAD 33, BODY 22, TRAVEL 2, SEASONAL 1 (a need may carry two tags) |
+
+**Read.** Code in full: `loop/calendar.py`, `loop/encounter.py`, `loop/matter.py`, the six harness files
+and `strife_moves.yaml`, `ENDINGS_CLASSIFIED.yaml`, `play_surface.py`; `queries/world_q.py` lines 1 to
+3,800 and 3,836 to 4,356 and 4,700 to 5,556. Design set (`.designs/`, intent only), in part: `victory_v30.md`
+(index; Core Frame, §0, §4 to §6), `calamity_radiation_v30.md` (principle, distance map, first three
+bands), `ms_trajectory_v1.md` (§1 to §3), `scale_transitions_v30.md` (index; §3.9 to §4.3.3),
+`auto_manual_resolution_duality_v1.md` (§1, §2), `propagation_spec_v1.md` (status head),
+`threadwork_v30_index.md`. Audit corpus (`.audit/`, lesser weight): `2026-08-08-world-churn-audit/00_findings.md`
+(§0, §5), `2026-07-05-emergent-narrative-engine/narrative_engine_design_v2_churn.md` (status, §0 head).
+
+**Not read** (the receipt lists these as skipped, with the reason): the rest of the two design sets and
+both audit entries; `world_q.py` 3,800 to 3,836 and 4,356 to 4,700 (`wounded_with`'s tail, `witnessed`,
+`PersonProjection`, `WorldReader`); the test files beyond their names and the three opened; the threadwork
+oracle beyond its docstrings, constants and signatures.
+
+## 13. Provided arcs and characters — adjudication
+
+`corpus_run` (E-15) runs all 143 cases and scores no ending (`ENDS = NOT-COMPUTABLE`), so "represented" is
+judged here from the code path and the realm runs, never from the case file. Hardness is the case's own.
+Proposal files are under `proposals/`; "arcs" is `09_WR_provided_arcs.md`.
+
+| case(s) | need (short) | hardness | represented today? | evidence | change required | owner | proposal | gate |
+|---|---|---|---|---|---|---|---|---|
+| ARC-05, ARC-48, EMG-C3 | an ambient world quantity decays by itself on a schedule | core | **in kind**: fabric wears each season | `condition.worn` 322 a season (E-07); `matter.py:852-884` | none for decay; a source so it means the Calamity | WR | `09_WR_world_motion.md` e1 | crossings ordered by distance from T15 |
+| ARC-48, ARC-27, ARC-43 | bands; crossing one changes what a class of acts can do in a territory | core | **in kind**: a Site below a floor closes its uses | `world_q.verbs`, `closed_uses`; 0 crossings in any run (E-16) | the live weight | WR, SE (H-165) | same | `closed_uses` non-empty at ring 1 |
+| ARC-48 | higher difficulty → more failure → further decay (a closed loop) | core | no | no working exists to fail; `WorkingOutcome.strain` is the carrier | B10-15 with strain | WR | `09_WR_threadwork_module.md` | a failed working lowers a Site |
+| ARC-05 | cost accrues invisibly across well-meant acts | core | no | as above | as above | WR | as above | as above |
+| ARC-41, EMG-X8 | a capability dormant until the ambient quantity crosses a band, then open to all who have it | core | no | no reader of a band gates a thread row | a `scalar_threshold` cell on the thread rows reading the local fabric band (the `floor` stem exists) | WR | B10-15 (CP-T07-05's place gate) | the row forms below the band, not above |
+| ARC-42 | an outcome moves the ambient quantity if sensitives were present | core | no | — | `mend`/`restore` by a sensitive | WR | B10-15 (CP-T07-04) | — |
+| NPC-002, EMG-X7, SCN-LOOP-A | a working costs the practitioner a persistent personal resource, scaled by the working | core | no | `(Person, coherence)` unproduced (`write_matrix.yaml:206`) | the carrier and the host | WR | `09_WR_threadwork_module.md`; B10-15 | `coherence.changed` in a run |
+| EMG-X7, ARC-09 | a floor state past which the capability, or agency, is lost | core | no | — | CP-T07-07 (permanent set narrows the season) | WR | B10-15 | budget falls at the band |
+| NPC-075 | an unrewarded maintenance labour is a real season-to-season choice, and wears the labourer | core | half: `restore` is a choice; nothing wears the mender | `restore` attempted 0 (E-07): the choice never arises | the source (so there is something to mend) and the working's cost | WR | world_motion e1; B10-15 | `restore` attempted > 0 |
+| NPC-004, NPC-005, ARC-51 | a hidden sensitivity, true and active, unknown to an institution; readable by another | core | half: `Person.thread_sensitivity` exists and gates `thread_read`; nobody can read another's | E-13 (7 of 83); `verb_table.yaml:1861` | what `thread_read` finds (CP-T07-10) | WR, FI | B10-15 | a finding naming another's sensitivity |
+| ARC-51 | sensitivity advances by a low-cost mode of use, in bands | core | no: set at build, written by none (`harness/loops.py:96`) | — | a growth rule for the scalar | CHAR (capability growth) | §14 | — |
+| ARC-34, ARC-47, ARC-31, ARC-32, NSC-05, NSC-08, EMG-C1 | a private counter fed by unrelated triggers that forces a formal step at its ceiling | core | no; the lawful form is permitted and unbuilt | `single_holder_counter` raises `Unspecified` (`world_q.py:162-168`) | the closed registry and a question at the count | WR, CHAR (axes) | arcs e1 | the three-claim falsifier |
+| ARC-47, NSC-08 | that counter never decreases | core | **wrongly stated** | claims decay and evict by design | restate: a tally is what is still held | — | arcs e1, e4 | — |
+| ARC-46, ARC-50, EMG-C2, NSC-09, ARC-03, ARC-45 | an institution's standing rises by itself; side effects feed it | core | no | — | clocks as folds of the log | FA, IN | CR-89 (B10-17b) | CR-90's arc instrument |
+| ARC-46 | "purely from the passage of time, with no actor choosing" | core | **wrongly stated** under L5 and ED-IN-0301 | — | restate: from its members' acts, read as a fold | FA | arcs e4 | — |
+| ARC-52 | a ceiling eliminates a faction with nobody declaring it | core | **wrongly stated** as an automatic outcome; lawful as a reported ending | `endings_reached` | an `endings` row | Jordan (content) | — | the row reached by acts |
+| ARC-02 | a state-change check fires on a person with no actor initiating it | core | in kind for bodies only (the bodies clock, dark) | `matter.py:726-731` | §11 item 2 | Jordan | — | — |
+| ARC-53, SCN-07 | an injury persists until a recovery act; no passive recovery | core | **yes** | `body.tended` 37, `tend` 37/69 (E-07); MATTER only lowers a body | none | — | — | — |
+| SCN-06, SCN-LOOP-C | drains and restorations on one resource summed per season | core | half: the larder draw sums; a fed body does not mend | H-211 | the signed step | WR, SE | arcs e2 | MW-11 |
+| ARC-23 | a threat that exists only while one person maintains it ends with him | core | **yes** | `remove_person` closes his edges; an ambition is a live `commit` (`world_q.ambitions`) | none | — | — | — |
+| ARC-07 | a failed sub-check in battle leaves a condition that outlasts the battle | core | not WR's | — | — | MB, PC | — | — |
+| NPC-052 | a removed leader's succession stays undetermined among claimants | core | half: the seat empties; no rival claims observed | vacant offices 5 of 35, 1 hold opened (E-16) | — | FA | — | — |
+| EMG-10 | nine conditions across subsystems jointly open one flashpoint | core | no | — | a tally over nine axes is edit 1 at scale; the conditions are other lanes' | all | arcs e1 | — |
+| ARC-01, ARC-44 | a cultural quantity drifts where no faction acts | core | no; a stored social scalar on a place is refused (`04` §B.3) | — | restate as persons' held affiliations by place, a Query | CHAR, SE | — | — |
+| the 19 `forced_by_threshold` cases | a crossing forces the moment | — | **misrepresented** by a planted holderless date | `corpus_run.py:656-660` | stop planting; author a tally | WR | arcs e3 | no `d_forced` in any built world |
+
+**Simulable end to end soonest, once this lane's changes land.** (1) ARC-53 and SCN-07 (injury and
+recovery) run today; they need only an overlay row. (2) ARC-23 runs today. (3) EMG-C3 and ARC-48's first
+two needs (a decaying world quantity in bands that persons may or may not attend to) after
+`09_WR_world_motion.md` edit 1 and the weight: the artifact is a seeded run in which crossings spread by
+distance from T15 and some person `restore`s. (4) ARC-34, ARC-47, NSC-08 (the private counter) after
+`09_WR_provided_arcs.md` edit 1 and one authored axis each: the artifact is a seeded run in which the holder,
+and only the holder, is offered the step when his ledger holds the triggers. (5) Every THREAD arc after
+B10-15 on the module proposal.
+
+**Dependency edges.** WR → PC, SC, FA: every arc whose close is a duel, a judgment or a treaty waits on
+those verbs executing (F-WR-01). WR → SE: the lattice weight waits on H-165. WR → CHAR: tally axes and
+sensitivity growth are capability and character content. FA → WR: CR-89's clocks. CORE → WR: the reason
+trail and claim fade.
+
+## 14. Capability authoring surface
+
+**The existing owner, not a new one.** A character's capability reaches a roll through one function,
+`seam/wrappers/pool.py::faculty` (the registered pool addends), keyed by `rosters.yaml: verb_capability`
+(verb → vocation) and `vocation_attribute` (vocation → attribute), over `Person.capability` and the
+attribute carrier (CR-20). CHAR's `02_CHAR_capability_uses_table.md` extends that owner; this section
+states what WR reads and what it needs from it.
+
+**(a) Where this lane takes a capability as input.**
+
+| site | what it reads | from |
+|---|---|---|
+| `world_q.practice` (`:4703-4744`) | the verb's vocation; the person's own Success-or-better acts in a window; three fixtures | `VERB_CAPABILITY`; `w.log`; `practice_window`, `practice_step`, `practice_cap` |
+| `world_q.kit_of` (`:3484-3509`) | arms kinds in the stores of the rungs he holds, else where he lives | `rosters.yaml: arms_kinds` (empty); `Rung.stores` |
+| `thread_read`'s typed cell (`verb_table.yaml:1861-1862`) | `Person.thread_sensitivity` against `thread_sensitivity_gate` | cast row `ts:` via `data/cast.py::thread_sensitivity_of`; a fixture |
+| `world_q.body_hazard` (`:1248-1270`) | `Person.born`, `is_cohort`; two rates | carrier; fixtures |
+| `world_q.wounded_with`, `loop/matter.py`'s body pass | `Person.body`, `body_ceiling`; `body_step` | carrier; fixture; `band_floors.body` |
+| `world_q.training_sites` (`:2261`) | Site conditions where a cohort resides | `w.sites` |
+| threadwork oracle `_actor_pool` (`operations.py:235`) | `.spirit`, `.focus`, `.ts` on a duck-typed actor | the caller's object |
+| threadwork oracle Ob and cost tables (`operations.py:73-168`), Coherence bands (`coherence.py:113-133`) | module constants | hard-coded |
+
+**(b) Data-driven, hard-coded or doubled.** Data-driven: `practice`, `kit_of`, the thread-sensitivity gate,
+the hazard rates, the body bands. Hard-coded: every threadwork table and band edge, three of them tagged
+"magnitude invented" at the definition; the depth gates (`DEPTH_TS_MINIMUM`) duplicate in a second
+vocabulary what `thread_sensitivity_gate` already says for one verb. Doubled: thread sensitivity has two
+readers with two thresholds (the fixture gate for `thread_read`; the oracle's `LEAP_OB_TS_LOW/HIGH` and
+`DEPTH_TS_MINIMUM` bands), and the practitioner's pool has two definitions (`faculty` for every loop verb;
+`_actor_pool` for a working).
+
+**(c) Target shape for this lane.** A capability definition must say, for WR to use it: its **id**; its
+**kind** (attribute, vocation, or scalar aptitude such as thread sensitivity); its **scale and bounds**;
+which **verbs** it feeds and whether as pool dice, as a gate (`scalar_threshold`) or as an obstacle band;
+its **growth rule** (practice window, step and cap; or "set at build"); and, for a scalar aptitude, its
+**bands** and what each band admits. One file carries it: the roster CHAR's proposal names as the
+capability table (today `rosters.yaml: verb_capability` and `vocation_attribute`). WR adds no file. It
+needs four things from that table: (1) a row kind for a *scalar aptitude with bands* (thread sensitivity:
+bands gate `thread_read`, the Leap and each depth; one definition, read by the gate stem and by
+`modules/threadwork`); (2) the working's pool expressed as a `faculty` addend like any other, so Spirit,
+Focus and practice reach a working by the registered route (CP-T07-02's "registered `faculty` addend"
+already says this); (3) a growth rule slot that a scalar aptitude can use (ARC-51 asks for it; today the
+scalar has no writer); (4) the working's obstacle axes (depth, breadth, distance) as a typed parameter
+file under `engine/engine_params/` (`09_WR_threadwork_module.md` edit 3), since they are properties of the
+act and not of the character.
+
+**The interface, for the merge:**
+`capability(person, id) -> int` (attribute, vocation or scalar); `band(person, id) -> str` for a banded
+scalar; `feeds(verb) -> ((id, role), …)` with role in `pool | gate | obstacle`; `growth(id) -> rule`. WR
+reads the first two in `Practitioner` (module input) and in the gate stem; it never writes one.
+
+**(d) RPG axioms, in the tradition's vocabulary.** Implemented: *use-based advancement with a cap and
+decay* (`practice`: do it well, gain dice, for a while); *attribute-gated ability* (thread sensitivity as a
+prerequisite score); *gear from holdings* (kit read off what you own, never consumed); *attrition tracks
+with thresholds* (body bands; hunger as a save you fail by being unfed); *power at a price* (a working
+costs Coherence: designed, unbuilt in the loop); *ageing* (a hazard by age: built, dark). Lacked, that a
+designer would expect: *advancement of the casting stat* (sensitivity never changes); *a trained skill
+for the craft* (no vocation maps to a thread verb, so `practice` cannot improve a practitioner);
+*corruption or sanity as a second track with recovery rules visible to the player* (Coherence's elastic
+and plastic halves exist in the oracle only); *survival skills* (nothing a person is good at changes what
+a journey or a winter costs him: CP-T10-01's pricing has no person-side reader). Contradicted: *the
+character's own sheet is the source of his pool*: the oracle takes whatever object the caller hands it.
+
+**(e) Proposals, ordered.** (1) `09_WR_threadwork_module.md` edits 1 and 3: `Practitioner` built from the
+capability table, the tables as typed data. (2) A banded-scalar row kind in CHAR's capability table, with
+thread sensitivity as its first member and the two existing thresholds folded into its bands (CHAR's
+file; this lane supplies the bands from `operations.py:95-124`). (3) A thread vocation in
+`verb_capability` for the B10-15 rows, so `practice` reaches them (data, with B10-15). (4) A growth rule
+for the scalar, design-first (ARC-51 states the need; nothing rules the rate).

@@ -299,8 +299,10 @@ Falsifier: one `site.restored` in three seasons at seed 0. Outcome: none. The ca
 `24f` was not isolated `[UNVERIFIED]`; candidates are the shipped `question_aggregation_rule: first` and
 the cohort pursuit vectors added by SE-06.
 Touches R-05, H-105.
-Consequence: harbours and seams wear 10 a season and nothing mends them; the first band crossing is at
-season 21, for all 37 harbours at once, then season 31 for all seams. Inside any horizon a session runs,
+Consequence: harbours and seams wear 10 a season and nothing mends them (read to season 20: minimum
+condition 800, no crossing emitted). By arithmetic on that wear and the floors in `rosters.yaml`
+(`bulk_shipping` 800, `deep_mining` 700), not by a run to that horizon, the first band crossing is at
+season 21 for all 37 harbours at once and season 31 for all seams. Inside any horizon a session runs,
 wear is a 1% a season decline nobody answers.
 Fix: no SE edit until the cause is read; the reading belongs in H-105's cite (§6, R-SE-16).
 
@@ -339,8 +341,8 @@ with 4 settlements over capacity and stays so; capacity ignores dwelling conditi
 (H-307); the executed migrations are five named persons re-homing repeatedly across territories with no
 cost of distance; no cohort migrates.
 Touches R-04. Consequence: the throttle that was to make `found` and `build` matter refuses individuals
-at occupied hearths while 185 of 211 hearths stand empty (`D_T08.md` row 15, re-read: `cap_total` 212
-against population 120).
+at occupied hearths while most hearths stand empty (`D_T08.md` row 15 counted 185 of 211, not re-run
+here; at this commit the realm's capacity sums to 212 against a population of 120).
 Fix: CR-49's class for `migrate`'s `to`; `07_SE_population_census.md` gives weight a writer, which is
 what flight would move.
 
@@ -392,8 +394,9 @@ Fix: none proposed (§0.1 pt 5); the readings named in each proposal's gate are 
   *"Sites, bodies, larders, ttl/term"* and §A.2:179 gives CENSUS `weight` and `envelope`; the code
   conforms, and CENSUS writes neither. `Rung.envelope` has no writer (H-171, IN-44).
 - **Determinism.** Every order is sorted (`subsist.py:57,71,80`; `matter.py:744`); the season factor draw
-  is keyed on `(world_seed, tick, territory)` (`world_q.py:1203`). The no-acts arm hashed
-  `f2cbf8f1a44c8e6bdd599db910476383` after two seasons at seed 0 in two separate processes.
+  is keyed on `(world_seed, tick, territory)` (`world_q.py::season_factor_of`). `aperture 3 0`'s own
+  control line reads `content_hash EQUAL` between `populated.run` and its instrumented arm (2,367 acts
+  each). Same-seed repetition across processes was not run by this audit.
 - **Test strength.** About 170 tests in 15 files, no `pytest.approx`, mutation notes in several
   docstrings. Three limits: (i) `test_hunger.py::test_i` pins F-SE-03's artefact as behaviour; (ii) the
   realm-level tests assert what the kernel does on a world that never exercises its consequence paths, so
