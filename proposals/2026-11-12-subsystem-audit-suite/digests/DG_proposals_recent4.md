@@ -683,3 +683,17 @@ Lane: proposals dated 2026-09-20 or later, and undated ones. Note: the assignmen
 - **Conflicts / stale:** Key premises retired.
 - **Open items:** petition-spray allowed by a later Jordan ruling (:60-61).
 
+### proposals/_session_provenance/2026-08-31-architecture-reconciliation/adjudications/F3_godot46.md
+- **What it is:** Fable-5 adjudication of the Godot 4.6 code shape for the port: version evidence, project layout, autoload policy, carrier placement, purity, fixed-point arithmetic, witness fan-out, determinism, save/load, ids, seam, skeleton verdicts, register, build order; 2026-08-31.
+- **Status:** "REFERENCE, not mechanism ... Nothing in it executes." Reading: historical for the version question (ED-GO-0002 now rules the version); the architectural rules are intent for GO.
+- **Bears on:** GO, CORE, DICE.
+- **Content that matters:**
+  - Version evidence: 4.3 has a declared `project.godot`, a CI pin and two executed headless runs (84 compile errors, 63 "Cannot infer the type"); 4.6 is prose, and the file it cites (`ecosystem_versions.yaml`) does not exist; the 84-error ratchet is only meaningful under the binary it was measured on (:57-111).
+  - Layout: `core/` headless, not one Node; `game/` is the only Node layer; autoload table empty or presentation-only; `World` driver-owned; `.tres` under `data/` is generated, never hand-authored (:120-209). Rejects `scene_tree_architecture.md`'s GameState autoload and the live `valoria-game` `Meta` single-state-owner pattern (:157-162).
+  - Fixed point: `condition` int in [0, `COND_SCALE`=10,000]; `f(degree)` as integer pairs over 16; half-up rounding on magnitude then sign; clamp once; band gate by cross-multiplication; float stays for belief-side arithmetic (:317-404).
+  - Determinism: one `RandomNumberGenerator` per operation from `H(world_seed, tick, subject_id, purpose)`; owned SplitMix64, never built-in `hash()` (:438-470). Save = binary snapshot with versioned header, not `.tres`, not event-log replay; JSON ids as hex strings (2^53 trap) (:486-520).
+  - Purity guard in the game repo: scan `core/` for `load(`/`preload(` and allowlisted autoloads; exactly one call site of `_witness(` (:295-313, :424-434). Skeleton `wound_module.gd:55` writes a field its own manifest declares non-writable (:606). The Python oracle has no substream implementation, so parity is threshold-level (:478-482).
+  - Escalations: engine version target; autoload ruling (STRAT:213) (:739-756).
+- **Conflicts / stale:** the Godot version question is now ruled by ED-GO-0002 (CLAUDE.md) so §1 is historical; the skeleton and `Key`/`KeyBus` references are retired. The 12-of-18 resolver-side Queries omitting `World` is a Layer-1 doc issue (:286-293).
+- **Open items:** `season_factor` distribution blocks `yield` fixed-point; int-overflow wrap in GDScript untested (:459-462).
+

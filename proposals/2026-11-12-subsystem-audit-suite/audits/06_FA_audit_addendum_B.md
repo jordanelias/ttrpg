@@ -351,7 +351,8 @@ is missing is a statement that this, and not three separate situations, is the s
 instrument line that says whether the loop closed.
 
 **The self-governing realm** is the same five links with no player, counted on the built realm. Today
-the count is 1 of 5 (link 1). The exit is all five at least once, by different persons, in one seeded
+the realm closes link 1 at every seed and link 4 by a death at seeds 1 and 2 (first audit E-5); links
+2, 3 and 5 read 0. The exit is all five at least once, by different persons, in one seeded
 run, with a control arm that reproduces today's hash. `06_FA_shortest_loop_B.md` states both as one
 gate over the existing instrument and adds nothing to the game path.
 
@@ -480,7 +481,7 @@ name.
 | R-29 | "the number of people and the weight of their positions" has no reading | one Query, `faction_q.weight(f)`: the summed `Person.weight` of members, plus the muster weight their seats can call (`guard_weight` where built). Read by instruments first; by a chooser term only when a planned position needs it (CP-T09-02's target choice). No stored value | 5 | this table; shape only |
 | R-30 | who owns a split realm | nobody, until a contested succession executes. `provinces_of` already makes a province vanish when its territories diverge, which is the split's geography for free | 2 (no subject yet), 3 (`scale_hierarchy_v1` §2) | this table |
 | R-31 | an army in being costs nothing | upkeep is a property of service, and the tree has one rule for it: an `oblige` with a term, renewed by `transfer`. Troops raised by `recruit` are a cohort's people under arms; while raised they should not `work`. That is SE's census, and it is the cost that bites without a new charge | 4 (`oblige` and `transfer`; MB T-MB-5 "raising troops removes a cohort, not a number") | cross-listed to `07_SE_population_census.md` |
-| R-32 | whether `at_war` may reach a verb's `requires` (F.33) | no. It reaches the *outcome*: a field's Events name the war Proposition when one is live between the two factions, so claims about the field are claims about the war | 5 | `06_FA_war_lives_in_seats_B.md` edit 3 |
+| R-32 | whether `at_war` may reach a verb's `requires` (F.33) | no. It reaches the *outcome*, by a Query over the log (the fields fought between two factions), never by a write on the field and never as a gate | 5 | `06_FA_war_lives_in_seats_B.md` edit 7 (a); shape only |
 | R-33 | the first lane's §13 row for NPC-089 ("she may `march` and `issue`") | still true; add that she cannot raise a man (F-FA-15) and her treasury is empty (F-FA-17), so "probe, pressure, invasion" has one rung | 3 | this table |
 | R-34 | `faction x` in the faction roster | leave; exclude from every count by name in instruments | 3 (`names_index.yaml:317`) | this table |
 
