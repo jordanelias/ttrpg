@@ -1223,3 +1223,74 @@ Lane: archived design documents under `.designs/` (README, `_architecture`, arti
 - **Conflicts / stale:** none.
 - **Open items:** none.
 
+### .designs/systems/npcs/reference/npc_roster_v30_index.md
+- **What it is:** generated heading/size index (2026-04-19) of "Named NPC Roster" (~8.7k tokens), skeleton body not in this lane.
+- **Status:** indexed doc "Status: CANONICAL" (:24). Reading: historical map.
+- **Bears on:** CHAR, ARCS.
+- **Content that matters:**
+  - 13 roster NPCs with titles: Edeyja, Maret Uln, Yrsa Vossen, Sæmund Haelgrund, Sigrid Torsvald, Halvar Brandt, Annika Feldhaus, Peder Almstedt, Gerik Strand, Dalla Virke, Doux Alexios Laskaris, Rikard Solberg, Aldric Tormann (Prudence Cardinal) (:28-40).
+  - A "Mode Interface Matrix" (4.5k tokens) and "Mode Coverage Summary": each NPC must have presence in at least 2 of 3 modes (:43-58). Summary Table, Cross-Reference Faction Axis Positions, Stat Blocks, and "Caste System Impact on Roster NPCs" (:41-63).
+- **Conflicts / stale:** the cast gets name "Aldric Tormann" in the roster vs "[Name Pending]" in analyses; "Sigrid Torsvald" vs "Sigrid Torsvald/Torsvald/Torsvald" spellings in other docs.
+- **Open items:** Stat Blocks "to be generated after identities are confirmed" (infill :112).
+
+### .designs/systems/npcs/reference/npc_roster_v30_infill.md
+- **What it is:** roster prose: each NPC's compromise, historical echo, ethics and behavioural AI flaw; mode bridges; caste annotations.
+- **Status:** "Status: CANONICAL" but "All NPC identities, motivations, and arc trajectories flagged for user review" and stat blocks provisional (:13, :15, :112). Reading: the NPC "Behavioral AI Profile" design (named flaws) is the most concrete intent statement for NPC AI in this lane.
+- **Bears on:** CHAR (NPC AI), ARCS, WR, FA, FI.
+- **Content that matters:**
+  - Design principle: every NPC except Edeyja carries a structural compromise; each has a named Behavioral AI flaw that produces suboptimal play players can exploit (:17-18).
+  - Behavioural AI flaws: Edeyja evidence-driven no flaw; Maret CONFLICTED (1-season delay against RM); Vossen IDEALIST (spreads Presence markers thin, 5 territories at 1 rather than 3 at 2); Haelgrund PROCEDURALIST (investigations +1 season but Overwhelming when resolved); Torsvald TS 35 (cover vs truth); Brandt EXTERNAL THREAT FIXATED; Feldhaus PROFIT-MAXIMISING (~15% of Guilds luxury revenue from Thread-touched supply chain); Almstedt CONSERVATIVE; Strand OVERPERFORMER; Virke NETWORK PROTECTOR; Laskaris PROTECTIVE; Solberg STABILITY-SEEKING (arms shipments conservative, intel downplays, better deals to the losing faction, policy ~1 season behind optimal aggression); Tormann OPTIMISER (:23-80).
+  - Niflhel is not a coordinated faction but a constellation of syndicate houses (Virke family one of several) (:61).
+  - Caste system as load-bearing: Feldhaus/Virke profit, Almstedt preserves, Prudence Cardinal's extraction deepens, Haelgrund enforces, Strand's frustration rebukes; "NPCs collectively reproduce the caste without intending to" (:114-130).
+  - Mode bridges: how each NPC's compromise expresses in TTRPG (personal choice), BG (stat delay or card trigger) and Hybrid (Zoom In) (:85-109).
+- **Conflicts / stale:** the named-flaw approach is a design for a scripted-flaw NPC AI (risk of scripting drift if hard-coded per entity); modes. 
+- **Open items:** ED-NEW-24 (RM internal split on Crown patronage) (:116); stat blocks pending.
+
+### .designs/systems/overview/reference/clock_registry_v30.md
+- **What it is:** Valoria Clock & Track Registry (created 2026-04-08, updated 2026-06-24): the "single source of truth" table of every clock, track and counter with ranges, starts and source docs. Skeleton.
+- **Status:** "Status: CANONICAL"; "Registry maintained by hand" (:14, :124). Reading: a doc-side inventory, superseded in function by the typed registries (a `.md` is not the head of a fact, §0.05 cl.1); useful as a checklist of tracks to confirm exist in code.
+- **Bears on:** CORE, WR, SE, FA, CHAR, FI, SC.
+- **Content that matters:**
+  - Shared clocks: MS 0-100 start 60 (videogame uses TTRPG default 60; BG 72; reconciliation 60-vs-72 pending creative layer), CI 0-100 start 28, IP 0-100 start 20, Turmoil 0-10 start 0 (:22-27).
+  - Faction tracks: Torben Loyalty 0-7 start 7 (PP-599 supersedes start 3), Elske Loyalty start 4, Löwenritter Autonomy Loyal/Restless/Autonomous/Split, Popular Will, Warden Cooperation 0-3, Warden Recognition 0-4, Intel Advancement Counter (flagged STRUCK, unverified) (:35-41); faction stats 1-7, Stability 0-7 (:47-54).
+  - Per-territory: Accord 0-3, PT 0-5, Fort 0-4, Prosperity 1-7, Guild Favour 0-7, Church Attention Pool 0-10 (first Inquisitor at AP >=3, second >=6) (:67-72).
+  - Personal: Coherence 10, Truth 0-5, TS 0-100, Composure 3-21 (`Charisma x 3`), Concentration 5-35 (`3 x Focus + 2 x Spirit`), Health 13-55 (`(End+6) x (MW+1)`, MW cap 3), Stamina 5-47 (`3 x End + 2 x Spirit`), Momentum 0-4, Knot Count (:78-87) — note these differ from canonical_registry (Composure `Cha+6`, Stamina `End+1`) and combat_reference (Stamina `End x 5`) (a three-way two-ladders defect).
+  - Contest: Persuasion Track 0-10 (A wins >=7, B wins <=3, compromise 4-6, Total Victory >=9/<=1); Obligation clocks cap ~3 active (ED-619) (:95-97). Fieldwork: Exposure, Cover, Evidence Track 3/5/8, Disposition -5..+5 (:110-113). Settlement tracks Prosperity/Defense/Order 0-5, Local Economy `Prosperity x 50`, Garrison Strength `Defense x 20 + Fort x 30`, Public Order `Order x 20` (:137-150).
+- **Conflicts / stale:** the Persuasion Track in code vs doc; Torben Loyalty start 7 vs 3; contest resource formulas disagree with canonical_registry; Accord ranges 0-3 here vs 0-4 in canonical_registry; Intelligence and Popular Will flagged struck but still listed.
+- **Open items:** ED-793 (IP start), ED-794/795/796 (struck items to verify), MS 60 vs 72.
+
+### .designs/systems/overview/reference/clock_registry_v30_infill.md
+- **What it is:** infill stub for the clock registry (headings only).
+- **Status:** "Status: CANONICAL" (updated 2026-04-13 PP-548-554) (:13). Reading: historical, no prose.
+- **Bears on:** CORE.
+- **Content that matters:**
+  - Only headings; no rationale text survives in this part (:16-23).
+- **Conflicts / stale:** its "Updated 2026-04-13" header is older than the skeleton's 2026-06-24 update.
+- **Open items:** none.
+
+### .designs/systems/overview/reference/ms_budget.md
+- **What it is:** Mending Stability Budget (ED-668, 2026-04-17/20): the single table of all MS drain and recovery sources, three budget scenarios and a three-path conclusion.
+- **Status:** "ED-668 | Status: CANONICAL". Reading: design intent for MS dynamics; fact table belongs in code; see FA/WR/SE for the clock.
+- **Bears on:** WR, MB, FI, PC, ARCS.
+- **Content that matters:**
+  - Starting MS TTRPG 60, BG 72, Hybrid 60 (:21-25). Seasonal cap +/-10 net at Accounting (:129).
+  - Drain: baseline -1/year (-0.25/season); Gap -4/season each; Lock -1 to -2/season; Strain 9-10 extra -1; Dissolution Success -5 / Failure -8; POP Success >= -3; battle on Valorian soil -1 (Campaign/War -2); siege -1/season; Popular Uprising -1; TS 90+ Reality Strain -1/season; Substrate Saturation (>=3 Thread ops/turn) -1; mass-battle x3 multiplier STRUCK, replaced by flat -1 (:33-59).
+  - Recovery: Mending +1 (Overwhelming +2); Weaving OW (Relational+) +1; WC >=2 halves Gap/Lock drain; WC >=3 +2/season; Gap self-closure by scale via d10 (Object 1-3, Personal 1-2, Relational 1, Territorial+ never) (:65-72).
+  - Scenarios: A Year 10 moderate: net ~-11.75/season (Fragile by S8, Fractured by S13); B peak military: -20 to -22; C with WC 3: -4 to -8 capped (:78-105).
+  - Four late-game paths: disciplined non-Warden, WC 3 with discipline, WC 3 with successful Wager (Arc E), and the non-viable trap (:111-121); "the substrate ontology does not permit Thread without consequence" (:121).
+- **Conflicts / stale:** the end note ("WC 3 is the singular endgame survival path") contradicts ED-740 reframing in the same file (:123 vs :149); drain rates conflict with canonical_registry "Decay -1/year" claims only mildly; code implementation of these sources [UNVERIFIED].
+- **Open items:** MS start 60 vs 72 resolution pending (clock registry).
+
+### .designs/systems/overview/reference/overview_flow_skeleton_v1.md
+- **What it is:** traced flow skeleton (at commit `6545067`) of the season loop as built before the engine/season rebuild: `engine/mc_v18.py:run_campaign`, `systems/overview/sim/{season,accounting,ci_track,ms_track,ip_track,rs_track}.py`.
+- **Status:** "REFERENCE — traced structure only". Reading: historical trace of the pre-`engine/season/` loop; the best census of clock wiring defects at that time; CORE lane should check which survive in `engine/season/`.
+- **Bears on:** CORE, WR, FA, SE.
+- **Content that matters:**
+  - Season loop: `advance_season` -> faction actions (`faction_take_action` per parliamentary faction with territory, exceptions caught and logged) -> `run_scene_phase` -> parliamentary scene -> `accounting_boundary()` + `next_tick()` -> `run_accounting` (6 steps: CI every season, MS baseline decay at year end, insurgency triggers, insurgency promotion, NPC ecology, report-only Accord drift probe) -> victory check (:76-97).
+  - Dead/dormant clocks: `Turmoil` read as the victory gate but never written, so the Political Stability gate is permanently satisfied (:177); `PI` and `Strain` seeded and never read or written (:178); `IP` writer `apply_ip_delta` and `check_phased_occupation_threshold` are stubs with zero production callers (:179); `rs_track.apply_rs_delta` stub reachable only via a dormant echo leg (:180); CI Assert/Suppress steps always no-op because `run_accounting` never supplies them (:187); no Mandate/Treasury accrual step (PRE-LPS-1 PORT-BLOCKING) (:184).
+  - Dead params: `VICTORY_THRESHOLD = 11` in `DEFAULT_PARAMS` is dead (live gate `victory.py` constant = 15); `max_seasons` argument shadowed (:172-173). Fallback winner by territory-count score when no victory fired (:96).
+  - NPC generation and Knot formation are stub markers only (`generate_npc(world-gen|season-tick)`, `form_knot(...)`) so they never run (:174-176).
+  - `check_arc_boundary` has zero callers; `SeasonResult` discarded; "13-step cascade" docstring vs actual 6 steps (:181-183). `peninsular_strain` contract emits (`env.*`) produced by no code (:188).
+- **Conflicts / stale:** the victory threshold 15 vs "11/15 territories" in canon docs (GD-1); module-level globals `scene_slate._queue` and `victory._qualifying_streak` not world-scoped (:136, :138).
+- **Open items:** none; every row is a traced gap.
+

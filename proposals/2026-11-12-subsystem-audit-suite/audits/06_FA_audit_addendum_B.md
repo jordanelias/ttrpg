@@ -13,8 +13,9 @@ continue the first audit's numbering from `F-FA-13`; resolutions continue from `
 
 Nothing here is the reason a behaviour is correct (`CLAUDE.md` §0.05). `.designs/`, `.audit/` and
 `research/` are cited as referents by path. `[UNVERIFIED]` marks what was not checked.
-`git diff --stat 601e715 6eff039 -- engine modules references architecture` was not run; every code
-citation below was opened at `6eff039`.
+`git diff --stat 601e715 6eff039 -- engine modules references architecture systems tools tests
+workplans registers` is empty (the commits between are the suite's own documents), so the first
+audit's readings of computed play hold at this SHA; every code citation below was opened at `6eff039`.
 
 ## B0. What this addendum changes in the first audit's verdict
 
@@ -34,7 +35,8 @@ redistribute power do not execute in computed play.
 ## B1. What was read
 
 **Faction design set, `.designs/systems/factions/reference/` — read in full, no line truncated**
-(every file's longest line is under the reader's 2,000-character cut; checked with `awk` first, E-B8):
+(line lengths were measured with `awk` first, E-B8; the three lines over 1,900 characters were each
+read to their last word):
 `faction_canon_v30` (739 lines; it ends after the Church sheet, the other sheets were never written
 into this file), `faction_layer_v30` and its `_infill`, `faction_behavior_v30`,
 `faction_state_authoring_v30`, `factions_personal_v30` and its `_infill`, `faction_politics_v30`
@@ -105,9 +107,8 @@ The `.audit/` and `research/` reading is accounted for in §B8, with what was no
 - **Falsifier and outcome.** A `hold` on a rung or an office that opens or closes in the same season as
   a `field.won` or `field.lost` naming its holder's faction. The first audit's realm runs read
   `rung.seized` 0 at seeds 0, 1 and 2 over three seasons, and `seize` attempted 9, refused 9 in
-  `aperture 2 0` (its E-3, E-5); no fought field in those runs was `Won`. Not re-run here: the reading
-  cannot have changed without a code change, and none is in the tree between the two SHAs' FA files
-  [UNVERIFIED: the diff was not run].
+  `aperture 2 0` (its E-3, E-5); no fought field in those runs was `Won`. Not re-run here: no code
+  changed between the two SHAs (header).
 - **Touches.** R-02, R-04. **Narrative consequence.** A lost battle is a casualty list. Nobody loses a
   province, a fortress or an office because of it, so no arc of conquest, ransom, deposition after
   defeat or a marshal broken for losing can occur.
@@ -522,7 +523,7 @@ or the MB audit's, cited as such.
 | E-B5 | read of `tests/test_faction_q.py:223-262` (not run: no pytest) | n/a | the test folds `utter` (WAR), `commit`, `release` and asserts `at_war` False, True, False |
 | E-B6 | `git ls-files` for `systems/factions`, `engine/mc_v18.py`, `engine/autoload`, `engine/cross_scale` | n/a | none present; `systems/` holds `characters`, `combat`, `fieldwork`, `mass_battle`, `overview`, `settlements`, `social_contest`, `threadwork`, `world` |
 | E-B7 | JSON read of `registers/editorial_ledger_fa_archive.jsonl` | n/a | 49 rows; `ED-FA-0001` once, `ratified`; `ED-FA-0008` superseded 2026-10-06; `ED-FA-0020` ratified |
-| E-B8 | `awk` line-length census of the 28 faction design files and 18 cross-cutting ones | n/a | three lines over 1,900 characters in two faction files (longest 2,393); none in the cross-cutting set. The two files were read with the reader's long-file mode; no line was cut in what is cited |
+| E-B8 | `awk` line-length census of the 28 faction design files and 18 cross-cutting ones | n/a | three lines over 1,900 characters in two faction files (longest 2,393: `faction_layer_v30:95`, `:211`, `factions_personal_v30:351`); none in the cross-cutting set. Each of the three was read to its end (their closing words are in the read) |
 | E-B9 | `levy_probe.py 0` (in-memory world only; hand-built acts through the real fold between seasons, the `army_presets` route) | 0 · build | Varfell: `p_npc_002` (no seat) mints `army_fac_varfell_0` and `recruit`s 60 levy from `cohort_set_s_026` (`army.recruited`); the same `recruit` by the Duke `p_npc_052` is `recruit.refused`. Guilds, Restoration Movement, Löwenritter: an unseated member mints the army; raisable cohorts 0 (`levy_probe_0.txt`) |
 
 `git status --short` at the end of the lane is recorded in §B8.

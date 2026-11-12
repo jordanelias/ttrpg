@@ -293,3 +293,122 @@ narrative, **H** hygiene.
   victory redesign (PP-406 to PP-418). The three `*_flow_skeleton_v1.md` files trace `mc_v18`, which
   is deleted. Neither is a source for a person. No edit: they are quarantined and stay; the dossier
   generator's path rule is the cause.
+
+## B3. §0A-B — the NPC and AI-chooser intent, read from the whole design set
+
+The first audit's §0A states the intent **as built and ruled** (I-1 to I-14). All fourteen stand and
+are not restated. This section adds the other half: what the design documents say a person is and how
+he should choose, each paired with its ruled successor in code, then set against `decision/`. The
+design is ARCHIVED-NOT-CANON: it is cited for what was meant, and where it and the code differ the
+code is what the game does.
+
+### B3.1 What the design says a person is, and what became of each part
+
+| the design's facet | its statement (source) | ruled or built successor | state in the build | gap |
+|---|---|---|---|---|
+| **Conviction**: what he takes to ground value; one to three primaries and a cultural background | *"Determines what the NPC wants to do"* (`npc_behavior_v30_infill` §1.1); structured concentration over a template (`conviction_taxonomy_v30` §4, §5) | fifteen pursuits on seven axes, all fifteen authored per person (ED-IN-0261; `data/cast.py` refuses fewer) | built, read by every ranking; 46 of 46 | none in kind |
+| **Ethical Framework**: what his institution rewards | *"For officers and functionaries … this filter IS the decision"* (§4.1 step 1); a leader who departs from it pays a Leadership Deviation check | organization goals (`goals.yaml`, ED-IN-0293) and role templates (loyalty from the cosine, `data/cast.py::loyalty`); duty of office is ruled (ED-IN-0335, ED-IN-0338) | goals order attention and stop (F-CHAR-01); loyalty is one seeded stance row; duty unbuilt (CR-88) | the institution has no voice in the ranking, so it cannot disagree with the person |
+| **Resonant Style**: the form of argument that reaches him | Evidence, Consequence, Authority, Solidarity; primary and secondary; a wrong style penalised; discovered by Appraise (§1.3, §6) | none | authored on 18 cast rows, read by nothing (F-CHAR-16); `argue` moves any hearer's pursuits alike (H-268) | `02_CHAR_which_ground_moves_whom.md` |
+| **Beliefs**: two or three first-person commitments, *"Conviction-derived commitment + situation-specific application"* | revised only by a decisive contest, in his style, on that belief; the old belief becomes a Scar (§3.1, §3.2) | a live `commit` to an OUGHT Proposition: ambitions, creeds, goals (I-4) | 148 commits among 46 cast; the want's text is unread (H-185); only a rung goal can be met (AM-B-09) | a commit that can be broken by argument is SC's (H-268); nothing ties a scar to a belief |
+| **Scars and crisis** | per conviction; 1 destabilises, 2 shifts weight and exposes a second style, 3 is crisis; rare by a triple gate and a per-person season cap (`conviction_track_v1` §2, §3) | `Person.scar` counts; thresholds ruled (ED-IN-0261); crisis built (G-Q6) | a tally of every disagreeable act seen (F-CHAR-17); two of three readers dormant | `02_CHAR_scar_is_a_wound.md` |
+| **Self-Other orientation**: for whom he acts | a scalar beside the convictions, drifting with outcomes: *"the Macbeth arc … emerges from accumulated outcomes"* (`conviction_taxonomy_v30` §3) | the `selfish_selfless` axis, projected from pursuits (ED-IN-0261); `beneficiary:` on every verb row | the axis has 2 non-zero alignment cells of 45 rows (parse); `benefits_me` has no production caller (NPC research lane M-NPC-12) | whether it is built is already put to Jordan by that lane; not re-raised |
+| **Temper and flaw** | every supporting NPC has *"a named flaw that produces suboptimal play and creates consequences the players can exploit"* (`npc_roster_v30`); combat `disp`; Companion priorities | risk appetite and horizon ruled (ED-IN-0304); the personality layer ratified as design, build held (CL-PERSON) | no carrier; the only departure from the best act is one realm-wide draw (F-CHAR-02) | first audit's temper hook; `02_CHAR_what_an_act_risks.md` |
+| **Relations** | toward the player, Disposition −5 to +5 and Knots with strain; between NPCs, six typed edges with strength, strain, capacity, inheritance; *"Disposition is a reading of the edge graph, not separately authored"* (`npc_relational_graph_v30` §4.7) | one stance row type and `regard` computed at read, for every pair, the player included (I-9; ED-IN-0301) | the derived-not-stored principle is the same; 5 of 90 directed pairs among ten leaders hold a row; no row has a kind; `tie` and `knot` have no opener | `02_CHAR_relations_have_a_ground.md` |
+| **History** | lifepath in four stages, each granting skills, a Knot, a Truth shift, a Belief shape; *"textural hooks"*: a memory, a place, a person the engine can cite later (`character_generation_questionnaire_v30` §2.1) | `lifepath:` and `heritage:` on the cast row; the ledger | 5 lifepaths, 4 heritages; a handful of seeded claims; no hook | B4; hooks are claims about one's own past and need no new carrier |
+| **Capacities** | attributes 1 to 7; derived resources; Thread Sensitivity, Coherence, Spirit, Truth as independent axes (`character_canon_v30` §7) | ten attributes (ED-IN-0328); Thread Sensitivity as the one gate (#353 §9.2) | attributes carried and switched off; Thread Sensitivity on 10; Coherence and Truth have no reader | B4 |
+| **What he knows and hides** | Beliefs revealed by Appraise or observation; counsel given in private and ruptured by public citation (§3.5); Hooks as leverage | the ledger, told chains, `visibility`, the lie | built; the confidence-break path is unreached (H-204) | FI and SC; cross-listed |
+| **Arc** | authored maps A, B, C with branch conditions on world state (§5.2) | none, and refused: an arc is what an observer reads (ED-IN-0225; first audit) | registry `arc_trajectory` on 36 rows, unread | the branch conditions are state predicates and are usable as instrument readings (CR-90), never as rules |
+| **Initiative toward others** | outreach when well disposed and concerned, demands when hostile and in authority; a leader assigns Duties (`npc_behavior_v30` §8.11; `player_agency_v30` §3) | every person runs `choose`; an act on the player is an act with the player as subject (I-1) | built in kind; the Scene Slate's successor is `questions_for` and `attention_key`'s five tiers | none in kind; volume is the question lanes' |
+| **Who gets a full interior** | Active, Passive, Background tiers; non-named NPCs *"have no Conviction, no Resonant Style, no Beliefs"* (§4.2) | a closed cast of full persons and cohorts at weight above one (ED-WR-0011, ED-IN-0255) | 46 and 37; one chooser for all | none; Jordan's *"local actors should be NPCs"* (2026-08-09) is consistent with it |
+| **How he is read** | a state panel per NPC (Disposition, scar count, *"next-expected-action"*); cut scenes on a scar, a knot, a revised belief; an annual chronicle (`articulation_layer_v30`, on the retired Key substrate) | `decision/sheet.py::chronicle`; the storybar | present values only; no event for a scar or a crisis; no reason (H-343) | first audit's reason trail; B5 |
+
+### B3.2 How the design turns a person into a choice
+
+Three generations of the design say the same thing in three forms.
+
+1. **The Decision Procedure** (`npc_behavior_v30` §4.1, with its infill). Step 1: what does the
+   institution favour. Step 2: if that agrees with his conviction, *"NPC takes it without
+   hesitation"*. Step 3, the **Decision Fork**, only where they diverge: unscarred, he follows his
+   conviction and his institution pays; scarred once, he follows whichever conviction the scar did
+   not touch; scarred further, crisis; and if survival is at stake, survival, *"regardless of
+   Conviction"*. Step 4: a contest with the player suspends the fork.
+2. **The synthesis** (`2026-09-16-conviction-decision-layer/synthesis.md` §1.3, REFERENCE, its rulings
+   absorbed into ED-IN-0251 and ED-IN-0261): `score = pull − cost`, the pull being what he is trying
+   to reach, what he takes to be right, who it is done to and for whose good, and *"exactly one term
+   carries a minus sign"*: what the act *"will take out of me"*, scaled by courage.
+3. **Jordan, 2026-11-05** (AR-04, ED-IN-0347): *"these attributes capabilities are to be combined
+   with pursuits convictions ambitions goals obligations demands etc to provide weighting for best
+   course of actions available to that character."*
+
+Read together they ask ten things of a chooser. Each is set against `decision/`:
+
+| | the property the design wants | in `decision/` today | evidence |
+|---|---|---|---|
+| P1 | **Two oughts that can diverge.** His own and his institution's are separate inputs, and their disagreement is the drama (*"The game does not resolve this tension. The player does."* `player_agency_v30` §3.5) | one ought. A goal chooses the question and is then silent; obligations and demands have no term | F-CHAR-01; `score_terms` returns `(pursuit, stance)` |
+| P2 | **Learnable, with a named way of failing.** A person is predictable in the main and errs in his own way | reversed. The order of verbs is fixed per person whatever the situation, and the departure from it is one realm-wide draw | F-CHAR-01, F-CHAR-02 |
+| P3 | **Rare pressure changes him.** A wound to a conviction brings out a second self | the wound is not rare and its readers are off | F-CHAR-17 |
+| P4 | **He looks after himself.** Danger to him counts against an act, by his nerve | no term | F-CHAR-20 |
+| P5 | **He can be moved, in his own way, and that way must be found out** | any argument moves anyone by the same roll | F-CHAR-16; H-268 |
+| P6 | **Whom an act is done to matters by what they are to him**, and breaking with them costs | regard enters the score and dominates where it is non-zero; rows are few and have no kind | F-CHAR-08, F-CHAR-18 |
+| P7 | **He acts on others unprompted**, the player included | built: one chooser, one act shape | I-1 |
+| P8 | **The world does not wait**: what the player leaves alone resolves by the NPC's own rule | built | first audit §1 |
+| P9 | **He can be read**: what is at stake, who is acting and why, what changed | absent after the decision | H-343 |
+| P10 | **He acts on what he can observe**, never on the engine's knowledge | built, structurally | I-2 |
+
+Four of ten are built (P7, P8, P10 whole; P6 in part). The six that are not are the six that make a
+person *characterful* in the brief's sense: P1, P2, P4 and P5 make two people choose differently for
+reasons that are theirs; P3 lets one person become different; P9 lets anyone tell.
+
+### B3.3 Where this reading differs from the first audit's §0A
+
+1. **"Prose only" is too short a list and too flat a label.** Most of what §0A files there has a ruled
+   successor that §0A names elsewhere without pairing: the Ethical Framework became goals, role
+   templates and the ruled duty of office; Beliefs became commits; the Scene Slate became the question
+   stream; Disposition and Knots became stance and regard; Duties became organization goals. B3.1 is
+   the pairing. What is left with **no** successor is short and specific: Resonant Style, the ground
+   of a relation, self-preservation, the flaw, and the rarity of a scar.
+2. **The evidence row is refined, not reversed.** §0A sets *"presented evidence can crack a
+   conviction"* against #353 §9.3 (evidence moves claims; only argument and consequence move the
+   moral layer). Read whole, the Evidence style is a fact about the **hearer**: which support an
+   argument needs before it reaches him. It survives the ruling as an advantage on `argue`, whose
+   effect is still the only mover. The conflict with the ruling is named in the proposal and is
+   absent on this reading.
+3. **§0A's list of what an NPC needs to be characterful is score-side** (situation, temper, a moving
+   interior, a reason). The design's own list is longer by three that are person-side data and one
+   that is a rule: a susceptibility, relations with a ground, an appetite for risk, and a wound that
+   is rare. They are P5, P6, P4 and P3.
+4. **The arc row gains a use.** §0A says an NPC rule keyed on an arc stage is scripting drift, and
+   that stands. The arc maps' branch conditions (*"Almud's Truth reaches 1 or 0 AND Löwenritter
+   Autonomy = Loyal"*) are predicates over state; as readings of an instrument they are the designed
+   answer to "did this run produce the story the authors hoped was possible", which is CR-90's job.
+5. **The legibility loss is larger than §0A's "only the occasion survives".** The ratified 2026-07-04
+   audit judged NPC behaviour the most legible part of the design, because a priority tree and an
+   arc menu can be read off a page. Replacing them with a sampled score was right for emergence
+   (P8, P10) and removed the one property the design had in full. The reason trail is therefore not
+   a convenience: it is the replacement for something deliberately given up.
+
+### B3.4 The intent, in the form other lanes can cite
+
+**A person in Valoria has ends (pursuits), allegiances he has committed to and offices he holds,
+relations to particular people each with a ground, a history that left him capacities and a few
+beliefs about named others, a temper (how much danger he will accept and how steadily he keeps to his
+best judgement), a particular way of being moved by others, and wounds that are few and that change
+him. A chooser must (1) rank acts by his ends and by his institution's, as separate terms, so that
+their divergence can be seen and paid for; (2) weigh the person an act is done to by what that person
+is to him; (3) count what an act risks to himself, by his appetite; (4) depart from his own best by
+his own steadiness and nobody else's; (5) change his ends only by a rare wound or by an argument of
+the kind that reaches him; and (6) leave, for every choice, a reason a reader can follow. He reads
+only what he holds (I-2), and the player is a person of the same kind whose choices come from outside
+(I-1).** Items (1), (4) and (6) are the first audit's proposals; (2), (3) and (5) are this
+addendum's. Nothing in it needs a second chooser, a name in a branch, or a stored opinion.
+
+### B3.5 What each lane should take from it
+
+| lane | what the reading asks of its NPC-facing surface |
+|---|---|
+| SC | a contest input for the hearer's susceptibility, fed by what was cited (its SC-P8) and by who is speaking; a result that can depend on the hearer and not only on the pools |
+| PC, MB | the opening approach and the standing order are chosen by the same appetite that prices any dangerous act; inside a bout, the module's default policy takes that appetite as typed input (the first audit's §14; `Combatant.disp` has no registry key) |
+| FA | duty as a second term in the ranking (CR-88), not a decline, so that an officer can act against his office and be seen to |
+| FI | a finding about a person's susceptibility or relations is a claim like any other and is what "learning how to reach him" consists of |
+| WR | arc branch conditions as readings (CR-90); a scar and a crisis as Events an observer can list |
+| GO | the person panel of the design (relations, wounds, the reason for the last act) is the reason trail and the sheet, not a new model |

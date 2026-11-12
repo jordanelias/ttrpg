@@ -72,3 +72,59 @@ Lane: the surviving audit corpus under `.audit/` (archived-not-canon; context an
   - Determinism rules: integer basis-point salience, content-addressed fragment selection, ordered `convergence_fired_set` (:94-99).
 - **Conflicts / stale:** New Key types `meta.convergence_detected`, `meta.arc_state_changed` (:65) assume the retired Key substrate. Whether `game_director`/`scenario_authoring` exist as code: `[UNVERIFIED]`.
 - **Open items:** Forks 1-9 (Torben Loyalty range 8->0 vs clock_registry 0-7 start 3 is a registered data conflict, :122-123) have no answer visible here.
+
+### .audit/2026-07-08-contest-settlement-faction-interface/interface_report_v1.md
+- **What it is:** Informational review of how far social contest is wired to settlement management and faction actions (SC lane, cross-cutting FA/SE, 2026-07-08); method: canon-doc read + `sim/` code trace + research-lineage read.
+- **Status:** "FILED (informational review) ... Advisory only"; its top recommendation (ED-SC-0002) said to be executed by the same commit. Reading: historical snapshot; code paths it cites (`sim/...`) no longer exist (`sim/` dissolved, CLAUDE.md §3), so the "thin interface" finding is stale as to files but the design gap it names is likely still the live question for engine/season/.
+- **Bears on:** SC, FA, SE, CORE.
+- **Content that matters:**
+  - Verdict "thin": the only live contest path (Stability Crisis in `scene_dispatch.py`, parties derived from one faction's own stats `side_a=round(L)`, `side_b=round(7-Sta)`, proceeding `guild_arbitration`, all [SEED]) resolved through the kernel and then discarded its verdict (no `echo` block) (:89-109); `parliamentary_vote.py` was a complete tested mutating path (`adjust("L",...)` :115) never called by the campaign loop (:111-124).
+  - Only 1 of 8 mandatory zoom-in triggers was evaluated (`evaluable={"Stability Crisis"}`); Settlement Revolt, Faction Leader Removal, Rank Advancement recognition were deferred though contest-shaped (:89-95, :232-243).
+  - No settlement-scale contest exists; `governance_play_redesign_v1` verbs Hold Court / Treat / Bargain / Recall are all explicit asymmetric-§7 contests but unbuilt; the party-derivation bridge for settlement stats (Order/Legitimacy/Popular Support) is the missing piece (:146-169, :217-231).
+  - Doctrine AU-1 ("faction stat has no setter"; writes terminate at settlement/territory cells or decaying national-event-modifier Keys) and AU-5 wiring contract name the same seam as a structural incompleteness, not a nicety (:195-215); open HIGH D.6 double-count risk between settlement stat_deltas and faction aggregate (:269-275).
+  - Consensus (Type-3) proceeding is a gap: "by consensus" collapses to a Mandate-weighted sigma vote; `coalition_vote` pools N parties onto two poles; `wrapper.py` GAMES marks consensus STUB (:277-308).
+  - Research lineage claim: the deliberation research (Venice, Florence, conciliarism, Putnam two-level games, liberum veto, sortition) is institutional/collective-body material imported DOWN into the personal-scale contest, so the faction/settlement interface is the design intent, with the engineering lagging (:327-476).
+- **Conflicts / stale:** Says there is "no Mandate stat in code" (`Faction` has L/Sta/W/I/Mil) (:171-175) and that `domain_echo` output shape is the pre-inversion scalar-delta shape; both about the dissolved `sim/` model. ED-SC-0002 is now `resolved` in `registers/editorial_ledger_sc_archive.jsonl:2` though the report calls it Jordan's open P0 pick. `echo_transport.py`/Key substrate it relies on are RETIRED.
+- **Open items:** ED-SC-0007 (Bout verdict to echo degree) and the settlement-scoped `_emergency_council_parties` analogue; whether `engine/season/` now routes any contest verdict into settlement state `[UNVERIFIED]` — an SC/SE/FA audit should test this by execution.
+
+### .audit/2026-07-08-mass-battle-gauge-architecture-audit/01_wave1_synthesis.md
+- **What it is:** Synthesis of 7 producer+critic investigations into why `tests/sim/gauge_mb.py` scored 7/20 under the live defaults (PER_CELL=1, POOL_QUALITY_MODEL=1, n=60) (MB lane, 2026-07-08).
+- **Status:** none stated in-file. Reading: historical/diagnostic ("diagnostic, not curative", :209); many named defects may since be fixed or re-ruled.
+- **Bears on:** MB, DICE.
+- **Content that matters:**
+  - Seven root causes: #1 footprint/`ncells` Lanchester-density artifact (two unreconciled cell-count generators; composed-army 133-200-troop subunits collapse to 1 cell, ~8x density ratio; reversal ablation flips H3 100%->0% and H10 0%->100%) (:24-39); #2 super-linear resolution, melee exponent p~3.2 under PER_CELL=1 vs Linear-Law target <=1.4, old p 1.65-2.5 measured on the wrong path because `lanchester_signature.py:24` hardcodes PER_CELL=0 (:41-50); #3 side-dependent Arrowhead asymmetry (100/0/0 on side A vs 43/43/13 on side B), root line untraced (:52-55); #4 `hold` stance never closes to range (R3 guaranteed 0-casualty draw) (:57-61); #5 `recalc_size` force-routes every subunit when aggregate floors (:63-66); #6 n=60 noise makes C3,H9 not real fails so true divergence ~11/20 (:68-71).
+  - Refuted: morale/rout as independent driver (no-op `rout_resolution` still 100/0), `MORALE_SIBLING_PULL` as H4 cause, post-rout pursuit unreachable in gauge (:83-87).
+  - Per-cell QUALITY granularity is provably inert for all 20 rows; cell COUNT/density is the dominant bug (:160-170). Dead constants: `MORALE_EROSION_DAMP`, `ROUT_FLOOR_LOSS_PCT`, `SUBUNIT_ROUT_FLOOR` never consumed; `MORALE_PHASE_CAP` shadowed by hardcoded 3.0 at `core/state.py:60` (:78).
+  - Five Jordan rulings requested: DG-A resolution architecture/exponent, DG-B canonical cell-count generator, DG-C morale floor of 1 while general present, DG-D cavalry vs infantry envelopment, DG-E per-cell scope + two stamina systems (:189-201).
+  - Warning that pass count is not monotonic: fixing #1 or #2 alone may knock C4/C7 out of band (:222).
+- **Conflicts / stale:** Cites `tests/sim/gauge_mb.py` (still exists), `core/attrition.py`, `units.py:1603-1611`; grep shows `_lanchester_strength`/`recalc_size` still present in `modules/mass_battle/core/attrition.py` and `hierarchy/units.py`, so some defects may be live. Whether DG-A..E were ruled: see later MB-lane docs in this assignment (wave2, README); `[UNVERIFIED]` otherwise.
+- **Open items:** Trace the Arrowhead A/B asymmetry; ablate H7/H8; confirm `recalc_size` guard rescues H4/H5; decompose H2 edge vs amplifier (:203-209).
+
+### .audit/2026-07-08-mass-battle-gauge-architecture-audit/02_wave2_synthesis.md
+- **What it is:** Wave-2 synthesis (movement/pathing, stances/tactics/orders, reach/targeting, ranged/volley) feeding RC-5; includes a new probe by the synthesizer (MB lane, 2026-07-08). Begins mid-conversation ("I have what I need").
+- **Status:** none stated. Reading: historical diagnostic, merged into README.md (third-level synthesis); numbering is wave-local (DG-6a..6f), final numbering is in README.
+- **Bears on:** MB, DICE, CHAR (troop-type grounding of behaviour).
+- **Content that matters:**
+  - R1 (ranged side wins 65% vs band 0-30) is a harness bug: ranged side built `troop_type='infantry'` (4/5/6) not archers (3/3/3); archers flips R1 to 0% (:18, :59).
+  - R3 (100% draw) is hold + out-of-range deployment (both hold, 19 rows apart vs `VOLLEY_MAX_RANGE=8`); `kite` fixes it only with disc-5 stats; with correct disc-3 archers `_node_advance` computes `floor(0.7)=0` and re-freezes (probe table :38-51). Live `_node_advance` lacked the legacy `_speed_accum` fractional accumulator (:49).
+  - Troop type grounds STATS not BEHAVIOUR: `ROLE_SPEC`/`role_allowed` are 0% exercised by the 20-row battery, ~11-12 of ~15 instruction strings are inert (byte-identical outcomes), only `brace/envelop/sweep/kite/yield` do anything; `hold` and `volley` as instructions do nothing; Orders substrate built in 2 places using 2 of 4 trigger kinds (:85-94).
+  - Melee pool bakes `eff_size` in (`exchange.py:110`); volley pool `max(1, eff_power-_vpen)` does not (`orchestration.py:1154-1166`); folding it in while keeping post-roll `K_SQUARE*eff_size` would double count numbers (:98-107).
+  - `TROOP_TYPE_REACH={}` makes the recoil gate's reach half a no-op; filling it flips currently-passing C2/C6, which are the same scenario built twice (:67, :143).
+  - Frozen momentum / flat `charge_pen=3` every tick (contributor to C1-C7, unquantified) and volley/melee standoff collision (`VOLLEY_MIN_RANGE=2` == melee standoff 2.0 so locked archers fire unreciprocated volleys, 15-36% max HP) (:62-66).
+- **Conflicts / stale:** Stale-comment claim: config/orchestration comments calling ROLE_SPEC "INERT" are wrong (Stage D wired the gate) (:79). Working-tree check: `_speed_accum` is now used in `modules/mass_battle/hierarchy/units.py:2097`, so the node-path floor may have been addressed `[UNVERIFIED]` for `_node_advance` specifically.
+- **Open items:** DG-6a..f (node-path speed floor, speed granularity, volley pool, reach ratification, hold for ranged, tactics grounding); quantify charge_pen; C3 mirror asymmetry; `sweep` transit.
+
+### .audit/2026-07-08-mass-battle-gauge-architecture-audit/README.md
+- **What it is:** Final combined engineering audit (third-level synthesis of two Opus-max waves, 11 surfaces, ~24 subagents) of why `tests/sim/gauge_mb.py` scored 7/20; MB lane / RC-5, 2026-07-08.
+- **Status:** none stated. Reading: historical, but the best single index of MB engine defects E1-E10, harness artifacts and rulings DG-6..DG-16; ED-MB-0006 is its reference.
+- **Bears on:** MB, DICE, CORE (harness instrument).
+- **Content that matters:**
+  - Row count: 13 nominal fails -> ~11 real (C3,H9 noise) -> ~9 deep engine divergences (H2-H8,H10,H11) after R1/R3 treated as harness (:31-39).
+  - E1 density defect proven by reversal ablation (H3 100->0, H10 0->100) and D1 amplifier p~3.2 vs target <=1.4; they are multiplicative, no single fix lands a row in band ("diagnostic, not curative") (:95-97, :250).
+  - H4 "Cannae" failure is a compound: ED-MB-0006 flipped it from WIN-OUT to losing; symmetric-thirds split gives pin centre 133 of 400; wing-release inert in H4 slot but decisive in H11 slot; `recalc_size` cascade; 33% draws are a turn-cap artifact (:146-156).
+  - E2 Arrowhead side asymmetry (100/0/0 on side A vs 43/43/13 on side B) root line untraced; every cavalry row C1-C7 has Arrowhead on side A so all are provisional (:101, :259).
+  - Rulings DG-6..DG-16 list with crosswalk to wave labels; DG-1..5 already ruled (symmetric-at-parity, fighting withdrawal/yield, intensive bottom-up pool, blended sibling-pull morale, racing-clocks closed) (:206-230, :268-284). Morale-floor-of-1 (DG-8) vs `mass_battle_v30.md:294`.
+  - Granularity directive verdict: cell-count/density half necessary; per-cell quality half provably inert for the gauge; speed, dr, stamina and volley still ungrounded; two stamina systems run simultaneously under PER_CELL=1 (:160-170, :222).
+  - Method note: ~4.5M subagent tokens (:4) as an example of cost for this style of audit.
+- **Conflicts / stale:** All file:line cites are July 2026 and `units.py` has grown (recalc_size now at :2982 still without the guard, per one grep); `PER_CELL`/`POOL_QUALITY_MODEL` defaults and gauge band results should be re-run before relying on any pass count. Whether DG-6..16 were ruled later: `[UNVERIFIED]` here (check HANDOFF_MB / ED-MB ledger).
+- **Open items:** Section 7c list (trace E2; ablate H7/H8; E4 rescue test; quantify E7); DG-6 is named the rate-limiting ruling.

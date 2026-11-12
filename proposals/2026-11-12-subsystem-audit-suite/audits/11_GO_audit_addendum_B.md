@@ -93,3 +93,126 @@ in quarantine and is not a queue (CLAUDE.md §0, the terminal-record test). The 
 inventory of 84 playable moments, each tested for what the player sees, may declare, and learns) is the
 one transferable instrument and is reused in §B3.
 
+### F-GO-15 · blocks the standing requirement · the player surface has no shared vocabulary, and six lanes have each proposed their own
+
+**Claim.** "Each subsystem a playable game, on one code path, integrated" needs one answer to *what a
+player is shown*. The suite's own proposals give six: SE `sheet(w) -> dict` (`07_SE_valley_scenario.md`
+§4); FA "a digest" (`06_FA_playable_scenario.md`); MB `FieldOutcome.report` of `PhaseSummary` plus a
+`FieldPhaseView` (`04_MB_playable_field_scenario.md` B, D); PC `DuelRoundOutcome.trace` plus
+`CombatTurnView` (`03_PC_duel_round_and_approach.md` §2, §4); SC a tuple on `Event.ending`
+(`05_SC_contest_record_on_event.md`); FI "one scenario summary line" (`08_FI_03_playable-inquiry.md`
+§5). The two surfaces already built disagree about what a surface may read: `decision/sheet.py` is
+under the AX-2 path scan and takes no `World`; `harness/military_menu.py::menu(w, actor)` takes it
+(`:87`).
+
+**Evidence.** The files cited, each opened at the lines given. **Falsifier.** A shared record type
+two of those proposals both name for a consequence: `grep -ln "ReceiptRow\|AccountRow\|AftermathRow"
+proposals/*.md` in the suite finds only GO's files (§B7 E-B6).
+
+**Touches.** R-04, and the standing requirement's "one code path". **Consequence.** Each lane's
+design is sound alone; together they are six dialects (`CLAUDE.md` §10, shape divergence), a port
+re-implements six, and a player learns six. SE's and FA's summaries also read world truth
+(`world_q.hunger`), which is right for a developer's instrument and wrong as the steward's own view.
+**Minimal fix.** One protocol: five readings and one scene pair (SURF-B), and one transcript runner
+every scenario prints through (SURF-B §8). R50, R74.
+
+### F-GO-16 · degrades narrative · a person cannot read what his own act came to
+
+**Claim.** The oracle shows what may be done and, in the ledger, what has been learned. It has no
+reading of *what this act of mine did*, and the ledger does not reliably carry it.
+
+**Evidence** (E-B3, E-B4: seed 0, one season, hash `5ab73af2…` equal to the plain run). `p_npc_001`
+resolved 15 acts; each caused one Event directly. Two `research` acts ended `finding.none`,
+`degree=Failure`: his ledger holds **0** claims of that kind. `sabotage.refused` and
+`compliance.impossible` did deposit. Ten of the 15 Events carry `observed` (the fold's reads, for
+example `Observation(subject='set_s_001', predicate='stores:grain', value=40)` elsewhere in the log);
+none carries `ending`, which has no production reader (`state/carriers.py:303`). Of his 119 claims,
+0 hold an Event id or an act id as `id`, `subject` or `value`. Pairing by `(kind, subject)` fails
+for 8 of the 15 (a `record.created` claim's subject is the new Record, not the act's subject).
+
+**Falsifier.** A claim in the actor's ledger for each of his 15 acts' Event kinds on the act's
+subject: run; 7 of 15. **Touches.** R-02 (consequence) as the player meets it; R-06.
+**Consequence.** A player who researches and fails is shown nothing. A port would reach into the log
+for it, which is world truth through the back door. **Minimal fix.** `receipt`, host-side, own acts
+only, depth one, values withheld unless held (SURF-B §3). R51, R72, R73. `finding.none` leaving no
+claim is cross-listed to FI as a question (is "I found nothing" a belief?), not changed here.
+
+### F-GO-17 · CORRECTS SURF §3 · `AftermathRow.own_act` cannot be computed
+
+SURF §3 read `own_act` as "the act id of his that the claim's chain names" and grouped claims "by
+whether `Claim.chain` or `Claim.doer` names one of his own act ids (both fields exist on `Claim`)".
+Both fields exist; neither holds an act id. `chain` is the tellers, origin first
+(`state/carriers.py:358-371`: "WHO PASSED THIS CLAIM ON"); `doer` is "the holder's own id when the
+claim records HIS OWN act, else `None`" (`:372-381`). E-B4: 0 of 119 claim ids are act ids.
+**Resolution (R52).** `account` partitions by what the fields do say (`own = doer == holder`; told,
+with teller, origin and hops already derived on `Claim`); the pairing of an act to its outcome is
+`receipt`'s, through the driver's `act_of`. No carrier field is added: an act id on `Claim` would be
+a second amendment to ratified `04` §B.9 (the first was `doer`, ED-IN-0294), and the host-side
+reader makes it unnecessary.
+
+### F-GO-18 · CORRECTS F-GO-08 and R20 · play is of two kinds, and two choice surfaces were missed
+
+**Claim.** F-GO-08 said "PLAYABLE exists at one seam" and R20 that every scene is hosted "only
+through a typed decider". That is true of suspension and false of play.
+
+**Evidence.** (i) *Loop-played subsystems.* The seated person's offer at seed 0 held 33 distinct
+verbs of the 66 resolvable, among them `speak`, `argue`, `petition`, `tell`, `lie`, `give`
+(contest); `research`, `surveil`, `interview`, `reconstruct`, `thread_read`, `survey` (inquiry);
+`commit`, `comply`, `construe`, `evade / defy` (governance); `build`, `found`, `tend`, `transfer`
+(settlement) (E-B3). SC decided that a hearing is "the season loop on a one-matter fixture, with a
+player callback on `dispatching_chooser`. No nested bout engine … no suspension inside a provider"
+(`05_SC_playable_hearing.md` §"The resolution"), because a hearing's turns are verb rows and a
+duel's are not. (ii) *The military menu.* `harness/military_menu.py` (ED-IN-0306 phase 5b; "Jordan
+ruled the menu an engine-side Python API") gives the commander of a faction's army the legal army
+commands with bounds, the module's vocabulary and advisories, and builds the acts
+(`recruit`, `form_unit`, `assign_troops`, `order_unit`, `disband_unit`, `discharge_troops`). At
+build, seed 0: 43 of 83 persons may mint their faction's army; none commands one (E-B3).
+`harness/army_presets.py` gives an unplayed faction an army through the same fold.
+
+**What stands of F-GO-08.** Suspension exists at one seam (the duel). The field has a choice surface
+before the battle (the menu, and `FieldOrder(role, retreat_at)`) and none during it; the contest and
+the inquiry need none. **Resolution (R53, R54).** SURF-B §6 types both kinds and says which
+subsystem uses which.
+
+### F-GO-19 · degrades narrative · the offer is three to five times the size the design set calls legible, and nothing in it says which rows are about the matter in hand
+
+**Evidence** (E-B3; one person, one seed, a reading). Five deliberations showed 22, 32, 33, 32 and
+38 candidates with budgets 5, 5, 4, 3, 2: 157 rows in a season. Twenty-three verbs appeared on all
+five sheets (`forge`, `sabotage`, `conceal`, `challenge`, `exchange`, `surveil`, …; `train` four
+times a sheet); five verbs appeared once (`petition`, `tend`, `lie`, `commit`, `argue`). The
+question changed each time (`need`, then four `claim_landed`, each `about` a different claim) and
+the view carried 7 to 12 separate questions. `Candidate.why` was deleted because nothing read it
+(`carriers.py:591-595`). The design intent: 5–8 options a decision (`valoria_ui_ux_v4.md` §5.2), 12
+visible Slate entries (`v4_1` §2.5), a load score of 8.0 or less with "every player decision …
+meaningful and non-obvious" (`cogload_moderate_target.md`).
+
+**Falsifier.** A field on `Candidate`, `DevelopmentSheet` or `View` that ties a candidate to one of
+the questions: read the three classes; none. **Touches.** R-05 (verbs) and R-04 as the player meets
+them. **Consequence.** The aperture is wide, which is the engine's strength, and unreadable as
+shown, which makes the wide aperture feel like no situation at all. **Minimal fix.** `OfferRow.occasion`
+and `Offer.withheld`; order and grouping are the oracle's, the cap the client's (SURF-B §2, MODES
+§3). R55, R56.
+
+### F-GO-20 · hygiene · the Godot architecture specification contradicts Layer 1 at five points and names the wrong governing document
+
+Detail and the full table are §B5. In one line: one autoload holding all state against rejection 1;
+container signals as the consequence stream against rejection 3; one seeded generator for the
+campaign against rejection 4; a tracker registry of stored faction and clock values against PART D's
+ban on stored aggregates; d10 pools with a target number against the one degree ladder. Its Status
+line says the governing document is the conversion strategy; the ratified mapping is §C.12.
+**Minimal fix.** REF edits 1–2. R66–R71.
+
+### F-GO-21 · degrades narrative · the design set holds two opposite answers to "what does the player know", and three lanes' scenario summaries follow the wrong one
+
+`throughlines_complete.md` T-30: "Player POV (full-framework access) → Character POV
+(framework-blind) … The gap between player and character knowledge IS the gameplay."
+`integration_proposal_v30.md` Part 7 gives the player a "Reported layer" (a faction intelligence
+feed) beside the "Witnessed" one. Against them: UI Oath II test 3; the case corpus (46 of 281
+knowledge rows name a player, and their recurring form is "players must NOT automatically know …
+surfacing it requires a specific investigative action", "only by watching her behavior across
+sessions, not via any status readout", "discovered retroactively, not tracked live"); and ratified
+§C.11 ("A split on who is looking breaches the axiom"). The code follows §C.11: reaching past the
+`View` raises. **Resolution (R58, R59).** §C.11 governs; nothing in play shows the player more than
+his person holds; a lane's `sheet(w)` is a developer's instrument. What survives T-30 is one
+question about the end of a campaign, returned to Jordan in §B6.3.
+

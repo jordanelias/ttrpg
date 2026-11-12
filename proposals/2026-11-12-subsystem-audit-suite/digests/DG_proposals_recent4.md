@@ -267,3 +267,204 @@ Lane: proposals dated 2026-09-20 or later, and undated ones. Note: the assignmen
 - **Conflicts / stale:** Hard-coded territory id in a rule validator is scripting drift in miniature (acceptable in a proposal tool). Directory slated for deletion once built.
 - **Open items:** none.
 
+### proposals/_session_provenance/2026-08-29-to-31/ARCH.md
+- **What it is:** Scratchpad brief (2026-08-29) fixing the "modular hierarchy" code architecture: the module tree IS the containment ladder (Person -> Family -> Community -> Settlement -> Territory -> Duchy -> Realm); faction orthogonal.
+- **Status:** "adjudicated, binding on the suite" (for the from-scratch exercise). Reading: historical; the README flags an error corrected by adjudication C-1 (R-1 "receives aggregates" retracted -> compute-on-demand).
+- **Bears on:** CORE, FA, SE, PROCESS.
+- **Content that matters:**
+  - Rules R-1..R-5: a module reads own state only, may compute descendant aggregates on demand, writes only its own state; decisions take (actor, VIEW) never world; a faction is a set of persons, never a rung or module (:57-70).
+  - Down-stroke = refraction through child modules; up-stroke = rung refuses/carries a demand (:23-28).
+- **Conflicts / stale:** Vocabulary (Family/Community rungs) differs from the live rung_kinds roster {person, hearth, community, settlement, territory, province, duchy, realm}: "Family" became "hearth" in code.
+- **Open items:** none (superseded by `11_code_shape` and holonic architecture).
+
+### proposals/_session_provenance/2026-08-29-to-31/AUDIT_BRIEF.md
+- **What it is:** Brief for the NERS audit critics of the from-scratch suite: steelman-then-attack, E as ratio, S = up/down propagation, R = structural dominance; 2026-08-29.
+- **Status:** none stated (working brief). Reading: historical; the NERS method is now owned by `skills/ners/SKILL.md`.
+- **Bears on:** PROCESS, WR, CORE.
+- **Content that matters:** "Most valuable finding is a FALSE N-LINE" (:33-34); R worked case = Comply/Defy fork where gain decays but cost compounds (:44-47); return format fixed at 1,600 words (:69-79).
+- **Conflicts / stale:** Uses an older NERS wording (N = emergence) than CLAUDE.md §0.06's definitions.
+- **Open items:** none.
+
+### proposals/_session_provenance/2026-08-29-to-31/AXIOM.md
+- **What it is:** Jordan's containment axiom A-1..A-4 captured mid-session 2026-08-29: Family and Community are first-class rungs; a faction is any aggregate at any scale (derived scale); peers compete in a shared container.
+- **Status:** "JORDAN'S BINDING DESIGN AXIOM (2026-08-29...)". Reading: historical statement of intent, still the origin of the rung ladder and of "faction is a set, not a tier".
+- **Bears on:** FA, SE, CORE, WR.
+- **Content that matters:** A-2 faction scale is DERIVED not declared; "two brothers and a national church are the same object" (:8-10); cadet branches, caste and guild dynamics become mechanical (:27-29); Canon's community level (settlement_layer_v30.md:171) vindicated (:25-26).
+- **Conflicts / stale:** "Family" rung is `hearth` in the live roster.
+- **Open items:** none.
+
+### proposals/_session_provenance/2026-08-29-to-31/BRIEF.md
+- **What it is:** Shared writer brief for the nine from-scratch design lanes: no existing work binds; nine throughlines T1-T9; NERS criteria; closed-loop objects (producer -> carrier -> consumer).
+- **Status:** none (working brief). Reading: historical.
+- **Bears on:** PROCESS, CORE, WR.
+- **Content that matters:** Throughlines T1 all actions by characters; T2-T3 changing/fallible memory; T4 no omniscience; T5 upward aggregation; T6 downward ripple; T7 events/clocks/gates as basis of debate; T8 world churns; T9 field investigation first-class (:31-43). "No CI gates, no validators, no registries whose only consumer is process" (:60-61).
+- **Conflicts / stale:** references scratchpad paths now gone.
+- **Open items:** none.
+
+### proposals/_session_provenance/2026-08-29-to-31/CODESHAPE_FORBIDDEN.md
+- **What it is:** Extract of PR #342's code-shape section 7 (forbidden list), ownership table and three signatures `choose(Person,View)`, `resolve(Act,World)`, `witness(Person,Event)`.
+- **Status:** none; MANIFEST says its prose paraphrase lists eleven items where section 7 has fourteen. Reading: historical, flawed extract kept deliberately.
+- **Bears on:** CORE, CHAR, FI, PROCESS.
+- **Content that matters:** Forbidden: a `World` param on decision functions; cohort deposits carrying a value rather than a distribution; stored aggregate/norm/density/reputation fields; a second resolver or auto-resolve fast path (:14); a flat additive person modifier on a roll (:16); scheduled recovery tick on standing (:18); per-entity branch in resolver (:19). Ownership: Person holds interior; container only stake/judging set/standing dates; "Nobody" holds aggregates (:25-31).
+- **Conflicts / stale:** Row 14 "a second resolver, an auto-resolve formula, a fast path" bears directly on Jordan's "one path" rule for mass battle and personal combat (auto vs playable).
+- **Open items:** none.
+
+### proposals/_session_provenance/2026-08-29-to-31/FINDINGS_DIGEST.md
+- **What it is:** Digest of two work lines handed to integration lanes: the NPC matrix (play-space coverage, ~56 probes) and the arc reachability test (83 arcs), 2026-08-30.
+- **Status:** none; findings marked "REVIEW" are under adversarial review. Reading: historical, partly corrected by the integration suite.
+- **Bears on:** CHAR, ARCS, WR, CORE.
+- **Content that matters:**
+  - Verdicts 33 RICH / 16 THIN / 4 BLOCKED / 1 SPLIT / 1 SPECTATOR; 19 of 55 have a blocked core (:5-14). Arc tally 40 REPRODUCED-BETTER, 2 REPRODUCED, 22 TRANSFORMED, 10 LOST, 9 NEVER-WORKED; denominator disputed (:68-71).
+  - "A BLOCKED CORE DOES NOT STOP AN ARC FROM RUNNING. IT STOPS IT FROM TERMINATING." (:100).
+  - The one hole: no world-substrate quantity (Mending Stability, Gap, Rupture) (:74-80). Keep ONE ACT PER PERSON (:107-108). Thresholds: 13 arcs end at a scheduled sitting and survive; 3 end at a counter reaching a number with nobody deciding and lose their ending (:88-91).
+- **Conflicts / stale:** Several claims struck by later `03_corrected_findings` (D-1 "floor" struck; C-3 struck) per SUPERSEDE_BRIEF.
+- **Open items:** whether convergence of lanes was seeded by shared briefs.
+
+### proposals/_session_provenance/2026-08-29-to-31/MANIFEST.md
+- **What it is:** Manifest of the session scratchpad: 19 files copied, 6 deliberately not (extracts of live research files, the 892K arcs corpus at ref `v30-snapshot-2026-06-28`).
+- **Status:** none. Reading: historical.
+- **Bears on:** PROCESS, ARCS.
+- **Content that matters:** Both Part-2 briefs committed at `3dbdf16d` before lanes returned; Part-3 briefs at `b5777ccc` (:62-64). Six session claims were confident-and-wrong, each authored upstream and caught by a reader who had not seen the producer's reasoning (:67-70). Arcs corpus recoverable at the named ref (:52).
+- **Conflicts / stale:** lists `PRECEDENT.md` among copied files; not present in this directory [UNVERIFIED].
+- **Open items:** none.
+
+### proposals/_session_provenance/2026-08-29-to-31/NERS.md
+- **What it is:** NERS charter as of 2026-08-29: E is a ratio against N and R; S = up/down propagation; R = structural dominance.
+- **Status:** "binding on the audit stage" (then). Reading: historical; superseded by CLAUDE.md §0.06's definitions (different N/S wording).
+- **Bears on:** PROCESS.
+- **Content that matters:** Rule 1 E not independent (:8-16); Rule 2 S = S-UP/S-DOWN (:18-24); Rule 3 R dominance with Comply/Defy worked case (:26-33).
+- **Conflicts / stale:** the S definition here (T5/T6 only) is narrower than §0.06 S (pauses, consistent methodology, zoom).
+- **Open items:** none.
+
+### proposals/_session_provenance/2026-08-29-to-31/PART2_AGONIST_BRIEF.md
+- **What it is:** Brief for the two Part-2 producers (integration proposals against PR #342 for the NPC matrix and arcs).
+- **Status:** none. Reading: historical.
+- **Bears on:** PROCESS.
+- **Content that matters:** Each change carries exact doc/section, text change, NERS line, cost, falsifier (:35-40); smallest change; no validators or registers (:44-46); separate SETTLED from LIVE CHOICE (:48-50).
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
+### proposals/_session_provenance/2026-08-29-to-31/PART2_ANTAGONIST_BRIEF.md
+- **What it is:** Brief for the cold read-only critic of Part 2 (factuality, compliance, logic, rigour, cost); rules P-2 seeded convergence, P-3 one-sided scale, P-4 pessimistic reading.
+- **Status:** none. Reading: historical.
+- **Bears on:** PROCESS.
+- **Content that matters:** Return format VERDICT/Struck/Compliance/Weakened/Survived/Missed (:53-65); must return NOs and YESes, no replacement designs (:42-50).
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
+### proposals/_session_provenance/2026-08-29-to-31/PART3_ANTAGONIST_BRIEF.md
+- **What it is:** Brief for the Part-3 critic of the comparative document; hazards: manufactured complementarity, false corroboration, unfalsifiable claims, retrospective coherence, smuggling of struck claims.
+- **Status:** none. Reading: historical.
+- **Bears on:** PROCESS.
+- **Content that matters:** Test whether two instruments have different blind spots (:21-25); check a name collision like `exposure` (:26-29).
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
+### proposals/_session_provenance/2026-08-29-to-31/PART3_BRIEF.md
+- **What it is:** Brief for the Part-3 comparative document (NPC matrix vs arcs: emergent narrative, code shape, working together).
+- **Status:** none. Reading: historical.
+- **Bears on:** PROCESS, ARCS, CHAR.
+- **Content that matters:** Matrix = coverage instrument over seats and affordances; arcs = reachability test over outcomes (:21-32); four fabricated/unverifiable objects caught each time by a reader who had not seen the producer's reasoning (:52-58); "no rates" - arc tally is an upper bound (:66-68).
+- **Conflicts / stale:** mis-pointer to "07 §E" for the `exposure` collision (MANIFEST).
+- **Open items:** none.
+
+### proposals/_session_provenance/2026-08-29-to-31/PESSIMISTIC_NERS.md
+- **What it is:** P-1..P-5 pessimistic reconciliation rules for the integration stage.
+- **Status:** none; promoted to `proposals/2026-08-31-integration/00b`. Reading: historical.
+- **Bears on:** PROCESS.
+- **Content that matters:** R binds at seats a player can occupy; elsewhere a dominant act is characterisation (:21-27); P-5 a fix that adds a system has failed (:42-46); two proposals to test hardest: a world-substrate quantity and a convergence measure (:48-59).
+- **Conflicts / stale:** R-at-player-seats-only conflicts with CLAUDE.md §0.06 R's no-player half (emergent narrative without player involvement) only partly.
+- **Open items:** none.
+
+### proposals/_session_provenance/2026-08-29-to-31/README.md
+- **What it is:** Note explaining why the scratchpad was committed (priming checks need the briefs).
+- **Status:** "working documents, not design. Nothing here is canon". Reading: historical.
+- **Bears on:** PROCESS.
+- **Content that matters:** ARCH.md contains an error corrected by C-1 (:23); arc corpus not committed (recoverable at ref).
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
+### proposals/_session_provenance/2026-08-29-to-31/RELAY.md
+- **What it is:** Agonist -> antagonist relay discipline (2026-08-31).
+- **Status:** none. Reading: historical origin of CLAUDE.md §10's relay.
+- **Bears on:** PROCESS.
+- **Content that matters:** Relay not dialogue; critic never sees the producer's reasoning; independence structural (critic = Read/Grep/Glob); orchestrator reconciles and records losers (:4-41).
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
+### proposals/_session_provenance/2026-08-29-to-31/REVIEW_B_ARCS.md
+- **What it is:** Adversarial review of the arc-reachability body (verdict SOUND-WITH-CORRECTIONS), 2026-08-30.
+- **Status:** none. Reading: historical.
+- **Bears on:** ARCS, WR, CORE.
+- **Content that matters:** Tally denominators 42/83 = 51% not 57% (:15-17); scale had REPRODUCED-BETTER but no REPRODUCED-WORSE; Arc 1 scored BETTER while its own closure table lists closure lost (:26-30); the priming charge upheld (Arc 1's verdict and route were pre-supplied) (:39-42); a global world-substrate scalar re-runs the anti-scalar argument unless place-scoped (:54-56); convergence measure compliant only as an offline instrument (:57-62).
+- **Conflicts / stale:** none.
+- **Open items:** conferral universal (office-rooted) sweep incomplete (:71-75).
+
+### proposals/_session_provenance/2026-08-29-to-31/SETTING.md
+- **What it is:** Setting content brief: caste, institutions, Knots, the Person, places, philosophical foundations P-01..P-15, live politics, named particulars (2026-08-29).
+- **Status:** none. Reading: historical snapshot of canon at that date; some values superseded.
+- **Bears on:** CHAR, FA, WR, SC, SE, ARCS.
+- **Content that matters:**
+  - Caste enforced by per-institution rank gates (Crown Standing 3+, Church strongly gated, Guilds Masterpiece Examination, Loewenritter and Niflhel caste-open) (:9-16); Niflhel status a LIVE CANON CONTRADICTION (:40).
+  - Knots: Disposition +5, TS>=30 either side, Bonds>=5, max floor(Bonds/2)+1, strain gauge, rupture at +5 or five triggers (:44-52). Nine attributes 1-7 with the tenth unnamed (:55-57); thirteen convictions (:61-62); Momentum 0-4 (:65).
+  - 35 settlements/14 provinces/3 duchies + 2 special = 37 march targets; flat T1-T17 scheme coexists unreconciled (:72-80).
+  - Named particulars the system must be able to produce: King Almud, Queen Lenneth, Duchess Inge Baralta, Duke Magnus Vaynard, Grandmaster Sigrid Ehrenwall, Yrsa Vossen, etc. (:112-118); the 1218-AG hunting "accident" perpetrator deliberately unresolved (:105-106).
+- **Conflicts / stale:** thirteen convictions superseded by fifteen pursuits; nine attributes superseded by ten (ED-IN-0328); Bonds dropped; Schoenland "spoiler" superseded by ED-IN-0356 neutral trade nation.
+- **Open items:** none.
+
+### proposals/_session_provenance/2026-08-29-to-31/SPINE_INPUTS.md
+- **What it is:** Eighteen failure modes (F-1..F-18) extracted from the nine-throughline critique, as lessons not a worklist.
+- **Status:** none. Reading: historical but still a useful audit checklist.
+- **Bears on:** CORE, CHAR, FI, SC, FA.
+- **Content that matters:** F-1 store without producer; F-3 omniscient deciders by signature; F-7 capped-bias trap ("a lie that cannot change any outcome is flavour text with provenance"); F-8 consensus broadcast; F-13 dead state; F-14 corroboration failed open (empty ancestries disjoint); F-15 knowledge stored on the thing known; F-16 granularity gap in claim identity; F-17 scale-blind primitives; F-18 setting-blindness (:3-44).
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
+### proposals/_session_provenance/2026-08-29-to-31/SUPERSEDE_BRIEF.md
+- **What it is:** Brief for the superseding exercise (new proposal suite replacing PR #342), with five adversarial axes and twelve known open defects.
+- **Status:** none. Reading: historical; names struck claims (D-1 floor struck, C-3 struck).
+- **Bears on:** PROCESS, CORE, WR.
+- **Content that matters:** Twelve known defects including five senses of `exposure`, view budget K `7+Focus` vs constant 12, practice rank 0-5 vs 0-7, dangling Thread pointer, three spellings of the signatures (:62-77); no apparatus; no rates (:81-84).
+- **Conflicts / stale:** uses "Hearth" for the rung that AXIOM calls Family (:24).
+- **Open items:** all twelve defects were the exercise's work list.
+
+### proposals/_session_provenance/2026-08-29-to-31/SUPERSEDE_RELAY_PROTOCOL.md
+- **What it is:** Iterative challenge protocol for authorship (agonist corrects its own draft against the antagonist's challenges; FIX/REBUT/DEMOTE), amended to ONE single document.
+- **Status:** "Jordan-directed, 2026-08-31", amended same day. Reading: historical protocol, partly the ancestor of CLAUDE.md §10; but the "audit -> fix -> audit" iteration it prescribes is now forbidden by CLAUDE.md §0 (REVIEW RUNS ONE ROUND).
+- **Bears on:** PROCESS.
+- **Content that matters:** Eight of twelve defects are cross-document contradictions that a single document makes unrepresentable (:69-100); the falsifier: an unrecorded challenge means the loop did not run (:62-65).
+- **Conflicts / stale:** Contradicts the later ruling "REVIEW RUNS ONE ROUND, THEN STOPS" (2026-10-22).
+- **Open items:** none.
+
+### proposals/_session_provenance/2026-08-29-to-31/dice.py
+- **What it is:** Python script computing a per-die success distribution (0/1/2 successes at 6/10, 3/10, 1/10), pool mean/sd, obstacle-roll bands and opposed contests.
+- **Status:** none. Reading: historical/dead; nothing reads it.
+- **Bears on:** DICE.
+- **Content that matters:** Defines band cutoffs (Disaster <= -2, Failure -1, Costed Success 0, Clean Success 1-2, Overwhelming >= 3) (:38-45), which differ from the live `degree_from_net` ladder (Overwhelming/Success/Partial/Failure) and the live d+sigma model.
+- **Conflicts / stale:** The per-die model is the pre-d+sigma d10 pool model; stale against `engine/dice_engine/dice_engine.py`.
+- **Open items:** none.
+
+### proposals/_session_provenance/2026-08-31-architecture-reconciliation/MANIFEST.md
+- **What it is:** Index of trace logs behind the 2026-08-31 reconciliation of the code architecture across PRs #337-#344 (8 PR logs, 6 repo-sweep logs).
+- **Status:** "PROVENANCE ONLY. Nothing here is a design ruling, and nothing ratifies on merge." Reading: historical.
+- **Bears on:** CORE, PROCESS.
+- **Content that matters:**
+  - Rediscovered findings: nothing in the #337-#344 design line executed at that date (`Person`, `Rung`, `Office`, `Site`, `Tenure`, `Query`, `Act`, `Event`, `Claim` absent from engine/); the running campaign resolved with zero people (`world.npcs` empty, `generate_npc` no call site) (:54-60).
+  - Two open Jordan rulings ED-IN-0200 (centralized hierarchical key/module contracts) and ED-IN-0201 (personnel precondition) cited by none of the design line (:61-63).
+  - Godot 4.3 vs 4.6: the 84-error compile ratchet only ever measured under 4.3 (:70-73). R1 vs R2 conflict on whether the architecture already exists in code (:76-81).
+- **Conflicts / stale:** the "Key substrate" and "Godot 4.3/4.6" threads are retired / ruled elsewhere (ED-IN-0232; ED-GO-0002). The "M1 0/7" figure is dated 2026-08-31.
+- **Open items:** none now.
+
+### proposals/_session_provenance/2026-08-31-architecture-reconciliation/adjudications/F1_primitives.md
+- **What it is:** Fable-5 read-only adjudication of the primitive set and ownership model (Person, Rung, Office, Site, Tenure, StateChange, Claim, Query) across PRs #339-#344, 2026-08-31.
+- **Status:** none stated. Reading: historical; its Key-substrate premise ("Event = Key, executing") is RETIRED by ED-IN-0232; the primitive vocabulary (Person/Rung/Office/Site/Tenure/Claim/Query) became the live Layer-2 state vocabulary.
+- **Bears on:** CORE, CHAR, FA, FI.
+- **Content that matters:**
+  - Authoritative primitive set = #344's with amendments A1-A4: a Proposition is the one identity-bearing IMMUTABLE record; Partition membership test is a schema column `social: bool` per (subject-type, field); every Tenure is owned by its subject; the `hold` collision with mass battle's `STANCE_SPEED_MOD["hold"]` (:153-236, :299-303).
+  - Tenure := (id, subject, object, kind in {hold, commit, contain, succeed, tie, knot, oblige}, since, until?, conferrer?, degree?, payload?) with per-kind cardinality declared on the schema (:186-190, :289-295). StateChange := (subject, mode in mint|alter|efface, driver Act|Event) (:191-197).
+  - Faction deleted as a carrier (Proposition + commit Tenures); "Nobody owns aggregates" ruled correct (:251-270).
+  - Id rule `H(world_seed, tick, subject_id, purpose)` ruled correct; uniqueness rests on one-act-per-tick; every Tenure-graph traversal needs a visited set (:343-371).
+  - Single escalation: whether the ratified Light Function / Slate binds the player surface (a curated season vs raw witnessing) (:447-469).
+- **Conflicts / stale:** R1 "greenfield" and R2 "already executable" both overturned (:377-389); `key_substrate_v30.md` carries two conflicting status lines (:393-399). Many "NOT in code today" statements are dated 2026-08-31 and are now false for the season (Person/Tenure/Claim exist in `engine/season/state/`).
+- **Open items:** Slate/Light Function question; ED-IN-0200/0201 cross-cite and close (answered).
+

@@ -552,3 +552,155 @@ Ratification summary for this lane: nothing in these files is RATIFIED by its ow
 - **Conflicts / stale:** the six-attribute roster vs v10 M2 nine attributes; claims about `rosters.yaml` line numbers drift. Outside-literature grades: Juul, Hunicke & Chapman read; Ryan/Rigby/Przybylski abstract only; Lundblade abstract only; game precedents "community-grade or from memory" (:229-236).
 - **Open items:** [GAP] J-T1/J-T2/J-T4 open decisions not read by the agent (:24); authoring source for persons outside the registry (C-9); the Nerve/chooser tension (:751-753).
 
+### proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-build-00-sequence.md
+- **What it is:** [READ PARTLY: lines 1-110 of ~210 opened (§0-§3 incl. the cut table); §4 question holds, §5 boundaries, §6 changes (rows 1-56) and §7 open risks NOT opened] Dependency-sequence document (T09, lane IN) for the master workplan v10: graph size, edge sources, critical path, the cut into batches B10-01..B10-20, the parallel plan.
+- **Status:** "instructions under the adopted plan. The state index stays `-03` §1" (:2); grade `paper` (:4). Reading: live process instruction for the v10 plan (adopted, ED-IN-0299/ED-IN-0301); the plan's authored head is `workplans/valoria_master_workplan_v10*.md`, not this file.
+- **Bears on:** PROCESS, CORE (and every subsystem via batch membership).
+- **Content that matters:**
+  - Graph: 211 nodes, 314 edges after the second decision round; the graph check script and transcription "are not on disk" (:8), so counts cannot be re-derived from this file; the script is cited as `ctl/graph_check.py` (:33) — not in this lane's files.
+  - Spine: B10-01 → B10-02 → {B10-03 ∥ B10-04} → B10-03b → B10-05 → B10-06 → B10-07 → B10-07b → B10-08 → B10-09 → B10-10 → B10-10b → B10-11 (PC) → B10-12 (MB) → B10-13 (SC) → B10-14 (FI) → B10-15 (WR threadwork) → B10-16 (SE) → B10-17 (FA) → B10-18 (WR/NPC life) → B10-20 (port gate) (:55-56); B10-19 (design-first clusters) and B10-Z (held/leave) are off the spine (:96-97).
+  - The cut table (:70-97) gives each batch's code/no-code class, entry gates and holds; B10-01 and B10-09, B10-10 are recorded CLOSED with closing commits; B10-12 through B10-18 are the build cards this lane holds.
+  - Rules P13 (serial inside verb cluster), P14 (hash movers declared with old/new pins), P15 (re-pin once in batch's pin commit), P3 (rows leave `-03` at close) are cited by id and defined elsewhere (`-03`) [UNVERIFIED here].
+  - CL-THRUST's row sits off the spine; its released pieces (B0.1, B2.x, B3.1, B3.2) land in B10-02/05/09; B5.1 is cut (M21) (:57-59).
+- **Conflicts / stale:** counts inside (211 nodes, 184-node/218-edge earlier check) are explicitly layered across rounds. The file mixes dates: a closed batch (B10-12) later got narrowed (see B10-12 file). Later plan versions are `workplans/valoria_master_workplan_v11_part3.md` (cited by B10-12) so the "v10" label is no longer the newest [UNVERIFIED which is current: `CURRENT.md` names it].
+- **Open items:** the §4 question holds M1, M3, M4 etc. (:109-129) were not opened.
+
+### proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-build-B10-11.md
+- **What it is:** [READ PARTLY: lines 1-14 and ### headings of 116 lines opened; position bodies not opened] Build instructions for batch B10-11, PERSONAL COMBAT (T03, lane PC).
+- **Status:** "instructions under the adopted plan" (:2). Reading: live process instruction, may be partly built; the batch card is `workplans/valoria_master_workplan_v10_part3.md`.
+- **Bears on:** PC, CORE, CHAR.
+- **Content that matters:**
+  - Positions: CP-T03-01 (cohorts never a party to a personal fight, weight bound; two commits: the `individual` stem first, then the cohort-fought mover); CP-T03-05 (combat's odds sampled live for the player's Act interface, REPAIR per AM-C-02); CP-T03-06 (the survivor's grudge: MEASURE, then DESIGN-FIRST, then BUILD or CUT); CP-T03-10 parked, CP-T03-11 cut; plus CP-T03-02/09/03/04/07/08 and PC-10 listed in order (:12-14, :40-81).
+  - Hash class mixed; `body_ceiling` is a schema mover changing every person's `repr` (CP-T03-07/08) (:11).
+  - Entry gate: B10-10 and B10-10b (personal-combat module's own debt, six closes, edits `modules/combat/`) merged. `modules/combat/` is reached through the wrapper and not edited here (:10).
+  - PC-10 route (1) decided (`-04` §3); PC-10b's `accept`-needs-a-held-challenge refusal is the thrust-layer register's G-15 owner.
+- **Conflicts / stale:** the combat module calls in `Read before building` cite `-08` AM-C-02..08 amendments (not in this lane).
+- **Open items:** CL-SLICE's build is a conditional landing first, if its design is approved and M31-M33 answered (:14).
+
+### proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-build-B10-12.md
+- **What it is:** [READ IN FULL] Narrowed build record for batch B10-12, MASS BATTLE (T04, lane MB).
+- **Status:** "CLOSED except CR-12, CP-T04-04 and CP-T04-10 (HELD in B10-Z); entries narrowed at the close" (:2). The batch's record moved to `workplans/valoria_master_workplan_v11_part3.md` (:3). Reading: partly historical, held entries live.
+- **Bears on:** MB, CORE.
+- **Content that matters:**
+  - Landed: CP-T04-02 `marshal` (`a86be397`, standing order of battle; built on the user's ruling with `role_allowed` bypassed, H-361) and CP-T04-07 `surrender` (`1cdfcaf6`); both ship WITHHELD (`withheld_verbs`) with the flip a declared mover not yet made (:10-14). The `cession` basis is not in `architecture/meta/04_CODE_ARCHITECTURE.md` C.2's write-gate enumeration, held back for Jordan (:14).
+  - CR-12 (melee attrition back to the locked linear law, ED-MB-0045): measured; design in `proposals/2026-11-08-cr12-melee-attrition-design.md`; "the only fix that moves the exponent removes troop numbers from the pool, against Jordan's 2026-07-08 directive"; builds nothing until he rules; acceptance when built: melee p at or below 1.4, volley p at or above 1.6, CI flip of `lanchester-signature` proposed not made (:16-19).
+  - CP-T04-04 (field fought a round after declared) exists only under M4 Ask C (b): needs a Layer 1 amendment to `04:177/:541-545` (:21-32). CP-T04-10 (raise and keep a force) held on M3 Ask A, which needs amending Layer 1 `04:793/:802` to admit a counted troop stock in `Rung.stores`; only item that amends Layer 1 (:34-45).
+  - CP-T04-09 CUT; reopen needs H-195's M0g trigger (:47-48).
+  - File stays only because `verb_table.yaml` (`marshal`, `surrender` rows) and `hole_register.yaml` (H-361) cite it as `source:` (:6).
+- **Conflicts / stale:** the shipped `marshal` bypassed `role_allowed`, a process deviation recorded in H-361 [UNVERIFIED: not opened]. Whether the CR-12 conflict with the 2026-07-08 directive has been ruled since is unknown.
+- **Open items:** CR-12 ruling; M4 Ask C (b); M3 Ask A; flips of `marshal`/`surrender` out of WITHHELD.
+
+### proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-build-B10-13.md
+- **What it is:** [READ PARTLY: lines 1-14 and ### headings of 220 lines] Build instructions for batch B10-13, SOCIAL CONTEST AND PROCEEDINGS (T05, lane SC).
+- **Status:** "instructions under the adopted plan" (:2). Reading: live instruction.
+- **Bears on:** SC, CHAR, FA.
+- **Content that matters:**
+  - Positions: SC-02 (F8 re-source of `reception`, DESIGN-FIRST; the build waits on approval; A1-08 answered option B, ED-SC-0040); CP-T05-01 (the verdict hears the bench, HELD on SC-02); CP-T05-02 (accused may answer now; (i) `hearing` held); CP-T05-03 (failed telling realised); SC-04 (`negotiation` arrangement row); CR-55 (a matter lapses visibly: dead party, venue with no bench, overdue stage); CR-56 (matter stamped where it waits); CR-34 (declared disposal read: a vote counts live commits; H-161); CR-27 (`lie`: spoken falsehood on a held cell claim; M9, `lie_offered` ships True); CR-31 (caste estimate: regard term over decider's creed and his belief about other's descent; `heritage_gain`) (:47-187).
+  - Shared files serialised: `arrangements.yaml`, `queries/person_q.py` (`lie_said_of`, `heritage_regard`), `decision/options.py`, `data/fixtures.py` (`lie_offered`, `heritage_gain`), `hole_register.yaml` (:20).
+  - Hash: CR-34 EQUAL in every seeded realm (realm reach 0); CR-31 EQUAL at `heritage_gain` 0 and a declared mover at shipped value (:10).
+- **Conflicts / stale:** B10-18c (later) builds the "social-contest choice layer" over the same files.
+- **Open items:** SC-02's design approval gates three builds (:15).
+
+### proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-build-B10-14.md
+- **What it is:** [READ PARTLY: lines 1-12 and ### headings of 200 lines] Build instructions for batch B10-14, FIELDWORK AND INFORMATION (T06, lane FI).
+- **Status:** "instructions under the adopted plan" (:2). Reading: live instruction.
+- **Bears on:** FI, WR, CORE.
+- **Content that matters:**
+  - Positions: CP-T06-09 (room files a covered deed under the hand); CR-29 (REACH: event-kind reach channel then `chronicle`'s paired deletion); CP-T06-01 (a deed that writes a place or alias leaves a trail); CP-T06-03 (a Partial closes the deed, not the hand); CP-T06-04 (refused/failed inquiry teaches its actor his reads); CP-T06-02 (`surveil` finds covert deeds at the place); CP-T06-07 (a cover can borrow another man's name); CP-T06-05 (the person questioned answers by his own act, verb retype); CP-T06-08 PARKED on JA-1; CP-T06-06 CUT (:41-162).
+  - CP-T06-01 is unobservable in the realm without B10-05's REM-21/22/2C; `test_fi03_trail.py` is re-recorded in the pin commit (:10-11).
+  - M11 answered (a) by Jordan's "Confirm all" of 2026-10-26 (ED-IN-0300, ED-IN-0301) (:5).
+- **Conflicts / stale:** none noted.
+- **Open items:** CP-T06-08 parked; "a mover only wherever a trail/cover/interview is found; the realm may reach none, which the control reports as a finding" (:10).
+
+### proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-build-B10-15.md
+- **What it is:** [READ PARTLY: lines 1-12 and ### headings of 269 lines] Build instructions for batch B10-15, THREADWORK (T07, lanes WR, PC).
+- **Status:** "instructions under the adopted plan" (:2). Reading: live instruction.
+- **Bears on:** WR, PC, CHAR, CORE.
+- **Content that matters:**
+  - Positions: CR-13 (the Leap not charged for failing); REM-45 (corrected history term, M18(b)); CP-T07-02 (Leap stage, one working host, actor adapter, `Person.coherence`: schema mover on every `repr`); CP-T07-03 (`weave`/`lock` on Sites: `Site.locked`); CP-T07-05; CP-T07-09 (every thread row a witnessable celled deed); CP-T07-04 (`mend`); CP-T07-06 (recovery as projection); CP-T07-07 (permanent set narrows the season); CP-T07-10 (what `thread_read` finds); CP-T07-08 (crossing as witnessed breach); CP-T07-11 (`ward`); IN-32 (`tie / knot` effect + reader); WR-01 (R-14 practitioner-resilience season reach, BLK on its own condition) (:43-226).
+  - IN-06 "plugged nothing" (design re-review); IN-35 landed at B-S; CP-T07-01 CUT (adapter is CP-T07-02's first function) (:5).
+  - Spirit is Will's alias (M2 narrowed); CP-T07-02 reads Will via CR-20's attribute carrier (:8-9).
+- **Conflicts / stale:** relates to thrust-layer G-21 (threadwork absent from season run): this batch is the plan that would load it.
+- **Open items:** none stated at head.
+
+### proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-build-B10-16.md
+- **What it is:** [READ PARTLY: lines 1-12 and ### headings of 262 lines; assignment marked it 76% previously read] Build instructions for batch B10-16, SETTLEMENTS, GOVERNANCE AND ECONOMY (T08, lane SE).
+- **Status:** "instructions under the adopted plan" (:2). Reading: live instruction.
+- **Bears on:** SE, FA, CORE.
+- **Content that matters:**
+  - Positions: CR-40 (delete `starting_pros`, one grain for Prosperity); CP-T08-01 (hands make the yield, `labour_mode`); CP-T08-03 (stores spoil); CP-T08-02 (places endowed by ground); CP-T08-05 (price read from the REM-50 draw record; trade between places); CP-T08-06 (`unrest(w, S)`); CP-T08-07 (`tax` edict standing levy); CP-T08-08 (upkeep payment gets a question; `upkeep_lead`); IN-14 (`budget()` counts `granted_acts`, MORE ROUNDS shape); CP-T08-10 (holding costs past a limit); CP-T08-04 (`craft`); IN-52 (provisioning flip, retirement HELD on M3) (:42-214).
+  - Off-arms EQUAL: `labour_mode: off`, rates 0, `uniform`, `()`; IN-14 is a declared MOVER (:10).
+  - Requisition chain credit: CP-T08-06's compliance reader, CP-T08-07, CP-T08-08's refill and IN-52's flip are credited in computed play only where CR-23's exit recorded `requisition` executing, otherwise `harness/scarce.governed` only (:12).
+- **Conflicts / stale:** none noted.
+- **Open items:** the "Held and withdrawn members" section (:214) not opened.
+
+### proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-build-B10-17.md
+- **What it is:** [READ PARTLY: lines 1-12 and ### headings of 310 lines] Build instructions for batch B10-17, FACTIONS, WAR AND DIPLOMACY (T09, lane FA; CR-32..37 also IN, SC).
+- **Status:** "instructions under the adopted plan" (:2). Reading: live instruction.
+- **Bears on:** FA, SC, CORE, SE.
+- **Content that matters:**
+  - Positions: IN-30 + CP-T09-04 (one owner of faction identity admitting emergence; land taken by plurality occupation, else by purview); CP-T09-01 (allegiance follows opinion, MEASURE first); CP-T09-05 (fief); CP-T09-02 (`declare`: war producer/occasion/target set; M10(b): no `at_war` gate on `march`); CP-T09-03 (alliance and peace as acts on the war Proposition); CP-T09-07 (`retain`); CR-09 (`own_purview` vs oblige clause, H-101); CP-T09-08 (`dispatch` sends); CP-T09-09 (`conspire`); CP-T09-06 (Crown's ducal seat passes with the line, data only); CR-32 (Standing ladders as posts on seats; `marks`); CR-35 (elected seat filled by faction bench; contested succession; H-217); CR-36 (nominate-then-confirm `nominated`); CR-37 (throne stripped by Holy See concurrence `joint_concurrence`; `depose` closed); IN-48 (H-108 delegation, DESIGN-FIRST); IN-36 (FORCE-FOREIGN remainder, HELD for `guards`); FA-01 (Schoenland trade-demand clause) (:41-269).
+  - Every build is a declared MOVER; `guards` stays off (ED-IN-0310 keeps it off, ED-IN-0301 confirmed default) (:6-9). `foreign` ANSWERED by ED-IN-0310 (2026-11-04).
+  - Two closes decided at batch open: close one T09 rows; close two CR-32/35/36/37 then IN-48 (:6 table in `-00`).
+- **Conflicts / stale:** the thrust-layer G-19 (guards binds nobody) depends on IN-36's flip, which is HELD here.
+- **Open items:** IN-36 on `guards`; CP-T09-01 and -09 measure-first then conditional.
+
+### proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-build-B10-18.md
+- **What it is:** [READ PARTLY: lines 1-12 and ### headings of 277 lines] Build instructions for batch B10-18, WORLD, TRAVEL, SURVIVAL AND NPC LIFE (T10, lanes WR, IN).
+- **Status:** "instructions under the adopted plan" (:2). Reading: live instruction.
+- **Bears on:** WR, CHAR, SE, CORE.
+- **Content that matters:**
+  - Positions: CP-T10-06 (kin: releasable `kin` kind + authored edges); CP-T10-07 (estate passes by heir's claim; new hashed collection `World.estates`); CP-T10-09 (deeds done to me and mine); CP-T10-01 (journey priced by route); CP-T10-02 (Calamity costs the traveller); CP-T10-03 (`year_length` calendar, ships off) and its own flip commit 0 → 4; CL-EVENTS commit 2 (FORCE-WEATHER per territory live draw), commit 3 (Tensions receiver: `tensions.yaml`, `data/tensions.py`, switch off) and commit 4 (six Tensions cards as `[ASSUMPTION]` data); CR-08 (`(Person, weight)` one writer: CENSUS; H-49); CR-22 (hunger binds: per-head need by reading rule); CP-T10-04 (recovery costs time and care); CP-T10-05 (bodies clock wounds before they kill); CP-T10-08 (`marry`) (:37-239).
+  - Entry gates include REM-52's `body_step = 10` (B10-05), the `individual` stem and `body_ceiling` (B10-11), `modules/mass_battle/terrain.py` (B10-12) (:12). Ends CR-38's approval window.
+- **Conflicts / stale:** these positions would switch on the "dark" exogenous motion that the thrust-layer register (G-22, S4) says is dark: `body_step`, `illness_rate`, `age_step`.
+- **Open items:** none stated at head.
+
+### proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-build-B10-18b.md
+- **What it is:** [READ IN FULL] Build instructions for batch B10-18b, VERBS: THE R-05 CLOSE (lane IN with FA, MB, SE).
+- **Status:** "instructions under the adopted plan" (:2). Reading: live instruction (batch after B10-18).
+- **Bears on:** CORE, FA, MB, SE.
+- **Content that matters:**
+  - CR-46 (rewrites R-05's `measure:` text; does not set `status:`), CR-52 (army-preset run through `military_menu.callback`/`dispatching_chooser`/`SeasonDriver.season`), CR-50 (two data cells `raze`, `train`), CR-47 (ranking of every deliberating person), CR-48/49 (give; confer/oblige), CR-51, CR-53, CR-54 (design file only) (:7-19, :27-37).
+  - Pre-flight: `len(VERB_TABLE)` is 62, `resolvable_verbs()` 60 at `eda39a6`, "the plan's earlier 56 is superseded" (:25); at `eda39a6`, pooled, 36 of 60 resolvable rows executed; 27 did not at seed 0 (:26); `aperture 3 --seeds 0 1 2` takes about a quarter-hour per seed at four seasons (:26).
+  - CR-48: no mint into the addressee's hold (ED-IN-0292 (1), RULED NO); route is `give`; the operand vocabulary is closed (H-94) (:30-34).
+  - Close prints the STORY READING (CR-69, ED-IN-0311) at the same seeds, "a reading, never a bar or a guard" (:42).
+- **Conflicts / stale:** supersedes the 56-verb count used in thrust-layer docs (13 of 56 write nothing).
+- **Open items:** any verb left at 0 is a named residue with an owner; no position invented.
+
+### proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-build-B10-18c.md
+- **What it is:** [READ IN FULL] Build instructions for batch B10-18c, SOCIAL CONTEST: THE CHOICE LAYER (lane SC with IN); ED-IN-0308 ratifies the batch.
+- **Status:** "instructions under the adopted plan" (:2). Reading: live instruction.
+- **Bears on:** SC, FA, CHAR, DICE.
+- **Content that matters:**
+  - CR-57 (give consent), CR-58 (`warrant_sourced` discriminator; which acts need consent is Jordan's content), CR-59 (authority-staged hand-built route, basis beside `pardon`'s in `gate.py`), CR-60 (one `may_determine` with authority conjunct; `scope_rung`), CR-61 (a `case` Record kind lands with readers; delete H-80 default labels; re-pin `BASE_HASHES[1, 2]` and go07 `BASE` seeds), CR-62 (concession reward through the obstacle under D-1), CR-63 (five verb rows), CR-64 (forum plea as stage of same case), CR-65 (design file only; needs P4 Q2's answer) (:23-33).
+  - Inputs: `proposals/2026-10-29-parliament-and-debate/` (P4 authority-staged proposal, matters-standpoints fold, build-all plan, probes `probe_event_kinds.py`, `probe_controls.py`, `probe_routes_hand_built.py`).
+  - Pre-flight checks B10-08's closed form: `engine/dice_engine/sigma_leverage.py::p_success` against the live roll at pool 2 and 12, Ob 2.5; ".3899 closed against .3875 sampled at 5D; the live discrete path read .581 against .430 at 2D" — CR-62 starts only if they agree (:18).
+  - Symbols that must be absent before the build (`authority`, `scope_rung`, `appeal_to`, `case` Record kind, `<verb>.unlicensed`); a present hit means the plan is stale (:20).
+- **Conflicts / stale:** "the live discrete path read .581 against .430" is a DICE discrepancy (live vs closed form) an SC/DICE audit must check; `VERB_CAPABILITY` and the H-80 default labels are named for deletion.
+- **Open items:** P4 Q2; port gate placement before B10-20.
+
+### proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-build-B10-19.md
+- **What it is:** [READ PARTLY: lines 1-12, 27-35, 63-102 and ### headings of 140 lines] Instructions for batch B10-19, DESIGN-FIRST CLUSTERS (narration, tenth attribute, troop stock, thrust ladders, Court Parliament's bench).
+- **Status:** "instructions under the adopted plan" (:2); "This batch changes no code. Every position is HELD ... or DESIGN-FIRST" (:8). Reading: live; the CL-THRUST section is the authoritative statement of what of the thrust layer is released.
+- **Bears on:** CHAR, WR, MB, SC, PC, CORE.
+- **Content that matters:**
+  - CL-THRUST (:81-102): M20 "(b) yes in part": a sequence is an ordered list of stage conditions read from the person's own ledger that only adds referents to his own `need` question; `closing`, `successor`, `deal` are struck, R3' and stage `deadline` excluded; key named `goal_stages` not `ladders:`; M21(a): `Felled` is death, no `Slain` band, B5.1 cut. Released: B0.1 → B10-02 lane 2; B2.1/B2.2 → B10-05 after `layer-conformance` Lens B answers TL :462-467; B3.1 → B10-05; B3.2 R2 only → B10-09 close two.
+  - Still held: B4.1 (docket crossing) gated on `determine` executing in computed play (3 of 43 at the register's base); B4.2 (bound-peace reader) gated on `covenant` executing (0 of 70); B5.2 on IN-36's `guards` flip; B6.n content is Jordan's, no builder. Arc rule (:98): a ladder names its source arc and its `ENDINGS_CLASSIFIED.yaml` class, drawn only from DECIDER/ROLL classes.
+  - CL-ATTR: tenth attribute name held on J-T2 (TS or Recall with reader built first); carrier absorbed by CR-20 (`Person.attributes` keyed by nine registry keys; the tenth slot refuses a value) (:63-70).
+  - CL-TROOP held on M3 (Layer 1 `04:793`/`:802` amendment for counted troop stock); NM-W1 PARTLY LANDED (chronicle render exists), NM-W4..W9 UNBUILT, DESIGN-FIRST; CR-38 Court Parliament's bench DESIGN-FIRST; CL-SLICE/OPEN/PERSON/MGMT design-first on `-10` questions (:27-120).
+- **Conflicts / stale:** `ENDINGS_CLASSIFIED.yaml` counts "48 classified arcs" here (:98) vs "50" in thrust-layer docs [UNVERIFIED which is right].
+- **Open items:** J-T2; M3; M1 residue; B4.x/B5.2/B6.n gates.
+
+### proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-build-B10-Z.md
+- **What it is:** [READ IN FULL] Instructions for batch B10-Z, HELD AND LEAVE (all lanes): nine entries FA-03, FA-07, MB-08, PC-06, PC-08, IN-44, SC-05, SC-07, CR-39.
+- **Status:** "instructions under the adopted plan" (:2); "This batch changes no code" (:8). Reading: live; entries are holds, not work.
+- **Bears on:** PROCESS, FA, SC, MB, PC, CORE.
+- **Content that matters:**
+  - IN-44: 16 owed Layer 0/1 edits, row 1 released by M15(a); rows 2-16 unscheduled; each anchor re-derived by symbol and checked for a (RULED) mark (:24-27). Row 13 (`RemoteTrigger` vs CLAUDE.md §11 deny-list) listed for Jordan, no agent edit to settings.
+  - SC-05 RET-SC: delete `systems/social_contest/sim/contest/` and `engine/tests/test_contest_kernel.py`, relocate degree veto as forwarded `extension=` at `engine/season/seam/ladder.py`, fold `sim-regression` job into `unit-tests` (a workflow edit: Jordan's file); `systems/social_contest/` stays (:31-35).
+  - FA-07 faction-vs-faction mechanisms: every stored clock refused (T-a, T-c, A-29); each aggregate restated as a Query (Piety Track → share of residents whose live `commit` is to the Church's Proposition; Church Attention → each seat-holder's own attention) (:55-58).
+  - CR-39 promotion of an emerged creed: "the retired oracle's `L` was initialized at 1.0 and never written, so promotion was unreachable by construction" (`git show 5c5d8ec6:systems/world/sim/insurgency_pipeline.py`) (:63-72).
+  - PC-06: `Person.attributes` (K-2) builds only with its first reader; MB-08: commander-chosen orders are a named residue (`massbattle.py:170-178`) (:90-103).
+- **Conflicts / stale:** the SC-05 deletion would orphan modules the SC audit may reference.
+- **Open items:** IN-44 rows; SC-05 timing (scheduling call); CR-38/CR-39.
+
