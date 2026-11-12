@@ -128,3 +128,89 @@ Not in this batch, and where each is: FI08 §1 and §4 (handed to the Thread lan
 - GLOSSARY: *matter* (step 5).
 - COST and TIER: edit; `sonnet`, `medium`.
 - LANDS IT: B25's producer; `Item: B25.03`, `[skip ci]`.
+
+### B25.04 — a person knows the seats over his home; swearing to a seat is drawn · S2B §4 · BUILD · HASH MOVER(behaviour)
+- SOURCE: S2B §4 (copied, as W3-4a rewrote it onto C-20), "Gate" §4, "Falsifiers" §4; OBS §2 members 6, 7, 26; decision register D-31 (taken A under A-24); VRES §6's reconciliations, as B11.08's part names them ("the private table `oblige_obstacle` is the roster member `establishment`" and "the control fixture `oblige_admission: fiat` stays the hash-equal arm", both landing here); rulings A-24, A-81; closes the `oblige` half of `audits/14_VERBS_SOCIAL2.md` §9 (`seats_named` empty at three seeds).
+- ADVANCES: R-04.c2's ground (persons enter service by their own act); R-06 (a seat may refuse a man).
+- INSTRUCTION (copied):
+  1. "The news of who holds the seats over a person's home is seeded at build by `seed_seat_news` (`08_FI_01_claim-sourced-referents.md` edit 6 …) and kept current by the existing `tenure.opened` / `tenure.closed` deposits; it is read by `person_q.holders_named` (edit 1). This file adds neither; its §3 and `oblige` read them."
+  2. "`oblige`: `seats_named` now returns the home's seats; `_req_oblige`'s five clauses stay as eligibility. **Admission becomes a draw** …: `verb_table.yaml` `oblige` gains `contests: "a standing"` with the seat's live holder as opponent where the joiner's ledger names one (`holders_named`), else the composer's stand-in for a vacant or unknown holder (`counterparty: subject` resolves to the seat); obstacle through the one composer: `rank_gap` (OBS member 6), the holder's `regard` of the joiner (member 7), `establishment` (member 26, `establishment_step` per 5 sworn men)." "`writes:` `Tenure.since`, `Tenure.term` at Ov / Su / Pa, `[]` at Fa; `emits:` `duty.taken` at Ov / Su, `duty.probation` at Pa, `duty.refused` at Fa. `_eff_oblige` opens the edge with `degree=res.degree` and, at Pa, half `oblige_term` (the term's one owner, `H-159`, read and halved, no second constant)." "`oblige_admission: fiat` stays the control arm."
+  3. `establishment` joins `rosters.yaml: obstacle_terms` "with its step at control 0 first" (OBS §4 step 6+): `establishment_step = 0` in `data/fixtures.py`, its tag naming this item; its host function reads `world_q.establishment_of` (OBS §2 row 26).
+  4. The row's class (U-6): `oblige` leaves the B07 class roster that held it (`graded_tasks` or `bookkeeping_verbs`, read at the open) in this commit. Its `capability:` cell is `none` with `capability_note:` "undeclared at authoring; every person rolls the untrained default" (U-8).
+  5. A-81: "`duty.refused` [is a] witnessed deed deposited to those present (the issuer, the seat's holder)". Draw key (A-30): `H(w.world_seed, w.tick, <actor id>, "oblige.standing")`.
+- WHERE: `engine/season/verb_table.yaml` (`oblige`); `engine/season/loop/effects_governance.py` (`_eff_oblige`); `engine/season/queries/world_q.py` (`seats_named`); `engine/season/rosters.yaml` (`obstacle_terms`: `establishment`; the B07 class roster); `engine/season/data/fixtures.py` (`establishment_step`, `oblige_admission`); `engine/season/seam/wrappers/sigma.py` (the `establishment` member's host function); NEW `engine/season/tests/test_vm_s2_b_word.py`.
+- TESTS: in the new file (S2B's test file, "one function per gate line"), written first, red: `test_oblige_forms_and_admission_is_drawn` (gate §4: "`oblige` formed > 0 at every seed, attempted ≥ 1; across seeds at least one `duty.taken` or `duty.probation` and the sworn man in `establishment_of`; a planted `Failure` opens no edge"; `build_realm(s)`, s = 0–2, two seasons); `test_no_seat_reaches_his_home_no_oblige` (falsifier §4: "a person whose home no seat reaches is offered no `oblige` (`seats_named` empty)"); `test_oblige_admission_fiat_hashes_as_the_control` (the control arm).
+- FALSIFIER and CONTROL: as the falsifier test. Control: `oblige_admission: fiat` reproduces the step's base hashes at seeds 0–2.
+- GATE: `python -m pytest engine/season/tests/test_vm_s2_b_word.py -k oblige -q` → pass; `python -m pytest engine/season/tests/test_task_draw.py -q` → pass (the class refusals of B07 accept the moved row); `python tools/ci_sim_fabrication_check.py` → exit 0.
+- HASH MOVERS: "declared hash movers at the shipped arm in every world." B25.99.
+- DEPENDS ON: V12 B11.08 (`08_FI_01` edits 1 and 6: `person_q.holders_named`, `seed_seat_news`; neither in the tree at `9700714`); V12 Batch B05 (the composer, OBS §2); V12 B21 (`rank_gap`, with `14_VERBS_BINDING_A`; reached by schedule: S12); EXISTS-IN-TREE `loop/effects_governance.py::_eff_oblige`, `loop/predicates.py::_req_oblige`, `world_q.seats_named`, `world_q.establishment_of`.
+- GLOSSARY: row *sworn* (U4d's): its owner gains `oblige`'s draw ("a sworn man: one a seat has admitted to its service by his own oath, as a man is sworn in").
+- COST and TIER: small build; `sonnet`, `high`; the contested row read by `opus` (S2B tier).
+- LANDS IT: B25's producer; `Item: B25.04`, `[skip ci]`.
+
+### B25.05 — a petition goes to a seat-holder · S2B §3 · BUILD · HASH MOVER(behaviour)
+- SOURCE: S2B §3 (copied, rewritten by W3-4a onto C-20), "Gate" §3, "Falsifiers" §3; closes the `petition` half of §2 of the audit (`to == subject` 12/12, 14/14, 13/13) and H-94's binding of `to`.
+- ADVANCES: R-06 (people petition their lords with no player present).
+- INSTRUCTION (copied): "`decision/options.py::operand_bags`: `petition`'s `to` fans over the holders `person_q.holders_named` (`08_FI_01` edit 1, the one reader of "who holds a seat, as I believe it") gives for the seats over the petitioner's home, minus `p.id` and the subject; read off the row's existing counterparty operand and the reader the row's note names, never the verb. Else the existing `known_persons` fan." "`verb_table.yaml` `petition`: `requires_typed_note` gains *`to` is fanned over the seat-holders the petitioner believes rule his home (`person_q.holders_named`); `H-94`'s single referent now binds `subject` alone*." "`rosters.yaml: petition_addressees` is **not** added." "Fixture `petition_addressee: seat_holders | referent` (control `referent`: today)." `engine/season/hole_register.yaml` H-94: its text records that `to` and `subject` no longer bind one referent (the row's other fields kept).
+- WHERE: `engine/season/decision/options.py` (`operand_bags`); `engine/season/verb_table.yaml` (`petition`'s note); `engine/season/data/fixtures.py` (`petition_addressee`); `engine/season/hole_register.yaml` (H-94); `engine/season/tests/test_vm_s2_b_word.py`.
+- TESTS: `test_petition_goes_to_a_seat_holder` (gate §3: "`to == subject` 0; every `to` holds a seat reaching the petition's `from`", seeds 0–2, two seasons); `test_no_seat_news_no_petition` (falsifier §3: "a petitioner with his seat news deleted (no `holders_named` entry) forms no petition"). Written first, red.
+- FALSIFIER and CONTROL: as the tests. Control: `petition_addressee: referent` reproduces B25.04's hashes.
+- GATE: `python -m pytest engine/season/tests/test_vm_s2_b_word.py -k petition -q` → pass; `python -m engine.season.harness.register --check` → exit 0.
+- HASH MOVERS: declared at the shipped arm (`seat_holders`). B25.99.
+- DEPENDS ON: V12 B25.04; V12 B11.08 (`holders_named`); EXISTS-IN-TREE `decision/options.py::operand_bags`, `person_q.known_persons`.
+- GLOSSARY: none.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B25's producer; `Item: B25.05`, `[skip ci]`.
+
+### B25.06 — `utter` says what he holds, and whether he is believed is drawn · S2B §1 · BUILD · HASH MOVER(behaviour)
+- SOURCE: S2B §1 (copied: the row, the rosters, the operand, the effect, the WITNESS trigger, the fixture), "Gate" §1 and "§1, the draw", "Falsifiers" §1; OBS member 13 (`dissent`); R4 §1.6 (`04` PART D 27: no verb literal in a WITNESS body); rulings A-30, A-81; closes `audits/14_VERBS_SOCIAL2.md` §1 (moods `{OUGHT}`, predicates `{''}`, values `{None}`).
+- ADVANCES: R-07 (a statement others can carry and compare); the readers that "can therefore never fire on a computed word" (`world_q`'s judge vote, `aim_state`, `_req_interrogate`'s `HOLDS` charge).
+- INSTRUCTION (copied):
+  1. The row (S2B §1, byte for byte):
+     ```yaml
+     - verb:        "utter"
+       stratum:     social
+       eligibility: [own]
+       beneficiary: none
+       requires:    "the speaker holds a claim on what he speaks of"
+       requires_typed: {form: own_ledger, of: subject, conjunct: holds}
+       contests:    "a standing"          # against the room: whether he is believed (standing rule)
+       writes:
+         Overwhelming: ["Proposition.exists"]
+         Success:      ["Proposition.exists"]
+         Partial:      ["Proposition.exists"]
+         Failure:      ["Proposition.exists"]
+       emits:
+         Overwhelming: ["proposition.uttered", "proposition.believed"]
+         Success:      ["proposition.uttered", "proposition.believed"]
+         Partial:      ["proposition.uttered"]
+         Failure:      ["proposition.uttered"]
+       emits_on_refusal: {holds: ["utterance.empty"]}
+       grade:       assumption
+     ```
+     "(notes carried forward; `writes_note` gains: *the cell is the `said` the named `holds` conjunct carries; the mood is `rosters.yaml: utter_mood_by_source`'s for the question's source; that he said it is not in doubt, so every band mints; whether the room believes it is the draw, and only `proposition.believed` triggers the told deposit*)." The row's skill: "`verb_capability: utter → copying` (new row; the row's own `capability:` cell at CAP A2/A3, D-U1-07)" → `capability: copying` on the row (B04.04). The row leaves its B07 class roster (U-6).
+  2. "`rosters.yaml: contest_subsystems.prizes`: `a standing` already routes to the `social_contest` provider (`tell`'s); the opponent is the room — the one composer's stand-in (`opposed_ob(pool_default)`, OBS §2 …) plus `dissent` (OBS member 13, `dissent_step`: one step per hearer present whom the speaker's own ledger holds as believing the contrary; `sigma.py::contest_input`, the speaker's own-ledger read, F8)." `dissent` joins `obstacle_terms` with `dissent_step = 0` (control first, OBS §4 step 6+).
+  3. "`engine/season/rosters.yaml`: new closed table `utter_mood_by_source` (keys: `question_sources` members, validated at load): `claim_landed: HOLDS`, `need: OUGHT`. A source with no row forms no `utter`."
+  4. "`engine/season/decision/options.py::_derive_operand`: operand `mood` → the table's value for `q.source`. (No branch on the verb: any row naming a `mood` operand gets it.)"
+  5. "`engine/season/loop/effects_information.py::_eff_utter`: content from `payload["said"]` (`Said`: subject, predicate, value) and `payload["mood"]`; the existing defaults kept only for a hand-built act with neither (fixture `utter_content: off` is the control: ignore both, today's behaviour). Typed in: `Act` with `said: Said | None`, `mood: str | None`. Out: `Change` naming the Proposition." The mint goes through `_mint_proposition(w, actor, prop)` (created here, shared with B25.16: S2B §2 step 3 names it "the same two lines `_eff_utter` performs"). B11.74's `Proposition.support` from `cites` is kept.
+  6. "`engine/season/loop/witness.py`, the told deposit: fires for an Event whose kinds include a member of a new closed roster `rosters.yaml: told_on_kinds` (`values: [proposition.believed]`, checked against `EVENT_KINDS` at load), depositing the told copy on those present with the utterer on its chain (FI-05B E-3's channel); at Pa / Fa the ordinary deposit of `proposition.uttered` about the speaker is all that lands." SITE (`[UNVERIFIED: whether today's trigger keys on the payload's `said`; if so the roster test is added beside it]`, S2B): open the told deposit's trigger (B24.24 widened it to "`said` or `cites`") and add the roster arm beside it; record which in the commit body.
+  7. "Fixture `utter_content: on | off` in `engine/season/data/fixtures.py`" (shipped `on`; its tag names this item). Draw key (A-30): `"utter.standing"`.
+  8. Glossary: row *utterance* (add or edit): "an utterance: a statement a person makes of what he holds, whether or not the room believes it"; owner `verb_table.yaml: utter`.
+- WHERE: `engine/season/verb_table.yaml` (`utter`); `engine/season/rosters.yaml` (`utter_mood_by_source`, `told_on_kinds`, `obstacle_terms`: `dissent`; the B07 class roster); `engine/season/data/rosters.py` (the two tables' loaders and refusals); `engine/season/decision/options.py` (`_derive_operand`); `engine/season/loop/effects_information.py` (`_eff_utter`, `_mint_proposition`); `engine/season/loop/witness.py` (the told deposit's trigger); `engine/season/seam/wrappers/sigma.py` (`dissent`'s host function); `engine/season/data/fixtures.py` (`utter_content`, `dissent_step`); `engine/season/tests/test_vm_s2_b_word.py`; `unified/U1_GLOSSARY.md` (*utterance*).
+- TESTS (written first, red): `test_utter_carries_what_he_holds` (gate §1: "≥ 90% of computed Propositions carry a non-empty predicate; every `HOLDS` cell equals a claim its utterer held at the act tick; ≥ 1 judge vote … or ≥ 1 `decision.agreement` disagreement between two utterances read at one seed"; seeds 0–2, two seasons); `test_belief_is_drawn` (gate "§1, the draw": "`proposition.believed` is emitted for some utterances and not for others (a fraction strictly between 0 and 1); a planted `Failure` mints the Proposition and deposits no told copy"); `test_an_evicted_said_refuses_utterance_empty` (falsifier §1); `test_a_source_with_no_mood_row_forms_no_utter` and `test_told_on_kinds_refuses_an_unknown_event_kind` `[ASSUMPTION: test names; the item creates them]`.
+- FALSIFIER and CONTROL: "an act whose `said` claim was evicted between formation and fold refuses `utterance.empty`, never mints the cell." Control: `utter_content: off` reproduces B25.05's hashes at seeds 0–2.
+- GATE: `python -m pytest engine/season/tests/test_vm_s2_b_word.py engine/season/tests/test_conclusion.py engine/season/tests/test_fi_evidence_interface.py -q` → pass; `python tools/ci_sim_fabrication_check.py` → exit 0.
+- HASH MOVERS: declared "at the shipped arm in every world" (every computed `utter`). B25.99.
+- DEPENDS ON: V12 B25.05; V12 B11.74 (`Proposition.support`); V12 B24.24 (the told deposit's trigger); V12 Batch B05 (`opposed_ob`, the composer); EXISTS-IN-TREE `loop/effects_information.py::_eff_utter`, `decision/options.py::_derive_operand`, `state/carriers.py::Said`, `Proposition`.
+- GLOSSARY: *utterance* (step 8).
+- COST and TIER: small build; `sonnet`, `high`; the contested row `opus`; one `opus` read of the gate's band fractions.
+- LANDS IT: B25's producer; `Item: B25.06`, `[skip ci]`.
+
+### B25.07 — the moved B11.74 arm · READING
+- In the position table only; its text is Reading R1 below.
+
+### B25.08 — the person questioned answers by his own act · CP-T06-05 · POINTER
+- SOURCE: the intake `:476` (CP-T06-05, STILL-NEEDED; target "FI · B25-fi-questioning (+B26 questioning file)"); carry-forward `master/eval/E1.md` `:700-719` (the card and the entry); placed by `_part2` §5.6's first rule (before the first item whose source names its id: S2C, ladder step 3, "CP-T06-05 for the interview"); U-1.
+- What it points at: S2C §3 (B25.14) builds the behaviour CP-T06-05 names — "His answer is his own `tell(topic, to=asker)` at a later deliberation … or no answer" — in this session's shape (`subject` the person questioned, `on` the topic as a derived operand), with S2A edit 5 (B25.02). CP-T06-05's own falsifier is carried as a test of B25.14 ("Hand-built: A and B at R, B holding a claim on X; A interviews B about X in lap 1, so B holds the question. Across 40 act-id draws of B's later deliberations that season, B forms `tell(X, to=A)` at a share above zero"; "round 1" → "lap 1", A-101). B26.01 (`19_LACUNA_questioning_has_an_approach_and_a_cost`) depends on this POINTER's target, B25.14.
+- Target files and symbols: `verb_table.yaml: interview`; `world_q.questions_for` (source `asked`); `decision/options.py::operand_bags`.
+- GATE: B25.14's. The intake entry CP-T06-05 is closed by B25.14's commit (its body names it).

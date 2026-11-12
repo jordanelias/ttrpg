@@ -38,41 +38,41 @@
 
 | scope | rows | RESOLVED-BY | SUPERSEDED | STALE/FP | DISPUTED | JORDAN | graded B / D / H+C+M | rows naming a v12 batch |
 |---|---|---|---|---|---|---|---|---|
-| CORE (with the test digests) | 238 | 169 | 39 | 26 | 0 | 4 | 9 / 9 / 15 | 168 |
-| CHAR | 125 | 104 | 15 | 6 | 0 | 0 | 7 / 18 / 9 | 103 |
-| PC | 169 | 117 | 48 | 4 | 0 | 0 | 4 / 8 / 11 | 155 |
-| MB | 146 | 104 | 39 | 3 | 0 | 0 | 19 / 15 / 9 | 139 |
+| CORE (with the test digests) | 238 | 169 | 39 | 26 | 0 | 4 | 9 / 9 / 15 | 158 |
+| CHAR | 125 | 104 | 15 | 6 | 0 | 0 | 7 / 18 / 9 | 96 |
+| PC | 169 | 117 | 48 | 4 | 0 | 0 | 4 / 8 / 11 | 146 |
+| MB | 146 | 104 | 39 | 3 | 0 | 0 | 19 / 15 / 9 | 125 |
 | SC | 154 | 135 | 14 | 3 | 2 | 0 | 6 / 19 / 7 | 151 |
 | FI | 105 | 95 | 5 | 3 | 2 | 0 | 3 / 7 / 3 | 97 |
 | FA | 118 | 97 | 16 | 4 | 0 | 1 | 6 / 15 / 6 | 99 |
 | SE | 85 | 72 | 11 | 1 | 1 | 0 | 5 / 23 / 9 | 77 |
 | WR | 83 | 71 | 9 | 3 | 0 | 0 | 3 / 22 / 10 | 68 |
-| DICE | 77 | 49 | 24 | 3 | 0 | 1 | 4 / 15 / 13 | 52 |
+| DICE | 77 | 49 | 24 | 3 | 0 | 1 | 4 / 15 / 13 | 50 |
 | GO | 62 | 51 | 9 | 2 | 0 | 0 | 8 / 16 / 7 | 53 |
 | the game (`16_PESSIMIST_GAME`) | 26 | 15 | 11 | 0 | 0 | 0 | 2 / 9 / 2 | 16 |
-| verbs (the six families) | 139 | 116 | 21 | 0 | 2 | 0 | — | 133 |
+| verbs (the six families) | 139 | 116 | 21 | 0 | 2 | 0 | — | 122 |
 | institutions | 41 | 23 | 17 | 0 | 1 | 0 | 1 / 0 / 0 | 20 |
 | arcs | 29 | 20 | 9 | 0 | 0 | 0 | — | 20 |
-| determinism | 34 | 21 | 11 | 1 | 1 | 0 | — | 21 |
+| determinism | 34 | 21 | 11 | 1 | 1 | 0 | — | 13 |
 | lacuna | 18 | 18 | 0 | 0 | 0 | 0 | — | 16 |
 | narrative churn | 23 | 20 | 3 | 0 | 0 | 0 | 1 / 7 / 0 | 20 |
 | procedural generation | 18 | 11 | 7 | 0 | 0 | 0 | — | 15 |
 | happenings | 24 | 15 | 9 | 0 | 0 | 0 | — | 18 |
 | story enablement | 32 | 23 | 8 | 0 | 0 | 1 | — | 24 |
-| census | 80 | 41 | 26 | 13 | 0 | 0 | — | 57 |
-| **all** | **1,826** | **1,387** | **351** | **72** | **9** | **7** | **78 / 183 / 101** | **1,522** |
+| census | 80 | 41 | 26 | 13 | 0 | 0 | — | 56 |
+| **all** | **1,826** | **1,387** | **351** | **72** | **9** | **7** | **78 / 183 / 101** | **1,460** |
 
-Of the 1,387 RESOLVED-BY rows, 1,261 name a v12 batch; the other 126 name a carrier the extract could not place (a section of the closure table itself, a plan position the intake retired, "no edit owed", or an abbreviation the extract does not resolve) and are printed with **—** in the batch cell; their carrier cell says what they name. Every one of the 7 JORDAN rows has since been answered by a ruling (§8). Rows per closure file: U5a 545, U5b 388, U5c 343, U5d 550.
+Of the 1,387 RESOLVED-BY rows, 1,255 name a v12 batch; the other 132 name a carrier the extract could not place (a section of the closure table itself, a plan position the intake retired, "no edit owed", or an abbreviation the extract does not resolve) and are printed with **—** in the batch cell; their carrier cell says what they name. Every one of the 7 JORDAN rows has since been answered by a ruling (§8). Rows per closure file: U5a 545, U5b 388, U5c 343, U5d 550.
 
 **Not in the closure tables, and carried here by hand:** the holistic audit's H-01 to H-13 (`master/HOLISTIC_AUDIT_part2.md` §4; their carriers are CI-01 to CI-11, §2.1 below); audits 24 to 31 (games grounding, engine grounding, mass-battle history, command, scene access, the one opposed rule, eras and regimes, house stances), which have no closure rows (`unified/U6_VERDICT_AND_REPAIRS.md`, "Not checked by the verdict"); their findings are carried by the proposals `26_*` to `31_*` and by rulings A-59 to A-114, and §10 gives each a synthesis with pointers instead of rows.
 
-**Verification of the extract (one round).** Thirty rows were drawn at random (seed 20261112): 22 with a defining audit line, 8 without. For each, the audit line the extract named was opened and its claim compared with the closure row's, and the carrier proposal's `Lands in batch:` head line was compared with the batch the extract printed. All 22 claims match their audit lines and their grades; all 30 batches agree with the proposals' own head lines, with two kinds of imprecision the table keeps and states: a proposal that lands in two batches (`06_FA_war_lives_in_seats_B`: edits 1–3 in B21, the rest later) is printed at U3's node batch; a superseded proposal (`05_SC_evidence_and_rebuttal`: "Lands in batch: none (node B24 kept for the order)") still prints its node batch. Three sub-rows (`F-PC-08 (a)` to `(c)`) take the grade of their parent finding, as the audit writes them.
+**Verification of the extract (one round).** Thirty rows were drawn at random (seed 20261112): 22 with a defining audit line, 8 without. For each, the audit line the extract named was opened and its claim compared with the closure row's, and the carrier proposal's `Lands in batch:` head line was compared with the batch the extract printed. All 22 claims match their audit lines and their grades; all 30 batches agree with the proposals' own head lines, with two kinds of imprecision the table keeps and states: a proposal that lands in two batches (`06_FA_war_lives_in_seats_B`: edits 1–3 in B21, the rest later) is printed at U3's node batch; a superseded proposal (`05_SC_evidence_and_rebuttal`: "Lands in batch: none (node B24 kept for the order)") still prints its node batch. Three sub-rows (`F-PC-08 (a)` to `(c)`) take the grade of their parent finding, as the audit writes them. **The sample found one extract defect, fixed before the tables were written:** a closure table defines short carrier names per section (U5a §2.8: `A`, `B`, `C` for the three CHAR pessimist proposals), and the first extract applied them file-wide, so `F-PES-CHAR-02` printed B07, B08, B15 for `16_PESSIMIST_CHAR_C_the_stop_is_the_mans` (B10). Single-letter names now apply only inside their own section and never in "Part B" or "A–D"; the eight rows of the sample without an audit line were re-drawn and re-read after the fix, and agree.
 
 ---
 
 ## 1. The verdict on the game as it stands
 
-**In one sentence:** the season loop is a sound, seeded, replayable kernel whose three ruled requirements about propagation and ticking read `met`, but as computed play it is a world of paper — persons read clocks and each other's records and answer with more records, while the verbs that move the world's skeleton (kill, seat, unseat, build, raze, found, trade, starve, win a field) are refused or never formed, almost every outcome is a fixed function of state, and every person is the same fighter, arguer and worker; v12's 61 batches carry a recorded fix for 1,261 of the 1,387 findings closed RESOLVED-BY, and none of it has executed.
+**In one sentence:** the season loop is a sound, seeded, replayable kernel whose three ruled requirements about propagation and ticking read `met`, but as computed play it is a world of paper — persons read clocks and each other's records and answer with more records, while the verbs that move the world's skeleton (kill, seat, unseat, build, raze, found, trade, starve, win a field) are refused or never formed, almost every outcome is a fixed function of state, and every person is the same fighter, arguer and worker; v12's 61 batches carry a recorded fix for 1,255 of the 1,387 findings closed RESOLVED-BY, and none of it has executed.
 
 ### 1.1 The execution artifacts that exist
 
