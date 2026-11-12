@@ -327,3 +327,128 @@ Lane scope: proposals dated 2026-09-20 or later (and undated) that earlier diges
 - **Conflicts / stale:** MB-08's orders-residue trigger ("a typed `Orders` record shared by the PLAYABLE scene and the AUTOMATED planner") is exactly the Mass-battle one-path intent from the brief; recorded here as unscheduled.
 - **Open items:** every LEAVE row's falsifier (an R-row or hole row citing it); SC-07 carriers (P-4 procedure before vote, V-4 non-combat acquisition layer, V-5 gloss).
 
+### proposals/2026-10-25-thrust-layer/probes/p10_clean_remeasure.py
+- **What it is:** Scratch measurement script (thrust-layer register probe P10, 2026-10-25): re-takes per ACT, not per call, the wrong-kind-refusal share, the graded-loss share and repeats; run as `PYTHONHASHSEED=0 python3 probes/p10_clean_remeasure.py SEASONS SEED...`. Hard-codes `sys.path.insert(0, "/home/user/ttrpg")`.
+- **Status:** none (no Status line); reading: historical instrument, a probe whose figures the register (`01_MISSING_IN_CODE.md`) cites; v11 plan part 11 and reports R11/R15 reference it. The harness it re-derives (CR-14's pooled census, REM-10 `graded_loss`) is the committed successor named in the v10 sequence.
+- **Bears on:** CORE, PROCESS (instrument), CHAR (chooser formation).
+- **Content that matters:**
+  - Wraps `SeasonDriver._admits`, `resolve`, `encounter` on the instance to classify each unique act's first admission refusal into `collection_mismatch / subkind_mismatch / subkind_wrong_coll / world_read_docket / absent_subject`, and separately counts `graded_loss` (all refusal Events degree Failure AND kind also in the row's `emits`) :45-67, :141-147. Reads `loop/driver.py:489-505`'s refused/executed rule as copied logic (:17), a second owner of that rule that REM-10's `attempts(w, n)`/`graded_loss` later replaced.
+  - Corrects P3b's counted calls (7,737) by counting unique acts: `_admits` calls per unique act: {0: 25, 1: 15275, 2: 816} (p10_s4.txt:34). Uses `engine.season.harness.probes as P` (`P.SUBSIST`) and `populated.build_realm(seed, None)`.
+- **Conflicts / stale:** Hard-coded absolute path; classification copies the driver's rule; no committed test. v10 CR-14 "lifts `goal_class` out of `decision_spread.py`" so these probes become committed readings (B10-02) [per sequence file :159].
+- **Open items:** none in-file; whether the committed CR-14 reproduces these figures is recorded as "a figure they do not reproduce is recorded, not chased" (sequence :217).
+
+### proposals/2026-10-25-thrust-layer/probes/p10_out.json
+- **What it is:** JSON output of P10 (windows `s2` = ticks 0-1 and `s4` = all four seasons, summed over seeds 0-4).
+- **Status:** none; reading: historical measurement output, derived data.
+- **Bears on:** CORE, PROCESS.
+- **Content that matters:**
+  - s4: attempted 16,116; executed 3,744; refused 12,372 (76.8 %); `refused_kind_also_in_emits` 2,731; `graded_loss` 469 (2.9 % of attempted); admission classes: collection_mismatch 4,063, subkind_wrong_coll 557, subkind_mismatch 174, world_read_docket 216, absent_subject 102, None 3,333, `refused_not_at_admission` 3,927; `wrongkind_collection` 4,620 (28.7 %) (:18-33).
+  - s2: attempted 7,402; executed 1,763; refused 5,639 (76.2 %); `wrongkind_collection` 2,385 (32.2 %) (:2-17).
+- **Conflicts / stale:** Nothing reads this file (`grep` outside the probe dir: only the register/reports cite the name). Figures are for the 80-person realm at HEAD-then; REM-21/22/23 formation items aim to cut the wrong-kind share.
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/probes/p10_s4.txt
+- **What it is:** Console output of P10 over seeds 0-4, 4 seasons.
+- **Status:** none; reading: historical measurement output.
+- **Bears on:** CORE, PROCESS.
+- **Content that matters:**
+  - Per-seed `content_hash` prefixes: seed0 `ee6d622c7fe04cf4`, seed1 `f2bcb30ba3927d24`, seed2 `f3d61bab71ac088d`, seed3 `4c7a22251188d21d`, seed4 `9ebffa07685e9ce4` (:1-5) (same as p1_out_s4.json hashes).
+  - Top verbs by wrong-kind (collection) refusal at s4: `research` 1,175, `commit` 548, `examine` 516, `sabotage` 252, `restore` 248, `carry` 223, `interview` 173, `build` 169, `petition` 165, `found` 165 (:32). 235 of 3,286 wrong-kind keys (seed, actor, verb, subject) refused in more than one season (:35).
+- **Conflicts / stale:** consistent with `DG`-level claims in T05/T06 homes (`argue` all refused; `examine` 62/59/39 never passes admission).
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/probes/p11b_accept_challenge.py
+- **What it is:** Scratch probe P11b (supersedes P11): for each death caused by an `accept`, was a prior `challenge.issued` Event behind it (by the subject, by either party, or in the acceptor's ledger)?
+- **Status:** none; reading: historical instrument.
+- **Bears on:** PC, SC, CHAR.
+- **Content that matters:**
+  - Wraps `d.resolve` to snapshot each acceptor's ledger before the round resolves (the chooser's lawful input), then scans the log for `challenge.issued` vs `person.died` with an `accept` cause (:34-81). Hard-coded path (:14).
+  - Purpose: the T03 home's gap F ("0 of 39 `accept`s answer a challenge"); resulting data in p11b_s4.txt.
+- **Conflicts / stale:** The docstring command names `p11_accept_challenge.py` but the file is `p11b_accept_challenge.py` (:9) (stale usage line).
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/probes/p11b_s4.txt
+- **What it is:** Console output of P11b over seeds 0-4, 4 seasons.
+- **Status:** none; reading: historical measurement output.
+- **Bears on:** PC, SC.
+- **Content that matters:**
+  - TOTAL: 15 `challenge.issued` events in five seeds; 11 deaths caused by `accept`; only 2 of 11 preceded by a challenge issued by the `accept` subject; 0 of 11 had a challenge aimed at the acceptor (`challenge_subject_to_acceptor` 0, `challenge_either_direction` 0); acceptor ledger claim about the pair in 2, any challenge claim in 4 (:17).
+  - Meaning: `accept` kills that "answer" no challenge, so PC-10's "accept requires a challenge Record" (PC-10a/b) is a real change: accepts today are unprovoked killings.
+- **Conflicts / stale:** Supports T03's description ("`challenge` writes nothing; `accept` reads no challenge").
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/probes/p12_fallback_kinds.py
+- **What it is:** Scratch probe P12: acts that emitted ONLY the fallback kinds `act.ineligible` / `act.refused` and are therefore counted EXECUTED by the driver's rule (no row's `emits_on_refusal` names them).
+- **Status:** none; reading: historical instrument.
+- **Bears on:** CORE, PROCESS.
+- **Content that matters:**
+  - Prints the intersection of `{act.ineligible, act.refused}` with `data.verbs.REFUSAL_KINDS` and counts acts classified executed whose Events are all fallback kinds, by verb (:13-42). A check that the driver's "executed" count is not inflated by silent fallbacks.
+- **Conflicts / stale:** No output file for P12 in the assigned set; result not recorded here [UNVERIFIED: see register].
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/probes/p1_out_s2.json
+- **What it is:** JSON output of P1 (per-verb attempted/executed/refused census) over seeds 0-4, 2 seasons.
+- **Status:** none; reading: historical measurement output.
+- **Bears on:** CORE, CHAR, all subsystem tags by verb.
+- **Content that matters:**
+  - Per seed (2 seasons): attempted 1,448-1,511, executed 335-374, refused 1,093-1,176, null 0; persons 79-82; hashes seed0 `5301d6b62af614f4`... (:3-53).
+  - Pooled: never executes: `argue` 62/62 refused, `build` 122/122, `carry` 157/157, `covenant` 28/28, `determine` 25/25, `establish` 18/18, `examine` 256/256, `march` 56/56, `pardon` 17/17, `raze` 89/89, `restore` 137/137, `revoke` 26/26, `sabotage` 127/127, `tend` 154/154, `train` 169/169; near-zero: `commit` 6 of 302, `found` 1 of 105, `work` 2 of 333, `migrate` 3 of 714, `fight` 9 of 115, `accept` 20 of 227, `release` 16 of 235, `transfer` 8 of 195, `research` 20 of 658; always executed: `conceal` 138, `create_record` 404, `utter` 213, `forgive` 5, `thread_read` 10 (:55-316).
+  - `thread_read` (the only thread verb) executes 10 of 10: the oracle is not reached.
+- **Conflicts / stale:** Pre-REM-27 / pre-B10 state; the v10 plan's counts (36 of 60 resolvable rows executed, B10-18b) are a later reading.
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/probes/p1_out_s2_seed0.json
+- **What it is:** JSON output of P1 for seed 0 alone, 2 seasons.
+- **Status:** none; reading: historical measurement output.
+- **Bears on:** CORE, CHAR.
+- **Content that matters:**
+  - Seed 0: attempted 1,511; executed 335; refused 1,176; hash `5301d6b62af614f4`; the same seed-0 row inside `p1_out_s2.json`. Per verb: `migrate` 121/121 refused, `work` 72/72, `examine` 61/61, `tend` 42/42, `train` 42/42, `raze` 23/23, `march` 19/19, `covenant` 14/14, `determine` 6/6 refused; `reconstruct` 34 of 41 executed; `create_record` 88; `conceal` 26 (:1-254).
+- **Conflicts / stale:** duplicates part of p1_out_s2.json (a derived file).
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/probes/p1_out_s4.json
+- **What it is:** JSON output of P1 over seeds 0-4, 4 seasons.
+- **Status:** none; reading: historical measurement output.
+- **Bears on:** CORE, CHAR; MB (`march` 93/93 refused), FA (`covenant` 70/70), SC (`determine` 3 of 43; `speak` 21 of 215).
+- **Content that matters:**
+  - Per seed (4 seasons): attempted 3,105-3,279, executed 722-784, refused 2,383-2,534; hashes as p10_s4.txt (:3-53). Pooled: `march` 93 attempted 0 executed; `seize` 3/3 refused; `covenant` 70/70 refused; `determine` 43 attempted 3 executed; `oblige` 642 attempted 301 executed (341 `duty.refused`); `open_case` 89 attempted, 40 executed; `confer` 111 attempted, 10 executed; `give` 24 attempted, 5 executed; `fight` 206 attempted, 18 executed; `migrate` 2,080 attempted 13 executed; `issue` 112 attempted 73 executed (38 `issue.unauthorized`); `requisition` 63 attempted 0 executed (47 unauthorized) (:55-323).
+- **Conflicts / stale:** These are the figures the register G-rows and the T03/T04/T08/T09 homes cite as "0 fields", "requisition 2/0, 5/0, 5/0" etc. They predate REM-27/B10 builds.
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/probes/p1_refusal_census.py
+- **What it is:** Scratch probe P1 (2026-10-25): per-verb census of attempted/executed/refused/null acts on the shipped realm, plus a CLOSERS block for the verbs that close an arc (`determine, confer, covenant, open_case, commit, release, oblige, revoke, succeed, arrest, issue, petition, found, build, work, give, restore, tend`); writes `p1_out_s{seasons}.json` next to itself.
+- **Status:** none; reading: historical instrument (inputs to the thrust-layer register); the harness `aperture` and CR-14/CR-46 are its committed successors.
+- **Bears on:** CORE, PROCESS, CHAR.
+- **Content that matters:**
+  - Copies `loop/driver.py:489-505` exactly: REFUSED if any emitted Event is a kind in the row's `emits_on_refusal`; EXECUTED if >=1 Event and none a refusal kind; NULL if none (:5-9, :64-76). Composition follows `harness/storybar.py::drive`. Hard-coded `/home/user/ttrpg` path.
+  - `CLOSERS` list prints `in_table` and `resolvable` flags per verb (`succeed` is in the list though it is "declined" in the table) (:28, :109-110).
+- **Conflicts / stale:** Duplicates the driver's classification rule (a second owner, flagged in the register); `get`s the probe list from `VERB_TABLE`, so adding verbs changes the census automatically.
+- **Open items:** none.
+
+## Cross-subsystem leads
+
+- **DICE / SC / FI / CHAR (resolution core):** T01's one-owner odds reader (`band_odds`, mode (a) true input, mode (b) believed input returning `None` for unknown factors), the fraction rule (CP-T01-04), the pool-solved ceiling (`chance_floor`, CP-T01-06 shipped True in B10-08), and `effort` (CP-T01-05) are the single path every other subsystem's odds display and chooser reading is meant to call (T02 CP-T02-08, T03 CP-T03-05 `fight_estimate`, T04 CP-T04-08 `field_estimate`, T05 bench estimate). The `faculty(p, verb)` reader with registered addends (inquiry, history, spirit via Will, practice) is the claimed capability owner (CHAR §14 lane). `sigma_leverage.p_success` is known to understate the dice (10-15 points; .581 vs .430 at 2D).
+- **PC <-> MB <-> CORE (one path / two modes):** the duel-terms path (`wrapper.fight(..., terms=LETHAL_TERMS)`, `DUEL_TERMS = ('yield','blood','death')`) exists in the module and is used by CP-T03-09 `capture`; the brief's two-mode duel (moment-by-moment vs auto round inside grid combat) is REM-31/IN-46's ENCOUNTER deferral, not described in these files. MB's season path stays: one `Unit` per side (CP-T04-01 one subunit per person), `marshal` and `surrender` landed WITHHELD, `besiege` and graded walls built or planned; the cell-based nested hierarchy, mixed-weapon loadout cost and named-squad intent of the brief appear only as MB-08 "AI generals / typed `Orders` record" LEAVE and CL-TROOP held on M3.
+- **SE <-> CORE <-> FA:** the requisition chain (CP-T08-06,-07,-08, IN-52 flip) is credited only where `requisition` executes in computed play (CR-23); `unrest`, `labour`, `price_of`, `store_spoil` all ship OFF. FA's war/occupation items (CP-T09-02, -04) read `mustered`, `purview_reaches`; `seat_people_at` and `oblige` clause in `may_muster` is the one count for both `sides_of` and plurality occupation.
+- **FI <-> SC <-> WR:** CP-T06-01/-02/-09 and the `thread.read` kind (CP-T07-10) share the found-deposit path; CP-T05-01/02's `opposed`/`hearing` terms depend on SC-02's F8 design (own-ledger only). The lie (CR-27) enters through `tell`'s kinds only.
+- **CHAR (NPC / chooser):** AQ-X1 (should believed odds enter the chooser's score) is the one consolidated ask; ED-IN-0304 (Jordan 2026-10-29: persons differ in risk appetite and in short/medium/long horizon, so a risk term and a timing term are wanted) is recorded in the progression adjudication (:650), and v10 CR-16/CR-17/CR-18/CR-21 carry the believed-odds weighting, `stance_polarity: declared`, practice and τ. Cohort populace choices are draws (no pursuit vector, ED-IN-0296 (2)).
+- **ARCS:** CL-THRUST's arc rule draws ladders only from `ENDINGS_CLASSIFIED.yaml` classes DECIDER/ROLL (18 unforced + 11 forced of 48); ARC-46..55 unclassified; B6.n authored ladders are Jordan's content. T10's Tensions cards (six archived fuse-deck cards as `[ASSUMPTION]` rows, switch OFF in v10) are the only world-generation arc seeds.
+- **GO:** `tensions.yaml`, `tension_effects`, `territory_yield_scale`, `route`/`exposure_body`, `season_terms` and `build_realm(tensions=)` cross to the port through GO-09's registries export; `Site.locked`, `Person.coherence`, `body_ceiling` are SCHEMA movers; `ladders:` and the `post` stamp are untyped payload keys.
+
+## Likely stale or superseded
+
+- `proposals/2026-10-23-subsystem-completion/*` (all items): each is a PROPOSED home whose v10 positions were built or narrowed by the `-08` overrides (AM-* rows) and the v10 build files; where a build file and its home disagree the build file governs (e.g. T07 `strain`/`calamity_band`/knot arm deleted; T08 CP-T08-04 craft, CP-T08-05 `price_of` formula; T09 CP-T09-06 `appointed` replaced by `inheritance`; T10 CP-T10-06 `kin` releasable and the kin witness channel cut). The T09 proposal's "A1 who may declare war" and T05's sibling claims are still the home's.
+- `2026-10-24-character-progression-adjudication.md`: six-attribute roster, "attributes fixed", accrual cut: superseded by M2 / ED-IN-0301 (nine stored attributes on 1-7, practice live; CR-18/CR-20).
+- v10 build files B10-11..B10-18c, B10-19, B10-Z and `-00-sequence`: written at `6bf2bb1`..`eda39a6`; several batches CLOSED (B10-01, B10-09, B10-10, B10-12 partly) and the plan moved to `workplans/valoria_master_workplan_v11_*` (B10-12 file cites v11 part 3). Treat figure tables (aperture counts, hash pins, "36 of 60 rows executed") as dated.
+- `probes/*`: scratch scripts with hard-coded `/home/user/ttrpg`; their figures predate the committed CR-14/CR-15 instruments; p11b docstring names a nonexistent `p11_accept_challenge.py`.
+- T01 claim that `CLAUDE.md` §5 names `engine/autoload/dice_engine.py` (:296): the CLAUDE.md in force does not.
+
+## Items that could change an audit finding
+
+- **F-PC-04 / no-deterministic rule:** T03 CP-T03-00 (both parties written) makes the attacker die in the scene, doubling combat deaths; `capture` (CP-T03-09) and yield terms (PC-10a, `DUEL_TERMS`) are the only non-lethal exits and need a seat granting `WARRANT_ACT` (J-8 open: may never form). Plain `fight` still kills by the band draw; CP-T03-05's `fight_estimate` samples live and so shows kill odds. Also p11b: 9 of 11 `accept` deaths had no prior challenge.
+- **Deterministic items in these proposals (candidates for the SC/FA lanes' G-65 style corrections):** T04 CP-T04-03 retreat conceding by threshold (`retreat_at` fraction) is a threshold, not a draw; CP-T09-04 plurality seizure ("strictly more members mustered") is a deterministic licence on an act, not a draw; T08 CP-T08-07 compliance `unrest_compliance[band]` is a deterministic fraction of a requisition; CR-35 election "quorum" tally is deterministic count of live commits, then rolled; CR-34's `quorum` conjunct is an eligibility check. T05 CP-T05-01/02 route evidence into the obstacle (a draw follows). Which of these count as "eligibility/requirement checks" vs "consequential outcomes" is for the lanes to judge.
+- **MB lane (brief's cell-based hierarchy, mixed-weapons cost, one resolver for player and auto):** T04 states a side is "units = PersonId[] at weight - one type" (Layer 1) and keeps a single `run_battle` resolver (2026-07-08 doctrine) but fights one `Unit` per side from the season; loadout is `TROOP_LOADOUT` in `modules/mass_battle/equipment/__init__.py:21` and "this proposal reads no arms or kit" (T04 :452-456); T03 CP-T03-03 `kit_of` is persons-only and gated on JQ-2 (a). The weapon-carry fatigue/speed trade-off appears in none of these files.
+- **F-SC / evidence entering a contest (G-65-type findings):** T05's verdict reads bench regard of the party (`opposed`) and the remembered hearing, but "testimony of violence does not reach the verdict as evidence" (a told killing names nobody, `PQ:145-148`); CP-T05-01 composes on `reception` which SC-02 must re-source (F8, own-ledger only). T06 refuses verifier/typed assertion by AX-7, so the brief's Obra Dinn / Golden Idol / Ace Attorney typed-evidence intent is unmet by design, and `forgery_quality` is capped away until CP-T01-06 (shipped True B10-08).
+- **CHAR capability authoring:** `Person.capability` empty on every realm person (1 of 430 holds one key); CP-T01-01 explicit `verb_capability` rows (`argue`, `inquiry`), `faculty(p, verb)` with registered addends, practice (CP-T01-02/CR-18), `Person.attributes` (CR-20, nine registry keys, tenth slot refuses a value), `arms` vocation (CP-T03-04) all converge on the claimed single reader; `Combatant.history` default 3 vs social `pool_default` 2 remain "two ladders" (progression adjudication C-4).
+- **NPC chooser intent:** v10 B10-18b CR-47 (ranking of every deliberating person), CR-16 (`stance_polarity: declared`), CR-17 (believed odds, τ), CR-21 (temperament cells) are the built answer; the chooser still cannot see leg price (CP-T10-01 `[GAP: unowned]`) or displacement (T07 §7 "NPCs who never stop"), and cohort populace choices are draws. 
+- **Provided arcs (§13):** ENDINGS_CLASSIFIED classes drive the thrust-layer arc rule; CR-37's `revoke` under `joint_concurrence` gives ARC-40's "be replaced" a non-violent route; CP-T09-04 clause makes `peninsular_sovereignty` reachable; CP-T09-06 passes Valorsmark with the line; arcs needing `lie` (CR-27), `kin`/`marry`/estates (CP-T10-06..08), `declare`/`covenant` chains (CP-T09-02/03, hand-built until a computed `covenant` executes) depend on the batches listed.

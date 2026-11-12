@@ -38,15 +38,16 @@ exist as edges and Records, and no roll reads them. The interlocks Jordan names 
 against a duke, a loan against a throne, a charter against a rival, a deed certified by one body and
 contested by another) are all the same event: *one institution's instrument entering another
 institution's draw as a term.* So the kit's centre is small: **one closed obstacle-term list** in which
-three terms carry every crossing (`obligation`: what the one asked owes; `remove`: how far the actor
-stands; `evidence`: what is held and cited, a certificate included), **one registry of instrument forms**
-(`engine/season/instruments.yaml`), **two record kinds** (`roll`, the deed ledger; `debt`), **one
-standing function** (`person_q.legitimacy`, extended by one term), and **ten seat-row keys**. Everything
-else is rows.
+four terms carry every crossing (`obligation`: what the one asked owes; `remove`: how far the actor
+stands; `standing`: how the person stands against the seat; `evidence`: what is held and cited, a
+certificate included), **one registry of instrument forms and seeded instruments**
+(`engine/season/instruments.yaml`), **one new record kind** (`debt`) and **one new content key**
+(`recites`, which makes any Record a certificate of deeds), **one standing function**
+(`person_q.legitimacy`, extended by one term), and **eight seat-row keys**. Everything else is rows.
 
-**The deed ledger is the shared currency, and it is a document somebody keeps.** A deed is an Event and
-fades from memory; a certificate is an entry on a `roll` Record, made only by a drawn act of a body, kept
-by a named seat, and able to be consulted, retold, forged, seized and burned. Standing passes down the
+**The deed ledger is the shared currency, and it is paper somebody keeps.** A deed is an Event and
+fades from memory; a certificate is a Record that recites deeds, made only by a drawn act of a body or a
+seat, kept by a named seat, and able to be consulted, retold, forged, seized and burned. Standing passes down the
 **seat** (not the blood) at a discount per holder, and only through deeds a person still holds a claim
 of; the keepers of rolls are therefore the keepers of every house's past, and each keeper is a different
 institution (the Crown's clerks hold the Settlement Roll of the three founders; the Church's archive

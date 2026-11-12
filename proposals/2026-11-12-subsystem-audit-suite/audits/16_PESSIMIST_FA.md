@@ -107,3 +107,124 @@ Varfell; nobility is by deed."**
 | P6.5 | heirs | what passes to an heir is the seat and a claim on the founder's standing, which he must keep up or lose (E7) |
 | P6.6 | the order matters | Hafenmark outranks Varfell by the founding order in some observable way (precedence, the claim to the crown if the royal line fails) (E4) |
 
+### 2.1 The notes' account (N), in aggregate
+
+Read after O. The code's own notes say, taken together: a decree is a `dispensation` Record minted into
+its issuer's hand, addressed by `to`, and reaches its addressee only by a `give`
+(`effects_information.py:254-272`; `world_q.py:3234-3260`); its being issued is "a matter of record …
+public to everyone by definition" (`epistemic.py:649-657`); obeying and defying are emission-only
+(`verb_table.yaml`, `comply`'s `writes_note`). A seat is filled by a superior seat whose purview reaches it
+and whose row grants `confer`, never by the heir's claim unless the basis is `inheritance`
+(`gate.py:697-698`, `:845-865`); "a seat declaring no basis is filled by NOTHING" (`:691-692`); "first
+valid claim wins" (`:782-783`). A revocation is admitted for the seat "on the rung DIRECTLY above"
+(`:604-606`) and costs an appointed man a permanent ban that "lasts until his death"
+(`effects_governance.py:328-329`). War is a `WAR` Proposition with a live `commit`; "`T-m` gives peace to
+the declarer" (`world_q.py:3576-3578`). "A faction does not act"; its holdings are its members' `hold`
+edges (`faction_q.py:84-113`). Duty of office is CR-88, unbuilt. The notes nowhere mention the secession
+war, a founder, or a ranked deed.
+
+N is honest about most of what follows; the three places where N and the run part company are marked **N≠R**.
+
+### 2.2 The running code (R), and the verdicts
+
+All at `build_realm(0)`; hand-built acts through RESOLVE (`harness/army_presets.py::_fold`); deaths through
+the engine's own writer (PROXY for a natural death, the game lane's X2 method). Scripts `pf1_static.py`,
+`pf2_premise.py`, `pf2b_followup.py`, `pf5_heads.py`; outputs beside them (§5). Each row names its control.
+
+**P1. "A decree binds those under the seat." — FAILS at "those under", at "binds", and at its end.**
+
+| link | what ran | verdict |
+|---|---|---|
+| P1.1 standing | the King through `off_king`: `dispensation.issued`. No seat: `issue.unauthorized`. A stranger naming `off_king`, the Clerk naming `off_king`, the Heir through `off_heir` (remit `[]`): `issue.unauthorized` each. The King resigns (`release`: `tenure.closed`) and issues again through `off_king`: `issue.unauthorized` | **holds**, 5 of 5 refusals visible and keyed |
+| P1.2 act | one Event, author, seat, tick; content is `terms` (one referent) and `to` | holds as an event; the content says nothing a person could do (F-FA-18, cited) |
+| P1.3 "those under the seat" | the purview conjunct was tried for every living individual as addressee. King: 42 of 45 admitted (the three refused live in the Altonian settlement). Royal Marshal (seat on T1): 15 admitted, of **eight factions**, including 2 members of Varfell, 2 of Hafenmark and 1 churchman. Duke of Varfell: **2 admitted, both members of the Restoration Movement; 0 of Varfell's five members, his own council included**. Restoration leader (T15): **0 of 45** | **fails**. "Under the seat" as run is *resident on the seat's ground*, not *below the seat in its ladder*. Cause, read off `pf2b` §6: the purview of `off_duke_varfell` (`duchy_varfell`) reaches the home of no Varfell member (they live in buildings of settlements s_002 to s_008), and likewise the Duchess of Hafenmark's reaches the home of none of Hafenmark's four, herself included. The Duke may appoint the Military Jarl (`may_fill` asks the SEAT's rung) and may not order him (`issue` asks the PERSON's place): two ladders for one quantity |
+| P1.4 it reaches them | issued inside a season by the seat-holder (player callback), everyone else idle. King's writ: 83 of 83 persons hold a `dispensation.issued` claim after one season (46 individuals, 37 peasant cohorts), 82 `told_by`. **The Royal Marshal's writ (a territory seat): 83 of 83 likewise.** In both, the addressee does not hold the paper and it is not in his `writs_held` | **fails in both directions**: every person in the realm, peasants in another duchy included, learns in the same season that a territory officer issued something; the one person it is addressed to cannot answer it. No distance, no delay |
+| P1.5 "binds" | paper placed in the addressee's hand (the issuer's `give` is refused; placed by a `hold` edge): `comply` → `compliance.impossible`; `evade / defy` → `compliance.impossible`; `construe` → `construal.impossible`; world state moved: nothing in all four arms (the fourth arm does nothing, the control). The precondition also wants the terms read into his ledger; with that added the FA lane's H-260 reading is that both answers write nothing | **fails** (cited: F-FA-01). New here: the issuer's own `give` of his own writ to his own Marshal is refused, so the one route N names is closed to the realm's top seat at build |
+| P1.6 the world changes | no arm moved state | fails (follows from P1.5) |
+| P1.7 it ends | the issuer dies: the Record still exists, **live holders: none; the heir does not hold it** | **fails**: a dead King's decrees are orphan paper, neither lapsed by rule nor inherited. (A dead person's edges are deleted with him, the non-conformance against `04:360` the FA lane cites.) |
+| P1.8 neighbours | nothing ranks two writs on one matter; `revoke` closes seats, not writs; no verb withdraws a writ | fails by absence (read, not run: no row in `verb_table.yaml` closes a `dispensation`) `[UNVERIFIED by execution]` |
+
+Genre: a strategy player would be surprised three times: that a duke cannot give an order to his own
+marshal-equivalent; that the whole realm knows of a clerk-rank writ at once; that nothing whatever follows
+from disobeying. Words: `dispensation` (the FA lane's R-11) and "purview".
+
+**P2. "A vacant seat is filled." — FAILS for 7 seats for ever, and where it holds it holds by the wrong hand.**
+
+| link | what ran | verdict |
+|---|---|---|
+| P2.1 vacancy | a death closes the dead man's seat-holds and names them (`tenure.closed` with the seats as subjects; game lane X2) | holds |
+| P2.2 someone has the right | enumerated over all 34 seats (`pf1`, and again filtered by the remit grant): **7 seats can be filled by nobody once empty** (`conferral: null`, `has_filler` false): the Duchess of Hafenmark's, the Duchy of Valorsmark, the Queen's, the Princess's, the guild leader's (`off_npc_084`) and the two Altonian seats. Of the other 27, 26 are fillable by a seat whose row grants `confer`, and **`off_king` and `off_widow_regent` (the Queen consort) are among the fillers of every one of the 26** | **fails** for the 7. For the rest: the right exists, and it is the Crown's everywhere |
+| P2.3 someone acts | the game lane's X2 (cited; outputs `PES_GAME/x2_death_s0.txt`, `x2b_*`): the King dies at seed 0; the heir's `succeed` lands a season later; over three seasons 43 `confer` attempts name the lost seats and all 43 are refused; `off_duke_valorsmark` is empty at the end. FA lane: `tenure.opened` 0 in nine seed-seasons | fails in computed play except the one claim |
+| P2.4 candidates, by a draw | every `confer`, `succeed`, `revoke`, `pardon`, `establish` and `release` here returned the same Event at every attempt; none carries a degree (`effects_governance.py`: the `res` argument is unused in all nine effects; "the first valid claim wins") | **fails the standing rule** (cited: `18_DETERMINISM_SWEEP.md` C-07, C-11) |
+| P2.5 the new holder holds | the heir's claim: `succession.claimed`, he holds `off_king`; the dead King's second seat (`off_duke_valorsmark`) does not pass: `successions` has one row and that seat has no basis; the new King's own `confer` of it on himself: `confer.refused` | partly holds. **N≠R**: `_eff_succeed`'s docstring says "the King who dies holding two such seats leaves both to one claim"; the King does die holding two seats and one of them passes |
+| P2.6 an unfilled vacancy costs | see §1.1's NO_SEATS arm | (measured there) |
+| P2.7 bounds | **the Rebel leader dies**: none of the three surviving members can take the seat (`confer.refused`, `succession.refused` each); the seats that may fill it are `off_king` and `off_widow_regent`; the King confers it on his Guard Captain: `tenure.opened`. **The Confessor dies**: each of the four Cardinals' `confer`: `confer.refused` (no row of theirs grants `confer`); the King confers the Confessor's seat on his Guard Captain: `tenure.opened`, and `faction_q` then reads the Guard Captain as head of the Church; the Queen consort confers it **on herself** through `off_widow_regent`: `tenure.opened`. **The Duchess of Hafenmark dies**: Hafenmark's head is `None`, `world_q.vacancies` names the seat for 0 persons, the King's `confer`: `confer.refused`. **The King and the heir die**: the Queen consort names herself heir (`tenure.opened`) and claims the throne (`succession.claimed`): she is King; or she names a peasant cohort heir and **the cohort claims the throne: `off_king` is held by `cohort_set_s_001`**; the Duchess of Hafenmark and the Duke of Varfell each try `succeed`: `succession.refused`. **King, heir and Queen die**: seats able to fill `off_heir`: none; persons able to claim `off_king`: none; Valorsmark is headless for the rest of the game | **fails**, each case by execution |
+
+Genre: a player who knows any dynastic game expects the body that elects to elect and the next in line to
+inherit. Here the insurgents' leader and the head of the Church are the King's appointments, a consort can
+make herself pontiff, a peasant village can be King, and the second house of the realm ends with its first
+death.
+
+**P3. "A war is declared and fought." — FAILS at standing, at licence, and at the end; "fought" is the MB lane's.**
+
+| link | what ran | verdict |
+|---|---|---|
+| P3.1 standing | `utter` mood `WAR` naming Hafenmark and Varfell, then the utterer's `commit`: `at_war` reads true when the declarer is an unseated person in no faction, **a peasant cohort**, the King (party to neither), the Chief Parliamentary Clerk, or the Duchess of Hafenmark. Control: false before, in every arm | **fails**: anyone alive puts any two factions at war |
+| bounds | Hafenmark at war with itself: `at_war(A, A)` true. A war between a faction id that does not exist and a person: `proposition.uttered`, `at_war` true. A party of two clerks formed a minute ago (any Proposition with committers resolves as a `Faction` view) declares war on Valorsmark: true | fails (E9): the Query reads two strings |
+| P3.2 it is known | at the tick of declaration `enemies_heard` is non-empty for 1 person of the 9 members of the two factions (control at peace: 0) | not judged from one tick; no season was run on it `[UNVERIFIED]` |
+| P3.3 war licenses | `at_war` has two readers in non-test code: `enemies_heard` (`world_q.py:3703`) and `:5150` (an instrument's count); no `requires` cell asks it (`04` F.33, open). A march needs no war (FA lane: 29 marches at seed 0 with `at_war` empty) | **fails**: war is not a state that changes what may be done |
+| P3.4, P3.5 | MB lane and FA addendum F-FA-15 (a levy belongs to whoever minted the army Record), cited | — |
+| P3.6 battles move the war | FA addendum F-FA-13 (no field outcome touches a holding or a seat), cited | fails |
+| P3.7 it ends | the declarer dies: `at_war` true → false; the `WAR` Proposition still exists. `release` by the declarer ends it (the tree's own test) | holds for a war of one; it ends by an accident of bookkeeping, not by anyone's decision (F-FA-14, cited) |
+| P3.8 zero case | no declaration, a march is the same act | fails (follows from P3.3) |
+
+**P4. "A faction is the sum of its persons' acts." — HOLDS as arithmetic, FAILS as a polity; and there are two heads.**
+
+| link | what ran | verdict |
+|---|---|---|
+| P4.1 members | at build 43 of 83 persons are members of exactly one faction; **40 are members of none: all 37 cohorts (the whole population of the realm) and 3 individuals**. Valorsmark is 11 individuals holding 11 seats; Hafenmark 4; Schoenland 1 | the sum is over the court. The governed are in no sum |
+| P4.2 "the sum" | `Faction` is members, holdings, seats, head. It sums **edges**, not **acts**: no field is a tally of what members did; no stores, men or reputation | holds for holdings and seats; "acts" is not in the view at all |
+| P4.3 the sum responds | the Duke of Varfell leaves Varfell (`release`): members 5 → 4, seats 4 → 3, **holdings 4 → 0** (every Varfell holding was his own `hold`); he still holds the ducal seat; `head` is still him, a non-member. He joins Hafenmark (`commit`, no one's consent, no draw): Hafenmark's holdings 4 → 8 and its seats include `off_duke_varfell`. **The King joins the Restoration Movement** (the insurgents): `commitment.made`; the Movement now reads 3 seats and 6 holdings, the realm's. The Duchess of Hafenmark also joins Varfell without leaving Hafenmark: a member of two. Every member of Hafenmark leaves: members 0, seats 0, holdings 0, `head` the Duchess; the four seats are all still held | **holds as arithmetic and that is the defect**: membership is unilateral, free, unrefusable and undrawn, so one man's sentence moves a duchy between factions; the view cannot tell a defection from a clerical act |
+| P4.4 others read the sum | non-test readers of `faction_q.resolve`: one, the `survey` verb's `faction_sheet` Record (`effects_information.py:829`). Readers of `Faction.head` / `head_seat`: none but that Record and an instrument. `opinion_of` reads a **different head**: the creed Proposition's subject, fixed at build. At build the two agree for 4 factions and differ for the Restoration Movement and the Löwenritter (`faction_q.head` is `None`, the creed names a living leader). After the King dies and the heir claims: `faction_q.head` is the new King; the creed still names the dead man, so `opinion_of` regards nobody as Valorsmark's head (mean opinion of Valorsmark over individuals 0.569 → 0.500) | **fails**: two ladders for one quantity, and the one that tracks the seat is read by nothing that decides |
+| P4.5 a faction acts through persons | holds (the FA lane's steelman 2, not re-attacked) | holds |
+| P4.6 rises and falls | FA lane: ten faction tuples unchanged build to end at three seeds | fails in computed play |
+
+**P5. "An officeholder who fails his duty is called to account." — FAILS at every link; what exists is dismissal without cause, hearing, draw or remedy.**
+
+| link | what ran | verdict |
+|---|---|---|
+| P5.1 a duty | `Office` has fields `binds, body, body_function, conferral, faction, id, post, remit_acts, revocation, rung, scope_rung, upkeep`; none is a duty. The word "duty" in the Event log (`duty.taken`, `duty.refused`) is an oath of service TO a seat (`oblige`), not a duty OF one | **fails**: there is nothing for an officer to fail |
+| P5.2, P5.3 failure, notice | no predicate; nothing to observe | fails by absence |
+| P5.4 a proceeding | at tick 0, the Marshal having done nothing: the King's `revoke` through `off_king`: `revoke.refused`; through `off_duke_valorsmark`: `tenure.closed`, degree `None`. No summons, hearing or draw | **fails**, and fails the standing rule |
+| who may call whom | of 34 seats, **6 can be stripped by anyone, all six by one seat, `off_duke_valorsmark`, and none through `off_king`** (the rule is the rung *directly* above, `gate.py:485`, `:604-606`; the realm is two rungs above T1). That seat is one of the 7 unfillable ones. After the King dies and the heir claims: **strippable seats in the realm: none**; the new King's dismissal of the Marshal: `revoke.refused` | **fails**: the realm's whole power of dismissal is one man's second title and dies with him. Appointment reaches 26 seats at any depth; dismissal reaches 6 at depth one: opposites that do not act oppositely (E11) |
+| P5.5 a consequence, by degree | the dismissed Marshal gets a `ban` (object `off_duke_valorsmark`, no term). The King reappoints him: `confer.refused`. The King pardons him: `pardon.refused`. **`pardon` tried through every one of the 33 held seats in the realm: 33 refused** (a pardon is exercised through the ban's object seat by a holder whose grant carries `determine`; `off_duke_valorsmark` grants `confer, convene, issue, revoke`). The Duke of Varfell offers him Varfell's elected Military Jarl seat: `confer.refused`; control, the same seat to the Clerk: `tenure.opened` | **fails**: one consequence, the maximum, in every case, irreversible by anyone, reaching every seat of every faction |
+| P5.6 the diligent are spared | the run above IS the zero case: a blameless officer at tick 0 | **fails**: `revoke` reads nothing about the man |
+| P5.7 who guards the guard | `off_king.revocation: null`; also null for the Confessor, the Cardinals, the Grand Master: explicit, ruled | holds as stated (ruled; §4) |
+| custody | a `detain` edge on the Marshal (placed by hand; the three `arrest` attempts drew `arrest.resisted`, `arrest.unauthorized`, `arrest.resisted`): he issues a writ through his seat: `dispensation.issued`; he convenes a sitting: `date.scheduled` | a prisoner governs from his cell: restraint and office do not touch |
+
+**P6. The fixed point: royalty by noble conquest; nobility by deed. — ABSENT from the engine. Zero of six links are represented.**
+
+| link | what ran | verdict |
+|---|---|---|
+| P6.1 the war happened | `grep -rni secession` over `engine/`, `modules/`, `references/` (`*.py`, `*.yaml`): no hit. The built world's log at tick 0 is empty; no Proposition, Record, claim, person or office carries "secession", "conquest", "founder" or "consecrat" (the three "deed"/"accomplish" hits are two heresy goals and one character's creed about bureaucracy). Canon carries it (`canon/03_canonical_timeline.md:72-84`, `:194`) | **absent**: the world has no past |
+| P6.2 ranked accomplishments | nobody at build holds an event-kind claim about anybody: `deeds_judged` is non-zero for 0 of 45 judges of the King, 0 of 45 of the Duchess, 0 of 45 of the Duke | **absent** |
+| P6.3 rank follows the deed | regard at build: the King non-zero for 13 of 45 (authored stance rows), mean +1.31; **the Duchess of Hafenmark and the Duke of Varfell: non-zero for 0 of 45, the same reading as the Chief Parliamentary Clerk** | **fails**: the two ducal houses are indistinguishable in standing from a clerk |
+| P6.4 nobility by deed | conferral bases: `appointed`, `elected`, `annex`, `inheritance`. No seat is filled, kept or lost by a deed; `regard` (the only reader of deeds) gates no governance predicate | **absent** |
+| P6.5 heirs | the three founding seats declare `inheritance` (King), `null` (Hafenmark), `elected` (Varfell). Hafenmark's ends with its holder (P2.7) | fails for Hafenmark |
+| P6.6 the order matters | the royal line fails: the Duchess of Hafenmark's `succeed`: `succession.refused`; the Duke of Varfell's: the same; neither can name himself heir (`confer.refused`); nobody is ever King (P2.7) | **fails**: the order king, Hafenmark, Varfell has no expression |
+
+The four institutions lanes each design how the fixed point should be carried (`15_INSTITUTIONS_*`, each
+with a "three seeded Secession deeds" or equivalent); this row is the execution baseline they build from:
+today the count is zero, and the control (the King's 13 stance rows) shows the reader would have seen it.
+
+### 2.3 Premises that failed, in one place
+
+| premise | fails at | by execution |
+|---|---|---|
+| a decree binds those under the seat | "those under" (residence, not ladder; a duke reaches none of his own); "binds" (nothing follows); reach (the whole realm at once, the addressee never); its end (orphan paper) | `pf2` P1, `pf2b` §6 |
+| a vacant seat is filled | 7 seats never; the Church's and the insurgents' heads by the Crown only; a consort or a peasant cohort can be King; no draw anywhere | `pf1`, `pf2` P2, `pf2b` §2, §3, §7 |
+| a war is declared and fought | anyone declares for anyone, self-war included; war licenses nothing; ends by its declarer's death | `pf2` P3 |
+| a faction is the sum of its persons' acts | the governed are in no faction; joining is free and unilateral; the view is read by one verb; two heads | `pf1`, `pf2` P4, `pf5` |
+| an officeholder who fails his duty is called to account | no duty; no proceeding; dismissal reaches 6 seats through one unfillable seat; its ban is total, permanent and unpardonable by anyone | `pf2` P5, `pf2b` §1, §4, §5 |
+| royalty by noble conquest, nobility by deed | not represented | `pf1` (c), `pf2b` §7 |
+

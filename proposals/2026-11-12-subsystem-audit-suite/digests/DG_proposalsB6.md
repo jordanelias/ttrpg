@@ -437,3 +437,309 @@ Lane scope: `proposals/2026-10-25-thrust-layer/{probes,reports,toy}` and 17 file
   - Known errors (:54-56): R09/R10 say candidate typing "unruled and in no workplan" (it is H-156); first-delivery refusal figures (929 of 1,318; 33%; 51 of 803; 28 of 46) superseded.
 - **Conflicts / stale:** none.
 - **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/toy/README.md
+- **What it is:** Module map and grade statement for the toy-world evidence directory (24 actors, 6 places, 6 prizes, 24 seasons; stdlib only, fixed seeds).
+- **Status:** "Grade: model-internal, low confidence. Reference under CLAUDE.md s0.05. Not game code, not read by any tool, creates no obligation." (:3-4). Reading: reference, correctly bannered; nothing in it runs `engine/season/` except the five chronicle files.
+- **Bears on:** WR, CHAR, PROCESS.
+- **Content that matters:**
+  - Module table (:11-22): `regimes.py` = `regimes_v1.py` (v1 world, byte-identical, hash in `v1_files.sha`); `regimes2.py` v2 instrument (pair-thread identity, plateau peak, burn-in, director thread); `regimes3.py` terminal-lifecycle and tribunal arms; `lookahead.py`; `regimes5.py` goal ladders HYg1-3; `regimes6.py` situation set pieces (TDS, TDSm, HYg3s); `regimes7.py` decisive-form set pieces (TDSc, TDScf, HYg3c); `regimes8.py` non-lethal/settled climaxes (run inline, not saved); `regimes9.py` standing snapshots (inline, not saved); `regimes10.py` constrained world.
+  - Pre-registration audit (:25): checked 2026-10-28, prediction/experiment scripts match their recorded hashes (13 of 17 entries) but the world file recorded beside them does NOT in four freezes (`regimes.py` in `predictions.sha`, `regimes2.py` in `v2_frozen.sha`, `regimes5.py` in `ladder_pred.sha`, `regimes10.py` in `con_pred.sha`): the freezes cover predictions, not the world.
+  - v1 predictions were blind; every later set is informed; HYc, HYd, bootstrap CIs, sifting test, lookahead, ladder, set-piece and constrained arms are post hoc (:25-28).
+  - "Printed, not saved" list (:37-39): `regimes9.py` review of earlier arcs; `regimes8.py` non-lethal/settlement runs; threshold-sensitivity and per-property tables; killing cascade tables except `save_figs_out.txt`.
+  - Five real-engine chronicles (seeds 0,1,2,4,5, 4 seasons) show 53 of 66 chain acts refused by the suffix definition of `narration-mechanisms.md` (:41-44).
+- **Conflicts / stale:** R01 cites 55 of 67 and R02/R10 cite 66 of 81 for the same chains; README says 53 of 66. Three different numerators for one measurement (suffix definition over-counts degree bands). P7 (`probes/p7_s4.txt`) counts 55 of 66 on the driver definition.
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/toy/exp_closure.py
+- **What it is:** Post-hoc script: does a threshold-forced, decider-closed moment (HYd) produce arcs? 300 seeds; base and 80% refusal; bootstrap CIs; tribunal count; single-closing-spike sifting.
+- **Status:** none (script, "POST-HOC, exploratory", :1). Reading: historical.
+- **Bears on:** WR, FA, CHAR.
+- **Content that matters:**
+  - Imports `regimes3 as R`; regimes BU, TDR, HY, HYd (:10-11). `boot()` is a naive percentile bootstrap (:6-9).
+  - Last block counts `summon`/`rule` events to report tribunals raised and ruled per run (:22-25), but it reads `e['thread']` on every event and crashes (see output).
+- **Conflicts / stale:** script crashes with `KeyError: 'thread'` at :24 (visible in `exp_closure_out.txt`).
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/toy/exp_closure_out.txt
+- **What it is:** Output of `exp_closure.py` (base and 80% refusal) plus the tribunal counts and spike test from a patched re-run.
+- **Status:** none. Reading: historical measurement, partly inconsistent (see below).
+- **Bears on:** WR, FA, CHAR.
+- **Content that matters:**
+  - Base: HYd arc_all 0.260 vs its own null 0.258; HYd - BU +0.173 [+0.113,+0.233]; `HYd arc_all - arc_null: 0.002` (:3-13) - the headline gain over BU is entirely matched by the shuffled null.
+  - 80% refusal: HYd - BU +0.027 [-0.037,+0.090], CI spans 0; TDR 0.710 vs null 0.330 (:14-26).
+  - After the traceback (:27-34) the file continues with a different run's lines: "HYd: tribunals raised per run 31.59, ruled (all three accepted) per run 11.11" (:35) and a single-closing-spike test: spike at season 4 -> arc False, seasons 8-20 -> arc True (:36-40). The arc test therefore passes a lone interior closing event at any season >= 8 (the R02 caveat).
+- **Conflicts / stale:** the file is a splice of two runs (the committed script still crashes at :24); tribunals/run (31.6 raised, 11.1 ruled) shows HYd is a high-volume tribunal arm, not a rare closure.
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/toy/exp_con.py
+- **What it is:** Constrained-world experiment: NPC death rare, violence against standing gated, accusation as usual weapon, bound peace, killing consequences; nine arms; seven pre-registered predictions K1-K7.
+- **Status:** none (script; predictions "registered BEFORE the first run", hash in `con_pred.sha`). Reading: historical.
+- **Bears on:** WR, PC, FA, CHAR.
+- **Content that matters:**
+  - CON1 = `death_p=0.01, gate_p=0.9, accuse=True, truce=True, conseq=True, lethal=False`; CON2 lethal + `tdr_kill` (:5-6). Metrics added: deaths, harm on standing, gate refusals, accusations, revenge events (reaction to a death id), outcry, late events (t>=22) (:18-26).
+  - `ladder_rate` computes share of ambitions with at least one `goal_met` (:29-38).
+  - Imports `regimes10 as R` - the code in the file whose hash does not match its freeze (README :25).
+- **Conflicts / stale:** none beyond the README caveat.
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/toy/exp_con_out.txt
+- **What it is:** Output of `exp_con.py`: nine arms, 300 seeds.
+- **Status:** none. Reading: historical; source of the "+0.244" figure.
+- **Bears on:** WR, PC, FA.
+- **Content that matters:**
+  - HYg3c nonlethal (ladder + decisive form + bound peace): deaths 0.24, harm on standing 0.127, arc 0.470, arc-minus-null +0.244 [+0.188,+0.303] (:7). Its sibling TDSc nonlethal (set piece without ladder): +0.016 [-0.019,+0.051] (:6). BU: -0.056 [-0.083,-0.027] (:2). HYg3d (ladder+tribunal): +0.010 [-0.046,+0.067] (:4). TDR forced yield: +0.099 (:5).
+  - Lethal + consequences arms: HYg3c 1.20 deaths, revenge 3.68/run, +0.291 (:9); TDSc lethal+conseq 1.35 deaths, +0.044 (:8).
+  - Ladder survives the gate: 0.957 of ambitions meet a goal (:12).
+  - Predictions: 3/7 confirmed (:14-22). FALSIFIED: K1 (deaths <= 0.6 and harm on standing <= 0.10 -- ladder arms have 0.12-0.13), K2 (BU has an ordering signal: -0.056, below chance), K3 (bound peace gives >= +0.08 for TDSc nonlethal: it gives +0.016), K5 (revenge >= 3.0 lethal arms: TDSc lethal+conseq 2.87 fails; nonlethal revenge 0.53-0.68, above 0.5).
+- **Conflicts / stale:** R13 F14 says `+0.244` is quoted without its sibling arm's +0.016 - this file shows both. The ordering signal in the ladder + peace arm depends on the ladder, not the peace alone.
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/toy/exp_contest.py
+- **What it is:** Conclusive-form set-piece experiment (best-of contest at a venue, decisive, lethal at climax); ten predictions C1-C10; uses `regimes7`.
+- **Status:** none (script; predictions frozen, `setpiece2_pred.sha`). Reading: historical.
+- **Bears on:** WR, PC, SC.
+- **Content that matters:**
+  - Arms BU, TDR, TDSc (set piece), TDScf (flat stakes), HYg3c, HYg3d (:16); also computes P(protagonist wins climax) (:22-29) and violations after killing the protagonist at season 10 (:31-35).
+  - C-predictions encode: winner stays open (0.25-0.75), signal >= +0.05, close to forcing director, complete beats >= 0.50, 80% refusal still >= 0.50, quiet world stakes >= 2x BU.
+- **Conflicts / stale:** the 80% refusal arm uses `refuse=0.8` on the toy's own act layer; the toy contest has its own dice and bypasses it (R05 :35), so C6's pass is partly an artifact.
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/toy/exp_contest_out.txt
+- **What it is:** Output of `exp_contest.py`.
+- **Status:** none. Reading: historical.
+- **Bears on:** WR, PC, SC.
+- **Content that matters:**
+  - TDSc arc 0.330, +0.142 [+0.090,+0.197], closed 0.793, five_node 0.673, why_linked 0.268; HYg3c +0.199, five_node 0.787, why_linked 0.446 (:5-7).
+  - 80% refusal: TDSc +0.561, HYg3c +0.627, HYg3d -0.023 (:23-26) - the toy contest does not pass through the act layer.
+  - P(protagonist wins climax) = 0.64 / 0.647 (:29). Quiet-world peak magnitude: BU 2.36, TDSc 7.65, TDScf 4.27 (:28).
+  - 9/10 confirmed; C10 FALSIFIED (HYg3c why_linked 0.446 < 0.55) (:42-43).
+- **Conflicts / stale:** R05's table lists HYg3c "+0.20 [+0.14,+0.26]" and "ladder + decisive-form 0.41"; matches :7.
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/toy/exp_ladder.py
+- **What it is:** Hierarchical-ambition experiment: ladders of depth 1-3 (HYg1-3) under an ambition, versus BU/TDR/HY/HYd; seven predictions H1-H7.
+- **Status:** none (script; "written BEFORE this script was first run", `ladder_pred.sha`, :2). Reading: historical.
+- **Bears on:** CHAR, WR.
+- **Content that matters:**
+  - Regimes BU, TDR, HY, HYd, HYg1, HYg2, HYg3 at base and `refuse=0.8` (:23-26). Contrast list includes HYg3 vs HY, HYg3 vs HYd, TDR vs HYg3 (:43).
+  - Contains a dead conditional (`if False else`) in the `d` lambda (:35) - a leftover.
+  - Imports `regimes5` (hash mismatch with `ladder_pred.sha` per README).
+- **Conflicts / stale:** none further.
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/toy/exp_ladder_out.txt
+- **What it is:** Output of `exp_ladder.py`.
+- **Status:** none. Reading: historical.
+- **Bears on:** CHAR, WR.
+- **Content that matters:**
+  - Base: HYg3 arc_all 0.143 vs null 0.140 (arc-null +0.003); HYg3 - HY +0.087 [+0.043,+0.137]; HYg3 - BU +0.057 [+0.007,+0.107]; why_linked 0.721 (:9-18). HYd arc 0.260/null 0.258 (:6).
+  - At 80% refusal HYg3 - BU +0.000 [-0.063,+0.063], TDR - HYg3 +0.520 (:28,:33).
+  - Predictions 4/7: FALSIFIED H1 (ladder >= +0.10 over HY), H4 (HYg3 arc-null >= +0.05), H7 (five_node +0.15); CONFIRMED H2 (depth dose), H3, H5, H6 (:38-46).
+  - HYg1's arc_null is 0.179, higher than any other arm's (:7, :18 -0.089) - an unexplained outlier in the null.
+- **Conflicts / stale:** R03 says "two tiers give about the same as three, one tier does nothing" - HYg1-HY +0.033 spans 0 (:17), HYg2-HY +0.097 (:16), consistent.
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/toy/exp_setpiece.py
+- **What it is:** Situation-only set-piece director (TDS: relocate principals + engagement window; TDSm: stakes multiplier) versus BU, TDR, HYg3d, HYg3s; nine predictions S1-S9.
+- **Status:** none (script; predictions frozen in `setpiece_pred.sha`). Reading: historical.
+- **Bears on:** WR, SC.
+- **Content that matters:**
+  - Computes outcome openness by who is dead at the end (protagonist only / antagonist only / both alive) for TDR, TDS, TDSm (:22-30), violations after killing the protagonist (:31-36), quiet-world peak magnitude (:21,:50).
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/toy/exp_setpiece_out.txt
+- **What it is:** Output of `exp_setpiece.py`.
+- **Status:** none. Reading: historical.
+- **Bears on:** WR.
+- **Content that matters:**
+  - TDS (situation only) arc 0.070, arc-null -0.042 [-0.073,-0.009]; TDSm -0.069 [-0.090,-0.049]; HYg3s -0.020; HYg3d +0.092 [+0.033,+0.152] (this is the "ladder + tribunal" arm's +0.09) (:5-8).
+  - Outcome openness: TDR (0,1,0) - the forcing director always kills the antagonist; TDS and TDSm 94% both alive (:30).
+  - 5/9 predictions confirmed; FALSIFIED S1 (outcomes stay open), S2, S6, S8 (:34-44). Quiet-world peak magnitude TDSm 14.52 vs BU 2.36 (:28).
+- **Conflicts / stale:** the "94% both alive" in R05/R06 is :30.
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/toy/lb_more.py
+- **What it is:** 120-seed lookahead-leverage run (lambda 0 vs 4) with bootstrap differences; multiprocessing Pool(4).
+- **Status:** none (script). Reading: historical.
+- **Bears on:** CHAR, DICE, CORE.
+- **Content that matters:**
+  - Compares arc_all, arc_null, arc_closed, dangling, five_node, why_linked, depth, n_exec; reports changed/leveraged, leveraged decisions per run, rollouts per run (:17-26).
+  - Uses `lookahead.simulate_lb` on the `regimes3` world.
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/toy/lb_more_out.txt
+- **What it is:** Output of `lb_more.py`.
+- **Status:** none. Reading: historical; source of R03's lookahead numbers.
+- **Bears on:** CHAR, DICE.
+- **Content that matters:**
+  - lam 4 vs lam 0: arc_all 0.092 vs 0.017 (+0.075); arc_null 0.167 vs 0.022 (+0.144 - null rises more); arc_closed 0.492 vs 0.150; why_linked 0.579 -> 0.287; chain depth 18.0 -> 30.6 (:2-8).
+  - `lam4 arc_all - arc_null = -0.075 [-0.144,-0.008]` (:10); changed/leveraged 0.324; 126 leveraged decisions and 3,179 rollouts per run; zero injected outcomes, zero violations (:11).
+  - R03 states "explained motive 0.58 -> 0.29" - this file has why_linked 0.579 -> 0.287.
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/toy/lb_sweep.py
+- **What it is:** 40-seed lambda sweep (0, 1, 2, 4) of lookahead leverage; Pool(3).
+- **Status:** none (script). Reading: historical.
+- **Bears on:** CHAR, DICE.
+- **Content that matters:**
+  - Prints per-lambda means of 11 metrics, injected total, changed/leveraged, rollouts/run (:16-23).
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/toy/lb_sweep_out.txt
+- **What it is:** Output of `lb_sweep.py`.
+- **Status:** none. Reading: historical.
+- **Bears on:** CHAR, DICE.
+- **Content that matters:**
+  - Dose: changed/leveraged 0.077 (lam 1), 0.154 (2), 0.287 (4); rollouts/run ~3,000; why_linked 0.610 -> 0.333; depth 16.2 -> 26.6; arc_all 0.100 vs arc_null 0.158 at lam 4 (:2-5). Zero violations and zero injections at every lambda.
+- **Conflicts / stale:** 40 seeds only (the 120-seed run supersedes it).
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/toy/lookahead.py
+- **What it is:** Toy-world choice-level "narrative leverage" with M=4 rollouts of H=2 seasons, standardised per actor and soft-capped, applied only to actors in the top-3 threads.
+- **Status:** none (script; module docstring is the design). Reading: historical; the only code in the directory that models the proposed sigma-leverage correlate.
+- **Bears on:** CHAR, DICE, CORE.
+- **Content that matters:**
+  - Mirrors `choose.py::_sample_order` (Plackett-Luce/Gumbel, tau; here `TAU = 0.15`, `M_MAX = 1.5`, :17-18) and adds `lam * soft_cap(z)` where z standardises the lookahead value across the actor's candidates (:98-100) - the mu-shift-in-sigma-units idea of `sigma_leverage.py`. The real engine's tau is 0.1, so the toy's tau differs.
+  - Proxy Q = mean of cross-person involvement, thread concentration and escalation (:140-146), "deliberately not the evaluation metrics" (:8-9).
+  - `clone()` copies the world per rollout (:26-36) - the cost driver (~3,000 rollouts per run).
+  - Casting rule: only actors in the current top-3 threads are leveraged (:107-119, :96).
+- **Conflicts / stale:** the lookahead value V is an in-sim local proxy that correlates with the arc metric's ingredients (cross-person depth) - R03 notes partial circularity.
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/toy/metrics2.py
+- **What it is:** Fragment of the v2 metrics module (selection, arc test, violations, graph stats, five-node, `run_metrics`, `log_hash`); has no imports header and uses `Counter`, `math`, `hashlib`, `json`, `T_DEF` unimported - it is spliced into `regimes2.py` (not independently runnable).
+- **Status:** none (code fragment). Reading: historical duplicate of the metrics section of `regimes2.py`.
+- **Bears on:** WR, PROCESS.
+- **Content that matters:**
+  - `arc_test` (:46-65): thread intensity per season, 3-wide smoothed plateau peak at 0.2n..0.92n, rise = Spearman >= 0.5 before peak, fall = post-peak mean <= 0.6 x peak AND a closing event at/after the peak. A single closing event at the peak season satisfies it.
+  - `shuffled` null shuffles event times (:68-70). `five_node` needs >= 4 beats, a turn, and a closing beat at/after peak (:109-121).
+  - Variants grid VARIANTS (peak_hi, strict_close, burn) (:134-135); `arc_all` = `p92_relax_b4`.
+  - `why_linked` = motive is an `ambition` or a `reaction` to a selected event (:146-149). `violations` counts dead_actor, dead_target, not_colocated, bad_cause (:73-87).
+  - `select` keeps top-3 threads capped at 12 beats - the "chronicle" selection (:5-14).
+- **Conflicts / stale:** `arc_any3` is assigned twice (:203-209) with a dead `if False` generator - leftover.
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/toy/out_v1.txt
+- **What it is:** Saved output of the v1 suite (blind predictions), N=300, T=24.
+- **Status:** none. Reading: historical; v1 instrument had defects fixed in v2.
+- **Bears on:** WR.
+- **Content that matters:**
+  - 11/21 predictions confirmed (:110). Blind-falsified: A1 (TD >= BU + 0.20; TD 0.143 vs BU 0.080), A3, D1, D2, B1, B2, E1, R1, K3 (:81-108).
+  - v1 TD violated constraints 99.7% of unperturbed runs (:74); post-kill violation rate TD 1.0, others 0 (:78).
+  - Control K1: 300/300 identical (HY with weight 0 equals BU) (:97).
+- **Conflicts / stale:** superseded by `out_v2.txt`.
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/toy/out_v2.txt
+- **What it is:** Saved output of the v2 suite.
+- **Status:** none. Reading: historical; the base table behind R02.
+- **Bears on:** WR, CHAR.
+- **Content that matters:**
+  - Regime table: why_linked BU 0.428 / TD 0.357 / TDR 0.229 / HY 0.801 (:5-8); arc_all/null BU 0.087/0.102, TD 0.160/0.168, TDR 0.350/0.254, HY 0.057/0.081 (:19-22); five_node 0.110/0.337/0.760/0.113 (:40-43).
+  - Dose: raising ambition weight w from 0 to 1 raises why_linked 0.423 -> 0.992 but lowers arc_all 0.093 -> 0.033 and arc_closed 0.36 -> 0.173 (:59-63).
+  - Ablation: removing the lifecycle raises HY arc_closed 0.233 -> 0.387 (:67): the lifecycle hurt closure.
+  - 80% refusal: TDR 0.71 vs null 0.33 (:74).
+  - 13/21 confirmed (:124); FALSIFIED A5 (hybrid has no signal over null: HY-null -0.024), R1, K2, K3.
+- **Conflicts / stale:** `out_v2.txt` K2 shows the "more ambition weight lowers arc rate" result that R02 reports (0.09 -> 0.03).
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/toy/posthoc.py
+- **What it is:** Post-hoc script on v2: HYc arm, bootstrap CIs, director-template signature counts, and "sifting availability" (does any top-6 thread and any window >= 8 seasons satisfy the arc test).
+- **Status:** none (script, "POST-HOC (exploratory, run after v2)", :1). Reading: historical.
+- **Bears on:** WR, PROCESS.
+- **Content that matters:**
+  - `available(ex)` searches threads and windows for any arc-test pass (:28-36); the shuffled null is computed the same way (:38-43).
+  - Counts distinct forced-beat signatures for TD and TDR (:21-27).
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/toy/posthoc_out.txt
+- **What it is:** Output of `posthoc.py`.
+- **Status:** none. Reading: historical.
+- **Bears on:** WR, PROCESS.
+- **Content that matters:**
+  - Sifting: real vs shuffled-null availability BU 0.887 vs 0.960, TD 0.943 vs 0.980, TDR 0.993 vs 0.993, HY 0.860 vs 0.947 (:28-33) - an arc-shaped window exists in almost every run and every shuffle; arc-shape is nearly always findable by sifting.
+  - Director templating: TD forced-beat signatures structural distinct = 1, slot distinct = 298 of 300; TDR structural 4 (:25-26) - the "oatmeal" evidence: different proper nouns, one structure.
+  - HYc (fired ambitions simply end) vs HY: arc +0.020 [-0.020,+0.063], CI spans 0 (:13).
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/toy/predictions.py
+- **What it is:** v1 blind pre-registered predictions (21 items: L1-3, C1-4, A1-3, D1-2, B1-3, K1-3, R1, N1, E1) as decorator-registered check functions.
+- **Status:** none (script; "PRE-REGISTERED ... sha256 saved to predictions.sha first", :1-2). Reading: historical; byte-identical to `predictions_v1.py`.
+- **Bears on:** WR, PROCESS.
+- **Content that matters:**
+  - Condition vocabulary: base, noent (no entrenchment), engine (`refuse=0.8`, "the real engine refuses ~70-80% of acts"), small, null (quiet world), pert (kill leader at t=10) (:3-6).
+  - `from regimes import spearman` in K2 (:127).
+- **Conflicts / stale:** the 70-80% refusal figure anchoring the `engine` condition is the pre-register figure (76.2% measured later).
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/toy/predictions_v1.py
+- **What it is:** Byte-identical copy of `predictions.py` (`cmp` equal).
+- **Status:** none. Reading: duplicate, historical.
+- **Bears on:** PROCESS.
+- **Content that matters:**
+  - Same content as `predictions.py` (verified by `cmp`); both named in the sha ledger (README :13).
+- **Conflicts / stale:** duplicate file.
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/toy/predictions_v2.py
+- **What it is:** v2 predictions, registered after v1 results and before the v2 run (informed, not blind).
+- **Status:** none (script, :1-3). Reading: historical.
+- **Bears on:** WR, PROCESS.
+- **Content that matters:**
+  - Replaces v1 L2/A1/A2/A3/A6/B1 with director-thread measures (arc_dir, dir_is_main, grounded_forced) and a four-variant sensitivity prediction A6 (:40-67); `from regimes2 import spearman` (:86).
+  - E1 now reads "the TD-BU gap in arc rate widens under 80% refusal" (:109-112).
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/toy/real_engine_chronicles/chronicle_seed0.txt
+- **What it is:** Saved `engine.season.harness.chronicle` output for seed 0, 4 seasons: deepest cross-person chain, 14 acts.
+- **Status:** none. Reading: historical measurement of the real engine at 2026-10-25.
+- **Bears on:** CORE, WR, CHAR.
+- **Content that matters:**
+  - acts=3256 (matches p1_s4 seed 0); 14 chain links, 11 of which emitted refusal kinds (commitment.refused, restore.refused, travel.blocked, march.refused, kill.refused, transfer.refused, raze.refused, challenge.refused, tend.refused) and only `dispatch` x2 (order.given) and `reconstruct` (finding.made) executed (:1-15).
+  - Chain participants are a handful of recurring names (Sigrid Torsvald, Torben Almqvist, Elske Almqvist, Wilhelm Voss, Gerik Strand) - the same actors in every seed.
+- **Conflicts / stale:** `PYTHONHASHSEED=None` in the header (:1): not run with a fixed hash seed.
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/toy/real_engine_chronicles/chronicle_seed1.txt
+- **What it is:** Chronicle, seed 1, 11 links.
+- **Status:** none. Reading: historical.
+- **Bears on:** CORE, WR.
+- **Content that matters:**
+  - acts=3259; 11 links: 10 refusal-kind (transfer, march, build x2, argue, move, survey, transfer ...) plus one executed (`forge` record.forged) and a `finding.none` (examine) (:1-12). Two characters (Joren Bergvall, Annika Feldhaus) alternate for most of the chain.
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/toy/real_engine_chronicles/chronicle_seed2.txt
+- **What it is:** Chronicle, seed 2, 15 links.
+- **Status:** none. Reading: historical.
+- **Bears on:** CORE, WR.
+- **Content that matters:**
+  - acts=3279; 15 links, only `reconstruct` (finding.made) executed; all others are refusals (accept.refused x3, restore.refused, work.unavailable x2, kill.refused, covenant.refused, release.refused x2, travel.blocked, commitment.refused) (:1-16).
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/toy/real_engine_chronicles/chronicle_seed4.txt
+- **What it is:** Chronicle, seed 4, 12 links.
+- **Status:** none. Reading: historical.
+- **Bears on:** CORE, WR.
+- **Content that matters:**
+  - acts=3217; 12 links; executed: `dispatch` order.given x2, `issue` dispensation.issued x2; the rest refusals (kill.refused opens the chain, work.unavailable x3, accept.refused, news.untold, pardon.refused) (:1-13).
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/toy/real_engine_chronicles/chronicle_seed5.txt
+- **What it is:** Chronicle, seed 5, 14 links (seed 5 is not in the P1 5-seed set).
+- **Status:** none. Reading: historical.
+- **Bears on:** CORE, WR.
+- **Content that matters:**
+  - acts=3284; 14 links; executed: `reconstruct`, `tell` (news.told); refusals the rest (commitment.refused x4, challenge.refused x2, kill.refused, found.refused, release.refused, march.refused, travel.blocked x2, news.untold) (:1-15).
+- **Conflicts / stale:** README says seed 3 "was shown in the session and not saved" (README :41-42).
+- **Open items:** none.
