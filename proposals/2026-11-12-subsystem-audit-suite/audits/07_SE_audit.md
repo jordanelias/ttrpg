@@ -19,8 +19,8 @@ each right in isolation and each has an executing test. The single largest obsta
 realm has no scarcity, no differentiation and no population dynamics, so none of the kernel's
 consequence paths is ever reached in computed play**: 37 settlements are stamped identically (one
 harbour, one seam, one garrison, one cohort of weight 2), produce about twenty-one times what they eat
-every season forever, accumulate stores that nothing spoils, spends or trades, and hold a population that
-no rule grows, shrinks, splits or moves. In three seasons of seed 0 (2,367 acts) the realm emitted no
+every season forever, accumulate stores that nothing spoils, spends or trades, and hold cohorts that no
+rule grows, thins or splits and that never move (51 cohort `migrate` attempts, none executed). In three seasons of seed 0 (2,367 acts) the realm emitted no
 `site.restored`, `site.worked`, `site.built`, `rung.founded`, `rung.razed`, `exchange.made`,
 `requisition.taken`, `condition.band_crossed` or `person.died`; its one hunger event is a world-gen
 artefact (every larder is empty before the first yield, so all 37 cohorts lose the same 60 body in season
@@ -53,7 +53,7 @@ no token and keeps no state. The registrar refuses a missing or re-kinded row at
 
 ### 1.2 The host (where the settlement layer actually lives)
 
-The module is the arithmetic. The behaviour is in the host, and it is roughly ten times the module's size:
+The module is the arithmetic. The behaviour is in the host, and it is several times the module's size:
 
 - **`loop/matter.py::matter` (`:284-903`)** — barrier 2, once a season, in this order: term maturation
   (Record stages, Tenure terms), docket lapse, claim decay, standing crossings, **subsist** (`:600`), body
@@ -219,7 +219,7 @@ Ranked by the weight each bears.
    bodies that cannot fall is honest about being unbalanced, and Jordan ruled the realm's missing
    shortfall a balance number (H-160 limit 3, 2026-10-12). *Attack:* is the dark arm reachable by a
    number? *Outcome:* `body_step` is live at 10 since REM-52 and CR-22 holds the magnitude; but the
-   number alone gives a synchronised famine (§1.4), so the steelman holds for the kernel and fails for
+   number alone gives a synchronized famine (§1.4), so the steelman holds for the kernel and fails for
    the world it runs on (F-SE-01).
 5. **The thin module is the architecture, not neglect.** A-25 has a module take typed input, return a
    typed outcome and hold nothing; wear, terms, travel and every effect are host by a stated reason each
@@ -463,7 +463,7 @@ Fix: none proposed (§0.1 pt 5); the readings named in each proposal's gate are 
 | H-303 | measured (RULING) | open; **decided** | direct call reproduced by the row; binds under `ground` | R-SE-11, `07_SE_ground_and_granaries.md` §4 d |
 | H-305 | measured (MECHANISM) | open; **decided** | `subsist.py:72` | R-SE-04, `07_SE_population_census.md` §4 a |
 | H-306 | measured (ABSENT_RULE) | open; **decided** | `effects_shared.py:120-136` | R-SE-07, `07_SE_kernel_repairs.md` §2 |
-| H-309 | measured (RULING) | **closed by precedent** | a seat is a `hold`, exercised `via`; no seat verb asks presence at the seat's rung | R-SE-17 |
+| H-309 | measured (RULING) | **closed by precedent** | a seat is a `hold`, exercised `via`; no settlement effect asks the holder's presence at the seat's rung (the governance rows were not opened, `[UNVERIFIED]` for them) | R-SE-17 |
 | H-327 | measured (MECHANISM) | open; **decided** | `matter.py:839-843` writes no `observed` | R-SE-10, `07_SE_kernel_repairs.md` §5 |
 | H-304 (secondary) | measured | open; PC lane's `tend`; binds here | play arm: `body.tended` 37 at season 0 | cross-listed; CR-22 cannot bind while `tend` restores whole |
 | H-307 (secondary) | measured | open | 4 settlements over capacity at build, unchanged | folded into F-SE-09 |
@@ -515,4 +515,305 @@ Fix: none proposed (§0.1 pt 5); the readings named in each proposal's gate are 
 
 Twenty-five resolutions decided. Two items survive the ladder (§11).
 
-(sections 7 to 14 appended below)
+## 7. Research transfer
+
+Research is tier 3 (`rosters.yaml:75-78`, opened): it informs and settles nothing. The lane file
+`research/by_lane/SE_settlements_territory_economy.md` (2026-10-16) reached this audit's structural
+findings a month ago at an older HEAD (its M-SE-1 population, M-SE-4 adjacency, M-SE-5 labour, M-SE-8
+regional difference, T-SE-9 to T-SE-11); what has changed since is recorded where it matters (`levy`
+renamed `requisition`; `exchange` restored; `body_step` live at 10; the weather draw per territory;
+`migrate` executing; `restore` no longer executing).
+
+**Precedent that changes what to build.**
+
+| precedent | source opened | what it changes |
+|---|---|---|
+| The buffer above the household, released in dearth: Sen 1981 (famine as entitlement failure), Scott 1976 (it is the ruler's invariance under dearth that detonates), Will and Wong 1991 (ever-normal granaries), *cura annonae* | `research/fa_se_historical_precedent_research_v1.md:250-252` (SE-2); by-lane T-SE-1, *"the strongest convergence in the lane"* (one program, citing independent scholarship not fetched) | the relief path is an institution, not a verb: the territory rung as granary, fed by `requisition`, drawn by the existing ladder (`07_SE_ground_and_granaries.md` R3). The research's three incompatible granary shapes are not adopted; the shape is the code's own `Rung.stores` |
+| Grain routes and structural dependency: breadbasket provinces feed highland and mining ones | `fa_se_…md:256-258` (SE-3), which names T5 and T6 as sources and Hafenmark as *"structurally grain-dependent"*; the canon data file's own descriptions agree | the endowment table's content (`site_endowment.ground`), keyed by territory |
+| Island fertilities decide what each island can make, so routes exist (Anno 1800) | `research/game_precedent_suite/dispositions/D_T08.md` row 32 (*"All 37 settlements yield the same … nothing motivates moving goods"*) | F-SE-01's fix; shape only, no figure taken |
+| A settlement dies of lost labour, not of resources (Banished, by way of the teardown) | by-lane T-SE-3 and §2.2 Banished row (one author's program; the teardown is a folk-model source) | supports CP-T08-01's order before the `ground` flip, and the thinning in `07_SE_population_census.md`: a thinner cohort is the carrier of lost labour |
+| Plot capacity gates immigration (Manor Lords), vacancy gates births (Banished) | by-lane §2.2, §2.3 item 2 | the code built the Manor Lords half (`has_room` on `migrate`); the Banished half is S-SE-1 |
+| Problem cards with deadlines that worsen if no advisor takes them (Kingmaker) | `D_T08.md` row 10 | the shortfall claim is the one analogue and fires only in `scarce`; the valley scenario's falsifier is this precedent's test |
+| Football Manager's one engine at three fidelities | `.designs/systems/_architecture/reference/auto_manual_resolution_duality_v1.md` §3-§4 (doctrine RULED 2026-07-08) | §9's one-code-path test: a played and an automated steward through `dispatching_chooser` |
+
+**Tried, did not transfer.**
+
+- *Victoria 3's pops, wages and market* (`D_T08.md` rows 3, 5): a weight-2 cohort cannot express labour
+  split or a living standard; the coarse population is ruled.
+- *Songs of Syx and Tropico individual citizens* (rows 14, 40): same reason; and by-lane §2.2 shows the
+  Tropico borrowing in the 2026-09-10 proposals inverts its source.
+- *The governor's action budget, Directive Comply/Bargain/Defy, Ledger tags, the Π deck*
+  (`governance_play_redesign_v1.md`): tier 4, *"just for ideas. do not treat as required"*; its sim is
+  deleted. NPC-083 is written against it (§13).
+- *HCC's modern cases* (Weimar, Zimbabwe, the Berlin blockade) as hooks for a pre-firearms peninsula:
+  the medieval rows beside them carry the mechanism; the modern ones add nothing (by-lane §1.3 item 5).
+- *GOV's hooks*: written in the retired Key idiom; nothing to transfer but H-100.
+- *The settlement-season stress sim's findings* (`.audit/2026-07-12-settlement-season-stress-sim/`): its
+  subject is the PR#119 mechanics on `sim/territory/`, retired at `29c`; its own reconciliation file
+  shows a third of its findings already answered. Irrelevant by ladder step 2. One method note
+  transfers: its two loudest alarms were artefacts of the compressed kernel it ran on, which is the same
+  class of error as reading the realm's season-0 dearth as a hunger mechanic.
+
+**Nulls (findings, not gaps to paper over).**
+
+- No surveyed game couples politics back into demography, makes rivals compete for the same people, or
+  lets allegiance arrive late (by-lane T-SE-7, bounded to the nine titles the teardown read). The ratified
+  *"factions hold people"* (`scale_hierarchy_v1.md` §5.1) therefore has no precedent to borrow a shape
+  from; it must be designed.
+- No solved design for the appointed governor (N-7, Total War's role added, removed and re-added). The
+  code has no settlement-rung seat in the realm, which honours the null by absence.
+- No source was found, in `research/` or `.designs/`, for a population synecdoche that both eats as a
+  crowd and deliberates as one person. F-SE-14 has no precedent answer `[UNVERIFIED beyond the files
+  opened]`.
+- The research holds no study of inter-settlement price formation or of migration as a function of
+  dearth (by-lane §1.3 item 7). CP-T08-05's price formula and any flight rule are the repository's own.
+
+## 8. Best path forward
+
+In order. *Alone* marks what the subsystem needs to run well by itself; *compose* what it needs to feed
+the others.
+
+| # | step | file and owner | gate (execution artifact) | unblocks | cost |
+|---|---|---|---|---|---|
+| 1 | Kernel repairs A, B, C and the four pointers | `07_SE_kernel_repairs.md` | the amount sweep refuses all but 1; one `condition.worn` per wearing Site; no same-place `travel.moved` in `aperture 2 0` | R-05 honesty; removes 248 no-op Events a season | edit · alone |
+| 2 | CR-40, CP-T08-03 (spoilage), as planned | `valoria_geography_v30.yaml`; `loop/matter.py`, `rosters.yaml: store_spoil` | their own; add the reading "realm stores level off within N seasons at the shipped rate" | a bounded economy | edit · alone |
+| 3 | CP-T08-01 (labour), as planned | `world_q.labour`, `ProduceInput`, `produce.py` | `test_labour_yield.py` | the first loop: people → yield | small build · alone |
+| 4 | Endowment by territory, stocked larders, granaries, the remainder walk; then the `ground` flip | `07_SE_ground_and_granaries.md`; amends CP-T08-02, AM-E-13, CR-22, H-303 | bands differ across settlements with weather off; a draw sourced at a territory rung; no cohort short at season 0 | R-01, R-04 (settlement row), R-05 (`transfer`, `requisition`, `exchange` have an occasion) | small build · alone, and the hinge for compose |
+| 5 | CR-22 run under `ground`; IN-52's flip with a ration list | `rosters.yaml: subsistence_weight`; `fixtures.py: field_provisioning` | CR-22's exit plus the band spread; a field whose troops a treasury bounds | R-04; MB's supply | measure, then edit · compose |
+| 6 | CR-08 specified, per-head loss, `empty` | `07_SE_population_census.md` | `test_cr08_census_weight.py`; settlements `empty` counted at CR-22's exit | R-01 (a death that propagates), NERS-R completeness | small build · alone |
+| 7 | Amount as a choice; CR-49's class on `transfer` and `migrate`; arrival report | `07_SE_arc_needs.md` §3 b; CR-49; `07_SE_kernel_repairs.md` §5 | two candidates differing by amount; a `transfer.made` between two settlements from a computed act | R-04, R-06, R-08 (a person's size of giving) | edit plus content · compose (CHAR) |
+| 8 | The valley scenario | `07_SE_valley_scenario.md` | `hoard` and `relieve` end differently at seeds 0 to 2 | the standing requirement; R-04's settlement row gets an instrument | small build · alone |
+| 9 | CP-T08-05 (price), CR-49, then CP-T08-06, -07 (unrest, tax), as planned | their homes | their own, re-read under `ground` | R-04, R-05 | build · compose (FA) |
+| 10 | Capability rate | `07_SE_capability_and_chooser_surface.md` | a skilled `restore` raises more, clamped | R-06 | edit · compose (CHAR) |
+| 11 | Travel and supply over the settlement graph | `valoria_geography_v30.yaml: settlement_adjacency` gets its first reader | design-first: a leg per edge, a route that can be cut | R-04; GD-3's contiguity (H-186); MB's march | design-first · compose (MB, FA) |
+| 12 | Population that recovers | S-SE-1 | — | NERS-R's no-player half | Jordan, then small build |
+
+Steps 1 to 4 and 6 make the subsystem run well alone. Step 4 is the one the others wait on: without unlike
+places, steps 5, 7 and 9 exercise a world with nothing to move.
+
+**Deletions.** `Rung.envelope` (through IN-44). `ground_class` as designed in the B10-16 build text, before
+it is built. `test_hunger.py::test_i` under the `ground` arm (re-recorded to assert the opposite).
+
+## 9. Playable standalone and integrated
+
+**Playable alone.** No. Point by point:
+
+| element | exists today | missing |
+|---|---|---|
+| entry point | `python -m engine.season.harness.scarce` (a printer over a fixed four-season run) | a run that takes a seat and a policy |
+| scenario seed | `scarce.build` / `scarce.governed`: two settlements, one cohort, hand-built in Python | a small authored world with unlike places, more than one mouth, a seat and rivals |
+| choice surface | whatever the chooser forms for the steward: in four seasons, one `transfer` that helps and three from the granary to itself | candidates that name another place and a chosen amount; `requisition`, `restore`, `build` reachable |
+| change | one transfer feeds one kind for one season | a choice whose two arms end differently |
+| consequence | a cohort's body falls; nothing reads it | weight, yield, the sworn men's terms, a seat at risk |
+| legibility | per-tick prints; `Event.observed` on each act | a sheet per season; a record of what was known when nothing was done |
+| stakes | none that persist (H-304: `tend` restores the body) | people |
+| end condition | a season count | a settlement lost, or held for a term |
+| instrument | `census` (one line of hunger bands); `aperture` (the verb funnel) | the scenario's own sheet |
+
+**One code path.** Yes, and this is the subsystem's strongest point against the standing requirement.
+There is no standalone settlement engine to diverge: `scarce` and the realm run the same `SeasonDriver`,
+the same eight registered entries and the same effects. A played seat enters through
+`play_surface.dispatching_chooser`, which edits no engine file. The risk is the reverse of a fork: there
+is nothing settlement-shaped to enter, only the season with a small world.
+
+**Layer 1 conformance.** The module conforms to A-25 and `holonic_ARCHITECTURE.md`'s module rows as far
+as this audit opened them (typed input, typed outcome, no token, no state, reached by composition row,
+refused at construction if a row is missing) `[UNVERIFIED: §43, §45-§47 of holonic_ARCHITECTURE.md were
+not opened; the conformance claim rests on `04_CODE_ARCHITECTURE.md` §A.2 rows 174 and 179, the
+composition rows and the import probe]`. The host is where a Layer-1 question sits: world-gen for the
+realm is `harness/populated.py`, an instrument, and Layer 1's build order names a *world-gen roster* at
+CENSUS (`04_CODE_ARCHITECTURE.md:1126`). A scenario seed that is code in `harness/` is the same shape
+`governance_spine` already has, so it is precedent, not a violation; it is named because the port will
+need a builder that is not an instrument.
+
+**Integrates.** The executed edges are in §10. The scale-transition question (enter a settlement scene
+from the season, resolve it, write back) has no settlement-specific answer because a settlement act is
+an ordinary act in the fold; nothing is paused because nothing is zoomed. The ruled duality doctrine
+(played, witnessed, auto as three fidelities of one event) is met trivially at the auto end and has no
+played or witnessed settlement event to offer.
+
+**No GM.** Everything the settlement layer resolves, the engine resolves. What a GM would supply and
+nothing does: deciding that a hungry town's people leave, riot or petition (the cohort is one chooser
+with no settlement-specific candidates), and deciding what a founded place becomes.
+
+**Ordered work to close each gap:** §8 steps 4, 6, 7 (stakes, consequence, choice), then 8 (the scenario
+and its sheet). The scenario's first reading is expected to fail its own falsifier; that failure is the
+measurement of how far the subsystem is from playing.
+
+## 10. Interfaces
+
+| with | SE consumes | SE emits | state |
+|---|---|---|---|
+| CORE (loop, gate, fold) | tokens, the fold's accumulator, `Event.observed`, the matrix | `stores.changed`, `yield.taken`, `body.changed`, `person.died`, `condition.worn`, `condition.band_crossed`, `travel.*`, `residence.changed`, `transfer.*`, `exchange.*`, `rung.*`, `site.*` | executed (the first five and `travel.*` every season; `band_crossed`, `rung.*`, `site.*`, `exchange.made` never in the realm) |
+| CHAR (persons, chooser) | `Person.weight`, `body`, presence, the chooser's candidates | the shortfall and stock Observations that become claims and questions; `body` to `decision/budget.py` | executed for the stock report; the shortfall only in `scarce`; candidates malformed for settlement verbs (F-SE-07, F-SE-11) |
+| PC (combat) | `tend` restoring a body (H-304) | `body` bands to the duel | executed, and it erases hunger |
+| MB (mass battle) | — | `fortification_of` (WALLS when any garrison stands), the geography file's terrain and river crossing, `provision` | fortification and terrain executed (`field.unopposed` 3, `field.lost` 1 in three seasons); provision designed, shipped off; garrisons never wear, so every settlement is WALLS forever |
+| FA (factions, seats) | a seat's remit and purview (`requisition`, `via`), `occupies` (`raze`) | treasuries at seat rungs; `term.renewed` | `requisition.taken` once in three seasons at seed 1, never at seed 0; `term.renewed` and `raze` never |
+| FI (fieldwork) | — | `survey`'s referents; the arrival report (proposed) | `survey` executes (17 of 37); nothing settlement-specific is found |
+| SC (social contest) | — | a shortfall as grounds for a `petition` | designed (CR-22's reading clause); not observed |
+| WR (world, Calamity) | the lattice weight, the weather draw | Site condition to the coupling | both shipped at control; no source at T15 (H-236) |
+| GO (port) | — | `engine/engine_params` exports of the rosters | not examined here |
+
+## 11. Survivors for Jordan
+
+Two items survive the five-step ladder.
+
+**S-SE-1 · May a population recover?** The rulings read together do not answer it. ED-WR-0011 takes a
+closed authored cast with *"no season-tick generation at all"*; CENSUS is demand-driven and *"no clock
+generates anything"* (S29); yet RR-2 scopes capacity to births, CR-08 gives CENSUS the weight writer, and
+CENSUS already mints a person on demand. No design document supplies a growth rule; no precedent in the
+tree settles it; the architecture carries either.
+- *Option A: weight only falls.* The realm is a finite people. Every famine, battle and levy spends it
+  for good; a dead town stays dead. The game is husbandry under attrition, and long campaigns hollow out.
+- *Option B: a fed cohort with room regains weight toward its dwellings, and an `empty` settlement can
+  be re-peopled by a neighbour's surplus weight.* Settlements breathe: decline and recovery are both
+  arcs, housing presses on founding, and a lord's neglect is reparable at a price in seasons.
+These are different games. This audit's proposals build the falling half only and leave the rising arm
+as one more branch of the same writer.
+
+**S-SE-2 · What custody takes from a ruler (H-293).** A detained duke cannot travel and can still
+`issue`, `convene` and `dispatch` through his seat. #453 names only the travel readers and says the rest
+is unruled; precedent in the tree is travel-only; the architecture is indifferent (an act `via` a seat
+needs no presence).
+- *Option A: custody is travel-only.* A captive ruler rules by writ from his cell; removal requires
+  `revoke`. Arrest is leverage, not deposition.
+- *Option B: custody suspends acts `via` a seat.* Arrest is a coup's first move; whoever holds the
+  prisoner holds the office's silence.
+The premise sentence the row was measured against (*"a ruler can … lock a person up"*) is satisfied by
+either. This is a governance question filed under settlements by path; it is listed here because the
+dossier makes it this lane's.
+
+## 12. Evidence log
+
+All with `PYTHONHASHSEED=0`, at `601e715`, working tree. Outputs under
+`/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379/scratchpad/runs/SE/`.
+
+| # | command | seed · seasons | outcome |
+|---|---|---|---|
+| 1 | `python -m engine.season.harness.aperture 3 0` | 0 · 3 | exit 0; 2,367 acts; control `content_hash EQUAL`; §1.4 funnel (`aperture_3_0.txt`) |
+| 2 | `python -m engine.season.harness.scarce` | fixture · 4, two arms | hashes `d2730068…` (named), `631b80ad…` (unnamed); §1.4 (`scarce.txt`) |
+| 3 | `se_probe.py 0 2 noacts` | 0 · 2 | hash `f2cbf8f1…`; stores 0 → 4,810 → 9,250 |
+| 4 | `se_probe.py 0 120 noacts` | 0 · 23 completed (timeout at 1,500 s) | §1.4 table; cost growth (F-SE-15) |
+| 5 | `se_probe.py 0 4 play` | 0 · 3 completed (stopped) | §1.4 control table |
+| 6 | `se_probe.py 1 3 play` | 1 · 3 | §1.4 control table; one `requisition.taken`; one named death |
+| 7 | `se_bind.py {0 8 10 0, 0 8 20 0, 0 8 10 1, 1 8 10 1}` | as named | §1.4 (`bind_sweep.txt`) |
+| 8 | `se_who.py 0 2` | 0 · 2 | §1.4 (`who_s0_2.txt`) |
+| 9 | `se_ground.py 0 8 4`, `0 8 0`, `0 6 4` (granary one unit short) | 0 · 8, 8, 6 | §1.4; the short arm records `shortfall:grain` and `shortfall:salt` once per territory at the draining season (`ground.txt`, `ground_middraw.txt`) |
+| 10 | `python -m engine.season.harness.loops` | — | derived equals declared; MATTER listed BLIND (`loops.txt`) |
+| 11 | `python -m engine.season.harness.corpus_run` | 0 · per case | exit 0; §1.4 (`corpus_run.txt`) |
+| 12 | `python -m engine.season.harness.register --requirements` | — | R-04 partial, R-05 not_met |
+| 13 | point-in-polygon of the 37 settlement coordinates over `terrain:` | — | 8 in no polygon; 11 plains, 11 highland, 2 forest, 2 marsh, 2 fjord coast, 1 coast; 0 mountain |
+| 14 | grep for readers of the geography file's keys (non-test) | — | F-SE-06 |
+| 15 | grep `capabilit|attribute` over the settlement code | — | no hit (§14) |
+
+Not run: `pytest` (by instruction); `soak` (it requires a clean engine tree and duplicates readings 5
+and 6; its two grades are the CORE lane's); `aperture 4 0`.
+The probe scripts are instruments of this audit, not repo artifacts; each is a few dozen lines over
+`build_realm`, the real `SeasonDriver` and the shipped chooser, and writes nothing.
+
+**Reading record.** Code: every Python and YAML file of the dossier's inventory in full, except that the
+geography file's settlement rows after S-011 and its edge and polygon lists were read by structure and
+parsed by script, and the SVG map was not opened (nothing reads it but a freshness pin); `loop/matter.py` in full
+and `harness/populated.py`, `queries/world_q.py`, `decision/options.py`, `seam/wrappers/mass_battle.py`
+and `pool.py` at the functions cited. Register rows: the twelve primary rows in full; the secondary rows
+by their `hole:` text. Plan: both batch cards, the entries and amendments cited, the B10-16 build text
+for CP-T08-01, -02, -03. Design intent, `.designs/` (ARCHIVED-NOT-CANON, never authority): read in full,
+`scale_hierarchy_v1.md` §1-§5 and `auto_manual_resolution_duality_v1.md` §1-§4; read by section,
+`settlement_layer_v30.md` (§1.1-§1.3, §1.8, §4.3a-§4.5, §6.2, with its index); read by outline,
+`settlement_adjacency_v30.md`, `march_layer_v30.md`, `settlements_flow_skeleton_v1.md`,
+`settlements_currency_v1.md`. `[SKIPPED: goldenfurt_slice/ (six files), generation_sourcebook_v1.md,
+governance_play_redesign_v1.md (tier 4), lps_wiring_v1.md, settlement_generator_v1.md,
+valoria_political_hierarchy_v30.md, territory_temperaments_v30.md beyond what cohorts.yaml quotes, and
+the cross-cutting set other than the duality doctrine — not read; nothing in this audit rests on them]`.
+`.audit/`: the README and reconciliation head of `2026-07-12-settlement-season-stress-sim/` and the
+settlement lines of `2026-08-11-world-schema-gap-audit/`; each old finding used was re-run against the
+code first (§3, §7). Research: `00_INDEX.md` §1, `by_lane/README.md`, `by_lane/SE_…md` §0 to §3.1, §7.1,
+§8.1-§8.2, §10.0, `D_T08.md` (the table), `fa_se_historical_precedent_research_v1.md` at SE-2, SE-3 and
+its closing note. `[SKIPPED: the rest of the by-lane file, the companion parts, `historical/`,
+`governance/` and the provenance harvest]`.
+
+## 13. Provided arcs and characters — adjudication
+
+Read: `cases/chain/CASE_BRIEF.md`; every `need:` line of the 143 cases, filtered to those whose mechanism
+is the settlement layer's (stores, production, population, place, extraction, trade); the overlays of
+NPC-083 and the corpus run above. `[SKIPPED: the full bodies of the case files and
+`proposals/2026-08-30-arc-reachability/` — needs lines and the listed overlays only]`. The corpus
+instrument grades no need at this commit (both bars `NOT-COMPUTABLE`), so *represented* below means a
+code path exists and a run reached it; where the run is the realm or a fixture and not the case's own
+world, the row says so.
+
+| case | need (short) | hardness | represented today? | evidence | change required | owner | proposal | gate |
+|---|---|---|---|---|---|---|---|---|
+| NPC-083 | the settlement generates demands (a shortfall) against the authority's orders | core | no, in the case world; yes, in a fixture | `corpus_run.build_at` seats no eater; `scarce` records the shortfall and the claim | a `world:` overlay block | SE | `07_SE_arc_needs.md` a | `headless --case NPC-083 --seasons 4`: a `shortfall:` claim in the governor's ledger |
+| NPC-083 | a limited per-season budget over a menu of administrative acts | core | partly | the scene budget is one capacity for every act (`decision/budget.py`); the menu is whatever the chooser forms | none in SE; the menu is `requisition`, `transfer`, `restore`, `build`, `issue`, `determine` once each is reachable | CHAR, SE | §8 steps 4, 7 | the governor's candidate set holds four of the six in one season |
+| NPC-083 | each act resolvable by more than one method, the method handing influence to an internal faction | core | no | no act has methods; no settlement-internal faction exists | **wrongly stated for this engine**: the need is the tier-4 redesign's (`rosters.yaml:79-80`), as the case's own sixth need admits. Re-stated: *who a governor takes from and gives to changes who stands with him*, which `stability`'s deed claims carry | SE, FA | — | — |
+| NPC-083 | past rulings persist as marks a successor inherits | important | partly | claims and stance rows persist on persons, not on the place | none in SE | CHAR | — | — |
+| NPC-083 | the settlement's pressure rises when demands go unmet | important | no | no `unrest`; a chronic dearth is silent (ruled) | CP-T08-06 | SE | plan | its own |
+| NPC-013 | a repeatable seasonal act improves a faction-wide resource, scaling with the territories it is applied to | core | partly | `requisition` into the seat's rung (`effects_governance.py`); executed once in three seasons (seed 1) at amount 1 | amount as a choice; a standing levy | SE | `07_SE_arc_needs.md` b; CP-T08-07 | `scarce.governed`: two candidates by amount |
+| NPC-013 | the same act degrades a slower political resource per territory, converting at an accounting point | core | partly | `requisition.taken` is an `UNREST_KINDS` deed that `stability` counts per rung (AM-E-17's reading, not re-opened) | CP-T08-06, -07 | SE | plan | their own |
+| NPC-013 | the erosion makes the territory's population receptive to a rival movement | important | no | cohorts hold no convictions and no `commit` | SE-06's conviction content; CR-107b | CHAR, FA | — | depends on FA |
+| NPC-037 | a treasury post affects, and is affected by, the Crown's material resources | core | yes, thinly | the seat's rung is the treasury (`_renewals`, clause 2); `p_npc_037` is offered `requisition` and does not execute it (`aperture 3 0`) | stores at the Crown's rung; amount as a choice | SE | `07_SE_arc_needs.md` a, b | a `requisition.taken` by `p_npc_037` in the realm under `ground` |
+| NPC-090 | a trade relationship governed by a treaty; a resolvable toll or smuggling dispute | core, important | no | `exchange` 0 of 79; his settlement holds no stores; no toll, no price | CR-49; foreign stores; then CR-67 (design-first) and a `covenant` whose terms bind `exchange` | SE, then FA | `07_SE_arc_needs.md` c | an `exchange.made` between `set_alt_1` and a realm settlement |
+| ARC-46 | failing a counter-action costs a depletable resource until it is unaffordable | core, important | partly | `_cost` refuses a works its rung cannot pay; `provision` bounds a field (off). No general act cost: the budget is the whole price (F.29, as ruled) | IN-52's flip | SE, MB | plan | a field fielding fewer troops than its weight |
+| ARC-07 | an unresolved military condition becomes a standing economic drain | important | no | an occupier eats nothing (H-212); a field debits nothing (off) | IN-52's flip; H-212's reader | MB, SE | plan | depends on MB |
+| ARC-20 | the refusal path feeds a trade dependency an economic faction turns against the refuser | important | no | no dependency exists between identical places | `ground`; CP-T08-05 | SE, then FA | `07_SE_ground_and_granaries.md` | Hafenmark's settlements drawing at a rung another duchy fills |
+| ARC-12 | a hazard inside an economic arrangement accumulates invisibly | core | no | every Site write is witnessed | not SE's mechanism (a hidden field is FI's and WR's) | FI, WR | — | — |
+| ARC-44, ARC-01 | a per-location allegiance erodes from extraction, and drifts with no faction acting | core | partly, and one clause **wrongly stated** | extraction: `requisition.taken` deed claims. Drift with nobody acting is forbidden to MATTER (L4: *"no social quantity moves here"*, `matter.py:845`) | re-state the drift as claim decay acting on a cohort's reasons (the licensed clock), CHAR's | CHAR, WR | — | — |
+| EMG-C3 | a shared resource falls through bands with worsening consequences; repair is harder the worse it is, with a chance side effect | core, important | bands yes; repair difficulty and chance no | `_crossings`, `band_floors` (tests); `restore` is uncontested and whole (H-164); never in the realm | the lattice's source (H-236); a rate (and, by design, a contest) on `restore` | WR, SE | `07_SE_capability_and_chooser_surface.md` | depends on WR |
+| NPC-003 | a movement gains standing by held settlements; a population shifts its own governance on collapse | important, flavour | holding yes; the population's shift no | `hold` on a Rung; cohorts hold no allegiance | CR-107b | FA, SE | — | depends on FA |
+| NPC-001 | her presence worsens the instability of places she travels through | important | no | a move writes nothing about the place; no instability quantity | CP-T08-06, then one roster row naming the deed | SE, WR | plan | depends on WR |
+| NPC-081 | a seat represents a rural constituency whose interest diverges | important | no | no link from a cohort to a seat | CR-107's `label:` and a seat's constituency | FA | — | depends on FA |
+
+**Soonest, in order.**
+
+1. **NPC-037** (the treasury post): needs only `07_SE_arc_needs.md` a and b. Artifact: a seeded
+   `headless --case NPC-037` run in which she requisitions a chosen share and her seat's rung holds it.
+2. **NPC-083** (the governor), in its re-stated form: needs a, b, then §8 steps 4 and 7; its pressure
+   need waits on CP-T08-06. Artifact: four seasons in which a shortfall claim reaches her, she forms a
+   relief and an extraction candidate in one season, and the act she takes moves stock.
+3. **NPC-013** (the tithe): needs b and CP-T08-07 for the standing levy; its receptivity need waits on
+   CHAR and FA.
+4. **ARC-20** and **NPC-090**: need the `ground` flip, then CR-49 and CP-T08-05; NPC-090's treaty is FA's.
+5. **ARC-46**, **ARC-07**: need IN-52's flip and MB's occupation reader.
+
+**Dependency edges.** SE → CHAR: candidate formation for `transfer`, `exchange`, `migrate` (CR-49's
+class); cohort convictions. SE → FA: cohort allegiance (CR-107b), treaty terms on `exchange`, seats at
+settlement rungs. SE → MB: IN-52's flip reads treasuries the granary step fills; H-212. SE → WR: the
+lattice's source; the weather draw live (CL-EVENTS (2)). FA, MB, CHAR → SE: none blocks §8 steps 1 to 6.
+
+## 14. Capability authoring surface
+
+**(a) Where the subsystem takes a character capability as input.** Nowhere. Searched: `capabilit` and
+`attribute` in `modules/settlements/*.py`, `loop/effects_economy.py`, `effects_founding.py`,
+`effects_migration.py`, `loop/matter.py`: no hit. What it reads of a person: `weight`
+(`larder.py:52`, `housing.py:31`, `provision.py:38`), `body` (`subsist.py:75`), presence
+(`fabric.py:37`), and a seat's remit and purview through the fold. `_rise`'s `f(degree)` is the identity
+by a stated reason (`effects_economy.py:121-129`, H-164).
+
+**(b) Data-driven, hard-coded, doubled.** Every settlement magnitude is data behind a loader with a
+register row: `site_yield`, `wear_per_season`, `band_floors`, `capacity_floor`, `works_cost`,
+`subsistence_weight`, `hunger_bands` (`rosters.yaml`), and the fixtures in `data/fixtures.py`. Nothing
+is doubled. Two things are hard-coded by ruling and are class rules, not capabilities: only a cohort
+eats (`larder.py:48`), and a cohort is a person at `weight > 1`.
+
+**(c) Target shape.** The existing owner is `rosters.yaml: verb_capability` with `vocation_attribute`,
+carried on `Person.capability` and `Person.attributes`, read by `seam/wrappers/pool.py`. SE needs one
+addition to it and no file of its own: a per-key rate table for uncontested effects and one reader,
+`rate(w, person, verb)`. A capability definition must say, for SE to use it: its key, the verbs it
+serves, and its rate table. The interface for the holistic stage is in
+`07_SE_capability_and_chooser_surface.md` §3.
+
+**(d) Axioms.** Present: resources tracked and upkeep paid (for cohorts and sworn men). Absent: skill
+setting the yield of untested work; a holder's ability setting his domain's output; travel time and
+encumbrance. Inverted: helping (`share` divides one act's rise by those present). The table is in the
+proposal's §6.
+
+**(e) Proposals, in order.** `07_SE_capability_and_chooser_surface.md` (the rate);
+`07_SE_arc_needs.md` §3 b (amount as a choice, the settlement layer's one temperament-bearing operand).
+
+**The NPC and chooser surface** is answered point by point in
+`07_SE_capability_and_chooser_surface.md` §5, citing the CHAR audit's statement of the intent. In short:
+persons decide every settlement outcome and MATTER none; the played and automated seat share one
+interface; no NPC rule is hard-coded in the settlement effects; what is missing for a settlement choice
+to be a person's is an amount, a destination and a rate that are his, and a trace of what he knew when he
+did nothing.

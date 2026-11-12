@@ -36,8 +36,8 @@ while the 26 lowland settlements stay fed. No weather draw, no multiplier, no ne
 - **The planned gate on the fix is circular.** AM-E-13 holds the `ground` flip until *"a measured relief
   path in computed play (`transfer` or `exchange` moving stock to a short town)"*. In a uniform realm no
   town is short while another is long, so that path has nothing to move: computed play moved 2 units of
-  13,688 in three seasons at seed 0 and 3 of 13,690 at seed 1 (`se_probe.py`, play arm), each a cohort's
-  1-grain `transfer` from its own settlement into its own person-rung.
+  13,690 in three seasons at seed 0 and 4 at seed 1 (`se_probe.py`, play arm): cohorts' 1-grain
+  `transfer`s from their own settlement into their own person-rung, and one `requisition` of 1 at seed 1.
 - **The planned derivation cannot classify the map.** CP-T08-02's build text reads the ground class
   *"from the authored geography by one function `ground_class(geo, settlement)`"* and its falsifier is
   *"a settlement whose coords fall inside a mountain polygon gets a seam"*. Point-in-polygon over

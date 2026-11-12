@@ -33,7 +33,8 @@ choices, choices that change what happens, consequences, an ending*):
 | legibility | per-tick lines printed by `scarce.main`; no reason is shown for an act not taken | same run |
 | end condition | none; `run(seasons)` stops at a count | `scarce.py:182` |
 
-The realm is not a substitute: its economy is unmoved by play (2 units of 13,688 in three seasons).
+The realm is not a substitute: its economy is unmoved by play (2 units of 13,690 in three seasons at
+seed 0, 4 at seed 1).
 
 ## 3. The resolution, decided
 

@@ -75,7 +75,10 @@ Read in full, with comments and docstrings (line counts from `wc -l`):
 - **Minimal fix at the owner.** The Scene is Layer 1's own type (`04` §B.9) and the act store is its
   resolver-side home: keep released Scenes in `state/acts.py` beside the acts they carry, append-only;
   give a standing-occasion act its occasion as a stored fact (the Scene's `occasion.source` and `about`)
-  rather than as `causes[]`. Proposal `01_CORE_reason_trail_in_the_act_store.md`.
+  rather than as `causes[]`. Proposal `01_CORE_reason_trail_in_the_act_store.md`. The deciding term is
+  the CHAR lane's (`02_CHAR_reason_trail_and_small_edits.md` Part A, an observer hook on the chooser);
+  that proposal says *"what survives is the OCCASION … on the `Scene`"*, which is true for the length of
+  the driver's life and is the gap this one closes.
 
 ### F-CORE-13 · blocks "playable" for four of eleven contested verbs' kin · one module is a scene, three are calls
 
@@ -358,11 +361,12 @@ verb rows, so every existing reader keeps its import and `faculty` is unchanged.
 verb_capability` and `vocation_attribute` are deleted in the same commit (edit the owner, never keep a
 second copy).
 
-Two generalisations the block makes possible and the proposal schedules separately, because each moves
-play: an own-state stem `own:<capability id>` in the `requires` grammar in place of the two
-Thread-Sensitivity stems (so an aptitude gate is a row, with Thread Sensitivity as its first and, under
-the present ruling, only instance); and `judges: told_claims` on Attunement in place of the literal at
-`options.py:1627`.
+Division with the CHAR lane, so that one fact has one proposal: this surface owns the **definition** of
+a capability, the **verb's** declaration and the **acquisition** rule. Where a capability enters a
+person's own *choice* (which attribute grades a told claim, the Thread-Sensitivity gate's two stems,
+the planned temper and forecast uses) is `02_CHAR_capability_uses_table.md`'s one table of uses
+(`use`, `key`, `form`, `gain`). The two compose without a second scheme: that table's `key` is a
+registry key, and a capability id in this block is one.
 
 The mapping capability → axiom → resolver input then reads, for any roll: the verb row names the
 capability; the capability row names its kind, base and opponent; `faculty` and `_opposition_of` are the
@@ -411,7 +415,12 @@ Contradicted or lacking, where a designer would expect otherwise:
 2. The same file, part two: the five undeclared contested rows declared (a hash mover per row, each with
    its control), and the acquisition rule (`untrained: attribute | default` read by `faculty` so that a
    first rank is never a loss), which is what lets `train` mint.
-3. The same file, part three (design-first, held on §9's survivor): `own:<capability>` as the gate stem.
+3. The same file, part three (design-first, held on §9's survivor): a capability as a gate on an act,
+   carried by the CHAR uses table's `at_least` form.
+4. Beside it, not in it: `02_CHAR_capability_uses_table.md` (the decision layer's uses),
+   `05_SC_capability_surface.md`, `06_FA_office_capabilities.md`, `07_SE_capability_and_chooser_surface.md`,
+   `03_PC_person_inputs_content.md` and `10_DICE_one_score_two_roles.md` are the other lanes' §14
+   proposals `[titles read; bodies not opened except CHAR's head]`.
 
 Dependency edges: CHAR authors the cast rows; PC owns `modules/combat/attributes.py`'s pointer to the
 block (its `faculty` and `disp` gain a `registry_key` or are declared combat-local); SC owns the
@@ -470,8 +479,9 @@ seat or creed the act was for, and the deciding term. The first two are data the
 release; the third is the chooser's and is one tuple per released scene. The archived design's
 expression of the same need is the witnessed and reported layers and the retrospective scene (§7).
 
-**(e) What is missing, as proposals.** `01_CORE_reason_trail_in_the_act_store.md` (occasion and
-deciding term stored with the Scene); `01_CORE_predicates_name_their_clause.md` (a refusal an actor can
+**(e) What is missing, as proposals.** `01_CORE_reason_trail_in_the_act_store.md` (the occasion, stored
+with the Scene; the deciding term is the CHAR proposal's observer hook);
+`01_CORE_predicates_name_their_clause.md` (a refusal an actor can
 learn from); the frozen `PersonInterior` (§8 row 6, an edit at `loop/deliberate.py` and
 `state/carriers.py`, no proposal file needed beyond the row); the commander as a chooser-served agent is
 the MB and CHAR lanes' (`withheld_verbs` is released by B10-18b's CR-52/CR-53, already scheduled).
@@ -516,7 +526,7 @@ Ladder steps: 1 superseded · 2 irrelevant · 3 answered by a design document ·
 |---|---|---|---|---|
 | 1 | the question an act answered is on the driver, not the world | Scenes are stored append-only in the act store; the driver keeps none past the season | 5 (`04` §B.9: `Scene` is a type; `state/acts` is its resolver-side home) | proposal `reason_trail` |
 | 2 | a standing-occasion act cites nothing | its Scene's `occasion` (source, about) is the record; `causes[]` stays `[act]` (an occasion that is no Event is not a cause) | 4 (`_occasion_of`'s own rule) | proposal `reason_trail` |
-| 3 | the deciding term is kept nowhere | `release` returns it with the scene; stored on the Scene; not hashed into Events | 5 | proposal `reason_trail` |
+| 3 | the deciding term is kept nowhere | the CHAR lane's observer hook on the chooser (`watch`) is its owner; the core adds no field. The stored Scene is what a watcher's record is keyed on | 4 (one owner per fact; CHAR's proposal already decides it) | `02_CHAR_reason_trail_and_small_edits.md` Part A |
 | 4 | four predicates raise on a list operand | one referent read (`subject_of` answers an id or `""`); `dispatch`, `convene`, `revoke`, `oblige` read through it | 4 (`subject_of` is already "THE ONE READ") | proposal `predicates` |
 | 5 | four predicates refuse without naming a clause; the clause never reaches the Event | every refusing branch calls `_refuse`; a predicate may return its clause, and a predicate row may key `emits_on_refusal:` on declared clause names | 4 (the typed cells' `Verdict.failed`) | proposal `predicates` |
 | 6 | `choose` receives the live `Person` | build a frozen `PersonInterior` at DELIBERATE and pass it; `development_space` already copies. Change the code, not `04` | 3 (`04` §B.2) | edit: `state/carriers.py`, `loop/deliberate.py:202`; CHAR's F-CHAR-12 |
@@ -530,10 +540,10 @@ Ladder steps: 1 superseded · 2 irrelevant · 3 answered by a design document ·
 | 14 | five contested rows declare no capability | each declares one, or `none` with a note; values proposed in the file | 5 | proposal `capability` |
 | 15 | a first rank is worse than none, so no skill is acquired | `untrained:` on the definition; `faculty` reads a non-holder at the declared untrained value and a holder at `max(untrained, rank)` | 5 | proposal `capability` |
 | 16 | Endurance default written three times | the combat spec's default is the one a fight uses; `party_end` reads `attributes.DEFAULT` through the module's typed export, not a literal; the registry's `default: 1` is the scale's and is renamed nothing | 4 (`modules/combat/attributes.py`: "a copied name or bound would be a second owner") | proposal `capability` (edit 7) |
-| 17 | the attribute that judges a told claim is named in code | `judges:` on the attribute's definition | 5 | proposal `capability` (part two) |
+| 17 | the attribute that judges a told claim is named in code; the Thread-Sensitivity gate is two stems named for it | both are uses of a capability in a person's own choice, and the CHAR lane's uses table owns them; a capability id from the registry block is a valid `key` there | 4 | `02_CHAR_capability_uses_table.md` |
 | 18 | the predicates' stale counts; `fixtures.py`'s stale writer claim; `shape.py` references; the dead forward declaration | corrected at the site when next opened | 5 | edits |
 | 19 | the play loop's caller contract (over-budget return raises) | the loop validates before it returns (the sheet's own rule); the engine keeps refusing | 4 (`development_space`) | first audit §8 step 4 |
-| 20 | the design's slate against the code's per-person question | no slate is built in the core. The player's triage is offered by showing him *all* his questions for the round (the driver already computes `questions[p.id]`) instead of the aggregated first | 5 | proposal `one_scene_contract` (its play-surface note) |
+| 20 | the design's slate against the code's per-person question | no slate is built in the core. The player's triage is offered by showing him *all* his questions for the round: `View.questions` already carries them (CP-T02-07); `DevelopmentSheet` shows only the aggregated one and gains `questions` | 5 | proposal `one_scene_contract` (edit 5) |
 | 21 | the design's Domain Echo tables | closed as superseded by Layer 1 (no stored aggregate) | 1 | none |
 | 22 | an end a player can read | the play loop stops on `endings_reached`, on the player's own conclusion (the design's portrait rule), or on an extinct line (`carry_on`) | 3 | first audit §8 step 4 |
 

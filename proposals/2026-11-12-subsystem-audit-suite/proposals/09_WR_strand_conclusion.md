@@ -12,7 +12,7 @@ follow the ratified text and need no ruling.
 `Fixtures stamp_flow_stakes` is on, the shipped value) skips a strand its holder reads concluded
 (`concluded_known`). Under edit 2 a person whose latest claim on a strand is a petition, a succession claim
 or another content-opening kind no longer reads it concluded, so its referents stay among his occasions.
-That is a **declared hash mover** on any seed where a person holds such a strand (between 0 and 7 persons of
+That is a **declared hash mover** on any seed where a person holds such a strand (between 0 and 9 persons of
 75 to 83 in the runs of E-05 to E-12). Edit 1 alone moves no hash: the world reading has no consumer in the
 loop (`world_q.py:4749-4752`).
 

@@ -79,8 +79,11 @@ for both sides.
   `bat.py`, `validators.py`). They import the module; the module does not import them.
 - `systems/mass_battle/sim/workbench/trace.py::run_traced_battle` takes `kind='field'` as its default:
   it builds a `MassBattleInput` and calls `massbattle.resolve_field` under `resolution.tracing()`.
-- Deleted outright: `orchestration.rally_check`, `threadwork_check`, `Subunit.halt_before_enemy` and
-  their call sites; `tactic_cards.py`; `altonian_reinforcements.py` (each with its `FORK:` row in
+- Deleted outright: `orchestration.threadwork_check`, `Subunit.halt_before_enemy` and their call sites
+  (the archived integration spec ordered `halt_before_enemy` deleted in May 2026; it is still called
+  twice a tick). `rally_check` is **kept as the commander's hook, not deleted**: the same spec gives it a
+  body (a Command check at each phase boundary restoring Morale toward its start), and it is where
+  `MassBattleInput.command` (item 4) first does something; until that lands it stays the no-op it is; `tactic_cards.py`; `altonian_reinforcements.py` (each with its `FORK:` row in
   `references/restructure_ledger.md`, and the pointers at `registers/placeholder_names.yaml:73-88` and in
   `registers/mechanics_index.yaml`).
 - `config.TROOP_TYPE_ROLES` and `ROLE_SPEC` lose the roles and keywords that resolve to no primitive

@@ -4,13 +4,31 @@
 
 ## Read at: 601e715 (working tree)
 
+HEAD advanced to `6eff039` while this was written, by draft commits under this suite's directory only;
+`git diff --stat 601e715 HEAD -- engine modules systems references architecture workplans registers research CURRENT.md`
+is empty.
+
 Lane: world, threadwork, clocks, travel, survival, strife flows, narrative engine. Every reading below is a
 dated reading of the command in §12 (seed and season count stated with it, `PYTHONHASHSEED=0`). Design
 documents are cited for intent and vocabulary only (CLAUDE.md §0.05); `.designs/` is not cited as authority.
 
 ## 0. Verdict
 
-VERDICT_PLACEHOLDER
+**No: as coded this subsystem is a sound causal substrate for an emergent narrative and not yet a source of
+one.** What holds is real and measured: seasons tick scene by scene (same-season cross-person answers are
+0 at one round and 128, 160, 158 at the shipped five), every Event carries its causes, about three times
+as many executed acts sit at cross-person depth three or more as an edge-count-preserving null gives,
+nothing is triggered, and the world's clocks are complete machinery. What does not hold is the thing asked for. With
+no player, six seasons of the shipped realm at seeds 0 and 1 produce no ending, one death between them,
+three `matter.determined` in eleven thousand acts, and a deepest consequence chain that is one concealment
+answered by three records. Beginnings are plentiful; escalation and endings are not,
+because the verbs that carry them are refused nearly every time (`challenge` 0 of 476, `accept` 0 of 186,
+`covenant` 1 of 58 over the two six-season runs), the world's own motion ships at its controls, and
+threadwork is not in the game at all. **The single largest obstacle is that the lane cannot tell:** the
+story bar has one arm and no way to fail, its companion control points the wrong way on a real log, and
+the strife reading calls a declared march a conclusion and, by season six, reads the whole realm as one
+strand. The project has built the world a memory and has not yet built a way to know whether anything
+happened in it. Five proposals address what this lane owns; the closing verbs are other lanes'.
 
 ## 1. What it is, as coded
 
@@ -90,7 +108,16 @@ the route check reads 13 of 312 pairs routeless, all on DN (natural death, defer
 one of the study's 16 drawn links reads 0 observed on the shipped realm at seeds 0 and 1 (§12 E-07, E-09),
 and the conclusion test does not discriminate (F-WR-02). **The target holds; the reading of it does not.**
 
-**S6. The instruments are honest about what they are.** `storybar` "grades nothing"; `chronicle` says
+**S6. Chains are probabilistic (R-09), as far as chains occur.** On one built world, varying only the
+chooser's draw moves the verb-chain multiset (394 and 362 chains differ between draw seeds, E-02), and
+every contested verb that resolves shows a spread of degrees: `argue` Failure 10, Partial 5, Success 4;
+`research` 91, 26, 11; `surveil` 25, 7, 2; `tell` 6, 4, 2 (seed 0, three seasons, E-07). *Attack:* is any
+multi-step chain inside one scene observed? *Outcome:* no. The only verbs that resolve are single-roll;
+no duel executes (`fight`/`accept` deaths 0 in six seasons at seed 0) and one field in 29 marches is
+fought. **Holds for single rolls; untested in the realm for a chain of exchanges, so `partial` stands**,
+for a reason beside the one R-09's row names (H-98's fourth band).
+
+**S7. The instruments are honest about what they are.** `storybar` "grades nothing"; `chronicle` says
 "answers" means "had among its causes"; `arc.py` ships two nulls; `strife.py` separates route from observed
 and refuses to guess a side. *Attack:* does that honesty leave any instrument that can report failure?
 *Outcome:* no (F-WR-03). **Holds as honesty; fails as a measure.**
@@ -121,7 +148,9 @@ ending appears at shipped fixtures. Seed 0, three seasons: none. Seed 1, three s
 closing Events in 5,276 attempted acts over the two seeds. Seed 0 at six seasons (E-08): 5,483 acts, 3,124
 refused (57.0%); `endings == []` at all six; zero deaths; `challenge` 0/223, `accept` 0/102, `comply` 0/98,
 `raze` 0/51, `capture` 0/32, `covenant` 0/27; `determine` 3/6 with one `matter.determined`; and the deepest
-consequence chain at six seasons is still the four-act chain that closed in season 1.
+consequence chain at six seasons is still the four-act chain that closed in season 1. Seed 1 at six
+seasons: 5,544 acts, 2,953 refused; `endings == []`; one death; `challenge` 0/253, `accept` 0/84, `comply`
+0/99; `covenant` 1/31; `determine` 4/10 with two `matter.determined`; deepest consequence chain 3.
 
 **Touches.** R-05 (verbs built out), R-02, R-06; NERS-R's no-player half.
 
@@ -157,7 +186,8 @@ person reading the roster's `concludes` list (`rosters.yaml:3396-3398`) holds `p
 → `questions_for`, shipped on).
 
 **Falsifier run.** A strand read `concluded` whose final move is not an opening kind and that stays
-concluded a season later. None in E-05, E-07, E-11.
+concluded a season later. None in E-05, E-07, E-11. At seed 1 the strand `1886acfe0b` read `concluded`
+at three seasons (3 moves, one doer, E-12) and reads open at six (13 moves, 3 doers, E-08).
 
 **Touches.** R-01, R-02 (through the stamp); NERS-E (legibility) and NERS-S (zoom: every strand reads at
 the realm rung at seed 0, three seasons: `per rung kind: hearth 2, realm 2, settlement 1`).
@@ -293,11 +323,12 @@ Proposal `09_WR_world_motion.md`, edit 3.
 
 ### F-WR-07 · degrades narrative · the flow stamp conditions almost nobody
 
-**Claim.** `stamp_flow_stakes` ships on and reaches between none and eight per cent of persons.
+**Claim.** `stamp_flow_stakes` ships on and reaches between none and eleven per cent of persons.
 
 **Evidence.** Persons for whom `flows_known` is non-empty, and for whom `flow_stakes` is: seed 0, two
 seasons, 0 and 0 of 83; three seasons, 1 and 1 of 83; forcing arm, 7 and 6 of 75; seed 1 forcing, 4 and 3 of
-79 (E-05, E-07, E-11, E-12). H-274's own dose reading is "6 to 13 persons are ever stamped" and "at two
+79 (E-05, E-07, E-11, E-12); at six seasons, 5 and 5 of 83 (seed 0) and 9 and 8 of 82 (seed 1) (E-08).
+H-274's own dose reading is "6 to 13 persons are ever stamped" and "at two
 seasons the arms are byte-identical on 9 of 10 seeds". The cause is in the roster: only nine kinds open a
 strand at the person reading, and the realm emits almost none of them (`field.lost` 1, no `arrest.made`,
 `requisition.taken`, `rung.seized`, `rung.razed`, `site.damaged`, `compliance.withheld` in E-07).
@@ -381,7 +412,7 @@ No second owner of a WR rule was found. Three single-owner moves done correctly 
 is asked by both the stamp and MATTER's report (`:3383`).
 
 **4.2 Dead or unreached code.** No loop or decision caller: `sovereign_fraction`, `density`, `within`,
-`provinces_of`, `slot_rank` and `presented` (harness only), `footprint` (one caller), `current_stage`'s
+`provinces_of`, `footprint`, `slot_rank` and `presented` (harness only), `current_stage`'s
 ladder (dormant: `goal_stages` ships `[]`). `systems/threadwork/sim/` and `systems/overview/sim/ms_track.py`
 are reached by tests and one exporter only. `ENDINGS_CLASSIFIED.yaml`'s `label` and `phrase`. The five
 "guard" Queries at the top of the file (`r1_aggregate`, `aggregate_guard`, `single_holder_counter`,
@@ -426,7 +457,7 @@ accept each as binding and re-raise none.
 |---|---|---|---|---|
 | story bar | "forcing on against off" (#457 `STORY-BAR`) | `ARMS = ("off",)` | code | the instrument has no subject (F-WR-03) |
 | conclusion | R6: "terminates or resolves with a concluding outcome, or it is not a flow" | 24 terminal codes, openers among them | code | conclusions announced on declarations (F-WR-02) |
-| flows condition behaviour | R2 | stamp reaches ≤ 8% of persons | code | R2 built, near-inert (F-WR-07) |
+| flows condition behaviour | R2 | stamp reaches ≤ 11% of persons | code | R2 built, near-inert (F-WR-07) |
 | victory | GD-1: 15 territories | 16 selected, one unholdable | code | victory unreachable (F-WR-06) |
 | the world substrate | arc-reachability §2: "the one hole" | lattice coupling built, weight 0, no source | code | the world is not dying (F-WR-04) |
 | threadwork | ED-WR-0010: in scope | unreached oracle | code | F-WR-05 |
@@ -494,8 +525,8 @@ purpose" (`world_q.py:4305-4308`), and the question it answered lives only in th
 959 only the actor's own (E-07): for 63% of acts the log cannot say what another person or the world did
 to occasion them, and for the 26% with none it cannot say why at all.
 (e) *Missing, as proposals.* The chronicle's `why` column and the interface it needs from CORE
-(`09_WR_story_instruments_that_can_fail.md` edit 5; CHAR's `02_CHAR_reason_trail_and_small_edits.md` owns
-the record); the mender's and the tally-holder's occasions (`09_WR_world_motion.md`,
+(`09_WR_story_instruments_that_can_fail.md` edit 5; the record itself is CORE's and CHAR's:
+`01_CORE_reason_trail_in_the_act_store.md`, `02_CHAR_reason_trail_and_small_edits.md`); the mender's and the tally-holder's occasions (`09_WR_world_motion.md`,
 `09_WR_provided_arcs.md` edit 1). Tier order by temperament is CHAR's (`02_CHAR_resolve_and_temper.md`);
 this lane needs only that `attention_key` read it from the person.
 
@@ -541,7 +572,7 @@ code read for this audit; rows whose subject is another lane's mechanism are mar
 | H-125 body step | open? | closed in effect (ships 10) | `body.changed` 37 in season 0 | see F-WR-10 |
 | H-129, H-130, H-135, H-139 `World.write` | open? | not WR's | CORE | none |
 | H-150 garrison strength unreachable | open? | not WR's (MB) | — | none |
-| H-159 oblige term | open? | open; live | `tenure.closed` 27 in season 5 at seed 0 (E-08): terms lapse together | FA's |
+| H-159 oblige term | open? | open; live | `tenure.closed` 0, 0, 2, 2, 2, 27 by season at seed 0 (E-08); that the 27 are matured `oblige` terms is inferred from `term.matured` and `duty.*` beside them, not read `[UNVERIFIED]` | FA's |
 | H-164, H-167, H-168 fabric, capacity, migrate | open? | not WR's (SE) | `migrate` 36/217 executed (E-08): H-168's "0 executed" is stale | SE re-reads |
 | H-172 `Claim.round` | open? | closed in effect | same-season cross edges 128, 160, 158 against 0 at one round (E-06, E-07) | re-grade at the row |
 | H-176 no ending reachable | open? | open; **its second cause is stale** | F-WR-06 | R-04 |
@@ -579,7 +610,7 @@ makes sense for the architecture. Twenty resolutions.
 | R-03 | The lattice coupling has no source (H-236), so a non-zero weight is not a Calamity | the source is an authored initial condition at T15 behind a build switch; the weight flips after H-165/H-07 | 3 (#457 D1, D-3) and 4 (`guards=`, `foreign=` switches) | `09_WR_world_motion.md` e1 |
 | R-04 | Victory selects 16 territories; canon says 15; H-176 says no verb opens a territory hold | select settled territories; correct H-176's cite | 3 (GD-1) | same, e3 |
 | R-05 | Who may take a place nobody holds (H-166), which leaves H-186's caller unbuildable | the occupier, by the rule `seize` already states | 4 (`_seize_rung`'s licence) | same, e2 |
-| R-06 | A real execution reads KL, not XE (H-257) | `readers_for.victim_held` reads the death's `body` change as well as `exists`, and reads custody from the Event's own `tenure.closed` receipts (emitted with the death since CP-T02-01) rather than from `w.tenures` after removal | 5 | harness edit; named here, two lines in `strife.py:84-87` |
+| R-06 | A real execution reads KL, not XE (H-257) | half decided: `readers_for.victim_held` reads the death's `body` change as well as `exists` (one line, `strife.py:85`). The other half cannot be fixed in a harness: the `detain` edge leaves `w.tenures` with the dead man and its closure mints no Receipt (`arc.py`'s own note), so custody at the death's tick is not in a finished world. XE stays unreadable on a real log until a closed custody edge is recorded; that is a `state/` question, cross-listed to CORE | 5 | harness edit named here; the rest an interface need |
 | R-07 | A strand concludes on an opening kind; the person-side `concludes` list holds content openers | an opening move is never terminal; `concludes` drops content-opening kinds | 3 (strife R6; §4 "cannot conclude on its own opening move") | `09_WR_strand_conclusion.md` e1, e2 |
 | R-08 | Is the missing threadwork module a gap? | yes; move the oracle to `modules/threadwork/` as pure typed entries before CP-T07-02 builds its host | 4 (IN-07 E1 to E6; `fieldwork.find`) | `09_WR_threadwork_module.md` |
 | R-09 | Threadwork's Ob tables and gates are module constants | one typed file under `engine/engine_params/`, read by the module | 3 (CLAUDE.md §0.05, §5) | same, e3 |
@@ -695,7 +726,7 @@ edits 1 to 3, then B10-15, then its edit 4 (the scenario).
 |---|---|---|---|
 | MATTER → SE (`settlements.subsist`, `settlements.produce`) | consumes | real | `matter.py:600`, `:741`; `stores.changed` 185, `yield.taken` 111 (E-07) |
 | MATTER → CHAR (claims of `condition.worn`, `stores.changed`, `body.changed`, shortfall Observations, through WITNESS) | emits | real, but few become acts | acts classed `world` 365 of 2,630 (E-07) |
-| MATTER → FA (a matured `oblige` term closes the edge) | emits | real | `tenure.closed` 27 in season 5 (E-08) |
+| MATTER → FA (a matured `oblige` term closes the edge) | emits | real | `matter.py:428-435`; `tenure.closed` 27 in season 5 (E-08), cause not read `[UNVERIFIED]` |
 | CALENDAR → SC (`date.fired`, docket slots, re-slot) | emits | real | `date.fired` 5, `docket.formed` 7 in two seasons (E-05); `determine` 3 of 6 (E-08) |
 | ENCOUNTER → PC, MB (deferred contests) | calls | real for marches; **no duel reaches it** | `march` Declared 29, Unopposed 6, Lost 1; `fight`/`accept` deaths 0 (E-07) |
 | `questions_for` → CHAR (`decision/`) | emits Questions | real | every act |
@@ -751,7 +782,7 @@ memory, run seasons, read the log; they write nothing but stdout).
 | E-05 | `wr_probe.py 0 2` | 0 · 2 | season hashes `5ab73af2…`, `bacd687f…`; 1,703 acts, 898 refused; 3 strands, 1 "concluded" (15 marches); person reading 0 of 83; arcs 21, null [1,0,0], unrestricted 53; chain ends ≥2: 29 against shuffled 86 to 97 |
 | E-06 | `wr_probe.py 0 3 1` (`scene_budget` swept to 1) | 0 · 3 | 519 acts; same-season cross edges 0; cross-season 51, 68 |
 | E-07 | `wr_probe.py 0 3` | 0 · 3 | 2,630 acts, 1,440 refused; 74,510 Events; 0 deaths; same-season cross edges 128, 160, 158; 5 strands, 0 concluded, largest 63 moves and 17 doers; all 16 links observed 0; `PT→PT` 13 against control 11.09 |
-| E-08 | `wr_probe.py 0 6` | 0 · 6 | 5,483 acts, 3,124 refused; 273,067 Events, 179,056 `claim.decayed`; `endings == []` ×6; 1 strand, 234 moves, 55 doers; arcs 33, null [2,0,0]; deepest consequence chain 4. Seeds 1 and 2 at six seasons were queued and had not finished when this was written `[UNVERIFIED]` |
+| E-08 | `wr_probe.py 0 6`; `wr_probe.py 1 6` | 0, 1 · 6 | seed 0: 5,483 acts, 3,124 refused; 273,067 Events, 179,056 `claim.decayed`; `endings == []` ×6; 1 strand, 234 moves, 55 doers; arcs 33, null [2,0,0]; deepest consequence chain 4. Seed 1: 5,544 acts, 2,953 refused; 247,204 Events; `endings == []` ×6; 2 strands (119 moves and 30 doers; 13 moves), 0 concluded; arcs 34, null [0,1,1]; person reading 9 of 82; deepest consequence chain 3. Seed 2 at six seasons was queued and had not finished when this was written |
 | E-09 | `… strife 2 0`; `… strife 3 0 1 2` | 0 · 2; 0–2 · 3 | OBSERVED 4, UNOBSERVED 8, KIND-ONLY 25, GAP 3; and OBSERVED 6, UNOBSERVED 6, KIND-ONLY 25, GAP 3; terminal codes with no static route: DN |
 | E-10 | `wr_null.py 0 2`; `wr_null.py 1 2` | 0, 1 · 2 | executed depth ≥3: 36 against null 10.8 (6..15); 27 against 9.0 (5..14). Consequence depth ≥3: 2 against 1.2 (0..3); 0 against 1.1 (0..4). 90 of 101 and 92 of 98 answering acts name the antecedent's actor or subject |
 | E-11 | `WR_FORCING=1 wr_probe.py 0 3` (illness 0.05, weather draw, coupling 250) | 0 · 3 | 8 deaths; `tenure.closed` 10; `oblige` 146/277; `confer` 1; `determine` 1; cross share 22.1%; 0 band crossings; `restore` not attempted |

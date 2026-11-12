@@ -1,0 +1,198 @@
+# CORE — one authoring surface for character capabilities
+
+## Status: PROPOSED
+
+Source: `audits/01_CORE_audit_addendum_B.md` §5 (the brief's §14), F-CORE-15. Read at `785bc62`.
+
+## What it changes in `engine/season/` at runtime
+
+Part one changes nothing a season computes: the same pools, the same obstacles, the same content hash at
+shipped data. It moves where three facts are authored and adds a refusal at load. Part two moves play
+(each edit a declared hash mover with its control). Part three is held on a question for Jordan.
+
+## The problem, with evidence
+
+`seam/wrappers/pool.py::faculty` is the one pool reader and is sound. The facts it reads have no single
+author and no definition:
+
+| fact | file |
+|---|---|
+| which capability a verb's roll draws on | `engine/season/rosters.yaml: verb_capability` (keyed by verb, outside the verb's row) |
+| which attribute a capability starts from, and which opposes it | `rosters.yaml: vocation_attribute` (`values`, `opposed_by`; the second is `{}`) |
+| the attribute roster, scale and names | `references/descriptor_registry.yaml: attributes` |
+| which capabilities a background grants | `rosters.yaml: lifepaths`, `tables.lifepath_templates` |
+| who holds what | `references/npc_registry.yaml` (`stats:`, `lifepath:`), case overlays (`cast: capability:`) |
+| the untrained default and the growth numbers | `engine/season/data/fixtures.py` |
+| combat's attribute keys and defaults | `modules/combat/attributes.py` |
+
+Measured on the tree: 11 contested verbs, 9 with a capability row, and of the contested ones `arrest`,
+`determine`, `lie`, `march` and `interrogate` have none, so every person rolls `pool_default` on them.
+`loop/effects_combat.py:262-268` refuses to mint a capability key because a first rank (1) would replace
+the untrained default (2) and lower the pool, so no skill is acquired in play. `attr.body.endurance` has
+a default of 1 in the registry, 4 in the combat spec and a literal 4 at `seam/wrappers/combat.py:151`.
+Nowhere does a row say what a capability *is*.
+
+## The resolution
+
+One block, `capabilities:`, in `references/descriptor_registry.yaml`, on the chain the attributes
+already use (exporter with a blocking `--check`, read through `engine/substrate/descriptors.py`). The
+verb's side is a column on the verb's own row. The character's side is the cast row. The existing
+loaders derive the maps every reader already imports. Nothing is added to `faculty`.
+
+## Part one — the surface (hash EQUAL)
+
+### Edit 1 · owner `references/descriptor_registry.yaml` — new block
+
+```yaml
+capabilities:
+  kinds: [attribute, skill, aptitude, trait]        # closed
+  growth_rules: [train, practice, use]              # closed; each names a rule the engine implements
+  untrained_rules: [default, attribute]             # closed; what a non-holder rolls
+  rows:
+    copying: {kind: skill, base: attr.mind.focus,      untrained: default, grows_by: [train, practice], scale: {floor: 0, ceiling: 7}, source: "rosters.yaml vocation_attribute (CR-20)"}
+    argue:   {kind: skill, base: attr.social.charisma, untrained: default, grows_by: [train, practice], scale: {floor: 0, ceiling: 7}, source: "rosters.yaml vocation_attribute (CR-20)"}
+    inquiry: {kind: skill, base: attr.mind.acuity,     untrained: default, grows_by: [train, practice], scale: {floor: 0, ceiling: 7}, source: "rosters.yaml vocation_attribute (CR-20)"}
+    arms:    {kind: skill, base: attr.body.agility,    untrained: default, grows_by: [train, practice, use], scale: {floor: 0, ceiling: 7}, source: "rosters.yaml vocation_attribute (CR-20); CP-T03-04 (iv)"}
+```
+
+The four rows are today's four vocations with today's attributes, moved. `opposed_by:` is an optional
+key (absent on all four, as `vocation_attribute.opposed_by` is empty). `use` is `_grown`'s rule (a fight
+that drew blood). The ten attributes stay where they are in the same file; a `kind: attribute` row is
+not written for them (they are already defined; a second definition would be a second owner).
+
+### Edit 2 · owner `tools/export_descriptors.py`, `engine/substrate/descriptors.py`
+
+The exporter cooks the block into the existing artifact; the leaf gains
+
+```python
+CAPABILITIES: Mapping[str, CapabilityRow]     # frozen; id -> (kind, base, opposed_by, untrained, grows_by, floor, ceiling)
+def capability(name) -> CapabilityRow         # raises ValueError naming the roster, as resolve_pursuit does
+```
+
+The exporter's `--check` refuses a `base` or `opposed_by` that is none of the ten, a `kind`, rule or
+`untrained` outside its closed set, and a `floor` above a `ceiling`.
+
+### Edit 3 · owner `engine/season/verb_table.yaml`, `engine/season/data/verbs.py` — a `capability:` column
+
+`VerbRow` gains `capability: str = ""`. The nine rows that have a `verb_capability` line today gain
+`capability: <the same key>`. The loader refuses (as it refuses a missing `beneficiary:`): a contested
+or graded row with no `capability:` key; a value that is neither a `CAPABILITIES` id nor `none`; `none`
+without a `capability_note:`; a `capability:` on a row that neither contests nor is graded (a column
+nothing reads). In part one the five undeclared contested rows carry `capability: none` and a note that
+says so plainly (*"undeclared at authoring; every person rolls the untrained default"*), which is their
+behaviour today.
+
+### Edit 4 · owner `engine/season/data/rosters.py` — derive, and delete the two rosters
+
+```python
+VERB_CAPABILITY      = {row.verb: row.capability for row in VERB_TABLE.values() if row.capability not in ("", "none")}
+VOCATIONS            = frozenset(VERB_CAPABILITY.values())
+VOCATION_ATTRIBUTE   = {k: CAPABILITIES[k].base for k in VOCATIONS}
+VOCATION_OPPOSED_BY  = {k: CAPABILITIES[k].opposed_by for k in VOCATIONS if CAPABILITIES[k].opposed_by}
+```
+
+These three bindings move to `data/verbs.py` (the verb table loads there; `rosters.py` cannot import it)
+and `rosters.py` re-exports nothing of them; `pool.py`, `sigma.py`, `effects_combat.py`, `world_q.py`
+and `corpus_run.py` change one import line each. `rosters.yaml: verb_capability` and
+`vocation_attribute` are deleted in the same commit, with `_load_vocation_attribute` and
+`_load_vocation_opposed_by` (their closure checks are now the exporter's and the verb loader's).
+`tables.lifepath_templates` keeps its place in `rosters.yaml`; its `holds:` check reads the capability
+ids off the leaf (`descriptors.CAPABILITIES`) instead of `VOCATIONS`, because `rosters.py` loads before
+the verb table and may not import it. A template may then grant a capability no verb yet tests, which
+the old check refused; the verb loader reports (does not refuse) a capability no row names, as
+`tenure_kinds_without_an_opener` reports an unopened kind.
+
+### Edit 5 · owner `references/npc_registry.yaml`, `engine/season/data/cast.py` — the character's side
+
+A cast row may carry `capabilities: {<id>: <whole number>}` beside `stats:`. `cast.capabilities_of(r)`
+validates each id against `CAPABILITIES` and each value against the row's scale, refusing as
+`attributes_of` does. `capability_of(r, pool_default)` (the lifepath expansion) is unchanged and the two
+are merged by the builder with the authored value winning. The case overlay's `cast: capability:` is
+validated through the same function (`corpus_run._check_capability` calls it instead of re-checking
+keys against `VERB_CAPABILITY`). No row is authored by this proposal: the CHAR lane owns the content.
+
+### Edit 6 · owner `engine/season/decision/sheet.py` — show what is rolled
+
+`DevelopmentSheet` gains `attributes` (a frozen copy, as `CreationRow` has). No derived pool is stored on
+the sheet; the play surface asks `View.odds` per candidate as the chooser does.
+
+### Edit 7 · owner `engine/season/seam/wrappers/combat.py:151` — one Endurance default
+
+`party_end` reads the combat spec's default for `end` through the module's typed export
+(`engine/engine_params`, section `attributes`, which `tools/export_engine_params.py` already writes) in
+place of the literal `4`. The registry's `default: 1` is the scale's floor value for an unauthored
+attribute in a *sheet*; the fight's default is the module's. Two different facts, each with one owner;
+the literal was a third copy of the second.
+
+**Gate (part one).** `python tools/export_descriptors.py --check` passes; the driver constructs; a
+same-seed `headless --case NPC-088 --seasons 2 --seed 0` prints hash `5405522c36b0399247f83fd9f6d29494`
+(the first audit's reading); `corpus_run` seed 0 reproduces its executed-verb and degree tallies.
+**Falsifier.** Delete `capability:` from `argue`'s row: the load refuses naming the row. Change
+`argue`'s `base` to a name outside the ten: the exporter's `--check` refuses. Either passing silently
+falsifies the edit.
+
+## Part two — the two things that move play (each its own commit)
+
+### Edit 8 · the five undeclared contested rows declare a capability
+
+| verb | prize | proposed | ground |
+|---|---|---|---|
+| `lie` | a standing, counterparty `to` | `copying` | `tell` and `speak`, the same prize and shape; a lie is a telling of a false value (precedent) |
+| `determine` | a proposition | `argue` | `argue` contests the same prize `[ASSUMPTION; medium; Jordan to correct; revert: none]` |
+| `interrogate` | a proposition, a detained subject | `inquiry`, `opposed_by: attr.mind.will` on the row's opposition | it is a question put to find something out, the three graded inquiries' vocation `[ASSUMPTION; medium; revert: none]` |
+| `arrest` | a standing, by `remit:dispatch` | `argue` | the roll is the social provider's; an arrest carried by force is `capture` (`arms`) `[ASSUMPTION; low; revert: none]` |
+| `march` | a field | `none`, noted | the field reads weights and orders and never calls `faculty`; a commander's capability is the MB lane's input |
+
+Each is one value on one row, shipped behind the row's own revert. **Gate.** `corpus_run` seed 0, 1, 2
+before and after: the share of `Failure` among graded `determine`/`lie` outcomes for persons who hold
+the key against persons who do not (a difference with the same-seed control is the reading; no balance
+claim is made from it).
+
+### Edit 9 · a first rank is never a loss, so a skill can be acquired
+
+`faculty`'s base becomes: for a holder of the key, `max(untrained_value, rank)`; for a non-holder,
+`untrained_value`, where `untrained_value` is `pool_default` under `untrained: default` and the base
+attribute (else `pool_default`) under `untrained: attribute`. At shipped data every held key is at
+`pool_default` or above, so this is hash EQUAL until someone holds a rank below it. Then
+`raised_capability` may mint: a non-holder's `train` writes `{key: 1}` and his pool is unchanged until
+the rank passes the default. `[ASSUMPTION; medium; Jordan to correct; revert: restore the never-minted
+rule]`. **Gate.** A seeded two-season realm run in which a person with no `argue` key trains it:
+`capability.raised` is emitted, his `argue` pool is not lower than before, and a second training raises
+it. **Falsifier.** His pool after the first rank is below `pool_default`.
+
+### Not here · where a capability enters a person's own choice
+
+Which attribute grades a told claim (`decision/options.py:1627`, a name in code) and the
+Thread-Sensitivity gate's two hard-wired stems are the decision layer's uses of a capability. The CHAR
+lane's `02_CHAR_capability_uses_table.md` resolves both with one table of uses (`use`, `key`, `form`,
+`gain`) and is their owner; this proposal does not repeat them. The two fit by construction: that
+table's `key` is *"a registry key (an attribute or a practitioner stat)"*, and a capability id defined
+in this proposal's block is a registry key of the same registry, so a use row may name a skill exactly
+as it names an attribute.
+
+## Part three — held (survivor in the addendum's §9)
+
+Whether a capability may gate an *act* (as distinct from weighting a choice). The carrier would be the
+CHAR table's `form: at_least` read by a `requires` cell (one own-state stem, `own:<registry key>`, in
+place of the two stems named for Thread Sensitivity), with the threshold on the verb row. Built only if
+Jordan rules that a capability may gate an act; under the present ruling the gate has exactly the one
+member it has now.
+
+## NERS reading (definitions: `CLAUDE.md` §0.06)
+
+- **N.** Top-down: a designer adds a skill by adding a row and naming it on the verbs that test it;
+  today that is four files. Bottom-up: `faculty` reads the same four maps. Lateral: the combat module
+  reaches the definition through the leaf it already reads. Removing the block returns the six-file
+  spread; removing the column returns verb facts keyed outside the verb. Holds in the directions tried.
+- **R.** Customisation of characters is the point: a capability becomes a thing a character sheet can
+  list with its meaning. Completeness: the five silent rows and the unacquirable skill are the two
+  extremes at which the present design breaks, and part two closes both.
+- **S.** One methodology for a pool (the same `faculty`), one ladder; the verb row is the only place a
+  verb's facts live, which is the table's own rule. The module seam is untouched.
+- **E (last, against N and R).** One block and one column replace two rosters and two loader functions;
+  a reader can say which capability fed a roll from the verb row alone.
+
+## Cost class
+
+Part one: edit plus a small build (the exporter and the leaf). Part two: three edits, each a hash mover.
+Part three: design-first.

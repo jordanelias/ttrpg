@@ -166,7 +166,10 @@ Ranked by how much weight each bears.
 
 ## 3. Adversarial findings
 
-Ranked worst first. "Falsifier" names the run that would have shown the claim wrong, and its outcome.
+F-MB-01 to F-MB-13 are ranked worst first. F-MB-14 to F-MB-19 were added under the later charges (the
+stated intent, the NPC surface, the cell-based approach) and are in the order found; by weight F-MB-14,
+F-MB-15 and F-MB-19 sit with F-MB-03, and F-MB-16 to F-MB-18 with F-MB-11. "Falsifier" names the run that
+would have shown the claim wrong, and its outcome.
 
 ### F-MB-01 · blocks a requirement · the shipped scale does not resolve a battle
 
@@ -433,6 +436,76 @@ verbs are withheld. Disposition in §6.2 R-17.
   who all follow one doctrine is not a character).
 - **Minimal fix.** §16 (e).
 
+### 3.A The cell-based approach and the weapon-carry trade-off (Jordan, 2026-11-12; verified by reading and by run)
+
+#### F-MB-17 · degrades narrative · the hierarchy is three levels, not four, and the top one is flattened for a season
+
+- **Claim.** The asked-for structure is army → unit → subformation → troops on one cell grid. The data
+  model has **army (`Unit`) → subformation (`Subunit`, one troop type, its own shape, role, orders, morale,
+  discipline, stamina) → cell (troops, morale, facing, position)**. That much is real in the resolver:
+  contact, casualties, morale breaks and facing are per cell; orders, targeting and rout are per
+  subformation; rout by share broken is per army. There is **no level between army and subformation**: a
+  "unit with its own subformations and troop types" is the army itself. Several `Unit`s a side exist only
+  in `run_multi_unit_battle`, where each pair fights on its own field and neighbours interact by rule
+  (cascade, freed attacker), not by position; the plan for several units on one grid
+  (`proposals/multiunit_envelopment_plan.md`) is PROPOSED and unbuilt.
+- **Evidence.** `hierarchy/units.py:392-560` (`Subunit`), `:2779-2892` (`Unit`); `battle_loop.py:13`
+  (exactly two `Unit`s); `orchestration.py:2191-2495` (pairings); `armies.py:35` (eleven subformations at
+  most). On the shipped path the hierarchy is flattened to one subformation of one stand-in type a side
+  (`massbattle.py:172-180`).
+- **Falsifier.** A season field with more than one troop type on a side without an `army` Record: none
+  possible (`_weighted_unit`, `_person_unit`).
+- **Touches.** R-04, R-05; the Ogre Battle and Unicorn Overlord referents (§18).
+- **Minimal fix.** None needed for the three levels that exist beyond making them the path (presets on,
+  proposal 3). The fourth level is a design question, not a defect: with eleven subformations a side,
+  each with its own type, role and orders, "unit" and "subformation" are one level under two names. §18
+  says what the referents ask of it.
+
+#### F-MB-18 · degrades narrative · two of the role shapes do not survive the first tick, and per-cell morale comes loose when they change
+
+- **Claim.** Every role whose shape is `GappedLine` (`Skirmish`, `Harass`, `Kite`) is offered only to
+  troop types whose Discipline is below that shape's minimum (5), so `check_drift` turns the body into a
+  `Line` at tick 1. And `check_drift` re-keys the troop map, the offsets and the node state but not
+  `cell_morale`, `cell_start_troops` or `cell_breakpoint`, so after a drift only the cells whose ids
+  happen to coincide keep their morale.
+- **Evidence.** `config.py:197-203` (`MIN_DISCIPLINE`), `:589-626`; `troop_types/registry.py:44-71`;
+  `hierarchy/units.py:3035-3063`. Run (one tick, seed 0): light infantry, archers, skirmishers and mounted
+  archers in those roles all read `GappedLine` at build and `Line` after one tick; morale ids still
+  matching troop ids: 1 of 2, 1 of 2, 1 of 2, 2 of 3. Cavalry `Shock` (Arrowhead, minimum 4, Discipline
+  5) keeps its shape.
+- **Falsifier.** A `GappedLine` role still gapped after tick 1 on any troop type the menu offers it to.
+  None in the run.
+- **Old finding, re-verified.** The 2026-07-26 Fable audit's S1.4 ("`check_drift` re-keys ONE of ten
+  per-cell maps") is now mostly fixed and still true for the three morale maps.
+- **Minimal fix.** `rekey_cells` also re-seeds the three morale maps from the subunit's current
+  aggregate; the minimum for `GappedLine` is set against the troop types that are meant to use it, or
+  the roles leave those menus (R-24, R-25).
+
+#### F-MB-19 · blocks the stated intent · loadout is not read, there is no second weapon, and the weapon in hand is not a state
+
+- **Claim.** A troop type has one weapon and one armour in a table of its own; the resolver reads one
+  field of it (melee or ranged). There is no secondary weapon, no cost for carrying anything, and no
+  state for what is in hand: a ranged body that is reached goes on shooting while it is being fought.
+  Fatigue and speed have no equipment term, and fatigue saturates within one engagement.
+- **Evidence.** `equipment/__init__.py:21-52`; `troop_types/registry.py:172-180`; `config.py:307`
+  (`RANGED_MELEE_SIGMA`); `orchestration.py:1586-1668` (`fire` checks range and ammunition, not contact).
+  Runs: a spearmen mirror under three different loadouts is byte-identical; archers reached at tick 3
+  volley through ticks 3 to 10 while in melee; first contact is tick 3 for light, spear, heavy and pike
+  foot alike; stamina reads 52 at tick 7, 0 at tick 18 and 0 at tick 72.
+- **Falsifier.** A result that changes when a troop type's armour or weapon record changes (reach class
+  held): none at the seed run.
+- **Touches.** R-05 (no verb reaches equipment), R-06; §14.
+- **Minimal fix.** Proposal `04_MB_unit_loadout_and_weapon_in_hand.md`, the unit half of
+  `03_PC_loadout_and_carry.md`: one roster, a loadout row with a secondary, the cost by the PC lane's
+  one function, `in_hand` as subunit state changed by an order, a switch that costs a tick.
+
+#### One cell resolver for the commanded and the delegated battle
+
+Yes for the resolver, no for the battle. Every loop in the tree calls the same
+`resolve_engagements_cascading` and the same movement and contact code, so there is one cell resolver.
+There is no commanded battle to share it with (F-MB-15), and the loops around it differ (F-MB-05).
+Step 4a keeps it one.
+
 ## 4. Code matters
 
 ### 4.1 Ownership and duplication
@@ -639,6 +712,28 @@ attribute enters, nothing can be changed once the field starts, and nothing expl
 squad-engagement synthesis (RULED 2026-09-25) built the orders, signals and officers that a manager would
 use; `HANDOFF_MB.md` records them as built; the season reads none of them.
 
+### 5.7 The cell-based approach, judged as a design
+
+What the design gets right is the choice of primitive. Jordan's directive that the cell be the primitive
+for morale, facing, damage and troops (`config.py:53-70`) is carried through: a flanked corner dies
+faster than the front beside it, a body comes apart from a local break, and frontage is measured, not
+declared. That is what lets formations have effects without per-shape bonuses (`config.py:194-196`), and
+it is the part of the engine that would be hardest to rebuild.
+
+What it has not decided is what sits above the cell. The archived description speaks of units and up to
+three sub-units; the code of one `Unit` and up to eleven `Subunit`s; the army Record of subformations; the
+brief of army, unit, subformation and troops. One of those levels is a synonym. The NERS reading: a fourth
+level earns its place only if it carries something the three do not, and the candidate is the referents'
+squad (a small body with a leader whose own qualities apply to it, §18) or the archived design's named
+officer per unit. `armies.py` already has that slot (`Officer`, a subformation's `officer` key, a span
+check) and nothing reads it at resolution. So the decided reading is: **army → subformation → cell, with
+the officer as the thing that makes a subformation a unit**; no fourth container.
+
+Weapon carry: the design intent is one rule over troop type, primary and secondary, with the switch as a
+costed state change. Neither scale has it; the PC lane owns the rule, this lane the unit half (F-MB-19).
+The design consequence worth stating is that the trade-off only exists if fatigue and speed matter, and
+today fatigue saturates in a dozen ticks of contact and speed differs only by Discipline and by horse.
+
 ## 6. Hole-register and workplan disposition, and resolutions
 
 ### 6.1 Items the dossier lists
@@ -693,7 +788,14 @@ Proposal files are under `proposals/2026-11-12-subsystem-audit-suite/proposals/`
 | R-22 | gap | recovery of morale | a lost field's morale row has one remover, `forgive`, which each loser must choose for himself [UNVERIFIED: whether the chooser forms `forgive` on a faction referent]; add the symmetric write: a `Won` field removes one morale row from each winner who holds one (`held_against`), so victory restores what defeat took | 4 | `04_MB_playable_field_scenario.md` |
 | R-23 | inconsistency | `CP-T04-10`'s `levy`/`disband` against `recruit`/`disband_unit` | superseded by `ED-IN-0306`'s verbs | 1 | none |
 
-Resolutions decided: **23**.
+| R-24 | inconsistency | `GappedLine` roles are offered only to troop types below that shape's minimum Discipline, so the shape is gone at tick 1 | lower `MIN_DISCIPLINE['GappedLine']` to the Discipline of the lightest type meant to use it (2), in the troop table when it is data; the roles then keep their shape | 5 | `04_MB_unit_loadout_and_weapon_in_hand.md` (the troop table) |
+| R-25 | gap | `check_drift` leaves the three per-cell morale maps keyed to cells that no longer exist | `Subunit.rekey_cells` re-seeds `cell_morale`, `cell_start_troops`, `cell_breakpoint` from the current aggregate | 5 | `04_MB_typed_outcome_and_one_path.md` |
+| R-26 | unclear | `rally_check` is a no-op the archived integration spec meant to fill | kept as the commander's hook (a Command check per phase restoring Morale), not deleted; R-09's list is amended | 3 | `04_MB_typed_outcome_and_one_path.md` |
+| R-27 | inconsistency | two weapon rosters and seven troop tables | one roster (personal combat's), one troop row; `ARSENAL`, `ARMOURY` deleted | 4 | `04_MB_unit_loadout_and_weapon_in_hand.md` |
+| R-28 | inconsistency | the archived mode spec resolves a zoomed battle by one rule set and a delegated one by a simpler formula; the code has one engine | superseded by the 2026-07-08 doctrine (one engine at every fidelity); the code is right | 1 | none |
+| R-29 | gap | truncated engagement groups (past the fifth depth group) are counted by `run_battle` and the count is dropped at `_run_and_grade` | `FieldOutcome.report` carries the truncated-troops figure; a non-zero value is visible to the instrument | 5 | `04_MB_typed_outcome_and_one_path.md` |
+
+Resolutions decided: **29**.
 
 ## 7. Research transfer
 
@@ -907,6 +1009,8 @@ are under `/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379/s
 | `seed2_field.py 2 1` | `build_realm(2)`, 1 season | one `field.lost`; bodies 1000 → 20 (two), → 30 (two), → 400, → 225 |
 | `python -m engine.season.harness.corpus_run` | 143 cases, seed 0 | `march`, `marshal`, `surrender`, `recruit`, `form_unit`, `assign_troops`, `order_unit`, `disband_unit` and `discharge_troops` are all among the 30 rows "foldable but never even attempted"; no field of any band is resolved in the corpus (`DEGREES RESOLVED` lists no `Won`, `Lost` or `Unopposed`) (`corpus_run.txt`) |
 | `presets_probe.py 0 2 tpw30` | | **failed to run**: the probe could not replace a fixture value on a built world; not retried |
+| inline: role shapes after one tick | seed 0, army path, every non-`Line` role on every type offered it | `GappedLine` roles all read `Line` after tick 1; `Arrowhead` (cavalry `Shock`) holds; morale ids still matching troop ids 1 of 2 or 2 of 3 |
+| inline: loadout, switch, fatigue, speed | spearmen mirror seed 3 under three loadouts; archers 300 v spearmen 300 seeds 0 to 2; spearmen 600 mirror seed 5 at 18 and 72 ticks; seven attacker types against spearmen 400, seed 1 | byte-identical under all three loadouts; archers volley through melee (ticks 3 to 10 at seed 1); stamina 52 at tick 7, 0 at ticks 18 and 72, casualties 0 and 36 of 600 at 18 ticks, 93 and 104 at 72, no rout; first contact tick 3 for four foot types, 5 for levy, 1 and 2 for horse |
 
 **How the code was read.** Read in full, as written: `massbattle.py`, `armies.py`, `armyrecord.py`,
 `orderofbattle.py`, `troop_types/` (three files), `rngsource.py`, `core/attrition.py`,
@@ -921,9 +1025,9 @@ files was read only where a finding cites it.
 - `[SKIPPED: tests/valoria/test_*.py and engine/season/tests/test_cp_t04_*.py (43 files) — not opened; §4.5 rests on the hole register's statements about them and on the code they test]`
 - `[SKIPPED: systems/mass_battle/sim/bat.py, stress.py, validators.py, lanchester_signature.py, test_persubunit_stress.py, workbench/server.py, rout_cascade_sweep.py — outlines only; walkthrough.py:120-172, workbench/trace.py:60-116 and engine.py:284-303 read]`
 - `[SKIPPED: perimeter.py:100-173 — not reached by any season arm]`
-- `[SKIPPED: proposals 2026-09-25-squad-engagement-*, 2026-10-16-troop-stock-design*, multiunit_envelopment_plan.md, pc_formation_system.md — Status lines only (dossier); none is RATIFIED]`
+- `[SKIPPED: proposals 2026-10-16-troop-stock-design* — Status lines only (dossier), PROPOSED; the squad-engagement, envelopment and formation proposals are in §18.4]`
 - `[SKIPPED: research/pre_firearms_formations/, research/historical/, research/emergent_narrative_literature/, the companion parts — relied on research/by_lane/MB_mass_battle.md's reading of them]`
-- `[SKIPPED: .designs/ mass_battle_v30.md and mass_battle_integration_v30.md — reference only; no finding depends on them]`
+- `.designs/` and `.audit/`: read later, under the added charges; what was and was not read is in §18.4.
 - `[SKIPPED: hole-register rows H-148, H-149, H-175, H-241 in full — excerpts and citing rows only]`
 
 ## 13. Provided arcs and characters — adjudication
@@ -1066,6 +1170,19 @@ person)` pair in `subject_matter`, a record-kind change); a cohort's training is
 cohort `Person` (`train` already raises `Person.capability`), read as a bounded step on the troop type's
 Discipline. Both are host reads handed in as integers on `MassBattleInput`; the module still sees no
 person. Order: Command first (it is the one the arcs need), officers second, cohort training third.
+
+**Addendum (the designer's surface for a troop type or a loadout; the PC lane's
+`03_PC_loadout_and_carry.md`).** Today a new troop type is seven edits in four Python files
+(`TROOP_TYPE_STATS`, `TROOP_TYPE_REACH`, `MOUNTED_TYPES`, `TROOP_TYPE_DENSITY_CAP`, `TROOP_TYPE_ROLES`,
+`TROOP_LOADOUT`, `TRAINING_SITE`), and its weapon is a key of a ten-row class catalogue that shares
+nothing with the fifty-four weapons a person can hold. The target is one authored row in one typed file
+(`key`, `power`, `discipline`, `morale`, `strength`, `mounted`, `cell_cap`, `primary`, `secondary`,
+`armour`, `roles`, `training_site`, `min_site_condition`), whose weapon keys are keys of the one roster
+personal combat owns. Giving pikemen or archers an arming sword is one cell. The carry cost is the PC
+lane's `carry_demand`, evaluated by the host and handed to the module as factors, so the unit and the
+person are charged by one function (proposal `04_MB_unit_loadout_and_weapon_in_hand.md`, which also
+confirms or corrects that proposal's statements about this module). Axioms this adds, in the tradition's
+words: encumbrance, a readied weapon, a sidearm, and a switch that costs an action.
 
 ## 15. Duels in and around a mass engagement (Jordan's personal-combat intent, 2026-11-12)
 
@@ -1220,3 +1337,98 @@ the match, against a field resolved atomically in the round it is declared (`ED-
 inside the call does not move the round, so this lane reads no conflict; a reading of `ED-IN-0301` as "no
 decision after declaration" would. (3) Legible cause, against friction at sigma 1.1 (§11 item 2): an
 explanation of a result that was mostly the draw is an honest explanation and a poor one.
+
+## 18. The five named referents, the full design set and the earlier audits
+
+### 18.1 The referents, as sourced in `research/`, against the code
+
+Sourcing floor first. **Unicorn Overlord**: sourced (`tutorials/T19_tactics_narrative.md:79-155`, pages
+read in body). **Football Manager**: sourced for its loop and choice menu (`tutorials/T16_managers_narrative.md:5-40`,
+official pages); its "three fidelities of one engine" is not established (D_T04 row 58). **Total War**:
+sourced (`tutorials/T07`, `tables/R6`, D_T04 rows 3 to 11). **Bannerlord**: sourced for recruitment,
+upgrade, simulated battles and death settings (`tables/R2_warband_sandbox.md:6-90`); party wages, the
+fight / send troops / auto-resolve menu and in-battle rout are memory-grade there. **Ogre Battle: not
+sourced as a battle referent.** The corpus names it only for its character-creation questionnaire
+(`research/by_lane/NPC_npc_cast.md:130`, `PC_personal_combat.md:90`); what it is "known for" in the
+brief's sense rests on the brief, and is read here through Unicorn Overlord, its sourced descendant.
+
+| what the referents share | where it is in the code | understood or named |
+|---|---|---|
+| **Squads of named, distinct characters** on a small formation grid, a leader whose effect applies to the squad (Ogre Battle; Unicorn Overlord: up to five on a 2 x 3 grid) | not in `modules/mass_battle/`: its cell is 40 to 200 anonymous troops. The nearest thing is `field_subunits: person` (one subformation per commanding person, a body of men, not a member). The tree's squad design is the personal-combat scene envelope (N against M over the duel engine, "wrap, never fork"), design-only and waiting on ED-911 | **absent here; designed elsewhere.** This is the scale the realm's own fields are at (two to six named persons a side), §15 |
+| **Standing orders set in advance** (Unicorn Overlord: a priority list per character with up to two conditions; Football Manager: roles, duties, instructions) | `Order` triggers and behaviours per subformation (`hierarchy/units.py:312-390`); `target_condition`; `fall_back_at`; the army Record's role, stance, target; the standing-order Record | **understood per subformation, dark; per character absent** |
+| **Automatic resolution with a prediction shown first** (Unicorn Overlord's stage preview; Total War's projected result) | `resolve_field`; `field_estimate` (400 samples of the same entry) | **understood**; the estimate is the player's only (§16) |
+| **Troop tiers, training and upkeep** (Bannerlord: recruit at settlements, upgrade with experience and gold, wages; the archived design: experience, Muster, Campaign Supply) | types by training Site (`recruitment.py`); no upgrade path, no experience, no wage; a ration per field, off | **tiers named as types; progression and upkeep absent** |
+| **Commander agency** (Bannerlord's hero fights and leads; Football Manager's manager; the archived design's general: Command, a general's action each turn, two-stage incapacitation, personal combat that suspends command, +1 Discipline for the player's presence) | Command is the literal 4; the commander is not on the field; `rally_check` is empty | **absent** (F-MB-14) |
+| **Campaign to battle to campaign** (Total War, Bannerlord) | stance to morale, garrison to walls, origin to river, Record to army, cohort bodies carrying losses to the next muster, presence to occupation | **understood, the best part of the seam; dark and mis-scaled as shipped** |
+| **Command, join or delegate** (Bannerlord, Total War) | delegate only | **one of three** |
+
+### 18.2 What the full design set changes in this audit
+
+Read in full: `mass_battle_v30.md`, `mass_battle_integration_v30.md`, `auto_manual_resolution_duality_v1.md`,
+`videogame_mode_spec.md`, `scene_combat_design_v1.md`. Index only: `military_layer_v30_index.md`. Not
+read: `mass_battle_flow_skeleton_v1.md`, `military_layer_v30.md`, the `_index` and `_infill` parts of
+`mass_battle_v30` (§12). These are intent and vocabulary; where they and the code differ the code is what
+plays.
+
+- **The design already has the inconclusive battle.** Mutual destruction is a draw with no territory
+  change; three bloodless turns end in a withdrawal that "neither side claims"; the strategic table has
+  `Partial`. R-03's `Drawn` restores something the description always had and the season seam dropped.
+  The ladder step for R-03 could as well be 3 as 4.
+- **The design's battle is a manager's battle.** A strategy declared each turn (assignments, formation,
+  tactic, split), a general's action each turn (rally, reinforce, stabilise, fight in person), three legal
+  points at which the player may enter, an aftermath scene with three choices, a named officer per unit
+  whose regard for the player moves with the orders he is given. The engine kept the physics of that
+  description and none of its decisions. F-MB-14 and F-MB-15 are therefore not new wishes: they are the
+  half of the design that was never ported. Step 4a's phase decider is the description's phase-lock rule.
+- **ARC-23 and SCN-14 are extractions of this document** (two-stage incapacitation of the general with a
+  one-turn stabilising window; a general in personal combat suspends command; mass battle pauses for a
+  unilateral duel and does not for a bilateral one). §13's reading stands: designed, not coded.
+- **"No character death from mass battle"** (ED-898, Jordan, 2026-06-01: the worst outcome is
+  incapacitation and capture). The shipped `scaled_by_degree` arm floors a body at 1 and agrees; the
+  `total` arm, which kills, is a control arm that contradicts a directive and should be labelled so at the
+  roster. Capture is the designed ending for a commander on a lost field and nothing writes it (§5.5).
+- **Levy cannot campaign.** The description confines levy to its home territory. The code has no such
+  rule, and the realm's preset armies are levy alone. Not adopted here (R-07 keeps levy as a line); named
+  for FA, because it decides whether an unbuilt realm can make war at all.
+- **Morale reset.** The description resets Morale between battles; directive d.1 (`ED-MB-0067`,
+  `ED-MB-0068`) replaced that with stance carried from lost fields, which is what the code does. R-22
+  (a win clears a row) is the description's concern (persistent morale snowballs) answered inside the
+  later ruling.
+- **Generalship.** "The general is the battle" was the description's axiom and was superseded for the
+  dice (ED-MB-0006). Its own note keeps Command for morale, formation and rout. §14's reading (Command
+  from the commander, into cohesion and not the pool) is that note.
+- **Two resolvers.** The mode specification resolves a zoomed battle by the full rules and a delegated one
+  by a strategic formula. The 2026-07-08 doctrine (one engine at every fidelity, with a witnessed middle)
+  superseded it, and the code follows the doctrine (R-28). The doctrine's calibration constraint (the
+  delegated and the played outcome agree in expectation on matched inputs) is satisfied by construction
+  when the played mode is the same call (step 4a) and is why F-MB-05's second loop must not become it.
+- **Housekeeping the description ordered and nobody did:** delete `halt_before_enemy` (May 2026); fill
+  `rally_check` (R-26).
+
+Nothing in the set reverses a finding. It moves two emphases: the manager half is a porting debt with a
+written specification, not an open design; and the squad scale has a design home in personal combat.
+
+### 18.3 The earlier audits (`.audit/`), read at their entry points only, re-verified where relied on
+
+| audit | what it found, in brief | today |
+|---|---|---|
+| 2026-07-26 Fable audit, findings register (headings and S1.1 read) | the law instrument red and unwired; a one-ulp float error zeroing an exchange; engagements past the fifth depth group dropped; `check_drift` re-keying one of ten maps; no regression oracle for the shipped configuration | instrument wired report-only and still red (CR-12); the degree and the pool floor now carry an epsilon (`resolution.py:101-120`, `orchestration.py:854-855`); truncation is now counted and still dropped, and the count never reaches the season (R-29); the re-key is fixed except for the three morale maps (F-MB-18, by run) |
+| 2026-07-08 gauge-architecture synthesis (first 26 lines) | a static cell count feeding the Lanchester density term; a super-linear melee architecture snapping every edge to a rout | `Unit.ncells` is still set once (`units.py:2872`) and read by `core/attrition.py:41` [not re-run]; the exponent is CR-12's subject |
+| 2026-07-22 stress test, README (first 26 lines) | which of two engines is live; field, not grid | closed by the port (`HANDOFF_MB.md` standing order) |
+| 2026-07-04 Cannae gauge audit, README (first 26 lines) | envelopment rows collapsing once per-cell mechanics were switched on | not re-verified; no season field has wings |
+| 2026-07-02 movement and pathing audit, README (first 26 lines) | wings going straight at the enemy | fixed in the engine's own record; not re-run |
+
+No proposal here makes code read either hidden tree.
+
+### 18.4 Reading disclosure for the added charges
+
+- `[READ IN FULL: .designs mass_battle_v30.md; mass_battle_integration_v30.md; auto_manual_resolution_duality_v1.md; videogame_mode_spec.md; scene_combat_design_v1.md; proposals/2026-10-29-army-phase5-design.md; proposals/2026-11-08-cr12-melee-attrition-design.md; proposals/2026-11-12-.../03_PC_loadout_and_carry.md (lines 28-107)]`
+- `[SKIPPED: .designs military_layer_v30.md, mass_battle_flow_skeleton_v1.md, mass_battle_v30_index.md and _infill.md, videogame_mode_spec_index.md — index of military_layer only; the lane ran out of reading budget]`
+- `[SKIPPED: the cross-cutting .designs set (campaign_architecture, campaign_modes, complete_systems_reference, throughlines_complete, engine_atlas, integration_proposal and the rest) — not opened]`
+- `[SKIPPED: proposals/2026-09-25-squad-engagement-concept-v5.md; proposals/mass_battle_fighting_withdrawal_v1.md; proposals/multiunit_envelopment_plan.md; proposals/pc_formation_system.md; proposals/weapon_physics_and_concentration_model.md beyond its head; 2026-09-25-squad-engagement-synthesis.md beyond its first 40 lines; 08_mass_battle_units.md beyond its recommendation table]`
+- `[SKIPPED: .audit — 58 files, about 870 KB across the five mass-battle entries; five entry files' first 26 lines and the Fable register's headings read; nothing else]`
+- `[SKIPPED: research tables R6, R2, R4 and REPO_MENTIONS in full — the rows cited above were read by search]`
+
+A second reader with a fresh budget should take the skipped design documents and the `.audit` entries; the
+findings above do not depend on them, and §18.2's "nothing reverses a finding" is a statement about the
+five documents read.
