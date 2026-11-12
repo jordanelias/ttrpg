@@ -175,4 +175,30 @@ Lane: code under `modules/mass_battle/`, `systems/` and `engine/`-adjacent oracl
 - **Conflicts / stale:** Retirement "29a-ms" is not recorded as done; the file still exists.
 - **Open items:** Whether `29a-ms` is open or abandoned.
 
+### systems/characters/sim/conviction.py
+- **What it is:** oracle code, 285 lines; per-Conviction Scar accumulation with thresholds 1/2/3+, season cap, Truth scaling, module-level state (PP-718 / PP-684 under `conviction_track_v1`).
+- **Status:** none (code). Oracle-only; one live-ish caller.
+- **Bears on:** CHAR, FI, WR (knots / threadwork scar source).
+- **Content that matters:**
+  - The roster is NOT defined here: `CONVICTIONS = descriptors.PURSUITS` (`:60`), read from `references/descriptor_registry.yaml:pursuit_roster` -> `engine/engine_params/descriptors.json` -> `engine.substrate.descriptors` (`:44-60`). A model single-owner chain, and the header records why: a hard-coded 9-name tuple plus `npe.py`'s different 8 made `knots.py`'s `conviction='Loyalty'` a silent magnitude-0 no-op (`:50-58`). `apply_conviction_scar` now raises on an unknown name via `descriptors.resolve_pursuit` (`:206`).
+  - Hard-coded rules: `SCAR_DESTABILISE=1`, `SCAR_SHIFT=2`, `SCAR_CRISIS=3`, `SCAR_SEASON_CAP_THREAD=1` (declared at `:70` but never read: the cap is enforced inline by `season == last_season`, `:211-220`, so the constant is dead), `CERTAINTY_SCALING = {0:-1,1:-1,2:0,3:0,4:0,5:+1}` (`:76-78`; "Certainty" axis renamed Truth per ED-IN-0075 but identifiers kept).
+  - State is module-level (`_conviction_state`, `:83`) with a `_store(world)` router that uses `world.convictions` if present; the season `World` has no such field (header `[ASSUMPTION]` `:17-20`), so under the season this state would be process-global and unseeded for save/load (cf. F-FI-07 for `knots.py`, which holds state the same way).
+  - Thread-source detection is a string test: `source.lower().startswith('thread') or 'witness' in source.lower()` (`:213`): the season cap fires on free-text wording, not on a typed source.
+  - Resonant/crisis flags are set (`:231-234`) but `ConvictionState.pending_belief_revisions` / `mark_belief_revision_pending` exist for a `beliefs` module that is retired (docstring `:13-27`, `systems/characters/__init__.py`); `mark_belief_revision_pending` therefore has no caller `[UNVERIFIED by grep; only knots.py and tests import this module]`.
+- **Reads / readers:** `systems/fieldwork/sim/knots.py:349` (late import, `apply_conviction_scar`); `engine/tests/test_knots_ed912.py:141-174` (tests); `references/module_contracts.yaml:232` and `registers/mechanics_index.yaml:167` name the file as the "PERSONAL piety_track's code". `engine/season` does not import it: the season's own scar/interior path is elsewhere (see F-CHAR-03 "the interior does not move", F-CHAR-04 "the scar runs away").
+- **Conflicts / stale:** docstring path `sim/personal/conviction.py` and `designs/personal/conviction_track_v1.md` (dissolved paths); "Cyclic dependency with sim/personal/beliefs ... co-defined in single commit" refers to a retired module. `module_contracts.yaml` registers it as a module code path but the season does not reach it: a registered-but-unreached oracle (candidate for F-CHAR-12 context: Layer-1's frozen `PersonInterior` is not built).
+- **Open items:** whether the season should own scar state (carrier) instead of module-level dicts; `SCAR_SEASON_CAP_THREAD` dead constant.
+
+### systems/overview/sim/ms_track.py
+- **What it is:** oracle code, 92 lines; Mending Stability world-track: clamp to [0,100], baseline decay -1 per year, `apply_ms_delta`.
+- **Status:** none (code; package docstring `PROVISIONAL`, retirement named as plan position `29a-ms`). Dead.
+- **Bears on:** WR, SE (Mending Stability clock).
+- **Content that matters:**
+  - Defines `MS_FLOOR=0`, `MS_CEILING=100`, `MS_BASELINE_DECAY_PER_YEAR=-1`, `SEASONS_PER_YEAR=4`, `MS_START=60` (`:41-52`) and two functions that mutate `world.clocks['MS']` (`:60-92`). `MS_START=60` records a Jordan ruling (2026-06-06) replacing 80 and the "60/72 mode split" (`:11-17`).
+  - Its dependency, the `game_state` module, "was deleted at `29b`"; "no caller passes a season `World` (which carries no `clocks`)" (`:27-29`). Verified by grep: no importer in `engine/`, `modules/`, `tests/`; only prose mentions (`engine/season/loop/matter.py:160` describes it as a prior "stored 0-100 scalar and yearly" model; `tests/valoria/test_flow_skeletons.py:345,414` mention `ms_track` seam as struck at plan position 27). So the current MS owner is `engine/season/loop/matter.py` (not read in this lane) and this file is an orphan with duplicate constants.
+  - `[DRIFT]` note about `accounting._ms_decay` (`:19-25`) is stale: `accounting` was retired at 29a.
+- **Reads / readers:** none.
+- **Conflicts / stale:** the clock described (a scalar MS with yearly -1 decay) vs `matter.py` (stock/lattice model; `hole_register.yaml:4932` "THE LATTICE COUPLING"). Whether the MS ruling `60` still holds in the live model is not answerable from this file. Delete candidate per its own package docstring.
+- **Open items:** retirement `29a-ms` pending; which carrier replaced `world.clocks['MS']` ("`33` decides the carrier").
+
 <!-- ENTRIES-NEXT -->

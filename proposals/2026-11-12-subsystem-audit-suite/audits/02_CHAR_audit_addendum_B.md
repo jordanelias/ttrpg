@@ -12,11 +12,23 @@ vocabulary and history, never as the reason a behaviour is correct (`CLAUDE.md` 
 
 ## B0. Verdict of the addendum
 
-(written at the end of the reading; see the foot of this section once filled)
+The first audit's verdict stands, and its account of the intent is half of the intent. Read whole, the
+design set says a person is ends, allegiances, relations with a ground, a history, a temper, a
+particular way of being moved, and a few wounds, and asks ten things of a chooser; four are built and
+the six that are not are the ones that make two people differ for reasons that are theirs (B3.2). The
+single largest obstacle the first audit named (the ranking reads the verb and nothing else) is
+confirmed from the design's side by a probe it did not run: the foils the design sets against each
+other choose alike, and the pair it calls opposed in method is the most alike of the four rulers
+(F-CHAR-18). Three things the first audit could not see without the design: the cast registry already
+authors, on eighteen persons, the fact that should make each of them reachable in a different way,
+and nothing reads it (F-CHAR-16); the first audit's own scar cap leaves every person in crisis by the
+third season, because the trigger is a tally where the design had a rare wound (F-CHAR-17, measured at
+two seeds); and four in five of the designed skill effects are specialisations that the DICE lane's
+capability map can carry as rows once their conditions are keys (B4 (b)). The `challenge` claim is
+settled: the row has no `individual` conjunct (B1.1). One survivor for Jordan, unchanged. Six
+proposals; twenty-four resolutions.
 
 ## B1. What was read
-
-(appended as the reading proceeds; the final table is at the end of this section)
 
 ### B1.1 The `challenge` row, settled
 
