@@ -781,7 +781,7 @@ draws.
 `proposals/22_HAPPENINGS_B_the_throne_is_never_stranded.md`.
 
 ### D-20 · Does winning a battle take the land? · MB, FA
-**ANSWERED** (A-57, Jordan, supersedes the ladder's taken-answer): land passes if and only if the aggressor marched in an effort to take land and won; not for a neutral-location battle, a defender's win, or a march with another purpose
+**ANSWERED** (A-57 and A-58, Jordan): on a march into territory another holds, only an aggressor win transfers the land and its seats; a draw or a defender's win leaves the defender holding; neutral ground is outside the rule; aggression is read from the march, with a casus belli as context
 
 
 **The situation.** As built (and per #453), winning a field gives presence; title passes only when someone

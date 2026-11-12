@@ -25,7 +25,7 @@
 | D-17 | The south in the Secession War | ANSWERED (A-17) — A: fought, ranked third, relegated despite it |
 | D-18 | Who holds Varfell's deed | ANSWERED (A-18) — Follows D-17 A: realm-wide, at the third confidence |
 | D-19 | The crown when the line fails | ANSWERED (A-19) — B: the deed race |
-| D-20 | A won battle and land | ANSWERED (A-57) — land passes iff the aggressor marched to take land and won (neutral ground, a defender's win, another purpose: nothing) |
+| D-20 | A won battle and land | ANSWERED (A-57, A-58) — only an aggressor win on a march into held territory transfers land and seats; a draw or defender win leaves the defender holding |
 | D-21 | Whose word ends a war | ANSWERED (A-20) — B: the seats that wage it |
 | D-22 | A decree | ANSWERED (A-21) — A: proclaimed |
 | D-23 | Orders up the chain | ANSWERED (A-22) — B: command |
