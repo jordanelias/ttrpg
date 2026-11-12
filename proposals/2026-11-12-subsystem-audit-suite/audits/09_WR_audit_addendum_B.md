@@ -90,9 +90,12 @@ fixtures), by Event kind per season. No new run.
 `matter.lapsed` occurs in exactly one season of each run, the sixth (per-season `[0, 0, 0, 0, 0, 8]`,
 `[0, 0, 0, 0, 0, 8]`, `[0, 0, 0, 0, 0, 7]`), and `tenure.closed` is `[0, 0, 2, 2, 2, 27]` at seed 0 and
 `[1, 1, 2, 3, 3, 27]` at seed 2. The shipped terms are `oblige_term = 4` and `docket_lapse = 4`
-(`data/fixtures.py:1104`, `:1168`), so both spikes fall where a term wound in season 1 runs out. That the
-27 closures are matured `oblige` terms is an inference from the fixture value and the season index, as the
-first audit marked it; it was not traced to the closing Event's causes `[UNVERIFIED]`.
+(`data/fixtures.py:1104`, `:1168`), so both spikes fall where a term wound in season 1 runs out. The
+first audit left "the 27 are matured `oblige` terms" unverified. It is still not traced to the closing
+Event's causes, but the three seeds make a natural control: `duty.taken` in season 1 is 26 at seed 0, 26 at
+seed 2 and **0** at seed 1 (its duties are taken in season 2), and the season-5 spike is 27, 27 and
+**absent** (seed 1 reads `[1, 2, 3, 5, 1, 4]`). The inference is corroborated; `[UNVERIFIED]` narrows to
+the one extra closure per seed.
 
 **Claim.** In the shipped realm a matter is nine times likelier to end by expiry than by judgment (23
 lapsed against 3 determined over the three runs), and the first closures of any size arrive at the season
@@ -173,7 +176,44 @@ a `situations` block composed on the existing World-first stampers, and a per-se
 
 ### 3.5 Does character change the story? The ablation (apparatus E7)
 
-<!-- ABLATION -->
+Kreminski et al.'s one transferable experiment (E11.Q3): disable the system that is supposed to make
+stories and see whether the stories get worse. Their Prom Week arm replaced social reasoning with random
+choice. The tree already owns the equivalent control: `harness/decision_spread.py::apply_control` gives
+every pursuit-holder the realm-mean pursuits and the realm-mean conviction, with `build_realm(goals=False)`
+and `no_goals()` so no authored ambition is seated or read. `wrb_ablate.py` (§9 EB-01) runs the season loop
+under that control and under the shipped build and reads both with the existing instruments. Control on the
+probe itself: the shipped arm at seed 0 reproduces the first audit's season-1 hash `bacd687f…` and its
+1,703 acts with 898 refused.
+
+| reading, two seasons | seed 0 shipped | seed 0 flat | seed 1 shipped | seed 1 flat |
+|---|---|---|---|---|
+| acts · executed | 1,703 · 805 | 1,639 · 760 | 1,706 · 830 | 1,655 · 826 |
+| executed cross-person share | 12.5% | 14.5% | 11.8% | 13.9% |
+| executed acts at cross depth 3 or more | 36 | 15 | 27 | 37 |
+| consequence chain ends, depth 2 or more · 3 or more | 29 · 1 | 52 · 1 | 27 · 0 | 35 · 7 |
+| `utter` + `commit` executed | 194 | 31 | 186 | 72 |
+| `oblige` executed | 26 | 168 | 0 | 27 |
+| `march` executed · fields met (`lost` + `unopposed`) | 3 · 3 | 7 · 7 | 3 · 3 | 23 · 23 |
+| deaths · `matter.determined` | 0 · 0 | 0 · 0 | 0 · 1 | 1 · 0 |
+| distinct executed-verb sets over 83 actors (largest shared) | 80 (2) | 66 (11) | 79 (2) | 80 (3) |
+
+**Reading (F-WR-16, degrades narrative).** Two seeds and two seasons are a direction and not a measure,
+and the arm removes two things at once (authored goals and per-person spread), so nothing here is a balance
+claim. The direction is plain at both seeds: **with every person flattened to the realm mean and no
+authored ambition, no story reading falls, and the world-changing acts rise.** The executed cross share is
+higher flat at both seeds; consequence chain ends are higher flat at both seeds; marches that reach a field
+go 3 to 7 and 3 to 23; the only death in the four runs is in a flat arm. What character visibly buys in
+the shipped arm is 186 to 194 executed `utter` and `commit` acts (23% of everything executed), the
+declaration of ambitions: beats by the definition of §3.1, and beats that change no one else's options.
+The one reading that moves the expected way is the spread of what persons did (66 distinct sets against
+80, eleven persons sharing one set against two) and it moves at one seed only.
+
+Two explanations fit and the runs cannot separate them: the instruments are blind to what character
+contributes (the first audit's F-WR-03, again), or the authored goal layer spends the scene budget on
+declaring and not on doing. Either is a defect; the second is CHAR's subject and is cross-listed to
+`02_CHAR_goal_lean_on_its_own_question.md`. **Falsifier:** a reading on which the shipped arm exceeds the
+flat arm at three seeds. None of the nine readings above does at two. Step 7 of §3.8 makes the arm
+standing so every later instrument is asked this question first.
 
 ### 3.6 How the world should generate drama when nobody is watching
 

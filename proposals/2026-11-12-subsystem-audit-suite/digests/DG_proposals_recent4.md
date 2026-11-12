@@ -468,3 +468,218 @@ Lane: proposals dated 2026-09-20 or later, and undated ones. Note: the assignmen
 - **Conflicts / stale:** R1 "greenfield" and R2 "already executable" both overturned (:377-389); `key_substrate_v30.md` carries two conflicting status lines (:393-399). Many "NOT in code today" statements are dated 2026-08-31 and are now false for the season (Person/Tenure/Claim exist in `engine/season/state/`).
 - **Open items:** Slate/Light Function question; ED-IN-0200/0201 cross-cite and close (answered).
 
+### proposals/_session_provenance/2026-08-31-architecture-reconciliation/adjudications/F2_keys_vocabulary.md
+- **What it is:** Fable-5 adjudication of keys, naming and vocabulary: the Key substrate as executed, the key namespace (55 types), ED-IN-0200 as a ruling, a completed collision register, naming rules, closed-set audit; 2026-08-31.
+- **Status:** none stated. Reading: historical; its Key-substrate subject is RETIRED (ED-IN-0232); the collision register and closed-set audit remain a useful vocabulary check.
+- **Bears on:** CORE, PROCESS, CHAR, PC, MB.
+- **Content that matters:**
+  - Key substrate summary (keys.py enums AXES/ROLES/SCALES, 8 invariants, KeyLog content hash, TickScheduler caps required with no default) (:32-128) - all retired.
+  - ED-IN-0200 ("key contracts and module contracts explicitly defined in a centralized hierarchical manner") answered by a spec: levels GAME > SUBSYSTEM > MODULE > KEYS/STATE; three registries stay separate with a declared parent; a `export_contract_tree.py --check` gate; DONE only when the port or `composition.py` reads the export (:245-332).
+  - Collision register: `hold` has six senses (Tenure kind, mood HOLDS, predicate form, coercion quantity, mass-battle stance at `config.py:269`, process HELD), `stance` five (Person.stance, mass-battle unit stance, NPE opinion scalar 1-5, referent kinds, salience weight), `witness` five, `kind` nine; rule: casing is the namespace test (dotted lowercase = registry id, Capitalized = record type, lowercase = field/kind/verb, UPPERCASE = step/phase) (:341-376, :206-241).
+  - Naming overturns: StateChange modes `mint/alter/efface` -> `create/alter/destroy`; `Tenure` kept with a mandatory qualifier; design `Event` IS the Key; the compendium's five-band degree ladder overruled by the live four-band `degree_from_net` (:384-400, :457).
+  - Closed sets: a set is closed when code raises on a non-member (13 Convictions and substrate enums are; most others are prose) (:483-489).
+  - Escalations: which design line (greenfield-v2 Entity/Tag/Post/Gauge vs ideal-v2 Person/Rung/Office/Site/Tenure) is the vehicle for ED-IN-0200/0201; whether to add Disaster/Costed Success bands; `piety_track` owner; F6/G-30 world dying or misunderstood; "no commander, no battle" gate vs penalty (:542-561).
+- **Conflicts / stale:** `Tenure` and the Person/Rung/Office/Site vocabulary later became the live Layer-2 state (engine/season), settling escalation 1 de facto. Degree ladder is still four-band in code.
+- **Open items:** 5 escalations, most now answered by the built season; "no commander, no battle" gate reading (docket 11 M22/M27 related).
+
+### proposals/_session_provenance/2026-08-31-fable5-review/MANIFEST.md
+- **What it is:** Manifest of the Fable-5 adversarial review of PR #343 (files, line counts, the headline numbers); 2026-08-31.
+- **Status:** "PROVENANCE (2026-08-31) ... Nothing here is a design document and nothing here ratifies." Reading: historical.
+- **Bears on:** PROCESS.
+- **Content that matters:** 34 findings filed, 33 carried, 13 corrections across 12 findings (2 from Jordan, 4 from the independent critic, 7 self-caught); the reviewer's own re-check caught none of the four load-bearing breaks (:19-28). `CODE_SHAPE_ABSTRACT.md` indexes 46 primitives, 44 closed vocabularies, 64 functions, 214 parameters, 145 invariants, 58 open items, and 30 objects drifting across 97 versions (:16).
+- **Conflicts / stale:** FABLE_FINDINGS contains four overstated claims later broken, kept uncorrected on purpose.
+- **Open items:** none.
+
+### proposals/_session_provenance/2026-08-31-fable5-review/merged210.md
+- **What it is:** Writing-agent fragment: review section 2.10 on A10/A12 - "there is no Tenure relation in the design: nothing can hold anything".
+- **Status:** none (working fragment). Reading: historical; the argument became the live `Tenure` primitive.
+- **Bears on:** FA, SE, CORE.
+- **Content that matters:** A faction is a proposition plus commitment map, owns nothing; `holdings` on a person is dead state; no verb moves property (`confiscat/enfeoff/seize` = 0 hits); Jordan: "A faction at a territory level may HOLD a territory, but a territory is NOT a territorial faction" (:46-52). Fix: `Tenure := (subject, object, since, conferrer, degree?)` with `confer`/`revoke` reused, `commit` kept separate (:65-70). A12's original filing (containment tree immutable) was wrong and recorded as such (:7-17).
+- **Conflicts / stale:** none now (built).
+- **Open items:** none.
+
+### proposals/_session_provenance/2026-08-31-fable5-review/new6.md
+- **What it is:** Writing-agent fragment: the ten-change ranked list for section 6 of the review (`mint`/`efface`, Tenure, `principals` query, matter-event generator, Allowance, need-as-claim, commutativity on the field, eviction, one-line repairs, typing unifications).
+- **Status:** none. Reading: historical (the "after" of the section 6 renumbering).
+- **Bears on:** CORE, FA, SE, WR, CHAR.
+- **Content that matters:** `mint`/`efface` modes add birth, building, founding, faction founding and purge in one primitive (:8-41); `principals(f, n)` = members with address in n ranked by commitment degree x raisable backing, deposition needs no verb (:87-111); `season_factor` must be declared a per-season DRAW to give the world a non-subtractive channel (:113-133); one `Allowance` primitive replaces `capacity(date)`/`seat_items` (:135-146); "a need is a claim" (:148-158); eviction by clock quantities only (:173-183); transfer needs `stores(hearth(giver)) >= amount` (:185-195).
+- **Conflicts / stale:** StateChange modes later renamed `create/alter/destroy` by F2; `principals` became `faction_q.head` (which returns None in realms per the arc plan).
+- **Open items:** none.
+
+### proposals/_session_provenance/2026-08-31-fable5-review/old6.md
+- **What it is:** Earlier seven-change version of the same section 6 ranking (before the Tenure and principals additions).
+- **Status:** none. Reading: historical.
+- **Bears on:** PROCESS, CORE.
+- **Content that matters:** Same changes minus Tenure/principals/matter-event generator; shows the pre-merge ranking (`mint`/`efface` rank 1, Allowance rank 2, need-as-claim rank 3) (:5-63).
+- **Conflicts / stale:** superseded by `new6.md` and the deliverable.
+- **Open items:** none.
+
+### proposals/_session_provenance/2026-08-31-fable5-review/sec1.md
+- **What it is:** Writing-agent fragment: section 1 verdict of the review (one-page central finding, trajectory test, where the design is a direct hit, tier counts).
+- **Status:** none. Reading: historical.
+- **Bears on:** CORE, FA, WR, CHAR.
+- **Content that matters:**
+  - Central finding: the #343 design has rich vocabulary for changing the state of things that exist and almost none for changing which things exist or who holds them; the only five existence-changing operations are all decider-free (death, de-individuation, claim eviction, individuation, holdings moving on death) (:21-44).
+  - A Proposition cannot be created by any route, so the flagship emergence claim (a faction forms from a physical fact) is false as written (:46-70).
+  - Trajectory test: of ten transitions for Jordan's two arcs, three work (lose/gain office; rule another through belief); fixes bring it to nine of ten; occupation change remains (:73-102).
+  - Direct hits: epistemics layer, the sitting and stasis ladder, one-order-many-executors, vacant-allocator semantics, option-removal inversion (:129-151). `choose` has no World, so the only way to move another person's act is to change his belief (:106-116).
+- **Conflicts / stale:** all 2026-08-31 absence claims; the season now has `establish/found/build/confer` verbs.
+- **Open items:** occupation/profession.
+
+### proposals/_session_provenance/2026-08-31-fable5-review/throughlines/THROUGHLINES_BRIEF.md
+- **What it is:** Brief (v2) naming twelve design-and-code throughlines D1-D12 of the 2026-08-31 session.
+- **Status:** none; v2 supersedes v1 (which was about the review method). Reading: historical; D3-D6, D9, D12 are still the shape of the live engine.
+- **Bears on:** CORE, FA, CHAR, FI, WR, GO.
+- **Content that matters:**
+  - D1 existence and tenure were the two registers the design could not touch; D2 one edge primitive (`Tenure`) spelled three times, `until?` makes a revoked tenure arguable; D3 power is a query never a field, the leader query must take an OBSERVER (:7-34).
+  - D4 the partition: peninsular human society is changed only by a character's choice, everything else (weather, non-peninsular, metaphysical substrate) by event; a plague may kill bodies but not efface a settlement, which "still legally exists until an office strikes it from the roll"; 21 of 26 impact types are social (:36-50).
+  - D5 the world is in flux: `condition <- clamp(condition + sum tending - wear, 0, 1)`, untended it falls and verbs leave; D6 `verbs(site, rung)` is world truth read only by `resolve`, `opening_set(person, view)` is belief inside `choose` so a person may attempt a verb the world already removed (:51-67).
+  - D8 enforcement-by-omission degrades to convention in GDScript: no live world state behind a global, every resolver-side query takes `World` first; D9 one act per person at every rung, an office's throughput is its establishment; D10 cohorts must act or the politics is elite-only; D12 ids not pointers (Godot has no cycle collector) (:77-114).
+  - Closing: 108 of 123 proposal docs over 200 lines were cited nowhere; every false claim the session produced was an absence claim (:118-124).
+- **Conflicts / stale:** none material.
+- **Open items:** none.
+
+### proposals/_session_provenance/2026-08-31-fable5-review/throughlines/sweep.py
+- **What it is:** 38-line Python script counting proposal `.md` files over 200 lines and how many are cited by three reference surfaces (SUP, REV, v2).
+- **Status:** none. Reading: dead provenance script; reads `proposals/2026-08-31-ideal*` files that may not exist now.
+- **Bears on:** PROCESS.
+- **Content that matters:** Citation test is `txt.count(path) + txt.count(basename)` (+ `NN:` locator regex for the from-scratch suite) (:29-33); prints CITED/UNCITED (:35-38). Proxy for coverage that the manifest itself says "citation count is not coverage".
+- **Conflicts / stale:** hard-coded paths of the 2026-08-31 ideal suites.
+- **Open items:** none.
+
+### proposals/_session_provenance/2026-08-31-fable5-review/tier1add.md
+- **What it is:** Writing-agent fragment: review sections 2.9-2.12 (A9 faction leader, A10 dead `holdings`, A11 "investigator is not a seat", A12 immutable containment tree).
+- **Status:** none. Reading: historical.
+- **Bears on:** FI, FA, CORE, CHAR.
+- **Content that matters:** A9 fix `principals(f, n)` as a derived query (:25-34). A11: field investigation is one sentence (#343 `:1715-1717`) with no verb, cost, obstacle owner or resolution path; the fix is an ordinary `investigate(person, question, subject)` act whose resistance pool is the concealment, output claims deposited by `witness` with source firsthand (:70-98) (the detective-lineage seat). A12: polity absorption fails on the tree not the faction; "faction absorption is shipped and correct (a merger is members of A committing to B)"; do not add a merge verb (:100-137).
+- **Conflicts / stale:** the A11 gap is what `examine/research/surveil/interview/reconstruct` rows later filled.
+- **Open items:** none.
+
+### proposals/_session_provenance/2026-08-31-fable5-review/v2/D2_PROPOSAL.md
+- **What it is:** A proposal resolving D-2 (the act economy): one act per person per season, universally; an office's throughput is its establishment's acts.
+- **Status:** "This is a PROPOSAL with its alternative stated, not a ruling." Reading: historical; the one-act-per-person rule is also in FINDINGS_DIGEST; MANIFEST notes `2026-08-30-fixes/02_the_act_economy.md` had already reconciled it.
+- **Bears on:** CORE, CHAR, FA.
+- **Content that matters:** "Act" does two jobs (personal attention vs institutional throughput); a Duke takes one act (`dispatch`) and thirty-five named people each spend theirs; the cohort exploit (individuate to farm acts) prices itself into content: eleven people who may refuse; `seat_items` and `capacity(date)` are one quantity seen from two sides (:14-81). Alternative (several acts for an office-holder) stated fairly and not recommended (:83-95). Unsettled: establishment size, who authors the first, upkeep, banking unspent acts (recommend no) (:97-103).
+- **Conflicts / stale:** the shipped loop uses `scene_budget` (default 5) per person per season with an office bonus (`budget.py`), a different economy than "one act".
+- **Open items:** establishment size/upkeep.
+
+### proposals/_session_provenance/2026-08-31-fable5-review/v2/F6_RULED.md
+- **What it is:** Jordan's ruling that the world is "in flux" (neither dying nor misunderstood), worked out as `wear` and as ambition-as-commitment.
+- **Status:** none (a "RULED BY JORDAN" worked note, quoting his words). Reading: historical record of a live ruling; `wear_per_season` is in the season fixtures/rosters.
+- **Bears on:** WR, SE, CHAR, CORE.
+- **Content that matters:** Jordan: "If the world is not tended to by anyone, it will die. If it is tended to by everyone, it will thrive. What people think is the best way to tend to the world ... and their ambitions ... drive conflict" (:3-5). Consequence 1: act-only condition cannot say this; need `condition <- clamp(condition + sum deltas - wear(kind), 0, 1)` with `wear` an authored per-site-kind constant (:16-47). Consequence 2: competing tending-doctrines are OUGHT Propositions with intersecting `when` intervals (no new object); an ambition is an unsatisfied `commit` Tenure to an OUGHT Proposition about the holder's future (matches `goals.yaml` ambitions that drive `need` questions) (:66-92).
+- **Conflicts / stale:** the `wear : restoration` ratio sets the difficulty curve and "no number in this design has been measured" (:111-113); docket 11 records `wear_per_season` rates as "invented values the row records for Jordan to correct" with `dwelling: 0` control.
+- **Open items:** wear tuning.
+
+### proposals/_session_provenance/2026-08-31-fable5-review/v2/MANIFEST.md
+- **What it is:** Manifest of the v2 "idealized system rebuilt" session files.
+- **Status:** "PROVENANCE (2026-08-31) ... Nothing here is a design document." Reading: historical.
+- **Bears on:** PROCESS, CORE.
+- **Content that matters:** ARCH_CORE brief received 12 FATAL, 35 MAJOR, 27 MINOR findings, all accepted; the corpus sweep found 108 of 123 proposal docs over 200 lines cited nowhere and four mechanisms reinvented; the partition applied to the event deck found 21 of 26 impact types social, ~9-11 of 58 cards event-legal (:6-30). F5 (off-board polities) ruled wrong then overturned by Jordan (:12).
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
+### proposals/_session_provenance/2026-08-31-fable5-review/v2/ARCH_CORE.md
+- **What it is:** Fable-5 synthesis brief "the idealized shape, v2": three carriers (Person, Node, Office), one edge (`Tenure`), one act (`touches` with modes read/alter/exclude/mint/efface), derived-not-stored aggregates, three signatures with a new `Sensation`, a three-barrier loop; 2026-08-31.
+- **Status:** none; MANIFEST says it "did not survive: 12 FATAL, 35 MAJOR, 27 MINOR, all accepted"; `REVISIONS.md` is the authority. Reading: historical (superseded by REVISIONS and the deliverable).
+- **Bears on:** CORE, CHAR, FA, WR.
+- **Content that matters:** Site is matter held by a Node, not a carrier; Faction = Proposition + `commit` Tenures (entirely derived) (:34-44); `Tenure(subject, object, kind in hold|commit|contain|succeed|tie|knot)` (:46-70); `Sensation` is a closed record of exactly four need scalars computed in P2 and never stored (:111-123); loop = B1 CALENDAR, B2 MATTER, M1 DELIBERATE (per person), B3 RESOLVE, M2 RECKON (per person) (:158-173); eviction on `confidence_live x recency` only (:175-178). May-not list: D-2, conferral basis, `stores` denominator, S19, Coherence-0, off-board polities (:9-11).
+- **Conflicts / stale:** the shipped loop has seven steps (CALENDAR, MATTER, DELIBERATE, RESOLVE, ENCOUNTER, WITNESS, CENSUS); `Node` later renamed `Rung`.
+- **Open items:** carried-open list at :186-189.
+
+### proposals/_session_provenance/2026-08-31-fable5-review/v2/FORKS.md
+- **What it is:** The six reserved forks (F1-F6) worked for the "ideal system"; each a proposal with cost and falsifier.
+- **Status:** none. Reading: historical; MANIFEST notes F5 was ruled wrong here and Jordan overturned it (partition: Altonia is an event source).
+- **Bears on:** FA, WR, SE, CORE.
+- **Content that matters:** F1 conferral basis dissolves into `Office.conferral` per-office (person-rooted warbands vs office-rooted magistracies) (:16-37); F2 `stores` becomes `map[MatterKind -> quantity]` (grain vs silver; coin cannot be eaten) (:41-69); F3 rootless cluster vacancy: conferral may name the office's own judging set (:73-91); F4 Coherence-0 = de-individuation by another cause (:95-108); F6 world dying vs misunderstood stays Jordan's (later ruled "in flux") (:133-142).
+- **Conflicts / stale:** F5 (generate off-board persons) overturned by Jordan; F6 ruled in `F6_RULED.md`.
+- **Open items:** F3's empty-judging-set floor unspecified.
+
+### proposals/_session_provenance/2026-08-31-fable5-review/v2/THE_PARTITION.md
+- **What it is:** Jordan's partition rule for what drives a state change (2026-08-31) and its extension (creation and deletion are state changes).
+- **Status:** none (a worked statement of a Jordan ruling). Reading: historical record of a live ruling; also in the arc plan C4 (M16 fourth motion refused).
+- **Bears on:** CORE, WR, FA.
+- **Content that matters:** Jordan: peninsular human society (polities, institutions, offices, organizations, occupations, religion, settlements, marriage) changes only by a character's choice; everything else (weather, non-peninsular like the Altonian Empire, tears in the metaphysical substrate) is "an event that acts upon the game world" (:2-6). `StateChange := (subject, mode in mint|alter|efface, driver in Act|Event)`; the subject picks the driver (:85-92). Worked case: a plague kills bodies (event) but may not efface a settlement; the village empties and legally exists until an office strikes it from the roll (:104-118). An event may not change standing, regard, commitment or grievance (:60-64).
+- **Conflicts / stale:** reverses FORKS F5; "events resolve first in their own barrier" (:136).
+- **Open items:** edge subjects (plague/famine/heresy); the event/act balance is unmeasured (:66-72).
+
+### proposals/_session_provenance/2026-08-31-unified-code-shape/MANIFEST.md
+- **What it is:** Provenance manifest for the "ideal unified code shape" session: cites.json, cites2.json (harvested `path:line` claims), dossier.txt (not present in this assignment).
+- **Status:** "PROVENANCE. Working files, committed unedited ... Nothing here is a design document and nothing here ratifies." Reading: historical.
+- **Bears on:** PROCESS.
+- **Content that matters:** Every citation of the 14 PR #345 trace logs was checked by printing the cited lines beside the claim; prior citations had drifted by 2-20 lines and one was fabricated outright (:24-29). A 42 MB checkout was deliberately not committed (:17-22).
+- **Conflicts / stale:** `dossier.txt` (285 KB) listed but not in the assignment [UNVERIFIED present].
+- **Open items:** none.
+
+### proposals/_session_provenance/2026-08-31-unified-code-shape/cites.json
+- **What it is:** Machine data, one line, 264 KB: 493 records `{log, logline, cited, ln, ln2, claim, resolved, how}` harvesting `path:line` citations from PR logs (e.g. A337-001 `ledger.py:30` TAG_KINDS).
+- **Status:** none (data). Reading: historical; read by nothing (grep of code not run).
+- **Bears on:** PROCESS.
+- **Content that matters:** [PARTIALLY READ: structure and first record only; the file exceeds the Read tool's 256 KB limit and is a citation-harvest dataset] First record: PR337 log line 59 cites `systems/settlements/sim/ledger.py:30`, the closed 5-family `TAG_KINDS` {Precedent, Grudge, Debt, Reputation, Leverage}.
+- **Conflicts / stale:** line numbers stale by construction.
+- **Open items:** none.
+
+### proposals/_session_provenance/2026-08-31-unified-code-shape/cites2.json
+- **What it is:** The second, widened harvest of the same 493 citation records plus `path` and `actual` (the real source line) fields.
+- **Status:** none (data). Reading: historical.
+- **Bears on:** PROCESS.
+- **Content that matters:** [PARTIALLY READ: structure and first record only; 315 KB exceeds the Read limit] Adds `actual: TAG_KINDS = {"Precedent", "Grudge", "Debt", "Reputation", "Leverage"}` for the first record.
+- **Conflicts / stale:** as cites.json.
+- **Open items:** none.
+
+### proposals/_session_provenance/2026-09-01-holonic-architecture/00_MANIFEST.md
+- **What it is:** Provenance manifest for the 2026-09-01 holonic-architecture session (six runs: sweep, census, lanes A-D by `valoria-critic` Read/Grep/Glob).
+- **Status:** none (evidence, not findings; "raw lane output, transcribed"). Reading: historical.
+- **Bears on:** CORE, PROCESS.
+- **Content that matters:** Three lanes independently killed the first revision's central proposal, the "wrapper" (an object that checks direction/target of Key crossings): the Event has no target, the direction rule contradicts T6 and containerless venues, wrapper placed on the code tree while the rule is on the world tree (:38-54). Census: 27 items, not 24 (:53). Transcriptions not byte-exact; nothing cited as a measurement without re-running (:80-84). Notes the directory exists despite CLAUDE.md §0's rule because Jordan asked (:9-15).
+- **Conflicts / stale:** the "wrapper" concept is deleted (ARCHITECTURE.md §44 post-mortem).
+- **Open items:** ROLE-to-SUBSYSTEM ordering (one role `contest`, three providers?) left unresolved (:62-64).
+
+### proposals/_session_provenance/2026-09-01-holonic-architecture/01_SWEEP_337_352.md
+- **What it is:** Sweep of the PR chain #337-#352 in six phases (measure, greenfield and its collapse, from scratch, reconciliation, unified shape, execution and its audit).
+- **Status:** none. Reading: historical; useful as an index of what the chain retracted.
+- **Bears on:** CORE, PROCESS, CHAR.
+- **Content that matters:** #337 headline: Valoria is "disconnected" not under-designed, 15% of classified things are correct code with no caller (:10-13). #351 implemented the shape and drove it with 78 blind-authored cases, but #352 showed the case layer never executed (verdicts keyword lookups; one misplaced classifier file reuses all 50 arc ids and flips ~40 verdicts); #352 retracted four of its own charges (:42-48). Retraction table: stored-primitive foundation, MATTER-advanced `Record.stage`, L3 ratchet bound twice, "8 arcs -> 3", "40% -> 16%" refusal rate (:50-62). "A crude instrument systematically overstates a strict design's cost" (:64-67). `m1_acceptance` 0/7 throughout (:76).
+- **Conflicts / stale:** all numbers dated 2026-09-01.
+- **Open items:** fix case loader, assertions for unasserted passes, declared capability tags instead of regex routing (:71-75).
+
+### proposals/_session_provenance/2026-09-01-holonic-architecture/02_CENSUS_BRIEF.md
+- **What it is:** The dropped-rulings census brief: a thing is dropped if decided/ruled in #337-#352 and a later document contradicts, restates open, omits or promises-and-fails to carry it; field 4 (name the later file/section) is the test.
+- **Status:** none. Reading: historical.
+- **Bears on:** PROCESS.
+- **Content that matters:** 27 items: 14 folded in, 3 refused, 1 struck, rest recorded; 16 candidates failed field 4; "most were lost at a section that RESTATES its neighbours"; argument for graded rows over prose lists of open items (:36-45). "Damage removes an option" was carried under another name (a band gate on `condition`) (:20-24).
+- **Conflicts / stale:** a cited sentence found out-of-chain and withdrawn (:32-34).
+- **Open items:** none.
+
+### proposals/_session_provenance/2026-09-01-holonic-architecture/03_LANE_A_fidelity.md
+- **What it is:** Lane A (chain fidelity and factuality) critique of the holonic proposal.
+- **Status:** none. Reading: historical.
+- **Bears on:** PROCESS, CORE.
+- **Content that matters:** Findings F1-F16: census miscounts itself (27 not 24); an item quoted "eleven of twelve work" appears nowhere (source: "FIVE OF TWELVE WORK TODAY"); the act budget was RULED "THE ACT BUDGET IS ~5, NOT 1" by Jordan (2026-08-31, in #351's `02_SCENE_BUDGET_RULING.md`) and the proposal missed it (:18-23); "nothing in MATTER crosses a rung boundary" is contradicted by the head (MATTER touches persons) (:26).
+- **Conflicts / stale:** this ruling (act budget ~5) is the origin of `scene_budget`=5 in fixtures.
+- **Open items:** PR bodies #338/#343 not on disk (UNVERIFIED).
+
+### proposals/_session_provenance/2026-09-01-holonic-architecture/04_LANE_B_architecture.md
+- **What it is:** Lane B (code architecture: keys, wrappers, modularity, ownership, primitives) critique.
+- **Status:** none. Reading: historical.
+- **Bears on:** CORE, PROCESS.
+- **Content that matters:** The ONE RULE (aggregate up / refraction down) fails completeness: containerless venues, "scope enumerates executors not places", and WITNESS fan-out global; the wrapper sits on the code tree while the rule is on the world tree; no in-chain record carries a rung target; the spine is not a strict tree at ROLE and KEY TYPE edges; `phase:` must be a set (Date written in two or three steps) (:18-26). Needs a third clause for ended edges (live edges `until == null`) (:26). Did not break: one type with eight kinds, the barrier/clock argument (:28-30).
+- **Conflicts / stale:** wrapper deleted.
+- **Open items:** travel legs have no ownership row (:51).
+
+### proposals/_session_provenance/2026-09-01-holonic-architecture/05_LANE_C_logic.md
+- **What it is:** Lane C (logic, sequence, flexibility, emergence) critique.
+- **Status:** none. Reading: historical.
+- **Bears on:** CORE, PROCESS.
+- **Content that matters:** MATTER is not rung-local (subsistence, death writes on another person's rung, travel legs); CALENDAR is per-holder; CENSUS and WITNESS stage 2 are per-owner maps; the head permits within-tick reaction bounded by `max_depth`, not barriers; the termination debt is cross-season; "the scope rule is applied once and waived five times"; "the proposal's REFUSALS mostly stand; its REASONS mostly do not" (:14, :18-34).
+- **Conflicts / stale:** none.
+- **Open items:** the "no reaction inside a season" tension stated in ARCHITECTURE §40.2.
+
+### proposals/_session_provenance/2026-09-01-holonic-architecture/06_LANE_D_foldin.md
+- **What it is:** Lane D adjudication of the 27 dropped rulings for fold-in (verdicts, set-level conflicts, dependency order, budget).
+- **Status:** none. Reading: historical.
+- **Bears on:** CORE, FA, SC, CHAR.
+- **Content that matters:** 23 of 27 confirmed real; item 16 (twelve argument faults) STRIKE; items 23 (hook grammar: guaranteed fire at threshold vs "may never produce an outcome") and 27 (Parliament rider) REFUSE; `transfer` needs a `stores >= amount` precondition (otherwise "the second claimant on an emptied granary gets a different Event" is false); scar written at WITNESS breaks L4 (lawful: RESOLVE ACTS class `social: true`); `confer` eligible when the holder-Proposition has zero live `commit` edges (memberless faction); person roster: adopt the shape not the number (T3 needs a person with zero `hold` Tenures) (:14-28). Order 14 -> 17 -> 6 -> 7 -> 13 -> 19 -> 21 -> 11 -> 20 -> 15 -> 18 -> 22 -> 24 -> 9/10 (:40). The one thing: write `Event :=` and map it onto the Key (:50-53).
+- **Conflicts / stale:** Key premises retired.
+- **Open items:** petition-spray allowed by a later Jordan ruling (:60-61).
+

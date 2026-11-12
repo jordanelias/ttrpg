@@ -284,3 +284,160 @@ Shared shape for the nine `cluster_*.json` files (inspected record by record thr
   - "No AXIS violations, no UNIT inconsistencies, and no 0-1 behavioral scalars smuggled into mass/position/extent fields" was found (`:40-50`).
 - **Conflicts / stale:** counts the clusters differently from one cluster's own note (polearm_spears "≤0.04%" vs file "0.15%").
 - **Open items:** hook_sword crescent dual-listing "most likely to bite a downstream consumer that naively sums both lists".
+
+### .audit/2026-07-02-scene-combat-closing-distance-redesign/_workings_joined.md
+- **What it is:** 2704-line machine-joined archive of 10 working papers of the scene-combat closing-distance / facing / grip / grapple redesign ("R1" plan, "R2" implementation), 2026-07-02/03: README, two antagonist audits, a 23-item consolidated issue register, capstone punch-list and verifier notes, the I8 capstone audit, the ratified plan `plan_r1_RATIFIED.md`, the R0 research brief, and R0 ideal-state prep notes. Read in full.
+- **Status:** README: "R2 implementation is COMPLETE (I0→I8, 2026-07-03)"; plan: "READY FOR JORDAN'S RATIFICATION" (`:893`) and README calls it "the final, Jordan-approved plan" (`:29`). Reading: implemented; the I8 item 1 finding (balance drift, Phase C) is the one open item.
+- **Bears on:** PC, DICE
+- **Content that matters:**
+  - Motivating symptom: reach/pole weapons win 84-96% vs arming sword; Jordan: "we did a lot of work on weapon physics ... in ideal circumstances without considering ... less ideal circumstances"; the fix must be primitive-level degradation of an ideal ceiling, never a class nerf ("PRIMITIVE LAW": no branching on a weapon name; `test_no_weapon_name_literal_in_resolution` stays green) (`:987-1023`).
+  - Register/plan decisions D0-D12 and increments I0-I8 with falsifiable acceptance criteria (`:1108-1935`): schema restoration (`orient_deg`, `element_ref`), `at_circumstance(w, grip, room)` bundle (rear_clearance from located parts, floored `geom_slide`), thrust-protection keyed on the SELECTED element's head (`sel_head=='point'` → Φ=1.0) with floored NaN-guarded swing Φ_grip, widened `select_mode` 5-tuple `(dm,h,sel_gap,sel_perc,sel_pc)` written at both call sites, two-recompute `er` contract, range_avail → commit-window + legibility with interior optimum (C4, Bolander 2009), a new Contact STATE + `contact.py` grab/pin, and `clinch` DELETED.
+  - Audit method of note: six lens audits (physics, schema, geometry, coupling, architecture-orphan, pipeline-trace) merged into a register of 7 BLOCKER / 9 SERIOUS / 7 MINOR; a four-round agonist/antagonist repair loop (22 agents); then a 3-lens capstone (oscillator, emergence-gate, coherence) found a NEW blocker (grip↔reach 2-cycle: spear 0↔0.865 every beat, JD-9) by iterating the live recurrence (`:461-520`, `:2111-2163`).
+  - Concrete findings that falsified earlier "verified" claims: `Φ_grip = S_g(g)/S_g(0)` zeroed closed thrusts (yari 0.000, spear 0.135, staff 0/0 NaN); `orient_deg` and whole-weapon `point_concentration` both fail to separate arc from thrust (bear_spear pc 0.55 < greatsword 0.62); `½·m_eff·omega_cap²` dimensionally invalid; `reach_base` subtracted metres from engine reach-units (`:99-134`, `:178-205`, `:232-238`).
+  - I8 capstone record: reach-class poles still win 75-93% vs arming at all armour tiers (spear 78-82%, yari 83-90%, poleaxe 82-94%), dagger/main_gauche 17-26% unarmoured vs a 30-45% target; "not inverted" holds, "CONTESTED 55-75%" band NOT met; attributed to Phase-B grounded masses outrunning pre-Phase-B engine-scale constants, deferred to "Phase C" (`:781-814`, `:861-870`). Accepted-red set: 8 combat reds (5 element-parity tests regenerated at I4, `test_gap_game_poleaxe_spikes_plate`, `test_anchor_is_near_one`, `test_lunge_quality_is_weapon_derived_continuous`).
+  - R0 research brief (facts only): fight divides into approach/close regimes across Fiore, Silver, Meyer, Liechtenauer, Capoferro; grabs are bind-gated or open-contact for dagger and always opportunistic on a created opening, with branching outcomes (Fiore 2nd Remedy Master: arm-break, throw, disarm, tie); facing is per-guard not per-weapon-class; polearm facing unresolved (flag C1); `clinch` field was dead data (`:2217-2608`).
+  - Nine Jordan-decisions (`:1998-2163`), each with a plan default: JD-1 thrust/retained-material/greatsword cure; JD-2 `longer/shorter` label flip (default freeze); JD-3 poleaxe hammer vs spike; JD-4 hammer percussion grip-invariance; JD-5 seven silent-zip composites; JD-6 two-recompute contract; JD-7 pull-vs-bind primitive (default defer); JD-8 cut_thrust partisan/spetum part-swing; JD-9 fixed-grip drive for `grip_target`.
+- **Conflicts / stale:** At the tree (`modules/combat/`): `at_circumstance`, `sel_pc`, `range_avail`, `rear_clearance`, `contact.py` (`grab_available`), `Contact` in `combat_systems.py` all exist, so the plan was built; `clinch` is deleted (`weapons.py:17`, "DELETED, I7b/D9, 2026-07-03"). Whether Phase C (the I8 balance recalibration) was ever done: [UNVERIFIED]; the 75-93% reach-class win rates are from 2026-07-03 and may be stale. The plan quotes Windows paths (`C:/Github/ttrpg-morph-rearch/...`, `designs/scene/combat_engine_v1/`) that no longer exist; JD answers (Jordan "approved" the plan wholesale) are not individually recorded in this corpus.
+- **Open items:** I8 item 1 (roster-wide reach-class dominance vs the CONTESTED band, dagger underdog floor), Phase C engine-scale re-tune, JD-3 (poleaxe), JD-7 (pull-hook grab primitive deferred indefinitely), polearm facing (C1) unresolved.
+
+
+### .audit/2026-07-02-scene-combat-closing-distance-redesign/audit1_lens_architecture_orphan.json
+- **What it is:** 234-line JSON, first-generation lens audit (code-architecture / staging / orphan detection) of the original closing-distance plan `things-like-a-feather-compressed-rivest.md`, 2026-07-02.
+- **Status:** none; reading: historical, fully absorbed into the consolidated register and the ratified plan (both inside `_workings_joined.md`).
+- **Bears on:** PC, PROCESS
+- **Content that matters:**
+  - Layering verdict: plan honours L0/L1/L2/L3 (`at_circumstance` L0-pure, facing/range_avail as Combatant state with the wrapper as sole mutator, `contact.py` as L2); risks are sequencing, not layering.
+  - Findings: I3 silently redefines `closed` (SERIOUS); the per-beat `er` recompute is under-specified on ordering (SERIOUS, must follow `grip_target` and the half-sword swap); `clinch` "retired OR residual bias" disjunction re-orphans (SERIOUS); I7 over-bundled (SERIOUS); scaffold fields orphaned for several increments (MINOR); plan's own Fable-audit section was `[PENDING]` (MINOR).
+  - Orphan table: 12 of 13 new items VERIFIED with a named consumer; the one GAP is `clinch`.
+- **Conflicts / stale:** its `hook_affordance`, `omega_cap`, `m_eff` items were later dropped from the plan.
+- **Open items:** none outstanding in this file.
+
+### .audit/2026-07-02-scene-combat-closing-distance-redesign/audit1_lens_consumer_coupling.json
+- **What it is:** 77-line JSON, lens "consumer-coupling / half-switch risk", ten findings (2 BLOCKER, 4 SERIOUS, 4 MINOR) against increments I1-I8.
+- **Status:** none; reading: historical, absorbed (M-03, M-09, M-12, M-15, M-16, M-17 in the register).
+- **Bears on:** PC, PROCESS
+- **Content that matters:**
+  - Method: grep-verified every call site of each function an increment touches; cross-checked `wrapper.py` sequencing and the combat tests for hard-coded expectations that silently stop exercising a changed path.
+  - BLOCKER: threading grip into `heft`/`percussion_authority` cannot be byte-identical since grip is already >0 at strike (wrapper.py:66); the "free cascade" of `reach_base` is false (`reach_sigma` reads a frozen `er`).
+  - SERIOUS: `agility` reads full MoI not `at_grip` I_g; `test_combat_heft.py` pins only longsword==1.0 (re-anchor can silently re-tier damage); `select_mode` is called at three sites with different `closed` values.
+  - MINOR: every `test_combat_*.py` does `pytest.importorskip('numpy')`, so a numpy-less validator job skips the combat suite (a green that is an all-skip).
+- **Conflicts / stale:** the importorskip/all-skip hazard may still apply to the CI `tests/valoria` job without numpy [UNVERIFIED].
+- **Open items:** none.
+
+### .audit/2026-07-02-scene-combat-closing-distance-redesign/audit1_lens_geometry_bake_mode.json
+- **What it is:** 48-line JSON, lens "geometry / bake / mode coherence", seven findings (1 BLOCKER, 4 SERIOUS, 2 MINOR).
+- **Status:** none; reading: historical, absorbed (M-02, M-05, M-08, M-11, M-13).
+- **Bears on:** PC
+- **Content that matters:**
+  - BLOCKER: `mode_elements` carry only `{head, geo}`, no position, so D5's "how far out each mode sits" is un-computable.
+  - SERIOUS: sibling blunt path still reads static whole-weapon `percussion_authority` when `heft` becomes grip-aware; `longer/shorter`/`measure_gap`/`closed` are also frozen at engagement start; "wrapper branches mirror bind/riposte" is false (bind is a nested 3-iteration loop that mutates `beats`); the bake-once `_derived` cache stored on the weapon dict couples the static and dynamic worlds.
+  - MINOR: `core.strike` pairs dynamic `sel_head` with whole-weapon `w['gap']`; `hook_affordance` would triple-read `extent_m`.
+- **Conflicts / stale:** none beyond absorption.
+- **Open items:** none.
+
+### .audit/2026-07-02-scene-combat-closing-distance-redesign/audit1_lens_physics_kinematics.json
+- **What it is:** 60-line JSON, lens "physics/kinematics correctness", eight findings (2 BLOCKER, 3 SERIOUS, 3 MINOR).
+- **Status:** none; reading: historical, absorbed (M-01, M-04, M-19, M-20).
+- **Bears on:** PC, DICE
+- **Content that matters:**
+  - BLOCKER: `omega_cap = τ/I_g` is angular acceleration (1/s²), so `½·m_eff·omega_cap²` is dimensionally invalid and numerically inverts the roster onto the dagger; any dimensionally correct fixed-ω reading reconnects damage to `I_g`, re-creating spear dominance.
+  - SERIOUS: `m_eff` cancels against an `I_g`-derived ω; subtracting hand-slide metres from engine reach-units under-scales the choke by ~1/0.635; scaling ω by room makes swing damage fall quadratically (contradicts flag C4).
+  - MINOR: `at_grip` clamps at CoM so a staff (PoB=0) gets u=0, making choke-up inert for the canonical half-staff weapon; mirror matches need the same `measure_gap` for both fighters.
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
+### .audit/2026-07-02-scene-combat-closing-distance-redesign/audit1_lens_pipeline_trace.json
+- **What it is:** 185-line JSON, lens "exhaustive mechanical tracing": a 53-weapon element/mode inventory, comparator table, same-key-different-object flags, beat call graph, label cross-reference, findings.
+- **Status:** none; reading: historical, absorbed (M-02, M-05, M-10, M-11, M-24).
+- **Bears on:** PC, PROCESS
+- **Content that matters:**
+  - Read all 8 source files and imported `weapons.py` to enumerate all 53 records; 16 of 53 flagged for mode/element link problems (mode_elements linked to `elements[]` only by list order; 7 composites with >1 located part but 0 `mode_elements`; voulge 3 vs 2).
+  - Same-key-different-object flags: `gap` (whole-weapon vs selected element), `head` (native vs selected), `percussion_authority` (whole vs per-element).
+  - State graph is descriptive: 21 orphan labels (0 of 15 STATES and 8 of 9 INJECTION_POINTS referenced by name in wrapper/systems); no `Contact` state and no `'contact'` TRACE_KIND; `contact.axis` is metadata `(WS-5, unbuilt)`.
+  - Measured divergences: goedendag whole gap 0.29 vs spike 0.73, guisarme 0.50 vs 0.75, ji 0.56 vs 0.68, voulge 0.48 vs 0.63, bec_de_corbin 0.82 vs beak 0.57 (the last later corrected).
+- **Conflicts / stale:** `INJECTION_POINTS` site strings were dropped (I8 item 8); `Contact` now exists in `modules/combat/combat_systems.py`.
+- **Open items:** none.
+
+### .audit/2026-07-02-scene-combat-closing-distance-redesign/audit1_lens_primitive_schema.json
+- **What it is:** 49-line JSON, lens "primitive-schema sufficiency", six findings (2 BLOCKER, 2 SERIOUS, 2 MINOR).
+- **Status:** none; reading: historical, absorbed (M-05, M-06, M-07, M-19).
+- **Bears on:** PC
+- **Content that matters:**
+  - Read `weapons.py` fully (53 records) plus the Phase-0 combined JSON; found `mode_elements` carry no `x_m`/`extent_m`; `hook_affordance` cannot tell a pull-hook from a bind-lug; Phase 0 collected `orient_deg` and `material` on every part and `weapons.py` dropped both.
+  - `rear_clearance` must come from located-part positions, not `derive()['length_m']` (spear 2.01 vs true rear extent −0.36 m).
+  - Non-blockers recorded: grip bounds are well formed; facing keyed on `head` tokens is not tempted into a class shortcut.
+- **Conflicts / stale:** the later plan retracted the "orient_deg cleanly gates arc-vs-thrust" idea.
+- **Open items:** none.
+
+### .audit/2026-07-02-scene-combat-closing-distance-redesign/r0_flags.json
+- **What it is:** 131-line JSON of five labelled contradictions (C1-C5), ten weakly-grounded claims, and nine strongly-grounded highlights from the R0 research synthesis.
+- **Status:** none; reading: historical reference, load-bearing for the redesign's flag discipline.
+- **Bears on:** PC, DICE
+- **Content that matters:**
+  - C1 polearm/greatsword facing square vs bladed UNRESOLVED (needs a primary polearm-treatise read); C2 facing is per-guard/per-moment not per-weapon-class; C3 bladed stance does not imply linear-only footwork (destreza circular footwork); C4 force-vs-distance NON-monotonic (Bolander 2009; no hard minimum-distance threshold may be encoded); C5 the `clinch` values (guisarme 2, ji 3, dagger 10, rondel 9) encode only free-hand, ignoring hook hardware.
+  - Weakest claims: Silver "square-footed", Bolander single-study, butt-spike fallback, "shaft is easier to grab than a hilt" (inference), no treatise passage on cut-arc truncation, a "~50 cm minimum distance" is unsupported.
+  - Strongest: void and close are the same motion (Fiore fol. 39r); sword grappling is bind-gated in both traditions; a single dominant grip gives a branching menu; grabs are opportunistic on a created opening.
+- **Conflicts / stale:** none.
+- **Open items:** primary read of Fiore spear/pollax and Meyer Stange for polearm facing.
+
+### .audit/2026-07-02-scene-combat-closing-distance-redesign/r0_research_commitment_depth.json
+- **What it is:** 153-line JSON, raw R0 research cluster (commitment depth and range-utilization): 12 findings, 3 open questions, engine scan, sources.
+- **Status:** none; reading: historical raw input, synthesised in the combined brief (read in full there).
+- **Bears on:** PC, DICE
+- **Content that matters:**
+  - F1 Capoferro graded measure (larga/stretta; the four-tier scheme is a modern gloss); lunge/passata a distinct deeper action; Meyer graduated commitment; peer-reviewed fencing-lunge and strike-force kinetic-chain studies (Rinaldi 2018 181.2 N); Bolander 2009 optimal distance; absence finding that treatises frame close range as switching action, not the same action weakened.
+  - Confirmed engine gap: `commit_depth`/`lunge_depth` driven by disposition/wariness only, never by `measure_gap`.
+- **Conflicts / stale:** (structure and key fields read via dump, long source lists counted rather than transcribed).
+- **Open items:** whether a treatise passage exists for a cut/swing failing to develop force from inside its arc (answered "no" in the brief).
+
+### .audit/2026-07-02-scene-combat-closing-distance-redesign/r0_research_facing_stance.json
+- **What it is:** 216-line JSON, raw R0 cluster on facing/stance: 16 findings, 5 disagreements, 4 unreadable sources, 3 follow-ups.
+- **Status:** none; reading: historical raw input, synthesised in the brief.
+- **Bears on:** PC
+- **Content that matters:**
+  - Bladed: Fiore Posta di Donna, Fabris and Capoferro rapier; square: Vom Tag, chudan-no-kamae; destreza bladed with circular footwork; Liechtenauer square with offline stepping.
+  - The one unreadable key source is the image-based Fiore lancia PDF (`hroarr.com/manuals/fiore/omsg_lanza.pdf`); follow-up: read a translated primary Fiore spear or pollaxe section to settle C1.
+- **Conflicts / stale:** none.
+- **Open items:** C1 polearm facing.
+
+### .audit/2026-07-02-scene-combat-closing-distance-redesign/r0_research_grappling.json
+- **What it is:** 139-line JSON, raw R0 cluster on grappling in armed combat: 10 findings, 5 blocked sources (Wiktenauer 403).
+- **Status:** none; reading: historical raw input, synthesised in the brief.
+- **Bears on:** PC
+- **Content that matters:**
+  - High confidence: bind-gated sword grappling in both Fiore (Zogho Stretto) and German (Ringeck "when you bind against his sword"); `clinch` field flagged dead data with Phase 5 not started; engine context records `prior_repo_proposal_not_source`.
+  - Seizure targets documented (wrist, hilt, mid-blade with gloved hand, fingers, foot-pin of the weapon Getty Carta 28V).
+- **Conflicts / stale:** the file mis-cited some `clinch` values (noted in flag C5).
+- **Open items:** counters/escapes for a grabbed fighter documented as existing but not extracted in detail.
+
+### .audit/2026-07-02-scene-combat-closing-distance-redesign/r0_research_measure_gap.json
+- **What it is:** 232-line JSON, raw R0 cluster on measure/closing footwork and deflection: 4 finding groups, 3 cross-cutting observations, 19 sources.
+- **Status:** none; reading: historical raw input, synthesised in the brief.
+- **Bears on:** PC
+- **Content that matters:**
+  - Fiore Zogho Largo/Stretto as a regime boundary; Silver true times (hand before foot); Meyer Zufechten/Handtarbeit/Abzug; forte/foible as rigid-body lever mechanics; deflection as redirection; seizing a haft distinct from deflection.
+  - Cross-cutting: all traditions converge that closing measure makes a different technique repertoire available.
+- **Conflicts / stale:** none.
+- **Open items:** forte/foible is a within-exchange contact-point quantity while the engine's `leverage()` is a per-weapon scalar (flagged gap, analytic not attested).
+
+### .audit/2026-07-02-scene-combat-closing-distance-redesign/r0_workflow_script.js
+- **What it is:** 124-line Workflow script for R0 (4 Sonnet research clusters then Opus synthesis); not in my assignment list (not listed) but present in the directory, read for context only.
+- **Status:** none; reading: historical.
+- **Bears on:** PROCESS
+- **Content that matters:** hard-coded Windows scratch paths and the DISCIPLINE preamble ("facts only, no fiat effectiveness numbers, no invented 0-1 scalars", "do not propose a mechanic that already exists under a different name").
+- **Conflicts / stale:** paths do not exist.
+- **Open items:** none.
+
+### .audit/2026-07-04-mass-battle-cannae-gauge-audit/README.md
+- **What it is:** 443-line root-cause audit and fix plan for the H3-H6/C4 Cannae-pattern historical-gauge collapse after `PER_CELL` came on, 2026-07-04; four-lens adversarial read (`clock_coupling`, `historical_fidelity`, `alternative_mechanism`, `design_options`), Fable-adjudicated.
+- **Status:** "RATIFIED (ED-MB-0002, 2026-07-04) — merged via PR #73"; DG-3 and DG-4 RESOLVED by Jordan the same day; DG-1, DG-2, DG-5 OPEN pending re-measurement (`:3-8`). Reading: partly executed; follow-up lanes (RC-3, RC-5, DG-1/2/5) unresolved in this corpus.
+- **Bears on:** MB, DICE
+- **Content that matters:**
+  - RC-1 (very high confidence): three composition-coupling defects make a multi-subunit unit fight worse than the same troops as one subunit: (a) multi-front pool asymmetry, `POOL_VARIANT="C-ii"` (`orchestration.py:504-528`) scales a composed subunit's pool by troop fraction while a single-subunit opponent rolls its full pool into each pair, with the encirclement tax only −0.2σ/pair; (b) subunits with `morale=None` route writes to one shared parent pool, so two §A.4 triggers erode it twice; (c) per-subunit casualty denominators trip 50%/25% triggers faster under `PER_CELL` (`core/state.py:27-38`) (`:39-64`).
+  - RC-2 (high): the old green baseline was an artifact: with `PER_CELL=0` cohesion is frozen at 1.0 and §A.4 triggers cannot fire, so the pre-flip H3-H6 pass validated an invincibility bug; "restore the pre-flip numbers" re-installs the artifact (`:66-73`).
+  - RC-3 (medium): a fixture ablation shows the pinning-main-body-plus-detachment loses byte-identically whether the detachment envelops, marches in or never moves (refuting "two racing clocks" at fixture scope, but the detachment was a construction-order ghost cell, `validators.py:205`); C4 fails and C7 passes with the same `_envelop_army` composition against a Line (defender stance/discipline untraced) (`:75-100`). RC-4: no state between "eroding" and "routed" so Hannibal's ordered center withdrawal is inexpressible (design gap). RC-5 (low-medium, undiagnosed): nine single-subunit gauge rows (H2, H7, H8, H9, R1, R3, C1, C3, C5) fail off-band; only 4/20 rows pass (H1, C2, C6, C7) (`:102-116`).
+  - Fix plan is evidence-gathering only: fix the ghost cell fixture; fix the float-epsilon pool floor; per-coupling ablation harness (8 toggle combinations); gauge-scale frozen-wings ablation; trace C4 vs C7; do not diagnose RC-5 (`:127-187`).
+  - Jordan rulings recorded (`:319-357`): DG-3 = Option A (split the defender's pool symmetrically across pairs; accepted cost: full signed digest re-record of every gauge/mirror matchup with >1 pair); DG-4 = "Morale is blend of per-subunit as well as whole unit", operationalised by defaulting each subunit to its OWN starting morale at `build_army`/`build_envelopment`/`build_refused_flank` while `agg_morale()/derive_rout()/cascade_morale_hit()` already carry the whole-unit half.
+  - Method discipline worth re-using: every contested fact re-verified against the working tree before adjudication; "confirmation, not just motion" (a mechanism must move, not only a band), and a gauge row landing in-band because a composition or magnitude was retuned does NOT count (`:426-442`).
+- **Conflicts / stale:** At the tree (`modules/mass_battle/`): the epsilon floor fix is in (`orchestration.py:854-855` `math.floor(raw + 1e-9)`); per-subunit morale default is in (`armies.py:312-320` cites the DG-4 ruling). `POOL_VARIANT` is still the string "C-ii" (`config.py:27`), so whether DG-3 Option A is implemented under a new variant or not at all: [UNVERIFIED]. Gauge baseline numbers (single 2/20, multi 4/20) are 2026-07-04 snapshots; `gauge_mb.py` is referenced from `tests/sim/` and `systems/mass_battle/sim/workbench/trace.py` (the file's own location not checked). Paths `tests/sim/mass_battle/...` are the retired layout.
+- **Open items:** DG-1 (pinning composition: majority pin / thin-and-yielding / status quo), DG-2 (fighting-withdrawal/yield mechanic), DG-5 (wing-timing, conditional on the frozen-wings result), RC-5's nine unexplained single-subunit rows, the C4-vs-C7 split, and the three-way confound of LC-8 + ED-1091 recoil + `PER_CELL` flip landing in one PR window.

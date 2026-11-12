@@ -113,11 +113,12 @@ The `.audit/` and `research/` reading is accounted for in §B8, with what was no
   province, a fortress or an office because of it, so no arc of conquest, ransom, deposition after
   defeat or a marshal broken for losing can occur.
 - **Minimal fix.** Not a new write on the field. CP-T09-04 already gives occupation its taking
-  (plurality occupation licenses `seize`), which is the β reading the code chose. What is missing is the
-  *occasion*: the seat that could take title must be told that its faction's army stands there. One
-  standing occasion, of `vacancies`' shape, in `06_FA_war_lives_in_seats_B.md` edit 4. The seats half of
-  the stake (a commander who lost) is the recall of the first lane's `06_FA_decree_binds.md`, fed by one
-  more claim kind; named there, not duplicated.
+  (plurality occupation licenses `seize`), which is the β reading the code chose, and its part (d)
+  already plans the occasion for *uncontrolled* land where the seat's faction is mustered. What is
+  missing is the same occasion for *held* land the faction occupies after an arrival: one clause on that
+  planned term (`06_FA_war_lives_in_seats_B.md` edit 6). The seats half of the stake (a commander who
+  lost) is the recall of the first lane's `06_FA_decree_binds.md`, fed by one more claim kind; named in
+  the same file's edit 7 (b), not built.
 
 ### F-FA-14 · design defect in a planned position · under the planned `at_war`, one committer keeps two factions at war, and Layer 1's own open gap is where it comes from
 
@@ -408,10 +409,10 @@ What FA must receive, and does not:
    recall (the first lane's suspicion fold counts defied writs; a lost field is the other reason a
    superior replaces a subordinate in every referent the design cites, Trigger 5 and the ladder's
    "military failure of a campaign the Senior Jarl commanded"). One more claim kind in an existing fold,
-   named in `06_FA_war_lives_in_seats_B.md` edit 5 as a follow-on, not built there.
-7. **That the army now stands on someone's land.** `army.arrived` is emitted. No standing occasion tells
-   a seat with `issue` over the place that its faction occupies it, so `seize` never forms for a reason.
-   Edit 4 of the same proposal.
+   named in `06_FA_war_lives_in_seats_B.md` edit 7 (b) as a follow-on, not built there.
+7. **That the army now stands on someone's land.** `army.arrived` is emitted. CP-T09-04 (d) plans the
+   occasion for uncontrolled land only; nothing tells a seat with `issue` that its faction occupies a
+   place another faction holds, so `seize` never forms there for a reason. Edit 6 of the same proposal.
 8. **Captives.** The design's officer fate (wounded, captured, killed, with ransom) has a carrier in
    the tree (`detain`) and no writer on a field. PC and MB own the write; FA's part is that a captive
    holder's seat is not vacant and cannot act, which `restrained` already gives the muster and would
@@ -469,7 +470,7 @@ name.
 
 | id | inconsistency, gap or unclear passage | resolution | step | carried by |
 |---|---|---|---|---|
-| R-22 | Layer 1's battle roster contract names stakes (holdings, seats); the code passes and writes none (F-FA-13) | keep β (a field writes presence; title is a second act); add the occasion that tells a seat with `issue` that its faction occupies a place in its purview, so the taking forms for a reason | 3 (`_eff_march`'s own recorded choice; CP-T09-04), then 5 | `06_FA_war_lives_in_seats_B.md` edit 4 |
+| R-22 | Layer 1's battle roster contract names stakes (holdings, seats); the code passes and writes none (F-FA-13) | keep β (a field writes presence; title is a second act); widen CP-T09-04 (d)'s planned occasion from uncontrolled land to any land the seat's faction occupies, so the taking forms for a reason after an arrival | 3 (`_eff_march`'s own recorded choice; CP-T09-04), then 5 | `06_FA_war_lives_in_seats_B.md` edit 6 |
 | R-23 | F.32 open in Layer 1: whose edge a war is; under the plan, peace needs every committer (F-FA-14) | a war is de jure while a committer holds a seat of either party carrying the muster act; rank-and-file commits are the de facto share | 5 | `06_FA_war_lives_in_seats_B.md`; §B6.2 item 1 |
 | R-24 | men are levied by a Record's holder, stores by a seat (F-FA-15) | `recruit` and `discharge_troops` through a seat with the muster act whose purview reaches the cohort's residence; one army per faction stays; the Record's holder must be that seat's holder to command | 4 (`requisition`, `march`, `may_muster`) | `06_FA_levy_through_the_seat_B.md` |
 | R-25 | five factions have no head (F-FA-16) | `head_seat` gains the Grand Master and the Restoration Leader; the Guilds stay headless by design, stated on the roster | 3 (the rows exist; `factions_personal_v30` §8.6 for the Guilds) | `06_FA_seat_terms_by_body_B.md` edit 4 |

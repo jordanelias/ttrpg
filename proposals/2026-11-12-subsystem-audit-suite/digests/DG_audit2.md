@@ -263,3 +263,157 @@ Lane: the surviving audit corpus under `.audit/` (archived-not-canon; context an
   - Predicate grammar too weak for event-history triggers (sim-F4, High) (:26).
 - **Conflicts / stale:** `sim/territory/registry.py` and `tests/sim/settlement_mgmt_stress_01/` named as built; `sim/` is dissolved. G1 reported closed; `Compact` vs `Leverage` conflict named as unreconciled.
 - **Open items:** everything in the tables marked ⏳/Open.
+
+### .audit/2026-07-12-governance-compendium/_workings_joined.md
+- **What it is:** Verbatim join (16 fragments, 2,734 lines) of the compendium's working parts: event-card integration map, 10 event-card category files (HEV-* cards), 12 ripple chains (THR-01..12), and four `reeval/` files (chn_byz, hab_it, jp_se, ven_hre).
+- **Status:** fragments are PROPOSED / "extracted verbatim ... not yet vetted against the live card corpus"; reeval files "PROPOSED / provisional re-evaluation artifact". Reading: reference; the reeval fragments are the only surviving copy of the per-proposal re-evaluations.
+- **COVERAGE NOTE:** read lines 1-40 (header, integration map start), 1250-1310 (ripple chains THR-01/02), 1546-1585 (reeval_chn_byz start), 2307-2393 (reeval_jp_se, in full). NOT read: event-card bodies (:19-1249), THR-03..12 (:1310-1545), rest of reeval_chn_byz/hab_it/ven_hre (:1585-2306, :2393-2734). `[SKIPPED: .audit/2026-07-12-governance-compendium/_workings_joined.md lines 40-1249, 1310-1545, 1585-2306, 2393-2734 — context budget]`.
+- **Bears on:** SE, FA, WR, CORE.
+- **Content that matters:**
+  - Catalogue count: 94 HEV cards confirmed by direct enumeration of every `### HEV-` heading, not the "~124" in the task brief (:33-37).
+  - Re-evaluation vs BUILT substrate for the 8 Japan items (:2307-2389): SE-JP1 RECONCILE (Local-Actor representation is three-way inconsistent: `npc_ids` unbounded list, Goldenfurt 9 named actors, stress harness count-per-type; the NERS "1-2 actor cap" MERGE reason does not survive); SE-JP2 COLLIDES (built Settlement schema has no `assessed_base` field; Compact vs Leverage); SE-JP3 COLLIDES ("Charter" is not among built `TAG_KINDS`; `charter_age_seasons` not tracked); SE-JP4 SUPERSEDED/stay CUT; FA-JP2/3/4 STILL-VALID (no built FA oracle); FA-JP5 RECONCILE (single scalar `suspicion` + G606 +1/season cap would be forked).
+  - Built facts used as judging substrate: ledger `TAG_KINDS={Precedent,Grudge,Debt,Reputation,Leverage}` (no Compact, no Charter); legitimacy/popular_support "inert"; `AP=2+tier(+1 Seat/Cathedral)`; province Accord = floor-average Order; effective_prosperity = SUM; the §1.8 Mandate formula is design-only (:2314).
+  - Coverage-gap flag: the built substrate only reaches SE-lane settlement mechanics; FA-lane content has no built oracle to re-judge against (:2388).
+  - Ripple chains encode multi-step causality as `follow_on` seeds writing tags that the next card's trigger reads, e.g. THR-01 debasement->famine->coup and THR-02 toll->private army->Toluid contest (:1267-1309).
+- **Conflicts / stale:** Contradicts `tier3_proposal_status_closure.md` :28 ("`reeval/` directory is empty") and 00_index.md :45 — the reeval files exist here, so tier3's claim is stale or reflects a different moment. Built substrate cited is the dissolved `sim/territory/` (Settlement schema, `ledger.py` TAG_KINDS) — equivalents in `engine/season/` `[UNVERIFIED]`.
+- **Open items:** the Compact/Charter/Leverage tag-family reconciliation; Local-Actor representation decision.
+
+### .audit/2026-07-12-settlement-season-stress-sim/_workings_joined.md
+- **What it is:** Verbatim join (7 fragments, 853 lines) of the seven per-seed play-out traces S1 Brixholm, S2 Dunmark, S3 Sanct Vaduz, S4 Kronmark, S5 Eisgrund, S6 Valholt March, S7 Hohenfels (5 seasons each, Opus seed agents).
+- **Status:** fragment statuses not read; the parent synthesis is "FILED ... NOT canon". Reading: historical raw traces underlying the synthesis and Appendix B.
+- **COVERAGE NOTE:** only the fragment index (:19, :125, :253, :360, :525, :646, :763) was read; the per-season traces were not. `[SKIPPED: .audit/2026-07-12-settlement-season-stress-sim/_workings_joined.md bodies — context budget; their depth-3 failure rows are reproduced in appendix_B_roll_failures.md, which was read]`.
+- **Bears on:** SE, FA, CHAR.
+- **Content that matters:** seed set covers port/guild politics, frontier fortress under Crown Directive, cathedral seat with Seggio, famine town under Compact lock, mine under patron-lapse, 3-settlement territory Mandate aggregation, absentee court seat under Performance Audit (per synthesis :11-17).
+- **Conflicts / stale:** the "simulation" was agent-driven paper play (no executable settlement-season engine existed, synthesis :5-8) — traces are not execution artifacts in the §0.2 sense.
+- **Open items:** none beyond the synthesis.
+
+### .audit/2026-07-12-settlement-season-stress-sim/appendix_B_roll_failures.md
+- **What it is:** Table of all 57 traced major-roll failures (depth-3 L1/L2/L3 cascades) across 7 seeds, each with resolver and stated P(success) (2026-07-12, lane IN).
+- **Status:** none stated (appendix to the synthesis). Reading: historical evidence table.
+- **COVERAGE NOTE:** read lines 1-50 (S1 and S2 rows, and S3-S4 starts); S4 remainder through S7 not read.
+- **Bears on:** SE, FA, CHAR, DICE.
+- **Content that matters:**
+  - Rows show the chain Need-jaw/Directive-jaw `resolution_quality` Key -> Duty-failure input -> §1.0a Demotion after 3 failures; Appeals ~22-25% vs Std-7 adjudicator (:30, :41).
+  - R-4 cliff: S1 Π 7->8 on a single failed vote (:13); Cell Revolt Crisis from 3 Collective-Liability stacks (:28); Seggio lock makes heresy case permanently unadjudicable (:41); Locked Survey at Prosperity-3 era stale-high once Prosperity falls to 2 (:49).
+  - Example realised-roll demonstration of the §1.3c ordenanza gap having teeth: blocked ambition -> uprising -> disruption -> quota fail -> demotion (:17).
+- **Conflicts / stale:** pool sizes were engine-assigned; no character attribute block existed (synthesis §3 HIGH).
+- **Open items:** none beyond the synthesis.
+
+### .audit/2026-07-12-settlement-season-stress-sim/ground_truth_odds.md
+- **What it is:** Computed ground-truth odds tables: `dice_pool` P(net>=Ob) at TN6/TN7 for pools 3-18 and `d_sigma` P by base_Ob/pool/advantage, from `skills/valoria-dice-model/valoria_dice.py` and `sim/autoload/sigma_leverage.py::p_success` (2026-07-12).
+- **Status:** none stated. Reading: reference numbers; the dice model and sigma engine are DICE-lane referents and may have changed (`engine/dice_engine/dice_engine.py` is the CLAUDE.md §5 owner).
+- **Bears on:** DICE, SE, FA.
+- **Content that matters:**
+  - Die model: 1 -> -1, 10 -> +2, >=TN -> +1 (:7); e.g. TN7 pool 7 Ob3 = 55%, pool 10 Ob4 = 57% (:36, :39).
+  - net_sigma by advantage level: minor .25 / moderate .5 / strong .75 / major 1.0 (:50); d_sigma base_Ob3 pool7 neutral 46%, +major 78% (:66).
+- **Conflicts / stale:** cites dissolved `sim/autoload/sigma_leverage.py`; numbers should be re-derived from current dice owner before reuse `[UNVERIFIED]`.
+- **Open items:** the legible-vs-engine odds contract (see synthesis §0.4).
+
+### .audit/2026-07-12-settlement-season-stress-sim/stress_test_synthesis_v1.md
+- **What it is:** Max-effort synthesis of a 7-seed x 5-season adversarial play-out of the PR#119 provisional governance mechanics, with a main-session verification layer (13-agent workflow, lane IN, 2026-07-12).
+- **Status:** "FILED ... Read-only review artifact — NOT canon." Reading: historical findings; method was paper play by agents, not execution.
+- **COVERAGE NOTE:** read lines 1-275 in full (except nothing skipped; file is 275 lines).
+- **Bears on:** SE, FA, CHAR, DICE, CORE.
+- **Content that matters:**
+  - Verification layer downgraded two loud findings to digest artifacts: "Crisis family has ZERO resolvable cards" (Crisis cards route to `d_sigma`) and "no Gu-Std2->3 rung" (Guild ladder authored through Gu-Std 6) (:42-62).
+  - Agents under-estimate `P(net>=3)` on 7D TN7 by 5-7 points (truth 55%) (:64-70); `d_sigma` legible linear model (50% + 10%/pt, floor .05 cap .90) diverges from the canonical normal-CDF `p_success()` at tails (78% vs ~90%) (:72-78).
+  - Mechanic verdicts: HOLD §5 resolution_quality->Standing bridge, §1.0a magnitudes, §3.3b Za patron-lapse; BREAK §1.3a (no subsistence floor, ~8-season cooldown), §3.3c Seggio (no governance-scale force/seizure resolver), Mandate-at-scale; MERGE confirmed for §1.0d and §1.3b (:90-107).
+  - Cascade patterns A-H (see Part 44), e.g. demotion spiral 7/7, Appeals 0/6, Mandate `clamp(round(7T/(T+6)))` hides collapse (:116-143, :147-150).
+  - Gaps: no character attribute block in any seed so no dice validation possible; territory-scale governor AP economy undefined; §5 mis-scores a sanctioned Defy as a Duty-failure (:149-165, :184-188).
+  - Vindicated rejected proposals: IT-3 Sforza Gambit the strongest reinstatement candidate (bounded force-seizure/emergence resolver), VEN-SE-4 Dedizione, VEN-SE-7, BYZ-4 price-control half (:196-215); prioritised 13 findings (:235-265).
+- **Conflicts / stale:** Examples of stale cites: `sim/autoload/sigma_leverage.py`, `sim/provincial/faction_action.py`. The simulated "ruleset" is paper design (`governance_play_redesign_v1` PROPOSAL), so the findings test design prose, not `engine/season/` code.
+- **Open items:** all 13 prioritised findings; need a seed/roster attribute schema (CHAR) so dice validation is possible.
+
+### .audit/2026-07-22-combat-engine-stress-test/adversarial_pass.py
+- **What it is:** Report-only script falsifying the stress-test report's own claims and tracing the half-sword result to its mechanism (in-process monkeypatches; PC lane, 2026-07-22).
+- **Status:** none (script). Reading: historical instrument; read head only (:1-14).
+- **COVERAGE NOTE:** read first 14 lines (docstring, imports); body (107 lines) not read.
+- **Bears on:** PC, DICE.
+- **Content that matters:** imports `systems/combat/combat_engine_v1` (path `ENG = ../../systems/combat/combat_engine_v1`) and `workbench.balance.winrate`; uses `HALFSWORD_FORM` from `weapons` to ablate the switch (:1-14).
+- **Conflicts / stale:** hard-coded path `systems/combat/combat_engine_v1` — the live combat head is now `modules/combat/` (CLAUDE.md §4), so the script would not run as written `[UNVERIFIED]`. `HALFSWORD_FORM` still defined at `modules/combat/weapons.py:926`.
+- **Open items:** none.
+
+### .audit/2026-07-22-combat-engine-stress-test/grounding_battery.py
+- **What it is:** 20-assertion HEMA/physics/treatise grounding battery over the deterministic physics layer (select_mode/coupling/core.damage/adef/halfsword), citing Williams, Fiore, Talhoffer, Ringeck, Le Jeu de la Hache; MATCH/DIVERGE reporting (2026-07-22).
+- **Status:** none. Reading: historical instrument; read head only.
+- **COVERAGE NOTE:** read first 14 lines; body (101 lines) not read.
+- **Bears on:** PC.
+- **Content that matters:** grounds on cited authorities and reports divergence not pass/fail (:1-8); report states 19 MATCH / 1 DIVERGE (PHASE-C poleaxe spike).
+- **Conflicts / stale:** same stale engine path as above.
+- **Open items:** none.
+
+### .audit/2026-07-22-combat-engine-stress-test/phasec_probe.py
+- **What it is:** Phase-C diagnostic probe localising three coupled levers (approach stop-hit, close-range reach, heft/PoB_frac) with deep-copied CFG (2026-07-22).
+- **Status:** none. Reading: historical.
+- **COVERAGE NOTE:** read first 14 lines of 51; body not read.
+- **Bears on:** PC.
+- **Content that matters:** report-only, commits nothing; baseline harness `workbench.balance.winrate` (:1-14). Findings it supports are in stress_test_findings.md.
+- **Conflicts / stale:** stale engine path.
+- **Open items:** target win-rate bands for spear vs arming in plate are a design call (see findings).
+
+### .audit/2026-07-22-combat-engine-stress-test/primitives_probe.py
+- **What it is:** Adversarial probe of the L0 primitive-law claim (behaviour emerges from five geometry primitives via `geometry.bake`, no weapon-name tables): dead-coefficient, name-table-vs-emergence, dead-primitive ablation (2026-07-22).
+- **Status:** none. Reading: historical.
+- **COVERAGE NOTE:** read first 14 lines of 79; body not read.
+- **Bears on:** PC.
+- **Content that matters:** three tests A/B/C; asserts `geo['halfsword']` orphan, half-sword capability as a 2-name fiat list `HALFSWORD_FORM`, and zero/max ablation of each raw primitive (:1-14). Findings P1 (ratified-but-unimplemented) and P2 (all raw primitives live, moves basket 29-87pp) are reported in findings.
+- **Conflicts / stale:** `HALFSWORD_FORM` still present in `weapons.py:926`; PC-1 per the register was built (ED-PC-0014) so the name-table was reportedly retired as behaviour gate while the dict remains `[UNVERIFIED]` which sites still read it (`combat_systems.py:11` imports it).
+- **Open items:** none.
+
+### .audit/2026-07-22-combat-engine-stress-test/stress_battery.py
+- **What it is:** 24-check mechanical correctness battery over 51 weapons x 4 armours x 8 traditions: robustness, extremes, determinism, mirror symmetry, numerical sanity, attribute monotonicity, 95% upset cap, termination (2026-07-22).
+- **Status:** none. Reading: historical instrument.
+- **COVERAGE NOTE:** read first 14 lines of 161; body not read.
+- **Bears on:** PC, DICE, CHAR (attribute monotonicity).
+- **Content that matters:** result recorded in findings: all green except M1 unguarded logistic overflow; 6.8 ms/fight; upset cap clamps maximal vs minimal fighter to 94.7% (`UPSET_FLOOR` 0.05).
+- **Conflicts / stale:** stale engine path; `math.exp` logistic sites named in M1 (`combat_systems.py` L782/703/909/914) — one grep shows `modules/combat/combat_systems.py` no longer matches `math.exp` (only `weapon_physics.py:663` does), so M1 may be fixed `[UNVERIFIED]`.
+- **Open items:** none.
+
+### .audit/2026-07-22-combat-engine-stress-test/trace_backward.py
+- **What it is:** Explicit-trace plus backward-causal analysis: wires the engine's `_TRACE` seam and spies on `assemble_net_sigma` and `core.strike`, then walks each battle from terminal state to origin (2026-07-22).
+- **Status:** none. Reading: historical instrument; the method (trace every consumed input, walk causal chain backward) is reusable for any lane.
+- **COVERAGE NOTE:** read first 14 lines of 156; body not read.
+- **Bears on:** PC, CORE (trace-based verification method).
+- **Content that matters:** three archetypal battles reproduced in findings: half-sword longsword loses by volume (11 vs 5 attacking beats), spear kills by stop-hit at gap 2.37 before closing, rondel wins on armour-defeat σ 0.53 (findings :175-190).
+- **Conflicts / stale:** stale path.
+- **Open items:** none.
+
+### .audit/2026-07-22-combat-engine-stress-test/pc2_halfsword_expansion.md
+- **What it is:** PC-2 half-sword roster expansion write-up: capability shipped (`grippable=True` on greatsword/flamberge ricassos), activation held; includes ready-to-activate `*_halfsword` form records (PC lane, ED-PC-0016 `needs_jordan`, 2026-07-22).
+- **Status:** "CAPABILITY SHIPPED, ACTIVATION HELD" (title). Reading: possibly superseded by U10 and later PC work; not verified.
+- **Bears on:** PC.
+- **Content that matters:**
+  - Naive unconditional switch is a liability for greatsword/flamberge: winrate vs arming at medium 93->50 and 93->49, heavy 71->55 / 72->69 (:27-40); base forms out-fight the half-sword on reach+mass.
+  - Cheap per-form conditional (compare single-strike closed damage) is UNSOUND: flips with strength (longsword @heavy BASE at strength 4 contradicting PC-5's validated 73% win) (:44-64).
+  - Three options for Jordan: duel-aware wrapper conditional, half-sword as a competing MODE in `select_mode`, or close-efficacy calibration of long weapons (:66-78); until then greatsword/flamberge record `affords_halfsword=True` but never switch.
+  - Authored `greatsword_halfsword` / `flamberge_halfsword` records (mass conserved, `head='point'`, thrust_auth 0.92 / 1.0) ready to drop in with `HALFSWORD_FORM` additions (:85-130).
+- **Conflicts / stale:** `modules/combat/weapons.py:926` `HALFSWORD_FORM` — whether greatsword/flamberge entries exist `[UNVERIFIED]` (one grep shows the dict at :926 only). Refers to `wrapper.py:123`.
+- **Open items:** the activation decision (needs_jordan).
+
+### .audit/2026-07-22-combat-engine-stress-test/ratified_unimplemented_register.md
+- **What it is:** Register of 25 items ratified/RULED/plan-of-record but missing or incomplete in code, across PC, SC, IN, FA, SE, WR, FI lanes (2026-07-22).
+- **Status:** none; it names itself a proposed generated surface. Reading: partly stale; PC rows reflect July state.
+- **Bears on:** PC, SC, FA, SE, WR, FI, CORE, PROCESS (the register motive).
+- **Content that matters:**
+  - Root cause of rediscovery: no index of ratified-but-unbuilt work; fix proposed as generated `tools/observability/build_ratified_unimplemented.py` plus grep-before-claiming-novel discipline and a reader-existence test for `geometry.bake` outputs (:94-119).
+  - PC: PC-1 emergent half-sword via `grippable` BUILT (ED-PC-0014); PC-2 held; PC-3 reversed-grip/JD-9 formula built but not wired (blocked on `core.coupling` fix); PC-4 `THRUST_AUTH_REF=0.52` built (ED-PC-0017); PC-5 Phase-C partially built (ED-PC-0015: spear heavy 85->28%, longsword both-heavy 38->73%); PC-6 U3-U9 not started (:33-40).
+  - IN-1 `engine_clock` (T0 blocker for M1 and GO) NOT STARTED at that date; closure ticket ED-1051 still open (:60).
+  - SC: ED-SC-0008 module contract refresh, ED-SC-0009 Face/Rattled strain channel (`Standing.strip()` never called), ED-SC-0010 chronicle focalization, ED-SC-0011/13 auto/played parity harness, ED-SC-0014 Standing homonym — all NOT STARTED (:62-66).
+  - FA/SE/WR/FI: B12 scale-tier rewrite (no `Territory` symbol in code), ED-FA-0002 domain_actions home, Status-line flips never done for §1.0c, §2.5a, §3.3b, §1.3c; ED-WR-0002 RS->MS sweep gates Godot params export; ED-FI-0002 counter-espionage loop NOT STARTED (:79-90).
+  - Mass Battle: no qualifying items (DG-1..5 implemented, DG-6+ not ratified) (:74-75).
+- **Conflicts / stale:** Dated 2026-07-22 and cites `systems/...` and `engine/`; the later `engine/season/` (Layer 2) and `ED-IN-0232` Key retirement change several rows (IN-1 engine_clock and anything Key-based). U9/U10 later changed PC-6 status (see capstone). Contradicts `tier4` on whether Compact exists (not same file). Rows can be re-checked by grepping each cited symbol.
+- **Open items:** the registry-generation tool (never confirmed built `[UNVERIFIED]`); each NOT STARTED row.
+
+### .audit/2026-07-22-combat-engine-stress-test/stress_test_findings.md
+- **What it is:** Combat-engine stress test findings: mechanical correctness battery plus HEMA/physics grounding battery, with a same-day adversarial revision, Phase-C investigation, primitives probe and backward-causal trace (PC lane, 2026-07-22).
+- **Status:** none stated. Reading: historical but dense; contains self-retractions, so read the "Adversarial revision" before the TL;DR.
+- **Bears on:** PC, DICE, CHAR (attribute dominance).
+- **Content that matters:**
+  - Mechanical: 447 passed / 9 failed baseline (9 accepted-red); stress battery all green except M1 (unguarded `1/(1+exp(-x))` at four `combat_systems.py` sites overflows only for attributes ~100x outside 1-8) (:13-16, :208-217).
+  - Grounding: armour arc is textbook (dagger/rondel/stiletto +55..+62pp from none->heavy; pure cutters collapse vs plate e.g. shamshir 85->8; mace/bec_de_corbin/goedendag rise) (:229-244).
+  - RETRACTED: "half-swording engages vs harness" strength and the "5 distinct context-leaders" C1 claim (low-N artifact; at N=400 only 3 leaders, 0.2-0.6pp margins); what holds is the 2.9pp unconditional tradition spread (:42-78, :246-259).
+  - Half-sword switch is a net LIABILITY (longsword vs arming at mail/plate 27->62 / 41->73 when ablated); three fix attempts all failed; conclusion: symptom of reach over-weighting (Phase-C/G4), needs joint recalibration (:47-100).
+  - Phase C is a three-lever joint problem: approach stop-hit (spear 93->38 at STOPHIT=0 but poleaxe barely moves 91->88), close-range reach decay for the half-sword, PoB_frac normalisation (spear 0.34 vs swords ~0.12) (:104-139); blocker is a missing target win-rate band design call.
+  - G1: arbitrary vs-plate cliff among cutting polearms (guandao 96% vs bardiche 9.6%) from authoring coverage of `point` modes, not physics (:263-284). Agility dominance: +29.9..+34.4pp marginal, ~17pp over cognition (:73-74, :320-326).
+- **Conflicts / stale:** M1 sites: `modules/combat/combat_systems.py` no longer has `math.exp` (one grep) so M1 may be fixed `[UNVERIFIED]`. U9 capstone says activation of morphology levers later occurred (U10), so the "levers at K=0" context of this report is superseded. Report itself retracts G2.
+- **Open items:** target bands for spear/arming in plate; roster-wide joint re-tune; agility budget check; G1 roster audit.

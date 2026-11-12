@@ -217,3 +217,225 @@ sessions, not via any status readout", "discovered retroactively, not tracked li
 his person holds; a lane's `sheet(w)` is a developer's instrument. What survives T-30 is one
 question about the end of a campaign, returned to Jordan in §B6.3.
 
+## B3. The player-surface design reading
+
+The measuring stick is four things a player must be able to do in every subsystem: **(a)** see a
+situation, **(b)** be offered choices (the verb aperture), **(c)** see consequences, **(d)** read
+the reasons behind what persons and the world did. The design set is read for what it asks; the
+code and the probes for what exists. A design document is cited for intent only.
+
+### B3.1 What the design set asks, in twelve intents, and where each stands
+
+| # | the design set asks | source (intent) | in the loop as built |
+|---|---|---|---|
+| 1 | the surface shows only what the character can perceive and use; a control he cannot use is absent, not greyed | UI Oath II and its three tests; v4.1 §2.1 | **built, by type.** The `View` is claim ids and one query; `opening_set` forms only what he may attempt; reaching past the `View` raises |
+| 2 | the world's demands arrive as a short ranked list of specific occasions, more than can be attended; choosing is the play | the Scene Slate; ED-SC-0013 §1 | **built, unnamed.** `View.questions` in `attention_key` order and `scene_budget = 5`; no reading presents them (SURF-B `AskedRow`) |
+| 3 | every option shows its pool, obstacle, cost and projected band before commit | v4 §4.3.1 | **partly.** The candidate; `View.odds` (believed); no terms, cost or odds on the sheet |
+| 4 | an option out of reach is shown with what it needs, unless it is beyond his perception | v4 §5.3; max audit F-7 (seven gate kinds) | **absent.** A declined candidate is discarded; `harness/interactions.py` names it as the first thing its log cannot show |
+| 5 | after a roll, what decided it: the pool as assembled, the margin against the resistance, the named interaction | v4 §6.3.1, §7.6; the contest walkthrough, step 3 | **partly, and not for the player.** The duel returns a `trace` list; the contest's `Margin(net, ob)` stops at the seam; `Event.observed` holds the fold's reads |
+| 6 | consequences enumerated and traceable, at once and at the season's close ("What did I just do?") | v4 §7.9 (five panels), §21.3 (the accounting scroll) | **absent for his own acts** (F-GO-16); `chronicle` shows the ledger as a present state |
+| 7 | another person's reason is visible as the frame he speaks from, and a counterpart can predict him | v4 §5.5; cases NPC-073, NPC-090, NSC-04 | **only as far as he holds claims.** No reading groups what he holds about one person's deeds and commitments |
+| 8 | evidence on a persistent board, each item with source and reliability; an argument cites held items | v4 §4.5–§4.6; max audit F-6 | **the carrier is built** (`Claim.source`, `chain`, `confidence`; `LedgerReader` support over origins); no board reading; `proofs` spends the whole ledger and cites nothing |
+| 9 | one engine at three fidelities | ED-SC-0013 (ruled) | **built in shape** at one provider; two of the three fidelities have no reading |
+| 10 | information is dark, then perceived, then named, earned by engagement | `integration_proposal_v30.md` Part 4 | **dark and held are built**; "perceived but unnamed" is presentation over an `AccountRow` |
+| 11 | what happened elsewhere reaches the player through his nearest connection, tagged for reliability | max audit F-44 | **built.** A told claim carries its teller, origin and hops. 77 of the seated person's 119 claims were `told_by`, every one through a channel with no speaking actor (`chain` empty), so this run exercised only the anonymous form |
+| 12 | a change is felt before it is labelled; the moments that matter are staged | Oath III | **a trigger rule only** (SURF-B §7); staging is the client's |
+
+Seven of twelve are built or partly built in the engine and reach no client; the absences are 4, 6
+and the readings of 5, 7 and 8.
+
+### B3.2 What a seated person is shown today, measured
+
+Seed 0, one season, `p_npc_001` seated with `take_ranked`; hash equal to the plain run (E-B3, E-B4).
+
+| | reading |
+|---|---|
+| (a) situation | 5 deliberations; question sources `need` ×1, `claim_landed` ×4; the view held 0 then 12 claim ids and 1 to 12 separate questions; no place, holdings or company on the sheet |
+| (b) offer | 22 / 32 / 33 / 32 / 38 candidates; 33 distinct verbs of 66 resolvable; a `Candidate` is `verb`, `subject`, `operands`; `View.odds` is a function the sheet does not call |
+| (c) consequence | 15 acts, 15 direct Events (4 `record.created`, 3 `finding.made`, 2 `finding.none`, 2 `compliance.impossible`, one each of `petition.filed`, `sabotage.refused`, `proposition.uttered`, `commitment.made`); 2 with a degree, 10 with `observed`, 0 with `ending`; 119 claims deposited (42 firsthand, 77 `told_by`), 40 with `doer` set |
+| (d) reasons | 30 new claims about other persons (14 `dispensation.issued`, 7 `order.given`, 4 `date.scheduled`, 2 `pursuit.moved`); none says why |
+| the world's share | 13,379 Events in the season; 119 deposits to him, 0.9% by count |
+| the world's notice | realm-wide, 318 of 749 acts (42.5%) are matched by kind and subject in another person's ledger, and 60 of 83 persons had an act so matched; of his 15, none (E-B5) |
+
+The last row is one seed and one matcher; it shows a range, not a rate. It bears on creation: a seat
+the world cannot answer is a poor first game, and the creation sheet shows nothing of it (MODES §4).
+
+### B3.3 Per subsystem: what the oracle must export, and what exists
+
+"Export" means a typed reading or a typed field on a module's input or outcome, built in the oracle
+and re-implemented or rendered by the port; never a rule in `game/`.
+
+| subsystem | (a) situation | (b) choices | (c) consequences | (d) reasons |
+|---|---|---|---|---|
+| **the person's season** | *needs* `Situation`: asked rows, holdings, budget. *Exists:* the sheet's own-field copies, `View.questions` | *needs* `Offer` with terms, odds, occasion, withheld. *Exists:* ranked candidates | *needs* `receipt`, `account`. *Exists:* `chronicle` | *needs* `account` rows with source and teller; `explain`. *Exists:* `Claim` fields |
+| **duel, and a duel round on a grid** | *needs* a turn view with what a fighter can see (PC §4). *Exists:* `CombatTurnView(turn, claimants, wound_state)` | *needs* the approach per round, exported with names. *Exists:* `TURN_CHOICES = (engage, withdraw)`, the duel terms `yield / blood / death` | *needs* the round's typed trace and `Event.ending` read by `receipt`. *Exists:* an untyped `trace` list on the entry's return; `ending` stamped, unread | *needs* the decisive beat (PC's typed outcome) and the opponent's approach as seen. *Exists:* nothing typed |
+| **field** | *needs* his army as he holds it and, in battle, his own side per phase (MB's `FieldPhaseView`). *Exists:* `MilitaryMenu` (host-side); `MassBattleInput` (resolver-side) | *needs* orders before and at phase boundaries. *Exists:* six army commands with bounds, `FieldOrder(role, retreat_at)`, `battle_orders.json`; no choice during | *needs* a per-phase report on the typed outcome. *Exists:* `degree`, two size shares, `_person_report` (who broke first, survivors) | *needs* the report's terms (flanked, parts broken) as Observations a bystander can carry. *Exists:* four advisories before battle |
+| **contest** (hearing, petition, debate) | *needs* the matter, the bench as he knows it, his own case (`dossier`). *Exists:* the docket question; `SocialContestInput` is resolver-side | *needs* `speak` with what he cites, plea and effort; `tell`, `lie`, `give`, `evade / defy` (SC). *Exists:* the verbs in the offer; `proofs` uncited | *needs* the roll on the act's Event (SC-P1) read by `receipt`. *Exists:* `Margin(net, ob)`, dropped | *needs* the room and leverage terms (SC-P1's `room`, `leverage`) for his own act only. *Exists:* composed inside the module |
+| **inquiry** | *needs* what he holds about the subject (`dossier`); **never** the trail (`TrailItem` is the host's projection of deeds he did not witness) | *needs* the inquiry verbs and, at the end, a conclusion to state (FI-03). *Exists:* six inquiry verbs in the offer | *needs* the finding's terms, and "nothing found". *Exists:* `Findings(found)`; `finding.none` reaches no ledger | *needs* source, origin and contradiction per item. *Exists:* on `Claim`; no reading |
+| **governance** | *needs* the vacancies, writs and dockets stamped on his question. *Exists:* `Question.classes` | *needs* nothing new. *Exists:* `confer`, `succeed`, `commit`, `comply`, `construe`, `evade / defy` form on the classes | *needs* `receipt`. *Exists:* refusal kinds with `observed` | *needs* who ordered, who refused, as held. *Exists:* `order.given`, `dispensation.issued` claims |
+| **settlement** | *needs* the shortfall and store claims he holds; a steward's holdings. *Exists:* hunger is a Query nobody is shown; claims of `condition.worn` and the like | *needs* nothing new. *Exists:* `build`, `found`, `tend`, `transfer`, `requisition` | *needs* `receipt`; `account` with `prior` for a store he holds claims about. *Exists:* the claims | *needs* an unattributed fall to say so. *Exists:* §C.11's rule, unbuilt |
+
+### B3.4 Auto-resolve and manual play
+
+The ruled doctrine (ED-SC-0013) is one engine at two ends and a thin middle; its referents are
+Football Manager (three renderings of one match engine) and Total War (per battle, fight or
+resolve). The code has the doctrine's shape and none of its presentation. It also has something the
+doctrine did not anticipate: **fidelity is epistemic already.** A party decides (if hosted), a
+bystander receives firsthand `seen` deposits, an absent person receives a telling at some remove or
+nothing. So "witnessed" needs no mechanism and the played/auto pair needs one rule the first audit
+did not state: with no decider, the scene is decided by the person's own policy, never a module
+constant, so that declining to play costs and gains nothing an NPC of the same sheet would not
+have (MODES §2, R61, R62). The doctrine's open fork C then needs no number. Football Manager's
+other half, the post-match explanation, is the `trace` and the `receipt`: the same record, shown
+between turns to one who plays and after the fact to one who does not.
+
+### B3.5 The cognitive-load target
+
+`cogload_moderate_target.md` scores each system's load and brings every one to 8.0 or less, chiefly
+by moving state and arithmetic onto cards and mats; its companion note concludes that the tracking
+layer should be software. In the video game that is already true, so the target's residue is the
+decision itself, and its stated principle is the test: "every player decision should be meaningful
+and non-obvious". Three things follow. First, the offer as shown (22 to 38 rows) fails the test not
+by having too many verbs but by not distinguishing the five that answer the question from the
+standing thirty (F-GO-19). Second, where the design found that two choices were one (four named
+argument styles for genre × orientation), the rule generalizes: a module's choice set is exported
+with a name and a line of text, and the client shows a named move. Third, the lossy cuts the target
+considered (flat costs, auto-corroboration, a "Core tier" hiding advanced actions) are not needed
+and should not be built: nothing in the engine is expensive for a player to track, and hiding a row
+he could take breaks intent 1 from the other side. MODES §3 decides this.
+
+### B3.6 The three surfaces the brief names
+
+**The duel, and a duel round inside grid combat.** *Asked:* each fighter equipped, an approach per
+phase, each exchange visible; on a grid, the player picks an approach and the engine runs one round.
+*Exists:* one suspension seam with a typed view and a two-member choice set; a per-turn trace the
+module returns and nothing reads. *For the surface:* the round as the unit (PC §2) is what makes
+both modes one path, because a grid turn then asks for exactly one `DuelRoundOutcome` and shows its
+`trace`; the view must carry what a fighter can see (PC §4); the choice set must be exported. The
+quarantined UI's version (a pool split slider declared blind by initiative) describes a retired
+resolver and is not a target.
+
+**The managed battle.** *Asked* (Football Manager, Total War, Ogre Battle, Unicorn Overlord,
+Bannerlord): compose and instruct before; watch; intervene; resolve automatically and consistently;
+read afterwards why it went as it did. *Exists:* the composing and instructing half is further on
+than the first audit recorded: `MilitaryMenu` gives legal recruitment by cohort and troop type with
+bounds, subformations, roles, stances, targets, a retreat threshold and four advisories ("under N it
+routs at the first check", "levy will not close to contact"), and `army_presets` fields an unplayed
+faction through the same commands. *Missing:* anything during the battle and any explanation after.
+*For the surface:* MB's phase decider and three phase summaries are the smallest faithful form; the
+summaries must be on the typed outcome so that the played, watched and absent player read the same
+battle at three removes. The 2026-07-29 visualization audit (re-read in full; lesser weight) is the
+one record of a battle rendered tick by tick: formations sheared at 30–45°, attrition was 7–15% where
+the historical battles lost most of an army, and cells interpenetrated until an exclusion pass
+halved it at a cost of 19% of the casualties. Those are MB's to re-verify; for GO they say that a
+per-tick view is where a field's defects become visible to a player, which is an argument for
+watching at the phase, not the tick, until MB has re-measured them.
+
+**Evidence-and-argument contests and the case board.** *Asked* (the detective precedents; v4 §4.6;
+max audit F-6, F-7, F-11): a persistent board of held items with source and reliability; an
+argument that cites items; a contradiction that answers; one named choice per exchange. *Exists:*
+the strongest carrier in the tree for it. A claim already knows who told it and through whom, a
+reader already counts support over distinct origins and prices a teller caught out, and a forged
+Record already has a quality an inquiry rolls against. *Missing:* the reading (`dossier`), the
+citation (FI-05's `cites`), and the roll shown to its maker (SC-P1 with `receipt`). SC's decision
+that a hearing is loop-played is right for the surface as well: the board and the offer are the
+same two readings inside and outside the room, so "zooming in" to a hearing changes the fixture and
+not the interface. The UI set's Reconstruct rule ("the conclusion is WRONG; you will not know") has
+its lawful form in FI-03: a wrong conclusion follows from a wrong ledger, and no band is hidden.
+
+### B3.7 Campaign modes
+
+`campaign_modes_v30.md` is a rule-branching table for a tabletop game, a board game and their hybrid;
+`campaign_architecture_v30.md` adds the Church's four settlement axes, a three-phase invasion, the
+revelation curve, and an ending by portrait and lineage. None of the per-mode branches exists in
+code and none should: MODES §1 decides one mode. What the two documents hold that a campaign still
+needs is a frame: how it begins (a seat is chosen), continues (the line carries on, built), is saved
+(between seasons; three documents agree) and ends (extinction, or the player concludes and reads
+the chronicle). The world-content parts (axes, invasion phases, the revelation curve by band) are
+WR's and FA's content, and reach a player only as claims.
+
+### B3.8 What the provided arcs and characters ask of the surface
+
+The 143 cases were loaded through `harness/run_cases.load_cases` (972 needs). 243 needs name a
+player or use the vocabulary of seeing (81 name a player in the need or its reason; the first audit
+counted 53 on the need alone), and 46 of 281 knowledge rows name a player. Read in full and classed
+by hand; the classes are about legibility, which no other lane owns.
+
+| what the cases require | cases (examples) | carried by | today |
+|---|---|---|---|
+| a quantity hidden **from its own holder**, visible to a trained third party | ARC-02, ARC-05, ARC-26, ARC-35, ARC-39, NPC-004, NPC-007 | the holder's readings show nothing; the observer's `account` holds the claim | representable (per-holder ledgers); the surface must not have a sheet field that leaks it |
+| one entity rendered as nothing to one observer and in full to another, in one scene | SCN-10, ARC-16, ARC-27, ARC-30, ARC-48, ARC-54 | readings are per seated person by construction | built in shape |
+| a hidden thing surfaced only by a specific investigative act or a holder's choice to tell | ARC-07, ARC-12, ARC-18, ARC-36, ARC-47, ARC-50 | `receipt` of the inquiry; a told `AccountRow` | the channel is built; no reading |
+| disclosure as a real choice (tell him, tell his institution, withhold) | ARC-02, ARC-12, ARC-15, ARC-41, ARC-47, NPC-033, NPC-039 | `Offer` rows for `tell` and its kin on a held claim | `tell` forms; whether the three destinations form is CHAR's and FI's |
+| an accumulated change attributed to the actor whose behaviour caused it, or marked untraceable | ARC-R16, SCN-02, EMG-C3 | `AccountRow.unattributed`; never an Event walk | absent |
+| a counterpart's bias predictable from his disposition | NPC-073, NPC-090, NSC-04, NPC-030, NPC-089 | claims he holds about that person's commitments and past deeds, grouped (`dossier` on a person) | claims exist; no grouping |
+| a value followed across periods, or read as one summary on return | ARC-46, ARC-R16, ARC-R19 | `AccountRow.prior`; `account(p, since)` over several seasons | absent |
+| a cost the chooser is not warned of | ARC-14, EMG-X5, EMG-C2, ARC-R19 | `odds` and `terms` are his beliefs, so an unknown cost is simply not in them | built in shape: the surface never promises completeness |
+| noticing an absence | ARC-09, ARC-06 | no carrier (the first audit's finding stands; IN's) | absent |
+
+Two consequences for the contract. The corpus asks for ignorance as often as for knowledge ("players
+must NOT automatically know"), which is the strongest argument in the tree for person-side
+readings over any status display. And the needs that ask for a *summary* ask for it as something
+read at an accounting, late, which is `account` over a longer `since`, not a live meter.
+
+## B4. The player-surface contract, refined
+
+The decision-ready text is SURF-B. What it changes in the first lane's contract, and why the full
+set warrants each change:
+
+| SURF | SURF-B | warranted by |
+|---|---|---|
+| §1 `OfferRow(candidate, pursuit, stance, odds, cost)` | `OfferRow(candidate, occasion, terms, odds, cost)` in an `Offer` that also carries `withheld` rows | F-GO-19; design intents 3 and 4; CHAR's two proposals, which own the hook and the decline |
+| — | `Situation` with `asked` rows and `holdings` | intent 2 (the Slate is `View.questions`); B3.2 (a) |
+| §2 `explain` | unchanged | `04` §C.11 |
+| §3 `aftermath(p, since)` with `own_act` | `account(p, since)` with `own`, `prior`, `unattributed`; and `receipt`, host-side, for his own acts | F-GO-16, F-GO-17; intents 5 and 6; the case classes of B3.8 |
+| — | `dossier(p, subject)` | intent 8; the brief's case board; FI-05 |
+| §4 scars and crises emit | unchanged | — |
+| §5 `OFFER-CONTAINS` | unchanged | — |
+| §6 every scene through one typed decider | two kinds of play; five rules for the scene pair; no decider means the person's policy; the outcome carries `trace` | F-GO-18; SC's decision; ED-SC-0013 |
+| — | a presentation is triggered by an `AccountRow` or `ReceiptRow`, never a log Event | Oath III against §C.12 rejection 3 |
+| — | one transcript runner for every lane's scenario | F-GO-15 |
+
+The split between oracle and runtime that the first audit drew (§5) gains one row and loses none:
+
+| what | crosses as | owner here | state |
+|---|---|---|---|
+| **The surface's readings** — `Situation`, `Offer`, `account`, `dossier`, `explain` (person-side); `receipt` (host-side); each module's turn view, choice set and `trace` | **re-implemented** as person-side functions in the port's core and one host reader; **rendered** by `game/`, which computes none and holds no legal-choice list | `decision/sheet.py`, `queries/person_q.py`, `harness/play_surface.py`, each module | the sheet and one turn view built; the rest designed |
+
+`harness/play_surface.py` is the seam and lives under `harness/` (the first audit's §9 noted it).
+With `receipt` and the transcript it becomes the host half of the surface in fact; whether it moves
+out of `harness/` is IN's call when a client exists, and nothing here depends on its path.
+
+## B5. The Godot architecture specification, read against Layer 1 §C.12
+
+`godot/godot_architecture_specification.md` (2026-04-11, 998 lines, read to the end). Its Status line
+calls it STALE and "retained for its pipeline/procedure structure". Read part by part:
+
+| part | says | against §C.12 and the code | verdict |
+|---|---|---|---|
+| 1.2–1.3, 3.1 | "One autoload. The Meta-Container … holds all persistent state"; all mutation through `Meta.receive_consequence()` (`:41`, `:233-305`) | **rejection 1**: `World` is not an autoload; D-2 and D-46 depend on it being unreachable by name | conflict; dead |
+| 3.1 | a `Tracker` registry keyed `scope:owner:id` holding world clocks, faction stats and territory tracks, with a seasonal ±2 cap at one choke point (`:241-293`) | PART D: a Query is a function, never a stored aggregate; a faction is a Query return (§B.6.1); the stat vector was deleted | conflict; dead. The idea that survives is its last clause: one choke point for every mutation, which is the write gate |
+| 3.3a | containers emit `consequence_reported`, `scene_completed`, `zoom_in_requested`, `scene_escalated`; the Conflict Container routes consequences by signal (`:380-450`) | **rejection 3**: the log is not signals; a signal carries no cause and no receipt | conflict as the state channel. As a `game/`-side notification after an append it is what rejection 3 permits |
+| 3.3a | a zoom stack, outer scene suspended and dimmed, maximum depth three (`:455-481`) | the driver's one suspension (`loop/driver.py`), `contest_max_depth`, a typed refusal at the cap (§C.8–§C.10) | agrees in shape; the oracle owns the depth and the port only renders the nesting |
+| 3.3a | "Containers do not know about each other" (`:45`) | a registered module takes a typed input and returns a typed outcome, reached by composition row | agrees |
+| 3.3b | every modifier "sourced and traceable" (`PoolModifier.source`, `reason`) (`:489-501`) | §C.11's derivation; `OfferRow.terms`; SC-P1's `room` and `leverage` | agrees in intent; the nearest thing in the stale documents to the reason trail the contract types |
+| 3.3b | five resolution modes; d10 pools, target number 7, exploding tens; a second non-exploding dice variant for the board game (`:505-523`) | one degree ladder read from `engine/dice_engine`; no second variant | conflict; dead (`CLAUDE.md` §6: pre-`d+σ`) |
+| 3.4 | consequences are immediate or deferred; a cascade display that "is not a processing step", reading a visual queue (`:309-340`, `:559-561`) | barriers between steps; a presentation reads `account` and `receipt` | the second half agrees: display never processes. The first half is the retired phase model |
+| 3.4 | "Domain Echo scope recognition … must implement this programmatically" (`:549-557`) | no GM; a faction is a view, so there is no echo to recognise | superseded |
+| 3.5 | the Game Director awaits the player's slate choices, runs conflicts, then a strategic phase, then accounting (`:575-616`) | the seven-step season; the player is a `choose` callback inside DELIBERATE | conflict; dead |
+| 4 | create a character or play a named one; "Both paths produce a `CharacterData` … treated identically" (`:633-637`) | `creation_sheet` and `seat` (C1); one agent type | agrees with the ruled half (pick a seated person); creating one is CENSUS's, unbuilt |
+| 5 | "Save between seasons only" (`:652-667`) | R44; MODES §4 | agrees |
+| 6 | installs an engine version and add-ons (`:673-698`) | ED-GO-0002 owns the version | not asserted here; superseded by the ledger row |
+| 7 | the extraction procedure: values from parameter files, procedures from design documents, worksheets per document (`:702-794`) | `CLAUDE.md` §5: never take a number for the port out of prose; values cross behind an exporter | conflict in source (it extracts from prose); its distinction between a formula, a procedure and a trigger condition is sound vocabulary |
+| 8–12 | phases, a daily workflow, verification by worked examples, a timeline | the port gate (B10-20); parity by content hash over replayed draws | superseded |
+
+**What is binding for the port:** Layer 1 §C.8–§C.12 and PART E step 13 (ratified, ED-IN-0204);
+`CLAUDE.md` §5 and §6; ED-1050; ED-GO-0002 for the version; the B10-20 card for the gate. **What is
+not:** every `godot/` document but the README's pointer line; the conversion strategy (PROPOSED);
+the UI set. **Stale inside the binding text:** the two §C.12 passages the first audit named (TEXT
+items 4–6); nothing further was found on this reading. One sentence of §C.12 gains weight from the
+player surface: rejection 3's "emit one per appended Event after the append, for the view layer to
+consume" is correct for a developer's view and too broad for a player's, which is why SURF-B §7
+narrows the trigger to the seated person's two readings. That is a rule for `game/`, stated in a
+proposal; it does not edit §C.12.
+

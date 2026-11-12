@@ -2,7 +2,7 @@
 
 ## Status: REFERENCE (an audit addendum; resolves nothing at runtime)
 
-## Read at: 618ec4b (working tree; the first audit was read at 601e715)
+## Read at: 618ec4b (working tree; the first audit was read at 601e715; HEAD reached af0bef3 during the run, by commits that touch this suite's directory only)
 
 Addendum to `10_DICE_audit.md`. It does not edit that file or its five proposals. It covers what that
 audit reported as unread, closes H-152 by a run, corrects the first audit where a second reading or a
@@ -20,7 +20,9 @@ obstacle; a modifier is a named sigma level) are two different sets of RPG axiom
 coherent, and the tree runs three of them at once: the season's, personal combat's, and mass battle's.
 The sections below state each, by code, and the proposal names one authoring surface over them.
 
-(Sections 1 to 6 follow; this head was written before the reading finished, per the brief.)
+Counts for the receipt: one proposal written (`../proposals/10_DICE_capability_axiom_map.md`); nine new
+findings (F-DICE-15 to F-DICE-23); eight corrections to the first audit (C-1 to C-8); H-152 closed by a
+run; two items for Jordan, both already his (§5.6).
 
 ## 1. What was read
 
@@ -192,14 +194,32 @@ Numbering continues from the first audit's F-DICE-14.
   authored, the same Presence 4 makes a middling debater and the same Coordination 4 a confident
   fighter, and a designer tuning one cannot predict the other. A character sheet that shows one number
   per capability cannot tell the player what it is worth.
-- **The steelman, and what survives.** Combat's regime is not an accident: ED-901 chose a pool of six
-  to twelve dice so that the Normal sampler is well-behaved and attributes act through sigma, not
-  through the pool; the first audit's F-DICE-02 shows what a two-die pool does. What does not survive
-  is that the *choice of regime* is a constant in each module. **Resolution** (ladder step 3, Ruling C):
-  the pool rule is one row per resolver in the one authoring surface (proposal §C, `pool_rule`), read
-  by the one pool reader; the social row ships as it is (`base: score, add: 0, floor: 1`), combat's row
-  carries its 6 and 5, and whether the social roll should move to the designed regime is listed for
-  Jordan (§5.6), since it changes every non-combat band in the game.
+- **The steelman, and what survives.** Combat's regime is not an accident: ED-901 made the pool six to
+  twelve dice from skill alone, to close an Agility-dominance channel, with attributes acting through
+  sigma instead of through the pool; the first audit's F-DICE-02 shows what a two-die pool does. What
+  does not survive is that the *choice of regime* is a constant in each module. **Resolution** (ladder
+  step 3, Ruling C): the pool rule is one line, `max(floor, score + addends + add)`, whose two operands
+  are named per site on the `dice` row of the one authoring surface (proposal §C); the social row
+  ships at 0 and 0 (today's arithmetic), combat's at 6 and 5, and whether the social roll should move
+  to the designed regime is listed for Jordan (§5.6), since it changes every non-combat band in the
+  game.
+
+#### F-DICE-23 · hygiene, latent (NERS-R, completeness) · a skill's rank has no ceiling
+
+(Numbered last; placed here because it is the other half of F-DICE-17's missing fact.)
+
+- **Claim.** An attribute is bounded at 7 by its registry scale; a capability key is bounded by
+  nothing. `train` and a fight that drew blood each add one through one body, and that body reads no
+  ceiling.
+- **Evidence.** `loop/effects_combat.py:262-268` (`raised_capability`: `int(p.capability[key]) + 1`).
+- **Falsifier.** Not run as a season (it needs a holder who trains for more seasons than a short run
+  has); read at the owner, E-B08. The same body refuses to mint a first rank because a rank of 1 would
+  lower the pool below the default (E-B07: pool 1 reads 90 % Failure where no key reads 74 %).
+- **Consequence.** Over a long campaign a trained key can outgrow every attribute, since nothing stops
+  it at 7; at the other end a skill cannot be acquired at all. Both are the extremes of one missing
+  fact, the capability's own scale.
+- **Minimal fix.** The definition row's `scale` (proposal §B), read by `raised_capability`; the
+  acquisition half is the CORE lane's edit 9.
 
 #### F-DICE-18 · blocks a design intent · a field battle reads no person
 
@@ -465,11 +485,14 @@ reading.
    sub-one-die floor in `roll_pool_fractional` as *"mass battle's own"* while the owner floors at one
    die. Decided here, ladder step 4 (the fraction of a margin, and the fraction of a die above one, are
    both paid in probability): **the roller deals what it is handed.** `roll_net(pool)` deals
-   `floor(pool)` dice and one more with probability equal to the fraction, for any `pool ≥ 0`; the
-   floor of one die moves to where it is a statement about a *person* (`pool.py::faculty` returns at
-   least 1, the proposal's `pool_rules.floor`), which is what the *minimum pool* axiom means. A unit's
-   pool is an aggregate of troops and may fall below a die. E-B03 shows what the present split costs: at
-   a pool of 0.25 the owner's roller averages 0.400 successes and mass battle's 0.100.
+   `floor(pool)` dice and one more with probability equal to the fraction, for any `pool ≥ 0`. The
+   owner's floor of one die decides no person's outcome today: the social seam refuses a pool of zero
+   on the returned pair (`sigma.py:544-546`; E-B07: a held 0 gives pool 0 and no odds), so the one die
+   dealt for it is rolled and discarded, and a fight's pool is at least five. What a person brings at
+   the least is the pool rule's `floor` (the proposal's `dice` row), which is where the *minimum pool*
+   axiom belongs. A unit's pool is an aggregate of troops and may fall below a die. E-B03 shows what
+   the present split costs: at a pool of 0.25 the owner's roller averages 0.400 successes and mass
+   battle's 0.100.
 4. **The boost follows the die (F-DICE-19).** With the same rule in the owner: for a pool under one
    die, `net_boost` is applied on the draws in which the die is dealt, and not otherwise. Expected
    boost is then proportional to the pool, a sliver with every advantage still fails when it rolls
@@ -507,8 +530,8 @@ stream derived from the fight's, with an approach chosen per phase. From the dic
   whole fight. With rounds, what a person weighs is a round at an approach: the role's signature gains
   the approach, and the shares are over the round's endings. Stated for the PC lane; nothing is built
   here.
-- **The round's stream** (`random.Random(rng.getrandbits(64))`) is a tenth construction site for GO's
-  one constructor. Cross-listed to GO.
+- **The round's stream** (`random.Random(rng.getrandbits(64))`) is one more place a generator is
+  constructed, which GO's one constructor would have to cover. Cross-listed to GO.
 - **Wounds inside a round** stay the module's (`wound_impairment`); the season-side wound term of §5.4
   is applied by the host to non-combat rolls only, so nothing is counted twice.
 
@@ -585,7 +608,8 @@ Neither is new; each is a measurement added to a question the ledger already hol
   the score is the pool. Equals succeed 28 % of the time; one point is worth eleven. Option B, the
   regime combat kept: the score plus a base, floor five. Equals succeed about 65 %; one point is worth
   about five; the Normal approximation and the level table behave as designed; every non-combat band
-  in the game moves. The map makes this one row (`pool_rules`), so the choice is an edit, not a build.
+  in the game moves. The map makes this two fixtures on one row (`social_pool_add`,
+  `social_pool_floor`), so the choice is an edit, not a build.
 
 ## 6. Evidence log
 
@@ -599,7 +623,9 @@ Neither is new; each is a measurement added to a question the ledger already hol
 | E-B03 | `probe_axioms.py`: equal-skill bands under each resolver's own rule (exact enumeration over `_die_result` and `degree_from_net`; closed-form Normal for combat); the opposed roll; what one point buys; the design's calibration line; the wound as an obstacle term against a level; mass battle's roller against the owner's below one die | 11 · n 200,000 for the two sampled rows; the rest exact | §2.2 tables (`axioms.txt`) |
 | E-B04 | `probe_inputs.py`: the three host input builders before and after a side is raised to 7 on ten attributes and four keys | 0 · build | `MassBattleInput` equal; combat `faculties` (2, 2) → (7, 2), `ends` (4, 4) → (7, 4); social `pool` 2 → 7, `opposition` `None` → 7.0 on the subject's side (`inputs.txt`) |
 | E-B05 | inline: `_sigma_net_boost(s, floor(0.4))` for s in 1, 1.5, 2, 3 and `compute_degree` against a floor of 1 | — | 0.699, 0.914, 1.044, 1.157; Partial from +2σ with no die |
-| E-B06 | `git status --short` at the end | — | this file and `proposals/10_DICE_capability_axiom_map.md` are this lane's only changes |
+| E-B06 | `git status --short`; `git diff --stat 618ec4b HEAD` outside this suite's directory | — | this file and `proposals/10_DICE_capability_axiom_map.md` are this lane's only writes; nothing outside the suite's directory changed between the two SHAs; this lane committed nothing (earlier states of both files are in the orchestrator's in-progress commits) |
+| E-B07 | inline: `contest_input` and `_odds_of_input` for one actor's `argue` with the key held at 0, at 1, and not held (no attribute) | 0 · build | pool 0, no odds (refused); pool 1, 90.0 / 10.0 / 0 / 0; pool 2, 74.0 / 19.0 / 7.0 / 0: a first rank is worse than none (the CORE lane's edit 9) |
+| E-B08 | read: `loop/effects_combat.py:262-268` (`raised_capability`) | — | a rank is raised by one with no ceiling read (F-DICE-23) |
 
 Not run: `pytest`; `aperture`; any battle long enough to observe F-DICE-19 in play (marked
 `[UNVERIFIED]` there). The first audit's probes were not re-run; its figures are quoted as it gave them.

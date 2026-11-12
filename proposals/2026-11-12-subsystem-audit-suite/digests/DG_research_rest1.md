@@ -157,4 +157,225 @@ Lane scope: research files an earlier digest lane (`DG_research1.md`) could not 
 - **Conflicts / stale:** code line numbers dated; `test_season_shape.py:13727-13733` would be re-pinned by K-PC-2 (:530).
 - **Open items:** decision set for in-fight play (J-15 ask-then), standing actor's wounds, how a cohort fights at weight: all Jordan's (:554).
 
+### research/game_precedent_suite/tutorials/T17_repo_strategy_a.md  (read lines 1-4 and 64-177: Dominions and Heroes of Might and Magic; the EU4 section 6-63 not opened)
+- **What it is:** tutorial pass (2026-10-22) on Europa Universalis IV, Dominions 5/6 and Heroes of Might and Magic III/V/VII, with checks of repo claims.
+- **Status:** no Status line. Reading: reference; the Dominions rout check and HoMM accrual check correct repo claims in `research/valoria_game_precedent_companion_v1_part5.md`.
+- **Bears on:** MB, FA, SE, CHAR.
+- **Content that matters:**
+  - Dominions: battles are never played live; the engine runs them from Army Setup (squad placement, formation, battle orders) plus mage spell scripts, then a replay is viewed next turn (an auto-resolve-with-pre-set-orders shape, the Ogre Battle / Unicorn Overlord "orders set in advance" pattern); simultaneous turns, ~45-step resolution order, battles in random order (:78-80, :122).
+  - Repo claim "Dominions commander-anchored rout, scale-blind" PARTLY CONFIRMED: troops without an unrouted leader of the appropriate type rout or dissolve, so sniping leaders removes armies; but it is per leadership type, a commander leads only as many troops as his Leadership value, and most routs are not commander-based (squad morale, army HP below 50%, auto-rout at 25% HP left D6 / 75% lost D5) (:122). Bears directly on the repo's "Command=0 -> instant rout" rule.
+  - Dominions pretender-design: 450 design points minus chassis, scales of +-40 points per click, 9 magic paths (D6); commander Leadership >=40, >=80 unlocks line formations (:70-73, :105).
+  - HoMM III: hex grid 11x15, creatures act by speed, morale -3..+3, hero casts one spell per round; town dwellings accrue cumulatively but map dwellings cap at weekly growth in vanilla (repo's "accrual in a place whether you visit or not" CONFIRMED for town dwellings, WRONG for map dwellings in vanilla); Halls pay 500/1000/2000/4000 per day; defeat = no town for seven days (:136, :176).
+- **Conflicts / stale:** D5 vs D6 build prices and bless rules differ (:110); HoMM V and VII mostly [M]; Dominions manual unread (:65).
+- **Open items:** D5 equivalent of army-HP turn-rout `?`; HoMM V/VII accumulation `?` (:122, :176).
+
+### research/game_precedent_suite/tutorials/T18_repo_strategy_b.md  (read lines 1-4 and 153-283: XCOM and Brigandine; Shadow Empire and Stellaris sections 6-152 not opened)
+- **What it is:** tutorial pass (2026-10-22) on Shadow Empire, Stellaris, XCOM (EU, XCOM 2) and Brigandine: The Legend of Runersia, with repo-claim checks.
+- **Status:** no Status line. Reading: reference. Brigandine is the squad-on-a-grid, monsters-in-a-knight's-troop, season-phased campaign precedent (an Ogre Battle / Unicorn Overlord sibling).
+- **Bears on:** MB, FA, SE, CHAR, DICE.
+- **Content that matters:**
+  - Brigandine: a "troop" is a knight plus up to 6 monsters, total Magic Cost <= the knight's Magic Pool, monsters stay within a Command Range of the knight; up to 3 troops a side on a hex map; attacker has 12 turns to beat every defending knight; a ruler's fall sends all that nation's knights home; undefended base is occupied unfought; empty-or-stacked base is the implicit garrison choice; Auto Mode battles (:233-235, :241-245, :252).
+  - Brigandine campaign layer: each season = Organization Phase + Attack Phase with all nations' moves revealed together; mana income vs monster upkeep (reserve short -> all monsters start battles at 70% HP/MP); difficulty fixed per campaign and sets season limit (Normal 120 seasons, Hard 60) (:227, :231-236).
+  - Repo claim "Brigandine garrisons are a precedent" (companion X5 "garrison is an assignment, never a unit type") PARTLY HOLDS: there is no garrison unit type, but the game names no garrison role and "Guard Castle Hex" is a CPU battle-AI option; "units lost wholesale if the territory falls" is WRONG (knights retreat, only abandoned monsters are captured) (:282).
+  - XCOM hidden aim assist VERIFIED: lower difficulties flip misses to hits after a miss streak (Rookie x1.2, +10/miss; Veteran x1.1; Commander +15/miss; Legend none; threshold 50, cap 95) and alien hits to misses; displayed percentage is not what the dice use (:208-212). Relevant to any "show odds" decision in DICE/PC.
+  - XCOM: concealed pod-patrol missions, Avatar Project doom meter as a clock, Dark Events, soldier permadeath (:165-170, :201).
+- **Conflicts / stale:** Brigandine win rule CONTESTED (beat every knight in 12 turns vs occupy castle by last turn); who picks the defending three unknown (:281).
+- **Open items:** Easy-mode CPU behaviour may describe only the demo (:281).
+
+### research/game_precedent_suite/tutorials/T08_sanity_a.md, T09_sanity_b.md, T10_npc_economy.md, T11_policy_sims.md, T12_paradox_classical.md, T15_pressure_political.md  (head and section index only: first ~4 lines of each plus the `facts line` headings; bodies NOT read — see the closing `[PARTIAL]` note)
+- **What they are:** same-format v3 tutorial passes (2026-10-22). T08: Darkest Dungeon II, Sunless Sea, Eternal Darkness. T09: Don't Starve, Pathologic 2, Vampire: Bloodlines. T10: The Sims 4, Anno 1800, Patrician IV, Wildermyth. T11: Tropico 6, Suzerain, Dragon Age: Inquisition (war table), Democracy 4. T12: Crusader Kings II, Imperator: Rome, Total War: Rome II (Emperor + Power & Politics), Oriental Empires. T15: Against the Storm, Pax Pamir 2e, Empires in Arms, Shadow of Mordor/War (Nemesis system).
+- **Status:** no Status line. Reading: reference, same provenance rules as T01-T04.
+- **Bears on:** T08/T09 WR, CHAR, SE (stress, sanity, survival clocks); T10 SE, CHAR, NPC economy; T11 FA, SC (policy/court/council); T12 FA, MB (Total War Rome II is the nearest Total War precedent in this list); T15 FA, WR, CHAR (Nemesis persistent-encounter log; Empires in Arms is a corps/strategic-war precedent).
+- **Content that matters:** [PARTIAL] for five of six files: only the game rosters and headings were established, and no per-game claim from T08, T09, T10, T11, T15 is reported (the Nemesis system, T15 lines 189-262, is unread). T12 lines 178-259 (Total War: Rome II) were read in full:
+  - Rome II loop: one turn per season, action points per character, battle choice per contact = fight on the 3D battlefield, auto-resolve "by comparing unit statistics", or withdraw; units muster directly to a general, upkeep deducted at the start of the next turn (T12:190-195, :207). Politics: party influence from gravitas, loyalty per party, secession protection for the first 20 turns, civil war takes regions at once (T12:227, :237); difficulty shifts party loyalty (+10 Easy to -25 Legendary) (T12:186).
+  - Rome II repo-claim checks: "province owned only when every region held" PARTLY (edicts require the whole province); "Entice: >=30 gravitas, -8 loyalty" NOT FOUND in any source read; "Rome II's ambition is a multiplier called cosmetic" CONFIRMED as a multiplier on gravitas, not cosmetic (T12:251-255).
+- **Conflicts / stale:** none checked.
+- **Open items:** none checked.
+
+### research/by_lane/00_COMPARATIVE_ANALYSIS.md  (read lines 1-120 only: C0 verdict, C1 matrix, C2 root causes, C3(a) dependencies; C3(b)-C9 not opened)
+- **What it is:** IN-lane cross-cutting join (2026-10-16, HEAD bd8105b) of the ten lane evaluations: verdict, lane matrix, 11 shared root causes RC-1..11, dependency map D-1..18, adjudication, a register of missing areas and of Jordan's decisions (J-C-n).
+- **Status:** `FILED — reference, not canon … resolves nothing at runtime … no recommendation here enters a plan or ledger until Jordan so rules`. Reading: historical (dated) but the best single map of cross-lane dependencies.
+- **Bears on:** CORE, MB, PC, SC, FI, FA, SE, CHAR, WR, GO, DICE.
+- **Content that matters:**
+  - Verdict: the ten lanes describe one absence: the season loop resolves acts by persons who differ in what they want but not in what they hold, can do or know, so every scale seam is fed a default (:26-29). Ranked interactions: 1 troop chain, 2 per-person capacity source, 3 acts that carry no content, 4 no player surface/pause (IN-46/47 "no build batch"; R-04 therefore M1 cannot read `met`), 5 population that only shrinks (:31-37).
+  - Lane matrix counts: MB 17 missing / 5 hollow-blocked / 11 planned-dark; SC 9/9/17; PC 9/3/8; SE 8/5/19; FA 5/6/18; NPC 12/10/14; WR 8/6/8; FI 7/7/15; IN 14/10/30; GO 10/4/9; totals 99/65/149 (:52-62). "The ranking inverts code maturity: MB and SC hold the most cited evidence and the deepest built modules and deliver least of it to the season" (:64).
+  - RC-1: no ruled per-person capacity source (`Person.capability` empty on 429 of 430 persons; combat builds `Combatant(a_id, end=a_end)` only); carrier disagreement between new `Person.attributes` (Jordan's "it will be 10 attributes", ED-IN-0185 Q7) and capability derived at read (:34, :78). RC-2: no troop stock, three forms proposed (rung stock coupled to cohort weight / uncoupled `matter_kinds` row / troops as people), choice left to Jordan (J-C-2) (:79).
+  - RC-4 acts carry no content (FI six verbs; every computed `utter` mints an OUGHT so war is never uttered); RC-9 combat draws a continuous Normal with logistic side-channel while season/contest/field use discrete dice; RC-10 `content_hash` folds `repr()` and floats and draws use CPython `random.Random` where Layer 1 wants an integer-domain hash (GO parity) (:81, :86-87).
+  - Dependencies: composite army needs troop stock (D-1); `march` requiring war needs a war-mood source (D-7, D-8); competence needs RC-1 and, for an inquiry, AX-7 layer 2 (D-10); a played fight and a battle yielding to a duel extend IN-46's one call-out (D-17) (:103-119).
+- **Conflicts / stale:** counts and locators as of 2026-10-16; decision list J-C-1..12 not opened here.
+- **Open items:** J-C-2 (form of the troop stock), J-C-12 (what odds/derivations may be shown), X-14/X-16 adjudications at C4 not read.
+
+### research/by_lane/FA_faction_actions.md  (read §0 verdict lines 10-24 and §10.0 lines 549-557 only; the remaining ~600 lines not opened)
+- **What it is:** FA lane critical evaluation (2026-10-16): governance research, game precedent, repo work, missing areas M-FA, recommendations K-FA.
+- **Status:** `FILED — reference, not canon`. Reading: historical.
+- **Bears on:** FA, MB, SE, SC, CHAR, WR.
+- **Content that matters:**
+  - FA code that runs is grounded in Layer 1 and Jordan's rulings, not the lane's research; no v9 FA position cites any research document; research hooks are all in the retired Key/Directive/Need idiom (:10-14 of verdict items 1, 2, 4).
+  - Archived FA corpus self-contradictory: 79 and 67 contradictions across 33 governance documents; victory, seizure, treaty lapse, Coup Counter, Standing range each have 2-6 versions (verdict item 3).
+  - Strategic layer partial: `faction_q.head()` returns `None` in every built world, no computed act declares war or treaty, `levy` refused in the corpus run, no ending (H-176); treaty and war representable via existing verbs but nothing authors them; `covenant` unbuilt (verdict items 5, 7).
+  - Top five: K-FA-13 faction raises troops from settlements and assembles its army from chosen subunits; K-FA-1 war can be declared, joined, ended (blocked by `attention_key` own-echo ranking); K-FA-6 one ending; K-FA-2 a treaty something reads; K-FA-9 a visible faction (:549-557).
+- **Conflicts / stale:** `HANDOFF_FA.md` row 3 orders authoring into a quarantined file (verdict item 9). H-100 quotes a research generalisation in tension with its source (item 8).
+- **Open items:** K-FA-11 early dismissal is Jordan's.
+
+### research/by_lane/NPC_npc_cast.md  (read §10.0 lines 676-686 only; 770+ lines not opened)
+- **What it is:** NPC lane critical evaluation (2026-10-16).
+- **Status:** `FILED — reference, not canon` (assumed same header as siblings; line 3 not re-read). Reading: historical.
+- **Bears on:** CHAR, FA, WR, SC, MB.
+- **Content that matters:**
+  - Top five: K-NPC-1 persons differ in wants only so every contest, duel, witness reading and field army resolves alike by person; K-NPC-4 a faction's creed names its head as a man and four of six heads die in one season at seed 0 (probe), so a regicide leaves members answering to a corpse; K-NPC-3 vacancy reaches only conferrers' questions (`confer` does not yet execute); K-NPC-2 nobody's values or body change over a campaign (mechanisms exist, ship off); K-NPC-11 none of this is visible to a player (:676-686).
+  - Cross-lane NERS line quoted in 00_COMPARATIVE: "small because capacity and change were amputated".
+- **Conflicts / stale:** none checked. **Open items:** none read.
+
+### research/by_lane/SE_settlements_territory_economy.md  (read §10.0 lines 475-485 only)
+- **What it is:** SE lane critical evaluation (2026-10-16).
+- **Status:** `FILED — reference, not canon` (not re-read). Reading: historical.
+- **Bears on:** SE, MB, FA, WR.
+- **Content that matters:**
+  - Top five: K-SE-13 a settlement's people are never its army (no troop stock, no levy that raises units, no quality by equipment/experience/commander); K-SE-1 a settlement's population cannot change (probe 74 -> 74 in every arm); K-SE-2 nobody can know who holds a place; K-SE-4 with K-SE-3 settlements have no neighbour and cannot trade with each other; K-SE-5 the verb `levy` is a stores extraction Jordan rules misnamed (:475-485).
+  - K-SE-7 (silent chronic dearth, H-160 limit 3) was ruled a balance number by Jordan 2026-10-12 (:483).
+- **Conflicts / stale:** none checked. **Open items:** none read.
+
+### research/by_lane/WR_world.md  (read §10.0 lines 520-530 only)
+- **What it is:** WR lane critical evaluation (2026-10-16).
+- **Status:** `FILED — reference, not canon` (not re-read). Reading: historical.
+- **Bears on:** WR, CORE, CHAR, GO.
+- **Content that matters:**
+  - Top five: K-WR-2 build thread operations as persons' acts (the lane's physics never enters play); K-WR-4 drive the Calamity from what persons do with threads (IN-35 HOLLOW); K-WR-5 give the crossing a consequence (P-15); K-WR-9 author ages and turn the world's forcing on (ageing on today would age everyone from 0); K-WR-11 build IN-47's chronicling space on S-2's per-person projection (:520-530).
+- **Conflicts / stale:** none checked. **Open items:** none read.
+
+### research/by_lane/IN_infrastructure.md  (read §10.0 lines 969-982 only)
+- **What it is:** IN lane critical evaluation (2026-10-16), the longest lane file (1118 lines).
+- **Status:** `FILED — reference, not canon` (not re-read). Reading: historical.
+- **Bears on:** CORE, MB, PC, GO, SC, FI, WR.
+- **Content that matters:**
+  - Top five: K-IN-1 rule one source for per-person capacities every resolver reads; K-IN-13 make `levy` raise troops into a settlement's own stock and build the season's army from those stocks as composite subunits, rename the stores act; K-IN-10 put IN-46/47 builds in a batch (without it M1 cannot be met under v9); K-IN-6 let a battle pause for a person's act inside it; K-IN-9 rule what the player is shown (AX-7 gloss vs §C.11), then build `explain` (:969-982).
+  - `confer` already executes (IN-53); what remains for `revoke` is a motive, under Jordan's H-207 ruling (:982).
+- **Conflicts / stale:** none checked. **Open items:** none read.
+
+### research/pre_firearms_formations/00_MANIFEST.md
+- **What it is:** project manifest (2026-05-14) for the pre-firearms formations research: four tasks (catalogue, strategy, matchup, battle-phase choreography), vocabulary per Jordan (grand formation, unit formation, unit, strategy, tactic), chunk plan A-F, per-formation entry template.
+- **Status:** `[2026-05-14] Manifest created. Chunk A in progress.` Reading: historical and stale (its chunk plan names `09_throughlines.md`; the tree has 09-16 with different names).
+- **Bears on:** MB.
+- **Content that matters:**
+  - Vocabulary: grand formation = an army's spatial organisation, movement and strategies; unit formation = a sub-grouping with a specific role; unit = troops comprising a sub-formation (:12-18). Matches the army -> unit -> subformation -> troops nesting Jordan describes.
+  - Per-formation template: name, era, composition, geometry (frontage, depth, intervals, alignment), equipment dependency, tactical role, strategic context, vulnerabilities, notable engagements (:36-46).
+  - Weight: Renaissance Europe (E1) and Islamic/steppe (E2) at MAX (:28-29). Working discipline: "no commits, no repo writes; pure research" (:54).
+- **Conflicts / stale:** chunk plan does not list files 10-16. **Open items:** none.
+
+### research/pre_firearms_formations/01_ancient.md, 02_classical.md, 03_early_medieval.md, 04_high_medieval.md, 05_late_med_renaissance_europe.md, 06_renaissance_islamic_steppe.md, 07_renaissance_east_asia.md, 08_pre_columbian.md  (HEADINGS ONLY: bodies not read; 8 files, 2,880 lines)
+- **What they are:** the formation catalogue (Task 1), chunks A-E4, each formation with composition, geometry, vulnerabilities and some phase choreographies.
+- **Status:** no Status line seen. Reading: historical-reference; self-authored from memory and encyclopaedias per `by_lane/MB_mass_battle.md` section 1.1 (not independently sourced).
+- **Bears on:** MB (formations, troop types, geometry), PC (weapon traditions) minor.
+- **Content that matters (headings only, from `grep '^##'`):**
+  - 01: Sumerian phalanx, Akkadian combined-arms levy, Egyptian New Kingdom, Hittite heavy chariot, Assyrian combined arms ("first true integrated system"), archaic hoplite, Achaemenid, steppe horse-archery.
+  - 02: hoplite and Theban oblique order, Macedonian sarissa phalanx with Gaugamela choreography, Hellenistic successors, Roman manipular (triplex acies, quincunx, "the Cannae problem"), Roman cohort, Carthaginian, Parthian (Carrhae), Sassanid, Han, Mauryan/Gupta (elephant doctrine).
+  - 03: Byzantine (Phokas hollow square, kataphraktoi wedge), early Islamic (Khalid), Carolingian (Tours), Viking (Stamford Bridge), Anglo-Saxon shield-wall (Hastings choreography), Tang/Song (Talas), Heian.
+  - 04: Norman conroi/couched lance, Western feudal heavy cavalry, Crusader (Hattin, Arsuf), Seljuk/Ayyubid (Manzikert), Mongol decimal system (Liegnitz, Ain Jalut), Song/Jin, Kamakura, Khmer/Pagan.
+  - 05 (650 lines): Courtrai, Scottish schiltron (Falkirk, Bannockburn), English longbow (Crecy, Poitiers, Agincourt), Hussite wagenburg, Swiss Gewalthaufen, Burgundian (Grandson, Murten, Nancy), Landsknechte (Bicocca).
+  - 06: Ottoman (Nicopolis, Ankara, Varna, Constantinople, Mohacs; tabur cengi wagon-fortress), Mamluk furusiyya (Marj Dabiq, Raydaniyya), Timur, Safavid Qizilbash (Chaldiran), late Mongol successors.
+  - 07: Sengoku ashigaru, Ming (wei-suo household system, Mu Ying volley, Tumu), Joseon hwacha, Dai Viet (Chi Lang), First Panipat. 08: Aztec, Inca (decimal), Maya, Mississippian, Spanish collisions.
+- **Conflicts / stale:** the MB lane file notes these are the sole historical grounding for the formation geometry yet cannot be independently verified (MB_mass_battle.md :302 says the lane did not read 01-16).
+- **Open items:** [SKIPPED: bodies of 01-08 — budget; headings only].
+
+### research/pre_firearms_formations/09_throughlines_matchup.md  (read lines 354-395 conclusions; headings for the rest)
+- **What it is:** Chunk F1 (2026-05): 29 throughlines in clusters A-J, 8 meta-throughlines M-1..M-8, and the Task-3 matchup matrix in seven tiers.
+- **Status:** none seen. Reading: historical-reference.
+- **Bears on:** MB, FA, SE.
+- **Content that matters:**
+  - Seven generic conclusions: no formation wins all matchups; pike-cavalry-missile RPS is real but qualified by terrain and command (Bicocca); combined arms beats mono-culture except in specific terrain; wagon-fortress plus firearms dominant late; steppe horse-archery dominant pre-gunpowder asymmetric formation; the decisive arm is the fixing arm's complement (hammer and anvil); single-arm matchups poorly model war (:356-368).
+  - Composite system ranking: Ottoman mature system, Spanish coronelia/early tercio, Mongol decimal combined arms, Roman imperial legion+auxilia, Babur's hybrid, Byzantine, Swiss pike, Mamluk, English longbow, Hussite (:374-383).
+  - Meta-throughlines: M-1 doctrine-substrate-opponent triangle, M-2 institution > tactics > weapons, M-4 discipline-timing axis as the universal command skill, M-5 perfect-system trap, M-6 cultural-doctrinal filter, M-7 strategic-political dimension, M-8 compound failures (headings :101-195).
+- **Conflicts / stale:** MB lane found M-1/M-5/M-6/M-7 have no carrier below faction scale (MB_mass_battle.md :371). **Open items:** none.
+
+### research/pre_firearms_formations/10_battle_phase_choreography.md  (read lines 298-363 and 437-546; Parts I, II, IV, V headings only)
+- **What it is:** Chunk F2 (Task 4): a generic 8-phase framework (0 approach, 1 deployment, 2 skirmish, 3 missile attrition, 4 main contact, 5 decisive commit, 6 collapse, 7 pursuit), per-phase choreography, six battle archetypes, failure modes per phase, ten game-design observations for Valoria.
+- **Status:** "The project's four deliverables are complete" (:535). Reading: historical-reference; cited by `modules/mass_battle` provenance as "PFF 10".
+- **Bears on:** MB, PC, GO.
+- **Content that matters:**
+  - Reference tables: movement speeds (heavy infantry march 4-5 km/h, Swiss pike attack 5-7, cavalry charge final gallop 30-40 km/h "last 30-50 m only", army 15-25 km/day, Mongol 50-100 km/day) (:300-318); missile ranges and rates (longbow 200-250 m, 6-10/min; heavy crossbow 1/min; early arquebus 0.5-1/min) (:320-332); frontages per 1,000 men (hoplite 125 m x 8 deep, sarissa 60 m x 16, Roman maniple 100 m x 6) (:334-347); phase durations (decisive commit 2-10 min typical, main contact 1-3 h) (:349-360).
+  - Observation 2: the decisive-commit window is "the one mechanic that captures pre-firearm tactics"; Observation 5: fixing/decisive duality visible as roles (anvil vs hammer); Observation 10: 5-15% loss on the winning side, 30-60% on the losing side, mostly in phases 6-7, so "fighting is dangerous but survivable; routing is devastating"; pursuit should be a separate decision (:447-457, :473-477, :507-514).
+  - Observation 7: force generation as a strategic-level mechanic (institutions over a maxed elite unit); Observation 9: compound-failure stacking, catastrophic only when several failures stack (:485-505).
+- **Conflicts / stale:** the MB lane notes the commit-window figures disagree across files (2-10, 5-30, 1-6 turns) (MB_mass_battle.md :357). **Open items:** the observations are "observations, not specifications" per the project-owner contract (:439).
+
+### research/pre_firearms_formations/11_throughlines_ners_audit.md  (read lines 330-422; Parts I-III headings only)
+- **What it is:** all-directions review, NERS scoring and canon-constraint (P-01..P-15) cross-check of the 29 throughlines + 8 meta-throughlines.
+- **Status:** closure: "0 P1, 4 P2, 4 P3 findings; 19 strong NERS fit, 11 partial, 6 DEFER, 1 EXCLUDE" (:397-404). Reading: historical-reference.
+- **Bears on:** MB, WR (P-10 Coherence x combat morale), PROCESS.
+- **Content that matters:**
+  - Prioritised integration: M-1 doctrine-substrate-opponent triangle, M-4 discipline-timing, T-1 shock+missile, T-5 force-generation depth, T-17/18/M-6 cultural filter, T-22 technology matrix, T-23 operational geography, T-24 hammer-and-anvil, T-26 single-shot charge, T-28/29/M-8 emergent propagation (:352-361).
+  - P2 gaps for Jordan: thread-doctrine interaction, combat-morale x Coherence (is morale layer 2 or 3), tridimensional propagation of military outcomes (P-12), military intelligence x rendering asymmetry (:337-340, :380-390).
+  - Scale assignments: personal M-4/T-29; settlement T-15/T-26; territory T-1..T-5, T-22..T-24, M-1/2/7; peninsula T-4/5/12/17/18, M-1/2/5/6/7 (:365-372).
+- **Conflicts / stale:** the audit scored throughlines the MB lane later judged unreached (T-MB-7..9). **Open items:** Part V's six questions to Jordan (peninsula geography, gunpowder status, scale assignment) not visibly answered here.
+
+### research/pre_firearms_formations/12_moment_by_moment_dynamic_spacing.md  (read lines 902-940; headings for Parts I-V)
+- **What it is:** primary-source reconstruction (manual spacing vocabulary from Asclepiodotus, Aelian, Polybius, Vegetius, Byzantine Praecepta; nine battle reconstructions: Cannae, Pharsalus, Adrianople, Hastings, Crecy, Agincourt, Marignano, Pavia, Panipat), generic patterns of dynamic spacing, reference tables.
+- **Status:** none seen. Reading: historical-reference; high confidence on manual-derived spatial primitives, low on absolute timings (:936).
+- **Bears on:** MB, GO.
+- **Content that matters:**
+  - Generic patterns (headings :758-825): approach window 250 m-2 km; skirmish zone 50-300 m forward of main line; killing arc of mass missile fire 30-250 m; main-contact frontage matches initial deployment; lethal pocket forms when an army is pressed into a smaller area than its formation needs; cavalry final gallop 30-50 m; decisive commit occupies 5-30 minutes; full battle 2-9 hours.
+  - Game notes O-1..O-7 (:906-918): 250-800 m first-contact distance as a natural battle-scale spatial unit; ~12-20 m2 per man lethal density gives step-change not linear casualty multipliers; compress a battle to 5-10 player minutes with the decisive commit in a 10-60 s window; cavalry cannot sustain full charge speed; rain/mud/terrain as dramatic modifiers; doctrinal manuals as a game-economy resource; chronicle authorship shaping memory.
+  - `[GAP]` timing is mostly derived from speed x distance, not source-stated (:938).
+- **Conflicts / stale:** none checked. **Open items:** none.
+
+### research/diagrams/mass_battle_formations/README.md
+- **What it is:** note on a visual engine-vs-history comparison of mass-battle deployment after ED-MB-0017 (generator `generate_comparison.py`, HTML and PNG outputs, `SOURCES.md`).
+- **Status:** none. Reading: historical (the geometry test it cites was dropped 2026-11-04, :22); the artifact files (HTML/PNG/py) are not in the assigned list.
+- **Bears on:** MB, GO.
+- **Content that matters:**
+  - Fixed and confirmed: no subunit overlap (P-1), symmetric double envelopment (P-2), echeloned refused flank (P-3) (:28-39).
+  - Caveats: the wrap needs until ~t16-t20; no cavalry ride-around so the ring is a horseshoe not a circle (`_envelop_goal` models the infantry wrap only); single line not a reserve/triplex acies; envelopment "still often loses" in raw outcome (DG-6 over-decisiveness, ED-MB-0016) (:41-54).
+- **Conflicts / stale:** `tests/valoria/test_deployment_geometry.py` dropped 2026-11-04 so the geometry is no longer pinned (:22). References `../../../audit/2026-07-22-mass-battle-stress-test/` (a retired path; `.audit/` now). **Open items:** cavalry rear-transit, depth-line relief unmodelled (:44-50).
+
+### research/diagrams/mass_battle_formations/SOURCES.md
+- **What it is:** citation list for the historical formation diagrams (Cannae, Leuctra, Leuthen, Roman triplex acies, phalanx/oblique order): Wikipedia/Commons maps, Historia Civilis animations, Polybius, Livy, Goldsworthy, Xenophon, Sabin.
+- **Status:** none. Reading: reference. Images not stored (proxy denied downloads).
+- **Bears on:** MB.
+- **Content that matters:** schematics are the author's own drawings "from the geometry described in these sources", not tracings; they use the sim's coordinate convention (:58-61).
+- **Conflicts / stale:** points at the retired `audit/2026-07-22-mass-battle-stress-test/` path (:59). **Open items:** none.
+
+### research/diagrams/mass_battle_formations/perimeter_model/README.md
+- **What it is:** note on a machine-vision check of the perimeter target-point / normal model for engine formations (Line, Arrowhead, Column, GappedLine).
+- **Status:** none. Reading: historical (2026-07-23).
+- **Bears on:** MB.
+- **Content that matters:** target points are face midpoints (major) and corners (minor), sharp vertex at interior angle <=60 degrees, outward normals give the required approach angle; Line panel matches Jordan's hand drawing; the convex hull bridges the GappedLine's internal lane, so gapped formations need concave/internal-edge perimeter handling (:3-17). Spec cited: `audit/2026-07-22-mass-battle-stress-test/perimeter_targeting_geometry_v1.md`.
+- **Conflicts / stale:** spec path is the retired `audit/` tree. **Open items:** concave perimeter handling for gapped formations (:16-17).
+
+### research/governance/00_MANIFEST.md
+- **What it is:** manifest of the governance research corpus (2026-07-14, ED-IN-0064): three theme documents x 8 civilisations, with `=> Valoria design hook` lines.
+- **Status:** `RESEARCH — filed 2026-07-14 · Lane: IN · ED-IN-0064 · analytic/reference, not a design ratification`. Reading: historical-reference.
+- **Bears on:** FA, SC, WR.
+- **Content that matters:** method was Sonnet researcher per civilisation then Opus verifier (every verdict SOUND_WITH_FIXES) (:16-24); civilisations: Ottoman, Roman, Carolingian, HRE, Renaissance Italy, Venice, Han/Three Kingdoms, Shogunate Japan; Byzantine omitted (:26-40); "Mandate of Heaven is history only, never proposed as a Valoria mechanic" (:58-60); hooks map to the PROPOSED 8-value `governance_mode` taxonomy, the `faction_politics` Standing ladder and Demotion Magnitude (:45-48).
+- **Conflicts / stale:** hooks are proposals in a retired idiom (FA lane found all research hooks use Key/Directive/Need); refers to `designs/audit/...` paths (dissolved tree). **Open items:** Byzantium "add later if wanted" (:30).
+
+### research/governance/governance_modes.md  (read the synthesis and hooks table, lines 1-48; per-civilisation detail 49-469 headings only)
+- **What it is:** thematic governance research (2026-07-14): how a polity decides, across eight civilisations (Ottoman, Roman, Carolingian, HRE, Renaissance Italy, Venice, Han/Three Kingdoms, shogunal Japan), with a consolidated design-hooks table.
+- **Status:** `RESEARCH — filed 2026-07-14 · Lane: IN · ED-IN-0064 · analytic/reference, not a design ratification`. Reading: historical-reference; hooks are phrased in the retired Key idiom (Key, Directive-Key, L/PS) and cannot be adopted as written (FA lane finding, `by_lane/FA_faction_actions.md` verdict 2).
+- **Bears on:** FA, SC, CHAR.
+- **Content that matters:**
+  - Findings: autocracy bounded by a parallel legitimacy order (Ottoman kanun/seriat and fatwa, Roman auctoritas, Carolingian synods, Han tingyi); oligarchic councils split three ways (portfolio-differentiated, co-equal capped, estate-allocated with sequential veto and documented representation-lag); selection as anti-capture engineering (cursus honorum, Han cha ju, Florentine imborsazione, Venice's doge pipeline alternating random subsets and scrutiny, conclave Ubi periculum decaying holdout cost); governance mode as mask vs substance and as legislated migration (Venice Serrata) (:20-28).
+  - Primitives named: peer-blocking veto (intercessio) distinct from vote-tallying and gating a "holdout" state; chain-bypass authorities constructed, purchased, negative-only, doubled or dormant-but-live; recognition-fission; rank = secession blast-radius (:22, :30).
+  - The 11-row consolidated hook table maps each pattern to a mechanic named in the proposed 8-value `governance_mode` taxonomy (AUTOCRATIC_FIAT, OLIGARCHIC_COUNCIL, NEGOTIATED_ESTATES, MERITOCRATIC_BUREAUCRATIC, CONSENSUS_UNANIMITY, ROYAL_COURT_APPOINTMENT) (:34-47).
+- **Conflicts / stale:** taxonomy values and Key/L-PS primitives belong to the proposed, since-retired governance design; no code reads them. Byzantium omitted.
+- **Open items:** per-civilisation verifier notes are inline and (per FA lane) truncated mid-sentence in places.
+
+### research/governance/political_hierarchy_standing.md  (read lines 1-12 and section headings only; synthesis 18-48 not opened; 486 lines)
+- **What it is:** thematic research on rank/office hierarchy, advancement and demotion across the same eight civilisations, mapped to the `faction_politics` Standing ladder, Demotion Magnitude and a resolution-quality-to-standing bridge.
+- **Status:** same RESEARCH header as `governance_modes.md`. Reading: historical-reference; retired idiom.
+- **Bears on:** FA, CHAR, SC.
+- **Content that matters:**
+  - Framing (:10-16): standing was never a single scalar but a claim on an underlying currency (trust/itimad, patronage-credit/commendatio, immediacy/Reichsunmittelbarkeit, assessed yield/kokudaka, captured eligibility lists), and a rank is only as solid as its currency.
+  - Per-civilisation sections cover ladder, routes up, routes down, standing currency (e.g. Roman cursus honorum as an 8(+)-rank ladder with senatorial vs equestrian parallel power bases; patronus/cliens) (headings :101-136, :209-249).
+  - FA lane cites `political_hierarchy_standing.md:427-429` for the consort-clan counter-case behind H-100 "kinship-derived seats get containment" (`by_lane/FA` verdict 8).
+- **Conflicts / stale:** Standing range has 2-6 versions across the archived FA corpus (FA lane). **Open items:** none read.
+
+### research/governance/conflicts_power_struggles.md  (read synthesis and hooks table, lines 1-45; per-civilisation detail headings only)
+- **What it is:** thematic research on succession crises, usurpation, civil war and ruler-vs-assembly collisions, with a 14-row design-hooks table.
+- **Status:** same RESEARCH header. Reading: historical-reference; retired idiom (Key/two-signal primitive).
+- **Bears on:** FA, WR, MB (army loyalty), SC.
+- **Content that matters:**
+  - Four generative mechanisms: succession vacuum, autonomy-equals-secession, displacement grievance, channel starvation (assassination where no contest channel exists) (:20). Legitimacy collapse modes: single fragile ritual (Praetorians auctioning the throne), split legitimating bodies, procedural legitimacy (Venice) (:22).
+  - "Rank = secession blast-radius" restated; fuse length (fast Onin/Ciompi/Pazzi, slow Kamakura, no-relief-valve Roman third century); relief valves (Venice graduated removal ladder, Ottoman grand-vizier-as-scapegoat) (:24-26).
+  - Hooks: two-signal resonance (objective strain + independent legitimating signal must co-fire), suppression-backfire (a "solved" unrest becomes a non-decaying grievance re-arming at a lower threshold), relief-valve scapegoat, emergent-arc seed (silent accumulator not reset between crises), "gate army/enforcement loyalty to an impersonal charter, never a seat-holder" (:32-43). The last bears on MB army loyalty and the K-NPC-4 finding that members answer to a dead head.
+- **Conflicts / stale:** Mandate of Heaven excluded by ruling (:58-60 of manifest). **Open items:** none read.
+
 <!-- END -->
