@@ -151,3 +151,241 @@ from 0.5 to 0.4 on the score at the season default is nearly free: the obstacle 
 third of a turn shorter, the same blows, the same reversals. (4) The form the suite had written (0.4 on the
 pool) fails target (c) by an order of magnitude and target (a)'s bloodless bound; no value of the damage
 scale repairs it, because the fights it leaves undecided are undecided for want of blows landing.
+
+**P2 · the better fighter** (`p2_skill.py`; 1,000 fights a cell, seeds 0 to 999; won / lost / undecided, %).
+
+| arm | 3v2 | 4v2 | 6v2 | 5v4 | 6v4 | 7v5 | 7v3 |
+|---|---|---|---|---|---|---|---|
+| score / 2, 1.55 (shipped) | 64.9 / 34.8 / 0.3 | 77.0 / 22.8 / 0.2 | 93.4 / 6.3 / 0.3 | 63.8 / 36.0 / 0.2 | 73.7 / 25.7 / 0.6 | 73.5 / 25.9 / 0.6 | 93.0 / 6.6 / 0.4 |
+| score / 2, 1.07 | 67.9 / 31.6 / 0.5 | 81.8 / 17.2 / 1.0 | 95.7 / 3.6 / 0.7 | 66.1 / 32.9 / 1.0 | 76.9 / 21.6 / 1.5 | 77.5 / 20.8 / 1.7 | 94.9 / 4.2 / 0.9 |
+| **0.4 × score, 1.07 (chosen)** | 65.7 / 33.6 / 0.7 | 78.0 / 21.9 / 0.1 | 92.3 / 6.9 / 0.8 | 63.0 / 36.3 / 0.7 | 75.2 / 24.6 / 0.2 | 74.3 / 25.5 / 0.2 | 91.0 / 8.4 / 0.6 |
+| 0.4 × pool − 1.0, 1.07 | 62.0 / 24.1 / 13.9 | 77.7 / 13.1 / 9.2 | 92.7 / 2.9 / 4.4 | 62.4 / 27.0 / 10.6 | 75.1 / 17.0 / 7.9 | 74.7 / 17.6 / 7.7 | 92.3 / 3.5 / 4.2 |
+| 0.4 × pool, 1.55 | 55.3 / 20.9 / 23.8 | 69.3 / 10.8 / 19.9 | 90.5 / 1.5 / 8.0 | 54.8 / 24.4 / 20.8 | 69.5 / 14.1 / 16.4 | 69.6 / 16.6 / 13.8 | 90.2 / 1.8 / 8.0 |
+
+Control (the mirror's won share at two disjoint seed sets): shipped 50.5 and 50.8%; chosen 50.8 and 51.4%.
+The chosen arm keeps the shipped curve to within two points at every gap. Lowering the scale alone
+(row 2) steepens it by three to five points, because more blows give the better man more draws; the 0.4
+rate gives that back. The better man's share is the lever no arm moves much; what the arms move is whether
+the fight ends.
+
+**P3 · equals by rank** (1,000 fights a cell; turns / blows / lead change % / undecided % / bloodless turns %
+/ Failure share of an exchange %).
+
+| arm | rank 0 | rank 2 | rank 5 | rank 7 | rank 12 |
+|---|---|---|---|---|---|
+| score / 2, 1.55 | 3.24 / 3.26 / 37.8 / 0.2 / 38.5 / 12.7 | 3.37 / 3.21 / 34.8 / 0.2 / 40.2 / 17.5 | 3.75 / 3.13 / 33.8 / 0.4 / 43.6 / 24.0 | 3.91 / 3.12 / 32.4 / 0.5 / 46.1 / 29.1 | 4.37 / 3.06 / 30.6 / 1.3 / 51.5 / 37.8 |
+| score / 2, 1.07 | 4.33 / 4.65 / 46.1 / 0.5 / 37.9 / 11.8 | 4.64 / 4.63 / 44.8 / 0.5 / 41.3 / 17.3 | 5.07 / 4.53 / 42.7 / 1.1 / 44.3 / 24.4 | 5.30 / 4.45 / 40.7 / 1.9 / 46.2 / 28.5 | 5.88 / 4.38 / 39.4 / 4.1 / 50.7 / 35.5 |
+| **0.4 × score, 1.07** | 4.33 / 4.65 / 46.1 / 0.5 / 37.9 / 11.8 | 4.28 / 4.51 / 44.5 / 0.1 / 37.5 / 13.6 | 4.28 / 4.46 / 43.8 / 0.2 / 39.1 / 18.2 | 4.30 / 4.39 / 43.4 / 0.4 / 39.9 / 20.8 | 4.29 / 4.30 / 42.4 / 0.5 / 39.5 / 24.9 |
+| 0.4 × pool − 1.0, 1.07 | 7.96 / 4.93 / 36.7 / 19.4 / 58.3 / 32.2 | 7.50 / 4.81 / 37.7 / 14.8 / 56.8 / 33.9 | 6.95 / 4.62 / 37.9 / 10.1 / 56.1 / 35.9 | 6.68 / 4.53 / 38.7 / 8.3 / 55.2 / 36.9 | 6.29 / 4.35 / 37.8 / 6.3 / 53.8 / 39.1 |
+
+This is the table that answers "without making it a big attrition". Under the half-score, the better two
+equals are, the longer they take and the oftener they fail to finish (the fight with A-31's scale alone
+goes from 4.33 to 5.88 turns and from 0.5 to 4.1% undecided). Under 0.4 on the score the mirror is the same
+fight at every rank, to a twentieth of a turn. The residual rise in the Failure share (11.8 to 24.9%) is
+the widening of the curve with a larger pool, not a cost per point.
+
+**P4 · defence is real** (attacker A against defender B, 600 traced fights a cell, chosen arm; per roll of
+A: share that wounds / mean damage / Overwhelming share).
+
+| A | B two below | one below | equal | one above | two above | four above |
+|---|---|---|---|---|---|---|
+| rank 2 | 64.7% / 10.4 / 57.6% | 58.2% / 8.8 / 48.1% | 52.0% / 7.3 / 38.8% | 45.8% / 6.1 / 31.1% | 39.0% / 4.8 / 23.3% | 27.5% / 3.0 / 13.2% |
+| rank 5 | 62.6% / 10.1 / 56.5% | 56.6% / 8.6 / 47.6% | 51.6% / 7.4 / 40.9% | 45.2% / 6.2 / 33.8% | 39.2% / 5.1 / 26.3% | 28.5% / 3.5 / 17.1% |
+
+Half-score at the same scale, rank 2 attacking: 64.6, 58.1, 50.9, 41.2, 34.7, 20.7%. So a rank of defence
+is worth about six points of the attacker's wounding share under the chosen rate and about eight under the
+half-score; the defender four ranks better is still wounded by more than one attack in four (27.5%), where
+the half-score leaves one in five. Aptitude (the module's own sigma assembly, defender's attribute raised,
+500 fights a cell): Agility 4, 5, 6, 7 gives the attacker 52.8, 46.8, 40.9, 36.1%, a step of Agility being
+worth a rank of training; Strength 47.2, 42.9, 39.2% from 5 to 7; Endurance moves the wounding share by a
+point a step and the felled share by eight (it is Health). Perception is far steeper (one step from its
+default of 3 takes the wounding share from 52 to 39%); that is `audits/16_PESSIMIST_PC.md` §2.4's finding
+and is left to its lane.
+
+**P6 · two alternatives that keep the base in the opposition, and one that rolls both sides** (`p6_alts.py`,
+1,000 fights a cell).
+
+| arm | turns | blows | lead change | undecided | better man (4v2) |
+|---|---|---|---|---|---|
+| 0.4 × pool with the defence layer's neutralisation cut to 0 (the base opposes once, in the obstacle), 1.55 | 6.11 | 4.14 | 31.4% | 5.6% | 84.2 / 13.1 / 2.7 |
+| the same, 1.07 | 7.73 | 5.50 | 35.7% | 15.1% | — |
+| a two-sided roll (the defender rolls too) at the blow's centre, 1.07 | 4.08 | 4.15 | 44.8% | 0.1% | **65.9** / 33.7 / 0.4 |
+| chosen, same seeds | 4.28 | 4.51 | 44.5% | 0.1% | 78.0 / 21.9 / 0.1 |
+
+Cutting the defence layer to pay for the pool operand still leaves three to seven times the bloodless
+play, fewer reversals than the shipped fight, and deletes the parry, the dodge and the riposte as things
+that happen. Rolling both sides keeps the length and halves what skill is worth: two ranks better wins two
+in three where the chosen rule gives three in four, because the second roll is noise the better man cannot
+buy down; it also doubles the draws of every exchange for the port. Under `blood` terms a duel is still
+one blow (1.08; first blood is the first wound, which no obstacle changes); under `yield` terms the chosen
+arm runs 2.82 turns and 2.55 blows where today's runs 2.15 and 1.51 (800 duels each).
+
+---
+
+## 5. The argument: the same rule on the season's roll
+
+**P5** (`p5_social.py`). The instrument is the repository's closed form (`sigma_leverage.p_success`, the
+Normal form of the sampler A-5 orders for every roll) for the four bands, with the pool A-6 orders
+(`max(5, score + 6)`). Control, closed form against 200,000 seeded draws through `roll_net_continuous`,
+`net_boost` and `degree_from_net` (seed 29): pool 8 at obstacle 3.2: 50.0 / 17.1 / 23.7 / 9.2 closed, 50.2 /
+17.2 / 23.5 / 9.1 dealt; at 3.7 with half a level against: 75.9 / 11.5 / 10.5 / 2.1 against 76.1 / 11.4 /
+10.3 / 2.1. The closed form is the dealt roll to within a quarter of a point.
+
+Equals by rank, Failure / Partial / Success / Overwhelming, %:
+
+| obstacle | rank 0 | rank 2 | rank 4 | rank 7 |
+|---|---|---|---|---|
+| half the score, no difficulty | 11.0 / 12.7 / 38.3 / 38.0 | 16.5 / 13.2 / 34.0 / 36.2 | 21.5 / 13.2 / 30.7 / 34.6 | 27.8 / 12.6 / 27.0 / 32.6 |
+| 0.4 × score, no difficulty (the blow's obstacle) | 11.0 / 12.7 / 38.3 / 38.0 | 14.4 / 12.4 / 33.7 / 39.5 | 17.1 / 11.9 / 30.4 / 40.6 | 20.3 / 11.1 / 26.9 / 41.8 |
+| even line + 0.4 × score (`plain`) | 50.0 / 19.5 / 24.2 / 6.3 | 50.0 / 17.1 / 23.7 / 9.2 | 50.0 / 15.4 / 22.8 / 11.8 | 50.0 / 13.6 / 21.5 / 14.9 |
+| **even line + 0.5 + 0.4 × score (`routine`)** | 60.1 / 17.7 / 18.5 / 3.7 | 58.7 / 15.9 / 19.3 / 6.1 | 57.8 / 14.5 / 19.3 / 8.3 | 56.9 / 13.0 / 18.9 / 11.2 |
+| even line + 1.0 (`demanding`) | 69.5 / 15.1 / 13.3 / 2.1 | 67.1 / 14.1 / 15.0 / 3.9 | 65.4 / 13.2 / 15.8 / 5.7 | 63.6 / 12.0 / 16.1 / 8.3 |
+| even line + 1.5 (`hard`) | 77.8 / 12.1 / 9.0 / 1.1 | 74.6 / 11.9 / 11.1 / 2.3 | 72.3 / 11.5 / 12.4 / 3.8 | 69.8 / 10.8 / 13.4 / 5.9 |
+
+The tuning tables' half-step ladder (`13_SC_tuning_tables.md` T1: 0 / 0.5 / 1 / 1.5) stands unchanged on the
+even line: the four levels separate by seven to ten points of Failure at every rank (C2, C8), equals at
+`routine` fail 56.9 to 60.1% (C1's 0.50 to 0.65) and carry 22.2 to 30.1% (C1's 0.15 to 0.30; a tenth of a
+point over at rank 7, which the calibration step reads). The first two rows show why the argument cannot
+stand where the blow stands: with no even line an argument at an equal carries 72 to 76% of the time.
+
+The better arguer, at `routine` (actor against opponent; then the reverse; then, of one exchange each way,
+the share in which exactly one side reaches Success):
+
+| ranks | better argues: Failure / Success-or-better | worse argues | better lands alone / worse lands alone / neither or both | better's share of decided |
+|---|---|---|---|---|
+| 2, 2 | 58.7 / 25.4 | 58.7 / 25.4 | 18.9 / 18.9 / 62.1 | 50.0% |
+| 3, 2 | 51.7 / 32.3 | 65.5 / 20.1 | 25.9 / 13.6 / 60.6 | 65.6% |
+| 4, 2 | 45.3 / 39.1 | 71.7 / 15.5 | 33.1 / 9.4 / 57.5 | 77.9% |
+| 6, 2 | 34.6 / 51.4 | 82.3 / 8.5 | 47.0 / 4.1 / 48.8 | 92.0% |
+| 5, 5 | 57.5 / 28.6 | 57.5 / 28.6 | 20.4 / 20.4 / 59.2 | 50.0% |
+| 6, 5 | 51.4 / 34.6 | 63.3 / 23.7 | 26.4 / 15.5 / 58.1 | 63.0% |
+| 7, 5 | 45.9 / 40.4 | 68.8 / 19.3 | 32.6 / 11.5 / 55.9 | 73.9% |
+| 7, 3 | 35.1 / 51.4 | 80.9 / 9.8 | 46.3 / 4.8 / 48.9 | 90.6% |
+| 7, 0 | 21.3 / 67.4 | 95.4 / 1.4 | 66.4 / 0.5 / 33.1 | 99.2% |
+
+Set beside P2's chosen row: the fight's 65.7 / 63.0, 78.0 / 75.2 / 74.3, 92.3 / 91.0 against the argument's
+65.6 / 63.0, 77.9 / 73.9, 92.0 / 90.6. **The two contests share one better-one-wins curve to within a point
+and a half at every gap measured.** That is not tuned in; it follows from pricing a point of training at
+0.4 on both sides of both rolls. The "decided exchange" is arithmetic on the one act that exists, not a
+built mechanism: an exchange pair is decided 38 to 51% of the time, so the expected count of pairs to a
+decision is 2.0 to 2.6, inside the bound of three. Under today's rate on the same sampler the equals drift
+(Failure 60.1, 62.1, 63.9, 66.1% at ranks 0, 2, 4, 7) and the worse arguer is priced harder than the
+better is helped (4 against 2: 36.1% and 11.6%).
+
+Aptitude and wounds, as levels against the roller (rank-2 equals at `routine`; `levels_to_net_sigma`, the
+soft cap applied by `net_boost`):
+
+| against the roller | net σ (capped) | Failure | Success-or-better |
+|---|---|---|---|
+| nothing | 0 | 58.7% | 25.4% |
+| one `minor` (one step of the opponent's aptitude, or one wound step on the roller) | −0.25 (−0.248) | 68.0% | 18.1% |
+| two `minor` | −0.50 (−0.482) | 75.9% | 12.6% |
+| three `minor` | −0.75 (−0.693) | 82.0% | 8.8% |
+| three `major` (far past any lawful stack) | −3.00 (−1.446) | 95.2% | 1.7% |
+
+One step of aptitude is worth about nine points of Failure at the centre, a little more than two ranks of
+training (a rank is 0.4 of an obstacle, 0.18σ at pool 8, against a level's 0.25σ) and unlike training it
+saturates: the cap leaves the worst-placed roller 1.7% to carry. The same levels for the roller when the
+wounded man is the one argued at: Failure 48.9, 39.7, 31.8% at one, two and three `minor`. A hurt man is
+easier to move and worse at moving, by one ladder, in a room and in a fight.
+
+The extremes: rank 0 arguing against rank 7 on a `hard` matter composes 6.7 against a pool of six and
+reads 1.4% Partial-or-better before the per-pool ceiling (`roll.py::_chance_floor_cap`, H-213) lifts it to
+its floor; the same pair on a `routine` matter reads 4.6%. The ceiling is the argument's bound against a
+wall and is `16_PESSIMIST_DICE_soft_ceiling.md`'s to shape. No cell reads 0 or 1.
+
+---
+
+## 6. The candidates against the three targets, and what each loses
+
+| # | form | (a) longer fights, more reversals | (b) the better one wins; equals even | (c) defence real, no attrition | verdict |
+|---|---|---|---|---|---|
+| 0 | as coded: half the score in both, damage 1.55 | fails: 3.35 turns, 3.20 blows, 35.2% | fight holds; equals drift with rank in both contests | defence real; drift: rank-12 mirror fails 37.8% of exchanges | the control |
+| 1 | U5b's default: half the score in the fight, 0.4 in the argument, damage 1.07 | meets: 4.60 / 4.60 / 45.0% | fight curve three to five points steeper; two rules | drift kept: 4.64 to 5.88 turns and 0.5 to 4.1% undecided from rank 2 to 12 | **loses A-71 itself** (two rules) and the flat mirror |
+| 2 | 0.4 × the defender's pool in both (`U1` §4, CAP B5 as written) | fails the bloodless bound: 8.4 to 10 turns, 70% of them bloodless, reversals fall to 27% | better man's share falls (two ranks: 69.3%), a fifth undecided | **fails: 29.0 to 49.7% undecided** | the big attrition, measured |
+| 3 | 0.4 × pool less a constant of 1 to 2 in the fight | 2.0: meets; 1.0: 7.43 turns, 56% bloodless | holds | 1.5: 5.1%; 1.0: 14.1% undecided, 19.4% at rank 0 | a private constant in the fight, a second regime by another name; only its top value survives, and that value is form 5 less 0.4 |
+| 4 | 0.4 × pool, the defence layer's neutralisation deleted | 6.1 to 7.7 turns, reversals 31 to 36% | steeper (84.2% at two ranks) | 5.6 to 15.1% undecided | **loses the parry, the dodge and the riposte**, and still fails (c) |
+| 5 | **0.4 × the defender's trained score; the base is the argument's even line and the fight's defence layer; damage 1.07** | **meets: 4.27 / 4.50 / 45.2%, 39.3% bloodless** | **meets: one curve in both, 66 / 78 / 92; equals 50** | **meets: six points a rank; mirrors flat 4.28 to 4.33; undecided ≤ 0.5%** | **chosen** |
+| 6 | a two-sided roll at the same centre | meets: 4.08 / 4.15 / 44.8% | **fails: two ranks better wins 65.9%** | meets | loses the better man's edge and doubles the draws |
+| 7 | the defender's training as levels, not obstacle | — (not run) | saturates at the soft cap: beyond about six ranks a better defender is no harder to hit | bounded by construction | loses A-26's own words (a cost per point) and A-7's assignment (training is dice, talent is levels); not run because the cap decides it by arithmetic (1.5σ ÷ 0.25σ) |
+
+What the chosen form costs, stated: (i) at the shipped realm the fight's obstacle moves from 1.0 to 0.8, so
+A-31's *"obstacle left alone"* is honoured in effect (a third of a turn) and not to the letter; A-71 is the
+later and specific ruling (ladder step 1). (ii) A defender's rank is worth six points of the attacker's
+wounding share where the half-score gave eight: the better fighter's edge is the shipped one, not the
+steeper one A-31's scale alone would have produced. (iii) The blow and the argument do not have one centre
+(J-29-01). (iv) The Failure share of an exchange between equals still rises from 12 to 25% over twelve
+ranks, because a bigger pool is a wider curve; removing that would take an obstacle that scales with the
+root of the pool, a second formula for nothing a player would see (the mirrors' length does not move).
+
+### For Jordan
+
+**J-29-01 · Does "the same" reach the centre, or the rule?** Taken: the rule. Option A (taken): one
+opposition rule and one better-one-wins curve; a blow at an equal draws blood one time in two, an argument
+at an equal on a routine matter fails 59%, half-lands 16% and carries 25%, so a position holds unless
+something moves it. Option B: one centre as well, the argument carrying about one time in two; positions
+change hands as readily as blood is drawn, and `13_SC_calibration.md` C1 is rewritten. The reverse (the
+blow at the argument's centre) is form 2 and is not offered. Nothing else survives the ladder: the rate is
+A-26's, the scale A-31's, the two inputs A-7's, the wound A-8's, and the operand is decided by measurement.
+
+---
+
+## 7. The battle's duel round and the hearing
+
+- **Duel round (A-4, A-72).** A field calls one round of the combat module through `nested_entry`
+  (`U5b_PC_rulings_in_the_fight.md` §1); the round's exchanges call `ob_from_defender`, so the rule is the
+  same by construction, and the only edit is that the round's input carries the rate and the pool pair raw.
+- **Order friction and prowess (A-59).** `27_MB_A_command_and_the_obedience_draw.md:53` declares the
+  obedience draw `opposed_by: none`: a task on the even line with the ordinary score as its stand-in. The
+  melee pair is not opposed (C-U5b-03). The rule therefore has no rating-against-rating site in a field
+  today; one that is added later calls `opposed_ob` on the trained score and brings no rate of its own.
+- **Hearing** (`05_SC_playable_hearing_B.md`). `argue` is the rule's site (the other side's
+  `Speaker.score`); `answer` has no person operand and takes the even line plus its own difficulty, its
+  exhibit weights as `proofs` levels; the closing draw and the ballots go through the same composer. Length
+  is bounded by effort, structurally.
+
+## 8. Dispositions
+
+| item | where | disposition |
+|---|---|---|
+| J-U5b-01 (`unified/U5_FINDINGS_CLOSURE_U5b.md` §5.2) | answered by A-71 | closed by this file: neither listed option; one rule on the trained score. Option B as listed there (0.4 of the defender's pool in the fight) is form 2, refused by measurement |
+| C-U5b-02 (CAP row B5 against A-31) | U5b decided "two declared regimes" | **superseded** (ladder step 1, A-71): one fixture, one rate; `fight_opposition_rate` is not created. `Folded:` on `U5b_PC_rulings_in_the_fight.md` |
+| `U5a_capability_home_and_two_inputs.md` rows B4, B5; `U1` §4 row *the opponent* | the operand is the opponent's pool | **amended** in place (`Folded:`): the operand is the trained score; the pool's base is the even line. Every social figure is unchanged; the fight is what the amendment protects |
+| F-PES-PC-01 (a fight is two blows) | `audits/16_PESSIMIST_PC.md` | stands; A-31's scale is the fix; this file's gate 2 reads it at the obstacle it will ship with |
+| the pessimist's fourth row of §6.3 (0.4 × pool − 1: 5.65 turns, 3.48 blows, 5.3%) | same | reproduced (5.63, 3.49, 5.5%); it is form 3 at 1.0 |
+| `05_SC_opposed_obstacle_parity.md` (the carrier of the rate) | option B's edit 1 | stands with one change: the composed obstacle is the even line plus the product; its whole-dice tables are history |
+| `13_SC_tuning_tables.md`, `13_SC_calibration.md` | T1's sizes, C1 to C8 | stand; restated on trained ranks and on the even line; one row added to the test (the better-arguer curve) |
+| `03_PC_duel_round_and_approach.md`, `_B.md` | the round's input | gains the three raw fields; its E-B readings are re-read after gate 2, as U5b §5 row 7 already orders |
+| `10_DICE_one_score_two_roles.md` Edit B | `_opposition_of` returns the score | **restored** as written (U5a B4 had replaced "score" with "the pool") |
+
+Layer 1 rows are graded in the proposal; none is edited or owed. Not read in full: `audits/10_DICE_audit.md`
+and its addendum beyond the rows `U5a_DICE_owed_edits.md` carries; `proposals/U5b_PC_residue.md`,
+`U5b_MB_*`, `U5c_SC_proceedings_residue.md`; `05_SC_playable_hearing_B.md` below its *Who decides* section;
+`04` §A.2's provider row (cited through U5c's reading and marked so in the proposal).
+
+## 9. Evidence log
+
+Scratchpad: `/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379/scratchpad/runs/ONE_OPPOSED/`
+(each script's output is the `.txt` of the same name). All `PYTHONHASHSEED=0`. Module scale: `wrapper.fight`
+through the trace seam, with the helpers of `runs/PES_PC/lib.py` so the figures are comparable with
+`audits/16_PESSIMIST_PC.md`. Forms were set by replacing `core.ob_from_defender` and `core.DMG_SCALE` for the
+run; nothing tracked was written. Load average 1.7 to 4 on 4 cores.
+
+| probe | what, size | used in |
+|---|---|---|
+| `olib.py` | the six obstacle forms, the two-sided arm (the defender's zero-mean dice noise added to the attacker's net), the per-exchange reader | — |
+| `p1_grid.py` | 6 forms × 2 scales, 1,200 fights a cell (seeds 0–1,199), 300 traced for bands; 3 control rows at seeds 800,000 on | §4 P1 |
+| `p2_skill.py` | 5 arms × 7 rank pairs × 1,000; mirror control at two seed sets; mirrors at ranks 0, 2, 5, 7, 12 × 4 arms × 1,000 (+200 traced); defence by rank, 600 traced a cell; attributes, 500 a cell | §4 P2, P3, P4 |
+| `p5_social.py` | closed-form bands on the A-5/A-6 roll; control 200,000 seeded draws (seed 29); equals by rank; nine rank pairs; levels; extremes; two-sided roll 100,000 a cell | §5 |
+| `p6_alts.py` | the neutralisation cut, the two-sided roll, the half-score at rank 7, 1,000 a cell; `blood` and `yield` terms 800 a cell | §4 P6 |
+
+Reproduced from other lanes as a check on the instrument: the shipped mirror (3.35 turns, 3.20 blows
+against the pessimist's 3.36 and 3.18); A-31's scale (4.60 / 4.60 / 45.0% against 4.60 / 4.58 / 43.9%); the
+shipped skill curve at 3v2 and 4v2 (64.9 and 77.0% against `pD_skill.txt`'s 64.97 and 76.50%).
+
+Limits, stated. One weapon and one armour (arming sword, light): the season's only fight
+(`audits/16_PESSIMIST_PC.md` §1.2). No reading here is a balance claim across the roster; the roster sweep
+belongs to U5b §5 row 5's batch. The argument's figures are the roll's own odds, not a realm reading: the
+realm reading is `13_SC_calibration.md` step 4's, after the cast holds scores. The 1.07 scale is the
+pessimist's seed, not a swept value. The two-sided arm in a fight is an equivalent-in-law construction on
+the attacker's net, not a second draw path.
