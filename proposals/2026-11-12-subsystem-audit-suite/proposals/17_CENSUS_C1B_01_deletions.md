@@ -1,5 +1,7 @@
 # CENSUS C1B · deletions: three batches, ordered by risk
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-19) — D1's and D3's edits to `tests/valoria/test_flow_skeletons.py`, and gate item 3's run of that file, are conditional: `01_CORE_tests_delete_what_cannot_fail.md` row 2 deletes the file. If that proposal has landed, skip those edits and that gate line; if this one lands first, make them (the file must stay green until it is deleted). No other edit here changes. D3's whole-file deletion of `co_movement.py` supersedes `17_CENSUS_REST_1_deletions.md` D1 row 6 (a field inside it).
+
 ## Status: PROPOSED
 
 Carries `audits/17_CENSUS_C1B.md` §3.1 (the 21 dead rows this lane newly finds). The 80 dead rows that

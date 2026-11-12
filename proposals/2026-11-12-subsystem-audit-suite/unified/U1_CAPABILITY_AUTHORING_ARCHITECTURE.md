@@ -122,8 +122,12 @@ lanes:
 4. **`circumstance` carries hostile terms only** (A-25). A favourable circumstance is an `edge` row for
    the roller. A row with a negative `gain` at role `circumstance` is refused at load. The room's
    favourable half follows SC's composer (U5c).
-5. **`gate` stays closed to its one site** (A-11): `own_state_gate` / Thread Sensitivity. No `when` key,
-   `requires` stem or use row may make another capability a condition of attempting an act.
+5. **`gate` stays closed to its one capability** (A-11): Thread Sensitivity, at two sites, each the same
+   comparison against the one `thread_sensitivity_gate` fixture: `own_state_gate` (may he attempt the
+   gated act) and `told_retain` (may he hold a told claim of a thread-substrate term;
+   `17_CENSUS_REST_2_wiring.md` W3, Reconciled to read through `capability_admits`). No `when` key,
+   `requires` stem or use row may make another capability a condition of attempting an act or of holding
+   a claim; a `gate` row keyed on any other capability, or at any other site, is refused at load.
    `01_CORE_capability_authoring_surface.md` Part three is withdrawn (Reconciled).
 6. **A seat's modifier is an `addend`** (A-12). Where a seat declares one (the fact on the seat is the
    institutions and FA lanes'; the Layer-1 amendment text is owed by the unification stage, not applied
@@ -135,7 +139,8 @@ Sites (`capability_use_sites`, closed; each is one reader): `social_roll`, `figh
 `settlement_effect`, `told_claim_credit`, `choice_temper`, `own_state_gate` (MAP §C), plus the sites other
 lanes' proposals add on this surface: `choice_exposure` (`02_CHAR_what_an_act_risks.md`), `bench_reading`
 (`05_SC_hearing_capabilities.md`), `notice` (`18_DETERMINISM_notice_is_a_draw.md`), `task`
-(`18_DETERMINISM_task_draw_for_uncontested_verbs.md`). A new site is a new reader and a new roster member.
+(`18_DETERMINISM_task_draw_for_uncontested_verbs.md`), `told_retain` (`17_CENSUS_REST_2_wiring.md` W3). A
+new site is a new reader and a new roster member.
 
 ## §4 · The roll: two inputs, one pool rule, one sampler
 

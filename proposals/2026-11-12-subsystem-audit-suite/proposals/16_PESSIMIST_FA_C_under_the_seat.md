@@ -1,5 +1,7 @@
 # PES-FA-C — "under the seat" is one predicate: the seat's ground, its ladder, and its sworn
 
+Reconciled: 2026-11-12, U5d closure — folded **A-22** (command). `under_seat` is rewritten to the ruled three classes: (i) the sworn (a live `oblige` to this seat; the third disjunct, unchanged), (ii) the holder of a seat this seat may revoke (`may_revoke`, replacing the second disjunct "he holds a seat on its ground"), (iii) an **unseated** person in its land (the first disjunct, narrowed: `purview_reaches(seat, place_of(person))` and the person holds no seat). A seated resident who is neither sworn nor revocable is no longer under the seat by living there. A writ to a superior is a petition: edit 2 routes a Person referent who fails `under_seat` to the petition form, not to a refusal. Edit 3 (`dispatch` asks the same predicate) stands; this narrows the ED-IN-0256 (4) basis for `issue` and `dispatch` behind its revert, as the ruling says. Gate arms rewritten: the Duke of Varfell reaches the holders of Varfell seats he may revoke and his sworn men, wherever they live; the Royal Marshal no longer reaches seated residents of other factions.
+
 ## Status: PROPOSED
 
 Source: `audits/16_PESSIMIST_FA.md` F-PES-FA-03 (premise P1.3; runs `pf2_premise.py` P1, `pf2b_followup.py`

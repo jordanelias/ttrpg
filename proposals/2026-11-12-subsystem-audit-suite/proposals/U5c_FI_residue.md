@@ -51,9 +51,13 @@ Falsifier: `08_FI_01`'s and `16_PESSIMIST_FI_C`'s, unchanged. Hash: declared mov
 | 12 | `08_FI_05_evidence-interface_B.md` with `05_SC_evidence_and_rebuttal_B.md` and `19_LACUNA_admission_rides_the_citing_draw.md` | CR-61, plan SC-02, the hearing | their gates |
 | 13 | `08_FI_08` §3; `08_FI_04` (its §4 budget row last, with `test_n3` read before and after) | 3 | theirs |
 
-The `reach` roster has two cells that are Jordan's (closure Part 2.2): seat changes, and the death that
-caused one. Both ship at realm-wide (what the realm does today, now mediated) with by-presence the swept
-control; the two cells are separate rows so the answers need not match.
+The `reach` roster has two cells Jordan has answered (`unified/DECISIONS_ANSWERED.md`), and they are
+separate rows because the answers differ. **Seat changes** ship realm-wide, with presence, purview and
+telling built as the test arm (A-32). **The death that emptied a seat** travels apart from the seat's
+news: by presence, trail and telling only (A-33), so a realm can know a throne is empty and not know why.
+`08_FI_01` edit 6 seeds the first cell; the second has no seed and is carried by `08_FI_06` and
+`16_PESSIMIST_FI_C`'s deposits. Gate for the second cell: at one seed, a person holds the vacancy and no
+`person.died` claim about its last holder.
 
 ## §3 Register and pointer text (edits; no behaviour)
 

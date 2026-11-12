@@ -2,6 +2,8 @@
 
 Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-07 — note added that the levy's turnout is a graded draw (MILITARY's `recruit`); this file decides eligibility only.
 
+Reconciled: 2026-11-12, U5d closure — folded **A-22** (command). `may_levy`'s conjunct `purview_reaches(seat, residence of the cohort)` stands: a cohort is "the unseated in its land", one of the three classes a seat commands, so the levy is an order to those the seat commands and no rewrite of edits 1–6 is owed. What changes is the reason given: the basis is command over the unseated on the seat's ground, not territorial authority over everyone there; a seated person resident on that ground is not levied through it. One gate arm added: a seat-holder residing in the levying seat's land is not raisable through `may_levy` unless he is its sworn man or holds a seat it may revoke.
+
 ## Status: PROPOSED
 
 Source: `audits/06_FA_audit_addendum_B.md` F-FA-15, §B4.1 (the levy and command rows), §B6.1 R-24;

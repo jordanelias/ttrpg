@@ -1,5 +1,7 @@
 # Census (REST) 1 — deletion batches: fields, a dead clock's dependants, two phantom contracts (and one deletion withdrawn)
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-18) — D1 row 6 (`CoMovementCard.card_id`) is withdrawn: `17_CENSUS_C1B_01_deletions.md` D3 deletes `systems/threadwork/sim/co_movement.py` whole, so there is no field to cut. D1 row 1's condition does not fire: the dice proposals as reconciled to Jordan's answer A-5 (`U5a_DICE_owed_edits.md` §1) give `RollResult.pool_size` no reader, so the row stands. D1 rows 4–5 and `17_CENSUS_C1B_01_deletions.md` D1 edit the same file (`systems/characters/sim/conviction.py`); land them in one commit or re-read the line numbers. D2 and D4 are unchanged.
+
 ## Status: PROPOSED
 
 Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-30) — the test at `test_season_shape.py:4729-4731` is named.

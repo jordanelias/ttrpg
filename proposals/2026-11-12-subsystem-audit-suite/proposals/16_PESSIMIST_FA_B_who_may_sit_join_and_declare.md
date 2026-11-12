@@ -1,5 +1,7 @@
 # PES-FA-B — who may sit, who may join, who may declare: three eligibility checks the engine does not ask
 
+Reconciled: 2026-11-12, U5d closure — folded **A-19**, **A-20** and **A-58**. Decision 1 (`may_sit`: an individual) is the first eligibility of the deed race and of a conquest's seats (a cohort taker leaves the seat vacant). Decision 2 stands and the "Jordan call of §5 for the crown's fallback" is answered (the race). Decision 4 (a war has two parties and a declarer of one) composes with A-20: the declarer must also be able to wage it for the declaration to be de jure (`may_wage`, `06_FA_war_lives_in_seats_B.md` edit 1); a member's WAR utterance without a muster seat is a call for war, not a war. No step is deleted.
+
 ## Status: PROPOSED
 
 Source: `audits/16_PESSIMIST_FA.md` F-PES-FA-01, -04, -05 (premises P2, P3, P4; runs `pf2_premise.py` P2 to

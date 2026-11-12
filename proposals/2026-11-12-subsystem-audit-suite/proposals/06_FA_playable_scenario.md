@@ -2,6 +2,8 @@
 
 Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-08 — the heir's `succeed` and the tick-0 set-up acts are draws; a set-up that fails is reported, not forced.
 
+Reconciled: 2026-11-12, U5d closure — folded **A-19** (the crown by the deed race), **A-10** and **A-21**. The `succession` situation no longer assumes one title and a first valid claim: `successions` is a set of titles (`22_HAPPENINGS_B_the_throne_is_never_stranded.md` edit 2 as reconciled) and the claim is a draw whose odds read what others hold of each claimant's deeds; the scenario-local mapping in `play` is a tuple of titles and the digest reports every claimant and the band. The `order` situation is A-21's proclaimed decree as written. A-10 confirms the form (a scenario on the season loop; no governance module), so the audit's §11 item 2 no longer hangs over this file. Steps rewritten: the `succession` row of the situation table and the last paragraph of the edits (the mapping's value shape). The gate gains one arm: with two listed titles held, the seat goes to each in at least one seed of the swept set.
+
 ## Status: PROPOSED
 
 Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-28) — all three readers of `SUCCESSIONS` hold the one dict by `from`-import; an in-place change reaches them and a rebinding does not.

@@ -1,5 +1,7 @@
 # FA-B1 — a war lives in the seats that wage it: whose word continues it, whose word ends it, and what a seat is told when its army stands on another's land
 
+Reconciled: 2026-11-12, U5d closure — folded Jordan's answers. **A-20** rules option (B), the seats that wage it: the sentence "lands only on that ruling. Until then the code is unchanged" is discharged; edits 1–3 land as written and edit 4 (the Layer 1 text for `04:460` and D-48) is owed by the ruling, drafted, not applied by a suite lane. **A-57 / A-58** replace edit 6's premise ("the taking is still `seize`'s … Nothing is written by the field"): on a march in force onto land another faction holds, the aggressor's win writes the title and the seats that go with the land in the field's own effect; a draw or a defender's win leaves the defender holding; ground no party holds is outside the rule. The exact edit is `U5d_FA_land_and_seats_pass_on_a_won_march.md`. Edit 6 is rewritten to: CP-T09-04 (d)'s standing term offers `seize` only for rungs the faction occupies **without a won field** (an `Unopposed` entry; unheld land), since a won field has already passed the title. Edit 7 (a) stands (`at_war` enters no `requires`); a land-taking march is a war act, so `fields_between` is the reader of it. R-22's "keep β" in the addendum is superseded by the rulings; the finding stays.
+
 ## Status: PROPOSED
 
 Source: `audits/06_FA_audit_addendum_B.md` F-FA-13, F-FA-14, §B4.2, §B6.1 R-22, R-23, R-32, §B6.2 item 1;

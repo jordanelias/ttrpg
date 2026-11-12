@@ -47,7 +47,7 @@ Carriers: **DECREE** = `06_FA_decree_binds.md`; **REMIT** = `06_FA_remit_grant_b
 `14_VERBS_BINDING_C_turnover.md`, `_D_orders.md`, `_E_war_seats.md` (U5c closes the verb verdicts; cited
 here as the owner of a band row); **OWED-FA** = `U5d_FA_owed_edits.md` (written by this lane: the FA
 rows decided "in this table" with no file, and the edits Jordan's answers A-19, A-22, A-23, A-35 and A-36
-now order).
+now order); **LAND** = `U5d_FA_land_and_seats_pass_on_a_won_march.md` (written by this lane on A-57 and A-58).
 
 ## 1.1 `audits/06_FA_audit.md` — findings
 
@@ -149,15 +149,16 @@ now order).
 | C-1 | F-FA-04's "no producer" is true only of computed play | RESOLVED-BY | corrected in the addendum; no edit owed | `tests/test_faction_q.py:223-262` |
 | C-2 | `marshal`, `surrender` and the army verbs are withheld by a fixture | RESOLVED-BY | MB's step 5 lifts the withholding (U5b); LEVY-B lands first | `data/fixtures.py:1157` |
 | C-3 | the FA→MB interface was understated | RESOLVED-BY | corrected in the addendum §B4.2; `04_MB_campaign_party_economy.md` (U5b) | — |
-| C-4, C-5, C-7, C-8 | corrections of reading | RESOLVED-BY | corrected in the addendum; no edit owed | E-B1, E-B6, E-B7 |
+| C-4, C-5, C-8 | corrections of reading | RESOLVED-BY | corrected in the addendum; no edit owed | E-B1, E-B6, E-B7 |
+| C-7 | nothing a battle decides is read back by a governance verb (a Layer 1 shortfall) | RESOLVED-BY | LAND (as F-FA-13) | `10_FACTIONS_AND_DEPLOYMENT.md:90` |
 | C-6 | eight `elected` rows at `term: 8` do not fit the design | RESOLVED-BY | TERMS-B (three rows; life seats `null`), which supersedes TERMS's first authoring in content | E-B2 |
-| F-FA-13 | a defeat costs bodies and never a holding or a seat | RESOLVED-BY | WAR-B edit 6 (R-22); the field returns an end state (A-3) | `10_FACTIONS_AND_DEPLOYMENT.md` §3 |
+| F-FA-13 | a defeat costs bodies and never a holding or a seat | RESOLVED-BY | **LAND** (`U5d_FA_land_and_seats_pass_on_a_won_march.md`, written by this lane on A-57 and A-58: an aggressor's win on a march onto land another holds passes the land and its seats; a draw or a defender's win passes nothing); WAR-B edit 6 as reconciled | `architecture/meta/10_FACTIONS_AND_DEPLOYMENT.md:90`; `loop/effects_combat.py::_eff_march` ("PRESENCE, NOT TITLE", opened) |
 | F-FA-14 | under the planned `at_war`, one committer keeps two factions at war | RESOLVED-BY | WAR-B edits 1–4 as reconciled: A-20 rules (B), so the "lands only on that ruling" hold is lifted | `04:460` |
 | F-FA-15 | men are levied by whoever minted a paper | RESOLVED-BY | LEVY-B as reconciled (A-22: the cohort is "the unseated in its land") | E-B3 |
 | F-FA-16 | five of ten factions have no head; one has no members | RESOLVED-BY | TERMS-B edit 4 (two heads); the Guilds headless by design; R-34 (`faction x` excluded by name) | E-B2 |
 | F-FA-17 | at tick 0 no rung holds a store | RESOLVED-BY | `07_SE_treasury_granary_B.md`; the seeded start draws bounded stores (A-50, `21_PROCEDURAL_D_world_cards_and_churn.md`) | addendum E-B1 |
 | F-FA-18 | what an order orders exists only as prose | RESOLVED-BY | OWED-FA §5 (R-27: a closed set of term shapes, built after an answered writ is observed); VB-D owns the row | H-44 |
-| R-22 | Layer 1's battle roster names stakes the code does not pass | RESOLVED-BY | WAR-B edit 6 | — |
+| R-22 | Layer 1's battle roster names stakes the code does not pass ("keep β: a field writes presence") | SUPERSEDED | A-57, A-58 replace β; LAND carries the edit; holdings and seats both pass, so the Layer 1 clause is met in full | `_eff_march`'s own tag: "revert: Jordan states α, and title moves here" |
 | R-23 | whose edge a war is | RESOLVED-BY | WAR-B (A-20) | — |
 | R-24 | men by a Record's holder, stores by a seat | RESOLVED-BY | LEVY-B | — |
 | R-25, R-26 | heads; which seats take a term | RESOLVED-BY | TERMS-B | — |

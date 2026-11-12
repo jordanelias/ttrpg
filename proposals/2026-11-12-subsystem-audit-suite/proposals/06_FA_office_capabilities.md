@@ -2,6 +2,8 @@
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-11) — the judge's capability is named `law`, not `judgment`: SC's `05_SC_hearing_capabilities.md` authors the same capability under that name, one thing takes one name, and `judgment` collides with the uses table's role `judgement`. `determine: law`, `interrogate: inquiry`, `arrest: arms` are the decided verb values (`unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §5), written on the verb row's `capability:` column; the definition row lives in `references/descriptor_registry.yaml: capabilities`.
 
+Reconciled: 2026-11-12, U5d closure — folded **A-12** (a seat may carry a modifier) and **A-7** (two inputs to a roll). The sentence "a seat's vocation is never a prerequisite. It is a reason" stands for gating (A-11: capability gates nothing), and edit 3's `vocation:` key stands. Added by A-12: a seat row may also carry a modifier on the rolls made through it; this file does not author its number or home, which is `14_VERBS_BINDING_C_turnover.md`'s standing term and the institutions kit's (`15_INSTITUTIONS_SYNTHESIS_A_one_kit.md`), read by the one obstacle composer (`U5c_SC_one_obstacle_form.md`) so that regard and office are not counted twice. Edit 4's "the one reader" is therefore no longer the only reader of a seat's row. The pool's two inputs and the capability home are `U5a_capability_home_and_two_inputs.md`'s; edits 1–2 land on that home. The Layer 1 text for `04` §B.7 is owed by the ruling, not applied.
+
 ## Status: PROPOSED
 
 Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (L-10) — the pool reader's owner is `seam/wrappers/pool.py::faculty` (`:78`), re-exported by `sigma.py:105`; one citation corrected. No edit of the proposal changed.

@@ -1,5 +1,7 @@
 # FA-P3 — seats that end: a term on the office row, a refusal for a malformed one, and the scope of a ban
 
+Reconciled: 2026-11-12, U5d closure — folded **A-15** (natural death on), **A-14** (a vote is a draw on the voter) and **A-36**. The first authoring ("the eight `elected` rows at `term: 8`") is withdrawn in favour of `06_FA_seat_terms_by_body_B.md` (the audit addendum's C-6); the mechanism (edits 1–6) stands. With A-15 a seat also empties by its holder's natural death at a rate, so the gate's "a `tenure.opened` after a `term.matured`" gains a sibling reading (an opening after a death) and the vacancy occasion must not assume the term is the only clock. Where a seat is `elected`, the filling is one presiding act whose ballots are draws (A-14), not a plain `confer`. The Confessor's seat takes no term and no removal (A-36: death or resignation only).
+
 ## Status: PROPOSED
 
 Source: `audits/06_FA_audit.md` F-FA-02, F-FA-08, §6.2 R-06 and R-17, §13 (NPC-008, NPC-070, NPC-006,

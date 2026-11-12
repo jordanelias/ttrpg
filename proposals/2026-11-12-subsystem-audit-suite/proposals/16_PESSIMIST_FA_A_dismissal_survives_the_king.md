@@ -1,5 +1,7 @@
 # PES-FA-A — the power to dismiss survives the King, reaches a duke's own council, and can be undone
 
+Reconciled: 2026-11-12, U5d closure — folded **A-19**, **A-37** and **A-58**. Edit 1's `successions: off_duke_valorsmark: off_heir` is written in the set-of-titles shape (`22_HAPPENINGS_B` edit 2) and the duchy passes to whoever takes the throne in the race, not to the heir by right; the claim is a draw. Edit 3 (a dismissing seat can pardon) stands and agrees with A-37 (an imposed bar ends by the bench's pardon or its term, never by the barred man's own release). Edit 2 anchors six council seats on a territory: under A-58 a seat goes with the land it is anchored on, so those six seats pass to the taker when that territory is taken on a won march; the author's choice of territory is therefore also the choice of what a conquest of it carries, and this is stated at the rows.
+
 ## Status: PROPOSED
 
 Source: `audits/16_PESSIMIST_FA.md` F-PES-FA-02 (premise P5; runs `pf1_static.py`, `pf2_premise.py` P2 and

@@ -1,5 +1,7 @@
 # GO — the player-surface contract: what the oracle types so that the port only renders
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-21) — §4 only. The write-matrix rows already declare `scar.taken` on `(Person, scar)` and `conviction.moved` on `(Person, conviction)`; no row "gains" a kind and `conviction.folded` is not created (`17_CENSUS_REST_3_corrections.md` C-5). The one edit §4 asks to be "one edit" is split between two carriers and made once each: `scar.taken` is passed at `_scar_witnesses` by `16_PESSIMIST_CORE_the_record_holds_what_changed.md` edit 2, landing after `02_CHAR_scar_cap_and_regard_unit.md`'s cap (883 scar writes in three seasons at seed 0 otherwise become 883 Events); `conviction.moved` is emitted, witnessed, by `16_PESSIMIST_CHAR_A_a_crisis_of_faith_is_drawn_and_told.md` item 4 (Jordan's answer A-24). GO's own closure owns the rest of this file.
+
 ## Status: PROPOSED
 
 Carries audit findings F-GO-07 and F-GO-08, and the audit's §13 and §14 (`audits/11_GO_audit.md`).

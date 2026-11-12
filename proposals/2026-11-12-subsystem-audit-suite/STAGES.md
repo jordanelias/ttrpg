@@ -1,0 +1,22 @@
+# Stages — the order of the remaining work, and what it ends in
+
+## Status: WORK ORDER (Jordan's direction of 2026-11-12; not canon)
+
+Jordan, 2026-11-12: *"Once we finish all lanes, the unification pass will update everything as required re verification, correction, adjustment, making commensurate. The penultimate step will be to read and evaluate the entirety of workplan v11 and gap register. Our goal is to end up with a comprehensive master suite with findings and recommendations followed by a comprehensive batch-based logically sequenced time efficient expedient folding of extremely detailed instructions for code execution from this session alongside the above work re workplan v11. We will end up with a workplan v12 that is huge."*
+
+## The order
+
+1. **Finish the producing lanes** (audits, addenda, verbs, institutions and their re-grounding, pessimist audits, census, story enablement, grounding, the mass-battle history lane, closure lanes U5a to U5d, implementation lane A). Collect receipts; no new fan-out until the first wave is read (CLAUDE.md §0).
+2. **Unification** (`UNIFICATION_BRIEF.md`: U1 owners and vocabulary, U2 Layer 1 conformance, U3 conflicts and order, U4 index, traceability and fact check). It verifies, corrects, adjusts and makes every document commensurate with the rest and with Jordan's rulings (`unified/DECISIONS_ANSWERED.md`, the governing list), the engine-grounding refutations (`audits/25_GROUNDING_ENGINE.md`) and the research re-grounding. Its edits are made in the documents; its ledgers are the record.
+3. **Holistic audit and codebase improvement proposal** (organization, centralization, efficiency, modularity), built on the unified documents.
+4. **Instruction suite**: how to achieve the nine requirements, and how each subsystem plays alone as a game that conforms to Layer 1 and integrates with the season loop.
+5. **PENULTIMATE: read and evaluate the whole of workplan v11 and the gap register.** Workplan v11 is `workplans/valoria_master_workplan_v11.md` and `_part2` to `_part17` (the head in `CURRENT.md`); the gap register is `engine/season/hole_register.yaml` (read by the corpus grader) with its `registers/` companions. Read every position and every row, in full (sampling is a defect). For each: is it done in code, superseded by a ruling or a suite proposal, wrong, still needed, or missing a dependency; how does it sit against this session's findings. Output: `master/V11_EVALUATION.md` and `master/GAP_REGISTER_EVALUATION.md`, with a disposition per position and per row.
+6. **FINAL: the master suite and workplan v12.**
+   - **The master suite**: findings and recommendations, one place, ordered, each with its evidence and owner (`master/`).
+   - **Workplan v12**: the batch-based, logically sequenced, time-efficient folding of (a) the extremely detailed code-execution instructions from this session's proposals and (b) what survives from v11 and the gap register. Each batch: the items, their dependency edges, the exact edits at the single owner, the gate (an execution artifact), the falsifier, the declared hash movers, who or what lands it, the cost class, and what runs in parallel. It is expected to be very large; per `CLAUDE.md` §4 it is written as sequential parts (`_part2`, `_part3`, …) in reading order.
+   - It is drafted under the suite directory (`master/workplan_v12/`) as a PROPOSAL. **Adopting it into `workplans/` retires v11 in the same commit** (delete the superseded files and write an exact-file `FORK:` row each in `references/restructure_ledger.md`; a shallow clone runs `git fetch --unshallow` first; carry forward any v11 content v12 still needs), per `CLAUDE.md` §2 (one active plan per lane). [ASSUMPTION: adoption is Jordan's call at merge, and it ratifies by merge per ED-1094 unless the PR body says what is held back.] The Layer 1 amendments and canon rewordings owed by Jordan's rulings are carried as batch items and listed as held back.
+7. **Agonist/antagonist write-up** (Sonnet) of the master suite and v12, as the original brief asked, ending the sequence. [ASSUMPTION: after v12 rather than before it; the 2026-11-12 message names v12 as the goal.]
+
+## Standing constraints for every stage
+
+Read `AUDIT_BRIEF.md`'s standing rules and `unified/DECISIONS_ANSWERED.md` first. Nothing deterministic; ground every claim in the repository; do not guess. One round of review per deliverable, then stop (CLAUDE.md §0). No lane edits code, canon, a registry or a ruling; implementation lanes land the plan.

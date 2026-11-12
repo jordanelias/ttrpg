@@ -1,5 +1,7 @@
 # FA-B3 — which seats end on a clock: terms by body, from the design's own tenure rules; and the two heads the roster omits
 
+Reconciled: 2026-11-12, U5d closure — folded **A-36**, **A-35** and **A-15**. Edit 3's sentence for CR-37 ("deposition is the turnover of a life seat") excludes the Confessor: nobody judges him, so his seat ends by death or resignation only and no deposition occasion is offered for `off_confessor`. Every other Church officer's turnover is the head's strip by a resistible draw (A-35; `15_INSTITUTIONS_PAPACY_B_patronage_election_discipline.md` item 4, un-held); the Löwenritter stay unstrippable until edit 4's `head_seat` row for `off_grand_master` lands, after which the same basis reaches them. A-15 makes "emptied by death" a live route for the life seats, so this file's rule (a term only where the body rotates) no longer leaves them permanent.
+
 ## Status: PROPOSED
 
 Source: `audits/06_FA_audit_addendum_B.md` C-6, F-FA-16, §B6.1 R-25, R-26; evidence E-B1, E-B2.

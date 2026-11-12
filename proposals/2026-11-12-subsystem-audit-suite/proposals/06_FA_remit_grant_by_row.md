@@ -1,5 +1,7 @@
 # FA-P2 — a seat grants what its row names: `dispatch` by row, a row for the unauthored seat, the consort's remit
 
+Reconciled: 2026-11-12, U5d closure — folded **A-19** and **A-23**. Edit 1's `off_widow_regent: remit_acts: []` (R-16) lands only together with the deed race (`22_HAPPENINGS_B_the_throne_is_never_stranded.md` as reconciled), which gives the throne a filler when King and heir are both dead; landing it alone strands the throne one death earlier (`audits/16_PESSIMIST_FA.md` F-PES-FA-11). The note's "a regency is a termed `confer` or the heir's claim" gains: or a claim in the race by the consort herself (A-19 lists her among those who may claim). A-23: a grant is not exercised while its holder is in custody; no row edit follows from it.
+
 ## Status: PROPOSED
 
 Source: `audits/06_FA_audit.md` F-FA-03, §6.2 R-04 and R-16, §13 (NPC-032, NPC-034, NPC-036, NPC-072,

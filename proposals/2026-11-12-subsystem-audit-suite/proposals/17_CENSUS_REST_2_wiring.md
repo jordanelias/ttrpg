@@ -1,5 +1,7 @@
 # Census (REST) 2 — wiring: four cut wires this census closes itself, and the ledger of those other proposals carry
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-20) — W3 stands, with one change to its edits 3–4: the comparison is not a second hand-written read of `thread_sensitivity_gate`. It is a `gate` row of `rosters.yaml: tables.capability_uses` at the site `told_retain` (`{use: told_retain, role: gate, key: prac.thread_sensitivity, side: subject}`), read through the one reader `capability_admits` (`unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §3 amendment 5, §8). `retainable(...)` keeps its signature and calls that reader for the `thread_substrate` branch; `loop/witness.py` calls `retainable` as written. Jordan's answer A-11 (a capability never gates, except Thread Sensitivity) admits this gate and no other. W1, W2 and W5 are unchanged.
+
 ## Status: PROPOSED
 
 Author: Fable census lane, PART=REST. Source: `audits/17_CENSUS_REST.md` §1a, §2, §5–§9. Read at

@@ -44,7 +44,8 @@ In order; each row is an edit some proposal already states, with what U1 changes
 and `fed_by` on a graded `argue` lists exactly its `dice` and `opposes` rows.
 **Falsifier (Part A).** U1 §8's four: delete the block (load refuses); delete a contested row's
 `capability:` (load refuses naming the row); a negative-gain `circumstance` row, a `dice` use of a trait, a
-`gate` row at any site but `own_state_gate`, each refused at load. Any of them loading falsifies the edit.
+`gate` row keyed on any capability but Thread Sensitivity or at any site but `own_state_gate` and
+`told_retain` (U1 §3 amendment 5), each refused at load. Any of them loading falsifies the edit.
 **Hash movers.** None.
 
 ## Part B — the roll with two inputs (one calibrated landing; every seeded result re-pinned once)

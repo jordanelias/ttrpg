@@ -152,15 +152,28 @@ no pursuit, or already stands where the arguer does) is emitted as `argument.ref
 Lands with `16_PESSIMIST_SC_D_an_argument_moves_someone.md`, which touches the same row. Gate:
 `p5_argue.py` (e): 0 `argument.refused` at degree Success. Hash: declared mover.
 
-## §8 Who a verdict is for (PES-SC, for Jordan): the two shapes, so either answer can be built
+## §8 Who a verdict is for: the petitioner, or a seat he names (answered by Jordan, A-38)
 
-- **A, as ruled (C-1):** the disposal is the party's edge on the seat exercised. Nothing to build.
-- **B:** a won case gives the petitioner something. It is not one row key: `oblige` runs from a person to
-  a seat (`04` §B.7), so a remedy to a person is either a store movement the bench orders (a `transfer`
-  from the party's rung to the petitioner's, opened as a disposal kind `damages` beside `oblige`,
-  `detain`, `ban`, with its `stakes_ob` row) or a hold the bench passes (`give`'s handover basis). Both
-  are design-first and both add a member to `DISPOSABLE_KINDS`. B changes what C-1 ruled about the edge's
-  object, so it waits for Jordan.
+`unified/DECISIONS_ANSWERED.md` A-38 (D-55) takes B: where a case came from a petition, the verdict serves
+the petitioner or a seat he names. It changes what addendum C-1 ruled about the edge's object. The build,
+in two parts:
+
+1. **A seat he names (buildable now, with `16_PESSIMIST_SC_C_a_verdict_names_its_party.md`).** The
+   petition's Proposition carries the seat as a referent; the docket item carries it forward; an
+   arrangement row may declare `disposes_to: petition`; `_eff_determine` then opens the disposal `oblige`
+   with that seat as object instead of the seat exercised. No new edge kind, no new gate basis: the
+   writer is still the determining judge under the `determination` basis. Where the petition names no
+   seat, the object is the seat exercised, as today. `detain` and `ban` keep the bench's seat as object
+   (custody and the ban are the court's to end, `_eff_pardon`).
+2. **His person (design-first).** `oblige` runs from a person to a seat (`04` §B.7), so a remedy to a
+   person is a store movement the bench orders: a disposal kind `damages` beside `oblige`, `detain` and
+   `ban` (a `transfer` from the party's rung to the petitioner's, with its `stakes_ob` row), adding one
+   member to `DISPOSABLE_KINDS`. Not built until its design names the amount's owner.
+
+Gate for part 1: at one seed, a determined case that came from a petition naming a seat leaves an
+`oblige` whose object is that seat; the control (a case from `open_case`) leaves it on the bench's seat.
+Falsifier: a disposal whose object is a seat the petition did not name. Hash: declared mover on any world
+where a petition-born case is determined.
 
 ## §9 The four things that did not draw (C-10), in one table
 
@@ -169,7 +182,7 @@ Lands with `16_PESSIMIST_SC_D_an_argument_moves_someone.md`, which touches the s
 | what a hearer believes once a telling lands | a reading over held items, not an outcome; the outcomes are the deposits, which are drawn (the telling's band; notice, `18_DETERMINISM_notice_is_a_draw.md`). No draw is added at read: a read is not an Event, and a belief drawn per read would give one person two beliefs in one season. The reading itself is repaired so it can come out either way as deposits vary | `16_PESSIMIST_SC_B` (confidence in the one comparator); `16_PESSIMIST_SC_E` edit 1 |
 | whether a bench that failed may ask again | once per sitting; counted toward dismissal | §4 items 3 and 4 |
 | whether a lapsed or dismissed matter may be re-opened | eligibility (something new), then the docketing draw for `carry` | §4 item 5; `14_VERBS_SOCIAL1_D` §1 |
-| whether a convict may discharge an imposed service | he may attempt it (C-1's ruled price, not re-raised); whether he gets free is a draw | `U5c_VERBS_residue_and_governance_owner.md` §4 |
+| whether a convict may discharge an imposed service | he may not (Jordan, A-37): it ends by the bench's `pardon`, which is drawn, or by its term. The certain self-release is removed as eligibility, so nothing is left to draw | `U5c_VERBS_residue_and_governance_owner.md` §4 |
 
 Docketing itself: `carry` is drawn (`14_VERBS_SOCIAL1_D` §1); `open_case` on one's own bench is a remit
 act and is not (LACUNA §5; `convene`'s class).
@@ -184,5 +197,12 @@ refuse the other shape), except §4 item 5's person-side decline (CONVENTION unt
 
 ## Cost class
 
-§1, §5, §7: edit. §2, §4: small build. §6: inside `05_SC_playable_hearing_B.md`'s build. §3, §8:
-design-first.
+§1, §5, §7: edit. §2, §4, §8 part 1: small build. §6: inside `05_SC_playable_hearing_B.md`'s build. §3,
+§8 part 2: design-first.
+
+## Jordan's answers this file is conformed to (`unified/DECISIONS_ANSWERED.md`)
+
+A-14 (a vote is a draw on the voter inside the presiding person's act: §6). A-37 (no self-release from an
+imposed service: §9 row 4). A-38 (the verdict serves the petitioner or a seat he names: §8). A-39 (appeal
+on new grounds only: §4's `fresh` conjunct is also the appeal's eligibility in
+`19_LACUNA_verdict_ladder_and_reversal.md`, one reader for both).

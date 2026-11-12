@@ -12,6 +12,23 @@ each of those carries a `Reconciled:` line pointing here: `05_SC_obstacle_diffic
 files it depends on and does not edit: `16_PESSIMIST_DICE_task_difficulty_and_throughput.md` (PES-DICE),
 `10_DICE_capability_axiom_map.md` (the DICE map).
 
+## Conformed to Jordan's answers (`unified/DECISIONS_ANSWERED.md`, 2026-11-12)
+
+The answers landed while this was being written. The form below needs none of them changed; the numbers do.
+
+| answer | what it does here |
+|---|---|
+| A-25 (favourable circumstances raise the speaker; hostile ones raise the obstacle) | confirms the split this file is built on (§2, §3) |
+| A-26 (an equal opponent costs 0.4 per point) | the opposition term's rate. `opposed_ob` stays the one owner (§1); its value changes from half the score to 0.4 per point, and `05_SC_opposed_obstacle_parity.md` is the carrier. Steps 0 to 4 of §4 land at the rate in force today (half the score), which is what keeps them hash-equal: the "1.0" and "2.0" written below are that rate's figures. The rate changes once, at step 5, as a declared mover (the stand-in becomes `0.4 × pool_default`) |
+| A-5 (the bell curve everywhere), A-6 (score plus a base, floor five), A-7 (two inputs) | the sampler and the pool rule under the form. The pool and the opposing score are read through `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §4 as U5a rewrote it; this file names no formula for either. Every probability quoted below (§4 step 5, §6, the gate's exact-odds rows) is whole-dice arithmetic and is recomputed against the re-centred sampler in the one calibration step (§4 step 5), together with A-26's rate |
+| A-12 (a seat carries a modifier) | `rank_gap` (§2 member 6) is the half that stands against an act; the half that helps is declared once, as the source `office` (§3), whose first member is T13 T4's bench die. It does not double-count with `regard`: `regard` reads stance rows only, never rank or heritage (§2 member 7). The Layer 1 amendment text for `04` §B.7 is owed by the unification stage and is not applied here |
+| A-14 (a vote is a draw on the voter) | the `lean` source (§3) |
+
+What does not move: the roster, the composer, the record, the landing order, the falsifier. Steps 0 to 4 of
+§4 are sampler-independent (each is hash-equal or a declared mover by construction). Step 5 is the
+calibration, and it is now one joint step over A-5, A-6, A-7 and A-26, read against CAL's criteria, which
+are stated on outcomes and stand.
+
 ## What it changes in `engine/season/` at runtime
 
 Every rolled act composes its obstacle in one function from one closed roster of terms, each of which
@@ -140,7 +157,7 @@ the obstacle). The values in `terms` sum exactly to `ob`.
 
 `rosters.yaml: advantage_sources`, in order: `effort` (existing), `capability` (the DICE map's `edge` rows,
 which absorb `05_SC_capability_surface.md`'s `trait_advantages` once the capability surface names their
-home), `proofs`, `favour`, `approach`, `custody`, `lean`. Each source returns two lists of `LEVEL_SIGMA` names,
+home), `proofs`, `favour`, `approach`, `custody`, `office`, `lean`. Each source returns two lists of `LEVEL_SIGMA` names,
 the actor's and the other side's; `levels_to_net_sigma(aggressor, defender)` nets them; `net_boost` applies
 the soft cap. Bounded, monotone and uniform at every pool.
 
@@ -150,6 +167,7 @@ the soft cap. Bounded, monotone and uniform at every pool.
 | `favour` | one `favour_level` per whole unit of: the audience's favourable `reception × reception_gain`; the counterparty's favourable stance (`clamp(stance_toward / STANCE_MAX) × regard_step`); a live `tie` of the actor to the counterparty; a favourable plea | — | `favour_level` (first value `major`; control `None`) |
 | `approach` | `press` on `interview` or `interrogate`: one `press_level` for the questioner in the engagement draw | one against the questioned person's answering `lie` | `press_level` (first value `minor`; control `None`) |
 | `custody` | one level per season the prisoner has been held, capped by the soft cap | — | `custody_level` |
+| `office` | the seat the actor exercises carries a modifier (Jordan, A-12): one `office_level` where the row's audience is a bench or body he sits on or presides over | the same for a seated counterparty acting through his seat | T13 T4's `standing_dice` is this source's first and only member and stands (A-12). T13 states it as a die; the calibration step (§4 step 5) restates it once in the unit the re-centred sampler uses (a die or an `office_level`), never both |
 | `lean` | a bench member's own ballot: one `lean_level` per live public commit of his for the motion | one per commit of his against it | `lean_level` (`U5c_SC_proceedings_residue.md` §6) |
 
 Units round half up. A source with nothing to say returns two empty lists. `believed_input` fills the
@@ -181,10 +199,11 @@ leverage: proofs +2, favour +1, effort +1*.
 
 - No row hangs its only effect on Overwhelming: at pool 2 it is dealt 0.00 at Ob 2 and 0.01 at Ob 1 (13 §4
   cell 7; 0 of 284 realm rolls).
-- The default share of a scalar effect by band is one table (C-23): `effect_share`, first values
-  1000 / 1000 / 500 / 0, read by `loop/effects_shared.py::graded_amount` (M-A §2). It is the table
-  `18_DETERMINISM_task_draw_for_uncontested_verbs.md` calls `task_fraction`; one name lands. A row that
-  departs from it (a delivery, a price, an outlay) names its own table in its own band map, as M-B and M-C do.
+- The default share of a scalar effect by band is one table under one name (C-23): `task_fraction`
+  (`18_DETERMINISM_task_draw_for_uncontested_verbs.md` item 4, as U5a reconciled it), first values
+  1 / 1 / 0.5 / 0 for Overwhelming / Success / Partial / Failure, read by
+  `loop/effects_shared.py::graded_amount` (M-A §2, which called it `effect_share`). A row that departs from
+  it (a delivery, a price, an outlay) names its own table in its own band map, as M-B and M-C do.
 
 ### §7 Stale citations repointed
 

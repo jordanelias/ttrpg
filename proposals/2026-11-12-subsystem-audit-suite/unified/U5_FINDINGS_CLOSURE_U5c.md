@@ -27,7 +27,7 @@ Short names follow the audits: `es/` = `engine/season/`; `K/` = `systems/social_
 | `U5c_SC_one_obstacle_form.md` | the one obstacle form: one `obstacle_terms` roster, one composer, the leverage channel for everything a party brings; the merged member list across SC-B, DICE, 13, the pessimists and the verb lanes; landing order and gate (C-01 to C-06) |
 | `U5c_SC_proceedings_residue.md` | SC items with no carrier: register and pointer edits, the BAR re-pin, the bundle, one asking per sitting, the re-opening rule, `open_case` on oneself, petition formation, the `ballots` key, the ballot's one owner, `covenant` as a hearing (C-07 to C-12) |
 | `U5c_FI_residue.md` | FI items with no carrier (listed in the FI section) |
-| `U5c_VERBS_residue_and_governance_owner.md` | verb verdicts with no carrier, and the one prize, roll and obstacle owner for the contested governance rows; the task prize Layer 1 requires; `release` of an imposed edge (C-19 to C-32) |
+| `U5c_VERBS_residue_and_governance_owner.md` | verb verdicts with no carrier, and the one prize, roll and obstacle owner for the contested governance rows; the two shapes a drawn act with nobody opposite may take; what `release` may not close; what a refusal teaches (C-19 to C-35) |
 
 Abbreviations for carriers: **OBS** = `U5c_SC_one_obstacle_form.md`; **RES** = `U5c_SC_proceedings_residue.md`;
 **SC-B** = `05_SC_obstacle_difficulty_and_modifiers_B.md`; **HEAR** = `05_SC_playable_hearing_B.md`;
@@ -205,7 +205,7 @@ Abbreviations for carriers: **OBS** = `U5c_SC_one_obstacle_form.md`; **RES** = `
 | F-PES-SC-09 | the room is necessary to nothing | RESOLVED-BY | HEAR edit 7; EVID edit 4; ADM | `n2_cuts.py` |
 | F-PES-SC-10 | the lie's roll reads neither party; its content is a fixed function | RESOLVED-BY | CAPS (`deception`, opposed by perception); PES-E edit 2 (two directions, the liar's sampled choice); OBS §2 (`tell` is opposed by the stand-in, `copying.opposed_by: none`) | `p2e_roll_check.py` |
 | F-PES-SC-11 | proceedings begin without a readable reason | RESOLVED-BY | `16_PESSIMIST_GAME_standing_occasions_carry_their_cause.md` and `02_CHAR_offer_what_can_be_done.md` (cross-family; cited) | `e1_reasons.py` |
-| F-PES-SC-12 | words that do not mean what they say | RESOLVED-BY | PES-D (`argument.held`); `argument.refused` at Success and `release` offered under `detain`: RES §7; `matter.*` four kinds gain readers by HEAR/EVID | PES-SC §2.5 |
+| F-PES-SC-12 | words that do not mean what they say | RESOLVED-BY | PES-D (`argument.held`); `argument.refused` at Success: RES §7; `release` offered under `detain`: VB-A §1 (`own_edge_declines`) with VRES §4; `matter.*` four kinds gain readers by HEAR/EVID | PES-SC §2.5 |
 | res. 1 | favour and proofs as levels | RESOLVED-BY | PES-A; OBS §3 | ladder 1 |
 | res. 2 | one comparator | RESOLVED-BY | PES-B | — |
 | res. 3 | `tell` is opposed by the hearer's skill | RESOLVED-BY | OBS §2: the opposing score is the capability row's `opposed_by`; `copying.opposed_by: none` gives the stand-in; a hostile hearer enters through `regard`. No verb-keyed clause | PES-SC §2.2 table |
@@ -284,7 +284,7 @@ CR-94, CP-T06-01 to -09.
 | R-32 | seven archived reliability tags | RESOLVED-BY | FI-05B E-1 (kind and weight derived, never stored) | — |
 | R-33 | the archived Evidence Track | RESOLVED-BY | CONC (support over distinct origins, bound on the Proposition) | ED-IN-0319 |
 | §11 item 1 | is who holds a public seat common knowledge? | RESOLVED-BY | answered by Jordan as two cells of the one `reach` roster. The seat change ships realm-wide, with presence, purview and telling built as the test arm (A-32, D-42). The death travels apart from the seat's news: by presence, trail and telling only (A-33, D-43). FI-01 edit 6 and FRES §2 build both cells | `fi_arms.py nochron`: marches 29 → 4 without a replacement |
-| §11 item 2 | the `loop/witness` may-read cell: amend or restore | SUPERSEDED | by C-16: not a choice. The rule decides (change the code); FI-04 §6 as rewritten | `CLAUDE.md` §0.05 |
+| §11 item 2 | the `loop/witness` may-read cell: amend or restore | RESOLVED-BY | FI-04 §6 (C-16). Closed on the decision register as D-74, taken B: fix the witness code, not Layer 1. A read no refactor removes is listed for an amendment text and is not applied by any lane here | `CLAUDE.md` §0.05; D-74 |
 | §6a hole rows | 59 primary rows verified | RESOLVED-BY | closed and stale heads: FRES §3; wrongly filed rows (H-62, H-92, H-106, H-138, H-182, H-217, H-219, H-279…H-302, H-325, H-335/6): FRES §3 lists the re-filing per row; the rest by the R-rows above | audit §6a |
 | §6b workplan | B10-14 cards kept; CR-29 first; CP-T06-05 preconditioned | RESOLVED-BY | FI-02 edit 1; FRES §2 (the order across both lanes and the pessimist) | audit §6b |
 | §13 classes A–J | arc needs by information class | RESOLVED-BY | A: CR-29, FI-02 §4 · B: CONC, FI-02, PFI-A · C: B10-14, FI-03 §4, CR-83 · D: FI-07, FI-05B, PFI-B · E: B10-14, FI-07, CONC, FI-06 · F: FI-02, FI-06 · G: CP-T06-05, QUES, FI-05B, FI-06 · H: CP-T06-02 · I: CP-T06-07, -09 · J: SE's (H-325) | audit §13 |
@@ -407,7 +407,9 @@ to the whole part and are decided once, in `unified/U5_CONFLICTS_U5c.md`:
   subtraction; per-verb obstacle tables are members of the one roster (OBS §1, §3).
 - **C-19, C-20.** One reader of "who I believe is with me" (`person_q.present_persons`) and one of "who
   holds that seat as I know it" (`person_q.holders_named`).
-- **C-23.** One default table for the share of a scalar effect a band delivers.
+- **C-23.** One default table for the share of a scalar effect a band delivers, under one name:
+  `task_fraction` (18-A's, already cited by U5a and by `16_PESSIMIST_DICE_task_difficulty_and_throughput.md`);
+  M-A's `effect_share` is the same roster and yields its name.
 
 ## 4.1 SOCIAL1 — verdicts, shared rules, survivors
 
@@ -487,9 +489,9 @@ to the whole part and are decided once, in `unified/U5_CONFLICTS_U5c.md`:
 | `research` | draws; a find teaches nothing | RESOLVED-BY | M-E §2 as reconciled (C-24: `observes:` is a flat list; which reads a band deposits is `finding_terms`'; the row stays on the graded route and writes nothing) | 20 / 19 / 19 finds |
 | `reconstruct` | executes most often and concludes nothing | RESOLVED-BY | CONC as reconciled (C-22: a graded inquiry that writes nothing and deposits the conclusion to its maker; the committed assertion is his `utter` with `cites`). M-E §3 and FI-03 §3 point to it | 82 / 89 / 110 executed |
 | `transfer` | forms but is refused; where it executes it is a sink | RESOLVED-BY | M-B §2 (`carriage`) | 2 / 1 / 2 executed |
-| D-1 | every material act is drawn through `graded_acts` | DISPUTED in its form | the draw stands; the route does not (C-22). The roster keeps its name and its three inquiry rows; a material row that writes by band declares `contests: "a task"` | `data/verbs.py:848-851` |
+| D-1 | every material act is drawn through `graded_acts` | DISPUTED in its form | the draw stands; a band-keyed `writes:` on a route row does not (C-22). A material row whose effect is one magnitude is a route row with flat `writes:` scaled by `task_fraction`; one whose bands write different cells declares `contests: "a task"`. The route roster is 18-A's `graded_tasks`, not a second roster `graded_acts` | `data/verbs.py:848-851` |
 | D-2, D-3, D-5, D-6, D-7 | pool; obstacle; a failure is not a refusal; formation on what is known; populations | RESOLVED-BY | M-A §2; OBS; `02_CHAR_offer_what_can_be_done.md` (cross-family) | — |
-| D-4 | effects by degree on one ladder (`effect_share` 1000 / 700 / 350 / 0) | RESOLVED-BY | M-A §2 row 2, with the first shipped values reconciled (C-23: 1000 / 1000 / 500 / 0, the same table `18_DETERMINISM_task_draw_for_uncontested_verbs.md` calls `task_fraction`; 1000 / 700 / 350 / 0 is a sweep arm) | 13 §4 cell 7 (Overwhelming 0 of 284 at pool 2) |
+| D-4 | effects by degree on one ladder (`effect_share` 1000 / 700 / 350 / 0) | RESOLVED-BY | M-A §2 row 2, with the name and first shipped values reconciled (C-23: the roster is `task_fraction`, values 1 / 1 / 0.5 / 0 as `18_DETERMINISM_task_draw_for_uncontested_verbs.md` states them; 1000 / 700 / 350 / 0 is a sweep arm) | 13 §4 cell 7 (Overwhelming 0 of 284 at pool 2) |
 | §17.2 correction | S2-A's list of bare-`Record` rows omits `research` | RESOLVED-BY | S2-A as reconciled (C-28) | M audit §17.2 |
 | J-M1 | is production labour an act? | SUPERSEDED | closed by the ladder at step 3: the plan answers it (CP-T08-01: yield reads the hands present; `work` is labour on a works), and M-A §4 builds that reading. Option B is recorded in the audit as the alternative game | plan position `24e`, CP-T08-01 |
 | J-M2 | what a failed reconstruction leaves | SUPERSEDED | closed at step 3 (K-37, ratified as intent, ED-IN-0288): a lost draw states nothing; a wrong conclusion has an author in the world. One decision with S-PES-FI-1 | CONC R-19-04 |
