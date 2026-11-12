@@ -488,8 +488,8 @@ Three sources. None is a director (null N4 stands; §11 D-3 says what that costs
 3. **Arrivals: demand-driven individuation through G4.** When an act demands a person who does not exist
    (a `dispatch` to a clerk, a `recruit`, a `confer` on a vacant local seat with no candidate), CENSUS
    individuates one from the place's cohort. With G4 at that call site the new person arrives with a
-   lifepath, a deviation, relations into the place and, with table probability, a card bound to him. New
-   blood with new wants, authored by the demand.
+   lifepath, a deviation and relations into the place. New blood with new wants, authored by the demand.
+   (Binding an undrawn card to an arrival is a card read by a loop step, so it is held with D-3.)
 4. **Succession churn** needs no generator: G4's kin and G5's contested seats mean a death (bodies motion)
    opens a contest among people who already exist.
 5. **Re-arming in play** is the open question (D-3): build-time pools are finite and a long game spends
@@ -679,8 +679,8 @@ After PG-4: a realm with a past. After PG-5: *the generated inquiry* (§9).
 - **D-3 · Re-arming in play.** *Option A:* cards are read at build only (plan text B10-18:183 stands).
   Churn after the pools are spent comes from storms, arrivals and succession; a long game may run dry, and
   V3 will show it. *Option B:* a docket read inside a seat-holder's `convene` (no date, no outcome; the
-  draw is the convener's act), with repeat suppression. Institutions keep producing business; amends
-  B10-18:183 and B10-19:95 (not an axiom). **Recommended: B, after PG-6 shows whether A runs dry.**
+  draw is the convener's act), with repeat suppression, and an arrival at CENSUS allowed to bind an
+  undrawn card. Institutions keep producing business; amends B10-18:183 and B10-19:95 (not an axiom). **Recommended: B, after PG-6 shows whether A runs dry.**
 - **D-4 · Thread-bearing generation.** 49 of the 143 provided cases turn on the Thread
   (`12_ARCS_adjudication.md` §1). *Option A:* the kit generates no Thread content until the substrate
   ruling (`12_ARCS_substrate_as_ground.md`, Options A and B there) is made; practitioner cases stay
@@ -738,6 +738,35 @@ and Traveller tradition), point bands by age, a deviation or quirk roll, backgro
 skills. *Lacking, and a designer would expect it:* advancement during the prologue (a person who worked a
 year should be better at it: `04` F.6 says "a character never improves at anything"; the `train` verb
 exists and its refusal rate is high), and aging.
-(e) *Proposals:* `21_PROCEDURAL_B_cast_and_seats.md` §3 (lifepaths), after the CHAR and CORE definition
-proposals.
+(e) *Proposals:* `21_PROCEDURAL_B_cast_and_seats.md` §4 (a) (lifepaths), after the CHAR and CORE
+definition proposals.
+
+## 15. NPC and chooser surface, and the standing rule checked against this file
+
+The CHAR lane owns the statement of NPC and chooser intent (`audits/02_CHAR_audit.md`); this lane cites it.
+
+- *(a) Who decides.* Generation decides nothing after the build. Every generated person is served by the
+  one chooser on his own ledger, budget and pursuits; a case's deed, a seat's conferral and a card's
+  opening are candidates of a person's chooser, never writes of a generator.
+- *(b) One interface.* The inquiry scenario seats the player-proxy in a seat a generated person would
+  hold, through `harness/play_surface.py`; the proxy and the NPC investigator of gate (b) use the same
+  candidates and the same verbs.
+- *(c) Scripting drift.* The places it could enter are named and closed: a card may carry no outcome; the
+  clause set is closed; a proper noun is legal only under `scenario`; a covert deed with any cause other
+  than its doer's act fails the gate.
+- *(d) Characterful and legible.* A generated person is distinguishable by lifepath, deviation and the
+  grounds of his relations; a choice is legible afterwards if the act store keeps the goal row that leaned
+  it, and a goal row minted from a card keeps the card's id (`01_CORE_reason_trail_in_the_act_store.md`).
+- *(e) What is missing and not this lane's:* a goal must actually lean a choice
+  (`02_CHAR_goal_lean_on_its_own_question.md`, `02_CHAR_choice_alignment.md`); until it does, generated
+  motives are inert however well they are drawn. The CHAR audit measures 36 of 46 persons holding one top
+  verb across six situations; generation cannot repair that and should not be judged before it is.
+
+**Standing rule ("we do not do deterministic"), checked here.** Seat filling: a keyed weighted draw or a
+person's act, never rank order (§4.5; the PG-3 gate asserts the holder is not always the top-weighted
+candidate). Card selection: a weighted draw (§4.8). A deed: the doer's draw. A finding: the inquiry's
+draw, with fade as a modifier on the obstacle and never a cut-off (§4.7). A determination: the hearing's
+draw, with wrong outcomes counted in the gate. What is fixed by rule in this kit is only what the standing
+rule allows: eligibility (who may be a candidate), invariants (what is not a world), bookkeeping (stores,
+ids), and the one-time solvability check, which accepts or rejects a *world* and resolves nothing in it.
 

@@ -19,7 +19,8 @@ withheld. Both would read "above the control" today, and both would be true of a
 a person does changes anything but paper:
 
 - **Chains are plentiful and are about paper.** Seed 0, three seasons (`runs/PES_GAME/x1_s0_k3.txt`):
-  417 executed cross-person answers; 80% land in the information verbs; the largest sources are clock
+  513 executed answers to another person's or a clock's Event; 436 (85%) land in the information
+  verbs (83% and 85% at seeds 2 and 1); the largest sources are clock
   Events (`stores.changed → create_record` 29, `yield.taken → create_record` 25). No executed answer
   lands in personal combat, mass battle, the settlement verbs or training.
 - **Divergence is plentiful and changes no state.** The King abstaining for three seasons

@@ -112,8 +112,9 @@ forced, the tree's own `_tell` recipe; `said` is what `person_q.said_of` returns
 
 Identical for a deed (`(p_king, person.died, True)`), at `Success` and at `Partial`. The second man in
 any chain passes on the fact that he was told, and the third man receives nothing. **A rumour in this
-engine has a maximum length of one telling.** No fixture arm changes it (`said_slant` has two arms,
-`newest` and `valence`; neither excludes the transport's own kind).
+engine has a maximum length of one telling.** The other `said_slant` arm (`valence`) gave the same
+table for these persons, who carry no convictions (`p2_chain_valence.py`); a teller whose convictions
+give the deed a nonzero valence was not tested `[UNVERIFIED]`, and `valence` does not ship.
 
 **Control (PROXY, labelled).** `p2_proxy.py` forces each teller to pass on the content claim he was
 told (what `08_FI_02`'s proposed slant would choose), to test the links downstream of the break. Twenty

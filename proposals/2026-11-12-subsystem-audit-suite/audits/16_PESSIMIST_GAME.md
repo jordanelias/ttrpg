@@ -123,8 +123,8 @@ Reading, by column (what an engine is ever moved to do by someone else):
 - **CHAR answers nothing.** `train` is refused 324 of 324; `tend` executes only as a cohort mending itself.
 - **SE answers almost nothing** (a `move` after a store report); `exchange` 0 of 225, `build`/`found`/
   `raze`/`sabotage` 0 of every attempt.
-- **Everything that is answered is answered in writing.** The FI column holds 80% of executed
-  cross-person answers at every seed, and its largest source is not a person: `stores.changed`,
+- **Everything that is answered is answered in writing.** The FI column holds 85%, 85% and 83% of the
+  executed answers (436 of 513, 431 of 507, 453 of 545), and its largest source is not a person: `stores.changed`,
   `yield.taken` and `term.matured` (clock Events) answered by `create_record` and `utter`. The top
   executed pairs at seed 0: `stores.changed → create_record` 29, `yield.taken → create_record` 25,
   `yield.taken → utter` 21, `term.matured → research` 21, `term.matured → create_record` 20.

@@ -41,7 +41,9 @@ Each row was followed upward, by AST and by resolved import (not by name), until
 a top-level definition in `loop/driver.py`; a function registered by a decorator (`effect_for`,
 `requires_predicate`, `provider`, `requirement_form`, `_context`); a module-level statement (a loader or
 a check run at import); a harness entry; a test or tool; or nothing. Instrument: a read-only script in the
-scratchpad (`c1a/reach6.py`), not in the tree and not proposed for it. Every non-driver verdict was then
+scratchpad
+(`/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379/scratchpad/c1a/reach6.py`; `ext2.py` and
+`mktable.py` beside it), not in the tree and not proposed for it. Every non-driver verdict was then
 read at its site, and the registries were probed once (§5).
 
 Four dispatch forms defeat a name search, and each accounts for rows here:
@@ -94,11 +96,11 @@ and never in a world. The army verbs are withheld from the chooser by fixture an
 `verb_table.yaml` carries `beneficiary:` on 68 rows; `data/verbs.py:789-811` refuses a bad one at load;
 the one runtime reader, `decision/choose.py:281-319 beneficiary_of`, is called by
 `tests/test_governance_build.py` only. `score_terms` (`choose.py:193-221`) never asks who an act is for.
-The code's own rule for this is quoted in `data/rosters.py:1406-1407`: "a column nobody reads is a column
-that silently does nothing". Four suite proposals author new `beneficiary:` values
-(`14_VERBS_SOCIAL1_A`, `14_VERBS_SOCIAL2_D` among them) and `01_CORE_capability_authoring_surface.md:78`
-cites its loader refusal as the model, so the suite treats the column as live grammar. No suite proposal
-reads it.
+The code's own rule for this is quoted at `data/rosters.py:1407`: "a column nobody reads is a column
+that silently does nothing". Six VERBS proposals author new `beneficiary:` values
+(`14_VERBS_MATERIAL_D`, `_E`, `14_VERBS_MILITARY_A`, `_C`, `14_VERBS_SOCIAL2_B`, `_D`) and
+`01_CORE_capability_authoring_surface.md:78` cites its loader refusal as the model, so the suite treats
+the column as live grammar. No suite proposal reads it.
 
 **F-C1A-05 · three Layer 1 queries have no caller (extension; broken; reader owed, no proposal names
 one).** `architecture/holonic_ARCHITECTURE.md:597-598` enumerates `density`, `footprint` and
