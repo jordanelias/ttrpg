@@ -90,3 +90,158 @@ EST: this half 13.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula o
 
 Not in this half, and where each is: `27_MB_A` 27A-5 (the four Command reads; after the rout files, the second half), 27A-6 (B05, CAP Part B), the window and lull actions (the second half, after this half's B19.22), §5's seat half (B05's `modifier:` column; read by 27A-6); `27_MB_C` 27C-2 and 27C-3 (the second half, read last); `16_PESSIMIST_MB_one_stamina_ledger` step 3 and the A-69 record write (B31); `04_MB_cr12_linear_law` steps 2–3 (SUPERSEDED by MBA-04, MBA §8.1: not carried) and its bisect bullet (dropped, same); `16_PESSIMIST_MB_partition_and_the_pair_rule` edits 1–3 (SUPERSEDED by MBA-04: not carried); MBA-04 step 5 (the second half, after MBA-06); `04_MB_cell_hierarchy_as_data` §4 (`layers`: not carried, UNDECIDED (5)); the `obey` block's move to the troop file (UNDECIDED (1)); ED-MB-0045's other parts: the melee item (SUPERSEDED by MBA-04, MBA §8.2), item 4 (LEAVE under the cell-primitive directive, the intake's held list), and the stale comment at `modules/mass_battle/config.py:108` (done in code: the line reads "default ON: retracted to OFF 2026-07-25 (above), back ON once ED-MB-0058 resolved the scalar-write no-op", opened at `8c087bc`).
 
+### B19.01 — the "results" block: the calibration targets' T-rows in the gauge · `26_MASS_BATTLE_calibration_targets` §1–§2 · BUILD · HASH EQUAL
+- SOURCE: `proposals/26_MASS_BATTLE_calibration_targets.md` "The resolution, decided" §1 (the table), §2 (the instrument), §4 (order), "Gate", "Tests and lands (W3-1)"; U3 §1 item 19 ("T-rows written first as the batch's tests"; read last); rulings A-5, A-6, A-77; carries R-1 to R-5, B-10, B-11 of `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md`.
+- ADVANCES: none of the nine by itself; the instrument every later reading of this batch is taken on (R-04.c4's field is read through it at the close).
+- INSTRUCTION:
+  1. `tests/sim/gauge_mb.py`: "the block is a function `run_results()` beside `run()`, with its own `RESULTS` table, invoked by a `--results` argument; the win-share block is untouched." "Each row builds its scenario through the season's own constructors (`orderofbattle`, `massbattle.resolve_field`) so that what is read is what a season fights; the win-share block's own constructors are left as they are." "The block prints the table with the reading, the band, n, and the same-run control for each row, and writes nothing tracked."
+  2. The rows (copied, §1; n at least 400 seeded fields per scenario):
+
+     | id | reading | band | source and tier | status of the band |
+     |---|---|---|---|---|
+     | T-1 | the winner's share lost in a decided even field | reported; flagged if its median exceeds 0.10 | CR A1 `[D]`; CR A11 `[D]` | a flag, since the unit differs |
+     | T-2 | loser's loss ÷ winner's loss, even field, no pursuit possible (no horse, no `Pursue` role) | **1.7 to 5.2**, centre near 3 | Krentz (CR A1, A2 `[D]`) | target |
+     | T-3 | loser's loss with mounted pursuit ÷ loser's loss without, same seeds | **2 to 5** | CR A1, A6 `[D]` | target; wide on purpose |
+     | T-4 | share of even fields decided (won or lost) within 1 bout, and within `max_bouts` | reported; the second must exceed the first | CR C1 `[D]` | ordering only |
+     | T-5 | share of decided fields in which the loser broke at a `fight_loss` below the casualty floor (0.15) | above zero with `stand_draw: on`; zero with it off | CR D5 `[D]` | ordering against the control |
+     | T-6 | horse charging frontally: win share against unbraced foot > against braced pole-armed foot > 0; against shaken foot highest | the ordering | MV H1–H3 `[T]`; the gauge's rows C1, C2, C5 | ordering |
+     | T-7 | **no scenario's win share is 0 or 1** at n 400 | every share inside (0, 1) | the standing rule | target |
+     | T-8 | fresh against tired: a side entering at `entry_stamina` 0.5 against 1.0 | loses more often than the mirror by more than the sampling band | CR D3 `[D]` | ordering |
+     | T-9 | numbers: win share of the larger side at 2 : 1 and 3 : 1 on a frontage that fits both | rises with the ratio and stays below 1 | CR D8 `[T]` | ordering |
+     | T-10 | of men lost in flight under mounted pursuit, the share captured (S-2: "taken" → captured) | between 0.2 and 0.8 as a mean, not constant across seeds | CR A6, §B | flag; three battles |
+
+  3. The scenarios, each with its control (copied, §2): even foot (two equal spear armies, `line`; control: the seeds' sides swapped); even combined (the preset army of a weight-20 faction against itself; as above); pursuit (even combined, one arm with the horse removed from both; the no-horse arm is T-2's and T-3's denominator); charge (200 horse against 400 foot: unbraced levy; braced pike; shaken spear; control: the horse against itself); tired (even foot, one side at `entry_stamina` 0.5; control both at 1.0); numbers (spear 300, 600, 900 against 300 on a field wide enough for all; control 300 against 300).
+  4. "Rows whose mechanism does not exist yet (T-3, T-5, T-10) print 'no mechanism' and not a number." T-8 needs `MassBattleInput.entry_stamina` (B31, `16_PESSIMIST_MB_one_stamina_ledger` step 3): until then it prints "no mechanism" too `[ASSUMPTION: the row is read through the season's input field the source names — basis: the source's own "builds its scenario through the season's own constructors"; entry_stamina lands in B31]`.
+  5. A reading outside a target is reported with the scenario and the seeds; "the band is not moved to fit"; "a flag or an ordering that fails is a finding about a mechanism, not a number to tune". No band gates a merge (the source).
+- WHERE: `tests/sim/gauge_mb.py` (`run_results`, `RESULTS`, the `--results` argument).
+- TESTS: none new (the source: "the instrument is not a test and has no CI row"; CLAUDE.md §0.1 pt 5). Gates 2 and 4 are run by hand with the planted defects and recorded in the commit body.
+- FALSIFIER and CONTROL: "a band edited in the same commit as the constant that brought the engine inside it; a row whose scenario is built by a constructor the season cannot reach; a historical percentage compared directly with an engine loss." Planted (gate 2): `pursuit_damage` returning 0 → T-3 reads 1.0 and is reported outside its band; the winner's and loser's losses swapped in the readout → T-2 reads below 1. Control: side symmetry (gate 3), every even scenario's win share for side A inside the sampling band of side B's.
+- GATE: `PYTHONHASHSEED=0 python tests/sim/gauge_mb.py --results` → ten rows with n, band and control, T-3, T-5, T-10 (and T-8 until B31) printing "no mechanism"; run twice at the same seeds → the same table (gate 4); the two planted defects → each reported as stated (gate 2); the table goes in the commit body as `reading @<sha>`. This item's reading is the baseline; the batch reads the block again last (the second half).
+- HASH MOVERS: none (an instrument; writes nothing tracked).
+- DEPENDS ON: EXISTS-IN-TREE `tests/sim/gauge_mb.py::run`, `::casualty_verdict`, `::TESTS`; `modules/mass_battle/massbattle.py::resolve_field`; `modules/mass_battle/orderofbattle.py`; V12 Batch B05 (the one sampler, UMR §1) and Batch B06 (the keyed draw) (the source's §4: a pass before them is spent); V12 Batch B17 (`04_MB_unit_loadout_and_weapon_in_hand_B`'s troop file).
+- GLOSSARY: none (no new term; "captured" for T-10 per the lexicon's D-17, S-2).
+- NAMES: `subformations` → `units`, `Subformation` → `UnitRow` (B16L) where the scenarios build an order of battle; `Subunit` → `Unit`, `Unit` → `Army` (B16M) in the block's code.
+- COST and TIER: small build; `sonnet`, `high`; the runs `haiku` (`valoria-measure`); the reading at the close `opus` (the source: "the batch's judgment node").
+- LANDS IT: B19's `valoria-author` producer, `isolation: worktree`; `Item: B19.01`, `[skip ci]`.
+
+### B19.02 — the commander's and each officer's typed record on the field's input · 27_MB_A 27A-1 · BUILD · HASH EQUAL
+- SOURCE: `proposals/27_MB_A_command_and_the_obedience_draw.md` §2 ("What the field is handed"), "Instructions to code it" row 27A-1; rulings A-59 (1), A-7, A-12 (D-U1-01); closes F-MB command-literal (`audits/27_MB_COMMAND_AND_DYNAMIC_STRENGTH.md`).
+- ADVANCES: R-04.c4 and R-04.c5 (iii) through B19.05 and B20 (nothing alone: the record is absent everywhere).
+- INSTRUCTION: `engine/season/queries/inputs.py`, beside `MassBattleInput` (copied, §2):
+  ```python
+  @dataclass(frozen=True)
+  class CommandRecord:
+      person: str            # the person id, for the report only; the module reads nothing by it
+      score: int             # skill score in `command`, or the untrained score (`pool.py::score`)
+      addends: int           # whole dice from the registered pool addends (practice) (D-U1-01)
+      levels: float          # signed sigma: the two attribute rows, summed (`sigma.py::advantage_sigma`), and the
+                             # `office` level of the seat the march is made through (D-U1-01; the commander only)
+      post: Optional[str]    # the unit he rides with (the commander only); None is the army's rear centre
+      fed_by: tuple          # U1 §8's reason trail rows, echoed on the report
+  ```
+  "the frozen record of §2; four new fields with defaults `commanders=(None, None)`, `pool_add=0`, `pool_floor=0`, `obey_task=0.0`" on `MassBattleInput` (27A-1). `MassBattleInput.commanders: (CommandRecord | None, CommandRecord | None)` replaces the `command: tuple = (4, 4)` that `04_MB_typed_outcome_and_one_path.md` §4 yields (D-U1-11g: the 1..7 integer is retired; if B17 landed a `command` field, it is removed in this commit and its readers read `COMMAND_DEFAULT` from B19.03 `[ASSUMPTION: B17's text yields the field rather than landing it — basis: that file's Reconciled (3) and D-U1-11g; read at the item's open]`).
+- WHERE: `engine/season/queries/inputs.py` (`CommandRecord`; `MassBattleInput.commanders`, `.pool_add`, `.pool_floor`, `.obey_task`).
+- TESTS: `engine/season/tests/test_mass_battle_module.py::test_no_commander_reads_the_literal_four` (the source's control test; written with this item and read green: with `commanders` absent, the field built today equals the field built with `(None, None)`).
+- FALSIFIER and CONTROL: a field input built with the defaults that differs from one built before the edit. Control: `python tools/ci_golden_modes_check.py` digests equal (27_MB_A gate 1).
+- GATE: `python -m pytest engine/season/tests/test_mass_battle_module.py -q` → pass; `python tools/ci_golden_modes_check.py` → three digests equal to B19a's close (`reading @<sha>`); the realm content hash at seed 0, one season → equal to B19.01's reading (an input, not a `World` carrier).
+- HASH MOVERS: none (`MassBattleInput` is a module input, not a class `World.content_hash()` reaches; D-04 does not apply).
+- DEPENDS ON: EXISTS-IN-TREE `engine/season/queries/inputs.py::MassBattleInput`; V12 Batch B05 (`pool.py::score`, CAP Part B; `sigma.py::advantage_sigma`, U1-B) for the values a later builder writes (27A-6 is B05's: `command_record(w, person, via)`).
+- GLOSSARY: none (the row *commander*; *officer* already point at the MB words; `CommandRecord` is a type name).
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B19's producer; `Item: B19.02`, `[skip ci]`.
+
+### B19.03 — the default command, the order-draw block and the span table, exported · 27_MB_A 27A-2 · BUILD · HASH EQUAL
+- SOURCE: `27_MB_A_command_and_the_obedience_draw.md` §4 ("Data"), §6 (`command_span`), row 27A-2; UNDECIDED (1) and (2) of this block.
+- ADVANCES: none alone (the block ships at `arm: off`).
+- INSTRUCTION (27A-2, copied): "`modules/mass_battle/config.py` :: new `COMMAND_DEFAULT = 4`, `ORDER_OBEY` (the §4 block as a dict, `arm: 'off'`), `command_span(score)`; `massbattle.py::_MVP_UNIT_COMMAND` and `orderofbattle.py::_UNIT_COMMAND` read `COMMAND_DEFAULT`; `tools/export_battle_orders.py::build` adds key `obey`; regenerate `engine/engine_params/battle_orders.json`; `engine/substrate/battle_orders.py` exposes it". The §4 block, as the dict's content:
+  ```yaml
+  orders:
+    obey:
+      arm: off                 # off | on.  off is today's certainty: the control
+      step: {keep: none, change: 0, restrain: 1, signal: 0}    # `none` = no draw: nothing is asked
+      across: 1
+      unsteady: 1
+      in_contact: 0            # CONTROL. Flip seed 1. [shape from MV E4; no magnitude sourced]
+      reach: 13                # cells in one distance step. SEED: a quarter of the 51-cell field. [no source]
+      distance: 1              # per distance step. CONTROL 0
+      signal_reach: 51         # a prearranged signal carries the field at the stated scale (26, S-1). SEED
+  ```
+  "Every number is a seed. The form is what is decided." `command_span(score)`: "an integer 1 to 7 from that person's skill score by one table ... (seed: the score through the existing `clamp_command`, `core/exchange.py:44-54`; `None` is `command_default`)" (§6). `engine/substrate/battle_orders.py` "exposes each key of the export as a module constant read from `_DATA` (`ROLES`, `RETREAT_AT`)", so `obey` is one more constant, `ORDER_OBEY` (the source's INCOMPLETE item 3, read). Regenerate the JSON with the tool, never by hand. `config.py:528-529`'s `CMD_CHA_WEIGHT`, `CMD_COG_WEIGHT` stay until `derive_command` retires (the batch head's CARRIED line).
+- WHERE: `modules/mass_battle/config.py` (`COMMAND_DEFAULT`, `ORDER_OBEY`, `command_span`, `__all__`); `modules/mass_battle/massbattle.py` (`_MVP_UNIT_COMMAND`); `modules/mass_battle/orderofbattle.py` (`_UNIT_COMMAND`); `tools/export_battle_orders.py` (`build`); `engine/engine_params/battle_orders.json` (re-derived); `engine/substrate/battle_orders.py` (`ORDER_OBEY`); `tests/valoria/test_mass_battle_order_of_battle.py` (its pin of the command literal follows `COMMAND_DEFAULT`).
+- TESTS: `tests/valoria/test_mass_battle_order_of_battle.py`'s command-literal pin follows `COMMAND_DEFAULT` (the source's "Changed"); green before and after.
+- FALSIFIER and CONTROL: `export_battle_orders.py --check` passing with a hand edit of `obey` in the JSON. Control: the golden digests equal.
+- GATE: `python tools/export_battle_orders.py --check` → exit 0; `python -m pytest tests/valoria/test_mass_battle_order_of_battle.py engine/season/tests/test_cp_t04_02_marshal.py -q` → pass; `python tools/ci_golden_modes_check.py` → digests equal to B19.02's reading.
+- HASH MOVERS: none.
+- DEPENDS ON: EXISTS-IN-TREE `core/exchange.py::clamp_command`, `tools/export_battle_orders.py::build`, `engine/substrate/battle_orders.py`; `massbattle.py::_MVP_UNIT_COMMAND` and `orderofbattle.py::_UNIT_COMMAND` [ASSUMPTION: present under these names after B17 — basis: the source's row, read at `faf0cea`; grep at the item's open and name the literal's site in the commit body]; V12 B19.02.
+- GLOSSARY: "command span": the number of units one leader can keep in hand, read from his `command` skill score by one table (D-U1-11g: never called "command" in prose); row added to `unified/U1_GLOSSARY.md` §J in this commit, owner `config.command_span`.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B19's producer; `Item: B19.03`, `[skip ci]`.
+
+### B19.04 — the army and its units carry the commander, his post and each officer's record · 27_MB_A 27A-3 · BUILD · HASH EQUAL
+- SOURCE: `27_MB_A_command_and_the_obedience_draw.md` §2 (the unit row's `officer`; the host builder), §3 (`commander_post` on the army Record), row 27A-3, INCOMPLETE item 3 (`_order_due` beside `_order_idx`).
+- ADVANCES: R-04.c5 (iii) through B20 (the record a decider's orders are drawn on).
+- INSTRUCTION (27A-3, copied with NAMES): "`modules/mass_battle/hierarchy/units.py` :: `Unit` gains `commander`, `commander_post`; `Subunit` gains `officer_record`, `_order_due`; `armies.py::build_army`, `orderofbattle.py::Subformation`, `OrderOfBattle`, `_spec_for` carry them; `armyrecord.py::KEYS`, `order`, `validate` accept `commander_post` and a unit row's `officer`; `engine/season/rosters.yaml: record_kinds.values.army` mirrors the key". `_order_due` "is declared beside [`_order_idx`] with the same default and needs no reset" (a `Subunit` is built per engagement). `commander_post` is "a column on the army Record ... a unit's name"; `validate` refuses a `commander_post` naming no unit of the record ("validated against the unit names", the exact-edits table). All absent by default.
+- WHERE: `modules/mass_battle/hierarchy/units.py` (the army class: `commander`, `commander_post`; the unit class: `officer_record`, `_order_due`); `modules/mass_battle/armies.py` (`build_army`); `modules/mass_battle/orderofbattle.py` (`UnitRow`, `OrderOfBattle`, `_spec_for`); `modules/mass_battle/armyrecord.py` (`KEYS`, `order`, `validate`); `engine/season/rosters.yaml` (`record_kinds.values.army`); `tests/valoria/test_mass_battle_army_record.py` (the Record key pin), `tests/valoria/test_army_verbs.py`.
+- TESTS: the Record key pins in `tests/valoria/test_mass_battle_army_record.py` and `test_army_verbs.py` follow the new key (the source: "the Record key pin is in"); `test_mass_battle_army_record.py::test_commander_post_naming_no_unit_is_refused` `[ASSUMPTION: test name; the item creates it, E-3]`, written first and read red.
+- FALSIFIER and CONTROL: a record without the new keys that validates differently than before. Control: golden digests equal (all absent).
+- GATE: `python -m pytest tests/valoria/test_mass_battle_army_record.py tests/valoria/test_army_verbs.py tests/valoria/test_mass_battle_order_of_battle.py -q` → pass; `python tools/ci_golden_modes_check.py` → digests equal to B19.03's.
+- HASH MOVERS: none (the keys are absent in every shipped world; a Record's `subject_matter` keys enter the content hash only where present).
+- DEPENDS ON: EXISTS-IN-TREE `hierarchy/units.py` (`_order_idx` at `:516`, `class Officer` at `:2752`), `armyrecord.py::KEYS`, `::order`, `::validate`, `armies.py::build_army`, `orderofbattle.py::_spec_for`; V12 Batch B16L, Batch B16M (the names), B19.03.
+- GLOSSARY: none (*commander*, *officer* rows already point at the MB lexicon D-5; their owner columns gain `armyrecord` `commander_post` and the unit row's `officer` in this commit).
+- NAMES: `Unit` → `Army`; `Subunit` → `Unit`; `Subformation` → `UnitRow`; Record key `subformations` → `units` (B16L, B16M; `V12_STRUCTURE_part2.md` §5.10).
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B19's producer; `Item: B19.04`, `[skip ci]`.
+
+### B19.05 — an order takes effect by a draw: the obedience draw at `check_orders` · 27_MB_A 27A-4 · BUILD · HASH EQUAL (at `arm: off`)
+- SOURCE: `27_MB_A_command_and_the_obedience_draw.md` §3 (who rolls), §4 (the draw), "Gate" 1–6, row 27A-4, "Tests to add", "Falsifier", INCOMPLETE items 3 and 4; `26_MASS_BATTLE_maneuver_orders.md` §1 (the kinds of order, read for `obey.step`'s keys); rulings A-59 (1), A-5, A-30, A-25 (`[ASSUMPTION]` as the source marks it).
+- ADVANCES: R-04.c4 (a field's orders now carry chance); R-04.c5 (iii) through B20.
+- INSTRUCTION:
+  1. `modules/mass_battle/core/contact.py` :: "new `_obey_terms(order, roller, sub, unit, ctx)`, `obey(...)`, `_roller_for(unit, sub, source)`; `check_orders` (`:66`) calls `obey` before the `for k, v in order.behavior.items()` loop (`:130`) and applies on `obeyed`, sets `sub._order_due` on `late`, leaves the order pending on `not carried out`; the misread branch selects the unit's other pending `signal:` order" (27A-4). The draw (§4, copied):
+     ```
+     pool      = max(pool_floor, roller.score + roller.addends + pool_add)
+     levels    = roller.levels  (+ `minor` for the roller if the unit's Discipline is 4 or more: A-25 [ASSUMPTION as the source marks it])
+     obstacle  = obey.task                                   # the one task-obstacle rule, carried as a number
+               + obey.step[kind]                             # the kind of order (below), as steps
+               + obey.distance * steps(roller.post, unit)    # §3's last column, in distance steps; 0 when it says none
+               + obey.across  * max(0, units_on_signal - 3)
+               + obey.unsteady  (unit `raw`, or Discipline 1)
+               + obey.in_contact (the unit has a cell in contact)          # CONTROL 0
+     net       = roll_net_continuous(pool) + net_boost(levels, pool)       # the one sampler (A-5)
+     band      = degree_from_net(net, obstacle)                            # the one ladder
+     ```
+     | band | what happens to the order |
+     |---|---|
+     | Overwhelming, Success | **obeyed**: applied this tick |
+     | Partial | **late**: applied after `1 + bands` ticks. **Misread**, in the one case the data can express: the order came by signal and the unit holds another pending order on a *different* signal; it answers that one instead, now |
+     | Failure | **not carried out**: the order stays pending and is drawn again when its trigger next holds, at most once a phase. For a restraint (`hold` on `enemy_broken`, `recall`, a signalled halt, a body held for a signal) not carried out is the body doing what it was held from |
+  2. Who rolls (§3): a standing order with a local trigger → the unit's **officer**, a unit with none → the **commander** (distance from his post); a signal → one draw per unit waiting on it, on its officer, else the commander; an improvised order → the commander, then for an officered unit the officer once more. "An order is drawn once for each person who has to pass it on to the unit." `_roller_for` reads `sub.officer_record`, else the army's `commander` (B19.04); a side with no record reads `COMMAND_DEFAULT` as `score` with zero levels (§2's control).
+  3. The kind of an order (`obey.step`'s key), read from the order's behaviour by `26_MASS_BATTLE_maneuver_orders.md` §1's table: `keep` (`hold`, posture unchanged: no draw); `change` (a change of posture, target or route; a weapon switch); `restrain` (`hold` on `enemy_broken`; `recall`; a signalled halt); `signal` (act together on a signal across several units). The triggers `enemy_broken` and `in_lull` do not exist at this item (`hierarchy/units.py::_ORDER_TRIGGER_KINDS` holds `immediate, tick:, enemy_range:, ally_at:, own_strength:, signal:`); they arrive with `26_MASS_BATTLE_maneuver_orders.md` §2 (B20), so `restrain` is reached by `recall` and a signalled halt only until then.
+  4. "**Distance.** `steps` (a distance step) is the whole number of `obey.reach` cells between the roller's post and the unit's centroid, beyond the first." "`obey.task` is the obstacle of a task nobody opposes, by the one rule: `even_line(pool_add) + opposed_ob(pool_default, opposition_rate)`, both functions of `engine/dice_engine/sigma_leverage.py`, computed host-side in `field_input` and carried on `MassBattleInput` as one number. The module does not read a fixture table and does not restate the rule." In this item `obey_task` is read from the input (default 0.0, B19.02); the host-side computation lands with 27A-6's builder (B05) `[ASSUMPTION: B05's `command_record` item fills `obey_task`; if it did not, the first `field_input` edit of the second half does — basis: the source's §4 and row 27A-6]`.
+  5. "**One draw per key** (A-30): each draw is keyed on (field, tick, unit, purpose `obey`, link)", through the field's `Draw` (`resolve_field`'s `rng`, `engine/dice_engine/draw.py`, B06). At `arm: off` `obey` returns `obeyed` without drawing, so no draw is consumed and nothing moves.
+  6. "The module's first engine import" for the draw is the leaf U5b §1 row 1 made in B05 (`roll_net_continuous`, `net_boost`, `degree_from_net`).
+- WHERE: `modules/mass_battle/core/contact.py` (`_obey_terms`, `obey`, `_roller_for`, `check_orders`); `tests/valoria/test_conditional_orders.py`; `tests/valoria/test_mass_battle_signals.py`; `tests/valoria/test_mass_battle_officers.py`.
+- TESTS (each in the file that already covers the code, written before the edit; the gate-2 to gate-6 tests read red before it, the control green): `tests/valoria/test_conditional_orders.py`: `test_obey_off_applies_every_order_at_its_trigger` (control); `test_with_the_draw_on_an_order_is_obeyed_late_or_not` (gate 2: `obey: on`, one unit with `(tick:3, {stance: hold})`, n 400, all three counts above zero, `assert checked >= 400`); `test_command_score_and_each_attribute_move_the_obeyed_share` (gate 3: officer at score 5 against 0; Presence 6 and Reason 6 against 2 and 2 at equal score; each attribute alone); `test_distance_from_the_commanders_post_lowers_the_obeyed_share` (gate 4; with `distance: 0` equal field for field). `tests/valoria/test_mass_battle_signals.py`: `test_a_unit_on_two_signals_can_misread_and_on_one_cannot`; `test_more_units_on_one_signal_answer_together_less_often` (gate 5). `tests/valoria/test_mass_battle_officers.py`: `test_a_standing_order_is_rolled_by_the_units_officer`; `test_an_improvised_order_to_an_officered_unit_draws_twice` (gate 6, read from the draw trace; the improvised-order path reaches `obey` when B20's `CommanderAction` lands, so this test exercises `obey`'s link argument directly until then `[ASSUMPTION — basis: the source's §3 and Dependencies: window and lull actions reach obey only when the manager's §4 lands]`). Existing callers `check_orders(u, t, [])` in `test_mass_battle_signals.py`, `test_mass_battle_routes.py`, `test_mass_battle_yield.py`, `test_conditional_orders.py` "stay valid because the arm defaults `off`".
+- FALSIFIER and CONTROL: "An order that takes effect at its trigger in every one of 400 fields with the draw on. A commander's score, or either attribute, that moves no obedience share. A draw count that depends on who issued the order. A misreading on a unit that holds one signal. A second table that maps a rank to dice. A seat read by the module." Planted: `obey` returning `Success` always (gate 2 must fail); the two attribute rows deleted (gate 3's attribute halves must fail); `_roller_for` returning the commander for every unit (the officer test must fail). Control: `obey: off`, `commanders: (None, None)`: `python3 tools/ci_golden_modes_check.py` digests equal; a field with orders equals the same field on the tree before the edit, at 200 seeds (gate 1).
+- GATE: `python -m pytest tests/valoria/test_conditional_orders.py tests/valoria/test_mass_battle_signals.py tests/valoria/test_mass_battle_officers.py tests/valoria/test_mass_battle_routes.py tests/valoria/test_mass_battle_yield.py -q` → pass; `python tools/ci_golden_modes_check.py` → digests equal to B19.04's; `git grep -n "roll_pool(.*\.command)" modules/mass_battle` → prints the two reads 27A-5 replaces (`recall_check`, `feigned_retreat_recognized`) and nothing else (gate 8's empty reading is moved to the item that lands 27A-5, §5.8).
+- HASH MOVERS: none at the shipped arm (`off`). With `on`: every field in which an order fires (read in tests only here; the flip is UNDECIDED's dial line).
+- DEPENDS ON: EXISTS-IN-TREE `core/contact.py::check_orders` (`:66`), `hierarchy/units.py::Order`, `::_ORDER_TRIGGER_KINDS`; V12 Batch B05 (`dice_engine.roll_net_continuous`, `sigma_leverage.net_boost`, `degree_from_net` in the module, UMR §1 row 1), Batch B06 (`engine/dice_engine/draw.py`, the field's `Draw` as `resolve_field`'s `rng`), B19.02, B19.03, B19.04.
+- GLOSSARY: new row "obedience draw": the draw by which a unit carries out an order it has been given: at once, late, or not at all (27_MB_A §4); owner `core/contact.py::obey`; rejected: "order check", "command roll". "distance step" (row *band*'s rejected-synonym column already names it): owner column → `ORDER_OBEY['reach']`.
+- NAMES: `Subunit` → `Unit`; `Unit` → `Army`; `stance` (the engine attribute keeps its name, D-9); "general" → commander (S-1).
+- COST and TIER: small build; `sonnet`, `high`; the draw is a judgment node read at the batch's `opus` closing critique (the source).
+- LANDS IT: B19's producer; `Item: B19.05`, `[skip ci]`.
+
+### B19.06 — every named draw that exists is traced · 27_MB_C 27C-1 (the trace sites) · BUILD · HASH EQUAL
+- SOURCE: `proposals/27_MB_C_dynamic_strength_and_the_residual_chance.md` §3 ("Where the chance in a field is, after", "The report"), row 27C-1; U3 §4.1 row 91; UNDECIDED (3) of this block; rulings A-59, A-30.
+- ADVANCES: the instrument 27C-2 reads (the draw counts per arm are "asserted from the draw trace, not from the flag", 27_MB_C §4) in the second half.
+- INSTRUCTION: "one `trace_event('draw', tick, side, unit, kind, band)` at each site, through the module's existing trace call" (27C-1), at the draw sites that exist at this item: `core/contact.py::obey` (B19.05; kind `obey`), `orchestration.py::recall_check` (`recall`), `orchestration.py::feigned_retreat_recognized` and `resolve_feigned_retreat` (`feint`), `orchestration.py::pursuit_damage` (`pursuit`). The module's trace call is `modules/mass_battle/resolution.py::trace_event(cat, **kw)`, a no-op outside a `tracing()` block ("byte-exact when off"); the call is `trace_event('draw', tick=…, side=…, unit=…, kind=…, band=…)`. The other sites 27C-1 lists (`stand_draw`, `rally_roll`, the `captured` draw) are created by the rout files in the second half; **each of those items adds its own `trace_event('draw', …)` line in its own commit** (said here so the second half carries it; 27_MB_C §3's table). The pair's contact draw and the cell breakpoints are "summarised per unit per bout: nets above and below zero; cells broken" (MBA §8.1: the contact and volley draws "are reported aggregated per unit, not per tick"); that summary is collected with the report (B19.27).
+- WHERE: `modules/mass_battle/core/contact.py` (`obey`); `modules/mass_battle/orchestration.py` (`recall_check`, `feigned_retreat_recognized`, `resolve_feigned_retreat`, `pursuit_damage`: one line each; these stay in `orchestration.py` through B17, the orchestrator's note of 2026-11-12); `tests/valoria/test_army_battle.py`.
+- TESTS: `tests/valoria/test_army_battle.py::test_draw_trace_names_each_draw_site_that_fired` `[ASSUMPTION: test name; the item creates it, E-3; 27C-1's own test, `test_report_draws_lists_every_named_draw_that_fired`, reads the report and moves to B19.27]`: inside `tracing()`, a field with `obey: on` and an order that fires holds at least one `cat == 'draw'` event of kind `obey`; read red before the edit.
+- FALSIFIER and CONTROL: a draw event with no unit or no kind (27_MB_C gate 2's "a draw whose key has no unit and no purpose"). Control: outside `tracing()` the golden digests are equal (the call is a no-op).
+- GATE: `python -m pytest tests/valoria/test_army_battle.py -q` → pass; `python tools/ci_golden_modes_check.py` → digests equal to B19.05's.
+- HASH MOVERS: none (the trace list is not state; the report write that moves every fought field's band Event is B19.27's, BLOCKED to B20).
+- DEPENDS ON: EXISTS-IN-TREE `modules/mass_battle/resolution.py::trace_event`, `::tracing`; `orchestration.py::recall_check` (`:2093`), `::feigned_retreat_recognized` (`:2101`), `::resolve_feigned_retreat` (`:2125`), `::pursuit_damage` (`:2057`); V12 B19.05.
+- GLOSSARY: "named draw": a draw the field makes at a site the fiction names (an order obeyed, a stand, a pursuit), listed on the result by name (27_MB_C §3); new row, owner `resolution.trace_event` category `draw` until B20's report owns it.
+- NAMES: `Subunit` → `Unit`; `Unit` → `Army` (B16M).
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B19's producer; `Item: B19.06`, `[skip ci]`.
+
