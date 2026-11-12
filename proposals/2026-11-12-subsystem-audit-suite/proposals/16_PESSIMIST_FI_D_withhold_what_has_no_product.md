@@ -58,7 +58,8 @@ formable, it moves every seeded season"*). No new mechanism.
    is today's behaviour).
 2. **`engine/season/requirements.yaml`, R-05's `measured:` text**: the three rows are named as
    withheld, with the product each waits on, so the row does not count them as verbs "built out on
-   execution". (Text only; the row's status is unchanged by this proposal.)
+   execution" (the phrase is the first FI audit's reading of the row, F-FI-03; this lane did not
+   open the row's text). Text only; the row's status is unchanged by this proposal.
 3. **The three product proposals named above** each carry one more line: remove the row from
    `withheld_verbs`.
 

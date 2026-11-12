@@ -141,7 +141,7 @@ this run agrees with it and is read here for the premise.
 | 6 | waiting is a risk | yes | the first Event anyone could notice is at season 20; its consequence is a yield change a tenth the size of the surplus | DEPARTS |
 
 By arithmetic on the measured rate (not run): the last band edges fall at seasons 90 and 95, every
-producing Site reaches 0 at season 100, and the stores then feed the cohorts for some 280 seasons more.
+producing Site reaches 0 at season 100, and the stores then feed the cohorts for some 400 seasons more.
 The steady-state season costs about 9,900 Events, of which 322 are the wear writes.
 
 **The premise fails at shipped values**: it holds of 74 integers and of nothing a person in the fiction
@@ -193,7 +193,7 @@ arm is the first run in which crossings actually occurred and the absence could 
 | 3 | it can be seen coming | signs, argument | 112 `condition.band_crossed` in 14 seasons, each "a witnessable Event; produce no outcome" | FOLLOWS at FORMS |
 | 4 | it breaks | a moment | none: no death, no body falls (every cohort still at 940: §2.1's glut carries them), no Event marks a rupture, `endings_reached` is `[]`; the decay has no floor but zero and no reversal | INERT |
 | 5 | people can bound it | at a cost, uncertainly | `restore` is the bound the docstring names: an ungraded, costless, certain rise (`effects_economy.py:181-211`), attempted **0 times** in three seasons in every shipped arm here and at three seeds of GAME's X1 | INERT in computed play |
-| 6 | what people did changes it | yes | see (d) | CALAMITY_LINK6_PENDING |
+| 6 | what people did changes it | yes | (d): the played and the unplayed realm decay identically | INERT |
 
 **The premise fails in both halves at shipped values, and in "breaks" in every arm.** A consequence for
 a sibling proposal: flipping `lattice_coupling` to 250 with a wound in place, as
@@ -215,13 +215,13 @@ person-side price is "[GAP: unowned]" (WR R-23).
 
 | reading | seed 0 shipped | seed 0 `drawseed` | seed 1 shipped |
 |---|---|---|---|
-| executed `move` + `migrate` | 37 | 44 | S1_MOVES |
-| to where the mover already stands | 20 | 30 | S1_SAME |
-| to another territory | 14 | 10 | S1_OTHER |
-| individuals who travelled, and of them harmed (a body fall or death, any cause) | 10, **0** | 12, **0** | S1_HARM |
-| individuals who never travelled, harmed | 36, 0 | 34, 0 | S1_HARM_CTL |
-| most journeys by one person in one season | 3 | 3 | S1_MAX |
-| refused (`travel.blocked`, `migrate.refused`) | 77, 80 | 57, 35 | S1_REF |
+| executed `move` + `migrate` | 37 | 44 | 41 |
+| to where the mover already stands | 20 | 30 | 36 |
+| to another territory | 14 | 10 | 5 |
+| individuals who travelled, and of them harmed (a body fall or death, any cause) | 10, **0** | 12, **0** | 11, **0** |
+| individuals who never travelled, harmed | 36, 0 | 34, 0 | 35, 1 (killed in a `capture`) |
+| most journeys by one person in one season | 3 | 3 | 1 |
+| refused (`travel.blocked`, `migrate.refused`) | 77, 80 | 57, 35 | 55, 54 |
 
 | # | link | O | C observed | verdict |
 |---|---|---|---|---|
@@ -279,13 +279,13 @@ loop (WR F-WR-05).
 
 | reading | seed 0 shipped | seed 0 `drawseed` | seed 0 `calendar` | seed 1 shipped |
 |---|---|---|---|---|
-| `thread_read` attempted / executed | 3 / 3 | 8 / 8 | 2 / 2 | S1_TR |
-| what it was pointed at | 1 person, 2 Records | 2 persons, 5 Records, 1 other | 1 person, 1 Record | S1_TR_SUBJ |
+| `thread_read` attempted / executed | 3 / 3 | 8 / 8 | 2 / 2 | 4 / 4 |
+| what it was pointed at | 1 person, 2 Records | 2 persons, 5 Records, 1 other | 1 person, 1 Record | 3 persons, 1 Record |
 | degree | none | none | none | none |
 | what the finding observed | the reader's own sensitivity and the gate (`thread_sensitivity` 75, `.gate` 30) and nothing else | same | same | same |
 | the reader's body, before → after | 1000 → 1000 | | | |
 | claims in the reader's ledger that name the Thread | 0 of 308 | | | |
-| `restore` / `work` attempted | 0 / 0 | 0 / 0 | 0 / 0 | S1_RESTORE |
+| `restore` / `work` attempted | 0 / 0 | 0 / 0 | 0 / 0 | 0 / 0 |
 
 Four of the 46 individuals clear the gate (sensitivities 35, 50, 60, 75; six more are authored below
 it).
