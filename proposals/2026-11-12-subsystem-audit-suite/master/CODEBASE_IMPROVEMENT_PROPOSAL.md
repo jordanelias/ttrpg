@@ -4,6 +4,8 @@
 
 ## Read at: `4dc8a7b` (working tree, 2026-11-12; the code tree is unchanged through `ff2f508`). Producer: Fable, the holistic lane. Findings: `master/HOLISTIC_AUDIT.md` and its parts 2 and 3 (`H-01` to `H-13`). For Jordan: `master/HOLISTIC_FOR_JORDAN.md`.
 
+Reconciled: 2026-11-12, A-102 (lane `unified/work/A102_112_APPLIED.md`): CI-07 is no longer held; it lands as `B03c-boot` after B03 and before B03a and B04 (§2 table, §3.2, §3.3), and CI-02's scope gains `boot/`.
+
 **Words** (`unified/U1_GLOSSARY.md` §H): a *setting* is a `Fixtures` field; the *act-count instrument* is
 `harness/aperture.py`; a *dataclass* is a typed input or outcome class of `queries/inputs.py`; a *hot file*
 is one of the files `U3` §1.1 lists. Code identifiers stay as the tree has them.
@@ -73,7 +75,7 @@ overwrites a `(RULED)` item (the one Layer 1 question is in `HOLISTIC_FOR_JORDAN
 | **CI-06** | one owner of the chooser's composition | H-02 | **B03**, after `U5a_CORE_owed_edits` (it edits `harness/probes.py`) | lands before B06, which changes what `draw_factory` returns: B06 then edits one composition, not four |
 | **CI-01**, **CI-02** | annotations out of the two registries; history out of the source | H-03, H-07 | **new batch `B03a-prose`** (IN, hash EQUAL), after B03, before B04 | below |
 | **CI-09** | personal combat as a package | H-08 | **new batch `B13-pc-package`** (PC, hash EQUAL; the handle U3 left unused), after B03a, before B05 and B14 | below |
-| **CI-07** | the realm builder's home; one way to place a person | H-02 | **held** on `J-H-01`; when ruled, **new batch `B03c-boot`** (IN, hash EQUAL) at the next IN-lane boundary | a pure move; lands at any boundary once its home is ruled |
+| **CI-07** | the realm builder's home; one way to place a person | H-02 | **new batch `B03c-boot`** (IN, hash EQUAL), after B03, before B03a and B04 (A-102 ruled `J-H-01` option A, 2026-11-12: the tenth module `engine/season/boot/`; joined in `unified/U3_DEPENDENCY_ORDER.md` item 4c) | a pure move; before B03a so CI-02's pass covers `boot/` as game code, and before B04, the first batch that edits the builder |
 
 **`B03a-prose`** (IN; after B00, B01, B02, B03; before B04, B05, B08). Members: CI-01, CI-02. One close.
 *Why its own batch and not part of B03:* its diff touches almost every non-test file of the season package's game code and the
@@ -129,13 +131,13 @@ own batches (H-08); the B03 items serve R-05's delivery indirectly (H-01's readi
 | file | items | batch |
 |---|---|---|
 | `engine/season/rosters.yaml`, `engine/season/verb_table.yaml` | CI-01 | B03a |
-| every non-test `*.py` under `engine/season/{loop,state,decision,queries,data,seam,manifest}`, `engine/season/epistemic.py`, `engine/substrate/`, `engine/dice_engine/`, `modules/` | CI-02 | B03a |
+| every non-test `*.py` under `engine/season/{loop,state,decision,queries,data,seam,manifest,boot}` (`boot` added by A-102: game code once B03c lands before B03a), `engine/season/epistemic.py`, `engine/substrate/`, `engine/dice_engine/`, `modules/` | CI-02 | B03a |
 | `references/module_contracts.yaml`, `engine/engine_params/composition.json` | CI-03 | B03 |
 | `engine/season/seam/wrappers/sigma.py` | CI-03 (B03), CI-02 (B03a) | B03 → B03a |
 | `engine/season/loop/driver.py` | CI-03 (one line), CI-08 (B03), CI-02 (B03a) | B03 → B03a |
 | `tools/export_sim_params.py`, `engine/engine_params/sim_params.json`, `tests/valoria/test_export_sim_params.py` | CI-04, CI-05 | B03 |
 | `engine/season/harness/probes.py`, `soak.py`, `storybar.py`, `interactions.py` | CI-06 | B03 |
-| `engine/season/harness/populated.py` and its importers | CI-07 | B03c (held) |
+| `engine/season/harness/populated.py` and its importers; `engine/season/boot/` (new); `engine/season/data/files.py`; `test_cr20_attributes.py`, `test_k3_thread_sensitivity.py`, `test_season_shape.py`, `test_cp_t03_07_body_ceiling.py` (paths only) | CI-07 | B03c (A-102) |
 | `modules/combat/*.py`, `engine/substrate/pc_engine.py`, `systems/combat/combat_engine_v1/workbench/*.py`, `tools/export_engine_params.py`, the 27 test files of CI-09 step 6 | CI-09 | B13 |
 | `tools/join_audit_workings.py`, `tools/verify_handoff_split.py`, `tools/link_values_pointers.py`, `tests/valoria/test_link_values_pointers.py`, `engine/engine_params/value_pointer_links.json`, `references/restructure_ledger.md` | CI-10 | B03 |
 | `engine/season/harness/aperture.py`, `engine/season/tests/test_aperture.py` | CI-11 | B02 |
@@ -148,7 +150,7 @@ own batches (H-08); the B03 items serve R-05's delivery indirectly (H-01's readi
    practice 3b).
 3. **B03a:** CI-01 (two files, two lanes at once) → CI-02 (one lane per package, at once, disjoint files).
 4. **B13:** CI-09, beside B04.
-5. **B03c:** CI-07, when `J-H-01` is answered.
+5. **B03c:** CI-07 (A-102 answered `J-H-01`), after B03 and before B03a (item 3 above runs after it).
 
 ---
 

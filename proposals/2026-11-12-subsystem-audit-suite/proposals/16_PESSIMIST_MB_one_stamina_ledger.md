@@ -17,6 +17,8 @@ U3 B19 (steps 1-2), §4.1 row 64 (step 3 and the A-69 write land in B31 with the
 
 ## Status: PROPOSED
 
+Reconciled: 2026-11-12, A-100/A-101 supersession pass (MBA-04; `master/mb_abstraction/MBA_DESIGN_part3.md` §8.1): this file STANDS, **narrowed**: the one column ledger's stamina share feeds the contact draw's `rounds_d` (how many duel rounds a man has already fought), `MB_STAM_SIGMA` and `_fatigue_sigma` leave (there is no sigma head), and `percell.update_stamina`'s per-clash drain is scaled by `exposure_d / EXPOSURE_BASE` (MBA-04 step 6). Steps 1 and 2 (one ledger, reported) and step 3 are unchanged. Marked in place at the table's "read by" row.
+
 Lands in batch: **B19** for steps 1-2 (MB; the field calibration batch, before the pair rule); **B31** for step 3 and the
 A-69 record write (with `26_MASS_BATTLE_movement_and_fatigue_as_data.md`, which declares `stamina_left`). Depends on:
 `04_MB_unit_loadout_and_weapon_in_hand_B.md` (B17), `26_MASS_BATTLE_movement_and_fatigue_as_data.md` (B31) for step 3.
@@ -54,7 +56,7 @@ There are two stamina ledgers for one quantity (`ED-MB-0045` counts three stores
 |---|---|---|
 | state | `Unit.stamina`, `Subunit.stamina` (`hierarchy/units.py`) | `percell._ColBlock.stamina` |
 | drained by | `STAMINA_DRAIN_PER_CONTACT_CELL` in `battle_loop.run_battle` | `MB_STAMINA_DRAIN` in `percell.update_stamina`, damped by depth |
-| read by | `core/exchange.py::_stamina_pool_penalty`: one die off at exactly zero | `percell._fatigue_sigma`: a sigma malus that grows to `MB_STAM_SIGMA` |
+| read by | `core/exchange.py::_stamina_pool_penalty`: one die off at exactly zero | `percell._fatigue_sigma`: a sigma malus that grows to `MB_STAM_SIGMA` *(A-100, MBA-04: `MB_STAM_SIGMA` leaves; the column's share feeds the contact draw's `rounds_d`)* |
 | a fresh 18-tick field ends at | 99.5 and 100.0 of 100; zero on 0 of 80 sides | 35 of 100 |
 | entering at 50 instead of 100 (mirror, n 100, friction off) | 36 / 54 / 10 → **36 / 54 / 10** | 36 / 54 / 10 → **15 / 79 / 6** |
 | reported by `run_battle` | **yes** (`a_stamina`, `b_stamina`) | no |

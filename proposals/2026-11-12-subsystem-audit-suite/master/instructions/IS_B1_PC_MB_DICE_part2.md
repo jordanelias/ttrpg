@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED (part 2 of `master/instructions/IS_B1_PC_MB_DICE.md`; nothing here is applied; resolves nothing at runtime)
 
+Reconciled: 2026-11-12, A-100/A-101 supersession pass (MBA-04; `master/mb_abstraction/MBA_DESIGN_part3.md` §8.1): **IS-MB-06 (`prowess_of` arithmetic with two callers) is SUPERSEDED by A-100 (MBA-04)**: no pool arithmetic remains; its landing in B31 (or B19) is struck. **IS-MB-P6 and IS-MB-B2 are NARROWED** (P6: the contact and volley draws use the keyed draw's normal, only the will checks use the one sampler, B05; B2: a drill step is a step on `skill`). IS-MB-01 to IS-MB-05 and IS-MB-B3 STAND. A new batch B19a (the contact instrument) precedes B19 and adds no item to this suite; the squad bridge MBA-07 joins IS-MB-04's file in B30. Marks are in place below.
+
 Checked: 2026-11-12, Sonnet check (`master/instructions/IS_CHECK.md`; the edits are listed at the head of part 1): `IS-MB-01`, `IS-MB-04` register scenario rows; `IS-MB-02` records `_fall`'s fixed form; `IS-MB-03` uses `make_decider` and the lexicon's post `centre`; census gains the `scenarios.py` row.
 
 Read part 1 first: its §0 gives the item form, the words (A-98; `unified/MB_LEXICON.md` for the army and the battle) and the four probes P-1 to P-4 this part cites. Short names used in both parts: **PB** is `proposals/03_PC_duel_round_and_approach_B.md`; **GO-B** is `proposals/11_GO_player_surface_contract_B.md`; **the manager proposal** is `proposals/04_MB_manager_battle_one_resolver.md`; **the scenario proposal** is `proposals/04_MB_playable_field_scenario.md`.
@@ -43,12 +45,12 @@ Read part 1 first: its §0 gives the item form, the words (A-98; `unified/MB_LEX
 | 2 | **B05-one-roll** (IN) | one sampler in the battle (A-5; `U5b_MB_rulings_in_the_field` §1; `10_DICE_one_roller_one_fraction_rule` Edit C) | the battle and a debate draw from one roller |
 | 3 | **B06-keyed-draw** (IN) | every draw keyed `(field, tick, unit, purpose)` | a replayed battle is identical by construction |
 | 4 | **B17-mb-scale** (MB) | one survivor share, one owner of weight to troops, the **drawn** end state and the return to station (A-67 to A-70), the typed `FieldOutcome`, one path, `references/troops.yaml` and its exporter | **a battle resolves at the shipped scale with three end states** (P-2 is the before-reading) |
-| 5 | **B19-mb-field-calibration** (MB) | command and the obedience draw (A-59), the stand and pursuit draws, the linear melee law (A-60), cells and the hierarchy as data, bouts and lulls, the side-wide multiplier tested out (A-77) | the result has causes the report can name; a fall-back point is reachable inside a battle |
+| 5 | **B19-mb-field-calibration** (MB), after **B19a-mb-contact-instrument** (A-100) | command and the obedience draw (A-59), the stand and pursuit draws, the linear melee law (A-60; carried by the contact draw, MBA-04, not the pool), cells and the hierarchy as data, bouts and lulls, the side-wide multiplier tested out (A-77) | the result has causes the report can name; a fall-back point is reachable inside a battle |
 | 6 | **B20-mb-orders** (MB) | standing orders on the unit row, the window and `GeneralAction`, the interventions list, the report, the scenario, the commander's view and odds; **IS-MB-01**, **IS-MB-03** | **MB plays alone**: choices before and during, a report after, three ending kinds (the `seize` ending waits on B23) |
 | 7 | **B22-mb-armies** (MB) | what an army carries back (A-69, A-78), the military verbs, supply and muster, armies at realm build; **IS-MB-02** (the siege) | **MB is integrated**: a seeded realm fights battles in natural play; besiege is a real second option |
 | 8 | **B23-land** (FA) | `seize`, occupy, withdraw; seats pass with holdings (A-57, A-58, A-66) | the scenario's **win** by taking the place |
 | 9 | **B30-mb-nested** (MB) | officers' duel contacts, the squad of named characters; **IS-MB-04**, IS-PC-02 | a duel inside a battle; a squad plays alone |
-| 10 | **B31-mb-loadout-economy** (MB) | the secondary weapon and its cost, movement and fatigue as data, the campaign economy, unit prowess on the row; **IS-MB-06** | a designer defines a troop type and its kit as data |
+| 10 | **B31-mb-loadout-economy** (MB) | the secondary weapon and its cost, movement and fatigue as data, the campaign economy, unit prowess on the row (27B-3, 27B-4 only, A-100); ~~**IS-MB-06**~~ (SUPERSEDED by MBA-04) | a designer defines a troop type and its kit as data |
 | 11 | **B34-go-surface** (GO) | the transcript and the generic scene entry | the battle as a player would see it |
 
 **The cut, stated.** MB's standalone scenario lands in B20 and its integrated proof in B22 because the military verbs (B22) wait on a decision U1 has not taken (IS-MB-B1); holding the scenario for them would leave B17, B19 and B20 with nothing to play. The scenario does not need them: its armies are minted at build by `harness/army_presets.py::install`, which folds the army verbs directly between seasons and spends no person's budget (that file's head).
@@ -121,6 +123,7 @@ Read part 1 first: its §0 gives the item form, the words (A-98; `unified/MB_LEX
 - **GATE:** expected after B17: at seed 2 the battle the realm fights is `field.won`, `field.lost` or `field.drawn` and no longer the artefact of the shipped scale; after B22: fought battles above 0 at every seed and the two army rows above 0 (the scenario proposal's gate 4); after B23: at least one `seize` following a `field.won`.
 - **Hash movers:** none. **Depends on:** CI-11 (PROPOSED, B02). **Lane:** MB (B17, B20, B22), FA (B23). **Joins:** those closes. **Cost and tier:** a reading; `haiku` runs it. **Lands it:** each batch's BATCH-CLOSE.
 
+**SUPERSEDED by A-100 (MBA-04): no pool arithmetic remains (`prowess_of`, `prowess(atom)` and `subunit_combat_pool` are deleted by MBA-04 steps 4 and 7; a unit's quality is the vector `(arm, armour, skill)` read by the contact draw). Landing struck (the B31 / B19 join below, the P2-3.1 row and the P2-3.2 census row).**
 **Item: IS-MB-06 · unit prowess is one arithmetic with two callers** (settles `27_MB_B` item 27B-2 at the tree; `U4_DOCUMENT_STATUS.md` §3.4 code SITE)
 
 - **Advances:** A-59 (2) (each unit's own prowess as data on its row). The proposal read `Unit.base_combat_pool` by grep and left a fallback; the site is opened here.
@@ -139,7 +142,7 @@ Read part 1 first: its §0 gives the item form, the words (A-98; `unified/MB_LEX
 | IS-MB-P3 | at the shipped scale no battle resolves (P-2; F-MB-01) | `04_MB_headcount_grade_and_scale` gates 2 and 3 | B17 |
 | IS-MB-P4 | roles that change nothing (P-3) | `U5b_MB_residue` §1, the one list of unit roles that leave the menu | B17 |
 | IS-MB-P5 | the battle returns an untyped mapping (H-06) | `04_MB_typed_outcome_and_one_path` §1 | B17 |
-| IS-MB-P6 | the module keeps its own roller | `10_DICE_one_roller_one_fraction_rule` Edit C with `U5b_MB_rulings_in_the_field` §1 | B05 |
+| IS-MB-P6 | the module keeps its own roller (**NARROWED by A-100 (MBA-04): the contact and volley draws use the keyed draw's normal; only the will checks (stand, rally, obey) use the one sampler**) | `10_DICE_one_roller_one_fraction_rule` Edit C with `U5b_MB_rulings_in_the_field` §1 | B05 |
 | IS-MB-P7 | a besieged town's larder (`U5d_STORY_owed_edits` §1) and the census's `_siege` row | unblocked by IS-MB-02 | B22, then B39 |
 
 **Blocked items**
@@ -147,7 +150,7 @@ Read part 1 first: its §0 gives the item form, the words (A-98; `unified/MB_LEX
 | handle | what is missing | why it cannot be decided here | owner | what the suite assumes meanwhile |
 |---|---|---|---|---|
 | IS-MB-B1 | which obstacle terms of `14_VERBS_MILITARY_A..D` and the army-size source of `14_VERBS_PHYSICAL_B` are members of the obstacle roster (`U5c_SC_one_obstacle_form` §2) | a vocabulary decision the owners ledger has not taken (`U5b_VERBS_military_physical_residue` §1 rule 3 `[LEDGER: U4_DOCUMENT_STATUS.md §3.4]`) | U1 owners ledger | B22's military verbs wait; the standalone scenario (B20) does not, since its armies are minted by `army_presets.install`. The integrated check (IS-MB-05 after B22) cannot be met before the decision |
-| IS-MB-B2 | the drill step (a cohort's skill score in `arms` as a step on its unit's `power`): its size, its cap, the host-side read | no proposal specifies a read, and the size is a calibration against `26_MASS_BATTLE_calibration_targets` | MB lane, design-first, B31 | no step: a cohort's skill does not reach unit prowess; that is the control arm |
+| IS-MB-B2 (**NARROWED by A-100 (MBA-01): a drill step is a step on the unit's `skill`; `power` is retired as a troop stat**) | the drill step (a cohort's skill score in `arms` as a step on its unit's `power`): its size, its cap, the host-side read | no proposal specifies a read, and the size is a calibration against `26_MASS_BATTLE_calibration_targets` | MB lane, design-first, B31 | no step: a cohort's skill does not reach unit prowess; that is the control arm |
 | IS-MB-B3 | every share table and the return window of `27_MB_E` (items 27E-3, 27E-4) | no value exists in the tree's research; the dead-to-wounded ratio is not established (`README.md` §6) | Jordan, or a source search filed under `research/historical/` | the loader refuses a missing value, so the return ships switched off; the scenario's report prints losses without kinds until then |
 | IS-MB-B4 | two unread sites: how a non-verb caller hands `ArmyCommand` to the army record's write path (`27_MB_E`), and how a unit row's name addresses its `Subunit` inside the module (`27_MB_A`) | each is one function to read at landing; this lane did not open them | the landing session of B22 and of B19 | nothing; each proposal says which function |
 
@@ -232,7 +235,7 @@ Read part 1 first: its §0 gives the item form, the words (A-98; `unified/MB_LEX
 | B20-mb-orders | MB | IS-MB-01 (after the scenario proposal §A–§D), IS-MB-03 (after `27_MB_D`) | EQUAL with nothing authored |
 | B22-mb-armies | MB | IS-MB-02 | **mover**: realms in which `besiege` forms; one re-pin at B22's last item |
 | B30-mb-nested | MB | IS-MB-04, then IS-PC-02 | EQUAL |
-| B31 (or B19, see IS-MB-06) | MB | IS-MB-06 | EQUAL |
+| ~~B31 (or B19, see IS-MB-06)~~ | MB | ~~IS-MB-06~~ (SUPERSEDED by A-100, MBA-04; struck) | — |
 | B34-go-surface | GO | IS-DICE-01; the split registrations of IS-PC-01, IS-MB-01, IS-MB-04 | EQUAL |
 
 ### P2-3.2 File census (files this suite's items create or edit; serial order is item order in the batch)
@@ -251,7 +254,7 @@ Read part 1 first: its §0 gives the item form, the words (A-98; `unified/MB_LEX
 | `engine/season/rosters.yaml` | IS-MB-03 (`window_responses`, a new key at the end of the choice family's block), IS-MB-02 (`march_postures.values`) | B20, B22 |
 | `engine/season/seam/wrappers/mass_battle.py` | the manager proposal §4, `27_MB_D` 27D-4's forward, IS-MB-03 step 4 (one edit, the same lines) | B20 |
 | `engine/season/loop/effects_combat.py` (`_siege`), `engine/season/tests/test_march.py` | IS-MB-02 | B22 |
-| `modules/mass_battle/core/exchange.py`, `modules/mass_battle/hierarchy/units.py` | `27_MB_B` 27B-1, IS-MB-06 | B31 (or B19) |
+| ~~`modules/mass_battle/core/exchange.py`, `modules/mass_battle/hierarchy/units.py`~~ | ~~`27_MB_B` 27B-1, IS-MB-06~~ (SUPERSEDED by A-100, MBA-04; struck: MBA-04 steps 3, 4 and 7 edit `exchange.py`, B19) | ~~B31 (or B19)~~ |
 | `tests/valoria/test_combat_duel_terms.py`, `test_combat_invariants.py`, `test_combat_strength_jobs.py` | IS-PC-04 | B14 |
 
 ### P2-3.3 Serial edges this suite adds (all point forward)
@@ -273,7 +276,7 @@ PC items: R-04's combat conjunct, R-05 (`fight`, `challenge`, `accept`, `capture
 | | `U5b_PC_residue` §10 | **closed** by IS-PC-04, on this lane's criterion and its `[ASSUMPTION]` |
 | | `16_PESSIMIST_PC_A` (the values) | blocked, IS-PC-B2 (Jordan) |
 | | `27_MB_A`, `27_MB_C` | **closed** by order (IS-MB-P1, IS-MB-P2); two sites left to the landing session (IS-MB-B4) |
-| | `27_MB_B` | 27B-2 **closed** at the tree (IS-MB-06); the drill step blocked (IS-MB-B2) |
+| | `27_MB_B` | 27B-2 **closed** at the tree (IS-MB-06) *(A-100: both SUPERSEDED by MBA-04)*; the drill step blocked (IS-MB-B2) |
 | | `27_MB_D` (27D-4) | **closed** by IS-MB-03; the cells' content stays CHAR's (G-3) |
 | | `27_MB_E` | blocked on content (IS-MB-B3) |
 | | `29_DICE` (29-5, hearing half) | blocked on B24, with its completing step (IS-DICE-B1) |

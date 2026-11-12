@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED (part 2 of `master/CODEBASE_IMPROVEMENT_PROPOSAL.md`; nothing here is applied)
 
+Reconciled: 2026-11-12, A-102 (lane `unified/work/A102_112_APPLIED.md`): CI-07 rewritten for the ruled destination `engine/season/boot/` (see its own line); §5 item 6 marked answered.
+
 The form of each item, the baselines and the rules are in part 1, §1.
 
 ---
@@ -56,7 +58,9 @@ routing happened.
 
 ---
 
-## CI-07 · The realm builder has a home in the game code, and a person is placed one way — HELD on `J-H-01`
+## CI-07 · The realm builder has a home in the game code, and a person is placed one way — the move into `engine/season/boot/` (A-102)
+
+Reconciled: 2026-11-12, A-102 (Jordan: `J-H-01` option A, a tenth module; lane `unified/work/A102_112_APPLIED.md`). No longer held. The Layer 1 text is applied (node `L1-A102`, `ED-IN-0359`: `04` §A.2's `boot/` line and row, PART D rows 46 and 53, F.31; `hol` §45, §47), so the move lands against amended text and no step below edits `architecture/`. The option table is replaced by the ruled destination; the edits are the same as drafted, with the paths named and the path-keyed scans added (step 7).
 
 **Finding.** H-02. `build_realm` and the 23 module-level functions defined before it are in
 `engine/season/harness/populated.py` (`:98` to `:1995`); six harness files assign the stores directly at
@@ -66,32 +70,40 @@ routing happened.
 person (`populated.py:515-518`, `:693-696`). **Preserved:** every world the builder makes, byte for byte
 (its content hash before a season is run, at seeds 0, 1, 2, with each of the seven arms flipped once).
 
-**Where it goes is Jordan's** (`master/HOLISTIC_FOR_JORDAN.md`, `J-H-01`): `04` §A.2 lists nine modules and
-gives a table row to every file of `loop/`; either answer adds a line to a ratified table. The edits below
-are the same under both; only the destination differs.
+**Where it goes (A-102, ruled).** A tenth module, `engine/season/boot/`, holding three files:
+`boot/__init__.py` (docstring only: the module's one sentence from `04` §A.2, *"the realm builder and the
+chooser's set-up: reads the authored data, constructs the World, holds no token after construction; imports
+no instrument"*; it re-exports nothing), `boot/realm.py` (the builder, steps 1, 2 and 4) and
+`boot/chooser.py` (the chooser's set-up, step 3). Path constants in `engine/season/data/files.py`, beside
+`HARNESS_DIR` (`:44`) and `LOOP_DIR` (`:176`): `BOOT_DIR = PACKAGE_DIR / "boot"`, `REALM_PY = BOOT_DIR /
+"realm.py"`, `BOOT_CHOOSER_PY = BOOT_DIR / "chooser.py"`. `BOOT_DIR` is **not** added to `loop_modules()`
+(`data/files.py:183`), which lists the steps; `package_modules()` (`:258`) discovers the new files by
+`rglob` with no edit.
 
-| | option A | option B |
-|---|---|---|
-| destination | a tenth host module, `engine/season/boot/` (`realm.py`, `__init__.py`) | a file of the existing `loop/` module, `engine/season/loop/boot.py` |
-| path constant | `data/files.py`: `BOOT_DIR`, `REALM_PY` | `data/files.py`: `REALM_PY = LOOP_DIR / "boot.py"`; **not** added to `loop_modules()` (`data/files.py:183`), which lists the steps |
-
-**Exact edits, in order** (once `J-H-01` is answered).
+**Exact edits, in order** (A-102: option A).
 
 1. *Closure first.* By `ast`, list which of the 23 functions `build_realm` reaches (a function it does not
    reach stays where it is), and every name the reached set reads from
    `harness/probes.py` (imported as `P`) and `harness/run_cases.py` (`load_cases`, `seed_pursuits`,
    `wants_of`; `populated.py:92-93`). A name only the builder reads moves with it; a name both sides read
-   moves to the builder's file and the harness imports it from there. The builder's file imports nothing
-   from `harness/` when this step is done (the direction `W2` shows today for every non-harness file).
-2. Move, without editing bodies: `_load`, `_slug`, `_index_anchor`, `resolve_anchor`, `seat_anchor`,
+   moves to `boot/realm.py` and the harness imports it from there. `boot/` imports nothing
+   from `harness/` when this step is done (the direction `W2` shows today for every non-harness file;
+   `04` PART D row 53). The relative imports of the moved code change from `..` (the harness's parent)
+   to `..` from `boot/` (the same depth, so `from ..data import cast, files` and its siblings at
+   `populated.py:70-89` stay textually the same); `from . import probes as P` and
+   `from .run_cases import …` (`:90-91`) are replaced by imports of the moved names or deleted.
+2. Move into `boot/realm.py`, without editing bodies: `_load`, `_slug`, `_index_anchor`, `resolve_anchor`, `seat_anchor`,
    `_mentions`, `_institutions`, `institution_of`, `surname_index`, `concerns_of`, `cohort_rows`,
    `temperament_rows`, `seat_cohorts`, `guard_rows`, `_first_holder`, `_seat_id`, `acquaintance_pairs`,
    `seed_acquaintances`, `seat_guards`, `mint_planned_works`, `goals_missing`, `seed_goals`, `seed_arms`,
    `build_realm`, and the module constants they read (`GEOGRAPHY`, `VENUES`, `ROSTER`, …). `census`, `run`,
    `creed_sweep` and `main` stay in `harness/populated.py` and import the builder.
-3. `chooser` (after CI-06) moves beside the builder as the game's composition of its chooser;
-   `harness/probes.py` imports it. `run` stays an instrument.
-4. One function that places a person, in the builder's file,
+3. `harness/probes.py::chooser` (`:278-292`, after CI-06 gives it `draw_seed`) moves to
+   `boot/chooser.py::chooser` as the game's composition of its chooser (`make_chooser` over `w.fixtures`,
+   the act-id mint `H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")`, `draw_factory`); its imports are
+   `decision.make_chooser` and `state.ids.H, draw_factory`, nothing from `harness/`. `harness/probes.py`
+   imports it (`from ..boot.chooser import chooser`) for its callers; `run` stays an instrument.
+4. One function that places a person, in `boot/realm.py`,
    `place_person(w, pid, name, rung, *, home=None, weight=1, **fields) -> Person` (the word is *place*, not
    *seat*: a seat is an office in this tree): the `Person`, its person
    `Rung`, the `contain` Tenure `t_{pid}_in` and the `reside` Tenure `t_{pid}_home` (the ids at
@@ -104,30 +116,65 @@ are the same under both; only the destination differs.
    `grep -rl "build_realm" engine tools tests --include=*.py` lists: 87 files under `engine/season/tests`,
    six under `tests/valoria`, 18 under `harness/`, `tools/m1_acceptance.py`, `tools/export_npc_roster.py`.
    The 19 files of `loop/`, `state/`, `data/`, `queries/`, `decision/` and `epistemic.py` that *name*
-   `build_realm` or `populated` in a comment are CI-02's.
+   `build_realm` or `populated` in a comment are CI-02's. (Re-read 2026-11-12: 133 files name `build_realm`;
+   90 under `engine/season/tests`, `tests/valoria`, `tools` and `harness/` carry an import line naming
+   `populated` or `build_realm`, by `grep -rlE "(from|import) .*(populated|build_realm)"`; the rest name
+   it in comments.) The rewrite per file is mechanical and is the one form
+   `from engine.season.boot.realm import build_realm` (or `from ..boot.realm import …` inside the package);
+   a file that also uses `populated.run`, `census`, `creed_sweep` or `main` keeps its `populated` import for
+   those. Verify with `grep -rnE "populated\.(build_realm|seat_cohorts|seat_guards|resolve_anchor|place_person)"
+   engine tools tests --include=*.py` printing nothing.
 6. `tools/export_sim_params.py::_realm_arm_records` (CI-05): its path becomes `files.REALM_PY`.
-7. Layer 1: the table row is Jordan's amendment (text drafted in `HOLISTIC_FOR_JORDAN.md`), applied by him
-   or on his word in the same merge, never by the lane to make the code conform.
+7. **The path-keyed scans that named the builder's old home** (read 2026-11-12; each changes in the same
+   commit, and the change is to a path, never to what the scan asserts):
+   - `engine/season/tests/test_cr20_attributes.py:236` (`build = root / "harness" / "populated.py"`, the one
+     file allowed to assign `attributes`/`heritage`) and `engine/season/tests/test_k3_thread_sensitivity.py:222`
+     (`_BUILD`, the one file allowed to assign the carrier): both become `files.REALM_PY`.
+   - The scans that skip the instrument and will now reach the builder: `test_season_shape.py::_model_modules`
+     (`:679-680`, `"harness" not in m.parts`; read by `test_d6_no_constant_is_hardcoded_in_a_body`,
+     `test_h115_the_fourteen_load_time_raises_are_unchanged`, `test_jordan_no_definition_is_hardcoded_in_a_body`)
+     and `test_cp_t03_07_body_ceiling.py::_season_sources` (`:282`, skips `tests` and `harness`). `boot/` is
+     game code (A-102), so these scans SHOULD see it: run the four tests on the moved tree; a hit that a
+     same-value move to its register row clears is cleared in this batch (hash EQUAL); a hit that needs a
+     ruling or a value change is not fixed here: `boot` is added to that one scan's skip tuple with a
+     comment naming `04` §A.2's `boot/` row ("construction is not a season write") and the hit count in the
+     commit body. `[UNVERIFIED: the hit counts on a moved tree were not measured by this lane]`
+     `[ASSUMPTION: a skip with a named reason, not a body edit, keeps the batch a pure move — basis: A-102 "a
+     pure move: no outcome changes"; revert: clear the hits in a later batch and drop the skip]`
+   - `test_g2_token.py:43` (`APPARATUS = ("harness/", "tests/")`, where calling `mint_token` is allowed):
+     unchanged; `boot/` calls no `mint_token` (`populated.py` names it only in a docstring, `:718`), and
+     `boot/` must not join `APPARATUS` (row 53's twin: it holds no token after construction).
+8. Layer 1: **done** (A-97, node `L1-A102`, `ED-IN-0359`); this batch edits no file under `architecture/`.
 
-**Tests.** Add `engine/season/tests/test_realm_builder_home.py::test_importing_the_builder_pulls_in_no_instrument`:
-in a fresh subprocess, import the builder's module and assert no `engine.season.harness` module is in
-`sys.modules`, with a floor (`assert len([m for m in sys.modules if m.startswith("engine.season")]) > 20`)
-so an import that loaded nothing cannot pass. Change: nothing else but import lines.
+**Tests.** Add `engine/season/tests/test_boot_module.py` (the module's own file):
+`test_importing_boot_pulls_in_no_instrument`: in a fresh subprocess (`subprocess.run([sys.executable, "-c",
+…])`), `import engine.season.boot.realm, engine.season.boot.chooser`, then assert no key of `sys.modules`
+starts with `engine.season.harness`, with a floor
+(`assert len([m for m in sys.modules if m.startswith("engine.season")]) > 20`) so an import that loaded
+nothing cannot pass (`04` PART D row 53's MECHANICAL grade; the shape of
+`test_importing_every_engine_module_pulls_in_no_subsystem`). `test_no_harness_import_line_in_boot`: by
+`ast`, every `Import`/`ImportFrom` node in `files.BOOT_DIR.rglob("*.py")` names no `harness` module, with
+`assert checked >= 3` files. Change: nothing else but import lines and the step-7 paths.
 
 **Gate.** For seeds 0, 1, 2: `build_realm(seed).content_hash()` equal to the base; the same for each arm
 flipped once at seed 0; the realm hashes after one season at seeds 0 and 2 equal the opening reading;
 `python tools/m1_acceptance.py --summary` rows 1, 2 and 4 PASS; `python tools/export_npc_roster.py --check`
-current; `python tools/export_sim_params.py --check` current; the new test green.
+current; `python tools/export_sim_params.py --check` current; the new test green. **Hash EQUAL is the
+gate**: the base readings are taken on the batch's base commit by the same script before any file moves,
+and a single differing hash fails the batch (a pure move moves nothing; A-102). The covering pytest run is
+`python tools/tests_for_diff.py`'s list for the diff, once, at the close (CLAUDE.md §0.4), which for ~90
+re-pointed test files is effectively `pytest engine/season/tests tests/valoria -n auto`.
 
 **Falsifier and control.** In a scratch worktree: add `1` to the weight `seat_cohorts` gives one cohort →
 the build hash at seed 0 must move (the control sees the builder). Revert. Then import the moved builder
 with `engine.season.harness` blocked (`sys.modules["engine.season.harness"] = None`) → it must import.
 
-**Declared hash movers.** None. **Depends on:** `J-H-01`; CI-05, CI-06. **Lands in:** `B03c-boot` (IN) at
-the first IN-lane boundary after the answer; every later proposal that edits `populated.py`'s builder
-(29 by `U3` §5.1) is re-pointed to the new file by its symbol name. **Lands it:** one `valoria-author`
-lane, `sonnet`, `high`, for steps 1 to 4 and 6; the importer re-pointing (step 5, about 115 files of
-import lines) on `haiku`, batched. **Cost class:** small build (a move), wide by file count.
+**Declared hash movers.** None. **Depends on:** A-102 (answered; `J-H-01` closed); `L1-A102` (APPLIED);
+CI-05, CI-06. **Lands in:** `B03c-boot` (IN), joined to the U3 order after B03 and before the first batch
+that edits the builder (`unified/U3_DEPENDENCY_ORDER.md` §1, the B03c row); every later proposal that edits
+`populated.py`'s builder (29 by `U3` §5.1) is re-pointed to `boot/realm.py` by its symbol name. **Lands it:**
+one `valoria-author` lane, `sonnet`, `high`, for steps 1 to 4, 6 and 7; the importer re-pointing (step 5,
+about 90 files of import lines) on `haiku`, batched. **Cost class:** small build (a move), wide by file count.
 
 ---
 
@@ -423,8 +470,10 @@ member.
    doubles with each season played; four seasons at seed 2, 120 s.
 5. **CI-06 before B06.** With the chooser composed once, `11_GO_one_draw_owner`'s change to the chooser's
    draw is one edit in `probes.chooser` and one in `interactions.py`.
-6. **What moves when `J-H-01` is answered late.** CI-07 is a pure move and lands at any IN-lane boundary;
-   until then proposals keep citing `harness/populated.py::build_realm`.
+6. ~~**What moves when `J-H-01` is answered late.** CI-07 is a pure move and lands at any IN-lane boundary;
+   until then proposals keep citing `harness/populated.py::build_realm`.~~ *(A-102, 2026-11-12: answered;
+   CI-07 lands as `B03c-boot` after B03; proposals keep citing `populated.py`'s builder by symbol until B03c
+   lands and are re-pointed to `boot/realm.py` by symbol.)*
 
 ## 6. What this proposal does not carry, and why
 

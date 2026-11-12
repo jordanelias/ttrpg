@@ -17,6 +17,8 @@ nothing" sentence, the gate's test file. A-98 vocabulary lane (2026-11-12, A-98;
 
 ## Status: PROPOSED
 
+Reconciled: 2026-11-12, A-100/A-101 supersession pass (MBA-04 step 5; `master/mb_abstraction/MBA_DESIGN_part3.md` §8.1): this file STANDS except the **pursuit damage law, NARROWED** (step 2's `pursuit_damage` "as coded" and step 3's pool `subunit_combat_pool(unit, atom)`): pursuit casualties are the contact draw under the `pursuit` matchup row, one law; `may_pursue`, `rally_roll`, `recall_check` and the rout's two exits are unchanged. `freed_attacker_damage` and `run_multi_unit_battle` leave with the legacy harness, not converted.
+
 Lands in batch: **B19** (MB), last before the calibration targets (U3 §1 item 19). Depends on:
 `04_MB_typed_outcome_and_one_path.md` (B17, the typed outcome), `14_VERBS_PHYSICAL_A_custody_and_force.md` (B15, custody
 for the taken), `26_MASS_BATTLE_rout_pursuit_and_giving_ground.md` and `27_MB_A_command_and_the_obedience_draw.md` (B19:
@@ -85,7 +87,7 @@ owner the module receives on its input; no generator is threaded. Neither is a f
    thereby gets its primitive: light infantry told to pursue do, at foot pace, see step 4).
    `pursuit_damage` takes the pursuing **subunit**; its `pursuer.speed != "Fast"` test is replaced by
    that predicate, and its pool is `subunit_combat_pool(unit, atom)`, the owner every melee pair
-   already reads.
+   already reads. *(NARROWED by A-100, MBA-04 step 5: there is no pool; the predicate stands, the damage is the contact draw under the `pursuit` row.)*
 4. **Foot pursues at a cost.** A body that pursues by instruction and is not mounted rolls at
    `REARGUARD_PENALTY` fewer dice. One constant, already in the file, read twice.
 5. **The outcome says what happened.** `resolve_field` supplies, per part, the values of the typed fields

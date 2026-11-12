@@ -4,6 +4,8 @@
 
 ## Read at: `4dc8a7b` (working tree, 2026-11-12). Lane: the holistic audit (`master/HOLISTIC_AUDIT.md`, `master/CODEBASE_IMPROVEMENT_PROPOSAL.md`).
 
+Reconciled: 2026-11-12, A-102 (lane `unified/work/A102_112_APPLIED.md`): J-H-01 answered (option A); nothing in this file waits on Jordan now.
+
 **One item survived the five-step ladder** (CLAUDE.md §0). It is not a choice between two games; it is here
 because either answer adds a line to a ratified Layer 1 table, and a lane does not do that on its own
 authority. Everything else the audit decided is in the second table, each with the step that decided it,
@@ -11,7 +13,13 @@ and is reversible on a word.
 
 ---
 
-### J-H-01 · Where does "start a new game" live in the code?
+### J-H-01 · Where does "start a new game" live in the code? — **ANSWERED (A-102, Jordan 2026-11-12: option A)**
+
+**Answer.** A tenth module, `engine/season/boot/`, holds the realm builder and the chooser's set-up
+(`unified/DECISIONS_ANSWERED.md` A-102). The Layer 1 text is applied under A-97 (node `L1-A102`,
+`ED-IN-0359`: `04` §A.2 heading, list line and row; PART D row 46 and new row 53; F.31; `hol` §45, §47). The
+move is CI-07, batch `B03c-boot` (`master/CODEBASE_IMPROVEMENT_PROPOSAL_part2.md`; `unified/U3_DEPENDENCY_ORDER.md`
+item 4c). The question as it was put stays below for the record.
 
 **What is true today.** The code that builds the realm (the map, its buildings, the 46 named people and the
 37 population groups, their offices, goals and starting acquaintances) is one function of about a thousand

@@ -6,6 +6,8 @@ Reconciled: 2026-11-12, U5d closure — folded **A-32** and **A-33**. Who holds 
 
 Reconciled: 2026-11-12, wave 3 lane W3-5b (`unified/work/R5_READ.md` §1 rows who_holds_what (CONFORMS; the `_stance_arm` ordering AMBIGUOUS), §2 row edit 5 (`release` polarity; A-22, A-37), §7, 7b; `unified/U3_CONFLICT_LEDGER.md` C3-K3; `unified/U3_DEPENDENCY_ORDER.md` §1 item 38, §3.1). Changed: (1) edit 2's `[UNVERIFIED]` call site is resolved at the tree: `epistemic.py::claim_subjects` (`:185`) reads a `hold` through `_hold_tenure_ends` (`:167`, H-71, used at `:246` and in the sighting walk at `:1038`); the `held_by` deposit is added where those ends are produced; (2) edit 4 lands after the scar-cap Addendum's `regard_sign`/`beneficiary` term (B10; C3-K3) and adds `holder_gain` to the same `r` before the sign rule, one clamp, one `stance_scale`; its code used `_regard_of`, which does not exist in `decision/choose.py` (read here: the arm memoises `regard(p, subject, fx)` in `memo`), so the code now uses that memo; (3) edit 5's "stated limit" is decided at its owner (R5 §2): the Addendum's `regard_sign` column is `-1` on `release` and on any row that ends a tie to its subject, so `stance_polarity: declared` no longer makes a man likelier to leave a lord he honours; the row values are the CHAR lane's to write in that Addendum (listed); (4) tests named; (5) batch order: this file lands before `20_NARRATIVE_B_what_he_was_owed.md` inside B38 (NARR_B imports `believed_holder`; U3 §1 item 38 lists them the other way, corrected here); (6) tier.
 
+Reconciled: 2026-11-12, A-103 (`unified/DECISIONS_ANSWERED.md`; lane `unified/work/A102_112_APPLIED.md`): CR-91's ground is the occasion of a march, never its admission; the two sentences that made it eligibility at RESOLVE are marked. No edit of this file changes.
+
 Depends on: `02_CHAR_scar_cap_and_regard_unit.md` Addendum (B10; `_stance_arm`'s merged term and the `regard_sign` column); `18_DETERMINISM_notice_is_a_draw.md` (B11); `06_FA_seat_terms_and_turnover.md`, `06_FA_seat_terms_by_body_B.md` (B21) and `06_FA_war_lives_in_seats_B.md` (B23), which supply the changes of holder commit 2 deposits; `30_WR_A_the_era_is_a_named_period.md` and `30_GO_F_the_plot_as_the_player_is_shown_it.md` (B38) read `believed_holder` after it lands.
 Lands in batch: B38 (lane WR), after `20_NARRATIVE_A_stands_for.md` and before `20_NARRATIVE_B_what_he_was_owed.md`; three commits, each a declared mover with its control.
 Tier: sonnet / high.
@@ -48,8 +50,11 @@ No verb, Event kind, carrier or world read from `decision/` is added.
   the target by `commensurate`: the base rate.
 - A sworn man's oath is to the *seat* (`_eff_oblige`; every one of 50 / 45 / 93 edges). It passes to
   the next holder with no act and no question, and his stance toward the seat has no person in it.
-- CR-91 (ratified, B10-17b) will require a *ground* before a march is admitted. That is eligibility
-  at RESOLVE. Nothing in it tells the chooser whom the march is against.
+- ~~CR-91 (ratified, B10-17b) will require a *ground* before a march is admitted. That is eligibility
+  at RESOLVE.~~ *(A-103, Jordan 2026-11-12: a claim is the occasion for a march, not an admission gate;
+  CR-91's claim carrier is built as occasion and as context for regard and legitimacy, with no
+  `requires_typed` conjunct on `march`; IN-36's cap of one march per season per territory stays.)*
+  Nothing in CR-91 tells the chooser whom the march is against.
 
 ## The resolution, decided
 
@@ -162,8 +167,8 @@ printed in the commit body (seeds 0 to 2, four seasons), with `20_NARRATIVE_F`'s
 
 - **N.** Cut it and every act on a place or a seat is aimed at nobody: a rising has no enemy, an oath
   no lord, a succession is not news about a person. Top-down (the Crown as a person others regard),
-  bottom-up (my reeve), vertical (the same claim at hearth and realm), lateral (CR-91's ground says a
-  march is allowed; this says whom it is against), diagonal (`20_NARRATIVE_B` lays a lapse at this
+  bottom-up (my reeve), vertical (the same claim at hearth and realm), lateral (CR-91's ground is what moves a
+  man to march, never what admits it, A-103; this says whom it is against), diagonal (`20_NARRATIVE_B` lays a lapse at this
   door), horizontal (two neighbours with different news hold different lords).
 - **R.** The no-player half: a contested succession in which half the realm has not heard is drama the
   engine makes alone. Complete at the extremes: an unheld place reads nobody; a person with no claim

@@ -1,6 +1,6 @@
 # THE SEASON LOOP — A HOLONIC ARCHITECTURE, AND THE GUIDE TO BUILDING IT IN GODOT
 
-## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302, ED-IN-0303): Godot's words name Godot constructs, so a registered module's playable form is a *scene* (a run of it, a *scene instance*), and *rung* is the world side (a *container* left in a quotation, a field name or a plan title predates this); the scene tree lives in `game/`, not `port/`. ⚠ AMENDED 2026-11-12 (Jordan-directed, A-97, ED-IN-0358): the rulings' owed amendments, appended in place so no line moves — L1-A92 (§2 T2, §9.3) · L1-A12 (§11.1) · L1-A9 (§27.1, §32 item 3) · L1-A64 (§27.1, §33) · L1-A96 (§34.1) · L1-A72 (§39.3) · L1-A3 (§39.4) · L1-A4 (§44.3).**
+## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302, ED-IN-0303): Godot's words name Godot constructs, so a registered module's playable form is a *scene* (a run of it, a *scene instance*), and *rung* is the world side (a *container* left in a quotation, a field name or a plan title predates this); the scene tree lives in `game/`, not `port/`. ⚠ AMENDED 2026-11-12 (Jordan-directed, A-97, ED-IN-0358): the rulings' owed amendments, appended in place so no line moves — L1-A92 (§2 T2, §9.3) · L1-A12 (§11.1) · L1-A9 (§27.1, §32 item 3) · L1-A64 (§27.1, §33) · L1-A96 (§34.1) · L1-A72 (§39.3) · L1-A3 (§39.4) · L1-A4 (§44.3). ⚠ AMENDED 2026-11-12 (Jordan, A-102; A-97, ED-IN-0359): L1-A102 (§45, a pointer to `04` §A.2's tenth module, `boot/`; §47, the `World` is constructed by `boot/`).**
 ## Under `CLAUDE.md` §0.05 this document is **REFERENCE, never mechanism.** Under §0.2 **nothing in it
 ## runs.** Part X says what would make each claim done and which steps cannot be satisfied by writing.
 
@@ -1736,7 +1736,7 @@ res://
 
 ⚠ **`manifest/`, `seam/<subsystem>_wrapper.gd` and `modules/<name>/` are additions to the chain's stated layout**,
 marked here as departures rather than smuggled in. They are §43's and §44.2's homes. (AMENDED 2026-10-03,
-ED-IN-0284, corrected by ED-IN-0285: `modules/<name>/` is new; the wrapper line is as ratified.)
+ED-IN-0284, corrected by ED-IN-0285: `modules/<name>/` is new; the wrapper line is as ratified.) ⚠ AMENDED 2026-11-12 (Jordan, A-102; A-97, node L1-A102): `04` §A.2 now has a tenth module, `boot/` — the realm builder and the chooser's set-up, which read the authored data, construct the `World`, hold no token after construction and import no instrument (`04` PART D rows 46, 53); this layout predates it and names no port home for it, so its file under `core/` is the port's to name.
 
 ### §45.1 Declare `World` first
 
@@ -1794,7 +1794,7 @@ a third field to `Vector2`.**
 
 > ### **THE `[autoload]` TABLE CONTAINS NO SIMULATION STATE AND NO SIMULATION SERVICE.**
 > **Target: empty. Permitted ceiling: presentation-only — a UI signal bus, audio. `World` is
-> constructed by the driver and passed by parameter. Nothing under `core/` names an autoload, ever.**
+> constructed by the driver and passed by parameter. Nothing under `core/` names an autoload, ever.** ⚠ AMENDED 2026-11-12 (Jordan, A-102; A-97, node L1-A102): *constructed by the driver* now reads *constructed once by `boot/` and handed to the driver* (`04` PART D row 46); *passed by parameter* and the empty autoload table stand.
 
 **The mechanism is two parts:**
 

@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED (continues `MB_LEXICON.md` and `MB_LEXICON_part2.md`)
 
+Reconciled: 2026-11-12, A-100/A-101 supersession pass (MBA-04 step 4; `master/mb_abstraction/MBA_DESIGN_part3.md` §7.1): in rename L2-1 the sub-item `core/exchange.py::subunit_combat_pool` → `unit_combat_pool` is struck, the function being deleted by MBA-04 (B19); the rest of L2-1 stands. The new A-100 rows are in `MB_LEXICON_part2.md` group E. The A-101 lane's edit to D-7 stands.
+
 ## §3 · Where two good words competed: what is settled, and by which step
 
 Ladder steps (CLAUDE.md §0): 1 superseded by a ruling, 2 irrelevant, 3 a design document, 4 precedent in the
@@ -102,7 +104,7 @@ edit `orderofbattle.py` and `armyrecord.py`; a rename after them is a second edi
 
 | id | rename | files |
 |---|---|---|
-| L2-1 | engine `hierarchy.units.Unit` (one side's army in a battle) → `Army`; then `Subunit` → `Unit`; `Unit.subunits` → `units`; `SUBUNIT_CAP` → `UNIT_CAP`; `SUBUNIT_ROUT_FLOOR` → `UNIT_ROUT_FLOOR`; `core/exchange.py::subunit_combat_pool` → `unit_combat_pool`; `MassBattleInput.subunits` and the fixture `field_subunits` → `units`, `field_units` | `Subunit` in 46 files, `subunits` in 71, `SUBUNIT_` in 26, `Unit(` in 16 (overlapping), across `modules/mass_battle/` (14), `systems/mass_battle/sim/` (6), `tests/valoria/` (17+), `tests/sim/`, `engine/season/queries/inputs.py`, `engine/season/data/fixtures.py`, `engine/season/seam/wrappers/mass_battle.py`; `.audit/` copies are not edited |
+| L2-1 | engine `hierarchy.units.Unit` (one side's army in a battle) → `Army`; then `Subunit` → `Unit`; `Unit.subunits` → `units`; `SUBUNIT_CAP` → `UNIT_CAP`; `SUBUNIT_ROUT_FLOOR` → `UNIT_ROUT_FLOOR`; ~~`core/exchange.py::subunit_combat_pool` → `unit_combat_pool`~~ *(SUPERSEDED by A-100, MBA-04 step 4: the function is deleted with the pool, so this rename is struck)*; `MassBattleInput.subunits` and the fixture `field_subunits` → `units`, `field_units` | `Subunit` in 46 files, `subunits` in 71, `SUBUNIT_` in 26, `Unit(` in 16 (overlapping), across `modules/mass_battle/` (14), `systems/mass_battle/sim/` (6), `tests/valoria/` (17+), `tests/sim/`, `engine/season/queries/inputs.py`, `engine/season/data/fixtures.py`, `engine/season/seam/wrappers/mass_battle.py`; `.audit/` copies are not edited |
 | L2-2 | `Subunit.broken`, `Unit.broken` (Discipline at nothing) → `disordered`; `cell_broken` keeps its name (a cell's morale at nothing: the break sense) | 16 files hold `.broken`/`'broken'` |
 | L2-3 | `battle_loop.run_battle(max_turns=18)` → `max_ticks`; its local `turns` → `ticks` | 22 files hold `max_turns` or a `["turns"]` read (49 sites) |
 

@@ -7,6 +7,8 @@ Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` 
 
 ## Status: PROPOSED
 
+Reconciled: 2026-11-12, A-100/A-101 supersession pass (MBA-05; `master/mb_abstraction/MBA_DESIGN_part3.md` §8.1): **§1 and §3 STAND; §2 is NARROWED**: its per-arm ranges are read by the range bands (`troops.yaml: contact.missile.bands`), and "a volley is a tick's worth of shooting" becomes `shots_per_tick` (MBA-05). The per-arm ranges land in B19 with MBA-05. Marked in place at §2.
+
 Lane MB (the scene sequence is IN's). Carries rows S-1, B-9, R-5 and R-6 of
 `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md`. Amends, and does not replace,
 `04_MB_cell_hierarchy_as_data.md` (the `deployment` header), `04_MB_unit_loadout_and_weapon_in_hand_B.md`
@@ -92,6 +94,7 @@ deployment:
 - A bow's rate against a crossbow's is sourced ("up to ten arrows per minute" against "about twice a minute",
   W-CRE). `volleys` per arm (`…_B.md`) stays 10 for both until Jordan sets it: at four seconds a tick neither
   rate is a volley a tick, and the engine's volley is a tick's worth of shooting, not one arrow.
+  **NARROWED by A-100 (MBA-05): a volley is no longer "a tick's worth"; it is `shots_per_tick[arm]` shots, each at `hit[arm, band]`, the band set by distance as a share of the arm's range. The per-arm ranges above are kept and are what the bands divide.**
 - With bows reaching the board, ammunition is what ends the shooting, which is what the page read says of
   Agincourt (SQ 5 step 5). The `volleys_spent` trigger of `…_B.md` then has something to fire on.
 
