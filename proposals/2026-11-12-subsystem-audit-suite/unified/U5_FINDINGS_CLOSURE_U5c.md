@@ -393,8 +393,13 @@ to the whole part and are decided once, in `unified/U5_CONFLICTS_U5c.md`:
 
 - **C-22 (Layer 1).** A row whose `writes:` is keyed by band declares `contests:` (`04` §B.13 invariant 12
   and §C.4; `engine/season/data/verbs.py:848-851`, `:870-874` refuse the other shape at load, MECHANICAL).
-  The graded route (`graded_inquiries`) keys `emits:` only and writes nothing. So no verb proposal's
-  `graded_acts` row may write by band: such a row names the prize `a task` (VRES §1).
+  So no verb proposal's `graded_acts` row may key `writes:` by band. Decided with U5a (its C-U5a-10, on
+  `18_DETERMINISM_task_draw_for_uncontested_verbs.md` item 4), a drawn act with nobody opposite takes one
+  of two shapes: (a) a route row with **flat** `writes:` whose effects read the band through the one share
+  table and whose failed draw is the keyed `emits_on_refusal` clause `draw`; (b) where two bands must
+  write different cells, a `contests:` row naming the prize `a task`. The three inquiries stay on the
+  route and write nothing. Where a row below says "prize `a task`", read "shape (a) or (b) by that test"
+  (VRES §1). The route roster has one name, 18-A's `graded_tasks`; `graded_acts` is not added.
 - **C-25.** One prize roster, one roll, one obstacle composer (VRES §1–§2); `rank_gap` is the one name for
   rank standing against an act (`standing` is refused as a term name); the band an instrument was drawn up
   at is the content key `force`.
@@ -492,15 +497,31 @@ to the whole part and are decided once, in `unified/U5_CONFLICTS_U5c.md`:
 
 ---
 
-# Jordan — what survives in this family (five items, each with two options, stated in its row)
+# Jordan — what survives in this family: nothing
 
-1. **Who is a verdict for?** (PES-SC Jordan 3; Part 1.5.)
-2. **Seat news and death news: realm-wide or by presence and telling?** (FI §11 item 1 merged with S-PES-FI-2; Part 2.2.)
-3. **Appeal as of right, or on grounds only?** (S-19-1; Part 3.)
-4. **Does an order run up the chain?** (BINDING §13.4 decision 1; Part 4.3.)
-5. Nothing else. Twelve other items the audits listed for Jordan are closed by the ladder in their rows
-   (SC §11 items 1–2; PES-SC Jordan 1–2; FI §11 item 2; S-PES-FI-1; SOCIAL1 D1, D2; SOCIAL2 §11.4 items 1–3;
-   MATERIAL J-M1, J-M2).
+`unified/DECISIONS_ANSWERED.md` (Jordan's answers of 2026-11-12) landed while this closure was being
+written, and every item this family would have carried to him is answered there. The rows above are
+conformed to it; where an answer reversed this lane's first reading, the row says so.
+
+| item | answer | effect on this closure |
+|---|---|---|
+| who a verdict is for (PES-SC Jordan 3) | A-38: the petitioner, or a seat he names | was JORDAN; now RESOLVED-BY PES-C, RES §8 |
+| seat news; death news (FI §11 item 1; S-PES-FI-2) | A-32: realm-wide shipped, by-presence the test arm; A-33: a death travels apart, by presence, trail and telling | was JORDAN; FRES §2 |
+| appeal (S-19-1) | A-39: on new grounds only | was JORDAN; VERD, RES §4 |
+| orders up the chain (BINDING §13.4 decision 1) | A-22: command | was JORDAN; VB-D commit D2 |
+| a favourable modifier (PES-SC Jordan 1) | A-25: it raises the speaker | confirms C-01 |
+| an equal opponent's cost (SC §11 item 1) | A-26: 0.4 per point | **reverses** this lane's first reading (the half score kept); C-33 |
+| a convict's own release (PES-SC Jordan 2) | A-37: no | **reverses** this lane's first reading (a drawn release); C-10 row 4 |
+| swearing to a seat (SOCIAL2 §11.4 item 1) | D-31 taken A under A-24: a draw against the seat | **reverses** this lane's first reading (disputed); C-30 |
+| what a construer attempts; tie and knot (SOCIAL2 §11.4 items 2, 3) | A-27: his own interest; A-28: split | confirms the rows |
+| a writ in the addressee's hand (SOCIAL1 D1) | A-21: a decree is proclaimed | supersedes the measurement this lane had proposed; C-34 |
+| a refusal teaches (SOCIAL1 D2); a wrong name or conclusion (S-PES-FI-1, J-M2); the witness reads (FI §11 item 2) | D-46 B; D-44 A, D-45 A; D-74 B (ladder table) | confirms the rows |
+| a vote (13 §4 cell 9; sweep C-14) | A-14: a draw on the voter, inside the presiding person's act | confirms C-11 |
+| rank in the odds (VB-C's term; T13 T4) | A-12: a seat carries a modifier | `rank_gap` and the bench's modifier stand; the Layer 1 amendment text (§B.7) is owed by the unification stage, not applied; C-35 |
+| the dice (T13, CAL, 13) | A-5 bell curve everywhere; A-6 score plus a base, floor five; A-7 two inputs | every number in T13, CAL and OBS §4 is recomputed; the forms stand; C-33 |
+
+Two answers leave work this lane names and does not do: the Layer 1 amendment texts A-12 and A-22 owe
+(another unification lane's), and the recalibration A-5, A-6, A-7 and A-26 owe together (OBS §4).
 
 # Coverage (what this lane read, and how)
 
