@@ -55,8 +55,8 @@ The steelman is owed and holds where it was attacked: the seam is correct and st
 new attacks (order of the fold, interleaved acts, replay: §1.6); firsthand knowledge is never overturned
 by hearsay in the weighed reader, even from a teller the hearer loves and has always found right (§2.2).
 The single largest obstacle is upstream of every proposal on file: **the draw is the only thing in a
-contest that varies, and its band is read by nothing but the Event's own name** (five of seven contested
-social rows write `[]` in every band). The SC lane's proposals give the draw inputs; this lane's finding
+contest that varies, and its band is read by nothing but the Event's own name** (four of seven contested
+social rows write `[]` in every band, and a fifth, `arrest`, never executes). The SC lane's proposals give the draw inputs; this lane's finding
 is that the *outputs* are equally absent, and that three of them are wrong rather than missing (§3,
 F-PES-SC-02, -03, -06).
 
@@ -334,8 +334,10 @@ trial is one real season: the offered candidate, the shipped roll, WITNESS. Cont
 | the hearer holds `copying` 8 | **0.74** / 0.19 / 0.07 / 0.00 | 0.90 / 0.08 / 0.02 / 0.00 |
 | the hearer holds Attunement 7 | 0.74 / 0.19 / 0.07 / 0.00 | the same |
 
-The hearer's knowledge is not an operand at all (KNOWS 47 Failure of 60, NOTHING 54 of 60, one
-distribution). 13_SC §4 cell 1 reports that `lie` cannot be opposed; what the rows above add is the
+The hearer's knowledge is not an operand at all: over 400 seeded acts per hearer through the fold
+(`p2e_roll_check.py`) a lie fails 0.745 against the knower and 0.740 against the hearer who holds
+nothing; exact 0.74 for both. (The 60-season cells below read 47 and 54 Failures; that is sampling,
+which the 400-act check was run to settle.) 13_SC §4 cell 1 reports that `lie` cannot be opposed; what the rows above add is the
 comparison: a practised speaker is three times as likely to be heard *when he tells the truth* and no
 likelier when he lies, and a practised listener is harder to tell the truth to (0.90) than to lie to
 (0.74). INVERTED on P2.7's "a skilled liar is caught less".
@@ -558,13 +560,14 @@ Read as stories:
   (`terms`) is the person it is *addressed to* (`to`): the chooser forms `petition(subject = X, to = X)`.
   `carry` dockets `terms` as the matter, so a petition to a lord puts the lord on the docket as the
   accused. `p_npc_020` drew fourteen petitions in four seasons and was bound in season 4.
-- **The reason for a prosecution is not readable.** Of the 22 petitions and cases of season 1
-  (`e1_reasons_s1.txt`): 11 of 14 petitions have no act among their causes (a standing question); the
-  opener holds no deed claim at all about the person he proceeds against in 8 of 22; his regard for
-  that person is zero or positive in 20 of 22 (`p_npc_089` petitions about a man he regards at +12.5).
-  Three of the eight opened cases are a person opening a case on **himself** (`p_npc_020`,
-  `p_npc_074`; `p_npc_004`'s is refused). One beginning does read as a reason: `p_npc_021` opens the
-  case against `p_npc_004` with his own refused `covenant` among its causes.
+- **The reason for a prosecution is not readable.** Of the 24 petition and case acts of season 1
+  (14 petitions, 10 `open_case`; `e1_reasons_s1.txt`): 11 of 14 petitions have no act among their
+  causes (a standing question); the opener holds no deed claim at all about the person he proceeds
+  against in 8 of 24; his regard for that person is zero or positive in 22 of 24 (`p_npc_089` petitions
+  about a man he regards at +12.5). Two of the eight opened cases are a person opening a case on
+  **himself** (`p_npc_020`, `p_npc_074`), and a third such attempt is refused (`p_npc_004`). One
+  beginning does read as a reason: `p_npc_021` opens the case against `p_npc_004` with his own refused
+  `covenant` among its causes.
 - **Escalation is repetition.** `p_npc_033` speaks to `p_npc_020`'s matter in each of four seasons and
   fails each time. `p_npc_041` speaks to `p_npc_038`'s matter in seasons 2, 3 and 4 and *succeeds* each
   time (`matter.advanced`); the matter is where it was. `p_npc_075` carries one petition in season 1
@@ -572,8 +575,10 @@ Read as stories:
   season 3 (refused: there is nothing to pardon) and sentences him in season 4.
 - **Reversal: none observed, none possible.** No acquittal, no closed disposal, no answered speech.
 - **Cost: none observed.** No accuser, speaker, arguer or liar lost anything he could point to. The one
-  loss in the run is a death in a `capture` (`p_npc_013`, who had spoken twice against `p_npc_041` at
-  his hearing and then tried to seize him); the log does not link the two `[UNVERIFIED causal link]`.
+  loss in the run is `p_npc_013`'s: he twice spoke to `p_npc_041`'s matter (seasons 2 and 3, both
+  Failure) and in season 3 is the actor of a `tenure.closed` at degree `Felled` whose subject is
+  `p_npc_041` (the GAME audit §0 identifies this person's death in a `capture` at this seed); the log
+  does not link the hearing to the seizure `[UNVERIFIED causal link]`.
 - **Endings.** Two verdicts in four seasons, both Partial, both an `oblige` to the judge's seat. In
   both, a new case against the same party is opened in the same season (`p_npc_004` by the judge who
   had just bound him; `p_npc_020` by himself). What cites the verdict: 254 and 251 `claim.deposited`,
@@ -586,10 +591,11 @@ Read as stories:
   (§2.2). A narrator reading the log can say *who filed against whom and that a judge determined
   something*; he cannot say who was convicted, of what, on what ground, or what it cost anyone.
 
-**The shape of the tail.** Twenty-seven persons were the matter of some proceeding. By signature:
-petitioned and never carried, 13; opened or carried and never spoken to or decided, 7; spoken to and
-undecided, 5; determined, 2 (both re-opened at once). No two of the twenty-seven differ in anything but
-the count of repetitions. The SC lane's six-season logs add the only other ending: at season 6 eight
+**The shape of the tail.** Thirty-two persons were the matter of some proceedings act (classified from
+the run's own timelines). By signature: petitioned and never carried, 13; docketed (opened or carried)
+and never spoken to or decided, 10; spoken to and undecided, 2; determined, 2 (both re-opened at once);
+named only in refused acts, 5. Within a signature no two differ in anything but the count of
+repetitions. The SC lane's six-season logs add the only other ending: at season 6 eight
 matters lapse at each seed. Across seeds and seasons it is one hearing: *filed; talked at; forgotten or,
 rarely, bound to the judge.*
 
@@ -665,7 +671,7 @@ terminal; §5 item 4 adds the one clause it lacks.
 accusation, the grant goes to the judge, and in computed play the accused is the person petitioned.**
 §2.1, §3.2. A petition about a place is docketed, spoken to and undeterminable; a granted one binds the
 party to the judge's seat; the petitioner holds nothing new; 14 of 14 computed petitions name their
-addressee as their matter; three of eight opened cases are self-cases. Falsifier: a computed petition
+addressee as their matter; two of eight opened cases are self-cases. Falsifier: a computed petition
 with `terms` ≠ `to` — none in 14. Fix: §5 items 5 and 6 (formation is CORE's; the remedy is a Jordan
 call).
 
@@ -686,8 +692,8 @@ the missing opposition; the comparison with `tell` and the fixed direction are n
 hearer's skill at the same vocation.
 
 **F-PES-SC-11 · degrades narrative (R-01, R-07) · Proceedings begin without a readable reason.** §3.2.
-11 of 14 petitions with no act among their causes; no held deed about the target in 8 of 22; regard
-zero or positive in 20 of 22. Fix: not SC's. `16_PESSIMIST_GAME_standing_occasions_carry_their_cause.md`
+11 of 14 petitions with no act among their causes; no held deed about the target in 8 of 24; regard
+zero or positive in 22 of 24. Fix: not SC's. `16_PESSIMIST_GAME_standing_occasions_carry_their_cause.md`
 and CORE's formation own it; listed for them.
 
 **F-PES-SC-12 · hygiene · Words that do not mean what they say.** `argument.won` at Partial (nobody

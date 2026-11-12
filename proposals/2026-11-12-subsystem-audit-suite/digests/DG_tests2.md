@@ -548,3 +548,157 @@ Cross-file pattern noticed early: most files in this family carry a long docstri
   - Realm test (one season, `build_realm(0)`): `for rec in sheets:` asserts per sheet and `assert checked + skipped == len(sheets)` (`:683`). The execution counts were DELETED (v9 §0.5), so with ZERO sheets the loop and the final equality both pass (0 == 0): a loop that asserts nothing when handed nothing, with no `checked >= N` floor. That is an F-TEST-07-class defect the addendum did not list (it counted 7 all-conditional season tests; this file is not named) `[the claim is read from the code; not run]`.
 - **Conflicts / stale:** the docstring says `forge` and `destroy_record` "EXECUTE SINCE v9 IN-45 / IN-26" while the section-6 text cites 4-6 sheets per realm season measured at IN-57.
 - **Open items:** H-169 (2)/(5); nothing here tests that a survey is DONE in play.
+
+### engine/season/tests/test_interactions_log.py
+- **What it is:** ED-IN-0335: `harness/interactions.py`, the interaction audit log, observes and changes nothing. Addendum C read it in full (F-TEST-12).
+- **Status:** none. Reading: live, with the addendum's F-TEST-12 CONFIRMED.
+- **Bears on:** CORE (instrument), CHAR, PC (the Cardinal's `fight` on a same-faction Inquisitor).
+- **Content that matters:**
+  - Hash-equal control: `content_hash`, log length, draw ordinal and act-id sequence after two seasons watched equal the run unwatched (seed 0; seeds 1-2 are `@pytest.mark.slow`) (`:86-103`).
+  - The FINDING test (`:41-47`) and the planted-wrong-relation test (`:77-83`) both call `revert_cr87(monkeypatch)` first, because on the shipped tree (CR-87 `fight` contexts) the Cardinal forms no `fight` on the Inquisitor; the docstring says CR-87 "made the finding its falsifier" (`:42-44`). So two of the six tests exercise a fixture the shipped game no longer produces (T-19).
+  - The logged scores carry the believed-odds factor: a shim dropping the odds query moves 28 of 328 deliberations' scores (`moved >= 1`) (`:59-74`).
+  - The re-read table is the chooser's: `unmatched == 0`, `returned_acts > 0` (`:50-56`).
+- **Conflicts / stale:** `Cardinal fight on Inquisitor, same faction, stance 0.0` is itself a narrative-plausibility defect the log was built to show (a same-faction act of violence from an acquaintance claim); fixed by CR-87, preserved only at the revert.
+- **Open items:** none.
+
+### engine/season/tests/test_k3_thread_sensitivity.py
+- **What it is:** v9 PC-06 K-3 (`H-85`): `thread_read`'s typed cell over the Thread Sensitivity carrier (`Person.thread_sensitivity`, set once at world build from the cast's authored `ts:`, never written in play).
+- **Status:** none. Reading: live. NB the addendum's F-TEST-07 / row text names `test_march.py` and `test_content_operands`, not this file.
+- **Bears on:** WR (threadwork), FI, CHAR (cast attribute), CORE.
+- **Content that matters:**
+  - The gate reads the actor's own carrier at the fold, the reader and person-side formation: `ts == GATE` executes (`finding.made`), `GATE-1` and `None` refuse (`finding.none`); `checked == 3` (`:73-92`). The gate value is read from `DEFAULT_FIXTURES`, not typed (30 per the file's own comment).
+  - A person reads nobody else's sensitivity; a ledger never answers the stem (a told number cannot decide the gate); `OWN_STATE_STEMS <= WORLD_ONLY_STEMS` (`:95-115`). Threshold is the fixture's: sweeping the gate flips the same person's verdict (`:122-136`).
+  - Parse rule: ranges read as lower bound ("75-80" -> 75), "~50" -> 50; "high", "30" (string), "", -5, True, 2.5, [30] refuse (`:143-155`). Registry rows NPC-001/002/005/006 read `[75, 50, 35, None]` (`:162-163`).
+  - Nothing writes the carrier in play: no matrix row, the gate refuses a write, an AST walk over non-test sources finds exactly one assigning file (`harness/populated.py`) with `scanned > 50` (`:208-244`).
+- **Conflicts / stale:** the threadwork gate is a deterministic threshold on a fixed cast number: a threadworker either reads or does not; no draw by sensitivity (brief's draw rule; WR/FI).
+- **Open items:** `ts: null # [GAP]` for NPC-006 and similar (the registry has gaps).
+
+### engine/season/tests/test_levy_feed.py
+- **What it is:** v9 IN-52: the levy-to-field feed, SHIPPED OFF (`field_provisioning`, H-241): a levied treasury provisions a field (troops bounded by whole rations); `settlements.provision` module entry; the field adapter hands `troops_a`/`troops_b` to `mass_battle.resolve_field`; `_eff_march` debits what the field ate.
+- **Status:** none. Reading: live code, dark by default (`test_the_shipped_arm_is_off`, `:219-223`).
+- **Bears on:** MB, SE (logistics, treasury), FA.
+- **Content that matters:**
+  - Module rule: control arm `troops = weight`, `consumed = ()`; arm on takes the MIN over ration kinds of whole rations (`//`), chosen so `max` and `/` mutants give different numbers (`:71-83`); an unprovisioned side fields 0 and the crash floor is the mass-battle module's (A16) (`:86-95`).
+  - On `build_realm(0)` with stores PLANTED (because `requisition` executes 0 times in computed play, `H-163` limit 3(a), and the realm seeds no treasury): short attacker treasury fields 1 of 2; empty defender fields 0, lifted by `_MIN_TROOPS` (`:143-156`); arm off fields Σ weight (2 v 6) and consumes nothing (`:159-166`).
+  - Debit through the real RESOLVE->ENCOUNTER fold (treasury falls by exactly `consumed`), including the defender's half and a shared treasury never eaten twice (`:199-285`); two real `requisition` folds raise the next field's troops (1 then 2) (`:297-312`).
+  - The numbers rest on authored world facts (`p_npc_033`, `set_s_036`, `terr_T1`, `terr_T9`, "six of the Church stand") re-asserted where used.
+- **Conflicts / stale:** `requisition` executes 0 times in computed play (H-163): so the treasury that bounds a field is always empty in play and the feed's only live meaning is dark by default. This bears on MB's weapon-carry/logistics intent: a supply constraint exists as a module rule but is off and fed by an act no one takes.
+- **Open items:** the arm's flip is "its own declared commit"; `requisition` never executing is H-163 limit 3(a).
+
+### engine/season/tests/test_loops_instrument.py
+- **What it is:** IN-24 (`BOUND-LOOPS`): `harness/loops.py`, the derived feedback-cycle check (`H-106`) and the bound read. Addendum C counts it among "grader on planted series, kept on purpose".
+- **Status:** none. Reading: live instrument tests.
+- **Bears on:** CORE, WR (feedback loops, amplifiers).
+- **Content that matters:**
+  - A planted amplifier with no LOOP row makes derived != declared and names it, with a relative control (`("Rung.stores",)` absent before, present after) (`:25-35`); removing the witness fan-out makes `H-102`, `H-112` underived (`:38-45`).
+  - `compare` flags a loop row with no cycle key as unmapped (`H-999`) (`:48-51`); the sign algebra: damping gives `-`, unknown `?` (`:54-59`).
+  - Bound check: over -> FAIL; at -> PASS; no bound -> UNCHECKED (never a pass); no reading -> NOT OBSERVED; a bound on a quantity off the row raises `ValueError` (`:62-80`).
+  - A drifted read map is reported as drift, not raised (`:83-98`); a bad `--bound` is refused before the slow observation runs (`:101-107`).
+- **Conflicts / stale:** the instrument has no effect on the game (process-load-bearing only, §0.1 pt 5). The declared loops are IDs `H-102`, `H-104`, `H-112`, i.e. hole-register rows.
+- **Open items:** none.
+
+### engine/season/tests/test_march.py
+- **What it is:** `march` (M4 build step 7, ED-IN-0279 clause (a)) and IN-13: the verb row, `_eff_march`, the RESOLVE -> ENCOUNTER pipeline, the arrival (muster basis), `seize` widened to a Rung. Addendum C read it at flagged tests (F-TEST-07). 1,049 lines, read in full.
+- **Status:** none. Reading: live; the load-bearing mass-battle/territory test file for the realm.
+- **Bears on:** MB, FA, SE, CORE (R-04).
+- **Content that matters:**
+  - A lost field (2-v-6, `p_npc_033` Crown marches on `set_s_036` Church): the attacker's army takes the casualties, the winners' stance rows absent; `field_grudge_weight` swept to 3 so grudge and morale rows differ by VALUE (a swapped ternary was found by `/code-review`) (`:92-148`). An unopposed march ARRIVES (no casualties, no stance rows); one leg per mover (`:151-188`). An unheld settlement arrives rather than crashing (`:229-264`).
+  - `Won` is unreachable at fixture scale: at the shipped `field_troops_per_weight` 1 even a 20-v-6 attacker routs on contact (`Lost`); only swept to 10 does it flip to `Won` (`:267-317`). Hence IN-13's exits (i),(vii) use constructed `Resolution("Won", ...)` or a patched module entry (`:579-600, :929-949`). This is a finding for MB: realm-scale field outcomes are dominated by "route on contact" and the shipped weight->troops scale (JQ-4 open).
+  - The three `field_casualty_model` arms (`scaled_by_degree`, `total`, `none`) differ; `none` writes stance only (`:348-391`). At `:361-362` and `:385-391` the loops `for pid in attackers:` assert over `world_q.mustered(...)` with NO `len(attackers)` floor: CONFIRMS F-TEST-07 (the addendum cites `:348`/`:365` = the test defs). `attackers` is non-empty today (`_march_act("p_npc_033", ...)` and the other tests assert `len(attackers) == 2`), but these two tests do not.
+  - A real chooser (restricted to `verbs={"march"}`) forms the march from a constructed `Question` carrying the settlement as a `Rung` pair and names `via=off_spymaster` itself (`:394-487`); the unrestricted-chooser demonstration is `aperture 1 0` and `hole_register` H-175, not in this file (`:36-45`).
+  - IN-13: a won/occupied settlement can be `seize`d (`rung.seized`) by a seat whose faction is `mustered` there; occupation by a RESIDENT Crown member already works at seed 0 with no field fought (H-212) (`:952-964`); a retaking closes the seizer's hold under `seizure` (`:901-926`); R-7: a routed (`Lost`) army stays at origin, pinned `[ASSUMPTION; Jordan to correct]` (`:678-688`).
+  - The re-homed regard falsifier: a witness who did not fight reads a changed regard toward the marcher after a `field.lost`, equal to `judged_gain * judged` (exact float equality `:1029`), zero when the deeds are removed and at `judged_gain` 0 (`:1013-1035`).
+- **Conflicts / stale:** `fortification_of` is called exactly once on the battle path (`calls == ["set_s_036"]`) (`:490-507`). Fixture facts are cast-specific (NPC-037 resident in the Church cathedral; `_no_resident_crown` edits them).
+- **Open items:** JQ-4 (the weight->troops scale); R-7 (routed army); the rate at which `march` is chosen in unrestricted play (H-175 / aperture).
+
+### engine/season/tests/test_mass_battle_module.py
+- **What it is:** plan position `31c` (IN-05): the `mass_battle` module entry called on a hand-built `MassBattleInput` in a FRESH SUBPROCESS (A-25: a module takes the typed record and a seeded rng, imports nothing of the host, never reads `World`, opens no file).
+- **Status:** none. Reading: live; addendum notes "mass battle not reached" in its read of the four seam tests, so this is the unread one.
+- **Bears on:** MB, CORE (Layer 1/holonic conformance).
+- **Content that matters:**
+  - One test: a probe script run in a child process resolves one constructed `march` record (sides `((180.0,120.0),(240.0,))`, territory `T9` uphill, `fort_level=1.0`, stances, loyalties, `walls_dr`) for seeds 1-6, with a DIFFERENT field (`OTHER`: T3 river crossing `origin="T9"`) fought between two calls of the first; asserts `again == got` (no state leaks), the stdlib `random` state untouched, no draw source left scoped, `opened == []` (no file opened via `builtins.open`/`io.open`/`os.open`), the geography mapping unmodified, and that the 6 seeds do not all give one result (`len({repr(got)}) > 1`) (`:80-106`). `checked == 6`.
+  - The module's return is exactly `{attacker_wins, degree, attacker_size_pct, defender_size_pct}` (`:94`); the input carries weights per side as lists of floats, not cells or a map: the interface does not represent a cell battlefield or carried weapons.
+  - The allowed-load list names only `massbattle.py` and `orchestration.py` under the module dir plus `engine/season/queries/inputs.py` (`:84-91`).
+- **Conflicts / stale:** the module is isolated and deterministic-per-seed, probabilistic across seeds (draw preserved). The result schema carries no per-cell or per-unit state: relevant to the brief's cell-based MB intent.
+- **Open items:** none.
+
+### engine/season/tests/test_migrate_capacity.py
+- **What it is:** plan position `19c` + `24d-ii`: `migrate` (RR-2: "persons can build hearths and accept people who move settlements"), `Person.reside` vs `contain`, `capacity` (dwelling Sites + floor), the throttle, and v9 IN-45/v10 REM-29 (the `room` conjunct).
+- **Status:** none. Reading: live.
+- **Bears on:** SE, CHAR, CORE (R-04: management; settlements).
+- **Content that matters:**
+  - A `travel_leg` ends at the next MATTER (`travel.ended`), the budget penalty returns to 0, the stayer unaffected (`:77-109`). Every builder houses every person where he stands (`residence == presence` at build over six builders) (`:120-136`).
+  - `migrate` changes residence (`reside` edge), `move` does not; capacity throttle: a migrate into a full rung is refused until a dwelling is BUILT there (RR-2's lever), a visitor by `move` is never refused (`:159-253`); in `build_realm(0)` a single newcomer into an empty hearth is admitted, a second refused, a cohort (weight 2) refused by weight (`:256-299`).
+  - `capacity` floor: a rung with no dwelling reads exactly the floor (never 0), swept over `capacity_floor.dwelling` None/0/2 (`:306-333`); one more dwelling raises the rung and every ancestor by one (spine chain of 7/6 rungs) (`:336-353`); AST check that `has_room` has a non-test caller, link by link (`:356-398`).
+  - A computed `migrate` forms only on a place he was TOLD of (`places_named`), is refused when full, then executes once a second dwelling is built (`:460-493`); a refusal for room is learned (`room:<actor>` False in `Event.observed`, deposited at WITNESS) and his next deliberation forms no `migrate` there, with `observation_deposit_mode: none` and another person as controls (`:608-642`).
+- **Conflicts / stale:** the file has two module-level `import` blocks mid-file (`:421-425`, `:571-574`). Capacity is a deterministic function; whether population movement is ever driven by any pressure (hunger, etc.) in play is not here.
+- **Open items:** none.
+
+### engine/season/tests/test_odds_of.py
+- **What it is:** CP-T01-03: `seam/wrappers/sigma.py::odds_of`, the exact odds of the social roll an act would deal, in two modes: (a) the true record, (b) the person's own ledger belief (`believed_input`).
+- **Status:** none. Reading: live; the strongest R-08/R-09 evidence in the family (addendum cites `test_cr17_odds_weighting` for the same property).
+- **Bears on:** DICE, SC, CHAR, CORE (R-08 not omniscient; R-09 probabilistic).
+- **Content that matters:**
+  - Mode (a) equals the dealt distribution: 20,000 real `roll()` calls graded by the real ladder agree with `odds_of` within 3 standard errors in every one of four bands (`_within_3se`, seed 7 fixed so not flaky); `math.isclose(sum(odds), 1.0, abs_tol=1e-12)` on a float sum (`:63-105`).
+  - The obstacle is the module's: replacing `obstacle` moves the odds (`:108-116`); read-only: world hash unchanged (`:119-125`).
+  - A `speak` into a bench shows the room's odds (bench `reception` moves the obstacle), and a `research` on a forged Record shows the forgery's odds (control: quality 0 gives other odds) (`:128-172`).
+  - S27.4: an obstacle above `obstacle_refusal_multiple` x pool deals no dice: `odds_of` is `None` and `resolve` returns `REFUSED` on the same pair (`:175-199`).
+  - Mode (b): a person with no claim on the opposition gets `None`, never a figure; a wrong belief gives different odds than the truth (`band_odds(4, 0.5, 0.0)`); latest-then-most-confident claim; `believed_input` takes no World (signature check); a believer's own pool is `faculty` and an addend moves it (`:211-291`). Capabilities are test fixtures (`mid=10`, `other=3`, `p_low=4`).
+- **Conflicts / stale:** none noticed.
+- **Open items:** none.
+
+### engine/season/tests/test_pc10b_challenge_record.py
+- **What it is:** v10 PC-10b (RS-25; H-240 route (1)): a `challenge` is a Record; `accept` binds to it via the `names:<operand>` stem; the duel is fought under the Record's `stakes` (`blood`/`death`/`yield`), through CP-T03-09's one path; a yield rides the result (`surrender`), earning `duel.yielded` for the yielder alone, never a band (H-98).
+- **Status:** none. Reading: live.
+- **Bears on:** PC, SC, CORE (R-09).
+- **Content that matters:**
+  - `CHALLENGE_TERMS` equals the engine's `DUEL_TERMS` (the one place roster vs engine is compared, imported via the seam) (`:129-134`); a yield is not a fourth band (only `Wounded` declares `duel.yielded`) (`:164-170`).
+  - An `accept` with no challenge Record, the wrong `to`, or the wrong actor is refused AT ITS CELL with zero scenes fought (a spy on `combat.entry_for` records `calls == []`) (`:223-250`); planted failure: with the two `names` conjuncts deleted a no-challenge `accept` fights `(ACC, THIRD)` (`:253-269`).
+  - A scan of `TRIES = 80` accept act ids per stakes: a `blood` challenge sometimes stops on its term (`yielded` non-empty); `death` shows `person.died` and no yield; for seeds whose lethal control's first wound is not decisive, `blood` emits `duel.yielded` and no death (`:288-333`). Outcomes depend on the draw; no universal is asserted ("no universal is asserted for the rest").
+  - Controls: `stakes: death` builds the same input as a lethal `fight`; an unchallenged `fight` between the same pair is `terms == "death"` (`:336-362`) - the lethal plain `fight` (F-PC-04's subject: plain `fight` kills 200 of 200) is pinned here as the control.
+  - Autouse fixture monkeypatches `world_q.holds_dispute` to always True for every test (`:47-52`), so `challenge`'s CR-87 dispute conjunct is bypassed (owned by `test_cr87_violence_contexts.py`).
+- **Conflicts / stale:** a computed challenge naming no stakes falls through to `blood` (CR-87, ED-IN-0336), earlier `death`. `fight_estimate` samples from the same input (`:345-354`).
+- **Open items:** none.
+
+### engine/season/tests/test_person_projection.py
+- **What it is:** v9 PC-06 S-2 / L-1: one person's projection (`world_q.PersonProjection`, `projection`, `witnessed`): the read equals the log filtered by witness; a claim planted in another ledger is absent; "never a World".
+- **Status:** none. Reading: live.
+- **Bears on:** CHAR, FI, CORE (R-07/R-08 the boundary of what a person knows; the brief's NPC projection).
+- **Content that matters:**
+  - L-1: for every person, `witnessed(w, pid)` equals `w.log` filtered by the ids WITNESS recorded in its own `TRACE.claim` rows (an instrument the read does not consult); guarded by `all(len(ledger) < cap)`, `any(reads.values())`, and `len({tuple(v)}) >= 2` (the reads differ per person) (`:40-57`); the originating Event, never `claim.deposited`, is returned (`:57`).
+  - S-2: a claim planted in another person's ledger is absent from mine and present in his (`:60-78`); the projection is a read and a copy (hash unmoved even after mutating the projection's claims) (`:81-91`); a witnessed Event carries `observed == ()` (the fold's reads reach only the actor under `observation_deposit_mode: actor`) with `checked >= 1` (`:94-109`); an unknown person refuses (`:112-115`).
+  - Uses `headless.run(2, 0)` and `headless.CARIN`, `BAILIFF` (the NPC-088 "hearth_ostvik" world), not the realm.
+- **Conflicts / stale:** none noticed. The projection omits `observed`, which is what the person is "entitled to"; interplay with R-07: the ledger is the person's only evidence.
+- **Open items:** none.
+
+## Cross-subsystem leads
+
+- **CORE / all (the `Relax exit rules` ruling and the shape of the evidence).** Nearly every file in this lane carries the sentence "NO TEST HERE ASSERTS THAT ANY VERB EXECUTED IN THE SEED-0 REALM" (v9 §0.5, RULED 2026-10-13, "Relax exit rules"): `test_in10_record_operands.py:7-9`, `test_in12_*` (arrest, conceal, covenant, forgive, seize), `test_in10a`, `test_in13`-era `test_march`, `test_in45_carry`, `test_information_cluster.py:236`, `test_in09:30-33`. This ruling is the structural source of F-TEST-01: it is deliberate, and every audit lane judging "plays" must read it. Realm executions are recorded as hand readings in commit bodies or `harness/*` readers (`heir_hears`, `aperture`), not asserted. Tags: CORE, all.
+- **FA / SC (deterministic resolution: "binds / obeyed / the senior office wins").** In these files an admitted act with no contest writes a fixed result: `pardon` ends custody (`test_in12_arrest.py:252`), `seize` moves a hold (`test_in12_seize.py:122`), `raze` removes a rung (`test_in12_raze.py:69`), `forgive` removes stance rows (`test_in12_forgive.py:155`), `tend` heals to scale (`test_in12_step9.py:207`), `sabotage` falls a fixed `_fall`, `succeed` seats the heir with "first valid claim wins" (`test_in61_succession.py:153-175`), `revoke` imposes a ban by provenance (`test_in31_revocation_cost.py`), `confer` seats the conferee, `covenant`/`comply` are emission-only. Contested ones (draws) are `arrest`, `argue`, `interrogate`, `determine`, `fight`/`accept`, `tell`, `speak`, `march`. Tags: FA, SC, PC, SE, DICE (brief's "WE DO NOT DO DETERMINISTIC").
+- **MB / SE (supply and scale).** `test_levy_feed.py`: `field_provisioning` ships OFF and its input (`requisition`) executes 0 times in computed play (H-163 limit 3(a)); `test_march.py:267-317`: at the shipped `field_troops_per_weight` 1 even a 20-v-6 attacker routs on contact (`Lost`), so `Won` is unreachable at realm scale without the swept 10; `test_mass_battle_module.py`: the module record takes per-side weight lists, not cells. Tags: MB, SE, FA.
+- **CHAR / FI (what a person knows).** `test_odds_of.py` (belief-based odds, no claim -> `None`), `test_person_projection.py` (projection from the person's ledger and witnessed Events), `test_in70_opinion_at_read.py` (opinion computed at read, nothing stored), `test_in57_attention_tiers.py` (an ordered, deterministic key of a person's own state decides which question he answers first), `test_in23_legitimacy_stability.py` (legitimacy has no chooser consumer: H-224 reverted). Tags: CHAR, FI, CORE (R-07/R-08).
+- **WR (dark hazards).** `test_in34_bodies_clock.py` (age/illness ship at 0), `test_in35_lattice_coupling.py` (`lattice_coupling` 0, source is a plant, H-236), `test_hunger.py` (`hunger` has no loop caller). Three world-pressure mechanisms exist and are inert in the shipped game. Tags: WR, SE, CORE (R-03).
+- **ARCS / CHAR (the provided cast).** `test_in64_cast_integration.py` shows 46 registry NPC rows each carrying 15 pursuits and a conviction on every concern (church/einhir/altonia); `test_in36_foreign.py`: the Altonian cast of three (NPC-011/089/090) with the Katepano as head; march frequency 4 of 80 seeds at tick 0. `test_in68_goal_seeding.py` and `test_in66_goals_loader.py`: org goals as OUGHT Propositions with committed persons. Tags: ARCS, CHAR, FA.
+
+## Likely stale or superseded
+
+- `test_governance_build.py:127-219` (LB-1 BO-9/10 paragraph, marked "HISTORY, SUPERSEDED BY THE v9 IN-11 PARAGRAPH BELOW"); `:2639-2970` (24d-i dwelling test: ~40 stacked re-record comments for `(749, 747)`); `:883-913` (the verb-count 38->67 log). Historical commentary kept in assertions' neighbourhood.
+- `test_in45_carry.py:153-170` and `test_information_cluster.py:515-541` and `test_migrate_capacity.py:513-545`: tests read with a column blanked in-process (`petition`/`carry` `referent_class=""`), i.e. against a formation the shipped table no longer has.
+- `test_in36_foreign.py:273-286`: witness seeds (44, 53) are a trajectory-dependent set (was 10 of 80, now 4 of 80), the same class as F-TEST-02/03.
+- `test_in50_refusals_carry_the_occasion.py:213-216`: corpus case pick (ARC-23, NPC-087) re-picked once because CP-T03-00 killed NPC-090's attackers.
+- `test_in23_legitimacy_stability.py`: the consumer was reverted (H-224); legitimacy/stability are read only by `storybar` (an instrument).
+- `test_hunger.py:16-18`: `hunger` has no loop caller (REM-51 cut).
+- `test_in34/35`: shipped-dark mechanisms (arms 0).
+- Stale prose in comments: `test_in34_bodies_clock.py:23-26` says the vacancy-claims fan-out is "H-206's NOT DONE"; `test_h206_a_death_at_matter_is_witnessed.py` closes the place half. `[UNVERIFIED]` whether office-vacancy claims are still open.
+
+## Items that could change an audit finding
+
+- **F-TEST-12 (interactions_log, in62 revert) CONFIRMED** at `test_interactions_log.py:45,78` and `test_in62_decision_spread.py:274`.
+- **F-TEST-07 CONFIRMED in `test_march.py`** (`:361-362` and `:385-391` loop over `mustered(...)` with no floor); and ONE UNLISTED instance found: `test_information_cluster.py:659-683` (`test_20iii_every_sheet_the_populated_realm_makes_says_what_its_holder_holds`) asserts per sheet inside `for rec in sheets` and `checked + skipped == len(sheets)`; with zero sheets both pass (the execution counts were deleted at v9 §0.5). The addendum's all-conditional count (7 season tests) did not name this file `[read from the code; not run]`. Also `test_in61_succession.py:180-212` asserts only `if claimed:` for the execution half (the formation half is asserted).
+- **F-TEST-01 qualified.** `test_in50_refusals_carry_the_occasion.py:209-224` is an additional R-01 test on PLAYED corpus cases (ARC-23, NPC-087) asserting `_r3_propagates` and `seen >= 1`, not a realm-at-shipped-configuration test but a played one; the R-01 row in addendum §3 should add it. `test_in57_attention_tiers.py:427-444` is a played-realm property (404 calls) with floors. `test_in62_decision_spread.py:256-262` asserts `score == sum(score_terms)` over >= 1000 candidates of a played realm season (R-06 mechanism at realm scale).
+- **F-TEST-02 / F-TEST-03 (pins).** Count pins read here: `len(VERB_TABLE) == 67` (`test_governance_build.py:913`), `(out["acts"], cout["acts"]) == (749, 747)` (`:2957`), 31 seats / `{appointed:18, elected:8, inheritance:1, None:4}` / 34 offices (`:1975-1991, :2421`), `len(REFERENT_CLASSES) == 8` and the 29-row `referent_class` set (`test_in53_vacancy_need.py:246, :298`), `len(control.persons) == 83` (`test_in36_foreign.py:99`), `BASE_HASHES[1]/[2]` with `revert_cr79` (`test_in27_endings.py:357-385`). Each carries an in-test re-record log.
+- **F-TEST-09 class (source-text assertion).** `test_governance_build.py:776-783` asserts `"remove_person" in inspect.getsource(_eff_kill)` and `"t.until = w.tick" not in body` beside a behaviour assertion; AST-walk tests with floors (`test_in23:169-182` `len(attrs) > 10`, `test_k3:225-244` `scanned > 50`, `test_migrate_capacity:356-398`, `test_governance_build:1559-1604`) are the "kept on purpose" kind.
+- **F-TEST-11 (skip on absent combat engine).** `test_h206_a_death_at_matter_is_witnessed.py:161-162` `pytest.skip` when the combat engine is absent (probably one of the "four other files").
+- **R-04 (strategic/management acts).** Every governance verb in this lane is folded from hand-built acts, matching the addendum's R-04 row; `test_in53_vacancy_need.py:348-360`, `test_in10b`, `test_in61_succession.py` show the end-to-end chain (vacancy question -> formation -> fold) on `_gov_world`, not in a played season. `test_in36_foreign.py` shows one natural-play march at 4 of 80 seeds.
+- **R-07.** Feeling/attitude: `test_in12_forgive.py` (stance rows; permanent absent `forgive`), `test_in70_opinion_at_read.py` (opinion at read; reaches choice only via question referents), `test_in23_legitimacy_stability.py` (no chooser consumer), `test_h11_affiliation_scar.py` (scar table dormant in the shipped realm). The addendum's "no test for feeling/attitude/relationship" is too strong: tests exist for stance, regard (`test_march.py:1013-1035`), opinion and scar at the mechanism; what is absent is a behaviour test that a changed attitude changes a played decision at the shipped configuration.
+- **Brief's deterministic cases.** `F-PC-04` input: unchallenged `fight` is `terms == "death"` (`test_pc10b_challenge_record.py:357-362`). Succession (`test_in61_succession.py`): a fixed-order heir with "first valid claim wins". Evidence entry/strike (`G-65`) is not in this lane's files.

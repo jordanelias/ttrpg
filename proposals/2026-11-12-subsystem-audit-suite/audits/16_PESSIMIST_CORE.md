@@ -14,13 +14,36 @@ sweep (`18_DETERMINISM_SWEEP.md`) and the GAME pessimist (`16_PESSIMIST_GAME.md`
 Everything measured here is new work unless a lane is named. All runs: `PYTHONHASHSEED=0`; scripts and
 outputs in `/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379/scratchpad/runs/PES_CORE/`.
 
-**This file is written early and appended (the brief's instruction). Sections below the verdict are in
-the order they were established; the verdict is rewritten last. A section headed `[PENDING]` was not
-reached.**
-
 ## 0. Verdict
 
-`[PENDING — rewritten after the probes; see §1–§3 for what is established so far]`
+**The kernel does what two of its four premise sentences say and half of each of the other two: a
+season does tick, and a decision does propagate (shown here by a counterfactual with a clean null,
+which is better evidence than the requirement rows cite); but a refusal does not teach, and what
+happened is recorded only as the fact that something of a named kind touched a named cell.** In three
+seasons of the shipped realm at seed 0, 56% of what individuals attempt is refused; a refused
+opportunity is twice as likely to be tried again as one that worked, and the retry fails 24 times in 25,
+because the commonest reason an act cannot happen (the other person is not here) is the one read the
+engine rules a person may never learn, although the person already holds an unread claim that he was
+refused. Every one of 36,586 receipts in the log carries no value; 69% of the state changes that are not
+ledger bookkeeping (every scar, and the only writer of a conviction crisis) are in no Event; 94% of the
+log is claim bookkeeping. The "scene" the season ticks by is a budget unit: its steps fold in hash
+order, not the order chosen (23%, which is chance), and the person spoken to is busy with a scene of his
+own 71% of the time. The gate over the nine requirements returns success on a file that claims all nine `met` on a
+module that does not exist. **The single largest obstacle in the core is F-PES-CORE-01**: more than half
+of every person's season is spent being refused the same things, so whatever the other lanes build to
+make acts land, the chooser spends its budget relearning nothing.
+
+**Steelman, and what survived.** The causal edge, the gate, seeded replay and the same-season answer
+channel all held: a replay differs in 0 acts; removing a scene that touches nobody changes 0 of other
+people's acts; removing one individual's scene changes 236 to 634, ordered by how often it was cited.
+The teaching channel is real where it is wired (8% retry against 57% where it is not). Three cuts came
+back free (the stored plan tail, the five strata, the retry licence at 99 parts in 100) and one came back
+*not* free and is reported as such (the budget the chooser is shown).
+
+**On the standing rule (*we do not do deterministic*).** Nothing proposed here makes an outcome a fixed
+function of state: the refusal fix is a weight on a drawn choice, and the alternative that would be a
+ban is named and rejected. Fold order, which the determinism sweep (C-11) flagged as an undrawn decider
+between rival acts, was measured: it decides about one act in 175.
 
 ## 1. Premise audit — the four sentences of the loop, by execution
 

@@ -590,3 +590,110 @@ Lane `tests1`: 70 files under `engine/season/tests/` (test files and three helpe
   - Control: expansion stubbed reproduces `BASE` (the pre-commit 1-season hash) per seed; expansion on differs at seed 0 (:219-232). The pin comment lists NINE re-pins each with a named revert control.
 - **Conflicts / stale:** the "mover is the one row that maps to a key": the lifepath system yields capability for 2 of 46 NPCs; the rest of the 34 lifepaths map to none or are unused. [CHAR lead: capability data is nearly empty in the shipped game.]
 - **Open items:** none.
+
+### engine/season/tests/test_cr34_declared_disposal.py
+- **What it is:** behaviour test, v11 CR-34 (C-7, `ED-SC-0034`, H-161): the declared disposal is read: `determine` on a matter whose docket item names an arrangement row declaring `disposal: declared` gains a `vote` conjunct counting live `commit` edges of distinct bench members (`judging_set`) to an OUGHT Proposition about the party naming the kind the row `disposes:` (`ban`); `world_q.declared_votes` is computed on read, stored nowhere. `excommunication_deliberation` is the first declared row, `quorum: 2`. `[ASSUMPTION; medium]`.
+- **Status:** none; live code, hand-built evidence only.
+- **Bears on:** SC (proceedings, bench votes), FA (governance, church bench), ARCS.
+- **Content that matters:**
+  - REALM REACH IS 0 and the file says so: "no computed `open_case` names an arrangement (H-80), so the realm never meets a declared row" (:10-14). A computed docket item naming an arrangement (petition route or `judging_set` mapping) is the residue. So a vote at a sitting is not reachable in computed play.
+  - One bench-member commit -> `determine.refused` on the `vote` clause (`declared.votes` 1, `declared.quorum` 2 in `Event.observed`); two -> `matter.determined` with degree in `(Overwhelming, Success)` and a `ban` opens (:92-104). Not a vote: a creed commit whose subject is the accused (the "loyal-creed hazard"), another subject, mood not OUGHT, predicate not the kind, an ENDED commit, two commits by one member (distinct members), a non-member's commit (:107-157).
+  - Sweep: with exactly two votes quorum {1,2,3} admits at 1,2 refuses at 3 (:179-188). Controls: `legal_trial` (bench) admitted with `votes 0, quorum 0`; at quorum 1 with the determiner committed the outcome equals the bench reading (:160-206). Ambiguous docket (two items for one matter, one declared) reads `UNKNOWN` and `_eff_determine` declines (:209-224). Tally stored nowhere: the count follows the edges (:227-238).
+  - Voting is deterministic count (>= quorum live commits) with no draw at the vote; the draw is the `determine` degree afterward. [SC lane: per the brief's rule, whether "votes meet quorum => bound" is a fixed function of state - check against G-65 and the proceedings ownership ruling.]
+- **Conflicts / stale:** "H-80: no arrangement named" in computed play contradicts the idea that an arrangement is the proceeding's rule set: arrangements are reachable only by hand-planted dockets.
+- **Open items:** computed docket naming an arrangement.
+
+### engine/season/tests/test_cr55_matter_lapses.py
+- **What it is:** behaviour test, v11 CR-55: a matter lapses visibly: a docket item held beyond `Fixtures docket_lapse` seasons is taken off the docket by MATTER (one gate write, `matter.lapsed`, `causes` the docketing Event); an overdue term stage matures once (`loop/matter.py`).
+- **Status:** none; live. Shipped `docket_lapse` is 4 (":the shipped rule (4) cannot fire inside two seasons, so the instrument reads it at 0", :337-341).
+- **Bears on:** SC (docket, proceedings), FA, WR (term/stages), CORE.
+- **Content that matters:**
+  - Three docket facts held an item for ever: a dead party, a venue with no bench, a matter that is no person; all lapse at the barrier opening `t + lapse + 1` (heard through `t + lapse`); seen red with the mechanism removed (planted failures recorded in docstrings, run 2026-11-08, not in suite except via assertions of `_outlives`/`lapsing_items`) (:65-117).
+  - Empty slot lapses too, chained on the `docket.formed` that made it (its age is the Date's `due_at`); a slot emptied after a re-slot lapses on the slot-forming Event, not the re-slot's (:119-153); a carried matter ages from the carry, not an older `open_case` (B10-13 Phase 3) (:156-177); an undated matter the lapse is about to take is not re-slotted (:180-198); neighbouring items lapse at their own counts (:201-213).
+  - Control `docket_lapse = None`: nothing lapses in 12 seasons; an item with no docketing Event has unknown age and does not lapse (:220-236).
+  - Overdue stage matures once: `due != w.tick` never matured it; once-guard reads the last maturation BEFORE the pass; a stage wound by an ACT id (no logged Event names the Record) is guarded via `last_emission_of(..., written=True)` (:243-319).
+  - Realm reading at lapse 0 vs None, 2 seasons seed 0: `len(lapsed) >= 1` and none under control; every lapse names a docketing Event in the log, a `matter.lapsed` claim reaches a ledger, hashes differ (:326-351). The shipped lapse 4 is therefore never observed in a played realm by a test.
+- **Conflicts / stale:** shipped `docket_lapse = 4` is unexercised; a lapse is a deterministic age rule (bookkeeping, a clock's tick).
+- **Open items:** none.
+
+### engine/season/tests/test_cr56_matter_stamped.py
+- **What it is:** behaviour test, v11 CR-56: the matter is stamped where it waits: `world_q.matters_awaiting(w, p)` stamps, as `Rung`, the lowest of `p`'s own convening seats containing a waiting undated person-matter's place (so `convene` forms on the tier that can hear it); CALENDAR's re-slot moves each undated person-matter into the open slot `world_q.slot_for` finds. Two `[ASSUMPTION; medium]`s.
+- **Status:** none; live.
+- **Bears on:** SC (docket, convening, venue), FA (seats' convening acts), CHAR (what questions an officer is handed).
+- **Content that matters:**
+  - Stamp: control with no docketed person-matter stamps nothing; after `open_case` the Duke is stamped `("D",)` and `convene` forms on `D` (and not before; `places_named` never offers a venue the Duke lives under); a person with no convening seat is offered nothing; of two convening seats the lowest containing the matter is stamped (`("D",)`, then `("D","R")`) (:65-97). A matter outside every convener's seat is neither stamped nor slotted (:90-97).
+  - Stamp displaces no question (stop condition): question ids equal with the term stubbed out; `len(without) >= 2` (:100-110).
+  - Re-slot: a waiting matter fills a later slot that reaches it; the slotting Event `docket.formed` anchored at `D` and caused by `date.fired`; a non-person matter (a rung) is never re-slotted (:117-138). `CONVENING_REMIT_ACTS == {"convene"}` (count pin, :61-63).
+  - Seeded readings are in the item receipt, not pinned.
+- **Conflicts / stale:** the helper functions `_convene_at`, `_next_calendar` are imported by `test_cr55`.
+- **Open items:** none.
+
+### engine/season/tests/test_cr69_chains.py
+- **What it is:** instrument test, CR-69: `harness/chronicle.py::consequence_chains` (`--chains --min-depth D`), the story reading; "A READING, NEVER A GUARD".
+- **Status:** none; live (an instrument of the narrative surface).
+- **Bears on:** WR (narrative reading, emergent chains), ARCS (arc reading), CORE (R-01 chains).
+- **Content that matters:**
+  - Planted world with 4 writing chains of depth 3, a writing chain of depth 2 and a non-writing chain of depth 4: `chain_ends == 4` at min-depth 3, 5 at 2 and 1, 0 at 4; `consequence_acts == 14` (the non-writing chain is not one); kinds histogram read off the log (`war.ended`, `heir.named`, a planted `grudge.sworn` appears; the reader holds no roster) (:67-96).
+  - Shuffled-`causes` null (8 seeds) reads strictly below (`ARC.shuffled_causes`, the single null shared with `harness/arc.py`) (:99-111); same world twice reads identically; planted failures: counting every act, ignoring min_depth (:125-142). CLI: `--chains` without `--min-depth` refused (exit 2), plain output untouched (:155-169).
+  - A real seeded run (`SB.drive(0, 2, "off", 10)`): reads identically twice, writes nothing (hash, log length, `w.writes` unchanged), `consequence_acts > 0 and chain_ends > 0`, null differs (:174-185).
+- **Conflicts / stale:** the chain reader counts only chains of acts whose Events write Receipts on the ARC rosters; belief-only changes (WITNESS) aren't consequences (cf. cl_thrust_b01).
+- **Open items:** none.
+
+### engine/season/tests/test_cr81_realm_acquaintances.py
+- **What it is:** build-property test, CR-81 (B10-09 close two, `ED-IN-0318`): the realm starts with acquaintances (Jordan 2026-11-04: "many characters should already know each other based on faction belonging, and high status characters will know each other (eg Duke Duchess king queen)"): `harness/populated.py::acquaintance_pairs` / `seed_acquaintances`, run last in `build_realm`; `acquaintances=False` is the control arm.
+- **Status:** none; live. HASH PINS: `PARENT_HASHES` three build hashes (control arm), `KNOW_NONE_AT_BUILD = 41`.
+- **Bears on:** CHAR (social graph), FI (known-person gate on `tell`, R-01/R-07), FA (faction membership), WR.
+- **Content that matters:**
+  - Measured: persons who know no one at build 83 of 83 -> 41 of 83 on every seed; 236 `exists:Person` claims (226 faction co-member pairs + 10 high-status pairs); `tell` forms for 0 -> 37 persons. The 41 are 37 cohorts (no faction commit, no seat), 3 cast members in no faction, 1 member of Schoenland's one-member faction (:6-17). Derived from two routes in the test (`_expected_pairs` from the person's end `faction_holding`, high set via Jordan's four words `King/Queen/Duke/Duchess` over `OFFICES_SEATS`) (:74-95); `checked == 3*236`.
+  - `[ASSUMPTION; medium]`s: "know one another" mutual and complete within a faction; the duchy seats are the high-status set; added claims evict none. IN PLAY THE THIRD IS MEASURED FALSE: ledgers reach `ledger_cap` 200 in season 1, a base claim ranking below an acquaintance claim is evicted (peaks 93/142/152 displaced); acquaintance claims fade (0, 11, 0 of 236 still held at season 4). "A durable acquaintance would need a carrier eviction does not reach: not ruled, not built." (:19-28).
+  - Control: `acquaintances=False` reproduces the parent hashes (`b9928b27..., d58a1395..., cb800549...` after re-pins by CR-86/CR-20+30/CR-33/CR-87/CP-T03-07) and the arm's ledger less the added claims equals the control claim by claim; no ledger over `ledger_cap` (:136-154). Planted: `seed_acquaintances` a no-op reddens the exit (:157-165).
+  - Hash comment lists SEVEN re-pins of the control arm.
+- **Conflicts / stale:** supersedes `test_cr03_acquaintance_arm.py`'s measurement (CR-03 said the realm starts with none; CR-81 wires it in). CR-82 raised the cap so the fade at 200 is now the control arm.
+- **Open items:** durable acquaintance carrier (not ruled, not built).
+
+### engine/season/tests/test_cr82_ledger_retention.py
+- **What it is:** behaviour test, CR-82 (`ED-IN-0319`): what a person knows of others is kept for years, not seasons: `ledger_cap` raised 200 -> 3200 (Jordan 2026-11-04: "people don't stop knowing people or claims that quickly"); comparator `state/ledgers.py::eviction_key` unchanged.
+- **Status:** none; live.
+- **Bears on:** CHAR/FI (memory, R-07), CORE (ledger eviction), WR.
+- **Content that matters:**
+  - At shipped cap (3200) the 236 acquaintance claims are still held at season 2 (`held > HELD_FLOOR 200`, measured 221); at the control cap 200 `held < FADED_CEILING 170` (measured 147) on seed 1, 2 seasons; the bounds are "deliberately loose": the test is about the lever, not a golden (:47-58). Measured elsewhere (H-09's cite): at season 4 seed 1: 6 at cap 200 vs 208 at 3200; through eight seasons 202 and 196 of 236 at 3200 vs 0 and 0 at 200 (:7-11).
+  - "this directory no longer builds a four-season realm (the user's v9 section 0.5 ruling, recorded at the `season-tests` CI job's comment), and eight seasons is about six minutes on one seed" (:13-17): the test horizon is two seasons by a runtime cap, the long-horizon claim is not under test.
+- **Conflicts / stale:** none. Time horizon: "two years at four seasons to the year, `ED-IN-0332`".
+- **Open items:** none.
+
+### engine/season/tests/test_cr85_faculty_replaces_history.py
+- **What it is:** behaviour + hash-control test, CR-85 (ED-IN-0330/0331): combat's pool and Ob read `faculty` not `history`: `sigma.faculty` -> `combat.combat_input` -> `PersonalCombatInput.faculties` -> `modules/combat/fight.py`: pool `max(5, faculty + 6)`, Ob the opponent rolls against `faculty / 2`. `[ASSUMPTION; medium; revert: delete the design file; history stays]`, built on `proposals/2026-11-05-cr85-...md`, which is UNRATIFIED (ED-IN-0349 withdrawn by ED-IN-0351). Defines `revert_cr85` (:73-78).
+- **Status:** none; live. HASH PINS: `PRE_ITEM`, `POST_ITEM` (six literals).
+- **Bears on:** PC (the combat roll's inputs), CHAR (§14 capability -> pool), DICE.
+- **Content that matters:**
+  - In the shipped game EVERY season fight rolls pool 8 against Ob 1.0 (`(8, 1.0)`), because no verb names a combat key so `faculty` = `pool_default` 2 (:12-14); mutation (faculties dropped, module default 3) reads `(9, 1.5)`; a party holding a test-local combat key at 5 rolls pool 11 and his opponent rolls against Ob 2.5 (:129-168). So persons do not differ in fights in the shipped game. (Later `arms` CP-T03-04 wires the key but nobody holds it; test_cp_t03_04.)
+  - `build_realm(0)` forms no fight in one season since CR-87, so the falsifier reads seeds 1 and 2 (:20-22); seed 0's hash does not move (`PRE_ITEM[0] == POST_ITEM[0]`).
+  - Control: seam's faculty replaced by 3 for every party reproduces the pre-item hash exactly (the five deleted sigma terms were 0.0 in every season fight: both parties at history 3, empty `skills`) (:136-147); the falsifier test runs behind FOUR reverts (`revert_cr79`, `revert_cp_t03_04`, `_07`, `_08`).
+  - Autouse fixture `_engine_available` calls `pytest.skip` if `C.engine()` is None (F-TEST-11) (:44-50).
+- **Conflicts / stale:** the item cites an unratified design file; the design's `skills`/`history` fields are "deleted" from the pool but "history stays" as data.
+- **Open items:** ratification of `proposals/2026-11-05-cr85-histories-hooks-and-combat-input.md`.
+
+### engine/season/tests/test_cr86_realm_structure.py
+- **What it is:** build test, CR-86 (ED-IN-0342): the realm's structure: Valorsmark a faction, the vassals sworn by `oblige`, the heads seated.
+- **Status:** none; live.
+- **Bears on:** FA (factions, heads, vassalage, purview), CORE (realm build), SE (territory).
+- **Content that matters:**
+  - `faction_q.head` of Valorsmark is the King (`p_npc_020`); Hafenmark `p_npc_050`, Varfell `p_npc_052`, Church `p_npc_021`; `len(HEAD_SEAT) == 4`; a faction with no `head_seat` (Guilds) has head None; vacating the King's seat removes the head (:31-47).
+  - `Crown` is an alias of Valorsmark (`cast.resolve_faction("Crown")`, `office_faction`), not a roster member; `>= 5` registry Crown rows, none of the built offices carries `faction == "Crown"`, `>= 8` carry Valorsmark (:50-66). An office whose `body:` implies a faction different from the alias refuses (`Forbidden`) (:56-58).
+  - Vassals: the Duchess (p_npc_050), the Duke (p_npc_052) and the Grand Master (p_npc_070) are sworn to `off_king` by live `oblige`; in the as-built realm the King reaches a Varfell territory by containment alone (control); planted: cut `duchy_varfell` out of the realm and only then does the Duke's `oblige` edge decide `purview_reaches`; dropping the edge leaves it unreached; the Duchess's edge does not bring Varfell's ground (:69-100). The Church territory already has its dwelling (:103-107).
+  - Everything is keyed on hard realm ids (`p_npc_0xx`, `terr_T12`, `duchy_*`).
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
+### engine/season/tests/test_cr87_violence_contexts.py
+- **What it is:** behaviour + hash-control test, v11 CR-87 (ED-IN-0335..0337, 0340; commit `c7145842`): violence made exceptional. Six parts: `rosters.yaml: violence_contexts` (a person-side formation decline: `fight` forms on a subject only where the actor holds a context against him: war, crime, duel, defence), `fight` alignment cells -0.3 on all seven axes, the grudge's bound `hostile_stance_gain`, a computed duel fought to `blood` and `challenge` asks a DISPUTE, build-time loyalty toward the creed never its head, coercion rows keep their gates. Defines `revert_cr87` (:358-374), imported by many other files.
+- **Status:** none; live. HASH PINS: `BASE_BUILD = "837d0f83..."`, `BASE_SEASON = "bcc4ee3f..."`.
+- **Bears on:** PC (when fights happen), CHAR (grudge, contexts, NPC chooser), FA (war, warrants, detainees), MB, ARCS (war and crime arcs), WR.
+- **Content that matters:**
+  - With no context `fight` does not form (but the question forms other acts); each context forms it: war (an `Enemy` class stamp via `enemies_heard`, only once he knows of a live war with a live commit), crime (a held warrant record whose `to` names the actor; the maker is not charged; or a `Detainee` stamp), duel (a held challenge naming both), defence (an attack he saw this season, deed claim on its patient + sighting; older attack no) (:78-131). Emptying `VIOLENCE_CONTEXTS` forms `fight` again (:133-137). Roster refusals: unknown verb, empty list; readers closed (:140-147).
+  - Realm falsifier: seed 0 season 1 via `harness/interactions.py`'s own run: `fight` formations on same-faction persons at stance >= -3 are 0 (base: 110 formations, 68 same-faction, 65 of them at stance >= -3), Cardinal->Senior-Inquisitor and Spymaster->King formations are 0 on seeds 0-2; the mutation (decline deleted) restores them (positive control) (:312-337).
+  - Costs: `fight` and `accept` -0.3 on every axis; `challenge` keeps -0.6 (grandiose_humble) and -0.3 (deontological_instrumental). A grudge on a violent row reads `hostile_stance_gain` (0.5 in test) and in a war context a -4 grudge still ranks `fight` first at the shipped bound (:176-215). A computed duel is fought to `blood`; named stakes (`death`) still govern; unchallenged `fight` keeps the lethal default (:218-221). `dispute` is a WORLD-ONLY stem read off the actor's own judgement: a deed claim of B's that A's pursuits score against him (:224-238).
+  - `loyalty_in_band` cuts a negative loyalty row to the member band (-1,4)->(-1,1); no creed-loyalty row names a faction head below the band; with `loyalty_toward_creed` False the Spymaster holds the grudge toward the King (the audit's finding) (:245-262).
+  - Hash: with the block empty and every value at its revert, plus SEVEN more reverts (`revert_cr79, revert_cp_t03_02, revert_cr85, revert_cp_t03_04, _07, _08`), the build and one season equal `BASE_BUILD`/`BASE_SEASON` (:377-393) - F-TEST-02 pattern; `shipped build != BASE_BUILD` so the control is not vacuous.
+- **Conflicts / stale:** violence is by a formation decline, a deterministic gate on candidates (eligibility, defensible under the brief's rule), but it means in the shipped game "a fight" appears only with a context; CR-85/CP-T03-01 notes that seed-0 forms no fight in a season.
+- **Open items:** none.

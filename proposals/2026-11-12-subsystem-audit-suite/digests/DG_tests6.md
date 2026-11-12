@@ -128,3 +128,112 @@ Lane `tests6`: 77 files under `tests/valoria/` (alphabetical `test_combat_invari
 - **Conflicts / stale:** none. Note the design point: "refused" has two meanings (objective contested = engine refusal; `accepted=False` = caller's disposition) and both are visible only on the trace.
 - **Open items:** no resolver for the consequence of a refused yield (a free strike) exists in the combat module by design.
 
+### tests/valoria/test_conditional_orders.py
+- **What it is:** pytest file, 2026-07-23 Jordan directive and ED-MB-0030: conditional stance/withdraw orders on the mass-battle `Order` primitive (`enemy_range:D`, `own_strength:F`).
+- **Status:** none stated; reading: live; the only direct tests of the standing-order surface the brief asks MB to judge (Ogre Battle / Unicorn Overlord style "priorities set in advance").
+- **Bears on:** MB (orders, retreat conditions), PC (none).
+- **Content that matters:**
+  - Trigger names validate at construction (`enemy_rnge:5` and `own_strenght:0.5` raise ValueError, :41-46, :78-82); `behavior` may set `stance` and `yielding` (:48-51).
+  - Behaviour is run through `systems.mass_battle.sim.engine.resolve_battle` (the sim oracle, not `modules/mass_battle`) with a global `random.seed(...)`: an advancing line flips to `stance='retreat'`, `yielding=True` once the enemy is within 5 cells (`_order_idx == 1`, :54-63); a 0.5-cell trigger never fires (control, :66-75); `own_strength:0.9` fires after attrition (:85-98).
+  - Only one test imports the shipped module: `modules.mass_battle.core.contact.check_orders` for the no-fire-at-full-strength arm (:104-110). So the order tests run on the `systems/` sim engine and one on `modules/`: two engines for one primitive [UNVERIFIED whether `systems.mass_battle.sim.engine` re-exports `modules`].
+  - The fire tests assert end-of-battle state only (`_order_idx`), not the tick it fired, so "fires when the enemy closes" is observed as "fired some time in 40 turns" with a fixed seed.
+- **Conflicts / stale:** `_SIM` path points at `tests/sim` (a directory CLAUDE.md §3 calls unrelated to the retired `sim/`); `systems/mass_battle/sim/` exists. Docstring says "No new engine mechanism".
+- **Open items:** no trigger for morale, supply, flank exposure or ammunition exists in the tested set (only two triggers are tested).
+
+### tests/valoria/test_conviction_roster_single_owner.py
+- **What it is:** pytest file: the pursuit (ex-Conviction) roster has one owner (`references/descriptor_registry.yaml:pursuit_roster`, read as `engine.substrate.descriptors.PURSUITS`), and a source walk fails on a second roster.
+- **Status:** none stated; reading: live; a recurrence guard that carries its own §0.1 pt 5 predicate and passes it (game code, defect was real).
+- **Bears on:** CHAR (pursuits/convictions), CORE (registry owner), PROCESS.
+- **Content that matters:**
+  - `len(descriptors.PURSUITS) == 15` (:64): a count pin, re-pinned 13 to 15 at IN-08 (ED-IN-0261's fifteen pursuits). `conviction.CONVICTIONS is descriptors.PURSUITS` and `rosters.PURSUITS is descriptors.PURSUITS` by identity (:72-73).
+  - AST walk over `engine/` plus `ci_common.MODULE_CODE_DIRS`: any Tuple/List/Set/Dict literal holding 2 or more canonical names fails (dict keys AND values inspected, :98-109). Floors: `len(walked) >= 100` and a named non-engine witness file `systems/characters/sim/conviction.py` must be walked (:113-115): the derived roots cannot silently drop a tree.
+  - Twenty legacy names (`Justice, Survival, ... Scholastic, faith, warden`) raise `ValueError` in `resolve_pursuit`, no `CONVICTION_ALIASES` attribute may exist; legacy tags migrate per character, not by alias (:124-148).
+  - The control is the docstring's stated mutation (re-hardcode two names, "Mutation-verified 2026-08-24"): not re-run by the test; the floors are the in-test observation.
+- **Conflicts / stale:** the module still uses the word "Conviction" for the roster (deliberately, stated). It reads `systems/characters/sim/conviction.py`, which still exists as the named witness.
+- **Open items:** none.
+
+### tests/valoria/test_definitions_store.py
+- **What it is:** pytest file for `tools/definitions_store.py` (the unified definitional surface, ED-IN-0077): store equals a fresh rebuild and equals the union of `names_index` and `descriptor_registry`.
+- **Status:** none stated; reading: live but its subject is a process/definition store.
+- **Bears on:** PROCESS, CORE (names registry).
+- **Content that matters:**
+  - `ds.check()` returns `(ok, msgs)`; the store is UNTRACKED (ED-IN-0194, culling wave 5) and written by the `generated_layer` conftest fixture, so "store is current" is now determinism, not staleness (:20-26). The set-identity with the union of the two registers and the name-field parity on overlapping keys (:29-43) are the real content.
+  - The overlap loop (`for key in set(names) & set(desc)`) has no count and no check that the overlap is non-empty (:41): a loop that asserts only if the overlap exists (conditional-assert-without-asserting-it-asserted). The addendum's `valoria · CORE` loops row covers this pattern in aggregate.
+  - `test_every_definition_has_a_canonical` likewise loops with no population floor (:46-48), though the set-identity test beside it implies non-empty if `names_index` is.
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
+### tests/valoria/test_degree_boundary_epsilon.py
+- **What it is:** pytest file, ED-MB-0051 / plan v2 A2: a 1-ulp float error must not move a mass-battle damage degree; `compute_degree` epsilon and the sigma-zero snap.
+- **Status:** none stated; reading: live; a strong falsifier-aware file.
+- **Bears on:** MB, DICE (degree ladder in mass battle: Failure/Partial/Success/Overwhelming at margins 0, 1, 3).
+- **Content that matters:**
+  - Uses `math.nextafter` at every boundary because the v1 guard (`ob - 1e-16`) equals `ob` in float64 for ob 3 and 6 and "could not fail"; the file proves that in-suite (`test_guard_is_not_vacuous...`, :168-180): exemplary §0.1 pt 2.
+  - The ruled MB ladder (2026-08-14): margin `net - ob` below 0 is Failure, 0 to <1 Partial, 1 to <3 Success, 3 or more Overwhelming, each boundary with an ulp-below case at ob in (1, 3, 6, 9) (:66-100). `_DEGREE_EPS == 1e-9` is pinned (:134) and `_SIGMA_ZERO_SNAP < _DEGREE_EPS` (:158).
+  - Ceiling test: a net `1000*eps` below each boundary must still demote to the adjacent lower band, so the epsilon cannot become a balance change (:126-148). Symmetry test: dust above the Partial boundary is not promoted (:103-123).
+  - Imports `modules.mass_battle.resolution.compute_degree`, `_sigma_net_boost`, private constants `_DEGREE_EPS`, `_SIGMA_ZERO_SNAP`: the test pins private names.
+- **Conflicts / stale:** `compute_degree` in MB is a separate implementation of the ladder from `engine.dice_engine.dice_engine.degree_from_net` which PC consumes (see `test_combat_ob_from_defender_consumers.py:131`) and the next file tests (`test_degree_ladder_single_owner.py`) [UNVERIFIED whether MB's `compute_degree` delegates; the SC/MB/PC three-ladder question belongs to the next entry].
+- **Open items:** none.
+
+### tests/valoria/test_degree_ladder_single_owner.py
+- **What it is:** pytest file, ED-IN-0187 sweep, 478 lines (about 60% comment): one degree ladder for the whole game; enrolls each ladder and evaluates it cell-for-cell against `engine.dice_engine.dice_engine.degree_from_net` over three domains (about 600 integer cells, about 890 quarter-net cells, about 1,780 half-integer-Ob cells), plus a source sweep for a new hand-rolled ladder.
+- **Status:** none stated; reading: live. Several comments are corrections of earlier comments and say so ("a claim about a data structure that a targeted string edit never forces anyone to re-read", :174-283, :406-416); one comment states `HELD` is empty so the divergence test "asserts nothing" (:274-284).
+- **Bears on:** DICE, MB, PC, SC, FA (threadwork), PROCESS.
+- **Content that matters:**
+  - Enrolled ladders: owner; `systems/threadwork/sim/operations.py`; `modules/mass_battle/resolution.py`; `skills/valoria-dice-model/valoria_dice.py`; `systems/social_contest/sim/contest/degree_extension.py` (pool-less form); `modules/combat/core.py` (:154-172). The MB ladder is SPELLED OUT, not imported, in `modules/mass_battle/resolution.py:104-120` (verified by grep: three `if margin` branches with `_DEGREE_EPS`), its docstring naming this test as the only link: a second implementation of the ruled ladder, held equal by measurement (:116-130, :376-381).
+  - `test_every_ladder_is_behaviourally_the_owner` carries floors `len(LADDERS) >= 5`, `len(DOMAIN) >= 1000`, and checks that the domain has fractional nets and fractional obstacles (:334-339); it deleted its own arithmetically-forced `checked == ...` assertion as vacuous (:324-331).
+  - `test_the_held_site_still_diverges` loops over `HELD = {}` and asserts nothing: a standing no-op test (:284-300).
+  - `test_three_band_shorthand_is_a_declared_fold_not_a_ladder`: threadwork `opposing._degree_label` equals the owner's four bands folded to three (Meets/Partial/Failure), over the whole domain (:346-357).
+  - `test_no_new_hand_rolled_ladder` is a regex sweep over `engine, MODULE_CODE_DIRS, skills, tools, tests` for files that PRODUCE two or more distinct band literals, with a registry of owners/adapters/frozen oracles and floors `scanned >= 100` and `'systems' in roots_seen` (:451-477). The `_FROZEN_ORACLE` entries name five `tests/sim/v32-combat-balance/*.py` files that carry the old `2*Ob` ladder on purpose (:364-368, :397-401).
+  - A `RULINGS` dict (:185-269) records Jordan's verbatim rulings in a test module: the margin ladder (2026-08-14); "systems should not need different degree bands ... the wrapper needs to inject the engine in such a manner that it can be modified cleanly" (2026-08-15; executed as `dice_engine.BandExtension`); "DECISIVE_OB for combat is stupid as hell ... Ob should be determined by your opponent" (2026-08-15, executed ED-PC-0058 / PC-02); "yes accept. if you don't have enough dice you don't have enough dice" (a pool-2 contest can never resolve Overwhelming, 2026-08-27, SETTLED); "stop arbitrary fiat capping" (2026-08-27); "one faction write mechanism" (ED-FA-0038); "key contracts and module contracts etc need to be explicitly defined in a centralized hierarchical manner" (ED-IN-0200, RULED NOT EXECUTED). `RULINGS` is read by no assertion: it is prose-in-code that the file's own §0.05 reading makes reference, not mechanism.
+- **Conflicts / stale:** `RULINGS` cites `tests/valoria/test_faction_write_sweep.py` as the guard for "one faction write mechanism"; no such file exists (Glob: none) and the faction block was deleted at plan position 29b, so the cited guard is gone [verified]. The mass-battle ladder is not the single "ONE" implementation the docstring claims for the bands: `modules/mass_battle/resolution.py` keeps its own copy (`:104`). Docstring cites `audit/2026-08-12-degree-vocabulary-census/` (archived). Paths `tests/sim/mass_battle/` are stale (the engine moved to `modules/mass_battle/`).
+- **Open items:** the SC ladder keeps a "declared extension" (pool-aware Overwhelming bar) that is off the tested two-argument domain; its contract lives in `engine/tests/test_sigma_leverage_parity.py::TestPoolAwareDegree` (the addendum marks the kernel for retirement under `05_SC_sc05_kernel_retirement.md`). The "centralized hierarchical contracts" ruling is recorded here as unexecuted.
+
+### tests/valoria/test_deployment_primitives.py
+- **What it is:** pytest file, ED-MB-0025/0026: explicit subunit deployment primitives (density bounds cell count, depth distribution gradient, explicit width x depth) and the `build_envelopment` / `build_refused_flank` explicit-placement fixes.
+- **Status:** none stated; reading: live; one of the few direct tests of the "unit = formation on a cell grid with its own troops" structure the brief asks MB to judge.
+- **Bears on:** MB (geometry, hierarchy, cell grid, formation shapes).
+- **Content that matters:**
+  - `footprint_for(shape, troops, density, None)` bounds troops-per-cell within 40..200 for troops in (133, 200, 400, 1200) and density in (40, 50, 67, 100); 133 troops at 40/cell spans at least 3 cells (:15-25); lower density means more cells (:28-32); shapes `Line`, `Arrowhead`, `GappedLine`, `Column` build 6..10 cells at 400 troops, density 50 (:35-39). The 40/200 bounds (`CELL_FLOOR`, `CELL_CAP`) are hardcoded in the test.
+  - `Subunit(... distribution='front'|'rear'|'uniform')` conserves troops within 1e-6 and shifts density between ranks (:42-59). Width x depth fixes exact cell count (8x2 and 2x8 both 16, :117-125), and the spec path `build_army` forwards `width`, `depth`, `distribution` (:128-144).
+  - `build_envelopment`: wings straddle an explicitly placed centre; explicit wing columns are kept (2 and 20); `build_refused_flank` echelons the refused wing back near the strong wing (:62-114). These test the army-builder helpers in `systems.mass_battle.sim.engine`, not `modules/mass_battle`.
+  - Hierarchy observed: a `Subunit` carries `cell_troops`, `shape`, `troop_type`, `tier`, `starting_position`, `distribution`: the army-to-unit-to-subunit-to-cells nesting is real in the data model at build time; the file does not test whether resolution reads it per level.
+- **Conflicts / stale:** `build_army` imported from `systems.mass_battle.sim.engine` while `Subunit` and `footprint_for` come from `modules.mass_battle` [UNVERIFIED how the two relate]. Unused `import os, sys`.
+- **Open items:** no loadout (primary/secondary weapon) key appears in any spec here; troop type is a single string, which bears on the brief's mixed-weapons question.
+
+### tests/valoria/test_descriptor_registry.py
+- **What it is:** pytest file, W1.13, revived 2026-07-08 (OPT-AV-7), re-pinned at CR-84 (ED-IN-0328): the descriptor registry loads, the ten attributes, alias preservation.
+- **Status:** none stated; reading: live.
+- **Bears on:** CHAR (attribute roster), CORE (registry).
+- **Content that matters:**
+  - The ten attributes in order: body strength, endurance, agility; mind focus, acuity, will, perception; social attunement, charisma, grace (3/4/3 by category, :29-33, :55-57). Aliases resolve case-insensitively (Spirit to will, Cognition/Reason to acuity, Presence to charisma, Vitality to endurance, Dexterity/Coordination to agility, :60-72). `Recall` retired and unresolvable (:75). `Bonds`, `Sincerity`, `Affability` resolve to `attr.social.bonds` with `deprecated: True` (:119-127). Composure and Resolve are derived values, not attributes (:130-137).
+  - Alias preservation is a function `_lost(reg)` run both on the real registry and on a planted copy (Dexterity dropped; Charisma retargeted) which must name exactly that loss (:93-108): a planted control for the assertion.
+  - Uniqueness of every name/alias/key across the roster (:140-147).
+  - The registry is opened with a CWD-relative path (`open('references/descriptor_registry.yaml')`, :37, :101), so the file passes only when run from the repo root.
+- **Conflicts / stale:** the docstring's path `tests/registry/test_descriptor_registry.py` (:1) is old. The combat files use attribute names `att`, `agi`, `strength`, `faculty` (`test_combat_lever_sign_safety.py:79-81`); the mapping from the ten registry keys to those combat inputs is not tested here.
+- **Open items:** none.
+
+### tests/valoria/test_descriptor_registry_category_b.py
+- **What it is:** pytest file, W3 item 4 / OI-30a / ED-IN-0059 / ED-IN-0096: known-answer parse test for the eight "Category-B" scalar registrations in `references/descriptor_registry.yaml`.
+- **Status:** none stated; reading: live but weak; guards a registration list, not behaviour.
+- **Bears on:** CORE (registry), CHAR/FA/SE/WR (the eight scalars span personal, province, settlement, clock, faction).
+- **Content that matters:**
+  - Exactly eight entries with keys `pc.wounds, pc.poise, pc.initiative, prov.turmoil, set.accord, clock.season_counter, fac.coup_posture, fac.succession_status`, one kind `personal_track`, and eight pinned names (:31-54): a count and set pin on a registry listing.
+  - `source` of each entry must contain `module_contracts.yaml` (:57-61); `personal_track` must appear in the first 2000 bytes and `# KIND:` exactly once there (:64-74), a text-position pin because "no code enforces" the KIND enum (:65-67).
+  - `test_category_b_note_flags_registrations_not_schema_bindings` ends with `section_comment_present = True; assert section_comment_present` (:81-82): an assertion that cannot fail. It asserts only that `note` is non-empty.
+- **Conflicts / stale:** the faction rows (`fac.coup_posture`, `fac.succession_status`) are in `category_b_scalars` while `test_descriptors_runtime.py:8` says the `fac.*` registry block was deleted at plan position 29b [UNVERIFIED whether category_b rows survive that deletion; the test is presumably green].
+- **Open items:** "C2 stays out of scope (fork 11, J)" (:35).
+
+### tests/valoria/test_descriptors_runtime.py
+- **What it is:** pytest file: the engine reads the cooked `engine/engine_params/descriptors.json`, not the YAML; the ten-attribute sentinel; the ratified-but-unimplemented register.
+- **Status:** none stated; reading: live, with two tautological assertions.
+- **Bears on:** CORE, CHAR.
+- **Content that matters:**
+  - Source-text test: `engine/substrate/descriptors.py` source contains `descriptors.json` and, after the docstring (`split('"""')[2]`), not `descriptor_registry.yaml` (:23-28): observes text, fragile to docstring layout.
+  - `len(descriptors.ATTRIBUTES) == 10`, `ATTRIBUTES_PENDING_TENTH is None`, `attr.mind.perception` and `attr.social.grace` present, `attr.social.bonds` absent (:31-38); the falsifier test feeds the exporter a nine-attribute registry via monkeypatch and requires `count == 9` and the sentinel (:41-55).
+  - `EXPECTED_UNIMPLEMENTED = set()` and `unimpl` from `descriptors.json['unimplemented']` must equal it (:72-99); every present row needs `needs` and `why_it_matters`. The register is EMPTY, so the loop at :97-99 iterates nothing. `test_the_unimplemented_register_guard_can_observe_an_unauthorised_deletion` asserts `{'faction_L'} != set()` and two similar inequalities (:102-114): constant comparisons that cannot fail on any code change.
+  - `tools/export_descriptors.py --check` returns 0 (:117-121): a round-trip check for the exporter (a kept pattern under §0.1).
+  - Prose records that `fac.intel`, `faction_L`, `per_stat_floors` rows left the register by deletion of `game_state.py`, `Faction` and the `fac.*` block at plan position 29b (:66-71); "An empty register is ... not evidence the register is complete".
+- **Conflicts / stale:** docstring says "same discipline as keys.py vs key_types.json" (:24); the Key substrate is RETIRED (ED-IN-0232) and `keys.py` is gone; the reference is to a retired thing, in a docstring only.
+- **Open items:** the file itself says nothing catches a ratified item that never reaches the `unimplemented` block.
+
