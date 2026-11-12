@@ -1,0 +1,98 @@
+# FA-P5 — hygiene: stale register rows, the refusing clause, unreached queries, two names, retired contract rows
+
+## Status: PROPOSED
+
+Source: `audits/06_FA_audit.md` F-FA-09 to F-FA-12, §6.2 R-09 to R-15, R-18.
+
+## What it changes in `engine/season/` at runtime
+
+Items 1, 2, 5 and 6 change nothing at runtime. Item 3 deletes two functions nothing calls. Item 4 renames
+one Record kind, one Event kind and one verb: behaviour is unchanged, and `World.content_hash()` moves for
+every world whose log or store uses them, which is declared.
+
+## The problems (evidence), and the resolution for each
+
+**1. Two register rows describe a tree that no longer exists (R-13).**
+`engine/season/hole_register.yaml` H-230 (`:4863`) opens "IN-61 … STOPPED AT ITS DESIGN-FIRST STEP, UNBUILT"
+and its `default:` says "`succeed` stays declined … no `successions` registry". At `601e715`:
+`loop/effects_governance.py::_eff_succeed` (`:145-182`), `data/rosters.py::SUCCESSIONS`,
+`state/gate.py::may_claim` (`:770-786`) and `death_subjects` (`:1819-1832`, which names each seat `hold` a
+death closes so witnesses hold a claim about the seat) are all in the tree, and the batch card records
+IN-61, CP-T02-01 and CP-T02-02 as landed at `f9e4cef`. H-206 (`:4551`) says the office and `hold` half of a
+death is unbuilt; `death_subjects` is that half.
+*Edit:* prepend each row's `hole:` and `cite:` with one sentence stating what landed and where, and set
+H-230's `default:` to the built state; keep the measured history below it (the register's own R0 rule:
+append, never rewrite the measurement). Ladder step 1.
+
+**2. Three refusals name no clause (R-14, H-252).** `_req_confer` and `_req_establish` return a bare
+`False` at each of their clauses (`loop/predicates.py:140-179`, `:366-425`), so `aperture`'s DECIDING READ
+prints `no-read` (`establish` 7 of 7 and `release` 15 of 15 at seed 0, two seasons). `_req_release` and
+`_req_revoke` already route each refusal through `_refuse(clause, ids)` (`:62-75`), which writes a trace
+row and nothing else.
+*Edit:* each `return False` in the two predicates becomes `return _refuse("<the clause, in the words of its
+own comment>", f"{a.actor} …")`. No Event, no claim, no hash. `harness/aperture.py`'s `no-read` class then
+reads the trace row for a predicate row. Ladder step 4.
+
+**3. Unreached query surface (R-10).** `grep -rn "\.superiors(\|faction_q\.holdings(" engine/season
+--include=*.py` outside tests returns nothing; `purview` and `subordinates` are read only by
+`harness/interactions.py:123-127`.
+*Edit:* delete `faction_q.superiors` and the standalone `faction_q.holdings` with their tests
+(`test_faction_q.py`'s three cases for them); `resolve(...).holdings` is unchanged. Keep `purview` and
+`subordinates`. Keep `head`'s `Tenure.degree` branch, which `04` §B.6.1 and §F.34 name, and add one line at
+the site: unreachable until something writes a degree on a `commit`. Ladder step 5 (`ID-13`: a role no
+caller requires is not declared).
+
+**4. Two names that say the opposite of what the thing does (R-11, R-12; H-262, H-298).**
+A `dispensation` is an order; the ordinary word means an exemption. The verb `oblige` binds only the actor;
+the ordinary word means to bind another.
+*Edit, kind:* `rosters.yaml: record_kinds.dispensation` → `writ`; `verb_table.yaml` `issue`'s `emits:
+dispensation.issued` → `writ.issued`, and the three `existence … kind: dispensation` cells → `kind: writ`;
+`references/names_index.yaml` if it carries the term. The code already says "writ" in every function and
+note that touches it (`writs_held`, `WRIT_MINTING_VERB`).
+*Edit, verb:* the VERB row `oblige` → `swear` (the code's own word: `sworn_to`, `_swear`), with its effect
+registration, predicate key and `duty.taken` unchanged. The Tenure KIND stays `oblige`, which Layer 1 names.
+Each rename is its own commit and a declared mover, as the `refract` → `construe` and `levy` →
+`requisition` renames were `[ASSUMPTION; medium; Jordan to correct; revert: the old spelling]`. Ladder
+step 4.
+
+**5. Contract rows for a retired faction (R-09).** `references/module_contracts.yaml` `modules:` carries
+`faction_state` (`:127`) and `faction_politics` (`:797`) with stored state ("faction stats 1-7",
+"Standing", "Coup posture"), Key-registry vocabulary and `doc:` pointers into `.designs/`. The stat-vector
+faction was deleted at plan position `29b`, the Key substrate retired by ED-IN-0232, and no code under
+`engine/season/` or `modules/` implements either row. Known readers of the names:
+`tools/build_engine_atlas.py:179`; `engine/season/manifest/registry.py:55-58` parses the `modules:` list.
+*Edit:* in one commit, reduce each of the two rows to its `module:` name and a one-line note (a faction is
+`engine/season/queries/faction_q.py`'s view; it has no contract, no state and no composition role), and
+re-point or drop `build_engine_atlas.py`'s `VALORIA_CONTRACTS` entry. Before the edit, list every reader of
+the two rows' fields (`grep -rn "faction_state\|faction_politics" tools engine tests`) and name them in the
+commit; this proposal found the two above and did not trace the workbench census. Ladder step 2.
+
+**6. Two process rows.** `registers/handoffs/HANDOFF_FA.md` row 3 orders authoring a merge into a
+quarantined `.designs/` file "in the same pass as E11", in the cell that says v9 schedules none (R-15).
+*Edit:* delete the row; ED-FA-0021 stays ratified as intent, and what it intends is built as a fold by
+FA-P1. The B10-17 card's CP-T09-06 row says `off_duke_valorsmark`'s conferral is `inheritance`
+"replacing `appointed`"; `offices.yaml:206` reads `conferral: null` (R-18). *Edit:* the card's words become
+"replacing `null`".
+
+## Gate (execution artifact)
+
+`python -m engine.season.harness.register --check` after item 1; `aperture 2 0` printing a clause in place
+of `no-read` for `establish` after item 2; the `engine/season/tests` files that import the deleted
+functions pass after item 3; for item 4, the pre- and post-rename `aperture 2 0` outputs are identical but
+for the renamed strings, and the two-season `build_realm(0)` hash is re-recorded old to new in the commit
+body; `tools/valoria_local.py --staged` after items 5 and 6.
+
+## Falsifier
+
+For item 4, an `aperture` diff showing any count change is a rename that moved behaviour, and the commit is
+wrong. For item 3, a grep that finds a caller is the falsifier, run before the deletion.
+
+## NERS reading
+
+Not a design object. E alone would be the wrong reason to do any of it; the reason is that a register row
+that says a built thing is unbuilt, and a contract that describes a deleted module, mislead the next reader
+of a repository that has no memory between sessions.
+
+## Cost class
+
+Edit. Six commits; two are declared hash movers.

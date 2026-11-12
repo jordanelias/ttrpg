@@ -2,7 +2,7 @@
 
 ## Status: REFERENCE (an audit; resolves nothing at runtime)
 
-## Read at: 601e715 (working tree)
+## Read at: 601e715 (working tree; code, registers and workplans read at this commit — the commits after it on this branch touch only `proposals/2026-11-12-subsystem-audit-suite/`)
 
 Short names: `es/` = `engine/season/`; `K/` = `systems/social_contest/sim/contest/` (the kernel);
 `PS/` = `proposals/2026-09-05-proceedings-subsystem/`; `PD/` = `proposals/2026-10-29-parliament-and-debate/`;
@@ -690,7 +690,10 @@ needs one today: choosing the row a case is heard under (CR-61), choosing which 
    proofs and effort. A is a world of entrenchment; B is a world where the better arguer usually
    wins. Ladder: not superseded; not irrelevant (it governs every contested social act once scores
    are seated); the design documents restate the ruling; precedent (combat, mass battle) is
-   two-sided but a different mechanism; the architecture is indifferent. It survives.
+   two-sided but a different mechanism; the architecture is indifferent. It survives. Referent: the
+   archived head resolved an exchange by both orators rolling and the higher winning
+   (`social_contest_v30.md` §4 Step 4) — a third form, two-sided, which neither option restores and
+   which the ruling of 2026-08-14 post-dates.
 2. **Whether anything ratified for the kernel is kept as design (G-24).** `ED-1056` to `ED-1062`
    ratified, for `K/`: the Face scale-binding, weighted-by-standing panel ballot, the Guild
    Arbitration rebind, the venue-derived Guilds boost, the armature's fourth axis, the two-genre
@@ -721,7 +724,7 @@ Scratchpad: `/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379
 | 12 | self-plea probe: `contest_input(w, [p], verb="speak", subject=p)` on `probes.tiny_world` | — | opposition `None`; a third party against him: 14.0 |
 | 13 | `python -m engine.season.harness.corpus_run` | 0 | exit 0 (`corpus_run.txt`): 143 cases; degrees by verb in §1; 23 of 67 verbs executed; `determine` only refused; ARC ends NOT-COMPUTABLE |
 | 15 | exact odds at the proposed rate (`band_odds(6, 1.2)`, `band_odds(3, 2.4)`) | — | 0.630 and 0.124 Success or better; SC-P5's falsifier re-worded on this reading |
-| 14 | `git status --short` | — | see the receipt |
+| 14 | `git status --short`; `git diff --name-only 601e715 HEAD` | — | no path outside `proposals/2026-11-12-subsystem-audit-suite/` is modified or untracked; this lane wrote its audit and eight `05_SC_*` proposal files and committed nothing (the orchestrator's commits carry the suite's files) |
 
 Not run: `pytest` (by instruction). Not re-run: H-284's fold, H-296's arrest sweep.
 
@@ -870,3 +873,111 @@ cast's attributes (not an SC file); (3) SC-P7 edits 3–4 (the generic trait sou
 character surface names its trait carrier; (4) SC-P5 if §11 item 1 is ruled for B; (5) the
 trained-below-untrained asymmetry is the pool reader's owner's to decide — SC states it and asks that
 the merged surface make "absent" and "0" the same or say why not.
+
+## 15. The NPC-facing and chooser-facing surface
+
+The intent for NPCs and the chooser is the CHAR lane's to state
+(`audits/02_CHAR_audit.md`; at the time of writing its §1, §2 item 8 and F-CHAR-01, F-CHAR-02,
+F-CHAR-05 and F-CHAR-11 were on file and its intent section was not). This section cites that
+audit for the intent and judges only this subsystem's surface.
+
+**(a) What the subsystem needs of an NPC and of the chooser.**
+
+| question | as built | site |
+|---|---|---|
+| who decides to contest | the person, through the one chooser; no social act is formed by the subsystem | `decision/choose.py`; `loop/deliberate.py` |
+| on what information | his own ledger and pursuits; for a contested candidate that writes in a band, his believed chance (`View.odds`) | `sigma.py::believed_chance`, `believed_odds_query` |
+| with what temperament and conviction | the pursuit term × the verb's alignment, plus the stance term (negated toward an opponent since CR-16) | `choose.py::score_terms`, `stance_term` |
+| at what budget | scene slots; `effort` e costs an extended scene | `choose.py::settle_efforts`; `Fixtures.extended_scene_cost` |
+| with what visible reason | the question that occasioned the act (a docketing claim, a sitting's firing) in the Event's causes; refusal reads in `observed` | `world_q.docket_question`, `sittings_before`; `_act_events` |
+| who decides a verdict | nobody: the judge chooses WHEN to `determine`; the outcome is a default roll | `verb_table.yaml` `determine` |
+
+**(b) One interface for player and NPC.** Yes. A player is a callback on
+`harness/play_surface.py::dispatching_chooser` receiving the same `(Person, View, Sensation, budget)`
+and returning the same Acts; the social provider cannot tell the two apart (`host` is unused). The
+kernel's harness is the exception and retires (SC-P2). CHAR's item 8 states the same from its side.
+
+**(c) Where the subsystem hard-codes an NPC rule (scripting drift).**
+
+1. `world_q.proofs` spends every proof the speaker holds: a decision the speaker would make, taken
+   by the resolver (SC-P3 edit 2 returns it to the chooser).
+2. The verdict: a judge's own regard, pursuits and skill do not enter it (F-SC-13).
+3. In the kernel: `policy.py`'s eleven scripted policies stand in for a decision procedure;
+   `faction.py::Faction.fixed_lean` hard-codes one faction's vote on one motion (an entity
+   special-case); the harness rotates the AI's style by exchange index. All unreached; all retire.
+4. Not SC's but starving it: the person-side declines keyed by verb (F-CHAR-11) and the formation
+   that aims `argue` and `tell` at absent hearers (F-SC-08; F-CHAR-05 counts the refusals an actor
+   could have foreseen).
+
+**(d) What makes an NPC characterful here, and legible afterwards.** Distinguishable people must
+produce distinguishable contests on four counts, none of which holds in the realm today: a pool
+that differs (attributes unseated); a choice inside the hearing that his pursuits rank (none
+exists); a judge whose verdict depends on what he holds of the party (`opposed`, held); and effort
+spent where he cares (formed only for verbs that write, so never for a speech). The reason trail a
+narrative needs is: the occasion (present, in `causes`), which score term decided the choice
+(`decision_spread.attribute_top`, CHAR's instrument), what he cited (SC-P8's stages), and the roll
+with the room's term (SC-P1). The first two exist; the last two are proposed.
+
+**(e) Missing, as proposals.** SC-P3 edit 2 (variants as Candidates — the same score for NPC and
+player) and edit 3 (a speech writes, so the chooser prices it and presses it); SC-P1 (the record,
+with `room` and `leverage`); SC-P7 (traits as data); SC-P8 (cited items). One request to CHAR:
+the chooser's term for a hearing should read the believed chance of the VERDICT he is trying to
+move, not only of his own act's band — an interface SC can serve (`odds_of` over the matter's
+`determine`) once `hearing` exists. Not proposed here; named for the holistic stage.
+
+## 16. Evidence and argument: the detective and noir precedent
+
+Sources read: `D_T05.md` and `D_T06.md` (both in full; they carry R4/R5 and T05/T06 row by row), the
+SC lane file §0–§3.1. The questions are the brief's, asked of the engine as built.
+
+| question | answer | evidence |
+|---|---|---|
+| Can a contest take evidence as a typed input? | Partly, for `speak` only. The input is typed as two floats and a quality: `reception` (what the bench holds of the speaker's deeds, signed by each judge's pursuits), `proofs` (the speaker's unmirrored deed claims about the subject), `forgery_quality` (an inquiry's examined Record only). No act names an item; no Record is a proof; the `proofs` roster and each row's admitted kinds are unread. `tell` and `lie` do cite a held claim (`payload["said"]`, the `holds` conjunct) — L.A. Noire's rule, in the loop. | `queries/inputs.py::SocialContestInput`; `world_q.py:792-879`; `sigma.py:199-212` |
+| Can an argument be refuted by a held contradiction? | No. The only answer is the mirror: the opponent holding the same subject and predicate zeroes the proof, without speaking, and it is total in play. A contradiction is weighed person-side, after the fact, when a hearer re-grades a teller whose word disagrees with his own sight (`decision/options.py::record`, `teller_weight`) — never inside a hearing. | `world_q.py:877-879`; H-216 |
+| Does a case's strength come from what is held, witnessed and cited? | By design, in part; in play, no. The room's terms are exactly "what the bench has witnessed of you" and "what you hold of him", but `proof_step` is 0.25, the mirror zeroes it, the fixed ceiling clips a hostile room on a defaulted obstacle, and the verdict (`determine`) reads none of it. A realm contest is 2 dice against Ob 2. | `roll.py:141-154`; F-SC-01, F-SC-03 |
+| Can an NPC build a case and be answered by another NPC? | It can gather, docket and speak; it cannot be answered. `research` and `surveil` roll (639 and 236 in `corpus_run`), petitions are filed and carried, cases opened, speeches made on docketed matters (36 in twelve seed-seasons). A second person can speak on the same matter — the accused himself since CP-T05-02 (ii) — but no speech refers to another and the bench's verdict reads neither. D_T06 found 0 found-deposits in three seeds, so the gathered case is thin at its source (FI's finding, not re-run here). | §1 runs; `sigma.py:210` |
+| What do falsehood, forgery and concealment do to a contest and to later trust? | `lie` is a contested telling whose success plants a false claim; the hearer's later trust in the teller falls only if his own firsthand contradicts it (built; rarely exercised). A forged Record read by someone deposits like a true one and its claims count as proofs; its quality resists only an `examine`, and is inert at the fixed ceiling. Concealment hides nothing from those present and has no reading in a hearing. | CR-27; H-210; D_T06 rows 18, 44, 62, 66 |
+
+**What the precedent asks that the engine can give without an authored truth.** L.A. Noire: cite a
+held item or lose the option — SC-P8 edit 1. Ace Attorney and Danganronpa: testimony on the record,
+then an item presented against it — SC-P8 edits 2–3, with "contradicts" asked of two held items and
+never of the Event log. Pentiment: the judgment binds whatever is true and the community remembers —
+built in shape; SC-P6 gives it its other verdict. Guild 2: evidence with strength and expiry weighed
+before rhetoric — SC-P8 edit 4, on claims that already decay. Shadows of Doubt: a lying witness —
+`lie` exists; SC-P8 edit 5 is what a caught forgery costs. Obra Dinn and Golden Idol's verifier:
+refused by axiom and not proposed.
+
+**Interface needed from fieldwork's evidence model** (stated in full in SC-P8): a citeable item
+with a stable id and a kind from the one `proofs` roster; a finding on a Record that says whether it
+is forged, as a term on the Event `find_trail` already produces; one importable owner of
+"contradicts"; examination staying an inquiry and never a contest.
+
+**Conflicts with ruled items, named and not resolved:** the archived *"+1D per Finding cited"* (dice)
+against the ruled obstacle form and `ED-SC-0034`'s pool-only latitude (SC-P8 keeps the obstacle);
+the no-verifier axiom (SC-P8 compares held items only); F8 (every read is the actor's ledger, a
+Record, a Tenure or an Event).
+
+## 17. What was read of `.designs/` and `.audit/`, and what it changed
+
+Neither tree is authority; nothing proposed makes code read either.
+
+| source | read | bearing |
+|---|---|---|
+| `.designs/systems/social_contest/reference/social_contest_v30.md` | in full (732 lines) | §5 "four models"; §11 item 1's archived form (a paired compare); Obligations ↔ `oblige`; the three-way heresy verdict ↔ SC-P4 and SC-P6; chain contests ↔ SC-P3's case-file memory |
+| `…/social_contest_v30_infill.md`, `…/social_contest_currency_v1.md` | in full | *Let It Ride* (a resolved question is not re-contested unless circumstances change) — the loop has the opposite: a failed `determine` is re-heard every season (supports SC-P6) |
+| `…/social_contest_system_v2.md` (SUPERSEDED), `…_index.md` files, `…_flow_skeleton_v1.md` | Status lines only `[SKIPPED: superseded / section maps / traced structure with no design content]` | — |
+| `.designs/systems/_architecture/reference/auto_manual_resolution_duality_v1.md` | in full | §5 (the duality doctrine); §9; G-35 |
+| `…/videogame_mode_spec.md` §1.2, `…/scale_transitions_v30.md` and `…/player_agency_v30.md` (contest lines only) | by section | a scene is 1–3 interactions and a multi-exchange contest may cost two scene actions (the shipped `interactions_per_scene` 3, `extended_scene_cost` 2) — the archived basis for a hearing as a scene of `speak` acts; Fieldwork → Contest (+1D per Finding) — G-33 |
+| the other fourteen cross-cutting `.designs` documents the dossier lists (`campaign_*`, `cogload_*`, `companion_app`, `complete_systems_reference`, `conflict_architecture_proposal`, `early_game_ignition_analysis`, `engine_atlas_v1`, `integration_proposal_v30`, `throughlines_complete`) | not read `[SKIPPED: context budget; a grep counted their contest mentions (0–41 lines each) and none was opened]` | none claimed |
+| `.audit/2026-08-06-social-contest-three-lens-audit/00_synthesis.md` §0; `03_…adjudication.md:84-130` | by section | §5 (three models; three old findings re-verified, one now false); §7 (the persistent board) |
+| `.audit/2026-07-01-contest-player-interaction/player_interaction_walkthrough_v1.md` §0–§2 | by section | G-34 |
+| `.audit/2026-07-08-contest-settlement-faction-interface/interface_report_v1.md` | head only | Domain Echo and settlement-targeted Obligations as the archived cross-scale intent (§10: designed only) |
+| `.audit/2026-06-03-contest-groundup/engine.py` | head | the kernel's origin of `OVERWHELM_SIGMA` and the local σ-engine (SC-P2's extension finding) |
+| the Gate A, B and C packets (four directories) | not opened `[SKIPPED: their decisions are restated in `K/` source comments read in full, and they concern code SC-P2 retires]` | G-24 / §11 item 2 rests on the `K/` comments, not on the packets |
+
+Old findings re-verified before use: three-lens F9 (`hard` dominated) — still true; "Gate C
+mechanisms unreachable from `build_contest`" — still true; "the campaign resolves every contest as
+logos against logos" — now false (the path is deleted); the lane file's "`speak` is uncontested" and
+"`argue`, `seize` absent" — now false; D_T05 row 75 (computed cases docket Rungs) — now false at
+seed 0 (all 11 docketed matters are persons after two seasons); D_T05's "`argue` has never executed"
+— now false (41 and 52 executions in six seasons).

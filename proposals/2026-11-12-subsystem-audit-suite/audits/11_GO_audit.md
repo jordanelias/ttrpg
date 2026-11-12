@@ -2,11 +2,26 @@
 
 ## Status: REFERENCE (an audit; resolves nothing at runtime)
 
-## Read at: b1e5a08 (working tree; begun at 601e715, the two differ only in this suite's own files)
+## Read at: ad07a9a (working tree; begun at 601e715; `git diff --stat 601e715 HEAD` outside this suite's directory is empty)
 
 ## 0. Verdict
 
-VERDICT-PLACEHOLDER
+**Not yet, and not because what is built is unsound.** GO in this repository is not a subsystem that
+runs; it is the oracle half of a port contract of which one position in ten is built (GO-07, the
+portable digest), and that position holds: the realm's hash is identical under three `PYTHONHASHSEED`
+values and three CPython minors, every draw of a computed season is keyed, and a typed player surface
+exists whose played and automated runs are one code path. The contract the port gate (B10-20) would
+freeze does not yet prove a port: its two-season slices enter the combat engine for 0, 2 and 4 fights
+and fight one field battle across seeds 0–2, the fights' generators are built outside the factory the
+draw recorder is planned on, replay never exercises the port's own samplers, the float arithmetic that
+decides outcomes is pinned nowhere, 91 mass-battle tunables are read from the process environment and
+exported nowhere, and 172 in-loop halts have no portable form. **The single largest obstacle to a
+dynamic emergent-narrative game is the shape of the freeze itself:** it pins the *behaviour* of a
+58,000-line re-implementation while the season loop reads three requirements met of nine, so the port's
+dominant cost (re-porting every mover) is scheduled ahead of the game, and the part of the port that
+makes emergence legible to a player — why a choice ranks, what the person believes the odds are, what
+an act did — has an owner on neither side. Five proposals carry the repairs; one question (Layer 1's
+"integer domain") survives for Jordan.
 
 ## 1. What it is, as coded
 

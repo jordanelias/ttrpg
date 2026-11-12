@@ -102,7 +102,19 @@ Total War). The port needs four things from the oracle for a battle a player man
 
 Auto-resolve and the played battle are then one call with and without the decider, which is what keeps
 them consistent, and the module-scene pin covers both: the automated outcome, and a played run whose
-decider returns the default orders reproducing it.
+decider returns the default orders reproducing it. That is the doctrine the tree already holds
+(ED-SC-0013, ruled 2026-07-08: "one engine, event-parameterized … auto = the kernel run headless, played
+= the same kernel run interactively"; the text is in the quarantined
+`auto_manual_resolution_duality_v1.md`, read for intent and loaded by nothing). Its one open fork, the
+calibration tolerance between fidelities, needs no number under this shape: the two fidelities are equal
+on matched inputs by construction, and the pin is the check. A "witnessed" battle is the automated call
+with the after-action reading shown; it adds no mechanism.
+
+The quarantined scenario-visualization audit (2026-07-29, lesser weight; its constants re-verified:
+field 51, 11 subunits, 10,000 troops a unit) found that a single-subunit body of 25 cells has no
+geometry to watch. A field the seam builds from person weights alone will be such a body. Whether the
+order of battle carries subunits is MB's; the pin's three field scenarios must include one that does,
+or the trace has nothing in it for a port to get wrong.
 
 ## 4. Halts and refusals
 

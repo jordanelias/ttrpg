@@ -124,7 +124,18 @@ battle, the social contest and fieldwork have none; their lanes design the decis
 For a managed battle the port then shows four things, each a typed reading the module returns: the
 orders in force and the vocabulary to change them (`battle_orders.json`); the field per tick; the
 intervention point (the decider's call); and the after-action reading (`massbattle.py::_person_report`
-today: who broke first, each person's survivors; a fuller one is MB's).
+today: who broke first, each person's survivors; a fuller one is MB's). The three fidelities the tree's
+doctrine names (ED-SC-0013: played, witnessed, auto) are then one call: with a decider; without one,
+with the per-tick reading and the aftermath shown; without one, with the aftermath alone. No fidelity
+has its own formula, so none can be chosen for a better expected outcome.
+
+**Intent read, not loaded.** The quarantined UI set (`valoria_ui_ux_v4_1.md`) is written against phases
+and clocks the season loop retired, and nothing here makes code read it. Two of its rules survive as
+tests of this proposal: Oath II's third violation test ("Does the UI reveal information the character's
+perception cannot render? If yes → FAIL") is what `explain`'s no-`World` signature enforces; and its
+Slate dock's cap of twelve visible entries is a presentation rule over the offer (22 and 32 rows in the
+sampled deliberations), which the port applies to `OfferRow`s in rank order without dropping any from
+the reading.
 
 ## What is data and what is code, for the chooser
 
