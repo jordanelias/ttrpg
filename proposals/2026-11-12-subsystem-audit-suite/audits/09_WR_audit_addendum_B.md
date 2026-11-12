@@ -627,11 +627,117 @@ introduced. Proposal edit 3; the flip of `route_pricing` then waits only on its 
 
 ## 6. The 48 primary hole rows not read by the first lane, dispositioned
 
-<!-- SECTION-6 -->
+**How these were read.** Each row was opened at its register line in `engine/season/hole_register.yaml`
+and its `grade`, `default` and `cite` fields read to the first 470 to 640 characters (the cite of a long
+row runs to several thousand; its head carries the status sentence and the measurement). That is more
+than the dossier's 300-character excerpt and less than the whole cite, and is stated so no row below is
+taken as read to its last word. "Verified" means checked against code or a run named in §9 or in the
+first audit's §12; "as the row says" means the row's own closing sentence was read and nothing here
+contradicts it. The eight rows the first lane read in full (H-176, H-186, H-211, H-235, H-236, H-238,
+H-257, H-274) are not repeated. The work order counts 48 unread rows; the dossier's 56 less the seven of
+those eight that are dossier rows (H-236 is not one) is 49, and all 49 are below. H-118 carries no
+register line in the dossier and is dispositioned last.
+
+| row | register grade | disposition at HEAD | evidence | action |
+|---|---|---|---|---|
+| H-04 `q`'s producer | assumption | **closed** (the row: "DISCHARGED BY `W5`"; four sources, a roster) | `questions_for` forms every act | none |
+| H-05 world-generation roster | assumption, **empty cite** | **closed in code, unrecorded at the row** | `build_realm(0)`: 83 persons (first audit E-13) | the row's cite names its closer; text in `09_WR_B_pointer_text_for_the_orchestrator.md` |
+| H-27 travel-leg ownership | assumption | **closed, and the default is superseded in form**: the row says "as the Tenure's SUBJECT"; the code holds the leg as `Person.travel_leg` | `loop/matter.py:831-843`; `travel.ended` 24 | row text; CP-T10-01 changes the leg's element to a tuple and must update it |
+| H-32 `judging_set_rule` | assumption | open, narrowed; **not WR's** (SC) | as the row says | none |
+| H-34 establishment size | ruled | **closed as moot** (field deleted at `17a`) | as the row says | none |
+| H-40 claim decay | assumption | **closed**; shipped 5 a season | `data/fixtures.py:328` | cost is first audit R-14 |
+| H-51 what demands an individuation | ruled | **closed by a producer** (`person.demanded`) | as the row says | none |
+| H-65 `requires:` is prose | assumption | open, narrowed; **not WR's** (CORE) | as the row says | none |
+| H-125 body step | assumption | **open as a value**: ships 10, "Not a claim that 10 is the magnitude"; its own test is "IS STARVATION A SEASON OR A CAMPAIGN" | `body.changed` 37 to 41 in season 0 and at most 1 after, three seeds | CR-22 re-derives it; the test's answer depends on whether a fed body mends, so it should be read with first audit R-13's signed step on, not before (a sequencing note for B10-18: CR-22 precedes CP-T10-04 in the card) |
+| H-95 two scale vocabularies | ruled | **closed in effect** (first audit E-15) | — | none |
+| H-102 propagation loop | measured | **open as a sign, measured as an edge**; the row's own caveat stands ("under this instrument's own fixtures it cannot amplify at all") | cross edges 286 to 366 over four arms (§9 EB-01) | none; the ablation of §3.5 is a second reading of the same edge |
+| H-103 claim decay as a bound | measured | **closed** | as the row says | none |
+| H-107 `Event.subject` | measured | open; **not WR's** (CORE). It bears on §3.3: the chronicle's `about` must come from `subject_of(act)` and never from `Event.subject`, which "IS THE ACTOR" for an act-emitted Event | row cite | noted in `09_WR_B_chronicle_that_tells.md` |
+| H-110 band crossing loses its Event | ruled | **closed, dissolved** | as the row says | none |
+| H-129 `last_emission_of` | measured | **closed** (both halves fixed, per the row) | as the row says | none |
+| H-130 a write can apply and still raise | measured | open; **not WR's** (CORE) | as the row says | none |
+| H-135 a no-op closure write still emits | measured | **open, and it is most of this lane's wear signal**: 248 of the 322 `condition.worn` Events a season are writes of zero | §9 EB-07 | F-WR-21; CORE owns the gate, WR the reading |
+| H-139 deleted Tenure invisible to the diff | measured | open; **not WR's** (CORE) | as the row says | none |
+| H-150 garrison strength unreachable | assumption | open; **not WR's** (MB). Note: `garrison` wears at 0 and has no band floor, so the Site's `condition` never moves | §9 EB-07, EB-08 | MB |
+| H-159 `oblige` term | assumption | **open as a value, and now observed**: ships 4; the season-5 closures are its first maturation | F-WR-13 (27, 27, absent by seed) | FA; the row's "NOT MEASURED" is out of date |
+| H-164 how far one act raises a fabric | assumption | open as shipped; unreached, because no fabric is below its ceiling | §9 EB-07 | none until a Site falls |
+| H-167 capacity floor | assumption | open; **not WR's** (SE) | as the row says | none |
+| H-168 `migrate` executes only hand-built | measured | **stale**: `migrate` 16 of 116 and 36 of 217 executed | first audit E-07, E-08 | SE re-reads |
+| H-172 `Claim.round` | measured | **closed in effect** (first audit S2) | — | re-grade at the row |
+| H-185 authored ought's predicate | absent | held; **not WR's** (CHAR) | as the row says | none |
+| H-208 bodies-clock values | assumption | **built dark, deferred by ruling** | fixtures 0.0 | first audit §11 item 2 |
+| H-209 a dead victim's death claim never becomes a question | measured | open in mechanism; **its measurement no longer reproduces**: it counts 11 `person.died` claims at seed 0, six seasons, and seed 0 has no death in six seasons at HEAD | first audit E-08 | F-WR-22; re-measure after the duel path executes |
+| H-215, H-216, H-223 | assumption | open as values; **not WR's** (SC) | as the rows say | none |
+| H-225 a killing turns nobody toward the killer's faction | measured | open; same staleness as H-209 (its counts are of death claims at two seasons, seeds 0 to 2) | first audit E-05, E-12 | F-WR-22 |
+| H-227 a witness does not form a `commit` from a petition | measured | open; **not WR's** (FI/SC) | as the row says | none |
+| H-230 the heir is never told the throne is vacant | measured | open; **its premise no longer occurs**: "SEED 0: the King `p_npc_020` dies in season 1"; at HEAD nobody dies at seed 0 in six seasons | first audit E-08 | F-WR-22 |
+| H-232 `pardon`, `raze` formed and refused | measured | open | `raze` 0 of 51, `pardon` 0 of 6 | CHAR/FA |
+| H-242 hunger bands | assumption | **closed as an injected value** | as the row says | none |
+| H-243 stock report | assumption | **closed as an injected value** | as the row says | none |
+| H-245, H-246, H-247 practice | assumption | **closed as injected values, live** | `data/fixtures.py:475-479` | §7 |
+| H-278 `convene` asks no purview | measured | open; **not WR's** (FA) | as the row says | none |
+| H-283 ambition is a switch, not a weight | measured | open; **not WR's** (CHAR). §3.5 is a second reading in the same direction: removing authored ambition raises world-changing acts | §9 EB-01 | cross-listed |
+| H-287 standing and backers do not reach the roll | measured | open; **not WR's** (SC) | as the row says | none |
+| H-291 hand-built `establish` skips purview | measured | open; **not WR's** (FA) | as the row says | none |
+| H-307 housing ignores dwelling condition | measured | open; **not WR's** (SE). Note: dwellings wear at 0 and have no floor, so their condition cannot change in play | §9 EB-07 | SE |
+| H-311 a failed interrogation is spendable as proof | measured | open; **not WR's** (FI/SC) | as the row says | none |
+| H-326 the fieldwork head's tracks have no carrier | measured | open; **not WR's** (FI) | as the row says | none |
+| H-350 everyone fights with the same kit | measured | open by design (content); **not WR's** (PC) | as the row says | none |
+| H-356 docket lapse | assumption | **closed as an injected value, and observed**: ships 4; "a matter docketed in season t … lapses as t + 5 opens", which is the season-5 spike of F-WR-13 | first audit E-08 | none |
+| H-118 `content_hash` | measured | **closed** | hashes reproduce across this file's and the first lane's processes (§9 EB-01) | none |
+
+**Counts.** 49 rows: 18 closed (H-04, -05, -27, -34, -40, -51, -95, -103, -110, -118, -129, -172, -242,
+-243, -245, -246, -247, -356); 6 open in this lane or bearing on it (H-102, -125, -135, -159, -164,
+-208); 4 whose measurement or premise is stale at HEAD (H-168, -209, -225, -230); 21 another lane's, read
+and left.
 
 ## 7. Capability-authoring consequences
 
-<!-- SECTION-7 -->
+**Not redone.** The capability authoring surface is CORE's
+(`proposals/01_CORE_capability_authoring_surface.md`: one `capabilities:` block in
+`references/descriptor_registry.yaml`, kinds `attribute | skill | aptitude | trait`, growth rules
+`train | practice | use`, a `capability:` column on verb rows) and the table of where a capability enters a
+person's own choice is CHAR's (`proposals/02_CHAR_capability_uses_table.md`: `rosters.yaml:
+capability_uses`, forms `about_mid | at_least`, each with a named gain fixture; its third row is already
+`{use: own_state_gate, key: prac.thread_sensitivity, form: at_least, gain: thread_sensitivity_gate}`). The
+DICE audit's §14 maps what reaches a roll. This section states what the design set read for this addendum
+changes in what WR asks of those two surfaces, in their schema, and corrects one request of the first
+audit's §14.
+
+**R-24 · the first audit's "banded scalar" row kind is not needed.** The first audit asked CHAR for "a row
+kind for a scalar aptitude with bands" for thread sensitivity. Read against CHAR's actual proposal, a band
+edge is an `at_least` use with its own gain fixture, and a ladder is several such rows over one key.
+*Decided (ladder step 5):* no third form and no new kind. Thread sensitivity is one `capabilities` row of
+`kind: aptitude`, and every place its value gates something is one `capability_uses` row. That keeps
+CHAR's rule ("a third form is a code change and a design decision") intact.
+
+| capability, as the design set has it | where it bites | today | as data, in the CORE and CHAR schema | what stays code or stays Jordan's |
+|---|---|---|---|---|
+| **thread sensitivity** (0 to 100; ED-678 derives a starting value from lifepath: origin, formation, vocation) | may form `thread_read` (30); may work at each depth (30, 50, 70); what a witness perceives of a working (five bands in v30 §2.3; four in the applications ladder); the Leap's obstacle (2 below 50, 1 from 50) | one field; one fixture gate; the rest are `operations.py` constants (`DEPTH_TS_MINIMUM`, `LEAP_OB_TS_LOW/HIGH`) and unbuilt | `capabilities.rows.thread_sensitivity: {kind: aptitude, scale: {floor: 0, ceiling: 100}, grows_by: []}`; one `capability_uses` row per edge: `thread_read` gate, `working_depth.<depth>` (three), `working_perceived.<band>`; the Leap's two obstacles as rows of the threadwork parameter file keyed on the same edges | the starting value by lifepath is CORE's edit 5 (the character's side) with ED-678's table as its content, Jordan's; **growth** is a rule the closed set does not hold: the design says "exposure teaches" (E-2) and that an Overwhelming working adds one. That is a fourth growth rule or `use` re-read, a design decision (ARC-51), not proposed |
+| **the craft** (the pool a working rolls: Spirit doubled, a history term, sensitivity over ten) | every working | the oracle's `_actor_pool` on a duck-typed actor; CP-T07-01 routes `spirit` and `history` through `faculty` | a `capability:` on each thread verb row naming one `skill` row whose `base` is `attr.mind.will`; `grows_by: [practice]`, so `world_q.practice` reaches it by the route every other skill uses | not `train`: canon P-08 excludes advancement "by study alone" (T07 gap J). The history term's fate is CR-85's |
+| **Approach Training** (v30 §2.1: a binary prerequisite to work at all, with three routes to acquire it) | a second gate beside sensitivity | absent from the oracle and from B10-15, where sensitivity is "the one class gate" | if wanted: a `kind: trait` row and one `at_least` use on the thread verbs; acquired by `train` under a mentor | whether the second gate exists is answered at ladder step 2 by the plan (it dropped it); recorded so the design's distinction between *perceiving* and *being able to work* is not lost by accident |
+| **the practitioner's resilience** (R-14) | how much of a working's cost lands | `RESILIENCE_GAIN = 0` in the oracle | a `capability_uses` row `{use: working_cost, key: attr.mind.will, form: about_mid, gain: resilience_gain}`; the gain moves from an oracle constant to a fixture | the value (WR-01) |
+| **wayfaring** (nothing in the tree) | the price of a leg; the exposure charged at its end | none: every person pays the same | a `skill` row and two uses, `leg_price` and `exposure_charge`, each `about_mid` with a gain shipped at 0 | two new use **sites** are code (one reader each, in `route`'s caller and the leg-end pass); the completion proposal already records the missing capability source for exposure ("J-13's remainder") |
+| **hardiness** (Endurance) | illness and age (`body_hazard`); hunger's body step | the hazard reads age and two rates; no attribute | one use `body_hazard` over `attr.body.endurance`, `about_mid`, gain 0 | the rates (ED-IN-0317) |
+| **navigation** | — | none | **none proposed** | a route is a shortest path over public geography; a skill at finding the way has nothing to act on until places can be unknown, and discovery is parked (`poi_catalog` holds counts, not places: T10 §0). A null, stated so nobody adds a skill with no reader |
+| **tending** | how much one `tend` restores, and whether it works | one unpriced `tend` heals 1 to 1000 ("code-flagged [ASSUMPTION]", T10 G5) | CP-T10-04's, with a `capability:` on the `tend` row | CP-T10-04 |
+
+**The interface this lane needs from the merged surface, restated after the full read** (it replaces
+the four-function list in the first audit's §14 only where it differs): a use site may be declared for a
+*module input* as well as for a person's own choice, because four of the rows above (`working_depth`,
+`working_cost`, `leg_price`, `exposure_charge`) are read by a host when it builds a typed input record,
+not by `decision/`. CHAR's table is scoped to "a person's own choice"; the same row shape serves, and the
+closed roster of sites is where the difference is recorded. Nothing else is asked.
+
+**RPG axioms, corrected against the design set.** The first audit listed "corruption or sanity as a
+second track with recovery rules visible to the player" as lacking. The design refuses the visible half in
+terms (§4.3) and refuses the word: "An alignment axis, a corruption track, or an arc from good to evil …
+No sin, no corruption, no fall, and nothing being punished" (`threadwork_applications_part2.md` §10). The
+axiom threadwork implements is nearer *strain and permanent injury* (an elastic reserve that recovers with
+rest in the right place, and set that does not) than *sanity*, and a designer adding a capability to it
+should reach for that vocabulary. The one tradition-standard axiom it still lacks is the one F-WR-17
+names: *push your luck within a casting* (each further operation harder, the practitioner choosing when to
+stop).
 
 ## 8. Proposals written by this addendum
 

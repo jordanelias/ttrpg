@@ -356,7 +356,7 @@ Dispositions in §B6 (R-37, R-38). None is a mechanism; each misleads the next r
 | "delete the cell layer … little shipped behaviour changes" | Fable §4.4 | stronger on the season path | F-MB-20 |
 | armour is unwired; `dr` is a free scalar defaulting to 1 | Fable §5.5 | still true: the damage line reads `eff_dr` (`orchestration.py:1360-1366`) and nothing maps an armour tier to it | grep; first audit's loadout run |
 | two cell-count generators; footprint collapse; static `ncells` | gauge synthesis #1 | still true; now the season's path | F-MB-20 |
-| cells within a subunit are homogeneous | investigation gap 2 | still true | `core/exchange.py:100-109` |
+| cells within a subunit are homogeneous | investigation gap 2 | still true | `core/exchange.py:114-118` |
 | cap of 11 against Command 1 to 7 | investigation gap 4 | officers built as a span check; inert at resolution | F-MB-26 |
 | fighting withdrawal residuals gated off | proposal Status | false: on | F-MB-25 |
 | the shipped default has no regression oracle | Fable S1.5 | `[UNVERIFIED]`: not opened | — |
@@ -371,7 +371,7 @@ Dispositions in §B6 (R-37, R-38). None is a mechanism; each misleads the next r
 | **army**: "a deployment of all its units in a formation on that grid" | directive (a): Football Manager and Total War "inform the overall formation"; 2026-07-22: "subunits form an army in a formation with overall instructions" | several units on a battle map; the general's strategy declaration each turn; ED-909: an army formation is where the bodies are put and what they are told, never a shape of its own | `hierarchy/units.py::Unit`; `orderofbattle.OrderOfBattle`; deployment by `orderofbattle._place` |
 | **unit**: "has its own subformation and its own troop types" | directive (a): "subunit roles the way [FM] informs a player's role"; ED-1090: up to eleven | "a unit is composed of up to three sub-units", each with its own Morale, Discipline and rout (`mass_battle_v30.md` §A.4, ED-1019); one named officer a unit (§D.2); a unit token with Type, Size, Discipline and Experience (`military_layer_v30.md` §1.1) | `Subunit`; `orderofbattle.Subformation`; the Record's `subformations` row |
 | **subformation** | directive (a): "a subunit's shape is formation arrangement at a smaller scale"; 2026-07-22: "troops form subunits in a subformation with instructions" | "each cell within a formation holds a player-assigned troop count with min/max bounds. The player shapes the formation's distribution … at muster" (§A.3b); ED-907's adjustable allocation surface (`pc_formation_system.md` §2, L2) | `Subunit.shape`, `width`, `depth`, `distribution`, `concentration`; `geometry.footprint_for` |
-| **troops** | directive (b): "the number and quality of troops per cell"; 2026-07-08: "subunit power is the aggregate or derivation of cell power" | the cell as the primitive for morale, facing, damage and troops | a cell: `cell_troops`, `cell_morale`, `cell_facing_vec`, position; type and quality are the unit's, not the cell's (`core/exchange.py:100-109`) |
+| **troops** | directive (b): "the number and quality of troops per cell"; 2026-07-08: "subunit power is the aggregate or derivation of cell power" | the cell as the primitive for morale, facing, damage and troops | a cell: `cell_troops`, `cell_morale`, `cell_facing_vec`, position; type and quality are the unit's, not the cell's (`core/exchange.py:114-118`) |
 
 The record names the second level "subformation" where Jordan says "unit" and uses no word for the third.
 That is a naming fork between `armyrecord.py` and the intent, and it is why the first audit counted a
@@ -648,7 +648,7 @@ edge and where the sibling's text has to change for the two to meet.
 | edge | PC lane's design | what mass battle needs, or supplies | status |
 |---|---|---|---|
 | a duel inside a field | `03_PC_duel_round_and_approach.md` §5: the field reports a contact between two named persons; the host adapter calls `combat.round`; "one field turn is one duel round"; the field receives `DuelContactResult` | **a named person must be somewhere on the field for a contact to exist.** Today he is nowhere (first audit F-MB-14). With `officer` on the unit row he is *with a unit*; the contact is two officers whose units are in contact at a window. The window, not the tick, is the duel round's clock (two a engagement), which matches the archived cadence: "one mass combat turn = one personal combat exchange", at most five (`scale_transitions_v30.md` §3.7, PP-111) | designed on both sides; needs `officer` (§B3.3) and the window (§B4.4) |
-| what a duel does to the field | "a person's effect on a unit is a fraction of the unit's own cohesion, never a flat amount" (PC §5, from `research/by_lane/PC_personal_combat.md` T-PC-15) | accepted. The carrier already exists: an officer felled or yielded is a morale erosion on his unit through `cascade_morale_hit`, scaled by that unit's own discipline, the form the engine uses for a freed attacker (`orchestration.py`, quoted in the synthesis Part D). No army-wide instant rout: the engine's command-zero rout (`battle_loop.py:411-413`) is the failure shape the corpus warns of (first audit §7) | one line in the manager proposal |
+| what a duel does to the field | "a person's effect on a unit is a fraction of the unit's own cohesion, never a flat amount" (PC §5, from `research/by_lane/PC_personal_combat.md` T-PC-15) | accepted. The carrier already exists: an officer felled or yielded is a morale erosion on his unit through `cascade_morale_hit` (`hierarchy/units.py:2966`), scaled by that unit's own discipline, the form the engine uses for a freed attacker (`orchestration.py`, quoted in the synthesis Part D). No army-wide instant rout: the engine's command-zero rout (`battle_loop.py:411-413`) is the failure shape the corpus warns of (first audit §7) | one line in the manager proposal |
 | squads | PC §5.1: a squad exchange is pairings of duel rounds; `StandingOrder` rows; "its owner is the lane that owns squads and orders (MB…)" | owned here: `proposals/04_MB_squad_grid_of_named_characters.md` (§B4.6). Pairing is the host's policy; combat is unchanged | proposal |
 | the carry rule | `03_PC_loadout_and_carry.md`: `carry_demand(weapons: tuple, armour: str)`, reading keys of personal combat's export | **the keyed form cannot serve a troop**, whose primary may be a bow or a pike that the roster lacks (C-3). Needed: the same leaf exposes the mass form, `carry_demand_of(masses: tuple, armour: str)`, which the keyed form calls. One rule, two spellings of its argument; no second function | a one-line amendment the PC lane owns; stated in the `_B` proposal |
 | the weapon in hand | PC: `DuelState.in_hand`; `switch` costs the next action's readiness; an NPC's trigger reads `close_unwieldiness` | the unit's form: `Subunit.in_hand`; the switch costs a tick; triggers `enemy_range`, `flanked`, `volleys_spent`. Same state name, same "costs the next action" rule at both scales (NERS-S) | consistent |
@@ -756,7 +756,7 @@ loadouts, and squads of named characters.
    `experience`, which is a fact about the record's own row and is written only by `_eff_march`.
 2. *Inside the module, `Unit` and `Subunit` are values built from the frozen input and discarded at
    return.* The roster contract governs what the seam is handed ("what it actually forbids: handing the
-   wrapper anything that is not the projection", `04:806-809`), not the resolver's internals.
+   wrapper anything that is not the projection", `04:810`), not the resolver's internals.
 3. *The squad of named characters is the un-amended rule, not an exception to it.* "Every combatant a
    `Person`" is exactly Ogre Battle's and Unicorn Overlord's squad. That is why §B4.6 puts it on the duel
    round and not in cells: built as a mass-battle unit it would be the unit class the rule refuses.
@@ -777,3 +777,121 @@ and the host mints two bands from it. This is not a conflict between Jordan's in
 code against Layer 1, and by `CLAUDE.md` §0.05 the code changes. How it changes has two defensible forms
 (§B11 item 3).
 
+## B6. Resolutions and proposals
+
+### B6.1 Resolutions (continuing the first audit's table; ladder steps as there)
+
+| id | kind | what | decided resolution | step | proposal |
+|---|---|---|---|---|---|
+| R-30 | unclear | "unit" and "subformation" name different levels in the intent and in `armyrecord.py` | the intent's words win at the designer's surface: the troop file and the menu say **unit** for a body and **subformation** for its arrangement. The record's key `subformations` keeps its spelling (a rename is a hash mover for nothing); `armyrecord.py`'s docstring states the mapping once | 5 | `04_MB_cell_hierarchy_as_data.md` |
+| R-31 | inconsistency | the field returns a winner; Layer 1 asks for a margin or, by the combat ruling, a read state (F-MB-24) | the module returns the field's end state per side (`routed`, `conceded`, `share`) and no `verdict`; `seam/ladder.py::field_degree` reads `Won`, `Lost` or `Drawn` off it, as `combat_degree` reads a scene. This amends the first audit's R-03 and R-04 in one field | 4 (the combat exemption, Jordan 2026-09-03) | `04_MB_manager_battle_one_resolver.md`; §B11 item 3 |
+| R-32 | gap | the season packs every body at the cell cap; the oracle calibrates on another generator (F-MB-20) | explicit ranks-by-files bodies at one stated deployment density, the tier table's; the cap is the control | 3, 4 | `04_MB_cell_hierarchy_as_data.md` |
+| R-33 | gap | the army's formation is one hard-coded rule | `formations` rows and a `post` per unit; today's rule is the row `line`; the harness's envelopment and refused-flank builders become rows | 5 | same |
+| R-34 | inconsistency | two of three strategies lose to the third (F-MB-21) | `strategy` leaves the record's choice surface and the menu; `line` is what an army does; the stance stays settable per unit by a standing order. It returns as a roster when each value wins somewhere, the PC lane's bar | 4 (the PC lane's calibration rule) | `04_MB_manager_battle_one_resolver.md` |
+| R-35 | inconsistency | troop types that differ only by weapon are identical (F-MB-22); behaviour keyed on type names; "mounted" has two owners (F-MB-23) | reach and support depth derive from the weapon in hand's class; `mounted`, `charge`, `wheel`, `default_role` are columns; knights templar is mounted in one place | 5 | `04_MB_unit_loadout_and_weapon_in_hand_B.md` |
+| R-36 | inconsistency | "one weapon roster: personal combat's" cannot hold a troop's missile weapon or pike (C-3) | one owner a fact, not one file: an arm's mass lives in personal combat's export when its key is there and in `troops.yaml`'s `arms` when it is not; the loader refuses a key stated in both; the carry leaf takes masses | 5 | same |
+| R-37 | inconsistency | stale surfaces (F-MB-25): the fighting-withdrawal Status; `reform_check`'s docstring; the "melee sidearm" comment | correct each at its site when its file is next touched: the Status line to "BUILT, on by default"; the docstring to the flag's value; the comment goes when `arms` lands | 1 | none (pointer and comment edits) |
+| R-38 | inconsistency | `03_VERBS_AND_LOOPS.md:261` and `10_FACTIONS_AND_DEPLOYMENT.md:89` lack the ED-IN-0306 amendment `04:813` carries | the later ruled row governs; add the same amendment note at both sites. A Layer 1 edit, IN's, not made here | 1 | none |
+| R-39 | gap | the manager's vocabulary has no carrier (F-MB-26) | `standing_orders` on the unit row over the engine's exported closed sets; `fall_back_at` becomes one such row | 4 (`fall_back_at` is already an `Order`) | `04_MB_manager_battle_one_resolver.md` |
+| R-40 | gap | officers are counted and read by nothing | `officer` on the unit row names a person; three reads, in order: his unit's contact makes a duel contact (§B5.1); his fall erodes his unit's morale; the general's span counts officers (built). Command from the commander is the first audit's §14 | 3 (the archived design's §D.2), 5 | same; `04_MB_squad_grid_of_named_characters.md` |
+| R-41 | unclear | where the squad of named characters lives | on the duel round, by a host pairing policy over a two-row grid; not in cells | 3 (Layer 1 §E.2.1), 4 (PC §5.1) | `04_MB_squad_grid_of_named_characters.md` |
+| R-42 | gap | no veterancy, no upkeep | `experience` on the unit row (0 to 2, +1 Power a step, lost with the unit); an `upkeep` column and one consequence for arrears | 3 (`military_layer_v30.md` §1.6, §1.7) | `04_MB_campaign_party_economy.md` |
+| R-43 | unclear | the flow skeleton's anchors are dead | superseded: its adapter and callers were deleted; it is archived reference and is not repaired. `[UNVERIFIED: what `tests/valoria/test_flow_skeletons.py` still checks of it]` | 2 | none |
+| R-44 | unclear | the first audit's R-07 plants training Sites "at each faction seat" | plant them where the realm already has venues named for them (`b_s_014_barracks`, `b_s_007_barracks`), so one place is one thing | 4 | none (SE's data; cross-listed) |
+| R-45 | gap | the estimate's cost invites a formula | fewer samples, or a cache keyed on the frozen input; never a closed form (§B5.4) | 3 (Layer 1 §27.2) | `04_MB_manager_battle_one_resolver.md` |
+
+Resolutions decided in this addendum: **16** (R-30 to R-45). With the first audit's 29: 45.
+
+### B6.2 Proposals written by this lane
+
+All under `proposals/2026-11-12-subsystem-audit-suite/proposals/`, Status PROPOSED.
+
+| file | carries | supersedes |
+|---|---|---|
+| `04_MB_unit_loadout_and_weapon_in_hand_B.md` | the troop file (`arms`, `troops`), the loadout, the weapon in hand, the carry factors, the columns that replace the name tests; R-35, R-36 | `04_MB_unit_loadout_and_weapon_in_hand.md` (the first lane's; left unedited) |
+| `04_MB_cell_hierarchy_as_data.md` | the unit's arrangement, the deployment density, `formations` and `post`, kinds within a unit; R-30, R-32, R-33 | nothing |
+| `04_MB_manager_battle_one_resolver.md` | standing orders, the general's action, the interventions list, the report, the end state in place of a winner, the estimate; R-31, R-34, R-39, R-40, R-45 | §B of `04_MB_playable_field_scenario.md` (its `PhaseOrder`) and the `verdict` field of `04_MB_typed_outcome_and_one_path.md`; the rest of both stands |
+| `04_MB_squad_grid_of_named_characters.md` | the squad scale; R-41 | nothing |
+| `04_MB_campaign_party_economy.md` | veterancy and upkeep; R-42 | nothing |
+
+### B6.3 Order, against the first audit's §8
+
+The first audit's steps 1 and 2 (scale, grade, typed outcome) still come first, with R-31 folded into
+step 2. Then: DICE's roller (byte-equal against today's goldens); the troop file as data with no
+behaviour change (the `_B` proposal's stage 1); the arrangement (§B3.4), which is the mover that makes
+the cell grid the battlefield; then standing orders and the general's action; then the loadout's second
+weapon; then squads; then veterancy and upkeep. Kinds within a unit are last. The first audit's step 7
+(CR-12) should be measured after the arrangement, not before: its exponent is fitted on tier-table
+bodies, which is where the season will then be.
+
+## B7. Evidence log
+
+Python 3.13 (the container's), `PYTHONHASHSEED=0`, read-only. Scripts and outputs:
+`/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379/scratchpad/runs/MB_B/`. No `pytest`,
+no `aperture`, nothing written to a tracked file. Bodies by `orderofbattle.build_unit` (or
+`armies.build_army` where an explicit grid is needed), fought by `battle_loop.run_battle(max_turns=18)`
+under `rngsource.using(random.Random(seed))`.
+
+| run | seeds, size | outcome |
+|---|---|---|
+| `cells_probe.py` | none (construction only) | preset armies: weight 20 → 2, 1, 2, 1 cells (6 in all); weight 30 → 3, 2, 2, 1 (8); levy 600 → 3; a 5,000 army → 12, 7, 10, 3 in 2 to 3 ranks; cavalry `Shock` 300 → 3 cells, `Arrowhead`, 2 rows |
+| `generators_probe.txt` | none | tier table Line: 9, 15, 25, 35 cells (3 x 3, 3 x 5, 5 x 5, 5 x 7) at 100, 200, 400, 800 troops; `footprint_for` at the cap: 1, 1, 2, 4. (The script's last line, a call of `_weighted_unit` with a wrong argument, raised; nothing depends on it) |
+| `density_probe.py` | 0 to 39; 600 heavy infantry a side; A at the cap | against the cap 15, 24, 1 (A, B, drawn); concentration 100: 14, 24, 2; concentration 50: 16, 18, 6; 6 x 2: 17, 16, 7; 3 x 4: 18, 14, 8; 12 x 1: 22, 0, 18, losses 3.6% and 26% |
+| `mirror_probe.py 300` | 0 to 299; identical single bodies of 600 | heavy infantry: A 133, B 154, drawn 13; losses 25% and 21%; 8.2 ticks. Spearmen: 134, 137, 29; 19% and 18%; 9.9 ticks. No side bias established (1.2 standard deviations) |
+| `lever_probe.py 200` | 0 to 199; spearmen 300, archers 150, cavalry 150 a side | tables in F-MB-21; about 20 ms a field |
+| `pike_probe.py` | 0 to 199 at 600 a side; 0 to 39 at 3,000; 0 to 99 for single bodies of 600 against cavalry `Shock` | pike against heavy infantry: identical winner and both sides' troops (rounded to 1e-6) in 200 of 200 and 40 of 40; cells 2, 1, 2 in one rank and 8, 4, 8 in two. Against cavalry: pike 35, 59, 6; heavy infantry 35, 59, 6; spearmen 25, 72, 3; light infantry 25, 72, 3 |
+| `brace_probe.py` | 0 to 99; 600 against cavalry 600 `Shock` | `ShieldWall`: pike 38, 60, 2; heavy infantry 38, 60, 2; spearmen 22, 72, 6. `Anvil`: 38, 59, 3; 38, 59, 3; 25, 72, 3. Pike identical to heavy infantry in 100 of 100 under each |
+| `tests.txt` survey | 43 files | 9,872 lines; two of the three tests in `test_charge_momentum_impulse.py` have a `pytest.skip` path; reloads in `test_feigned_retreat.py` (15) and `test_octagon_damage.py` (5) |
+| greps at HEAD | — | type-name tests (`units.py:943`, `:1491`; `orchestration.py:1213`, `:1217`; `armies.py:267`; `orderofbattle.py:150`); `REFORM_CHECK_ENABLED` and the three `MB_YIELD_*` flags default `'1'`; `Unit.ncells` assigned once (`units.py:2872`); call sites of `pursuit_damage`, `resolve_feigned_retreat`, `unit_in_reserve` all inside `run_multi_unit_battle`; 91 `os.environ` reads under `modules/mass_battle/` (the first audit's count, confirmed) |
+| personal combat's weapon keys | `grep` of `modules/combat/weapons.py` | 54 keys: rapier, arming, longsword, greatsword, sabre, dagger, paired_short, spear, staff, mace, poleaxe, yari, the polearm and East Asian families, the half-sword forms. None of bow, crossbow, sling, javelin, pike, lance |
+| referent search | `grep -ril "ogre battle\|unicorn overlord\|bannerlord" research proposals .designs .audit` | Ogre Battle: every hit is the character-creation questionnaire |
+
+**Controls and limits.** Every lever figure is read against the same-run control and a binomial standard
+deviation of about 5 at n 200; the single-body side bias was checked at n 300 before any A-against-B
+figure was used. One field only was probed for F-MB-21 (an even, open, combined-arms field); the claim is
+stated for that field. No balance claim is made from any of it: these are readings of mechanism, at one
+size.
+
+`git status --short` before finishing: this lane's changes are this file and five proposal files, all
+untracked and new; the other entries are sibling lanes' files in the suite directory.
+
+## B11. Survivors for Jordan (additions to the first audit's §11)
+
+Three. Each is here because the brief requires a conflict with ratified Layer 1 or a ruled item to be
+listed with its two options, not because the ladder left it open; this lane's reading is given with each.
+
+1. **Auto-resolve: a mode of the one resolver, or a calculation of its own.** (§B5.4 (a).)
+   - *(a) A mode.* The delegated battle is the cell resolver run on standing orders; the commanded one is
+     the same call with a general's action at windows; a recorded battle replays exactly. Layer 1 §27.2
+     and §C.4 stand untouched. Every unwatched battle costs a full resolution, and an estimate costs
+     samples of it. War is the same thing whether or not anyone is looking.
+   - *(b) A calculation.* A cheaper comparison of the two armies for battles nobody plays, as Total War
+     does. Unwatched war is fast and the estimate is free; the played and the delegated battle agree only
+     on average, standing orders and arrangement stop mattering to any battle the player skips, and
+     §27.2 is amended. *This lane's reading:* (a); the brief's "one path" sentence and the 2026-07-08
+     doctrine both say it. Nothing here builds toward (b).
+2. **A unit: a row on the army's record, or a thing in the world.** (§B5.4 (b).)
+   - *(a) A row.* Units are groupings of cohort persons' headcounts with columns (kind, arrangement,
+     loadout, orders, officer, experience). Layer 1 as amended by ED-IN-0306 stands. A unit has no
+     memory but its officer's and its men's; "the army that stayed" is a story about persons.
+   - *(b) A thing.* A unit has identity: persons hold claims about it, swear to it, fear it; it carries
+     its own history and conditions. Regiments become characters of the world. §C.5.1 is amended again
+     and the knowledge model gains a kind. *This lane's reading:* (a), as ruled on 2026-10-28; listed
+     because ARC-07's need is worded for (b).
+3. **What a field returns: its end state, or a margin.** (F-MB-24, R-31.)
+   - *(a) The end state, read off as combat's scene is.* Bands `Won`, `Lost`, `Drawn` (with `Unopposed`
+     and `Invested`), read by the host off which side broke or conceded. A battle is won or it is not;
+     how hard it was shows in the casualties and the report. Extends the 2026-09-03 combat exemption to
+     the field: a narrowing of Layer 1's "the return type is `Margin`" that needs Jordan's word, as
+     combat's did.
+   - *(b) A margin on the one ladder.* The field returns a net (for instance the difference of the two
+     sides' broken shares on the ladder's scale) and the ladder grades four bands: an overwhelming
+     victory, a victory, a partial, a failure, each with its own writes. Battles then differ in *kind* by
+     how decisively they are won (a crushing win could move title where a narrow one moves presence),
+     and mass battle joins every other contest on one grading. Layer 1 holds as written; the four bands'
+     writes are new design. *This lane's resolution:* (a), by the combat precedent, because the module's
+     own four-way split is thresholds nobody calibrated and (b) would need them.
+
+Nothing else from this addendum survives the ladder. The scale of a cell (§B3.4), the meaning of the four
+words (C-1), the strategy roster (R-34), the weapon roster (R-36), where squads live (R-41) and the
+stale surfaces are answered above.

@@ -191,9 +191,11 @@ narrative, **H** hygiene.
   the ones the design uses to tell one person from another: how he can be moved, where his story
   bends, what culture formed him.
 - **Evidence.** Parse of `references/npc_registry.yaml` (46 rows), non-null counts: `arc_trajectory`
-  36, `resonant_style` 18 (Evidence 7, Consequence 5, Solidarity 4, Authority 2), `cultural_label` 17,
-  `certainty` 8, `self_other_initial` 2, `coherence` 1. `grep` of `engine/`, `modules/`, `tools/` and
-  `systems/` (non-test `.py`) for each key: one hit, a comment (`data/cast.py:220`). The NPC research
+  36, `resonant_style` 18 (Evidence 7, Consequence 5, Solidarity 4, Authority 2), `cultural_label` 43
+  (17 at the row's top level, 26 inside its `convictions:` block), `self_other_initial` 28 (2 and
+  26), `certainty` 8, `coherence` 1. `grep` of `engine/`, `modules/`, `tools/` and `systems/`
+  (non-test `.py`) for each key: one hit, the loader's own comment where it steps over the two nested
+  keys by name (`data/cast.py:220`). The NPC research
   lane found three of these and proposed deleting them (K-NPC-11).
 - **Falsifier.** T13.Q4 (`research/emergent_narrative_literature/02`): *"does every character trait
   the audience is shown correspond to an input to the decision process?"* Run in reverse on the data:
@@ -283,7 +285,10 @@ narrative, **H** hygiene.
   (AR-38). The score has no term in which a candidate's danger to its actor appears.
 - **Evidence.** `decision/choose.py:193-221`: two terms, neither reads `Person.body` or the row's
   exposure. `odds_weight` multiplies a contested candidate's value by the chance of its writing
-  bands, so a likely loss lowers the value of winning and never prices losing. First audit: `fight`
+  bands, so a likely loss lowers the value of winning and never prices losing; and for the rows that
+  contest the body or a field the believed-chance query answers `None` (their bands are the combat
+  module's and the field's, which `seam/wrappers/sigma.py::believed_chance` does not speak for), so
+  a fight is weighed with no odds at all. First audit: `fight`
   resolved 0 times in two seasons at seed 0 while `challenge` was refused 84 times, so the absence is
   hidden today by formation, not supplied by judgement.
 - **Falsifier.** Two persons identical but for body band 1 and band 4 would rank `fight` on one
@@ -677,7 +682,7 @@ Of the 38: 4 closed or closed-as-built (H-46, H-201, H-205, H-240), 1 superseded
 | 2 | whether the actor is scarred by his own act (H-128) | unclear | yes, at the floor: a man who does what violates what he holds is the first witness of it; the arm stays swept | 5 | same |
 | 3 | `resonant_style` authored on 18 rows and unread | orphan | read it, as four susceptibility traits on the hearer | 3 (the design), 4 (SC-P7's trait advantage) | `02_CHAR_which_ground_moves_whom.md` |
 | 4 | `arc_trajectory` authored on 36 rows and unread | orphan | not an engine fact (ED-IN-0225); move the text to the case file's prose, delete the key | 1 | `02_CHAR_capability_definitions.md` edit 4 |
-| 5 | `cultural_label` (17), `self_other_initial` (2) | orphan | superseded by the fifteen authored pursuits (ED-IN-0261); delete | 1 | same |
+| 5 | `cultural_label` (43 rows), `self_other_initial` (28 rows) | orphan | superseded by the fifteen authored pursuits (ED-IN-0261); delete | 1 | same |
 | 6 | `certainty` (8), `coherence` (1) | orphan | keep, marked unread at the loader, until threadwork has a reader; do not delete a fact a planned lane names | 2, 4 | same |
 | 7 | evidence *"can crack a conviction"* (design) against #353 §9.3 | apparent conflict | none on a whole reading: the style is the hearer's and acts on `argue` | 3 | `02_CHAR_which_ground_moves_whom.md` |
 | 8 | relations have no kind; `npcs.yaml`'s `tie:` says how a concern was picked, not what the person is to him | gap | an authored relation seeds a stance row and a held claim of its ground; no new carrier | 4 (the loyalty row), 5 | `02_CHAR_relations_have_a_ground.md` |
@@ -717,7 +722,7 @@ tree was read at `ad07a9a`; the orchestrator committed during the lane (`46500d4
 | command or probe | seed, seasons | outcome |
 |---|---|---|
 | parse of `verb_table.yaml` typed conjuncts, ten rows | — | `challenge`: existence Person, `with`, `dispute`; `fight`, `capture`, `accept` carry `individual` twice; `forge`, `create_record` none |
-| parse of `references/npc_registry.yaml` | — | 46 rows; non-null `resonant_style` 18, `arc_trajectory` 36, `cultural_label` 17, `certainty` 8, `self_other_initial` 2, `coherence` 1, `stats` 1, `ts` 10, `goals` 17, `lifepath` 5, `heritage` 4 |
+| parse of `references/npc_registry.yaml` | — | 46 rows; non-null `resonant_style` 18, `arc_trajectory` 36, `cultural_label` 17 top-level and 26 nested under `convictions:`, `self_other_initial` 2 and 26, `certainty` 8, `coherence` 1, `stats` 1, `ts` 10, `goals` 17, `lifepath` 5, `heritage` 4 |
 | `grep` of non-test `.py` under `engine`, `modules`, `tools`, `systems` for the six unread keys | — | one hit, a comment (`data/cast.py:220`) |
 | parse of `rosters.yaml: tables.lifepath_templates` | — | 34 rows: 21 hold nothing, 7 `inquiry`, 6 `argue` |
 | `ALIGNMENT` non-zero cells per axis | — | `selfish_selfless` 2; the others 8 to 25 |

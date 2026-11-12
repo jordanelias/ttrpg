@@ -16,6 +16,26 @@ Scope of this addendum, by the work order: (1) the reading the first lane report
 and muster layer owed to mass battle; (5) decisions on the first lane's placeholders; (6)
 capability-authoring consequences; (7) proposals; (8) evidence log.
 
+**Order in this file.** The sections carry the work order's numbers and stand in the order they were
+written (CLAUDE.md §10 pt 2: write before the reading is finished): §3, §4, §2, §5, §6, §7, §1, §8.
+
+## 0. What this addendum changes, in one paragraph
+
+The first audit's verdict stands: a sound accounting kernel under a world that gives it nothing to
+account for. Four things change. **Its one design survivor is closed**: whether a population may recover
+was ruled on 2026-09-17 (the bound on growth is food and housing), so the rising arm is a build, not a
+question. **Its granary is moved**: it put the relief stock at every territory rung, and 14 of the 16
+settled territories have no seat there, so nothing governing could refill it, pay from it or march on
+it; the stock belongs at the seat rungs, where relief, the sworn men's pay and a field's ration become
+three claims on one store. **The campaign layer is specified from the settlement side**: the realm can
+train nothing but levy, raising troops costs a place nothing, and an army abroad eats at home; three
+host-side reads and one roster table close that without a new verb. **Its capability edit is re-fitted**
+to the surface the CORE, CHAR and DICE lanes proposed after it, by which it would otherwise be refused at
+load. Read against the full design set and the colony-sim precedents, the shortest faithful path to a
+settlement that plays is still the first lane's, with one reading added: the six verbs of the loop are
+all built, and *ration* is not a missing verb but the inverse of the ruled default (the granary is open
+by rule; withholding is the act).
+
 `.designs/` and `.audit/` are ARCHIVED-NOT-CANON and are cited below as referents by path, never as the
 reason a behaviour is correct (CLAUDE.md §0.05). Research is tier 3 (`engine/season/rosters.yaml`
 source-precedence note): it informs and settles nothing, and the sourcing floor binds every figure.

@@ -119,62 +119,6 @@ Lane: code under `modules/mass_battle/`, `systems/` and `engine/`-adjacent oracl
 - **Conflicts / stale:** none beyond the sibling note.
 - **Open items:** none.
 
-### systems/combat/__init__.py
-- **What it is:** Package marker, 10-line docstring (PC lane; ED-900/904).
-- **Status:** none; live (package).
-- **Bears on:** PC
-- **Content that matters:** Records what remains under `systems/combat/`: `combat_engine_v1/` (`capabilities.py`, `state_graph.py`, `workbench/`, a NON-package scripts dir). The v30 oracle `sim/combat.py` was deleted at plan position PC-12; the resolver (core, wrapper, combatant, config, weapons) moved to `modules/combat/` at plan position `31b`; `combat_engine_v1/systems.py` was renamed `combat_systems.py`. Verified by `ls`: `systems/combat/combat_engine_v1/` holds `capabilities.py`, `state_graph.py`, `workbench/` only (no `combat_systems.py`; it left with the resolver or was retired `[UNVERIFIED which]`).
-- **Conflicts / stale:** Docstring mentions `combat_systems.py` which is not in the directory.
-- **Open items:** none.
-
-### systems/fieldwork/__init__.py
-- **What it is:** Package marker, 8-line docstring (FI lane, ED-IN-0071 P4).
-- **Status:** none; live (package).
-- **Bears on:** FI
-- **Content that matters:** Says `sim` imports as `systems.fieldwork.sim.*`; "knots still imports sim.personal.conviction (stays until the character slice) + systems.threadwork.sim". Directory now has only `sim/knots.py` (verified).
-- **Conflicts / stale:** Stale: `sim.personal.conviction` was relocated to `systems.characters.sim.conviction`; `fieldwork`/`investigation` sim modules named as moved are no longer present, only `knots.py` is (F-FI-07 flags `knots.py` as holding state and drawing unseeded).
-- **Open items:** none.
-
-### systems/fieldwork/sim/__init__.py
-- **What it is:** Package marker, one-line docstring.
-- **Status:** none; live (package).
-- **Bears on:** FI
-- **Content that matters:** Names the oracle as "was sim.personal.{fieldwork,investigation,knots}"; only `knots` remains.
-- **Conflicts / stale:** As above.
-- **Open items:** none.
-
-### systems/mass_battle/__init__.py
-- **What it is:** Package marker, 7-line docstring (MB lane, ED-IN-0071 P4 provincial split part 1).
-- **Status:** none; live (package).
-- **Bears on:** MB
-- **Content that matters:** Says the folder holds the `mass_battle_v30` / `mass_battle_integration_v30` / `military_layer_v30` docs and the `massbattle/units/tactic_cards/altonian_reinforcements` sim, and that `faction_action` "lazy-imports massbattle across the lane boundary until the factions slice".
-- **Conflicts / stale:** STALE: no docs here; `massbattle.py` and `units.py` moved to `modules/mass_battle/`; `tactic_cards.py` and `altonian_reinforcements.py` are still present in `systems/mass_battle/sim/` and imported by nothing (F-MB-10).
-- **Open items:** none.
-
-### systems/mass_battle/sim/__init__.py
-- **What it is:** Empty package marker (0 lines).
-- **Status:** none; live (package).
-- **Bears on:** MB
-- **Content that matters:** Empty. The directory holds `bat.py`, `engine.py`, `lanchester_signature.py`, `stress.py`, `validators.py`, `walkthrough.py`, `test_persubunit_stress.py`, `workbench/`, plus `tactic_cards.py`, `altonian_reinforcements.py`, `stress_scenarios.json`, `walkthrough_example.json`, `walkthrough_template.html`.
-- **Conflicts / stale:** none.
-- **Open items:** none.
-
-### systems/overview/__init__.py
-- **What it is:** Package marker, 6-line docstring.
-- **Status:** none; live (package).
-- **Bears on:** WR, SE
-- **Content that matters:** Says the folder is the doc home for `clock_registry_v30` and `peninsular_strain_v30`, and that `sim/` holds the MS (Mending Stability) world-track oracle.
-- **Conflicts / stale:** Stale: docs live in `.designs/`. Per `sim/__init__.py` the MS track has no importer left.
-- **Open items:** none.
-
-### systems/overview/sim/__init__.py
-- **What it is:** Package marker, 15-line docstring, marked `Status: [PROVISIONAL - Pass 2l armature stub 2026-05-17]`.
-- **Status:** `[PROVISIONAL - Pass 2l armature stub 2026-05-17]`; stale (a 2026-05 stub label on a package whose other modules were retired at plan positions 29a/29b).
-- **Bears on:** WR
-- **Content that matters:** Lists one module, `ms_track` "no importer left since plan position 27; its own retirement is plan position 29a-ms"; retired: `accounting`, `rs_track`, `ip_track` (29a), `ci_track` (29b). Verified: `grep` for `systems.overview` / `ms_track` outside the package finds only `engine/substrate/composition.py:6` (a comment mentioning `systems.overview.sim.season`) and `engine/season/data/cast.py:438`, no importer. So `ms_track.py` is an orphan the package docstring itself flags for retirement.
-- **Conflicts / stale:** Retirement "29a-ms" is not recorded as done; the file still exists.
-- **Open items:** Whether `29a-ms` is open or abandoned.
-
 ### systems/characters/sim/conviction.py
 - **What it is:** oracle code, 285 lines; per-Conviction Scar accumulation with thresholds 1/2/3+, season cap, Truth scaling, module-level state (PP-718 / PP-684 under `conviction_track_v1`).
 - **Status:** none (code). Oracle-only; one live-ish caller.
@@ -189,17 +133,13 @@ Lane: code under `modules/mass_battle/`, `systems/` and `engine/`-adjacent oracl
 - **Conflicts / stale:** docstring path `sim/personal/conviction.py` and `designs/personal/conviction_track_v1.md` (dissolved paths); "Cyclic dependency with sim/personal/beliefs ... co-defined in single commit" refers to a retired module. `module_contracts.yaml` registers it as a module code path but the season does not reach it: a registered-but-unreached oracle (candidate for F-CHAR-12 context: Layer-1's frozen `PersonInterior` is not built).
 - **Open items:** whether the season should own scar state (carrier) instead of module-level dicts; `SCAR_SEASON_CAP_THREAD` dead constant.
 
-### systems/overview/sim/ms_track.py
-- **What it is:** oracle code, 92 lines; Mending Stability world-track: clamp to [0,100], baseline decay -1 per year, `apply_ms_delta`.
-- **Status:** none (code; package docstring `PROVISIONAL`, retirement named as plan position `29a-ms`). Dead.
-- **Bears on:** WR, SE (Mending Stability clock).
-- **Content that matters:**
-  - Defines `MS_FLOOR=0`, `MS_CEILING=100`, `MS_BASELINE_DECAY_PER_YEAR=-1`, `SEASONS_PER_YEAR=4`, `MS_START=60` (`:41-52`) and two functions that mutate `world.clocks['MS']` (`:60-92`). `MS_START=60` records a Jordan ruling (2026-06-06) replacing 80 and the "60/72 mode split" (`:11-17`).
-  - Its dependency, the `game_state` module, "was deleted at `29b`"; "no caller passes a season `World` (which carries no `clocks`)" (`:27-29`). Verified by grep: no importer in `engine/`, `modules/`, `tests/`; only prose mentions (`engine/season/loop/matter.py:160` describes it as a prior "stored 0-100 scalar and yearly" model; `tests/valoria/test_flow_skeletons.py:345,414` mention `ms_track` seam as struck at plan position 27). So the current MS owner is `engine/season/loop/matter.py` (not read in this lane) and this file is an orphan with duplicate constants.
-  - `[DRIFT]` note about `accounting._ms_decay` (`:19-25`) is stale: `accounting` was retired at 29a.
-- **Reads / readers:** none.
-- **Conflicts / stale:** the clock described (a scalar MS with yearly -1 decay) vs `matter.py` (stock/lattice model; `hole_register.yaml:4932` "THE LATTICE COUPLING"). Whether the MS ruling `60` still holds in the live model is not answerable from this file. Delete candidate per its own package docstring.
-- **Open items:** retirement `29a-ms` pending; which carrier replaced `world.clocks['MS']` ("`33` decides the carrier").
+### systems/combat/__init__.py
+- **What it is:** Package marker, 10-line docstring (PC lane; ED-900/904).
+- **Status:** none; live (package).
+- **Bears on:** PC
+- **Content that matters:** Records what remains under `systems/combat/`: `combat_engine_v1/` (`capabilities.py`, `state_graph.py`, `workbench/`, a NON-package scripts dir). The v30 oracle `sim/combat.py` was deleted at plan position PC-12; the resolver (core, wrapper, combatant, config, weapons) moved to `modules/combat/` at plan position `31b`; `combat_engine_v1/systems.py` was renamed `combat_systems.py`. Verified by `ls`: `systems/combat/combat_engine_v1/` holds `capabilities.py`, `state_graph.py`, `workbench/` only (no `combat_systems.py`; it left with the resolver or was retired `[UNVERIFIED which]`).
+- **Conflicts / stale:** Docstring mentions `combat_systems.py` which is not in the directory.
+- **Open items:** none.
 
 ### systems/combat/combat_engine_v1/capabilities.py
 - **What it is:** PC oracle/instrument code, 173 lines; the weapon-morphology affordance gates as one table (scene-combat WS-2 / req 5) plus a self-test that checks each predicate against the live engine.
@@ -286,8 +226,8 @@ Lane: code under `modules/mass_battle/`, `systems/` and `engine/`-adjacent oracl
 - **Status:** none (code); output header says "GENERATED - do not hand-edit".
 - **Bears on:** PC, DICE
 - **Content that matters:**
-  - `QUANTITIES` (`:88-142`) is a hand-listed registry of 52 per-weapon derivations in four layers: L0 stored (`hands, mass, head_len, grip_len, head`), L1 `geometry.bake` (`curvature, point_concentration, cross_section, edge_keenness, cut, thrust, gap, halfsword`), L2 `weapon_physics` (`heft, agility, percussion_authority, puncture_pressure, handling, hand_guard, blade_guard, spine, edge_lines, grab_hazard, edge_vibration, distraction, facing_pref, hilt_mass, ... defense_affinities`), L3 `combat_systems` (`reach_base, wield_heft, weapon_tempo, close_tempo, leverage, recoverability, lunge_quality, str_demand, ...`). This is the best single map of the weapon structure in PC: a weapon record is `hands, mass, head_len, grip_len, head, geometry` and everything else is derived. It tells the kit/weapon audit that a "weapon" has no authored per-weapon capability list beyond those stored primitives.
-  - `PAIRWISE` (35 functions) and `FIGHTER_ONLY` (20) are hand-listed lists of engine functions with no per-weapon value (`:145-161`): both are import-time references to `S.*`/`core.*` symbols, so a renamed function breaks the catalogue at import (a drift alarm, not a guard).
+  - `QUANTITIES` (`:88-142`) is a hand-listed registry of 49 per-weapon derivations in four layers: L0 stored (`hands, mass, head_len, grip_len, head`), L1 `geometry.bake` (`curvature, point_concentration, cross_section, edge_keenness, cut, thrust, gap, halfsword`), L2 `weapon_physics` (`heft, agility, percussion_authority, puncture_pressure, handling, hand_guard, blade_guard, spine, edge_lines, grab_hazard, edge_vibration, distraction, facing_pref, hilt_mass, ... defense_affinities`), L3 `combat_systems` (`reach_base, wield_heft, weapon_tempo, close_tempo, leverage, recoverability, lunge_quality, str_demand, ...`). This is the best single map of the weapon structure in PC: a weapon record is `hands, mass, head_len, grip_len, head, geometry` and everything else is derived. It tells the kit/weapon audit that a "weapon" has no authored per-weapon capability list beyond those stored primitives.
+  - `PAIRWISE` (34 functions) and `FIGHTER_ONLY` (20) are hand-listed lists of engine functions with no per-weapon value (`:145-161`): both are import-time references to `S.*`/`core.*` symbols, so a renamed function breaks the catalogue at import (a drift alarm, not a guard).
   - The neutral fighter is `attributes.DEFAULT`, no skills, no tradition, light armour (`:20-22`, `:48`); every value is "this weapon in a neutral hand".
   - `coupling_matrix()` documents the A7 finding that native cut tokens return an IDENTICAL coupling for every weapon at a tier because `core.coupling` ignores `eff` for `straight_cut`/`curved_cut` (`:190-194`).
   - Constants half prints `core.HEAD_MODE, DELIVERY, RESIST, TIER2MAT, GAP_EXPOSURE, PEN_THR, QUAL, COVERAGE_GAP, ...` and the whole `CFG` (`:244-265`); the CFG count is printed, not asserted.
@@ -372,6 +312,38 @@ Lane: code under `modules/mass_battle/`, `systems/` and `engine/`-adjacent oracl
 - **Conflicts / stale:** The filename `trace.py` shadows stdlib `trace` (F-PC-11).
 - **Open items:** none stated.
 
+### systems/fieldwork/__init__.py
+- **What it is:** Package marker, 8-line docstring (FI lane, ED-IN-0071 P4).
+- **Status:** none; live (package).
+- **Bears on:** FI
+- **Content that matters:** Says `sim` imports as `systems.fieldwork.sim.*`; "knots still imports sim.personal.conviction (stays until the character slice) + systems.threadwork.sim". Directory now has only `sim/knots.py` (verified).
+- **Conflicts / stale:** Stale: `sim.personal.conviction` was relocated to `systems.characters.sim.conviction`; `fieldwork`/`investigation` sim modules named as moved are no longer present, only `knots.py` is (F-FI-07 flags `knots.py` as holding state and drawing unseeded).
+- **Open items:** none.
+
+### systems/fieldwork/sim/__init__.py
+- **What it is:** Package marker, one-line docstring.
+- **Status:** none; live (package).
+- **Bears on:** FI
+- **Content that matters:** Names the oracle as "was sim.personal.{fieldwork,investigation,knots}"; only `knots` remains.
+- **Conflicts / stale:** As above.
+- **Open items:** none.
+
+### systems/mass_battle/__init__.py
+- **What it is:** Package marker, 7-line docstring (MB lane, ED-IN-0071 P4 provincial split part 1).
+- **Status:** none; live (package).
+- **Bears on:** MB
+- **Content that matters:** Says the folder holds the `mass_battle_v30` / `mass_battle_integration_v30` / `military_layer_v30` docs and the `massbattle/units/tactic_cards/altonian_reinforcements` sim, and that `faction_action` "lazy-imports massbattle across the lane boundary until the factions slice".
+- **Conflicts / stale:** STALE: no docs here; `massbattle.py` and `units.py` moved to `modules/mass_battle/`; `tactic_cards.py` and `altonian_reinforcements.py` are still present in `systems/mass_battle/sim/` and imported by nothing (F-MB-10).
+- **Open items:** none.
+
+### systems/mass_battle/sim/__init__.py
+- **What it is:** Empty package marker (0 lines).
+- **Status:** none; live (package).
+- **Bears on:** MB
+- **Content that matters:** Empty. The directory holds `bat.py`, `engine.py`, `lanchester_signature.py`, `stress.py`, `validators.py`, `walkthrough.py`, `test_persubunit_stress.py`, `workbench/`, plus `tactic_cards.py`, `altonian_reinforcements.py`, `stress_scenarios.json`, `walkthrough_example.json`, `walkthrough_template.html`.
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
 ### systems/mass_battle/sim/altonian_reinforcements.py
 - **What it is:** oracle stub, 21 lines; one function that raises `NotImplementedError`.
 - **Status:** `[PROVISIONAL - Pass 2l armature stub 2026-05-17 (Pass 2e canon authoring pending faction contamination audit. Jordan 2026-05-17: "choice lock" ...)]`. Dead.
@@ -382,33 +354,6 @@ Lane: code under `modules/mass_battle/`, `systems/` and `engine/`-adjacent oracl
   - Verified by grep earlier: imported by nothing (F-MB-10 names it).
 - **Conflicts / stale:** canon source paths `designs/audit/...` and `designs/provincial/altonian_reinforcements_v30.md` are dissolved paths.
 - **Open items:** the "choice lock" mechanism is an unbuilt design commitment (a faction-ability that costs relationship permanently); F-MB-10 recommends deletion with a `FORK:` row.
-
-### systems/mass_battle/sim/engine.py
-- **What it is:** oracle code, 303 lines; "public API wrapper for the mass-battle engine": star-re-exports the whole `modules/mass_battle` namespace, a `MECHANICS` registry with a self-test, and the oracle builders `build_unit`, `build_envelopment`, `build_refused_flank`, `resolve_battle`.
-- **Status:** none (code). Oracle/gauge-facing (`bat.py`, `stress.py`, validators); `engine/season` uses `modules/mass_battle/armies.py` / `orderofbattle.py` instead.
-- **Bears on:** MB.
-- **Content that matters:**
-  - `MECHANICS` (`:41-77`): 31 registered mechanics, each `{fn, toggle, source, status}` with every status `WIRED`; `mechanics_selftest()` asserts each `fn` resolves to a symbol in the module list (`:79-82`). It checks that a name exists, not that it is called: `pursuit`, `recall`, `morale_cascade`, `multi_turn`, `between_turn_recovery` are all "WIRED" here while the season battle never reaches them (see orchestration.py entry). Registry `source` strings cite `mass_battle_v30 section ...` and `audit/lane-c/...` (prose as provenance).
-  - `build_unit` (`:90-124`) builds a single-subunit `Unit` with `troop_type='infantry'` default and derives `unit_type` from `unit_type_for(troop_type)` via the loadout (Jordan 2026-07-02: "Ranged is troop type as per the weapon assigned to troop", `:104-110`): the only place weapon assignment affects behaviour is melee/ranged. Stats `power=4, command=4, discipline=5, morale=6, dr=1` are hard-coded defaults tagged `[canonical: sim_mb_06_v9_historical_spec.md ...]` (a baseline T3 stat line repeated in four signatures).
-  - `build_envelopment` (`:127-221`) and `build_refused_flank` (`:224-281`) are unit-level posture presets (Cannae, Leuctra/Leuthen) composed from `build_army` + timed `Order` queues: `release_tick=4` (CALIBRATED-DEBT), `refuse_range=10` (fixed by measurement after a prior default of 3 never fired because the geometry made it unsatisfiable, ED-MB-0041 FIX, `:225-231`), `APEX=2`, `ENVELOP_WING_GAP`, `REFUSE_ECHELON`. These are the only authored "formation" structures: a spec is a dict `{shape, troop_type, tier, starting_position, role, instructions, stance, orders...}`. `Horseshoe`/`RefusedFlank` shapes are retired (LC-8; Jordan "those are emergent outcomes", `:147`).
-  - `resolve_battle(kind='single'|'multi'|'multi_unit')` routes to `run_battle` / `run_multi_turn_battle` / `run_multi_unit_battle` (`:284-297`): the oracle's three battle shapes; the season uses none of the last two.
-  - Final `__all__` is computed from the union of module `__all__`s (`:302-303`), so adding a name anywhere exports it.
-- **Reads / readers:** `systems/mass_battle/sim/bat.py`, `stress.py`, `validators.py`, `workbench/*`, `test_persubunit_stress.py` import it (`from systems.mass_battle.sim.engine import *`); the walkthrough uses `orderofbattle.build_unit` instead. `engine/season` does not.
-- **Conflicts / stale:** docstring mentions "the sim_mb_sigma.py shim" (not in the tree `[UNVERIFIED]`); `build_unit` parameter comment `speed='Standard'` feeds only the pursuit path the season never runs.
-- **Open items:** none stated.
-
-### systems/mass_battle/sim/walkthrough.py
-- **What it is:** oracle harness, 56 lines unread of 257 (read in full); runs the example battle behind the mass battle walkthrough page and rebuilds the page from `walkthrough_template.html`.
-- **Status:** none (code); declares itself "Reference only, not a source of any value (CLAUDE.md section 0.05)".
-- **Bears on:** MB, GO (page as a presentation of tick state), PROCESS.
-- **Content that matters:**
-  - It fights two `OrderOfBattle`s (`Subformation(name, troop_type, troops, role)` + one `strategy`) built from `walkthrough_example.json` through `orderofbattle.build_unit` and `orchestration.run_battle`, the same path `massbattle.resolve_field` uses for army records (`:3-8`). So the example is the only authored sample of the season-facing army shape: subformation list + one strategy + `morale_start`, `max_turns`, `page_seed`, `sweep_seeds`, `round_digits`.
-  - `_Recorder` uses `sys.setprofile` to log the order of `run_battle`'s direct callees (`:80-111`): an execution artifact of the tick stage order (what the code actually calls, per tick), unusually good evidence for stage-order claims.
-  - It takes the grade from `massbattle._grade(a, b, by_troops=True)` (private import, `:32`) and constants for the page from `config` (`VOLLEY_LETHALITY_SCALE`, `K_SQUARE`, `K_LINEAR`, `TICKS_PER_PHASE`, `ROUT_ONSET_FRAC`, `ROUT_CAP_FRAC`, `SUBUNIT_ROUT_FLOOR`, `ROUT_CASCADE_FRAC`) (`:207-210`): the page reads numbers from the engine, not from prose.
-  - `--role` gives side A's `light_cavalry` a role (`Flanker`, `Feint`): `light_cavalry` is hard-coded as the role-bearing type (`:45`).
-- **Reads / readers:** run as CLI; `tests/valoria/test_design_prose_quarantine.py` mentions "walkthrough" only as a fixture name. Uses `sys.setprofile`, so it must not run under another profiler.
-- **Conflicts / stale:** none found.
-- **Open items:** none stated.
 
 ### systems/mass_battle/sim/bat.py
 - **What it is:** oracle gauge, 792 lines (about 530 are comment): the byte-exact DIGEST harness (the "G5 gate"): a fixed battery of 10 matchups x 24 seeds through `engine.resolve_battle(kind='multi')`, hashing the full end-state vector of every trial.
@@ -424,6 +369,20 @@ Lane: code under `modules/mass_battle/`, `systems/` and `engine/`-adjacent oracl
 - **Reads / readers:** CLI (`--check`); the two CI/pytest gates above; imports `systems.mass_battle.sim.engine`. `engine/season` does not read it.
 - **Conflicts / stale:** the header refers to `tests/sim/gauge_mb.py` and `coverage_matrix.md` as sources; `ci_golden_modes_check` and `test_mass_battle_byte_exact` are said not to cover the two legacy modes. A `[canonical: ...]` tag on `ANCHOR_MAP` points to `mass_battle_v30.md section deployment`. The `MB_CELL_MORALE` mode key assumes the flag is a recorded axis; the default is ON (`config.py:106`) while the bare 'cell' key says `mor0`.
 - **Open items:** the two ungated legacy digests; the 3.11-vs-3.13 split; "a session with real reference-CI access" to resolve the pre-existing drift (`:628-632`).
+
+### systems/mass_battle/sim/engine.py
+- **What it is:** oracle code, 303 lines; "public API wrapper for the mass-battle engine": star-re-exports the whole `modules/mass_battle` namespace, a `MECHANICS` registry with a self-test, and the oracle builders `build_unit`, `build_envelopment`, `build_refused_flank`, `resolve_battle`.
+- **Status:** none (code). Oracle/gauge-facing (`bat.py`, `stress.py`, validators); `engine/season` uses `modules/mass_battle/armies.py` / `orderofbattle.py` instead.
+- **Bears on:** MB.
+- **Content that matters:**
+  - `MECHANICS` (`:41-77`): 31 registered mechanics, each `{fn, toggle, source, status}` with every status `WIRED`; `mechanics_selftest()` asserts each `fn` resolves to a symbol in the module list (`:79-82`). It checks that a name exists, not that it is called: `pursuit`, `recall`, `morale_cascade`, `multi_turn`, `between_turn_recovery` are all "WIRED" here while the season battle never reaches them (see orchestration.py entry). Registry `source` strings cite `mass_battle_v30 section ...` and `audit/lane-c/...` (prose as provenance).
+  - `build_unit` (`:90-124`) builds a single-subunit `Unit` with `troop_type='infantry'` default and derives `unit_type` from `unit_type_for(troop_type)` via the loadout (Jordan 2026-07-02: "Ranged is troop type as per the weapon assigned to troop", `:104-110`): the only place weapon assignment affects behaviour is melee/ranged. Stats `power=4, command=4, discipline=5, morale=6, dr=1` are hard-coded defaults tagged `[canonical: sim_mb_06_v9_historical_spec.md ...]` (a baseline T3 stat line repeated in four signatures).
+  - `build_envelopment` (`:127-221`) and `build_refused_flank` (`:224-281`) are unit-level posture presets (Cannae, Leuctra/Leuthen) composed from `build_army` + timed `Order` queues: `release_tick=4` (CALIBRATED-DEBT), `refuse_range=10` (fixed by measurement after a prior default of 3 never fired because the geometry made it unsatisfiable, ED-MB-0041 FIX, `:225-231`), `APEX=2`, `ENVELOP_WING_GAP`, `REFUSE_ECHELON`. These are the only authored "formation" structures: a spec is a dict `{shape, troop_type, tier, starting_position, role, instructions, stance, orders...}`. `Horseshoe`/`RefusedFlank` shapes are retired (LC-8; Jordan "those are emergent outcomes", `:147`).
+  - `resolve_battle(kind='single'|'multi'|'multi_unit')` routes to `run_battle` / `run_multi_turn_battle` / `run_multi_unit_battle` (`:284-297`): the oracle's three battle shapes; the season uses none of the last two.
+  - Final `__all__` is computed from the union of module `__all__`s (`:302-303`), so adding a name anywhere exports it.
+- **Reads / readers:** `systems/mass_battle/sim/bat.py`, `stress.py`, `validators.py`, `workbench/*`, `test_persubunit_stress.py` import it (`from systems.mass_battle.sim.engine import *`); the walkthrough uses `orderofbattle.build_unit` instead. `engine/season` does not.
+- **Conflicts / stale:** docstring mentions "the sim_mb_sigma.py shim" (not in the tree `[UNVERIFIED]`); `build_unit` parameter comment `speed='Standard'` feeds only the pursuit path the season never runs.
+- **Open items:** none stated.
 
 ### systems/mass_battle/sim/lanchester_signature.py
 - **What it is:** oracle regression, 407 lines; the P-L Lanchester signature checks: LINEAR (melee 4:1), SQUARE (volley 4:1), NO-ANNIHILATION (mirror), and a conserved-quantity exponent fit.
@@ -465,4 +424,124 @@ Lane: code under `modules/mass_battle/`, `systems/` and `engine/`-adjacent oracl
 - **Conflicts / stale:** `[canonical: designs/provincial/mass_battle_v30.md ...]` and `canon/editorial_ledger.jsonl` citations are dissolved paths.
 - **Open items:** none stated.
 
-<!-- ENTRIES-NEXT -->
+### systems/mass_battle/sim/validators.py
+- **What it is:** oracle code, 435 lines; eight top-down "historical-goal" validators (`V-CANNAE`, `V-FIXING`, `V-SHOCK`, `V-BRACE`, `V-ENVELOP`, `V-REFORM`, `V-ARCHER`, `V-SWEEP`) that build a deployment, run the real engine and check an emergent outcome band.
+- **Status:** none (code). Run: `PER_CELL=1 FIELD_MOVEMENT=0 MB_NODE_COHESION=0 PYTHONHASHSEED=0 python3 -m systems.mass_battle.sim.validators` (`:23`). Consumed by `tests/valoria/test_mass_battle_maneuvers.py` and `test_obb_contact_toi.py` (per `bat.py` comment, `:201-203`).
+- **Bears on:** MB.
+- **Content that matters:**
+  - Principle: "If a validator fails, the MECHANIC is wrong, not the validator" (`:6-9`); judged only on public battle outputs (winner, hp, rout). Bands are signs/inequalities (`delta > 0`, no seed worse), not magnitudes. V-CANNAE: envelopment of a fixed unit leaves the attacker with more hp; V-FIXING: the flank bonus has exactly zero effect on an unpinned unit; V-SHOCK/V-BRACE: shock decisive on a balanced line, resisted by a held, disciplined square; V-ARCHER: ordered fire concentrates on the target (asserts the cell==hp invariant); V-REFORM: seven gating cases of the Command-asymmetry rule.
+  - Fixtures are 14 hard-coded `_`-prefixed constants tagged `[canonical: class-B test-fixture]` (`:49-68`; e.g. `_DEF_TROOPS=3000`, `_MAIN_TROOPS=4000`, `_DET_TROOPS=1500`, `_TURNS=60`, `_SEEDS=20`). The attacker/defender are always single-type `infantry` `Line` subunits with `tier=4`: the validators exercise formation geometry, never troop-type or loadout differences.
+  - The two movement validators report BOTH arms: `v_envelop`/`v_sweep(path='grid'|'node')` and gate pass/fail on the grid (legacy) arm by default, because the validators' original working regression semantics were on the legacy lattice; the node (live) arm is an xfail gate in `test_mass_battle_maneuvers.py` (`:25-36`, header: "a bare invocation silently measured the DEAD node-path arm"). `_set_movement_path` mutates `FIELD_MOVEMENT`/`MB_NODE_COHESION` on `_hu` and `_orch` modules in process (`:218-233`): global mutation by a measurement.
+  - Reaches into module internals directly: sets `_orch.MB_FIXING_FLANK`, `_orch.MB_ENVELOP_SHOCK`, `_orch.MB_VOLLEY_TARGETING`, `_orch.REFORM_CHECK_ENABLED`, replaces `_orch.find_contacts` for V-REFORM (`:112-113`, `:302-303`).
+  - Header says "reliable detachment rear-reach is build C ... a detachment approaching directly into the rear or flank forms NO contact pair" (`:19-22`): an acknowledged limit.
+- **Reads / readers:** `tests/valoria/test_mass_battle_maneuvers.py`, `test_obb_contact_toi.py`; run as a module.
+- **Conflicts / stale:** "`validators.py:220` already says 'the legacy integer path'" (`bat.py:203`): `path='grid'|'node'` still carries the word the 2026-08-14 ruling retired (`bat.py:199-203`). Citation to `designs/audit/2026-07-04-mass-battle-cannae-gauge-audit/README.md` is a dissolved path.
+- **Open items:** the node (live path) arm of V-ENVELOP/V-SWEEP is tracked as xfail.
+
+### systems/mass_battle/sim/walkthrough.py
+- **What it is:** oracle harness, 56 lines unread of 257 (read in full); runs the example battle behind the mass battle walkthrough page and rebuilds the page from `walkthrough_template.html`.
+- **Status:** none (code); declares itself "Reference only, not a source of any value (CLAUDE.md section 0.05)".
+- **Bears on:** MB, GO (page as a presentation of tick state), PROCESS.
+- **Content that matters:**
+  - It fights two `OrderOfBattle`s (`Subformation(name, troop_type, troops, role)` + one `strategy`) built from `walkthrough_example.json` through `orderofbattle.build_unit` and `orchestration.run_battle`, the same path `massbattle.resolve_field` uses for army records (`:3-8`). So the example is the only authored sample of the season-facing army shape: subformation list + one strategy + `morale_start`, `max_turns`, `page_seed`, `sweep_seeds`, `round_digits`.
+  - `_Recorder` uses `sys.setprofile` to log the order of `run_battle`'s direct callees (`:80-111`): an execution artifact of the tick stage order (what the code actually calls, per tick), unusually good evidence for stage-order claims.
+  - It takes the grade from `massbattle._grade(a, b, by_troops=True)` (private import, `:32`) and constants for the page from `config` (`VOLLEY_LETHALITY_SCALE`, `K_SQUARE`, `K_LINEAR`, `TICKS_PER_PHASE`, `ROUT_ONSET_FRAC`, `ROUT_CAP_FRAC`, `SUBUNIT_ROUT_FLOOR`, `ROUT_CASCADE_FRAC`) (`:207-210`): the page reads numbers from the engine, not from prose.
+  - `--role` gives side A's `light_cavalry` a role (`Flanker`, `Feint`): `light_cavalry` is hard-coded as the role-bearing type (`:45`).
+- **Reads / readers:** run as CLI; `tests/valoria/test_design_prose_quarantine.py` mentions "walkthrough" only as a fixture name. Uses `sys.setprofile`, so it must not run under another profiler.
+- **Conflicts / stale:** none found.
+- **Open items:** none stated.
+
+### systems/mass_battle/sim/workbench/rout_cascade_sweep.py
+- **What it is:** oracle calibration script, 195 lines; sweeps `ROUT_CASCADE_FRAC` over {1.0 ... 0.5} (one subprocess per value) against the gauge's loser-casualty band `LOSER_CAS_BAND = (15.0, 30.0)` with the win-share bands as control (A8, ED-MB-0067 Part A / ED-MB-0071).
+- **Status:** none (code). Dev tool; the shipped value 0.6 came from it. A neighbour `rout_cascade_sweep_results.json` exists (not in this lane).
+- **Bears on:** MB, CORE (campaign reach).
+- **Content that matters:**
+  - Key audit fact (`:22-33`): `Unit.derive_rout`'s cascade condition is evaluated per Unit over its OWN subunits; for a one-subunit Unit `_broken_share()` is a 0/1 step so ANY threshold in (0,1] fires at the same instant: "PROVABLY inert". `massbattle._faction_to_unit` "the only function building Units for the live campaign builds exactly one subunit per faction, so this sweep's choice has ZERO effect on any campaign-reachable battle today, whatever it picks". NOW STALE (verified): `massbattle._oob_unit` (`modules/mass_battle/massbattle.py:358-370`, ED-IN-0306) builds the side's Unit from an `OrderOfBattle` of several `Subformation`s through `orderofbattle.build_unit`; a field with orders of battle therefore has more than one subunit per side, so `ROUT_CASCADE_FRAC=0.6` is no longer inert in a season battle (only a headcount side with one `_HEADCOUNT_LINE_TYPE` subformation is). The sweep's calibration evidence (gauge rows) was taken on the oracle's multi-subunit gauge rows, not on season-built armies.
+  - Method controls: derives the in-scope rows programmatically (`callable(sa) or callable(sb)`) after a first hand-listed set dropped C4/C7; the worker fails loud if the env var did not take effect (`:99-105`); one subprocess per candidate because config reads env at import. `CANDIDATE_VALUES` is a 0.1 grid, JUSTIFIED as screening resolution only.
+  - Depends on `tests/sim/gauge_mb.py` (`TESTS`, `CAV_TESTS`, `matchup`, `casualty_verdict`): the gauge, not in this lane.
+- **Reads / readers:** CLI; subprocess-self. No reader in the engine.
+- **Conflicts / stale:** `LOSER_CAS_BAND` as "historically-grounded" is a claim about the gauge, not verified here.
+- **Open items:** none stated.
+
+### systems/mass_battle/sim/workbench/server.py
+- **What it is:** oracle dev tool, 178 lines; stdlib HTTP server for the Mass-Battle Workbench (`/api/mode`, `/api/presets`, `/api/roster-options`, `/api/trace`), port 8766.
+- **Status:** none (code).
+- **Bears on:** MB, GO (a UI of army configuration).
+- **Content that matters:**
+  - `/api/roster-options` exposes the LIVE registries to the UI so it "never hardcodes a second copy": shapes from `geometry.CELL_PATTERN_FN`, troop types from `TROOP_TYPE_STATS` plus the two legacy generics `infantry`/`cavalry`, `roles_by_troop_type` from `registry.roles_for`, `SUBUNIT_CAP`, `BATTLEFIELD_SIZE` (`:108-124`). It is the only place the full army-configuration vocabulary (shape x troop type x role) is enumerated for a chooser, and the right shape for the `valoria` authoring architecture (read the registry, not a copy).
+  - `PRESETS` (8 scenarios H1, H4, H7, C4, C2, R1, M3, OBL) mirror `gauge_mb.py` TESTS/CAV_TESTS (`:73-91`); preset geometry (`_ENVELOP_WINGS` at columns 3 and 15 from row `SIDE_A_START_ROW`) is hand-set.
+  - Mode is fixed at process start because toggles are read at import and star-imported as independent copies (`:9-13`): the process-global flag problem F-MB-09 names, stated by the file itself.
+  - `from trace import run_traced_battle` shadows stdlib `trace` (cf. F-PC-11 equivalent).
+- **Reads / readers:** run as a script only.
+- **Conflicts / stale:** header "(Mirrors designs/scene/combat_engine_v1/workbench/server.py's pattern)" is a dissolved path; `sys.path.insert(... '..','..')  # tests/sim` is a stale comment (it points at `systems/mass_battle`, not `tests/sim`).
+- **Open items:** none stated.
+
+### systems/overview/__init__.py
+- **What it is:** Package marker, 6-line docstring.
+- **Status:** none; live (package).
+- **Bears on:** WR, SE
+- **Content that matters:** Says the folder is the doc home for `clock_registry_v30` and `peninsular_strain_v30`, and that `sim/` holds the MS (Mending Stability) world-track oracle.
+- **Conflicts / stale:** Stale: docs live in `.designs/`. Per `sim/__init__.py` the MS track has no importer left.
+- **Open items:** none.
+
+### systems/overview/sim/__init__.py
+- **What it is:** Package marker, 15-line docstring, marked `Status: [PROVISIONAL - Pass 2l armature stub 2026-05-17]`.
+- **Status:** `[PROVISIONAL - Pass 2l armature stub 2026-05-17]`; stale (a 2026-05 stub label on a package whose other modules were retired at plan positions 29a/29b).
+- **Bears on:** WR
+- **Content that matters:** Lists one module, `ms_track` "no importer left since plan position 27; its own retirement is plan position 29a-ms"; retired: `accounting`, `rs_track`, `ip_track` (29a), `ci_track` (29b). Verified: `grep` for `systems.overview` / `ms_track` outside the package finds only `engine/substrate/composition.py:6` (a comment mentioning `systems.overview.sim.season`) and `engine/season/data/cast.py:438`, no importer. So `ms_track.py` is an orphan the package docstring itself flags for retirement.
+- **Conflicts / stale:** Retirement "29a-ms" is not recorded as done; the file still exists.
+- **Open items:** Whether `29a-ms` is open or abandoned.
+
+### systems/overview/sim/ms_track.py
+- **What it is:** oracle code, 92 lines; Mending Stability world-track: clamp to [0,100], baseline decay -1 per year, `apply_ms_delta`.
+- **Status:** none (code; package docstring `PROVISIONAL`, retirement named as plan position `29a-ms`). Dead.
+- **Bears on:** WR, SE (Mending Stability clock).
+- **Content that matters:**
+  - Defines `MS_FLOOR=0`, `MS_CEILING=100`, `MS_BASELINE_DECAY_PER_YEAR=-1`, `SEASONS_PER_YEAR=4`, `MS_START=60` (`:41-52`) and two functions that mutate `world.clocks['MS']` (`:60-92`). `MS_START=60` records a Jordan ruling (2026-06-06) replacing 80 and the "60/72 mode split" (`:11-17`).
+  - Its dependency, the `game_state` module, "was deleted at `29b`"; "no caller passes a season `World` (which carries no `clocks`)" (`:27-29`). Verified by grep: no importer in `engine/`, `modules/`, `tests/`; only prose mentions (`engine/season/loop/matter.py:160` describes it as a prior "stored 0-100 scalar and yearly" model; `tests/valoria/test_flow_skeletons.py:345,414` mention `ms_track` seam as struck at plan position 27). So the current MS owner is `engine/season/loop/matter.py` (not read in this lane) and this file is an orphan with duplicate constants.
+  - `[DRIFT]` note about `accounting._ms_decay` (`:19-25`) is stale: `accounting` was retired at 29a.
+- **Reads / readers:** none.
+- **Conflicts / stale:** the clock described (a scalar MS with yearly -1 decay) vs `matter.py` (stock/lattice model; `hole_register.yaml:4932` "THE LATTICE COUPLING"). Whether the MS ruling `60` still holds in the live model is not answerable from this file. Delete candidate per its own package docstring.
+- **Open items:** retirement `29a-ms` pending; which carrier replaced `world.clocks['MS']` ("`33` decides the carrier").
+
+## Cross-subsystem leads
+
+- **MB / CORE / FA (what reaches the season battle).** The season enters mass battle through one function, `massbattle.resolve_field`, via `engine/season/seam/wrappers/mass_battle.py`; `engine/season` imports nothing under `modules/mass_battle/hierarchy` or `orchestration`. Everything the seam does not pass is oracle-only: `run_multi_turn_battle`, `run_multi_unit_battle`, pursuit by Fast units (`pursuit_damage`, `recall_check`, `Unit.speed`), freed-attacker flanking, the morale cascade between adjacent engagements, `between_turn_recovery` (morale recovery constant is 0), `reset_positions`. `engine.py`'s `MECHANICS` registry labels these "WIRED" because the self-test checks a symbol exists, not that the season calls it. (orchestration.py, engine.py entries.)
+- **MB / SE.** `terrain.py` is the only reader of `systems/settlements/valoria_geography_v30.yaml`'s `terrain:` polygons and `water: rivers:`; two real territories (T3, T10) cannot resolve to `NARROW_PASS` because their anchors lie outside the pass polygons; bridges are unread; the walls DR `+3` and the uphill/river dice are hard-coded in `terrain.py` with `[canonical: ... A.9]` tags. SE audit should know the fortification of a place reaches the battle only as `fort_level > 0 -> WALLS`.
+- **MB / CHAR.** `Unit.command` enters the engagement through the pool formula only; `Officer` and `Subunit.officer` are bookkeeping no code reads. Individuals' attributes do not reach a battle (F-MB-14). The Command stat's real rolls (`recall_check`, `feigned_retreat_recognized`) are in oracle-only code.
+- **MB / PC (shared vocabulary of formation and weapon).** MB has one `TROOP_LOADOUT` map (troop type -> (weapon, armour)) in `modules/mass_battle/equipment/__init__.py` that feeds only `unit_type` (melee/ranged) through the weapon's `reach` field; PC has a rich derived weapon model (`modules/combat/weapons.py`, 49 per-weapon quantities in `catalogue.py`). No code connects the two weapon vocabularies (F-MB-19 loadout, F-PC-13 equipment half). A duel inside a battle (F-MB duel intent) would have to bridge `troop_type`/`eff_power`/`eff_dr` to a `Combatant(weapon, armor, tradition, attrs)`.
+- **PC / CHAR / FI.** Kit, tradition, technique and cross-training (`equipped`, `known_traditions`, `skills`) are defined only in the combat module and exercised only by `build_levers.py`; `balance.py`, the workbench `server.py` and the fighter builders can express attributes + one weapon + one armour tier + one tradition only. `skills` is "UNCAPPED at the engine layer ... a character-gen/economy job that does not exist yet" (`build_levers.py:111-113`). `conviction.py` (CHAR) is called only by `knots.py` (FI) and tests; the season does not read it.
+- **DICE.** Several instruments carry their own copy of dice/interval math: `probabilities.py` and `presets.py` read `m1_dice_sigma_core` (frozen harness) not `engine/dice_engine`; `_wilson` appears in `balance.py`, `build_levers.py`, `server.py`, `calibrate_generics.py`; the discipline-penalty ladder (`>=5 / >=3 / else` = 1.0/0.7/0.4) appears three times in `units.py` and again as 0/1/2/99 in `orchestration.volley_phase`.
+- **GO / port.** `bat.py` goldens are interpreter-bound (the field digests "differ under 3.13"); `hierarchy/units.py` is float throughout with 12 import-time env toggles (F-MB-09); `stress.py --grid` shows the season's deployment geometry lives in module-private constants of `orderofbattle.py` (`_A_FRONT_ROW`, `_ANCHOR_COL`, `_MAX_COL`). `structure_scan.dead_exported_keys` is the live guard for the PC export.
+- **WR.** `ms_track.py` is an orphan duplicate of the Mending Stability clock (constants 0/100/-1/year/start 60); the live owner is in `engine/season/loop/matter.py` (not read here).
+
+## Likely stale or superseded
+
+- `systems/overview/sim/ms_track.py` and its package docstring (`PROVISIONAL - Pass 2l armature stub`): no importer; retirement `29a-ms` named, not done.
+- `systems/mass_battle/sim/altonian_reinforcements.py`: `NotImplementedError` stub; dependencies deleted; imported by nothing (F-MB-10). `systems/mass_battle/sim/tactic_cards.py` is its sibling (not in this lane).
+- `systems/__init__.py`, `systems/characters/__init__.py`, `systems/fieldwork/__init__.py`, `systems/mass_battle/__init__.py`, `systems/overview/__init__.py`, `systems/combat/__init__.py`: docstrings describe design documents "co-located" under `systems/` that were moved to `.designs/`, name `sim.personal.*`/`sim.provincial.*` paths and sibling modules that no longer exist, and `npcs`/`articulation`/`ui` plain directories that are absent.
+- `hierarchy/units.py:47-55` comments say the facing model is DEFAULT-OFF / "do not enable" while every `MB_FACING_*` defaults ON; `:1108-1115` calls cell-morale re-key "inert today" at `MB_CELL_MORALE=0` while `config.py:106` defaults it ON; `Unit.__post_init__` comment about `MB_FEIGNED_RETREAT` was corrected once and still describes history.
+- `orchestration.py:277` says `REFORM_CHECK_ENABLED` default OFF; code default `'1'`. Its 150-line header (v9-v20 battery results, H5 open tension) is history, not state.
+- `rout_cascade_sweep.py:22-33` "ZERO effect on any campaign-reachable battle": superseded by `massbattle._oob_unit` (ED-IN-0306) building multi-subformation Units for the season.
+- `lanchester_signature.py`: its recorded fitted exponents (melee p=3.20, volley p=2.00) conflict with its own bars (<=1.4, >=1.6); the `[canonical: mb_lanchester_design.md ...]` tags were re-labelled JUSTIFIED after not resolving.
+- `calibrate_generics.py` numbers: stale per its own header (CR-85 re-base owed). `narrate.py` run instruction (`python -m workbench.narrate` from the engine dir) points at a retired location.
+- `commentary.py` literals ("5% upset", "12 turns") duplicate `config.UPSET_FLOOR` and `wrapper.fight(max_bouts=12)`; the separation table omits `terms`.
+- Dissolved path citations (`designs/provincial/...`, `designs/audit/...`, `designs/scene/...`, `sim/personal/...`) occur in units.py, orchestration.py, perimeter.py, bat.py, engine.py, validators.py, lanchester_signature.py, test_persubunit_stress.py, workbench/server.py, altonian_reinforcements.py, conviction.py, ms_track.py.
+
+## Items that could change an audit finding
+
+- **F-MB-09 (hidden env inputs): CONFIRMED and sharpened.** units.py reads 12 and orchestration.py 11 environment variables at import (matches the 91-total claim), and the Mass-Battle workbench's own header states mode "is fixed at process start" because values are star-imported as independent copies. `rout_cascade_sweep.py` works around it with one subprocess per value. The shipped default of several of these (`MB_FACING_*`, `MB_CELL_MORALE`, `REFORM_CHECK_ENABLED`) is ON while comments say OFF.
+- **F-MB-10 (dead and unreached code): EXTENDED.** Additional dead items in this lane: `Subunit.role_at_contact` (no caller, verified), `perimeter.py`'s `target_points`, `nearest_target`, `approach_alignment`, `TargetPoint`, `SHARP_TIP_DEG` (only `perimeter_faces` is called, once), `SCAR_SEASON_CAP_THREAD` in `conviction.py`, `Unit.officers`/`Subunit.officer` unread, `run_multi_unit_battle`'s two empty `pass` cascade arms (`orchestration.py:2370-2375`), and the oracle-only block (`run_multi_turn_battle`, `run_multi_unit_battle`, pursuit, recall, freed-attacker) that `massbattle.py:387` records as unreachable from the season. `ms_track.py` is a further dead module outside MB.
+- **F-MB-18 (per-cell morale comes loose on role/shape change): STRENGTHENED.** `rekey_cells` deliberately skips `cell_morale`, `cell_start_troops`, `cell_breakpoint` (`units.py:1108-1115`, "plan-v2 B1c ... rulings") and `MB_CELL_MORALE` defaults ON, so a Column/Arrowhead that drifts to Line loses its seeded per-cell morale on the default path.
+- **F-MB-19 / F-MB-22 (loadout not read, weapon-only types collapse): CONFIRMED in these files.** The Subunit carries `troop_type` only; the loadout reaches the battle as `unit_type` (melee/ranged) via `unit_type_for(troop_type)` (`engine.py:104-115`, `registry.py:172-180`) and as `reach_for(troop_type)`; damage reads `eff_power` and `eff_dr` (integers per Unit/Subunit). No second weapon, no off-hand, no shield.
+- **F-MB-23 (behaviour keyed on type names): CONFIRMED.** `fast = troop_type in ('cavalry','light_cavalry')` (`units.py:1491`), `charge_pen = 3 if troop_type == 'cavalry'` (`:943`), `atom_a.troop_type == 'cavalry'` in the recoil gate (`orchestration.py:1213`), `light_cavalry` hard-coded in `walkthrough.py:45`.
+- **F-MB-12 / F-MB-25 (surfaces that say the opposite of the code): more instances.** See Likely stale; add the octagon admission that the central damage model "is NOT in mass_battle_v30.md" (`orchestration.py:925`, `:1058`).
+- **F-MB-15 / F-MB-16 (no intervention; NPC commander is a script): CONFIRMED.** The only in-battle command surface is the `Order` queue (`units.py:271-389`: triggers `immediate|tick|enemy_range|ally_at|own_strength|signal`) plus stance; no code path takes a decision during a tick.
+- **F-MB-17 (hierarchy three levels): CONFIRMED** (Unit -> Subunit -> cell; `Officer` unused).
+- **F-MB-02 / the Lanchester law:** `lanchester_signature.py`'s own fitted melee exponent 3.20 against a linear-law bar of 1.4 suggests the shipped melee attrition is not Lanchester-linear; re-run before relying on "linear" in any finding `[UNVERIFIED: not run]`.
+- **Stale premise in the audit evidence:** `rout_cascade_sweep.py`'s "inert for the campaign" argument no longer holds after ED-IN-0306; any finding that quotes "ROUT_CASCADE_FRAC is campaign-inert" should be re-checked.
+- **F-PC-02 / F-PC-09 / F-PC-13 (every person the same fighter; ability layer near-silent; equipment half): CONFIRMED by the tools' own text.** `build_levers.py` finds the ability rows inside the noise floor and the ED-PC-0023 review put the aggregate win-rate edge near 0; the build surface (skills, equipped, known_traditions) is unreachable from `balance.py`/server; the capability table has four gates and no off-hand/shield slot.
+- **F-PC-10 / F-PC-11 (constants outside the export; flat-module hygiene): CONFIRMED.** `calibrate_generics.py` records `LEGIB_SWING_ROOM_K` as a module-level constant outside `CFG`; `workbench/trace.py` shadows stdlib `trace` (also `systems/mass_battle/sim/workbench/trace.py`, `server.py` import); `structure_scan.py` counts `sys.path.insert` sites.
+- **F-PC-08 (second owners of the draw): EXTENDED to the instruments.** `probabilities.py` re-implements the outcome map and the commit-band draw; `presets.py` takes dice constants from the frozen `m1` harness.
+- **F-FI-07 (knots holds state):** `conviction.py` has the same module-global state shape (`_conviction_state`), shared with `knots.py`.
+- **F-CHAR-12 (frozen PersonInterior not built) context:** `conviction.py` is the registered (`module_contracts.yaml:232`) personal piety track yet unreached by the season.
