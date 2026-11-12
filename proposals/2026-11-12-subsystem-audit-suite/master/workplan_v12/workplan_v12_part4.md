@@ -476,3 +476,5 @@ Not in this batch, and where each is: `17_CENSUS_C1A_01` D1's `cast.defects` row
 - GLOSSARY: none.
 - COST and TIER: edit (text only); `sonnet` (the source's tier), `medium`.
 - LANDS IT: B03's producer; `Item: B03.17`, `[skip ci]`.
+
+*Continued at B03.18 in this part's `_cont` file (the 120 KB cap, `V12_STRUCTURE_part2.md` §4.1), which also holds this half's SERIAL EDGES and file census.*

@@ -23,7 +23,7 @@ GATE: Batch B04-capability-home
 GATE: Batch B07-task-draw
 GATE: Batch B10-character
 GATE: Batch B11-fi-readers
-REQUIREMENT: R-04.c3 → `PYTHONHASHSEED=0 python -m engine.season.harness.headless --world hearing --seed 0 --auto`, run twice, prints the same content hash (`IS_A_NINE.md` R-04.c3; `IS_A_NINE_part2.md` §12.2 row B24: "the hearing's hash twice equal"); no `status:` edited (A-114). Also served: the `scales:` row *social contests / debates* gains its measured `in_loop:` sentence at B24.47 if B24.44's reading is above zero (`IS-B2-SC-01`); A-14, A-25, A-26, A-38, A-63, A-64, A-79, A-80, A-81 for the hearing.
+REQUIREMENT: R-04.c3 → `PYTHONHASHSEED=0 python -m engine.season.harness.headless --world hearing --seed 0 --auto`, run twice, prints the same content hash (`IS_A_NINE.md` R-04.c3; `IS_A_NINE_part2.md` §12.2 row B24: "the hearing's hash twice equal"); no `status:` edited (A-114). Also served: the `scales:` row *social contests / debates* gains its measured `in_loop:` sentence at B24.99 if reading R1 (B24.39) is above zero (`IS-B2-SC-01`, B24.42); A-14, A-25, A-26, A-38, A-63, A-64, A-79, A-80, A-81 for the hearing.
 @@HEADER-REST@@
 
 ### B24.01 — the docket item names its case file · IS-B2-SC-02 · BUILD · HASH MOVER(behaviour)
@@ -45,7 +45,7 @@ REQUIREMENT: R-04.c3 → `PYTHONHASHSEED=0 python -m engine.season.harness.headl
 - GLOSSARY: row *case file* (`unified/U1_GLOSSARY.md`): its owner column gains a pointer to `world_q.case_file_of` (the docket item's `case` key) in this commit; if no row exists, one is added: "case file: the Record a court keeps on one matter, as a clerk's file is."
 - IDS: none.
 - COST and TIER: edit; `sonnet`, `high`.
-- LANDS IT: B24's `valoria-author` producer, `isolation: worktree`; one `Item: B24.01` commit, `[skip ci]`; its commit body also records the B24-open reading of B24.44 step 1 (`IS-B2-SC-09` (1)).
+- LANDS IT: B24's `valoria-author` producer, `isolation: worktree`; one `Item: B24.01` commit, `[skip ci]`; its commit body also records reading R1's open arm (`IS-B2-SC-09` (1), taken on the batch's base before this item).
 
 ### B24.02 — `reception` and `proofs` re-sourced from commits (F8, option B) · SC-02 (intake) · BUILD · HASH MOVER(behaviour)
 - SOURCE: the intake `:428` (SC-02, STILL-NEEDED; "slot by R8 into B24 (before the evidence cycle)"); carry-forward `master/eval/E1.md` `:4217` (= E2 `:892`, E4 `:4110`), REMAINING UNBUILT: "the re-source build (`reception` and `proofs` read the actor's own ledger and the bench's public commits) is HELD on its approval"; the design it builds, `proposals/2026-11-08-sc02-reception-proofs-own-commit-design.md` §1–§5 (PROPOSED; ratified on the merge that adopts v12, ED-1094, unless the PR body holds it back); rulings A1-08 (ED-SC-0040's option B); closes ED-SC-0040's F8 question; amends H-215 (7), H-216 (7). Placed here by `_part2` §5.6's first rule: HEAR_B, the first member, names SC-02's commit term (`Seat.lean`), and EVID_B names SC-02 as a predecessor.
