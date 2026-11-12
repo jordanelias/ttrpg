@@ -403,3 +403,102 @@ holds: it is the architecture). It improves by deleting what is false in every w
 else a reader for it, `Rung.yield`, `coin` until something mints it, the hunger bands until a person can
 be told one. And it worsens with each new table added before one of the six sentences executes.
 
+## 3. Emergent narrative
+
+Question: with no player acting, over several seeds and seasons, does a *place* generate stories:
+beginning, escalation, reversal, cost, an ending that is not an arbitrary stop, and a record a narrator
+could read?
+
+### 3.1 What stories the code can produce at all (enumerated from the effects and MATTER, not the documents)
+
+| # | story | its path in code | executes where |
+|---|---|---|---|
+| S1 | a dearth reported and relieved | a stocked larder runs dry → Observation → witness or seat channel → claim → question → `transfer` | `harness/scarce.py` with the steward's question named: once, 8 salt, grain never (first audit F-SE-04). The realm: never (0 Observations in four play runs and the famine run here) |
+| S2 | a town starves to death | never-stocked ladder → body falls every season → death at 0 | barrier-only worlds built hungry (famine arm; first audit `se_bind`). Under computed play: never (`tend`) |
+| S3 | a fabric decays | wear 10 a season → band crossing | arithmetic: first crossing at season 21, every harbour at once (first audit F-SE-05) |
+| S4 | a works rises | declare → terms ripen → `found` or `build` → `restore` to the ceiling | hand-built (`test_works_founding.py`); the realm: 0 of 25 and 0 of 14 here |
+| S5 | a steward starves his establishment | seat-rung `transfer` away → `oblige` terms lapse | hand-built (`test_term_upkeep.py`, by the docstring; not re-run) `[UNVERIFIED here]` |
+| S6 | a town is razed | occupation → `raze` → every edge closed, residents placeless | hand-built (`test_in12_raze.py`); the realm: 0 |
+| S7 | a courtier changes address | named `migrate` | the shipped realm (first audit: 16 in three seasons, five persons); 0 in the four stocked-arm runs here |
+| S8 | a harvest fails | season factor 0.5 | only with the arm on; consequence none (§2.3 P2) |
+
+Eight. S1, S4, S5 and S6 need a world built by hand to exhibit them; S2 needs the chooser switched off;
+S3 needs twenty-one seasons; S8 needs a fixture flipped and then has no second beat. **In computed play
+on the built realm the settlement layer's whole story output is S7**, and S7 is not about a place.
+
+### 3.2 What it produced, counted (two seeds, two seasons, two arms; the control is the fed arm)
+
+| reading | seed 0 fed | seed 0 fail | seed 1 fed | seed 1 fail |
+|---|---|---|---|---|
+| towns with no food | 0 | 11 | 0 | 11 |
+| acts resolved | 1,532 | 1,527 | (735 + s1) | (733 + s1) |
+| shortfall Observations / persons holding a shortfall claim | 0 / 0 | 0 / 0 | 0 / 0 | 0 / 0 |
+| deaths | 0 | 0 | 0 | 0 |
+| cohort `tend` executed (the hungry healing themselves) | 0 | 21 | 0 | 20 |
+| `migrate` executed / attempted | 0 / 74 | 0 / 78 | 0 / 46 | 0 / 41 |
+| `exchange` executed / attempted | 0 / 41 | 0 / 36 | 0 / 56 | 0 / 43 |
+| `transfer` executed (all a cohort to its own person-rung, 1 grain) | 2 | 2 | 2 | 1 |
+| `requisition` executed | 0 | 0 | 0 | 0 |
+| `found`, `build`, `raze`, `sabotage` executed | 0 | 0 | 0 | 0 |
+| executed `move` to anywhere but where the mover stands | 0 of 17 | 0 of 17 | 0 of 23 | 0 of 26 |
+| food held in the eleven highland towns at the end | grain 1,221, salt 935 | 0, 0 | — | 0, 0 |
+| Event kinds present in one arm only | — | `office.established`, `establish.refused`, `issue.unauthorized` (1 each) | `matter.advanced`, `record.given` (1 each) | — |
+
+Reading. Removing the food of eleven towns changes, of the settlement layer's own kinds, `body.changed`
+(+11 a season), `body.tended` (+10 or +11), `stores.changed` and `condition.worn` (-11 each: the missing
+harbours), and nothing else. The other differences between arms are small and unsigned (for example
+`transfer.refused` 24 against 19, `commitment.made` 26 against 17 at seed 0 season 1): the divergence a
+different act by eleven cohorts would cause anywhere, not a consequence of hunger; none is a kind a
+narrator would file under famine. **A third of the realm starving is not an event in the realm's
+story.**
+
+A control on the instrument itself: the first audit, on the shipped realm (empty larders at build),
+read 10 named migrations executed in two seasons at seed 0; here, in both arms with stocked larders,
+none. The difference is in the world built, not the probe's counting rule (the same `ex`/`ref` test as
+`se_who.py`). Its cause was not isolated `[UNVERIFIED]`; the unstocked arm was re-run as the control
+(evidence log, row 12).
+
+### 3.3 The six beats, against the famine (the strongest story the layer owns)
+
+| beat | present? | evidence |
+|---|---|---|
+| beginning (a cause a reader can name) | no | the hunger `body.changed` chains to the cohort's previous `body.changed`, else `ROOT` (`matter.py:699-705`); it does not cite the larder, the yield or the missing harbour |
+| escalation | arithmetic only | 1000 → 598 → 196 → dead (famine arm, `body_step` 67), the same for all eleven: no town breaks first, none holds out |
+| reversal | no | nothing can interrupt it but an act, and no act is formed toward it (§3.2); with acts on, `tend` reverses it for free every season, which is the absence of a story in the other direction |
+| cost | no | the dead towns' yield, capacity, named residents and holders are untouched; nobody loses a levy, a tax, standing or a seat |
+| ending | an arbitrary stop | all eleven die in one season; the towns then read `fed`; no Event closes the place; `ENDINGS_CLASSIFIED.yaml` (224 lines) has no row naming a settlement, hunger, famine, migration, founding or razing (grep: 0 hits) |
+| retelling | no | `person.died` is written with `causes=[ROOT]` and `observed=()` (`matter.py::_die`; famine arm, first death Event): the record cannot tell a starvation from an illness; `yield.taken` carries no amount; the story instruments (`storybar`, `chronicle`, `arc`) read acts and their cross-person chains, and a death at MATTER has no act, so the famine cannot appear in a chronicle at all |
+
+### 3.4 The questions the work order asks
+
+- **Which stories are dead ends?** S1 ends after one bag (the second question's `from` binds to the
+  hungry rung, first audit). S2 ends in a town that reads `fed`. S4 ends in an empty lot (§2.3 P4). S7
+  loops (the Spymaster moves four times).
+- **What does a player's choice change?** In the settlement layer, by the first audit's control, 2 to 4
+  units of 13,690 in three seasons. Nothing here revises that. A player who wanted to relieve the
+  highlands has `transfer` at the default amount of 1 against a need of 66 a season.
+- **The shape of the tail: are all runs the same run?** For the economy, yes, to the unit: barrier-only
+  stores are identical at seeds 0 and 1 (first audit), and in play the executed settlement acts are the
+  same *kinds* of non-event on both seeds (self-moves, one self-transfer). There is no tail.
+- **Are persons' reasons readable afterwards?** There are no reasons to read: the cohorts did not act on
+  hunger, and the one act they took (`tend`) is not caused, in the log, by the fall it answers
+  `[UNVERIFIED: the `tend` act's `causes` were not opened]`.
+- **Does the story survive the extremes?** Zero population: the place goes on as an unlabelled mine
+  (§1.3). One person: no hunger exists. A hundred towns on one granary: the lowest ids eat (A-1).
+
+### 3.5 Stories that cannot happen, and why (each is one missing link, named at its owner)
+
+| story a player would expect of a place | the missing link | owner |
+|---|---|---|
+| a town thins in a famine and recovers after | no writer of `Person.weight` | `07_SE_population_census.md`, `07_SE_population_regrowth_B.md` (first lane) |
+| the hungry blame their lord, and it costs him | no person learns of a chronic dearth; nothing ties a dearth to a holder | F-PES-SE-04; `unrest` (CP-T08-06, planned) |
+| refugees arrive and strain the next town | no cohort migration executes; arrival changes nothing but a count | F-PES-SE-01; CR-49 (first lane) |
+| a bad year is remembered | the harvest is not an Event | F-PES-SE-07 |
+| a town lives by its mine and buys its bread | `exchange` cannot name what the town has or lacks; ore has no buyer | F-PES-SE-09, F-PES-SE-10 |
+| a road is cut and a town goes short | no route (first audit F-SE-06) | design-first |
+| a founder's town outgrows him, or dies with him | no settlement can be founded; no founded thing can end | F-PES-SE-06 |
+| a besieged town is starved out | the larder ladder has no notion of being cut off from the rungs above | MB and SE; not built |
+| an army eats a province bare | the field ration reads one seat rung, and it is empty | F-PES-SE-05 |
+| a granary is burned | `sabotage` reaches a Site's condition, never a store | no path |
+| a hoarder, a profiteer | no price, no `coin` | no path |
+

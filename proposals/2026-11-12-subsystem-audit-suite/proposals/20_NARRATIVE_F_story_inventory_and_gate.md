@@ -88,12 +88,12 @@ python -m engine.season.harness.strife 4 0 1 2 --strands
 
 (`on` is every `20_NARRATIVE` fixture at its proposed live value.) It passes when all of these hold:
 
-1. **A control.** Under `basis_off`, G1 to G4 and G6 read 0 at every seed and G5 has one sign at three
-   seeds of five or more (today's reading, reproduced). If `basis_off` shows crossings, the reading is
-   counting something else.
+1. **A control.** Under `basis_off`, G1 to G4 and G6 read 0 at every seed, and G5 counted between two
+   persons who both hold a conviction has one sign at three seeds of five or more (today's reading,
+   reproduced). If `basis_off` shows crossings, the reading is counting something else.
 2. **Non-degenerate.** Under `on`, pooled over five seeds: at least four of the six classes are above
-   zero at three seeds or more; no class holds more than 60% of all crossings; G5 shows all three
-   signs.
+   zero at three seeds or more; no class holds more than 60% of all crossings; G5 between two convinced
+   persons shows all three signs.
 3. **Not one run.** The five seeds' class vectors are not all equal, and at least three are distinct.
 4. **Not a fixed function of state.** On one built world, the class vector differs between at least
    two of four draw seeds (the chooser's sample and the contests' rolls are what moved it).
@@ -148,4 +148,5 @@ Small build, one session; clause by clause it can only be read as the proposals 
   (petition, covenant), `06_FA_decree_binds.md`, `06_FA_seat_terms_and_turnover.md` (G3's supply),
   `02_CHAR_offer_what_can_be_done.md` (fewer foreseeable refusals), `08_FI_02_rumour-that-travels.md`
   (G5's supply), PC's `challenge`/`accept`.
-- **CORE:** `01_CORE_tests_shipped_world_falsifiers.md` (planted-log tests of this shape).
+- **CORE:** `01_CORE_reason_trail_in_the_act_store.md` (the Scene the occasion lines read survives the
+  driver).
