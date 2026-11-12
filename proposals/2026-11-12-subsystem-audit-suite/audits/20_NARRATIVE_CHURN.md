@@ -36,9 +36,30 @@ Vocabulary, as the tree uses it (so no reader takes a word in its ordinary polit
 
 ## 0. Verdict
 
-*(Written last; see the end of the file's build order in §11. Placed here.)*
-
-VERDICT_PLACEHOLDER
+**No: as coded, eras, regimes and strife run beside allegiance, office, obligation, pursuit and
+conviction and do not meet them, so the engine produces chains with causes and no plot.** The chain of
+who answered whom is real and recorded (WR's finding, reproduced). What is absent is a *ground*: nothing
+computes that a person stands on two things that pull apart. Read at seeds 0, 1 and 2 over four seasons
+with nobody playing: of thirty-five edges between the eleven things, four are live; no person changed
+faction, no seat changed hands, no oath was paid, no writ was complied with (0 of 193), 123 petitions
+were filed and 2 determined, and at the seed where they were counted the two-step stories the design
+names (a petition answered, a decree obeyed or defied, an oath kept or broken, a march answered)
+occurred zero times as cause and consequence. A third of all acts are occasioned by having seen someone
+do something; challenges are formed because the harvest came in. **The single largest obstacle is that three
+of the five crossings Jordan names are omissions, and the engine cannot say who failed whom**: a lapse
+names an edge, nobody knows who holds what (H-195, re-measured at zero), and so neglect, the cheapest
+grievance there is, produces none. Beside it, four things found here and by no earlier lane: the regime
+is one value (`commensurate` is −1 for 1,031 of 1,035 pairs, because "held" is read as above zero where
+a ruling gives every NPC a low position on every creed; under the reading `conviction_stand` already
+uses, the authored realm holds three regimes that follow its factions and a split inside the Crown's
+own party); the calendar has no year; a person's opinion of his own side is computed and never asked;
+and convictions do change, by a fixed rule and in silence (six persons at seed 0 in the three-season
+arm that printed them, five converted to the creed they stood against and the Duchess of Hafenmark left
+with none, with no Event; the shipped runs count 6, 8 and 8). Clearing every conviction at build moved
+no story reading (§4.3 states on how many seeds). The remedy is
+not event generators, which would be triggers; it is five person-side readings of a pull, each entering
+`regard`, attention or credit behind a control, in six proposals, and a bar that fails on the shipped
+engine today.
 
 ## 1. The eleven things, as coded
 
@@ -151,7 +172,7 @@ c` in seed order. States: **live** (executes and something reads it), **thin** (
 
 ### 2.6 What the map says, in one paragraph
 
-Of thirty-five edges, six are live, six thin, and twenty-three are starved, degenerate, by clock, inert
+Of thirty-five edges, four are live, five thin, and twenty-six are starved, degenerate, by clock, inert
 or missing. The live ones are the ones a clerk needs: a seat licenses a writ, a person swears to a seat,
 a pursuit ranks a verb, a deed scars a witness. Every edge that would carry a **crossing** (a demand
 against the one who owes it, a duty against its holder, a stand against a side, a new holder against an
@@ -279,7 +300,23 @@ one-strand realm unless `20_NARRATIVE_A` and `09_WR_strand_conclusion.md` land f
 
 ### F-NARR-07 · degrades narrative · conviction can be removed and no story reading moves
 
-*(evidence in §4.3; written when E-N07 completed.)*
+**Steelman.** Conviction is ruled, authored for all 46 cast members and read in four places (the
+`doctrine` weight, opinion, regard by descent, credit); H-188's damp has a declared control.
+**Attack:** clear every `Person.conviction` at build and run the same seeds.
+**Claim.** With no person holding any conviction, what the realm does is what it does with them.
+**Evidence.** §4.3: no closing kind, strand count, era, ending or death differs, and the executed-verb
+profile moves by less than two shipped seeds differ from each other on every verb but one. Agrees with
+WR `_B` F-WR-16 (pursuits and convictions flattened to the realm mean: no story reading falls, two
+seeds). The reason is in §2.5: the routes are small (P3, P5), the largest (credit) is a constant
+(F-NARR-01), and the one that moves anyone's interior is silent (F-NARR-08).
+**Falsifier.** A story reading that differs between the arms by more than the shipped arm's seed
+spread. §4.3 states which readings were compared and on how many seeds.
+**Touches.** R-06, R-07; NERS-N for the conviction layer (a cut that is nearly free today).
+**Consequence.** "A conviction crossed by an allegiance" cannot be a plot point while conviction is not
+a force. This is not an argument for cutting it: the authored data carries the realm's fault lines
+(F-NARR-01). It is the measure of how little of that the code reads.
+**Fix.** `20_NARRATIVE_A`, `20_NARRATIVE_D`; the bar's clause 5 (`20_NARRATIVE_F`) is this ablation,
+kept as a gate.
 
 ### F-NARR-08 · degrades narrative (R-09) · a change of conviction is silent and decided by rule
 
@@ -289,7 +326,9 @@ emits no Event, deposits no claim, reaches no chronicle and is decided by a fixe
 about every observer"; `person_q.py:903-904`: "THE ENGINE CHOOSES PER CASE, BY A RULE OVER STATE … AND
 ROLLS NOTHING" (`ED-IN-0261`'s superseding row, Jordan 2026-10-06); the same docstring: under the
 shared column "the selector … folds the HIGHER-held creed into the lower", so a zealot's creed transfers
-to the creed he stood against. Which six persons, and into what, the first runs did not print; E-N10 prints them.
+to the creed he stood against. E-N10 prints the six at seed 0 (§4.4): four of the Crown's faction and a Löwenritter
+end as holders of `einhir_restoration` with their orthodoxy gone, and the Duchess of Hafenmark holds
+nothing. Nobody in the realm, the Duchess's own court included, holds a claim that it happened.
 **Falsifier.** An Event of any kind whose changes name `Person.conviction`. `grep` of the KINDS lines:
 none in any run.
 **Touches.** R-06, R-07, R-09; the standing rule (a thing that could go either way for the person).

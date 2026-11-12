@@ -25,8 +25,8 @@ interrupted and the sections below are the partial record.**
 ## 1. NERS — the cuts, executed and read
 
 Method: `skills/ners/SKILL.md`; definitions `CLAUDE.md` §0.06. A cut is free when nothing but the cut
-thing's own bookkeeping differs. The FA lane's NERS readings (`06_FA_audit.md` §5.4) are cited; four of
-its five "survives" are attacked here. **No draw to diagnose:** none of the nine governance effects takes a
+thing's own bookkeeping differs. The FA lane's NERS readings (`06_FA_audit.md` §5.4) and steelmen (§2) are
+cited, and attacked here wherever an execution could reach them. **No draw to diagnose:** none of the nine governance effects takes a
 draw (`effects_governance.py`: the `res` argument is unused in every one), so `resolution-diagnostic` has
 no subject in FA's own code; the one draw met in the probes is `arrest` (2 of 2 `arrest.resisted`), which
 is SC's and PC's.
@@ -256,7 +256,7 @@ the engine's own writer (PROXY for a natural death, the game lane's X2 method). 
 |---|---|---|
 | P1.1 standing | the King through `off_king`: `dispensation.issued`. No seat: `issue.unauthorized`. A stranger naming `off_king`, the Clerk naming `off_king`, the Heir through `off_heir` (remit `[]`): `issue.unauthorized` each. The King resigns (`release`: `tenure.closed`) and issues again through `off_king`: `issue.unauthorized` | **holds**, 5 of 5 refusals visible and keyed |
 | P1.2 act | one Event, author, seat, tick; content is `terms` (one referent) and `to` | holds as an event; the content says nothing a person could do (F-FA-18, cited) |
-| P1.3 "those under the seat" | the purview conjunct was tried for every living individual as addressee. King: 42 of 45 admitted (the three refused live in the Altonian settlement). Royal Marshal (seat on T1): 15 admitted, of **eight factions**, including 2 members of Varfell, 2 of Hafenmark and 1 churchman. Duke of Varfell: **2 admitted, both members of the Restoration Movement; 0 of Varfell's five members, his own council included**. Restoration leader (T15): **0 of 45** | **fails**. "Under the seat" as run is *resident on the seat's ground*, not *below the seat in its ladder*. Cause, read off `pf2b` §6: the purview of `off_duke_varfell` (`duchy_varfell`) reaches the home of no Varfell member (they live in buildings of settlements s_002 to s_008), and likewise the Duchess of Hafenmark's reaches the home of none of Hafenmark's four, herself included. The Duke may appoint the Military Jarl (`may_fill` asks the SEAT's rung) and may not order him (`issue` asks the PERSON's place): two ladders for one quantity |
+| P1.3 "those under the seat" | the purview conjunct was tried for every living individual as addressee. King: 42 of 45 admitted (the three refused live in the Altonian settlement). Royal Marshal (seat on T1): 15 admitted, of **seven factions and one of none**, including 2 members of Varfell, 2 of Hafenmark and 1 churchman. Duke of Varfell: **2 admitted, both members of the Restoration Movement; 0 of Varfell's five members, his own council included**. Restoration leader (T15): **0 of 45** | **fails**. "Under the seat" as run is *resident on the seat's ground*, not *below the seat in its ladder*. Cause, read off `pf2b` §6: the purview of `off_duke_varfell` (`duchy_varfell`) reaches the home of no Varfell member (they live in buildings of settlements s_002 to s_008), and likewise the Duchess of Hafenmark's reaches the home of none of Hafenmark's four, herself included. The Duke may appoint the Military Jarl (`may_fill` asks the SEAT's rung) and may not order him (`issue` asks the PERSON's place): two ladders for one quantity |
 | P1.4 it reaches them | issued inside a season by the seat-holder (player callback), everyone else idle. King's writ: 83 of 83 persons hold a `dispensation.issued` claim after one season (46 individuals, 37 peasant cohorts), 82 `told_by`. **The Royal Marshal's writ (a territory seat): 83 of 83 likewise.** In both, the addressee does not hold the paper and it is not in his `writs_held` | **fails in both directions**: every person in the realm, peasants in another duchy included, learns in the same season that a territory officer issued something; the one person it is addressed to cannot answer it. No distance, no delay |
 | P1.5 "binds" | paper placed in the addressee's hand (the issuer's `give` is refused; placed by a `hold` edge): `comply` → `compliance.impossible`; `evade / defy` → `compliance.impossible`; `construe` → `construal.impossible`; world state moved: nothing in all four arms (the fourth arm does nothing, the control). The precondition also wants the terms read into his ledger; with that added the FA lane's H-260 reading is that both answers write nothing | **fails** (cited: F-FA-01). New here: the issuer's own `give` of his own writ to his own Marshal is refused, so the one route N names is closed to the realm's top seat at build |
 | P1.6 the world changes | no arm moved state | fails (follows from P1.5) |
@@ -346,4 +346,270 @@ today the count is zero, and the control (the King's 13 stance rows) shows the r
 | a faction is the sum of its persons' acts | the governed are in no faction; joining is free and unilateral; the view is read by one verb; two heads | `pf1`, `pf2` P4, `pf5` |
 | an officeholder who fails his duty is called to account | no duty; no proceeding; dismissal reaches 6 seats through one unfillable seat; its ban is total, permanent and unpardonable by anyone | `pf2` P5, `pf2b` §1, §4, §5 |
 | royalty by noble conquest, nobility by deed | not represented | `pf1` (c), `pf2b` §7 |
+
+## 3. Emergent-narrative audit — governance with no player
+
+The game lane's §3 (`16_PESSIMIST_GAME.md`) covers the whole loop and tests the instruments' verdicts; it
+is cited. This section is FA's stories only. New run: `pf4_story.py 3 3` (the shipped realm and chooser,
+**seed 3, a seed no lane had pinned**, three seasons, hash `cb6227d588bc`), read against the FA lane's seeds
+0 to 2 (its E-5) and this lane's two dice seeds of seed 0 (§1.1).
+
+### 3.1 What stories FA can produce at all (enumerated from the code that executes)
+
+Twelve atoms: an appointment (`confer`); a claim (`succeed`); an office founded or its remit changed
+(`establish`); a resignation, a leaving, a peace, an oath broken (`release`); a dismissal with its ban
+(`revoke`); a pardon; a sitting called (`convene`); an oath of service and its lapse (`oblige`, the
+term); a levy (`requisition`); a decree, an order, a covenant offered (`issue`, `dispatch`, `covenant`); a
+joining or a declaration (`commit`, `utter` of `WAR`); a death that vacates. Each was made to happen by
+hand in `pf2`/`pf2b` except `pardon` (refused at every attempt, §2 P5) and `establish`, `requisition`,
+`oblige`, `dispatch` and `covenant` (seen executing in the computed runs of §1.1 and §3.2). Composed, the
+engine can tell these and no others:
+
+| story | beats that execute | where it stops |
+|---|---|---|
+| a death and the heir's claim | death, claim | two beats; no rival, no draw, no reaction (game lane §2.1) |
+| a death and the Crown's choice | death, the King's or the Queen consort's `confer` into any ladder | the body concerned has no say and no answer |
+| a lordship founded and given | `establish`, `confer` | the new lord has nothing to do (computed at seed 3, §3.2) |
+| a fall | `revoke`, the ban | terminal: no pardon, no return, no appeal; six seats, one King's lifetime |
+| a defection | `release`, `commit` | the views move; nobody answers |
+| a war of one | `utter`, `commit`, then `release` or the declarer's death | licenses nothing, ends with him |
+| an oath and its lapse | `oblige`, `term.matured` | the seat loses a name from its establishment |
+
+**Stories that cannot happen, because no code path exists:** an election; a contested succession (two
+claimants and an outcome between them); a regency; the deposition of a King, a Confessor, a Cardinal or a
+Grand Master (ruled: `revocation: null`); an officer tried and removed (a bench's disposal is a `detain`
+or a `ban`, never a closed seat-hold; read from `_eff_revoke`'s and `_eff_pardon`'s notes, not run
+`[UNVERIFIED]`); a reprimand or any fall short of the ban; a reinstatement; a succession in Hafenmark, in
+the Duchy of Valorsmark or in any of the seven basis-less seats; a rebellion that names its own leader; a
+Church that chooses its own head; a usurpation or a coup (no act takes a held seat except the holder's
+superior's); a province or an office lost in battle (F-FA-13); an alliance, a treaty, a peace with terms;
+a faction founded and regarded; an ennoblement by deed; a decree obeyed or defied; an order carried out;
+a duty failed and answered; a vacancy that costs anyone anything.
+
+### 3.2 Which it does produce in computed play
+
+| | seeds 0, 1, 2 · three seasons (FA lane E-5) | seed 3 · three seasons (this lane) | seed 0, other dice · two seasons |
+|---|---|---|---|
+| seats that changed holder | 0, 0, 0 (one death at seeds 1 and 2 left a seat empty) | **1**: `off_lord_terr_T5`, founded and conferred in season 1 | 0 |
+| offices founded | 1, 0, 0 (unheld) | 2 (one filled, one empty to the end) | 0 |
+| claims, dismissals, bans, pardons, wars | 0 at every seed | 0 | 0 |
+| determinations at a sitting | 0, 1, 0 | 0 (3 sittings fired) | 0 |
+| levies (`requisition.taken`) | 0, 1, 6 | 0 | 3 |
+| faction tuples that changed | none but the Church's loss of the dead cardinal | Valorsmark's seats 11 → 12 | — |
+
+Control: every atom executes when forced (`pf2`), so the zeros are observations and not a blind reader;
+and seed 3 shows the instrument seeing the one that occurred.
+
+**The one computed story, told from the log.** Seed 3, season 1. Almud Almqvist, through
+`off_duke_valorsmark`, founds a lordship over `terr_T5`. The same season, through `off_king`, he confers
+it on Peder Almstedt, the Chief Parliamentary Clerk, who now holds two seats. The Duke of Varfell founds a
+lordship over `terr_T13` and fills it with nobody for three seasons. Nothing follows: the only traced
+answer to the conferral is one refused `issue`. Set against the brief's questions: a beginning, yes;
+escalation, reversal, cost: none; an ending: the run stops; retelling: both Events carry `causes: []`, so
+the record does not say why the King wanted a lord there or why the Clerk.
+
+### 3.3 Chains: does governance answer governance
+
+Over the seed-3 run, an executed FA or docket act with another person's FA or docket act among its direct
+causes: **16 in three seasons** (34 counting refused answers). The pairs are `oblige → issue` 3,
+`dispatch → issue` 2 and eleven singletons. Depth of governance-only cross-person chains over 838 such
+Events: 804 at depth 0, 29 at 1, 4 at 2, 1 at 3; the deepest is two refused case-openings by the King
+between two other persons' orders. No chain contains a seat changing hands.
+
+### 3.4 Are the persons' reasons readable afterwards
+
+No. Of the 40 acts executed through a seat at seed 3, 19 have no Event among their causes (5 of 15
+`issue`, 4 of 10 `dispatch`, 2 of 2 `establish`, 4 of 4 `march`, 3 of 3 `convene`, the one `confer`). And
+the content, where there is content, does not read as governance: the Chief Parliamentary Clerk issues
+three writs, to the Princess, to the King and to the Lord Steward, whose terms each name the King and
+whose content is the claim that he exists; the King `dispatch`es himself and opens a case against himself; the Confessor convenes a
+sitting at the King's cottage; the Guild Comptroller and Hafenmark's Military Commander march on
+settlements. A narrator given this log could say who did what through which seat, and could not say what
+any of it was for.
+
+### 3.5 The shape of the tail: are all runs the same run
+
+In the skeleton, almost: three seeds with no seat change and one with a single founded lordship. In the
+paper, no: one world under two dice seeds differs by 240 in its executed-verb vector, and `oblige` reads
+26, 0, and (at seed 3) 75 in one season. The variation is in how much is written, not in what happens to
+anyone.
+
+### 3.6 What a player's choice changes
+
+In computed play, the game lane's X4 (cited): the King abstaining for three seasons removes the one
+office he would have founded and no seat changes either way. By hand (`pf2`): a player King can fill any
+vacancy in the realm including the Church's and the insurgents', dismiss six officers for life, and name
+anyone his heir; a player consort can make herself Confessor and, the King and heir dead, King; any player
+can put any two factions at war and join any faction. So the player's reach is too wide where the engine
+asks nothing (§2) and null where it should bite: no NPC's later act has any of these Events among its
+causes in the game lane's seam matrix (seat Events are terminals there).
+
+### 3.7 Extremes
+
+§1.3. In one line each: zero members, a head of nothing; one death, seven seats empty for ever; the royal
+line gone, no King; a village on the throne; a prisoner governing.
+
+## 4. Findings, worst first
+
+Severity: blocks a requirement / degrades narrative / hygiene. Each names its falsifier run and control,
+the requirements touched and the minimal fix at the owner.
+
+**F-PES-FA-01 · blocks R-04 and R-09 · a vacant seat is filled by the Crown or by nobody.** 7 of 34 seats
+can never be refilled; `off_king` and `off_widow_regent` are fillers of all 26 fillable seats, the
+Confessor's, the Cardinals', the Restoration leader's and Varfell's included; no body can fill its own
+head; a consort can seat herself as Confessor and as King; a cohort can be King; with the royal line gone
+nobody is ever King; no filling draws. *Falsifier:* `pf1_static.py 0`; `pf2_premise.py 0` P2;
+`pf2b_followup.py 0` §2, §3, §7. *Control:* the same acts by the bodies' own members are refused; the
+King's are admitted. *Fix:* PES-FA-B edits 1 and 2 (who may sit; cross-ladder conferral priced, self-
+conferral across ladders refused); VB-C (the draws); the election arms (CR-35, PAPACY-B, VENICE-C); the
+Jordan call of §5 for the crown's fallback.
+
+**F-PES-FA-02 · blocks R-04's turnover and R-02 · the realm's power to dismiss is one unfillable seat, and
+its one consequence cannot be undone.** 6 of 34 seats strippable, all through `off_duke_valorsmark`, none
+through `off_king`; after one royal death, none; seven seats that declare a revocation basis are
+strippable by nobody; the ban is permanent, bars every seat of every faction, and `pardon` is refused
+through all 33 seats; `revoke` reads nothing about the man and draws nothing; a detained officer governs.
+*Falsifier:* `pf1`, `pf2` P2 (B2) and P5, `pf2b` §1, §4, §5. *Control:* the King's dismissal through the
+ducal seat executes; the Clerk is seated where the banned man is refused. *Fix:* PES-FA-A (three data
+edits). The FA lane's recall occasion and VB-C's contested `revoke` both depend on it.
+
+**F-PES-FA-03 · degrades narrative, R-04, an S defect · "under the seat" is where a person sleeps.** 18 of
+34 seat-holders live off their seat's ground (seeds 0 and 1 alike); the Duke of Varfell may address none
+of Varfell, the Duchess of Hafenmark's purview reaches none of Hafenmark, the Restoration leader may
+address nobody; the Royal Marshal may address residents of seven factions; `dispatch` asks no relation at
+all; and every person in the realm, 37 peasant cohorts included, holds a claim of a territory officer's
+writ within the season while its addressee cannot hold or answer it. *Falsifier:* `pf2` P1.3, P1.4;
+`pf2b` §6; the residence count (§7, E-8). *Control:* the King's 42 of 45. *Fix:* PES-FA-C (`under_seat`);
+who hears, and when, is COLONIAL-B's.
+
+**F-PES-FA-04 · degrades narrative, R-04, R-06 · a faction cannot refuse a member, and the governed are in
+none.** `commit` to a faction is unilateral, free and undrawn; the King joins the insurgents; a duke's
+leaving moves his duchy's holdings to another faction's view; dual membership is admitted; all 37 cohorts
+and 3 individuals belong to nothing; cutting every membership moves two seasons of the realm less than
+re-rolling the dice (§1.1). *Falsifier:* `pf2` P4; `pf3_cut.py 0 2`. *Control:* DRAW2. *Fix:* PES-FA-B
+edit 3; that the people of a duchy are of no faction is WR's and SE's (cross-listed, not decided).
+
+**F-PES-FA-05 · degrades narrative, R-04 · anyone declares war for anyone, and war licenses nothing.** A
+peasant cohort, a stranger and a clerk each put Hafenmark and Varfell at war; Hafenmark can be at war with
+itself; `at_war` gates no act. *Falsifier:* `pf2` P3. *Control:* false before each declaration. *Fix:*
+PES-FA-B edit 4; the licence is CP-T09-02 and `04` F.33, cited.
+
+**F-PES-FA-06 · blocks the institutions fixed point · royalty by noble conquest is not in the engine.** No
+secession war, founder or deed in any file code reads or in the built world; the two ducal heads are
+regarded by 0 of 45 persons, as a clerk is; the order king, Hafenmark, Varfell has no expression; the
+second house ends with its first death. *Falsifier:* the grep and `pf1` (c); `pf2b` §7. *Control:* the
+King's 13 authored stance rows are seen by the same reader. *Fix:* the institutions lanes' seeded deeds
+(COLONIAL-D, PAPACY-C) and the Jordan call of §5.
+
+**F-PES-FA-07 · degrades narrative (NERS: a false N-line in computed play) · offices are free to cut.** With
+all 34 seats empty for two seasons the realm's persons, bodies, per-rung stores, stance and sites are those
+of the shipped realm, and what persons do differs by the dice-noise distance (§1.1). *Falsifier:*
+`pf3_cut.py 0 2 NO_SEATS` against SHIPPED and DRAW2. *Fix:* none of its own: it is the measure the three
+proposals and the FA lane's are judged by. After them, the NO_SEATS arm must differ from SHIPPED by more
+than DRAW2 does, in a component other than its own holds.
+
+**F-PES-FA-08 · degrades narrative, an S defect · two heads for one faction, and the one that follows the
+seat is read by nothing.** `faction_q.head` (CR-86) has no reader that decides; `opinion_of` regards the
+creed Proposition's subject, fixed at build, so a successor is never regarded as his faction's head and a
+dead leader leaves the term empty. *Falsifier:* `pf5_heads.py`. *Fix (decided, no proposal file: one
+line):* `world_q.opinion_of` reads `faction_q.head(w, faction)` first and falls back to the creed's
+subject; then the FA lane's R-25 (two more `head_seat` rows) has a reader. Ladder step 4 (CR-86's own
+reading of who heads a faction). A hash mover wherever the two differ: the Restoration Movement and the
+Löwenritter at build, every faction after a succession.
+
+**F-PES-FA-09 · degrades narrative · a dead ruler's decrees are orphan paper, and a living one cannot hand
+his own writ to his own marshal.** After the issuer's death the Record has no live holder and the heir
+does not hold it; the King's `give` of his writ to the addressee at build is refused. *Falsifier:* `pf2`
+P1.5, P1.7. *Fix:* `06_FA_decree_binds.md` removes the dependence on the paper; what a successor inherits
+of his predecessor's standing writs is undecided there and is added to its open list by this row
+(decided reading, ladder step 5: a writ is the seat's, so it stands until the seat's next holder
+withdraws it; the Record's `hold` passes with the seat in `_eff_succeed` and `_eff_confer`).
+
+**F-PES-FA-10 · degrades narrative · the governance record does not carry its reasons, and its content is
+noise.** §3.4. *Fix:* F-FA-18 (what an order orders) and the game lane's reason-trail finding, cited.
+
+**F-PES-FA-11 · a sibling proposal's interaction · the FA lane's R-16 strands the throne one death
+earlier.** Emptying the Queen consort's remit while the King lives removes the only seat, other than the
+King's, that can name an heir; with King and heir dead nobody is ever King. *Falsifier:* `pf1` (fillers of
+`off_heir`), `pf2b` §7. *Fix:* R-16 lands with a fallback (the §5 call) or with the regency it mentions
+conferred by a seat that exists.
+
+**F-PES-FA-12 · hygiene, measurement · single-seed verb counts in the FA audit are one draw from a wide
+spread.** `oblige` 26 → 0, `march` 13 → 4 between two dice seeds of one world. No fix; a caution on its
+E-3 and E-5 per-verb figures. Its zeros (no seat change, no war, no compliance) are confirmed at a fourth
+seed and a second dice seed, with one exception it could not have seen: a computed conferral at seed 3.
+
+### 4.1 The standing rule, applied to this subject and to these files
+
+Fixed outcomes found in FA's code (cited to `18_DETERMINISM_SWEEP.md` C-07, C-11, not re-ranked): every
+governance effect. Added by this lane, each a thing that could go either way for the people in the
+fiction and goes one way: who may join a faction (always admitted); who is at war (whoever says so);
+whether a dismissed man may return (never); whether a body accepts the Crown's nominee (always). This
+file's proposals add eligibility checks only and leave every outcome to a draw (VB-C's); PES-FA-B edit 2
+prices a cross-ladder appointment instead of forbidding it, for that reason.
+
+## 5. For Jordan — what survives the five-step ladder
+
+**One item.** *When the royal line fails, who may take the crown?* Not superseded (no ruling names it);
+not irrelevant (the built realm reaches it in two deaths); the design documents that speak to it are
+quarantined (`baralta_crown_claim_v30.md`) or silent (canon's timeline stops at the founding); precedent
+in the tree is one row (`successions: off_king: off_heir`); and the architecture is indifferent.
+
+- **Option A — the order of accomplishment is a line.** `successions` carries an ordered list for the
+  throne: the heir's title, then Hafenmark's ducal seat, then Varfell's. A later title may claim only
+  when every earlier one is vacant; the claim is a draw (VB-C), and a rival may contest. *The game:*
+  dynastic. Hafenmark's claim is a right that waits; killing or discrediting an heir is a move toward a
+  crown; Varfell is always third.
+- **Option B — the crown goes again to the greatest deed.** With the line failed, any seat-holder may
+  claim, at odds set by what others hold of his deeds (the institutions lanes' accomplishment reading);
+  the fixed point's order gives the two houses their head start and nothing more. *The game:* a race.
+  A marshal who wins the war of the interregnum can be King; Hafenmark can be passed over.
+
+Either needs the three founders' deeds seeded (F-PES-FA-06). The FA lane's R-16 needs one of them to land
+with it (F-PES-FA-11).
+
+Accepted as ruled and not re-raised, with its measured consequence recorded: revocation by the rung
+directly above (ED-IN-0256 (3); a King as King dismisses nobody below a duchy); `revocation: null` for the
+Church's and the Löwenritter's seats (the FA lane's §11 item 3 carries it); a permanent ban for an
+appointed seat revoked (permanent unless pardoned, which PES-FA-A makes possible).
+
+## 6. Proposals written by this lane
+
+| file | what | cost |
+|---|---|---|
+| `proposals/16_PESSIMIST_FA_A_dismissal_survives_the_king.md` | the Duchy of Valorsmark passes with the throne; the seven council seats come under their dukes; a dismissing seat can pardon | edit (data) |
+| `proposals/16_PESSIMIST_FA_B_who_may_sit_join_and_declare.md` | a seat is held by an individual; cross-ladder conferral priced, self-conferral across ladders refused; joining a faction needs an admission; a war has two parties and a declarer of one | edit; one small build |
+| `proposals/16_PESSIMIST_FA_C_under_the_seat.md` | one predicate for who is under a seat (ground, ladder, sworn), asked by `issue` and `dispatch` | small build |
+
+Decided in this file without a proposal file: F-PES-FA-08 (one line in `opinion_of`); F-PES-FA-09's
+reading of a successor's writs.
+
+## 7. Evidence log
+
+All `PYTHONHASHSEED=0`, `PYTHONPATH` the repo and `runs/PES_GAME` (for `pes.py`, the game lane's probe
+library, reused unmodified). The machine's load average was 34 to 44 on four cores throughout; walls are
+not timings.
+
+| id | command (scratchpad `runs/PES_FA/`) | seed · seasons | output | reading |
+|---|---|---|---|---|
+| E-1 | `pf1_static.py 0` and the grant-filtered re-read (inline) | 0 · none | `pf1_s0.txt` | fillers and strippers per seat; faction views; the fixed point's absence; §2 P2, P5, P6 |
+| E-2 | `pf2_premise.py 0` | 0 · none (deaths: one idle season each) | `pf2_s0.txt` | §2 P1 to P5. Four lines in it read `RAISED Forbidden … names cause(s) that resolve to nothing`: a probe defect (an act folded on one fork with a driver built on another), re-run correctly in E-3 and not used |
+| E-3 | `pf2b_followup.py 0` | 0 · none | `pf2b_s0.txt` (to §5), `pf2b_s0_run2.txt` (all; the first run stopped at §6 on a probe error, a wrong call signature, fixed in the scratch file) | §2 P2.7, P5; residences; the royal line; a new faction; view cost |
+| E-4 | `pf5_heads.py` | 0 · one idle season | `pf5.txt` | two heads; `opinion_of` after a succession |
+| E-5 | `pf3_cut.py 0 2 SHIPPED NO_FACTION`; `pf3_cut.py 0 2 NO_SEATS DRAW2`; `pf3_cmp.py 0 2` | 0 · 2, four arms | `pf3_a_s0.txt`, `pf3_b_s0.txt`, `pf3_cmp_s0.txt` | §1.1. Hashes `bacd687f1470`, `7f29b24ecbd2`, `9cda0ab0600b`, `671cd84fd00c` |
+| E-6 | `pf4_story.py 3 3` | 3 · 3 | `pf4_s3.txt` | §3. Hash `cb6227d588bc` |
+| E-7 | `grep -rni secession --include=*.py --include=*.yaml engine/ modules/ references/` | — | no hit | §2 P6.1; canon at `canon/03_canonical_timeline.md:72-84`, `:194` |
+| E-8 | inline: residence of every individual against the rung of every seat he holds | 0 and 1 · none | printed | 16 of 34 seat-holds held by a resident of the seat's ground at both seeds; 32 of 46 individuals live in the Duchy of Valorsmark |
+| E-9 | inline greps: non-test readers of `.head`, `HEAD_SEAT`, `faction_q.resolve(`, `at_war(` | — | printed | §1.2 |
+| cited | the game lane's `x2_death_s0.txt`, `x2b_*`, `x4_s0.txt`, `x5_s0.txt` (its §2.1, §2.5, §3.7); the FA lane's E-3 to E-6 | | | not re-run |
+
+**Not done, and why.** No second seed for the cut arms or the hand-built premise probes (the load; the
+hand-built probes read rules, not draws, and residence was confirmed equal at seed 1). No season was run
+on a declared war (P3.2). `comply` with the terms read into the addressee's ledger was not rebuilt (the
+FA lane's H-260 reading is cited). `governance_spine.yaml` was not probed: it cannot seat or strip
+(F-FA-07), so the realm is the evidence. `arrangements.yaml` and `data/affiliations.py` were read at
+their heads only: the first is SC's proceedings table, the second holds religious affiliation and
+conviction (CHAR's), and neither is a political affiliation; no finding here rests on either. No tracked
+file was written; `git status --short` at the end shows this file and three proposal files as this lane's
+only additions.
 

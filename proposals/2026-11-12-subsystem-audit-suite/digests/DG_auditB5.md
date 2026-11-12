@@ -65,3 +65,122 @@ Working-tree facts checked while reading (used below): `systems/social_contest/s
 - **Conflicts / stale:** cites `ledger.py:31-32, 50-53`, `mc_v18.py:148-151`, `parliamentary_stay.py` "zero campaign callers" - no `parliamentary_stay.py` file now and `ECHO_TRANSPORT` is gone (retired substrate); `LedgerTag` grep returned nothing [UNVERIFIED]. `social_contest_v30.md:39` terminate-and-reinstantiate is quarantined in `.designs/`.
 - **Open items:** the "lose the case, win the room" guard is "Not yet written" (:486-489); 18 forks unresolved; three independently derived "second currencies" (attribution CIP-12, disposition CIP-6, room impression) not reconciled as one axis or three (:522-524).
 
+### .audit/2026-08-06-social-contest-three-lens-audit/06_adversarial_audit_of_05.md
+- **What it is:** record of a three-critic adversarial pass (correctness, logic, elegance; `valoria-critic` read-only) against file 05, 2026-08-07, lane SC, ED-SC-0028.
+- **Status:** "RECORD (2026-08-07, ED-SC-0028)". Reading: historical; useful as a method exhibit (an author-written falsifier that was never run).
+- **Bears on:** SC, PROCESS, CORE.
+- **Content that matters:**
+  - Method result: ~25 checkmarked citations hand-verified across two critics, zero misquotes (:19-32); 22 ranked errors (:46-71).
+  - Headline error: "sealed off from the world" false - `mc_v18.py:148-151` ran `parliamentary_bridge` every season, `_derive_vote` generates a topic from world pressure, `parliamentary_vote.py:206-216` writes `world.factions` (:50). Claim narrowed to "the Bout kernel is sealed".
+  - "No new primitive" false: `ledger_add` makes Reputation `SINGLE_VALUED` by kind ignoring `key`; no holder dimension, factions have no ledgers (:53).
+  - Duality trilemma: if auto = headless kernel (Fork A RULED) then either playing shapes nothing in expectation or the player mode-shops in consequence space; escape is unratified CIP-9b (:52).
+  - `FactionBoost` has NO resolution consumer in code - the +1D is prose-level (:35); `Reserve` net-positive (:36); the warrant-vs-appeal reversal and FactionBoost-to-disposition rescue were motivated reasoning / category error (:57-58).
+  - Methodological lesson (:81-91): a duplicate-vs-distinct test is decidable only against a FIXED system; grading kills against what exists and rescues against what is proposed converts a pruning instrument into a licence; naming a falsifier is not running it (§0.1 pt 3).
+- **Conflicts / stale:** `ECHO_TRANSPORT` default-ON premise gone with the retired echo/key substrate; ledger cites unverified at tree [UNVERIFIED]. Citations to `resolver.py` lines have drifted (VALID_KINDS now `resolver.py:34`, was `:32`).
+- **Open items:** the unwritten guard (no site converts a track into `adv` at a fixed rate); reconciling CIP-12/CIP-6/CIP-14 "second currencies"; 5 parliamentary-path questions (what Mandate-pool roll carries) left to FA/CORE.
+
+### .audit/2026-08-06-social-contest-three-lens-audit/07_keys_knots_npcs_and_the_combat_model.md
+- **What it is:** extension proposal, 2026-08-08, lane SC, ED-SC-0030; six Fable lenses on four Jordan axes (Keys I/O with scatter-gather, Knots, world churn as anti-repetition, the contest as multimodal combat).
+- **Status:** "PROPOSED (2026-08-08, ED-SC-0030)". Reading: partly superseded - Section 2 (Keys as I/O substrate, `scene.contest_convened`, OF-CAP cascade_depth_max=3, emissions 64, `drain_tick`) is dead because the Key substrate is RETIRED (ED-IN-0232); sections 1, 3, 4, 5 retain design value.
+- **Bears on:** SC, PC (combat comparison), WR, CHAR (NPCs, Knots), FA, MB (rout), CORE.
+- **Content that matters:**
+  - Coverage finding (:15-21): audits 00-06 never opened `systems/combat/combat_engine_v1/`; track map of combat's eight tracks vs social (:43-55): Initiative, Tempo and Commitment/legibility/read are NULL on the social side; Stamina maps to Reserve (two yields clinch as silence).
+  - Standing dead zone (:85-106): `Standing.frac()=(v-START)/(HI-START)` clamped, START=5 (`primitives.py:32` still `LO,HI,START = 0,10,5`) so Standing 0 and 5 are indistinguishable in reception; ruling: add `discredit_bar` to `DefeatCatalogue` (fatal iff venue says so, `[SEED]` ~2), shipped only with a face-attack channel.
+  - Non-fungibility guard (:182-188): "tracks enter resolution as multipliers on process, never as addends on the score; no site converts Standing/Room/Reserve/faults/claim state into `adv` at a fixed rate"; fix is more terminals and record kinds, not addends.
+  - Jordan's correction (:108-141): a feint in speech is a deliberately chosen act (unlike combat), with two independent detections (opponent; bench/room) - being caught being clever costs Face; explicit trick/feint class warranted. Leak term `res=(1-leak)*venue_w+leak*judge_character` already is the "suckered" mechanism (:154-157); judge default vector 0.34/0.33/0.33 makes judge identity inert until skew is authored (:271-274).
+  - NPC adjudicator: derivation adapter not replacement; `faction.py:39` already derives an Adjudicator from faction stats; aggregate benches by ballot not mean; `ArmatureConfig` keys by `id(adjudicator)` - ephemeral (:290-293). Five disjoint id spaces.
+  - Knots (:299-336): `check_knot_rupture` has zero callers outside module+test; `EvidenceItem` lacks provenance so rupture can never fire - add `provenance` incl. `knot_counsel(knot_id)`; `conviction.py` `CONVICTIONS` tuple was wrong and silently no-op'd 'Loyalty'. Churn (:342-371): same emergency council replays the same contest every season at Sta<=2; `_derive_vote` derives who, not what; shippable repeat-detector tuple (xfail now, blocking when the minimum set lands).
+- **Conflicts / stale:** Section 2 all retired (Key substrate). `id(adjudicator)` still used at `agon_harness.py:211` and `_kernel_tests.py:1366` (still live as pattern). `CONVICTIONS` now `= descriptors.PURSUITS` at `systems/characters/sim/conviction.py:60` (the gate was re-founded; fixed or changed [UNVERIFIED which]). `check_knot_rupture` now referenced only in `engine/tests/test_knots_ed912.py` (still no production caller). `PP-724` status [UNVERIFIED].
+- **Open items:** no NPC lane in the ED roster at the time; 5-way id space; the Vor (initiative scalar) fork; outcome enum extension (clinch, remitted); Rivalry+Patronage edge minimum subset; Room collapse terminal default off.
+
+### .audit/2026-08-06-social-contest-three-lens-audit/sources/01_political_mechanics_primitives.md
+- **What it is:** verbatim upload 1 ("Political Mechanics for a Renaissance-Inflected Videogame"), research to 45 primitives P1-P45 in seven families, four assembled scene types, self-audit A1-A11; preserved 2026-08-06; external author, not Valoria.
+- **Status:** README header "SOURCE MATERIAL — verbatim, NOT canon, NOT ratified, NOT Valoria design text". Reading: research input (tier-3 material); reference for vocabulary only.
+- **Bears on:** SC, FA, SE, WR, FI (inquisition, inspection circuit), CORE (Record spine).
+- **Content that matters:**
+  - Source-tier tagging `[T0]..[T2]`, `[UNVERIFIED]`, `[TIER-FLOOR: T2]`; Inquisition material rests on Hill 2019 and Lea (partisan), Hermagoras only via Cicero (:8, :100-106, :753-755).
+  - Constraint C1 from Burning Wheel Duel of Wits collapse (players converge on Point/Dismiss): manoeuvres must differ in what they change about the state of the argument, not damage (:186-190); C2 (contradiction-matching is a puzzle not a debate, :198); C3 (cap affection so structural conflicts stay unbuyable, :224).
+  - P5 Stasis Gate (Conjecture -> Definition -> Quality -> Jurisdiction, ordered/gating, :309-315) and P7 three attacks Undermine/Rebut/Undercut (Prakken, :322-329); P9 Burden of Proof as a single token "sits differently in each forum" (:337-341); P11 Evidence Array hidden from the defence (:349-354).
+  - P16 Recorded Defeat (senatus auctoritas, :385-389), P33 Decree with Compliance (:491-494), P34 Detection+Graduated Sanction (:496-500), P37 Split Command (:513-516), P41 Scaled Compromise (:537-540), P42 Cheap Talk default with P43 Costly Signal as exception (:542-549), P45 Shared Loss (:556-559).
+  - Composition rules (:563-569): one vocabulary; forums differ by parameter not minigame; every power primitive has a cost or term; records outlive scenes; information layer not optional. Content graph: author Claims and Frames, generate Records, never generate the framing of a question or charter terms (:677-698). Four hearing types as one machine with four parameter sets (:595-602); negotiation = same scene with burden token removed (:604).
+  - Own audit A1-A11 (:716-755): A1 stasis fix lives at content layer (remedy: ~40% invariant, 20-claim paper prototype); A5 no resource economy; A9 P45 is a multiplayer fix and in single-player becomes an AI opposition problem; blind spots: assumes turn-based scene-bounded play, no interface thinking, no player-fantasy check (:767-773).
+- **Conflicts / stale:** Uses Victoria 3 enactment-clock figures (100-day stages, 2x/1.5x multipliers) it itself flags as not transferable (A4). Nothing in it is canon; any Valoria doc citing "40%" or P-numbers as authority has an orphaned provenance (see file 03).
+- **Open items:** the three closing questions (player's position, resource economy, multiplayer) - the later documents answer them for a single-player no-GM game.
+
+### .audit/2026-08-06-social-contest-three-lens-audit/sources/02_political_state_graphs.md
+- **What it is:** verbatim upload 2 ("State Graphs — Eight Systems"): eight mermaid state machines S1-S8 in the P-vocabulary plus a computed interrogation (incidence matrix, tiers, Jaccard, role stability, call graph, throughlines T1-T5).
+- **Status:** SOURCE MATERIAL per README (not canon). Reading: research input; the computed findings are reproducible via `02a_interrogate.py`.
+- **Bears on:** SC, FA, SE, WR, FI, CORE.
+- **Content that matters:**
+  - Eight graphs: S1 Court, S2 Tribunal, S3 Inquisition (abjuration negotiated by calling S4), S4 Negotiation (burden removed), S5 Parliament (with nested Enactment machine), S6 Settlement, S7 Territory (fans out to one S6 per locality), S8 Diplomacy (:27-487).
+  - Tiers (:550-556): only P1 Standing and P16 Record are in 7-8 systems; P4 Immunity and P24 Alternating Narrow/Widen used nowhere; "S9 Selection and Investiture" is the missing ninth system and "largest gap" (:564-566).
+  - Clusters (:585-591): Adjudication S1-S3 (J 0.52-0.76), Administration S6-S7 (0.67), Exchange S4-S8 (0.52); S4 vs S6 J=0.07 "honest boundary"; S2 Tribunal is the hinge and S5<->S2 the only call cycle, "do not break" (:595, :626).
+  - S4 is a subroutine (3 inbound calls, 0 outbound) (:624). Role shifts: P1 is M everywhere but G in S2 (accuser standing gates opening); P35 Bond produced in S8, consumed as guard in S6/S7 (:605-608).
+  - T1 record spine: every terminal emits a Record that guards a later transition (e.g. RelapseWatch -> Condemnation guarded by an earlier hearing's P16) (:633). T4: P30 Sealed Channel is the sole bridge from information to adjudication (:642).
+  - Self-audit: encoding written after the graphs by same author; M cells weakest; P1 and P31 counts are upper bounds (:662).
+- **Conflicts / stale:** Cites Valoria-unrelated sources only. Overlap analysis depends on the encoding, not independently derived. Has no consumer in code (SC kernel does not implement Record spine).
+- **Open items:** S9 Selection never built; all S5 enactment parameters untuned.
+
+### .audit/2026-08-06-social-contest-three-lens-audit/sources/02a_interrogate.py
+- **What it is:** the Python script behind upload 2's interrogation (SYS dict of primitive->role per system, CALLS list), 105 lines.
+- **Status:** SOURCE MATERIAL (script, not run by anything). Reading: historical instrument.
+- **Bears on:** SC, PROCESS.
+- **Content that matters:**
+  - Defines `SYS` (8 systems x primitive->role in {S,T,G,O,M}) and `CALLS` (7 edges); computes frequency, tiers (CORE>=7, BROAD 4-6, BRIDGE 2-3, LOCAL 1, UNUSED), role-shifts for primitives in >=3 systems, pairwise Jaccard, matrix, call graph (:17-104).
+  - Hard-coded input: it reads `political-mechanics-primitives.md` by bare filename at :9 (the file is now `01_political_mechanics_primitives.md`), so it does not run as filed from this directory.
+  - Encoding is a hand-authored table identical to the markdown matrix; computing from it only re-derives it (circular: the "computed" claim rests on the hand encoding).
+  - Nothing in the repo reads it (one-off).
+- **Conflicts / stale:** the name mismatch above; otherwise dead artefact.
+- **Open items:** none.
+
+### .audit/2026-08-06-social-contest-three-lens-audit/sources/README.md
+- **What it is:** index to the five-document source series, 2026-08-06, lane SC, ED-SC-0025.
+- **Status:** "SOURCE MATERIAL — verbatim, NOT canon, NOT ratified, NOT Valoria design text". Reading: live as provenance note, historical otherwise.
+- **Bears on:** SC, PROCESS.
+- **Content that matters:**
+  - Why the sources were copied: ED-SC-0017 flagged that `params/contest.md` is cited 97 times across the kernel and no longer exists on disk; ED-SC-0021/0023/0024 cited documents with no on-disk provenance (:12-17).
+  - Series table (:20-27): doc 1 primitives P1-P45; doc 2 state graphs; doc 3 consolidation 45 -> 14 mechanisms + 31 configurations; doc 4 persuasion pivot (story model, ELM, Cialdini, N1-N11); doc 5 era sources (Guiguzi, Han Feizi, N12-N20).
+  - Three warnings (:29-44): doc 4 retracts doc 3's warrant x attack matrix as fabricated; doc 5 carries `[TIER-FLOOR: T2]` on Chinese material (adopt as design on merit, never cite as historical in ratified docs; only Gentz's comparative thesis is T1); the series inflated 14 -> 25 primitives and the re-distillation gives 20 N-primitives -> 5 mechanisms.
+- **Conflicts / stale:** cross-refs say "adjudication §4" for the re-distillation, which is §3 in file 03 (minor).
+- **Open items:** none.
+
+### .audit/2026-08-06-social-contest-three-lens-audit/sources/03_consolidation.md
+- **What it is:** verbatim upload 3 ("Consolidation — From Research to Encodable Systems"): self-audit of docs 1-2, distillation 45 primitives -> 14 mechanisms M1-M14 + 31 configurations, four-resource economy, M2 Scope, data schemas, resolution pseudocode, three loops, opposition model.
+- **Status:** SOURCE MATERIAL per README (not canon). Reading: research input; its §6.2 warrant x attack table is the retracted fabrication.
+- **Bears on:** SC, FA, CORE, SE, WR, CHAR (Actor/aims).
+- **Content that matters:**
+  - Separation rule: "A mechanism is code: it takes inputs and branches. A configuration is data... If it can be written as a row in a table, it is not a mechanism" (:62-63); M1 Standing, M2 Scope, M3 Concealed Value, M4 Probe, M5 Claim, M6 Attack, M7 Gate, M8 Floor, M9 Block, M10 Record, M11 Clock, M12 Compliance, M13 Settlement, M14 Selection (:67-82).
+  - Four resources (:117-124): Time (universal cost, segments), Standing (indexed per body, non-fungible, 0-100), Coin, Obligation (directional, destroyed by use, cannot be bought); rule that Standing and Coin do not convert directly (:129).
+  - M2 Scope: `Scope = SELF|SETTLEMENT|HOUSE|FACTION`; `bind()` returns BOUND within mandate limits else PROVISIONAL(risk) that is live and may be repudiated; "the only thing in this design that gets more interesting without a human across the table" (:147-172).
+  - `gate(burden)` with ACCUSER / RESPONDENT / LOWER_STANDING / NONE gives accusatorial / inquisitorial / political tribunal / negotiation (:378-385); S1 and S3 differ in exactly two fields (burden, evidence visibility) (:547); S8 Diplomacy is Loop A with burden NONE wrapped in Loop B (:548).
+  - §6.2 anti-collapse table of warrant (WITNESS, DOCUMENT, EXPERT, SIGN, PRECEDENT, CONSEQUENCE) vs attack (strong/moderate/weak) and the "no attack kind optimal for >40% of claims" invariant (:314-337) - RETRACTED by doc 4 as fabricated.
+  - Opposition model (:556-579): faction aims (2-3, visible), unbuyable red lines, private `threatModel`, `concessionCurve`, `patience`; aims expire with their holder; replaces P45; Selection chain encoded `[N30,N9,W40,N12,W25,N9,W45,N11,W41]` (:492).
+- **Conflicts / stale:** all numerics `[UNTUNED]`; self-flagged gaps: interface never specified (third doc running), 40% invariant stated not enforced, inquisitorial array authored-to-be-inferable has no guidance (:596-600). The "requested model handoff" note at :4 is an artefact of the upload's chat session.
+- **Open items:** paper prototype of Loop A (twenty claims, four bodies) - never done; build order (:602-609: Record+Standing first, then Concealed Value+Probe, then Loop A with burden, Scope, Selection).
+
+### .audit/2026-08-06-social-contest-three-lens-audit/sources/04_negotiation_and_persuasion.md
+- **What it is:** verbatim upload 4 ("Negotiation and Persuasion"): classical rhetoric + behavioural science + game survey (Griftlands, Dogs in the Vineyard, Reacting to the Past), primitives N1-N11, three systems (Table, Floor, Verdict), encoding, adversarial audit A1-A11.
+- **Status:** SOURCE MATERIAL per README (not canon). Reading: research input; its opening retracts doc 3's warrant/attack matrix; its A1 is the Klei refutation used by the SC audits.
+- **Bears on:** SC, CHAR (minds, aims), FA, DICE (resolution shape).
+- **Content that matters:**
+  - Pivot: persuasion operates on minds (counterpart, audience, jury), not propositions; table of targets and governing research (:4-16).
+  - Atechnic (inventory: laws, witnesses, contracts, tortures, oaths) vs entechnic (ethos/pathos/logos actions) proofs (:24-30); ELM central vs peripheral route with durability asymmetry (:62-71); Cialdini levers with unity as multiplier (:75-79).
+  - Story model (Pennington and Hastie): coverage, coherence (consistency, plausibility, completeness), uniqueness; `acceptance=h(coverage,coherence)`, `confidence=k(uniqueness)`; terms "not formally defined" so the numbers are ours (:85-104).
+  - N6 counter-anchoring (Galinsky and Mussweiler: focusing on opponent's alternatives/reservation/own target eliminates the anchor), N7 logroll (better joint outcome, rated less attractive), N10 Deliberation (first ballot, informational vs normative influence, acceleration, momentum, first-crossing reversal) (:255-283); N8 Arena+Escalation (Talk -> Status -> Coercion -> Force, concession priced) (:266-269); N9 factions and indeterminates (RTTP) (:271-274).
+  - A1 (:466-467): Klei's playtest evidence - conversation challenges built as spending resources to influence rolls were "a lot less fun than fighting"; cards fixed it - and docs 1-3 are exactly that shape. A6: N3 route-forcing creates a dominant strategy ("make them stupid, then charm them"). A10: no deception/truth field. A3: per-mind plausibility content cost uncosted.
+  - Recommended build order (:529-532): paper-prototype the Verdict (six minds, two stories, twelve evidence items), then the Table; decide interaction model from prototypes; do not write the Floor until A6 answered.
+- **Conflicts / stale:** `[CLOSED: fabricated matrix]` claim is qualified by A2 (function bodies g,h,k are invented). Laboratory-derived findings (A5); leniency asymmetry carried as tunable parameter.
+- **Open items:** interaction model (cards vs scripted vs spend-and-roll), deception, escalation pricing, "nothing played - four documents running".
+
+### .audit/2026-08-06-social-contest-three-lens-audit/sources/05_persuasion_in_the_era_sources.md
+- **What it is:** verbatim upload 5 ("Persuasion in the Era Sources"): corrects doc 4's A4 with the Chinese counterpart-facing tradition (Guiguzi, Han Feizi), Roman jury composition, Koziol supplication, Sengoku kishomon oaths; primitives N12-N20.
+- **Status:** SOURCE MATERIAL per README (not canon). Reading: research input with explicit `[TIER-FLOOR: T2]`; adopt as design on merit only.
+- **Bears on:** SC, FI (assessment-before-speaking), FA, WR, CHAR.
+- **Content that matters:**
+  - Gentz thesis (T1): European rhetoric is forum-facing, Guiguzi counterpart-facing (:18); the other technique lists rest on a publisher's table of contents and encyclopedia summaries (B1, :237).
+  - N12 Read Before Speaking (Weigh/Gauge/Assess, assessment is the majority of the activity, :126-133), N13 Open-Shut, N14 Reverse Scale (per-mind lethal topic; B3: save-scum trigger unless inferable/survivable, :140-143, :245), N15 Concealed Comprehension (legibility value; inverts "knowledge always good", :145-149), N16 Attribution (scored outcome: did the target believe the decision was his own, :151-154).
+  - N17 Supplication binds the powerful at public cost (Koziol; B6: no failure state, :156-160, :255); N18 Self-cursing bond with trust inflation (plain paper -> talisman -> seal -> blood) resting on Ogino's contested reading (B9, :162-167, :261); N19 Composition Contest (lex Aurelia changed only who sat after 50 years of contest, :169-172); N20 Advocate as Evidence (:174-177).
+  - Own audit: Renaissance Italian practice search failed (B5, :250); the series corrects itself each document and the primitive count is rising again (:273-274).
+- **Conflicts / stale:** nothing here is citable as historical in ratified docs (file 03 §3.5).
+- **Open items:** primary-text reads (Hui Wu translation, Gentz 2014, Watson Han Feizi, Koziol chapters, Cotrugli 1458); re-run separation rule on N12-N20 (done in file 03: 20 -> 5).
+

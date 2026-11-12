@@ -19,6 +19,9 @@ world in which a told claim lands between two persons holding convictions, which
 3. `world_q.incompatible_span` (a reading; the strife harness and CR-97 print it) discriminates.
 4. `person_q.confliction` counts a strained pair only where the person stands for both; it is damped
    out of the score today (`confliction_weight` 0) so this moves nothing until that arm is flipped.
+5. `person_q.conviction_after_crisis` folds a broken creed only into an incompatible creed the person
+   stands for. Today it folds into any incompatible creed held above zero, which converted five persons
+   into the creed each stood against in three seasons at seed 0 (audit §4.4).
 
 No carrier, verb, Event kind or roster member is added. `Person.conviction` is unchanged.
 
@@ -59,9 +62,11 @@ and, at `v ≥ 3`, the sets fall along the factions the cast was authored into: 
 `einhir_restoration`); Löwenritter split (2 none, 1 `thread_truth`, 1 `solmund_orthodoxy`). The fault
 lines Jordan authored are in the data. The reader erases them.
 
-What that costs in play (E-N04, four seasons, seeds 0 to 2): every told claim a cast member holds from
-another cast member at the end of the run reads `commensurate = −1`; none reads 0 or +1 between two
-convinced persons. `regime_gain` 0.5 is therefore one flat discount on hearsay inside the cast, the
+What that costs in play (E-N04, four seasons, seeds 0 to 2): told claims held at the end of the run
+between two persons who both hold convictions read −1 in 20 / 8 / 14 cases and +1 in 0 / 0 / 7 (the
+seven all inside the four pairs of the realm that read +1); a 0 occurs only where one side is a cohort
+with no conviction (5 / 5 / 9). Mean confidence: 28.9 / 34.5 / 42.9 at −1 against 78.6 / 94.0 / 82.6 at
+0. `regime_gain` 0.5 is therefore one flat discount on hearsay inside the cast, the
 strife design's L4 ("in-regime tellers credited more", `strife-00` §6) has no in-regime teller to
 credit, and `incompatible_span` prints `True` for every strand with two convinced parties, which is the
 base rate and not a reading. `tests/test_strife_credit.py:216-241` asserts that `commensurate` is
@@ -126,6 +131,18 @@ affiliations (an intensity above 0, `person_q`'s reading)" is replaced by the po
 **4. `engine/season/queries/person_q.py::confliction`** takes the reading as an argument its one caller
 passes (`decision/choose.py::deliberation_memo` already holds `fx`): the sum runs over the incompatible
 pairs both of whose members are in `stands_for(p, reading)`. At `any` it is today's sum exactly.
+
+**4b. `engine/season/queries/person_q.py::conviction_after_crisis`** takes the same reading. Its
+docstring records the choice this reverses: *"[ASSUMPTION: the draft's "held above threshold" is read
+as held at all, i.e. above 0.]"* Under `stands`, the affiliation in crisis, the heir of a FOLD and the
+"something else is held" test of RESTABILISE and DESTROYED each read `stands_for`; under `any` the
+function is today's. The observed effect of today's reading (audit §4.4, seed 0, three seasons): three
+members of the Crown's faction at `solmund_orthodoxy` 2 with `einhir_restoration` 1 end at
+`einhir_restoration` 3 with no orthodoxy; a fourth goes from orthodoxy 3 to Restoration 4; a
+Löwenritter from orthodoxy 2 and `thread_truth` 3 to Restoration 5. A creed held at 1 is a position
+against it (`conviction_stand` −0.6), and the fold makes it the heir. Whether the crisis should be a
+rule at all is `20_NARRATIVE_E` edit 3 and Jordan's (audit §10); which creeds count as held is this
+edit and is not.
 
 **5. Not edited here: the scar writer.** `person_q._held(p.conviction, violated)` (`:764`, through
 `broken_by`) is the same boolean, and CHAR's `02_CHAR_scar_is_a_wound.md` fixture 1 (`scar_hold:

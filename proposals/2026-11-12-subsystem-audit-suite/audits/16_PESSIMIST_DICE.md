@@ -15,7 +15,28 @@ named.
 All runs: `PYTHONHASHSEED=0`; scripts and outputs under
 `/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379/scratchpad/runs/PES_DICE/`.
 
-(Sections below are appended as the work proceeds; §0 is written last and placed first.)
+## 0. Verdict
+
+**The dice are sound and they decide almost nothing: in computed play the resolution substrate is a
+correct machine fed one input, whose output changes what a few people believe and, in 282 of 284 graded
+rolls, no state at all.** The substrate's own claims survived attack: the odds stated are the odds dealt,
+one named level buys the same at every pool on the dice actually thrown (the uniform-leverage attack
+failed), the fraction of an obstacle pays its fraction, and the same seed gives the same world (this
+lane's two realm hashes equal two other lanes' independent runs). What failed is everything the five
+sentences of chance need around it. Nobody's dice differ, so *more dice* and *a master* have no referent
+in a run. A task has no difficulty, and the one obstacle there is fails three times in four, so *hard*
+names the ordinary case; under the standing rule's own remedy (every consequential verb draws) that pair
+would leave the realm doing about a sixth of what it does. Past the ceiling the roll is flat in the
+pool, the opposition and every hostile modifier at exactly 10 %, and every forgery in the shipped realm
+stands on that ceiling. Results have two degrees that matter on six of ten verbs, the top band cannot
+occur, and a failed search is forgotten by the searcher and tried again the same season. At the scale of
+a field the deciding draw is not a die: a lognormal multiplier on the pool, outside the engine and its
+soft cap. Two fixes are decided and written (a saturating ceiling; the unopposed task's obstacle and a
+throughput reading for the task draw); one choice is Jordan's (the form of fortune in a field).
+
+The five worst findings: F-PES-DICE-01 (the degree changes no state), -02 (at the shipped pair
+"everything draws" means "little happens"), -03 (the ceiling is a wall), -04 (a field is decided outside
+the dice engine), -05 (a failed search is forgotten, and remembering it would change nothing).
 
 ## 1. NERS
 
@@ -215,7 +236,7 @@ rows H-111, H-126, H-127, H-210, H-213, H-269, H-284.
 Depths: EXECUTES = the owner called directly or by exact enumeration through it (`band_odds`,
 `record_odds`, `roll.obstacle` on a hand-built `SocialContestInput` with the shipped fixtures); FIRES =
 `build_realm(seed)`, the shipped chooser, two seasons, seeds 0 and 1 (284 graded margin rolls). Controls
-are named per row. Evidence ids are in §9.
+are named per row. Evidence ids are in §8.
 
 **P1 "More dice are better, but not always"** — *holds at EXECUTES between Ob 0.5 and the ceiling; breaks
 at both ends of the obstacle range; inert at FIRES (everyone rolls two dice).*
@@ -301,4 +322,337 @@ people believed.
 
 Set beside the five sentences: none of the five nouns that carry them (dice, hard, master, advantage,
 degrees) varied in the run.
+
+## 3. Emergent narrative
+
+The subject is a resolver, so the question is what the draw contributes to a story: which turns it can
+produce, which it does produce with nobody playing, and what of each a narrator could read back.
+
+### 3.1 The turns the dice can produce, enumerated from the code
+
+From `degree_from_net`, `roll.py`, the fourteen rolled rows of `verb_table.yaml` and the two other
+providers; not from any design document.
+
+| turn | can it happen | what it needs | in two realm seasons, seeds 0 and 1 |
+|---|---|---|---|
+| the attempt that fails | yes | any roll | 208 |
+| the near thing (Partial as its own outcome) | on `argue`, `determine`, `speak`, `interrogate` only | a row whose Partial differs from its Success | 56 Partials, 8 on rows where the band differs (7 `argue`, 1 `determine`) |
+| the clean success | yes, from two dice | — | 20 |
+| the triumph (Overwhelming) | on `speak` and `interrogate` only, as an Event kind | three dice at Ob 2, or two dice at Ob 1 and a pair of tens | 0 |
+| the upset (the weak succeed against the strong) | to Partial only, at exactly 10 %, for anyone at the ceiling; never a Success on one die | a scored subject | 0 (nobody holds a score) |
+| the strong fail | yes: 9.5 % for seven dice against a score of 1 | scores | 0 |
+| pressing (odds bought with effort) | yes for a player; a person may form it (`npc_effort: on`) | a believed chance, which is `None` for every contested act but `determine` (F-DICE-14) | 0 of 284 |
+| persistence (try again after failing) | yes | nothing; a failed act costs its slot | 49 of 151 failed aims, 50 of 71 repeats within the season |
+| the run of luck | only for someone who rolls often | rolls | most rolls by one person: 5 and 8; longest failure run 5 and 7; best record `Partial, Partial, Failure, Partial` |
+| the field turned by fortune | yes, and by fortune more than by dice: the friction draw (§1.1) | a fought field | 0 fought fields in these runs (6 `Unopposed`) |
+
+**Turns that cannot happen at all, because no code owns them.**
+
+- **The disaster.** No band lies below Failure, the margin is discarded, and every margin row's Failure
+  writes nothing: a miss by one and a miss by four are the same Event (the 208 realm failures were 76,
+  94, 33 and 5 at one to four below).
+- **The success that costs.** No band and no row carries a price paid for succeeding.
+- **The contest with a loser.** A social act has one roller. `argument.lost` is the arguer's own failure;
+  the person argued against gains, loses and records nothing by it.
+- **The comeback.** A person who fails a search holds nothing saying he searched, so his second attempt
+  is not, to him, a second attempt.
+- **Character shown by dice** (she is reliably good at this): impossible while the pool is a constant
+  (F-DICE-01, cited). Over these runs no person's record can be told from luck: at most eight rolls each,
+  one distribution for all.
+- **The larger triumph.** On eight of the ten margin rows Overwhelming declares exactly what Success does.
+
+### 3.2 What a roll leaves behind
+
+Per graded roll, the Events that later cite its Event as a cause (E-P6):
+
+| band | rolls | descendant Events | of which not `claim.deposited` | state changes on the roll's own Events |
+|---|---|---|---|---|
+| Failure, inquiries (`finding.none`) | 157 | **0** | 0 | 0 |
+| Failure, other verbs | 51 | 577 | 29 | 0 |
+| Partial | 56 | 639 | 25 | 1 (`determine`) |
+| Success | 20 | 416 | 16 | 2 (one `argue`) |
+
+A roll's result propagates as belief (a witness's claim that it happened) and almost never as state.
+Three quarters of the realm's rolls are inquiries (`research` 166, `surveil` 45 of 284); when one fails,
+nothing in the world records that it was made. So the commonest thing the dice decide is whether a
+searcher comes to hold a finding, and the commonest result is an Event nobody, the searcher included,
+ever reads.
+
+### 3.3 The shape of the tail
+
+Every run is the same run, in distribution. Seed 0 gave 80 / 27 / 11, seed 1 128 / 29 / 9; against the
+pooled shares that is χ² = 3.3 on two degrees of freedom (p about 0.19): two samples of one roll. It
+could not be otherwise: 270 of 284 rolls are (2 dice, Ob 2.0, no leverage), and the other fourteen moved
+only by a bench or a forged Record. The same person (`p_npc_081`) is the most frequent roller in both
+seeds, because who rolls is decided by the roster's standing questions, not by anything a roll did.
+
+### 3.4 What a player's choice changes
+
+One thing: `effort`, which takes the default roll's Failure from 74.0 to 56.5, 42.4 and 32.9 % at one to
+three slots (E-P1 B3). He cannot choose an easier task (a task has no difficulty), cannot be helped (no
+second person's dice enter), cannot prepare (no other advantage source), and gains nothing by choosing
+whom to act against (nobody holds a score). He can try again, at the cost of the slot.
+
+### 3.5 Are the reasons readable afterwards
+
+No. The Event carries the band. The pool, the obstacle and its terms, the leverage and its named level,
+the net and the margin exist in the provider's returned dict for the length of one function call
+(`resolve.py::_contest`) and are dropped (H-284, known; SC-B's `Margin.terms` proposal is the remedy and
+this lane adds one field to it, the settled margin). A narrator can write *"she failed"* and cannot write
+*"she failed narrowly, against long odds, having spared no effort"*, each clause of which the engine
+computed.
+
+### 3.6 The extremes
+
+- **No rolls.** A realm in which no standing question exists rolls nothing; the dice have no part in a
+  world without inquiry or speech. Not a defect.
+- **One die.** If content authors a score of 1, that person fails the default task 90 % of the time and
+  cannot Succeed at it at all (E-P1 A1); the only stories he can have are failures and near things.
+- **Zero.** A held 0 is refused every attempt except against another 0, which he wins nine times in
+  ten.
+- **Many dice.** Seven dice against an unscored subject: Failure 27.4 %, Overwhelming 20.8 %. The top
+  band becomes common exactly where content is most authored, and on eight rows it means nothing more.
+- **Past the ceiling.** However strong the opposition, however good the forgery, however hostile the
+  bench: 10 %. The most extreme situations in the game are the ones the dice cannot tell apart.
+
+## 4. Findings, ranked worst first
+
+Severity vocabulary as the suite's. *Known limit confirmed* marks a finding whose mechanism a hole row
+already names; what is new there is the measurement.
+
+### F-PES-DICE-01 · blocks what R-09 is for · the degree changes no state
+
+- **Claim.** In computed play the band a roll lands in moves a belief or nothing; it does not move the
+  world.
+- **Falsifier run.** Realm, seeds 0 and 1, two seasons: 284 graded margin rolls; the Events of 282
+  carry an empty `changes`. **Control** (the instrument can see a change): one `argue` at Success (two
+  changes, `Person.pursuits`), one `determine` at Partial (one). Declared rows (E-P5): `lie`, `tell`,
+  `speak`, `interrogate` declare `writes: []` in all four bands; `examine`, `research`, `surveil` declare
+  `writes: []` flat.
+- **Touches.** R-01, R-02, R-09.
+- **Consequence.** R-09 (chains of events are probabilistic) is met in the letter: the chain is drawn.
+  What is drawn is whether a claim is deposited. A world whose dice never touch a body, an office, a
+  store or a bond has chance and no stakes.
+- **Minimal fix at the owner.** `engine/season/verb_table.yaml`: the seven rows above each key at least
+  one write, or one deposit of differing strength, on the band. The band maps are the verb lanes'
+  (`14_VERBS_SOCIAL*`, `13_SC_draw_for_unrolled_contests.md`, FI); `18_DETERMINISM_task_draw…` item 4's
+  default map (Partial at half) is the shape. No edit proposed here beyond naming the seven rows.
+
+### F-PES-DICE-02 · degrades narrative, and defeats the standing rule's own remedy · at the shipped pair "everything draws" means "little happens"
+
+- **Claim.** `18_DETERMINISM_task_draw_for_uncontested_verbs.md` converts 22 verbs to the graded route
+  and ships them at `obstacle_default` *"until [the difficulty column] lands"*. At the shipped pool that
+  is Failure 74 / Partial 19 / Success 7 / Overwhelming 0. Under its own fraction table (Partial one
+  half) the converted verbs deliver **16.5 %** of the effect they deliver today.
+- **Falsifier run.** `band_odds(2, 2.0) == (0.74, 0.19, 0.07, 0.0)`; 0.19 × 0.5 + 0.07 = 0.165.
+  **Control**: the same arithmetic at pool 2 / Ob 1.0 gives 0.42; at pool 4 / Ob 1.0, 0.63; at pool 4 /
+  Ob 2.0, 0.40 (E-P1 A1). On the sweep's count of 727 consequential undrawn outcomes in five realm
+  seasons, that is about 120 effect-equivalents at the shipped pair and about 305 at Ob 1.0.
+- **A second defect in the same place.** Under `13_SC_tuning_tables.md` T1's calibrated sizes (`plain`
+  0, `routine` 0.5, `demanding` 1.0, `hard` 1.5) with SC-B's floor at `OB_MIN`, a row with **no person
+  counterparty** has no opposition term, so `plain`, `routine` and `demanding` all compose 1.0: three of
+  the four difficulty levels are one number for every unopposed task (the 22 task rows, and `speak`,
+  `research`, `examine`, `surveil`). T1's falsifier (*"two adjacent levels giving the same P(Failure)
+  at equals"*) tests opposed pairs only and cannot see it.
+- **Touches.** R-04 (strategic and management actions), R-09.
+- **Consequence.** A realm in which a journey arrives one time in four and a wound mends one time in
+  four is not more dramatic; it is slower, and the plain failures write nothing (F-PES-DICE-01). The
+  standing rule says a good position *"still loses sometimes"*; at this pair an ordinary position loses
+  usually.
+- **Minimal fix.** `proposals/16_PESSIMIST_DICE_task_difficulty_and_throughput.md`: the unopposed
+  stand-in, a default level of `plain` for a task row, and a throughput reading in 18-A's gate. The
+  pool regime behind it is already Jordan's (addendum §5.6).
+
+### F-PES-DICE-03 · degrades narrative · the ceiling is a wall, and the shipped forgery stands on it
+
+- **Claim.** `min(ob, cap)` makes the obstacle flat past each pool's cap. There the chance of
+  Partial-or-better is 10.00 % for every pool, every opposition and every hostile modifier.
+- **Falsifier run.** E-P1 A2, A3, C1: pools 1 to 12 each read 90.0 % Failure at their cap; one die reads
+  10.0 % against scores of 4, 5, 6, 7, 10, 20; two dice against 6 and up. Forgery quality 1, 2, 3 and 5
+  compose 2.842 for two dice, and 0 to 5 all compose 2.000 for one die. **Control**: the uncapped arm
+  (A4) separates every one of those cells (16.5 / 7.0 / 4.0 %, then REFUSED), so the flatness is the
+  cap's and not the dice's. **In the realm**: 7 of 284 rolls were examinations of forged Records, all
+  seven at exactly 2.842, all seven Failure.
+- **What 13 already has, and what is new.** `13_SC_tuning_tables.md` problem 4 states the room's half
+  (*"every favourable room composes 1.0 and every hostile one 2.842"*). New here: the plateau across
+  **pools** (a die buys nothing past the cap); that `default_forgery_quality` 1 places every shipped
+  forgery on the cap for the shipped pool, so H-210's sweep arms 1 and 3 are one arm; that the
+  task-draw proposal's `forge_quality[band]` (a better forging roll, a better forgery) is dead above
+  0.842 for a two-die examiner; and that the two operands of one roll saturate by two conventions
+  (sigma by `tanh`, *"no hard ceiling and no dead-zone"*; the obstacle by `min`), an S defect.
+- **Touches.** R-06, R-09; NERS-R (completeness at the extreme), NERS-S.
+- **Consequence.** The mechanism is flattest where the fiction is most extreme. Past the cap, a
+  master's eight dice against an impossible bench are worth what a novice's one die is (10.0 % each;
+  with three slots of effort 42.4 % against 37.4 %): effort is all that counts and skill counts for
+  nothing.
+- **Minimal fix.** `proposals/16_PESSIMIST_DICE_soft_ceiling.md`: the excess over the fixed ceiling
+  saturates toward the pool's cap as sigma saturates toward `M_MAX`. No new number.
+
+### F-PES-DICE-04 · degrades narrative · a field is decided by a draw the dice engine never sees
+
+- **Claim.** The largest chance term in a fought field is `exp(gauss(0, 1.1))`, drawn once per unit per
+  battle and multiplied into the dice **pool** (`orchestration.py::_draw_friction`,
+  `core/exchange.py:147`).
+- **Falsifier run.** By construction (E-P3 S3): the multiplier's 5th and 95th percentiles are 0.164 and
+  6.107; one side's draw is more than twice the other's with probability 0.656. Run by the MB pessimist
+  lane and cited, not re-run (`runs/PES_MB/p1_size.txt`): 600 against 600, 300 seeds, the higher draw
+  won 275 of 287 decided fields and 199 of 199 where the draws differed more than twofold; at 2 : 1 all
+  85 upsets went to a smaller side with the higher draw. **Control**: their friction-off arm.
+- **Bearing on this scope.** The shared-roller question (F-DICE-07 and its proposal) merges the part of
+  the field's chance that does not decide it; the cut test in §1.2 shows that merge is free. The part
+  that decides is not a d10, is not a mean shift, is not soft-capped (`M_MAX` bounds named advantage at
+  1.5 z; doubling an eight-die pool is about 1.4 z by itself and the 95th percentile is a sixfold pool),
+  is not graded, and reaches no record a player or a narrator reads.
+- **Touches.** R-04, R-09; resolution-diagnostic P-ii (bypass), P-iii (unbounded), P-v.
+- **Minimal fix.** Not decided here: the multiplier is a calibrated, ledgered choice (ED-MB-0016, against
+  a historical win-rate curve). §6 gives the two forms.
+
+### F-PES-DICE-05 · degrades narrative · a failed search is forgotten, retried at once, and remembering it would change nothing (known limit confirmed, with a control that narrows its remedy)
+
+- **Claim.** `rosters.yaml: undeposited_kinds` skips `finding.none` at WITNESS for everyone, the actor
+  included (H-111, *Jordan to correct*; the roster's note says the person re-forms the act). The dice
+  consequence: for an inquiry the draw is a delay.
+- **Falsifier run.** E-P6: 157 of 157 `finding.none` Events have no descendant. Of 151 aims that opened
+  with a Failure, 49 were tried again, 17 of them reaching a result; non-failure per aim 41.2 and 29.4 %
+  (seeds 0, 1) against 32.2 and 22.9 % per roll. **Control, new** (E-P7): seed 0, two seasons, the skip
+  arm emptied in memory so that `finding.none` deposits as any Event does (306 descendants on 64 failed
+  inquiries; content hash moves, as it must): failed inquiry aims tried again **19 of 42**, against
+  **20 of 47** at the shipped arm.
+- **Reading.** The roster's note offers a narrower skip (deposit to the actor) as *"the alternative
+  Jordan would name"*. The control shows that depositing, to the actor or to everyone, does not reduce
+  the retrying: nothing in `decision/` reads a held *"looked and found nothing"*. The missing piece is a
+  reader, not a deposit.
+- **Touches.** R-07 (memory), R-08 (a person who never learns from a failed attempt is not boundedly
+  rational, he is amnesiac).
+- **Minimal fix.** Owed to the lanes that own the chooser and the inquiry (CHAR, FI): the candidate for
+  an inquiry reads the actor's own held `finding.none` on that subject (count and recency) into his
+  believed chance, through the one query `believed_chance` already is. Not written as a proposal here:
+  the reader is theirs, and `10_DICE_believed_odds_have_a_prior.md` is the surface it lands on.
+
+### F-PES-DICE-06 · degrades narrative, latent · one die cannot succeed, and a zero cannot try
+
+- **Claim.** At one die the default task's bands are 90 / 10 / 0 / 0: Success does not exist. A held 0
+  is refused everything but another 0.
+- **Falsifier run.** `band_odds(1, 2.0) == (0.9, 0.1, 0.0, 0.0)`; E-P1 A3 row `s=0`. **Control**: an
+  unauthored person (no key) rolls two dice, 74 / 19 / 7 / 0.
+- **Relation to earlier findings.** F-DICE-03 (holding a score makes a person easier to oppose) and
+  addendum E-B07 (a rank of 1 would lower the pool below the default). This is the same family at the
+  degree level: the first point of a skill removes the Success band.
+- **Touches.** R-06.
+- **Minimal fix.** None separate: it closes with `10_DICE_one_score_two_roles.md` for person-opposed
+  rolls (Ob 1.0: 60 / 30 / 10 / 0) and with the unopposed stand-in of this lane's task proposal for the
+  rest.
+
+### F-PES-DICE-07 · degrades narrative · the record of a roll is its band (known limit confirmed, H-284)
+
+- **New measurement.** The 208 realm failures missed by 1 (76), 2 (94), 3 (33) and 4 (5); the 76 successes
+  cleared by 0 (56), 1 (17) and 2 (3). Every one of those numbers was computed and none is kept.
+- **Minimal fix.** `05_SC_obstacle_difficulty_and_modifiers_B.md` puts the obstacle's terms on `Margin`
+  and so on the Event. One field is owed to it: `settled_margin`, which the provider already returns
+  (`sigma.py:555`).
+
+### F-PES-DICE-08 · hygiene, latent · the obstacle's floor reaches one term and not the sum
+
+- **Claim and run.** The room's favour floors at `OB_MIN`; the sum does not. A held 0 composes Ob 0.0,
+  where a second die lowers the chance (90.0 → 89.0 %) and two zeros succeed against each other 90 % of
+  the time; a held 1 composes 0.5, below the friendliest room's floor (E-P1 A1, A3, C1).
+- **Minimal fix.** Already written: `13_SC_tuning_tables.md` T1 (*"floored at `OB_MIN` after every
+  term"*). Cited; no second copy.
+
+### F-PES-DICE-09 · hygiene · the field's four stat checks are bare binaries on the roller
+
+- `recall_check`, `feigned_retreat_recognized`, `feigned_retreat_check`, `discipline_check_cascade`
+  (`modules/mass_battle/orchestration.py:2093-2166`): `roll_pool(stat) >= Ob`, pass or fail, where the
+  ladder is one call away and the outcomes (a pursuit recalled, a unit overextended, morale lost) are
+  graded things. Resolution-diagnostic P-iv. Cross-listed to the MB lane; no proposal.
+
+### F-PES-DICE-10 · hygiene · words (known limits confirmed)
+
+- `argue` at Partial emits `argument.won` and changes nothing (H-269): 7 of 7 realm instances.
+- A *contest* (`contests:`) with one roller and no loser; *won* and *lost* name the actor's own band.
+  The rename belongs to `verb_table.yaml`'s owner lane and moves every hash whose log uses the kind.
+
+## 5. Summary lists
+
+**False N-lines found** (cuts that are free): mass battle's own `roll_pool` at whole pools (0 of 20,000
+nets differ; stream position identical); the Overwhelming band on the social path as shipped; three of
+the four named levels in the season; and, already found by the first audit and re-read, `BandExtension`
+and the four unused functions of the advantage module. **Narrowed:** Partial as an outcome (four rows);
+S27.4 in the provider (a held 0 only). **Survive:** the settle rule, `band_odds`, the ceiling's purpose
+(not its form), uniform leverage on dealt dice.
+
+**Premises that failed.** P2 as worded (a task has no difficulty; the one task there is, is hard). P5 in
+play (two bands matter; the band changes no state; recovery is forgetting). **Held with breaks at the
+ends:** P1 (flat past the ceiling, reversed at Ob 0), P3 (no Success for one die; no loser in a social
+act; three scales, three meanings), P4 (holds, uniformly; one source, one sign, never fired; the field's
+largest advantage is outside it).
+
+**Stories the dice can tell today:** the attempt that fails; the near thing on four verbs; the clean
+success; persistence. **With content:** the strong failing; the upset, to Partial; the triumph, as an
+Event kind on two verbs. **Never, as coded:** the disaster; the success that costs; the contest with a
+loser; the comeback remembered; character shown by a record of rolls; a triumph that does more than a
+success.
+
+## 6. For Jordan (one item survives the ladder)
+
+**The form of fortune in a field.** Not superseded, not irrelevant; the documents point both ways
+(ED-MB-0016 calibrates the multiplier; the 2026-08-15 ruling *"ONE resolver for all d10 probability"*
+and the mean-shift rulings ED-884 / ED-934 describe advantage otherwise); precedent is split the same
+way; the architecture favours the second and would overwrite a calibrated ledger item, so it is listed.
+
+- **Option A — keep fortune as a pool multiplier, owned.** One lognormal per unit per battle, its sigma
+  a typed fact (not an environment read), its value written on the field's result so the record says
+  *fortune favoured the left*. The game this makes: a field is largely settled by one hidden draw before
+  contact; upsets at 2 : 1 are common (about a quarter) and are explained by nothing a commander did.
+- **Option B — fortune as named levels through the boost.** The per-battle draw selects a signed number
+  of named levels for each side, summed with stance, ground and morale and soft-capped with them. The
+  game this makes: fortune moves every exchange by at most 1.5 z in total with everything else, so
+  composition, ground and orders decide more and luck less; the historical upset curve the multiplier
+  was fitted to may not be reachable and would have to be re-measured.
+
+Already Jordan's, with one measurement added: the pool regime of the season's roll (addendum §5.6). At
+the built regime the standing rule's task draw delivers 16.5 % of today's effect at Ob 2 and 42 % at the
+floor; at the designed regime's lowest pool (five dice) the same two obstacles give 49 % and 70 %
+(`band_odds(5, 2.0)`, `band_odds(5, 1.0)` through the same fraction).
+
+## 7. Proposals written, and corrections owed elsewhere
+
+| file | carries | status |
+|---|---|---|
+| `proposals/16_PESSIMIST_DICE_soft_ceiling.md` | F-PES-DICE-03 | decided (ladder step 4: the engine's own precedent, `soft_cap`) |
+| `proposals/16_PESSIMIST_DICE_task_difficulty_and_throughput.md` | F-PES-DICE-02, -06 | decided (ladder steps 3 and 5); amends three proposals, named there |
+
+Owed to other lanes, one line each (nothing sent, nothing edited): **18-A** ships at `obstacle_default`
+(F-PES-DICE-02); **13 / SC-B** three levels collapse on unopposed rows, and `bound()` is the hard `min`
+(F-PES-DICE-02, -03); **SC-B** add `settled_margin` to what the Event keeps (F-PES-DICE-07); **the verb
+lanes** seven margin rows write nothing in any band (F-PES-DICE-01); **CHAR / FI** the chooser reads no
+failed search (F-PES-DICE-05); **MB** four binary checks, and the friction form (F-PES-DICE-09, -04);
+**`10_DICE_advantage_sources_for_the_arcs.md`** a source that can count against goes through the 10 %
+floor at one die (§1.1 P-iii (c)); **`10_DICE_one_score_two_roles.md`** its gate has no row at an
+obstacle below 1.
+
+**Standing-rule check of this lane's own text.** Neither proposal makes an outcome a function of state:
+the soft ceiling changes an obstacle (odds), and the task proposal changes an obstacle and adds a
+reading to a gate. No correction was needed.
+
+## 8. Evidence log
+
+All under `…/scratchpad/runs/PES_DICE/`, `PYTHONHASHSEED=0`. Nothing in the tree was edited but this file
+and the two proposal files.
+
+| id | what ran | seed, n | outcome |
+|---|---|---|---|
+| E-P1 | `probe_pure.py` → `pure.txt`: exact enumeration through `band_odds`, `record_odds` and `roll.obstacle` on hand-built `SocialContestInput` records with `DEFAULT_FIXTURES`. A1 bands by pool × raw Ob; A2 the per-pool cap; A3 actor × opposition, shipped arm; A4 the same, `obstacle_ceiling=None` (control); B1 one named level on dealt dice against the Normal form; B2 ±40σ; B3 the effort ladder; C1 forgery quality and reception | exact | as quoted in §1 and §2 |
+| E-P2 | `soft.txt`: the proposed saturating bound against the hard cap, pools 1 to 8, raw Ob 2 to 10; strict decrease on a 0.005 grid, pools 2 to 12 | exact | no violation at pools 3 to 12; at pool 2 none below Ob 14.9, where `tanh` is 1.0 in a float; lowest chance 10.0000 %; largest Ob ÷ (2 × pool) is 1.0 |
+| E-P3 | `probe_scales.py` → `scales.txt`: S1 one score on two scales (social enumeration; combat exchange as the Normal bands of `core.resolve` at no sigma, checked against 100,000 samples through `roll_net_continuous` + `degree_from_net`, seed 7: 62.9 / 16.0 / 17.2 / 4.0 against 63.0 / 15.9 / 17.1 / 4.0); S2 mass battle's `roll_pool` against the owner's on one stream, and the fractional means (seed 11, n 40,000); S3 the friction multiplier's percentiles | 20,000 seeds; 2,000 | 0 nets differ; 2,000 of 2,000 stream positions equal |
+| E-P4 | greps and imports: every `rngsource.get().<draw>` under `modules/mass_battle/`; `orchestration.py:2060-2190` read; `modules.mass_battle.config` imported with and without `MB_FRICTION`, `MB_FRICTION_SIGMA`, `FEIGNED_RECOGNIZE_OB` set | — | five draw sites, two of them the d10; `True 1.1 2` against `False 0.5 5` |
+| E-P5 | `verb_table.yaml` parsed: `writes` and `emits` per band for the fourteen rolled rows | — | as §2.3 P5 link 4 |
+| E-P6 | `probe_realm.py` 0 2 and 1 2 → `realm_s0_2.json`, `realm_s1_2.json`; `analyse_realm.py`. `build_realm`, the shipped chooser over `resolvable_verbs()`, `SeasonDriver._fold` wrapped to record each graded act, its provider record, its Events and the Events citing them | seeds 0, 1; two seasons | 1,529 and 1,519 resolved acts; 118 and 166 margin rolls; **hashes `bacd687f1470883b412be9638d0b0f88` and `8aae8412c221edb44ffd45d91bae2671`, equal to the SC interrogation lane's seed-0 tap and the determinism sweep's seed-1 run** (the wrapper moved nothing) |
+| E-P7 | `probe_realm_deposit.py` 0 2 → `realm_s0_2_deposit.json`: the same with `loop.witness.UNDEPOSITED_KINDS` emptied in memory | seed 0; two seasons | hash `1b61dd6127a682b09a9ee0c685340975` (moved, as declared); 120 margin rolls; failed inquiry aims tried again 19 of 42 (shipped arm 20 of 47) |
+| cited | `runs/SC_INT/realm_tap_s0.json`, `_s1.json` (rolls per person re-tabulated here); `runs/PES_MB/p1_size.txt` (friction; not re-run) | — | — |
+
+Not run: `pytest`; any `aperture` or `corpus_run`; a fought field (none occurred in E-P6; the field's
+figures are the MB pessimist lane's). `[UNVERIFIED]`: that the four binary checks of F-PES-DICE-09 are
+reached from the season's field (the call sites at `battle_loop.py:438` and `orchestration.py:2257`,
+`:2392`, `:2430` were read, not executed).
 

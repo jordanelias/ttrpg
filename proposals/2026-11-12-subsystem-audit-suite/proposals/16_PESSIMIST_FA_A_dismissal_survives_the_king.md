@@ -13,8 +13,10 @@ and `pardon` become draws; this file changes who may attempt them, never the out
 1. After a King dies and his heir claims, the heir holds the Duchy of Valorsmark as well as the throne, so
    the six Crown seats that can be stripped today can still be stripped. Today they cannot: the claim opens
    one seat of the two and the realm is left with no seat able to dismiss anyone.
-2. The Duchess of Hafenmark and the Duke of Varfell can strip the seats of their own councils (seven seats
-   that declare `rung_above_same_faction` and that nobody can strip today).
+2. The Duchess of Hafenmark and the Duke of Varfell can strip the seats of their own councils: six of the
+   seven seats that declare `rung_above_same_faction` and that nobody can strip today. The seventh, the
+   Guild Comptroller, resolves to the faction `Guilds`, which has no seat above it; it stays strippable by
+   nobody and this file says so instead of pretending otherwise.
 3. A seat that can dismiss can also pardon the ban its dismissal opened. Today no seat in the realm can do
    both, and `pardon` of a dismissed man is refused through every one of the 33 held seats.
 
@@ -58,9 +60,8 @@ No hash moves at build. Edits 1 and 2 are data; edit 3 is data. None adds a fiel
 
 Not decided here, and named: the King as King still dismisses nobody (the realm is never the rung directly
 above a seat that is not a duchy seat). That is the ruled rule working as ruled; a King who wants a duke's
-officer gone must go through the duke, or through a court. It is listed in the audit's §4 as a reading for
-Jordan only because the game it gives (a King with appointment at every depth and dismissal at none) may
-not be the one intended.
+officer gone must go through the duke, or through a court. The audit's §5 records it as accepted and not
+re-raised, with its measured consequence (a King with appointment at every depth and dismissal at none).
 
 ## Exact edits
 
@@ -68,9 +69,10 @@ not be the one intended.
    **`engine/season/rosters.yaml: successions`**: add `off_duke_valorsmark: off_heir`. (`claimable_seats`
    already returns every vacant seat whose title is the claimant's; `_eff_succeed` already opens all of
    them in one write. No code edit.)
-2. **`engine/season/offices.yaml`**, the `rung:` anchor of seven rows: `off_legal_advisor_hm`,
-   `off_military_commander_hm`, `off_commune_rep_hm`, `off_guild_comptroller` from `{duchy: "Hafenmark"}`
-   to `{territory: "<Hafenmark's seat territory>"}`; `off_senior_jarl_west`, `off_skald_chief`,
+2. **`engine/season/offices.yaml`**, the `rung:` anchor of six rows: `off_legal_advisor_hm`,
+   `off_military_commander_hm`, `off_commune_rep_hm` from `{duchy: "Hafenmark"}`
+   to `{territory: "<Hafenmark's seat territory>"}` (`off_guild_comptroller` is left where it is: its
+   faction is `Guilds`, so no anchor brings it under the Duchess); `off_senior_jarl_west`, `off_skald_chief`,
    `off_military_jarl` from `{duchy: "Varfell"}` to `{territory: "<Varfell's seat territory>"}`. The two
    territory ids are the author's to name: Hafenmark's children are `terr_T7`, `terr_T8`, `terr_T10`,
    `terr_T17` and Varfell's `terr_T4`, `terr_T11`, `terr_T12`, `terr_T13` at `build_realm(0)`; which holds
@@ -100,13 +102,25 @@ test file that builds the realm:
 - **G4** at the close, the files covering what the edits touch: `engine/season/tests/test_in31_revocation_cost.py`,
   `test_in61_succession.py`, `test_in12_arrest.py` (the `pardon` cases) and `test_g3_not_yours.py`.
 
-## Falsifier
+## Falsifier, and its outcome with the edits applied in memory
 
-G2 fails if `check_successions` or `claimable_seats` treats a second seat under one title differently
-from the first (then the docstring was never true and the claim needs an edit, not only a row). G1 fails
-if `office_faction` resolves `Inner Council` or `Jarl Council` to a faction other than its duke's (then
-"same faction" refuses and the body's faction is the defect). G3 fails if `may_determine` asks more of the
-seat than the grant and the object (then `bench` needs the reading named above).
+Each edit was applied to a forked world in memory (no file written) and its gate run: `pf6_fixcheck.py`,
+seed 0, output `runs/PES_FA/pf6.txt`.
+
+- G2 would fail if a second seat under one title were treated differently from the first. **Observed:**
+  with the basis and the row, the heir's one `succeed` gives him `off_king` and `off_duke_valorsmark`; the
+  strippable set is the same six seats before the death and after the claim; his `revoke` of the Marshal
+  through the ducal seat: `tenure.closed`. (The import-time `check_successions` was not re-run against
+  edited files; it reads `offices.yaml` and the roster at load `[UNVERIFIED]`.)
+- G1 would fail if a council's body resolved to a faction other than its duke's. **Observed:** re-anchored
+  on a territory of the duchy, `off_military_jarl`, `off_skald_chief` and `off_legal_advisor_hm` pass
+  `may_revoke` through their duke's seat (false before), and the Duke of Varfell's `revoke` of the Military
+  Jarl closes the hold with no ban (an elected seat). **`off_guild_comptroller` does not pass**: its
+  faction resolves to `Guilds`. That is the one the first draft of this file got wrong, and why the edit
+  now names six rows.
+- G3 would fail if the bench asked more than the grant and the object. **Observed:** with `determine` on
+  the ducal seat's grant: dismiss `tenure.closed`; pardon through the same seat `ban.ended`; reappoint
+  `tenure.opened`; control, pardon through `off_king`: `pardon.refused`.
 
 ## NERS reading (definitions `CLAUDE.md` §0.06; E last)
 

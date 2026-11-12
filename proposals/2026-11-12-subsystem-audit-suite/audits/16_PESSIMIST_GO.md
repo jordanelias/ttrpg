@@ -65,3 +65,16 @@ resolver, at the same odds. (e) The three are one fight, not three.
 (c) The record can be read in order with who, what and in answer to what. (d) Someone inside the
 world, and so the player, can follow at least one thread from its opening to its end. (e) The things
 in it have names a person would say aloud.
+
+### 2.0a Established early (kept here in case the lane is interrupted; restated in the findings)
+
+- **The parity contract cannot see the player's offer.** `probe.py trunc 0`: every one of the 83
+  persons seated on `development_space`, the pick keeping only the head of the offer a budget can pack
+  (`budget × interactions_per_scene`, 3). One season, seed 0: 383 deliberations showed **18,689**
+  candidate rows; the pick kept **4,063**; `content_hash` = `5ab73af282d0779646c38839fbab85d8`, equal to
+  the plain run (control, same session: `probe.py plain 0 2`, season 0). So 78.3% of every row a player
+  is offered is outside anything the port gate pins, and so is every reading the `11_GO` proposals add
+  (none is hashed; a `Question` "is never hashed", `state/carriers.py:538`).
+- **"Why" is `None` by construction.** The one field named `why` on the one witness value
+  (`epistemic.py::Seen.why`) is filled by `_term_why`, whose body is `return None` (`epistemic.py:939-950`);
+  `Candidate.why` was deleted (`state/carriers.py:591-595`); a `Claim` has no cause field.

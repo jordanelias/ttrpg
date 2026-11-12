@@ -15,9 +15,46 @@ measured here is new work unless a lane is named. Runs: `PYTHONHASHSEED=0`; scri
 
 ## 0. Verdict
 
-*(written last; see the end of this section once the runs are in. The section order below is the order
-the work was done in, so that a partial file is still usable: §2.0 holds the ordinary-meaning
-predictions, written before any FI note or code was opened.)*
+**The information layer is the realm's busiest engine and it informs nobody: of the five premise
+sentences of knowing, one holds in part and four break, and cutting every information verb from the
+chooser makes the world more eventful, not less.** In the shipped realm at seed 0 over three seasons,
+with no player, 73.7% of the acts anyone carries out are information verbs (`create_record` 350,
+`utter` 199, `research` 128, `reconstruct` 117, `surveil` 80, `forge` 52, `interview` 37, `conceal` 34)
+and 93.9% of the 74,510 Events are ledger bookkeeping (`claim.deposited`, `claim.decayed`). What that
+activity carries: ten tellings land; no rumour passes a second mouth, and on a hand-driven chain none
+can, because the second teller says only that he was told (§2.1); the false beliefs the first FI audit
+counted as formed by telling are seven people holding that one man exists twice; 52 papers are forged
+and none leaves its forger's hand; no inquiry finds anything; every death in the arms run here (four)
+is known as a death only to the six or seven people in the room. With every information verb removed
+from the chooser (the cut `nofi`, same world, same seed, against a draw-seed control), persons march
+53 times instead of 29, move 94 times instead of 21, issue 65 writs instead of 29, carry `determine`
+through three times instead of never, fight once, and two men die (§1.1): the information verbs as the chooser
+forms them are a false N-line, and they are spending the scenes the rest of the game needs. The parts
+that hold are worth keeping and are stated as such: for a quantity a requirement names, a person does
+act on what he believes and is corrected by being refused (§2.5 reading 1); the per-holder ledger and
+the witness barrier are honest; the far channels are what make any act form at a distance (§1.1,
+`presence`: no marches at all without them).
+
+**The single largest obstacle** is that knowledge in this engine is a pointer and not a content: a
+claim raises a question about its subject, and nothing but a dozen requirement cells reads what the
+claim says. So "the King is dead" and "the King is well" produce the same candidates (§2.5), a paper
+known to be false is read as true (§2.3), a deed leaves nothing a later look can read (§2.4), and what
+people choose to tell one another is whichever claim is newest, most often that someone exists
+(§2.1). The noir precedent the lane is built on (evidence that must be found, read, contradicted and
+cited) needs content that binds; three proposals below are the smallest edits that give it some.
+
+**On the standing rule** (*we do not do deterministic*): in this scope the draws are `research`,
+`surveil`, `examine` (unformed), `tell` and `lie`. Fixed functions of state that could go either way
+in the fiction, each observed here: every person present at a deed notices it and knows the hand
+(§2.3, §2.4); `forge` writes at one quality; `interview` and `reconstruct` "find" 40 times in 40;
+`sabotage` takes a harbour from 900 to 0 in one act; a `Partial` find forbids the hand for ever by rule
+(§2.2); a `Success` telling is a perfect copy at any depth (§2.1); the realm learns of a vacated seat
+at once and whole. `audits/18_DETERMINISM_SWEEP.md` C-02, C-05 and C-15 own the first, second and
+fourth; the rest are listed in §4 for that lane.
+
+*(Section order below is the order the work was done in, so that a partial file was usable
+throughout: §2.0 holds the ordinary-meaning predictions, written before any FI note or code was
+opened; §1 and §3 follow §2 in the file.)*
 
 ## 2. Premise audit
 

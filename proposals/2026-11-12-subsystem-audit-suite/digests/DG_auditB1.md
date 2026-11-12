@@ -251,3 +251,159 @@ Scope: 29 files under `.audit/` (archived-not-canon, lesser weight). Verified-at
 - **Conflicts / stale:** mojibake throughout (UTF-8 read as cp1252); `provenance.citations` cite `designs/scene/combat_engine_v1/weapons.py`, a deleted path. Counts of 53 not recounted [UNVERIFIED]. The engine's `weapons.py:686` flamberge blade 0.8859 kg differs from the 1.05 kg here.
 - **Open items:** hook_sword dual-record decision; whether the engine consumes `guards` or `head_elements` where both list one part.
 
+### .audit/2026-07-02-scene-combat-closing-distance-redesign/audit1_lens_architecture_orphan.json
+- **What it is:** one of six parallel "Fable 5" lens audits (2026-07-02) of a PLAN ("R1 circumstance-degradation redesign", increments I1..I8, decisions D1..D10) for personal-combat closing distance, grip/range-aware damage, facing and grappling; this lens checks layering, increment sequencing and orphans. The plan file itself (`C:/Users/Jordan/.claude/plans/...`) is not in the tree.
+- **Status:** none; plan was `[PENDING]` its own four-lens fold-in at read time (:7, :220). Reading: historical; the plan has largely landed (tree checks below).
+- **Bears on:** PC, CORE (layer discipline L0-L3).
+- **Content that matters:**
+  - :55 (SERIOUS) I3 (grip-aware, per-beat reach) silently redefines `closed`/`measure_gap` that I4/I5 build on: a dependent chain, not independent increments; re-run the I3 acceptance (polearm-vs-arming out of the 93-96% band) after I5. :90 (SERIOUS) the per-beat `er` recompute must run after `grip_target` and after the half-sword weapon swap or reach reads a stale grip.
+  - :197 (SERIOUS) D9 "retire `clinch` OR reduce to a residual bias" leaves an orphan re-entry path; recommended hard disposition: delete the field. :83 I7 over-bundled; split rear_clearance (I7a) from contact.py + hook_affordance (I7b).
+  - :69 I1 adds `facing`/`range_avail` Combatant fields several increments before readers exist (I5/I6); recommended a standing anti-orphan test "every Combatant circumstance field has >=1 live reader".
+  - :215 half-switch hazard: `agility`, `defense_affinities.lever_norm`, `wield_heft`, `_recovery_mode_commitment` must all read the same grip-adjusted `I_g`.
+  - :94-179 orphan table: 12 items VERIFIED consumers, 1 GAP (clinch); layering verdict: plan honours L0 pure (`at_circumstance(w, grip, room)` takes scalars only), wrapper sole mutator, contact.py an L2 module (:231).
+- **Conflicts / stale:** Tree check (one grep each, `modules/combat/`): `weapon_physics.py:933` `at_circumstance(w, grip=0.0, room=1.0)` exists and returns `rear_clearance`/`geom_slide`; `weapons.py:17` "`clinch` DELETED, I7b/D9, 2026-07-03" and contact.py:9 forbids re-reading it (FIXED, both the disposition and the split); `wrapper.py:172` "er REFRESH #1 (I3, D3)" - the per-beat refresh exists with longer/shorter labels frozen at engagement start (resolves the S6 ordering ask in the plan's default); `state_graph.py:48-51` now has a `Contact` node. The `omega_cap`/`m_eff` names do not exist in `weapon_physics.py` (the KE formulation of D2 was not adopted as written). Files cited (`designs/scene/combat_engine_v1/`) are now `modules/combat/` + `systems/combat/combat_engine_v1/` (state_graph.py, capabilities.py).
+- **Open items:** none outstanding from this lens that a grep can show; whether the standing anti-orphan test (S3) was built [UNVERIFIED].
+
+### .audit/2026-07-02-scene-combat-closing-distance-redesign/audit1_lens_consumer_coupling.json
+- **What it is:** second lens: grep-verified call sites of every function each increment touches, hunting half-switch risk; 9 findings (2 BLOCKER, 5 SERIOUS, 2 MINOR).
+- **Status:** none. Reading: historical.
+- **Bears on:** PC, CORE (test discipline).
+- **Content that matters:**
+  - :9 (BLOCKER) `core.strike` calls `heft_resp(attacker.w, cfg)`/`WP.percussion_authority(attacker.w)` with the weapon only; grip lives on the Combatant and is already >0 at strike time for closed poles. Threading grip into `heft/percussion_authority` must update `core.strike`, `adef_cap`, `select_mode` (two calls) and `puncture_pressure` ATOMICALLY or damage and armour-defeat disagree on the same blow.
+  - :17 (BLOCKER) the plan's "free cascade" through `reach_base` is false: `reach_sigma` reads the frozen `er` dict, `stophit_sigma`/`close_rate` do not call `reach_base`; only `close_unwieldiness` and `slip_inside` read it live. The `er`-freeze (wrapper.py:32-33) must be refreshed in the same commit, with an explicit decision about whether the longer/shorter label may flip (role-thrash).
+  - :31 I1's "agility reads at_grip I_g, byte-identical at g=0" is not exact for records where `I_cm = max(0, I0 - m*PoB^2)` clamps (the half-sword shifted-origin forms) or by float round-trip; the 0.40-0.60 mirror band would mask drift: demand exact-float equality before calling an increment identity.
+  - :37 `test_combat_heft.py` pins only the longsword anchor (1e-6) and an ordering spear<arming<longsword<greatsword, so a KE re-anchor can silently re-tier every other weapon: add a per-weapon heft snapshot.
+  - :72 every `test_combat_*.py` does `pytest.importorskip('numpy')`, so a numpy-less run skips the guards that would catch a half-switch: treat a skipped combat suite as RED.
+  - :45 `select_mode` is called at 3 sites and its `closed` argument is never read; `approach_displace` reads native `longer.w['head']`, so wiring it to `sel_head` is a behaviour change on the approach (sel_head is always set), not a fallback.
+- **Conflicts / stale:** tree: `combat_systems.py:385` `close_efficacy(pc, measure_gap, range_avail, closed, head)` now exists (the unused `closed` hook was consumed), `:649-694` shows `select_mode` returning `sel_gap/sel_perc/sel_pc` (ED-PC-0037.1), `:441` `range_utilization`, `:430` `facing_target`. The numpy-importorskip hazard (:72) is a standing process hazard [UNVERIFIED still open].
+- **Open items:** whether a per-weapon heft snapshot test exists (not grepped).
+
+### .audit/2026-07-02-scene-combat-closing-distance-redesign/audit1_lens_geometry_bake_mode.json
+- **What it is:** third lens: geometry / bake / mode coherence; 7 findings (1 BLOCKER).
+- **Status:** none. Reading: historical.
+- **Bears on:** PC.
+- **Content that matters:**
+  - :7 (BLOCKER) `element_afforded` ranks affordance on each element's `geo['gap']`, but `select_mode`'s comparator (systems.py:325-326), `core.strike` and `adef_cap` resolve on whole-weapon `w['gap']`; `mode_elements` carried only `{head, geo}`, no position, so a "close-efficacy from its own geo" is un-computable without plumbing.
+  - :13 (SERIOUS) `core.damage`'s blunt branch reads whole-weapon `percussion_authority` while the cut/thrust branch would be grip-aware: a choked blunt strike would deal full-extension damage; make percussion circumstance-aware in the same increment or state that it is deliberately grip-invariant.
+  - :19 (SERIOUS) `longer/shorter`, `measure_gap`, `closed` are all frozen from the same `er`; refreshing only `er[c]` lets a choked pole be labelled "longer" while reading shorter.
+  - :25 (SERIOUS) "contact mirrors bind/riposte" is false: bind is a nested 3-iteration loop that mutates `beats`; `contact.axis` is injection metadata only (node=Bind, site "(WS-5, unbuilt)") and `STATES` has no Contact node.
+  - :31 weapons are shared singletons (`combatant.w = WEAPONS[self.weapon]`) with `_derived` baked at import: circumstance quantities must take `(w, scalars)` and never be written onto the weapon dict. :43 `hook_affordance` as a saturating sum over `dual_role_element` guards would triple-read the same `extent_m` already summed into `blade_guard` by `_guard_catch_raw` (weapon_physics.py:316-324).
+- **Conflicts / stale:** tree: `weapons.py:43,52` mode_elements now `{head, element_ref, geometry}` linked to `elements[]` by reference "NOT list order" (FIXED), 11 weapons; `sel_gap` threaded (combat_systems.py:649); Contact node present in state_graph. Whether `percussion_authority` became grip-aware was not grepped [UNVERIFIED].
+- **Open items:** the percussion grip-invariance decision.
+
+### .audit/2026-07-02-scene-combat-closing-distance-redesign/audit1_lens_physics_kinematics.json
+- **What it is:** fourth lens: physics/kinematics correctness of the plan's formulas; 8 findings (2 BLOCKER).
+- **Status:** none. Reading: historical, but its two BLOCKERs are the most reusable physics checks in the corpus.
+- **Bears on:** PC, DICE (units discipline).
+- **Content that matters:**
+  - :14 (BLOCKER) `omega_cap = tau/I_g` is angular ACCELERATION (1/s^2), not velocity; fed into `1/2*m_eff*omega_cap^2` it ranks dagger KE ~8.1e6 over greatsword ~751 and spear ~47 (tau=30 N m; tau/I_g: dagger 10047, arming 200, longsword 132, greatsword 29, spear 15), the inverse of the intended ordering.
+  - :20 (BLOCKER) the existing `heft()` (weapon_physics.py:389-399) deliberately reads `m_head*PoB_frac`, NOT MoI, because the spear's I_g (1.966) and poleaxe's (1.461) dwarf longsword (0.227)/arming (0.150); a KE term built on `I_g` re-creates the 84-96% polearm dominance via the damage channel. Ordering can only come from non-I_g terms (applied torque, swing angle).
+  - :26 `m_eff = I_g/r^2` makes `m_eff * (omega r)^2/2 = I_g omega^2/2`: carrying both `m_eff` and an `I_g`-derived omega double counts or no-ops.
+  - :31 `u` (metres) subtracted from `reach_base`, which is `L0 + REACH_GEOM_SCALE(0.635)*geom`: a units mismatch understates choke penalty by 1/0.635 (reach_base spans ~4.44 dagger to 7.80 spear; spear u@g=1 = 0.692 m).
+  - :37 `range_avail` scaling omega then squaring makes swing damage fall quadratically with lost room; Bolander 2009 (via r0_flags C4) warns of a non-monotonic optimum. :43 the at_grip clamp makes the staff's `u_max=0` (PoB=0), disabling the very choke-up case the research cites; decouple the geometric slide from the CoM-bounded inertia slide.
+- **Conflicts / stale:** tree: `weapon_physics.py:933-966` shows `geom_slide` decoupled from `u` ("M-04/M-20") and `rear_clearance` computed from located parts, i.e. findings :43 and `length_m` misuse were taken; `omega_cap`/`m_eff` do not appear (the faulty KE form was dropped). `REACH_GEOM_SCALE` is applied to `forward_extent(c,cfg,grip)` (combat_systems.py:62), consistent with the units fix.
+- **Open items:** none.
+
+### .audit/2026-07-02-scene-combat-closing-distance-redesign/audit1_lens_primitive_schema.json
+- **What it is:** fifth lens: is the weapon schema sufficient for the plan's derivations; 6 findings (2 BLOCKER).
+- **Status:** none. Reading: historical.
+- **Bears on:** PC.
+- **Content that matters:**
+  - :15 (BLOCKER) `mode_elements` had no x_m/extent and were joined to `elements` only by list order (flamberge 3/0, poleaxe 3/3, voulge 3/2).
+  - :21 (BLOCKER) every catching feature is `dual_role_element=True` with no hook-vs-lug discrimination; the Phase-0 per-guard `type`, `orient_deg` (rear-curved beak = -90) and notes were dropped by `weapons.py`.
+  - :26 `orient_deg` (~124 occurrences) and `material` were collected on every element/guard and dropped; the bec_de_corbin hammer +90 / beak -90 / spike 0 distinction was flattened to positive `x_m`.
+  - :32 `derive()['length_m']` is the full length, the wrong operand for rear clearance (spear 2.01 vs true rear extent -0.36; guisarme 2.10 vs -1.06; estoc_halfsword 1.57 vs -1.17); compute from `_all_parts`.
+  - :38 grip bounds are already well-defined (`grip_choke_max`, `grip_travel_max`; mace/dagger/longsword 0.0, spear/staff/poleaxe 1.0, longsword_halfsword 0.8).
+- **Conflicts / stale:** tree: `weapons.py:25` now documents `orient_deg` and `material` in `elements[]` (RE-INGESTED); `weapon_physics.at_circumstance` computes `rear_clearance` from `_all_parts` (matches :32); mode_elements link by `element_ref` (`weapons.py:43`).
+- **Open items:** whether hook-vs-lug is now encoded [UNVERIFIED; `hook_affordance` does not exist, only `rear_clearance` at combat_systems.py:127 was found by grep].
+
+### .audit/2026-07-02-scene-combat-closing-distance-redesign/audit1_lens_pipeline_trace.json
+- **What it is:** sixth lens: exhaustive mechanical trace, walking `wrapper.engagement()` beat by beat across all 53 records; the richest of the six.
+- **Status:** none. Reading: historical, except the beat call graph, which is a reusable map.
+- **Bears on:** PC, CORE (state_graph / trace seam).
+- **Content that matters:**
+  - :6-73 `element_mode_inventory`: of 53 weapons only 8 had `mode_elements`; 16 flagged; 7 "silent-zip failures" (dangpa, spetum, partisan, guandao, fauchard, flamberge, hook_sword have >1 mass element, 0 modes); voulge 3 elements vs 2 modes; goedendag whole-gap 0.29 vs spike 0.73, guisarme 0.50 vs 0.75, poleaxe 0.78 vs 0.82/0.59 (:92).
+  - :75-89 `comparator_table`: `element_afforded` is split-brain (cut/point read per-element `geo`, blunt reads whole-weapon `percussion_authority`, flagged `[PHASE-B6 PENDING]` in code at systems.py:268-271); `reach_threat` calls `adef_cap` with no `sel_head` while `armor_defeat_sigma` passes it, so one weapon's armour-defeat is scored on two different heads in one beat; `approach_displace` (systems.py:448) and wrapper.py:232 gate on NATIVE head.
+  - :99-130 29-step `beat_call_graph` with a `staleness_risk` per step (frozen `er` read by reach_sigma/reopen/labels/reopen_moment, live reads by slip_inside/close_unwieldiness/str_demand; after riposte role-flip `sel_head/grip_position` are stale until next beat).
+  - :132-171 label cross-reference: 0 of 15 `state_graph.STATES` and 8 of 9 `INJECTION_POINTS` are referenced by the wrapper; the state graph is a descriptive test artifact (`fired_states_from_events` reconstructs nodes from the trace event stream), only `TRACE_KINDS` (13), `SEPARATION_REASONS` (4) and 3 capability predicates are live. 21 orphan labels. INJECTION_POINTS hold hardcoded `wrapper.py:NN` line strings that no test checks (:183).
+  - :173-184 findings: whole-weapon gap vs per-element geo (BLOCKER); frozen `er` (BLOCKER); state graph descriptive-only so "contact.axis goes live" must be built (BLOCKER); sel_head vs native head; percussion only whole-weapon; select_mode ignores `closed`; agility grip-blind.
+- **Conflicts / stale:** tree: `state_graph.py:48-51` lists `Contact` in `Exchange/Bind/Riposte` edges; `wrapper.py:172` `er` refresh; `sel_gap` threading. Line numbers in the audit all refer to the deleted worktree.
+- **Open items:** the trace-seam observation (state graph is not a control structure) stands unless `state_graph` became read by the wrapper [UNVERIFIED].
+
+### .audit/2026-07-02-scene-combat-closing-distance-redesign/r0_flags.json
+- **What it is:** Round-0 research cross-check: contradictions C1-C5 across four research streams (commitment_depth, facing_stance, grappling, measure_gap), a "weakly grounded" list and "strongly grounded" highlights.
+- **Status:** none. Reading: historical research (tier 3 by repo rule); useful as an evidence-grade register.
+- **Bears on:** PC (primary), SC (the same bind-gated / state-conditional contest logic), FI (epistemic grading).
+- **Content that matters:**
+  - :6-31 contradictions: C1 polearm facing (square vs bladed) unresolved, a Quora 403 snippet vs F3/F8; C2 facing is per-guard/per-moment, not per-weapon-class (so no per-class facing constant); C3 destreza circular footwork vs Italian linear lunge (do not generalise the Italian lunge); C4 Bolander 2009 non-monotonic force-vs-distance, "do not encode a strictly monotonic range-power relationship".
+  - :34-39 C5 `clinch` values encode "free hand" (dagger 10, rondel 9, estoc_halfsword 9) not "hook hardware" (guisarme 2, ji 3, fauchard 2, dangpa 2, partisan 3).
+  - :42-92 ten weakly grounded claims, including an unsupported "~50 cm minimum distance" (do not encode a hard threshold), an absence finding for treatise language about a truncated swing, and a "shaft easier to grab than hilt" inference with 0 direct sources.
+  - :93-129 strongly grounded: the void and the close are the same motion (Fiore fol. 39r); sword grappling is bind-gated in both Fiore and German sources; a dominant grip yields a menu of outcomes (arm-break / throw / disarm / restrain); grabs are opportunistic on a prior opening; leverage is absolute hand-to-contact distance; long behind-the-hands length is a close-range liability; commit_depth and lunge_depth are driven by disposition/wariness, never by `measure_gap`.
+- **Conflicts / stale:** tree: `clinch` deleted (weapons.py:17); `range_utilization` now couples commitment to measure.
+- **Open items:** C1 polearm facing remained "needs a primary polearm-treatise read".
+
+### .audit/2026-07-02-scene-combat-closing-distance-redesign/r0_research_commitment_depth.json
+- **What it is:** Round-0 research file on thrust commitment depth and range utilisation, with a prior engine scan; 12 findings F1-F12 with sources and confidence.
+- **Status:** none. Reading: historical research (tier 3); secondary-source heavy (web search summaries), several citations flagged unverified by the file itself.
+- **Bears on:** PC.
+- **Content that matters:**
+  - :10-24 engine already had `commit_depth` (Beta over [2,5]), `lunge_depth` (LUNGE_COMMIT=4.0) and `grip_target`; the confirmed gap (:23): neither is driven by the current `measure_gap`.
+  - F1 :29 Capoferro misura larga/stretta; the four-tier "larghissima/strettissima" is a modern teaching gloss (:34). F6 :77 German half-swording vs Fiore's "mezza spada" as a measure name (:82): do not conflate.
+  - F8-F10 :95-:128 karate/boxing kinetic-chain studies (Rinaldi 2018 181.2 N; Dinu 2020; Beattie and Ruddock 2022; Dunn 2021; Bolander 2009) show force tied to joint-extension completion; Bolander is non-monotonic and read from snippets only ("most load-bearing and least-triple-verified numeric claim", :127).
+  - F11 :132 absence: no treatise language for a checked swing, treatises switch to a different action by measure; F12 :140 Meyer's committed-vs-feinted depth as a chosen spectrum.
+- **Conflicts / stale:** relies on Consensus.app paper links and Wiktenauer/Grokipedia paraphrases; not primary text.
+- **Open items:** :148-151 three open questions (swing-arc truncation, Filipino/Chinese short-range doctrine, Bolander full table).
+
+### .audit/2026-07-02-scene-combat-closing-distance-redesign/r0_research_facing_stance.json
+- **What it is:** Round-0 research on square vs bladed stance across traditions and its link to footwork and grip change; 16 findings F1-F16, explicit disagreements, unreadable sources.
+- **Status:** none. Reading: historical research (tier 3).
+- **Bears on:** PC (primary), CHAR (tradition differences), FI (source grading).
+- **Content that matters:**
+  - :19 confirmed no body-facing concept existed in the engine ("bladed" there means the weapon class). F9 :102 no clean 1H-bladed / 2H-square rule; facing is per-guard/per-moment, counterexample Fiore's Posta di Donna (bladed, 2H).
+  - F11 :122 Fiore's mezza-spada crossing as divider/unifier of zogho largo and stretto, grip change is measure-triggered (consistent with the engine's `halfsword_target`); F12-F15 German doctrine steps to the side though squared, destreza bladed with circular footwork closes measure, Italian rapier gathering-step plus lunge.
+  - F16 :172 sport-fencing lunge ~1.5x height, 260.0 +/- 9.8 cm mean: modern sport data, "do not transfer directly".
+  - :183-187 the lowest-confidence claims: Silver's "square-footed stance" rests on AI-aggregated paraphrase; polearm facing is the weakest sub-question.
+  - :189-209 four sources unreadable (a Fiore lanza scan, ARMA study guide over 10 MB, a Meyer footwork article timeout, Quora 403).
+- **Conflicts / stale:** F7 Silver claim unverified against the primary text.
+- **Open items:** :211-214 three recommended primary-source reads before design relies on the polearm or Silver claims.
+
+### .audit/2026-07-02-scene-combat-closing-distance-redesign/r0_research_grappling.json
+- **What it is:** Round-0 research on historical weapon/limb grabs and pins, hooks, outcomes and the dead `clinch` field.
+- **Status:** none. Reading: historical research (tier 3); Wiktenauer and ARMA pages partly blocked (403/10 MB), claims rest on secondary summaries and Mele's Getty reconstruction.
+- **Bears on:** PC (grab/pin/disarm), SC (the same bind-gated contest shape, FA via nothing), FI (evidence grading).
+- **Content that matters:**
+  - :6 `clinch=<1-10>` on every weapon record with zero readers; sampled values dagger 10, rondel 9, estoc_halfsword 9, misericorde 7, bec_de_corbin 8, spear 2, rapier 2, guisarme 2, ji 3 (:126 notes the inconsistency with hook hardware). A prior unratified proposal exists at `designs/audit/2026-05-29-combat-armature/grappling_system_design.md` (:7).
+  - Range finding (:25): Fiore's 25 stretto sword plays all proceed from an existing crossing (right foot forward); dagger and unarmed grabs are open-contact (the grab is the first contact, Dagger 1st Master at the apex of the strike, :45).
+  - Four-branch outcome menu from one dominant grip (:48): arm-break, throw, disarm, tie in the high bind. Weapon foot-pin (rompere di punta, Getty Carta 28V, :38, :113). German Ringeck: hilt seize, mid-blade "Taking a Sword", biceps grabs, shoulder-fulcrum leg-break (:57-63).
+  - Polearm hooks (:80-86): eight weapons carry `dual_role_element` catch hardware; the pattern beat/parry -> shaft-as-hook across the neck -> pull down -> thrust is Getty-cited for a plain spear; no source for a named play with a forged guisarme hook.
+  - Success factors (:99-105): timing at the apex of a committed linear strike, leverage over raw grip, a free hand, a created opening; no source documents a grab against an uncompromised weapon.
+- **Conflicts / stale:** tree: `contact.py:28` `grab_available(actor, opponent, opening_created, cfg)` implements the "opening_created" gate; `clinch` deleted.
+- **Open items:** escape/counter detail extracted only at secondary level (:115); Ott Jud plays uncited (:73).
+
+## Cross-subsystem leads
+- **PC / CORE:** the beat call graph in `audit1_lens_pipeline_trace.json` (:99-130) and the state-graph finding that `state_graph.STATES` is reconstructed from trace events and never read by the engine (:170) bear on any lane that treats `state_graph` or `INJECTION_POINTS` as a control structure (CORE seam, PC). Tree shows a `Contact` node added since.
+- **SC (+ DICE):** the Gate A/B/C verdict logs are the only record of social-contest design forks: Face scale-binding (Charisma x3 downward buffer vs 0-10 Standing upward), Composure retirement blast radius, Panel aggregation and reachability, Terminal Doubt on TallyAtClose, CR5 backfire trigger, STYLE_AXIS 4th axis, epideictic compression. Tag SC; CHAR for the armature (adjudicator conviction vector).
+- **SC / CHAR:** `armature.py` `ARMATURE_MAX_DSIGMA = level("moderate")` (0.50 sigma) and the sub-1 pool quantisation lesson (0.15 off-axis rounded away by `max(1,int(round(pool)))`) bear on DICE and on any lane scoring fractional pool bonuses.
+- **MB / CORE:** `findings_full.json` is the best evidence on default-toggle drift: two `FIELD_MOVEMENT`/`NODE_COHESION` defaults flipped without moving the acceptance validators or the multi-turn reset, validators wired into no CI, golden field digests recording the bug. Tree shows `PER_CELL` since flipped to 1 (ED-MB-0001) and route/maneuver goals added; MB and CORE lanes should check the field-digest and validator-gate state themselves.
+- **MB / PC:** `check_drift`-style state re-keying (node state vs cell_troops) and `build_army` silent key drop are examples of pattern defects the repo's own predicate (§0.1 pt 5) governs.
+- **PC / MB / CHAR:** the morphology records (53 weapons) feed `modules/combat/weapons.py`; MB troop equipment (`TROOP_TYPE_REACH`, `mounted_archers` with no `TROOP_TYPE_STATS`) references the same weapon names (polearms) [UNVERIFIED cross-link].
+- **FI / WR:** research-file evidence grading (S1/S2/S3 tiers, "unverified snippet", absence findings) is the closest thing in `.audit/` to an epistemics register for fieldwork lanes; tag FI.
+- **PROCESS:** Gate A R2:98 (CRLF-hash pins vs `git hash-object`) and R3:163 (`_index` Line columns stale after a main-doc edit) describe checker blind spots (`freshness_gate.py`, `ci_co_file_checker.py`); `ci_co_file_checker.py` still checks only `canonical_sources.yaml` co-change [UNVERIFIED].
+
+## Likely stale or superseded
+- Every path in these files is pre-restructure: `sim/personal/contest/` (now `systems/social_contest/sim/contest/`), `designs/scene/combat_engine_v1/` (now `modules/combat/` and `systems/combat/combat_engine_v1/`), `tests/sim/mass_battle/` (now `modules/mass_battle/` + `systems/mass_battle/sim/`), `designs/audit/...` (now `.audit/`).
+- Contest Gate A/B/C findings: Guilds "GM picks" (fixed: "Context (venue-derived)", ED-1061), prebuilt-Panel skip (fixed `wrapper.py:165-166`), Panel reachability (Guild Arbitration, `dictionaries.py:380`), CR4 chosen-genre, CR5 standing cap, armature delta-sigma channel, Church Tribunal start ground (`modes.py:59-61`). The two-meanings Face scale fork appears still present (`primitives.py` `Face = Standing`, STRIP 0.8).
+- MB movement/pathing findings: PER_CELL default (now 1), node `reset_positions` (now skipped explicitly), waypoint/route primitive (present), `check_drift` node re-key (present, units.py:1154); the 144-tick "freeze" was refuted at the time.
+- Closing-distance plan lens findings: `clinch` (deleted), `mode_elements` linkage (element_ref), `er` per-beat refresh (present), `sel_gap` (present), `orient_deg` (re-ingested), `omega_cap` KE form (dropped). The plan file referenced is not in the tree.
+- Both Track-2 decision-prep scripts: dead `sys.path` to `../../scene/combat_engine_v1`; they cannot run.
+- Morphology Phase-0 JSON: superseded by `modules/combat/weapons.py` as the live record; combined file keeps the `mass_grade`/`confidence_tier` mismatches and the pre-fix path citations.
+
+## Items that could change an audit finding
+- **Face (SC):** if an SC lane reports "Face is decorative" or "Face has one scale", Gate A R1:34, R2:123 and R4:200 say the same thing about the 2026-07 kernel; the tree today still has `Face = Standing` and `STRIP = 0.8` (`primitives.py:33,108`), but `resolver.py:433` now strips standing-bounded points, so "never stripped" is false now. Re-verify before repeating.
+- **Panel (SC):** "Panel unreachable" (Gate B R2:62) is false at the tree if `dictionaries.py:380` is accurate (reachable via Guild Arbitration); "simple majority" is stale: bench-weight = `Adjudicator.discipline`.
+- **Obscuring dominance (SC):** Gate B R2:66-70 and R4:168-172 (Terminal Doubt undefined under TallyAtClose): I did not re-check whether ED-1060 was ever specified for the tally subset.
+- **CR4/CR5 (SC):** the Memory (FACT) branch is reachable only if a proceeding starts on FACT; `modes.py:59-61` shows Church Tribunal moved to FACT; an SC audit saying "all 8 start on QUALITY" is stale.
+- **Armature reveal (SC/CHAR):** `appraise_armature` has no resolver call (Gate C R3:272); the tree's `agon_harness.py:35-58` describes wiring it through an Appraise roll [UNVERIFIED whether live].
+- **Combat (PC):** "clinch is dead data", "mode_elements have no positions", "reach_sigma reads frozen er", "heft ignores grip" are all stale per the tree checks above; the omega_cap units error and the "I_g is the wrong operand for impact" argument are the lasting physics lessons. A PC audit proposing a KE swing model should cite `audit1_lens_physics_kinematics.json` :14-26.
+- **MB:** any MB audit claiming "maneuvers are dead on the default path", "PER_CELL is off", "reset_positions no-ops" or "validators measure the dead arm" must re-verify: the first three are fixed at the tree; the CI-gating of maneuver validators was not re-checked. The "mounted archers unit_type" gap (ED-1093 data half) cannot be confirmed closed by grep (`config.py:599,623` still comment "blocked on the kiting primitive").
+- **Morphology (PC):** `hook_sword` double-listing, the Lucerne Hammer length conflict (239.1 vs 139.2 cm), pommel masses of 23-35% of weapon mass on residual-split blades (rapier 0.348/1.3, cinquedea 0.23/0.8, szabla 0.21/0.95, paired_short 0.202/0.7) are calibration artefacts, not specimen facts.
