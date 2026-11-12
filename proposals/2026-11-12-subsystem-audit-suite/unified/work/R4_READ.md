@@ -568,4 +568,69 @@ Cycle check (this lane's edges only): no cycle among the 59. The edges that **cl
 | Reverts of the 2026-10-11 ruling | BYZ_E:problem, PAP_B | "the ruled disposal (an appointed seat revoked costs a ban, 2026-10-21, `gate.py::REVOCATION_DISPOSAL`)" vs PAP_B "overwrites the 2026-10-11 `revocation: null` ruling" | two different rulings (10-21 disposal; 10-11 null revocation); consistent |
 | Fatigue / march figures | MIL_A:Folded (26 M-7) | Vegetius 20 Roman miles in five summer hours; ~15 miles a day for Alexander's army (snippet only); Crécy ~12 miles | "None is a figure to build on" (file); `OWED_TO_UNIFICATION.md` §C: pre-1700 foot pace not established |
 
+## 7. Test 9 (implementation-ready)
+
+**Reading used.** COMPLETE = the file names (or, with the uniform block 7b.0 applied, would name) files and symbols, order, schema or rows, call sites, a gate that is an execution artifact with an expected reading, a falsifier and control, hash movers, dependencies, what lands it, cost class, **and** its body agrees with its own head line and the rulings. INCOMPLETE lists what is missing. Every file lacks a **model tier** and most lack a **named test file** and a **lane tag**: those three are decidable from the repository and are supplied for all 58 by 7b.0, so they are not repeated per row; "COMPLETE (uniform)" means that is all that was missing. Common to nearly every file: gates name an instrument (`aperture 2 s`, a hand-built fold) and not a test path.
+
+| file | verdict | missing (beyond 7b.0) |
+|---|---|---|
+| VRES | INCOMPLETE | §4's formation clause reads the log person-side (F-R4-06): text in 7b.1; the `a task` prize row needs its first verb to bind (the file says so); dependencies on 18-A (R5) unmet |
+| RES-V | INCOMPLETE | §2 open items and §3 [ASSUMPTION] are answered by A-65 to A-74 (7b.2); `passage_granted` (U5d) is P |
+| BIND_A | INCOMPLETE | A-37 clause (7b.1); A3 waits on SC-B (P); `PersonInterior.tenures` unverified |
+| BIND_B | INCOMPLETE | `pardon` by a bench that is not the disposing seat has no basis in `04` §C.2 (7b.3); `a verdict` prize edit |
+| BIND_C | INCOMPLETE | body stale: `standing`, `standing_step`, `provisional_term` value, e7 gate clause (7b.3) |
+| BIND_D | INCOMPLETE | prize name; A-21 sentences; D4 blocked on CP-T09-08 (M) |
+| BIND_E | INCOMPLETE | Partial surrender "reverts" unreachable (7b.3); seats-in-the-write edit is U5d's |
+| MAT_A | INCOMPLETE | shapes (7b.4); `sabotage` (b); `covert_kinds` mask [UNVERIFIED] |
+| MAT_B | INCOMPLETE | shapes; `distance`; share tables (7b.4) |
+| MAT_C | INCOMPLETE | shape (b) for `found`/`build`; refusal key `stores` refused (G-05) (7b.4) |
+| MAT_D | INCOMPLETE | shapes; `seize` (b) and A-66/A-73 (7b.4) |
+| MAT_E | INCOMPLETE | C-24 and `reconstruct` as an inquiry (7b.4) |
+| MIL_A | INCOMPLETE | body to head: `contests: "a task"`, level for `sworn_there`, five obstacle terms with no roster member (blocked on U1) |
+| MIL_B | INCOMPLETE | body to head; `trained_at` column home (U1) |
+| MIL_C | INCOMPLETE | Edit 6 (MATTER dispersal) violates the matrix (J-R4-3); `may_levy` M; shape (a) text (7b.5) |
+| MIL_D | INCOMPLETE | shape (a) text; `BANDS` export (7b.5); obstacle terms with no roster member |
+| PHY_A | INCOMPLETE | mortal-wound draw home (F-R4-05); stale pool text; four test files unnamed (7b.5) |
+| PHY_B | INCOMPLETE | `raze` shape (b); RES-V §2/§3 updates; `(Site, exists)` matrix row [UNVERIFIED] (7b.5) |
+| PHY_C | INCOMPLETE | `surveil_watch_rate` has no value (swept, none given); the witness-channel roster is unnamed ("[name the roster at landing]") |
+| PHY_D | INCOMPLETE | stage 2 blocked on WR; loader acceptance of `observes:` on another person [UNVERIFIED] |
+| S1_A | INCOMPLETE | body superseded by `present_persons` (7b.6) |
+| S1_B | INCOMPLETE | prize; `delivery_weight`; MATTER stage emission; `issuing_seat` exists (7b.6) |
+| S1_C | INCOMPLETE | C-15, C-26, F-R4-03 bodies (7b.6) |
+| S1_D | INCOMPLETE | MATTER satisfaction draw; stance row shape; `carry` venue claim [UNVERIFIED] (7b.6) |
+| S2_A | COMPLETE (uniform) | one read at `world_q.py:3714` (`own_referents_of_class`) before landing; depends on FI-02 e5 (P) |
+| S2_B | INCOMPLETE | body stale vs C-20/C-21 (7b.6) |
+| S2_C | INCOMPLETE | `band_entry`; folded tables (7b.6) |
+| S2_D | INCOMPLETE | the IN-32 body is unreachable in this clone (`53ed995d`): write `_eff_tie` from the row (7b.6) |
+| SYN_A | INCOMPLETE | five unruled seat keys (J-R4-1); `remove`; `quorum_share` exclusivity (7b.7) |
+| SYN_B | INCOMPLETE | A-51 sentence; `holder: null` loader [UNVERIFIED]; reach of `field.won` [UNVERIFIED] |
+| SYN_C | INCOMPLETE | e7's `authority` conjunct reading the `form` operand [UNVERIFIED] (fallback in file) |
+| SYN_D | INCOMPLETE | A-80 arm; depends on every batch |
+| SYN_E | INCOMPLETE | I-10, electorate, A-35/36/41 (7b.7) |
+| BYZ_A | INCOMPLETE | withdrawn edits in the body; effect-side deposit wording (7b.7) |
+| BYZ_B | INCOMPLETE | bill claim site; `requisition.rendered` conflict (7b.7) |
+| BYZ_C | INCOMPLETE | MATTER stage close (F-R4-02); A-21 sentence (7b.7) |
+| BYZ_D | INCOMPLETE | sibling-rung reach [UNVERIFIED]; NPC id; `foreign_cast` keys [UNVERIFIED] |
+| BYZ_E | INCOMPLETE | Partial `revoke`; kind names; body `favourable` steps (7b.7) |
+| BYZ_F | INCOMPLETE | superseded by SYN_D; `procedure_draws` arms |
+| BYZ_G | INCOMPLETE | item 2 blocked on COL_A `staple` breach kind (M until COL_A rows land) |
+| COL_A | COMPLETE (uniform) | lazy-import admissibility [UNVERIFIED], file's own note |
+| COL_B | INCOMPLETE | §2 rows withdrawn; `distance`; `root_of` M; A-33 reach (7b.7) |
+| COL_C | INCOMPLETE | `audited` -> `audit_at_exit`; closing arm basis (7b.7) |
+| COL_D | INCOMPLETE | edit 1 replaced; test file stale |
+| COL_E | COMPLETE (uniform) | depends on CR-29 (W) and ED-IN-0317 for scenario 2 |
+| COL_F | INCOMPLETE | `after:` doer of `field.won` [UNVERIFIED]; edit 4 may be inert (gate 4 says how to tell) |
+| PAP_A | INCOMPLETE | generated-file hand edit (F-R4-14): owner and re-derive command (7b.7) |
+| PAP_B | INCOMPLETE | Seat tuple (J-R4-1); exclusivity; four-electors gate |
+| PAP_C | INCOMPLETE | body stale vs SYN_A/B |
+| PAP_D | INCOMPLETE | `writ_terms_forms`; A-39 grounds |
+| PAP_E | INCOMPLETE | item 5 dropped; `holder: null` loader [UNVERIFIED] |
+| PAP_F | COMPLETE (uniform) | A-80 arm |
+| PAP_G | COMPLETE (uniform) | item 3 waits on `covenant` executing (the file says so) |
+| VEN_A | INCOMPLETE | `obligation` sign (F-R4-07) (7b.7) |
+| VEN_B | INCOMPLETE | `debt.lapsed` emission (F-R4-02); removed readers |
+| VEN_C | INCOMPLETE | seat keys, `lot` (J-R4-1); edit 8 design-first |
+| VEN_D | INCOMPLETE | `exit_audit`; `charter` held on MAT_B |
+| VEN_E | COMPLETE (uniform) | `judging_set` at a hearth venue [UNVERIFIED], file's own note |
+
 <!-- R4-END -->
