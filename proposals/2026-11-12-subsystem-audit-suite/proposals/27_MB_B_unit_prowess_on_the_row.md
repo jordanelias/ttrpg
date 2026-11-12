@@ -1,9 +1,11 @@
 # MB · a unit's own prowess: columns of its row, one function that composes its pool, and no baseline lent by its side
 
+Reconciled: 2026-11-12, A-100/A-101 supersession pass (MBA-01, MBA-04; `master/mb_abstraction/MBA_DESIGN_part3.md` §8.1): **27B-1 and 27B-2 (`prowess(atom)` returns the pool's base term) are SUPERSEDED by A-100 (MBA-01/MBA-04)**: prowess is the vector `(arm, armour, skill)` and has a value only against an opponent (A-59 (3)); there is no pool. **27B-3 is NARROWED** (the row `infantry` carries `skill`, MBA-01 step 2, not `power: 4`); **27B-4 is NARROWED** (`readout(row)` shows the unit's felling chances against a reference opponent, not a pool); **§3 (no baseline lent by the side) STANDS**. So only 27B-3, 27B-4 land, in B31, and `power` is read as the men's martial skill. Marks are in place below; the text is kept as history.
+
 Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `U1_OWNERS_AND_VOCABULARY.md` D-U1-11p (*prowess* is a unit's quality only: already so), D-U1-11o and `U1_GLOSSARY.md` *band* (§1's "subformation" row is the unit's **formation**, its cell arrangement, and `bands` is `layers`), `R1_READ.md` §1.2 (CONFORMS; "no function sums it over an army" stays the author's CONVENTION); `U3_DEPENDENCY_ORDER.md` (node B31; `Depends on:` / `Lands in batch:` added; INCOMPLETE item 1 closed by order, since the troop file lands in B17 before B31). **Order note:** U3's node table puts this file in B31, but 27B-1 and 27B-2 are `04_MB_cr12_linear_law.md` step 2 ("one function returns the pool's base term", that file's first `Folded:` item) and `U5b_MB_rulings_in_the_field.md`'s head item (3) places them in the field calibration batch; so 27B-1/27B-2 land in B19 with CR-12 step 2 and 27B-3/27B-4 in B31 (reported for U3/U4). U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): MB unit "stance" → "posture" in prose (glossary *stance*, *posture*; the code field `stance` keeps its name). MB lexicon lane (2026-11-12, `unified/MB_LEXICON.md` D-1, A-94): A-59's "subformation" is a group of units at one post (not the unit's cell arrangement, which is its **unit formation**); §1 row 4 split into unit formation and subformation, §2's bullet and gate 5 reworded to match.
 
 **Depends on:** 27B-1/27B-2 on nothing unlanded (they are CR-12 step 2); 27B-3/27B-4 on `04_MB_unit_loadout_and_weapon_in_hand_B.md` stage 1 (B17); gate 2 on `04_MB_campaign_party_economy.md` §1 (B31); gate 5 on `04_MB_cell_hierarchy_as_data.md` (B19).
-**Lands in batch:** 27B-1, 27B-2 in B19 (`B19-mb-field-calibration`, first, with CR-12 step 2); 27B-3, 27B-4 in B31 (`B31-mb-loadout-economy`, last; U3 §4.1 row 80).
+**Lands in batch:** ~~27B-1, 27B-2 in B19 (`B19-mb-field-calibration`, first, with CR-12 step 2)~~ *(struck, A-100: SUPERSEDED by MBA-01/MBA-04)*; 27B-3, 27B-4 in B31 (`B31-mb-loadout-economy`, last; U3 §4.1 row 80).
 
 ## Status: PROPOSED
 
@@ -67,6 +69,8 @@ Nothing in the table is new except the last column's statement of where it is re
 
 ### 2. The arithmetic, in one function
 
+**SUPERSEDED by A-100 (MBA-01, MBA-04): there is no pool and no `prowess(atom) -> float`; a unit's quality is the vector `(arm, armour, skill)` read by the contact draw against an opponent (`core/contact_draw.py::contact_casualties`), and the troop column `power` is the men's martial skill (`skill`). What survives of this section is its three prohibitions below (no commander, no numbers, no formation as a multiplier). Landing struck.**
+
 `modules/mass_battle/core/exchange.py::prowess(atom) -> float` is the base-term function
 `04_MB_cr12_linear_law.md` step 2 creates. After that proposal's step 3 and the one-ledger proposal's step 1:
 
@@ -119,6 +123,8 @@ dealt    = K_LINEAR * frontage(pair) * PAY_PER_NET * max(0, net) * (1 + quality)
   (the command literal by `27_MB_A` §2).
 
 ### 4. What the player and the designer are shown
+
+**NARROWED by A-100 (MBA-01): the readout shows the unit's felling chances against a reference opponent (from `mb_contact.json`), not quality dice; "no function sums it over an army" stands.**
 
 `modules/mass_battle/troop_types/table.py::readout(row) -> dict`: quality dice (`prowess` at full order),
 steadiness, armour tier, reach class and support ranks of the arm in hand, pace, and the two carry factors,
@@ -184,10 +190,10 @@ and 27B-4 are INCOMPLETE on a named dependency** (the troop file). Line numbers 
 
 | item | file :: symbol (single owner) | edit | hash |
 |---|---|---|---|
-| 27B-1 | `modules/mass_battle/core/exchange.py` :: new `prowess(atom) -> float` | the body of today's `POOL_QUALITY_MODEL` branch (`:101-124`: `pen`, `stam_pen`, `eff_power * eff_size * POOL_QUALITY_SCALE`), moved verbatim; `subunit_combat_pool` (`:77`) calls it and keeps the routed, broken, yield (`:139-140`) and floor (`:148`) lines; the two legacy branches (`:125-128`) stay in `subunit_combat_pool` until the harness leaves. Add `'prowess'` to `__all__` | equal |
-| 27B-2 | `modules/mass_battle/hierarchy/units.py` :: `Unit.base_combat_pool` (`:3004-3023`) | its `POOL_QUALITY_MODEL` arm calls the same `prowess` arithmetic (CR-12 step 2: "calling the same function"); no other change. **INCOMPLETE in one respect:** this lane read that method by grep only; if its unit-level arm is not the single-subunit case of `prowess`, the builder adds a `prowess_of(power, size, discipline, stamina)` core that both call | equal |
-| 27B-3 | `references/troops.yaml: troops.infantry`; `modules/mass_battle/massbattle.py` :: `_weighted_unit` (`:279-282`), `_person_unit` (`:332`), `orderofbattle.py::build_unit` (`:243`) | the row `{power: 4, discipline: 5}`; the constructors set `power`, `discipline` on each `Subunit` from its troop row and stop passing them to `Unit`; delete `_SEASON_FORCE_POWER` (`massbattle.py:198`), `_UNIT_POWER`, `_UNIT_DISCIPLINE` (`orderofbattle.py:75`) | equal |
-| 27B-4 | `modules/mass_battle/troop_types/table.py` :: new `readout(row) -> dict` | §4 | none (no caller in resolution) |
+| 27B-1 **SUPERSEDED by A-100 (MBA-04); landing struck** | `modules/mass_battle/core/exchange.py` :: new `prowess(atom) -> float` | the body of today's `POOL_QUALITY_MODEL` branch (`:101-124`: `pen`, `stam_pen`, `eff_power * eff_size * POOL_QUALITY_SCALE`), moved verbatim; `subunit_combat_pool` (`:77`) calls it and keeps the routed, broken, yield (`:139-140`) and floor (`:148`) lines; the two legacy branches (`:125-128`) stay in `subunit_combat_pool` until the harness leaves. Add `'prowess'` to `__all__` | equal |
+| 27B-2 **SUPERSEDED by A-100 (MBA-04); landing struck** | `modules/mass_battle/hierarchy/units.py` :: `Unit.base_combat_pool` (`:3004-3023`) | its `POOL_QUALITY_MODEL` arm calls the same `prowess` arithmetic (CR-12 step 2: "calling the same function"); no other change. **INCOMPLETE in one respect:** this lane read that method by grep only; if its unit-level arm is not the single-subunit case of `prowess`, the builder adds a `prowess_of(power, size, discipline, stamina)` core that both call | equal |
+| 27B-3 **NARROWED by A-100 (MBA-01 step 2): the row carries `skill`, not `power`; the constructor edits and the five literals' deletion stand** | `references/troops.yaml: troops.infantry`; `modules/mass_battle/massbattle.py` :: `_weighted_unit` (`:279-282`), `_person_unit` (`:332`), `orderofbattle.py::build_unit` (`:243`) | the row `{power: 4, discipline: 5}`; the constructors set `power`, `discipline` on each `Subunit` from its troop row and stop passing them to `Unit`; delete `_SEASON_FORCE_POWER` (`massbattle.py:198`), `_UNIT_POWER`, `_UNIT_DISCIPLINE` (`orderofbattle.py:75`) | equal |
+| 27B-4 **NARROWED by A-100 (MBA-01): felling chances against a reference opponent, not a pool** | `modules/mass_battle/troop_types/table.py` :: new `readout(row) -> dict` | §4 | none (no caller in resolution) |
 
 When `04_MB_cr12_linear_law.md` step 3 lands, its one-line change (`eff_size` becomes `REFERENCE_SIZE`) is
 made **inside `prowess`** and nowhere else; when `16_PESSIMIST_MB_one_stamina_ledger.md` step 1 lands, the

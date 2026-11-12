@@ -120,6 +120,8 @@ superseded text, `OWED_TO_UNIFICATION.md` §A). The melee pair is not an opposed
 
 ## Exact edits
 
+*(A-100: the rows for edits 1 to 3 are SUPERSEDED by MBA-04: `core/exchange.py` pool rows, `pair_casualties`, the sigma head's `eff_dr` term, the WALLS rows, `DAMAGE_BY_DEGREE`/`PAY_PER_NET`/`REFERENCE_SIZE`. The rows that stand are edit 4's: `_convergence_scale` deleted, `resolve_engagements_cascading`'s share count, `core/attrition.py::_lanchester_strength`, and the PARTITION row in `lanchester_signature.py`.)*
+
 | file · owner | edit |
 |---|---|
 | `modules/mass_battle/core/exchange.py` | the pool base as CR-12 step 3; `pair_pool_contribution` deleted; `_pair_engaged_troops` stays (it is what says a body is engaged) |

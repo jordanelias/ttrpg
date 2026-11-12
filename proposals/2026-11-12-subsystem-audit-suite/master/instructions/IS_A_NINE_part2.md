@@ -323,8 +323,8 @@ B02) and §12.2 (this file). · **Lane:** each batch's. · **Batch:** every batc
 tier:** none beyond the readings.
 
 **Item: IS-A-13 — the re-take: the one item that may move a row**
-· **Advances:** the row named. · **INSTRUCTION (one item per milestone of §12.1, the last item of the batch
-that closes it):** on the batch's closing tree, `PYTHONHASHSEED=0`: run every conjunct `argv` of the row (the
+· **PLACEMENT (A-114, Jordan 2026-11-12: no per-milestone re-take, "that would take forever"; "maybe at the very end of the plan?"):** the re-take does NOT run at M2, M3 or M4. It runs ONCE, as the plan's very last item (after the last batch of M5 has closed), as the single longer reading of the nine; the two-season cap (P10) governs every batch close before it and between milestones the rows stay as they are. The instruction below is that last item's instruction. `[ASSUMPTION: Jordan's "maybe" is taken as: schedule it once, at the end, and run it as the closing gate; he may still defer it]`
+· **Advances:** the row named. · **INSTRUCTION (one item, the last of the plan; formerly one per milestone of §12.1):** on the batch's closing tree, `PYTHONHASHSEED=0`: run every conjunct `argv` of the row (the
 long ones launched in the background at batch open on the base and re-run only if `git diff <base>..HEAD`
 touches what they reach); write each `reading:`; set `holds`; set `status:` to `met` only where every
 conjunct holds, to `partial` where some do, and leave it where none moved. State in the commit body what
