@@ -237,7 +237,7 @@ Not in this batch, and where each is: CR-104 (B11F2; reads B11F1.02's Sites); SE
 - WHERE: `engine/season/venues.yaml` (the `site:` keys); `engine/season/tests/test_cr106_church_sites.py`.
 - TESTS: (3), written before the transcription and read red: "in `build_realm(0)` the number of `worship` Sites equals the number of settlements whose venue rows carry `worship`, asserted by counting `venues.yaml` rows in the test and not by a literal, and every territory under `r_valoria` that holds a settlement holds at least one Church-owned Site (the validator's check; `terr_T15` holds no settlement, and `terr_ALT` is a foreign root whose one settlement, `set_alt_1`, has no venue rows)".
 - FALSIFIER and CONTROL: (3) red. "the control-arm identity `test_24d_i_...` is re-read with the Church Sites present and its result stated (… the Church kinds' `{100,500,800}` rows remove that guard; MATTER also writes every Site every season at rate 0 and emits `condition.worn` …, and `work` forms on a Site-classed referent …, so the Church Sites enter `work`/`restore`'s referent space: a reading, stated, not hidden)" (UNDECIDED 3: the four `test_24d_i_*` tests and the `test_24d_ii_*` tests are run and each result stated).
-- GATE: `python -m pytest engine/season/tests/test_cr106_church_sites.py engine/season/tests/test_governance_build.py -k "cr106 or 24d_i" engine/season/tests/test_migrate_capacity.py -q` → pass, or a red `test_24d_*` quoted with its reason in the commit body; `python proposals/2026-11-08-flow-conditioning/content_validate.py` → exit 0; the realm hash at seed 0 after one season → moved (declared), the value quoted; `aperture 2 0`'s `work` and `restore` formed counts quoted beside B11F1.01's.
+- GATE: `python -m pytest engine/season/tests/test_cr106_church_sites.py engine/season/tests/test_governance_build.py engine/season/tests/test_migrate_capacity.py -k "cr106 or 24d" -q` → pass, or a red `test_24d_*` quoted with its reason in the commit body; `python proposals/2026-11-08-flow-conditioning/content_validate.py` → exit 0; the realm hash at seed 0 after one season → moved (declared), the value quoted; `aperture 2 0`'s `work` and `restore` formed counts quoted beside B11F1.01's.
 - HASH MOVERS: "`build_realm(0).content_hash()` MOVES where rows carry `site:` (new Sites fold into the encoding, `state/world.py:1664,1704-1707`)". Declared; re-pinned in B11F1.99.
 - EXPECTED RED UNTIL B11F1.99: `engine/season/tests/_realm_goldens.py`.
 - DEPENDS ON: V12 B11F1.01.
@@ -299,7 +299,7 @@ Not in this batch, and where each is: CR-104 (B11F2; reads B11F1.02's Sites); SE
 - FALSIFIER and CONTROL: the file exists and states (1) to (5); no code.
 - GATE: `test -f proposals/v12_B11F1_territory_caps.md` and `grep -c "^## Status: PROPOSED" proposals/v12_B11F1_territory_caps.md` → 1; no file outside it in the commit's diff.
 - HASH MOVERS: none.
-- DEPENDS ON: V12 Batch B12c (`07_SE_ground_and_granaries` R1 landed in B12, the endowment rows); EXISTS-IN-TREE `loop/effects_founding.py` (`_eff_build`), `venues.yaml`.
+- DEPENDS ON: V12 Batch B12a to B12c (`07_SE_ground_and_granaries` R1, the endowment rows keyed on the territory code, lands in the B12 chain, which B12c closes); EXISTS-IN-TREE `loop/effects_founding.py` (`_eff_build`), `venues.yaml`.
 - GLOSSARY: none.
 - COST and TIER: design; `opus`, `high`, with a `ners` critic.
 - LANDS IT: B11F1's producer; `Item: B11F1.06`, `[skip ci]`. No build follows in v12: no source writes one; what the design leaves to Jordan is reported at the close, not built.
