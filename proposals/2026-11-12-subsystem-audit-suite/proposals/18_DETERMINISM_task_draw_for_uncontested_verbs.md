@@ -69,11 +69,14 @@ roller, one loader refusal; no second resolver).
    and calls each effect with it (`:967`).
 3. **Odds, from state; outcome, from the draw.** Pool = `seam/wrappers/pool.py::faculty` (`:78`; the verb's
    `verb_capability` key, else `pool_default`). Obstacle = `roll.py::obstacle` — the task's difficulty
-   (the `difficulty` column `13_SC_tuning_tables.md` T1 puts on the verb row; until it lands,
-   `obstacle_default`) plus the named modifiers that already exist (a person subject's opposition, the
+   (the row's `difficulty:` level, `plain` where the owning verb lane has stated none; the route lands
+   with or after the column `13_SC_tuning_tables.md` T1 puts on the verb row, never on `obstacle_default`) plus the named modifiers that already exist (a person subject's opposition, the
    room). Each term lands in `Margin.terms` (the reason trail), unchanged machinery.
-4. **Graded, recoverable effects.** Each converted row gains `writes_by_degree` / `emits_by_degree`
-   (the existing columns). Default band map, used where the owning verb lane has not stated one —
+4. **Graded, recoverable effects.** A converted `task` row keeps its flat `writes:` and `emits:`
+   (`04` §B.13 invariant 12: a `Degree`-keyed column belongs to a verb that declares `contests:`); its
+   magnitude is scaled by `task_fraction`, and its failed draw is the row's keyed `emits_on_refusal`
+   clause `draw` (the form `finding.none` already has for the three graded inquiries). A verb whose bands
+   must write different cells declares `contests:` and is a contest row. Default band map, used where the owning verb lane has not stated one —
    **the verb lane's row supersedes this default** (one owner per row):
 
    | band | writes | emits |
@@ -108,8 +111,9 @@ roller, one loader refusal; no second resolver).
 2. `engine/season/data/rosters.py` — `GRADED_TASKS`, `BOOKKEEPING_VERBS`, `TASK_FRACTION` exported;
    `GRADED_INQUIRIES` deleted (readers: `loop/resolve.py`, `manifest/registry.py`, `data/verbs.py`).
 3. `engine/season/data/verbs.py` — the two refusals in item 1, at load.
-4. `engine/season/verb_table.yaml` — for each `task` row: `writes_by_degree` / `emits_by_degree` per item
-   4, and the `<verb>.failed` kind in `emits_on_refusal`'s neighbour column; `EVENT_KINDS` gains them.
+4. `engine/season/verb_table.yaml` — for each `task` row: the `<verb>.failed` kind keyed under
+   `emits_on_refusal` clause `draw` (item 4); the flat `writes:` and `emits:` are unchanged; `EVENT_KINDS`
+   gains the new kinds.
 5. `engine/season/loop/effects_*.py` — each magnitude/quality effect reads `res.degree` through
    `TASK_FRACTION` / `forge_quality`; no effect names a band.
 6. `engine/season/loop/resolve.py` — `_route = GRADED_TASKS.get(a.verb)`; nothing else (the branch
@@ -129,6 +133,11 @@ roller, one loader refusal; no second resolver).
    `tend` acts each — the trained tender's Failure share is lower, and neither is 0.
 4. Loader: plant `tend` into `bookkeeping_verbs` → load refuses naming `tend`; delete `reconstruct`'s
    route → load refuses naming `reconstruct`.
+
+5. Throughput (from `16_PESSIMIST_DICE_task_difficulty_and_throughput.md` (d)): for each converted verb,
+   the count of Events at each band per season with `task_draw_arm` on, beside its success Events with
+   the arm off, seeds 0 to 2, two seasons, in the landing commit's body. The arm does not ship `on` while
+   any converted verb with ten or more off-arm successes has zero Success-or-better Events on-arm.
 
 **Declared hash movers:** every realm, spine and case world in which a converted verb executes (all
 goldens); re-pinned once, in the landing commit, saying so.
@@ -154,4 +163,4 @@ writes another person's body, tenure or stores and loads; an effect that names a
 ## Cost class
 
 Medium build (one loader refusal, one rename, about twenty band rows, five effects reading a fraction),
-after 13's `difficulty` column for the obstacle's task term (it ships at `obstacle_default` without it).
+with or after 13's `difficulty` column for the obstacle's task term (it never ships on `obstacle_default`).

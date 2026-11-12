@@ -72,8 +72,9 @@ modules do, and no module is touched by this proposal.
 A module entry that can be played has the signature `fn(inp, rng, *, decide=None) -> outcome` and
 exports, from its own package: a frozen view type (what the decider is shown: the person's own state and
 what he perceives, never the opponent's true state), and a closed tuple of choices
-(`modules/combat/wrapper.py::TURN_CHOICES` is the precedent). With `decide=None` the entry plays its own
-policy. `decide` draws nothing, writes nothing and holds no token (`PlayHost`'s existing rule). The
+(`modules/combat/wrapper.py::TURN_CHOICES` is the precedent). With `decide=None` the entry asks the
+decider the host built for that person (his own, sampled; see the `Reconciled:` line); a module default
+is the named interim. `decide` draws nothing, writes nothing and holds no token (`PlayHost`'s existing rule). The
 witnessed fidelity the doctrine names is a decider that returns the module's own policy choice after
 being shown the view: no third mode is built.
 

@@ -76,7 +76,7 @@ know" and mark the gap; do not fill it from memory. Exact figures you could not 
 
 1. **Auto-resolve is the same resolver, run automatically** (from standing orders or the chosen approach),
    not a separate quicker calculation. A played and an auto-resolved battle or duel round with the same
-   choices agree. Layer 1 §27.2 and §C.4 stand unchanged. Applies to mass battle and to the grid duel round.
+   choices agree. Layer 1 holonic §27.2 and `03_VERBS_AND_LOOPS.md` §C.4 (not `04`'s) stand unchanged. Applies to mass battle and to the grid duel round.
 2. **A unit is a row of data** on the army's record (troop type, formation, loadout, orders, officer,
    experience), not a thing with its own identity (ED-IN-0306 as ruled 2026-10-28 stands). A regiment's
    story is told through its officer and its men.

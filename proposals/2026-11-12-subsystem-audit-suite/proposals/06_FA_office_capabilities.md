@@ -1,5 +1,7 @@
 # FA-P6 — capability where governance uses it: vocations for the contested governance verbs, a seat's vocation, founding content as data
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-11) — the judge's capability is named `law`, not `judgment`: SC's `05_SC_hearing_capabilities.md` authors the same capability under that name, one thing takes one name, and `judgment` collides with the uses table's role `judgement`. `determine: law`, `interrogate: inquiry`, `arrest: arms` are the decided verb values (`unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §5), written on the verb row's `capability:` column; the definition row lives in `references/descriptor_registry.yaml: capabilities`.
+
 ## Status: PROPOSED
 
 Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (L-10) — the pool reader's owner is `seam/wrappers/pool.py::faculty` (`:78`), re-exported by `sigma.py:105`; one citation corrected. No edit of the proposal changed.

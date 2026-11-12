@@ -2,6 +2,8 @@
 
 Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-02, D-03 — `answer` is now a rolled move with graded board effects; `silence` adds levels to the closing draw instead of conceding the rung; `forgery_found` only on an Overwhelming answer; D-06 — the NPC decider samples through the one chooser's sampler instead of taking the top score.
 
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-04) — edit 4's assumption (*`PlayHost.decide` is called with whichever view the provider builds*) is replaced by the one `PlayHost` shape of `01_CORE_one_scene_contract.md` Edit 1: `deciders` keyed by module role, so the hearing's decider is `deciders["social_contest.hearing"]` and the stated revert (a second field) is not needed.
+
 ## Status: PROPOSED — supersedes `05_SC_playable_hearing.md` (SC-P3). Design-first for edits 6 and 8; the rest are small builds.
 
 Source: `audits/05_SC_audit_addendum_B.md` §B2 (F-SC-15, F-SC-17, F-SC-20), §B3, §B4;
