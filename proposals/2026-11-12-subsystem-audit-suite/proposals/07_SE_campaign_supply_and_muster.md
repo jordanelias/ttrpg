@@ -1,6 +1,6 @@
 # 07 · SE — what the settlement layer owes the campaign: hands under arms, the standing ration, and somewhere to train
 
-Reconciled: 2026-11-12, U5d closure — folded **A-57 / A-58** and the pessimist's constraint. R-SE-34 ("an army whose holder stands on land his faction does not hold eats from his seat's treasury") is read once a season, not per field (R-PES-SE-14). After a won march onto another's land the land is the aggressor's (`U5d_FA_land_and_seats_pass_on_a_won_march.md`), so from the next season the army stands on land its faction holds and the place's own ladder feeds it; R-SE-36 ("nothing, by rule … living off the occupied place is a `requisition`") therefore covers only an `Unopposed` entry or a drawn or lost field, where the land stays the defender's.
+Reconciled: 2026-11-12, U5d closure — folded **A-57 / A-58** and the pessimist's constraint. R-SE-34 ("an army whose holder stands on land his faction does not hold eats from his seat's treasury") is read once a season, not per field (R-PES-SE-14). A victor may occupy without seizing (A-66): while he does, his army stands on land his faction does not hold, so R-SE-34's standing ration and R-SE-36 ("nothing, by rule … living off the occupied place is a `requisition`") apply to him for as long as the occupation lasts; they stop applying only if he seizes the place (`U5d_FA_land_and_seats_pass_on_a_won_march.md`), after which its own ladder feeds his men. A drawn aggressor's army is back at its station (A-67) and eats there.
 
 ## Status: PROPOSED
 

@@ -1,6 +1,6 @@
 # 07 · SE — the relief stock sits where someone holds it: the treasury is the granary (supersedes one clause of `07_SE_ground_and_granaries.md`)
 
-Reconciled: 2026-11-12, U5d closure — folded **A-23** and **A-57 / A-58**. The addendum's P-16 (an absentee duke's treasury still feeds his duchy) gains: a duke in custody forms no act through his seat (A-23), so he cannot withhold or release; the rule of relief still runs (it is no act). A treasury sits at a seat's rung: when that rung is taken on a won march its seats pass with it, and the stores on the rung go with the rung's `hold` (stores are `Rung.stores`; no separate transfer is written).
+Reconciled: 2026-11-12, U5d closure — folded **A-23** and **A-57 / A-58**. The addendum's P-16 (an absentee duke's treasury still feeds his duchy) gains: a duke in custody forms no act through his seat (A-23), so he cannot withhold or release; the rule of relief still runs (it is no act). A treasury sits at a seat's rung: when that rung is seized by a victor its seats pass with it (A-58, A-66), and the stores on the rung go with the rung's `hold` (stores are `Rung.stores`; no separate transfer is written).
 
 ## Status: PROPOSED
 

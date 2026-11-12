@@ -1,6 +1,6 @@
 # FA-B4 — the shortest playable loop: one governance scenario a player can play, one realm that governs itself, and a line that says whether the loop closed
 
-Reconciled: 2026-11-12, U5d closure — folded **A-10** and **A-47**. A-10 (governance is the loop's own verbs) confirms that the subsystem's exit is this instrument reading and no module. In the `recall` scenario the threshold opens the Duke's question; whether the player is revoked is the Duke's choice and then `revoke`'s resistible draw, so `loop_closed`'s `responded` counts attempts and reports their bands. `vacated` gains the cause `conquest` (A-58: seats pass with holdings on a won march) beside death, release, revocation and term.
+Reconciled: 2026-11-12, U5d closure — folded **A-10** and **A-47**. A-10 (governance is the loop's own verbs) confirms that the subsystem's exit is this instrument reading and no module. In the `recall` scenario the threshold opens the Duke's question; whether the player is revoked is the Duke's choice and then `revoke`'s resistible draw, so `loop_closed`'s `responded` counts attempts and reports their bands. `vacated` gains the cause `conquest` (A-58: seats pass with holdings when a place is seized) beside death, release, revocation and term.
 
 ## Status: PROPOSED
 

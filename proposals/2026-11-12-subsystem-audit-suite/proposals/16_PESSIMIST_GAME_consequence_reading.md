@@ -1,6 +1,6 @@
 # GAME — the propagation reading counts what moved, not what was written about
 
-Reconciled: 2026-11-12, U5d closure — folded **A-15**, **A-19** and **A-57 / A-58**: the game gate's clauses (`person.died` and `tenure.closed` among the causes of another's executed act; the played skeleton differing between seeds) now have producers the rulings order: natural death, the deed race for an empty throne, and a won march passing land and seats. The reading gains one column, tenure changes by cause (death, term, revocation, claim, conquest). No other step changes.
+Reconciled: 2026-11-12, U5d closure — folded **A-15**, **A-19** and the land rulings (**A-57, A-58, A-66**): the game gate's clauses (`person.died` and `tenure.closed` among the causes of another's executed act; the played skeleton differing between seeds) now have producers the rulings order: natural death, the deed race for an empty throne, and a victor's seizure passing land and seats. The reading gains one column, tenure changes by cause (death, term, revocation, claim, conquest). No other step changes.
 
 ## Status: PROPOSED
 
