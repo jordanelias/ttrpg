@@ -9,7 +9,11 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 
 ## PC — personal combat
 
-<!-- SYNTHESIS:PC -->
+**What is wrong.** The duel engine is a sound resolver and a clean registered module that computed play almost never reaches (`audits/03_PC_audit.md` §0): at seed 0 over two seasons, `fight` formed no candidate and `challenge`, `accept` and `capture` were refused 84, 27 and 12 times of as many (F-PC-01); all 83 persons are the same fighter (F-PC-02); a plain `fight` is binary for its loser (F-PC-04); the duel and the grid round are not one path (F-PC-13); inside a fight an NPC is not an agent (F-PC-14). The pessimist (`16_PESSIMIST_PC.md` §0): a two-blow lottery between identical men that the world remembers as one line; in 5,000 fights to the death the loser takes one blow worth half his health in 99.7 % (F-PES-PC-01); the world keeps a verdict, not a fight (F-PES-PC-05); a killing in self-defence has no killer (F-PES-PC-06).
+
+**What was decided.** A fight is a sequence of rounds (A-101); a battle may call one duel round (A-72, A-4); fights run longer (A-31) under the one opposed rule (A-79); a wound is a level (A-8); a person may try to kill another of his own motive, rarely, and a failed attempt on a guarded target is always caught (A-16, A-96); combat reads skill scores through the skill table (A-112).
+
+**What is built where.** B01 lands implementation lane A's duel-chain commits (A-93); B13 makes personal combat a package and deletes the path seam (`CI-09`); B14 the typed outcome and what the world keeps of a fight (53 RESOLVED-BY rows); B15 the calibration (`PCR-1`, the damage scale, the yield and armour as draws, ED-SC-0001); B16 the round (`PCR-2`, `PCR-3`, `03_PC_duel_round_and_approach_B`); B18 the duel's content; B29 custody (`arrest`, `accept`). **What stays open:** lane A's residues (an accepted challenge is never used up; `ob_terms` not on the log) and the duel's authored scores (content, B18).
 
 **Rows: 169** (RESOLVED-BY 117 · SUPERSEDED 48 · STALE/FP 4 · DISPUTED 0 · JORDAN 0).
 

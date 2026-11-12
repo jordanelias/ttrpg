@@ -9,7 +9,11 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 
 ## CORE — the season kernel, its instruments and tests
 
-<!-- SYNTHESIS:CORE -->
+**What is wrong.** The kernel is sound (one clock, one write gate, one fold, one causal log, seeded and replayable, observed running: `audits/01_CORE_audit.md` §0) and its instruments cannot judge the game it hosts: the nine's statuses are strings with no control (F-CORE-03) and the gate accepts `met 9` on a module that does not exist (F-PES-CORE-04); no test asserts a requirement on a played world (F-TEST-01); the 143-case corpus runs one template and checks no case need (F-CORE-02); the play surface has no client (F-CORE-05) and only one module is a playable scene (F-CORE-13); the loop check passes on six cycles of 39,482 (F-CORE-21). In play, a refusal does not teach: 56 % of attempts are refused and a retried refusal fails 24 times in 25 (`16_PESSIMIST_CORE.md` §0; F-PES-CORE-01); the reason for an act is not in the world (F-CORE-12); the log is mostly memory-fade bookkeeping (F-CORE-01).
+
+**What was decided.** A scene is a short sequence in the chooser's order (A-9; `L1-A9`), a refusal's receipt is the budget as a Query (A-62; `L1-A62`), a visit occupies its counterparty (A-63, A-64), management orders cost no budget (A-104), no row's status moves before B99 (A-114), and the game's entry is the tenth module `boot/` (A-102).
+
+**What is built where.** B02 builds the reading record, the knockout arm, the shipped-world falsifiers and `CI-11`'s `ENGINES` reading (M0); B03 the hygiene (55 RESOLVED-BY rows: deletions, owners, `CI-03` to `CI-06`, `CI-08`, `CI-10`); B03c the move to `boot/`; B08 the scene order; B09 memory (claim fade as read, a refusal remembered, the record holds what changed); B34 the one-scene contract and the play surface; B39 the case format on the realm. **What stays open:** CR-07 with H-89 is BLOCKED on content (`off_npc_084`'s rung); the test digests' per-entry bodies were not read (§5.3 of `_part2`); four rows went to Jordan and are answered (A-48, A-62).
 
 **Rows: 238** (RESOLVED-BY 169 · SUPERSEDED 39 · STALE/FP 26 · DISPUTED 0 · JORDAN 4).
 
@@ -258,7 +262,11 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 
 ## CHAR — persons, choice and the interior
 
-<!-- SYNTHESIS:CHAR -->
+**What is wrong.** The character layer is structurally sound (no `World` under `decision/`, an option set computed from the verb table) and not behavioural (`audits/02_CHAR_audit.md` §0): a person's ranking reads the verb and nothing about what the act would do, so 36 of 46 cast persons hold one top verb across six situations (F-CHAR-01); the departure from the optimum is one realm-wide draw, so identical persons disagree in seven decisions of ten (F-CHAR-02); the interior does not move (F-CHAR-03: stance moved for 0 of 83 at two seeds). The pessimist (`16_PESSIMIST_CHAR.md` §0): "a person is a seat, a ledger and a coin"; a man of `love` alone ranks `forge` first in 266 of 276 situations (F-PES-CHAR-01); thirteen of fifteen pursuits fail a two-line statement of their name; the only interior event is a fixed, inverted, silent conversion (F-PES-CHAR-03); nothing stops a man, and armed, the gate stops everyone (F-PES-CHAR-02). The scar's ladder cannot discriminate under any cap (F-CHAR-17); designed foils are not foils (F-CHAR-18); nothing a person risks reaches his choice (F-CHAR-20); six authored cast-row facts are read by nothing (F-CHAR-16).
+
+**What was decided.** Attribute and skill, two inputs, skill score plus a base, floor five (A-6, A-7, A-98); traits a separate roster (A-107); stored manner offsets (A-108); a crisis of faith and a scruple are drawn and seen (A-24, closing D-27, D-28); self-knowledge is a belief, built narrowly (A-34); a learned skill is never lost (A-106); zero coherence makes a person unknowable, not dead (A-43).
+
+**What is built where.** B04 the skill home, `Person.traits` and the `lap` rename (one encoding re-pin, D-04); B09 the reason trail; **B10** the bulk (68 RESOLVED-BY rows: the goal's lean on its own question, resolve and temper with the test-retest gate, regard and relations with a ground, the scar as a wound, `IS-B2-CHAR-02` and `-07`); BA1 the cast's values (M2). **What stays open:** the cast's values are content (`_part2` §5.2); no CHAR scenario has an end condition of its own (`unified/U4_TRACEABILITY.md` §3, PARTIAL).
 
 **Rows: 125** (RESOLVED-BY 104 · SUPERSEDED 15 · STALE/FP 6 · DISPUTED 0 · JORDAN 0).
 
