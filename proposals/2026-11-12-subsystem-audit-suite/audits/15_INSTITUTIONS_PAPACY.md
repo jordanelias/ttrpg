@@ -22,10 +22,10 @@ war, in the order king, first Duke of Hafenmark, first Duke of Varfell; §2), an
 **The engine already holds the right skeleton for a Church and almost none of its force: seven seats at one
 city, a creed, four bodies, three hearing rows and a goal to root out heresy, with no reach beyond
 Himmelenger, no memory, no income, no election, no discipline and no sanction that has ever opened in
-computed play.** In three seasons at seeds 0 and 1 the seven Church seats made 109 resolved acts
+computed play.** In three seasons at seeds 0 and 1 the seven Church seats made 113 resolved acts
 (`issue`, `covenant`, `open_case`, `establish`, `convene`, `pardon`, and, through the testing remit,
-`raze` and `seize`), opened 18 cases, determined one matter, and opened no `ban` and no `detain`; a
-Cardinal who died at seed 1 was not replaced (E-1). At build the Church's purview and every Church bench
+`raze` and `seize`), 22 of them `open_case`; they determined one matter and opened no `ban` and no
+`detain`; a Cardinal who died at seed 1 was not replaced (E-1). At build the Church's purview and every Church bench
 stop at `terr_T9`; the Crown's seats may lawfully fill every Church seat including the Confessor's, and
 nobody may strip one; no person is sworn to a Church seat; the world holds two Records, both `works`, so
 the founding deeds of the crown exist nowhere a person could read, cite, forge or burn; and the Confessor

@@ -408,4 +408,269 @@ already (`loop/effects_migration.py::_relocate`, `Person.travel_leg`; "`Query.bu
 The "information delay" of the sea empires becomes: *the centre knows what somebody came and told it, as
 well as he told it.*
 
-(§4 onward is appended below.)
+---
+
+## 4. The play-facing model
+
+### 4.1 Primitives: what exists, what is reused, what is new
+
+| primitive (brief's list) | in the engine today | used here for | new? |
+|---|---|---|---|
+| **seat** | `Office` (rung, remit acts, conferral, revocation, binds, upkeep); `establish`, `confer`, `revoke`, `release`, `succeed` | governor, farmer, factor, warden of a march, resident, inspector, the far superior | no; content rows |
+| **body** | `rosters.yaml: office_bodies` (19) | a company (a body whose seats sit at trade places), the imperial court | no; content rows |
+| **procedure** | `arrangements.yaml` (9 rows, 13 keys) | the audit, the calling-in of a charter | no; **two rows** |
+| **instrument / document** | `Record` kind `dispensation {terms, to, at}`, minted by `issue` (down purview) and `covenant` (across); `Record.stages` is its term | every grant and treaty | the Record no; **the closed set of forms is new** (`instruments.yaml`) |
+| **claim** | `Claim`, `petition`, the deed kinds, `deeds_judged` | complaint, deed-claim, the accomplishment ledger | no |
+| **obligation** | Tenure `oblige` person → seat, with `term`, renewed by `transfer` at `upkeep_of(seat)`; purview's oath clause | homage, service tenure, a company's servants, the client's bond | no |
+| **patron–client edge** | the same `oblige` (sworn) and `commit`; `establishment_of` | client elites; the change of patron is `release` + `oblige` | no |
+| **treasury / credit line** | `Rung.stores` at the seat's rung; `transfer`, `requisition`, `exchange` | the farm's advance and rent, tribute, subscription and dividend | no (credit proper is the banking lane's) |
+| **jurisdiction** | `purview_reaches` (containment + oath) | immunity, the march, the factory's precinct | no |
+| **sanction** | `ban`, `detain`, `revoke`, `seize`; the embargo is persons' withheld `exchange` | forfeiture, recall, interdiction of trade | no |
+
+**Reused: ten of ten. New: one registry and one obstacle term (§3.2).**
+
+### 4.2 The one new thing: `engine/season/instruments.yaml`, a closed set in data
+
+`covenant`'s own row says "ITS READERS ARE DEFERRED … neither tribute nor allied sides read a covenant"
+(`verb_table.yaml`, `covenant.writes_note`) [CHECKED]. A treaty today is a Record whose `terms` names an
+uttered Proposition that nothing can read. The repair follows the tree's own method for proceedings
+(`arrangements.yaml`: "a proceeding is just defined parameters"): **an instrument is just defined
+parameters.** One file, one loader (`data/instruments.py`, unknown keys rejected), one row per form:
+
+```yaml
+- id:           <form name>
+  made_by:      issue | covenant          # which verb mints it: down purview, or across
+  grantor_act:  <a remit_acts member>     # what the granting seat must hold
+  term:         <seasons> | null          # null: for the grantee's life in the seat
+  renewal:      grantor | both | none     # who must act for it to run on
+  confers:      <a seat template> | null  # the seat the grant establishes and confers, if any
+  due:          [ {by: grantor|grantee, kind: <deed kind>, every: <seasons>|once, of: <operand map>} ]
+  forbears:     [ {by: grantor|grantee, kind: <deed kind>, over: grant_ground|grantee} ]
+  lapse:        reverts | stands          # at maturity unrenewed
+  hardens:      true | false              # does age add evidence weight (prescription)
+```
+
+Every value is checked at load against an existing owner: `kind` must be a `data/verbs.py::DEED_KINDS`
+member (so a clause can only name something a verb emits), `grantor_act` a `remit_acts` member, the seat
+template's bases members of `conferral_bases` and `revocation_bases`. The dispensation's content gains one
+key, `form`, naming a row; its `terms` stays an uttered Proposition (so the K-54 reading, "a treaty is an
+uttered Proposition both holders commit to", is unchanged).
+
+**What reads it** (three Queries, no stored state, no MATTER pass):
+
+1. `world_q.dues(w, pid)` — a standing occasion in `vacancies`' and `writs_addressed`' shape. For each
+   live instrument to which `pid` is party (he holds it, or his own ledger holds its content claim), each
+   `due` clause that binds his side and has no matching deed of his in its current period stamps that
+   clause's referent on the question he answers. He then pays, performs, or does not: **his choice,
+   through the one chooser**, and the performing act is itself a draw wherever §3.2 makes it one (tribute
+   is a `transfer` between places).
+2. `person_q.kept(p, record) -> int` — person-side, computed when read, `suspicion_of`'s shape
+   (`06_FA_decree_binds.md` edit 4): over `p`'s **own ledger**, plus one for each period in which he holds
+   a claim of the due deed by the bound party, minus one for each matured period in which he holds none,
+   minus one for each claim of a forborne deed done. It is what `p` *believes* about the instrument's
+   keeping; two parties' readings differ whenever news did not arrive, which is the point.
+3. `world_q.breaches(w, pid)` — the mirror occasion: where `kept(p, record)` is below zero, the bound
+   party and the grant's seat are stamped on `p`'s question, classed `Person` and `Office`. What he does
+   with it is an existing verb: `petition`, `open_case` (the calling-in, §6), `revoke`, `release` of his
+   own oath (which a known breach makes cost him no regard, read through CHAR's regard reader), `seize`,
+   `march`.
+
+**An immunity is not a wall.** A `forbears` clause forbids nothing in the gate. A grantor who levies
+inside a granted immunity can: the levy is rolled as any levy (§3.2), the grantee's people witness it, and
+the breach is a claim in their ledgers. This follows SE's ruling on relief ("withholding is the act",
+`07_SE_treasury_granary_B.md` R-SE-29) and the tree's rule that defiance costs what the other party then
+chooses to do.
+
+### 4.3 The forms this family needs (ten rows; full text in `…_A_instruments.md`)
+
+| form | made by | what it is | confers | due | forbears | historical shape |
+|---|---|---|---|---|---|---|
+| `homage` | covenant | the bond of a conquest-founded house to the crown | — | grantee: attends a `convene`d sitting once a year; answers a muster. grantor: confirms at each succession | grantor: `revoke`/`seize` over the grantee's ground | fief; the settlement of 200 AG (canon :88) |
+| `land_grant` | issue | unheld or taken ground given for settlement | a `Lord`-post seat at the ground, `conferral: appointed`, heritable by a `successions` title | grantee: a `rung.founded` within the term, or the grant reverts | grantor: `requisition` over the ground for the first term | military colony, headright `[TREE T8; MEMORY]` |
+| `march` | issue | a frontier held on wide powers | a warden's seat with `dispatch` and `determine` at a pass or gate territory | grantee: a `garrison` kept in repair (`site.restored`) | grantor: `open_case` over the warden's men | marcher lordship `[TREE T8]` |
+| `farm` | covenant | the revenue of a ground sold for a term | a farmer's seat with `issue` (hence `requisition`) at the ground, term 4 | grantee: an advance once, a rent each season, both `transfer.made` to the grantor's rung | grantor: `requisition` over the ground while it runs | publicani, iltizam `[TREE T2]` |
+| `charter` | issue | a town's or a body's self-rule | the body's head seat, `conferral: elected` | grantee: a fee at each succession of the grantor's seat | grantor: `revoke`, `confer` on the chartered seats | borough charter, Magdeburg law `[TREE T4]` |
+| `staple` | issue | a body's sole right to trade a matter kind at a place | a factor's seat with `issue` at the settlement | grantee: a rent each year | grantor: a second `staple` of that kind there (`dispensation.issued` with the same `of:`) | company monopoly, the staple port `[MEMORY]` |
+| `immunity` | issue | a jurisdiction left alone | — | grantee: none (quiescence is a `forbears`: no `march`, no `seize` against the grantor) | grantor: `requisition`, `seize`, `open_case` over the ground | the containment grant (canon :58) |
+| `tribute` | covenant | payment for peace or protection | — | grantee: `transfer.made` each year. grantor (the `protected` variant): a `march.declared` against whoever marches on the grantee | grantor: `march` on the grantee | Ragusa, the Danegeld `[TREE T10, FA-8]` |
+| `wardship` | covenant | a person of one house kept at another's court | — | grantee: the named person's `residence.changed` to the grantor's settlement, once | grantee: the person's return while it runs | hostage-kin `[TREE Shogunate §1.9]`; the tutoring demand (canon :141) |
+| `capitulation` | covenant | terms on which a place is given up | — | grantee: `place.surrendered`, once | grantor: `rung.razed`, `requisition` over the place for the first term | honours of war, the entry `[TREE T6]` |
+
+A **company** is not a form and not a faction kind. It is a body (`office_bodies` row) holding a `staple`
+or a `charter`; its servants are persons with an `oblige` to its seats, paid by the seat's `transfer`
+(the existing upkeep renewal, `loop/effects_economy.py::_renewals`); its subscribers are persons who
+`transfer` into its seat's rung and hold a `tribute`-shaped instrument against it (a dividend is a `due`
+on the company). That is joint stock in the engine's units with no new carrier. Banking and credit proper
+belong to the merchant-republic lane (§10).
+
+### 4.4 Cut tests (what dies without each candidate primitive)
+
+- **`instruments.yaml`**: without it, every treaty, tribute, charter, farm and capitulation is an
+  unreadable Proposition; `covenant` has no reader (its own row). *Kept.* E, last: one file and three
+  Queries against ten institutions and the Altonian treaties, the containment grant and the ducal
+  settlement becoming things persons can keep or break.
+- **A `Charter` Record kind**: dies nothing; `rosters.yaml: record_kinds` already notes a covenant "is a
+  dispensation distinguished by what its `terms` names". *Cut.*
+- **A `colony` rung kind**: a planted settlement is a `settlement` rung founded by `found` on granted
+  ground; its being a colony is the instrument its lord holds. *Cut.* (`found` exists; whether a new
+  settlement may be added to the 37 is SE's and Jordan's, `[TREE: SE-9(a)]`; the `land_grant` form
+  works on converting an existing village as well.)
+- **A `company` faction kind**: a faction is "a derived view with no verbs" (`queries/faction_q.py`). A
+  body with seats is enough. *Cut.*
+- **An `audit` verb**: it is `open_case` under an arrangement row (§6.2). *Cut.*
+- **A stored `suspicion`, `legitimacy`, `prescription` or `governor_emergence` value**: Layer 1 refuses a
+  social quantity that moves at MATTER (`state/world.py:64-107`, cited from `audits/12_ARCS_adjudication.md`
+  rank 1, not opened here). Each is a fold over a ledger or a Tenure's age. *Cut.*
+- **`remove`** (the obstacle term): without it distance costs nothing and every colonial story collapses
+  into the capital. *Kept.*
+
+---
+
+## 5. Legitimacy: rank as a ranked ledger of accomplishment
+
+### 5.1 What the tree already has
+
+- **Canon:** deed-monarchy; "authority is entirely earned through wartime deeds"; "cadet branches as
+  deed-families"; "the deed-presumption is rebuttable"; the heir "inherits the presumption his father
+  created" and must prove it (`canon/03_canonical_timeline.md:80–:92, :117`) [CHECKED].
+- **Code:** a deed is an Event of a `data/verbs.py::DEED_KINDS` kind; `queries/person_q.py::deeds_judged(p,
+  referent)` is each person's own valuation of a referent's deeds from his own ledger (`:97`);
+  `rosters.yaml: standing_routes` partitions deed kinds into `dominance` (`person.died`, `body.changed`,
+  `field.won`, `rung.seized`, `record.seized`, `requisition.taken`) and `prestige` (every other);
+  `standing.band_crossed` is logged when a person's standing gap changes band and is "read only as a
+  QUESTION about its tellers" (`rosters.yaml: logged_kinds`); `conferral_bases` includes `annex` (a seat
+  taken with its ground; "which act fills an … `annex` seat is not ruled"); `successions: {off_king:
+  off_heir}`; `continuation_ties: [heir_title, sworn]` [all CHECKED by load].
+- **Design vocabulary (archived, intent only):** a **Recognized Deed** is "an action the Church,
+  Parliament, or a senior military commander publicly endorses" (`faction_politics_v30.md:170`); in
+  Varfell "any Deed-Claim succession … needs the Skald-Chief's endorsement" (`:315`, carried into
+  `offices.yaml:523`).
+
+### 5.2 Jordan's statement against the tree
+
+*"Royalty by noble conquest, i.e. the first king had the greatest accomplishment in the secession war,
+followed by the first Duke of Hafenmark and the first Duke of Varfell."*
+
+| # | the tree says | against the statement | disposition |
+|---|---|---|---|
+| 1 | Canon :80, :90: the first Almqvist's leadership "proves decisive"; Baralta's ducal status "earned through wartime deeds" | agrees for the king and Hafenmark | none needed |
+| 2 | Canon :76, :96: the coalition was "primarily northern"; the south was "peripheral and culturally stigmatised"; the caste is "the structural consequence of the south's exclusion from the war coalition's leadership" | **in tension**: a first Duke of Varfell with the third-greatest accomplishment was in the coalition and was rewarded with a duchy | **Jordan's word governs the world.** Third of three is the junior place and is consistent with exclusion from *leadership*; it is not consistent with "peripheral". The canon sentence is ratified text, so its rewording is §11 item 1 |
+| 3 | `offices.yaml:226-237`: `off_duke_varfell.conferral: elected`, source "first among the Jarls, not a monarch" | **apparent** conflict only | reconciled by reading (ladder step 4, the tree's own distinction): *how the seat was founded* (conquest) is not *how each holder is seated* (the Jarls elect). The Holy Roman crown is the research's precedent: elective, and won by one house for centuries `[TREE: HRE §1]`. No edit to the seat |
+| 4 | `offices.yaml:213-224`: `off_duchess_hafenmark.conferral: null` | the code says nothing about how Hafenmark passes | proposed: `inheritance`, by `off_king`'s precedent (ladder step 4), with a `successions` title that **nobody holds at build** (canon: Baralta is "unmarried, childless, heirless"). `…_D_accomplishment.md`, an `[ASSUMPTION; Jordan to correct]` content edit in FA's file |
+| 5 | **No fact in code ranks the three founders.** No founder exists as a person, no Secession deed exists as an Event or a claim | the order of accomplishment is carried by nothing | proposed: three prehistory deeds seeded through the gate (below) |
+
+### 5.3 The design
+
+**(a) The ledger is each person's own.** There is no world-level rank. `person_q.accomplishment(p, q)` is
+`p`'s `deeds_judged` of `q` over the `prestige` and `dominance` kinds he holds claims of, **plus the
+presumption `q` inherits**: for each seat `q` holds, `p`'s judgement of the deeds of the person whose
+`hold` on that seat closed before `q`'s opened (read from `p`'s own `tenure.opened`/`tenure.closed`
+claims), times `presumption_gain`, recursively, so a founder's deed is worth `presumption_gain`ⁿ to the
+nth holder after him. Unit: the unit of `deeds_judged`. Owner: `data/fixtures.py: presumption_gain`,
+first value **0.5**, sweep {0 control, 0.5, 0.75}. **Standing passes down the seat, not the blood**:
+that is deed-logic as canon states it ("loyal to Crown as institution, not bloodline", :145), it is
+Kantorowicz's corporate crown `[TREE: SE-6]`, and the third-generation decay is Ibn Khaldun's
+`[TREE: CP-2]`. Blood enters only where a seat's `conferral` is `inheritance` and an heir title exists.
+
+**(b) The Secession War is three seeded deeds.** At world-gen, before tick 0 and through the gate (the
+route `audits/12_ARCS_adjudication.md` §6 row 16 decides for prehistory, "acts and witnessed Events …
+not constructed Claims"), three `field.won` Events are written whose doers are the three founders, as
+dead persons with a closed `hold` on `off_king`, `off_duchess_hafenmark` and `off_duke_varfell`, the
+King's with three such deeds, Hafenmark's two, Varfell's one `[ASSUMPTION; the counts carry the order and
+nothing else; Jordan to correct]`. The cast learns them `told_by` at build. From there (a) gives Almud
+half his father's standing in every ledger and gives Baralta and Vaynard half their founders', in
+Jordan's order, **until somebody does something.**
+
+**(c) Certification is an instrument, and it shifts odds.** A recognised deed is a `dispensation` of form
+`recognition` (an eleventh row, shared with the crown and Church lanes, §10) issued by a seat with
+`determine` in its remit: the Confessor (consecration), a Crown seat, the Grand Master, the Skald-Chief.
+In any later contest where the deed is cited, the recognition is `evidence` (SC-B's term; weight by the
+hearer's regard for the certifying seat's faction, through `heritage_regard`'s existing fold). It decides
+nothing: a rival body may issue a `recognition` of a rival deed, or open a case on this one, and **which
+reading the room takes is the hearing's draw.**
+
+**(d) A new accomplishment raises a house or unseats one through three existing routes**, each a draw:
+1. *By reception.* When `accomplishment(p, claimant) − accomplishment(p, incumbent)` crosses a band for
+   `p` (the existing `standing.band_crossed` log, re-keyed to this gap), the seat and the claimant ride
+   `p`'s question. `p` may `oblige` to the claimant's seat, `release` his oath to the incumbent's, or
+   `petition`. Enough released oaths and the incumbent's purview no longer reaches (§1.4).
+2. *By hearing.* A deed-claim is a `petition` to the body that fills the seat; the plan's `succession`
+   arrangement row (`disposes: hold`, CR-35; `arrangements.yaml` header) hears it; `determine` rolls.
+3. *By conquest.* An `annex` seat is filled by the holder of the seat through which its ground was taken
+   (a won `march`, a `seize` that held, a `place.surrendered` under a `capitulation`). This is the one
+   ruling this lane asks of FA (`state/gate.py::FILLED_BY["annex"]`): ladder step 4, on Jordan's own
+   statement that the three founding seats were won this way.
+
+**(e) What a conquest-founded house owes and is owed** is the `homage` row (§4.3): it owes attendance and
+the muster; it is owed confirmation at each succession and the grantor's forbearance on its ground
+(canon :88, "ducal authority cannot be unilaterally overridden"). The three built oaths (§1.4) gain that
+form as content. A king who levies inside a duchy has breached, visibly; a duke who does not come when
+`convene`d has breached, visibly; each breach is the other's licence.
+
+---
+
+## 6. Verbs, procedures and contests
+
+### 6.1 Verbs (all existing; mapped to `verb_table.yaml`)
+
+| verb | today (E-3; verb-lane readings where cited) | what this family adds | owner of the row text |
+|---|---|---|---|
+| `covenant` | executes rarely; "0 of 41 executed" (`workplans/…v11_part2.md:67`); no reader | a `form` operand from `instruments.yaml` (by `rosters.yaml: choice_sourced`' route); `dues`/`kept`/`breaches` read it | this lane, proposal A; SOCIAL verb lane for the row |
+| `issue` | executes, binds nobody (`audits/14_VERBS_BINDING.md` §0) | optional `form`; graded at `remove` (§3.2) | BINDING verb lane; FA-P1 |
+| `requisition` | unrolled | graded: the levy's yield | MATERIAL verb lane; this lane states the roll |
+| `transfer` | unrolled; renews `oblige` terms through a seat | graded between places: carriage | MATERIAL verb lane |
+| `seize` | unrolled; "only refused or never attempted" (ARCS rank 9) | graded: whether the taking holds | MATERIAL verb lane |
+| `oblige` / `release` | forms only on a seat the person was told of | the client's change of patron; a known breach as the releaser's ground | unchanged rows |
+| `establish` / `confer` | `establish` mostly refused; `confer` never chosen (BINDING §0) | the `confers:` seat of a grant; term from FA-P3's `term:` key | FA-P3, BINDING lane |
+| `open_case` / `determine` | `determine` refused on `docket` | two arrangement rows (§6.2) | SC lane's `05_SC_playable_hearing_B.md` for reach |
+| `found` | executes on a held `works` | the `land_grant`'s due deed | unchanged |
+| `dispatch` | executes, writes nothing | the inspector, the envoy, the courier: CP-T09-08 as adopted by `14_VERBS_BINDING.md` §4 | BINDING lane |
+| `march`, `surrender`, `raze` | fields are draws (mass battle) | conquest, revolt; `capitulation` terms | PHYSICAL lane, MB |
+
+No verb is added. `audit`, `charter`, `colonise`, `farm`, `pay_tribute`, `embargo` were each tested and
+each is an existing verb with an instrument form or an arrangement row.
+
+### 6.2 Two procedures (rows of `arrangements.yaml`; full text in `…_C_audit_and_charter.md`)
+
+**`audit`** (the residencia; the visita is the same row opened mid-term by a `dispatch`ed inspector).
+Opened by `open_case` through the seat that conferred the audited seat, or its successor, when the
+audited `hold` closes for any reason, or at will if the opener is present at the audited seat's rung
+(`remove` 0: an inspection must be on the spot). `disposal: bench`; `floor: open` (the governed may
+speak); `proofs: [testimony, record]`: testimony is what residents of the governed ground hold of the
+officer's deeds (their own claims of `requisition.taken`, `record.seized`, unanswered `petition.filed`),
+records are his accounts (an assessment Record, a quittance from an earlier audit, forgeries included,
+through FI's evidence interface). `standard: demanding`. `disposes:` band-keyed (SC-P4's map,
+`05_SC_arrangement_rows_that_bind.md`): against the officer at Overwhelming `ban` (from seats in the
+opener's purview, FA-P3's scoping); at Success `oblige` to the opener's seat with a `due` of restitution;
+at Partial a `Record` only (an admonition every later bench may read as evidence); at Failure nothing is
+opened and the officer receives a quittance Record (`05_SC_acquittal.md`'s shape). **The verdict is the
+bench's draw**; a guilty governor with friends on the bench and a forged account is sometimes cleared,
+and an honest one before a hostile successor is sometimes ruined.
+
+**`quo_warranto`** (the calling-in of a grant). Opened by the grantor's seat or its successor against the
+holder of an instrument. `proofs: [record, testimony, oath]`; the instrument itself is the holder's
+evidence and, where its form `hardens`, **its age adds weight**: one unit of proof weight per
+`prescription_seasons` held, capped at three (owner `data/fixtures.py`; first value **8**; sweep {4, 8,
+16}; unit: seasons per unit of SC's `proof_step` weight). `standard: demanding`; `stakes`: the seat the
+grant confers. Band-keyed disposal, for the mover: Overwhelming the conferred `hold` closes; Success it
+closes and the mover owes restitution; Partial the grant stands for a fee (a `due` on the holder, the
+confirmation fine `[TREE: SE-4]`); Failure the grant stands and the judgment is a Record that is evidence
+in every later calling-in. Every other holder of the same form hears of it at the reach of the bench's
+`disposal_reach`, and judges the mover by it (`deeds_judged`): London, 1683 `[TREE: T4]`, as persons'
+reactions and not as a realm-wide modifier.
+
+### 6.3 The contests, each with its roll
+
+| contest | who rolls | venue | modifiers that matter most (SC's dimension table, `audits/13_SC_contest_interrogation.md` §2) |
+|---|---|---|---|
+| the levy | the collector | the place | `remove`; the cohort's `regard`; the share demanded; a held assessment |
+| the convoy | the carrier | the path | `remove`; war on the path; the amount |
+| the order at a distance | the issuer | the addressee's place | `remove`; a live oath; the addressee's `regard` and score |
+| the audit | the bench (`determine`); the officer and the governed (`speak`) | the governed ground | testimony held by residents; accounts; `reception`; the opener's stake |
+| the calling-in | the bench; grantor and holder (`speak`) | the grantor's court | the instrument's age; `reception`; rival recognitions |
+| the bid for a farm or a patent | each bidder (`petition` then `speak` at the grantor's sitting) | the grantor's court | the advance offered (a `transfer` made), `regard`, standing dice |
+| the field | commanders (mass battle) | the ground | MB's; `capitulation` offered before it |
+
+---
+
+(§7 onward is appended below.)
