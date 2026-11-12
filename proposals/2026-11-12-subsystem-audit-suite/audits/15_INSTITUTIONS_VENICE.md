@@ -685,7 +685,8 @@ with `upkeep`). A **branch** is another such rung whose manager is sworn to the 
 then reaches it by the oblige clause, one edge deep, which is the partnership-of-partnerships exactly (a
 branch's own dependants are not the head's). A **rector** is an appointed, termed seat on a subject
 settlement's rung with a commission (a `dispensation`), `cooling_off`, and `audit_at_exit`. A **charter**
-is a `dispensation` whose `terms` names a market rung; `exchange` across factions asks for one.
+is a `dispensation` whose `terms` names a market rung; holding one is a favourable term on the rate roll
+of an `exchange` at that market, and trading without one is attempted at worse odds, never refused.
 
 ### 6.2 Where the draw is (the standing rule, applied to every procedure of this family)
 
@@ -729,7 +730,7 @@ body's ballot with those facts as evidence (FA lane).
 | seat-row key `eligible_from` | **new** (one optional key, one gate reader) | Guild-gated office, the patriciate, the cursus, "burgher status … qualify for political participation" (canon's own cell) stay prose |
 | `conferral_bases: lot` | **new** (one roster member, one branch in `_eff_confer`'s conferee) | Sortition cannot be expressed; the roll has no pay-off distinct from an election; Florence collapses into Venice |
 | seat-row keys `cooling_off`, `audit_at_exit` | **new** (two optional keys beside FA-P3's `term`) | Rotation without a cooling-off is re-election of the incumbent every term; without the exit audit the rector at distance has no account to render and the republic's characteristic accusation never starts |
-| a `charter` conjunct on cross-faction `exchange` | **new** (one conjunct; no Record kind: a charter is a `dispensation`) | Monopoly, privilege, embargo and the league's weapon have nothing to bite on; the colonial lane's company has no charter either |
+| a `charter` term on the rate roll of `exchange`, and a `standard` on a market's venue row | **new** (one term on the MATERIAL lane's roll; no Record kind: a charter is a `dispensation`; no refusal: an unchartered trade is rolled at worse odds) | Monopoly, privilege, embargo and the league's weapon have nothing to bite on; the colonial lane's company has no charter either |
 | a `purchased` conferral basis | **not taken** | Nothing: purchase is `transfer` then warrant or `confer`, and is better findable composed |
 | a kin-bar (*divieto*) | **not taken now** | It needs kinship as a typed edge; `tie` has no opener (`tenure_kinds_without_an_opener`) and CHAR's `02_CHAR_relations_have_a_ground.md` owns the ground. Added as one `seat_bars` value when that lands |
 | a profit-sharing venture account | **not taken** | §5.2 |
@@ -756,7 +757,7 @@ No verb is added. Verbs that gain behaviour or content in this family, and the l
 | `determine` | drawn ballots under a `declared` row; `debt_suit`; the exit audit | this lane (C, B); SC-P4, SC-P6 |
 | `convene`, `open_case` | the sitting; the auditor's and the Avogador's intake | `14_VERBS_BINDING` B; this lane stamps `audit.due` |
 | `establish` | found a house's head seat, a branch, a line, a Kontor's alderman | `14_VERBS_BINDING` A; FA `06_FA_office_capabilities.md` |
-| `exchange` | the venture; asks for a charter across factions; band-keyed rate | `14_VERBS_MATERIAL`; this lane (D) the conjunct |
+| `exchange` | the venture; a band-keyed rate; a held charter as a favourable term | `14_VERBS_MATERIAL` owns the roll; this lane (D) the term |
 | `requisition`, `seize` | distraint under a lapsed bond; the forced loan | SE `06_FA_levy_through_the_seat_B.md`; this lane (B) the warrant read |
 | `survey`, `tell`, `surveil`, `interview`, `reconstruct`, `forge`, `conceal`, `lie` | the *relazione*, the dispatch, the denunciation, the double ledger and its detection (ARC-15, ARC-08) | FI lane (`08_FI_*`); nothing added |
 | `dispatch`, `march`, `marshal`, `recruit`, `train` | the hired company; the commissary sent to the camp | `14_VERBS_MILITARY`, CP-T09-08 |
@@ -845,7 +846,7 @@ family's parts supply). No case is claimed simulable on this lane's changes alon
 | **NPC-007 Annika Feldhaus** | N2: a supply chain that can be cut; N3: two actors who each built one half | part 4 (a venture financed), part 5 (a house with branches) | SE trade; M-LATENT |
 | **NPC-084 Frieda Kessler** | holds and argues a position against her own body's line | part 3: a rotating council seat by lot, a recorded division | FA-P2 (her seat's row) |
 | **NPC-085 Nessa Grindvold** | N1: a guild's privileges challenged in a venue (M-SIT) | part 5: the charter is a document; the challenge is a suit on it | SC hearing B; `12_ARCS_cited_evidence.md` |
-| **NPC-090 Stephanos Doukas** | N1: a trade relationship between polities that can be suspended or altered (M-REC) | part 5: the charter conjunct on `exchange`; his seat issues or withholds it | WR; BYZANTINE lane (his office) |
+| **NPC-090 Stephanos Doukas** | N1: a trade relationship between polities that can be suspended or altered (M-REC) | part 5: the charter term on `exchange`'s rate roll and the market's `standard`; his seat issues or withholds the one and may raise the other | WR; BYZANTINE lane (his office) |
 | **NPC-037 Annalie Reichard** | N2: the treasury-oversight post (M-STORES) | part 4: the forced loan and the state as debtor; the exit audit | SE `07_SE_treasury_granary_B.md` |
 | **SCN-12** (a succession that trades a present benefit for a future claim) | N2 (M-REC) | part 4: the claimant's bond to a backer | FA succession |
 
@@ -890,7 +891,7 @@ it uses and others define. One name, one owner.
 
 | | primitive / verb | meaning at the seam |
 |---|---|---|
-| export | charter | the Kommerkiarios (`off_kommerkiarios`, remit `[issue]`) issues, renews or withholds the dispensation without which cross-faction `exchange` at his market is refused |
+| export | charter | the Kommerkiarios (`off_kommerkiarios`, remit `[issue]`) issues, renews or withholds the dispensation whose holder trades at his market on better odds, and may raise the market's `standard` (an embargo) |
 | export | the house as a foreign enclave (a hearth rung with a head seat inside another faction's settlement) | the Kontor; the bureau's counterpart is the enclave's alderman |
 | export | `survey` Records and told dispatches | the *relazione*: what a merchant republic knows of the empire, held as documents that can be seized or forged |
 | import | the sequence of offices, seals and delays (that lane's procedure rows and `interposed:` chains) | a charter passes through it; each step is a seat that can be asked (`obligation`, gifts composed) |
@@ -903,7 +904,7 @@ it uses and others define. One name, one owner.
 |---|---|---|
 | export | the rector at distance (appointed, termed, commissioned, `cooling_off`, `audit_at_exit`) | the company's governor and factor |
 | export | `debt` as a transferable bond | the company's stock is a bond the company seat owes its holders; a share is a `debt` Record handed on by `give` |
-| export | charter and its conjunct on `exchange` | the monopoly |
+| export | charter and its term on `exchange`'s rate roll | the monopoly, as an advantage that can be undercut and not as a wall |
 | export | the line as a termed seat over a foreign market | the chartered voyage |
 | export | the hired company (`oblige` to the employer's seat, renewed by `upkeep`) with a commissary | the company's troops |
 | import | the peoples under a charter (that lane's seats and rolls for subject communities) | who sues a rector at his exit audit |
@@ -929,7 +930,7 @@ build / design-first.
 | **A** | `proposals/15_INSTITUTIONS_VENICE_A_obligation_and_the_ask.md` | `obstacle_terms` gains `obligation`; three fixtures; the host carries the edge count raw; the term is recorded on the roll | small build | SC `05_SC_obstacle_difficulty_and_modifiers_B.md` (the composer and the roster), SC-P1 (terms on the Event) | spine and realm, seeds 0–2: at `obligation_step: 0` the content hash equals the pre-item hash; at 0.5 the four vassals' answers to `off_king`'s asks carry the term, and the band distribution of asks to obliged against unobliged persons is **read and reported** over the three seeds (a reading, not a balance claim) |
 | **B** | `…_B_debt_instrument.md` | `record_kinds: debt`; `covenant` mints it; discharge read in `_eff_transfer`; `debt.lapsed` at MATTER; `arrangements.yaml: debt_suit`; the lapsed bond as a `warrant_sourced` warrant | small build | A; SC-P4, SC-P6; SE `07_SE_treasury_granary_B.md` (stores at build) | hand-built fold: mint, part payment, extension, lapse, suit, each with its Event; seeded: a fixture with one stocked house, seeds 0–2, six seasons: debts minted, reckoning bands and lapses **read and reported**; control: no `debt` kind in the roster → hash EQUAL to pre-item |
 | **C** | `…_C_roll_lot_ballot.md` | `binds_bases: members_by_warrant`; row keys `eligible_from`, `cooling_off`, `audit_at_exit`; `conferral_bases: lot`; drawn ballots under `declared` | small build; the ballot is **design-first** (it changes CR-34's shipped conjunct) | FA-P3 (the `term` key and loader), CR-35, CR-36; SC hearing B | spine, a three-seat rotating council with a roll of eight: over twelve seasons every seat turns over by lot, no holder is re-seated inside his cooling-off, at least one exit audit is opened by a person; control: all new keys null → hash EQUAL; planted failure: the lot ignoring `eligible_from` seats a stranger |
-| **D** | `…_D_houses_charters_and_content.md` | content: house head seats for the Guilds, Schoenland's seats and body, council rows for a Hafenmark commune; five arrangement rows; the charter conjunct; the scenario fixture | edit (content) + small build (conjunct, fixture) | A–C; FA-P2 (`off_guild_leader`), FA `06_FA_office_capabilities.md`; WR (Schoenland's place); `14_VERBS_MATERIAL` (`exchange`) | the playable scenario below, headless, seeds 0–2, with its control |
+| **D** | `…_D_houses_charters_and_content.md` | content: house head seats for the Guilds, Schoenland's seats and body, council rows for a Hafenmark commune; three arrangement rows (two more named, waiting on CR-35 and CR-36); the `venue` anchor form; the charter term; the scenario fixture | edit (content) + small build (anchor form, fixture); the charter term is held until `exchange` is rolled | A–C; FA-P2 (`off_guild_leader`), FA `06_FA_office_capabilities.md`; WR (Schoenland's place); `14_VERBS_MATERIAL` (`exchange`) | the playable scenario below, headless, seeds 0–2, with its control |
 
 **The first playable scenario: "The Counting-House"** (standing requirement; proposal D §5). A guild town
 of one settlement on the spine fixture. The player-proxy is the head of a house with a stocked chest, two
@@ -988,8 +989,9 @@ Resolutions decided: **14**.
    from; (b) keeps it a limit on the map. Canon says only "neutral offshore trade nation"; the name
    *Island Republic* is geography's.
 3. **May a house's head seat exist on a hearth with no faction?** `office_faction` refuses a seat that
-   belongs to nothing. (a) Every house belongs to a faction through a body (Feldhaus's to `Guild`); a
-   foreign factor's to his own. (b) A private house is its own small faction ("factions can be of any
+   belongs to nothing. (a) Every house belongs to a faction, authored on its row's `faction:` (Feldhaus's
+   to the Guilds; a titled post may not sit in a body, `refuse_a_title_in_a_body`); a foreign factor's to
+   his own. (b) A private house is its own small faction ("factions can be of any
    scale", Jordan, 2026-09-18). (a) is taken (no roster change); (b) would let a banking house outgrow
    and leave its guild, which is the Medici's actual arc, and it is a real fork.
 

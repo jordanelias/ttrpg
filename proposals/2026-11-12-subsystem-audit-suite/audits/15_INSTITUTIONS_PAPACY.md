@@ -448,4 +448,366 @@ centralisation, concentrated the market. Resistance: by kings (statutes, concord
 by councils, by cities (Venice), by clergy who did not publish a sentence, by subjects who preferred their
 lord, by the excommunicate who simply lived with it, by dissenters who denied the keys altogether.
 
-<!-- APPEND-POINT-2 -->
+---
+
+## 4. Adaptation to Valoria: what is kept, what is changed, and why
+
+### 4.1 Keep / change
+
+| historical mechanism | kept as | changed, and why |
+|---|---|---|
+| apex elected by a college, two-thirds, enclosed | the Confessor's seat filled by the Church's own bench (CR-35) under a `conclave` row with `quorum_share: [2, 3]` | the vote does not decide: it sets the odds of the determination's draw (standing rule). The four Cardinals are also the heads of the four arms, so an election is a contest among the Church's own departments, which is truer to Valoria's four-Cardinal structure than a college of courtiers |
+| government by rescript; the curia's fee-taking chain | the `dispensation` Record and `petition`, issued through a seat, answered by `comply` / `evade / defy` / `construe` | the clerk-by-clerk chain is **not** modelled as offices. It is carried as what it did: delay (a sitting is a season), cost (stores moved by `transfer` to the seat's rung) and the proctor (an advocate, `interposed: person`). A chain of seven seats that each stamp one paper is overhead with no choice in it (NERS-E against N: nothing dies if cut) |
+| jurisdiction by person and by matter | CR-60's `scope:` (the bench's ground) plus goal rows that say which deeds the Church acts against | jurisdiction by *matter* is not a gate. A Church bench may hear whatever is docketed before it; what it *seeks* is set by its goals (`deed_doers`), so a contest of jurisdictions is two benches each docketing the same person, which is what happened |
+| three ways to open a case | CR-60's two rites (accusatorial, inquisitorial); `petition` then `open_case`, or `open_case` on the bench's own claim | denunciation folds into accusation with the accuser concealed (`conceal`), no third rite |
+| excommunication, minor and major | the `ban` (legal exclusion, existing) and a published writ of avoidance (social exclusion, a `dispensation`) | no automatic sentence. *Latae sententiae* is a fixed function of state and is refused by the standing rule; every sentence is a determination |
+| release of subjects from their oaths | CR-88's duty decline, lifted for a person in proportion to his own grievance, to which a published sentence adds one origin | never a dissolution. An oath ends only by its owner's `release` |
+| interdict | a writ addressed to the Church's own seat-holders in a place, withholding the services the engine models: `tend`, alms (`transfer`), teaching (`train`), judging | the rites themselves are not modelled, so the interdict withholds what the Church does that the engine can see. Canon makes exactly these the Church's hold on the realm: *"hospitals, charities, dispute resolution"* (`canon/03_canonical_timeline.md:68`) |
+| absolution, penance, reservation | `pardon` through the seat that is the ban's object (existing rule), after a termed `oblige` of the penitent | reservation is already the engine's rule: only the sentencing seat closes its own edge |
+| lay investiture and its settlement | `may_fill` as built lets a lord with purview fill a Church seat on his ground; a seat row's `patronage:` says whether that is lawful there | the settlement is data per seat, not a realm-wide rule: Himmelenger's seats are the Church's own, a see on ducal ground is contestable |
+| benefice | a seat plus the stores of its rung it may `requisition` and `transfer` | no separate "living" object. Title and grant are already two things in the engine (a `hold` on an Office, stores on a Rung) |
+| tithe; annates; indulgences | a standing writ from the Cardinal of Prudence to the sees; each see's `requisition` and `transfer` | annates and indulgences are **not adopted**: annates is a second levy on the same flow; indulgences sell a metaphysical good the simulation must not price (canon guard, §4.2). The cut costs the Reformation's trigger; Valoria's own trigger is the Thread truth |
+| exempt orders | a house whose head is sworn (`oblige`) to the head seat, so the head seat's purview runs through it (the oblige clause) | none: this is the existing primitive, and the Löwenritter's oath to the throne is its precedent |
+| inquisition and its register | `open_case` by the Senior Inquisitor's bench; `interview`, `interrogate`, `research`; the case file (CR-61) as a Record that outlives the case | torture is not a verb. Pressure is custody (`detain`) and the `interrogation` row |
+| temporal power | Himmelenger and the Church's holds; the `theocracy` ending; CR-89's band triggers | the Papal States' vicariate system is left to the lane that designs holdings; the Church's seizure is CR-89's and CR-91's |
+| legates | a seat the Confessor founds on another's ground with a term (`establish`, FA-P3); the Archbishop's Representative is the resident form | procurations become the legate's `requisition` on the ground he is sent to |
+| schism | a second head seat founded by a dissenting part of the bench, persons re-committing | a faction is a Proposition plus its commits, so a schism is the general split, not a Church rule. Design-first (§11 batch 6) |
+| councils | a `general_council` row whose bench is every Church seat granting `determine` | whether it can judge the Confessor is Jordan's (§13) |
+| anointing | the `consecration` row and its `resolution` | it confers nothing; §2 |
+
+### 4.2 Canon guard (method of `skills/valoria-canon-guard`; constraints read at `canon/02_canon_constraints.md:42-56`)
+
+| constraint | status | note |
+|---|---|---|
+| P-03 rendering is consciousness-performed; information asymmetry is the mechanic | PASS | consecration, sanction and commemoration act only on persons' ledgers, stances and choices. No rite changes a world quantity |
+| P-04 monstrosity is ontological, not moral | PASS | the Church's benches judge persons' deeds; no rule assigns moral valence to a practitioner or a monstrous being. The Church's *belief* that they are deluded is a goal row and a conviction, never an engine fact |
+| P-08 the epistemological barrier is inaccessibility, not suppression | PASS, with a guard | nothing here lets study, a trial, a seized text or an archive give a non-sensitive Thread-level knowledge; the archive holds Records whose content a non-sensitive reads as devotional (the Seam Texts' two readings stay FI's and WR's). The Church *reinforces* the barrier and is never its cause: burning the archive ends no barrier |
+| P-13 the Forgetting is rendering failure | PASS | untouched |
+| P-01, P-11, P-12, P-14 (co-movement of Thread operations) | not engaged | no Thread operation is added. An inquisitor's `thread_read` (NPC-004's hidden sensitivity) is WR's module |
+| P-02, P-05, P-06, P-07, P-09, P-10, P-15 | not engaged | |
+| GD-1 sole victory | PASS | `theocracy` stays an ending, not a victory |
+| world truth: *"Solmund did not found the Church"*; consecration as *interpretation* | PASS | the design never makes divine favour true. Indulgences are refused for this reason: a priced remission would need the simulation to hold a fact about grace |
+
+### 4.3 The nine requirements
+
+R-01 propagation and R-02 consequence: a sentence, a consecration, a vacancy and an interdict each write
+something another person later reads (a Tenure, a Record, a claim) and decides differently on. R-04
+strategic acts: the head seat's appointments, sanctions, levies and legations are its management verbs.
+R-05: no verb is added; twelve gain Church content. R-07/R-08: every effect on a third party passes
+through that person's own ledger and conviction; a far parish may never hear of a sentence. R-09: every
+procedure is a draw (§6).
+
+---
+
+## 5. The play-facing model: primitives
+
+| primitive | exists as | Church use | new? |
+|---|---|---|---|
+| seat | `Office` on an anchor, with remit, conferral, revocation, binds | Confessor, Cardinals, Inquisitor, the Representative; sees; a legate's termed seat; an order's house | rows only |
+| body | `office_bodies` | Holy See and the four arms | none added (a new body name is canon's to give) |
+| procedure | an `arrangements.yaml` row | `conclave`, `consecration`, `general_council`; the three existing Church rows gain `standard:` (SC T2) | three rows; one key `quorum_share` |
+| instrument | `Record` of a rostered kind | `dispensation` (charter, citation, sentence published, writ of avoidance, interdict, tithe writ), `petition`, `resolution` (CR-36: attestation, motion), the case file (CR-61) | one typed `terms` form (avoid / withhold); no kind |
+| claim | `Claim` in a ledger; deed claims; content claims of a held Record | fama; the deed ledger; what a sermon tells | none |
+| obligation | `oblige` Tenure with a term | an order's oath to the head seat; penance | none |
+| patron-client edge | `oblige`; the conferrer of a seat (the creating act of a `hold`) | a Cardinal's creatures: the persons whose holds his `confer` opened, read off the act store when someone asks who made whom | none; a Query when a reader needs it |
+| treasury | `Rung.stores`, moved by `requisition` / `transfer` | the tithe to Himmelenger's store; alms out of it | none |
+| jurisdiction | `Office.rung` (acting), `Office.scope_rung` (judging, CR-60's `scope:`), the oblige clause | Himmelenger; sees; realm-wide judging; reach through sworn houses | none |
+| sanction | `ban`, `detain`, closed by `pardon` | sentence; penance; absolution | two Event kinds on existing rows (`ban.opened`, `detention.opened`) |
+| right of appointment | `may_fill` (purview) | Himmelenger's own seats; contestable sees | **one key**, `patronage:`, with a closed roster |
+| world-gen document | none (the build mints only `works`) | the settlement charter; the three founding attestations | **one section**, `offices.yaml: instruments:` |
+
+**Cut tests for the two new things.** `patronage:`: without it every Church seat is a royal appointment
+(today, F-PAP-02) or, if `may_fill` simply gained a same-faction clause, no lay lord could ever invest a
+bishop and the investiture contest could not occur; the key is what lets one seat be the Church's own and
+the next be fought over. `instruments:`: without it no world begins with a charter, an attestation or a
+standing writ, so every institution starts with no past, and Jordan's order of accomplishment has no
+owner code reads (§0.05).
+
+**Not added, and why.** A piety or influence number (refused by Layer 1 and already translated by the
+plan); an `excommunicate` verb (it is `determine` under a row); an `interdict` verb (it is `issue`); a
+`consecrate` verb (it is `determine` under a row); an `elect` verb (CR-35: an election is `determine`);
+simony as a verb (it is a `covenant` and a `transfer` around a `confer`); a clergy flag on a person (a
+cleric is a person holding or sworn to a Church seat, which `faction_holding` already answers).
+
+---
+
+## 6. Each procedure as a draw
+
+One ladder (Overwhelming, Success, Partial, Failure), one pool reader, one obstacle
+(`difficulty + opposition + standard + subject + stakes + hostile − favourable`, the SC lane's closed
+roster; this lane adds **no term**). "Check" is an eligibility test that decides only whether the act may
+be attempted. Draw shapes for `confer`, `revoke`, `pardon`, `establish`, `issue`, `succeed` are the verb
+lane's (`14_VERBS_BINDING.md` §0.2); this table names the Church's rows and which existing terms carry
+personality, affiliation, office, evidence and publicity.
+
+| id | procedure | who acts, verb, venue | check | pool | obstacle terms | O / S | Partial | Failure (recoverable) | written; who reads it |
+|---|---|---|---|---|---|---|---|---|---|
+| P-1 | **Election of the Confessor** | a Church elector, `determine` under `conclave`, chapter house at Himmelenger, on a candidate's petition naming the seat | the seat is vacant; at least two-thirds of the electors present hold a live vote (any candidate): the body can sit | the determiner's (governance vocation, office weight) | `standard` demanding; `reception` = share of the bench with a live vote for the candidate minus the share for others (the bench's public commits, the term's existing source); `evidence` (the candidate's cited deeds and offices); `regard` not used (bench act) | the candidate holds the seat; O: no dissent recorded | provisional hold (`provisional_term`), lapsing unless a later sitting confirms; dissent recorded | the candidacy is dismissed (SC-P6); the seat stays vacant; other petitions stand; next season | `hold` Tenure; `tenure.opened`; the division where `records_dissent`. Every Church seat-holder (his superior changed), the Crown (whom it must treat with), the losers (grievance) |
+| P-2 | **Appointment to a Church seat** (a benefice granted) | the Confessor (or, where `patronage` admits, a lay lord), `confer`, his own venue | conferral basis; `patronage` admits the seat exercised | conferrer's | `difficulty` routine; `reception` of the seat's body toward the conferee; `standing`; `opposition` the incumbent when displacing | seated | provisional | not seated, `appointment.resisted` | the `hold`; the conferee's grant. The losers; the other claimant to the gift |
+| P-3 | **Consecration / attestation** | a Church bench, `determine` under `consecration`, cathedral, on the claimant's petition naming the seat | a docketed petition; the bench sits over the claimant (CR-60) | determiner's | `standard` demanding; `evidence` = the claimant's cited deeds and Records minus standing answers; `reception` of the bench toward him | a `resolution` naming seat and claimant, held by the determiner | a `resolution` whose terms attest half the cited entries (the first half in cited order) | none minted; `matter.dismissed`; he may petition again with more | the Record. Any later hearing that admits `record`; whoever researches or is told of it |
+| P-4 | **Sentence of exclusion** | a Church bench, `determine` under `excommunication_deliberation` or `inquisition_hearing` | docketed; bench sits over the party; under the declared row two-thirds of the bench present hold a live vote either way | determiner's | `standard` (demanding / hard); `stakes` (`ban`); `opposition` the party's score; `evidence`; `reception` (vote share for the sentence minus against); `plea` if he appears and speaks | `ban` opened; O adds the pursuit move the row already writes | band-keyed (SC-P4): a termed `ban` (suspension), not a permanent one | acquittal (SC-P6); a failed sentence is itself news (the martyr) | `ban` Tenure; `ban.opened` Event. `confer` and `oblige` (existing); every hearer's regard and grievance toward him |
+| P-5 | **Publication and avoidance** | a Church seat with `issue`, `issue`, to the faithful it reaches | authority; executors exist | issuer's | `regard`, `standing` (verb lane) | writ minted with `force` = band | force Partial | a dead letter | a `dispensation` whose terms are `{avoid: person, verbs: […]}`. Each addressee, as P-6 |
+| P-6 | **A believer's answer** | each addressee, `comply` / `evade / defy` / `construe` | a claim of the terms is in his ledger (FA-P1) | his own (resolve; conviction as advantage through CHAR's ground rule) | `difficulty` by the writ's `force`; `regard` of him toward the excluded person as a hostile term (a tie makes shunning hard); `stakes` if he is sworn to him | shuns: declines the named verbs toward him while the ban lives; O also tells others | shuns in the open, deals in private (`conceal` forms) | defies; `compliance.withheld`, a deed the issuer's goal acts against | his own claim of his answer; the excluded man's options (who still trades, tends, serves) |
+| P-7 | **Interdict** | the head seat or the Cardinal concerned, `issue`, to Church seat-holders and sworn in a rung | as P-5 | as P-5 | as P-5 | writ with terms `{withhold: [tend, transfer, train, determine], at: rung}` | weak force | dead letter | each addressee answers as P-6; residents' own claims of shortfall and untended harm (`stability`), then their regard for the ruler who caused it |
+| P-8 | **Absolution** | the sentencing seat's holder, `pardon` | he sits over the penitent; the edge's object is his seat | his | `stakes` (the restraint), `standard`, `reception`; favourable `evidence` if a termed `oblige` of the penitent to that seat has matured (penance done) | restraint ends | commutation (the verb lane's shape) | `pardon.denied`; ask again | `ban.ended`. The same readers as P-4, reversed |
+| P-9 | **Discipline of a Church officer** | the head seat's holder, `revoke` (basis `head_of_faction`, if ruled) | the basis | his | `regard`, `standing`, `stakes` (`hold`), `reception` of the seat's body, `opposition` the holder | unseated | unseated, no disposal | he holds, `revocation.resisted` | Tenure closed; a vacancy (P-2) |
+| P-10 | **Appeal** | the party, `petition` to a higher Church bench; that bench, `determine` | the row's `appeal_basis`; CR-59 | appellate determiner's | `standard`; `evidence` including the first bench's case file; `reception` | the first disposal is closed | it is termed | it stands; the appeal is spent for that file | the first bench's standing with its superiors |
+| P-11 | **The tithe** | Cardinal of Prudence, `issue` to the sees; each see-holder, `comply` by `requisition` then `transfer` | remit; stores cover | issuer's; each complier's | P-5's; P-6's with `stakes` the settlement's shortfall | rendered | part rendered | withheld | stores at the see's rung and at Himmelenger; alms capacity; the lord whose settlement was drawn on |
+| P-12 | **Founding a see or sending a legate** | the head seat, `establish` on a rung his purview or `patronage` reaches | conferral basis; a rung | his | `reception` of the holding's seated persons, `standing` | founded with its row's remit | founded with half the remit | `office.unrecognised` | a new seat; a vacancy (P-2); the local lord's options |
+| P-13 | **Council** | a Church elector, `determine` under `general_council` | two-thirds present hold a vote | his | as P-1, `standard` hard | the `resolution` it was asked for | a partial resolution | dismissed | a `resolution`: the motion CR-37's shape needs |
+
+No row decides by tally, rank or seniority. The vote, the proofs, the venue's standard and the bench's
+disposition are terms; the die decides; a Failure leaves the matter re-attemptable or dismissed with the
+party free to return.
+
+---
+
+## 7. Verbs and contests
+
+No new verb. Mapped to the 67 rows (`engine/season/verb_table.yaml`):
+
+| verb | Church content it gains | owner of the row's build-out |
+|---|---|---|
+| `determine` | three rows (`conclave`, `consecration`, `general_council`); `ban.opened` / `detention.opened` earned per edge | SC; `14_VERBS_BINDING.md` §3; this lane's B, C, D |
+| `confer` | the `patronage` clause in `may_fill` | `14_VERBS_BINDING.md` §1; this lane's B |
+| `revoke` | `head_of_faction` basis (if ruled); `ban.opened` on its disposal | `14_VERBS_BINDING.md` §11; FA §11 item 3; B |
+| `establish` | sees and legations as rows | `14_VERBS_BINDING.md` §5; E |
+| `issue` | the avoid / withhold `terms` form | `14_VERBS_BINDING.md` §6; FA-P1; D |
+| `comply`, `evade / defy`, `construe` | answers to a writ of avoidance, an interdict, the tithe writ | FA-P1; the social verb lanes; D |
+| `pardon` | penance as favourable evidence | `14_VERBS_BINDING.md` §9; D |
+| `petition`, `open_case`, `convene`, `speak`, `argue` | candidacy; consecration; accusation; appeal | SC; the social verb lanes |
+| `oblige`, `release` | an order's oath; penance; a vassal leaving an excluded lord | the binding lane |
+| `tell`, `research`, `create_record`, `give`, `conceal`, `forge`, `destroy_record`, `seize` | the archive and the deed ledger | FI; `12_ARCS_cited_evidence.md`; C |
+| `requisition`, `transfer`, `tend`, `train` | tithe, alms, hospital, school: the services an interdict withholds | the material verb lane; SE |
+| `covenant` | concordat; election capitulation; a simoniacal bargain | the binding lane |
+| `arrest`, `interrogate`, `interview` | the Inquisitors' procedure | SC, FI |
+
+Contests: every Church contest is a `determine` (prize `a proposition`, or `a seat` when it disposes a
+`hold`) or one of the verb lane's contested binding acts. No new prize.
+
+## 8. Tuning dimensions
+
+All in the SC lane's tables (`proposals/13_SC_tuning_tables.md`); this lane supplies rows, not tables.
+
+| dimension | where it enters | Church rows (first values, each `[ASSUMPTION; Jordan to correct]`; unit: `difficulty_levels` member) |
+|---|---|---|
+| venue | T2 `standard:` on the arrangement row; `venue_min_rank` | `conclave` demanding; `consecration` demanding; `general_council` hard; existing: `excommunication_deliberation` demanding, `inquisition_hearing` hard (T2's own values). Sweep: each ± 1 level in a planted hearing |
+| personality | the determiner's and the answerer's pools; CHAR's ground rule (`02_CHAR_which_ground_moves_whom.md`) as advantage; pursuits in `deed_term` | no Church value; a `doctrine`-leaning hearer judges an excluded man harder because `deed:ban.opened` aligns against `doctrine` (alignment cells, proposal D) |
+| affiliation | `Person.conviction` through CHAR's advantage source; `opinion` of the Church in `reception` | none stored here |
+| office | the governance vocation of the seat (FA-P6); `standing`; who may attempt (remit, `patronage`, `scope`) | seat rows |
+| evidence | T5 `evidence` with the row's `proofs:` as admission filter | `consecration` admits `[record, testimony, oath]`; `conclave` `[]` (an election hears no proofs: it reads the vote); `general_council` `[record, testimony]` |
+| publicity | the row's `floor` (open / closed) raising `standard` one level in T2's sweep; `disposal_reach`; the chronicle channel | `consecration` open (a public rite: its failure is public); `conclave` closed |
+| season | none as a term (T-table R-6). Sittings are seasonal; a vacancy's cost accrues by what the vacant seat cannot do | none |
+
+`quorum_share` (proposal B): unit, a ratio of electors present with a live vote to electors present;
+owner `arrangements.yaml`; first value `[2, 3]`; sweep `[1, 2]`, `[2, 3]`, `[3, 4]`. It is a check on
+sitting, not on the result.
+
+---
+
+## 9. Emergent narrative with no player
+
+Each line: the story; the conditions; the instrument that could show it and could fail.
+
+1. **The long vacancy.** The Confessor dies; the four arms each prefer their own; no candidate holds
+   two-thirds; sittings fail; meanwhile nobody can appoint, discipline or absolve. Conditions: P-1's
+   check unmet or its draw failing in successive seasons. Instrument: seasons from `person.died` of the
+   holder to `tenure.opened` on `off_confessor`, per seed; it fails if every seed elects in one season
+   (no politics) or none ever does (dead end).
+2. **The contested see.** A see on ducal ground falls vacant; the Duke invests his man; the Confessor
+   provides another; each `confer` displaces the other's with the incumbent as opposition. Instrument:
+   count of `tenure.opened` on one seat with alternating `Act.via` factions; fails at 0.
+3. **The sentence that makes a martyr.** A Failure at P-4 against a popular lord is told abroad as a deed
+   of the bench. Instrument: mean `regard` of hearers toward the party before and after a failed
+   determination, against a control with the sentence succeeding.
+4. **The excluded king.** P-4 succeeds on a head of faction; P-5 reaches his vassals; those who already
+   hold a grievance read one more origin and `release` (CR-88's lift); those who do not, defy the writ.
+   Instrument: `commitment.ended` / `tenure.closed` on `oblige` edges to his seats within N seasons of
+   `ban.opened`, split by the releaser's prior grievance; it fails if release does not depend on prior
+   grievance (the sanction would be a switch).
+5. **Canossa.** The excluded man swears a termed `oblige` to the sentencing seat; at term the seat pardons;
+   the vassals' added origin is gone. Instrument: `ban.ended` preceded by a matured `oblige` of the same
+   person to the same seat.
+6. **The interdict that fails.** A see-holder whose regard for his lord outweighs his duty defies P-7 and
+   keeps the hospital open; the head disciplines him (P-9) or does not. Instrument: `compliance.withheld`
+   by a Church seat-holder on a withhold writ.
+7. **The refused consecration** (the Consecration Triangle). A claimant with the second-ranked roll
+   petitions; the bench's reception is hostile; Failure. Instrument: `matter.dismissed` under
+   `consecration` for a party who holds a seat or a claim to one.
+8. **The burned roll.** Someone destroys or forges a founding attestation; the next contest is argued on
+   testimony and copies. Instrument: `record.destroyed` or `record.forged` on an instrument of kind
+   `resolution`, then the `evidence` term of the next hearing that would have cited it.
+9. **The over-mighty arm.** A Cardinal's sworn house grows; he acts without the head; the head cannot or
+   will not strip him (the archived *Jarnstal Drift* without a counter). Instrument: acts through a
+   Cardinal's seat that a held writ of the Confessor forbids (`compliance.withheld` by a Cardinal).
+10. **The inquisitor's file.** A case file kept for seasons convicts someone its first subject named
+    (ARC-41, NPC-004). Instrument: a `determine` whose cited items include a Record created under an
+    earlier matter.
+11. **Theocracy by consecration.** With CR-89's bands, the Church attests one of its own and a succession
+    contest goes to him. Instrument: `endings_reached` reports `theocracy`.
+12. **Schism** (design-first). A provisional election unconfirmed; the dissenters found a second head
+    seat; persons re-commit. Instrument: two live seats of post `Confessor` held under different faction
+    Propositions.
+
+---
+
+## 10. Provided arcs and characters that depend on it
+
+From `audits/12_ARCS_adjudication.md` (rows opened: ARC-21, ARC-36, ARC-37, ARC-41, NSC-04, NPC-039,
+NPC-040; the M-table) and `engine/season/npcs.yaml` (wants read at the row).
+
+| case | need (short) | hardness | represented today? | this design's carrier | proposal | depends on |
+|---|---|---|---|---|---|---|
+| ARC-21 The Excommunication | a formal contest with more than two outcome tiers, each a different consequence set; a failed challenge weakens the challenger | core | no: one consequence for three bands (SC F-SC-06) | P-4's band-keyed disposal; Failure as acquittal and news | D | SC-P4, SC-P6 |
+| ARC-36 The Tithe That Fed the Enemy | an NPC optimising a levy; an investigative branch detecting the derivative marker | core | no levy route | P-11; the Inquisitors' `open_case` on a claim of where stores went | E | CP-T08-07, the material verb lane |
+| ARC-41 The Inquisitor's Unravelling | rigorous documentation that later convicts its maker | core | no case file | the case file as a Record (CR-61); P-4 | D | CR-61 |
+| NSC-04 the Church exposed | exposing an institutional actor's secret partnership | core | partial (`tell`, inquiry verbs) | a deed claim the Church's own discipline (P-9) or a council (P-13) acts on | B | FI-02 |
+| NPC-038 Olafsson | a branch's named superior whose authorisation is a precondition above a severity threshold | core | no | a sentence of `ban` needs the declared row, whose bench he sits on and whose sittings he convenes; his removal (P-9) changes what the body does | B, D | FA §11 item 3 |
+| NPC-013 Tormann | a repeatable seasonal action improving a faction-wide resource, scaling with the territories applied to | core | no | P-11: one writ, as many renders as there are sees | E | sees authored |
+| NPC-034 Linder | the sole lawful conduit of a second institution's authority on the first's ground | core | structure yes, content no (FA §13) | his seat is the Church's one seat reaching `terr_T1`; with `issue` on his row (FA-P2) and `patronage: own_faction` he cannot be replaced by the Crown | A, B | FA-P2 |
+| NPC-039 Klapp, NPC-040 Jarnstal | a Church figure as one of several standing candidates for a named seat | core (M-SEAT) | no election, no candidacy | P-1 and P-2: a candidate is a petitioner naming the seat | B, F | CR-35 |
+| NPC-021 Himlensendt | faith privately challenged while the public role continues | core | CHAR's (conviction; M-REGARD) | this lane fixes where he lives and what his seat can do; the crack is CHAR's | A | CHAR |
+| NPC-004 Haelgrund | an investigation concluding plausibly and wrongly, acted on as true | core | FI's | his bench acting on it (P-4) is what makes the error cost someone | D | FI-03 |
+
+Soonest: NPC-034 and NPC-021 (content, proposal A); NPC-039 / NPC-040 (the playable scenario, F); ARC-21
+after SC-P4 and SC-P6.
+
+---
+
+## 11. Implementation plan
+
+Ordered by dependency. Each batch: what changes, where, the gate (an execution artifact), the falsifier,
+cost class, what it waits on. Exact edits are in the proposal files.
+
+| batch | proposal | what lands | owner files | cost | waits on | gate and control | planted failure |
+|---|---|---|---|---|---|---|---|
+| 1 | A `…_A_ground.md` | the Confessor housed at Himmelenger; `dispatch` on the Templars' Cardinal's row; the three realm `scope:` values; CR-74's carrier named (`ROLE_TEMPLATE_OF`) | `npcs.yaml`, `offices.yaml`, `harness/strife_moves.yaml` | edit | FA-P2 (for the `dispatch` row to matter); CR-60 (for `scope:`) | `probe_reach.py` re-run: the Confessor stands under `terr_T9`; after CR-60 a Church bench `sits_over` `terr_T1`. Control: rows reverted reproduce the base build hash | a `scope:` on a non-bench seat changes nothing (it must not widen acting reach) |
+| 2 | B `…_B_patronage_election_discipline.md` | `patronage:` key and `may_fill` clause; `conclave` row with `quorum_share`; vote share read by `reception`; `head_of_faction` (held for Jordan) | `rosters.yaml`, `offices.yaml`, `state/gate.py`, `arrangements.yaml`, `data/arrangements.py`, `queries/world_q.py` | small build | CR-35; `14_VERBS_BINDING` C (the `confer` draw); SC's obstacle | hand-built, real fold: the King's `confer` on `off_cardinal_prudence` refused, the Confessor's admitted; an election at vote share 1/3 and at 3/3 run over 200 seeds gives two different band distributions, both with all four bands present. Control: no `patronage:` key reproduces the base hash | set every share to the same value: the two distributions must coincide (the vote is the only difference) |
+| 3 | F `…_F_playable_vacant_chair.md` | the first playable scenario | `harness/` situation and probe; no game code | small build | batches 1-2; FA-P4's vacancy situation; CR-88 or a planted question | a seeded run in which a vacancy is filled by a person's `confer` or stays open, with the reason trail; the same seed without the vacancy shows no conferral | remove `patronage` and the Crown's seat fills the chair first at some seed |
+| 4 | C `…_C_consecration_and_deed_ledger.md` | `offices.yaml: instruments:` and its builder pass; the `consecration` row; the charter goal row | `offices.yaml`, `harness/populated.py`, `arrangements.yaml`, `goals.yaml` | small build | CR-36 (`resolution`, the Record disposal site); SC-P8 / ARCS 04 (cited Records) | build: four instruments exist, held by the Cardinal of Temperance's seat-holder, with the three attestations' entry counts in Jordan's order; a planted consecration hearing with and without the predecessor's roll cited gives different odds (exact, no draw) and both arms show all four bands over 200 seeds. Control: `instruments:` empty reproduces the base hash | cite a Record the row's `proofs:` does not admit: the `evidence` term must read 0 |
+| 5 | D `…_D_sanction_and_absolution.md` | `ban.opened` / `detention.opened`; the avoid / withhold `terms` form and its person-side decline; alignment cells for `deed:ban.opened`; penance as favourable evidence; the CH signature | `verb_table.yaml`, `rosters.yaml`, `decision/options.py`, `loop/effects_information.py`, `harness/strife.py` | small build | FA-P1; SC-P4, SC-P6; CR-88; CR-60; CR-74's slot | planted: a `ban` through a Church seat reads CH and through a secular seat does not; after a published sentence, addressees' answers over 200 seeds include comply and defy for the same person at different draws, and the share complying rises with his conviction (two arms). Control: writ never issued, no decline forms | make the decline unconditional on the answer: every addressee shuns, and the gate's "both answers occur" goes red |
+| 6 | E `…_E_sees_tithe_orders_legates_council.md` | see rows (content); the tithe writ; an exempt house; a legate's termed seat; `general_council`; schism | `offices.yaml`, `goals.yaml`, `arrangements.yaml` | content edit, then design-first (schism, council) | FA-P3 (terms); CP-T08-07 (standing levy); the material verb lane; Jordan (§13) | per item in the proposal | per item |
+
+**Playable scenario (the standing requirement).** Batch 3, *The Vacant Chair*: a Cardinal's seat is empty
+at Himmelenger. Seats a player may take: the Confessor (whom to appoint, whether to take a candidate's
+offered covenant, whether to wait), a candidate (petition, canvass, bargain), the King (press a man of his
+own where `patronage` admits it, or covenant with the Confessor). One code path: the harness situation
+builds the realm, plants the vacancy and offers `play_surface`'s aperture; the acts are the season loop's.
+End: the chair is held on a non-provisional hold, or three seasons pass. The second scenario, after batch
+4, is *The Petition* (a claimant seeks consecration); the third, after batch 5, *The Sentence*.
+
+**What the Church needs to run well alone versus to compose.** Alone: batches 1-3 (a Church whose seats
+turn over by its own people's acts). To compose: batch 4 joins it to the crown and the dukes; batch 5 to
+every believer; batch 6 to the settlements and the economy.
+
+**Dependencies on other lanes, stated as edges.** CR-35 → B. CR-36 → C. CR-60 → A (scope), D (absent
+party). FA-P1 → D (answers form). FA-P2 → A. FA-P3 → E (termed legation), D (termed ban). SC obstacle and
+T-tables → B, C, D. SC-P4, SC-P6 → D. SC-P8 / ARCS 04 → C. CR-88 → D (the lift), F (selection). CR-89 →
+none blocked; its band triggers gain real acts to weight once B-E exist. `14_VERBS_BINDING` C, D → B, D.
+
+---
+
+## 12. Inconsistencies, gaps and unclear passages: decided
+
+Ladder steps: 1 superseded, 2 irrelevant, 3 answered by a design document, 4 by precedent, 5 by what the
+architecture needs.
+
+| # | item | resolution | step | carried by |
+|---|---|---|---|---|
+| R-1 | The Confessor's roster row seats him in a market in `terr_T1` with no institution (F-PAP-04) | row corrected: `institution: Church`, `home: b_s_036_cathedral`. The file is hand-editable by its own header | 3 (canon: the Confessor is at Himmelenger) | A |
+| R-2 | Canon calls Himmelenger sovereign; the realm rung contains `terr_T9`, so Crown seats have purview there (F-PAP-02) | containment stays (GD-1 counts the territory; `theocracy` and `peninsular_sovereignty` read it). Sovereignty is carried where it bites: who may fill the Church's seats (`patronage: own_faction`) and the charter whose breach the Church acts against. Not a detached root | 5 (a detached T9 would remove a territory from GD-1's count and from every realm walk) | B, C |
+| R-3 | CR-35 narrows `elected` seats only; the six `appointed` Church seats remain fillable by the Crown | `patronage:`, opt-in per row, default today's rule | 4 (precedent: `revocation: rung_above_in_holdings`, a per-row basis Jordan ruled when hierarchy alone was wrong) | B |
+| R-4 | `excommunication_deliberation` is described as judging an absent person and cannot (F-PAP-10) | answered by CR-60's `scope:` once the three benches carry realm scope; the row's comment then holds. Until then the comment is false and says so | 1 (CR-60 supersedes) | A |
+| R-5 | CR-74 asks for a property by which a seat is a church's, or the missing carrier named | the carrier exists: `data/rosters.py::ROLE_TEMPLATE_OF[<seat's faction>] == "ecclesiastical"`, reached from `Act.via` through `office_faction`. No faction is named in the signature. Kinds: `arrest.made` today; `ban.opened` / `detention.opened` once D lands | 3 (the roster is the design's own statement of what kind of institution a faction is) | A, D |
+| R-6 | The declared tally gates and then is ignored (F-PAP-09) | the count becomes the `reception` term's content for a declared row; only *can the body sit* stays a check | standing rule (Jordan, 2026-11-12) | B; listed for IN/SC as CR-34's owner |
+| R-7 | The archived design reverses an excommunication by *"Grand Debate or new Confessor"*; the code closes a `ban` only through the seat that is its object | the code governs and already yields both: any holder of that seat may `pardon` (a new Confessor), and a hearing before it is the debate | 3 / code | D |
+| R-8 | The archived Excommunication *"strips Circles bonus … −1 Legitimacy to each settlement"*; no such quantities exist | not carried. The sentence's weight is each hearer's own judgement of `deed:ban.opened` and his answer to the writ | 2 (the quantities were retired) | D |
+| R-9 | *Cardinal Independence Check*, *Jarnstal Drift 0-3* (a private counter) | a Cardinal acting against a held writ of the Confessor is `evade / defy`; nothing counts to 3. The head's remedy is P-9 | 2 / 3 (Layer 1 refuses the counter) | B |
+| R-10 | Church Influence, Piety Track, Church Attention | already translated by the plan (CR-89; FA-07's second round). This lane adds acts those folds will count, and no clock | 1 | none |
+| R-11 | The canon timeline's *"exclusion from the war coalition's leadership"* against Jordan's ranking of Varfell's first Duke third | Jordan's word governs: the founder fought and ranked last. The canon sentence is owed an amendment by Jordan's hand; this lane edits no canon | 3 (Jordan's statement) | §13 item 4 (a note, not a question) |
+| R-12 | `off_duke_varfell` is `elected` while the ducal house is conquest-founded | both stand: the deed founded the seat; the Jarls fill it. The founding attestation attaches to the seat's first holder | 5 | C |
+| R-13 | Should the King be sworn (`oblige`) to the Confessor's seat at consecration? | no. Under the oblige clause that would give the Confessor purview over the whole realm (the papal-fief model). Canon says first among equals and co-sovereign; the bond is the charter and the attestation | 3 (canon) | C |
+| R-14 | `off_cardinal_fortitude` commands only through the unruled `dispatch` (F-PAP-08) | its row names `dispatch` | 3 (the body's own note: *"Military. Knights Templar, enforcement"*) | A |
+| R-15 | Indulgences, annates | not adopted (§4.1, §4.2) | 5 / canon guard | none |
+| R-16 | Latae sententiae (automatic sentence) | refused: a fixed function of state | standing rule | D |
+| R-17 | A dead founder's deeds and the heir's `legitimacy` | not joined here; the interface is stated (§2.2 item 3) for the lane that gives a house a carrier | 5 (one owner for *what a house is*; it is not the Church) | C, as a cross-lane request |
+
+Resolutions decided: 17.
+
+---
+
+## 13. Decisions that survive to Jordan
+
+Each survived the five steps: two defensible options that lead to different games, or an answer that
+would overwrite a ruling.
+
+1. **May the head of the Church strip a Church officer?** (FA §11 item 3; the seven seats are ruled
+   `null`, 2026-10-11.) *(A) Keep null*: Cardinals leave by death; an over-mighty or exposed Cardinal can
+   only be killed, outlived or sentenced without being unseated; the Church is a set of barons for life.
+   *(B) `head_of_faction`*: the Confessor disciplines (P-9, a draw the officer can resist); the Church has
+   internal politics, purges and the fear of them; NPC-038's removal on exposure becomes possible. This
+   lane writes (B) in proposal B and ships it off.
+2. **Can anyone judge the Confessor?** *(A) Nobody*: he leaves by death or resignation; a bad Confessor is
+   answered by schism (a rival seat) or violence. *(B) A council with the Crown's concurrence*: the mirror
+   of CR-37 (the throne is stripped by a motion and the Holy See's concurrence; the Holy See by a council's
+   motion and the throne's). (B) makes Crown and Church each the other's check and gives the archived
+   *Confrontation* arc a lawful route; (A) keeps the Church the one institution with no check, which is
+   what makes Himlensendt *"the most dangerous person on the peninsula"*.
+3. **Is lay investiture lawful on ducal ground?** *(A) `patronage: [purview, own_faction]` on sees*: the
+   lord and the Confessor may each fill a see in the lord's land, and the investiture contest is a
+   standing feature. *(B) `own_faction` everywhere*: the Church appoints all its own; lords contest it only
+   by violence or by founding rival houses. (A) is this lane's content default for sees and (B) for
+   Himmelenger's seats.
+4. **Note, not a question:** `canon/03_canonical_timeline.md:76` and `:96` need Jordan's amendment to
+   agree with the ranked order of accomplishment (R-11), and the three founding attestations' entry
+   counts (proposal C: 5, 3, 2 as first values; only the order is Jordan's) are his to set.
+
+---
+
+## 14. Evidence log, research transfer, and what was not read
+
+### Evidence
+
+| id | command | seed · seasons | outcome |
+|---|---|---|---|
+| E-1 | `PYTHONPATH=. PYTHONHASHSEED=0 python <scratch>/runs/INST_PAPACY/probe_church.py 3 0 1` (builds the realm, runs `SeasonDriver` with the harness chooser, reads `w.acts`, `w.log`, `w.tenures`; writes nothing tracked) | 0, 1 · 3 | resolved acts through Church seats: 64 (seed 0), 49 (seed 1); `open_case` 14 and 8; `determine` attempted 1 and 3, resolved 0 and 1; `ban`/`detain` Tenures 0 and 0; `claim.decayed` 34,837 and 31,392; seed 1: `person.died` 1, `off_cardinal_prudence` vacant at the end. Output: `probe_church_3s_seeds01.txt` |
+| E-2 | `… probe_reach.py` (build only) | 0 · 0 | rungs: 1 realm, 3 duchies, 18 territories, 38 settlements, 211 hearths; purview and bench table as F-PAP-01; `may_fill` and `may_revoke` lists as F-PAP-02, -03; `oblige` edges to Church seats `[]`; records `{'works': 2}`; persons under `terr_T9` 9 of 83; the Confessor's ancestry `b_s_003_market → set_s_003 → terr_T1`; `solmund_orthodoxy` held by 44 persons at levels 1-5. Output: `probe_reach_seed0.txt` |
+| E-3 | YAML parse of `verb_table.yaml` (67 rows; emits, eligibility) and `rosters.yaml` value sets | n/a | `comply` emits `compliance.given`; `pardon` emits `detention.ended`, `ban.ended`; no row emits `ban.opened`; `release` domain includes `oblige`; `record_kinds` has no `resolution` yet |
+
+Scratch directory: `/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379/scratchpad/runs/INST_PAPACY/`.
+No pytest was run. No number above is a balance claim: E-1 is two seeds and is reported as counts, not rates.
+
+### Research transfer
+
+- **Changes what to build**: *Ubi periculum* as a check on sitting plus a cost that accrues by itself (the
+  vacancy), not a ration counter (`governance_modes.md:295-296`); the two-signal reading of sanctions
+  (`political_hierarchy_standing.md:193-194`, `conflicts_power_struggles.md:196-209`), which is why P-6 is
+  each person's draw; the Concordat of Worms' bifurcated grant (`governance_modes.md:213-215`), carried as
+  `patronage:` per seat; *"the roll, not the draw"* (capture at the eligibility list,
+  `political_hierarchy_standing.md:323-324`), which is why the attestation, not the vote, is the thing
+  worth forging; the benefice as title and grant apart (`:172-173`); the cardinal-nephew as a shadow
+  hereditary track (`governance_modes.md:296`), carried as *who conferred whom*.
+- **Decorative, or tried and not transferred**: the curia's chain of clerks as seats; indulgences;
+  annates; the Papal States' vicariates; the secular veto in conclaves; voting by nation (Valoria's Church
+  has four arms, not nations; the idea returns only if sees multiply).
+- **Nulls**: the tree's game-precedent suite was not searched for a shipped game that models
+  excommunication as third-party compliance rather than a stat penalty; none is claimed. The historical
+  statements marked `[M]` are from memory and unverified against sources in this session.
+- **Stale in the research**: the hooks are written in the retired Key idiom and against a stored Standing
+  ladder; only their shapes were taken.
+
+### Not read, or read in part
+
+- `[SKIPPED: .designs/systems/factions/reference/faction_politics_v30.md — the 168 KB rank-ladder body
+  (Church ladder, Inquisitor and Templar sub-ladders, dicasteries); read through its digest entry only]`
+- `[SKIPPED: faction_layer_v30*.md, factions_personal_v30*.md, ci_political_v30.md bodies — digest
+  entries only]`
+- `[SKIPPED: research/governance/*.md in full — the passages on the papacy, investiture, schism and
+  benefices were extracted by pattern and read; the rest through the digests]`
+- `[SKIPPED: audits 05_SC, 06_FA, 07_SE, 02_CHAR in full — verdicts, the Church-bearing passages and the
+  proposal heads were read; SC-P8's item-weight rule, FA-P1's body and the CHAR chooser statement were not
+  opened, and each dependence on them is marked]`
+- `[UNVERIFIED]`: whether `issue` admits an addressee outside the issuing seat's purview; whether the build
+  admits an authored seat with no holder; `loop/effects_governance.py::_eff_release`'s witness of an ended
+  `oblige`; CR-88's `grievance_against` (unbuilt). Each is named where the proposals rely on it.
+

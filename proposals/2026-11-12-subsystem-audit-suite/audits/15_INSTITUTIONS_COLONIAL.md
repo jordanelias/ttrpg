@@ -653,10 +653,11 @@ holder of an instrument. `proofs: [record, testimony, oath]`; the instrument its
 evidence and, where its form `hardens`, **its age adds weight**: one unit of proof weight per
 `prescription_seasons` held, capped at three (owner `data/fixtures.py`; first value **8**; sweep {4, 8,
 16}; unit: seasons per unit of SC's `proof_step` weight). `standard: demanding`; `stakes`: the seat the
-grant confers. Band-keyed disposal, for the mover: Overwhelming the conferred `hold` closes; Success it
-closes and the mover owes restitution; Partial the grant stands for a fee (a `due` on the holder, the
-confirmation fine `[TREE: SE-4]`); Failure the grant stands and the judgment is a Record that is evidence
-in every later calling-in. Every other holder of the same form hears of it at the reach of the bench's
+grant confers. Band-keyed disposal, for the mover: at Overwhelming and Success the conferred
+`hold` closes (a closing disposal, the one code change this lane asks of SC; proposal C states the
+fallback); Partial the grant stands for a fee (a `due` on the holder, the confirmation fine
+`[TREE: SE-4]`); Failure the grant stands and the judgment is a Record that is evidence in every later
+calling-in. Every other holder of the same form hears of it at the reach of the bench's
 `disposal_reach`, and judges the mover by it (`deeds_judged`): London, 1683 `[TREE: T4]`, as persons'
 reactions and not as a realm-wide modifier.
 
@@ -733,8 +734,8 @@ realm with one extra instrument and one extra seat; nothing in it is harness-onl
 `06_FA_playable_scenario.md` and SC's `05_SC_playable_hearing_B.md`, which this scenario composes and
 does not replace: the audit *is* SC's playable hearing with this lane's row.
 
-**Execution artifact (the gate for the whole plan).** `python -m engine.season.harness.<report> 6 S` for
-S in 0..4, `PYTHONHASHSEED=0`, six seasons (`MAX_SEASONS`), NPC chooser in all three seats, prints per
+**Execution artifact (the gate for the whole plan).** `python -m engine.season.harness.institution
+INST-COLONIAL-01 6 S` (the report proposal E specifies) for S in 0..4, `PYTHONHASHSEED=0`, six seasons (`MAX_SEASONS`), NPC chooser in all three seats, prints per
 seed: levies attempted and their bands; rent `transfer`s attempted and their bands; `kept` as each of the
 two parties reads it at each season's end; petitions filed; whether the audit was opened and its band.
 **Pass:** across the five seeds at least two different audit bands occur and at least one levy lands in

@@ -565,4 +565,250 @@ Each section below has the nine parts the brief orders. Part 6 names the proposa
    `restore`'s formula and ladder. E, last: a class and a banded row. **Cut test:** merged into
    `restore`, a Site verb would bind a Person.
 
-<!-- more -->
+## 13. `research`
+
+1. **Premise.** *To study a document or an archive and learn what it holds.* Chain: a record exists
+   where the researcher can get at it → he studies it → he learns what it says and who keeps it, more or
+   less → if it is false he may see that → he acts on what he learned.
+2. **State today.** `own | presence:<site>`; `referent_class: Record`; cell `existence` Record; graded
+   through `graded_inquiries` (pool `inquiry` else `pool_default`; obstacle `obstacle_default`, plus an
+   examined Record's `forgery_quality`); `emits` keyed by degree (`finding.made` ×3, `finding.none`); no
+   `writes`. Reading: 71 / 95 / 67 attempted; 51 / 76 / 48 graded losses; 20 / 19 / 19 finds. A find
+   deposits *a finding was made* and, for a forged paper, the found claim (0 found deposits at three
+   seeds `[FI]`). He does not learn the content, and he need not be where the paper is (H-319). **The
+   one drawn verb of the family; a find teaches nothing.**
+3. **Build-out.** `08_FI_03_playable-inquiry.md` §2 (the `observes:` column) and `08_FI_04_small-edits.md`
+   §2 (the `present_at` conjunct) are adopted as written; this file decides the bands. Overwhelming and
+   Success: he holds the Record's content as a firsthand `content:` claim without taking the `hold`, and
+   `held_by`; Partial: the content with one value drifted (the lossy-copy rule) and no `held_by`;
+   Failure: `finding.none`. The found deposit keeps its own band terms (`modules/fieldwork/find.py`). The
+   obstacle is SC-B's: difficulty `demanding` (today's 2), plus `subject` (forgery quality). Formation:
+   bare `Record`, so SOCIAL2-A's stamp must carry both pairs (§17). Refusal renamed `inquiry.refused`
+   (FI-04 §1).
+4. **Scales and surface.** Person scale; its product feeds a hearing (a cited paper, an impeachment).
+   The player chooses the paper; the engine draws the depth.
+5. **Tuning hooks.** `inquiry`; the row's `difficulty:`; `forgery_quality`; `rosters.yaml:
+   inquiry_modules` (finding terms).
+6. **Exact edits.** `14_VERBS_MATERIAL_E_knowledge.md` §2.
+7. **Gate and falsifier.** FI-03's §2 gate, with the account: a researcher of another's account holds
+   its cell firsthand after a planted `Success` and not after a planted `Failure`; his `record` of a
+   teller who told him otherwise falls below 1.0. Planted failure: empty `observes:`.
+8. **Cases.** NPC-052 (N1: private research), NPC-086 (N7: corroborating or refuting a claim), NSC-01,
+   ARC-37 N4, ARC-54.
+9. **NERS.** N: reading without holding is how a paper's content reaches a second mind. R: a
+   half-understood document. S: the inquiry route, unchanged. E, last: a column FI already wrote.
+   **Cut test:** merged into `examine` (a Site) one cell would bind two kinds, which the table refuses.
+
+## 14. `reconstruct`
+
+1. **Premise.** *To put the pieces together and say what happened.* Chain: a person holds scattered
+   evidence of a deed → he reasons over it → he states a conclusion, right or wrong → he and others act
+   on it → later evidence bears it out or does not.
+2. **State today.** `own`; cell `own_ledger` of `subject`; flat `emits: [finding.made]`, no `writes`,
+   not graded (K-37: *no value space*). Reading: 84 / 91 / 113 attempted, 82 / 89 / 110 executed, on
+   persons (30 at seed 0), towns (23), papers. Each deposits *a finding was made* and nothing else
+   (H-218, H-315, H-320 `[FI]`). **Executes most often of the family and concludes nothing.**
+3. **Build-out.** FI-03 §3's design, decided where it left the row to a design pass. Formation: an
+   individual, on a referent about which his own ledger holds a deed claim he has not yet concluded on;
+   the conclusion's candidate is computed at CHOOSE from his ledger alone (`person_q.deed_doer`, with
+   FI-06's travelling pairing) and rides the act, as `said` does; nothing to conclude is declined. The
+   row joins the graded route: pool `inquiry`, difficulty `demanding`, less an `evidence` term (one
+   `proof_step` per independent chain root among the claims he holds on the deed: corroboration, e2).
+   Overwhelming and Success: he utters a HOLDS Proposition naming the deed and the doer, with the
+   maker's `hold` (`_eff_utter`'s body); Partial: the Proposition names the deed and no hand; Failure:
+   `finding.none`, nothing uttered (§19, J-M2 holds the alternative). A conclusion is as wrong as his
+   ledger; nothing checks it. It then feeds `petition` → `carry` → `determine` and a hearing's `cites`.
+4. **Scales and surface.** Person scale; its product is the accusation that reaches a bench. The player
+   chooses which deed to conclude on (and, through `choice_sourced`, which named doer where his ledger
+   offers several); the engine draws whether he gets as far as a name.
+5. **Tuning hooks.** `inquiry`; `proof_step`; `rosters.yaml: terms_sourced` (the row that lets a
+   petition form from a held conclusion, FI-03's design pass).
+6. **Exact edits.** `14_VERBS_MATERIAL_E_knowledge.md` §3.
+7. **Gate and falsifier.** FI-03's §3 gate: over 20 seeds of `inquiry_world`, `reconstruct` utters a
+   Proposition in more than zero folded acts, at least one run names someone who is not the Event's actor
+   and at least one names the actor; a petition forms from a held conclusion. Planted failure: compute
+   the candidate from the Event log; FI-01's silent-change arm must go red.
+8. **Cases.** NPC-004 N1 (a confident wrong conclusion), NSC-01 (N2, N3), ARC-15 N6, NSC-04, the 26
+   corpus cases FI-03 counts.
+9. **NERS.** N: the investigation scale has no outcome without it. R: three routes to a name; a wrong
+   name that matters. S: `utter`'s mint, `tell`'s copy rule, the inquiry route. E, last: a retyped row.
+   **Cut test:** merged into `utter`, a conclusion would need no evidence and carry no degree.
+
+## 15. `transfer`
+
+1. **Premise.** *To give goods from my store to another.* Chain: a person commands a store → he sends a
+   quantity to a place that needs it → it arrives, wholly or in part → the receiver eats, pays its men
+   or builds with it.
+2. **State today.** `remit:issue | own | hold:<store>`; cell `stores(from, kind) >= amount`; effect
+   `_eff_transfer` (`_shift`, plus `_renewals`: a payment out of a seat's rung renews obligees' terms).
+   `to` binds the question's referent. Reading: 43 / 61 / 47 attempted, 2 / 1 / 2 executed; at seed 0, 24
+   name the giver's own rung as `to`, 13 a Person, Record or Proposition, 2 a hearth; the two that
+   execute are a cohort moving one grain from its settlement into its own person-rung, off the larder
+   ladder (F-SE-07 `[SE]`). `term.renewed` never emitted. **Forms but is refused; where it executes it
+   is a sink; no draw.**
+3. **Build-out.** Formation: class `Needy` (non-collection): a rung other than his `from` that his own
+   ledger holds a `shortfall:` claim about, or a stock claim of zero; the rung that keeps an unmade works
+   he holds (so a works can be stocked, r2's *"paid by `transfer` into the works' rung"*); and the rung
+   where a man obliged to the seat he gives through stands (so upkeep is formable). `to == from`
+   declines at formation (CR-49's column). Amount: the shortfall's, else SE's `amount_shares`. Draw:
+   `capability: none`, difficulty `plain`, plus `carriage`: one step per `contain` edge on the ladder
+   path between the two rungs, times `Fixtures carriage_step` (the only distance the world has; F-SE-06).
+   Overwhelming and Success: the whole amount arrives; Partial: 700‰ arrives and the rest stays where
+   it was; Failure: `transfer.failed`, nothing moves. Matter is conserved at every band (what does not
+   arrive never left). `_renewals` reads the amount that arrived.
+4. **Scales and surface.** Person, settlement, seat. Relief (down the ladder or across it), upkeep, and
+   withholding (SE addendum §3.4: a move off the ladder is the act of hoarding, which a `Needy` stamp
+   does not offer and a player may still do through the open aperture). The player chooses where and
+   how much; the engine draws what gets through.
+5. **Tuning hooks.** `amount_shares`; `carriage_step`; `shortfall_sourced_operands`; `upkeep_of`.
+6. **Exact edits.** `14_VERBS_MATERIAL_B_stores.md` §2.
+7. **Gate and falsifier.** `harness/scarce`, named arm, seeds 0 to 19: a second claim-sourced
+   `transfer.made` and grain delivered > 0 (F-SE-04's falsifier), with the delivered amount varying by
+   seed; realm: no `transfer` whose `to` is its `from` or no rung; a `term.renewed` from a computed act
+   once an `oblige` exists. Planted failure: stamp the giver's own rung as `Needy`.
+8. **Cases.** NPC-083 (relief), NPC-037 (the treasury), NPC-013, ARC-20, ARC-07 (a standing drain).
+9. **NERS.** N: the only way stock moves by a person's will. R: relief that comes up short; pay that
+   does not arrive. S: `_shift`; the family's draw; CR-49's decline. E, last: one stamp, one term.
+   **Cut test:** merged into `exchange` every gift would need a return.
+
+## 16. `work` (the dead end, with `restore`)
+
+1. **Premise.** *To labour at a place of work so that what it is for gets done.* Chain: a person stands
+   at a site fit for use → he puts in a season's labour → the project or the product advances by what
+   his labour was worth → those who depend on it are better off.
+2. **State today.** `own | presence:<site>`; `referent_class: Site`; cell `condition >= floor(verb)`,
+   with `floor` read as the least demanding use's floor and UNKNOWN for a kind with no floors
+   (`dwelling`, `garrison`); effect `_eff_work` stages a hand-declared delta, else, only at a Site a live
+   works names, `_rise`. Reading: formed for 1 person (on dwellings, where the cell reads UNKNOWN),
+   attempted 0, at three seeds. A computed `work` can therefore execute only on a harbour or seam that a
+   works names and that already clears its floor; no such works is authored, and the one authored Site
+   works is a dwelling. **Unreachable twice over: no occasion, and a precondition its only target cannot
+   pass.** The cell is the production reading of the word (§12.1: fit for a *use*) and the effect is the
+   construction reading (plan position `24e`); the row holds both and serves neither.
+3. **Build-out.** Decided for the reading the tree built and scheduled: `work` is **labour on a works**
+   (construction), `restore` is repair, and production labour is presence (CP-T08-01, planned). Formation:
+   class `Unfinished`: a Site standing where he stands that a works he holds names (`works_sites`,
+   existing), or whose newest fabric news in his ledger is `site.built`. The `floor` read answers the
+   roster's own `default_cell` (0) for a kind with no floors, so a dwelling is workable; the conjunct
+   stays (a ruled cell is not dropped here). Draw: pool `labour` `[ASSUMPTION; revert: none]`,
+   difficulty `routine`. The rise is `_rise` (toward the works' ceiling, which ripened terms lift) times
+   `graded_amount`; Failure: `work.failed`. `work.unavailable` stays the refusal. A cohort may work. The
+   production reading is §19's J-M1.
+4. **Scales and surface.** Person and population at a settlement; the works' master need not be the
+   labourer (*a rival may finish what somebody else began*). The player chooses which unfinished thing
+   to labour on; the engine draws the progress.
+5. **Tuning hooks.** `labour`; `works_cost`; a works' declared `terms` (the pace); `band_floors`.
+6. **Exact edits.** `14_VERBS_MATERIAL_A_mending.md` §4.
+7. **Gate and falsifier.** After batch M-C: the dwelling at the Royal Court is built and then worked;
+   `site.worked` > 0 with at least two degrees across seeds 0 to 2; its condition never exceeds the
+   ceiling its ripened terms give; `capacity` of the court rises only when it clears. Control: the works
+   row removed. Planted failure: restore UNKNOWN for a floorless kind; every `work` on the dwelling must
+   refuse.
+8. **Cases.** NPC-083's menu; NPC-075 (the labour he continues); F-SE-05; EMG-11 N2.
+9. **NERS.** N, narrowed: it holds from the settlement's side (a built thing must be raised by someone)
+   and from the capability side (brawn against `restore`'s craft, the 2026-11-05 map's split); from the
+   formula's side it is `restore`. E against that: one formula under two names, kept apart by occasion
+   and capability only. **Cut test:** fold it into `restore` and what dies is the labourer as a kind of
+   person and the difference between raising and mending; nothing in play dies today, because neither
+   executes. Kept, pending J-M1.
+
+## 17. Dependencies
+
+### 17.1 Inside the family (an arrow reads *must land before*)
+
+```
+the family's draw (D-1..D-5, in batch M-A)  ──►  every row
+restore ◄── sabotage (its occasion)          build ──► work ──► restore (wear on the new fabric)
+requisition ──► transfer (a treasury to give from) ──► found, build (a works' rung stocked)
+create_record (account) ──► forge, research, destroy_record, seize (papers worth acting on)
+survey ──► forge (a sheet as exemplar)       research ──► reconstruct (firsthand cells to conclude on)
+exchange: independent after CR-49
+```
+
+### 17.2 Across families and lanes
+
+| needs | from | what |
+|---|---|---|
+| the `difficulty:` column, the obstacle's term roster and `Margin.terms` | SC, `05_SC_obstacle_difficulty_and_modifiers_B.md` | this family adds five named terms to `rosters.yaml: obstacle_terms`: `ruin`, `wound`, `watch`, `carriage`, and a `requisition` row in `stakes_ob` |
+| the `capability:` column and the `capabilities:` block | CORE, `01_CORE_capability_authoring_surface.md` | four ids that are Jordan's content: `craft`, `labour`, `physic`, `trade`; until authored every row carries `capability: none` with its note, and rolls `pool_default` |
+| one roller | DICE, `10_DICE_one_roller_one_fraction_rule.md` | the route's `module_entry` is whatever that proposal makes the one roller's |
+| the own-state decline and the `individual` conjunct | CHAR, `02_CHAR_offer_what_can_be_done.md` | D-7's rows; this file adds four to CHAR's list |
+| that a formed act is chosen | CHAR and CORE, `02_CHAR_goal_lean_on_its_own_question.md`, `01_CORE_unmet_need_is_attended_first.md` `[not opened]` | `found` and `build` are formed on their works and never chosen in four seasons (§5); formation is this family's, the lean is theirs |
+| `holders_named` | FI, `08_FI_01_claim-sourced-referents.md` edit 1 | `sabotage`, `seize`, `exchange`, `survey` |
+| `observes:`, the conclusion, the travelling pairing, `cites` | FI, `08_FI_03`, `08_FI_06`, `08_FI_05_evidence-interface_B.md` | `research`, `reconstruct`; an `account` and a forgery as `record` proofs |
+| `Record.<kind>` | SOCIAL2, `14_VERBS_SOCIAL2_A_formation_on_what_is_known.md` edit 2 | **a correction for that lane:** its list of rows declaring bare `Record` omits `research`. `_stamped` must carry both pairs, `(id, Record)` and `(id, Record.<kind>)`, or `research` and `seize` form on nothing |
+| a Site to look at | PHYSICAL (`examine`) | the `Worn` and `Resented` stamps and `site.damaged` in `covert_kinds` give `examine` a Site and a trail; its row is that family's |
+| occupation | PHYSICAL and MILITARY (`march`, `raze`); FA `06_FA_war_lives_in_seats_B.md` | the `Occupied` stamp is one term for `seize` and `raze` |
+| `kind: army` | MILITARY | `create_record` drawn means a declared army can fail to be written (`record.spoiled`); that family's gates must plant the degree or accept the retry |
+| warrants and carriage of paper | BINDING (`issue`), SOCIAL (`give`) | unchanged; a forged writ and an account travel by their rows |
+| wear that is real; unlike places; a treasury; an amount | SE, `07_SE_kernel_repairs.md` §3, `07_SE_ground_and_granaries.md`, `07_SE_treasury_granary_B.md`, `07_SE_arc_needs.md` §3 b | `restore`'s stamp needs the first; the stores verbs' consequences need the rest |
+
+**Corrections listed for owning lanes under the standing rule** (their files are not edited here):
+SE addendum §3.3's *"Governing acts do not roll"* row and `07_SE_capability_rate_B.md` §3 (a deterministic
+magnitude; superseded by D-1, D-2); `03_PC_exits_withdrawal_recovery.md` Part C (`tend_fraction`, a fixed
+function; superseded by §12); `07_SE_arc_needs.md` §3 b (the amount taken is exact; the choice stands, the
+intake is drawn, §7).
+
+## 18. Landing order
+
+| batch | lands | proposal | needs first | gate (execution artifact; seeds and control in the proposal) |
+|---|---|---|---|---|
+| M-0 | nothing of this family: SC-B's column, CORE's column, SOCIAL2-A's class, SE kernel repair B, FI-01's reader | theirs | — | their own |
+| M-A | the family's draw; `restore`, `work`, `sabotage`, `tend` | `14_VERBS_MATERIAL_A_mending.md` | M-0 | `site.restored` > 0 at seeds 0 to 2 with two or more degrees, harbour condition above the no-acts arm; `tend` on `with=False` 0; a `sabotage` fixture with a spread of outcomes and a hidden hand |
+| M-B | `transfer`, `exchange`, `requisition` | `14_VERBS_MATERIAL_B_stores.md` | M-A's draw; CR-49; SE's amount | `scarce`: grain delivered > 0, varying by seed; realm: no self-directed store move, no computed `requisition.unauthorized`; `exchange.made` > 0 under `ground` |
+| M-C | `found`, `build` (and `work` on what is built) | `14_VERBS_MATERIAL_C_works.md` | M-A; SOCIAL2-A | `rung.founded` or `site.built` ≥ 1 within four seasons at some seed 0 to 2, wrong-kind refusals 0, then `site.worked` on the built Site |
+| M-D | `create_record`, `forge`, `survey`, `destroy_record`, `seize` | `14_VERBS_MATERIAL_D_paper.md` | M-A's draw; FI-01 | accounts with content; a given account moves its receiver's candidates; a forged writ acted on; a seized paper citable; a destroyed one not |
+| M-E | `research`, `reconstruct` | `14_VERBS_MATERIAL_E_knowledge.md` | M-D; FI-03 §1, FI-06 | FI-03's §2 and §3 gates |
+
+Each batch is a declared hash mover and re-records the goldens it reaches once, said plainly in its commit.
+M-A and M-D are independent of each other after the draw lands; M-B's consequences are thin until SE's
+`ground` arm.
+
+## 19. Decisions that survive to Jordan
+
+Two. Everything else above is decided by the ladder and shipped with a control arm.
+
+**J-M1 · Is production labour an act?** The `work` row's precondition (§12.1: fit for a *use*) and its
+effect (plan position `24e`: advance a works) are two readings of the word.
+- *Option A (built here): labour on a site's product is presence.* Yield reads the hands that stand at a
+  place (CP-T08-01); `work` is construction. A people feeds itself without choosing to; a steward's
+  levers are stock and buildings. Sturdier with a weak chooser; allocation is not play.
+- *Option B: `work` is the act that puts hands on a producing Site.* It carries a `use` (the
+  `band_floors` keys), the floor gates it, and CP-T08-01's factor reads the season's `work` acts. A
+  cohort that riots, flees or mends walls is not working the harbour, and yield falls for a reason with
+  an author. The colony-sim precedents the SE addendum sourced converge on this (*allocation is the
+  lever*). It puts the realm's food on the chooser.
+These are different games. Option B also settles the fold: `work` and `restore` then differ in substance.
+
+**J-M2 · What a failed reconstruction leaves.**
+- *Option A (shipped here, FI-03's): a lost draw utters nothing.* A wrong conclusion arises only from
+  wrong evidence (a lie, a forgery, a drifted report). Every error has an author in the world.
+- *Option B: a lost draw utters a conclusion that names another person his own ledger places at the
+  deed.* The investigator misreads true evidence; nothing reads world truth. It is the archived design's
+  intent (a failed Reconstruct is plausible and wrong) and gives NPC-004 its case from honest evidence.
+  It also makes the engine the author of an error, which no other verb does.
+Not a conflict with a ruled item (the no-verifier ruling of 2026-08-18 is kept either way).
+
+Named, not escalated: who may declare a works (ED-IN-0297, closed at option (B), authored rows; more
+`planned_works` rows are content); the four capability ids (content).
+
+## 20. Evidence log
+
+`PYTHONHASHSEED=0`, HEAD `84d2a02`. Outputs under
+`/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379/scratchpad/runs/VERBS_MATERIAL/` unless
+another lane's directory is named.
+
+| # | command | seed · seasons | outcome |
+|---|---|---|---|
+| 1 | `python -m engine.season.harness.aperture 2 2` | 2 · 2 | exit 0; 1,558 acts; `content_hash EQUAL`; §0.3 third column (`aperture_2_2.txt`) |
+| 2 | read: `runs/VERBS_PHYSICAL/aperture_2_0.txt`, `runs/VERBS_BINDING/aperture_2_1.txt` | 0, 1 · 2 | §0.3 first and second columns; not re-run |
+| 3 | `mat_probe.py 0 2` | 0 · 2 | hash `bacd687f…`; formation by subject class, attempted acts by payload shape, ledger predicates, Record census (`mat_probe_s0_2.txt`) |
+| 4 | `mat_probe.py 2 4` | 2 · 4 | hash `b4bae063…`; `found` and `build` formed 819 each, 36 on a works, attempted on none of those; `restore`, `work` formed 20, on dwellings (`mat_probe_s2_4.txt`) |
+| 5 | `git status --short` before return | — | see the receipt |
+
+Not run: `pytest`; a long `aperture`; `corpus_run` (the SE and PHYSICAL lanes' outputs were read). Not
+opened: the bodies of `02_CHAR_goal_lean_on_its_own_question.md`, `01_CORE_unmet_need_is_attended_first.md`,
+`10_DICE_one_roller_one_fraction_rule.md`, `08_FI_08_knots-season-form.md` (its verb, `tie / knot`, is not
+this family's), `loop/witness.py` (its covert and content branches are cited from docstrings elsewhere and
+marked `[UNVERIFIED]` in the proposals), and `research/` beyond what the SE and FI lanes quote.
+

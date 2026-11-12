@@ -91,4 +91,84 @@ that; the seat, site and rung rows are new here.
 
 Control for the instrument: the projection does see change when change happens (the NULL arm's wear,
 yield and hunger rows; the seed-1 death; the established office), so "same" is an observation and not a
-blind reader.
+blind reader. Seed 2 reads as seed 1, and with the same death: at both seeds the one person who dies is
+the same cardinal (`p_npc_013`, `off_cardinal_prudence`), felled in a `capture`.
+
+### 1.2 The seam matrix — which engine's Events does another engine's act answer
+
+Read off the shipped arm's log (`pes.py::seam_edges`): one edge per (answering act, antecedent Event)
+where the antecedent Event sits in the `causes[]` of an Event the act caused and was caused by ANOTHER
+person's act (row `WORLD`: by no act, a clock). Rows: the engine of the antecedent act; columns: the
+engine of the answering act. The verb → engine map is this lane's reading `[ASSUMPTION]` (no typed
+column owns it; it is in `pes.py`). Cells: answering acts that were NOT refused, three seasons.
+
+| antecedent ↓ / answer → | PC | MB | SC | FA | SE | FI | CHAR |
+|---|---|---|---|---|---|---|---|
+| WORLD (clocks), seed 0 / 1 / 2 | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/1 | 9/9/7 | **221/226/236** | 0/0/0 |
+| PC | 0/0/0 | 0/0/0 | 0/1/0 | 0/1/2 | 0/1/0 | 2/19/5 | 0/0/0 |
+| MB | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/0 | 0/1/4 | 0/0/0 |
+| SC | 0/1/1 | 0/0/0 | 5/5/12 | 5/2/0 | 0/1/1 | 37/27/46 | 0/0/0 |
+| FA | 0/1/2 | 0/0/0 | 15/16/10 | 11/11/22 | 0/0/1 | 67/54/76 | 0/0/0 |
+| SE | 0/0/0 | 0/0/0 | 2/3/4 | 5/0/4 | 0/2/2 | 26/19/32 | 0/0/0 |
+| FI | 0/1/0 | 0/0/0 | 5/10/6 | 9/6/11 | 2/4/2 | 69/67/49 | 0/0/0 |
+| CHAR | 0/0/1 | 0/0/0 | 1/1/1 | 7/0/2 | 1/0/0 | 14/18/5 | 0/0/0 |
+
+Reading, by column (what an engine is ever moved to do by someone else):
+
+- **MB is answered by nothing and answers nothing.** No executed march in nine seed-seasons has another
+  person's Event among its causes; a `field.lost`, `field.unopposed` or `army.arrived` Event is among the
+  causes of no other person's executed act at seeds 0 and 1 and of four information acts at seed 2.
+- **PC answers nothing.** The handful of PC-column edges are `capture` scenes at seeds 1 and 2; `fight`
+  never forms, `challenge` is refused 393 of 393 and `accept` 128 of 128 over the three runs.
+- **CHAR answers nothing.** `train` is refused 324 of 324; `tend` executes only as a cohort mending itself.
+- **SE answers almost nothing** (a `move` after a store report); `exchange` 0 of 225, `build`/`found`/
+  `raze`/`sabotage` 0 of every attempt.
+- **Everything that is answered is answered in writing.** The FI column holds 80% of executed
+  cross-person answers at every seed, and its largest source is not a person: `stores.changed`,
+  `yield.taken` and `term.matured` (clock Events) answered by `create_record` and `utter`. The top
+  executed pairs at seed 0: `stores.changed → create_record` 29, `yield.taken → create_record` 25,
+  `yield.taken → utter` 21, `term.matured → research` 21, `term.matured → create_record` 20.
+
+So the cross-person chains the story bar counts (WR: cross share 25%, depth to 21) are, by content,
+persons recording that the granary filled and that a term matured. The WR lane found the deepest
+consequence chain to be one concealment answered by three records; this is why.
+
+**Event kinds emitted and never among the causes of another person's executed act** (seed 0 / 1 / 2,
+emitted counts): `person.died` (– / 1 / 1), `field.lost` (1 / 1 / 3), `field.unopposed` (3 / 5 / 6),
+`army.arrived`, `march.declared` (29 at seed 0), `news.told` (10 / 9 / –), `body.changed` (37 / 39 / 41),
+`residence.changed`, `travel.moved`, `record.given`, `petition.carried`, `faction.surveyed`,
+`office.established`, `finding.none`, `condition.worn` (966). A death, a lost battle, a told rumour and a
+hungry town are each a terminal: they are logged, witnessed, remembered, and answered by nobody.
+
+### 1.3 The determinism census — how much of the game is a draw
+
+Jordan's standing rule (`AUDIT_BRIEF.md`, "WE DO NOT DO DETERMINISTIC"): a thing that could go either
+way for the people in the fiction goes by a draw. Read two ways.
+
+**By running** (`pes.py::outcome_census` over the X1 shipped arms; an act's outcome signature is the set
+of non-claim Event kinds it caused plus its degree; "by a draw" = the signature carries a degree other
+than a bare `Declared`):
+
+| | seed 0 | seed 1 | seed 2 |
+|---|---|---|---|
+| acts attempted, 3 seasons | 2,630 | 2,646 | 2,664 |
+| not refused | 1,394 (53%) | 1,498 (57%) | 1,525 (57%) |
+| **resolved by a draw** | **206 (7.8%)** | **286 (10.8%)** | **225 (8.4%)** |
+| verbs that ever drew | 7 | 9 | 8 |
+| verbs that succeeded every time, no draw | 10 (894 acts) | 10 (967) | 9 (990) |
+| verbs refused every time | 18 (569 acts) | 15 (549) | 17 (528) |
+| verbs split by admission alone, no draw | 13 (732 acts) | 13 (612) | 14 (704) |
+
+The draws that do occur are `research` (always drawn), `surveil` (drawn in under half its acts), `tell`,
+`lie`, `argue`, `speak`, `capture`, `determine` and a fought `march`. Of the ~15% of executed acts that
+draw, about 60% are `research`, a solitary act whose finding nobody but the researcher reads (FI audit).
+**Excluding `research`, a draw decides 3% of what is attempted** (78 of 2,630 at seed 0).
+
+**By reading** (`engine/season/data/verbs.py::VerbRow.contests`; `VERB_TABLE`): 11 of 67 rows declare
+`contests:` (`accept`, `argue`, `arrest`, `capture`, `determine`, `fight`, `interrogate`, `lie`, `march`,
+`speak`, `tell`); the six fieldwork verbs draw through the `inquiry` role; the other 50 rows, once
+admitted, write their effect with certainty. Among those 50 are acts that in the fiction could plainly go
+either way: `forge` (a forgery is made, always, at the forger's fixed quality), `conceal`, `sabotage`,
+`seize`, `raze`, `requisition`, `migrate`, `exchange`, `recruit`, `found`, `build`, `restore`, `train`,
+`tend`, `oblige`, `covenant`, `comply`/`defy`, `succeed`, `confer`, `revoke`, `pardon`, `release`,
+`convene`, `issue`, `dispatch`. §5 ranks them with the world-clock cases.
