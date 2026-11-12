@@ -122,7 +122,8 @@ edit; `sonnet`, `medium`. · **Closes:** `U4_TRACEABILITY.md` G-2 as stale.
 
 **Item: IS-A-05 — two readings the nine lack: a choice that was not the top one, and a feeling that changes a choice**
 · **Advances:** R-08.c (part 1), R-07.d (part 2). · **What exists:** `U4_TRACEABILITY.md` G-4 gives both in
-outline; this item fixes the sites.
+outline; this item fixes the sites. **This item is the one owner** (Sonnet check, 2026-11-12): lane IS-B2's
+`IS-B2-CORE-04` carried the same two tests at the same files and is now a pointer here; v12 keeps this item.
 · **INSTRUCTION, part 1 (B02):** in `engine/season/tests/test_realm_requirements.py` (the file
 `01_CORE_tests_shipped_world_falsifiers` creates), NEW
 `test_r08_some_chosen_acts_were_not_the_top_candidate_and_none_at_zero_temperature`, seeds 0–2: play one
@@ -184,7 +185,10 @@ block prints 67 lines; at `6e1ea91` the `FOUGHT FIELDS` line reads `won+lost 0` 
 · **Advances:** R-05.c (A-81). · **What exists:** `30_WR_E_cascade_chains_and_the_census` instruction 1
 defines `null_scenes(w, n)` over `corpus_run.attempts` and lands it with an asserted zero in B38;
 `U4_TRACEABILITY.md` G-11 proposes moving the function and a report-only line to B02. This item adopts G-11's
-text and adds the site.
+text and adds the site. **This item is the one owner of `null_scenes` in B02** (Sonnet check, 2026-11-12): lane
+IS-B2's `IS-B2-CORE-03` carried the same function and file and is now a pointer that adds only the per-close
+quotation and the scenario summary line; `harness/storybar.py`'s B02 order stays the nine-gate proposal, `IS-A-03`,
+this item (the nine-gate proposal edits that file first, C3-K7).
 · **INSTRUCTION:** land `null_scenes` where `30_WR_E` puts it (`harness/storybar.py`, behind the
 `--null-scenes` flag that proposal names), report-only; `harness/aperture.py::report` prints after
 `BUILT OUT` one block `NULL SCENES (acts whose Events carry no durable write)` by verb and by outcome class
@@ -294,7 +298,11 @@ stage-1 draft. Not decidable from the repository beyond what each row's basis co
 · **Lane:** IN. · **Batch:** NEW `BA1-cast-content` (after B00, B01, B02, B04, B05, B10; gates nothing but
 the three re-takes; one close). *Why its own batch:* its edit set is content files no B10 item edits, its
 mover re-pins every realm, and its close is where three rows can move; merged into B10 it would hold B10's
-close on Jordan's corrections. · **Cost and tier:** content; drafting `opus`, `high` (authorship with
+close on Jordan's corrections. **One batch, two items (Sonnet check, 2026-11-12):** `IS-B2-CHAR-03` (lane IS-B2's
+`B10c-cast-content`) is this batch under another handle; its handle is retired and its members are stage 2's tables.
+Lane IS-B2 asked that B15, B19 and B24 follow it; that edge is **soft** (a calibration that closes first names the
+control arm it ran at and is re-read once at this batch's close), because a hard edge would hold three lanes on
+Jordan's corrections. · **Cost and tier:** content; drafting `opus`, `high` (authorship with
 competing considerations, CLAUDE.md §10); landing `sonnet`, `medium`. · **Closes:** G-3 (as far as the nine
 need it; the ages of A-15 are G-12, with B37; goal rows' `axis:` with B38).
 
@@ -374,7 +382,7 @@ Only batches that name a conjunct. "re-read" is a held conjunct the batch's diff
 | B12 | SE+WR | R-04.c6; `BUILT OUT`: `restore`, `work`, `sabotage`, `exchange`, `requisition`, `found`, `build` | the valley runs; each built out |
 | B19, B20 | MB | R-04.c4; R-04.c5 (ii), (iii); R-07.c | `won+lost` above 0 at seeds 0–2 with the stance receipt; the commanded field equals the automatic one with no decider |
 | B21 | FA | R-04.a (`establish`, `confer`, `revoke`, `dispatch`, `issue`, `requisition`); R-04.c2; `BUILT OUT`: `confer`, `revoke`, `succeed` | each `via` at least 1; the spine closes |
-| B22 | MB | R-04.c1 (`train`); `BUILT OUT`: `train`, `recruit`, `discharge_troops`, `form_unit`, `assign_troops`, `disband_unit`, `order_unit`, `raze`; `besiege` (`IS-A-09`); `ENGINES`: `mass_battle.army` and `mass_battle.army_order` above 0 | each built out |
+| B22 | MB | R-04.c1 (`train`); `BUILT OUT`: `train`, `recruit`, `discharge_troops`, `form_unit`, `assign_troops`, `disband_unit`, `order_unit`, `raze`; `besiege` (`IS-MB-02`, read through `IS-A-09`); `ENGINES`: `mass_battle.army` and `mass_battle.army_order` above 0 | each built out |
 | B23 | FA | `BUILT OUT`: `marshal`, `surrender`, `seize` | each built out; the land gate's arms a–i |
 | B24 | SC | R-04.c3 | the hearing's hash twice equal |
 | B25 | FI | R-04.a (`open_case`); `BUILT OUT`: `construe`, `interrogate`, `tie` | the table reads 68 by command |
@@ -419,7 +427,7 @@ commands and its test files inside the one suite run.
 
 | gap (`U4_TRACEABILITY.md` §6) | disposition here |
 |---|---|
-| G-1 (siege) | carried: `IS-A-09` (B22) |
+| G-1 (siege) | carried: `IS-MB-02` (B22; `IS-A-09` points at it) |
 | G-2 (scale vocabulary) | **closed as stale**: `rosters.yaml: scale_of_rung` is the mapping; the comment is corrected by `IS-A-04`; the open part is H-89 (a reader), stage 5's |
 | G-3 (authored content) | carried as a batch: `IS-A-11` (`BA1`); the values stay Jordan's |
 | G-4 (R-07 and R-08 readings) | carried: `IS-A-05` (B02, B10) |
@@ -456,5 +464,6 @@ to correct, each with its revert at the place it is made: the sweep's conjunct r
   `v11_part2` were not read.
 - Workplan v11's positions named in the rows' `blocks:` lists (IN-, CR-, CP-T-, REM- ids) are stage 5's to
   disposition; this file reads only v11 part 2's `met` texts.
-- The sibling instruction files were not read; a duplicate of `IS-A-09` or of a new batch handle is
+- (Stale after the Sonnet check of 2026-11-12, which read the siblings: the duplicate of `IS-A-09` and the second
+  cast-content handle were found and resolved at the head of this part.) The sibling instruction files were not read; a duplicate of `IS-A-09` or of a new batch handle is
   possible.

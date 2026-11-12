@@ -4,6 +4,8 @@
 
 ## Read at: branch `ccr-62958c70-0kjhsw`, HEAD `6e1ea91`, working tree of 2026-11-12 (dirty in `architecture/`, `references/id_reservations.yaml` and two ED ledgers: other lanes' work, not touched here). Producer: Fable, lane IS-A. Work order: `master/INSTRUCTION_SUITE_ORDER.md`.
 
+Checked: 2026-11-12, Sonnet check, `master/instructions/IS_CHECK.md` (edits listed at the head of `IS_A_NINE_part2.md`).
+
 **What this file is.** For each of the nine requirements of `engine/season/requirements.yaml`: the reading
 today, what execution would make the row read `met` under CLAUDE.md §0.2, the sequence of batches that gets
 there, and the items no existing proposal carries. Then the milestone grouping: how v12 groups the batches of
@@ -221,7 +223,7 @@ B23, B24, B25, B30, B32, B34, B36. **Earliest `met`: B36's close** (the chronicl
 it holds nothing here. (2) `06_FA_war_lives_in_seats_B` waits on v11's CP-T09-02 (stage 5). (3) The hearing's
 rite and its unplayed decider are design-first (`05_SC_playable_hearing_B` edits 6 and 8). (4) Domain
 actions: `U4` G-7 reads the contract row `domain_actions` as superseded by A-10; that is lane IS-B3's (SE).
-(5) A siege (`march` with posture `besiege`) has no carrier: `IS-A-09`.
+(5) A siege (`march` with posture `besiege`) has no carrier in the proposals: `IS-MB-02` (lane IS-B1; `IS-A-09` points at it).
 
 ## 6. R-05 — "all verbs must be built out, and doing so requires planning out all the different scales of play required in a season" · register: `not_met`
 
