@@ -13,7 +13,10 @@ description: >
   the free text against the live workplan first — one matching position with its GATE already met
   proceeds straight through; more than one matching position, or none at all, STOPS and presents
   the resolved sequence (or the freshly-stated plan) for approval before anything is built, per
-  CLAUDE.md §0's "ambiguous or spanning lanes" rule. PHASE 0.2+: read each item's own instruction
+  CLAUDE.md §0's "ambiguous or spanning lanes" rule. BATCH OPEN, after the gate checks and before
+  the first producer: PLAN EVERY AGENT ASSIGNMENT of the batch — each Phase 0 producer and each
+  BATCH-CLOSE critic, with agent type, model, effort, isolation, inputs handed and withheld, and what
+  its absence would miss (item 5). PHASE 0.2+: read each item's own instruction
   (a workplan position's content-owner entry, or the stated plan for an ad hoc task) and dispatch a
   `valoria-author` producer to build it in `isolation: worktree` — one producer by default, fanned
   into several only when the instruction itself names independent sub-parts with no shared file —
@@ -35,7 +38,7 @@ description: >
 
 # METHODOLOGY-EXECUTE — build, then close
 
-## Created 2026-09-29, split out of `methodology` (now `methodology-close`) per Jordan's directive that the pipeline also orchestrate the build, not only verify one already built. Revised 2026-10-06 per Jordan: a batch is a partition by shared files and gates, and the unit of context — finished batches are deleted from the plan and cleared from the window before the next opens. Invocable as a project skill through the symlink `.claude/skills/methodology-execute`.
+## Created 2026-09-29, split out of `methodology` (now `methodology-close`) per Jordan's directive that the pipeline also orchestrate the build, not only verify one already built. Revised 2026-10-06 per Jordan: a batch is a partition by shared files and gates, and the unit of context — finished batches are deleted from the plan and cleared from the window before the next opens. Revised 2026-11-12 per Jordan: at the beginning of a batch, every agent assignment (Phase 0 producers and BATCH-CLOSE critics) is carefully planned before the first producer is dispatched (BATCH OPEN item 5). Invocable as a project skill through the symlink `.claude/skills/methodology-execute`.
 
 ## What this skill owns, and what it copies
 
@@ -43,6 +46,7 @@ description: >
 |---|---|
 | the build phase — dispatching the producer(s) that write the diff a unit of work specifies, sizing the fan, and integrating parallel write lanes | **this file** |
 | batching — the partition of items into batches, each batch's context set, where the boundary falls between many cheap BUILDs and one BATCH-CLOSE, and what is deleted and cleared between batches | **this file** — except a plan's own batch structure where it has one, which is the plan's (§BATCHES) |
+| the assignment plan — every agent dispatch of a batch (producers and BATCH-CLOSE critics), planned at BATCH OPEN item 5 | **this file**; the tiers, effort and sizing rule it reads are CLAUDE.md §10's, the close's default roster `methodology-close`'s |
 | the status line every invocation ends with, and the `approved:` prefix | **this file**; `tools/methodology_drive.py` reads and writes them by that spelling and defines neither |
 | deleting a finished position from the plan | **CLAUDE.md §2** (*"Finished positions leave the plan; the commit is their record"*); this file adds the pre-deletion reference check and says when (§BATCH BOUNDARY) |
 | the sequence, tiers, checklists, the handshake, the guardrails and the falsifiers for verifying the resulting (batch) diff | **`methodology-close`**, invoked by reference — not copied |
@@ -87,8 +91,9 @@ itself.
   BATCH k    OPEN ──▶ item 1 ──▶ PHASE 0 · BUILD ──▶ commit ─┐
   (as a      (orient  item 2 ──▶ PHASE 0 · BUILD ──▶ commit ─┼─▶ BATCH-CLOSE (once per batch):
   session    from        ⋮  (repeats for every item)         ┘     PHASE 1 · AGONIST FAN → ANTAGONIST
-  opens)     disk)                                                 PHASE 2 · MECHANICAL GATES (+ the one suite run, CLAUDE.md §0.4)
-                                                                   PHASE 3 · TERMINAL CRITIQUE
+  opens)     disk, then                                              PHASE 2 · MECHANICAL GATES (+ the one suite run, CLAUDE.md §0.4)
+             PLAN ALL                                                PHASE 3 · TERMINAL CRITIQUE
+             AGENTS)
                                                                           │
                                                           EXPUNGE ◀───────┘  (delete the batch from the plan)
                                                               │
@@ -175,6 +180,10 @@ Either way, that instruction **is** the plan Phase 1 will check fidelity against
 it, paraphrase it, or draft a second version for the producer — hand it the same text you read.
 
 ### 0.3 Size the build — one producer is the default
+
+**The sizing was decided at BATCH OPEN item 5; this step carries it out.** Dispatch what the
+item's rows in the assignment plan say, or state the deviation (item 5, *Deviating*). What follows
+is the test that plan applied, kept here because it is also the test for a mid-batch re-plan.
 
 Dispatch one `Agent({ subagent_type: "valoria-author", ... })` to build the entire instruction,
 sequentially, in `isolation: worktree` — one producer or several (RULED 2026-10-13, the session's
@@ -387,6 +396,53 @@ it (`STOPPED`); it never opens a second batch.
    for the dispatch itself), and BATCH-CLOSE hands every phase that range. `valoria-critic` holds
    only Read, Grep and Glob and cannot run `git diff`: write the range's diff to a scratchpad file
    and hand the critics its path.
+5. **Plan every agent assignment the batch will make — before the first item's producer is
+   dispatched** (Jordan, 2026-11-12: *"at the beginning of a batch it will carefully plan out all
+   agent assignments"*). Runs after items 1–4, so an unmet gate stops the batch before any planning
+   is spent on it. The plan covers **both halves of the batch** — every Phase 0 producer, and every
+   BATCH-CLOSE dispatch — because the close's roster is knowable from the same items' entries, and
+   sizing it only when the close arrives is how a batch ends with a fan nobody weighed.
+   Read only from sources the batch already holds: each item's content-owner entry (INSTRUCTION /
+   WHERE / FALSIFIER / GATE), the partition's edit and gate sets, `valoria-author`'s contract, CLAUDE.md
+   §10 and `methodology-close` §1.2–1.4 and §3.2. It restates none of them and invents no tier,
+   count or effort of its own.
+
+   **a. One row per dispatch**, in this order — Phase 0 (item order), then Phase 1, then Phase 3 — each
+   naming: **item or lens** it serves · **agent type** · **model and effort**, set explicitly, by
+   CLAUDE.md §10 (what the node does, not a habit) · **isolation** (`worktree` for every producer;
+   none for read-only critics) · **inputs handed** (the instruction text verbatim; the before-readings
+   the baseline rule already holds; the commits it depends on) and **inputs withheld** (another lane's
+   instruction; any producer's reasoning) · **output form** (a receipt; a ruling per claim) · **what
+   its absence would miss** — CLAUDE.md §10's *"ask what N-1 would miss"*, answered per row. A row
+   whose absence misses nothing is struck, not kept for symmetry.
+   **b. Each item's fan, decided here and not at dispatch.** From the item's WHERE: one producer, or
+   named sub-parts whose file sets are disjoint (0.3's test). Two sub-parts, or two items, that name
+   the same file are a collision found at planning time, where it costs a sentence: collapse to one
+   producer (0.4's rule, applied early). Items stay **serial** — each commits before the next
+   builds (0.1 step 3); a fan lives inside an item, and this plan does not parallelise across items.
+   **c. The shared reading, extracted once.** Where several rows need the same mechanical numbers
+   (a census, a size sweep, a baseline), one batched `valoria-measure` row precedes them and its
+   table is handed down (CLAUDE.md §10 *"share the reading; fork only the judgment"*). A single lookup
+   is not a row.
+   **d. The close's roster, provisional until the diff exists.** Phase 1's lenses are
+   `methodology-close` §1.2's default five, collapsed or split along the batch's own independent
+   parts, each change stated with what it buys; one antagonist; Phase 3 one critic. Phase 2 and the
+   accretion pass are the orchestrator's own work and are listed as such, with no agent. At
+   BATCH-CLOSE the roster is **confirmed against the real range diff**; a change is stated with its
+   reason, never made silently.
+   **e. Dispatch order inside each fan** — first dispatch alone, then the rest in one message (0.3's
+   cache-priming rule, assigned a row here rather than remembered at the time).
+   **f. Held in the window, written nowhere.** The assignment plan is not a document, a ledger row
+   or a scratchpad file (§GUARDRAILS), and it is **not an approval stop**: it needs no confirmation,
+   and an unattended driver is never blocked on it. What ran survives in the item commits' bodies
+   (each producer's receipt) and in BATCH-CLOSE's reconciliations. A resumed batch re-derives it from
+   the same entries for the items not yet in `built` and the phases after `close`; it never rebuilds a
+   plan from an earlier window's recollection.
+   **Deviating.** A dispatch the plan does not list, or one that differs from its row (a producer
+   re-sized after a receipt, a lens added), is stated where it happens — the item's commit body, or
+   BATCH-CLOSE's report — with what the plan did not foresee. Re-planning the remaining rows is
+   permitted when a receipt shows the partition was wrong; planning once and then ignoring the plan
+   is not.
 
 ### The last batch is also the run's `/close`
 
@@ -412,7 +468,9 @@ against a working-tree diff, since nothing is left uncommitted by the time a bat
   FIDELITY TO PLAN now means fidelity to *that*, not to one item's `WHERE` in isolation.
 - Its **fan sizing, dispatch order, cache-priming step, and reconciliation** (§1.2–1.5) apply as
   written there, sized to the batch's own independent parts — which will usually be larger than a
-  single item's, since a batch holds several items' worth of change.
+  single item's, since a batch holds several items' worth of change. **The roster is the one the
+  assignment plan provisionally fixed (BATCH OPEN item 5d), confirmed now against the real range
+  diff**: dispatch it as planned, or change it with the reason stated.
 - Its **Phase 2 order and apply-before-next-reads discipline** (§2.1–2.4) apply as written there,
   against the batch's full cumulative diff. **The test suite is CLAUDE.md §0.4's, not
   `methodology-close`'s:** it runs at most once per batch, here, and only if it can observe
@@ -625,6 +683,9 @@ seasons, so cost is superlinear in seasons and the unit is not "one realm, one s
 - **Nothing here is a fixed count.** Producer-fan size, agonist-fan size, and batch size are each
   read from the instruction (or the batch) at hand every time — never a default fan, never a
   fixed item-count per batch.
+- **The assignment plan is planned, not written down.** It is held in the window for its batch, is not
+  an approval stop, and is never a file, ledger row or scratchpad note (CLAUDE.md §0's adversarial-pass
+  rule: no document for a stage). The next batch plans its own from its own entries.
 - **No self-scheduling** (CLAUDE.md §11, as always).
 - **Produces edits, not documents.** No directory beyond `skills/methodology-execute/`, no
   findings file, no build log kept past the receipts Phase 0's producers already returned.
@@ -633,6 +694,7 @@ seasons, so cost is superlinear in seasons and the unit is not "one realm, one s
 
 | the claim | what would show it false |
 |---|---|
+| "all agent assignments were planned at batch open" | a producer was dispatched before the batch's assignment plan existed; or a dispatch ran (at Phase 0 or BATCH-CLOSE) that no row listed, with no deviation stated; or a row names no "what its absence would miss"; or the plan sized a fan by a fixed count or by file count alone; or two rows of one item shared a file and the plan did not collapse them; or the plan was made for Phase 0 only and the close's roster was first sized at BATCH-CLOSE |
 | "one producer was enough" | the instruction itself named independent, file-disjoint sub-parts, and only one dispatch ran with no stated reason to collapse them |
 | "the build matched the instruction" | the produced diff's scope is broader or narrower than the instruction's own `WHERE`, or silently substitutes a different fix for the one named — this is exactly what BATCH-CLOSE's FIDELITY TO PLAN lens exists to catch; if it passed anyway, name why |
 | "fanned lanes integrated cleanly" | 0.4's merge resolved a same-file collision instead of stopping and rebuilding that file as one producer |
