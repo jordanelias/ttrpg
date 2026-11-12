@@ -1,197 +1,178 @@
-# U5d-FA — land and its seats pass on a won march into held territory: one writer of title, read from the field's end state
+# U5d-FA — after a won march: seize, occupy or withdraw. One writer of title, and the seats go with the land when it is taken
 
 ## Status: PROPOSED (a plan for a later implementation lane; nothing here was executed)
 
-Author: U5d closure lane (Fable), 2026-11-12, on Jordan's rulings A-57, A-58 and A-65
-(`unified/DECISIONS_ANSWERED.md`), which replace the ladder's reading of D-20 ("presence only"). The
-battle side (which end state is the aggressor's win) is `26_MASS_BATTLE_aggression_and_land.md`'s; this
-file owns the title write and decides the five land cases that file lists (section "The five open
-cases").
+Author: U5d closure lane (Fable), 2026-11-12, on Jordan's rulings A-57, A-58, A-65, A-66 and A-67
+(`unified/DECISIONS_ANSWERED.md`), which replace the ladder's reading of D-20. This file owns the title
+write. The battle side (which end state is the aggressor's win) is
+`26_MASS_BATTLE_aggression_and_land.md`'s; the five land cases that file lists are decided below.
 
-Carries: `audits/06_FA_audit_addendum_B.md` F-FA-13, R-22 and C-7 (as re-decided by the rulings);
+Revised twice on the day: first written on A-57 and A-58 as a transfer in the field's own effect; A-65
+made the rescuer's taking a chosen act; A-66 then ruled the same choice for every winner. The transfer
+in `_eff_march` is withdrawn. What remains is smaller and closer to the code as built.
+
+Carries: `audits/06_FA_audit_addendum_B.md` F-FA-13, R-22 and C-7;
 `architecture/meta/10_FACTIONS_AND_DEPLOYMENT.md:90` (the roster contract's `stakes`: "`holdings` and
-`seats`, for what a defeat costs"). Amends by its `Reconciled:` line: `06_FA_war_lives_in_seats_B.md`
+`seats`, for what a defeat costs"). Amends by their `Reconciled:` lines: `06_FA_war_lives_in_seats_B.md`
 edit 6, `14_VERBS_BINDING_E_war_seats.md`, `15_INSTITUTIONS_COLONIAL_D_accomplishment.md` edit 5,
 `15_INSTITUTIONS_SYNTHESIS_B_the_deed_ledger.md`, `16_PESSIMIST_FA_A_dismissal_survives_the_king.md`,
-`09_WR_world_motion.md` edit 2 and `09_WR_B_draws_not_thresholds.md`.
+`09_WR_world_motion.md` and `09_WR_B_draws_not_thresholds.md`.
 
-## The rule, as ruled (quoted from the record; nothing added)
+## The rule, as ruled (quoted from the record)
 
 - A-57: *"a won battle takes land if and only if the aggressor marched in an effort to take land (as
   opposed to battle in a neutral location or a defending army wins)"*.
 - A-58: *"Seats pass with holdings."* · *"Draw on land taking march means defender retains land."* ·
-  *"sending your military into another's territory is a pretty clear sign of aggression"* (purpose is
-  read from the act; a casus belli is context for legitimacy and regard, not a precondition).
+  *"sending your military into another's territory is a pretty clear sign of aggression"*.
 - A-65: *"uninvited rescuer who beats an invader CAN occupy the territory but it's their choice and with
   that comes all repercussions from doing so or not"*.
+- A-66: *"yes, a land taking aggressor can choose to occupy without seizing territory, which has
+  historical precedent"*.
+- A-67: a drawn aggressor's army returns to its original station, where its march began.
 
-So: on a `march` in force onto a rung **another faction holds**, an **aggressor's win over that holder's
-own force** moves the `hold` on that rung, and the seats that go with it, to the aggressor. A draw, a
-defender's win, and a field on ground no party holds move nothing. A win over an army that is **not the
-holder's** (the rescuer's case) moves nothing by itself: the winner may take the place by an act he forms
-(A-65).
+Read together: a field never writes title. An aggressor who wins on a march into land another holds
+stands on that land and **chooses**: **seize** (the title passes, and the seats that go with the land
+pass with it), **occupy without seizing** (his army holds the ground; title and seats stay with the
+holder, whose claim stands), or **withdraw**. The rescuer who beats an invader on a third party's land
+has the same three. A draw or a defender's win leaves the aggressor nowhere to choose from: he does not
+stand on the ground. Ground no party holds is outside the rule.
+
+## Confirmed against the title owner (the record's marked assumption)
+
+A-66's record marks as an assumption that seizure is an act the aggressor forms after the win, not a
+default. The code agrees and already has the act:
+
+- `loop/effects_combat.py::_eff_march`: on `Won` and `Unopposed` the claimants are relocated and
+  `army.arrived` is emitted; *"no `hold` moves (R-6, β: title moves by `seize`, `give`, `release` or
+  death)"*, tagged `[ASSUMPTION; medium; Jordan to correct; revert: Jordan states α, and title moves
+  here]`. A-66 keeps β: the tag is discharged as ruled, not reverted.
+- `loop/effects_information.py::_seize_rung` (`:1038`): *"THE LICENCE IS OCCUPATION"*: the exercised
+  seat's faction stands at the place and another faction holds it. It *"asks nothing of the defenders:
+  an opposed `Won` that removed nobody still leaves the attacker mustered there, so the seizure is
+  admitted"*. Its tail is `_take_hold` (`:978`), the one writer of a title changing hands.
+- `loop/effects_shared.py::occupying_faction` (`:149`): *"A defended territory therefore stays its
+  holder's AGAINST A MARCH: one that lost never arrived, so nothing occupies and nothing is seized."*
+
+So the three choices exist today as: form `seize`; form nothing; move the army away. No flag to Jordan
+follows from the confirmation: the game is the one A-66 describes.
 
 ## What it changes in `engine/season/` at runtime
 
-1. `_eff_march` on the band `Won` (the attacker's own outcome, `seam/ladder.py::field_degree`), when the
-   target rung is held by a faction other than the marching seat's, writes the title in the same Change
-   as the arrival: the defender's `hold` on the rung closes and the marcher's opens.
-2. In that same write, every seat anchored on the taken rung (and on the rungs the taking carries with
-   it, by `world_q.occupies`' own reading: a taken territory's settlements) changes hands: the sitting
-   holder's seat-`hold` closes and one opens for the taker.
-3. `Lost`, a drawn field (when the MB lane's drawn end state lands, A-3), `Unopposed`, `Invested` and
-   `Declared` write no title. A march onto a rung no faction holds writes no title (neutral ground).
-4. `seize` of a held, occupied place stops being the way a won field is cashed: after (1) the seat's own
-   faction already holds it and `_seize_rung` declines (`occupying_faction` returns `None` when
-   `holder == mine`). `seize` keeps its Record half, unheld land (`09_WR_world_motion.md` edit 2) and a
-   held place entered **without a field** (`Unopposed`), which neither ruling speaks to.
+1. `seize` of a place carries the **seats anchored on it** (A-58). Today it moves the rung's `hold` only,
+   and the gate states *"A SEAT IS NEVER SEIZED"* (`state/gate.py:291-300`).
+2. A faction standing on another's land **by that holder's leave** does not occupy it, so it holds no
+   licence to seize while the leave stands (A-58's marked assumption, made a rule).
+3. Nothing else. `_eff_march` writes what it writes today. Occupation without seizure is the state
+   `world_q.occupies` already reads (`queries/world_q.py:2152`).
 
-Hash movers (declared): every seeded run in which a `march` on held land reaches `Won`. First reading to
-record before the edit: the count of such Events per seed (realm seeds 0–2, the army verbs withheld
-today at `data/fixtures.py:1157`, so the expected count is the `march`-by-headcount fields only;
-`[unverified]`, not run by this lane).
+Hash movers (declared): runs in which a `seize` of a rung executes on a place with a seat anchored on
+it (`seize` 0 of 14 executed at seed 1 in the WR pessimist's reading, so the first reading is expected
+near zero; `[unverified]`, not run by this lane); runs in which a guest by leave formed a `seize` (none
+possible today: `covenant` executes 0 of 10).
 
-## The problem (evidence at HEAD `4ae20f0`)
-
-- `loop/effects_combat.py::_eff_march` docstring: *"ONE WRITE IS ADDED, AND IT IS PRESENCE, NOT TITLE …
-  no `hold` moves (R-6, β: title moves by `seize`, `give`, `release` or death)"*, and the comment at the
-  arrival: *"β, occupation then `seize` … not α (a won field transferring the hold) [ASSUMPTION; medium;
-  Jordan to correct; revert: Jordan states α, and title moves here]"*. A-57 and A-58 are that correction,
-  with conditions.
-- `state/gate.py:291-300`: *"A SEAT IS NEVER SEIZED: a `hold` on an Office is `conferral`'s and `T-o`'s
-  alone"*. No tenure-write basis admits a seat changing hands with its ground.
-- `architecture/meta/10_FACTIONS_AND_DEPLOYMENT.md:90` names `holdings` and `seats` as the stakes of a
-  defeat; the FA addendum measured that the code passes and writes neither (F-FA-13).
-
-## The resolution, decided (and what the rulings do not state)
+## The resolution, decided
 
 | # | decision | basis |
 |---|---|---|
-| 1 | **Aggression is read from the act**: the marching seat's faction (`gate.seat_faction(a.via)`) differs from the target's holder (`world_q.holder_faction_of(target)`) and that holder is not `None`. Both values are already computed in `_eff_march` (`attacker_faction`, `defender_faction`). No purpose operand, no declaration field | A-58 (3) |
-| 2 | **Who takes the hold**: the act's actor, exercising `a.via`, as `seize` writes "the ACTOR'S OWN hold" (`_seize_rung`). `[ASSUMPTION; medium; Jordan to correct; revert: the holder of the faction's `head_seat`]` — the rulings say land passes to the aggressor and do not name the person | ladder step 4 (`_seize_rung`) |
-| 3 | **Which seats go with the land**: every `Office` whose `rung` is the taken rung, or a `march_target_kinds` rung beneath it that the taking carries. Seats anchored on a duchy or the realm are never taken by a field, because those rungs are not march targets (`rosters.yaml: march_target_kinds` is `[settlement, territory]`) | A-58 (1); `rosters.yaml:1178` |
-| 4 | **To whom the seats pass**: the same taker, in the same write ("pass *with* holdings"). He holds them as any holder does and may `confer` them onward; a seat whose row he cannot lawfully sit (`16_PESSIMIST_FA_B` edit 1: a cohort) is closed and left vacant instead. `[ASSUMPTION; medium; Jordan to correct; revert: close the seats and leave them vacant for the taker's conferral, `15_INSTITUTIONS_COLONIAL_D` edit 5's `annex` basis]` | A-58 (1), read literally |
-| 5 | **A march by the holder's leave is not aggression** `[ASSUMPTION, marked in A-58]`. Leave is read as a live `covenant` Record between a seat of each faction whose terms name the marcher's faction or the rung (the alliance and passage shape of plan CP-T09-03). Until `covenant` executes in computed play (0 of 10 formed, FA audit E-3) no march is by leave | A-58's own marked assumption; step 4 |
-| 6 | **Relief and pursuit**: a march onto a rung the marcher's own faction holds takes nothing (decision 1 is false). A march onto a third party's held rung against an army that is **not the holder's** (the uninvited rescuer; a pursuit of a beaten enemy) passes nothing on a win: the winner stands there and **may** take the place by his own act, `seize` on the occupation licence (`_seize_rung`: his faction mustered there, the place held by another faction). Taking or declining is his choice and every repercussion is read by the ordinary rules (regard, claims, war), none fixed here | A-65 (this row replaces the earlier reading that a win on such a march passed the land) |
-| 7 | **A surrender under siege is the aggressor's win by concession** (A-3: the end state is read off which side broke or conceded), so `_eff_surrender`'s cession carries the seats by the same tail | A-3 with A-58 (1) |
-| 8 | **`Unopposed` entry into held land** is not a battle. Today's write stands (presence), and the entrant may take the place by `seize` on the occupation licence: the same chosen act A-65 gives the rescuer | ladder step 4 (`_seize_rung`; A-65's shape) |
-
-## Exact edits, by owner, in order
-
-**1. `engine/season/state/gate.py`** (owner of what admits a tenure write). A twelfth basis, `conquest`,
-beside `seizure` (`:291-301`), in `tenure_write_basis` (`:1137`): the closure of another person's live
-`hold` on (a) a Rung of a `MARCH_TARGET_KINDS` kind or (b) an Office whose `rung` is such a rung, and the
-opening of the taker's, when `via` is a seat the actor sits in whose grant carries `MUSTER_ACT`
-(`may_muster`'s first two conjuncts). As with `seizure`, the licence (a won field on held land) is the
-effect's: the gate reads Tenures and `state/` readers only (K-52). The comment "A SEAT IS NEVER SEIZED"
-stays true of `seizure` and gains one line naming `conquest`.
-
-**2. `engine/season/loop/effects_information.py::_take_hold`** (the one tail of a title write; `:978`).
-It gains `seats: tuple = ()`: for each `(office_id, sitting_hold)` it closes the sitting hold and opens
-the taker's in the same `perform`, each edge named in the Change (G4). `_eff_seize`'s callers pass
-nothing and are unchanged. A helper beside it, `seats_on(w, rid) -> tuple`, returns the offices anchored
-on `rid` and on the settlements under a territory (`Office.rung`; the descent is `occupies`' own), each
-with its live seat-`hold` or `None`.
-
-**3. `engine/season/loop/effects_combat.py::_eff_march`** (owner of what a field writes). After the
-arrival is composed and only when `res.degree == WON`, `defender_faction is not None`,
-`attacker_faction is not None`, `attacker_faction != defender_faction`, **the beaten side is the holder's
-own** (the losers' faction, read as `loop/sides.py::sides_of` derives it, equals
-`holder_faction_of(target)`; today every field's defender is the holder's faction, so this conjunct is
-true of every field the tree can form, and it becomes live when allied relief forms a field against a
-non-holder), and no leave stands (decision 5:
-`world_q.passage_granted(w, attacker_faction, defender_faction, target)`, a new Query over live
-`covenant` Records, `False` for every world today): join `_take_hold(w, a, target, held, earns=…,
-seats=seats_on(w, target))` to the Change. Emit `rung.taken` beside `army.arrived` (one new Event kind on
-the `march` row's `emits`, so `standing_routes.kinds.dominance` can list it and the deed ledger's
-`took_by_force` reads it). The docstring's "PRESENCE, NOT TITLE" paragraph and the R-6 comment are
-rewritten to the rule above; the `[ASSUMPTION … revert: Jordan states α]` tag is removed and A-57/A-58
-cited.
-
-**4. `engine/season/loop/effects_information.py::_eff_surrender`** (`:1092`): its `_take_hold` call
-passes `seats=seats_on(w, obj)` (decision 7).
-
-**5. `engine/season/rosters.yaml`**: `tenure_write_bases` (or the roster the gate's bases load from;
-`[unverified: the roster's key name was not opened]`) gains `conquest`; `standing_routes.kinds.dominance`
-gains `rung.taken`; the `march` verb row in `verb_table.yaml` gains `rung.taken` under `emits` at `Won`.
-
-**6. Layer 1 (text owed, not applied; by the ruling, in the same commit as edits 1–5).**
-`10_FACTIONS_AND_DEPLOYMENT.md:90`'s `stakes` row is met as written (holdings and seats); the sentence
-that title moves only by `seize`, `give`, `release` or death (#453 R-6) gains "or by a won march onto
-land another faction holds (A-57, A-58)".
-
-**7. Tests** (`engine/season/tests/test_march.py`, the file that pins exit (i) and R-6/R-7): the β pin is
-re-recorded as the rule, with the controls below. Said plainly: this is an intended golden re-pin.
-
-Order: 1, 2, then 3 and 4 together, 5 with 3, 6 and 7 in the same commit. Depends on:
-`06_FA_remit_grant_by_row.md` (only commanding seats hold `dispatch`, so the taker is a commander);
-`16_PESSIMIST_FA_B_who_may_sit_join_and_declare.md` edit 1 (`may_sit`, for decision 4's cohort case). The
-drawn end state is U5b's (`04_MB_*`); this file needs only that a draw is not `Won`.
-
-## Gate (execution artifact)
-
-`python -m pytest engine/season/tests/test_march.py -q` with five hand-built arms on one world, each a
-single change from the first: (a) aggressor wins on a held territory with a seat anchored on it → the
-rung's `hold` and the seat's `hold` are the taker's, `rung.taken` emitted once; (b) the same field
-`Lost` → no tenure moves; (c) the same target unheld → arrival only; (d) the target held by the
-marcher's own faction → arrival only; (e) `Unopposed` on held land → arrival only, and a following
-`seize` still takes it; (f) a hand-built field on a third party's land against an army that is not the
-holder's, won → arrival only, the winner's `seize` candidate forms, and in a twin arm he declines and
-no tenure moves; (g) a guest by leave is refused `seize` while the covenant stands. Then the realm instrument: `python -m engine.season.harness.strife 2 0` before and
-after, recording the count of `rung.taken`.
-
-## Falsifier
-
-Arm (b) or (c) moving a tenure; arm (a) leaving the seat with its old holder; a seat anchored on a duchy
-or the realm changing hands in any arm; `_seize_rung` still admitting a seizure of the rung taken in (a)
-(it must decline: own faction holds). Any of these fails the proposal.
+| 1 | **The field writes presence, never title.** The winner's army arrives (`Won`, `Unopposed`); nothing arrives on a draw or a loss | A-66; `_eff_march` as built |
+| 2 | **The taking is `seize`, formed by the winner**, on the occupation licence. Its row and its draw are the MATERIAL lane's (`14_VERBS_MATERIAL_D_paper.md` §6); this file changes its tail only | A-66 (record's assumption, confirmed above) |
+| 3 | **Seats go with the land when it is seized**: every `Office` whose `rung` is the seized rung, or a `march_target_kinds` rung beneath it that the taking carries (`occupies`' own descent). Seats anchored on a duchy or the realm are never taken this way, because those rungs are not march targets (`rosters.yaml:1178`: `[settlement, territory]`); the throne (`offices.yaml`: `off_king`, `rung: {realm: true}`) is one of them | A-58 (1) |
+| 4 | **To whom**: the seizer, in the same write ("pass *with* holdings"); a seat he may not sit (`16_PESSIMIST_FA_B` edit 1: a cohort) is closed and left vacant. Only seats of the dispossessed holder's faction pass. `[ASSUMPTION; medium; Jordan to correct; revert: the seats close and stand vacant for the seizer's conferral (`15_INSTITUTIONS_COLONIAL_D` edit 5's `annex` basis); or every seat on the rung]` | A-58 (1), read literally; ladder step 4 (`_seize_rung`: "the title written is the ACTOR'S OWN hold") |
+| 5 | **Occupation without seizure is a state with its own readings**, none stored: the holder's `hold` stands; `occupies(rung, faction)` is true of the occupier; it ends when the occupier leaves (`march`, `move`), when a `covenant` between seats of the two closes it, when he later seizes, or when the holder's counter-march beats him (`14_VERBS_PHYSICAL_B_field_and_ruin.md` B1 forms a field against a non-holder on the marcher's own land). The occupier's army eats from his own treasury while it stands on land his faction does not hold (`07_SE_campaign_supply_and_muster.md` R-SE-34, R-SE-36) | A-66 ("a recognised state … ends by treaty, withdrawal, a later seizure or a counter-march") |
+| 6 | **Leave**: a faction standing on another's land under a live `covenant` between a seat of each faction that names the marcher's faction or the rung does not occupy it. Until `covenant` executes in computed play (0 of 10 formed, FA audit E-3) nobody stands anywhere by leave | A-58's marked assumption; plan CP-T09-03's alliance and passage shape |
+| 7 | **A surrender under siege** is a cession (a title write through the same tail), so it carries the seats as a seizure does | A-3 (the end state is read off which side broke or conceded) with A-58 (1) |
 
 ## The five open cases (`26_MASS_BATTLE_aggression_and_land.md` §3, §4), decided
 
 | case | decided | basis | edit |
 |---|---|---|---|
-| the uninvited rescuer who beats an invader on a third party's land | no transfer by the field; he may `seize`, his choice | A-65 | decision 6; edit 3's "beaten side is the holder's own" conjunct |
-| an `Unopposed` entry onto held land | no transfer by the arrival; he may `seize` | ladder step 4 (the code's licence; A-65's shape) | decision 8; no code edit |
-| where a drawn aggressor's army stands | at its origin: nobody arrives, as `Lost` leaves a routed army (#453 R-7) and as `04_MB_headcount_grade_and_scale.md` writes the drawn band. `[ASSUMPTION; medium; Jordan to correct; revert: the army stands on the ground it contested and may `seize` nothing while the holder's force is unbeaten]` | ladder step 4 (R-7; the MB proposal) | none here; the drawn band's write is the MB lane's |
-| does leave shield a guest who attacks his host | no. Leave is consent to presence. A field in which the holder's own faction defends against the guest is itself the absence of consent for that act, so `passage_granted` is not read when the defenders are the holder's faction; the guest who wins is an aggressor who won | ladder step 5, on A-58's own reason ("because the holder consented") | edit 3: the leave conjunct applies only where the beaten side is not the holder's, that is, it shields entry and passage and never an attack on the host |
-| is presence by leave occupation | no. `world_q.occupies` (`queries/world_q.py:2152`) declines a faction for which `passage_granted` is true on that rung, so a guest holds no `seize` licence while his leave stands and gains it the moment it ends (the weakness `loop/effects_shared.py::occupying_faction`'s docstring names: "people placed on a territory by other means … occupy it as well") | ladder step 5 | one conjunct in `occupies`; gate arm: an ally mustered by leave is refused `seize`, and admitted after the covenant closes |
+| the uninvited rescuer who beats an invader on a third party's land | he stands there and chooses: seize, occupy or withdraw | A-65, A-66 | none: when allied relief forms such a field his arrival gives him the licence `_seize_rung` already reads |
+| an `Unopposed` entry onto held land | the same three choices: he arrived, so he occupies | ladder step 4 (`_eff_march` arrives on `Unopposed`; `_seize_rung`'s licence) | none |
+| where a drawn aggressor's army stands | **ruled (A-67): it returns to its original station, where its march began.** In the code this is no journey: `_eff_march` relocates claimants only on `Won` and `Unopposed`, so on a draw (as on `Lost`, #453 R-7) the army was never moved from its station. Unstated by A-67 and decided here by the ladder: (i) the return is immediate, not a march that takes time or can be contested, because the loop carries no army between stations (a `march` is one act resolved in one season; a pursuit is inside the field, the MB lane's pursuit draw); (ii) the defender's army keeps its station, since no band relocates a defender; (iii) what the returning army carries back in losses is the drawn band's body write, each side's share (`04_MB_headcount_grade_and_scale.md`), and fatigue has no carrier across seasons in the field today, so none is carried: both are the MB lane's to change. None is flagged: each follows from what the loop can represent, and the alternative (an army in transit as a state) is a build nobody has asked for | A-67; ladder step 4 (`_eff_march`; R-7) and step 5 | none here; the drawn band's write is the MB lane's |
+| does leave shield a guest who attacks his host | no. Leave is consent to presence. A guest who marches on the holder's own force has ended his leave by the act: the field forms as any field does, and if he wins he occupies as an aggressor does | ladder step 5, on A-58's own reason ("because the holder consented") | edit 3's conjunct reads leave **at the time of asking**; a `march` by the guest against the holder's faction on that rung closes the reading for that rung (the covenant's own breach is the instruments kit's, `15_INSTITUTIONS_COLONIAL_A_instruments.md`: `breaches`) |
+| is presence by leave occupation | no | ladder step 5 | edit 3 |
 
-## For Jordan: does the winner of a land-taking march choose, as the rescuer does?
+## Exact edits, by owner, in order
 
-A-57 reads as a transfer ("a won battle takes land"); A-65 makes the rescuer's taking a chosen act. Both
-are Jordan's words and they describe different winners, so the ladder does not settle whether the
-election extends to the aggressor who beats the holder.
+**1. `engine/season/state/gate.py`** (owner of what admits a tenure write). A twelfth basis,
+`conquest`, beside `seizure` (`:291-301`), in `tenure_write_basis` (`:1137`): the closure of another
+person's live `hold` on an Office whose `rung` is a `MARCH_TARGET_KINDS` rung, and the opening of the
+seizer's, in the same Change as a `seizure` of that rung or a rung above it in the taking, when `via` is
+the seat the seizure is exercised through. As with `seizure`, the licence is the effect's (K-52): the
+gate reads Tenures and `state/` readers only. The comment "A SEAT IS NEVER SEIZED" stays true of
+`seizure` and gains one line naming `conquest`.
 
-- **(A) The win takes the land (built here).** On an aggressor's win over the holder's force the land and
-  its seats pass in the field's own effect. A commander who wanted only to punish must hand the place back
-  by a later act (`give`, `release`), and the record shows a conquest and a return. Every won invasion is
-  a conquest; raids are told as conquests undone.
-- **(B) The win opens the choice.** The field writes presence; the winner is put the question that
-  season (mandatory, by A-47's form) and takes the land and seats by his own act or declines; until he
-  acts the beaten holder still holds. Punitive expeditions and raids are first-class; a victor's restraint
-  is a deed others read; the cost is one more formed act per won field and a season in which a routed
-  holder still holds title.
+**2. `engine/season/loop/effects_information.py::_take_hold`** (`:978`, the one tail of a title write).
+It gains `seats: tuple = ()`: for each `(office_id, sitting_hold)` it closes the sitting hold and opens
+the taker's in the same `perform`, each edge named in the Change (G4). A helper beside it,
+`seats_on(w, rid, faction) -> tuple`, returns the offices anchored on `rid` and on the settlements under
+a territory (`Office.rung`; the descent is `occupies`' own) whose `seat_faction` is `faction`, each with
+its live seat-`hold` or `None`. `_seize_rung` (`:1038`) and `_eff_surrender` (`:1092`) pass
+`seats=seats_on(w, rid, dispossessed_faction)`; the Record half of `seize` passes nothing. The Event
+`rung.seized` (the kind the deed ledger already reads as dominance:
+`15_INSTITUTIONS_PAPACY_C`'s `deed_doers` lists it) names the seats in its changes; no new kind.
 
-This plan builds (A) because A-57's and A-58's words are a transfer, and carries (B) as a fixture arm
-`conquest_election` (control `off` = (A)) so the two can be read side by side before the choice is made.
+**3. `engine/season/queries/world_q.py::occupies`** (`:2152`, the one reading of occupation). One
+conjunct: not `passage_granted(w, faction, holder_faction, rung)`, a new Query over live `covenant`
+Records between seats of the two factions whose terms name the faction or the rung; `False` for every
+world today. `occupying_faction`'s docstring loses its named weakness for the guest's case.
+
+**4. `engine/season/loop/effects_combat.py::_eff_march`.** No code edit. The docstring's R-6 tag
+(`[ASSUMPTION … revert: Jordan states α]`) is replaced by a citation of A-57, A-58 and A-66: presence is
+the field's write by ruling.
+
+**5. Layer 1 (text owed, not applied; by the rulings, in the same commit as edits 1–3).**
+`10_FACTIONS_AND_DEPLOYMENT.md:90`'s `stakes` row is met as written: a defeat puts the holding and its
+seats at the victor's choice. #453 R-6's sentence (title moves by `seize`, `give`, `release` or death)
+stands and gains "and a seized place's seats pass with it (A-58)".
+
+**6. Tests** (`engine/season/tests/test_march.py` and the file covering `seize`'s rung half; find it with
+`grep -rl "_seize_rung\|rung.seized" engine/season/tests`). The β pin stands. Added arms below. Said
+plainly: `seize`'s golden outputs move where a seat is anchored on the seized place; an intended re-pin.
+
+Order: 1, 2, 3, then 4 to 6 in the same commit. Depends on: `06_FA_remit_grant_by_row.md` (which seats
+hold `issue` and `dispatch`); `16_PESSIMIST_FA_B_who_may_sit_join_and_declare.md` edit 1 (`may_sit`).
+The occasion on which the winner is offered the taking is `06_FA_war_lives_in_seats_B.md` edit 6 (plan
+CP-T09-04 (d) widened to rungs his faction occupies whatever their holder).
+
+## Gate (execution artifact)
+
+`python -m pytest engine/season/tests/test_march.py -q` and the `seize` file, with hand-built arms on
+one world, each a single change from the first: (a) aggressor wins on a held territory with a seat
+anchored on it, then forms `seize` → the rung's `hold` and the seat's `hold` are the seizer's; (b) the
+same win and no `seize` → no tenure moves in any later season, `occupies` is true, and the holder's
+`hold` stands; (c) the same win, then the army moves away → `occupies` false, nothing moved; (d) the
+field `Lost` → nobody arrives, `seize` refused; (e) `Unopposed` on held land → as (a) and (b); (f) a
+seat anchored on the duchy above the seized territory keeps its holder in every arm; (g) a faction
+standing there under a live covenant is refused `seize`, and admitted after the covenant closes. Then
+the realm instrument: `python -m engine.season.harness.strife 2 0` before and after, recording
+`rung.seized` and the seat-hold changes that cite it.
+
+## Falsifier
+
+A tenure moved by the field itself in any arm; arm (a) leaving the seat with its old holder; arm (b)
+moving a tenure; a seat on a duchy or the realm changing hands by a seizure; a guest by leave admitted
+to `seize`.
 
 ## Not decided here (unstated by the rulings; marked, not assumed)
 
-Whether the taken seats' remit snapshots are re-stamped at
-the new hold (they are stamped when a hold opens, `World._grant_remit`, so they will be: `[unverified]`
-that this is wanted for a conquered council); what happens to a seat whose faction is not the land's
-holder (a Church seat on Crown ground): this plan passes only seats whose `seat_faction` is the defending
-faction `[ASSUMPTION; medium; Jordan to correct; revert: every seat on the rung]`.
+Which person on the winning side may seize is today's rule (eligibility `remit:issue` through a seat
+whose purview reaches the place), so a commander whose seat holds `dispatch` and not `issue` wins the
+field and cannot take the place himself; that is content on `offices.yaml` rows
+(`06_FA_remit_grant_by_row.md`) and is left there. Whether a seized seat's remit snapshot is re-stamped
+at the new hold (it is stamped when a hold opens, `World._grant_remit`: `[unverified]` that this is
+wanted for a conquered council). How long an occupation may stand is not bounded by any rule here.
 
 ## NERS (E last)
 
-N: the Layer 1 stakes row has no other carrier; cutting this leaves a defeat costing bodies only
-(F-FA-13). R: conquest becomes a strategic act with a visible prize and a visible loss, and a succession
-or a council can be changed by a field with nobody watching. S: one tail (`_take_hold`) writes every
-title; no second seizure path; the field's end state (A-3) is the only reader of who won. E: one
-conditional in one effect, one helper, one basis; legible as "win a march onto their land and it, with
-its offices, is yours".
+N: the Layer 1 stakes row has no other carrier, and without the seats a conquest changes a map and no
+government (F-FA-13). R: three different victories from one win (conquest, occupation, the raid that
+goes home), each read by everyone who learns of it; a victor's restraint is a deed; an occupied duke
+still holds and can treat, resist or wait, with nobody watching. S: one tail writes every title; the
+field's end state decides only who stands where; leave is one conjunct in the one reading of
+occupation. E: "win, and the land is yours to take, hold or leave" is one sentence, and the build is one
+basis, one helper and one conjunct.
 
 ## Cost class
 
-Small build (one basis, one helper, one conditional, one Event kind), one declared re-pin.
+Small build, one declared re-pin.

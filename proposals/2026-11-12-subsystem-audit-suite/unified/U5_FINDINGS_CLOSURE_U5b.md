@@ -21,10 +21,12 @@ A resolution is a plan for a later lane or session (the brief: *"Resolve is a pl
 nothing here was executed against code, a registry or canon. Proposal paths are relative to
 `proposals/2026-11-12-subsystem-audit-suite/proposals/`. Rulings are cited by their id in
 `unified/DECISIONS_ANSWERED.md` (A-1 to A-56 and the ladder-closed D-rows); they supersede any lane
-document. **Held, not closed here:** battle luck (D-34) and numbers in the melee dice (D-35), which
-`audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md` and `proposals/26_MASS_BATTLE_*` (another lane, being
-written; not on disk at this head) adjudicate. Rows that turn on either are closed SUPERSEDED to that
-adjudication and name what they wait for.
+document. **Answered while this lane worked** (and folded): A-57 and A-58 (the land), A-59 (battle luck; D-34),
+A-60 (numbers in the melee dice; D-35), A-61 (a stand draw beside the 15% rout band), A-62 (a refused
+act's receipt), A-63 and A-64 (a visit occupies the person visited). The history adjudication
+(`audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md`, `proposals/26_MASS_BATTLE_*`) is finished and folded;
+A-59's carriers (`audits/27_MB_COMMAND_AND_DYNAMIC_STRENGTH.md`, `proposals/27_MB_*`) are another lane's,
+being written at this head, and are cited by title and not duplicated.
 
 Short names: `es/` = `engine/season/`; `mc/` = `modules/combat/`; `mb/` = `modules/mass_battle/`.
 
@@ -34,9 +36,9 @@ Short names: `es/` = `engine/season/`; `mc/` = `modules/combat/`; `mb/` = `modul
 |---|---|
 | `U5b_PC_rulings_in_the_fight.md` | the rulings that land inside `modules/combat/` and its seam and had no file: the nesting cap and the declared class of person-supplied callables (A-4); the fight's two inputs and the pool rule (A-6, A-7; U5a's CAP row B7, handed across); the wound carried into a fight as a level (A-8); the damage scale and the one combat calibration batch (A-31); the first-exchange edge on an unexpected opener (D-41 B, after A-16); the landing order of every PC proposal |
 | `U5b_PC_residue.md` | PC items with no carrier: the slope bound and the read's literal scale; the grapple's names; the roster census before an inventory; the same-id refusal; the unseeded fallback; stale instrument text; the tempo flat-top's position; the lasting mark as a draw; the believed estimate of a fight; the test-strength items handed across by U5a |
-| `U5b_MB_rulings_in_the_field.md` | the rulings that land inside `modules/mass_battle/` and its seam and had no single file (listed in Part 2) |
-| `U5b_MB_residue.md` | MB items with no carrier (listed in Part 2) |
-| `U5b_VERBS_military_physical_residue.md` | verb verdicts of the two families with no carrier (listed in Parts 3 and 4) |
+| `U5b_MB_rulings_in_the_field.md` | the module's one sampler (A-5; U5a's DOE row 4, handed across) and its composition with the pair rule; where A-3, A-57 and A-58 land; the nested duel and the squad as a registered entry (A-4; Layer 1 §44.3); A-1 and A-2 conformance and one fixture for armies at build; veterancy as a draw; the landing order of every MB proposal, with lane 26's and lane 27's folded in |
+| `U5b_MB_residue.md` | one merged list of roles that leave the menu; pointer and status edits; training Sites at the venues; the standing `xfail` and `approx` on conservation; a commander's believed estimate; extremes; plan rows; three resolutions whose named carrier lacked them (R-24, R-25, R-29) |
+| `U5b_VERBS_military_physical_residue.md` | the Layer 1 shape of a drawn act applied to eighteen rows; one sampler, one pool rule, levels for favourable terms; `march` under A-57 and A-58 (who defends; consent, relief and pursuit classed); `raze` and `seize` after the land passes; `mustered` reads custody; D-25, D-36, A-62, A-63 |
 
 Abbreviations for carriers. PC: **P1** = `03_PC_duel_chain_reach.md`; **P2** =
 `03_PC_typed_outcome_one_door.md`; **P3** = `03_PC_exits_withdrawal_recovery.md`; **P4** =
@@ -269,7 +271,9 @@ Abbreviations. **HG** = `04_MB_headcount_grade_and_scale.md`; **TO** = `04_MB_ty
 `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md` (another lane's; cited by row); **26-SCALE**,
 **26-MOVE**, **26-ROUT**, **26-MAN**, **26-CAL**, **26-LAND** = `26_MASS_BATTLE_cell_scale_and_time.md`,
 `…_movement_and_fatigue_as_data.md`, `…_rout_pursuit_and_giving_ground.md`, `…_maneuver_orders.md`,
-`…_calibration_targets.md`, `…_aggression_and_land.md` (that lane's; by title and section); **LAND** =
+`…_calibration_targets.md`, `…_aggression_and_land.md` (that lane's; by title and section); **27-MB** =
+`audits/27_MB_COMMAND_AND_DYNAMIC_STRENGTH.md` and `proposals/27_MB_*` (another lane's, serving A-59; cited
+by title, being written at this head); **LAND** =
 `U5d_FA_land_and_seats_pass_on_a_won_march.md` (U5d's).
 
 ## 2.1 `audits/04_MB_audit.md` — findings
@@ -282,14 +286,14 @@ Abbreviations. **HG** = `04_MB_headcount_grade_and_scale.md`; **TO** = `04_MB_ty
 | F-MB-04 | a field neither side wins is written as the attacker's defeat | RESOLVED-BY | HG (the `Drawn` band) with MGR §1 (A-3: the host reads the end state) | audit §12 (10 `Failure`, 14 `Partial`, all `Lost` at the seam) |
 | F-MB-05 | the standalone and the season battle are two code paths | RESOLVED-BY | TO §2; confirmed as Layer 1 §27.2 conformance by A-1 | reach probe (16 of 48 functions entered by no season arm) |
 | F-MB-06 | the seam drops what the battle knows; the outcome is an untyped dict | RESOLVED-BY | TO §1 as reconciled (no `verdict`); the report: MGR §6, PLAY §D | `mb/massbattle.py:465-470` |
-| F-MB-07 | CR-12 is parked on a question the ledger answered, behind an instrument that cannot read its exit | RESOLVED-BY | CR12 (steps 1–3) with PART as its step 3. The question it turns on (D-35) is held in the decision record and adjudicated by A26 R-8 as CR12 decides | `registers/editorial_ledger_mb_archive.jsonl:73` |
-| F-MB-08 | a ruled magnitude (friction) swamps every choice | SUPERSEDED | held as D-34; A26 §7 item 2 carries the two options to Jordan with the pessimist's decomposition; A26 B-3 and 26-MAN §1 put friction on orders | pessimist `p1_size.py` (the higher draw wins 275 of 287) |
+| F-MB-07 | CR-12 is parked on a question the ledger answered, behind an instrument that cannot read its exit | RESOLVED-BY | CR12 (steps 1–3) with PART as its step 3. The question it turns on (D-35) is answered: A-60, numbers act through frontage, depth and endurance; A26 R-8 in support | `registers/editorial_ledger_mb_archive.jsonl:73` |
+| F-MB-08 | a ruled magnitude (friction) swamps every choice | SUPERSEDED | answered: A-59 (D-34): the day's luck is lowered once order friction exists, and a static side-wide value is misleading. Carried by 27-MB (the multiplier's three-arm test; command; a unit's prowess) with 26-MAN §1 (an order takes effect by a draw) and 26-CAL | pessimist `p1_size.py` (the higher draw wins 275 of 287) |
 | F-MB-09 | hidden inputs and held state in a registered module | RESOLVED-BY | TO §3 (one frozen `EngineConfig`; the unused registry mutators deleted); the float half is A-29 and `11_GO_float_contract.md` (U5d's) | 91 `os.environ` reads (addendum §B7, confirmed) |
 | F-MB-10 | dead and unreached code | RESOLVED-BY | TO §2 (stubs, no-ops, the second pool owner); RES-MB §1 (the one role list); `rally_check` is kept as the commander's hook (R-26; ROUT) | audit §3 |
 | F-MB-11 | after a won field the loser stays and the winner stands beside him | SUPERSEDED | by A-57 and A-58: on land another holds, an aggressor's win passes the land and its seats (LAND; 26-LAND §2); the routed defender's re-homing is PLAY §G | `es/loop/effects_combat.py:532-536` |
 | F-MB-12 | surfaces that disagree with the code | RESOLVED-BY | RES-MB §2 (R-12, R-13, R-14); TO (R-15); HG (R-16) | — |
 | F-MB-13 | the choice surfaces are priced wrongly for the chooser | RESOLVED-BY | PLAY §E (`marshal` fans `retreat_at` only); MIL-C Edit 5 (the one opportunity-key edit) | H-361 |
-| F-MB-14 | individuals' attributes do not reach the battle | RESOLVED-BY | RUL-MB §1 edits 3–5 (the commander's two inputs; U1's `field` site); officers: MGR §7; cohort training: MIL-B | `mb/massbattle.py:184-188` |
+| F-MB-14 | individuals' attributes do not reach the battle | RESOLVED-BY | 27-MB (A-59: command from a learned skill and social and mental attributes; each unit's own prowess as columns of its row); officers: MGR §7; cohort training: MIL-B | `mb/massbattle.py:184-188` |
 | F-MB-15 | no intervention during a battle and no account afterwards | RESOLVED-BY | MGR §4–§6 (it supersedes PLAY §B's decider return); bouts and lulls: 26-SCALE §3 | `mb/massbattle.py:425-427` |
 | F-MB-16 | the non-player commander is a script; the player sees what no NPC may | RESOLVED-BY | MIL-C, MIL-D (he forms the six verbs through the one chooser); doctrines as data: LOAD-B's troop file (`doctrines`); the estimate: RES-MB §5 | `harness/army_presets.py:17-20` |
 | F-MB-17 | the hierarchy is three levels, not four | SUPERSEDED | by addendum C-1 (three containers and an arrangement; no level is missing); HIER §1 (R-30); A-2 | `proposals/2026-09-25-squad-engagement-concept-v5.md:7` |
@@ -320,7 +324,7 @@ Abbreviations. **HG** = `04_MB_headcount_grade_and_scale.md`; **TO** = `04_MB_ty
 | CP-T04-02/05/06/07 | repairs, closed | STALE / FALSE-POSITIVE | closed at HEAD per the audit's reading of the code paths; no edit | audit §6.1 |
 | R-01, R-02, R-03, R-16, R-18, R-19 | one scale; one share; `Drawn`; one deployment; graded walls; `person` | RESOLVED-BY | HG as reconciled (R-03's verdict is read host-side) | — |
 | R-04, R-05, R-08, R-09, R-15, R-21, R-26 | the typed outcome; one path; `EngineConfig`; stubs; the resolver label; the docstring; `rally_check` kept | RESOLVED-BY | TO as reconciled | — |
-| R-06 | CR-12: numbers out of the melee dice | RESOLVED-BY | CR12 (D-35 held; A26 R-8) | — |
+| R-06 | CR-12: numbers out of the melee dice | RESOLVED-BY | CR12 (A-60) | — |
 | R-07 | presets at build; a training Site a seat; levy as a line | RESOLVED-BY | PLAY §E as reconciled; RES-MB §3 (R-44: Sites where the venues are) | — |
 | R-10 | roles with no primitive leave the menu | RESOLVED-BY | RES-MB §1 (merged with F-PES-MB-08) | — |
 | R-11 | where the beaten side goes | SUPERSEDED | in part by A-57 and A-58 (title now moves on an aggressor's win: LAND); its third clause (a routed defender re-homed) stands in PLAY §G | — |
@@ -328,22 +332,22 @@ Abbreviations. **HG** = `04_MB_headcount_grade_and_scale.md`; **TO** = `04_MB_ty
 | R-17, R-20, R-22 | the `marshal` fan and the army-verb key; MB-08's march half; a win clears a morale row | RESOLVED-BY | PLAY §E, §G; MIL-C Edit 5; PHY-B B1 | — |
 | R-24, R-25, R-29 | `GappedLine`'s minimum; the morale maps re-keyed; the truncated-troops figure | RESOLVED-BY | RES-MB §9 | — |
 | R-27 | one weapon roster, personal combat's | SUPERSEDED | by addendum C-3 and R-36 (one owner a fact, not one file); LOAD-B §2 | addendum §B7 (no missile weapon, pike or lance in the personal roster) |
-| §9 conflict 1; §11 item 2 | friction at sigma 1.1 against "choices change what happens" | SUPERSEDED | held as D-34; A26 §7 item 2 | — |
+| §9 conflict 1; §11 item 2 | friction at sigma 1.1 against "choices change what happens" | SUPERSEDED | answered: A-59 (the audit's option (b), taken further); 27-MB | — |
 | §9 conflict 2 | same-round resolution against a defender's turn | SUPERSEDED | no conflict once `Drawn` exists (the audit's own reading); bouts inside the scene: 26-SCALE §3 under A-9 | — |
-| §11 item 1 | CR-12: do numbers stay in the melee dice | SUPERSEDED | held as D-35; A26 R-8 adjudicates it as (a); CR12 is the carrier | — |
+| §11 item 1 | CR-12: do numbers stay in the melee dice | SUPERSEDED | answered: A-60 (option (a)); CR12 is the carrier | — |
 | §13 ARC-07 (five needs) | a rare sub-outcome persists; a condition on a unit; the reason for staying; a distinct resolving act; a standing drain | RESOLVED-BY | TO §1 (parts, `broke_first`); A-2 (the condition is claims in the men's ledgers); PLAY §G and LAND (why an army stays: it holds what it took); MIL-C (`discharge_troops`' failure band and the dispersal draw are "the army that stayed"); upkeep: ECON §2 with SE (U5d) | — |
-| §13 ARC-23, SCN-14 | phases within a battle; a commander's incapacitation; a personal act inside a battle | RESOLVED-BY | 26-SCALE §3 (bouts and lulls); MGR §7 as reconciled with RUL-MB §3 (the nested duel; an officer's fall erodes his unit's morale); RUL-MB §1 (the commander's inputs) | — |
+| §13 ARC-23, SCN-14 | phases within a battle; a commander's incapacitation; a personal act inside a battle | RESOLVED-BY | 26-SCALE §3 (bouts and lulls); MGR §7 as reconciled with RUL-MB §3 (the nested duel; an officer's fall erodes his unit's morale); 27-MB (the commander's command) | — |
 | §13 ARC-43, ARC-20, ARC-45, ARC-11, NPC-072, NPC-082, NPC-006 | fields that arise from persons' acts; commanders whose command is material | RESOLVED-BY | PLAY §E; MIL-C, MIL-D; TO (per-cohort shares) | — |
 | §13 NPC-089 | three graduated postures | RESOLVED-BY | PHY-B B1 (one Candidate a posture); `besiege` un-withheld by PLAY A/C; a probing posture is FA content (U5d) | — |
 | §13 NPC-070, ARC-47, ARC-43 (the fixed multiple; adjacent territories) | not MB's mechanism | SUPERSEDED | CHAR (U5a), FA and WR (U5d) closures | — |
 | §13 "needs wrongly stated" | SCN-14's suspended command; ARC-07's unit condition; three UNCLEAR needs | SUPERSEDED | read as the audit reads them (a commander's attention is spent or not per bout; claims in ledgers; the army Record he holds); A-2 confirms the second | — |
-| §14 (a)–(e) capability surface | Command a literal; troop tables in Python; two stat systems; the roller re-implemented | RESOLVED-BY | RUL-MB §1; LOAD-B stage 1 (the troop file); U1 §9 | — |
+| §14 (a)–(e) capability surface | Command a literal; troop tables in Python; two stat systems; the roller re-implemented | RESOLVED-BY | 27-MB (command; a unit's prowess from its own row); LOAD-B stage 1 (the troop file); RUL-MB §1 (the one roller); U1 §9 | — |
 | §15 duels in and around a field | no edge; the squad scale; between engagements; at the end | RESOLVED-BY | SQD as reconciled; RUL-MB §3; `capture` on `field.won` through PHY-A | — |
 | §15 named conflicts | one engine against a dispatch by scale; §C.5.1 against a squad | SUPERSEDED | A-1 (the ruling is about played and delegated resolution of one contest); A-4; the squad is the un-amended Layer 1 rule (addendum §B5.4 (b) 3) | — |
 | §15 shared geometry | may one module import another | SUPERSEDED | no module imports another: the squad entry is handed a callable (RUL-MB §3); the engine leaf import is settled by RUL-MB §1 edit 1 | — |
 | §16 (a)–(e) the NPC surface | who decides; the estimate is the player's; doctrine a script | RESOLVED-BY | MIL-C, MIL-D; RES-MB §5; CHAR's cells on fanned payload values (U5a) | — |
 | §16 named: AQ-X1 | "no NPC reads" the estimate | RESOLVED-BY | RES-MB §5 (an NPC reckons on what he believes, never on the world) | `es/seam/wrappers/mass_battle.py:465-466` |
-| §17 named conflicts | attributes against the 2026-07-08 directive; intervention against ED-IN-0301; legible cause against friction | SUPERSEDED | (1) the commander enters cohesion and obedience, never the pool (RUL-MB §1 edit 6); (2) the windows are inside the call (MGR); (3) D-34 held | — |
+| §17 named conflicts | attributes against the 2026-07-08 directive; intervention against ED-IN-0301; legible cause against friction | SUPERSEDED | (1) A-59: command sets the odds of an order taking effect; whether an officer's command also reaches his unit's dice is 27-MB's own survivor (its §9); (2) the windows are inside the call (MGR); (3) answered by A-59 | — |
 | §18.2 "no character death from mass battle" (ED-898) | the `total` casualty arm kills | RESOLVED-BY | RES-MB §2 is extended at landing by one roster note (the `total` arm labelled a control that contradicts ED-898); 26-ROUT §4 (who among the hurt dies is the season's draw) | — |
 | §18.2 levy cannot campaign | the design confines levy to its home territory; the code does not | SUPERSEDED | not adopted by the audit (R-07 keeps levy as a line); named for FA (U5d); no ruling orders it | — |
 | §18.3 earlier audits | five entries, re-verified where relied on | SUPERSEDED | by addendum §B2.3's fuller re-verification, closed in 2.3 | — |
@@ -400,17 +404,17 @@ Abbreviations. **HG** = `04_MB_headcount_grade_and_scale.md`; **TO** = `04_MB_ty
 | id | claim (one line) | disposition | carrier · section | evidence |
 |---|---|---|---|---|
 | F-PES-MB-01 | an army divided into units loses to the same men in one block | RESOLVED-BY | PART (edits 1–4; the PARTITION row), as CR12's step 3 | pessimist `p15_shape.py` (0 of 60 against 36) |
-| F-PES-MB-02 | the field is decided by one draw made before it, over a rule that is a cliff | SUPERSEDED | the rule under the draw: PART; the draw itself is D-34, held (A26 §7 item 2) | pessimist `p1_size.py` |
+| F-PES-MB-02 | the field is decided by one draw made before it, over a rule that is a cliff | SUPERSEDED | the rule under the draw: PART; the draw itself is answered by A-59 (lowered, and tested for removal: 27-MB) | pessimist `p1_size.py` |
 | F-PES-MB-03 | a rout has no exit | RESOLVED-BY | ROUT as reconciled; 26-ROUT §3–§5 | pessimist `p6_rout.py` |
 | F-PES-MB-04 | integer armour against integer power makes whole match-ups certain | RESOLVED-BY | PART edit 3 | pessimist `p10_edges.py` (60 of 60) |
-| F-PES-MB-05 | a flanked line breaks no sooner; an encircled one never | RESOLVED-BY | PART gate 4; 26-ROUT §1 (the stand draw on a body struck in flank or rear) | pessimist `p2_flank.py` |
+| F-PES-MB-05 | a flanked line breaks no sooner; an encircled one never | RESOLVED-BY | PART gate 4; 26-ROUT §1 (the stand draw on a body struck in flank or rear; A-61 confirms it beside the 15% band) | pessimist `p2_flank.py` |
 | F-PES-MB-06 | two stamina ledgers | RESOLVED-BY | STAM | pessimist `p5_tired.py` |
 | F-PES-MB-07 | the pike is a name | RESOLVED-BY | LOAD-B (its falsifier with depth added) after HIER and PART | pessimist `p4_pike.py` (60 of 60 identical) |
 | F-PES-MB-08 | nine role rows do nothing, two do harm, one name is false | RESOLVED-BY | RES-MB §1 | pessimist `p10_edges.py` (b) |
 | F-PES-MB-09 | the people a field touches are ground to a thousandth | RESOLVED-BY | HG; TO; SQD (their own rounds, not a headcount share) | pessimist `p8_season.py` |
 | §1.1 false N-lines (seven rows) | each cut, executed | SUPERSEDED | by the findings that carry them (the unit ledger: STAM; the pike: LOAD-B; nine role rows: RES-MB §1; the division into units and `_convergence_scale`: PART; `rally_check`: ROUT; `Flanker` on one body: MGR §3's bar) | — |
 | §1.3 the resolution diagnostic (P-i to P-iv; the loop) | two live bands; reachable zeros; leverage falling with pool; no legible odds; an undamped loop | RESOLVED-BY | PART edits 2–3; RUL-MB §1; RES-MB §5 (odds a commander can state) | pessimist `t2.py` |
-| §1.4 S | walls as armour; the opposed-roll obstacle; a LogNormal where siblings use capped levels | RESOLVED-BY | PART edit 3 and edit 2; the multiplier is D-34 | — |
+| §1.4 S | walls as armour; the opposed-roll obstacle; a LogNormal where siblings use capped levels | RESOLVED-BY | PART edit 3 and edit 2; the multiplier is A-59's (27-MB) | — |
 | §2.8 the five premises | larger usually wins; a flanked line breaks; pikes hold; tired fights worse; rallied or pursued | SUPERSEDED | by F-PES-MB-01 to -07, each closed above | — |
 | §3.2 a dead-end loop | one person forms the same refused march 15 times in a season | RESOLVED-BY | PHY-B B1 (the `Field` class makes the wrong-kind target unformable); MIL-A Edit 6's shape for a deposited refusal | pessimist `p8_s0_k30.txt` |
 | §3.3 extremes | nobody against nobody; past the ceiling | RESOLVED-BY | RES-MB §6 | pessimist `p11_extremes.py` |
@@ -421,21 +425,21 @@ Abbreviations. **HG** = `04_MB_headcount_grade_and_scale.md`; **TO** = `04_MB_ty
 | res. 7 | inert roles off the menu | RESOLVED-BY | RES-MB §1 | — |
 | res. 8 | CR-12's exit gains the partition row | RESOLVED-BY | PART; CR12 as reconciled | — |
 | res. 9 | pike and heavy infantry identical at depth | RESOLVED-BY | LOAD-B | — |
-| §5 survivor | friction: keep it, or move its seat | SUPERSEDED | held as D-34; A26 §7 item 2 | — |
+| §5 survivor | friction: keep it, or move its seat | SUPERSEDED | answered: A-59 (option (b): its seat moves to the named draws) | — |
 
 ## 2.5 Handed across to MB by other closures; GO items in PC and MB scope
 
 | from | item | disposition | carrier · section |
 |---|---|---|---|
 | U5a DOE §1 row 4 | the module's sampler becomes the owner's | RESOLVED-BY | RUL-MB §1 |
-| U5a F-DICE-18 (C-7) | a field battle reads no person | RESOLVED-BY | RUL-MB §1 edits 3–5 |
+| U5a F-DICE-18 (C-7) | a field battle reads no person | RESOLVED-BY | 27-MB (A-59) |
 | U5a F-DICE-21 (C-8) | the field speaks sigma in die-equivalents and tires twice | RESOLVED-BY | RUL-MB §1 edit 1; STAM |
 | U5a res. 22 | the survivor-ratio labels use the ladder's four names | RESOLVED-BY | HG (the four-way `degree` is deleted) |
 | U5a F-PES-DICE-09 | the field's four stat checks are bare binaries | RESOLVED-BY | ROUT (rally graded; recall); 26-ROUT §1 (the stand draw); 26-MAN (the feint's three draws); each on the one sampler (RUL-MB §1) |
 | U5a F-DICE-14 Edit C | the field's believed estimate | RESOLVED-BY | RES-MB §5 |
 | U5a sweep C-06 | a defended field is lost by the attacker 60 of 60 | RESOLVED-BY | HG |
 | U5a F-TEST-10 row 6; tests §4 | the standing `xfail`; `approx` on conservation | RESOLVED-BY | RES-MB §4 |
-| U5a CHAR §10; NPC-089 | the officer's keys on the input; more than one posture | RESOLVED-BY | RUL-MB §1; PHY-B B1 |
+| U5a CHAR §10; NPC-089 | the officer's keys on the input; more than one posture | RESOLVED-BY | 27-MB; PHY-B B1 |
 | U5d H-158; C-2; C-3 | upkeep; the withheld verbs; the FA→MB interface | RESOLVED-BY | ECON; MIL-C Edit 7 and MIL-D Edit 6; ECON |
 | `audits/11_GO_audit.md` F-GO-01 | the pinned slices barely enter combat and mass battle | SUPERSEDED | U5d's closure owns GO; this family's part is the two calibration batches' re-records (RUL-PC §5 row 5; RUL-MB §6 row 4), after which the slices are re-pinned once |
 | F-GO-02 | the float contract | SUPERSEDED | A-29; `11_GO_float_contract.md` (U5d's); TO §1 quantises the field's shares at the seam |
