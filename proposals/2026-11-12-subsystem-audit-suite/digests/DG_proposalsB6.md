@@ -236,3 +236,204 @@ Lane scope: `proposals/2026-10-25-thrust-layer/{probes,reports,toy}` and 17 file
   - SPINE: every holder eligible for all 56 rows (:170-195) - the seated-only world is a different access profile from the realm; same refusal pattern (build/carry/commit/found/restore/work all 100% refused, :203-206,:222-224,:240-241).
 - **Conflicts / stale:** realm `tell`: `att 25 ex 25 ref 18 both 18` and `march` `att 17 ex 17 ref 17 both 17` (:114,:134) - an act can be both executed and refused (two Events), so executed + refused can exceed attempted; the file says they are never summed (:1).
 - **Open items:** `arrest` forms for nobody in either world (:88,:202); `seize` forms for one person (:129,:243).
+
+### proposals/2026-10-25-thrust-layer/reports/R01_partial_top_down.md
+- **What it is:** Chat report (2026-10-24/25 session, verbatim) answering whether pure bottom-up emergence is a problem and whether partial top-down guides help, with "oatmeal" research (Compton, Tale-Spin effect).
+- **Status:** "REFERENCE - HELD BACK IN FULL" (:3). Reading: historical; figures predate the register and are corrected by `../02_MAJOR_TAKEAWAYS.md` s9.
+- **Bears on:** WR, CHAR, CORE, FA.
+- **Content that matters:**
+  - Verdict: partial top-down in three places only - standing motives held by actors, selection of what the player is shown, a narrow channel of declinable occasions; "every state change stays bottom-up" (:17).
+  - Three lawful channels (:34-40): (1) motive inside the actor with a lifecycle (form, advance, obstruct, lapse or fire, succeed) - `goals.yaml` has the right shape (referents, attention only, `goals.yaml:9-12`) but no lifecycle field; (2) selection outside the world (observer/slate reads, writes nothing); (3) occasion channel (predicate hooks per the 2026-08-18 ruling; boot-time authored occasion rows, W8 Rung 2). Control: zero rows must leave the world hash byte-identical (:40).
+  - Per-layer state in code (:46-51): ambition question wins ~6% of deliberations and putting it first cut `news.told` 14 -> 7 and events 21,735 -> 15,738; only 2 of 38 goal rows attach to a seat (`goals.yaml:450,468`); cohorts carry no wants (`cohorts.yaml:18-23`).
+  - Would narrow ED-IN-0225's wording but keep the refusal of need-triggered outcome injection even with permission to overrule (:42).
+  - Falsifier: raise ambition weight; hybrid fails if chain-acts-from-ambition rises while `news.told` collapses (:53).
+- **Conflicts / stale:** uses the superseded 929/1,318 and 51/803 figures (:22); "55 of 67 chain acts refused (82%)" uses the over-counting suffix definition (:20-21); `[GAP: primary literature not re-fetched]` (:55).
+- **Open items:** human-reader ablation of the recognition layer (CK2 apophenia item) (:53).
+
+### proposals/2026-10-25-thrust-layer/reports/R02_arcs_deconstruction_and_logic_tests.md
+- **What it is:** Chat report: logic tests of top-down/bottom-up/hybrid emergence in a self-built toy world, and a deconstruction of the studied arcs.
+- **Status:** "REFERENCE - HELD BACK IN FULL" (:3). Reading: historical; toy results are model-internal, low confidence.
+- **Bears on:** ARCS, CHAR, WR.
+- **Content that matters:**
+  - Seven ways arcs are achieved (:20-28): accrual, exposure, succession, decision point (largest: 20/50 arcs close by a decider), contest (9/50 roll), conjunction, held control state (10/50 never close; a state, not an arc). 19/50 are crossing-forced.
+  - Hand classification of the 46 character cases by `ends_when` (:34-38): forks 11 (004, 020, 021, 050, 052, 070, 003, 032, 031, 030, 001), exit events only 7, terminus presumed by extractor 12, nothing authored 16 (033, 071, 034, 036, 037, 041, 072-074, 080-082, 084, 085, 089, 090). So 28 of 46 have none or presumed.
+  - Arc lane is not mostly arcs: of 50 classified endings 16 (32%) are not multi-season arcs (10 never close, 3 no condition, 3 one roll: ARC-21, 23, 27) (:40). The "~13 shapes" figure rests on 24 of 138 arcs and an evacuated calibration set (:41).
+  - Toy table (:48-55): legibility (motive outlasts moment) BU 0.43 / TD 0.36 / TDR 0.23 / HY 0.80; blind-script violated world constraints in 96% of runs; arc rate BU 0.09 (null 0.10), TDR 0.35 (null 0.25). HYd (threshold raises a declinable tribunal, decider rules) lifted arc rate to 0.26 but its shuffled null is 0.26 too (the test credits a lone interior closing event) (:61-62). At 80% refusal HYd's gain vanishes, TDR reaches 0.71.
+  - Implication: lawful top-down is arming decider and threshold closure engines, not writing beats (:64).
+- **Conflicts / stale:** v1 had four instrument defects fixed in v2; v2 predictions registered after seeing v1 (13/21 scored); A6 had a key-filter bug (:67). The word "Key" in toy code is unrelated to the retired Key substrate.
+- **Open items:** whether to accept TDR's injected ordered arcs is left to Jordan (:64).
+
+### proposals/2026-10-25-thrust-layer/reports/R03_sigma_leverage_correlate.md
+- **What it is:** Chat report: is there a sigma-leverage correlate for the likelihood of subsequent events; toy results for lookahead leverage versus goal ladders.
+- **Status:** "REFERENCE - HELD BACK IN FULL" (:3). Reading: historical; recommendation "do not build lookahead" carried into `02_MAJOR_TAKEAWAYS.md` T5.
+- **Bears on:** CHAR, DICE, CORE, WR.
+- **Content that matters:**
+  - The chooser already has the slot: `engine/season/decision/choose.py::_sample_order` softmax(score/tau), `choice_temperature = 0.1`, noise keyed per candidate (:28); a narrative term would be expressed in tau units, soft-capped like `soft_cap` in `sigma_leverage.py`, kept on the choice stage not the dice, never removing an option (:29-33).
+  - Toy table (:37-45): ladder + threshold-raised tribunal 0.38 arc rate, +0.09 over null, closure 0.85; scripted director 0.35 / +0.10; lookahead leverage strength 4 (120 seeds) arc rate 0.09, minus-null -0.08 [-0.14, -0.01]. Last two rows use a different base chooser (:47).
+  - Lookahead cost: 126 leveraged decisions per run, ~3,200 rollouts, ~270x run time; 32% of decisions flipped; chain depth 18 -> 31 (partly circular); explained motive 0.58 -> 0.29 (:60-64).
+  - Both lawful routes collapse on a mostly-refusing substrate: ladder + tribunal falls to 0.21 at 80% refusal, forced director holds 0.71 (:65). Recommendation: fix the refusal rate before either (:67).
+  - Would override v2 narrative-engine rules R-AI and F8 (forecast objects actor-invisible); if adopted F8 becomes a dosimeter (:69).
+- **Conflicts / stale:** ladder predictions scored 4 of 7, H1/H4/H7 falsified (:72).
+- **Open items:** two-level lookahead, other value proxies and human "construable" judgement untested (:71).
+
+### proposals/2026-10-25-thrust-layer/reports/R04_ladder_tribunal_best.md
+- **What it is:** Chat report answering "is ladder + threshold-raised tribunal the best?"
+- **Status:** "REFERENCE - HELD BACK IN FULL" (:3). Reading: historical.
+- **Bears on:** WR, CHAR, FA.
+- **Content that matters:**
+  - Answer: No; it leads only on arc rate with no outcome written (0.38, +0.09 [+0.03,+0.15]) and ties the director (:21-23).
+  - It loses on motive legibility (0.43 vs 0.80 ambition alone), thread continuity (0.58, lowest of six arms), complete beats (0.43 vs 0.76), 80% refusal robustness (0.21 vs 0.71) (:27-32).
+  - Threshold-sensitive: signal holds for thresholds 4.5-10, weakens at 3, gone at 16 (:35). In 192 of 293 runs the main thread closes on a tribunal ruling - one template (:36).
+  - Ladder alone multiplies cross-person chain depth ~2.7x (62.5 vs 23.0) and keeps legibility 0.72 (:40).
+  - No arm dominates; weighting is a Jordan choice (:42).
+- **Conflicts / stale:** ~20 arms compared with no multiple-comparison correction (:38); threshold sensitivity run not saved (:46). The critic later found "2.7x" in no saved output (R13 F14).
+- **Open items:** none beyond the trade-off.
+
+### proposals/2026-10-25-thrust-layer/reports/R05_scripted_director_set_pieces.md
+- **What it is:** Chat report: a director that injects set pieces (venue, engagement window, decisive form) rather than outcomes.
+- **Status:** "REFERENCE - HELD BACK IN FULL" (:3). Reading: historical.
+- **Bears on:** WR, PC, SC, MB.
+- **Content that matters:**
+  - Situation alone fizzles (arc rate 0.07, -0.04 vs null; 94% of runs end with both principals alive); a decisive form (best-of-rounds contest at the venue, lethal at climax, dice and skill pick the loser) gives arc 0.33 (+0.14 [+0.09,+0.20]), complete beats 0.67 (:17-29).
+  - Escalating stakes carry much: flat stakes drop complete beats 0.67 -> 0.17; but the director now writes intensity (main-thread peak 7.65 vs 2.36 BU) (:30).
+  - Ladder + decisive-form set pieces 0.41 / +0.20 / beats 0.79 (:24). The dictated outcome is traded for dictated form and stakes - "an authored occasion that is not declinable" between lawful occasion and refused scripted beat (:32).
+  - The 80% refusal result (0.81) is likely an artifact because the toy contest bypasses the act layer (:35).
+- **Conflicts / stale:** R06 immediately corrects the headline (decisive form only matches when the climax is lethal).
+- **Open items:** declinable set pieces, mid-run stake adjustment (:38).
+
+### proposals/2026-10-25-thrust-layer/reports/R06_npc_deaths_clarification.md
+- **What it is:** Chat report clarifying that "94% end with both principals alive" is toy-world removal, and that the decisive-form arms kill one principal per run.
+- **Status:** "REFERENCE - HELD BACK IN FULL" (:3). Reading: historical correction of R05.
+- **Bears on:** WR, CHAR.
+- **Content that matters:**
+  - Decisive-form set piece with lethal climax: 1.00 principal dead per run, +0.14; loser exiled +0.01 [-0.03,+0.07]; settled by pact +0.03; ladder + decisive form lethal +0.20 vs pact +0.03 (:18-25). The ordering signal depends on the death.
+  - Ladder + tribunal kills no one and keeps its signal (+0.09) (:29).
+  - Mechanism: a lethal climax leaves the thread silent after (0.00 intensity after season 22) and the arc test requires a post-peak fall - partly an artifact of the arc definition (:28).
+  - In Valoria the cast is closed and authored (ED-WR-0011) so every death is permanent (:30).
+- **Conflicts / stale:** `[CORRECTION]` of R05's headline (:32). Output printed, not saved (:33).
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/reports/R07_arcs_without_deaths.md
+- **What it is:** Chat report: arcs without NPC death; death rare, fighting authority hard, killing consequential (toy constrained world, 300 seeds/arm).
+- **Status:** "REFERENCE - HELD BACK IN FULL" (:3). Reading: historical; source of the "+0.244" toy figure and the real-engine note on `fight`.
+- **Bears on:** WR, PC, FA, CHAR.
+- **Content that matters:**
+  - Among runs that passed the arc test the main thread closed on a death in 99% (forcing director), 94% (lethal set piece), 98% (ladder + lethal), 3% (ladder + tribunal) (:17). 19-36% of harm events hit someone holding a prize (:18).
+  - Constrained table (:22-30): ladder + decisive form + bound peace +0.24 [+0.19,+0.30], deaths 0.24/run, beats 0.52; decisive form without ladder +0.02; ladder + tribunal +0.01 ("does not transfer"); bottom-up -0.06 [-0.08,-0.03]; lethal climax with consequences on +0.29, 1.20 deaths. Constraints used: death needs a skill-1 target and 1% roll; harm against a standing-holder refused 90% unless provoked; accusation as usual weapon; peace bound eight seasons (:32).
+  - Killing at season 10 in ladder + tribunal world: ~9.5 acts by ~4.9 actors target the killer, ~1.3 tribunals name him, no runaway feud, world ~7 events quieter; avenge ambition added +0.5 acts (:38-43). Not saved.
+  - Real-engine note: `fight` requires only existence + co-location; `Felled` deletes the person and emits `person.died`; the "deontological gate" does not exist (`verb_table.yaml`, row `fight`) (:46).
+- **Conflicts / stale:** only 3 of 7 pre-registered predictions held (:49); "standing" = holding a prize is the toy's choice (:48); review table and killing runs not saved (:51).
+- **Open items:** trial, succession politics for vacated offices, longer feud unbuilt (:44).
+
+### proposals/2026-10-25-thrust-layer/reports/R08_ten_axes.md
+- **What it is:** Chat report mapping the user's ten goal axes to `goals.yaml` rows, verb ladders and gaps; defines the arc criterion as self effect + world effect.
+- **Status:** "REFERENCE - HELD BACK IN FULL" (:3). Reading: live as a mapping of axes to engine content; cites 38 rows.
+- **Bears on:** CHAR, WR, FA, ARCS, FI.
+- **Content that matters:**
+  - Axes: (1) suppress Einhir Revival, (2) hide threadwork truth, (3) overthrow Church, (4) overthrow caste, (5) purge Altonian influence, (6) maintain/expand authority, (7) standing within faction, (8) benevolent community action, (9) heal the Calamity, (10) revive Einhir heritage (:9-19).
+  - Coverage (:34-45): rows exist for 1 and 10 (direct opposition), partial for 3, 5 ("resist" not "purge"), 6 well covered, 8 only Knights/Cardinal of Prudence rows, none for 2 (Varfell's row is the opposite pole), 7 (only 2 of 38 rows attach to a seat), 9. Caste has no store in engine code (canon: informal geographic stigma) and no row defends it; healing has no act (`WR_world.md` T-WR-7, T-WR-11).
+  - Arc criterion: self effect = write to actor's own standing/holdings/stance/capability/knowledge; world effect = write to a store the actor does not own (Record, Site, Rung, DocketItem, another's Tenure/stance); checkable statically from `verb_table.yaml` `writes:` (:28-31). At least nine verbs write nothing (examine, interview, research, surveil, thread_read, reconstruct, tell, construe, comply) (:32) - R12 corrects to thirteen.
+  - Authority stripping: only the rung above in the same faction can strip a seat (ED-IN-0256 ruling 3); an outsider's route is force (`seize`) (:38).
+  - Non-lethal closing acts exist for every axis (determination, exposure, schism, establishment, revocation, conferral, completed work, restoration) (:54).
+- **Conflicts / stale:** uses the superseded 929/1,318 figure (:56); whether each listed verb executes was unverified (:61), and P1 later showed most do not.
+- **Open items:** map the 46 case files onto the axes (:58).
+
+### proposals/2026-10-25-thrust-layer/reports/R09_design_verdict.md
+- **What it is:** Chat report: verdict after the producer/critic relay on the thrust-layer design (v1 -> v2).
+- **Status:** "REFERENCE - HELD BACK IN FULL" (:3). Reading: historical summary of `../00_THRUST_LAYER_DESIGN.md`.
+- **Bears on:** CORE, CHAR, WR, FA.
+- **Content that matters:**
+  - Verdict: designable, not buildable yet; every closure route ends through verbs the measured run refused almost every time (:15).
+  - Critic opened ~125 citations: 114 held, 9 failed, 2 unverifiable (:17). Four critic findings that changed the design (:31-34): arc test vacuous via witness bookkeeping (`loop/witness.py:654-657`, `state/world.py:1144-1160`); succession piece duplicated ruled IN-61 (`workplans/valoria_master_workplan_v9_part5.md:129-133`); standing gate protects 3 of 31 seats; R3 would repeat the news-starvation regression (all goal commits minted at season 0).
+  - Design: current stage read from the person's own ledger (no arc store); ten-axis roster in `rosters.yaml`; stage referents added to the `need` question and promoted to top tier one season per deadline period with staggered phase (:20-21).
+  - Axis 9 out of scope until a thread-operation act exists; axes 2 and 4 need authored content; the Church holding axis 2 is an assumption (:38).
+- **Conflicts / stale:** `Correction recorded after delivery` (:11): "candidate typing unruled and in no workplan" is wrong; it is H-156 (`engine/season/hole_register.yaml:3615`). References `toy/thrust_layer_design_v2.md` and `..._v1_as_attacked.md` (:43), which are not in this directory (the committed design is `../00_THRUST_LAYER_DESIGN.md`).
+- **Open items:** `Slain` edge and D4 (sequence vs arc) for Jordan (:39) - later decided by M20/M21 per `DG_proposals_recent2.md`.
+
+### proposals/2026-10-25-thrust-layer/reports/R10_major_takeaways_as_first_delivered.md
+- **What it is:** Chat report: the eight takeaways as first delivered.
+- **Status:** "REFERENCE - HELD BACK IN FULL" (:3); points to `../02_MAJOR_TAKEAWAYS.md` as expanded and corrected (:11). Reading: superseded by 02.
+- **Bears on:** CORE, WR, CHAR.
+- **Content that matters:**
+  - Ranking: (1) make existing verbs execute (929/1,318 refused; determine 7/7, confer 4/4, commit 74/74 refused); (2) motive layer partly there (24 of 38 goal rows orientation-only and mint no Proposition); (3) goal ladder + closure form; (4) killing has no consequences (H-209, H-206; gate guards 3 of 31 seats); (5) do not build lookahead / blind script / forcing director; (6) deepest premise least buildable (heal Calamity no act, hide threadwork no row, caste no store, exogenous motion dark); (7) authoring is the largest content job; (8) metrics fail quietly (:15-59).
+  - Not answered: whether players find any of it legible; no human readers (:61).
+- **Conflicts / stale:** all first-delivery figures (929/1,318; 33%; 51/803; 28/46 as measurement) are superseded in `02` s9 (:11).
+- **Open items:** none.
+
+### proposals/2026-10-25-thrust-layer/reports/R11_register_verdict.md
+- **What it is:** Chat report: verdict on the missing-in-code register after the relay.
+- **Status:** "REFERENCE - HELD BACK IN FULL" (:3). Reading: historical; the lead design (G-01) withdrawn.
+- **Bears on:** CORE, CHAR, PC.
+- **Content that matters:**
+  - G-01 (stamp every referent with its collection class) withdrawn: Record sub-kinds (`works`, `dispensation`) are not collections, `DocketItem` is a world read, `determine` has two existence conjuncts of different kinds, stamping would starve untyped rows, and the loader refusal would reject the shipped `comply` row (:17-24). What survives is H-156's three options; choosing is Jordan's (the register's one escalation, :25) - later decided M19(a) per `DG_proposals_recent2.md`.
+  - P3b's "33.1%" counted `_admits` calls, not acts; P10 re-takes it per act: 32.2% of attempts at 2 seasons and 28.7% at 4 are refused at admission on a wrong-kind subject (:26). Headline 76.2% / 76.8% holds; 73.8% / 73.9% excluding graded losses (:27).
+  - G-16 re-owned to PC-10b: "default for an un-negotiated fight" answered: lethal per PC-10b (:28).
+  - `build`/`found`/`work` cannot execute by any typing (ED-IN-0297); `endings_reached` is an existing executable terminus both documents missed (:31-33). `accept` deaths: 0 of 11 had a challenge by the accept's subject (P11b); only 15 challenge events against 11 kills; cutting `accept` depends on PC-10b's H-240 route (:43).
+  - Control for any G-01 option must read questions delivered and claims deposited, not executed counts (:45). Degree-aware retry change in G-03 not run (moves the hash by construction). Player seat bypasses `opening_set` (:47).
+- **Conflicts / stale:** points to `toy/missing_in_code_v2.md` and probes p10/p11b/p12 (:51-54); in this tree they are `../01_MISSING_IN_CODE.md` and `probes/p10_*`, `p11b_*`, `p12_*` (outside this lane's list).
+- **Open items:** whether register + probes go in PR #506 or a new PR (:56).
+
+### proposals/2026-10-25-thrust-layer/reports/R12_design_producer_receipt.md
+- **What it is:** Producer (opus) hand-back for design v1 plus the verbatim brief it was given.
+- **Status:** "REFERENCE - HELD BACK IN FULL" (:3). Reading: historical; kept as terminal verdict about an existing artifact.
+- **Bears on:** CORE, CHAR, WR, FA, PC.
+- **Content that matters:**
+  - Corrects the brief: thirteen verbs write nothing, not nine (add `dispatch`, `challenge`, `evade / defy`, `speak`) (:16); `construe` is `grade: absent` with `requires_typed: none` so cannot serve as non-violent weapon (:17); `offices.yaml` has 31 seats: 16 no revoker, 13 strippable by rung above in same faction, 2 by rung above in holdings (:18).
+  - Orientation-only goal rows mint no Proposition so produce no thrust: Crown resist-Altonia, both Einhir-revival rows, caste-ended, community rows (:19). Standing gate can build on `admits_audience` / `guard_weight` (`world_q.py:1250-1344`) but binds nobody because guards are off by default (:20). `succeed`, `tie`, `knot` have no code opening their tenures (`rosters.yaml:141-143`) so hereditary seats cannot be filled (:21).
+  - Silent consequence channels: death never reaches questions (H-209), empty seat named by no claim (H-206) (:22). `_standing_crossings` (`loop/matter.py:187-240`) is the precedent for a threshold that writes nothing (:24).
+  - Brief (verbatim :71-112) gives the evidence base: `goals.yaml` 38 rows, chooser `_sample_order` Plackett-Luce via Gumbel at `data/fixtures.py:286`, `ENDINGS_CLASSIFIED.yaml` (DECIDER 20, ROLL 9, THRESHOLD 8, NEVER 10, UNCLEAR 3), 143 cases (46 characters, 97 arcs) (:90-93).
+  - Cheapest sinking test: executed `determine`/`confer`/`covenant`/`open_case` over seeds (:63).
+- **Conflicts / stale:** brief states "9 verbs write nothing" - corrected here. The brief cites the retired-Key `09_ambitions_and_arcs.md` proposals as reference-only (:92).
+- **Open items:** D1 (beaten fighter killed), D2 (who holds axis 2 / defends caste), D3 (caste store) - D2 later answered from canon by R13 F13.
+
+### proposals/2026-10-25-thrust-layer/reports/R13_design_critic_report.md
+- **What it is:** Read-only critic's report on design v1 (findings F1-F16, ~125 citations opened: 114 held, 9 failed, 2 unverifiable).
+- **Status:** "REFERENCE - HELD BACK IN FULL" (:3). Reading: historical terminal verdict; dispositions live in `../00_THRUST_LAYER_DESIGN.md`.
+- **Bears on:** CORE, CHAR, FA, WR, PC.
+- **Content that matters:**
+  - F1 BLOCKER: ARC predicate vacuous - every witnessed act yields a `claim.deposited` Receipt whose subject is the claim id (`loop/witness.py:654-657`; `state/world.py:1144-1160`), and any self-write (`move` writes `Person.travel_leg`) meets clause (2) (:18). F2 BLOCKER: succession carrier rejected by ruling IN-61 (`valoria_master_workplan_v9_part5.md:131`, `04_CODE_ARCHITECTURE.md:195`) (:19). F3: standing gate seats only 3 principals (`cohorts.yaml:127-130`); −1 `seat_holders` goals target unguarded Church seats (`goals.yaml:161-163`) (:20).
+  - F4: R3 reintroduces news starvation because goal commits are minted at `since` 0 (`harness/populated.py:709`) so stages come due together (:21). F5: `harness/arms.py:135-170` is wired to `field_casualty_model`, so it cannot produce the named measurements (:22). F6: `of: referent` cannot be spelled - operands closed, builder `SystemExit` not `Unspecified` (`data/requires.py:973-978`) (:23).
+  - F10: `held_document_declines` (`rosters.yaml:2020-2033`; `decision/options.py:857-874`) maps verb -> document kind and cannot key on a covenant's referent (:27). F11: contraventions understated (ED-IN-0225, R3 deadline as a timer no act declared, `Slain` vs 2026-09-04 "accept the result") (:28). F9: "pure read over a finished world" false - the question lives on the driver's `Scene` (`state/carriers.py:574-584`) (:26).
+  - Holds: 13 verbs write nothing; 31 seats (revocation 16 null / 13 / 2; conferral 6 null / 8 elected / 17 appointed); 22 of 29 loop-built seats keep `dispatch` (`data/rosters.py:709-717`); ED-IN-0225 cited in four `.py` files (chronicle, populated, soak, storybar) (:57-62).
+  - Observations: no path for a player character; a detained holder with a due stage forms acts the custody decline refuses (`verb_table.yaml:913`) (:36-37).
+- **Conflicts / stale:** many `path:line` cites will have drifted [UNVERIFIED]. F14 notes the "~2.7x" and "~9.5 acts by ~5 actors" toy figures appear in no cited output (:31).
+- **Open items:** none beyond the dispositions (in 00).
+
+### proposals/2026-10-25-thrust-layer/reports/R14_register_producer_receipt.md
+- **What it is:** Register producer's hand-back (29 entries, probes P1-P9) with the verbatim brief.
+- **Status:** "REFERENCE - HELD BACK IN FULL" (:3). Reading: historical; superseded by `../01_MISSING_IN_CODE.md` v2.
+- **Bears on:** CORE, CHAR, FA, PC, WR, FI.
+- **Content that matters:**
+  - Grades (:18-24): PRESENT-BROKEN 9 (G-01-06, G-14, G-15, G-27), ABSENT-RUN 5, ABSENT-READ 7, PRESENT-INERT 4, PRESENT-USED narrowed 4.
+  - P5: `body_step`, `illness_rate`, `season_factor_draw`, `lattice_coupling` change the world when set; `age_at_build` does nothing on a built world because `Person.born` fixed at construction (`state/carriers.py:687`) (:36).
+  - G-02: contested act refused before its contest never reaches `SeasonDriver.resolved` (`loop/resolve.py:1039-1045` vs `:377-379`); aperture reads `accept` as 4 attempted/4 executed when it was 48 attempted/44 refused (:45). G-27: cross-person share 30.4% -> 17.9% executed-only (:47).
+  - G-16: non-lethal duel exists unwired - RS-25 rules it in, PC-10a built it in `modules/combat/wrapper.py`, the season never passes it terms (:48). G-15: PC-10b's planned refusal of `accept` with no challenge would remove most measured deaths (:49). Rename `ladders` -> `goal_stages` because `ladders` already names two other things (:50).
+  - Brief corrections: `REFUSAL_KINDS` is at `data/verbs.py:1403`, not `:1073` (:59).
+  - Wrote the narration proposal's open S12 as "answered from precedent: IN-53 declines wrong-kind `confer` formations" (:65) - R15 A1 shows that was wrong.
+- **Conflicts / stale:** "28 of 46 by a text rule written after reading the strings" is non-independent (:37).
+- **Open items:** why `arrest` is never formed (R15 A14a answers: it forms only on a held warrant, `verb_table.yaml:179`); whether `survey` mints a `works` record (R15 A9: already answered in tree).
+
+### proposals/2026-10-25-thrust-layer/reports/R15_register_critic_report.md
+- **What it is:** Read-only critic's report on the register v1 (A1-A14, O1; ~46 citations opened: 34 held, 12 failed) plus verbatim brief.
+- **Status:** "REFERENCE - HELD BACK IN FULL" (:3). Reading: historical terminal verdict; dispositions in `../01_MISSING_IN_CODE.md` s7.
+- **Bears on:** CORE, CHAR, FA, SE, PC.
+- **Content that matters:**
+  - A1 BLOCKER: G-01 passed over open RULING H-156 (`hole_register.yaml:3615`, "survives all five ... THE ROW STAYS OPEN"; `withheld_verbs` at `:3619`); `decision/options.py:94-100` says a filter on world truth would be `choose` reading the world (:19). A2 BLOCKER: the class rule is unsound (works/petition/dispensation are Record sub-kinds; DocketItem is a world-state read; `determine` has two existence conjuncts; `examine` conjunct is `of: site`; stamping collides with source-qualified classes and would undo IN-45, IN-49, IN-09) (:20).
+  - A3: 7,737 counts calls of `_admits`, not acts: a contested or graded act calls it twice (`resolve.py:1039`, `:428`); per act 2,560/7,402 = 34.6% (:21). A6: "refused" has at least four readers (`witness.py:245-256`; `person_q.py:364-368`; `data/verbs.py:1406`); 44 of seed 0's 1,176 refusals are "both" (:24). A8: G-02 is already a recorded instrument limit (`requirements.yaml:993-996`, R-05) (:26). A9: `build`/`found` cannot execute because a computed `create_record` mints `text` (`effects_information.py:82-84`; H-165; ED-IN-0297) (:27). A10: `world_q.endings_reached` (`world_q.py:1990-2024`; `driver.py:520-523`) missed (:28).
+  - A5: refusals carry the world's motion - seat claims are mostly `duty.refused`/`confer.refused` and `claim_landed` is 13,074 of 14,357 questions (:23). A4: `commit` executes in baseline (IN-11: 8 times in the realm; `hole_register.yaml:3622`) (:22).
+  - A14: `act.ineligible` and the fallback `act.refused` count as EXECUTED under the driver rule (`resolve.py:88`, `:229`) (:32); P6's strict regex embeds verbatim fragments and omits NPC-081/082/087 (:32).
+  - NEEDS-RUN list (:35-44) of six measurements; O1: player seat bypasses `opening_set` via `harness/play_surface.py:8-29` (:33).
+  - What holds: P1's capture is valid (driver calls `self.resolve`/`self.encounter` `driver.py:473,:480`); hashes agree across P1/P3b/P4/P5; P4 counts hold; `arms.py:153-165` hard-codes `field_casualty_model`; `guards=False` default (`populated.py:725`) (:54-59).
+- **Conflicts / stale:** the "8 times" and similar counts are as of 2026-10-25 [UNVERIFIED now].
+- **Open items:** the six NEEDS-RUN items; P10 (not in this lane) is the re-measurement.
+
+### proposals/2026-10-25-thrust-layer/reports/README.md
+- **What it is:** Index of the 15 reports and reproduction notes.
+- **Status:** "REFERENCE - PROPOSED, HELD BACK IN FULL" (:3). Reading: live as an index.
+- **Bears on:** PROCESS, WR.
+- **Content that matters:**
+  - R01-R11 are the assistant's chat answers verbatim; R12-R15 are subagent hand-backs with briefs (:39-40). Only path rewrites were applied (:46).
+  - R12-R15 kept as terminal verdicts about existing artifacts per CLAUDE.md s0's exception; "Delete them if the exception becomes the general case" (:7-9).
+  - Known errors (:54-56): R09/R10 say candidate typing "unruled and in no workplan" (it is H-156); first-delivery refusal figures (929 of 1,318; 33%; 51 of 803; 28 of 46) superseded.
+- **Conflicts / stale:** none.
+- **Open items:** none.

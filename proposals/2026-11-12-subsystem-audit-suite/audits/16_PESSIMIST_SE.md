@@ -276,7 +276,7 @@ one that would cost nothing even in the worlds built to exhibit it is a **false 
 | `settlements.produce` (ore) | a seam yields | delete the `ore` cell | nothing, in any world: no rule, cost, weight or roster reads `ore` (grep: three hits, all the registry and the yield cell). 1,850 of 4,810 units a season | **false N-line** |
 | `settlements.produce` (timber) | pays for fabric | delete the cell | nothing in computed play (`build` 0 executed); hand-built `build` would refuse | false today |
 | `Rung.yield` | "last season's product" | delete the field and its write | nothing: written 37 times a season, read by no code outside `harness/` and tests (grep) | **false N-line** (a write-only field) |
-| `larder_draw` + `subsist` | scarcity binds a body | set `body_step` 0 | barrier-only: the eleven starving cohorts live. Computed play: `body.changed` and `body.tended` vanish and nothing else moves (the cohorts end each season at 1000 in both readings) | true in principle; **false in computed play** (H-304) |
+| `larder_draw` + `subsist` | scarcity binds a body | remove the shortfall (the fed arm against the fail arm; `body_step` 0 itself was not run) | barrier-only: the eleven starving cohorts live instead of dying. Computed play: `body.changed` and `body.tended` vanish and no settlement reading moves (41 of 44 starving cohort-seasons end at body 1000 anyway) | true in principle; **false in computed play** (H-304) |
 | the shortfall Observation | a dearth reaches a person | drop `short_seen` | nothing in the realm in either arm, two seeds (0 Observations); one `transfer` of 8 salt in `scarce` | false today; true in one fixture |
 | `world_q.hunger` and its bands | a settlement's need is readable | delete | nothing: read by `census` and a probe label | **false N-line** |
 | `settlements.housing` (capacity) | the throttle that makes `found` and `build` matter | set the floor to 99 | `migrate` refusals for room stop (79 of 116 at seed 0); the acts they refused are courtiers re-homing; `found`/`build` do not execute either way | holds as a refusal, **false as a throttle** |
@@ -289,7 +289,7 @@ one that would cost nothing even in the worlds built to exhibit it is a **false 
 | `raze` | a town ends | delete | nothing: 0 executed | false today |
 | `exchange`, `default_return_kind` | both sides' stores move | delete | nothing: 0 executed in any realm run | false today |
 | `transfer` | matter moves by an act | delete | per season, one unit of grain no longer moves from a town into its own cohort's person-rung, where no draw reaches it | false today |
-| `migrate` (cohort) | the people move | forbid cohorts | nothing: 0 of 67 cohort attempts executed across both arms and two seeds | **false N-line today** |
+| `migrate` (cohort) | the people move | forbid cohorts | nothing: 0 of 155 cohort attempts executed across both arms and two seeds (and 0 of 84 by named persons in those four runs) | **false N-line today** |
 | the geography file's adjacency, costs, budget | the map | delete the keys | nothing (first audit F-SE-06, grep) | false N-line |
 | `coin` | a matter kind | delete the row | nothing: no yield, no holder, no reader | **false N-line** |
 

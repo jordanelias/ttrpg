@@ -23,3 +23,45 @@ interrupted and what follows is partial.**
 ## 0. Verdict
 
 `[PENDING — rewritten after the probes]`
+
+## 2. Premise audit — the five sentences of presentation
+
+### 2.0 The first account: what each sentence means in ordinary words (written before the probes ran)
+
+Written from the words alone, as a player of strategy and role-playing games would take them, and
+committed to this file before any measurement below existed. Each link is a thing the game must do
+for the sentence to be true.
+
+**P1. "A player sees what their character could see."**
+(a) The character has a place, senses, company and holdings. (b) The player is shown what lies within
+them: where he stands, who is with him, what he holds, what he has been told and by whom. (c) The
+player is not shown what lies outside them: a death in another town is unknown until word arrives.
+(d) What is shown may be wrong, because a rumour is shown as a rumour. (e) The converse holds too:
+nothing the character could plainly see (his purse, his wound, the people in the room) is hidden from
+the player. *Genre:* a Crusader Kings player expects an omniscient ledger and would be surprised by
+darkness; a Disco Elysium or Pentiment player expects exactly this sentence. Both would be surprised
+if the menu of actions named a thing the character has never heard of.
+
+**P2. "A player can read why a thing happened."**
+(a) A thing happened that the player knows of. (b) It had causes: a person's act and that person's
+reason, or a process of the world. (c) The game shows the cause as far as the character could know
+it: who did it, in answer to what. (d) Where a roll decided it and the roll was his own, he is shown
+what went into it and how it fell. (e) Where he cannot know, the game says "unknown", not nothing.
+
+**P3. "A player can choose a lever and see its effect."**
+(a) Several choices are offered that a player can tell apart. (b) Before choosing he can anticipate
+what each would do: the chance, the cost. (c) Choosing one rather than another changes what happens.
+(d) The change is shown to him and is traceable to the choice, at once (the result of the act) and
+later (what others did about it).
+
+**P4. "A duel and a battle can be watched, steered or skipped."**
+(a) A duel or battle occurs with the player's person in it or near it. (b) *Watched:* an account of
+its course, blow by blow or phase by phase, is presented with no input. (c) *Steered:* at decision
+points his input changes the course. (d) *Skipped:* the outcome is produced at once, by the same
+resolver, at the same odds. (e) The three are one fight, not three.
+
+**P5. "The story the world tells is legible as a story."**
+(a) The world produces sequences of events that answer one another. (b) A record of them exists.
+(c) The record can be read in order with who, what and in answer to what. (d) Someone inside the
+world, and so the player, can follow at least one thread from its opening to its end. (e) The things
+in it have names a person would say aloud.
