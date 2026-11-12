@@ -557,3 +557,52 @@ HEADS-ONLY lane (350 files, proposals dated before 2026-09-20). Method per file:
 ### proposals/2026-08-31-authoritative-architecture/08_PROVENANCE.md
 - one line: Status reference; method, evidence base, findings by independent rediscovery :60, what the method could not see :77. Tags PROCESS.
 
+### proposals/2026-08-31-ideal-v2/00_INDEX.md
+- **What it is:** index of "The Idealized System v2" (four docs: architecture, season loop, compendium, Godot implementability), 2026-08-31.
+- **Status:** "PROPOSED (2026-08-31). NOTHING HERE HAS EXECUTED." Reading: superseded by `architecture/` (Layer 1) and the running `engine/season/`; cited by workplan v11 `_part6`.
+- **Bears on:** CORE, FA, SE, CHAR, GO.
+- **Content that matters:**
+  - Seven forks all answered: D-2 act economy ruled "one act per person or cohort, universally" (an office's throughput is its establishment's acts); F1 `Office.conferral` names the basis per office; F2 `Stores := map[MatterKind -> quantity]`; F3 rootless vacancy dissolves (conferral rule may name the office's own judging set); F4 Coherence-0 is de-individuation, not a fork; F5 off-board polities are an EVENT SOURCE not a simulated realm (large deletion); F6 RULED BY JORDAN "neither - the world is in flux": "If the world is not tended to by anyone, it will die. If it is tended to by everyone, it will thrive." :87-103.
+  - What these documents refuse :104.
+- **Conflicts / stale:** Jordan quote on F6 is a design-intent statement useful to WR/SE audits; check if it landed in `engine/season`.
+- **Open items:** none in head.
+### proposals/2026-08-31-ideal-v2/01_ARCHITECTURE.md
+- one line: 2187 lines, 68 headings; citation key and namespace key before anything :30-40; "what this document may not do" :59. Architecture of persons/rungs/offices/sites. Tags CORE.
+### proposals/2026-08-31-ideal-v2/02_THE_SEASON_LOOP.md
+- one line: four barriers, six steps :96, four write classes :114, parallelism licence :134. Argument about text, no execution. Tags CORE.
+### proposals/2026-08-31-ideal-v2/03_COMPENDIUM.md
+- one line: cross-referenced register of keys, inputs, outputs, terms; five id families :37; identity register :65; five identity facts :105. Key-era vocabulary. Tags CORE.
+### proposals/2026-08-31-ideal-v2/04_GODOT_IMPLEMENTABILITY.md
+- one line: the port axis; no `.gd` parsed, no benchmark; Godot version evidence both sides. Superseded by `godot/` and ED-GO-0002. Tags GO.
+
+### proposals/2026-08-31-ideal/00_THE_SHAPE.md
+- **What it is:** direct answer to Jordan: the ideal design system and code shape from scratch (PR #343), 2026-08-31, 996 lines.
+- **Status:** "DIRECT ANSWER (2026-08-31)". Reading: historical; superseded by `10_SUPERSEDING.md` in the same directory.
+- **Bears on:** CORE, FA, SC, CHAR.
+- **Content that matters:** notes cross-document contradictions in the 17-doc from-scratch suite (two pool formulas, two practice ranges, three signature spellings) :4; what the exercise established :10; the ideal system :28; what stays because it earned its place :30. "Four enlargements" (watch, convener, transfer act, option removal).
+- **Conflicts / stale:** its evidentiary base partly overturned by 03.
+- **Open items:** none.
+### proposals/2026-08-31-ideal/01_review_b_findings.md
+- one line: Fable read-only review; F-6 propagation gap (`:219` ruling), F-2 closure axis. Tags CORE.
+### proposals/2026-08-31-ideal/02_review_a_findings.md
+- one line: Fable review; contamination sweep null result :8, three overturns :34, S19 containerless cluster vacancy :55, ordering dependency nobody stated :63. Tags CORE, FA.
+### proposals/2026-08-31-ideal/03_review_synthesis.md
+- one line: verdict "four-enlargement shape survives in kind; evidentiary base does not"; S-1 (four shipped watch instances), S-2, S-3 overturned; section 10 fails its own falsifier on four counts :48. Tags PROCESS.
+### proposals/2026-08-31-ideal/04_ners_audit.md
+- one line: Status AUDIT, gates the superseding doc; option-removal clears `:219`; dominant option (silent burial) :26; the watch has zero exact shipped instances :50; petition-to-office :91; transfer act strongest N-line :123; section 10 falsifier run :146. Tags FA, SC, CORE.
+### proposals/2026-08-31-ideal/10_SUPERSEDING.md
+- **What it is:** "Valoria - the Ideal Design, enlarged by what the testing taught", the terminal deliverable of PR #343, 2018 lines, 87 headings.
+- **Status:** "PROPOSED (2026-08-31). Supersedes PR #342's 17-doc suite and the palimpsest ... Nothing here has executed." Reading: superseded by `architecture/` and `engine/season/`; directory `2026-08-31-ideal` cited by workplan `_part6` and by `engine/season/queries/world_q.py`.
+- **Bears on:** CORE, FA, SC, CHAR, SE.
+- **Content that matters:**
+  - Design on one page: one actor (person); containment (single-parent tree) and alignment (set system, faction = proposition + commitment map); three signatures (`choose` takes no world, `resolve` takes no person, `witness` per-person, consensus broadcast a type error); one resolver, one roll, one obstacle; containers hold stake, judging set, standing dates; offices hold remit and own dates; nobody holds an aggregate; knowledge lives only in ledgers :67-80.
+  - Four enlargements = one promotion: standing date as spine; convening condition (§7), petition (§8), lost option (§10), unpaid wage (§11); principle "there is no fallback" (§13) :80-86.
+- **Conflicts / stale:** `world_q.py` cites it - check that comment still true.
+- **Open items:** none.
+### proposals/2026-08-31-ideal/11_challenges_round1.md
+- one line: antagonist round 1: 5 FATAL, 12 MAJOR, 6 MINOR; C-1/C-2 the dominance repair does not hold / the dominance defect is itself ... :12-31. Tags CORE, PROCESS.
+### proposals/2026-08-31-ideal/12_challenges_round2.md
+- one line: round 2: 1 FATAL, 8 MAJOR, 4 MINOR; nine of sixteen are regressions from round 1's own fixes :3; D-1 units error was relocated :27; shipped stochastic yield :42. Tags PROCESS.
+### proposals/2026-08-31-ideal/20_FABLE5_ADVERSARIAL_REVIEW.md
+- one line: adversarial review of PR #343's terminal deliverable, 1824 lines; verdict in one page :136, central finding :138, trajectory test :278, where the design is a direct hit :330. Tags PROCESS, CORE.
+

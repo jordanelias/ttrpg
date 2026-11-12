@@ -125,8 +125,8 @@ time to choose the form. The size of the bend is Jordan's to tune and is exposed
 4. **`engine/season/seam/wrappers/sigma.py::_frame`**: `ceiling_form=fx.get("ceiling_form")`.
 5. **`engine/season/data/fixtures.py`**: `ceiling_form="soft"`, swept `hard` (control) / `soft`
    (shipped) / `soft_late` (the knee one whole success under the cap, never under the fixed ceiling:
-   `knee = max(ceiling, cap - 1)`, the arm that bends least; listed so the sweep has three points and a
-   verdict that flips across it is itself the finding, S42.2.1). It rides H-213's row (the same hole:
+   `knee = max(ceiling, cap - 1)`, the arm expected to bend least, `[not measured here]`; listed so the
+   sweep has three points and a verdict that flips across it is itself the finding, S42.2.1). It rides H-213's row (the same hole:
    how hard one matter can get); no new row.
 6. **SC-B, when it lands**: its `bound(x) = min(x, ceiling)` reads this function instead. The
    favourable halves are still subtracted after the bound and floored at `OB_MIN`; nothing else in SC-B
@@ -136,7 +136,8 @@ time to choose the form. The size of the bend is Jordan's to tune and is exposed
 
 1. **Control.** At `ceiling_form: hard`, `build_realm(0)` and `build_realm(1)` through the shipped
    chooser for two seasons give `bacd687f1470883b412be9638d0b0f88` and
-   `8aae8412c221edb44ffd45d91bae2671` (measured at 826b747 by three lanes independently).
+   `8aae8412c221edb44ffd45d91bae2671` (measured by this lane at 826b747; equal to the SC interrogation
+   lane's seed-0 run and the determinism sweep's seed-1 run).
 2. **At the owner.** `runs/PES_DICE/soft.txt`'s body as a test in
    `engine/season/tests/test_sc01_obstacle_ceiling.py`: over pools 2 to 12 and obstacles from the knee
    to 14 in steps of 0.005, the chance of Partial-or-better is strictly decreasing and never under
