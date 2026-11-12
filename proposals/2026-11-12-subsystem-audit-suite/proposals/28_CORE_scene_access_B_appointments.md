@@ -217,6 +217,57 @@ never deleted): relied on. Row 44 (a belief is a `commit` to an `OUGHT`): an app
 - **S.** One methodology for every promise with an end. *Zooms*: person to room.
 - **E.** One table row, one branch in one effect, two reads.
 
+## No scene is still (A-81) and entrenchment moves the world (A-80)
+
+| outcome | the durable change it leaves | who can read it afterwards |
+|---|---|---|
+| the ask is uttered (any band) | `Proposition.exists` and the utterer's hold; the deposits of `proposition.uttered` | the host and his people if present; anyone told |
+| the host's `commit` takes | the `commit` Tenure with its term and `degree` | `appointment_with`; the precedence draw; witnesses of `commitment.made` |
+| the host's `commit` fails | `14_VERBS_SOCIAL1_D…` §4 has Failure write nothing; the remembered refusal is the deposit of `commitment.refused` in the host's own ledger and in those present. **Owed under A-81, named for that lane:** a Failure whose Proposition names another person as its `value` also deposits to that person where present, so the asker learns he was refused | the asker, by presence or by telling |
+| the appointment lapses unused, or with the visitor turned away | MATTER's close of the Tenure (`until`), Event `tenure.closed` citing the commit | `appointment_outcome`; the visitor's `dues_unmet` clause (proposal C) |
+| the host withdraws | his `release`: the Tenure's `until`, Event `commitment.ended` | witnesses; `deeds_judged` |
+
+The no-null-scene reading for this file: scenes holding an ask or a grant with no gate write and no
+`claim.deposited` citing them. Expected 0; control `appointments: off` (no such scene exists, the count
+is 0 by absence, and the planted test of commit 2 is what shows the reading can count).
+
+A-80: an appointment is the entrenched party's own instrument. A host who grants leave selectively is
+dispensing a favour others must seek, hold, lose and resent; one who withdraws it makes a witnessed
+break. Both act on the world while his door stays shut to the rest.
+
+## Instructions to code it (a batch item for workplan v12)
+
+**Lands by:** the IN lane, one `methodology-execute` batch after proposal A's batch, `valoria-author` at
+`sonnet`, one `methodology-close` with its terminal `opus` critique. **Cost class:** small build.
+
+| # | files and symbols (single owner) | call sites changed | data rows | named tests (`engine/season/tests/test_scene_access_appointments.py`) |
+|---|---|---|---|---|
+| 1 | `data/rosters.py`: loader and constant `TERMED_PROMISES` (validates `mood` against the Proposition moods in use, `term` as a `Fixtures` name, `asked_on` against `data/verbs.py::EVENT_KINDS`); `data/fixtures.py`: `appointments` (`off` / `on`, shipped `off`), `appointment_term = 2` | none | `rosters.yaml`: `termed_promises: {receives: {mood: OUGHT, term: appointment_term, asked_on: [visitor.kept_waiting]}}` | `test_the_table_refuses_an_unknown_kind_and_an_unknown_fixture` |
+| 2 | `loop/effects_shared.py::declared_term` (moved from `loop/effects_governance.py::_declared_term`, `:39-55`); `loop/effects_information.py::_eff_commit` (`:1253`): the term for a self-binding promise the table lists | `loop/effects_governance.py::_eff_confer` imports the moved helper | `verb_table.yaml` `commit`: `writes: ["Tenure.since", "Tenure.term"]` | `test_a_commit_to_an_ask_carries_the_term_and_matter_closes_it` (gate row 4); `test_any_other_commit_is_untermed_and_the_hash_is_equal` |
+| 3 | `queries/world_q.py`: `appointment_with`, `appointment_outcome` | `loop/resolve.py`: the precedence net's second level (proposal A commit 6) | — | `test_the_appointed_caller_is_usually_first_and_never_always` (gate row 3); `test_each_outcome_class_is_reachable_in_a_planted_world` |
+| 4 | `decision/options.py::_derive_operand` (`:1081`): the `said` for an ask, from a held claim of a kind in `asked_on` | none (`operand_bags`, `:1306`, already calls it) | — | `test_a_person_kept_waiting_can_form_the_ask_and_one_who_was_not_cannot`; `test_two_hosts_alike_but_for_stance_grant_at_different_rates` (gate row 5) |
+| 5 | `harness/chronicle.py`: one line class per `appointment_outcome`; `harness/access.py`: the four outcome counts | none | — | `test_the_chronicle_prints_an_appointment_line_for_a_planted_lapse` |
+| 6 | the measurement (gate row 2) and the flip of `appointments` to `on`; one declared re-pin | the goldens' one owner | — | the re-pin |
+
+**Control and falsifier:** `appointments: off` (hash EQUAL); the falsifiers above, each a named test.
+**Declared hash movers:** `appointments: on` in a world where a host commits to an ask; commit 2's
+`Tenure.term` on the `commit` row is check-only and moves nothing.
+
+**INCOMPLETE, with what is missing.**
+
+- *Commit 4.* `utter` is untyped today (`decision/options.py:1287`: `{}` *"is the right answer for
+  `utter`"*) and carries no `said`. The ask cannot be formed by the chooser until
+  `14_VERBS_SOCIAL2_B_a_word_with_content.md` §1 lands the typed `holds` conjunct and the `mood` operand.
+  Until then an ask exists only as a hand-built or played act, and commits 1 to 3 and 5 are complete
+  without it.
+- *How the ask reaches the host as a `commit` referent.* `commit` forms only on a `Proposition`-classed
+  referent of the question the person answers (`queries/world_q.py::own_referents_of_class`, `:3714`).
+  Not opened: whether `questions_for` admits, for the host, a claim about a Proposition another person
+  uttered whose `subject` is the host. Missing: that reading; if it does not, one reach term (*a
+  Proposition whose subject is the person*) is added at `questions_for`, with its own control. Gate row
+  2 reading zero grants at every seed is the symptom.
+- *The Failure deposit to the asker* (table above) is the SOCIAL1 lane's row; not coded here.
+
 ## Cost class
 
 Small build after proposal A and S2-B §1. Golden re-record where a host commits to an ask.
