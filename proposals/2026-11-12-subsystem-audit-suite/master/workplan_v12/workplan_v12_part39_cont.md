@@ -97,4 +97,145 @@ Not in this batch, and where each is: `04_MB_unit_loadout_and_weapon_in_hand_B` 
 - COST and TIER: design; `opus`, `high`; critic `ners` on `opus`.
 - LANDS IT: B31's `valoria-author` producer, `isolation: worktree`; `Item: B31.01`, `[skip ci]`; at the batch's open. Its approval is the batch PR's merge (ED-1094); its build is listed for Jordan in the PR body as unscheduled.
 
+### B31.02 — the weapon in hand, two order triggers, the switch's tick · `04_MB_unit_loadout_and_weapon_in_hand_B` stage 3 · BUILD · HASH EQUAL
+- SOURCE: `proposals/04_MB_unit_loadout_and_weapon_in_hand_B.md` §4 ("The weapon in hand"), its `Folded:` (audit 26) item (1) and (2), "Stages and gates" row 3, "Tests (W3-1)" stage 3, "Falsifier"; rulings A-2, A-59, A-100 (MBA §3.1: "A missile troop that is reached fights with its sidearm … or switches by a standing order (`volleys_spent`)"); ED-MB-0001 (read as "per the weapon in hand", the brief's later statement); closes R-35 of `audits/04_MB_audit_addendum_B.md`, `IS-PC-P2` (with B31.03).
+- ADVANCES: none of the nine; a weapon decision reaches a field (A-59 (2)).
+- INSTRUCTION (copied, with the corrections said):
+  1. "`Subunit.in_hand: str = 'primary'`, in `hierarchy/units.py::_ORDER_SAFE_FIELDS`. `unit_type`, reach and support depth are read from the arm in hand." Correction (A-100): the contact draw reads the `duel_key` of the arm in hand (MBA-01), or the missile arm's `sidearm` when a missile arm is in hand hand to hand; `RANGED_MELEE_SIGMA` was deleted by MBA-04 step 7, so "the missile handicap" is that sidearm.
+  2. "A change is an `Order` behaviour, so a standing order carries it (`04_MB_manager_battle_one_resolver.md`): for example `(enemy_range:2, {in_hand: secondary})`." `switch` is an order "and take[s] effect through the obedience draw (`27_MB_A`)".
+  3. "**The switch costs a tick:** on the tick the order fires, the unit's pair pools are 0 and its brace latch resets. A body with a missile weapon in hand does not volley once it has switched". Correction (A-100, MBA-04 step 4): "pair pools are 0" is written as "the body contributes `m = 0` fighting men to its contact vector on that tick".
+  4. "Two trigger kinds are added to `_ORDER_TRIGGER_KINDS`, not one: `flanked` (contact on a flank or rear arc, which the engine computes per pair) and **`volleys_spent`** (ammunition at zero)."
+  5. "**No default order is invented by the builder.** … a body with no such order keeps its primary in hand and pays for it." "The switch is one-way within an engagement unless a later order switches back; the tick is paid each time."
+  6. Audit 26's fold (1): "**A body itself in melee contact does not volley**, whichever weapon is in hand; a body not in contact may shoot into a melee". Open `orchestration.py::volley_phase` and `core/volley.py` (B19's MBA-05: "the no-volley-in-contact rule unchanged") and record in the commit body whether the rule holds at this tree; add it in `volley_phase` only if a reached body still volleys.
+- WHERE: `modules/mass_battle/hierarchy/units.py` (`Unit.in_hand`, `_ORDER_SAFE_FIELDS`, `_ORDER_TRIGGER_KINDS`, the trigger evaluation, the switch tick); `modules/mass_battle/orchestration.py` (`volley_phase`; `resolve_engagements`' vector builder reads the arm in hand); `modules/mass_battle/core/volley.py` (only if step 6 finds the rule absent); `tests/valoria/test_mass_battle_ammo.py`.
+- TESTS: `tests/valoria/test_mass_battle_ammo.py::test_switch_stops_volleys_and_costs_a_tick` and `::test_reached_archers_with_no_order_stop_volleying` (named, W3-1), written first and read red.
+- FALSIFIER and CONTROL: "a reached missile body that still volleys after switching"; "any result that moves with every `secondary` null". Control: `python tools/ci_golden_modes_check.py` digests equal with every `secondary` null.
+- GATE: the row's gate, copied: "digests equal with every `secondary` null; archers with `secondary: arming` and the order `(enemy_range:2, {in_hand: secondary})`: volley events stop at the order's tick, one tick with no melee from that body, then melee without the missile handicap"; and "a reached archer body with no order: zero volley events after its first tick in contact". `python -m pytest tests/valoria/test_mass_battle_ammo.py -q` → pass; `python tools/ci_golden_modes_check.py` → digests equal to B30's close.
+- HASH MOVERS: none ("none at stages 1–3 with every `secondary` null").
+- DEPENDS ON: EXISTS-IN-TREE `hierarchy/units.py::_ORDER_SAFE_FIELDS`, `::_ORDER_TRIGGER_KINDS`, `orchestration.py::volley_phase`; V12 Batch B17 (stages 1–2: `references/troops.yaml`'s `primary`, `secondary`); V12 Batch B19a, B19 (MBA-01 `duel_key`, `sidearm`; MBA-04, MBA-05; `27_MB_A`'s obedience draw); V12 Batch B20 (`04_MB_manager_battle_one_resolver.md` §2: standing orders on the unit row).
+- GLOSSARY: *weapon in hand* (row exists for the duel's `form`, A-101's round): its owner column adds `Unit.in_hand` (mass battle; one state name with the duel's, `…_B.md` NERS S).
+- NAMES: `Subunit` → `Unit` (B16M); `subunits` → `units` (B16M); the army is `Army` (B16M).
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B31's producer; `Item: B31.02`, `[skip ci]`.
+
+### B31.03 — what a unit carries costs it stamina and speed · `04_MB_unit_loadout_and_weapon_in_hand_B` stage 4 · BUILD · HASH EQUAL
+- SOURCE: the same file, §3 (`strength` and its seed rule), §5, its first `Reconciled:` items (1), (2) (the factors act on the column ledger only), "Stages and gates" rows 4 and "4, after arrangement", "Tests (W3-1)" stage 4; `proposals/03_PC_loadout_and_carry.md` items 2–4 (`carry_demand_of`, "the ONE body"; the host hands the shortfall "as `(fatigue_factor, step_factor)` per in-hand state … on the unit row's input"); D-U1-11d; closes R-36, `IS-PC-P2`.
+- ADVANCES: none of the nine; Jordan's stated trade (versatility against tiring and slowness) has a carrier.
+- INSTRUCTION:
+  1. Copied (§5): "the host evaluates the carry demand for each unit in both states and hands the module `(fatigue_factor, step_factor)` per state; the module multiplies the per-clash drain, divides the rest recovery, and multiplies the step." "The caller is the host, `seam/wrappers/mass_battle.py::field_input` (and the army constructors' input builders); `modules/mass_battle/` neither imports nor copies it." Masses: "An arm's mass lives in personal combat's typed export when its key is in that roster, and here (`mass_kg`) only when it is not."
+  2. The form (UNDECIDED (4), `[ASSUMPTION: carrier and map — basis: `03_PC_loadout_and_carry` items 3 and 4]`): per state (`primary` in hand; `secondary` in hand), `short = max(0, carry_demand_of(masses_not_in_hand, armour) − strength)`; `fatigue_factor = 1 + ACT_WEIGHT / D_WT × short`; `step_factor = 1 / (1 + CARRY_CLOSE_K × short)` (the PC lane's constants, read from the export's `cfg`). The two pairs ride on the unit's row of the order of battle the host builds (`UnitRow.carry: ((f_primary, s_primary), (f_secondary, s_secondary))`, default `((1.0, 1.0), (1.0, 1.0))`).
+  3. Module reads: `percell.update_stamina` multiplies the per-clash `drain` by the in-hand state's `fatigue_factor` and divides the rest by it; `Unit._node_advance` multiplies the step by `step_factor` (the column ledger only: "the subunit drain in `battle_loop` and `STAMINA_RECOVERY_PER_RESERVE_RANK` … have no successor").
+  4. `strength` on every troop row by the seed rule, if B17 did not ship it: "the smallest whole number at or above the demand of the row's own armour, so that a type carrying only its primary pays nothing, as today."
+- WHERE: `engine/season/seam/wrappers/mass_battle.py` (`field_input`, `_order_of_battle`: the factors); `modules/mass_battle/orderofbattle.py` (`UnitRow.carry`); `modules/mass_battle/percell.py` (`update_stamina`); `modules/mass_battle/hierarchy/units.py` (`_node_advance`); `references/troops.yaml` (`strength`, if absent); `tools/export_troops.py`, `engine/engine_params/troops.json` (re-derived); `tests/valoria/test_mass_battle_order_of_battle.py`.
+- TESTS: `tests/valoria/test_mass_battle_order_of_battle.py::test_the_factor_handed_in_equals_carry_demand_of` (named): "the factor handed in equals the leaf evaluated on the same masses, asserted by calling it". Written first, read red.
+- FALSIFIER and CONTROL: "a carried second weapon that changes nothing at any `strength`"; "a second roster or a second carry rule under `modules/mass_battle/`". Control: every `secondary` null → every factor 1.0 → digests equal.
+- GATE: row 4, copied: "with a `secondary` and `strength` at the seed: stamina at tick 7 and first-contact tick differ from the same body without it; at a raised `strength` they do not; over 72 ticks the carrying side recovers more slowly out of contact"; row "4, after arrangement": "a pike body four ranks deep with `secondary: arming` and a `flanked` switch order, against the same body with no secondary, flanked by cavalry: the switching body's share lost differs beyond the same-run control at n 200; against a frontal charge it does not win more than the control" (a module reading on `resolve_field`, `assert checked >= 200`, quoted in the commit body). `python -m pytest tests/valoria/test_mass_battle_order_of_battle.py -q` → pass; `python tools/ci_golden_modes_check.py` → digests equal; `python tools/export_troops.py --check` → exit 0.
+- HASH MOVERS: none at landing ("stage 4 only rows naming a second weapon"; none does).
+- DEPENDS ON: V12 Batch B18 (`03_PC_loadout_and_carry`: `engine/substrate/combat_kit.py::carry_demand_of`, the export's `mass`); V12 Batch B19 (`04_MB_cell_hierarchy_as_data`, the arrangement; `16_PESSIMIST_MB_one_stamina_ledger` steps 1–2, the one column ledger); V12 B31.02; EXISTS-IN-TREE `percell.py::update_stamina`, `units.py::_node_advance`, `combat_kit.py`.
+- GLOSSARY: *carry demand* (row exists, PC's): owner column `combat_kit.carry_demand_of` for persons and units alike.
+- NAMES: `Subformation` → `UnitRow` (B16L); `Subunit._node_advance` → `Unit._node_advance` (B16M).
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B31's producer; `Item: B31.03`, `[skip ci]`.
+
+### B31.04 — pace on the troop row; the envelop pace on the order · `26_MASS_BATTLE_movement_and_fatigue_as_data` §1 · BUILD · HASH EQUAL
+- SOURCE: `proposals/26_MASS_BATTLE_movement_and_fatigue_as_data.md` §1, "Exact edits", "Gate" 1, "Tests (W3-1)"; rulings A-59 (pace is a term a unit brings from its own row); `04_MB_unit_loadout_and_weapon_in_hand_B` `Folded:` (5); closes M-1 of `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md`.
+- ADVANCES: none of the nine.
+- INSTRUCTION (copied): "`references/troops.yaml: troops.<kind>.pace`, cells a tick at base. Seeds reproduce today": every foot kind 1 ("Control and seed are the same."); `cavalry`, `light_cavalry`, `mounted_archers` 3 ("Today's constant, in range"); `knights_templar` 1 ("today's behaviour (it is not in `MOUNTED_TYPES`)"). "`MB_CAVALRY_SPEED_MULT` is deleted; the four sites read the row. The envelop multiplier becomes `orders.envelop_pace: 2`, one datum beside the order vocabulary, because it is a property of the order, not of a troop." `config.py`: delete `MB_CAVALRY_SPEED_MULT`, `MB_ENVELOP_SPEED_MULT`. Every site is found by `git grep -n "MB_CAVALRY_SPEED_MULT\|MB_ENVELOP_SPEED_MULT" modules/` at the item's open (this read finds five uses of the cavalry constant in `hierarchy/units.py`, the source names four; each reads the row). `troop_types/table.py` exposes `pace_for(kind)`; `tools/export_troops.py` carries the column; `python tools/export_sim_params.py --build` drops the two constants.
+- WHERE: `references/troops.yaml` (`troops.*.pace`, `orders.envelop_pace`); `tools/export_troops.py`; `engine/engine_params/troops.json`; `modules/mass_battle/troop_types/table.py` (`pace_for`, the `orders` block); `modules/mass_battle/hierarchy/units.py` (every site); `modules/mass_battle/config.py`; `engine/engine_params/sim_params.json` (re-derived).
+- TESTS: `tests/valoria/test_export_troops.py` (the round trip) and `tests/valoria/test_field_golden_pins.py` (gate 1); none new.
+- FALSIFIER and CONTROL: "A pace that still depends on the spelling of a troop type's name". Control: digests equal.
+- GATE: "Every new value at its control: `tools/export_troops.py --check` passes and `tools/ci_golden_modes_check.py` digests are equal"; `git grep -n "MB_CAVALRY_SPEED_MULT\|MB_ENVELOP_SPEED_MULT" modules/ engine/` → nothing; `python tools/export_sim_params.py --check` → exit 0.
+- HASH MOVERS: none ("Sections 1 and the transcribed fatigue rows: edit, hash-equal").
+- DEPENDS ON: V12 Batch B17 (the troop file, its loader and exporter); EXISTS-IN-TREE `config.py::MB_CAVALRY_SPEED_MULT`, `::MB_ENVELOP_SPEED_MULT`, `units.py::_node_advance`; V12 B31.03.
+- GLOSSARY: *pace* (new row): "how many cells a body moves in a tick at its ordinary speed, as a marching pace is"; owner `troops.yaml: troops.<kind>.pace`.
+- COST and TIER: edit (mechanical); `sonnet`, `high`.
+- LANDS IT: B31's producer; `Item: B31.04`, `[skip ci]`.
+
+### B31.05 — ground slows horse: the terrain pace column, at control · `26_MASS_BATTLE_movement_and_fatigue_as_data` §2 · BUILD · HASH EQUAL
+- SOURCE: the same file, §2, "Exact edits" (`massbattle.py::resolve_field`), "Gate" 2; closes M-2.
+- ADVANCES: none of the nine.
+- INSTRUCTION (copied): "A `pace` column on the six terrain rows (`modules/mass_battle/terrain.py` today; the troop file's `terrain` section when that file lands), by class" — shipped at the control, every cell 1.0 ("Control arm: every cell 1.0"); the seeds (`forest_broken` mounted 0.6, `uphill` mounted 0.25; `narrow_pass`, `river_crossing`, `walls` "**not established**; no multiplier invented") are B31.17. "The multiplier applies to the body's step before the posture modifier, at the one place the step is formed (`units.py::_node_advance`; the continuous-speed arm accumulates the fraction as it already does for discipline)." "`massbattle.py::resolve_field` passes the field's terrain row to the units for pace, as it passes it for dice." The column lives in the troop file's `terrain` section `[ASSUMPTION: the troop file holds the section at this tree — basis: "when that file lands" (B17); if `terrain.py` still holds the rows, the column goes there]`.
+- WHERE: `references/troops.yaml` (`terrain.<row>.pace`, or `modules/mass_battle/terrain.py`); `tools/export_troops.py`; `engine/engine_params/troops.json`; `modules/mass_battle/troop_types/table.py`; `modules/mass_battle/hierarchy/units.py` (`_node_advance`, the continuous arm); `modules/mass_battle/massbattle.py` (`resolve_field`); `tests/valoria/test_mass_battle_terrain.py`.
+- TESTS: `tests/valoria/test_mass_battle_terrain.py::test_horse_pace_by_ground` (named; gate 2), written now with the seeds set in the test, read red before the edit.
+- FALSIFIER and CONTROL: "horse at three times foot on `uphill`" (with the seeds set). Control: every cell 1.0 → digests equal.
+- GATE: `python -m pytest tests/valoria/test_mass_battle_terrain.py -q` → pass (gate 2, seeds set in the test: "on `open_flat` the horse arrives in a third of the ticks; on `forest_broken` in about half to two-thirds; on `uphill` after the foot"); `python tools/ci_golden_modes_check.py` → digests equal; `python tools/export_troops.py --check` → exit 0.
+- HASH MOVERS: none at the control.
+- DEPENDS ON: V12 B31.04; EXISTS-IN-TREE `modules/mass_battle/terrain.py` (`OPEN_FLAT`, `FOREST_BROKEN`, the six rows), `massbattle.py::resolve_field`.
+- GLOSSARY: none (*pace* from B31.04).
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B31's producer; `Item: B31.05`, `[skip ci]`.
+
+### B31.06 — the fatigue rows; the fast-move term at 0 · `26_MASS_BATTLE_movement_and_fatigue_as_data` §3 (rows) · BUILD · HASH EQUAL
+- SOURCE: the same file, §3, "Exact edits" (`config.py`, `percell.py`), "Gate" 1, 3; `16_PESSIMIST_MB_one_stamina_ledger` `Folded:` (audit 26) amendment (3); D-U1-11c ("the four constants deleted from `config.py` in the same commit that adds their rows"); A-69 (the head's `Folded:` (1)).
+- ADVANCES: none of the nine.
+- INSTRUCTION:
+  1. Open `references/troops.yaml` and record whether a `fatigue:` block exists (B22.03 wrote `fatigue: {carry: off, carry_laps: 0}`) and whether it holds `lull_recover` (B22.03 reads it; UNDECIDED (2)). Add only the missing keys; never a second block.
+  2. Copied (the rows):
+     ```yaml
+     fatigue:
+       clash_drain: 12          # MB_STAMINA_DRAIN, per clash a column fights           (today)
+       rest: 5                  # MB_STAMINA_REST, per tick a column is out of contact   (today)
+       fast_move_drain: 0       # per tick a column moves above its row's pace. CONTROL 0. Seed for the flip: 2
+       lull_recover: 30         # BETWEEN_TURN_STAMINA_RECOVERY (orchestration.py), per lull (today)
+       entry:                   # share of full stamina a side starts with. CONTROL: all 1.0
+         march_partial: 1.0
+         second_field: 1.0
+         unfed: 1.0
+     ```
+     The `entry` values ship at their control 1.0 here (the source's block shows the seeds 0.7, which are B31.19's flip); "the lowest product is floored at 0.3 so no side arrives unable to stand (a seed)" is the loader's floor. Keys B22.03 wrote (`carry`, `carry_laps`) stay.
+  3. `config.py`: delete `MB_STAMINA_DRAIN`, `MB_STAMINA_REST` ("their values now rows"); `orchestration.py::BETWEEN_TURN_STAMINA_RECOVERY` reads `fatigue.lull_recover`. `percell.update_stamina` reads the rows, and gains the fast-move term: a column that moved above its row's `pace` this tick loses `fast_move_drain` (0: nothing).
+  4. `troop_types/table.py` exposes the `fatigue` block; `tools/export_troops.py` carries it; `python tools/export_sim_params.py --build`.
+- WHERE: `references/troops.yaml` (`fatigue`); `tools/export_troops.py`; `engine/engine_params/troops.json`; `modules/mass_battle/troop_types/table.py`; `modules/mass_battle/config.py`; `modules/mass_battle/orchestration.py` (`BETWEEN_TURN_STAMINA_RECOVERY`); `modules/mass_battle/percell.py` (`update_stamina`); `engine/engine_params/sim_params.json` (re-derived); `tests/valoria/test_mass_battle_maneuvers.py`.
+- TESTS: `tests/valoria/test_mass_battle_maneuvers.py::test_fast_move_drain_tires_the_wing` (named; gate 3), written now with `fast_move_drain: 2` set in the test, read red before step 3.
+- FALSIFIER and CONTROL: "stamina unchanged by a bout of double-pace movement at a non-zero drain". Control: every value at control → digests equal.
+- GATE: `python -m pytest tests/valoria/test_mass_battle_maneuvers.py -q` → pass ("an enveloping wing's columns read lower stamina at first contact than the same wing at the control"); `python tools/ci_golden_modes_check.py` → digests equal; `python tools/export_troops.py --check`, `python tools/export_sim_params.py --check` → exit 0; `git grep -n "MB_STAMINA_DRAIN\|MB_STAMINA_REST" modules/ engine/` → nothing.
+- HASH MOVERS: none at the control.
+- DEPENDS ON: V12 B31.03, B31.04; V12 Batch B19 (the one column ledger, `16_PESSIMIST_MB_one_stamina_ledger` steps 1–2); V12 Batch B22 (B22.03's `fatigue` block); EXISTS-IN-TREE `config.py::MB_STAMINA_DRAIN`, `::MB_STAMINA_REST`, `orchestration.py::BETWEEN_TURN_STAMINA_RECOVERY`, `percell.py::update_stamina`.
+- GLOSSARY: *stamina* (row exists; U1 §3: a share in [0, 1] at every typed boundary): unchanged.
+- COST and TIER: edit and small build; `sonnet`, `high`.
+- LANDS IT: B31's producer; `Item: B31.06`, `[skip ci]`.
+
+### B31.07 — a field may be entered tired; who writes the share · `16_PESSIMIST_MB_one_stamina_ledger` step 3; `26_MASS_BATTLE_movement_and_fatigue_as_data` §3 (`entry`) · BUILD · HASH EQUAL
+- SOURCE: `proposals/16_PESSIMIST_MB_one_stamina_ledger.md` "Step 3", "Gate", "Falsifier"; `proposals/26_MASS_BATTLE_movement_and_fatigue_as_data.md` §3 (`entry`, its three writers) and "Exact edits" (`field_input`); rulings A-69; U1 §3; closes F-PES-MB-06's step 3, M-7.
+- ADVANCES: none of the nine; A-69 (fatigue reaches the field).
+- INSTRUCTION:
+  1. At the item's open: `grep -n entry_stamina engine/season/queries/inputs.py modules/mass_battle/massbattle.py`. If present (UNDECIDED (2)), step 2 is a POINTER to the landing commit (`git log -S entry_stamina --oneline`), named in the commit body; else build it.
+  2. Copied (step 3): "`engine/season/queries/inputs.py::MassBattleInput` — new field `entry_stamina: tuple[float, float] = (1.0, 1.0)`, each side's share of full stamina at the start, in `[0, 1]`"; "`modules/mass_battle/massbattle.py::resolve_field` — after each `Unit` is built: `for b in unit.col_grid: b.stamina = STAMINA_MAX * share`; at `1.0` nothing is written"; "The `PER_CELL` off arm has no column grid; there `entry_stamina` other than `(1.0, 1.0)` is refused loudly rather than ignored." "`entry_stamina` may be given per part" (the audit-26 fold (2)) where B22.03 already passes a per-part value.
+  3. Copied (`26_…` §3, `field_input`): "forms `entry_stamina` from the three facts (a share in [0, 1], U1 §3)": "the march's band (an army that arrives spent, `14_VERBS_MILITARY_A_movement.md`'s `Partial`), a second field in one season round, and a short ration" — "Each value multiplies; the lowest product is floored at 0.3"; "The three writers are the only writers; each reads a fact its owner already has (the march's band; the count of fields this round; the ration debit)". Under B22.03's A-69 record, the second-field writer is replaced by the recorded `stamina_left` plus one lull where a record exists (`27_MB_E` §4). At this item every `entry` value is 1.0, so every product is 1.0.
+- WHERE: `engine/season/queries/inputs.py` (`MassBattleInput.entry_stamina`, if absent); `modules/mass_battle/massbattle.py` (`resolve_field`, if absent); `engine/season/seam/wrappers/mass_battle.py` (`field_input`); NEW `tests/valoria/test_mass_battle_entry_stamina.py` (if absent); `engine/season/tests/test_mass_battle_module.py`.
+- TESTS: in `tests/valoria/test_mass_battle_entry_stamina.py` (named by the source), written first and read red: `test_entry_stamina_half_loses_more` ("a mirror field, n 100 seeds, friction pinned off for the test; `entry_stamina (0.5, 1.0)` loses more often than `(1.0, 1.0)` by more than the sampling band", `assert checked >= 100`), `test_default_equals_omitted`, `test_returned_stamina_below_100_after_a_fought_field`; `engine/season/tests/test_mass_battle_module.py::test_entry_stamina_lowers_the_tired_side` (`26_…` gate 4, written with `entry.march_partial: 0.7` set in the test). A test already landed is kept, not duplicated.
+- FALSIFIER and CONTROL: "A field whose result is unchanged by `entry_stamina` 0.1 against 1.0 on one side". Control: "`(1.0, 1.0)` equals the field with the argument omitted, field for field"; the realm content hash at seed 0, one season, equal to B31.06's reading (`MassBattleInput` is not a `World` carrier: no encoding move).
+- GATE: `python -m pytest tests/valoria/test_mass_battle_entry_stamina.py engine/season/tests/test_mass_battle_module.py -q` → pass; `python tools/ci_golden_modes_check.py` → digests equal.
+- HASH MOVERS: none ("step 3 none at its default").
+- DEPENDS ON: V12 B31.06 (the `entry` rows); V12 Batch B22 (B22.03: `FieldOutcome.stamina_left`, `last_field`, `field_input`'s per-part reading; `14_VERBS_MILITARY_A`'s march band, B22.08; B22.16's ration debit); EXISTS-IN-TREE `engine/season/queries/inputs.py::MassBattleInput`, `seam/wrappers/mass_battle.py::field_input`, `massbattle.py::resolve_field`, `config.py::STAMINA_MAX`.
+- GLOSSARY: *entry stamina* (new row, if absent): "the share of full stamina a side starts a field with".
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B31's producer; `Item: B31.07`, `[skip ci]`.
+
+### B31.08 — changing formation out of contact, for a price · `26_MASS_BATTLE_movement_and_fatigue_as_data` §4 · BUILD · HASH MOVER(behaviour) (declared)
+- SOURCE: the same file, §4, "Exact edits" (`hierarchy/units.py`), "Gate" 5, "Tests (W3-1)"; A-59 (`reform` is an order through the obedience draw, `27_MB_A`); closes M-5 and F-MB-18 (`audits/04_MB_audit.md`).
+- ADVANCES: none of the nine.
+- INSTRUCTION (copied): "`shape`, `ranks` and `files` join `_ORDER_SAFE_FIELDS` as one behaviour key, `reform: {shape, ranks, files}`, applied through `rekey_cells` (after F-MB-18's repair: the three morale maps re-seeded from the body's aggregate)" — the repair is this item's (the source's exact edits: "`rekey_cells` repair"). "**Eligibility:** the body has no cell in contact on the tick the order fires. In contact the order stays pending." "**Cost:** `reform_ticks` during which the body's pair pools are 0, it does not volley, and its brace latch is down: the weapon switch's rule (`…_B.md` §4), for longer. Datum `orders.reform_ticks` by Discipline: 1 at Discipline 4 or more, 2 below." "in the lull between bouts … a reform costs no ticks." "`check_drift` stays, and pays the same cost: a body that loses its shape for want of Discipline is disordered for `reform_ticks`, not instantly re-dressed." "a `_reforming_until` tick on the subunit, read where the switch tick is". Correction (A-100): "pair pools are 0" is "contributes `m = 0` fighting men", as B31.02.
+- WHERE: `modules/mass_battle/hierarchy/units.py` (`_ORDER_SAFE_FIELDS`, `rekey_cells`, `check_drift`, `Unit._reforming_until`); `references/troops.yaml` (`orders.reform_ticks`); `tools/export_troops.py`; `engine/engine_params/troops.json`; `modules/mass_battle/troop_types/table.py`; `tests/valoria/test_mass_battle_role_instructions.py`.
+- TESTS: `tests/valoria/test_mass_battle_role_instructions.py::test_reform_out_of_contact_only_and_costs_ticks` and `::test_stamina_left_is_a_share` (named), written first, read red.
+- FALSIFIER and CONTROL: "a re-forming body that fights". Control: a body never ordered to reform and never drifting reads as before.
+- GATE: gate 5, copied: "A body ordered to `reform` from `Line` to `Column` while out of contact: its shape changes, its cells' morale ids match its troop ids, and for `reform_ticks` it deals no damage; the same order given in contact does not fire until contact ends; charged during the reform, it loses more than the same body charged after it." `python -m pytest tests/valoria/test_mass_battle_role_instructions.py -q` → pass; `python tools/ci_golden_modes_check.py` → read and quoted: equal, or moved only where `check_drift` fires (UNDECIDED (6)).
+- HASH MOVERS: fields in which a body drifts (`check_drift` now pays `reform_ticks`), if any: declared; B31's one re-pin.
+- DEPENDS ON: V12 B31.02 (the switch tick); V12 Batch B19 (`27_MB_A` obedience; `04_MB_cell_hierarchy_as_data`: `ranks`, `files`); EXISTS-IN-TREE `units.py::rekey_cells`, `::check_drift`, `::_ORDER_SAFE_FIELDS`.
+- GLOSSARY: *reform* (new row): "to change a body's formation while out of contact, which costs it time"; the word *unit formation* names the arrangement (MB lexicon).
+- NAMES: "the subunit" → the unit (`Unit`, B16M).
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B31's producer; `Item: B31.08`, `[skip ci]`.
+
+### B31.09 — the stamina a unit ended with is recorded on its row · `16_PESSIMIST_MB_one_stamina_ledger` (the A-69 write) · POINTER · HASH EQUAL
+- SOURCE: `proposals/16_PESSIMIST_MB_one_stamina_ledger.md` "The one writer of the recorded stamina (A-69, A-2)", "Gate" (`test_marched_field_records_stamina_left_on_the_army_record`, "(B31)"); UNDECIDED (3).
+- What the pointed items do: B22.03 and B22.04 (part 33) write each unit row's `last_field: (lap, stamina_left)` at RESOLVE in `_eff_march` through the army verbs' write path (`armyrecord.apply`), under `recuperation: on`, through the existing `(Record, subject_matter)` matrix row. This item adds only the source's named test and the row note it owes.
+- INSTRUCTION: (1) `tests/valoria/test_mass_battle_entry_stamina.py::test_marched_field_records_stamina_left_on_the_army_record`: a marched field, `recuperation: on` set in the test, leaves each fighting unit row's recorded stamina equal to the part's `FieldOutcome.stamina_left`; read green (the write exists), red with B22.04's write reverted in a scratch copy. (2) If `engine/season/verb_table.yaml`'s `march` row does not declare `Record.subject_matter` in its `writes` at the bands that fought a field, add it, and name `march` in the `(Record, subject_matter)` row's `by:` note in `engine/season/write_matrix.yaml` (the source's `[ASSUMPTION: … verify the band set at landing]`).
+- WHERE: `tests/valoria/test_mass_battle_entry_stamina.py`; `engine/season/verb_table.yaml` (`march`, if needed); `engine/season/write_matrix.yaml` (the `by:` note, if needed).
+- GATE: `python -m pytest tests/valoria/test_mass_battle_entry_stamina.py -q` → pass; `python -m engine.season.harness.register --check` → exit 0.
+- HASH MOVERS: none (a test and a declaration; the write was B22's).
+- DEPENDS ON: V12 B22.03, B22.04; V12 B31.07.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B31's producer; `Item: B31.09`, `[skip ci]`.
+
 <!-- A39 cont append point -->
