@@ -1,5 +1,7 @@
 # The hearing as the social-contest module's scene: a sitting of exchanges whose closing draw is today's roll
 
+Reconciled: 2026-11-12, U4 fact check (`unified/U4_FACT_CHECK.md` F-07) — ladder step 1 cites `ED-IN-0285` and A-1 for the one-engine doctrine; `ED-SC-0013` is its PROPOSED draft, not a ruling (`audits/25_GROUNDING_ENGINE.md` G-12).
+
 Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-02, D-03 — `answer` is now a rolled move with graded board effects; `silence` adds levels to the closing draw instead of conceding the rung; `forgery_found` only on an Overwhelming answer; D-06 — the NPC decider samples through the one chooser's sampler instead of taking the top score.
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-04) — edit 4's assumption (*`PlayHost.decide` is called with whichever view the provider builds*) is replaced by the one `PlayHost` shape of `01_CORE_one_scene_contract.md` Edit 1: `deciders` keyed by module role, so the hearing's decider is `deciders["social_contest.hearing"]` and the stated revert (a second field) is not needed.
@@ -46,7 +48,7 @@ executes with items on file.
 ## The resolution, decided
 
 **Around the room, verb rows (the plan's). In the room, one module entry with two modes. One closing
-draw, the existing `roll`, by the determiner.** Ladder: step 1 (`ED-IN-0285`, `ED-SC-0013`); step 3
+draw, the existing `roll`, by the determiner.** Ladder: step 1 (`ED-IN-0285`, A-1; `ED-SC-0013` is the PROPOSED draft of the doctrine, `audits/25` G-12); step 3
 (`PS/05` PART B; `holonic` T7 and §39); step 4 (REM-31); step 5 (the roll as the sitting with no
 exchanges).
 

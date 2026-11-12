@@ -2,6 +2,8 @@
 
 Reconciled: 2026-11-12, wave 3 (W3-3) — R3 §1 and §2, C3-L4 (3): reader 1 and gate (a) no longer cite `world_q.projection` (deleted by `17_CENSUS_C1A_01` D2); the per-holder view is `account`, the person's own ledger (`11_GO_player_surface_contract_B.md`). U1 §2 (one interface for the player view): edit 4's `legible` is a slot of `state/carriers.py::View`'s one closed list, added by GO with its reader, not a field this file coins. U3 §6.3: `Person.coherence` has no writer and no carrier in the suite; the readers ship and read nothing until one exists (INCOMPLETE, as the file already states). Batch and tier added (U3 B35; R3 7b-0).
 
+Reconciled: 2026-11-12, unification lane U4c (test 9; grepped at the tree) — hash movers declared: none while `Person.coherence` has no writer. A grep of `engine/season/` for `coherence` (tests excluded) finds only the write-driver guard at `state/world.py:1301-1308` ("written ONLY through seam Events"), no loop or module that sets it, so no pinned world reads a value below ceiling and the readers move no seeded result; the gate's hand-built world is not a pinned world. The first writer's commit is the file's mover and is not in this suite (U3 §6.3, CP-T07-02).
+
 ## Status: PROPOSED, design-first (a plan for a later implementation lane; nothing here was executed)
 
 Lands in batch: B35 (WR thread), last in U3 §1 item 35.

@@ -2,6 +2,8 @@
 
 Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.3 row tests (CONFORMS), §7 (INCOMPLETE: sites unopened), §7b-T; `unified/U3_CONFLICT_LEDGER.md` C3-N30; `unified/U3_DEPENDENCY_ORDER.md` nodes B02, B08). Changed: §E's verb-roster rule is aligned with T1 D and C3-N30 (the one pin T1 keeps at `test_season_shape.py:15933` is a reading re-recorded at B25 and B38, not deleted); §G is placed in B08 with the scene order; lands-it and tier added. Left INCOMPLETE, with the reason: most sites are read from the digests and not opened (this lane runs and edits no test); the executing session's first step per row is to open the site, as the file already orders.
 
+Reconciled: 2026-11-12, unification lane U4c (test 9; from `unified/U3_DEPENDENCY_ORDER.md` §1 item 3 and §3.1, node B02) — dependency line added, which the file lacked: **Depends on:** `01_CORE_tests_one_golden_owner.md` and `01_CORE_tests_delete_what_cannot_fail.md` (B02, both before this file in U3's order); it adds to those two and to `01_CORE_tests_shipped_world_falsifiers.md`, which follows it.
+
 **Lands in batch:** B02 (§A–§C, §E, §F with T1–T3); §D2 after T1 in B02; §D3 with the `tend` draw (`14_VERBS_MATERIAL_A` §6, B12); §G in B08 with `16_PESSIMIST_CORE_a_scene_runs_in_its_own_order.md`.
 
 ## Status: PROPOSED (a plan for future execution; nothing here is executed by the closing lane)

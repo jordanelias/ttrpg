@@ -2,6 +2,8 @@
 
 Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.5 row FI-06 (CONFORMS), §6 row *`Said` in Layer 1*, §7 (INCOMPLETE: the `g6` method names no file; planted failures unnamed), §7b-17, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` ledger S-07; `unified/U3_DEPENDENCY_ORDER.md` node B11, §6.2). Settled: the Layer 1 `[UNVERIFIED]` (`grep -c Said architecture/meta/04_CODE_ARCHITECTURE.md` reads 0: `04` lists no `Said` members, so no row is amended); the `g6` tests' method is `engine/season/tests/test_told_by_channel.py` (the `test_g6…` group); §5's slants are `U5c_FI_residue.md` §6's one roster text. Added: named tests (7b-17) for the gate and the planted failures; the two scratch probes restated by them; lands-it and tier.
 
+Reconciled: 2026-11-12, unification lane U4c (test 9; from `unified/U3_DEPENDENCY_ORDER.md` §3.1, node B11, and the line below) — dependency line added, which the file lacked: **Depends on:** `08_FI_02_rumour-that-travels.md` (B11, before this file) and `U5c_FI_residue.md` §6 (the one slant roster); no other proposal.
+
 **Lands in batch:** B11 (`U5c_FI_residue.md` §2 row 7: after `08_FI_02` and before `16_PESSIMIST_FI_A` edit 4).
 
 ## Status: PROPOSED

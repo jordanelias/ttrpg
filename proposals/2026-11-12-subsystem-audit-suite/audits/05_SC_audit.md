@@ -361,7 +361,7 @@ memoryless re-hearing (SC-P3's case-file stages give it memory); the Domain Echo
 Layer 1's ruling that a faction is a view. The paired compare of §4 Step 4 is the archived form of
 §11 item 1's option; the ruling of 2026-08-14 is later and governs.
 
-**The duality doctrine (`auto_manual_resolution_duality_v1.md`, `ED-SC-0013`, RULED 2026-07-08).**
+**The duality doctrine (`auto_manual_resolution_duality_v1.md`, `ED-SC-0013`, RULED 2026-07-08).** *[CORRECTED 2026-11-12, `unified/U4_FACT_CHECK.md` F-07; `audits/25_GROUNDING_ENGINE.md` G-12: ED-SC-0013's row reads "(PROPOSED) — drafted 2026-07-08"; the doctrine is binding through `ED-IN-0285` and Jordan's A-1, not through that row. The text below is unchanged.]*
 *"Auto = the contest kernel run headless, played = the same kernel run interactively. Not two
 mechanics — one engine at two fidelities … same engine ⇒ consistent by construction."* This is the
 standing requirement's one-code-path clause, ruled four months earlier. It names the kernel as the

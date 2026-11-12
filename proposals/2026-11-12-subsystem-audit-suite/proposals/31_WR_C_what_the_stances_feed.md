@@ -2,6 +2,8 @@
 
 Reconciled: 2026-11-12, wave 3 (W3-3) — R3 §1 found it CONFORMS and R3 §2 found no ruling it contradicts. Added: batch and dependencies (U3 B38; commit 1 rides the institutions batches); `U5d_FA_owed_edits.md` §4's weight is now authored as `rosters.yaml: tables.territory_weight` (U1 ledger F-12), which `block_lean` reads through `faction_q.weight`; U3 §6.3 (no goal row carries `axis:`; commit 2 ships at its control until rows are authored); commit 3's storybar edit is placed in C3-K7's serial order after `31_WR_B` commit 3 `[ASSUMPTION: C3-K7 does not list this file; it edits `harness/storybar.py`, so it is placed last — basis: C3-K7's rule that no two proposals edit the file concurrently]`. Tier already named.
 
+Reconciled: 2026-11-12, unification lane U4c (test 9; grepped at the tree) — commit 2's `[UNVERIFIED]` and its first-step grep are answered: no goal row in `engine/season/goals.yaml` carries `axis:` (its only occurrence is the comment at `:33`), and the one reader of a goal row's `axis:` is `data/goals.py::_axis` (`:268-280`, the loader, which already refuses a non-`thrust_axes` member and an `orientation` row); the other `"axis"` hits (`data/verbs.py:1426`, `:2058`) read the pursuit-axes cells, not goals. So `bears:` is a new key beside `_axis`, read by the same loader; the first step's grep needs only be re-run at landing to confirm nothing new reads `.axis`.
+
 ## Status: PROPOSED (four small edits, each a request to the file that owns its site; the ten phrase pairs are `[ASSUMPTION; Jordan to correct]`)
 
 Lands in batch: B38 (narrative and regimes), after `31_WR_B` and before `30_WR_A` (U3 §1 item 38); commit 1's step rows land with `15_INSTITUTIONS_BYZANTINE_E` and `15_INSTITUTIONS_VENICE_C` in their batches (B32/B40).

@@ -2,6 +2,8 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-56** and **A-15**. The clause leaving growth undecided (§3 R4) is superseded by `07_SE_population_regrowth_B.md` (the register's ladder table: a population may recover, bounded by food and room). Thinning's body loss is drawn on the ladder (A-54; `09_WR_B_draws_not_thresholds.md` edit 2), with `body_step × short // weight` as the Partial band's magnitude. Who leaves is the cohort's own `migrate`, one of its heavy moves (`U5d_SE_cohort_heavy_moves_and_caste.md`). A-15's natural death is of named persons with authored ages; no births or ageing pass is added to a cohort by it (A-51 says so for the prologue).
 
+Reconciled: 2026-11-12, U4 fact check (`unified/U4_FACT_CHECK.md` F-05) — "38 settlements" in §2 counts settlement rungs (37 on the map plus the foreign `set_alt_1`), where every other file's "37 settlements" counts the map's settlements; `build_realm(0)` read at the tree: settlement rungs 38, Sites at 37 of them (`audits/25` L-04). "Population 120" is the sum of `Person.weight`, over 83 persons (read at the tree).
+
 Reconciled: 2026-11-12, wave 3 (W3-3) — C3-C3 and R3 §1 (writer placement): the thinning moves from CENSUS to MATTER's bodies pass, where `sub.falls` is in hand (`loop/matter.py:690-711`), so neither branch of the weight writer is a CENSUS pass polling a floor (`holonic` §29: no clock at census); `04` §A.2 gives `weight` to CENSUS and `holonic` §25/§29 put deaths at MATTER, and the ambiguity is named here and picked by layer-conformance B4 (CENSUS keeps individuation). The matrix row `(Person, weight)` gains `MAT` (`steps: [MAT, CEN]`, the `(Rung, envelope)` precedent, `write_matrix.yaml:375-381`), so the "Grounded" line's "no matrix edit is owed" no longer holds. R3 §2 (A-54): §4 (a) names `09_WR_B_draws_not_thresholds.md` edit 2 as the owner of the drawn loss and keeps the per-head scaling as the Partial band's magnitude. The head's supersession of R4 is carried into the body (R4, the source paragraph). Tier and batch added (R3 7b-0; U3 B12); the test file is written as the batch's first commit (U3 §6.1).
 
 ## Status: PROPOSED
@@ -41,7 +43,9 @@ All four ship behind fixtures at today's arms, so every pinned hash is unchanged
 - **The dead town reads as thriving.** `world_q.hunger` answers `fed` when demand is 0 (its docstring:
   *"A settlement with no cohort under it (D = 0) reads `fed`"*), and `produce.py` reads no person, so the
   town yields at full rate into a larder nobody draws. After the 37 deaths above, realm grain rises
-  1,480 → 11,322 over seven seasons and the census reports 38 settlements `fed`.
+  1,480 → 11,322 over seven seasons and the census reports 38 settlements `fed` (38 settlement rungs: the
+  37 on the map and `set_alt_1`, the foreign faction's rung with no Site and no cohort; `audits/25` L-04;
+  U4 F-05).
 - **The loss scales with headcount, not with how hungry each person is** (H-305):
   `lost = body_step × Σ units short` and `want = weight × Person.weight`, so the same half ration costs a
   weight-2 cohort 30 body and a weight-20 cohort 300.

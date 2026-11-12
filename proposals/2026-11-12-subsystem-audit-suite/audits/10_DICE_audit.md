@@ -423,7 +423,7 @@ shift (ED-884, ED-934). An obstacle against a person is their score halved plus 
 modifiers. Combat's degree is read off the scene (2026-09-03). No base Ob by scale (2026-09-05).
 Investigation is not made a contest to become gradeable. Capability supplies dice and gates nothing.
 One engine at two fidelities, with `E[auto | event] ≈ E[played | event]` (the auto/manual duality,
-ED-SC-0013, ruled 2026-07-08). The continuous engine as the videogame's specification (ED-833,
+ED-SC-0013, ruled 2026-07-08 *[CORRECTED, U4 F-07 / `audits/25` G-12: the row says PROPOSED; ruled by `ED-IN-0285` and A-1]*). The continuous engine as the videogame's specification (ED-833,
 2026-05-15), which the built social roll departs from (§11).
 
 **Where ruling and code agree.** All of the above are executed by the code read, with the exceptions in

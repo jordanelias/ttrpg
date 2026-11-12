@@ -504,7 +504,7 @@ What the port needs follows from the code:
 
 ### 5.2 A managed battle (Jordan's stated intent, 2026-11-12: Football Manager and Total War)
 
-The doctrine the tree already holds is ED-SC-0013 (ruled 2026-07-08; text in the quarantined
+The doctrine the tree already holds is ED-SC-0013 (ruled 2026-07-08 *[CORRECTED, U4 F-07 / `audits/25` G-12: the row says PROPOSED; ruled by `ED-IN-0285` and A-1]*; text in the quarantined
 `auto_manual_resolution_duality_v1.md`, read for intent): one engine at two fidelities, "auto = the
 kernel run headless, played = the same kernel run interactively", with a middle "witnessed" fidelity,
 and consistency between them "by construction". The code agrees in shape: the loop calls one field

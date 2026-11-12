@@ -1,5 +1,7 @@
 # FA-B4 — the shortest playable loop: one governance scenario a player can play, one realm that governs itself, and a line that says whether the loop closed
 
+Reconciled: 2026-11-12, U4 fact check (`unified/U4_FACT_CHECK.md` F-07) — S line: "the ruled doctrine (ED-SC-0013)" is the doctrine ruled by A-1 and `ED-IN-0285`; ED-SC-0013's own row says PROPOSED (`audits/25_GROUNDING_ENGINE.md` G-12).
+
 Reconciled: 2026-11-12, U5d closure — folded **A-10** and **A-47**. A-10 (governance is the loop's own verbs) confirms that the subsystem's exit is this instrument reading and no module. In the `recall` scenario the threshold opens the Duke's question; whether the player is revoked is the Duke's choice and then `revoke`'s resistible draw, so `loop_closed`'s `responded` counts attempts and reports their bands. `vacated` gains the cause `conquest` (A-58: seats pass with holdings when a place is seized) beside death, release, revocation and term.
 
 Reconciled: 2026-11-12, wave 3 (W3-3) — the `loop_closed` table follows the head: `responded` counts attempted acts and reports each one's band (A-47, A-24), not executed acts only; `vacated` gains the cause `seizure` (A-58), named as U3 decided the mechanism (C3-L7: the seat's `hold` closes by its `revocation: holder_of_rung` basis inside the seizer's `seize` act, C3-L12; the head's word "conquest" is that cause). 7b-3 (two named tests in the shared file), tier and batch added (R3 7b-0; U3 C3-D5).
@@ -123,7 +125,7 @@ treaty or vote in the loop: none of them executes yet, and a loop that waits on 
   and no game.
 - **R.** The player may comply, bargain by `petition`, defy, or misread; the superior may ignore,
   recall or prosecute; the seat may be filled by a rival. The no-player half is the exit itself.
-- **S.** One instrument at two fidelities, the ruled doctrine (ED-SC-0013).
+- **S.** One instrument at two fidelities, the doctrine ruled by A-1 and `ED-IN-0285` (ED-SC-0013 drafted it and is PROPOSED, `audits/25` G-12).
 - **E, last.** One keyword, one situation name, one reader of thirty lines.
 
 ## Cost class

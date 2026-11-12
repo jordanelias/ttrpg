@@ -8,6 +8,8 @@ Folded: 2026-11-12 by `U5a_CHAR_owed_amendments.md` §3 — *a want can be kept 
 
 Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.6 row (CONFORMS), §2 row (the missing pointer), §7, §7b-T; `unified/U3_DEPENDENCY_ORDER.md` node B10). Added: the `Folded:` pointer above, which `U5a_CHAR_owed_amendments.md` §3 said this head carries; the body's edit list carries the head's `opens: mandatory | ordinary` key; named tests; lands-it and tier. Left INCOMPLETE with its reason: item 5's `org.person` against AM-B-09 (the ruling's text was not opened by any lane; the row is dropped if it excludes person-level goals).
 
+Reconciled: 2026-11-12, unification lane U4c (test 9; grepped at the tree) — (1) **Depends on:** no other proposal (`unified/U3_DEPENDENCY_ORDER.md` §3.1, node B10 has no inbound edge); it lands in B10 with `U5a_CHAR_owed_amendments.md` §3 (the `Folded:` line above). (2) Item 5's AM-B-09 mark is narrowed, not closed: AM-B-09 is built as `world_q.aim_state` for rung goals only (`engine/season/rosters.yaml:2324-2330`, `tests/test_cp_t02_03_aim_state.py:1`), every other goal kind "reads `open` always", and `person` is a listed goal-object kind (`rosters.yaml:2321`), so the ruling bars a person goal from being *met by `aim_state`*, not from existing; the stages here are armed by held claims and do not read `aim_state`. What stays open is the one grep at landing: whether `data/goals.py` admits an `org: {person: <id>}` form (if not, the row is dropped, as the file already says).
+
 ## Status: PROPOSED
 
 Source: `audits/12_ARCS_adjudication.md` §4 (M-LATENT, M-AIM), §5 stage 5, §6 row 1, §9 (c1, c2).

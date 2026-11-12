@@ -1,5 +1,7 @@
 # FA-P4 — a governance scenario that plays: three situations on the spine, a digest, three endings
 
+Reconciled: 2026-11-12, U4 fact check (`unified/U4_FACT_CHECK.md` F-07) — "the ruled doctrine (ED-SC-0013)" is the doctrine ruled by A-1 and `ED-IN-0285`; ED-SC-0013's own row says PROPOSED (`audits/25_GROUNDING_ENGINE.md` G-12). The "no seat was vacant" reading is the hand-built governance spine, not `build_realm` (where one seat falls vacant by a death at seeds 1 and 2: `06_FA_seat_terms_and_turnover.md`): two worlds, no conflict.
+
 Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-08 — the heir's `succeed` and the tick-0 set-up acts are draws; a set-up that fails is reported, not forced.
 
 Reconciled: 2026-11-12, U5d closure — folded **A-19** (the crown by the deed race), **A-10** and **A-21**. The `succession` situation no longer assumes one title and a first valid claim: `successions` is a set of titles (`22_HAPPENINGS_B_the_throne_is_never_stranded.md` edit 2 as reconciled) and the claim is a draw whose odds read what others hold of each claimant's deeds; the scenario-local mapping in `play` is a tuple of titles and the digest reports every claimant and the band. The `order` situation is A-21's proclaimed decree as written. A-10 confirms the form (a scenario on the season loop; no governance module), so the audit's §11 item 2 no longer hangs over this file. Steps rewritten: the `succession` row of the situation table and the last paragraph of the edits (the mapping's value shape). The gate gains one arm: with two listed titles held, the seat goes to each in at least one seed of the swept set.
@@ -34,7 +36,7 @@ today prints a census, and gives the spine fixture's offices the conferral and r
   held by an addressee, no oath was released (audit E-4).
 - No reader prints, per season, who holds what and what was ordered and answered. A refusal of `confer` or
   `establish` records no clause (H-252).
-- The ruled doctrine is one engine at two fidelities, with a slate of specific events and a budget of scene
+- The doctrine (ruled by A-1 and `ED-IN-0285`; drafted as ED-SC-0013, PROPOSED, `audits/25` G-12) is one engine at two fidelities, with a slate of specific events and a budget of scene
   actions (ED-SC-0013). The engine has the budget and the chooser; FA has no slate a person could look at.
 
 ## The resolution, decided

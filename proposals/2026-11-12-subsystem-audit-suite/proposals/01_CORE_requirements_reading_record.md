@@ -4,6 +4,8 @@ Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-01, C-U
 
 Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.1 row CORE 03, §7 (COMPLETE except lands-it and tier), §7b-T; `unified/U1_GLOSSARY.md` *record / Record*, *reading*; `unified/U3_CONFLICT_LEDGER.md` C3-K5). The withdrawn §2 body (the `chronicle --propagation` reading) is removed and replaced by the head's pointer (stale text is not left beside the decision); the edit list, gate, falsifier and cost class follow; in prose the requirement row carries a **reading** (the `reading:` key keeps its name; "record" is the `Record` carrier, glossary); lands-it and tier added.
 
+Reconciled: 2026-11-12, unification lane U4c (test 9; from `unified/U3_DEPENDENCY_ORDER.md` §3.1, node B02) — dependency line added, which the file lacked: **Depends on:** no other proposal (no inbound edge); it is the first edit of `engine/season/requirements.yaml` and `harness/register.py`, and `01_CORE_tests_shipped_world_falsifiers.md` and `16_PESSIMIST_CORE_the_nine_gate_and_a_knockout_reading.md` depend on it.
+
 **Lands in batch:** B02 (hash EQUAL). **Serial edge:** first edit of `engine/season/requirements.yaml` (B02 → B03 → B09 → …, U3 §5.1) and of `harness/register.py`.
 
 ## Status: PROPOSED

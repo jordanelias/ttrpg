@@ -4,6 +4,8 @@ Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-24) — §2
 
 Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.5 row FI-07 (CONFORMS), §7 (INCOMPLETE: tests unnamed), §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` ledger S-08, S-21, S-22; `unified/U3_DEPENDENCY_ORDER.md` node B11). The body follows its head: §2 (b)'s "teaches its reads at every band" and its gate are replaced by `U5c_FI_residue.md` §8 (the gating reads at every band and on a refusal; the listed reads by band through `finding_terms`; none at Failure); the loop table's step 5 is the two-act conclusion (FRES §7) and steps 6–7 cite the SC successors (`05_SC_playable_hearing_B.md`, `05_SC_evidence_and_rebuttal_B.md`, `05_SC_acquittal.md`); the board's contradiction flag is `decision/options.py::contradicts`; named tests; lands-it and tier.
 
+Reconciled: 2026-11-12, unification lane U4c (test 9; from `unified/U3_DEPENDENCY_ORDER.md` §3.1, node B11) — dependency line added, which the file lacked: **Depends on:** `08_FI_03_playable-inquiry.md` (B11) and `08_FI_06_testimony-names-a-hand.md` (B11, before this file in the batch); Cut B's pieces depend on `05_SC_playable_hearing_B.md`, `05_SC_evidence_and_rebuttal_B.md`, `05_SC_acquittal.md` (loop steps 6–7, B24 and B27) as the loop table already cites them.
+
 **Lands in batch:** B11 (Cut A and §2 (a), (b)); Cut B's later pieces in their own batches (B24 for the hearing).
 
 ## Status: PROPOSED (§1, §3, §4 are harness edits; §2 is two small engine edits; nothing here is design-first)

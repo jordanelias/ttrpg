@@ -1,5 +1,7 @@
 # GO — the port gate: what it freezes, in what order, and what it must cover
 
+Reconciled: 2026-11-12, U4 fact check (`unified/U4_FACT_CHECK.md` F-07) — "ED-SC-0013, ruled 2026-07-08" is corrected where it is quoted in §3: the ledger row (`registers/editorial_ledger_sc_archive.jsonl`, 2026-07-08) calls the doctrine "(PROPOSED) — drafted"; the binding rulings are `ED-IN-0285` and Jordan's A-1 (`audits/25_GROUNDING_ENGINE.md` G-12, opened again at the row).
+
 Reconciled: 2026-11-12, U5d closure — folded **A-30**, **A-29** and **A-5**. GO-16 (the draw recorder) is not built: §2's order drops it and GO-08 loses the draw-log digest and gains draw vectors (`16_PESSIMIST_GO_keyed_draw_no_recorder.md`); the pins gain the surface block of `16_PESSIMIST_GO_surface_pins.md`. The freeze of §1 is of contracts; the behaviour pins are re-recorded once for the keyed draw and once for the one sampler (A-5 moves every season hash), each a declared mover named in the card. §3's module pins take inputs built by the seam, with the mass battle returning an end state (A-3).
 
 Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §2 row A-30 and `U3_CONFLICT_LEDGER.md` C3-L3 item 3 (§1 strikes "the draw and float logs" from the behaviour pins and the plan text; parity is by vectors; §2's order drops GO-16, the head's own fold now carried into the body), §2 row A-4 (§3's decider row cites `04_MB_manager_battle_one_resolver.md` §4, PROPOSED, the general's action at each window), C3-N15 (§4's figure replaced by the command, `11_GO_pointer_and_stale_text_resolutions.md` item 6), 7b-8 and `U1_OWNERS_AND_VOCABULARY.md` D-U1-11c (§5: the 91 reads are partitioned by the one-owner rule, and **the build is `04_MB_typed_outcome_and_one_path.md` §3's, landing in B17**; this file keeps the plan-text edit and the check, so no constant has two builders); §1.4 row 151 (§4's halt shape stands; a new `raise` on a port-reached path needs a `where` tag, `U5b_PC_residue.md` §4 as reconciled); test 9 (`module_scenes` scenario names, tests, order, lands-it, tier; `Depends on:` / `Lands in batch:`).
@@ -117,7 +119,7 @@ Total War). The port needs four things from the oracle for a battle a player man
 Auto-resolve and the played battle are then one call with and without the decider, which is what keeps
 them consistent, and the module-scene pin covers both: the automated outcome, and a played run whose
 decider returns the default orders reproducing it. That is the doctrine the tree already holds
-(ED-SC-0013, ruled 2026-07-08: "one engine, event-parameterized … auto = the kernel run headless, played
+(ED-SC-0013, drafted 2026-07-08 and PROPOSED, not ruled — `audits/25_GROUNDING_ENGINE.md` G-12; the ruling is Jordan's A-1 and `ED-IN-0285`: "one engine, event-parameterized … auto = the kernel run headless, played
 = the same kernel run interactively"; the text is in the quarantined
 `auto_manual_resolution_duality_v1.md`, read for intent and loaded by nothing). Its one open fork, the
 calibration tolerance between fidelities, needs no number under this shape: the two fidelities are equal

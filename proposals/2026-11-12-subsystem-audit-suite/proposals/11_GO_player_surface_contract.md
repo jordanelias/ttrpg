@@ -26,7 +26,7 @@ acts did as he came to know it.
 
 The oracle types the player's surface in `engine/season/decision/sheet.py`, and it works: seated at
 seed 0 for one season, `development_space` with `take_ranked` reproduces the automated hash
-(`5ab73af2…`), and a reversed pick moves it (`0cddf258…`, 749 → 739 acts). What it shows:
+(`5ab73af2…`), and a reversed pick moves it (`0cddf258…`, 749 → 739 folded acts; 821 attempted at the plain run, U4 F-02). What it shows:
 
 - `DevelopmentSheet.candidates`: 22 and 32 candidates at the two deliberations sampled. A `Candidate`
   carries `verb`, `subject`, `operands`. No term, no odds, no cost.

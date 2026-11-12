@@ -1,8 +1,12 @@
 # GO — one mode, three fidelities, one campaign frame: what the mode documents become in code
 
+Reconciled: 2026-11-12, U4 fact check (`unified/U4_FACT_CHECK.md` F-02) — "318 of 749 acts" below is "318 of 749 folded acts (821 attempted)" (C3-N14; `audits/25_GROUNDING_ENGINE.md` L-18), and the 42.5% is a "matched in another ledger" share, a statistic unrelated to the refusal rate whose five definitions C3-N13 lists.
+
 Reconciled: 2026-11-12, U5d closure — folded **A-49**, **A-48**, **A-1** and **A-53**. §4 built E1 (the truth is never shown) "because it needs nothing"; A-49 rules E2 on top of it: after a line ends and no continuation is taken, the client may show the developer's chain (`harness/chronicle.py`'s reading of the log); never in play, and never when a continuation would carry the truth to the next seat. Step added to §4: one host-side reading, gated on the line's end and on no continuation. §3's display cap stays the client's constant; triage of the question list is player gameplay (A-48). A world that fails its checks is replaced by the next seed by default, with play-it behind a setting (A-53), stated in the campaign frame.
 
 Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` §2 row A-49 (§4 "End": the sentence returning the reveal to Jordan is removed; A-49 answered it as the head says), `U3_CONFLICT_LEDGER.md` C3-L4 and `U1_OWNERS_AND_VOCABULARY.md` D-U1-11n (§2's played row: the outcome of his own act reaches him as a firsthand claim read by `account`, no host-side `receipt`), A-30 (the "draw log" of §2 and gate 2 is the same keyed draws: no draw log is recorded); `U3_CONFLICT_LEDGER.md` C3-N13 (the 42.5% is named by its definition, "matched in another person's ledger": already so); test 9 (named tests, call sites, lands-it, tier; `Depends on:` / `Lands in batch:`).
+
+Reconciled: 2026-11-12, unification lane U4c (test 9; read from this file's own gate) — hash movers declared: none by default. Gate 1 requires `overrides = {}` and a seated person with `take_ranked` to reproduce the plain hash, so the landing is hash EQUAL; the only run that moves a hash is gate 3's `scene_budget` sweep to 3, an overlay the gate applies and no pinned world does, so it needs no re-pin.
 
 **Depends on:** `11_GO_player_surface_contract_B.md` (B34, earlier in the batch); `11_GO_one_draw_owner.md` (B06) for the keyed-draw equality of gate 2.
 **Lands in batch:** B34 (`B34-go-surface`, GO), after `11_GO_player_surface_contract_B.md`.
@@ -110,7 +114,7 @@ legibility of each decision:
 - **Begin.** `creation_sheet` then `seat`: the player picks a person the builder seated (IN-47 C1,
   as ruled). `CreationRow` gains `holdings` (his live Tenures, through `OwnStateReader`), because a
   seat's place in the world is the first thing a player must weigh and the row shows none of it. At
-  seed 0, one season, 318 of 749 acts (42.5%) were matched in another person's ledger, 60 of 83
+  seed 0, one season, 318 of 749 folded acts (821 attempted; 42.5%, a "matched" share, not a refusal rate) were matched in another person's ledger, 60 of 83
   persons had at least one act so matched, and `p_npc_001` had none of fifteen: seats differ in how
   much of the world can answer them, and the sheet should not hide it.
 - **Continue.** `carry_on`, as built.

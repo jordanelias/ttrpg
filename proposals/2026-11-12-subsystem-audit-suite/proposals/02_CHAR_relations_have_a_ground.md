@@ -4,6 +4,8 @@ Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` §4) — amen
 
 Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.2 row (CONFORMS), §2 row A-19, §7, §7b-17, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` ledger S-12, S-14; `unified/U3_DEPENDENCY_ORDER.md` node B10, §6.2). Changed: "Kin as an eligibility … is Jordan's" is replaced by the pointer to A-19 (the crown when the line fails is the deed race: heir, consort, princess and both houses' heads may claim; kin stays a ground nothing reads as a rule); the scratch `probe_foils.py` reading becomes named tests; the `to:` id form is stated with its open mapping; lands-it and tier.
 
+Reconciled: 2026-11-12, unification lane U4c (test 9; opened and grepped at the tree) — the `to:` mapping is named: `f"p_{_slug(cid)}"` at `engine/season/harness/populated.py:1291` (`_slug` is `harness/populated.py:113`; the same mapping is used at `:817`, `:898`, `:921`). The `[UNVERIFIED]` at the `to:` paragraph is settled: the edit reuses `_slug` as the build does and adds no second mapping.
+
 **Lands in batch:** B10. **Depends on:** `U5a_CHAR_owed_amendments.md` §4 (B10, `_bond`); `02_CHAR_scar_cap_and_regard_unit.md` Addendum (B10, `regard_sign`; the falsifier names it).
 
 ## Status: PROPOSED
