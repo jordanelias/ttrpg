@@ -614,5 +614,6 @@ not on disk; their decisions are cited from the closure tables.
 No finding of the family ends as JORDAN: every survivor its audits listed was answered by a ruling
 (A-1 to A-4, A-6 to A-8, A-16, A-31, A-57 to A-61) or by the ladder (D-25, D-36, D-40, D-41). The four
 questions of §5.2 arise from reconciling the rulings with one another, not from an unclosed finding.
-Proposals amended in place (each carries a `Reconciled:` line naming this file): 34. New proposals: 5
+Proposals amended in place (each carries a `Reconciled:` line naming this file): 33 of the family's 34
+(`03_PC_weapon_form_at_round_start.md` is touched by no ruling and stands as written). New proposals: 5
 (`U5b_*`).
