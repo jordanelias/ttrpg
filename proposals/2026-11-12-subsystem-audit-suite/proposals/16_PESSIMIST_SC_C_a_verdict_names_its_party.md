@@ -53,10 +53,10 @@ second case against him the same season.
    `relation = 1 + regard_gain × clamp(regard(p, teller) / STANCE_MAX, −1, 1)`, in `[0.5, 1.5]` at the
    shipped gain) is applied to the judge. For each sentence `p` knows of on `x`:
 
-       Δ regard(p, x) = − sentence_gain × (1 + regard_gain × clamp(regard(p, judge) / STANCE_MAX, −1, 1) − 1 + bias)
+       Δ regard(p, x) = − sentence_gain × relation(p, judge)          (relation = 1 where p cannot name the judge)
 
-   with `bias` 1 so that a hearer neutral to the judge lowers his regard by one `sentence_gain`, one who
-   reveres the judge by 1.5, and one who despises him by 0.5 — and, at `regard_gain` 1.0 (the sweep's top),
+   A hearer neutral to the judge lowers his regard for the convicted by one `sentence_gain`, one who
+   reveres the judge by 1.5, one who despises him by 0.5 — and, at `regard_gain` 1.0 (the sweep's top),
    by nothing: the convict of a hated court loses no standing. Shipped at `sentence_gain = 0` (the
    control: today's behaviour) until its sweep is read; proposed first live value 1.0 on the stance
    scale (one valence step at weight 1), swept 0 / 1 / 2.
@@ -78,16 +78,26 @@ second case against him the same season.
    (`RESTRAINT_KINDS` from `data/rosters.py`). Both callers (`claim_subjects`, `seen_subject`) take the
    new name. The docstring's *"any other subject, including a non-`hold` Tenure id … passes through"*
    is narrowed to the kinds that still do.
-2. **`engine/season/rosters.yaml`** — `matter.determined` and `arrest.made` join the paired kinds
-   (`person_q.PAIRED_KINDS`' roster), so the doer is read off the sighting's `seen.who` and the party is
-   never attributed the judge's deed (`attributed_deeds` reads a bare-subject claim of an unpaired kind
-   as an act *of* that subject, which would credit the convict with judging). `suffered_deeds(ledger,
-   x)` then returns the sentence for `x`.
-3. **`engine/season/queries/person_q.py::deeds_judged`** — a third returned half, `sentenced`: the sum
-   over `suffered_deeds(p.ledger, referent)` of kinds in a new roster `sentence_kinds`
-   (`matter.determined`, `arrest.made`) of `−(bias + regard_gain × clamp(regard_stored(p, doer) /
-   STANCE_MAX, −1, 1))`, using the stored half of regard for the doer (no recursion through
-   `deeds_judged`). `regard` adds `sentence_gain × sentenced`.
+2. **`engine/season/rosters.yaml` and `queries/person_q.py::PAIRED_KINDS`** — a closed roster
+   `patient_kinds` (`matter.determined`, `arrest.made`), unioned into `PAIRED_KINDS`
+   (`person_q.py:226`, today *the deed kinds no single row emits*). The reason is that definition's own
+   (`:223-225`): a paired kind is one *"whose claim subject may be the doer OR the patient"*, and after
+   edit 1 these two are. Without it `attributed_deeds` reads `(party, matter.determined, True)` as an act
+   *of* the party (an unpaired kind's subject is its doer, H-192) and would credit the convict with
+   judging. With it, the deed is judged once, for the doer named by the `seen.who` pairing, as
+   `lean × bond` (`deeds_judged`'s IN-58 rule), and `suffered_deeds(ledger, x)` returns the sentence.
+   ⚠ This changes what a verdict earns its judge: today +0.18 from every holder of the same pursuits,
+   the convict included; after, `lean × stance_toward(p, convict)`, so the convict's friends resent the
+   judge, strangers are unmoved, and the convict's own regard for his judge no longer rises. Declared;
+   it removes the inversion measured in the audit's §2.4.
+3. **`engine/season/queries/person_q.py::deeds_judged`** — a third returned half, `sentenced`: over
+   every deed claim `(referent, k, True)` with `k` in `patient_kinds` that `p` holds and whose paired
+   doer (where the pairing names one) is not `referent`, the sum of `−relation`, with
+   `relation = 1 + regard_gain × clamp(stance_toward(p, doer) / STANCE_MAX, −1, 1)` when a doer is
+   paired and `1` when none is (a told copy carries no sighting today; `08_FI_06_testimony-names-a-hand.md`
+   is the edit that lets a told sentence name its judge, and this half reads it when it lands). The
+   stored half of regard is used for the doer, so nothing recurses through `deeds_judged`. `regard` adds
+   `sentence_gain × sentenced`.
 4. **`engine/season/data/fixtures.py`** — `sentence_gain = 0.0` (swept 0 / 1 / 2; hole-register row,
    graded `assumption`: no document gives the magnitude).
 5. **`engine/season/queries/world_q.py`** — the DOCKET arm dropped at `:5416-5422` can be restored on
@@ -97,7 +107,8 @@ second case against him the same season.
 ## Gate (an execution artifact)
 
 `p4_verdict.py` after edits 1–2: "new claims naming the party" is at least 1 for every witness in all
-three arms, 0 in the control; regard for the judge moves as today. With `sentence_gain = 1`: regard for
+three arms, 0 in the control; regard for the judge is 0.0 for a witness with no stance toward the
+convicted and non-zero, signed by that stance, for one who holds one. With `sentence_gain = 1`: regard for
 the convicted falls for every witness, by more for one given a positive stance toward the Duke and by
 less for one given a negative stance (three hearers planted at −25, 0, +25; the run prints three
 distinct values in that order). Control: `sentence_gain = 0` leaves every regard as today.

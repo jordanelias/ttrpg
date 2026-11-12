@@ -243,7 +243,12 @@ is no longer one (§6, R-1; proposal `16_PESSIMIST_PC_A_the_yield_is_a_draw.md`)
 |---|---|
 | ordinary | Some blows that would have wounded glance off or are stopped; the better the armour, the more of them. A blow that gets through still hurts. Armour is weight: it tires the wearer. Armour is what lets a man stand in a fight he would otherwise lose, not what makes him unkillable. |
 | the notes | `RESIST` per material and mode; "a blow whose coupling-reduced impact does not clear the tier's resistance inflicts little lasting wound (it is stopped/deflected)" (`core.py:169-176`); the gap game for points; `ARMOR_DEMAND` charges a weak wearer stamina. |
-| the code, run | Armour never decides whether a blow draws blood. It multiplies the damage of every blow by a fixed transmission and a soft knee (`core.damage`, `:609-645`), and shifts the roll through `armor_defeat_sigma`. |
+| the code, run | Armour multiplies the damage of every blow by a fixed transmission and a soft knee (`core.damage`, `:609-645`). It shifts the roll (`armor_defeat_sigma`) only where the weapon falls short of the tier's threshold: for an arming sword, not at all below plate. Whether a landed blow is "turned" is decided by the defender's mode, not by what he wears. |
+
+`pL_misc.py` L1, A (arming, light) attacking B (arming) in each tier, 800 fights a cell: mean net σ of
+A's rolls −0.08, 0.00, −0.07 and **−0.69**; an exchange draws blood 45.3%, 47.8%, 44.7% and **25.4%**;
+mean damage per exchange 10.2, 9.7, 5.4 and **0.6**. So cloth and mail change no odds at all for a
+sword; plate changes both the odds and, far more, the divisor.
 
 `pC_armour.py` C1: A (light armour, faculty 2) strikes B (arming sword, faculty 2) in each tier; 1,500
 fights a cell; "dry" is the share of A's Success rolls that drew no blood.

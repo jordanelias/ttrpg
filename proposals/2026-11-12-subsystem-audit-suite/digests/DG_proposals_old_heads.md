@@ -606,3 +606,196 @@ HEADS-ONLY lane (350 files, proposals dated before 2026-09-20). Method per file:
 ### proposals/2026-08-31-ideal/20_FABLE5_ADVERSARIAL_REVIEW.md
 - one line: adversarial review of PR #343's terminal deliverable, 1824 lines; verdict in one page :136, central finding :138, trajectory test :278, where the design is a direct hit :330. Tags PROCESS, CORE.
 
+### proposals/2026-08-31-integration/00_REVIEW_BRIEF.md
+- **What it is:** index entry of the 2026-08-31 integration relay directory (14 files: briefs 00-00d, reviews 01-03, integration proposals 04-05, antagonists 06-07, reconciliations 08/12, ledger 09, judgment 10, integrated doc 11), reconciling "body (a) NPC matrix/season machine" and "body (b) arcs" into the PR #342 suite.
+- **Status:** "BRIEF (2026-08-31)". Reading: historical process record; the directory is not cited by CURRENT.md/workplan.
+- **Bears on:** CHAR, ARCS, CORE, PROCESS.
+- **Content that matters:** code-shape surface RESOLVED BY JORDAN :13; four axes :27; discipline :50.
+- **Conflicts / stale:** sources suites are Key-era / unexecuted.
+- **Open items:** none.
+### proposals/2026-08-31-integration/00b_pessimistic_ners.md
+- one line: Rule 1 E is a ratio against N and R never a fourth axis; Rule 2 S is T5/T6 restated; Rule 3 R binds at seats a player can occupy; five rules making the pass pessimistic :4-29. Compare skills/ners. Tags PROCESS.
+### proposals/2026-08-31-integration/00c_relay_discipline.md
+- one line: relay not dialogue; independence structural not declared; model tiering; antagonist's precise purpose :4-36. Precursor of CLAUDE.md §10 relay text. Tags PROCESS.
+### proposals/2026-08-31-integration/00d_findings_digest.md
+- one line: consolidated findings digest for (a) NPC matrix/season machine :5 and (b) arcs (`2026-08-30-arc-reach...` directory, not in this lane) :60. Tags ARCS, CHAR.
+### proposals/2026-08-31-integration/01_review_b_arcs.md
+- one line: verdict SOUND-WITH-CORRECTIONS for the arcs body. Tags ARCS.
+### proposals/2026-08-31-integration/02_review_a_npc_matrix.md
+- one line: NPC matrix SOUND-WITH-CORRECTIONS; F1 OVERTURN "eleven of the nineteen [blocked cores are RICH]" :6, F2 OVERTURN "the single most common result" :15. Tags CHAR, ARCS.
+### proposals/2026-08-31-integration/03_corrected_findings.md
+- one line: Status "BINDING INPUT for Part 2"; struck claims: S-1 "eleven of nineteen RICH" (really seven by intersection), S-2 blocked cores "most common result" unsupported (RICH 33/55 vs blocked 19), S-3 "22 convergences from lanes that could not see each other" (about half seeded by shared briefs) :8-26; survivors :27. Evidence that the gap-report headline needed correction. Tags CHAR, ARCS, PROCESS.
+### proposals/2026-08-31-integration/04_integration_a_npc_matrix.md
+- one line: proposal to change the from-scratch suite with the NPC matrix; verdict by 06 UNSOUND. Tags CHAR.
+### proposals/2026-08-31-integration/05_integration_b_arcs.md
+- one line: proposal edits to PR #342 for arcs; 07 verdict SOUND-WITH-CORRECTIONS; binds `CODESHAPE_FORBIDDEN.md` (not in this lane). Tags ARCS.
+### proposals/2026-08-31-integration/06_antagonist_a_npc_matrix.md
+- one line: cold critic (Read/Grep/Glob) verdict UNSOUND on 04. Tags PROCESS.
+### proposals/2026-08-31-integration/07_antagonist_b_arcs.md
+- one line: cold critic verdict SOUND-WITH-CORRECTIONS on 05. Tags PROCESS.
+### proposals/2026-08-31-integration/08_part2_reconciliation.md
+- one line: orchestrator adjudication closing Part 2; two lanes returned opposite verdicts :9. Tags PROCESS.
+### proposals/2026-08-31-integration/09_citation_ledger.md
+- one line: verified fact base by direct read; signatures and rules :15, the world-substrate object :59; "where this ledger and any earlier doc disagree, this ledger wins". Tags CORE.
+### proposals/2026-08-31-integration/10_comparative_judgment.md
+- one line: read-only top-tier judgment of the two bodies; three defects in the binding inputs :8. Tags PROCESS.
+### proposals/2026-08-31-integration/11_INTEGRATED.md
+- one line: integrated document answering Jordan's three questions on emergent narrative fit; 634 lines, 39 headings; judged UNSOUND by 12. Tags ARCS, CHAR.
+### proposals/2026-08-31-integration/12_PART3_RECONCILIATION.md
+- one line: Part 3 closes; D-1 "the floor" STRUCK on direct read: untrained attempt is always legal ("just a small pool", `10_resolution_surface.md:33`) and rank>=3 adds verbs to a list (`02_the_person.md:204`), only rank-5 is a true gate :8-20. So `09_GAP_REPORT` D-1 and `2026-08-30-fixes/01_the_floor.md` rest on a false premise. Tags CHAR, PROCESS.
+
+### proposals/2026-08-31-pr350-archive-recovery/00_FINDINGS.md
+- **What it is:** best ideas in the 2026-06-28 archive (tag `v30-snapshot-2026-06-28`) missing from PR #350 (the unified-code-shape suite), 12 lanes + 3 compare lanes, 2026-08-31; directory has 21 files (README, 00-02, evidence/COMPARE_1-3 and LANE_A-L).
+- **Status:** "PROPOSED (2026-08-31). HELD BACK IN FULL." Reading: historical; directory cited by `architecture/holonic_ARCHITECTURE.md`.
+- **Bears on:** FA, SE, CHAR, WR, ARCS, CORE.
+- **Content that matters:** standard applied :17; how produced :39; reading order in README (method :28, reproducing :50, honest state :58).
+- **Conflicts / stale:** the archive tag is now where `designs/` and `audit/` live (fork refs).
+- **Open items:** none.
+### proposals/2026-08-31-pr350-archive-recovery/01_CONVERGENCE.md
+- one line: eleven cross-lane convergences: C-1 mandate derived from per-settlement legitimacy and popular support :17; C-2 personal-to-faction seam has a name, a throttle and a known defect :46; C-3 "derive it, don't store it" reached independently :68; C-4 a faction is an aggregate of named people not an agent :85; C-5 corpus's characteristic failure: ruled, then never propagated :103; C-6 feedback loops unbounded then closed with named dampers :120; C-7 world decays from neglect, power vacuum births a faction :142; C-8 scarcity of seats manufactures politics :160; C-9 institutional capture through helpfulness :175; C-10 13-conviction taxonomy and its 4-axis substrate :191; C-11 season shape and action budget, strongest convergence :222. Tags FA, SE, CHAR, WR.
+### proposals/2026-08-31-pr350-archive-recovery/02_SCENE_BUDGET_RULING.md
+- one line: **JORDAN RULING 2026-08-31: "i expect a character to get ~5 playable scenes per season, which may mean ~5 actions"**; overturns `unified-code-shape/02_ONTOLOGY.md` §8.1 and `07_THE_PLAYER_AND_THE_PERSON.md` §4 ("one act per person or cohort per season, universally"); also contradicts the ideal-v2 fork D-2 ruling; open question flagged :62. Compare against the act budget in `engine/season/`. Tags CORE, CHAR, GO.
+### proposals/2026-08-31-pr350-archive-recovery/README.md
+- one line: reading order; archive interrogation Jordan-directed. Tags PROCESS.
+### proposals/2026-08-31-pr350-archive-recovery/evidence/COMPARE_1_governance.md
+- one line: Fable lane 1 compare (governance, factions, settlements): verdict in three sentences :7; missing ranked :13; covered/superseded :71; where PR #350 is affirmatively wrong :96. Tags FA, SE.
+### proposals/2026-08-31-pr350-archive-recovery/evidence/COMPARE_2_npc_narrative.md
+- one line: Fable lane 2 (NPCs, persons, world churn, emergent narrative): missing :13, covered :64, wrong :85. Tags CHAR, WR.
+### proposals/2026-08-31-pr350-archive-recovery/evidence/COMPARE_3_adversarial.md
+- one line: Fable lane 3 adversarial cross-cut: missing :17, covered :55, wrong :75. Tags PROCESS.
+### proposals/2026-08-31-pr350-archive-recovery/evidence/LANE_A.md
+- one line: factions and Mandate (archives/audit); notes a ratified "Jordan ruling (2026-05-30, structural/metaphysical layer)". Tags FA.
+### proposals/2026-08-31-pr350-archive-recovery/evidence/LANE_B.md
+- one line: world, topography, settlement; notes a directory that is a citation-graph/TF-IDF tool not topography. Tags WR, SE.
+### proposals/2026-08-31-pr350-archive-recovery/evidence/LANE_C.md
+- one line: architecture, game flow, interdependency. Tags CORE.
+### proposals/2026-08-31-pr350-archive-recovery/evidence/LANE_D.md
+- one line: NPC modelling, attributes, NERS, investigation. Tags CHAR, FI.
+### proposals/2026-08-31-pr350-archive-recovery/evidence/LANE_E.md
+- one line: `designs/npcs/` and `designs/personal/` (CANONICAL; matrix provisional pending Stage-10 calibration, 12/14 sim pass). Tags CHAR.
+### proposals/2026-08-31-pr350-archive-recovery/evidence/LANE_F.md
+- one line: world, territory, settlement; a PROPOSAL of 2026-06-22 extending `settlement_layer_v30 §3.2`. Tags SE.
+### proposals/2026-08-31-pr350-archive-recovery/evidence/LANE_G.md
+- one line: governance, factions, strategic layer (CANONICAL after Stage-10 sim 12/14; faction_canon_v30 consolidation PROVISIONAL). Tags FA.
+### proposals/2026-08-31-pr350-archive-recovery/evidence/LANE_H.md
+- one line: political dynamics session and territory audits ("Foundational"). Tags FA, SE.
+### proposals/2026-08-31-pr350-archive-recovery/evidence/LANE_I.md
+- one line: NPC comprehensive audit and character audits (PROVISIONAL). Tags CHAR.
+### proposals/2026-08-31-pr350-archive-recovery/evidence/LANE_J.md
+- one line: cross-system syntheses, bridges, throughlines ("WORKING DOCUMENT"). Tags CORE.
+### proposals/2026-08-31-pr350-archive-recovery/evidence/LANE_K.md
+- one line: emergent narrative, arcs, articulation (self-contradictory status). Tags ARCS, WR.
+### proposals/2026-08-31-pr350-archive-recovery/evidence/LANE_L.md
+- one line: the scene and the season economy; numbers table (every number found, with citation) :7; "CANONICAL approved 2026-04-17". Tags CORE, CHAR.
+
+### proposals/2026-08-31-shape-tracer/00_README.md
+- **What it is:** index of two executed tests of PR #350's idealized code shape (a:NPC, b:ARCS) via a Python tracer, 2026-08-31; directory has 27 files incl. `tracer/` code, `results.json`, `gaps.json`, `workings/`.
+- **Status:** "PROPOSED (2026-08-31). HELD BACK. Nothing ratifies on merge." Reading: historical evidence; directory cited by `architecture/holonic_ARCHITECTURE.md`.
+- **Bears on:** CORE, CHAR, ARCS.
+- **Content that matters:** `04_UNIFIED_SHAPE.md` is the deliverable, rest is evidence :3; the instrument and its own honesty :16, :30.
+- **Conflicts / stale:** tracer implements the shape `shape.py`, not the real engine; results do not describe `engine/season/`.
+- **Open items:** none.
+### proposals/2026-08-31-shape-tracer/01_TEST_A_NPC.md
+- one line: the test RAN (`TRACE.txt`, `results_npc.json` not in this lane's list): a season loop for each of 27 named NPCs, copyist to King; result :15, what succeeded :36. Tags CHAR, CORE.
+### proposals/2026-08-31-shape-tracer/02_TEST_B_ARCS.md
+- one line: 50 arcs from the archived `designs/arcs` extracted and run; headline distribution of how arcs END (a person chooses: 20 etc.) :36; useful number :55. Tags ARCS, CORE.
+### proposals/2026-08-31-shape-tracer/03_THROUGHLINES_AND_CHANGES.md
+- one line: throughlines of a:NPC :8 and b:ARCS :25 and where the two meet :38, each row produced by execution and naming its probe. Tags CORE, CHAR, ARCS.
+### proposals/2026-08-31-shape-tracer/04_UNIFIED_SHAPE.md
+- one line: measurement: 27 NPCs - 22 BLOCKED, 4 NOT-ASSESSED, 1 DEGRADED, 0 PLAYABLE; 50 arcs - 38 BLOCKED, 11 NOT-ASSESSED, 1 PLAYABLE; 527 need-rows, 65 probes, 80 acts, 337 class-checked writes; 243 needs UNMAPPED; top blockers `P36` budget, `A4` provenance, `P29` custody, `F6` sittings (NPC), `A2` endings, `P34` hidden tally, `P4` convictions, `A5` spirals (arcs) :18-30; laws L1 person is the only actor, L2 nobody omniscient, L3 every aggregate a function (amended: closed roster) :72, L4 state change partitioned by subject :113, L5 the EDGE LAW (new, "lets stories end") :123. Shape-tracer numbers, not engine numbers. Tags CORE, CHAR, ARCS.
+### proposals/2026-08-31-shape-tracer/gaps.json
+- one line: gap register: 47 gaps (NO-PRODUCER 29, UNSPECIFIED 11, FORBIDDEN 4, COLLISION 3), 80 acts, 117 events, 337 writes. Data; nothing reads it (one grep: only the sibling docs).
+### proposals/2026-08-31-shape-tracer/results.json
+- one line: keys `probe_results, need_rows, need_verdicts, case_verdicts, cases, unmapped`; 6489 lines of tracer output. Data, read by nothing.
+### proposals/2026-08-31-shape-tracer/tracer/probes.py
+- one line: concrete probes of the shape; a probe either completes or raises `ShapeGap`, never works around. Standalone; reads nothing in `engine/`.
+### proposals/2026-08-31-shape-tracer/tracer/run_cases.py
+- one line: maps each case's shape-neutral `season_requires` need onto a probe. Standalone (same-named `engine/season/harness/run_cases.py` is unrelated).
+### proposals/2026-08-31-shape-tracer/tracer/shape.py
+- one line: PR #350 shape implemented to run; a tracer not an engine. Dead relative to `engine/season/`.
+### proposals/2026-08-31-shape-tracer/tracer/test_tracer_is_honest.py
+- one line: adversarial self-test of the tracer (two false PASSes found by hand). A pytest-named file under `proposals/`; not under `tests/` so unlikely CI-collected [UNVERIFIED].
+### proposals/2026-08-31-shape-tracer/tracer/trace_log.py
+- one line: trace log and gap register writer. Standalone.
+### proposals/2026-08-31-shape-tracer/workings/README.md
+- one line: Status "WORKING MATERIAL. Not a finding, not a proposal, not reference"; what is deliberately not here :25; naming-lint note :51. Tags PROCESS.
+### proposals/2026-08-31-shape-tracer/workings/briefs/FABLE_BRIEF.md
+- one line: comparative analysis brief PR #350 vs 2026-06-28 archive; three dispositions :38, five kinds of value :56. Tags PROCESS.
+### proposals/2026-08-31-shape-tracer/workings/briefs/LANE_BRIEF.md
+- one line: archival scrape brief; five subjects with a hard exclusion :24; output format :52. Tags PROCESS.
+### proposals/2026-08-31-shape-tracer/workings/briefs/PR350_DIGEST.md
+- one line: orientation digest of PR #350 (merged `647fbdf`); architecture :15, four laws :37, governance/faction/settlement specifics :55, world churn (05) :82. Tags CORE, FA, SE.
+### proposals/2026-08-31-shape-tracer/workings/classifier_inputs/ENDINGS.md
+- one line: ONE_LINE and ENDS_WHEN for 50 arcs (ARC-01 The Unworked Clause ... ARC-05 The Quiet Fracture ...). A short summary list of the provided arcs. Tags ARCS.
+### proposals/2026-08-31-shape-tracer/workings/classifier_inputs/UNMAPPED_CORE.md
+- one line: needs that routed to no probe, e.g. ARC-01 players removing a named cost-component from a leader's decision calculus; ARC-04 NPC sustaining deliberate non-commitment toward a subordinate; ARC-05 forcing a stalled private inter-faction calculation into a public formal contest. Tags ARCS, FA, SC.
+### proposals/2026-08-31-shape-tracer/workings/extraction/arc_lane1_cases.yaml
+- one line: arc cases ARC-01.. with `one_line`, `ends_when`, `season_requires`; data. Tags ARCS.
+### proposals/2026-08-31-shape-tracer/workings/extraction/arc_lane2_final.yaml
+- one line: second arc lane (ARC-R16 "The World Without Direction" etc.); data. Tags ARCS.
+### proposals/2026-08-31-shape-tracer/workings/extraction/build_yaml.py
+- one line: helper `SR(need, why, hardness)`; builds yaml. Dead.
+### proposals/2026-08-31-shape-tracer/workings/extraction/extract.py
+- one line: hard-coded `/tmp/claude-0/.../78360267-.../tasks` session paths; cannot run elsewhere. Dead.
+### proposals/2026-08-31-shape-tracer/workings/extraction/extract2.py
+- one line: same, `/tmp` session paths. Dead.
+### proposals/2026-08-31-shape-tracer/workings/extraction/lane2_output.yaml
+- one line: NPC cases (NPC-004 Saemund Haelgrund, Church Field Inquisitor with unrecognised Thread perception ...). Data. Tags CHAR.
+### proposals/2026-08-31-shape-tracer/workings/extraction/output.yaml
+- one line: NPC cases (NPC-088 Carin Vedel, a copyist hand-reproducing suppressed Einhir texts ...). Data. Tags CHAR.
+### proposals/2026-08-31-shape-tracer/workings/prbody.md
+- one line: PR body: HELD BACK IN FULL; five findings that changed the proposal :29; what the unified proposal does :54; two adversarial audits :74; five instrument defects that flatter :91; a corpus finding :106. Tags PROCESS.
+
+### proposals/2026-08-31-throughlines.md
+- **What it is:** ten throughlines drawn from an adversarial review of PR #342/#343 and the rebuild that followed, 2026-08-31, 866 lines, 27 headings.
+- **Status:** "PROPOSED (2026-08-31). ... Nothing in this session executed." Reading: historical reference; unclear whether superseded by the same-day `unified-code-shape` suite.
+- **Bears on:** CORE, FA, SC, WR.
+- **Content that matters:** self-declares no execution :4-7; ten throughlines distinct from the nine in the fable5 critique and the 08-25 chapters.
+- **Conflicts / stale:** three overlapping throughline sets (08-25, 08-29 T1-T9, 08-31 ten) with no reconciliation seen.
+- **Open items:** none.
+
+### proposals/2026-08-31-unified-code-shape/00_INDEX.md
+- **What it is:** index of PR #350's "Ideal Unified Code Shape" (17 numbered docs + ADVERSARIAL + TRACE_REGISTER), 2026-08-31, layered L0..L5.
+- **Status:** "PROPOSED (2026-08-31). HELD BACK IN FULL." Reading: superseded by `architecture/` (Layer 1) and the running `engine/season/`; its comment citations remain in some `engine/season` files? (grep shows `proposals/2026-09-17...` cited, not this dir). Directory-level citations: `2026-08-31-unified-code-shape` found by name only in ledgers.
+- **Bears on:** CORE, CHAR, FA, SC, MB, PC, WR, GO.
+- **Content that matters:** six shaping rulings :68-90: (1) event log is the Event mechanism, not the Claim/witness/Query mechanism; (2) six steps refine the running three-phase tick; (3) a `Belief` is about MORALS not veracity (Jordan) - what a person holds true is a `Claim`, what they hold right is a Belief backed by Convictions; WITNESS never touches a Belief; (4) a Proposition of mood OUGHT is an uttered Belief, so a faction is somebody's morals said aloud that others signed; (5) degree ladder is four bands, corpus's five-band table overturned; (6) the world's trajectory is an OUTPUT (`wear` against tending) and the world-substrate hole closes as a `Site` kind.
+  - Architecture on one page :18; reading order holistic to granular :50.
+- **Conflicts / stale:** "degree ladder four bands" vs `degree_from_net` in code: check. Belief-vs-Claim split bears on conviction/decision-layer design (ED-IN-0251/0261).
+- **Open items:** none in head.
+### proposals/2026-08-31-unified-code-shape/01_THROUGHLINE.md
+- one line: L1 laws; "a person is the unit, everything else is bookkeeping about persons" :38; four laws :66; later rows contradicting a law are defects. Tags CORE.
+### proposals/2026-08-31-unified-code-shape/02_ONTOLOGY.md
+- one line: L2, every type/field/closed set, 1231 lines, 42 headings; section 5 says exactly which parts run; §8.1 "one act per person or cohort per season, universally" - overturned by Jordan's ~5 scenes ruling (see pr350-archive-recovery/02). Tags CORE, CHAR.
+### proposals/2026-08-31-unified-code-shape/03_OWNERSHIP.md
+- one line: every value in exactly one row; four owners, one log :9; Faction row deleted :31. Mechanical test "name any value and this says who owns it". Tags CORE, FA.
+### proposals/2026-08-31-unified-code-shape/04_THE_SEASON_LOOP.md
+- one line: six steps, four barriers, four write classes; nests in the tick that already runs :38; "single most load-bearing document in this suite". Tags CORE.
+### proposals/2026-08-31-unified-code-shape/05_WORLD_CHURN.md
+- one line: what happens when nobody does anything; `wear` as the world's entropy :34. Tags WR.
+### proposals/2026-08-31-unified-code-shape/06_EMERGENT_NARRATIVE.md
+- one line: "a story is a provenance chain you can walk"; no narrative engine, quest object, story grammar or authored arc; four mechanisms :44. Tags WR, ARCS.
+### proposals/2026-08-31-unified-code-shape/07_THE_PLAYER_AND_THE_PERSON.md
+- one line: no player model :9; fidelity is a camera never a formula :29; `choose` is the whole of deliberation :64. §4 act budget overturned by Jordan ruling. Tags CHAR, CORE.
+### proposals/2026-08-31-unified-code-shape/08_FUNCTION_SURFACE.md
+- one line: every signature; enforcement by parameter list that fails; query catalogue :35. Tags CORE.
+### proposals/2026-08-31-unified-code-shape/09_THE_SEAM.md
+- one line: how personal combat, social contest, mass battle attach to the loop; says nothing about what happens inside one. Tags PC, SC, MB, CORE.
+### proposals/2026-08-31-unified-code-shape/10_GODOT_4_6.md
+- one line: the port to Godot 4.6; no `.gd` parsed; version handled honestly :10. Superseded by ED-GO-0002 ruling. Tags GO.
+### proposals/2026-08-31-unified-code-shape/11_PARAMS.md
+- one line: parameter ledger; proposes no values, grades measured/ruled/assumption; what is already exported :29. Tags CORE, DICE.
+### proposals/2026-08-31-unified-code-shape/12_TESTS.md
+- one line: structural tests; T1 no decision function can see the world :32; "none has ever been run". Tags CORE.
+### proposals/2026-08-31-unified-code-shape/13_EXECUTION.md
+- one line: execution path; where we actually are :10. Tags PROCESS.
+### proposals/2026-08-31-unified-code-shape/14_NERS.md
+- one line: NERS ledger auditing this shape; E as a ratio; N :36. Tags PROCESS.
+### proposals/2026-08-31-unified-code-shape/15_ADJUDICATIONS.md
+- one line: rulings R-1.. each with a falsifier; "session rulings not Jordan's except quoted". Tags CORE.
+### proposals/2026-08-31-unified-code-shape/16_PROVENANCE.md
+- one line: method; what the lanes overturned :61. Tags PROCESS.
+### proposals/2026-08-31-unified-code-shape/ADVERSARIAL.md
+- one line: reference review against HEAD `d080535`; three that matter most :24; status/what was run :46. Tags PROCESS.
+### proposals/2026-08-31-unified-code-shape/TRACE_REGISTER.md
+- one line: LIVE / BUILT-INERT status of pre-`engine/season` code (`engine/autoload/engine_clock.py`, `season_manager.py`, `systems/overview/sim/season.py`, accounting) at `f59fd0e`; all line numbers stale after the engine moves; historical. Tags CORE.
+

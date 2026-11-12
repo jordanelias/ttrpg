@@ -25,7 +25,7 @@ primitive that none of them asked for: every institution in them is persons in s
 acting through documents, judged in hearings, on one roll.** What stops them functioning together today
 is not a disagreement of mechanism but (a) the same four upstream absences each lane found alone (an
 order that reaches nobody and is answered by nobody; an obstacle with no named terms; empty stores; six
-institutional verbs that execute with no draw), and (b) twenty-nine collisions among the lanes themselves and with the
+institutional verbs that execute with no draw), and (b) twenty-eight collisions among the lanes themselves and with the
 verb lanes, every one of them a collision of **name, home or shape**, none of method: three encodings of
 the founding order of the Secession War, three carriers for a certified deed, two things called a roll,
 two things called a charter, two things called `instruments`, two functions for standing, two encodings
@@ -144,6 +144,7 @@ means the single file code would read.
 | X-20 | **`oath_step` against `obligation`.** `[COL B]` gives the `issue` row "− `oath_step` 0.5 if the addressee holds a live sworn `oblige` to `Act.via`" | that is `[VEN A]`'s `obligation`. `oath_step` is withdrawn | 5 | COL B |
 | X-21 | **`provisional_term`**: `[BYZ A]` 4 (sweep 2 / 4 / 8); `14_VERBS_BINDING_C_turnover.md` 2 (sweep 1 / 2 / 4) | the row's owner: VB-C's fixture and value | 5 (one owner per row) | BYZ A, BYZ E |
 | X-22 | **The control arm of a new draw.** `[BYZ]` a global `procedure_draws: on | off`. DETERMINISM-A `task_draw_arm: on | off`. VB-C none (its falsifier pins the roll). `[VEN]` ships each size fixture at its control. `[COL B]` declares its rows movers with no equal arm | one style (§3.6). `procedure_draws` is withdrawn: a task row's arm is DETERMINISM-A's `task_draw_arm`; a contest row's control is the pinned roll | 1 (DETERMINISM-A) | BYZ A, B, C, E, F |
+| X-30 | **The currency of a stipend.** `[BYZ B]` bills the court in `coin`; `[VEN B]` denominates every instrument by `kind` because `coin` has no producer and no holder in the built world | `upkeep` is owed in units of whatever matter the paying `transfer` carries; the bill's shortfall claim names `default_store_kind` until SE gives `coin` a producer (§7.5) | 5 (one currency model) | BYZ B |
 
 ### 2.4 Verb rows rewritten by more than one lane
 
@@ -160,7 +161,7 @@ and asks for band content.** Detail and the row-by-row outcome are in §3.5.
 | X-28 | `seize`: `[COL B]` and `14_VERBS_MATERIAL_D_paper.md` §6 | the MATERIAL lane's row, plus `remove` | COL B |
 | X-29 | the answer to a writ: `14_VERBS_SOCIAL1_B` (the row; `comply` opens an `oblige` carrying `OBEYED_WRIT`), `[PAP D]` (the believer's answer; the complier's decline), `[VEN A]` (`obligation` on the answer), `[COL A]` (a covenant's keeping) | SOCIAL1-B's rows. `[PAP D]` edit 7's decline reads the complier's own live `oblige` carrying `OBEYED_WRIT` (his Tenure, person-side), in place of a search for his newest answer claim. `obligation` counts only edges `gate.py::sworn_to` counts, so an obedience is not an oath for the odds either. A covenant-made instrument is in force by SOCIAL1-B's `world_q.covenant_in_force`, which `dues` and `breaches` ask | PAP D, VEN A, COL A |
 
-**Thirty-one rows; twenty-nine collisions decided, two shown not to be collisions (X-16, X-17).** Outside
+**Thirty rows; twenty-eight collisions decided, two shown not to be collisions (X-16, X-17).** Outside
 the four families and therefore listed, not edited: three names for distance (X-27); `rank_gap`
 (`14_VERBS_SOCIAL1_D`) against `standing` (`14_VERBS_BINDING_C`), one quantity; a `dispensation` content
 key `standing` (`14_VERBS_SOCIAL1_B` §3) against the obstacle term `standing`; three names for the graded
@@ -599,6 +600,282 @@ grudgingly; in the south it was never in doubt."*
 the enforcement mechanisms"* names a counter Layer 1 refuses (`[via PAP]` §2.1). Offered: *"it is enforced
 by what a rival's deeds can do: a claim made before those who must accept it, and a Motion of No
 Confidence."*
+
+---
+
+## 5. The interlock map
+
+Seven parties. None is a type: each is a set of seats under a faction or a body, and each row below is
+made of the kit's primitives and existing verbs. Exact edits for the crossings that need one:
+`proposals/15_INSTITUTIONS_SYNTHESIS_C_crossings.md`.
+
+| | party | its seats today or by a family proposal | what only it holds |
+|---|---|---|---|
+| **C** | the crown | `off_king`, `off_heir`, the Inner Circle, the Lord Treasurer | the realm rung's purview; the `homage` instruments' grantor side; dignities to give |
+| **N** | nobility by deed and the conquest-founded ducal houses | `off_duchess_hafenmark`, `off_duke_varfell`, the Jarls, dignity-holders, wardens of a `march` | deeds; ground; men sworn to them |
+| **Ch** | the Church | the Confessor, four Cardinals, the Inquisitor, the Representative; sees; exempt houses | benches whose reach follows the person (CR-60); the archive; believers' answers |
+| **B** | the bureaux and the court | Ministries, Court Parliament, Imperial Court dignities; Altonia's court, Doux, Katepano, Kommerkiarios | the hands paper passes; the Settlement's custody; the gate |
+| **M** | merchant republics and houses | Schoenland's seats; Hafenmark's commune council; house heads on a hearth | stocked chests; bonds; rolls kept by warrant |
+| **G** | guilds and orders | the guild roll, comptroller and leader; the Löwenritter; the Templars' houses | a roll that gates other bodies' seats; an armed body sworn to a seat |
+| **K** | chartered companies and the peoples under them | farmers, factors, wardens, rectors; cohorts and hearths; the southern Einhir | the ground itself: stores, hands, testimony, and the choice to stay |
+
+### 5.1 Pair by pair
+
+"Gives" is a named primitive or verb one side supplies that the other cannot supply for itself.
+"Sanction" and "favour" are what crosses when the relation is used as a weapon or a gift. Every sanction
+is a drawn act whose effect on third parties is their own drawn answer.
+
+| pair | first gives second | second gives first | sanctions that cross | favours that cross |
+|---|---|---|---|---|
+| **C · N** | re-issue of `homage` at each succession; forbearance on ducal ground (`forbears`: `requisition`, `revoke`, `seize`); dignities (`confer` citing a deed) and their `upkeep` | an untermed `oblige` to `off_king` (so the realm's purview reaches the duchy, and `obligation` sits in every royal ask); a relief (`due`) at each succession; their `legitimacy` readings in the `reception` of every `succeed` | crown: a levy inside the duchy (a breach each ducal ledger can hold), `quo_warranto` on the homage, a dignity unpaid. Noble: `release` of the oath (the duchy leaves the purview), the relief withheld, `march` | a new deed recited in a grant (`land_grant`, `march`); a dignity; confirmation without a fee |
+| **C · Ch** | the `immunity` (the containment charter) and its confirmation; leave for sees and tithe on crown ground; CR-37's concurrence partner | consecration (a certificate for the seat, `evidence` at `succeed` and at any deposition); commemoration (`tell`); alms, tending, teaching and judging in crown settlements | Church: a `ban` on a crown seat-holder and its `avoidance` writ to his sworn men; an `interdict` on a rung; consecration refused, or given to a rival. Crown: a levy or seizure in Himmelenger (breach of the immunity); its own man pressed into a see; `quo_warranto` against a grant two centuries old | absolution (`pardon` after a served penance); a see for a royal clerk |
+| **C · B** | seats and their `upkeep`; `confer` and `revoke` | the hands every royal writ passes (`carry`); collection (`requisition` through the treasury seat); custody of the Settlement; the route by which a new deed is enrolled | bureau: a writ held over or returned; a petition never entered. Crown: recall; a purge, after which every writ lapses at the hand | a gift (`give`) that moves a clerk's regard; a dignity for a clerk |
+| **C · M** | a `charter` (a commune's self-rule), a `staple`, a bench for `debt_suit` | a `debt` (the loan against the throne; the forced loan is the same paper with the treasury as debtor); `staple` rents; what their factors have surveyed | house: the next loan refused on the `evidence` of the last; the bond handed (`give`) to the throne's rival; the lapse told. Crown: default; a successor who does not commit; a market's `standard` raised; `quo_warranto` | an extension (a new stage on the bond); a charter confirmed |
+| **C · G** | a `charter` for the body; exemption by `immunity` | the Löwenritter's oath to the **seat**, not the man; a guild roll that gates commune office | order: `release` (canon's "deed-logic enforcement mechanism", `:145`). Crown: `quo_warranto`; the Church's own procedure borrowed against an order it owes money (§5.2 e) | a fee remitted at succession |
+| **C · K** | `farm`, `march`, `land_grant`, `staple`, each conferring a seat with `audit_at_exit`; inspectors (`dispatch`) | an advance and a rent (`due`); a kept garrison; a founded settlement; from the people: yield, testimony, petitions | crown: recall (drawn at `remove`), the `audit`, a calling-in. Grantee: rent withheld, the recall not obeyed, local oaths taken. People: `requisition.resisted`, `petition`, `migrate`, an oath to somebody else | renewal; a quittance; a deed recited |
+| **N · Ch** | a see's ground and its stores; the right to invest where `patronage` admits it | consecration of a ducal claimant; a bench and alms on ducal ground; tithe collected through the see | Church: **excommunication against a duke** (§5.2 a). Duke: his own bishop invested; a see-holder kept loyal against an interdict; the tithe withheld | a benefice for a son (composed, and findable) |
+| **N · B** | (nothing owed) | the clerk's hand on any petition to enrol a deed; custody of the two ducal certificates | bureau: the petition returned; the paper withheld from a hearing. Noble: `purge_altonia` acted on; the minister struck | a deed entered quickly |
+| **N · M** | a `charter` for a town; protection (the `protected` variant of `tribute`) | a `debt` for a campaign; hired captains (an `oblige` kept by `upkeep`, the advance a `debt`) | house: suit and the debt-bar inside its commune; both sides funded (ARC-15). Noble: default; a town's charter called in at his succession | arrears forgiven (the bond handed back) |
+| **N · G** | ground for a house | an order's arms; a roll that decides who sits for a commune on the duke's council | order: a house sworn to a Cardinal and not to the lord on whose ground it stands. Noble: the house's stores levied | — |
+| **N · K** | a `land_grant` or a `march` in his gift | a new house: a warden's won field, then a certificate for his seat, is how nobility by deed is made again | people: oaths to the warden outnumber oaths to his grantor; revolt. Lord: the levy | — |
+| **Ch · B** | schooling (`train`) and its own archive | (Altonia's) the original containment grant; (the Crown's) entry of Church petitions | two keepers: a deed certified in one house and contested in the other (§5.2 d). A Church bench trying a clerk for a forged entry | — |
+| **Ch · M** | benefices; lawful instruments (a debt in another kind at another place leaves no usury to find) | credit; carriage of the tithe as a bond payable at Himmelenger instead of a convoy | Church: usury tried as a derived fact; an `avoidance` naming a commune's members, which bites on their goods and bonds abroad. House: the next advance refused | a prelate's debt extended |
+| **Ch · G** | the head seat's purview through every house sworn to it | houses on other lords' ground; arms (`dispatch` on the Templars' Cardinal's row) | head: discipline (if ruled, §10). Arm: acts through a Cardinal's seat against the Confessor's held writ; `release`, house by house | — |
+| **Ch · K** | alms to hearths in shortfall; a bench that hears a hearth's complaint | believers' answers to every writ; the tithe's yield | `interdict` (what stops is what the engine can see: alms, judging); a parish that defies it | a mission's ground (`land_grant`) |
+| **B · M** | a `staple` at the gate (the Kommerkiarios issues, renews or withholds it); a hand on every exception | duties; dispatches and `survey` Records the other side wants to read | bureau: the market's `standard` raised. Merchants: withdrawal together | a gift |
+| **B · G** | entry of a body's charter | — | a charter left unentered | — |
+| **B · K** | the far superior's orders, late; the inspector; the bench of an `audit` | reports that arrive in a person | recall that does not arrive; a governor who construes | — |
+| **M · G** | a roll by warrant; council seats by lot from it | members' oaths; the gate to office | the keeper lets a member's term lapse (the quiet purge); the league's order to withdraw, and a breaker put out | enrolment |
+| **M · K** | capital: the advance on a `farm` is a `debt`; a share is a `debt` | the factor at distance under a `commission`, audited at exit | settlers against the centre's levy; a factor trading on his own account | — |
+| **G · K** | apprenticeship: the one route from a hearth to a roll | labour at a site | — | — |
+
+### 5.2 The crossings the work order names, as chains of drawn acts
+
+Each step is one existing verb by one person; each has four bands; none is a rule about a duke, a throne
+or a charter.
+
+**(a) Excommunication against a duke.**
+1. A churchman who holds a deed claim the Church's goals act against `open_case`s; the matter is carried
+   to a bench with realm `scope` (`carry`, drawn).
+2. `determine` under `excommunication_deliberation`: each member's ballot is drawn; at two thirds of the
+   ballots cast the sentence passes, and its band disposes: Overwhelming or Success a `ban`
+   (`ban.opened`); Partial an `oblige` of the duke to the bench (monition); Failure an acquittal, which
+   is itself news and costs the bench with those bonded to him.
+3. A Church seat with `issue` publishes: a `dispensation` of form `avoidance` naming him. The writ's
+   `force` is drawn, with `remove` to each see.
+4. **Each addressee answers by his own draw.** For a man sworn to the duke the terms are hostile to
+   compliance: his `obligation` toward the duke, his `regard` for him, `stakes`. A complier holds an
+   obedience (`oblige` carrying `OBEYED_WRIT`) and his `forborne` set declines the named dealings.
+5. **What the sanction does to the duke's power is one line in one reader**: while a live `ban` stands on
+   him from a seat of the faction whose writ a man has complied with, that man's `obligation` toward him
+   reads zero (`[VEN A]`'s lift). His asks, musters and writs to that man lose the term. CR-88's duty
+   decline no longer bars that man's own `release`; whether he takes it is his own score, and those who
+   already held a grievance take it more often (`[PAP D]`'s gate).
+6. The duke's answers: submit (swear a termed `oblige` to the sentencing seat; at its maturity `pardon`
+   reads `penance_weight`); appeal; defy and hold his men by their regard; invest his own bishop in the
+   see on his ground; strike at the bench.
+
+**(b) A loan against a throne.**
+1. The holder of a crown seat `petition`s a house head (the ask: the lender's `regard`, the `evidence` of
+   debts met or lapsed, `stakes` by the amount).
+2. `covenant` mints a `debt`: the borrower commits through his seat; the house holds the bond.
+3. The advance is a `transfer` (drawn carriage). `dues` puts each stage on the debtor's question.
+4. At a stage's maturity the house, or a factor sworn to it, presents the bond: the reckoning, with the
+   debtor's `obligation` (his live `commit`) in the creditor's favour. Paid, paid, part paid and extended,
+   or refused.
+5. `debt.lapsed`. **No bench sits over a throne**, so there is no suit. What the house has is what
+   Florentine bankers had: it can refuse the next loan; tell; and `give` the bond to someone who can use
+   it (a duke, the Church, Altonia), who then holds a king's paper. A successor is not bound until he
+   commits, so every accession is a default the house can see coming, and its members' readings are part
+   of that accession's `reception` where they sit in the audiences.
+6. The crown's side of the same instrument is the forced loan: the treasury seat issues the realm's
+   paper to a lender whose answer is `comply` or not.
+
+**(c) A charter against a rival.**
+1. A grantor issues a `staple` to one body for a kind at a place where another body holds an older one.
+   The first grant's `forbears` clause (the grantor: no second `staple` there) is now breached, and the
+   older holder's `kept` reads below zero as soon as he hears of it.
+2. His `breaches` occasion offers him the grantor and the newcomer's factor: `petition`; a suit;
+   `exchange` at worse odds than he had; withdrawal with his league.
+3. Or the grantor clears the ground first by `quo_warranto` against the older grant. The holder cites
+   his instrument, and because the form `hardens` its age held adds weight (`prescription_seasons`), up
+   to the cap. The bench's draw decides; every other holder of a like grant hears of it at the row's
+   `disposal_reach` and judges the mover by it.
+4. Two grantors over one ground (a ducal `land_grant` inside a Church `immunity`; a crown `farm` over a
+   ducal liberty) are the same conflict with nobody above both: each holder cites his paper as `evidence`
+   in every levy and seizure on that ground until a hearing or a field settles it.
+
+**(d) A deed certified by one body and contested by another.**
+1. A claimant petitions the Church for consecration to a seat; the bench's `reception` is hostile;
+   Failure, known because the floor is open.
+2. She petitions the Court Parliament instead. The petition passes the chancery's hand (`carry`: entered,
+   held over or returned); the body determines; a `resolution` recites her deeds for the seat, kept by the
+   clerk.
+3. When the seat falls vacant two certificates stand for two claimants, kept in two houses. Each is
+   `evidence` at the `succeed` draw only if its keeper cites it, gives it or testifies. The audiences'
+   readings are their own ledgers'. A provisional hold on Partial is a reign that must be earned twice.
+4. The same shape holds between the Crown's Settlement, which recites one deed for Varfell, and what the
+   Skald-Chief tells in the south.
+
+**(e) An order suppressed with the Church's hands.** A crown seat owes a `debt` to an order's house. The
+order is exempt from the local bishop and answers to the head seat alone. The crown's road is therefore a
+Church bench: a denunciation, `inquisition_hearing`, a `ban` on the order's officers, and the bond is
+paper nobody can present. Exemption protects an order from bishops and not from the power that protects
+it (`[PAP]` §3.8). No rule; every step is a person's.
+
+### 5.3 What every institution needs from another, in one sentence each
+
+- The **crown** needs the nobles' oaths for reach, the Church's certificate and the clerks' paper for its
+  heir, the houses' credit for its bill, and somebody on the spot for every far levy.
+- The **nobles** need the court for a deed to be told and paid, the chancery or the Church for it to
+  outlast them, and the crown's forbearance on their ground.
+- The **Church** needs the crown's immunity and the lords' ground for its sees, and every believer's
+  answer for any sanction to mean anything.
+- The **bureaux** need a holder who will not purge them and have nothing but the hand and the chest of
+  papers.
+- The **houses** need a bench that will hear a suit and a debtor who can be sued, which a throne is not.
+- The **guilds and orders** need a charter from someone who can call it in.
+- The **people** need a room where what was done to them counts, and have the levy's odds, their
+  testimony and their feet.
+
+---
+
+## 6. Structural conflicts that generate story by themselves
+
+Each is a pattern an observer reads off the log. "Arises when" states conditions on persons' states and
+on what the draws have already produced; nothing fires. "Reading" is a fold over the Event log that the
+one report prints (proposal D); "fails to show" is what would prove the conflict did not occur. Every
+reading is of the kind `harness/strife.py` is: read-only, no assertion that a story occurs, no guard.
+
+| conflict | the two things that cannot both be kept | arises when | the draws in it | reading | how it fails to show | built by |
+|---|---|---|---|---|---|---|
+| **investiture** | a lord's ground and the Church's office on it | a seat whose `patronage` lists both `purview` and `own_faction` is vacant, and lord and head each know a man | two `confer` draws, each with the other's incumbent as `opposition` | `tenure.opened` on one seat with alternating `Act.via` factions | no see ever empties; one side never forms the act | `[PAP B]`, `[PAP E]` |
+| **succession by deed against blood** | a title-holder's presumption and a rival's fresh deeds | a founding seat falls vacant with an heir whose own deeds are few and a rival whose deeds are in many ledgers; sharper where a keeper has stopped telling the founder's | `succeed` (the BINDING lane's), its `reception` reading `legitimacy`; `determine` under `consecration` | `succeed` attempts by band and by whether the claimant held the title; provisional holds confirmed or lapsed; per audience, the mean `legitimacy` gap between the two | no seat empties (today: `succeed` formed 0, `[BYZ]` §8); every claim is by the title-holder | `[BYZ E]`; proposal B |
+| **debt against sovereignty** | a creditor's bond and a debtor nobody can sue | a seat-holder at the realm or a duchy rung holds a `commit` to a `debt` that matures while his rung's stores are short, or he dies | the reckoning; the successor's `commit`, his choice; the next loan's ask | `debt.lapsed` whose debtor held a realm or duchy seat; then the bond's `record.given` chain; the successor's `commit` or its absence | no bond is ever minted (the chooser does not lend: M-AIM's finding, not this kit's) | `[VEN A]`, `[VEN B]` |
+| **charter against charter** | two papers over one ground or one trade | a second grant is made where a first forbears it; or a grantor's successor wants a revenue an old grant took | `quo_warranto`'s `determine`; every levy and `exchange` on the ground, each citing a paper | cases under `quo_warranto` whose holder cites an instrument with age weight of one or more, and their bands; two live `staple`s of one kind at one place; other holders' regard for the mover afterwards | no succession at a grantor's seat; every successor confirms for the fee | `[COL A]`, `[COL C]` |
+| **schism** | one creed and two heads | a `conclave` stays undetermined for seasons, or carries by a margin the losers will not accept, and the dissenters hold seats that grant `establish` | each ballot; `establish`; each person's `commit` | two live seats of the head's post under different faction Propositions | design-first: no verb mints a faction Proposition in play (FA's emergent-faction carrier) | `[PAP B]`, `[PAP E]` §6 |
+| **tax revolt** | a fixed demand and a short store | a rent, a stipend bill or a tithe falls due on a seat whose ground had a lean season; the collector asks a larger share; the cohort's `regard` falls; the next levy's odds fall | `requisition` (the MATERIAL lane's), with `stakes` by share, `regard`, `remove` | `requisition.resisted` followed within two seasons by a `march.declared` or a `petition.filed` naming the collector, in the same territory | the collector remits; stores never run short (today every treasury rung is empty and hunger occurs in season 0 only) | `[BYZ B]`, `[COL B]`, `[COL E]`; SE's stores |
+| **bureaucratic capture** | who holds the seat and who holds the hand, or the roll | most hands of a body resolve to one person; or one person with no seat on a bench holds live edges of more than half its members | `carry`; every ballot, with `obligation` | per body: the share of entries made by its busiest seat-holder and the writs returned in a season he is absent; per bench: the largest share of members with a live edge to one person, against the `obligation_step: 0` control | every writ is entered; no share ever passes the control world's | `[BYZ C]`; `[VEN A]`, `[VEN C]` |
+| **colonial revolt** | a grant's terms and the grantee's own following | a grantee at `remove` from his grantor collects well and pays his men; or the governed hold breaches and a rival offers | `issue` at `remove` (a recall that does not arrive); `requisition`; `oblige` and `release`; the field | `oblige` edges to a conferred seat from residents of its ground against those to the grantor's; a `tenure.closed` by `release` followed by `duty.taken` to another faction's seat; `compliance.withheld` on a writ naming the holder's own seat | no grant is ever made; every recall lands and is obeyed | `[COL A]` to `[COL E]` |
+
+Four more the interlocks produce that no single family named:
+
+| conflict | arises when | reading | fails to show |
+|---|---|---|---|
+| **the keeper's silence** | a keeper's regard for a house is low, or his goals run against it, and he stops telling what its paper recites | per season, the mean chain term of `legitimacy` for each founding seat, beside the count of tellings of recited deeds by each keeper | the chain term does not fall faster when tellings stop (proposal B gate 4) |
+| **the unpaid court buys a creditor** | the stipend bill exceeds the fisc and the holder borrows to meet it | `transfer.made` renewing a sworn term within a season of a `debt` minted through the same seat; then that bond's fate | the bill is always met by levy, or never met |
+| **the sanction that needed an army** | a `ban` and its `avoidance` are published against a lord whose men hold no grievance | compliance and release shares among his sworn men, split by prior grievance; it must depend on it | release does not depend on prior grievance (the sanction would be a switch) |
+| **the paper that changed hands** | a certificate, a bond or a charter is seized, given or forged and then cited by its new holder | `record.seized`, `record.given` or `record.forged` on an instrument, then a hearing whose `evidence` term cites it | no hearing ever cites a held Record (SC's evidence interface not landed) |
+
+**Why these arise without a script.** `20_NARRATIVE_CHURN.md` §7.1 finds that every stage of a plot point
+is built except the first, a pull: two things a person stands on that cannot both be kept. An instrument
+is a stored pull. A `homage` and a stipend bill, an `immunity` and a short fisc, a bond and an empty
+rung, a certificate and a rival's deeds: each sits in a person's ledger as two claims that disagree about
+what he should do, and the kit's three occasions (`dues`, `breaches`, `audits_due`) are how the pull
+reaches his question. What he does is sampled and then drawn.
+
+---
+
+## 7. The commensuration test
+
+Jordan: *"all need to be adapted made commensurate expressed within play."* Five tests; each is stated
+with what was found against it and what the kit does about it.
+
+### 7.1 One roll form
+
+Every institutional procedure resolves through `seam.contest` or the graded route into
+`social_contest.roll`, and through no other roller.
+
+| route | the verbs on it | owner |
+|---|---|---|
+| prize `a proposition` | `determine` (bench), `argue`, `covenant` | SC; `13_SC` |
+| prize `a standing` | `arrest`, `interview` | SC; `13_SC`; FA-P6 |
+| prize `a seat` | `confer`, `revoke`, `succeed`, `establish` | `14_VERBS_BINDING_A`, `_C` |
+| prize `an order` | `issue`, `dispatch`, `comply`, `evade / defy` | `14_VERBS_BINDING_D`; `14_VERBS_SOCIAL1_B` |
+| the graded route (no prize) | `carry`, `open_case`, `requisition`, `transfer`, `exchange`, `seize`, the inquiries | `13_SC`; `14_VERBS_MATERIAL_B`, `_D`; DETERMINISM-A |
+| a ballot | one draw per member, inside `determine` under a `declared` row | `13_SC` |
+| the lot | `draw(off.id, "lot")`, the one draw owner (`state/ids.py`); not a roll: a draw among the eligible | `[VEN C]` |
+
+Found against it: none of the four families added a roller. Two wrote private obstacle compositions
+(X-19, X-20) and one a second ballot (X-15); all three are folded into the one composer.
+
+### 7.2 One ladder
+
+Overwhelming, Success, Partial, Failure, by `degree_from_net`. The four families' Partial bands are five
+shapes, and that is one too many only once:
+
+| Partial means | for | owner of the shape |
+|---|---|---|
+| provisional: a termed hold | `confer`, `succeed` | VB-C (`provisional_term`) |
+| less than whole: half the remit, half the recited deeds, half the term | `establish`, `consecration`, `comply` | VB-A; `[PAP C]`; SOCIAL1-B |
+| a smaller amount | `requisition` (the magnitude ladder), `transfer` (the delivery ladder) | MATERIAL-B: one function, two tables, which that file asks S to tolerate and this kit accepts |
+| delayed one term | `carry`, a ballot short of its pass mark, a `revoke` that closes at the season's end | `13_SC`; X-15; `[BYZ E]` |
+| a lesser disposal | every band-mapped `disposes:` | SC-P4 |
+
+Failure is recoverable everywhere: nothing is written but the Event of the attempt, and the act may be
+tried again. `[VEN C]`'s bar on a failed motion was the one exception and is withdrawn (X-15).
+
+### 7.3 One set of scales
+
+The eight `rung_kinds`. An institution's scale is its seat's rung and nothing else:
+
+| the brief's scale | rung kinds | institutional things at it |
+|---|---|---|
+| person | person | a deed, an oath, a debt, an answer to a writ |
+| settlement | hearth, community, settlement | a house and its branch; a guild chapter; a commune council; a farmed toll; a parish |
+| faction | territory, province, duchy | a see; a march; a duchy under `homage` |
+| realm | realm, and a foreign root | the throne; the Church's realm-scope benches; the Altonian court at `border_hops` |
+
+Found against it: no seat sits on a `hearth` today and the anchor resolver has no form for one (`[VEN]`
+E-1); the kit adds the `{venue:}` form. There is no `province` rung in the built realm and the kit needs
+none.
+
+### 7.4 One cadence
+
+The season. Two clocks only, both matured at MATTER: `Tenure.term` and `Record.stages`. Every duration in
+the kit is a whole number of seasons on one of the two.
+
+| duration | unit | on which clock |
+|---|---|---|
+| the pay year (`oblige_term`), a rotating seat's `term`, `cooling_off` | seasons (4 shipped or proposed) | `Tenure.term` |
+| `provisional_term` | seasons (2) | `Tenure.term` |
+| a hand's patience (`hand_term`, `office_bodies.term`) | seasons (1 to 2) | `Record.stages` |
+| an instrument's `term`, a clause's `every`, a `debt`'s stages | seasons | `Record.stages` |
+| `prescription_seasons` | seasons (8) | read off `Tenure.since` of the holder's `hold` on the Record |
+
+Found against it, and not this kit's to repair: **the engine has no year.** `season_of_year` is `None` at
+shipped fixtures (`20_NARRATIVE_CHURN.md` W1). "Yearly" in every family file means "every four seasons"
+by the value of `oblige_term`, not by a calendar. When WR's year lands
+(`09_WR_B_weather_with_memory_and_the_year.md`), the kit's fours should read that owner; until then they
+are independent numbers that happen to agree. No transit clock and no message queue exist or are added
+(X-14).
+
+### 7.5 One currency model, and a unit for every number
+
+Stores of a `matter_kinds` member at a rung, conserved by `_shift`. A `debt` and a `due` move no stores
+by themselves; a payment is a `transfer`.
+
+**X-30, found by this test.** `[BYZ B]` denominates the stipend bill in `coin` (`shortfall:coin`).
+`[VEN B]` denominates every instrument by `kind` because `coin` "is produced by no site and held by"
+nobody (`data/fixtures.py:613-632` `[via VEN]`). Decision: `upkeep` is owed in units of whatever matter
+the paying `transfer` carries (H-158's own stated limit `[via BYZ]`), and the bill's shortfall claim names
+`default_store_kind` until SE gives `coin` a producer. `[BYZ B]` edit 4 is reconciled; the `roga`
+scenario's stores are seeded in that kind.
+
+Every number the kit proposes, with unit, owner and sweep, is the table of §3.6 (fixtures) and the rows
+named there (content). There is no number in the kit without those three. Family numbers that had two
+values are resolved in X-07, X-21 and X-30. Numbers outside the kit that this test found in two values,
+listed for unification lane U3: `regard_step` (0.04 in `05_SC_obstacle_difficulty_and_modifiers_B.md`,
+1.0 in `13_SC_tuning_tables.md`); the distance step (X-27).
+
+### 7.6 How the test is run
+
+Not by a new guard (CLAUDE.md §0.1 pt 5). By the refusals the loaders already owe each data family, each
+named in its own proposal: `roll.py::obstacle` refuses a term off the roster (SC-B edit 5); `data/verbs.py`
+refuses a writing row that is neither contested, graded nor declared bookkeeping (DETERMINISM-A);
+`data/instruments.py` refuses a clause kind off `DEED_KINDS`; the `offices.yaml` loader refuses an unknown
+key. And by one reading in the first playable's report (proposal D): per run, the roll routes used, the
+bands seen per verb, the term names seen, the matter kinds moved, and the two clocks' maturations.
 
 <!-- append-point -->
 

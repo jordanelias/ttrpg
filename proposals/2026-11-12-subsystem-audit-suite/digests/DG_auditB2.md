@@ -430,3 +430,82 @@ Working-tree facts used throughout (verified this session): `designs/` does not 
 - **Conflicts / stale:** Everything cites `designs/`, Key types and `sim/` paths that no longer exist (verified `designs/` absent; `registers/mechanics_index.yaml` replaces `canon/`). `canon/definitions.yaml` "does NOT exist" (`:63`). One verified live item: `canon/02_canon_constraints.md:70` still uses "Political Stability" and `:86-87` lists the GD-1 propagation as "pending". Two internal inconsistencies: the faction dossier text (`:665`, `:780`) says GD-1 is "11+ territories" whereas GD-1 is all 15 (ED-1031).
 - **Open items:** ED-151 modifier calibration; the L362 "GM adjudicates" clause; ED-1060 Terminal Doubt; the 14-action combat mapping; none has a visible closing artifact in this folder.
 
+### .audit/2026-07-04-ners-qualitative-audit/ed_options.md
+- **What it is:** 12 drafted ED candidates (E-1..E-12) from the NERS audit, each as a ready JSON ledger line; 104 lines; 2026-07-04, ratification addendum 2026-07-05.
+- **Status:** `RATIFIED (Jordan, 2026-07-05 - ALL 12 accepted and FILED in the ledger; forks resolved to audit defaults)`. Reading: historical decision record; the filing table at `:91-104` is the useful part.
+- **Bears on:** SE, WR, PC, SC, MB, FI, CORE, PROCESS.
+- **Content that matters:**
+  - Filing map (`:93-104`): E-1 `ED-SE-0001` (settlement governance: adopt the redesign path), E-2 `ED-IN-0003` (Convergence Marker detector/applier), E-3 `ED-IN-0004` (articulation trigger omissions), E-4 `ED-IN-0005` (per-subsystem walkthrough policy for UI/UX v4.1 staleness), E-5 `ED-WR-0001` (sweep peninsular_strain), E-6 `ED-IN-0006` (steering surfaces), E-7 `ED-IN-0007` (register back-propagation gate), E-8 `ED-WR-0002` (MS wins over RS), E-9 `ED-PC-0001` (combat player-interface + ED-911 as named increments), E-10 `ED-SC-0001` (dominance sweeps), E-11 `ED-IN-0008` (naming authority), E-12 `ED-FI-0001` (audit the investigation lane).
+  - `:20-22` E-2's proposed design: a registry of trigger-pairs checked per Accounting, emitting a convergence-marker event; candidate home `game_director`.
+  - `:55-57` E-9: "wrapper.engagement() has no player-decision parameter (verified; DELIBERATE sim-first staging per refutation R-1)" - the final audit adopted DELIBERATE staging but asked to schedule both the input surface and ED-911 post-R3.
+  - `:60-62` E-10 lists the unverified hunt lines to re-sweep: Recall/Corroborate/Prep stacking vs a global cap; boost-lookup vs Appraise; solo floor under ED-297; armour no-downside; imposition asymmetry; ability-stacking budget ("config prose claims one while ability_primitives enforces none").
+  - `:69-72` E-12: `investigation_systems_v30` and fieldwork overlap un-audited; orphan T-02/T-30.
+- **Conflicts / stale:** I grepped `registers/editorial_ledger*.jsonl`: `ED-SE-0001`, `ED-WR-0001`, `ED-WR-0002`, `ED-PC-0001`, `ED-SC-0001`, `ED-FI-0001` appear in the `*_archive.jsonl` files (rows show a later `superseded` or `closed` status for SE-0001, WR-0001, WR-0002, PC-0001, FI-0001 - file order, last-wins reading [UNVERIFIED]); `ED-IN-0004`, `ED-IN-0008` in `editorial_ledger_in_archive.jsonl`; `ED-IN-0003` and `ED-IN-0005` were not found by that grep. So most of these 12 were closed or superseded by later work; E-9's "ED-PC-0001" was reused as U0 in the PC sequence (consolidation_v1 allocates ED-PC-0001 to U0), an ID collision worth a look [UNVERIFIED which row the ledger holds].
+- **Open items:** whether the Convergence Marker detector (E-2) was built (the `engine/season/` loop is where it would live); whether UI/legibility walkthroughs exist for scales other than contest.
+
+### .audit/2026-07-04-weapon-morphology-granularity/README.md
+- **What it is:** 18-line abstract of the weapon-morphology granularity audit set (lane PC, 2026-07-04).
+- **Status:** `PROPOSED, Jordan-vetoable - lane PC - no ED-PC IDs allocated yet - no canonical file touched` (stale: audit_v1 was later ratified by PR #74 merge and its sequence executed). Reading: superseded by the status lines inside `audit_v1.md` and `consolidation_v1.md`.
+- **Bears on:** PC.
+- **Content that matters:**
+  - `:5-11` trigger: a silhouette-reconstruction exercise showed a faithful renderer had to INVENT blade width and edge symmetry (the latter as a hand-authored 21-weapon set).
+  - `:12-18` the audit's output: four primitives P1-P4 with "absent => identity" defaults, S-graded grounding, mass-closure anti-fabrication loop, five tranches T1-T5; HIGH balance risk is the `cross_section` -> `gap` armour-defeat chain.
+- **Conflicts / stale:** status line predates ratification; files `u9_adversarial_review_v1.md` and `u9_capstone_v1.md` sit in the same folder but were not assigned to me.
+- **Open items:** none.
+
+### .audit/2026-07-04-weapon-morphology-granularity/audit_v1.md
+- **What it is:** Fable-tier design audit of how to add morphology primitives (edge topology, blade profile, grippable zone, guard axis) to the bottom-up weapon model; 437 lines; 2026-07-04, lane PC.
+- **Status:** `RATIFIED-by-merge (PR #74, ED-1094) - T1-T5 SUPERSEDED-IN-PART` (by `consolidation_v1.md` section 4). Reading: analysis still the rationale source for P1-P4; tranche plan superseded.
+- **Bears on:** PC, DICE, GO (port re-export).
+- **Content that matters:**
+  - `:43-80` inventory of stored primitives (`elements[]{x_m,extent_m,mass_kg}`, `guards[]`, `haft`, `pommel`, `edge_undulation`, `adornments`, `head` token, `mode_elements[]`) and five baked geometry scalars (`curvature`, `point_concentration`, `cross_section`, `edge_keenness`, `strike_concentration`) with their consumers; states "what it cannot say" is anything transverse or topological about the blade.
+  - `:88-178` ranked gaps G1 edge topology (single/double/edgeless + false-edge fraction), G2 width/thickness profile, G3 grippable element (retires name-keyed `HALFSWORD_FORM`), G4 guard axis ambiguity (`guards[].extent_m` transverse vs `elements[].extent_m` axial), G5 flexibility derived, G6 taper.
+  - `:190-320` P1 `elements[].edges = dict(sides, false_edge_frac)`; P2 `profile = dict(width_base_m, width_tip_m, thickness_base_m, thickness_tip_m, section_fill)` staged P2-a data + closure, P2-b `rigidity_derived` parity, P2-c cross_section swap (Jordan-gated); P3 `grippable`; P4 guard `span_m`/`depth_m`.
+  - `:323-338` wiring map: P2-c is the HIGH-risk surface (`w['gap']` -> `adef_cap` armour-defeat tier list); oracle rule: re-export from Python, never edit the port (ED-1050).
+  - `:411-426` anti-fabrication register: every new constant `[SIM-CALIBRATE]`; mass-closure +/-20% report-only; rho_iron 7860 and `UNIT_M` 0.30 are existing sourced constants.
+  - `:428-437` four loud questions for Jordan (T5 ordering, flamberge half-sword, P2 campaign scope, renderer home).
+- **Conflicts / stale:** `consolidation_v1.md` F1-F3 correct it: `clinch` was deleted by R2 I7b; the P4 rename `extent_m -> span_m` is wrong for langets (guards already carry `orient_deg`); `geo['halfsword']` has zero readers. Working tree (grep in `modules/combat`): `false_edge_frac`, `grippable`, `edge_lines`, `affords_halfsword`, `LEGIB_EDGELINE_K` exist (P1/P3 built); `section_fill`, `rigidity_derived`, `span_m`, `has_spine`, `SPINE_WIND_K` do NOT (P2 profile data and P4 rename not built, spine renamed); `HALFSWORD_FORM` still defined at `weapons.py:926`.
+- **Open items:** P2 profile data campaign and rigidity parity table (T-P2); the cross_section swap (T5); the renderer script is "confirmed genuinely gone" (JD-8).
+
+### .audit/2026-07-04-weapon-morphology-granularity/consolidation_v1.md
+- **What it is:** Fable adjudication that merges the R3 plan (A, closing-distance/weapon-model, 9 increments) with the morphology audit (B) into one PC-lane sequence U0..U9 + T-P2 + T5; 162 lines; 2026-07-04, with 2026-07-08 and 2026-07-22 status updates in the header.
+- **Status:** `RATIFIED - plan-of-record for the PC lane, ratified by merge of PR #72 per ED-1094`; header records JD-1 RULED, JD-4 and JD-9 DETERMINED (2026-07-08), U3/U5/U7 executed byte-identical and U9 executed (2026-07-22: "capstone ablation found NO lever robustly clears the ~+/-4pp noise floor"). Reading: live as record of the PC build sequence; JD-2/3/5/6/7/8 stay OPEN per the header.
+- **Bears on:** PC (primary), DICE, GO.
+- **Content that matters:**
+  - `:21-55` verified-facts pass: V1/V2 `thrust_factor` and `geo['halfsword']` dead (zero readers); V3 `HALFSWORD_FORM` is a 2-name dict `{longsword, estoc}`; V6 live percussion mace 8.00 pinned at `PERC_CAP`, poleaxe 7.48 (cap inversion); V8 baseline `8 failed, 166 passed, 1 xfailed`; V7 PoB bias table (cinquedea -1.8 cm, greatsword 30.4); F1-F6 misreads (clinch deleted, guard `orient_deg`, renderer script never committed).
+  - `:59-91` per-overlap verdicts: edges encoded as B's `{sides, false_edge_frac}` with A's table as migration data; half-sword = B's `grippable` flag + A's derived-form generator, REJECT A's threshold-tuned predicate ("a whitelist smuggled through thresholds"); one channel per physical fact: cut-line entropy -> legibility only (`LEGIB_EDGELINE_K`), spine -> `bind_sigma` (drop `SPINE_WIND_K`), grab hazard -> `contact.grab_sigma`, thrust-trueness deferred behind P2 and U2.
+  - `:109-122` the table U0 units honesty (x0.30 into metres), U1 PoB recalibration (ED-PC-0010 done 2026-07-08), U2 graded mode affordance + percussion enactment (ED-PC-0008/0009/0011 done, residual ED-PC-0012 sabre-class `THRUST_AUTH_REF` open), U3 edges, U4 half-sword from attested grip, U5 polearm choke counterbalance, U6 retreat-as-default with cost, U7 weapon-class-aware facing, U8 guard hygiene, U9 capstone, T-P2, T5.
+  - `:124-132` ordering is forced: PoB -> graded modes+percussion -> capstone -> cross_section swap; "there is no separate future Phase C left after U9".
+  - `:150-158` open forks: JD-2 edge FLAG rows (tsurugi double, yari, paired_short, falchion clip, kissaki 0.15, estoc edgeless), JD-3 half-sword roster expansion (flamberge, greatsword, bastard/war swords = new anti-plate capability), JD-5 back-swing framing, JD-6 P2 scope (blades-first), JD-7 T5 sequencing, JD-8 renderer.
+  - `:153` JD-4 resolved: `weapon_physics.reversed_grip_percussion(w)` (hilt assembly mass, `REVERSED_GRIP_EFFICIENCY=0.25` [FIAT, HEMA-grounded Mordhau], reads 1.4-1.8/8 for two-handed swords); `:158` JD-9: `thrust_factor` floor dropped, `MODE_EDGE_MIN`/`MODE_TIP_MIN` = 0.15.
+  - `:162` U2 scope note: `core.coupling`'s `DELIVERY` constants do not scale with percussion magnitude except vs mail/plate, so any weak blunt option wins selection vs unarmoured targets (a separate architectural gap).
+- **Conflicts / stale:** the header names U3/U5/U7/U9 as executed but is silent on U6 (retreat-as-default with cost) and U8; the PC dossier (`dossier_personal_combat.json:80`) had U6 PENDING. One grep of `modules/combat/*.py` for `RETREAT_GATE` and `retreat_prob` (the U6 symbols) returns NOTHING, so U6 appears not to be built, or was removed, in the live module [UNVERIFIED which]; the AUDIT_BRIEF PC intent (retreat as a player choice) makes this a live question. The ED-PC numbering reuses ED-PC-0001 (U0) while ed_options.md E-9 filed `ED-PC-0001` as a different item.
+- **Open items:** JD-2, JD-3, JD-5, JD-6, JD-7, JD-8 (header lists them open as of the last edit); ED-PC-0012 sabre-class thrust fix; T5 re-baselines; P2 profile data.
+
+### .audit/2026-07-04-weapon-morphology-granularity/edges_data_v1.md
+- **What it is:** worker output table: per-element `edges = {sides, false_edge_frac}` with S-grades for 51 non-`base` weapons (half-sword forms skipped); 158 lines; no date, PC lane (U3 migration data).
+- **Status:** none. Reading: historical data input; the live data are the `edges` in `modules/combat/weapons.py`. Cites `/home/user/ttrpg/systems/combat/combat_engine_v1/weapons.py` (`systems/combat/combat_engine_v1` still exists in the tree; the live code is `modules/combat/`).
+- **Bears on:** PC.
+- **Content that matters:**
+  - `:7-40` the invariant-1 conflict table: `edge_keenness` of a multi-mode composite must be read per `mode_elements[i].geometry`, not top-level (poleaxe beak/spike 0.00, bec_de_corbin 0.00, hook_sword crescent 0.05, guandao notch 0.10, fauchard hook 0.05; voulge heel spike 0.15 genuinely blocks `sides=0`).
+  - `:28-37` data-gap forced calls (S3): dangpa flank tines, spetum and partisan wings, voulge rear_fluke inherit whole-weapon ek > 0.1, so an edgeless reading is structurally unavailable; "good candidates for future per-element mode_elements".
+  - `:54, :61, :103, :115` flagged JD-2 calls: paired_short sides=2 (lowest-confidence, S2), yari sides=2, tsurugi sides=2 (counter to "Japanese = single"), estoc sides=0 confirmed.
+  - `:76, :100-102, :107-110, :116` false-edge fractions: katana/tachi/odachi 0.15 (kissaki), naginata 0.15, sabre 0.2, szabla 0.2, falchion 0.2, scimitar 0.15, changdao 0.1, shamshir/pulwar/nandao 0.
+- **Conflicts / stale:** invariant `sides == 0 => edge_keenness <= 0.1` is the CI invariant named in audit_v1; `modules/combat/weapons.py:878` assigns `_el['edges'] = _ed` from an edge table, so the data are applied by a table at import; whether every row here matches that table is [UNVERIFIED].
+- **Open items:** JD-2 FLAG rows were landed "provisional" per consolidation default; no later ruling visible here.
+
+### .audit/2026-07-04-weapon-morphology-granularity/u10_activation_v1.md
+- **What it is:** U10 implementation record (ED-PC-0022): reverses the U9 "keep all six levers at K=0" verdict by re-homing the choke-thrust cost, building a tradition-modulation surface and activating the levers to small values; 198 lines; 2026-07-23.
+- **Status:** `RATIFIED (by merge of PR #226, 2026-07-23, per ED-1094 - no section was held back)`; abilities "illustrative/provisional content". Reading: live record of how the five morphology levers and four seed abilities came to be; later edited by ED-PC-0026 and ED-PC-0035 per code comments.
+- **Bears on:** PC (primary), DICE, CHAR (traditions/abilities).
+- **Content that matters:**
+  - `:24-31` the four fiats that kept levers inert: F1 wrong instrument (aggregate winrate), F2 amputated tradition surface (`ability_primitives.eff_cw`/`ability_factor` not wired to any of the six levers), F3 choke-thrust cost parked against the D2 force invariant, F4 near-invisible facing constants (`FACING_VOID_K=0.08`, `FACING_PROFILE_K=0.03`).
+  - `:44-49` `phi_grip('point')` is now grip-invariant unconditionally; `CHOKE_THRUST_K`/`CHOKE_THRUST_FLOOR` retired; the choke control cost lives only in `CHOKE_ACCURACY_K`. This dissolved the U9 `needs_jordan` (no D2 amendment).
+  - `:50-56` baselines: `LEGIB_EDGELINE_K=0.04`, `BIND_SPINE_K=0.03`, `GRAB_EDGE_K=0.07`, `CHOKE_ACCURACY_K=0.03`, `FACING_REGIME_K=0.12`; verified live in `modules/combat/config.py:55-68, :223`.
+  - `:58-66` four seed abilities `shinogi` (japanese, spine_press x1.6), `zwerchhau` (german, edge_read x1.6), `ringen_am_schwert` (german, edge_grab x0.4), `guardia` (italian, facing_regime x1.5); `choke_control` has a hook but no ability. Working tree: `ability_primitives.py:22-27, :57-59` shows `zwerchhau` was RE-HOMED to `counter_select` x1.4 and `guardia` REMOVED (ED-PC-0026), so this table is partly superseded.
+  - `:83-103` RETRACTION of a "+2.8pp specialist edge" (a confound: `german+ability` vs `none+empty`); isolated, the abilities' aggregate edge is about 0.
+  - `:138-168` four-perspective adversarial review (ED-PC-0023): correctness CLEAN, NERS pessimist SAFE (no runaway, no new degenerate win-share), balance found the confound, grounding found `winden` a category error (a longsword technique wired to a single-edge lever).
+  - `:172-198` the correct instrument for a situational lever is event-divergence with outcome preservation: levers-on vs off at identical seeds, katana vs arming 16% of fights differ, 3% change winner; dagger vs arming 28%/8%; sabre vs longsword 21%/8%. Decision: keep the activation.
+- **Conflicts / stale:** the dossier-era claim that choke/retreat were open is superseded; `modules/combat/config.py:130` records ED-PC-0035 removed `CHOKE_BIND_K` (a structural zero). The claim "combat suite: 9 accepted-red baseline" is date-bound (2026-07-23).
+- **Open items:** broader grounded ability content across more traditions (this record's own admission: aggregate effect about 0 so far); `choke_control` ability gap; C1 polearm facing direction unresolved (`:31`).
+
