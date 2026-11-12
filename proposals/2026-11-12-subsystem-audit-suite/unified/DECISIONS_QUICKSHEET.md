@@ -2,24 +2,25 @@
 
 ## Status: REFERENCE (companion to `DECISIONS_FOR_JORDAN.md`; resolves nothing at runtime; not canon)
 
-Reply in the form *"accept all recommendations except D-04 (B) and D-19 (C)"*. Full context, options and
+D-01 to D-07 are already answered (`DECISIONS_ANSWERED.md` A-1 to A-7) and are listed only so the
+numbering stays whole. Reply in the form *"accept all recommendations except D-19 (C) and D-24 (A)"*. Full context, options and
 costs for each line are in `DECISIONS_FOR_JORDAN.md` under the same id. Lines marked **(answerable)** are
 ones this lane thinks need no ruling from you; a plain "accept" closes them.
 
 | id | decision | recommended answer |
 |---|---|---|
-| D-01 | Auto-resolve | **A** — the same battle engine, run on standing orders; no quick sum; Layer 1 unchanged |
-| D-02 | A unit | **A** — a row on the army's record, not a thing with identity; Layer 1 as amended 2026-10-28 unchanged |
-| D-03 | A duel inside a battle | **A** — the battle calls the duel from inside, counted as a nested contest with a set cap |
-| D-04 | What a battle reports | **A** — won, lost or drawn (extends the 2026-09-03 combat exemption) |
-| D-05 | Dice for non-combat rolls | **A** — whole dice, as built; the bell curve for personal combat only |
-| D-06 | A score outside a fight | **B** — the score plus a base, floor five, as combat does |
-| D-07 | Talent and training | **A** — one number, as built (revisit after D-06) |
-| D-08 | A wound's cost | **A** — as ruled, a small fixed cost to the obstacle |
-| D-09 | A turn | **B** — a scene is a short sequence; each step may hang on the last |
-| D-10 | Governance's home | **A** — the season loop's own verbs; no governance module |
-| D-11 | Training gates an act | **A** — no; training changes odds, never access |
-| D-12 | Rank in the odds | **A** — no office bonus; office reaches the odds through regard |
+| D-01 | Auto-resolve | ANSWERED **A** (A-1) — the same battle engine, run on standing orders |
+| D-02 | A unit | ANSWERED **A** (A-2) — a row on the army's record |
+| D-03 | A duel inside a battle | ANSWERED **A** (A-4) — called from inside, as a nested contest |
+| D-04 | What a battle reports | ANSWERED **A** (A-3) — won, lost or drawn |
+| D-05 | Dice for non-combat rolls | ANSWERED **B** (A-5) — the bell curve everywhere |
+| D-06 | A score outside a fight | ANSWERED **B** (A-6) — the score plus a base, floor five |
+| D-07 | Talent and training | ANSWERED **B** (A-7) — two numbers |
+| D-08 | A wound's cost | **B** — a level against the roll, as combat spends it (follows from D-05) |
+| D-09 | A turn | ANSWERED **B** (A-9) — a scene is a short sequence |
+| D-10 | Governance's home | ANSWERED **A** (A-10) — the loop's own verbs |
+| D-11 | Training gates an act | ANSWERED **A** (A-11) — no |
+| D-12 | Rank in the odds | ANSWERED **B** (A-12) — yes, a seat carries a modifier (against the recommendation) |
 | D-13 | Three new seat facts | **B** — accept the clerks, paper-hands and exit-audit keys (optional per seat) |
 | D-14 | A vote | **A** — a draw on the voter inside the presiding act |
 | D-15 | Natural death | **A** — on, after the 46 ages are authored |

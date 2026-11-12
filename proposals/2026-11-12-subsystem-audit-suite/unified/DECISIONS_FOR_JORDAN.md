@@ -312,6 +312,9 @@ D-06 together.
 
 ### D-05 · Which dice the non-combat rolls use · DICE
 
+> **ANSWERED 2026-11-12: B, the bell curve everywhere** (`DECISIONS_ANSWERED.md` A-5), against the
+> recommendation below. D-06's answer is the re-centring.
+
 **The situation.** Personal combat draws from a bell curve; the social roll and the battle use whole dice
 with exact, countable odds. At the shipped settings the whole dice fail 74% of the time and the bell curve
 86%: they are not interchangeable.
@@ -338,6 +341,8 @@ with exact, countable odds. At the shipped settings the whole dice fail 74% of t
 `proposals/10_DICE_one_roller_one_fraction_rule.md`.
 
 ### D-06 · What a skill score is worth outside a fight · DICE, SC
+
+> **ANSWERED 2026-11-12: B** (`DECISIONS_ANSWERED.md` A-6), calibrated together with D-05.
 
 **The situation.** Outside combat the score *is* the dice pool: two equal opponents succeed 28% of the
 time, and one point of skill is worth about eleven percentage points. Combat instead uses the score plus a
@@ -367,6 +372,9 @@ intended effect at today's small pools, 49–70% at five dice).
 paragraph); ED-IN-0351.
 
 ### D-07 · Talent and training: one number or two · PC, CHAR
+
+> **ANSWERED 2026-11-12: B, two numbers** (`DECISIONS_ANSWERED.md` A-7), against the interim
+> recommendation below.
 
 **The situation.** A fighter's dice and obstacle come from one number: the larger of his natural attribute
 and his trained skill, plus practice. A gifted untrained man and a trained ungifted man are the same number.
@@ -403,10 +411,12 @@ Combat itself spends wounds as a level against the roll's spread.
 **Option B — a level against.** A wound costs 5 to 10 points at every pool, stacking under the soft cap with
 other disadvantages; experts feel wounds as much as novices.
 
-**Recommendation.** A (dice addendum is written for it). This lane agrees, lightly: B is more consistent
-with combat; take B if you want wounds to matter to the skilled.
+**Recommendation.** The dice addendum was written for A, under whole dice. Now that every roll is on the
+bell curve (D-05 answered B) and scores carry a base (D-06), this lane recommends B: a wound then costs
+the same share of the roll's spread as every other disadvantage, through the same capped channel, which is
+how combat already spends it. A fixed fraction of the obstacle would be a second ladder for one quantity.
 
-**If you do not answer.** A.
+**If you do not answer.** A, as ruled (ED-PC-0005, ED-PC-0006).
 
 **Blocks.** The wound rows of the capability-to-dice map.
 

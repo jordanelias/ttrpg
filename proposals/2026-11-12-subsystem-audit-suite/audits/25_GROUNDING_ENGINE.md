@@ -2,7 +2,7 @@
 
 ## Status: REFERENCE (a grounding pass over documents that already exist; resolves nothing at runtime, CLAUDE.md §0.05; queues nothing)
 
-## Read at: `870c661` (working tree, 2026-11-12). The suite was written across `54e6661` … `870c661`; no file under `engine/`, `modules/`, `references/` or `architecture/` changed between those (see §0).
+## Read at: `870c661` at the start, `62dbc8b` by the first probe (working tree, 2026-11-12). The code under every claim is the same at every SHA the suite cites (see §0).
 
 Jordan, 2026-11-12: *"All ungrounded information should have info available on repository."* *"Do not
 guess."* This file takes the suite's statements about the engine that their own authors marked as not
