@@ -927,8 +927,9 @@ establishes (`decision/`, `person_q.py`):
 
 - **(a) What FI needs of a chooser.** A person decides to inquire because a claim landed about something
   in his reach (Q2) or a standing aim names it (Q4); on his own ledger alone; with his pursuits scoring the
-  act (three inquiry rows are celled; `tell` is `uncelled` by design, so no temperament separates a talker
-  from a silent man); at a scene budget; with the reason recoverable as `Scene.occasion` → the question →
+  act where the verb has alignment cells (`requirements.yaml` R-08 records `tell` as `uncelled` by design,
+  so no temperament separates a talker from a silent man; the inquiry rows' cells were not opened
+  [UNVERIFIED]); at a scene budget; with the reason recoverable as `Scene.occasion` → the question →
   the claim → the Event (`world_q.occasioned_by`). Missing: discretion and candour as inclinations; a
   reason for *what* was said.
 - **(b) One chooser for player-proxy and NPC.** Yes at the act level: `play_surface.dispatching_chooser`

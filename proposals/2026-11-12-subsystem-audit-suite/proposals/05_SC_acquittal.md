@@ -11,8 +11,9 @@ intent, ED-IN-0288), which reads a failed determination as an acquittal (`Docket
 
 A contested `determine` that grades `Failure` takes the matter off the docket and emits
 `matter.dismissed`, where today it writes nothing, emits `matter.undetermined` and leaves the matter
-to be re-heard every season. A declared mover in every world where a `determine` executes (at seed 0
-the first is in season 4: one `matter.undetermined`, three-season and four-season probe, audit §12).
+to be re-heard every season. A declared mover in every world where a `determine` executes and fails
+(`build_realm`, six seasons: `matter.undetermined` 2 at seed 0 and 2 at seed 1, against
+`matter.determined` 1 and 2 and `matter.lapsed` 8 and 8; audit §12 run 6).
 
 ## The problem (evidence)
 
@@ -67,8 +68,8 @@ reopenable.
 `engine/season/tests/test_u7_remit.py` section 10: a planted `Failure` margin on a petition-borne
 matter leaves no docket item naming the party, a `matter.dismissed` Event whose `changes` name the
 petition, no new Tenure, and a second `open_case` on the same party is admitted (reopenable). Realm
-probe (audit §12's script) at seeds 0–2, 6 seasons: `matter.dismissed` above 0, and the docket's
-end-of-season length no longer monotone.
+probe (audit §12 run 6's script) at seeds 0–1, six seasons: `matter.dismissed` above 0 where
+`matter.undetermined` reads 2 and 2 today, and `matter.lapsed` below its present 8 and 8.
 
 ## Falsifier
 

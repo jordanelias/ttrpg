@@ -7,8 +7,10 @@ Source: `audits/06_FA_audit.md` F-FA-07, §9, §6.2 R-19, §13 (NPC-020, NPC-031
 ## What it changes in `engine/season/` at runtime
 
 Nothing on the game path. It adds a `play` entry to the instrument `harness/governance_spine.py`, which
-today prints a census. No file under `loop/`, `state/`, `queries/`, `decision/` or `data/` changes; a run's
-`content_hash` equals the same seasons run through `populated.run` with the same chooser (the control).
+today prints a census, and gives the spine fixture's offices the conferral and revocation bases they lack
+(a declared mover of the fixture's own hash, and of nothing else). No file under `loop/`, `state/`,
+`queries/`, `decision/` or `data/` changes; a run's `content_hash` equals the same seasons run through
+`populated.run` with the same chooser on the same built world (the control).
 
 ## The problem (evidence)
 
@@ -41,6 +43,18 @@ Ladder step 5. The alternative, a second world builder with situations written i
 of `build` and the thing the standing requirement forbids.
 
 ## Exact edits, by owner
+
+**`engine/season/governance_spine.yaml` and `harness/governance_spine.py::build`** (the one edit that moves
+a hash, the fixture's own). Every spine office is built today with no conferral and no revocation basis, so
+`may_fill` is false for every pair and no seat on the spine can be filled, stripped or claimed (probe at
+`601e715`: thirteen offices, all `(None, None)`; `may_fill` of the Duke over the Count beneath him False).
+Each `rungs:` row gains `conferral:` and `revocation:`; `build` passes them to `Office`. Values: the realm
+row `conferral: null`, `revocation: null` (nothing stands above it); every other row `conferral:
+appointed`, `revocation: rung_above_same_faction`, the generic case of ED-IN-0256 (2) and (3)
+`[ASSUMPTION; medium; Jordan to correct; revert: drop the two keys]`. The file's closing note, which says
+the two bases have "no code-readable owner yet", is replaced by a pointer to `rosters.yaml:
+conferral_bases` and `revocation_bases`. The spine's `content_hash` moves at build (`Office.conferral` and
+`.revocation` are hashed) and is re-recorded; the realm does not move.
 
 **`engine/season/harness/governance_spine.py`** (the fixture's one owner).
 
@@ -113,4 +127,5 @@ seat's season of rule runnable, observable and endable, which is what "plays alo
 
 ## Cost class
 
-Small build. No hash moves. Depends on nothing; FA-P1 and FA-P3 make scenarios 3 and 1 richer.
+Small build. One declared mover (the spine fixture's build hash). Depends on nothing; FA-P1 and FA-P3 make
+scenarios 3 and 1 richer.

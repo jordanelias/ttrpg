@@ -164,7 +164,8 @@ Worst first. "Falsifier" is the observation that would have shown the claim wron
   view (members, seats, holdings, head) identical build to end for all ten factions at seed 0, and at seeds
   1 and 2 but for the Church, which lost one member and one seat to a death; the dead man's seat
   (`off_cardinal_prudence`) was still vacant when each run ended; one `commitment.ended` at seed 2 (E-5). Spine, five seeds, four seasons: no
-  office changed holder (E-4). `aperture 2 0`: `confer` formed for 5 persons and attempted 0; `revoke` the
+  office changed holder (E-4), and on the spine none can, because its offices declare no basis (E-10), so
+  the realm is the evidence. `aperture 2 0`: `confer` formed for 5 persons and attempted 0; `revoke` the
   same; `succeed` formed 0 (E-3). The register records one computed `confer` at one seed in four seasons, a
   self-conferral (H-207's cite; not re-run).
 - **Why.** Four causes, each with an owner. (a) *Vacancies are rare*: two seat-holders died in nine realm
@@ -255,8 +256,13 @@ Worst first. "Falsifier" is the observation that would have shown the claim wron
 
 - **Claim.** Nothing lets a player, or a headless proxy, enter a governance situation, see the choices a seat
   opens, and see what a choice did.
-- **Evidence.** `harness/governance_spine.py:249-251` prints a census. `harness/play_surface.py` supplies the
-  dispatch seam and no scenario. No instrument prints per season who holds what, which writs stand
+- **Evidence.** `harness/governance_spine.py:249-251` prints a census. **On the spine no seat can be filled,
+  stripped or claimed at all:** `build` constructs every office with no conferral and no revocation basis
+  (`:155-156`), so all thirteen read `(conferral None, revocation None)` and `may_fill` is false for a Duke
+  over the Count beneath him (E-10). The fixture built to observe a decision travelling down a ladder
+  cannot observe an appointment. `governance_spine.yaml:96-110` still says the two bases have "no
+  code-readable owner yet"; `rosters.yaml` has owned both since `13d-i`. `harness/play_surface.py` supplies
+  the dispatch seam and no scenario. No instrument prints per season who holds what, which writs stand
   unanswered, or who is banned. `world_q.endings_reached` exists (`:2619`) and no governance run reads it as
   an end.
 - **Minimal fix.** Proposal `06_FA_playable_scenario.md`; §9.
@@ -594,7 +600,7 @@ Step 2 before 3: a term that empties a seat is only interesting once the seat's 
 | element | state |
 |---|---|
 | entry point | none that plays. `python -m engine.season.harness.governance_spine` prints a census |
-| fixture | `governance_spine.build(seed)`: 13 seats, 13 persons, two chains under one realm, every seat holding the full default remit, one faction with no members (`faction x`; its `members` is empty, E-4) |
+| fixture | `governance_spine.build(seed)`: 13 seats, 13 persons, two chains under one realm, every seat holding the full default remit and **no conferral or revocation basis** (E-10), one faction with no members (`faction x`; its `members` is empty, E-4) |
 | choice surface | exists in mechanism: `harness/play_surface.py::dispatching_chooser` hands a named person's deliberation to a callback with the same `(p, v, s, ask_budget)` the chooser sees; `opening_set` computes the offered candidates. Nothing presents them |
 | outcome legibility | none. Refusals are Events with a kind; three predicate rows record no reason (H-252). No digest says who holds what |
 | stakes | a seat can be lost only by death or a hand-built `revoke`; a decree costs nothing to ignore; a treasury is rarely touched |
@@ -711,6 +717,10 @@ shared with the other lanes (load average near 30), so long runs were kept few.
 | E-7 | `python -m engine.season.harness.corpus_run`, **the CORE lane's run of the same command on the same tree**, read from its scratch output; not re-run here because nine lanes were running it at once | 0 · per case | 143 cases; 23 of 67 verbs executed; `confer`, `convene`, `dispatch`, `establish`, `march`, `oblige`, `open_case`, `pardon`, `requisition`, `revoke`, `seize`, `succeed` among 30 "foldable but never even attempted"; `comply`, `construe`, `covenant`, `determine`, `evade / defy`, `survey` only refused; NPC RUNS and ARC ENDS both NOT-COMPUTABLE |
 | E-8 | `run_cases.load_cases` over the corpus, filtered by need text | n/a | 143 cases, 972 needs, 69 marked UNCLEAR; the FA-bearing needs listed in `fa_cases.txt` and grouped in `fa_case_mech.txt` |
 | E-9 | `grep` for entity literals in non-harness Python; for `faction\|office\|duty` in `decision/choose.py`; for callers of the `faction_q` members and `at_war` | n/a | entity literals in comments only; `choose.py` reads `seat_of` twice; callers as stated in F-FA-10; `at_war` read at `world_q.py:3703` and `:5150` |
+
+E-10: a `python -` probe on `governance_spine.build(0)`: all thirteen offices read `(conferral None,
+revocation None, binds members_by_admission)`; `has_conferral_basis(lo_province_a)` is False and
+`may_fill(lp_duchy_a, lo_duchy_a, lo_province_a)` is False.
 
 Stopped and discarded: a second `aperture 4 0` and an `aperture 4 1` of my own (the CORE lane was already
 running `4 0`; neither had produced output). Nothing in this audit rests on a four-season `aperture` reading.

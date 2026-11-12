@@ -25,8 +25,9 @@ entry (`social_contest.roll`, typed input, `Margin` out, no state).
   season never executes is the two-code-paths failure the standing requirement names.
 - **A hearing does not end.** `python -m engine.season.harness.aperture 2 0` (PYTHONHASHSEED=0):
   `determine` attempted 2, executed 0; `matter.determined` is in the never-emitted list; `speak`
-  attempted 25, refused 23 as `speech.unheard`, executed 2, both `Failure`. A three-season
-  `build_realm(0)` probe: 7 cases opened, 3 `determine.refused`, 0 determined, the docket 8 → 14 → 18.
+  attempted 25, refused 23 as `speech.unheard`, executed 2, both `Failure`. Six-season
+  `build_realm` probes at seeds 0 and 1: 27 cases opened, 3 `matter.determined`, 4
+  `matter.undetermined`, 16 `matter.lapsed`.
 - **A speech does not reach the verdict.** `matter.carried`, `matter.advanced`, `matter.held` and
   `matter.turned` have no reader under `engine/season/` outside harness comments (grep at `601e715`);
   all four bands of `speak` write `[]`.
