@@ -171,3 +171,69 @@ cells land.
 ## Cost class
 
 Small build, after `27_MB_A` and the manager proposal's §4. The scoring is CHAR's and is not costed here.
+
+## Instructions to code it (standing charge, `AUDIT_BRIEF.md:545-547`; for workplan v12)
+
+Checked against the charge on 2026-11-12. **The module half (27D-1 to 27D-3) is specified to the symbol and
+is INCOMPLETE only on `27_MB_A` and the manager proposal landing. The chooser half (27D-4) is a design only
+and is marked INCOMPLETE and returned to CHAR.**
+
+**Batch items, in edit order.**
+
+| item | file :: symbol (single owner) | edit | hash |
+|---|---|---|---|
+| 27D-1 | `modules/mass_battle/core/contact.py` :: new `obey_odds(view, action, me)` | calls `_obey_terms` (27A-4's helper, the one composition of pool, levels and obstacle) for each link and `engine.dice_engine.sigma_leverage.band_odds(pool, ob, boost)` on the result; composes two links by multiplying the at-once shares and summing the rest; draws nothing | none |
+| 27D-2 | `modules/mass_battle/massbattle.py` :: `FieldWindowView.units`, `GeneralAction` (both created by `04_MB_manager_battle_one_resolver.md` §4) | the three view fields, computed where the view is built: `reach_bands` by the same function `obey` uses, `steady` from the unit's Discipline and `raw`, `officer_pool` from `Subunit.officer_record`; `GeneralAction.reasons: tuple = ()`, copied untouched into `FieldOutcome.interventions` | none with no decider |
+| 27D-3 | `modules/mass_battle/armyrecord.py` :: `order`, `options`; `references/troops.yaml: doctrines.<name>.commander_post`; `engine/season/harness/military_menu.py` | `order` accepts `commander_post` and `officer` (27A-3 adds the keys; this adds the menu's closed sets: unit names; persons of the faction, handed in as facts); `options()` gains `unofficered` and `post_names_no_unit`; the menu lists both and prints `obey_odds` beside each window action | none (withheld verbs) |
+| 27D-4 | `engine/season/seam/wrappers/mass_battle.py::resolve` (`:355`); `engine/season/decision/` | forward `host.decide` for either side's commander by the one parameter; the chooser's decider over `GeneralAction`'s closed set | INCOMPLETE |
+
+**Data rows.** `doctrines.<name>.commander_post`: a post name of the formation (`front`, `rear`, `left`,
+`right`, `reserve`), resolved to the unit holding that post; seed `reserve` for every doctrine, which is the
+control (the rear centre, today's implied position).
+
+**Call sites.** The window hook is the `phase_boundary` call at `modules/mass_battle/battle_loop.py:461`
+(where the manager proposal puts `on_window`); the view is built there. `resolve` already forwards a
+decider for combat (`seam/wrappers/combat.py`, REM-31); the field's forward is its sibling.
+
+**Tests** (named).
+
+- `tests/valoria/test_conditional_orders.py`: `test_obey_odds_agrees_with_two_thousand_draws_of_obey`
+  (gate 1); `test_obey_odds_and_obey_share_one_terms_helper`.
+- `tests/valoria/test_mass_battle_officers.py`: `test_a_forward_post_buys_obedience_and_costs_exposure`
+  (gate 3, both differences beyond two standard errors, n 400);
+  `test_three_signals_can_be_misread_and_one_cannot` (gate 4).
+- `tests/valoria/test_army_battle.py`: `test_the_window_view_shows_no_enemy_unit_out_of_contact` (gate 5);
+  `test_no_decider_and_no_orders_is_todays_field` (gate 6, the control).
+- `tests/valoria/test_army_menu_presets.py`: `test_the_menu_offers_officer_and_post_from_their_closed_sets`.
+
+**Gate, with the reading expected.** As "Gate" above. Control: gate 6, hash-equal with no decider and no
+standing orders.
+
+**Falsifier and its control.** As "Falsifier" above. Planted: `obey_odds` given its own obstacle arithmetic
+(the helper-count test and gate 1 fail); the view built from `World` (gate 5 fails on an enemy unit out of
+contact).
+
+**Hash movers.** None with no decider. With one: fields in which the decider acts.
+
+**Dependencies.** `27_MB_A` items 27A-3 and 27A-4; `04_MB_manager_battle_one_resolver.md` §2, §4, §5;
+`26_MASS_BATTLE_cell_scale_and_time.md` §3 for lull actions; `04_MB_cell_hierarchy_as_data.md` §3 for posts;
+`04_MB_playable_field_scenario.md` step 5a for doctrines as rows.
+
+**What lands it; cost class; tier.** An IN-lane session under `/methodology-execute`, in
+`U5b_MB_rulings_in_the_field.md` §6 row 5. 27D-1 to 27D-3: small build, `sonnet`. 27D-4: design-first,
+`opus` (competing considerations in a chooser), CHAR's.
+
+**INCOMPLETE, with what is missing.**
+
+1. *27D-4, the unplayed commander's decider, is a design only.* This file gives the interface (the closed
+   action set, the view, `obey_odds`, the costs) and no ranking. Missing, all CHAR's: the cells on payload
+   values (`audits/04_MB_audit.md` §16 (d): the chooser keys on `(verb, subject)`); the question a commander
+   answers at a window; how temperament and conviction weigh `rally` against `signal`; the wording of
+   `reasons`. Returned to CHAR. Until it lands an unplayed commander has no decider and his standing orders
+   decide, which is a complete behaviour and not a stub.
+2. *Believed officer pools*: whether the knowledge model can hold a belief about another person's
+   capability rating was not verified. Missing: that read, from CHAR and
+   `10_DICE_believed_odds_have_a_prior.md`. Until then the view shows the true value, which is a breach of
+   non-omniscience confined to a commander's own officers; it is declared here and not hidden.
+3. *27D-1 to 27D-3 cannot be coded before `FieldWindowView` and `GeneralAction` exist* (the manager
+   proposal's §4). Missing: that proposal landed.

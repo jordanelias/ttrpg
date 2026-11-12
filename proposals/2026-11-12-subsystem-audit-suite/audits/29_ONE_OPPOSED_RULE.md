@@ -396,6 +396,7 @@ run; nothing tracked was written. Load average 1.7 to 4 on 4 cores.
 | `p2_skill.py` | 5 arms × 7 rank pairs × 1,000; mirror control at two seed sets; mirrors at ranks 0, 2, 5, 7, 12 × 4 arms × 1,000 (+200 traced); defence by rank, 600 traced a cell; attributes, 500 a cell | §4 P2, P3, P4 |
 | `p5_social.py` | closed-form bands on the A-5/A-6 roll; control 200,000 seeded draws (seed 29); equals by rank; nine rank pairs; levels; extremes; two-sided roll 100,000 a cell | §5 |
 | `p6_alts.py` | the neutralisation cut, the two-sided roll, the half-score at rank 7, 1,000 a cell; `blood` and `yield` terms 800 a cell | §4 P6 |
+| `p7_scale.py` | `core.strike` for default fighters at thirteen scales, no draw: Success is 9 (the Wound Interval) from 0.99 to 1.08, 10 from 1.10, 8 at 0.98 | the proposal's item 29-3 |
 
 Reproduced from other lanes as a check on the instrument: the shipped mirror (3.35 turns, 3.20 blows
 against the pessimist's 3.36 and 3.18); A-31's scale (4.60 / 4.60 / 45.0% against 4.60 / 4.58 / 43.9%); the
@@ -405,5 +406,6 @@ Limits, stated. One weapon and one armour (arming sword, light): the season's on
 (`audits/16_PESSIMIST_PC.md` §1.2). No reading here is a balance claim across the roster; the roster sweep
 belongs to U5b §5 row 5's batch. The argument's figures are the roll's own odds, not a realm reading: the
 realm reading is `13_SC_calibration.md` step 4's, after the cast holds scores. The 1.07 scale is the
-pessimist's seed, not a swept value. The two-sided arm in a fight is an equivalent-in-law construction on
+pessimist's seed; `p7_scale.py` (`core.strike`, no draw) shows a Success is exactly the Wound Interval (9)
+for every scale from 0.99 to 1.08, so 1.07 meets A-31's rule and is taken as decided. The two-sided arm in a fight is an equivalent-in-law construction on
 the attacker's net, not a second draw path.

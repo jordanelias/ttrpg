@@ -50,7 +50,7 @@ puts nothing in the way but his defence layer; a floor at `OB_MIN` would make ra
 alike, and the shipped realm lives there). In the social composer the even line is always present, so
 U5c §2's `max(OB_MIN, …)` never binds and is left as written.
 
-## The tuning (decided; every value is a fixture with its control arm, set by the gate's sweep, not by this text)
+## The tuning (decided; every value has a control arm, and each gate re-reads it at landing)
 
 | dial | owner | control | live | what it buys (AUD §4, §5) |
 |---|---|---|---|---|
@@ -78,9 +78,9 @@ Read together at the live arm:
 | 2 | `engine/season/seam/wrappers/pool.py` | `score(w, p, verb)` as U5a B1. Its opposing form (the `opposed_by` capability where the row names one) is what `_opposition_of` returns: **the trained score, never the pool** (replaces U5a B4's *"returns the opponent's pool"*); no practice addend; a person always has one (the untrained score) | U5a Part B |
 | 3 | `engine/season/queries/inputs.py` | `SocialContestInput` and `PersonalCombatInput` each carry `opposition_rate: float`, `pool_add: int`, `pool_floor: int` raw from the fixtures; `DuelRoundInput` (`03_PC_duel_round_and_approach_B.md`) carries the same three. One fixture each: `fight_opposition_rate` (U5b §2 edit 4) **is not created** | U5a Part B; U5b §5 row 4 |
 | 4 | `modules/social_contest/roll.py::obstacle` | `hard = even_line(inp.pool_add) + difficulty + opposed_ob(opposition if a person opposes else inp.pool_default, inp.opposition_rate) + Σ raw_i × step_i`, then U5c §2's bounds unchanged. `terms` gains the leading entry `("even", even_line)` so the terms still sum to `ob`; `rosters.yaml: obstacle_terms` gains the member `even` first; its host function in `sigma.py::OBSTACLE_TERMS` is the one that carries `pool_add` onto the record (so U5c §1's member-to-function pairing holds), and the value is derived in the module from that field and `MU_PER_DIE` | U5c §4 step 5 (the joint calibration step) |
-| 5 | `modules/combat/core.py::ob_from_defender(defender, rate)` | `return SL.opposed_ob(defender.faculty, rate)`; the three call sites (`wrapper.py:213`, `:243`, `:331`) and `core.py:665` pass the carried rate. The docstring's *"Score/2"* and *"two ladders for one quantity"* paragraphs are replaced by one sentence naming the owner and A-71. `BASE_POOL`, `POOL_FLOOR` stay as the workbench's defaults (U5b §2 edit 3) | U5b §5 row 4 at the control rate (hash EQUAL) |
+| 5 | `modules/combat/core.py::ob_from_defender(defender, cfg)` | `return SL.opposed_ob(defender.faculty, cfg.get('OPPOSITION_RATE', OPPOSITION_RATE))`; the three call sites (`wrapper.py:213`, `:243`, `:331`) and `core.py:665` pass `cfg` (item 29-2 below has the full route). The docstring's *"Score/2"* and *"two ladders for one quantity"* paragraphs are replaced by one sentence naming the owner and A-71. `BASE_POOL`, `POOL_FLOOR` stay as the workbench's defaults (U5b §2 edit 3) | U5b §5 row 4 at the control rate (hash EQUAL) |
 | 6 | `engine/season/data/fixtures.py`, `hole_register.yaml` | `opposition_rate`: one NUMBER row, grade `ruled` (A-26, A-71), sweep `0.5 / MU_PER_DIE / 0.3`, with the targets of this file as what it was set to. Flip to the live arm for the fight **first in U5b §5 row 5** (before the scale's sweep, so `DMG_SCALE` is swept on the obstacle it will ship with) and for the social roll at U5c §4 step 5 | as named |
-| 7 | `modules/combat/core.py:168` | `DMG_SCALE` by U5b §4's sweep, **run at `opposition_rate` live**: the value at which an arming sword's Success against light armour is one Wound Interval (seed 1.07) | U5b §5 row 5 |
+| 7 | `modules/combat/core.py:168` | `DMG_SCALE = 1.07`: decided. An arming sword's Success against light armour is exactly one Wound Interval (9) for every scale from 0.99 to 1.08 (`core.strike` is deterministic; `p7_scale.py`), so U5b §4's rule is met without a further sweep | U5b §5 row 5 |
 | 8 | `engine/season/tests/test_sc_calibration_targets.py` (`13_SC_calibration.md` edit 1) | the grid is stated on trained ranks 0, 2, 4, 7 (pools 6, 8, 10, 13), not on pools 2 to 8; "equals" is equal trained rank. Two rows are added: the even contest (`plain`, equal ranks: P(margin ≥ 0) within 0.005 of 0.5 at every rank) and the better-arguer curve (gate 6 below) | U5c §4 step 4 (red), 5 (green) |
 | 9 | `re-derived, never by hand` | `engine/engine_params/combat_engine_v1.json` (`tools/export_engine_params.py`); the combat goldens and the armour reference, once, at the end of U5b §5 row 5 | as U5b §4 edit 3 |
 
@@ -194,6 +194,188 @@ its own). It is listed because A-71's word could be read either way and the two 
   readily as blood is drawn; `13_SC_calibration.md` C1 is rewritten; an equal's argument carries twice as
   often (25% to about 50%). The reverse (the blow at the argument's centre) is not offered: it is the measured
   attrition, 29 to 50% of fights undecided.
+
+## Instructions to code it (workplan v12 batch items; `AUDIT_BRIEF.md`, the standing charge of 2026-11-12)
+
+Five items. Each is written to be followed without re-deriving anything; where it names a symbol that does
+not exist in the tree at `5c0a353` it says which proposal creates it. The edit table above is the summary;
+**where the two differ, this section governs** (it fixes how the rate reaches the combat module, which the
+table left as "the carried rate"). Tier is `CLAUDE.md` §10's; "lands it" is the lane and the agent role.
+
+### Item 29-1 · the owner (hash EQUAL) — DICE lane · `valoria-author` on `sonnet` · cost: edit
+
+1. `engine/dice_engine/sigma_leverage.py`, directly after `net_boost` (the block *Core σ-leverage
+   primitives*), two pure functions:
+   `def opposed_ob(score: float, rate: float) -> float: return float(rate) * max(0.0, float(score))` and
+   `def even_line(pool_add: float) -> float: return MU_PER_DIE * float(pool_add)`. `rate` has no default.
+   Docstrings name A-26 and A-71, and say: the operand is a trained score, never a pool.
+2. New file `engine/tests/test_opposed_ob.py`, four tests:
+   `test_opposed_ob_at_half_is_score_over_two_exactly` (scores 0 to 20 in halves, `==`, no `approx`);
+   `test_opposed_ob_clamps_a_negative_score_to_zero`; `test_opposed_ob_refuses_a_missing_rate`
+   (`TypeError`); `test_even_line_is_the_owner_mean_times_the_base` (`even_line(6) == dice_engine.MU_PER_DIE * 6`).
+3. Run `engine/tests/test_sigma_leverage_parity.py`. It is expected green untouched (it calls functions by
+   golden row, `_call(fn, args)`); if it enumerates the module's names, add no golden row and say so in the
+   commit.
+
+**Gate.** `python -m pytest engine/tests/test_opposed_ob.py engine/tests/test_sigma_leverage_parity.py -q`
+green. **Control and falsifier.** No caller exists, so `headless --case NPC-088 --seasons 2 --seed 0` prints
+the hash of the commit before; a different hash falsifies "no caller". **Hash movers.** None.
+**Depends on.** Nothing. (It is the function `U5a_capability_home_and_two_inputs.md` row A6 schedules.)
+
+### Item 29-2 · the fight reads the owner, at the control rate (hash EQUAL) — PC lane · `sonnet` · cost: edit
+
+In this order:
+
+1. `modules/combat/core.py`, beside `BASE_POOL`: `OPPOSITION_RATE = 0.5` with the comment
+   *"control (today's half-score); flips to DE.MU_PER_DIE at item 29-3 (A-71)"*.
+2. `modules/combat/core.py::ob_from_defender` becomes `ob_from_defender(defender, cfg)` and returns
+   `SL.opposed_ob(defender.faculty, cfg.get('OPPOSITION_RATE', OPPOSITION_RATE))`. The docstring's
+   *"Score/2 …"* opening and its *"two ladders for one quantity"* paragraph are replaced by: the owner
+   (`sigma_leverage.opposed_ob`), the ruling (A-71), and that `cfg['OPPOSITION_RATE']` is an arm's override.
+   The paragraph *"NO INSTANCE MODIFIER IS ADDED HERE"* is kept.
+3. Call sites, each gaining `cfg` (in scope at all four): `modules/combat/wrapper.py:213`
+   (`core.ob_from_defender(longer, cfg)`), `:243` (`shorter`), `:331` (`defender`);
+   `modules/combat/core.py:665` inside `strike` (`ob_from_defender(defender, cfg)`).
+4. `engine/season/queries/inputs.py::PersonalCombatInput`: `opposition_rate: Optional[float] = None`
+   (`None`: the module's own constant), documented beside `faculties`.
+5. `engine/season/data/fixtures.py`: `opposition_rate=0.5`, with its `[JUSTIFIED: hole_register …]` comment;
+   `engine/season/hole_register.yaml`: one NUMBER row, the next free `H-` id by the register's own
+   allocation, `site: Fixtures opposition_rate`, `grade: ruled` (A-26, A-71), `default: 0.5 (control)`,
+   sweep `0.5 / MU_PER_DIE / 0.3`, `cite:` this file's targets and gates 2 to 6.
+6. `engine/season/seam/wrappers/combat.py::combat_input` (`:197`): fills
+   `opposition_rate=fx.get("opposition_rate")` beside `faculties=` (`:229`).
+7. `modules/combat/fight.py::fight` (`:55`): before the call at the `try:` block,
+   `cfg = wrapper.CFG if inp.opposition_rate is None else dict(wrapper.CFG, OPPOSITION_RATE=inp.opposition_rate)`,
+   and the call becomes `wrapper.fight(A, B, cfg=cfg, rng=rng, terms=terms, decide=turn_choice)`.
+8. Tests changed: `tests/valoria/test_combat_ob_from_defender_consumers.py`, the five calls at `:65`, `:117`,
+   `:156`, `:204`, `:225` gain `config.CFG`; `test_set_attr_faculty_7_reads_pool_13_ob_3_5_and_no_sigma_moves`
+   keeps `(13, 3.5)` (the control). Tests added, same file:
+   `test_the_fight_obstacle_is_opposed_ob_at_the_cfg_rate` (a fight with
+   `cfg=dict(CFG, OPPOSITION_RATE=0.4)`, faculties 2 and 3: every `roll` event's `ob` is `0.4 ×` the struck
+   party's faculty; `assert checked >= 1`); and in `engine/season/tests/test_cr85_faculty_replaces_history.py`:
+   `test_the_record_carries_the_opposition_rate_to_the_module` (a hand-built `PersonalCombatInput` with
+   `opposition_rate=0.4`: the trace's `ob` values are `{0.8, 1.2}`; with `None`: `{1.0, 1.5}`).
+9. Re-derive: `python tools/export_engine_params.py` (the `core` section gains `OPPOSITION_RATE`), then
+   `python tools/export_engine_params.py --check`.
+
+**Gate.** The two test files green; `engine/tests/` combat goldens byte-equal; `build_realm(0..2)` season
+hashes EQUAL; `--check` green. **Falsifier and control.** A combat golden or a season hash that moves at
+this item (the control is the commit before). **Hash movers.** None (the exported JSON gains one key; it is
+an artifact, not a world hash). **Depends on.** 29-1. Independent of U5a and U5b's other rows; if U5b §2
+edits 1 to 3 land first, `opposition_rate` joins their three fields in the same record.
+
+### Item 29-3 · the flip and the scale (declared MOVER) — PC lane · `sonnet` for the edit, `opus` for the gate reading · cost: edit inside the calibration batch
+
+This is the first step of `U5b_PC_rulings_in_the_fight.md` §5 row 5; the goldens, the armour reference and
+the export are re-recorded once, at the end of that row, not here.
+
+1. `modules/combat/core.py`: `OPPOSITION_RATE = DE.MU_PER_DIE` (derived; no literal).
+2. `engine/season/data/fixtures.py`: `opposition_rate` reads `dice_engine.MU_PER_DIE` (imported from the
+   owner; no literal), the hole-register row's `default:` updated with the reading of the gate below.
+3. `modules/combat/core.py:168`: `DMG_SCALE = 1.07`. **This value is decided, not left to a sweep:**
+   `core.strike` is deterministic, and an arming sword's Success against light armour deals exactly the
+   Wound Interval (9) for every scale from 0.99 to 1.08, 10 at 1.10 and above, 8 at 0.98 (`p7_scale.py`);
+   1.07 is the pessimist's measured seed inside that window. The comment at `:168` is restated:
+   *"even Success = 1 WI at the season default kit (holds for 0.99..1.08); A-31"*.
+4. New file `tests/valoria/test_combat_opposed_rule_shape.py`, marked `combat`, fixed seeds, arming sword and
+   light armour, death terms, module scale (`wrapper.fight` with the trace seam); every test ends
+   `assert checked >= <cells>`:
+   - `test_a_success_is_one_wound_interval` (`core.strike(A, B, 'success', CFG) == B.wt.wi` for default fighters);
+   - `test_season_mirror_length_blows_and_reversals` (score 2 both, seeds 0–1,199: mean turns in [4.0, 5.0];
+     mean wound events ≥ 4.3; lead-change share of decided fights ≥ 0.40; undecided ≤ 0.02; bloodless turns
+     ≤ 0.45; the attacker's wounds per roll in [0.45, 0.57]). Expected reading: 4.27, 4.50, 0.452, 0.001,
+     0.393, 0.516;
+   - `test_the_better_fighter_wins_on_the_stated_curve` (1,000 fights a cell, seeds 0–999; 3v2 and 5v4 in
+     [0.60, 0.70]; 4v2, 6v4, 7v5 in [0.72, 0.82]; 6v2, 7v3 in [0.88, 0.95]). Expected: 0.657, 0.630; 0.780,
+     0.752, 0.743; 0.923, 0.910;
+   - `test_the_mirror_is_level_across_ranks` (ranks 0, 2, 5, 7; 1,000 fights each: longest mean turns within
+     0.5 of the shortest; undecided ≤ 0.02 each; Failure share of rolls ≤ 0.25 each). Expected: 4.33, 4.28,
+     4.28, 4.30; 0.005, 0.001, 0.002, 0.004; 0.118, 0.136, 0.182, 0.208;
+   - `test_each_rank_of_defence_lowers_the_wounding_share` (attacker rank 2 against defender ranks 0, 1, 2, 3,
+     4; 600 traced fights each: strictly falling, each step ≥ 0.04). Expected: 0.647, 0.582, 0.520, 0.458,
+     0.390.
+   The lead-change and wounds-per-roll readers are the ones in the scratchpad's `runs/PES_PC/lib.py::summary`
+   and `runs/ONE_OPPOSED/olib.py::exch`; they are copied into the test file as private helpers (the
+   scratchpad is not a dependency). Runtime about 60 to 90 s; it runs with `-m combat` and at the batch gate,
+   not in an inner loop.
+5. Text only: `tests/valoria/test_degree_ladder_single_owner.py:244` (the registry string naming
+   `defender.history/2`) and the docstring of `engine/season/tests/test_cr85_faculty_replaces_history.py`
+   (`:7`, `:13`) are restated to the owner and the rate; `test_set_attr_faculty_7_reads_pool_13_ob_3_5…` is
+   renamed for and re-pinned to `(13, DE.MU_PER_DIE * 7)` (no typed 2.8: the product is 2.8000000000000003),
+   said plainly in the commit.
+
+**Gate.** The new file green with its readings quoted in the commit beside a second run at seeds 800,000
+on (the control for sampling: expected 4.18 turns, 4.50 blows, 0.416). **Falsifier and control.** Any of
+this file's five falsifiers; the control arm is `cfg=dict(CFG, OPPOSITION_RATE=0.5)` with `DMG_SCALE` 1.55,
+which must reproduce 3.35 turns, 3.20 blows, 0.352 at the same seeds. **Hash movers.** Every fought scene;
+every combat golden; `workbench/data/combat_armour_reference.json`; `engine/engine_params/combat_engine_v1.json`.
+**Depends on.** 29-2; `03_PC_typed_outcome_one_door.md` (U5b §5 row 1), as row 5 already requires.
+
+### Item 29-4 · the argument reads the owner on the even line — IN and SC lanes · `sonnet` · cost: edit inside U5a Part B and U5c step 5
+
+This item edits functions that U5a and U5c rewrite in the same batch. It is stated against the tree as it
+is and against their end state; the lander applies whichever form is present.
+
+1. `engine/season/seam/wrappers/sigma.py::_opposition_of` (`:117`): the returned value is the subject's
+   trained score. Against today's body: the `held` list keeps `_capability(person, verb)` and drops
+   `_opposing_attribute(person, verb)` (A-7: the attribute is a level, not a score), and a person with no
+   key returns `float(w.fixtures.get("pool_default"))` (the untrained score; never `None` for a person).
+   Against U5a's end state: it returns `pool.score(w, person, opposing verb)`, not the pool.
+2. `engine/season/queries/inputs.py::SocialContestInput`: `opposition_rate: float`, `pool_add: int` carried
+   raw (U5a row A6 and B2 create both; this item fixes that the record carries them and that
+   `obstacle_default` is replaced by `pool_default`, as U5c §2 orders).
+3. `modules/social_contest/roll.py::obstacle` (`:141`): the first line becomes
+   `ob = even_line(inp.pool_add) + difficulty + opposed_ob(inp.opposition if inp.opposition is not None else inp.pool_default, inp.opposition_rate)`,
+   importing both names from `engine.dice_engine.sigma_leverage`; `difficulty` is `inp.difficulty`
+   (U5c §1's field; `0.0` until it lands); the room's subtraction at `:142-143` is
+   removed by U5c step 1b, not by this item. With U5c's `terms`, the first entry is `("even", even_line(...))`.
+4. Data rows: `engine/season/rosters.yaml: obstacle_terms` gains `even` as its first member (U5c step 1a
+   creates the roster); its entry in `sigma.py::OBSTACLE_TERMS` is the function that carries `pool_add`.
+   `engine/season/data/fixtures.py: difficulty_ob` live arm `0 / 0.5 / 1 / 1.5` (T1, unchanged).
+5. The wound's defending half (A-8), an amendment to `10_DICE_advantage_sources_for_the_arcs.md` Edit B:
+   `_wound_levels(fx, operands)` returns `([level] * n_subject, [level] * n_actor)`, where `n_subject` is
+   computed from `operands["subject_body"]` and `operands["subject_body_ceiling"]` by the same step and cap;
+   `contest_input` adds those two operands when the subject is a person; `believed_input` leaves them out
+   (another person's body is not the believer's to know without a claim).
+6. Tests: `engine/season/tests/test_sc_calibration_targets.py` (created by `13_SC_calibration.md` edit 1)
+   gains `test_equal_ranks_meet_a_plain_matter_half_the_time` (ranks 0, 2, 4, 7: `1 − band_odds(...)[0]`
+   within 0.005 of 0.5), `test_the_better_arguer_wins_on_the_fights_curve` (the decided-pair share from two
+   `band_odds` calls: 3v2 and 6v5 in [0.60, 0.70]; 4v2 and 7v5 in [0.72, 0.82]; 6v2 and 7v3 in [0.88, 0.95];
+   expected 0.656, 0.630, 0.779, 0.739, 0.920, 0.906), and C3 and C4 restated on ranks: an opponent four
+   ranks better at `routine` fails the actor in [0.75, 0.90] (expected 0.823, 0.809); one four ranks worse,
+   at most 0.45 (expected 0.346, 0.351). `engine/season/tests/test_social_contest_module.py` gains
+   `test_the_obstacle_is_even_line_plus_difficulty_plus_opposed_ob` (a hand-built record: `pool_add` 6,
+   `plain`, opposition 2, rate `MU_PER_DIE`: `obstacle == even_line(6) + opposed_ob(2, MU_PER_DIE)`, which is
+   3.2, and its `terms` sum to it).
+   `engine/season/tests/test_sc01_obstacle_ceiling.py` is re-pinned by U5a-DOE §1 row 3 (the closed-form
+   cap), not here.
+
+**Gate.** The three files green; gate 6 above read from the first. **Falsifier and control.** Control: with
+`opposition_rate` 0.5 and `pool_add` 0 the composed obstacle of every record in
+`test_social_contest_module.py` equals today's. Falsifier: equal ranks at `plain` off 0.5 by more than
+0.005 at any rank. **Hash movers.** Every graded social and task roll, inside U5a Part B's one re-pin.
+**Depends on.** 29-1; `U5a_capability_home_and_two_inputs.md` rows A6, B1, B2; `U5a_DICE_owed_edits.md` §1
+(`band_odds` as the closed form); `U5c_SC_one_obstacle_form.md` steps 0 to 5;
+`13_SC_calibration.md` edit 1.
+
+### Item 29-5 · the nested round and the hearing carry the rate — **INCOMPLETE as code instructions**
+
+The rule reaches both by construction, but the records it must be written on do not exist in the tree:
+`DuelRoundInput` (`03_PC_duel_round_and_approach_B.md` step 1), `HearingInput` and `Speaker`
+(`05_SC_playable_hearing_B.md`), and the field's `duel` window (`U5b_PC_rulings_in_the_fight.md` §1 edit 4).
+What is fixed here, for those proposals' own batches: `DuelRoundInput` carries
+`opposition_rate: Optional[float]` exactly as `PersonalCombatInput` does in item 29-2 and the round entry
+builds its `cfg` by the same line; `Speaker.score` is the trained score `_opposition_of` returns and the
+`argue` move builds a `SocialContestInput` whose `opposition` is that score; `answer` builds one with
+`opposition=None`. **Missing, and why it cannot be completed here:** the files, line numbers, call sites
+and test names of three unbuilt entries; they are owed by the closure lanes of those proposals
+(U5b for the round, U5c for the hearing), each of which now carries a `Folded:` line naming the field.
+
+### What is not carried as an item, and why
+
+J-29-01 is a question, not an edit; at its taken answer nothing is coded beyond items 1 to 4. `U1` §4's
+one-word amendment is prose and is the U5a closure lane's. The Perception lever's steepness (AUD §4, P4) is
+`audits/16_PESSIMIST_PC.md`'s finding and has no edit here.
 
 ## NERS reading (E last)
 

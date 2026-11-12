@@ -290,3 +290,103 @@ a filed source row or a Jordan-set value.
 
 Small build for §2 and §4. Design-first for §1's and §3's magnitudes: the form can land behind its arm; no
 value ships until §6 is filed or Jordan sets one.
+
+## Instructions to code it (standing charge, `AUDIT_BRIEF.md:545-547`; for workplan v12)
+
+Checked against the charge on 2026-11-12. **27E-1 and 27E-2 (the row and its two ops; the carried stamina)
+are specified to the symbol. 27E-3 (the write by kind) and 27E-4 (the return draws) are INCOMPLETE:** their
+form is decided and their magnitudes are not established, and two of their owners are other lanes' and were
+not opened. Line numbers at `faf0cea`.
+
+**Batch items, in edit order.**
+
+| item | file :: symbol (single owner) | edit | hash |
+|---|---|---|---|
+| 27E-1 | `modules/mass_battle/armyrecord.py` :: the unit row; new `lose(record, name, losses)`, `restore(record, name, cohort, kind, count)`; `OPS` (`:276`), `_apply`; `cohort_claims`; `options`; `validate`. `engine/season/rosters.yaml: record_kinds.values.army` | the row gains `absent: ((cohort, kind, count), ...)` and `last_field: (round, stamina_left) or None`, both optional and absent by default; `ABSENT_KINDS = ('injured', 'fled')`; `lose` lowers `assigned` by the four counts and appends the injured and fled to `absent`; `restore` moves a count back; `cohort_claims` counts absent men; `options()` gains `absent_men` | equal (no caller yet) |
+| 27E-2 | `engine/season/queries/inputs.py` :: `FieldOutcome` parts gain `stamina_left: float`, `ended: str`; `modules/mass_battle/massbattle.py::_grade` fills them from each unit's column blocks; `engine/season/seam/wrappers/mass_battle.py::field_input` (`:225`) computes `entry_stamina` per part from the row's `last_field` when its round is the current round, else the proposal 26 writers | equal with `fatigue.carry: off` |
+| 27E-3 | `engine/season/loop/effects_combat.py::_eff_march`, inside `_casualties` (`:630`); `engine/season/seam/wrappers/mass_battle.py::_order_of_battle` (`:192-214`); `modules/mass_battle/armyrecord.py::to_order_of_battle` (`:256`) | under `recuperation: on`: for each army part, the two draws of §1, then one `ArmyCommand(record, 'lose', …)` through the `mass_battle.army` composition row and the army verbs' write path; the cohort's `body` scaled by the dead share only; `_order_of_battle` passes fitness 1.0 and `to_order_of_battle` reads `assigned` less nothing (the loss is already in it). **These three edits are one commit** | moves army fields |
+| 27E-4 | the world-motion step (WR's owner, A-54); `engine/season/loop/effects_army.py` (`assign_troops`) | once a round, for each army Record with absent men: the injured's draw and the fled's draw of §3, each ending in `ArmyCommand(record, 'restore', …)`; at the window, the strike with its Observation; behind `aftermath.acting`, a recall adds one draw | moves rounds after an army field |
+
+**Data rows and schema.** `references/troops.yaml`, new section (every value absent until set; the loader
+refuses `recuperation: on` while any is absent):
+
+```yaml
+aftermath:
+  recuperation: off                    # off | on.   off is today's loop: the control
+  return: unprompted                   # unprompted | off      (A-78: unprompted is the rule; off is the test's control)
+  acting: on                           # on | off              (ASSUMPTION, reversible)
+  injured_share:  {Overwhelming: ~, Success: ~, Partial: ~, Failure: ~}    # NOT ESTABLISHED
+  fled_share:     {Overwhelming: ~, Success: ~, Partial: ~, Failure: ~}    # NOT ESTABLISHED
+  recover_share:  {Overwhelming: ~, Success: ~, Partial: ~, Failure: ~}    # NOT ESTABLISHED
+  regroup_share:  {Overwhelming: ~, Success: ~, Partial: ~, Failure: ~}    # NOT ESTABLISHED
+  window: ~                            # rounds. NOT ESTABLISHED
+  wounds_turn: off
+fatigue:
+  carry: off                           # off | on
+  carry_rounds: 0
+```
+
+**Call sites.** `to_order_of_battle` is called at `armyrecord.py:391` (the `mass_battle.army_order` entry)
+and reached from `seam/wrappers/mass_battle.py:214`; `field_input` at `:435` and `:496`; `_order_of_battle`
+at `:257`. Tests that read the fitness loop today: `tests/valoria/test_army_battle.py`,
+`test_army_verbs.py`, `test_mass_battle_army_record.py`, `test_mass_battle_order_of_battle.py`,
+`engine/season/tests/test_rem32_scale.py`, `test_cp_t04_02_marshal.py`; none changes at `recuperation: off`.
+
+**Tests** (named).
+
+- `tests/valoria/test_mass_battle_army_record.py`: `test_lose_lowers_assigned_by_the_four_kinds_and_holds_two`;
+  `test_restore_returns_absent_men_and_refuses_more_than_are_absent`;
+  `test_absent_men_still_count_against_their_cohort`; `test_absent_kinds_are_a_closed_set`.
+- `engine/season/tests/test_march.py`: `test_recuperation_off_is_the_body_loop_unchanged` (control, hashes
+  equal); `test_a_loss_is_never_counted_in_both_the_body_and_the_row` (gate 2; reddens on a planted
+  "still multiply by fitness"); `test_a_second_field_in_one_round_is_entered_at_the_stamina_left` (gate 6).
+- `engine/season/tests/test_cr_24_winner_casualties.py`: `test_winner_and_loser_write_losses_the_same_way`.
+- With 27E-4, in `engine/season/tests/test_march.py`:
+  `test_a_commander_who_does_nothing_recovers_some_and_not_all` (gate 5, A-78);
+  `test_the_dead_the_captured_and_the_deserted_never_return` (gate 4 and the falsifier);
+  `test_a_recall_brings_more_back_or_sooner_and_acting_off_brings_nothing_extra`.
+
+**Gate, with the reading expected.** As "Gate" above, rows 1 to 7. Rows T-11 to T-18 are orderings read at
+three sweep points of each parameter; they have no numeric band, because no figure is established.
+
+**Falsifier and its control.** As "Falsifier" above. Controls: `recuperation: off` (today), `return: off`
+(nobody returns), `acting: off` (acts add nothing), `carry: off`.
+
+**Hash movers.** None at the shipped arms. `recuperation: on`: every army field's fold and every round
+after one in which men are absent. `carry: on`: a second field in a round.
+
+**Dependencies.** 27E-1: none. 27E-2: `04_MB_typed_outcome_and_one_path.md` (the per-part outcome) and
+`16_PESSIMIST_MB_one_stamina_ledger.md` steps 2 and 3. 27E-3: those, and
+`26_MASS_BATTLE_rout_pursuit_and_giving_ground.md` §4 (`fight_loss`, `pursuit_loss`, `taken`) with
+`16_PESSIMIST_MB_rout_has_two_exits.md` (the end states). 27E-4: A-54's motion draw (WR); the ration debit
+(SE); `14_VERBS_MILITARY_C`, `_D` (the muster and `assign_troops` as draws); custody
+(`14_VERBS_PHYSICAL_A_custody_and_force.md`).
+
+**What lands it; cost class; tier.** An IN-lane session under `/methodology-execute`, after
+`U5b_MB_rulings_in_the_field.md` §6 row 2. 27E-1, 27E-2: small build, `sonnet`. 27E-3: small build,
+`sonnet`, with the batch's `opus` closing critique on the read-and-write move (the double-count hazard).
+27E-4: design-first, `opus` for the terms and the window, then `sonnet`. Sweeps: `haiku`
+(`valoria-measure`).
+
+**INCOMPLETE, with what is missing.**
+
+1. *Every share table and the window* (27E-3, 27E-4). The form is decided; no value exists. Missing: the
+   source search of §6 filed under `research/historical/`, or values set by Jordan. The loader's refusal
+   above is what stops a guessed value from shipping.
+2. *The world-motion step* (27E-4). A-54 rules the form; this lane did not open its owner
+   (`U5d_WR_owed_edits.md`, `16_PESSIMIST_GAME_the_world_draws.md`, cited by title), so the function that
+   runs a motion, the reader of a place's endurance and the season's hardship, and where a Record-reading
+   motion registers are not named. Missing: those three symbols from the WR lane.
+3. *The cohort's dead* (27E-3). Scaling a cohort's `body` by the dead share keeps today's owner, but `tend`
+   then restores the cohort and the dead with it at the cohort's scale. The right owner is the census's
+   `weight`, which is SE's (`22_HAPPENINGS_A_a_death_is_rare_caused_and_drawn.md`,
+   `U5d_SE_cohort_heavy_moves_and_caste.md`, cited by title, not opened). Missing: that write, from SE.
+   Until it lands the unit's dead are permanent on the unit's row and recoverable only at the town's scale,
+   which is declared here as a known gap, not a design.
+4. *The captured cohort share*: "a count on the band Event until SE has a place for prisoners"
+   (`26_…` §4). Missing: SE's carrier.
+5. *The length of a round in the fiction* was not read, so `carry_rounds` has no reasoned value beyond its
+   control of 0. Missing: one read of the loop's calendar (A-51's record names the same gap).
+6. *Symbols not opened*: where the army verbs' write path takes an `ArmyCommand` from a non-verb caller
+   (`_eff_march` is the first effect outside `effects_army.py` to write the Record), and the current
+   round's index as `field_input` can read it.

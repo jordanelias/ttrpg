@@ -257,3 +257,80 @@ lowering it and asks for removal to be tested. Shipping zero goes one step past 
 step is now ruled: **A-77**, zero when §4's first arm passes, the named level of §5 only if it fails. The
 superseding ledger row on `ED-MB-0016` cites A-59, A-77 and the test's table. This file still ships nothing
 before the table exists.
+
+## Instructions to code it (standing charge, `AUDIT_BRIEF.md:545-547`; for workplan v12)
+
+Checked against the charge on 2026-11-12. **27C-1 (the report's draws) is complete. 27C-2 (the test) and
+27C-3 (the deletion) are specified to the symbol and are INCOMPLETE only on dependencies that have not
+landed**, listed last. Line numbers at `faf0cea`.
+
+**Batch items, in edit order.**
+
+| item | file :: symbol (single owner) | edit | hash |
+|---|---|---|---|
+| 27C-1 | each draw site under `modules/mass_battle/` (`core/contact.py::obey`; `orchestration.py::stand_draw`, `rally_roll`, `recall_check`, `pursuit_damage`, the `taken` draw, `resolve_feigned_retreat`); `massbattle.py::_grade`; `engine/season/queries/inputs.py::FieldOutcome.report` | one `trace_event('draw', tick, side, unit, kind, band)` at each site, through the module's existing trace call (the one `04_MB_manager_battle_one_resolver.md` §6 adds for `'order'`); `_grade` collects them into `report.draws`; the `fortune` field of that proposal is not created | moves every fought field's band Event |
+| 27C-2 | `tests/sim/gauge_mb.py` :: new `ARMS`, `arms_table(scenarios, arms, n, seed_base)`, `flip_share(scenario, arm, source, n, seed_base)`, `planted(defect)`, and a new `--arms` flag on its command line | the six arms as dicts of `{MB_FRICTION_SIGMA, obey, stand_draw, pursuit, fortune_sigma}` applied in-process for the run (the pattern `tests/valoria/test_friction.py:49-62` uses to set the flag on every module that star-imported it); the five readings; the four planted defects. Fields are built by `orderofbattle` and `massbattle.resolve_field`, never by this file's `make_unit` | none (writes nothing tracked) |
+| 27C-3 | **the licensed commit, at zero when the criterion's first arm passes (A-77)** | (a) `core/exchange.py`: delete `:141-147`. (b) `orchestration.py`: delete `_draw_friction` (`:1725-1736`) and its `__all__` entry. (c) `battle_loop.py`: delete the import at `:29` and `:44-52`. (d) `config.py`: delete `:310-331` and the two names in `__all__` (`:5`). (e) `tools/ci_golden_modes_check.py:93-96`: remove both keys from `FIELD_PINS`. (f) `tests/valoria/test_field_golden_pins.py:142`: remove `'MB_FRICTION'` from its list. (g) `tests/valoria/test_friction.py`: delete the file (its subject is retired) and the mention at `tests/valoria/_conservation.py:14`. (h) `systems/mass_battle/sim/lanchester_signature.py:38-43`, `:108`: the LINEAR row's band `LINEAR_BIG_WIN_BAND = (74, 83)` is the multiplier's own calibration target; it becomes a printed flag, and the row's pass condition becomes "strictly inside (0, 100) and not below the 2 : 1 reading". (i) `systems/mass_battle/sim/stress_scenarios.json`: remove its one `FRICTION` key. (j) `python tools/export_sim_params.py --build`, so `engine/engine_params/sim_params.json` drops the constant's entry (`:2130-2131`). (k) `engine/season/hole_register.yaml:6543-6551` (H-361): the row's "under the shipped friction" reading is re-read on the new tree and its text follows the reading. (l) `registers/editorial_ledger_mb.jsonl`: the superseding row on `ED-MB-0016`. (m) every seeded golden with a fought field re-recorded once | moves every fought field at default flags |
+| 27C-3′ | only if the first arm fails and the second passes | `references/troops.yaml: deployment.fortune.sigma`; the level added where the terrain dice are added to `ns_a` / `ns_b` (`orchestration.py:1257-1260`); one draw per side per bout at the bout's start; listed in `report.draws` | as 27C-3 |
+
+**Call sites.** `_friction` is read at one line (`core/exchange.py:147`) and written at one function. The
+flag is star-imported, so every module holding a copy is in the list above; `git grep -n "_friction\|MB_FRICTION"`
+over `modules/ engine/ tools/ systems/ tests/` must print nothing after 27C-3 (the hole register's prose
+aside).
+
+**Tests.**
+
+- Added, `tests/valoria/test_army_battle.py`: `test_report_draws_lists_every_named_draw_that_fired` (27C-1);
+  `test_two_formations_of_one_army_differ_against_the_same_enemy` (gate 3);
+  `test_orders_move_the_win_share_and_some_signals_miss` (gate 4).
+- Added, `engine/season/tests/test_mass_battle_module.py`: `test_no_side_strength_is_computed_or_returned`
+  (gate 5's grep as a test of the typed input and outcome's field names);
+  `test_every_field_folds_to_won_lost_or_drawn_from_end_state_alone` (gate 6).
+- Deleted with the constant: `tests/valoria/test_friction.py`. Changed: `test_field_golden_pins.py`'s list.
+- The six-arm table is **not** a pytest test and gates no merge. It is run once, by hand, and its printed
+  table goes in the body of the licensed commit.
+
+**Gate, with the reading expected.** `python3 tests/sim/gauge_mb.py --arms` prints six arms by five
+readings, each cell with n, band and same-run control; then four lines `planted <defect>: caught by reading
+<k>`. The criterion of §4 is applied to that table as written. After 27C-3: the grep above is empty;
+`python3 tools/ci_golden_modes_check.py` prints its three digests **unchanged** (they pinned the multiplier
+off); `python tools/m1_acceptance.py --summary` runs.
+
+**Falsifier and its control.** As "Falsifier" above; the controls are arm K (today's value on the new pair
+rule), arm R0 (no multiplier and no named draws) and the asserted draw counts (2 a field in K, A, L; 0 in R,
+R0, F).
+
+**Hash movers.** 27C-1: every fought field's band Event, so `World.content_hash()` wherever a field is
+fought. 27C-3: every fought field at the default flags; `engine/tests/` goldens with a field;
+`systems/mass_battle/sim/bat.py`'s two legacy modes. Re-recorded once, with the calibration batch, and said
+plainly in the commit.
+
+**Dependencies.** 27C-1: `04_MB_manager_battle_one_resolver.md` §6 (the trace call) and
+`04_MB_typed_outcome_and_one_path.md` (`FieldOutcome`). 27C-2 and 27C-3: the whole of
+`U5b_MB_rulings_in_the_field.md` §6 rows 4 and 5, `27_MB_A` (rows 5 and 10), and the "results" block of
+`26_MASS_BATTLE_calibration_targets.md` §2. The order is reconciled: the test is read last
+(`unified/U5_FINDINGS_CLOSURE_U5b.md`, head).
+
+**What lands it; cost class; tier.** An IN-lane session under `/methodology-execute`. 27C-1: edit, `sonnet`.
+27C-2: small build, `sonnet`; the runs are `haiku` (`valoria-measure`, batched: six arms by the scenarios);
+**applying the criterion to the table is an `opus` judgment node, and is not delegated down**. 27C-3: edit,
+`sonnet`, in the calibration batch's one re-record, with the batch's `opus` closing critique.
+
+**INCOMPLETE, with what is missing.**
+
+1. *27C-2 cannot be run on today's tree.* Arms A, L, R and F need `obey`, `stand_draw` and the amended
+   pursuit and rally, none of which exists. Missing: `27_MB_A` items 27A-4 to 27A-6;
+   `26_MASS_BATTLE_rout_pursuit_and_giving_ground.md`; `16_PESSIMIST_MB_rout_has_two_exits.md`; the pair rule.
+   What **can** be run today is K against R0 (1.1 against 0, no named draws), which is the pessimist lane's
+   measurement and decides nothing.
+2. *Reading 3 (the flip share) needs one stream for each source of draws.* The module has one scoped RNG
+   (`rngsource.get()`, `using()`), and A-30's keyed draw is not landed. Missing: either A-30, or a
+   per-purpose child stream inside `rngsource` (`rngsource.for_purpose(name)`), which is engine code and so
+   a decision for the A-30 owner, not for this instrument.
+3. *The "results" block of `gauge_mb.py` does not exist*, and that file's `matchup` (`:472`) builds through
+   harness constructors and the multi-turn mode that `04_MB_typed_outcome_and_one_path.md` §2 removes.
+   Missing: `26_MASS_BATTLE_calibration_targets.md` §2 landed, or the builder creates the block with 27C-2
+   and says so.
+4. *`lanchester_signature.py`'s LINEAR band* (item h) is also `04_MB_cr12_linear_law.md`'s gate ("LINEAR in
+   band"). The two proposals touch one row. Missing: nothing to design; the CR-12 builder and this one must
+   make the edit once, in whichever lands second.
