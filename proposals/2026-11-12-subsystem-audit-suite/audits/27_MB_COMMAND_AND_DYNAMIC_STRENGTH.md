@@ -266,18 +266,17 @@ is test code, not engine code.
    well-executed plan can still lose to nothing a commander did, by a bounded amount. Recommended: (a) when
    the first arm passes, (b) only when the second does. Shipping zero overwrites a ruled magnitude
    (`ED-MB-0016`) one step past the word "lower", which is why it is asked.
-**Both items are answered** (kept below as asked, for the record). Item 1: **A-77**, option (a): zero when
-the first arm passes; (b) only if it fails. Item 2: **A-78**, neither option as written: the fled return
-unprompted and in part, the deserters never, and this audit's taken answer (recalled) is withdrawn.
+   **ANSWERED, A-77: (a).** Zero when the first arm passes; the named level only if it fails.
+2. *(Dropped. This item asked whether fled men return only when recalled or drift back, and recorded
+   "recalled" as taken by the ladder.)* **ANSWERED, A-78**, by neither option as it was written: the dead,
+   the captured and the deserters are lost for good; the injured and those who fled and regrouped return in
+   part with nobody acting. The recalled-only reading is withdrawn everywhere it stood (§3 row 19;
+   `27_MB_E` §3). What the ruling leaves unstated is taken, reversibly: acting brings more back or sooner.
 
-2. **Fled men: recalled, or drifting back.** A-69's record marks this not assumed, and the tree's research
-   does not establish it. Taken by the ladder (step 4) as *recalled*: they return only when the commander
-   musters them and the levy complies. *(a) Recalled:* getting an army back costs acts and standing with the
-   people it was raised from, and can fail. *(b) Unprompted:* waiting mends an army, and a beaten commander
-   who does nothing is whole again in time. Built with both arms behind one switch.
-
-Nothing else survives. The talent weights (decision 3), the two-link chain (4), the commander's absence from
-a unit's dice (9) and the owner of loss (17) are each answered above by a ruling or a precedent.
+Nothing is open. The talent weights (decision 3), the two-link chain (4), the commander's absence from
+a unit's dice (9) and the owner of loss (17) are each answered above by a ruling or a precedent. Three
+quantities remain **not established** and are parameters with controls, not questions for Jordan until a
+source or a value exists: the share of the fled who desert, the rate of return, and its window.
 
 ## 10. Decisions folded (each edited file carries a `Folded:` line dated 2026-11-12 naming this audit; no finding of another lane was deleted)
 
