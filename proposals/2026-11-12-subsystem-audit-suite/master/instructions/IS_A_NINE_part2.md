@@ -7,11 +7,18 @@ Read at `6e1ea91`. Batch handles `B00` to `B41` are `unified/U3_DEPENDENCY_ORDER
 renumbers it; sibling lanes of this suite may create batches of their own.]` Dependency marks:
 EXISTS (in the tree at `6e1ea91`), PROPOSED (another proposal's edit, with its batch), MISSING (no carrier).
 
+Checked: 2026-11-12, Sonnet check (`master/instructions/IS_CHECK.md`). Decided and edited here: `IS-A-09` is a
+pointer to `IS-MB-02` (one siege item); `IS-A-05` and `IS-A-07` are the owners of the R-07 and R-08 readings and
+of `null_scenes` (`IS-B2-CORE-03` and `-04` point here); `BA1-cast-content` is the one cast-content batch
+(`IS-B2-CHAR-03` joins it); **Lands it, for every item of this file that names no one: the batch's
+`valoria-author` producer, one `Item: <handle>` commit, `[skip ci]` except the batch's last (STAGES practice 3b),
+the batch close by `methodology-close`.**
+
 ## 11. The items
 
 Thirteen items. Seven add an edit no proposal carries; six point at a proposal or a gap text and add what
-it lacks. None changes what a seeded world does except `IS-A-09` (a new posture) and `IS-A-11` (authored
-values); the rest are instrument and register work, hash EQUAL.
+it lacks. None changes what a seeded world does except `IS-A-09` (a pointer; the new posture is `IS-MB-02`'s) and
+`IS-A-11` (authored values); the rest are instrument and register work, hash EQUAL.
 
 ---
 
@@ -212,37 +219,24 @@ measured here: size it on two small runs, STAGES practice 5); no model cost.
 position is invented to fix it"*. This suite carries an edit for every one of the 34, so the residue rule has
 nothing left to cover; if a carrier fails its gate the batch stops and reports, as any failed gate does.
 
-**Item: IS-A-09 — a siege: `march` with the posture `besiege`**
+**Item: IS-A-09 — a siege: `march` with the posture `besiege` (POINTER to `IS-MB-02`)**
 · **Advances:** R-04.c4, R-05 (the `march` row's second posture), and the standing "no dead ends" charge.
-· **What exists:** no proposal carries it (`17_CENSUS_C1A_02_wires_and_corrections`, INCOMPLETE,
-DEP-NOCARRIER; `U5d_STORY_owed_edits` §1 waits on it). `U4_TRACEABILITY.md` G-1 gives the carry text; this
-item is that text, checked at two sites (`rosters.yaml: march_postures`, source line *"`besiege` sits before
-the walls and wears the garrison"*; `loop/effects_combat.py::_siege`, `:686`).
-· **INSTRUCTION** (as edit 6 of `14_VERBS_MILITARY_A_movement`, after its edits 1–5):
-1. `engine/season/rosters.yaml: march_postures`: `values: [storm]` becomes `[storm, besiege]`, in its own
-   commit, declared a mover.
-2. The `march` row of `verb_table.yaml` keeps `posture` as its payload key; `seam/wrappers/mass_battle.py::resolve`
-   answers an opposed `besiege` as `Invested` and an unopposed one as `Unopposed` (the roster's own note).
-3. `loop/effects_combat.py::_siege` is the effect that wears the garrison; the `Invested` member of
-   `field_degree_bands` is its band. Under the standing rule the wear is a draw: pool the besieger's supply
-   and numbers, obstacle the place's fortification, on the one sampler (A-5), so a siege can fail to bite in
-   a season. `[ASSUMPTION: the wear is not drawn today — basis: the roster note says the garrison Sites "lose
-   condition"; `_siege`'s body was not opened. If it is a fixed step, converting it is part of this item and
-   reads `settlements.fortification`'s composition row for the obstacle.]`
-4. Formation: the chooser offers `besiege` beside `storm` wherever `march` forms on a defended settlement.
-· **WHERE:** `rosters.yaml`, `verb_table.yaml` (the `march` row), `loop/effects_combat.py`,
-`decision/options.py` (the posture operand), `engine/season/tests/test_march.py`: NEW
-`test_an_opposed_besiege_is_invested_and_wears_the_garrison` (planted garrison; control: `storm` against
-the same garrison fights a field) and `test_a_besiege_can_fail_to_wear_in_a_season` (200 planted sieges at
-one state: both outcomes occur).
-· **FALSIFIER:** with `besiege` removed from the roster the loader refuses a `march` payload that names it.
-· **GATE:** `aperture 2 --seeds 0 1 2`: `march` with posture `besiege` formed and built out at least once
-pooled; `field.invested` in `EMITTED KINDS`.
-· **Hash movers:** every seeded realm in which a chooser forms `besiege`; one re-pin at B22's last item.
-· **Depends on:** `14_VERBS_MILITARY_A` edits 1–5 (PROPOSED, B22); `07_SE_campaign_supply_and_muster`
-(PROPOSED, B22) for the besieger's supply; v11's CP-T04-06 is the position this retires (stage 5).
-· **Lane:** MB. · **Batch:** B22. · **Cost and tier:** small build; `sonnet`, `high`; `opus` reads the draw's
-terms. · **Closes:** G-1. `[If lane IS-B1 also carries the siege, v12 keeps one item.]`
+· **Decided by the Sonnet check (2026-11-12, ladder step 4: one owner, and the complete item wins).** Lane IS-B1
+carries this edit in full as `IS-MB-02` (`IS_B1_PC_MB_DICE_part2.md` §P2-1.2): its roster precondition read first
+(`restore` executes on a garrison Site, `rosters.yaml` `march_postures` note), the A-81 repair of a siege that wears
+nothing, the wear by `_fall`'s one owner, the `field_scene` table that decides whether the mover commit is made, and
+three named tests. **This item's own INSTRUCTION, WHERE, FALSIFIER and GATE are withdrawn; v12 keeps one item.**
+· **What this item still adds** (the requirement side only): (1) `IS-MB-02`'s gate line `march` with posture `besiege`
+formed and executed is read through `IS-A-06`'s `BUILT OUT` block at B22's close (`aperture 2 --seeds 0 1 2`), and
+`field.invested` is read in `EMITTED KINDS`; (2) the `march` row's built-out reading counts a besiege that wears
+nothing but leaves its claim (`IS-MB-02` step 4) as a clean execution, not a refusal.
+· **Read at the tree (2026-11-12), which settles this item's former assumption:** the wear is **not** drawn today.
+`loop/effects_combat.py::_siege` (`:686`) takes each garrison Site's fall from `loop/effects_economy.py::_fall`
+(`:141`), `(max(0, site.condition) * num) // den`, a fixed commons fraction with no draw, and returns `NO_CHANGE`
+(so `march.refused`) when no Site would fall. Converting it is therefore not this item's to do and not B22's alone:
+`IS-MB-02` step 5 stops and reports to the SE lane unless B12 has made `_fall` a draw.
+· **Hash movers / Depends on / Lane / Batch / Cost / Lands it:** as `IS-MB-02` (mover, one re-pin at B22's last item;
+MB; B22; `sonnet`, `opus` reads the table; B22's producer). **Closes:** G-1.
 
 **Item: IS-A-10 — R-09's first conjunct follows the task draw**
 · **Advances:** R-09.a, R-09.d. · **What exists:** `18_DETERMINISM_task_draw_for_uncontested_verbs` (B07)
@@ -316,7 +310,9 @@ commit writes the readings into the conjuncts' `reading:` records; `status:` is 
 · **WHERE:** v12's batch table and each batch's GATE; `engine/season/requirements.yaml` (`reading:` records
 only). · **FALSIFIER:** a close that edits `status:` outside a re-take item, or a conjunct at `yes` whose
 `reading.tree` is older than the last batch that named it. · **GATE:** `register --requirements` exit 0 at
-each close. · **Lane:** each batch's. · **Cost and tier:** none beyond the readings.
+each close. · **Hash movers:** none. · **Depends on:** `IS-A-01` (the `reading:` record exists; EXISTS only after
+B02) and §12.2 (this file). · **Lane:** each batch's. · **Batch:** every batch, from B02's close on. · **Cost and
+tier:** none beyond the readings.
 
 **Item: IS-A-13 — the re-take: the one item that may move a row**
 · **Advances:** the row named. · **INSTRUCTION (one item per milestone of §12.1, the last item of the batch
