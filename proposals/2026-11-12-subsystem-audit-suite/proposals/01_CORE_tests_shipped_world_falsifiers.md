@@ -35,7 +35,7 @@ an accusation), which changes an instrument's table and no world. The rest is te
    | R-06 | `test_in62_under_the_null_every_realm_top_is_draw_or_tiebreak_and_the_shipped_reading_is_not` | realm build, tick 0 · seed 0 · with `revert_cp_t05_02` | asserts `any(…"pursuit"…)`: one decision in 498 would pass (probe: 265 pursuit, 223 draw, 10 stance); the null arm reads 10 `stance` deciders on the shipped tree, which is why the test reverts a shipped change |
    | R-07 | `test_r7_two_persons_hold_different_things_and_at_total_they_cannot`; `test_wa_a_planted_claim_removes_transfer_and_a_larger_one_leaves_it` | `tiny_world` + a planted cohort · its own seed | feeling, attitude or relationship changing a decision: no test by any name |
    | R-08 | `test_u4_the_choice_is_sampling_and_the_argmax_is_its_zero_temperature_control` | `tiny_world` · 20 draw seeds · shipped temperature and 0 | nothing material at the mechanism; share of non-top choices in play is unread |
-   | R-09 | `test_we_a_contested_acts_consequence_differs_by_degree` (skips if the combat engine is absent) | `tiny_world` · 24 act ids | two persons separating by capability without a planted pool (`test_cr17…::test_two_pools…` monkeypatches `POOL_ADDENDS`) |
+   | R-09 | `test_we_a_contested_acts_consequence_differs_by_degree` (skips if the combat engine is absent) | `tiny_world` · 24 act ids | two persons separating by skill without a planted pool (`test_cr17…::test_two_pools…` monkeypatches `POOL_ADDENDS`) |
 
 2. **A played realm season is cheap and nobody asserts on it.** `build_realm(0)` + one season: 7.3 s,
    749 folded acts (821 attempted; C3-N14), 13,379 Events (`probe_realm_sweep.py`; this and the probes
@@ -113,7 +113,7 @@ first commit (U3 §6.1): green at the base tree where the claim is a property th
 and red with the cause removed (the witness-cut and same-seed controls).
 
 **Not written here, and where it goes.** R-04, R-06's magnitude, R-07's feeling/attitude half and R-09's
-separation are red at the shipped configuration by the first audit's readings (F-CORE-04: capability is
+separation are red at the shipped configuration by the first audit's readings (F-CORE-04: skill is
 empty on the cast; R-04's block: `found` / `build` execute 0 at seeds 0 and 1). A test that is red on
 `main` is the gate of the proposal that makes it green, not a test to land now. The falsifiers, stated
 so the owning lanes can carry them:

@@ -13,7 +13,7 @@ Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `U1_OWNERS_AN
 **Depends on:** stages 1–2 on nothing unlanded (the exporter shape is `tools/export_battle_orders.py`'s); stages 3–4 on `03_PC_loadout_and_carry.md` (B18: `carry_demand_of` in `combat_kit.py`), `03_PC_weapon_records_in_the_export.md` (B14: `mass` in the export), `04_MB_cell_hierarchy_as_data.md` (B19, the arrangement), `16_PESSIMIST_MB_one_stamina_ledger.md` (B19), `04_MB_manager_battle_one_resolver.md` §2 (B20, standing orders carry `in_hand`).
 **Lands in batch:** stages 1–2 in B17 (`B17-mb-scale`, MB); stages 3–4 in B31 (`B31-mb-loadout-economy`, MB).
 
-Lane MB, with PC (the carry leaf and the melee roster), SE (training sites) and CHAR (the capability
+Lane MB, with PC (the carry leaf and the melee roster), SE (training sites) and CHAR (the skill
 surface). **Supersedes `04_MB_unit_loadout_and_weapon_in_hand.md`** (the first MB lane's; that file is left
 unedited). It keeps that proposal's state design (`in_hand` on the subunit, changed by an order, costing a
 tick) and its use of personal combat's carry function, and replaces its roster merge, which cannot be

@@ -143,7 +143,7 @@ class Offer:
   state answers `False`): the decline returns the conjunct instead of dropping it. **Only own-state
   stems appear.** A requirement the world answers is never predicted to him; it is met as a refusal,
   in his `account` (his firsthand claim of his own refused act). This is the lawful form of the design set's "locked option, hover shows what is
-  needed", and it cannot show a control for a capability the world would have to confirm.
+  needed", and it cannot show a control for a skill the world would have to confirm.
 - A candidate that runs against a conviction is **not locked**. It is an ordinary row whose stance
   term is negative; picking it is the act, and the cost is the fold's (`_conviction_crisis`).
 - The army verbs are not `OfferRow`s: their command rides the act's payload, which no `Candidate`

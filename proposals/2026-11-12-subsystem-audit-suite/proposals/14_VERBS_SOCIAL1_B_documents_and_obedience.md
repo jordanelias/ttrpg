@@ -8,7 +8,7 @@ Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — the head applied to the bo
 Lands in batch: B28 (`unified/U3_DEPENDENCY_ORDER.md` §3.1), before `14_VERBS_SOCIAL1_D` in the same batch.
 Depends on: `14_VERBS_SOCIAL1_A_formation.md` (B11); `06_FA_decree_binds.md` (B21: a decree's answers form from the claim of its issue, A-21); `U5c_VERBS_residue_and_governance_owner.md` §1 and §4 (B07); lane A (B01: Record-kind formation); `05_SC_obstacle_difficulty_and_modifiers_B.md`/`U5c_SC_one_obstacle_form.md` (B05) and the members `watch`, `distance` landed in B12; `02_CHAR_choice_alignment.md` (B10: the `give` alignment cells, CHAR's to author).
 Lane: SC. Tier (R4 7b.0 (1)): `sonnet` producer, effort `high`; the three contested rows and `_eff_comply` `opus`; one `opus` read of the 20-seed band tables. Test file: `engine/season/tests/test_vm_s1_b_documents.py` (one function per gate).
-Standing (R4 7b.0 (4)): the pool is the one pool rule (`sigma_leverage.pool_of`, D-U1-08) on the actor's trained score in the row's capability (A-6; `pool_default` where none); talent as levels (A-7); a wound a level against the roll (A-8). Draws: `H(w.world_seed, w.tick, <actor id>, "<verb>.<prize>")` for `give`, `comply`, `evade / defy`, `covenant` (A-30). A `give` is a visit: it occupies its receiver for the round (A-63); precedence, appointments and the waiting petition are `28_CORE_scene_access_A`–`C`'s (A-64; C3-C13). **A-81:** each band names its write below; a refused tender, a failed compliance and a yielded defiance are each witnessed deeds.
+Standing (R4 7b.0 (4)): the pool is the one pool rule (`sigma_leverage.pool_of`, D-U1-08) on the actor's skill score in the row's skill (A-6; `pool_default` where none); the governing attribute as levels (A-7); a wound a level against the roll (A-8). Draws: `H(w.world_seed, w.tick, <actor id>, "<verb>.<prize>")` for `give`, `comply`, `evade / defy`, `covenant` (A-30). A `give` is a visit: it occupies its receiver for the round (A-63); precedence, appointments and the waiting petition are `28_CORE_scene_access_A`–`C`'s (A-64; C3-C13). **A-81:** each band names its write below; a refused tender, a failed compliance and a yielded defiance are each witnessed deeds.
 
 Batch S1-B of `audits/14_VERBS_SOCIAL1.md` §14 (verbs `give`, `comply`, `evade / defy`, `covenant`'s
 in-force reading). Authored in part by Fable; completed by Opus after the Fable usage limit (2026-11-12).
@@ -143,7 +143,7 @@ covenant's in-force reading is "a reading nothing performs yet" (`_eff_covenant`
    in OBS §2's order; `distance` and `watch` are already landed in B12 and are not added again), new
    `verb_capability` rows (`evade / defy: tradecraft` keyed by mode is not expressible — use `tradecraft`
    for both and let `defy` read `argue` through a `capability_by_mode` sub-map, `[ASSUMPTION]`; the home of
-   a verb's capability moves to the row's `capability:` cell at CAP A2/A3, D-U1-07), new kinds
+   a verb's skill moves to the row's `capability:` cell at CAP A2/A3, D-U1-07), new kinds
    (`compliance.failed`, `compliance.yielded`, `record.given.protested`) in `EMITTED_KINDS` via the rows.
 2. `data/fixtures.py`: `unwelcome_step`, `violated_step`, `divergence_step`, each with a control 0 and a
    NUMBER row in `hole_register.yaml` (`purview` reads `purview_reaches`, a 0/1 term, at the composer's

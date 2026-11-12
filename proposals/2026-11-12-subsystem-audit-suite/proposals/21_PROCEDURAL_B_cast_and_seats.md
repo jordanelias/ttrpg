@@ -53,7 +53,7 @@ witnesses.
 3. **Slots, not a head-count:** a generated person exists because a structural role needs filling (kin of a
    principal, keeper of a serving building, claimant to a local seat, rival for a contested seat,
    counterpart of a debt). No slot, no person.
-4. **Capabilities by lifepath, referencing the one definition table.** The generator defines none.
+4. **Skills by lifepath, referencing the one definition table.** The generator defines none.
 5. **Relations on existing carriers** (`02_CHAR_relations_have_a_ground.md`): a stance row and a firsthand
    claim with the ground.
 6. **Generated persons never enter `npcs.yaml`** (its header forbids inventing a row there). They are
@@ -95,7 +95,7 @@ deviation: 333                     # per thousand: chance one pursuit is re-draw
 relations_per_person: 3            # drawn relations beyond the slot's anchor relation
 seed_claims: 6                     # firsthand claims a generated person starts with, about own relations and place
 lifepaths:
-  origin:                          # weights by settlement type of birth; deltas name capability ids from the definition table
+  origin:                          # weights by settlement type of birth; deltas name skill ids from the definition table
     hearth_born:   {weight: {Village: 5, Town: 3, City: 1}, adds: {endurance: 1}}
     street_born:   {weight: {Town: 2, City: 4, Seat: 4},    adds: {attunement: 1}}
     hall_born:     {weight: {Seat: 2, City: 1, Fortress: 1}, adds: {presence: 1}}
@@ -132,8 +132,8 @@ ruling_house, order, foreign_crown, movement]`, and a map `rosters.yaml: faction
 basis: no `kind` key exists in `rosters.yaml: factions` (read: it carries `from_names: faction` and
 `head_seat` only)]. `worldgen.load` refuses a formation key outside `faction_kinds`, naming the row.
 
-Capability ids in `adds:` and practice keys are **references**: `worldgen.load` checks each against the
-capability definition table and refuses an unknown id by name. The ids above are the nine of the present
+Skill ids in `adds:` and practice keys are **references**: `worldgen.load` checks each against the
+skill definition table and refuses an unknown id by name. The ids above are the nine of the present
 attribute block as the tree names them (CR-20; the `build_realm` docstring lists cognition, focus,
 endurance, attunement, presence, grace) and are placeholders for whatever
 `02_CHAR_capability_definitions.md` and `01_CORE_capability_authoring_surface.md` settle; this file holds
@@ -282,7 +282,7 @@ opposed pursuits, near zero for near-equal ones).
   (C3-L13: the intended game, not a loss). Risk named: a cast the player cannot remember (RimWorld's 12
   against Dwarf Fortress's 200); `cast_cap` is the dial (A-44).
 - **S:** one generator for build and (name and birth only) CENSUS; relations and attributes on carriers that exist; no second
-  capability scheme; seats filled by the same verbs play uses.
+  skill scheme; seats filled by the same verbs play uses.
 - **E, last:** three tables and one function against a realm with a society in it. The slot rule keeps the
   count tied to roles that have readers.
 

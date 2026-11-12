@@ -60,7 +60,7 @@ What this file first wrote, and where each part now lives:
 |---|---|
 | `Ob = bound(… + hostile) − favourable` | OBS §2 (A-25: nothing lowers the obstacle) |
 | the ten-member `obstacle_terms` roster | OBS §2's roster, `even` first (C-02); `evidence` is leverage (`proofs`, OBS §3) |
-| `opposition` as score ÷ 2, "never practice", "the larger of key and attribute" | `opposed_ob(trained score, opposition_rate)`, 0.4 per point at the live arm (A-26, A-79, D-U1-02); no attribute in the score (A-7) |
+| `opposition` as score ÷ 2, "never practice", "the larger of key and attribute" | `opposed_ob(skill score, opposition_rate)`, 0.4 per point at the live arm (A-26, A-79, D-U1-02); no attribute in the score (A-7) |
 | `regard` signed, `regard_step` 0.04 | OBS §2 member 7 (hostile half only) and the `favour` level (OBS §3); `regard_step` sized at OBS §4 step 5 |
 | `evidence` and `proof_step` | the `proofs` leverage source; `proof_step` deleted (OBS §3) |
 | the bound applied before subtracting | OBS §2 (the bound acts on the composed obstacle; leverage is soft-capped separately) |
@@ -95,7 +95,7 @@ decides what unknown means).
 
 By the same function with no branch. The actor is whoever chose the act; the counterparty is the
 operand the verb row names (`loop/sides.py::sides_of`). The host builder reads: the row's
-`difficulty`; the counterparty's trained score and his stance toward the actor; the docketed row's
+`difficulty`; the counterparty's skill score and his stance toward the actor; the docketed row's
 `standard` and `disposes` kind where a bench hears; the actor's cited items (formed as Candidate
 variants by the one chooser, `08_FI_05` edit 3) and the other side's standing answers. No field
 depends on a player, and none on which of the two is "the NPC": two courtiers arguing in an empty

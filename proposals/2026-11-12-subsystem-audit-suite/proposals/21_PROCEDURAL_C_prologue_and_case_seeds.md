@@ -133,7 +133,7 @@ with certainty), a broken oath concealed (`conceal`), smuggling past a toll, a h
 withheld). The `eligible` clause vocabulary (`relation`, `stance_at_most`, `holds_seat`,
 `goal_toward_seat`, `doer_holds_any`, `doer_capability_at_least`, `shared`) is a **closed set**, declared
 in `rosters.yaml: card_clauses` and refused at import outside it; each clause is one existing query
-(relations from proposal B, seats from `world_q`, capability from the one capability surface). The pursuit
+(relations from proposal B, seats from `world_q`, skill from the one skill surface). The pursuit
 names must be members of `data/pursuits.py::PURSUITS` (fifteen; the rows above use five of them), and the
 loader that already parses goal rows (`data/goals.py::parse`) refuses any other.
 

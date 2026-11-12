@@ -10,7 +10,7 @@ Reconciled: 2026-11-12, wave 3 lane W3-4b — applied `R4_READ.md` §1.7 (BYZ_C:
 
 ## Status: PROPOSED
 
-**Implementation block (W3-4b; `R4_READ.md` 7b.0).** Lands in batch: **B33**, after BYZANTINE-B (`U3_DEPENDENCY_ORDER.md` §1 item 33). Depends on: `06_FA_decree_binds.md` and `14_VERBS_BINDING_D_orders.md` (B21: the content deposit; `force`), `13_SC_draw_for_unrolled_contests.md` (B07), `14_VERBS_SOCIAL1_D_grievance_and_settlement.md` (B28: `carry`'s row). Lane tag: FA (edit 5 is a cross-lane request to SOCIAL1-D's owner). Tier: `sonnet` producer, effort `high`; `opus` for edit 5's terms (a contested row). Named test: `engine/season/tests/test_inst_byz_c.py`. Standing sentences: *Pool* — `carry`'s pool is its row owner's, the one pool rule on the clerk's trained score (A-6, A-7, A-8). *Failure writes* — a Failure emits `document.returned` with the clerk as doer; WITNESS deposits it to the maker (A-81). *Draw keys* — `carry` at a hand draws `H(w.world_seed, w.tick, <record id>, "carry.hand")` (A-30).
+**Implementation block (W3-4b; `R4_READ.md` 7b.0).** Lands in batch: **B33**, after BYZANTINE-B (`U3_DEPENDENCY_ORDER.md` §1 item 33). Depends on: `06_FA_decree_binds.md` and `14_VERBS_BINDING_D_orders.md` (B21: the content deposit; `force`), `13_SC_draw_for_unrolled_contests.md` (B07), `14_VERBS_SOCIAL1_D_grievance_and_settlement.md` (B28: `carry`'s row). Lane tag: FA (edit 5 is a cross-lane request to SOCIAL1-D's owner). Tier: `sonnet` producer, effort `high`; `opus` for edit 5's terms (a contested row). Named test: `engine/season/tests/test_inst_byz_c.py`. Standing sentences: *Pool* — `carry`'s pool is its row owner's, the one pool rule on the clerk's skill score (A-6, A-7, A-8). *Failure writes* — a Failure emits `document.returned` with the clerk as doer; WITNESS deposits it to the maker (A-81). *Draw keys* — `carry` at a hand draws `H(w.world_seed, w.tick, <record id>, "carry.hand")` (A-30).
 
 Source: `audits/15_INSTITUTIONS_BYZANTINE.md` §2.3, §2.4, §3, §7.0, §7.1, §10, §14 item 1. Batch C.
 Depends on `06_FA_decree_binds.md` (the content deposit that tells an addressee a writ's terms, and
@@ -101,7 +101,7 @@ requirement):
 
 | term | reads |
 |---|---|
-| pool | the row owner's (`14_VERBS_SOCIAL1_D`): the one pool rule on the clerk's trained score for `carry`'s capability |
+| pool | the row owner's (`14_VERBS_SOCIAL1_D`): the one pool rule on the clerk's skill score for `carry`'s skill |
 | `difficulty` | by the rung kind of the issuing seat's rung (a realm instrument is harder to enter than a town's) |
 | `backlog` (OBS member 23) | the open documents in the clerk's hands beyond his scene budget this season |
 | `subject` (OBS member 4) | the document's `forgery_quality`, as an inquiry reads it (`seam/wrappers/sigma.py::contest_input`) |

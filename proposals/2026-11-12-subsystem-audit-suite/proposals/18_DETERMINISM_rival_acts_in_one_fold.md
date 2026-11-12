@@ -54,7 +54,7 @@ Ladder step 5 (the architecture: the fold's order semantics stay; only the tie b
    act's verb (D-U1-08), keyed `H(seed, tick, actor, "precedence:" + a.id)` through the one `Draw` owner
    (A-30; B06); highest net first; a tied net (the margin is quantised to milli-units, C3-L1, so a tie is
    an exact equality) is re-drawn under the key `"precedence:" + a.id + ":" + str(n)` for the n-th
-   re-draw. The odds are the rivals' capabilities; the order is the draw. **Under A-9 the fold orders
+   re-draw. The odds are the rivals' skills; the order is the draw. **Under A-9 the fold orders
    scenes:** with `16_PESSIMIST_CORE_a_scene_runs_in_its_own_order.md` edit 1 landed (first, in B08), a
    rivalry group is a group of scenes, re-ordered among the positions those scenes hold, and the
    act-level wording above applies as written only to a scene of one interaction. Both files edit

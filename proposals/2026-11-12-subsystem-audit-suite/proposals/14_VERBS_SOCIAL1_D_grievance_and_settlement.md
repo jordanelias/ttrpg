@@ -11,7 +11,7 @@ Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — the head applied to the bo
 Lands in batch: B28 (`unified/U3_DEPENDENCY_ORDER.md` §3.1), after `14_VERBS_SOCIAL1_B` and before `14_VERBS_SOCIAL1_C` in the same batch.
 Depends on: `14_VERBS_SOCIAL1_B_documents_and_obedience.md` (B28: `served`); `14_VERBS_PHYSICAL_A_custody_and_force.md` A4 (B14: `accept` on challenges heard); lane A (B01: the duel fires); `28_CORE_scene_access_B_appointments.md`, `_C_the_petition_that_waits.md` (B28/B38: the folded edges); `U5c_VERBS_residue_and_governance_owner.md` §1 (B07); `14_VERBS_BINDING_A_formation.md` (B21: lands `rank_gap`).
 Lane: SC. Tier (R4 7b.0 (1)): `sonnet` producer, effort `high`; the four drawn rows `opus`; one `opus` read of the 20-seed planted-grievance tables. Test file: `engine/season/tests/test_vm_s1_d_grievance.py` (one function per gate, plus C3-A4's spent-challenge test).
-Standing (R4 7b.0 (4)): the pool is the one pool rule (`sigma_leverage.pool_of`, D-U1-08) on the actor's trained score in the row's capability, the untrained default where none is authored (A-6); talent as levels (A-7); a wound a level against the roll (A-8). Draws: `H(w.world_seed, w.tick, <actor id>, "<verb>.<prize>")` for `carry`, `forgive`, `challenge`, `commit` (A-30). **A-81:** every band names a write: `carry`'s Failure appends a stage to the petition; `forgive`'s failed draw deposits `forgive.refused` to the actor (his own claim that he could not let it go); `challenge.refused` is judged by witnesses; `commitment.refused` reaches the person it named (the 28-lane fold).
+Standing (R4 7b.0 (4)): the pool is the one pool rule (`sigma_leverage.pool_of`, D-U1-08) on the actor's skill score in the row's skill, the untrained default where none is authored (A-6); the governing attribute as levels (A-7); a wound a level against the roll (A-8). Draws: `H(w.world_seed, w.tick, <actor id>, "<verb>.<prize>")` for `carry`, `forgive`, `challenge`, `commit` (A-30). **A-81:** every band names a write: `carry`'s Failure appends a stage to the petition; `forgive`'s failed draw deposits `forgive.refused` to the actor (his own claim that he could not let it go); `challenge.refused` is judged by witnesses; `commitment.refused` reaches the person it named (the 28-lane fold).
 
 Batch S1-D of `audits/14_VERBS_SOCIAL1.md` §14. Authored in part by Fable; completed by Opus after the
 Fable usage limit (2026-11-12). Reference only (CLAUDE.md §0.05). Read at `84d2a02`. Needs S1-B (delivery,
@@ -66,7 +66,7 @@ mover.
   where landed.
 - Drawn, shape (a) (one mark on one row set; the band sets its factor): `capability: none` (W3-4a: the
   word `resolve` is withdrawn — `02_CHAR_resolve_and_temper.md` defines a person reader, renamed
-  `person_q.decisiveness` by U1 D-U1-11m, not a capability; a capability for letting go is CHAR's to
+  `person_q.decisiveness` by U1 D-U1-11m, not a skill; a skill for letting go is CHAR's to
   author, and until then the untrained default rolls); obstacle `routine` + `grievance` (OBS member 16,
   `grievance_step` × |judged + told| from `deeds_judged`) + `scar` (member 17). A member of `graded_tasks`.
 - Bands → mark factor via `forgive_factor_by_band` (`Overwhelming 0, Success 0, Partial 0.5`; a factor on
@@ -190,5 +190,5 @@ new fixtures at control reproduce the S1-C hash except for the draws the rows no
 
 ## Cost class
 
-Small-to-medium build. Lanes: CHAR (a capability for letting go, the grievance owner), PC/PHYSICAL
+Small-to-medium build. Lanes: CHAR (a skill for letting go, the grievance owner), PC/PHYSICAL
 (`accept`'s mark, the spent challenge), SC (the seam operands), FA (arrangements).

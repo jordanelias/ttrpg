@@ -109,7 +109,7 @@ bodies its cells are grouped into.
 
 **The form not taken, and why.** Banding each side's net against an obstacle derived from the
 opponent's quality would also end the winner-take-all, and it is how the rest of the tree states an
-obstacle. The opposed obstacle has since been ruled (A-79: the defender's trained score at
+obstacle. The opposed obstacle has since been ruled (A-79: the defender's skill score at
 `opposition_rate`, for fights and arguments; `degree_from_net`'s docstring's 2026-08-21 suspension is the
 superseded text, `OWED_TO_UNIFICATION.md` §A). The melee pair is not an opposed roll (`U5b_MB_rulings_in_the_field.md`
 §1 row 2): each side is paid by its own roll, so edit 2 needs no obstacle and the form stays not taken.

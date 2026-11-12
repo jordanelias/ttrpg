@@ -128,7 +128,7 @@ class GeneralAction:
 |---|---|
 | `signal` | adds the name to `Unit.fired_signals`: every order waiting on `signal:NAME` fires, on every unit (`hierarchy/units.py:2844`) |
 | `order` | applies one behaviour dict to one unit, through the same validation an `Order` uses |
-| `rally` | the commander's hook: `rally_check` for that unit, a draw on the commander's `command` capability (carried on `CommandRecord`, `27_MB_A_command_and_the_obedience_draw.md` §2; the old integer `MassBattleInput.command` is retired, D-U1-11g) restoring morale toward its start |
+| `rally` | the commander's hook: `rally_check` for that unit, a draw on the commander's `command` skill (carried on `CommandRecord`, `27_MB_A_command_and_the_obedience_draw.md` §2; the old integer `MassBattleInput.command` is retired, D-U1-11g) restoring morale toward its start |
 | `withdraw` | the retreat `_retreat_orders` already sets on every unit |
 | `none` | nothing |
 

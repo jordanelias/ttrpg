@@ -2,7 +2,7 @@
 
 Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §1 (CONFORMS), §7/§7b (edit 4 located, tests,
 tier); U3 B26, §6.2 (`p3b_knows.py`, `p3_forgery.py` are not in the repository); U1 D-U1-01 and architecture §4 (what is
-not training reaches a roll as a named level, never a die: the "one more die" in "Not edited here" restated as a level).
+not the skill score reaches a roll as a named level, never a die: the "one more die" in "Not edited here" restated as a level).
 Changed: edit 4's location, the gate, one sentence of "Not edited here".
 
 ## Status: PROPOSED
@@ -87,7 +87,7 @@ Order of edits: 1 → 2 → 3 (hash-equal in shipped runs) → 4 (the mover), on
   `POOL_ADDENDS`, each `add(w, p, verb)`: no addend can see which Record is examined, so none can ask
   whether the examiner holds a second paper of the same kind about the same subject that says otherwise
   (`person_q.ABOUT_KEYS` is the key that would pair them). That is a named level for *comparing two
-  papers* (a leverage source; what is not the roller's training reaches the roll as a level, never a die,
+  papers* (a leverage source; what is not the roller's skill score reaches the roll as a level, never a die,
   U1 D-U1-01), and it needs the act in the source's signature; `10_DICE_advantage_sources_for_the_arcs.md`
   is where advantage sources are being gathered. Named for DICE; no edit here.
 - **What a forgery says.** `_eff_forge` writes the forger in as `head` for every forger (F-FI-10;

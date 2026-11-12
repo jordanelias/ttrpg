@@ -8,7 +8,7 @@ Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — the head applied to the bo
 Lands in batch: B25 (`unified/U3_DEPENDENCY_ORDER.md` §3.1), co-landing with `_SOCIAL2_A` and `_B` (C3-Y10: this file adds its kinds before S2_A's kind lists commit).
 Depends on: `05_SC_evidence_and_rebuttal_B.md` and `05_SC_playable_hearing_B.md` (B24); `19_LACUNA_admission_rides_the_citing_draw.md`, `19_LACUNA_questioning_has_an_approach_and_a_cost.md` (the `approach` source); `08_FI_02_rumour-that-travels.md` edit 5 and `08_FI_06_testimony-names-a-hand.md` (B11); `14_VERBS_SOCIAL2_A` (B25); `U5c_SC_one_obstacle_form.md` §2–§3 (B05; `dissent` lands with `_SOCIAL2_B`); `18_DETERMINISM_task_draw_for_uncontested_verbs.md` item 2 (B07: `task_fraction`).
 Lane: SC. Tier (R4 7b.0 (1)): `sonnet` producer, effort `high`; §2's and §3's draws `opus`; one `opus` read of the ten-seed band tables. Test file: `engine/season/tests/test_vm_s2_c_case.py` (one function per gate line).
-Standing (R4 7b.0 (4)): the pool is the one pool rule (`sigma_leverage.pool_of`, D-U1-08) on the actor's trained score (A-6); talent as levels (A-7); a wound a level against the roll (A-8); the opposition is the counterparty's trained score through `opposed_ob` (A-79, D-U1-02). Draws: `H(w.world_seed, w.tick, <actor id>, "<verb>.<prize>")` for `speak`, `interview`, `interrogate`, `tell` (A-30). An `interview` debits the interviewee's scene for the round (A-63); precedence by rung, appointments and the waiting petition are `28_CORE_scene_access_A`–`C`'s (A-64; C3-C13); `speak` is a sitting, not a visit. **A-81:** `speak`'s Failure writes the `disclosed` stage; `interview.declined` is deposited to both parties; `interrogate`'s Failure is witnessed by the prisoner and the interrogator (a claim of the Event to each).
+Standing (R4 7b.0 (4)): the pool is the one pool rule (`sigma_leverage.pool_of`, D-U1-08) on the actor's skill score (A-6); the governing attribute as levels (A-7); a wound a level against the roll (A-8); the opposition is the counterparty's skill score through `opposed_ob` (A-79, D-U1-02). Draws: `H(w.world_seed, w.tick, <actor id>, "<verb>.<prize>")` for `speak`, `interview`, `interrogate`, `tell` (A-30). An `interview` debits the interviewee's scene for the round (A-63); precedence by rung, appointments and the waiting petition are `28_CORE_scene_access_A`–`C`'s (A-64; C3-C13); `speak` is a sitting, not a visit. **A-81:** `speak`'s Failure writes the `disclosed` stage; `interview.declined` is deposited to both parties; `interrogate`'s Failure is witnessed by the prisoner and the interrogator (a claim of the Event to each).
 
 Carries `audits/14_VERBS_SOCIAL2.md` §3 (`open_case` content), §5 (`speak` bands and evidence), §6
 (`tell` odds), §7 (`interview` prompt), §8 (`interrogate`). Batch S2-C. Depends on S2-A, on CR-61 (the
@@ -17,7 +17,7 @@ pool), and on the SC lane's carriers (SC-P3B's hearing; the case file's stages).
 
 **Designed to the standing rule** (`AUDIT_BRIEF.md`, Jordan 2026-11-12: *"we do not do
 deterministic"*): every outcome here that could go either way for the people in the fiction is a draw
-whose odds come from the evidence held and cited, the actor's capability and the venue. Where the cited
+whose odds come from the evidence held and cited, the actor's skill and the venue. Where the cited
 SC and FI documents state a fixed rule (SC-P8 edit 3: *an answer STANDS when it contradicts*; edit 2:
 *entered at Success*; FI-05B E-6), this proposal reads it as a modifier on a draw and grades the result.
 SC-P8 is being corrected by another lane; this proposal is written to the draw and does not wait for
@@ -107,7 +107,7 @@ odds tables.
   graded inquiries).
 - `rosters.yaml: verb_capability`: `interview: "inquiry"`; `contest_subsystems.prizes`: `a standing` is
   already routed. Obstacle, through the one composer: `difficulty` + `opposition` (the interviewee's
-  trained score) + `rank_gap` (OBS member 6) + `regard` (member 7, the subject's hostile stance toward the
+  skill score) + `rank_gap` (OBS member 6) + `regard` (member 7, the subject's hostile stance toward the
   asker); a `tie` of the asker to the subject is a `favour` level for the asker (OBS §3). *(W3-4a: the
   private table `interview_obstacle` is not added, C-21.)*
 - `rosters.yaml: question_sources`: new source `asked` (ordered after `claim_landed`, before `need` —

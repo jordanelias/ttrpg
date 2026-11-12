@@ -12,7 +12,7 @@ Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `R1_READ.md` 
 **Lands in batch:** B30 (MB nested): after UPR §1, PB step 5 and the manager's §7, before `U5b_MB_rulings_in_the_field.md` §3.
 
 Lanes MB (the scale rule, the squad sheet, the host), PC (the round entry it calls), CHAR (the leader's
-capability, the chooser's decider), IN (the seam). Carries R-41 of
+skill, the chooser's decider), IN (the seam). Carries R-41 of
 `audits/04_MB_audit_addendum_B.md` §B6 and its §B4.6. Builds on `03_PC_duel_round_and_approach_B.md` §2 and
 §4 (the first proposal's §5.1 for the standing-order shape) and on the first MB audit's §15. Reference, not
 mechanism (`CLAUDE.md` §0.05).
@@ -129,10 +129,10 @@ or at the exchange cap
   "position influenc[es] their abilities and combat efficiency" is page-read; that the back row can be hit
   only by ranged or column attacks is one search snippet (grounding/unicorn_overlord.md). The reach rule
   above is therefore this proposal's own design, with snippet-grade precedent from one game.]`
-- **The leader.** A leader adds nothing by rule. What he adds is a capability read through the capability
-  surface the CHAR lane owns (the `command` capability, `27_MB_A_command_and_the_obedience_draw.md`), applied as the PC proposal
+- **The leader.** A leader adds nothing by rule. What he adds is a skill read through the skill
+  surface the CHAR lane owns (the `command` skill, `27_MB_A_command_and_the_obedience_draw.md`), applied as the PC proposal
   applies any lever: a prior on gates the duel already rolls for his squad's members. Until that
-  capability exists a leader is only the person whose fall fires `leader_down`.
+  skill exists a leader is only the person whose fall fires `leader_down`.
 - **Decider.** A played member is asked for his approach between exchanges through the same callable the
   duel uses; an unplayed one is served by his standing orders, or by the chooser. Delegated and commanded
   are the same rounds (the manager proposal's three conditions hold here unchanged: one entry, a decider

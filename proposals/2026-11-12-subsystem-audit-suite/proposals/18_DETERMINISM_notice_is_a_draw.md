@@ -4,7 +4,7 @@ Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-13, C-U
 
 Reconciled: 2026-11-12, wave 3 lane W3-5b (`unified/work/R5_READ.md` §1 rows notice_is_a_draw (VIOLATES as written; the `public:` column AMBIGUOUS), §2 row Odds/Exact edits, §7, 7b; `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` site `notice`; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-04, D-U1-08; `unified/U3_DEPENDENCY_ORDER.md` §1 item 12, §3.1). The body now follows the head. Changed: (1) WITNESS reads no World pool: the driver builds a per-holder notice pool into the barrier cache (`queries/cache.py::notice_pools`), and `notice` reads only that map, the presence cache, the act store and the Event (04 §A.2 `:180`; D-74 B); (2) the pool and obstacle follow U1: the `notice` site's rows are `dice · inquiry · actor` and `edge · attr.mind.perception · actor · per: mid` (U1 decides `inquiry`, not R5's `insight`); the pool is the one pool rule (D-U1-08); `notice_ob` is a member of `rosters.yaml: difficulty_levels` set at calibration (D-U1-04), no whole-dice figure; the roll is the one sampler (A-5) on a keyed draw (A-30); (3) `public:` is a required, loader-validated column on every verb row, never derived from the verb's name (R5 §1 pick, U1's `capability:` precedent); (4) "the actor" is read from the act store through `e.causes` (an Event has no actor field, 04 §B.9 `:433`); (5) tests, the barrier-cache member and the initial `public:` values are named; (6) batch and tier lines.
 
-Depends on: U1's capability block (B04: the `notice` site in `capability_use_sites`, `capability_uses` rows); `05_SC_hearing_capabilities.md` (B04); `18_DETERMINISM_task_draw_for_uncontested_verbs.md` (B07: the `conceal` cover band); the one sampler (B05) and the keyed draw (B06).
+Depends on: U1's skill block (B04: the `notice` site in `capability_use_sites`, `capability_uses` rows); `05_SC_hearing_capabilities.md` (B04); `18_DETERMINISM_task_draw_for_uncontested_verbs.md` (B07: the `conceal` cover band); the one sampler (B05) and the keyed draw (B06).
 Lands in batch: B11 (lane FI), after `16_PESSIMIST_FI_C` and before `14_VERBS_SOCIAL1_A`; ships at `notice_arm: off`.
 Tier: opus for the barrier-cache member and the odds (the Layer 1 placement), sonnet / high for the column, fixtures and tests.
 
@@ -49,10 +49,10 @@ the confiding draw keys a per-Event stream at this barrier) and step 5.
   `public: false` in the landing commit. A `public` row's deeds deposit to the co-present without a draw
   (the act's publicity is the channel's eligibility).
 - **Odds.** The witness's pool comes from the `notice` site of `rosters.yaml: tables.capability_uses`
-  (U1's site table): `dice · inquiry · actor` (the trained score, through the one pool rule
+  (U1's site table): `dice · inquiry · actor` (the skill score, through the one pool rule
   `sigma_leverage.pool_of`, D-U1-08; an untrained witness reads `pool_default`) and
-  `edge · attr.mind.perception · actor · per: mid` (talent as levels, A-7) [ASSUMPTION; medium: noticing
-  in passing is the fieldwork skill with Perception as its talent — basis: U1's site row, which the FI
+  `edge · attr.mind.perception · actor · per: mid` (the governing attribute as levels, A-7) [ASSUMPTION; medium: noticing
+  in passing is the fieldwork skill with Perception as its governing attribute — basis: U1's site row, which the FI
   lane confirms]. **WITNESS does not compute it:** the driver builds `queries/cache.py::notice_pools(w)
   -> {pid: int}` at the barrier, beside the presence cache, through the pool helper; `notice` reads that
   map (04 §A.2 `:168`, `:180`; D-74 B). Obstacle, composed by the one obstacle composer: the task
@@ -128,7 +128,7 @@ Partial deposit that names the hand; a doer who does not know his own act.
   (imperfect knowledge) asks that people hold different things for reasons; laterally, the inquiry
   verbs already roll to find what this barrier now may miss.
 - **R**: a crime can go unseen, a rumour can name the wrong man because the witness saw only that it
-  happened; concealment and perception become capabilities worth having; the world keeps secrets
+  happened; concealment and perception become skills worth having; the world keeps secrets
   without a player.
 - **S**: the same roller and band ladder as every other draw; the Partial shape is the found deposit's.
 - **E** (last): one function, one column, two fixtures, against the largest source of fixed outcomes in

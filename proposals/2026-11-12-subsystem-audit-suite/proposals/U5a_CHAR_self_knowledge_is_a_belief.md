@@ -39,7 +39,7 @@ himself he still knows by construction. No second answer on every own-state read
 
 | what | known by construction (today, unchanged) | read from his own ledger (this proposal) |
 |---|---|---|
-| his body, seats, oaths, commits, residence, trained skills | yes | — |
+| his body, seats, oaths, commits, residence, skills | yes | — |
 | the one gated gift (`prac.thread_sensitivity`) | where the row is not marked | where the cast row marks it `unaware` |
 | a pursuit he acts on | acts on it always (the score reads the true vector) | whether his **sheet and reason trail name it** |
 | his creed | yes | — (a crisis of faith is `16_PESSIMIST_CHAR_A…`'s draw, which deposits its own claim to him) |
@@ -71,7 +71,7 @@ himself he still knows by construction. No second answer on every own-state read
    is NPC-012's first need.
 6. **How he comes to know** (both existing mechanisms, no new verb): (a) he is told: a `tell` whose claim
    is `(him, "self:<key>", True)` deposits as any told claim and is graded by his regard for the teller,
-   so he may disbelieve it; (b) it shows: when a use row keyed on the capability contributes to one of his
+   so he may disbelieve it; (b) it shows: when a use row keyed on the skill contributes to one of his
    own graded acts at Overwhelming (the `fed_by` record of U1 architecture §8 names it), the act's effect
    adds an Observation `capability_shown:<key>` to the Event's `observed` (D-U1-06: `observed` is the one
    channel for a per-Event fact WITNESS may deposit; the member joins the closed roster
@@ -86,7 +86,7 @@ himself he still knows by construction. No second answer on every own-state read
    rows: the build hash moves once when edit 3 lands and is re-recorded; with edits 1, 2, 4, 5 alone and no
    seeding the hash is today's. The control is stated per edit in the landing commit).
 2. NPC-004 marked: over a seeded realm season he forms no `thread_read`; his inquiry rolls still show the
-   capability in `fed_by` where a use row names it; his twin with the mark removed forms `thread_read`.
+   skill in `fed_by` where a use row names it; his twin with the mark removed forms `thread_read`.
 3. Told and disbelieving: a planted `tell` of `self:prac.thread_sensitivity` from a person he holds low
    regard for leaves his reader at `UNKNOWN` below the confidence the reader requires; from one he trusts,
    the candidate forms next round.

@@ -63,7 +63,7 @@ overlay files under `cases/exercises/` gain two typed blocks. The game behaves i
 ## Gate (execution artifact)
 
 NPC-088 on the realm, seeds 0, 1, 2: `record.created` by `p_npc_088` and `term.matured` matched; the
-off-arm (her copying capability and workshop Record withheld) matches neither; the null matches no causal
+off-arm (her copying skill and workshop Record withheld) matches neither; the null matches no causal
 beat; unauthored cases hash as before. Named tests (new, `engine/season/tests/test_case_on_the_realm.py`):
 `test_npc088_beats_match_on_the_realm`, `test_npc088_off_arm_matches_neither`,
 `test_the_null_matches_no_caused_by_beat`, `test_unauthored_cases_hash_as_before`,

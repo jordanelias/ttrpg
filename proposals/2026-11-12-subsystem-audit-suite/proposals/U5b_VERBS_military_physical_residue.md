@@ -7,7 +7,7 @@ Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — applied `unified/work/R4_R
 Lands in batch: §1 in B07 (`unified/U3_DEPENDENCY_ORDER.md` §3.1), applied row by row as each verb proposal lands; §2 and §3 in B23 with `U5d_FA_land_and_seats_pass_on_a_won_march.md` and `26_MASS_BATTLE_aggression_and_land.md` (U3 §4.1 rows 26, 27); §4 in B22 with `14_VERBS_PHYSICAL_B`.
 Depends on: `18_DETERMINISM_task_draw_for_uncontested_verbs.md` items 2 and 4 (B07: the roster name and the loader refusals at `engine/season/data/verbs.py:848-876`, C3-R1); `U5c_VERBS_residue_and_governance_owner.md` §1 (B07, the `a task` prize row); `U5d_FA_land_and_seats_pass_on_a_won_march.md` decision 5 (`world_q.passage_granted`, MISSING in the tree, B23); `06_FA_war_lives_in_seats_B.md` edits 1 to 3 (B21).
 Lane: MB. Tier (R4 7b.0 (1)): §1 and §4 `sonnet` producer, effort `high`; §2 and §3 `opus` producer for `field_defender` and `may_ruin` (the predicates the title and the field share), then one `opus` read of the gate. Test file: `engine/season/tests/test_resv_field_defender.py` (one function per section's gate).
-Standing (R4 7b.0 (4)): the pool is the one pool rule (`engine/dice_engine/sigma_leverage.py::pool_of`, D-U1-08) on the actor's trained score (A-6); talent enters as levels from the governing attribute (A-7); a wound is a level against the roll (A-8). Every draw a row of this file names takes `H(w.world_seed, w.tick, <subject id>, "<verb>.<role>")` (A-30).
+Standing (R4 7b.0 (4)): the pool is the one pool rule (`engine/dice_engine/sigma_leverage.py::pool_of`, D-U1-08) on the actor's skill score (A-6); the governing attribute enters as levels (A-7); a wound is a level against the roll (A-8). Every draw a row of this file names takes `H(w.world_seed, w.tick, <subject id>, "<verb>.<role>")` (A-30).
 
 Author: U5b closure lane (Fable), 2026-11-12. Read at `6910680`. Applies to
 `14_VERBS_MILITARY_A…D_*.md` and `14_VERBS_PHYSICAL_A…D_*.md` (each carries a `Reconciled:` line pointing
@@ -49,7 +49,7 @@ Every row of the two families, placed by that test. The bands' meanings are each
 |---|---|---|---|
 | `move` (MIL-A) | band-keyed `writes:` (no leg / leg / two legs / leg only), two kinds | (b) | `contests: "a task"`; nothing else |
 | `migrate` (MIL-A) | band-keyed; three kinds | (b) | as `move` |
-| `train` (MIL-B) | a rank on two bands; `training.practised` on Partial; `training.fruitless` on Failure | (b) | three kinds across bands, so a contest row; the pool is the teacher's score in the capability (unchanged) |
+| `train` (MIL-B) | a rank on two bands; `training.practised` on Partial; `training.fruitless` on Failure | (b) | three kinds across bands, so a contest row; the pool is the teacher's score in the skill (unchanged) |
 | `recruit`, `discharge_troops` (MIL-C) | one cell on three bands, `share` 1.0 / 1.0 / 0.5; a Failure kind | (a) | flat `writes: ["Record.subject_matter"]`, flat `emits: ["army.recruited"]` (`army.discharged`); the `share` **is** `task_fraction`, read from the roster and not restated in the effect; `levy.shirked` and `discharge.balked` are the `draw` clause of `emits_on_refusal` |
 | `form_unit`, `assign_troops`, `order_unit` (MIL-D) | one cell on three bands; a Failure kind | (a) | flat columns; `unit.unformed`, `assign.balked`, `order.unheeded` are the `draw` clause. The band still reaches the module (`args['band']`) for `raw` and for a partial order: one cell, different contents |
 | `disband_unit` (MIL-D) | Partial emits two kinds | (a) | flat `emits: ["army.disbanded"]`; the half that goes home on Partial is `task_fraction` applied to the men returned to the pool and rides the Event as an Observation (`discharged`, a count), not as a second kind; `unit.balked` is the `draw` clause |
@@ -215,7 +215,7 @@ could not have stood in. **Movers.** Fields in which a mustered member is detain
 | H-309 | absence is not vacancy (MIL-A's note); A-23 adds that custody, not absence, suspends a seat's acts | — |
 | A-63, A-64 (an interaction occupies its counterparty; precedence by rung; appointments) | the edit is CORE's, with A-9's scene order (`16_PESSIMIST_CORE_a_scene_runs_in_its_own_order.md`). For these families: a `train` occupies the pupil; a `fight`, `capture` or `accept` scene already holds both parties; an `arrest` is not a visit (D-25: no officer need stand beside the prisoner), so it debits nobody's scene; a `move` that arrives where a busy person is finds him unavailable that round, which is a miss and not a dead end | U5a |
 | A-62 (a refused act's receipt: #353 holds) | no row here writes a changes list on a refusal: the `with`, `room`, `muster_room` and `surplus` reads ride `Event.observed` (REM-29's shape), and the `draw` clause of a task row is an emitted kind with no write | — |
-| A-59, A-60, A-61 (battle luck; numbers; the rout floor) | not verb-side: `order_unit`'s result is what the field's obedience draw (A-59) is later taken on; the muster's `command` pool is the same capability | `proposals/27_MB_*`; U5b Part 2 |
+| A-59, A-60, A-61 (battle luck; numbers; the rout floor) | not verb-side: `order_unit`'s result is what the field's obedience draw (A-59) is later taken on; the muster's `command` pool is the same skill | `proposals/27_MB_*`; U5b Part 2 |
 
 ## Who lands it, and dependencies
 

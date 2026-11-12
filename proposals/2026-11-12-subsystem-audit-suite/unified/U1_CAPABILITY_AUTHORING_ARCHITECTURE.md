@@ -1,6 +1,6 @@
 # U1 — the capability authoring architecture: one home, one schema, one reader interface
 
-## Status: REFERENCE (the suite's one decision on how a capability is authored; a plan, not canon; resolves nothing at runtime, CLAUDE.md §0.05)
+## Status: REFERENCE (the suite's one decision on how a skill is authored; a plan, not canon; resolves nothing at runtime, CLAUDE.md §0.05)
 
 ## Read at: 601e715 (working tree), 2026-11-12. Written by the U5a closure lane (CORE, CHAR, DICE), which was charged with deciding the home. Other closure lanes cite this file; they do not restate it.
 
@@ -19,7 +19,7 @@ once. The executable plan is `proposals/U5a_capability_home_and_two_inputs.md` (
 
 **Jordan's answers this is written to** (`unified/DECISIONS_ANSWERED.md`): A-5 the bell curve everywhere;
 A-6 score plus a base, floor five, one rule for combat and everything else; A-7 the attribute and the skill score
-are two inputs; A-8 a wound is a level against the roll; A-11 a capability never gates an act (Thread Sensitivity
+are two inputs; A-8 a wound is a level against the roll; A-11 a skill never gates an act (Thread Sensitivity
 excepted); A-12 a seat may carry a modifier; A-25 favourable circumstances raise the speaker, hostile ones
 raise the obstacle; A-26 an equal opponent costs 0.4 per point; A-54 a steward's skill bears on the harvest draw;
 A-59 command from a learned skill and social/mental attributes; A-71/A-79 one opposition rule for fight and argument,
@@ -34,16 +34,16 @@ One fact, one owner (UNIFICATION_BRIEF test 2). Kinds of fact and their owners:
 
 | fact | owner (authored head) | read through | why here |
 |---|---|---|---|
-| **what a capability is**: id, kind, gloss, governing attribute, what opposes it, scale, how it grows | `references/descriptor_registry.yaml: capabilities` | `tools/export_descriptors.py` (blocking `--check`) → `engine/engine_params/descriptors.json` → `engine/substrate/descriptors.py` (`CAPABILITIES`, `capability(id)`) | it is vocabulary, like the ten attributes, the pursuits, the axes, the affiliations and the heritage roster, which already live there |
-| **which capability a verb tests** | a `capability:` column on the verb's own row, `engine/season/verb_table.yaml` | `engine/season/data/verbs.py` (derives `VERB_CAPABILITY`, the map every reader already imports) | it is a property of the verb; a roster keyed by verb beside the table is a second place for a verb's facts (F-CORE-18) |
+| **what a skill is**: id, kind, gloss, governing attribute, what opposes it, scale, how it grows | `references/descriptor_registry.yaml: capabilities` | `tools/export_descriptors.py` (blocking `--check`) → `engine/engine_params/descriptors.json` → `engine/substrate/descriptors.py` (`CAPABILITIES`, `capability(id)`) | it is vocabulary, like the ten attributes, the pursuits, the axes, the affiliations and the heritage roster, which already live there |
+| **which skill a verb tests** | a `capability:` column on the verb's own row, `engine/season/verb_table.yaml` | `engine/season/data/verbs.py` (derives `VERB_CAPABILITY`, the map every reader already imports) | it is a property of the verb; a roster keyed by verb beside the table is a second place for a verb's facts (F-CORE-18) |
 | **how hard the verb's task is** | a `difficulty:` column on the verb's own row (a member of `rosters.yaml: difficulty_levels`); level sizes `Fixtures.difficulty_ob` | `data/verbs.py`; `roll.py::obstacle` | the same reason (D-U1-04); lane A's `rosters.yaml: task_difficulty` retires into it |
-| **where a capability changes an outcome**: the roles, the sites and their readers, the uses | `engine/season/rosters.yaml`: rosters `capability_roles`, `capability_use_sites`; `tables.capability_uses` | `engine/season/data/rosters.py` | each row binds a season reader and names a `Fixtures` gain: season facts, loaded by the season's one loader |
+| **where a skill changes an outcome**: the roles, the sites and their readers, the uses | `engine/season/rosters.yaml`: rosters `capability_roles`, `capability_use_sites`; `tables.capability_uses` | `engine/season/data/rosters.py` | each row binds a season reader and names a `Fixtures` gain: season facts, loaded by the season's one loader |
 | **who holds what** | `references/npc_registry.yaml` cast rows (`stats:`, `capabilities:`, `lifepath:`); bundles in `rosters.yaml: tables.lifepath_templates` | `engine/season/data/cast.py` | unchanged. An unauthored attribute is **not stored**: the roll reads the scale's mid-point (§4) |
 | **magnitudes** (the pool's base and floor, the untrained score, level sizes, gains, the opposition rate) | `engine/season/data/fixtures.py` with register rows; `LEVEL_SIGMA` in `engine/dice_engine/sigma_leverage.py` | `Fixtures`; `tools/export_sim_params.py` | unchanged owners |
 | **the rules** (the pool rule, the opposition, the even line) | pure functions in `engine/dice_engine/sigma_leverage.py`: `pool_of`, `opposed_ob`, `even_line` | imported by the host's `pool.py` and by the modules | one rule, two callers (D-U1-08); a module may import the dice engine (`04` §A.2 provider row) |
-| **a seat's modifier** | `engine/season/offices.yaml` row `modifier:` (a `LEVEL_SIGMA` name) | the `office` leverage source | a property of the seat (D-U1-01a); not a capability |
+| **a seat's modifier** | `engine/season/offices.yaml` row `modifier:` (a `LEVEL_SIGMA` name) | the `office` leverage source | a property of the seat (D-U1-01a); not a skill |
 
-`rosters.yaml` names the capability ids by the pointer it already has for registry-owned rosters
+`rosters.yaml` names the skill ids by the pointer it already has for registry-owned rosters
 (`capabilities: {from_descriptor: capabilities}`, the `pursuit_axes` precedent), so `lifepath_templates.holds`
 and `capability_uses.key` are validated against one roster. `rosters.yaml: verb_capability` and
 `vocation_attribute` are deleted in the commit that lands the block and the column; implementation lane A's three
@@ -182,7 +182,7 @@ loads; a cast row's trait found in `Person.capability`.
 Adopted from `10_DICE_capability_axiom_map.md` §A and §C: ten roles (`dice`, `addend`, `opposes`, `edge`,
 `circumstance`, `resource`, `threshold`, `rate`, `judgement`, `gate`), each one RPG axiom feeding one typed resolver
 input in one unit through one reader; one table, `rosters.yaml: tables.capability_uses`, in which every place a
-capability changes an outcome is a row (`use`, `role`, `key`, `side`, `when`, `level`, `per`, `against`, `gain`,
+skill changes an outcome is a row (`use`, `role`, `key`, `side`, `when`, `level`, `per`, `against`, `gain`,
 `add`, `floor`); closed both ways. The CHAR table (`02_CHAR_capability_uses_table.md`) is this table; its `form` is
 implied by `role` (`judgement` is `about_mid`, `gate` is `at_least`). Seven amendments, each forced by an answer or
 by a contradiction between lanes:
@@ -201,14 +201,14 @@ by a contradiction between lanes:
 4. **`circumstance` carries hostile terms only** (A-25). A favourable circumstance is an `edge` row for the
    roller. A row with a negative `gain` at role `circumstance` is refused at load. Its sum is the obstacle roster's
    member `capability` (OBS §2 member 9).
-5. **`gate` stays closed to its one capability** (A-11): Thread Sensitivity (`prac.thread_sensitivity`), at two
+5. **`gate` stays closed to its one held value** (A-11): Thread Sensitivity (`prac.thread_sensitivity`, a practitioner's stat, not a skill), at two
    sites, each the same comparison against the one `thread_sensitivity_gate` fixture: `own_state_gate` (may he
    attempt the gated act) and `told_retain` (may he hold a told claim of a thread-substrate term; also the reader
    by which a ground crossing reaches only sensitive witnesses, `12_ARCS_substrate_as_ground.md` item 4). No
-   `when` key, `requires` stem or use row may make another capability a condition of attempting an act or of
-   holding a claim; a `gate` row keyed on any other capability, or at any other site, is refused at load.
+   `when` key, `requires` stem or use row may make another skill a condition of attempting an act or of
+   holding a claim; a `gate` row keyed on anything else, or at any other site, is refused at load.
    `01_CORE_capability_authoring_surface.md` Part three is withdrawn (Reconciled).
-6. **A seat is not a capability and has no use row** (A-12; D-U1-01, superseding this item's earlier
+6. **A seat is not a skill and has no use row** (A-12; D-U1-01, superseding this item's earlier
    "a seat's modifier is an `addend`"). The seat the actor exercises (`Act.via`) helps him through the leverage
    source `office` (`rosters.yaml: advantage_sources`), whose host function reads that seat row's `modifier:` (a
    `LEVEL_SIGMA` name) and returns it as one level for the actor where the act is heard by a bench or body he sits
@@ -224,10 +224,10 @@ by a contradiction between lanes:
 
 | site | reader | rows (role · key · side) | lane |
 |---|---|---|---|
-| `social_roll` | `seam/wrappers/sigma.py::contest_input` | `dice · verb · actor` (`add: pool_add, floor: pool_floor`); `opposes · verb · subject`; `edge · verb.base · actor · per: mid · level: talent_level`; `edge · verb.base · subject · per: mid · against` (reads `opposed_by` where named); `circumstance` rows by `when` | SC, IN |
+| `social_roll` | `seam/wrappers/sigma.py::contest_input` | `dice · verb · actor` (`add: pool_add, floor: pool_floor`); `opposes · verb · subject`; `edge · verb.base · actor · per: mid · level: attribute_level`; `edge · verb.base · subject · per: mid · against` (reads `opposed_by` where named); `circumstance` rows by `when` | SC, IN |
 | `task` | the task route's input builder (`18_DETERMINISM_task_draw_for_uncontested_verbs.md`) | as `social_roll`, with `opposes` reading the stand-in (nobody opposite) | IN, verb lanes |
 | `fight` | `seam/wrappers/combat.py::combat_input` → `PersonalCombatInput` (applied by the module) | `dice · verb · each`; `opposes · verb · each`; `resource · attr.body.endurance · each`; `threshold · attr.body.strength · each` (the carry shortfall, D-U1-11d); `edge · attributes · each` carried raw on `.attributes` and applied by the module's own sigma (`wrapper.py:316-320`) | PC |
-| `field` | `seam/wrappers/mass_battle.py::command_record` → `CommandRecord` | `dice · command · each`; `edge · attr.social.charisma · each · per: mid`; `edge · attr.mind.acuity · each · per: mid` (`27_MB_A` §1, each `level: talent_level`); `threshold` for a troop kind's `strength` is the troop table's, not a person's | MB |
+| `field` | `seam/wrappers/mass_battle.py::command_record` → `CommandRecord` | `dice · command · each`; `edge · attr.social.charisma · each · per: mid`; `edge · attr.mind.acuity · each · per: mid` (`27_MB_A` §1, each `level: attribute_level`); `threshold` for a troop kind's `strength` is the troop table's, not a person's | MB |
 | `notice` | WITNESS's per-holder projection built at the barrier (`18_DETERMINISM_notice_is_a_draw.md`, C-U5a-14) | `dice · inquiry · actor`; `edge · attr.mind.perception · actor · per: mid` `[ASSUMPTION; medium; the FI lane confirms: noticing in passing is the fieldwork skill with Perception as its governing attribute, AR-24]` | FI |
 | `kit` | `combat_systems.act_cost`'s caller (host-side shortfall) | `threshold · attr.body.strength · each` | PC |
 | `settlement_effect` | the place's seasonal draw (`09_WR_world_motion` / A-54) | `edge · <the work's capability> · steward · per: mid` — the steward (holder of the seat whose rung is the place's treasury rung) adds levels to the **place's** draw; the place, not the steward, is the roller (D-U1-09) | SE |
@@ -250,12 +250,12 @@ fixtures; their values are set by the joint calibration A-5, A-6, A-7 and A-26 c
 | part | rule | input (who, what) | owner of the rule | answer |
 |---|---|---|---|---|
 | **dice** | `pool = pool_of(score, addends, pool_add, pool_floor) = max(pool_floor, score + addends + pool_add)` | the roller's **skill score**: his rank in the verb's skill, else the untrained score; `addends` = the registered pool addends (practice; helpers) | `sigma_leverage.pool_of`, called by `seam/wrappers/pool.py::faculty` and by `modules/combat/core.py` | A-6. `pool_add` and `pool_floor` live at 6 and 5 (`modules/combat/core.py:51-52`, the only regime ever calibrated; lane 29's tuning) |
-| **governing attribute** | named levels by `per: mid` on the governing attribute: for the roller above the mid-point, against below | the roller's **attribute** (`verb.base`) | `seam/wrappers/sigma.py::advantage_sigma` (the `edge` reader) | A-7. Size per step: fixture `talent_level`, live `minor` |
+| **governing attribute** | named levels by `per: mid` on the governing attribute: for the roller above the mid-point, against below | the roller's **attribute** (`verb.base`) | `seam/wrappers/sigma.py::advantage_sigma` (the `edge` reader) | A-7. Size per step: fixture `attribute_level`, live `minor` |
 | **the opponent** | `opposed_ob(score, opposition_rate) = opposition_rate × max(0, score)`, on the opponent's **skill score** (his rank in the skill the verb's row names as opposed, else the same one), never his pool: no base dice, no practice addend, no seat | the subject's **skill score** | `sigma_leverage.opposed_ob`, one function for both modules | A-26, A-79. `opposition_rate`: control 0.5, live `MU_PER_DIE` |
 | **the even line** | the social and task composer's first term: `even_line(pool_add) = MU_PER_DIE × pool_add`; absent from the fight, whose defence layer spends the defender's base | — | `sigma_leverage.even_line` | A-79 (the base dice are never part of the opposition) |
 | **the difficulty** | the verb row's `difficulty:` level, sized by `difficulty_ob` (live 0 / 0.5 / 1 / 1.5 above the even line) | — | `roll.py::obstacle` | `13_SC_tuning_tables.md` T1; OBS §4 |
 | **the opponent's attribute** | levels against the roller, `per: mid` on the subject's `opposed_by` attribute (else `base`) | the subject's **attribute** | the same `edge` reader | A-7 |
-| **nobody opposite** | the stand-in: `opposed_ob(pool_default, opposition_rate)` on the even line; a capability whose `opposed_by` is `none` takes it too | — | `roll.py::obstacle` | C-04; `obstacle_default` is deleted |
+| **nobody opposite** | the stand-in: `opposed_ob(pool_default, opposition_rate)` on the even line; a skill whose `opposed_by` is `none` takes it too | — | `roll.py::obstacle` | C-04; `obstacle_default` is deleted |
 | **the situation** | hostile terms add to the obstacle (OBS's roster); favourable ones are levels for the roller | `circumstance` and `edge` rows; OBS §2–§3 | `roll.py::obstacle`; `advantage_sigma` | A-25 |
 | **a seat** | the exercised seat's `modifier:` as one `office` level for the actor; a seat above his as `rank_gap` | `Act.via`; the subject's seats | the `office` source; OBS member 6 | A-12 (§3 item 6) |
 | **a wound** | a level against the wounded roller, and for the roller when the bearer defends (combat's bilateral precedent) | `Person.body` against its ceiling | `advantage_sources: wounds` (`10_DICE_advantage_sources_for_the_arcs.md` Edits A–D; 29 item 29-4 step 5) | A-8. The obstacle-term form (`10_DICE_audit_addendum_B.md` §5.4) is withdrawn |
@@ -286,10 +286,10 @@ unauthored_attributes` (2 on every key, seated by `build_realm(cast_attributes=T
 CR-20's attribute-as-pool code read a score for everybody; it retires at §11 batch U1-B, when the attribute leaves
 the pool (D-U1-04).
 
-## §5 · Which capability each rolled verb tests (decided across lanes)
+## §5 · Which skill each rolled verb tests (decided across lanes)
 
 One value per verb row. Where lanes disagreed the verb's owning lane's later proposal wins (ladder step 4),
-and a new capability must have a definition row before the verb row may name it.
+and a new skill must have a definition row before the verb row may name it.
 
 | verb | CORE Edit 8 | DICE edit C | SC | FA | lane A (B) | **decided** | ground |
 |---|---|---|---|---|---|---|---|
@@ -297,10 +297,10 @@ and a new capability must have a definition row before the verb row may name it.
 | `lie` | `copying` | `copying` | `deception` | — | (no verb row: a lie is a `tell`, `lie_verbs`) | **`deception`** on whichever row resolves a lie | the verb is SC's; a lie is not a faithful copy. Until the `deception` row is defined the row carries `capability: none` with a note |
 | `determine` | `argue` | `argue` | `law` | `judgment` | `argue` | **`law`** (interim `argue` until `law`'s row lands) | one thing gets one name; `judgment` collides with the role `judgement` |
 | `arrest` | `argue` | `arms` | CR-92's | `arms` | `arms` | **`arms`** | FA (the verb's lane), DICE and lane A agree; `capture`'s precedent |
-| `march` | `none`, noted | (mass battle's) | — | — | — | **`none`**, noted | the field's capability enters at the `field` site, on the commander's record (`27_MB_A`) |
+| `march` | `none`, noted | (mass battle's) | — | — | — | **`none`**, noted | the field's skill enters at the `field` site, on the commander's record (`27_MB_A`) |
 | `recruit`, `discharge_troops`, the army verbs | — | — | — | — | — | **`command`** | `14_VERBS_MILITARY_D` Edit 4; `27_MB_A` §1 (one rating for drilling and being obeyed) |
 | `tend` | — | — | — | — | — | **`healing`** | PC; the row's owner is `14_VERBS_MATERIAL_A` §6 (C-32) |
-| `restore`, `work`, `build`, `craft` | — | — | — | — | — | Jordan's content, when authored; as **task rows** they take the capability at the `task` site, not a `rate` row (D-U1-09) | SE |
+| `restore`, `work`, `build`, `craft` | — | — | — | — | — | Jordan's content, when authored; as **task rows** they take the skill at the `task` site, not a `rate` row (D-U1-09) | SE |
 
 The nine rows that have a value today keep it.
 
@@ -351,7 +351,7 @@ even_line(pool_add) -> float
 
 # engine/season/seam/wrappers/pool.py (host; the one pool reader)
 score(w, p, verb) -> int                           # the skill score: max(untrained score, held rank); no addend, no attribute
-talent(p, verb) -> int | None                      # the governing attribute as held; None = unauthored (reads as the mid-point). Proposed name; the batch names it `governing_attribute` (A-98: "talent" is retired)
+governing_attribute(p, verb) -> int | None                      # the governing attribute as held; None = unauthored (reads as the mid-point). Proposed name; the batch names it `governing_attribute` (A-98: "talent" is retired)
 faculty(w, p, verb) -> int                         # pool_of(score, Σ addends, pool_add, pool_floor)
 rate(w, p, verb) -> Fraction                       # about_mid on score; 1 unless the row declares magnitude: rate (D-U1-09)
 
@@ -362,13 +362,13 @@ obstacle_operands(w, act, row) -> tuple            # (name, raw, step) per obsta
 
 # decision side (person-side; no World)
 capability_factor(p, use, fx) -> float | None      # `judgement` rows; 1 at the scale's mid-point
-capability_admits(p, use, fx) -> bool | UNKNOWN    # the one `gate` capability, two sites
+capability_admits(p, use, fx) -> bool | UNKNOWN    # the one `gate` value (Thread Sensitivity), two sites
 View.odds(act, bands) -> float | None              # pools and opposition are never read directly
 describe(key) -> str                               # the gloss
 ```
 
 Typed inputs carry the composed values and no module reads a table (`04` §A.2): `SocialContestInput.pool`,
-`.opposition` (the opponent's trained score, or `None`), `.pool_default`, `.pool_add`, `.opposition_rate`,
+`.opposition` (the opponent's skill score, or `None`), `.pool_default`, `.pool_add`, `.opposition_rate`,
 `.difficulty`, `.obstacle_operands`, `.leverage`; `PersonalCombatInput.scores` and `.addends` (replacing
 `.faculties`, D-U1-08), `.pool_add`, `.pool_floor`, `.opposition_rate`, `.attributes`; `DuelRoundInput` the same five
 (29 item 29-5); `MassBattleInput.commanders: (CommandRecord | None, CommandRecord | None)` with
@@ -393,12 +393,12 @@ before its own body move. If any of these needs a Python edit to take effect, th
 | SE | `rate` on non-task magnitudes; the steward's `edge` rows at `settlement_effect` (D-U1-09) |
 | PC | `fight`'s rows; `scores`, `addends`, `pool_add`, `pool_floor`, `opposition_rate` carried raw; `healing`; abilities as rows once the lever roster is exported; an approach is an `edge` row, never a pool rule |
 | MB | the `field` site: `command`'s definition and its three use rows, `CommandRecord`; a troop kind's `strength` is the troop table's |
-| FI, WR | `notice` and `task` as sites; `thread`; a finding names the capability that surfaced it through `fed_by` |
+| FI, WR | `notice` and `task` as sites; `thread`; a finding names the skill that surfaced it through `fed_by` |
 | GO | the sheet shows `gloss`, rank (the skill score), the governing attribute, the traits held and the terms of `fed_by`; R-09's by-person conjunct is this surface's execution check: *two actors at different pools: yes* on a non-combat verb in `aperture`, with no monkeypatched addend |
 
 ## §10 · What this does not decide
 
-The values of `pool_add`, `pool_floor`, `talent_level`, `opposition_rate`, `difficulty_ob` at ship (lane 29's tuning
+The values of `pool_add`, `pool_floor`, `attribute_level`, `opposition_rate`, `difficulty_ob` at ship (lane 29's tuning
 and the joint calibration); the per-seat `modifier:` values (the institutions and FA lanes' content); Health's form
 and the other derived scores (Jordan's AR-58, open; A-98 (5) names the family, inventory
 `unified/work/A98_DERIVED_SCORES.md`); the content of any cast row; the base attribute of `healing`;
@@ -461,14 +461,14 @@ None. **Depends on.** `01_CORE_tests_one_golden_owner.md` (one pin file).
 Lands with `U5a_DICE_owed_edits.md` §1 (the one sampler). Order:
 
 1. `seam/wrappers/pool.py`: `score(w, p, verb)` = `max(pool_default, held rank)` (the base branch's `score` with the
-   attribute branch removed); `talent(p, verb)`; `faculty` = `pool_of(score, Σ addends, fx.pool_add, fx.pool_floor)`;
+   attribute branch removed); `governing_attribute(p, verb)`; `faculty` = `pool_of(score, Σ addends, fx.pool_add, fx.pool_floor)`;
    delete `_authored_attribute`'s use in `faculty`.
-2. `data/fixtures.py` + `hole_register.yaml` NUMBER rows: `pool_add` (0 / 6), `pool_floor` (0 / 5), `talent_level`
+2. `data/fixtures.py` + `hole_register.yaml` NUMBER rows: `pool_add` (0 / 6), `pool_floor` (0 / 5), `attribute_level`
    (`None` / `minor`), `opposition_rate` (0.5 / `MU_PER_DIE` read from the owner), `difficulty_ob` (0/1/2/3 →
    0/0.5/1/1.5), each with a three-point sweep. Control arm = batch U1-A's bytes.
 3. `rosters.yaml: tables.capability_uses`: the `dice` rows of `social_roll`, `fight`, `task` name `add: pool_add,
-   floor: pool_floor`; the two `edge` talent rows per site (§3).
-4. `sigma.py::_opposition_of` returns `pool.score(w, person, opposing verb)` — the trained score — for every person
+   floor: pool_floor`; the two `edge` attribute rows per site (§3).
+4. `sigma.py::_opposition_of` returns `pool.score(w, person, opposing verb)` — the skill score — for every person
    subject (29 item 29-4 step 1); `advantage_sigma` reads the `edge` rows through the signed two-list form (ADV
    Edit A); `advantage_sources` gains `capability`, `wounds` (ADV Edits B–D).
 5. `verb_table.yaml`: the `difficulty:` column (every rolled row `routine`); `rosters.yaml: difficulty_levels`;
@@ -486,17 +486,17 @@ Lands with `U5a_DICE_owed_edits.md` §1 (the one sampler). Order:
 8. Flip the live arms in the order lane 29 gives (the fight's rate first inside U5b §5 row 5; the social roll at
    OBS §4 step 5); re-pin every golden once.
 
-**Tests.** `engine/season/tests/test_u1_two_inputs.py`: `test_training_gives_dice_and_talent_gives_levels`
-(two hand-built persons, rank 5 / talent 2 and rank 2 / talent 5, read different band shares; swapping the two
-`edge`/`dice` rows' keys swaps them with no code edit); `test_an_unauthored_person_reads_zero_talent_levels`;
-`test_a_first_rank_never_lowers_a_pool`; `test_the_opposition_reads_the_trained_score_not_the_pool` (a subject with
+**Tests.** `engine/season/tests/test_u1_two_inputs.py`: `test_the_skill_score_gives_dice_and_the_attribute_gives_levels`
+(two hand-built persons, rank 5 / attribute 2 and rank 2 / attribute 5, read different band shares; swapping the two
+`edge`/`dice` rows' keys swaps them with no code edit); `test_an_unauthored_person_reads_zero_attribute_levels`;
+`test_a_first_rank_never_lowers_a_pool`; `test_the_opposition_reads_the_skill_score_not_the_pool` (a subject with
 practice addends and a seat: his `opposition` equals his rank). `engine/season/tests/test_cr85_faculty_replaces_history.py`
 and `test_cr20_attributes.py` re-pinned (named in the commit). 29's `test_sc_calibration_targets.py` and
 `tests/valoria/test_combat_opposed_rule_shape.py`.
 **Check.** (1) Control: every fixture at control reproduces batch U1-A's hashes at `build_realm(0..2)`, one season.
-(2) Equal trained ranks 0, 2, 4, 7 at `plain`: P(margin ≥ 0) within 0.005 of 0.5 (29 gate 6). (3) `python -m
+(2) Equal skill scores 0, 2, 4, 7 at `plain`: P(margin ≥ 0) within 0.005 of 0.5 (29 gate 6). (3) `python -m
 engine.season.harness.aperture 4 0` prints *two actors at different pools: yes* on a non-combat verb only after
-batch U1-C (expected **no** at this batch: every person holds the default). **Falsifier.** A first trained rank
+batch U1-C (expected **no** at this batch: every person holds the default). **Falsifier.** A first skill score
 lowering a pool; an authored character easier to oppose than an unauthored one; an attribute or a seat found in
 the opposition; a favourable circumstance lowering an obstacle; a hash moving at the control arm.
 **Hash movers.** Every world in which a graded act resolves; all goldens, once. **Depends on.** U1-A; lane 29 item

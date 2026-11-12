@@ -234,7 +234,7 @@ thin until it arrives.
 | `02_CHAR_which_ground_moves_whom.md`; `10_DICE_advantage_sources_for_the_arcs.md` | feed I-7 (conviction as leverage on an answer to a writ) |
 | `02_CHAR_relations_have_a_ground.md`; `02_CHAR_scar_cap_and_regard_unit.md` | feed I-3 and I-6 (authored stance rows; the unit `reception` and `legitimacy` share) |
 | `02_CHAR_goal_lean_on_its_own_question.md` | feeds every batch: whether anyone lends, pays, tells or audits is the chooser's |
-| `02_CHAR_capability_definitions.md`; `02_CHAR_capability_uses_table.md`; `01_CORE_capability_authoring_surface.md` | feed the pools (`law`, `copying`; a steward's capability if Jordan wants one) |
+| `02_CHAR_capability_definitions.md`; `02_CHAR_capability_uses_table.md`; `01_CORE_capability_authoring_surface.md` | feed the pools (`law`, `copying`; a steward's skill if Jordan wants one) |
 | `01_CORE_claim_fade_as_read.md` | feeds I-3 (the fade the chain relies on) |
 | `01_CORE_reason_trail_in_the_act_store.md`; `01_CORE_unmet_need_is_attended_first.md` | feed I-9's legibility and the attention a bill gets |
 | `12_ARCS_case_on_the_realm.md` | blocks I-3 (prehistory through the fold) and I-9 (a case as a delta) |

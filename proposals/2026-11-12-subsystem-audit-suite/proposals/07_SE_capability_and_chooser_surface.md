@@ -1,4 +1,4 @@
-# 07 · SE — how a character's capability and temperament reach a settlement act
+# 07 · SE — how a character's skill and temperament reach a settlement act
 
 Reconciled: 2026-11-12, U5d closure — folded **A-12**, **A-54** and **A-56**. §3 and §4 are superseded by `07_SE_capability_rate_B.md` (as the addendum says); §5 and §6 stand. NPC-083's "methods handing influence to internal factions" stays outside this file. A cohort's candidate surface is the heavy-move list (`U5d_SE_cohort_heavy_moves_and_caste.md`), so the chooser terms here bind named persons and the seven cohort moves only.
 
@@ -10,20 +10,20 @@ Lands in batch: B12 (world motion and ground), §5–§6 after `07_SE_capability
 Depends on: `07_SE_capability_rate_B.md` (B12) and `U5d_SE_cohort_heavy_moves_and_caste.md` (B38), as pointers.
 
 Carries §14 (capability authoring surface) and the NPC and chooser points of `audits/07_SE_audit.md`.
-It extends the existing owners. It defines no capability, no second pool reader and no settlement-local
+It extends the existing owners. It defines no skill, no second pool reader and no settlement-local
 dialect.
 
 ## 1. What changes in `engine/season/` at runtime
 
 Nothing from this file (Reconciled, wave 3). The runtime change this section described (three uncontested
-settlement effects reading a capability multiplier) is superseded by `07_SE_capability_rate_B.md` as decided
-in C3-C2 and D-U1-09: a verb that becomes a task row takes its capability through the task draw
+settlement effects reading a skill multiplier) is superseded by `07_SE_capability_rate_B.md` as decided
+in C3-C2 and D-U1-09: a verb that becomes a task row takes its skill through the task draw
 (`18_DETERMINISM_task_draw_for_uncontested_verbs.md`), and `rate` survives only for magnitudes no draw
 decides.
 
 ## 2. The problem, with evidence
 
-- **No settlement outcome reads a character capability.** `grep -n "capabilit\|attribute"` over
+- **No settlement outcome reads a character skill.** `grep -n "capabilit\|attribute"` over
   `modules/settlements/*.py`, `loop/effects_economy.py`, `loop/effects_founding.py`,
   `loop/effects_migration.py` and `loop/matter.py` returns nothing (run at this commit). The one pool
   reader, `seam/wrappers/pool.py::faculty`, is reached only by contested verbs, and no settlement verb
@@ -38,7 +38,7 @@ decides.
 ## 3. and 4. Superseded (pointer)
 
 Superseded by `07_SE_capability_rate_B.md` (this file's U5d head; R3 §2; C3-C2, D-U1-09) and deleted here,
-not left beside their replacement. What they carried is decided elsewhere: the capability's home is
+not left beside their replacement. What they carried is decided elsewhere: the skill's home is
 `references/descriptor_registry.yaml: capabilities` and the verb row's `capability:` column (D-U1-07;
 `rosters.yaml: verb_capability` and `vocation_attribute` are deleted by CAP A2/A3, and no
 `capability_rate` table is created); `restore`, `work` and `build` resolve by the task draw's band; `rate`
@@ -70,11 +70,11 @@ chooser intent as established from code plus ruling); it is cited, not redone. F
   same amount, and a cohort differs from its neighbour only by its territory's `alpha/beta` ratio. What
   makes a settlement choice a person's: an amount he chose (`07_SE_arc_needs.md` §3 b), a destination he
   chose among places he knows (CR-49's `referent_class: Rung` for `transfer`, `exchange` and `migrate`),
-  and a capability that bears on his act (the task draw, `18_DETERMINISM_task_draw_for_uncontested_verbs.md`;
+  and a skill that bears on his act (the task draw, `18_DETERMINISM_task_draw_for_uncontested_verbs.md`;
   `07_SE_capability_rate_B.md`). The reason trail exists for acts (`Event.observed`,
   `Term.declared_by`: a lapse cites the last hand that wound the clock) and is missing for the act not
   taken: a steward who let a town starve leaves no record that he knew.
-- **(e) Missing, as proposals.** `07_SE_capability_rate_B.md` (capability on a settlement act);
+- **(e) Missing, as proposals.** `07_SE_capability_rate_B.md` (skill on a settlement act);
   `07_SE_arc_needs.md` (amount as a choice); `07_SE_kernel_repairs.md` D (arrival knowledge). A cohort
   performs every individual verb (read at seed 0, two seasons: 708 of 1,529 resolved acts are cohorts',
   among them `create_record` 115, `challenge` 60, `forge` 47, `research` 30; a different denominator from
@@ -98,7 +98,7 @@ chooser intent as established from code plus ruling); it is cited, not redone. F
 ## 7. Gate, falsifier, cost
 
 - **Gate, falsifier.** None of this file's own: §3–§4 are superseded, and §5–§6 are reference (prose, no
-  edit). The gate of the capability on a settlement act is `07_SE_capability_rate_B.md`'s; the cohort
+  edit). The gate of the skill on a settlement act is `07_SE_capability_rate_B.md`'s; the cohort
   surface's is `U5d_SE_cohort_heavy_moves_and_caste.md`'s.
 - **NERS.** §5–§6 are a reading, not a design object; the design objects they point at carry their own.
 - **Cost class.** Edit (text only). Tier: `sonnet` (R3 7b-0).

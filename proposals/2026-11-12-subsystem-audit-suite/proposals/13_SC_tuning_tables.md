@@ -42,7 +42,7 @@ history at the half-score rate):
    obstacle 2.0; the other fourteen move only by a bench's reception or a forged record (audit §3.2).
 2. A 54-cell planted grid (venue × temperament × affiliation relation × stance) moves no verb's
    obstacle; a held score of 6 moves `tell`, `argue`, `speak` and does not move `lie`, `determine`,
-   `interrogate` or `arrest`, which have no capability key (§3.3).
+   `interrogate` or `arrest`, which have no skill key (§3.3).
 3. Under SC-B's level sizes (`routine` 1), a contest between equals fails 0.71–0.74 at pools 2–8 and
    `demanding` and `hard` give the same cell (0.85–0.90 vs 0.90) (§3.4).
 4. The room's modifiers saturate at the floor and the cap: at pool 2 every favourable room composes
@@ -63,7 +63,7 @@ a designer edits, a first value with its basis, and the sweep that would set it.
 - **Unit**: obstacle units (net successes; one die nets `MU_PER_DIE` 0.4 on average).
 - **First values (calibrated arm)**: `plain` 0, `routine` 0.5, `demanding` 1.0, `hard` 1.5, above the
   even line. **Control arm**: 0 / 1 / 2 / 3, which reproduces today's 2.0 for every unscored counterparty
-  under the `pool_default` stand-in. Basis (the head's closed form on the bell curve, equals at trained
+  under the `pool_default` stand-in. Basis (the head's closed form on the bell curve, equals at skill
   ranks 0 / 2 / 4 / 7): `plain` fails 50.0% at every rank; `routine` 60.1 / 58.7 / 57.8 / 56.9;
   `demanding` 69.5 / 67.1 / 65.4 / 63.6; `hard` 77.8 / 74.6 / 72.3 / 69.8 (target C1 0.50–0.65 for
   `routine`). The audit's whole-dice basis (§3.4) is history.
@@ -71,7 +71,7 @@ a designer edits, a first value with its basis, and the sweep that would set it.
   at commit 2 `interrogate` → `demanding`, the inquiries stay `routine`.
 - **Floor**: the composed obstacle is floored at `OB_MIN` after every term (OBS §2), which removes the obstacle
   0.0 cell a held score of 0 gave (audit degenerate cell 3).
-- **Sweep**: the size ladder at {0/1/2/3, 0/0.5/1/1.5, 0/0.75/1.5/2.25}; exact grid at trained ranks 0, 2,
+- **Sweep**: the size ladder at {0/1/2/3, 0/0.5/1/1.5, 0/0.75/1.5/2.25}; exact grid at skill scores 0, 2,
   4, 7.
 - **Falsifier**: an act whose row names a level other than `plain` and whose term list shows
   `difficulty 0`; or, at the calibrated arm, two adjacent levels giving the same P(Failure) at equals for
@@ -165,7 +165,7 @@ a designer edits, a first value with its basis, and the sweep that would set it.
 - **Venue building kind** (`venues.yaml`): no term (R-3).
 - **Season and territory conditions**: no term (R-6).
 - **The opposition rate**: one fixture `opposition_rate` shared with the fight (A-26, A-71, A-79; carried by
-  `05_SC_opposed_obstacle_parity.md`): control 0.5, live `MU_PER_DIE`, on the opponent's trained score
+  `05_SC_opposed_obstacle_parity.md`): control 0.5, live `MU_PER_DIE`, on the opponent's skill score
   (D-U1-02). It is not a table here.
 
 ## Exact edits, by owner
@@ -199,7 +199,7 @@ a designer edits, a first value with its basis, and the sweep that would set it.
   `test_sc_calibration_targets.py::test_every_rolled_verb_with_five_rolls_shows_more_than_two_obstacles`).
 - The planted grid (`planted_grid.py`, scratch) is restated as
   `engine/season/tests/test_sc_tuning_tables.py::test_planted_grid_moves_lie_interrogate_and_speak` (new):
-  after the capability column and commit 2, `lie` and `interrogate` move with the counterparty's trained
+  after the skill column and commit 2, `lie` and `interrogate` move with the counterparty's skill
   score; `speak` moves with T2 under a docketed row; no cell's obstacle is moved by temperament (that is
   leverage, CHAR's). `::test_a_bench_seat_modifier_is_one_level_for_its_own_bench_only` (T4).
 

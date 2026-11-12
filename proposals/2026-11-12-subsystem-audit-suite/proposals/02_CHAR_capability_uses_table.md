@@ -1,4 +1,4 @@
-# CHAR — one table for where a capability enters a person's choice
+# CHAR — one table for where a skill enters a person's choice
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-08) — adopted as `rosters.yaml: tables.capability_uses` with the `role` column (`unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §3); `form` is implied by `role`. A `key` may also be a capability id from `descriptor_registry.yaml: capabilities` or the selectors `verb` / `verb.base`.
 
@@ -9,7 +9,7 @@ Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.
 ## Status: PROPOSED
 
 Written by the CHAR audit lane (`audits/02_CHAR_audit.md` §14). Ratifies nothing. Reference under
-`CLAUDE.md` §0.05. It extends the existing owners and adds no capability system.
+`CLAUDE.md` §0.05. It extends the existing owners and adds no skill system.
 
 ## What this changes in `engine/season/` at runtime
 
@@ -19,18 +19,18 @@ of one roster table that the same modules read; a third row is added for the tem
 
 ## The problem, with evidence
 
-The tree already owns the definition of a capability in two places that code reads:
+The tree already owns the definition of a skill in two places that code reads:
 
 | fact | owner (code reads it) |
 |---|---|
 | what an attribute is: key, name, aliases, scale 1–7 | `references/descriptor_registry.yaml: attributes` → `engine/substrate/descriptors.py` (`ATTRIBUTES`, `attribute_key`, `ATTRIBUTE_FLOOR`, `ATTRIBUTE_CEILING`) |
-| which capability a verb draws on | `engine/season/rosters.yaml: verb_capability` (`data/verbs.py::VERB_CAPABILITY`, `VOCATIONS`) |
-| which attribute a capability's pool starts from, and which opposes it | `rosters.yaml: vocation_attribute` (`VOCATION_ATTRIBUTE`, `VOCATION_OPPOSED_BY`) |
-| which capabilities a lifepath grants | `rosters.yaml: lifepaths`, `tables.lifepath_templates` |
+| which skill a verb draws on | `engine/season/rosters.yaml: verb_capability` (`data/verbs.py::VERB_CAPABILITY`, `VOCATIONS`) |
+| which attribute a skill's pool starts from, and which opposes it | `rosters.yaml: vocation_attribute` (`VOCATION_ATTRIBUTE`, `VOCATION_OPPOSED_BY`) |
+| which skills a lifepath grants | `rosters.yaml: lifepaths`, `tables.lifepath_templates` |
 | what a character holds | `references/npc_registry.yaml` rows: `stats:`, `lifepath:`, `ts:`, `heritage:` → `data/cast.py` |
 
-Those rows are reached by one reader, `seam/wrappers/pool.py::faculty`, and a new capability is already a
-data edit (the loader refuses a capability with no attribute row). The decision layer breaks the pattern
+Those rows are reached by one reader, `seam/wrappers/pool.py::faculty`, and a new skill is already a
+data edit (the loader refuses a skill with no attribute row). The decision layer breaks the pattern
 in three places:
 
 1. `decision/options.py:1627` — `COMPETENCE_ATTRIBUTE = attribute_key("Attunement")`. Which attribute
@@ -39,7 +39,7 @@ in three places:
    two hard-wired stems and an import-time `SystemExit` if `OWN_STATE_STEMS` grows
    (`person_q.py:1145-1148`). The registry calls the same thing `prac.thread_sensitivity`; nothing in
    the decision layer reads it by that key.
-3. Every planned use (CR-93: Focus on the temperature, Reason on the forecast, an aptitude on
+3. Every planned use (CR-93: Focus on the temperature, Reason on the forecast, a skill with no dice on
    uncontested candidates; CR-92: Grace, Presence, Attunement on others) would, built in the shape of
    (1), add one more named constant per use.
 
@@ -48,7 +48,7 @@ decision layer's half is in function bodies.
 
 ## The resolution, decided
 
-One roster table lists every place a capability changes an outcome, a person's own choice among them
+One roster table lists every place a skill changes an outcome, a person's own choice among them
 (U1 §3: the one table, closed both ways). Ladder step 4: `vocation_attribute` was the precedent (a closed
 table, both ways, refused at import); it is itself deleted by U1 §1, its `base`/`opposed_by` facts moving
 to the definition row.
@@ -65,7 +65,7 @@ tables:
     # EVERY PLACE A CAPABILITY CHANGES AN OUTCOME. One row per use. `use` is a member of
     # `capability_use_sites`. `role` is a `capability_roles` member; for the choice-side rows `judgement`
     # (a factor about the scale's mid-point, the form `options.competence` has) and `gate` (against a
-    # fixture; Thread Sensitivity only, A-11). `key` is a capability id, a registry key (an attribute or a
+    # fixture; Thread Sensitivity only, A-11). `key` is a skill id, a registry key (an attribute or a
     # practitioner stat) or the selectors `verb` / `verb.base`. `side` is whose sheet is read. `gain` names
     # the Fixture that scales it.
     rows:
@@ -132,7 +132,7 @@ and nothing else: no attribute name, no scale constant and no pool arithmetic un
   do" without reading Python. With it the question is one `grep` of one table.
 - **R.** Customization of characters by data; a designer can move a use to another attribute and see
   the game respond. Complete: a use with no row is refused or reads nothing, never a silent default.
-- **S.** One method for every capability factor in a choice (`about_mid`), consistent with the pool's
+- **S.** One method for every skill factor in a choice (`about_mid`), consistent with the pool's
   table one row over.
 - **E (last, as a ratio).** One table and two substrate functions against one constant per use,
   indefinitely.

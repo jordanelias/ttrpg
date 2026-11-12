@@ -44,8 +44,8 @@ The fixed outcomes that follow (tracker-true):
 | light against heavy, equal skill | the plated man felled 0 of 500, 0 of 400 and 0 of 400 in three runs here (0 of 1,000 in the PC audit's E5); unarmoured against heavy, 0 of 1,500 |
 | heavy mirror, `death` terms | 99.8% undecided at twelve turns (0% at 200 turns: the cap decides) |
 | heavy mirror, `yield` terms | 90.1% undecided; `blood` terms 39.5% undecided |
-| trained score 6 in light against score 2 in heavy | the novice in plate felled 2.5%; the master felled 59.5% |
-| trained score 10 in light against score 2 in heavy | the novice felled 22.2%; 74.0% undecided |
+| skill score 6 in light against score 2 in heavy | the novice in plate felled 2.5%; the master felled 59.5% |
+| skill score 10 in light against score 2 in heavy | the novice felled 22.2%; 74.0% undecided |
 
 The engine's history is right (a mace, an estoc or a half-sworded longsword answers plate: plate
 mirrors with those resolve 96.5 to 100%), so the model is sound for a full inventory. The defect is that
@@ -84,7 +84,7 @@ point: the bare-zone blow is the upset.
 | heavy mirror, `yield` terms | 9.2% yield, **90.8** undecided | 53.5% yield, 3.5% felled, **43.0** undecided |
 | mace against arming, heavy both | **0.0** / 87.5 / 12.5 | **8.0** / 79.5 / 12.5 |
 | estoc in light against arming in heavy | 25.0 / 75.0 / 0.0 | 24.0 / 76.0 / 0.0 |
-| trained score 6 in light against score 2 in heavy | 59.5 / **2.5** / 38.0 | 47.8 / **33.2** / 19.0 |
+| skill score 6 in light against score 2 in heavy | 59.5 / **2.5** / 38.0 | 47.8 / **33.2** / 19.0 |
 
 Controls: the light mirror is unchanged (the gap term against cloth is small and the knee is inert);
 the estoc, which already defeats plate, is unchanged. Bare-zone share of blows on armour: 14.4 to 15.3%

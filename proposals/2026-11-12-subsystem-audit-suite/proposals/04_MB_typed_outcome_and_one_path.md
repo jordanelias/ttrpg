@@ -101,7 +101,7 @@ of `rosters.yaml: observation_terms` (D-U1-06).
   (the archived integration spec ordered `halt_before_enemy` deleted in May 2026; it is still called
   twice a tick). `rally_check` is **kept as the commander's hook, not deleted**: the same spec gives it a
   body (a Command check at each phase boundary restoring Morale toward its start), and it is where the
-  commander's `command` capability on `CommandRecord` (`27_MB_A`; D-U1-11g) first does something; until
+  commander's `command` skill on `CommandRecord` (`27_MB_A`; D-U1-11g) first does something; until
   that lands it stays the no-op it is. Also deleted: `tactic_cards.py`; `altonian_reinforcements.py` (each with its `FORK:` row in
   `references/restructure_ledger.md`, and the pointers at `registers/placeholder_names.yaml:73-88` and in
   `registers/mechanics_index.yaml`).
@@ -128,11 +128,11 @@ of `rosters.yaml: observation_terms` (D-U1-06).
   `systems/mass_battle/sim/`, which builds a variant with `replace(DEFAULT, PER_CELL=False)` and passes it.
 - `equipment/_base.py::Registry.override` and `remove` are deleted (no caller).
 
-### 4. The first capability input (audit §14)
+### 4. The first skill input (audit §14)
 
 *(Reconciled, W3-1, D-U1-11g, U1 §4 M-23: the integer `MassBattleInput.command: tuple = (4, 4)` this
-section proposed is removed. The commander's and each officer's `command` capability reaches the field as
-`CommandRecord` (trained score, addends, levels, post), `27_MB_A_command_and_the_obedience_draw.md` §2; the
+section proposed is removed. The commander's and each officer's `command` skill reaches the field as
+`CommandRecord` (skill score, addends, levels, post), `27_MB_A_command_and_the_obedience_draw.md` §2; the
 old integer and `core/exchange.py::derive_command` retire with it; `command_span`, the 1..7 span read off
 the score, keeps its name.)* `config.CMD_CHA_WEIGHT` and `CMD_COG_WEIGHT` move with the harness code.
 

@@ -9,7 +9,7 @@ Reconciled: 2026-11-12, wave-3 mop-up (`unified/work/W3_5a_DONE.md` row 13 and C
 Lands in batch: B21 (`unified/U3_DEPENDENCY_ORDER.md` §3.1), after `16_PESSIMIST_FA_A` and before `06_FA_war_lives_in_seats_B` (C3-D5's order). D4 does not land in B21: it waits on a carrier of CP-T09-08 (none in the suite).
 Depends on: `05_SC_obstacle_difficulty_and_modifiers_B.md` and `U5c_SC_one_obstacle_form.md` §4 steps 0–2 (B05: `difficulty`, `opposition`, `regard`; `rank_gap` lands with `14_VERBS_BINDING_A` in B21); `U5c_VERBS_residue_and_governance_owner.md` §2 (B07: the `a standing` row is existing; `rank_gap`, `regard` per its table); `06_FA_decree_binds.md` and `06_FA_remit_grant_by_row.md` (B21).
 Lane: FA. Tier (R4 7b.0 (1)): D1, D2 `sonnet` producer, effort `high`; D3 (the contested row and its terms) `opus` producer; one `opus` read of the 40-seed `force` table. Test file: `engine/season/tests/test_vb_d_orders.py` (one function per gate D1–D3; D4's function is written when D4 lands).
-Standing (R4 7b.0 (4)): the pool is the one pool rule (`sigma_leverage.pool_of`, D-U1-08) on the issuer's trained score (A-6), talent as levels (A-7), a wound a level against the roll (A-8); the issuer's exercised seat helps him only as the `office` level (D-U1-01). Draws: `H(w.world_seed, w.tick, <actor id>, "issue.standing")`, `H(w.world_seed, w.tick, <actor id>, "dispatch.standing")` (A-30).
+Standing (R4 7b.0 (4)): the pool is the one pool rule (`sigma_leverage.pool_of`, D-U1-08) on the issuer's skill score (A-6), the governing attribute as levels (A-7), a wound a level against the roll (A-8); the issuer's exercised seat helps him only as the `office` level (D-U1-01). Draws: `H(w.world_seed, w.tick, <actor id>, "issue.standing")`, `H(w.world_seed, w.tick, <actor id>, "dispatch.standing")` (A-30).
 
 Source: `audits/14_VERBS_BINDING.md` §0.1, §0.2, §4 (`dispatch`), §6 (`issue`), §13.4 decision 1; batch D.
 Binds on, and does not redo: `06_FA_decree_binds.md` (FA-P1: terms reach the addressee, answers form,
@@ -55,7 +55,7 @@ All are declared movers for the realm. (2) is §13.4 decision 1 of the audit and
   ordered. One predicate, `commands(w, actor, via, person) -> bool`, whose one body is
   `queries/world_q.py::commands` (`16_PESSIMIST_FA_C_under_the_seat.md` edit 1); one `requires` basis value, `command`.
 - **The draw**: prize `a standing`, opponent `to`, through the one obstacle composer: `difficulty`
-  `routine`, `opposition` (his trained score, A-79, D-U1-02), `regard` (his stance toward the issuer),
+  `routine`, `opposition` (his skill score, A-79, D-U1-02), `regard` (his stance toward the issuer),
   `rank_gap` (OBS §2 member 6).
   `issue` mints the Record at every band (the paper exists: bookkeeping) and writes the band into its
   content as `force`; Failure is a dead letter. `dispatch` (after CP-T09-08): O/S relocate, Partial

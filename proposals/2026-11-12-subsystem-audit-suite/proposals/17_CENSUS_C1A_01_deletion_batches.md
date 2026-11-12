@@ -22,7 +22,7 @@ them.
 
 ## The problem
 
-A top-level name that only a test calls (or nothing calls) passes every gate and describes a capability
+A top-level name that only a test calls (or nothing calls) passes every gate and describes a skill
 the game does not have. The audit's upward search found, in this partition, the names below. Each was
 read at its site and grepped across `engine/`, `modules/`, `systems/`, `tools/` and `tests/`.
 

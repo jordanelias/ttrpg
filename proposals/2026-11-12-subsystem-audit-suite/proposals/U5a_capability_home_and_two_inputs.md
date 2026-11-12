@@ -1,4 +1,4 @@
-# U5a · CAP — the capability surface in its decided home, and the roll with two inputs
+# U5a · CAP — the skill surface in its decided home, and the roll with two inputs
 
 Folded: 2026-11-12, lane 29 (`audits/29_ONE_OPPOSED_RULE.md`; `proposals/29_DICE_one_opposed_rule_form_and_tuning.md`), on Jordan's A-71 (one opposed-contest rule for the argument and the fight) — rows B4 and B5 are amended in one word: the operand `opposed_ob` reads is the opponent's **trained score**, not his pool. The base dice's mean (`MU_PER_DIE × pool_add`, the *even line*) is a named term of the social composer and is absent from the fight, whose defence layer already spends the defender's base. Every social and task obstacle this file orders is numerically unchanged (0.4 × pool = even line + 0.4 × score), and gate (2) holds as written on a `plain` row (closed form: 50.0% at ranks 0, 2, 4, 7; a `routine` row fails 56.9 to 60.1%). Measured reason: 0.4 on the pool in a fight leaves 29.0% of season-default mirrors undecided at twelve turns (49.7% with A-31's scale); 0.4 on the score leaves 0.1%. One fixture `opposition_rate` serves both modules. All other rows stand.
 
@@ -51,7 +51,7 @@ reading before B01; re-read on the batch's base and quote that, C3-N27); `corpus
 and `fed_by` on a graded `argue` lists exactly its `dice` and `opposes` rows.
 **Falsifier (Part A).** U1 §8's four: delete the block (load refuses); delete a contested row's
 `capability:` (load refuses naming the row); a negative-gain `circumstance` row, a `dice` use of a trait, a
-`gate` row keyed on any capability but Thread Sensitivity or at any site but `own_state_gate` and
+`gate` row keyed on anything but Thread Sensitivity or at any site but `own_state_gate` and
 `told_retain` (U1 §3 amendment 5), each refused at load. Any of them loading falsifies the edit.
 **Named tests (Part A).** `engine/season/tests/test_u1_capability_surface.py` (U1 §11 U1-A: the five refusals
 and `test_derived_vocation_maps_equal_the_retired_rosters`); `engine/tests/test_opposed_ob.py` and
@@ -66,20 +66,20 @@ Part A's bytes.
 
 | # | owner | exact edit | answer |
 |---|---|---|---|
-| B1 | `engine/season/seam/wrappers/pool.py` | starts from lane A's `pool.py::score` split (`c5bf18a`); `max(attr, have)` is removed (A-7; C3-A3). `score(w, p, verb)`: `max(untrained score, held rank)`; no attribute in it (TWO Edit A, with the `max(int(attr), int(have))` branch removed). `talent(p, verb)`: the governing attribute as held, else `None` (read as the scale's mid-point). `faculty`: `pool_of(score, Σ addends, fx.pool_add, fx.pool_floor)`, the one pure owner `engine/dice_engine/sigma_leverage.py::pool_of` = `max(pool_floor, score + addends + pool_add)` (D-U1-08) | A-6, A-7 |
-| B2 | `engine/season/data/fixtures.py`, register rows | `pool_add` (control 0; live 6), `pool_floor` (control 0; live 5), one pair for every site; `talent_level` (control `None`; live `minor`); `opposition_rate` (control 0.5; live `MU_PER_DIE`, read from the owner); each `[ASSUMPTION; medium; Jordan to correct]` with a three-point sweep. MAP's `social_pool_*` and `combat_pool_*` are not created | A-6, A-7, A-26 |
-| B3 | `rosters.yaml: tables.capability_uses` | the `dice` rows of `social_roll`, `fight`, `task`, `notice` name `add: pool_add, floor: pool_floor`; two `edge` rows per site: `{role: edge, key: verb.base, side: actor, per: mid, level: talent_level}` and `{role: edge, key: verb.base, side: subject, per: mid, level: talent_level, against: true}` (the subject's row reads `opposed_by` where the capability names one) | A-7 |
-| B4 | `engine/season/seam/wrappers/sigma.py` | `_opposition_of` returns the opponent's **trained score** (`pool.score` for the capability the verb's row names as opposed, else the verb's own): no base dice, no practice addend, no seat, no attribute (TWO Edit B as first written; A-79, D-U1-02); the pool's base is the social composer's even line; a person subject always has one (the untrained score); `advantage_sigma` reads the `edge` rows through the signed two-list form (ADV Edit A) | A-26, A-7 |
-| B5 | `modules/social_contest/roll.py::obstacle`; `modules/combat/core.py::ob_from_defender` | `opposed_ob(inp.opposition, inp.opposition_rate)` on the opponent's trained score in both modules (A-79, D-U1-02); the social composer leads with the even line `even_line(pool_add)`, the fight adds nothing (its defence layer spends the defender's base); hostile terms added; no favourable term subtracted (those arrive as leverage) | A-26, A-25, A-71 |
+| B1 | `engine/season/seam/wrappers/pool.py` | starts from lane A's `pool.py::score` split (`c5bf18a`); `max(attr, have)` is removed (A-7; C3-A3). `score(w, p, verb)`: `max(untrained score, held rank)`; no attribute in it (TWO Edit A, with the `max(int(attr), int(have))` branch removed). `governing_attribute(p, verb)`: the governing attribute as held, else `None` (read as the scale's mid-point). `faculty`: `pool_of(score, Σ addends, fx.pool_add, fx.pool_floor)`, the one pure owner `engine/dice_engine/sigma_leverage.py::pool_of` = `max(pool_floor, score + addends + pool_add)` (D-U1-08) | A-6, A-7 |
+| B2 | `engine/season/data/fixtures.py`, register rows | `pool_add` (control 0; live 6), `pool_floor` (control 0; live 5), one pair for every site; `attribute_level` (control `None`; live `minor`); `opposition_rate` (control 0.5; live `MU_PER_DIE`, read from the owner); each `[ASSUMPTION; medium; Jordan to correct]` with a three-point sweep. MAP's `social_pool_*` and `combat_pool_*` are not created | A-6, A-7, A-26 |
+| B3 | `rosters.yaml: tables.capability_uses` | the `dice` rows of `social_roll`, `fight`, `task`, `notice` name `add: pool_add, floor: pool_floor`; two `edge` rows per site: `{role: edge, key: verb.base, side: actor, per: mid, level: attribute_level}` and `{role: edge, key: verb.base, side: subject, per: mid, level: attribute_level, against: true}` (the subject's row reads `opposed_by` where the skill names one) | A-7 |
+| B4 | `engine/season/seam/wrappers/sigma.py` | `_opposition_of` returns the opponent's **skill score** (`pool.score` for the skill the verb's row names as opposed, else the verb's own): no base dice, no practice addend, no seat, no attribute (TWO Edit B as first written; A-79, D-U1-02); the pool's base is the social composer's even line; a person subject always has one (the untrained score); `advantage_sigma` reads the `edge` rows through the signed two-list form (ADV Edit A) | A-26, A-7 |
+| B5 | `modules/social_contest/roll.py::obstacle`; `modules/combat/core.py::ob_from_defender` | `opposed_ob(inp.opposition, inp.opposition_rate)` on the opponent's skill score in both modules (A-79, D-U1-02); the social composer leads with the even line `even_line(pool_add)`, the fight adds nothing (its defence layer spends the defender's base); hostile terms added; no favourable term subtracted (those arrive as leverage) | A-26, A-25, A-71 |
 | B6 | `rosters.yaml: advantage_sources`, `sigma.py` | `wounds`: one named level against the wounded roller per `wound_step` of body lost, capped (ADV Edits B–D as written) | A-8 |
-| B7 | `modules/combat/core.py`, `engine/season/queries/inputs.py`, `seam/wrappers/combat.py::combat_input` (PC's lane, U5b) | `resolution_pool` calls `sigma_leverage.pool_of`; `ob_from_defender(defender, cfg)` → `opposed_ob(defender.score, …)`; `PersonalCombatInput.faculties` is replaced by `scores: (int, int)` (the trained score) and `addends: (int, int)`, beside `pool_add`, `pool_floor`, `opposition_rate` carried raw; `combat_input` fills them; `BASE_POOL`, `POOL_FLOOR` become the workbench's defaults of the carried pair (D-U1-08; U1 §11 U1-B step 6) | A-6, A-7, A-79 |
+| B7 | `modules/combat/core.py`, `engine/season/queries/inputs.py`, `seam/wrappers/combat.py::combat_input` (PC's lane, U5b) | `resolution_pool` calls `sigma_leverage.pool_of`; `ob_from_defender(defender, cfg)` → `opposed_ob(defender.score, …)`; `PersonalCombatInput.faculties` is replaced by `scores: (int, int)` (the skill score) and `addends: (int, int)`, beside `pool_add`, `pool_floor`, `opposition_rate` carried raw; `combat_input` fills them; `BASE_POOL`, `POOL_FLOOR` become the workbench's defaults of the carried pair (D-U1-08; U1 §11 U1-B step 6) | A-6, A-7, A-79 |
 | B8 | `engine/season/verb_table.yaml`, `rosters.yaml`, `data/verbs.py`, `data/fixtures.py` | the `difficulty:` column on every rolled row (`routine` at control), roster `difficulty_levels: [plain, routine, demanding, hard]`, `Fixtures.difficulty_ob` (control 0/1/2/3; live 0/0.5/1/1.5); delete lane A's `rosters.yaml: task_difficulty`, `data/verbs.py::_load_task_difficulty` and `Fixtures obstacle_model`'s `task` arm; `obstacle_default` and H-127 deleted (C-04). Hash-equal at the control arm (D-U1-04 edit (1); OBS §4 step 1a) | A-25 |
-| B9 | `engine/season/rosters.yaml`, `data/rosters.py`, `harness/populated.py` | delete lane A's `rosters.yaml: unauthored_attributes`, `data/rosters.py::_load_unauthored_attributes` and the `cast_attributes` seating of unauthored values; `pool.py::talent` returns `None` for an unauthored key (read as the mid-point `(ATTRIBUTE_FLOOR + ATTRIBUTE_CEILING) / 2`) (D-U1-04 edit (2)) | A-7 |
+| B9 | `engine/season/rosters.yaml`, `data/rosters.py`, `harness/populated.py` | delete lane A's `rosters.yaml: unauthored_attributes`, `data/rosters.py::_load_unauthored_attributes` and the `cast_attributes` seating of unauthored values; `pool.py::governing_attribute` returns `None` for an unauthored key (read as the mid-point `(ATTRIBUTE_FLOOR + ATTRIBUTE_CEILING) / 2`) (D-U1-04 edit (2)) | A-7 |
 
 **Gate (Part B).** (1) Control: every fixture at its control arm reproduces Part A's hashes. (2) Equal
-opponents: for equal trained ranks 0, 2, 4, 7 and mid talent, P(margin ≥ 0) is within sampling error of one
-half at every rank (the even contest is even; today 28 % Success-or-better). (3) Training and talent
-separate: two hand-built persons, one rank 5 with talent 2, one rank 2 with talent 5, against one opponent,
+opponents: for equal skill scores 0, 2, 4, 7 and mid-point attributes, P(margin ≥ 0) is within sampling error of one
+half at every rank (the even contest is even; today 28 % Success-or-better). (3) Skill score and attribute
+separate: two hand-built persons, one rank 5 with attribute 2, one rank 2 with attribute 5, against one opponent,
 read different band shares, and swapping the two `capability_uses` rows of B3 swaps them with no code edit.
 (4) R-09's conjunct: `python -m engine.season.harness.aperture 4 0` prints *two actors at different pools:
 yes* on a non-combat verb once Part C's content is in (the line is `engine/season/harness/aperture.py:772`;
@@ -88,11 +88,11 @@ instrument, U5c): band shares at the realm's pools, reported in the landing comm
 claim from one run.
 **Named tests (Part B; `engine/season/tests/test_u1_two_inputs.py`, U1 §11 U1-B).** Gate (2):
 `test_equal_trained_ranks_at_plain_are_even` (ranks 0, 2, 4, 7: P(margin ≥ 0) within 0.005 of 0.5 by the
-closed form); gate (3): `test_training_gives_dice_and_talent_gives_levels`; plus
-`test_an_unauthored_person_reads_zero_talent_levels`, `test_a_first_rank_never_lowers_a_pool`,
-`test_the_opposition_reads_the_trained_score_not_the_pool`. `engine/season/tests/test_cr85_faculty_replaces_history.py`
+closed form); gate (3): `test_the_skill_score_gives_dice_and_the_attribute_gives_levels`; plus
+`test_an_unauthored_person_reads_zero_attribute_levels`, `test_a_first_rank_never_lowers_a_pool`,
+`test_the_opposition_reads_the_skill_score_not_the_pool`. `engine/season/tests/test_cr85_faculty_replaces_history.py`
 and `test_cr20_attributes.py` are re-pinned, named in the commit.
-**Falsifier (Part B).** A person's first trained rank lowers his pool; an authored character is easier to
+**Falsifier (Part B).** A person's first skill score lowers his pool; an authored character is easier to
 oppose than an unauthored one; a favourable circumstance lowers an obstacle; a hash moves at the control arm.
 **Hash movers.** Every world in which a graded act resolves: all goldens, re-pinned once with the sampler.
 
@@ -120,11 +120,11 @@ a character moves him under the old regime first and again under the new).
 
 ## NERS reading (E last)
 
-**N.** Without the home a capability has two definitions the first time two lanes land; without Part B the
+**N.** Without the home a skill has two definitions the first time two lanes land; without Part B the
 answers of 2026-11-12 are four separate movers on four fixtures nobody reads together. Tested top-down (a
 designer adds a skill as rows), bottom-up (one pool reader, one edge reader), lateral (a fight, a debate, a
 task and a notice draw compose one way), vertical (the port reads the exported block), diagonal (a seat's
-modifier and a person's skill enter by different doors and cannot double). **R.** Talent and training make
+modifier and a person's skill enter by different doors and cannot double). **R.** Attribute and skill score make
 different people (A-7's point): the gifted novice and the schooled plodder roll differently and can be told
 apart afterwards through `fed_by`. Complete at the extremes: floor five, soft-capped levels, a ceiling on
 rank. **S.** One pool rule, one obstacle rule, one sampler, one unit per channel. **E (last).** Two tables,

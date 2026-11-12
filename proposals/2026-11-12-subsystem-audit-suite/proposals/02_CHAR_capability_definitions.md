@@ -1,4 +1,4 @@
-# CHAR — the character's side of the capability surface: what a definition says to a reader, levels, bundles at a rank, and the cast row's unread keys
+# CHAR — the character's side of the skill surface: what a definition says to a reader, levels, bundles at a rank, and the cast row's unread keys
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-08) — the table this file would not name a path for is `references/descriptor_registry.yaml: capabilities` (`unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §1–§2); `gloss` is a required field of that block.
 
@@ -50,13 +50,13 @@ text. Gate hash: `headless --case NPC-088 --seasons 2 --seed 0` prints `5405522c
 
 ### Edit 1 · `gloss` on the definition row (ladder step 5)
 
-Every row of the capability definition table carries `gloss:`, one sentence in plain words saying
-what the capability is. The loader refuses a row without one, as the verb loader refuses a missing
+Every row of the skill definition table carries `gloss:`, one sentence in plain words saying
+what the skill is. The loader refuses a row without one, as the verb loader refuses a missing
 `beneficiary:`. The ten attributes gain the same key where they are defined
 (`references/descriptor_registry.yaml: attributes`); three of them (Focus, Reason, Presence) carry no
 description today (`rosters.yaml:1588`). Readers: `decision/sheet.py` gains
 `describe(key) -> str` (the leaf's text, no `World`); the first lane's reason trail prints it beside
-a capability use that fired. The four existing rows, for Jordan to correct:
+a skill use that fired. The four existing rows, for Jordan to correct:
 
 | id | proposed `gloss` |
 |---|---|
@@ -68,7 +68,7 @@ a capability use that fired. The four existing rows, for Jordan to correct:
 ### Edit 2 · `rank_at_least` as a `when` key (step 4: the map's `when` roster)
 
 One more member of the uses table's closed `when` keys: `rank_at_least: <n>` holds when the holder's
-**capability rank** (the held rank on the row's `scale`, never a seat rank) in the row's `key` is at
+**skill rank** (the held rank on the row's `scale`, never a seat rank) in the row's `key` is at
 least `n`. It is how a skill's higher rank changes *what* it does: two use rows on one key, the second
 under `rank_at_least: 3`, selecting which levels apply. It is never a condition of attempting an act and
 never a `requires` stem (A-11; U1 §3 amendment 5: Thread Sensitivity is the one `gate`); the archived
@@ -79,7 +79,7 @@ uses reader; no row ships.
 
 In `tables.lifepath_templates`, an entry of `holds:` may be `{<id>: <rank>}` as well as a bare id; a
 bare id keeps today's meaning (the untrained value). The loader checks the rank against the
-capability's `scale`. No rank is authored here: which lifepath starts a person at what is content,
+skill's `scale`. No rank is authored here: which lifepath starts a person at what is content,
 and it only moves a pool once CORE's edit 9 (a first rank is never a loss) has landed. The same
 shape serves a martial tradition's bundle (AR-43a) when the combat module exports one.
 
@@ -114,11 +114,11 @@ were taken at 0.
 
 ## What a definition must carry, in one place
 
-The full field list by kind (skill, aptitude, trait), with the tradition's word for each and
+The full field list (one kind, skill, A-98; the traits are their own roster, U1 §2a), with the tradition's word for each and
 its reader, is the table in the addendum's §B4 (c) as decided in U1 §2: `kind`, `gloss`, `base`,
 `opposed_by`, `scale`, `untrained`, `grows_by`; a use row per effect, with `when` (now including
-`rank_at_least`); and nothing about loss, because a capability is never lost. An *ability* is not a
-kind: it is a trait or aptitude whose use row names its scene's site, and a combat ability waits on the
+`rank_at_least`); and nothing about loss, because a skill is never lost. An *ability* is not a
+kind: it is a skill whose use row names its scene's site (A-98), and a combat ability waits on the
 combat module exporting its lever roster.
 
 ## The gate (an execution artifact)
@@ -135,7 +135,7 @@ the batch re-reads it on its base and quotes that (C3-N27).
 (b) `test_a_definition_row_with_no_gloss_is_refused_naming_it`, `test_a_cast_row_key_neither_read_nor_unread_listed_is_refused`;
 (c) `test_describe_returns_the_gloss`, `test_development_sheet_shows_thread_sensitivity_heritage_and_tenures`
 (`p_npc_001` reads Thread Sensitivity 75);
-(d) `test_rank_at_least_selects_a_second_use_row` (a planted row; holders at capability rank 2 and 3 read
+(d) `test_rank_at_least_selects_a_second_use_row` (a planted row; holders at skill rank 2 and 3 read
 different levels; `==` on the level names, not `approx`). (a) is the batch's hash check.
 
 ## The falsifier
@@ -145,7 +145,7 @@ search finds a reader of a deleted key (it was not unread). Or (d)'s two holders
 
 ## NERS reading (`CLAUDE.md` §0.06; E last)
 
-- **N.** From the designer's side a capability he cannot describe on the row he defines is a number;
+- **N.** From the designer's side a skill he cannot describe on the row he defines is a number;
   from the player's side the sheet is the only place he meets it; from the engine's side nothing
   changes. It holds in the two directions that have a reader and is neutral in the third.
 - **R.** Customisation is the brief's own demand: a skill, its levels and the background that grants

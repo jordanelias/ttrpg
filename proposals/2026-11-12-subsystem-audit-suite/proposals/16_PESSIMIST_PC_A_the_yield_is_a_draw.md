@@ -4,7 +4,7 @@ Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` §1.5)
 
 Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §1 and §2 (A-30: "the scene's own `rng`" U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "fought scene" → "fight" (glossary *scene*); "the riposte" (`18_DETERMINISM_no_certain_matchup.md`) → "the riposte" (glossary *riposte*).
 replaced by a keyed draw), §7/§7b (test file, tier; `YIELD_OB`'s shipped values stay the sweep's pick, Jordan's); U1
-D-U1-08 (the pool is `sigma_leverage.pool_of` on the trained score, not `core.resolution_pool`), D-U1-11m (the CHAR
+D-U1-08 (the pool is `sigma_leverage.pool_of` on the skill score, not `core.resolution_pool`), D-U1-11m (the CHAR
 reader is `person_q.decisiveness`; the input field takes the same name, `decisiveness`, so one word names one thing),
 glossary *roll* ("yield check" → "yield roll"; the function `_resolve_check` → `_yield_roll`); U3 B15, §4.1 row 55 (this
 file supersedes `03_PC_exits_withdrawal_recovery.md` Part B, the yield), §6.2 (`pB_yield.py`, `pM_yield_draw.py` are not
@@ -56,8 +56,8 @@ owner ladder); every term. The draw is keyed `H(seed, tick, scene id, "yield:<tu
 one keyed-draw owner (A-30), not a generator threaded through the scene.
 
 - **Pool** *(Reconciled, A-7; D-U1-08)*: `sigma_leverage.pool_of(score, (), pool_add, pool_floor)`, `score` the
-  party's trained score in the capability the roll tests (carried on `PersonalCombatInput.scores`), the untrained
-  default where none is authored. **Talent:** Spirit
+  party's skill score in the skill the roll tests (carried on `PersonalCombatInput.scores`), the untrained
+  default where none is authored. **Governing attribute:** Spirit
   (`attributes.py`: registry key `attr.mind.will`, already carried on `PersonalCombatInput.attributes`)
   enters as named levels for or against the roll by its distance from the mid-point, so an authored
   person still brings his own. ~~`core.resolution_pool(c.spirit)`~~

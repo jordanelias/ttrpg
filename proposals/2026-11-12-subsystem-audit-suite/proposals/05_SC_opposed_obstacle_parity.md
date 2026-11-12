@@ -6,7 +6,7 @@ Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-33) — un-
 
 Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.4 row SC-P5, §2 rows SC-P5 Status and A-80, §7, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-02, D-U1-11j, ledger R-07 to R-10, R-16; `unified/U3_CONFLICT_LEDGER.md` C3-C12, `OWED_TO_UNIFICATION.md` §A row on `degree_from_net`'s docstring). Changed: the Status line is no longer HELD BACK (A-26 un-held it; A-79 makes it the one rule for fight and argument); "The two options" is replaced by the decision (option B, at `opposition_rate`); edit 1 reads the opponent's **trained score** and names the even line (D-U1-02); edit 2's "no edit" on H-127 is superseded by C-04 (`obstacle_default` deleted; the stand-in is `opposed_ob(pool_default, opposition_rate)`); the problem tables are marked whole-dice history (A-5); A-80's entrenched-world control is cited (C3-C12); the docstring that still states the 2026-08-14 form is named as owed to B05; lands-it and tier added. U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "Ob" → "obstacle" in prose (glossary *obstacle*).
 
-**Lands in batch:** B05 (the joint calibration step, `U5c_SC_one_obstacle_form.md` §4 step 5). **Depends on:** `29_DICE_one_opposed_rule_form_and_tuning.md` item 29-1 (`opposed_ob`, B05), `U5c_SC_one_obstacle_form.md` (B05), `U5a_capability_home_and_two_inputs.md` Part B (the trained score, B05).
+**Lands in batch:** B05 (the joint calibration step, `U5c_SC_one_obstacle_form.md` §4 step 5). **Depends on:** `29_DICE_one_opposed_rule_form_and_tuning.md` item 29-1 (`opposed_ob`, B05), `U5c_SC_one_obstacle_form.md` (B05), `U5a_capability_home_and_two_inputs.md` Part B (the skill score, B05).
 
 ## Status: PROPOSED — un-held by Jordan's A-26 (2026-11-12: an equal opponent costs 0.4 per point), which overrides the 2026-08-14 half-score ruling; A-71/A-79 make it the one opposed rule for argument and fight. This file carries the rate.
 
@@ -59,7 +59,7 @@ entrenched-world arm carried by `28_CORE_scene_access_A_occupancy_and_precedence
 
 1. `modules/social_contest/roll.py::obstacle` — the opposition term is
    `sigma_leverage.opposed_ob(inp.opposition, inp.opposition_rate)`, where `inp.opposition` is the
-   opponent's **trained score** (`pool.py::score`; no base dice, no practice addend, no seat; A-79,
+   opponent's **skill score** (`pool.py::score`; no base dice, no practice addend, no seat; A-79,
    D-U1-02) and `opposition_rate` is a field of `queries/inputs.py::SocialContestInput`, filled by
    `seam/wrappers/sigma.py::_frame` from the fixture `opposition_rate` (control `0.5`, the 2026-08-14 form;
    live arm `dice_engine.MU_PER_DIE`, read from the owner, not typed). A NUMBER row in `hole_register.yaml`
@@ -77,7 +77,7 @@ entrenched-world arm carried by `28_CORE_scene_access_A_occupancy_and_precedence
 
 `engine/season/tests/test_sc01_obstacle_ceiling.py` (exists): at the control arm the whole-dice table above
 is no longer reproducible after A-5 lands (the sampler changes); the test's control reads the base tree's
-closed form. At the live arm, on the re-centred sampler (A-5, A-6), equal trained ranks 0, 2, 4, 7 meet a
+closed form. At the live arm, on the re-centred sampler (A-5, A-6), equal skill scores 0, 2, 4, 7 meet a
 `plain` row with P(margin ≥ 0) within 0.005 of 0.5 (lane 29's closed form: 50.0%), named
 `engine/season/tests/test_sc_calibration_targets.py::test_equal_ranks_at_plain_are_even` (the file is
 MISSING from the tree and is written as B05's first commit, U3 §6.1). `build_realm(0)` hashes equal on both
@@ -86,7 +86,7 @@ arms until a cast row holds a score.
 ## Falsifier
 
 For equal pairs, P(Failure) rises 0.186 from s = 2 to s = 12 on the whole-dice roll (0.420 → 0.606) and
-0.078 at the swept arm (0.358 → 0.436), both history. On the live arm: if equal trained ranks at `plain`
+0.078 at the swept arm (0.358 → 0.436), both history. On the live arm: if equal skill scores at `plain`
 read outside 0.5 ± 0.005 at any rank, or an opposition value moves with a practice addend, a seat or an
 attribute, the rule is not what A-79 rules and this edit is wrong. What the rate does NOT fix, stated: a one-sided roll is never
 complementary under a four-band ladder (6 against 3 succeeds 0.630 and 3 against 6 succeeds 0.124 at

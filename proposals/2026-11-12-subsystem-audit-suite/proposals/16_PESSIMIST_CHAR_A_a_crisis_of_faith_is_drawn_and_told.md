@@ -47,7 +47,7 @@ All figures: `PYTHONHASHSEED=0`, `build_realm`, shipped chooser, no player.
 
 1. **The crisis is the only thing that moves a person's interior in computed play, and it is a fixed
    function of the build.** Three seasons: stored stance moved for 1 and 2 of 83 persons (seeds 0, 1),
-   pursuits for 2 and 0 (largest single move 0.027 on a weight), capability and seats for 0;
+   pursuits for 2 and 0 (largest single move 0.027 on a weight), skill and seats for 0;
    `Person.conviction` was rewritten for 6 persons at seed 0 and 7 at seed 1 (`b1_season.py`). The six
    at seed 0 (Sigrid Torsvald, Hedda Kronvald, Inge Baralta, Torben Almqvist, Gerik Strand, Wilhelm
    Voss) are six of the seven at seed 1 (the seventh is Annika Feldhaus), and each of the six lands on
@@ -96,14 +96,14 @@ through the A-30 key function (`04` PART D 35: `H(seed, tick, subject, purpose)`
 ordinal (`state/world.py:1632-1635`, reset every tick), the counter A-30 retires; and not the chooser's draw.
 The act id is in the purpose so two crises of one person in one tick have two keys. The roll is composed as
 every roll is (U1 architecture §4; A-5, A-6, A-7):
-- **Pool** (training): `sigma_leverage.pool_of(score = intensity of the creed, addends = (), pool_add,
+- **Pool** (the dice input): `sigma_leverage.pool_of(score = intensity of the creed, addends = (), pool_add,
   pool_floor)`, i.e. `max(pool_floor, intensity + pool_add)`, through the one pool rule
   (`seam/wrappers/pool.py`); the held intensity is the score (A-6).
-- **Talent** (A-7): a `capability_uses` row `{use: crisis, role: edge, key: attr.mind.will, side: roller,
+- **Governing attribute** (A-7): a `capability_uses` row `{use: crisis, role: edge, key: attr.mind.will, side: roller,
   per: mid}`, read by the one `edge` reader; `crisis` is added to `capability_use_sites` with
   `_conviction_crisis`'s input builder as its reader (U1 architecture §3, "a new site is a new reader and a
   new map member"). `[ASSUMPTION; medium: will governs faith — basis: `descriptor_registry.yaml` lists
-  `attr.mind.will`; the CHAR content pass may substitute; revert: no talent row]`.
+  `attr.mind.will`; the CHAR content pass may substitute; revert: no attribute row]`.
 - **Obstacle**: the fixture `crisis_obstacle` (a difficulty level; **no shipped literal**: its value is set by
   the joint calibration of A-5, A-6, A-7 and A-26, `13_SC_calibration.md` being the instrument) plus one per
   co-held incompatible creed (a hostile term, A-25).

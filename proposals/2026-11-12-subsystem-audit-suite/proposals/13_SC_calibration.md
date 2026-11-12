@@ -44,8 +44,8 @@ tables are reached, the grid is where they are set.
 
 ### 2. The targets (what "calibrated" means)
 
-Reference cell: `plain` room, neutral regard, no evidence, no stakes, no effort; "equals" = equal trained
-rank (A-79). Trained ranks 0, 2, 4, 7 (pools 6, 8, 10, 13 under A-6). The last column is the audit's
+Reference cell: `plain` room, neutral regard, no evidence, no stakes, no effort; "equals" = equal skill
+rank (A-79). Skill scores 0, 2, 4, 7 (pools 6, 8, 10, 13 under A-6). The last column is the audit's
 whole-dice reading at the half-score rate (history under A-5; the live readings are lane 29's, quoted in the
 Folded line).
 

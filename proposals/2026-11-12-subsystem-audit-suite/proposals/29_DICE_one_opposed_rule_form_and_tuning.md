@@ -18,7 +18,7 @@ It **supersedes three sentences** and adds no second system:
 `U5a_capability_home_and_two_inputs.md` row B4 and row B5 (the operand: the opponent's *pool*), `U1` §4's row
 *the opponent* (the same), and `U5b_PC_rulings_in_the_fight.md` §2 edit 4 (a second rate for the fight,
 which A-71 supersedes by name). The two proposals carry a `Folded:` line; `U1` §4's row is owed the same
-one-word amendment (pool to trained score) and was not edited by this lane. Every other edit of those files
+one-word amendment (pool to skill score) and was not edited by this lane. Every other edit of those files
 stands.
 
 ## What it changes in `engine/season/` at runtime
@@ -36,16 +36,16 @@ batch that already moves every seeded result once (U5a Part B). This proposal ad
 opposed_ob(score, rate)  =  rate × max(0, score)                       # the one owner, engine/dice_engine/sigma_leverage.py
 even_line(pool_add)      =  MU_PER_DIE × pool_add                      # same module; derived, never typed (2.4 at 6)
 
-the argument, the task   ob = even_line + difficulty level + opposed_ob(opponent's trained score, or the untrained score) + hostile terms
-the blow                 ob = opposed_ob(defender's trained score)
+the argument, the task   ob = even_line + difficulty level + opposed_ob(opponent's skill score, or the untrained score) + hostile terms
+the blow                 ob = opposed_ob(defender's skill score)
 every roll               roll_net_continuous(pool) + net_boost(levels for − levels against, pool);   degree_from_net(roll, ob)
 ```
 
 | the defender's … | enters as | size | ruling |
 |---|---|---|---|
-| **training** (the trained rank of the capability that opposes the verb; "prowess" is kept for a unit's quality, U1 glossary) | the obstacle | `opposition_rate` = `MU_PER_DIE` a point, read from the owner | A-26 |
+| **skill score** (his rank in the skill that opposes the verb; a person's skill at arms is his martial skill, "prowess" a unit's quality, A-98) | the obstacle | `opposition_rate` = `MU_PER_DIE` a point, read from the owner | A-26 |
 | **base** (the `pool_add` dice everyone holds) | never as opposition. In an argument it is the even line the difficulty ladder stands on; in a fight it is spent by the module's defence layer (`modules/combat/wrapper.py:340-357`) and is in no obstacle | — | A-6, A-71 |
-| **talent** (the attribute; "aptitude" is a capability kind, U1 glossary) | named levels against the roller, `per: mid`, under the soft cap (`M_MAX` 1.5σ). In a fight: the module's own sigma assembly (`wrapper.py:316-320`), no host term | `talent_level` = `minor` a step | A-7 |
+| **governing attribute** (the attribute; A-98: an aptitude is an attribute) | named levels against the roller, `per: mid`, under the soft cap (`M_MAX` 1.5σ). In a fight: the module's own sigma assembly (`wrapper.py:316-320`), no host term | `attribute_level` = `minor` a step | A-7 |
 | **wounds** | named levels: against the bearer when he rolls, for the roller when the bearer defends (combat's bilateral precedent, `combat_systems.py:1049-1050`). Never an obstacle term | `wound_level` per `wound_step` | A-8 |
 | **circumstance** | favourable: levels for the roller. Hostile: non-negative obstacle terms | per `U5c_SC_one_obstacle_form.md` §2, §3 | A-25 |
 | **seat** | the `office` level source | per U5c §3 | A-12 |
@@ -60,11 +60,11 @@ U5c §2's `max(OB_MIN, …)` never binds and is left as written.
 | dial | owner | control | live | what it buys (AUD §4, §5) |
 |---|---|---|---|---|
 | `opposition_rate` | `engine/season/data/fixtures.py` (one fixture, both modules) | 0.5 | `MU_PER_DIE` | equals read alike at every rank: fight mirrors 4.28 to 4.33 turns from rank 0 to 12 (half-score: 4.33 to 5.88, undecided 0.5 to 4.1%) |
-| the operand | `seam/wrappers/pool.py::score` | — | the trained score, no base, no practice addend | 0.1% undecided where the pool operand gives 49.7% |
+| the operand | `seam/wrappers/pool.py::score` | — | the skill score, no base, no practice addend | 0.1% undecided where the pool operand gives 49.7% |
 | `pool_add`, `pool_floor` | fixtures (U5a B2) | 0, 0 | 6, 5 | the even line is 2.4 |
 | `DMG_SCALE` | `modules/combat/core.py:168` (U5b §4) | 1.55 | 1.07 seed (a Success is one Wound Interval) | 3.20 to 4.50 blows; lead change 35.2 to 45.2% |
 | the argument's difficulty ladder | `difficulty_ob` (`13_SC_tuning_tables.md` T1) | 0 / 1 / 2 / 3 | 0 / 0.5 / 1 / 1.5 **above the even line** | equals at `routine` fail 56.9 to 60.1% over ranks 0 to 7, inside `13_SC_calibration.md` C1; Success-or-better 22.2 to 30.1%, at C1's upper edge (0.30) at rank 7, which the calibration step reads |
-| `talent_level` | fixture (U5a B2) | `None` | `minor` | one step of talent against: Failure 58.7 to 68.0%, Success-or-better 25.4 to 18.1% (rank-2 equals, `routine`) |
+| `attribute_level` | fixture (U5a B2) | `None` | `minor` | one step of the governing attribute against: Failure 58.7 to 68.0%, Success-or-better 25.4 to 18.1% (rank-2 equals, `routine`) |
 
 Read together at the live arm:
 
@@ -72,21 +72,21 @@ Read together at the live arm:
 |---|---|---|
 | (a) fight length | 4.27 turns, 4.50 blows, lead change 45.2%, 0.1% undecided, 39.3% bloodless turns (shipped: 3.35, 3.20, 35.2%, 0.2%, 40.9%) | 1,200 fights, seeds 0–1,199; control seeds 800,000 on: 4.18, 4.50, 41.6%, 0.5% |
 | (b) the better one wins | fight, felled shares: +1 rank 65.7 / 63.0%; +2: 78.0 / 75.2 / 74.3%; +4: 92.3 / 91.0%; equals 50.8 and 51.4%. Argument, share of decided exchanges: +1: 65.6 / 63.0%; +2: 77.9 / 73.9%; +4: 92.0 / 90.6%; equals 50% | 1,000 fights a cell; closed form checked against 200,000 seeded draws |
-| (c) defence is real | per rank of the defender's training: 6 points off the attacker's wounding share (64.7, 58.2, 52.0, 45.8, 39.0, 27.5% against ranks 0, 1, 2, 3, 4, 6), 8 to 9 off his Overwhelming share, a sixth off his damage a roll. Per step of Agility: 6 points (52.8, 46.8, 40.9, 36.1%) | 600 and 500 traced fights a cell |
+| (c) defence is real | per rank of the defender's skill score: 6 points off the attacker's wounding share (64.7, 58.2, 52.0, 45.8, 39.0, 27.5% against ranks 0, 1, 2, 3, 4, 6), 8 to 9 off his Overwhelming share, a sixth off his damage a roll. Per step of Agility: 6 points (52.8, 46.8, 40.9, 36.1%) | 600 and 500 traced fights a cell |
 | (c) no big attrition | mirrors at ranks 0, 2, 5, 7, 12: 4.33, 4.28, 4.28, 4.30, 4.29 turns; undecided 0.5, 0.1, 0.2, 0.4, 0.5%; an exchange fails 11.8, 13.6, 18.2, 20.8, 24.9% (half-score at the same scale: 4.33 to 5.88 turns, 0.5 to 4.1% undecided, 11.8 to 35.5%) | 1,000 fights a cell; band shares from 200 traced fights |
 
 ## Exact edits, by owner (in landing order)
 
 | # | owner | exact edit | lands in |
 |---|---|---|---|
-| 1 | `engine/dice_engine/sigma_leverage.py` | `opposed_ob(score: float, rate: float) -> float` returning `rate * max(0.0, float(score))`; `even_line(pool_add: float) -> float` returning `MU_PER_DIE * float(pool_add)`. Pure; no default for `rate` (a caller cannot skip the fixture, as `core.resolve`'s `ob` is required, ED-PC-0058). This is the function `10_DICE_capability_axiom_map.md` §G edit 5 names; its operand is fixed here as the trained score | U5a Part A row A6 (hash EQUAL) |
-| 2 | `engine/season/seam/wrappers/pool.py` | `score(w, p, verb)` as U5a B1. Its opposing form (the `opposed_by` capability where the row names one) is what `_opposition_of` returns: **the trained score, never the pool** (replaces U5a B4's *"returns the opponent's pool"*); no practice addend; a person always has one (the untrained score) | U5a Part B |
+| 1 | `engine/dice_engine/sigma_leverage.py` | `opposed_ob(score: float, rate: float) -> float` returning `rate * max(0.0, float(score))`; `even_line(pool_add: float) -> float` returning `MU_PER_DIE * float(pool_add)`. Pure; no default for `rate` (a caller cannot skip the fixture, as `core.resolve`'s `ob` is required, ED-PC-0058). This is the function `10_DICE_capability_axiom_map.md` §G edit 5 names; its operand is fixed here as the skill score | U5a Part A row A6 (hash EQUAL) |
+| 2 | `engine/season/seam/wrappers/pool.py` | `score(w, p, verb)` as U5a B1. Its opposing form (the `opposed_by` skill where the row names one) is what `_opposition_of` returns: **the skill score, never the pool** (replaces U5a B4's *"returns the opponent's pool"*); no practice addend; a person always has one (the untrained score) | U5a Part B |
 | 3 | `engine/season/queries/inputs.py` | *(W3-1: matched to item 29-2, which governs.)* `SocialContestInput` carries `opposition_rate: float`, `pool_add: int`, `pool_floor: int` raw from the fixtures; `PersonalCombatInput` carries `opposition_rate: Optional[float] = None` (`None`: the module's own constant) beside `scores`, `addends`, `pool_add`, `pool_floor` (D-U1-08); `DuelRoundInput` (`03_PC_duel_round_and_approach_B.md`) carries them once, on its `fighters: PersonalCombatInput`. `fight_opposition_rate` (U5b §2 edit 4) **is not created** | U5a Part B; U5b §5 row 4 |
 | 4 | `modules/social_contest/roll.py::obstacle` | `hard = even_line(inp.pool_add) + difficulty + opposed_ob(opposition if a person opposes else inp.pool_default, inp.opposition_rate) + Σ raw_i × step_i`, then U5c §2's bounds unchanged. `terms` gains the leading entry `("even", even_line)` so the terms still sum to `ob`; `rosters.yaml: obstacle_terms` gains the member `even` first; its host function in `sigma.py::OBSTACLE_TERMS` is the one that carries `pool_add` onto the record (so U5c §1's member-to-function pairing holds), and the value is derived in the module from that field and `MU_PER_DIE` | U5c §4 step 5 (the joint calibration step) |
-| 5 | `modules/combat/core.py::ob_from_defender(defender, cfg)` | `return SL.opposed_ob(defender.score, cfg.get('OPPOSITION_RATE', OPPOSITION_RATE))` (the trained score, D-U1-08); the three call sites (`wrapper.py:213`, `:243`, `:331`) and `core.py:665` pass `cfg` (item 29-2 below has the full route). The docstring's *"Score/2"* and *"two ladders for one quantity"* paragraphs are replaced by one sentence naming the owner and A-71. `BASE_POOL`, `POOL_FLOOR` stay as the workbench's defaults (U5b §2 edit 3) | U5b §5 row 4 at the control rate (hash EQUAL) |
+| 5 | `modules/combat/core.py::ob_from_defender(defender, cfg)` | `return SL.opposed_ob(defender.score, cfg.get('OPPOSITION_RATE', OPPOSITION_RATE))` (the skill score, D-U1-08); the three call sites (`wrapper.py:213`, `:243`, `:331`) and `core.py:665` pass `cfg` (item 29-2 below has the full route). The docstring's *"Score/2"* and *"two ladders for one quantity"* paragraphs are replaced by one sentence naming the owner and A-71. `BASE_POOL`, `POOL_FLOOR` stay as the workbench's defaults (U5b §2 edit 3) | U5b §5 row 4 at the control rate (hash EQUAL) |
 | 6 | `engine/season/data/fixtures.py`, `hole_register.yaml` | `opposition_rate`: one NUMBER row, grade `ruled` (A-26, A-71), sweep `0.5 / MU_PER_DIE / 0.3`, with the targets of this file as what it was set to. Flip to the live arm for the fight **first in U5b §5 row 5** (before the scale's sweep, so `DMG_SCALE` is swept on the obstacle it will ship with) and for the social roll at U5c §4 step 5 | as named |
 | 7 | `modules/combat/core.py:168` | `DMG_SCALE = 1.07`: decided. An arming sword's Success against light armour is exactly one Wound Interval (9) for every scale from 0.99 to 1.08 (`core.strike` is deterministic; `p7_scale.py`), so U5b §4's rule is met without a further sweep | U5b §5 row 5 |
-| 8 | `engine/season/tests/test_sc_calibration_targets.py` (`13_SC_calibration.md` edit 1) | the grid is stated on trained ranks 0, 2, 4, 7 (pools 6, 8, 10, 13), not on pools 2 to 8; "equals" is equal trained rank. Two rows are added: the even contest (`plain`, equal ranks: P(margin ≥ 0) within 0.005 of 0.5 at every rank) and the better-arguer curve (gate 6 below) | U5c §4 step 4 (red), 5 (green) |
+| 8 | `engine/season/tests/test_sc_calibration_targets.py` (`13_SC_calibration.md` edit 1) | the grid is stated on skill scores 0, 2, 4, 7 (pools 6, 8, 10, 13), not on pools 2 to 8; "equals" is equal skill score. Two rows are added: the even contest (`plain`, equal ranks: P(margin ≥ 0) within 0.005 of 0.5 at every rank) and the better-arguer curve (gate 6 below) | U5c §4 step 4 (red), 5 (green) |
 | 9 | `re-derived, never by hand` | `engine/engine_params/combat_engine_v1.json` (`tools/export_engine_params.py`); the combat goldens and the armour reference, once, at the end of U5b §5 row 5 | as U5b §4 edit 3 |
 
 No edit is made to `architecture/`. No `.md` under `systems/` is written. No new fixture is created: the
@@ -104,7 +104,7 @@ even line is derived, and the fight's second rate is withdrawn.
   reads the composer's *nobody opposite* arm (the untrained score through `opposed_ob`, on the even line). The
   melee pair is not opposed (C-U5b-03). So the rule has two sites in a battle, the duel round and the
   obedience draw's stand-in; any later contest of one commander's command against another's calls
-  `opposed_ob` on the trained command score and composes no private rate.
+  `opposed_ob` on the `command` skill score and composes no private rate.
 - **The hearing** (`05_SC_playable_hearing_B.md`). `argue`: the mover's pool against
   `roll.py::obstacle` with `opposition` = the other side's `Speaker.score`, whose comment becomes *"what
   `opposed_ob` reads"*. `answer`: a roll with no person operand; its obstacle is the even line plus
@@ -214,7 +214,7 @@ table left as "the carried rate"). Tier is `CLAUDE.md` §10's; "lands it" is the
    primitives*), two pure functions:
    `def opposed_ob(score: float, rate: float) -> float: return float(rate) * max(0.0, float(score))` and
    `def even_line(pool_add: float) -> float: return MU_PER_DIE * float(pool_add)`. `rate` has no default.
-   Docstrings name A-26 and A-71, and say: the operand is a trained score, never a pool.
+   Docstrings name A-26 and A-71, and say: the operand is a skill score, never a pool.
 2. New file `engine/tests/test_opposed_ob.py`, four tests:
    `test_opposed_ob_at_half_is_score_over_two_exactly` (scores 0 to 20 in halves, `==`, no `approx`);
    `test_opposed_ob_clamps_a_negative_score_to_zero`; `test_opposed_ob_refuses_a_missing_rate`
@@ -261,7 +261,7 @@ In this order:
    keeps `(13, 3.5)` (the control). Tests added, same file:
    `test_the_fight_obstacle_is_opposed_ob_at_the_cfg_rate` (a fight with
    `cfg=dict(CFG, OPPOSITION_RATE=0.4)`, scores 2 and 3: every `roll` event's `ob` is `0.4 ×` the struck
-   party's trained score; `assert checked >= 1`); and in `engine/season/tests/test_cr85_faculty_replaces_history.py`:
+   party's skill score; `assert checked >= 1`); and in `engine/season/tests/test_cr85_faculty_replaces_history.py`:
    `test_the_record_carries_the_opposition_rate_to_the_module` (a hand-built `PersonalCombatInput` with
    `opposition_rate=0.4`: the trace's `ob` values are `{0.8, 1.2}`; with `None`: `{1.0, 1.5}`).
 9. Re-derive: `python tools/export_engine_params.py` (the `core` section gains `OPPOSITION_RATE`), then
@@ -326,7 +326,7 @@ This item edits functions that U5a and U5c rewrite in the same batch. It is stat
 is and against their end state; the lander applies whichever form is present.
 
 1. `engine/season/seam/wrappers/sigma.py::_opposition_of` (`:117`): the returned value is the subject's
-   trained score. Against today's body: the `held` list keeps `_capability(person, verb)` and drops
+   skill score. Against today's body: the `held` list keeps `_capability(person, verb)` and drops
    `_opposing_attribute(person, verb)` (A-7: the attribute is a level, not a score), and a person with no
    key returns `float(w.fixtures.get("pool_default"))` (the untrained score; never `None` for a person).
    Against U5a's end state: it returns `pool.score(w, person, opposing verb)`, not the pool.
@@ -381,7 +381,7 @@ The rule reaches both by construction, but the records it must be written on do 
 (`05_SC_playable_hearing_B.md`), and the field's `duel` window (`U5b_PC_rulings_in_the_fight.md` §1 edit 4).
 What is fixed here, for those proposals' own batches: `DuelRoundInput` carries
 `opposition_rate: Optional[float]` exactly as `PersonalCombatInput` does in item 29-2 and the round entry
-builds its `cfg` by the same line; `Speaker.score` is the trained score `_opposition_of` returns and the
+builds its `cfg` by the same line; `Speaker.score` is the skill score `_opposition_of` returns and the
 `argue` move builds a `SocialContestInput` whose `opposition` is that score; `answer` builds one with
 `opposition=None`. **Missing, and why it cannot be completed here:** the files, line numbers, call sites
 and test names of three unbuilt entries; they are owed by the closure lanes of those proposals
@@ -396,16 +396,16 @@ one-word amendment is prose and is the U5a closure lane's. The Perception lever'
 ## NERS reading (E last)
 
 - **N.** Without it the fight and the argument price a defender in two units, and the suite's written form
-  breaks the fight. Top-down: one sentence (*his training is what stands against me, a point for a point*).
+  breaks the fight. Top-down: one sentence (*his skill score is what stands against me, a point for a point*).
   Bottom-up: one function over one score. Lateral: fight, argument, hearing move, duel round. Vertical: a
   person's rank reaches a field through his duel. Diagonal: a seat, a wound and an attribute reach the same
   roll by the level channel and cannot be counted in the obstacle as well. Horizontal: the port carries one
   rate.
-- **R.** Training, talent and injury are three different things about a person and read differently
+- **R.** Skill score, attribute and injury are three different things about a person and read differently
   afterwards. Complete at the extremes: levels are soft-capped, the rank ceiling bounds the obstacle, the
   mirror is level at every rank, both tails stay open. With no player present, a master and a novice, two
   masters and two novices each produce a fight with a middle.
-- **S.** One rate in the unit the dice are in; one ladder; one channel for everything that is not training.
+- **S.** One rate in the unit the dice are in; one ladder; one channel for everything that is not the skill score.
   The fight keeps its defence layer and stops paying for the defender's base twice.
 - **E, against that.** Two pure functions, one fixture, three carried fields; one fixture and one docstring
   paragraph retire; a player can say the rule.

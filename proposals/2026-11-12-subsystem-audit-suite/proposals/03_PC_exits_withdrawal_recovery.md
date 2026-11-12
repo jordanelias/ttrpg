@@ -59,7 +59,7 @@ resolves through the same two functions.
      no-null-scene reading counts it.
   3. Read: emit `withdraw(turn=t, by=W, clean=False)`; `P` strikes once with
      `core.resolve(pool_of(P.score, P.addends, pool_add, pool_floor), S.pursuit_sigma(P, W, fat_P, fat_W, cfg, TR),
-     u_strike, core.ob_from_defender(W))` (the one pool rule and `opposed_ob` on W's trained score, D-U1-08,
+     u_strike, core.ob_from_defender(W))` (the one pool rule and `opposed_ob` on W's skill score, D-U1-08,
      A-79), wounding through the one damage site (`_wound('pursuit', P, W, d)`).
      If `W` is felled the fight is decided. Otherwise the turn is then fought as an engaged turn with
      `P` as `first` (he holds the tempo, as `wrapper.py:219` gives the pursuer).
@@ -121,7 +121,7 @@ Part's rule, fixture and gate are inputs that land there (B12), not a second row
 deterministic outcome; it becomes a draw. Corrected rule below; the fraction stays as the
 `Success` band's size.)* `tend` rolls through the one task draw
 (`proposals/18_DETERMINISM_task_draw_for_uncontested_verbs.md`): pool = the tender's `healing`
-capability (or `pool_default`), obstacle = `tend_ob` (difficulty, proposed 1) only; the patient's
+skill (or `pool_default`), obstacle = `tend_ob` (difficulty, proposed 1) only; the patient's
 headroom scales the band's share (`ceil(tend_fraction × headroom)`), not the obstacle (A-8: a wound is a
 level against a roller, and the tender is the roller; a wound-marks obstacle term would count the headroom
 twice). `Failure`: no change, `tend.failed` (a new band kind on the row), witnessed and deposited to the

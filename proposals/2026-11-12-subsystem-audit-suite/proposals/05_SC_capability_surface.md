@@ -1,4 +1,4 @@
-# SC-P7 — the social roll's capability inputs as data: complete the capability rows, one generic advantage source
+# SC-P7 — the social roll's skill inputs as data: complete the skill rows, one generic advantage source
 
 Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-02) — its `trait_advantages` source is not a second leverage source: it is read as the `edge` rows of the one `capability` source (`U5c_SC_one_obstacle_form.md` §3), whose home is the one `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` names. Edits 3 and 4 (a judge whom evidence moves more or less) stand, on the leverage channel.
 
@@ -10,11 +10,11 @@ Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.
 
 Source: `audits/05_SC_audit.md` §14. It extends the existing owner (`engine/season/rosters.yaml`:
 `verb_capability`, `vocation_attribute`, `vocation_opposed_by`, `advantage_sources`); it adds no
-second capability system and no field to the module.
+second skill system and no field to the module.
 
 ## What it changes in `engine/season/` at runtime
 
-Edits 1 and 2 are data rows: `lie` and `interrogate` start drawing on a capability where they roll the
+Edits 1 and 2 are data rows: `lie` and `interrogate` start drawing on a skill where they roll the
 bare default today. In the shipped realm nobody holds a key or an attribute (`aperture 2 0`: pools
 `[2]` for every actor; `build_realm(cast_attributes=False)`), so the hash is unchanged until a cast
 row carries one. Edit 3 lets a trait become an advantage on the social roll by a roster row, with no
@@ -35,13 +35,13 @@ Python function per trait; with no such row authored it is inert.
 3. **Four rules of composition are constants in code:** the pool is `max(attribute, key)`
    (`pool.py:94-100`); the opposition is `max(key, opposing attribute)` (`sigma.py:133-136`); the
    obstacle is `opposition / 2.0` (`modules/social_contest/roll.py:141`); an absent key is
-   `pool_default` while a held `0` is zero dice (`pool.py:97-99`), so a person trained to 1 rolls
+   `pool_default` while a held `0` is zero dice (`pool.py:97-99`), so a person at skill score 1 rolls
    fewer dice than one untrained.
 
 ## The resolution, decided
 
 - Rows 1–2 by sibling precedent (ladder step 4). `determine` and `arrest` are NOT decided here: which
-  capability judges and which resists arrest is CR-92's design (B10-19, *the social attributes acting on
+  skill judges and which resists arrest is CR-92's design (B10-19, *the social attributes acting on
   others*), answered by plan (step 3).
 - A trait reaches the roll through ONE generic member of the existing advantage door, defined in
   data (step 5: the door exists and is closed; a per-trait function is the scale-local dialect §10
@@ -84,8 +84,8 @@ The first-written text of edit 3 is kept below for the record only (superseded):
    `modules/social_contest/roll.py` is unchanged: it already applies `leverage` as `net_boost`.
 4. `engine/season/seam/wrappers/sigma.py::believed_input` — the believer's own traits are his to
    know; the subject's are `None` unless he holds a claim of them under the existing `CAPABILITY_CLAIM`
-   rule (`sigma.py:238`, prefix `"capability:"` + the trait's capability id, value 0 or 1), since a trait
-   is a capability row of kind `trait` (U1 §2): no new prefix and no roster row. Unknown → `None`, never
+   rule (`sigma.py:238`, prefix `"capability:"` + the trait's id, value 0 or 1); a trait is a row of the trait roster (U1 §2a,
+   A-98 (4)), not a skill, and the claim prefix stays the one rule `[ASSUMPTION: the prefix is kept for both rosters; a trait id is never a skill id, U1 §2a step 2]`. Unknown → `None`, never
    a guess. The `edge` rows on the subject's side are evaluated against the believed value in the
    believed input and against the held value in the true input.
 

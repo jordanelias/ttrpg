@@ -12,9 +12,12 @@ instructions; an item that points at a proposal says so and adds only what is mi
 
 **Words.** `unified/U1_GLOSSARY.md`'s words are used. A *row* is one of R-01 to R-09. A *reading* is what an
 instrument printed on a named tree. A *batch* is a handle `B00` to `B41` of `U3` (one close each); `IS-A-n`
-is an item of this file; `BIS-n` is a batch this file creates. A *milestone* is a set of batches whose last
-close moves a row (the ordinary sense: a stage reached; the tree's M1 is one such). The *act-count
-instrument* is `harness/aperture.py`. `04` is `architecture/meta/04_CODE_ARCHITECTURE.md`.
+is an item of this file; `BA1` is the one batch this file creates. A *conjunct* is one of the readings a
+row's `met` text joins by "and" (v11's word, kept). A *milestone* is a set of batches whose last close lets
+a row be re-taken (the ordinary sense: a stage reached). The *act-count instrument* is `harness/aperture.py`.
+`04` is `architecture/meta/04_CODE_ARCHITECTURE.md`. Persons' numbers follow A-98: an *attribute*, a *skill*
+and its *skill score*, a *derived score*, the chooser's *choice score*; `capability` appears only as the
+tree's identifier.
 
 **Parts.** This file: §0 the reading today, §1 what "met" has to mean, §2 to §10 one section per row.
 `IS_A_NINE_part2.md`: §11 the items in full (item form), §12 the milestone grouping and the requirement map,
@@ -36,8 +39,8 @@ nothing between the two trees moved either reading.
 carries a `measured:` line (`requirements.yaml:5-8`). It does not run a row's `measure:` command. So every
 `status:` is a hand-edited string behind which a command was run once on a named tree; `m1_acceptance` row 3
 counts those strings and says so. Two of the three `met` rows rest on a run nobody can repeat cheaply (R-02:
-36 chunk cells, about 75 minutes, by a script under `proposals/`), and four rows share one eight-minute
-command (`corpus_run`) whose printed line the row then interprets by prose. This is the first thing §1 fixes.
+36 chunk cells, about 75 minutes, by a script under `proposals/`), and four rows share one command of
+several minutes (`corpus_run`) whose printed line the row then interprets by prose. This is the first thing §1 fixes.
 
 **This lane's own probe** (scratch, not committed; `populated.build_realm(s)` then `populated.run(1, s, w=w)`,
 the shipped builder and chooser, one season):
@@ -210,8 +213,8 @@ reached by nothing by design; `data/rosters.py:775-794` checks it total over `ru
 map or the verb table's `scale:` column (`hole_register.yaml` H-89, grade `absent`). G-2 is closed as stale
 for the mapping; the header comment is corrected in `IS-A-04`; H-89 stays where it is (stage 5's row).
 
-**Batch sequence.** B01 → B12 → B19 → B20 → B21 → B22 → B23 → B24 → B25 → B30 → B32 → B34 → B36.
-**Earliest `met`: B36's close** (the chronicle is the last reading of c1), with B30 and B32 closed.
+**Batch sequence** (the set, in handle order; the schedule is `U3` §2.3's). B01, B12, B19, B20, B21, B22,
+B23, B24, B25, B30, B32, B34, B36. **Earliest `met`: B36's close** (the chronicle is the last reading of c1), with B30 and B32 closed.
 
 **What holds it.** (1) `dispatch` D4, the order that sends a person, has no carrier (`_eff_dispatch`, `U3`
 §6.3); R-04.a does not need it (`dispatch` executes today, 86 attempted and 16 executed at `23bea9da`), so
@@ -266,8 +269,8 @@ task draw's throughput gate (`18_DETERMINISM_task_draw_for_uncontested_verbs` ga
 converted verb from falling to zero successes. The `BUILT OUT` block is read at each of those closes too.
 
 **Batch sequence.** B07 (every uncontested verb draws) → B10 (`02_CHAR_offer_what_can_be_done`: an act is
-formed only where it can be done) → B11 → B12 → B14, B15 → B21 → B22 → B23 → B25 → B26 → B28 → B29 → B32 →
-B35. **Earliest `met`: the later of B32's and B35's close**, re-read at B38 if `riot` joins the table.
+formed only where it can be done), then in handle order B11, B12, B14, B15, B21, B22, B23, B25, B26, B28,
+B29, B32, B35 (the schedule is `U3` §2.3's). **Earliest `met`: the later of B32's and B35's close**, re-read at B38 if `riot` joins the table.
 
 **What holds it.** (1) The four army-order verbs and the muster: `14_VERBS_MILITARY_A` to `_D` are
 INCOMPLETE (DESIGN): their obstacle terms are not members of the one obstacle roster and the membership is

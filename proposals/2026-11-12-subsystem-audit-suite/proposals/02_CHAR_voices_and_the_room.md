@@ -142,9 +142,9 @@ own ledgers. Neither is a new subsystem; both are readings over owners that exis
    `room_as_held(...)` after it, in words built from `ScorePart.kind`, `owner` and `gloss`
    (`02_CHAR_capability_definitions.md`), never the totals alone.
 
-7. **Not built here: a capability's voice and a voice that was wrong.** A capability speaks when its
+7. **Not built here: a skill's voice and a voice that was wrong.** A skill speaks when its
    use fires (`capability_uses`; the DICE map's `capability` advantage source reports
-   which). A capability that was wrong needs a held claim to record which capability admitted it, and a
+   which). A skill that was wrong needs a held claim to record which skill admitted it, and a
    missed finding to be recordable as missed; both are FI's (`08_FI_audit_addendum_B.md`, line 245)
    and a write, so they are not observers and do not belong here. Until then the voices are a
    person's ends and his relations, which is half of the precedent and the half the engine already

@@ -35,11 +35,11 @@ isolated (`[UNVERIFIED]` there).
    (value 1.0, byte-identical), so the exporter carries it and a sweep can fit it.
 3. The calibration rule gains one line, at its owner (`combat_balancing_methodology.md` is quarantined
    reference; the executable owner is `workbench/build_levers.py`'s lever table): **one point of any
-   attribute or skill axis moves the season-default mirror no more than one point of trained score does**
+   attribute or skill axis moves the season-default mirror no more than one point of skill score does**
    (about fifteen points near parity, `pD_skill.py`). A lever outside the bound is reported by the table,
    not gated.
 4. Combat axes are bounded where they are authored: the `axis` slot family (was `skill`; U1 glossary) of
-   `03_PC_person_inputs_content.md` Part A takes its bounds from the capability row (U1 §2 `scale`), and
+   `03_PC_person_inputs_content.md` Part A takes its bounds from the skill row (U1 §2 `scale`), and
    `technique` and `grab` are not members of the family until a sweep shows them outside the interval.
 5. *(W3-1, U1 §4 R-27:)* one quantity, two sites, one calibration: the in-fight wound σ
    (`CFG['WOUND_ATK_OB']`, `CFG['WOUND_DEF_OB']`, read by `combat_systems.wound_impairment`) stays the

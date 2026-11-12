@@ -100,7 +100,7 @@ today's behaviour as the control. No natural season fights an army field today.
   is declared (`ED-IN-0301`); there is no march clock to slow, so the loadout's weight cannot bite at
   campaign scale. It needs travel time first, which is CORE's.
 - **Companions with roles** (scout, surgeon, quartermaster, engineer): persons holding posts in an army
-  are the manager proposal's `officer`; further posts are capability content (CHAR).
+  are the manager proposal's `officer`; further posts are skill content (CHAR).
 - **Prisoners and ransom** (sourced, Warband): the custody edge exists and a field writes none (first
   audit §5.5); the squad proposal's outcome names the fallen, which is the input a `capture` needs.
 - **Tiers as an upgrade tree** (recruit → veteran → elite as different troop rows): not proposed. With
@@ -163,7 +163,7 @@ every `upkeep` 0; a second payment path beside the seat's.
 
 - **N.** From the campaign down: without something worth keeping, an army is a number to spend, and a
   commander has no reason to refuse a battle. From the battle up: the outcome already says which unit
-  stood. Lateral: `train` raises a person's capability and nothing raises a unit's. Cut it and the
+  stood. Lateral: `train` raises a person's skill and nothing raises a unit's. Cut it and the
   Bannerlord referent is a recruiting rule and nothing else.
 - **R.** A veteran unit is worth protecting (the archived design's phrase); a war chest decides what kind
   of army can be kept; the world's armies age into different things with nobody watching.

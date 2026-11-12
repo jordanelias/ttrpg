@@ -10,7 +10,7 @@ Reconciled: 2026-11-12, unification lane U4c (test 9; opened at the tree) — th
 Lands in batch: B28 (`unified/U3_DEPENDENCY_ORDER.md` §3.1), after `14_VERBS_SOCIAL1_D_grievance_and_settlement.md` in the same batch.
 Depends on: `05_SC_obstacle_difficulty_and_modifiers_B.md` and `U5c_SC_one_obstacle_form.md` (B05; `watch` lands in B12 with `14_VERBS_MATERIAL_A`); `16_PESSIMIST_SC_D_an_argument_moves_someone.md` edit 1 (the `argument.held` band) and `16_PESSIMIST_SC_E_an_honest_teller_is_not_marked.md` edit 1 (WITNESS's handling of a hearer who knows better); lane A (B01: persons hold scores); `14_VERBS_SOCIAL1_D` (B28: commit degree); `18_DETERMINISM_task_draw_for_uncontested_verbs.md` items 2, 4 (B07: `conceal` joins `graded_tasks`).
 Lane: SC. Tier (R4 7b.0 (1)): `sonnet` producer, effort `high`; `lie`'s told-deposit confidence `opus`; one `opus` read of the two-arm band tables. Test file: `engine/season/tests/test_vm_s1_c_persuasion.py` (one function per two-arm fold).
-Standing (R4 7b.0 (4)): the pool is the one pool rule (`sigma_leverage.pool_of`, D-U1-08) on the actor's trained score (A-6); talent as levels (A-7); a wound a level against the roll (A-8); the opposition is the counterparty's trained score through `opposed_ob` (A-79, D-U1-02). Draws: `H(w.world_seed, w.tick, <actor id>, "argue.standing")`, `"lie.standing"`, `"conceal.task"` (A-30). **A-81:** `argue`'s Failure deposits `argument.lost` to the hearer; `lie`'s Failure deposits `deceit.exposed` naming the liar; `conceal`'s failed draw `cover.failed` is witnessed by those present.
+Standing (R4 7b.0 (4)): the pool is the one pool rule (`sigma_leverage.pool_of`, D-U1-08) on the actor's skill score (A-6); the governing attribute as levels (A-7); a wound a level against the roll (A-8); the opposition is the counterparty's skill score through `opposed_ob` (A-79, D-U1-02). Draws: `H(w.world_seed, w.tick, <actor id>, "argue.standing")`, `"lie.standing"`, `"conceal.task"` (A-30). **A-81:** `argue`'s Failure deposits `argument.lost` to the hearer; `lie`'s Failure deposits `deceit.exposed` naming the liar; `conceal`'s failed draw `cover.failed` is witnessed by those present.
 
 Batch S1-C of `audits/14_VERBS_SOCIAL1.md` §14. Authored in part by Fable; completed by Opus after the
 Fable usage limit (2026-11-12). Reference only (CLAUDE.md §0.05). Read at `84d2a02`. Needs SC-OB
@@ -20,7 +20,7 @@ two roles).
 ## What it changes in `engine/season/` at runtime
 
 `argue` gains a `commitment` obstacle term (its Partial is `argument.held`: nobody moves, C-15). `lie`
-gains its own capability, an opposing key, a confidence that follows the band, and a Failure that deposits
+gains its own skill, an opposing key, a confidence that follows the band, and a Failure that deposits
 a deed. `conceal` becomes drawn (cover quality by band, a failed draw that is witnessed); it is ranked by
 its alignment cells and stance, as every verb is. Declared hash mover.
 
@@ -30,7 +30,7 @@ its alignment cells and stance, as every verb is. Declared hash mover.
   only on bands whose `writes:` is non-empty); pool 2 for every actor (`aperture 1 0` POOLS ROLLED); a
   hearer's commitments do not enter the roll.
 - `lie`: `[corpus]` "bands that differ: False"; Failure (110 of 138 graded) deposits nothing but
-  `news.untold`; no capability row; the hearer's own firsthand knowledge of the cell does not enter the roll
+  `news.untold`; no skill row; the hearer's own firsthand knowledge of the cell does not enter the roll
   (H-183 counts it against the liar only after the fact).
 - `conceal`: "RANKING EXCLUDES" (no celled axis: chosen by the draw's tie-break, not a reason); cover quality
   does not exist, so an inquiry cannot be harder against a better cover; the mint is certain — a fixed
@@ -54,11 +54,11 @@ its alignment cells and stance, as every verb is. Declared hash mover.
 
 ### 2. `lie`
 
-- Capability `deception` (U1 capability architecture §5; W3-4a: was `deceit`; until `deception`'s
+- Skill `deception` (U1 capability architecture §5; W3-4a: was `deceit`; until `deception`'s
   definition row lands the row carries `capability: none` with a note). The opposing key is `opposed_by:
-  perception` on the `deception` **capability row** (OBS §2: "the capability the verb's capability row
+  perception` on the `deception` **skill row** (OBS §2: "the skill the verb's skill row
   names as `opposed_by`"; `copying.opposed_by: none` is the precedent), read only by the one pool reader's
-  `score()` for the counterparty's `opposition` (DICE's `10_DICE_one_score_two_roles.md`); a capability
+  `score()` for the counterparty's `opposition` (DICE's `10_DICE_one_score_two_roles.md`); a skill
   without it opposes with its own key, as today. No verb-row column is added.
 - Obstacle: `routine` + `opposition` + `regard`. *(W3-4a, C-26: the `contradiction` term and
   `contradiction_ob` are struck: the term opened the hearer's ledger at RESOLVE, which `04` §B.2 forbids; a
@@ -78,7 +78,7 @@ its alignment cells and stance, as every verb is. Declared hash mover.
 
 ### 3. `conceal`
 
-- Drawn, shape (a) (VRES §1 item 4: the band is the quality of one Record; no prize `a cover`): capability
+- Drawn, shape (a) (VRES §1 item 4: the band is the quality of one Record; no prize `a cover`): skill
   `tradecraft`; obstacle `routine` + `watch` (OBS member 22, `watch_step`, landed with
   `14_VERBS_MATERIAL_A`: the persons present at his place less himself, read from presence, never from
   other people's ledgers; W3-4a: was `notoriety`). Row: flat `writes: ["Record.exists"]`, flat `emits:` (the
@@ -98,15 +98,15 @@ its alignment cells and stance, as every verb is. Declared hash mover.
 
 ## Exact edits, by owner, in landing order
 
-1. `rosters.yaml`: capability cells (`lie`'s row `capability: deception` once defined, `conceal:
+1. `rosters.yaml`: skill cells (`lie`'s row `capability: deception` once defined, `conceal:
    tradecraft`; D-U1-07 moves them to the verb rows' `capability:` column at CAP A2/A3); `cover` key
    `quality`; `obstacle_terms` member `commitment` (OBS member 12; this file is its first reader);
    `deed:` cells for `deceit.exposed`; `graded_tasks` gains `conceal`.
 2. `data/fixtures.py`: `commitment_ob`, `lie_confidence_by_band`, `cover_quality_by_band` (each a NUMBER
    row, control named). *(Deleted: `argue_shift_by_band`, `contradiction_ob`, `notoriety_step` — the one
    fixture is `watch_step` — and `conceal_rank_step`.)*
-3. The capability surface (`references/descriptor_registry.yaml: capabilities`, D-U1-07): `deception` gains
-   `opposed_by: perception` (the loader refuses an unknown capability key); `verb_table.yaml`: rows `lie`
+3. The skill surface (`references/descriptor_registry.yaml: capabilities`, D-U1-07): `deception` gains
+   `opposed_by: perception` (the loader refuses an unknown skill key); `verb_table.yaml`: rows `lie`
    (Failure emits) and `conceal` (shape (a), `difficulty: routine`).
 4. *(Deleted: `person_q.argued_pursuits` keeps its band test, C-15.)*
 5. `seam/wrappers/sigma.py::contest_input`: the `commitment` operand (`watch` is already read).

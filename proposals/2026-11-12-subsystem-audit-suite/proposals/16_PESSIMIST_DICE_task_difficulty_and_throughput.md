@@ -4,7 +4,7 @@ Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-07, C-U
 
 Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §2 (A-5, A-6, A-26: (a) restated as the U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "Ob" → "obstacle" in prose (glossary *obstacle*).
 form; the figures of (b)-(d), "What it changes" and the gate are dropped as whole-dice history; gate 2's property kept),
-§7/§7b (test file, tier); U1 D-U1-02 and architecture §4 (the opposing operand is the **trained score**, never the
+§7/§7b (test file, tier); U1 D-U1-02 and architecture §4 (the opposing operand is the **skill score**, never the
 pool, at `opposition_rate`; the stand-in is `opposed_ob(pool_default, opposition_rate)` with the composer's even line
 `even_line(pool_add)` as its own leading term), D-U1-04 (difficulty lives on the verb row, `difficulty_levels`,
 sized by `difficulty_ob`), D-U1-11j (`obstacle_default` deleted; `pool_default` is the one stand-in); U1 glossary
@@ -73,9 +73,9 @@ Exact enumeration through the owner (`band_odds`; `runs/PES_DICE/pure.txt`).
 ## The resolution, decided
 
 **(a) Where nobody opposes, the untrained score does** (ladder step 1: A-26 and A-79 rule the opposing
-operand, the trained score at `opposition_rate` per point, replacing the 2026-08-14 *"score/2"*; U1
+operand, the skill score at `opposition_rate` per point, replacing the 2026-08-14 *"score/2"*; U1
 D-U1-02; and `10_DICE_one_score_two_roles.md` already reads an unauthored *person* as `pool_default`).
-The `opposition` term is never absent: for a person counterparty it is `opposed_ob(his trained score,
+The `opposition` term is never absent: for a person counterparty it is `opposed_ob(his skill score,
 opposition_rate)`; for a row or an act with no person counterparty it is the stand-in
 `opposed_ob(pool_default, opposition_rate)`, through the same one owner (`sigma_leverage.opposed_ob`). In the
 social and task composer the even line `even_line(pool_add)` is its own leading term on every roll (U1

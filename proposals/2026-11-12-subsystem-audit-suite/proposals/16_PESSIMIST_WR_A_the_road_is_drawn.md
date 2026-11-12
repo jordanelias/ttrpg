@@ -63,7 +63,7 @@ through the gate at cells the write matrix already licenses for MATTER (`(Person
 **State sets the odds; the draw sets the outcome.**
 
 - *Pool:* `seam/wrappers/pool.py::faculty(w, traveller, "move")`, the one owner of a person's pool for a
-  verb (`pool_of(score, addends, pool_add, pool_floor)`, A-6; so a capability a designer attaches to `move`
+  verb (`pool_of(score, addends, pool_add, pool_floor)`, A-6; so a skill a designer attaches to `move`
   is read here with no engine edit).
 - *Obstacle:* composed as every task obstacle is (U1 architecture §4: the even line, the difficulty, the
   stand-in for nobody opposite), with `road_base` the difficulty (a `difficulty_levels` member, its size set

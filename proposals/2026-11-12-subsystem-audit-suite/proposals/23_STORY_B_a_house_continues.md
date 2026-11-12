@@ -115,7 +115,7 @@ individuates the child as it individuates any demanded person (`loop/census.py:1
 person rung and its `contain` edge, weight 1), with `born = w.tick` and its `contain` edge at the
 bearer's home [ASSUMPTION: a `reside` edge beside it is added only if `write_matrix.yaml` admits it at
 CENSUS; today's census mints `contain` alone, `:73-78`]; its name from `generate_person` keyed by the
-`person.born` Event id. No pursuits, conviction or capability are written at CENSUS (`04` §A.2 `:179`;
+`person.born` Event id. No pursuits, conviction or skill are written at CENSUS (`04` §A.2 `:179`;
 inv. 5 `:497`): a newborn begins thin and is formed by upbringing acts (`train`, `tend`, `speak` toward a
 minor) and what he witnesses, which is the intended game, not a loss. WITNESS deposits the birth to
 those present; everyone else learns by telling.

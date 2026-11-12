@@ -10,7 +10,7 @@ Reconciled: 2026-11-12, wave 3 lane W3-4b — applied `R4_READ.md` §1.7 (BYZ_B:
 
 ## Status: PROPOSED
 
-**Implementation block (W3-4b; `R4_READ.md` 7b.0).** Lands in batch: **B33**, first (`U3_DEPENDENCY_ORDER.md` §1 item 33). Depends on: `15_INSTITUTIONS_BYZANTINE_A` (B32), `07_SE_treasury_granary_B.md` (B12, stores at seat rungs), `14_VERBS_MATERIAL_B_stores.md` (B12, `requisition`'s and `transfer`'s rows; C3-Y7). Lane tag: FA (edit 5 is a cross-lane request to MATERIAL-B's owner). Tier: `sonnet` producer, effort `high`; one `opus` read of gate 3's renew/mature table. Named test: `engine/season/tests/test_inst_byz_b.py`. Standing sentences: *Pool* — `requisition`'s pool is MATERIAL-B's, the one pool rule on the collector's trained score (A-6, A-7, A-8). *Failure writes* — a `requisition` Failure emits `requisition.resisted`, a deed of the collector's the place's people hold (A-81). *Draw keys* — the draw is MATERIAL-B's, keyed `H(w.world_seed, w.tick, <place id>, "requisition.draw")` (A-30); this file adds none.
+**Implementation block (W3-4b; `R4_READ.md` 7b.0).** Lands in batch: **B33**, first (`U3_DEPENDENCY_ORDER.md` §1 item 33). Depends on: `15_INSTITUTIONS_BYZANTINE_A` (B32), `07_SE_treasury_granary_B.md` (B12, stores at seat rungs), `14_VERBS_MATERIAL_B_stores.md` (B12, `requisition`'s and `transfer`'s rows; C3-Y7). Lane tag: FA (edit 5 is a cross-lane request to MATERIAL-B's owner). Tier: `sonnet` producer, effort `high`; one `opus` read of gate 3's renew/mature table. Named test: `engine/season/tests/test_inst_byz_b.py`. Standing sentences: *Pool* — `requisition`'s pool is MATERIAL-B's, the one pool rule on the collector's skill score (A-6, A-7, A-8). *Failure writes* — a `requisition` Failure emits `requisition.resisted`, a deed of the collector's the place's people hold (A-81). *Draw keys* — the draw is MATERIAL-B's, keyed `H(w.world_seed, w.tick, <place id>, "requisition.draw")` (A-30); this file adds none.
 
 Source: `audits/15_INSTITUTIONS_BYZANTINE.md` §2.2, §2.5, §4, §6.3 item 4, §7.0, §10. Batch B. Depends
 on proposal A (`dignity:`), on `07_SE_treasury_granary_B.md` (stores that exist at seat rungs) and on
@@ -119,7 +119,7 @@ added to its reader, one line, in the same commit.]` `loop/matter.py` is not edi
 - Failure moves nothing and emits `requisition.resisted`, which the place's people hold as a deed of the
   collector's. Every band is recoverable: he may collect again, send force, or remit.
 - Withdrawn from this edit's earlier text (this file's first `Reconciled:` line): the hunger band as
-  `stakes`, the `copying` capability row, the `altonian_civics` step, and `procedure_draws`.
+  `stakes`, the `copying` skill row, the `altonian_civics` step, and `procedure_draws`.
 
 ## Gate (execution artifacts)
 

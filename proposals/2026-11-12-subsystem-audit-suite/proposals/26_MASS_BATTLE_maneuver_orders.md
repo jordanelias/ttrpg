@@ -185,4 +185,4 @@ doctrine's name.
 ## Cost class
 
 Small build, after `04_MB_manager_battle_one_resolver.md` §2 and the bouts of
-`26_MASS_BATTLE_cell_scale_and_time.md`. The Command input is `27_MB_A`'s `command` capability (D-U1-11g).
+`26_MASS_BATTLE_cell_scale_and_time.md`. The Command input is `27_MB_A`'s `command` skill (D-U1-11g).

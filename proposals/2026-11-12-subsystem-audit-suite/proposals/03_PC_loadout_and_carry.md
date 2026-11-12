@@ -9,7 +9,7 @@ Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `U1_OWNERS_AN
 
 ## Status: PROPOSED
 
-Lane: PC, with MB (troop loadouts), SE (stores as arms) and CHAR (the capability surface). Source:
+Lane: PC, with MB (troop loadouts), SE (stores as arms) and CHAR (the skill surface). Source:
 Jordan's direction of 2026-11-12 (`AUDIT_BRIEF.md`, "Mass battle: the cell-based approach and the
 weapon-carry trade-off"); `audits/03_PC_audit.md` §10 and R-PC-26. Read at `601e715`. Reference only
 (CLAUDE.md §0.05); not ratified by being written. The mass-battle side was read by search only

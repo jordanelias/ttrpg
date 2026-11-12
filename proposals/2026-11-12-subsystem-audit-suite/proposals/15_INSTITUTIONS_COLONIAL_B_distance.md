@@ -16,7 +16,7 @@ Source: `audits/15_INSTITUTIONS_COLONIAL.md` §3, §8, §12 batch C-2, §13 (M-A
 `audits/12_ARCS_adjudication.md` rank 13 and §6 row 12, "none written"). Depends on and does not redo:
 SC-B (`proposals/05_SC_obstacle_difficulty_and_modifiers_B.md`, the obstacle form and its closed
 `obstacle_terms` roster); CR-29 (`workplans/valoria_master_workplan_v11_part4.md:118-129`, the reach
-channel); FA-P6 (`06_FA_office_capabilities.md`, how a capability is added); the MATERIAL and BINDING verb
+channel); FA-P6 (`06_FA_office_capabilities.md`, how a skill is added); the MATERIAL and BINDING verb
 lanes for the final row text of `requisition`, `transfer`, `seize` and `issue`. Nothing is ratified by
 being written.
 
@@ -80,7 +80,7 @@ is `14_VERBS_BINDING_D_orders.md`'s one roll. This file supplies to each the obs
 (§1); what it once called `oath_step` is the `obligation` leverage source (VENICE-A as reconciled). The
 earlier `issue` delivery outcomes (terms withheld at Failure) are superseded by A-21: a decree's terms
 reach whoever learns of its issue; `force` bears on the answer's obstacle, not on whether the terms are
-known (`14_VERBS_BINDING_D` as reconciled). The `stewardship` capability rows are withdrawn with the
+known (`14_VERBS_BINDING_D` as reconciled). The `stewardship` skill rows are withdrawn with the
 rows. A victor on another's land chooses to seize, occupy or withdraw (A-66); a seizure carries the
 place's seats (`U5d_FA_land_and_seats_pass_on_a_won_march.md`).
 

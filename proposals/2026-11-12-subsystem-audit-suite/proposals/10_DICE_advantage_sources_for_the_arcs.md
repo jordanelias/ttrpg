@@ -30,7 +30,7 @@ bytes.
 2. **In computed play the channel sums to zero.** Realm, seed 0, 4 seasons: 284 graded rolls, leverage
    0.0 on all 284 (audit §12, E-02). The chooser forms `effort` only where a believed chance prices it
    (`decision/choose.py::settle_efforts`), and a believed opposition for a person subject is `None`
-   because nothing deposits a capability claim (`sigma.py:234-238`).
+   because nothing deposits a skill claim (`sigma.py:234-238`).
 3. **The provided arcs ask for exactly this channel and get none of it.** Of 973 `need:` rows in
    `engine/season/cases/`, the ones that turn on a modifier to a roll include (audit §13): a wound taken
    at personal scale persisting as a penalty on the same person's later rolls at a larger scale (ARC-53,

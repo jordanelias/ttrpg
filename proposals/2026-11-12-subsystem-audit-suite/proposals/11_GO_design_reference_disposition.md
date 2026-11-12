@@ -53,7 +53,7 @@ ratified and decide it).
 
 | from | rule | how the contract meets it |
 |---|---|---|
-| UI v4/v4.1 Oath II, test 1 | no control for a capability the character lacks: absent, not greyed | `opening_set` forms only what the person may attempt; a `WithheldRow` exists only for an own-state conjunct |
+| UI v4/v4.1 Oath II, test 1 | no control for a skill the character lacks: absent, not greyed | `opening_set` forms only what the person may attempt; a `WithheldRow` exists only for an own-state conjunct |
 | Oath II, test 3 | nothing the character's perception cannot render | every person-side reading takes no `World`; `account` shows the outcome of his own act only as the firsthand claim he holds (C3-L4), and withholds a value he does not hold |
 | Oath I | the world stays present at every zoom | the `Situation` is the same record inside and outside a suspended scene; a scene adds a turn view and removes nothing |
 | Oath III | a change is shown before it is labelled | a presentation is triggered by an `AccountRow` (C3-L4: no `ReceiptRow`), so it can only be about something he has perceived |

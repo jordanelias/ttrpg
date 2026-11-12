@@ -88,7 +88,7 @@ today, but only because the tier is unreachable; the prototype shows it has work
 | ripostes / binds / grapples per exchange | 14.7% / 5.7% / 18.1% | 16.4% / 6.0% / 27.5% |
 | season-default mirror, A felled (control seeds) | 49.9% (52.1%) | 50.4% (50.1%) |
 | turns, wounding blows, lead-change share | 3.36, 3.18, 34.1% | 3.25, 3.17, 34.3% |
-| trained score 3 against 2, A felled | 34.8% | 37.6% |
+| skill score 3 against 2, A felled | 34.8% | 37.6% |
 | longsword against arming, A felled | 19.2% | 19.8% |
 | rapier against longsword, unarmoured | 52.5% | 52.4% |
 | **A's depth forced to 3.9 / 3.0 / 2.3, A felled** | **45.3 / 49.0 / 54.4** | **52.0 / 47.6 / 51.5** |

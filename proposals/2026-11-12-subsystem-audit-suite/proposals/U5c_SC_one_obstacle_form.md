@@ -89,7 +89,7 @@ the roster's shape.
 | which host function reads each term | `engine/season/seam/wrappers/sigma.py::OBSTACLE_TERMS` (member → one function; refused at import for a member with no function or a function with no member, as `ADVANTAGE_SOURCES` is) |
 | each term's size | one fixture per term in `engine/season/data/fixtures.py`, control 0, with a NUMBER row in `hole_register.yaml` |
 | the ruled divisor | `engine/dice_engine/sigma_leverage.py::opposed_ob` (DICE map §G edit 5), shared with combat |
-| the score a person rolls and opposes with | `engine/season/seam/wrappers/pool.py::score`, the **trained score** (`max(pool_default, held rank)`; no addend, no seat, no attribute; A-79, D-U1-02) (`10_DICE_one_score_two_roles.md` edit A) |
+| the score a person rolls and opposes with | `engine/season/seam/wrappers/pool.py::score`, the **skill score** (`max(pool_default, held rank)`; no addend, no seat, no attribute; A-79, D-U1-02) (`10_DICE_one_score_two_roles.md` edit A) |
 | the set of leverage sources | `rosters.yaml: advantage_sources` and `sigma.py::ADVANTAGE_SOURCES` (existing) |
 
 The dataclass carries the terms as one field, not one field per term:
@@ -109,7 +109,7 @@ under the names U1 fixes (C3-A3 (2); D-U1-04).
 
 ```
 hard   = even + difficulty + opposed_ob(opposition if a person opposes else pool_default, opposition_rate) + Σ raw_i × step_i
-         # even = sigma_leverage.even_line(pool_add) = MU_PER_DIE × pool_add; opposition is the trained score (A-79)
+         # even = sigma_leverage.even_line(pool_add) = MU_PER_DIE × pool_add; opposition is the skill score (A-79)
 ob     = max(OB_MIN, min(hard, cap(pool)))            # the existing ceiling rule (H-213), then the floor
 terms  = ((name, value), …) in roster order, + ("ceiling", −clip) and ("floor", +lift) where a bound acted
 ```
@@ -118,10 +118,10 @@ Every `raw_i × step_i` is non-negative; the module raises `ValueError` on a neg
 the obstacle). The values in `terms` sum exactly to `ob`.
 
 - **`opposition` is never absent** (PES-DICE (a)). A person counterparty opposes with `score()` of the
-  capability the verb's capability row names as `opposed_by`, else the same capability. Where no person
-  stands opposite (a `DocketItem`, a Record, a site, a task), where the capability row's `opposed_by` is the
+  skill the verb's skill row names as `opposed_by`, else the same skill. Where no person
+  stands opposite (a `DocketItem`, a Record, a site, a task), where the skill row's `opposed_by` is the
   explicit `none`, and for a self-plea, the term is `opposed_ob(pool_default)` (1.0 at the shipped
-  fixture). `copying.opposed_by: none` is one cell on the capability surface: a hearer's skill at
+  fixture). `copying.opposed_by: none` is one cell on the skill surface: a hearer's skill at
   reproduction is not resistance to being told (PES-SC res. 3). No verb is named in code.
 - **`obstacle_default` is deleted** with its fixture and H-127's row. `10_DICE_one_score_two_roles.md`'s
   `opposition_fallback` fixture is not added: its `stand_in` arm is this form's control (§4, commit 1a),
@@ -141,7 +141,7 @@ the obstacle). The values in `terms` sum exactly to `ob`.
 | 6 | `rank_gap` | how far the person acted on or for stands above the actor's exercised seat | the gate's rank reader over `rung_kinds`; `rank_step` | governance and person-to-person acts across rank | VB-C (as `standing`); S1-D; S2-B |
 | 7 | `regard` | the counterparty's hostility to the actor | `person_q.stance_toward(counterparty, actor)`, clamped at `STANCE_MAX`, hostile half; `regard_step` | one person counterparty, no audience | SC-B; T13 T3 |
 | 8 | `reception` | the audience's hostility | `world_q.reception` as plan SC-02 re-sources it, over the audience the prize row names (`heard_by`), hostile half; `reception_gain` | audience-heard acts; never with `regard` | SC-B; VB-A, -C, -E |
-| 9 | `capability` | a circumstance that punishes a want | the `circumstance` rows of the capability uses table, summed | per row `when:` | DICE map |
+| 9 | `capability` | a circumstance that punishes a want | the `circumstance` rows of the skill uses table, summed | per row `when:` | DICE map |
 | 10 | `plea` | an inapt speech's price | CR-62's `plea_step` | `speak` | SC-B |
 | 11 | `first_heard` | answering an item entered at Overwhelming | the case-file stage's `first` mark; `first_heard_ob` | an answering `speak` or move | ADM |
 | 12 | `commitment` | the hearer's live commit to the contrary, and the hearer's own live `owed_to` edges toward the other party of the heard matter (the hostile half of `obligation`) | his `commit` Tenures × `degree_weight`; his `owed_to` edges toward the other party; `commitment_ob` per unit | `argue`; any contested act with a person counterparty where the hearer owes the other party (`15_INSTITUTIONS_VENICE_A` §"The quantity and its two channels") | S1-C §1; VEN-A |
@@ -200,7 +200,7 @@ believer's own sources and leaves the other side's `None` without a claim.
 | step | lands | hash |
 |---|---|---|
 | 0 | `10_DICE_one_score_two_roles.md` edits A and C (`score()`; the four `verb_capability` rows, with `lie: deception` and `determine: law` once `05_SC_hearing_capabilities.md`'s rows exist); DICE map §G edit 5 (`opposed_ob`) | equal (no caller changes) |
-| 1a | this form at the control arm: the roster with `even` (at `pool_add` 0, i.e. 0) and members 1 and 2 only; the `difficulty:` column with roster `difficulty_levels`; `difficulty_ob` 0 / 1 / 2 / 3; lane A's `rosters.yaml: task_difficulty`, `data/verbs.py::_load_task_difficulty` and `Fixtures obstacle_model`'s `task` arm deleted, each of its rows becoming `difficulty: routine` (D-U1-04); **every one of the ten rolled rows `routine`** (`tell`, `lie`, `argue`, `speak`, `determine`, `arrest`, `interrogate`, `research`, `examine`, `surveil`), so each composes 1 + 1.0 = 2.0; `obstacle_default` deleted; `Margin.terms` | moves only for an act whose counterparty holds a score in a capability the verb reads (none observed at seeds 0 and 1: the held capabilities are `inquiry`, which no person-subject row reads) |
+| 1a | this form at the control arm: the roster with `even` (at `pool_add` 0, i.e. 0) and members 1 and 2 only; the `difficulty:` column with roster `difficulty_levels`; `difficulty_ob` 0 / 1 / 2 / 3; lane A's `rosters.yaml: task_difficulty`, `data/verbs.py::_load_task_difficulty` and `Fixtures obstacle_model`'s `task` arm deleted, each of its rows becoming `difficulty: routine` (D-U1-04); **every one of the ten rolled rows `routine`** (`tell`, `lie`, `argue`, `speak`, `determine`, `arrest`, `interrogate`, `research`, `examine`, `surveil`), so each composes 1 + 1.0 = 2.0; `obstacle_default` deleted; `Margin.terms` | moves only for an act whose counterparty holds a score in a skill the verb reads (none observed at seeds 0 and 1: the held skills are `inquiry`, which no person-subject row reads) |
 | 1b | PES-A edits 1 to 5 (the favourable room as `proofs` and `favour` levels; the hostile half stays the `reception` term) | declared mover: every `speak` that rolled with `proofs > 0` or `reception > 0` (seven rolls in four seed-seasons, 13 §3.2) |
 | 2 | SC-P1 as reconciled: `margin_endings` values `[pool, ob, net, margin, terms, levels, leverage]` | declared mover (every Event of a social roll gains the tuple) |
 | 3 | T13 commit 1 (members 3, 5, 7 with every step at 0, every `standard` `plain`, `standing_dice` 0, admission off) | equal to step 2 |
@@ -247,7 +247,7 @@ at HEAD.
    on the re-centred sampler, asserting four distinct values with `!=`, no `approx`), expected: four
    strictly increasing Success-or-better shares for proofs 0, 1, 2, 4.
 3. Step 1a, `build_realm(0)` and `(1)`, two seasons: a printed count of rolled acts whose obstacle differs
-   from the base commit, each with its terms; expected zero, or only acts against a holder of the capability the verb reads.
+   from the base commit, each with its terms; expected zero, or only acts against a holder of the skill the verb reads.
    Named test: `test_obstacle_form.py::test_step_1a_composes_todays_obstacle_at_control`.
 4. Step 5: CAL's test green; the realm reading (the absent `runs/SC_INT/realm_tap.py`, written first as
    `engine/season/tests/test_sc_calibration_targets.py::test_every_rolled_verb_with_five_rolls_shows_more_than_two_obstacles`,

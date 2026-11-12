@@ -1,4 +1,4 @@
-# U1 — calls for Jordan from the owners, vocabulary and capability lane
+# U1 — calls for Jordan from the owners, vocabulary and skill lane
 
 ## Status: REFERENCE (a list for Jordan; resolves nothing at runtime, CLAUDE.md §0.05; not canon)
 
@@ -22,7 +22,7 @@ each is one or two edits of data to reverse.
 | **An unauthored attribute is average** (D-U1-04) | A person whose sheet does not name an attribute reads as the middle of the 1–7 scale: it neither helps nor hurts his rolls. | Store a value for everyone (the implementation lane ships 2 on every attribute today, which makes every unauthored person below average once attributes act as edges). | set a stored default |
 | **The year has named seasons** (D-U1-10) | The year is four seasons (your ED-IN-0332), named spring, summer, autumn, winter; the weather, terms, ages and the five-year prologue all count on it. | — (the names are the proposal's `[ASSUMPTION]`; the length is your ruling) | rename the four members |
 
-**What the suite assumes meanwhile.** Every person holds the untrained score and average talent until the cast's
+**What the suite assumes meanwhile.** Every person holds the untrained score and average attributes until the cast's
 scores are authored (your content, with the character content pass); every rolled act is a `routine` task until
 per-task difficulties are authored. So the obstacle still reads the same for nearly every roll in the shipped
 realm (implementation lane A measured 998 of 1,106 rolls at 2.0): the mechanism is in place, and the variety waits

@@ -64,7 +64,7 @@ Each is a draw keyed by its purpose (A-30; `04` PART D 35): the rally `H(seed, t
 owner the module receives on its input; no generator is threaded. Neither is a fixed function of state
 (`AUDIT_BRIEF.md`, the standing rule).
 
-1. **Rally.** The routed side's commander makes a Command draw on his `CommandRecord` (trained `command` as
+1. **Rally.** The routed side's commander makes a Command draw on his `CommandRecord` (`command` skill score as
    dice, Presence and Reason as levels; its obstacle a step over the one task obstacle, with the armour and
    mounts step of `26_MASS_BATTLE_rout_pursuit_and_giving_ground.md` (1): `27_MB_A_command_and_the_obedience_draw.md`
    §6), on the one sampler (A-5). A side whose general is out does not roll. Graded on the module's

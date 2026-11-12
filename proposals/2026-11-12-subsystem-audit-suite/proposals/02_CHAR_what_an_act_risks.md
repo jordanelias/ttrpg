@@ -79,10 +79,10 @@ risk(p, c) = − risk_gain · exposed(c) · (1 − chance(p, c)) · (1 + bands_b
   AR-44 (*"the capacity to tolerate harm and strain"*) and the adjudication's §2.2 (iv) (*"nerve is
   Spirit's"*).
 
-**Appetite is not in this term and is not a capability.** A stored per-person appetite for risk
+**Appetite is not in this term and is not a skill.** A stored per-person appetite for risk
 (ED-IN-0304) passes the personality test (no pole always wins) and is CL-PERSON's; when M40 answers
 where it is carried, it multiplies `risk` at this site and nowhere else, so there is one ladder for
-the quantity. This proposal supplies the term it would scale and the half that is capability.
+the quantity. This proposal supplies the term it would scale and the half that is skill.
 
 ## Exact edits, by file and owner
 

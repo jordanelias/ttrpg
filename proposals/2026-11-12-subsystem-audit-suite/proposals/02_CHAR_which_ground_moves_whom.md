@@ -4,6 +4,8 @@ Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-08) —
 
 Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.2 row (VIOLATES, three of four keys), §2 row polarity, §7, §7b-6, §7b-17; `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-01, ledger C-12; `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §2, §3 items 3 and 6; `unified/U3_CONFLICT_LEDGER.md` §9; `unified/U3_DEPENDENCY_ORDER.md` §4.1 row 40). Layer 1 rewrite (`04` §B.2 F8: the fold may ask the actor's own ledger and no other): `consequence_held` reads the **arguer's** own ledger and the hearer's `Person.pursuits` (a field), `regard_at_least` reads `person_q.stance_toward(hearer, arguer)` (the hearer's stance rows, not his ledger; C-03), and `speaker_over_subject` is removed — a seat reaches a roll only as the `office` level and `rank_gap` and no `edge` row may read a seat (D-U1-01) — so `moved_by_authority` keeps only its creed half, `creed_committed` `[ASSUMPTION]`. The four rows carry the head's polarity `side: subject, against: false`; the body's polarity paragraph and the conditional on evidence are deleted (`moved_by_evidence` stays: evidence weighing in an argument is built, `05_SC_evidence_and_rebuttal_B.md`, ladder step 4). SC-P7/SC-P8 citations read their successors. Named test, lands-it and tier added.
 
+Reconciled: 2026-11-12, A-98 vocabulary lane (A-98 (4); `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §2a): the four traits are rows of the trait roster `descriptor_registry.yaml: traits`, not of the skill block (edit 1); edit 4's `susceptibility_of` and its `rosters.yaml: susceptibilities` roster are replaced by `data/cast.py::traits_of` reading the roster's `seated_by`, and a trait is held on `Person.traits`, never in `Person.capability` `[ASSUMPTION, A-98 (4)]`; "capability" in prose → skill.
+
 **Lands in batch:** B24 (with `cites`). **Depends on:** `01_CORE_capability_authoring_surface.md` and `02_CHAR_capability_uses_table.md` (B04; the block and the table), `U5a_capability_home_and_two_inputs.md` Part B (B05; the `edge` reader's signed two-list form), `05_SC_evidence_and_rebuttal_B.md` (B24; `cites`), `17_CENSUS_C1A_02_wires_and_corrections.md` W4's `which_ground` half (B24 split, U3 §4.1 row 40).
 
 ## Status: PROPOSED
@@ -12,7 +14,7 @@ Written by the CHAR audit lane, addendum B (`audits/02_CHAR_audit_addendum_B.md`
 property P5, B6.2 rows 3 and 7). Ratifies nothing. Reference under `CLAUDE.md` §0.05. It composes on
 U1 §3 (the `edge` role, the `capability_uses` table, the generic `capability` advantage source; adopted from
 `10_DICE_capability_axiom_map.md`), on `05_SC_capability_surface.md` as reconciled (a trait as an `edge`
-row) and on `05_SC_evidence_and_rebuttal_B.md` (cited items); it adds no capability system and no field on
+row) and on `05_SC_evidence_and_rebuttal_B.md` (cited items); it adds no skill system and no field on
 `Person`.
 
 ## What this changes in `engine/season/` at runtime
@@ -57,14 +59,15 @@ the arguer's own ledger and the hearer's interior fields.
 
 ## Exact edits, by file and owner
 
-1. **The four traits** (rows of `references/descriptor_registry.yaml: capabilities`, U1 §2; `gloss`
-   required, per `02_CHAR_capability_definitions.md`):
+1. **The four traits** (rows of the trait roster `references/descriptor_registry.yaml: traits`, U1 §2a, A-98 (4):
+   a trait is not a skill; `gloss` required, per `02_CHAR_capability_definitions.md`; the roster's `scale: [0, 1]`
+   is said once on the block):
 
    ```yaml
-   moved_by_evidence:    {kind: trait, scale: [0, 1], untrained: none, grows_by: [fixed], gloss: "Yields to a case that cites something he can check."}
-   moved_by_consequence: {kind: trait, scale: [0, 1], untrained: none, grows_by: [fixed], gloss: "Yields when shown the harm his own position has already done."}
-   moved_by_authority:   {kind: trait, scale: [0, 1], untrained: none, grows_by: [fixed], gloss: "Yields to one who stands over him or speaks for his creed."}
-   moved_by_solidarity:  {kind: trait, scale: [0, 1], untrained: none, grows_by: [fixed], gloss: "Yields to one he holds dear."}
+   moved_by_evidence:    {seated_by: evidence,    gloss: "Yields to a case that cites something he can check."}
+   moved_by_consequence: {seated_by: consequence, gloss: "Yields when shown the harm his own position has already done."}
+   moved_by_authority:   {seated_by: authority,   gloss: "Yields to one who stands over him or speaks for his creed."}
+   moved_by_solidarity:  {seated_by: solidarity,  gloss: "Yields to one he holds dear."}
    ```
 
 2. **Four `when` keys** (new members of the uses table's closed `when` roster; one host-side function
@@ -74,7 +77,7 @@ the arguer's own ledger and the hearer's interior fields.
    | key | holds when | reads |
    |---|---|---|
    | `cites: <proofs member>` | the act's payload cites at least one held item of that kind | the act's `cites` operand (`05_SC_evidence_and_rebuttal_B.md`; FI E-1, the kind derived by `person_q.proof_kind`); `False` until `cites` lands (the row is then inert, not wrong) |
-   | `consequence_held: true` | the **arguer's** own ledger holds a deed claim about the argued Proposition's subject that the **hearer's** `Person.pursuits` score negative | `queries/person_q.py::deeds_judged` over the arguer's ledger, scored with the hearer's projected pursuits (a field, as the pool reads the subject's training) |
+   | `consequence_held: true` | the **arguer's** own ledger holds a deed claim about the argued Proposition's subject that the **hearer's** `Person.pursuits` score negative | `queries/person_q.py::deeds_judged` over the arguer's ledger, scored with the hearer's projected pursuits (a field, as the pool reads the subject's skill score) |
    | `creed_committed: true` | the argued Proposition is a creed Proposition the hearer holds a live `commit` edge to `[ASSUMPTION: the creed half of the design's Authority, kept; basis: the hearer's live Tenures are interior fields OBS §2 member 12 already reads]` | the hearer's live `commit` edges |
    | `regard_at_least: <n>` | the hearer's stance toward the arguer is at least `n` stance steps | `queries/person_q.py::stance_toward(hearer, arguer)`, clamped at `STANCE_MAX` (C-03) |
 
@@ -97,10 +100,11 @@ the arguer's own ledger and the hearer's interior fields.
    reading (b) observes the direction.
 
 4. **The character's side** (`engine/season/data/cast.py`, owner of the cast loader). A function
-   `susceptibility_of(r)` maps the row's `resonant_style:` value (checked against a closed roster
-   `rosters.yaml: susceptibilities: [evidence, consequence, authority, solidarity]`, refused
-   otherwise) to `{moved_by_<style>: 1}`; the builder merges it into `Person.capability` as it merges
-   a lifepath's keys. The registry key keeps its name and its eighteen values. A second style per
+   `traits_of(r)` (U1 §2a step 4, A-98 (4); it replaces this edit's `susceptibility_of` and its roster
+   `rosters.yaml: susceptibilities`, which is not created) maps the row's `resonant_style:` value through the
+   trait roster's `seated_by` (refused when no trait row names it) to `frozenset({moved_by_<style>})`; the
+   builder sets `Person.traits` from it and never writes a trait into `Person.capability`, which holds skills
+   only. The registry key keeps its name and its eighteen values. A second style per
    person (the design has one) is content: the key may become a list.
 
 5. **Not built here: the arguer's own knowledge of it.** `View.odds` computes a believed chance from

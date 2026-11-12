@@ -44,7 +44,7 @@ tuples in the same form, exported in the typed export's `attributes` section:
 | slot family | members (as the engine reads them today) | read at | scale |
 |---|---|---|---|
 | `attr` | `strength, agi, end, att, spirit, focus` | `attributes.SPEC`, by `registry_key` | registry's 1 to 7 |
-| `pool` | `scores`, `addends` *(Reconciled, A-7, D-U1-08:)* the party's **trained score** (training gives dice; never the larger of attribute and key) and his registered pool addends, carried raw beside `pool_add`, `pool_floor`, `opposition_rate`. The opponent's obstacle is `opposed_ob(the defender's trained score, opposition_rate)`, the one rule (`29_DICE_one_opposed_rule_form_and_tuning.md`, A-79) | `core.py:54-58`, `:102-124` | a real number; the pool is `sigma_leverage.pool_of(score, addends, pool_add, pool_floor)` = `max(pool_floor, score + addends + pool_add)`, unrounded |
+| `pool` | `scores`, `addends` *(Reconciled, A-7, D-U1-08:)* the party's **skill score** (the skill score gives dice; never the larger of attribute and key) and his registered pool addends, carried raw beside `pool_add`, `pool_floor`, `opposition_rate`. The opponent's obstacle is `opposed_ob(the defender's skill score, opposition_rate)`, the one rule (`29_DICE_one_opposed_rule_form_and_tuning.md`, A-79) | `core.py:54-58`, `:102-124` | a real number; the pool is `sigma_leverage.pool_of(score, addends, pool_add, pool_floor)` = `max(pool_floor, score + addends + pool_add)`, unrounded |
 | `axis` (was `skill`; renamed, U1 glossary: these are combat axes, not U1 skills) | `balance, parry, dodge, bind` *(Reconciled, R-PC-43: `technique` and `grab` measured inside the interval, 50.1% and 47.6% at +1, and are withheld from the slot family until a sweep shows otherwise)*; the engine's read sites for all six stand | `combat_systems.py:198`, `:345-362`, `:1060`; `contact.py:46` | additive σ bonus, 0 untrained |
 | `lever` | `visual, precommit, tactile, tempo, balance, measure, leverage, counter_select, counter_success, anti_overcommit, edge_read, spine_press, edge_grab, choke_control, facing_regime` | `ability_primitives.py:188-218` and its callers | a factor (`*`) or a bonus (`+`) |
 | `temper` | `disp` (the aggression axis) | `combat_systems.py:190-193` | 1 to 7, 4 neutral |
@@ -52,7 +52,7 @@ tuples in the same form, exported in the typed export's `attributes` section:
 
 `PersonalCombatInput` (see `03_PC_typed_outcome_one_door.md` Part B) carries, per party, a mapping per
 family. The module takes **numbers per slot**, never the name of a skill, technique or tradition: the
-host composes a person's capabilities into slot values by the authoring surface's rule. That makes
+host composes a person's skills into slot values by the authoring surface's rule. That makes
 `ABILITIES`, `TRADITION_KIT` and the tradition gate (`ability_primitives.py:30-185`) authoring data and
 host-side composition, not module code; the module keeps `ability_factor`'s clamp and the lever maths.
 
@@ -129,7 +129,7 @@ outcome without appearing in the record.
 - **Order of edits.** Part A (slot tuples in `modules/combat/attributes.py`, exported; `PersonalCombatInput`
   per-family mappings) → Part C (`unarmed` record; generated artifacts re-derived by their generators) → Part B
   (roster rows, one kind per census row) → Part D (`lifepath_templates`).
-- **Call sites.** The host fills the slots in `seam/wrappers/combat.py::combat_input` from the capability
+- **Call sites.** The host fills the slots in `seam/wrappers/combat.py::combat_input` from the skill
   surface (`U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §8 reader interface); `modules/combat/fight.py:44-52`
   reads them; `queries/world_q.py::kit_of` returns `unarmed` (Part C).
 - **Tests.** `tests/valoria/test_combat_invariants.py` (existing; Part C must pass it);
@@ -147,7 +147,7 @@ outcome without appearing in the record.
 - N: from above, R-09 and R-06 cannot read for combat while every fighter is the default; from below,
   about 220 exported coefficients have nothing to act on; laterally, mass battle's troop quality
   wants the same equipment model (Jordan, 2026-10-16, statement 1 in `research/by_lane/README.md`).
-- R: customisation of a character becomes real (kit, training, body); the no-player half gains
+- R: customisation of a character becomes real (kit, skills, body); the no-player half gains
   mismatched fights, which is where upsets and reputations come from.
 - S: one slot interface for the duel, the grid round and a duel inside a field; one equipment roster.
 - E, last: Part A adds two tuples and four record fields and removes three module-side tables from the

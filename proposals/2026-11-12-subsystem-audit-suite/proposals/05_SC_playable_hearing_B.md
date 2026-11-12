@@ -67,8 +67,8 @@ class Exhibit:                 # one item on the case file; defined here, cited 
 @dataclass(frozen=True)
 class Speaker:                 # a party or an advocate
     id: str; side: str
-    pools: tuple               # ((capability id, dice), ...) from the one pool reader
-    score: float               # his trained score, which the other side opposes at opposition_rate (A-26, A-79)
+    pools: tuple               # ((skill id, dice), ...) from the one pool reader
+    score: float               # his skill score, which the other side opposes at opposition_rate (A-26, A-79)
     effort: int                # exchanges he will spend: his own act's `effort`
     levels: tuple              # (for, against): named sigma levels from the advantage roster
 
@@ -183,7 +183,7 @@ NPC does in the room is a draw whose odds his interior sets, never a fixed funct
    `composition_roles`: `social_contest.hearing`, `entry: verb_call`.
 6. `engine/season/seam/wrappers/sigma.py`: `hearing_input(w, act)` (the host builder: the case file's
    stages → exhibits; `world_q.judging_set` → seats, each with its seat row's `modifier:`; `faculty` and
-   `_opposition_of` (the trained score) → speakers; SC-02's commit term → `lean`; the engagement read of
+   `_opposition_of` (the skill score) → speakers; SC-02's commit term → `lean`; the engagement read of
    `28_CORE_scene_access_A` → which attendees are present) and a `@provider("contest", …)` path that calls the entry with the dispatching
    decider. It reads the case file, seats and interiors; no ledger (F8).
 7. `engine/season/loop/effects_information.py::_eff_determine`: under its own token, append the

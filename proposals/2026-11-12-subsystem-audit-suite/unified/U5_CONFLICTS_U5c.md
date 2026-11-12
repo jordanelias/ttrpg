@@ -76,7 +76,7 @@ Proposal paths are relative to `proposals/`. Abbreviations: **OBS** `U5c_SC_one_
 
 | id | documents | the contradiction | decision | by | edit to the losing document |
 |---|---|---|---|---|---|
-| C-26 | `14_VERBS_SOCIAL1_C`; `05_SC_hearing_capabilities.md`; `16_PESSIMIST_SC_E` | `lie`'s capability name; a `contradiction` term and a `notoriety` term that open other people's ledgers | capability `deception`; `contradiction` dropped (done at WITNESS); `notoriety` is `watch`, read from presence | step 3 (`04` §B.2) | head line |
+| C-26 | `14_VERBS_SOCIAL1_C`; `05_SC_hearing_capabilities.md`; `16_PESSIMIST_SC_E` | `lie`'s skill name; a `contradiction` term and a `notoriety` term that open other people's ledgers | skill `deception`; `contradiction` dropped (done at WITNESS); `notoriety` is `watch`, read from presence | step 3 (`04` §B.2) | head line |
 | C-27 | `14_VERBS_SOCIAL1_D` §3 | a MATTER write of `Person.stance` | MATTER emits `challenge.declined`; the challenger's satisfaction is his own `forgive` | step 3 (`04` §A.2, the `loop/matter` row, and AX-3: a person's stance is an ACTS row written at RESOLVE; the MATTER token does not open it) | head line |
 | C-28 | `14_VERBS_SOCIAL2_A` edit 2; `audits/14_VERBS_MATERIAL.md` §17.2 | the list of bare-`Record` rows omits `research` | `_stamped` carries both pairs | step 5 | head line |
 | C-30 | `14_VERBS_SOCIAL2_B` §4; the ruled `members_by_admission` | admission to a seat's service: certain, or a draw against the seat | **A draw against the seat** (decision register D-31, taken A under Jordan's A-24). This lane first disputed it; the answer reverses that | Jordan (A-24) | head line; VRES §6 |

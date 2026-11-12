@@ -69,8 +69,8 @@ hatred, or hatred and no grievance, forms nothing.
 
 **Getting to him is a draw.** Before the scene, where the target's place has a guard
 (`world_q.guard_weight(w, rung) > 0`, IN-60), the attacker makes one graded roll through the task
-route (`18_DETERMINISM_task_draw_for_uncontested_verbs.md`): pool his own covert capability (the
-capability `conceal` reads, through the one pool rule); obstacle composed by the one obstacle form
+route (`18_DETERMINISM_task_draw_for_uncontested_verbs.md`): pool his own covert skill (the
+skill `conceal` reads, through the one pool rule); obstacle composed by the one obstacle form
 (`U5c_SC_one_obstacle_form.md` §2), never a private sum: member 1 `difficulty` at the difficulty level
 `guard_ob` (a member of `rosters.yaml: difficulty_levels`, D-U1-04) and member 22 `watch` in its `guard`
 reading, `world_q.guard_weight(w, rung) × watch_step` at the target's place (the reading

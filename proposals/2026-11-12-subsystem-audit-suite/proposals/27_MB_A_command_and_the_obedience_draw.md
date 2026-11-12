@@ -1,13 +1,13 @@
-# MB · command: a capability of the commander and his officers, and the draw by which an order takes effect
+# MB · command: a skill of the commander and his officers, and the draw by which an order takes effect
 
-Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `U1_OWNERS_AND_VOCABULARY.md` D-U1-01 (the seat's modifier reaches a roll as the `office` **level**, never dice: §2's `addends` comment is practice only, `levels` gains the march seat's `office` level, §5 rewritten to the two halves, gate 7 and its test renamed; `R1_READ.md` §1.2's "verify at U2" on a modifier column is answered by D-U1-01a: one `modifier:` column on the seat's own row, `offices.yaml`, its Layer 1 text owed), U1 §4 R-14 (`level: minor` → `level: talent_level`, the fixture), R-10/R-16 and the architecture §4 "nobody opposite" (`obey.task` is the stand-in `even_line(pool_add) + opposed_ob(pool_default, opposition_rate)`; INCOMPLETE item 2 closed), `U1_GLOSSARY.md` *band* (a distance band is a **distance step**: `bands()` → `steps()`); `R1_READ.md` §2 row A-25 (the Discipline `minor` marked `[ASSUMPTION]`), §2 row A-30 and `U3_CONFLICT_LEDGER.md` C3-D2 (B19 lands after the keyed draw B06, so INCOMPLETE item 4's interim `rngsource` order is not needed); test 9 (INCOMPLETE item 3 partly closed at the tree; `Depends on:` / `Lands in batch:`; U3 §4.1 row 67). U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "Ob" → "obstacle" in prose (glossary *obstacle*); "distance band" → "distance step" (glossary *band*).
+Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `U1_OWNERS_AND_VOCABULARY.md` D-U1-01 (the seat's modifier reaches a roll as the `office` **level**, never dice: §2's `addends` comment is practice only, `levels` gains the march seat's `office` level, §5 rewritten to the two halves, gate 7 and its test renamed; `R1_READ.md` §1.2's "verify at U2" on a modifier column is answered by D-U1-01a: one `modifier:` column on the seat's own row, `offices.yaml`, its Layer 1 text owed), U1 §4 R-14 (`level: minor` → `level: attribute_level`, the fixture), R-10/R-16 and the architecture §4 "nobody opposite" (`obey.task` is the stand-in `even_line(pool_add) + opposed_ob(pool_default, opposition_rate)`; INCOMPLETE item 2 closed), `U1_GLOSSARY.md` *band* (a distance band is a **distance step**: `bands()` → `steps()`); `R1_READ.md` §2 row A-25 (the Discipline `minor` marked `[ASSUMPTION]`), §2 row A-30 and `U3_CONFLICT_LEDGER.md` C3-D2 (B19 lands after the keyed draw B06, so INCOMPLETE item 4's interim `rngsource` order is not needed); test 9 (INCOMPLETE item 3 partly closed at the tree; `Depends on:` / `Lands in batch:`; U3 §4.1 row 67). U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "Ob" → "obstacle" in prose (glossary *obstacle*); "distance band" → "distance step" (glossary *band*).
 
 **Depends on:** 27A-1–27A-4 on nothing unlanded beyond the one sampler (B05) and the key (B06); 27A-5 on `26_MASS_BATTLE_rout_pursuit_and_giving_ground.md` §1 (B19); 27A-6 on `U5a_capability_home_and_two_inputs.md` Part B (B05, C3-D4); the seat half of §5 on the seat row's `modifier:` column (D-U1-01a, lands with OBS §3, B05; U3 §6.3); window and lull actions on `04_MB_manager_battle_one_resolver.md` §4 (B20, LATER, U3 §4.1 row 67) and `26_MASS_BATTLE_cell_scale_and_time.md` §3 (B19).
 **Lands in batch:** 27A-1–27A-5 in B19 (`B19-mb-field-calibration`, MB), first in the batch; 27A-6 in U5a's CAP batch (B05).
 
 ## Status: PROPOSED
 
-Lane MB (the capability rows and the pool reader are CORE's and DICE's surface, U1; the seat's modifier is
+Lane MB (the skill rows and the pool reader are CORE's and DICE's surface, U1; the seat's modifier is
 FA's and the institutions kit's; the chooser's side is CHAR's and is `27_MB_D_the_commander_as_chooser.md`).
 Serves ruling **A-59** (`unified/DECISIONS_ANSWERED.md:73`) clause (1): *"order friction is a function of
 'command' which itself comes from a combination of learned skill/faculty and a function of social/mental
@@ -21,7 +21,7 @@ Read at `faf0cea`. Reference, not mechanism (`CLAUDE.md` §0.05). No code is edi
 
 Nothing for a side with no orders, no officers and no commander record: that is today's field (`obey: off`
 and `commanders: (None, None)` are the controls and are hash-equal). With them: (1) every order that fires in
-a field, from any source, takes effect by a draw whose dice are the issuing person's trained `command` and
+a field, from any source, takes effect by a draw whose dice are the issuing person's `command` skill score and
 whose levels are his Presence and his Reason; (2) the draw is harder with distance from the issuer and easier
 for an order that was prearranged; (3) the field's result lists each such draw and its band. No natural
 season fights an army field today (`audits/04_MB_audit.md` F-MB-03), so no shipped season moves.
@@ -36,8 +36,8 @@ season fights an army field today (`audits/04_MB_audit.md` F-MB-03), so no shipp
   (`core/exchange.py:57-65`; `config.py:528-529`, Jordan directive 2026-06-02) and no season path calls it
   (`audits/04_MB_audit.md` §14 (a)). `Officer` holds a Command "derived the SAME way a general's is" and is
   "bookkeeping only" at resolution (`hierarchy/units.py:2745-2774`, `:2845-2849`).
-- `MassBattleInput` carries no capability or attribute (`engine/season/queries/inputs.py:205-260`); the
-  capability surface declares the `field` site with no rows (`unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md`
+- `MassBattleInput` carries no skill or attribute (`engine/season/queries/inputs.py:205-260`); the
+  skill surface declares the `field` site with no rows (`unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md`
   §8, last paragraph).
 - The one stochastic friction in a field is a multiplier on a side's whole pool (`core/exchange.py:147`), which
   the sources read put nowhere: they put friction on orders (delay, reinterpretation, refusal):
@@ -46,7 +46,7 @@ season fights an army field today (`audits/04_MB_audit.md` F-MB-03), so no shipp
 
 ## The resolution, decided
 
-### 1. Command is one capability row with two inputs
+### 1. Command is one skill row with two inputs
 
 Definition (the home U1 §1 decides, `references/descriptor_registry.yaml: capabilities.rows`; the first rows
 of the `field` site are this lane's, U1 §9 and `U5b_MB_rulings_in_the_field.md`'s head):
@@ -55,7 +55,7 @@ of the `field` site are this lane's, U1 §9 and `U5b_MB_rulings_in_the_field.md`
 command:
   kind: skill
   gloss: "Gets a body of armed men to do what was ordered, when it was ordered."
-  base: attr.social.charisma          # Presence: the governing attribute (the talent input of U1 §4)
+  base: attr.social.charisma          # Presence: the governing attribute (the governing attribute input of U1 §4)
   opposed_by: none                    # nobody's rating opposes an order; the task's difficulty does
   scale: [0, 7]
   untrained: default
@@ -68,12 +68,12 @@ site, U1 §9):
 
 ```yaml
 - {use: field, role: dice, key: command,              side: each, add: pool_add, floor: pool_floor}   # the learned skill
-- {use: field, role: edge, key: attr.social.charisma, side: each, level: talent_level, per: mid}      # the social attribute (U1 R-14)
-- {use: field, role: edge, key: attr.mind.acuity,     side: each, level: talent_level, per: mid}      # the mental attribute
+- {use: field, role: edge, key: attr.social.charisma, side: each, level: attribute_level, per: mid}      # the social attribute (U1 R-14)
+- {use: field, role: edge, key: attr.mind.acuity,     side: each, level: attribute_level, per: mid}      # the mental attribute
 ```
 
-- **Two inputs, as A-7 and U1 §4 assign them:** training gives dice (`pool = max(pool_floor, score + addends +
-  pool_add)`); talent gives signed levels by steps from the scale's mid-point. They are never folded into one
+- **Two inputs, as A-7 and U1 §4 assign them:** the skill score gives dice (`pool = max(pool_floor, score + addends +
+  pool_add)`); the governing attribute gives signed levels by steps from the scale's mid-point. They are never folded into one
   number. `derive_command`, `CMD_CHA_WEIGHT` and `CMD_COG_WEIGHT` (one number folded from two) leave with the
   harness code that alone calls them (`04_MB_typed_outcome_and_one_path.md` §2).
 - **"A function of social/mental attributes" is two `edge` rows**, one on Presence (`attr.social.charisma`)
@@ -81,12 +81,12 @@ site, U1 §9):
   `references/descriptor_registry.yaml`, the `mind:` block). No aggregate key and no new compute kind is
   added: the registry's `agg.*` rows are `status: placeholder` and nothing reads them.
 - **Decided, by ladder step 4, and reversible in one cell:** both rows ship at `minor` a step, the size U1 §4
-  gives every capability's talent (the fixture `talent_level`). The 2026-06-02 directive's 2 : 1 ratio is not
+  gives every skill's governing attribute (the fixture `attribute_level`). The 2026-06-02 directive's 2 : 1 ratio is not
   reproduced at landing, because the level table has no step below `minor`
   (`engine/dice_engine/sigma_leverage.py:103-108`); restoring it is setting the Presence row to `moderate`,
   and the calibration reads both. `config.py:528-529` tags the two weights class-B (tunable).
 - `march` stays `capability: none` on its verb row (U1 §5): a commander does not roll the field. The
-  `command` capability is the same key `14_VERBS_MILITARY_D_the_order_of_battle.md` Edit 4 gives the four
+  `command` skill is the same key `14_VERBS_MILITARY_D_the_order_of_battle.md` Edit 4 gives the four
   army verbs, so a man who drills well and a man who is obeyed in the field are one rating.
 
 ### 2. What the field is handed (typed, composed host-side)
@@ -97,9 +97,9 @@ site, U1 §9):
 @dataclass(frozen=True)
 class CommandRecord:
     person: str            # the person id, for the report only; the module reads nothing by it
-    score: int             # trained rank in `command`, or the untrained score (`pool.py::score`)
+    score: int             # skill score in `command`, or the untrained score (`pool.py::score`)
     addends: int           # whole dice from the registered pool addends (practice) (D-U1-01)
-    levels: float          # signed sigma: the two talent rows, summed (`sigma.py::advantage_sigma`), and the
+    levels: float          # signed sigma: the two attribute rows, summed (`sigma.py::advantage_sigma`), and the
                            # `office` level of the seat the march is made through (D-U1-01; the commander only)
     post: Optional[str]    # the unit he rides with (the commander only); None is the army's rear centre
     fed_by: tuple          # U1 §8's reason trail rows, echoed on the report
@@ -127,7 +127,7 @@ class CommandRecord:
 - The rule in one sentence: *an order is drawn once for each person who has to pass it on to the unit.* A
   prearranged order has one such person; an improvised one to an officered unit has two.
 - **Officers' ranks enter without a second ladder.** An officer is a person with the same `command` row, the
-  same pool rule and the same two talent rows. What his echelon changes is which rows his draw covers (the
+  same pool rule and the same two attribute rows. What his echelon changes is which rows his draw covers (the
   row names him) and the span check the constructor already makes, with "one ladder ... at every echelon"
   (`modules/mass_battle/armies.py:176-180`, `hierarchy/units.py:2745-2749`). There is no table of dice by
   rank.
@@ -229,7 +229,7 @@ decides levels, one channel per side, and that text is replaced.)*
 |---|---|
 | `recall_check`, `feigned_retreat_recognized`: `roll_pool(pursuer.command)` against obstacle 2 (`orchestration.py:2094-2106`) | calls of `obey`'s pool rule on the commander's record, with their stated obstacles as steps over `obey.task` |
 | the rally roll (`16_PESSIMIST_MB_rout_has_two_exits.md` step 1) | the same; the commander's, since rally at the end of a field is his act |
-| morale erosion's divisor `dmg / (discipline × command)` (`orchestration.py:2342-2343`, `:1151`), `h_per_size` (`hierarchy/units.py:2867`) and the span check (`armies.py:176-193`) | read the **span value** of the link that covers the unit (its officer's, else the commander's): an integer 1 to 7 from that person's trained score by one table, `command_span`, in the troop file's header (seed: the score through the existing `clamp_command`, `core/exchange.py:44-54`; `None` is `command_default`). A side-wide integer in every unit's divisor is a static side value; this makes it the unit's own |
+| morale erosion's divisor `dmg / (discipline × command)` (`orchestration.py:2342-2343`, `:1151`), `h_per_size` (`hierarchy/units.py:2867`) and the span check (`armies.py:176-193`) | read the **span value** of the link that covers the unit (its officer's, else the commander's): an integer 1 to 7 from that person's skill score by one table, `command_span`, in the troop file's header (seed: the score through the existing `clamp_command`, `core/exchange.py:44-54`; `None` is `command_default`). A side-wide integer in every unit's divisor is a static side value; this makes it the unit's own |
 | `command <= 0`: every unit's morale set to zero (`battle_loop.py:408-413`) | a stand draw for each unit (`26_MASS_BATTLE_rout_pursuit_and_giving_ground.md` §1) |
 
 ## Exact edits
@@ -278,7 +278,7 @@ misreading on a unit that holds one signal. A second table that maps a rank to d
 ## NERS (definitions `CLAUDE.md` §0.06; E last)
 
 - **N.** Top-down: A-59 names this as where the day's chance belongs. Bottom-up: the order queue, the signal
-  set and the officer class exist and decide nothing. Lateral: the same capability, pool rule and levels as a
+  set and the officer class exist and decide nothing. Lateral: the same skill, pool rule and levels as a
   speech or a fight; the same draw `order_unit` makes in the season. Vertical: a person's sheet reaches a
   field for the first time. Diagonal: a seat's modifier reaches an army by the channel every seat uses.
   Horizontal: both sides, played or not. Cut it and orders are certain and command is the literal 4.
@@ -286,19 +286,19 @@ misreading on a unit that holds one signal. A second table that maps a rank to d
   under a poor general. With no player: orders miss, wings go early, and the record says which.
 - **S.** One site, one sampler, one ladder, one pool rule; the window, the lull and the standing order are
   drawn alike; pauses at the engine's own boundaries.
-- **E, against that.** One capability row, three use rows, one record, one function, one table of eight
+- **E, against that.** One skill row, three use rows, one record, one function, one table of eight
   seeds; a literal, a derivation with its own weights and two bespoke rolls leave.
 
 ## Cost class
 
-Small build, in two parts: the record and the capability rows (with U5a's CAP Part B; hash equal at `None`),
+Small build, in two parts: the record and the skill rows (with U5a's CAP Part B; hash equal at `None`),
 then `obey` (with the orders batch, `U5b_MB_rulings_in_the_field.md` §6 row 5).
 
 ## Conflicts with ruled items, named
 
 - The 2026-06-02 directive's 2 : 1 weighting of Charisma over Cognition is not reproduced at landing (§1);
   one cell restores it. Decided by precedent (U1 §4), not escalated.
-- A-7's assignment (training the dice, talent the levels) is U1's and is listed for Jordan as
+- A-7's assignment (the skill score the dice, the governing attribute the levels) is U1's and is listed for Jordan as
   decided-and-reversible in `unified/U5_CONFLICTS_U5a.md` §2; this file follows it.
 
 ## Instructions to code it (standing charge, `AUDIT_BRIEF.md:545-547`; for workplan v12)
@@ -346,7 +346,7 @@ controls are hash-equality at `obey: off` with `commanders: (None, None)` (`pyth
 prints its three digests unchanged) and, per draw, the same field with the term zeroed.
 
 **Falsifier and its control.** As "Falsifier" above. Planted for the tests: `obey` returning `Success`
-always (gate 2 must fail); the two talent rows deleted (gate 3's attribute halves must fail); `_roller_for`
+always (gate 2 must fail); the two attribute rows deleted (gate 3's attribute halves must fail); `_roller_for`
 returning the commander for every unit (the officer test must fail).
 
 **Hash movers.** None at the shipped arms. With `obey: on`: every field in which an order fires; with a

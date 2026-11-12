@@ -7,9 +7,9 @@ Reconciled: 2026-11-12, wave-3 rewrite lane W3-4a — the head line applied to t
 ## Status: PROPOSED
 
 Lands in batch: B22 (`unified/U3_DEPENDENCY_ORDER.md` §3.1), after `14_VERBS_MILITARY_A_movement.md` (Edit 6, the `with` deposit).
-Depends on: `01_CORE_capability_authoring_surface.md` Edit 9 (B04); `05_SC_obstacle_difficulty_and_modifiers_B.md` and `U5c_SC_one_obstacle_form.md` (B05); `U5c_VERBS_residue_and_governance_owner.md` §1 and `18_DETERMINISM_task_draw_for_uncontested_verbs.md` item 4 (B07); U1's capability surface (`trained_at`).
+Depends on: `01_CORE_capability_authoring_surface.md` Edit 9 (B04); `05_SC_obstacle_difficulty_and_modifiers_B.md` and `U5c_SC_one_obstacle_form.md` (B05); `U5c_VERBS_residue_and_governance_owner.md` §1 and `18_DETERMINISM_task_draw_for_uncontested_verbs.md` item 4 (B07); U1's skill surface (`trained_at`).
 Lane: MB. Tier (R4 7b.0 (1)): `sonnet` producer, effort `high`; one `opus` read of reading (iii). Test file: `engine/season/tests/test_vm_mil_b_train.py` (one function per §4 reading; the scratch probe `probe_army.py` is restated as reading (ii)'s function, U3 §6.2's rule).
-Standing (R4 7b.0 (4)): the pool is the one pool rule (`sigma_leverage.pool_of`, D-U1-08) on the teacher's trained score in the capability (A-6); talent as levels from the governing attribute (A-7); a wound a level against the roll (A-8). The draw takes `H(w.world_seed, w.tick, <actor id>, "train.task")` (A-30). **A-81:** Partial and Failure write no cell; `training.practised` is counted by `practice` for the learner (a durable read of the deposit) and `training.fruitless` is witnessed by teacher and pupil (a claim of it to each), so no lesson is a still scene.
+Standing (R4 7b.0 (4)): the pool is the one pool rule (`sigma_leverage.pool_of`, D-U1-08) on the teacher's skill score in the skill (A-6); the governing attribute as levels (A-7); a wound a level against the roll (A-8). The draw takes `H(w.world_seed, w.tick, <actor id>, "train.task")` (A-30). **A-81:** Partial and Failure write no cell; `training.practised` is counted by `practice` for the learner (a durable read of the deposit) and `training.fruitless` is witnessed by teacher and pupil (a claim of it to each), so no lesson is a still scene.
 
 Batch M-B of `audits/14_VERBS_MILITARY.md` (§3.3, §5.3). Source: F-VM-01; the M-CAP row of
 `audits/12_ARCS_adjudication.md` ("`train` attempted and never executed"); `AUDIT_BRIEF.md` "Standing
@@ -33,8 +33,8 @@ Declared movers: formation (the class), and every executed `train`.
   persons, its `att` column acts, `harness/aperture.py:709-713`, so attempted may exceed formed),
   attempted 85, executed 0, refused 85: `exists:Person=0` 39 (the
   subject is the question's referent, whatever it is), `with=False` 33, and 13 that cleared the cell
-  and were declined by the effect because the subject holds no rank in the capability.
-- `probe_army_s0.txt`: 2 of 83 persons hold any capability key (both `inquiry`). Self-training
+  and were declined by the effect because the subject holds no rank in the skill.
+- `probe_army_s0.txt`: 2 of 83 persons hold any skill key (both `inquiry`). Self-training
   `arms` and `copying` with no key: `train.refused`. With `{arms: 2}`: `capability.raised`,
   `{arms: 3}`, with certainty (`loop/effects_combat.py::_eff_train`, `raised_capability`).
 - `corpus_run`: `train` only refused; the ranking excludes it (no celled alignment axis), so where
@@ -67,7 +67,7 @@ columns** (eligibility, beneficiary, cell and their notes stand):
 **Edit 2 — `engine/season/rosters.yaml`.**
 
 - *(W3-4a: the `graded_inquiries` line is deleted; `train` is a contest row on the `a task` prize.)*
-- The pool key is the capability the act carries (`vocation_sourced: {train: kind}`, unchanged): the
+- The pool key is the skill the act carries (`vocation_sourced: {train: kind}`, unchanged): the
   roll's input builder reads the one pool reader (`pool.py`, over `sigma_leverage.pool_of`, D-U1-08) on
   `a.payload[kind]` for a row `vocation_sourced` names, and `verb_capability` gains no `train` line. One
   clause in `seam/wrappers/sigma.py::contest_input` (the one input builder), reading the roster, never
@@ -76,14 +76,14 @@ columns** (eligibility, beneficiary, cell and their notes stand):
 
   | verb | difficulty | obstacle terms | leverage (A-25) |
   |---|---|---|---|
-  | `train` | `routine` | `learner_rank` (the subject's effective rank in the capability, 1 at least) · `self_taught` (subject is the actor) · `no_training_place` (no Site or venue of a kind the capability row's `trained_at` lists where they stand) · `teacher_no_better` (the actor's rank does not exceed the subject's; not applied to self-teaching) | `learner_regards_teacher`: a `favour` level (a positive stance row of the subject toward the actor; C3-C10) |
+  | `train` | `routine` | `learner_rank` (the subject's effective rank in the skill, 1 at least) · `self_taught` (subject is the actor) · `no_training_place` (no Site or venue of a kind the skill row's `trained_at` lists where they stand) · `teacher_no_better` (the actor's rank does not exceed the subject's; not applied to self-teaching) | `learner_regards_teacher`: a `favour` level (a positive stance row of the subject toward the actor; C3-C10) |
 
   `[ASSUMPTION; medium; Jordan to correct]` for each number. **INCOMPLETE (blocked on U1, as MIL_A's
   five):** the four obstacle terms are not members of OBS §2's closed roster; U1 decides which become
-  members and which fold into existing ones (`learner_rank` reads the subject's trained score, the
+  members and which fold into existing ones (`learner_rank` reads the subject's skill score, the
   operand `opposition` reads for a person opposite, so folding it there would make the lesson opposed).
   Until then they ship absent (0): the control is `routine`.
-- U1's capability rows (`references/descriptor_registry.yaml: capabilities`, D-U1-07; the authoring
+- U1's skill rows (`references/descriptor_registry.yaml: capabilities`, D-U1-07; the authoring
   surface of `01_CORE_capability_authoring_surface.md` as U1 re-homed it) gain one optional column,
   `trained_at: [site or venue kinds]` (`arms: [barracks, garrison]`, `copying: [archive]`; content,
   Jordan's). Until that column lands the term reads an empty list and applies everywhere.
@@ -106,7 +106,7 @@ only when that list is non-empty, so a `Partial: []` or `Failure: []` band emits
 
 **Edit 4 — `engine/season/queries/world_q.py::practice`.** Its set of counted kinds gains
 `training.practised`, read off the `train` row's `Partial` emit (`VERB_TABLE["train"].emits_at`),
-never a literal; the credit is the subject's, in the capability the causing act carried.
+never a literal; the credit is the subject's, in the skill the causing act carried.
 
 **Edit 5 — alignment.** `rosters.yaml: tables.alignment` cells for `train` are CHAR's to author
 (`02_CHAR_choice_alignment.md`); until they exist the row stays out of the corpus ranking, which this

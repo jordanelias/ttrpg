@@ -4,7 +4,7 @@ Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-20) —
 
 Reconciled: 2026-11-12, wave 3 lane W3-5b (`unified/work/R5_READ.md` §1 row REST_2 W3 AMBIGUOUS, §2 rows REST_2:W3 and W3 vs A-33, §7, 7b; `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §3 item 5, the site table row `own_state_gate, told_retain`, §8; `unified/U3_DEPENDENCY_ORDER.md` §1 items 20, 24, 32, 35, §4.1 row 85). Changed: (1) W3's edits 3-4 are rewritten to the head: `retainable(p, predicate, fx)` takes the hearer's `Person` and calls `capability_admits(p, "told_retain", fx)`; the old signature `(hearer_sensitivity, gate, predicate)` could not call a reader that takes a `Person` (R5 §1); (2) the use row is U1's (`gate · prac.thread_sensitivity · actor · gain: thread_sensitivity_gate`, the hearer being the person the reader is called on), not the earlier `side: subject`; U1 decides over the U5a head where they differ; (3) W3's Layer 1 placement is stated at the site (R5 §1 pick: a retention rule at WITNESS through the one reader, no `capability` eligibility kind; 04 `:180` lists no Person field among WITNESS's reads, so the site names this); (4) W3's test file and test names; (5) batch and tier lines. W1, W2, W5 unchanged. U4d glossary lane (2026-11-12, `unified/U1_GLOSSARY.md` §H–§I, ledger `unified/work/U4D_RENAMES.md`): "subformation" → "unit" in prose (glossary *unit*); "cut wire" → "declared with no reader" (glossary *wire / reader*).
 
-Depends on: W1 `04_MB_manager_battle_one_resolver.md` §2 (B20); W2 `05_SC_playable_hearing_B.md` (B24); W3 `14_VERBS_PHYSICAL_D_thread_read.md` stage 1 (B35) and U1's capability block (B04: the `capability_uses` table and `capability_admits`); W5 `15_INSTITUTIONS_PAPACY_B_patronage_election_discipline.md` (B32).
+Depends on: W1 `04_MB_manager_battle_one_resolver.md` §2 (B20); W2 `05_SC_playable_hearing_B.md` (B24); W3 `14_VERBS_PHYSICAL_D_thread_read.md` stage 1 (B35) and U1's skill block (B04: the `capability_uses` table and `capability_admits`); W5 `15_INSTITUTIONS_PAPACY_B_patronage_election_discipline.md` (B32).
 Lands in batch: W1 in B20, W2 in B24, W3 in B35 (after `14_VERBS_PHYSICAL_D` stage 1), W5 in B32 (`U3_DEPENDENCY_ORDER.md` §1, §4.1 row 85, SPLIT). One commit each.
 Tier: sonnet / high for W1, W2, W5 and W3's code; opus for W3's Layer 1 placement, already taken here.
 
@@ -200,7 +200,7 @@ field U2 may add).
    something; he does not hold it. No new Event kind, no new write class (the deposit that does not
    happen is WITNESS's own). **Named at the site (Layer 1):** WITNESS reading a field of the hearer's own
    sheet is a retention rule, not an eligibility kind; `04` `:180` lists no Person field among WITNESS's
-   reads and PART D 33 / §F.27 keep capability out of eligibility, so the comment at this line says the
+   reads and PART D 33 / §F.27 keep skill out of eligibility, so the comment at this line says the
    one gate A-11 admits is read here through `capability_admits` and that no `capability` eligibility kind
    is added (`04` B4 third disposition, `unified/work/R5_READ.md` §1).
 5. **What is not gated.** First-hand deposits: the reader's own finding passes the verb's gate already.

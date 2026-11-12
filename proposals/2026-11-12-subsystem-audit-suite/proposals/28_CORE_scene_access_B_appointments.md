@@ -80,7 +80,7 @@ The host forms `commit` on the Proposition as he forms it on any Proposition a q
 (`verb_table.yaml` `commit`, `referent_class: Proposition`). Whether he ranks it above his other
 business is his chooser's score (§6). Whether it takes is `commit`'s draw
 (`14_VERBS_SOCIAL1_D_grievance_and_settlement.md` §4: that file's pool, written there as `resolve` and to be
-renamed to its capability's name per the glossary, obstacle `plain` +
+renamed to its skill's name per the glossary, obstacle `plain` +
 `cross_pressure` + `violated`; Failure writes nothing and emits `commitment.refused`), and its band is
 the Tenure's `degree`.
 

@@ -10,7 +10,7 @@ Reconciled: 2026-11-12, unification lane U4c (test 9; read from this file's own 
 Lands in batch: B25 (`unified/U3_DEPENDENCY_ORDER.md` §3.1), after `08_FI_08_knots-season-form.md` §3 in the same batch.
 Depends on: `08_FI_02_rumour-that-travels.md` (B11: two-hop told chains, `present_persons`); `08_FI_08_knots-season-form.md` (B25); `U5c_SC_one_obstacle_form.md` (B05: `regard`, the `favour` source; `rank_gap` lands with `14_VERBS_BINDING_A` in B21).
 Lane: FI. Tier (R4 7b.0 (1)): `sonnet` producer, effort `high`; one `opus` read of the `tie_gain` arms. Test file: `engine/season/tests/test_vm_s2_d_tie.py` (the gate's arms and the three falsifiers as functions).
-Standing (R4 7b.0 (4)): the pool is the one pool rule (`sigma_leverage.pool_of`, D-U1-08) on the actor's trained score (A-6); talent as levels (A-7); a wound a level against the roll (A-8). The draw takes `H(w.world_seed, w.tick, <actor id>, "tie.standing")` (A-30). **A-81:** `bond.refused` is witnessed by both parties (a claim of it to each): a refused bond is a remembered deed.
+Standing (R4 7b.0 (4)): the pool is the one pool rule (`sigma_leverage.pool_of`, D-U1-08) on the actor's skill score (A-6); the governing attribute as levels (A-7); a wound a level against the roll (A-8). The draw takes `H(w.world_seed, w.tick, <actor id>, "tie.standing")` (A-30). **A-81:** `bond.refused` is witnessed by both parties (a claim of it to each): a refused bond is a remembered deed.
 
 Carries `audits/14_VERBS_SOCIAL2.md` §10. Batch S2-D. Follows `08_FI_08_knots-season-form.md` §3 (the
 reader first, then the producer) and does not redo it.
@@ -76,7 +76,7 @@ opener per kind: a `kind` operand would be a scale-local dialect).
    `resolvable_verbs()` admits `tie` once its effect exists; `knot` stays out.
 2. **`rosters.yaml`**: `verb_capability: tie: "copying"` (the row's own `capability:` cell at CAP A2/A3,
    D-U1-07). *(W3-4a: no `tie_obstacle` table, C-21.)* The obstacle, through the one composer:
-   `difficulty` + `opposition` (the partner's trained score, A-79) + `regard` (OBS member 7: the partner's
+   `difficulty` + `opposition` (the partner's skill score, A-79) + `regard` (OBS member 7: the partner's
    hostile stance toward the actor) + `rank_gap` (member 6); the partner's favourable stance is a `favour`
    level for the actor (OBS §3), not a −1.
 3. **`loop/effects_information.py`** (the module holding `_eff_commit`, beside it; the `"tie"` literal

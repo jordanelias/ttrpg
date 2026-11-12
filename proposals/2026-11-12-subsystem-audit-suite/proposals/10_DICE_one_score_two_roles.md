@@ -19,8 +19,8 @@ depends on in the character lane.
 
 ## What it changes in `engine/season/` at runtime
 
-*(Reconciled, W3-1, 7b-6.)* It is a declared mover. A person is opposed at `opposition_rate × his trained
-score` (`opposed_ob`, `29_DICE_one_opposed_rule_form_and_tuning.md`); a person who holds no capability the verb reads is opposed at
+*(Reconciled, W3-1, 7b-6.)* It is a declared mover. A person is opposed at `opposition_rate × his skill
+score` (`opposed_ob`, `29_DICE_one_opposed_rule_form_and_tuning.md`); a person who holds no skill the verb reads is opposed at
 his untrained score, `pool_default`, by the same function; where nobody stands opposite, the term is
 `opposed_ob(pool_default, opposition_rate)` (C-04; `obstacle_default` is deleted). The control arm
 (`opposition_rate` 0.5, `pool_add` 0) is today's bytes. The defect this removes is the inversion: today a
@@ -30,30 +30,30 @@ grades a person-opposed roll moves at the live arm; the readings are `29_DICE`'s
 ## The problem, with evidence
 
 1. **Holding a score makes a person easier to oppose than holding none.** `sigma.py::_opposition_of`
-   (`:117-137`) returns the larger of the held capability rank and the held attribute, or `None`; `roll.py::obstacle`
+   (`:117-137`) returns the larger of the held skill rank and the held attribute, or `None`; `roll.py::obstacle`
    (`:141`) halves a score and falls to `obstacle_default` on `None`. Probe (audit §12, E-07), pool 2: an
-   unauthored subject → obstacle 2.0, Partial-or-better 26.00 %; a subject holding the capability at 2 → obstacle 1.0,
+   unauthored subject → obstacle 2.0, Partial-or-better 26.00 %; a subject holding the skill at 2 → obstacle 1.0,
    58.00 %; a subject holding an attribute at 1 → obstacle 0.5, 73.50 %. The stand-in is worth a score of 4 while
    the same person rolls as a score of 2. `hole_register.yaml` H-127's `cite:` records this inversion as
    made live at B10-10 and unmeasured.
 2. **The stand-in is being applied outside its stated scope.** H-127's own text: the derivation *"reads
    off a PERSON. A Record, a Rung or a Proposition has no corresponding score, and this row is the
-   stand-in for that branch"*. A person subject with no capability the verb reads is a person, not that branch.
+   stand-in for that branch"*. A person subject with no skill the verb reads is a person, not that branch.
 3. **Two readings of one quantity across modules.** `modules/combat/core.py:113-116` records it: a person
-   holding no capability the verb reads *"is attacked at Ob 1.0 here and at `obstacle_default` in a social contest: two ladders
+   holding no skill the verb reads *"is attacked at Ob 1.0 here and at `obstacle_default` in a social contest: two ladders
    for one quantity"*. Combat reads `faculty` (untrained score and practice included); the social roll reads
    neither.
-4. **Four rolled verbs name no capability.** `rosters.yaml: verb_capability` maps nine verbs; `arrest`,
+4. **Four rolled verbs name no skill.** `rosters.yaml: verb_capability` maps nine verbs; `arrest`,
    `determine`, `interrogate` and `lie` roll through the social provider and are absent (audit §12, E-09),
    so their pool is `pool_default` and their opposition `None` for every pair. H-312 measured
-   `interrogate` alone: capabilities and attributes set to 0 or 20 leave the odds at
+   `interrogate` alone: skills and attributes set to 0 or 20 leave the odds at
    `(0.74, 0.19, 0.07, 0.0)`.
 
 ## The resolution, decided
 
 Ladder step 3 (a ruling and a register row answer the form) with step 4 for the precedent. The ruling of
 2026-08-14 (*"their corresponding score/2 plus whatever specific modifiers exist for them in that instance"*)
-is overridden in its rate by A-26 and A-79 (`opposed_ob(trained score, opposition_rate)`); its form stands: a
+is overridden in its rate by A-26 and A-79 (`opposed_ob(skill score, opposition_rate)`); its form stands: a
 person's corresponding score is the score he rolls: one read, two roles. Practice is excluded from the opposing role on
 `_opposition_of`'s existing statement (*"the practice addend raises a pool, not an opposition"*), which
 stands. `obstacle_default` is deleted with its fixture and H-127's row (C-04, `U5c_SC_one_obstacle_form.md`
@@ -70,7 +70,7 @@ arithmetic moves:
 ```python
 def score(w, p, verb) -> int:
     """(W3-1, A-7, 7b-6) What `p` is trained in for `verb`'s capability: the held rank, else the untrained
-    score `pool_default`. No attribute (talent enters as levels) and no addend. The base of his pool AND the
+    score `pool_default`. No attribute (the governing attribute enters as levels) and no addend. The base of his pool AND the
     score an opponent's `opposed_ob` reads."""
     have = _capability(p, verb)
     return max(int(w.fixtures.get("pool_default")), int(have)) if have is not None else int(w.fixtures.get("pool_default"))
@@ -87,20 +87,20 @@ Implementation lane A's `c5bf18a` already split `score()` from the addends; B05 
 
 ```python
 if subject and subject in w.persons:
-    return float(score(w, w.persons[subject], opposing_verb))   # the trained score (29 item 29-4 step 1);
-                                                                # the capability the row's `opposed_by` names, else the verb's own
+    return float(score(w, w.persons[subject], opposing_verb))   # the skill score (29 item 29-4 step 1);
+                                                                # the skill the row's `opposed_by` names, else the verb's own
 return None                                                     # nobody opposite: the module's stand-in,
                                                                 # opposed_ob(pool_default, rate) (C-04)
 ```
 
 *(W3-1, C-04:)* no `opposition_fallback` fixture is added and none of its hole-register row: the control arm is
-`opposition_rate` 0.5 with `pool_add` 0. The attribute does not oppose (A-7: talent is a level on the
+`opposition_rate` 0.5 with `pool_add` 0. The attribute does not oppose (A-7: the governing attribute is a level on the
 subject's side through the `edge` row `against`, `U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §3).
 `believed_input` is unchanged: a believer still needs a claim, or takes the ordinary prior
 (`10_DICE_believed_odds_have_a_prior.md`).
 
 **C. The verb row's `capability:` column** (`engine/season/verb_table.yaml`; U1 §5, D-U1-07: the verb's
-capability lives on its row, not in `rosters.yaml: verb_capability`). Four values: `interrogate: inquiry`,
+skill lives on its row, not in `rosters.yaml: verb_capability`). Four values: `interrogate: inquiry`,
 `arrest: arms`; `lie: deception` and `determine: law`, each `capability: none` with a note until SC authors the
 `deception` and `law` definition rows (lane A's interim `determine: argue` stands until then, D-U1-07). Each is
 an `assumption` under H-126's existing sweep; H-312 closes on the `interrogate` row.
@@ -122,7 +122,7 @@ goldens; this proposal only supplies the reader.
 
 ## The falsifier
 
-`odds_of` for a `tell` at an unauthored hearer must equal the odds at a hearer holding the capability at
+`odds_of` for a `tell` at an unauthored hearer must equal the odds at a hearer holding the skill at
 `pool_default` (no inversion; W3-1: the whole-dice tuples of the first text are moot under A-5); a hearer
 holding it at a higher rank must give lower odds. For `interrogate`, raising the subject's `inquiry` score must lower
 Partial-or-better (H-312's probe, which today prints an unchanged tuple).

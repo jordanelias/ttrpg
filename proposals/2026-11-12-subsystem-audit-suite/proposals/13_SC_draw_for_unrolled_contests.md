@@ -43,13 +43,13 @@ alone.
 ## The resolution, decided
 
 One roll, one composition (`U5c_SC_one_obstacle_form.md`: the even line, difficulty, `opposed_ob` on the
-trained score, hostile terms; what a party brings is leverage), routed by what exists. Each contest has one
+skill score, hostile terms; what a party brings is leverage), routed by what exists. Each contest has one
 owner; this file states the rule and checks that all five draw.
 
 | contest | owner (the file that carries the row and the edit) | route and form, as the owner decides it |
 |---|---|---|
 | negotiation | `05_SC_negotiation_scene.md`; `14_VERBS_SOCIAL1_B_documents_and_obedience.md` §3 | acceptance is the accepter's own sampled `commit` (C-07: one person's roll cannot open another's edge, `04` PART D row 10a); covenants are made in person (A-21) |
-| questioning | `14_VERBS_SOCIAL2_C_case_question_confession.md` §3 (the `interview` row); `19_LACUNA_questioning_has_an_approach_and_a_cost.md` (the approach) | `interview` contests a prize against the witness; the witness's trained score opposes (A-79); `interview` engages the interviewee's scene (A-63; C3-C13) |
+| questioning | `14_VERBS_SOCIAL2_C_case_question_confession.md` §3 (the `interview` row); `19_LACUNA_questioning_has_an_approach_and_a_cost.md` (the approach) | `interview` contests a prize against the witness; the witness's skill score opposes (A-79); `interview` engages the interviewee's scene (A-63; C3-C13) |
 | docketing | `14_VERBS_SOCIAL1_D_grievance_and_settlement.md` §1 (`carry`) | `carry`'s draw is that file's; `open_case` on one's own bench is a remit act and is not drawn. A docketing write on a task route needs 18-A's loader edit (C3-R1) |
 | the ballot | `U5c_SC_proceedings_residue.md` §6 (the hearing's close); A-14 | each vote is a draw on the voter inside the presiding person's act; the `lean` leverage source (OBS §3); `ballots` default 1 |
 | appeal | `19_LACUNA_verdict_ladder_and_reversal.md` | on new grounds only (A-39); the appellate bench writes `reversed`; the disposing seat's bench closes the edge by its own `pardon` |

@@ -4,7 +4,7 @@ Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-13) —
 
 Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `U1_OWNERS_AND_VOCABULARY.md` D-U1-06 / U1 §4 R-30 / `U3_CONFLICT_LEDGER.md` C3-L5 (Edit D is **withdrawn**: no `Event.roll` field; the roll's record rides the act's Resolution and reason trail, `fed_by`, `terms`, `levels`, and where a reader needs it witnessed its parts go on `Event.observed` as `observation_terms` members; the persistence of a social roll's terms lands with `05_SC_contest_record_on_event.md` in B05; `R1_READ.md` §1.3's AMBIGUOUS row answered), `R1_READ.md` §2 row A-5 (`settled_margin` struck: there is no settled margin), §1.3 (Edit A's prior reaches the obstacle through `opposed_ob`, A-79, `29_DICE` item 29-4 step 3), §6 (problem 1's figures are whole-dice readings of the old regime); test 9 (tests, lands-it, tier; `Depends on:` / `Lands in batch:`).
 
-**Depends on:** `10_DICE_one_score_two_roles.md` (B05: the opposing role reads the trained score); `29_DICE_one_opposed_rule_form_and_tuning.md` item 29-4 (B05); `10_DICE_advantage_sources_for_the_arcs.md` (B05, before it).
+**Depends on:** `10_DICE_one_score_two_roles.md` (B05: the opposing role reads the skill score); `29_DICE_one_opposed_rule_form_and_tuning.md` item 29-4 (B05); `10_DICE_advantage_sources_for_the_arcs.md` (B05, before it).
 **Lands in batch:** B05 (`B05-one-roll`, IN), after `10_DICE_advantage_sources_for_the_arcs.md`; Edit C's believed estimates land with `U5b_PC_residue.md` §8 (B14) and `U5b_MB_residue.md` §5.
 
 ## Status: PROPOSED
@@ -35,7 +35,7 @@ do not change: this is the person's estimate, never the dealt odds.
    A person who knows nothing about an opponent weighs the act as if it could not fail; a person who
    knows a little weighs it down. Ignorance is rewarded.
 3. **The figure that is returned is the same for everyone.** All 102 values are the default pair's; no
-   person holds a capability claim about another (`sigma.py:234-238`: *"NOTHING DEPOSITS ONE TODAY"*),
+   person holds a skill claim about another (`sigma.py:234-238`: *"NOTHING DEPOSITS ONE TODAY"*),
    so a believed opposition for a person subject is always unknown, and `believed_input` returns `None`
    (`:286-289`).
 4. **Nothing of the roll survives it but the band.** `Event` carries `id, kind, changes, causes,

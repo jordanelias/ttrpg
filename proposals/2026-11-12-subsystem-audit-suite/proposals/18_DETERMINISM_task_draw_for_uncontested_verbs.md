@@ -4,7 +4,7 @@ Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-07, C-U
 
 Reconciled: 2026-11-12, wave 3 lane W3-5b (`unified/OWED_TO_UNIFICATION.md` §B "item 2 contradicts item 4"; `unified/work/R5_READ.md` §1 row task_draw (AMBIGUOUS, three readings), §2 rows item 2 vs 4, item 3, A-81, §7, 7b; `unified/U3_CONFLICT_LEDGER.md` §9 cross-cutting (item 4 decides, C-22), C3-R1, C3-D3, C3-C2, C3-N27; `U5c_VERBS_residue_and_governance_owner.md` §1 (shapes (a), (b), inquiry); `unified/U1_OWNERS_AND_VOCABULARY.md` D-U1-04, D-U1-07, D-U1-09, D-U1-11i, -11j, -11l; U1 capability site `task`; `unified/U3_DEPENDENCY_ORDER.md` §1 item 8). Changed: (1) item 2's loader text, which still described the pre-C-U5a-10 shape ("a routed row's `writes:` is degree-keyed"), is replaced by item 4's: only the second refusal (`data/verbs.py:872-876`) is edited, by a `form: inquiry | task` field on each route row; the first (`:848-851`) is invariant 12 and stays, because a row whose bands write different cells declares `contests: "a task"` (shape (b)) and passes it unedited. U3's C3-R1 and §1 item 8 say "the two loader refusals edited"; at the tree (`data/verbs.py:848-851` read here) the first needs no edit once shape (b) declares `contests:`, so that wording is corrected here; (2) item 3 gains the stand-in clause for a task with nobody opposite and takes the pool from the `task` site (U1), not `verb_capability`; (3) item 4 names A-81 and the durable write of a Failure; (4) the draws use the one `Draw` owner (C3-D3); (5) gate 1 no longer cites a scratch probe: it is a named test; tests, failure kinds and the roster row shape are named; the control pins carry C3-N27's note; (6) batch and tier lines. A lost task draw keeps the clause name `draw` and its `emits_note` says it is a loss, not a refusal (04 §C.4 `:727-728`; R5 §1 reading (2)), so the refusal-rate readings count it as a loss.
 
-Depends on: `13_SC_tuning_tables.md` T1 and OBS §4 step 1a (B05: the `difficulty:` column, D-U1-04); `16_PESSIMIST_DICE_task_difficulty_and_throughput.md` (B05 code part; its text amendments land here, U3 §4.1 row 19); U1's capability block (B04: the `task` site); the one sampler (B05) and the keyed draw `engine/dice_engine/draw.py` (B06, C3-D3).
+Depends on: `13_SC_tuning_tables.md` T1 and OBS §4 step 1a (B05: the `difficulty:` column, D-U1-04); `16_PESSIMIST_DICE_task_difficulty_and_throughput.md` (B05 code part; its text amendments land here, U3 §4.1 row 19); U1's skill block (B04: the `task` site); the one sampler (B05) and the keyed draw `engine/dice_engine/draw.py` (B06, C3-D3).
 Lands in batch: B07 (lane IN; one re-pin), first item of the batch; `U5c_VERBS_residue_and_governance_owner.md` §1-§2, `U5b_VERBS_military_physical_residue.md` §1 and `13_SC_draw_for_unrolled_contests.md` follow it in B07. Every verb proposal whose rows rely on a route or a task contest names this file as its dependency (C3-R1).
 Tier: opus for the loader and roster design (the Layer 1 reading, taken above); sonnet / high for the 22 rows, the effects and the tests.
 
@@ -83,7 +83,7 @@ roller, one loader refusal; no second resolver).
    `row.writes_at(degree)` (`:450`) and calls each effect with it (`:967`).
 3. **Odds, from state; outcome, from the draw.** Pool: the `task` site's rows of
    `rosters.yaml: tables.capability_uses` (U1's site table: as `social_roll`), through the one pool rule
-   read by `seam/wrappers/pool.py::faculty` (`:78`; the verb's capability from its row's `capability:`
+   read by `seam/wrappers/pool.py::faculty` (`:78`; the verb's skill from its row's `capability:`
    cell, D-U1-07, which replaces the `verb_capability` side roster; an untrained actor reads
    `pool_default`, D-U1-11j). Obstacle = `roll.py::obstacle` — the task's difficulty
    (the row's `difficulty:` level, a member of `rosters.yaml: difficulty_levels`, D-U1-04; `plain` where
@@ -96,7 +96,7 @@ roller, one loader refusal; no second resolver).
    wave 3 line words it under D-U1-02; U1 site `task`: `opposes` reads the stand-in); the composer's even
    line `even_line(pool_add)` is its own leading term, never part of the opposition. Each term lands in `Margin.terms` (the reason trail), unchanged machinery. Every draw goes
    through the one `Draw` owner `engine/dice_engine/draw.py` (B06; C3-D3), keyed `H(seed, tick, actor,
-   "task:" + a.id)` (A-30). A task row carries no `rate` row: its capability enters through this draw
+   "task:" + a.id)` (A-30). A task row carries no `rate` row: its skill enters through this draw
    alone (D-U1-09, C3-C2).
 4. **Graded, recoverable effects.** A converted `task` row keeps its flat `writes:` and `emits:`
    (`04` §B.13 invariant 12: a `Degree`-keyed column belongs to a verb that declares `contests:`); its

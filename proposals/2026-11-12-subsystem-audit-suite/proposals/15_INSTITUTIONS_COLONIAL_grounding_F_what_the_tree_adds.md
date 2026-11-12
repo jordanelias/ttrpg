@@ -65,7 +65,7 @@ No obstacle term is added. The enforcing agent is a person, and the engine alrea
 2. he `dispatch`es the man (CP-T09-08, as `14_VERBS_BINDING` adopts it); the journey is the man's own
    legs and scene budget (`loop/effects_migration.py::_relocate`);
 3. arrived, the bearer `tell`s the writ's terms to the addressee. `tell` is a draw on the **bearer's**
-   capability at `distance` 0. Under A-21 the terms also travel with the news of the issue; the bearer
+   skill at `distance` 0. Under A-21 the terms also travel with the news of the issue; the bearer
    is one sure way the news arrives, and he is there to see the answer. A landed telling deposits the content claim, which is FA-P1's test for a
    writ being addressed to someone (COL-A edit 5: "he holds it, or his own ledger holds its content
    claim") `[UNVERIFIED: that a content claim received by `tell`, and not by the issue's own deposit,

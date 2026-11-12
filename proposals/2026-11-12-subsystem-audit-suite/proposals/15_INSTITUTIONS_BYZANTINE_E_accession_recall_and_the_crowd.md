@@ -12,7 +12,7 @@ Reconciled: 2026-11-12, unification lane U4c (test 9; opened at the tree) — bo
 
 ## Status: PROPOSED
 
-**Implementation block (W3-4b; `R4_READ.md` 7b.0).** Lands in batch: **B32**, after BYZANTINE-A (`U3_DEPENDENCY_ORDER.md` §1 item 32), with `22_HAPPENINGS_B` edit 3 (the deed race's odds, A-19; §4 rows 75, 76). Depends on: `14_VERBS_BINDING_C_turnover.md` (B21: `succeed`'s and `revoke`'s rows, bands, kinds and `provisional_term`), `05_SC_arrangement_rows_that_bind.md` (B27), `15_INSTITUTIONS_BYZANTINE_A` and `_SYNTHESIS_B` (B32: `legitimacy`'s chain); CR-35, CR-37, CR-91 are v11 plan positions, MISSING until `STAGES.md` step 5 (§2's widening of `may_claim` waits on CR-35). Lane tag: FA. Tier: `opus` for edits 1 and 3's terms (contested rows whose bands decide a story); `sonnet` for edit 4. Named test: `engine/season/tests/test_inst_byz_e.py`. Standing sentences: *Pool* — `succeed`'s and `revoke`'s pools are BINDING-C's, the one pool rule on the actor's trained score (A-6); talent enters as levels (A-7); a wound is a level (A-8). *Failure writes* — `succession.contested` and `revocation.resisted` are witnessed by those present and deposited to them; the resisted recall is a deed a later `arrest` or `march` can cite (A-81). *Draw keys* — BINDING-C's: `H(w.world_seed, w.tick, <seat id>, "succeed.draw")`, `H(w.world_seed, w.tick, <holder id>, "revoke.draw")` (A-30).
+**Implementation block (W3-4b; `R4_READ.md` 7b.0).** Lands in batch: **B32**, after BYZANTINE-A (`U3_DEPENDENCY_ORDER.md` §1 item 32), with `22_HAPPENINGS_B` edit 3 (the deed race's odds, A-19; §4 rows 75, 76). Depends on: `14_VERBS_BINDING_C_turnover.md` (B21: `succeed`'s and `revoke`'s rows, bands, kinds and `provisional_term`), `05_SC_arrangement_rows_that_bind.md` (B27), `15_INSTITUTIONS_BYZANTINE_A` and `_SYNTHESIS_B` (B32: `legitimacy`'s chain); CR-35, CR-37, CR-91 are v11 plan positions, MISSING until `STAGES.md` step 5 (§2's widening of `may_claim` waits on CR-35). Lane tag: FA. Tier: `opus` for edits 1 and 3's terms (contested rows whose bands decide a story); `sonnet` for edit 4. Named test: `engine/season/tests/test_inst_byz_e.py`. Standing sentences: *Pool* — `succeed`'s and `revoke`'s pools are BINDING-C's, the one pool rule on the actor's skill score (A-6); the governing attribute enters as levels (A-7); a wound is a level (A-8). *Failure writes* — `succession.contested` and `revocation.resisted` are witnessed by those present and deposited to them; the resisted recall is a deed a later `arrest` or `march` can cite (A-81). *Draw keys* — BINDING-C's: `H(w.world_seed, w.tick, <seat id>, "succeed.draw")`, `H(w.world_seed, w.tick, <holder id>, "revoke.draw")` (A-30).
 
 Source: `audits/15_INSTITUTIONS_BYZANTINE.md` §2.8 to §2.11, §3, §7.0, §17; the standing rule of
 `AUDIT_BRIEF.md` ("the ruled-in `succession` rules wherever the tree resolves an heir by a fixed
@@ -59,10 +59,10 @@ is a set, as a bench is).
 
 | term | reads |
 |---|---|
-| pool | BINDING-C's row: the one pool rule on the claimant's trained score for `succeed`'s capability (`[ASSUMPTION; medium]`: `argue`, a claim is made before people) |
+| pool | BINDING-C's row: the one pool rule on the claimant's skill score for `succeed`'s skill (`[ASSUMPTION; medium]`: `argue`, a claim is made before people) |
 | `difficulty` | by the rung kind of the seat's rung |
 | `reception` (OBS member 8, hostile half) | three audiences, each member `q` reading `legitimacy(q, claimant, seat)` (SYNTHESIS-B's chain, his own ledger; the resolver sums as `world_q.reception` sums a bench): the live holders of seats on the seat's rung and the rungs directly beneath it; the persons sworn to the seat (`gate.py::sworn_to`); the persons, cohorts by weight, residing where the seat's holder last resided. An empty audience is left out |
-| `opposition` (OBS member 2) | a rival who has docketed a claim on the same seat (A-19's deed race: heir, consort, princess and both houses' heads may claim); his trained score; none without a docketed rival |
+| `opposition` (OBS member 2) | a rival who has docketed a claim on the same seat (A-19's deed race: heir, consort, princess and both houses' heads may claim); his skill score; none without a docketed rival |
 | `standard` | raised one step at an open floor under `acclamation` (more eyes, and a wider telling on success) |
 | levels (leverage, C3-C10) | `favour` from the favourable half of the same three audiences' `legitimacy`, and from a live occasion under `acclamation` at his place; `office` from the title seat he exercises (`Act.via` names the `successions` title; its row's `modifier:`, D-U1-01a; none ships). The dignity step is dropped (this file's first `Reconciled:` line) |
 
@@ -91,7 +91,7 @@ heir "still has to claim", and is silent on who else may. `[UNVERIFIED]` `may_cl
 
 | term | reads |
 |---|---|
-| pool | BINDING-C's row: the one pool rule on the revoker's trained score (`[ASSUMPTION; medium]`: `argue`) |
+| pool | BINDING-C's row: the one pool rule on the revoker's skill score (`[ASSUMPTION; medium]`: `argue`) |
 | `difficulty` | by the rung kind of the stripped seat's rung |
 | `reception` (hostile half) | one audience: the persons sworn to **his** seat (`establishment_of`), each reading his regard for the holder: a governor's own men |
 | `rank_gap` (OBS member 6) | where a seat the holder holds stands above the revoker's exercised seat; the dignity-grade step is dropped (D-U1-01) |
