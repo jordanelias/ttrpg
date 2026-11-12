@@ -186,7 +186,13 @@ the instrument is read at the next accession. The ratchet does not depend on the
 
 ### 1.6 Commenda and colleganza: the contract that made the class
 
-`[M]` throughout (Lane; Puga and Trefler 2014; Pryor), shapes only.
+`[M]` throughout (Lane; Puga and Trefler 2014; Pryor), shapes only. **Still memory-grade after the
+re-grounding pass:** the word *commenda* occurs in no file of the tree (the work order's own grep for it
+matches "recommendation"), nor does *colleganza* or the sea loan. Three analogues are in the tree and
+are what the design can lean on: the Mongol ***ortoq***, a ruler's capital placed with merchants who
+carry a portable privilege and return a share `[T+: HCC:165]`; **the pledge of a future yield** to a
+financier for cash now, with the creditor's own ruin when the debtor is a prince who defaults
+`[T+: HCC:148]`; and **the loan secured on a named right** `[T+: HCC:161; CGR:190]`.
 
 - **Two parties, one voyage.** A **sedentary partner** (*stans*) puts up capital; a **travelling partner**
   (*tractator*) takes it to sea, trades, returns and renders account. The contract names the capital, the
@@ -209,21 +215,54 @@ the instrument is read at the next accession. The ratchet does not depend on the
 ### 1.7 The *stato da mar* and the galley system
 
 `[M]` for the detail; the tree holds the rettori shape `[T: research/proactive_governance_scale_research_v1.md X8]`.
+**Re-grounded:** the tree holds much more than the shape. The file this lane skipped (E-4) carries a
+thirteen-row table on exactly this subject `[T+: CGR:87-103]`, and the primitives study carries the
+two-officer model, the syndics and the report `[T+: PMP:119, :138-140, :150-152]`.
 
 - **A chain of ports, not a territory**: Istria and Dalmatia, Corfu, Modon and Coron ("the eyes of the
   Republic"), Crete, Negroponte, later Cyprus; a *bailo* at Constantinople with jurisdiction over Venetians
-  there.
+  there. `[M]` for the list and the *bailo*.
+- **Near and far were governed differently** (added `[T+: CGR:102]`). Mainland rectors were civilians
+  under "dense, fast Senate oversight"; the sea state was under a **Provveditore Generale da Mar**, a
+  senior governor with civil and military authority together. Distance bought the far officer the
+  combined command the near one was refused.
 - **Governed by rotation from the centre.** Each place had a **rector** (duke of Candia, *bailo*, *podestà*,
   *castellan*, *provveditore*) elected in the Great Council for about two years, with councillors beside
   him, a written **commission** stating what he may and may not do, **no local marriage, land or trade**,
   and a duty to report by dispatch. Local law and local councils were left in place under him.
+  `[T+: CGR:99: terms of 16, 24 or 36 months, fixed, with no self-succession; legislation "regularly
+  forbade rectors from close, informal contact with their subjects"; PHS:358. The figure is the tree's
+  and still a lead; the written commission and the marriage bar are not in the tree.]` The rector in
+  practice was **a broker** between the Senate's demands and the subjects, using his court as the place
+  of negotiation and his family's ties across the dominion `[T+: CGR:95, O'Connell]`; and a rectorship
+  was a rung on a graded ladder of postings for the patrician, promotion turning on how the last term
+  ended `[T+: CGR:101]`.
+- **By pact, not by annexation** (added `[T+: CGR:94; PMP:508-511; GPC:195-199]`). The mainland cities
+  came in by negotiated ***dedizione***: statutes, tax exemptions, guild privileges and communal
+  councils "formally preserved" in exchange for loyalty and the centre's appellate supremacy. Vicenza
+  kept a great council of 500, a lesser of 150 and a court that could impose death; Venice inserted its
+  two rectors and left the rest. The tree's rule from it: *conquest should produce a negotiation, not a
+  colour change.*
 - **Audited after the fact**: travelling **syndics** (*sindici inquisitori*) heard complaints from subjects
   against rectors and could try them on return; a rector's final *relazione* was read to the Senate.
+  `[T+: PMP:119: the 1566 commission charges them to bring "grandissima consolatione" to the cities and
+  to audit the rectors; they travel as a visible cortège of about thirty and proclaim their arrival:
+  "the inspection was theatre as much as audit"; CGR:100: the exit report "gates reassignment", and the
+  syndics are a second, independent layer. PMP:150-152: the ambassador's *relazione* is one cumulative
+  document that successors update.]`
 - **Split authority** (the tree's X8): in a subject city the *podestà* held justice and the *capitano* the
   garrison and the purse; some verbs rose to the centre, some stayed with the local council.
+  `[T+: PMP:138-140: "the governor is split into two rivalrous offices so that neither can defect
+  alone"; above them the *provveditori generali*, and the Avogaria could suspend a rector's decision.]`
+- **Settled as well as garrisoned** (added `[T+: CGR:103]`): Crete was colonised under a charter of 1211
+  with Venetian families holding land in two grades, the greater for mounted service and the lesser for
+  foot: a rooted militia of landholders under a separately rotating governor.
 - **How it broke**: Crete, 1363, the **revolt of St Titus**, in which the *Venetian settlers themselves*,
   holding fiefs for military service, rose with the Greek lords against a new tax levied without their
-  consent; put down with a hired army.
+  consent; put down with a hired army. `[M]`: the settlers' tenure is sourced above, the revolt is not
+  in the tree. The mainland broke otherwise and is sourced: after the defeat of 1509 the subject cities
+  opened their gates, the battle and "decades of resented rectorial administration" arriving together
+  `[T+: CPS:314]`.
 - **The merchant galleys (*mude*).** The state **built and owned** the great galleys in the Arsenal and
   each year **auctioned the charter** of each galley on each line (Romania and the Black Sea, Alexandria,
   Beirut, Flanders and England, Barbary) to the highest patrician bidder. The Senate fixed the sailing
@@ -245,9 +284,23 @@ The *arsenalotti* were also the Republic's **only trusted armed body at home**: 
 guard of the Great Council in session and of the palace during an interregnum, the fire watch, with
 ceremonial privileges and no vote `[T: political_hierarchy_standing.md §Venice 2.1]`.
 
+**Corrected `[T+: CGR:91, Davis]`:** the tree does not choose between the figures; it keeps both:
+"wholly state-owned, at peak employed ~16,000 workers (arsenalotti) with a stable skilled core of ~2,000
+backed by surge/unskilled labor — confirmed by multiple independent sources", with standardised
+production. So "a few thousand" is the core and "16,000" the surge; both are leads. The yard was fed by
+**state forests** the Republic took into its own ownership on the mainland, over communal and feudal
+claims, under six statutes ending in 1476 `[T+: CGR:92]`: a named supply chain from a subject province
+to one works. The comparative pass kept both as mechanics: a works with **a wage liability that falls
+due every season whether or not it is used**, and a levy tied to a named dependent site
+`[T+: CGR:198-199]`. **Corrected `[T+: CPS:306]`:** "only trusted armed body" overstates it. In 1355 the
+Doge's fellow conspirators against the patriciate were Arsenal men and craftsmen. The body the class
+trusted with the palace was the one a Doge could raise against the class.
+
 ### 1.9 The ban on armed power at home
 
-`[M]`, with `[T]` for Carmagnola.
+`[M]`, with `[T]` for Carmagnola. `[T+]`: *provveditori* as "civil-military overseers of frontier
+territories and fleets" are `PHS:358`; the contract and its phases are `CGR:110` (§2.6); the rule that no
+patrician commands on land, the pay chest, Pisani and the ban on foreign fiefs are not in the tree.
 
 - **No patrician commands a land army.** The mainland was held by **hired foreign captains** under
   contract (Carmagnola, Gattamelata, Colleoni), with patrician ***provveditori*** attached to the camp as
@@ -263,7 +316,15 @@ ceremonial privileges and no vote `[T: political_hierarchy_standing.md §Venice 
 
 ### 1.10 The spy system
 
-`[M]` for detail (Preto; Iordanou), `[T]` for the bench.
+`[M]` for detail (Preto; Iordanou), `[T]` for the bench. `[T+]`: the *relazione* as a required final
+report, unique to Venice, cumulative and inherited, is `PMP:150-152` (Queller); the grades of envoy
+(ambassador capped at two years, extraordinary envoy, resident) and an ambassador reporting straight to
+the Ten from 1480 are `PMP:154`: **the intelligence channel and the political channel could be
+separated**; the sealed route against the open accusation is `PMP:471-475`; the citizen secretaries who
+"drafted and often substantively conducted diplomacy that patrician ambassadors (who rotated too fast to
+master a brief) merely fronted" are `PHS:362`; informers and the denunciation slots are `GM:345`. The
+tree's cipher bureau is Milan's, under one long-serving secretary who survived his masters
+(`CGR:112`); a Venetian cipher office stays memory-grade.
 
 - **Three feeds**: (a) every ambassador and rector writes regular **dispatches** and reads a formal
   ***relazione*** to the Senate on return, an institutional memory in the secret chancery; (b) the Ten and
@@ -279,7 +340,13 @@ ceremonial privileges and no vote `[T: political_hierarchy_standing.md §Venice 
 
 ### 1.11 The ledger of the state
 
-`[M]` (Mueller; Lane; Pezzolo), shapes only.
+`[M]` (Mueller; Lane; Pezzolo), shapes only. **Still memory-grade for Venice:** the tree has no line on
+the Monte, the *estimo* or the forced loan. It has the same shape elsewhere, and that is what the design
+may lean on: the Spanish crown's ***juros*** and the suspensions of 1557, 1560, 1575 and 1596, where
+"default isn't a terminal state but a scripted restructuring": short debt converted to long, the
+bankers writing down part `[T+: CGR:130]`; the 1381 admission of new families "in exchange for war-loan
+contributions" `[T+: CPS:310]`: at Venice a loan to the state bought the roll; and the lender's ruin when
+the borrower is a prince `[T+: HCC:148]`.
 
 - **Forced loans, not taxes, on the rich.** Each household was assessed (the *estimo*) and required to lend
   a percentage; the loan was entered in the **Monte** (from 1262), paid a fixed interest (5% nominal), was
@@ -327,10 +394,18 @@ ceremonial privileges and no vote `[T: political_hierarchy_standing.md §Venice 
   had sat too recently), **the *specchio*** (he was in arrears with his taxes), age, absence. A man drawn
   and disqualified was "seen" (*veduto*); a man drawn and seated was *seduto*; being *veduto* for the high
   offices was itself a mark of standing a family counted `[T: ibid. 1.3; M for specchio and
-  veduto/seduto]`.
+  veduto/seduto]` `[T+: DPC:57: "a drawn man is *veduto* ('seen'), and he is *seduto* ('seated') only if
+  he clears the *divieti* (office held too recently, a relative in office, under age, absent, in tax
+  arrears)"; the bags were locked in a sacristy and their contents known to the scrutineers alone; the
+  loading of a purse of loyal names dates from about 1387, before the Medici. The word *specchio* is
+  not in the tree.]`
 - **Outsider magistrates.** The *podestà* and the Captain of the People were foreigners hired for six
   months with their own staff, forbidden local ties, and **audited at the end of term** (the *sindacato*)
-  before they were paid and released `[T: ibid. 1.7; M for sindacato]`.
+  before they were paid and released `[T: ibid. 1.7; M for sindacato]` `[T+: CGR:109, and the judgment
+  on it at CGR:207: the *sindacato*'s finding of malfeasance "bills the appointing faction's Legitimacy,
+  not just the podestà": **the appointer is liable for his man**, a mechanism this design lacked
+  (§17.2 item 3). `GM:277` adds the failure state: the outsider was sometimes captured by whichever
+  local party hired him.]`
 - **The party weapon before the Medici**: the Parte Guelfa's *ammonizione*, a ban from office on suspicion,
   with no trial `[T: ibid. 1.4]`.
 
@@ -359,7 +434,16 @@ procedure"* `[T: political_hierarchy_standing.md §The standing currency, compar
 
 ### 2.3 Patronage and the *gente*
 
-`[M]` (D. Kent; Padgett and Ansell 1993), `[T]` for the pillars.
+`[M]` (D. Kent; Padgett and Ansell 1993), `[T]` for the pillars. `[T+]`: the tree cites both authors
+and states the finding, twice. `RTP:68-71` (Padgett and Ansell 1993 named): the method is to **"capture
+the gate, not the seat"**; what makes the capture last is reach across many ladders ("multivocality");
+and its failure is specific: a narrow, coherent rival cannot out-organise it but can force **one public
+exposure that ties the scattered edges into a single scandal**. `RTP:452-455` (Kent and Rubinstein
+named): the bias sits in whatever generates the slate, and it is **one pointer that changes hands in one
+event**: the Albizzi used it to exile Cosimo in 1433 and he used the same lever on them a year later
+(`CPS:252`: "whoever drew the current Signoria decided who got exiled next"). `PHS:283`: the favours
+were marriage alliances, debts forgiven and dowries subsidised. The three named kinds of tie and the
+marriage-against-business pattern stay memory-grade.
 
 - **Three kinds of tie** made a following: kin (*parenti*), neighbours of the same ward (*vicini*) and
   friends (*amici*), the last meaning clients and allies bound by favours.
@@ -376,7 +460,19 @@ procedure"* `[T: political_hierarchy_standing.md §The standing currency, compar
 
 ### 2.4 The Medici bank: partnership branches and credit
 
-`[M]` (de Roover), shapes only.
+`[M]` (de Roover), shapes only. **Mostly still memory-grade:** the tree holds no account of the bank's
+partnership form, the bill of exchange, the discretionary deposit, the papal depositary or the alum
+farm. What it holds: that the bank was the second pillar of the regime, financing "allies' dowries,
+debts, and tax (*catasto*) burdens, buying loyalty without any formal office" `[T+: GM:269]`; that exile
+"did not touch the Medici bank's international correspondent network or its Florentine debtors", which
+is why exile failed `[T+: CPS:252]`; an archived design note that branch managers ran "practically an
+independent fiefdom … on personal relationships" `[T+: .designs/systems/npcs/reference/npc_roster_v30_infill.md:62,
+intent only]`; and, for the failure, the general case with other names: Edward III's default broke the
+Peruzzi in 1343 and the Bardi in 1346, "Creditor Collapse" when the exposure is concentrated
+`[T+: HCC:148]`; the Fugger loan for the imperial election bought mining rights and a climbing claim on
+office `[T+: HCC:161]`; and the Fugger house kept its factors honest by **a standing, scheduled audit of
+its own branches** `[T+: PGS:76]`, which is this section's "general manager who stopped reading the
+branch books", stated as an institution.
 
 - **A partnership of partnerships.** The family and one or two senior partners held the capital of a
   parent firm in Florence; **each branch** (Rome, Venice, Milan, Geneva then Lyon, Bruges, London, Avignon,
@@ -415,11 +511,27 @@ procedure"* `[T: political_hierarchy_standing.md §The standing currency, compar
   (§2.1): a fiscal fact with a constitutional effect.
 - **Sumptuary law**: statutes limiting dress, feasts, weddings and funerals, enforced by a magistracy with
   fines and by denunciation; they license display by rank, raise revenue by fine or dispensation, and give
-  a preacher's party a legal instrument (§2.8) `[M]`.
+  a preacher's party a legal instrument (§2.8) `[M]`. **Corrected in placement `[T+: PGS:121]`:** the
+  instance the tree holds is **Venice's** sumptuary magistracy, a standing office in a named city,
+  tightened from 1476 to 1562, drawing fines and petitions for exemption from the wealthy. The Florentine
+  use stays memory-grade.
 
 ### 2.6 The condottieri
 
-`[M]` (Mallett), `[T]` for Sforza and Carmagnola.
+`[M]` (Mallett), `[T]` for Sforza and Carmagnola. `[T+]`: the contract is in the tree. `CGR:110`: a
+captain contracted "for a specified count of 'lances' at a set stipend, structured in phases", a
+*ferma* and an *aspetto*; the judgment on it (`CGR:208`; compendium `tier3_proposal_status_closure.md:103`)
+names the life cycle ***Ferma → Aspetto → Lapsed***: bound service; then **a reserve at reduced pay in
+which the captain may be poached**; then lapse, with a period in which he may not turn on the late
+employer. **This corrects the sense of the first bullet below:** the second phase is not only the
+employer's option, it is the window in which a rival's offer is lawful. The structural conflict is
+`research/pre_firearms_formations/05_late_med_renaissance_europe.md:480-484` ("a condottiere's company is
+his livelihood"); the army as a bought instrument paid whether or not it prospers is `FASE:192-196`
+(Redlich); arrears turning the men on their own host is `HCC:67` (Antwerp, 1576: unpaid three seasons,
+they sacked the town that lodged them, "and every loyalist settlement that hears" trusted garrisons
+less); Sforza's marriage claim, which his employer twice tried to dissolve, is `RTP:340-343`; the general
+who feeds his army from the land and is brought down through his own sub-commanders is `RTP:345-348`.
+The muster inspection and the advance stay memory-grade.
 
 - **The *condotta***: a written contract between a state and a captain for a stated number of **lances**
   (a unit of three: man-at-arms, squire, page) and foot, for a **fixed term** (*ferma*) and an **option

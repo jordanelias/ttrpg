@@ -783,7 +783,7 @@ not superseded; canon is silent on who staffs the Ministries.)
   ("its research agent was interrupted", `00_MANIFEST.md:28`); the only treatment is eleven table rows
   and nine proposals in the quarantined `.audit/2026-07-09-comparative-governance-research/`. §2 is
   therefore mostly `[MEMORY]`. It should be read as shapes; no number in this design rests on it.
-  `[RE-GROUNDED, corrected: the first sentence is true of research/governance/ only. Nine other files treat Byzantium, four of them at procedure depth (acclamation; court rhetoric and protocol; the reception dossier; the army and its two loyalties): unified/RESEARCH_MAP_INSTITUTIONS_A.md §1. After re-grounding, of the nineteen [MEMORY] marks in §2, seven are sourced in whole or in part, and twelve stay memory-grade with a sourced cousin named beside each: §18.2]`
+  `[RE-GROUNDED, corrected: the first sentence is true of research/governance/ only. Nine other files treat Byzantium, four of them at procedure depth (acclamation; court rhetoric and protocol; the reception dossier; the army and its two loyalties): unified/RESEARCH_MAP_INSTITUTIONS_A.md §1. After re-grounding, of the sixteen memory marks in §2, five are sourced in whole or in part (Ktenas' price; the two bureaux the tree names; the acclamation; the guard's date; the protocol and payments abroad) and eleven stay memory-grade, each with a sourced cousin named beside it: §18.2]`
 - **No source in the corpus treats a decree's entry as distinct from its issue**, in games or
   history, beyond the Ming row. Decision 1 rests on the shape alone.
 - **No shipped game models a paperwork chain as persons with budgets.** The nearest the tree records
