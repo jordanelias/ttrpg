@@ -113,4 +113,131 @@ Not in this batch, and where each is: `30_WR_E`'s fork lift, the `entrenched`, `
 - COST and TIER: edit and small build; `sonnet`, `high`.
 - LANDS IT: B36's `valoria-author` producer, `isolation: worktree`; `Item: B36.01`, `[skip ci]`.
 
+### B36.02 — the strand shape line and the routes taken · `09_WR_story_instruments_that_can_fail` edits 3, 4 · BUILD · HASH EQUAL
+- SOURCE: the same file, "Edit 3", "Edit 4", "The falsifier"; closes F-WR-01 (edit 4), F-WR-03 (edit 3).
+- ADVANCES: none of the nine; whether the world closes what it opens is readable per seed.
+- INSTRUCTION (copied):
+  1. Edit 3, `engine/season/harness/strife.py::strands_block`: one line per seed, after `concluded N of M`:
+     `  shape: opened O · escalated E · closed C · closed-and-stayed S (of M strands)` —
+     "*opened*: the strand holds an `opens` move (always true; printed as the denominator's check); *escalated*: it holds a move by a doer other than its first doer, later in the log than its opening; *closed*: its latest move is terminal, is **not** an opening move, and `world_q.concluded` holds; *closed-and-stayed*: reported only by the two-reading form, `strands_block(w, seed, earlier=…)`, where `earlier` is the set of strand ids `concluded` at the previous season boundary: how many of those are still concluded strands now." "It reads `Flows` and `Move` fields that exist (`doer`, `opens`, `terminal`, `index`); it adds no roster."
+  2. Edit 4: "`opening_routes` stays static. `strands_block` already holds the world; beside `route check: X of Y pairs have no act route` it prints, per terminal code with a static route, the executed count of that route's verbs over the run (from `corpus_run.attempts`, the one owner of made and refused), and marks a code whose every terminal verb executed 0 times `ROUTE, NEVER TAKEN`."
+- WHERE: `engine/season/harness/strife.py` (`strands_block`; its `earlier=` keyword, default `None`).
+- TESTS: `engine/season/tests/test_storybar.py` gains `test_a_planted_opened_escalated_closed_strand_reads_closed_one` and `test_a_planted_executed_determine_clears_route_never_taken` `[ASSUMPTION: test names and file; the source names the falsifier plants, no test; E-3]`, written before the edits and read red.
+- FALSIFIER and CONTROL: "Edit 3: a plant of one opened, escalated, closed strand reading `closed 0`." "Edit 4: a planted executed `determine` leaving `ROUTE, NEVER TAKEN` on XS." Control: `build_realm(0)`'s content hash and the one- and two-season pins unchanged.
+- GATE: `python -m pytest engine/season/tests/test_storybar.py -q` → pass; `python -m engine.season.harness.strife 2 0 1 2 --strands` → a `shape:` line per seed and at least one `ROUTE, NEVER TAKEN` mark (the source's E-07 reading, three seasons: every code whose route is `determine`, `covenant`, `fight`, `pardon` or `seize`; read at two, A-114, and quoted).
+- HASH MOVERS: none.
+- DEPENDS ON: EXISTS-IN-TREE `harness/strife.py::strands_block`, `::opening_routes`, `::routeless_pairs`, `queries/world_q.py::concluded`, `::flows_in`, `harness/corpus_run.py::attempts`; V12 B36.01.
+- GLOSSARY: none (*strand* exists).
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B36's producer; `Item: B36.02`, `[skip ci]`.
+
+### B36.03 — the chronicle prints why an act was taken · `09_WR_story_instruments_that_can_fail` edit 5 · BUILD · HASH EQUAL
+- SOURCE: the same file, "Edit 5"; audit `09_WR_audit.md` §5.5 (the reason trail).
+- ADVANCES: R-04.c1 (with B36.06: a line says why).
+- INSTRUCTION (copied): `engine/season/harness/chronicle.py::lines`, `render`: "`soak._occasion_row(d, act)` already returns the question an act answered (`source`, `about`, `referents`); `arc.py` reads it. The chronicle renders `answers N. <actor> <verb>` for a cross-person antecedent and nothing for an act that answered a standing ambition. Add a `why` field to each line: for a `need` question, `pursuing <Proposition id, and its predicate where the store holds one>`; for `claim_landed`, `on learning <claim predicate> about <subject name>`. It reads the driver's `Scene`, as `arc.py` does." The CORE interface the source names under this edit (the question carried in an act's first Event's `observed`) is not built here (the batch's "Not in this batch" list).
+- WHERE: `engine/season/harness/chronicle.py` (`lines`, `render`).
+- TESTS: `engine/season/tests/test_in37_chronicle.py` gains `test_a_line_for_a_need_act_says_what_it_pursued` `[ASSUMPTION: test name; E-3]`, written first on a planted driver whose act answered a `need` question, read red; `test_the_render_changes_nothing_in_the_world` stays green.
+- FALSIFIER and CONTROL: a line for an act whose `Scene` answered a `need` question with no `why`; control: the render moves no content hash, log length or write list (the file's existing test).
+- GATE: `python -m pytest engine/season/tests/test_in37_chronicle.py -q` → pass; `python -m engine.season.harness.chronicle --seed 0 --seasons 2` → lines carry `pursuing …` or `on learning …` where the driver holds the occasion.
+- HASH MOVERS: none.
+- DEPENDS ON: EXISTS-IN-TREE `harness/soak.py::_occasion_row`, `harness/chronicle.py::lines`, `::render`; V12 B36.01.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, `high`.
+- LANDS IT: B36's producer; `Item: B36.03`, `[skip ci]`.
+
+### B36.04 — closes by act and by clock · `09_WR_B_readings_of_closure_and_tension` edit 1 · BUILD · HASH EQUAL
+- SOURCE: `proposals/09_WR_B_readings_of_closure_and_tension.md` "The resolution, decided" (R-29), "Edit 1", "The gate" (1), (2), "The falsifier"; rulings A-45 (per strand), the brief's "we do not do deterministic"; C3-K7, C3-Y9; closes F-WR-13.
+- ADVANCES: none of the nine by itself; the no-player half's endings become countable (clause 6 of `20_NARRATIVE_F`'s bar).
+- INSTRUCTION (copied):
+  1. `engine/season/harness/arc.py` gains, beside `ARC_SELF` and `ARC_WORLD`:
+     ```python
+     CLOSE_CELLS = frozenset({("Tenure", "until"), ("Person", "exists"), ("DocketItem", "matter"),
+                              ("Rung", "exists"), ("Office", "exists")})
+
+     def closes(log, act_of: dict, bounds: list) -> list[dict]:
+         """Per season: {"by_act": Counter(kind), "by_clock": Counter(kind)} over Events whose Receipts write a
+         CLOSE_CELLS cell; by act iff the Event's id is in `act_of` (the fold emitted it). Reads only."""
+     ```
+     "asserted at import to be a subset of their union plus `("Person", "exists")`."
+  2. "The clock half is split … A close *by term* is a Tenure whose `until` was set by a declared `Term` …: bookkeeping, which the rule permits. Every other MATTER close is *by threshold* … The split is structural: a closing Event whose causes include a `Term`'s declaring act through `Tenure.term` is `term`; any other non-act close is `threshold`."
+  3. `engine/season/harness/storybar.py::main` prints, under the per-season block, one line per season: `closes season=<s> by_act=<n> by_clock=<n> (term=<n> threshold=<n>) | <kind=n, …>`.
+  4. "`strife.py`'s strand-shape line (the first lane's edit) splits its `closed` count into the same two, by calling `arc.closes` and not by re-deriving it." (A-45: per strand; the one-river reading kept as the control column.)
+- WHERE: `engine/season/harness/arc.py` (`CLOSE_CELLS`, `closes`, the import-time assertion); `engine/season/harness/storybar.py` (`main`'s per-season block); `engine/season/harness/strife.py` (`strands_block`'s `shape:` line, B36.02).
+- TESTS: `engine/season/tests/test_storybar.py` gains `test_a_planted_determine_and_a_lapse_read_by_act_one_by_clock_one` (the source's gate (2): "a planted world with one `determine` executed and one matter left to lapse reads `by_act=1 by_clock=1`") `[ASSUMPTION: test name; E-3]`, written first, read red (no `closes`).
+- FALSIFIER and CONTROL: "A season with `by_act + by_clock` different from the number of Events writing a closing cell (the split lost one)". Control: `build_realm(0)` and the one- and two-season pins EQUAL with and without the line.
+- GATE: `python -m pytest engine/season/tests/test_storybar.py engine/season/tests/test_cl_thrust_b01_arc_reader.py -q` → pass; `python -m engine.season.harness.storybar --base-seed 0 --n 3 --seasons 2 --arms off` → a `closes` line per season. The source's gate (1) (season 5's `threshold` at least the `matter.lapsed` counts 8, 8, 7, six seasons) is past the cap and is not read here (six seasons in the source; A-114; B99's longer re-take may read it).
+- HASH MOVERS: none.
+- DEPENDS ON: EXISTS-IN-TREE `harness/arc.py::ARC_SELF`, `::ARC_WORLD`; `SeasonDriver.act_of`; V12 B36.01, B36.02.
+- GLOSSARY: *close* by act / by clock (new row): "an ending made by someone's act, or one the season's clock made: a term maturing, a matter lapsing, a body falling"; *by threshold* is the clock's half that a fixed state decides.
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B36's producer; `Item: B36.04`, `[skip ci]`.
+
+### B36.05 — open situations, the wear rule, idleness, the flat control · `09_WR_B_readings_of_closure_and_tension` edits 2–4 · BUILD · HASH EQUAL
+- SOURCE: the same file, "Edit 2", "Edit 3", "Edit 4", "The gate" (3)–(6), "The falsifier"; R-30; closes F-WR-15, F-WR-16, F-WR-21.
+- ADVANCES: none of the nine; apparatus rows F3, F4 gain an observable.
+- INSTRUCTION (one `storybar.py` commit, copied):
+  1. Edit 2: `def situations(w) -> dict:` — "At a season boundary: {kind: frozenset(referent)} for the four kinds above, each a referent stamped for two or more persons by its one World-first stamper (or, for `war`, a pair `at_war` admits among persons present at one rung). Composes on `world_q`'s stampers; reads only; calls no `new_draw`." The four kinds: "`seat` (`vacancies`, and `ambitions` naming an Office), `matter` (`matters_awaiting`), `custody` (`detainees_held`), `war` (`at_war` over the faction pairs of persons present together). A kind with no stamper is not invented here." "`drive`'s existing `on_season` hook carries it: `storybar.main` gains `--situations`, which collects `situations(w)` after each season and prints per season `open=<n by kind> opened=<n> gone=<n>`, and `motion=<non-zero condition changes> crossings=<condition.band_crossed>` (R-30: a `condition.worn` Event counts only when its Receipt's before and after differ). No pass bar, no threshold."
+  2. Edit 3: "The same block prints `idle=<persons with no executed act this season> of <persons>` and `idle_two=<persons idle two seasons running>`, computed from `read(...)["executed"]`'s `actor` field."
+  3. Edit 4: "`storybar.main` gains `--control {none,flat}` (no default other than `none`, which is today's reading; the seed and season count stay required, `tools/ci_sim_fabrication_check.py`'s scope). `flat` builds the realm with `build_realm(seed, goals=False)`, calls `decision_spread.apply_control(w)`, and runs `drive(..., world=w)` inside `decision_spread.no_goals()`. Every reading above, `--chains` and the act mix print for both. `decision_spread` does not import `storybar`, so the edge adds no cycle."
+- WHERE: `engine/season/harness/storybar.py` (`situations`, `main`'s `--situations`, `--control`).
+- TESTS: `engine/season/tests/test_storybar.py` gains `test_two_persons_on_one_vacant_seat_read_open_seat_one` (gate (3): "two persons stamped on one vacant seat reads `open seat=1`, and one person alone reads 0") and `test_situations_moves_no_hash_and_no_draw_ordinal` (the falsifier) `[ASSUMPTION: test names; E-3]`, written first, read red.
+- FALSIFIER and CONTROL: "a `situations` call that moves the content hash or the draw ordinal (it read the World lawlessly); a `flat` control whose hash equals the shipped arm's (the control did nothing)". Control: gate (6), "`build_realm(0)` and the one- and two-season pins are EQUAL with and without each flag".
+- GATE: `python -m pytest engine/season/tests/test_storybar.py -q` → pass; `python -m engine.season.harness.storybar --base-seed 0 --n 3 --seasons 2 --arms off --control flat --situations` → the flat arm's hash differs from the shipped arm's (gate (5) quotes EB-01's `1e202aff…` at seed 0 and `e48c989e…` at seed 1 on an older tree: the two hashes are recorded, not compared to those); the `motion=` and `idle=` lines printed (gate (4)'s "74 where 322" is quoted from the source's tree, read here and recorded).
+- HASH MOVERS: none.
+- DEPENDS ON: EXISTS-IN-TREE `queries/world_q.py::vacancies`, `::matters_awaiting`, `::detainees_held`, `::at_war`, `::ambitions`; `harness/decision_spread.py::apply_control`, `::no_goals`; `boot/realm.py::build_realm(goals=…)` (B03c); V12 B36.04.
+- GLOSSARY: *situation* (new row): "a matter that two or more persons are caught in at once: a vacant seat, a matter awaiting judgment, a man in custody, a war"; *idle* uses the plain word.
+- NAMES: `harness/populated.py::build_realm` → `boot/realm.py::build_realm` (B03c).
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B36's producer; `Item: B36.05`, `[skip ci]`.
+
+### B36.06 — the chronicle says what each act was about, starts from a close, and can be focalized · `09_WR_B_chronicle_that_tells` edits 1–4 · BUILD · HASH EQUAL
+- SOURCE: `proposals/09_WR_B_chronicle_that_tells.md` "The resolution, decided" (R-28, R-32), "The edits" 1–4, "The gate", "The falsifier"; rulings A-49, A-33, A-43; C3-Y9, C3-L4; closes F-WR-14.
+- ADVANCES: R-04.c1 ("`chronicle --seed 0` tells", IS-A §2).
+- INSTRUCTION (copied; `engine/season/harness/chronicle.py`):
+  1. "`lines()` gains an `"about"` field: `_name(persons, subject_of(act))` when the act has a subject, else `""`. `render()` prints it after the verb: `<actor> <verb> <about> | emitted …`." An act line's subject is `state/carriers.py::subject_of(act)`; an Event line's is `state/attribution.py::anchor_of(w, e)`; "nothing here may reintroduce one by reading the write call's `subject=` keyword off the log."
+  2. "`deepest_chain(rows)` keeps its signature for `--pick depth`; a new `closing_chain(rows, log, act_of)` is the default pick (`--pick close`), choosing the end as above and walking back with the rarity rule. Both are pure over their arguments." The rule: "The pick's end is an act whose own Event writes a closing cell (`arc.CLOSE_CELLS`); when several do, the rarest Event kind in the seed's log wins, then the latest season, then log order. When no act closed anything, the pick falls back to today's depth rule and the header says so." "Ties walking back are broken by rarity of the antecedent's verb within the seed, then by log order … the act-id order is retired."
+  3. "`--focus <pid>` (no default) restricts the rows to acts any of whose Events `pid`'s own ledger holds a claim of, read through `account` …, and tags each line `saw` / `inferred` from the row's source. The header names the focalizer: `chronicle … focus=<pid>`." `account` is called as `11_GO_player_surface_contract_B` §4 declares it, `account(w.persons[pid], since=(0, 0))` (UNDECIDED (5)); "a claim deposited by a witnessing channel is `saw`; one deposited beside a finding, FI-03's two-cause deposit, is `inferred`". `projection` / `witnessed` are not read (deleted by B03's `17_CENSUS_C1A_01` D2).
+  4. "The module docstring's THE PICK paragraph is rewritten to the rule above; the `[ASSUMPTION]` tag on CR-68's selection is kept." The omniscient render is the end reveal's body (A-49): the docstring says so in one sentence. "`--seed` and `--seasons` stay required."
+- WHERE: `engine/season/harness/chronicle.py` (`lines`, `render`, NEW `closing_chain`, `main`'s `--pick`, `--focus`, the docstring).
+- TESTS: `engine/season/tests/test_in37_chronicle.py` gains, written first and read red: `test_every_line_with_a_subject_names_it` (gate (1)); `test_a_planted_detain_determine_fight_reads_back_from_the_death` (gate (2): "a planted `detain → determine → fight` with a death reads back from the death, three lines, three subjects"); `test_equal_depth_walk_back_takes_the_rare_verb` (gate (4): "one verb seen once and one seen fifty times, walks back through the rare one"); `test_focus_tags_saw_and_inferred` (gate (5)) `[ASSUMPTION: test names; E-3]`; gate (6) "the existing hash-and-write-list test is green unchanged".
+- FALSIFIER and CONTROL: "A rendered line whose `about` names an id that is not the act's `subject` operand …; a `--pick close` render at a seed with a death that does not end on it; a `--focus` render containing an Event the focalizer holds no deposit for." Control: `test_the_render_changes_nothing_in_the_world`; `--pick depth` reproduces the pre-edit render.
+- GATE: `python -m pytest engine/season/tests/test_in37_chronicle.py -q` → pass; `python -m engine.season.harness.chronicle --seed 0 --seasons 2 --chains --min-depth 2` → every line with a subject names it (R-04.c1's reading, quoted in the close); gate (3) (seed 1, six seasons, the chain ends on `person.died`, `matter.determined` or a `tenure.closed`) is read at two seasons where such an Event exists, otherwise the header's "no act closed anything" line is quoted (six seasons in the source; A-114).
+- HASH MOVERS: none.
+- DEPENDS ON: EXISTS-IN-TREE `state/carriers.py::subject_of`, `state/attribution.py::anchor_of`, `harness/chronicle.py::deepest_chain`, `::_name`; V12 B36.04 (`arc.CLOSE_CELLS`); V12 Batch B34 (`decision/sheet.py::account`, `11_GO_player_surface_contract_B` §4); V12 Batch B03 (`17_CENSUS_C1A_01` D2).
+- GLOSSARY: *focalized telling* (row exists as *journal*/*telling*, A-49): its owner column points at `chronicle.py --focus` for the harness and at B36.08 for the in-play journal.
+- NAMES: `account`'s `since=(tick, round)` → `(tick, lap)` (B04, `PCR-4`).
+- COST and TIER: small build; `sonnet`, `high`.
+- LANDS IT: B36's producer; `Item: B36.06`, `[skip ci]`.
+
+### B36.07 — the case thread · `19_LACUNA_verdict_ladder_and_reversal` R-19-09 · BUILD · HASH EQUAL
+- SOURCE: `proposals/19_LACUNA_verdict_ladder_and_reversal.md` "R-19-09 · The case thread (harness)", "Exact edits" 6, "Gate" (last bullet), "Named tests" (B36's); C3-Y9; U3 §4.1 row 83.
+- ADVANCES: none of the nine; a case can be retold (R-04.c1's chronicle, supplementary).
+- INSTRUCTION (copied): "`harness/chronicle.py` gains `case_thread(w, case_file_id) -> list[line]`: from the determination (or dismissal, voiding, reversal) back through the case file's stages to the first deed claim each filed item cites, printed with `subject_of` / `anchor_of` as `09_WR_B_chronicle_that_tells` decides, and from a viewpoint where asked (`account` …; `world_q.projection` is deleted by C1A_01 D2, C3-L4). … It is how the realm 'retells' a case: who did it, who said so, on what, what the bench held, what later contradicted it. Reads only; asserts the content hash unchanged after a render, as `test_in37_chronicle.py` does." The viewpoint is B36.06's `--focus` selection, reused.
+- WHERE: `engine/season/harness/chronicle.py` (NEW `case_thread`); `engine/season/tests/test_in37_chronicle.py`.
+- TESTS: `engine/season/tests/test_in37_chronicle.py::test_case_thread_render_moves_no_hash` (named by the source), with a planted determined case file: "`case_thread` on the determined case prints the determination, each filed item and the deed claim it cites; the content hash is unchanged by the render". Written first, read red (no `case_thread`).
+- FALSIFIER and CONTROL: a case thread that omits a filed item the case file's stages hold, or a render that moves the content hash. Control: B36.06's render of the same world, unchanged.
+- GATE: `python -m pytest engine/season/tests/test_in37_chronicle.py -q` → pass.
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B36.06; V12 Batch B27 (`19_LACUNA_verdict_ladder` R-19-07, R-19-08: the `voided` / `reversed` stages; `05_SC_acquittal`); V12 Batch B24 (`05_SC_evidence_and_rebuttal_B`'s case file).
+- GLOSSARY: *case thread* (new row): "the story of one case told back from its verdict to the deeds it rests on".
+- COST and TIER: edit (harness); `sonnet`, `high`.
+- LANDS IT: B36's producer; `Item: B36.07`, `[skip ci]`.
+
+### B36.08 — the focalized journal · NM-W5 · BUILD · HASH EQUAL
+- SOURCE: the intake `:213` (NM-W5; `settled:` "`09_WR_B_chronicle_that_tells.md:63`: 'The journal NM-W5 owes ... is not built here'"); carry-forward `master/eval/E2.md:532` ("NM-W5, amended by the decision round") and `E4.md:3990`; home `proposals/2026-10-13-narration-mechanisms.md` §4 W5 (with the §A.2 row struck from its "Where" and "Co-edit" lines, M12 taken (a)); rulings A-49 (the focalized journal is the in-play telling), A-33, A-43; placement: after the item whose source names its id (B36.06's), because that source says the journal "composes on this" (§5.6, its own text); closes NM-W5.
+- ADVANCES: none of the nine; A-49's in-play telling gets its one person-side reader.
+- INSTRUCTION:
+  1. Open `engine/season/decision/sheet.py::account` (B34) and `04_CODE_ARCHITECTURE.md` §A.2 and §C.11 at this tree, and record in the commit body whether the journal can be built from `account`'s rows alone. W5's statement, copied: "A `person_q` function in the §C.11 `explain` shape: no `World` parameter, no walk from `causes[]` to `Act.actor`. It selects from the focalizer's own claims and Scenes; takes text fields from each claim's `seen` struct; prints `who` and `why` per section 3.3 rule 1; tells appraisal through `deeds_judged`, labelled as the person's own". The relevance is the ledger (A-9): it takes the Questions already raised for that person "and never recompute[s] them".
+  2. Build it as `journal(p, since) -> tuple[str, ...]` in `engine/season/queries/person_q.py` `[ASSUMPTION: the name and signature — basis: W5's "a `person_q` function"; `account(p, since)`'s shape, which it composes on]`, over `account(p, since)`'s rows (B34; the one person-side reading R-32 names): each line `saw` or `inferred` from the row's source as B36.06 tags it; a covered actor's act whose `seen.who` is `None` prints unattributed; a person at low legibility appears by his acts with no reason line (A-43); a death is told only to a holder who learned of it by presence, trail or telling (A-33). `skills/prose-writer/SKILL.md:158`'s "The player's vantage is genuinely omniscient" is narrowed in the same commit to the instrument chronicle (the carry-forward: "narrowed in NM-W5's commit").
+  3. STOPS IF step 1 finds the journal must read Scenes and Scenes are not person-side: then "the §A.2 row is owed and lands with NM-W5 as a Layer 1 hunk" (the carry-forward, M11 answered (a), ED-IN-0300, `[ASSUMPTION; medium; Jordan to correct]`): a Layer 1 edit is Jordan's amendment, so the item is HELD (trigger: the §A.2 row amended) and leaves for the held list at the expunge; nothing else of the batch waits on it.
+- WHERE: `engine/season/queries/person_q.py` (NEW `journal`); `skills/prose-writer/SKILL.md` (line 158's sentence); NEW `engine/season/tests/test_journal.py` `[ASSUMPTION: file name; E-3]`.
+- TESTS: in the new file, written before step 2 and read red: `test_journal_emits_no_field_its_seen_struct_lacks` (W5 falsifier 1: "Fields the journal emits that the focalizer's `seen` struct lacks: 0"); `test_unseen_actor_prints_unattributed` (the carry-forward's planted failure: "a covered actor's act reaching the focalizer with `seen.who = None` prints unattributed (planted failure: `actor_of` passed in reddens)"); `test_two_persons_sharing_a_reach_get_different_journals` (W5 falsifier 3); `test_a_journal_call_per_person_moves_no_hash`.
+- FALSIFIER and CONTROL: W5's three, "the control for (1) being the instrument's field count over the same focalizer (above 0) against the journal's 0". HASH control (the carry-forward's EXIT): "`content_hash()` of `build_realm(0)` over two seasons is equal with and without a journal call per person per season". W5 falsifier 2 (player coupling, a scripted callback) has no seat to run in this tree and is not read here.
+- GATE: `python -m pytest engine/season/tests/test_journal.py -q` → pass; `PYTHONHASHSEED=0`, `build_realm(0)` two seasons with and without a journal call per person per season → equal content hash.
+- HASH MOVERS: none ("HASH: EQUAL, asserted").
+- DEPENDS ON: V12 B36.06 (`--focus`'s `saw`/`inferred` rule); V12 Batch B34 (`decision/sheet.py::account`); EXISTS-IN-TREE `queries/person_q.py::deeds_judged`; NM-W1: SUPERSEDED by `09_WR_B_chronicle_that_tells` (`master/V11_EVALUATION_part2.md:288`), met by B36.06.
+- GLOSSARY: *journal* (row exists, A-49): its owner column becomes `person_q.journal`; "a person's own account of the season, told only from what he holds".
+- COST and TIER: small build; `sonnet`, `high` (the carry's "second tier"); step 1's Layer 1 reading `opus`.
+- LANDS IT: B36's producer; `Item: B36.08`, `[skip ci]`.
+
 <!-- A39 append point -->
