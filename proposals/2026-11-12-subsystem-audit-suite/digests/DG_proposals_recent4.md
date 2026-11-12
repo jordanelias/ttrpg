@@ -91,20 +91,19 @@ Lane: proposals dated 2026-09-20 or later, and undated ones. Note: the assignmen
 - **Conflicts / stale:** Card line citations moved (rosters.yaml 1864-1890 -> 2106-2140) (:79-81); card prose vs `seated_on_the_rung_above_structure` differ (:82-87); `off_king` has `revocation: null` and M8's third `revocation_bases` value is not yet in the tree (:100-102).
 - **Open items:** ID derivation and first-post pick are `[ASSUMPTION; medium]`; M8's throne basis owed by CR-37.
 
-### proposals/2026-11-04-knowledge-model-build-plan.md [partial 71%; read whole]
-- **What it is:** Build plan vetting Jordan's 2026-11-04 rulings ED-IN-0319..0331 (knowledge model, ten attributes, histories, hooks) against the tree and the v11 plan, lane IN.
-- **Status:** "PROPOSED (a plan, not a mechanism; nothing here is built)". Reading: live as intent for CR-82..CR-85; sections 11 folds a sequencing check; partly superseded by 2026-11-05 attribute rulings.
+### proposals/2026-11-04-knowledge-model-build-plan.md
+- **What it is:** Build plan vetting Jordan's 2026-11-04 rulings ED-IN-0319..0331 (knowledge model, ten attributes, histories, hooks) against the tree and the v11 plan; lane IN (file was partly read already; read whole).
+- **Status:** "PROPOSED (a plan, not a mechanism; nothing here is built)". Reading: live as intent for CR-82..CR-85; section 11 folds a sequencing check; partly superseded by the 2026-11-05 attribute rulings.
 - **Bears on:** CHAR, FI, SC, PC, MB, CORE, WR.
 - **Content that matters:**
-  - Most of the claim model already exists: told-claim corroboration is a noisy-OR over distinct origins (`person_q.py:938-974`), `deeds_judged` never reads confidence so staleness already leaves judgment alone; only retention (ledger_cap 200 fills in season 1; control 0/6/0 of 236 acquaintance claims at season 4) is the gap (:19-28, :41-47).
-  - CR-82 commits 2/3 as written (refresh/`stance` write at WITNESS) are dropped: the write_matrix forbids them (`write_matrix.yaml:93-96, 256-262, 180-185`), and a `stance` write would double count and fork `regard` from `reception` (:30-38).
-  - Ten attributes (ED-IN-0328): Agility->Coordination, Acuity->Reason, Will->Spirit, Charisma->Presence, add Perception and Grace (Composure alias), drop Bonds; keys stay stable; Godot bar stays (IN FLUX) (:79-109). The oracle `knots.py:185-216` reads `bonds` (:90).
+  - Most of the claim model already exists: told-claim corroboration is a noisy-OR over distinct origins (`person_q.py:938-974`), `deeds_judged` never reads confidence so staleness already leaves judgment alone; the real gap is retention (`ledger_cap` 200 fills in season 1; control reads 0/6/0 of 236 acquaintance claims at season 4) (:19-28, :41-47).
+  - CR-82 commits 2/3 as written (refresh or `stance` write at WITNESS) are dropped: `write_matrix.yaml:93-96, 256-262, 180-185` forbid them, and a `stance` write would double count and fork `regard` from `reception` (:30-38). CR-82 commit 2 is the ledger cap alone with a run-time ceiling vs the CI timeout (:243-254).
+  - Ten attributes (ED-IN-0328): Agility->Coordination, Acuity->Reason, Will->Spirit, Charisma->Presence, add Perception and Grace (Composure alias), drop Bonds; keys stay stable; Godot bar stays (IN FLUX) (:79-109). The knot oracle `knots.py:185-216` reads `bonds` (:90).
   - Histories: combat `history` is the roll's backbone (pool `max(5, history+6)`, Ob `history/2`, `core.py:54-56,115`); the season never authors it (default 3, every season fight pool 9 vs Ob 1.5); replacing it moves every season fight: needs design CR-85 (:148-177).
-  - Derived values census: 21 registry derived values, 2 duplicates, 12 correlates, 4 single-owner (all in `combatant.py`), 3 absent; TroopCount has two weight-to-troop ratios (1:1 at `massbattle.py:228` vs 30 per unit at `:255`); Health carried twice (`Person.body` and `WoundTracker`) (:179-200).
-  - A year is four seasons (ED-IN-0332) (:45-48). `lie` builds as CR-27 with no own kind, so detection symmetry with `forge` is not possible (:136-146).
-  - Risk tolerance is a duplicate of ED-IN-0304/CR-17/CL-PERSON M40; build nothing (:128-134).
-- **Conflicts / stale:** REM-45 dropped; CP-T07-02, PC-14 re-based; CP-T03-04/05, PC-17 conflict with a history replacement (:164-167, :255-261). Superseded in part by `2026-11-05-attribute-rulings-adjudication.md` (Composure/Grace gloss narrowed by AR-44).
-- **Open items:** whether `write_matrix.yaml` is Layer-1-bound (:220-222); unverified chained-told-claim count, REM-30 creation sheet, cast `stats:` blocks (:234-236); `ci_names_consistency` acceptance of new aliases not verified (:274-275).
+  - Derived-value census: 21 registry derived values: 2 duplicates, 12 correlates, 4 single-owner (all `combatant.py`), 3 absent; TroopCount has two weight-to-troop ratios (1:1 at `massbattle.py:228` vs 30 per unit at `:255`); Health carried twice (`Person.body` and `WoundTracker`) (:179-200).
+  - A year is four seasons (ED-IN-0332) (:45-48). `lie` builds as CR-27 with no own kind, so detection symmetry with `forge` is impossible (:136-146). Risk tolerance duplicates ED-IN-0304/CR-17/CL-PERSON M40; build nothing (:128-134).
+- **Conflicts / stale:** REM-45 dropped; CP-T07-02, PC-14 re-based; CP-T03-04/05, PC-17 conflict with a history replacement (:164-167, :255-261). The Composure/Grace gloss narrowed by AR-44 (see attribute-rulings-adjudication).
+- **Open items:** whether `write_matrix.yaml` is Layer-1-bound (:220-222); chained-told-claim count, REM-30 sheet, cast `stats:` blocks unverified (:234-236); `ci_names_consistency` acceptance of new aliases unverified (:274-275).
 
 ### proposals/2026-11-04-strife-flows/01_STRIFE_KINDS_DRAFT.md
 - **What it is:** Kind list (OPENS/JOINS/NEVER) of Event kinds for the "strife flows" person reading, 2026-11-04, lane IN.
@@ -147,19 +146,18 @@ Lane: proposals dated 2026-09-20 or later, and undated ones. Note: the assignmen
 - **Conflicts / stale:** AR-27/28 superseded by AR-29. Presence/Grace/Reason/Perception/Spirit readers largely absent in code (see adjudication).
 - **Open items:** health formula; AR-17, AR-43, AR-56/57 hedged.
 
-### proposals/2026-11-05-cr85-histories-hooks-and-combat-input.md [partial 70%; read whole]
-- **What it is:** Design file CR-85: what replaces the `history` integer in combat/threadwork/knot rolls; what a lifepath "hook" is; oracles' fate; health round trip. Lane PC (with IN, WR).
-- **Status:** "PROPOSED. Ratified by Jordan at 2026-11-05 (ED-IN-0349) and WITHDRAWN the same day ('undo ratification of combat', ED-IN-0351). Reopened ... whether `faculty` ... is the right single input to a contest pool, or attribute and trained skill are separate inputs. Nothing in `engine/` or `modules/` was built on this file." Reading: HELD / unresolved by Jordan's own withdrawal; design stands as a proposal.
+### proposals/2026-11-05-cr85-histories-hooks-and-combat-input.md
+- **What it is:** Design file CR-85: what replaces the `history` integer in combat/threadwork/knot rolls; what a lifepath "hook" is; the oracles' fate; the health round trip. Lane PC (with IN, WR). File was partly read already; read whole.
+- **Status:** "PROPOSED. Ratified by Jordan at 2026-11-05 (ED-IN-0349) and WITHDRAWN the same day ('undo ratification of combat', ED-IN-0351). Reopened with it ... whether `faculty` ... is the right single input to a contest pool, or attribute and trained skill are separate inputs. Nothing in `engine/` or `modules/` was built on this file." Reading: HELD by Jordan's own withdrawal; design stands as an unratified proposal.
 - **Bears on:** PC, CHAR, SC, CORE, FI.
 - **Content that matters:**
-  - Recommendation: combat pool and Ob read `faculty` (same reader as social contest, `sigma.py:146-160`); the five sigma reads of `history` are deleted not re-pointed; field renamed `faculty` (default 3) (:28-38). Measured: today every season fight rolls (pool 9, Ob 1.5), 28 of 28 over two seasons of `build_realm(0)`; under the design every season fight becomes (8, 1.0) because `faculty(w,p,"fight")` = `pool_default` 2 (:56-70).
-  - A control arm (constant 3 for every party) must reproduce the pre-item season `content_hash`; the five deleted sigma terms are exactly 0.0 when both parties sit at history 3 (:72-77).
-  - A hook is not a new thing: it is a capability key, a goal-row commit (via `seed_goals`), or a heritage value, all written at world build; the lifepath id lives on the cast row only, never on `Person` (:92-109).
-  - Oracles: combat `core.py:54-56,115`, `combat_systems.py:171,332,1053,1421,1441`; threadwork `min(3, history+3)` is constant 3; knots `pool = spirit*2`; deprecated `systems/combat/sim/combat.py` untouched; exporters re-derive `combat_engine_v1.json` with `SCHEMA_VERSION` bump (:125-136).
-  - Health: stored once as `Person.body`; `WoundTracker` is per-scene working state; the tracker docstring (persists between encounters) is false; "mapped twice, the two maps differ" (in: `party_end` lowers `end` by band; out: `body*left//full`) (:140-168). Step 2 (seeded-damage crossing) rides the first commit that passes Endurance from `Person.attributes` (:161-168).
-  - `practice` cannot count a fight (gate is the ladder's Success; fights carry Felled/Wounded/Untouched) (:188, :219).
-- **Conflicts / stale:** The plan cites `seam/wrappers/combat.py:36-39` as leaving history at default 3; those lines are a docstring omitting `history` (:258). Several line cites drifted (:251-259). Conflicts with later AR rulings (adjudication keeps `faculty` route).
-- **Open items:** `faculty` vs attribute+skill as separate inputs (reopened); combat key name (`arms` vs matter kinds); module default 3 vs season default 2; retire v30 combat.
+  - Recommendation: combat pool and Ob read `faculty` (the same reader the social contest uses, `sigma.py:146-160`); the five sigma reads of `history` are deleted not re-pointed; field renamed `faculty` (default 3) (:28-38). Measured: every season fight today rolls (pool 9, Ob 1.5), 28 of 28 over two seasons of `build_realm(0)`; under the design every season fight becomes (8, 1.0) because `faculty(w,p,"fight")` = `pool_default` 2 (:56-70).
+  - Control arm: constant 3 for every party must reproduce the pre-item season `content_hash` (the deleted sigma terms are exactly 0.0 when both sit at history 3) (:72-77).
+  - A hook is not a new thing: it is a capability key, a goal-row commit (via `seed_goals`) or a heritage value, all written at world build; the lifepath id lives on the cast row only, never on `Person` (:92-109).
+  - Oracles: combat `core.py:54-56,115`, `combat_systems.py:171,332,1053,1421,1441`; threadwork `min(3, history+3)` is constant 3; knots `pool = spirit*2`; deprecated `systems/combat/sim/combat.py` untouched; exporters re-derive `combat_engine_v1.json` with a `SCHEMA_VERSION` bump (:125-136).
+  - Health: stored once as `Person.body`; `WoundTracker` is per-scene working state; the tracker docstring (persists between encounters) is false; mapped twice and the maps differ (in: `party_end` lowers `end` by band; out: `body*left//full`); seeded damage rides the first commit that passes Endurance from `Person.attributes` (:140-168). `practice` cannot count a fight (gate is the ladder's Success; fights carry Felled/Wounded/Untouched) (:188, :219).
+- **Conflicts / stale:** the plan cites `seam/wrappers/combat.py:36-39` as leaving history at default 3; those lines are a docstring omitting `history` (:258). Several line cites drifted (:251-259).
+- **Open items:** `faculty` vs attribute+skill as separate inputs (reopened); combat key name (`arms` vs matter kinds); module default 3 vs season default 2; retire v30 combat (:280-283).
 
 ### proposals/2026-11-05-unified-design-and-build-plan.md
 - **What it is:** "The arc of the realm": one design for factions, clocks, breakdown, war, duty and violence with a build plan and workplan fold spec; lane IN (touches FA, PC, SC, WR), 2026-11-05.
@@ -482,6 +480,187 @@ Lane: proposals dated 2026-09-20 or later, and undated ones. Note: the assignmen
 - **Conflicts / stale:** `Tenure` and the Person/Rung/Office/Site vocabulary later became the live Layer-2 state (engine/season), settling escalation 1 de facto. Degree ladder is still four-band in code.
 - **Open items:** 5 escalations, most now answered by the built season; "no commander, no battle" gate reading (docket 11 M22/M27 related).
 
+### proposals/_session_provenance/2026-08-31-architecture-reconciliation/adjudications/F3_godot46.md
+- **What it is:** Fable-5 adjudication of the Godot 4.6 code shape for the port: version evidence, project layout, autoload policy, carrier placement, purity, fixed-point arithmetic, witness fan-out, determinism, save/load, ids, seam, skeleton verdicts, register, build order; 2026-08-31.
+- **Status:** "REFERENCE, not mechanism ... Nothing in it executes." Reading: historical for the version question (ED-GO-0002 now rules the version); the architectural rules are intent for GO.
+- **Bears on:** GO, CORE, DICE.
+- **Content that matters:**
+  - Version evidence: 4.3 has a declared `project.godot`, a CI pin and two executed headless runs (84 compile errors, 63 "Cannot infer the type"); 4.6 is prose, and the file it cites (`ecosystem_versions.yaml`) does not exist; the 84-error ratchet is only meaningful under the binary it was measured on (:57-111).
+  - Layout: `core/` headless, not one Node; `game/` is the only Node layer; autoload table empty or presentation-only; `World` driver-owned; `.tres` under `data/` is generated, never hand-authored (:120-209). Rejects `scene_tree_architecture.md`'s GameState autoload and the live `valoria-game` `Meta` single-state-owner pattern (:157-162).
+  - Fixed point: `condition` int in [0, `COND_SCALE`=10,000]; `f(degree)` as integer pairs over 16; half-up rounding on magnitude then sign; clamp once; band gate by cross-multiplication; float stays for belief-side arithmetic (:317-404).
+  - Determinism: one `RandomNumberGenerator` per operation from `H(world_seed, tick, subject_id, purpose)`; owned SplitMix64, never built-in `hash()` (:438-470). Save = binary snapshot with versioned header, not `.tres`, not event-log replay; JSON ids as hex strings (2^53 trap) (:486-520).
+  - Purity guard in the game repo: scan `core/` for `load(`/`preload(` and allowlisted autoloads; exactly one call site of `_witness(` (:295-313, :424-434). Skeleton `wound_module.gd:55` writes a field its own manifest declares non-writable (:606). The Python oracle has no substream implementation, so parity is threshold-level (:478-482).
+  - Escalations: engine version target; autoload ruling (STRAT:213) (:739-756).
+- **Conflicts / stale:** the Godot version question is now ruled by ED-GO-0002 (CLAUDE.md) so §1 is historical; the skeleton and `Key`/`KeyBus` references are retired. The 12-of-18 resolver-side Queries omitting `World` is a Layer-1 doc issue (:286-293).
+- **Open items:** `season_factor` distribution blocks `yield` fixed-point; int-overflow wrap in GDScript untested (:459-462).
+
+### proposals/_session_provenance/2026-08-31-architecture-reconciliation/adjudications/F4_loop_execution.md
+- **What it is:** Fable-5 adjudication of the season loop and execution path: rules between three competing loops, upholds the six-step loop as a refinement of the running three-phase tick, specifies four structural tests, the ED-IN-0201 personnel precondition and an execution path; 2026-08-31.
+- **Status:** none stated (adjudication; nothing executes). Reading: historical for the execution path (the season loop now exists in `engine/season/`); still the origin of the loop vocabulary, the structural-test list and the personnel gate.
+- **Bears on:** CORE, CHAR, FA, WR.
+- **Content that matters:**
+  - Ruling: three-phase tick (`engine_clock.py`: SEASON_TICK -> ACTION -> ACCOUNTING_BOUNDARY) is the AUTHORITATIVE MECHANISM; the six-step loop (CALENDAR, MATTER, DELIBERATE, RESOLVE, WITNESS, CENSUS; 4 barriers; 4 write classes) is the contract nested inside it (CALENDAR in SEASON_TICK; MATTER/DELIBERATE/RESOLVE in ACTION; WITNESS/CENSUS at the boundary); the seven-phase P0-P7 is retired (:97-150, :192-248). A write class is not a phase (:229-236).
+  - Write matrix reproduced (what each step may write) (:210-227). Ordering rule: CALENDAR -> MATTER (world freezes) -> DELIBERATE map -> RESOLVE (strata, hash tie-break, batch clamp) -> WITNESS -> CENSUS (:242-247).
+  - Order independence needs integer fixed-point (preferred) or canonical sort before summation; "floats, unsorted, approx-compare" refused (:269-287).
+  - Execution path of nine steps from a season-close emitter and a person loader (flag-gated, through `generate_npc`, never `world.rng`) to the gate, a real `choose`, WITNESS v0, RESOLVE batching, MATTER reorder and CENSUS v0 (:322-342).
+  - Four structural tests T1-T4 (choose sees no world; two witnesses disagree; officeless person acts/petitions; order independence incl. a poison triple 0.9 +0.3 -0.5 +0.3) each with a vacuity guard (:348-393).
+  - ED-IN-0201 personnel precondition quoted: "we do not allow the game to perform faction actions if there is no leader of that faction ..."; clause 2 must change the OPTION SET and POOL SOURCE, not a flat modifier; the "no commander, no battle" reading (a) gate vs (b) penalty is a genuine ambiguity (:402-420, :531-535). Also: 2 NPCs loaded moved the seed-42 winner purely by shifting the shared RNG phase (:311-315).
+  - Refusals table with mechanical/convention class (:464-488).
+- **Conflicts / stale:** M1 0/7, `stub_hits` 2 and `npcs == 0` pins are 2026-08-31 and now outdated (the season runs people). `engine_clock` `doc: null` claim and Key emission steps are retired. The "no commander, no battle" ambiguity is still carried (docket 11 M27 default AUTOMATED).
+- **Open items:** ESCALATE 1 commander gate vs penalty; verify D-2 act economy against `2026-08-30-fixes/02_the_act_economy.md`.
+
+### proposals/_session_provenance/2026-08-31-architecture-reconciliation/adjudications/F5_coverage_duplication.md
+- **What it is:** Fable-5 adjudication of coverage, duplication, gaps and supersession across the proposals corpus after PRs #337-#344: coverage figures, a supersession map, a 17-row duplication register, the G-01..G-30 gap register, the seven forks, ED-IN-0200/0201 quoted in full, ancestry, a reading list; 2026-08-31.
+- **Status:** none stated. Reading: historical snapshot (tree at `3871043`); the supersession map and gap register are partly outdated, but the ED-IN-0200/0201 quotes and the "uncited ancestor" findings remain a good index of what the proposals corpus holds.
+- **Bears on:** CORE, PROCESS, WR, CHAR, FA, SC, FI, GO.
+- **Content that matters:**
+  - Coverage: 133 proposal docs over 200 lines (75,453 lines); only 30 cited by the head suite, 103 uncited (67.7% by line weight); research masters and the two governing ED rulings uncited (:52-90).
+  - Supersession map: Tier 0 canon/code live; Tier 1 the #337-#344 chain (all PROPOSED, HELD BACK); greenfield-v2 "LIVE-PARALLEL, superseded by nothing"; `2026-08-30-fixes/03,04,05`, play-space coverage and arc-reachability LIVE EVIDENCE (:95-170).
+  - Duplication register highlights: independent convergence on the act economy (fixes/02 Reading C = ideal-v2 D-2 = integration master P4) and on investigation's six acts (doc 03 = `cross_scale_action_catalogue_v1.md:610-619`); `11_world_events.md` already designs the actorless-event channel including `we.altonian_pressure`; `10_the_slate_and_salience.md` supplies the candidate definition the ratified Light Function presupposes (:183-198).
+  - Gap register: world-substrate object (Thread/Mending Stability) is the largest unfiled gap; G-26/G-30 stale; `Recall` named the tenth attribute in shipped `CharacterCreationManager.gd:146-151` (:247-264). ED-IN-0200 and ED-IN-0201 quoted in full (:289-360).
+  - Escalations surviving: D-6 Church conferral rooting (person-rooted vs office-rooted vs off-map Holy See), the port's autoload and save-model rulings, Godot version (:527-550).
+- **Conflicts / stale:** `CLAUDE.md` Tenth-attribute `Recall` vs ED-IN-0328's Grace/Perception (superseded); `sim_params` citation counts `{cited:166, total:415, uncited:249}` vs "248" (:489-491); Key and module-contract premises retired.
+- **Open items:** D-6; autoload and save model (now in valoria-game); G-15/16/18 "likely closed by uncited doc" unverified.
+
+### proposals/_session_provenance/2026-08-31-architecture-reconciliation/pr_logs/PR337.md
+- **What it is:** not read.
+- **Status:** n/a
+- **Bears on:** n/a
+- **Content that matters:** [SKIPPED: proposals/_session_provenance/2026-08-31-architecture-reconciliation/pr_logs/PR337.md - not read in full; context budget of this lane was exhausted before reaching it. Header of its directory MANIFEST describes it where one exists.]
+- **Conflicts / stale:** n/a
+- **Open items:** n/a
+
+### proposals/_session_provenance/2026-08-31-architecture-reconciliation/pr_logs/PR338.md
+- **What it is:** not read.
+- **Status:** n/a
+- **Bears on:** n/a
+- **Content that matters:** [SKIPPED: proposals/_session_provenance/2026-08-31-architecture-reconciliation/pr_logs/PR338.md - not read in full; context budget of this lane was exhausted before reaching it. Header of its directory MANIFEST describes it where one exists.]
+- **Conflicts / stale:** n/a
+- **Open items:** n/a
+
+### proposals/_session_provenance/2026-08-31-architecture-reconciliation/pr_logs/PR339.md
+- **What it is:** not read.
+- **Status:** n/a
+- **Bears on:** n/a
+- **Content that matters:** [SKIPPED: proposals/_session_provenance/2026-08-31-architecture-reconciliation/pr_logs/PR339.md - not read in full; context budget of this lane was exhausted before reaching it. Header of its directory MANIFEST describes it where one exists.]
+- **Conflicts / stale:** n/a
+- **Open items:** n/a
+
+### proposals/_session_provenance/2026-08-31-architecture-reconciliation/pr_logs/PR340.md
+- **What it is:** not read.
+- **Status:** n/a
+- **Bears on:** n/a
+- **Content that matters:** [SKIPPED: proposals/_session_provenance/2026-08-31-architecture-reconciliation/pr_logs/PR340.md - not read in full; context budget of this lane was exhausted before reaching it. Header of its directory MANIFEST describes it where one exists.]
+- **Conflicts / stale:** n/a
+- **Open items:** n/a
+
+### proposals/_session_provenance/2026-08-31-architecture-reconciliation/pr_logs/PR341.md
+- **What it is:** not read.
+- **Status:** n/a
+- **Bears on:** n/a
+- **Content that matters:** [SKIPPED: proposals/_session_provenance/2026-08-31-architecture-reconciliation/pr_logs/PR341.md - not read in full; context budget of this lane was exhausted before reaching it. Header of its directory MANIFEST describes it where one exists.]
+- **Conflicts / stale:** n/a
+- **Open items:** n/a
+
+### proposals/_session_provenance/2026-08-31-architecture-reconciliation/pr_logs/PR342.md
+- **What it is:** not read.
+- **Status:** n/a
+- **Bears on:** n/a
+- **Content that matters:** [SKIPPED: proposals/_session_provenance/2026-08-31-architecture-reconciliation/pr_logs/PR342.md - not read in full; context budget of this lane was exhausted before reaching it. Header of its directory MANIFEST describes it where one exists.]
+- **Conflicts / stale:** n/a
+- **Open items:** n/a
+
+### proposals/_session_provenance/2026-08-31-architecture-reconciliation/pr_logs/PR343.md
+- **What it is:** not read.
+- **Status:** n/a
+- **Bears on:** n/a
+- **Content that matters:** [SKIPPED: proposals/_session_provenance/2026-08-31-architecture-reconciliation/pr_logs/PR343.md - not read in full; context budget of this lane was exhausted before reaching it. Header of its directory MANIFEST describes it where one exists.]
+- **Conflicts / stale:** n/a
+- **Open items:** n/a
+
+### proposals/_session_provenance/2026-08-31-architecture-reconciliation/pr_logs/PR344.md
+- **What it is:** not read.
+- **Status:** n/a
+- **Bears on:** n/a
+- **Content that matters:** [SKIPPED: proposals/_session_provenance/2026-08-31-architecture-reconciliation/pr_logs/PR344.md - not read in full; context budget of this lane was exhausted before reaching it. Header of its directory MANIFEST describes it where one exists.]
+- **Conflicts / stale:** n/a
+- **Open items:** n/a
+
+### proposals/_session_provenance/2026-08-31-architecture-reconciliation/repo_logs/R1_engine.md
+- **What it is:** not read.
+- **Status:** n/a
+- **Bears on:** n/a
+- **Content that matters:** [SKIPPED: proposals/_session_provenance/2026-08-31-architecture-reconciliation/repo_logs/R1_engine.md - not read in full; context budget of this lane was exhausted before reaching it. Header of its directory MANIFEST describes it where one exists.]
+- **Conflicts / stale:** n/a
+- **Open items:** n/a
+
+### proposals/_session_provenance/2026-08-31-architecture-reconciliation/repo_logs/R2_systems.md
+- **What it is:** Repo sweep R2 over `systems/` for the 2026-08-31 reconciliation: subsystem inventory, reproductions of `governance_ripple_substrate_v1.md` and `governance_play_redesign_v1.md`, the holonic doctrine vs "Rung as edge", a type inventory, a reconciliation table, duplication and gap registers, vocabularies.
+- **Status:** none (sweep log; secondary source). Reading: historical (2026-08-31); the two governance docs it reproduces are PROPOSED ancestors.
+- **Bears on:** SE, FA, CORE, CHAR, SC, MB, PC.
+- **Content that matters:**
+  - Subsystem inventory with sim LOC: combat engine 7,901 + 308; mass_battle 11,687 (30 files); social_contest 7,300; factions 2,747; settlements 1,021; threadwork 1,410; fieldwork 507; overview 600; world 767 (:5-20).
+  - `governance_play_redesign_v1.md` (PROPOSAL, 2026-06-22) is the richest prior art for NPC choice: AP economy `AP = 2 + FacilityTier`, governance verbs (Develop, Fortify, Keep Order, Hold Court, Sponsor, Treat, Levy, Investigate), five Ledger tag families (Precedent, Grudge, Debt, Reputation, Compact), the Pi pressure homeostat and 7 card families, and a Part 3 NPC dossier (convictions, ambition{goal, method, timeline, progress}, ethic, loyalty, leverage, trajectory re-planning) (:63-95). `governance_ripple_substrate_v1.md` (PROPOSED 2026-07-11): `resolution_quality` computed on a Key; 5/8 edges WIRED, 1 AT-RISK (event->Parliament/SC) (:24-59).
+  - Containment: `scale_hierarchy_v1.md` (RATIFIED 2026-07-13) already makes Province existence-conditional and says factions "hold PEOPLE not territory" - the ratified precedent of derived containment; the holonic doctrine's "one canonical shape at every scale" concerns code modules, not entities (:99-111).
+  - Duplication register: ~10 of 16 hunted mechanisms are re-invention of canonical/proposed material; Tenure and Rung unification are the genuinely new pieces; the Belief-vs-Memory duplication is inherited (:168-189).
+  - Gaps: no unified Tenure edge (governor_id FK, faction-holds-people prose, Compact tag, TreatyRecord, Standing ladders); no Partition statement; Territory scale an open gap (R-3); the six-step loop has no precedent (3-phase tick is canon) (:193-199).
+- **Conflicts / stale:** `governance_play_redesign_v1.md`'s own build gate (settlement registry) is met yet status never followed (:241); Key-substrate claims retired. Reproduces the glossary conflict "Event" (Key vs deck card).
+- **Open items:** R-1..R-4 of the ripple substrate; Scene Slate not re-read.
+
+### proposals/_session_provenance/2026-08-31-architecture-reconciliation/repo_logs/R3_godot.md
+- **What it is:** not read.
+- **Status:** n/a
+- **Bears on:** n/a
+- **Content that matters:** [SKIPPED: proposals/_session_provenance/2026-08-31-architecture-reconciliation/repo_logs/R3_godot.md - not read in full; context budget of this lane was exhausted before reaching it. Header of its directory MANIFEST describes it where one exists.]
+- **Conflicts / stale:** n/a
+- **Open items:** n/a
+
+### proposals/_session_provenance/2026-08-31-architecture-reconciliation/repo_logs/R4_registries.md
+- **What it is:** Repo sweep R4 over `references/`, `registers/`, `canon/` for the 2026-08-31 reconciliation: CURRENT.md reproduced, glossary inventory, the `Derived` fact, `descriptor_registry.yaml` and `module_contracts.yaml` parsed, a collision register checked against the repo, canon P-01..P-15 compliance, ledgers and handoff state.
+- **Status:** none (sweep log; "SECONDARY SOURCE", tree wins). Reading: historical snapshot (CURRENT.md stamp 2026-08-27, Generation v40).
+- **Bears on:** CORE, CHAR, WR, PROCESS.
+- **Content that matters:**
+  - `Derived` in the repo (glossary, `params_tables.yaml`, `descriptor_registry.yaml:284`) means a STORED per-character value in a flat global namespace, the opposite of the design's `Query`; the rename was necessary (:74-82).
+  - `descriptor_registry.yaml` (v1, ratified 2026-06-06): 9 attributes, tenth deliberately unnamed ("Do not infer the tenth from the aliases"), `agg.*` placeholders, 13 convictions enumerated to close a silent-no-op bug where two modules had divergent rosters (`conviction.py` 9 names, `npe.py` 8) (:86-104).
+  - `module_contracts.yaml`: 27 modules, 9 with `doc: null`, 11 `[ASSUMPTION]`-grade resolvers, 48 distinct Key types; not a single registration table (ED-IN-0200 says three flat namespaces) (:108-122).
+  - Collision additions: `hold` as mass-battle stance (`config.py:269`, `STANCE_SPEED_MOD` hold -99) and process HELD; `kind:` already an active YAML key in two registries; legacy attribute `Presence`; `View` as engine-atlas lens (:124-147).
+  - Canon P-01..P-15: the design is SILENT on 13 of 15; flags P-14 (modes vs a single loop) (:151-173).
+  - Ledger line counts and the 13 entries dated 2026-08-25+ (ED-IN-0196 "TN7 always"; ED-SC-0031/0032 degree ladder single owner); open ED-IN-0200/0201 (:177-223). `module_contracts.yaml:1543` names the no-Character/Actor gap (:255).
+- **Conflicts / stale:** CURRENT.md table of 2026-08-27 is long outdated; `Key`/module_contracts material retired; the "tenth attribute" is now Grace/Perception per ED-IN-0328.
+- **Open items:** the design should cite ED-IN-0200 and ED-IN-0201 (both `needs_jordan: false`, ruled-not-executed).
+
+### proposals/_session_provenance/2026-08-31-architecture-reconciliation/repo_logs/R5_corpus_coverage.md
+- **What it is:** not read.
+- **Status:** n/a
+- **Bears on:** n/a
+- **Content that matters:** [SKIPPED: proposals/_session_provenance/2026-08-31-architecture-reconciliation/repo_logs/R5_corpus_coverage.md - not read in full; context budget of this lane was exhausted before reaching it. Header of its directory MANIFEST describes it where one exists.]
+- **Conflicts / stale:** n/a
+- **Open items:** n/a
+
+### proposals/_session_provenance/2026-08-31-architecture-reconciliation/repo_logs/R6_execution.md
+- **What it is:** not read.
+- **Status:** n/a
+- **Bears on:** n/a
+- **Content that matters:** [SKIPPED: proposals/_session_provenance/2026-08-31-architecture-reconciliation/repo_logs/R6_execution.md - not read in full; context budget of this lane was exhausted before reaching it. Header of its directory MANIFEST describes it where one exists.]
+- **Conflicts / stale:** n/a
+- **Open items:** n/a
+
+### proposals/_session_provenance/2026-08-31-fable5-review/CODE_SHAPE_ABSTRACT.md
+- **What it is:** not read.
+- **Status:** n/a
+- **Bears on:** n/a
+- **Content that matters:** [SKIPPED: proposals/_session_provenance/2026-08-31-fable5-review/CODE_SHAPE_ABSTRACT.md - not read in full; context budget of this lane was exhausted before reaching it. Header of its directory MANIFEST describes it where one exists.]
+- **Conflicts / stale:** n/a
+- **Open items:** n/a
+
+### proposals/_session_provenance/2026-08-31-fable5-review/FABLE_FINDINGS.md
+- **What it is:** not read.
+- **Status:** n/a
+- **Bears on:** n/a
+- **Content that matters:** [SKIPPED: proposals/_session_provenance/2026-08-31-fable5-review/FABLE_FINDINGS.md - not read in full; context budget of this lane was exhausted before reaching it. Header of its directory MANIFEST describes it where one exists.]
+- **Conflicts / stale:** n/a
+- **Open items:** n/a
+
 ### proposals/_session_provenance/2026-08-31-fable5-review/MANIFEST.md
 - **What it is:** Manifest of the Fable-5 adversarial review of PR #343 (files, line counts, the headline numbers); 2026-08-31.
 - **Status:** "PROVENANCE (2026-08-31) ... Nothing here is a design document and nothing here ratifies." Reading: historical.
@@ -526,6 +705,14 @@ Lane: proposals dated 2026-09-20 or later, and undated ones. Note: the assignmen
 - **Conflicts / stale:** all 2026-08-31 absence claims; the season now has `establish/found/build/confer` verbs.
 - **Open items:** occupation/profession.
 
+### proposals/_session_provenance/2026-08-31-fable5-review/throughlines/CITATION_LEDGER.md
+- **What it is:** not read.
+- **Status:** n/a
+- **Bears on:** n/a
+- **Content that matters:** [SKIPPED: proposals/_session_provenance/2026-08-31-fable5-review/throughlines/CITATION_LEDGER.md - not read in full; context budget of this lane was exhausted before reaching it. Header of its directory MANIFEST describes it where one exists.]
+- **Conflicts / stale:** n/a
+- **Open items:** n/a
+
 ### proposals/_session_provenance/2026-08-31-fable5-review/throughlines/THROUGHLINES_BRIEF.md
 - **What it is:** Brief (v2) naming twelve design-and-code throughlines D1-D12 of the 2026-08-31 session.
 - **Status:** none; v2 supersedes v1 (which was about the review method). Reading: historical; D3-D6, D9, D12 are still the shape of the live engine.
@@ -555,6 +742,14 @@ Lane: proposals dated 2026-09-20 or later, and undated ones. Note: the assignmen
 - **Conflicts / stale:** the A11 gap is what `examine/research/surveil/interview/reconstruct` rows later filled.
 - **Open items:** none.
 
+### proposals/_session_provenance/2026-08-31-fable5-review/v2/ARCH_CORE.md
+- **What it is:** Fable-5 synthesis brief "the idealized shape, v2": three carriers (Person, Node, Office), one edge (`Tenure`), one act (`touches` with modes read/alter/exclude/mint/efface), derived-not-stored aggregates, three signatures with a new `Sensation`, a three-barrier loop; 2026-08-31.
+- **Status:** none; MANIFEST says it "did not survive: 12 FATAL, 35 MAJOR, 27 MINOR, all accepted"; `REVISIONS.md` is the authority. Reading: historical (superseded by REVISIONS and the deliverable).
+- **Bears on:** CORE, CHAR, FA, WR.
+- **Content that matters:** Site is matter held by a Node, not a carrier; Faction = Proposition + `commit` Tenures (entirely derived) (:34-44); `Tenure(subject, object, kind in hold|commit|contain|succeed|tie|knot)` (:46-70); `Sensation` is a closed record of exactly four need scalars computed in P2 and never stored (:111-123); loop = B1 CALENDAR, B2 MATTER, M1 DELIBERATE (per person), B3 RESOLVE, M2 RECKON (per person) (:158-173); eviction on `confidence_live x recency` only (:175-178). May-not list: D-2, conferral basis, `stores` denominator, S19, Coherence-0, off-board polities (:9-11).
+- **Conflicts / stale:** the shipped loop has seven steps (CALENDAR, MATTER, DELIBERATE, RESOLVE, ENCOUNTER, WITNESS, CENSUS); `Node` later renamed `Rung`.
+- **Open items:** carried-open list at :186-189.
+
 ### proposals/_session_provenance/2026-08-31-fable5-review/v2/D2_PROPOSAL.md
 - **What it is:** A proposal resolving D-2 (the act economy): one act per person per season, universally; an office's throughput is its establishment's acts.
 - **Status:** "This is a PROPOSAL with its alternative stated, not a ruling." Reading: historical; the one-act-per-person rule is also in FINDINGS_DIGEST; MANIFEST notes `2026-08-30-fixes/02_the_act_economy.md` had already reconciled it.
@@ -562,6 +757,14 @@ Lane: proposals dated 2026-09-20 or later, and undated ones. Note: the assignmen
 - **Content that matters:** "Act" does two jobs (personal attention vs institutional throughput); a Duke takes one act (`dispatch`) and thirty-five named people each spend theirs; the cohort exploit (individuate to farm acts) prices itself into content: eleven people who may refuse; `seat_items` and `capacity(date)` are one quantity seen from two sides (:14-81). Alternative (several acts for an office-holder) stated fairly and not recommended (:83-95). Unsettled: establishment size, who authors the first, upkeep, banking unspent acts (recommend no) (:97-103).
 - **Conflicts / stale:** the shipped loop uses `scene_budget` (default 5) per person per season with an office bonus (`budget.py`), a different economy than "one act".
 - **Open items:** establishment size/upkeep.
+
+### proposals/_session_provenance/2026-08-31-fable5-review/v2/EVENTS_AND_SWEEP.md
+- **What it is:** not read.
+- **Status:** n/a
+- **Bears on:** n/a
+- **Content that matters:** [SKIPPED: proposals/_session_provenance/2026-08-31-fable5-review/v2/EVENTS_AND_SWEEP.md - not read in full; context budget of this lane was exhausted before reaching it. Header of its directory MANIFEST describes it where one exists.]
+- **Conflicts / stale:** n/a
+- **Open items:** n/a
 
 ### proposals/_session_provenance/2026-08-31-fable5-review/v2/F6_RULED.md
 - **What it is:** Jordan's ruling that the world is "in flux" (neither dying nor misunderstood), worked out as `wear` and as ambition-as-commitment.
@@ -571,6 +774,22 @@ Lane: proposals dated 2026-09-20 or later, and undated ones. Note: the assignmen
 - **Conflicts / stale:** the `wear : restoration` ratio sets the difficulty curve and "no number in this design has been measured" (:111-113); docket 11 records `wear_per_season` rates as "invented values the row records for Jordan to correct" with `dwelling: 0` control.
 - **Open items:** wear tuning.
 
+### proposals/_session_provenance/2026-08-31-fable5-review/v2/FORKS.md
+- **What it is:** The six reserved forks (F1-F6) worked for the "ideal system"; each a proposal with cost and falsifier.
+- **Status:** none. Reading: historical; MANIFEST notes F5 was ruled wrong here and Jordan overturned it (partition: Altonia is an event source).
+- **Bears on:** FA, WR, SE, CORE.
+- **Content that matters:** F1 conferral basis dissolves into `Office.conferral` per-office (person-rooted warbands vs office-rooted magistracies) (:16-37); F2 `stores` becomes `map[MatterKind -> quantity]` (grain vs silver; coin cannot be eaten) (:41-69); F3 rootless cluster vacancy: conferral may name the office's own judging set (:73-91); F4 Coherence-0 = de-individuation by another cause (:95-108); F6 world dying vs misunderstood stays Jordan's (later ruled "in flux") (:133-142).
+- **Conflicts / stale:** F5 (generate off-board persons) overturned by Jordan; F6 ruled in `F6_RULED.md`.
+- **Open items:** F3's empty-judging-set floor unspecified.
+
+### proposals/_session_provenance/2026-08-31-fable5-review/v2/KEYS_AUDIT.md
+- **What it is:** not read.
+- **Status:** n/a
+- **Bears on:** n/a
+- **Content that matters:** [SKIPPED: proposals/_session_provenance/2026-08-31-fable5-review/v2/KEYS_AUDIT.md - not read in full; context budget of this lane was exhausted before reaching it. Header of its directory MANIFEST describes it where one exists.]
+- **Conflicts / stale:** n/a
+- **Open items:** n/a
+
 ### proposals/_session_provenance/2026-08-31-fable5-review/v2/MANIFEST.md
 - **What it is:** Manifest of the v2 "idealized system rebuilt" session files.
 - **Status:** "PROVENANCE (2026-08-31) ... Nothing here is a design document." Reading: historical.
@@ -579,21 +798,13 @@ Lane: proposals dated 2026-09-20 or later, and undated ones. Note: the assignmen
 - **Conflicts / stale:** none.
 - **Open items:** none.
 
-### proposals/_session_provenance/2026-08-31-fable5-review/v2/ARCH_CORE.md
-- **What it is:** Fable-5 synthesis brief "the idealized shape, v2": three carriers (Person, Node, Office), one edge (`Tenure`), one act (`touches` with modes read/alter/exclude/mint/efface), derived-not-stored aggregates, three signatures with a new `Sensation`, a three-barrier loop; 2026-08-31.
-- **Status:** none; MANIFEST says it "did not survive: 12 FATAL, 35 MAJOR, 27 MINOR, all accepted"; `REVISIONS.md` is the authority. Reading: historical (superseded by REVISIONS and the deliverable).
-- **Bears on:** CORE, CHAR, FA, WR.
-- **Content that matters:** Site is matter held by a Node, not a carrier; Faction = Proposition + `commit` Tenures (entirely derived) (:34-44); `Tenure(subject, object, kind in hold|commit|contain|succeed|tie|knot)` (:46-70); `Sensation` is a closed record of exactly four need scalars computed in P2 and never stored (:111-123); loop = B1 CALENDAR, B2 MATTER, M1 DELIBERATE (per person), B3 RESOLVE, M2 RECKON (per person) (:158-173); eviction on `confidence_live x recency` only (:175-178). May-not list: D-2, conferral basis, `stores` denominator, S19, Coherence-0, off-board polities (:9-11).
-- **Conflicts / stale:** the shipped loop has seven steps (CALENDAR, MATTER, DELIBERATE, RESOLVE, ENCOUNTER, WITNESS, CENSUS); `Node` later renamed `Rung`.
-- **Open items:** carried-open list at :186-189.
-
-### proposals/_session_provenance/2026-08-31-fable5-review/v2/FORKS.md
-- **What it is:** The six reserved forks (F1-F6) worked for the "ideal system"; each a proposal with cost and falsifier.
-- **Status:** none. Reading: historical; MANIFEST notes F5 was ruled wrong here and Jordan overturned it (partition: Altonia is an event source).
-- **Bears on:** FA, WR, SE, CORE.
-- **Content that matters:** F1 conferral basis dissolves into `Office.conferral` per-office (person-rooted warbands vs office-rooted magistracies) (:16-37); F2 `stores` becomes `map[MatterKind -> quantity]` (grain vs silver; coin cannot be eaten) (:41-69); F3 rootless cluster vacancy: conferral may name the office's own judging set (:73-91); F4 Coherence-0 = de-individuation by another cause (:95-108); F6 world dying vs misunderstood stays Jordan's (later ruled "in flux") (:133-142).
-- **Conflicts / stale:** F5 (generate off-board persons) overturned by Jordan; F6 ruled in `F6_RULED.md`.
-- **Open items:** F3's empty-judging-set floor unspecified.
+### proposals/_session_provenance/2026-08-31-fable5-review/v2/REVISIONS.md
+- **What it is:** not read.
+- **Status:** n/a
+- **Bears on:** n/a
+- **Content that matters:** [SKIPPED: proposals/_session_provenance/2026-08-31-fable5-review/v2/REVISIONS.md - not read in full; context budget of this lane was exhausted before reaching it. Header of its directory MANIFEST describes it where one exists.]
+- **Conflicts / stale:** n/a
+- **Open items:** n/a
 
 ### proposals/_session_provenance/2026-08-31-fable5-review/v2/THE_PARTITION.md
 - **What it is:** Jordan's partition rule for what drives a state change (2026-08-31) and its extension (creation and deletion are state changes).
@@ -683,32 +894,156 @@ Lane: proposals dated 2026-09-20 or later, and undated ones. Note: the assignmen
 - **Conflicts / stale:** Key premises retired.
 - **Open items:** petition-spray allowed by a later Jordan ruling (:60-61).
 
-### proposals/_session_provenance/2026-08-31-architecture-reconciliation/adjudications/F3_godot46.md
-- **What it is:** Fable-5 adjudication of the Godot 4.6 code shape for the port: version evidence, project layout, autoload policy, carrier placement, purity, fixed-point arithmetic, witness fan-out, determinism, save/load, ids, seam, skeleton verdicts, register, build order; 2026-08-31.
-- **Status:** "REFERENCE, not mechanism ... Nothing in it executes." Reading: historical for the version question (ED-GO-0002 now rules the version); the architectural rules are intent for GO.
-- **Bears on:** GO, CORE, DICE.
+### proposals/canonical_nomenclature_v1.md
+- **What it is:** Plan (v0.1, "planning pass 2026-08-11") for namespaced dotted identifiers for every named thing; lane IN, no ED allocated; executes held ED-IN-0152.
+- **Status:** "PROPOSED — not ratified. Nothing in this document renames anything." Reading: unadopted/proposed; the headline measurement predates the Key-substrate retirement.
+- **Bears on:** PROCESS, CORE, CHAR.
 - **Content that matters:**
-  - Version evidence: 4.3 has a declared `project.godot`, a CI pin and two executed headless runs (84 compile errors, 63 "Cannot infer the type"); 4.6 is prose, and the file it cites (`ecosystem_versions.yaml`) does not exist; the 84-error ratchet is only meaningful under the binary it was measured on (:57-111).
-  - Layout: `core/` headless, not one Node; `game/` is the only Node layer; autoload table empty or presentation-only; `World` driver-owned; `.tres` under `data/` is generated, never hand-authored (:120-209). Rejects `scene_tree_architecture.md`'s GameState autoload and the live `valoria-game` `Meta` single-state-owner pattern (:157-162).
-  - Fixed point: `condition` int in [0, `COND_SCALE`=10,000]; `f(degree)` as integer pairs over 16; half-up rounding on magnitude then sign; clamp once; band gate by cross-multiplication; float stays for belief-side arithmetic (:317-404).
-  - Determinism: one `RandomNumberGenerator` per operation from `H(world_seed, tick, subject_id, purpose)`; owned SplitMix64, never built-in `hash()` (:438-470). Save = binary snapshot with versioned header, not `.tres`, not event-log replay; JSON ids as hex strings (2^53 trap) (:486-520).
-  - Purity guard in the game repo: scan `core/` for `load(`/`preload(` and allowlisted autoloads; exactly one call site of `_witness(` (:295-313, :424-434). Skeleton `wound_module.gd:55` writes a field its own manifest declares non-writable (:606). The Python oracle has no substream implementation, so parity is threshold-level (:478-482).
-  - Escalations: engine version target; autoload ruling (STRAT:213) (:739-756).
-- **Conflicts / stale:** the Godot version question is now ruled by ED-GO-0002 (CLAUDE.md) so §1 is historical; the skeleton and `Key`/`KeyBus` references are retired. The 12-of-18 resolver-side Queries omitting `World` is a Layer-1 doc issue (:286-293).
-- **Open items:** `season_factor` distribution blocks `yield` fixed-point; int-overflow wrap in GDScript untested (:459-462).
+  - Finding: the dotted namespace already exists (`references/names_index.yaml` 113 dotted keys) but was never adopted as the identifier form: of 51 non-proper-noun keys, 16 appear nowhere outside generated registries, 32 only in tools/tests, 3 in engine/live design (`substrate.key`, `fac.intel`, `clock.mending_stability`) (:25-62).
+  - Noise is measured: ordinary-word names (Order 1,630 hits, Authority 1,366, Standing 1,234, Will 665...) (:64-92). Proposes a two-axis grammar (owner/scale governs entities and owned state; event-domain retained for Key types; kind axis retired), spelled-out namespaces (`set.` -> `settlement.` because `set` is a Python builtin) (:115-165).
+  - `tools/valoria_rename.py` scope roots (`designs`, `params`) no longer exist, so it silently covers 67 files and misses 270 design + 261 `.py` + 41 `.json` (:229-260).
+  - Four open Jordan calls, including `piety_track`'s owner (settlement vs territory vs character: three docs disagree) (:209-225).
+- **Conflicts / stale:** `fac.intel` and `substrate.key` references are to retired or orphaned facts (CLAUDE.md §0.05 cl. 4 notes `fac.intel` orphaned; Key substrate RETIRED ED-IN-0232). Proposed `ci_nomenclature_check.py` / phased guards conflict with the "no tree-wide guard" rule (§0.05, §0.1 pt 5).
+- **Open items:** Phase 0 rulings (axis; piety_track owner; `key.` prefix; contract citation-form); fix of `valoria_rename.py` scope.
 
-### proposals/_session_provenance/2026-08-31-architecture-reconciliation/adjudications/F4_loop_execution.md
-- **What it is:** Fable-5 adjudication of the season loop and execution path: rules between three competing loops, upholds the six-step loop as a refinement of the running three-phase tick, specifies four structural tests, the ED-IN-0201 personnel precondition and an execution path; 2026-08-31.
-- **Status:** none stated (adjudication; nothing executes). Reading: historical for the execution path (the season loop now exists in `engine/season/`); still the origin of the loop vocabulary, the structural-test list and the personnel gate.
-- **Bears on:** CORE, CHAR, FA, WR.
+### proposals/grounded_event_card_deck_v1.md
+- **What it is:** 58-card "grounded" event deck across seven families (Crisis, Petition, Opportunity, Ambition, Intrigue, Thread...) from four research dockets; lane IN (SE, FA), 2026-07-11. The file as read is partial: the body jumps from the compliance appendix to mid-card (line 98) and holds only about 10 full cards.
+- **Status:** "PROPOSED (2026-07-11) · Author-pass, not yet Jordan-ratified". Reading: unadopted; built on the retired Key/module-contract adjudicator framework; the successor event-card thinking is workplan CL-EVENTS (docket ch.11 rows 66-71).
+- **Bears on:** WR, SE, FA, FI, SC.
 - **Content that matters:**
-  - Ruling: three-phase tick (`engine_clock.py`: SEASON_TICK -> ACTION -> ACCOUNTING_BOUNDARY) is the AUTHORITATIVE MECHANISM; the six-step loop (CALENDAR, MATTER, DELIBERATE, RESOLVE, WITNESS, CENSUS; 4 barriers; 4 write classes) is the contract nested inside it (CALENDAR in SEASON_TICK; MATTER/DELIBERATE/RESOLVE in ACTION; WITNESS/CENSUS at the boundary); the seven-phase P0-P7 is retired (:97-150, :192-248). A write class is not a phase (:229-236).
-  - Write matrix reproduced (what each step may write) (:210-227). Ordering rule: CALENDAR -> MATTER (world freezes) -> DELIBERATE map -> RESOLVE (strata, hash tie-break, batch clamp) -> WITNESS -> CENSUS (:242-247).
-  - Order independence needs integer fixed-point (preferred) or canonical sort before summation; "floats, unsorted, approx-compare" refused (:269-287).
-  - Execution path of nine steps from a season-close emitter and a person loader (flag-gated, through `generate_npc`, never `world.rng`) to the gate, a real `choose`, WITNESS v0, RESOLVE batching, MATTER reorder and CENSUS v0 (:322-342).
-  - Four structural tests T1-T4 (choose sees no world; two witnesses disagree; officeless person acts/petitions; order independence incl. a poison triple 0.9 +0.3 -0.5 +0.3) each with a vacuity guard (:348-393).
-  - ED-IN-0201 personnel precondition quoted: "we do not allow the game to perform faction actions if there is no leader of that faction ..."; clause 2 must change the OPTION SET and POOL SOURCE, not a flat modifier; the "no commander, no battle" reading (a) gate vs (b) penalty is a genuine ambiguity (:402-420, :531-535). Also: 2 NPCs loaded moved the seed-42 winner purely by shifting the shared RNG phase (:311-315).
-  - Refusals table with mechanical/convention class (:464-488).
-- **Conflicts / stale:** M1 0/7, `stub_hits` 2 and `npcs == 0` pins are 2026-08-31 and now outdated (the season runs people). `engine_clock` `doc: null` claim and Key emission steps are retired. The "no commander, no battle" ambiguity is still carried (docket 11 M27 default AUTOMATED).
-- **Open items:** ESCALATE 1 commander gate vs penalty; verify D-2 act economy against `2026-08-30-fixes/02_the_act_economy.md`.
+  - Method: 15-agent workflow, critic returned 40 KEEP / 19 REVISE / 0 CUT; the deck flags that 0 cuts is a soft signal (:15-28). Family balance: Crisis 22/59 (over), Thread 1/59 (under-mined), Ambition 4/59 (thin) (:273-276).
+  - Compliance claim: every card resolves through three resolvers (`d_sigma`, `deterministic_accounting`, `dice_pool`); one new engine, a pi-weighted deck-draw (:42-76).
+  - ~50 of 58 cards' SC ripple is AT-RISK pending a `social_contest` `stakes.source_key` hook; 17 cards lever-gated on five new settlement levers (StockLevel, Assessment tag, route/corridor Precedent, Capital-Posture ledger family, Consent-Rule) (:284-300).
+  - Card shape: grounding (e.g. Fuggerei, Standon-Wadesmill turnpike, Crown of Thorns), trigger predicate, scale, branches with stat deltas, three-vector burden, FI/SC/FA ripples, follow-on actor, new lever (:98-240).
+  - Bonded pairs that must ship together (OPP-03 + OPP-04; ECON-05 -> ECON-01) (:267-268).
+- **Conflicts / stale:** Stat vocabulary (Mandate, L/PS, Treasury, Weight, Pi) belongs to the stored-aggregate design the season code refuses (Mandate not carried; "Nobody owns aggregates"); path `designs/architecture/...` dissolved.
+- **Open items:** the `stakes.source_key` hook (R-2/ED-SC-0015), R-1 levers, R-4 band cliff ruling - all unresolved against the current season code.
 
+### proposals/mass_battle_fighting_withdrawal_v1.md
+- **What it is:** Design workplan DG-2: a "yielding" per-subunit state (fighting withdrawal between full commitment and rout); lane MB, 2026-07-05, updated 2026-07-23.
+- **Status:** "BUILT (gated) — the §4 step-1 yield scope shipped in ED-MB-0005; the three residuals shipped in ED-MB-0024 ... all GATED OFF (MB_YIELD_EMERGENT / MB_YIELD_RALLY / MB_YIELD_POCKET), byte-exact. HELD for Jordan: the three default-flips, the emergent path's blast-radius measurement pass, the deferred erosion-brake, and the D_YIELD/YIELD_POOL_MULT/YIELD_RALLY_MORALE_FRAC/YIELD_POCKET_REACH calibration debt." Reading: live reference for built-but-default-off code.
+- **Bears on:** MB, PC (duel inside mass engagement: no), CHAR (discipline gate).
+- **Content that matters:**
+  - Gap: a body is either eroding at full commitment or routed atomically in one call (every subunit pool forced to 0, facing flips, engagement loop breaks); no state in between (:19-30).
+  - `yielding: bool` per subunit; facing preserved toward the enemy while movement vector is away (movement/facing decoupling is new logic), at most 1 cell/tick, melee-only, no volleying, malus on combat pool, bounded by path-budget `0.5 x speed x max-ticks` (:84-155).
+  - Entry: commanded `'yield'` order or emergent at `eff_discipline >= D_YIELD`; exit: rally, collapse to rout at `SUBUNIT_ROUT_FLOOR`, or pocket (blocked retreat -> hold, malus removed) (:98-143).
+  - Rejects the "recoil idiom" (no displacement primitive exists; `MB_CHARGE_RECOIL` is a net-success penalty) (:50-62). Reuses `_kite_goal`, `resolve_toi_and_commit`, `Order/check_orders` (:167-182).
+  - 2026-07-05 session fixed D2 (envelop phase limit cycle), D2b (frozen step), D3 (routed pool resurrected to 1), D4 (casualty columns union); Cannae-pattern gauge rows now overshoot in the attacker's favour; `subunit_combat_pool` is not scaled by the subunit's troop share, an unresolved partition-invariance question (:239-286).
+- **Conflicts / stale:** Calibration debt: `D_YIELD`, pool malus magnitudes are "not decided" per §5. Paths cite dissolved `designs/...`. Status line records both PROPOSAL (line 5) and BUILT (line 3) because of a later header insertion.
+- **Open items:** default flips; erosion-brake; whether partition-invariance is a defect (needs Jordan ruling).
+
+### proposals/multiunit_envelopment_plan.md
+- **What it is:** Implementation plan for army-scale multi-unit envelopment in the mass-battle sim; Path A (extend lane abstraction) vs Path B (unify the engagement field); lane MB, 2026-06-22.
+- **Status:** "PROPOSED — LIVE / UN-ADOPTED. Path-B cross-Unit spatial envelopment is a distinct, still-unbuilt mechanism ... Phase-1 never started. HELD FOR JORDAN." Reading: live, unbuilt; cited by the audit brief as the per-cell envelopment source.
+- **Bears on:** MB.
+- **Content that matters:**
+  - `run_multi_unit_battle` is a 1-D lane abstraction: each `pairings` lane runs an isolated 1v1 `run_battle`; cross-lane interaction is only rout contagion and a sequential freed-attacker; concurrent 2v1 is stubbed in a comment (:13-17).
+  - The per-cell envelopment shock is unit-agnostic (`_front_fixers` keyed by `id(subunit)`, `b_fixed_other`) so it would emerge for free once contacts are detected across all units (:9, :18, :81).
+  - Decision (Jordan, 2026-06-22): Path B, bottom-up emergent, no scripted convergence; `UNIT_GRID_SIZE` 30, `BATTLEFIELD_SIZE` 50, `MAX_TROOPS_PER_UNIT` 10000, `CELL_FLOOR` 40..`CELL_CAP` 200; `LINE_ASPECT` 1.4 vs ~2.0-2.3 target (:72-79).
+  - Phases: 0 spike (confirmed at line level), 1 shared-field static resolution (owner-unit lookup replacing `unit_a/unit_b` assumption), 2 positioning/maneuver, 3 command & control (ED-907), 4 NERS and historical re-validation (:40-47, :83-89).
+  - Guard: preserve the envelop-shock `elif` and dormant `_envelopment_sigma` so cell- and unit-level envelopment do not both fire (PP-683 lesson) (:18, :57).
+- **Conflicts / stale:** cites `BATTLEFIELD_SIZE` 25x25 (§A.3b) vs actual 50/51 in config (docket 08 says 51); a MB audit should check the current orchestration.
+- **Open items:** army-scale unit count; maneuver/command scope; LINE_ASPECT timing; canon write-back to §A.12.
+
+### proposals/pc_formation_system.md
+- **What it is:** "P-C Compositional Formation System (design-capture)": formations as shapes with no flat bonuses; roles = troop-type-gated instruction packages; Discipline/Command/Morale split; kiting build plan and validation. Lane MB (file name says pc = "P-C" phase, not personal combat). 2026-06-02, headings added 2026-07-15.
+- **Status:** "PARTIALLY SUPERSEDED — the engine half is BUILT (brace/missile-density/ROLE_SPEC/kiting ...). Residual: §8 canon reconciliation (strip flat dice rules from mass_battle_v30 §A.6, PARKED as ED-909 follow-up) + §9 opens. HELD FOR JORDAN." Reading: partly historical; the three-level surface (L1 army doctrine, L2 unit formation, L3 subunit role + instructions) is the live MB design shape.
+- **Bears on:** MB, CHAR (command from Charisma + Cognition), GO (intervention windows).
+- **Content that matters:**
+  - Principle: a formation is a SHAPE with no flat dice/sigma bonus; effects emerge from frontage (`_lanchester_strength`), depth (`_defender_depth`), facing (`octagon_angle`), tip speed (`cell_speed`), charge-shock; the retired `SHAPE_OFF_MOD/SHAPE_DEF_MOD` guarantee no flat shortcut (:20-32, :161).
+  - Three levels in the Football Manager model (ED-907): army doctrine (Aggression, Cohesion-priority; Command), unit formation (template or custom allocation; adopt-gated by Discipline `MIN_DISCIPLINE`), subunit role + instructions gated by troop type (:36-44). Roles table per troop type (Shield Wall, Hold, Anvil, Push, Skirmish, Gap, Pursue, Shock, Flanker, Feint, Screen, Volley line, Harass, Support/Reserve) (:77-83), matching today's `ROLE_SPEC` (15 roles).
+  - Brace is an instruction that raises effective density (mechanism B); depth-as-defense rejected; brace mechanism commit `7691eb6a` (reciprocal charge-recoil), missile-density coupling `a6ae38ad`, kiting commits `9159c22c` + `adf9fb9e` (:91-94, :198-216, :241-288).
+  - Governance: Command (derived Charisma-primary + Cognition secondary, ED-899) adapts strategy, recognises feints, runs concerted ploys (envelopment, false retreat, ambush, hammer & anvil), caps sub-unit coordination; Discipline maintains shape (0 = formation breaks); Morale is the rout resource (:50-67, :118-130). Intervention cadence ~5-20 windows per battle (:162).
+  - Kiting measured: kiter loses to cavalry (13/20), dominates infantry only on open field with long engagement (45 cells, 40 turns); space and time are implicit levers pending a terrain layer (:274-287). Validation anchors must trace to the research report; Waterloo/Albuera cited earlier were out of period (:224-238).
+- **Conflicts / stale:** canon A.5 Command formula `ceil((Cha+Cog)/2)` vs engine round((2Cha+Cog)/3) (:168-170). Docket 08 records `config.py:534-535` directive to abandon combat pools related to the commander, which sits against the "Command = Charisma + Cognition" base. `designs/` and `tests/sim/mass_battle/` paths are dissolved.
+- **Open items:** density-primitive magnitude; confirm role table; `MIN_DISCIPLINE` hard gate vs smooth drift; stratagem degrade-opponent-discipline; intervention cadence; custom-allocation UX granularity; subunit coordination limit (:174-185).
+
+### proposals/repo-reorganization-v1.md
+- **What it is:** Content-class taxonomy and phased migration plan for the repository (13 primaries; phases P0-P5) with per-slice execution logs, 2026-07-15/17; lane IN (ED-IN-0071).
+- **Status:** "RATIFIED (plan-of-record) — execution pending ... **EXECUTED.** The migration (P0-P5, §4) ran to completion across P0-P4's slices; `designs/` was retired 2026-07-19". Reading: historical (executed); the live tree differs again after ED-IN-0231 (`.designs/` quarantine, `systems/` holds no `.md`).
+- **Bears on:** PROCESS, CORE.
+- **Content that matters:**
+  - Ruled axes: `systems/<subsystem>/` with `sim/` subfolder per subsystem; one subsystem = one folder = one ID lane = one CURRENT.md row = one HANDOFF = one Godot module tree (§2a, :52-56). Registers + handoffs -> `registers/`; params + substrate -> `engine/`; `godot/` own primary (:34-48).
+  - Slices 1-9 executed (npcs/articulation/ui, threadwork, `_architecture`, world, settlements, fieldwork, social_contest, combat, mass_battle) with the retirement of the `import systems` landmine by renaming `combat_engine_v1/systems.py` -> `combat_systems.py` (:106).
+  - Rulings: character `piety_track` renamed `conviction` (piousness axis) under `systems/character/conviction/`; per-territory Piety Track -> `systems/settlements/` as `piety_track` (ED-644) (:119, :158). Audits filed by category with 1-month auto-deprecation (:120-123).
+  - Godot map: `systems/<sub>/sim/` -> `res://engine/modules/<sub>/` (ED-1050 1:1 oracle-port), `engine/engine_params/` -> `res://resources/*.tres` (:139-151).
+- **Conflicts / stale:** `audits/` lifecycle, `character/*`, `factions` slices and ED-644 rename were still "deferred" at the last edit; CLAUDE.md now says `audit/` is retired as a category, `.audit/` hidden, `.designs/` quarantined; `module_contracts.yaml` "27 modules" count dated; "Key-emitting" language retired (ED-IN-0232).
+- **Open items:** none that matter; reference for where old paths went (use `tools/pathres.py`).
+
+### proposals/social_contest_consolidation_integration_v1.md
+- **What it is:** Social-contest consolidation and integration programme v2 (CIP-0..CIP-15), based on four precedent lenses and three adversarial critics; lane SC, v1 2026-08-06, v2 2026-08-07; IDs ED-SC-0023/0024/0027/0028.
+- **Status:** "PROPOSED — CIP-0..CIP-15 filed. Needs Jordan: CIP-3, CIP-7b, CIP-9b, CIP-12, CIP-15". Reading: unratified; written against the pre-season SC kernel (`systems/social_contest/sim/contest/`, now UNWIRED from the season loop per docket 07) and the retired Key/echo transport; its principles are the nearest design statement of argument-as-structure in the tree.
+- **Bears on:** SC, FI, FA, CHAR, SE, GO.
+- **Content that matters:**
+  - Governing principle: two configurations of one engine are distinct scenes iff (i) a competent player's best action sequence differs and (ii) the player can tell which they are in; anti-collapse: no common scalar into which all effects convert (C-1, C-2: every win condition reads `s.adv`) (:15-52).
+  - CIP-1 Record spine: ledger tags (Precedent, Debt, Grudge) emitted by a contest close with source/parties/uses/superseded_by; fix `ledger_add` replacing on (kind,key); holder dimension and reach carrier needed; falsifier: a contest outcome in season N changes which branch fires in season N+k (:171-230). The kernel's whole interface to the world was two integers (`scene_dispatch.py:298,306-307`) (:78-83).
+  - CIP-2 evidence: the close must consume claim-graph state non-fungibly; a warrant scheme (Walton/Toulmin: premise, conclusion, critical questions) defines its own attack surface (no warrant x attack matrix); W3 evidence has no producer in the tree (`investigation.py` all stubs), no apparent-vs-true split so forgery is unrepresentable, no provenance (:232-290). This bears directly on the detective/noir charge (typed bindable evidence, contradiction/rebuttal).
+  - CIP-5 the writ declared before the roll (question, stakes = the draft Record, dials, coarse read, compromise axes, the end pursued); a topic the world did not raise should not be arguable (generalise `_derive_vote`) (:335-372). CIP-13 decorum operator: relevance graded not binary; delete `Stasis.TENSE` and the dominated `hard` verb (:551-599). CIP-14 audience as a party (crowd taste, room memory "lose the case, win the room"), conditional on CIP-9b (:601-646).
+  - CIP-9b: measure E[auto] against AI-vs-AI played, not expert play; auto-resolve viable only where the outcome surface is low-dimensional (XCOM 2 ships none) (:458-481). CIP-6: factions get `aims`, `redLines`, concealed `threat`, `patience`, voiced reasons (threshold predicates over persisted accumulators) (:374-405). CIP-11 N10 deliberation with named-juror persuasion falsifier (:498-514).
+  - Nulls: no published mechanisation of principal repudiation (CIP-7b), concealed willingness scalar, burden-of-proof UI, mid-debate AI concession; no world producer of evidence in the tree (:765-769).
+- **Conflicts / stale:** Claims about `parliamentary_bridge`/`echo_transport` (C-8) rest on the retired Key substrate. Ruled items it touches: ED-SC-0033..0039 (proceedings ownership) were later; the programme does not know them. The season now has `social_contest.roll` (margin only) with arrangements as data and `proofs`/`reception`/`forgery_quality` Ob terms (docket 07), so several CIPs (CIP-3, CIP-15) have been overtaken or reframed.
+- **Open items:** forks §4: CIP-3, 7b, 9b, 12, 15; Leak destination; C3 scope; Reserve cost; the eleven-primitive reconciliation; adjudicator authority level vs gap.
+
+### proposals/valoria_fork_plan_of_record_v1.md
+- **What it is:** "Valoria Fork — Plan of Record" v3: Python-side "Stage 0" plan before the Godot port (fork assembly, centralized value layer, inversion of prose registries to JSON, eight Jordan decisions C1-C8 ruled 2026-08-04); ED-IN-0124/0125, 2026-08-03/04.
+- **Status:** "PROPOSED (ED-IN-0124, 2026-08-03). Jordan-vetoable throughout. Class A ... Nothing here ratifies on merge." All eight C-items RULED 2026-08-04 (ED-IN-0125 / ED-MB-0064). Reading: largely historical; the fork was a different repo plan; Key premises retired.
+- **Bears on:** GO, CORE, MB, PC, FA, PROCESS.
+- **Content that matters:**
+  - Rulings (2026-08-04): C1 a personal combat can be triggered by field investigation, mass battle, scene contest AND invoked directly (four entry points); C2 mass battle occurs ON A MAP, loser = whoever loses more units or has a settlement captured (band edges unruled); C3 `engine_clock` stands as season counter + accounting boundary; C4 attribute roster TEN (3/3/3 plus Spirit), reversible; C5 struck (Keys "work all directions"); C6 no new `da.territorial_transfer`; C7 struck (already ruled a defect); C8 Church Influence is a GLOBAL peninsula-wide tracker gating behaviours (e.g. the mass-seizure attempt); `territorial_piety` is per-territory and feeds CI (:433-442).
+  - Thesis: a seeded campaign dispatched 29 scene slots, all `contest`, zero combat, so personal combat was unreachable from the loop; 554 typed values extracted and almost none reach anything that runs (:94-104).
+  - Code-first boundary: oracle code (`config.py`, `core.py`) is SOURCE; generated exports are GENERATED; prose only where no code pair (:146-163). Provenance ratchet: `uncited` may not increase (cited 84, uncited 240, assumption 8 of 324) (:194-198). Immutability and AST tripwire against new bare constants; a guard must be able to fail (:200-226).
+  - Procedure: positive control before asserting absence (:74-78, :514-520).
+- **Conflicts / stale:** Everything keyed to `Key IN -> resolver -> OUT`, `keys.py`, ECHO_TRANSPORT, `key_type_registry`, `wiring_manifest.yaml` is retired (ED-IN-0232). The proposed AST tripwire/`cook.py` guard conflicts with "no tree-wide guard" (§0.05). Docket counts of modules/keys are dated.
+- **Open items:** the mass-battle `degree_map` four-band edges (C2 residual); `build_fork.py` carry list stale.
+
+### proposals/verb_list.md
+- **What it is:** Roster of 92 verbs (coded and proposed) by subsystem lane with effect on the game world, coded/proposed status and justification; sourced from `proposals/2026-10-16-verbs/` (undated file; ~2026-10-16).
+- **Status:** none (no Status line). Header: "Coded = a row exists in engine/season/verb_table.yaml today. ... Proposed (planned) = a workplan position with no row yet; Proposed (new) = the v2 synthesis adds it." Reading: live reference roster; input to the attribute map; each row's coded/proposed state must be re-checked against `verb_table.yaml` (63 rows at docket time).
+- **Bears on:** CORE, PC, MB, SC, FI, WR, FA, SE, CHAR.
+- **Content that matters:**
+  - Personal combat: `fight` is the only way a person harms another; `assassinate` (aim death, held cover) and `capture` (aim alive; custody) proposed as same contest with different aims; `challenge` should mint a challenge Record; `accept` requires a held challenge and fights under its terms; `guard` and `rescue` proposed (:9-32).
+  - Mass battle: `levy`, `muster`, `drill`, `disband` as settlement acts moving troops by grade; `marshal` writes the `order_of_battle` Record "the field reads whenever the force fights, attacking or defending" (gives the defender a chooser); `march` carries posture and stocks; `supply`, `forage`, `surrender` (:35-69). None of these exist as rows; the coded army verbs are `recruit/form_unit/assign_troops/order_unit/disband_unit/discharge_troops` (docket 08/09).
+  - Social contest: `tell` (coded), `persuade` (moves pursuits; renamed from `argue`), `utter`, `commit`, `petition`, `lodge` (renamed from `carry`), `convene`, `open_case`, `speak`, `determine`, `interrogate`; lie parked (:73-131).
+  - Fieldwork: `examine`, `research`, `watch` (renamed from `surveil`), `interview`, `reconstruct` ("observations become an accusation; the honest mistake, the Foscarini case"), `survey`, `conceal`, `infiltrate`, `forge`, `bribe` (:133-202); threadwork `thread_read, weave, lock, dissolve, mend, ward, knot` (:204-247).
+  - Gaps flagged: `travel/explore` need route model and authored POIs; `ration` needs a draw-policy ruling; `pardon` name a defect (R-17); `tie` kept only if a reader gates on it (:292, :302, :479).
+- **Conflicts / stale:** Naming rulings (R-05 `order` vs shipped `dispatch`, R-06 `utter`, R-17 `pardon`) were open; "coded" claims drift since 2026-10-16 (verb_table.yaml now 63 rows with `argue`).
+- **Open items:** many "Proposed (new)" verbs have no row; hostile-working `ward` waits on the first hostile operation executing.
+
+
+## Cross-subsystem leads
+
+- **Status census of this lane (RATIFIED / PROPOSED / held back).** RATIFIED: `2026-11-04-strife-flows/01_STRIFE_KINDS_DRAFT.md` (ED-IN-0316, five calls resolved for emergent narrative); `2026-11-08-flow-conditioning/` (ratified as the accepted first reading, "ratify all and merge", ED-1094; content drafts for CR-106/CR-107, nothing at runtime; engine files do not yet carry it); `repo-reorganization-v1.md` (executed, historical). BUILT-gated-off: `mass_battle_fighting_withdrawal_v1.md` (yield, three MB_YIELD flags off, default flips HELD for Jordan). PARTIALLY SUPERSEDED: `pc_formation_system.md`. WITHDRAWN/held: `2026-11-05-cr85-histories-hooks-and-combat-input.md` (ratified ED-IN-0349 then withdrawn ED-IN-0351). PROPOSED (nothing ratified on merge): the docket chapters 07-11, `cr11-computed-establish-design`, `knowledge-model-build-plan`, `attribute-rulings-adjudication`, `verb-attribute-map` (+part2), `unified-design-and-build-plan` (ratified on merge by ED-1094 except Part 6 questions), `social_contest_consolidation_integration_v1` (needs Jordan: CIP-3, 7b, 9b, 12, 15), `grounded_event_card_deck_v1`, `canonical_nomenclature_v1`, `multiunit_envelopment_plan` (un-adopted, HELD), `valoria_fork_plan_of_record_v1`. FILED reference: `design-and-code-critique-report`, `verb_list.md`, `attribute-rulings-by-subject` (Jordan's words, ED-IN-0347).
+- **PC x CHAR x CORE: attributes reach no season fight.** The season builds every `Combatant` at class defaults except `end` (`seam/wrappers/combat.py:36-41`); PC-06 K-1 (the seam builds the fighter from `Person.attributes`) is what makes every combat attribute ruling live (attribute-rulings-adjudication :59, :93). CR-85 (history -> `faculty`) is WITHDRAWN, so the combat input design is unsettled: PC and CHAR must settle whether a contest pool takes attribute and trained skill as separate inputs (CR-85 header).
+- **PC x MB: mixed weapons and carry cost.** Nothing in this lane carries a secondary-weapon or carry-cost datum: docket 08 shows equipment (`ARSENAL`, `ARMOURY`, 14-row loadout) is `provisional=True` "NOT YET WIRED into resolution" except `unit_type_for`; per-unit `dr`/`stamina` deliberately unbridged; no kit carrier (M25, CP-T03-03). `pc_formation_system.md` supplies the role/instruction/brace/kiting logic that a loadout switch (pike to arming sword) would hang on; `mass_battle_fighting_withdrawal_v1.md` supplies the state-change precedent (a `yielding` flag plus an order) and its default-off calibration debt.
+- **MB: hierarchy and one path.** `multiunit_envelopment_plan.md` (un-adopted) says `run_multi_unit_battle` is a 1-D lane abstraction of isolated 1v1 `run_battle`s; the per-cell envelopment shock is unit-agnostic and would emerge if contacts were detected across all units (Path B). Docket 08: season ships no authored order of battle; `Subformation` 7 fields, army record up to 11 subformations; 7 of 15 role-instruction keywords unwired; the commander feed (`Officer.command`) has no Person link. The auto-resolve vs play question touches the code-shape forbidden row "a second resolver, an auto-resolve formula, a fast path" (provenance CODESHAPE_FORBIDDEN :14).
+- **SC x FI: the detective/noir bearing.** `social_contest_consolidation_integration_v1.md` (CIP-1, CIP-2, CIP-5, CIP-11, CIP-13) is the one design in this lane that treats evidence as a typed, bindable object (claim graph, schemes with critical questions, the writ declared before the roll, named-juror persuasion); docket 07 shows the live roll takes evidence only as `proofs`/`reception`/`forgery_quality` numbers in the Ob, speech kinds are UNREAD by game code, and `interview`/`reconstruct`/`thread_read` are ungraded. `verb_list.md` lists `reconstruct` ("observations become an accusation; the honest mistake, the Foscarini case"). The kernel in `systems/social_contest/sim/contest/` is NOT wired. Conflicts with ruled items (ED-SC-0033..0039, knowledge-model ruling) are unexamined by the CIP document (it predates them).
+- **CHAR x SC x FA x CORE: the chooser.** Docket 10: one shipped policy (score = pursuit + stance, Plackett-Luce, tau 0.1, one tau for all persons); 22 of 63 verbs have no `alignment` cell so pursuit is 0 for them; the player seat is a dispatch hook with no option list (a player proxy and an NPC do NOT share a menu surface). The attribute adjudication adds CR-93 (attributes in the chooser, per-person tau falling with Focus, Reason shrinking forecast error). The unified plan adds believed-clock thresholds (CI, Turmoil), duty decline (CR-88), violence contexts (CR-87).
+- **FA x WR x SE: the arc and the clocks.** `unified-design-and-build-plan` Part 3: Valorsmark a faction, vassals sworn, `head_seat` per faction, the Church's settlement; two clocks as folds of `w.log` (no matrix row), bands changing what persons want, never firing acts; casus belli as a claim Proposition on a ground; civil war a reading; CR-90 arc instrument. `design-and-code-critique-report` rulings (one parliament; transnational Church with Holy See at Himmelenger T9; 15 territories; Schoenland neutral trade nation; Queen is widow regent) bear on FA/SE content that is not yet built.
+- **SE x CHAR x WR: flow-conditioning content.** `content_cohorts.yaml` (51 rows over 37 settlements; heritage by radiation band; no `faction:` because a cohort `commit` makes the faction occupy the settlement) and `content_church_sites.yaml` (41 Church Sites) are ready drafts; neither is in `engine/season/` yet. Consequence recorded: every two-cohort village/fortress reaches summed weight = capacity so `migrate` into it is refused from tick 0.
+- **GO: port rules.** The F3 adjudication binds the port's shape (empty autoload table, `core/` headless, fixed-point integer `condition`, owned SplitMix64, binary snapshot saves, ids not pointers) and is intent, not code; engine version is ruled by ED-GO-0002 (so its §1 is historical). `valoria_fork_plan_of_record_v1.md` C1: a personal combat can be triggered by field investigation, mass battle, scene contest and direct invocation.
+- **PROCESS:** the entire `_session_provenance/` subtree (2026-08-29 to 2026-09-01) is Key-substrate-era working material (Key retired, ED-IN-0232). It is useful for the vocabulary (Tenure, Rung, Claim, Query, partition) and for the F-1..F-18 failure-mode checklist, not for current mechanism claims.
+
+## Likely stale or superseded
+
+- All of `proposals/_session_provenance/**` read here: dated 2026-08-29..09-01 snapshots of a design line that executed nothing then; M1 0/7, `world.npcs` empty, `stub_hits` 2, "nothing executes" are no longer true of `engine/season/`. Claims that rest on the Key substrate (`keys.py`, `KeyLog`, ECHO_TRANSPORT, 55 key types, `module_contracts.yaml` resolver labels, `wiring_manifest.yaml`) are retired by ED-IN-0232.
+- `valoria_fork_plan_of_record_v1.md` (Key IN -> resolver -> OUT frozen; `cook.py`, AST tripwire; `build_fork.py` carry list) and `repo-reorganization-v1.md` (executed; `designs/`, `sim/`, `tests/sim/` dissolved; the tree later changed again by `.designs/` quarantine).
+- `canonical_nomenclature_v1.md`: its measurement targets `fac.intel`/`substrate.key`/Key types; proposes `ci_nomenclature_check.py` (a tree-wide guard barred by §0.05 and §0.1 pt 5).
+- `grounded_event_card_deck_v1.md`: stored-aggregate vocabulary (Mandate, L/PS, Treasury, Weight), five new settlement levers, `stakes.source_key` hook; the body of the file jumps from the compliance appendix into mid-card (only ~10 cards present in this file).
+- `social_contest_consolidation_integration_v1.md`: premised on the unwired kernel, the echo bridge (`parliamentary_bridge`), and the Key transport; many CIPs (CIP-3, CIP-15, CIP-1 mount points) are overtaken by the arrangements/proceedings rows (ED-SC-0033..0039).
+- `2026-11-04-content-parameters-docket/07-11`: line cites and counts as of 2026-11-04 (63 verbs, 86 fixtures, 14 troop types); CR-87 has since landed per the critique report, so docket 10's chooser picture is partly stale.
+- `verb_attribute_map` finding 8 and F23 line cites, and F8 "moves nearly every golden", are corrected in `attribute-rulings-adjudication` §1.1.
+- `2026-11-08-design-and-code-critique-report.md` correction 1: "104 fight formations" STALE after CR-87.
+- `mass_battle_fighting_withdrawal_v1.md`: carries both PROPOSAL (:5) and BUILT (:3) status lines; paths to `designs/...` dissolved.
+
+## Items that could change an audit finding
+
+- **Mass battle, the ruled trade-off (Jordan's carry cost).** No loadout/carry datum exists in the code per docket 08; if the MB audit finds "mixed weapons per unit with fatigue and speed cost" absent, that is consistent with docket 08 (equipment PLACEHOLDER, NOT WIRED, `dr`/`stamina` unbridged). `pc_formation_system.md` already designs role = shape + instruction package gated by troop type and an intervention-window cadence; the 15-role `ROLE_SPEC` matches it (docket 08).
+- **Mass battle, one path.** `multiunit_envelopment_plan.md` documents that multi-unit resolution is lane-pairwise (1v1 `run_battle` per lane) not the cell-based union; an audit claiming a single cell-resolver for army battles should check `run_multi_unit_battle` (orchestration.py ~L2636-2899 per the plan) and the Phase-1 change-set (:83-89).
+- **Mass battle, yield.** `MB_YIELD_*` flags exist and are OFF: any audit statement that "fighting withdrawal is absent" must be qualified as "built, default off, calibration debt D_YIELD/YIELD_POOL_MULT/YIELD_RALLY_MORALE_FRAC/YIELD_POCKET_REACH".
+- **Personal combat, the two modes.** Nothing in this lane specifies the "approach per phase" surface; but attribute-rulings-adjudication records that `reading` is attribute-fed only by `att` mixed with `cog`, and that the season hands combat only `end` (so no attribute lever reaches a season fight until K-1). CR-85's withdrawn design determines whether a contest pool reads `faculty`; PC audit findings about "levers" should cite this.
+- **Social contest, evidence.** F-SC-style findings that "evidence is a number not an object" are supported by docket 07 (Ob terms `proofs`, `reception`, `forgery_quality`; speech kinds unread; kernel unwired); the CIP-2 claim-graph design is the only in-tree design for the alternative; `verb_list.md` carries `reconstruct` and `research` ("tells a forgery from a true one").
+- **NPC chooser findings.** Docket 10 supports: one policy for all persons; 22 uncelled verbs; no per-person tau; a player has no option list; `refusal_axis` ships None; `withheld_verbs` hides destroy_record and army verbs from computed play. The adjudication's AR-04 ("attributes/capabilities weight the best course of action") is Jordan's ruling that no code realises for uncontested candidates.
+- **Fieldwork findings.** Docket 07: `interview`/`reconstruct`/`thread_read` ungraded; `survey` mints `faction_sheet`; trail from place/alias writes owed (CP-T06-01..09); `why` observation term never supplied.
+- **Settlements.** Docket 08/11: `planned_works` 2; subsistence, wear rates "invented values"; POI catalog unread; `site_kinds` 9 (church kinds absent until CR-106 lands).
+- **Factions/governance.** Unified plan C9: King, Duchess, Duke not sworn; faction roster lacks Valorsmark; `faction_q.head` returns None; only 12 of 31 offices name a faction; plus the critique report's rulings (one parliament; Holy See at T9).
+- **Process finding ids.** No `audits/*.md` finding ids were cross-checked in this lane (no ids known); the claims above are described rather than id-keyed.

@@ -267,7 +267,7 @@ is true; the world shows the consequence later; time is short.
 | step | the player (or the chooser in his seat) does | carrier | exists? | needed change |
 |---|---|---|---|---|
 | 0 | enters a seeded place where a deed has been done and a paper handed on | `inquiry_world(seed)` | no | `08_FI_03` §1 (harness only) |
-| 1 | commits to the question: *the doer of this deed is brought before this seat* | a `commit` to an OUGHT Proposition; the standing `need` question it raises each season | yes (H-122 `cite:` measures `need` leading 267 of 1,068 deliberations) | none: this is the case object (R-44) |
+| 1 | holds the question: *who did this, and bring him before this seat* | a goal whose object is `deed_doers` (`person_q.deed_doers`, IN-67); its referents are the suspects his own ledger names, and it raises a standing `need` question each season | yes (11 such ambitions in `build_realm(0)`: first audit §12 run 2) | none: this is the case object (R-44) |
 | 2 | looks: reads the paper (`research`), watches the place (`surveil`), examines the site (`examine`) | three graded rows; the observation deposit | two of three | R-37 (`examine` forms); R-35 (an admitted look teaches its reads at any band); B10-14 |
 | 3 | asks: questions someone, who answers by his own `tell` or `lie` | CP-T06-05 | scheduled | F-FI-11's fix, or the answer cannot name a hand (`08_FI_06`) |
 | 4 | reads his board: per subject, what he holds, from whom, how sure, how many independent origins | `sheet.chronicle` + `LedgerReader._support` | data yes, view no | `08_FI_07` §3 (a rendering; no state) |
@@ -369,7 +369,7 @@ architecture needs.
 | R-41 | two names and shapes for the citing operand (`cites` refs; `proofs: [{kind, ref}]`) | two readings | `cites`, refs only; kind derived (E-1) | 5 | `08_FI_05_B` |
 | R-42 | a case-file entry that is a claim id cannot be compared without opening another's ledger | Layer 1 (F8) | the entry is the `Said` (E-2) | 5 | `08_FI_05_B` |
 | R-43 | SC-P8 asks FI for a finding term saying a Record is forged | interface | none is added: the found deposit's `(record, record.forged, True)` is the item, at `Partial` and better (E-5) | 4 | `08_FI_05_B` |
-| R-44 | what an investigation's "case" is, with no case object | unclear | the investigator's own `commit` to an OUGHT Proposition; its standing `need` question is the case; nothing new | 4 | `08_FI_07` §1 |
+| R-44 | what an investigation's "case" is, with no case object | unclear | the investigator's own goal with a `deed_doers` object (kinds, or `against` a patient): its referents are his suspects and its standing question is the case; nothing new is stored | 4 (IN-67's goal object) | `08_FI_07` §1 |
 | R-45 | the archived Disposition track against `regard` | design against code | the code governs: Disposition is `regard`, computed at read; the seven social acts are not rows and are not proposed | 3 (ruling R7) | none |
 | R-46 | the archived Exposure meter | design against code | no meter: for the scenario's instrument only, exposure is the number of distinct persons holding a `seen` claim naming the investigator at an inquiry, read resolver-side; no chooser reads it | 5 | `08_FI_07` §4 |
 | R-47 | forks inside the archived design set | inconsistency | irrelevant to the game; the parent `fieldwork_v30.md` is the reading where a case file cites a term | 2 | none |
@@ -383,7 +383,7 @@ architecture needs.
 *Should hearsay name a killer at all?* Step 4: for every deed kind one row emits it already does (the
 probe's control arm), so the paired kinds are an implementation limit, and the eyewitness-only reading is
 kept as the control arm for Jordan to prefer if he wishes. *Is an investigation a case object?* Step 4: a
-commitment and its standing question already are one (R-44). The first audit's two survivors stand.
+`deed_doers` goal and its standing question already are one (R-44). The first audit's two survivors stand.
 
 **Arcs (§13 of the first audit), amended.** Classes G (testimony, confession, denunciation: 14 cases, 6
 core) and E (an investigation that reaches a conclusion: 59 cases, 26 core) gain a dependency edge: any

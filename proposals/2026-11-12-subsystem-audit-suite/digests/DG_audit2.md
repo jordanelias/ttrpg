@@ -417,3 +417,343 @@ Lane: the surviving audit corpus under `.audit/` (archived-not-canon; context an
   - G1: arbitrary vs-plate cliff among cutting polearms (guandao 96% vs bardiche 9.6%) from authoring coverage of `point` modes, not physics (:263-284). Agility dominance: +29.9..+34.4pp marginal, ~17pp over cognition (:73-74, :320-326).
 - **Conflicts / stale:** M1 sites: `modules/combat/combat_systems.py` no longer has `math.exp` (one grep) so M1 may be fixed `[UNVERIFIED]`. U9 capstone says activation of morphology levers later occurred (U10), so the "levers at K=0" context of this report is superseded. Report itself retracts G2.
 - **Open items:** target bands for spear/arming in plate; roster-wide joint re-tune; agility budget check; G1 roster audit.
+
+## MB stress-test directory (`.audit/2026-07-22-mass-battle-stress-test/`) — coverage note
+
+Context budget forced head-reads for this directory. For each markdown file I read the first 26-55 lines (status, directive, headline claims) and the line count; for each `.py` the first 6-14 lines (docstring: purpose, question asked, run command); `results.json` and `run_log.txt` first lines only. Each entry says so. Whole-directory facts verified once at the working tree: `modules/mass_battle/perimeter.py` exists (the orphaned-mechanics audit's "perimeter.py never wired" is marked WIRED by ED-MB-0035); `modules/mass_battle/config.py:512` `K_LINEAR` still reads env default 12 while `MORALE_EROSION_DAMP=0.7` (:332) now carries a `[CALIBRATED-DEBT]` tag and notes the `sim_verification_ledger.json` bare-integer self-whitelist was deleted in ED-MB-0041 Tier-0.1 (so audit finding 1.1 looks FIXED). The directory path `tests/sim/mass_battle/` that these files target has a live counterpart at `modules/mass_battle/`.
+
+### .audit/2026-07-22-mass-battle-stress-test/README.md
+- **What it is:** Index/narrative of the field-based mass-battle stress test: §1-§6 DG-10 movement-freeze fix (ED-MB-0011, PR #207), §7 spatial-model v2 Stage B+C (ED-MB-0012: CIRCLE->OBB contact, collide-not-decelerate) (MB lane, 2026-07-22).
+- **Status:** none stated. Reading: historical record with some still-useful engine-map facts. **Head-read (55/267).**
+- **Bears on:** MB, CORE (two-engine question), DICE.
+- **Content that matters:**
+  - Two mass-battle engines unreconciled: wired bare port `systems/mass_battle/sim/massbattle.py` (no field flags) vs active field engine `tests/sim/mass_battle/` carrying all flags (`FIELD_MOVEMENT`, `PER_CELL`, `PC_NODE_COHESION`, `LANCHESTER_ENABLED`, `POOL_QUALITY_MODEL`) and ED-MB-0001..0007 work (:11-23); ED-IN-0074 D5.
+  - DG-10 headline: `_node_advance` computed `step=max(0, floor(base*disc_mult)+stance_mod)` with `disc_mult` 1.0 if disc>=5, 0.7 if >=3, else 0.4, so every sub-Discipline-5 body froze at 0 (:44-52); the grid engine got a clamp-to-minimum-quantum stopgap that flattens the sub-disc-5 speed gradient (discs 1-4 all 1 cell/tick) (:25-37). This is the same bug the gauge audit called E5/DG-10.
+  - Guard test `tests/valoria/test_mass_battle_systems_movement.py` (8 tests) (:37-39).
+- **Conflicts / stale:** the wired engine is the "older integer engine slated for Stage-G retirement" per the fiat register, but its claim about what `resolve_mass_battle` calls should be re-checked against `engine/season/` `[UNVERIFIED]`.
+- **Open items:** Stage G (route game path onto field engine) not started per `ratified_but_unbuilt_backlog.md`.
+
+### .audit/2026-07-22-mass-battle-stress-test/adversarial_deep_audit_v1.md
+- **What it is:** Five-critic blind deep adversarial audit of the mass-battle engine on fiat, historical/theory compliance, primitive emergence, sequencing and reachability, with hand verification (MB lane, 2026-07-24).
+- **Status:** none stated. Reading: historical but high-value; several findings are verifiably fixed. **Head-read (55/632).**
+- **Bears on:** MB, DICE, PROCESS (anti-fabrication gate).
+- **Content that matters:**
+  - Verdict: "machinery that documents itself as working and does not, on a provenance layer that is largely self-referential" (:8-10).
+  - 1.1 `tests/sim_verification_ledger.json` laundered 26 bare-integer constants (`K_LINEAR=12`, `CASUALTY_SCALE=4`, `MAX_SUB_PHASES=5`) through the anti-fabrication gate by citing the engine file itself — working tree now notes it was deleted in ED-MB-0041 Tier-0.1 (looks FIXED) (:14-20).
+  - 1.2 fabricated citation: `orchestration.py` cites "mass_battle_v30.md §A.3b — 45deg octagon GREEN/YELLOW boundary" but "octagon" appears 0 times there (:22-25).
+  - 1.3 `K_LINEAR=12` (multiplier on ALL melee casualties) is a fit to superseded output where the loser routed at ~58% casualties vs the 15-30% historical band (:27-31).
+  - 1.4 Discipline degradation misreads canon ~5x as a ratchet: canon "Total Size lost this turn > current Discipline", code uses cumulative loss since start (`core/state.py:182-185`) (:33-37).
+  - 1.5 `MORALE_EROSION_DAMP` makes the canonical -3 cap effectively 2.1 while the comment still asserts -3 (`core/state.py:111`) (:39-42).
+  - 1.6 converging bodies are divided by 1/N exactly (`orchestration.py:541-550`): N subunits converging on one target deal the damage of one — which is exactly envelopment geometry (:44-52).
+- **Conflicts / stale:** line numbers are July 2026; the rest of the 632 lines (unverified agent items, tiers) not read.
+- **Open items:** all findings after 1.6; remaining `[UNVERIFIED]` agent claims.
+
+### .audit/2026-07-22-mass-battle-stress-test/backwards_analysis.md
+- **What it is:** Backward trace of a real instrumented battle (heavy infantry Line vs cavalry Arrowhead, seed 3; 128 primitives consumed; outcome draw 64.3% vs 78.8%, 30 turns) from `winner` down to inputs, with the grid integer-snap points flagged (MB lane, 2026-07-22).
+- **Status:** none; contains a verified correction. Reading: historical map of the resolution path. **Head-read (55/148).**
+- **Bears on:** MB, DICE.
+- **Content that matters:**
+  - Layer chain: winner <- rout/attrition <- `DAMAGE_BY_DEGREE` x `CASUALTY_SCALE`/`K_LINEAR` <- `compute_degree(pool roll + sigma leverage)` <- pool = `eff_power x eff_size x POOL_QUALITY_SCALE` + `_lanchester_strength` + σ-head terms <- contact (:6-35).
+  - The integer grid still sits on the causal path: `contact.py:175/292-294`, `units.py:631/1017` all `int(round())`-snap; correction: `FIELD_CONTACT=1` does NOT remove it (A/B byte-identical over 10 seeds) — there is no toggle that removes the contact grid (:37-55).
+- **Conflicts / stale:** later `geometric_contact_proposal_v1.md` supersedes the diagnosis (OBB contact, Stage B+C).
+- **Open items:** none beyond those documents.
+
+### .audit/2026-07-22-mass-battle-stress-test/cannae_bait.py
+- **What it is:** Probe of Cannae with the commanded bait (ED-MB-0041): the DG-2 `yielding` primitive's entry is commanded via an Order `{'yielding': True}`; `check_orders` measures subunit CENTROID to nearest enemy cell so `enemy_range:3` never fires while `enemy_range:6` does. **Head-read (6/44).**
+- **Status:** none (script). Reading: historical probe.
+- **Bears on:** MB.
+- **Content that matters:** earlier Cannae runs never issued the yield order, which is why feigned retreat/yield showed no effect (:1-6).
+- **Conflicts / stale:** targets `tests/sim/mass_battle`; live counterpart `modules/mass_battle/`.
+- **Open items:** none.
+
+### .audit/2026-07-22-mass-battle-stress-test/cannae_calib.py
+- **What it is:** Calibration of a matched-granularity Cannae composition for H3 (Envelop vs Line, band decA 55-72), force and density parity at `GAUGE_TROOPS=600` @ `GAUGE_CONC`. **Head-read (6/98).**
+- **Status:** none. Reading: historical probe. **Bears on:** MB.
+- **Content that matters:** imports `gauge_mb` from `tests/sim` and runs `python cannae_calib.py [n]` (:1-6).
+- **Conflicts / stale:** none checked. **Open items:** none.
+
+### .audit/2026-07-22-mass-battle-stress-test/cannae_historical.py
+- **What it is:** Historically-faithful Cannae (216 BC) test: 5000 Carthage vs 8600 Rome (~1.72:1), granular Roman maniples, Carthaginian thin crescent centre + 2 deep African columns + cavalry superiority ~2:1; subunit cap 11/side; asks whether the engine reproduces an outnumbered Carthaginian win. **Head-read (6/76).**
+- **Status:** none. Reading: historical probe. **Bears on:** MB, ARCS-adjacent (historical validation).
+- **Content that matters:** monolith cannot be enveloped (ED-MB-0038), so Roman side is granular (:1-6).
+- **Conflicts / stale:** outcome not read (see flag_ablation / historical_fidelity_readiness). **Open items:** none.
+
+### .audit/2026-07-22-mass-battle-stress-test/cell_primitive_damage_v1.md
+- **What it is:** Write-up of the aggregate-smear bug and its fix: casualties computed as one scalar per subunit pair (`_octagon_dmg_mod` averaged cells' arcs) then spread by density only; fix `_octagon_cell_mods` per-cell allocation under `PC_CELL_DAMAGE=1` (ED-MB-0040, 2026-07-24).
+- **Status:** "BUILT + GATED OFF (`PC_CELL_DAMAGE=1`), byte-exact when off. Measured, not yet default." **Head-read (55/337).**
+- **Bears on:** MB.
+- **Content that matters:**
+  - Jordan directive: "the cell is the primitive", "damage is supposed to be done to cells", "damage only being emitted by cells in direct contact" (:4-6).
+  - Aggregate smear made monolithic subunits near-unbreakable by envelopment; ED-MB-0038 and ED-MB-0039 were downstream of this (:18-26).
+  - Measured: envelopment vs 3-command line side swing 41.0pp -> 15.5pp; side-symmetric avg 43.8% -> 57.8% (inside the 55-72 band) (:36-44).
+  - But re-bases the whole battery: gauge 8/20 (OFF) -> 4/20 (ON); C4 93.2->71.2, H11 45.6->15.4, H10 83.3->59.6, C5 -> 100 (:46-50); ships gated OFF.
+- **Conflicts / stale:** current default of `PC_CELL_DAMAGE` not confirmed (one grep for `PC_CELL_DAMAGE =` found nothing at module level) `[UNVERIFIED]`.
+- **Open items:** whether to flip default and re-fit bands (the "why ships gated off" section not read).
+
+### .audit/2026-07-22-mass-battle-stress-test/close_ranks_probe.py
+- **What it is:** ED-MB-0028 effect probe: does cell-level close-ranks (rear fills front-cell density) change outcomes, moderately-deep column vs wide-shallow line at equal troops and density, flag off vs on via subprocess. **Head-read (6/46).**
+- **Status:** none. Reading: historical probe. **Bears on:** MB.
+- **Content that matters:** flags are import-time, so A/B requires a fresh subprocess per setting (:1-6).
+- **Conflicts / stale:** none. **Open items:** none.
+
+### .audit/2026-07-22-mass-battle-stress-test/cluster_probe.py
+- **What it is:** Envelop-cluster measurement with matched 3-command (wing-centre-wing) defenders at constant density and force parity; reports decA vs band. **Head-read (6/54).**
+- **Status:** none. Reading: historical probe (ED-MB-0038 matched command-granularity). **Bears on:** MB.
+- **Content that matters:** plain Line/Arrowhead opponents are matched to 3 commands because the enveloper is already a 3-body composition (:1-4).
+- **Conflicts / stale:** none. **Open items:** none.
+
+### .audit/2026-07-22-mass-battle-stress-test/depth_factorial.py
+- **What it is:** 24-line script importing `gauge_mb` and `cannae_calib` for a depth factorial. **Head-read (6/24); no docstring.**
+- **Status:** none. Reading: historical probe. **Bears on:** MB.
+- **Content that matters:** no purpose line; companion to depth_probe.py.
+- **Conflicts / stale:** none. **Open items:** none.
+
+### .audit/2026-07-22-mass-battle-stress-test/depth_probe.py
+- **What it is:** Depth-vs-width probe at equal troops and 100/cell density: does depth earn reserve/staying-power value, or is frontage pure-width (with `MB_FRONTAGE_BLEND=0` the wide line wins)? **Head-read (6/51).**
+- **Status:** none. Reading: historical probe. **Bears on:** MB.
+- **Content that matters:** tests a capped-frontage deep column; ties to ED-MB-0028 close-ranks and the frontage blend flag (:1-8).
+- **Conflicts / stale:** none. **Open items:** result not read.
+
+### .audit/2026-07-22-mass-battle-stress-test/dg6_friction_resolution.md
+- **What it is:** DG-6 resolution: scale-invariant combat friction (per-battle CEV) to fix mass-battle over-decisiveness (ED-MB-0016, Jordan-directed 2026-07-22).
+- **Status:** "PROPOSED (grounded + calibrated + gauge-validated)". **Head-read (30/160).**
+- **Bears on:** MB, DICE.
+- **Content that matters:**
+  - Root cause is mathematical: summing N independent per-soldier dice self-averages (CV ~ 1/√N: N=4 0.89, 16 0.49, 64 0.25, 256 0.12, 1024 0.06), so large battles give near-deterministic degree from force ratio alone (:17-27); cites Kingman 2002 and arXiv:1905.03122 on vanishing variance at scale.
+  - It is not an implementation bug; the target is outcome bands (2:1 or envelopment advantage won ~65-83%, never certain).
+- **Conflicts / stale:** relates to gauge D1 amplifier and later `MB_FRICTION_CEV` flag in flag_ablation.py. **Open items:** remainder not read.
+
+### .audit/2026-07-22-mass-battle-stress-test/envelop_probe.py
+- **What it is:** Phase 1.5 diagnostic: do H3 envelop wings reach the enemy flank/rear, and does multi-side shock ever become eligible (>=2 distinct faces on one atom in a tick)? Monkeypatches `resolve_engagements_cascading`. **Head-read (6/87).**
+- **Status:** none. Reading: historical probe. **Bears on:** MB.
+- **Content that matters:** replicates `_atom_sides` before the cascade split drops it (:1-5).
+- **Conflicts / stale:** none. **Open items:** none.
+
+### .audit/2026-07-22-mass-battle-stress-test/envelopment_stability_diagnosis_v1.md
+- **What it is:** Root-cause of the H3/H10 side asymmetry that survived matched command-granularity (ED-MB-0039, 2026-07-24).
+- **Status:** "DIAGNOSTIC + engine-design fork flagged for Jordan." **Head-read (30/88).**
+- **Bears on:** MB.
+- **Content that matters:** H3 70.7% but reverse row H10 83% for the line (band 28-45): enveloper wins ~71% as A, ~17% as B (~54pp swing); not RNG-stream, not simple side bias (mirrors are symmetric); a deployment-chaotic knife-edge: parity centre (200 troops @ 100/cell = 2 cells) is narrower than the 3-command enemy (6 cells), start-row sweeps move the result 54->9pp, and Lanchester positive feedback amplifies; side-symmetric average ~44% (:7-30). H3's 70.7% is "the favourable side of the chaos, not a robust edge".
+- **Conflicts / stale:** superseded in part by cell_primitive_damage_v1 (which damps the swing 62%). **Open items:** engine-design fork for Jordan (rest not read).
+
+### .audit/2026-07-22-mass-battle-stress-test/envelopment_stability_probe.py
+- **What it is:** Probe backing ED-MB-0039: shows pure-infantry envelopment is deployment-chaotic (70% as A, ~17% as B), that a deep-narrow centre stabilises the swing 51->~7pp but loses, etc. **Head-read (6/60).**
+- **Status:** none. Reading: historical probe. **Bears on:** MB.
+- **Content that matters:** three facts listed in docstring (:1-9).
+- **Conflicts / stale:** none. **Open items:** none.
+
+### .audit/2026-07-22-mass-battle-stress-test/fable_logic_audit_v1.md
+- **What it is:** Five Fable-tier read-only auditors, one per logic lane (resolution, rout/morale, cell/frontage/geometry, orders/movement, gauge/harness); Part A = defects introduced in-session (ED-MB-0027..0032), Part B = deep pre-existing bugs (MB lane, 2026-07-24).
+- **Status:** Part A "ALL FIXED (ED-MB-0033, 2026-07-24)". **Head-read (30/175).**
+- **Bears on:** MB, PROCESS (self-introduced defects).
+- **Content that matters:**
+  - A1 CRITICAL: routing `make_unit` through `build_army` silently changed gauge cavalry Power 4->5, contaminating C-row verdicts (n=60: C1 45.6 IN/C2 48.3 OUT with P5; C1 11.7 OUT/C2 3.3 IN with P4); A2 `gauge_run.py` dropped both guards (:15-28).
+  - Honest re-measurement: baseline 5/20, +stochastic rout 6/20; the earlier 8/20 was inflated (:11-13).
+  - Every `PC_*` gated branch keeps byte-exactness (bat.py 4/4 modes) (:9-11).
+- **Conflicts / stale:** Part B findings not read. **Open items:** Part B ratification list.
+
+### .audit/2026-07-22-mass-battle-stress-test/fiat_register_v1.md
+- **What it is:** Fiat register: every hardcoded value/table/clamp/scripted recipe interfering with emergence, from a 9-agent adversarial sweep plus live `gauge_mb.py` run (6/20 multi) (MB lane, 2026-07-23).
+- **Status:** "AUDIT (adversarial, 2026-07-23)". **Head-read (30/348).**
+- **Bears on:** MB, CORE (game-path reachability), PROCESS (scripting drift).
+- **Content that matters:**
+  - Biggest fiat (§0b): the strategic engine the game actually calls, `resolve_mass_battle` via `_faction_to_unit`, collapses every faction to an identical shell (Line, tier 2, command 4, discipline 5, morale 5, one subunit) differing only by `power=int(round(faction.Mil))`; one 18-tick skirmish; ignores terrain; buckets by hardcoded 0.75/0.50/0.25 cutoffs — troop composition, formation, tactics, terrain differentiate nothing (:20-31). The field engine is real but not wired to the game.
+- **Conflicts / stale:** this is the single most important statement for the MB and CORE audits about what reaches the player; verify against `engine/season/` how battles are resolved `[UNVERIFIED]`. **Open items:** the per-layer fiat entries (:30-348) not read.
+
+### .audit/2026-07-22-mass-battle-stress-test/flag_ablation.py
+- **What it is:** Leave-one-out flag ablation on the historical Cannae OOB with `MB_FRICTION_CEV` pinned ON; baseline = all boolean flags ON; reports each flag's effect on the outnumbered side's win rate averaged over both deployment sides. **Head-read (6/60).**
+- **Status:** none. Reading: historical instrument. **Bears on:** MB.
+- **Content that matters:** a flag whose removal HURTS is load-bearing; one whose removal HELPS is costing the historical result (:1-5).
+- **Conflicts / stale:** result not read. **Open items:** none.
+
+### .audit/2026-07-22-mass-battle-stress-test/full_implementation_plan_v1.md
+- **What it is:** Steering surface for the multi-stage effort: Part-A flips + Part-B fixes + per-troop damage model, under Jordan's "implement all proposals. nothing is golden here" (2026-07-24).
+- **Status:** "PROPOSED (steering surface ...)". **Head-read (30/150).**
+- **Bears on:** MB.
+- **Content that matters:** regime inversion: the 20-row Dupuy/Sabin honest gauge becomes the primary correctness oracle, goldens (`bat.py`) become a re-recorded regression snapshot, every `PC_*` flag is kept for A/B, each stage its own small PR with independent critic and ED-MB ledger entry (:9-20); per-troop emission = f(weapon[troop_type], quality, intent defend<->aggress, morale) (:24-30).
+- **Conflicts / stale:** the "byte-exact golden constraint lifted" contradicts earlier fix notes that preserved byte-exactness; CLAUDE.md §7 says say plainly when re-recording a golden. **Open items:** stage list not read.
+
+### .audit/2026-07-22-mass-battle-stress-test/gauge_run.py
+- **What it is:** Full honest-gauge runner with configurable flags (env, import-time): runs the 20-row battery in multi mode and reports pass/OUT. **Head-read (6/26).**
+- **Status:** none. Reading: historical instrument (and, per fable audit A2, once dropped the verdict guards). **Bears on:** MB.
+- **Content that matters:** validation-loop closure harness (:1-4).
+- **Conflicts / stale:** A2 fixed per ED-MB-0033. **Open items:** none.
+
+### .audit/2026-07-22-mass-battle-stress-test/geometric_contact_proposal_v1.md
+- **What it is:** Design to de-grid the field engine: geometric contact + weapon reach (Jordan design, 2026-07-22, from the ED-MB-0011 stress test).
+- **Status:** "PROPOSED". **Head-read (30/95).**
+- **Bears on:** MB.
+- **Content that matters:** `CELL_RADIUS=0.5` (cell is a disc diameter 1.0); the live contact decision is already float geometric (`_find_contacts_standoff`: `hypot <= standoff_from_reach`, standoff = (CELL_RADIUS+reach_a)+(CELL_RADIUS+reach_b)); integer cell ids survive in only the engaged-cell recording (`contact.py:292-293`) feeding casualty column matching and `_lanchester_strength` frontage; the integer contention path is dead on the field path (`resolve_cross_side_contention` returns 0 when `FIELD_MOVEMENT`) (:9-32).
+- **Conflicts / stale:** supersedes the contact-grid claim in backwards_analysis.md; Stage B+C (OBB) landed as ED-MB-0012. **Open items:** none read.
+
+### .audit/2026-07-22-mass-battle-stress-test/granularity_probe.py
+- **What it is:** Tests whether the H3/H4 envelopment inversion is a unit-granularity artifact: a monolithic 600-troop defender dilutes flank/rear damage and never routs while the enveloper's 200-troop subunits rout piecemeal. **Head-read (6/48).**
+- **Status:** none. Reading: historical probe (led to ED-MB-0038). **Bears on:** MB.
+- **Content that matters:** hypothesis that splitting the defender into N subunits lets outer subunits rout and cascade (:1-6).
+- **Conflicts / stale:** confirmed later (cell_primitive_damage_v1 says ED-MB-0038 was a workaround for the smear). **Open items:** none.
+
+### .audit/2026-07-22-mass-battle-stress-test/hierarchical_units_investigation.md
+- **What it is:** Investigation of how the engine realises cells -> subunits -> army, mapped to the Football Manager / Total War paradigm, with an honest implemented/emergent/gap read (Jordan-directed, 2026-07-22).
+- **Status:** none (investigation). **Head-read (26/108).**
+- **Bears on:** MB, CHAR (decision layer analogue).
+- **Content that matters:** Cell = `(orig_r, orig_c)` slot with `cell_troops` and `cell_facing_vec` at continuous field position (no snapping on the live path); Subunit (`hierarchy.units.Subunit`) carries shape/instructions/stance/role/troop_type/tier/orders; Army (`Unit`) carries subunits[], stance, command, morale; cell count emergent from troops/density with `CELL_FLOOR(40)..CELL_CAP(200)` troops per cell; `PC_NODE_COHESION` holds formation (:8-26).
+- **Conflicts / stale:** none checked. **Open items:** gaps section not read.
+
+### .audit/2026-07-22-mass-battle-stress-test/historical_fidelity_readiness.md
+- **What it is:** Consolidated audit and roadmap on whether the field engine can reproduce Cannae, Leuctra, Gaugamela, Zama (five critics + architecture, granularity, capability-vocabulary, ratified-but-unbuilt sweeps, full-campaign gauge A/B) (2026-07-23).
+- **Status:** none. **Head-read (26/118).**
+- **Bears on:** MB, ARCS-adjacent (historical validation).
+- **Content that matters:** verdict: primitives and aggregation spine are sound and cell-up; the ceiling is (a) three missing capability layers needed to STAGE the battles and (b) the DG-6 variance structure; maneuver goals (`_envelop_goal`, `_sweep_goal`) are hardcoded two-waypoint state machines (scripting drift) while octagon multi-side shock was fixed by ED-MB-0019 (:7-26).
+- **Conflicts / stale:** none. **Open items:** roadmap not read.
+
+### .audit/2026-07-22-mass-battle-stress-test/honest_gauge_readout.md
+- **What it is:** Measurement-integrity readout: the gauge's #1 distortion M1 (per-cell density mismatch between plain and composed deployment paths) fixed by holding `GAUGE_CONC=100` and `GAUGE_TROOPS=600` across every unit (ED-MB-0027, 2026-07-23).
+- **Status:** "DIAGNOSTIC (the gauge now flags engine divergence honestly; bands NOT re-fit)". **Head-read (26/221).**
+- **Bears on:** MB.
+- **Content that matters:** the ~8x density gap, not flanking geometry, drove envelopment rows to 100%; null test (dense vs thin line, zero envelopment) already reproduced 100% (:9-17); integer-cell quantisation exact because every split divides by 100; the gauge is a manual harness (no `test_` functions, not a CI gate) (:25-29). Fable audit later found ED-MB-0027 itself introduced a P4->P5 cavalry change, so this readout's C-row verdicts were corrected.
+- **Conflicts / stale:** see fable audit A1. **Open items:** none read.
+
+### .audit/2026-07-22-mass-battle-stress-test/intent_probe.py
+- **What it is:** ED-MB-0029 intent-as-resolution probe: matched-density mirror lines under different stance pairings, `MB_INTENT_RESOLUTION` off vs on. **Head-read (6/56).**
+- **Status:** none. Reading: historical probe. **Bears on:** MB, CHAR (intent concept).
+- **Content that matters:** expected with intent ON: hold-vs-hold slow low-casualty standoff, aggressive-vs-aggressive fast and bloody, aggressive-vs-hold holder survives longer (:1-8).
+- **Conflicts / stale:** none. **Open items:** none.
+
+### .audit/2026-07-22-mass-battle-stress-test/mb_fieldbased_stress.py
+- **What it is:** Field-based stress harness for the active engine `tests/sim/mass_battle/` under `FIELD_MOVEMENT=1 / MB_NODE_COHESION=1 / PER_CELL=1` (2026-07-22). **Head-read (14/321).**
+- **Status:** none. Reading: historical instrument (the engine under test described as "more-developed ... NOT the wired-but-thin massbattle.py bare port"). **Bears on:** MB.
+- **Content that matters:** emits JSON per scenario with `--emit`, consumed by run.py; gates read from os.environ once at import (:1-12).
+- **Conflicts / stale:** path now `modules/mass_battle/`. **Open items:** none.
+
+### .audit/2026-07-22-mass-battle-stress-test/octagon_damage_model.md
+- **What it is:** Octagon facing as a damage-RECEIVED multiplier (ED-MB-0018), implemented DEFAULT ON, field goldens re-recorded (2026-07-23).
+- **Status:** "implemented, DEFAULT ON, field goldens re-recorded." **Head-read (26/179).**
+- **Bears on:** MB.
+- **Content that matters:** Jordan's three requirements: attacks from behind do ~twice the damage; cells cannot turn instantly (a couple of ticks); multi-side attack is extra bad (shock/distraction, not divide-by-two) (:7-17); previously `ANGLE_DEF_MOD={GREEN:0, YELLOW:-1, RED:-2}` fed the dice pool/sigma head (~a third fewer successes, too weak); octagon zone GREEN <45°, YELLOW 45-90°, RED >=90° (:19-24).
+- **Conflicts / stale:** the fiat audit found a fabricated "octagon" citation to `mass_battle_v30.md §A.3b`. **Open items:** none read.
+
+### .audit/2026-07-22-mass-battle-stress-test/orphaned_mechanics_audit_v1.md
+- **What it is:** Inventory of built-but-dead mass-battle code with wiring status, under Jordan's "built work is ratified and wired by default" (2026-07-24).
+- **Status:** none. **Read in full (47 lines read to :26 plus table; head-read 26/47).**
+- **Bears on:** MB, PROCESS.
+- **Content that matters:** `perimeter.py` WIRED via ED-MB-0035 into `_envelop_goal`; dead data seeds `provenance.py`; standalone `lanchester_signature.py`, `validators.py`; dead mechanics: `PC_ENVELOP_SIGMA=0.0` hardcoded DISABLED (computed each tick then x0; naive enable rewards the defender, C7 100->20), `PC_FACING_MODEL` family dead by default with explicit "do not enable" calibrated-debt tag (:5-26).
+- **Conflicts / stale:** `modules/mass_battle/perimeter.py` exists (matches). **Open items:** `PC_FACING_MODEL` flagged for Jordan.
+
+### .audit/2026-07-22-mass-battle-stress-test/pathing_deployment_diagnosis.md
+- **What it is:** Diagnosis that multi-unit formations are geometrically wrong (Jordan-flagged from the hierarchy snapshot) (2026-07-22).
+- **Status:** none. **Head-read (26/125).**
+- **Bears on:** MB.
+- **Content that matters:** `build_army` places subunit `i` at `(start_row, 15+i*4)`: a rightward column-of-columns, so both envelopment wings sit to the RIGHT of the centre (no left wing) and `_envelop_goal` sends both around the same flank; col-spans overlap once width exceeds the 4-col step (:1-27).
+- **Conflicts / stale:** fix status not read (ED-MB-0038..0041 later changed deployment). **Open items:** none read.
+
+### .audit/2026-07-22-mass-battle-stress-test/perimeter_targeting_geometry_v1.md
+- **What it is:** Spec of perimeter target-points and face normals as the geometric backbone for targeting, approach, contact and octagon facing (Jordan ruling 2026-07-23, from a hand-drawn model).
+- **Status:** "SPEC / PROPOSED (un-built)" (since wired as `perimeter.py`, ED-MB-0035). **Head-read (26/87).**
+- **Bears on:** MB.
+- **Content that matters:** major target points = face midpoints with outward normals; minor = corners with bisector normals; the normal defines required approach angle; attackers en route can be intercepted; pointed formations (tip angle <~60°) have a vertex target (:1-26).
+- **Conflicts / stale:** "un-built" is stale: `modules/mass_battle/perimeter.py` exists and orphaned_mechanics_audit marks it WIRED. **Open items:** none.
+
+### .audit/2026-07-22-mass-battle-stress-test/ratified_but_unbuilt_backlog.md
+- **What it is:** Exhaustive sweep of MB items classified RATIFIED-but-unbuilt, PROPOSED-not-ruled, built-not-ratified (2026-07-23).
+- **Status:** none. **Head-read (26/81).**
+- **Bears on:** MB, FA (faction tactic cards), CORE (Stage G).
+- **Content that matters:** A1 waypoint primitive + `0.5*speed*max-ticks` path-length budget (ED-1096/ED-MB-0001) not enforced; A2 Stage G / P-DEC-2: route `resolve_mass_battle` + `faction_action` onto the field engine and retire the integer engine, not started; A3 multi-unit Path B (N-on-1) never started; A4 DG-2 emergent auto-yield/rally/pocket exit only commanded entry shipped; A5 Faction Tactic Cards §B.4: `FACTION_TACTIC_CARD_POOL_MODIFIERS = {}` empty stub; A6 Reserve formation Phase-3-commit rule has zero consuming code; A7 Feigned Retreat zero code (:20-30). "Nothing here is a shipped-and-broken player-facing feature: the whole spatial engine isn't live in the game path yet" (:14-15).
+- **Conflicts / stale:** `ratified_unimplemented_register.md` said MB had no qualifying items — this file contradicts it (different date, deeper sweep). **Open items:** A1-A7 and rows below.
+
+### .audit/2026-07-22-mass-battle-stress-test/reachability_sweep.py
+- **What it is:** ED-MB-0041 sweep: for each failing gauge row, can ANY setting of the engine's toggles move it into its band? Rows invariant to every toggle are blocked by structure, not constants. **Head-read (8/254).**
+- **Status:** none. Reading: historical instrument; the method is reusable. **Bears on:** MB, DICE.
+- **Content that matters:** distinguishes "needs fitting" from "missing mechanism" per row (:1-8).
+- **Conflicts / stale:** results not read. **Open items:** none.
+
+### .audit/2026-07-22-mass-battle-stress-test/reface_probe.py
+- **What it is:** Confirms the persistent-defender-reface hypothesis for envelopment over-decisiveness by slewing contacted defender cells' facing toward the nearest attacker each tick (variant A unconditional, B only if threat not in rear arc). **Head-read (6/74).**
+- **Status:** none. Reading: historical probe. **Bears on:** MB.
+- **Content that matters:** hypothesis: flank reface drops H3 toward 55-72 while cavalry rear attacks (unrefaceable) stay near-total (:1-6).
+- **Conflicts / stale:** relates to dead `PC_FACING_MODEL`. **Open items:** none.
+
+### .audit/2026-07-22-mass-battle-stress-test/results.json
+- **What it is:** Machine-readable output of the field-based stress run (S0 wiring census with 30 registered mechanics, field triad, on_flags list, further sections) (2026-07-22). **Head-read (first 700 bytes of 641 lines).**
+- **Status:** none (data). Reading: historical artifact.
+- **Bears on:** MB.
+- **Content that matters:** `selftest_ok: true`, `n_mechanics: 30`, `field: {FIELD_MOVEMENT, PC_NODE_COHESION, PER_CELL}` all true, `on_flags` includes `LANCHESTER_ENABLED`, `POOL_QUALITY_MODEL`, `COMMAND_SIGMA_ENABLED`, `MORALE_FIX`, `SIGMA_HEAD_ENABLED`, `VOLLEY_ENABLED`, `CASCADING_ENABLED`, `PC_BRACE_*`, `PC_RECOIL_*`.
+- **Conflicts / stale:** flag set snapshot 2026-07-22; defaults changed since (PC_CELL_DAMAGE etc.). Read by nothing (an audit artifact). **Open items:** none.
+
+### .audit/2026-07-22-mass-battle-stress-test/reverse_pair_symmetry.py
+- **What it is:** ED-MB-0041 reverse-pair symmetry invariant: run an asymmetric matchup in both orientations; distinct from mirror symmetry (which passes: H1 50.0, C3 50.8); "the cheapest invariant the gauge has, and it fails today". **Head-read (6/117).**
+- **Status:** none. Reading: historical instrument; same idea as the wave-1 recommendation of a standing shape-and-side-swap diagnostic. **Bears on:** MB, DICE.
+- **Content that matters:** a mirror probe is structurally blind to side-dependent interaction defects (:1-6).
+- **Conflicts / stale:** none. **Open items:** the failure itself (E2 Arrowhead asymmetry lineage).
+
+### .audit/2026-07-22-mass-battle-stress-test/rotation_model_v1.md
+- **What it is:** Parse-back and build plan for Jordan's two-tier troop rotation + recovery directive, plus foundational primitive landed (ED-MB-0028) (2026-07-23).
+- **Status:** none. **Head-read (26/110).**
+- **Bears on:** MB.
+- **Content that matters:** T1 intra-subunit cell backfill + coverage shrink (rear cells fill engaged cells to prescribed density; coverage shrinks when minimums unmet); T2 inter-subunit rotation via blended cell exchange; losses are not all deaths so recovery of troop count is needed to make rotation worthwhile (:5-26).
+- **Conflicts / stale:** none. **Open items:** T2/T3 build not read.
+
+### .audit/2026-07-22-mass-battle-stress-test/rout_probe.py
+- **What it is:** ED-MB-0031 stochastic-rout probe: casualty-at-rout and battle length with `MB_STOCHASTIC_ROUT` off/on; target loser breaks at ~15-30% casualties, not ~58%. **Head-read (6/52).**
+- **Status:** none. Reading: historical probe. **Bears on:** MB.
+- **Content that matters:** the 15-30% band is Jordan's historical research figure (:1-4); contrasts with the K_LINEAR fit to a 58% rout trajectory flagged in the deep audit.
+- **Conflicts / stale:** none. **Open items:** none.
+
+### .audit/2026-07-22-mass-battle-stress-test/run.py
+- **What it is:** Driver for the field-based stress test S0-S5: wiring census, flag A/B isolation (fresh subprocess per env because gates read os.environ once at import), off-by-default activation, report print. **Head-read (6/329).**
+- **Status:** none. Reading: historical instrument. **Bears on:** MB, PROCESS.
+- **Content that matters:** the import-time flag pattern is why the byte-exact CI test also uses subprocesses (:1-6).
+- **Conflicts / stale:** none. **Open items:** none.
+
+### .audit/2026-07-22-mass-battle-stress-test/run_log.txt
+- **What it is:** Printed output of run.py (S0 wiring census table: mechanic, fn, toggle, live, status; mechanics_selftest ok=True, 30 registered mechanics; field-based=True, grid-oracle-active=False). **Head-read (12/175).**
+- **Status:** none (log). Reading: historical artifact. **Bears on:** MB.
+- **Content that matters:** rows like `cell_layout oriented_pattern None (always) WIRED`, `octagon_facing octagon_angle None (always) WIRED`.
+- **Conflicts / stale:** snapshot of 2026-07-22. **Open items:** none.
+
+### .audit/2026-07-22-mass-battle-stress-test/side_face_probe.py
+- **What it is:** Does the enveloper's wing wrap work in both orientations? Report the defender-struck faces when the enveloper is side A (advance_dir -1) vs side B (+1); if only FRONT as B there is a directional wheel pathing bug. **Head-read (6/59).**
+- **Status:** none. Reading: historical probe. **Bears on:** MB.
+- **Content that matters:** side-specific pathing hypothesis (:1-4); result superseded by the ED-MB-0039 knife-edge diagnosis (geometry mirror-identical, casualty exchange not).
+- **Conflicts / stale:** none. **Open items:** none.
+
+### .audit/2026-07-22-mass-battle-stress-test/side_probe.py
+- **What it is:** Isolates the envelopment side asymmetry: same two armies, swap A/B, same seeds. **Head-read (6/27).**
+- **Status:** none. Reading: historical probe. **Bears on:** MB.
+- **Content that matters:** if the engine were side-symmetric the enveloper's decisive win rate would match (:1-2); established in ED-MB-0039 that army construction does not consume `random`, so not an RNG-stream artifact.
+- **Conflicts / stale:** none. **Open items:** none.
+
+## Cross-subsystem leads
+
+- **MB + CORE (what reaches the player):** `fiat_register_v1.md` §0b says the game-path `resolve_mass_battle` collapses every faction into an identical single-subunit shell differing only by `power=round(Mil)`; `ratified_but_unbuilt_backlog.md` A2 (Stage G: route the field engine into `resolve_mass_battle`/`faction_action`) is "not started" and "the whole spatial engine isn't live in the game path". An MB or CORE audit should test by execution how `engine/season/` resolves a battle today before crediting any of the field-engine findings as player-facing.
+- **SC + FA + SE (consequence spine):** `interface_report_v1.md` (SC lane) names the open seam that a contest verdict touches no faction or settlement state (ED-SC-0007, party-derivation bridge for settlement stats); `stress_test_synthesis_v1.md` and `44_standing_institutions.md` show the same seam from the SE/FA side (Pattern H: Mandate saturation hides collapse; Standing/resolution_quality Keys, not Mandate, are the real cross-scale carrier). SC, FA and SE lanes need one agreed carrier.
+- **FA + SE + CHAR (rank ladder and NPC advancement):** `40_roster_officer_system.md` proposes NPCs climbing the same Standing ladder as the player with a `power_base` enum, and `44_standing_institutions.md` finds the demotion spiral (A, E, G) is the one universal doom-loop no institution can break (needs substrate tuning: survivable Appeal Ob, failure-retiring successes, defined Suspicion->Recall constant). CHAR and the NPC-chooser lane should read both together.
+- **DICE + SE/FA:** `44_standing_institutions.md` §44.9 and `stress_test_synthesis_v1.md` §0.4 report that the deck's legible `d_sigma` odds (50% + 10%/pt) diverge from the canonical normal-CDF `p_success`; `ground_truth_odds.md` gives the tables; no character attribute block existed in any seed, so pool sizes were engine-assigned (CHAR gap).
+- **PC + MB (shared structure):** the PC half-sword liability is a symptom of reach over-weighting (`stress_test_findings.md`), the MB analogue is the Lanchester/amplifier family (`README.md` of gauge audit D1). Both audits found that single-knob fixes fail and a joint recalibration against target bands is the real task, and both stalled on "I cannot invent the target win-rate bands" (design call for Jordan).
+- **WR + CORE (narrative engine):** the Emergent Narrative Engine design (`_workings_joined.md`, `narrative_engine_design_v1.md`) assumes the retired Key substrate; its goals (convergence detection over settled state at the Accounting boundary, subtract-only director, no arc labels surfaced, total accounting) are the right test for whatever `engine/season/` has. The ARC-S07 Torben Loyalty range conflict (register 8->0 vs `clock_registry_v30.md` 0-7 start 3) bears on ARCS.
+- **PROCESS:** `ratified_unimplemented_register.md` and `adversarial_deep_audit_v1.md` §1.1 both describe provenance-laundering/blindspot failure modes (bare-integer ledger citing the engine file; no index of ratified-but-unbuilt work). The first looks fixed (ED-MB-0041 Tier-0.1); the second's proposed generator tool is not confirmed built.
+
+## Likely stale or superseded
+
+- `u9_capstone_v1.md` (self-declared SUPERSEDED by U10, ED-PC-0022; `modules/combat/config.py:55` has `LEGIB_EDGELINE_K=0.04`) and the K=0 byte-identity claims in `u9_adversarial_review_v1.md`.
+- `tier3_proposal_status_closure.md` :28 "the `reeval/` directory is empty" and `00_index.md` :45 — the four `reeval_*` fragments exist in the compendium `_workings_joined.md`.
+- `perimeter_targeting_geometry_v1.md` "SPEC / PROPOSED (un-built)": `modules/mass_battle/perimeter.py` exists and the orphan audit marks it WIRED (ED-MB-0035).
+- `adversarial_deep_audit_v1.md` §1.1 (verification ledger laundering): the working tree notes the self-whitelist file was deleted in ED-MB-0041 Tier-0.1.
+- `interface_report_v1.md`, the governance compendium, `stress_test_synthesis_v1.md`: all cite `sim/...` (dissolved) as the built substrate; `ED-SC-0002` is `resolved` in `registers/editorial_ledger_sc_archive.jsonl:2`, not Jordan's open P0.
+- The combat stress-test scripts and the gauge audit cite `systems/combat/combat_engine_v1` and `tests/sim/mass_battle` paths; live heads are `modules/combat/` and `modules/mass_battle/`.
+- Emergent Narrative Engine `integration_with_ners_audit.md`, `narrative_engine_design_v1.md`, `_workings_joined.md`: Key-substrate based (RETIRED, ED-IN-0232).
+- `stress_test_findings.md` finding G2 (self-retracted) and the "5 distinct context-leaders" claim (self-retracted).
+- Still live at the working tree per one grep each: `HALFSWORD_FORM` (`modules/combat/weapons.py:926`), `recalc_size` aggregate-floor force-rout (`modules/mass_battle/hierarchy/units.py:2982`, no sibling guard visible), `K_LINEAR` env default 12 (`modules/mass_battle/config.py:512`), `MORALE_EROSION_DAMP=0.7` now tagged CALIBRATED-DEBT.
+
+## Items that could change an audit finding
+
+- **F-PC (U10/levers):** whether the six morphology levers are active (LEGIB_EDGELINE_K=0.04 is) and whether the D2 `test_thrust_protection_grip_invariant` still holds; the test-hygiene hazard (shared `weapon_physics.CHOKE_THRUST_K` global leaking from `test_combat_choke.py`) may still mask a D2 break.
+- **F-PC half-sword:** the switch is a net liability for longsword/estoc/greatsword/flamberge (activation HELD, ED-PC-0016; PC-5 `thrust_authority` fixed the longsword case to 38->73% at both-heavy); remaining open: Phase-C target bands, poleaxe spike-vs-plate selection, PoB_frac/heft ordering, G1 cutting-polearm affordance cliff (guandao 96% vs bardiche 9.6%), agility dominance (+30..34pp marginal).
+- **F-MB density/amplifier:** E1 Lanchester-density artifact (reversal-proven) and D1 resolution exponent p~3.2 vs <=1.4; later mechanisms ED-MB-0016 (friction CEV), ED-MB-0038/39/40 (matched granularity, deployment chaos, cell-primitive damage; gauge 8/20 -> 4/20 under `PC_CELL_DAMAGE=1`); honest baseline 5-6/20 after ED-MB-0033. Any MB finding should re-run `gauge_mb.py`, not rely on the 7/20 of 2026-07-08.
+- **F-MB unbuilt/drift:** Stage G (game path onto field engine) not started; Faction Tactic Cards empty stub; Reserve rule and Feigned Retreat zero code; `PC_ENVELOP_SIGMA=0.0` and `PC_FACING_MODEL` dead by default; `recalc_size` cascade; 1/N convergence division (`orchestration.py:541-550`); Discipline degradation uses cumulative rather than per-turn loss; fabricated octagon citation.
+- **F-SC/FA/SE interface:** contest verdict does not reach settlement/faction state; Compact vs Leverage vs Charter tag-family mismatch with built `ledger.py` `TAG_KINDS`; `assessed_base` field absent from built Settlement; Local-Actor representation three-way inconsistent; settlement-type taxonomy 8 vs 11 (Village undefined); Seggio lock with no governance-scale seizure resolver; §1.3a Survey/Compact deterministic below-subsistence strip; Π R-4 cliff with no relief valve; Appeals 0/6; Suspicion->Recall constant undefined; Mandate saturation formula `clamp(round(7T/(T+6)))`.
+- **F-WR narrative:** ED-IN-0003/0004 "closed by design" are not executing; Torben Loyalty 8 vs 0-7 start-3; ED-609, ED-1009, Certainty-in-bake-key swing; Certainty register table covers 5 rows with Certainty 0 uncovered and an out-of-range "6+"; faction count ranges 4-8 depending on doc; arc register is 138 entries (not ~110).
+- **F-DICE:** legible vs engine `d_sigma` odds contract; agents under-estimated `P(net>=3)` on 7D TN7 by 5-7 points (truth 55%).
+
+## Coverage summary (for the orchestrator)
+
+Entries written for all 75 assigned files, but depth varies and is stated per entry. Read in full: both U9 files, `integration_with_ners_audit.md`, `narrative_engine_design_v1.md`, `interface_report_v1.md`, gauge `01_wave1_synthesis.md`, `02_wave2_synthesis.md`, `README.md`, `comparative_governance_research_v1.md`, `00_index.md`, `43_directive_types.md`, `44_standing_institutions.md`, `tier4_discovered_open_work.md`, `stress_test_synthesis_v1.md`, `ground_truth_odds.md`, `pc2_halfsword_expansion.md`, `ratified_unimplemented_register.md`, `stress_test_findings.md`. Partially read (stated): narrative `_workings_joined.md` (about 40%), compendium parts 40, 41, 42, 45, tier3, compendium `_workings_joined.md`, `appendix_B_roll_failures.md`, settlement `_workings_joined.md` (index only), all six combat `.py` (header only), and the whole MB stress-test directory (heads only).

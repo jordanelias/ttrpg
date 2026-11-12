@@ -310,7 +310,188 @@ row that can.
 
 ## 4. Threadwork as a registered module: the design set in full, its playable form, its season integration
 
-<!-- SECTION-4 -->
+**Verdict.** The first lane's module proposal (`09_WR_threadwork_module.md`) is right about the shape
+(pure typed entries under `modules/threadwork/`, state passed in and returned) and incomplete in three ways
+the full design set makes visible: it gives the composition row an entry kind without the host declaration
+that kind needs; its input record carries the *operation* and not the *session*, so the designed
+moment-by-moment game (how many workings to risk inside one contact) cannot be the same code path as the
+season's one fold; and its standalone scenario shows the player a Coherence band, which the design set
+forbids in terms. `09_WR_B_threadwork_session_and_practitioner.md` supersedes its edits 1, 2 and 4 and
+leaves edit 3 (the tables as typed data) standing.
+
+### 4.1 What the design set says threadwork is (read for intent; five sources, one model)
+
+| source | status line | what it contributes that the code or the plan does not already hold |
+|---|---|---|
+| `threadwork_v30.md` (1,028 lines, skeleton) with `_infill` and `_index` | CANONICAL as filed; its Part 3 superseded by ED-WR-0010 | the **session**: Approach Training (a binary prerequisite with three acquisition routes); the Leap roll; a contact window bounded by Thread Fatigue (threshold Spirit × 5; a cost per round by operation) and by Focus (operations per contact = Focus − 1); overweaving (+1 Ob per further operation in one window); visibility by the observer's sensitivity (five bands) and a pre-Leap concealment roll; opposing and collective workings; the four designed beats of a Rendering Crisis (ED-681) |
+| `threadwork_applications.md` and `_part2` (ED-WR-0010) | PROPOSED, held back in full | the **pricing rules**: direction decides cost (restorative work moves the practitioner *toward* equilibrium; manipulative work costs "a step per season held"; destructive work damages beyond its target); reading is free and working is dear; operations are provable and their contents are not; the practitioner "cannot judge it themselves"; §10's never-build list |
+| `thread_horizontal_integration_spec.md` (ED-673 to ED-681) | CANONICAL as filed | nine cross-system fire paths, of which two survive the later rulings in kind: witnessed workings move observers' convictions (ED-676), and starting sensitivity derives from lifepath (ED-678, a capability-authoring row: §7) |
+| `threadwork_flow_skeleton_v1.md` | REFERENCE, traced structure | the entry points and seams as they stood on the retired driver; no design content |
+| `threadwork_philosophical_reference_v30*`, `threadwork_v25_historical*` | reference; historical | not read beyond their heads (§1) |
+| live successors, not quarantined: `proposals/2026-10-23-subsystem-completion/…-07-threadwork.md` (the home of the CP-T07 positions), `2026-10-07-unplugged-systems-replug.md` §3.3 (IN-06) | PROPOSED; homes of plan positions | the genre loop G1 to G10; IN-06's "store-shed" (each operation returns its cost, the host writes); the composition rows IN-06 named: `threadwork.<operation>` as `verb_call` and `threadwork.coherence_band` as `query` |
+
+The oracle (`systems/threadwork/sim/`) implements the operations' arithmetic and the ED-WR-0010 Coherence
+model (a distance; a resting point and an elastic displacement; recovery only where the surroundings stand
+in equilibrium; no self-restoration past the crossing: `coherence.py:1-70`). It implements **none of the
+session**: a grep of `systems/threadwork/sim/*.py` for Approach Training, concealment, visibility, Thread
+Fatigue, overweaving, over-actualisation and seasonal Mending fatigue returns two card names in
+`co_movement.py` and one perception label in `threadcut.py` (§9 EB-05). B10-15's card
+(`workplans/…part3.md:127-151`) schedules five verb rows (`weave`, `lock`, `mend`, `ward`, `thread_read`)
+and a host; it schedules no session either.
+
+### 4.2 F-WR-17 · degrades narrative · the designed session has no code and no plan position, so threadwork can only ever be one roll
+
+**Claim.** Every choice the design gives a practitioner *inside* a working (how deep, how many operations
+before the window closes, whether to conceal, whether to stop) is absent from the oracle, from the first
+lane's `WorkingInput` and from B10-15. What is planned is one graded fold per verb per scene.
+
+**Evidence.** The grep above (EB-05). `operations.py`'s public entries are `attempt_leap`,
+`attempt_weaving`, `attempt_pulling`, `attempt_past_pulling`, `attempt_locking`, `attempt_dissolution`,
+`attempt_mending` (`:351-512`); each resolves one operation and none takes a count of prior operations or
+a fatigue. The first lane's `WorkingInput` has `operation, actor, depth, breadth, distance, target_kind,
+in_equilibrium, draw`.
+
+**Why it matters under the standing requirement.** Jordan's intent for personal combat is two modes on one
+path: moment by moment, and an automatic round inside a larger frame. The auto/manual doctrine
+(`auto_manual_resolution_duality_v1.md`, ruled) makes that general. For threadwork the manual mode *is*
+the session: the precedent the tree itself cites for costly magic (D_T07; Darkest Dungeon's stress,
+Sunless Sea's terror, RimWorld's psyfocus) is a decision to press on or stop, repeated, with the price
+rising. A module whose entry resolves one operation and holds no session state can still carry it, if the
+session's state is in the input: the season's fold is a session of length one, and a played working is
+the same entry folded again with the count and the fatigue it returned. Without those two fields a played
+working needs a second resolver, which is the fork the standing requirement forbids.
+
+**Falsifier.** A `WorkingInput` field or an oracle argument that changes the obstacle with the number of
+operations already made in the contact. None exists.
+
+**Touches.** R-05, R-09 (a chain of rolls inside one scene is what R-09's fourth band asks for); the
+standing requirement.
+
+**Minimal fix.** `09_WR_B_threadwork_session_and_practitioner.md` edit 1: two integers on the input, one
+on the outcome, and the overweave step as one row of the typed parameter file. No new verb, no new state
+on `Person`: fatigue lives for the length of a contact and is the host's to pass.
+
+### 4.3 F-WR-18 · hygiene, with a design conflict · the practitioner's meter must not be shown to its owner, and the first lane's scenario shows it
+
+**Evidence.** `threadwork_applications_part2.md` §10, first item: "A Coherence meter its owner can read —
+the mechanic and its display contradict"; `threadwork_applications.md` §1.4: "They cannot judge it
+themselves. The faculty that would register the degradation is the faculty degrading, so others see it
+first." The first lane's edit 4 names "the practitioner's Coherence band" among the stakes and gives
+"the witness's ledger" as the legibility surface. The second half is the design's own answer; the first is
+the thing it forbids if it reaches the player's own person. The ratified ED-IN-0011 rule for anticipation
+surfaces ("never a meter") points the same way, and so does the knowledge-model ruling (a person has a
+reading of the world, never the world: AX-7).
+
+**Resolution (ladder step 3, a design document; step 4, AX-7's precedent).** A practitioner's own
+`Person.coherence` is **world-only** for him: no person-side Query returns it for the actor. He learns his
+state the way the design says, from three channels that already exist: (1) what CP-T07-07 takes from him
+(a season with fewer scenes: felt, not read); (2) what others who can perceive it tell him (`tell`, by a
+person whose sensitivity meets the detection ladder, depositing a claim about him in his own ledger);
+(3) how others act toward him (`deeds_judged`, regard). This is characterful by construction: the
+practitioner with a trusted, sensitive companion knows where he stands, and the one who works alone does
+not. It needs no new mechanism: CP-T07-10 already makes a person's band one of the two things
+`thread_read` finds on *another* person, and `tell` carries a finding. It needs two refusals: the host
+does not hand the band to the chooser or the player callback, and `thread_read` does not form on the
+actor himself (CP-T07-04 lets him `mend` himself; reading himself is the faculty judging itself).
+Proposal edit 3.
+
+**Conflict named, not resolved.** The completion proposal's G3 ("feel the meter before it breaks": bands
+change odds and refusals) is satisfied by channel (1) without display. If Jordan wants a visible band for
+the player's own person, §10's line is the document to overrule; listed in §8 of the first audit's terms
+as answered at step 3, so not escalated.
+
+### 4.4 The registered module, corrected (R-21, R-22)
+
+**R-21 · the entry kind needs its host declaration.** The first lane's row is `threadwork.work` with
+`entry: step_call`. `references/module_contracts.yaml:43-50` defines three kinds: `verb_call` ("a verb's
+adapter calls it; the row names the verb in `verb:`", one verb per row, and "the registrar refuses one
+target under two roles"), `step_call` and `query`. IN-06's design named per-operation `verb_call` rows.
+Five thread verbs sharing one entry cannot be five `verb_call` rows on one target, so the first lane's
+`step_call` is the right kind **and** it is the fieldwork shape (`fieldwork.find`: several inquiry verbs,
+one entry). What it omitted is what makes a `step_call` row refuse its own deletion: either a role roster
+whose rows name `module_entry:` (`inquiry_modules`, checked by `manifest/registry.py::check_inquiry_modules`)
+or a host tuple the registrar checks at driver construction (`loop/matter.py::STEP_CALLS` with
+`registrar.require_entries`). *Decided:* the host tuple, in `seam/wrappers/threadwork.py`, because the
+thread verbs have no per-verb module variation for a roster to carry (ladder step 4: MATTER's precedent;
+step 5: no new roster). Two further entries are already named by the plan's own homes and the first lane's
+proposal lists neither: `threadwork.read`, which CP-T07-10 reaches through an `inquiry_modules` row for a
+new kind `thread.read` (so perception *does* use the roster route, and the module has two entries, not
+one), and IN-06's `threadwork.coherence_band` `query` row, which still "lands only with a consumer"
+(CP-T07-07). The move to `modules/threadwork/` must leave room for all three.
+
+**R-22 · one entry, direction as an input.** The oracle's seven `attempt_*` functions differ in obstacle
+table, cost row and one side effect each. The applications document's first rule is that *direction*
+(restorative, manipulative, destructive), not the verb, decides whether there is a cost; the oracle keys
+cost on the verb and carries Mending as a special case (`MENDING_COHERENCE_COST = 0`, `operations.py:451`).
+*Decided:* `WorkingInput.operation` stays a `thread_operations` roster member, and the typed parameter
+file (first lane's edit 3) carries a `direction` column per operation, read by the one cost rule. That
+keeps ED-871's value (Mending costs nothing) as a row, removes the special case, and gives a designer one
+place to say what a new operation costs. It does not adopt the applications document's "restorative work
+moves the practitioner toward equilibrium" as a number: that is `recover`'s `mending=` term, already built
+(`coherence.py`, `recover()`), and the value is Jordan's.
+
+### 4.5 Playable alone: "the Warden's season"
+
+The standing requirement, point by point. This replaces the first lane's edit 4.
+
+| element | the design's answer | exists at HEAD | missing, and whose |
+|---|---|---|---|
+| **scenario seed** | one settlement at breadth-first distance 1 from a wound: three Sites (one below its floor, one above, one a dwelling), a practitioner at sensitivity 60, an apprentice at 35 (can read, can barely work), a steward who governs the larder the failing Site feeds, an orthodox witness whose affiliations are `incompatible` with the practitioner's | `tiny_world`-style builders; `data/cast.py::thread_sensitivity_of`; `band_floors`; affiliation pairs | the wound (first lane's `09_WR_world_motion.md` e1); an `exercises.py` overlay row (this proposal, edit 4) |
+| **the situation shown** | the Site's band and what it has closed (`closed_uses`); who is present; what the practitioner holds about each | `world_q.verbs`, `closed_uses` (World reads) | a person-side reading of a Site's band (first audit §9.3: the same gap) |
+| **choices, season scale** | `thread_read` (free of stretch, and it is how he learns direction: "nothing informs them beforehand except the read"); `mend` (restorative: no stretch, a raised obstacle each further cast in a season); `weave` (manipulative: holds the Site while held, and the holding is a load on him each season); `lock` (stops it changing for good; a locked Site yields nothing); `ward`; `restore` (the mundane repair, slow and visible to no one's orthodoxy); `conceal`; rest in a place at equilibrium | `thread_read`, `restore`, `conceal` | `weave`, `lock`, `mend`, `ward` (B10-15) |
+| **choices, inside a working** (the manual mode) | how many operations to make before leaving contact, each further one a step harder; whether to conceal first; when to stop | none | F-WR-17 (this proposal, edit 1) |
+| **stakes** | the Site's uses and the larder behind them; the practitioner's headroom (his resting point against the human band); exposure to the orthodox witness | Site bands; the oracle's two quantities; `deeds_judged`, `petition`, `arrest` | `Person.coherence` (CP-T07-02); the sign cells firing (CP-T07-09) |
+| **outcome legibility** | each working returns a degree and what it wrote; the practitioner's own state reaches him only through others (§4.3); the witness's claim is a Record a hearing can cite | degrees; WITNESS | the typed `observed` tuple on the outcome; a claim about a practitioner's state that a sensitive can `tell` (CP-T07-10's second finding) |
+| **end condition** | any of: the Site stands above its floor two seasons running with nothing held (restored); the practitioner's resting point leaves the human band (the crossing: CP-T07-08's breach, a person ending); the Site's last use closes (ruin); he is detained on the witness's petition | `endings_reached` has no person-scale row | a scenario's end is the overlay's to state; no new ending carrier is proposed |
+| **instrument** | `aperture` on the fixture: a thread row offered and executed; the chronicle from the crossing backwards (§3.3) | `aperture` | — |
+
+**One code path.** The scenario is `SeasonDriver.season` over a small world with
+`play_surface.dispatching_chooser` binding the practitioner; the host is CP-T07-02's; the module entry is
+the one the realm calls. A played working suspends where a played fight does (ENCOUNTER's `host`,
+`loop/encounter.py`, the one step "a playable host may suspend at") and folds the same entry. There is no
+standalone resolver.
+
+**No GM.** The design set leans on a GM in four places, each of which the proposal resolves or names: the
+"engine sets scope" of a Partial (decided: Partial is the next-lower breadth, a row of the parameter
+file); "engine determines domain type when Lock is applied" (R-63: not carried; a locked Site yields
+nothing, CP-T07-03's rule); the Rendering Crisis as "a campaign event … resolve the crisis narratively"
+(named gap: CP-T07-08 builds "the Event alone"; the four beats of ED-681 have no carrier and are the
+journal's to tell, not a scripted sequence); Approach Training's "narrative-driven" spontaneous
+acquisition (decided in §7: a capability row with a growth rule, or absent).
+
+### 4.6 Integrated with the season loop: the edges, real and designed
+
+| edge | step | carrier | state at HEAD |
+|---|---|---|---|
+| a person forms a thread verb | DELIBERATE | `opening_set` over rows whose `scalar_threshold` cell reads `Person.thread_sensitivity` | real for `thread_read` (3 and 4 executed, first audit E-07, E-12) |
+| the working resolves | RESOLVE, inside the fold | host → `MODULE_ENTRIES["threadwork.work"]` | designed (B10-15; module absent: F-WR-05) |
+| the price lands on the practitioner | RESOLVE, `driver="Seam"` | `(Person, coherence)`, two quantities | `unproduced` in `write_matrix.yaml` |
+| the working changes its target | RESOLVE | `Site.condition`, `Site.locked` | designed (CP-T07-03, -04) |
+| a failed or held working strains the place | MATTER, the wear loop | the lattice coupling, from the target Site | designed and waiting on a source (H-236; first lane R-03). **This is the design's "co-movement", re-expressed**: v30 Part 4 says the practitioner "controls where they touch … not how the ground moves", and draws a card; the lawful form here is that strain enters at the target and the coupling carries it to the weakest neighbours, with no deck and no stored world scalar |
+| others see it | WITNESS | a claim of the working's kind to those present whose sensitivity meets the ladder | designed (CP-T07-09); the ladder is `DEPTH_TS_MINIMUM`, hard-coded (§7) |
+| the orthodox act on it | later rounds | `petition`, `arrest`, `determine` on the claim | real verbs; `determine` rarely executes (first audit F-WR-01) |
+| he recovers | the next seam write (CP-T07-06) | `recover()` as a projection, gated by `in_equilibrium` (CP-T07-05) | designed |
+| his season narrows | DELIBERATE | `decision/budget.py::bands_below` over `coherence_band_floors` | designed (CP-T07-07, shipped `()`) |
+| the Calamity costs the traveller | MATTER, travel | CP-T10-02's bands by distance | designed (B10-18) |
+
+**Pause and zoom.** A working is one fold in the season and suspends nothing; a played session suspends
+at ENCOUNTER as a fight does and returns one outcome, so the other scales pause correctly by the rule
+already tested for combat (`test_rem31_grid_suspension.py`). The one place the scales do not yet meet is
+upward: nothing aggregates workings into a territory's reading. The applications document calls that
+"the single highest-value piece of unbuilt threadwork … the one place the personal scale and the
+strategic scale actually meet" and puts it in `rendering.py`, which was struck. The lattice is its
+successor and needs no aggregate: a governor reads his Sites' bands.
+
+**The NPC and chooser surface.** The archived doctrine for NPC practitioners (ED-679) gates their workings
+on a stored world scalar ("If RS ≤ 25 … Mending only") and on a Coherence the practitioner reads off
+himself ("If Coherence ≤ 5 … defer"). Both inputs are refused (#457 §5; §4.3 above). The lawful
+equivalents exist: a practitioner's restraint is what he holds about the fabric where he stands (claims of
+`condition.worn` and band crossings, witnessed) and what he has been told of his own state; his appetite
+is his affiliation cells on the thread rows (CP-T07-09) and, when authored, pursuit cells (JQ-3). The
+completion proposal's stated limit stands: until pursuit cells exist "NPCs tie among the four rows", so an
+NPC practitioner is not yet characterful in *which* working he chooses, only in whether his convictions
+let him work at all. Nothing in this lane hard-codes an NPC thread rule; the risk to watch is ED-679
+returning as a predicate on a band.
 
 ## 5. World motion: travel, survival, weather and the Calamity, as playable and as ambient
 

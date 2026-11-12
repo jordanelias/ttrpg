@@ -441,3 +441,328 @@ Shared shape for the nine `cluster_*.json` files (inspected record by record thr
   - Method discipline worth re-using: every contested fact re-verified against the working tree before adjudication; "confirmation, not just motion" (a mechanism must move, not only a band), and a gauge row landing in-band because a composition or magnitude was retuned does NOT count (`:426-442`).
 - **Conflicts / stale:** At the tree (`modules/mass_battle/`): the epsilon floor fix is in (`orchestration.py:854-855` `math.floor(raw + 1e-9)`); per-subunit morale default is in (`armies.py:312-320` cites the DG-4 ruling). `POOL_VARIANT` is still the string "C-ii" (`config.py:27`), so whether DG-3 Option A is implemented under a new variant or not at all: [UNVERIFIED]. Gauge baseline numbers (single 2/20, multi 4/20) are 2026-07-04 snapshots; `gauge_mb.py` is referenced from `tests/sim/` and `systems/mass_battle/sim/workbench/trace.py` (the file's own location not checked). Paths `tests/sim/mass_battle/...` are the retired layout.
 - **Open items:** DG-1 (pinning composition: majority pin / thin-and-yielding / status quo), DG-2 (fighting-withdrawal/yield mechanic), DG-5 (wing-timing, conditional on the frozen-wings result), RC-5's nine unexplained single-subunit rows, the C4-vs-C7 split, and the three-way confound of LC-8 + ED-1091 recoil + `PER_CELL` flip landing in one PR window.
+
+## 2026-07-04 qualitative NERS audit (`.audit/2026-07-04-ners-qualitative-audit/`)
+
+Group note for the 45 files below. The audit (2026-07-04, 55 agents: 12 dossiers + 5 degenerate-play hunters + 7 lenses + 30 refuters + a completeness critic; funnel 172 raw candidates → 62 already tracked / 33 P3 / 62 P1-P2 candidates → 30 verified → **5 survived, 25 refuted, 32 deferred unverified**) judges the corpus against the North Star "a Godot emergent grand-strategy · tactical-management · political-simulation · narrative RPG ... myriad options and decisions" with the criteria N / Ω(a-d) / Q-robust / Q-smooth / Q-elegant and P-01..P-15 + GD-1..3, NOT the engine-level mechanical framework. **Pre-reading caveat for every entry:** the audit's transport vocabulary (Key emit/observe, `module_contracts`, `scene.*` Keys, `doc:null` modules, `designs/...` paths) belongs to the Key substrate, which CLAUDE.md §0 now says is RETIRED (ED-IN-0232); findings phrased in those terms are largely moot or must be re-expressed against `engine/season/`. The Python `modules/` and `systems/<sub>/sim/` code it cites exists under different paths. The method (finder → intent-gated adversarial refutation → critic) and its result (finder claims wrong roughly 5 times out of 6) are the durable parts.
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/confirmed.json
+- **What it is:** 104-line JSON, the 5 findings that survived refutation, each with the refuter's record (verdict, intent, revised severity, evidence).
+- **Status:** none; reading: historical; RATIFIED by Jordan 2026-07-05 as filed (per the audit's header), the five became ED options E-1..E-5 (see `ed_options.md`).
+- **Bears on:** SE, WR, CORE, FA, PROCESS
+- **Content that matters:**
+  - `settlement-governance-thin-loop` (P1→P2, NOT-INTENDED): one mandatory verb per season from four +1 stat-pumps (`settlement_layer_v30 §3.2`), self-diagnosed by `governance_play_redesign_v1.md:4` ("roll one die a season").
+  - `collision-engine-has-no-engine` (P1→P2, UNDETERMINED): 8 Convergence Markers (`arc_register_events.md §VI`) hand-authored trigger+payload rows with no detector; `throughlines_complete T-24` is the only throughline without an Implementation line.
+  - `ui-spec-stranded-off-index` (PLAUSIBLE, P2): UI/UX v4.1 CANONICAL 2026-04-16 against superseded deps, absent from `CURRENT.md`, 69-finding v4.2 workplan never executed.
+  - `articulation-battle-concluded-trigger-gap` (CONFIRMED P2): §3.1 lists 10 triggers, none is `scene.battle_concluded`/`investigation_resolved`; §6.4 line 296 claims one "already triggers Tier 2".
+  - `peninsular-strain-partition-unmarked` (CONFIRMED, P3): `peninsular_strain_v30 §6.3` still carries struck GD-1 Partition co-victory (about 8 sites).
+- **Conflicts / stale:** At the tree no convergence-marker detector exists in `engine/`, `modules/`, `references/` (grep for "convergence marker" hits only `atomization_rules.yaml` and an archived ledger), so F-2's absence claim looks still live [UNVERIFIED against `engine/season/` for a differently named mechanism]; the `ED-SE-0001` row exists (`registers/editorial_ledger_se_archive.jsonl:1`, "ADOPT THE REDESIGN PATH"). Articulation has no code under `engine/` or `modules/` (grep), so F-4 is a spec-only issue.
+- **Open items:** settlement governance redesign build; convergence-marker detector; UI/legibility home.
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/critic/critic.json
+- **What it is:** 49-line JSON, the completeness critic's 11 gaps and verdict.
+- **Status:** none; reading: historical; audit §8 says it misread scratch placement as missing coverage in several rows.
+- **Bears on:** PROCESS
+- **Content that matters:**
+  - Real gaps: `settlement_territory` effectively unaudited (no dossier, hunt or refute); 7 of 12 lanes lack a consolidated six-direction dossier; `npc_behavior` collapsed to refutations; no combat degenerate-play hunt against the post-R2/R3 model; top-down and forwards axes thin (20 and 15 findings); shape artifacts (`decisions.json`, `id_reservations.yaml`, `HANDOFF_<LANE>`) not confirmed read; `scene.combat_resolved` down-seam verdicted by no lane.
+  - Method point: refutation files scattered over six subdirectories (a synthesiser globbing one directory could resurrect a refuted finding).
+- **Conflicts / stale:** audit §8 corrects several gaps (all 12 dossiers and 5 hunts did return structured output).
+- **Open items:** none outstanding in-file.
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/deferred_unverified.json
+- **What it is:** 398-line JSON, 32 P1/P2 candidates deferred by the verification cap (never refuted, never confirmed).
+- **Status:** none; reading: leads only, "sweep targets, not verdicts".
+- **Bears on:** SC, PC, MB, FA, CORE, WR, PROCESS
+- **Content that matters:** (one line per claim; severity as filed; all unverified)
+  - Combat: heavy armour has no wearer-side cost (`armor-no-encumbrance-pure-upside`); counter/measure traditions get a bind→riposte reward the others do not (`imposition-refuse-riposte-asymmetry`, tradition spread 6.8pp pre-dissolution); `overcommit_exposure` subtracts additive terms from a floored product, driving exposure to exactly 0 for a light weapon with `true_times` (`commit-recovery-axis-nulled-light-weapon`).
+  - Social: Recall +2D (per-exchange in Formal) plus uncapped Corroborate/Prep/Findings dwarf the base pool; Appraise's boost read is a deterministic public lookup; Face/Rattled channel unwired.
+  - Mass battle: split dominates concentration by +9..45% (ED-358; possibly contaminated per ED-MB-0002).
+  - Faction/world: Domain Echo cap is per scene not per season (Debate-spam farms Mandate); Crown Enforce rote chokes GD-3 emergence; Mending Coherence contradiction (§3.2 −1 vs §2.4 0) makes Mend dominant; Territorial Weave one roll three benefits.
+  - Meta: mechanics_index stale for mass_battle/social_contest; steering surfaces disagree (J-38); naming authorities disagree (7 vs 9 attributes); `ed912-stale-recheck-path`.
+- **Conflicts / stale:** most of the meta items concern retired registers; the combat items name `systems.py`/`ability_primitives.py` of `designs/scene/combat_engine_v1` (now `modules/combat/`).
+- **Open items:** the dominance lines above; all marked "verify structure survives retuning before filing" (`ed_options.md` E-10).
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/dossiers/dossier_architecture_spine.json
+- **What it is:** 221-line JSON dossier (8 findings) on the Key/propagation architecture.
+- **Status:** none; reading: historical, and about a retired substrate.
+- **Bears on:** CORE, PROCESS
+- **Content that matters:**
+  - Core loop: action → Key emission → observer interpretation → maybe cross-scale ripple. Best-specified choice point: Domain Echo (7 named triggers, capped, deferred-apply); thinnest: §12.4 down-seams (8 down-seams / 15 type-edges with unpopulated `targets[]`).
+  - Findings: cross-tick convergence unproven (P1, KNOWN: termination proven per tick/cascade only); `domain_actions` doc:null yet source of 3 of 8 down-seams (P1); three Key types with enums outside the canonical set (`structural`/`medium`) (later refuted as NOT-INTENDED P3); termination caps (`CASCADE_DEPTH_MAX`, `EMISSIONS_PER_TICK_MAX`) unbacked integers; three incompatible RNG contracts.
+- **Conflicts / stale:** Key substrate retired (ED-IN-0232), so enum-fork, `causes[]` and Key-RNG findings are moot; the cross-scale propagation question survives as an `engine/season/` question.
+- **Open items:** none in-file.
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/dossiers/dossier_articulation_layer_pp_688_designs_articu.json
+- **What it is:** 182-line JSON dossier (6 findings) on the Articulation layer (PP-688).
+- **Status:** none; reading: historical.
+- **Bears on:** WR, CORE
+- **Content that matters:**
+  - Three tiers: continuous UI reframing, 10-trigger cut scenes (5-15 s), annual chronicle; a pure sink (emits nothing).
+  - Findings: battle/investigation triggers missing (P2, confirmed); anti-starvation claim (§3.3) unwired (later refuted DELIBERATE); zero Thread/Coherence/Calamity hooks (P1 filed; refuted DELIBERATE/UNDETERMINED, revised P3); victory era transitions unkeyed (ED-1006); four disagreeing status markers.
+  - Stage 10 sim passed 6/6 incl. determinism.
+- **Conflicts / stale:** no articulation code under `engine/` or `modules/`.
+- **Open items:** whether a rendering layer exists in the game architecture at all.
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/dossiers/dossier_faction_political.json
+- **What it is:** 242-line JSON dossier (8 findings) on faction/political.
+- **Status:** none; reading: historical.
+- **Bears on:** FA, SE, CHAR
+- **Content that matters:**
+  - Core loop: 7 turn priorities, 10-step Accounting, a 4-component disposition engine (Mission/Cascade/Public Expectation/L+PS) feeding a 0-7 Mandate.
+  - Decision density: Domain Action selection thin (handful of verbs, one roll each); Parliament and Treaty moderate; Mandate/Legitimacy management degenerate (formula-computed); NPC faction voting GM-adjudicated.
+  - Findings: `gm-controls-npc-votes` (P1 filed, REFUTED: deterministic vote rule exists beside it, stale wording only); `faction_politics` doc:null despite 1115-line CANONICAL doc; single-root Cascade default for all 6 factions; Institutional Consolidation turtle (Stability+1/Accord+1 for inaction); 3 non-reconciled Mass Seizure formulas; stat lineup churn without typed export.
+- **Conflicts / stale:** the "no GM" point is settled by CLAUDE.md; engine form is `engine/season/`.
+- **Open items:** per-season fork beyond the signature action.
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/dossiers/dossier_mass_battle.json
+- **What it is:** 247-line JSON dossier (8 findings) on mass battle.
+- **Status:** none; reading: historical.
+- **Bears on:** MB, PC, SE
+- **Content that matters:**
+  - Decision points: Strategy Declaration moderate (6 tactics with counters, 7 formations); Part D aftermath scene rich ("strongest decision point in the lane": Tend / Survey / Address); army composition Levy vs Professional under Campaign Supply rich; §3.8 Scene→Mass bonus degenerate (never hooked); General Duel moderate and Thread-blind.
+  - Findings: splitting doctrine cites win-rate evidence of the kind ED-MB-0002 RC-2 shows was measured against an invincibility-bug baseline; generalship-dominance axiom ("Command=7 vs 1 near-certain before a die is rolled") deliberate but in tension with Ω (later REFUTED as a category error: Ω scopes dominance to choice); no named-actor motive field; per-sub-unit morale has no player-facing surface beyond Army Morale.
+- **Conflicts / stale:** consistent with the Cannae audit's RC-2.
+- **Open items:** HUD parity for per-sub-unit state (relevant to the user's cell-based, weapon-carry design intent in the brief).
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/dossiers/dossier_npc_behavior_designs_npcs_npc_behavior_v.json
+- **What it is:** 249-line JSON dossier (8 findings) on NPC behavior and conviction.
+- **Status:** none; reading: historical.
+- **Bears on:** CHAR, SC, FA
+- **Content that matters:**
+  - Core loop: NPCs hold Conviction(s) + Resonant Style + Certainty; scars from witnessed Thread ops or contest losses gate Belief revision and fire authored Arc branches; BG-mode Priority Trees (§8) run deterministic 7-level decisions each season; Outreach/Demand surfaces at most 3 scenes/season.
+  - Decision points: Advisor Knot extraction vs public citation rich; Edeyja Wager rich (only one NPC); recruitment incentive and Outreach accept/refuse thin; arc endpoint a fixed small menu per NPC (emergent timing, authored destination).
+  - Q-elegant: conviction taxonomy + Scar + Certainty + Resonant Style + 7-level tree + Outreach + Arc trees "not restatable after one reading"; only 2 of 9 priority trees carry Thread-conditioned rows (Varfell §8.5, Wardens §8.10).
+  - The candidate findings were refuted (deterministic trees are GD-2 structure; NPCs hold TWO Resonant Styles not one), so the lane "returned empty" per the critic.
+- **Conflicts / stale:** the audit's later "decision layer / AI chooser" intent in the brief is not addressed by this dossier.
+- **Open items:** concern/opinion/project/arc engine and `npc_memory` writer unswept (GAP-5).
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/dossiers/dossier_personal_combat.json
+- **What it is:** 193-line JSON dossier (6 findings) on `combat_engine_v1`.
+- **Status:** none; reading: historical, partly superseded by the R2/R3 plans.
+- **Bears on:** PC, CORE
+- **Content that matters:**
+  - Core loop: `wrapper.fight()` → `engagement()` per beat (approach → await tempo → exchange → bind/riposte → felled/separation); decision points degenerate/thin: mid-exchange commit depth, mode select, grip-choke, retreat-vs-press are engine/RNG-resolved; half-sword switch engine-triggered; `scene.combat_strike` input declared-only.
+  - Findings: `pc-no-player-input-hook` P1 (refuted DELIBERATE: sim-first oracle staging; residue is that nothing schedules the player-interface); thread gap compounding (ED-911); `scene.combat_resolved` carries only scene_id/outcome/participants/casualties/wounds_inflicted with no consumer listing it; legibility fails; tradition affinity budget narrows build differentiation; elegance drift from biomechanical-fidelity passes (5-tuple, per-element percussion, grip-oscillator fix).
+- **Conflicts / stale:** the brief's PC design intent (user-stated) may already cover player input; compare.
+- **Open items:** where a player-input surface is scheduled (ED-PC-0001).
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/dossiers/dossier_recent_infra_sequence_lane_last_month_in.json
+- **What it is:** 212-line JSON dossier (7 findings) on the last month of infra/sequence work.
+- **Status:** none; reading: historical, process.
+- **Bears on:** PROCESS
+- **Content that matters:** workplan v5 vs `CURRENT.md`/decision-queue contradict on J-38; `roadmap_state.yaml` frozen on a May track; contest stage gates (Gate 0→A→B→C) sequence cleanly; "R2 reduced spear/polearm dominance from 84-96% to 78-93% but the declared 55-75% band is not met"; seeded ~87%/0%/0% win share unaddressed; lane scoping documented but unenforced.
+- **Conflicts / stale:** almost all concern retired steering surfaces.
+- **Open items:** none for game audits, except the 78-93% / 87% figures (see PC, CORE).
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/dossiers/dossier_registers_graphs_shape_lane_mechanics_in.json
+- **What it is:** 180-line JSON dossier (7 findings) on shape artifacts (`mechanics_index`, `canonical_sources`, `supersession_register`, `DECISIONS.md`, `coverage_matrix`).
+- **Status:** none; reading: historical, process.
+- **Bears on:** PROCESS
+- **Content that matters:** `mechanics_index.yaml` marks mass_battle "not_implemented, <5% of v22" and social_contest "degenerate single-roll only" while both are mature; no ratified mass-battle default flip (ED-1089..1096, ED-MB-0001/0002) round-trips to the registers; 53% of 957 open `DECISIONS.md` items tagged P1; `coverage_matrix.md` titled "Weapon System v2" but holds only mass-battle coverage.
+- **Conflicts / stale:** those registers may no longer exist in the same form; per CLAUDE.md the owners are code and YAML read at runtime.
+- **Open items:** none.
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/dossiers/dossier_settlement_territory.json
+- **What it is:** 256-line JSON dossier (7 findings) on settlement/territory, written after the critic flagged the lane unaudited.
+- **Status:** none; reading: historical.
+- **Bears on:** SE, FA, MB
+- **Content that matters:**
+  - Core loop: 17 provinces, 37 settlements; governor gets one mandatory seasonal verb (Develop/Fortify/Pacify/Administer); Order → Accord (floor-mean); settlement L/PS (LPS-2e) aggregates size-weighted into faction Mandate `clamp(round(7T/(T+6)))`, which mean-reverts L/PS by ±1/season.
+  - Decision points: governance verb degenerate; §3.3 subnational management grant/revoke moderate; §4.3 RM-takeover Governance Transition (Disestablishment/Accommodation/Transformation) rich but narrow trigger; §4.9 Thread Exploitation Site harvest degenerate (refuted: deliberate tragedy of the commons); `governance_play_redesign_v1` rich but unratified.
+  - Findings: settlement governance thin loop (P1→P2 confirmed); redesign "orphaned" (refuted: its G1 prerequisite `sim/territory/registry.py` is built, 6 tests); temperament α/β zero mechanical consumers; stale adjacency IDs.
+- **Conflicts / stale:** `modules/settlements/` now exists (fabric.py, fortification.py); the governance verb menu was probably rebuilt: [UNVERIFIED].
+- **Open items:** governance loop build (ED-SE-0001).
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/dossiers/dossier_social_contest.json
+- **What it is:** 227-line JSON dossier (6 findings) on the social contest rebuild.
+- **Status:** none; reading: historical, partly stale (the rebuild moved on).
+- **Bears on:** SC, FI
+- **Content that matters:**
+  - Decision points: Appraise + armature-informed style choice rich ("continuous delta-sigma leverage, never a lookup"); Style pick moderate; Obligation naming (winner) rich; Recall citation thin; which of the four games to engage degenerate (only Agôn wired; consensus/negotiation/inquiry raise `NotImplementedError`).
+  - Findings: four games one wired; orientation payoff unwired (refuted: `cr5_self_backfire` IS called on the resolver path, `resolver.py:404-419`); Face/strain channel unwired (tracked); kernel has no thread hooks; armature quality a strength; Recall near-costless.
+- **Conflicts / stale:** the brief's detective/noir design intent for social contests and the inquiry/negotiation games is the open design here.
+- **Open items:** Stage 4 (three more games).
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/dossiers/dossier_threadwork_coherence_ms_rs_calamity_risk.json
+- **What it is:** 228-line JSON dossier (6 findings) on threadwork.
+- **Status:** none; reading: historical.
+- **Bears on:** WR, PC, SC
+- **Content that matters:**
+  - The "rich" choice-density subsystem: Leap pool `(Spirit×2)+History+TPS` TN7, op scale (Depth×Breadth×Distance) vs Coherence spend, Weave brittle vs Pull transient (snap-back Wound), Lock vs Dissolution, Rendering Crisis gamble (perma −1 TS), Knot spend vs rupture strain, collective/opposing ops.
+  - Findings: MS vs RS naming split (ED-428/731/772), combat zero thread (ED-911), articulation thread silence, `ED-046` cited but absent from the ledger, struck Ob tables retained inline.
+- **Conflicts / stale:** MS/RS resolved to MS per `ed_options.md` E-8 and `names_index.yaml:180` `clock.mending_stability`.
+- **Open items:** ED-1010/1011 Coherence-cost contradictions.
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/dossiers/dossier_victory_strategic_peninsular_sovereignty.json
+- **What it is:** 199-line JSON dossier (6 findings) on victory / peninsular strain / insurgency / player agency.
+- **Status:** none; reading: historical.
+- **Bears on:** FA, WR, SE
+- **Content that matters:** GD-1 endpoint (all 15 territories, Accord≥2, Turmoil≤6, 2 Accountings); four faction toolkits (Treaty/Seizure/Proclamation/Martial Governance); `insurgency_pipeline_v30 §7` says "11+ territories" vs GD-1 15 (refuted: tracked, sim authoritative at 15); GD-1 narrows victory shapes from ~9 to 1 (a deliberate trade of ending-diversity for pressure-diversity); `Political Stability` name vs Turmoil.
+- **Conflicts / stale:** victory threshold lives in code (`VICTORY_THRESHOLD=15` per the refutation).
+- **Open items:** none new.
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/hunts/hunt_combat_minmax.json
+- **What it is:** 77-line JSON, combat min-maxer output (4 dominant lines proposed, 4 findings).
+- **Status:** none; reading: never verified; also the critic claimed the hunt file missing (it is present).
+- **Bears on:** PC
+- **Content that matters:** four lines, each with the rule that permits it: always wear the heaviest armour (`armor_defeat_sigma`, `REACH_W`, `ADEF_CUT −0.9`; no wearer-side cost; "armor never read as self, equipment_health unwired"); counter/measure traditions get a free riposte on 50% of binds (`impose_node`, `IMPOSITION_GATE=True`); light hand-balanced weapon + aggressive disposition + `true_times` makes overcommit exposure 0 (`overcommit_exposure`, `ATTACKER_BIAS 0.12`); stacking every multiplicative ability (mezzo_tempo ×1.40, misura ×1.15, atajo ×1.18, staerke ×1.20) because `ability_primitives` enforces no budget while config prose cites one.
+- **Conflicts / stale:** pre-R3 model (`systems.py` line cites); file names are retired (`designs/scene/combat_engine_v1`).
+- **Open items:** re-hunt after R3 (`ners_qualitative_audit_v1.md` GAP-6); whether the affinity budget claim in config is still false [UNVERIFIED].
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/hunts/hunt_faction_minmax.json
+- **What it is:** 80-line JSON, faction min-maxer output (4 lines, 4 findings).
+- **Status:** none; reading: the top line was REFUTED.
+- **Bears on:** FA, SE, CORE
+- **Content that matters:** treaty-hegemony line (qualifying treaties count toward the 15, exempt from Accord≥2, lower Turmoil) refuted by global Turmoil≤6 and three other safeguards; Domain Echo per-scene cap lets Debate spam farm Mandate (unverified); metropolis saturation of Mandate (intended); Crown Enforce rote vs GD-3 emergence (unverified).
+- **Conflicts / stale:** none.
+- **Open items:** the two unverified lines.
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/hunts/hunt_massbattle_minmax.json
+- **What it is:** 98-line JSON, mass-battle min-maxer output (5 lines, 5 findings).
+- **Status:** none; reading: the top line (General Duel decapitation) REFUTED.
+- **Bears on:** MB, PC
+- **Content that matters:** the decapitation line refuted on five grounds (no forcing mechanism, bilateral duel suspends both commands, ED-898 removes death not capture, incapacitation is staged not instant-zero, uncommanded fights at 1D floor not destroyed; `:2940-3025`); split-beats-concentration (+9..45%) admitted in-doc; Company-scale thread cost arbitrage; Walls × Shield Wall turtle; pre-battle scene-bonus farming (+1D Command, +1D Volley, free Reform; +1D/1 turn).
+- **Conflicts / stale:** split-dominance evidence suspected contaminated (ED-MB-0002).
+- **Open items:** the remaining lines are P3 unverified.
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/hunts/hunt_social_minmax.json
+- **What it is:** 112-line JSON, social min-maxer output (6 lines, 6 findings).
+- **Status:** none; reading: the composite "four games collapse to one pattern" REFUTED (venue-invariance false; Argue attribute varies with adjudicator).
+- **Bears on:** SC
+- **Content that matters:** uncapped bonus stacking (Recall +2D per exchange in Formal, Corroborate +1D, Prep +1D, Findings +2D; the `+2D` cap covers only genre+boost); Appraise boost is a public lookup; Obscuring styles dominated (orientation inert, CR5 backfire wired); coalition REINFORCE ~5 track/exchange vs solo CLASH ~0 (ED-297); strain→Rattled→Face unwired so defence stats are decorative.
+- **Conflicts / stale:** the Obscuring/Doubt-Marker line is partly stale (backfire wired, ED-1060 terminal rule open).
+- **Open items:** Recall cap, Appraise value, coalition floor (ED-SC-0001).
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/hunts/hunt_threadwork_exploit.json
+- **What it is:** 80-line JSON, threadwork min-maxer output (4 lines, 4 findings).
+- **Status:** none; reading: mixed.
+- **Bears on:** WR, MB
+- **Content that matters:** the "−1 per-operation Coherence cap" is cited everywhere but defined nowhere (ED-1010, P1 KNOWN); Mending costs 0 Coherence in §2.4 but −1 in §3.2 and cannot be opposed (dominance on the repair sub-tree); one Territorial Weave serves as the Domain Action; Anchoring Scenes refill +1 Coherence per Close Knot uncapped (self-limited by rupture at +5).
+- **Conflicts / stale:** none.
+- **Open items:** Coherence-cost contradictions.
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/lenses/lens_centralization_schema.json
+- **What it is:** 119-line JSON lens on definitions/naming/typed-export centralisation (8 findings).
+- **Status:** none; reading: historical, consistent with CLAUDE.md §0.05 intent.
+- **Bears on:** PROCESS, CORE
+- **Content that matters:** `names_index.yaml` is the right home but binding is loose; glossary (7 attributes) vs descriptor registry/names_index (9) each claim authority; `resonance_style` deprecated while npc_behavior §1.3 runs Resonant Style live; only `world.solmund` is `enforce:block`; only `combat_engine_v1.json` is a typed export, 26 modules prose-only; Combat Pool verified reconciled at `max(5, History+6)`.
+- **Conflicts / stale:** typed exports have since grown (CLAUDE.md §5 and `engine/engine_params/`); attribute roster state now: [UNVERIFIED].
+- **Open items:** the 7-vs-9 roster is relevant to the brief's attribute/skill axioms.
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/lenses/lens_cohesion_interdependency.json
+- **What it is:** 106-line JSON lens on cross-subsystem delivery (7 findings, all about the Key transport).
+- **Status:** none; reading: historical, moot as phrased.
+- **Bears on:** CORE
+- **Content that matters:** flagship "consequence dies in transit" edges: `scene.combat_resolved` declared but unconsumed; 8 down-seams with empty `targets[]`; `domain_actions` doc:null with `consumes:[]`; articulation consumes `*` and fires nothing for flagship keys; doc:null debt clusters on connective modules (domain_actions, engine_clock, npc_memory).
+- **Conflicts / stale:** all stated in Key terms (retired).
+- **Open items:** the structural point (outputs of a resolver reaching consumers in `engine/season/`) still needs its own check.
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/lenses/lens_emergent_narrative.json
+- **What it is:** 116-line JSON lens on emergent narrative (8 findings).
+- **Status:** none; reading: historical; its headline is a confirmed finding.
+- **Bears on:** WR, FA, CHAR
+- **Content that matters:** the 8 Convergence Markers are hand-authored with no detector; COLLISION C (the charter's worked emergence example) is anchored on an unnamed ritual `[UNNAMED — ED-416]`; autonomous world changes over 4 seasons but trends to ~87% single-winner; consequence propagates one hop and does not compound; personal transformation best-served Ω clause but absent in combat; arc destinations authored menus.
+- **Conflicts / stale:** the GM-votes hole refuted; the 87% win share is a known sim issue.
+- **Open items:** detector; the brief's "emergent narrative without player involvement" measuring stick applies directly.
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/lenses/lens_playability_legibility.json
+- **What it is:** 105-line JSON lens on playability (6 findings).
+- **Status:** none; reading: historical.
+- **Bears on:** GO, SC, PC
+- **Content that matters:** ~27-30 named trackers across scales vs the 2026-05-08 immersion audit's ceilings (3-4 personal, 7 strategic); only Agôn contest has a current-era interaction model (the other 6 scales have none, later refuted as "deliberate per-subsystem method"); UI v4.1 still specifies struck Taint (0-6) and CD tracks; world-track name split blocks one-sentence readability; the dramatic-legibility test (whose position is at risk / what each actor wants / what happens if no one acts) fails at combat.
+- **Conflicts / stale:** UI docs are now in `.designs/systems/ui/`.
+- **Open items:** none new.
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/lenses/lens_sequence_lineage.json
+- **What it is:** 107-line JSON lens on build order and lineage (7 findings).
+- **Status:** none; reading: historical, process.
+- **Bears on:** PROCESS, GO, CORE
+- **Content that matters:** Gate-0 (Key v2 migration) unexecuted while the single ported combat slice got more passes; `engine_clock` home unlocated; no first end-to-end playable-season milestone defined; supersession register frozen at ED-912.
+- **Conflicts / stale:** both Gate-0 and the Key migration are moot (Key retired); `engine/season/` is the season loop now.
+- **Open items:** the "one playable season" milestone is the same question as `m1_acceptance`.
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/lenses/lens_threadwork_applicability.json
+- **What it is:** 123-line JSON lens on P-14 (inseparability in every play mode), 8 findings.
+- **Status:** none; reading: historical.
+- **Bears on:** WR, PC, FA, SC
+- **Content that matters:** WIRE-IT ranking: combat (ED-911, a regression from superseded `combat_v30 §10` Leap-in-combat), articulation render path, General Duel, faction behavior math, NPC trees (2 of 9), settlement governance verb; DELIBERATELY ABSENT: Church thread-resistance doctrine (ED-679, target faction dissolved), Thread Exploitation Sites' uncapped harvest (tragedy of the commons via shared RS).
+- **Conflicts / stale:** `modules/combat` grep for "thread" hits only data threading (consistent: ED-911 may still be open).
+- **Open items:** ED-911.
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/lenses/lens_throughlines_tree.json
+- **What it is:** 138-line JSON lens organising the corpus on four trunks (6 findings).
+- **Status:** none; reading: historical frame.
+- **Bears on:** WR, PROCESS
+- **Content that matters:** four trunks (cross-scale M-5, pressure/forced choice M-1+M-6, substrate-grounds-all M-3 "with severed limbs", autonomous world M-β); orphan throughlines T-31/33/34/35/37/38/39/40 (the M-7..M-11 phenomenology tier) implemented nowhere; T-02/T-30 home to un-audited `investigation_systems_v30`; trunkless mechanics (territory temperament α/β, Institutional Consolidation passive recovery, Recall +2D).
+- **Conflicts / stale:** `investigation_systems_v30` is the fieldwork lane's document (FI).
+- **Open items:** FI audit is the cross-lead (ED-FI-0001).
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/p3.json
+- **What it is:** 410-line JSON, 33 P3 candidates (not individually verified).
+- **Status:** none; reading: friction/debt list; by the audit's rule these are fix-here-or-drop.
+- **Bears on:** PC, MB, SC, FA, SE, WR, PROCESS
+- **Content that matters:** examples: `affinity-budget-vaporware` (the "affinity budget" cited in config is not implemented), `thread-scale-cost-contradiction`, `siege-turtle-no-downside`, `scene-bonus-prebattle-farm`, `knot-anchoring-coherence-regen-loop`, `institutional-consolidation-turtle`, `single-root-cascade-default`, `recall-near-costless`, `orphan-ed-046`, `decisions-p1-inflation`, `no-playable-milestone`.
+- **Conflicts / stale:** many are docs/registers that no longer exist in that form.
+- **Open items:** none tracked.
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/refuted.json
+- **What it is:** 497-line JSON, 25 refuted candidates, each with the refuter's verdict, intent and evidence ("design intel").
+- **Status:** none; reading: authoritative about why these are NOT defects as of 2026-07-04.
+- **Bears on:** PC, MB, SC, FA, SE, WR, CORE
+- **Content that matters:** dominant pattern "surface fact TRUE, defect framing FALSE, intent DELIBERATE"; e.g. `pc-no-player-input-hook` (code fact true, deliberate sim-first), `massbattle-general-duel-decap`, `hegemony-accord-exemption-solves-gd1` (Turmoil≤6 global), `four-games-collapse-one-pattern` (venue-invariance false), `orientation-payoff-unwired` (backfire wired), `generalship-dominance-axiom`, `resonant-style-lookup-collapse` (NPCs hold TWO styles, stacking wrong-style penalty), `deterministic-priority-trees` (GD-2 mandates deterministic precedence), `governance-redesign-orphaned` (G1 prerequisite built), `thread-exploitation-faucet` (deliberate), `key-vocabulary-enum-fork` (NOT-INTENDED but not NEW).
+- **Conflicts / stale:** an ADDENDUM 2026-07-07 (ED-IN-0024) corrects `articulation-thread-silence` intent from DELIBERATE to UNDETERMINED for the narrower trigger-omission claim.
+- **Open items:** none.
+
+### .audit/2026-07-04-ners-qualitative-audit/01_workings/tracked.json
+- **What it is:** 808-line JSON, 62 candidates reclassified KNOWN-TRACKED with their tracking refs.
+- **Status:** none; reading: historical map of what was already tracked on 2026-07-04.
+- **Bears on:** all subsystem tags
+- **Content that matters:** tracked refs worth re-checking: ED-911 (combat thread), ED-1010/1011 (Coherence), ED-1006 (era transitions unkeyed), ED-1051 (doc:null backlog), ED-MB-0002, ED-358, ED-297, ED-1060, propagation_spec §5; P1 items include `combat-resolved-double-bottleneck`, `domain-actions-down-seam-blind`, `gate0-frozen-combat-polished`, `engine-clock-still-homeless`, `cross-tick-convergence-unproven`, `sim-winshare-untouched` (87%/0%/0%), `contract-2cycle-self-contradiction` (social_contest↔npc_behavior opinion damper).
+- **Conflicts / stale:** these ED ids are lane-frozen; status today needs the ledgers.
+- **Open items:** the sim win-share and cross-tick convergence questions have equivalents in `engine/season/`.
+
+### .audit/2026-07-04-ners-qualitative-audit/_workings_joined.md
+- **What it is:** 3492-line machine-joined archive of the audit's md working papers (charter, three grounding files, workings README, critic notes, 5 dossier md, 4 hunt md, 7 lens md, 18 refutation records).
+- **Status:** fragments' own statuses (RATIFIED working record). Reading: reference archive.
+- **Bears on:** PROCESS, SC, MB, FA, WR
+- **Content that matters:**
+  - Charter: the North Star master question, the three-valued intent gate (DELIBERATE / NOT-INTENDED / UNDETERMINED), P1/P2/P3 definitions, and the KNOWN-items calibration list (`:25-118`); a finding re-reported as novel when listed there is "an audit failure".
+  - Grounding 02 interdependency map: 11 strongest coupling edges and the 27-module state (10 doc:null, 11 ASSUMPTION-grade resolvers) (`:233-307`); grounding 03 threadwork surface and the open ED-911 / 1010 / 1011 / 913 / 414 / 931 flags (`:318-395`).
+  - Refutation method sample: each record restates the claim, verifies text, tries refutations, runs an intent hunt in the ledger/decision queue, and re-judges severity against the North Star (`:2267-2537`); the general-duel refutation is a model of an exploit disproof (`:2940-3025`).
+- **Conflicts / stale:** I read lines 19-570 (charter, grounding, README, critic), 2267-2540 (4 refutations) and 2940-3025 and 3084-3154 (two more refutations) in full; the md dossier/hunt/lens fragments (536-2266) duplicate the JSON files above (read there) and 14 other refutation records (2540-3492) were read only at verdict level via `refuted.json`; [SKIPPED in full: `_workings_joined.md` lines 536-2266 and the other 14 refutations — duplicate content, covered by the JSON counterparts].
+- **Open items:** none.
+
+### .audit/2026-07-04-ners-qualitative-audit/ed_options.md
+- **What it is:** 104-line list of 12 drafted ED options E-1..E-12 (JSON ledger lines), 2026-07-04, held back per ED-1094, then FILED 2026-07-05.
+- **Status:** "RATIFIED (Jordan, 2026-07-05 — ALL 12 accepted and FILED in the ledger)" (`:3`). Reading: live as an ID map; forks resolved (E-1 adopt redesign path; E-4 per-subsystem walkthrough policy; E-8 MS wins).
+- **Bears on:** SE, WR, PC, SC, MB, FI, PROCESS
+- **Content that matters:**
+  - Map: E-1 `ED-SE-0001`, E-2 `ED-IN-0003` (convergence detector), E-3 `ED-IN-0004` (articulation triggers), E-4 `ED-IN-0005`, E-5 `ED-WR-0001`, E-6 `ED-IN-0006`, E-7 `ED-IN-0007` (register back-propagation gate), E-8 `ED-WR-0002` (MS name), E-9 `ED-PC-0001` (combat player-input + ED-911 as named increments, not before R3), E-10 `ED-SC-0001`, E-11 `ED-IN-0008` (naming authority unification), E-12 `ED-FI-0001` (audit investigation lane GAP-1) (`:91-104`).
+  - Selection guidance: pick E-2 + E-3 + E-7; E-1 largest playability win; E-8 cheapest precondition for Godot export (`:81-85`).
+- **Conflicts / stale:** E-2/E-3 are Key-substrate-phrased ("emits meta.convergence_marker consumed by articulation §3.1"); `ED-SE-0001` exists in `registers/editorial_ledger_se_archive.jsonl` (archive file name implies closed or retired) [UNVERIFIED state].
+- **Open items:** whether E-2 (detector) was executed: the ledger ids exist; the code does not (see confirmed.json entry).
+
+### .audit/2026-07-04-ners-qualitative-audit/ners_qualitative_audit_v1.md
+- **What it is:** 345-line verdict-first North-Star NERS audit report, lane IN, 2026-07-04.
+- **Status:** "RATIFIED (Jordan, 2026-07-05 — accepted as filed)" (`:3`). Reading: historical verdict; its method is durable, its transport findings are moot.
+- **Bears on:** all subsystem tags
+- **Content that matters:**
+  - Corpus verdict: "the substrate is deep; the promise is choked at three points": (1) player decision surfaces built after resolvers; (2) consequence transport leaks; (3) rendering holes at the flagship moments (`:20-30`). Criterion table N PASS(flag 2), Ω(a) PARTIAL, Ω(b) PASS, Ω(c) PASS (verified under attack), Ω(d) PASS (survived the hunt), Q-robust PARTIAL FAIL, Q-smooth PARTIAL FAIL, Q-elegant PASS (watch combat) (`:32-41`).
+  - Per-subsystem choice density: personal combat thin, faction thin, settlement thin, mass battle moderate, social moderate, threadwork RICH, NPC moderate with best legibility (`:80-93`).
+  - 5 surviving findings F-1..F-5 and two corpus signals S-1 (register back-propagation blindness) and S-2 (steering fragmentation) (`:123-190`).
+  - Threadwork wire-it ranking and the claim that P-14's live failure shape is "a whole play mode cannot host a thread op" (`:194-232`).
+  - Degenerate-play hunt: 23 candidate lines, every headline one refuted by safeguards "one line, one section, or one file away" (`:234-259`, `:288-295`).
+  - Bottom line: not a new mechanic but "closing the transport-and-rendering gap around the collision engine" (`:336-344`).
+  - Addendum 2026-07-07 (ED-IN-0024) corrects R-2 intent (`:308`).
+- **Conflicts / stale:** Key transport and register findings retired with the substrate; the questions of choice surfaces and visible emergence persist in `engine/season/` terms.
+- **Open items:** GAP-1 (investigation lane unaudited), GAP-2 (32 deferred), GAP-6 (combat re-hunt after R3).
+
+### .audit/2026-07-04-ners-qualitative-audit/strategic_judgments.md
+- **What it is:** 132-line list of 15 strategic judgments J-1..J-15 on sequencing, anti-drift governance and roadmap management.
+- **Status:** "RATIFIED (Jordan, 2026-07-05 — accepted as filed)" (`:3`). Reading: partly executed, mostly process/Godot sequencing.
+- **Bears on:** PROCESS, GO, CORE, WR
+- **Content that matters:**
+  - J-1 name the milestone: "one playable season ... a strategic decision, one domain action, one social contest, one combat, one thread op, season close, and an articulation render"; distance to it as the ordering criterion (`:16-20`). J-5 player decision surfaces are the biggest North-Star debt (`:46-53`). J-6 threadwork is the model; resolve MS/RS before any export binds (`:55-59`). J-4 build a minimal convergence-marker detector (`:39-44`).
+  - J-11 institutionalise the skeptic (unverified finder claims wrong ~5 of 6); J-9 ratification must back-propagate to registers mechanically (`:81-102`).
+- **Conflicts / stale:** J-2/J-3 (finish R3, close Key transport seams) are Key-era; J-1's milestone is exactly CLAUDE.md §0.2's "done means it runs".
+- **Open items:** J-14's monthly reconcile session type.

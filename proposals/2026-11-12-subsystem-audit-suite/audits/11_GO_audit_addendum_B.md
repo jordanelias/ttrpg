@@ -2,7 +2,7 @@
 
 ## Status: REFERENCE (an audit; resolves nothing at runtime)
 
-## Read at: 13a82e4 (working tree; the first GO lane read at ad07a9a)
+## Read at: 13a82e4 (working tree; the first GO lane read at ad07a9a; `git diff --stat 13a82e4 2d909d9` outside this suite's directory is empty)
 
 Continues `audits/11_GO_audit.md` (§0–§14, F-GO-01..12, R1–R47). Nothing there is repeated; where this
 file corrects it, the correction is marked **CORRECTS**. Finding ids continue at F-GO-13, resolutions at
@@ -550,7 +550,7 @@ No `pytest`, no long `aperture` run.
 | E-B4 | `surface_probe2.py` (plain run; each of his acts against his ledger) | 0 · 1 | same hash. `finding.none` (Failure) ×2: 0 claims of that kind held. `sabotage.refused`: 1. By `(kind, act subject)`: 7 of 15 matched. 0 claim ids are act ids. `observed` example `Observation(subject='set_s_001', predicate='stores:grain', value=40)`. Claims by round: 28/19/26/27/19 |
 | E-B5 | `surface_probe3.py` (every act against every other ledger, by kind and subject, anchor or actor) | 0 · 1 | same hash. 318 of 749 acts matched in another person's ledger (42.5%); 60 of 83 persons with an act so matched; `p_npc_001` 0 of 15, `p_npc_033` 6 of 6; 1,215 `Seen.who` claims naming 35 persons. One seed, one matcher |
 | E-B6 | `grep -ln "ReceiptRow\|AccountRow\|AftermathRow" proposals/*.md` (the suite); `grep -rn valoria_ui_ux tools engine modules tests`; `grep -rn "Disposition table" engine modules --include=*.py`; `git ls-files \| grep parliamentary_vote` | — | GO's files only; 0; 0; nothing |
-| E-B7 | `git status --short` at the end | — | this lane's four files are the only additions of its own (other lanes' files were changing in the same tree throughout) |
+| E-B7 | `git status --short`, `git diff HEAD --stat` on this lane's four files, at the end | — | this lane wrote four files and edited no other. It did not commit: the suite's own sweep commit `2d909d9` (02:56 UTC) had already taken them in, and a later edit to this row leaves this file modified against it. Other lanes' files were changing in the same tree throughout. One early append to this file was made with a shell heredoc before the lane switched to the edit tool; the text it wrote is the F-GO-13 and F-GO-14 entries as they stand |
 
 ### B7.2 What was read, and what was not
 
