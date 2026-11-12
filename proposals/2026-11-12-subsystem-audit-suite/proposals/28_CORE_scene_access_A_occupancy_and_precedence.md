@@ -58,8 +58,10 @@ reads, `queries/world_q.py:4599-4606`): a crowd is not occupied by one speaker.
 
 ### 2. One scene per person per round: a fold-local read
 
-`resolve()` holds a local mapping `engaged: person id -> scene id` for the round, dropped when the call
-returns (`04` PART D row 34's lifetime: a local of the step call). Walking the scenes in order:
+The driver holds a round-local mapping `engaged: person id -> scene id`, emptied before each round's
+RESOLVE, filled by the fold, read once more by ENCOUNTER (which shares barrier 3 and seats a sitting's
+attendees, `05_SC_playable_hearing_B.md`), and never read after it (`04` PART D row 34's lifetime:
+dropped at the next barrier). It is in no carrier, no hash and no Event. Walking the scenes in order:
 
 - **The opener.** If the scene's actor is already engaged in another scene, the whole scene is
   **deferred**: none of its acts enters the act store (`resolve.py:1033`) or folds; the scene is handed
