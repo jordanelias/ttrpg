@@ -11,7 +11,7 @@ place where your rulings and a ratified Layer 1 sentence point different ways an
 One permission is also yours, and is not a design call. Everything else is in the **Not yours** table, each
 with the check that settled it, so you can see nothing was dropped and reverse any of them on a word.
 
-**How to answer.** "J-U3-01: take 1" (or 2), and "P-1: yes" (or no).
+**ANSWERED 2026-11-12: J-U3-01 Option 1 (A-92); P-1 yes (A-93).** Both entries below are kept for the record.
 
 ---
 
