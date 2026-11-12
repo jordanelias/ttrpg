@@ -116,7 +116,7 @@ Not in this batch, and where each is: UPR §1 (the nesting cap, `nested_entry`; 
 - GATE: "the realm hash at seeds 0, 1, 2 **EQUAL** before and after (the values carry over: the score handed in is the number `faculty` carried after B05's A-7 change)" — before is B15.01's reading (`reading @<sha>`), one season each (E-2: the seed-0 hash is the per-item reading; seeds 1 and 2 are read here because EQUAL is this item's whole claim); `python tools/export_engine_params.py` re-derived here for the `attributes` section, then `--check` → exit 0 (B15.01 moved no export key, so the export is green at this item; it goes red at B15.03 until B15.99); "the two tests green"; `grep -rn "faculty" modules/combat engine/season --include=*.py` → comments only.
 - HASH MOVERS: none, "if the values carry over (A-112)".
 - DEPENDS ON: V12 Batch B05-one-roll (`pool.py::score`, A-7, the one pool rule; UPR §2 edits 1–3; `29_DICE` item 29-2); EXISTS-IN-TREE `modules/combat/attributes.py::SPEC`, `seam/wrappers/pool.py::faculty`, `seam/wrappers/combat.py::combat_input`; V12 B15.01. Lands before `03_PC_person_inputs_content.md` Part A (B18), "so its `pool` slot reads the score already".
-- GLOSSARY: *faculty* — already retired as a suite word (U4d); the row's last note "the code identifier survives in `modules/combat`" is struck: the identifier is gone. *skill score* — its owner column gains `modules/combat/combatant.py` (the `pool` slot's `score`).
+- GLOSSARY: *faculty* — already retired as a suite word (U4d); its sentence "The code symbol `pool.py::faculty` keeps its name (no retrofit) until D-U1-08's split replaces it" becomes "The code symbol is gone (`IS-PC-05`, B15.02): the fight reads the skill score". *skill score* — its owner column gains `modules/combat/combatant.py` (the `pool` slot's `score`).
 - COST and TIER: edit, wide by file count; `sonnet`, `high`.
 - LANDS IT: B15's producer; `Item: B15.02`, `[skip ci]`.
 
@@ -207,7 +207,7 @@ Not in this batch, and where each is: UPR §1 (the nesting cap, `nested_entry`; 
 - GATE: `python -m pytest engine/season/tests/test_in34_bodies_clock.py -q -k mortal_terms` → pass; the seed-0 hash equal to B15.05's (`reading @<sha>`).
 - HASH MOVERS: none (no caller).
 - DEPENDS ON: EXISTS-IN-TREE `engine/season/queries/world_q.py` (its import rule, "nothing here imports `shape`, `decision`, `loop` or `seam`"), `engine/season/data/rosters.py`; V12 Batch B05-one-roll (`sigma_leverage.pool_of`, fixtures `pool_add`, `pool_floor`, `pool_default` as D-U1-04 leaves it); V12 B15.05.
-- GLOSSARY: *mortal terms* `[ASSUMPTION: a new row]` — "the pool and obstacle of the draw that decides whether a felled or stricken body dies; one owner, `world_q.mortal_terms`"; *spell* (of illness) row gains the cause's roster `mortal_causes` as an owner.
+- GLOSSARY: *mortal terms* `[ASSUMPTION: a new row]` — "the pool and obstacle of the draw that decides whether a felled or stricken body dies; one owner, `world_q.mortal_terms`; its causes the closed roster `mortal_causes`".
 - COST and TIER: small build; `sonnet`, `high`; the reconciliation with PHY_A A3's reader `opus` (HAP_A tier line).
 - LANDS IT: B15's producer; `Item: B15.06`, `[skip ci]`.
 
@@ -246,7 +246,7 @@ Not in this batch, and where each is: UPR §1 (the nesting cap, `nested_entry`; 
 - GATE: `python -m pytest engine/season/tests/test_cr87_violence_contexts.py engine/season/tests/test_vm_phy_a_custody.py -q` → pass; "`aperture 2 0` and `aperture 2 1` before and after, quoted in the commit: … `accept` refusals on `exists:challenge` equal 0" (A4's reading, re-read), and `fight` formed and attempted with their `terms` counts per context, seeds 0 and 1, two seasons, beside B15.07's reading (`reading @<sha>`).
 - HASH MOVERS: "Every season `fight` … scene" whose context now sets `yield` terms; "the corpus pins of the 13 `fight` scenes" (PHY_A "What it changes"). Declared; B15.99.
 - DEPENDS ON: V12 Batch B14-pc-outcome (PHY_A A4: `world_q.challenges_heard`, `accept` formed on a heard challenge); V12 B15.07; EXISTS-IN-TREE `rosters.yaml: violence_contexts`, `duel_terms`; `decision/options.py::VIOLENCE_CONTEXT_READERS`, `violence_context_of`, `opening_set`; `seam/wrappers/combat.py::duel_terms_of`, `combat_input`; `data/verbs.py::WARRANT_SOURCED`, `ORDER_ROLE_KEY`, `ORDER_RETREAT_KEY`, `MARCH_POSTURE_KEY`.
-- GLOSSARY: *duel* — the row says "a duel is `accept`'s (a fight under a challenge's terms); `fight` has no `duel` context (PHY_A A3)".
+- GLOSSARY: none (the glossary has no *duel* row, only *duel round*, which this item does not touch; `duel` here is a roster key).
 - NAMES: `MARCH_POSTURE_KEY` → its B16L name if L1 renamed it (`V12_STRUCTURE_part2.md` §5.10: `stance` → `posture`).
 - COST and TIER: edit; `sonnet`, `high`; one `opus` read of the gate (PHY_A tier line).
 - LANDS IT: B15's producer; `Item: B15.08`, `[skip ci]`.

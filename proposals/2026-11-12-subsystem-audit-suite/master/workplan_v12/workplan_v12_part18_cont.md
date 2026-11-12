@@ -181,7 +181,7 @@ EST: 9.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this bl
 - GATE: `python -m pytest engine/season/tests/test_relations.py -q` → pass; "eleven directed pairs hold a stance among the ten (five today); for Almud and Baralta, the rank of a hostile act (`challenge`, `open_case`) on the rival is higher than the same act on a person toward whom he holds no row, and the rank of `confer` on the rival lower" (REL gate (b)), read at `build_realm(0)`; the build hash recorded (moved).
 - HASH MOVERS: "the content is a declared build-hash mover" (REL). Declared; BA1.99.
 - DEPENDS ON: V12 Batch B10-character (REL edits 1–5: `rosters.yaml: relation_grounds`, `cast.relations_of`, the seeder in `boot/realm.py::build_realm`); V12 BA1.02.
-- GLOSSARY: *relation ground* — owner `rosters.yaml: relation_grounds`, read against the rows.
+- GLOSSARY: *ground* (owner `rosters.yaml: relation_grounds`), read against the authored rows; no edit.
 - COST and TIER: content; `sonnet`, `medium`.
 - LANDS IT: BA1's producer; `Item: BA1.08`, `[skip ci]`.
 
