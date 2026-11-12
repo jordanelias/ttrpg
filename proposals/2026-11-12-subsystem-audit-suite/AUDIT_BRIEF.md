@@ -62,6 +62,39 @@ registry or canon:
 - **Count them in your receipt:** proposals written (paths) and resolutions decided (a number, from your
   §6 table).
 
+## Added charge (Jordan, 2026-11-12): adjudicate what the game needs to simulate the provided arcs and characters
+
+The repository holds a provided corpus of **narrative arcs and characters** the game is meant to be able to
+simulate: `engine/season/cases/` (`ARC4/5/6.yaml`, `NPC4/5.yaml`, `chain/ARC1-3.yaml`, `chain/NPC1-3.yaml`,
+`chain/CASE_BRIEF.md`, `exercises/ARC-nn.yaml`), `engine/season/ENDINGS_CLASSIFIED.yaml`,
+`proposals/2026-08-30-arc-reachability/` (arcs 01–55 and the emergent set, with `04_SYNTHESIS.md`), and the
+instruments that read them (`engine/season/harness/corpus_run.py`, `run_cases.py`, `exercises.py`, `arc.py`;
+`engine/season/gaps.py`; the hole register). Each case states `season_requires:` needs with a hardness
+(`core` / `important` / `flavour`) and a `temporal` block.
+
+**Each lane adjudicates, for the cases whose needs fall in its subsystem** (read `CASE_BRIEF.md` first, then
+run `python -m engine.season.harness.corpus_run` once and read its output; a need that spans subsystems is
+adjudicated by the lane that owns the *mechanism* the need turns on, and cross-listed by the others):
+
+- which `core` and `important` needs the engine **already represents** (cite the code path that makes it
+  so, and a run that shows it — not the case file's own say-so; check the representation is reached, not
+  declared);
+- which it **cannot yet represent**, and the cheapest faithful change at the single owner (a verb row, a
+  roster row, a predicate, an effect, a module input, a state field), written as a proposal;
+- which needs are **wrongly stated** (a need no reading of the arc requires, or one two careful readers
+  would take differently) and the resolution;
+- which arcs and characters can be **simulated end to end** once the lane's changes land, with the
+  execution artifact that would show it (a seeded run in which the arc's beats occur from persons' acts,
+  not from a script — scripting drift is a failure of the test, not a way to pass it);
+- which arcs depend on another lane's change first (name the dependency edge).
+
+Append this as **§13. Provided arcs and characters — adjudication** at the end of your audit: a table
+(case id · need (short) · hardness · represented today? · evidence · change required · owner lane ·
+proposal file · gate), then a short ordered list of the arcs your lane can bring up soonest. The
+holistic and instruction stages build the cross-lane sequence from these tables, so be exact about
+dependency edges. Do not read the case files' statements as proof the engine behaves that way (§0.05);
+they are the specification of what must be simulated.
+
 ## Ground rules (from `CLAUDE.md`; read it, these are the ones that bite here)
 
 1. **Code is the mechanism; prose is reference** (§0.05). A design document is never the reason a
