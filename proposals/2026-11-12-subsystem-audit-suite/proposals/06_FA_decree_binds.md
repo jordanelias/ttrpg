@@ -1,0 +1,134 @@
+# FA-P1 — a decree that binds: terms reach the addressee, the answer is a choice, defiance is the issuer's occasion
+
+## Status: PROPOSED
+
+Source: `audits/06_FA_audit.md` F-FA-01, F-FA-02, F-FA-05, §6.2 R-01 to R-03, §11 item 1, §13 (NPC-083,
+NPC-038, ARC-17), §15; hole rows H-260, H-207 (A), H-203; plan position CR-54.
+
+## What it changes in `engine/season/` at runtime
+
+1. A person who learns that a writ was issued, and whom the writ names as an addressee, also receives its
+   terms as a content claim. Today only a holder does.
+2. `comply`, `evade / defy` and `construe` form on a writ the person's own ledger names him an addressee of.
+   Today they form only on a writ he holds, which in computed play is never.
+3. An issuer who holds a claim that his own writ was defied carries, on the question he answers, the defier
+   and the seats the defier holds as classed referents.
+4. `revoke` reads its office from `subject` as `confer` does, so the row can execute on such a referent.
+
+No stored state, carrier, verb or remit act is added. No hold is minted to anyone but a Record's maker, so
+ED-IN-0292 (1) stands as written. Each numbered change is a declared hash mover and ships behind its own
+revert.
+
+## The problem (evidence)
+
+At `601e715`, `PYTHONHASHSEED=0` (audit §12, E-3 to E-5):
+
+- Realm, seeds 0, 1 and 2, three seasons: 29, 21 and 41 `dispensation.issued`; 0 writs held by an addressee;
+  0 persons for whom `world_q.writs_held` is non-empty; 0 `compliance.given`, 0 `compliance.withheld`.
+- Spine, seeds 0 to 4, four seasons: 19 writs, the same zeros.
+- `aperture 2 0`: `comply` attempted 33 and refused 33 on `exists:dispensation=0` (it formed on other
+  Records); `evade / defy` 5 of 5; `construe` 7 of 7; `revoke` formed for 5 persons, attempted 0.
+- Cause, in the code's own words (`queries/world_q.py:3234-3260`): "a writ is minted into its maker's hand …
+  A writ reaches its addressee only by a `give`. `()` for nearly everyone." `give` executed once.
+- Part E's cell for `comply`, kept on the row as `requires:`, is "a claim of the dispensation's terms is in
+  the actor's own ledger". It never asked him to hold the paper; the holding test arrived with the
+  formation (v9 IN-09, an `[ASSUMPTION; medium; Jordan to correct]`).
+- H-260 (measured on hand-placed writs): obeying and defying leave the world identical.
+
+## The resolution, decided
+
+A writ made by `issue` is a public instrument: it is a `binding_decision`, already told to everyone the
+chronicle channel reaches. Its terms travel with that news, to its addressees only. What the addressee then
+does is his own act, chosen by his own ranking. What defiance costs is whatever the issuer, now holding a
+claim of it, chooses to do: the chain is two persons' decisions, not a counter. `covenant` is unchanged: its
+row says it "must not be read as a public writ", and its terms still reach only a holder.
+
+Ladder: step 3 (Part E's cell) for the formation; step 5 for the route (WITNESS already deposits content
+claims; the addressee test `person_q.addressed_to` and the claim reader `person_q.content_said` already
+exist person-side); step 4 for the motive (CR-54's ratified reading of H-207 (A): a general motive is
+licensed, a special case is not). The choice between a proclaimed decree and a delivered one is listed for
+Jordan in the audit's §11 item 1, because the two are different games.
+
+## Exact edits, by owner
+
+**1. `engine/season/rosters.yaml: record_kinds`** (owner of what a Record kind carries). The `dispensation`
+row gains `public_terms: true`. Loader `data/rosters.py` exposes `PUBLIC_TERMS_KINDS`, refusing the key on a
+kind with no `addressee` content key. `[ASSUMPTION; medium; Jordan to correct; revert: drop the key — the
+deposit and the formation both fall back to today's]`.
+
+**2. `engine/season/loop/witness.py`, the fourth deposit** (`:823-845`, the one writer of `content:<kind>`
+claims). Beside `newly_held`, collect per Event the Records it created whose kind is in `PUBLIC_TERMS_KINDS`
+and whose creating act's verb is `WRIT_MINTING_VERB` (`issue`; the constant exists). In the deposit loop,
+for each such Record, when `addressed_to(rec.subject_matter, pid)` and `pid` is being deposited this Event
+by any admitting channel, deposit the same `(rec.id, "content:<kind>", content_value(rec.subject_matter))`
+claim, with the admitting channel's `src` and `conf`, under the existing exact-triple guard. One loop, one
+predicate; the holder's deposit is untouched.
+
+**3. `engine/season/queries/world_q.py::writs_held`** becomes `writs_addressed(w, p)`: the Records of a
+`RECORD_REFERENT_KINDS` kind for which `p` holds the writ **or** `p`'s own ledger holds a content claim on
+it whose addressee key names him (`content_said`, `addressed_to`), minus those he has already answered (a
+`compliance.given` or `compliance.withheld` claim of his own doing on the same writ, read from his ledger).
+The second clause is the new one; the third closes the standing scene tax the docstring records ("NO
+'ALREADY ANSWERED' DECLINE"). `accept`'s `challenge` kind keeps the holding clause only, because a challenge
+is not public. Every caller (`questions_for`, `admits_audience`) is renamed with it; `admits_audience`
+keeps asking for a *held* writ, since entry on a writ is the paper's.
+
+**4. `engine/season/queries/world_q.py`, a new standing occasion `defied_writs(w, p)`**, `vacancies`' shape:
+for a person who holds a claim of kind `compliance.withheld` whose subject is a writ he made (the creating
+act's actor, read as `may_warrant` reads it), the defier (classed `Person`) and each seat the defier holds
+that `may_revoke` admits through one of `p`'s seats (classed `Office`). Stamped on `out[0]` by the one stamp
+site. It asks the gate's own predicate, so it names no seat the gate would refuse.
+
+**5. `engine/season/verb_table.yaml: revoke`** gains `referent_named: true` beside its existing
+`referent_class: Office`; **`loop/predicates.py::_req_revoke`** and **`loop/effects_governance.py::_eff_revoke`**
+read `office_named_by(a)` in place of `payload['office']` (`office` still wins where both are present, so
+no hand-built act changes meaning). `office_named_by`'s docstring loses its "`revoke` IS NOT A CALLER"
+paragraph. This is CR-54's `office_named_by` change; H-207 (A) is honoured because nothing scores `revoke`
+specially: it forms only on a seat whose holder defied the actor's own writ, and competes on its ordinary
+alignment cells.
+
+## Gate (execution artifact)
+
+`fa_probe`'s reading, or `aperture`'s per-verb block, on the spine at seeds 0 to 4 for four seasons and the
+realm at seeds 0 to 2 for three:
+
+- at least one `compliance.given` and one `compliance.withheld` whose actor is an addressee of the writ;
+- after a `compliance.withheld`, the issuer's next delivered question carries the defier's seat as an
+  `Office`-classed referent (read with the spy `harness/heir_hears.py` already uses on `questions_for`);
+- `revoke` attempted at least once pooled over the realm seeds; if it executes, `aperture` prints it with
+  `Act.via` a seat whose `revocation` admits it. If it is attempted and never executes, that is recorded
+  and the row stays an R-05 residue: the proposal is kept for the triple, not for `revoke`.
+
+## Falsifier
+
+- Control: `public_terms` absent reproduces the pre-item `content_hash` at one and two seasons, realm seed 0.
+- A bystander is offered nothing: a person who witnessed the issue and is not an addressee has
+  `writs_addressed == ()` (the B10-05 close's defect, a bystander complying, must not return).
+- Mutation: drop the addressee test in edit 2 and a non-addressee holds the content claim; the bystander
+  assertion reddens.
+- Crowd-out: the executed counts of `issue`, `transfer`, `tell` and `speak` pooled over realm seeds 0 to 2
+  are read before and after and printed; a fall is reported, not asserted against (rule V2).
+
+## What it does not do
+
+No suspicion carrier (ED-FA-0021 D6 stays intent). No delivery of paper. No new consequence written by
+`comply` itself: what compliance performs is still the separate act the writ's terms name (H-44). No change
+to `covenant`, `petition` or `challenge`.
+
+## NERS reading
+
+- **N.** From above: a ruler's decree now has addressees who answer. From below: a governor has an order to
+  weigh against her settlement. Laterally: the issuer's response uses verbs that already exist (`revoke`,
+  `open_case`, `arrest`). Diagonally: a Church writ on Crown ground is answered or defied by Crown officers.
+  Removing it returns the 91-writs, zero-answers reading.
+- **R.** A real choice with two readers (the addressee's regard for the issuer; the issuer's response), and
+  drama with no player: orders defied and offices lost for it. Complete at the extremes: a writ naming a
+  dead man forms for nobody; an answered writ stops being offered.
+- **S.** One methodology: a standing occasion stamping classed referents, as `vacancies` and `writs_held`
+  already do. It pauses nothing and hands to SC (`open_case`) and PC (`arrest`) by existing seams.
+- **E, last.** One roster key, one deposit clause, one widened Query, one new Query, one reader swap. No new
+  noun. Against what N and R buy, small.
+
+## Cost class
+
+Small build. CORE reviews edit 2 (`witness.py`); CHAR's regard decides how often anyone defies.

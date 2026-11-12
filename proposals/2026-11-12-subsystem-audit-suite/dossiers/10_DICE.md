@@ -110,3 +110,8 @@
 - `.designs/systems/_architecture/reference/throughlines_complete.md` — 52 KB — 
 - `.designs/systems/_architecture/reference/videogame_mode_spec.md` — 17 KB — ## Status: CANONICAL — single-mode extraction reference for Godot implementation
 - `.designs/systems/_architecture/reference/videogame_mode_spec_index.md` — 3 KB — 
+
+## Surviving audit corpus (`.audit/`, HIDDEN; lesser weight than `.designs/`; read for context and referents: what earlier audits found and how, never as authority or as a to-do list) — 2
+
+- `.audit/2026-08-12-degree-vocabulary-census/` — 2 files, 17 KB — Degree-of-success vocabulary — behavioural equivalence census (entry: `.audit/2026-08-12-degree-vocabulary-census/00_findings.md`) (class:keyword)
+- `.audit/2026-08-14-degree-reband-consumer-cost/` — 1 files, 1 KB —  (class:keyword)

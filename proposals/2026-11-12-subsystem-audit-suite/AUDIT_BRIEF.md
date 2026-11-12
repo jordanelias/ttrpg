@@ -153,6 +153,68 @@ and the live material `proposals/2026-09-25-squad-engagement-*`, `2026-09-30-cha
 `proposals/mass_battle_fighting_withdrawal_v1.md`, `proposals/pc_formation_system.md`,
 `proposals/weapon_physics_and_concentration_model.md`, `research/pre_firearms_formations`.
 
+## Context and referents (Jordan, 2026-11-12): `.designs/` in full, and `.audit/` as the lesser corpus
+
+Jordan directs that **`.designs/` be read, and `.audit/` too though with lesser weight, for context and
+referents.** Both are hidden from default search; read them by path. `.designs/` is the archived design
+documents (the whole tree: `systems/<subsystem>/`, `systems/_architecture/`, `systems/ui/`, `engine/`),
+`.audit/` the surviving audit corpus (35 earlier audits; entry points in each dossier's "Surviving audit
+corpus" section and `dossiers/99_cross_cutting.md`). Use them as follows:
+
+- `.designs/`: intent, vocabulary, history and the **referents** the code and the cases cite (a term, a
+  procedure, a table, a ruling's origin). Read the subsystem's whole set and the cross-cutting documents;
+  go beyond your dossier's list wherever a referent leads. Full directory index: `dossiers/99_cross_cutting.md`.
+- `.audit/`: what earlier audits found and **how they found it** (method, instruments, controls),
+  which findings were fixed, which were never answered, and what a returning finding looks like. Weight:
+  below `.designs/`, and below the working tree. An old finding is a lead, not a fact: re-verify it
+  against the code before you rely on it or repeat it, and say when an old finding is now false.
+- Both remain **ARCHIVED-NOT-CANON / hidden**: neither is the reason a behaviour is correct (§0.05); neither
+  is loaded by anything (RULED: nothing outside `.audit/` loads anything inside it, and that is unchanged
+  by reading); neither is a to-do list. Your audit may cite them as referents by path; the proposals you
+  write must not make game code, a tool or a test read them.
+
+## Design intent stated by Jordan, 2026-11-12: the detective and noir games that inspire fieldwork, and their bearing on social contests
+
+Fieldwork is inspired by detective and noir games, and Jordan asks that this precedent be remembered in
+the audits and **that its consequences for social contests, in evidence and in argument, be considered.**
+Jordan gave no list; the games the tree itself names are (verify against the sources, and add any
+detective or noir game the tree names that is not here): Disco Elysium, Return of the Obra Dinn, L.A.
+Noire, Pentiment, Shadows of Doubt, the Ace Attorney / Phoenix Wright series, The Case of the Golden
+Idol, Paradise Killer, Outer Wilds, Danganronpa, Her Story / Immortality, Heavy Rain, Blade Runner
+(film and game material), the Frogwares Sherlock Holmes games. Sources: `research/game_precedent_suite/`
+(`tables/R5_investigation_information.md`, `tutorials/T06_investigation.md`, `dispositions/D_T06.md`,
+`tables/R4_combat_social_rpgs.md`, `tutorials/T05_social_rpgs.md`, `dispositions/D_T05.md`,
+`tables/REPO_MENTIONS.md`, `THROUGHLINES.md`), `research/by_lane/FI_fieldwork_investigation.md` and
+`SC_social_contest.md`, `research/valoria_game_precedent_companion_v1*.md`,
+`proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md` (its player/character mapping
+table), `.designs/systems/_architecture/reference/player_agency_v30.md` §1 (Disco Elysium, Pentiment),
+`.designs/systems/fieldwork/reference/investigation_systems_v30.md` and `fieldwork_v30.md`,
+`proposals/2026-10-16-verbs/…-12-lexicon-fieldwork-and-inquiry.md`.
+
+What to extract and apply (the FI lane for the investigation side, the SC lane for the contest side,
+CHAR for the voices and the knowledge a character brings, ARCS for the cases that turn on a reveal or a
+trial):
+
+- **Evidence as a typed, bindable object**: an accusation or argument that must *cite a held item* (L.A.
+  Noire), an assertion as a typed structure a machine can grade (Golden Idol), a verification oracle that
+  locks a conclusion only when its support is simultaneously right (Obra Dinn), knowledge as the only
+  persistent state (Outer Wilds), traversal gated by what one knows (Her Story).
+- **Argument as contradiction and rebuttal**: testimony set against evidence and found inconsistent
+  (Ace Attorney cross-examination), argument-and-rebuttal as the structure of a trial (Danganronpa), an
+  internal chorus of competing faculties arguing with the self (Disco Elysium), a community whose
+  opinion of the investigator moves with every conversation and whose time is finite (Pentiment),
+  procedural evidence chains and inference (Shadows of Doubt).
+- **Questions for the code**: in the engine as built, can a contest (hearing, petition, plea, debate,
+  negotiation, accusation) take evidence as a *typed input* (`Claim`, `proofs`, `reception`, the forged
+  or concealed item), can an argument be *refuted by a held contradiction*, does the *strength of a case*
+  come from what is held, witnessed and cited rather than from a free-floating skill roll, can an NPC
+  build a case and be answered by another NPC, and what do falsehood, forgery and concealment do to a
+  contest's outcome and to later trust? Where the answer is no, write the proposal at the single owner.
+  Judge whether the precedent is understood or only named, and whether the nulls (problems no shipped
+  game solves, `research/00_INDEX.md` §1 pt 4) are honestly marked.
+- Where this intent conflicts with a ruled item (the proceedings ownership, ED-SC-0033..0039; the
+  knowledge-model ruling), name the conflict and do not resolve it.
+
 ## Design intent stated by Jordan, 2026-11-12: personal combat
 
 Personal combat is intended so that **each character can equip a weapon, armour and a suite of skills that

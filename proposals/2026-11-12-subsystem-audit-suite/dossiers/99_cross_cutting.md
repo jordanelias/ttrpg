@@ -221,7 +221,7 @@ Items no rule placed in one subsystem. The holistic audit reads this; per-subsys
 - `proposals/2026-11-04-content-parameters-docket/` — 34 files, 12142 lines — Content parameters docket: master — ## Status: PROPOSED (2026-11-04). A collation of the content inputs that code and the active plan call for; reference under CLAUDE.md §0.05,
 - `proposals/2026-11-08-design-and-code-critique-report.md` — 115 lines — Design and code critique: categorized findings, adversarial results, suggestions — ## Status: FILED — reference, not canon (CLAUDE.md §0.05). A one-round review record (CLAUDE.md §0): its suggestions are proposals, and none
 - `proposals/2026-11-08-sc02-reception-proofs-own-commit-design.md` — 136 lines — SC-02 — where `reception` and `proofs` read under option B: the actor's own ledger, and the bench's public commits (F8) — ## Status: PROPOSED (design-first; builds nothing; ratified on merge by ED-1094's default unless held back)
-- `proposals/2026-11-12-subsystem-audit-suite/` — 56 files, 13612 lines — Dossier 00 · THE NINE (engine/season/requirements.yaml) — 
+- `proposals/2026-11-12-subsystem-audit-suite/` — 68 files, 16156 lines — Dossier 00 · THE NINE (engine/season/requirements.yaml) — 
 - `proposals/canonical_nomenclature_v1.md` — 342 lines — Canonical Nomenclature — namespaced identifiers for every named thing — ## Status: PROPOSED — not ratified. Nothing in this document renames anything.
 - `proposals/grounded_event_card_deck_v1.md` — 335 lines — Grounded Event-Card Deck — Breadth Pass Across All Four Research Dockets — ## Status: PROPOSED (2026-07-11) · Lane: IN (cross-cutting; SE, FA) · Author-pass, not yet Jordan-ratified
 - `proposals/valoria_fork_plan_of_record_v1.md` — 522 lines — Valoria Fork — Plan of Record — ## Status: PROPOSED (ED-IN-0124, 2026-08-03). Jordan-vetoable throughout.
@@ -263,3 +263,32 @@ Items no rule placed in one subsystem. The holistic audit reads this; per-subsys
 - `research/valoria_systems_integration_master_v1_part2.md` — 243 lines — Valoria Systems Integration Master — Part 2: Flatten, the Personal Half
 - `research/valoria_systems_integration_master_v1_part3.md` — 371 lines — Valoria Systems Integration Master — Part 3: Within-System Analysis
 - `research/valoria_systems_integration_master_v1_part4.md` — 744 lines — Valoria Systems Integration Master — Part 4: Cross-Category Comparison and Integration Proposals
+
+## .audit corpus (unclassified; cross-cutting) — 5
+
+- `.audit/2026-07-02-morphology-rearch-phase0/` — 11 files, 447 KB — Phase-0 Morphology Harmonization Report (entry: `.audit/2026-07-02-morphology-rearch-phase0/phase0_report.md`)
+- `.audit/2026-07-04-ners-qualitative-audit/` — 34 files, 754 KB — ED Options — drafted candidates, NOT filed (entry: `.audit/2026-07-04-ners-qualitative-audit/ed_options.md`)
+- `.audit/2026-07-29-scenario-visualization/` — 7 files, 83 KB — Scenario visualisation + dead-primitive census — findings (entry: `.audit/2026-07-29-scenario-visualization/00_findings.md`)
+- `.audit/2026-08-06-vector-audit/` — 1 files, 11 KB — 
+- `.audit/2026-08-11-code-leanness/` — 4 files, 87 KB — Code leanness — findings, corrections, and the merged consolidation plan (ED-IN-0159) (entry: `.audit/2026-08-11-code-leanness/00_code_leanness.md`)
+
+## .designs full index by directory — 18
+
+- `.designs/engine/` — 4 files
+- `.designs/systems/_architecture/reference/` — 44 files
+- `.designs/systems/articulation/reference/` — 2 files
+- `.designs/systems/characters/reference/` — 13 files
+- `.designs/systems/combat/combat_engine_v1/reference/` — 8 files
+- `.designs/systems/combat/reference/` — 5 files
+- `.designs/systems/factions/reference/` — 28 files
+- `.designs/systems/fieldwork/reference/` — 19 files
+- `.designs/systems/mass_battle/reference/` — 7 files
+- `.designs/systems/npcs/reference/` — 19 files
+- `.designs/systems/overview/reference/` — 7 files
+- `.designs/systems/settlements/goldenfurt_slice/reference/` — 6 files
+- `.designs/systems/settlements/reference/` — 14 files
+- `.designs/systems/social_contest/reference/` — 7 files
+- `.designs/systems/threadwork/reference/` — 12 files
+- `.designs/systems/ui/reference/` — 10 files
+- `.designs/systems/victory/reference/` — 4 files
+- `.designs/systems/world/reference/` — 21 files

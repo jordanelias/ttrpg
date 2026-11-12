@@ -386,6 +386,53 @@ and a person can give each army verb once a season through the menu callback bec
 is `(verb, subject)` and the subject is the army (`harness/military_menu.py:148-151`). Both are why the
 verbs are withheld. Disposition in §6.2 R-17.
 
+### F-MB-14 · blocks the stated intent · individuals' attributes do not reach the battle (Football Manager's premise)
+
+- **Claim.** In the reference the match engine resolves from the settings *and the individuals' attributes*.
+  Here no attribute, skill or condition of any person enters a field except his `weight` and his stance
+  toward his faction. Command is the literal 4; officers are "bookkeeping only"; the derivation from
+  Charisma and Cognition has no season caller; troop quality is a table by type.
+- **Evidence.** `massbattle.py:184-188`, `:198`; `orderofbattle.py:75`; `hierarchy/units.py:2862-2863`
+  (the only call of `derive_command`, on harness-built units); `queries/inputs.py:205-260` (no capability
+  field). §14.
+- **Falsifier.** Two fields identical but for the commander: nothing in `MassBattleInput` can differ, so
+  the results are equal by construction.
+- **Touches.** R-06, R-04; SCN-14, ARC-23, NPC-072, NPC-082.
+- **Conflict, named.** The 2026-07-08 directive took the commander out of the combat *pool*. §14's
+  resolution feeds the commander into Command (span, cohesion, recall) and not into the dice, which is
+  consistent with it; a reading of the reference in which a general's skill wins exchanges is not.
+- **Minimal fix.** §14 (c); §8 step 8.
+
+### F-MB-15 · blocks the stated intent · no intervention during a battle and no account of it afterwards
+
+- **Claim.** The reference lets the manager watch, change tactics and substitute, and then explains the
+  result. The season's field is one opaque call; the engine's trace (`resolution.tracing`: tick, melee,
+  volley, casualty, positions) and its conditional orders exist, and neither crosses the seam. The
+  provider accepts `host` and does not use it (`seam/wrappers/mass_battle.py:361-363`).
+- **Evidence.** `massbattle.py:425-427` (no trace block, by design: "no trace block is opened"); the
+  combat module's `fight(inp, rng, decide)` is the built precedent for a host decider inside a module call
+  (`modules/combat/fight.py:55-70`, REM-31, ratified `proposals/2026-10-07-grid-mode-suspension.md`).
+- **Falsifier.** A season Event carrying anything about how the field went beyond its band and, on one
+  arm, one name: none (`effects_combat.py:668-683`).
+- **Touches.** R-03 (nothing happens between the start and the end of a field), R-04, R-09.
+- **Minimal fix.** `resolve_field(..., decide=None)` called at the two phase boundaries with a typed view,
+  on the combat module's precedent; `FieldOutcome.report` (a bounded summary derived from the trace).
+  Proposal `04_MB_playable_field_scenario.md`.
+
+### F-MB-16 · degrades narrative · the non-player commander is a script, and the player is shown what no NPC may see
+
+- **Claim.** A faction nobody plays gets its army from one fixed doctrine (45% heavy foot, 25% missile,
+  20% horse, levy the rest), the same for every faction and every leader, folded directly between seasons
+  without passing through DELIBERATE or anyone's budget. The odds of a field are computed for the player's
+  display only; no NPC may read them.
+- **Evidence.** `troop_types/presets.py:37-50`; `harness/army_presets.py:17-20`, `:40-49`;
+  `seam/wrappers/mass_battle.py:465-466` ("MODE (a), THE PLAYER'S DISPLAY ONLY -- no NPC reads it").
+- **Falsifier.** Two factions with different leaders producing different armies from equal means: `plan`
+  takes no person.
+- **Touches.** R-06, R-08 (a commander who cannot estimate is not imperfectly rational, he is blind; one
+  who all follow one doctrine is not a character).
+- **Minimal fix.** §16 (e).
+
 ## 4. Code matters
 
 ### 4.1 Ownership and duplication
@@ -579,6 +626,19 @@ march beyond the one ration debit; the troop stock (`CL-TROOP`, `CP-T04-10`: hel
 decides where to march (MB-08); terrain chosen by the commander; the tactic cards (an empty dict since
 May); mass-scale threadwork (ARC-43, SCN-14).
 
+### 5.6 Against the stated intent: Football Manager and Total War (Jordan, 2026-11-12)
+
+Full table in §17. The short judgment: **Total War is understood; Football Manager is named.** The
+battlefield half (formations as footprints, terrain rows, morale as a track that breaks locally and
+spreads, flanks and rear as damage multipliers, charge and brace, fatigue, ammunition) is built from the
+mechanism up, with measurement. The campaign-to-battle-and-back half is built and is the best-designed
+part of the seam (§2 item 3), though dark. The manager half exists as vocabulary: roles carry instruction
+packages (`armies.py`'s own words: "the FM position->role model"), seven of twelve instruction keywords do
+nothing, the roles that do something move the field against whoever ordered them (H-361), no individual's
+attribute enters, nothing can be changed once the field starts, and nothing explains the result. The
+squad-engagement synthesis (RULED 2026-09-25) built the orders, signals and officers that a manager would
+use; `HANDOFF_MB.md` records them as built; the season reads none of them.
+
 ## 6. Hole-register and workplan disposition, and resolutions
 
 ### 6.1 Items the dossier lists
@@ -679,6 +739,23 @@ failure (lane file T-MB-4; its Dominions leg is marked unverified at source). Th
 failure shape (`battle_loop.py:411-413`, command 0 is an instant rout) and the season never reaches it.
 ARC-23 and SCN-14 (§13) ask for exactly this seam; there is no precedent to copy, and §13 says so.
 
+**Read against the two named references** (Jordan, 2026-11-12; the corpus's own account of each).
+
+- *Football Manager.* What the corpus establishes is thin: D_T04 row 58 marks the repository's claim about
+  its three fidelities as not established, and the squad-engagement concept "names nine games and surveys
+  none" (lane file T-MB-16). What transfers without leaning on unverified detail is the *shape* the brief
+  states: settings plus individuals in, an automatic result out, intervention at breaks, an explanation
+  after. Three of those four are absent (F-MB-14, F-MB-15).
+- *Total War.* The corpus is better here (`tutorials/T07_mass_battle.md`, `tables/R6`, D_T04 rows 3 to
+  11): the contact panel with projected result and the choice to fight, delegate or withdraw; first-party
+  warnings that auto-resolve differs from the played battle; post-battle captive and settlement options;
+  stances and attrition on the march; siege as a state with a timer. Built from it: the estimate, the
+  exit, the siege posture, presence-then-title. Not built: captives, march attrition, a siege clock, and
+  the played battle itself.
+- *Null carried from the corpus:* Total War's own auto-resolve is the documented case of two answers to
+  one battle. Valoria's protection is the single engine; it holds only if the played mode is the same call
+  with a decider (F-MB-15's fix), not a second loop (F-MB-05).
+
 ## 8. Best path forward
 
 Ordered. "Alone" is what the subsystem needs to run well by itself; "compose" needs another lane.
@@ -695,6 +772,15 @@ Ordered. "Alone" is what the subsystem needs to run well by itself; "compose" ne
 | 8 | Command and quality from the commander and the troops' training (§14) | `MassBattleInput`, `field_input`, `rosters.yaml: verb_capability` | a field between equal armies under commanders of different capability differs in win share beyond sampling error at n 400 | R-06, R-04 | small build | compose (CHAR) |
 
 Steps 1 and 2 are the only ones that must precede everything else. Step 7 should not run ahead of them.
+
+**Added by the stated intent** (Football Manager, Total War) and by the NPC charge; each is in a proposal.
+
+| # | what changes | where | gate | unblocks | cost | alone / compose |
+|---|---|---|---|---|---|---|
+| 4a | The played battle is the same call: `resolve_field(inp, rng, decide=None)`; at each phase boundary the decider gets a typed view of its own side and may change approach (`advance`, `line`, `defend`) or order the retreat; `None` is today's field exactly | `massbattle.py`, `battle_loop.py` (the phase-boundary hook), `seam/wrappers/mass_battle.py` (forward `host.decide`, as `combat.py:394-395` does) | same seed with `decide=None` and with a decider that returns no change: equal outcome and equal draw count; a decider that orders `defend` at phase 1 changes the outcome at some seed | R-03, R-04; the Football Manager and Total War "fight or delegate" requirement | small build | alone |
+| 4b | The battle report: `FieldOutcome.report`, a bounded tuple of phase summaries (per part: share lost, broke or held, flanked or not) derived from the engine's own trace | `massbattle.py`; `effects_combat.py` writes it as Observations on the band Event | a folded field's Event answers "who broke first, in which phase, facing what" for both sides | R-01, R-07 | small build | alone |
+| 5a | A commander's doctrine is a choice: the preset plan's shares become data keyed by a doctrine name, the leader's act names the doctrine, and the commands go through `dispatching_chooser` (CR-52), not a direct fold | `troop_types/presets.py`; a typed doctrine file; `harness/army_presets.py` | two leaders with different doctrine names raise different armies from equal means; with the door off, nothing | R-06, R-08 | small build | compose (CHAR) |
+| 5b | An NPC may weigh a field: the estimate run on what the person believes of the enemy, not on the world | `seam/wrappers/mass_battle.py::field_estimate` with an input built from the person's claims | a commander told a false strength marches where one told the truth does not | R-07, R-08 | design-first | compose (CHAR, knowledge model); conflicts with AQ-X1 as written, §16 |
 
 ## 9. Playable standalone and integrated
 
@@ -750,6 +836,15 @@ deciding what a beaten army does (R-11); pricing a retreat.
    `Drawn` exists: the first engagement is still fought the round it is declared; later ones are new acts.
 
 **Ordered work to close each gap:** §8 steps 1, 2, 3, 4, then 5.
+
+**The played battle and the delegated battle (the stated intent).** There is no played battle. The
+delegated one is the only one, which avoids Total War's two-answers failure by having one answer and
+fails the intent by having no play. The built precedent for adding the played mode without a second path
+is the combat module's `decide` parameter; step 4a applies it at the engine's own phase boundaries. A
+battle then has three choice points for a played side (deployment by the army Record and strategy, the
+first phase boundary, the second) and, with `Drawn`, a decision between engagements. For a side nobody
+plays the same decider slot is filled by the standing instructions (`fall_back_at`, `retreat_at`, the
+strategy), which is the reference's "instructions set before the match".
 
 ## 10. Interfaces
 
@@ -963,6 +1058,15 @@ decision of the capability's name. (2) The troop tables as one exported typed fi
 R-08's sibling. (3) The module's `roll_pool` and `compute_degree` forward to the substrate's owners, a
 DICE-lane edit recorded here and not proposed. No private capability scheme is proposed.
 
+**Addendum (the stated intent: individuals' attributes feeding unit performance).** The interface stated
+above (one integer per side per engagement, Command) is the minimum. The reference asks for more than the
+commander: officers and soldiers as characters. The tree already has the carriers and no new scheme is
+needed: an `Officer` per subformation is a person holding a post in the army Record (a `(subformation,
+person)` pair in `subject_matter`, a record-kind change); a cohort's training is a capability on the
+cohort `Person` (`train` already raises `Person.capability`), read as a bounded step on the troop type's
+Discipline. Both are host reads handed in as integers on `MassBattleInput`; the module still sees no
+person. Order: Command first (it is the one the arcs need), officers second, cohort training third.
+
 ## 15. Duels in and around a mass engagement (Jordan's personal-combat intent, 2026-11-12)
 
 **Where a duel is embedded in or arises from a mass engagement today: nowhere.** There is no edge between
@@ -1031,3 +1135,88 @@ one registered module to import another; the tree shows no instance].
 
 **What this lane owes the PC lane:** the scale rule (which fields are squads), `FieldOutcome` naming the
 losing commander, the round structure, and the approach roster's single owner. It owes no resolver.
+
+## 16. NPC-facing and chooser-facing surface
+
+The statement of the NPC and chooser intent is the CHAR lane's (`audits/02_CHAR_audit.md`); its section on
+the intent was not yet written when this was, so this section cites that audit's findings as they stood
+(F-CHAR-01, "the ranking does not read what an act would do"; F-CHAR-05, "four in ten resolved acts are
+refusals the actor could have foreseen") and reads the mass-battle surface against the code.
+
+**(a) Who decides, on what, at what budget, with what visible reasons.**
+
+| decision | who | information | budget | what is visible afterwards |
+|---|---|---|---|---|
+| to march, and where | a person holding a seat whose remit grants `march` (26 persons at seed 0, `aperture 2 0`) | the Rungs his questions name; no estimate, no knowledge of the defence | one scene | `march.declared`, then the band Event |
+| how to meet the enemy (storm, besiege) | the same act's payload | none | the same act | the posture in the act's payload |
+| the standing order (retreat line; today also a role) | a seat, by `marshal` | none | one scene; withheld | an `order_of_battle` Record, which persists |
+| what the army is (raise, form, assign, order, disband, discharge) | the army Record's holder | the menu's bounds and advisories (`armyrecord.options`) | once per verb per season through the callback; withheld | `army.*` Events; the Record |
+| to yield a place | the defender's seat, by `surrender` | none | one scene; withheld | `place.surrendered` |
+| anything during the field | nobody | | | |
+| to fight or not when marched on | nobody: the defender has no turn | | | |
+
+**(b) One interface for player and NPC.** Structurally yes: `play_surface.dispatching_chooser` hands a
+person either to a client callback or to `auto`, and `military_menu.callback` rides it; the army verbs are
+acts either would give. Two breaches. The estimate is the player's alone (`field_estimate`, "no NPC reads
+it"): the player and the NPC are then not the same kind of agent at the one moment that matters. And the
+non-player's army is not raised through the chooser at all (F-MB-16).
+
+**(c) Rules hard-coded for NPCs instead of read from the chooser.** The preset doctrine and its role table
+(`troop_types/presets.py:37-50`); the direct fold in `army_presets.install`; the stand-in troop type for a
+side with no army (`massbattle.py:355`); the fixed deployment rule (`orderofbattle.py:15-19`); the
+defender's absence of any decision. None is keyed to an entity, so none is scripting drift in the narrow
+sense; all are one policy standing where a person's choice should be.
+
+**(d) What would make an NPC characterful here, and legible afterwards.** Three closed sets already exist
+as payload choices and are scored alike because the chooser keys on `(verb, subject)`: posture (`storm`,
+`besiege`), retreat line (`none`, `0.5`, `0.25`), strategy (`advance`, `line`, `defend`). A bold commander
+and a cautious one differ exactly on these. They need cells on the *value*, not only on the verb, which is
+the pursuit worksheet's and CHAR's to own. Legibility: the standing order is a Record and the posture is
+on the act, so "he ordered no retreat and stormed the walls" is already recoverable; what is not is why
+(the score terms) and what he believed the odds were.
+
+**(e) Missing, as proposals.** In `04_MB_playable_field_scenario.md`: the doctrine as a named choice
+through the chooser (step 5a); the estimate on believed strength (step 5b); the phase decider slot filled
+for a non-player by standing instructions (step 4a). Owed by CHAR and named here as the dependency: cells
+on fanned payload values; the reason trail.
+
+**Disagreement between sources, named.** AQ-X1 as recorded in the code ("no NPC reads" the estimate)
+against the charge's "the player and NPC are the same kind of agent". The built rule wins today. Step 5b
+does not let an NPC read the world's odds; it lets him compute odds on what he believes, which may satisfy
+both. Whether it does is CHAR's reconciliation.
+
+## 17. Against the stated design intent: Football Manager and Total War
+
+"Understood" means the mechanism is built and reaches a season outcome under some shipped or switchable
+arm; "named" means the vocabulary exists and the behaviour does not.
+
+| what the reference is known for | in the code | verdict |
+|---|---|---|
+| **FM** a squad of individuals with roles, duties and instructions | `ROLE_SPEC` (15 roles, each a shape and an instruction package), `TROOP_TYPE_ROLES` (menus by troop type), `Subunit.instructions`; five keywords drive a primitive, seven do not (`units.py:71-101`); the army Record stores a role per subformation | **named.** Half the menu is inert and the live half is not a reliable lever (H-361) |
+| **FM** instructions set before and adjusted during the match | before: strategy, stance, target preference, fall-back point, standing retreat line; conditional `Order`s with tick, range, strength and signal triggers (`units.py:312-390`, `core/contact.py:66-198`). During: nothing from outside the call | **understood before the match, absent during it** (F-MB-15) |
+| **FM** the engine resolves automatically from settings and individuals' attributes | settings: yes. Attributes: none (F-MB-14) | **half** |
+| **FM** watch, intervene, change tactics, substitute | trace exists for the workbench; reserves commit only in the multi-unit loop the season cannot reach (`orchestration.py:2219-2244`) | **absent in the game** |
+| **FM** post-match analysis that explains the result | `resolution.tracing`, `walkthrough.py`'s page, `stress.py`'s analysis: harness only; the trace-cause design (A9) is "scoped down, not built" | **named** |
+| **TW** formations and units on a battlefield | cells, footprints from troops and density, four shapes, multi-subunit deployment with wings and a rear line (`orderofbattle._place`) | **understood** |
+| **TW** terrain | six rows derived from geography (`terrain.py:66-75`): walls, uphill and river crossing act; forest's speed half is inert and narrow pass applies nothing on a one-engagement field (`massbattle.py:386-399`); terrain is a modifier on a flat field, not ground | **partly understood**: a row, not a map (the map generator is MB-08, LEAVE) |
+| **TW** morale and routing | per-cell morale, local breaks that spread, a stochastic break band, contagion across subunits, whole-army rout by share broken (`core/state.py`, `units.py:2260-2353`, `:2928-2948`) | **understood**, and the strongest part; never runs at the shipped scale |
+| **TW** flanking, charges, fatigue | octagon arcs as damage multipliers with a reaction delay, multi-side shock, charge momentum and brace recoil, per-column stamina | **understood** |
+| **TW** supply | ammunition per subunit; a ration debit per field, shipped off; nothing on the march | **named** at campaign scale |
+| **TW** a campaign layer that feeds the battle | morale from members' stance, walls from garrison condition, river from the march's origin, the army from a Record raised from population and sites, troops from stores | **understood**, dark |
+| **TW** ... and receives its result | bodies by share, morale and grudge rows, presence, garrison wear | **understood**; the magnitude is wrong on the shipped path (F-MB-02); no captives, no title |
+| **TW** fight or auto-resolve, kept consistent | one engine, one answer, no played battle; `host` accepted and unused | **consistent by absence** |
+
+**Reconciling the existing material.** The squad-engagement synthesis (RULED 2026-09-25) is the tree's
+Football Manager document and its build slate is executed; its concept input is recorded there as never
+having read the repository. `08_mass_battle_units.md` (PROPOSED) asked for U-1 (inputs beyond headcount),
+U-3 (wire roles or stop presenting them) and U-4 (officers as persons): U-1 is partly answered by the army
+path, U-3 is R-10, U-4 is §14. The phase-5 design is built. `multiunit_envelopment_plan.md` is PROPOSED and
+un-adopted; under F-MB-05's resolution its subject (several Units a side) leaves the registered tree, so it
+should be re-read as an oracle item or closed. None of these conflicts with the resolutions in §6.2.
+
+**Conflicts with ruled items, named and not resolved.** (1) Individuals' attributes driving the result,
+against the 2026-07-08 directive that took the commander out of the pool (F-MB-14). (2) Intervention during
+the match, against a field resolved atomically in the round it is declared (`ED-IN-0301`): the decider
+inside the call does not move the round, so this lane reads no conflict; a reading of `ED-IN-0301` as "no
+decision after declaration" would. (3) Legible cause, against friction at sigma 1.1 (§11 item 2): an
+explanation of a result that was mostly the draw is an honest explanation and a poor one.

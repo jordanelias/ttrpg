@@ -29,7 +29,10 @@ draw, no pursuit. Measured through the registered entry (300 world seeds, tiny_w
 The engine already owns the act one level down: a reach weapon's fighting withdrawal inside an
 engagement is an attempt, a read contest (`combat_systems.py:1000-1004`, `disengage_clean_p`) and, when
 read, a pursuing strike (`wrapper.py:206-219`, `pursuit_sigma` at `combat_systems.py:1357-1378`). Two
-exits for one act, one of them free.
+exits for one act, one of them free. The quarantined doctrine `auto_manual_resolution_duality_v1.md`
+(headed RULED 2026-07-08; intent only here) asks that the expected outcome of an event be the same
+whether it is played or auto-resolved, so that the choice of fidelity carries no advantage; the table
+above is that constraint broken by a factor of more than three.
 
 **Resolution** (ladder rung 5; CLAUDE.md §0, compose on the single owner). The turn-level withdrawal
 resolves through the same two functions.
