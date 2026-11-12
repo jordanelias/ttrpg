@@ -6,6 +6,8 @@ Reconciled: 2026-11-12, A-98 vocabulary lane (2026-11-12, A-98; ledger `unified/
 
 Reconciled: 2026-11-12, A-104/A-97 follow-up (`unified/work/L1_A104_AND_WAVES.md`): §A gains `L1-A104`, `L1-A105`, `L1-A107`, `L1-A108` (APPLIED, `ED-IN-0360`) and one word collision for Jordan (the season's "round" in Layer 1).
 
+Reconciled: 2026-11-12, A-115/A-116 lane: §A gains `L1-A115` (APPLIED, `ED-IN-0361`: `Rung.envelope` deleted from Layer 1; the code deletion is v12 B12b.18). A-116 (the larder reach) needed no Layer 1 text: it is built in v12 B12c.30 to .35.
+
 Collected by the orchestrator from lane receipts, 2026-11-12. Each item names its source. The stage reads the sources; this list is an index, not evidence.
 
 ## A. Layer 1 and canon text owed (drafted by unification, applied only by Jordan's amendment; never by editing Layer 1 to match code)
@@ -38,6 +40,7 @@ the arm allowed before it, in `unified/U3_LAYER1_AMENDMENTS.md`; that table is t
 | ~~a management order costs no scene budget: §B.9's "length ≤ `budget`" and row 51's count~~ APPLIED 2026-11-12 (`L1-A104`; Layer 1; ED-IN-0360) | A-104 | `U3_LAYER1_AMENDMENTS.md`, `work/L1_A104_AND_WAVES.md` |
 | ~~a grant reduction is a revocation: §C.2's `conferral` line and row 10a~~ APPLIED 2026-11-12 (`L1-A105`; Layer 1; ED-IN-0360) | A-105 | `U3_LAYER1_AMENDMENTS.md`, `work/L1_FURTHER.md` |
 | ~~`Person.traits` and `Person.manner_offset?` in §B.2's tuple~~ APPLIED 2026-11-12 (`L1-A107`, `L1-A108`; Layer 1; ED-IN-0360) | A-107, A-108 | `U3_LAYER1_AMENDMENTS.md`, `work/L1_FURTHER.md` |
+| ~~`Rung.envelope` deleted: §B.3's `Rung` tuple and §A.2's `loop/census` row (with §C.7, F.19)~~ APPLIED 2026-11-12 (`L1-A115`; Layer 1; ED-IN-0361); the code deletion is v12 B12b.18 | A-115 | `U3_LAYER1_AMENDMENTS.md` (`L1-A115`), `master/workplan_v12/workplan_v12_part24.md` B12b.18 |
 | the season's "round" in Layer 1 (`04:1065` row 36, `hol:1166`) collides with A-101's fight round; the glossary's word is *lap* (PCR-4 is the identifiers' rename candidate). A word, not a rule: not applied; for Jordan or v12's rename batch | A-101 | `work/L1_FURTHER.md` |
 
 ## B. Documents owed an edit or a check

@@ -10,7 +10,14 @@ the patch lane (`PATCH_LOG.md`, `H2_DECISIONS.md`). Questions those checks did s
 
 ---
 
-### J-01 · A rung's population envelope: remove it from the architecture, or give it a reader · SE, Layer 1
+### J-01 · A rung's population envelope: remove it from the architecture, or give it a reader · SE, Layer 1 · ANSWERED
+
+**ANSWERED 2026-11-12 (Jordan: *"J-01 A"*; `unified/DECISIONS_ANSWERED.md` A-115).** Removed. Layer 1 node
+`L1-A115` is applied (`ED-IN-0361`: `04` §B.3's `Rung` tuple and DELETED line, §A.2's `loop/census` row, §C.7,
+F.19; pointers in `holonic_ARCHITECTURE.md`, `01_AXIOMS.md`, `ARCHITECTURE_V2.md`). B12b.18 is now a BUILD deletion
+(`workplan_v12_part24.md`): the field, its write-matrix row, the probe that writes it, the tests that name it;
+a hash MOVER(encoding), re-pinned at B12b.99. It left the head's held-back list. The text below is the
+question as it was asked.
 
 **The situation.** Every settlement rung (a town, a village and so on) carries a stored number, its
 population envelope. It is written into the architecture's definition of a rung (`04` §B.3) and listed in
@@ -41,7 +48,21 @@ text, not applied)"); `H2_NOTES.md` (A24).
 
 ---
 
-### J-02 · How a lord learns what a town's granary holds, so that he can requisition it · SE, FA
+### J-02 · How a lord learns what a town's granary holds, so that he can requisition it · SE, FA · ANSWERED
+
+**ANSWERED 2026-11-12 (Jordan: *"J-02 A typically but B can be selected"*; `unified/DECISIONS_ANSWERED.md`
+A-116).** A report up the chain is the typical rule; reach down the residence ladder can be selected per seat.
+Built in Batch B12c (`workplan_v12_part28_cont.md`): B12c.30 the seat-row key `larder_reach: report | residence`
+(default `report`) and its loader refusal; B12c.32 the offer aimed at the stock the lord was told of; B12c.33
+the `residence` reach; B12c.34 the flip (CR-23's stock report every season, the believed read on), whose gate
+is an issuing seat offered a larder in the built realm at seed 0, two seasons, against the 766-of-766 reading
+as the control; B12c.35 a design item for the report as the seat-holder's own word (a shaded or withheld
+report). B10.79 is a POINTER to them; B33.30 is HELD on B12c.34. Assumptions recorded (B12c's UNDECIDED (8)):
+`[ASSUMPTION: "each lap" read as each season, the report riding MATTER, which runs once a season; a per-lap
+report is the seat-holder's own act, B12c.35]`; `[ASSUMPTION: "the seat above" read as every seat whose
+purview reaches the settlement, \`governors_of\`]`; `[ASSUMPTION: the key sits on the seat row, \`offices.yaml\`,
+not an \`arrangements.yaml\` row]`; `[ASSUMPTION: no shipped seat is set to \`residence\`; which seats are is
+authored content]`; all reversible. The text below is the question as it was asked.
 
 **The situation.** A seat-holder may `requisition` stores, but in played seasons he never does. The query
 that lists the larders he may draw on returned nothing in every call measured, 766 of 766: a settlement's

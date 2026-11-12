@@ -91,7 +91,7 @@ UNDECIDED: (1) BYZ_B edit 5 measures `distance` "from the exercised seat's rung 
 | B33.27 | a man who complied shuns: the decline | PAP_D edit 7 | BUILD | EQUAL | Batch B28, Batch B32 |
 | B33.28 | penance weighs in a pardon | PAP_D edit 9 | BUILD | EQUAL | B33.25 |
 | B33.29 | the strife instrument counts the Church's sentences | PAP_D edit 10 | BUILD | EQUAL | B33.25 |
-| B33.30 | the standing levy, the `tax` edict | CP-T08-07 (the intake `:333`) | BLOCKED (SE/FA: H-163 limit 3(a), a governor's stock claim, has no owner) | — | — |
+| B33.30 | the standing levy, the `tax` edict | CP-T08-07 (the intake `:333`) | HELD (trigger: B12c.34 merged, its gate met; A-116 gave H-163 limit 3(a) an owner) | — | B12c.34 |
 | B33.31 | three sees, built vacant | PAP_E edit 1 | BUILD | MOVER(encoding) | Batch B32 |
 | B33.32 | the tithe named in the Cardinal's goal; an exempt house offered, off | PAP_E edits 3–4 | CONTENT | EQUAL | B33.31 |
 | B33.33 | what the one asked owes: `owed_to` | VEN_A edit 3 | BUILD | EQUAL | Batch B32 |

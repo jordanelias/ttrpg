@@ -81,7 +81,7 @@
 | B10.76 | the deed lie | H-198, M9 (intake `:156`) | BLOCKED (FI B11: a deposit that can hold a deed claim False; CHAR: the pairing) | — | — |
 | B10.77 | pursuit weights that do not sum to one: kept, and named as decisiveness | ER-JF10 (intake `:157`) | POINTER (to the first half's `02_CHAR_resolve_and_temper` resolution 1 item) | — | the first half's `02_CHAR_resolve_and_temper` item |
 | B10.78 | H-185 and H-191 left to their owners | DEF-12 (intake `:160`) | POINTER | — | B10.75 |
-| B10.79 | `requisition` in computed play | the B10-16 gates, IN-52 and `requisition` entry (intake `:161`) | BLOCKED (SE: H-163 limit 3(a), the lift that gives an issue-granting holder a larder claim; unowned, v11's M17) | — | — |
+| B10.79 | `requisition` in computed play | the B10-16 gates, IN-52 and `requisition` entry (intake `:161`) | POINTER (B12c.30 to B12c.34, A-116; was BLOCKED on H-163 limit 3(a)) | — | — |
 | B10.80 | CR-93's build | CR-93 | HELD (`B10.51` merged; its build items written into the next batch that edits `decision/`) | — | B10.51 |
 | B10.81 | CR-95's build | CR-95 | HELD (`B10.52` merged; combat half and social half each into the next batch that edits their files) | — | B10.52 |
 | B10.82 | the risk and horizon terms and the M36 columns | CL-PERSON's build less `B10.58` | HELD (`B10.53` merged; the next batch that edits `decision/`) | — | B10.53 |
