@@ -2,6 +2,8 @@
 
 Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-01 — striking by weight replaced by the answering act's graded draw (FI E-6 adopted, banded); filing stays draw-free bookkeeping.
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-01, C-05, C-10) — three changes. (1) Entry: an item is entered by the band of the speech that cites it (`19_LACUNA_admission_rides_the_citing_draw.md` decides the question this file had deferred): the "recorded without a roll" sentence and the **file** row are rewritten. (2) The evidence term: standing items reach the roll as `proofs` levels on the leverage channel for the side they stand for, never as an obstacle subtraction (Jordan, A-25; `U5c_SC_one_obstacle_form.md` §3); "The evidence term" is rewritten and `proof_step` is not added. (3) "Falsehood, forgery" no longer has a false item fall to a heavier one or a forgery's origin struck with certainty: both go by the answering draw's band (rule 2).
+
 ## Status: PROPOSED — supersedes `05_SC_evidence_and_rebuttal.md` (SC-P8). Consumes `08_FI_05_evidence-interface_B.md` (FI's E-1 to E-8) and differs from it at one point, named below.
 
 Source: `audits/05_SC_audit_addendum_B.md` §B3 (the kernel's `Dossier`, `rebut`, `EVIDENCE_CAP`
@@ -54,24 +56,26 @@ the carriers.
 *(Reconciled by `audits/18_DETERMINISM_SWEEP.md` D-01: the earlier text of this section made entering
 and striking deterministic; that breaks the standing rule. The section now agrees with FI's E-6, graded.)*
 
-**Filing is bookkeeping; whether an item stands against an answer is a draw.** Putting a held item on
-the case file is an act the citer may attempt (an eligibility: he holds it, the row admits its kind) and
-is recorded without a roll; whether a presented item survives a contradiction or an impeachment could go
+**Whether an item is entered is the citing speech's draw; whether it stands against an answer is the
+answering act's draw.** Citing a held item is an act the citer may attempt (an eligibility: he holds it,
+the row admits its kind). What the file then holds is read off the band of that speech
+(`19_LACUNA_admission_rides_the_citing_draw.md`): `Failure` enters nothing, `Partial` enters the item at
+half weight, `Success` enters it, `Overwhelming` enters it with the `first` mark (an answer to it meets the
+`first_heard` obstacle term). Whether a presented item survives a contradiction or an impeachment could go
 either way for the people in the room, so it goes by a draw, at the answering act (FI's E-6). The
 division the three-lens audit recovered (`3L/05` §4.2: an orator cannot make a contract more probative)
 is kept by putting the items' **weights into the obstacle**, not the orator into the weights: the
 answerer's pool is his own (`speak`'s pool through the one roller), the obstacle is the answer's task
 difficulty plus the weight difference, so a heavy answer to a light item is likely and never certain.
 What E-6 protects survives: no item decides a case, the verdict is still a draw, and one rule serves the
-room and the out-of-room path (`present` stays draw-free as filing; `answer` is rolled in both).
-Whether admission to the file should itself ride the citing act's band (FI's E-2) is
-`19_LACUNA_admission_rides_the_citing_draw.md`'s question; this file defers to it.
+room and the out-of-room path (`present` adds no draw of its own: it orders items already entered;
+`answer` is rolled in both).
 
 ### The three operations, one owner each
 
 | operation | when | rule | owner |
 |---|---|---|---|
-| **file** | a `speak` on a docketed matter carrying `cites` (the filing act; any band) | one `filed` stage per held, admitted item: `(tick, "filed", side, rung, Said or record id, weight, origin, act id)`. The speech's band still decides its own matter effect (`matter.advanced` …) | host: `loop/effects_information.py`, the `speak` effect, under its own token |
+| **file** | a `speak` on a docketed matter carrying `cites` (the filing act; entered by its band: `Failure` none, `Partial` at half weight, `Success` whole, `Overwhelming` whole with the `first` mark) | one `filed` stage per held, admitted item the band enters: `(tick, "filed", side, rung, Said or record id, weight, origin, act id)`. The speech's band still decides its own matter effect (`matter.advanced` …) | host: `loop/effects_information.py`, the `speak` effect, under its own token |
 | **present** | in a sitting, the `present` move; with no sitting, every filed item is presented at close | an item counts only once presented | module: `modules/social_contest/evidence.py` |
 | **stand** | at every board change, and at close | `standing(presented, findings) -> (standing, struck, faults)`, the rules below | module, one pure function, World-free |
 
@@ -117,11 +121,12 @@ an impeachment, plus the room's existing modifiers (reception, venue). Each term
 
 `proofs = Σ weight(standing, side = for)`, `rebuttals = Σ weight(standing, side = against)`, both
 carried raw on `SocialContestInput` (FI: `proofs` stays one float; `rebuttals` is
-`05_SC_obstacle_difficulty_and_modifiers_B.md` edit 4's). For the determiner's draw the `evidence`
-term is `proof_step × (rebuttals − proofs)`: what supports the docket lowers the obstacle to carry
-it, the party's standing answers raise it. For a party's own `speak` the sign is the speaker's
-side. The favourable half is subtracted after the ceiling (the obstacle proposal's bound; G-41), so
-four standing items against a strong opponent are four different obstacles.
+`05_SC_obstacle_difficulty_and_modifiers_B.md` edit 4's). Neither sum enters the obstacle. Each reaches
+the roll through the `proofs` leverage source (`U5c_SC_one_obstacle_form.md` §3): one `proof_level` per
+whole unit of weight standing for the roller's side, and the same against him for the other side's. For
+the determiner's draw the roller's side is the docket's; for a party's own `speak` it is the speaker's.
+Four standing items against a strong opponent are then four different odds at every pool, bounded by the
+soft cap (F-SC-16; Jordan, A-25: what a party brings raises the party).
 
 ### How an NPC builds a case and is answered by another
 
@@ -134,12 +139,14 @@ what to withhold; out of a sitting, everything filed is presented at close.
 
 ### Falsehood, forgery, concealment, and later trust
 
-- A false claim filed in good faith stands until answered by a heavier contradicting item; a false
-  item can strike a true one (no verifier, 2026-08-18 Q5, kept).
-- A forged Record counts as any Record until someone who holds the forged claim presents it; then it
-  and everything of its origin is struck, and the finding's told deposit (E-3) lowers the citer's
-  `reception` and `teller_weight` in every hearer by the existing paths. Nothing new is written for
-  trust.
+- A false claim filed in good faith stands until an answering act is drawn against it, and then stands
+  or falls by that draw's band (rule 2), whatever the weights; the weights move the odds. A false item
+  can strike a true one (no verifier, 2026-08-18 Q5, kept).
+- A forged Record counts as any Record until someone who holds the forged claim answers it with that
+  claim. The answer is drawn (rule 2): at `Success` the Record's item is struck, at `Overwhelming` every
+  item of its origin is struck too, at `Partial` it is halved, at `Failure` it stands. The finding's told
+  deposit (E-3) lowers the citer's `reception` and `teller_weight` in every hearer by the existing paths.
+  Nothing new is written for trust.
 - A concealed item is unheld and cannot be cited; no rule.
 
 ## Exact edits, by owner

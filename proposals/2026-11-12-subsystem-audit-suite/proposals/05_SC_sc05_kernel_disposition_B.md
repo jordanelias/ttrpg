@@ -1,5 +1,7 @@
 # SC-05 decided on the full evidence: retire the kernel's code, carry its exchange game as the module's second entry
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-09) — three checks in the carry table (rebuttal, defeat by named fault, who bears the question) asserted a fixed outcome; each now asserts a share over seeds, as the sweep's D-01 and D-03 already made the mechanisms they test (`05_SC_evidence_and_rebuttal_B.md` rule 2; `05_SC_playable_hearing_B.md`: silence adds levels and concedes nothing). The carry list and the retirement are unchanged.
+
 ## Status: PROPOSED — supersedes `05_SC_sc05_kernel_retirement.md` (SC-P2), which it keeps in every edit it does not restate
 
 Source: `audits/05_SC_audit_addendum_B.md` §B2 (C-2, C-3, F-SC-18), §B3; `audits/05_SC_audit.md`
@@ -65,9 +67,9 @@ what makes it one path). Nothing here is Jordan's to answer.
 | a run of exchanges, one move each | `Bout.resolve` | `hearing.py::hear` | two scripted deciders that differ in one move leave different standing sets |
 | the issue ladder and descent | `Stasis`, `shift` | roster `issue_rungs`; the case file's stage | a `concede` moves the tried rung one step and is witnessed |
 | held evidence: relevance, weight, diminishing corroboration | `Dossier`, `EvidenceItem` | `05_SC_evidence_and_rebuttal_B.md` | an item off the live rung enters at half; a second item of one origin adds less than the first |
-| rebuttal that removes a standing point | `rebut` | the `answer` move | an answered item stops counting in the closing obstacle |
-| defeat by named fault, per venue | `DefeatCatalogue` | roster `hearing_faults`, the row's `faults:` | a row without `silence` in its list does not concede the rung to a resting bearer; a row with it does |
-| who bears the question | `ProofBar`, `GraceThreshold` | the row's `bears:` | swapping `bears:` on one hand-built world swaps whose draw closes the stage |
+| rebuttal that removes a standing point | `rebut` | the `answer` move | over 200 seeds an `answer` strikes the item in a share strictly between 0 and 1; a struck item adds no `proofs` level to the closing draw and a standing one does |
+| defeat by named fault, per venue | `DefeatCatalogue` | roster `hearing_faults`, the row's `faults:` | a row with `silence` in its list adds levels against a resting bearer in the closing draw and a row without adds none; in neither is the rung conceded without the draw |
+| who bears the question | `ProofBar`, `GraceThreshold` | the row's `bears:` | swapping `bears:` on one hand-built world moves the closing draw's odds toward the other side over 200 seeds; no single result is fixed by the swap |
 | a ballot per seat that can cross the room | `VoteAtClose`, `ED-1057` | `HearingOutcome.ballots` on `declared` rows | a seeded bench where the board favours one side and one seat votes the other |
 | what moves this judge, read in bands | `armature.py`, `appraise.py` | SC-P7 trait rows; the turn view's `insight` gate | a trait row changes one seat's ballot odds and no other's |
 | effort as the attendee's budget | `Reserve` | `Act.effort` | an attendee at effort 0 makes no move |
