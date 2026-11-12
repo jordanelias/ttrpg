@@ -124,6 +124,8 @@
 
 | A-90 (answers the open point in A-88) | Is 'anti-Einhir' a religious axis or a people axis | Jordan: *"einhir is both"* | The Einhir are **both a religious tradition and a people**: an opinion about the Einhir bears on **both axes at once** (what is believed and practised, and who the people are), so a regime can differ on the two (a house can be pro-Solmund and sympathetic to the Einhir people, as Valorsmark is, A-89; the Church's anti-Einhir stance, A-88, is held on both). The lane models them as two linked axes (a religion pole and a people pole) with the link between them carried as data, not a single flag; a person's stance on each can differ and so can pull apart (a story source). |
 
+| A-91 (J-31-1 to J-31-4) | Lane 31's four survivors | Jordan took lane 31's A in each case | (1) The Duchess of Hafenmark is devout in doctrine and set against the Church's jurisdiction (`solmund_orthodoxy` 4): her quarrel with the Confessor is between believers. (2) Valorsmark's 'mixed' government form is a fault line (`parliamentary_rule × militarism` strains): its Marshal and its Clerk discount each other's word. (3) Varfell's Revival: the five principals already lean 4 and 5 on the tradition pole and the populace starts at the core and is what gathers (so cohort convictions must be able to move). (4) The Restoration Movement's four principals are against the royal order (`royal_order` 1): the Queen and the Movement share a cause and part on the Crown. |
+
 ### Closed by the five-step ladder, not by Jordan (CLAUDE.md §0; reversible on his word)
 
 Answered by prior ruling, precedent or architecture; recorded so the numbering is whole.

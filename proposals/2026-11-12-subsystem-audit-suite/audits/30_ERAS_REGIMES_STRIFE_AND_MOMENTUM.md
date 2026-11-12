@@ -190,7 +190,7 @@ Each proposal carries its own instructions; this is the order. EQUAL items may s
 | **B30-3 the movers**, one commit each, in this order | `30_WR_C` 1b (`strand_links`); `30_WR_D` commit 1 with `20_NARRATIVE_B`; `30_WR_A` commit 3 (`era_mandatory_vacancy`); `30_WR_G` commit 4 (`credit_form`); `30_WR_G` commit 5 (`custom_shift`) | the strife guard on against off for each; C12, C7 (L8), C11, C13, C10 | declared movers; pins re-recorded once per commit | B30-2; `20_NARRATIVE_A`, `C`; `12_ARCS_arcs_as_staged_goals`; `22_HAPPENINGS_B` |
 | **B30-4 the era's conditions**, a row at a time | `30_WR_A` commit 4's rows; `30_WR_B` commit 3 | C11 and the shape of each row | EQUAL | each row's emitter: the suite's batches E-3 (`dearth`, minority), E-5 (`contested`, `schism`), E-8 (wars, `occupation`) |
 | **B30-5 the player's plot** | `30_GO_F` | its gate: the seat test, the reader test | EQUAL | `11_GO_player_surface_contract_B`; B30-2; `20_NARRATIVE_C`, `E` |
-| **B30-6 content** | `30_WR_G` commit 2 | the regimes block prints a holder of each new pole | a build-hash mover | Jordan's values, or `21_PROCEDURAL_B`'s rule. **INCOMPLETE** until then |
+| **B30-6 content** | `30_WR_G` commit 2 | the regimes block prints a holder of each new pole | a build-hash mover | Jordan's values (supplied: A-87 to A-91; completed by `31_WR_A`). ~~INCOMPLETE~~ closed by lane 31 |
 
 Needed for the subject to run well alone: B30-1, B30-2, B30-5. Needed for it to compose: B30-3, B30-4.
 
