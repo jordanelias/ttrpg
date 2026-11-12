@@ -10,7 +10,7 @@ repository. Where one of your own ruled words fails, or where an agent has narro
 renames it: it is listed here with a plain alternative and what a rename would cost. The form follows
 `DECISIONS_FOR_JORDAN.md`. Answering none of them is safe: the suite keeps your word as it stands.
 
-**ANSWERED 2026-11-12 (A-94): J-U4d-01 regime stands; J-U4d-02 subformation stands as Jordan's word and is settled in the mass-battle lexicon (A-95); J-U4d-04 rung stands; J-U4d-03 prowess/aptitude open.**
+**ANSWERED 2026-11-12 (A-94): J-U4d-01 regime stands; J-U4d-02 subformation stands as Jordan's word and is settled in the mass-battle lexicon (A-95); J-U4d-04 rung stands; J-U4d-03 answered by A-98 (aptitude = attribute; learned rank = skill; martial skill; one capability kind, skill).**
 
 **How to answer.** One line will do: *"keep all four"*, or *"J-U4d-01 take B"*, and so on.
 
