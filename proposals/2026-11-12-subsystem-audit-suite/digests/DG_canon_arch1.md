@@ -473,3 +473,69 @@ Line references are to the file in the entry. `[UNVERIFIED]` marks anything not 
 - **Conflicts / stale:** P-11 text reads "universal across operations. Every operation produces some" and the note scopes it so restorative operations produce none: the headline and its scope disagree within one cell (:35). The older `canon/02_canon_constraints.md` P-08/P-13 "Forgetting" (retention instability) is contradicted. Whether the canon-guard skill (`valoria-canon-guard`) cites the superseded `02_canon_constraints.md` rather than this file [UNVERIFIED; one grep would show].
 - **Open items:** none.
 
+### canon/philosophy/DECISIONS.md
+- **What it is:** the decision surface posed to the author: D-0 assumption, twelve rulings D-1..D-12, 22 resolutions B-1..B-22, seven ordering calls, six optional enrichments; 987 lines.
+- **Status:** "SUPERSEDED — every question in this document has been ruled on" (:3-16); `RULINGS.md` is the live record. Reading: historical (context for what was asked).
+- **Bears on:** WR, PROCESS.
+- **Content that matters:**
+  - Records the options and the reasoning behind each ruling: D-0 "to move one is to move all" read generally (licenses layer 2 as threadwork) (:44-91); D-1 co-constitution vs realism (:99-169); D-2 where the tendency lives (ruled in the rendering/threads, not spooling) (:173-243); D-3 Calamity tensile vs inversion vs phased (ruled tensile on the holding-against reading) (:247-318); D-5 the Leap's danger dissolved into environment x duration plus type x scale (:384-445); D-6 ordinary self-rendering not an "operation" (:449-496); D-8 threadcut persistence / Solmund dissolution / strain (:556-612); D-10 Church's God vs Ein Sof (option A "same referent" was presented here, but 08_history later ruled the Church worships Solmund, a third answer) (:656-695).
+  - "Two items remain open by deliberate refusal": what is owed to a being outside the moral register, and whether Solmund understood what was made of him (:14-16).
+  - D-8 Question 2 (what dissolved Solmund) was DECLINED by the author on 2026-09-20 (ED-WR-0012); he "ceased the work" (:583-592).
+  - B-5..B-11 are cases where a constraint contradicted the section it cites (Forgetting vs inertness; what came through the tear; Locked Zone epistemic vs substrate; dangling refs §21.1/§22.2; "GM is the rendering engine") (:817-855).
+- **Conflicts / stale:** options and "recommendations" here are not rulings; D-10 option A (Church and inner tradition share a referent) conflicts with the later ruling in `08_history.md` §8.7 [consistent with RULINGS, which governs]. Reader should not cite this file as current.
+- **Open items:** the two refusals above only.
+
+### canon/philosophy/DIAGRAM.md
+- **What it is:** eight mermaid diagrams of the framework (stack, layer profiles, an operation end to end, what strains, Coherence elastic/plastic model, emergence, damage, everything at once); 349 lines.
+- **Status:** none stated. Reading: live reference (listed in `README.md`); a rendering of the rulings.
+- **Bears on:** WR, CHAR, DICE, PROCESS.
+- **Content that matters:**
+  - View 3: an operation end to end - Leap -> threads taken as threads -> imbrication -> direction (restorative / manipulative / destructive) -> aim (another vs own configuration) -> re-engagement; "F and G are the same machinery"; cost = Coherence "resisted by how strongly configured you are" (:88-136).
+  - View 5 (Coherence, RULED 2026-09-07/08): band, resting point, stress, elastic displacement, plastic set, restorative threadwork on oneself, became other; absent by ruling: creep, fatigue, work hardening, sensitivity as plastic set (:170-242).
+  - View 6: emergence modes; "witnesses do not constitute this" (:246-265). View 7: Gap vs Locked Zone vs orphaned configuration; "Whether a Gap itself can be Mended is open" (:269-287).
+  - Two deliberate refusals restated (:348-349).
+- **Conflicts / stale:** none within lane; `README.md` says "Eight diagrams" and the file says "Seven views" at its top (:3) and has eight sections.
+- **Open items:** can a Gap itself be Mended (:285-287).
+
+### canon/philosophy/DISCUSSION_SUPPLEMENT.md
+- **What it is:** the review's findings record: headline verdict, resolutions and their authority, the twelve then-open rulings (R-1..R-12), optional Lurianic figures, gaps, what was not migrated, ordering calls, method and falsifier; 391 lines.
+- **Status:** "PARTLY SUPERSEDED ... §3's twelve open rulings are all now decided ... `RULINGS.md` governs" (:3-7). Reading: historical for §3; accurate on findings (§1, §2) and method (§5-§8).
+- **Bears on:** PROCESS, WR.
+- **Content that matters:**
+  - Headline: a census of 38 operational claims found 24% entailed by an on-page argument, 34% entailed by an unwritten or mis-cited chain, 16% underdetermined, 10% stipulated, 16% underivable; roughly 71% entailed after repairs (:31-49). "Kind versus magnitude: every kind of consequence is entailed, every number stipulated" (:58-60).
+  - The seam: one clause in source §16.1 slid from "the rendering's stabilising tendency" to "the substrate's own spooling would resume" (:51-57).
+  - What was NOT migrated: A-rule set, GD-1..3, knot-profile mechanics (magnitudes, dice-facing wording, MS instrument), Level-4 hooks, numeric thresholds (:306-323). Terms used but never defined in sources (Weaving, Pulling, Locking, Dissolution, Mending, Contact Duration, Focus capacity, Mending Stability, Diagnosis, Edeyja/Wardens, human-mode being, rendered-integrity baseline, etc.) belong in a glossary this suite does not own (:325-335).
+  - Method: read-only Fable review under four lenses (Heidegger, Husserl, Derrida, Lurianic Kabbalah) plus a pre-recorded independent pass for rediscovery ranking (:359-384); central falsifier is D-0's general reading of "to move one is to move all" (:386-391).
+- **Conflicts / stale:** R-2 ruling text is stale (see RULINGS); the file's recommendation lines predate rulings. The Gaps list (§5) items 10-12 (non-sensitive's rendering at a confrontation; trauma diminution; whether Coherence exists for non-practitioners) are answered later in RULINGS/04/05 (:297-302).
+- **Open items:** terms-never-defined list (:325-335) as a glossary nobody owns (Mending Stability, Diagnosis, Contact Duration) - potential gap for any lane that mechanizes threadwork.
+
+### canon/philosophy/PROVENANCE.md
+- **What it is:** pointer to the unbannered source texts (commit `2071b146...`) with md5s; 32 lines.
+- **Status:** none. Reading: live reference (about the superseded originals).
+- **Bears on:** PROCESS.
+- **Content that matters:** the reviewed text is the bannered body of the five `canon/` files; byte-exact originals via `git show 2071b146b661a56cdd0d268b791dcb91e074a41f:canon/philosophy/_sources/<file>` (:7-16); the `_sources/` directory was deleted by design (:28-32).
+- **Conflicts / stale:** the `git show` paths name `canon/philosophy/_sources/`, which no longer exists at HEAD; resolvable only in a non-shallow clone [UNVERIFIED].
+- **Open items:** none.
+
+### canon/philosophy/README.md
+- **What it is:** index and reading order for the philosophy suite, plus why the order, relationship to the five sources, and provenance; 107 lines.
+- **Status:** "PROPOSED as a reorganization; the philosophical content is RULED" (:3-5). Reading: live index. Says retiring the five sources "is a decision for the author" (:85-87) though the five files already carry supersession banners.
+- **Bears on:** PROCESS, WR.
+- **Content that matters:** reading order 0-10 plus RULINGS, DECISIONS, DISCUSSION_SUPPLEMENT, DIAGRAM, PROVENANCE (:23-40); "If you read only one thing: RULINGS.md"; RULINGS is "Not verbatim throughout - 24 of 47 entries quote the author" (:36, :42); the suite is "reference, not mechanism: if deleted the game would behave identically" (:11-13).
+- **Conflicts / stale:** README says DIAGRAM has "Eight diagrams" while DIAGRAM's own header says "Seven views" (:39 vs DIAGRAM :3).
+- **Open items:** none.
+
+### canon/philosophy/RULINGS.md
+- **What it is:** the append-only record of the author's rulings (batches 1-13, 2026-09-07..09), with verbatim quotes where captured and explicit marks where the wording is the editor's; 1522 lines.
+- **Status:** "This is the live record of what the framework holds. Where any other file in this suite disagrees with it, this file governs" (:3-6). Reading: live; THE authority within canon for philosophy questions.
+- **Bears on:** WR, CHAR, PC, DICE, PROCESS (the editor-vs-author provenance discipline).
+- **Content that matters:**
+  - Provenance caution: of 47 entries 24 quote the author verbatim and 23 do not (:12-24); lettered options are "not a safe way to take a ruling on anything structural" - write back the sentence and get it confirmed (:1254-1258). Six instances of the editor building on or manufacturing a statement are recorded (R-1, R-2, R-7, R-8, C-3, R-15) (:1088-1093, :1260-1262, :1337-1340).
+  - Core rulings: D-0 co-movement is general (:48-61); D-1 positional constitution through imbrication, dichotomy rejected (:63-89); D-2 stabilizing tendency belongs to the futural-potential-legible, later relocated to the threads' own orientation (R-12) (:91-124, :1169-1208); D-3 Calamity tensile, "holding-against" (:126-142); D-10 the Church's God is Solmund, "Don't fall into some trap about a false God necessarily being antagonistic" (:201-226); B-17 two-uncannies unification REJECTED ("I didn't write this. but threadcut are radically singular and alien") (:290-300).
+  - Coherence: distance not quantity; "became other"; amoral since "being moral requires being human"; drifted retain preferences, understanding gated by sensitivity at the crossing; Batch 8 elastic/plastic model E-1..E-4; Batch 9 C-1 restorative work can reach the resting point ("I also never agreed to the notion that you can't move a resting point back"), C-2 purpose: "to prevent players/characters from spamming thread operations without penalty ... discourage ... doing it again without recuperation" (:390-519, :716-909).
+  - R-14 (2026-09-09) cost is the practitioner's Coherence, resisted by "how resilient their spirit is, ... how strongly configured they are"; C-3 "it was nonsense" retracted (:1214-1244, :1297-1320).
+  - R-13/R-15/R-16 sensitivity = range outside the human band, imbrication = how much of a thread one can purposefully interact with; R-17 threads are not literal; R-18 coprimordial; R-19 grounding always withdrawing; R-20 "the draw" retired ("that's not my verbiage") (:1264-1522).
+  - Questions the rulings opened (not gaps): why Locked Zones haven't been restored (strongest answer, the knife-edge temptation, "nowhere in the suite"); Southernmost systematically more likely to become other and better off; is moral standing lost continuously or at the yield point; what is it like in a Locked Zone; can a Gap be Mended; does ordinary life change imbrication (:615-650). Implementation note: a depleting Coherence track does not model this (:652-670).
+- **Conflicts / stale:** header (:26-29) says the Solmund-intent refusal "is unresolved" inconsistency. Entry D-4 ("not taken") superseded by R-2 (:191-193). Banner at :657-670 warns the "no accumulation / never falls" note was wrong: read all of Batch 8 and 9 before coding a Coherence track. R-3 (constitutive cost) and §6.8's operational channel not reconciled (:975-986). "The draw" noun survived at ~5 sites until R-20; confirm gone.
+- **Open items:** the late-flagged vocabulary ruling on "the draw" is resolved by R-20; what is owed to a being outside the register; whether Solmund understood; whether R-19 "withdrawing" is compatible with §1.5 (if §1.5 needs a note, it needs a ruling) (:1449-1452); "as-structure" row in lineage.
+

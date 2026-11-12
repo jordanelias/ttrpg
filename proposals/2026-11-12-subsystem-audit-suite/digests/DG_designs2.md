@@ -476,3 +476,105 @@ Lane `designs2`: archived design documents under `.designs/systems/{overview,set
   - Mode branching table TTRPG/BG/Hybrid; Hybrid Coherence declaration rule: the PC who declares leadership at Phase 1 of Cascade pays (:964-973, :955).
 - **Conflicts / stale:** Coherence 10→0 versus applications doc's two-quantity model (explicit disagreement); RS/MS no carrier in the season architecture (rendering.py header: no rendering or mending clock among the three licensed clocks). Hybrid/Board-game modes excluded (videogame-only). Many [PROVISIONAL] PP patches inline.
 - **Open items:** ST-TW-01 (Coherent Strike free at Object scale), several simulation tasks listed in the implementation sequence (:1005-1018) with no results here.
+
+### .designs/systems/threadwork/reference/threadwork_v25_historical_index.md
+- **What it is:** Auto-generated index (2026-04-18) of threadwork_v25_historical (24,165 tokens; titled "threadwork_redesign_v25").
+- **Status:** none (generated). Reading: stale.
+- **Bears on:** PROCESS
+- **Content that matters:** heading/size map; Part Two Operations 9,702 tokens, Part Three Coherence 5,122 (:122, :139); canonical_sha "unknown" (:11).
+- **Conflicts / stale:** line numbers shifted vs body; `designs/threadwork/` path dissolved.
+- **Open items:** none.
+
+### .designs/systems/threadwork/reference/threadwork_v30.md
+- **What it is:** The v30 skeleton of Threadwork mechanics (mechanical spec only, prose in the infill), v3.2; the head design for operations, Coherence, co-movement, Mending Stability (MS), threadcut beings, mode branching.
+- **Status:** "Status: CANONICAL" but header "design proposal, requires editorial approval"; module_contracts.yaml:300-318 records this doc ambiguity as OPEN (Jordan) and still points `doc:` at this quarantined path ("read by CODE (workbench node-state, the census)"). Reading: the live design head per old CURRENT; skeleton only.
+- **Bears on:** WR, FI, PC, MB, CHAR, SE
+- **Content that matters:**
+  - Pool: (Spirit × 2) + relevant History bonus + TPS (TPS = TS ÷ 10), TN 7 (8 for Binding/POP); Leap Ob 2 at TS 30-49, 1 at TS 50+; wound penalty +0.15 Ob per Wound, "never a −1D pool cut" (Jordan 2026-07-08, ED-PC-0005/0006) (:25-30, :161-167, :246).
+  - Approach Training tag required for any Leap; acquired via Formation 2F, a full-season mentored arc (mentor TS >= 50, Disposition >= +2, Spirit TN 7 Ob 2), or First Leap catalyst (:108-143).
+  - ED-694 Thread Fatigue replaces Contact Rounds: fatigue counts up to Spirit × 5; per-op costs Leap 3 (entry), sensing 2/round, Mending 4, Pulling 5, Locking 7, Dissolution 10; Focus sets max operations per session (Focus − 1) (:193-203, :217-222).
+  - Mending: zero Coherence cost (restorative; canon/02 Amendment 3, ED-871), +1 Ob per consecutive Mending in a season (Seasonal Mending Fatigue), Ob by Gap severity 2-8, Mending Stability +1/+2 on Success/Overwhelming (:456-493). ED-WR-0007 flags Mending as a single dominated tool needing a second branch (:454).
+  - Coherence 10→0 with thresholds Stable/Dissonant/Fragmented/Fractured/Severed/Rendering Crisis; scale-based loss with per-op cap −1 except FR surcharge (:612-658); Rendering Crisis resolution and four narrative beats (ED-681) (:702-737).
+  - Co-Movement deck: 18 cards CM-01..CM-18, 1 draw per operation (2 with a Thread Witness Node), global deck, MS deltas and territory effects, actualized vs unactualized profile (:761-783).
+  - World track: Mending Stability 100→0 (renamed from Rendering Stability), bands Stable/Strained/Fragile/Fractured/Critical/Rupture; seasonal cap ±10; mass battle costs flat −1 MS (−2 cataclysmic; Stability Check Ob 3 at MS <= 10) replacing the ×3 multiplier (:51-59, :820-835).
+  - Thread Revelation Curve by MS band and revelation triggers; hidden +0.5 Accord/season bonus at RM cells on Thread-active sites; RM chooses Embrace/Denial/Schism (:846-875).
+  - Threadcut beings: observer-dependent rendering, Rendering Strain vs Health, De-Actualisation rounds with +2/+4 Ob (:879-920). Opposing ops: engagement modifier floor(opponent TPS ÷ 2) min +1, 6-row resolution table (:539-605).
+- **Conflicts / stale:** Terminology split: this doc says Mending Stability (MS) while the same author's v25 and older cross-refs say Rendering Stability (RS); `rendering.py` header (struck) calls them different. Composure still the Conviction/knot-strain name (retired to Face in SC). Skeleton has many blank sections (Diagnosis, First Leap, Weaving prose) whose prose is in the infill. "Sim code still charges −1/−2 for Mending — fix deferred to Stratum B" (:634). Board game / hybrid modes excluded by scope.
+- **Open items:** Past-Oriented Pulling fold into the Three-Axis Ob system (ED-WR-0007, Jordan's call); Mending second-branch; Three-Axis Ob "canonical in params_threadwork.md" (not in this tree; Breadth/Distance tables in operations.py are dead per flow skeleton).
+
+### .designs/systems/threadwork/reference/threadwork_v30_index.md
+- **What it is:** Auto-generated index (2026-04-19) of threadwork_v30; 18,862 tokens, 76+ headings.
+- **Status:** none (generated). Reading: stale (line numbers differ from the current v30 body, which has gained ED-694 Thread Fatigue and the Mending rename).
+- **Bears on:** PROCESS, WR
+- **Content that matters:** heading map shows the "RENDERING STABILITY (WORLD TRACK)" part title (:80-86) still labelled RS while the body renamed to Mending Stability (MS) — evidence of an incomplete rename; Part Five contains §5.6 Thread Revelation Curve (:86).
+- **Conflicts / stale:** RS vs MS naming; `designs/threadwork/` path dissolved.
+- **Open items:** none.
+
+### .designs/systems/threadwork/reference/threadwork_v30_infill.md
+- **What it is:** Prose, rationale and GM sidebars extracted from threadwork_v30 (infill half).
+- **Status:** none of its own beyond the copied header ("design proposal, requires editorial approval"). Reading: reference prose; same document in parts as the v30 skeleton.
+- **Bears on:** WR, CHAR, PC
+- **Content that matters:**
+  - Leap is "no bridge, no gradient, no partial Leap"; first Leap is a full event scene run by the GM; failure = Dissociation (no Thread ops for a season, TS frozen) (:43-54).
+  - Brittleness rule: a Woven configuration at Relational+ scale can shatter into a Shifting Object under non-Thread stress (siege, betrayal, collapse) — "GM may rule" (:74-75). A GM-judgment rule the no-GM engine must either compute or drop.
+  - Over-actualisation modifier does not carry through collapse (PP-208); stacks from separate windows (PP-209) (:72-73).
+  - Opposing ops: overwhelmed practitioner takes knot strain not degree-table Failure ("overpowered, not misaligned") (:111); declared simultaneously at Priority 5, may withdraw before rolling (:118).
+  - Coherence pacing: Object/Personal work sustainable indefinitely; ~10-15 Relational+ ops over a 30-session campaign costs ~10-15 Coherence, producing a late-campaign crisis arc; "Dissonant entry" is a table protocol (:127, :132).
+  - Hybrid Coherence pacing (PP-207): one Relational+ op and one leadership declaration per season reaches Rendering Crisis near session 10 (:191).
+- **Conflicts / stale:** GM-addressed text throughout ("the Game Master should ask...", :75, :132) vs "there is no GM"; "Mending Stability (RS)" mixed labels (:158); says "Certainty −1" at First Leap where v25 says "Truth −1" (:53) (another rename).
+- **Open items:** none.
+
+### .designs/systems/ui/reference/ui_flow_skeleton_v1.md
+- **What it is:** Flow skeleton for `systems/ui/` at commit 6545067: all six flow sections empty; the content is a "Traced gaps" table concluding `ui` owns no code.
+- **Status:** "REFERENCE — traced structure only". Reading: historical but the negative finding is plausibly still true for the UI subsystem proper (systems/ lists characters, combat, fieldwork, mass_battle, overview, settlements, social_contest, threadwork — no ui).
+- **Bears on:** GO, PROCESS
+- **Content that matters:**
+  - No `.py`/`.gd`/`.tscn` under systems/ui; no `ui` module in module_contracts.yaml (27 modules at the time); no `CURRENT.md` row; canonical_sources.yaml `ui_ux` names design docs only (:48-51).
+  - `godot/skeleton/` has 8 `.gd` files, none UI (:52); dashboard/ and tools/observability/ are process tooling, not game UI (:53).
+  - `_identifier_census.yaml` reports 28 identifiers `BUILT` against UI vocabulary but all pointers land in other subsystems — name matches, not wiring proof (:54).
+  - The one self-identified UI code: `engine/cross_scale/articulation.py` `render_protagonist_lens` ("Tier 1 UI Lens"), a stubwire no-op with no callers (:56). `engine/cross_scale/` no longer exists in the tree.
+- **Conflicts / stale:** `engine/cross_scale/articulation.py`, `dashboard_data.py` (retired) cited; the UI doc set is thus design-only. Whether the tick-based "Layer 3" UI tier is the same as `systems/ui` is excluded by CLAUDE.md's note.
+- **Open items:** whether the player-facing UI should claim the articulation lens — "a design question, not a traced fact" (:66-68).
+
+### .designs/systems/ui/reference/valoria_ui_ux_v4_1_index.md
+- **What it is:** Auto-generated heading and token index (2026-04-18) of the UI/UX Comprehensive Reference v4.1 (20,281 tokens); only the index is in the tree, not the body (not in this assignment).
+- **Status:** none (generated). Reading: historical/outline of a design-only UI spec.
+- **Bears on:** GO, FI, SC, PC, MB, WR, CHAR
+- **Content that matters:**
+  - Parts: three design oaths with violation tests (Part 0); state machine and Scene Action Cost Table (Part 1); persistent chrome with visibility rules (Part 2); peninsula map/province/settlement/zoom (Part 3); fieldwork (Part 4); dialogue as "Disco-Elysium conviction interface" with eight row types and Thread-gated options (Part 5); social contest generic interface plus Parliament/Inquisition/Royal Audience/Treaty/chain variants (Part 6); personal combat on a hex grid with asymmetric declaration (Part 7); mass combat and settlement invasion (Part 8); threadwork progressive unlock, Thread panel, co-movement panel, "World Survival Display — RS and WC" (Part 9); encounter UIs (Part 10); faction/settlement/character/party management (Part 11); integrated loop 7-scene walkthrough (Part 12); cutscenes and four feel layers (Part 13) (:23-146).
+  - Part 9 is the largest part (2,860 tokens) (:222); Appendix E is "Godot implementation reference" (:147).
+  - §5.3 "Eight row types", §5.5 "NPC Convictions limit their responses" (:60-64) are the UI side of the conviction decision layer.
+- **Conflicts / stale:** Dated 2026-04-18 on a "canonical" path `designs/ui/`; the max-audit and v4.2 workplan indexes show v4.1 needed major repair, so this index describes an unrepaired draft. "Part 7: hex grid" vs mass battle "25×25 cell grid" vs v4's 16×10 battle map (see v4 index).
+- **Open items:** none.
+
+### .designs/systems/ui/reference/valoria_ui_ux_v4_1_max_audit_index.md
+- **What it is:** Index (2026-04-18) of the "UI/UX v4.1 Max-Effort Granular Audit" (25,356 tokens): 84 playable moments tested, integrated assessment, prioritized repair list, second-order findings.
+- **Status:** none (generated). Reading: historical audit record; its repairs were scheduled in the v4.2 workplan.
+- **Bears on:** GO, PROCESS
+- **Content that matters:**
+  - Structure: Part 0 playable-moment inventory; Part 2 moment-by-moment test grouped Phase loop (1-4), travel (5-6), fieldwork (7,10,16,17), dialogue (11-12), social contest (13), personal combat (18-21), Thread (22-39), settlement (40-45), faction (46-56), mass (57-61), cross-scale (62-69), world-state (70-79), content integrity (80-84) (:24-39).
+  - Part 3.A scores "robust / elegant / smooth" individually then as a set; 3.C tests the three design oaths; Part 4 prioritized P1/P2/P3 repair list; 4b "second-order findings" incl. "Spec autonomy pattern (systemic)" and "Thread axis terminology" (:40-55).
+  - Thread (moments 22-39) and faction scale (46-56) are the heaviest sections (2,989 and 2,920 tokens) (:72-74).
+- **Conflicts / stale:** the body is not in the tree; only headings. `designs/ui/` path dissolved.
+- **Open items:** the repair list items are tracked in the v4.2 workplan, not here.
+
+### .designs/systems/ui/reference/valoria_ui_ux_v4_2_workplan_index.md
+- **What it is:** Index (2026-04-18) of the "UI/UX v4.1 Repair Workplan" (8,972 tokens): 13 stages from honesty fix to v4.2 publication.
+- **Status:** none (generated). Reading: historical plan; there is no evidence in the tree (UI flow skeleton) that v4.2 was published.
+- **Bears on:** GO, PROCESS
+- **Content that matters:**
+  - Stages: 1 honesty fix (F-69 Option B); 2 canon breach deletions; 3 threshold corrections; 4 integration proposal H-items; 5-7 missing UI surfaces (personal; settlement/faction; thread/mass/cross-scale); 8 Oath II compliance (pre-commit cost previews); 9 Appendix E engineering depth; 10 Resolved Items Index rewrite; 11 spec autonomy remediation; 12 P3 enrichment; 13 v4.2 publication (:28-40).
+  - Sections §3 execution preconditions, §4 work totals, §6 risk items, §7 acceptance gate (:41-45).
+- **Conflicts / stale:** a workplan for `designs/ui/` while CLAUDE.md §2 says one active plan per lane under `workplans/` — this one predates that rule.
+- **Open items:** whether any stage executed is not recoverable from this index.
+
+### .designs/systems/ui/reference/valoria_ui_ux_v4_index.md
+- **What it is:** Index (2026-04-18) of the UI/UX Comprehensive Reference v4 (35,489 tokens) — the predecessor of v4.1.
+- **Status:** none (generated). Reading: superseded by v4.1 (itself unrepaired).
+- **Bears on:** GO, PC, MB, SC, FI
+- **Content that matters:**
+  - Heading map: 127 sections across Parts 0-9 then oddly "§20.3-§20.6" (feel layers) then Parts 21-25; Part 7 personal combat with hex grid, offence/defence split "asymmetric information", Fibonacci group bonus, Rescue, Death Cascade, Sufficient Scope indicator (:87-99); Part 8 mass combat on a "16×10 battle map" (:100-101); Part 6 social contest incl. "free-text argument field" (§6.3.2) (:83).
+  - Part 24 Godot implementation reference (scene tree, resources, signal bus, deterministic RNG, save system) 3,328 tokens (:137-148).
+  - Part 22 accessibility, input, resolution scaling; Part 23 precedent attribution (:128-136).
+- **Conflicts / stale:** Part numbering jumps from 9 to §20.3 (missing Parts 10-20 in the index) — the v4 body had a numbering defect or the index mis-parsed. The 16×10 mass battle grid conflicts with the 25×25 cell grid in mass_battle_v30 §A.3b (AUDIT_BRIEF) — UI and design disagree [UNVERIFIED which is current].
+- **Open items:** none.

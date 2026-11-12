@@ -586,3 +586,147 @@ Lane: archived design documents under `.designs/` (README, `_architecture`, arti
 - **Conflicts / stale:** scalar numbers superseded by equal-affinity-budget model (2026-06-29).
 - **Open items:** contact-axis accesses (clinch/disengage/choke) and `seize` retirement remain open.
 
+### .designs/systems/combat/reference/combat_c4_draft_v0.md
+- **What it is:** draft spec (2026-05-17, ED-864) of three scene-combat mechanics added atop a d10 pool baseline: M1 reach/distance gate, M2 stance x stance counter-table, M3 initiative preemption.
+- **Status:** "DRAFT — Jordan review pending. Not yet canonical." Reading: superseded; combat moved to the continuous sigma engine (ED-900/904), so the pool grammar, TN-7 and stance counter-table are obsolete. Historical.
+- **Bears on:** PC, DICE.
+- **Content that matters:**
+  - Distance Bands 0-3 (Grappled, Engaged, Spaced, Reach), start Band 2; attack out of reach collapses to `1D + History` (:33-59); Close/Open actions (:62-68).
+  - Four stances Pressure/Patience/Decisive/Cautious with simultaneous reveal and a counter-table (Patience vs Decisive imposes -3D; Pressure vs Cautious caps at Partial; Pressure vs Patience denies Take Breath) (:84-107).
+  - M3: higher-Initiative fighter, at <=60% HP and gap >=2, once per duel, cancels opponent's action for 2 stam cost / 3 stam penalty (:119-131).
+  - Phase 11 sim: Fast (Agi 6) vs Tough-heavy 22.3% under reach gate; reframing 2: each archetype wins in its domain (:139-161).
+  - Seven open canonical questions (gate severity, magnitudes, stance count 4 vs 2, grapple, ranged) (:163-181).
+- **Conflicts / stale:** the "reach gate" and "stances" concept re-emerges in the live engine as continuous `reach_base`, `measure_gap` and tradition imposition; reading this as current would conflict with CURRENT.md's combat head.
+- **Open items:** all seven questions were never answered in this file.
+
+### .designs/systems/combat/reference/combat_currency_v1.md
+- **What it is:** currency lineage note (2026-08-14, ED-IN-0189): the narrative formerly in CURRENT.md's personal-combat head row, moved here.
+- **Status:** "REFERENCE — currency lineage only; rules nothing, supersedes nothing". Reading: historical lineage, last reading 2026-07-23.
+- **Bears on:** PC, DICE, PROCESS.
+- **Content that matters:**
+  - Live head `systems/combat/combat_engine_v1/` (engine wins on disagreement); typed export `engine/engine_params/combat_engine_v1.json` GENERATED from `config.py` with a blocking round-trip (:21-25, :31).
+  - R2 closing-distance/facing/grip/contact redesign (I0-I8) merged PR #72 (2026-07-04); R3 weapon-model consolidation U0..U9 (:31).
+  - U9 capstone (ED-PC-0021): no edge/choke/facing lever robustly cleared the ~+/-4pp noise floor, so all six stayed at K=0; then U10 (ED-PC-0022/0023, PR #226, 2026-07-23) activated the six morphology levers at small grounded baselines behind `ability_factor` (:31).
+  - Retraction: the earlier "+2.8pp" ability edge was a tradition-membership confound; correct instrument for a situational lever is per-fight texture with outcome preservation (16-28% of fights play differently, ~3-8% flip the winner) (:31).
+  - `IMPOSITION_GATE=False` (imposition mechanism retired as fiat, Jordan); governing principle: every build available (not every build good); efficacy from investment, no fiat (:31).
+  - Deferred: MAX_TEMPO_PEN 38-weapon flat-top (needs golden regen), PERC_EXP low-mass compression, PERC_TRANSMIT_FLOOR, adef_cap sel_head; JD-2/3/5/6/7/8 open (:31).
+- **Conflicts / stale:** a single 3,955-character line, i.e. the paragraph that CURRENT.md was told to stop carrying; check against `modules/combat/` since the head may have moved [UNVERIFIED].
+- **Open items:** JD-2/3/5/6/7/8 and ED-PC-0012 (one-handed sabre "point" gap) at time of writing.
+
+### .designs/systems/combat/reference/combat_flow_skeleton_v1.md
+- **What it is:** traced flow skeleton (at commit `6545067`) of `combat_engine_v1`: `wrapper.fight`/`engagement` beat loop, core resolve/strike, bridge seam.
+- **Status:** "REFERENCE — traced structure only". Reading: historical trace; engine path since moved to `modules/combat/`.
+- **Bears on:** PC, CORE, DICE.
+- **Content that matters:**
+  - `fight` multi-bout harness (max_bouts=12, coin-flip aggressor, `UPSET_FLOOR` symmetric upset flip) vs `engagement` per-exchange bout; the intended per-turn game call `engagement` has no outside caller (:51-61, :156).
+  - Per-beat flow: reach_base, `measure_gap` closed-band latch, re-presentation gate, cadence `ready` vs `ACT_THRESHOLD`, half-sword auto-switch, `commit_depth`, `read_contest`, `assemble_net_sigma`, INDES steal, `core.resolve(pool, net_sigma, rng, ob)` with `ob_from_defender` (ED-PC-0058 correction), overcommit exposure, outcome mapping by degree x defender mode, displace-and-step-inside, bind sub-loop (beats can advance by 4 per iteration), riposte role flip, contact axis grapple (:63-96).
+  - Entire `combat` scene branch of `scene_dispatch` unreachable because `evaluate_triggers` only fires `contest`; `DISPATCH_COMBAT_BRIDGE` default off; deprecated `systems/combat/sim/combat.py` call deleted 2026-09-25 (:106-110, :153-154).
+  - `combat_engine_v1` itself never emits/consumes a Key although the contract says so (:152); `capabilities.py` and `state_graph.py` not imported by the live spine (:155).
+  - `engage` contact axis (`contact.grab_available`, `grab_outcome`: disarm/throw/pin/foot_pin/control) exists in the traced code (:93), unlike the plan documents.
+- **Conflicts / stale:** the contact axis here exists, contradicting phase4_5_plan_v1's "Phase 5 NOT STARTED" (later than 2026-07-01); `resolve(pool, net_sigma, rng, ob)` signature [UNVERIFIED current].
+- **Open items:** whether the season loop now dispatches personal combat at all (PC/CORE audit).
+
+### .designs/systems/combat/reference/combat_reference_v1.md
+- **What it is:** consolidation (2026-08-08, ED-PC-0056) of `combat_v30`, `combat_design_v1`, `combat_v30_infill` into one design-layer reference for personal combat (13 sections).
+- **Status:** "REFERENCE — subordinate to the `combat_engine_v1/` head (PROPOSED, ED-PC-0056)"; "Where this prose and the engine disagree, the engine wins." Reading: mixed; much of it is a pre-d+sigma d10 TTRPG rule set that the engine superseded, but several world-bridge tables (§13) and surrender/disengage (§11.4) exist nowhere else.
+- **Bears on:** PC, FA, SE, FI, WR, MB.
+- **Content that matters:**
+  - Pool `max(5, Relevant History + 6)`, Agility-independent (RATIFIED R1) (:62); wounds are a fractional Ob (+0.15 attacking / +0.25 defending per wound, ED-1041/ED-PC-0005) not a pool cut (:66, :366); wound penalty to Thread ops +0.15 Ob each (:518, :527).
+  - Damage = Impact x Coupling x Quality (Partial 0.6 / Success 1.0 / Overwhelming 1.5), Impact = Strength + Heft additive (:221-228); weapon-vs-armour table kept as relationship reference (:233-238).
+  - Health `(End+6) x (MaxWounds+1)`, Wound Interval `End+6`, Max Wounds `floor(End/2)+1` (range 14-65) (:353-364); Stamina `End x 5` (:371).
+  - "All weapons are TN7 now" Jordan 2026-08-15; the engine never had per-weapon TN (:410). TN 6/7/8 = Controlled/Standard/Desperate is a situational mode, not a weapon property (:410).
+  - §11.4 Surrender and Disengage (Yield accept/refuse; Disengage Agility contest) is the only definition of "surrender" which §13.1's echo table consumes (:28-36, :587-603).
+  - §13 world bridge: Combat Domain Echo (officer defeated: acting faction stat +1, target Stability -1; killed adds Mandate -1), Combat Reputation 0..6+ effects and decay -1/yr, settlement consequences (public combat Order -1, vs governor Order -2), Death Cascade (Knot rupture, Disposition -3, Scene Slate P1 entries, Exposure +2 per territory, player Conviction revision) (:652-710).
+  - Ranged, cover, terrain, group combat (Fibonacci group bonus +0..+5), Rescue (PP-290/292), stress-FF PP-720, B-mode presentation flag PP-721 (:204-315, :384-466).
+- **Conflicts / stale:** the d10 pool, TN matrix, Feint versus roll, resolution-order action table and Strike/Feint/Disarm/Tie Up set are pre-engine; §7 says Health formula "see derived_stats_v30 §4.1" while §366 overrides it (ED-PC-0005); "GM" language throughout; mode-split text kept as historical rationale per its own note (:15).
+- **Open items:** pending editorial ED-033 (Commander bonus formula conflict), ED-040 (Artillery Balanced disposition lock), P2-B11-19 (Thread Tension 80+ in mass battle) (:642-644); ED-131 weapon modifier values need playtest (:240).
+
+### .designs/systems/factions/reference/baralta_crown_claim_v30.md
+- **What it is:** BG mechanic design (2026-04-11, ED-408..411, PP-661): Crown Succession Contest, Baralta claim, Consecration Crisis, Hafenmark after Baralta takes Crown, three-clock interaction. Skeleton; prose in `_infill`.
+- **Status:** "DESIGN (editorial decision, flagged for review)". Reading: historical; depends on Coup Counter, Torben Loyalty, Löwenritter Autonomy clocks, many of which the conflict proposal replaced.
+- **Bears on:** FA, CHAR, WR.
+- **Content that matters:**
+  - Trigger: Crown eliminated (Mandate 0 + Loyalty 0) or Royal Deposition succeeds; claimants need Mandate >= 3 (Löwenritter Autonomy >= 3; Hafenmark Baralta alive + Mandate >= 4; Church CI >= 40), each rolls pool vs Ob 3 TN 7, ties: Löwenritter military, Hafenmark political (:29-52).
+  - Baralta Claim Precondition: Crown Mandate <= 2 AND PI >= 5 AND Baralta alive; pool Hafenmark Mandate + Influence; Ob Crown Mandate + 1; +2D on contest if positioned; failure Stability -1, 2-season lockout (:54-64).
+  - Consecration Crisis: Church Stability >= 4 refuses (CI +3, Crown Mandate inherited at -2, 3-season validation window else contest reopens); Stability <= 3 consecrates under duress (CI -5, Church Stability -3) (:70-91).
+  - Option B: Hafenmark persists under institutional successor if PI >= 4, else fractures (:131-135); Hafenmark-to-Crown recognition ceremony Standing 7 -> Crown Std 5 (:137).
+  - Three-clock table (Generational Shift x Löwenritter Autonomy x IP): Crown Stability <= 1 increments Counter automatically; IP >= 60 lowers Torben alignment threshold 3 -> 4; sequencing: Succession first, Autonomy second, IP last (:160-212).
+- **Conflicts / stale:** Coup Counter replaced by graduated autonomy (conflict proposal); Option A/B tension with the FA lane's emergent-faction ruling (starting factions = 4); Arc 11 "GM discretion" (:91).
+- **Open items:** ED-647 Recognition Ceremony formalization pending (:141).
+
+### .designs/systems/factions/reference/baralta_crown_claim_v30_infill.md
+- **What it is:** prose/rationale infill for the Baralta Crown Claim doc.
+- **Status:** "DESIGN (editorial decision, flagged for review)". Reading: historical.
+- **Bears on:** FA, WR.
+- **Content that matters:**
+  - Trigger text (infill only): "Ehrenwall Coup fires AND Ehrenwall does not claim the Crown for Löwenritter directly" (:21-23), a different trigger from the skeleton's elimination/deposition — a conflict inside the part-set.
+  - Stake Claim = Senator Outward targeting Crown; places a Claim Token (+2D on contest, makes Baralta a succession option in Ehrenwall's Coup assessment, alerts Church) (:25-29).
+  - Strategic sweet spot: weaken Church to Stability 3 before claiming; creates tension with Baralta's TC (now CI) suppression interest (:44).
+  - Four conditions for a viable claim: Crown Mandate <= 2, PI >= 5, Church Stability <= 3, Hafenmark PI >= 4 (:47).
+  - Early-game unconsecrated claim is "a trap"; late-game is "a gamble" (:37, :42).
+- **Conflicts / stale:** skeleton vs infill trigger disagreement; "TC" is the retired name for CI.
+- **Open items:** none beyond skeleton.
+
+### .designs/systems/factions/reference/ci_political_v30.md
+- **What it is:** CI (Church Influence) political legitimacy redesign, stat economy and card system, v1.0 (2026-04-14); skeleton, companion infill named `tc_political_redesign_v30_infill.md`.
+- **Status:** "CANONICAL — approved 2026-04-17 (editorial batch acceptance)"; §2.2 victory clause "SUPERSEDED-BY: GD-1 2026-05-30". Reading: partly live intent (CI mechanics, stat change tables, card cooldowns); several pieces superseded by the d+sigma resolver and strain doc.
+- **Bears on:** FA, SE, WR, SC, DICE.
+- **Content that matters:**
+  - CI runs 0-100, no freeze; milestones 28 start, 40 Assertive (+1D Assert/Seizure), 55 Institutional Reach, 65 Dominant, 80 Ascendant (Seizure Ob -1, PT drift), 100 Theocracy Unification; seasonal cap +/-5, +/-3 from player Domain Actions (:84-113).
+  - Mass Seizure one-shot, Ob = 10 - PT - infrastructure (floor 1), available from CI >= 60, probability per season `P = ((CI-60)/40)^3.3` (1% at 70, 10% at 80, 39% at 90, 100% at 100) (:95, :423). Contradicts conviction_track Ob `2 + Fort + max(0, 3-PT)`.
+  - Spiritual Weight (SW) fixed per territory, total 32 (T9 = 5, T8/T14 = 3, T15 = 0) (:46-65); Piety Yield = sum(PT tier x SW/5) (:69).
+  - CI institutional weight `floor(CI/20)` as +votes in Parliament tally or +margin M in resolver (not dice); opponent vote contribution `max(0, Mandate - floor(CI/30))`, floored at 0 (:129-179) — ED-865/874 consistency.
+  - Stat change paths per stat; Govern/Trade resolve through d+sigma resolver with `M = Stat - difficulty`, `difficulty = max(1, (Ob-1)*2)`, `Ob = floor(Prosperity/2)+1` (:229, :242); degree tables (:230-249).
+  - Strain/Turmoil bands 0-2/3-4/5-6/7-8/9-10 effects on Mandate checks, Accord; Battle -> MS -1; "Battle -> IP +2" struck by ED-743, IP now from Accord-threshold territory counts (:252-265).
+  - Card hands, domain expertise, Card->action mapping, Cooldown Track (Pontifex/Prefect/Colonist 2 seasons, Recess 0) (:271-323); AI posture priority stack EXISTENTIAL/DEFEND/CONSOLIDATE/COUNTER-THREAT/EXPAND/OPPORTUNISTIC (:331-349).
+  - T9 contributes to CI cap like any territory (ED-721 Option A) (:386).
+- **Conflicts / stale:** Starting Accord "capitals = 3" (:429) vs canonical_registry "capitals = 4"; §7.1 and §7.8 still say bonus dice; Church victory sub-requirement CI >= 65 moot after GD-1; Piety Yield formula differs from conviction_track Conviction Yield (both claim CANONICAL) — a two-ladders defect.
+- **Open items:** none flagged here beyond resolved ED-NEW-CI-10/11.
+
+### .designs/systems/factions/reference/ci_political_v30_index.md
+- **What it is:** generated heading/size index (2026-04-20) of the CI political doc (~5.8k tokens); older heading labels.
+- **Status:** none stated. Reading: historical; body is `ci_political_v30.md`.
+- **Bears on:** FA.
+- **Content that matters:**
+  - Pre-ED-865 heading "§3.2 CI Bonus Dice (Church in Political Forums)" (:34) vs body "CI Institutional Weight": shows the rename away from dice.
+  - §7.5 titled "Battle -> RS and IP" (RS = old name of MS) (:54).
+  - Section sizes show §3 (880) and §7 audit-of-changes (1,044) as the heaviest rule sections.
+- **Conflicts / stale:** heading terms (RS, bonus dice) lag the body.
+- **Open items:** none.
+
+### .designs/systems/factions/reference/faction_politics_v30_index.md
+- **What it is:** generated heading/size index (2026-04-20) of `faction_politics_v30.md` "Faction Politics Patch Register (EXPANDED)" PP-660 (~37k tokens; body absent from `.designs/systems/factions`).
+- **Status:** indexed doc "CANONICAL (approved Jordan 2026-04-17, commit PP-660)" (:25). Reading: historical map of a large rank-ladder spec; the body is the largest FA design doc and is not in this lane's files.
+- **Bears on:** FA, CHAR, SE.
+- **Content that matters:**
+  - Standing 0-7 rank ladders for Crown, Hafenmark, Varfell, Church (PART 1, 14.8k tokens), each with specialty branches at Standing 3 and a named inner circle (:32-52).
+  - Sub-office ladders: Löwenritter, Riskbreaker (Shadow Renown 0-10, Deniability Debt 0-7 cap 7), Inquisitor, Templar, Guild (Hafenmark-integrated + independent), Niflhel per arm, Warden of the Thread (:53-70).
+  - Caste integration (Standing advancement gating, Renown, Initiation Duty, inner-circle Disposition floor, Conviction Scar risk) (:71-77).
+  - Part 4 naming reconciliation: a "Solmund naming violation — IMMEDIATE FIX" (:79), CV/PT/SW dissolution, T15 Southernmost vs Askeheim, Varfell vs peninsula naming.
+  - Parts 5-9: TC x rank, Baralta Crown Claim x ladder (Outcomes A/B/C, Recognition Ceremony ED-647), Ministry expansion (Crown ministries, Hafenmark committees, Church dicasteries, Varfell councils), Generational Shift fix with Torben Readiness track, cross-faction parity table (:88-111).
+- **Conflicts / stale:** this index uses TC terminology; "Skyrim integration" progression pattern is a design referent. The ladder body is cited by the governance_consolidation doc (§1.0b-d).
+- **Open items:** ED-634..ED-658 editorial items; the body must be read in `designs/provincial/faction_politics_v30.md` [UNVERIFIED present].
+
+### .designs/systems/factions/reference/faction_succession_split_v30.md
+- **What it is:** generalized faction succession contest and split mechanics (PP-666, 2026-04-19; FSS-1 2026-05-30 amendment), plus RM settlement emergence.
+- **Status:** "## Status: CANONICAL" and "PROVISIONAL — approved mechanical design 2026-04-19 (PP-666)" in one file (:11-13, ED-712 smoke-test pending). Reading: live design intent for FA; contradictory status line; resolution rewritten for the d+sigma resolver.
+- **Bears on:** FA, SE, WR, CHAR.
+- **Content that matters:**
+  - Trigger matrix: leader eliminated (killed, captured without ransom in 2 seasons, deposed, incapacitated) opens a contest unless a sole heir has Disposition >= +3 AND Standing >= 4; multiple comparable claimants always contest (:32-42).
+  - Claim bases: Inner Circle rank (Standing >= 3), blood claim, institutional claim, external backing (costs Diplomatic Token); contender strength deterministic per type (Blood: Mandate + Influence; Institutional: Influence + faction stat Crown=Mandate, Hafenmark/Church=Influence, Varfell=Intelligence; External: backer Influence + own Standing) (:46-58).
+  - Two-stage resolution: Stage 1 who leads via resolver `M = strength(top1) - strength(top2)`; Stage 2 whether it splits via deterministic gap G: G>=3 unified, G=2 unified fractious (runner-up Disposition >=0 accepts else splits), G<=1 split; dice tails flip only Failure/Overwhelming (:60-85). Rationale: fragmentation tracks power balance (Carolingian divisio, Diadochi) not dice variance (:67).
+  - Split asset division: Mandate/Influence 60/40, Wealth 70/30, units by Loyalty check `Commander Disposition + unit Discipline`, winner Stability -1, splinter Stability 2 (:91-101).
+  - RM Settlement Emergence: Order = 0 (hard threshold) AND PT <=1 AND local Disposition toward Yrsa Vossen >= +3; at most once per province per 4 seasons (:160-162).
+  - Worked example: Varfell after Vaynard (:119-146) still shows pre-FSS d10 rolls then restates under FSS-1.
+- **Conflicts / stale:** "Intelligence" stat (struck per canonical_registry) used as Varfell's rank stat (:57); example's d10 rolls (:131-134) contradict FSS-1; Order=0 thresholds duplicated in session_a_spec_patches Patch 4. Subsumes `baralta_crown_claim` (:179).
+- **Open items:** player-led contender mechanics deferred; simultaneous succession order (descending pre-loss Mandate); RM 4-season cooldown balance flagged for smoke-test (:176-178).
+
+### .designs/systems/factions/reference/faction_succession_split_v30_index.md
+- **What it is:** generated heading/size index (2026-04-19) of the succession-split doc (~2.7k tokens).
+- **Status:** none stated. Reading: historical index.
+- **Bears on:** FA.
+- **Content that matters:**
+  - Section map matches the body: §2 contest framework is the heaviest (1,210 tokens), worked example §3 (454), RM emergence §4 (353) (:40-51).
+- **Conflicts / stale:** line numbers predate FSS-1 amendment so section lengths are stale.
+- **Open items:** none.
+

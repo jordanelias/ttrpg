@@ -188,6 +188,108 @@ resolved in §5 (a `capability:` column on the row). The rest follows F-CHAR-11'
 
 Fix: correct each when the file is next opened; no sweep (`CLAUDE.md` §0.1 pt 5).
 
+### F-CORE-20 · degrades narrative, and narrows R-01 and R-04 · a need propagates to the one who could meet it and is not met
+
+(Ranked second of this addendum's findings by consequence; numbered in the order found.)
+
+- **Claim.** In the world built to show demand and delivery (`harness/scarce.py`: a town that runs dry, a
+  steward who holds it and stands in a full granary), the shipped loop delivers nothing to the town in
+  four seasons. The shortfall is recorded, deposited to the steward and raises a question; he does not
+  answer it. With the harness naming his question for him (the instrument's one intervention) he sends
+  8 salt once and never the 15 grain.
+- **Evidence / falsifier runs.** `python -m engine.season.harness.scarce` (seed 0, four seasons,
+  `scarce.txt`): unassisted, deliveries at the hungry town after the first season are 0 grain and 0 salt
+  every season while the granary goes from 100 to 216 grain; the steward's six transfers are 1 grain
+  from the granary to the granary, each refused. Cause located at `queries/world_q.py::attention_key`:
+  the held town and his own granary are both tier 1, *"magnitudes inside tier 1 are not ranked
+  (LIMIT)"*, and the tiebreak is the question id. Two in-process experiments, each against its
+  same-seed control: answering the first *unanswered* question changes nothing (hash equal; a null,
+  because a new claim heads the list every round); ordering a shortfall claim first inside tier 1 moves
+  the hash at seeds 0, 1 and 2 and produces relief at seed 2 only (15 grain, claim-sourced), because at
+  seeds 0 and 1 the steward attends and then does not choose `transfer`.
+- **Touches.** R-01 (the edge exists; the consequence that matters does not follow), R-04 (a seat's
+  management response), R-06.
+- **Narrative consequence.** Famine is never relieved by the person whose office it is; a realm's
+  stewards hoard beside starving towns for a reason no character holds. The story the settlement arcs
+  need (want, appeal, relief or refusal, blame) has its first two beats and not its third.
+- **Minimal fix at the owner.** Inside tier 1, order by recorded unmet need (one term, tier 2's
+  precedent). Necessary and, measured, not sufficient: the second link is the ranking (the CHAR audit's
+  F-CHAR-01). Proposal `01_CORE_unmet_need_is_attended_first.md`.
+
+### F-CORE-21 · blocks an honest reading of loop bounds (H-25, CR-98) · the loop check passes on six cycles of 39,482, and cannot see the loops that run away
+
+- **Claim.** `harness/loops.py` derives the cycle set from what is written against every *typed* reader
+  and compares amplifiers with the register's LOOP rows. A verb's write carries no polarity (`?`), so
+  every cycle through a verb is unsigned.
+- **Evidence / falsifier run.** `python -m engine.season.harness.loops` (`loops.txt`): 73 processes,
+  39,482 cycles: 4 amplifying, 2 damping, **39,476 unsigned**; verdict *"AMPLIFIERS … derived ==
+  declared"*, exit 0. The six signed cycles are produced by the four `STEP_READS` processes and compared
+  with `DECLARED_CYCLES`; both are literals in `loops.py` (`:154-181`), so the equality compares one
+  file's two constants. The instrument lists its own blind spots and they are the character's interior:
+  the nine predicate verbs, and *"DELIBERATE (all but its question sources)"*. Not on the graph at all:
+  `Person.scar` (the CHAR audit measures it at a median maximum of 41 against a ladder of 3,
+  F-CHAR-04), `Person.capability` raised by success (`_grown`, `practice`: `data/fixtures.py:469-473`
+  calls practice *"a capped positive loop (success -> dice -> success)"*), `Person.stance` moved by a
+  lost field and read by the next choice. The falsifier was an unsigned count small enough to read; it
+  is 99.98 % of the set.
+- **Touches.** R-02, R-09; the termination question the archived propagation spec leaves open across
+  seasons (§7.1).
+- **Minimal fix at the owner (input to CR-98, which is scheduled).** Declare the chooser as a reader
+  (`Person.pursuits`, `stance`, `scar`, `capability` → `Act[].returned`, each signed where the score's
+  term is monotone) and the fold's three interior writers as processes with their signs; add LOOP rows
+  for the scar (amplifying; its bound is the CHAR proposal's season cap) and practice (amplifying; bound
+  `practice_cap`). Until a verb's write has a polarity the verdict line should print the signed share
+  beside "equal". Edits in `harness/loops.py` and the register; no new file (§8 row 24).
+
+### F-CORE-22 · hygiene with a measurement risk · the one controlled-comparison instrument cannot tell a null from a fake control
+
+`harness/arms.py` is the tree's n-seed two-arm instrument (`CLAUDE.md` §7 names it). Its shipped pair is
+`field_casualty_model` `total` against `scaled_by_degree`, which differ only on a *lost, fought* field.
+Its own docstring: one seed, two seasons, *"9 DECLARED marches and 0 resolved ones"*, and *"the tool
+prints … how many resolved field battles it saw"*. `main` prints total acts and the tally by act subject
+(`arms.py:288-310`); it prints no count of fought fields. With none fought the two arms are identical by
+construction, and the printed line reads *"no category shifted significantly … This is a CONTROL, not
+proof of no effect"*. The first audit found `march` among the never-attempted verbs of the corpus.
+`[Not run here: the default invocation is twenty realm builds of two seasons each.]` Fix: `run_arm`
+returns the count of field Events at a fought band (`FIELD_BANDS`), `main` prints it and prints
+`NOT-COMPUTABLE` in place of a z when it is zero in both arms. The mapping form of an arm
+(`{'fixtures': …, 'build': …}`) is general and has no command line (`:192-193`); giving it one makes
+`arms` the control every proposal's gate in this suite can cite. `_pool_arm` and `_ARMS_POOL`
+(`:255-272`), kept *"as historical records"*, are dead code; the record is the commit.
+
+### F-CORE-23 · bears on the arcs charge · the provided corpus is loaded through a repair routine, and one case is gone
+
+`harness/run_cases.py::_tolerant_yaml` exists because *"six of [the chain's] seven case files do not
+load with `yaml.safe_load`"*. Re-run (`load_cases`, §10): eight defects recorded; `ARC1`, `ARC2`,
+`ARC3`, `NPC1`, `NPC2`, `NPC3` are each *"committed inside a markdown fence with transcript preamble"*;
+`ARC3.yaml` is *"TRUNCATED AT HEAD — 37 lines of a record above the first `- id:`"* and the recovery
+*"recovered 0 row(s)"*, so one emergent case's needs are in no instrument's corpus although the
+function's docstring says its rows *"are NOT DROPPED"*. 46 NPC and 97 ARC cases load. The files are the
+specification the arcs charge adjudicates against, and code reads them (`CLAUDE.md` §0.05: a fact code
+reads lives where code reads it, in a form a loader validates). Resolution (§8 row 26): normalise the
+six files to plain YAML in one commit (the fence and preamble carry no case content; git keeps the
+evidence), state the lost head in `ARC3.yaml` as one comment, and delete the repair path so the loader
+is `load_yaml`. The lost case is closed as unrecoverable.
+
+Also in this file's neighbour: `harness/report.py::emit` reads `TRACE` (`:171`), which is imported only
+under `if __name__ == "__main__"` (`:301`), so `emit` works only when the file is run as a script
+`[by reading; not executed, since it writes tracked files under engine/season/runs]`; its step-sequence
+text lists six steps and omits ENCOUNTER (`:76-81`); its header counts *"46 unique NPCs"* by hand.
+
+### Corroboration from the instruments read (no new finding)
+
+- `harness/interactions.py` is the reason trail built outside the engine, at Jordan's request
+  (`ED-IN-0335`: *"log character interactions so that we can audit then diagnose why"*). It wraps the
+  chooser, re-reads each deliberation through the chooser's own functions, and keys its rows on Python
+  object identity (`by_act[id(a)]`, with a `held` list *"so `id()` stays unique"*, `:250-251`). Its own
+  list of what it cannot show includes *"why the fold refused … (a `REQUIRES_PREDICATES` verb reads
+  through a hand-written predicate that records nothing)"*. That is F-CORE-12 and F-CORE-14 stated by
+  the instrument that had to work around them.
+- `harness/run_cases.py::grade` resolves each declared token to a verb, a hole id, a probe or an Event
+  kind and reports `PLAYABLE` when every token names something present. It executes no case. The first
+  audit's F-CORE-02 covers the executing instrument; this is the grading one, and its word for "every
+  declared thing exists" is the standing requirement's word for something else.
+
 <!-- APPEND-FINDINGS -->
 
 ## 3. Corrections to the first audit

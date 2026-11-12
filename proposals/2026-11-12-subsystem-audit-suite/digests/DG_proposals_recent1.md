@@ -222,3 +222,112 @@ Reading-depth note: the assigned set is about 3.3 MB. Entries marked `[READ IN F
 - **Conflicts / stale:** Plan `workplans/valoria_master_workplan_v8.md` cited as the one plan (:11); likely replaced since (see `workplans/2026-09-28-...`). Figures are scratch and uncommitted. Calamity baseline sign flagged [UNVERIFIED that code and trajectory document reconcile].
 - **Open items:** Jordan items 2 (ageing in J-6 scope), 4 (foreign cast content incl. T16), 6 (ending vocabulary GD-1/H-176); the M2 instrument has none (STORY-BAR proposed).
 
+### proposals/2026-10-07-grid-mode-suspension.md
+- **What it is:** IN/PC design of where the season driver suspends for a PLAYABLE fight (A-25), what it holds, the typed pair exchanged, and the equal-replay falsifier; plus a 2026-10-12 "Re-read at B-L" against the moved `combat` module. [READ IN FULL]
+- **Status:** "RATIFIED by Jordan (2026-11-05, in PR #559, ED-IN-0349) · design-only, builds nothing (its build landed as REM-31, `96136014`) ... re-read at B-L (HOLDS WITH CORRECTIONS)" (:3); the B-L section itself says "Status stays PROPOSED" (superseded by the later ratification). Reading: live; position IN-46 (= SM-6).
+- **Bears on:** PC, CORE, GO, MB.
+- **Content that matters:**
+  - Suspension is at ENCOUNTER, inside the one `_contest` provider call, replacing only `modules/combat/fight.py:52` (`wrapper.fight(A,B,rng=rng)`); a call-out, not a return - no token minted twice, no draw consumed, nothing serialised (:15-60).
+  - Precondition: every fight must be deferred to ENCOUNTER in both modes - `the body` prize needs `step: "ENCOUNTER"` / `declares: "Declared"` (`rosters.yaml:1116-1126`), with `Declared` cells on `fight` and `accept` in `verb_table.yaml`; this moves `content_hash` of any seeded season that reaches a fight and the build must re-record goldens (:34-48).
+  - Mode chosen by a party test at the seam (does a claimant belong to a person the host plays); the host is one optional argument threaded `season` -> `encounter` -> `contest` -> provider -> entry; absent = AUTOMATED = today (:92-103).
+  - Decider contract: reads turn index and a read-only view; returns one of a closed set `{engage, withdraw}` [ASSUMPTION]; draws nothing from `rng` (:86-93). Six equal-replay conditions a-f (:107-120).
+  - Falsifier (IN-46): three arms on one seed; hash(AUTOMATED) == hash(PLAYABLE with default decider) != hash(PLAYABLE withdrawing after turn 1); assert suspension entered and a fight ran >= 2 turns (:122-139).
+  - B-L re-read: the decider parameter lands in both `modules/combat/wrapper.py::fight` and `fight.py::fight`; the engine now has a second early exit (the PC-01 yield, `yield_decl`, `wrapper.py:487-513`) so whether the decider set gains `yield` is open; results dict now carries `surrender` (:160-215).
+- **Conflicts / stale:** Cites `workplans/valoria_master_workplan_v9_part4.md`/`_part5.md` (A-25) - check they still exist. Note 05's "grid mode" is thereby deferred to scene; no grid map exists (`requirements.yaml:146-153`).
+- **Open items:** J-15 (05 s4.1/4.2); the grid map; M-1 trace return; port parity of `random.Random` stream (ED-IN-0017 F5).
+
+### proposals/2026-10-07-p25-scale-cost.md
+- **What it is:** WR record of the P-25 scale-based Mending Stability cost, derived by running `systems/threadwork/sim/operations.py::_resolve_operation`. [READ IN FULL]
+- **Status:** "RATIFIED on merge (ED-1094) — a record of what the code returns" (:3). Reading: live reference.
+- **Bears on:** WR, DICE.
+- **Content that matters:**
+  - `mending_stability_delta` = `COHERENCE_COST_BY_SCALE.get(scale,0)` at Partial and `base - 1` at Failure; 0 at Success/Overwhelming; only Weaving and Pulling read it (:21-26).
+  - Table: Object/Personal 0 (Failure -1); Relational/Field/Territorial -1 (Failure -2); Structural/Foundational -2 (Failure -3); Ob by scale 1,2,3,5,1,8,13 (`Territorial` has no `DEPTH_OB`, resolves at Ob 1) (:34-42).
+  - `Past-Oriented Pulling` gets no scale term (delta 0 at all degrees); `Locking`/`Dissolution` flat -1; `Mending`/`Leap` 0 (:48-56).
+  - The delta is reported on `OperationResult` and "written nowhere; no world Mending Stability clock consumes it" (:57-58).
+  - The quarantined threadwork reference holds a steeper five-band ladder (MS -1..-5) the code does not use (:62-67).
+- **Conflicts / stale:** Reference `ED-WR-0010` consequence 3. The "written nowhere" claim should be checked against the season-loop threadwork re-plug (A-24/plan `33`). [UNVERIFIED]
+- **Open items:** whether Past-Oriented Pulling should be priced like Pulling (WR lane).
+
+### proposals/2026-10-07-settlements-computation-modules.md
+- **What it is:** SE/IN-07 design of six loop-resident settlements computations extracted into `modules/settlements/` plus a levy-to-field provisioning feed. [READ IN FULL]
+- **Status:** "RATIFIED by Jordan (2026-11-05, PR #559, ED-IN-0349) ... BUILT as of 2026-10-26: `modules/settlements/` landed in `b7a1e1b2` (B-T, #503); the levy feed (section 5, IN-52) is built and ships OFF, its flip ON is not built" (:3). Reading: live; built (module) with feed shipped OFF.
+- **Bears on:** SE (primary), CORE, MB, FA.
+- **Content that matters:**
+  - Extractions E1 `larder_draw`/`drawn_under` (query), E2 `subsist` (MATTER step_call: draw, dearth, debit), E3 `produce` (yield/credit), E4 `housing` (population, capacity), E5 `fabric` (works ceiling, commons share), E6 `fortification`; all pure functions of typed records, writes stay host (:106-318).
+  - Rule: `state/gate.py` gets zero extractions (all F3 write authority); polity queries, site wear, record stages, claim decay stay host (:329-359).
+  - `MODULE_ENTRIES` is filled only at driver construction, so driverless callers (`harness/populated.py:425`, `scarce.py:158`) resolve by `composition.require`; new `require_entries(needs)` makes a deleted row refuse (:61-87).
+  - Hash hazard: `Rung.stores` dict insertion order reaches `content_hash`, so outputs are ordered tuples and float expressions copied operand for operand (:98-102). `inspect.getsource(SeasonDriver.matter)` is read by eight tests (:216).
+  - Levy feed: nothing a levy does reaches a field today (side troops = sum of `Person.weight`, `massbattle.py:326-329`); LF-1 provisions (bounds) troops by treasury via the larder ration behind off-by-default fixture `field_provisioning`; LF-2 defender eats from the nearest held rung; LF-3 `_eff_march` debits consumption (:363-431). Measurement of the `on` arm waits for MB-07/J-18 (:411-419).
+  - Jordan should weigh LF-1+LF-3 (do levied stores bound and feed a field) and LF-2 first (:490-492).
+- **Conflicts / stale:** Written when `modules/` "does not exist yet" (:32) - since built. `_part3/_part4/_part5` workplan citations may be retired. "Four test files read `subsistence_draw`" etc. need re-checking after the move. [UNVERIFIED]
+- **Open items:** `field_provisioning` flip ON; march refusing when treasury empty (A16); H-170/H-171 (SE-04) arms.
+
+### proposals/2026-10-07-character-sheet-spaces.md
+- **What it is:** IN-47 design: the character sheet as three spaces (creation, development, chronicling) - what each reads, emits and which carrier each act reaches; plus a B-H review (2026-10-08). [READ IN FULL]
+- **Status:** "RATIFIED by Jordan (2026-11-05, PR #559, ED-IN-0349) · design-only (its build landed as REM-30, `fca48e4f`) · the hold until its review against IN-08's carriers is released" (:3). Reading: live; the in-file Review says "Status stays PROPOSED and HELD BACK" (superseded by the ratification).
+- **Bears on:** CHAR (primary), CORE, WR, PC.
+- **Content that matters:**
+  - A-25 contract: a space is a `choose` callable that reads the player's own View/Question/Candidate and emits Acts, owning no state; "A module with no token cannot write" (Layer 1 `04_CODE_ARCHITECTURE.md:158`). Rule 1: a space ranks and selects, never forms candidates (no second option generator); rule 2: a space owns no writer (:23-58).
+  - Person-field table with live writers: `capability` retired (no season write, world-gen only); `stance` only `march`; `pursuits` unproduced (H-62), world-gen only; `scar` written by fold's `_scar_witnesses` (one count per observer per violated pursuit or held affiliation, `scar_excludes_actor=False`); `conviction` via `_conviction_crisis` at scar 3, inert on shipped data (every person holds `{}`); `exists` by CENSUS which writes nothing (:60-76).
+  - Creation: nothing in the season loop constructs a `Person` (all in `harness/`); C1 = player picks an already-seated person (a cast-entry arm had no shape: `CAST_KEYS` has no `pursuits`); C2 = CENSUS individuation, hole H-51 absent/unowned (:78-116).
+  - Development: `train` (capability) and `argue` (pursuits) do not exist in `verb_table.yaml`; until B-Q a player cannot author a difference (:118-160).
+  - Chronicling is a reader: in-sim ledger by recency then confidence (salience excluded by signature); out-of-sim render over `causes[]`; scar and conviction-crisis writers emit nothing so neither is recorded in ledger or cause graph (:172-215).
+  - Review falsifier: a space that writes a Person field outside an act's fold fails; build check: creation arm off reproduces pre-build hash (:233-247).
+- **Conflicts / stale:** `train`/`argue` rows may exist now (verb-coverage step 9 / README says K-4 superseded by `train`). `write_matrix.yaml` line numbers drifted. 429 of 430 persons have empty `capability` (`requirements.yaml:78-80`).
+- **Open items:** writer for H-51; authored `affiliations:` on any cast row; the `scar.taken`/`conviction.moved` events are declared on rows but no code emits them.
+
+### proposals/2026-10-07-unplugged-systems-replug.md
+- **What it is:** IN-06 (`33`) design of what knots, conviction, threadwork, ms_track and the rendering stubs need before a composition row can reach them; re-reviewed at the B-S opener 2026-10-23. [READ PARTLY: lines 1-200 and section 6 head; 3.3-3.5, 4, 5 and rest of 6 not read in full]
+- **Status:** "PROPOSED — the design half of IN-06 ... every section 6 item is resolved on the CLAUDE.md section 0 ladder, so this is ratified on merge (ED-1094); nothing is held back" (:3). Reading: live reference, but note the in-file admission that IN-32 was built and FALSIFIED (:139).
+- **Bears on:** WR, FI, CHAR, CORE.
+- **Content that matters:**
+  - Finding: no module plugs at B-S; IN-06's build adds no composition row, sheds no store, moves no closure; four composition rows exist: `combat.fight`, `fieldwork.find`, `mass_battle.resolve_field`, `social_contest.roll`; `modules/` holds exactly those four (:20-25, :55-62).
+  - Plugged-module rules (A-25): no state between calls, no `World`, rng a parameter, a row lands with its caller (ID-13), plugged code moves to `modules/` per SM-7 (`test_modules_reachable_closure.py`) (:64-87).
+  - `knots.py` has module-level stores, unseeded rng, late imports, a symmetric `Knot` record that Layer 1 overrides as two directed edges with strain a Query; formation pool omits ED-FI-0005's "+3"; no verb moves strain (:111-137).
+  - IN-32 (`tie/knot` host-side `_eff_tie`) was attempted (`53ed995d`), reverted (`7c6df560`) by its own stopping rule (like IN-33 on H-58); `tie`/`knot` is celled so executed ties scar observers (:139-163).
+  - `conviction.py`'s CONVICTIONS **is** `descriptors.PURSUITS`; scar/conviction have season owners (`_scar_witnesses`, `crisis_weights` threshold 2, `conviction_after_crisis` threshold 3) (:168-195). `Person.pursuits` is produced now (`determine` at SC-02 22b, `argue` at IN-12 step 9) (:187).
+  - Section 6 resolutions: knot gauge = a Query over strain events (not stored `Tenure.degree`); `tie/knot` partner operand = the act's `subject`; no thread-operation verb row at B-S, Mending is `restore`'s arm; `coherence` lands as one structured field (resting_point + elastic_displacement) when a reader exists (:334-364).
+- **Conflicts / stale:** Contradicts 09_character_sheet / forcing doc statement that `argue`/`train` do not exist, only if IN-12 step 9 has since landed (this doc says `argue` produces pursuits). [UNVERIFIED] The B-S entry gate lists PR/commit hashes (#496, #498 ...) not re-checked.
+- **Open items:** `piety_track` name-collision `[OPEN — Jordan]`; IN-32 reverted but H-182 open; WR-01 gain/slot (J-9/K-2 held).
+
+### proposals/2026-10-13-narration-mechanisms.md
+- **What it is:** IN/WR proposal v2 (2026-10-13) for telling `engine/season/` as prose: instrument chronicle + person-bounded journal, with measured evidence (seed 0, two seasons, tree `e6b706d`). [READ PARTLY: header, summary, section 1.1 evidence table, 2.1, section 7, heading map; sections 3-6, 8-10 not read in full (about 70% of the file)]
+- **Status:** "PROPOSED — reference under CLAUDE.md 0.05; ... supersedes an earlier draft (v1) never committed" (:3); merging does NOT ratify; four decisions held for Jordan; grade: paper.
+- **Bears on:** WR, CORE, CHAR, GO.
+- **Content that matters:**
+  - Measured: 1,318 acts in two seasons, 389 executed, 929 refused/blocked/null (70.5%); 460 of 929 refusals carry `exists:<T> = 0` and 439 (33.3% of all acts) chose a subject that exists as another kind - "candidate formation, not record content, is the first obstacle" (:33-45, :27).
+  - Verbs whose every attempt was refused: `migrate` 79, `commit` 74, `work` 67, `build` 33, `found` 29, `give` 24; only ~48 acts have an effect beyond an existence flag; 52 of 52 act-minted Propositions have predicate `''`/value None; 112 of 120 Records are `text` with `subject_matter` None (:46-56).
+  - Cross-person causation: shipped storybar 9.5% vs occasion-restored reading 23.8% (depth up to 7); 11,929 claims but only 4 arrived by a telling (:41-42, :57).
+  - Two products that must not merge: omniscient instrument chronicle (`harness/chronicle.py`, IN-37) vs focalized journal (no `World` parameter, `who`/`why` from `rosters.yaml:948-963` `supplied_by` at runtime) (:84-120).
+  - Work packages W0-W9 (instruments, render v0, candidate-typing disposition, IN-50, content-bearing record kind, journal, fragment bake, scale lines, occasion ladder, `Receipt.before/after`); refused: need-triggered injection, scripted beats, per-season authored-occasion emitter (:23-31).
+  - Jordan decisions: (1) candidate-typing (learning vs scene tax), (2) authored occasions, (3) journal as a new 04 section A.2 row, (4) narrowing ED-IN-0225's wording (:402-426).
+- **Conflicts / stale:** Scratchpad artifacts cited as evidence ("S") are not in the repo - all [MEASURED] figures are unreproducible from the tree alone (:15). 04 section C.11 reading of "journal takes no World". `prose-writer` skill line 158 would need narrowing.
+- **Open items:** the four Jordan items; W0(d) repeat on a second seed; `REFUSAL_KINDS`-based refusal count not measured.
+
+### proposals/2026-10-14-in31-revocation-cost-provenance.md
+- **What it is:** IN/SE design (IN-31, H-100) of what a `revoke` costs by the seat's conferral provenance; revised after an independent critic's twelve findings. [READ PARTLY: header, section 0 verdict, heading map; sections 1-8 body not read in full]
+- **Status:** "PROPOSED (2026-10-14) · design only ... BUILT as of 2026-10-26: IN-31's revocation cost by the seat's provenance landed in `d16bd895` (B-Q)"; IN-48 `delegate` passages CONDITIONAL because that build was reverted (:3-5). Reading: live for the provenance reading; delegate passages stale.
+- **Bears on:** FA, SE, CORE.
+- **Content that matters:**
+  - Provenance carrier already exists: `Office.conferral` for a `hold` (appointed / elected / annex / None, Jordan's ED-IN-0256 ruling (2), `rosters.yaml:1845-1863`), `Tenure.kind` for a delegate edge; no field added (:15-21).
+  - `revoke` of an `appointed` seat's holder closes the hold and writes a PERMANENT `ban : him -> Act.via`; elected/annex/None revoke writes nothing; the ban uses SC-03a's existing `ban` readers (`confer` declines a banned conferee, `oblige` refuses him) (:26-42).
+  - Mapping owner: `REVOCATION_DISPOSAL` in `state/gate.py` beside `REVOCATION_RULES`, total over `CONFERRAL_BASES + {None}`; an unmapped basis REFUSES, never defaults; ban admitted under `T-o` by a same-write licence (:44-55).
+  - Limit: provenance is the SEAT's basis, not how this man came to sit (R3); a computed `revoke` executes 0 times (H-207 ruling (A)), so EXIT is a seeded test with hand-built `revoke` per provenance (:23-25, :56-62).
+  - Open: A1 "what only Jordan can answer" (§0, :63) - not read.
+- **Conflicts / stale:** Line cites taken from a reverted tree; helpers from deleted `test_in48_delegation.py` must be rewritten (:5). Verdict section says IN-48 delegate is conditional.
+- **Open items:** A1; whether a delegation carrier survives (see IN-48 below).
+
+### proposals/2026-10-14-in48-delegation-carrier.md
+- **What it is:** IN/FA/SE design (IN-48, H-108) of a `delegate` Tenure kind for a seat exercised by someone who does not hold it; built at `40926a95` and reverted. [READ PARTLY: header, section 0 banner, heading map, section 9 in full; sections 1-8 not read in full]
+- **Status:** "PROPOSED (2026-10-14) · HELD: built at `40926a95` and REVERTED because it contradicts ratified Layer 1 (section 9)" (:3). Reading: historical/held - sections 0-8 describe a reverted build.
+- **Bears on:** FA, SE, CORE.
+- **Content that matters:**
+  - Reverted because it contradicts `architecture/meta/01_AXIOMS.md:1465-1467,:1528-1530,:1569` ("Delegation does not need a delegation mechanism") and `04_CODE_ARCHITECTURE.md:351` ("delegation = `establish` -> `confer` -> `revoke`"); only Jordan can amend Layer 1 (:490-496).
+  - Position returns to design on Layer 1's own route: `establish` a second seat over the domain, `confer` it, IN-10 `Tenure.term` for "revoke at majority"; open measured question: no rung-above revocation basis lets a principal revoke a same-rung seat early (:498-503).
+  - Phase 1 findings if resumed: `rung_above_in_holdings` judged on the delegate's holdings not the principal's; a displacing `confer` leaves third-party delegates live; a seat granting `confer` but not `revoke` can open and not dismiss; `reach`/`governors_of` read others' tenures through dormancy (:505-521).
+  - Measured: `build_realm(0)` four seasons 1162 s; `_req_confer` entered 0,0,0,5 times with 0 own-seat; hashes unchanged (:525-531).
+  - H-108 would have been graded `assumption` not `measured`; the "puppet rulers" unblock was not met (:533-534).
+- **Conflicts / stale:** Contradicts the IN-31 design's `delegate` branch (conditional there). Whole body superseded by section 9.
+- **Open items:** whether the `establish`/`confer` route fails on a named measurement; then one `needs_jordan` row with both options.
+
