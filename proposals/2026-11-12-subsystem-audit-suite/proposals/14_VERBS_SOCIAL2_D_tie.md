@@ -1,5 +1,7 @@
 # 14 · VERBS · SOCIAL2 · D — `tie`: a chosen bond, drawn for, read by the telling; `knot` handed to the Thread lane
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-21) — `tie_obstacle` is folded into the one roster (`U5c_SC_one_obstacle_form.md` §2). The split of `tie` and `knot` (edit 6) is Jordan's A-28.
+
 ## Status: PROPOSED
 
 Carries `audits/14_VERBS_SOCIAL2.md` §10. Batch S2-D. Follows `08_FI_08_knots-season-form.md` §3 (the

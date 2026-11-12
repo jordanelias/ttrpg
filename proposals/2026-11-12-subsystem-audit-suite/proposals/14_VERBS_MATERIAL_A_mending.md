@@ -1,5 +1,7 @@
 # 14 · VERBS · MATERIAL · A — the family's draw; `restore`, `work`, `sabotage`, `tend`
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-22, C-23, C-32) — §2: the family's draw takes one of two loadable shapes (`U5c_VERBS_residue_and_governance_owner.md` §1); `graded_acts` is not added beside the route roster `graded_tasks` of `18_DETERMINISM_task_draw_for_uncontested_verbs.md`, and a band-keyed `writes:` on a route row does not load (`04` §B.13 invariant 12). The share table is `task_fraction`, first values 1 / 1 / 0.5 / 0; `effect_share` 1000 / 700 / 350 / 0 is a sweep arm of it. §6 owns the `tend` row.
+
 ## Status: PROPOSED
 
 Batch M-A of `audits/14_VERBS_MATERIAL.md` §18 (sections §8, §16, §9, §12 and decisions D-1 to D-7 of its

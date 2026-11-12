@@ -1,5 +1,7 @@
 # 08 · FI · 03 — A playable inquiry: a scenario, products for the empty inquiries, a conclusion, a check, an end
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-22, C-24) — §2's band gate and §3's graded `reconstruct` that mints a Proposition are read with `U5c_FI_residue.md` §7 and §8. `observes:` is a flat list and `finding_terms` owns which reads a band deposits. `reconstruct` is a graded inquiry that writes nothing and deposits its conclusion to its maker; the committed assertion is his `utter` (the loader refuses a band-keyed `writes:` on a route row, `04` §B.13 invariant 12).
+
 ## Status: PROPOSED (design-first: §3 and §4 need a design pass before code; §1, §2 and §6 are edits)
 
 Carries audit `audits/08_FI_audit.md` F-FI-03, F-FI-04 and resolutions R-07, R-08, R-27. Sits on top of

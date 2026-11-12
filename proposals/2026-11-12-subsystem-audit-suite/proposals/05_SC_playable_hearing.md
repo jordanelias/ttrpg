@@ -1,5 +1,7 @@
 # SC-P3 — the hearing as a played scene: one fixture, one callback, the season's own code path
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-13) — superseded by `05_SC_playable_hearing_B.md` (`ED-IN-0285` (13): a hearing is the module's own scene, not the season loop on a fixture). Kept for its evidence; no edit of it is to be landed.
+
 ## Status: PROPOSED
 
 Source: `audits/05_SC_audit.md` F-SC-01, F-SC-05, F-SC-07 and §9; the standing requirement (each

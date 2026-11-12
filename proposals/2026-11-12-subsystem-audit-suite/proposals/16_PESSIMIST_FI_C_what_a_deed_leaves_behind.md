@@ -1,5 +1,7 @@
 # 16 · PESSIMIST · FI · C — What a deed leaves behind: a trail at the place, the ending in the requirement's own words, and no reading of who is truly where
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-20) — edit 4 lands as one change to `questions_for` with `08_FI_01_claim-sourced-referents.md` edits 2 to 5 (`U5c_FI_residue.md` §1); one function, one commit, one gate.
+
 ## Status: PROPOSED
 
 Carries `audits/16_PESSIMIST_FI.md` F-PES-FI-01 (§2.4) and F-PES-FI-04 (§2.5). Extends two scheduled

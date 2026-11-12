@@ -1,5 +1,7 @@
 # VB-B — the room: one sitting per seat, a judge asked only about the parties before him, mercy only for the restrained and only by a draw
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-11, C-25) — `determine` names the prize `a verdict` (the hearing's entry, with the ballot inside it; Jordan, A-14). Edit 12's audience is the `bench` cell the `a matter` row already carries. `pardon` stays on `a matter`, and it is the only way but the term that an imposed edge ends (A-37).
+
 ## Status: PROPOSED
 
 Source: `audits/14_VERBS_BINDING.md` §0.1, §0.2, §2 (`convene`), §3 (`determine`), §9 (`pardon`); batch B.

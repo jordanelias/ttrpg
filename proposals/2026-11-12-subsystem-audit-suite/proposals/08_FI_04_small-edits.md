@@ -1,5 +1,7 @@
 # 08 · FI · 04 — Small edits: names, wiring, stale rows, pointers, and one Layer-1 hunk
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-15, C-16) — §1's `argument.held` row and §3's second bullet are withdrawn as duplicates (carried once by `16_PESSIMIST_SC_D_an_argument_moves_someone.md` edit 1 and `16_PESSIMIST_SC_C_a_verdict_names_its_party.md` edit 1). §6 is read as the decision register's D-74, taken B: fix the witness code, not Layer 1. No lane applies a Layer 1 hunk; a read no refactor removes is listed for an amendment text. §4's budget row lands last, with `test_n3` read before and after.
+
 ## Status: PROPOSED
 
 Carries audit `audits/08_FI_audit.md` resolutions R-10 to R-17, R-22 to R-24, R-26. Each row is

@@ -2,6 +2,8 @@
 
 Reconciled: 2026-11-12, U5d closure — folded **A-57 / A-58** at the coordinator's direction (this file is the BINDING lane's; its verdict rows are closed by U5c). A yielded town is the aggressor's win by concession (A-3), so `_eff_surrender`'s cession carries the seats anchored on the place in the same write (`U5d_FA_land_and_seats_pass_on_a_won_march.md` edit 4: `_take_hold(..., seats=…)`); edits 7–8 gain those seat edges in `writes`. At Failure (`surrender.rejected`) the field goes ahead and its end state decides: only an aggressor win passes the land. `Front`'s definition is unchanged.
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-25) — edit 9's audience is the `heard_by: residents` cell on the `a holding` prize row, with `toward: to`, read by the one audience function (`U5c_VERBS_residue_and_governance_owner.md` §2); `contest_input` names no verb.
+
 ## Status: PROPOSED
 
 Source: `audits/14_VERBS_BINDING.md` §0.2, §7 (`marshal`), §8 (`surrender`); batch E, the last. Depends on

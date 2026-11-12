@@ -1,5 +1,7 @@
 # VERBS SOCIAL1 · A — form only what can be done: believed co-location, and `covenant` on a Proposition
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-19) — `believed_with` and the `with_belief_window` fixture are not added: the one reader of believed co-location is `person_q.present_persons` (`08_FI_02_rumour-that-travels.md` edit 5; fixture `telling_hearers`). R-WITH, the reading conjunct by conjunct, stands. A refusal on the `with` conjunct teaches its actor (decision register D-46; `U5c_VERBS_residue_and_governance_owner.md` §3).
+
 ## Status: PROPOSED
 
 Batch S1-A of `audits/14_VERBS_SOCIAL1.md` §14. Written under `VERBS_BRIEF.md` (FAMILY = SOCIAL1).

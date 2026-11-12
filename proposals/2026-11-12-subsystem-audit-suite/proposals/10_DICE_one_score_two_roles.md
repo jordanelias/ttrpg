@@ -2,6 +2,8 @@
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-11, C-U5a-12) — the one-read-two-roles rule stands. Changed by Jordan's answers: `score` is the **trained rank** (`max(untrained score, rank)`), with no attribute folded in (A-7; the `max(int(attr), int(have))` branch of Edit A goes, and the attribute is read separately as talent); what the opponent contributes is his **pool** under the same pool rule times `opposition_rate` (A-6, A-26), not `score / 2`. Edit C's values are U1 §5's: `lie: deception`, `determine: law` (each `none` with a note until SC's definition rows exist), `interrogate: inquiry`, `arrest: arms`, on the verb row's `capability:` column. The gate gains a row at an obstacle below `OB_MIN` (`U5a_DICE_owed_edits.md` §3 row 11). Figures quoted here are whole-dice figures at the old regime.
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-04) — the `opposition_fallback` fixture is not added, and the sentence that a non-person subject is opposed at `obstacle_default` is superseded: opposition is never absent, and where nobody stands opposite the term is `opposed_ob(pool_default)` (`16_PESSIMIST_DICE_task_difficulty_and_throughput.md` (a); `U5c_SC_one_obstacle_form.md` §2). `obstacle_default` is deleted.
+
 ## Status: PROPOSED
 
 Carries findings F-DICE-03 and F-DICE-04 (and bears on F-DICE-01 and F-DICE-02) of `../audits/10_DICE_audit.md`. Lanes that own the edited files:

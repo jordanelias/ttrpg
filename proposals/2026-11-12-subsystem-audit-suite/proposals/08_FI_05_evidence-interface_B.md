@@ -2,6 +2,8 @@
 
 Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-01 — E-6's strike is graded by the answering draw's band, one rule with SC's `_B`; admission left to `19_LACUNA_admission_rides_the_citing_draw.md`.
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-05) — admission is decided: it rides the citing speech's band (`19_LACUNA_admission_rides_the_citing_draw.md`). E-2's stage is written only for an item the band enters, at half weight on a Partial. E-5 item 1's owner of "contradicts" is the pairing step `decision/options.py::_pair`, as `05_SC_evidence_and_rebuttal_B.md` problem 4 found, not `decision.agreement`. E-9 and E-10 are closed in `U5c_FI_residue.md` §4.
+
 ## Status: PROPOSED (an interface statement; the consumer is SC's and design-first there)
 
 Supersedes `08_FI_05_evidence-interface.md` (first FI lane). Carries `audits/08_FI_audit.md` F-FI-09, R-29 and

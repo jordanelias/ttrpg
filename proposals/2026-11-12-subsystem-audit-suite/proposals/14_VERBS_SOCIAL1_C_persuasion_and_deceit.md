@@ -1,5 +1,7 @@
 # VERBS SOCIAL1 · C — persuasion and deceit: `argue`, `lie`, `conceal` drawn with a reason on every band
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-15, C-26) — three changes. (1) `argue`'s Partial write is withdrawn: the band is `argument.held` and nobody moves (`16_PESSIMIST_SC_D_an_argument_moves_someone.md` edit 1). (2) `lie`: the capability is `deception`; the `contradiction` term is dropped, because it opens the hearer's ledger at RESOLVE (`04` §B.2) and a hearer who knows better is already handled at WITNESS (`16_PESSIMIST_SC_E_an_honest_teller_is_not_marked.md` edit 1); `deceit.exposed` at Failure stands. (3) `conceal`'s `notoriety` term is the roster member `watch`, read from presence and not from other people's ledgers; `a cover` is not a prize (`U5c_VERBS_residue_and_governance_owner.md` §1, §2).
+
 ## Status: PROPOSED
 
 Batch S1-C of `audits/14_VERBS_SOCIAL1.md` §14. Authored in part by Fable; completed by Opus after the

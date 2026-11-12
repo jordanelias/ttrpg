@@ -1,5 +1,7 @@
 # 08 · FI · 05 — The evidence interface a contest consumes
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-13) — superseded by `08_FI_05_evidence-interface_B.md`. Kept for its comparison table; no edit of it is to be landed.
+
 ## Status: PROPOSED (an interface statement for the SC lane to cite; design-first on the SC side)
 
 Carries audit `audits/08_FI_audit.md` F-FI-09 and resolution R-29. It states what FI supplies; what a

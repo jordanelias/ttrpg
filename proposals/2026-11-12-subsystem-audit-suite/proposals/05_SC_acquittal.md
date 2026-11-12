@@ -1,5 +1,7 @@
 # SC-P6 — a hearing can be lost by the bench: `determine` at `Failure` dismisses the matter
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-08) — the count of failed askings that dismisses a matter is one arrangement-row key, `ballots`, default 1 (`audits/05_SC_audit_addendum_B.md` G-55; `ED-IN-0288`'s intent: one failed asking dismisses unless the row says more). The addendum's proposed 3 is a value a row may author, not the default. A bench that failed asks again at most once per sitting, and a dismissed matter re-opens only on something new (`U5c_SC_proceedings_residue.md` §4).
+
 ## Status: PROPOSED
 
 Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-25) — edit 4's `[UNVERIFIED]` settled: the `(Record, stages)` matrix row names no verb, so no matrix edit is owed; the verb row's band list is where the pair is declared.

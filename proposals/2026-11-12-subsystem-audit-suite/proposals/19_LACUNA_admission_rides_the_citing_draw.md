@@ -1,5 +1,7 @@
 # 19 · LACUNA · 1 — Admission rides the citing act's draw (the FI/SC conflict on entering evidence, decided)
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-05) — decided as written. Its edits to `05_SC_evidence_and_rebuttal_B.md` are applied there, and `08_FI_05_evidence-interface_B.md` carries the decision at its head.
+
 ## Status: PROPOSED
 
 Carries `audits/19_LACUNA_investigation_to_proceedings.md` §5 and resolution R-19-02. Decides between

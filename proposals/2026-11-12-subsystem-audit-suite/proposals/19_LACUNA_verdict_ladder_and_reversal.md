@@ -2,6 +2,8 @@
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-15) — a telling *from a viewpoint* reads `account` (`11_GO_player_surface_contract_B.md` §4), not `world_q.projection`, which `17_CENSUS_C1A_01_deletion_batches.md` D2 deletes.
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-17) — three changes. (1) The `voided` stage is written by the next `convene` that reads the refused Event, never on the refusal path (a refused act writes nothing). (2) Reversal: the appellate bench writes the `reversed` stage and the finding is told; the disposing seat's bench then closes the edge by its own `pardon`. The gate's `determination` basis closes a disposal only through the seat that is its object, and closing it from above needs a basis `04` §C.2 does not list. (3) "Open for the design pass" is answered: appeal on new grounds only (Jordan, A-39), read by the `fresh` conjunct of `U5c_SC_proceedings_residue.md` §4.
+
 ## Status: PROPOSED (results 1-4 are edits on existing owners; reversal is design-first; the case thread is harness only)
 
 Carries `audits/19_LACUNA_investigation_to_proceedings.md` §3 ("The verdict ladder"), §4.6 and resolutions

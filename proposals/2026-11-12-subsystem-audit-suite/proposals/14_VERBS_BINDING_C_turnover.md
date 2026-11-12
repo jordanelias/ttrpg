@@ -1,5 +1,7 @@
 # VB-C — seats change hands by a draw: an appointment can be resisted, a revocation withstood, a claim contested
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-25, C-31, C-35) — the term `standing` is the roster member `rank_gap` (licensed by Jordan's A-12; the word `standing` already names a prize). Edit 3's audience is `heard_by: seat_body` on the prize row. `revoke` reads `reception` and not `regard`: a row has an audience or a single hearer, never both. §3's Partial for `succeed` opens termed seats under the existing claim basis and lays the title down; the variant that keeps the title needs a gate basis `04` §C.2 does not list and is not built. §2's `revoke` draw carries A-35 (the head strips an officer by a resistible draw).
+
 ## Status: PROPOSED
 
 Source: `audits/14_VERBS_BINDING.md` §0.2, §1 (`confer`), §11 (`revoke`), §12 (`succeed`); batch C.

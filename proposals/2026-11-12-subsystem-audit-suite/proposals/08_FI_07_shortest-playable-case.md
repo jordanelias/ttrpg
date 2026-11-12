@@ -1,5 +1,7 @@
 # 08 · FI · 07 — The shortest playable case: a loop on the season's own code path, and the two edits it needs
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-24) — §2 (b)'s "deposited at every band" is read with `U5c_FI_residue.md` §8: the gating reads teach at every band and on a refusal; the listed non-gating reads are deposited by band through `finding_terms`, and none at Failure.
+
 ## Status: PROPOSED (§1, §3, §4 are harness edits; §2 is two small engine edits; nothing here is design-first)
 
 Carries `audits/08_FI_audit_addendum_B.md` §B3d, F-FI-12 and resolutions R-35, R-37, R-44, R-46. It sits

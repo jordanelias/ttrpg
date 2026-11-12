@@ -1,5 +1,7 @@
 # SC-P4 — arrangement rows that bind: a band-keyed `disposes:`, and unread keys leave with the batch
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-08) — two row keys are added by other files and are read here as members of the same row: `ballots` (the count of failed askings that dismisses, default 1; `05_SC_acquittal.md`) and `disposes_to: petition` (`U5c_SC_proceedings_residue.md` §8; Jordan, A-38: a verdict serves the petitioner or a seat he names).
+
 ## Status: PROPOSED
 
 Source: `audits/05_SC_audit.md` F-SC-06, §13 (ARC-10, ARC-21, ARC-31, EMG-X6); hole rows H-281, H-162.

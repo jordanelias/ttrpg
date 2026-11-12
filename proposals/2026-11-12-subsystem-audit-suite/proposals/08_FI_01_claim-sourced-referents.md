@@ -1,5 +1,7 @@
 # 08 · FI · 01 — Referents about other people's state come from the asker's own ledger
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-20) — edits 2 to 5 land as one change to `questions_for` with `16_PESSIMIST_FI_C_what_a_deed_leaves_behind.md` edit 4 (`U5c_FI_residue.md` §1). `holders_named` and `seed_seat_news` are the one reader and the one build step for seat knowledge across families. Edit 6 ships realm-wide for seat changes with by-presence the test arm (Jordan, A-32); a death is not seeded and travels by presence, trail and telling (A-33).
+
 ## Status: PROPOSED
 
 Carries audit `audits/08_FI_audit.md` F-FI-01 and resolutions R-01, R-02, R-03. Builds a decision already

@@ -1,5 +1,7 @@
 # 19 · LACUNA · 2 — A conclusion is a committed assertion, its support bound, the world answering later
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-22) — the graded `reconstruct` row does not write a Proposition: the loader refuses a band-keyed `writes:` with no `contests:`, and an inquiry takes no prize. It deposits the conclusion to its maker, and the committed assertion is his `utter` carrying `cites`, stored as `Proposition.support` (`U5c_FI_residue.md` §7). Edits 1 and 4 stand; the gates are read with "a Proposition uttered after a winning `reconstruct`". A lost draw states nothing (decision register D-45, taken A).
+
 ## Status: PROPOSED (design-first in its value-space and `record` halves; the carrier edits are small)
 
 Carries `audits/19_LACUNA_investigation_to_proceedings.md` §4.4 and resolutions R-19-03 to R-19-05. Builds

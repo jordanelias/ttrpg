@@ -1,5 +1,7 @@
 # 14 · VERBS · SOCIAL2 · B — a word with content: what is uttered, how a writ is read, to whom a petition goes, which seats a person knows
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-20, C-21, C-30) — §4: `seed_seats_known`, `seat.held` and `seat_holders_known` are not added; the one reader is `person_q.holders_named` and the one build step `seed_seat_news` (`08_FI_01_claim-sourced-referents.md` edits 1 and 6). `construe_obstacle` and `oblige_obstacle` are the roster members `clarity`, `deference` and `establishment` (`U5c_SC_one_obstacle_form.md` §2). `oblige`'s draw against the seat stands (decision register D-31, taken A under Jordan's A-24). §3's petition `to` fans over `holders_named`. §2's construal toward his own interest is Jordan's A-27.
+
 ## Status: PROPOSED
 
 Carries `audits/14_VERBS_SOCIAL2.md` §1 (`utter`), §2 (`petition`), §4 (`construe` effect), §9

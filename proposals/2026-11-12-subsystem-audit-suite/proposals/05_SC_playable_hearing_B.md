@@ -4,6 +4,8 @@ Reconciled: 2026-11-12 by `audits/18_DETERMINISM_SWEEP.md` D-02, D-03 — `answe
 
 Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` C-U5a-04) — edit 4's assumption (*`PlayHost.decide` is called with whichever view the provider builds*) is replaced by the one `PlayHost` shape of `01_CORE_one_scene_contract.md` Edit 1: `deciders` keyed by module role, so the hearing's decider is `deciders["social_contest.hearing"]` and the stated revert (a second field) is not needed.
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-11, C-25) — the ballot has one owner, this file's `HearingOutcome.ballots` at the hearing's close: each seat's ballot is a draw on that voter (Jordan, A-14), his public commits entering as `lean` levels, and the host's `vote` conjunct is deleted (`U5c_SC_proceedings_residue.md` §6; `13_SC_draw_for_unrolled_contests.md` edits 3 and 4 yield). `determine` names the prize `a verdict` (entry `social_contest.hearing`, fought at ENCOUNTER; `U5c_VERBS_residue_and_governance_owner.md` §2).
+
 ## Status: PROPOSED — supersedes `05_SC_playable_hearing.md` (SC-P3). Design-first for edits 6 and 8; the rest are small builds.
 
 Source: `audits/05_SC_audit_addendum_B.md` §B2 (F-SC-15, F-SC-17, F-SC-20), §B3, §B4;

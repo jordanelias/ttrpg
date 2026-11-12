@@ -1,5 +1,7 @@
 # SC — every contest draws: a roll for negotiation, questioning, docketing, the ballot and the appeal
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-07, C-11, C-12) — of the five rolls here, three yield and two stand. Negotiation: acceptance is not the offerer's roll; it is the accepter's own sampled `commit` (`05_SC_negotiation_scene.md`; `14_VERBS_SOCIAL1_B_documents_and_obedience.md` §3), because one person's roll cannot open another's edge (`04` D-10a). Questioning: the `interview` row is `14_VERBS_SOCIAL2_C_case_question_confession.md` §3's. Docketing: `carry`'s draw is `14_VERBS_SOCIAL1_D_grievance_and_settlement.md` §1's, and `open_case` on one's own bench is a remit act and is not drawn. The ballot stands, owned by the hearing's close (edits 3 and 4 yield to `U5c_SC_proceedings_residue.md` §6; Jordan, A-14). The appeal stands as `19_LACUNA_verdict_ladder_and_reversal.md`'s, on new grounds only (A-39).
+
 ## Status: PROPOSED
 
 Written by the contest-interrogation lane (`audits/13_SC_contest_interrogation.md` §4 cells 8–11, §8

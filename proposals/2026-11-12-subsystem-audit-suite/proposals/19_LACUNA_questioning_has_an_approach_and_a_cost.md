@@ -1,5 +1,7 @@
 # 19 · LACUNA · 4 — Questioning has an approach and a cost: tone moves the odds, and the questioned learn they were asked
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-12, C-18) — `press` subtracts from no obstacle (Jordan, A-25): it is one `press_level` for the questioner in the engagement draw and one against the questioned person's answering `lie` (`U5c_SC_one_obstacle_form.md` §3, source `approach`). The `interview` row is `14_VERBS_SOCIAL2_C_case_question_confession.md` §3's; this file supplies its `approach`.
+
 ## Status: PROPOSED (small; depends on CP-T06-05, the questioned person answering by his own act)
 
 Carries `audits/19_LACUNA_investigation_to_proceedings.md` §4.2 and resolutions R-19-10, R-19-11.

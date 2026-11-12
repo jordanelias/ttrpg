@@ -1,5 +1,7 @@
 # SC-P7 — the social roll's capability inputs as data: complete the vocation rows, one generic advantage source
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-02) — its `trait_advantages` source is not a second leverage source: it is read as the `edge` rows of the one `capability` source (`U5c_SC_one_obstacle_form.md` §3), whose home is the one `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` names. Edits 3 and 4 (a judge whom evidence moves more or less) stand, on the leverage channel.
+
 ## Status: PROPOSED
 
 Source: `audits/05_SC_audit.md` §14. It extends the existing owner (`engine/season/rosters.yaml`:

@@ -1,5 +1,7 @@
 # SC-P2 — SC-05 decided: retire the kernel whole, forward nothing, after the hearing entry lands
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-13) — superseded by `05_SC_sc05_kernel_disposition_B.md`, which keeps every edit here it does not restate and changes what the deletion waits for.
+
 ## Status: PROPOSED
 
 Source: `audits/05_SC_audit.md` F-SC-02, F-SC-08, F-SC-09; executes `ED-SC-0033` clause 2 (RULED:

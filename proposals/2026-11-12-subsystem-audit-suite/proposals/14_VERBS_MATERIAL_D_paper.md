@@ -1,5 +1,7 @@
 # 14 · VERBS · MATERIAL · D — paper that says something: `create_record`, `forge`, `survey`, `destroy_record`, `seize`
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-22) — `create_record` and `forge` take the route shape (the band is a quality on one Record); a row whose bands write different cells declares `contests: "a task"` (`U5c_VERBS_residue_and_governance_owner.md` §1). `watch` is the one name for who is there to see (`U5c_SC_one_obstacle_form.md` §2).
+
 ## Status: PROPOSED
 
 Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-02, G-03) — two `[UNVERIFIED]` marks settled against the proposal's first reading: `data/requires.py` has no `any:` combinator and a verb row carries one `referent_class`. In both places the proposal's own stated fallback is now the edit.

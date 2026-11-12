@@ -1,5 +1,7 @@
 # 08 · FI · 02 — A rumour that travels: what a person passes on, to whom, and the broadcast's retirement first
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-14, C-19) — `said_slants` has one text across three proposals, `[newest, valence, unshared, unshared_first]`, and edits 2 to 4 are read with `U5c_FI_residue.md` §6. Edit 5's `present_persons` is the one reader of believed co-location for every family. CR-29's gate gains the `march` and `migrate` reading (`U5c_FI_residue.md` §2 row 2). The `reach` roster carries two rows Jordan has answered: seat changes realm-wide (A-32), a death by presence, trail and telling (A-33).
+
 ## Status: PROPOSED
 
 Carries audit `audits/08_FI_audit.md` F-FI-02, F-FI-05 and resolutions R-05, R-06, R-18, R-28.

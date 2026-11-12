@@ -1,5 +1,7 @@
 # SC — the social roll's tuning tables: one table per thing a designer tunes, on SC-B's terms
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-01 to C-04, C-13, C-33, C-35) — five changes; the tables' shape and the order of commits stand. (1) T3's reader `person_q.regard(counterparty, actor, fx)` opens the counterparty's ledger at RESOLVE (`04` §B.2, F8): the reader is `person_q.stance_toward(counterparty, actor)` clamped at `STANCE_MAX`, its hostile half the `regard` term and its favourable half a `favour` level. (2) No table subtracts from the obstacle (Jordan, A-25). (3) Row values: every rolled row `routine` at the control arm; at commit 2 only `interrogate` is `demanding`. (4) Every number here is whole-dice arithmetic at the half-score rate. Jordan's A-5, A-6, A-7 and A-26 move the sampler, the pool rule and the opposition rate, so the tables are recomputed in one step (`U5c_SC_one_obstacle_form.md` §4 step 5). T4's bench modifier stands (A-12). (5) Citations of `05_SC_evidence_and_rebuttal.md` read `05_SC_evidence_and_rebuttal_B.md`.
+
 ## Status: PROPOSED
 
 Written by the contest-interrogation lane (`audits/13_SC_contest_interrogation.md` §4–§5, §8 R-1..R-10).

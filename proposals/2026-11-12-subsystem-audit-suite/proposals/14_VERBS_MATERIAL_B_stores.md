@@ -1,5 +1,7 @@
 # 14 · VERBS · MATERIAL · B — `transfer`, `exchange`, `requisition`: store moves that name a place, carry a size and are drawn
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-21, C-22) — `carriage` is the roster member `distance` (`U5c_SC_one_obstacle_form.md` §2). Each row takes the route shape with flat `writes:` scaled by `task_fraction`, or declares `contests:` where two bands write different cells (`U5c_VERBS_residue_and_governance_owner.md` §1).
+
 ## Status: PROPOSED
 
 Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-13) — the roster the unrest kinds live in is `rosters.yaml: standing_routes: kinds: dominance` (`UNREST_KINDS` is its alias in `queries/person_q.py:517`); the name is corrected in place and the wider reach of the edit is stated.

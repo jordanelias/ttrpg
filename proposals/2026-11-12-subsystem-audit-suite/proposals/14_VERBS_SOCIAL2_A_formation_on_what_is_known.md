@@ -1,5 +1,7 @@
 # 14 · VERBS · SOCIAL2 · A — formation on what the person can know: a docket class, a Record sub-kind, a present subject
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-19, C-28) — edit 2 (`Record.<kind>`): `_stamped` carries both pairs, the bare `Record` and the qualified one, so `research` and `seize` still form (`research` was missing from this file's list of bare-`Record` rows, `audits/14_VERBS_MATERIAL.md` §17.2); it lands as one commit across families. §4 reads `person_q.present_persons`.
+
 ## Status: PROPOSED
 
 Carries `audits/14_VERBS_SOCIAL2.md` §3 (`open_case` formation), §4 (`construe` formation), §5 (`speak`

@@ -1,5 +1,7 @@
 # 14 · VERBS · MATERIAL · C — `found` and `build`: formed on their own works, asked about, drawn, and raised by `work`
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-22) — each row takes the route shape with flat `writes:`, or declares `contests: "a task"` where two bands write different cells; no route row keys `writes:` by band (`U5c_VERBS_residue_and_governance_owner.md` §1).
+
 ## Status: PROPOSED
 
 Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (G-05) — a keyed refusal cannot name an effect-side clause other than `write` (`data/verbs.py:945-967`); the `stores` key needs a named typed conjunct or falls under `write`.

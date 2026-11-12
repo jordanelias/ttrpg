@@ -1,5 +1,7 @@
 # 14 · VERBS · SOCIAL2 · C — a case with a charge, a speech that enters by degree, a question the questioned answers, a confession on file, a telling whose odds the hearer sets
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-12, C-21, C-29) — §2's `speak` bands yield to `19_LACUNA_admission_rides_the_citing_draw.md` (entry) and `05_SC_evidence_and_rebuttal_B.md` (answer). §3 owns the `interview` row, over `13_SC_draw_for_unrolled_contests.md`'s; `19_LACUNA_questioning_has_an_approach_and_a_cost.md` supplies `approach` as levels. The tables `tell_obstacle`, `interview_obstacle` and `interrogate_obstacle` are folded into the one roster (`U5c_SC_one_obstacle_form.md` §2); a tie is a `favour` level and custody is the `custody` source (§3 there).
+
 ## Status: PROPOSED
 
 Carries `audits/14_VERBS_SOCIAL2.md` §3 (`open_case` content), §5 (`speak` bands and evidence), §6

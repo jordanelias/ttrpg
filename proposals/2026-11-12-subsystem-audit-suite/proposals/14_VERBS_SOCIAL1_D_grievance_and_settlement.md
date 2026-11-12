@@ -1,5 +1,7 @@
 # VERBS SOCIAL1 · D — grievance and settlement: `forgive`, `challenge` beyond lane A, `carry` to a room, `commit` by degree
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-22, C-27) — `challenge`: MATTER emits `challenge.declined` at the due tick and writes no `Person.stance`; the challenger's satisfaction is his own later `forgive`. `commit` and `forgive` take the route shape with flat `writes:` (`U5c_VERBS_residue_and_governance_owner.md` §1). `carry`'s draw in §1 supersedes the docketing row of `13_SC_draw_for_unrolled_contests.md`.
+
 ## Status: PROPOSED
 
 Batch S1-D of `audits/14_VERBS_SOCIAL1.md` §14. Authored in part by Fable; completed by Opus after the

@@ -1,5 +1,7 @@
 # The social obstacle: the task's difficulty plus named modifiers, each recorded on the roll
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-01 to C-04, C-33) — four readings change; the term list and the reason trail stand. (1) No term is subtracted: the favourable halves of `evidence`, `reception` and `regard` reach the roll as `proofs` and `favour` levels (Jordan, A-25; `16_PESSIMIST_SC_A_what_the_speaker_brings_is_leverage.md` edits 1 to 5), so edit 1's subtract-after-ceiling step and `proof_step` are not built. (2) The roster, the binding table and the record field are `U5c_SC_one_obstacle_form.md` §1's: one `obstacle_operands` tuple in place of edit 4's field per term. (3) `opposition` is never absent: `obstacle_default` is deleted and every rolled row is `routine` at the control arm, in place of edit 2's `demanding` rows. (4) The Status line's "supersedes `05_SC_opposed_obstacle_parity.md`" no longer holds: Jordan's A-26 un-holds that file and it carries the opposition rate.
+
 ## Status: PROPOSED — supersedes `05_SC_opposed_obstacle_parity.md` (SC-P5, HELD BACK). Decision-ready for the implementation lane.
 
 Source: Jordan's clarification of 2026-11-12, as relayed to this lane by the orchestrator: *the social

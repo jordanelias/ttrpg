@@ -180,7 +180,7 @@ now order); **LAND** = `U5d_FA_land_and_seats_pass_on_a_won_march.md` (written b
 | F-PES-FA-01 | a vacant seat is filled by the Crown or by nobody | RESOLVED-BY | PES-FA-B edits 1–2; VB-C; the election arms; the crown's fallback is ruled (A-19) and carried by `22_HAPPENINGS_B_the_throne_is_never_stranded.md` as reconciled | `pf1_static.py 0`; `pf2_premise.py 0` P2 |
 | F-PES-FA-02 | the power to dismiss is one unfillable seat; the ban cannot be undone; a detained officer governs | RESOLVED-BY | PES-FA-A edits 1–3; the detained officer: OWED-FA §2 (A-23: custody suspends acts through the seat) | `pf2b` §1, §4, §5 |
 | F-PES-FA-03 | "under the seat" is where a person sleeps | RESOLVED-BY | PES-FA-C as reconciled (A-22: the predicate is the command basis: sworn men, holders of seats it may revoke, the unseated in its land; a writ to a superior is a petition) | 18 of 34 seat-holders off their ground |
-| F-PES-FA-04 | a faction cannot refuse a member; the governed are in none | RESOLVED-BY | PES-FA-B edit 3; the governed: `U5d_WR_SE_cohort_heavy_moves.md` (A-56) | `pf2` P4; `pf3_cut.py 0 2` |
+| F-PES-FA-04 | a faction cannot refuse a member; the governed are in none | RESOLVED-BY | PES-FA-B edit 3; the governed: `U5d_SE_cohort_heavy_moves_and_caste.md` (A-56) | `pf2` P4; `pf3_cut.py 0 2` |
 | F-PES-FA-05 | anyone declares war for anyone | RESOLVED-BY | PES-FA-B edit 4 with WAR-B (A-20) | `pf2` P3 |
 | F-PES-FA-06 | royalty by noble conquest is not in the engine | RESOLVED-BY | `15_INSTITUTIONS_SYNTHESIS_B_the_deed_ledger.md` (the seeded deeds), on A-17/A-18 (the south fought, ranked third; Varfell's deed realm-wide at the third confidence) | grep and `pf1` (c) |
 | F-PES-FA-07 | offices are free to cut | RESOLVED-BY | none of its own (a measure): the NO_SEATS arm is the gate of DECREE, TERMS and PES-FA-A–C (it must differ from SHIPPED by more than DRAW2) | `pf3_cut.py 0 2 NO_SEATS` |
@@ -191,4 +191,122 @@ now order); **LAND** = `U5d_FA_land_and_seats_pass_on_a_won_march.md` (written b
 | F-PES-FA-12 | single-seed verb counts are one draw from a wide spread | RESOLVED-BY | none owed (a caution); gates in this family read at ≥ 2 dice seeds | `oblige` 26 → 0 |
 | §4.1 | fixed outcomes in FA's code | RESOLVED-BY | VB-C (the draws); PES-FA-B edit 2 prices, never forbids | `18_DETERMINISM_SWEEP.md` C-07, C-11 |
 | §5 item | when the royal line fails, who may take the crown | SUPERSEDED | A-19 (the deed race) | — |
+
+---
+
+# Part 2 — SE (settlements, territory, economy)
+
+Carriers: **GROUND** = `07_SE_ground_and_granaries.md`; **TREAS-B** = `07_SE_treasury_granary_B.md`;
+**CENSUS** = `07_SE_population_census.md`; **REGROW-B** = `07_SE_population_regrowth_B.md`; **KERN-SE** =
+`07_SE_kernel_repairs.md`; **ARCN** = `07_SE_arc_needs.md`; **SUPPLY** =
+`07_SE_campaign_supply_and_muster.md`; **CAPS-SE** = `07_SE_capability_and_chooser_surface.md`;
+**RATE-B** = `07_SE_capability_rate_B.md`; **VALLEY** = `07_SE_valley_scenario.md`; **PES-SE-A/B** =
+`16_PESSIMIST_SE_A…B_*.md`; **DRAWS** = `09_WR_B_draws_not_thresholds.md`; **LAPSE** =
+`23_STORY_C_a_founded_place_can_fail.md`; **OWED-SE** = `U5d_SE_owed_edits.md` and **COHORT** =
+`U5d_SE_cohort_heavy_moves_and_caste.md` (both written by this lane).
+
+## 2.1 `audits/07_SE_audit.md` — findings
+
+| id | claim (one line) | disposition | carrier · section | evidence |
+|---|---|---|---|---|
+| F-SE-01 | every settlement is the same economic object | RESOLVED-BY | GROUND (endowment by territory, R-SE-01) as annotated by the addendum's P-1 to P-6 | `se_bind.py`; 8 of 37 settlements in no polygon |
+| F-SE-02 | population is a constant that can only fall, falls whole, and its loss is invisible | RESOLVED-BY | CENSUS §4 (thinning, R-SE-04 to -06) and REGROW-B (the rising arm) | `subsist.py:72` `[not re-opened]` |
+| F-SE-03 | the realm's only hunger event is a world-gen artefact, and a test pins it | RESOLVED-BY | GROUND (stocked larders, R-SE-02) as reconciled: the starting stock is drawn within bounds (A-50) | the audit's §1.4 control table |
+| F-SE-04 | relief is one act, one kind, once | RESOLVED-BY | GROUND §4 d (the remainder walk, R-SE-11); TREAS-B (the stock at the seat rung); PES-SE-A edit 1 (a short rung is shared) | `harness/scarce.py` |
+| F-SE-05 | the fabric's raising arm does not reach in play | RESOLVED-BY | OWED-SE §1 (the reading added to H-105's and H-171's cites; cause not isolated, so no code edit is planned until it is) | `restore` 0 attempts, seed 0, three seasons |
+| F-SE-06 | the geography feeds the battlefield and nothing else | RESOLVED-BY | TREAS-B (the granary's reach is the first reader); `09_WR_B_weather_with_memory_and_the_year.md` edit 3 (a leg's price) and `16_PESSIMIST_WR_A_the_road_is_drawn.md` (the road); the rest design-first (audit §8 step 7) | 55 settlement edges, 26 territory edges, an 11-row cost matrix unread |
+| F-SE-07 | what persons do to the economy is nil in size and partly a sink | RESOLVED-BY | ARCN §3 b (amount as a choice, R-SE-24); OWED-SE §2 (CR-49's class on `transfer`, `migrate`) | `default_transfer_amount=1` (`fixtures.py:625`) |
+| F-SE-08 | 248 of 322 `condition.worn` Events report a wear that did not happen | RESOLVED-BY | KERN-SE §3 (R-SE-08) | the audit's count |
+| F-SE-09 | capacity acts as noise and migration as churn | RESOLVED-BY | OWED-SE §2 (CR-49's class for `migrate`'s `to`); CENSUS (weight gains a writer); COHORT (`migrate` is one of the cohort's heavy moves, A-56) | `aperture 3 0`: 16 migrations |
+| F-SE-10 | a store move accepts a negative, zero or fractional amount | RESOLVED-BY | KERN-SE §2 (R-SE-07) | `effects_shared.py:120-136` |
+| F-SE-11 | a move to where the mover stands publishes as travel | RESOLVED-BY | KERN-SE §4 (R-SE-09) | 14 of 15 executed moves same-place |
+| F-SE-12 | the world never grows | SUPERSEDED | A-55 (fixed map); households within settlements are founded and may lapse (LAPSE); the producer of `build` candidates is IN-45's content | `found` 0 of 7, `build` 0 of 4 |
+| F-SE-13 | there is no settlement scenario to play | RESOLVED-BY | VALLEY (with the addendum's P-13 change) | audit §9 |
+| F-SE-14 | the people of a town act as one individual | RESOLVED-BY | COHORT (A-56: a cohort forms only the heavy moves) | 708 of 1,529 resolved acts at seed 0 are cohorts' |
+| F-SE-15 | a season's cost grew with the tick in every arm run | DISPUTED | none: the audit itself marks the reading load-confounded and names no cause; this lane has no measurement either way, so it stays a caution and no edit is planned | audit §3 (`[not re-measured]`) |
+| F-SE-16 | the instruments cannot see the economy's loops | RESOLVED-BY | none owed (CLAUDE.md §0.1 pt 5: no instrument over an instrument); each SE proposal's gate names its own reading | — |
+
+## 2.2 `audits/07_SE_audit.md` §6.1, §6.2, §11, §13
+
+| id | claim (one line) | disposition | carrier · section | evidence |
+|---|---|---|---|---|
+| H-105, H-171 | cite `restore` executing in the realm | RESOLVED-BY | OWED-SE §1 (R-SE-16) | F-SE-05 |
+| H-140, H-306, H-327 | same-place move; amounts; arrival teaches nothing | RESOLVED-BY | KERN-SE §4, §2, §5 | — |
+| H-149, CP-T08-09 | ruled and enforced; withdrawn | STALE-FALSE-POSITIVE | none owed | `test_march.py` |
+| H-166 | who holds an unheld place | RESOLVED-BY | `09_WR_world_motion.md` edit 2 as reconciled (unheld land is taken by occupation; ground no party holds is outside A-57/A-58) | `effects_founding.py:51-89,170` |
+| H-236 | the lattice has no source (filed under SE by path) | SUPERSEDED | WR's (Part 3: `09_WR_world_motion.md` edit 1; A-40 makes the wear a real condition of places) | T15 holds no Site |
+| H-241 | `field_provisioning` built, shipped off | RESOLVED-BY | SUPPLY; PES-SE-B edit 4 (the flip's load-time refusal); OWED-SE §4 (R-SE-22) | `fixtures.py:809` |
+| H-293, S-SE-2 | what custody takes from a ruler | SUPERSEDED | A-23 (custody suspends acts through the seat); `U5d_FA_owed_edits.md` §2 | #453 names the travel readers only |
+| H-303 | a partly stocked rung blocks the walk | RESOLVED-BY | GROUND §4 d (R-SE-11) | — |
+| H-305 | hunger's loss scales with headcount | RESOLVED-BY | CENSUS §4 a (R-SE-04) | `subsist.py:72` |
+| H-309 | a seat holder who migrates keeps the seat | RESOLVED-BY | OWED-SE §1 (close the row, R-SE-17); the addendum's P-16 stands | — |
+| H-304, H-307, H-168 | `tend` restores whole (PC's); over capacity at build; `migrate` only hand-built (now false) | RESOLVED-BY | PES-SE-A edit 4 (owed to PC, U5b); folded into F-SE-09; OWED-SE §1 (R-SE-18) | `aperture 3 0` |
+| CR-40, CP-T08-01, -03, -04 to -08, -10, CR-08, CR-22, CR-49, CR-67, CR-106, CR-107, SE-06 | planned, unbuilt | RESOLVED-BY | the plan positions as amended by R-SE-01 to -05 and -19 (GROUND, CENSUS, OWED-SE §2) | — |
+| SE-04 (b), R-SE-20 | `Rung.envelope` declared, unwritten, unread | RESOLVED-BY | plan IN-44 (delete through its Layer 1 row); OWED-SE §3 | grep `[not re-opened]` |
+| `HANDOFF_SE` Open row 1 | waits on a closed ED | RESOLVED-BY | KERN-SE §6 (R-SE-13) | AM-E-15 |
+| R-SE-01, -02, -03, -11 | endowment; stocking; the gate; the walk | RESOLVED-BY | GROUND | — |
+| R-SE-04, -05, -06 | per-head loss; thinning; `empty` band | RESOLVED-BY | CENSUS | — |
+| R-SE-07 to -10, -12 to -15 | kernel repairs and stale pointers | RESOLVED-BY | KERN-SE §2–§6 | — |
+| R-SE-16, -17, -18 | register edits | RESOLVED-BY | OWED-SE §1 | — |
+| R-SE-19 | `transfer`'s `to` binds the question's referent | RESOLVED-BY | OWED-SE §2 | — |
+| R-SE-21 | a cohort's weight is 2 everywhere | RESOLVED-BY | plan CR-107 (authored rows); the generated cast (A-44) authors cohorts with weights, `21_PROCEDURAL_B_cast_and_seats.md` | H-170 |
+| R-SE-22 | the ration is a `min` over every eaten kind | RESOLVED-BY | OWED-SE §4 | — |
+| R-SE-23, -24 | case worlds hold no eater; every store move is 1 unit | RESOLVED-BY | ARCN §3 a, b | — |
+| R-SE-25 | no settlement verb reads a capability | SUPERSEDED | by R-SE-32 (RATE-B) | H-164 |
+| S-SE-1 | may a population recover | SUPERSEDED | the register's ladder table ("Yes, bounded by food and room", the 2026-09-17 ruling) and the addendum's C-1; REGROW-B | ED-SE-0051 `[ledger row not re-opened]` |
+| §13 NPC-083, NPC-037, NPC-013 | shortfall against orders; treasury post; the tithe | RESOLVED-BY | ARCN §3 a, b; plan CP-T08-06, -07 | `corpus_run.build_at` seats no eater |
+| §13 NPC-083 (methods), ARC-44/ARC-01 (drift with nobody acting) | "wrongly stated" | RESOLVED-BY | restated by the audit (the tier-4 redesign's; claim decay on a cohort's reasons); no SE edit | `rosters.yaml:79-80` |
+| §13 NPC-090, ARC-20 | treaty trade; a trade dependency | RESOLVED-BY | ARCN §3 c; GROUND; TREAS-B (R-SE-30: the gate is a person's store move across two duchies) | `exchange` 0 of 79 |
+| §13 ARC-46, ARC-07 | a depletable resource; a standing drain | RESOLVED-BY | SUPPLY (R-SE-34) | — |
+| §13 ARC-12, EMG-C3, NPC-001, NPC-003, NPC-081 | owned by FI, WR, FA | SUPERSEDED | the owning closures (U5c; Parts 1 and 3 here) | — |
+| §14 (capability surface) | (c) and (e) superseded | SUPERSEDED | the addendum §6; RATE-B | — |
+
+## 2.3 `audits/07_SE_audit_addendum_B.md`
+
+| id | claim (one line) | disposition | carrier · section | evidence |
+|---|---|---|---|---|
+| C-1 to C-8 | corrections to the first audit | RESOLVED-BY | made in the addendum; carried by TREAS-B (C-2, C-3), REGROW-B (C-1, C-8), RATE-B (C-5) | — |
+| F-SE-17 | the proposed granary tier has no steward | RESOLVED-BY | TREAS-B (R-SE-28) | — |
+| F-SE-18 | every quantity has one working arm, so any binding arm is a ratchet | RESOLVED-BY | REGROW-B (R-SE-26, -27) | — |
+| F-SE-19 | the realm can raise only levy, at no cost to the place | RESOLVED-BY | SUPPLY (R-SE-33, -35); `06_FA_levy_through_the_seat_B.md` | — |
+| F-SE-20 | supply has no place and no duration | RESOLVED-BY | SUPPLY (R-SE-34, -36) as constrained by R-PES-SE-14 (one ration, charged once a season) | — |
+| F-SE-21 | two lanes' capability edits collide | RESOLVED-BY | RATE-B as reconciled; the home is `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md`'s | — |
+| F-SE-22 | the food dependency's recorded resolution points at trade | RESOLVED-BY | TREAS-B (R-SE-30) | BALANCE-005; ED-SE-0009 `[not re-opened]` |
+| F-SE-23 | the relief ladder's top is the Crown's for three duchies and not for the other two | RESOLVED-BY | OWED-SE §5 | the addendum's probe |
+| F-SE-24 | `amount_shares` at 1000 strips below subsistence with no consequence path | RESOLVED-BY | OWED-SE §6 (R-SE-38: the flip is sequenced after CP-T08-06) | — |
+| §2.3 (twelve `.audit/` findings re-verified) | true, false now, moved, irrelevant | RESOLVED-BY | none owed beyond the rows above (G-33 and G-04 false now; the stress-sim mechanics irrelevant, ladder step 2) | the addendum's table |
+| §2.4 ARC-37/39, NPC-007, EMG-11, NPC-082, ARC-R17, ARC-14, NPC-087 | cases the first audit did not list | RESOLVED-BY | GROUND and OWED-SE §2 for SE's half; FA, FI, WR, CHAR own the rest (CR-107b; COHORT for ARC-14's population) | — |
+| P-1 to P-16 | decisions on the first lane's placeholders | RESOLVED-BY | as the addendum's table: P-7 superseded by TREAS-B, P-10 by REGROW-B, P-14 by RATE-B; the rest stand in GROUND, CENSUS, ARCN, VALLEY | — |
+| R-SE-26, -27 | recovery; flight is an act | RESOLVED-BY | REGROW-B | — |
+| R-SE-28, -29, -30 | where relief sits; relief is the rule; the trade channel | RESOLVED-BY | TREAS-B | ED-IN-0255 `[not re-opened]` |
+| R-SE-31, -37, -38 | endowment annotations; `ration` is no verb; when `amount_shares` flips | RESOLVED-BY | OWED-SE §6 (notes for the builder of GROUND and ARCN) | — |
+| R-SE-32 | the capability rate against the other surfaces | RESOLVED-BY | RATE-B | — |
+| R-SE-33 to -36 | hands under arms; the standing ration; training; the occupier | RESOLVED-BY | SUPPLY | — |
+| §6 "stewardship: no passive bonus from a holder to his domain's yield" | declined by the addendum | SUPERSEDED | A-54 (a steward's skill bears on the harvest draw) and A-12 (a seat may carry a modifier); RATE-B as reconciled | — |
+
+## 2.4 `audits/16_PESSIMIST_SE.md`
+
+| id | claim (one line) | disposition | carrier · section | evidence |
+|---|---|---|---|---|
+| F-PES-SE-01 | a failing place changes nothing that any person does | RESOLVED-BY | PES-SE-A edits 2, 4; COHORT (the hungry cohort's petition, migration, refusal and riot, A-56); OWED-SE §7 (the kinds a trade is formed on, R-PES-SE-09) | the fail arm: eleven towns starve unseen |
+| F-PES-SE-02 | nothing in the settlement layer is drawn | RESOLVED-BY | DRAWS edits 1–2 as reconciled (A-54: wear, harvest and hunger on the one four-band ladder); PES-SE-A edit 1 (the remainder) | `18_DETERMINISM_SWEEP.md:110` corrected by OWED-SE §8 |
+| F-PES-SE-03 | a shared granary feeds towns in id order | RESOLVED-BY | PES-SE-A edits 1–2 | — |
+| F-PES-SE-04 | a death by hunger is recorded as a death by nothing | RESOLVED-BY | PES-SE-A edit 3 | — |
+| F-PES-SE-05 | the shipped supply fixture, turned on, reduces every army to its crash floor | RESOLVED-BY | TREAS-B and SUPPLY; PES-SE-B edit 4 | `pes_supply.py` |
+| F-PES-SE-06 | a founding cannot fail, cannot found a town, and leaves a lot nobody uses | RESOLVED-BY | LAPSE as reconciled (A-55: fixed map; an empty founded household may lapse) | — |
+| F-PES-SE-07 | the harvest is not an event; the weather runs the mines | RESOLVED-BY | PES-SE-B edits 1–2 as reconciled (A-54) | — |
+| F-PES-SE-08 | a second garrison adds nothing and a new one halves the walls | RESOLVED-BY | PES-SE-B edit 3 | — |
+| F-PES-SE-09 | two fifths of production has no use; three objects have no reader | RESOLVED-BY | OWED-SE §9 (R-PES-SE-05 to -08) | — |
+| F-PES-SE-10 | want lowers the attempt to trade | RESOLVED-BY | OWED-SE §7 (owed to CHAR's formation; U5a) | — |
+| F-PES-SE-11 | the story instruments cannot see a place | RESOLVED-BY | none owed (§0.1 pt 5); `23_STORY_D_story_census_and_gate.md` reads places | — |
+| F-PES-SE-12 | stocking the larders at world-gen coincides with every migration stopping | RESOLVED-BY | OWED-SE §10 (a gate arm on GROUND's stocking edit); the drawn start (A-50) leaves some larders low | the pessimist's two-arm run |
+| F-PES-SE-13 | smaller kernel defects | RESOLVED-BY | OWED-SE §9 (R-PES-SE-13) and KERN-SE | — |
+| R-PES-SE-01 to -04 | sharing; the crossing; causes; `tend` and hunger | RESOLVED-BY | PES-SE-A edits 1–4 | — |
+| R-PES-SE-05, -07, -08, -09, -13 | ore's reader; hunger bands; `coin`; trade kinds; Site-kind names | RESOLVED-BY | OWED-SE §7, §9 | — |
+| R-PES-SE-06, -10, -11, -12 | `Rung.yield`'s reader; grown kinds; walls; the flip | RESOLVED-BY | PES-SE-B edits 2, 1, 3, 4 | — |
+| R-PES-SE-14 | one ration on two clocks | RESOLVED-BY | SUPPLY (a constraint on R-SE-34) | — |
+| J-1 | does a chronic dearth speak | SUPERSEDED | the ladder table's D-69 (A: famine reports once; the never-stocked edge repaired); PES-SE-A edit 2 as reconciled | H-160 limit 3 |
+| J-2 | how does the world's own motion draw | SUPERSEDED | A-54 (the one four-band ladder) | — |
+| J-3 | may a place begin, and may a begun place end | SUPERSEDED | A-55 | SE-9(a) |
+| §5 lists; §6.3 owed | false N-lines; failed premises; items owed to other lanes | RESOLVED-BY | OWED-SE §8–§10; PC's `tend` is U5b's | — |
 

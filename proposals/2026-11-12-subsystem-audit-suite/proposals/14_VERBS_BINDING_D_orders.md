@@ -1,5 +1,7 @@
 # VB-D — an order orders something, goes down the chain, and takes hold by a draw
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-25) — the prize `an order` is not added: `issue` and `dispatch` contest `a standing` (same hearer, same step; `U5c_VERBS_residue_and_governance_owner.md` §2). The term `standing` is `rank_gap`; a writ's band is the content key `force`. §13.4 decision 1 is answered (Jordan, A-22: command): commit D2 ships behind its revert. A decree is proclaimed (A-21).
+
 ## Status: PROPOSED
 
 Source: `audits/14_VERBS_BINDING.md` §0.1, §0.2, §4 (`dispatch`), §6 (`issue`), §13.4 decision 1; batch D.

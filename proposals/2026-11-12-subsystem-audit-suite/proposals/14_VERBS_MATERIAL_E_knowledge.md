@@ -1,5 +1,7 @@
 # 14 · VERBS · MATERIAL · E — `research` that teaches what it read, `reconstruct` that concludes
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-22, C-24) — §2: `observes:` is a flat list, not keyed by Degree; `finding_terms` owns which reads a band deposits (`U5c_FI_residue.md` §8). §3: `reconstruct` writes nothing and deposits its conclusion to its maker; the Proposition is his `utter` (`U5c_FI_residue.md` §7).
+
 ## Status: PROPOSED
 
 Batch M-E of `audits/14_VERBS_MATERIAL.md` §18 (its §13, §14). Needs batch M-D (papers with content) and

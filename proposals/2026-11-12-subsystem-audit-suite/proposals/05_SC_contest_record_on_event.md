@@ -1,5 +1,7 @@
 # SC-P1 — a contested act's Event carries the roll that decided it
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-06) — `margin_endings` values are `[pool, ob, net, margin, terms, levels, leverage]`: `terms` and `levels` replace `room`, because the room is no longer one number subtracted from the obstacle (`U5c_SC_one_obstacle_form.md` §5).
+
 ## Status: PROPOSED
 
 Source: `audits/05_SC_audit.md` F-SC-04; closes `engine/season/hole_register.yaml` H-284.

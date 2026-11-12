@@ -1,5 +1,7 @@
 # SC — calibrating the social roll's tables: targets on the four-band ladder, the sweeps, the order
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-33) — the criteria are stated on outcomes and stand. The values they were solved for are whole-dice at the half-score rate and are re-solved once against the bell curve (Jordan, A-5), score plus a base (A-6), two inputs (A-7) and 0.4 per point (A-26). The test file is read red at `U5c_SC_one_obstacle_form.md` §4 step 4 and green at step 5.
+
 ## Status: PROPOSED
 
 Written by the contest-interrogation lane (`audits/13_SC_contest_interrogation.md` §3.4, §6). Sets the

@@ -1,5 +1,7 @@
 # VB-A — a tie is released only where it is held, and an office is founded only over land that can carry one
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-10, C-25) — edit 14's audience is the `heard_by: seat_body` cell on the `a seat` prize row, read by one function (`U5c_VERBS_residue_and_governance_owner.md` §2). The term `standing` is the roster member `rank_gap`. §1's `own_edge_declines` also declines an edge a disposal imposed: a party does not release his own sentence (Jordan, A-37; `U5c_VERBS_residue_and_governance_owner.md` §4).
+
 ## Status: PROPOSED
 
 Source: `audits/14_VERBS_BINDING.md` §0.1, §0.2, §5 (`establish`), §10 (`release`); batch A of its landing

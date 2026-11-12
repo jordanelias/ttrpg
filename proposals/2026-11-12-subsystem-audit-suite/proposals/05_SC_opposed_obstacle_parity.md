@@ -1,5 +1,7 @@
 # SC-P5 — what an equal opponent costs: the opposed obstacle against the dice's own mean
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-33) — un-held by Jordan's answer A-26 (0.4 per point: an even contest is even). The "HELD BACK" in the Status line below is superseded and this file is the carrier of the rate. Read with two things: the rate's one owner is `opposed_ob` (`U5c_SC_one_obstacle_form.md` §1), and it changes once, in that file's §4 step 5, together with A-5 (the bell curve), A-6 (score plus a base) and A-7 (two inputs), so the 0.4 is set against the re-centred sampler and not the whole-dice one this file measured.
+
 ## Status: PROPOSED — HELD BACK. It would overwrite a RULED item (Jordan, 2026-08-14: an opposed
 obstacle is *"their corresponding score/2 plus whatever specific modifiers exist for them in that
 instance"*). Listed in `audits/05_SC_audit.md` §11 with both options. Nothing here ratifies on merge.

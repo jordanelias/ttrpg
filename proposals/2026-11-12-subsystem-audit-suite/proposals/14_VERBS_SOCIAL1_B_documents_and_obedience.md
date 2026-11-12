@@ -1,5 +1,7 @@
 # VERBS SOCIAL1 · B — documents reach their addressees, and an order can be obeyed or refused, by a draw
 
+Reconciled: 2026-11-12, U5c closure (`unified/U5_CONFLICTS_U5c.md` C-07, C-21, C-25, C-34) — four readings. (1) §1: a decree is proclaimed (Jordan, A-21), so `comply` and `evade / defy` on a decree form from the claim that it was issued and do not wait on `give`; the addressed-document occasion stays for a covenant and a challenge. (2) `witnesses` is the roster member `watch`; rank standing against an act is `rank_gap`; the band a document was drawn up at is the content key `force`. (3) A row drawn with nobody opposite takes one of two loadable shapes, and a prize this file names that the roster does not keep is read through `U5c_VERBS_residue_and_governance_owner.md` §1 and §2. (4) Covenant acceptance is the counterparty's own `commit`.
+
 ## Status: PROPOSED
 
 Batch S1-B of `audits/14_VERBS_SOCIAL1.md` §14 (verbs `give`, `comply`, `evade / defy`, `covenant`'s
