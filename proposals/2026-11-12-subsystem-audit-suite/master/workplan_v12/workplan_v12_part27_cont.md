@@ -6,6 +6,39 @@ Written against `09bb5a1`, as the part it continues. Words, paths, the owed rena
 
 ---
 
+### B19.70 — the `command` skill row, its three `field` use rows, and the one host builder of a `CommandRecord` · `27_MB_A` item 27A-6 · BUILD · HASH MOVER(behaviour)
+- Covered: C-02 (added by the coverage lane, `master/workplan_v12/COVERAGE.md` §C). `27_MB_A`'s head: "27A-6 in U5a's CAP batch (B05)"; the first half reads "27A-6 is B05's: `command_record(w, person, via)`", and no B05 item carries it; B22.21 and B22.26 name "`27_MB_A` §1 (Batch B19: `command`'s definition row)" as a dependency. It lands here, after the field's input carries `commanders` (B19.02, 27A-1), because 27A-6's `field_input` edit needs those fields: the dependency decides the batch (`V12_STRUCTURE_part4.md` E-8). Landing order: after B19.55, before B19.66 (the handle is the next free one; the position table lists it there).
+- SOURCE: `proposals/27_MB_A_command_and_the_obedience_draw.md` §1 (the definition and the use rows), §2 (the host builder), §5 (a seat's modifier), "Exact edits" rows `descriptor_registry.yaml`, `capability_uses`, `mass_battle.py`, "Instructions to code it" row 27A-6, "Tests to add" (the two builder tests), "Gate" 3 and 7; INCOMPLETE item 1 (satisfied at this batch: B04 and B05 landed the skill block, `capability_uses` and `pool.py::score`); rulings A-59, A-7, A-12 (D-U1-01); closes 27_MB_A's INCOMPLETE item 1 and the U5b closure row `U5b:437` (F-DICE-18, "a field battle reads no person": 27-MB, A-59) with B19.02 to B19.05 and B19.55.
+- ADVANCES: R-04.c4 (a field reads its commander and officers as persons), through B19.05's obedience draw.
+- INSTRUCTION (copied):
+  1. `references/descriptor_registry.yaml: capabilities.rows` gains (§1): "```yaml
+  command:
+    kind: skill
+    gloss: "Gets a body of armed men to do what was ordered, when it was ordered."
+    base: attr.social.charisma          # Presence: the governing attribute (the attribute input of U1 §4)
+    opposed_by: none                    # nobody's rating opposes an order; the task's difficulty does
+    scale: [0, 7]
+    untrained: default
+    grows_by: [train, practice]
+    source: "A-59; Jordan directive 2026-06-02 (Charisma primary, Cognition secondary)"
+  ```" with its exporter round-trip (B04.02's `--check`).
+  2. `engine/season/rosters.yaml: tables.capability_uses` gains, at the end of its block (§3.B "registry order"): "```yaml
+  - {use: field, role: dice, key: command,              side: each, add: pool_add, floor: pool_floor}   # the learned skill
+  - {use: field, role: edge, key: attr.social.charisma, side: each, level: attribute_level, per: mid}      # the social attribute (U1 R-14)
+  - {use: field, role: edge, key: attr.mind.acuity,     side: each, level: attribute_level, per: mid}      # the mental attribute
+  ```" "both rows ship at `minor` a step … reversible in one cell" (the Presence row to `moderate` restores the 2 : 1 ratio; the calibration reads both).
+  3. "One host builder, `seam/wrappers/mass_battle.py::command_record(w, person, via)`, called by `field_input`. It calls the one pool reader and the one edge reader and holds nothing. `None` (no commander among the side, or a headcount side with no acting person) is the control" (§2); 27A-6: "`field_input`, `resolve`, `field_estimate` pass it". Each unit row's `officer` is "built by the same host function for the person the row's `officer` column names" (§2). The seat (§5): "The seat the commander's march is made through (`Act.via`) helps him as a named level from the leverage source `office` …, sized by that seat row's own `modifier:` column …, read by the one host function and summed into `CommandRecord.levels` under the soft cap. A seat that declares no modifier adds nothing"; "It is the commander's only"; "`addends` is practice only". The builder fills `obey_task` (B19.05's input, default 0.0) by "`even_line(pool_add) + opposed_ob(pool_default, opposition_rate)` (§4)" (INCOMPLETE item 2, closed) where the first half's B19.05 left it at its default (part 26, B19.05's `[ASSUMPTION]`).
+- WHERE: `references/descriptor_registry.yaml` (`capabilities.rows.command`); `engine/season/rosters.yaml` (`tables.capability_uses`, three `field` rows); `engine/season/seam/wrappers/mass_battle.py` (NEW `command_record`; `field_input`, `resolve`, `field_estimate`); `engine/season/tests/test_mass_battle_module.py`; `unified/U1_GLOSSARY.md` (the *command* skill row, if absent).
+- TESTS (the source's, in `engine/season/tests/test_mass_battle_module.py`, written before the edit and read red): `test_command_record_is_built_by_the_one_pool_reader`; `test_a_seat_modifier_reaches_the_commander_as_a_level` ("gate 7, D-U1-01; the seat row's `modifier:` planted in a hand-built world"). `test_no_commander_reads_the_literal_four` (B19.02) stays green.
+- FALSIFIER and CONTROL (copied): "A commander's score, or either attribute, that moves no obedience share. … A second table that maps a rank to dice. A seat read by the module." Control: a side with no acting person builds `None`, and its field equals the field B19.55 left, field for field.
+- GATE: `python -m pytest engine/season/tests/test_mass_battle_module.py -q` → pass; `python tools/export_composition.py --check` and the descriptor exporter's `--check` → exit 0; gate 7 (copied): "With a planted `modifier: moderate` on the commander's march seat's row, his `CommandRecord.levels` rises by that level (`addends` unchanged) … no officer's record changes"; gate 3's two input halves are read with `obey: on` in the test world (B19.05's arm), seeds named, `assert checked >= 400`; the realm hash at seed 0, one season, quoted (moved only if a realm field has an acting commander).
+- HASH MOVERS: "every field with a commander among the side" (27_MB_A "Hash movers"); 27A-6's row reads "equal until a cast row holds `command` or an attribute", and BA1 lands the cast's attributes before this batch, so it is declared a mover; B19.99 re-pins.
+- DEPENDS ON: V12 B19.02 (`CommandRecord`, `MassBattleInput.commanders`, `.obey_task`), B19.05 (the obedience draw that reads the record), B19.55 (the four command reads); V12 Batch B04 (the skill definition block and its exporter, `capability_uses` and its loader: B04.02, B04.05); V12 Batch B05 (`pool.py::score`, `sigma.py::advantage_sigma`, the seat `modifier:` column B05.20); EXISTS-IN-TREE `engine/season/seam/wrappers/mass_battle.py::field_input`, `::resolve`, `::field_estimate`.
+- GLOSSARY: *command* (a skill: "gets a body of armed men to do what was ordered, when it was ordered"; owner the registry row) added to `unified/U1_GLOSSARY.md` if B19.03's *command span* row did not add it; "command span" stays the span table's word.
+- NAMES: `capability` (the tree's identifier for a skill) kept in code font; `Subformation` → `UnitRow`, `stance` → `posture` (B16L), where the copied text meets them.
+- COST and TIER: small build; `sonnet`, `high` (27A-6: "small build, `sonnet`"); gate 3's reading `opus`.
+- LANDS IT: B19's producer; `Item: B19.70`, `[skip ci]`; B19.99 re-pins it with the batch's movers.
+
 ### B19.66 — the six-arm instrument · `27_MB_C` 27C-2 · BUILD · HASH EQUAL
 - SOURCE: `proposals/27_MB_C_dynamic_strength_and_the_residual_chance.md` §4 (the arms, the readings, the criterion, the controls against a fake reading, "The instrument"), "Batch items" row 27C-2, "Gate, with the reading expected"; `26_MASS_BATTLE_calibration_targets.md`'s A-59 `Folded:` line (1), (2); rulings A-59, A-77, A-30; UNDECIDED 6.
 - ADVANCES: A-59 B, A-77 (the test that tells removal from lowering).

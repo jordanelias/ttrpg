@@ -35,6 +35,7 @@
 | B19.63 | the charge on the contact draw: the situation, whether it closes, its shock to the stand draw | MBA-06 steps 2, 3 | BUILD | MOVER(behaviour) | B19.61, B19.62; MBA-04 (first half) |
 | B19.64 | the chase's casualties are the contact draw under the `pursuit` row | MBA-04 step 5 | BUILD | MOVER(behaviour) | B19.58, B19.62 |
 | B19.65 | one resolver, one fixture, one landing order | `U5b_MB_rulings_in_the_field` §4, §6 | POINTER | — | — |
+| B19.70 | the `command` skill row, its three `field` use rows, and the one host builder of a `CommandRecord` (Covered: C-02) | `27_MB_A` §1, §2, §5, item 27A-6 | BUILD | MOVER(behaviour) | B19.55; B19.02 (first half); Batch B04, Batch B05 |
 | B19.66 | the six-arm instrument | `27_MB_C` 27C-2 | BUILD | EQUAL | B19.61; the T-rows block (first half) |
 | B19.67 | the calibration read: exposure, the levels and the seeds against the targets | MBA-08 (with `26_MASS_BATTLE_calibration_targets` §3's sweeps) | BUILD (calibration) | MOVER(behaviour) | B19.51 to B19.64 |
 | B19.68 | the multiplier leaves: the six-arm table, the criterion, the licensed commit | `27_MB_C` 27C-3 (and 27C-3′, its other branch) | BUILD | MOVER(behaviour) | B19.66, B19.67 |

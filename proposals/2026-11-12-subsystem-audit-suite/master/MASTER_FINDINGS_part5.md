@@ -39,8 +39,8 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 18 | R-25 | a hearer's regard rides `reception` | — |  | `U5c:279` · H-267 | SUPERSEDED | by G-60 / OBS §2–§3 (`regard` is its own term where no bench hears) | → B05 | IN |
 | 19 | R-40 | forgery quality under the per-pool arm | — |  | `U5c:329` · PES-FI §2.2 | STALE/FP | the arm ships and bites (C-3's row above); the term is OBS's `subject` | — (stale) | IN |
 | 20 | N-lines | N-1, N-2, N-5 false; N-3, N-4, N-6 narrowed; N-7 holds | — |  | `U5c:360` · PES-FI §1.2 | RESOLVED-BY | N-1: FI-02, FI-06; N-2: PFI-D and the cross-family sink; N-5: PFI-A; N-4: FRES §2's gate; N-6:… | B05, B11, B26 | IN |
-| 21 | F-PES-FI-12 | 93.9% of the log is ledger bookkeeping | — |  | `U5c:355` · Event census | RESOLVED-BY | CR-29 removes the broadcast's share; one decay Event per claim per season is IN's (`01_CORE_cl… | B09, B11 | IN |
-| 22 | F-PES-FI-13 | a Record's id where a person is meant; a hearth to itself; a man told he exists | — |  | `U5c:356` · `p3_forgery.py` | RESOLVED-BY | PFI-B edit 4; PFI-A edits 2–3 (existence is not garbled); the self-`transfer` is `02_CHAR_offe… | B10, B26, B11 | IN |
+| 21 | F-PES-FI-12 | 93.9% of the log is ledger bookkeeping | H |  | `U5c:355` · Event census | RESOLVED-BY | CR-29 removes the broadcast's share; one decay Event per claim per season is IN's (`01_CORE_cl… | B09, B11 | IN |
+| 22 | F-PES-FI-13 | a Record's id where a person is meant; a hearth to itself; a man told he exists | H |  | `U5c:356` · `p3_forgery.py` | RESOLVED-BY | PFI-B edit 4; PFI-A edits 2–3 (existence is not garbled); the self-`transfer` is `02_CHAR_offe… | B10, B26, B11 | IN |
 | 23 | R-02 | `goal_referents`' docstring reads the ruling backwards | — |  | `U5c:256` · `world_q.py:2836` | RESOLVED-BY | FI-01 edit 2 | B11 | FI |
 | 24 | R-03 | own-edge stamps stay; others' state is ledger-gated | — |  | `U5c:257` · `docket_question` precedent | RESOLVED-BY | FI-01 "The rule" | B11 | FI |
 | 25 | R-04 | Q2 clause 2 stays (adds no referent) | — |  | `U5c:258` · `p1_belief.py`, `p1d_where.py` | DISPUTED | this lane's evidence is the pessimist's: the clause removes referents on world truth (a silent… | — (disputed) | FI |
@@ -88,16 +88,16 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 67 | R-44 | the case is a `deed_doers` goal | — |  | `U5c:331` · IN-67 | RESOLVED-BY | FI-07 §1 | B11 | FI |
 | 68 | R-46 | no Exposure meter | — |  | `U5c:333` | RESOLVED-BY | FI-07 §4 | B11 | FI |
 | 69 | R-47 | forks inside the archive | — |  | `U5c:334` | RESOLVED-BY | FRES §3 | B11 | FI |
-| 70 | F-PES-FI-01 | a deed leaves no trace but the memory of those present | — |  | `U5c:344` · `p5_crime.py` | RESOLVED-BY | PFI-C edits 1–3 with CP-T06-01, -02 | B11 | FI |
-| 71 | F-PES-FI-02 | a rumour is one telling long; what is said is mostly that someone exists | — |  | `U5c:345` · `p2_chain.py`, `told_dump.py 0 2` | RESOLVED-BY | FI-02 as reconciled (C-14); PFI-A edits 1–3, 5 | B11 | FI |
-| 72 | F-PES-FI-03 | a forged paper is believed by nobody in play; knowing it false changes nothing | — |  | `U5c:346` · `p3b_knows.py` | RESOLVED-BY | PFI-B edits 1–3; that a forgery travels at all is FI-07's scenario and the chooser's `give` (P… | B26, B11 | FI |
-| 73 | F-PES-FI-04 | who exists and where is read from the truth | — |  | `U5c:347` · `p1_belief.py`, `p1d_where.py` | RESOLVED-BY | PFI-C edit 4 with FI-01; FRES §1 | B11 | FI |
-| 74 | F-PES-FI-06 | distortion drifts anything stored as a number | — |  | `U5c:349` · `p2_proxy.py` | RESOLVED-BY | PFI-A edits 1–4 | B11 | FI |
-| 75 | F-PES-FI-07 | a better look is worse than a failed one | — |  | `U5c:350` · `p4_detective.py` (0.15 at pool 2) | RESOLVED-BY | plan CP-T06-03 | B11 | FI |
-| 76 | F-PES-FI-08 | a claim is a pointer; a death is said two ways | — |  | `U5c:351` · `p1c_exists.py` | RESOLVED-BY | PFI-C edit 3 (one vocabulary for an ending); the general case is CHAR's question projection (c… | B11 | FI |
-| 77 | F-PES-FI-09 | news of a death does not travel | — |  | `U5c:352` · `fi_arms.py` arms | RESOLVED-BY | FI-06; FI-02; the `reach` cell for `person.died` is answered (A-33: presence, trail and tellin… | B11 | FI |
-| 78 | F-PES-FI-10 | cutting `chronicle` alone stops the marches | — |  | `U5c:353` · `nochron` arm | RESOLVED-BY | FRES §2 (CR-29's gate) | B11 | FI |
-| 79 | F-PES-FI-11 | fixed outcomes that could go either way | — |  | `U5c:354` · PES-FI §0 | RESOLVED-BY | CP-T06-03 (the lockout); C-12 (`interview`: the answer is the questioned person's draw); CONC… | B11 | FI |
+| 70 | F-PES-FI-01 | a deed leaves no trace but the memory of those present | B |  | `U5c:344` · `p5_crime.py` | RESOLVED-BY | PFI-C edits 1–3 with CP-T06-01, -02 | B11 | FI |
+| 71 | F-PES-FI-02 | a rumour is one telling long; what is said is mostly that someone exists | D |  | `U5c:345` · `p2_chain.py`, `told_dump.py 0 2` | RESOLVED-BY | FI-02 as reconciled (C-14); PFI-A edits 1–3, 5 | B11 | FI |
+| 72 | F-PES-FI-03 | a forged paper is believed by nobody in play; knowing it false changes nothing | D |  | `U5c:346` · `p3b_knows.py` | RESOLVED-BY | PFI-B edits 1–3; that a forgery travels at all is FI-07's scenario and the chooser's `give` (P… | B26, B11 | FI |
+| 73 | F-PES-FI-04 | who exists and where is read from the truth | B |  | `U5c:347` · `p1_belief.py`, `p1d_where.py` | RESOLVED-BY | PFI-C edit 4 with FI-01; FRES §1 | B11 | FI |
+| 74 | F-PES-FI-06 | distortion drifts anything stored as a number | D |  | `U5c:349` · `p2_proxy.py` | RESOLVED-BY | PFI-A edits 1–4 | B11 | FI |
+| 75 | F-PES-FI-07 | a better look is worse than a failed one | D |  | `U5c:350` · `p4_detective.py` (0.15 at pool 2) | RESOLVED-BY | plan CP-T06-03 | B11 | FI |
+| 76 | F-PES-FI-08 | a claim is a pointer; a death is said two ways | D |  | `U5c:351` · `p1c_exists.py` | RESOLVED-BY | PFI-C edit 3 (one vocabulary for an ending); the general case is CHAR's question projection (c… | B11 | FI |
+| 77 | F-PES-FI-09 | news of a death does not travel | D |  | `U5c:352` · `fi_arms.py` arms | RESOLVED-BY | FI-06; FI-02; the `reach` cell for `person.died` is answered (A-33: presence, trail and tellin… | B11 | FI |
+| 78 | F-PES-FI-10 | cutting `chronicle` alone stops the marches | D |  | `U5c:353` · `nochron` arm | RESOLVED-BY | FRES §2 (CR-29's gate) | B11 | FI |
+| 79 | F-PES-FI-11 | fixed outcomes that could go either way | D |  | `U5c:354` · PES-FI §0 | RESOLVED-BY | CP-T06-03 (the lockout); C-12 (`interview`: the answer is the questioned person's draw); CONC… | B11 | FI |
 | 80 | S-PES-FI-1 | may a garbled deed name the wrong person? | — |  | `U5c:358` · PFI-A "For Jordan" | SUPERSEDED | closed by the ladder at step 3: K-37 (ratified as intent, ED-IN-0288) admits no wrong value fr… | → B11 | FI |
 | 81 | S-PES-FI-2 | how fast does a death travel compared with the seat it empties? | — |  | `U5c:359` · A-33 | RESOLVED-BY | answered by Jordan, A-33 (D-43: apart from the seat's news). Merged with FI §11 item 1: two ce… | B11 | FI |
 | 82 | R-29 | the evidence interface | — |  | `U5c:283` | RESOLVED-BY | FI-05B | B24 | SC |
@@ -117,13 +117,13 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 96 | R-48 | a person witnesses through a knot he owns | — |  | `U5c:335` · `04:388` | RESOLVED-BY | FI-08 §1 | B25 | FI |
 | 97 | R-50 | delete the `try/except` wrappers | — |  | `U5c:337` · `knots.py:347-378` | RESOLVED-BY | FI-08 §2 | B25 | FI |
 | 98 | R-21 | `standing` is one constant for everyone | — |  | `U5c:275` · `04` §B.10 note on `Sensation` | STALE/FP | irrelevant at HEAD: no deposit mints a `person_predicates` claim and no chooser term reads `st… | — (stale) | FI |
-| 99 | R-31 | one vocation for three inquiries | — |  | `U5c:285` · `verb_capability` | RESOLVED-BY | no engine edit owed: authoring (two data rows on the skill surface U1 decides) | — | FI |
+| 99 | R-31 | one vocation for three inquiries | — |  | `U5c:285` · `verb_capability` | RESOLVED-BY | no engine edit owed: authoring (two data rows on the skill surface U1 decides) | B04 (B04.03) content | FI |
 | 100 | C-3 | forgery quality is inert at the shipped fixtures, refused at quality 3 | — |  | `U5c:302` · `p4_detective.py 300` (PES-FI §2.2) | STALE/FP | false at HEAD: quality 0 → 1 moves Failure 68.3% → 91.0% at pool 2; nothing is refused (the pe… | — (stale) | FI |
-| 101 | C-7 | Heavy Rain is named nowhere in the tree | — |  | `U5c:306` · addendum §B7 run 4 | RESOLVED-BY | R-49 (dropped as a referent; no file cites it for a design) | — | FI |
-| 102 | C-10 | the three-season runs | — |  | `U5c:309` · addendum §B7 run 3 | RESOLVED-BY | no edit owed (readings) | — | FI |
-| 103 | R-45 | Disposition is `regard` | — |  | `U5c:332` · ruling R7 | RESOLVED-BY | no edit owed (the code governs) | — | FI |
-| 104 | R-49 | Heavy Rain dropped | — |  | `U5c:336` | RESOLVED-BY | no edit owed | — | FI |
-| 105 | F-PES-FI-05 | the information verbs crowd the game out | — |  | `U5c:348` | RESOLVED-BY | `fi_arms.py 0 3 nofi`, `nod3` against `draw1` | — | FI |
+| 101 | C-7 | Heavy Rain is named nowhere in the tree | — |  | `U5c:306` · addendum §B7 run 4 | RESOLVED-BY | R-49 (dropped as a referent; no file cites it for a design) | none owed (a pointer; `workplan_v12/COVERAGE.md` §A.2) | FI |
+| 102 | C-10 | the three-season runs | — |  | `U5c:309` · addendum §B7 run 3 | RESOLVED-BY | no edit owed (readings) | none owed (a pointer; `workplan_v12/COVERAGE.md` §A.2) | FI |
+| 103 | R-45 | Disposition is `regard` | — |  | `U5c:332` · ruling R7 | RESOLVED-BY | no edit owed (the code governs) | none owed (a pointer; `workplan_v12/COVERAGE.md` §A.2) | FI |
+| 104 | R-49 | Heavy Rain dropped | — |  | `U5c:336` | RESOLVED-BY | no edit owed | none owed (a pointer; `workplan_v12/COVERAGE.md` §A.2) | FI |
+| 105 | F-PES-FI-05 | the information verbs crowd the game out | D |  | `U5c:348` | RESOLVED-BY | `fi_arms.py 0 3 nofi`, `nod3` against `draw1` | B26 (B26.06) | FI |
 
 ---
 
@@ -165,7 +165,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 24 | F-FA-11 | `dispensation` and `oblige` say the opposite of what they do | H |  | `U5d:66` · `06_FA_audit.md:304` · H-262, H-298 | RESOLVED-BY | HYG item 4 (R-11, R-12); declared hash mover | B03 | IN |
 | 25 | F-FA-12 | H-230 and H-206 describe a tree that no longer exists | H |  | `U5d:67` · `06_FA_audit.md:309` · `_eff_succeed`, `successions`, `death_subjects` in the tree | RESOLVED-BY | HYG item 1 (R-13) | B03 | IN |
 | 26 | F-FA-17 | at tick 0 no rung holds a store | H |  | `U5d:159` · `06_FA_audit_addendum_B.md:188` · addendum E-B1 | RESOLVED-BY | `07_SE_treasury_granary_B.md`; the seeded start draws bounded stores (A-50, `21_PROCEDURAL_D_w… | B39, B12a-c | WR |
-| 27 | F-PES-FA-12 | single-seed verb counts are one draw from a wide spread | H |  | `U5d:191` · `16_PESSIMIST_FA.md:572` · `oblige` 26 → 0 | RESOLVED-BY | none owed (a caution); gates in this family read at ≥ 2 dice seeds | — | FA |
+| 27 | F-PES-FA-12 | single-seed verb counts are one draw from a wide spread | H |  | `U5d:191` · `16_PESSIMIST_FA.md:572` · `oblige` 26 → 0 | RESOLVED-BY | none owed (a caution); gates in this family read at ≥ 2 dice seeds | none owed (a pointer; `workplan_v12/COVERAGE.md` §A.2) | FA |
 | 28 | H-206, H-230 | stale heads | — |  | `U5d:82` · `gate.py:1819-1832` | RESOLVED-BY | HYG item 1 | B03 | IN |
 | 29 | H-252 | which clause refused | — |  | `U5d:84` · E-3 | RESOLVED-BY | HYG item 2 (R-14) | B03 | IN |
 | 30 | H-262, H-298 | names | — |  | `U5d:86` | RESOLVED-BY | HYG item 4 | B03 | IN |
@@ -205,7 +205,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 64 | fourteen UNCLEAR needs (NPC-071, -034 t… | content debts on `npc_registry.yaml` and `offices.yaml` | — |  | `U5d:142` · E-8 | RESOLVED-BY | REMIT edit 3 (rows for unauthored seats); the generated cast (A-44, `21_PROCEDURAL_B_cast_and_… | B39, B21 | WR |
 | 65 | C-2 | `marshal`, `surrender` and the army verbs are withheld by a fixture | — |  | `U5d:150` · `data/fixtures.py:1157` | RESOLVED-BY | MB's step 5 lifts the withholding (U5b); LEVY-B lands first | B21 | FA |
 | 66 | C-6 | eight `elected` rows at `term: 8` do not fit the design | — |  | `U5d:154` · E-B2 | RESOLVED-BY | TERMS-B (three rows; life seats `null`), which supersedes TERMS's first authoring in content | B21 | FA |
-| 67 | F-FA-18 | what an order orders exists only as prose | — |  | `U5d:160` · H-44 | RESOLVED-BY | OWED-FA §5 (R-27: a closed set of term shapes, built after an answered writ is observed); VB-D… | B21 | FA |
+| 67 | F-FA-18 | what an order orders exists only as prose | unrated in source |  | `U5d:160` · H-44 | RESOLVED-BY | OWED-FA §5 (R-27: a closed set of term shapes, built after an answered writ is observed); VB-D… | B21 | FA |
 | 68 | R-24 | men by a Record's holder, stores by a seat | — |  | `U5d:163` | RESOLVED-BY | LEVY-B | B21 | FA |
 | 69 | R-25, R-26 | heads; which seats take a term | — |  | `U5d:164` | RESOLVED-BY | TERMS-B | B21 | FA |
 | 70 | R-27 | what a writ may order | — |  | `U5d:165` | RESOLVED-BY | OWED-FA §5 | B21 | FA |
@@ -229,7 +229,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 88 | ARC-01, ARC-03 | a quantity that moves from the absence of any act ("wrongly stated against a ruling") | — |  | `U5d:141` · ED-IN-0345 `[ledger row not re-opened]` | RESOLVED-BY | restated on events that mark inaction (the audit's own restatement); plan CR-89 | B21d | FA |
 | 89 | CP-T09-01 to -09, CR-09, CR-32, CR-35 t… | planned, unbuilt | — |  | `U5d:92` · no `declare`, `retain`, `conspire` row (E-2) | RESOLVED-BY | the plan positions; one clause each from WAR-B edits 5–6 | B23 | FA |
 | 90 | C-7 | nothing a battle decides is read back by a governance verb (a Layer 1 shortfall) | — |  | `U5d:153` · `10_FACTIONS_AND_DEPLOYMENT.md:90` | RESOLVED-BY | LAND (as F-FA-13) | B23 | FA |
-| 91 | F-FA-14 | under the planned `at_war`, one committer keeps two factions at war | — |  | `U5d:156` · `04:460` | RESOLVED-BY | WAR-B edits 1–4 as reconciled: A-20 rules (B), so the "lands only on that ruling" hold is lift… | B23 | FA |
+| 91 | F-FA-14 | under the planned `at_war`, one committer keeps two factions at war | unrated in source |  | `U5d:156` · `04:460` | RESOLVED-BY | WAR-B edits 1–4 as reconciled: A-20 rules (B), so the "lands only on that ruling" hold is lift… | B23 | FA |
 | 92 | R-22 | Layer 1's battle roster names stakes the code does not pass ("keep β: a field writes presence") | — |  | `U5d:161` · `_eff_march`'s own tag ("revert: Jordan states α") is discharged as ruled, not… | RESOLVED-BY | β is ruled for the field's write (A-66); the stakes are met by the victor's choice: LAND edits… | B23 | FA |
 | 93 | R-23 | whose edge a war is | — |  | `U5d:162` | RESOLVED-BY | WAR-B (A-20) | B23 | FA |
 | 94 | R-32 | may `at_war` reach a verb's `requires` | — |  | `U5d:170` | RESOLVED-BY | WAR-B edit 7 (a) (no; an outcome Query) | B23 | FA |
@@ -241,21 +241,21 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 100 | C-3 | the FA→MB interface was understated | — |  | `U5d:151` | RESOLVED-BY | corrected in the addendum §B4.2; `04_MB_campaign_party_economy.md` (U5b) | B31 | MB |
 | 101 | H-21, H-41, H-99, H-100 | listed open; verified closed | — |  | `U5d:73` · `effects_governance.py:538-544`; `office.established` 1 (E-5); `REVOCATION_DISP… | STALE/FP | none owed (H-352 carries H-21's residue) | — (stale) | FA |
 | 102 | H-70, H-156, H-161, H-163, H-281, H-297 | open; another lane's (CHAR, CORE, SC) | — |  | `U5d:74` · audit §6.1 "cross-listed" | SUPERSEDED | the owning closures (U5a for H-70, H-156; U5c for H-161, H-163, H-281, H-297) | — | FA |
-| 103 | H-133 | two live holders on one office | — |  | `U5d:78` | RESOLVED-BY | none owed: stays registered (F-FA-08); no builder produces the state | — | FA |
+| 103 | H-133 | two live holders on one office | — |  | `U5d:78` | RESOLVED-BY | none owed: stays registered (F-FA-08); no builder produces the state | none owed (a pointer; `workplan_v12/COVERAGE.md` §A.2) | FA |
 | 104 | H-353 | a seat's faction and a holder's membership are two records | — |  | `U5d:91` | STALE/FP | none owed (R-08: leave them two; `world_q.leaders`' docstring) | — (stale) | FA |
-| 105 | FA-03, FA-07 | held, leave | — |  | `U5d:96` | RESOLVED-BY | none owed (reference) | — | FA |
+| 105 | FA-03, FA-07 | held, leave | — |  | `U5d:96` | RESOLVED-BY | none owed (reference) | none owed (a pointer; `workplan_v12/COVERAGE.md` §A.2) | FA |
 | 106 | R-20 | "registered module" against a subsystem with no verbs of its own | — |  | `U5d:116` | SUPERSEDED | A-10: the loop's own verbs; no governance module | — | FA |
 | 107 | §11 item 2 | the standing requirement against Layer 1 for FA | — |  | `U5d:119` | SUPERSEDED | A-10 | — | FA |
 | 108 | §11 item 3 | seats nobody can strip | — |  | `U5d:120` | SUPERSEDED | A-35, A-36 (as R-21) | — | FA |
 | 109 | NPC-038, NPC-004, NPC-070 (removal) | removable only by death | — |  | `U5d:130` | SUPERSEDED | A-35 (as R-21) | — | FA |
 | 110 | NPC-073, NPC-074, NPC-084, ARC-R18 | a council seat casts a position; a vote neither side wins | — |  | `U5d:140` | SUPERSEDED | SC's closure (U5c); the vote is A-14 | — | FA |
-| 111 | C-1 | F-FA-04's "no producer" is true only of computed play | — |  | `U5d:149` · `tests/test_faction_q.py:223-262` | RESOLVED-BY | corrected in the addendum; no edit owed | — | FA |
-| 112 | C-4, C-5, C-8 | corrections of reading | — |  | `U5d:152` · E-B1, E-B6, E-B7 | RESOLVED-BY | corrected in the addendum; no edit owed | — | FA |
-| 113 | R-30 | who owns a split realm | — |  | `U5d:168` | RESOLVED-BY | none owed until a contested succession executes; the Split is A-46's | — | FA |
-| 114 | R-33, R-34 | NPC-089's rung; `faction x` | — |  | `U5d:171` | RESOLVED-BY | none owed (statements) | — | FA |
+| 111 | C-1 | F-FA-04's "no producer" is true only of computed play | — |  | `U5d:149` · `tests/test_faction_q.py:223-262` | RESOLVED-BY | corrected in the addendum; no edit owed | none owed (a pointer; `workplan_v12/COVERAGE.md` §A.2) | FA |
+| 112 | C-4, C-5, C-8 | corrections of reading | — |  | `U5d:152` · E-B1, E-B6, E-B7 | RESOLVED-BY | corrected in the addendum; no edit owed | none owed (a pointer; `workplan_v12/COVERAGE.md` §A.2) | FA |
+| 113 | R-30 | who owns a split realm | — |  | `U5d:168` | RESOLVED-BY | none owed until a contested succession executes; the Split is A-46's | none owed (a pointer; `workplan_v12/COVERAGE.md` §A.2) | FA |
+| 114 | R-33, R-34 | NPC-089's rung; `faction x` | — |  | `U5d:171` | RESOLVED-BY | none owed (statements) | none owed (a pointer; `workplan_v12/COVERAGE.md` §A.2) | FA |
 | 115 | §B6.2 item 1 | whose word ends a war | — |  | `U5d:172` | SUPERSEDED | A-20 (the seats that wage it) | — | FA |
-| 116 | §B8.2 (old findings re-verified; what t… | reading account | — |  | `U5d:174` | RESOLVED-BY | no edit owed; the transfers are carried by the kit (Part 5) | — | FA |
-| 117 | F-PES-FA-11 | R-16 strands the throne one death earlier | — |  | `U5d:190` · `pf1`, `pf2b` §7 | RESOLVED-BY | as R-16: lands with A-19's race | — | FA |
+| 116 | §B8.2 (old findings re-verified; what t… | reading account | — |  | `U5d:174` | RESOLVED-BY | no edit owed; the transfers are carried by the kit (Part 5) | none owed (a pointer; `workplan_v12/COVERAGE.md` §A.2) | FA |
+| 117 | F-PES-FA-11 | R-16 strands the throne one death earlier | unrated in source |  | `U5d:190` · `pf1`, `pf2b` §7 | RESOLVED-BY | as R-16: lands with A-19's race | B21 (B21.03, B21.16) | FA |
 | 118 | §5 item | when the royal line fails, who may take the crown | — |  | `U5d:193` | SUPERSEDED | A-19 (the deed race) | — | FA |
 
 ---
@@ -308,7 +308,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 34 | F-PES-SE-13 | smaller kernel defects | H |  | `U5d:303` · `16_PESSIMIST_SE.md:647` | RESOLVED-BY | OWED-SE §9 (R-PES-SE-13) and KERN-SE | B12a-c | SE+WR |
 | 35 | F-PES-SE-11 | the story instruments cannot see a place | H |  | `U5d:301` · `16_PESSIMIST_SE.md:634` | RESOLVED-BY | none owed (§0.1 pt 5); `23_STORY_D_story_census_and_gate.md` reads places | B36 | WR |
 | 36 | F-SE-15 | a season's cost grew with the tick in every arm run | H |  | `U5d:226` · `07_SE_audit.md:371` · audit §3 (`[not re-measured]`) | DISPUTED | none: the audit itself marks the reading load-confounded and names no cause; this lane has no… | — (disputed) | SE |
-| 37 | F-SE-16 | the instruments cannot see the economy's loops | H |  | `U5d:227` · `07_SE_audit.md:377` | RESOLVED-BY | none owed (CLAUDE.md §0.1 pt 5: no instrument over an instrument); each SE proposal's gate nam… | — | SE |
+| 37 | F-SE-16 | the instruments cannot see the economy's loops | H |  | `U5d:227` · `07_SE_audit.md:377` | RESOLVED-BY | none owed (CLAUDE.md §0.1 pt 5: no instrument over an instrument); each SE proposal's gate nam… | none owed (a pointer; `workplan_v12/COVERAGE.md` §A.2) | SE |
 | 38 | SE-04 (b), R-SE-20 | `Rung.envelope` declared, unwritten, unread | — |  | `U5d:245` · grep `[not re-opened]` | RESOLVED-BY | plan IN-44 (delete through its Layer 1 row); OWED-SE §3 | B12a-c, B03 | SE+WR |
 | 39 | H-293, S-SE-2 | what custody takes from a ruler | — |  | `U5d:239` · #453 names the travel readers only | SUPERSEDED | A-23 (custody suspends acts through the seat); `U5d_FA_owed_edits.md` §2 | → B21 | FA |
 | 40 | H-105, H-171 | cite `restore` executing in the realm | — |  | `U5d:233` · F-SE-05 | RESOLVED-BY | OWED-SE §1 (R-SE-16) | B12a-c | SE+WR |
@@ -352,9 +352,9 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 78 | R-SE-33 to -36 | hands under arms; the standing ration; training; the occupier | — |  | `U5d:284` | RESOLVED-BY | SUPPLY | B22 | MB |
 | 79 | R-PES-SE-14 | one ration on two clocks | — |  | `U5d:307` | RESOLVED-BY | SUPPLY (a constraint on R-SE-34) | B22 | MB |
 | 80 | H-149, CP-T08-09 | ruled and enforced; withdrawn | — |  | `U5d:235` · `test_march.py` | STALE/FP | none owed | — (stale) | SE |
-| 81 | §13 NPC-083 (methods), ARC-44/ARC-01 (d… | "wrongly stated" | — |  | `U5d:258` · `rosters.yaml:79-80` | RESOLVED-BY | restated by the audit (the tier-4 redesign's; claim decay on a cohort's reasons); no SE edit | — | SE |
+| 81 | §13 NPC-083 (methods), ARC-44/ARC-01 (d… | "wrongly stated" | — |  | `U5d:258` · `rosters.yaml:79-80` | RESOLVED-BY | restated by the audit (the tier-4 redesign's; claim decay on a cohort's reasons); no SE edit | none owed (a pointer; `workplan_v12/COVERAGE.md` §A.2) | SE |
 | 82 | §13 ARC-12, EMG-C3, NPC-001, NPC-003, N… | owned by FI, WR, FA | — |  | `U5d:261` | SUPERSEDED | the owning closures (U5c; Parts 1 and 3 here) | — | SE |
-| 83 | §2.3 (twelve `.audit/` findings re-veri… | true, false now, moved, irrelevant | — |  | `U5d:277` · the addendum's table | RESOLVED-BY | none owed beyond the rows above (G-33 and G-04 false now; the stress-sim mechanics irrelevant,… | — | SE |
+| 83 | §2.3 (twelve `.audit/` findings re-veri… | true, false now, moved, irrelevant | — |  | `U5d:277` · the addendum's table | RESOLVED-BY | none owed beyond the rows above (G-33 and G-04 false now; the stress-sim mechanics irrelevant,… | none owed (a pointer; `workplan_v12/COVERAGE.md` §A.2) | SE |
 | 84 | J-2 | how does the world's own motion draw | — |  | `U5d:309` | SUPERSEDED | A-54 (the one four-band ladder) | — | SE |
 | 85 | J-3 | may a place begin, and may a begun place end | — |  | `U5d:310` · SE-9(a) | SUPERSEDED | A-55 | — | SE |
 
@@ -385,8 +385,8 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 11 | F-WR-06 | the victory ending is unreachable on one territory; its register row is stale | D | R-06 | `U5d:335` · `09_WR_audit.md:303` · GD-1 | RESOLVED-BY | MOTION edit 3 (settled territories), reached by a draw (DRAWS edit 3) | B12a-c | SE+WR |
 | 12 | F-PES-WR-06 | a journey is free, instant and certain | D | R-06 | `U5d:414` · `16_PESSIMIST_WR.md:506` | RESOLVED-BY | PES-WR-A | B12a-c | SE+WR |
 | 13 | F-PES-WR-07 | the bodies clock is a coin, the same coin for everyone | D | R-07, R-09 | `U5d:415` · `16_PESSIMIST_WR.md:513` · `fixtures.py:692` | RESOLVED-BY | PES-WR-C as reconciled (A-15: no longer dark once the ages are authored); `22_HAPPENINGS_A` ow… | B37 | IN |
-| 14 | F-WR-07 | the flow stamp's reach hangs on one Event kind | D | R-07 | `U5d:336` · `09_WR_audit.md:325` · dose 0 to 28% by seed | RESOLVED-BY | none of its own (the stamp is correct; its inputs are rare): it reads again once F-WR-01's clo… | — | WR |
-| 15 | F-PES-WR-08 | every run is the same run | D | R-08 | `U5d:416` · `16_PESSIMIST_WR.md:530` | RESOLVED-BY | none of its own (the sum of F-WR-01 and the world's motion being off); the seeded start (A-50)… | — | WR |
+| 14 | F-WR-07 | the flow stamp's reach hangs on one Event kind | D | R-07 | `U5d:336` · `09_WR_audit.md:325` · dose 0 to 28% by seed | RESOLVED-BY | none of its own (the stamp is correct; its inputs are rare): it reads again once F-WR-01's clo… | none owed (a pointer; `workplan_v12/COVERAGE.md` §A.2) | WR |
+| 15 | F-PES-WR-08 | every run is the same run | D | R-08 | `U5d:416` · `16_PESSIMIST_WR.md:530` | RESOLVED-BY | none of its own (the sum of F-WR-01 and the world's motion being off); the seeded start (A-50)… | none owed (a pointer; `workplan_v12/COVERAGE.md` §A.2) | WR |
 | 16 | F-WR-09 | memory decay is half the log and grows | D | R-09 | `U5d:338` · `09_WR_audit.md:367` · 179,056 `claim.decayed` (E-08) | RESOLVED-BY | `01_CORE_claim_fade_as_read.md` (U5a's; the ladder's D-48: forgetting computed when read) | B09 | IN |
 | 17 | F-WR-24 | wear, strain, the hungry body, a lapse, endings and a strand's conclusion are fixed functions of state | D | R-09 | `U5d:390` · `09_WR_audit_addendum_B.md:91` | RESOLVED-BY | DRAWS edits 1–4 (R-37 to R-40), confirmed in form by A-54 and A-24 | B12a-c | SE+WR |
 | 18 | F-WR-19 | the scheduled weather has no memory, no neighbours and a mean of 1.167 | D |  | `U5d:385` · `09_WR_audit_addendum_B.md:86` | RESOLVED-BY | WEATHER-B edits 1–2 as reconciled (A-54) | B12a-c | SE+WR |
@@ -443,18 +443,18 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 69 | R-28, R-32 | what a line is about; the journal's source | — |  | `U5d:395` | RESOLVED-BY | CHRON-B | B36 | WR |
 | 70 | R-29, R-30 | closed by act or by clock; non-zero changes only | — |  | `U5d:396` | RESOLVED-BY | READ-B edits 1–2 | B36 | WR |
 | 71 | §6.1 rows "not WR's" (H-32, -65, -107,… | another lane's mechanism | — |  | `U5d:343` | SUPERSEDED | the owning closures (U5a, U5b, U5c; Parts 1 and 2 here); the addendum's §6 re-reads each (3.2… | — | WR |
-| 72 | H-238 | no corpus thread sensitivity | — |  | `U5d:348` · E-15 | RESOLVED-BY | none owed (answered at ladder step 1 by the row itself) | — | WR |
-| 73 | H-274 | the stamp | — |  | `U5d:350` | RESOLVED-BY | as F-WR-07 | — | WR |
-| 74 | R-10, R-17, R-19 | the empty thrust ladder; sixteen links read 0; live tenures at a move's tick | — |  | `U5d:356` | RESOLVED-BY | none owed (statements recorded in the audit; no code) | — | WR |
+| 72 | H-238 | no corpus thread sensitivity | — |  | `U5d:348` · E-15 | RESOLVED-BY | none owed (answered at ladder step 1 by the row itself) | none owed (a pointer; `workplan_v12/COVERAGE.md` §A.2) | WR |
+| 73 | H-274 | the stamp | — |  | `U5d:350` | RESOLVED-BY | as F-WR-07 | none owed (a pointer; `workplan_v12/COVERAGE.md` §A.2) | WR |
+| 74 | R-10, R-17, R-19 | the empty thrust ladder; sixteen links read 0; live tenures at a move's tick | — |  | `U5d:356` | RESOLVED-BY | none owed (statements recorded in the audit; no code) | none owed (a pointer; `workplan_v12/COVERAGE.md` §A.2) | WR |
 | 75 | §11 item 1 | the same-doer link | — |  | `U5d:361` · ED-IN-0316 | SUPERSEDED | A-45 (several strands) | — | WR |
 | 76 | §13 ARC-02 | a state-change check with no actor | — |  | `U5d:368` | SUPERSEDED | A-15 | — | WR |
 | 77 | §13 ARC-53, SCN-07, ARC-23 | represented today | — |  | `U5d:369` · `tend` 37/69 (E-07) | STALE/FP | none owed | — (stale) | WR |
 | 78 | §13 ARC-07, NPC-052, ARC-01, ARC-44 | other lanes' | — |  | `U5d:371` | SUPERSEDED | U5b; Parts 1 and 2 | — | WR |
 | 79 | §14 (skill surface; "banded scalar") | asked CHAR for a row kind | — |  | `U5d:373` | SUPERSEDED | the addendum's R-24 (none needed) | — | WR |
-| 80 | R-24, R-33, R-35 | no "banded scalar"; no navigation skill; no Approach Training gate | — |  | `U5d:394` | RESOLVED-BY | none owed (A-11 confirms: training gates nothing; Thread Sensitivity is the one gate) | — | WR |
-| 81 | R-36 | the Rendering Crisis's four beats | — |  | `U5d:398` | RESOLVED-BY | none owed (the Event alone; the journal tells) | — | WR |
+| 80 | R-24, R-33, R-35 | no "banded scalar"; no navigation skill; no Approach Training gate | — |  | `U5d:394` | RESOLVED-BY | none owed (A-11 confirms: training gates nothing; Thread Sensitivity is the one gate) | none owed (a pointer; `workplan_v12/COVERAGE.md` §A.2) | WR |
+| 81 | R-36 | the Rendering Crisis's four beats | — |  | `U5d:398` | RESOLVED-BY | none owed (the Event alone; the journal tells) | none owed (a pointer; `workplan_v12/COVERAGE.md` §A.2) | WR |
 | 82 | §6: 20 rows another lane's | read and left | — |  | `U5d:403` | SUPERSEDED | the owning closures | — | WR |
-| 83 | §5, §6, §7 lists | false N-lines; premises; stories | — |  | `U5d:421` | RESOLVED-BY | none owed beyond the rows above | — | WR |
+| 83 | §5, §6, §7 lists | false N-lines; premises; stories | — |  | `U5d:421` | RESOLVED-BY | none owed beyond the rows above | none owed (a pointer; `workplan_v12/COVERAGE.md` §A.2) | WR |
 
 ---
 
@@ -487,7 +487,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 15 | F-PES-DICE-03 | the ceiling is a wall; every shipped forgery stands on it | D |  | `U5a:635` · `16_PESSIMIST_DICE.md:466` · pools 1–12 read 10.00 % at their cap | RESOLVED-BY | SOFT (the cap's closed form follows the one sampler: DOE §1) | B05 | IN |
 | 16 | F-PES-DICE-05 | a failed search is forgotten and retried; remembering alone changes nothing | D |  | `U5a:637` · `16_PESSIMIST_DICE.md:510` · 157 of 157 `finding.none` Events have no descendant; deposit alone: 19 of 42 ag… | RESOLVED-BY | DOE §4 (the actor-only deposit of `finding.none`, read by `refused_before` of `16_PESSIMIST_CO… | B09, B05 | IN |
 | 17 | F-PES-DICE-06 | one die cannot succeed, and a zero cannot try | D |  | `U5a:638` · `16_PESSIMIST_DICE.md:532` · `band_odds(1, 2.0)` | SUPERSEDED | A-6 (no person rolls under five dice); TASK for the unopposed rows | → B05 | IN |
-| 18 | F-DICE-04 | four rolled verbs name no skill | D |  | `U5a:552` · `10_DICE_audit.md:197` · E-09 | RESOLVED-BY | U1 architecture §5 (one value per verb row, decided across CORE, DICE, SC and FA: C-U5a-11) | — | IN |
+| 18 | F-DICE-04 | four rolled verbs name no skill | D |  | `U5a:552` · `10_DICE_audit.md:197` · E-09 | RESOLVED-BY | U1 architecture §5 (one value per verb row, decided across CORE, DICE, SC and FA: C-U5a-11) | B04 (B04.03, B04.19) | IN |
 | 19 | F-PES-DICE-04 | a field is decided by a draw the dice engine never sees | D |  | `U5a:636` · `16_PESSIMIST_DICE.md:491` · friction's 5th–95th percentile 0.164–6.107 | JORDAN | D-34 (luck in battle: a hidden multiplier, or a named level) | — (answered A-59, A-77) | IN |
 | 20 | F-DICE-22 | two unread tests are prose guards | H |  | `U5a:578` · `10_DICE_audit_addendum_B.md:300` | RESOLVED-BY | `01_CORE_tests_delete_what_cannot_fail.md` row 1 (`test_knot_pool_formula.py`); `tests/valoria… | B02, B05 | IN |
 | 21 | F-PES-DICE-08 | the obstacle's floor reaches one term and not the sum | H |  | `U5a:640` · `16_PESSIMIST_DICE.md:554` · E-P1 | SUPERSEDED | `13_SC_tuning_tables.md` T1 (U5c) | → B05, B02 | IN |
@@ -507,7 +507,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 35 | §5.5 | order of landing | — |  | `U5a:583` | RESOLVED-BY | restated for the answers in CAP "Order" and DOE "Order" | B04, B05 | IN |
 | 36 | H-126, H-127, H-213 | 3.3 `audits/10_DICE_audit.md` §6.1 rows, §6.2 resolutions 1… | — |  | `U5a:596` | RESOLVED-BY | `10_DICE_one_score_two_roles.md` (H-127's scope); `16_PESSIMIST_DICE_soft_ceiling.md` (H-213);… | B05, B04 | IN |
 | 37 | res. 25 | 3.3 `audits/10_DICE_audit.md` §6.1 rows, §6.2 resolutions 1… | — |  | `U5a:612` | RESOLVED-BY | MAP §D (`fed_by`) with SC-B's `Margin.terms` (U5c): one record of a roll, proposed once | B04 | IN |
-| 38 | F-DICE-10 | the room is a flat obstacle shift | — |  | `U5a:558` · E-08 | RESOLVED-BY | the favourable half moves to leverage by Jordan's answer A-25 (SC's composer: U5c); the senten… | B05 | IN |
+| 38 | F-DICE-10 | the room is a flat obstacle shift | unrated in source |  | `U5a:558` · E-08 | RESOLVED-BY | the favourable half moves to leverage by Jordan's answer A-25 (SC's composer: U5c); the senten… | B05 | IN |
 | 39 | C-4 | the roller proposal's `grep` falsifier cannot read one line | — |  | `U5a:571` · E-B02 | RESOLVED-BY | `10_DICE_one_roller_one_fraction_rule.md` falsifier restated (Reconciled) | B05 | IN |
 | 40 | C-6, H-152 | closed by a run (CP-T02-01) | — |  | `U5a:573` · `probe_h152.py`, three arms with a mutation | RESOLVED-BY | DOE §3 row 6 (the register row's head and owner) | B05 | IN |
 | 41 | §5.1 items 1–6 | the shared roller meets mass battle's resolver | — |  | `U5a:580` | RESOLVED-BY | DOE §1 (items 1–5 restated for the one sampler); item 6's order against `11_GO_one_draw_owner.… | B06, B05 | IN |
@@ -527,25 +527,25 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 55 | §14, §15 | 3.3 `audits/10_DICE_audit.md` §6.1 rows, §6.2 resolutions 1… | — |  | `U5a:625` | RESOLVED-BY | U1 architecture; `10_DICE_believed_odds_have_a_prior.md` | B05 | IN |
 | 56 | §13 ARC-06 (an implementation can fail… | 3.3 `audits/10_DICE_audit.md` §6.1 rows, §6.2 resolutions 1… | — |  | `U5a:617` | RESOLVED-BY | `18_DETERMINISM_task_draw_for_uncontested_verbs.md` (PART 6) | B07 | IN |
 | 57 | §9 "one roll as a decision"; §8 step 7… | 3.3 `audits/10_DICE_audit.md` §6.1 rows, §6.2 resolutions 1… | — |  | `U5a:614` | RESOLVED-BY | `11_GO_player_surface_contract_B.md` (`Offer` rows carry odds; U5d) | B34 | GO |
-| 58 | C-2 | the first audit's research skip was a false absence | — |  | `U5a:569` | RESOLVED-BY | the three leads are used in F-DICE-16, -17, -18 | — | IN |
+| 58 | C-2 | the first audit's research skip was a false absence | — |  | `U5a:569` | RESOLVED-BY | the three leads are used in F-DICE-16, -17, -18 | none owed (a pointer; `workplan_v12/COVERAGE.md` §A.2) | IN |
 | 59 | §5.2 | the duel round from the dice side | — |  | `U5a:581` | SUPERSEDED | PC's closure (U5b): an approach is an `edge` row, never a pool rule | — | IN |
 | 60 | §5.6 item 1 | the wound's channel | — |  | `U5a:584` | SUPERSEDED | answered: A-8 (a level against) | — | IN |
 | 61 | §5.6 item 2 | what a score is worth outside a fight | — |  | `U5a:585` | SUPERSEDED | answered: A-6 | — | IN |
 | 62 | H-310 | 3.3 `audits/10_DICE_audit.md` §6.1 rows, §6.2 resolutions 1… | — |  | `U5a:594` | SUPERSEDED | FI / SC (U5c) | — | IN |
-| 63 | H-312 | 3.3 `audits/10_DICE_audit.md` §6.1 rows, §6.2 resolutions 1… | — |  | `U5a:595` | RESOLVED-BY | U1 architecture §5 (`interrogate: inquiry`) | — | IN |
+| 63 | H-312 | 3.3 `audits/10_DICE_audit.md` §6.1 rows, §6.2 resolutions 1… | — |  | `U5a:595` | RESOLVED-BY | U1 architecture §5 (`interrogate: inquiry`) | B04 (B04.03, B04.19) | IN |
 | 64 | H-332, H-349, H-361; CP-T01-01 … -06; C… | 3.3 `audits/10_DICE_audit.md` §6.1 rows, §6.2 resolutions 1… | — |  | `U5a:597` | STALE/FP | — | — (stale) | IN |
 | 65 | res. 3, 4 | 3.3 `audits/10_DICE_audit.md` §6.1 rows, §6.2 resolutions 1… | — |  | `U5a:599` | SUPERSEDED | A-5 (no whole-dice fraction rule) | — | IN |
 | 66 | res. 5 | 3.3 `audits/10_DICE_audit.md` §6.1 rows, §6.2 resolutions 1… | — |  | `U5a:600` | SUPERSEDED | A-5 (the audit decided "leave the offset, narrow ED-833"; Jordan answered the other way) | — | IN |
-| 67 | res. 19 (SCN-05 restated: a spend buys… | 3.3 `audits/10_DICE_audit.md` §6.1 rows, §6.2 resolutions 1… | — |  | `U5a:607` | RESOLVED-BY | same file, "The resolution" | — | IN |
+| 67 | res. 19 (SCN-05 restated: a spend buys… | 3.3 `audits/10_DICE_audit.md` §6.1 rows, §6.2 resolutions 1… | — |  | `U5a:607` | RESOLVED-BY | same file, "The resolution" | B05 (B05.60) | IN |
 | 68 | res. 22 (mass battle's survivor-ratio l… | 3.3 `audits/10_DICE_audit.md` §6.1 rows, §6.2 resolutions 1… | — |  | `U5a:609` | SUPERSEDED | MB's closure (U5b); A-3 fixes the field's returned vocabulary (won, lost, drawn) | — | IN |
 | 69 | res. 24 | 3.3 `audits/10_DICE_audit.md` §6.1 rows, §6.2 resolutions 1… | — |  | `U5a:611` | SUPERSEDED | PC's and MB's closures (the `believed_estimate` role) | — | IN |
 | 70 | §11 survivor (which sampler non-combat… | 3.3 `audits/10_DICE_audit.md` §6.1 rows, §6.2 resolutions 1… | — |  | `U5a:613` | SUPERSEDED | answered: A-5 (the audit's Option B). Every edit the audit wrote "for A" is reconciled | — | IN |
-| 71 | §13 ARC-22, NSC-04, NSC-07, SCN-01, ARC… | 3.3 `audits/10_DICE_audit.md` §6.1 rows, §6.2 resolutions 1… | — |  | `U5a:615` | RESOLVED-BY | A-6 and U1 architecture §4 (the top band becomes reachable); band-distinct writes on `lie`, `s… | — | IN |
+| 71 | §13 ARC-22, NSC-04, NSC-07, SCN-01, ARC… | 3.3 `audits/10_DICE_audit.md` §6.1 rows, §6.2 resolutions 1… | — |  | `U5a:615` | RESOLVED-BY | A-6 and U1 architecture §4 (the top band becomes reachable); band-distinct writes on `lie`, `s… | B04, B05 (B04.24, B05.05) | IN |
 | 72 | §13 ARC-18, ARC-17 | 3.3 `audits/10_DICE_audit.md` §6.1 rows, §6.2 resolutions 1… | — |  | `U5a:616` | STALE/FP | — | — (stale) | IN |
 | 73 | §13 SCN-04 (difficulty from a stored di… | 3.3 `audits/10_DICE_audit.md` §6.1 rows, §6.2 resolutions 1… | — |  | `U5a:618` | SUPERSEDED | SC's obstacle proposal (U5c) | — | IN |
-| 74 | §13 SCN-05, SCN-02, ARC-23 | 3.3 `audits/10_DICE_audit.md` §6.1 rows, §6.2 resolutions 1… | — |  | `U5a:621` | RESOLVED-BY | SCN-05: resolution 19. SCN-02 conflicts with ED-SC-0038 (named, SC's). ARC-23 (a skill require… | — | IN |
+| 74 | §13 SCN-05, SCN-02, ARC-23 | 3.3 `audits/10_DICE_audit.md` §6.1 rows, §6.2 resolutions 1… | — |  | `U5a:621` | RESOLVED-BY | SCN-05: resolution 19. SCN-02 conflicts with ED-SC-0038 (named, SC's). ARC-23 (a skill require… | B05 (B05.60) | IN |
 | 75 | §13 EMG-C2, NSC-05, SCN-08, NPC-052; EM… | 3.3 `audits/10_DICE_audit.md` §6.1 rows, §6.2 resolutions 1… | — |  | `U5a:622` | SUPERSEDED | WR's and CORE-side happenings closures (U5d); the mechanism (a keyed rate draw) exists | — | IN |
-| 76 | §13 NPC-001, NPC-004, NPC-075, ARC-22 (… | 3.3 `audits/10_DICE_audit.md` §6.1 rows, §6.2 resolutions 1… | — |  | `U5a:623` | RESOLVED-BY | U1 architecture §6 (cast content) | — | IN |
+| 76 | §13 NPC-001, NPC-004, NPC-075, ARC-22 (… | 3.3 `audits/10_DICE_audit.md` §6.1 rows, §6.2 resolutions 1… | — |  | `U5a:623` | RESOLVED-BY | U1 architecture §6 (cast content) | B04, BA1 (B04.09, BA1.01) | IN |
 | 77 | §13 EMG-X6 | 3.3 `audits/10_DICE_audit.md` §6.1 rows, §6.2 resolutions 1… | — |  | `U5a:624` | SUPERSEDED | SC (U5c) | — | IN |
 
 ---
@@ -610,17 +610,17 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 46 | R45, R46 | the UI design set; "witnessed" fidelity | — |  | `U5d:469` | RESOLVED-BY | SURF-B; MODES §2 (R62 refines R46) | B34 | GO |
 | 47 | §13 ARC-R16 summary, ARC-46 history, AR… | readings a person lacks | — |  | `U5d:471` · E7 | RESOLVED-BY | SURF-B §3–§4 (`receipt`, `account`); SURF-B §2 for a history over his own claims | B34 | GO |
 | 48 | §13 "players must be able to X" (53 nee… | per verb | — |  | `U5d:473` · 23 of 67 verbs execute (E10) | RESOLVED-BY | SURF-B §2 (`OFFER-CONTAINS`); each act is its verb lane's | B34 | GO |
-| 49 | F-GO-17 | `AftermathRow.own_act` cannot be computed | — |  | `U5d:485` | RESOLVED-BY | SURF-B §4 (R52) | B34 | GO |
-| 50 | F-GO-18 | two kinds of play; two choice surfaces missed | — |  | `U5d:486` | RESOLVED-BY | SURF-B §6 (R53, R54) | B34 | GO |
+| 49 | F-GO-17 | `AftermathRow.own_act` cannot be computed | unrated in source |  | `U5d:485` | RESOLVED-BY | SURF-B §4 (R52) | B34 | GO |
+| 50 | F-GO-18 | two kinds of play; two choice surfaces missed | unrated in source |  | `U5d:486` | RESOLVED-BY | SURF-B §6 (R53, R54) | B34 | GO |
 | 51 | R77 | the Scene Slate has no generator | — |  | `U5d:491` | SUPERSEDED | A-48: the slate is a list of questions offered to the player; NPCs take the first; SURF-B §1 a… | → B34 | GO |
 | 52 | §B6.3 survivor | may the end of a campaign show what the person never knew | — |  | `U5d:492` | SUPERSEDED | A-49 (reveal after the line ends and no continuation is taken; never in play); MODES §4 as rec… | → B34 | GO |
 | 53 | R1, R10–R14 | pins; tunables; halts; freeze; edges | — |  | `U5d:460` | RESOLVED-BY | GATE §1–§5 | B41 | GO |
-| 54 | GO-06 | cross-repo reader, held | — |  | `U5d:457` | RESOLVED-BY | none owed (correctly held; another repository) | — | GO |
+| 54 | GO-06 | cross-repo reader, held | — |  | `U5d:457` | RESOLVED-BY | none owed (correctly held; another repository) | none owed (a pointer; `workplan_v12/COVERAGE.md` §A.2) | GO |
 | 55 | Strategy Part VIII items 1–8 (R36–R43) | open items | — |  | `U5d:459` · R42 `[UNVERIFIED]` in the audit: stays marked | SUPERSEDED | closed by the ladder in the audit (the Key substrate retired; the oracle by ED-1050; no stat v… | — | GO |
 | 56 | R7, R9, R33 | replay of the port's samplers; what GO-16 records; "statistical parity" | — |  | `U5d:464` | SUPERSEDED | A-30 and A-5: the port implements the same keyed hash and the one sampler; nothing is recorded… | — | GO |
-| 57 | R21, R36–R43, R47 | superseded or irrelevant items | — |  | `U5d:466` | RESOLVED-BY | none owed | — | GO |
+| 57 | R21, R36–R43, R47 | superseded or irrelevant items | — |  | `U5d:466` | RESOLVED-BY | none owed | none owed (a pointer; `workplan_v12/COVERAGE.md` §A.2) | GO |
 | 58 | §13 arcs represented today (ARC-R16, AR… | the world acts unattended; hidden quantities | — |  | `U5d:470` · 749 acts, 13,379 Events a season (E3) | STALE/FP | none owed (represented) | — (stale) | GO |
-| 59 | §13 ARC-14, ARC-17 ("a single threshold… | wrongly stated (a player/NPC fork) | — |  | `U5d:472` | RESOLVED-BY | restated by the audit; A-47 keeps the threshold as the opener of a mandatory scene, never the… | — | GO |
+| 59 | §13 ARC-14, ARC-17 ("a single threshold… | wrongly stated (a player/NPC fork) | — |  | `U5d:472` | RESOLVED-BY | restated by the audit; A-47 keeps the threshold as the opener of a mandatory scene, never the… | none owed (a pointer; `workplan_v12/COVERAGE.md` §A.2) | GO |
 | 60 | §13 ARC-09, NPC-088 and others cross-li… | not GO's | — |  | `U5d:474` | SUPERSEDED | U5a (CORE, CHAR) | — | GO |
-| 61 | F-PES-GO-11 | corrects F-GO-16's measure | — |  | `U5d:508` | RESOLVED-BY | made in the audit | — | GO |
+| 61 | F-PES-GO-11 | corrects F-GO-16's measure | unrated in source |  | `U5d:508` | RESOLVED-BY | made in the audit | none owed (a pointer; `workplan_v12/COVERAGE.md` §A.2) | GO |
 | 62 | §7 survivor | the draw | — |  | `U5d:512` | SUPERSEDED | A-30 | — | GO |

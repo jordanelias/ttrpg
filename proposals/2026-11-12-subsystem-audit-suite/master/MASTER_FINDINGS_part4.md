@@ -53,8 +53,8 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 32 | §1.6 S (i) | one ladder centred at two places | — |  | `U5b:230` · pessimist `pJ_roll.py` | RESOLVED-BY | CAP Part B (one pool rule, one opposed divisor across combat and everything else, A-5/A-6/A-26… | B04, B15 | IN |
 | 33 | PC-21, PC-22, CR-95 | design-first positions | — |  | `U5b:113` | SUPERSEDED | plan positions stand; CR-95's adverse body modifier is answered by A-8 (`10_DICE_advantage_sou… | → B05, B10 | IN |
 | 34 | C-9 | a fight is never priced by believed odds in the chooser | — |  | `U5b:183` · `es/seam/wrappers/sigma.py` | RESOLVED-BY | RES-PC §8 (the `believed_chance` answer for the `personal_combat` band: the resolver sampled o… | B05, B14 | IN |
-| 35 | F-PC-07 | one engine, two doors; the registered door is the narrower | — |  | `U5b:73` · `workbench/server.py:15-37`; `mc/fight.py:55-56` | RESOLVED-BY | P2 Part B | B14 | PC |
-| 36 | F-PC-09 | the tradition, ability and lever layer is unreachable from the season and near-silent in the module | — |  | `U5b:78` · audit E5 (47.8% against a 46.1–49.3 band) | RESOLVED-BY | P4 Part A (the layer becomes authoring data composed host-side into `lever` and `skill` slots,… | B18, B14 | PC |
+| 35 | F-PC-07 | one engine, two doors; the registered door is the narrower | unrated in source |  | `U5b:73` · `workbench/server.py:15-37`; `mc/fight.py:55-56` | RESOLVED-BY | P2 Part B | B14 | PC |
+| 36 | F-PC-09 | the tradition, ability and lever layer is unreachable from the season and near-silent in the module | unrated in source |  | `U5b:78` · audit E5 (47.8% against a 46.1–49.3 band) | RESOLVED-BY | P4 Part A (the layer becomes authoring data composed host-side into `lever` and `skill` slots,… | B18, B14 | PC |
 | 37 | H-98 | the fourth band | — |  | `U5b:95` · audit E3 (90 untouched, 110 wounded) | RESOLVED-BY | P2 Part C, R-PC-01 (register edit) | B14 | PC |
 | 38 | H-119 | two degree surfaces | — |  | `U5b:96` · audit E3 | RESOLVED-BY | P2 Part A (the deleted keys); 18-D | B14 | PC |
 | 39 | H-123 | wound magnitude; stale `site:` | — |  | `U5b:97` | RESOLVED-BY | P2 Part C, R-PC-15 | B14 | PC |
@@ -78,18 +78,18 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 57 | §11 item 3 | is any matchup certain? | — |  | `U5b:144` · 18-D | SUPERSEDED | answered by the standing rule (sweep D-11, C-13); carried by 18-D (decided fights), PES-D (arm… | → B14, B15 | PC |
 | 58 | C-7 | `DuelState` has a fifth field; an adapter holds nothing | — |  | `U5b:181` · addendum E-B7 | RESOLVED-BY | PB §2; PF (which removes the fifth field if it lands first) | B16, B14 | PC |
 | 59 | C-8 | 64 constants and every weapon field are outside the export | — |  | `U5b:182` · addendum E-B1, E-B3 | RESOLVED-BY | PX | B14 | PC |
-| 60 | F-PC-16 | the half-sword form persists across engagements | — |  | `U5b:186` · addendum E-B7, E-B8 | RESOLVED-BY | PF | B14 | PC |
-| 61 | F-PC-20 | the roster MB proposes as the only one is melee only | — |  | `U5b:190` · addendum E-B1 | RESOLVED-BY | PX item 6 (pike as content; ranged classes carry `mass` only until a ranged resolution exists) | B14 | PC |
-| 62 | F-PC-21 | four skill axes are real, two are not; the weapon erases the build | — |  | `U5b:191` · addendum E-B5 | RESOLVED-BY | P4 Part A as reconciled (R-PC-43: `technique` and `grab` are not exposed as slots until a swee… | B18, B14 | PC |
+| 60 | F-PC-16 | the half-sword form persists across engagements | unrated in source |  | `U5b:186` · addendum E-B7, E-B8 | RESOLVED-BY | PF | B14 | PC |
+| 61 | F-PC-20 | the roster MB proposes as the only one is melee only | unrated in source |  | `U5b:190` · addendum E-B1 | RESOLVED-BY | PX item 6 (pike as content; ranged classes carry `mass` only until a ranged resolution exists) | B14 | PC |
+| 62 | F-PC-21 | four skill axes are real, two are not; the weapon erases the build | unrated in source |  | `U5b:191` · addendum E-B5 | RESOLVED-BY | P4 Part A as reconciled (R-PC-43: `technique` and `grab` are not exposed as slots until a swee… | B18, B14 | PC |
 | 63 | §B7 | the loadout rule's individual side: three amendments | — |  | `U5b:199` · addendum E-B1 | RESOLVED-BY | PL as reconciled; PX item 6 | B14, B18 | PC |
 | 64 | R-PC-36, R-PC-37, R-PC-38 | the export's sections; forms; ranged | — |  | `U5b:203` | RESOLVED-BY | PX | B14 | PC |
 | 65 | R-PC-39 | six stale texts | — |  | `U5b:204` | RESOLVED-BY | RES-PC §5 | B14 | PC |
 | 66 | R-PC-42 | the workbench re-derives the roll | — |  | `U5b:207` | RESOLVED-BY | P2 Part C as reconciled | B14 | PC |
 | 67 | R-PC-43 | two skill axes move nothing; skills uncapped | — |  | `U5b:208` | RESOLVED-BY | P4 Part A as reconciled; RES-PC §1 | B18, B14 | PC |
-| 68 | F-PES-PC-08 | one attribute outweighs the levers the intent names | — |  | `U5b:223` · pessimist `pN_att.py` | RESOLVED-BY | RES-PC §1 (R-7: isolate the term, lift the read's literal scale into `CFG`, the slope bound as… | B14 | PC |
-| 69 | F-PES-PC-09 | eight false or narrowed N-lines | — |  | `U5b:224` · pessimist `pE_cuts2.py`, `pE3_default.py` | RESOLVED-BY | no edit of its own; it is the evidence for the order (RUL-PC §5) and for what the port does no… | B15, B14 | PC |
-| 70 | F-PES-PC-10 | names that promise events the engine does not have | — |  | `U5b:225` · pessimist §1.3 | RESOLVED-BY | RES-PC §2 (the grapple's names); P2 Part A (`standing`); "first blood" is restated by PES-A's… | B14, B15 | PC |
-| 71 | F-PES-PC-12 | a spear against a sword is 99.2 to 99.8% | — |  | `U5b:227` · pessimist `pE_cuts_base800.txt` | RESOLVED-BY | RES-PC §3 (R-9: the census gates each weapon's admission to `arms_kinds`) | B14 | PC |
+| 68 | F-PES-PC-08 | one attribute outweighs the levers the intent names | unrated in source |  | `U5b:223` · pessimist `pN_att.py` | RESOLVED-BY | RES-PC §1 (R-7: isolate the term, lift the read's literal scale into `CFG`, the slope bound as… | B14 | PC |
+| 69 | F-PES-PC-09 | eight false or narrowed N-lines | unrated in source |  | `U5b:224` · pessimist `pE_cuts2.py`, `pE3_default.py` | RESOLVED-BY | no edit of its own; it is the evidence for the order (RUL-PC §5) and for what the port does no… | B15, B14 | PC |
+| 70 | F-PES-PC-10 | names that promise events the engine does not have | unrated in source |  | `U5b:225` · pessimist §1.3 | RESOLVED-BY | RES-PC §2 (the grapple's names); P2 Part A (`standing`); "first blood" is restated by PES-A's… | B14, B15 | PC |
+| 71 | F-PES-PC-12 | a spear against a sword is 99.2 to 99.8% | unrated in source |  | `U5b:227` · pessimist `pE_cuts_base800.txt` | RESOLVED-BY | RES-PC §3 (R-9: the census gates each weapon's admission to `arms_kinds`) | B14 | PC |
 | 72 | §3.7 stories that cannot happen | twelve rows | — |  | `U5b:233` | SUPERSEDED | each row is closed by the finding it cites (ambush: RUL-PC §6; yield: PES-A; refused surrender… | → B16, B18, B14, B15 | PC |
 | 73 | §5 standing-rule table | ten fixed functions of state | — |  | `U5b:234` | SUPERSEDED | each row by its named carrier above; the lasting mark by RES-PC §7; one point of `arms` per fi… | → B14 | PC |
 | 74 | R-5 | the scene's shape and `fell_to_hand` | — |  | `U5b:238` | RESOLVED-BY | PES-C | B14 | PC |
@@ -116,15 +116,15 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 95 | §13 ARC-23 (capture over death) | yes at personal scale | — |  | `U5b:157` · audit E4 | RESOLVED-BY | PHY-A A1–A3; P3 Part B; inside a battle PB step 5 | B16, B15 | PC |
 | 96 | §13 SCN-14 (a personal action inside a… | no | — |  | `U5b:165` | RESOLVED-BY | PB step 5; RUL-PC §1; RUL-MB | B16, B15, B19 | PC |
 | 97 | §15 (a)–(e) NPCs and the chooser in a f… | hard-coded NPC rules in module and seam | — |  | `U5b:169` · audit §15 (c) | RESOLVED-BY | PB §5; PES-A; P3 Part A | B16, B15 | PC |
-| 98 | F-PC-17 | the monotone advantage of aggression is the initiative drift | — |  | `U5b:187` · addendum E-B10 | RESOLVED-BY | PB §3, step 3e; composed with PES-B (the deep tier) in RUL-PC §5 | B16, B15 | PC |
+| 98 | F-PC-17 | the monotone advantage of aggression is the initiative drift | unrated in source |  | `U5b:187` · addendum E-B10 | RESOLVED-BY | PB §3, step 3e; composed with PES-B (the deep tier) in RUL-PC §5 | B16, B15 | PC |
 | 99 | §B4 row 1 | the adapter row: person-supplied callables | — |  | `U5b:194` · `es/seam/wrappers/combat.py:331-332` | SUPERSEDED | by A-4 (read as one declared class of adapter input); the declaration is RUL-PC §1 edit 3 | → B15 | PC |
 | 100 | §B4 row 2 | nested resolution under §39.3 | — |  | `U5b:195` · `holonic_ARCHITECTURE.md:1397-1402` | SUPERSEDED | by A-4 (option (a): a nested contest, counted against the cap); the cap's default is RUL-PC §1… | → B15 | PC |
 | 101 | §B10 item 4 | is intensity a declared term or only a lean? | — |  | `U5b:209` · `DECISIONS_ANSWERED.md` ladder table | SUPERSEDED | by the ladder (D-40: A now; B behind a dial at zero, set after D-39); PB step 3c; RUL-PC §5 | → B16, B15 | PC |
-| 102 | F-PES-PC-02 | the per-phase approach has nothing to decide | — |  | `U5b:217` · pessimist `pP_window.py`, `pI_approach2.py` | RESOLVED-BY | PES-B, then RUL-PC §4, then PB step 3 with the added gate (R-6), in the order RUL-PC §5 fixes | B16, B15 | PC |
-| 103 | F-PES-PC-03 | whether a wounded man gives up is a threshold | — |  | `U5b:218` · pessimist `pB_yield.py` | RESOLVED-BY | PES-A | B15 | PC |
-| 104 | F-PES-PC-04 | the commit window is [2, 4.03]; the deep tier sits at 4.0 | — |  | `U5b:219` · pessimist `pF_story.py` F3 | RESOLVED-BY | PES-B | B15 | PC |
-| 105 | F-PES-PC-07 | armour is an average; its top step is a certainty | — |  | `U5b:222` · pessimist `pC_armour.py`, `pQ2_gap.py` | RESOLVED-BY | PES-D | B15 | PC |
-| 106 | F-PES-PC-11 | the opener has no edge, and neither does the watch | — |  | `U5b:226` · pessimist `pL_misc.py`, `pS_season.py` S2 | RESOLVED-BY | RUL-PC §6 (D-41 B: a first-exchange level on an opener the target did not expect); the watch:… | B15 | PC |
+| 102 | F-PES-PC-02 | the per-phase approach has nothing to decide | unrated in source |  | `U5b:217` · pessimist `pP_window.py`, `pI_approach2.py` | RESOLVED-BY | PES-B, then RUL-PC §4, then PB step 3 with the added gate (R-6), in the order RUL-PC §5 fixes | B16, B15 | PC |
+| 103 | F-PES-PC-03 | whether a wounded man gives up is a threshold | unrated in source |  | `U5b:218` · pessimist `pB_yield.py` | RESOLVED-BY | PES-A | B15 | PC |
+| 104 | F-PES-PC-04 | the commit window is [2, 4.03]; the deep tier sits at 4.0 | unrated in source |  | `U5b:219` · pessimist `pF_story.py` F3 | RESOLVED-BY | PES-B | B15 | PC |
+| 105 | F-PES-PC-07 | armour is an average; its top step is a certainty | unrated in source |  | `U5b:222` · pessimist `pC_armour.py`, `pQ2_gap.py` | RESOLVED-BY | PES-D | B15 | PC |
+| 106 | F-PES-PC-11 | the opener has no edge, and neither does the watch | unrated in source |  | `U5b:226` · pessimist `pL_misc.py`, `pS_season.py` S2 | RESOLVED-BY | RUL-PC §6 (D-41 B: a first-exchange level on an opener the target did not expect); the watch:… | B15 | PC |
 | 107 | §1.6 S (ii)–(v) | armour an average; the yield a threshold; "deep" an absolute; two verbs for taking a man | — |  | `U5b:231` | RESOLVED-BY | PES-D; PES-A; PES-B; PHY-A A1–A2 | B15 | PC |
 | 108 | R-1, R-2 | the yield is a draw; NPC concession no longer Jordan's | — |  | `U5b:235` | RESOLVED-BY | PES-A | B15 | PC |
 | 109 | R-3 | the tier follows the window | — |  | `U5b:236` | RESOLVED-BY | PES-B | B15 | PC |
@@ -151,8 +151,8 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 130 | C-3 | the free withdrawal is a one-agent-kind breach | — |  | `U5b:177` | RESOLVED-BY | P3 Part A as reconciled (its ground restated) | B16 | PC |
 | 131 | C-4 | the grid is one build | — |  | `U5b:178` · `04_CODE_ARCHITECTURE.md:811` | RESOLVED-BY | PB §4 (the cell field at weight 1) | B16 | PC |
 | 132 | C-6 | disposition is monotone because of one hook | — |  | `U5b:180` · addendum E-B4, E-B10 | RESOLVED-BY | PB step 3e (`DISP_INIT_K = 0`) | B16 | PC |
-| 133 | F-PC-18 | "phase" is the engagement's own phase | — |  | `U5b:188` · `systems/combat/combat_engine_v1/state_graph.py::INJECTION_POINTS` | RESOLVED-BY | PB §3–§4 (R-PC-27) | B16 | PC |
-| 134 | F-PC-19 | round state on an adapter cannot be built | — |  | `U5b:189` · `architecture/holonic_ARCHITECTURE.md:1679-1686` | RESOLVED-BY | PB §2, §4 (R-PC-30); A-4 | B16 | PC |
+| 133 | F-PC-18 | "phase" is the engagement's own phase | unrated in source |  | `U5b:188` · `systems/combat/combat_engine_v1/state_graph.py::INJECTION_POINTS` | RESOLVED-BY | PB §3–§4 (R-PC-27) | B16 | PC |
+| 134 | F-PC-19 | round state on an adapter cannot be built | unrated in source |  | `U5b:189` · `architecture/holonic_ARCHITECTURE.md:1679-1686` | RESOLVED-BY | PB §2, §4 (R-PC-30); A-4 | B16 | PC |
 | 135 | R-PC-27 … R-PC-34 | phase, own coefficients, drift, state in the frame, form, exact gate, one grid, the person's decider | — |  | `U5b:201` | RESOLVED-BY | PB §2–§5, §7 | B16 | PC |
 | 136 | R-PC-40 | cadence and "is disposition a trade" | — |  | `U5b:205` | SUPERSEDED | answered by the 2026-11-12 intent; PB | → B16 | PC |
 | 137 | §B10 named: ED-IN-0304, J-15 | risk appetite as the temperament carrier; one act or scenes | — |  | `U5b:210` | SUPERSEDED | ED-IN-0304 stays CHAR's open ask (no new carrier, PB §8.6); J-15 is answered for the nested ca… | → B16 | PC |
@@ -165,7 +165,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 144 | §13 SCN-03 (incapacitation varies by at… | in the module; unreached | — |  | `U5b:153` · audit E5, E8 | RESOLVED-BY | P4 Part D | B18 | PC |
 | 145 | §13 NPC-006 (high combat stats, no numb… | wrongly stated | — |  | `U5b:162` | RESOLVED-BY | P4 Part D (authored attributes and an `arms` key on his cast entry; values are content) | B18 | PC |
 | 146 | U5a DICE addendum §5.3 | the carry cost is the `threshold` role, one leaf | — |  | `U5b:256` | RESOLVED-BY | PL | B18 | PC |
-| 147 | §5 "no matchup is ever certain" | the cap moves `result`; the fold reads trackers | — |  | `U5b:89` · `mc/wrapper.py:618-624` (re-read at HEAD) | RESOLVED-BY | 18-D (the riposte through the one damage site) | — | PC |
+| 147 | §5 "no matchup is ever certain" | the cap moves `result`; the fold reads trackers | — |  | `U5b:89` · `mc/wrapper.py:618-624` (re-read at HEAD) | RESOLVED-BY | 18-D (the riposte through the one damage site) | B15 (B15.09) | PC |
 | 148 | H-147, H-212, H-342, H-355, H-360 | filed under PC by path; subject is `_eff_march` | — |  | `U5b:108` | SUPERSEDED | closed in Part 2 (MB) of this file | — | PC |
 | 149 | CP-T03-10, CP-T03-11 | rescue parked; guards cut | — |  | `U5b:111` · plan card | SUPERSEDED | accepted as the plan records them; no edit | — | PC |
 | 150 | R-PC-03 | keep the flip as the workbench's rule; a comment | — |  | `U5b:119` · 18-D "Exact edits" 3 | SUPERSEDED | by 18-D edit 3 (the flip is deleted; the comment edit is replaced) and survivor 3's closure be… | — | PC |
@@ -181,7 +181,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 160 | §14 (d) item 10 | "a skill may gate an attempt" is refused by Layer 1 | — |  | `U5b:168` | SUPERSEDED | A-11 confirms the refusal | — | PC |
 | 161 | C-5 | `videogame_mode_spec.md` is superseded on both points | — |  | `U5b:179` | SUPERSEDED | Layer 1; A-1; no edit (R-PC-41) | — | PC |
 | 162 | C-10 | the FFT precedent is in the held proposal's Appendix A, unsurveyed | — |  | `U5b:184` | SUPERSEDED | recorded as a null; nothing is built from it (addendum §B3 "Against the research") | — | PC |
-| 163 | §B4 row 3 | the upset flip after the engagement | — |  | `U5b:196` | RESOLVED-BY | 18-D | — | PC |
+| 163 | §B4 row 3 | the upset flip after the engagement | — |  | `U5b:196` | RESOLVED-BY | 18-D | B15 (B15.09) | PC |
 | 164 | §B4 row 4 | the quarantined auto-resolve formula | — |  | `U5b:197` | SUPERSEDED | Layer 1 §27.2; A-1 | — | PC |
 | 165 | §B7 fourth matter | which weapons may be carried where (carry context) | — |  | `U5b:200` | SUPERSEDED | held with `proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md` §12… | — | PC |
 | 166 | R-PC-35 | off-hand closed | — |  | `U5b:202` | SUPERSEDED | ED-PC-0055 | — | PC |
@@ -221,7 +221,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 16 | F-MB-14 | individuals' attributes do not reach the battle | B |  | `U5b:298` · `04_MB_audit.md:400` · `mb/massbattle.py:184-188` | RESOLVED-BY | 27-MB (A-59: command from a learned skill and social and mental attributes; each unit's own pr… | B20, B22 | MB |
 | 17 | F-MB-15 | no intervention during a battle and no account afterwards | B |  | `U5b:299` · `04_MB_audit.md:417` · `mb/massbattle.py:425-427` | RESOLVED-BY | MGR §4–§6 (it supersedes PLAY §B's decider return); bouts and lulls: 26-SCALE §3 | B20 | MB |
 | 18 | F-MB-26 | the manager's vocabulary has no carrier in the season | B |  | `U5b:376` · `04_MB_audit_addendum_B.md:323` · `mb/armyrecord.py:13-19` | RESOLVED-BY | MGR §2 (R-39); 26-MAN | B20 | MB |
-| 19 | U5a F-DICE-18 (C-7) | a field battle reads no person | B |  | `U5b:437` · `10_DICE_audit_addendum_B.md:224` | RESOLVED-BY | 27-MB (A-59) | — | MB |
+| 19 | U5a F-DICE-18 (C-7) | a field battle reads no person | B |  | `U5b:437` · `10_DICE_audit_addendum_B.md:224` | RESOLVED-BY | 27-MB (A-59) | B19 (B19.02, B19.05, B19.55) | MB |
 | 20 | F-MB-04 | a field neither side wins is written as the attacker's defeat | D |  | `U5b:288` · `04_MB_audit.md:253` · audit §12 (10 `Failure`, 14 `Partial`, all `Lost` at the seam) | RESOLVED-BY | HG (the `Drawn` band) with MGR §1 (A-3: the host reads the end state) | B17, B20 | MB |
 | 21 | F-MB-06 | the seam drops what the battle knows; the outcome is an untyped dict | D |  | `U5b:290` · `04_MB_audit.md:288` · `mb/massbattle.py:465-470` | RESOLVED-BY | TO §1 as reconciled (no `verdict`); the report: MGR §6, PLAY §D | B17, B20 | MB |
 | 22 | F-MB-16 | the non-player commander is a script; the player sees what no NPC may | D |  | `U5b:300` · `04_MB_audit.md:433` · `harness/army_presets.py:17-20` | RESOLVED-BY | MIL-C, MIL-D (he forms the six verbs through the one chooser); doctrines as data: LOAD-B's tro… | B17, B22 | MB |
@@ -322,7 +322,7 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 117 | C-2 | an even engagement is decisive for one body, drawn for an army | — |  | `U5b:362` · addendum `mirror_probe` | RESOLVED-BY | PLAY as reconciled (its evidence is corrected by A26 R-5); 26-SCALE §3 | B20 | MB |
 | 118 | C-4 | two of the three strategies a decider would choose are traps | — |  | `U5b:364` · addendum `lever_probe` | RESOLVED-BY | MGR §3, §4 | B20 | MB |
 | 119 | C-6 | Layer 1 does not accept a returned winner | — |  | `U5b:366` | SUPERSEDED | answered by A-3 (an end state, read by the host); MGR §1 | → B20 | MB |
-| 120 | F-MB-24 | the field returns a winner | — |  | `U5b:374` · `es/seam/ladder.py:198-222` | SUPERSEDED | answered by A-3; MGR §1 (R-31) | → B20 | MB |
+| 120 | F-MB-24 | the field returns a winner | unrated in source |  | `U5b:374` · `es/seam/ladder.py:198-222` | SUPERSEDED | answered by A-3; MGR §1 (R-31) | → B20 | MB |
 | 121 | §B4.3–§B4.5 | standing orders; the general's action; the report | — |  | `U5b:383` | RESOLVED-BY | MGR §2, §4, §6 as reconciled; 26-MAN §1 (an order takes effect by a draw) | B20 | MB |
 | 122 | R-31 | the end state in place of a winner | — |  | `U5b:392` | RESOLVED-BY | MGR §1 | B20 | MB |
 | 123 | R-34, R-39, R-40, R-45 | strategy off the choice surface; standing orders; officers; the estimate | — |  | `U5b:394` | RESOLVED-BY | MGR §3, §2, §7, §8 | B20 | MB |
@@ -516,5 +516,5 @@ Columns and order are the head part's §0. **evidence**: the closure row (`U5a:6
 | 150 | res. 10 | "obligee" names the bound party | — |  | `U5c:220` · `establishment_of` | STALE/FP | none: one person, two words; VERD's table reads "by the bound party" after this lane's edit | — (stale) | SC |
 | 151 | Jordan 3 | who is a verdict for? | — |  | `U5c:223` · PES-SC §2.1 P1.6; A-38 | RESOLVED-BY | answered by Jordan, A-38 (D-55: the petitioner, or a seat he names). PES-C carries the party o… | B27 | SC |
 | 152 | G-26 | the lane research file is stale on `speak`/`argue` | — |  | `U5c:95` · audit §17 | STALE/FP | none needed: dated reference; D_T05 rows 71–73 already say so | — (stale) | SC |
-| 153 | §13 wrongly stated needs | ARC-03, NPC-071/-085 `UNCLEAR:` rows, SCN-04's faction resource, EMG-C4's champion | — |  | `U5c:110` · `04` PART D rows 1, 8, 14 | RESOLVED-BY | the audit's own restatements stand (no edit to a case file is proposed; `12_ARCS_*` owns the c… | — | SC |
-| 154 | §B4.7 | six conflicts with ruled items, named | — |  | `U5c:162` · HEAR NERS-N | RESOLVED-BY | each kept as the addendum names it: one sitting is one provider call (ARC-31 between sittings… | — | SC |
+| 153 | §13 wrongly stated needs | ARC-03, NPC-071/-085 `UNCLEAR:` rows, SCN-04's faction resource, EMG-C4's champion | — |  | `U5c:110` · `04` PART D rows 1, 8, 14 | RESOLVED-BY | the audit's own restatements stand (no edit to a case file is proposed; `12_ARCS_*` owns the c… | none owed (a pointer; `workplan_v12/COVERAGE.md` §A.2) | SC |
+| 154 | §B4.7 | six conflicts with ruled items, named | — |  | `U5c:162` · HEAR NERS-N | RESOLVED-BY | each kept as the addendum names it: one sitting is one provider call (ARC-31 between sittings… | B27 (B27.02) | SC |
