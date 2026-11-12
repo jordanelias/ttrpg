@@ -70,6 +70,9 @@ rules (§3.6).
     record_kind: dispensation     # dispensation | debt          (default dispensation)
     bearer:      false            # true: entitled = the Record's holder; bound = a live commit to its terms
     recites:     false            # true: the Record may carry a `recites` list (a certificate of deeds)
+    basis:       command          # command | purview: whom an `issue` of this form may address (the `authority`
+                                  #   conjunct's basis value, `14_VERBS_BINDING_D` edits 3 to 5). `purview` for a
+                                  #   PUBLICATION (a sanction told to everyone on the ground); `command` for an order
     # in `confers:` — one optional key more:
     #   audit_at_exit: <arrangements.yaml id>
     # in a clause — value sets widened:
@@ -115,6 +118,7 @@ and every row whose `confers:` seats an officer over other people's ground (`mar
   - id: avoidance               # PAP-D §3: addressees forbear named dealings with a named person
     made_by: issue
     grantor_act: issue
+    basis: purview              # a publication: it addresses everyone on the issuing seat's ground (SYN-C edit 7)
     term: null                  # while the ban it publishes lives
     renewal: none
     due: []
@@ -173,7 +177,8 @@ and every row whose `confers:` seats an officer over other people's ground (`mar
 landing which kinds may be named; a verb with no success kind yet is left out of the row until its lane
 lands one).
 
-**Loader, beyond COL-A's refusals:** `record_kind` off `{dispensation, debt}`; `bearer: true` on a row
+**Loader, beyond COL-A's refusals:** `basis` off `{command, purview}`, or present on a row whose `made_by`
+is `covenant`; `record_kind` off `{dispensation, debt}`; `bearer: true` on a row
 whose `made_by` is not `covenant`; `by: addressee` on a row whose `made_by` is not `issue`; `over: named`
 or `to: named_rung` on a row with no clause able to name one; `confers.audit_at_exit` that is no
 `arrangements.yaml` id; `recites: true` with `record_kind: debt`.

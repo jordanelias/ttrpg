@@ -19,7 +19,39 @@ PROXY marks a hand-set state (a builder's write before any season).
 
 ## 0. Verdict
 
-VERDICT_PENDING
+**The world, as it runs, is a set of clocks that keep time for nobody: none of the five sentences that
+describe it survives execution past its first or second link, and the one thing the narrative engine was
+never asked is the thing it lacks, a turn.** Run with nobody acting for 41 seasons the realm is one ramp
+in 37 identical places, with its first noticeable Event at season 20 and 284 seasons of grain in store
+at season 40. Switched on, the Calamity is a second uniform ramp; given a hand-planted source it takes
+the realm's yield from 4,810 to 719 in fourteen seasons without one death, one rupture or one ending,
+and the played realm decays exactly as the unplayed one (ring means equal to the unit; `restore`
+attempted 0 times while 24 band crossings were witnessed). A journey harms none of 33 travellers at
+three arms, takes no time and costs the same across the realm as across a room. The Thread is read 17
+times in four arms, off nine documents and seven persons and no place, and each reading reports the
+reader's own entry requirement as its finding. And of 33 edges that closed in two seeds, 33 were closed
+by their own holder and none by anyone else, against 2,298 left open: stories here begin, and are
+answered, and do not turn.
+
+The cut tests agree. Against a noise control (the same realm, another chooser draw: 316 executed acts
+apart), removing CALENDAR entirely moves the realm by 38 and no story reading at all; planting the
+Calamity moves it by 24; removing the stock report moves it by 161 and kills exactly one verb
+(`migrate`, 16 to 0). Of seventeen world mechanisms three have a true N-line, and two of those are
+clocks that close things because nothing else does.
+
+The steelman is owed and partly holds: replay is exact (the same seed twice gives one hash); the story
+bar does read zero where nobody can answer anybody (a realm of 37 cohorts, and of one named person:
+cross share 0.0%, depth 1), which narrows the WR lane's "cannot fail"; L5 is kept everywhere (no clock
+decides anything); and the lattice rule does exactly what its docstring says. The burden stays on the
+mechanism: every one of those virtues is a property of a substrate, and none is a thing that happens.
+**The single largest obstacle in this scope is that the world emits and nobody is asked:** crossings,
+journeys, sittings and readings each end in an Event that raises no question carrying the place or the
+person it is about, so the clocks cannot be answered even where a verb exists to answer them. Four
+proposals carry what this lane can decide; nothing here needs Jordan.
+
+*Cited, not redone:* escalation and endings (WR F-WR-01, F-WR-13), the instruments' design (F-WR-03,
+F-WR-14), threadwork as a module (F-WR-05, F-WR-17), the surplus and the identical settlements (SE
+F-SE-01), the game-level seam matrix (GAME §1.2), the eleven things (NARR §1).
 
 ## 1. NERS — the cut tests, executed where a run could decide
 

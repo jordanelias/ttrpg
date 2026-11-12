@@ -12,7 +12,7 @@ CR-60 (a bench's `scope`), CR-88 (the duty decline), SC's evidence weight. Batch
 
 ## What it changes in `engine/season/` at runtime
 
-Six small edits, each at the seam between two families' proposals, where neither family wrote the whole
+Seven small edits, each at the seam between two families' proposals, where neither family wrote the whole
 rule because half of it belonged to the other.
 
 1. A person who has chosen to shun a man, or who holds a breach against him, is **excused**: his own
@@ -25,6 +25,8 @@ rule because half of it belonged to the other.
 4. Two certificates for one seat on opposite sides of a hearing stand against each other, item by item.
 5. A grant that forbears a levy is `evidence` against that levy, when the levied know of it.
 6. A hand may belong to another faction than the seat whose paper it passes.
+7. A sanction's publication addresses everyone on the issuing seat's ground; an order addresses only
+   those the seat commands. One key on the form row.
 
 With no `avoidance` complied with, no instrument breached and no certificate cited, nothing moves.
 
@@ -135,6 +137,27 @@ seat's paper across the gate passes the Altonian trade prefect's hand). The basi
 `data/requires.py` asks only that the actor hold the named seat or a seat of the named body; BYZ-C's
 further conjunct ("drawn up at a rung the issuing seat's purview reaches") is about the issuing seat and
 stands.
+
+### 7. `engine/season/instruments.yaml: forms[].basis` — a publication is not a command
+
+`14_VERBS_BINDING_D_orders.md` edits 3 to 5 narrow `issue`'s addressees from purview over a person's
+place to **command**: a seat's sworn men, the holders of seats it may revoke, and the unseated within
+its purview (that audit's §13.4 decision 1, listed for Jordan). `15_INSTITUTIONS_PAPACY_D` §3 addresses a
+writ of avoidance "to the persons its issue reaches". Under command a see could not address a lord's
+seated vassals at all, and they are the persons the sanction is aimed at.
+
+Decided: the basis is a property of the **form**. A form row carries `basis: command | purview`
+(default `command`); `issue`'s `authority` conjunct asks the basis the chosen form names, and the bare
+decree (no form) asks `command`. `avoidance` is `purview`: a sentence is published to everyone on the
+issuing seat's ground, and it orders nobody to do anything (its clauses are all forbearances). `interdict`
+and `tithe` stay `command`: they address the issuer's own seat-holders. If Jordan takes territorial
+authority for every writ (that decision's option A), the key reads `purview` on every row and is inert.
+One conjunct, one reader, no second predicate: both basis values are that proposal's.
+
+Ladder step 5: the distinction is the instrument's, and `instruments.yaml` is where an instrument's facts
+live. `[UNVERIFIED]` that the `authority` conjunct can read a value sourced from the act's `form`
+operand; if a `requires` cell cannot be keyed by an operand, `issue` gains a second row alternative for
+published forms, which is the table's existing way to say "either".
 
 ## Gate (execution artifacts)
 
