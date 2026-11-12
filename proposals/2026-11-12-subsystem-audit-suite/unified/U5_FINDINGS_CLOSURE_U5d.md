@@ -589,3 +589,147 @@ Carriers: **CAUSE** = `16_PESSIMIST_GAME_standing_occasions_carry_their_cause.md
 | J-3 | arcs that end on a threshold | SUPERSEDED | A-47 | — |
 | J-4 | the realm is one realm | SUPERSEDED | A-50 | — |
 
+---
+
+# Part 8 — narrative churn (`audits/20_NARRATIVE_CHURN.md`)
+
+Carriers: **NARR-A** = `20_NARRATIVE_A_stands_for.md`; **NARR-B** = `…_B_what_he_was_owed.md`; **NARR-C** =
+`…_C_who_holds_what.md`; **NARR-D** = `…_D_his_own_side.md`; **NARR-E** = `…_E_the_year_and_the_reason.md`;
+**NARR-F** = `…_F_story_inventory_and_gate.md`. (Part 7, the institutions kit, follows Part 11 in
+writing order.)
+
+| id | claim (one line) | disposition | carrier · section | evidence |
+|---|---|---|---|---|
+| F-NARR-01 | the regime is one value | RESOLVED-BY | NARR-A edits 1–2 (R-N1, R-N16) | H-275's term returns one value |
+| F-NARR-02 | an omission has no author | RESOLVED-BY | NARR-B edits 1–4 (R-N4, R-N5, R-N13) with the story lane's R-11 (the blamed is the believed holder of the seat that may fill it) | — |
+| F-NARR-03 | an office is a licence and owes nothing | RESOLVED-BY | NARR-B; plan CR-88; a seat may now also carry a modifier (A-12) | — |
+| F-NARR-04 | nobody knows who holds what, so nothing is aimed | RESOLVED-BY | NARR-C edits 1–5 (R-N6) as reconciled: seat news ships realm-wide (A-32), the death apart (A-33) | 0 `held_by` claims (H-195) |
+| F-NARR-05 | allegiance is fixed and no stand can cross it | RESOLVED-BY | NARR-D edits 1–4 as reconciled (A-46 un-holds edit 4 in its narrow form) | — |
+| F-NARR-06 | the calendar has no year and the era has no reader | RESOLVED-BY | NARR-E edit 1 (R-N9: a roster owns the year; the weather reads it) — the owner A-51's "five years" is counted on | `world_q.season_of_year`: `len(season_factor_draw)`, shipped `()` (opened) |
+| F-NARR-07 | conviction can be removed and no story reading moves | RESOLVED-BY | NARR-A (R-N1, R-N2) | the audit's ablation |
+| F-NARR-08 | a change of conviction is silent and decided by rule | RESOLVED-BY | `16_PESSIMIST_CHAR_A_a_crisis_of_faith_is_drawn_and_told.md` (U5a's carrier; A-24 confirmed it), under which NARR-E edit 3 is merged and un-held | `person_q.py:903` "ROLLS NOTHING" |
+| R-N1, R-N2, R-N16 | three readings of one intensity; a call-not-spread test; `regime_gain`'s row | RESOLVED-BY | NARR-A edits 1, 6, 2 | — |
+| R-N3 | ED-IN-0352 against "affiliation sets odds" | RESOLVED-BY | none owed (no conflict: a flow, an era or a regime never sets odds; a person's own edges do) | — |
+| R-N4, R-N5, R-N13 | a lapse laid at a door; the household's dissolving; omissions counted | RESOLVED-BY | NARR-B edits 1–4 | — |
+| R-N6 | how a person learns who holds a rung | RESOLVED-BY | NARR-C | — |
+| R-N7 | `release` raises regard under `stance_polarity: declared` | SUPERSEDED | the BINDING verb lane and CHAR own the polarity rule (U5c, U5a); NARR-C edit 5 and NARR-D edit 3 name it | — |
+| R-N8 | eight creeds engage no pole | RESOLVED-BY | NARR-D edits 1–2 | — |
+| R-N9, R-N10 | the year's length; a referent's ground | RESOLVED-BY | NARR-E edits 1, 2 | — |
+| R-N11, §10 item 1 | a crisis of conviction: by rule or drawn and seen | SUPERSEDED | A-24 (D-27 taken B: drawn and seen); carrier as F-NARR-08 | ED-IN-0261 |
+| R-N12, §10 item 2 | is leaving a side a strife move | SUPERSEDED | A-46 (narrow: only leaving a faction's creed or head seat); NARR-D edit 4 and `09_WR_strand_conclusion.md` edit 2 as reconciled | `strife_kinds.never` |
+| R-N14 | "era" and "regime" in two senses | RESOLVED-BY | NARR-F (the reign as a reading) | — |
+| R-N15 | CR-100 and CR-101 stamp the same stake for everyone | RESOLVED-BY | none owed: two preconditions, both now carried (strands conclude and are several, A-45; the regime differs, NARR-A) | — |
+| H-195, H-275, H-274, H-159, H-356 | register rows re-measured | RESOLVED-BY | NARR-C; NARR-A; Part 3 (F-WR-07); NARR-B reads the clock closures | — |
+| CR-76 to CR-80, CR-88, CR-91, CR-97, CR-100 to CR-103 | plan positions | RESOLVED-BY | the plan; R-N13 and R-N15 are their inputs | — |
+| §4.2 (stories impossible or starved: fourteen rows) | blocked at a named link | RESOLVED-BY | the carriers of this part and of Parts 1–3; "a succession crisis: impossible by ruling" is lifted by A-15; "a war" by A-20 and A-57/A-58; "an excommunication" by `15_INSTITUTIONS_PAPACY_D_sanction_and_absolution.md`; "a debt called in" by `15_INSTITUTIONS_VENICE_B_debt_instrument.md` | — |
+| §7 (the coupled narrative basis; the five pulls) | design | RESOLVED-BY | NARR-A to -F | — |
+
+---
+
+# Part 9 — procedural generation (`audits/21_PROCEDURAL_GENERATION.md`)
+
+Carriers: **PROC-A** = `21_PROCEDURAL_A_worldgen_tables_and_ground.md` (PG-0, PG-1); **PROC-B** =
+`…_B_cast_and_seats.md` (PG-2, PG-3); **PROC-C** = `…_C_prologue_and_case_seeds.md` (PG-4, PG-5);
+**PROC-D** = `…_D_world_cards_and_churn.md` (PG-6, PG-7); **PROC-E** = `…_E_names_and_texts.md` (PG-8).
+
+| id | claim (one line) | disposition | carrier · section | evidence |
+|---|---|---|---|---|
+| R-21-01 | four card receivers with four schemas | RESOLVED-BY | PROC-D (one `world_cards` schema) | — |
+| R-21-02 | `build_realm` takes a seed and draws nothing from it | RESOLVED-BY | PROC-A as reconciled (A-50: some starting state drawn, small and bounded; the `variable=` arm's flip is licensed) | 22 of 22 components equal at seeds 0–2 (PES-GAME G-1) |
+| R-21-03 | canon geography's fields are read by nothing | RESOLVED-BY | `07_SE_ground_and_granaries.md`; PROC-A | — |
+| R-21-04 | the `npcs.yaml` header forbids invented NPCs, against a generated cast | RESOLVED-BY | PROC-B as reconciled (A-44 lifts the hold; generated persons never enter `npcs.yaml`) | ED-WR-0011 `[not re-opened]` |
+| R-21-05, R-21-06, R-21-07 | trace store; solvability checked once; evidence pattern by deed kind | RESOLVED-BY | PROC-C | — |
+| R-21-08 | pre-history: simulate or invent ("one simulated year") | SUPERSEDED | A-51 (five years); PROC-C as reconciled | — |
+| R-21-09 | `Person.born` 0 for all 83; `heritage` unset for 79 | RESOLVED-BY | PROC-B (tier B writes both); the 46 principals' ages are owed under A-15 (`22_HAPPENINGS_A` edit 1 is the one writer of `Person.born` from authored ages) | `fixtures.py:692` |
+| R-21-10 | the world builder lives under `harness/` | SUPERSEDED | U5a (a Layer 1 placement question for CORE); PROC-A adds `data/worldgen.py` only | — |
+| R-21-11 | a director for pacing | RESOLVED-BY | none owed (refused by axiom); PROC-D measures a drought | — |
+| R-21-12, R-21-13 | die notation in data; seed stability under table edits | RESOLVED-BY | PROC-B; PROC-A (the batch-0 probe) | — |
+| PG-0 to PG-8 | the nine batches | RESOLVED-BY | PROC-A to -E, in the audit's order | — |
+| D-1 | the cast: 46, or 46 plus a generated supporting cast | SUPERSEDED | A-44 (about 94 generated persons plus kin, capped) | — |
+| D-2 | depth of the past | SUPERSEDED | A-51 (five years; no generational pass; no births or ageing pass ordered) | — |
+| D-3 | re-arming in play | SUPERSEDED | A-52 (a docket read inside convening, after a test shows cards-at-build runs dry); PROC-D §5 as reconciled | — |
+| D-4 | Thread-bearing generation | SUPERSEDED | A-40: the substrate ruling its Option A waited for is made (ground); PROC-C may generate Thread cases on Sites | — |
+| D-5 | a wrong world | SUPERSEDED | A-53 (next seed by default; play-it behind a setting) | — |
+| §5 (validation V1–V3) | a world that can be rejected; a bar that can fail | RESOLVED-BY | PROC-A, PROC-C (the detective gate), under A-53 | — |
+| §9, §13, §14, §15 | the generated inquiry; arcs; capability; the standing rule | RESOLVED-BY | PROC-C; `12_ARCS_case_on_the_realm.md`; U1's capability home; no fixed outcome found in the kit's text by this lane's reading of the resolutions | — |
+
+---
+
+# Part 10 — happenings (`audits/22_HAPPENINGS.md`)
+
+Carriers: **HAPP-A** = `22_HAPPENINGS_A_a_death_is_rare_caused_and_drawn.md`; **HAPP-B** =
+`…_B_the_throne_is_never_stranded.md`; **HAPP-C** = `…_C_a_killing_is_a_crime_someone_commits.md`;
+**HAPP-D** = `…_D_batches_and_added_gates.md`. The audit's own table names a carrier for each
+happening; this lane re-read that column and changed it only where a ruling did.
+
+| id | claim (one line) | disposition | carrier · section | evidence |
+|---|---|---|---|---|
+| H-01 | officers seize with no cause, take no prisoner, and kill | SUPERSEDED | U5b (`14_VERBS_PHYSICAL_A_custody_and_force.md` A2, A3; `16_PESSIMIST_PC_A`); HAPP-D §2 adds the four-season gate | seeds 1, 2: 9 scenes fought, 0 custody, 3 dead |
+| H-02 | nobody named dies of age, illness or enmity; everyone is zero seasons old | RESOLVED-BY | HAPP-A and HAPP-C as reconciled (A-15, A-16); PROC-B | `born` 0 for 83 of 83 |
+| H-03, H-04, H-09, H-10, H-28 | refused acts; senseless aims; paperwork; villages forging; retries | SUPERSEDED | U5a and U5c (`02_CHAR_offer_what_can_be_done.md`, the formation proposals, `16_PESSIMIST_CORE_a_refusal_is_remembered.md`); H-10 also by `U5d_SE_cohort_heavy_moves_and_caste.md` (A-56) | 322 refusal Events on 749 acts |
+| H-05, H-27 | the world is the same whether anyone acts; a player-king who does nothing loses nothing | RESOLVED-BY | `16_PESSIMIST_GAME_consequence_reading.md`; NARR-B | F-PES-GAME-01, -10 |
+| H-06, H-16, H-17, H-18, H-20, H-32 | certain outcomes; verdicts; lies; hearings; two dice; acts that write nothing | SUPERSEDED | U5a (determinism, DICE) and U5c (SC, LACUNA); a convict no longer ends his own sentence (A-37) | F-PES-GAME-04 |
+| H-07 | no seat changes hands, no one changes side, no oath is paid, no writ is obeyed | RESOLVED-BY | Part 1 (DECREE, VB-C, VB-D); NARR-A to -F | 0 of 193 writs complied with |
+| H-08, H-19, H-34 | everyone behaves alike; a silent crisis; no reaction to being attacked | SUPERSEDED | U5a (`16_PESSIMIST_CHAR_A`, `_B`; `02_CHAR_relations_have_a_ground.md`) | F-PES-CHAR-01, -03 |
+| H-11, H-12 | no duel is fought; a fight is two blows | SUPERSEDED | U5b (`03_PC_duel_chain_reach.md`, `03_PC_duel_round_and_approach_B.md`; A-31 longer fights) | 48 of 48 challenges refused |
+| H-13 | anyone declares war; marches meet nobody; a defended field is always lost | RESOLVED-BY | `16_PESSIMIST_FA_B` edit 4; `06_FA_war_lives_in_seats_B.md` (A-20); the field's scale is U5b's | F-PES-FA-05 |
+| H-14, H-15, H-29, H-30 | every town the same; rest cures starvation; a hunger death by nothing; id-order feeding | RESOLVED-BY | Part 2 (GROUND, PES-SE-A); `09_WR_B_draws_not_thresholds.md` (A-54); PROC-A | — |
+| H-21 | no crime is ever committed, so no case can begin | RESOLVED-BY | HAPP-C as reconciled (A-16); PROC-C; U5c's paper and case carriers | `fight` 0 |
+| H-22 | news does not travel | SUPERSEDED | U5c (`08_FI_02`, `16_PESSIMIST_FI_A`); A-32, A-33 | a death known to 16 of 82 |
+| H-23 | the King cannot dismiss as King; a dismissal is permanent | RESOLVED-BY | `16_PESSIMIST_FA_A_dismissal_survives_the_king.md` | F-PES-FA-02 |
+| H-24 | the throne can be stranded; a consort can seat herself as Confessor; a cohort can be King | RESOLVED-BY | HAPP-B as reconciled (A-19); `16_PESSIMIST_FA_B` edits 1–2 | F-PES-FA-01 |
+| H-25 | the King lives in a cottage apart from his Queen | RESOLVED-BY | HAPP-D §3 (the homes); `16_PESSIMIST_FA_C` makes governance independent of residence | `npcs.yaml` rows |
+| H-26 | the world never ends and never ends differently | RESOLVED-BY | Part 3 (STRAND, READ-B, DRAWS edit 3) | `endings == []` |
+| H-31 | armour does not turn a blade; a second garrison adds nothing | RESOLVED-BY | walls: `16_PESSIMIST_SE_B` edit 3; armour: `16_PESSIMIST_PC_D_armour_turns_a_blade_by_a_draw.md` (U5b; the audit said "no proposal identified here", and one exists) | — |
+| H-33 | the record cannot retell | RESOLVED-BY | `16_PESSIMIST_GAME_standing_occasions_carry_their_cause.md`; `16_PESSIMIST_CORE_the_record_holds_what_changed.md` (U5a) | — |
+| §1 (the King's death, re-run and explained) | he dies at seed 2 in the fourth season, seized by his Spymaster | RESOLVED-BY | as H-01; the corrections of §5 | `runs/HAPPEN/king_2.json` `[not re-opened]` |
+| §3 (batches 1–8) | the landing order | RESOLVED-BY | HAPP-D | — |
+| §4 item 1 | natural death on or off | SUPERSEDED | A-15 (on, after the 46 ages are authored) | — |
+| §4 item 2 | may a person commit a killing | SUPERSEDED | A-16 (yes, rarely) | ED-IN-0337 |
+| §4 item 3 | who may claim the throne when the line fails | SUPERSEDED | A-19 (the deed race: heir, consort, princess and both houses' heads; the founding order a head start) | — |
+| §5 (four corrections owed in files this lane does not edit) | "King dies tick 0 in all seeds" and three others | RESOLVED-BY | recorded here as the standing correction (the digest and the two audits are not edited by a closure lane: their findings stay; the correction is this row); the PHYSICAL_A gate line is HAPP-D §2's and U5b's | the audit's §1.1 reproduction |
+
+---
+
+# Part 11 — story enablement (`audits/23_STORY_ENABLEMENT.md`)
+
+Carriers: **STORY-A** = `23_STORY_A_what_a_roll_leaves.md`; **STORY-B** = `…_B_a_house_continues.md`;
+**STORY-C** = `…_C_a_founded_place_can_fail.md`; **STORY-D** = `…_D_story_census_and_gate.md`; **STORY-E** =
+`…_E_first_playable_the_lean_year.md`. The audit's subject is the 73 stories S-01 to S-73, the nineteen
+carried mechanisms, three gaps, eleven batches and its decisions.
+
+| id | claim (one line) | disposition | carrier · section | evidence |
+|---|---|---|---|---|
+| M1, M2, M3 (the floor) | the offer makes sense; the act is drawn and every band writes; the record keeps cause, value and margin | SUPERSEDED | U5a and U5c carriers named in the audit's §3; `16_PESSIMIST_GAME_standing_occasions_carry_their_cause.md` | 1,585 of 7,940 acts refused at every attempt |
+| M4, M11, M12 | news with a name; a trail and a conclusion; a hearing that binds and ends | SUPERSEDED | U5c | — |
+| M5 | regard moves with deeds and dues, and has a ground | RESOLVED-BY | NARR-A to -D; U5a's CHAR carriers | — |
+| M6, M7 | seats pass by a draw; an order is answered by a draw | RESOLVED-BY | Part 1; HAPP-B; VB-C, VB-D | — |
+| M8 | bodies and time | RESOLVED-BY | HAPP-A; `16_PESSIMIST_WR_C`; `09_WR_B_weather_with_memory_and_the_year.md`; NARR-E edit 1 (all as reconciled: A-15, A-54) | — |
+| M9 | places differ and stores bind | RESOLVED-BY | Part 2 | — |
+| M10, M13, M15 | violence with a cause and a mercy; a field that can be won; capability differs and grows | SUPERSEDED | U5b and U5a; the land and seats a field wins are `U5d_FA_land_and_seats_pass_on_a_won_march.md` | 0 `field.won` in any run |
+| M14 | the interior draws | SUPERSEDED | U5a (PES-CHAR-A, -C); `12_ARCS_arcs_as_staged_goals.md` | — |
+| M16 | instruments and ties | RESOLVED-BY | Part 7 (the institutions kit) | — |
+| M17 | the world strains, breaks and ends | RESOLVED-BY | Part 3 | — |
+| M18 | a scene runs in its own order | SUPERSEDED | A-9 (a short sequence); `16_PESSIMIST_CORE_a_scene_runs_in_its_own_order.md` (U5a); S-67 no longer waits | — |
+| M19 | a seat can read it | RESOLVED-BY | Part 4 (WHY; SURF-B) | `Seen.why` is `None` |
+| G1 | what a roll leaves | RESOLVED-BY | STORY-A edits 1–4 as reconciled (A-5: the margin is the one sampler's; A-38 for whom a verdict names) | margin discarded |
+| G2 | a house continues | RESOLVED-BY | STORY-B edits 1–4 as reconciled: the marriage and the majority land; `majority_age` goes live with the authored ages (A-15); births stay behind `birth_rate` at 0 (J-1) | persons never increase |
+| G3 | a founded place can fail | RESOLVED-BY | STORY-C as reconciled (A-55) | — |
+| S-01 to S-73 (the inventory) | each story completes when its mechanisms land | RESOLVED-BY | by batch, the audit's §6.2: E-2 (S-60, 68, 69, 71, 72, and S-67 now that A-9 is ruled), E-3 (S-01, 31, 32, 34, 35, 36, 40, 66), E-4 (S-02, 29, 33, 37, 52, 57, 70, 73), E-5 (S-04, 05, 06, 07, 10, 15, 16), E-6 (S-08, 27, 28), E-7 (S-03, 09, 12, 30, 43–47, 49, 51, 53–56), E-8 (S-14, 20–26), E-9 (S-59, 61, 63, 64, 65), E-10 (S-11, 13, 17, 18, 19, 48, 50, 62), E-11 (S-38, 39, 41, 42); STORY-D is the reading that gates each | `runs/STORY/p2_count.py` `[not re-run]` |
+| S-58 | a planted clue that misleads | SUPERSEDED | decided out (R-10); the ladder's D-44 and D-45 agree (no engine-authored wrong conclusions) | K-37 |
+| E-0 to E-11 | the batches and their gates | RESOLVED-BY | STORY-D (the gate every batch uses) and the batch table as reconciled in STORY-D's head line | — |
+| §6.3 (thirteen places intent meets Layer 1) | named at the site | RESOLVED-BY | none owed by this lane except three that rulings moved: "arcs that end when a counter fires" (A-47), "natural death … the shape lands dark" (A-15: live), "chains inside a scene" (A-9) | — |
+| R-01, R-02, R-03, R-04, R-13, R-14, R-15, R-16, R-17, R-19, R-20 | decided by the ladder | RESOLVED-BY | as the audit's table (STORY-A, -C, -D, -E; §5; §6) | — |
+| R-05 | the deposition of a crowned or anointed head | RESOLVED-BY | none new: conquest (`U5d_FA_land_and_seats_pass_on_a_won_march.md`, for a head whose seat is anchored on a march-target rung), a sentence his sworn men each answer (`15_INSTITUTIONS_PAPACY_D`), CR-37; the Confessor is judged by nobody (A-36), so "by a College after a crisis" does not reach him | — |
+| R-06 | what a regency is | RESOLVED-BY | STORY-B edit 4; HAPP-B (Partial) | — |
+| R-07 | a besieged town's larder | RESOLVED-BY | `U5d_STORY_owed_edits.md` §1 (a constraint on `07_SE_campaign_supply_and_muster.md`) | — |
+| R-08 | a burned granary | RESOLVED-BY | `U5d_STORY_owed_edits.md` §2 (owed at the MATERIAL lane's `sabotage` row) | — |
+| R-09 | a hoarder, a profiteer | RESOLVED-BY | none owed (no price mechanism; told as relief withheld and a debt on terms) | — |
+| R-10 | a planted clue | RESOLVED-BY | none owed (out of plan) | — |
+| R-11 | who is blamed for a due that lapses under an empty seat | RESOLVED-BY | `U5d_STORY_owed_edits.md` §3 (an amendment to NARR-B's `dues_unmet`) | — |
+| R-12 | an ambush: the opener's edge | RESOLVED-BY | `U5d_STORY_owed_edits.md` §4; the ladder's D-41 takes it (a first-exchange edge on an unexpected opener, following A-16) | — |
+| R-18 | refugees need a population that can move | SUPERSEDED | A-56; `U5d_SE_cohort_heavy_moves_and_caste.md` | — |
+| R-21 | two men who kill each other | RESOLVED-BY | `U5d_STORY_owed_edits.md` §5 (owed at PC's owner) | 0 of 5,000 |
+| J-1 | are named persons born in play | JORDAN | (a) births on, in STORY-B's shape behind `birth_rate`: houses continue or fail, a regency has a child at its centre, the cast grows; (b) no births: the cast is what the build and the prologue made, minors come of age, every line is finite. Not answered by A-15 (deaths) or A-51 (which orders no births or ageing pass for the prologue). STORY-B's marriage and majority land under either | — |
+| §8.3 (twelve items "already Jordan's") | defaults under which no batch waited | SUPERSEDED | eleven are answered: A-15, A-16, A-19, A-24 (D-27, D-28), A-9, A-46, A-55, A-38, A-33 and the ladder's D-69; where the answer differs from the plan's default the batch is re-read in STORY-D's head line (A-9: S-67 completes in E-2; A-46: the Split is a strife move; A-38: the verdict names the petitioner). One stays open: the form of fortune in a field (D-34, held for `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md`; U5b's) | — |
+

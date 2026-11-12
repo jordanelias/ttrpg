@@ -138,6 +138,20 @@ a `march` Candidate is scored under `odds_weighting: believed`.
 - **`modules/mass_battle/` floats** against the port: A-29 (declared floats now); `11_GO_float_contract.md`
   (U5d's). The seam still quantises shares (`04_MB_typed_outcome_and_one_path.md` §1).
 
+## §9 · Three resolutions whose named carrier does not contain them (first audit R-24, R-25, R-29)
+
+The first audit's table names a proposal for each; the text of that proposal holds none of the three
+(searched: `rekey_cells`, `GappedLine`, `truncat` across `04_MB_*`).
+
+| id | owner | exact edit | gate |
+|---|---|---|---|
+| R-24 | `modules/mass_battle/config.py::MIN_DISCIPLINE` (the troop file's header when it lands) | `GappedLine`'s minimum is set to the Discipline of the lightest troop type whose menu offers a `GappedLine` role (2, per the audit's run), so `Skirmish` and `Kite` keep their shape past tick 1; or, where a type is not meant to hold it, the role leaves that type's menu (§1's test) | the audit's one-tick probe: every `GappedLine` role still reads `GappedLine` after tick 1 on each type that offers it |
+| R-25 | `modules/mass_battle/hierarchy/units.py::Subunit.rekey_cells` | re-seeds `cell_morale`, `cell_start_troops` and `cell_breakpoint` from the subunit's current aggregate when the cell map is re-keyed. **Carried in fact by `26_MASS_BATTLE_movement_and_fatigue_as_data.md` §4 and its edit row for `units.py`** (the reform order needs the same repair); recorded here so the first audit's pointer resolves | after a drift, every troop id has a morale entry (the audit's "1 of 2" reads 2 of 2) |
+| R-29 | `modules/mass_battle/massbattle.py::_run_and_grade`; `FieldOutcome.report` (`04_MB_playable_field_scenario.md` §D) | the count of troops in engagement groups past the fifth depth group, which `run_battle` already returns and `_run_and_grade` drops, rides the report as one figure, `truncated_troops` | a field built to exceed five depth groups reports a non-zero figure; an ordinary field reports 0 |
+
+**Movers.** R-24 and R-25 move fields in which a body drifts (army fields only; none in natural play).
+R-29 moves nothing.
+
 ## NERS reading (E last)
 
 N: each row is a decision already taken that had no file. R: an NPC commander stops being blind to odds

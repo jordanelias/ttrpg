@@ -1,5 +1,7 @@
 # VERBS · PHYSICAL · C — looking: `examine`, `surveil`
 
+Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` Parts 3–4; `U5b_VERBS_military_physical_residue.md`) — (1) `examine` and `surveil` keep the inquiries' own form (task rows that write nothing; residue §1): the roster is `graded_tasks`, and `surveil`'s Failure kinds `finding.none` and `watcher.seen` are both members of its `emits_on_refusal` clause `draw`. (2) **A-5, A-7**: the draw is the one sampler; the pool is the one pool rule on the watcher's `inquiry` score. (3) The per-sighting admission draw at `surveil_watch_rate[band]` stands: a success is watchfulness, not omniscience (D-44 and D-45: an error has an author; this channel shows less, never something false). (4) A-32 and A-33 (who learns of a change of office; a death) are untouched: a watcher learns what is done where he watches.
+
 ## Status: PROPOSED
 
 Grounded: 2026-11-12 by `audits/25_GROUNDING_ENGINE.md` (A-09) — one Layer 1 line corrected in the proposed note text: the rule is `04:260` (§B.3 `Rung`, "NEVER: any social aggregate"), not `:237`.

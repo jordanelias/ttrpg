@@ -23,7 +23,7 @@ are now at D-01 to D-03, rewritten in the plain readings you asked for. The shor
 every lane's recommendation keeps Layer 1 as it stands, and gives you the experience you described anyway.
 You only need to amend Layer 1 if you want the *other* reading.
 
-**STATUS 2026-11-12 (later): every decision except D-34 and D-35 is now answered or ladder-closed. Each entry below begins with its status line; `DECISIONS_ANSWERED.md` governs where they differ from the entry's text, including the recommendations and 'if you do not answer' lines, which are now historical.**
+**STATUS 2026-11-12 (later): every one of the 74 decisions is now answered or ladder-closed. Each entry below begins with its status line; `DECISIONS_ANSWERED.md` governs where they differ from the entry's text, including the recommendations and 'if you do not answer' lines, which are now historical.**
 
 **Answered at first drafting (2026-11-12, recorded in `DECISIONS_ANSWERED.md`, which governs where they differ):**
 D-01 (A, the same resolver run automatically), D-02 (A, a row), D-03 (A, nested), D-04 (A, won/lost/drawn),

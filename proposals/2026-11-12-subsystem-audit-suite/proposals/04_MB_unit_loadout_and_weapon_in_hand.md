@@ -1,5 +1,7 @@
 # MB · the unit-scale half of the weapon-carry rule: one roster, a loadout with a secondary, the weapon in hand as state
 
+Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` Part 2) — **superseded by `04_MB_unit_loadout_and_weapon_in_hand_B.md`** where the two differ; this file's confirmations of the PC proposal's statements about the module (its first table) stand and are what `03_PC_loadout_and_carry.md` now cites. Superseded: §1's roster merge (personal combat's roster holds no missile weapon, pike or lance: addendum C-3; decided instead as one owner a fact, R-36); §2's seven-table list (twelve tables and four name tests); §4's default switch order added by the builder (a default the commander did not write is a rule standing where a choice should be: the doctrine row writes it); §4's last bullet (`PhaseOrder` gains `in_hand`: the decider's return is the manager proposal's `GeneralAction`, whose `order` behaviour carries `in_hand`). Kept by `_B`: `in_hand` as subunit state changed by an order and costing a tick; the cost by personal combat's function, handed in as factors.
+
 ## Status: PROPOSED
 
 Lane MB. The unit-scale half of `03_PC_loadout_and_carry.md` (the PC lane's proposal, which owns the

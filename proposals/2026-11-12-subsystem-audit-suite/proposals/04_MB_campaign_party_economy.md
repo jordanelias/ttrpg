@@ -1,5 +1,7 @@
 # MB · the army between battles: veterancy and upkeep on the unit row, by the owners the campaign already has
 
+Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` Part 2) — two changes. (1) **The standing rule** (`audits/14_VERBS_MILITARY.md` §0.5 lists this file's fixed rule): a unit that stood does not gain `experience` with certainty; the write in §1 is one draw for each eligible unit on the one sampler, the gain on Success or better (`U5b_MB_rulings_in_the_field.md` §5). The conditions for eligibility, the reset on destruction and the dilution rule stand as bookkeeping. Arrears stay arithmetic (they set odds); what unpaid men do is drawn in `14_VERBS_MILITARY_C_the_muster.md` (`discharge_troops`' Failure band; the dispersal draw). (2) **A-2** confirms the carrier: `experience` and `arrears` are columns of the unit row (the ruling's own list names experience); no unit holds a history of its own.
+
 ## Status: PROPOSED
 
 Lane MB for the two data columns and the two battle-side effects; FA and SE own the acts that pay and
@@ -55,7 +57,7 @@ today's behaviour as the control. No natural season fights an army field today.
   place a unit's stats are assembled.
 - **Write:** `engine/season/loop/effects_combat.py::_eff_march`, on a band that is not `Lost` for the
   unit's side, for each unit whose part in `FieldOutcome.parts` (a) lost troops and (b) did not rout:
-  `experience += 1` up to the cap, through the army verbs' one write path
+  *(Reconciled, the standing rule: one draw for each eligible unit, pool the unit officer's `command` score by the one pool rule, else the commander's, else the untrained default; obstacle `veterancy.ob` plus one a step already held; on Success or better)* `experience += 1` up to the cap, through the army verbs' one write path
   (`armyrecord.apply`). A unit whose part is destroyed (share 0) is reset to 0. Condition (a) is the
   Field of Glory rule (a unit that stood in reserve and was never touched learns nothing) and keeps the
   write from being a clock.

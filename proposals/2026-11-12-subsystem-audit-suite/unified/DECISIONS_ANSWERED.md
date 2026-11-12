@@ -75,6 +75,8 @@
 | A-61 (rout floor) | May a body break below the 15% band | A: yes, a stand draw beside the band | The ruled 15% onset (ROUT_ONSET_FRAC) is not edited; a shock can break a body sooner, built behind a switch with the band-only reading as the control. |
 | A-62 (J-U5a-03) | A refused act's receipt | B: amend D-51; #353 holds | Budget is a Query; a refusal Event carries no changes list; the Layer 1 `04` D-51 amendment text is owed (not applied); build nothing. |
 
+| A-63 (J-U5a-05) | Is the person visited occupied by a visit | B: yes, an interaction occupies its counterparty | His scene budget is debited or he is unavailable to a second visitor that round; reaching a busy person becomes a real constraint and a tellable story; throughput falls by an amount that must be measured before it ships (the 62-of-87 baseline is in `audits/16_PESSIMIST_CORE.md`). The edit belongs with A-9's scene order (`16_PESSIMIST_CORE_a_scene_runs_in_its_own_order.md`). |
+
 ### Closed by the five-step ladder, not by Jordan (CLAUDE.md §0; reversible on his word)
 
 Answered by prior ruling, precedent or architecture; recorded so the numbering is whole.

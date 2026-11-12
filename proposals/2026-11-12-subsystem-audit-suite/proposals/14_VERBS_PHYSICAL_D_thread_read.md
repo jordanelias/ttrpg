@@ -1,5 +1,7 @@
 # VERBS · PHYSICAL · D — `thread_read`: a graded diagnosis now, a priced working later
 
+Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` Parts 3–4; `U5b_VERBS_military_physical_residue.md`) — (1) Stage 1 is the inquiries' form on the one roster `graded_tasks` (not `graded_routes`); stage 2 writes `Person.coherence` on every band, Failure included, so it is a contest row bound to the threadwork provider it re-points to (residue §1, shape (b)). (2) **A-5, A-7**: one sampler; the pool rule on the reader's score; Thread Sensitivity stays the one gate A-11 keeps. (3) **A-40** (the Thread is ground: one site a territory, no new entity kind) unblocks the Site half this file leaves waiting on a substrate; planning it is WR's (U5d's family). (4) **A-43** (zero coherence: a person no longer legible to others): what a `thread_read` of such a person shows is CHAR's and WR's to plan with that ruling; this file's stage 1 deposits a sensitivity reading and nothing about his reasons.
+
 ## Status: PROPOSED
 
 Batches P-D1 and P-D2 of `audits/14_VERBS_PHYSICAL.md` §10.3. Carries that file's §9 and §0.6. Stage 1
