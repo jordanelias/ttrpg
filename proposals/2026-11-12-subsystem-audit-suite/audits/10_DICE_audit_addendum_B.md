@@ -55,7 +55,7 @@ provider's and not a hand-built one (the existing test,
 
 The mutation arm reproduces the row's defect exactly (eight people gone, nothing in the log), so the
 probe can observe the failure it excludes; the unmutated arm does not show it. **H-152 is closed** (by
-CP-T02-01, `1ef8d273` and before). Action, a register edit for whoever closes this suite: the row's head
+CP-T02-01, the B10-09 build). Action, a register edit for whoever closes this suite: the row's head
 to CLOSED citing CP-T02-01 and this probe; `owner:` to `state/gate.py::death_subjects`. It never was a
 dice-engine row; the dossier filed it here by a path rule on `effects.py`.
 

@@ -252,3 +252,227 @@ Lane `designs2`: archived design documents under `.designs/systems/{overview,set
   - Province Accord = floor(mean Order) over real member settlements (:88).
 - **Conflicts / stale:** Everything cited has moved or been retired (many "RETIRED 2026-08-21 → FORK:1e4c6f4"). Useful only as evidence of the failure pattern "designed in prose, never wired".
 - **Open items:** OI-37 (reconcile Territory.accord vs Settlement.order) is deferred in the old code (:149).
+
+### .designs/systems/settlements/reference/settlement_layer_v30.md
+- **What it is:** The Settlement Layer Specification (2026-04-16, many later amendments to 2026-07-13): two-tier map, settlement types/stats, facility tiers, Church infrastructure, L/PS to Mandate, 37-settlement registry, dual-authority governance, subnational factions, settlement events, siege, Entry Terms, player stature ladder, faction emergence/collapse, extended timeline.
+- **Status:** "CANONICAL — approved 2026-04-17 (editorial batch acceptance)" with many embedded "PROPOSED, not yet ratified" subsections (§1.8a/b/c, §3.3a, §3.3c, §4.3a/b, §5.3) and "RATIFIED" §3.3b. Reading: the largest single body of settlement intent; mostly unbuilt (settlement flow skeleton shows only stats, Order and a probe ran); the live head per old CURRENT.
+- **Bears on:** SE, FA, CHAR, WR, MB, SC
+- **Content that matters:**
+  - Province Accord = floor(mean settlement Order) (:69); settlement stats Prosperity/Defense/Order 0-5; derived Local Economy = Prosperity×50, Garrison = Defense×20 + Fort×30, Public Order = Order×20 (:53-57).
+  - Weight W = base(Type) + Prosperity + FacilityTier (Seat/City/Cathedral 3, Town/Fortress/Port 2, Village/Mine/Outpost 1); q = 0.5L + 0.5PS; Mandate = round(7T/(T+6)) (:166-176); NOTE base values differ from lps_wiring_v1 (Seat 4 / City 3 / Cathedral 4) (lps_wiring :59).
+  - Settlement L/PS event tables: L: oath +1, charter +1, regular court +1, stance broken −1; PS: dearth relieved +2, festival +1, defended +2, levy −1, forced billeting −1, public execution −2 (:214-231); succession: normal leaves L unchanged, contested/emergency/imposed L −1 plus Regency (:263-267); emigration: >= 2 Dearth/Order<=1 seasons loses 1 Weight (:294-300).
+  - Registry: 37 settlements (35 Kingdom + Himmelenger S-036 + Schoenland S-037); S-006 Goldenfurt Town in Kronmark, S-007 Lowenskyst Fortress (:324-445); sub-features (districts) are not siege targets (:316, :449-483); migration map from the old 36-id list (:489-528).
+  - Governor/governance: standing gates (3 Town/Outpost, 4 City/Fortress/Mine, 5 Seat/Cathedral), 4 governance actions Develop/Fortify/Pacify/Administer with Ob formulas (:549-563); subnational faction table with management effects (Church, Guilds, Ministry, Löwenritter, RM, Wardens, Niflhel) (:575-583).
+  - Charters/Quo Warranto: revoke Ob = Influence÷2 + floor(age/8); charters older than ~16 seasons need a public Quo Warranto social contest, plus Order −1 peninsula-wide in settlements that faction-type manages (:621-631); Za patron-lapse (:659-669); Seggio council (:677-700).
+  - Dearth chain: triggers (Prosperity 0, grain route cut, levy at Prosperity<=1), verbs Open Granary / Fix Prices / Requisition / Ignore / Provision, new `granary` 0-3 field (:767-786); grain routes make Hafenmark dependent on T5/T6 or Ports (:819-834).
+  - Siege/assault/bypass (:912-920); Surrender-on-terms vs Storm branches (non-Overwhelming result only) owned jointly with faction_action (:941-960); Entry Terms: Confirm Privileges seeds L=3, Impose Administration seeds L=1 and Order −1 (:989-1012).
+  - Stature ladder Renown/Standing to governance scope; 5-stage faction emergence; Founded Faction starting stats L2/PS3/Mil1/Stab3; collapse contracts to city-state (:1027-1093); IP baseline halved; Generational Shift clock 0-10, +1 per 5 years, leaders lose attribute at 10/20/30 years unless TS >= 50 (:1103-1117).
+- **Conflicts / stale:** §4.5 says "~45-50 Local Actors across 36 settlements" (:866) and §4.1 "S-015 Gransol Parliament" (:712) while the registry renumbered Gransol to S-018 (:382, migration :505) — stale IDs inside the doc. Part 5 heading is followed by §4.7-4.9 and §4.6 sits after Part 8 (out-of-order). Province Accord rules cite peninsular_strain §2.3-2.4 which operate "by modifying settlement Order"; its §2.1 table uses old IDs. `derived_stats_v1` citation correction note says the real doc marks these formulas "PENDING" (:51). Mandate retired as collapse carrier by ED-IN-0046 (settlements_currency :33) vs §1.8 Mandate as canonical aggregate. Engine uses S-006 Goldenfurt (engine/season/venues.yaml:151) consistent with this registry.
+- **Open items:** ED-SETT-01/02 (starting stats, governance Ob calibration) deferred to a smoke test never run in the tree; per-province vs per-settlement grain route tracing; Seggio and Sack branches `needs_jordan`.
+
+### .designs/systems/settlements/reference/settlement_layer_v30_index.md
+- **What it is:** Auto-generated heading and token index (2026-07-08) of settlement_layer_v30.md; whole doc 25,697 tokens.
+- **Status:** none (generated). Reading: stale against the current body (line numbers off by roughly 40 to 190; omits §1.8's later subsections' final form and §3.3b/c, §1.3a).
+- **Bears on:** PROCESS
+- **Content that matters:**
+  - Token sizes show the weight of the doc: Part 1 7,321 tokens, Part 2 3,617, Part 3 3,044, Part 4 3,681, Part 5 2,719 (:101-139).
+  - Heading list omits §3.3b and §3.3c (added after 2026-07-08).
+- **Conflicts / stale:** canonical path `designs/territory/` (dissolved).
+- **Open items:** none.
+
+### .designs/systems/settlements/reference/territory_temperaments_v30.md
+- **What it is:** Per-province public temperament authoring (PP-686 v2 Phase B Stage 6, 2026-05-01) for T1-T17, with a faction aggregate and drift rule.
+- **Status:** Header says "Status: CANONICAL" and the banner "PROVISIONAL — Class A authoring... pending Stage 10 calibration". Reading: self-contradictory; provisional data; intent only (engine/season mentions temperament in cohorts.yaml and a few harness/epistemic files, not as this table [UNVERIFIED]).
+- **Bears on:** SE, FA, CHAR, WR
+- **Content that matters:**
+  - Five temperaments as alpha (outcomes) / beta (conduct) pairs: pragmatic 0.7/0.3, traditional 0.3/0.7, balanced 0.5/0.5, principled 0.2/0.8, outcomes-only 0.9/0.1 (:20-26).
+  - Province assignments (e.g. T2 Kronmark traditional; T6 Stillhelm, T13 Oastad, T15 Askeheim outcomes-only; T9 principled) (:41-57); faction aggregates uniform-weighted: Crown ≈0.50/0.50, Church 0.20/0.80, Hafenmark ≈0.55/0.45, Varfell ≈0.50/0.50 (:67-70).
+  - Faction effective temperament = population-weighted mean over territories; RM and Löwenritter derive theirs from territories they operate in (:28, :72).
+  - Drift: `temperament_drift += 0.1 × strain_delta` clamp [−1, 1] on strain shock (:86-89) — uses `env.peninsular_strain_shock` Keys, a retired Key-era interface.
+- **Conflicts / stale:** Strain-shock Key interface is retired (ED-IN-0232); Strain itself has no carrier in code (see peninsular_strain entry). VSG ruling wants temperament aggregated across scales, not province-only (settlement_generator §7).
+- **Open items:** settlement-level temperament (Stage 6b) deferred; population weighting uniform.
+
+### .designs/systems/settlements/reference/valoria_political_hierarchy_v30.md
+- **What it is:** PP-726 political hierarchy canon (2026-05-10): Valn > Kingdom > Duchy > Province > "Territory = Settlement"; special-case entities; settlement counts, march-route rule, province fracturing, political value, governor assignment, vetting block.
+- **Status:** "PROVISIONAL — Class A". Banner states §1's "Territory = Settlement" equivalence and §2.3 fracturing rule are SUPERSEDED (2026-07-13) by scale_hierarchy_v1. Reading: partly superseded; Duchy tier, settlement/province counts and special entities still the descriptive base.
+- **Bears on:** FA, SE, WR
+- **Content that matters:**
+  - Three duchies: Valorsmark (Almud, also monarch; 6 provinces; Latinate), Hafenmark (Baralta; 4; Hanseatic), Varfell (Vaynard; 4; Old-Einhir/Norse) (:51-54).
+  - Special entities: Himmelenger (Church city-state, sovereign), Askeheim (unincorporated Calamity wilderness, zero settlements), Schoenland (foreign Altonian island, one sea edge, exempt from >=2 rule) (:60-68).
+  - Each province 2-3 settlements (7 at 3, 7 at 2 = 35); each settlement connected to >= 2 others (:76-82).
+  - political_value = sum of territory_value (by type plus Prosperity/Defense/Order) + province_unification_bonus when one faction owns all territories; scalars TBD (:92-103).
+  - Vetting block rates M-1..M-11 and a Q-robust paragraph (three approaches per province-control conflict) (:150-178).
+- **Conflicts / stale:** States 56-edge settlement graph (:12, :178) vs 49 edges in settlement_adjacency (:44) and the sourcebook's "49 vs 55 vs 56" debt. Deprecates "T1..T17" naming yet every other document and the engine still uses T-ids. "Almund (Almud)" spelled two ways (:49).
+- **Open items:** fracturing triggers and reunification thresholds, political-value scalars, ED-055 naval scope, Askeheim healing path (:141-144).
+
+### .designs/systems/social_contest/reference/social_contest_currency_v1.md
+- **What it is:** Currency-lineage note (2026-08-14, ED-IN-0189) carrying the retired `CURRENT.md` Social contest head-row narrative.
+- **Status:** "REFERENCE — currency lineage only". Reading: historical, but a dense timeline of SC rulings.
+- **Bears on:** SC, FA, CORE
+- **Content that matters:**
+  - Contest_rebuild staged (Gate 0 2026-06-30; ED-1055..1062 Stages 1a-3); kernel at `systems/social_contest/sim/contest/` (:33).
+  - ED-SC-0002 RULED 2026-07-08: COMPOSED keying (Persuasion-Track band gates magnitude; genre selects stat/channel: Memory to L/Mandate, Projection to I) (:33).
+  - P1 consequence spine EXECUTED with ECHO_TRANSPORT default ON: faction-scale auto-resolve via parliamentary_bridge and personal-scale Emergency Council via scene_dispatch; both can fire in one season (double-fire), calibration case under ED-SC-0013's Auto/Manual Resolution Duality (FORK-C tolerance needs_jordan) (:33).
+  - Open: ED-SC-0015 (Total-Victory Mandate −1 stacking with Censure −1 = −2); P0 docket ED-SC-0003/0004/0005 (ED-SC-0004 blocks calibration) (:25, :33).
+  - Three-lens audit (2026-08-06, ED-SC-0017..0022): three resolution models under one name; Stage 3 (CR4/armature/CR5) unreachable because `build_contest` has no armature param; BG "one-season" Mandate −1 is permanent; no record spine (Record primitive exists at settlements ledger.py) (:33).
+- **Conflicts / stale:** Cites `engine/params/contest.md`, `params_tables.yaml` (retired), echo_transport (retired Key-era), `engine/cross_scale/*` (gone). Text is cut mid-sentence at line 33 (ends at "...KU-1 flags)").
+- **Open items:** ED-SC-0015, ED-SC-0003..0005 were open at writing; later EDs ED-SC-0033..0039 (proceedings ownership) are referenced in the AUDIT_BRIEF as ruled [UNVERIFIED here].
+
+### .designs/systems/social_contest/reference/social_contest_flow_skeleton_v1.md
+- **What it is:** Traced flow skeleton of the old social-contest code (kernel `contest/`, parliamentary_vote, stay, scene_dispatch, parliamentary_bridge) at commit 6545067 with `path:line symbol` anchors; some rows corrected 2026-09-26.
+- **Status:** "REFERENCE — traced structure only". Reading: historical for call sites (engine/cross_scale and mc_v18 are gone), but the kernel files it names still exist under systems/social_contest/sim/contest/ (verified by ls).
+- **Bears on:** SC, FA, CORE
+- **Content that matters:**
+  - Kernel API: `build_contest` (adapter) -> `resolve_contest` (router, game "agon" only live) -> `Bout.resolve` exchange loop over `venue.budget`, moves pass/hard/support/shift/evidence/rebut/advance with reserve spending, faults, win-condition (:64-97).
+  - Evidence is a hidden-value item presented by `evidence` move (no roll); `rebut` gated by `venue.allow_rebuttal` default False (:87-88) — directly relevant to the brief's evidence-as-typed-input question.
+  - Gaps: armature (CR4/CR5) unreachable from `build_contest`; no durable record (only queued faction-stat deltas); `resistance` metadata-only and never supplied; `game` consensus/negotiation/inquiry STUBS unreachable; Emergency Council always closes by Panel vote, never Persuasion Track (:177-186).
+  - Dead or orphaned: `parliamentary_stay.invoke_stay/resolve_stay_lift` zero callers; `contest/faction.py` zero production callers; `agon_harness.py` zero callers; `Standing.strip` never called (:181-183, :192).
+  - Four coexisting resolvers: Bout, run_parliamentary_vote, legacy run_contest (retired 2026-09-26, ED-SC-0033), faction.coalition_vote (:191).
+  - Church Tribunal/Excommunication exist twice (contest-kernel proceedings and independent FA modules) (:185); 9-node import cycle in the contest package, runtime-broken only by function-scoped imports (:190).
+- **Conflicts / stale:** `contest_legacy_stub` deleted (the file notes it). `scene_dispatch`, `parliamentary_bridge`, `mc_v18` named here are not in the tree [UNVERIFIED but `engine/mc_v18.py` absent]. A `modules/social_contest` module now exists (ls modules) — the skeleton predates it.
+- **Open items:** none stated; gaps are the open items.
+
+### .designs/systems/social_contest/reference/social_contest_system_v2.md
+- **What it is:** The v2 social contest spec (Opus 4.6 session 2026-04-04, PP-234 and later patches): format-follows-context, GM setup, Argue pool, Appraise/Choose/Argue exchange, CLASH/REINFORCE/CROSS/TIE, strain and Concentration, asymmetric proceedings, BG vote and hybrid modes.
+- **Status:** "SUPERSEDED — canonical doc is designs/scene/social_contest_v30.md ... DO NOT CITE AS LIVE RULES" (banner :9-19). Reading: superseded; vocabulary and design intent only; §-anchors map 1:1 to v30 except §5 and §9.6.
+- **Bears on:** SC, CHAR, FI, FA
+- **Content that matters:**
+  - Two genres (Memory = retention/actual, Projection = protention/potential) and two orientations (Revealing / Obscuring); style bonus +1D primary genre, +1D matching audience boost, max +2D (:34-38, :78-93).
+  - Argue pool = (primary attribute × 2) + History bonus; primary attribute by adjudicator: Expert judge Cognition, Crowd Charisma, No adjudicator Attunement, Panel Cognition (provisional) (:56-61, :126-133).
+  - Evidence: Recall bonus +2D "when citing a specific, named, verifiable claim (document, date, prior statement, named precedent)", binary, either genre (:168); Evidence Track Findings from fieldwork add +1D on Exchange 1, max +2D, not consumed, must be declared at setup (:313) — the only evidence-as-input rule in v2, a bonus die rather than a refutation.
+  - Interaction types CLASH/REINFORCE/CROSS/TIE and Doubt Marker for Obscuring wins (:171-206); Persuasion Track 0-10, Side A wins >= 7, B <= 3, compromise 4-6, Total Victory >= 9 / <= 1 (:98, :248, :265).
+  - Composure = Charisma + 6, Rattled marks at strain >= Composure, 2 marks = socially incapacitated; Concentration = Focus + Recall, Spent at 0 (:215-228); first-to-speak deliberately deterministic (higher Attunement acts last) (:234-241).
+  - Asymmetric proceedings: Church Tribunal track starts biased at 6, disadvantaged party halved resistance (:271-281); BG Parliamentary Vote: pool = sum of Mandate per side, Total Victory = loser Mandate −1 one season (:342-358).
+- **Conflicts / stale:** Composure retired as the contest tracker name (CR3/ED-1056: re-homed onto Face, per the v30 infill :39). "Presence/Memory" renamed. Panel adjudicator "not yet designed" here (ED-137) but implemented in the kernel (flow skeleton S1.4). Pre-Contest Preparation and Findings bonus not seen in the kernel's move list [UNVERIFIED].
+- **Open items:** Escalation between social modes, negotiation ZOPA-style compromise, Appraise expansion, SIM-DEBT-03/04 (:404-416).
+
+### .designs/systems/social_contest/reference/social_contest_system_v2_index.md
+- **What it is:** Auto-generated index (2026-04-18) of the v2 spec; 7,112 tokens.
+- **Status:** none (generated). Reading: stale/historical.
+- **Bears on:** PROCESS, SC
+- **Content that matters:** Heading map only; §4 Exchange Structure 1,632 tokens, §2 GM Setup 1,082 (:74-76). canonical_sha "unknown" (:11).
+- **Conflicts / stale:** canonical path `designs/scene/` (dissolved).
+- **Open items:** none.
+
+### .designs/systems/social_contest/reference/social_contest_v30_index.md
+- **What it is:** Auto-generated index (2026-07-02) of the live-at-the-time social_contest_v30.md body (22,256 tokens).
+- **Status:** none (generated); the indexed doc is "CANONICAL — approved 2026-04-17". Reading: gives the only view in my set of v30's added sections.
+- **Bears on:** SC, FA, CHAR, WR
+- **Content that matters:**
+  - v30 adds §6.1 Obligations (post-contest binding commitments, 2,564 tokens), §6.2 Conviction Scar Visibility, §6.3 Chain Contests (unresolved tension generates follow-up), §7.1 Excommunication Tribunal (ED-625), §7.2 Succession Contest (ED-665), §7.3 Heresy Investigation Lifecycle (ED-772), §9.4b Adjudicator Thread Response (ED-667), §10.1 Parliamentary Stay (ED-631) (:38-58).
+  - §5 renamed "First to Speak"; §9.6 renamed "Chamber Violence (Forced Forfeit)" (ED-897) (:37, :52).
+  - Largest sections: §4 Exchange Structure 5,362 tokens, §6 Post-Contest 3,911, §7 Asymmetric 3,303 (:84-90).
+- **Conflicts / stale:** Duplicates the title "SOCIAL CONTEST SYSTEM v2" for a v30 file (:23).
+- **Open items:** none.
+
+### .designs/systems/social_contest/reference/social_contest_v30_infill.md
+- **What it is:** Prose/rationale extracted from social_contest_v30.md (infill half of a skeleton/infill pair).
+- **Status:** "CANONICAL — approved 2026-04-17" copied from skeleton header. Reading: fragment; one-document-in-parts with v30 body.
+- **Bears on:** SC, CHAR
+- **Content that matters:**
+  - CR3/ED-1056: the Charisma×3 buffer is retained but re-homed onto the Face tracker; "Composure" as the contest-tracker name retired; Rattled at strain >= Face; Knot-as-Face-buffer (:39-41).
+  - Jordan CONFIRMED scoped-rename-only (Composure to Face) at Gate A; knots_v30 §4.2 still says "Knot-as-Composure-buffer" (:41).
+  - ED-897: canonical genre/orientation names Memory/Projection and Revealing/Obscuring; "Past/Future", "Direct/Indirect" are pre-PP-234 labels (:36).
+  - §9.6 Chamber Violence = immediate forfeit, exception monster incursion/catastrophe (:55-57).
+- **Conflicts / stale:** Uses "Past/Future" in rationale (:24-25) against the Memory/Projection canon (:36).
+- **Open items:** none.
+
+### .designs/systems/threadwork/reference/thread_horizontal_integration_spec.md
+- **What it is:** ED-673..ED-681 (2026-04-17) cross-system Thread fire paths and editorial resolutions: Thread Domain Echo, Scene Slate Thread-State scenes, settlement Thread environment, CV drift, perception table, lifepath-to-TS derivation, Thread warfare NPC AI doctrine, Case Board dual-depth overlay, Rendering Crisis beats.
+- **Status:** "ED-673 through ED-681 | Status: CANONICAL". Reading: intent/historical; its target sections were to be inserted into other docs by "propagation" (the propagation map lists target docs under dissolved `designs/`).
+- **Bears on:** WR, FI, CHAR, FA, SE, GO
+- **Content that matters:**
+  - Thread Domain Echo: fires when RS change >= 1, or witnessed Conviction Scar, or Gap/Lock/Knot created/destroyed at Territorial+; effect ±1 to the most relevant faction stat (Dissolution −1 Stability, territorial Mending +1 Mandate, unauthorised Lock −1 Mandate); queued to next Accounting; cap 1 per scene per faction (:38-62).
+  - Scene Slate Step 2b: RS <= 20 mandatory Thread Crisis scene; active Gap/Lock/threshold-crossing/WC advance add scenes; max 1 Thread-State scene per Slate (:74-86).
+  - Settlement Thread effects are per-territory, not per-settlement (editorial resolution 6) (:27, :108); CV drift from public Thread operations capped ±2 per territory per season (:122-136).
+  - Starting Truth/TS from lifepath table, base Truth 4, TS 0; Formation 2F gives Truth 2, TS +10 (:172-189).
+  - Case Board Thread Layer: TS >= 30 toggle; linking rendered evidence to substrate evidence of the same event advances the Evidence Track +1 (max one insight bonus per investigation) (:225-239) — evidence-linking as typed object, relevant to FI/SC.
+  - Thread warfare NPC doctrine as priority tree amendments: RS <= 25 forces defensive only; Niflhel Harvest gate 1 Dissolution/season at RS <= 30, suspended <= 20; Church has no amendment (:199-217). These are scripted per-faction NPC rules.
+  - Rendering Crisis as four designed beats with Spirit checks (Withdrawal, Knot, Place, Choice), career rhythm framing (:249-261).
+- **Conflicts / stale:** Resolution 3 "no battle-driven TS development" is design intent only. Depends on ms_budget.md and wc_survival_spine.md. "Composure 0 (Contest)" column (:150) uses the retired Composure name (now Face).
+- **Open items:** none (document closes its own questions); propagation never traceable in the tree.
+
+### .designs/systems/threadwork/reference/thread_horizontal_integration_spec_index.md
+- **What it is:** Auto-generated index (2026-04-19) of the integration spec; 4,914 tokens.
+- **Status:** none (generated). Reading: stale pointer (`designs/threadwork/`).
+- **Bears on:** PROCESS
+- **Content that matters:** heading map; largest section ED-681 (649 tokens) (:78).
+- **Conflicts / stale:** line numbers shifted vs body.
+- **Open items:** none.
+
+### .designs/systems/threadwork/reference/threadwork_applications.md
+- **What it is:** Part 1 of 2 of "Threadwork — Practical Applications by Subsystem" (2026-09-10, lane WR, ED-WR-0010): worked cases and doctrine for threadwork in combat, social contest, mass battle and fieldwork, carried across from a "Valoria Unreality Suite" of 2026-09-06.
+- **Status:** "PROPOSED — REFERENCE ONLY. HELD BACK FROM RATIFICATION-ON-MERGE IN FULL." (:10). Reading: live as intent vocabulary only; explicit that deleting it changes nothing in the game; `needs_jordan` row for adoption and whether threadwork_v30 Part 3 is edited or superseded.
+- **Bears on:** WR, PC, SC, MB, FI, CHAR
+- **Content that matters:**
+  - Four pricing rules: direction decides cost (restorative negative/free, manipulative 1-2 steps plus a step per season held, destructive 1-2 steps and damage not confined); reading is free and working is dear; detection ladder by reach 30/50/70/90 and "no reach returns content: operations are provable, contents are not"; practitioner degrades and cannot see it (present displacement vs resting point) (:50-127).
+  - The one code note: `systems/threadwork/sim/coherence.py` still implements the superseded 10→0 clamped integer; needs two quantities, an environment condition on recovery, a direction gate and a resilience term (:123-127).
+  - Combat: threadwork is a prepared action never a combat action (Leap window); difficulty ladder for fighting a drifting practitioner Dissonant/Fragmented/Fractured; directness beats the drift; a mob beats a threadcut being where a champion cannot; never Past-Pull a threadcut being (leaves a Gap) (:131-215).
+  - Social contest: threadwork cannot persuade; pre-negotiation survey is the capability (shape of knots/pulls, never content); a court "cannot use one of you is lying as its default frame" and "needs a distinct category of proceeding for the operated-upon case"; sworn testimony from retained experience outweighs documentary records; practitioner testimony is structurally hedged, attacked through observers; usability-by-band table, "a drifting practitioner wins the room and loses the record" (:249-380).
+  - Mass battle: the commander's instrument is prognosis not operation; terrain preparation decisive and invisible below reach 70; no command lattices, no held formations; theatre tension is a line item (sustained manipulative work raises substrate tension, incursions drop Accord, forcing mandatory governing actions); doctrine list of 8 (:385-532).
+  - Fieldwork: thread forensics gives the shape of a crime, ordinary investigation its content; orphan signatures legible to non-sensitives; "honest irreconcilable witnesses are a lead"; test capacity not recall; interview log must record repetition counts (satiation manufactures a signature); an archive that works its own holdings destroys admissibility; incursion findings carry no motive (:541-667).
+- **Conflicts / stale:** Disagrees with the Coherence code (explicit). Priced in "bands" because absolute Coherence figures were deliberately removed. wc/ms_budget-era Coherence "10→0" model vs rulings: flagged by the doc itself.
+- **Open items:** adoption decision (needs_jordan); coherence.py rewrite listed as a code change, not design question; the doc's strongest SC/FI hooks (a distinct proceeding for the operated-upon; repetition-count logging) have no counterpart in code [UNVERIFIED].
+
+### .designs/systems/threadwork/reference/threadwork_applications_part2.md
+- **What it is:** Part 2 of 2 of Threadwork practical applications (2026-09-10, WR, ED-WR-0010): factions/politics, twelve economic sectors, institutions, the strategic loop, presentation/UI, safety requirements, a "what must never be built" list, and a carried/dropped ledger.
+- **Status:** "PROPOSED — REFERENCE ONLY. HELD BACK FROM RATIFICATION-ON-MERGE IN FULL." Reading: intent vocabulary; self-declares bias risk and "medium" confidence on per-subsystem attributions (:545-550).
+- **Bears on:** WR, FA, SE, CORE, GO, CHAR
+- **Content that matters:**
+  - Principal-agent: a noble formed in a Church polity cannot perform, verify or retain threadwork; "the retained practitioner is an agent the principal structurally cannot supervise" (:24-40).
+  - Catalogue of faction/parliament/diplomacy applications with cost/detection/counter; structural traps: records problem, action-economy loop (tension to incursions to Accord drop to mandatory response), retinue problem; verdict "very good at taking a territory; structurally hostile to holding fifteen" (:44-131).
+  - Sector viability test (restorative fraction, holding, externality, knotting); healthcare highest value, construction/water/education fail; triage inversion; calendar and tenure externalities; materials pre-assembly rule (:139-285). Safety trap: a society that succeeds at civil defence reduces its practitioner supply (:276-284).
+  - Eight institutions (Tendency Survey, Tension Register, Knot Registry with sparsity cap, Working-Site Model, Assay, Attestation Cadence, Apprenticeship Orders, Exposure Rota); oversight has a structural ceiling (:288-307).
+  - Strategic layer: "the single highest-value piece of unbuilt threadwork" is `rendering.py`'s `apply_rs_strain`/`check_calamity_threshold`, said to be "a wired stub" while Turmoil and MS clocks are "live" (:345-349); strain should accrue from a HELD manipulative shape, and MS settlement consequences should be keyed to direction not verb (:351-358).
+  - Incursion response by mode (ordinary: cordon and wait; transient: record it, no stat block; threadcut: separate institution); Locked Zones cordon and survey, a competent commander uses one as an anchored flank (:362-380).
+  - Presentation rules: one perception path (external term + internal term + noise + criterion = force); insight never helps (no dispel/truesight); drift as observer-computed channel inconsistency; no Coherence number ever shown; two histories never reconciled; four endgames by reach at crossing (:386-473); safety requirements (photosensitivity, depersonalization, dehumanization) (:477-487); "must never be built" list (:493-512).
+- **Conflicts / stale:** Says "Turmoil ... live and already ticking" (:347) — Turmoil/Strain has no carrier in engine/modules .py (grep), and `systems/overview/sim/ms_track.py` [UNVERIFIED present]. `rendering.py` greps found no `NotImplementedError` or those two function names at the path searched, so the "wired stub" claim is [UNVERIFIED] / possibly stale. Contradicts the older WC spine's "Wardens/WC 3 is the singular endgame path" by dropping WC entirely from the analysis.
+- **Open items:** the same needs_jordan adoption call as Part 1; art/accessibility constraints are requirements the GO lane has no row for [UNVERIFIED].
+
+### .designs/systems/threadwork/reference/threadwork_flow_skeleton_v1.md
+- **What it is:** Traced flow skeleton of the old threadwork sim (operations, coherence, collective, opposing, co_movement, rendering, threadcut) at commit 6545067 with `path:line symbol` anchors.
+- **Status:** "REFERENCE — traced structure only". Reading: historical (call sites in `engine/cross_scale/*`, `engine/mc_v18.py`, `engine/autoload/*` are gone: `ls engine/cross_scale` fails); the module list under `systems/threadwork/sim/` still exists (operations.py, coherence.py, collective.py, opposing.py, co_movement.py, rendering.py, threadcut.py).
+- **Bears on:** WR, FI, CORE, MB
+- **Content that matters:**
+  - Operations: attempt_leap/weaving/pulling/past_pulling/locking/dissolution/mending share `_resolve_operation` (pool from spirit/ts/history; Ob from DEPTH_OB only); Mending costs 0 Coherence (ED-871 exemption) (:64-78).
+  - Collective op: Anchor = highest TS; helpers add floor(Cognition/2); lattice fracture +1 Ob (:80-84). Opposing: 3x3 Meets/Partial/Failure table, Ob modifier from opponent TPS (:86-90). Co-Movement 15-card deck drawn once per op (:92-94). Threadcut interaction (:96-99).
+  - Gaps: no Key emitted; no production caller reaches any `attempt_*` (only tests); campaign loop and scene_dispatch never reach Thread scale; Rendering Part 5 fully stub-wired; mass-battle `threadwork_check` is a `pass` no-op; defect C-TW-3 (blanket Partial/Failure −1 Coherence mis-hits Leap); Thread Fatigue declared in contract but unimplemented; Three-Axis Ob (Breadth, Distance tables) dead; `attempt_leap` docstring claims a `ts_minimum` read the body never performs (:158-168).
+  - The one cross-subsystem live call: fieldwork knots.py calls `apply_coherence_delta` on Knot rupture (:34, :147).
+- **Conflicts / stale:** `systems/threadwork/sim/rendering.py` docstring now says it "held two stubwire.stub_resolve armature stubs" (past tense, so they were since changed) — the skeleton's S8 and threadwork_applications_part2's "wired stub" claim are stale against the file header [verified lines 4]. Many world fields cited (`practitioners`, `threadcut_beings`, `comovement_deck`) lived in the retired game_state.py.
+- **Open items:** none stated; gaps listed above.
+
+### .designs/systems/threadwork/reference/threadwork_philosophical_reference_v30.md
+- **What it is:** Empty skeleton of the philosophical framing (headings only) extracted from threadwork_redesign_v25 Part 1; used by the canon-guard for P-01..P-15.
+- **Status:** "REFERENCE — not a design doc". Reading: reference; this half is headings only (prose is in the infill).
+- **Bears on:** WR, PROCESS
+- **Content that matters:**
+  - Seven headings: What Threads Are; Ein Sof and Spooling; What Thread Sensitivity Does; The Scale Principle; The Two States: Perception and Contact; Why Thread Operations Produce Unpredicted Consequences; Why This Matters for Play (:24-57).
+- **Conflicts / stale:** none.
+- **Open items:** none.
+
+### .designs/systems/threadwork/reference/threadwork_philosophical_reference_v30_infill.md
+- **What it is:** The prose of the philosophical reference: threads as co-movement of three axes (actuality, intelligibility, temporality), Ein Sof and spooling, scale principle, perception vs contact (the Leap).
+- **Status:** "REFERENCE — not a design doc". Reading: reference/vocabulary.
+- **Bears on:** WR, FI, CHAR
+- **Content that matters:**
+  - Thread = co-movement of three axes; touching one touches all three, hence co-movement consequences (d6 random) are "things that simply happened" (:20, :42-43).
+  - Scale Principle: intelligible-to-unintelligible ratio varies by scale; Structural operations produce severe co-movement and escalating Ob; "the game rewards restraint and punishes ambition" is the stated foundational design principle (:30-35).
+  - Perception (TS-based, rendering) vs Contact (Leap suspends rendering); no bridge between them (:37-40).
+  - GM narrates operations in two phases; after the Leap, outcome described from outside (:45) — assumes a GM, which the engine replaces (CLAUDE.md "no GM").
+- **Conflicts / stale:** the GM-narration instruction (:45) predates "there is no GM". Moves from the older "Past/Future" vocabulary elsewhere.
+- **Open items:** none.
+
+### .designs/systems/threadwork/reference/threadwork_v25_historical.md
+- **What it is:** Pre-atomization snapshot (2026-04-13; text dated v2.6/v3.1, 2026-03-27 revised 04-02) of the whole Threadwork mechanics document: operations, Coherence 10→0, co-movement, Rendering Stability world track, threadcut beings, Knot mechanics, cross-mode.
+- **Status:** "HISTORICAL — pre-atomization snapshot"; self-header "design proposal, requires editorial approval" with a CANONICAL POOL NOTICE. Reading: historical; overlapped by threadwork_v30; used for rationale and numbers only.
+- **Bears on:** WR, FI, PC, MB, CHAR, FA
+- **Content that matters:**
+  - Operation pool: (Spirit × 2) + relevant History bonus + Thread Pool Score (TPS = TS ÷ 10), TN 7 (TN 8 for Past-Oriented Pulling, Locking, Dissolution); Leap Ob 2 at TS 30-49, 1 at TS 50+, +1 per Wound; Leap is a Priority 5 full-round action; contact lasts Focus rounds (Focus 1 = no operations) (:113-182).
+  - Operation-by-operation degree tables: Weaving (over-actualisation at Relational+), Pulling (duration by surplus), Past-Oriented Pulling (TS 70+, RS ≤ 60, Ob by recency 3-7), Locking (chronic RS drift; Permanent Lock forms Locked Zones), Dissolution (RS −3 to −8, Failure = Gap + Monstrous Incursion), Mending (Ob by Gap severity, ceiling 8; 0.. −1 Coherence in v25) (:220-486).
+  - Collective ops: Anchor highest TS, helpers add floor(Cognition ÷ 2), lattice fracture +1 Ob (:488-508); Opposing ops 3x3 table with opponent-TPS Ob modifier (:514-568).
+  - Coherence 10→0 track: scale-based loss (Object/Personal 0, Relational/Territorial −1, Structural −2, FR +1), per-operation cap −1, thresholds Stable 10-8 / Dissonant 7-5 / Fragmented 4-3 / Fractured 2 / Severed 1 / Rendering Crisis 0; recovery only by non-practice (+1/season) or Knot anchoring (:571-651). THIS is the quantity the 2026-09 applications document says was superseded.
+  - Rendering Stability world track 100→0, default start 60, bands Stable/Strained/Fragile/Fractured/Critical/Rupture, seasonal change cap ±10; "RS Critical is the point of no return... designed. The Einhir reached the same point" (:733-776).
+  - Knot mechanics: pool (Bonds × 2) + 3 points, tiers Close 5 / Medium 2 / Loose 1, max Knots floor(Bonds/2)+1; Rupture Disposition → −4; Loss = Coherence −1 (:850-904).
+  - Mode branching table TTRPG/BG/Hybrid; Hybrid Coherence declaration rule: the PC who declares leadership at Phase 1 of Cascade pays (:964-973, :955).
+- **Conflicts / stale:** Coherence 10→0 versus applications doc's two-quantity model (explicit disagreement); RS/MS no carrier in the season architecture (rendering.py header: no rendering or mending clock among the three licensed clocks). Hybrid/Board-game modes excluded (videogame-only). Many [PROVISIONAL] PP patches inline.
+- **Open items:** ST-TW-01 (Coherent Strike free at Object scale), several simulation tasks listed in the implementation sequence (:1005-1018) with no results here.

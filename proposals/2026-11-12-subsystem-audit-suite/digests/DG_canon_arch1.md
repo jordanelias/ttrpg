@@ -135,3 +135,277 @@ Line references are to the file in the entry. `[UNVERIFIED]` marks anything not 
 - **Conflicts / stale:** §B.1.1's 2026-10-28 note: "container" now means a *view*, a registered module's playable form is a *scene* (:82-83).
 - **Open items:** contest depth cap value per venue (Stage 3); whether the containment roster carries a sub-settlement tier — content (:262-267).
 
+### architecture/meta/03_VERBS_AND_LOOPS.md
+- **What it is:** Stage 3: what a verb is, consequence, a slice of play, the seven-step loop, where a contest re-enters; 314 lines. (Lines 1-3, the title and Status banner, were not re-read; the banner is the same RATIFIED text per `head -3`.)
+- **Status:** same RATIFIED/Layer-1 banner; "Nothing here runs" (:5). Reading: live reference; the loop count is the current one (seven steps).
+- **Bears on:** CORE, SC, MB, PC, FI, FA.
+- **Content that matters:**
+  - A verb declares five things: who may attempt, what must hold, what it writes, what it emits on success, what it emits on REFUSAL; "a per-verb body IS a second resolver" (:13-20). Eligibility is never capability; four kinds (own standing, seat's warrant, custody, presence); "an incompetent attempt is a story; an unavailable option is a menu" (:22-32). A seat adds no verb and no modifier (:34-42).
+  - A refusal must emit: scarcity lives in the ordered fold; a verb that emits success while writing nothing is "a consequence with no effect" (:76-90). `causes[]` is the narrative layer (:92-100).
+  - A slice of play = a SCENE: one person's attention, at one occasion, in one place; ladder interaction < scene < season < campaign; the budget counts scenes (~5) (:104-134). Fidelity (summarised / narrated / expanded into a contest) does not fork the slice — "they agree exactly, because they are the same slice" (:146-153); this is the auto-resolve-equals-played-scene principle MB/PC lanes should hold code to.
+  - Seven steps: CALENDAR, MATTER, DELIBERATE, RESOLVE, ENCOUNTER, WITNESS, CENSUS; ENCOUNTER (M4, ED-IN-0279 (a), 2026-09-28) shares barrier 3 and RESOLVE's write class; a verb whose prize row names a `step:` it defers to writes nothing at RESOLVE (the roster's `Declared` band) (:159-188).
+  - Contest roster contract: sides are two resolved `Faction` views frozen at seam entry; units are persons at weight, "there is no unit class"; one scale down a squad is the faction members present at a rung (:247-270). A subsystem that returns a winner rather than a margin "has not met the contract"; nothing may mint missing bands; an undecided outcome is legitimate (:286-289).
+- **Conflicts / stale:** §F says "Six axioms" (:295) while 01_AXIOMS now has seven; "Fourteen idioms" (:303) vs ID-1..ID-18 in Stage 1. "units are persons, at weight. One type; there is no unit class" (:261) is relevant to the MB lane: it conflicts with a hierarchical army -> unit -> subformation -> troops design if MB code introduces a unit class [UNVERIFIED against `modules/mass_battle/`].
+- **Open items:** none new; refers to Stage 4 for per-verb pricing.
+
+### architecture/meta/05_ONTOLOGY.md
+- **What it is:** a reading of Stages 1-4 indexed by the question "how do objects, relations, edges and fields work"; 136 lines.
+- **Status:** same banner; "If this and a stage disagree, the stage is right and this is stale" (:5). Reading: live reference, partly stale where noted.
+- **Bears on:** CORE, CHAR, FA.
+- **Content that matters:**
+  - Four kinds of value sorted by "who writes this": FIELD (one writer, one thing), EDGE (one writer, two things, owned by its subject), QUERY (spans many owners, owned by Nobody), BARRIER CACHE; "two writers = a defect" (:12-20).
+  - Ids typed, minted `H(world_seed, tick, subject, purpose)`, no allocator (:29-31).
+  - Field admission: what a thing HOLDS needs a decision-reader; what the world READS OFF it needs a resolver-reader; D.0's third clause declared/the case/read-off (:43-66).
+  - Three routes end a Tenure: owner's discretion, declared term, seat-declared revocation (T-o) (:81-95). Edge whose subject cannot act is a field in disguise (`succeed`, seat membership list); `contain` is the honest exception (:101-113).
+  - `destroy` sets `until` on tenures naming the id and cascades nothing; `hold`'s subject is `Person` only (:121-136).
+- **Conflicts / stale:** §2 lists carrier `Seat` where holonic uses `Office` (:26) — vocabulary drift between Stage 4's `Seat` and the earlier `Office` [UNVERIFIED which the code uses].
+- **Open items:** none.
+
+### architecture/meta/06_STRUCTURE.md
+- **What it is:** reading answering "how do we structure design going forward": hierarchies, nestings, dependencies, state changes; 104 lines.
+- **Status:** same banner; "If this and a stage disagree, the stage is right" (:4). Reading: live reference.
+- **Bears on:** CORE, PROCESS.
+- **Content that matters:**
+  - Code hierarchy `GAME -> MODULE -> DECLARED EDGE -> FIELD`; role, subsystem, key type, phase, scale are axes (:29-31).
+  - Process nesting needs a caller-supplied cap with no default; exceeding returns a typed refusal (:43-51).
+  - One write shape `(subject, mode create|alter|destroy, driver Act|Event, field?, delta?)`; matrix keyed on `(kind, field)` with `writer: act_only | world_or_act`; "every write goes through one gate, and the gate applies it" returning a receipt; the log refuses an Event carrying a receipt the gate never minted (:77-92).
+  - Single test: "Name the writer" (:99-105).
+- **Conflicts / stale:** the "log refuses an Event carrying a receipt the gate never minted" is a Stage-4 design statement; whether `shape.World.write` / `Event.__post_init__` implements receipts is for CORE [UNVERIFIED].
+- **Open items:** none.
+
+### architecture/meta/07_DYNAMICS.md
+- **What it is:** reading on slices, graphs, chains, loops, echo and propagation; 194 lines.
+- **Status:** same banner; stage governs on disagreement (:4). Reading: live reference; contains dated supersession notes.
+- **Bears on:** CORE, WR, FI, SC, FA.
+- **Content that matters:**
+  - Graph table: containment (decision-reachable), subordination (no root), lateral web, causation `causes[]`, claim citation (cyclic); the "touch graph" is REJECTED — contests are declared, never inferred from write collisions (:31-41).
+  - `tell` chain is the only news transport: "no news service, no rumour tick, no ambient diffusion" (:57-58). Three claim carriers: presence (what changed and who), a document (only that it changed), a telling (what said, at their confidence) (:133-146).
+  - The loop that is "actually the game": claim lands -> question -> candidate -> act -> Event -> witnessed -> claim in SOMEONE ELSE's ledger -> their question; originally measured ZERO instances, superseded 2026-09-04 (30 of 30 NPC, 54 of 59 ARC; row `H-102`), but "nothing moves a Record to a second person (`H-84`)" (:80-91).
+  - Spirals remain an open debt: nothing bounds season-to-season feedback; ID-16 declared `LOOP` rows with a `sign` column are buildable but no resolver reads them (:95-123).
+  - Flood lesson: per-write MATTER emission took events 207 -> 896 -> 3,389; fix was channel predicates (deposits 678 -> 68); "bound echo by who could have perceived it, never by how important it is" (:171-188). PLAN.md later restates 678->68 as stale (711 -> 66 measured).
+  - No within-season reaction at person scale: "you anticipated, or you are late" (:194).
+- **Conflicts / stale:** numbers 678 -> 68 flagged stale in PLAN.md §6.3 (:1838-1840 of that file). "Zero instances" struck by the file itself.
+- **Open items:** spirals; `H-84` Record movement; declared loop list has no reader.
+
+### architecture/meta/08_DATA_AND_KEYS.md
+- **What it is:** reading on dictionaries, definitions, registers, keys and buses; 111 lines.
+- **Status:** same banner; stage governs (:4). Reading: live reference. Its title says "KEYS" but the Key substrate is RETIRED (ED-IN-0232); the Event is the only "key-like record" it discusses.
+- **Bears on:** CORE, PROCESS, GO.
+- **Content that matters:**
+  - Four data shapes: Roster (closed set), Table (mapping keyed on roster), Fixture (free scalar injected at a named site), Register (holes as rows). Separating test: "would changing this change the GAME or how the CODE works?" (:9-27). A number that is a property of a roster member travels with the roster (`alignment[axis][verb]`); a free-standing one is a fixture (`view_k`) (:24-27).
+  - Polarity rule: an absent roster RAISES; a `default_cell` may cover only an unlisted PAIR of registered keys (:37-42).
+  - Registered Event kind roster is DERIVED as the union of every emission column in the write matrix and verb table; "a subsystem cannot invent a kind" (:73-76).
+  - No bus: a bus routes to a recipient, which needs a `target`, which is forbidden; WITNESS computes observers from presence and five channels (co-located, document, witness-key, post-remit, chronicle) (:84-104). Modules are the one thing that route by name, via role -> manifest row, failing at startup naming the row (:109-111).
+- **Conflicts / stale:** "keys" in the title/§4 predates the retirement of the Key substrate; "Event kinds are `family.type`" is the live use.
+- **Open items:** none.
+
+### architecture/meta/09_WORKED_EXAMPLES.md
+- **What it is:** three worked cases (political strife, a settlement at risk of revolting, excommunicating a mayor) derived from the primitives, each ending in what is blocked today; 178 lines.
+- **Status:** same banner; stage governs (:5). Reading: live reference with dated blocker notes.
+- **Bears on:** FA, SE, SC, FI, WR, CHAR.
+- **Content that matters:**
+  - Seven sources of contention that fall out free: scarcity, one seat many claimants, overlapping purview, de jure vs de facto, incompatible honest claims, revocation asymmetry, custody (:23-33).
+  - Four-season trace: Count dies -> "nobody convenes, the seat stays empty" (if no person acts, the thing does not occur) -> convene by remit holder -> date fires -> loser's stance moves -> `tell` distorts -> third person acts (:49-67). "A CIVIL WAR IS: ENOUGH NAMED PEOPLE, EACH CHOOSING, IN A SEASON" (:69-75).
+  - Revolt: no unrest value; risk of revolt = share of persons at and under a rung whose LIVE `commit` edges are to a proposition incompatible with the holder's (a Query over live edges, reversible); the Query is resolver-side so no person can read it (:79-114). §C.11 explanation contract: owed is the arithmetic of the claims the character holds, not the aggregate (:116-125).
+  - Excommunication is an `issue` (a dispensation to EXECUTORS) landing as a compliance contest per person, not a flag; "a mayor excommunicated and ignored is a mayor who is fine" (:147-158).
+  - Blocked today: `oblige` cannot be closed, judging set absent, no Record movement (`H-84`), commitment-share Query not computed anywhere, six investigation acts `assumption` with no writes, nine dispensation terms unspecified (:169-178).
+- **Conflicts / stale:** blockers dated 2026-09; some may have closed (W26 sitting decides, W21 H-71) [UNVERIFIED]. The revolt design contradicts any `settlement.unrest`/`discontent` stored field SE/WR code may carry [UNVERIFIED: grep `unrest` in `engine/season`].
+- **Open items:** the commitment-share Query; the nine dispensation term types.
+
+### architecture/meta/10_FACTIONS_AND_DEPLOYMENT.md
+- **What it is:** rationale for Jordan's 2026-09-03 rulings: a faction is a deployable resolved view, and war is an uttered declaration; 148 lines (lines 1-3 not re-read).
+- **Status:** "AMENDS the stages ... FOLDED IN 2026-09-03 — this is the RATIONALE, and the stages are now the text" (:4-6). Reading: live reference; superseded in text by Stage 1 §D.11/§E.1.6.
+- **Bears on:** FA, MB, PC, CORE, GO.
+- **Content that matters:**
+  - Jordan verbatim: "factions can't act by themselves, but they should be available as an abstraction for all the people who belong to that faction such that the game code can actually deploy it" and "factions can be flagged at war ... a container for people and holdings ... way easier to define mass battles and grid based squad combat" (:8-12).
+  - `Faction := (proposition, members, holdings, seats, head?)`, built at a barrier, owns nothing, never `Act.actor`, a contest claimant, a `hold` subject, or a `resolve` parameter (:24-49).
+  - War = a Proposition somebody UTTERED plus an owned edge, peace is `until`; `at_war(A,B)` is a real predicate the combat seam may ask (:55-77); open gaps F.32 (whose edge a war is, so who may make peace if the declarer is dead) and F.33 (whether `at_war` may appear in a verb's `requires`) (:134-137).
+  - The seam receives two RESOLVED factions frozen at entry; a squad is the faction members present at a rung (:83-98). A guard was LOST: "a faction cannot gain a field" was structural by absence of a type, now only lifetime (:130-133).
+- **Conflicts / stale:** none beyond Stage-1 supersession.
+- **Open items:** F.32, F.33 (not shown closed here).
+
+### architecture/meta/README.md
+- **What it is:** index and change-log of the meta-architecture (Stages 1-4 plus readings 05-10), revisions 2 and 3; 176 lines.
+- **Status:** same RATIFIED banner; own text: "Not ratified ... does not run ... changes no code, register row, roster or plan" (:174-177). Reading: live index; the "not ratified" line sits oddly beside the RATIFIED banner (the banner is later, ED-IN-0204).
+- **Bears on:** PROCESS, CORE.
+- **Content that matters:**
+  - Rev. 2 findings: AX-3 vs AX-5 contradiction (fading removes, never revises), AX-6 scope clause, the write gate never checked `subject == actor` (AX-4 clause 2 was CONVENTION; two live verbs write another person's `Tenure.until`) -> T-o; a lost contest still wrote -> `writes:` `Degree`-keyed for `contests:` verbs (:42-60).
+  - Rev. 3 applied seven of thirteen edits left by `proposals/2026-09-03-v2-against-the-meta-architecture.md`; deleted `Tenure.conferrer` (ID-13); `establishment` is a Query at both Stage 1 sites (:5-40).
+  - Stage 4 (`04_CODE_ARCHITECTURE.md`, not in this lane) has PART F with 33 gaps; two block the build outright: `F.20` nothing founds a hearth or builds a site ("the world only decays"), `F.24` every verb's `requires` is a prose string ("the resolver has thirty") (:107-113). PART G is called the most durable thing.
+  - Scope rule of the exercise: admissible sources are the axioms and PR chain #337-#357; nothing under `canon/`, `systems/`, `research/` or `engine/` is authority (:114-124).
+  - Method: derive with the tree closed; decompose by who writes what; write in a form a loader/falsifier can evaluate; close only on representations (:97-99).
+- **Conflicts / stale:** scope line contradicts CLAUDE.md §0.05 for code authority (stage-local); "There are SIX axioms" (:155) vs seven now. `F.20`/`F.24` status unknown [UNVERIFIED; CORE/SE lanes should check whether hearth founding and typed `requires` exist].
+- **Open items:** F.20 and F.24 as above.
+
+### canon/00_philosophical_foundations.md
+- **What it is:** the original "Philosophical Foundations" compendium (Parts 1-8, 18 sections, appendices A-B); prose theory of threads, Ein Sof, rendering, monstrosity, Calamity, Church, Coherence/drift; 472 lines, text dated through 2026-04-25.
+- **Status:** "SUPERSEDED — 2026-09-07 ... by canon/philosophy/" (:1-25), retained unedited for ~70 citing files. Reading: superseded (historical; use `canon/philosophy/`).
+- **Bears on:** WR, CHAR, FI, PC (monstrosity), DICE (Coherence/TS).
+- **Content that matters:**
+  - Inseparability: every thread operation moves temporal, epistemic and actualized dimensions together; operations differ only by intended target (:87-93); every operation produces some Temporal Disjunction (:105-107).
+  - Rendering is consciousness-performed; thread operations change both facticity and rendering, so "changing the world" and "changing how it is experienced" collapse (:127-137).
+  - Monstrosity = the Lacanian Real, ontological not moral; three emergence modes (ordinary incursion, Providence, threadcut) (:141-195). Confrontation produces a trauma-like signature that is the rendering's correct response to finitude (§4.3, :159-175).
+  - Calamity: over-drawing the substrate tears it at anchor points; ground has no agency; "forensic not explanatory" knowledge (:199-213). Collapse is ontological devastation through the knot lattice (:215-233).
+  - Coherence = integrity of layer-two self-rendering (reflexive and outward facings), tridimensional, orthogonal to Thread Sensitivity; Coherence 0 is not threadcut (:341-364); reality-strain for high-reach Coherence-0 beings (:385-391).
+  - Perceptual prophylaxis (Church theology forecloses sensitivity) is emergent, not designed (:245-267).
+- **Conflicts / stale:** its §4.2 "rendering's preference for stable actualisation" and the Calamity-as-tearing account were ruled against/revised by `canon/philosophy/RULINGS.md` per the sibling banners (stabilizing tendency, Calamity mechanism, what the Church worships) [UNVERIFIED until RULINGS read below]. "Coherence 0 outcomes by TS" are in the amendment files.
+- **Open items:** none; superseded.
+
+### canon/00_philosophical_foundations_rules.md
+- **What it is:** condensed loadable rule set (A1-A15, vocabulary, C1-C5 universal principles) derived from the foundations compendium; 137 lines.
+- **Status:** "SUPERSEDED — 2026-09-07 ... recommended for retirement rather than migration" (:1-31). Reading: superseded; banner calls it a third restatement that introduced two drifts (a second referent for Providence, "what came through the tear were threadcut beings").
+- **Bears on:** WR, CHAR, PROCESS.
+- **Content that matters:**
+  - A8 redefines Providence as "the rendering's tendency toward stable configuration", while the compendium's §5.2 (and P-05) use Providence as an emergence mode — the banner names this as one of the suite's worst drifts (:64-65 vs compendium :183).
+  - A14: "What came through the resulting fracture were threadcut beings" — contradicts the compendium §6.2 (surfeit flooded; why Solmund unknowable) (:82-84).
+  - C1-C5 are game-facing mechanic rules: every thread op must fire all three dimensional effects; track cumulative Temporal Disjunction; character growth through confrontation not XP; drift mechanics tridimensional; social bonds are mechanical bonds (:113-128).
+  - D: "Any mechanic that violates A2, A11 or A14 is a canon violation regardless of other considerations" (:137).
+- **Conflicts / stale:** C3 "Character growth through confrontation, not XP accumulation" conflicts with any XP/skill-advancement mechanic in CHAR [UNVERIFIED].
+- **Open items:** none.
+
+### canon/01_foundations_amendment_self_rendering.md
+- **What it is:** 2026-03-31 amendment: three layers of being-persistence, the Leap as suspension of layer 2, Coherence redefined, Coherence-0 outcomes gated by Thread Sensitivity bands; 167 lines.
+- **Status:** "SUPERSEDED — 2026-09-07 ... chiefly canon/philosophy/04_being_persistence.md and 07_drift.md" (:1-29); inner "Status: Canonical". Banner says "central derivation sound, citation not" (:24-26). Reading: superseded.
+- **Bears on:** CHAR, PC, WR, DICE.
+- **Content that matters:**
+  - Three layers: (1) Ein Sof spooling, (2) unconscious self-rendering, (3) deliberate threadwork; organic humans have 1+2, threadcut have 3 only (:48-56, :152-159).
+  - Coherence degradation bands 10-8 Stable, 7-5 Dissonant, 4-3 Fragmented, 2-1 Fractured, 0 Failure (:82-92).
+  - TS-gated Coherence-0 outcomes: TS 30-49 Stirring = ontological freefall; 50-69 Attuned = relational persistence (Knots load-bearing); 70-89 Sensitive = structural reconstitution; 90-100 Resonant = full reconstitution plus reality-strain (:96-138). These band numbers are a numeric table a CHAR/DICE lane may find hard-coded elsewhere [UNVERIFIED].
+  - The campaign arcs for Vaynard, Almud, Lenneth at Coherence 0 must specify TS and acknowledge reality-strain (:161-163).
+- **Conflicts / stale:** this file's Amendment 5 says threadcut beings = layer 3 only; `02_canon_constraints.md` P-06 says "Threadcut beings have no layer 2" and "Coherence does not apply" while the foundations rules A9 say threadcut "lack layer 1" (:68 of the rules file) — three superseded sources disagree on which layer threadcut lacks [UNVERIFIED what canon/philosophy/04 states].
+- **Open items:** none; superseded.
+
+### canon/02_canon_constraints.md
+- **What it is:** P-01..P-15 canon constraint table (§A) plus GD-1..GD-3 game design constraints (§B); 95 lines.
+- **Status:** "SUPERSEDED — 2026-09-07 ... §A by canon/philosophy/ (10_constraints.md); §B by canon/04_game_design_constraints.md" (:1-31). Reading: superseded; the live P-01..P-15 text is `canon/philosophy/10_constraints.md`.
+- **Bears on:** all subsystems (every design is checked against P-01..P-15), CORE, FA, WR, DICE, PROCESS.
+- **Content that matters:**
+  - P-01 Inseparability (all three dimensions co-move, no GM discretion to skip) :42; P-02 Monstrosity grounded in the Lacanian Real :43; P-03 Rendering = consciousness-performed, "GM is the rendering engine" :44; P-04 Monstrosity ontological not moral, no alignment system :45; P-05 three emergence modes mechanically distinct, Mode 2 is an event not an entity :46; P-06 threadcut beings :47; P-07 Calamity rendered-side, ground never "responds" :48; P-08 barrier = inaccessibility not suppression :49; P-09 memory pulling messy and detectable :50; P-10 Coherence indexes commensurability with human-mode being :51; P-11 Temporal Disjunction universal :52; P-12 drift propagation tridimensional :53; P-13 Forgetting = rendering failure :54; P-14 board/VG modes must express inseparability :55; P-15 three-layer being-persistence, Leap needs a vulnerability window :56.
+  - Violation Tests are phrased as yes/no questions per constraint (e.g. P-15: "Does any mechanic allow Coherence 0 with no consequence, or a Leap without a vulnerability window? -> FAIL").
+  - GD-1: Peninsular Sovereignty is the sole victory condition (all 15 territories, Accord >= 2, Political Stability <= 6, sustained 2 seasons); code must route through a single `peninsular_sovereignty()`; `victory_paths` in `registers/mechanics_index.yaml` holds exactly one entry (:70).
+  - GD-2: deterministic threat response precedes stochastic action selection (mandatory Muster at Accord <= 3 ungarrisoned, Govern at Accord <= 2 garrisoned; up to 3 per season) (:71). GD-3: Revolt -> Insurgency -> Faction pipeline (:72).
+- **Conflicts / stale:** P-03's "GM is the rendering engine" contradicts the current "no GM, engine resolves everything" framing (CLAUDE.md); P-14 cites Foundations §21.1/§22.2 which do not exist in `00_philosophical_foundations.md` (that file ends at §18). GD-1..GD-3 reference `designs/`, `sim/world/insurgency_pipeline.py`, "Accord", "Political Stability", `valoria_hooks.py`, board-game vocabulary for dissolved trees; the Level-4 hooks are "[PROVISIONAL — pending]" (:80-82). FA/CORE should check whether the season loop honours GD-2/GD-3 at all [UNVERIFIED].
+- **Open items:** the three hooks never landed per this file.
+
+### canon/02_foundations_amendment_leap_mechanism.md
+- **What it is:** 2026-04-20 amendment: the Leap as suspension of the reflexive facing, involuntary directional knots, restorative/manipulative/destructive operation taxonomy, the Catastrophe as inversion of a manipulative operation, the Church's conflation, knot-profile tag; 120 lines.
+- **Status:** "SUPERSEDED — 2026-09-07 ... chiefly 06_operations.md and 08_history.md"; banner: "Two of its claims were ruled against. The Calamity is tensile on a holding-against reading, not an inversion event; and the stabilizing tendency belongs to the futural-potential-legible rather than to substrate spooling" (:1-29). Reading: superseded.
+- **Bears on:** WR, CHAR, PC, DICE.
+- **Content that matters:**
+  - Operation-type risk: restorative (Mending; Coherence cost zero), manipulative (Weaving/Locking/Pulling imposing non-prior states), destructive (dissolution); "scale makes destructive worse, alignment makes restorative non-corrosive" (:62-76).
+  - Knot-profile tag per Leap-formed knot (operation type, target, formation context) with four mechanical consequences: Coherence-event propagation, passive seismographic awareness of Mending Stability (MS), vulnerability triggers (Coherence checks Ob 1-2), relational propagation (Coherence-band drop -> MS -1 per knotted territory; practitioner death -> MS -2) (:98-112).
+  - Church persecutes Wardens (Edeyja) though Mending is non-corrosive (:88-94).
+- **Conflicts / stale:** the "Catastrophe as inversion" account (:78-84) is the claim ruled against; `canon/03_canonical_timeline.md` still carries the inversion wording (:22), so the live timeline conflicts with the ruling unless RULINGS says otherwise [UNVERIFIED]. MS/Mending Stability clock and `designs/threadwork/` references point to dissolved trees.
+- **Open items:** none; superseded.
+
+### canon/03_canonical_timeline.md
+- **What it is:** canonical setting chronology (pre-history through 245 AG game start), starting clocks, key figures, faction starting values, conflicts-resolved table; 198 lines, updated through 2026-11-08 (Schoenland neutral, ED-IN-0356).
+- **Status:** "Canonical reference document ... canonical for setting chronology" (:1-4). Reading: live (listed as live in `canon/README.md`).
+- **Bears on:** WR, ARCS, FA, CHAR, SE.
+- **Content that matters:**
+  - Calendar AG = After Solmund; Einhir Catastrophe ~12 years before 0 AG; Solmund emergence ~12 years (5 coalescing + 7 ministry); dissolution 0 AG; Church forms 0-200 AG; Altonian colonial period and Church containment ~50-200 AG (Himmelenger cathedral city); Secession Wars ~195-200 AG; deed-monarchy; informal caste of southern Einhir; GAME START 245 AG (:16-122).
+  - Game-era table: first Almqvist reigns ~200-218; hunting accident ~218 (perpetrator TBD, E-01); Almud ascends ~218; Almud marries Lenneth ~220 (children Elske, Torben); direct Altonia trade 238 via Elske's marriage to Doux Alexios Laskaris (:114-122).
+  - Starting clocks: MS 72 (Strained), CI 22, IP 20 (Dormant) (:129-133). Key figures with parallels (Almud TS 0; Lenneth institutional Einhir revivalist; Himlensendt keystone; Baralta Hafenmark Henry-VIII; Vaynard Varfell Von Lohengramm; Ehrenwall Löwenritter) (:136-145).
+  - Faction starting values on a 1-7 scale are "board-game-era ... kept as history"; Niflhel dissolved, "Revolution" = Restoration Movement; "Faction-wide stats are not engine quantities (architecture/meta/01_AXIOMS.md T-a)"; live roster of polities is `references/names_index.yaml` `token_class: faction` rows (:146-153).
+  - Schoenland is a neutral offshore trade nation, not a faction; persons act from their own seats, no GM (:166-167).
+- **Conflicts / stale:** internal: "five years of Solmund's presence" (:48, :70) vs "five years coalescing, seven years ministry (twelve)" (:32, :190). Catastrophe described as "configuration inverts" (:22) vs the Calamity ruling (see above). The "Standing Editorial Items" E-01 (assassin) and E-03 (calendar name) remain TBD. Starting clocks MS/CI/IP are board-game clocks; whether the season loop carries them [UNVERIFIED]; per L3/T-a "stored aggregate" such clocks are disallowed as fields. Header says "Last updated 2026-04-11" but contains a 2026-11-08 edit.
+- **Open items:** E-01, E-03.
+
+### canon/04_game_design_constraints.md
+- **What it is:** GD-1..GD-3 extracted verbatim from `02_canon_constraints.md` §B on 2026-09-07; 52 lines.
+- **Status:** "CANONICAL (mutable canon — updates require explicit ratification logged in the editorial ledger)" (:3). Reading: live in status, but content is board-game-era and its hooks are provisional.
+- **Bears on:** FA, CORE, SE, MB.
+- **Content that matters:**
+  - GD-1 sole victory = Peninsular Sovereignty (15 territories, Accord >= 2, Political Stability <= 6, 2 seasons); 8 faction-specific alternates STRUCK; single `peninsular_sovereignty()` (:27).
+  - GD-2 mandatory-actions pass precedes stochastic action selection; mandatory pool Muster/Govern (:28).
+  - GD-3 insurgency emerges from 2+ contiguous Uncontrolled territories for 2 seasons; promotes to Faction at L>=3, 2+ territories, Accord>=4 sustained 2 seasons; PT<3 -> Restoration Movement variant (extra-parliamentary) (:29).
+  - Level-4 hooks `h.victory_singularity_check`, `h.mandatory_action_precedence`, `h.insurgency_invariant_check` are "[PROVISIONAL — pending]" (:35-39).
+- **Conflicts / stale:** all three are framed in a faction-as-actor, territory/Accord/Political-Stability vocabulary which L1/AX-1 (only persons act; no stored faction aggregates) and the architecture's refusal of faction-wide stats contradict: GD-2's "faction action-selection" runs a faction chooser; "a faction acts" is a ruled refusal in `holonic_ARCHITECTURE.md` L1. FA lane should name this conflict and not resolve it. Cross-references (`designs/`, `sim/world/`, `params/factions.md`) are dissolved paths. "Victory" as a game-end condition: whether the season loop evaluates `peninsular_sovereignty` anywhere [UNVERIFIED; grep `peninsular` in `engine/`].
+- **Open items:** the three hooks; GD-3 pipeline "pending Pass 2l" never built per this file.
+
+### canon/README.md
+- **What it is:** index of `canon/`; 39 lines.
+- **Status:** none stated. Reading: live index.
+- **Bears on:** PROCESS, WR.
+- **Content that matters:**
+  - `philosophy/` is Rank 1 and "the live statement of the framework's metaphysics, ontology and phenomenology"; `RULINGS.md` governs where any document disagrees (:7-9).
+  - Five superseded files retained for ~70 citations: 00_philosophical_foundations, 00_..._rules, 01_amendment, 02_canon_constraints, 02_amendment_leap; concordance at `philosophy/00_standing.md` §0.4 (:17-32).
+  - "A note on immutable": the old claim of immutability was wrong; what is durable is the record of decisions (`RULINGS.md`) (:34-39).
+- **Conflicts / stale:** CLAUDE.md §3 says canon/ holds "foundations P-01..P-15, timeline, constraints, amendments; world truth only"; the README itself says the amendments are superseded.
+- **Open items:** none.
+
+### canon/philosophy/00_standing.md
+- **What it is:** §0 of the philosophy suite: standing/precedence rules, lineage table of borrowed traditions, and the old-section -> new-section concordance; 197 lines.
+- **Status:** "PROPOSED" (:3); text itself says it is a reference document, "not a mechanism" (:10-15). Reading: live reference (the `canon/README.md` calls the suite Rank 1), though the `Status: PROPOSED` line was never flipped.
+- **Bears on:** PROCESS, WR.
+- **Content that matters:**
+  - Self-limiting standing: "If it were deleted, nothing in the world would resolve differently"; authoritative only for intent, history, vocabulary (:10-18). "Numeric bands are not foundations": TS thresholds, Coherence tracks, obstacle numbers are mechanism and are marked for relocation, not reproduced (:25-29).
+  - Precedence rule: this suite is sole owner of claims it states; sources own unabsorbed content; absorbing documents must mark absorbed sections superseded in the same change; "Restatements are forbidden" - every drift entered through a hand-written restatement (:42-60).
+  - Lineage: Husserl, Kant (apperception, previously misattributed to Husserl), Heidegger (ontical/ontological claim "withdrawn"; Welt weltet; coprimordial), Derrida (always-already, trace, supplement; Ruled 2026-09-07 to name Derrida, Kant, Freud/Jentsch), Kierkegaard, Lurianic Kabbalah (agency stripped), Lacan (Real redefined as plenitude), Whitehead/Bergson, apophatic theology (:74-85). Four pivots and whether their debts are paid (Real paid by §5.3 finitude; epoché paid; Ein Sof partially; ontological difference NOT paid) (:87-115).
+  - Concordance table old F/A/L/R/C section -> new section; L Am. 6 (knot-profile tag), R A1-A15 and GD-1..GD-3 are "Not migrated" (:147-195).
+- **Conflicts / stale:** Status line "PROPOSED / Supersedes: nothing yet" (:3-4) while `canon/README.md` and the sibling banners treat the suite as superseding the five files. Outstanding scholarship correction: the as-structure (Auslegung) appears in no lineage row (:78).
+- **Open items:** the Heidegger as-structure row owed (:78).
+
+### canon/philosophy/01_limit_and_ground.md
+- **What it is:** §1 The Limit and the Ground: epistemic opacity charter, regress, Ein Sof, contraction, no agency; 129 lines.
+- **Status:** "PROPOSED" (:3). Reading: live reference.
+- **Bears on:** WR (cosmology constraints), PROCESS.
+- **Content that matters:**
+  - Charter: no causal claim about the ground's constitution/response is supportable; ruled R-19 2026-09-09 that the grounding is "always withdrawing", a receding limit (:13-28). "That the ground gives" is allowed (evidenced by becoming); "how or why" is forbidden (:30-41).
+  - Ein Sof reading restated as a regulative inference from the rendered side ("what comes through presents as surfeit"), not a description (:74-84). The contraction is "originary and uncaused" (Ruled 2026-09-07) (:93-105).
+  - §1.5 the ground does not act, intend, respond, prefer or tend; three forbidden formulations incl. a spooling "tendency" (:107-126) - the P-07 root.
+- **Conflicts / stale:** none within lane; the forfeit of an origin story is stated openly (:58-62).
+- **Open items:** none.
+
+### canon/philosophy/02_threads.md
+- **What it is:** §2 Threads: dual role, configuration defined, coprimordiality, intelligibility, temporality, actualized dimension, Inseparability, Temporal Disjunction; 253 lines.
+- **Status:** "PROPOSED" (:3). Reading: live reference (rulings 2026-09-07 and 2026-09-09 inline).
+- **Bears on:** WR, DICE (P-01/P-11 grounding), CHAR.
+- **Content that matters:**
+  - Threads "are not literal threads"; imagery gestures at essence (Ruled 2026-09-09) (:11-16). A configuration = "an organization or cohering of threads such that they come to constitute a being or entity" - its boundary is the being (:25-32).
+  - Substrate and conditions are coprimordial (Heidegger gleichursprünglich); chain "Threads comprise beings. Beings have consciousness. Rendering occurs due to conscious beings" (:34-64). Inseparability is the acknowledgement that the constituting/constituted distinction was never stable (:87-95).
+  - Temporality is one dimension; splitting it is "a metaphysical violation" (Ruled 2026-09-07); a temporal operation does not rewind time, it pulls a configuration out of its own becoming in equilibrium (:132-153). The three dimensions are closed: that (actuality), when (temporality), as-what (intelligibility); "where" is imbrication (:174-183).
+  - Inseparability governs WHICH dimensions move (all); operation type governs DIRECTION relative to the tendency; "restorative" must not be defined by return to a prior actualized state (:208-217).
+  - Temporal Disjunction is a relation between configurations (witnessed, local); scoped 2026-09-09 so restorative operations produce none, and ordinary experience carries none; distinct from Coherence's temporal facet (:219-253). This narrows P-11 ("universal").
+- **Conflicts / stale:** §2.2 defers "what a thread is when nobody renders it" to §3.5 (:102-111).
+- **Open items:** none.
+
+### canon/philosophy/03_rendering.md
+- **What it is:** §3 Rendering: constitutive process, dual consequence, passive stratum, stabilizing tendency (futural-potential-legible), positional constitution through imbrication; 239 lines.
+- **Status:** "PROPOSED" (:3). Reading: live reference.
+- **Bears on:** WR, DICE, FI (epistemics), CHAR.
+- **Content that matters:**
+  - Rendering = "the ability for consciousness to interpret phenomena as meaningful"; nothing is prior to it; one cannot decline it; rendering does not configure, spooling does (Ruled 2026-09-09) (:11-42). Constitution/experience, not appearance/reality (:44-48).
+  - Passive stratum (pre-predicative) explains the residue of a confrontation, seismographic awareness, the primitive system; "not actively constituted; passively registered as trace" (:84-111).
+  - Stabilizing tendency belongs to the threads ("what threads are like", not an action); equilibrium target is the futural-potential-legible; Locked Zones = becoming precluded, threads no longer moving toward equilibrium; Mending = restoration of becoming (:113-188).
+  - §3.5 rendering is positional: a person is a position within the weave constituted by imbrication; shared reality = overlap of imbrication; disagreement is not error (:190-239).
+- **Conflicts / stale:** retires "Providence" as a name for the tendency (kept for emergence Mode 2, per 04 §4.6).
+- **Open items:** none.
+
+### canon/philosophy/04_being_persistence.md
+- **What it is:** §4 Being-Persistence: three layers, derivation of layer 2, Coherence defined, Coherence-0 not threadcut, threadcut beings, three emergence modes, orphaned configurations; 295 lines.
+- **Status:** "PROPOSED" (:3). Reading: live reference; settles which layer threadcut lacks.
+- **Bears on:** CHAR, PC, WR, DICE.
+- **Content that matters:**
+  - Layers: 1 spooling (configures), 2 self-rendering (gives human shape, "continuous, unconscious, default" - not "always-already"), 3 deliberate threadwork (:13-35). Derivation of layer 2 (:37-79).
+  - Coherence is "a distance, not a quantity" and everyone has it; practitioners differ by spending it; communal life protects by holding and mending; the isolated drift faster (:81-147); orthogonal to TS but contingently correlated through confrontation (:142-147).
+  - Layer-profile table: organic 1+2; Coherence-0 shallow 1; Coherence-0 deep 1+3; threadcut 3; Locked Zone 1+2 with becoming precluded (:160-166). Settles the superseded files' disagreement: "Threadcut beings lack layer 1" (:154).
+  - Threadcut beings are singular and alien (not "a human minus one layer"); their cost never eases - "immortality is unremitting labour" (:173-230). A struck derivation (persistence partly supplied by others' rendering) was never ruled (:222-230).
+  - Mode 1 ordinary incursion, Mode 2 Providence (an event, not an entity), Mode 3 threadcut; Mode-3 organization is radically opaque (:232-281).
+  - Orphaned configurations decay because removing causal history removes accumulated spooling depth (:283-295).
+- **Conflicts / stale:** none found; this is the resolution file.
+- **Open items:** none.
+
+### canon/philosophy/05_confrontation_and_sensitivity.md
+- **What it is:** §5: monstrosity, rendering's limit, finitude pivot, development of sensitivity, what sensitivity is (a band of sensing across three axes), epistemic barrier, transmission as religious poetry, deepening vs destabilization; 369 lines.
+- **Status:** "PROPOSED" (:3). Reading: live reference.
+- **Bears on:** CHAR, WR, FI, PC (monster encounters), DICE.
+- **Content that matters:**
+  - Monstrosity is ontological; "being moral requires being human" so calling a monster evil is a category error (:9-31). Sensitivity captures more of the surfeit without commensurability ("two dimensions can represent three") (:33-50).
+  - Confrontation trauma-signature is a theorem of the two-stratum rendering; "A larger cup is still a cup" - growth changes how much, not what kind (:74-137, :261-298).
+  - Sensitivity cuts both ways: greater reach holds more of an encounter and is reconfigured more ("sensitivity is not armour"; "the exposed are not the ignorant; they are the ones who can see") (:154-179).
+  - Thread sensitivity = how far outside the human band one can sense (Ruled 2026-09-09: window analogy; 40-60% -> 10-90% range); practitioners are not tied to more threads; perceptual reach and self-holding are one variable; imbrication is the engagement side (:181-259). §6.8 cost account answered "under a misunderstanding"; whether reach bears on cost is OPEN (:291-297).
+  - Epistemic barrier = inertness not amnesia; non-sensitives retain thread knowledge and cannot render it (Ruled 2026-09-07) - the rewritten P-08/P-13 basis (:299-329).
+- **Conflicts / stale:** `02_canon_constraints.md` P-13 ("Forgetting = rendering failure") framed as forgetting, now contradicted; `canon/03_canonical_timeline.md` still uses "the Forgetting" as a named event (:22, :66) - CHAR/FI lanes should treat the Forgetting as inertness, not memory loss.
+- **Open items:** the retracted cost consequence; "does reach bear on what a working costs" (:291-297, deferred to §6.8).
+

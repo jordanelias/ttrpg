@@ -23,8 +23,9 @@ no player, six seasons of the shipped realm at seeds 0 and 1 produce no ending, 
 three `matter.determined` in eleven thousand acts, and a deepest consequence chain that is one concealment
 answered by three records. Beginnings are plentiful; escalation and endings are not,
 because the verbs that carry them are refused nearly every time (`challenge` 0 of 476, `accept` 0 of 186,
-`covenant` 1 of 58 over the two six-season runs), the world's own motion ships at its controls, and
-threadwork is not in the game at all. **The single largest obstacle is that the lane cannot tell:** the
+`covenant` 1 of 58 over the two six-season runs; seed 2 the same shape: no ending, two deaths,
+`challenge` 0 of 223), the world's own motion ships at its controls, and threadwork is not in the game at
+all. **The single largest obstacle is that the lane cannot tell:** the
 story bar has one arm and no way to fail, its companion control points the wrong way on a real log, and
 the strife reading calls a declared march a conclusion and, by season six, reads the whole realm as one
 strand. The project has built the world a memory and has not yet built a way to know whether anything
@@ -321,24 +322,27 @@ row) and `_seize_rung`'s docstring says "a territory IS one since ED-IN-0306 pha
 territory with a settlement beneath it), which is 15 and is GD-1's number; H-176's cite is corrected.
 Proposal `09_WR_world_motion.md`, edit 3.
 
-### F-WR-07 · degrades narrative · the flow stamp conditions almost nobody
+### F-WR-07 · degrades narrative · the flow stamp's reach hangs on one Event kind
 
-**Claim.** `stamp_flow_stakes` ships on and reaches between none and eleven per cent of persons.
+**Claim.** `stamp_flow_stakes` ships on and reaches between none and eleven per cent of persons at seeds 0
+and 1 and 28% at seed 2; the difference is whether a field was fought.
 
 **Evidence.** Persons for whom `flows_known` is non-empty, and for whom `flow_stakes` is: seed 0, two
 seasons, 0 and 0 of 83; three seasons, 1 and 1 of 83; forcing arm, 7 and 6 of 75; seed 1 forcing, 4 and 3 of
-79 (E-05, E-07, E-11, E-12); at six seasons, 5 and 5 of 83 (seed 0) and 9 and 8 of 82 (seed 1) (E-08).
-H-274's own dose reading is "6 to 13 persons are ever stamped" and "at two
+79 (E-05, E-07, E-11, E-12); at six seasons, 5 and 5 of 83 (seed 0), 9 and 8 of 82 (seed 1) and 27 and 23
+of 81 (seed 2) (E-08). Seed 2 is the seed with five `field.lost` (an `opens` kind) against one at each of
+the others: an earlier draft of this finding, written before seed 2 finished, said "at most eleven per
+cent", and seed 2 falsified it. H-274's own dose reading is "6 to 13 persons are ever stamped" and "at two
 seasons the arms are byte-identical on 9 of 10 seeds". The cause is in the roster: only nine kinds open a
 strand at the person reading, and the realm emits almost none of them (`field.lost` 1, no `arrest.made`,
 `requisition.taken`, `rung.seized`, `rung.razed`, `site.damaged`, `compliance.withheld` in E-07).
 
 **Touches.** R-01; strife ruling R2 ("flows condition how people behave").
 
-**Consequence.** R2 is ruled and built and has almost no effect in play, because its trigger kinds do not
-occur (F-WR-01).
+**Consequence.** R2 is ruled and built, and whether it has any effect in a given realm is decided by
+whether one of nine kinds happens to occur; where none does it conditions nobody (F-WR-01).
 
-**Minimal fix.** None in this lane beyond F-WR-01's: the stamp is correct; its inputs are absent. Do not
+**Minimal fix.** None in this lane beyond F-WR-01's: the stamp is correct; its inputs are rare. Do not
 widen `opens` to raise the dose (that would make civic life strife, the reason the kind list exists).
 
 ### F-WR-08 · hygiene, with one live defect · `ENDINGS_CLASSIFIED.yaml` is prose read by a builder
@@ -457,7 +461,7 @@ accept each as binding and re-raise none.
 |---|---|---|---|---|
 | story bar | "forcing on against off" (#457 `STORY-BAR`) | `ARMS = ("off",)` | code | the instrument has no subject (F-WR-03) |
 | conclusion | R6: "terminates or resolves with a concluding outcome, or it is not a flow" | 24 terminal codes, openers among them | code | conclusions announced on declarations (F-WR-02) |
-| flows condition behaviour | R2 | stamp reaches ≤ 11% of persons | code | R2 built, near-inert (F-WR-07) |
+| flows condition behaviour | R2 | stamp reaches 0 to 11% of persons at two seeds, 28% at a third | code | R2 built; its reach rests on one rare kind (F-WR-07) |
 | victory | GD-1: 15 territories | 16 selected, one unholdable | code | victory unreachable (F-WR-06) |
 | the world substrate | arc-reachability §2: "the one hole" | lattice coupling built, weight 0, no source | code | the world is not dying (F-WR-04) |
 | threadwork | ED-WR-0010: in scope | unreached oracle | code | F-WR-05 |
@@ -588,7 +592,7 @@ code read for this audit; rows whose subject is another lane's mechanism are mar
 | H-238 no corpus thread sensitivity | open? | open, answered at ladder step 1 by the row itself | `thread_read` never attempted in `corpus_run` (E-15) | none |
 | H-242, H-243, H-245 to H-247 | closed? | closed as injected numbers | — | none |
 | H-257 a real execution reads KL | open? | open | `strife.py:85` reads `exists` only | R-06 |
-| H-274 the stamp | open? | open; dose near nil | F-WR-07 | none |
+| H-274 the stamp | open? | open; dose 0 to 28% by seed | F-WR-07 | none |
 | H-278, H-283, H-287, H-291, H-307, H-311, H-326, H-350, H-356 | open? | not WR's | — | none |
 | B10-15 (12 positions) | open | open; precondition missing | F-WR-05 | R-08 |
 | B10-18 (13 positions) | open | open | CL-EVENTS (2), CR-22, CP-T10-04 answer F-WR-04, -10, -11 | keep order |
@@ -659,7 +663,7 @@ self (lane file T-WR-6; index §7): every threadwork number is internal, three a
 invented" at their definitions, and no precedent can check them. No game certifies that generated content
 is good rather than varied (N-5): the story bar cannot be given a pass mark from precedent, only a null it
 must beat. No game defends a cross-scale bridge whose default state equals its absence: the flow stamp at
-a dose near nil (F-WR-07) is that null arriving.
+a dose of nil at one seed and 28% at another (F-WR-07) is that null arriving.
 
 ## 8. Best path forward
 
@@ -730,7 +734,7 @@ edits 1 to 3, then B10-15, then its edit 4 (the scenario).
 | CALENDAR → SC (`date.fired`, docket slots, re-slot) | emits | real | `date.fired` 5, `docket.formed` 7 in two seasons (E-05); `determine` 3 of 6 (E-08) |
 | ENCOUNTER → PC, MB (deferred contests) | calls | real for marches; **no duel reaches it** | `march` Declared 29, Unopposed 6, Lost 1; `fight`/`accept` deaths 0 (E-07) |
 | `questions_for` → CHAR (`decision/`) | emits Questions | real | every act |
-| `flow_stakes` → CHAR (the stamp) | emits classed referents | real, dose near nil | F-WR-07 |
+| `flow_stakes` → CHAR (the stamp) | emits classed referents | real, dose 0 to 28% of persons by seed | F-WR-07 |
 | `endings_reached` → driver summary | emits | real, always `[]` | E-05 to E-12 |
 | `hunger`, `uncontrolled`, `closed_uses` → anything that decides | emits | **designed only** | one caller each, `populated.census` |
 | threadwork → loop | both | **designed only** | F-WR-05 |
@@ -782,7 +786,7 @@ memory, run seasons, read the log; they write nothing but stdout).
 | E-05 | `wr_probe.py 0 2` | 0 · 2 | season hashes `5ab73af2…`, `bacd687f…`; 1,703 acts, 898 refused; 3 strands, 1 "concluded" (15 marches); person reading 0 of 83; arcs 21, null [1,0,0], unrestricted 53; chain ends ≥2: 29 against shuffled 86 to 97 |
 | E-06 | `wr_probe.py 0 3 1` (`scene_budget` swept to 1) | 0 · 3 | 519 acts; same-season cross edges 0; cross-season 51, 68 |
 | E-07 | `wr_probe.py 0 3` | 0 · 3 | 2,630 acts, 1,440 refused; 74,510 Events; 0 deaths; same-season cross edges 128, 160, 158; 5 strands, 0 concluded, largest 63 moves and 17 doers; all 16 links observed 0; `PT→PT` 13 against control 11.09 |
-| E-08 | `wr_probe.py 0 6`; `wr_probe.py 1 6` | 0, 1 · 6 | seed 0: 5,483 acts, 3,124 refused; 273,067 Events, 179,056 `claim.decayed`; `endings == []` ×6; 1 strand, 234 moves, 55 doers; arcs 33, null [2,0,0]; deepest consequence chain 4. Seed 1: 5,544 acts, 2,953 refused; 247,204 Events; `endings == []` ×6; 2 strands (119 moves and 30 doers; 13 moves), 0 concluded; arcs 34, null [0,1,1]; person reading 9 of 82; deepest consequence chain 3. Seed 2 at six seasons was queued and had not finished when this was written |
+| E-08 | `wr_probe.py 0 6`; `wr_probe.py 1 6` | 0, 1 · 6 | seed 0: 5,483 acts, 3,124 refused; 273,067 Events, 179,056 `claim.decayed`; `endings == []` ×6; 1 strand, 234 moves, 55 doers; arcs 33, null [2,0,0]; deepest consequence chain 4. Seed 1: 5,544 acts, 2,953 refused; 247,204 Events; `endings == []` ×6; 2 strands (119 moves and 30 doers; 13 moves), 0 concluded; arcs 34, null [0,1,1]; person reading 9 of 82; deepest consequence chain 3. Seed 2 (`wr_probe.py 2 6`): 5,509 acts, 2,908 refused; 277,603 Events; `endings == []` ×6; 2 deaths; 5 `field.lost`; `challenge` 0/223, `accept` 0/118, `covenant` 0/27, `determine` 1/6; 1 strand, 241 moves, 51 doers; arcs 34, null [0,0,1]; person reading 27 of 81, stamped 23; deepest consequence chain 3 |
 | E-09 | `… strife 2 0`; `… strife 3 0 1 2` | 0 · 2; 0–2 · 3 | OBSERVED 4, UNOBSERVED 8, KIND-ONLY 25, GAP 3; and OBSERVED 6, UNOBSERVED 6, KIND-ONLY 25, GAP 3; terminal codes with no static route: DN |
 | E-10 | `wr_null.py 0 2`; `wr_null.py 1 2` | 0, 1 · 2 | executed depth ≥3: 36 against null 10.8 (6..15); 27 against 9.0 (5..14). Consequence depth ≥3: 2 against 1.2 (0..3); 0 against 1.1 (0..4). 90 of 101 and 92 of 98 answering acts name the antecedent's actor or subject |
 | E-11 | `WR_FORCING=1 wr_probe.py 0 3` (illness 0.05, weather draw, coupling 250) | 0 · 3 | 8 deaths; `tenure.closed` 10; `oblige` 146/277; `confer` 1; `determine` 1; cross share 22.1%; 0 band crossings; `restore` not attempted |

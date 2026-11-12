@@ -296,3 +296,243 @@ Lane: archived design documents under `.designs/` (README, `_architecture`, arti
 - **Conflicts / stale:** all Key/KeyLog/`cascade_depth` machinery retired; `decay()`, cap constants and RNG model never ruled (per armature). Whether `engine/season/` honours the one-tick arc/year offset and hysteresis is [UNVERIFIED].
 - **Open items:** OF-CAP, OF-3 decay(), OF-D6 disjointness, RNG-MODEL-COLLISION, ORD-3/ORD-4, O-2 (`new_season` label computed nowhere), OF-HYSTERESIS-AUDIT for other level-triggered §4.3.2 triggers (:389-404).
 
+### .designs/systems/_architecture/reference/repo_state_armature_v1.md
+- **What it is:** charter (ED-IN-0077, 2026-07-20) for a "repository state armature": one definitions store, one review aggregator `review_core.py`, one ratchet baseline.
+- **Status:** "RATIFIED — charter + Phases 0-2 ... Phase 3 COMPLETE ... Phase 5 HELD BACK pending OPT-AV-1". Reading: historical/superseded; the file itself records `review_core.py` RETIRED 2026-08-21 (ED-IN-0194) (:94) and the banner it builds is forbidden by CLAUDE.md §0.3.
+- **Bears on:** PROCESS.
+- **Content that matters:**
+  - Three artifacts: `references/definitions/` single source, `tools/review_core.py` -> `review_state.json`, `registers/review_baseline.yaml` count-ceiling ratchet (:36-82).
+  - View inversion: `names_index.yaml` and `descriptor_registry.yaml` regenerated at their existing paths as `# GENERATED` views so blocking readers are never rewired (:46-52).
+  - P5 attribute centralization hard-gated on Jordan ruling OPT-AV-1 (7/9/10-with-Recall roster) (:135-137); collapse 3 Combat-Pool definitions into one `kind: formula`.
+  - CI job regrouping explicitly rejected (:103-106).
+  - Top risk: lossy regeneration of the naming spine, mitigated by parity test (:157-165).
+- **Conflicts / stale:** it asserts a SessionStart banner as BUILT, contradicting CLAUDE.md §0.3 (banner retired); `review_core.py` retired. Phase 2 `definitions/` store status unknown [UNVERIFIED].
+- **Open items:** OPT-AV-1 attribute roster (see CHAR lane); Phase 4 freshness absorption.
+
+### .designs/systems/_architecture/reference/repository_keep_set_v1.md
+- **What it is:** keep-set / evacuation plan (2026-08-04, ED-IN-0125/0127/0128/0129/0139): `main` keeps code-first, outdated prose evacuates to a tag.
+- **Status:** "RULES RATIFIED ... PER-DIRECTORY DISPOSITIONS PROPOSED ... No deletion is authorised by this document." Reading: historical; the evacuation executed (the tree now has `.designs/`, no `audit/`), but this table is the rationale, partition of record was `tools/evacuation_plan.py`.
+- **Bears on:** PROCESS, CORE.
+- **Content that matters:**
+  - Rule cuts on outdated, not format: prose with no code pair (`canon/`, 14 `godot: no-oracle` specs) stays authoritative; prose with a code pair is "information only" (:55-60).
+  - `engine/params/` evacuated after capture into `engine/engine_params/params_tables.yaml` (43 files, 258 tables, 1,367 rows); provenance `[canonical: params/...]` cites the fork (:67-90).
+  - `registers/` kept, restarted via read-only `registers/archive/` snapshot because 103 files cite `ED-` IDs and `validate_ed_citations.py` is blocking (:199-206).
+  - Eight things that go red under mass deletion (ED citations, restructure ledger alias rows, co-file checker, scope ratchet, freshness pins, SessionStart banner, `tests/valoria`, dashboard) (:294-318).
+  - Standing review gate: adversarial read-only critic after every milestone; three defects found only by review (:257-290).
+  - Streamlined means working tree; do not rewrite history because SHAs are cited (:353-383).
+- **Conflicts / stale:** counts (3148 files -> 1691 KEEP) are snapshots; CLAUDE.md now says there is "no `deprecated/` tree". `canon/` MB code home `tests/sim/mass_battle` re-home status [UNVERIFIED].
+- **Open items:** §10 open calls (godot stale docs per-file, skills/proposals per-file) are overtaken by events.
+
+### .designs/systems/_architecture/reference/scale_transitions_v30_index.md
+- **What it is:** generated heading/size index (2026-04-18) of `scale_transitions_v30.md` v1.0 (2026-04-13, ~5.2k tokens; body absent).
+- **Status:** indexed doc "DESIGN — canonical for scale transitions and mode bridging" (:25). Reading: historical; cited by the retired echo transport and `cross_scale` code.
+- **Bears on:** CORE, SC, MB, FI, FA.
+- **Content that matters:**
+  - Section map: §3 eight handoff rules plus §3.9 Fieldwork <-> all systems (largest: 652 tokens), §4 Zoom In/Out with §4.3.2 mandatory zoom-in triggers and §4.3.3 world-state triggers, §4.4 "Where Were You?" retrospective scene generation (:31-46).
+  - §5 Domain Echo: trigger, amount, timing by mode, Debate (PP-108), Accord Echo (§5.5), Thread Echo (§5.6, ED-673) (:48-54).
+  - §7 Sufficient Scope register-shift trigger; §8 scope shift rules; §9 PC Faction Embedding (ED-075); §11 Contested Figure System (ED-167/168) (:61-65).
+- **Conflicts / stale:** index only; the "Zoom In/Zoom Out" and "Domain Echo" vocabulary maps onto the season loop's scene dispatch [UNVERIFIED current equivalents].
+- **Open items:** none visible.
+
+### .designs/systems/_architecture/reference/scale_transitions_v30_infill.md
+- **What it is:** prose infill for `scale_transitions_v30.md` (companion, one doc in parts).
+- **Status:** "DESIGN — canonical for scale transitions and mode bridging" (:14). Reading: historical.
+- **Bears on:** CORE, SC, MB, FI.
+- **Content that matters:**
+  - TTRPG is baseline; Board Game abstracts; Hybrid is the bridge, not a third mode (:18-19).
+  - Multiple simultaneous Zoom Ins resolve in Attunement order, then Agility, then GM (ED-072, ED-160) (:40).
+  - Domain Echo in Hybrid queues and fires at next BG Accounting Step 3 (:48); BG clock advances only at Accounting (:55).
+  - Sufficient Scope: faction-scope if an action would normally require a Domain Action roll (treaty, accusation, territorial claim); GM makes final call (ED-074) (:59-61).
+  - Scope shift once per round, second costs +1 Inspiration (:63). Contested Figure killed between Zoom Ins is redirected or Zoom Out (:67-68).
+- **Conflicts / stale:** relies on GM adjudication; no-GM engine must resolve scope by rule.
+- **Open items:** skeleton body of most subsections is not in this part.
+
+### .designs/systems/_architecture/reference/session_a_spec_patches.md
+- **What it is:** spec patch list (2026-04-19, Session A): 6 patches + backstory strike, all propagated.
+- **Status:** "ALL PATCHES PROPAGATED". Reading: historical; documents what was changed in params/NPC trees at the time.
+- **Bears on:** FA, SE, WR, CHAR.
+- **Content that matters:**
+  - Three-scale resolution model (settlement -> province -> peninsula) inserted into phases (:17-45).
+  - Bishop appointment as Church Consul-Outward action: Influence vs Ob 1; Overwhelming gives Accord +1 and PT +1; Partial gives Church Stability -1; Failure no Casus Belli (:49-80).
+  - Secession candidates limited to settlements held by a national faction; subnational/Uncontrolled settlements cannot secede (:89-103).
+  - RM emergence requires Order = 0 (not <=1), PT <=1, local Disposition toward Yrsa Vossen >= +3 (:107-124).
+  - Splinter Influence split 60/40 like Mandate (:128-142). Crown P4 default: garrison T2 Kronmark if ungarrisoned and a Varfell unit is active in T4 (:146-163).
+  - Patch 7 strikes the prior king's assassination as pre-game backstory in favour of the Royal Crisis fuse (:167-175).
+- **Conflicts / stale:** targets (`params/bg/*`, `designs/provincial/*`) are gone; whether the Order=0 RM threshold and 60/40 split live in current faction code is [UNVERIFIED].
+- **Open items:** none.
+
+### .designs/systems/_architecture/reference/tensions_pair_validation.md
+- **What it is:** validation (post 2026-04-19) that all 15 pairs of the six rescoped Tensions Deck cards C1-C6 yield a belligerent, a target, and opportunity/obligation for the rest.
+- **Status:** none stated. Reading: historical; the deck itself (draw 1) was set by the conflict proposal, this file validates draw-2 pairs, so partly overtaken.
+- **Bears on:** FA, WR.
+- **Content that matters:**
+  - Six cards: C1 Crown-Church (S003), C2 Crown-Varfell border, C3 Crown-Löwenritter, C4 Hafenmark-Church bishop claim, C5 Hafenmark-Guilds (S017), C6 Varfell-RM (:20-27).
+  - Method: criteria 1-3 (belligerent, target, opportunity or obligation) applied by hand to all 15 pairs; 15/15 pass (:11-14, :277).
+  - Weakest pair C5+C6 (two internal crises, quiet "cold start"); strongest C1+C2, C3+C4, C1+C4 (:281-283).
+- **Conflicts / stale:** pass/fail judged by reading, not by simulation, and the "draw 2" premise conflicts with the "draw 1" of `conflict_architecture_proposal.md` [UNVERIFIED which is current].
+- **Open items:** none.
+
+### .designs/systems/_architecture/reference/videogame_mode_spec_index.md
+- **What it is:** generated heading/size index (2026-04-19) of `videogame_mode_spec.md` (2026-04-17, ~4.1k tokens; body absent).
+- **Status:** indexed doc "CANONICAL — single-mode extraction reference for Godot implementation" (:25). Reading: historical; brief names the full spec as a cross-cutting read.
+- **Bears on:** GO, CORE, all.
+- **Content that matters:**
+  - Collapses TTRPG/BG/Hybrid branching to one videogame spec; per-system mode collapse for combat, social contest, fieldwork, threadwork, mass battle, scale transitions, faction layer, NPC behavior, player agency, companion, settlement layer (:30-41).
+  - §2 unified threadwork mode table, §3 "GM Decides" resolution register, §4 What is discarded, §5 implementation priority (:42-45).
+- **Conflicts / stale:** index only; the "GM Decides" register is the mapping from human-GM rules to engine rules and would be a primary referent for any no-GM conformance audit.
+- **Open items:** the full body is in `.designs/systems/_architecture/` or elsewhere [UNVERIFIED location].
+
+### .designs/systems/articulation/reference/articulation_flow_skeleton_v1.md
+- **What it is:** traced flow skeleton (at commit `6545067`) of the articulation layer: `engine/cross_scale/articulation.py` as subscriber to the Key scheduler.
+- **Status:** "REFERENCE — traced structure only". Reading: historical; subject (Key-scheduler subscriptions) retired.
+- **Bears on:** CORE, WR, GO.
+- **Content that matters:**
+  - Tier 1 `render_protagonist_lens`, Tier 3 `generate_chronicle_entry` have zero callers; Tier 2 `evaluate_articulation_triggers` only called by a stub-wiring regression probe (:130-132).
+  - `subscribe_all` wired 13 callbacks (`_TRIGGER_TYPE_IDS`) at every boot, but 10 of 13 trigger types had zero production emitter, so none could fire under default flags: "structurally present and dormant" (:133-137).
+  - Fired callback `_on_key` ignored the Key and returned a `stubwire.stub_resolve` no-op; only a telemetry counter (`CampaignResult.stub_hits`) moved (:81-87).
+  - `scene.combat_felled` subscribed but has no emission path; `scene.combat_resolved` behind default-off `DISPATCH_COMBAT_BRIDGE` (:134-135).
+  - Declared `consumes` wildcard `{type: "*"}` vs actual 13 explicit ids (:138). `subscribe_all` non-idempotent (:139).
+- **Conflicts / stale:** the articulation tier model (protagonist lens / cut scenes / chronicle) was a stub then; whether `engine/season/` has a chronicle or narrative-render function is for the WR/GO lanes [UNVERIFIED].
+- **Open items:** none; every gap was a traced finding.
+
+### .designs/systems/characters/reference/character_histories_v30_index.md
+- **What it is:** generated heading/size index (2026-04-20) of `character_histories_v30.md` (lifepath system, ~9.8k tokens; body absent).
+- **Status:** indexed doc "CANONICAL — approved 2026-04-17 (editorial batch acceptance)" (:24). Reading: historical; paired with `_infill`.
+- **Bears on:** CHAR, FA.
+- **Content that matters:**
+  - Four stages: Origin (8: Crown Heartland, Highland, Fjord, Southern Einhir, Himmelenger, Valorsplatz Underclass, Border, Displaced), Formation (7), Vocation (9 faction/cross-faction groups), Catalyst (7) (:29-65).
+  - Scope: SaGa-style sparking, Recall-gated equip slots, skill levels 1-3 (:25).
+  - Sections on Skill Level Design Principle, Character Creation Summary, canonical test character Mira Sondhal (ED-143), Open Editorial Items (:66-69).
+  - Godot implementation noted in `valoria-game/docs/history_skill_integration.md` (:28).
+- **Conflicts / stale:** index only; the vocation lists with skills are in the skeleton body, not here. [UNVERIFIED] whether engine has a lifepath generator.
+- **Open items:** see infill (ED-377, ED-380, ED-390, ED-391).
+
+### .designs/systems/characters/reference/character_histories_v30_infill.md
+- **What it is:** prose infill for the lifepath system: origin/formation/catalyst narrative, no vocation or skill-list content.
+- **Status:** "CANONICAL — approved 2026-04-17" (:13). Reading: historical; skeleton portion missing here so mechanical content (skills per stage) is incomplete.
+- **Bears on:** CHAR, WR, FA.
+- **Content that matters:**
+  - Four lifepath stages each grant a History; 5 starting skills at Level 1; Origin grants 1, Vocation 2 (at least 1 unique), Catalyst 1 (:19-20, :91, :103).
+  - Equip slots `max_equipped = Recall` (1-7); skill Level 2 needs History dice_bonus >= 3, Level 3 >= 5 (:22-23).
+  - Starting Truth values by origin: Highland 4, Himmelenger 5, Valorsplatz Underclass 3, Border 4, Displaced 2; Self-Taught Formation applies Truth -1 (:34, :48, :52, :59, :65, :80).
+  - Displaced origin grants unique skill "Scarred by the Unreal" (immune to Composure loss and surprise-round penalties from Thread phenomena; Thread Sensitivity +3) (:65).
+  - 4C "Lost Someone" uses a GM "ghost sheet" (anti-fridge clause); 4G Religious Crisis direction "GM determines" (:108, :117). 4F events: Spartfell Incident, Templar Suppression, Ducal Border Clash (:113-115).
+  - Cultural fact: 245 years of Church suppression of Einhir inheritance (:43).
+- **Conflicts / stale:** GM-dependent clauses (4C, 4G) have no engine equivalent unless the engine derives them [UNVERIFIED]. Cross-ref list names retired docs.
+- **Open items:** ED-377 (Intuitive Threadwork + co-movement), ED-380 (Deep South +8 TS Leap eligibility), ED-390 (new setting events need approval), ED-391 (ghost sheet) (:126-129).
+
+### .designs/systems/characters/reference/characters_flow_skeleton_v1.md
+- **What it is:** traced flow skeleton (at commit `654506799c63`) of `systems/characters/sim/{conviction,beliefs,companion}.py`: Conviction Scars, Beliefs, companion stub, world snapshot round-trip.
+- **Status:** "REFERENCE — traced structure only". Reading: historical trace, but its gap table records which Conviction mechanics were uncalled.
+- **Bears on:** CHAR, FI, SC, CORE.
+- **Content that matters:**
+  - `apply_conviction_scar` flow: Thread-witnessing season cap (one Scar per Conviction per season), Certainty-scaled magnitude, thresholds destabilised=1, shifted=2, in-crisis >=3 (:68-79).
+  - Gap 1: no production entry exercised the core mechanics; the only caller `knots.apply_knot_loss` has zero production callers; `social_success` caller `contest_legacy_stub.run_contest` is dead; `run_companion_scene` is a stub only a probe calls (:151).
+  - Gap 2: `add_belief` has zero callers, so no live campaign can contain a `Belief` (:152). Gap 4: `restore_world` test-only (:154). Gap 5: `check_conviction_threshold` and `revise_belief` have zero callers even in tests (:155).
+  - Gap 3: `piety_track` contract declared Key consumption the code never implemented (:153).
+  - Gap 7 CLOSED 2026-08-24: knots called `apply_conviction_scar` with `conviction='Loyalty'`, absent from the 9-name roster, so every scar silently no-op'd; roster now single-owned in `references/descriptor_registry.yaml:conviction_roster` and an unknown name raises; caller now passes `'Honor'` (:157).
+- **Conflicts / stale:** `systems/characters/sim/*` and `engine/mc_v18.py` anchors may be moved or deleted [UNVERIFIED]; the Convictions-as-9 vs 13 roster question is settled in code (gap 7) but design docs (conviction_track_v30, PP-718) speak of 13.
+- **Open items:** whether `engine/season/` consumes Convictions/Beliefs at all (CHAR audit); a no-op scar-on-unknown-name was a silent failure of the "stub that returns success" class.
+
+### .designs/systems/characters/reference/conviction_track_v1_pp718_vetting.md
+- **What it is:** a full "N/Mu/M-1..M-11/T/Q" vetting walkthrough (2026-05-10) of PP-718 per-Conviction Scar accumulation.
+- **Status:** none stated; ends "Overall: Class B vetting passes". Reading: historical justification for the rule; the mechanic is what matters.
+- **Bears on:** CHAR, FA, WR.
+- **Content that matters:**
+  - Rule: crisis fires when any single Conviction reaches 3+ Scars (not aggregate); multi-primary NPCs Scar each Conviction independently; cultural-background-only (weight 0.2-0.4) crises produce muted drift (:11-17).
+  - Crisis-table roll 5: legacy "Autonomy survival" replaced by Self-Other-orientation override (Autonomy renamed Liberty per PP-684) (:16, :127).
+  - Pre-PP-684 mapping Reason->Scholastic, Autonomy->Liberty, Continuity roster-determined (:17).
+  - Thread-witnessing Scar cap 1 per season per NPC; witness requirement: direct presence or credible testimony (Evidence Track + Disposition >= +1); Player Conviction Check = Spirit pool TN 7 Ob 1 (ED-664) (:69, :147, :183, :250).
+  - Faction effective_convictions aggregated from member NPCs (PP-686 §3.2); Cascade math consumes it (:50, :259).
+  - Final tally 5 plus, 5 satisfies, 1 n/a, 0 violations after recalibrating M-1/M-9 to avoid double-counting (:209, :288).
+- **Conflicts / stale:** the 13-Conviction taxonomy vs the 9-name code roster in `conviction.py` (see characters flow skeleton gap 7) [UNVERIFIED current code]. The vetting framework (N/Mu/M/T/Q) is itself a prose process, not a mechanism.
+- **Open items:** none.
+
+### .designs/systems/characters/reference/conviction_track_v30.md
+- **What it is:** NB: despite the filename, this is the **Piety Track (PT, per-territory) and Church Influence (CI) redesign**, PP-406..PP-418 (2026-04-05), not the per-character Conviction system. Skeleton; prose in `_infill`.
+- **Status:** "CANONICAL — approved 2026-04-17"; §4.2, §4.3, §6, §7 "SUPERSEDED-BY GD-1 (peninsula-only victory)"; §4.1 and §3 pacing superseded by PP-421 (CI runs to 100, no freeze). Reading: part live (PT/CI mechanics), part historical (Church/Varfell victory paths).
+- **Bears on:** SE, FA, WR, CHAR (naming).
+- **Content that matters:**
+  - PT 0-5 per territory (0 = Einhir Restoration, 5 = Solmund Orthodoxy); starting values by territory T1..T17; T15 fixed 0 "cannot increase by any means"; seasonal move cap +/-1 (:30-72). Name collision: the stat "Conviction (PT)" vs per-character Convictions (ED-644 notes PT term equivalence) (:39).
+  - Calamity Drift: MS <=50, <=35, <=20 erode PT by 1 at Accounting for adjacent, within 2 steps, all territories; ignores +/-1 cap (:92-98); Thread-op drift capped at +/-2 combined (:114).
+  - Church Seizure Ob = 2 + Fort + max(0, 3 - PT), floor 1; modifiers Consecrated -1, failed-seizure +1 each, Löwenritter +1; results by degree (:144-176).
+  - CI per season: passive +1, Conviction Yield floor(sum 1 at PT5, 0.5 at PT4), Assert Influence vs Ob 2 (+1; failure Stability -1), Suppress negates passive, Hafenmark Baralta Mandate >=4 gives CI -1 (:191-214).
+  - RM emergence: Warden's Accord (WA) -3..+3; emergence needs WA <=-2, >=3 territories PT <=1, MS <=50; one-shot; starting stats Mandate = count PT<=1 (min2,max5), Influence 4, Wealth 1, Military 0, Stability 3 (:317-375).
+  - Environmental presentation per PT transition and Church Attention Pool indicators 0..4+ (:502-527).
+- **Conflicts / stale:** CI milestone set 40/55/65/80/100 vs stale "CI 75" row (:538), armature 5.11 left unresolved; presentation of CI 75 still in file. GAP list: RM emergence frequency, Community Weaving feedback loop, Consecrated seizure edge case, Fort Level data absent (:468-476). Victory sections (TCV >=18, AEA clock, Hollow Victory) dead per GD-1.
+- **Open items:** [GAP] CI pacing against CI-100 model never simulated; [GAP] AEA pacing; Hafenmark Secular Governance PT floor of 2.
+
+### .designs/systems/characters/reference/conviction_track_v30_index.md
+- **What it is:** generated heading/size index (2026-04-18) of the Piety Track doc (~7.3k tokens); section line numbers refer to the earlier un-superseded text.
+- **Status:** "CANONICAL — approved 2026-04-17". Reading: historical; older than body (still uses TC/CV/RS terminology).
+- **Bears on:** SE, FA, CHAR (naming).
+- **Content that matters:**
+  - Heading map shows pre-rename vocabulary: "TC Generation", "CV Change Environmental Events", "RS-Linked CV Erosion" (:31-37, :58-60), i.e. TC = Theocracy Counter (now CI), CV = Conviction value (now PT), RS (now MS).
+  - Largest sections: §11 presentation layer (1,134 tokens), §5 RM emergence (879), §4 victory (850).
+- **Conflicts / stale:** index terminology (TC, CV, RS) is superseded by CI/PT/MS in the body.
+- **Open items:** none.
+
+### .designs/systems/characters/reference/conviction_track_v30_infill.md
+- **What it is:** prose infill for the Piety Track doc; header says "Status: Design Proposal — Awaiting User Review".
+- **Status:** "Design Proposal — Awaiting User Review" (:14). Reading: historical; skeleton carries the later CANONICAL status; "CV" terminology is stale.
+- **Bears on:** SE, FA, WR.
+- **Content that matters:**
+  - Rationale: PT captures popular belief, not institutional Church power (Mandate) nor theological correctness; Restoration pole is recovered cultural memory, not a competing faith (:20).
+  - "Drift: None. CV is sticky" (:23) — contradicted by Calamity Drift and Thread drift in the skeleton.
+  - Each faction may attempt one PT movement action per season total, not per territory (:25).
+  - Consecrated: PT cannot drop below 4 while Church controls (:29), matching skeleton §1.4 only partly (skeleton says lost if Church loses control AND PT <4).
+  - RM emergence is one-shot; suppression does not restore pre-emergence state (:53-56). Path B blocked if RM has emerged (:60). Hollow Victory scoring unresolved (ED-304) (:48).
+  - Co-victory impossible if RM hostile (WA >= +2 cannot coexist) (:65).
+- **Conflicts / stale:** "drift none" vs skeleton Calamity Drift; per-faction one action per season vs skeleton per-territory actions. The skeleton wins in time.
+- **Open items:** ED-304 Hollow Victory scoring.
+
+### .designs/systems/combat/combat_engine_v1/reference/README.md
+- **What it is:** short README of the personal-combat engine v1 (modular, multimodal, matrix-validated); file list and status.
+- **Status:** "CANONICAL — ratified by ED-900/904 and docket ED-1029". Reading: live as history of the engine now at `modules/combat/` (CURRENT.md names the head).
+- **Bears on:** PC, DICE.
+- **Content that matters:**
+  - Files: core.py (sigma-resolution + armour-aware damage), combatant.py, config.py, systems.py, tradition.py, wrapper.py (engagement state machine: measure/approach/close, displacement, re-opening, bind, feinting, 95% cap) (:16-20).
+  - Validated against the four-state weapon matchup matrix A0 unarmoured -> A3 full plate (:14-15).
+  - Canonical resolution is d_sigma (sigma-leverage), additive-coupled damage and ED-1041 bilateral-Ob wounds, "NOT the v30 model (Agi x2 pool / TN-7 / multiplicative STR)" (:24-25).
+- **Conflicts / stale:** file locations moved (code now `modules/combat/`); the pool model note agrees with canonical_registry's superseded rows.
+- **Open items:** none.
+
+### .designs/systems/combat/combat_engine_v1/reference/REARCHITECTURE_v1.md
+- **What it is:** 2026-06-29 re-architecture blueprint (Class-C, Jordan-vetoable) for the combat engine: six layers L0-L5.
+- **Status:** none stated; "Class-C, Jordan-vetoable". Reading: partly executed historical blueprint; which phases landed is [UNVERIFIED].
+- **Bears on:** PC, DICE.
+- **Content that matters:**
+  - Six layers one-way: L0 weapon primitives (`weapon_physics.py`: mass, head_len, grip_len, pommel_kg, wclass, hilt...) -> L1 core (`resolve` mu-shift, degree, pool) -> L2 weapon-gated subsystems (`systems.py` + `capabilities.py`) -> L3 wrapper (orchestrate only, owns all mutation) -> L4 traditions -> L5 abilities (:24-53).
+  - Symmetry: weapon = sum of physical primitives; tradition = sum of ability primitives; ability = learned ACCESS to a graph transition, never a +X dial (:51-55).
+  - Violation worklist: wrapper assembles `net_sigma` inline; `HEFT`, `GATE`, `spd`, `reach_base` hand tables to be derived from physics; `closes_poorly`, `wt`, `seize` vestigial (:59-71).
+  - Five phased steps; Phase 1 build-only, Phase 2 behaviour-preserving byte-identical, Phase 3 re-baseline (mirror=50, no one-shot, tier spread) (:73-87).
+  - Blocked on Jordan: D-A damage scale, pommel_kg singletons, affinity-budget build layer, K_* gains, pick vs mace vs plate, seize lever retire/reroute, reach dominance r~0.83 (:89-97).
+- **Conflicts / stale:** `seize` lever later found dead (see ability_armature); the "access not modifier" principle contradicts ability_armature §1 ("Modulate, never unlock").
+- **Open items:** the seven "blocked on Jordan" items are a decision list that may have been answered in `modules/combat/` [UNVERIFIED].
+
+### .designs/systems/combat/combat_engine_v1/reference/ability_armature.md
+- **What it is:** provisional armature (framework) for martial-tradition abilities: levers, phase x competence cross-product, source material by tradition, workflow.
+- **Status:** "Provisional". Reading: partly superseded by the L5 "ability = access" model in REARCHITECTURE; ED-PC-0042 label fix recorded.
+- **Bears on:** PC.
+- **Content that matters:**
+  - Principles: modulate never unlock; invariant-safe (unequipped = no change); every ability needs a documented technique (bottom-up) AND a historical precedent (top-down) with a source tier S1..S5; priority-gap traditions get no ability until S1/S2 anchored (:20-25, :158-159).
+  - Phases Approach / Initiative-seizure / Exchange / Separation; competences Measure, Balance, Reading, Seizing, Countering, Parrying, Striking, Tempo, Leverage (:33-52).
+  - `seize` lever is DEAD: its consumer (`seizure_score` + `initiative_seize`) cut 2026-06-05, so `vorschlag` and `sen_no_sen` do nothing when equipped (ED-PC-0042) (:55, :178-182). Live levers: `counter_success` (Indes), `counter_select` (mezzo tempo), `anti_overcommit` (true times) (:177).
+  - Balance is NOT a stat: `effective_balance = f(Agility) x poise(context) x ability_factor` (Jordan) (:75-87).
+  - Chinese Ming manuals are mnemonic shorthand, treat as thin; selection-effect universal warning (:24, :152-153).
+- **Conflicts / stale:** the document contradicts itself on `seize` (§2c correction vs table rows, fixed in labels only); contradicts REARCHITECTURE's access-model.
+- **Open items:** reopen/disengage lever not built; Balance re-sourcing from Agility queued.
+
+### .designs/systems/combat/combat_engine_v1/reference/combat_balancing_methodology.md
+- **What it is:** scene-combat WS-8 methodology doc for balancing combat variables via `workbench/balance.py`.
+- **Status:** "Methodology + instrument doc (mechanical-tier; not canon-gated)". Reading: live method; baseline numbers are a 2026-06-28 point-in-time (N=300/cell).
+- **Bears on:** PC, DICE.
+- **Content that matters:**
+  - Analytic vs Monte-Carlo must agree within +/-2pp; `net ~ Normal(mu*pool + soft_cap(net_sigma)*sigma_n, sigma_n)` banded by `core.degree` (:25-32).
+  - One-factor-at-a-time, position-swapped, mirror at 50, Wilson 95% CI, parity noise +/-2-3pp at N~3000, acceptance band 0.40-0.60 (`r8.BAND_LO/HI`) (:34-41).
+  - Two-pass: weapon-only then attribute-parity; joint not single-knob; contextual balance C1 "no option globally best" (:43-69).
+  - Ablation gate: a lever that does not move outcomes beyond noise is cut (proven-inert `seize` precedent) (:71-76).
+  - Baseline: weapons reach-dominated (spear 91, rapier 88, staff 84 ... arming 49, dagger 31, mace 28); marginal attribute +1: cog +26, strength +20, agi +20; tradition spread 6.8pp exceeds band; after WS-4 `none` fixed to ~49 but only 2 distinct context leaders, spanish broadly strong, chinese broadly weak (:81-105).
+- **Conflicts / stale:** baseline is pre-redesign; `workbench/balance.py` named as live (CLAUDE.md §9 task routing also cites it).
+- **Open items:** tradition channel-leverage equalisation (design-laden, "paradigm-strength = Jordan's call") (:105).
+
