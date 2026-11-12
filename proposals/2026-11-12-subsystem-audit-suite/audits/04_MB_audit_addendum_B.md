@@ -36,8 +36,8 @@ hold more than one troop kind, and the army's formation is one hard-coded rule. 
 those three, with the loadout, is in §B3 and its proposal. Layer 1's "no second resolver, no auto-resolve
 formula, no fast path" and Jordan's "fight or auto-resolve" are reconcilable without touching the rule, and
 are reconciled in §B5.4; one true Layer 1 non-conformance is found on the way (the field returns a winner
-where the ratified contract asks for a margin or a read state, F-MB-24), and it is the one new item for
-Jordan (§B11).
+where the ratified contract asks for a margin or a read state, F-MB-24), and it is the third of the three
+items listed for Jordan (§B11).
 
 ## B1. What this lane read
 
@@ -422,6 +422,7 @@ vocabulary is already exported by `tools/export_battle_orders.py` to
   | `standing_orders` | an ordered list of `(trigger, behaviour)` over the engine's closed sets (§B4.3) | `()` |
   | `officer` | the person who leads it | none |
   | `experience` | 0, 1 or 2 (§B5.2) | 0 |
+  | `arrears` | seasons its troops went unpaid (§B5.2) | 0 |
 
 - **What a designer edits.** A new troop type: one `troops` row. A new weapon for troops: one `arms` row
   (or nothing, if personal combat has it). Pikemen or archers with arming swords: one cell, `secondary:
@@ -483,7 +484,7 @@ has ranks for it to occupy.
 - **S.** One methodology for a body's cells on both paths (today two generators); one roster for a
   weapon's mass; the scale stated once.
 - **E, against that.** Twelve tables and four name tests become one file of four sections; the record
-  gains six optional fields. A player can predict that a deeper block holds longer and a wider one
+  gains eight optional fields. A player can predict that a deeper block holds longer and a wider one
   wraps, which no player can predict of one cell.
 
 ## B4. The manager-style battle, as one cell resolver for the commanded and the delegated mode
@@ -750,7 +751,8 @@ loadouts, and squads of named characters.
 
 1. *In season state a unit is a row, not a class.* The army is a `Record`; its unit rows name cohort
    `Person`s and headcounts (`armyrecord.py:13-19`). Everything proposed here adds optional columns to
-   that row (post, ranks, secondary, standing orders, officer, experience) and tables to a data file.
+   that row (post, ranks, files, secondary, standing orders, officer, experience, arrears) and tables to a
+   data file.
    No new kind of thing enters the `World`, nothing but a person acts, and the amendment's own list
    ("formations, subformations, troop-type assignments, tactic, strategy") covers each column but
    `experience`, which is a fact about the record's own row and is written only by `_eff_march`.
@@ -852,8 +854,11 @@ figure was used. One field only was probed for F-MB-21 (an even, open, combined-
 stated for that field. No balance claim is made from any of it: these are readings of mechanism, at one
 size.
 
-`git status --short` before finishing: this lane's changes are this file and five proposal files, all
-untracked and new; the other entries are sibling lanes' files in the suite directory.
+`git status --short` before finishing: this lane's changes are this file and five proposal files and
+nothing else. HEAD moved from `6eff039` to `f8a629b` while this was written (the orchestrator's interim
+commits of the suite's drafts, which also began tracking these six files part-way through);
+`git diff --stat 6eff039 HEAD -- modules engine systems tools tests references architecture research
+.designs .audit` is empty, so every reading above holds at the new HEAD.
 
 ## B11. Survivors for Jordan (additions to the first audit's §11)
 

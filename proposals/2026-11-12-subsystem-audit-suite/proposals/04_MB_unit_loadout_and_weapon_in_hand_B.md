@@ -144,7 +144,7 @@ troops:
   2. **No default order is invented by the builder.** The first lane had `orderofbattle._spec_for` add a
      switch order to any ranged body with a melee secondary. A default the commander did not write is a
      rule standing where a choice should be; instead the *doctrine* row
-     (`04_MB_cell_hierarchy_as_data.md`) writes standing orders for an unplayed commander, and a body with
+     (`04_MB_manager_battle_one_resolver.md` §2) writes standing orders for an unplayed commander, and a body with
      no such order keeps its primary in hand and pays for it.
   3. The switch is one-way within an engagement unless a later order switches back; the tick is paid
      each time.

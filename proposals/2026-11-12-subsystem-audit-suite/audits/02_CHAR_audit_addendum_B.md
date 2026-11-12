@@ -641,6 +641,12 @@ precedent to lean on. And the Tale-Spin effect (C-5) cuts both ways: showing eve
 choice is a debugging console, not a voice. The reading must select (the largest pull against, the
 one that changed since last time), which is a curation rule and is specified as one.
 
+**Measured (completion).** The construction has something to say and must be selective about it:
+the act ranked first has a held pursuit pulling against it in 99% of 498 deliberations, but the
+largest such pull reaches half the act's total in only 2.2% (`probe_voices.py`, B7). A dissent heard
+only above half the total is therefore about one deliberation in fifty. The proposal takes that as
+its default floor, as a display parameter.
+
 ## B6. Dispositions and resolutions
 
 ### B6.1 The 38 hole-register rows
@@ -744,8 +750,8 @@ tree was read at `ad07a9a`; the orchestrator committed during the lane (`46500d4
 | `probe_foils.py` (ten named persons, six referents, temperature 0) | 0 and 1, no season | identical at both seeds; F-CHAR-18's figures |
 | `probe_scar_stock.py` (seasons in which each (person, element) count rose) | 0, 4 | hashes `5ab73af2`, `bacd687f`, `52ff67bc`, `abbde715`; capped maximum 1, 2, 3, 4 for 83 of 83; median elements at 3 or more: 9 then 11 |
 | regular-expression count over the skill-bearing table rows of `character_histories_v30.md` | — | 106 rows; bonus dice 83, target number 7, obstacle 11, immunity 13, limited use 6, strain and resource 13, new action 9, sensitivity grant 2 |
-
 | `probe_scar_stock.py` | 1, 4 | hashes `aa58ef0b`, `8aae8412`, `26d2091b`, `25d23448`; capped maximum 1, 2, 3, 4; 82 of 82 at 3 or more from season three; median elements at 3 or more: 11 then 12 |
+| `probe_voices.py` (completion; score-top candidate per formed set over the common referents, pursuit term split by held pursuit) | 0 and 1, no season | identical at both seeds: 498 deliberations; 493 (99.0%) with a held pursuit pulling against the act taken, median 6; largest such part a median 0.16 of the total, at or above 0.5 in 2.2%, never above 1; stance term against the act in 0; split sums to the pursuit term within 1.1e-16. Feeds `02_CHAR_voices_and_the_room.md` |
 
 Not run: `pytest`; `aperture`; `corpus_run` (the first audit's reading stands). The scar probe's
 capped reading is first-order (B2.3, F-CHAR-17).
