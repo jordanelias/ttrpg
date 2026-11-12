@@ -47,6 +47,7 @@
   8. `IS-B2-CHAR-02` step 6 (`played_by`): `seam/wrappers/_entry.py` has no `played_by` on the tree read; by the item's own text step 6 lands with `01_CORE_one_scene_contract.md` Edit 2 in B34 and steps 1–5 here.
   9. The `ARC-47` arm of `12_ARCS_arcs_as_staged_goals.md`'s gate runs on `12_ARCS_case_on_the_realm.md` (B39): moved there (§5.8); `test_arc47_on_arm_off_arm_and_lie_arm` is written in B39, not here.
   10. CR-95's social half: v11's gate puts it "after SC-02's re-source", which v12 slots into B24. The design (`B10.52`) is written here against SC-02's written design (`proposals/2026-11-08-sc02-reception-proofs-own-commit-design.md`), not its build; other reading: the social half's design moves to B24.
+  11. `02_CHAR_choice_alignment.md`'s Depends line names `16_PESSIMIST_CORE_a_scene_runs_in_its_own_order.md` (B08), which §2.1 schedules after B10 (B08 has slack 12, S13). No edit of `B10.56` names a symbol B08 creates, so it is not taken as a gate of B10 (a back edge otherwise); the source's per-duel-round paragraph is read at B08 and B16. Other reading: `B10.56` moves to a batch after B08.
 
 ### Position table (this half)
 
@@ -236,7 +237,7 @@
 - FALSIFIER and CONTROL: "if, with cells authored, the distribution of chosen values over seeds 0–4 does not differ between two persons of opposite temperament, the term is swamped by the fan and the fan must be scored before it is formed" (read at BA1, where cells are authored; two seasons). Control: "No cell authored: `build_realm(0)` one-season hash EQUAL."
 - GATE: `PYTHONHASHSEED=0 python -m pytest engine/season/tests/test_choice_alignment.py -q` → pass; the realm hash at seed 0, one season → equal to `B10.55`'s; `PYTHONHASHSEED=0 python -m engine.season.harness.aperture 1 0` with `marshal` released from `withheld_verbs` in a scratch arm (not committed: "it ships withheld, … whether the realm forms it once released is read by that run, and is a declared mover of its own") → `marshal`'s formed count quoted in the commit body.
 - HASH MOVERS: none with no cell (control); "each authored cell a declared mover" (at BA1).
-- DEPENDS ON: EXISTS-IN-TREE `data/verbs.py::_load_alignment`, `::CHOICE_RANGES`, `::_load_choice_sourced`, `decision/choose.py::score_terms`, `decision/options.py::_fanned_choices`; V12 Batch B08 (`16_PESSIMIST_CORE_a_scene_runs_in_its_own_order`, the source's Depends line; B08 lands at S13, after B10, so the per-round reading of A-9 is read there, not here — the build here does not read it `[ASSUMPTION: basis — no edit of this item names a symbol B08 creates]`).
+- DEPENDS ON: EXISTS-IN-TREE `data/verbs.py::_load_alignment`, `::CHOICE_RANGES`, `::_load_choice_sourced`, `decision/choose.py::score_terms`, `decision/options.py::_fanned_choices`; V12 Batch B08 (`16_PESSIMIST_CORE_a_scene_runs_in_its_own_order`, the source's Depends line; B08 lands at S13, after B10 (`V12_STRUCTURE.md` §2.3), so the source's "Per round (A-9, A-72)" paragraph — a duel round's approach chosen as a step of the scene — is read there and at B16, not here; this build does not read it, and the edge is not a gate of B10 `[ASSUMPTION: basis — no edit of this item names a symbol B08 creates]`).
 - GLOSSARY: none (no new term; "alignment cell" is the table's own word).
 - COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B10's producer; `Item: B10.56`, `[skip ci]`.
