@@ -781,7 +781,7 @@ draws.
 `proposals/22_HAPPENINGS_B_the_throne_is_never_stranded.md`.
 
 ### D-20 · Does winning a battle take the land? · MB, FA
-**CLOSED BY THE FIVE-STEP LADDER, not by Jordan; reversible on his word** (ladder table): A: a won battle gives presence only; title passes by a separate act of seizure
+**ANSWERED** (A-57, Jordan, supersedes the ladder's taken-answer): land passes if and only if the aggressor marched in an effort to take land and won; not for a neutral-location battle, a defender's win, or a march with another purpose
 
 
 **The situation.** As built (and per #453), winning a field gives presence; title passes only when someone

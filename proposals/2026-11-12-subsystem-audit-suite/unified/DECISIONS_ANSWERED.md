@@ -66,6 +66,8 @@
 | A-55 (D-71) | Founding and abandoning towns | A: fixed map; an empty founded household may lapse | 'Never adding nodes' stands. |
 | A-56 (D-73) | The common people | B: a few heavy moves (petition, migrate, work, tend, comply or refuse, riot) | Carries A-41's caste tiers and vote blocks; unlocks D-68. |
 
+| A-57 (D-20) | Does a won battle take the land | Jordan (unprompted, replacing the ladder's A): *"a won battle takes land if and only if the aggressor marched in an effort to take land (as opposed to battle in a neutral location or a defending army wins)"* | Supersedes the ladder row for D-20. Land (holdings) passes **if and only if** all of: the battle was fought on a march the aggressor made **in an effort to take land** (the march carries that purpose as declared data), and the **aggressor won**. It does **not** pass when the battle is in a neutral location, when the defender wins, or on a draw. A defender's win takes nothing and a march with another purpose (relief, raid, pursuit, passage) takes nothing. So title transfer by battle exists, conditional on declared intent, rather than presence-only (the ladder's reading) or unconditional (option B). Owed: the march's purpose as a typed operand; the battle's end state (A-3) reads it; the transfer is the one owner of title's write (not a second seizure path). Unstated by this ruling and not assumed: whether seats, as well as holdings, pass; whether a draw on a land-taking march leaves the aggressor on the ground; how the aggressor's declared purpose is known to others. Interacts with A-20/D-21 (war lives in the seats that wage it): a land-taking march is a war act. Layer 1's faction contract ('holdings and seats') is now partly met for holdings; the seats clause stays a named conflict. |
+
 ### Closed by the five-step ladder, not by Jordan (CLAUDE.md §0; reversible on his word)
 
 Answered by prior ruling, precedent or architecture; recorded so the numbering is whole.
@@ -80,7 +82,7 @@ Answered by prior ruling, precedent or architecture; recorded so the numbering i
 | D-46 | B: his refusal teaches him, privately | Jordan's 'we never want dead ends'; step 5 |
 | D-48 | A: forgetting computed when read | precedent (a crossing is recorded, a level is not); step 4 |
 | D-74 | B: fix the witness code, not Layer 1 | CLAUDE.md §0.05 (a spec edited to match its code checks nothing); step 3 |
-| D-20 | A: a won battle gives presence only; title passes by a separate act of seizure | as built and per #453; one owner of title (seizure); step 4. Contradiction with Layer 1's faction contract ('holdings and seats') is named for the unification stage, not edited into Layer 1 |
+| D-20 | SUPERSEDED by A-57 (Jordan, 2026-11-12): land passes iff the aggressor marched to take land and won | his own ruling replaces the ladder's taken-answer |
 | D-25 | A: an arrest needs no officer beside the prisoner (the court's reach suffices) | as built; the physical-verbs lane and this register agree; step 4 |
 | D-27, D-28, D-31 | B / B / A (a drawn and seen crisis of faith; a drawn scruple; swearing to a seat a draw against the seat) | by Jordan's A-24 (D-26) |
 | D-68 | B: farm work an act, sequenced after the cohorts' heavy moves land | its stated condition (D-73 B) is met; step 3 |
