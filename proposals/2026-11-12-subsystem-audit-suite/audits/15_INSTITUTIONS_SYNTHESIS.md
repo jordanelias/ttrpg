@@ -25,7 +25,7 @@ primitive that none of them asked for: every institution in them is persons in s
 acting through documents, judged in hearings, on one roll.** What stops them functioning together today
 is not a disagreement of mechanism but (a) the same four upstream absences each lane found alone (an
 order that reaches nobody and is answered by nobody; an obstacle with no named terms; empty stores; six
-institutional verbs that execute with no draw), and (b) thirty collisions among the lanes themselves and with the
+institutional verbs that execute with no draw), and (b) thirty-one collisions among the lanes themselves and with the
 verb lanes, every one of them a collision of **name, home or shape**, none of method: three encodings of
 the founding order of the Secession War, three carriers for a certified deed, two things called a roll,
 two things called a charter, two things called `instruments`, two functions for standing, two encodings
@@ -161,14 +161,15 @@ and asks for band content.** Detail and the row-by-row outcome are in §3.5.
 | X-28 | `seize`: `[COL B]` and `14_VERBS_MATERIAL_D_paper.md` §6 | the MATERIAL lane's row, plus `remove` | COL B |
 | X-29 | the answer to a writ: `14_VERBS_SOCIAL1_B` (the row; `comply` opens an `oblige` carrying `OBEYED_WRIT`), `[PAP D]` (the believer's answer; the complier's decline), `[VEN A]` (`obligation` on the answer), `[COL A]` (a covenant's keeping) | SOCIAL1-B's rows. `[PAP D]` edit 7's decline reads the complier's own live `oblige` carrying `OBEYED_WRIT` (his Tenure, person-side), in place of a search for his newest answer claim. `obligation` counts only edges `gate.py::sworn_to` counts, so an obedience is not an oath for the odds either. A covenant-made instrument is in force by SOCIAL1-B's `world_q.covenant_in_force`, which `dues` and `breaches` ask | PAP D, VEN A, COL A |
 
-### 2.5 Two more, found while writing the crossings and the playable
+### 2.5 Three more, found while writing the crossings and the playable
 
 | # | collision | decision | step | reconciled in |
 |---|---|---|---|---|
 | X-31 | **One idea keyed three ways: a man is excused from what he owes.** `[VEN A]`: `obligation` counts 0 under "a live `ban` on the actor whose seat's faction is the counterparty's". `[PAP D]` §3: after his own `comply`, CR-88's duty decline does not bar his `release`. `[COL A]` §4.2: a known breach makes `release` cost no regard | one person-side predicate, `person_q.excused(p, holder)`: `p` shuns him (his own obedience to an `avoidance` naming him) or holds a breach against him (`kept < 0`). Two readers: `owed_to` and CR-88's decline (`15_INSTITUTIONS_SYNTHESIS_C` edit 1) | 5 | VEN A, PAP D, COL A |
 | X-32 | **Four scenario styles.** `[BYZ F]` set-up acts in Python in `governance_spine.py` and seven digest lines; `[PAP F]` command-line flags; `[VEN D]` rows added to the spine fixture and a reading script `counting_house.py`; `[COL E]` a case file and a report `harness/institution` | a scenario is a case file (ARCS-01's delta on a base), played by FA's one runner, read by one report (`15_INSTITUTIONS_SYNTHESIS_D` §1). `[COL E]`'s shape, the others re-stated in it | 4 (`12_ARCS_case_on_the_realm.md`; `06_FA_playable_scenario.md`) | BYZ F, PAP F, VEN D |
+| X-33 | **Whom a sanction's publication may address.** `[PAP D]` §3 addresses a writ of avoidance "to the persons its issue reaches". `14_VERBS_BINDING_D_orders.md` narrows `issue`'s addressees to those the seat *commands* (its sworn men, holders of seats it may revoke, the unseated in its purview; that audit's §13.4 decision 1, with Jordan). Under command a see cannot address a lord's seated vassals, who are the sanction's target | the basis is a property of the form: a form row carries `basis: command | purview`. `avoidance` is `purview` (a publication orders nobody: its clauses are forbearances); `interdict` and `tithe` are `command`. If Jordan takes territorial authority for every writ, the key is inert (`15_INSTITUTIONS_SYNTHESIS_C` edit 7) | 5 | PAP D |
 
-**Thirty-two rows; thirty collisions decided, two shown not to be collisions (X-16, X-17).** Outside
+**Thirty-three rows; thirty-one collisions decided, two shown not to be collisions (X-16, X-17).** Outside
 the four families and therefore listed, not edited: three names for distance (X-27); `rank_gap`
 (`14_VERBS_SOCIAL1_D`) against `standing` (`14_VERBS_BINDING_C`), one quantity; a `dispensation` content
 key `standing` (`14_VERBS_SOCIAL1_B` §3) against the obstacle term `standing`; three names for the graded
@@ -188,7 +189,7 @@ this kit; "theirs" means another lane's proposal or the plan carries it and the 
 One file, one loader (`data/instruments.py`, unknown keys refused), two sections. Full text:
 `proposals/15_INSTITUTIONS_SYNTHESIS_A_one_kit.md`.
 
-**`forms:` — the closed set of what a document can oblige.** Row keys (`[COL A]`'s, plus the three this
+**`forms:` — the closed set of what a document can oblige.** Row keys (`[COL A]`'s, plus the four this
 synthesis adds, marked †):
 
 | key | values | meaning |
@@ -206,6 +207,7 @@ synthesis adds, marked †):
 | `hardens` | bool | does age held add evidence weight (prescription) |
 | `bearer` † | bool, default false | the entitled party is whoever holds the Record; the bound party is whoever holds a live `commit` to its `terms` |
 | `recites` † | bool, default false | the instrument may carry a `recites` list (it certifies deeds) |
+| `basis` † | `command` (default) \| `purview` | whom an `issue` of this form may address: those the seat commands, or everyone on its ground (a publication; X-33) |
 
 Two kinds of clause, one schema: a clause whose `by:` is `grantor` or `grantee` is **kept or broken** by a
 party who made the bargain (read by `kept` and `breaches`); a clause whose `by:` is `addressee` is
@@ -367,6 +369,7 @@ content. For each, the row's owner and what the kit adds to it.
 | `transfer` | `14_VERBS_MATERIAL_B` | counts toward a `debt` or a `due` when made to the clause's place (`[VEN B]`); `_renewals` pays `upkeep_owed` (`[BYZ B]`) |
 | `exchange` | `14_VERBS_MATERIAL_B` | a held `staple` is `evidence`; a market's `standard` |
 | `seize` | `14_VERBS_MATERIAL_D`; `14_VERBS_PHYSICAL_A` | `remove`; a lapsed `debt` held by an officer is the warrant's stand-in for a distraint by `requisition` (`[VEN B]`) |
+| `surrender` | `14_VERBS_BINDING_E` | the form `capitulation` is the surrender on terms that lane records as "the covenant route … not built" (`audits/14_VERBS_BINDING.md` §8) |
 | `give` | `14_VERBS_SOCIAL1_B` | handing a bond on assigns it; handing it to the debtor cancels it |
 | `tell`, `research`, `survey`, `forge`, `destroy_record`, `conceal` | FI; `14_VERBS_MATERIAL_D`; `14_VERBS_SOCIAL2_B` | telling what a held certificate recites is commemoration; a forged or burned certificate is the next hearing's missing proof |
 

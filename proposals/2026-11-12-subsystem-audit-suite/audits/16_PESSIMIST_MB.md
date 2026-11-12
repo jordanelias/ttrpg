@@ -232,7 +232,8 @@ the draw set the outcome. The shipped field meets the letter (there is a draw) a
 both directions at once: under the draw the rule is a near-fixed function of headcount (the OFF column),
 and the draw laid over it is not the engine's graded roll over a pool and an obstacle but a single
 pre-battle multiplier with a 4.7x one-sigma spread on the ratio, which then decides the field alone.
-What a commander does between the draw and the result (§2.4, §2.6, §2.7) is small against either.
+What a commander does between the draw and the result (§2.4 to §2.6) is small against either. Finding
+F-PES-MB-02.
 
 **Link 1 inverted: "larger" stops meaning "stronger" when the army has units** (`p3_partition.py`, n 60
 a row; the same 900 heavy infantry in one line, as one, two, three or six bodies; `attacker graded the
@@ -315,7 +316,7 @@ undecided), and the season fights exactly one such turn (`massbattle._run_and_gr
 line needs no order to face about, so "flanked" is a state that lasts two ticks
 (`FACING_REACTION_TICKS`) unless the front is also pinned; (c) with friction ON the table's ordering is
 largely gone (B wins 25 of 60 when flanked, 33 when not): the draw is larger than the manoeuvre. Finding
-F-PES-MB-02.
+F-PES-MB-05.
 
 **The control that shows the octagon itself works** (`p4_pike.py`, same harness, friction OFF): when the
 attacker is ONE body, a 600-horse charge on a braced 600-man block breaks it in 30 of 60 from the front,
@@ -367,7 +368,7 @@ the end of the field.
 | E12 | no value changes nothing; no option always best | | under the shipped friction every row from pike to spearmen holds 30 to 36 of 60 and ShieldWall adds nothing (35 against 36): the role, the troop type and the direction of the charge are all inside one draw | DEPARTS |
 | E11 | neighbours differ | a charge is better than no charge | charging cavalry (Shock, Arrowhead) loses to the same cavalry standing in line, 16 to 41 (OFF) and 21 to 35 (ON): `H-361`'s "Shock moves the field the wrong way", now with its control | INVERTED · the Shock role |
 
-Finding F-PES-MB-05 (the pike), F-PES-MB-06 (Shock). The addendum's `04_MB_unit_loadout_and_weapon_in_hand_B.md`
+Finding F-PES-MB-07 (the pike), F-PES-MB-08 (Shock, with the role menu). The addendum's `04_MB_unit_loadout_and_weapon_in_hand_B.md`
 is the carrier that would make the weapon a datum the resolver reads; nothing here changes that
 proposal, and this table is its falsifier with depth added.
 
@@ -405,7 +406,7 @@ at the end of 18 ticks (n 40): the unit ledger stands at **99.5 and 100.0 of 100
 | 7 | heavier troops tire faster | per type or per kit | `MB_STAMINA_DRAIN` is one constant for every troop type; no loadout term (first audit F-MB-19) | ASSERTED: the half of Jordan's carry rule that is a fatigue cost has no carrier |
 | S | one quantity, one ladder | | two ledgers, two drain rules, two penalties (a die at zero; a sigma that grows), one of them reported and inert | S defect (two ladders for one quantity) |
 
-Finding F-PES-MB-04.
+Finding F-PES-MB-06.
 
 ### 2.7 P5 — "a routed army can be rallied or destroyed in pursuit": neither
 
@@ -522,5 +523,210 @@ Nine shapes; two occur.
   the attacker's "survivor share" is 1.01 (F-MB-02). 10,000 a side, the stated ceiling
   (`MAX_TROOPS_PER_UNIT`): resolves, a quarter of a second a field. 20,000 a side: past the ceiling,
   not refused, resolves. Six units against one: §2.3. 2,400 against 12,000: a third of fields undecided
-  at the cap. Integer armour against integer power: §4, F-PES-MB-07.
+  at the cap. Integer armour against integer power: §4, F-PES-MB-04.
+
+### 3.4 Stories that can happen, and stories that cannot
+
+**Can, and do:** a force walks into an undefended place; a force marches on a defended place and is
+recorded beaten.
+
+**Can in the code, and have not in any run:** a place taken by force; a named man killed in a field.
+
+**Cannot, as built** (each named by the link that is missing): the outnumbered army that wins for a
+reason anyone can state (the reason is an unreturned draw); the flank march that decides the day (a
+detachment is worth less than nothing); the reserve committed at the right moment (no decision after
+the start; first audit F-MB-15); the line that holds against horse because it is pikes (the pike is
+inert); the army beaten because it had marched all night (no fatigue enters a field); the rout stopped
+by a commander's presence (no rally); the pursuit that turns a defeat into a destruction, or the
+rearguard that prevents one (no pursuit, and no beaten army anywhere on the map to pursue); the wall
+that is costly but not impossible to storm (it is either immune or irrelevant, by troop type); the
+veteran company whose history matters (units are built new for every field); the small elite that
+beats the large rabble by being several good units well handled (several units lose).
+
+## 4. Findings, ranked worst first
+
+Severity words as `AUDIT_BRIEF.md`. "Touches" names the nine requirements (`dossiers/00_NINE.md`).
+Every falsifier below was run; its control is on the same line.
+
+### F-PES-MB-01 · blocks the stated intent, inverts a premise · an army divided into units loses to the same men in one block
+
+- **Claim.** In `run_battle`, on the season's constructors, a force's result depends on how many
+  bodies it is in, by the whole of the result.
+- **Evidence.** §2.3 table; §2.4 last paragraph. `core/exchange.py::subunit_combat_pool` (pool
+  proportional to the body's own troops), `::pair_pool_contribution` (a body's pair pools can sum to
+  more than its pool; "known accepted residual"), `orchestration.py::resolve_engagements`
+  (`compute_degree(a_net, max(1, b_net))`; `DAMAGE_BY_DEGREE` less `eff_dr`), `::_convergence_scale`.
+  Ledger: `ED-MB-0003` (Jordan, 2026-07-05: pool semantics "Intensive (per-troop,
+  partition-invariant)"), `ED-MB-0004` (Jordan, 2026-07-08: "genuine defect -- fix it"); the fix landed
+  for the case in which splitting adds dice, and the case measured here was not tried.
+- **Falsifier and control.** 3 x 300 against 1 x 900 heavy infantry, friction off, season density: the
+  split side graded the winner in 0 of 60 (it should be near the mirror's 30 of 60). Controls: the
+  mirror 1 x 900 against 1 x 900 (30 / 24 / 6); the side swap (1 x 900 against 3 x 300: 59 to 1);
+  3 x 300 against 3 x 300 (25 / 26 / 9); shipped friction through `resolve_field` (42 → 14 of 100).
+- **Touches.** R-04 (a strategic choice that is punished), R-09 (a certain result), and the standing
+  requirement's cell hierarchy.
+- **Emergent-narrative consequence.** Every story that needs more than one unit on a side (§3.4).
+- **Not closed by CR-12 as proposed.** With the pair pool made a function of troop quality only
+  (`04_MB_cr12_linear_law.md` step 3, run as a labelled proxy, `p9_proxy.py`): 600 + 300 against 900
+  wins 1 of 60 and loses 23% to 8%; 3 x 300 wins 12 to 29; **6 x 150 wins 51 to 3**. The collapse goes
+  and the dependence on the split stays, with its sign now depending on the split.
+- **Minimal fix at the owner.** `proposals/16_PESSIMIST_MB_partition_and_the_pair_rule.md`.
+
+### F-PES-MB-02 · blocks a requirement · the field is decided by one draw made before it, laid over a rule that is otherwise a cliff
+
+- **Claim.** Under the shipped friction the winner of an even field is the side with the higher
+  pre-battle draw in 96% of decided fields; without it the pair rule turns a 10% edge in numbers into
+  a 70% field and a 50% edge into a certainty.
+- **Evidence.** §2.3, links 3 and 4. First audit F-MB-08 named the magnitude (ruled, `ED-MB-0016`,
+  `ED-MB-0080`); the decomposition, the upset attribution (85 of 85) and the bare rule under it are
+  new.
+- **Falsifier and control.** A decided even field won by the side with the lower draw when the draws
+  differ by more than 2x: 0 of 199. Control: friction off, the same field still splits 134 / 136.
+- **Touches.** R-09 directly; R-04, R-08 (a commander's read of a field cannot be better than a coin).
+- **Disposition.** The magnitude is ruled and is not re-raised. What is new and is not ruled: the rule
+  under the draw. It is the same edit as F-PES-MB-01. §5, item 1, lists the one thing that is Jordan's.
+
+### F-PES-MB-03 · blocks a premise · a rout has no exit: no rally, no pursuit, no beaten army
+
+- **Claim, evidence, falsifier, control.** §2.7 (`p6_rout.py`). Rally: 0 of 60 by any route. Pursuit:
+  unreachable from `resolve_field`; zero for every unit the season constructors can build
+  (`Unit.speed` is `'Standard'` for a side of cavalry); by hand, with speed forced, a mean 73% of the
+  survivors in one roll (control: speed `Standard`, 0 in 115 of 115).
+- **Touches.** R-02 (consequence), R-03, R-09.
+- **Minimal fix.** `proposals/16_PESSIMIST_MB_rout_has_two_exits.md`.
+
+### F-PES-MB-04 · degrades narrative (standing rule) · integer armour against integer power makes whole match-ups certain
+
+- **Claim.** `max(0, DAMAGE_BY_DEGREE[degree](power) - dr)` has zeros a field can sit on for its whole
+  length. Walls add 3 to a default `dr` of 1 (`terrain.WALLS_DEFENDER_DR`; `massbattle._run_and_grade`):
+  no troop type of power 3 or less can hurt a walled defender in any band (`1 + 3 - 4 = 0`), and a
+  power-4 type only on Overwhelming. A levy (power 1) deals nothing on a Success anywhere.
+- **Evidence and falsifier.** `p10_edges.py`, through `resolve_field`, shipped configuration, n 60:
+  3,000 light infantry, 3,000 spearmen and 3,000 archers against 300 levy behind walls: `attacker_wins`
+  0 of 60 each, the defender loses nobody in 60 of 60 each, the attacker nobody in 59 of 60. **Control:**
+  3,000 heavy infantry against the same wall wins 60 of 60 and loses nobody in 60 of 60; the same
+  3,000 on open ground, 60 of 60. Levy 600 against levy 600, open: the defender loses nobody in 48 of
+  60.
+- **What the season then writes.** Nobody is hurt, nobody routs, the shares are equal, so `_grade`
+  says the attacker did not win and `field_degree` writes `Lost`: three thousand men walk up to a
+  wall, nothing happens, and they are recorded beaten.
+- **Touches.** R-09. Both certainties survive the friction draw, which multiplies a pool and cannot
+  move an integer floor.
+- **Why it is one owner's defect.** The other two terrain rows are dice
+  (`UPHILL_ATTACKER_OFF_D`, `UPHILL_DEFENDER_DEF_D`, `RIVER_CROSSING_OFF_D`, onto
+  `Unit.terrain_off_d` / `terrain_def_d`); walls alone are armour. `ED-MB-0045` already records that
+  `DAMAGE_BY_DEGREE` "cites a nonexistent §A.4 while the nearest canon specifies a different linear
+  law".
+- **Minimal fix.** In `proposals/16_PESSIMIST_MB_partition_and_the_pair_rule.md` (§3, the band table
+  and where armour and walls enter).
+
+### F-PES-MB-05 · degrades narrative · a flanked line breaks no sooner, and an encircled one never
+
+- §2.4. Falsifier: B routed in more fields when flanked by 300 extra men than when those men are
+  absent: 15 against 21 of 60 (fails); both flanks, 0 of 60. Control: a whole force on the flank, 41
+  against 30 from the front. Touches R-04. Closed by F-PES-MB-01's fix and by the field running to a
+  decision (first audit's `Drawn` band; addendum's command windows); no separate proposal.
+
+### F-PES-MB-06 · degrades narrative, S defect · two stamina ledgers; the reported one is inert, the live one is unreported and uncarried
+
+- §2.6 (`p5_tired.py`). `ED-MB-0045` counts "three stamina stores"; which is live, which is reported
+  and that nothing enters a field tired are measured here. Touches R-02 (a march has no consequence in
+  the field), and Jordan's carry rule (a fatigue cost needs a ledger that bites).
+- **Minimal fix.** `proposals/16_PESSIMIST_MB_one_stamina_ledger.md`.
+
+### F-PES-MB-07 · degrades narrative · the pike is a name; what holds against horse is the brace, half the time
+
+- §2.5. Extends addendum F-MB-22 to three ranks and to a charge. No new proposal: the carrier is
+  `04_MB_unit_loadout_and_weapon_in_hand_B.md`; this lane adds its falsifier (pike braced against
+  heavy infantry braced, identical in 60 of 60) and one constraint: a loadout's effect must be
+  visible under the shipped friction, where today every row from pike to spearmen holds 30 to 36 of 60.
+
+### F-PES-MB-08 · hygiene with a player's cost · nine role rows do nothing, two do harm, and one role's name is false
+
+- §3.3; §2.5 (Shock); §2.7 (Pursue). `hierarchy/units.py::ROLE_INSTRUCTION_PRIMITIVES` already records
+  seven keywords as unwired; `config.TROOP_TYPE_ROLES` still offers the roles made only of them.
+- **Minimal fix (decided, an edit, no proposal file needed).** In `config.TROOP_TYPE_ROLES` remove
+  `Pursue` and `Screen` from every menu and `Feint` from menus until a season path reaches
+  `resolve_feigned_retreat`; `VolleyLine` stays as a shape with its instruction tuple emptied. `Pursue`
+  returns when F-PES-MB-03's fix gives its instruction a primitive. `ROLE_SPEC` rows with no menu entry
+  go with them. The gate is `p10_edges.py`'s part (b) reading no row "identical in 60 of 60". `Flanker`
+  on a single body (13 against 42) and `Shock` against horse (16 against 41) are behaviours, not
+  no-ops: both are the addendum's F-MB-21 class and ride with its manager proposal.
+
+### F-PES-MB-09 · degrades narrative · the only people a field touches are ground to a thousandth, win or lose, and nothing answers
+
+- §3.2. Cause is first audit F-MB-02 and F-MB-11; their proposals
+  (`04_MB_headcount_grade_and_scale.md`, `04_MB_typed_outcome_and_one_path.md`) close it. New here: the
+  three-season trace, the winner being written as the loser is, and the proxy-scale arm (no attacker
+  wins there either, 0 of 4, not observed).
+
+## 5. Resolutions, and what is Jordan's
+
+Decided by the five-step ladder (`CLAUDE.md` §0); the step is named.
+
+| # | inconsistency or gap | resolution | step | carried by |
+|---|---|---|---|---|
+| 1 | the result depends on the split; the tree's fix covers one direction | the requirement stands (ratified: `ED-MB-0003`, `ED-MB-0004`); the pair rule changes so that it is met in both directions; a partition row joins CR-12's exit | 1 (a ruling already decided it) | `16_PESSIMIST_MB_partition_and_the_pair_rule.md` |
+| 2 | the melee pair grades each net against the other's roll and pays the lower net nothing | each side's roll is graded against an obstacle set by the opponent's quality; both sides deal casualties | 4 (the tree's rule for an obstacle against a force; the code's own PP-233 citation, "both sides deal and receive") and 3 (`ED-MB-0045`: the damage table's citation does not exist) | same |
+| 3 | walls are armour where uphill and river are dice | walls become a dice row | 4 (the two sibling rows) | same |
+| 4 | a body's pair pools sum to more than its pool | removed with the pool's dependence on headcount (resolution 2); nothing left to sum | 5 | same |
+| 5 | rally hook empty; pursuit unreachable; `Unit.speed` never derived | rally and pursuit are two draws at the end of a field that ends in a rout; who may pursue is read from the troop registry | 3 (the design's own phase order and §A.12, as the code cites them) and 5 | `16_PESSIMIST_MB_rout_has_two_exits.md` |
+| 6 | two stamina ledgers | the unit ledger is deleted; the column ledger is the one, is returned, and takes an entry value | 5 (the cut is free, §1.1) | `16_PESSIMIST_MB_one_stamina_ledger.md` |
+| 7 | roles that do nothing are on the menu | off the menu until wired | 5 | F-PES-MB-08, an edit |
+| 8 | CR-12's proposed step 3 does not meet resolution 1 | its exit gains the partition row; its step 3 is the place resolution 2 lands | 4 (its own exit already lists checks) | first proposal, §5 |
+| 9 | pike and heavy infantry identical at depth | unchanged: the addendum's loadout proposal | cite | `04_MB_unit_loadout_and_weapon_in_hand_B.md` |
+
+**Survivors for Jordan: one, and it is the first audit's §11 item 2 with new evidence, not a new
+item.** Friction at sigma 1.1 is ruled. On this lane's evidence the two defensible options, once the
+pair rule of resolution 2 is in, are:
+
+- **(a) Keep it as it is.** The field stays a contest whose result is, 96 times in 100, the draw. It
+  is the cheapest thing that produces the historical win-share band, and nothing else has to be tuned.
+  The game this gives: battles are weather; a commander's art is choosing when to fight, never how.
+- **(b) Keep the uncertainty, move its seat.** With the pair no longer winner-take-all the bare rule is
+  already graded (proxy, friction off: 2:1 wins 50 of 60 and loses 6; `p9_proxy.py`, PROXY 1), so the
+  fortune of the day can be an ordinary modifier among the others: a named sigma level each side draws,
+  entering through the same soft-capped leverage as morale and fatigue, and returned in the outcome so
+  that it can be told afterwards. The game this gives: a good plan usually beats a bad one, luck still
+  overturns it, and the record says which it was.
+
+Nothing in this file edits the ruled magnitude. The proposals are written so that both options remain
+open.
+
+## 6. Evidence log
+
+All under `/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379/scratchpad/runs/PES_MB/`;
+`PYTHONHASHSEED=0`; seeds `0..n-1` unless stated. No pytest was run; nothing tracked was written but
+this file and the three proposals.
+
+| script → output | what | n | reading |
+|---|---|---|---|
+| `h.py` | harness: season constructors, `run_battle`, per-field seed | | |
+| `t0.py` | timing; mirror at three densities | 20 | the same 5 / 14 / 1 tally at all three: first sign that the draw decides |
+| `p1_size.py` → `p1_size.txt` | size ratio 1 to 5, bases 300 / 600 / 2,400, both orientations, friction ON and OFF; friction attribution | 300 a row | §2.3 |
+| `p2_flank.py` → `p2_flank.txt` | the extra 300 in line, on the flank, in the rear; two wings; ON and OFF | 60 | §2.4 |
+| `p3_partition.py` → `p3_partition.txt` | 900 as 1, 2, 3, 6 bodies against 600 and 900; side swap; two densities; ON and OFF (the last ON block was cut off by the time limit; rows used are complete) | 60 | §2.3 |
+| `t2.py` | trace of one field each: 1 x 900, 3 x 300, 600 + 300 against 1 x 900, seed 3 | 1 | pools, degrees, casualties by source |
+| `p4_pike.py` → `p4_pike.txt` | six foot types and two roles against a cavalry charge; flank, rear; pike against foot; ON and OFF | 60 | §2.5 |
+| `p5_tired.py` → `p5_tired.txt` | entry stamina on each ledger and both; fresh end state; two densities (the last two rows at three ranks were cut off by the time limit) | 100 | §2.6 |
+| `p6_rout.py` → `p6_rout.txt` | loss at rout; un-rout attempts; `pursuit_damage` by speed; season constructors' `Unit.speed` | 200 / 60 / 115 | §2.7 |
+| `p7_field.py` → `p7_field.txt` | partition through `resolve_field` with orders of battle, shipped configuration; shipped rule against a first proxy | 100 | §2.4 end; superseded for the proxy by `p9` |
+| `p9_proxy.py` → `p9_proxy.txt` | three pair rules (shipped; CR-12 step 3 as proposed; quality pool with an obstacle from quality) on partition, size and flank rows, friction OFF | 60 | F-PES-MB-01; §5; the first proposal's evidence |
+| `p10_edges.py` → `p10_edges.txt` | damage-ladder zeros through `resolve_field` (levy; walls by troop type); sixteen role rows against no role | 60 | F-PES-MB-04; §3.3 |
+| `p11_extremes.py` → `p11_extremes.txt` | 0, 1, 79, 80, 99, 100, 101 v 99, 10,000, 20,000 a side through `resolve_field` | 20 (4 at the top) | §3.3 |
+| `p8_season.py` → `p8_s2_k1.txt`, `p8_s{0,1,2}_k30.txt` | `build_realm`, three seasons, shipped chooser, no player; shipped scale at seed 2; proxy scale 30 at seeds 0, 1, 2 | 4 runs | §3.2. Hashes `b95552898d` (seed 2, shipped), `efba9c3b43`, `d30e77a305`, `59a2213e38` |
+
+Read by this lane: `PESSIMIST_BRIEF.md`, `AUDIT_BRIEF.md`, `skills/premise-check/SKILL.md`,
+`skills/resolution-diagnostic/SKILL.md`; `audits/04_MB_audit.md` (§0, §1, F-MB-08, §5.3, §5.4, the
+finding index) and `04_MB_audit_addendum_B.md` (§B0 and the index); `16_PESSIMIST_GAME.md` (to §1.3);
+the heads of `04_MB_cr12_linear_law.md`, `04_MB_manager_battle_one_resolver.md`,
+`04_MB_cell_hierarchy_as_data.md`; in code, in full: `battle_loop.py`, `orderofbattle.py`,
+`troop_types/registry.py`, `massbattle.py` from line 150; in part, at the sites cited:
+`orchestration.py`, `core/exchange.py`, `resolution.py`, `config.py`, `hierarchy/units.py`,
+`terrain.py`; the ledger rows `ED-MB-0003`, `0004`, `0041`, `0045` at the passages quoted.
+`[SKIPPED]`: `skills/ners/SKILL.md` (the definitions and the cut test were taken from `CLAUDE.md`
+§0.06 and the brief); the full design set under `.designs/systems/mass_battle/` (the two earlier lanes
+read it; this lane cites them and tested the running code); `systems/mass_battle/sim/`;
+`effects_army.py` (the army verbs are withheld and were covered by the first audit); the remainder of
+`hierarchy/units.py` and `orchestration.py`.
 

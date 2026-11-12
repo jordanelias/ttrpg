@@ -58,6 +58,31 @@ G-65); any fight that kills with certainty (`F-PC-04`: plain `fight` kills 200 o
 default roll with no spread; any "binds"/"obeyed" effect with no resolution roll; the ruled-in `succession`
 rules wherever the tree resolves an heir by a fixed order.
 
+## Standing rule (Jordan, 2026-11-12): DO NOT GUESS; every claim is grounded in the repository
+
+*"All ungrounded information should have info available on repository."* *"Do not guess."* A claim in any
+suite document is either (a) **grounded**: it cites a repository path (and line where it is a code or data
+fact), or a repository research note that records the external source (publication or URL, date read, and
+the tier: page read / snippet / memory), or (b) **marked ungrounded** and not relied on. Memory-grade
+history, game-mechanics recollection and `[UNVERIFIED]` engine claims are not acceptable as support for a
+design decision. Where external knowledge is needed, the lane (or a grounding lane) sources it and stores
+the note in the repository first (under `research/`, in the directory that fits: `research/governance/`,
+`research/historical/`, `research/game_precedent_suite/`), then cites it. When you do not know, say "I do not
+know" and mark the gap; do not fill it from memory. Exact figures you could not source are not quoted.
+
+## Rulings given by Jordan in this session (2026-11-12; bind every later lane)
+
+1. **Auto-resolve is the same resolver, run automatically** (from standing orders or the chosen approach),
+   not a separate quicker calculation. A played and an auto-resolved battle or duel round with the same
+   choices agree. Layer 1 §27.2 and §C.4 stand unchanged. Applies to mass battle and to the grid duel round.
+2. **A unit is a row of data** on the army's record (troop type, formation, loadout, orders, officer,
+   experience), not a thing with its own identity (ED-IN-0306 as ruled 2026-10-28 stands). A regiment's
+   story is told through its officer and its men.
+3. **A mass battle returns an end state: won, lost or drawn** (with Unopposed and Invested as the field's
+   other bands), read off which side broke or conceded, as personal combat's scene is read; how hard it was
+   shows in casualties and the report. This narrows Layer 1's "the return is a margin" for the field, as
+   combat's exemption of 2026-09-03 did, **on Jordan's word**. Outcomes inside the battle remain draws.
+
 ## Authority granted (Jordan, 2026-11-12): author, design and resolve — in the form of proposals
 
 Fable lanes may **author and design improvements, and resolve every inconsistency, gap and unclear

@@ -281,8 +281,13 @@ and they say so more candidly than the design documents do.
   View raises" (`state/carriers.py:457-458`); the sheet "holds copies" and "ranks and selects; it
   never forms" (`decision/sheet.py:21-26, 36-41`). But `goal_referents`' `seat_holders` "IS A WORLD
   READ WITH NO CLAIM BEHIND IT … it hands `p` the identity of whoever sits on a throne he may never
-  have been told of" and "the referent FOLLOWS A SUCCESSION" (`queries/world_q.py:2847-2859`), a
-  precedent taken at ladder step 5 and marked for Jordan to correct.
+  have been told of" and "the referent FOLLOWS A SUCCESSION" (`queries/world_q.py:2847-2859`). The
+  note says it follows the precedent of ED-IN-0292 (2). **It reads that precedent backwards.** The
+  row that closed item (2) (`registers/editorial_ledger_in.jsonl:74`, 2026-10-26, opened) says the
+  answer TAKEN is "a vacancy reaches a person as a claim deposited through the channels, not as a
+  world stamp; AX-7 … prohibits the engine's resolution being handed into belief unmediated, which
+  the stamp … is", with offices-as-common-knowledge left open "as a channel's reach". So the world
+  read is against the taken answer, not under it.
 - *Reasons.* "NO CHANNEL SUPPLIES `why`, AND THAT IS `R8.4`'s DEFECT … Case 4 (*no discernible
   reason*) is therefore every deposit today" (`rosters.yaml:1303-1306`). `chronicle()` "shows no scar
   or crisis as an event" (`sheet.py:29-34`). `harness/chronicle.py` is "read OUTSIDE the simulation"
@@ -610,7 +615,7 @@ Ladder steps as `CLAUDE.md` §0. "P-" names the proposal file under
 |---|---|---|---|---|
 | 1 | hash parity is called the port's contract; it sees none of the player's offer | the pins gain a `surface` block: per pinned seed, for a declared set of seats, a digest per deliberation of the ranked candidate rows, the question ids and the budget, in GO-07's encoding | 5 | P- `surface_pins` |
 | 2 | GO-16 records draws the port could compute | the draw is a function of its key; GO-16 is not built; GO-08 loses the draw-log digest and gains draw vectors | 5, and Jordan for the Layer 1 row (§7) | P- `keyed_draw_no_recorder` |
-| 3 | the Question carries world reads into the offer (`seat_holders`), against the View's own rule | `seat_holders` reads the holders the person's own ledger names; the world builder deposits the holders of public seats as record-channel claims at build | 4 (the View's rule; the docstring's own named revert) | P- `the_offer_names_what_is_held` |
+| 3 | the Question carries world reads into the offer (`seat_holders`), against the View's own rule | `seat_holders` reads the holders the person's own ledger names; the world builder deposits the holders of public seats as record-channel claims at build, by a draw | 1 (ED-IN-0292 (2)'s closing row, `editorial_ledger_in.jsonl:74`: a claim through the channels, not a stamp; the docstring's own named revert) | P- `the_offer_names_what_is_held` |
 | 4 | believed odds answer `None` almost everywhere | three edits at the owner, in order: `believed_chance` passes the believer's own `believed_room` (his claims of `reception` and `proofs` where he holds them); a believed form for a module estimate, fed from the capability and body claims he holds about the other party; `odds_of` returns a typed record naming its ladder | 5 | listed for CHAR and DICE; no GO proposal |
 | 5 | a verb refused every time is offered as a row | SURF-B's `Offer.withheld` stays own-state only; the world-side case is the CORE proposal (a person discounts what he has been refused). GO adds nothing: a surface-side filter would be a second owner of admission | 4 | — |
 | 6 | the creation row hides what decides the seat's game | `CreationRow` gains `holdings` (the live Tenure pairs SURF-B's `Situation.holdings` already defines) and `cohort: bool`; `creation_sheet` takes the same reader | 4 (SURF-B) | P- `the_offer_names_what_is_held` §4 |

@@ -41,13 +41,14 @@ clocks that close things because nothing else does.
 
 The steelman is owed and partly holds: replay is exact (the same seed twice gives one hash); the story
 bar does read zero where nobody can answer anybody (a realm of 37 cohorts, and of one named person:
-cross share 0.0%, depth 1), which narrows the WR lane's "cannot fail"; L5 is kept everywhere (no clock
-decides anything); and the lattice rule does exactly what its docstring says. The burden stays on the
+cross share 0.0%, depth 1), which narrows the WR lane's "cannot fail"; no clock decides anything (WR's
+S3, cited); and the lattice rule does exactly what its docstring says. The burden stays on the
 mechanism: every one of those virtues is a property of a substrate, and none is a thing that happens.
-**The single largest obstacle in this scope is that the world emits and nobody is asked:** crossings,
-journeys, sittings and readings each end in an Event that raises no question carrying the place or the
-person it is about, so the clocks cannot be answered even where a verb exists to answer them. Four
-proposals carry what this lane can decide; nothing here needs Jordan.
+**The single largest obstacle in this scope is that the world emits and nobody is asked:** a band
+crossing raises no question that carries its Site (measured: F-PES-WR-11), and journeys, sittings and
+readings likewise end in Events that no executed act answers (§3.1), so the clocks cannot be answered
+even where a verb exists to answer them. Four proposals carry what this lane can decide; nothing here
+needs Jordan.
 
 *Cited, not redone:* escalation and endings (WR F-WR-01, F-WR-13), the instruments' design (F-WR-03,
 F-WR-14), threadwork as a module (F-WR-05, F-WR-17), the surplus and the identical settlements (SE
@@ -68,7 +69,7 @@ Distance = L1 over the executed-verb counts. Shipped arm: 2,630 acts attempted, 
 `52ff67bc…`, which is the WR lane's E-07 world (their 74,510 Events and 1,190 executed), so the instrument
 reproduces a sibling's reading before it is trusted.
 
-| arm | executed acts | L1 to shipped (executed verbs) | L1 (attempted) | state components differing from shipped (of 24) | story bar: cross share · executed share | deepest executed chain | strands · concluded |
+| arm | executed acts | L1 to shipped (executed verbs) | L1 (attempted) | state components differing from shipped (of 23) | story bar: cross share · executed share | deepest executed chain | strands · concluded |
 |---|---|---|---|---|---|---|---|
 | shipped | 1,190 | 0 | 0 | 0 | 23.4% · 14.4% | 5: `utter, conceal, create_record ×3` | 5 · 0 |
 | `drawseed` (noise) | 1,346 | **316** | 706 | 15 | 19.0% · 10.0% | 5: `commit, utter ×3, tell` | 7 · 2 |
@@ -164,8 +165,9 @@ terms; weather, ageing and illness and the lattice are built and ship at their c
 
 **C (P1).** `build_realm(0, cap=0)`: the realm's 322 Sites and 37 cohorts, no named person, a chooser
 that returns no act, shipped fixtures, 41 seasons (`p1_s0_k125_shipped.txt`, stopped at 41 for load).
-The SE lane ran the same shape to 120 seasons (`runs/SE/probe_noacts_s0_120.txt`, its §3 and line 305);
-this run agrees with it and is read here for the premise.
+The SE lane ran the same shape to 120 seasons (`runs/SE/probe_noacts_s0_120.txt`, its §3 and line 305,
+which counts seasons from one: its 21 and 31 are the 20 and 30 below); this run agrees with it and is
+read here for the premise.
 
 | season | harbour, seam (37 each) | band crossings | realm grain yield | grain in store | grain eaten | cohorts, body |
 |---|---|---|---|---|---|---|
