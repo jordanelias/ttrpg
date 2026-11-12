@@ -378,22 +378,27 @@ A node `L1-…` is Jordan applying one drafted amendment (both halves, PART B/C 
 batch graph, so it adds no cycle. Each batch lands at the dormant form the amendments table names; only the arm named
 here waits on the node.
 
+**APPLIED 2026-11-12 (Jordan, A-97; `ED-IN-0358`).** Every `L1` node below is applied to Layer 1 (lines in
+`U3_LAYER1_AMENDMENTS.md` and `work/L1_APPLIED.md`), so no arm in this table waits any longer: each batch may land its
+live arm, still behind its own revert or dial where its proposal names one. `L1-A96` (A-96) is added.
+
 | node | the arm that waits on it (batch) | dormant form that lands without it |
 |---|---|---|
-| `L1-A3` | the host grading the field by its end state; B23's land rules on `Won` (B17, B23) | `FieldOutcome` carries the end-state flags beside the margin; the ladder grades the margin `[ASSUMPTION]` |
-| `L1-A4` | any new person-supplied callable across a seam: B20's field decider, B30's `duel` (B20, B30) | the built `decide=host.decide` (`seam/wrappers/combat.py:395`), as built |
-| `L1-A72` | B30's wrapper handing `duel` into the field (B30) | the `contest_nesting_cap` fixture and `nested_entry` with no caller |
-| `L1-A9` | `interactions_per_scene` above 1; the rival-acts draw over scenes (B08) | B08 edits 1–4 at `interactions_per_scene = 1` |
-| `L1-A64` | `precedence_level` set (B28) | the person key at control (`precedence_level` `None`) |
-| `L1-A12` | any non-null seat `modifier:` (OBS step 5's bench die, B05; B19; B32–B33); `rank_step` above 0 (B21) | the column loaded null; `rank_step` 0 |
-| `L1-A13` | any authored `passes_through`, `hand_term`, `audit_at_exit` (B32, B33) | the keys accepted and absent |
-| `L1-A20` | `at_war` narrowed to seat holders that may muster (B21) | `may_wage` built; `at_war` as today |
-| `L1-A29` | B41's reading of step 13's done-when (B41) | B06 whole (hash EQUAL) |
-| `L1-A30` | B41's port draw (B41) | B06 whole, under R-C's reading that `n` is part of the key |
-| `L1-A92` | `sway_gain` above 0 (the calibration batch after B38) | the RESOLVE-side sway at `sway_gain` 0 (B10 host, B38) |
-| `L1-A62` | none (A-62: build nothing) | — |
+| `L1-A3` APPLIED | the host grading the field by its end state; B23's land rules on `Won` (B17, B23) | `FieldOutcome` carries the end-state flags beside the margin; the ladder grades the margin `[ASSUMPTION]` |
+| `L1-A4` APPLIED | any new person-supplied callable across a seam: B20's field decider, B30's `duel` (B20, B30) | the built `decide=host.decide` (`seam/wrappers/combat.py:395`), as built |
+| `L1-A72` APPLIED | B30's wrapper handing `duel` into the field (B30) | the `contest_nesting_cap` fixture and `nested_entry` with no caller |
+| `L1-A9` APPLIED | `interactions_per_scene` above 1; the rival-acts draw over scenes (B08) | B08 edits 1–4 at `interactions_per_scene = 1` |
+| `L1-A64` APPLIED | `precedence_level` set (B28) | the person key at control (`precedence_level` `None`) |
+| `L1-A12` APPLIED | any non-null seat `modifier:` (OBS step 5's bench die, B05; B19; B32–B33); `rank_step` above 0 (B21) | the column loaded null; `rank_step` 0 |
+| `L1-A13` APPLIED | any authored `passes_through`, `hand_term`, `audit_at_exit` (B32, B33) | the keys accepted and absent |
+| `L1-A20` APPLIED | `at_war` narrowed to seat holders that may muster (B21) | `may_wage` built; `at_war` as today |
+| `L1-A29` APPLIED | B41's reading of step 13's done-when (B41) | B06 whole (hash EQUAL) |
+| `L1-A30` APPLIED | B41's port draw (B41) | B06 whole, under R-C's reading that `n` is part of the key |
+| `L1-A92` APPLIED | `sway_gain` above 0 (the calibration batch after B38) | the RESOLVE-side sway at `sway_gain` 0 (B10 host, B38) |
+| `L1-A62` APPLIED | none (A-62: build nothing) | — |
+| `L1-A96` APPLIED (with `L1-A96b`, the `detention` gate basis) | the Failure branch forming the guard's `capture` (B37) | the Failure writing `fight.stopped` alone |
 
-`L1-A22`, `L1-A24`, `L1-A77`, `L1-A85` are ledger rows co-committed with B21, B10, B19 and B23/B38; `L1-A17`, `L1-A60`
+`L1-A22`, `L1-A24`, `L1-A77`, `L1-A85` are ledger rows (APPLIED 2026-11-12 as superseding rows under `ED-IN-0256`, `ED-IN-0261`, `ED-MB-0016`, `ED-IN-0352`), once to be co-committed with B21, B10, B19 and B23/B38; `L1-A17`, `L1-A60`
 and `L1-A84` are reference text. None of them is a gate.
 
 
