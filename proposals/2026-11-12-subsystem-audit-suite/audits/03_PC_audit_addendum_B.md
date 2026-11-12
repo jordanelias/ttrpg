@@ -141,7 +141,8 @@ an individual-kit side only for the sword. Resolution R-PC-38; §B7.
 skill axes are real, two are not, and the weapon still erases the build.** `build_levers.py` at this
 SHA: +1 on bind 61.4%, dodge 60.8%, balance 59.5%, parry 58.1%; technique 50.1% and grab 47.6%
 (inside the interval, n 1,000); all six, 79.6%. Skills are uncapped (`combatant.py:197`). Abilities
-at levels 1 to 8 stay within 4 points of 50 (n 600). Four archetypes with different attributes,
+alone, at levels 1 to 8, read 48.6 to 54.3 (n 600, interval about ±4); the one row that leaves the
+band adds a skill (level 4 with bind skill 2: 64.0). Four archetypes with different attributes,
 skills and kits land at 93.6, 94.9, 95.7 and 95.4 against a neutral fighter (the July report's D1,
 standing). Consequence: equipping skills that "correspond to levers" is half true in the engine
 (skills move outcomes; techniques do not) and wholly untrue in a season (no carrier). R-PC-43.
@@ -447,7 +448,7 @@ All runs `PYTHONHASHSEED=0`. No pytest was run. No tracked file was written by a
 | E-B2 | workbench imports, from the workbench directory | — | all eleven modules import |
 | E-B3 | `python -c` over `combatant`, `contact`, `geometry`, `traditions`, `ability_primitives` against the export | — | `combatant` 8 constants, `traditions` 2, `ability_primitives` 3: none exported; no `ABILITIES` or `TRADITIONS` key; 30 abilities |
 | E-B4 | `workbench/build_levers.py disposition 2000` | crc32 seeds | disposition 1 to 7 against 4: 40.8, 44.0, 48.2, 53.3, 54.6, 57.7 |
-| E-B5 | `build_levers.py mirror 2000`, `armour 1000`, `skills 1000`, `archetypes 1000`, `abilities 600` | — | mirrors 48.2 to 52.1; heavy against none 94.9; skills as F-PC-21; archetypes 93.6, 94.9, 95.7, 19.3 (dagger grappler), 95.4; abilities 48.8 to 54.3 |
+| E-B5 | `build_levers.py mirror 2000`, `armour 1000`, `skills 1000`, `archetypes 1000`, `abilities 600` | — | mirrors 48.2 to 52.1; heavy against none 94.9; skills as F-PC-21; archetypes 93.6, 94.9, 95.7, 19.3 (dagger grappler), 95.4; abilities alone 48.6 to 54.3, 64.0 with bind skill 2 |
 | E-B6 | `workbench/structure_scan.py`; `state_graph.py`; `capabilities.py`; `armour_participation.py --drift` | — | duplicates `adef_cap`, `fight`; zero-caller functions 0; inline literals 94; `sys.path.insert` 10 in the engine, 38 in the workbench; dead exported keys `[]`; state graph PASS with the dead-branch flag on `beat_exhaustion`; capabilities PASS; drift 0 cells |
 | E-B7 | `probe_round_state.py` | four matchups × seeds 0 to 199 | 1,659 later engagement starts; state differing from the fight's start: stamina, concentration, poise, damage, weapon (1,142 fighter-starts), plus per-beat fields re-derived inside the round |
 | E-B8 | `probe_form_reset.py` | five matchups × 3,000 fights, seeds from 0; control from 500,000 | as F-PC-16 |

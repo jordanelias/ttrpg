@@ -755,7 +755,8 @@ loadouts, and squads of named characters.
    data file.
    No new kind of thing enters the `World`, nothing but a person acts, and the amendment's own list
    ("formations, subformations, troop-type assignments, tactic, strategy") covers each column but
-   `experience`, which is a fact about the record's own row and is written only by `_eff_march`.
+   `experience` and `arrears`, which are facts about the record's own row, written by `_eff_march` and by
+   the campaign's payment path.
 2. *Inside the module, `Unit` and `Subunit` are values built from the frozen input and discarded at
    return.* The roster contract governs what the seam is handed ("what it actually forbids: handing the
    wrapper anything that is not the projection", `04:810`), not the resolver's internals.

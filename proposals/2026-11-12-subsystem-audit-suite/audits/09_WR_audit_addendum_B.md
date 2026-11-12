@@ -70,7 +70,152 @@ five proposals its text names), not to a second reading of the design set.
 
 ## 2. Corrections to the first audit, and new findings
 
-<!-- SECTION-2 -->
+Findings F-WR-13 to F-WR-20 are stated where their subject is (§3 to §5); this section indexes them, states
+the corrections to the first audit, and carries the three findings that have no section of their own.
+
+### 2.1 Index of findings in this addendum
+
+| id | severity | one clause | where |
+|---|---|---|---|
+| F-WR-13 | degrades narrative | the realm closes by clock, not by act: 23 lapsed against 3 determined, three seeds, six seasons | §3.2 |
+| F-WR-14 | degrades narrative | the chronicle prints who and when, never what, from no viewpoint, picked by depth | §3.3 |
+| F-WR-15 | degrades narrative | no reading of open situations, tension or idle persons exists | §3.4 |
+| F-WR-16 | degrades narrative | flattening every person to the realm mean lowers no story reading at two seeds | §3.5 |
+| F-WR-17 | degrades narrative | threadwork's designed session (push your luck inside one contact) has no code and no plan position | §4.2 |
+| F-WR-18 | hygiene, design conflict | the first lane's scenario shows the practitioner his own Coherence band, which the design forbids | §4.3 |
+| F-WR-19 | degrades narrative | the scheduled weather has no memory, no neighbours and a mean of 1.167 | §5.3 |
+| F-WR-20 | degrades narrative | the second contest (the world's survival) has no reading and no ending | §5.4 |
+| F-WR-21 | hygiene (measurement) | 248 of the 322 `condition.worn` Events a season are writes of zero | §2.3 |
+| F-WR-22 | hygiene | three hole rows rest on deaths that no longer occur at their seed | §2.3 |
+| F-WR-23 | hygiene, cross-listed | a believed wound is never cleared, so a mended body still draws `tend` each season | §2.3 |
+
+### 2.2 Corrections to the first audit (`09_WR_audit.md`)
+
+1. **The 27 season-5 closures (its §3, "the 27 are matured `oblige` terms", `[UNVERIFIED]` there).**
+   Corroborated by a natural control across seeds, not traced to causes: §3.2. The `[UNVERIFIED]` narrows to
+   one extra closure per seed.
+2. **The threadwork proposal (`09_WR_threadwork_module.md`).** Its edit 1 carries the operation and not the
+   session (F-WR-17); its edit 2 names a `step_call` row with no host declaration, and one entry where the
+   plan's own homes name three (R-21); its edit 4 shows the practitioner his band (F-WR-18). Edit 3 (the
+   tables as typed data) stands. `09_WR_B_threadwork_session_and_practitioner.md` supersedes edits 1, 2, 4.
+3. **Its §14 asked CHAR for a "banded scalar" row kind.** Not needed: R-24 (§7).
+4. **Its RPG-axiom list named "corruption or sanity" as lacking.** The design refuses both the word and the
+   visible meter; the axiom is strain and permanent set (§7, last paragraph).
+5. **Its §9.3 "hold the valley" scenario had no instrument and no end.** §5.4 supplies both (the situations
+   block of F-WR-15 and a `site_band` ending selector).
+6. **Its F-WR-04 treats the weather draw as a forcing that is merely off.** Switching it on as scheduled
+   does not give the incident the design names (F-WR-19).
+7. **Its §6.1 disposition of H-168 (`migrate` executes only hand-built) is stale** at HEAD (16 of 116 and
+   36 of 217 executed, its own E-07, E-08): §6 row.
+8. **A correction to this addendum's own §3.3, made at completion.** The row for T11.Q2 / D6 says the
+   per-person telling is unbuilt. The *render* is; the *focalized selection* is not. `queries/world_q.py`
+   `:4374-4441` holds `witnessed(w, pid)` (the Events a person holds evidence of having witnessed, in log
+   order, cumulative) and `projection(w, pid)` (`PersonProjection`: his own claims and those Events, as
+   copies, with `observed` and `ending` emptied so a witness reads nothing WITNESS did not deposit). That is
+   a viewpoint in the literature's sense, built and read-only (PC-06 S-2, L-1). Two consequences, both
+   carried in `09_WR_B_chronicle_that_tells.md`: the journal NM-W5 owes is a selection over `projection`
+   and never over `w.log` (R-32); and `witnessed` lists a trail Event a person *inferred* from a finding
+   (FI-03's two-cause deposit) beside the ones he saw, which its docstring records as an open contract
+   question. A focalized telling that presents an inference as a sight misreports the person's knowledge;
+   the telling must mark which (`causes` of the deposit carries the difference).
+9. **A trap for §4.3's resolution, found at completion.** A person's own quantity is read today through
+   `data/requires.py:809`, `OWN_STATE_STEMS = {"thread_sensitivity", "thread_sensitivity.gate"}`, answered
+   by `person_q.OwnStateReader` on the actor himself (`world_q.py:4686-4695`). That is the precedent the
+   CP-T07-02 builder will reach for when `Person.coherence` lands, and following it would hand the
+   practitioner his own Coherence, which R-25 refuses. R-25 therefore names the stem roster as the place
+   the refusal is written: `coherence` is not added to `OWN_STATE_STEMS`; it is world-only for its owner
+   and readable about *another* only through `thread_read`'s finding.
+
+### 2.3 New findings without a section of their own
+
+**F-WR-21 · hygiene (measurement) · most of the wear signal is writes of zero (H-135).**
+*Claim.* Three quarters of the Events every instrument would count as "the world wearing" change nothing.
+*Evidence.* `loop/matter.py:852-870` writes one `condition.worn` per Site per season whatever the wear;
+`rosters.yaml:1911-1912` ship `dwelling: 0` and `garrison: 0`, and `:3583-3584` give both `band_floors` of
+`{}`. At seeds 0 and 1, `build_realm` holds 322 Sites: 211 dwellings, 37 garrisons, 37 harbours, 37 seams;
+248 are wear-0 kinds (§9 EB-07). A dwelling's or garrison's condition therefore never moves in play, and
+`WorldReader.read`'s `floor` stem raises `Unspecified` for both (`world_q.py:4519-4534`), so `work` cannot be
+asked of them. *Falsifier.* A season in which a dwelling's `condition.worn` Event carries a non-zero change.
+None can occur under the shipped table. *Consequence.* The incident count of F-WR-15 and any wear reading
+over the log reads 322 where 74 Sites moved; first lane's F-WR-04 count ("322 `condition.worn` a season") is
+the same number read as motion. *Fix.* The reading (this lane's): count a wear Event only when its change is
+non-zero, and count crossings (`condition.band_crossed`) as the incident; carried as edit 2's rule in
+`09_WR_B_readings_of_closure_and_tension.md` (R-30). The gate that declines a no-op write is H-135's and
+CORE's; not proposed here. The wear-0 kinds are SE's and MB's (H-307, H-150).
+
+**F-WR-22 · hygiene · three measured rows cannot be re-measured at their seed.** *Claim.* H-209, H-225
+and H-230 are measured on deaths that seed 0 no longer produces. *Evidence.* H-230's cite: "SEED 0: the
+King `p_npc_020` dies in season 1"; H-209 counts 11 `person.died` claims at seed 0 over six seasons;
+H-225 counts death claims at seeds 0 to 2 over two seasons. At HEAD, seed 0 has no `person.died` in six
+seasons, seed 1 one (season 3), seed 2 two (seasons 2 and 4) (first audit E-08; §9 EB-02; the ablation's
+shipped arms, two seasons, none at either seed). *Falsifier.* A death at seed 0 within six seasons at HEAD.
+None. *Consequence.* None of the three mechanism claims is falsified (a dead victim's claim still forms no
+question; a killing still turns nobody; an heir is still not told), but their numbers cannot be reproduced
+and nothing at seed 0 exercises them. *Fix* (R-31): each row's cite gains one sentence saying the
+measurement is of an earlier tree and that the re-measurement is at seed 2 or under the illness arm (first
+audit E-11, eight deaths in three seasons at seed 0), after PC's duel path executes. Text in
+`09_WR_B_pointer_text_for_the_orchestrator.md`.
+
+**F-WR-23 · hygiene, cross-listed to PC and CHAR · a believed wound is never cleared.** *Claim.* Once a
+person holds a claim that another is wounded, nothing in the loop retracts it, so `tend` forms on a man who
+has healed. *Evidence.* `queries/world_q.py:3806-3812`, `wounded_with`'s own stated limit: "NOTHING CLEARS A
+BELIEVED WOUND. Only `_eff_kill` writes a `(pid, "body", v)` Observation; `_eff_tend` and MATTER write
+none", with the `NoOpReceipt` refusal each season and "[GAP: a believed ceiling is not carried]".
+*Falsifier.* Not run (the arm forms near zero today: 0, 3, 9 pairs at seeds 0 to 2, per the docstring's
+CP-T03-08 measurement). *Why WR.* §5.2's "a body that mends when fed" (first audit R-13) and CP-T10-04's
+recovery both make bodies *rise*; each rise this lane asks for leaves a stale belief behind it, and the
+season tax grows with them. The fix is the docstring's own (carry the ceiling with the body Observation,
+and have `_eff_tend` and the recovery write a body Observation), at PC's and CHAR's owner; this lane asks
+only that R-13 and CP-T10-04 not land without it.
+
+### 2.4 Research transfer added at completion (R7, R8)
+
+- **The hidden meter is a null, not a precedent.** Every game in `R7` that prices power or exposure with a
+  meter shows it to the player: Darkest Dungeon II's Stress 0 to 10, Sunless Sea's six Terror bands,
+  Eternal Darkness's Sanity, Don't Starve's three meters, Bloodlines' Humanity and Masquerade. R-25 (§4.3)
+  hides the practitioner's Coherence from its owner. The nearest shipped shape is DD2's banter: stress
+  bands are *voiced by companions* (at 7 to 9, 90% negative banter), so the band reaches the player through
+  others, which is §4.3's channel (2). The ruling stands on the design document and AX-7, not on precedent,
+  and is marked as untested; the reader test (§3.8 step 6) is where it fails or holds.
+- **A journey is one allocation decision** (Sunless Sea: three clocks share cargo space). It supports R-23:
+  a price the chooser cannot read before choosing makes travel a toll, not a decision.
+- **Pathologic 2's Bound infection** is a seeded daily draw, fixed at dawn, with player-side mitigation:
+  the shape of `ids.draw_factory` plus a capability use, and the precedent for `body_hazard` in §7.
+- **Wildermyth's repeat suppression** (an event that occurred becomes a quarter as likely next campaign)
+  and its role-casting with fall-back are the shipped form of "prefer the rare" that
+  `09_WR_B_chronicle_that_tells.md` uses for ties; Wildermyth's calamity cards are a director and do not
+  transfer (strife R1).
+- **Historical chains route incidents along roads** (`historical_concerns_action_catalogue_v1.md` chains 3
+  and 5: a relief corridor or a muster route as the contagion vector). This is the historical form of
+  F-WR-19's "neighbours"; the spell keyed on the parent rung is the minimum, and route-borne spread is the
+  lattice coupling's job once it has a source (first lane's world-motion edit 1). Not proposed further.
+- **Did not transfer:** Anno 1800's fixed prices and royal taxes (Valoria has no price); The Sims' needs
+  ticking per person (named persons do not eat, ED-IN-0255).
+
+### 2.5 Resolutions decided in this addendum
+
+| id | inconsistency, gap or unclear passage | decided resolution | ladder step | carried by |
+|---|---|---|---|---|
+| R-21 | the first lane's `threadwork.work` `step_call` row has no host declaration and omits two named entries | host tuple in `seam/wrappers/threadwork.py`, checked by `registrar.require_entries`; `threadwork.read` by an `inquiry_modules` row; `threadwork.coherence_band` lands with its consumer | 4 (MATTER's `STEP_CALLS`), 5 | `09_WR_B_threadwork_session_and_practitioner.md` e2 |
+| R-22 | cost keyed on the verb with Mending a special case, against the design's "direction decides cost" | one cost rule over a `direction` column of the parameter file | 3, 5 | same, e2 |
+| R-23 | CP-T10-01's "[GAP: unowned]" person-side price of a leg | a pure function of two settlement ids over loaded geography, handed to `decision/` beside `fx` | 4 (`budget(p, v, k, fx)`) | `09_WR_B_weather_with_memory_and_the_year.md` e3 |
+| R-24 | "banded scalar" capability kind | none; one `aptitude` row and one `at_least` use per edge | 5 | §7 (no file; CHAR's and CORE's proposals) |
+| R-25 | the design forbids a meter the owner reads; the first lane's scenario shows one; the own-state stem precedent would build one | `coherence` is world-only for its owner; not an `OWN_STATE_STEMS` member; `thread_read` does not form on the actor | 3, 4 (AX-7) | threadwork `_B` e3 |
+| R-26 | the Rupture is an ending by every design document and has no expression in `endings` | a `site_band` selector; the row ships absent | 3, 4 (#457 END-VICTORY) | weather `_B` e4 |
+| R-27 | the scheduled weather is memoryless, placeless and biased upward | a spell (coarser keyed draw on parent rung and coarser tick); arm members with mean one | 5 | weather `_B` e1, e2 |
+| R-28 | the chronicle's "about" could be taken from `Event.subject`, which is the actor for an act-emitted Event (H-107) | from `carriers.subject_of(act)`, the one read | 4 | `09_WR_B_chronicle_that_tells.md` |
+| R-29 | strand and storybar readings count `closed` without saying by what | a close is *by act* when the closing Event's causes include an executed act, *by clock* when its driver is MATTER's term or lapse | 5 | `09_WR_B_readings_of_closure_and_tension.md` e1 |
+| R-30 | wear Events counted as motion (F-WR-21) | a reading counts non-zero changes and crossings only | 5 | readings `_B` e2 |
+| R-31 | three hole rows measured on deaths that no longer occur (F-WR-22) | re-pointed at seed 2 or the illness arm, after the duel path | 1 (the tree changed) | pointer `_B` |
+| R-32 | the journal's source (correction 8) | a selection over `world_q.projection`, marking inferred Events | 4 (PC-06 S-2) | chronicle `_B` |
+| R-33 | navigation as a capability | none until places can be unknown | 2 (discovery parked) | §7 |
+| R-34 | the design's "engine sets scope" of a Partial working | the next-lower breadth, one row of the parameter file | 5 | threadwork `_B` e1 |
+| R-35 | Approach Training: a second gate the plan dropped | absent; if wanted, a `trait` row and one `at_least` use | 2 | §7 |
+| R-36 | the Rendering Crisis's four designed beats "resolved narratively" | the Event alone (CP-T07-08); the beats are the journal's to tell from the log, never a scripted sequence | 2, 5 | §4.5 |
+
+Sixteen resolutions; with §6's 49 rows dispositioned. None survives the ladder to §11's terms: the one
+design conflict (a visible band for the player's own person, §4.3) is answered at step 3 and named, not
+escalated.
 
 ## 3. The emergent-narrative engine, read against the full design set and the literature
 
@@ -781,9 +926,33 @@ stop).
 
 ## 8. Proposals written by this addendum
 
-<!-- SECTION-8 -->
+All under `proposals/2026-11-12-subsystem-audit-suite/proposals/`, `## Status: PROPOSED`. None edits the
+first lane's files; the `_B` infix marks a supersession or an addition.
+
+| file | carries | supersedes | runtime change |
+|---|---|---|---|
+| `09_WR_B_readings_of_closure_and_tension.md` | F-WR-13, F-WR-15, F-WR-16, F-WR-21; R-29, R-30; §3.8 steps 1 and 7 | nothing (adds to the first lane's `09_WR_story_instruments_that_can_fail.md`) | none: harness readings, hash EQUAL |
+| `09_WR_B_chronicle_that_tells.md` | F-WR-14; R-28, R-32; §3.8 step 2 | nothing | none: harness render, hash EQUAL |
+| `09_WR_B_weather_with_memory_and_the_year.md` | F-WR-19, F-WR-20; R-23, R-26, R-27; §3.8 step 4 | nothing (sits beside the first lane's `09_WR_world_motion.md`) | e1, e2 only under a declared arm; e3 none until `route_pricing` flips; e4 none (grammar, no row) |
+| `09_WR_B_threadwork_session_and_practitioner.md` | F-WR-17, F-WR-18; R-21, R-22, R-25, R-34; §4.5 | `09_WR_threadwork_module.md` edits 1, 2, 4 (edit 3 stands) | none by itself (as the first lane's) |
+| `09_WR_B_pointer_text_for_the_orchestrator.md` | the first audit's R-11, R-12, R-20 as text; H-05, H-27, H-159, H-168, H-172 and F-WR-22's three rows | nothing | none: text for files only the orchestrator edits |
 
 ## 9. Evidence log
 
-<!-- SECTION-9 -->
+`PYTHONHASHSEED=0` for every run. Outputs under
+`/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379/scratchpad/runs/WR_B/` (this lane) and
+`…/runs/WR/` (the first lane's, read and not re-run). No pytest; no `aperture` run.
+
+| id | command or probe | seed · seasons | outcome |
+|---|---|---|---|
+| EB-01 | `python wrb_ablate.py <seed> 2 shipped|flat` (`runs/WR_B/wrb_ablate.py`; outputs `ablate_s{0,1}_k2_{shipped,flat}.txt`) | 0, 1 · 2 | shipped seed 0 hash `bacd687f…`, 1,703 acts, 898 refused (the first audit's E-05 reproduced); flat seed 0 `1e202aff…`, 1,639 / 879; shipped seed 1 `8aae8412…`, 1,706 / 876; flat seed 1 `e48c989e…`, 1,655 / 829; readings as §3.5's table; cross edges 363, 286, 366, 333 |
+| EB-02 | read of the first lane's `runs/WR/probe_s{0,1,2}_k6.txt` by Event kind per season | 0, 1, 2 · 6 | §3.2's table; `person.died` absent at seed 0, `[0,0,1,0,0,0]` at seed 1, `[0,1,0,1,0,0]` at seed 2 |
+| EB-03 | `grep -rn -i tension --include=*.py engine/season` (tests excluded) | — | 17 lines: comments on AX-7 tensions, `extension` substrings and one `spy` signature; no computation of a set of open conflicts. Re-run at completion, same result |
+| EB-04 | read of `harness/chronicle.py:86-104`, `:128-162`, `:227-245` | — | as §3.3's table |
+| EB-05 | `grep -n -i -E "approach.?training|conceal|visib|fatigue|overweav|over.?actual|mending.?fatigue" systems/threadwork/sim/*.py` | — | two lines: `co_movement.py:50` (a card, "Scar Memory … visible to non-Sensitives") and `threadcut.py:41` (a perception label). Re-run at completion, same |
+| EB-06 | `grep -rl` over `engine/`, `modules/`, `references/` (`*.py`, `*.yaml`) for `year_length`, `season_terms`, `route_pricing`, `leg_unit`, `exposure_body` | — | 0 files each (completion re-run) |
+| EB-07 | `python -c` over `build_realm(seed)`: Sites by kind and `fixtures.wear(kind)` (`runs/WR_B/eb07_wear.txt`) | 0, 1 · build | 322 Sites: dwelling 211, garrison 37, harbour 37, seam 37; wear 0, 0, 10, 10; 248 wear-0 at both seeds |
+| EB-08 | read of `rosters.yaml:1905-1945` and `:3575-3590` | — | `wear_per_season` `dwelling: 0`, `garrison: 0`; `band_floors` `dwelling: {}`, `garrison: {}` |
+| EB-09 | `git diff --stat a3ee7e6 7289ef2 -- engine modules systems references architecture workplans registers research CURRENT.md` | — | empty; the ten commits between touch this suite's files only |
+| EB-10 | `grep -o "SEED 0: the King[^.]*" engine/season/hole_register.yaml` and the H-209, H-225 cites at their lines | — | H-230's premise sentence as quoted in F-WR-22 |
 
