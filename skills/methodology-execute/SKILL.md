@@ -541,7 +541,7 @@ twice per batch:
 **CI needs a PR.** This repo's CI triggers only on a push to `main` or a pull request into it, so
 neither run starts unless a PR is open for the branch: BATCH-CLOSE step 0 opens it if it does not
 exist, and no other push starts a run. Where the first run's place falls among the closing phases is
-`methodology-close`'s ("Where CI runs", an `[ASSUMPTION]` it flags and this skill inherits). **Neither
+`methodology-close`'s ("Where CI runs"). **Neither
 result is waited for** (CLAUDE.md §11): consumed if reported when its step is reached, otherwise
 unread and returned through the user.
 
