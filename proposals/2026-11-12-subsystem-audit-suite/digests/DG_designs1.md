@@ -1114,3 +1114,112 @@ Lane: archived design documents under `.designs/` (README, `_architecture`, arti
 - **Conflicts / stale:** none beyond body.
 - **Open items:** §5 open editorial items.
 
+### .designs/systems/npcs/reference/baralta_v30.md
+- **What it is:** NPC profile extract (2026-04-25) of Duchess Inge Baralta's theological position, moved from the miraculous-event doc.
+- **Status:** "PROVISIONAL — pending Jordan editorial review". Reading: character/world intent; no mechanism.
+- **Bears on:** ARCS, CHAR, FA.
+- **Content that matters:**
+  - Baralta accepts the Church's theological content but rejects its monopoly on mediation; direct communion; deeds are evidence of divine favour; historical anchors Isabella I / Henry VIII, Luther's priesthood of all believers, prosperity gospel, deed-monarchy theology (:23-31).
+  - Her theology weakens the "perceptual prophylaxis" over generational timescales, exceeding the game's ~5 year span, so "narrative/thematic positioning, not a mechanical variable during play" (:37-39).
+  - She is "the Restoration Movement's pure adversary": her authority has two sources (sovereign, Solmund); Einhir pre-Solmund tradition would undermine both (:43).
+  - Flagged editorial: NPC analysis §6 should be refined to "questions the Church's exclusive claim to mediate" (:33).
+- **Conflicts / stale:** the Baralta Crown Claim doc treats her as the claimant in a mechanic (FA); no mechanical hook for the theology in code.
+- **Open items:** the editorial update to the NPC analysis.
+
+### .designs/systems/npcs/reference/edeyja_npc.md
+- **What it is:** NPC sheet (2026-03-30) of Edeyja, the Southernmost Warden-Chief.
+- **Status:** "Canonical Non-Player Character (working name — pending final name pass)". Reading: character intent and arc-access ladder for ARCS.
+- **Bears on:** ARCS, WR, CHAR.
+- **Content that matters:**
+  - Stats: Thread Sensitivity 75-80 (highest living), Coherence 9, Cognition 5, Focus 5, Endurance 4, social 3-4 (:29-33). Conviction Warden, Resonant Style Evidence (show Thread state data; abstract appeals do not register) (:38-39).
+  - Warden lineage dying (single digits to low teens); wardens do not recruit; the Forgetting means the peninsula does not know of them; a conventional force entering the Southernmost meets Thread operations that make it irrelevant (:44-55).
+  - Conflict-as-disturbance: each inter-faction battle registers (MS -1/battle, -2 at Campaign/War); as Turmoil rises and MS decays her work gets harder; PCs working with her see how their faction's choices undermine what she preserves (:69).
+  - PC access ladder by expedition progress: no contact (border) -> wary (Season 2; TS <=20 dismissed, 21-39 limited guidance, 40+ useful) -> substantive (Season 3) -> collaboration (Season 4+ after Extraordinary Weaving) -> campaign-altering knowledge after multiple seasons; she never leaves the Southernmost (:75-85).
+  - Dramatic engine: she cannot fix the Calamity alone and cannot ask for help from people who do not know she exists (:93).
+- **Conflicts / stale:** "Game Master" notes; Niflhel mention already redirected; Varfell Path B (WR 4 = "Edeyja substantive contact") is struck.
+- **Open items:** pronoun/name confirmation editorial.
+
+### .designs/systems/npcs/reference/npcs_flow_skeleton_v1.md
+- **What it is:** traced flow skeleton (at commit `6545067`) of NPC code, which lives outside `systems/npcs/` (zero `.py` files): `systems/world/sim/npe.py`, `engine/autoload/npc_ai.py`.
+- **Status:** "REFERENCE — traced structure only". Reading: historical trace; the census of what NPC code existed and was dead.
+- **Bears on:** CHAR, WR, CORE.
+- **Content that matters:**
+  - NPE: `generate_npc` (ecology weights from Territory accord/prosperity via `canonical_accord`; Tier-1 archetype seed with Stance per active issue, worldview convictions, compromise category, volatility, loyalty; Tier-2 deviation roll with `DEVIATION_DIE_MAX` that flips one of four axes, with a fifth hidden-allegiance branch that computes but is never applied) (:53-75, :137).
+  - `simulate_npc_actions`: for same-territory NPC pairs sharing a conviction with exactly-adjacent Stances, roll d6 against average Volatility, drift both one step, emit `NPCAction('stance_drift')`; its return is discarded by accounting (:76-88, :100).
+  - `generate_npc` has no production call site; mc_v18 records a `stubwire` marker `generate_npc(world-gen|season-tick)`, with a golden pinning `npcs_generated == 0` (:132).
+  - `npc_ai.select_action`/`evaluate_priority_stack` are stub no-ops with no callers (:133); `npc_behavior` contract declares Procedures B/C/D/E flows against `sim_module: none`; `npc_memory` contract has no code at all (:134).
+  - `role` param never read; `PIETY_HIGH/LOW` never used (Territory has no piety field) (:46, :138).
+  - `CURRENT.md`'s NPC head is `npc_behavior_v30` while the contract's `doc:` was repointed to a doc under `systems/factions/` (:139).
+- **Conflicts / stale:** the CHAR lane should confirm whether `engine/season/` supplies NPC generation/decisions in place of these; the audit-brief intent on the AI chooser is not met by this code.
+- **Open items:** none; gap table is the content.
+
+### .designs/systems/npcs/reference/npc_behavior_system_v1.md
+- **What it is:** the original NPC ethical-stance and resonance behaviour system v1 (2026-04-13): Stance Triangle, named-NPC triangles, Beliefs and Scars, decision procedure, arc state machines, Resonant Style targeting, framework drift, and seven-level faction priority trees.
+- **Status:** "SUPERSEDED — canonical doc is designs/systems/npc_behavior_v30.md ... Retained as historical reference" (:11). Reading: superseded by v30 (and later by whatever engine/season carries) but it is the most complete extant statement of the NPC decision procedure and AI-chooser intent in this lane.
+- **Bears on:** CHAR (NPC/AI chooser), FA, SC, WR, ARCS.
+- **Content that matters:**
+  - Stance Triangle = Conviction (what they want), Ethical Framework (what the institution rewards), Resonant Style (the argument form that bypasses their defences); Convictions listed Faith, Order, Reason, Equity, Precedent, Autonomy, Continuity (7); Resonant Styles Evidence, Consequence, Authority, Solidarity (4) with primary and secondary (escalation) (:21-56).
+  - Named triangles for Almud, Himlensendt, Baralta (Precedent), Vaynard, Ehrenwall, Vossen, Hann, Torben (blank, set by first faction to Loyalty >= 5, else Autonomy by Year-End of Year 2), Edeyja, Maret Uln, Guilds, Niflhel, four Cardinals; Leadership Deviation Ob per leader (1 Baralta, 2-3 others) (:62-316).
+  - Beliefs: 2-3 per named NPC; revision needs decisive contest outcome AND winning argument on a Resonant Style AND engaging the specific Belief; old Belief becomes a Scar; Scars 0/1/2/3+ change Conviction (secondary activates; primary may shift; at 3+ crisis table d6: 1-2 original primary, 3-4 secondary, 5 Autonomy, 6 relational pull) (:324-358).
+  - Decision procedure for named NPCs: Institutional filter -> Conviction filter -> Decision Fork (Scar count 0 conviction over framework with Leadership Deviation Stability check; Stability <= 1 Autonomy regardless) -> Resonant Style interaction suspends the fork during a contest; non-named NPCs follow only the framework filter (:364-387).
+  - Generic transition triggers (:409-417); per-NPC arc maps (Almud Reformer/Fortress/Overthrown; Himlensendt Zealot/Crisis of Faith/Confrontation; Baralta Constitutional Triumph/Pragmatist/Excommunication; Vaynard Scholar/Awakened/Consumed; Edeyja Holdout/Collaboration/Crisis) with branch conditions on Truth, Stability, Coup Counter, TS (:425-535). Transformation Knot strain propagation by TS band (:393-405).
+  - Framework Drift table per faction (Church TC +1; Crown Truth +1/yr; Hafenmark Influence +1/season if all actions aligned; Varfell TK +0.5/season capped at 3; RM Presence spread; Guilds Favour; Niflhel overexposure; Löwenritter Military Consolidation) (:590-600).
+  - Seven-level priority-tree template (Survival, Conviction-critical, Framework-aligned opportunity, Institutional Tendency, Conviction-secondary, Reactive, Pass) and concrete trees for Church, Crown, Hafenmark, Varfell, Guilds, Löwenritter, Niflhel, Restoration, Wardens (:618-740).
+  - Evidence targeting against TS 0 NPCs restricted to ontic evidence; Thread-level evidence invalid until TS >= 30 (:548-550); targeting bonus +1D only, positional cap +5D (:578).
+- **Conflicts / stale:** Conviction taxonomy here is 7 values; later PP-684 taxonomy is 13 and the code roster is 9 (see characters flow skeleton); Autonomy renamed Liberty; "Continuity" roster-determined; GM adjudication throughout; Niflhel dissolved; Yrsa Vossen vs Maret Vossen rename (:9, :836); Torben Conviction blank vs conflicts with later ED-525.
+- **Open items:** ED-515..ED-530 (Conviction/Style taxonomy sufficiency, arc shapes, BG priority trees "P1-BLOCKER for BG sim", drift confirmation); SIM-NPC-01..05 simulation debt (:772-803).
+
+### .designs/systems/npcs/reference/npc_behavior_system_v1_index.md
+- **What it is:** generated heading/size index (2026-04-19) of `npc_behavior_system_v1.md` (~16.4k tokens); navigation index renamed from `_skeleton.md` (PP-673).
+- **Status:** indexed doc "SUPERSEDED — canonical doc is designs/systems/npc_behavior_v30.md ... retained as historical reference" (:25). Reading: historical; the body is in `npc_behavior_system_v1.md` (read above).
+- **Bears on:** CHAR.
+- **Content that matters:**
+  - Heaviest sections: §2 Named NPC Stance Triangles (5.1k tokens), §5 Arc Emergence (3.3k), §8 BG priority trees (2.6k) (:108, :129, :148).
+  - Line numbers differ from the body (index line 4 vs body 10): the index tracks an earlier layout.
+- **Conflicts / stale:** none beyond the body.
+- **Open items:** none.
+
+### .designs/systems/npcs/reference/npc_behavior_v30_index.md
+- **What it is:** generated heading/size index (2026-04-20) of `npc_behavior_v30.md` (~22.5k tokens): the canonical successor to v1; body is not in this lane.
+- **Status:** indexed doc "CANONICAL — approved 2026-04-17 (editorial batch acceptance)" (:24). Reading: the v30 map of what grew beyond v1; this is the doc `CURRENT.md` heads for NPC behaviour, though the contract `doc:` was repointed to `systems/factions/`.
+- **Bears on:** CHAR (NPC/AI chooser), FA, WR.
+- **Content that matters:**
+  - Additions over v1: §2.13a Extra-Territorial Heresy Jurisdiction (ED-670); §2.14 Registrar Lennart Haelgrund (Ministry, 1,578 tokens); §2.15-2.17 Crown Inner Circle, Hafenmark Inner Council, Varfell Jarl Council; §3.4 Thread Operation -> Conviction Scar triggers (ED-663/664); §4.3 NPC Practitioner Coherence decision thresholds (ED-665) (:47-58, :66).
+  - §8.11 NPC Personal Outreach Generation (outreach conditions, demand conditions, outreach by faction, scene structure, volume control, subnational faction outreach) feeding the player_agency scene slate step 5 (1,437 tokens) (:92-98).
+  - §9.5 NPC Recruitment Procedure (PP-642): Identify, Approach, Offer, Resolution by Degree, Hooks, Defection (939 tokens) (:103-109).
+  - Second §7 BG Faction Priority Trees (Crown, Church, Hafenmark, Varfell, Löwenritter, Ministry, Schoenland, Altonian Vanguard at IP >= 75, override conditions, NPC stat values TS/Truth) (:113-123); §11 Named NPC Roster Tracking Capacity (PP-661): tiers, capacity, demotion triggers, background tier, inner-circle NPCs, companion app display (:125-131).
+  - Duplicate section numbers (two §7, two §11, two §5.2) show unmerged patches (:64-65, :90, :102).
+- **Conflicts / stale:** duplicated headings; the PP-661 roster capacity numbers are only in the body.
+- **Open items:** §10 editorial items and §11 simulation debt still open.
+
+### .designs/systems/npcs/reference/npc_character_analyses_v30.md
+- **What it is:** consolidated NPC character analyses (2026-04-11), skeleton: Part One 13 roster NPCs, Part Two ruler diamond and named NPCs. Most prose is in the `_infill`; this part carries structure, arcs and mechanical hooks.
+- **Status:** "Status: DESIGN"; "All analyses flagged for user review" (:14, :16). Reading: character intent and arc inventory; no mechanism; several arcs conflict with later struck material.
+- **Bears on:** ARCS, CHAR, WR, FA.
+- **Content that matters:**
+  - Roster of arc-bearing NPCs: Edeyja (fixed point), Maret Uln (Sorge parallel), Yrsa Vossen (Luxemburg trap, TS 25 below Forgetting threshold 29), Sæmund Haelgrund (Inquisitor, hidden TS 12), Sigrid Torsvald (TS 35 from archive exposure; ~30% abort rate), Halvar Brandt (external-threat fixated), Annika Feldhaus (Guilds, Thread-touched supply chain), Peder Almstedt (Parliament registrar, co-opt Influence vs Ob 3), Gerik Strand (flattery vulnerability -1 Ob), Dalla Virke, Doux Alexios Laskaris (sandbags IP -1/season while Elske Loyalty >= 3, flips IP +3 if Loyalty <= 2), Rikard Solberg, Prudence Cardinal (:22-146).
+  - Ruler diamond on the Einhir/caste axis (Almud pragmatism, Lenneth revival, Baralta adversary, Vaynard expulsion) (:150-157). Lenneth TS pathway slow scholarly loosening, SA-gated, ceiling 10-20 (D-6, ED-727) (:182); Lenneth arcs A (Reformist Queen), B (Widow Regent if Almud assassinated), C (target) tied to the Royal Assassination Fuse sub-roll (:184-197).
+  - Torben fuse target (sub-roll 3-4) leads to Almud Arc E and Elske retrieval via T4 (:210-220); Baralta wants the Crown actively, PP-487 PI-gated succession (PI < 4 fractures Hafenmark) (:239-249); Baralta theological profile ED-732 (:247).
+  - Almud: Crown Mandate 5 answers "competent custodian" (:164); Discovery Event arc is rupture not confirmation (:174).
+- **Conflicts / stale:** the assassination backstory removal (infill :84) vs earlier text; Niflhel/Coup Counter assumptions; empty paragraphs (Maret, Vossen, etc. have gaps between headings because prose moved to infill).
+- **Open items:** Torsvald TS threshold "GM discretion (TS 40? 45?)" (:69); NPC name pending for the Prudence Cardinal.
+
+### .designs/systems/npcs/reference/npc_character_analyses_v30_infill.md
+- **What it is:** prose infill of the NPC character analyses with historical parallels per NPC.
+- **Status:** "Status: DESIGN" (:13). Reading: reference character design; richest narrative-hook source for ARCS.
+- **Bears on:** ARCS, CHAR, WR.
+- **Content that matters:**
+  - Per-NPC flaw/engine and historical anchor: Edeyja maintenance engineer, Maret (Sorge), Vossen (Luxemburg), Haelgrund (Bellarmine; arc branches A undiscovered TS, B defects, C suppresses with Coherence degradation), Torsvald (Granville; Lenneth archive hinge), Brandt (Aetius), Feldhaus (Jacques Coeur; shared supply chain with Virke), Almstedt (Byzantine logothetes), Strand (William Marshal), Virke (Medici branch manager), Laskaris (Palaiologos; oikonomia), Solberg (Xenophon; homesickness steers Schoenland toward stability), Prudence Cardinal (Suger; OPTIMISER flaw: Church Wealth +1/season while Mandate -0.5 per squeezed territory at Year-End and PT erosion +1; Parish Revolt at >= 3 squeezed territories with Mandate <= 3) (:17-75).
+  - Ruler diamond narrative: Almud as Manuel I Komnenos, deed-monarchy logic (competence = legitimacy, deposition is the system working), Almud's father assassination backstory STRUCK in favour of the forward fuse (:79-85); Lenneth as Catherine the Great, builds up not tears down, stages: cultural recognition, institutional reform, Thread work (:88-94); Vaynard as Reinhard von Lohengramm, Forgetting is his political prison (:99-107); Baralta as Isabella I, "Henry VIII not Luther" (jurisdiction) (:109-112); Himlensendt as structural keystone whose compassion and suppression are the same act (:114-119); Ehrenwall's Coup Counter as the deed-logic's enforcement mechanism, loyalty to the institution not the bloodline (:126-127).
+- **Conflicts / stale:** Baralta "does not question the Church's theology" (:109) refined by the ED-732 supplement in the skeleton; "TC"/"CV" terminology; Coup Counter mechanics.
+- **Open items:** Cardinals Klapp, Olafsson, Jarnstal mostly "unchanged" with no body in this part.
+
+### .designs/systems/npcs/reference/npc_character_analyses_v30_index.md
+- **What it is:** generated heading/size index (2026-04-20) of the NPC character analyses (~4.8k tokens).
+- **Status:** none stated ("Status: DESIGN" in the indexed doc). Reading: historical map.
+- **Bears on:** ARCS, CHAR.
+- **Content that matters:**
+  - 13 roster NPCs + 11 ruler/named NPCs; heaviest entries Lenneth (587 tokens), Almud (420), Baralta (412) (:77-89). Dalla Virke 12 tokens, Prudence Cardinal 18 tokens, Vaynard 14, Klapp 14 in the skeleton show that most prose is in the infill.
+- **Conflicts / stale:** none.
+- **Open items:** none.
+

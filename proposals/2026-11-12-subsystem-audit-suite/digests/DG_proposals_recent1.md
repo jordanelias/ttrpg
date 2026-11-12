@@ -2,8 +2,8 @@
 
 ## Status: REFERENCE (a coverage digest; resolves nothing at runtime)
 
-Lane: proposals dated 2026-09-20 or later, and undated ones (68 assigned entries; see per-entry reading depth notes).
-Reading-depth note: the assigned set is about 3.3 MB. Entries marked `[READ IN FULL]` were read to their end; entries marked `[READ PARTLY: ...]` or `[SKIPPED: ...]` say exactly what was and was not opened. Nothing is summarised from memory.
+Lane: proposals dated 2026-09-20 or later, and undated ones (67 assigned entries; see per-entry reading depth notes).
+Reading-depth note: the assigned set is about 3.3 MB (roughly 800k tokens), more than one session can read. Entries marked `[READ IN FULL]` were read to their end (pursuit worksheet, squad concept v5, squad synthesis, the eleven files of the 2026-09-30 suite incl. README, forcing-churn, grid-mode-suspension, P-25, settlements-computation-modules, character-sheet-spaces, attribute-derivation_aptitudes). Every other entry is marked `[READ PARTLY: ...]` and says exactly which header, sections or heading map were opened; the unread bodies are NOT summarised and should be treated as [SKIPPED for size]: notably the bulk of the 4663-line verb-coverage doc, all lexicon suite tables in verbs-09..18, the gap-register rows in verbs-19..23, the remediation item bodies, and the evidence tables of the attribute-derivation family. No claim below is from memory; each cites the line opened.
 
 ### proposals/2026-09-20-pursuit-basis-worksheet.yaml
 - **What it is:** A Jordan authoring worksheet (YAML), 2026-09-20, replacing the 2026-09-18 conviction-basis worksheet. [READ IN FULL]
@@ -761,4 +761,87 @@ Reading-depth note: the assigned set is about 3.3 MB. Entries marked `[READ IN F
   - Sections 1 EC, 2 WT, 3 verbs sources say needed, 4 precedent documents, 5 what could not be read (:29-241).
 - **Conflicts / stale:** as above.
 - **Open items:** n/a.
+
+### proposals/2026-10-21-v9-remediation/2026-10-21-v9-remediation-01-verdict-and-coverage.md
+- **What it is:** IN-lane v9 remediation plan, part 1: verdict against THE NINE requirements, change logs (rev. 2-4), recorded rulings, coverage map of every input finding to an item or a declined row. Produced by agonist-antagonist relay, 2026-10-21. [READ PARTLY: header, section 0 verdict, 0.2 rulings; sections 0.0-0.1b, 0.4, 1.x coverage tables not read]
+- **Status:** "PROPOSED. Merging this file ratifies nothing: every item, ask and edit below is HELD BACK" (:3); grade `paper`; now "Home of v10 positions" (ED-IN-0299) for positions whose plan row names it (:4). Reading: live as spec home for v10 positions; deleted with a FORK row when the last lands.
+- **Bears on:** CORE (requirements), all subsystems via THE NINE.
+- **Content that matters:**
+  - Verdict: even fully executed the plan cannot make THE NINE `met`; R-01/R-02/R-03 stay met; R-04/R-05/R-07 move up without guarantee; R-06/R-08/R-09 made honest not met; 40 items in 7 batches RB-0, RB-1, RB-2a, RB-2b, RB-3, RB-4, RB-5 (hunger) (:25-37).
+  - Rulings (Jordan, 2026-10-21): D-1 an agent may land unmarked Layer 0/1 text in the PR; D-2 RB-3 may build IN-46/IN-47 while their designs stay held; L1-6 option B: `subsistence` leaves `Sensation` and the call chain (REM-44 deletes `urgency`, `benefits_me`) (:148-154).
+  - Hunger: derived settlement Query `world_q.hunger(w, S)` reaching people via MATTER observations and the H-125 body clock at 10; at today's magnitudes realm holds 21.7 -> 41.7 seasons of food per settlement so hunger binds only before first yield (:39-48).
+  - Critical path: RB-0 -> RB-1 -> {B-P || RB-5} -> RB-2a -> RB-2b -> B-Q -> B-R -> B-S -> B-Y -> RB-3b (:51-52).
+  - Scratch files (`SP/...`) are not in the repo; figures carry reproducing commands (:11-13).
+- **Conflicts / stale:** superseded in parts by workplan v10 (ED-IN-0299); figures at HEAD `b70b5af`; "grid-mode-suspension" and "character-sheet-spaces" designs it keeps held were ratified 2026-11-05.
+- **Open items:** the Jordan asks in part 4.
+
+### proposals/2026-10-21-v9-remediation/2026-10-21-v9-remediation-02-items-rb0-to-rb3.md
+- **What it is:** Part 2: the items of batches RB-0 (plan text), RB-1 (instruments), RB-2a/2b (formation and scarcity verb cluster), RB-3 (scale builds: R-04 conjunct 3, mass-battle form), each with closes, rows moved, class, Layer, change, falsifier, verify, hash, gates, tier, revert. [READ PARTLY: header, field key, heading map; item bodies not read]
+- **Status:** "PROPOSED... HELD BACK" (:3); `paper`. Reading: home of v10 positions' full specs.
+- **Bears on:** CORE, FA, MB, SC, SE.
+- **Content that matters:**
+  - Structure: 2.1 RB-0 plan-only; 2.2 RB-1 harness readings hash-equal by construction; 2.3 RB-2a/2b verb cluster; 2.4 RB-3 scale builds (:51-546).
+  - Item field key: `closes`, `R`, `class` (a/b/c/d), `Layer`, `change`, `falsifier` with control, `verify`, `hash`, `gates`, `tier`, `revert` (:10-12).
+- **Conflicts / stale:** REM-numbered items landed or were adopted into v10 by now (REM-30 = character sheet, REM-31 = grid mode per other docs).
+- **Open items:** item-by-item adoption.
+
+### proposals/2026-10-21-v9-remediation/2026-10-21-v9-remediation-03-items-rb4-rb5-and-index.md
+- **What it is:** Part 3: RB-4 (Layer 1 conformance and NERS fixes), RB-5 (hunger, REM-50..52), owner map for 47 kinds declared and never emitted, Layer-1 self-check per batch, ordering, index of 40 items. [READ PARTLY: RB-5 recommendation section 2.5b.4 and heading map]
+- **Status:** "PROPOSED... HELD BACK" (:3). Reading: live spec home.
+- **Bears on:** SE (hunger), CORE, CHAR, FA.
+- **Content that matters:**
+  - RB-5 Route A: REM-50 the Query, REM-51 its reach, REM-52 the body clock live at H-125's arm 10; visible effects: bodies fall and cohorts die where food is short, the body band cuts scene budget (`budget.py:59`), hunger claims reach seat holders (IN-22) so `transfer`/`requisition` act on known-hungry towns, deaths lower demand (:266-293).
+  - It does NOT make a vectorless cohort prefer `migrate`/`transfer` (the draw decides, ED-IN-0296 (2)); `migrate` gains no hunger conjunct (forbidding is the engine deciding options, AX-1); `work` does not make food (:285-293).
+  - RB-4a (REM-42, 45, 46, 47) pre-B-S so B-S plugs the corrected threadwork formula; RB-4b (REM-40 -> 41 -> 44) after B-Y (:8-11).
+  - 2.6 owner map for the 47 event kinds declared and never emitted in either world over 2 seasons seed 0 (:442).
+- **Conflicts / stale:** "47 kinds declared and never emitted" bears on `scar.taken`/`conviction.moved` emit gap noted in character-sheet-spaces.
+- **Open items:** JQ-6.
+
+### proposals/2026-10-21-v9-remediation/2026-10-21-v9-remediation-04-asks-edits-measurement-and-risks.md
+- **What it is:** Part 4: the Jordan asks JQ-1..JQ-6, proposed edits to existing v9 parts and Layer 0/1 text, measurement protocol per batch, risks, what the plan deliberately does not do, mechanical self-check. [READ PARTLY: JQ-1, JQ-5, JQ-6 and heading map]
+- **Status:** "PROPOSED... HELD BACK" (:3). Reading: live ask list (some asks may have been answered by v10).
+- **Bears on:** CHAR, SE, CORE.
+- **Content that matters:**
+  - JQ-1: among 46 vectored realm persons the sampler overrules a strict score top in 72% of choices (198 of 276 at seed 0), median outvoted margin 0.030 vs `choice_temperature` 0.1 (`data/fixtures.py:286`); pursuit decides 28% - keep tau / re-scale / name a share (feeds R-06's fourth conjunct) (:14-31).
+  - JQ-2 amend rank 1 (J-13 remainder: does "pool only" reach combat and mass battle); JQ-3 four magnitudes no v9 part names; JQ-4 at REM-32 G3's weight->troop value; JQ-5 optional ratify IN-46/IN-47; JQ-6 what makes a settlement go hungry (knobs: `subsistence_weight` grain 2 salt 1, `SITE_YIELD`, cohort weights all 2 + `capacity` floor ED-SE-0051; capacity caps population 4-9) (:32-113).
+  - Section 4.2 lists Layer 0/1 edits agent-landed per D-1 (:203).
+- **Conflicts / stale:** IN-46/IN-47 ratified 2026-11-05 (JQ-5 moot).
+- **Open items:** JQ-1..JQ-4, JQ-6.
+
+---
+
+## Cross-subsystem leads
+
+- **MB / FA / SE / CORE - troop representation is contested across three documents.** The settlements-module feed (LF-1..LF-3, ships OFF), the troop-stock design (A: a troop stock on the rung; amends two Layer 1 sentences; withdraws LF-1..LF-3 as forms; J-1 open) and the Verbs MB lane (field force M-1; D-V8) disagree on what a raised troop is and how it eats; `march` arrival moves persons only so a won march moves no troops (verbs-10 :27-32). Squad-engagement synthesis A3/A4 (officers, order latency) and C5 (span = Command) add commanders. An MB audit must name which of these the code actually implements.
+- **MB / CORE - the loop does not call mass_battle for morale.** `massbattle.py:_faction_to_unit` hardcodes `morale=5, morale_start=5` (synthesis C6 d.1) though 08_mass_battle_units says morale comes from `Sta` since ED-MB-0068; `_weighted_unit` fixes power 4 and morale 5. Verify against code before relying on either.
+- **CHAR / SC / PC / MB - attributes feed almost nothing in the running loop.** Only `tell` reads `capability` (`copying`); `fight` derives only `end` from body; `march` fixes Command at 4; `capability` has no season writer; `pursuits` unproduced (H-62) per several docs. Divergence test: CHA inert at T2, ATT ~ half an ACU, Recall has no reader. Any CHAR/NPC audit must check whether `train`/`argue` now exist.
+- **CHAR / CORE - decision layer.** Verbs-05: value term reads the verb alone, urgency has no candidate term, chooser sees 4 of ~12 modulating node types; verb-coverage says the same from the churn side (66% of acts end in refusal; 22/44 verbs ever succeed); JQ-1: sampler overrules strict top in 72%; pursuit worksheet: deontological gates at `opening_set`.
+- **SC / FI / WR - the "knowledge" side is the complete part.** Ledger/WITNESS works, but narration doc: only 4 of 11,929 claims arrived by a telling; candidate typing wastes a third of acts on wrong-kind subjects; `chronicle` WITNESS channel slated for deletion (SC-01 step 13) while the narration proposal reads it.
+- **WR / FI - threadwork.** Mending Stability deltas are reported and written nowhere (p25); no module plugs at B-S; `thread_read` untypeable until K-3; Coherence/TS lack carriers; IN-32 `tie/knot` attempt was reverted.
+- **PC / GO - playable fight.** Grid-mode-suspension design (ratified; build landed REM-31) puts the suspension at ENCOUNTER with a decider parameter; the PC-01 yield is a second early exit; fights must be deferred in both modes, moving goldens. 05's two Jordan questions (J-15) remain.
+- **FA / SE - no faction actor.** Faction acts are persons' acts through seats; `head` empty and `at_war` false in buildable worlds; `remit:dispatch` is granted to 22 of 29 seats while J-8 is unruled; delegation carrier IN-48 reverted for contradicting Layer 1 (use `establish`->`confer`->`revoke`).
+- **SE / WR - scarcity and forcing.** Realm runs ~21.7-41.7 seasons of food surplus (remediation 03) / ~35x surplus (01 doc) so hunger/shortfall rarely bite; `season_factor` constant 1.0; no weather/ageing/foreign cast. Forcing-churn items are ratified as intent but unbuilt in the files read.
+
+## Likely stale or superseded
+
+- `proposals/2026-09-25-squad-engagement-concept-v5.md`: superseded as a design by its own synthesis (Part B rejections: Mass pool already retired, discrete morale clock, Keys, etc.); only the command/perception/plan layer survived.
+- `proposals/2026-10-14-in48-delegation-carrier.md` sections 0-8: reverted build; Layer-1 route instead. IN-31 doc's `delegate` passages conditional.
+- `proposals/2026-10-16-attributes-from-scratch*.md` (fourteen attributes): marked "void until rerun blind" by Verbs-02 section II.6; and `...-attribute-derivation*.md` eleven primaries: superseded in recommendation by Verbs-02 (nine + TS).
+- `proposals/2026-10-16-verbs/*` first-pass counts (179, 65, 37/50, 46 demands "Part III first pass") withdrawn by the 2026-10-17 rewrite (92-verb roster); `2026-10-03-verb-coverage-and-gap-fill.md` 55-verb suite and the 92-verb roster are two rosters, not reconciled in what I read.
+- `proposals/2026-09-30-character-and-play-surface/09_the_character_sheet.md` s1.1: describes 13 convictions -> 4 axes; the 2026-09-20 worksheet and IN-08 moved to 15 pursuits -> 7 axes plus `Person.scar`/`conviction` counts.
+- `proposals/2026-10-07-settlements-computation-modules.md` s1 fact 3 ("`modules/` does not exist yet") and the LF-1..LF-3 feed (withdrawn as forms by the troop-stock design).
+- `proposals/2026-10-04-forcing-churn-and-the-story-bar.md` s6 (order) superseded by v9's order; `master_workplan_v8` referenced as the one plan.
+- `proposals/2026-10-21-v9-remediation-*`: v9 plan edits, now rolled into v10 positions (ED-IN-0299); the pursuit worksheet is a to-be-deleted worksheet whose `set:` cells are all `{}`.
+- Status lines marked "Status stays PROPOSED/HELD BACK" inside the grid-mode and character-sheet-spaces review sections were superseded by the 2026-11-05 ratification (ED-IN-0349).
+
+## Items that could change an audit finding
+
+- **Status summary (RATIFIED / PROPOSED / held back) for the files read:** RATIFIED (on merge or by Jordan 2026-11-05, ED-IN-0349): grid-mode-suspension, character-sheet-spaces, settlements-computation-modules, P-25 scale cost (ED-1094), unplugged-systems (on merge, though IN-32's shape was falsified). RATIFIED AS INTENT (v9): the 2026-09-30 suite (listed items), verb-coverage (ED-IN-0288), forcing-churn (ED-IN-0287). RULED: squad-engagement synthesis (Parts A-C; Part D PROPOSED, needs Jordan). PROPOSED / held back / undecided: concept-v5, all attribute-derivation and attributes-from-scratch files, character-template, troop-stock (J-1 open), the Verbs v2 series, narration-mechanisms, IN-31 (built `d16bd895`), IN-48 (reverted), v9 remediation (held), pursuit worksheet (worksheet, not canon).
+- **Squad synthesis A8:** `ROUT_CASCADE_FRAC` default 1.0 "UNCHOSEN" and the Part D envelopment erosion (post-damage, gated by `discipline_check_cascade`) - an MB finding about the envelopment shock or rout cascade should check whether A8/Part D landed (HANDOFF_MB ED-MB-0069..0077; MB-07r J-18 (A) shipped OFF).
+- **Pursuit/NPC decision findings:** if the audit says "no deontological refusal exists" check the worksheet's `opening_set` gate and whether pursuits/axes (15/7) landed; `Person.scar` is now a count over two rosters written by `_scar_witnesses`, and `scar.taken`/`conviction.moved` are declared but never emitted (character-sheet-spaces s4) - any finding about "interior state is recorded in the log" is false for these.
+- **Playable-alone claim for PC:** the bout trace is captured at 20 `_TRACE` sites and discarded (04/05); suspension design exists and the build landed (REM-31) - re-check whether PLAYABLE fights actually route through a decider.
+- **Playable-alone claim for FI:** five of six acts execute but with no graded outcome, `thread_read` untypeable (03). **For SC:** zero leverage in sigma contests; no manoeuvre set (01/03).
+- **MB morale:** claims that morale derives from faction Stability conflict between synthesis d.1 (hardcoded 5/5) and 08 (`Sta` since ED-MB-0068) - verify in `massbattle.py`.
+- **Verb counts:** any finding citing "44 verbs" vs 46 rows (`seize` + `requisition` rename) vs 55/92 proposed; `len(VERB_TABLE) == 44` pins are re-recorded per verb added.
+- **Weapon physics (06/07):** `material` has no reader so a wooden staff clears heavy plate (adef_cap 0.915 vs threshold 0.72) - a PC finding about armour/weapon realism should check W-1; parry affinity floor for 35/52 weapons; `recoverability_factor` up to 62.1.
 

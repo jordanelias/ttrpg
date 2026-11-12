@@ -512,3 +512,43 @@ Ratification summary for this lane: nothing in these files is RATIFIED by its ow
 - **Conflicts / stale:** as above.
 - **Open items:** none.
 
+### proposals/2026-10-24-character-layers-capability-ambition-values-personality.md
+- **What it is:** [READ IN FULL] v1 design (2026-10-24, lane IN) splitting a person into four layers (capability, ambition, values, personality) and deciding what the seven pursuit axes become; one producer + one critic + orchestrator.
+- **Status:** "PROPOSED (2026-10-24). HELD BACK ... superseded in part by character-layers-v2.md ... v1 still carries the cuts Jordan withdrew on 2026-10-25" (:3). Reading: partly superseded; its §5 cuts (boldness, patience, vindictiveness) are overruled by Jordan's "don't cut anything because there isn't a code reader yet" (v2 :10) and ED-IN-0304 ruling noted at :129.
+- **Bears on:** CHAR, CORE, PC, SC.
+- **Content that matters:**
+  - Four membership tests in order (:49-54): capability = more always helps; ambition = some state satisfies it; value = direction nothing finishes; personality = varies independently of values, leaves odds untouched, no pole always wins.
+  - Split of the seven axes (:25-27, :95-103): four are value readouts at spread 0 (`selfish_selfless`, `partisan_equitable`, `hierarchical_equal`, `precedent_substantive`); three get a stored per-person offset (`rigid_flexible`, `grandiose_humble`, `deontological_instrumental`) at ±0.15, derived as one corpus sd (0.12/0.11/0.15 over 46 authored rows, measured at :107-111) rounded up to 0.05.
+  - Carrier proposed `Person.personality: dict`, absent key = offset 0 = control; build-only like `thread_sensitivity` (:84-85). Likeness readers read the prior over all seven columns so spread 0 keeps `World.content_hash()` exact (:116, :206).
+  - Worked example (:152-166): A/B/C with identical pursuits rank `comply`/`challenge`/`forge` differently only with offsets; the armed deontology gate "hardly discriminates" at these magnitudes (:168).
+  - Cut rows: `forgiving_vindictive` "dead reader" (grudge row keyed by faction name, `effects_combat.py:311-313`; candidates' subjects are persons); `choice_temperature` fails test 4 (:126-137).
+  - Every authored NPC holds all 15 pursuits (`data/cast.py:209-211`), minted persons (`loop/census.py:106`) hold none; cohorts hold none (SE-06 / ED-IN-0296) (:79, :194).
+- **Conflicts / stale:** overrides the ED-IN-0261 R7 dissolution clause ("two people with identical pursuits ARE identically disposed") for three axes (:37) — held for Jordan (v2 :25). Line numbers are of HEAD `d59acc9`.
+- **Open items:** [GAP] candour/discretion/credulity/dogmatism untested (:135); `Combatant.disp` unmapped (two ladders for one trait family, :136, :216); gate convention is H-146's (:195); whether example verbs share one real `opening_set` (:220-221).
+
+### proposals/2026-10-24-character-layers-v2.md
+- **What it is:** [READ IN FULL] Reconstruction (2026-10-30) of a lost v2 design (session 2026-10-24/25) from a digest of that session's closing summary: ten axes, fifteen personality traits, attribute readers.
+- **Status:** "PROPOSED — HELD BACK IN FULL; reconstructed from a digest, not from the original file; where this file and a re-derivation from the tree disagree the tree wins" (:3). Original `layers_v2.md`: LOST (:5). The session's closing line asked "want the v2 design landed as a replacement" and Jordan's answer is not on record (:8). Reading: design exercise record; figures unverified.
+- **Bears on:** CHAR, PC, SC, CORE.
+- **Content that matters:**
+  - Ten axes: the 4 value readouts (spread 0) + 3 prior-plus-offset (±0.15) + 3 new personality-only axes `cautious_bold` (derived from verb-table exposure, 12 of 56 verbs), `hasty_patient` (declared per verb, 13 delay cases), `conciliatory_coercive` (declared per verb) (:50-59).
+  - Fifteen traits = six manner offsets + nine per-person copies of global gain settings (`forgiving_vindictive`, `trusting_sceptical`, `open_dogmatic`, `guarded_open`, `steadfast_malleable`, `callous_scrupulous`, `serene_torn`, `frugal_lavish`, `steady_capricious`) (:65-69). Sorting rule: effect varies by VERB → axis; by claim/stance/deposit/scar → per-person gain (:103).
+  - Attribute readers: Body → budget base and combat strength; Hand → forgery and combat agility; Wit → Recall (`claim_decay_per_season`, `ledger_cap`, `view_k`); Nerve → wound-band penalty and combat spirit; Sense → Watchfulness and `record_gain`; Presence → none (:86-95).
+  - Measured example (unreproduced): identical pursuits, `cautious_bold` -1/+1 → chance of landing a duel in top five 0.130 vs 0.324 vs control 0.208 (:121-122).
+  - Session findings (:127-131): capability empty for 429 of 430 persons; only `tell`/`speak` read it; candidate gaps 0.01-0.06 at tau 0.1, top candidate reaches top five 41% of the time, stance term -8.0 on every candidate; `selfish_selfless` has no nonzero cell on any verb; growth loop has no start and no exit (`train` raises only if already held). Conclusion: wiring what exists comes before new layers.
+- **Conflicts / stale:** v1's "no per-verb cell, no new reader" is contradicted by v2's per-verb columns (:39). Falsifiers are carried from v1, restated "at v2's numbers" nowhere (:148-155).
+- **Open items:** four owner calls (`selfish_selfless` spread; `choice_temperature` swallows personality, tied to CR-17 and ED-IN-0304; `payoff`/`force` columns are unargued judgement cells; refusal gate convention) (:137-142); progression open gaps (Thread Sensitivity among the six; floors for unrostered persons; mapping `stats:`; decay period N; Nerve tension) (:97).
+
+### proposals/2026-10-24-character-progression-adjudication.md
+- **What it is:** [READ PARTLY: lines 1-260, 275-394, 547-754 opened; §4.7-§8 (lines 395-546) not opened] One first-principles adjudication of character progression by a read-only agent (HEAD `b7a1e1b`), with a §10 addendum by the orchestrating session on Nerve/Composure.
+- **Status:** "PROPOSED (2026-10-24); partly superseded since by the ratified v10 plan (M2 / ED-IN-0301: nine stored attributes on 1-7 with practice live; CR-18 takes the practice arm of CP-T01-02; CR-20 keeps `max(held key, base)` floor)" (:3). Reading: partly superseded; the six-attribute roster and the cut of accrual are overtaken, the code premises in §2 remain a usable map.
+- **Bears on:** CHAR, DICE, PC, SC, MB, CORE.
+- **Content that matters:**
+  - Architecture (:246-253): six immutable stored attributes (Body, Hand, Wit, Nerve, Presence, Sense) setting a ceiling and floor on capability, never a dice term; one capability ladder; decisive-event writer at RESOLVE (+1 at most once per key per season) and decay; no lifepath bundle; tradition as an input/label; attributes never move; no mechanical specialness for the player's seat.
+  - Code facts (§2): `Person` has no attribute/tradition field (`carriers.py:655-729`); `pool_default = obstacle_default = 2` (`fixtures.py:414,416`, graded assumption H-126/H-127); `_eff_train` only raises a held key (`effects_combat.py:421-446`); `verb_capability` maps only `tell`/`speak` to `copying` (`rosters.yaml:1232-1233`); one of 430 persons holds any capability (NPC-088); 8 of 56 verbs contest (`argue`, `arrest`, `determine`, `fight`, `accept`, `march`, `speak`, `tell`).
+  - Combat's pool: `resolution_pool = max(POOL_FLOOR=5, int(round(history)) + BASE_POOL=6)`, obstacle `defender.history / 2.0`; the season seam derives exactly one `Combatant` field (`end`) so every season fighter rolls max(5, 3+6) = 9 and familiarity is always 1.0 (:160-186). Two ladders for one quantity (C-4).
+  - Corrections C-1..C-10 (:547-625): familiarity does not reach the obstacle; `march` reads no capability; the handoff is `dispatching_chooser` not `choose.py:433`; "no switch while a contest is open" is not held by the seam; name collisions Body/`Person.body`/`agg.body`, Presence alias of Charisma.
+  - Addendum §10: chooser score = pursuit term + stance + urgency, no risk term, no timing term (`choose.py:130-151`); ED-IN-0304 (2026-10-29) rules risk appetite and short/medium/long horizon wanted; Nerve is decision-side (Jaccard overlap nerve/composure 0.09); verdict "not both as attributes" but the adjudication keeps Nerve (:750-753).
+- **Conflicts / stale:** the six-attribute roster vs v10 M2 nine attributes; claims about `rosters.yaml` line numbers drift. Outside-literature grades: Juul, Hunicke & Chapman read; Ryan/Rigby/Przybylski abstract only; Lundblade abstract only; game precedents "community-grade or from memory" (:229-236).
+- **Open items:** [GAP] J-T1/J-T2/J-T4 open decisions not read by the agent (:24); authoring source for persons outside the registry (C-9); the Nerve/chooser tension (:751-753).
+

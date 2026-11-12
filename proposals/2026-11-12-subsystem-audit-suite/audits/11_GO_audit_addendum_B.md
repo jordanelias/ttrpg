@@ -7,8 +7,10 @@
 Continues `audits/11_GO_audit.md` (§0–§14, F-GO-01..12, R1–R47). Nothing there is repeated; where this
 file corrects it, the correction is marked **CORRECTS**. Finding ids continue at F-GO-13, resolutions at
 R48. Proposal short names: **SURF-B** = `proposals/11_GO_player_surface_contract_B.md` (supersedes
-`11_GO_player_surface_contract.md`), **MODES** = `proposals/11_GO_fidelity_and_campaign_modes.md`,
-**UISET** = `proposals/11_GO_ui_design_set_disposition.md`.
+`11_GO_player_surface_contract.md`, called **SURF** below), **MODES** =
+`proposals/11_GO_fidelity_and_campaign_modes.md`, **REF** =
+`proposals/11_GO_design_reference_disposition.md`. The first lane's **GATE** and **TEXT** keep their
+names.
 
 ## B0. Verdict
 
@@ -29,8 +31,15 @@ invent the data, which is the second owner the first audit warned against.
 
 ## B1. What was read
 
-(Completed at the end of this file, §B7, with the evidence log. The list is kept there so it is
-written once, after the reading, and not maintained in two places.)
+The full list, with what was not read, is §B7.2; it is written once, there. In short: the whole UI
+design set (ten files); the nine cross-cutting documents the first lane named, with the ruled
+auto/manual doctrine; `godot/godot_architecture_specification.md` to its end; Layer 1 §C.11, §C.12
+and PART E; the player-surface code (`decision/sheet.py`, `harness/play_surface.py`,
+`harness/military_menu.py`, `queries/inputs.py`, the `Event`, `Claim`, `View`, `Question` and
+`Candidate` carriers, the combat and mass-battle entries); the 143 cases through the repository's
+own loader (972 needs, 281 knowledge rows; 243 needs and 46 knowledge rows read in full, selected by
+a stated matcher); four entries of `.audit/`; and the twelve sibling proposals that define a playable
+surface. `.audit/` beyond those four (about 7 MB) was not read.
 
 ## B2. Corrections and new findings
 
@@ -67,7 +76,7 @@ but its premise was that the reference exists. For the management surfaces and t
 loop it does not; what a port would build from is a table of contents. **Minimal fix.** None to the
 quarantined tree (it is not edited). The decided resolution is R48: the oracle-side readings of SURF-B
 are the specification of the player surface, written against the season loop as built, and the missing
-v4 parts are *not* reconstructed. UISET records the disposition.
+v4 parts are *not* reconstructed. REF records the disposition.
 
 ### F-GO-14 · hygiene · the newest UI document still carries two tracks its own audit ruled out, and its repair plan stopped after one stage
 

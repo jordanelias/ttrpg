@@ -28,7 +28,7 @@ answers all of them without a switch.
 | a Scene Slate of specific events, budgeted at 3–5 scene actions, from which the player picks what to attend | `player_agency` §4 as quoted in the doctrine §1 | `View.questions` in `attention_key` order and `scene_budget = 5` (`data/fixtures.py:228`, ruled); the person's own acts are what he attends |
 | difficulty as a budget (5 / 4 / 3 scene actions) | `valoria_ui_ux_v4_1.md` §1.3 | one fixture, `scene_budget` |
 | complexity tiers per system (a Core tier and a Full tier) and a companion application that holds the tracking | `cogload_moderate_target.md` META-1; `companion_app_design_note.md` | the engine holds all tracking; there is nothing for a tier to switch off |
-| a campaign that ends by victory, shared loss, or the player choosing to stop ("Conclude this story", a portrait) | `campaign_architecture_v30.md` Part 7; `videogame_mode_spec.md` | death, then `carry_on` over `world_q.continuations` (`harness/play_surface.py:61-95`); the build file warns `victory: true` is not the game's end |
+| a campaign that ends by victory, shared loss, or the player choosing to stop ("Conclude this story", a portrait) | `campaign_architecture_v30.md` Part 7 (its own Part 8 lists the mode specification as not yet updated for it) | death, then `carry_on` over `world_q.continuations` (`harness/play_surface.py:61-95`); the B10-20 build file warns `victory: true` is not the game's end (first audit §9) |
 
 Measured for the cognitive-load target (seed 0, one season, `p_npc_001`, a reading at one seed): the
 sheet showed 22, 32, 33, 32 and 38 candidates at five deliberations against a design ceiling of 5–8
@@ -69,8 +69,9 @@ needs no number.** Two clauses replace it:
   gains by deciding is the game, not an exploit: his decisions are inputs.
 
 The doctrine's "debt" (the automated parliamentary vote was a generic seasonal roll, not the
-resolution of a specific slate event) is closed by supersession: that resolver was retired with the
-faction stat vector, and a motion is now a docketed matter persons act on.
+resolution of a specific slate event) is closed by supersession: that resolver is gone
+(`git ls-files | grep parliamentary_vote` prints nothing), and a motion is now a docketed matter
+persons act on.
 
 ### 3. The cognitive-load target becomes four oracle duties and one client constant (steps 4, 5)
 

@@ -133,3 +133,137 @@ Lane: proposals dated 2026-09-20 or later, and undated ones. Note: the assignmen
 - **Conflicts / stale:** Corrects the verb-attribute map: F8 "moves nearly every combat outcome" is wrong for the season; F23 line cites; F25 evidence (ED-1040 does not establish the stall was real) (:57-65). `modules/mass_battle/config.py:534-535` records a 2026-07-08 directive to abandon commander-related combat pools vs live `derive_command` [UNVERIFIED which wins] (:64).
 - **Open items:** Health formula AR-56..58 PROVISIONAL, no position written (:159-161).
 
+### proposals/2026-11-05-attribute-rulings-by-subject.md
+- **What it is:** Verbatim compilation of Jordan's 2026-11-05 attribute rulings (AR-01..AR-58) grouped by subject, with firmness tags; cited by ledger row ED-IN-0347. Lane IN.
+- **Status:** "PROPOSED (2026-11-05). A compilation of Jordan's own words ... merging ratifies nothing beyond what that row says." Reading: live as the quoted source of Jordan's attribute intent (the words are Jordan's; tags RULED/HEDGED/PROVISIONAL/DIRECTION).
+- **Bears on:** CHAR, PC, SC, FI, MB, DICE.
+- **Content that matters:**
+  - Strength: damage mitigated by weapon type (blunt big-head most, thin piercing least), heft management, armour wearing, leverage, pushing; contributes to health; weapons have mass; stopping momentum by counterbalancing heft (AR-10..14, :36-42).
+  - Coordination: accuracy, footing, dodging, precise manoeuvre, forgery quality, lock-picking; the attack's suddenness disguises it from the defender's read (AR-15..19, :44-50). Endurance: stamina, breath, tiredness impacting concentration (AR-20).
+  - Reason: acuity, forecasting, what a choice entails; low Focus gives avoidable errors and irrelevant info in the forecast (AR-21). Focus: lapse/error rate from inattention or pain; high Focus characters less distracted and less influenced by irrelevant info in their choices (AR-22, 23).
+  - Perception: factual matters; surveillance, fieldwork; "a governor with high perception more likely to notice grain stores are low"; combat read of the attack is "pure perception" (AR-24..26a, 37, 40). Attunement: understanding others' intentions/pursuits, likelihood of forming knots/bonds, opponent's emotional state and prediction of action, how close an opponent is to yielding (AR-30, 31, 38, 39, 41, 42).
+  - Presence = charisma magnetism social impact (AR-29, last statement). Grace: dignity/etiquette; ties to royal conduct; low-standing office with high grace thought well of; promotion; venues may prioritise grace, "parliament would penalize someone who lacks sufficient grace" (AR-32..36a). Spirit: staying true to oneself against influence, tolerating harm/strain, threadwork coherence, ignoring obstacle modifiers or adding to the pool (AR-44).
+  - AR-04 RULED: attributes and capabilities are combined with "pursuits convictions ambitions goals obligations demands" to weight the best course of action for a character (:29). AR-05: attribute minimum is 1 (:30). Duel is a choice of combat to settle an issue; proposing is far easier than seeing it accepted; a king would not duel unless at the brink of war (AR-51, 52, :118-119). Familiarity grown outside the subsystem, constant at use (AR-45..48). Health `(S+3)(E+3)` PROVISIONAL (AR-56..58).
+- **Conflicts / stale:** AR-27/28 superseded by AR-29. Presence/Grace/Reason/Perception/Spirit readers largely absent in code (see adjudication).
+- **Open items:** health formula; AR-17, AR-43, AR-56/57 hedged.
+
+### proposals/2026-11-05-cr85-histories-hooks-and-combat-input.md [partial 70%; read whole]
+- **What it is:** Design file CR-85: what replaces the `history` integer in combat/threadwork/knot rolls; what a lifepath "hook" is; oracles' fate; health round trip. Lane PC (with IN, WR).
+- **Status:** "PROPOSED. Ratified by Jordan at 2026-11-05 (ED-IN-0349) and WITHDRAWN the same day ('undo ratification of combat', ED-IN-0351). Reopened ... whether `faculty` ... is the right single input to a contest pool, or attribute and trained skill are separate inputs. Nothing in `engine/` or `modules/` was built on this file." Reading: HELD / unresolved by Jordan's own withdrawal; design stands as a proposal.
+- **Bears on:** PC, CHAR, SC, CORE, FI.
+- **Content that matters:**
+  - Recommendation: combat pool and Ob read `faculty` (same reader as social contest, `sigma.py:146-160`); the five sigma reads of `history` are deleted not re-pointed; field renamed `faculty` (default 3) (:28-38). Measured: today every season fight rolls (pool 9, Ob 1.5), 28 of 28 over two seasons of `build_realm(0)`; under the design every season fight becomes (8, 1.0) because `faculty(w,p,"fight")` = `pool_default` 2 (:56-70).
+  - A control arm (constant 3 for every party) must reproduce the pre-item season `content_hash`; the five deleted sigma terms are exactly 0.0 when both parties sit at history 3 (:72-77).
+  - A hook is not a new thing: it is a capability key, a goal-row commit (via `seed_goals`), or a heritage value, all written at world build; the lifepath id lives on the cast row only, never on `Person` (:92-109).
+  - Oracles: combat `core.py:54-56,115`, `combat_systems.py:171,332,1053,1421,1441`; threadwork `min(3, history+3)` is constant 3; knots `pool = spirit*2`; deprecated `systems/combat/sim/combat.py` untouched; exporters re-derive `combat_engine_v1.json` with `SCHEMA_VERSION` bump (:125-136).
+  - Health: stored once as `Person.body`; `WoundTracker` is per-scene working state; the tracker docstring (persists between encounters) is false; "mapped twice, the two maps differ" (in: `party_end` lowers `end` by band; out: `body*left//full`) (:140-168). Step 2 (seeded-damage crossing) rides the first commit that passes Endurance from `Person.attributes` (:161-168).
+  - `practice` cannot count a fight (gate is the ladder's Success; fights carry Felled/Wounded/Untouched) (:188, :219).
+- **Conflicts / stale:** The plan cites `seam/wrappers/combat.py:36-39` as leaving history at default 3; those lines are a docstring omitting `history` (:258). Several line cites drifted (:251-259). Conflicts with later AR rulings (adjudication keeps `faculty` route).
+- **Open items:** `faculty` vs attribute+skill as separate inputs (reopened); combat key name (`arms` vs matter kinds); module default 3 vs season default 2; retire v30 combat.
+
+### proposals/2026-11-05-unified-design-and-build-plan.md
+- **What it is:** "The arc of the realm": one design for factions, clocks, breakdown, war, duty and violence with a build plan and workplan fold spec; lane IN (touches FA, PC, SC, WR), 2026-11-05.
+- **Status:** "PROPOSED (ratified on merge, ED-1094, except what §6 holds back)." Reading: live proposal; positions CR-86..CR-91 and batch B10-17b; Part 6 questions open.
+- **Bears on:** FA, WR, PC, SC, CHAR, CORE.
+- **Content that matters:**
+  - Interaction audit: nothing checks a relation or context before `fight` forms; seed 0 season 1: 104 formations, 74 same-faction; the grudge is doubled under `declared` via `stance_term` `(1+stance_gain)*(-regard)` (`choose.py:79-85,104-106`); fight's alignment cells non-null on 2 of 7 axes (:27). Build-time loyalty-to-stance writes -4 toward the King, manufacturing a traitor Spymaster who attacks him 5-13 times a run (:31).
+  - Realm data: King, Duchess and Duke are NOT sworn (only two `oblige` tenures exist); faction roster has no Valorsmark; `faction_q.head` returns None in every realm; only 12 of 31 offices name a faction (:54, :76, :60).
+  - Clocks (CI 0-100 start 28; Turmoil 0-10) are built as folds of `w.log` (no matrix row, no stored counter), each person reading a believed fold from the Events he holds claims of; bands change what persons want or may do, never fire an act; passive increments refused as a fourth clock (Layer 1 §25.1) (:33-45, :82-130).
+  - Violence made exceptional (CR-87): person-side `violence_contexts` (war, crime, duel, defence), -0.3 cost on every axis for `fight`, bounded grudge weight on violent verbs, duel stakes `blood`; casus belli carrier = a claim Proposition on a ground (CR-91); duty-of-office decline with a betrayal reading from deeds (CR-88) (:137-173).
+  - CR-90 instrument `harness/arc.py`; reference "breakdown or casus belli in >=80% of seeds 0-9 by season 24" is a proposed default, Jordan's share (:175-180, :266).
+  - Fold spec for workplan v11 parts 3/4/5/6/12/16 and the correcting ledger row (Part 5, :239-260).
+- **Conflicts / stale:** Strife guard ("at least two terminal codes off") vs "almost inevitable" separated as objects (:46). Contradicts ED-IN-0337/0340 and ED-IN-0335 as found in the audit. `[UNVERIFIED: recalled]` history/precedent tags throughout.
+- **Open items:** Part 6: share meaning of "almost inevitable"; war contexts vs duels only; Valorsmark = Crown renamed or a fifth faction.
+
+### proposals/2026-11-05-verb-attribute-map.md
+- **What it is:** Map of Jordan's ten attributes (primary/secondary) against the verb roster, with 27 findings on combat/season readers of each attribute; lane IN, 2026-11-05.
+- **Status:** "PROPOSED (2026-11-05). Reference ... merging ratifies nothing"; every row `[ASSUMPTION; medium]` unless CODE/RULED. Reading: live reference input to CR-20 `vocation_attribute` rows; several findings corrected by the adjudication (F8, F23, F25).
+- **Bears on:** CHAR, PC, SC, FI, MB, CORE, WR.
+- **Content that matters:**
+  - Verb classes: R (season draws a pool now) 12, D (draw in module off-path) 13, P (performance, no draw) 18, none 50 (:15-22). Capability "supplies dice and gates nothing"; `faculty` takes ONE base per vocation under CR-20, so a Secondary column cannot be carried without a `faculties:` weight table (:24).
+  - Primary counts: Presence 7 (all R), Spirit 8, Reason 5, Coordination 4, Perception 4, Attunement 4, Grace 4 (none draw), Strength 0, Focus 0 (:228-239).
+  - Combat reads seven fields (`combatant.py:93`) and no Presence/Grace/Attunement; `reading=(2cog+att)/3+history` becomes pure Perception per Jordan; tradition `familiarity` is a two-label constant (1.0/0.93/0.85); a missed read guesses a defence mode uniformly at random (`combat_systems.py:1136`), the natural home of an Attunement prior (:250-252, :293).
+  - No attribute or opponent-state (emotion, closeness to yielding) carrier exists in `modules/combat`; `disp` is only static aggression; yield/flee are folded into `fight` with no module state (:252).
+  - WITNESS `observers_for` reads no attribute: every governor in reach learns a larder shortfall at the same confidence (`witness.py:491-524`) (:253).
+  - Chooser: an attribute weights a choice only through `odds_weight` x `faculty` for the 12 R verbs; nothing weights uncontested candidates; one `choice_temperature` for every person (:255, :262).
+  - Health sketch `(S+3)(E+3)` vs code (range 16-100 vs 12-60; Spirit leaves; wound structure interval x count lost) (:301-313).
+- **Conflicts / stale:** F8 "moves every combat golden" wrong for the season (see adjudication); `march` CODE grade unverified vs `mass_battle/config.py:534-535` directive (:259); earlier drafts' corrections inline ([CORRECTION] tags).
+- **Open items:** nearly every finding ends "Not decided".
+
+### proposals/2026-11-05-verb-attribute-map_part2.md
+- **What it is:** Part 2 of the attribute map: the designed-verb lexicon (`proposals/2026-10-16-verbs/verbs-09..18`), 159 rows, 147 names, plus 31 CULLED names; lane IN.
+- **Status:** "PROPOSED (2026-11-05). Reference ... merging ratifies nothing." Reading: live reference; weaker than part 1 (only the mechanic column of the lexicon read: "[GAP: suite bodies of verbs-09 to -18 not read]").
+- **Bears on:** CHAR, SC, FI, MB, PC, FA, SE, WR.
+- **Content that matters:**
+  - FOLDED names inherit the host verb's class/attribute; 47 rows override the host; no folded name adds a verb that draws (:9).
+  - MB in-battle orders `rally/pursue/retreat/withstand` on the commander's `derive_command` pool (Presence 2 : Reason 1) with module draws `rally_check`/`recall_check` (:39-42).
+  - SC folded modes (praise/flatter Attunement-first; concede/lie Grace-first) cannot change the key under CR-20's one attribute per vocation unless `tell`/`speak` take a mode operand into `vocation_attribute` (:251).
+  - Culled names listed: PC strike/rush/disengage/withdraw/disarm/kill/wound; MB command/invest/assault/fortify; SC argue/supplicate; etc. (:253-262).
+- **Conflicts / stale:** `argue` is listed culled in SC lexicon though part 1 maps the coded `argue` as an R verb (:257 vs part 1 :87).
+- **Open items:** override rows could be contradicted by suite text (:13).
+
+### proposals/2026-11-08-design-and-code-critique-report.md
+- **What it is:** Filed one-round review record ("Design and code critique") with categorised findings, adversarial corrections, grades and suggestions; written against `f94043d`, lane IN, 2026-11-08.
+- **Status:** "FILED — reference, not canon ... its suggestions are proposals, and none enters the plan or a ledger until Jordan so rules." Reading: live as a filed review; the five rulings it records (ED-IN-0353..0357) are ledger rows and live.
+- **Bears on:** FA, WR, PC, SC, CORE, SE.
+- **Content that matters:**
+  - Rulings recorded: one parliament (ED-IN-0353); transnational Church with the Holy See at Himmelenger T9 (0354); 15 territories (0355; geography carries 17; which 15 assumed T1-T14 + T17; victory selector counts Askeheim); Schoenland a neutral offshore trade nation (0356; contradicts timeline text which was corrected); "Queen is widow regent or whatever" (0357) - the unconditional five grants are a normalization artefact; build awaits a go (:18-30).
+  - Corrections: CR-87 landed, `fight` formed 0 in an aperture run (the "104 formations" figure is STALE); 40.3% of 821 acts did not execute (331/821); Templars/Loewenritter not one mechanism; CI loop has several brakes, not shown closed (:34-52).
+  - Defects from the aperture run: `challenge` fails 43 of 48 on a wrong-collection subject so `accept` refuses 17; 103 of 821 fail the kind check; 106 of 167 declared event kinds never emitted; ED-IN-0292 says no computed `accept` forms until a challenge is `give`n yet 26 formed (:69).
+  - Remit is a snapshot taken at seating, so a grant contingent on another seat's vacancy is not a data edit; option 1 recommended (Queen's `remit_acts: []` at build plus a regency seat claimed through `succeed`) (:13, :98).
+  - Institution table: Church irrevocability is DEVIATION BY RULING (2026-10-11); Guilds, Restoration thin; Ministries/Rectorates/Praefectures/Imperial Court bodies without seats UNEXPLAINED (:55-67). Grades overall D+ (player-facing F for this repo) (:83-93).
+- **Conflicts / stale:** Limits: aperture output not committed; neither critic ran code; "25 of 31 seats strippable by nobody", "160/15", "~100 proposals cite research/" are critic-reported (:111-113). `CURRENT.md` stamp predates several heads (:115).
+- **Open items:** Queen mechanism go; seat/declare-nominal parliament and Imperial Court bodies; read layer with perspective-bound chronicles; held-out stylized-facts validation; Schoenland seats and trade goals; Church persons abroad by oath (:97-105).
+
+### proposals/2026-11-08-flow-conditioning/README.md
+- **What it is:** Directory README for the settlement content drafts feeding CR-106 (Church site kinds) and CR-107 (several cohorts per settlement); rulings ED-IN-0352.
+- **Status:** "RATIFIED as the accepted first reading (Jordan, 2026-11-08, 'ratify all and merge'; ED-1094): a first reading Jordan corrects; every row [ASSUMPTION; medium]." Reading: live builder input; "What it changes in engine/season/: nothing at runtime. No loader, test or gate reads these files."
+- **Bears on:** SE, WR, CHAR, FA.
+- **Content that matters:** Files: `content_church_sites.yaml` (CR-106), `content_cohorts.yaml` (CR-107), `content_provenance.md`, `content_validate.py`, `content_validate.out`. Directory is to be deleted with a `FORK:` row once both positions are built (:8-9).
+- **Conflicts / stale:** At this read, `worship` appears in neither `engine/season/rosters.yaml` nor `venues.yaml` and `cohorts.yaml` has no `heritage:`: CR-106/107 not built into the engine [verified by grep].
+- **Open items:** the build positions themselves.
+
+### proposals/2026-11-08-flow-conditioning/content_church_sites.yaml
+- **What it is:** Data draft for CR-106: three new Church-owned site kinds with band ladders, an owner table and per-venue `site:` rows.
+- **Status:** Header: "read by nothing at runtime ... First reading for Jordan to correct. Every cell is [ASSUMPTION; medium]". Reading: draft awaiting the CR-106 build.
+- **Bears on:** SE, FA, WR.
+- **Content that matters:**
+  - New `site_kinds`: worship, templar_quarters, school; wear 0, capacity_floor 0, works_cost {timber: 10}; `band_floors` 100/500/800 per kind (chapel/church/cathedral; station/house/chapter; school/monastery/university) (:12-41).
+  - New `site_owner` table (default null; the three kinds -> `Church of Solmund`): ownership by data cell on the kind, not a `Site.owner` field (:43-49).
+  - Venue `site: {kind, condition}` rows per settlement type with condition by capacity tier midpoint (300/650/900) and the Church seat 1000; result: 37 worship, 3 school, 1 templar_quarters = 41 Church Sites; 15 of 15 settled territories under the realm hold >= 1; T15 and terr_ALT excepted (:57-94).
+- **Conflicts / stale:** Not in engine yet (see README note). Same condition for Valorsplatz and Sigurdshelm (per-type rows, no per-settlement override) (provenance UNDERIVED 4).
+- **Open items:** `house` mid-band name unsourced; a build price decides whether a Church Site can be newly built.
+
+### proposals/2026-11-08-flow-conditioning/content_cohorts.yaml
+- **What it is:** Data draft (revision 2) for CR-107: 51 `cohorts:` rows over 37 settlements with heritage and conviction by three rules H, C, V.
+- **Status:** "builder's input, read by nothing at runtime ... [ASSUMPTION; medium]". Reading: draft awaiting CR-107 build.
+- **Bears on:** SE, CHAR, FA, WR.
+- **Content that matters:**
+  - No row carries `faction:` (B1): a cohort `commit` makes the faction occupy the settlement at build (`world_q.py:2131-2172`), which would license seize/raze/levies from tick 0 and break `test_in36_foreign.py:120`; allegiance is carried by `heritage` and `conviction` only (:6-8, provenance :34-40).
+  - Rule H: one majority cohort per settlement by Varfell/band (southern band <=1 or Varfell T4/T12/T13; northern T11 and band >=4; central band 2-3; schoenlander T16); C: caste/minority cohorts; V: conviction from radiation bands, e.g. einhir_restoration = 6 - band for southern, solmund_orthodoxy = min(5, 1 + band) for northern/central, other affiliations 1 (:10-38).
+  - Heritage rows: 24 northern, 15 southern, 10 central, 1 altonian (S-007), 1 schoenlander; 8 settlements hold both a northern and a southern cohort (validator).
+- **Conflicts / stale:** Conviction rule V gives a whole populace one intensity by territory band; the cast-median alternative was rejected. Schoenlander has no `engages:` cell so conviction is 1 throughout.
+- **Open items:** whether to add `schoenlander: altonia` to `engages:`; faction commitment HELD behind an audit of commit readers.
+
+### proposals/2026-11-08-flow-conditioning/content_provenance.md
+- **What it is:** Per-cell provenance for the two content drafts, plus canon-location disagreements and the verbatim validator output.
+- **Status:** "Every row ... [ASSUMPTION; medium; Jordan to correct]." Reading: live reference for the drafts; engine wins over prose on places (Jordan 2026-11-08).
+- **Bears on:** SE, WR, CHAR, FA.
+- **Content that matters:**
+  - Canon location disagreements (engine wins): Himmelenger is T9 not T14; Varfell territories T4/T11/T12/T13 not T1-T4; Valorsplatz cathedral S-001 not S-003; Gransol S-018 not S-015 (:67-77).
+  - The :655 vs :657 faction_politics conflict about Varfell north/south resolved by "an explicit territory id beats a regional phrase", placing northern Varfell on T11 (:45).
+  - Consequences: every village/fortress holding two cohorts reaches summed weight = capacity 4, so `migrate` into them is refused from tick 0 (`has_room` counts named residents) (:98-100). `incompatible[solmund_orthodoxy][einhir_restoration]` is true so each northern/southern pair holds both ends (:101-103).
+  - Validator exit 0: 51 rows, 0 FAIL, 41 Church Sites (:111-197).
+- **Conflicts / stale:** quarantined docs cited by bare filename only.
+- **Open items:** UNDERIVED list (:85-94).
+
+### proposals/2026-11-08-flow-conditioning/content_validate.py
+- **What it is:** Read-only Python validator for the two content drafts against `build_realm(0)`; re-derives every cohort row and Church-site condition from the stated rules and diffs.
+- **Status:** "Read-only validation ... (writes nothing)". Reading: live proposal tool, not wired to CI (only itself references the directory per grep).
+- **Bears on:** SE, CHAR, PROCESS.
+- **Content that matters:**
+  - Imports `engine.season.harness.populated`, `queries.world_q`, `data.cast`, `data.affiliations.conviction_map`, `data.rosters.FACTIONS`/`roster`, `engine.substrate.descriptors` (:17-23); asserts structure the loaders would require and a rule re-derivation `expected == rows` (:165-254).
+  - Hard-codes `T11_SET = {"T11"}` for rule H2 (a by-name territory) (:178) and reads the heritage rule via `descriptors.HERITAGES`.
+- **Conflicts / stale:** Hard-coded territory id in a rule validator is scripting drift in miniature (acceptable in a proposal tool). Directory slated for deletion once built.
+- **Open items:** none.
+
