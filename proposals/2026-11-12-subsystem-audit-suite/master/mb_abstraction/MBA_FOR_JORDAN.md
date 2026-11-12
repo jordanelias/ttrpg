@@ -8,6 +8,8 @@
 
 ---
 
+**ANSWERED 2026-11-12 (A-113): stated rows, checked against history and banded logically to the derived results; personal combat is not taught the equipment now.**
+
 ### J-MBA-01 · Should personal combat gain shields, the pike, the mounted fighter and missile weapons, so that mass battle can derive those numbers from it too?
 
 **What the game does today.** You asked for the weapon-on-weapon and weapon-on-armour numbers of a battle to come from simulating personal combat. The duel engine can supply them for swords, axes, maces, spears and polearms against the four armour tiers: the lane ran it (spear against sword, sword against plate, a skilled man against an average one) and the numbers come out cleanly. But the duel engine has **no shield, no pike, no lance, no horse and no bow, crossbow, sling or javelin**: its catalogue has 54 weapons, all hand weapons used on foot. So for exactly the matchups you named as different (pikes against cavalry, bows against cavalry), and for every shielded line, the duel cannot say anything.

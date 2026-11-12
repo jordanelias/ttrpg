@@ -1,5 +1,7 @@
 # MB · an army in units must fight as well as the same men in one block: the melee pair's rule, and the row that proves it
 
+Reconciled: 2026-11-12, A-100/A-101 supersession pass (MBA-04; `master/mb_abstraction/MBA_DESIGN_part3.md` §8.1): **edits 1 to 3 are SUPERSEDED by A-100 (MBA-04)** (each side's casualties are the opponent's measured felling chance; armour is in the table; walls are `cover`, `MBA_DESIGN.md` §1.4); **edit 4 (a contact cell's share `1/m`) and gate rows 1 to 5 STAND**, landed in MBA-04 step 3 and run as MBA-04's gate. The requirement and the problem are unchanged. Marks are in place below; the text is kept as history.
+
 Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` Part 2) — three joins. (1) **A-5**: the `net` each side is paid by is the continuous net of the one sampler (`roll_net_continuous` plus `net_boost`), so edit 2's "net successes" is the margin above zero, not a count of faces, and `PAY_PER_NET`'s seed (1/6) is re-read on it; `U5a_DICE_owed_edits.md` §1 row 4 says the module's opposed roll "stays and is named", and for the melee pair this file's edit 2 governs: the pair is not opposed (`U5b_MB_rulings_in_the_field.md` §1 row 2). (2) **D-35 is answered: A-60** (numbers out of the melee dice), so CR-12 proceeds; this file is CR-12's step 3 and lands in the field calibration batch before the grid arm (same file §6 row 4). (3) **D-34 is answered: A-59** takes this audit's option (b) (the uncertainty keeps, its seat moves) and goes further: a static side-wide value is misleading, so the multiplier is lowered and tested for removal by `proposals/27_MB_*`, on the pair rule this file supplies. Nothing here edits its magnitude, as written; that lane's test does.
 
 Reconciled: 2026-11-12, wave-3 rewrite lane W3-5a. Rows applied: `R5_READ.md` §2 (A-5: every "today" figure in the problem
@@ -15,7 +17,7 @@ friction sentence, "The form not taken", the gate's "today" marks and test names
 
 ## Status: PROPOSED
 
-Lands in batch: **B19** (MB; the field calibration batch), as CR-12's step 3: after `04_MB_cr12_linear_law.md` steps 1-2
+Lands in batch (A-100): **B19**, edit 4 and the gate only, inside MBA-04 step 3 (edits 1 to 3 struck, below). As first written: **B19** (MB; the field calibration batch), as CR-12's step 3: after `04_MB_cr12_linear_law.md` steps 1-2
 and `16_PESSIMIST_MB_one_stamina_ledger.md` steps 1-2 (B19), after `04_MB_headcount_grade_and_scale.md` (B17). Depends on:
 those; `U5b_MB_rulings_in_the_field.md` (B19).
 
@@ -86,6 +88,8 @@ bodies its cells are grouped into.
 
 **The pair rule that meets it**, in three edits at their owners:
 
+**Edits 1 to 3 below: SUPERSEDED by A-100 (MBA-04): there is no pool and no net; each side's casualties are the opponent's measured felling chance (`core/contact_draw.py`), armour is in the table, walls are `cover`. Their landing is struck; edit 4 stands (below).**
+
 1. **The pool is troop quality.** As `04_MB_cr12_linear_law.md` step 3 states it (`eff_power x
    REFERENCE_SIZE x POOL_QUALITY_SCALE`, less the discipline term). Not restated here. Numbers act
    through the engaged-frontage term only.
@@ -101,7 +105,7 @@ bodies its cells are grouped into.
    and the walls' `WALLS_DEFENDER_DR`, become die-equivalents against the attacker's net, entering
    where the two sibling terrain rows already enter (`terrain_def_d`, converted by `SIGMA_PER_D`
    through `_sigma_net_boost`, soft-capped). No match-up has a zero it cannot leave.
-4. **A cell's engaged strength is divided among the pairs it is in.** Where the tick's pairs are
+4. **STANDS (A-100, MBA-04 step 3: landed there as `engaged_files`).** **A cell's engaged strength is divided among the pairs it is in.** Where the tick's pairs are
    assembled, each contact cell's contribution to a pair's frontage is `1 / m`, `m` the number of
    pairs that cell is in this tick. With edit 1 nothing sums pools any more, so
    `_convergence_scale` and `pair_pool_contribution`'s share are deleted with their "known accepted

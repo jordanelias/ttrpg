@@ -1,5 +1,7 @@
 # MB · CR-12 decided by the ladder: numbers leave the melee dice, after the instrument can read it
 
+Reconciled: 2026-11-12, A-100/A-101 supersession pass (MBA-04; `master/mb_abstraction/MBA_DESIGN_part3.md` §8.1): **steps 2 and 3 are SUPERSEDED by A-100 (MBA-04)** (there is no pool; numbers leave the melee by construction, so `REFERENCE_SIZE` is not needed); **step 1 STANDS, narrowed** (the instrument repair stays as the falsifier of the contact draw's construction; the bisect of LINEAR 77% to 52% is dropped, its subject, the pool's drift, being retired); **the gate is NARROWED** (the planted collapse carrier becomes `EXPOSURE_BASE = 0`). The decision (numbers leave the melee dice, A-60) stands; what carries it out is MBA-04 in B19. Marks are in place below; the text is kept as history.
+
 Reconciled: 2026-11-12, U5b closure (`unified/U5_FINDINGS_CLOSURE_U5b.md` Part 2) — three notes; the decision and its order stand. (1) **D-35 is answered: A-60** (numbers act through frontage, depth and endurance, not the dice; the 2026-07-08 directive's words are narrowed by that ruling), with `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md` R-8 in support; this proposal proceeds and the plan's hold "for Jordan" is lifted. (2) **A-5**: the pool this file makes a function of troop quality is drawn on the one sampler (`U5b_MB_rulings_in_the_field.md` §1); step 2's one base-term function is where that lands. (3) Step 3 is not sufficient alone: `16_PESSIMIST_MB_partition_and_the_pair_rule.md` edits 2 to 4 are what it must contain and the PARTITION row its exit gains (measured: step 3 alone leaves three bodies on one body's cells at 2 wins of 60). The whole is one step of the field calibration batch (`U5b_MB_rulings_in_the_field.md` §6 row 4).
 
 ## Status: PROPOSED
@@ -10,8 +12,8 @@ Folded: 2026-11-12 by `audits/26_MASS_BATTLE_HISTORICAL_ADJUDICATION.md` (row R-
 
 Reconciled: 2026-11-12, wave 3 rewrite lane W3-1 — rows applied: `U3_CONFLICT_LEDGER.md` C3-C6 and `R1_READ.md` 7b-9 (the LINEAR band's one edit belongs to `27_MB_C` 27C-3 (h); this gate reads it), `R1_READ.md` §2 row A-59/A-77 (the planted collapse moves off `MB_FRICTION_SIGMA` when that constant is deleted, as the first `Folded:` line already says; the gate now names both carriers), test 9 (tests, lands-it, tier; `Depends on:` / `Lands in batch:` from `U3_DEPENDENCY_ORDER.md`). The second sentence of the first `Folded:` line ("whichever lands second makes the edit once") is replaced by C3-C6's assignment.
 
-**Depends on:** `04_MB_headcount_grade_and_scale.md` (B17); `16_PESSIMIST_MB_partition_and_the_pair_rule.md` edits 2–4 (B19, the same step as step 3); `U5b_MB_rulings_in_the_field.md` §1 (B19, the one sampler).
-**Lands in batch:** B19 (`B19-mb-field-calibration`, MB): steps 1–3 with the partition's edits 2–4, before `04_MB_cell_hierarchy_as_data.md` and before `27_MB_C`'s removal test, which must run on this pair rule.
+**Depends on:** `04_MB_headcount_grade_and_scale.md` (B17); ~~`16_PESSIMIST_MB_partition_and_the_pair_rule.md` edits 2–4 (B19, the same step as step 3)~~ *(struck, A-100: edits 2–3 are SUPERSEDED by MBA-04; edit 4 lands in MBA-04 step 3)*; `U5b_MB_rulings_in_the_field.md` §1 (B19, the one sampler).
+**Lands in batch:** B19 (`B19-mb-field-calibration`, MB): step 1 only; ~~steps 2–3 with the partition's edits 2–4~~ *(struck, A-100: replaced by MBA-04, `master/mb_abstraction/MBA_DESIGN_part3.md` §7.1, in the same slot)*; before `04_MB_cell_hierarchy_as_data.md` and before `27_MB_C`'s removal test, which must run on this pair rule.
 
 Lane MB. Carries R-06 of `audits/04_MB_audit.md` §6.2; listed in that audit's §11 because it narrows the
 plain words of a standing directive. Supersedes nothing in `proposals/2026-11-08-cr12-melee-attrition-design.md`
@@ -60,13 +62,17 @@ scales every sigma modifier by the square root of the pool (`resolution.py:230`)
   design's synthetic control (an exactly linear law with a 7:5 column edge reads 1.30 to 1.45) is added
   to the instrument as a row that must read "linear": either fit `A^p - c B^p` with `c` free, or
   normalise each side's loss rate by its engaged columns before fitting.
-- Bisect LINEAR 4:1 from 77% (`ED-MB-0045`, 2026-10-08) to 52% (`aa6871b8`) and record the commit and
-  cause in `ED-MB-0045`'s next row. This is the reading a season feels; the flip cannot pass without it.
+- ~~Bisect LINEAR 4:1 from 77% (`ED-MB-0045`, 2026-10-08) to 52% (`aa6871b8`) and record the commit and
+  cause in `ED-MB-0045`'s next row. This is the reading a season feels; the flip cannot pass without it.~~
+  **Dropped (A-100, MBA-04):** its subject, the pool's drift, is retired with the pool; the two bullets above
+  stand as the falsifier of the contact draw's construction (`MBA_DESIGN_part3.md` §8.1).
 
+**SUPERSEDED by A-100 (MBA-04): there is no pool, so there is no base term to consolidate; the contact draw (`core/contact_draw.py`) replaces it. Landing struck.**
 **Step 2, consolidation (hash equal).** One function in `core/exchange.py` returns the pool's base term;
 `subunit_combat_pool` calls it; `Unit.base_combat_pool` goes with the multi-unit harness code
 (proposal `04_MB_typed_outcome_and_one_path.md`), calling the same function.
 
+**SUPERSEDED by A-100 (MBA-04): numbers leave the melee by construction (the contact draw reads the felling chance, frontage, depth and endurance; A-60 is met without `REFERENCE_SIZE`); `POOL_QUALITY_SCALE` is deleted, not re-read. Landing struck.**
 **Step 3, the fix.** In that one function the melee base is `eff_power x REFERENCE_SIZE x
 POOL_QUALITY_SCALE`, `REFERENCE_SIZE` a named `config` constant (the design's probe E used 4);
 `pair_pool_contribution` still splits by engaged share. Re-read `POOL_QUALITY_SCALE` and the 4:1 band on
@@ -74,6 +80,8 @@ the repaired instrument. The stale comment at `resolve_engagements` ("numbers-in
 under Lanchester") becomes true and stays.
 
 ## Gate
+
+**NARROWED by A-100 (MBA-04):** the planted collapse's carrier is `EXPOSURE_BASE = 0` (`MBA_DESIGN_part3.md` §8.1), replacing `MB_FRICTION_SIGMA=4`, the named level's spread and `PAY_PER_NET` of zero below; the rest of the gate is read on the contact draw.
 
 The repaired instrument, both `PER_CELL` arms, Python 3.11 with `PYTHONHASHSEED=0`: LINEAR per
 `lanchester_signature.py` as edited by `27_MB_C` 27C-3 (h); until that commit, in band (74, 83) (C3-C6);
