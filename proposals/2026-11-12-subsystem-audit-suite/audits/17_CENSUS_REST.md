@@ -45,7 +45,7 @@ Decision codes: **FP** false positive · **DEAD** delete · **WIRE** broken, wir
 | `BodyFall.body_after` `inputs.py:395` | written positionally `modules/settlements/subsist.py:76`; read `matter.py:702,709` | **FP** | — |
 | `SubsistOutcome.short_by_person` `inputs.py:409` | written positionally `subsist.py:86`; read `matter.py:601` | **FP** | — |
 | `FabricInput.live_works` `inputs.py:503` | written `world_q.py:619` (keyword) and `:639` (positional); read `modules/settlements/fabric.py:32-33` | **FP** | — |
-| `Office.body_function` `carriers.py:1061` | written in `__post_init__` (`:1092`) from `BODY_FUNCTION` (`data/rosters.py:1324`, `rosters.yaml: office_bodies.function`); **no reader anywhere**, tests included. The comment eleven lines above states the criterion that deletes it ("an artifact nothing reads") | **DEAD** (batch D1): the field, the `:1091-1092` write, `BODY_FUNCTION`. The `function:` map in `rosters.yaml` goes with it unless `06_FA_seat_terms_by_body_B.md` lands a reader first; the quoted cells are in `.designs/` and in the roster's `source:` line | `grep -rn "body_function\|BODY_FUNCTION"` → 4 lines, all owner or writer |
+| `Office.body_function` `carriers.py:1061` | written in `__post_init__` (`:1091-1092`) from `BODY_FUNCTION` (`data/rosters.py:1324`, `rosters.yaml: office_bodies.function`); **no reader of the field anywhere**, tests included. The comment eleven lines above states the criterion that deletes it ("an artifact nothing reads"). The roster map is a different object: Jordan asked for the type-of-office axis (`rosters.yaml:2188-2190`) and a test reads it (`test_season_shape.py:10017-10020`) | **DEAD** (batch D1): the stored field and its write only. `BODY_FUNCTION` and the `function:` map stay; a surface that shows what a body does reads `BODY_FUNCTION[office.body]` at the read, which is one owner instead of a copy per Office | `grep -rn "\.body_function"` → the write at `carriers.py:1092` and nothing else |
 | `StubResult.io_contract` `stubwire.py:49` | written by keyword `:77`; T-read (`tests/valoria/test_stubwire.py:55`). The only caller of `stub_resolve` is the SC kernel (`wrapper.py:227`, `dictionaries.py:48`) | **DEAD with its caller**: when the kernel goes (SC disposition B), `engine/substrate/stubwire.py` has no caller and goes in the same batch with `tests/valoria/test_stubwire.py` (batch D3). Until then FP | `grep -rn stub_resolve` |
 | `Order.waypoint_ref` `units.py:333` | **never written by anything**. `ally_at:D` is an accepted trigger kind (`units.py:309,336`), its payload is range-checked (`:349`), and `contact.py:106-110` evaluates it only `if order.waypoint_ref is not None`; so an `ally_at:` order is accepted, queued, never fires, and dams every order queued behind it (`contact.py:89-90`, the loop stops at the first unfired order) | **WIRE** (W1). `04_MB_manager_battle_one_resolver.md` §2 lists `ally_at:D` in the standing-order grammar it exports and validates, so the trigger is needed | probe P-1 |
 | `Subunit.merged_cells` `units.py:434` | reset at `:1121` and `:1149`; nothing ever adds a cell to it and nothing reads it | **DEAD** (batch D1) | `grep -rn merged_cells modules` → declaration, a docstring word, two resets |
@@ -201,6 +201,177 @@ block (26 rows) is where the pointers that do not resolve are:
 
 **C6 totals:** as given 0, confirmed 0 by import. Added in the `modules:` block: LABEL 2 new (C-1, C-2)
 plus 4 groups already carried by named proposals · DEAD 2 contract rows (D4) · FP 16.
+
+## 5. C4 — event kinds (0 rows as given; the table is empty because the script matched nothing)
+
+**Why the table is empty.** `census.py:136` looks for `emits = "kind"` in Python and
+`census.py:142` for `emits: kind` in YAML. Effects do not name a kind that way (the fold emits the verb
+row's kinds), and `verb_table.yaml` writes `emits: ["petition.carried"]`, a list, which
+`emits:\s*["']?([\w.]+)` does not enter. The script printed `C4 0 of N` over a near-empty `emitted` map.
+Re-derived here from the code's own roster, `data/verbs.py::EVENT_KINDS` (178 kinds: every emission
+column of the verb table, the write matrix's `emits:`, `fold_kinds`, `logged_kinds`), against (a) the
+Event log of a realm run and (b) every kind-specific consumer (`scratchpad/census_rest/c4.py`).
+
+**Instrument.** `python -m engine.season.harness.aperture 3 0` (realm, seed 0, 3 seasons, 83 persons;
+its control line reads `content_hash EQUAL`), `PYTHONHASHSEED=0`. One seed, three seasons: every "never
+emitted" below is a count in that run, not a claim that the kind cannot fire.
+
+**What counts as a consumer.** Four layers, and the census must not confuse them:
+1. *generic*: WITNESS deposits every Event as claims in the ledgers of those who perceive it; every kind
+   has this consumer unless `undeposited_kinds` names it;
+2. *by derived class*: `REFUSAL_KINDS`, `DEED_KINDS`, `PAIRED_KINDS`, `_KIND_STRATA`, `DOCKETING_KINDS`
+   (`data/verbs.py:1489-1492`, `queries/person_q.py:226-232`, `queries/world_q.py:350`) read a kind
+   through its verb row, without naming it;
+3. *by roster*: `strife_kinds` (opens / joins / never / concludes), `standing_routes.kinds.dominance`,
+   `covert_kinds`, goal-stage rows in `goals.yaml`;
+4. *by name*: a string literal in `queries/`, `loop/`, `decision/`, `state/`, `epistemic.py`.
+
+| class | kinds | reading | decision |
+|---|---|---|---|
+| emitted in the run and named by a layer 3–4 consumer | 35 | live both ends | — |
+| **A.** emitted, no layer 3–4 consumer | 43 | 34 are refusal kinds (`*.refused`, `*.unauthorized`, `*.impossible`, `travel.blocked`, `speech.unheard`): consumed at layer 2 as `REFUSAL_KINDS` and by the instruments (`aperture`, `obligee_report`, `scarce`). 9 are not: `body.tended`, `case.opened`, `cover.assumed`, `faction.surveyed`, `matter.held`, `matter.turned`, `news.untold`, `proposition.uttered`, `pursuit.moved`; `case.opened` is in `DOCKETING_KINDS` (layer 2), the rest reach the game only as claims (layer 1) | **FP** ×43 as "no consumer": layer 1–2 is a consumer. Whether a *refusal* should be seen by anyone but the refused is `01_CORE_reason_trail_in_the_act_store.md`'s question, not a census row |
+| **B.** named by a layer 3–4 consumer, never emitted in the run | 39 | the consumer waits on an Event that did not occur. 23 of the 39 sit in `strife_kinds`; of that roster's nine `opens` kinds, eight did not occur (`field.won`, `rung.seized`, `rung.razed`, `record.seized`, `arrest.made`, `compliance.withheld`, `requisition.taken`, `site.damaged`), so in this run a strife could open on `field.lost` and nothing else. Each traces to a verb in §6's never-executes set (`seize`, `raze`, `arrest`, `comply`/`evade / defy`, `requisition`, `sabotage`) or to a march that was not won | **WIRE**, carried by the verb build-outs (§6); no edit to the consumers. Evidence that the consumers are correct and starved: `09_WR_story_instruments_that_can_fail.md` |
+| **C.** never emitted, no layer 3–4 consumer | 61 | 27 are refusal kinds of verbs never attempted; 21 are deed kinds of verbs that never execute (`accept.declared`, `bond.formed`, `capability.raised`, `challenge.issued`, `compliance.given`, `confession.*` ×4, `fight.declared`, `capture.declared`, `place.surrendered`, `order.marshaled`, `siege.pressed`, `site.worked`, `site.restored`, `matter.*` ×3, `contest.undecided`, `arrest.resisted`); 4 are the fold's and the log's own kinds (`act.ineligible`, `act.refused`, `attempt.refused`, `standing.band_crossed`); **9 are declared by the write matrix and have no emitter anywhere** (below) | per kind, below |
+
+### 5a. Nine kinds the write matrix declares that nothing can emit
+
+The gate requires a MATTER-class write to name one of its row's declared kinds
+(`state/world.py:1344-1356`, D22 / H-12). It does not require that of an ACTS-class write: the fold
+passes `emits=None` and the act's own Event carries the verb row's kind. So for a cell written only at
+RES/ENC the matrix's `emits:` is a list of *permitted* kinds, and a kind no verb row lists and no writer
+passes is vocabulary that cannot occur. Measured by wrapping `World.write` over the same run
+(`scratchpad/census_rest/writes_probe.py`; hash `52ff67bc45c5b956cd99215f6ba3097f`, 30 of 42 matrix
+rows written, 0 unrowed writes):
+
+| matrix row | declared kind | gate writes in the run | Events of that kind | emitter in code | decision |
+|---|---|---|---|---|---|
+| `(Person, scar)` | `scar.taken` | 883 | 0 | none (`resolve.py::_scar_witnesses` passes no `emits`) | **WIRE**, carried by `11_GO_player_surface_contract.md` §4 and `02_CHAR_scar_is_a_wound.md`. Correction to §4's wording: the row already declares `scar.taken`; the edit is `emits=` at the writer, not a new row entry (correction C-5). 883 writes in three seasons is the volume `02_CHAR_scar_cap_and_regard_unit.md` measures; the Event must land after that proposal's cap, or it publishes 883 Events |
+| `(Person, conviction)` | `conviction.moved` | 2 | 0 | none (`_conviction_crisis`) | **WIRE**, same carrier |
+| `(Person, weight)` | `weight.changed` | 0 | 0 | none; CENSUS writes no weight | **WIRE**, carried by `07_SE_population_census.md` |
+| `(Person, coherence)` | `coherence.changed` | 0 | 0 | none; `Person` has no `coherence` field; the gate admits only the driver `Seam` (`world.py:1305`) | **WIRE**, carried by `09_WR_threadwork_module.md` |
+| `(Record, ttl)` | `record.expired` | 0 | 0 | none; `Record.ttl` has no writer and no reader (`world_q.py:2304`) | **DEAD**, with `08_FI_04_small-edits.md`'s deletion of the field and row; its dependants are batch D2 |
+| `(Record, stages)` | `record.staged` | 370 | 0 | none | **FP** as a defect: the write rides the act's own Event (`record.created`, `petition.carried`); under the gate's reading (permitted kinds) nothing is wrong, and no consumer names the kind. H-86 already registers the column's ambiguity |
+| `(ConveningCondition, attached)` | `condition.attached` | 17 | 0 | none | see X-R1: the value written has no reader either |
+| `(Rung, envelope)` | `envelope.changed` | 0 | 0 | none; "the ratified-but-unwritten field" (`world_q.py:1803-1807`) | accepted, nothing written: `04` §A.2's `loop/census` row names `envelope`, so the row stays; no proposal in the suite gives it a writer `[UNVERIFIED: 07_SE proposals searched by name only]` |
+| `(Tenure, degree)` | `tenure.graded` | 0 | 0 | none; `degree` is set at the edge's construction (`effects_information.py:700-702`) and never re-graded | accepted: `05_SC_arrangement_rows_that_bind.md` decides what the band does |
+
+**The trap this leaves, and its resolution.** `EVENT_KINDS` is what the import-time checks hold a
+consumer roster to (`_check_strife_kinds`: "a kind in any list absent from `EVENT_KINDS`"). A roster may
+therefore name a kind that cannot be emitted and import cleanly. None does today (the nine have no layer
+3–4 consumer). Two near-cases do exist and are narrower than they look: `strife_kinds.joins` and
+`.concludes` name `tenure.opened`, which only `confer` emits (0 Events) while `Tenure.since` was written
+178 times; `strife_kinds.never` names `stance.moved`, which only `forgive` emits while `(Person, stance)`
+was written once without it. Decision: no new check (CLAUDE.md §0.1 pt 5: a roster of an instrument is
+process); the two rows are reported to the WR lane as readings (correction C-6).
+
+**C4 totals:** as given 0. Extended over 178 kinds: FP 43 (class A) + 2 · WIRE 39 (class B, carried) + 4
+(5a, carried) · DEAD 1 (`record.expired`) · accepted without edit 2 · class C's other 52 (27 refusal
+kinds, 21 deed kinds, 4 fold and log kinds) follow their verbs (§6).
+
+## 6. Extended — verbs with no predicate/effect, or that never execute
+
+**Instruments.** `python -m engine.season.harness.corpus_run 0` (143 cases, seed 0, seasons from
+`temporal.span_seasons`; exit 0) and the realm run of §5. `register --requirements`: R-05 `not_met`
+(met 3 · partial 5 · not_met 1).
+
+| | corpus (143 worlds) | realm (1 world, 3 seasons) |
+|---|---|---|
+| executed at least once | 23 | 30 |
+| attempted, always refused | 13 | 18 |
+| formed or foldable, never attempted | 30 | 7 formed-never-attempted + 12 never formed |
+| no predicate/effect | 1 (`tie / knot`) | 1 (`tie / knot`: formed for 83, offered to 0) |
+
+Union: **33 of 67 verbs execute in at least one of the two instruments; 34 execute in neither.**
+
+| group | verbs | deciding read (realm, per refused act) | owner |
+|---|---|---|---|
+| no effect | `tie / knot` | `resolvable_verbs()` excludes it | `08_FI_08_knots-season-form.md` |
+| never formed for anyone in the realm, never attempted in the corpus (11) | `assign_troops`, `disband_unit`, `discharge_troops`, `form_unit`, `order_unit`, `recruit`, `marshal`, `surrender`, `succeed`, `interrogate`, `destroy_record` | no candidate: nobody holds an army record, a detainee, a vacancy claim or a record to destroy | `14_VERBS_MILITARY.md`; `14_VERBS_BINDING.md`; `06_FA_seat_terms_and_turnover.md` (`succeed`) |
+| formed, never attempted (6) | `arrest` (2 formed), `confer` (6), `examine` (1), `forgive` (2), `restore` (1), `work` (1) | ranked below the budget line every time | `14_VERBS_BINDING.md`, `14_VERBS_PHYSICAL.md`, `14_VERBS_MATERIAL.md`, `14_VERBS_SOCIAL1.md` |
+| attempted, always refused (16) | `accept` (45 refused: `exists:challenge=0`), `build` (4: `exists:works=0`), `comply` (47), `construe` (10), `evade / defy` (8) (all three: `exists:dispensation=0`), `covenant` (18: `exists:Proposition=0`), `determine` (3: clause `docket` 2, `party` 1), `exchange` (79: 37 post-admission), `found` (7: `exists:works=0`), `pardon` (3, all post-admission: `bench=True`), `raze` (22; 21 post-admission), `requisition` (5: clause `authority`), `revoke` (6: no read recorded), `sabotage` (47: `exists:Site=0`), `seize` (14, all post-admission: clause `write`), `train` (119; 24 post-admission) | as listed | the `14_VERBS_*` lane for the verb's stratum |
+
+Two things the table shows that a per-verb reading hides:
+
+1. **Wrong-referent formation is the largest single cause.** `exists:<K>=0` decided 402 of 1,440 refused
+   acts: the chooser formed `accept` on something that is not a challenge 45 times and `comply` /
+   `construe` / `evade / defy` on something that is not a dispensation 65 times. The verb is built; its
+   candidate is not. Carried by `14_VERBS_SOCIAL1_A_formation.md` and
+   `14_VERBS_SOCIAL2_A_formation_on_what_is_known.md`.
+2. **Post-admission refusal with no reason on the Event.** 304 refused acts cleared every recorded read
+   and were refused in the effect; for `seize` (14 of 14), `pardon` (3 of 3) and `raze` (21 of 22) that
+   is every refusal. A verb that always clears its `requires` and always fails in its effect is a broken
+   wire, not a hard precondition. Carried by `01_CORE_predicates_name_their_clause.md` (the reason) and
+   the verb's lane (the effect).
+
+Decision for the 34: **WIRE**, all carried; this census adds no verb edit. It adds the measurement that
+ties them to §5 class B (the 39 consumers waiting on kinds these verbs emit).
+
+## 7. Extended — records written and never read (write matrix, writers followed to readers)
+
+`write_matrix.yaml` has 42 rows and no readers column. Writers were counted at the gate (§5a's probe);
+readers by attribute and key reads in `queries/`, `decision/`, `loop/`, `state/`, `seam/`, `epistemic.py`
+and `modules/` (harness excluded, since an instrument is not the game).
+
+| id | row | written (run) | read by | decision |
+|---|---|---|---|---|
+| X-R1 | `(ConveningCondition, attached)`: `date["convening_attached"] = True` (`loop/effects_governance.py:457`) | 17 | **nothing, tests included.** The "condition" is the constant `True`; CALENDAR fires the Date without consulting it | **WIRE**, carried by the Papacy lane's `quorum_share:` arrangement key (`audits/15_INSTITUTIONS_PAPACY.md` proposal B): the value CALENDAR tests before `date.fired` is what this cell holds. Until that lands the write is inert; if B is not adopted, delete the key, keep the Layer 1 row (W5 states both) |
+| X-R2 | `(Record, ttl)` | 0 | nothing | **DEAD** (`08_FI_04`; dependants D2) |
+| X-R3 | `(Rung, envelope)` | 0 | one query that explicitly declines to count it | accepted (§5a) |
+| X-R4 | `MassBattleInput.loyalties` × `loyalty_gain` (C2 row; not a matrix cell) | every field | read (`massbattle.py:560-561`) and **0 by construction twice**: the `field_morale_loyalty_gain` fixture ships `0` (`data/fixtures.py:771`, H-148's control), and since CR-87 (5) no built realm holds a loyalty row toward a creed's utterer, so `loyalties` is `(0.0, 0.0)` whatever the gain (`inputs.py:228-229`, H-256) | **WIRE**, carried by `04_MB_typed_outcome_and_one_path.md` and CR-88's betrayal reading (H-256 `unblocks:`); sweeping the gain while the stance term is identically 0 is a fake control (CLAUDE.md §7) and is recorded as such |
+| X-R5 | `(DocketItem, arrangement)`, `(DocketItem, petition)` | 11 each | `effects_information.py:421`, `predicates.py:558`, `matter.py:452` | **FP** (dict keys `DOCKET_ARRANGEMENT` / `DOCKET_PETITION`, not attributes) |
+| X-R6 | twelve rows not written in the run: `Act[].returned`, `Person.body_ceiling`, `Person.coherence`, `Person.exists`, `Person.weight`, `Record.subject_matter`, `Record.ttl`, `Rung.dates`, `Rung.envelope`, `Site.exists`, `Tenure.degree` and `Proposition.*` | 0 | — | `body_ceiling`, `Person.exists`, `subject_matter`, `Site.exists` have writers that this run did not reach (no fight, no death, no army, no `build`); `Rung.dates` `[UNVERIFIED: writer not located; `convene` writes `(Date, due_at)`]`; `Act[].returned` and `Proposition.*` are declared write-less. The other five are §5a's. **FP** ×6, 1 unverified; no row here is new |
+
+Every other row has both a writer that ran and a reader in game code.
+
+## 8. Extended — closed rosters with no loader refusal
+
+`rosters.yaml` holds 127 named rosters and tables (`scratchpad/census_rest/rosters_probe.py`). 125 are
+loaded by name in game code. The textual probe flagged 26 as "loaded, never used for membership"; the 22
+opened at their use sites are, with one exception, uses or refusals the regex could not see (a multi-line
+`require_member(`, a `_check_*` at import, a destructuring assignment); four were not opened
+(`order_roles`, `modules`, and the tables `pursuit_projection`, `alignment`: each has 8 or more uses).
+What is left:
+
+| roster | reading | decision |
+|---|---|---|
+| `knowledge_kinds` | no loader, no reader (§2) | **WIRE** (W3) |
+| `ladder_rungs` | loaded into `LADDER_RUNGS` (`data/rosters.py:868`), which no game code uses. `arrangements.yaml: speech_kinds` "reuses" its six ids (`arrangements.yaml:62`), and the only thing holding the two equal is a test (`tests/test_arrangements.py:89`); `data/arrangements.py` refuses an unknown genre, band, proof and interposed kind (`:140-194`) and not an unknown or missing speech-kind id | **WIRE** (W2): the equality moves from the test into the loader, the one licensed place (CLAUDE.md §0.05: "the loader's refusal per data family"). `05_SC_playable_hearing_B.md` renames what this roster is for (`audits/05_SC_audit_addendum_B.md` G-46: "the issue ladder is absent and its name is on the charge ladder"); the refusal is written against whichever name that edit leaves |
+| `witness_channel_predicates` | holds a `predicates:` map of prose meanings for the five channels; the predicates themselves are functions (`epistemic.py::_ch_*`), keyed by `witness_channels`. Read by one test (`test_season_shape.py:4818`) for set equality with the channel names | **FP**: reference text beside H-33's row; nothing claims it is a mechanism |
+| `venues.yaml` rows | a building row is read by subscript (`b['slug']`, `b['quarter']`); a missing key raises `KeyError`, an unknown key is ignored | accepted: authored-for-play data with one consumer (the realm builder); no proposal in the suite authors venues by hand |
+
+## 9. Extended — tests that exercise code nothing calls
+
+Module-level only; the symbol-level sweep is C1's. A cluster is listed when its only importers are
+tests (sibling lane's import graph, `scratchpad/modlive.json`, re-checked here by grep at each row).
+
+| id | code | tests | reading | decision |
+|---|---|---|---|---|
+| X-T1 | `engine/season/decision/sheet.py` (`creation_sheet`, `seat`, `development_space`, `take_ranked`, `chronicle`) | `test_rem30_character_sheet.py`, `test_g2_token.py`, `test_cr20_attributes.py` | the player's seat ships switched off (`person_id=None`); no harness or loop code calls any of the five. The tests are real (they run the season with the arm on and compare hashes) | **WIRE**, carried by `11_GO_player_surface_contract_B.md` and `01_CORE_one_scene_contract.md`; `chronicle()` in particular has no caller that is not a test |
+| X-T2 | `systems/threadwork/sim/{coherence,operations,collective,opposing}.py` | 6 files under `tests/valoria/`, 1 under `engine/tests/` | an oracle with tests and no host | **WIRE**, `09_WR_threadwork_module.md`. `co_movement.py` and `threadcut.py` have neither test nor caller; they move or die in that proposal's commit, and `CoMovementCard.card_id` dies either way (D1) |
+| X-T3 | `systems/social_contest/sim/contest/` (16 files) | `_kernel_tests.py` and the test importers that proposal lists | retired by ruling (ED-SC-0033 cl. 2) | **DEAD**, `05_SC_sc05_kernel_disposition_B.md` |
+| X-T4 | `engine/substrate/stubwire.py` | `tests/valoria/test_stubwire.py` | its only callers are in X-T3 | **DEAD** with X-T3 (batch D3) |
+| X-T5 | `systems/characters/sim/conviction.py`, `systems/fieldwork/sim/knots.py` | `engine/tests/test_knots_ed912.py`, `tests/valoria/test_knot_pool_formula.py`, `test_conviction_roster_single_owner.py` | retained oracles (ED-IN-0283; `02_CHAR_audit.md` §6 row 27; `08_FI_audit.md` R-14) | **FP**: kept on purpose, and each audit says so |
+| X-T6 | mass-battle order features: `signal:NAME` triggers and `Unit.fired_signals`; `build_army(officers=…)`; `ally_at:D` | `test_mass_battle_signals.py`, `test_mass_battle_officers.py`; `ally_at` has no test at all | production constructs none of the three (`units.py:2843`: "no … production code constructs a 'signal:' trigger"; `armies.py:115` default `officers=()`) | **WIRE**: `04_MB_manager_battle_one_resolver.md` §2 (the standing-order grammar and `fire_signal`) and §7 (officers); `ally_at` is W1 |
+| X-T7 | `modules/combat/*` shown as tests-only by the import graph | — | reached by path, not import: `engine/substrate/pc_engine.py` is the one `PATH_SEAM_ALLOWED` seam, and `combat.fight` is a registered entry | **FP** of the graph |
+
+## 10. Extended — documents that describe code that does not exist
+
+A scan of 916 tracked live files (everything but `.designs/`, `.audit/`, `proposals/`, `registers/`,
+`research/`, `workplans/`, the restructure ledger and `_history` files) for path strings under
+`engine/`, `modules/`, `systems/`, `tools/`, `tests/` that do not resolve found 530 in 140 files. That
+number is a ceiling, not a count of defects: the register and the verb table write `tests/test_x.py`
+relative to `engine/season/` (those two files hold 116 of the 530), tests name fabricated paths on purpose, and tools and
+indexes name a retired file in order to say it is retired (`CURRENT.md:37-40`, the workflow's comments).
+Opened at the line:
+
+| id | document | claim | reading | decision |
+|---|---|---|---|---|
+| X-D1 | `engine/season/write_matrix.yaml:4`, `:28-31` | "`engine/season/shape.py`'s `write()` gate reads it"; "`python engine/season/register.py --verify-write-matrix` re-extracts and fails on drift" | `shape.py` does not exist (the gate is `state/world.py::World.write`); `harness/register.py` has five flags (`--check`, `--counts`, `--verify-citations`, `--rule`, `--requirements`) and no `--verify-write-matrix`; the string occurs nowhere else in the tree. The header of a file the gate reads at runtime asserts a drift check that does not exist | **LABEL** (C-3) |
+| X-D2 | `references/module_contracts.yaml` `combat`, `mass_battle` rows | §4 | **LABEL** (C-1, C-2) |
+| X-D3 | `engine/season/hole_register.yaml` `site:`/`owner:` | §3 | **LABEL** (26 pointers) |
+| X-D4 | `architecture/PLAN.md:564-717`, `00_ADOPTION_README.md:27`, `ARCHITECTURE_V2.md` | `engine/season/register.py`, `engine/season/shape.py` | Layer 1 names files that were split into `harness/register.py` and `state/`. Layer 1 is not edited to match code (CLAUDE.md §0.05); these are plan-history paths inside ratified documents | accepted, nothing written; `11_GO_pointer_and_stale_text_resolutions.md` is the suite's home for pointer text and already lists what the orchestrator may touch |
+| X-D5 | `references/what_valoria_is_and_what_runs.md` (11 dead paths: `systems/factions/sim/faction_action.py`, `crown_initiative.py`, …) | describes the retired campaign driver | `[UNVERIFIED: not opened past the path list]` | reported to the orchestrator: a document titled "what runs" naming eleven files that do not exist is a currency hazard; its disposition is not a census edit |
+| X-D6 | `engine/season/harness/arms.py`, `tests/valoria/test_balance_oracle_arms.py` (18 mentions of `tools/balance_oracle.py`) | name the retired instrument | they name it as retired (CLAUDE.md §7) | **FP** |
 
 <!-- APPEND -->
 

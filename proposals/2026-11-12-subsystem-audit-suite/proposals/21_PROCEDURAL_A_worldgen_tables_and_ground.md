@@ -139,7 +139,8 @@ site_endowment:
       spread: 200                     # NEW: half-width, on condition_scale, of the starting-condition draw
 ```
 
-A kind named in `optional:` must be a `SITE_YIELD` kind or `none`; refused at import otherwise, naming the
+The kind names above are illustrative (the producing kinds built today are `harbour` and `seam`; the SE
+lane's proposal names the rest). A kind named in `optional:` must be a `SITE_YIELD` kind or `none`; refused at import otherwise, naming the
 row (the `_check_arms_at_build` idiom).
 
 **(g) `engine/season/data/fixtures.py`**: `endowment_mode` gains the value `drawn` (swept
