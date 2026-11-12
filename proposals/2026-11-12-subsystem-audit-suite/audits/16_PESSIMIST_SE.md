@@ -11,7 +11,43 @@ are cited, not redone. Everything measured here is new work unless a finding id 
 All runs: `PYTHONHASHSEED=0`; scripts and outputs under
 `/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379/scratchpad/runs/PES_SE/`.
 
-(Sections below are appended as the work proceeds; §0, the verdict, is written last and placed first.)
+## Read at: d161a61 (working tree)
+
+## 0. Verdict
+
+**The settlement layer does not do what the six sentences of a place say, and giving it the scarcity the
+first audit found missing does not make it do so.** The first audit's verdict (a sound accounting kernel
+under a world with nothing to account for) holds and is not redone. This audit tested the next step:
+it took the food away from eleven of the 37 towns by hand and ran computed play beside the same realm
+fed, at two seeds. With a third of the realm starving, no grain moved toward it, no one left it, no one
+traded with it, no person learned of it, and no one was blamed; the starving cohorts healed themselves
+by `tend` each season and the realm's story was the fed realm's story. With nobody acting, the same
+eleven towns fall by the same step and die in the same season, in silence, and then read `fed` and go on
+mining.
+
+All six premises fail by execution (§2). Sixteen of the layer's twenty objects can be cut today with
+nothing dying, five of them in every world (§1.1). The layer contains no live draw, so every outcome
+in it is a fixed function of state, and the determinism sweep cleared its hunger rule by reading the
+word "draw" in "larder draw" (§1). The one story the layer produces in computed play is a courtier
+changing address (§3).
+
+The five worst findings: a failing place changes nothing any person does (F-PES-SE-01, B); nothing in
+the layer is drawn (F-PES-SE-02, B); a shared granary feeds towns in id order and does not report the
+town it leaves with nothing (F-PES-SE-03); a death by hunger is recorded with no cause, so no retelling
+and no blame can attach to it (F-PES-SE-04); the shipped supply fixture, turned on, cuts every army to
+its crash floor because no treasury the field reads holds food (F-PES-SE-05).
+
+The steelman is owed and holds where the first audit put it: the kernel is conserved, typed and
+single-owned, MATTER decides nothing social, and the notes say candidly what is not built. What it
+cannot carry is the claim that the missing piece is content alone. Scarcity was supplied here and the
+chain from a hungry place to a person's act is still broken at three links that are code, not content:
+the report (silent unless a stocked larder is drained inexactly), the answer (`tend` erases the fall),
+and the offer (a trade is formed on fixture kinds the hungry do not hold).
+
+Two proposals are written (`proposals/16_PESSIMIST_SE_A_…`, `…_B_…`), fourteen resolutions decided
+(§6.1), three Jordan calls stated with two options each (§6.2).
+
+(Sections were appended as the work proceeded, so §2 precedes §1 in the file.)
 
 ## 2. Premise audit
 
@@ -358,8 +394,8 @@ until any census writer lands; it must land with R1 or before it.
 ### 1.3 R: the half with no player, and the extremes
 
 - **No player.** Barrier-only, the layer emits `yield.taken`, `stores.changed`, `condition.worn` and (in
-  a hungry world) `body.changed` and `person.died`, identically on every seed (the first audit's table:
-  seeds 0 and 1 agree to the unit). It throws no hook: no Event names a place as short, rich, emptied,
+  a hungry world) `body.changed` and `person.died`, with no rng anywhere in the path, so identically on
+  every seed (the first audit's table: play at seeds 0 and 1 and no play agree to the unit). It throws no hook: no Event names a place as short, rich, emptied,
   founded or cut off. R-WORLD fails for every settlement seat.
 - **Zero population** (famine arm, seasons 2-5). A town with no people reads `fed`, keeps capacity, keeps
   yielding from its seam (about 49 ore a season each), keeps its named residents at full body, and is
@@ -431,7 +467,7 @@ on the built realm the settlement layer's whole story output is S7**, and S7 is 
 | reading | seed 0 fed | seed 0 fail | seed 1 fed | seed 1 fail |
 |---|---|---|---|---|
 | towns with no food | 0 | 11 | 0 | 11 |
-| acts resolved | 1,532 | 1,527 | (735 + s1) | (733 + s1) |
+| acts resolved | 1,532 | 1,527 | 1,544 | 1,535 |
 | shortfall Observations / persons holding a shortfall claim | 0 / 0 | 0 / 0 | 0 / 0 | 0 / 0 |
 | deaths | 0 | 0 | 0 | 0 |
 | cohort `tend` executed (the hungry healing themselves) | 0 | 21 | 0 | 20 |
@@ -445,7 +481,7 @@ on the built realm the settlement layer's whole story output is S7**, and S7 is 
 | Event kinds present in one arm only | — | `office.established`, `establish.refused`, `issue.unauthorized` (1 each) | `matter.advanced`, `record.given` (1 each) | — |
 
 Reading. Removing the food of eleven towns changes, of the settlement layer's own kinds, `body.changed`
-(+11 a season), `body.tended` (+10 or +11), `stores.changed` and `condition.worn` (-11 each: the missing
+(+11 a season), `body.tended` (+9 to +11), `stores.changed` and `condition.worn` (-11 each: the missing
 harbours), and nothing else. The other differences between arms are small and unsigned (for example
 `transfer.refused` 24 against 19, `commitment.made` 26 against 17 at seed 0 season 1): the divergence a
 different act by eleven cohorts would cause anywhere, not a consequence of hunger; none is a kind a
@@ -455,8 +491,9 @@ story.**
 A control on the instrument itself: the first audit, on the shipped realm (empty larders at build),
 read 10 named migrations executed in two seasons at seed 0; here, in both arms with stocked larders,
 none. The difference is in the world built, not the probe's counting rule (the same `ex`/`ref` test as
-`se_who.py`). Its cause was not isolated `[UNVERIFIED]`; the unstocked arm was re-run as the control
-(evidence log, row 12).
+`se_who.py`). The unstocked arm was re-run with this probe as the control (evidence log, row 12): 10
+of 84 `migrate` attempts executed, all by named persons. The cause of the difference was not isolated
+`[UNVERIFIED]` (F-PES-SE-12).
 
 ### 3.3 The six beats, against the famine (the strongest story the layer owns)
 
@@ -477,8 +514,8 @@ none. The difference is in the world built, not the probe's counting rule (the s
 - **What does a player's choice change?** In the settlement layer, by the first audit's control, 2 to 4
   units of 13,690 in three seasons. Nothing here revises that. A player who wanted to relieve the
   highlands has `transfer` at the default amount of 1 against a need of 66 a season.
-- **The shape of the tail: are all runs the same run?** For the economy, yes, to the unit: barrier-only
-  stores are identical at seeds 0 and 1 (first audit), and in play the executed settlement acts are the
+- **The shape of the tail: are all runs the same run?** For the economy, yes, to the unit: the realm's
+  stores are identical under play at seed 0, play at seed 1 and no play (first audit), and in play the executed settlement acts are the
   same *kinds* of non-event on both seeds (self-moves, one self-transfer). There is no tail.
 - **Are persons' reasons readable afterwards?** There are no reasons to read: the cohorts did not act on
   hunger, and the one act they took (`tend`) is not caused, in the log, by the fall it answers
@@ -502,3 +539,219 @@ none. The difference is in the world built, not the probe's counting rule (the s
 | a granary is burned | `sabotage` reaches a Site's condition, never a store | no path |
 | a hoarder, a profiteer | no price, no `coin` | no path |
 
+## 4. Findings, worst first
+
+Severity as in the first audit: **B** blocks a requirement, **D** degrades narrative, **H** hygiene.
+Requirements by the ids of `dossiers/00_NINE.md`. Each names its falsifier run and its control.
+
+**F-PES-SE-01 · B · A failing place changes nothing that any person does.**
+Run: `pes_play.py {0,1} 2 fail` against `... fed` (the control: the same realm, the same seed, the eleven
+highland towns fed). Falsifier: one executed `transfer`, `exchange`, `requisition` or `migrate` with a
+highland town as an end, or one shortfall claim held by anyone, in the fail arm and not the fed arm.
+Outcome: none in either seed (§3.2). The hungry attempt to leave no more than the fed (22 against 24
+attempts, 0 executed of 239 in all), attempt to trade less (9 against 26), and repair themselves by
+`tend` (41 of 44 cohort-seasons).
+Touches R-01, R-02, R-04. This is the first audit's F-SE-01 and F-SE-04 seen from the other side: there
+the world had no scarcity; here it is given scarcity by hand and still nothing answers it. So the first
+lane's endowment proposal is necessary and not sufficient: a differentiated realm would starve its
+highlands in silence.
+Minimal fix at the owners, in order: (i) a starving cohort must become known to someone
+(`proposals/16_PESSIMIST_SE_A_...md` edits 2 and 3: the missed crossing, the cause chain; the chronic
+case is Jordan's, §6 J-1); (ii) `tend` must not answer hunger (same proposal, edit 4, owed to PC);
+(iii) the hungry must be able to name what they lack and what they have (F-PES-SE-10, owed to CHAR).
+
+**F-PES-SE-02 · B · Nothing in the settlement layer is drawn, and the sweep that should have said so
+cleared it by a homonym.**
+Evidence: §1 head. Falsifier: an rng parameter on any of the eight module entries or a `resolution`
+on any of the ten effects. Outcome: none; `18_DETERMINISM_SWEEP.md:110` reads `subsistence_draw` as
+"drawn". Control: a drawn layer would differ between world seeds; the first audit's stores agree
+to the unit between play at seed 0, play at seed 1 and no play at all.
+Touches R-09 and the standing rule. Fix: the hunger and wear draws are already proposed
+(`proposals/16_PESSIMIST_GAME_the_world_draws.md`); the verbs' task route is the sweep's C-01 and C-15.
+What is added here: which method the clock draws use is a Jordan call (§6 J-2), and who eats from a
+short granary is a draw this lane proposes (proposal A, edit 1).
+
+**F-PES-SE-03 · D · A shared granary feeds towns in id order, and the town left with nothing is not
+reported.** §1.2 A-1; `kernel.py` K2. Falsifier: `shortfalls` non-empty when the second town goes
+unfed. Outcome: empty. Control: one unit more in the granary and the report fires.
+The same hole opens across seasons: a granary holding an exact multiple of what its towns want feeds
+them in full until it is empty (no mouth unfed, so no report), and the next season every walk ends at
+`source None`, which the notes class as "never stocked" and keep silent. Stock authored in whole seasons
+of need is the natural authoring, and the first lane's own probe stocks its granaries at "N seasons of
+deficit, less one unit" (`runs/SE/se_ground.py:20`), which is this hole being stepped around.
+Touches R-01, R-09. Fix: proposal A, edits 1 and 2.
+
+**F-PES-SE-04 · D · A death by hunger is recorded as a death by nothing.**
+Evidence: `matter.py::_die` (`causes=[prior_d] if prior_d else [ROOT]`, where `prior_d` is an earlier
+*death* of the same person, so always `ROOT`); `matter.py:699-705` (the hunger `body.changed` cites the
+cohort's previous `body.changed`, else `ROOT`); famine arm, first death Event: `causes` of length 1,
+`observed=()`. Falsifier: any Event id on the death's cause chain that names a larder, a yield or a
+shortfall. Outcome: none.
+Touches R-01 (propagation needs a cause to propagate along), and the retelling half of the narrative
+measure. Fix: proposal A, edit 3 (causes only; no behaviour moves).
+
+**F-PES-SE-05 · D now, B for the campaign layer on the day the arm is flipped · The shipped supply
+fixture, turned on, reduces every army to its crash floor.** §1.2 A-2; `pes_supply.py`. Falsifier: one
+office whose rung could ration one man after two seasons of yield, or one settlement whose defender
+treasury could. Outcome: 0 of 34 and 0 of 37. Control: the same census finds 9,250 units at settlement
+rungs, so the food exists and is not where the field reads it.
+Touches R-04. Fix: the first lane's `07_SE_treasury_granary_B.md` and `07_SE_campaign_supply_and_muster.md`
+move the stock to the seat rungs; added here as a gate on H-241's flip (proposal B, edit 4): the arm may
+ship on only in a commit whose realm run shows a fielded side above the floor.
+
+**F-PES-SE-06 · D · A founding cannot fail, cannot found a town, and leaves a lot nobody uses.**
+§2.3 P4; `pes_found.py`. Falsifier: any change to a founded hearth in 40 seasons, or a `rung.founded`
+for a settlement. Outcome: none; `found.refused`.
+Touches R-05, R-09. No decided fix: whether a settlement may be founded is the held question SE-9(a)
+(`rosters.yaml:1973`), and whether a founded place may end needs a Layer-1 licence to end a Rung other
+than by `raze`. §6 J-3.
+
+**F-PES-SE-07 · D · The harvest is not an event, the weather runs the mines, and there is no season.**
+§2.3 P2; `pes_noacts.py harvest 0 8`. Falsifier: an Event or Observation naming the factor, or ore
+yield constant under a varying factor. Outcome: 0 such records; ore follows the factor.
+Touches R-09, the retelling measure. Fix: proposal B, edits 1 and 2.
+
+**F-PES-SE-08 · D · A second garrison adds nothing and a new one halves the walls.** §1.2 A-3; K4.
+Falsifier: `fortification((1000, 0)) >= fortification((1000,))`. Outcome: 0.5 against 1.0.
+Touches the field's `fort_level` (MB). Fix: proposal B, edit 3.
+
+**F-PES-SE-09 · D · Two fifths of what the realm produces has no use, and three more objects have no
+reader.** §1.1: ore (1,850 of 4,810 units a season), `Rung.yield`, the hunger bands, `coin`. Falsifier:
+a non-test, non-harness reader of each (grep). Outcome: none.
+Touches NERS-N and E. Fix: §6 R-PES-SE-05 to -08 (a reader or a deletion each); `Rung.yield` gains its
+reader in proposal B, edit 2.
+
+**F-PES-SE-10 · D (cross-lane, CHAR) · Want lowers the attempt to trade.** §2.3 P5. The hungry towns'
+cohorts attempt `exchange` a third as often and `transfer` a fifth as often as the same towns fed,
+because the acts are formed on fixture kinds (`grain` out, `default_return_kind` back) and a town
+holding only ore and timber can name neither side. Falsifier: more highland trade attempts in the fail
+arm than the fed arm on either seed. Outcome: fewer on both.
+Touches R-04, R-05. Fix: §6 R-PES-SE-09 (the kinds are read off the actor's own stores and lack);
+owner `decision/options.py`, with the first lane's CR-49 destination class.
+
+**F-PES-SE-11 · H · The story instruments cannot see a place.** §3.3: a famine has no act, so
+`storybar`, `chronicle` and `arc` (which read acts and cross-person chains) cannot register it, and
+`ENDINGS_CLASSIFIED.yaml` names no ending of a place. No fix proposed (`CLAUDE.md` §0.1 pt 5: an
+instrument is not load-bearing on the game; the first audit's F-SE-16 took the same course). It is
+recorded because a "story bar" reading on any future settlement work will not count that work.
+
+**F-PES-SE-12 · H · Stocking the larders at world-gen coincides with every migration stopping.**
+Evidence: executed `migrate` 0 of 239 in the four stocked-arm runs; 10 of 84 in the unstocked control
+at seed 0 over the same two seasons (`play_s0_2_ship.txt`, all ten by named persons, the same count the
+first audit's `se_who.py` read). So the probe can see a migration, and a realm whose larders are stocked
+at build has none. The cause was not isolated `[UNVERIFIED]`. It bears on `07_SE_ground_and_granaries.md` §4 (c), which stocks
+the larders: its gate should read `migrate`'s refusal clauses before and after.
+
+**F-PES-SE-13 · H · Smaller kernel defects**, each measured: timber yields nothing below condition 100
+and every kind loses a whole unit at condition 999 (`int()` truncation, K5); `build` leaves a `timber: 0`
+key in the payer's stores (`found.txt`); a cohort may `migrate` into a territory, a duchy or the realm
+rung (`room_s0.txt`: 485, 76 and 1 open pairs), where the notion of a town's people living "in the
+realm" has no reading. No proposal; the first is content, the second is one line in
+`effects_shared._debit` beside the rule `provision.py` already states, the third is a `referent_class`
+matter for CR-49.
+
+## 5. The three lists the work order asks for
+
+**False N-lines found** (§1.1): sixteen of twenty objects cut free today; five in every world: the `ore`
+yield, `Rung.yield`, the hunger bands, the geography file's adjacency, cost and budget keys, `coin`.
+Two that hold in principle are erased in computed play (the larder's bite, by `tend`; the shortfall
+report, by never firing).
+
+**Premises that failed** (§2.4): all six, by execution. P1 at "shrinks" and "is blamed"; P2 at "differ";
+P3 at "leave"; P4 at "or fails"; P5 at "moves"; P6 at "character".
+
+**Stories** (§3.1, §3.5). Can happen in computed play on the built realm: a courtier changes address.
+Can happen in a hand-built world: a dearth relieved once; a works raised; a town razed; a seat's
+establishment lapsing unpaid. Can happen only with nobody acting: a town starving to death. Cannot
+happen: a town thinning and recovering; the hungry blaming a lord; refugees; a remembered bad year; a
+mining town buying bread; a cut road; a founded town growing or dying; a siege by hunger; an army eating
+a province; a burned granary; a hoarder.
+
+## 6. Resolutions decided, Jordan calls, and what is owed to other lanes
+
+### 6.1 Decided (the five-step ladder; the step is named)
+
+| id | inconsistency or gap | resolution | step | where |
+|---|---|---|---|---|
+| R-PES-SE-01 | who eats when a rung cannot feed all who draw on it (id order today) | shares in proportion to want; the indivisible remainder by a keyed draw | 5 (and the standing rule for the remainder) | proposal A, edit 1 |
+| R-PES-SE-02 | a rung drained exactly reports no dearth | the eater who finds a rung this draw emptied is short *at that rung* | 3 (`matter.py:629`: the emission is the crossing) | proposal A, edit 2 |
+| R-PES-SE-03 | a hunger death and a hunger fall cite no cause | `causes` cite the larder write, and the death cites the fall | 5 | proposal A, edit 3 |
+| R-PES-SE-04 | `tend` undoes hunger | a patient short at the last MATTER is not tended | 4 (the effect-body decline, `_eff_move`'s precedent) | proposal A, edit 4 (owed to PC) |
+| R-PES-SE-05 | `ore` has no reader | the martial fabrics cost ore: `works_cost` rows `garrison`, `barracks`, `archery_range`, `stable`, `siege_workshop` gain `ore: 10` beside timber `[ASSUMPTION; medium; Jordan to correct]`; arms as matter (`arms_kinds`, CP-T03-03) are its second reader when they are priced | 4 (`works_cost`'s own one-number precedent) | `rosters.yaml: works_cost` |
+| R-PES-SE-06 | `Rung.yield` is written and never read | it gains a reader: the yield Event's receipt (proposal B, edit 2); not deleted, because Layer 1 lists the write (#353 §25) | 3 | proposal B |
+| R-PES-SE-07 | the hunger bands are read by a census only | no edit until a person can be told one; the first reader is the first lane's `unrest` (CP-T08-06). Not deleted | 3 | — |
+| R-PES-SE-08 | `coin` is a registered kind with no source | leave the row (the registry is open by its own note, `rosters.yaml:1827`); nothing may *read* `coin` until something yields or mints it | 3 | — |
+| R-PES-SE-09 | `exchange` and `transfer` are formed on fixture kinds | `kind` is the kind the actor's rung holds most of beyond its own draw; `return_kind` is a kind its ladder was short of at the last MATTER (`World._subsistence_shortfall`, else the fixture) | 5 | `decision/options.py` (CHAR), with CR-49 |
+| R-PES-SE-10 | the weather multiplies every Site | only kinds the roster marks as grown | 5 | proposal B, edit 1 |
+| R-PES-SE-11 | fortification is a mean | the complement of the product of the garrisons' shortfalls | 5 | proposal B, edit 3 |
+| R-PES-SE-12 | `field_provisioning` may be flipped in a realm whose treasuries are empty | the flip carries a realm reading of fielded troops | 5 | proposal B, edit 4 |
+| R-PES-SE-13 | grain from a harbour, timber from a seam | the names follow the endowment: `field` and `woodland` Site kinds as roster rows when `07_SE_ground_and_granaries.md`'s endowment table lands; until then the yields are a declared invention (`rosters.yaml:3516`) and stand | 3 | first lane's proposal |
+| R-PES-SE-14 | one ration on two clocks (season and field) | the field ration is the season's ration, charged once a season to an army in the field, not per battle; folded into `07_SE_campaign_supply_and_muster.md`'s R-SE-34 as a constraint on it | 4 (the larder is the precedent) | first lane's proposal |
+
+Fourteen resolutions decided.
+
+### 6.2 Jordan calls (each survives the ladder: two defensible options, different games)
+
+**J-1. Does a chronic dearth speak?** Today a place reports its crossing into dearth once and is then
+silent (ruled a balance number, H-160 limit 3, 2026-10-12, as the first audit records it). In the fail
+arm that ruling's consequence is that eleven towns starve and no person ever learns of it, because they
+were never stocked and so never crossed. *Option A (keep the ruling's cadence, repair its edge):* a
+never-stocked ladder reports once, at the first short season, as a crossing from "no report yet";
+thereafter silence. Famines are discovered once and then depend on memory and rumour. *Option B (the
+dearth speaks every season it lasts):* the Observation rides the cohort's `body.changed` each short
+season. Famines stay in view; the claim volume rises with every hungry town. A is the smaller change and
+is consistent with the ruling; B reverses it. This lane's proposal A builds neither; it repairs only
+the missed exact-drain crossing, which the ruling's own words cover.
+
+**J-2. How does the world's own motion draw?** *Option A:* by multiplier tables, equally likely, on the
+weather draw's precedent (`16_PESSIMIST_GAME_the_world_draws.md`: weather, hunger, wear consistent with
+each other). *Option B:* by the one ladder (`degree_from_net`): a place's endurance or fertility as the
+pool, the season's hardship as the obstacle, the four bands as the outcome, so a harvest is
+"Overwhelming" or "a Failure" in the vocabulary every other outcome uses, and a capability (a steward's
+husbandry) can bear on it. A is three fixtures; B makes the settlement layer part of the one resolution
+system and costs a pool and an obstacle per clock. The standing rule's own wording ("a probabilistic
+roll with a graded, recoverable result (the four-band ladder)") reads toward B.
+
+**J-3. May a place begin, and may a begun place end?** SE-9(a) holds "never adding nodes" to the
+settlement registry, so `found` makes hearths and communities only, and nothing ends one. *Option A (the
+map is fixed):* 37 settlements forever; founding is of households within them; "a founder builds
+something that lasts or fails" is not a sentence of this game at the scale of a town, and the hearth
+needs a lapse rule (a founded rung with no resident and no Site when its works' last term matures ends,
+its stake returning to its parent) to have a second outcome. *Option B (the map grows and shrinks):*
+`settlement` gains a `works_cost` row and a `raze`-like natural end (abandonment at population 0 for N
+seasons). B is the colony game the addendum's precedents describe; A is the court game on a fixed board.
+
+### 6.3 Owed to other lanes (not edited; nothing sent)
+
+- `18_DETERMINISM_SWEEP.md:110`: strike `world_q.subsistence_draw` from the "checked, drawn" list; it is
+  arithmetic (F-PES-SE-02).
+- PC: `tend` and hunger (proposal A, edit 4).
+- CHAR: the kinds an `exchange` or `transfer` is formed on (R-PES-SE-09).
+- First SE lane: F-PES-SE-12 (its stocking edit and migration); R-PES-SE-14 on its supply proposal; A-6
+  (the per-head loss must land with or before any census writer).
+- GAME: `16_PESSIMIST_GAME_the_world_draws.md` and J-2.
+
+## 7. Evidence log
+
+All under `/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379/scratchpad/runs/PES_SE/`; `PYTHONHASHSEED=0`.
+
+| # | command | seed, seasons | output | bears on |
+|---|---|---|---|---|
+| 1 | `kernel.py` (module calls: larder, subsist, produce, fortification) | — | `kernel.txt` | K1-K5; F-03, F-08, F-13, A-6 |
+| 2 | `pes_noacts.py room 0 0` | 0, build | `room_s0.txt` | P3, F-13 |
+| 3 | `pes_noacts.py famine 0 6` (eleven towns without harbour or food; `body_step` 67, a registered sweep arm) | 0, 6 | `famine_s0_6.txt` | P1, F-04, §3.3 |
+| 4 | `pes_noacts.py harvest 0 8` (`season_factor_draw` at `((0.5, 1.0, 2.0),)*4`) | 0, 8 | `harvest_s0_8.txt` | P2, F-07 |
+| 5 | `pes_play.py 0 2 fed` | 0, 2 | `play_s0_2_fed.txt`, hash `1bd09e85…` | control |
+| 6 | `pes_play.py 0 2 fail` | 0, 2 | `play_s0_2_fail.txt`, hash `3872ddf0…` | F-01, F-10, §3.2 |
+| 7 | `pes_play.py 1 2 fed` | 1, 2 | `play_s1_2_fed.txt` | control |
+| 8 | `pes_play.py 1 2 fail` | 1, 2 | `play_s1_2_fail.txt` | F-01, F-10 |
+| 9 | `kdiff.py`, `tally.py` over rows 5-8 (Event-kind differences; act tallies by verb, class, region, outcome) | — | printed | §3.2 |
+| 10 | `pes_found.py` (`tiny_world`, the founding test's helpers; 40 MATTER barriers) | — | `found.txt` | P4, F-06 |
+| 11 | `pes_supply.py` (provision edges; the realm's offices and treasuries after two barrier-only seasons) | 0, 2 | `supply.txt` | F-05 |
+| 12 | `pes_play_ship.py 0 2 ship` (the unstocked realm: the control on the probe's own migration count) | 0, 2 | `play_s0_2_ship.txt` | F-12 |
+| 13 | grep: `blame`; readers of `ore`, `coin`, `Rung.yield`, `world_q.hunger`; `del w.rungs`; settlement words in `ENDINGS_CLASSIFIED.yaml` | — | inline | §1.1, §3.3 |
+
+Read, not run: the first audit's `scarce.txt`, `who_s0_2.txt`, `ground_middraw.txt` (cited at their
+rows); `test_term_upkeep.py` and `test_in12_raze.py` (named in §3.1 from docstrings, `[UNVERIFIED here]`).
+Not run: `aperture`, `storybar`, `corpus_run` (the machine's load average was 30 to 45 throughout; a
+two-season play arm took 190 to 240 s). No pytest. No tracked file written.

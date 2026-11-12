@@ -189,3 +189,92 @@ large (35,115 against 34,837).
 record.created | answers 3. Berta utter"* is an index entry, not a retelling. Intent: partly; integrity
 (the `causes[]` edge) is real and held against attack in the CORE audit. Words: `Receipt` promises more
 than an acknowledgement that a write occurred. Fix: F-PES-CORE-02.
+
+### 1.6 The two readings §1.3 and §1.4 left open (`p34.py 0 2`; hash `bacd687f…`, the baseline's)
+
+**Refusals, split by what the refusal's own observation could teach** (525 refused individual acts in two
+seasons; `Event.observed` read off each refusal; the stem lists are `loop/witness.py`'s own
+`WORLD_ONLY_STEMS` and `LEDGER_DERIVED_STEMS`):
+
+| the read that failed | refusals | same opportunity attempted again | again refused |
+|---|---|---|---|
+| a stem WITNESS deposits (`exists`, `stores`, `room`, `present_at`, `purview`, `contain.path`) | 189 | **15 (8%)** | 15 |
+| a world-only stem, never deposited (`with` 174, `dispute`, `individual`, `audience`) | 181 | **100 (55%)** | 100 |
+| every observation true (the refusal's cause is not among the fold's reads: eligibility, the write clause, a null search) | 139 | **81 (58%)** | 74 |
+| no observation | 9 | 6 | 5 |
+| `claim.held` false, never deposited | 7 | 2 | 1 |
+
+This is the control the sentence needed, and it cuts both ways. **Where the failing read reaches the
+ledger, the refusal teaches: 8% retry, against 20% for acts that succeeded.** Where it does not (327 of
+525, 62%), 57% are tried again and 96% of those fail. The mechanism is sound and is wired to two fifths
+of its cases. The largest unwired case is one stem, `with`.
+
+**Gate writes the log does not hold.** The gate minted 40,494 receipts; 36,580 ride an Event; **3,914 are
+in no Event, and every one is a `Person.scar` write** (3,906 at RESOLVE, 8 at ENCOUNTER), on all 83
+persons: 47 per person in two seasons. Non-claim receipts in the log number 1,749, so **of the 5,663
+state changes that are not ledger bookkeeping, 69% are absent from the record**. This is deliberate and
+documented (`loop/resolve.py:637-640`: *"Nothing is emitted: `scar.taken` is declared on the row and no
+reader consumes it, and putting the receipts on the act's Event would deposit claims about every scarred
+observer at WITNESS"*; `_conviction_crisis` follows *"the scar's precedent"*, `:706-708`), and
+`write_matrix.yaml` still declares `emits: scar.taken` and `emits: conviction.moved` on the two rows. The
+rate itself (a scar on 38% of acts, a dozen observers each) is the CHAR lane's finding; the core's is that
+the one kind of change that reaches every person in the realm, and the only writer of a conviction
+crisis (*"fold, restabilise or destroyed"*), leaves nothing a retelling can find. F-PES-CORE-03.
+
+**The retelling the instrument makes** (`harness/chronicle.py`, same world):
+
+- over consequence acts (446 of 1,703): the deepest chain is **4 acts**: `conceal` (cover.assumed), then
+  three `create_record`s by three people. With the log's `causes[]` shuffled (`arc.shuffled_causes`, the
+  instrument's own control) the deepest chain is **5**. The pick cannot be told from a shuffle; the WR
+  lane found the same of chain ends (its E-05) and that proposal is cited, not redone.
+- over all acts: 10 acts, of which **8 are refusals** (*transfer.refused → train.refused → order.given →
+  dispensation.issued → tend.refused → exchange.refused → travel.blocked → tend.refused → train.refused →
+  travel.blocked*). The longest thing that happened in two seasons is people failing after watching
+  other people fail.
+
+## 2. NERS — cut tests on the core's own structures, executed
+
+Method (`skills/ners/SKILL.md`; definitions `CLAUDE.md` §0.06): propose the cut, run it or read it off a
+run, name what dies. Graded on false N-lines. `ordp.py 0 1` (one season, seed 0; the replay arm
+reproduces hash `5ab73af2…` and differs in nothing, which is the control); the queue and receipt rows
+are read off the three-season dump.
+
+| structure | the cut | what died | verdict |
+|---|---|---|---|
+| **the per-person scene queue** (`_queued`, `_inputs_fingerprint`, the re-plan rule; `deliberate.py:199-308`) | choose one scene per round | nothing: **0 of 1,137** released scenes came from a queue an earlier round made | **FALSE N-LINE.** The N-line is the law text *"the PERSON chooses what to leave undone"*; in computed play the round count does the leaving |
+| **the five strata** (`resolve._canonical_order`, `rosters.yaml: strata`) | hash order only (`stratum_of → 0`) | of 821 acts: **0** executed/refused flips, 0 differences in emitted kinds or degree in round 0; 820 of 821 act ids in common over the season; two persons' scar counts; one log entry | **FALSE N-LINE in computed play.** What the strata would decide (movement before a social act that needs presence) needs two acts in one round that touch one thing; see the next row for how often that is |
+| **fold order at all** | reverse the hash order inside each stratum | round 0: **1 of 175** acts flips (`speak`, executed → refused); season: 6 status flips among 774 common acts | **nearly free.** S27.1's *"each act sees the world its predecessors left"* decides under 1% of acts. This is the frequency `18_DETERMINISM_rival_acts_in_one_fold.md` left unmeasured: its draw would touch about one act in 175 |
+| **the retry licence** (`driver.py:508-518`: a refused act stays retryable *"because a later round's world may have made its precondition true"*) | filter refused opportunities for the season as realised ones are | 4 of 309 retries succeed (research excluded); 305 scenes are spent on a second refusal | **FALSE N-LINE, 99 parts in 100.** The possibility it protects is real and is 1.3% of its uses. Not the fix (a ban is a fixed outcome); see F-PES-CORE-01 |
+| `Receipt.delta`, `.spec`, `.mode` | delete the three fields | nothing: one constant written, one constant folded into the hash | free as built; the better cut is to fill `delta` (F-PES-CORE-02) |
+| the contest depth cap | F-CORE-07 | nothing | cited |
+| CENSUS (the sixth step) | drop the step | nothing at seed 0 in three seasons: `person.demanded` is never emitted | **unexercised, not shown false.** Individuation on demand is the only way a person enters after the build; that nobody is ever demanded is the finding |
+| the `obstacle > 2 × pool` gate (`resolve.py:1046`) and the fold kinds `act.ineligible`, `act.refused`, `attempt.refused` | — | none of the three kinds is emitted in three seasons | unexercised |
+| the write matrix as a runtime refusal | let any step write any cell | of 65 `(kind, field, step)` cells, 26 are written in a season; **no write was refused by the matrix** (the 59 writes that raised are all `NoOpReceipt`) | N holds from one direction only (authoring: a new effect that writes the wrong cell is stopped at its first run). Narrowed, not passing as a play-time rule. No finding: that is what a type check is |
+| the `Scene` level (one to three interactions) | one act per scene | 1,995 of 2,630 acts ride three-interaction scenes: the level triples what a budget buys | N holds **for quantity**; as sequence it is empty (§1.1 pt 2) |
+| WITNESS per round | once per season | the 420 same-season answers of §1.1 | N holds |
+| ENCOUNTER | fold fights where declared | `[not cut]` 29 `march.declared`, 5 `field.unopposed` at seed 0 pass through it | exercised; not attacked |
+
+**R, the half with no player.** The kernel makes occasions without a player (every one of 1,487
+individual acts has an occasion; 1,408 of them `claim_landed`, 79 `need`: the roster has those two sources
+and no other, `rosters.yaml: question_sources`). It does not make *completion*: 100 of the 178 declared
+Event kinds were never emitted in three seasons, and the list is the list of things that finish something
+(`person.died`, `matter.determined`, `tenure.opened`, `exchange.made`, `site.built`, `rung.founded`,
+`capability.raised`, `confession.made`, `succession.claimed`, `record.destroyed`, `field.won`); 19 of 67
+verbs were never attempted. **R at the extremes** (`extremes.py`): an empty World runs five rounds of
+nothing without error; at `scene_budget = 0` MATTER's Events are logged and witnessed by nobody (WITNESS
+is called only inside the round loop: ledgers stay at 0); at 40 rounds two persons of a three-person world
+emit `travel.blocked` 108 times in two seasons.
+
+**S.** *Pauses correctly*: fails at the scene (§1.1 pt 3). *Calculations consistent with siblings*: the
+believed-odds factor weights a contested Candidate by the chance of its bands (`choose.py::odds_weight`),
+and nothing weights any Candidate by the chance it is admitted at all, though admission decides 13 verbs
+outright (GAME §1.3) and the person holds the evidence. One ladder for "will the roll go my way" and
+none for "can I even try" is the sibling inconsistency F-PES-CORE-01's fix removes.
+
+**E, last, as a ratio.** What N and R found the core to deliver in computed play: a clock, a gate, a
+causal edge, a same-season answer channel, and a teaching channel that works where it is wired. Against
+that: a plan queue that is never used, an order rule that decides nothing, a retry rule that pays once in
+a hundred, three receipt fields holding a constant, a log 94% bookkeeping, and five `choose()` calls per
+person per season each composing five scenes to release one. The kernel is legible in its rules and
+carries roughly as much unexercised structure as exercised. *"Allows the player to intuit complex
+outcomes from simple choices"* fails where the three surprises of §1.1 are.

@@ -19,8 +19,8 @@ who rules, what stands or what is in the granary.** Three seasons of the shipped
 2 against a control in which nobody acts at all (X1): the acting realm ends with the same persons, the
 same holder in every one of the 34 seats, the same condition on every one of the 322 sites, the same
 rungs and (to within a few units of grain) the same stores as the realm in which no person did anything;
-the one exception in nine seed-seasons is a cardinal killed in a `capture` at seed 1, whose seat nobody
-then fills and whose death no other person's executed act answers. What the acting realm adds is 357
+the one exception in nine seed-seasons is a cardinal killed in a `capture`, the same man at seeds 1 and
+2, whose seat nobody then fills and whose death no other person's executed act answers. What the acting realm adds is 357
 records, 199 propositions, 95 commitments, 42 duties, a docket of 18 and a ledger for everyone. Every
 executed act that answers another person's act lands in the information verbs (`create_record`, `utter`,
 `reconstruct`, `research`, `surveil`), the docket verbs (`petition`, `convene`) or the emission-only
@@ -249,7 +249,7 @@ four-season realm's (`abbde715aa0e`), so the sweep itself moved nothing.
 
 | # | link | O (ordinary) | C (observed) | verdict · cause |
 |---|---|---|---|---|
-| 1 | he can die | of age, illness, violence, accident | of nothing, shipped: both hazard rates are 0, `fight` never forms; nine seed-seasons give one death, the same cardinal at seeds 1 and 2 | **INERT at FIRES** · BEHAVIOUR (the control is the shipped value) |
+| 1 | he can die | of age, illness, violence, accident | of nothing, shipped: both hazard rates are 0, `fight` never forms; nine seed-seasons give two deaths, one each at seeds 1 and 2, the same cardinal in a `capture` | **INERT at FIRES** · BEHAVIOUR (the control is the shipped value) |
 | 2 | the death is an event with a trace | one Event, his seats close | `person.died` (causes `[ROOT]`), `tenure.closed` naming both seats | FOLLOWS (PROXY) |
 | 3 | "the others": who learns | the court at once, the realm within a season | 16 of 82 the season he dies; **17 of 82 three seasons later** | **DEPARTS** · BEHAVIOUR: news does not travel (FI audit: almost nothing is told) |
 | 4 | the seat is filled | an heir claims; rivals may contest; an interregnum has a cost | the Prince's `succeed`, once, the season after: no rival, no roll, no refusal possible once admitted. `succession.claimed`'s `causes[]` is his own act alone: the log does not say he claimed *because* the King died | FOLLOWS for the throne · **fixed outcome** (standing rule) · E10 DEPARTS (reason unreadable) |
@@ -285,7 +285,8 @@ cost of obeying set; defiance is visible to the issuer". Listed for the FA lane 
 
 FI measured the first half: between 0 and 7 of 10,000 to 12,000 held claims arrived by a person telling
 another; no claim was retold (`08_FI_audit.md` §0). X1 adds the second half: `tell` and `lie` are
-refused 81 of 102 times at seed 0 (`tell.refused`), 12 tellings land (`news.told` 10), and **no
+refused 81 of 102 times at seed 0 (`tell.refused`), 11 fail the roll (`news.untold`), 10 land
+(`news.told`), and **no
 `news.told` Event is among the causes of any other person's executed act at seeds 0 or 1** (10 and 9
 emitted). A told thing is held and nothing is done with it. Opposite failure: what *is* drawn here (the
 `tell` roll, three bands) has spread; what it gates has no consequence, so the spread is decoration.
@@ -328,7 +329,7 @@ have played).
 
 | | AUTO | ABSTAIN | LAST |
 |---|---|---|---|
-| the King's executed acts | 24 | 0 | fewer |
+| the King's executed acts | 24 | 0 | 11 |
 | persons, seats, sites, rungs, stores | — | **same** | **same** |
 | offices | 35 | 34 (`off_lord_terr_T1` never established) | 34 |
 | `duty.taken` / `duty.refused` in the realm | 42 / 69 | **0 / 0** | 0 / 0 |
@@ -539,9 +540,13 @@ admits.
 
 **F-PES-GAME-09 · D · most persons are downstream of nobody and upstream of nobody.** Reach (executed
 acts by others descending from a person's acts), seed 0, three seasons: 48 of 83 at zero; median 0;
-cohorts' mean 0.6, seat-holders' 18.2. The 37 cohorts are 45% of the actors and make about two acts in
-five (1,049 with no cast against 2,630 with it). *Falsifier:* `x4_player.py 0 3` REACH lines; `x5`.
-*Touches* R-06. *Fix:* none proposed here; §7 J-2.
+cohorts' mean 0.6, seat-holders' 18.2. The 37 cohorts are 45% of the actors and make 43% of the acts
+(1,143 attempted of 2,630; 596 executed of 1,394: `x6_cohort_cut.py 0 3`, the shipped arm), and what
+"the people of" a settlement execute is `create_record` 174, `utter` 107, `reconstruct` 51, `research`
+49, `forge` **34** (the 46 individuals forge 18), `surveil` 28, `conceal` **18** covers. A town's
+population forges documents and assumes cover identities, and cannot `migrate` (refused every time).
+*Falsifier:* `x4_player.py 0 3` REACH lines; `x5`; `x6`. *Touches* R-06; the genre test fails (a
+strategy player does not expect a village to be a spy). *Fix:* none proposed here; §7 J-2.
 
 **F-PES-GAME-10 · D · a player-king who does nothing loses nothing.** §2.5. *Touches* R-02 as meant.
 *Fix:* the ring; nothing specific to the play surface.
@@ -649,8 +654,9 @@ two of the three seeds. Today every clause fails.
   remit until one returns. Under (a) famine is an economic story; under (b) it is a political one, and
   a blight can unseat a duke.
 - **J-2 · cohorts as full actors.** The 37 cohorts are persons (S9.1) and are offered the whole verb
-  table: they write records, utter propositions, commit, forge and argue, make two acts in five, and
-  are answered by almost nobody (reach 0.6). (a) Keep: the people are a chorus of individuals writ
+  table: they write records, utter propositions, commit, research, forge (34 forgeries to the
+  individuals' 18) and assume covers (18), make 43% of all acts, and are answered by almost nobody
+  (reach 0.6). (a) Keep: the people are a chorus of individuals writ
   large. (b) Give a cohort a collective aperture by a roster column (petition, migrate, work, tend,
   comply or refuse, riot) so that what a population does is what a population can do. Under (a) the
   realm's log is mostly the populace's paperwork; under (b) it is the named persons' acts against a
@@ -680,7 +686,7 @@ All at `4995824`, `PYTHONHASHSEED=0`, outputs under `runs/PES_GAME/` in the scra
 | X3 local | `x3_famine.py 0 1 5 local` | 0 · 1 + 5 | `[not finished under load; §2.4 link 5 rests on X1, not on it]` |
 | X4 | `x4_player.py 0 3` → `x4_s0.txt` | 0 · 3 | §2.5; reach |
 | X5 | `x5_extremes.py 0 3` → `x5_s0.txt` | 0 · 3 | §3.7 |
-| X6 | `x6_cohort_cut.py {0,1} 3` | 0, 1 · 3 | `[not finished under load]` |
+| X6 | `x6_cohort_cut.py 0 3` → `x6_s0.txt` | 0 · 3 | the shipped arm finished (F-09's cohort figures; 513 executed answers, equal to X1's matrix total, the instrument's own agreement); the CUT arm (cohorts do not deliberate) `[not finished under load: J-2 is unpriced]` |
 | census parse | `parse_census.py x1_s*_k3.txt` | — | §1.3 table; the dead-end sum 1,585 of 7,940 |
 | fixtures | `build_realm(0).fixtures.get(...)` | 0 | the four draw sites shipped off |
 | cited, not rerun | `runs/WR/probe_s{0,1,2}_k6.txt`, `runs/WR/storybar_drawseeds_s0_k2.txt`, `runs/SE/probe_noacts_s0_120.txt`, `runs/SE/probe_play_s0_4.txt`, `runs/CORE/register_requirements.txt`, `runs/CORE/m1_summary.txt`, `runs/ARCS/corpus_run.txt` | | as the lanes report |

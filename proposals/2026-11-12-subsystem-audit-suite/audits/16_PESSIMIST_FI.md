@@ -236,3 +236,138 @@ row exactly (68.3 / 24.0 / 7.7 at pool 2). Three things depart.
 is false, and from that day he can never see whose hand wrote it, however long he studies it. Had he
 been slower, he might have.*
 
+### 2.3 P3 "A forged letter is believed until someone who knows better sees it": holds to "is believed" (EXECUTES), then every later link is inert or asserted; INERT at FIRES
+
+**Runs** (`p3_forgery.py`, `p3b_knows.py`; tiny world; the forger forges or, as the control, surveys
+a sheet of a faction, and hands it on by `give`; candidates are `opening_set` over `questions_for`
+for the receiver; realm counts from `fi_arms.py`, seed 0, three seasons).
+
+| # | link | O | C observed | verdict · cause |
+|---|---|---|---|---|
+| P3.1 | forged, by an act with skill in it | could go well or badly | `forge` writes with certainty once admitted; quality is one fixture (`default_forgery_quality` 1) for every forger; realm: 113 attempted, 52 written, 61 refused by the `requires` cell | DEPARTS · BEHAVIOUR (no draw: the standing rule; the determinism sweep lists `forge`) |
+| P3.1b | the making can be seen | maybe, by chance | everyone in the room holds `(paper, record.forged, True)` firsthand and a sighting naming the forger, with certainty. Realm: 12 of 52 forgeries were known forged, to up to 7 others, the instant they were made | DEPARTS · BEHAVIOUR (a forger cannot forge unseen in company, and every bystander recognises the act as forging; `18_DETERMINISM_notice_is_a_draw` is the owner) |
+| P3.2 | a letter that purports an author | an author field that is false | a `faction_sheet` (proposition, members, holdings, seats, head) with the forger written in as `head`. There is no author, sender or seal on any Record | DEPARTS · WORD: `forge` forges a roll with oneself at its head, the same for every forger (F-FI-10) |
+| P3.3 | is believed | the reader acts as if it were true | a holder's candidates take `to` from the sheet's `head`: 19 (a hearth member) and 28 (the Duke) candidates addressed to the forger, by `challenge`, `capture`, `determine`, `exchange`, `interview`, `move`, `pardon`, `raze`, `sabotage`, `speak`, `surveil`, `train`, `transfer`. Control (surveyed sheet, `head: None`): the same candidates with `to` bound to **the paper itself** | FOLLOWS at EXECUTES, with a COMPOSITION defect: being named head earns the forger a duke's `challenge` and `capture` as readily as his `exchange` |
+| P3.3 | (FIRES) | forgeries reach readers | **0 of 52 forgeries ever left the forger's hand** (0 of 57 and 0 of 40 in the two cut arms); `give` 25 attempted, 1 executed | **INERT at FIRES** |
+| P3.4 | someone who knows better | a definite set | nobody can. The content claim's subject is the paper, so no claim a person holds shares a cell with it, and nothing can contradict it. A man who **watched the forging** and is then handed the sheet is offered 116 candidates, 19 of them addressed to the forger off the sheet; with that knowledge deleted from his ledger (control): 116 and 19, the same candidates | **INERT** (knowledge of the forgery is read by nothing) |
+| P3.5 | sees it; odds by what he knows | a draw, ordered by knowledge | a draw ordered by the reader's `inquiry` pool and the fixture quality (§2.2's table); knowledge of the faction, of the forger or of the true head plays no part | DEPARTS · BEHAVIOUR (skill, not knowledge) |
+| P3.6 | until: then he disbelieves | the content is discounted | after his own `Success` find the holder holds `(paper, record.forged)` and `(forger, record.forged)`, **and the content claim unchanged at confidence 100, firsthand**; 21 of his candidates still read `to: the forger` off the sheet | **DEPARTS · BEHAVIOUR** (disbelief has no carrier) |
+| P3.7 | a genuine letter is not called forged | control | a surveyed sheet has an empty trail; 0 `record.forged` claims in any band | FOLLOWS |
+
+**Play-back.** *A stranger writes out the roll of the Duke's house with his own name at its head, in
+front of two clerks who watch him do it. He keeps it in his coat for three years. In the one telling
+where he hands it to a clerk who watched, the clerk weighs challenging him, questioning him and
+trading with him as head of the house, exactly as he would had he not watched. The Duke, handed the
+same roll, proves it false and goes on reading it as true.*
+
+**What the precedent asks and the code lacks** (L.A. Noire, Ace Attorney, Obra Dinn: a document is
+set against what the reader holds): a cell the paper and the reader's ledger share. The fix is at one
+owner and is `proposals/16_PESSIMIST_FI_B_a_paper_is_about_something.md`.
+
+### 2.4 P5 "A crime leaves traces": does not hold; the only trace of a deed is the memory of those in the room at that instant
+
+**Run** (`p5_crime.py`; tiny world, shipped fixtures; the killing is the real `fight` fold at a
+forced `Felled`, the sabotage the real act; the visitor's inquiries are real acts, 40 act ids each).
+
+*A killing with nobody else present* (the King, alone at the realm rung, by a stranger):
+
+| who | holds, the instant after |
+|---|---|
+| the killer | `(King, person.died)`, the sighting naming himself |
+| every other living person, anywhere | `(the King's seat, tenure.closed)` `told_by`, hand withheld: the `chronicle` channel |
+| every other living person | **nothing about the King** |
+
+Then: a visitor reaches the place one tick later and learns nothing (there is no body; a Person is
+deleted). `surveil` of the place, 40 acts: 12 `finding.made`, nothing about the King. `interview` of
+the killer, 40 acts: 40 `finding.made`, nothing. `reconstruct` on the King, 40 acts: 40
+`finding.made`, and what he holds is `(King, finding.made, True)`. `trail_of` is empty for the place,
+for the killer and for the victim. The visitor is still offered `tell` and `lie` candidates naming the
+dead man. A duke two rungs away is offered `confer` on the King's seat. **Control** (two bystanders in
+the room): both hold the death and the killer's name, with certainty.
+
+*A sabotage with nobody else present* (a harbour, condition 900 → 0 in one act, with no draw): the
+saboteur alone holds anything about the site. The Duke returns, a visitor arrives: neither holds
+anything. The visitor's `examine` of the ruined harbour, 40 acts (hand-built: the chooser never forms
+`examine`, F-FI-12): 15 `finding.made`, and he holds `(harbour, exists:Site, 1)` and
+`(harbour, finding.made, True)`. **He has examined a ruin and does not hold that it is ruined.**
+
+*The roster.* `rosters.yaml: covert_kinds` is `[record.forged]`. The verb rows emit 89 deed kinds;
+thirteen are harm-shaped (`person.died`, `body.changed`, `person.captured`, `arrest.made`,
+`site.damaged`, `rung.razed`, `record.seized`, `rung.seized`, `requisition.taken`,
+`record.destroyed`, `cover.assumed`, `record.forged`, `arrest.resisted`). One of thirteen leaves a
+trail, and it is the one whose trail the realm never reaches (§2.3).
+
+| # | link | O | C | verdict · cause |
+|---|---|---|---|---|
+| P5.1 | a crime | an act with an author, a place, a time | yes: Events with `causes[]` to the act | FOLLOWS (in the log, which no person reads) |
+| P5.2 | leaves | the act itself produces traces | only the WITNESS deposit of that tick | DEPARTS |
+| P5.3 | traces of several kinds | witnesses, the changed thing, documents | witnesses only. The changed thing is not perceivable: a later visitor sees no body and no ruin; `examine` and `surveil` read nothing of state | **DEPARTS · BEHAVIOUR** |
+| P5.4 | specific, pointing at the author | varying strength | certainty for those present (who is always shown); nothing for anyone else | DEPARTS (no gradation: the standing rule) |
+| P5.5 | for a time; hidden at a cost | fading; concealment is an act | a witness's claim decays 5 a season; nothing else exists to fade or to hide. `conceal` re-anchors a deed for the far channels and those present still see the hand (H-324, cited) | ASSERTED |
+| P5.6 | found by looking in the right place | the scene, or a witness | the scene yields nothing. A witness can be reached only if he volunteers a telling, and for a killing his telling names no hand (F-FI-11) | **INERT** |
+| P5.7 | leading to the author before a body | the pipeline | no step of `19_LACUNA` §3's pipeline can start from an unwitnessed deed | UNREACHED |
+| P5.8 | zero; planting | no crime, no trace; framing possible | no crime, no trace: FOLLOWS. Nothing can be planted: no act mints a false deed claim (H-198) | FOLLOWS; ASSERTED |
+
+**The composition defect.** The realm learns at once, everywhere, that the King's seat is empty, and
+no one but the killer can ever learn that the King is dead, where, or by whom. The succession can
+proceed; the murder cannot be a story.
+
+**Play-back.** *A stranger kills the King in an empty hall. By nightfall every village knows the
+throne is vacant. Nobody finds a body, because there is none; nobody can ask what happened, because
+no question about it can be formed; a magistrate who searches the hall for a year learns that the
+hall exists.*
+
+### 2.5 P1 "A person acts on what he has seen or been told, not on what is true": holds for a quantity a requirement names; does not hold for who exists, nor for what a claim says
+
+**Runs** (`p1_belief.py`, `p1b_belief.py`; tiny world; one person at a hearth whose true grain is
+8; counterfactual pairs, each differing in one thing; candidates are `opening_set` over
+`questions_for`; then three seasons in which only he acts, shipped chooser, twelve world seeds).
+
+| arm | what differs | candidates against the arm's control |
+|---|---|---|
+| `true` | he holds `(hearth, stores:grain, 8)` | +28 (a claim about the hearth raises a question on it) |
+| `false-empty` | he holds `(hearth, stores:grain, 0)`; the hearth is full | the same +28 **less 12** (`exchange` 6, `transfer` 6): clause 4 declines on the false belief |
+| `stale-full` | he holds 8; the world's hearth was emptied silently | identical to `true`: he forms the transfer on the stale belief |
+| `silent-empty` | he holds nothing; the hearth emptied silently | identical to control: no leak |
+| `dead-false` | he holds `(King, person.died, True)`; the King lives | **+28 candidates about the King**: `challenge`, `interview`, `tell` ×4, `lie` ×4, `move`, `speak`, `surveil`, `transfer`, `tie / knot`, … |
+| `dead-silent` | the King is removed from the world silently; he holds nothing of it | **−28: every candidate about the King is gone** |
+
+Three readings.
+
+1. **For a quantity a `requires` cell names, the premise holds end to end, and this is the best
+   thing in the subsystem.** The false belief declines the act; the stale belief forms it; the fold
+   refuses it; the refusal's observation lands in his ledger (`(hearth, stores:grain, 0)`, firsthand,
+   one tick later) and the transfer candidates fall from 7 to 0. In the three-season runs the
+   `false-empty` arm's attempted acts differ from the `true` arm's at 10 of 12 seeds. (Steelman
+   holds: attacked by the silent-empty control and by the refusal probe; it stands.)
+2. **Whether a person exists is read from the truth, by subtraction** (INVERTED pair, rows 5 and 6).
+   A man who believes the King dead is offered to challenge and interview him; a man who knows nothing
+   stops being offered anything about the King the instant the King is deleted. The owner is
+   `queries/world_q.py::questions_for`'s claim loop (clauses 1 and 2): a held claim raises a question
+   only where its subject is in `reach(w, p)` or `place_of(w, subject)` is, and both are world reads,
+   so a subject that no longer exists raises nothing. The first FI audit read clause 2 as harmless (its R-04: *"filters the person's
+   own landed claims and adds no referent"*). It adds none and removes them on a fact he was never
+   told, which is the same leak with the sign changed; F-FI-01's probes could not see it because they
+   moved a seat, not a person.
+3. **What a claim says is read by nothing but clause 4.** Any claim about X raises the same
+   candidates about X (28 here for the hearth and for the King alike). `person.died` is not a cell a
+   requirement reads (`individual`, `with` are world-only stems), so a belief that a man is dead
+   cannot decline `challenge` on him, and no verb is offered *because* he is dead. News is a pointer
+   to a subject; its content steers only the dozen store, condition and containment cells.
+
+At CHOOSE the death arms have no power in this fixture: the control chose no act naming the King at
+any of 12 seeds, so "0 of 12 differ" is not a reading. The FORMS rows above are.
+
+**Link table.**
+
+| # | O | C | verdict · cause |
+|---|---|---|---|
+| P1.1 truth and holdings are two things | yes | yes: `Person.ledger` against `World` | FOLLOWS |
+| P1.2 seen | present, he holds it | by `co_located`, with certainty and in full (who, what) | FOLLOWS (no draw on noticing: cited) |
+| P1.3 told | a telling names its teller | the told claim carries `chain`; but 14,252 of 14,272 `told_by` claims at seed 0, three seasons, have no teller (the broadcast; F-FI-05) | FOLLOWS at EXECUTES; DEPARTS at FIRES |
+| P1.4 a holding may be false | stale, lied, forged, misheard | stale: yes (117 firsthand cells false of 1,651); lied or misheard: 17 of 18 told cells false; forged: never reaches a reader | FOLLOWS, thin |
+| P1.5 he acts on it | choice reads holdings | for requirement cells: yes. For a claim's content otherwise: no (reading 3) | FOLLOWS, narrowed; DEPARTS · BEHAVIOUR |
+| P1.6 not on what is true | truth alone changes nothing | stores: holds (`silent-empty`). Persons: fails (`dead-silent`). Seats, vacancies, aims: fails (F-FI-01, cited) | **DEPARTS · BEHAVIOUR**, three families |
+| P1.7 correction | truth arrives, holding and act change | by refusal: yes, for the cell that refused | FOLLOWS |
+| P1.8 holds nothing, does nothing | zero | a person with an empty ledger still has the world-stamped questions | DEPARTS (F-FI-01) |
+

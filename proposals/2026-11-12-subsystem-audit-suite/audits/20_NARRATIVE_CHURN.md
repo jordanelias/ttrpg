@@ -506,3 +506,147 @@ Items 1, 3 and the stamped half of 2 are this lane's. The telling itself is WR's
   only effect is that a referent is offered; the person samples.
 - No new verb, Event kind (bar one: G6's, held for Jordan), carrier or module.
 - No named person, seat or faction in any rule (the plan's rename falsifier applies to every edit).
+
+## 8. Resolutions: every inconsistency, gap and unclear passage found, decided
+
+Ladder steps: 1 superseded, 2 irrelevant, 3 a design document or ruling, 4 precedent, 5 architecture.
+
+| id | inconsistency, gap or unclear passage | decided | step | carried by |
+|---|---|---|---|---|
+| R-N1 | three readers read one conviction intensity three ways (held above 0; signed about the midpoint; a fraction of the ceiling) | every yes/no question reads "stands for": above the midpoint. The two graded readers stay | 4, 5 | `20_NARRATIVE_A` |
+| R-N2 | `test_strife_credit.py` asserts `commensurate` is called, not that it varies | a value-spread test on the built realm, naming today's degenerate set | 5 | `20_NARRATIVE_A` edit 6 |
+| R-N3 | `ED-IN-0352` forbids a flow changing "any obstacle, target number, pool, odds"; the standing rule of 2026-11-12 lists "affiliation" among what sets odds | no conflict, by `ED-IN-0352`'s own scope ("STRIFE … conditions the decision field; REGIME conditions belief"): a flow, an era or a regime never sets odds; a person's own edges and interior, and the counterparty's as a contest already reads them, may. Every pull of §7.2 is of the second kind and enters ranking or belief, not a roll | 1 | §7.3; no file |
+| R-N4 | a lapse must be laid at a door; S19.3 forbids an actor or target on an Event | the wronged person attributes it from his own edge and his own belief of the holder | 3 | `20_NARRATIVE_B` |
+| R-N5 | WR `_B` files a term's maturing as bookkeeping; this audit calls the household's dissolving a plot point | both stand: the tick and the closure are the clock's (T-n); what the lapse does to the people it failed is theirs. WR `_B`'s exclusion is adopted, not re-argued | 1 | `20_NARRATIVE_B` |
+| R-N6 | H-195: "no document says how a person learns who holds a rung" | he is told at build what everyone under that seat knows, and thereafter by the Event that shows it; the claim can be stale | 5 | `20_NARRATIVE_C` |
+| R-N7 | `release` is uncontested, so under `stance_polarity: declared` regard for the tie's other end *raises* it | named for the row's owners (BINDING verb lane, CHAR); not decided here, because the polarity rule is theirs and one more per-verb sign would be a second rule | wrongly filed here | `20_NARRATIVE_C` edit 5, `20_NARRATIVE_D` edit 3 |
+| R-N8 | `engaged_poles`: "[ASSUMPTION] the creed engages no pole" leaves opinion's conviction term 0 for eight factions | a faction row may declare the poles its creed stands on; four authored from what their members stand for | 4 | `20_NARRATIVE_D` |
+| R-N9 | the length of the year is the length of a weather table that ships empty | a roster owns the year; the weather reads it | 5 | `20_NARRATIVE_E` edit 1 |
+| R-N10 | a stamped referent's ground is not kept | `Question.grounds`, beside `classes` | 4 | `20_NARRATIVE_E` edit 2 |
+| R-N11 | a crisis of conviction "rolls nothing" and emits nothing (ruled 2026-10-06) against the standing rule (2026-11-12) | written as a proposal behind a control arm and listed in §10 | 1 against 1 | `20_NARRATIVE_E` edit 3 |
+| R-N12 | `commitment.ended` is `never` strife, so the study's two defection links are unreachable | proposed `joins`; a ratified roster, so §10 | 3 | `20_NARRATIVE_D` edit 4 |
+| R-N13 | CR-88's `grievance_against` (planned) counts deeds; three of five crossings are omissions | it also counts `dues_unmet` | 5 | `20_NARRATIVE_B` edit 4 |
+| R-N14 | "era" and "regime" in Jordan's direction read in the ordinary sense; in the tree they are the strife scope and Foucault's term (R13, R17) | the tree's senses stand; the ordinary sense of era is printed as the **reign** (a reading); the ordinary sense of regime change is a change of a seat's holder (G3) | 3 | this file's vocabulary; `20_NARRATIVE_F` |
+| R-N15 | CR-100 and CR-101 will stamp and order "what is at stake" for everyone within an open strand; with one strand and one era every person receives the same stake | not a change to those positions: two preconditions named for CR-103's evaluation, that strands can conclude and do not collapse (`09_WR_strand_conclusion.md`) and that the regime discriminates (`20_NARRATIVE_A`); CR-97 (g) already prints the realm-rung share | 3 | §9 |
+| R-N16 | H-275's row reads `regime_gain` as shipped on its guard; the guard "passed for want of movement" (CR-97's N-line) and the term returns one value | the row is re-cited with the value spread at the build of `20_NARRATIVE_A`; no new row | 5 | `20_NARRATIVE_A` edit 2 |
+
+Hole-register and plan items this lane touched, verified against code:
+
+| item | listed | verified | action |
+|---|---|---|---|
+| H-195 (the holder operand) | absent | **open**, re-measured: 0 `held_by` claims | `20_NARRATIVE_C` |
+| H-275 (`regime_gain`) | shipped 0.5 | built; **degenerate input** | `20_NARRATIVE_A` |
+| H-274 (`stamp_flow_stakes`) | shipped on | reproduced: 1 / 7 / 15 persons stamped at four seasons | none (WR F-WR-07) |
+| H-159 (`oblige_term`), H-356 (`docket_lapse`) | shipped 4 | built; clock closures | `20_NARRATIVE_B` reads their Events |
+| CR-76, CR-77, CR-78, CR-79 | landed | landed; readings of §2.1 | A, and WR's two |
+| CR-80 (the deck) | held | held; not opened here | none |
+| CR-88 (duty of office) | design-first | unbuilt; its reading lacks omissions | R-N13 |
+| CR-91 (casus belli) | scheduled | unbuilt; gives a march a ground, not an aim | `20_NARRATIVE_C` is its decision-side half |
+| CR-97 (plot points) | ratified, unbuilt | per strand; no per-person crossing | `20_NARRATIVE_F` beside it |
+| CR-100 to CR-103 | ratified, unbuilt | see R-N15 | preconditions named |
+
+## 9. Dependency edges
+
+**Order inside this lane:** A (independent) → E edits 1, 2 (hash EQUAL) → C → B → D edits 1 to 3 → F
+(grows clause by clause). E edit 3 and D edit 4 wait on §10.
+
+| this lane | needs first | feeds |
+|---|---|---|
+| A stands for | nothing | CR-79's term, CR-97's span column, CR-99's guard, CHAR `02_CHAR_scar_is_a_wound.md` (same threshold, one owner), D (the poles), F G5 |
+| B what he was owed | C | CR-88 (`grievance_against`), F G1 |
+| C who holds what | nothing to build; its supply is FA's turnover | B, D, F G3 and G4; CR-88's duty decline; CR-91's aim; INST `15_INSTITUTIONS_BYZANTINE_A`, `15_INSTITUTIONS_COLONIAL_D` (the same claim form) |
+| D his own side | nothing; better after A | F G2; INST `15_INSTITUTIONS_PAPACY_A` (owns the Church's row) |
+| E year, ground, crisis | nothing | WR's weather and chronicle; CORE's Scene store; FA's yearly terms |
+| F the bar | WR `09_WR_story_instruments_that_can_fail.md` | every gate above |
+
+**To the WR proposals.** `09_WR_strand_conclusion.md` and `09_WR_story_instruments_that_can_fail.md` are
+preconditions of F clauses 7 and 8 and of R-N15. `09_WR_B_weather_with_memory_and_the_year.md` should
+read E's year roster. `09_WR_B_readings_of_closure_and_tension.md` is called by F clause 6; its
+"situation" (a referent stamped for two or more persons) is the world-side sibling of §7.2's
+person-side pulls, and the two should print side by side. `09_WR_B_chronicle_that_tells.md` renders
+§7.5. `09_WR_world_motion.md` and `09_WR_B_draws_not_thresholds.md` supply shocks.
+
+**To the FA proposals.** `06_FA_seat_terms_and_turnover.md` and `06_FA_seat_terms_by_body_B.md` are the
+supply of G3 (no seat changes hands today). `06_FA_decree_binds.md` is the writ half of G1 and is not
+duplicated. `06_FA_war_lives_in_seats_B.md` makes a war a fact about seat-holders, which C lets persons
+know. `06_FA_remit_grant_by_row.md` and `06_FA_office_capabilities.md` are the modifier column of §7.3.
+
+**To the CHAR proposals.** `02_CHAR_goal_lean_on_its_own_question.md` (allegiance on the score) and D
+(allegiance as an occasion) are two halves. `02_CHAR_relations_have_a_ground.md` seeds what B later
+moves. `02_CHAR_scar_is_a_wound.md` shares A's threshold. `02_CHAR_offer_what_can_be_done.md` removes
+refusals every gate here would otherwise count. `02_CHAR_what_an_act_risks.md` prices G4.
+`02_CHAR_reason_trail_and_small_edits.md` and E edit 2 meet at the Scene.
+
+**To the FI proposals.** `08_FI_02_rumour-that-travels.md` is G5's supply (25 / 13 / 30 told claims held
+is too few for a regime to matter). `08_FI_01_claim-sourced-referents.md` (by its title and FI F-FI-01:
+a person's candidates should move only on what he has witnessed or been told) and C's `held_by` claim
+are the same idea; they should share the claim form. `08_FI_05_evidence-interface.md` is where a
+grievance (G1) brought to a hearing would cite what it rests on `[UNVERIFIED: read by its head only]`.
+
+**To the SC proposals.** `13_SC_draw_for_unrolled_contests.md` is the draw that settles G1 and G3
+(petition, covenant) and `05_SC_obstacle_difficulty_and_modifiers_B.md` with
+`15_INSTITUTIONS_VENICE_A_obligation_and_the_ask.md` the composer that reads a live obligation as odds.
+`05_SC_contest_record_on_event.md` is §7.5 item 4. SC F-SC-01 (a proceeding rarely closes) bounds
+every G1 outcome.
+
+**To the plan.** CR-88, CR-91, CR-97, CR-99, CR-100 to CR-103, CR-104 as in §8. Nothing here asks for a
+new batch: A, C and D edit owners that B11-F2 and B10-17b already schedule work on.
+
+## 10. Survivors for Jordan
+
+Two. Each overwrites a ruled or ratified item, so each is a proposal and a question.
+
+1. **A crisis of conviction: by rule, or drawn and seen?** (`ED-IN-0261`'s superseding row, 2026-10-06:
+   "the engine chooses per case … and rolls nothing"; the standing rule, 2026-11-12.)
+   *Option a, the rule stands:* everyone who sees the same deeds breaks alike, at the same count, into
+   the creed the rule names; nobody ever knows. Convictions are a slow, uniform tide.
+   *Option b, `20_NARRATIVE_E` edit 3:* a creed under strain is tried; firm believers usually hold and
+   sometimes break, weak ones the reverse; a breaking is an Event its owner, and sometimes a witness,
+   holds. Faith becomes a thing people can lose in front of each other, and a zealot who kept his faith
+   through a scandal is a character.
+   The ladder does not settle it: two rulings of Jordan's point opposite ways and the later one does not
+   name the earlier.
+2. **Is leaving a side a strife move?** (`rosters.yaml: strife_kinds.never` holds `commitment.ended`;
+   ratified `strife-01` §6, ED-IN-0316, with the roster's own stated revert.)
+   *Option a, `never` stands:* a defection is everyday life; a rising cannot be read as having split a
+   faction, and the study's `DA>WA` and `WN>DA` links stay unreachable.
+   *Option b, `joins`:* a defection attaches to the strand it belongs to and can conclude nothing; the
+   Split becomes a move of the era. The risk is that every routine release of a commitment to an uttered
+   cause (1 or 2 a run today) joins strands too; a content opener keyed on the released edge's object
+   being a faction's creed or a head seat is the narrower form and needs a second ruling.
+
+Not escalated, and why: the deferral of natural death (ED-IN-0317) is ruled and is not re-raised; its
+cost is recorded in §4.2 (the succession family has no supply). The `release` polarity (R-N7) is another
+lane's. Everything else was decided in §8.
+
+## 11. Evidence log
+
+All with `PYTHONHASHSEED=0`, HEAD `d4ee8a4`, scratch directory
+`/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379/scratchpad/runs/NARR/`. The machine's
+load average rose from 3 to 42 during the session; that bounded what completed.
+
+| id | command | seeds, seasons | outcome |
+|---|---|---|---|
+| E-N01 | inline `python`: `build_realm(0)`; conviction intensities, held-sets, `commensurate` over all pairs at thresholds 1 to 4, sets by faction, `confliction` | seed 0, no season | the tables of `20_NARRATIVE_A`; intensities `{0: 7, 1: 90, 2: 23, 3: 7, 4: 7, 5: 14}`; `confliction > 0` for 41 of 46 |
+| E-N02 | `data/fixtures.py:529-535, 690-700, 834, 842, 1024, 1086, 1104, 1168` read | n/a | `season_factor_draw ()`, `age_step 0`, `illness_rate 0`, `lattice_coupling 0`, `scar_weight_shift 0`, `confliction_weight 0`, `stamp_flow_stakes True`, `regime_gain 0.5`, `oblige_term 4`, `docket_lapse 4` |
+| E-N03 | `python -m engine.season.harness.strife 4 0 --strands` → `strife_4_s0.txt` | seed 0, 4 | 4 strands, 1 era OPEN (106 moves), concluded 0 of 4, every strand opened on `petition.filed`, `incompatible-span True` on all four, 0 of the study's 16 links observed (4 UNREACHABLE: DR, DA twice, FA), route check 13 of 312 (all DN). 1 min 57 s |
+| E-N04 | `narr_probe.py <seed> 4 shipped` → `p_s{0,1,2}_k4_shipped.txt` | 0, 1, 2; 4 | hashes `abbde715…`, `25d23448…`, `b4bae063…`; every reading of §2, §4.1, §5, §6 |
+| E-N05, E-N06 | the INTERIOR, ALLEGIANCE, DEMAND lines of E-N04 | as E-N04 | §2.2, §2.4, §2.5 |
+| E-N07 | `narr_probe.py <seed> 4 noconv` | 0, 1, 2; 4 | §4.3 |
+| E-N08 | `narr_probe.py <seed> 4 regime0` | 0, 1; 4 | §4.3 |
+| E-N09 | `narr_probe.py <seed> 4 forcing` | not run | queued behind the others; stopped when the load made it unreachable. WR E-11, E-12 are the forcing readings this file relies on |
+| E-N10 | `narr_probe.py 0 3 lapse` (`oblige_term` 1, `docket_lapse` 2: the fixtures' own swept values, so lapses fall inside three seasons) | seed 0; 3 | §4.4. The six-season shipped runs first queued for this were stopped for the same reason |
+| E-N11 | smoke runs `narr_probe.py 0 1 shipped` (hash `5ab73af2…`, the one-season hash the DET and FI lanes report), `0 2 shipped` | seed 0; 1, 2 | the probe reads what the other lanes' probes read at the same seed |
+| E-N12 | `grep -rn held_by engine/season` (non-test) | n/a | the stem appears in `verb_table.yaml` typed cells, `harness/` and the hole register; no depositor in `loop/` or `epistemic.py` |
+| E-N13 | inline `python`: `opinion_of(w, p, own faction)` and of every other faction; `engaged_poles`; claims with a `held_by` predicate; ledger sizes | seed 0, no season | 43 members; opinion of own side below 0: 4; rate another faction higher: 27; poles engaged: the Church's only; `held_by` claims 0; 42 of 83 persons hold any claim at build |
+
+Probe defect, stated: the FACTION lines of `narr_probe.py` print `head None` for every faction because
+the probe looked the head up by the wrong key. Nothing in this file uses that column; faction heads are
+FA F-FA-16's.
+
+Not read, and why it matters: the provided arcs and cases (`engine/season/cases/`,
+`proposals/2026-08-30-arc-reachability/`) were not opened; which case needs each pull serves is
+`audits/12_ARCS_adjudication.md`'s to say. `[SKIPPED: epistemic.py in full — the deposit rule was read
+through `world_q.py`'s statement of it and `seen_of`; `20_NARRATIVE_C` edit 2 marks its call site
+UNVERIFIED]`. `[SKIPPED: canon/ timeline — the founding by conquest is cited through INSTITUTIONS_BRIEF
+and the COLONIAL-D and BYZ-A proposals, not re-read]`.

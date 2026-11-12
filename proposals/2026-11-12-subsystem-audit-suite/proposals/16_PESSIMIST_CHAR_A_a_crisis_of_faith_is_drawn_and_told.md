@@ -22,10 +22,10 @@ All figures: `PYTHONHASHSEED=0`, `build_realm`, shipped chooser, no player.
 1. **The crisis is the only thing that moves a person's interior in computed play, and it is a fixed
    function of the build.** Three seasons: stored stance moved for 1 and 2 of 83 persons (seeds 0, 1),
    pursuits for 2 and 0 (largest single move 0.027 on a weight), capability and seats for 0;
-   `Person.conviction` was rewritten for 6 persons at seed 0 and 7 at seed 1 (`b1_season.py`). Five of
-   those persons are the same at both seeds (Sigrid Torsvald, Hedda Kronvald, Inge Baralta, Torben
-   Almqvist, Gerik Strand, Wilhelm Voss at seed 0; the same six plus Annika Feldhaus at seed 1), and each
-   lands on the same vector at both seeds. `person_q.py:903`: the rule *"ROLLS NOTHING"*.
+   `Person.conviction` was rewritten for 6 persons at seed 0 and 7 at seed 1 (`b1_season.py`). The six
+   at seed 0 (Sigrid Torsvald, Hedda Kronvald, Inge Baralta, Torben Almqvist, Gerik Strand, Wilhelm
+   Voss) are six of the seven at seed 1 (the seventh is Annika Feldhaus), and each of the six lands on
+   the same vector at both seeds. `person_q.py:903`: the rule *"ROLLS NOTHING"*.
 2. **Its direction inverts the person.** `x1_extremes.py` asks `conviction_after_crisis` of every cast
    person with his held creeds at the threshold, with no play at all: of 46, **31 have their
    highest-held creed replaced by the creed it is incompatible with**, 1 is left holding nothing, 14 are
