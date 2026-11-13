@@ -342,7 +342,7 @@ nothing but leaves its claim (`IS-MB-02` step 4) as a clean execution, not a ref
 
 INVOCATION: /methodology-execute Batch B26-fi-inquiry
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_FI.md, Open table
-GATE: Batch B00-ids
+GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
 GATE: Batch B01-laneA
 GATE: Batch B02-tests
 GATE: Batch B10-character

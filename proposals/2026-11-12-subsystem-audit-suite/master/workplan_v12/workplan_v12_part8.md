@@ -17,7 +17,7 @@
 ## Batch B05-one-roll · lane IN · wave W7 · step S7 · HASH MOVER, one re-pin
 INVOCATION: /methodology-execute Batch B05-one-roll
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_IN.md, Open table
-GATE: Batch B00-ids
+GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
 GATE: Batch B01-laneA
 GATE: Batch B02-tests
 GATE: Batch B03a-prose

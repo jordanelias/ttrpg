@@ -19,7 +19,7 @@
 ## Batch B03-hygiene · lane IN · wave W3 · step S3 · HASH MOVER(encoding B03.28; behaviour B03.86), one re-pin
 INVOCATION: /methodology-execute Batch B03-hygiene
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_IN.md, Open table
-GATE: Batch B00-ids
+GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
 GATE: Batch B01-laneA
 GATE: Batch B02-tests
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.harness.populated import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`workplan_v12.md` §3.B, "the hash reading") (this batch runs before B03c moves the builder to `engine/season/boot/realm.py`).

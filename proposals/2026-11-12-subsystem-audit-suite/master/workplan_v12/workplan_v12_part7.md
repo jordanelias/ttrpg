@@ -11,7 +11,7 @@
 ## Batch B04-capability-home · lane IN · wave W6 · step S6 · HASH MOVER(encoding), one re-pin
 INVOCATION: /methodology-execute Batch B04-capability-home
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_IN.md, Open table
-GATE: Batch B00-ids
+GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
 GATE: Batch B01-laneA
 GATE: Batch B02-tests
 GATE: Batch B03g-go-early-landings

@@ -15,7 +15,7 @@
 ## Batch B36-wr-story-instruments · lane WR · wave W19 · step S19 · HASH MOVER, one re-pin
 INVOCATION: /methodology-execute Batch B36-wr-story-instruments
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_WR.md, Open table
-GATE: Batch B00-ids
+GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
 GATE: Batch B01-laneA
 GATE: Batch B02-tests
 GATE: Batch B03-hygiene

@@ -355,7 +355,7 @@ No engine version is asserted anywhere in v12 (ED-GO-0002 is the owner).
 
 ## 12. Ids and row blocks (B00's allocation, proposed)
 
-**This is a proposal, not an allocation.** `references/id_reservations.yaml` is not edited by this part; B00.01 makes the allocation on its own base, from this table (the structure §7.5; `workplan_v12_part3.md` B00.01). B00.01's `WHERE` names "the plan's head part 2" for the table; the table is here, and B00 reads it here.
+**This is a proposal, not an allocation.** `references/id_reservations.yaml` is not edited by this part; B00.01 @02289ab makes the allocation on its own base, from this table (the structure §7.5; `workplan_v12_part3.md` B00.01 @02289ab). B00.01 @02289ab's `WHERE` names "the plan's head part 2" for the table; the table is here, and B00 reads it here.
 ⚠ Superseded by `workplan_v12_part2_cont2.md` §9 (lane H2): the same method re-run with IN from 0363 and B12c's H count 12; B00 reads that table. ⚠ The table's rows below are now copied from that §9 table by repair lane R1 (2026-11-13), so the two agree (B98-dials `ED-IN-0399..0400`, `H-846..H-850`; B99-nine-retake `ED-IN-0401..0402`, `H-851..H-855`, as part 44 takes them); the method bullets above keep the H1 readings they were made from.
 
 **How it was made.**
@@ -369,7 +369,6 @@ No engine version is asserted anywhere in v12 (ED-GO-0002 is the owner).
 
 | batch | lane | ED block (declared + spare) | H block (declared + spare) |
 |---|---|---|---|
-| B00-ids | IN | ED-IN-0363..0366 (2+2) | H-363..H-367 (0+5) |
 | B01-laneA | IN | ED-IN-0367..0368 (0+2) | H-368..H-373 (1+5) |
 | B02-tests | IN | ED-IN-0369..0370 (0+2) | H-374..H-378 (0+5) |
 | B03-hygiene | IN | ED-IN-0371..0372 (0+2) | H-379..H-383 (0+5) |
@@ -467,7 +466,7 @@ Each is also stated where it is invoked (the batch block's lines, the item's fie
 
 | batch | file(s) under `master/workplan_v12/` |
 |---|---|
-| B00-ids, B01-laneA | `workplan_v12_part3.md` |
+| B01-laneA | `workplan_v12_part3.md` |
 | B02-tests | `workplan_v12_part3.md`, `_part3_cont.md` |
 | B03-hygiene | `workplan_v12_part4.md`, `_part4_cont.md`, `_part5.md`, `_part5_cont.md` |
 | B03g-go-early-landings, B03c-boot, B16L-mb-words | `workplan_v12_part6.md` |

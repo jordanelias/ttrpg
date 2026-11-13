@@ -15,7 +15,7 @@
 ## Batch B38-narrative-regimes · lane WR · wave W20 · step S20 · HASH MOVER, one re-pin
 INVOCATION: /methodology-execute Batch B38-narrative-regimes
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_WR.md, Open table
-GATE: Batch B00-ids
+GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
 GATE: Batch B01-laneA
 GATE: Batch B02-tests
 GATE: Batch B05-one-roll

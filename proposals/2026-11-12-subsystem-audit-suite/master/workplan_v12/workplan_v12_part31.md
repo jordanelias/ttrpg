@@ -15,7 +15,7 @@
 ## Batch B27-sc-proceedings · lane SC · wave W16 · step S16 · HASH MOVER, one re-pin
 INVOCATION: /methodology-execute Batch B27-sc-proceedings
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_SC.md, Open table
-GATE: Batch B00-ids
+GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
 GATE: Batch B01-laneA
 GATE: Batch B02-tests
 GATE: Batch B11-fi-readers

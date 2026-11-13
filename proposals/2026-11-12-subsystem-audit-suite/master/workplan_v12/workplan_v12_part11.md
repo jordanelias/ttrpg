@@ -17,7 +17,7 @@
 ## Batch B17-mb-scale · lane MB · wave W9 · step S9 · HASH MOVER, one re-pin
 INVOCATION: /methodology-execute Batch B17-mb-scale
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_MB.md, Open table
-GATE: Batch B00-ids
+GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
 GATE: Batch B01-laneA
 GATE: Batch B02-tests
 GATE: Batch B16L-mb-words

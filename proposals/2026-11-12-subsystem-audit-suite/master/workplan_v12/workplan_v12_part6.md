@@ -21,7 +21,7 @@ Every before-reading is the previous close's after-reading, quoted `reading @<sh
 ## Batch B03g-go-early-landings · lane GO · wave W4 · step S4 · HASH EQUAL
 INVOCATION: /methodology-execute Batch B03g-go-early-landings
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_GO.md, Open table
-GATE: Batch B00-ids
+GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
 GATE: Batch B01-laneA
 GATE: Batch B02-tests
 GATE: Batch B03-hygiene
@@ -162,7 +162,7 @@ Placement (`V12_STRUCTURE_part2.md` §5.6): the four entries sit under the intak
 ## Batch B03c-boot · lane IN · wave W4 · step S4 · HASH EQUAL
 INVOCATION: /methodology-execute Batch B03c-boot
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_IN.md, Open table
-GATE: Batch B00-ids
+GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
 GATE: Batch B01-laneA
 GATE: Batch B02-tests
 GATE: Batch B03-hygiene
@@ -260,7 +260,7 @@ EST: 3.7 h [estimate: §2.4's formula over three positions (0.4 h × 3 + 2.5 h),
 ## Batch B16L-mb-words · lane MB · wave W4 · step S4 · HASH EQUAL
 INVOCATION: /methodology-execute Batch B16L-mb-words
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_MB.md, Open table
-GATE: Batch B00-ids
+GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
 GATE: Batch B01-laneA
 GATE: Batch B02-tests
 GATE: Batch B03-hygiene

@@ -10,94 +10,10 @@
 
 ---
 
-## Batch B00-ids · lane IN · wave W0 · step S0 · HASH EQUAL
-INVOCATION: /methodology-execute Batch B00-ids
-IN-FLIGHT ROW: registers/handoffs/HANDOFF_IN.md, Open table
-GATE: none (record only); closes on the boundary row (E-6; the plan's first batch; its base is the working tree head on which v12 is adopted)
-HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.harness.populated import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`workplan_v12.md` §3.B, "the hash reading") (this batch runs before B03c moves the builder to `engine/season/boot/realm.py`).
-REQUIREMENT: none — allocation (`STAGES.md`, "Parallel sessions" rule 4: ids are allocated up front and land on `main` before any session cites a number; CLAUDE.md §4)
-BATCH GATE: `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`) (no duplicate id, `register.py::rule_R0`);
-  `python tools/validate_ed_citations.py` → exit 0; `python tools/currency_consistency_check.py` → exit 0;
-  `python -c "import yaml; d=yaml.safe_load(open('references/id_reservations.yaml')); print({k: v['next_free'] for k, v in d['lane_ids']['lanes'].items()})"` → each lane's value equals the plan's id-block table's last block end + 1 for that lane, read by B00.01's id-block check (its command) → `ok` on all ten lines (H and the nine lanes);
-  `python -m engine.season.harness.register --requirements` → exit 0, nine lines (unchanged: `reading @<base sha>`); `python tools/m1_acceptance.py --summary` → its verdict line, quoted;
-  the suites `python tools/tests_for_diff.py --base <batch-start-sha>` names;
-  the close's commit body records `register --requirements` (nine lines), `m1_acceptance --summary`'s verdict line, the batch's measured wall time (build and close apart, `V12_STRUCTURE.md` §2.4); no conjunct is named, so no `reading:` record is written and `status:` is not edited (`IS-A-12`).
-RE-PIN: none
-IDS: ED-IN 2; H 0
-DIALS AT CONTROL: none
-C(B00-ids): this batch's entries; the plan's head parts (the id-block table, the batch table); `references/id_reservations.yaml`; `engine/season/hole_register.yaml` (its highest id only); `registers/editorial_ledger_in.jsonl` (its last row, for the shape);
-  `workplans/valoria_master_workplan_v11_part15.md` §5 H-1 and §4 M31, M32 (read whole for B00.02: the relayed words are copied from it); `tools/validate_ed_citations.py`; `engine/season/harness/register.py` (`rule_R0`);
-  the permanent surface (CLAUDE.md, `CURRENT.md`, `HANDOFF.md`, `registers/handoffs/HANDOFF_IN.md`, the skill and `methodology-close`).
-SERIAL EDGES: B00.01 → B00.02 (B00.02 takes its two ED-IN ids from B00's own block, which B00.01 writes).
-  `references/id_reservations.yaml`: B00 alone (no later batch edits `next_free`; each takes from its block).
-PARALLEL: S0, alone.
-COST: edit; `sonnet`, high; no judgment node (the counts are the authors' declared `IDS:` lines, summed by script).
-EST: 3 h [estimate]
-
-| pos | item | source | state | hash | gates on |
-|---|---|---|---|---|---|
-| B00.01 | every batch's ED and H block, allocated and landed on `main` | U3 §1 item 1; `V12_STRUCTURE_part3.md` §7.5 | BUILD | EQUAL | the plan's id-block table (H2) |
-| B00.02 | Jordan's 2026-10-28 words, recorded as relayed (M31, M32) | the intake H-1; A-111 | BUILD | EQUAL | B00.01 |
-| B00.99 | re-pin and close readings (record only) | `V12_STRUCTURE_part4.md` E-1, E-6 | BUILD | EQUAL | B00.02 |
-
-### B00.01 — allocate every batch's ED block and hole-register block, and land the bump first · U3 §1 item 1 · BUILD · HASH EQUAL
-- SOURCE: `unified/U3_DEPENDENCY_ORDER.md` §1 item 1; `master/workplan_v12/V12_STRUCTURE_part3.md` §7.5 (which completes it); `unified/U3_CONFLICT_LEDGER.md` T-4; rulings none; closes nothing (allocation).
-- ADVANCES: none of the nine; the precondition of every parallel step (`STAGES.md`, "Parallel sessions" rules 4 and 5).
-- INSTRUCTION (U3 item 1, then §7.5's five steps, copied):
-  U3: "Allocate, on the working tree head and before any batch cites a number: a block of lane-tagged ED ids per batch from `references/id_reservations.yaml` `next_free` (bumped, co-committed); a block of hole-register ids beginning at the register's next free id (`H-363` at this read; the file has no H key, `U3_CONFLICT_LEDGER.md` T-4), split into per-batch sub-blocks, recorded in the close."
-  §7.5: "Readings at `7c37586`, re-read by B00 on its base: `references/id_reservations.yaml` `lane_ids.lanes.<LANE>.next_free` is MB 82, PC 60, FI 10, SC 41, FA 40, WR 13, IN 361, GO 3, SE 57; the highest hole-register id in `engine/season/hole_register.yaml` is H-362, and the file holds no next-id key. B00: (1) sums each batch's declared `IDS:` counts; (2) gives each batch, in §2.1's order within its lane, an ED block of its count plus two and an H block of its count plus five `[ASSUMPTION: the spare — basis: none measured; a batch that runs out stops and takes the next free id on main, it never borrows a sibling's]`; (3) moves each lane's `next_free` past its blocks, with one comment line pointing at the plan's id-block table, co-committed; (4) writes the table into part 2 in the same commit; (5) lands on `main` before any session cites a number (CLAUDE.md §4). A two-lane batch takes its ED ids from SE. Ids a batch did not use are named in its expunge commit body and are not re-used. Lane A's row is renumbered from `H-275` in B01 (C3-A1) from B01's own block."
-  Added by this plan (the order of the five steps on the tree): step 0, re-read the nine `next_free` values and the highest `id: H-` in `hole_register.yaml` on this batch's base and write both readings in the commit body (`reading @<base sha>`); the H blocks begin at that highest id + 1, whatever it reads. B00's own block is the first IN block: B00.02 takes its two ids from it. The hole-register blocks live only in the plan's id-block table and in this commit body: `id_reservations.yaml` gains no `H` key (U3 item 1; T-4), and `register.py::rule_R0`'s duplicate refusal stays the one check.
-- WHERE: `references/id_reservations.yaml` (`lane_ids.lanes.<LANE>.next_free` for each of the nine lanes, and one comment line per lane pointing at the plan's id-block table); the plan's head part 2, the id-block table (columns: batch · ED lane and range · H range).
-- TESTS: none new. The covering reader of `id_reservations.yaml` is `tools/validate_ed_citations.py` and `tools/currency_consistency_check.py` (both read the file; `grep -rl id_reservations tools` lists them with `ci_common.py`, `ci_register_size_check.py`, `build_identifier_census.py`); no test under `tests/valoria` or `engine/season/tests` names the file.
-- FALSIFIER and CONTROL: two batches of one lane hold overlapping ranges, or a lane's `next_free` is at or below the end of a block the table gives it (then a session allocating by `next_free` collides with a pre-allocated id). Control: `register --check` and `validate_ed_citations.py` read exit 0 before and after (no id is written to a ledger or register by this item).
-- GATE: `python tools/validate_ed_citations.py` → exit 0; `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`); the id-block check (below) → prints `<LANE> ok` for each of the nine lanes (before this item it prints `FAIL` for all nine: read at the tree of 2026-11-13 by repair lane R2a, K1 F5; that is its control). The id-block check, run from the repository root with `T` the file holding part 2's §9 table (`workplan_v12_part2_cont2.md` in the plan's directory): `python -c "import re,yaml,collections,sys; t=open(sys.argv[1]).read().split('\n## 9.')[1].split('\n## ')[0]; s=collections.defaultdict(list); [s[l].append((int(a),int(b))) for l,a,b in re.findall(r'ED-([A-Z]{2})-(\d{4})\.\.(\d{4})',t)]; h=sorted((int(a),int(b)) for a,b in re.findall(r'H-(\d+)\.\.H-(\d+)',t)); n=yaml.safe_load(open('references/id_reservations.yaml'))['lane_ids']['lanes']; print('H', 'ok' if all(x[1]<y[0] for x,y in zip(h,h[1:])) else 'FAIL'); [print(l, 'ok' if all(x[1]<y[0] for x,y in zip(sorted(v),sorted(v)[1:])) and n[l]['next_free']==max(b for a,b in v)+1 else 'FAIL') for l,v in sorted(s.items())]" T` (the table is process data, not a game fact: CLAUDE.md §0.05 cl. 4; ids are read by code only through `next_free`, which this check ties to the table).
-- HASH MOVERS: none.
-- DEPENDS ON: V12 the plan's id-block table, made by H2 from every batch block's `IDS:` line (`V12_STRUCTURE_part3.md` §7.2, §7.5); EXISTS-IN-TREE `references/id_reservations.yaml::lane_ids.lanes`, `engine/season/harness/register.py::rule_R0`.
-- GLOSSARY: none.
-- COST and TIER: edit; `sonnet`, high.
-- LANDS IT: B00's `valoria-author` producer, `isolation: worktree`; one `Item: B00.01` commit, `[skip ci]`; the batch's PR lands on `main` before any other session opens (§7.5 step 5).
-
-### B00.02 — Jordan's 2026-10-28 words, recorded in the IN ledger as relayed · H-1 · BUILD · HASH EQUAL
-- SOURCE: the intake `:102-104` (H-1, carry-forward E5 Block D8, which copies `workplans/valoria_master_workplan_v11_part15.md` §5 H-1); ruling A-111 (`unified/DECISIONS_ANSWERED.md:147`: "v12 carries the owed ledger rows (M31, M32) as relayed, marked 'Jordan's words relayed, not recorded'; A-104 already supersedes the menu-budget part"); A-104; closes H-1.
-- ADVANCES: none of the nine; the record of two rulings v11's M31 and M32 rest on.
-- INSTRUCTION:
-  1. `registers/editorial_ledger_in.jsonl`: append two rows, ids `ED-IN-<B00 block slot 1>` and `ED-IN-<B00 block slot 2>`, each with the keys of the file's last row (`id`, `date`, `system`, `status`, `needs_jordan`, `confidence`, `supersedes_row`, `superseded_by`, `citations`, `source`, `description`, `canonical_source`), `needs_jordan: false` (A-111 answered it).
-  2. Row 1, M32's combat half: `description` opens with "Jordan's words relayed, not recorded:" and quotes, as the carry-forward block gives them, *"we wouldn't really forecast though"* (the no-forecast combat directive M32's combat half waits on), and with it the troop and equipment directions *"troops can be modeled somewhat after games like rotk and total war … equipment can be from tactical RPGs"* and the story-variety concern *"relying 100% on primitive emergence … could produce too many similar stories"*, each marked as relayed in a digest; `citations` name `workplans/valoria_master_workplan_v11_part15.md` §5 H-1 and §4 M32, and A-111.
-  3. Row 2, M31 (b)'s budget words: `description` opens the same way and quotes *"menu based management wouldn't take up any budget. the budget is for playable scenes where the character actually interacts within the world"*; `superseded_by: ["ED-IN-0360"]` (the row that records A-104, "management orders cost no scene budget", whose `citations` name "A-104 (E-3 / M31(b))"); `citations` name `…_part15.md` §4 M31 (b), A-111, A-104.
-  4. The commit body says "H-1 closed: rows written as relayed (A-111)". The other relayed items H-1 lists (Jordan's three "yes" decisions of 2026-10-28, whose contents are not in hand; the 2026-10-30 instruction; ED-IN-0304's narrowed PLAN line, "its contents Jordan's") are not written: A-111 names M31 and M32 only.
-- WHERE: `registers/editorial_ledger_in.jsonl` (two appended rows).
-- TESTS: none new.
-- FALSIFIER and CONTROL: a row whose `description` does not open "Jordan's words relayed, not recorded" (it would read as a recorded ruling), or an id outside B00's block. Control: `validate_ed_citations.py` exit 0 before and after.
-- GATE: `python tools/validate_ed_citations.py` → exit 0; `python -c "import json; rows=[json.loads(l) for l in open('registers/editorial_ledger_in.jsonl')]; print([r['id'] for r in rows[-2:]])"` → the two ids of B00's block.
-- HASH MOVERS: none.
-- DEPENDS ON: V12 B00.01 (the block); EXISTS-IN-TREE `registers/editorial_ledger_in.jsonl` row `ED-IN-0360`.
-- GLOSSARY: none.
-- IDS: ED-IN block slots 1 and 2.
-- COST and TIER: edit; `sonnet`, medium.
-- LANDS IT: B00's producer; `Item: B00.02` commit, `[skip ci]` (the batch's last `Item:` push is B00.99; repair lane R1, E-1).
-
-### B00.99 — re-pin and close readings (record only) · `V12_STRUCTURE_part4.md` E-1, E-6 · BUILD · HASH EQUAL (records)
-- SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2, E-6 (a batch with nothing to gate on "still has a `.99` position (the record) and a boundary row"); `V12_STRUCTURE_part2.md` §5.12; B00's BATCH GATE; part 2 §11 C-01 (written by repair lane R1).
-- ADVANCES: none of the nine (REQUIREMENT: none — allocation); the batch's record.
-- INSTRUCTION: (1) Re-pin nothing (RE-PIN: none; both items are EQUAL). (2) Read once on the closing tree and quote in this commit's body every BATCH GATE line: `register --check`'s per-check violation counts against the opening reading; the exit codes of `tools/validate_ed_citations.py` and `tools/currency_consistency_check.py`; the `next_free` dict; `register --requirements` (nine lines, unchanged against `reading @<base sha>`); `m1_acceptance --summary`'s verdict line; the `HASH READING` at `<s>` = 0, 1, 2, `<k>` = 1, equal to the base; the batch's measured wall time. (3) No conjunct is named, so no `reading:` record is written and no `status:` is edited. The commit carries no file (`git commit --allow-empty`) `[ASSUMPTION: a record-only `.99` lands as an empty commit carrying the record — basis: E-6; B03g.99's "WHERE: none but the commit body"]`.
-- WHERE: none but the commit body.
-- TESTS: none new.
-- FALSIFIER and CONTROL: a moved hash at any seed, or a `register --check` count above the opening reading (then B00 moved what it only allocates: `STOPPED`). Control: the base readings (`reading @<base sha>`).
-- GATE: the BATCH GATE above, every line, read once on this commit's tree.
-- HASH MOVERS: none.
-- DEPENDS ON: V12 B00.01, B00.02.
-- GLOSSARY: none.
-- COST and TIER: reading; `sonnet`, medium.
-- LANDS IT: B00's producer; `Item: B00.99`, the batch's last `Item:` push (no `[skip ci]`).
-
-| STOP. Batch B00-ids closes here |
-
----
-
 ## Batch B01-laneA · lane IN · wave W1 · step S1 · HASH MOVER, one re-pin
 INVOCATION: /methodology-execute Batch B01-laneA
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_IN.md, Open table
-GATE: Batch B00-ids
+GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.harness.populated import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`workplan_v12.md` §3.B, "the hash reading") (this batch runs before B03c moves the builder to `engine/season/boot/realm.py`).
 REQUIREMENT: R-04.c5 (i) → `aperture 2 s`, s = 0–2: `challenge` executed above 0 at each seed (lane A's 26 / 19 / 24 is a comparison, not a target; IS-A §12.2); and `IS-PC-03`'s reading (below)
 BATCH GATE: `PYTHONHASHSEED=0 python -m engine.season.harness.aperture 2 s` for s = 0, 1, 2, before (`reading @<base sha>`) and after, quoted: `challenge` executed above 0 at each seed; at formation `exists:Person` 0, `dispute=False` 0; `accept` refusals with last read `exists:challenge` 0; `comply`'s `exists:dispensation` refusals 0 (U3 §1 item 2; lane A's gate);
@@ -160,7 +76,7 @@ EST: 3 h [estimate]
 - FALSIFIER and CONTROL: the commit's: "`revert_b11a_scores` (the switch, the bundle off, the three rows off) reproduces the reach commit's one-season realm hashes at seeds 0-2 exactly" (on this tree: B01.01's). Planted (C3-A1): a second row `id: H-275` → `register --check` exits non-zero.
 - GATE: `python -m pytest engine/season/tests/test_b11a_scores_and_obstacle.py engine/season/tests/test_b11a_duel_reach.py -q` → green; `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`); `git grep -n "H-275" -- engine/season` → CR-79's row and its own citations only; then the batch gate.
 - HASH MOVERS: the build hash (the seated `unauthored_attributes`) and every season hash (the obstacle by task, `cast_attributes` on); the corpus (`determine` leaves refused_only), the aperture pools {2} → {2, 5}. Declared; this commit is B01's one re-pin.
-- DEPENDS ON: V12 B01.01; V12 B00.01 (B01's H block); EXISTS-IN-TREE `engine/season/hole_register.yaml` row `H-275` (CR-79, `regime_gain`), `seam/wrappers/pool.py::faculty`, `modules/social_contest/roll.py`; the commit `c5bf18a` (`git cat-file -t c5bf18a` → `commit`, read 2026-11-12).
+- DEPENDS ON: V12 B01.01; V12 B00.01 @02289ab (B01's H block); EXISTS-IN-TREE `engine/season/hole_register.yaml` row `H-275` (CR-79, `regime_gain`), `seam/wrappers/pool.py::faculty`, `modules/social_contest/roll.py`; the commit `c5bf18a` (`git cat-file -t c5bf18a` → `commit`, read 2026-11-12).
 - GLOSSARY: `obstacle_model` and `task_difficulty` are tree names U1 replaces in B05 (C3-A3: "Which names survive is U1's"); no row is edited here.
 - NAMES: none in this part (the obstacle's names are B05's to change).
 - IDS: H block slot 1 (the renumbered row).
@@ -190,7 +106,7 @@ Note for the BA1 author (not an edit here): after B01.02, `build_realm`'s `cast_
 ## Batch B02-tests · lane IN · wave W2 · step S2 · HASH EQUAL
 INVOCATION: /methodology-execute Batch B02-tests
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_IN.md, Open table
-GATE: Batch B00-ids
+GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
 GATE: Batch B01-laneA
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.harness.populated import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`workplan_v12.md` §3.B, "the hash reading") (this batch runs before B03c moves the builder to `engine/season/boot/realm.py`).
 REQUIREMENT: R-01.a, .b, .c; R-02.a, .b; R-03.a, .b; R-04.b; R-06.d, .e; R-07.a; R-08.b, .c; R-09.a → all `yes`; R-01, R-02, R-03 read `met` with every conjunct held (R-03.c is not written in B02: B08.99 adds it with its reading; repair lane V1) and the six others print their held counts; the first `BUILT OUT`, `ENGINES` and `NULL SCENES` baselines (`ENGINES`: `combat.fight` above 0 at seed 0 if B01 did what its gate says; it read 0 at `6e1ea91`) (IS-A §12.2)
