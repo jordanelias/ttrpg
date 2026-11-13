@@ -400,10 +400,12 @@ arrangements until it is specified.
 
 ### §10.3 `envelope` is matter and does not act   ⚠ AMENDED 2026-11-12 (Jordan, A-115; A-97, node L1-A115): the field is deleted (`04` §B.3). A place's population is the `weight` of the persons there; births and deaths move `weight`, the one owner. What this section says of the cohort (it acts; demography does not choose) still holds
 
-Births add weight at the youngest band; deaths remove it. **Birth is envelope weight, not a `create`.**
-The envelope is written at MATTER and reconciled at CENSUS. It has **no ledger, no stance and no act.**
-The cohort acts; the envelope does not. **Conflating them produces a design in which demography can
-choose.**
+Births add weight at the youngest band; deaths remove it. **Birth is `weight`, not a `create`.**
+⚠ AMENDED 2026-11-12 (Jordan, A-115; A-97, node L1-A115; Stage E antagonist finding 4): the sentence this
+replaces read "the envelope is written at MATTER and reconciled at CENSUS"; there is no envelope, so there
+is nothing to reconcile (`04` §B.3, §A.2's `loop/census` row). A place's population has **no ledger, no
+stance and no act.** The cohort acts; the population does not. **Conflating them produces a design in
+which demography can choose.**
 
 ### §10.4 `MatterKind` is open, correctly
 
