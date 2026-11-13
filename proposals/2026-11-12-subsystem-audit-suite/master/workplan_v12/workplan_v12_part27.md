@@ -29,7 +29,7 @@
 | B19.57 | rally at the field's end: `rally_roll`, with the troops' armour step | `16_PESSIMIST_MB_rout…` step 1; `26_…rout…` §5 | BUILD | EQUAL | B19.55 |
 | B19.58 | the rout's two exits run at the end of `run_battle` | `16_PESSIMIST_MB_rout…` steps 2, 4, "Exact edits" `run_battle`, `_grade`, `pursuit_damage`, `run_multi_unit_battle` | BUILD | MOVER(behaviour) | B19.53, B19.56, B19.57; B19.10, B19.12 (first half) |
 | B19.59 | the chase inside a bout: hold or chase on `enemy_broken` | `26_…rout…` §3 | BUILD | EQUAL | B19.54, B19.58 |
-| B19.60 | the captured share, and what the season writes | `26_…rout…` §4; `16_PESSIMIST_MB_rout…` step 5 | BUILD | EQUAL | B19.53, B19.58; Batch B29 (UNDECIDED 3) |
+| B19.60 | the captured share, and what the season writes | `26_…rout…` §4; `16_PESSIMIST_MB_rout…` step 5 | BUILD | MOVER(behaviour) | B19.53, B19.58; Batch B29 (UNDECIDED 3) |
 | B19.61 | the `stand_draw` flip: `off` → `on` | `26_…rout…` "Cost class" (its one declared flip); A-61 | BUILD | MOVER(behaviour) | B19.54, B19.59, B19.60 |
 | B19.62 | the troop class, the matchup reader and the ten ★ rows | MBA-06 steps 1, 4; MBA §3.2 | BUILD | EQUAL | Batch B19a; Batch B17 |
 | B19.63 | the charge on the contact draw: the situation, whether it closes, its shock to the stand draw | MBA-06 steps 2, 3 | BUILD | MOVER(behaviour) | B19.61, B19.62; MBA-04 (first half) |
