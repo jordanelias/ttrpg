@@ -25,6 +25,7 @@ GATE: Batch B12c-material-verbs-and-valley
 GATE: Batch B15-pc-calibration
 GATE: Batch B16-pc-round
 GATE: Batch B21-fa-governance
+GATE: Batch B29-pc-custody   (added by H2: `H2_DECISIONS.md` HD-11, HAP_C and HAP_D need custody; no wave moves; `workplan_v12_part2.md` §1)
 REQUIREMENT: none — rulings A-15 (natural death on, behind the 46 authored ages and a rate), A-16 (a person may try to kill another of his own motive, rarely), A-96 (an access-draw Failure always forms the guard's `capture`), D-41 after A-16 (the opener's edge); `IS-PC-03`'s reading at this close (B37.18). The close reads the nine lines on the closing tree and names no conjunct, so no `reading:` record is written and `status:` is not edited (`IS-A-12`).
 BATCH GATE (read once, on the closing tree, `PYTHONHASHSEED=0` on every seeded command):
   `python -m pytest engine/season/tests/test_in34_bodies_clock.py engine/season/tests/test_cr87_violence_contexts.py engine/season/tests/test_u7_remit.py engine/season/tests/test_seat_holders_live_on_their_ground.py engine/season/tests/test_season_opener_edge.py -q` → all pass (the last two created in this batch);

@@ -6,7 +6,7 @@ Words, paths and short names are the first file's (its "Words" and "Paths" parag
 
 ---
 
-## Batch B30-mb-nested · lane MB · wave W17 · step S18 · HASH MOVER, one re-pin
+## Batch B30-mb-nested · lane MB · wave W18 · step S18 · HASH MOVER, one re-pin
 INVOCATION: /methodology-execute Batch B30-mb-nested
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_MB.md, Open table
 GATE: Batch B00-ids

@@ -4,7 +4,7 @@
 
 ---
 
-## Batch B31-mb-loadout-economy · lane MB · wave W16 · step S19 · HASH MOVER, one re-pin
+## Batch B31-mb-loadout-economy · lane MB · wave W18 · step S19 · HASH MOVER, one re-pin
 INVOCATION: /methodology-execute Batch B31-mb-loadout-economy
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_MB.md, Open table
 GATE: Batch B00-ids

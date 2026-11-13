@@ -78,7 +78,7 @@ BACKGROUND RUN: the 5,000-fight census of B15.03 (`scale_census.py`) and the 1,0
 | B15.13 | the combat armour-tier and ability sweeps | `ED-SC-0001` (the intake `:496`) | READING | — | B15.11 |
 | B15.14 | the survivor's grudge: measure, then cut or name the cause (Patched: P-27) | CP-T03-06 (the intake `:491`; moved from B14.14) | DESIGN-FIRST | EQUAL | B15.11; Batch B14 (B14.16), Batch B10 (`02_CHAR_scar_is_a_wound`) |
 | B15.15 | the slope bound joins the lever table; `READ_SCALE` is fitted; the two wound values stated side by side (Covered: C-03) | `U5b_PC_residue` §1 items 3, 5 (the fit) | BUILD (calibration) | MOVER(behaviour) only if the fitted `READ_SCALE` ≠ 1.0 | B15.11; Batch B14 (B14.17, B14.18) |
-| B15.99 | the one re-record and the close's readings | UPR §4 edit 3, §5 row 5; `29_DICE` row 9 | BUILD | MOVER (the re-pin) | B15.01 to B15.14 |
+| B15.99 | the one re-record and the close's readings | UPR §4 edit 3, §5 row 5; `29_DICE` row 9 | BUILD | MOVER (the re-pin) | B15.01 to B15.15 |
 
 Not in this batch, and where each is: UPR §1 (the nesting cap, `nested_entry`; B30); UPR §2 and §3 edits 1–4 (B05; this batch flips §3's fixture only); UPR §6 (the opener's edge; B37); `29_DICE` items 29-1, 29-2, 29-4 (B04, B05) and 29-5 (B30); PHY_A A0–A2 (B29) and A4 (B14); `HAP_A` edits 1, 2, 4, 5, 6 (B37); `03_PC_exits_withdrawal_recovery` Part B (superseded by `PC_A`, U3 §4.1 row 55); `03_PC_typed_outcome_one_door` R-PC-03's comment edit (superseded by `18_DET` edit 2); `IS-PC-B2` (the shipped `YIELD_OB` pick, Jordan's at the merge; B15.10 lands an admitted value).
 

@@ -28,6 +28,7 @@ GATE: Batch B15-pc-calibration
 GATE: Batch B21-fa-governance
 GATE: Batch B25-fi-questioning
 GATE: Batch B27-sc-proceedings   (added by this part: G-14's `determine` reading, B28.31; UNDECIDED (U-8); not in §2.1's list, no wave moves)
+GATE: Batch B24a-sc-outside-the-room   (added by H2: `H2_DECISIONS.md` HD-16, B28.33's CR-61 citation; no wave moves; `workplan_v12_part2.md` §1)
 REQUIREMENT: `BUILT OUT` for `comply`, `evade / defy`, `forgive`, `covenant`; re-read R-03.a (IS-A §12.2's B28 row: "each built out") → each of the four reads `built out` on `aperture 2 --seeds 0 1 2`, and R-03.a's command passes (`python -m pytest engine/season/tests -q -k test_u2_`: all pass, the one-lap control among them); the SC standalone reading of `IS-B2-SC-01` step 9 ("the negotiation is reachable by a computed act") → true; no `status:` edited (A-114)
 BATCH GATE (read once, on the closing tree, `PYTHONHASHSEED=0` on every seeded command; no command past two seasons):
   U3 §1 item 28's gate, "28A's twelve rows with their named tests" (U3 §1.3: the test files `test_scene_access_engagement.py` (U3 §6.1's `_occupancy.py`, renamed by 28A's W3-2 line), `test_scene_access_precedence.py`, `test_scene_access_appointments.py` are written in B28.16 to B28.25): `python -m pytest engine/season/tests/test_scene_access_engagement.py engine/season/tests/test_scene_access_precedence.py engine/season/tests/test_scene_access_appointments.py -q` → all pass; the gate rows themselves are read at B28.29 and B28.30 and quoted there;

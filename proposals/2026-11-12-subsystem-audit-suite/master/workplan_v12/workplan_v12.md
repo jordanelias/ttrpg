@@ -333,6 +333,7 @@ No engine version is asserted anywhere in v12 (ED-GO-0002 is the owner).
 ## 12. Ids and row blocks (B00's allocation, proposed)
 
 **This is a proposal, not an allocation.** `references/id_reservations.yaml` is not edited by this part; B00.01 makes the allocation on its own base, from this table (the structure §7.5; `workplan_v12_part3.md` B00.01). B00.01's `WHERE` names "the plan's head part 2" for the table; the table is here, and B00 reads it here.
+⚠ Superseded by `workplan_v12_part2_cont2.md` §9 (lane H2): the same method re-run with IN from 0363 and B12c's H count 12; B00 reads that table.
 
 **How it was made.**
 - **Readings at `bba489b`:** `lane_ids.lanes.<LANE>.next_free` is MB 82, PC 60, FI 10, SC 41, FA 40, WR 13, IN 361, GO 3, SE 57; the highest hole-register id in `engine/season/hole_register.yaml` is H-362 (the file holds no next-id key, `unified/U3_CONFLICT_LEDGER.md` T-4); the highest registry id in `references/npc_registry.yaml` is NPC-090 (46 rows).

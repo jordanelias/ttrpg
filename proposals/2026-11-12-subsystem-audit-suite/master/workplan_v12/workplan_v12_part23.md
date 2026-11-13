@@ -339,11 +339,11 @@ C(B08-scene-order): this batch's entries; the plan's head parts; `unified/U1_GLO
   `engine/season/hole_register.yaml` (row H-249); `master/eval/E8.md` CF-E8-2 (read whole for B08.01: its text is copied there);
   the tests named in the items; instruments: `headless`, `report`, `delta`, `aperture`, `register`, `tools/m1_acceptance.py`, `tools/tests_for_diff.py`; `engine/season/tests/_realm_goldens.py` (B02);
   the closing SHAs of B00, B01, B02, B03a, B04, B05, B06 and the S13 base; the permanent surface.
-SERIAL EDGES: within the batch: B08.01 first (CF-E8-2: "as the FIRST item, before the rewrite", the instrument must read `pack_scenes` before `SEQ` edit 4 changes it) → B08.02 (`SEQ` edits 2–3: the field and its reader) → B08.03 (`SEQ` edit 1: "Order of edits: 2 → 3 → 1 → 4") → B08.04 (`SEQ` edit 4, reading B08.01's bins) → B08.05 (`RIVAL`: "Both files edit `_canonical_order`; the scene order lands first", "after … edits 1-4") → B08.99.
+SERIAL EDGES: within the batch: B08.01 first (CF-E8-2: "as the FIRST item, before the rewrite", the instrument must read `pack_scenes` before `SEQ` edit 4 changes it) → B08.02 (`SEQ` edits 2–3: the field and its reader) → B08.03 (`SEQ` edit 1: "Order of edits: 2 → 3 → 1 → 4") → B08.04 (`SEQ` edit 4, reading B08.01's bins) → B08.05 (`RIVAL`: "Both files edit `_canonical_order`; the scene order lands first", "after … edits 1-4"); B08.03, B08.04 → B08.06 (the lap stamp's test arm, `COVERAGE.md` C-01) → B08.99. With other batches: `engine/season/tests/test_season_shape.py` (B08.06) also gains a census row (part 2 §5).
   With other batches: `loop/resolve.py::_canonical_order` is a serial instrument site (C3-K8): B08.03 → B08.05 → B28 (`28_CORE_scene_access_A`'s person key, `("round", person)` in its source, `lap` after PCR-4); `loop/resolve.py`: B05 → B07 → B09 → B10 → **B08** → B26 → B27 → B28 → B38 (time order); `decision/choose.py`: B04 → B09 → B10 → **B08** and B16 in S13 (`pack_scenes` and `approach_of`) → B28 → B34 → B38; `state/carriers.py`: B03 → B05 → B09 → B10 → B11 → B21 → **B08** → B32 → B34 → B38; `data/verbs.py`: B04 → B07 → B10 → **B08** and B16 in S13 (different names); `data/fixtures.py`: **B08** (`rival_precedence`) and B16 (`npc_decider_roles`) in S13, different keys; `verb_table.yaml`: **B08.02** adds `sequence:` to every keyed `emits_on_refusal:` row, so **every later batch that adds or keys a row's refusals keys `sequence:` too** (the loader refuses one that does not; a forward rule for H2's serial-edge table).
 PARALLEL: S13 with B12a-world-motion-and-ground (SE+WR), B16-pc-round (PC), B21b-fa-war (FA), B24-sc-hearing (SC). Shared with B16: `decision/choose.py`, `data/verbs.py`, `data/fixtures.py` (different functions, names and keys; §7.3). Shared with B12a, B21b, B24: `verb_table.yaml` wherever a sibling adds a keyed refusal row (the coordinator has B08 merge first and the sibling key `sequence:` on rebase); `loop/resolve.py` if a sibling edits a function of it (not `_canonical_order`, which is serial). Merge position: first in S13 (§2.1's order); B08 is a mover, so each later mover of the step rebases on it and re-pins once (§7.4).
 COST: small build; the deferred-prize case and the `after` encoding are the judgment node, `opus` (`SEQ` "Cost class"), then `sonnet`, `high`, for the edits and tests; H-249's bins `sonnet`, read by `opus` (CF-E8-2); `RIVAL` `sonnet`, `high`; the close's terminal critique `opus`.
-EST: 5 h [estimate: §2.4's formula over 6 positions (0.4 h × 6 + 2.5 h); no close timed]
+EST: 5.3 h [estimate: §2.4's formula over 7 positions (0.4 h × 7 + 2.5 h), B08.06 included (H2, `COVERAGE.md` §C); no close timed]
 
 | pos | item | source | state | hash | gates on |
 |---|---|---|---|---|---|
@@ -353,7 +353,7 @@ EST: 5 h [estimate: §2.4's formula over 6 positions (0.4 h × 6 + 2.5 h); no cl
 | B08.04 | the chooser sets `after` from the row | `SEQ` edit 4, with H-249's reading | BUILD | MOVER(behaviour) | B08.03, B08.01 |
 | B08.05 | rivals for one exclusive thing are ordered by a draw | `RIVAL` | BUILD | MOVER(behaviour) | B08.03; Batch B05, Batch B06 |
 | B08.06 | the lap stamp earns its test arm or the arm goes (H-172) | `U5a_tests_digest_additions` §G (Covered: C-01) | BUILD | EQUAL | B08.03, B08.04 |
-| B08.99 | re-pin and close readings | E-1 | BUILD | MOVER (the re-pin) | B08.01 to B08.05 |
+| B08.99 | re-pin and close readings | E-1 | BUILD | MOVER (the re-pin) | B08.01 to B08.06 |
 
 Not in this batch: `SEQ` edit 5 (the Layer 1 text; APPLIED, `L1-A9`, `04:662`, "dropped from the plan"); `SEQ`'s folded engagement half (the `engaged` clause, `visitor.kept_waiting`) and `RIVAL`'s person key (`("round", person)` in the sources, `("lap", person)` after PCR-4) (both `28_CORE_scene_access_A_occupancy_and_precedence.md`, B28); the strata-cut arm of `SEQ`'s table (`ordp.py`, lane scratch, U3 §6.2: "reported only if re-written as a committed reading"; not re-written here).
 
@@ -472,7 +472,7 @@ Not in this batch: `SEQ` edit 5 (the Layer 1 text; APPLIED, `L1-A9`, `04:662`, "
 - FALSIFIER and CONTROL: a pin that moved at B08.01 or B08.02 (declared EQUAL): then that item moved it and the batch stops before the re-pin. Control: `interactions_per_scene = 1` with `rival_precedence: hash` reproduces the base hash.
 - GATE: the BATCH GATE above; `python -m engine.season.harness.register --check` → exit 0 after the H-249 append.
 - HASH MOVERS: the re-pin.
-- DEPENDS ON: V12 B08.01 to B08.05.
+- DEPENDS ON: V12 B08.01 to B08.06.
 - GLOSSARY: none.
 - COST and TIER: edit and readings; `sonnet`; the readings' judgment `opus`.
 - LANDS IT: B08's producer; `Item: B08.99`, the batch's last `Item:` commit (no `[skip ci]`).

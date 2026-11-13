@@ -230,7 +230,7 @@ Not in this batch, and where each is: CR-91 (1), (2), (4), the claim to a territ
 
 ---
 
-## Batch B41-go-port-gate · lane GO · wave W15 · step S15 · HASH EQUAL
+## Batch B41-go-port-gate · lane GO · wave W17 · step S18 · HASH EQUAL
 INVOCATION: /methodology-execute Batch B41-go-port-gate
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_GO.md, Open table
 GATE: Batch B00-ids
@@ -239,6 +239,8 @@ GATE: Batch B02-tests
 GATE: Batch B03g-go-early-landings
 GATE: Batch B06-keyed-draw
 GATE: Batch B34-go-surface
+GATE: Batch B17-mb-scale   (added by H2: `H2_DECISIONS.md` HD-10; wave W15 → W17, step S15 → S18; `workplan_v12_part2.md` §1)
+GATE: Batch B20-mb-orders   (added by H2: `H2_DECISIONS.md` HD-10; B20 closes at S16; the PARALLEL line below was written for S15)
 REQUIREMENT: none — the port's pins (CLAUDE.md §6; `V12_STRUCTURE.md` §2.2): what a port is built against (the contract) and checked against (the behaviour pins), so a port that is wrong about a duel, a field, an offer or a halt is shown wrong. It serves GO's "S7 integrated" (`master/instructions/IS_B3_FA_SE_WR_GO_part2.md` §6.1) and moves no row of the nine; the close quotes the nine lines unchanged
 BATCH GATE (read once, on the closing tree; `PYTHONHASHSEED=0` on every seeded command unless a line names others):
   `python tools/export_oracle_pins.py --check` → OK, the artifact holding the oracle SHA, the `primitives`, slice 1 and slice 2 blocks, `surface`, `module_scenes` (the twelve named entries), `halts` and `scenarios`; the same under `PYTHONHASHSEED=1` → OK (GO-08's CONTROL);

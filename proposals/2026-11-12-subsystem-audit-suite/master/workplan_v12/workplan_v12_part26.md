@@ -26,6 +26,7 @@ GATE: Batch B15-pc-calibration
 GATE: Batch B16-pc-round
 GATE: Batch B17-mb-scale
 GATE: Batch B19a-mb-contact-instrument
+GATE: Batch B29-pc-custody   (added by H2: `H2_DECISIONS.md` HD-09, B19.60's named captives go into custody; no wave moves; `workplan_v12_part2.md` §1)
 REQUIREMENT: R-04.c4; R-04.c5 (ii), (iii); R-07.c → with B20: `field.won + field.lost` above 0 at seeds 0–2 (`aperture 1`) quoted with `_eff_march`'s `Person.stance` receipt on the losing side and `field.unopposed` beside it; R-04.c5 (ii) a fought field resolves on the cell battlefield; (iii) the commanded field equals the automatic one with no decider (B20's half; read here only as "not yet": the decider is B20's) (`IS_A_NINE_part2.md:383`; `IS_A_NINE.md:193-194`, `:329`). No `status:` is edited (A-114).
 BATCH GATE (read once, on the closing tree, `PYTHONHASHSEED=0` on every seeded command; two seasons at most, D-17):
   `python tests/sim/gauge_mb.py --results` → the T-rows of `26_MASS_BATTLE_calibration_targets` §1 (T-1 to T-10; T-2a, T-6a–c and the dominance row as MBA-08 adds them in the second half), each with n, band and same-run control; a row whose mechanism is absent prints "no mechanism" (B19.01); printed in the close's commit body;

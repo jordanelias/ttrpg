@@ -40,7 +40,7 @@
 | B19.67 | the calibration read: exposure, the levels and the seeds against the targets | MBA-08 (with `26_MASS_BATTLE_calibration_targets` §3's sweeps) | BUILD (calibration) | MOVER(behaviour) | B19.51 to B19.64 |
 | B19.68 | the multiplier leaves: the six-arm table, the criterion, the licensed commit | `27_MB_C` 27C-3 (and 27C-3′, its other branch) | BUILD | MOVER(behaviour) | B19.66, B19.67 |
 | B19.69 | the targets, read last | `26_MASS_BATTLE_calibration_targets` §1, §2; MBA §4.2 | READING | — | B19.68 |
-| B19.99 | re-pin and close readings | `V12_STRUCTURE_part4.md` E-1, E-2 | BUILD | MOVER (the re-pin) | B19.01 to B19.69 |
+| B19.99 | re-pin and close readings | `V12_STRUCTURE_part4.md` E-1, E-2 | BUILD | MOVER (the re-pin) | B19.01 to B19.70 |
 
 **Not in this half, and where each is.** `27_MB_A` 27A-1 to 27A-4, `27_MB_C` 27C-1, the T-rows block, the stamina ledger, CR-12 step 1, MBA-04 steps 0–4 and 6–8, `04_MB_cell_hierarchy_as_data`, `26_MASS_BATTLE_cell_scale_and_time`, ED-1043, ED-MB-0045 and L1-6: the first half. `27_MB_A` 27A-6: B05 (its own `Lands in batch:` line). `U5b_MB_rulings_in_the_field` §1: B05; §2: B23; §3: B30; §5: B31 (U3 §1 item 31, "`04_MB_campaign_party_economy` with UMR §5"; the file's head line "§4–§6 in B19" is read with U3, which lands §5 with the economy whose eligibility conditions it draws on). The fled and injured kinds of `16_PESSIMIST_MB_rout…` step 5: B22 (`27_MB_E_what_an_army_carries_back`, the army Record's loss ledger, C3-L11). `26_…rout…` §1's officer-felled call: B30 (`04_MB_manager_battle_one_resolver.md` §7; U3 §4.1 row 66). MBA-07: B30. MBA-09 and the 25 matchup rows not marked ★: B31. `27_MB_E`'s rows T-11 to T-18 of the targets table: B22.
 

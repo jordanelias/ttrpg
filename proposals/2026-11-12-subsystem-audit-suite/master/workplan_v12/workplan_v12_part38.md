@@ -31,6 +31,8 @@ GATE: Batch B26-fi-inquiry
 GATE: Batch B27-sc-proceedings
 GATE: Batch B28-social-verbs
 GATE: Batch B32-inst-kit
+GATE: Batch B21d-fa-arc   (added by H2: `H2_DECISIONS.md` HD-13, CR-88's duty decline; no wave moves; `workplan_v12_part2.md` §1)
+GATE: Batch B21s-strife-supply   (added by H2: `H2_DECISIONS.md` HD-14, PAP-D extends the CH row; no wave moves)
 REQUIREMENT: none — A-12, A-13, A-14 (`V12_STRUCTURE.md` §2.2's B33 row): the seat facts and the economy of the institutions kit (upkeep by grade, the hands an order passes, the audit at a term's end, the debt, the obligation that moves odds, the Church's sentence by other people's answers). No conjunct of R-01 to R-09 is moved; the close re-reads the nine and prints their held counts (`IS-A-12`).
 BATCH GATE (read once, on the closing tree, `PYTHONHASHSEED=0` on every seeded command; no command past two seasons, D-17):
   `python -m pytest engine/season/tests/test_inst_byz_b.py engine/season/tests/test_inst_byz_c.py engine/season/tests/test_inst_byz_d.py engine/season/tests/test_remove.py engine/season/tests/test_audit_and_charter.py engine/season/tests/test_inst_col_d_ledger.py engine/season/tests/test_inst_pap_c.py engine/season/tests/test_inst_pap_d.py engine/season/tests/test_inst_pap_e.py engine/season/tests/test_inst_ven_a.py engine/season/tests/test_inst_ven_b.py engine/season/tests/test_inst_ven_d.py engine/season/tests/test_inst_syn_c_crossings.py -q` → all pass (every file is created by an item of this batch; each item names its own);

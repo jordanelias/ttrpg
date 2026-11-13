@@ -25,6 +25,7 @@ GATE: Batch B21c-fa-seats
 GATE: Batch B32-inst-kit
 GATE: Batch B33-inst-economy-hands
 GATE: Batch B39-procgen-and-cases
+GATE: Batch B21d-fa-arc   (added by H2: `H2_DECISIONS.md` HD-13, PAP-F needs CR-88; no wave moves; `workplan_v12_part2.md` §1)
 REQUIREMENT: every conjunct of R-01 to R-09, re-read on B40's closing tree (M5 closes here, `V12_STRUCTURE.md` §3; IS-A §12.1, M5 row: "all nine at B40") → all nine hold; no `status:` is edited (A-114: the one re-take that may move a row is B99). No row is moved by this batch's own items; what they serve is A-12, A-13, A-14, A-80 and the standing requirement that each subsystem plays alone (IS-A §12.1, the note under the milestone table: "A-12, A-13, A-14 (B32, B33, B40) … the standing requirement that each subsystem plays alone (B18, B27, B40)").
 BATCH GATE (read once, on the closing tree, `PYTHONHASHSEED=0` on every seeded command; nothing past two seasons, D-17):
   `python -m engine.season.harness.register --check` → exit 0; `python -m engine.season.harness.register --requirements` → nine lines, each row's conjuncts read and holding (the M5 reading; a conjunct that does not hold is quoted with its tree, and the close is not failed by it: no item here targets one, so the reading is recorded for B98 and B99, `V12_STRUCTURE.md` §3);
