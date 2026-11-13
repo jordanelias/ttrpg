@@ -1,4 +1,4 @@
-# Workplan v12 — part 41: Batch B38-narrative-regimes, second half (handles from `B38.51`: `20_NARRATIVE_D`'s later commits through `U5d_SE_cohort_heavy_moves_and_caste` and `IS-B3-SE-02`; the Readings block; `B38.99`; the boundary row)
+# Workplan v12 — part 41: Batch B38-narrative-regimes, second half (handles from `B38.53`, B38.51 and B38.52 being at the head of part 40 by R2d: `20_NARRATIVE_D`'s later commits through `U5d_SE_cohort_heavy_moves_and_caste` and `IS-B3-SE-02`; the Readings block; `B38.99`; the boundary row)
 
 ## Status: PROPOSED (a body part of workplan v12, drafted under `master/workplan_v12/`; unratified input to `methodology-execute`'s 0.1 stop until Jordan adopts v12, `V12_STRUCTURE_part3.md` §8; resolves nothing at runtime, CLAUDE.md §0.05; not canon)
 

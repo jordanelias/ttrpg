@@ -123,7 +123,7 @@ ORDER: execution order is the position table's, not the handle's. B38.51 (D-18, 
 | B38.24 | the houses' regime cores and the links between opinions | `31_WR_A` commit 3 | BUILD | EQUAL | B38.17, B38.18, B38.19, B38.20, B38.21 |
 | B38.25 | the factions' creeds, signed on the cores | `31_WR_A` commit 4 | CONTENT | MOVER(behaviour) | B38.14, B38.19, B38.24 |
 
-Items B38.19 to B38.25 are in this part's continuation file. The second half (from B38.51) appends its rows to this table's reading order; `B38.99` (the re-pin and the close readings) and the boundary row are the second half's.
+Items B38.19 to B38.25 are in this part's continuation file. The second half (from B38.53; B38.51 and B38.52 head this table, ORDER above) appends its rows to this table's reading order; `B38.99` (the re-pin and the close readings) and the boundary row are the second half's.
 
 ### B38.51 — the `riot` row's design · `U5d_SE_cohort_heavy_moves_and_caste` edit 3 · DESIGN-FIRST · HASH EQUAL
 - SOURCE: `proposals/U5d_SE_cohort_heavy_moves_and_caste.md` "Exact edits" 3, "Not decided here", "Cost class" ("design-first (3)"; "The `riot` row's cells stay INCOMPLETE as content (design-first, Jordan's)"); `unified/U4_DOCUMENT_STATUS.md` §3.4 row (CONTENT, Jordan); `master/instructions/IS_A_NINE_part2.md` `IS-A-08` ("A row whose cells are owed content (`riot`) lands in the batch that has the content"); rulings A-56, A-80, A-81; D-18, D-19.

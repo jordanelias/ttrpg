@@ -93,8 +93,8 @@ These are lines of the B12a block (merged by reference, repair lane R2b, CHK_K4 
 ---
 
 ### B12a.51 — places are endowed by territory: the `field` kind, the `site_endowment` table, its loader and `endowment_for`, two fixtures, the site loop · `07_SE_ground_and_granaries` (a), (b), (c) site loop; CP-T08-02 · BUILD · HASH EQUAL
-- SOURCE: `proposals/07_SE_ground_and_granaries.md` §3 R1, §4 (a), (b), (c) (the site loop), (e) (`test_endowment.py`, first half), §5; intake `:315` (CP-T08-02, E1 carry-forward `:1229`, E4 `:1464`); U3 §6.1 (`test_endowment.py` MISSING: "write it as the batch's first commit"); rulings A-50 (the starting draw, at its zero-width control here); closes CP-T08-02 (with B12a.54), F-SE-01, R-SE-01.
-- ADVANCES: none of the nine by itself; the ground every scarcity reading of B12b (CR-22) and B12c (CP-T08-05, CR-49) steers.
+- SOURCE: `proposals/07_SE_ground_and_granaries.md` §3 R1, §4 (a), (b), (c), (e), §5; intake `:315` (CP-T08-02); U3 §6.1; A-50 (zero-width control here); closes CP-T08-02 (with B12a.54), F-SE-01, R-SE-01.
+- ADVANCES: none of the nine by itself; the ground B12b's and B12c's scarcity readings steer.
 - INSTRUCTION:
   1. Create `engine/season/tests/test_endowment.py` first (step 6 below), and read it red (no `site_endowment`).
   2. `engine/season/rosters.yaml`, a new table (the source's text, exactly):
