@@ -22,3 +22,6 @@
 4. Sonnet agonist/antagonist write-up of the master suite and v12 (Stage E).
 5. Update PR #602 body (remove the 'not subscribed' line; held-back list: canon rewordings A-17, strife master A-84, A-60 directive, the `CLAUDE.md` preamble sentence on the engine-version owner, GO-09 workflow line, remaining Layer 1 items, content Jordan owes, `YIELD_OB` / `mortal_wound_ob` picks, B03.69 seat `off_npc_084`; Layer 1 edits and ED rows are in this PR and merging ratifies them, ED-1094). Stop the checkpoint loop.
 6. Adoption of v12 into `workplans/` (retire v11 with `FORK:` rows) is Jordan's call; not done.
+
+
+**Closed 2026-11-13:** Stage E done (`../AGONIST_ANTAGONIST.md` Parts A to C; lane E repairs `checks/E_REPAIR.md`); the Fable verdict repaired (`checks/V1_APPLIED.md`); PR #602 body rewritten; checkpoint loop stopped. Nothing in v12 has been run. Remaining and Jordan's: J-03 to J-08 (`V12_FOR_JORDAN.md`), adoption of v12 into `workplans/` (retires v11, `FORK:` rows), the repository's merge setting (J-05), merge of PR #602.
