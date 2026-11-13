@@ -344,6 +344,7 @@ Not in this batch, and where each is: `04_MB_unit_loadout_and_weapon_in_hand_B` 
 - FALSIFIER and CONTROL: "horse at three times foot on `uphill`". Control: the revert (every cell 1.0) reproduces B31.15's digests.
 - GATE: `python -m pytest tests/valoria/test_mass_battle_terrain.py -q` → pass; `python tools/ci_golden_modes_check.py` → digests read and recorded (moved where a field is fought on those grounds); the realm content hash at seed 0, one season, read.
 - HASH MOVERS: every fought field with a mounted body on `forest_broken` or `uphill`. Declared; B31.99's re-pin.
+- EXPECTED RED UNTIL B31.99: `python tools/ci_golden_modes_check.py` where a field is fought on those grounds (exit 1 while its pinned digests differ from the moved ones this item's GATE reads), under `[skip ci]` (K9 added this line, as B30.10).
 - DEPENDS ON: V12 B31.05.
 - GLOSSARY: none.
 - COST and TIER: edit (a value); `sonnet`, `high`.
