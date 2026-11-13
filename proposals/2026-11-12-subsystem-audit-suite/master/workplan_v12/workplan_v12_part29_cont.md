@@ -299,7 +299,7 @@ Not in this batch, and where each is: CR-104 (B11F2; reads B11F1.02's Sites); SE
 - WHERE: NEW `proposals/v12_B11F1_territory_caps.md`.
 - TESTS: none (no code).
 - FALSIFIER and CONTROL: the file exists and states (1) to (5); no code.
-- GATE: `test -f proposals/v12_B11F1_territory_caps.md` and `grep -c "^## Status: PROPOSED" proposals/v12_B11F1_territory_caps.md` → 1; no file outside it in the commit's diff.
+- GATE: `test -f proposals/v12_B11F1_territory_caps.md` → exit 0 (the `## Status:` line is not read as a gate, CLAUDE.md §0.05; R2d, CHK_K9 #13); no file outside it in the commit's diff.
 - HASH MOVERS: none.
 - DEPENDS ON: V12 Batch B12a to B12c (`07_SE_ground_and_granaries` R1, the endowment rows keyed on the territory code, lands in the B12 chain, which B12c closes); EXISTS-IN-TREE `loop/effects_founding.py` (`_eff_build`), `venues.yaml`.
 - GLOSSARY: none.

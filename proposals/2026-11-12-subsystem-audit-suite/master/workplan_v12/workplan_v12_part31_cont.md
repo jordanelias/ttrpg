@@ -33,7 +33,7 @@ Words, paths and short names are the first file's. The intake's B27 entries are 
 - WHERE: NEW `proposals/v12_B27_legitimacy_index.md`. No code.
 - TESTS: none (a design item).
 - FALSIFIER and CONTROL: the carry's EXIT and FALSIFIER: "design approved by ED-1094's merge default unless held back; a built index shows an L ≡ 1 arm with no draw difference at control."
-- GATE: the file exists, `## Status: PROPOSED`, and states (1) to (4), each with a falsifier; no code line from this item.
+- GATE: `test -f proposals/v12_B27_legitimacy_index.md` → exit 0 (its `## Status:` line is not read as a gate, CLAUDE.md §0.05; R2d, CHK_K9 #13); the file states (1) to (4), each with a falsifier; no code line from this item.
 - HASH MOVERS: "none at the design step (E)".
 - DEPENDS ON: V12 Batch B24a-sc-outside-the-room (CR-60, the carry's NEEDS); V12 Batch B24-sc-hearing (B24.02, the F8 precedent).
 - IDS: none (the carry's ids are H-222 and ED-SC-0040, cited, not written).
@@ -48,7 +48,7 @@ Words, paths and short names are the first file's. The intake's B27 entries are 
 - WHERE: NEW `proposals/v12_B27_membership_contests.md`. No code.
 - TESTS: none (a design item).
 - FALSIFIER and CONTROL: the carry's EXIT: "design approved by ED-1094's merge default unless held back."
-- GATE: the file exists, `## Status: PROPOSED`, and states the party, the disposal, the bench and what is witnessed, each with a falsifier; no code line from this item.
+- GATE: `test -f proposals/v12_B27_membership_contests.md` → exit 0 (its `## Status:` line is not read as a gate, CLAUDE.md §0.05; R2d, CHK_K9 #13); the file states the party, the disposal, the bench and what is witnessed, each with a falsifier; no code line from this item.
 - HASH MOVERS: "none at the design step (E)".
 - DEPENDS ON: V12 Batch B24a-sc-outside-the-room (CR-60, the carry's NEEDS); V12 B27.01, B27.02.
 - GLOSSARY: none until the build.
@@ -79,7 +79,7 @@ Words, paths and short names are the first file's. The intake's B27 entries are 
 - WHERE: NEW `proposals/v12_B27_person_predicate_writer.md`. No code.
 - TESTS: none (a design item).
 - FALSIFIER and CONTROL: a design that writes a person-predicate claim with no Event behind it (AX-7). Control: none (no code).
-- GATE: the file exists, `## Status: PROPOSED`, and states (1) to (4), each with a falsifier; no code line from this item.
+- GATE: `test -f proposals/v12_B27_person_predicate_writer.md` → exit 0 (its `## Status:` line is not read as a gate, CLAUDE.md §0.05; R2d, CHK_K9 #13); the file states (1) to (4), each with a falsifier; no code line from this item.
 - HASH MOVERS: none here; the build "moves hashes: yes" (E3), declared then.
 - DEPENDS ON: V12 B27.03 (a restraint and an imposed edge read as their two ends: the design composes on `_public_edge_ends`); EXISTS-IN-TREE `loop/matter.py::_standing_crossings`, `decision/options.py::standing_of`, `queries/world_q.py::standing_crossed`, `rosters.yaml: person_predicates`.
 - GLOSSARY: none until the build.
@@ -93,7 +93,7 @@ Words, paths and short names are the first file's. The intake's B27 entries are 
 - WHERE: NEW `proposals/v12_B27_failure_seen.md`. No code.
 - TESTS: none (a design item).
 - FALSIFIER and CONTROL: a design that adds a stored observer count (the register: "a barrier-scoped observer count built now would be read by nothing (ID-13)") or a failure band that writes nothing (A-81).
-- GATE: the file exists, `## Status: PROPOSED`, and states (1) to (4), each with a falsifier; no code line from this item.
+- GATE: `test -f proposals/v12_B27_failure_seen.md` → exit 0 (its `## Status:` line is not read as a gate, CLAUDE.md §0.05; R2d, CHK_K9 #13); the file states (1) to (4), each with a falsifier; no code line from this item.
 - HASH MOVERS: none here; the build "moves" (E7), declared then.
 - DEPENDS ON: V12 B27.01, B27.02, B27.07 (the Failure bands this batch gives `determine` and `argue`).
 - GLOSSARY: none until the build.

@@ -156,7 +156,7 @@ EST: 9.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this bl
 - WHERE: `engine/season/rosters.yaml` (`affiliation_signatures` rows; `tables.affiliation_engagement` cells).
 - TESTS: none new; `test_pursuit_signatures.py` reads green (its reader serves both, "same reader").
 - FALSIFIER and CONTROL: "With breaks at zero, the conviction swap still moves the top act in under 5 % of readings (then the engagement gain, not the cells, is what is small: say so and sweep it)" — a finding for the `opus` reader, quoted, not swept here; control: BA1.05's hash.
-- GATE: "`conviction_spread --words` prints the creed breaks; after the cells, each creed's violating set differs from at least one other creed's"; the seed-0 hash (`HASH READING`) recorded.
+- GATE: "`conviction_spread --words` prints the creed breaks; after the cells, each creed's violating set differs from at least one other creed's". Command and expected reading (repair lane R2b, CHK_K4 F10): `python -m engine.season.harness.conviction_spread --words` → its creed-breaks line reads 0 (else this item's STOPS IF), and no two creeds print the same violating set, quoted before and after the cells; `python -m pytest engine/season/tests/test_pursuit_signatures.py -q` → pass; the seed-0 hash (`HASH READING`) → moved from BA1.05's (declared).
 - STOPS IF: the creed breaks do not reach 0: as BA1.05's STOPS IF.
 - HASH MOVERS: every world with a person holding a creed. Declared; BA1.99.
 - DEPENDS ON: V12 Batch B10-character (CHAR_OWED §7's edit: the `affiliation_signatures` roster and its reader); V12 BA1.05.
@@ -200,7 +200,7 @@ EST: 9.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this bl
 - WHERE: `references/npc_registry.yaml` (rows NPC-034, NPC-071: `goals:`).
 - TESTS: none new.
 - FALSIFIER and CONTROL: one of the two persons holds no live `commit` at build; control: BA1.08's build hash with the two rows removed.
-- GATE: "`data/cast.py` loads; the two persons hold a live `commit` at build" (read at `build_realm(0)`, the two persons' `commit` Tenures listed in the commit body); the build hash (`HASH READING`) recorded.
+- GATE: "`data/cast.py` loads; the two persons hold a live `commit` at build" (read at `build_realm(0)`, the two persons' `commit` Tenures listed in the commit body). Command (repair lane R2b, CHK_K4 F10): `PYTHONHASHSEED=0 python -c "from engine.season.boot.realm import build_realm; w = build_realm(0); print(sorted((t.subject, t.object) for t in w.tenures if t.kind == 'commit' and t.until is None and t.subject in {'NPC-034', 'NPC-071'}))"` → at least one pair for each of NPC-034 and NPC-071 `[ASSUMPTION: the cast ids are the persons' ids in the built realm and a goal's commitment is a `Tenure` of kind `commit` — basis: `state/carriers.py::Tenure` (`subject`, `object`, `kind`, `until`); the item's own "live `commit`"; if either differs, the producer reads the two persons' commitments through `queries/world_q.py::ambitions` and says so]`; the build hash (`HASH READING`, `<k>` = 0) → moved from BA1.08's (declared).
 - HASH MOVERS: "A declared build-hash mover" (CHAR_OWED §10). Declared; BA1.99.
 - DEPENDS ON: EXISTS-IN-TREE `engine/season/data/cast.py` (the `goals` reader), `references/npc_registry.yaml` rows NPC-034, NPC-071; V12 BA1.08.
 - GLOSSARY: none.

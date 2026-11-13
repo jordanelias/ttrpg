@@ -330,7 +330,7 @@ The items B27.01 to B27.17 follow; B27.18 to B27.99, the `## Readings` block and
 - WHERE: NEW `proposals/v12_B27_one_act_several_matters.md`. No code.
 - TESTS: none (a design item).
 - FALSIFIER and CONTROL: the design adds a second case-file carrier, or a condition between matters written as code (c). Control: none needed (no code).
-- GATE: the file exists with its `## Status: PROPOSED` line and states (1) to (5), each with a falsifier; `git diff --stat <batch-start-sha>..HEAD -- engine modules` shows no line from this item.
+- GATE: `test -f proposals/v12_B27_one_act_several_matters.md` → exit 0 (its `## Status:` line is not read as a gate, CLAUDE.md §0.05; R2d, CHK_K9 #13); the file states (1) to (5), each with a falsifier; `git diff --stat <batch-start-sha>..HEAD -- engine modules` shows no line from this item.
 - HASH MOVERS: none.
 - DEPENDS ON: V12 Batch B24a-sc-outside-the-room (CR-61's content keys); V12 B27.01 (the per-file counts).
 - GLOSSARY: none until the build (a *bundle* row is the build's).
@@ -349,7 +349,7 @@ The items B27.01 to B27.17 follow; B27.18 to B27.99, the `## Readings` block and
 - WHERE: NEW `proposals/v12_B27_damages.md`. No code.
 - TESTS: none (a design item).
 - FALSIFIER and CONTROL: the design opens a new edge kind or a new gate basis (both refused by PRES §8: "No new edge kind, no new gate basis").
-- GATE: the file exists, `## Status: PROPOSED`, and states (1) to (4), each with a falsifier; no code line from this item.
+- GATE: `test -f proposals/v12_B27_damages.md` → exit 0 (its `## Status:` line is not read as a gate, CLAUDE.md §0.05; R2d, CHK_K9 #13); the file states (1) to (4), each with a falsifier; no code line from this item.
 - HASH MOVERS: none.
 - DEPENDS ON: V12 B27.02, B27.11. Read as reference, not a code dependency: `proposals/14_VERBS_MATERIAL_B_stores.md` (the stores lane, B12c, which is not an ancestor of B27 in §2.1; `IS-B2-SC-06` names it as the owner of a person-ordered store movement). The design's build gates on B12c.
 - GLOSSARY: none until the build.

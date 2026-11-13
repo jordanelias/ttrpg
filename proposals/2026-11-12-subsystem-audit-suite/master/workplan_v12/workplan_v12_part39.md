@@ -317,7 +317,7 @@ Not in this batch, and where each is: `30_WR_E`'s fork lift, the `entrenched`, `
 - FALSIFIER and CONTROL: "Clause 2 passing under `basis_off`: the classes are too loose"; "Clause 4 failing with clause 2 passing: the overlaps are scripted by the build"; "A class above zero whose acts, read in the chronicle, do not read as that story to a person" (one rendered instance per class per seed is printed for this check). Control: `test_overlaps_block_moves_no_hash`.
 - GATE: `python -m pytest engine/season/tests/test_storybar.py -q` → pass (two skips named); `python -m engine.season.harness.storybar --base-seed 0 --n 3 --seasons 2 --arms off noconv --overlaps --executed-only` → G1–G5 `n/a (no reader)`, G6 a count, the three lines printed (six seasons and five seeds in the source; A-114; the bar's clauses are B36.R1).
 - HASH MOVERS: none.
-- DEPENDS ON: V12 B36.04 (`closes`), B36.01 (the arms mapping), B36.12; V12 Batch B10 (`16_PESSIMIST_CHAR_A`: `conviction.moved`); EXISTS-IN-TREE `harness/decision_spread.py::apply_control`, `harness/corpus_run.py::attempts`; the readers of G1–G5: V12 Batch B38 (PROPOSED).
+- DEPENDS ON: V12 B36.04 (`closes`), B36.01 (the arms mapping), B36.12; V12 Batch B10 (`16_PESSIMIST_CHAR_A`: `conviction.moved`); EXISTS-IN-TREE `harness/decision_spread.py::apply_control`, `harness/corpus_run.py::attempts`. Note, not a dependency: the readers of G1–G5 are built in Batch B38 (a later batch); until then this item's GATE reads G1–G5 as `n/a (no reader)` (R2d, CHK_K9 #12).
 - GLOSSARY: *overlap* (row exists: the story bar's sense of "crossing"): owner column → `storybar.overlaps`.
 - COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B36's producer; `Item: B36.13`, `[skip ci]`.

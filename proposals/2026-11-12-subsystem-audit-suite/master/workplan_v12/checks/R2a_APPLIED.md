@@ -42,4 +42,22 @@ Scope: `checks/CHK_K1.md` (F1..F13) and `checks/CHK_K2.md` (#1..#16), after `che
 | K2 #14 | 3 (part 2 §5.3's cost classes and DEPENDS ON marks) | B07 batch COST and B07.01 "medium build" → `build`; B09.05 → `calibration` (the old words kept in parentheses); B05.21's `MISSING-BY-ORDER` mark rewritten as a forward note outside the marks, naming B10.09 `[ASSUMPTION]` as the stance-unit item | `workplan_v12_part10_cont2.md` B07 head, B07.01; `_part11_cont.md` B09.05; `_part8_cont.md` B05.21 |
 | K2 #15 | 5 (a gates-on cell must resolve to a handle) | part 9's "gates on" cells name handles first, the prose kept in parentheses: B05.51 → B05.23; B05.56 → B05.14, B05.23; B05.57 → B05.09; B05.59 → B05.14 to B05.23 (mapped from part 8's table: OBS step 1a = B05.14, OBS step 5 = B05.23, CAP B1 = B05.09). The split head/table across part 8 and 9 is allowed (lanes A08, A09) and left | `workplan_v12_part9.md` B05 table |
 | K2 #16 | 3 (§5.3 WHERE lists NEW files) | B04.19 WHERE gains `test_sc_hearing_capabilities.py` (B04.18's) and NEW `test_fa_office_capabilities.py` | `workplan_v12_part7.md` B04.19 |
+| K2 #11 | 3 (E-12's remedy is "copies only the exact edit text … and cites the rest", not a truncation of edit text) | each of the 21 items over 6,000 bytes (byte count by script, after this lane's other edits) profiled by field and grepped for non-edit text (reasons, history, evidence, `Reconciled`/`Folded`): **B05.14 rewritten** (10,913 → 8,693 bytes: the quoted reasons and duplicated rationale cut and cited by section; every edit, schema, pseudocode block, test name, gate kept); **B05.64 SOURCE trimmed** (the intake's evidence cited, not copied). The other 19 (B04.02, .05, .07; B05.02, .09, .10, .17, .21, .23, .51, .57, .58, .60; B06.04; B07.01; B17.01, .03, .10; B05.99 is 6,093) hold edit text, schemas, test bodies and gates in their INSTRUCTION/TESTS/GATE fields with no removable non-edit block of size: left over the cap as compliant with E-12's remedy. Cutting further would move edit text out of the item (against §5.4); splitting would renumber handles other parts cite. Orchestrator: accept, or rule that the 6 KB cap binds over §5.4 | `workplan_v12_part8_cont.md` B05.14; `_part9.md` B05.64 |
 | K2 #13 | 5 (git's behaviour, run here) | B14.05's reading "→ 0" → "no output, exit 1", with the control read at the tree (six files, 16 hits, exit 0) | `workplan_v12_part10_cont.md` B14.05 |
+
+## For Jordan
+
+None. Every finding was answered by ladder steps 1 to 5; the one Layer 1 item (K1 F9, B03.71) is licensed by A-97 with RS-27 as its ruling and carries that as an `[ASSUMPTION]`.
+
+## For the orchestrator (not Jordan's)
+
+- K2 #11: accept the 19 items left over 6 KB as edit text only, or rule that the cap binds over §5.4.
+- Part 2 totals not recomputed: §1.2 positions and serial sum (+1 position, +0.4 h for B17.14; B17 is off the critical path, slack 4) and the plan-wide behaviour/encoding mover totals sentence (B09.10: encoding 1 → behaviour).
+
+## Edits outside parts 3 to 11
+
+`workplan_v12_part2.md` §1.3 (B17, B09 rows) and §3 (B09 row); `workplan_v12_part2_cont.md` file census (`test_mass_battle_maneuvers.py` row); `workplan_v12_part2_cont2.md` §8 row 6 and §11 C-19. Each a one-cell Edit, required by K1 F1, K2 #6 or K2 #9.
+
+## Close
+
+`python tools/ci_naming_check.py` → "no new use of a deprecated name", exit 0. No pytest, no commit. Commands run against the tree: the id-block check (B00.01's new gate; `H ok`, nine lanes `FAIL` before the bump), `git cat-file -t 785bc62` (`commit`), the `requirements.yaml` `measured` count (9), `git grep -c "designs/audit/" modules/combat` (16 hits). B05.14 was spliced in by `scratchpad/r2a/splice.py` from a file written with `Write`; the diff against the snapshot touches only that item's lines.

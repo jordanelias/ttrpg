@@ -93,7 +93,7 @@ Not in this batch, and where each is: `04_MB_unit_loadout_and_weapon_in_hand_B` 
 - WHERE: NEW `proposals/2026-11-12-mb-drill-step.md`. No file under `modules/` or `engine/`.
 - TESTS: none (a design).
 - FALSIFIER and CONTROL (stated in the file): two units of one troop row, one drawn from a drilled cohort, read differently through the contact draw (`contact_casualties`) only by the step and not at all with the step at 0. Control: the step at 0 reproduces the base digests.
-- GATE: `test -f proposals/2026-11-12-mb-drill-step.md` → exit 0; `grep -c '^## Status: PROPOSED' proposals/2026-11-12-mb-drill-step.md` → 1; the file states (1) to (4) each with a falsifier and a control (read by the batch's `ners` critic); `git diff --stat <batch-start-sha> -- modules engine` shows no change made by this commit.
+- GATE: `test -f proposals/2026-11-12-mb-drill-step.md` → exit 0 (the `## Status:` line is not read as a gate, CLAUDE.md §0.05; R2d, CHK_K9 #13); the file states (1) to (4) each with a falsifier and a control (read by the batch's `ners` critic); `git diff --stat <batch-start-sha> -- modules engine` shows no change made by this commit.
 - HASH MOVERS: none. Its build, unscheduled, is a declared mover of every field with a drilled cohort.
 - DEPENDS ON: V12 Batch B19 (MBA-01's `skill` column; MBA-04's `ContactVector`); V12 Batch B22 (`14_VERBS_MILITARY_B` `train`, the cohort's `arms` rank).
 - GLOSSARY: none in this commit (the design names a new term with its ordinary-English reading; its build adds the row). The word is "drill", not "training", where it means a unit's practice (the glossary's *train* is a person's verb).

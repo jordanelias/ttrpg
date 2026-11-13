@@ -408,7 +408,7 @@ Expected after B17 (its GATE): "at seed 2 the battle the realm fights is `field.
 - FALSIFIER and CONTROL: a pin moved that no item declared (then an item is wrong, not the pin). Control: seed 0's realm hash equal to B16M's close.
 - GATE: the BATCH GATE.
 - HASH MOVERS: the re-pin itself.
-- DEPENDS ON: V12 B17.01 to B17.12.
+- DEPENDS ON: V12 B17.01 to B17.12, B17.14 (if it landed; R2a).
 - GLOSSARY: none.
 - COST and TIER: reading and re-pin; `sonnet`, `high`; Reading 1 `haiku`.
 - LANDS IT: B17's producer; `Item: B17.99`, the batch's last `Item:` commit (no `[skip ci]`).

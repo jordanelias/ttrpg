@@ -79,7 +79,7 @@ Not in this batch, and where each is: CR-91 (1), (2), (4), the claim to a territ
 - WHERE: NEW `proposals/v12_B21d_duty_of_office.md`.
 - TESTS: none (no code).
 - FALSIFIER and CONTROL: "(design) the file exists and states (1) to (5); no code." A design whose (1) keys a decline on a named seat or person (it must read `hold` and F structurally) is refused at review. Control: `git diff --stat` of the commit touches the one file.
-- GATE: `test -f proposals/v12_B21d_duty_of_office.md` and `grep -c "^## Status: PROPOSED" proposals/v12_B21d_duty_of_office.md` → 1; the file names (1) to (5), the `accept` pricing and the restated (3), each with a falsifier and a control (read by the `ners` critic); no file outside it in the diff.
+- GATE: `test -f proposals/v12_B21d_duty_of_office.md` → exit 0 (the `## Status:` line is not read as a gate, CLAUDE.md §0.05; R2d, CHK_K9 #13); the file names (1) to (5), the `accept` pricing and the restated (3), each with a falsifier and a control (read by the `ners` critic); no file outside it in the diff.
 - HASH MOVERS: none.
 - DEPENDS ON: V12 B11.02 (CR-83's design, `proposals/v12_B11_familiarity_and_inference.md`); V12 B10.30 (the `aim` term); EXISTS-IN-TREE `data/verbs.py::_load_own_stance_declines`, `decision/options.py::subject_is_opponent`, `queries/person_q.py::deeds_judged`, `data/goals.py::expected`, `decision/choose.py::stance_term` (CR-87's `hostile_stance_gain`).
 - GLOSSARY: rows *duty* and *grievance* drafted in the design as candidates (ordinary readings: "duty", what an office binds its holder to do; "grievance", a wrong a person holds against another); the glossary is edited by B21d.05, where the code defines them.

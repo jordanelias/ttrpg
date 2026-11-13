@@ -355,7 +355,7 @@ These are lines of the B12a block (merged by reference, repair lane R2b, CHK_K4 
 - WHERE: `engine/season/data/fixtures.py` (`hunger_severity_draw`); `engine/season/hole_register.yaml` (its row, B12a.58's slot).
 - TESTS: none new; `test_hunger_draw_off_is_the_base_hash` keeps its control by building with the fixture overridden to `False`.
 - FALSIFIER and CONTROL: over seeds 0 to 2 every hungry eater's draw takes one band (the draw collapsed into a threshold). Control: `False` reproduces B12a.61's hash.
-- GATE: `python -m pytest engine/season/tests/test_hunger.py -q` → pass; the readings above, with their seeds.
+- GATE: `python -m pytest engine/season/tests/test_hunger.py -q` → pass; the readings above, with their seeds, expected (repair lane R2b, CHK_K4 F10; the FALSIFIER's negation): at every seed of 0 to 2 where at least one eater went short, two or more distinct bands occur among the eaters' draws (`checked >= 1` per such seed; a seed with no hungry eater is reported as one, not a pass), and before the flip every eater reads today's step. The readings are taken in-process (`build_realm(s)`, `populated.run(2, s, w=w)`, `hunger_severity_draw` set on `w.fixtures`), counting the bands from what B12a.61's draw writes `[ASSUMPTION: the band of each eater's draw is readable from what B12a.61 records — basis: B12a.61's `test_hunger_draw_on_bodies_diverge_and_first_deaths_differ` reads per-eater outcomes]`; the script is quoted in the commit body.
 - HASH MOVERS: "every world with a hungry eater at `True`" (the source). Declared; re-pinned at B12a.99.
 - EXPECTED RED UNTIL B12a.99: the realm pins, as B12a.54.
 - DEPENDS ON: V12 B12a.61; V12 B12a.57 (the design merged; if it is not, this item is `HELD`, D-18).
