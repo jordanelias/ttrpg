@@ -291,7 +291,48 @@
 - DEPENDS ON: V12 B22.34; EXISTS-IN-TREE `engine/season/queries/world_q.py::mustered` (`:2132`), `::restrained` (`:1766`); (Patched: P-04) V12 Batch B29 (`capture`, `detain` to the issuing seat; `test_vm_phy_a_custody.py`).
 - GLOSSARY: none.
 - COST and TIER: edit and the re-pin; `sonnet`, high.
-- LANDS IT: B22's producer; `Item: B22.35`, the batch's last `Item:` commit (no `[skip ci]`: its push opens BATCH-CLOSE).
+- LANDS IT: B22's producer; `Item: B22.35`, `[skip ci]` (the batch's last `Item:` push is B22.99, which takes step 3, the re-pin, with the GATE's "green after the re-pin" arms and HASH MOVERS' re-pin clause; repair lane R1, E-1).
+
+## Readings (B22)
+
+Written by repair lane R1 (K8 F2: the three READING rows had no block; E-10). Each text is copied byte for byte from the source the row names, line breaks kept; read once on the closing tree at B22.99 and quoted in its commit body with its SHA.
+
+Reading 1 (B22.R1, `IS-MB-05`; `master/instructions/IS_B1_PC_MB_DICE_part2.md`, item IS-MB-05, its INSTRUCTION and GATE bullets):
+
+- **INSTRUCTION:** at the close of B17, B20, B22 and B23 the last commit body quotes `python -m engine.season.harness.aperture 2 s`, s = 0, 1, 2: the `ENGINES` lines for `mass_battle.resolve_field`, `mass_battle.army`, `mass_battle.army_order`; the counts of `field.won`, `field.lost`, `field.drawn`, `field.unopposed`, `siege.pressed`; `attempted` and `executed` for `march`, `marshal`, `recruit`, `form_unit`, `assign_troops`, `order_unit`. Each reading names its SHA and is taken once.
+- **GATE:** expected after B17: at seed 2 the battle the realm fights is `field.won`, `field.lost` or `field.drawn` and no longer the artefact of the shipped scale; after B22: fought battles above 0 at every seed and the two army rows above 0 (the scenario proposal's gate 4); after B23: at least one `seize` following a `field.won`.
+
+Reading 2 (B22.R2, `17_CENSUS_C1A_02` W2; `proposals/17_CENSUS_C1A_02_wires_and_corrections.md` §W2, the two census rows of this batch and the closing gate; the `_siege` row is INCOMPLETE in its source, no carrier):
+
+| census row | effect(s) | corpus reading | proposal that names the verb |
+|---|---|---|---|
+| `loop/effects_army.py:34 _army`, `:45 _payload` | `recruit`, `form_unit`, `assign_troops`, `disband_unit`, `discharge_troops`, `order_unit` | never attempted | `14_VERBS_MILITARY_C_the_muster.md`, `14_VERBS_MILITARY_D_the_order_of_battle.md` |
+| `loop/effects_combat.py:686 _siege` | `march` | never attempted | `14_VERBS_MILITARY_A_movement.md` |
+
+**The gate these rows close on.** `python -m engine.season.harness.corpus_run`: each verb above appears
+under `VERBS THAT EXECUTED`. Today's line reads 23 of 67 executed, 13 only refused, 30 never attempted.
+[v12: run as `python -m engine.season.harness.corpus_run --seasons 2`, two seasons a case, D-17; the case's own span, to `MAX_SEASONS`, is B99's; the line's figures are the source's reading, not a target.]
+
+Reading 3 (B22.R3, `IS-A-09` (1) and (2); `master/instructions/IS_A_NINE_part2.md`, item IS-A-09, "What this item still adds"):
+
+(1) `IS-MB-02`'s gate line `march` with posture `besiege`
+formed and executed is read through `IS-A-06`'s `BUILT OUT` block at B22's close (`aperture 2 --seeds 0 1 2`), and
+`field.invested` is read in `EMITTED KINDS`; (2) the `march` row's built-out reading counts a besiege that wears
+nothing but leaves its claim (`IS-MB-02` step 4) as a clean execution, not a refusal.
+
+### B22.99 — re-pin and close readings · `V12_STRUCTURE_part4.md` E-1; B22.35 step 3, moved · BUILD · HASH MOVER (the re-pin)
+- SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2, E-10 (the Readings block above); B22's RE-PIN, REQUIREMENT and BATCH GATE lines; B22.35 INSTRUCTION step 3, moved here by repair lane R1 (part 2 §11 C-01; K8 F1, F2).
+- ADVANCES: R-04.c1 and the batch's `BUILT OUT` and `ENGINES` rows (its REQUIREMENT line), read on this tree; their conjuncts' `reading:` records written here (`IS-A-12`); no `status:` edited; M3 and M4 readings as the REQUIREMENT line names them.
+- INSTRUCTION: (1) **The re-pin**: B22.35 step 3 as written there (every pin B22's declared movers moved: the realm, spine and corpus pins at seeds 0 to 2, the field goldens a moved field reaches, and `engine/season/tests/test_in12_raze.py`'s H-228 pin; "re-pin" said plainly, before and after quoted). (2) Readings 1 to 3 (the block above, B22.R1 to B22.R3), each read once on this tree and quoted in this commit's body with its SHA. (3) Every BATCH GATE line, the `HASH READING` at `<s>` = 0, 1, 2 before (`reading @<sha>`) and after, the `BUILT OUT`, `ENGINES` and `NULL SCENES` lines before and after, and the batch's measured wall time, into this commit's body; the conjuncts' `reading:` records.
+- WHERE: the pin files the movers reach (`engine/season/tests/_realm_goldens.py` and the golden files it owns, B02's one golden owner); `engine/season/tests/test_in12_raze.py` (the H-228 pin); `engine/season/requirements.yaml` (`reading:` records).
+- TESTS: none new; after step 1 the pinned-hash tests B02 owns and `test_in12_raze.py` read green on the re-pinned values.
+- FALSIFIER and CONTROL: a pin that moved and that no B22 item declared (B22.04 to B22.35's HASH MOVERS lines; then the re-pin stops and the batch is `STOPPED`). Control: the close B22 rebased on (B21b's or B20's, whichever merged last, `reading @<sha>`).
+- GATE: the BATCH GATE above, every line, read once on this commit's tree; `PYTHONHASHSEED=0 python -m pytest engine/season/tests/test_resv_field_defender.py engine/season/tests/test_in12_raze.py -q` → green after the re-pin.
+- HASH MOVERS: the batch's one re-pin, here and nowhere else.
+- DEPENDS ON: V12 B22.01 to B22.35; the Readings B22.R1 to B22.R3.
+- GLOSSARY: none.
+- COST and TIER: a re-pin and the readings; `sonnet`, high; the readings read by `opus`.
+- LANDS IT: B22's producer; `Item: B22.99`, the batch's last `Item:` push (no `[skip ci]`: its push opens BATCH-CLOSE).
 
 | STOP. Batch B22-mb-armies closes here |
 
@@ -318,7 +359,7 @@ BATCH GATE (read once, on the closing tree; every seeded command under `PYTHONHA
   4. `python -m engine.season.harness.aperture 2 --seeds 0 1 2` → the `BUILT OUT` line reads built out for `destroy_record`, `examine`, and `seize` on a Record (IS-A-08: a verb not built out is a failed gate); for `create_record`, `forge`, `survey`, `research`, `reconstruct`, `surveil` (rows this batch re-draws) the `BUILT OUT` line quoted; `interview`, `reconstruct`, `thread_read` attempted 0 where B26.06 withholds them.
   5. `python -m engine.season.harness.aperture 2 0` and `2 1` → `examine` attempted above 0; `surveil` refusals on `present_at` and `exists:Rung` at 0; a `finding.made` from `surveil` deposits at least one claim other than "a finding was made" where any deed happened at the place (`14_VERBS_PHYSICAL_C` gate).
   6. The close's commit body records `register --requirements` (nine lines), `m1_acceptance --summary`'s verdict line, the named conjuncts' readings with their tree, the `BUILT OUT`, `ENGINES` and `NULL SCENES` lines before (`reading @<sha>`, B25's close or B22's merge, whichever is later in the step's merge order) and after, and the batch's measured wall time; the last `Item:` commit writes the conjuncts' `reading:` records; `status:` is not edited (`IS-A-12`).
-RE-PIN: every seeded realm, spine and corpus pin, re-recorded once in B26.17 (the batch's last `Item:` commit), said plainly as a re-pin; the before-reading is the previous close's after-reading (`reading @<sha>`); in step S17 B26 merges after B22 and rebases on B22's re-pin (§7.4 of the structure).
+RE-PIN: every seeded realm, spine and corpus pin, re-recorded once in B26.99 (the batch's last `Item:` commit; moved from B26.17 by repair lane R1, E-1), said plainly as a re-pin; the before-reading is the previous close's after-reading (`reading @<sha>`); in step S17 B26 merges after B22 and rebases on B22's re-pin (§7.4 of the structure).
 EXPECTED RED UNTIL B26.99 (under `[skip ci]`, E-1; one batch line, repair lane R1): the realm and corpus pins any mover item of this batch moves read red from its first mover (B26.01) to the re-pin; the files that pin them (`git grep -lE '"[0-9a-f]{32}"'` over the test trees and the golden files, those this batch names): `engine/season/tests/_realm_goldens.py` (B02's one pin file); `engine/season/tests/test_go07_canonical_digest.py` (its asserting test, `SHIPPED`/`CENSUS`).
 IDS: ED-FI 0; H 2 (the NUMBER rows of B26.09 `forgery_quality_step` and B26.15 `surveil_watch_rate`; H-169's existing row is narrowed by B26.17, no new id)
 DIALS AT CONTROL:
@@ -358,6 +399,7 @@ EST: 5 h [estimate: the structure's §2.4 formula; nothing timed]
 | B26.15 | `surveil` makes the watcher an observer, by a draw | `14_VERBS_PHYSICAL_C` C2 | BUILD | MOVER(behaviour) | B26.14 |
 | B26.16 | what bounds a survey's content | H-169 (intake `:480`; E7 carry-forward `:183`) | DESIGN-FIRST | EQUAL | B26.15 |
 | B26.17 | a survey is bounded by the seats whose remit covers the subject; the batch's one re-pin | H-169 | BUILD | MOVER(behaviour) | B26.16, B26.08 |
+| B26.99 | re-pin and close readings | `V12_STRUCTURE_part4.md` E-1; B26.17 step 3, moved | BUILD | MOVER (the re-pin) | B26.17 |
 
 **Placement and not carried.** H-169: no member or instruction item names its id (`grep -l H-169` over the six members and `master/instructions/`: none), and its text says neither "first" nor "last", so it is placed at the batch's tail in the intake's order (structure §5.6). `16_PESSIMIST_FI_D` edit 2 (R-05's `measured:` text): not carried — `IS-A-01` (B02) removes every row's `measured:` field ("`measured:` leaves"), so the edit has no target; the withheld rows are read through `IS-A-06`'s `BUILT OUT` block instead (see the receipt). `14_VERBS_MATERIAL_D` §6's Rung half (`seize_place`, `places_occupied`): B23's (U3 §4.1 row 82). `14_VERBS_MATERIAL_E` §4 steps 1 and 3 (FI-04 §1, §2 and FI-06): B11's items.
 
@@ -802,7 +844,21 @@ EST: 5 h [estimate: the structure's §2.4 formula; nothing timed]
 - DEPENDS ON: V12 B26.16, B26.08; EXISTS-IN-TREE `engine/season/loop/effects_information.py::_eff_survey`, `engine/season/hole_register.yaml` row H-169 (`:3824`).
 - GLOSSARY: none.
 - COST and TIER: small build; `opus` (the carry-forward's TIER) for step 1, `sonnet` for the re-pin.
-- LANDS IT: B26's producer; `Item: B26.17`, the batch's last `Item:` commit (no `[skip ci]`: its push opens BATCH-CLOSE).
+- LANDS IT: B26's producer; `Item: B26.17`, `[skip ci]` (the batch's last `Item:` push is B26.99, which takes step 3, the re-pin, and the GATE's "green after the re-pin" arms; step 1's HELD fallback no longer moves the re-pin to B26.15; repair lane R1, E-1).
+
+### B26.99 — re-pin and close readings · `V12_STRUCTURE_part4.md` E-1; B26.17 step 3, moved · BUILD · HASH MOVER (the re-pin)
+- SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2; B26's RE-PIN, REQUIREMENT and BATCH GATE lines; B26.17 INSTRUCTION step 3, moved here by repair lane R1 (part 2 §11 C-01; K8 F1).
+- ADVANCES: the `BUILT OUT` readings of B26's REQUIREMENT line (`destroy_record`, `examine`, `seize` a Record), read on this tree; their conjuncts' `reading:` records written here (`IS-A-12`); no `status:` edited.
+- INSTRUCTION: (1) **The re-pin**: B26.17 step 3 as written there (every pin B26's declared movers moved, B26.01, B26.05 to B26.15 and B26.17: the realm, spine and corpus pins at seeds 0 to 2, rebased on B22's merge, step S17's order; "re-pin" said plainly, before and after quoted). If B26.17 is HELD (its step 1: B26.16's design unmerged), the re-pin is still made here, over the movers that landed. (2) Every BATCH GATE line, the `HASH READING` at `<s>` = 0, 1, 2 before (`reading @<sha>`) and after, the `BUILT OUT` lines before and after, and the batch's measured wall time, into this commit's body; the named conjuncts' `reading:` records.
+- WHERE: the pin files the movers reach (B02's one golden owner, `engine/season/tests/_realm_goldens.py`); `engine/season/requirements.yaml` (`reading:` records).
+- TESTS: none new; after step 1 the pinned-hash tests B02 owns read green on the re-pinned values.
+- FALSIFIER and CONTROL: a pin that moved and that no B26 item declared (then the re-pin stops and the batch is `STOPPED`). Control: B22's merge readings (`reading @<sha>`), the base B26 rebased on.
+- GATE: the BATCH GATE above, every line, read once on this commit's tree; `PYTHONHASHSEED=0 python -m pytest engine/season/tests/test_survey_bound.py engine/season/tests/test_information_cluster.py engine/season/tests/test_vm_mat_d_paper.py -q` → green after the re-pin (B26.17's files; `test_survey_bound.py` exists only if B26.17 landed).
+- HASH MOVERS: the batch's one re-pin, here and nowhere else.
+- DEPENDS ON: V12 B26.01 to B26.17.
+- GLOSSARY: none.
+- COST and TIER: a re-pin and the readings; `sonnet`, high.
+- LANDS IT: B26's producer; `Item: B26.99`, the batch's last `Item:` push (no `[skip ci]`: its push opens BATCH-CLOSE).
 
 | STOP. Batch B26-fi-inquiry closes here |
 

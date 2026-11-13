@@ -13,7 +13,7 @@
 ## Batch B00-ids · lane IN · wave W0 · step S0 · HASH EQUAL
 INVOCATION: /methodology-execute Batch B00-ids
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_IN.md, Open table
-GATE: none (the plan's first batch; its base is the working tree head on which v12 is adopted)
+GATE: none (record only); closes on the boundary row (E-6; the plan's first batch; its base is the working tree head on which v12 is adopted)
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.harness.populated import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`workplan_v12.md` §3.B, "the hash reading") (this batch runs before B03c moves the builder to `engine/season/boot/realm.py`).
 REQUIREMENT: none — allocation (`STAGES.md`, "Parallel sessions" rule 4: ids are allocated up front and land on `main` before any session cites a number; CLAUDE.md §4)
 BATCH GATE: `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`) (no duplicate id, `register.py::rule_R0`);
@@ -38,6 +38,7 @@ EST: 3 h [estimate]
 |---|---|---|---|---|---|
 | B00.01 | every batch's ED and H block, allocated and landed on `main` | U3 §1 item 1; `V12_STRUCTURE_part3.md` §7.5 | BUILD | EQUAL | the plan's id-block table (H2) |
 | B00.02 | Jordan's 2026-10-28 words, recorded as relayed (M31, M32) | the intake H-1; A-111 | BUILD | EQUAL | B00.01 |
+| B00.99 | re-pin and close readings (record only) | `V12_STRUCTURE_part4.md` E-1, E-6 | BUILD | EQUAL | B00.02 |
 
 ### B00.01 — allocate every batch's ED block and hole-register block, and land the bump first · U3 §1 item 1 · BUILD · HASH EQUAL
 - SOURCE: `unified/U3_DEPENDENCY_ORDER.md` §1 item 1; `master/workplan_v12/V12_STRUCTURE_part3.md` §7.5 (which completes it); `unified/U3_CONFLICT_LEDGER.md` T-4; rulings none; closes nothing (allocation).
@@ -73,7 +74,21 @@ EST: 3 h [estimate]
 - GLOSSARY: none.
 - IDS: ED-IN block slots 1 and 2.
 - COST and TIER: edit; `sonnet`, medium.
-- LANDS IT: B00's producer; `Item: B00.02` commit, the batch's last (no `[skip ci]`).
+- LANDS IT: B00's producer; `Item: B00.02` commit, `[skip ci]` (the batch's last `Item:` push is B00.99; repair lane R1, E-1).
+
+### B00.99 — re-pin and close readings (record only) · `V12_STRUCTURE_part4.md` E-1, E-6 · BUILD · HASH EQUAL (records)
+- SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2, E-6 (a batch with nothing to gate on "still has a `.99` position (the record) and a boundary row"); `V12_STRUCTURE_part2.md` §5.12; B00's BATCH GATE; part 2 §11 C-01 (written by repair lane R1).
+- ADVANCES: none of the nine (REQUIREMENT: none — allocation); the batch's record.
+- INSTRUCTION: (1) Re-pin nothing (RE-PIN: none; both items are EQUAL). (2) Read once on the closing tree and quote in this commit's body every BATCH GATE line: `register --check`'s per-check violation counts against the opening reading; the exit codes of `tools/validate_ed_citations.py` and `tools/currency_consistency_check.py`; the `next_free` dict; `register --requirements` (nine lines, unchanged against `reading @<base sha>`); `m1_acceptance --summary`'s verdict line; the `HASH READING` at `<s>` = 0, 1, 2, `<k>` = 1, equal to the base; the batch's measured wall time. (3) No conjunct is named, so no `reading:` record is written and no `status:` is edited. The commit carries no file (`git commit --allow-empty`) `[ASSUMPTION: a record-only `.99` lands as an empty commit carrying the record — basis: E-6; B03g.99's "WHERE: none but the commit body"]`.
+- WHERE: none but the commit body.
+- TESTS: none new.
+- FALSIFIER and CONTROL: a moved hash at any seed, or a `register --check` count above the opening reading (then B00 moved what it only allocates: `STOPPED`). Control: the base readings (`reading @<base sha>`).
+- GATE: the BATCH GATE above, every line, read once on this commit's tree.
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B00.01, B00.02.
+- GLOSSARY: none.
+- COST and TIER: reading; `sonnet`, medium.
+- LANDS IT: B00's producer; `Item: B00.99`, the batch's last `Item:` push (no `[skip ci]`).
 
 | STOP. Batch B00-ids closes here |
 
@@ -111,6 +126,7 @@ EST: 3 h [estimate]
 |---|---|---|---|---|---|
 | B01.01 | computed play reaches the duel: `e5d6ab9`, rebased | `03_PC_duel_chain_reach`; lane A `e5d6ab9`; C3-A2; A-93 | BUILD | MOVER(behaviour) | Batch B00 |
 | B01.02 | persons hold scores and the obstacle is the task's difficulty plus named terms: `c5bf18a`, rebased, its hole-register row renumbered; the batch's re-pin | lane A `c5bf18a`; C3-A1, C3-A2 | BUILD | MOVER(behaviour) | B01.01 |
+| B01.99 | re-pin and close readings (the re-pin rides B01.02's cherry-pick) | `V12_STRUCTURE_part4.md` E-1, E-7 | BUILD | EQUAL | B01.02 |
 
 ### B01.01 — computed play reaches the duel: lane A's `e5d6ab9` on the current tree · 03_PC_duel_chain_reach · BUILD · HASH MOVER(behaviour)
 - SOURCE: `unified/U3_DEPENDENCY_ORDER.md` §1 item 2; `unified/U3_CONFLICT_LEDGER.md` C3-A2 ("Rebase, do not redo"), T-1, T-2; `proposals/03_PC_duel_chain_reach.md` (Gate, Falsifier, Implementation); `unified/OWED_TO_UNIFICATION.md` §E; the commit `e5d6ab9` on branch `worktree-agent-a737f996de1fa4752`; rulings A-93 (B01 may push the rebased branch and open its PR); closes F-PC-01 (as far as formation reaches).
@@ -149,9 +165,23 @@ EST: 3 h [estimate]
 - NAMES: none in this part (the obstacle's names are B05's to change).
 - IDS: H block slot 1 (the renumbered row).
 - COST and TIER: build and the re-pin; `sonnet`, high; the resolution of `seam/wrappers/sigma.py`, `pool.py` and `data/fixtures.py` read by `opus`.
-- LANDS IT: B01's producer; `Item: B01.02`, the batch's last (no `[skip ci]`).
+- LANDS IT: B01's producer; `Item: B01.02`, `[skip ci]` (the batch's last `Item:` push is B01.99, which also takes step 5's push and PR; repair lane R1, E-1).
 
 Note for the BA1 author (not an edit here): after B01.02, `build_realm`'s `cast_attributes` ships True at value 2 on every key (`c5bf18a` step 3); `IS-A-11` stage 2 step 2 ("the `cast_attributes` default flips to on") then finds the switch on and lands only the values.
+
+### B01.99 — re-pin and close readings (the re-pin rides B01.02's cherry-pick) · `V12_STRUCTURE_part4.md` E-1, E-7 · BUILD · HASH EQUAL (records)
+- SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2, E-7; `V12_STRUCTURE_part2.md` §5.12; B01's RE-PIN, REQUIREMENT and BATCH GATE lines; B01.02 step 5 (the push and the PR, moved here); part 2 §11 C-01 (written by repair lane R1).
+- ADVANCES: the readings B01's REQUIREMENT line names (R-04.c5 (i): `challenge` executed above 0 at seeds 0 to 2; `IS-PC-03`'s reading), quoted with their tree; no `reading:` record (they begin at B02, `IS-A-01`), no `status:` edited.
+- INSTRUCTION: (1) Re-pin nothing here: B01.02's cherry-pick re-records, once, the pins B01's two commits move, as the RE-PIN line says (a re-pin borne by a GIT commit, E-7) `[ASSUMPTION: E-1's one re-pin is met by B01.02 — basis: B01's RE-PIN line, "re-recorded once in B01.02 against the rebased tree"]`. (2) Read once on the closing tree and quote in this commit's body every BATCH GATE line, the REQUIREMENT readings, the `HASH READING` at `<s>` = 0, 1, 2 (`<k>` = 1) and the build hash (`<k>` = 0), each against B01.02's re-recorded values, and the batch's measured wall time. (3) Then push the branch and open the batch's PR for Jordan's review (A-93; B01.02 step 5's last sentence, moved here because this is the batch's last push). The commit carries no file (`git commit --allow-empty`).
+- WHERE: none but the commit body.
+- TESTS: none new.
+- FALSIFIER and CONTROL: a pin read on the closing tree that differs from B01.02's re-recorded value (then something after B01.02 moved the world: `STOPPED`). Control: B01.02's after-readings (`reading @<sha>`).
+- GATE: the BATCH GATE above, every line, read once on this commit's tree.
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B01.01, B01.02.
+- GLOSSARY: none.
+- COST and TIER: reading; `sonnet`, medium.
+- LANDS IT: B01's producer; `Item: B01.99`, the batch's last `Item:` push (no `[skip ci]`).
 
 | STOP. Batch B01-laneA closes here |
 
@@ -228,6 +258,7 @@ EST: 10 h [estimate]
 | B02.37 | `IS-A-12`'s close record is written from this batch's close on | `IS-A-12` | READING (a form: the close line of this batch's BATCH GATE) | EQUAL | — |
 | B02.39 | the corpus run takes a seasons cap, so a gate reads it at two seasons | v12 repair R1 (K1 F3, K3 F2; D-17) | BUILD | EQUAL | B02.13 |
 | B02.38 | the nine's conjuncts, authored, and the readings this batch takes | `IS-A-02` | BUILD | EQUAL | B02.13 to B02.36, B02.39 |
+| B02.99 | re-pin and close readings (EQUAL: the record) | `V12_STRUCTURE_part4.md` E-1 | BUILD | EQUAL | B02.38 |
 
 Position numbers in the SERIAL EDGES line above are this table's. The items follow, in the form of `V12_STRUCTURE_part2.md` §5.3.
 

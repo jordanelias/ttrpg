@@ -15,6 +15,7 @@ GATE: Batch B02-tests
 GATE: Batch B03-hygiene
 GATE: Batch B03c-boot
 GATE: Batch B16L-mb-words
+GATE: Batch B03g-go-early-landings
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: none — reading cost of every later batch (H-03, H-07; CIP §2: "B03a's reason is reading cost on every later batch"); no row moves
 BATCH GATE (read once, on the closing tree, `PYTHONHASHSEED=0` on every seeded command; CIP CI-01 "Gate" and CI-02 "Gate", copied where they are commands):
@@ -134,6 +135,7 @@ GATE: Batch B01-laneA
 GATE: Batch B02-tests
 GATE: Batch B03-hygiene
 GATE: Batch B03a-prose
+GATE: Batch B03g-go-early-landings
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: none — personal combat as a package, the port's first slice and the PC lane's own batches (H-08; CIP §2: "B13's is the port's first slice and the PC lane's own batches"); no row moves
 BATCH GATE (read once, on the closing tree, `PYTHONHASHSEED=0` on every seeded command; CIP CI-09 "Gate", copied):

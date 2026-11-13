@@ -338,7 +338,7 @@ B02.37 (`IS-A-12`, READING: no code, no commit) is the close line of this batch'
 
   R-09's assumption, copied into R-09.d's and R-09.e's `text`: "`[ASSUMPTION: R-09.d and .e are conjuncts of the row and not only gates of B06 and B07 — basis: the standing rule names R-09; v11's text would read met on one verb at two bands while nine in ten successes stay a fixed function of state. Revert: drop them; the row can then read met at B07 plus BA1.]`" R-09.a's `argv` today is `python -m pytest engine/season/tests/test_season_shape.py -q -k test_we_only_a_verb_that_declares_contests_can_be_graded_today`. R-09.b's `argv` at two seasons: `aperture 2 0` "(four seasons in the source; A-114)".
 
-  6. The readings of step 1 are taken on the tree after B02.36, `PYTHONHASHSEED=0`; the long ones (`corpus_run --seasons 2` [v12: two seasons a case, D-17; the case's own span, to `MAX_SEASONS`, is B99's]; the removal test at seeds 0–2; `aperture 1` and `2` at seeds 0–2) launched in the background at this item's open, each sized first on one seed, and read here (`STAGES.md` practice 5). Each `reading:` record carries `tree`, `date`, `seed`, `seasons`, `line` (the printed line), `control`, `does_not_show`.
+  6. The readings of step 1 are taken on the tree after B02.39 (the corpus cap; repair lane R1: B02.36 before it), `PYTHONHASHSEED=0`; the long ones (`corpus_run --seasons 2` [v12: two seasons a case, D-17; the case's own span, to `MAX_SEASONS`, is B99's]; the removal test at seeds 0–2; `aperture 1` and `2` at seeds 0–2) launched in the background at this item's open, each sized first on one seed, and read here (`STAGES.md` practice 5). Each `reading:` record carries `tree`, `date`, `seed`, `seasons`, `line` (the printed line), `control`, `does_not_show`.
 - WHERE: `engine/season/requirements.yaml` only (every row's `conjuncts:`, `status:` as step 4 gives it, `measure:` of any row B02.13 left naming a deleted command).
 - TESTS: `test_check_requirements.py::test_shipped_file_exits_zero` (B02.13) turns green.
 - FALSIFIER and CONTROL: "a conjunct marked `yes` whose `reading.tree` is not an ancestor of the commit that wrote it (visible in one `git log -p`); control: the register's own refusals (`IS-A-01`)."
@@ -347,6 +347,20 @@ B02.37 (`IS-A-12`, READING: no code, no commit) is the close line of this batch'
 - DEPENDS ON: V12 B02.39 (`corpus_run --seasons 2`, the two-season cap its corpus conjuncts run under); V12 B02.13 (`IS-A-01`), B02.19 (`IS-A-03`), B02.32 (`IS-A-05` part 1), B02.21 and B02.22 (rows 1–2), B02.18 (`BUILT OUT`), B02.20 (`NULL SCENES`), B02.05 (R-07's expression); EXISTS-IN-TREE `engine/season/tests/test_faction_q.py`, `harness/headless.py`, `harness/corpus_run.py`, `harness/decision_spread.py`; `engine/mc_v18.py` absent.
 - GLOSSARY: none beyond B02.13's rows.
 - COST and TIER: edit plus instrument time (`corpus_run` recorded at 2.5 and at 8 minutes by two lanes; not measured here); `sonnet`, high; `opus` reads each reading against its conjunct's text before `holds` and `status:` are written (the judgment node that gates a requirement, CLAUDE.md §10).
-- LANDS IT: B02's producer; `Item: B02.38`, the batch's last (no `[skip ci]`); it writes the conjuncts' `reading:` records (`IS-A-12`).
+- LANDS IT: B02's producer; `Item: B02.38`, `[skip ci]` (the batch's last `Item:` push is B02.99; repair lane R1, E-1); it writes the conjuncts' `reading:` records (`IS-A-12`).
+
+### B02.99 — re-pin and close readings (EQUAL: the record) · `V12_STRUCTURE_part4.md` E-1 · BUILD · HASH EQUAL (records)
+- SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2; `V12_STRUCTURE_part2.md` §5.12; B02's BATCH GATE and RE-PIN lines; part 2 §11 C-01 (written by repair lane R1).
+- ADVANCES: the close of the readings B02.38 takes and records (R-01 to R-03 `met`; the first `BUILT OUT`, `ENGINES` and `NULL SCENES` baselines); nothing beyond them.
+- INSTRUCTION: (1) Re-pin nothing (RE-PIN: none; every item is EQUAL; the BATCH GATE's first line reads every pinned hash against B01's close, `reading @<B01 closing sha>`). (2) Read once on the closing tree and quote in this commit's body every BATCH GATE line, the `HASH READING` at `<s>` = 0, 1, 2 (`<k>` = 1) equal to B01's close, and the batch's measured wall time (build and close apart). The conjuncts' `reading:` records are B02.38's (written on B02.39's tree), not rewritten here. The commit carries no file unless the record needs one (`git commit --allow-empty`).
+- WHERE: none but the commit body.
+- TESTS: none new.
+- FALSIFIER and CONTROL: a pinned hash that differs from B01's close (then an item here was not EQUAL: `STOPPED`). Control: B01's close readings (`reading @<B01 closing sha>`).
+- GATE: the BATCH GATE above, every line, read once on this commit's tree.
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B02.01 to B02.38, B02.39.
+- GLOSSARY: none.
+- COST and TIER: reading; `sonnet`, medium; the readings against each conjunct's text read by `opus` (B02's COST line).
+- LANDS IT: B02's producer; `Item: B02.99`, the batch's last `Item:` push (no `[skip ci]`).
 
 | STOP. Batch B02-tests closes here |

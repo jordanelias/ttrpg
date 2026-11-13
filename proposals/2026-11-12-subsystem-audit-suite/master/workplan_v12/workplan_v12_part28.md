@@ -16,6 +16,8 @@
 INVOCATION: /methodology-execute Batch B12c-material-verbs-and-valley
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_SE.md, Open table; `registers/handoffs/HANDOFF_WR.md` carries one pointer row `Batch B12c-material-verbs-and-valley — IN FLIGHT (row in HANDOFF_SE.md)`, deleted at the same expunge (D-21)
 GATE: Batch B12b-weather-arcs-population
+GATE: Batch B34-go-surface
+GATE: Batch B15-pc-calibration
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: R-04.c6 → `test_valley.py` passes and the valley's policies read as B12c.28's gate states; `found`, `build`, `work` built out (`aperture 2 --seeds 0 1 2`, four seasons in the source, A-114); `BUILT OUT` for `restore`, `work`, `sabotage`, `exchange`, `requisition`, `found`, `build` (IS-A §12.2 B12 row; `IS-A-08`: a verb of this batch not built out at the close is a failed gate). B12's row of the map is this batch's (`V12_STRUCTURE.md` §3); no `status:` is edited (A-114).
 BATCH GATE (read once, on the closing tree, `PYTHONHASHSEED=0` on every seeded command):

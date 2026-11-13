@@ -26,6 +26,7 @@ GATE: Batch B20-mb-orders
 GATE: Batch B21-fa-governance
 GATE: Batch B21b-fa-war
 GATE: Batch B22-mb-armies
+GATE: Batch B26-fi-inquiry
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: R-05 contributor (M3 · every verb, `V12_STRUCTURE.md` §3): the `BUILT OUT` lines of `aperture 2 --seeds 0 1 2` for `marshal`, `surrender` and `seize_place` (the place half of `seize`, MAT-D §6) → each built out, or the line read with its reason (no field won on held land at that seed); the land gate's arms (a) to (i) of U5d-LAND → each as stated; `IS-MB-05`'s reading after B23 (B23.R1) → at least one `seize_place` following a `field.won` on held land, honestly per seed. No `status:` edited (A-114).
 BATCH GATE (read once, on the closing tree, `PYTHONHASHSEED=0` on every seeded command):
