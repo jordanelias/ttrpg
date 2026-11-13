@@ -28,7 +28,7 @@ GATE: Batch B12c-material-verbs-and-valley
 GATE: Batch B32-inst-kit
 GATE: Batch B34-go-surface
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`workplan_v12.md` §3.B, "the hash reading").
-REQUIREMENT: R-05 (re-take at B35, `IS_A_NINE_part2.md` §12.2 row B35; M3 closes here, `V12_STRUCTURE.md` §3) → `BUILT OUT` for `thread_read`, `weave`, `lock`, `mend`, `ward` and `knot` on the closing tree, and R-05's `built out n of n` at B35's `n` (the table gains four rows here, `IS-A-08`); R-09 (a working is drawn on the one sampler, `IS-B3-WR-01` "Advances") and R-07, R-08 (`IS-B3-WR-04`) re-read with their held counts. `knot`: see `UNDECIDED` (4): no source of this batch writes `knot`'s effect, so its `BUILT OUT` line is expected to read not built out unless B35.28 is released. No `status:` is edited (A-114).
+REQUIREMENT: R-05 (re-take at B35, `IS_A_NINE_part2.md` §12.2 row B35; M3 closes here, `V12_STRUCTURE.md` §3) → `BUILT OUT` for `thread_read`, `weave`, `lock`, `mend`, `ward` and `knot` on the closing tree, and R-05's `built out n of n` at B35's `n` (the table gains four rows here, `IS-A-08`) (R-05.b, R-05.c: `NULL SCENES` 0); R-05.a (added by repair lane V1, `V12_VERDICT.md` question 3: read off its own instrument, the BATCH GATE's `corpus_run --seasons 2` seed-0 run) → `WHERE THE <n> GO: 0 have no predicate/effect · 0 foldable but never even attempted · 0 attempted and always refused`, or R-05.b for every verb in the last two classes; R-09 (a working is drawn on the one sampler, `IS-B3-WR-01` "Advances") and R-07, R-08 (`IS-B3-WR-04`) re-read with their held counts. `knot`: see `UNDECIDED` (4): no source of this batch writes `knot`'s effect, so its `BUILT OUT` line is expected to read not built out unless B35.28 is released. No `status:` is edited (A-114).
 BATCH GATE (read once, on the closing tree, `PYTHONHASHSEED=0` on every seeded command, two seasons at most, D-17):
   `python -m pytest tests/valoria/test_threadwork_resilience.py tests/valoria/test_threadwork_mending_parity.py tests/valoria/test_coherence_elastic_plastic.py engine/tests/test_thread_mending_ed871.py -q` → pass on unchanged expected numbers (the parity gate of the move, `09_WR_B…` "The gate");
   `python -m pytest tests/valoria/test_engine_does_not_import_systems.py -q` → pass, no `systems/threadwork` path under any engine module;
@@ -119,7 +119,7 @@ Not in this batch, and where each is: `09_WR_threadwork_module` edit 3 and the `
 - WHERE: NEW the design file; no code.
 - TESTS: none (a design item).
 - FALSIFIER and CONTROL: a figure with no falsifier or no source mark; an amount that leaves the ground's condition crossing no band in two seasons under any arm (`12_ARCS…` "Falsifier", at two seasons, A-114).
-- GATE: the file exists and states (1) to (5), each with a falsifier; no code (v11's form, D-18); the `ners` critic's reading is in the commit body.
+- GATE: `test -f proposals/2026-11-12-subsystem-audit-suite/proposals/12_ARCS_substrate_as_ground_design.md` → exit 0; `git show --stat --format= HEAD` → that file only (no code, v11's form, D-18); `grep -c -i "falsifier" <the file>` → 5 or more (one per point (1) to (5)); for (3), `python -c "import yaml; print(yaml.safe_load(open('engine/season/rosters.yaml'))['band_floors'])"` → the floors the design cites are the shipped ones it amends; the `ners` critic's reading is in the commit body (commands added by repair lane V1, `V12_VERDICT.md` question 2).
 - HASH MOVERS: none.
 - DEPENDS ON: V12 Batch B12c (`09_WR_world_motion` edit 1 and the A-54 draw, through B12a; `16_PESSIMIST_WR_B…`'s break rule); EXISTS-IN-TREE `rosters.yaml: band_floors`, `wear_per_season`.
 - GLOSSARY: none (B35.26 adds *Thread ground*).
@@ -133,7 +133,7 @@ Not in this batch, and where each is: `09_WR_threadwork_module` edit 3 and the `
 - WHERE: NEW the design file; no code.
 - TESTS: none.
 - FALSIFIER and CONTROL: a member no code emits; a threshold with no control value.
-- GATE: the file exists and states (1) to (4) with falsifiers; no code.
+- GATE: `test -f proposals/2026-11-12-subsystem-audit-suite/proposals/08_FI_08_knot_strain_design.md` → exit 0; `git show --stat --format= HEAD` → that file only (no code); `grep -c -i "falsifier" <the file>` → 4 or more; for each member of (1), `git grep -n "<kind>" engine/season` → at least one emitting line (the FALSIFIER: a member no code emits), each quoted in the commit body (commands added by repair lane V1, `V12_VERDICT.md` question 2).
 - HASH MOVERS: none.
 - DEPENDS ON: EXISTS-IN-TREE `loop/resolve.py::_confidence_broken`, `queries/world_q.py::standing_crossed`; V12 Batch B11 (`08_FI_02`'s `present_persons`).
 - GLOSSARY: none (B35.24 adds the rows).

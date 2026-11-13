@@ -29,7 +29,7 @@
 | `test_obligees.py` | `17_CENSUS_C1A_02_wires_and_corrections` (B10) | — | not written: dropped at `FORK:217340fc` (ED-IN-0314), B10 second half (part 13_cont) rewrites the rows that cited it |
 | `test_opposed_ob.py` | `29_DICE_one_opposed_rule_form_and_tuning` (B05) | B04.24 | named by an item |
 | `test_realm_requirements.py` | `01_CORE_tests_shipped_world_falsifiers` (B02) | B02.21, B02.22, B02.32, B05.63 … | named by an item |
-| `test_referent_class_stamps.py` | `16_PESSIMIST_WR_D_small_clock_repairs_and_two_readings` (B36) | — | **unmatched**: B36's `16_PESSIMIST_WR_D` item names `test_in12_step9.py`'s tests as its control and writes no file of this name (C-17) |
+| `test_referent_class_stamps.py` | `16_PESSIMIST_WR_D_small_clock_repairs_and_two_readings` (B36) | — | **a stale name, not a test owed** (C-17 closed): the source says the file is not in the tree and gates on `test_in12_step9.py` (B36.10) |
 | `test_remove.py` | `15_INSTITUTIONS_COLONIAL_B_distance` (B33) | B33.14, B33.15, B33.16 | named by an item |
 | `test_sc_calibration_targets.py` | `13_SC_calibration` (B05); `29_DICE_one_opposed_rule_form_and_tuning` (B05) | B05.22, B05.23, B05.51, B05.59 … | named by an item |
 | `test_scene_access_appointments.py` | `28_CORE_scene_access_B_appointments` (B28) | B28.01, B28.23, B28.24, B28.25 … | named by an item |
@@ -573,7 +573,7 @@ Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them
 | M2 · persons | BA1 (S12; §2.3 S12) | B09 S10, B10 S11, BA1 S12 | none | R-06, R-07, R-08, R-09 |
 | M3 · every verb | B35 (S18; §2.3 S18) | B11 S12, B12a S13, B12b S14, B12c S15, B14 S8, B15 S12, B21 S12, B21b S13, B21c S14, B22 S17, B23 S18, B24a S15, B25 S16, B26 S17, B27 S16, B28 S17, B29 S14, B32 S17, B35 S18 | none | R-01, R-04, R-05, R-07, R-08, R-09 |
 | M4 · every scale | B36 (S19; §2.3 S19) | B16 S13, B17 S9, B19a S14, B19 S15, B20 S16, B24 S13, B30 S18, B34 S14, B36 S19 | none | R-04 |
-| M5 · the rulings beyond the nine, and the carried positions | B40 (S22; §2.3 S22) | B18 S15, B31 S19, B33 S19, B37 S16, B38 S20, B39 S21, B40 S22, B41 S18, B11F1 S16, B11F2 S17, B21d S15, B21s S18, B37p S17 | none | R-01, R-09 |
+| M5 · the rulings beyond the nine, and the carried positions | B40 (S22; §2.3 S22) | B18 S15, B31 S19, B33 S19, B37 S16, B38 S20, B39 S21, B40 S22, B41 S18, B11F1 S16, B11F2 S17, B21d S15, B21s S18, B37p S17 | none | R-01 to R-09, every conjunct: B40's REQUIREMENT re-reads all on its closing tree (`workplan_v12_part43.md`; corrected by repair lane V1 from "R-01, R-09"); R-05.a is first named at B35 (`workplan_v12_part36.md` REQUIREMENT) |
 | the settings, then the re-take | B99 (S24; §2.3 S24) | B98 S23, B99 S24 | none | — |
 
 | row | batches whose `REQUIREMENT:` line reads a conjunct of it, in step order | last of them (step) | the milestone that reads it whole (§3 of the structure) |
@@ -582,7 +582,7 @@ Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them
 | R-02 | B02, B04, B06, B09, B21d | B21d (S15) | M0 (B04); `status:` moves only at B99 (A-114) |
 | R-03 | B02, B04, B06, B08, B28 | B28 (S17) | M1 (B08); `status:` moves only at B99 (A-114) |
 | R-04 | B01, B02, B04, B11, B15, B21, B12a, B16, B21b, B24, B21c, B34, B12c, B18, B19, B21d, B24a, B20, B25, B22, B32, B30, B35, B36 | B36 (S19) | M4 (B36); `status:` moves only at B99 (A-114) |
-| R-05 | B21b, B29, B24a, B23, B35, B38 | B38 (S20) | M3 (B35); `status:` moves only at B99 (A-114) |
+| R-05 | B21b, B29, B24a, B23, B35 (R-05.a, .b, .c), B38, B40 (every conjunct) | B40 (S22) | M3 (B35); `status:` moves only at B99 (A-114) |
 | R-06 | B02, B10, BA1, B21d, B39 | B39 (S21) | M2 (BA1); `status:` moves only at B99 (A-114) |
 | R-07 | B02, B09, B10, BA1, B11, B21c, B19, B20, B35 | B35 (S18) | M2 or M3; `status:` moves only at B99 (A-114) |
 | R-08 | B02, B05, B06, B10, BA1, B35 | B35 (S18) | M2 (BA1); `status:` moves only at B99 (A-114) |
@@ -652,7 +652,7 @@ The second table reads every batch's `REQUIREMENT:` line for `R-0n`, so it lists
 | C-14 | **open** | no B39 item names ED-507 (`grep ED-507 workplan_v12_part4[0-3]*.md` → nothing); K10 did not take it. Owed: one B39 item, or a sentence in B39.31's text that the `poi: by_draw` placement is not ED-507's reader (§7.9) — the orchestrator's one Edit |
 | C-15 | **closed** | B36.08 is BUILD, not HELD (its row, `workplan_v12_part39.md:71`): ED-IN-0300 covers it (HD-22) |
 | C-16 | **closed** | K5 (`CHK_K5.md:105`): no B21b item edits `loop/sides.py` |
-| C-17 | **open (accepted residue)** | U3 §6.1's `test_referent_class_stamps.py` is written by no item; B36's item gates on `test_in12_step9.py`'s tests instead. No check lane took it (K10 named; part 39 is K9's). The gate executes; the U3 row stays unmatched in §6 |
+| C-17 | **closed (repair lane V1; ladder step 1, superseded by the source)** | U3 §6.1's `test_referent_class_stamps.py` is a stale name: the source itself says so (`proposals/16_PESSIMIST_WR_D_small_clock_repairs_and_two_readings.md`, edit 2's Gate: "the earlier name `tests/test_referent_class_stamps.py` is not a file in the tree"; the referent-class test is `engine/season/tests/test_in12_step9.py`, CP-T03-08's). No item needs the old name, so none creates it; B36.10 gates on `test_in12_step9.py` as its source orders |
 | C-18 | **fixed** | lane H3: B35.30 written (HD-25); B35.28 HELD on it |
 | C-19 | **fixed** | R2a (B04.99 step 4) |
 | C-20 | **closed** | H2 (§9) |
