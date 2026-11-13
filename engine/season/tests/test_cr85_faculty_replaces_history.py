@@ -121,6 +121,8 @@ def test_falsifier_every_season_roll_reads_pool_8_against_ob_1(seed, monkeypatch
     revert_cp_t03_04(monkeypatch)
     revert_cp_t03_07(monkeypatch)        # v11 CP-T03-07 (`body_ceiling`, a schema mover of every realm), the same way
     revert_cp_t03_08(monkeypatch)   # v11 CP-T03-08 (`tend` forms on the wounded, a formation mover of every season), the same way
+    from .test_b11a_duel_reach import revert_b11a
+    revert_b11a(monkeypatch)   # B11 lane A (the duel chain's reach, a formation mover of every season), the same way
     seen, got = _season_rolls(monkeypatch, seed)
     assert _off_the_reading(seen) == [], dict(seen)
     assert got == POST_ITEM[seed]
@@ -141,6 +143,8 @@ def test_control_faculty_3_for_every_party_reproduces_the_pre_item_hash(seed, mo
     revert_cp_t03_04(monkeypatch)        # v11 CP-T03-04, a later formation mover of every season: so `PRE_ITEM` stands
     revert_cp_t03_07(monkeypatch)        # v11 CP-T03-07 (`body_ceiling`, a schema mover of every realm), the same way
     revert_cp_t03_08(monkeypatch)   # v11 CP-T03-08 (`tend` forms on the wounded, a formation mover of every season), the same way
+    from .test_b11a_duel_reach import revert_b11a
+    revert_b11a(monkeypatch)   # B11 lane A (the duel chain's reach, a formation mover of every season), the same way
     seen, got = _season_rolls(monkeypatch, seed)
     assert got == PRE_ITEM[seed]
     assert set(seen) <= {(9, 1.5)}, dict(seen)

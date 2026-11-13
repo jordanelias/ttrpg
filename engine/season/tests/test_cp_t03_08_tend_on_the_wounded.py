@@ -168,6 +168,10 @@ def test_hash_post_item_and_revert(seed, monkeypatch):
     # CR-79's credit term (a later mover of the told deposit) is reverted in process: POST_ITEM reads this item alone.
     from .test_strife_credit import revert_cr79
     revert_cr79(monkeypatch)
+    # B11 lane A (the duel chain's reach, a later formation mover of every season) is reverted in process, so
+    # POST_ITEM still reads this item alone.
+    from .test_b11a_duel_reach import revert_b11a
+    revert_b11a(monkeypatch)
     w = build_realm(seed)
     run(1, seed, w=w)
     assert w.content_hash() == POST_ITEM[seed] != PRE_ITEM[seed]

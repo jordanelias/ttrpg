@@ -362,6 +362,8 @@ def test_hash_post_item_control_and_revert(seed, monkeypatch):
     # CR-79's credit term (a later mover of the told deposit) is reverted in process too.
     from .test_strife_credit import revert_cr79
     revert_cr79(monkeypatch)
+    from .test_b11a_duel_reach import revert_b11a
+    revert_b11a(monkeypatch)   # B11 lane A (the duel chain's reach, a formation mover of every season), the same way
     w = build_realm(seed)
     run(1, seed, w=w)
     scale = w.fixtures.get("condition_scale")

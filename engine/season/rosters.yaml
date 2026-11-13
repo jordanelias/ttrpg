@@ -742,7 +742,14 @@ rosters:
       collection; named by `data/verbs.py::ENEMY_CLASS`; occasion-only). No row declares it, so no verb FORMS on
       it: `decision/options.py::opening_set` reads it as the war context of the `fight` decline. Empty while no
       war Proposition is live, which is every buildable world before CR-91.
-    values: [Office, Record, Rung, Site, Proposition, Person, Detainee, Enemy]
+      `Disputant` (B11 lane A, the duel chain's second link [ASSUMPTION; medium; Jordan to correct; revert: drop the
+      value, `challenge` declares `Person`]): A PERSON BESIDE THE ASKER WHOM HE HOLDS A DISPUTE WITH, stamped by the
+      standing occasion `queries/world_q.py::disputes_held` (over `person_q.holds_dispute`, the one owner) onto the
+      question he answers, `Enemy`'s shape (no collection; named by `data/verbs.py::DISPUTANT_CLASS`; occasion-only).
+      `challenge` declares it. It is a class of its own, not `Person`, because `Person` is shared: stamped as
+      `Person`, `capture` formed on the same men and executed 11 times in two realm seasons at seed 0 where it had
+      executed 0 (measured, `aperture 2 0`), violence no context licensed (ED-IN-0337).
+    values: [Office, Record, Rung, Site, Proposition, Person, Detainee, Enemy, Disputant]
 
   occasion_only_classes:
     source: "v10 REM-21 (B10-05, AM-A-06's exclusion)"
@@ -776,7 +783,8 @@ rosters:
       v10 IN-12 step 5: `Detainee` joins -- only `detainees_held` stamps it (no collection is named
       `Detainee`, so the own-referent term could never match it; listed so the roster says so).
       v11 CR-87: `Enemy` joins, for `Detainee`'s reason -- only `enemies_heard` stamps it.
-    values: [Office, Rung, Detainee, Enemy]
+      B11 lane A: `Disputant` joins, for the same reason -- only `disputes_held` stamps it.
+    values: [Office, Rung, Detainee, Enemy, Disputant]
 
   flow_stake_classes:
     source: "v11 CR-78 (B11-S4, `strife-00` section 5, the stamp)"
@@ -2409,6 +2417,21 @@ rosters:
       predicates did.
     values: [actor, subject, from, to, site, kind, amount, floor, return_kind, return_amount]
 
+  read_to_addressee:
+    source: >-
+      B11 lane A (the duel chain's third link; `14_VERBS_PHYSICAL_A_custody_and_force.md` A4's *heard of*).
+    note: >-
+      THE RECORD KINDS WHOSE MAKING IS PUT TO THE ADDRESSEE'S FACE -- a list of `record_kinds` members. WITNESS deposits a
+      document's content (`content:<kind>`) to its new holder; for a kind listed here it deposits it too to a witness the
+      document is addressed to (`loop/witness.py::addressee_reads`, the addressee test `world_q.addressed_to`'s), so he reads
+      what was put to him while the Record stays in its maker's hand (ED-IN-0292 (1), RULED NO on a mint into the
+      addressee's, stands). `challenge`: its cell asks the challenged present (`with`), so a challenge is issued to him
+      in person. MEASURED before (`build_realm(0..2)`, four seasons): challenges were issued 36 to 46 times a seed and no
+      challenged person held a reading of one, so `accept` could not tell it from any other document. A writ or a petition
+      is not listed: who learns what it says is `give`'s (`test_give.py`). Refused at import for a member that is no record
+      kind. [ASSUMPTION; medium; Jordan to correct; revert: `[]`.]
+    values: [challenge]
+
   record_sourced_operands:
     source: >-
       #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §10.1, *the shared enabler*, plan
@@ -2701,7 +2724,12 @@ rosters:
       What `give` holds that is neither a Record nor a Rung (a seat) still forms and is declined by the
       effect (`give.refused`). [ASSUMPTION; medium; Jordan to correct; revert: drop the member, and restore
       the `existence` conjunct.]
-    values: [destroy_record, give]
+      B11 lane A JOINED `carry`, `found` AND `build`, the three `Record` rows whose cell asks `held_by` of `subject`: they
+      formed on the question's own Records of every kind and the fold refused each it does not hold (MEASURED before,
+      `aperture 2 0`, realm: `found` 6 and `build` 2 refused, never executed; `carry` 15 refused of 19). Their own holding
+      is the actor's own state; what the document IS stays the sub-kind rule's (`decision/options.py`,
+      `RECORD_SUBKINDS_BY_VERB`). [ASSUMPTION; medium; Jordan to correct; revert: drop the three members.]
+    values: [destroy_record, give, carry, found, build]
 
   own_title_declines:
     source: >-
@@ -2767,8 +2795,30 @@ rosters:
       own gates. ONE LOADER, `data/verbs.py::VIOLENCE_CONTEXTS`, refused at import when a line names a verb the
       table lacks or one whose `subject` is not its opponent; `options.py` refuses a context it has no reader
       for. An empty block is the CONTROL: no decline. [ASSUMPTION; medium; Jordan to correct; revert: `{}`.]
+      B11 lane A (carrying `14_VERBS_PHYSICAL_A` A3's first line): `duel` DROPPED from `fight`. The challenger
+      holds every challenge he issues, so the context licensed him to attack the man he had called out, under
+      `fight`'s lethal terms, without an acceptance -- MEASURED once challenges were reachable (`build_realm(0..2)`,
+      four seasons): 2 / 0 / 7 such fights, 2 / 0 / 6 deaths. A duel is `accept`'s, fought under its challenge's
+      terms. The `duel` reader stays in the closed set for a later line. [ASSUMPTION; medium; Jordan to correct;
+      revert: restore `duel`.]
     values:
-      fight: [war, crime, duel, defence]
+      fight: [war, crime, defence]
+
+  opposed_without_prize:
+    source: >-
+      B11 lane A (the duel chain's fifth link; ED-IN-0336, RULED: a duel settles a dispute).
+    note: >-
+      THE ROWS THAT NAME NO PRIZE AND ARE NONETHELESS DONE AGAINST THEIR SUBJECT -- a list of `verb_table.yaml`
+      verbs whose second side is their `subject` (`counterparty: subject`). `decision/options.py::subject_is_opponent`
+      reads a member as it reads a contested row, so the chooser's stance term (`stance_polarity: declared`) scores
+      it AGAINST the subject: a grievance raises a challenge to the man it is held against, where it had lowered it.
+      MEASURED before (`build_realm(0..2)`, four seasons, the real chooser): `challenge` executed 0 times in twelve
+      realm-seasons while formed on every standing grievance beside its holder -- the planted-dispute run scored it
+      -0.11 (pursuit +0.07, stance -0.18) against a best candidate of +0.69 at `choice_temperature` 0.05; read
+      against its subject, 36 to 48 challenges a seed were issued. `oblige` shares the columns and is not listed: a
+      man asking service of another is not acting against him. Refused at import for a verb the table lacks or one
+      whose second side is not its subject. [ASSUMPTION; medium; Jordan to correct; revert: `[]`.]
+    values: [challenge]
 
   violent_prizes:
     source: >-

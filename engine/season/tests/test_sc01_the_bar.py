@@ -339,14 +339,23 @@ def test_an_injected_act_reddens_the_bar(verb):
         _zero_authored(w, chosen)
 
 
-def test_the_walk_is_false_for_a_determination_the_ambition_raised_beside_a_fired_date():
+def test_the_walk_is_false_for_a_determination_the_ambition_raised_beside_a_fired_date(monkeypatch):
     """THE CONTROL. Same world (`CONTROL`, stability at seed 8 at HEAD); at v10 it read virtue at seed 0 (re-traced at B10-09 close one from scholastics at seed 6, which CP-T02-05 had taken from virtue at seed 2; re-traced at v10 CP-T05-04 against the assertions below only, from
     doctrine at seed 8; doctrine at 83 and at 22 before it, re-traced at IN-12 step 10 and step 9; the narrative that
     follows was traced at seed 8, SC-03b; community at seed 13 before it): the Duke convenes at `S` AND
     opens the clerk's case in the same season, so the case is docketed dateless before the sitting
     fires; the sitting's slot forms empty, and after the firing the Duke determines the
     clerk out of his ambition (`need`, occasion `[ROOT]`). That determination's `causes[]` reach no
-    firing -- so THE BAR's walk is not satisfied by a firing merely preceding a determination."""
+    firing -- so THE BAR's walk is not satisfied by a firing merely preceding a determination.
+
+    ⚠ B11 LANE A: READ WITH THE LANE AT ITS REVERT (`test_b11a_duel_reach.py::revert_b11a`), the world it was measured on --
+    `test_cp_t03_01`'s precedent for a pattern a later mover took out of reach. On this tree stability/8/5 determines nobody
+    (its Record sub-kind rule moves the Duke's act mix: two `case.opened`, no `matter.determined`; with the rule emptied in
+    process the control passes), and a sweep of this test over the 15 convictions found no run with the pattern (seeds 0-159
+    at 5 seasons, 0-99 at 6, 0-59 at 4 and at 7; the producer's scratch, not kept). [GAP: no shipped-tree control world for
+    the walk's falsity; the bar's walk is still checked true on `PROCEEDINGS`.]"""
+    from .test_b11a_duel_reach import revert_b11a
+    revert_b11a(monkeypatch)
     conviction, seed, seasons = CONTROL
     w, d, chosen = _run(conviction, seed, seasons)
     _zero_authored(w, chosen)

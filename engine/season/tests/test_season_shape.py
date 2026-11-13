@@ -11591,7 +11591,13 @@ def test_wc_the_fold_binds_what_the_person_bound(monkeypatch):
     # `Record` row, is in `WALK_NAMED` below.)
     q = Question("q:wc_agree", "need", ("S", "Hh"),
                  classes=(("D", "Rung"), ("site_harbour", "Site"), ("prop_wc", "Proposition"),
-                          ("p_mid", "Person"), ("rec_wc", "Record")))
+                          ("p_mid", "Person"), ("rec_wc", "Record"), ("p_mid", "Disputant")))
+    # B11 lane A: AND `p_mid` RIDES AS A `Disputant`, for `challenge` (typed, formed only on that class since the lane) on
+    # the same ground; and the Record sub-kind rule (`options.RECORD_SUBKINDS_BY_VERB`: a document he holds no reading of
+    # forms no `carry`/`found`/`build`) is a FORMATION rule, so the walk -- about binding -- reads with it emptied, as it
+    # reads `violence_contexts` emptied below.
+    from ..decision import options as _options_b11a
+    monkeypatch.setattr(_options_b11a, "RECORD_SUBKINDS_BY_VERB", {})
     v = View(p.id, [], w.fixtures.get("view_k"), q)
     # v9 PC-06 K-3: `thread_read` forms only for a person whose own Thread Sensitivity passes its gate
     # (`OWN_STATE_STEMS`), so `p_low` is given exactly the gate and the row stays in the walk -- its
@@ -11719,7 +11725,9 @@ def test_wc_the_fold_binds_what_the_person_bound(monkeypatch):
     # so every `own_hold_declines` row forms on it and its two bindings are compared, not vacuously.
     _hold_document(w, p, "petition", {"terms": "p_mid", "to": "p_mid", "from": "Hh"}, rec_id="rec_wc_held")
     sink = w.fixtures.sweep("withheld_verbs", ())
-    qh = Question("q:wc_held", "need", ("rec_wc_held",))
+    # B11 lane A: `carry`, `found` and `build` joined `own_hold_declines` and form only on a `Record`-classed referent, so the
+    # held document rides as that class too (the sub-kind rule is emptied for this walk, above).
+    qh = Question("q:wc_held", "need", ("rec_wc_held",), classes=(("rec_wc_held", "Record"),))
     held_walk = [c for c in decision.opening_set(p, View(p.id, [], sink.get("view_k"), qh), qh, sink)
                  if c.verb in WALK_HELD]
     # B10-12 pin commit (P15): CP-T04-02 `marshal` and CP-T04-07 `surrender` ship WITHHELD and are `remit:dispatch`-only, as
@@ -12363,7 +12371,10 @@ def test_wb_a_refusals_reads_land_as_a_claim_that_contradicts_and_the_candidate_
     # ⚠ 21 -> 20 BEFORE AND 19 -> 18 AFTER, v11 CP-T03-08: `tend` declares `referent_class: Person`, so it no longer forms on a
     # plain referent like `S` (REM-21's own-referent term stamps only a person); the drop is unchanged. RE-DERIVED, not adjusted:
     # the one missing verb is `tend`. CONTROL: `test_cp_t03_08_tend_on_the_wounded.py::revert_cp_t03_08` applied for the session (in process) reads the old value and passes.
-    assert (len(before), len(after)) == (20, 18), (
+    # ⚠ 20 -> 19 BEFORE AND 18 -> 17 AFTER, B11 lane A: `challenge` declares `referent_class: Disputant`, so it no longer forms on a
+    # plain referent like `S` (the drop is unchanged). RE-DERIVED, not adjusted: the one missing verb is `challenge`. CONTROL:
+    # `test_b11a_duel_reach.py::revert_b11a` applied for the session (in process) reads (20, 18).
+    assert (len(before), len(after)) == (19, 17), (
         f"the absolute counts moved to {(len(before), len(after))}. They are the denominator the "
         "delta above is read against, and the delta alone does not reproduce them — re-derive "
         "`H-122`'s reading rather than adjusting this line")

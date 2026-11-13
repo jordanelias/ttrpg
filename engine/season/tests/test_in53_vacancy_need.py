@@ -243,7 +243,9 @@ def test_in53v_c_the_classes_survive_the_fold_and_are_closed():
     # `world_q.detainees_held` stamps (`interrogate`'s, `test_in12_interrogate.py`).
     # RE-RECORDED AT v11 CR-87: `Enemy` joins (7 -> 8), the war-context class `world_q.enemies_heard` stamps (no row declares
     # it; the `fight` decline reads it, `test_cr87_violence_contexts.py`).
-    assert len(REFERENT_CLASSES) == 8 and {"Office", "Record"} <= REFERENT_CLASSES and "Rung" in REFERENT_CLASSES
+    # RE-RECORDED AT B11 lane A: `Disputant` joins (8 -> 9), the dispute-context class `world_q.disputes_held` stamps
+    # (`challenge` declares it, `test_b11a_duel_reach.py`).
+    assert len(REFERENT_CLASSES) == 9 and {"Office", "Record"} <= REFERENT_CLASSES and "Rung" in REFERENT_CLASSES
     a = Question("q:claim:x", "claim_landed", ("S",), "x")
     b = Question("q:need:off_reeve", "need", (), "off_reeve", (("off_reeve", "Office"),))
     for rule in ("all", "one_per_source"):
@@ -294,7 +296,9 @@ def test_in53v_c_the_declarations_as_built():
     # `accept` declares `Record` on a held `challenge` (twenty-five rows -> twenty-six; control: the CP-T03-09 tree
     # `95f58adb`, twenty-five); AT v11 CP-T03-08 (B10-11) `tend` declares `Person` (twenty-six rows -> twenty-seven;
     # control: the CP-T03-07 tree, twenty-six); AT B10-12 (pin commit, P15) `marshal` (CP-T04-02) and `surrender` (CP-T04-07)
-    # declare a referent class (twenty-seven rows -> twenty-nine; both ship WITHHELD; control: the B10-13 tree, twenty-seven).
+    # declare a referent class (twenty-seven rows -> twenty-nine; both ship WITHHELD; control: the B10-13 tree, twenty-seven);
+    # AT B11 lane A `challenge` declares `Disputant` and `capture` declares `Person` (twenty-nine rows -> thirty-one;
+    # control: `test_b11a_duel_reach.py::revert_b11a`, twenty-nine).
     assert {v for v, r in VERB_TABLE.items() if r.referent_class} == {"confer", "oblige", "comply", "march",
                                                                       "establish",
                                                                       "interrogate", "succeed",
@@ -305,7 +309,8 @@ def test_in53v_c_the_declarations_as_built():
                                                                       "carry", "found", "build",
                                                                       "argue", "open_case",
                                                                       "research", "accept", "tend",
-                                                                      "marshal", "surrender"}
+                                                                      "marshal", "surrender",
+                                                                      "challenge", "capture"}
     assert VERB_TABLE["migrate"].referent_class == "Rung" and not VERB_TABLE["migrate"].referent_named
     assert VERB_TABLE["requisition"].referent_class == "Rung" and not VERB_TABLE["requisition"].referent_named
     assert VERB_TABLE["confer"].referent_class == VERB_TABLE["oblige"].referent_class == "Office"

@@ -1613,6 +1613,17 @@ def _derive_holding_record_kinds() -> frozenset:
 
 HOLDING_RECORD_KINDS = _derive_holding_record_kinds()
 
+# B11 lane A (the duel chain's reach): `{verb: record sub-kinds}` -- per `Record`-classed row, the sub-kinds its own
+# cell asks `existence` of on `subject` (`_record_subkinds_answered`, the one owner both derivations above read).
+# `decision/options.py::opening_set` keeps a Record referent of such a row only where the person's own content claim
+# says it is of one of them: `accept` forms on a challenge, `comply` on a dispensation, never on another kind the
+# shared class carries. A row asking only the class (`research`) is absent and forms as before.
+RECORD_SUBKINDS_BY_VERB = {v: k for v, row in VERB_TABLE.items() if (k := _record_subkinds_answered(row))}
+# ...and of them, the rows whose cell asks the actor to HOLD the document (`carry`, `found`, `build`): a document he holds
+# and holds no reading of may be of the kind (clause 4: unknown forms), where a writ row (`accept`, `comply`) asks a
+# document addressed to him, which he knows only by reading it.
+RECORD_SUBKINDS_HELD = frozenset(v for v in RECORD_SUBKINDS_BY_VERB if _asks_subject_held(VERB_TABLE[v]))
+
 
 def _derive_declared_classes() -> frozenset:
     """v10 REM-21 (AM-A-06): THE REFERENT CLASSES SOME ROW DECLARES -- every `referent_class:` value in
@@ -1895,6 +1906,21 @@ def _derive_violent_verbs(prizes) -> frozenset:
 VIOLENT_VERBS = _derive_violent_verbs(roster("violent_prizes"))
 
 
+def _load_opposed_without_prize(values) -> frozenset:
+    """`rosters.yaml: opposed_without_prize` (B11 lane A): verbs naming no prize whose second side is their subject,
+    read as done against him. Refused at import for a verb the table lacks or whose second side is not `subject`."""
+    out = frozenset(values or ())
+    bad = sorted(v for v in out if v not in VERB_TABLE or VERB_TABLE[v].opponent_operand() != "subject")
+    if bad:
+        raise Forbidden(f"`rosters.yaml: opposed_without_prize` names {bad}: no such verb, or its second side is not "
+                        "its subject", "rosters.yaml", needs="a verb whose `counterparty:` is `subject`",
+                        law="B11 lane A -- an act against its subject names him as its second side")
+    return out
+
+
+OPPOSED_WITHOUT_PRIZE = _load_opposed_without_prize(roster("opposed_without_prize"))
+
+
 def _derive_rung_remit_acts() -> frozenset:
     """v9 IN-49 `requisition` (H-163 limit 3, [ASSUMPTION; medium; Jordan to correct]): THE REMIT ACTS A
     SEAT EXERCISES ON A `Rung`-CLASSED REFERENT -- the act of every `remit:` eligibility alternative
@@ -1964,6 +1990,16 @@ if not CONVENING_REMIT_ACTS:
     raise Forbidden("no verb-table row granted by a remit act writes `Date.due_at`", "verb_table.yaml",
                     needs="the convening row's `writes:` and `remit:` eligibility, or `matters_awaiting` retired",
                     law="v11 CR-56 -- a stamp keyed on an act no row grants offers nothing in every world")
+
+# B11 lane A (the duel chain's second link, [ASSUMPTION; medium; Jordan to correct; revert: drop the value and the
+# stamp, `challenge` declares `Person`]): A PERSON BESIDE THE ASKER WHOM HE HOLDS A DISPUTE WITH, `Enemy`'s shape -- no
+# collection, stamped by name by the standing occasion `queries/world_q.py::disputes_held`, refused at import off
+# `rosters.yaml: referent_classes`. `challenge` declares it.
+DISPUTANT_CLASS = "Disputant"
+if DISPUTANT_CLASS not in REFERENT_CLASSES:
+    raise Forbidden(f"{DISPUTANT_CLASS!r} is not a `rosters.yaml: referent_classes` value", "rosters.yaml",
+                    needs="the dispute-context class in the closed roster",
+                    law="B11 lane A -- a class stamped by name must be one the roster declares")
 
 # v11 CR-25 ([ASSUMPTION; medium; Jordan to correct; revert: drop `holdings_to_found` and the derivation]): THE
 # REMIT ACTS A SEAT FOUNDS AN OFFICE THROUGH -- `establish`'s own `remit:` alternatives (`confer` today), read off

@@ -238,6 +238,8 @@ def test_control_the_realm_ends_at_the_base_hash_wherever_no_cohort_was_a_party(
     revert_cp_t03_04(monkeypatch)
     revert_cp_t03_07(monkeypatch)   # v11 CP-T03-07 (`body_ceiling`, a schema mover of every realm), the same way
     revert_cp_t03_08(monkeypatch)   # v11 CP-T03-08 (`tend` forms on the wounded, a formation mover of every season), the same way
+    from .test_b11a_duel_reach import revert_b11a
+    revert_b11a(monkeypatch)   # B11 lane A (the duel chain's reach, a formation mover of every season), the same way
     h, reads, refused_on_it = _realm_two_seasons(seed)
     assert reads > 0, "the conjunct was never read: the equality below observes nothing"
     assert refused_on_it == 0, f"{refused_on_it} Events were refused on `individual` at seed {seed}"
@@ -254,6 +256,8 @@ def test_where_a_cohort_was_a_party_the_realm_moves_and_the_refusals_are_the_con
     # v11 CP-T03-08 (`tend` forms on the wounded, a formation mover of every season) moves seed 2's second season off the
     # cohort-party act (MEASURED: 0 refusals on `individual` with it live), so it is read at its revert too, the same way.
     revert_cp_t03_08(monkeypatch)
+    from .test_b11a_duel_reach import revert_b11a
+    revert_b11a(monkeypatch)   # B11 lane A (the duel chain's reach, a formation mover of every season), the same way
     h, reads, refused_on_it = _realm_two_seasons(2)
     assert refused_on_it > 0, "no act was refused on `individual` at seed 2"
     assert h != BASE[2], ("the realm did not move off the pre-conjunct base at seed 2 (the refusal itself is observed "
