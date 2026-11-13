@@ -196,7 +196,7 @@ The batch block's head (the GATE lines, BATCH GATE, RE-PIN, IDS, UNDECIDED U1 to
 - GATE: the test → pass, its two differences quoted; `python tools/export_troops.py --check` → exit 0 (R2). B99 QUOTES: every commander in reserve.
 - DEPENDS ON: V12 Batch B20, B20.17. COST and TIER: reading; `sonnet`, high. LANDS IT: no commit; B98.99's body.
 
-### B98.46 — four obstacle steps of the word verbs leave 0 · row 56; B25.06, B25.13, B25.16, B25's `oblige` item; S2B §1, §2, §4; S2C §4; OBS §4 step 6+ · BUILD (flip) · HASH MOVER(behaviour)
+### B98.46 — four obstacle steps of the word verbs leave 0 · row 56; B25.04, B25.06, B25.13, B25.16; S2B §1, §2, §4; S2C §4; OBS §4 step 6+ · BUILD (flip) · HASH MOVER(behaviour)
 - SOURCE: part 2 §4 row 56; part 30_cont's line: "each 'with its step at control 0 first; equal at control; a declared mover when the step ships' (OBS §4 step 6+); set by B98; target: S2B's gate lines … and S2C §4's ('`news.told` / (`news.told` + `news.untold`) … stays below 1')"; `proposals/14_VERBS_SOCIAL2_B_a_word_with_content.md` "Gate": "`build_realm(s)`, s = 0, 1, 2, two seasons, `PYTHONHASHSEED=0`, on-arm against each fixture's control: … across the three seeds `proposition.believed` is emitted for some utterances and not for others (a fraction strictly between 0 and 1) …; §4: `oblige` formed > 0 at every seed, attempted ≥ 1; across seeds at least one `duty.taken` or `duty.probation` …; §2 … Over seeds 0–9 with the shipped odds, all four bands occur". S2B states no value: the sweep is the sibling `regard_step`'s, `0 / 0.5 / 1.0 / 2.0` (`13_SC_calibration` §3 step 3; U9, precedent).
 - SETTINGS: `engine/season/data/fixtures.py` (`dissent_step`, `clarity_step`, `deference_step`, `establishment_step`) = 0. New values: each from `{0.5, 1.0, 2.0}`.
 - INSTRUCTION: one value moved at a time, against its control (`13_SC_calibration` §3's rule): for each step in turn, the others at their chosen or control values, seeds 0 to 2 (0 to 9 for §2's bands), two seasons, in-process: the gate line that step's verb reads (`dissent` → §1's fraction and S2C §4's ratio; `clarity`, `deference` → §2's four bands; `establishment` → §4's `oblige` and `duty.*`). Rule (U4): per step, the smallest value at which its line holds and its line at 0 is not already the same (the step is not decoration); none: that step stays 0. One commit with the four values; each NUMBER row's text names its reading.
@@ -204,7 +204,7 @@ The batch block's head (the GATE lines, BATCH GATE, RE-PIN, IDS, UNDECIDED U1 to
 - GATE: `python -m pytest engine/season/tests/test_vm_s2_b_word.py engine/season/tests/test_vm_s2_c_case.py -q` → pass; the per-step table quoted; `HASH(0, 2)` recorded.
 - HASH MOVERS: "a declared mover when the step ships": every world with an `utter`, `tell`, `construe` or `oblige` drawn. EXPECTED RED UNTIL B98.99: the `_realm_goldens` readers.
 - REVERT: the four steps → 0 (one commit).
-- DEPENDS ON: V12 Batch B25, B25.06, B25.13, B25.16 and the `oblige` item; Batch B05 (OBS, the composer).
+- DEPENDS ON: V12 Batch B25, B25.04 (`establishment_step`), B25.06 (`dissent_step`), B25.13, B25.16 (`clarity_step`, `deference_step`); Batch B05 (OBS, the composer).
 - COST and TIER: calibration; `sonnet`, high; `opus` reads each line. LANDS IT: B98's producer; `Item: B98.46`, `[skip ci]`.
 
 ### B98.47 — a tie weighs the teller, at IN-32's value · row 57; B25.20; S2D edit 4; FI08 §3 · BUILD (flip) · HASH MOVER(behaviour)
@@ -257,3 +257,83 @@ The batch block's head (the GATE lines, BATCH GATE, RE-PIN, IDS, UNDECIDED U1 to
 - REVERT: `surprise_level` → `None`.
 - DEPENDS ON: V12 Batch B37, B37.15; V12 B98.50.
 - COST and TIER: calibration; `sonnet`, high; the probe run may be `haiku`; `opus` reads it. LANDS IT: B98's producer; `Item: B98.51`, `[skip ci]`.
+
+### B98.52 — the flow of news within a side stays off: CR-103 is held · row 62; B11F2.09, B11F2.10 (HELD); CR-103 · BLOCKED (CR-103's trigger: Batch B21s-strife-supply and Batch B21b-fa-war closed) · HASH EQUAL
+- SOURCE: part 2 §4 row 62 (HD-28); part 32_cont's line: "If B98 opens with B11F2.10 still HELD, B98 carries these three as `BLOCKED (CR-103's trigger: Batch B21s-strife-supply and Batch B21b-fa-war closed)`, not as flips"; target when it unholds: "CR-103's DECISION RULE (LIFT and SAFE against OFF and SHUFFLED), at two seasons".
+- SETTINGS: `engine/season/data/fixtures.py` (`stamp_flow_within` = `False`; `flow_salience_gain` = 0; `flow_office_gain` = 0, if B11F2.09 built it).
+- INSTRUCTION: read B11F2.10's state on `main`. Both triggers' batches closed long before S23, so the held row's own trigger has fired: the HELD row is by then an item of the batch that fired it, or `STOPPED` (`V12_STRUCTURE_part3.md` §7.9: "a trigger that fires makes an item of the batch that fired it, or `STOPPED` if that batch has closed"). This position flips nothing either way and records which.
+- OWNER OF THE TARGET: CR-103's decision rule, run by whoever takes the fired held row (the 0.1 stop of B98 presents it).
+- GATE: the three read on the closing tree → control (R2). B99 QUOTES: as left.
+- DEPENDS ON: V12 Batch B11F2, B11F2.09, B11F2.10; Batch B21s, B21b. COST and TIER: reading; `sonnet`, low. LANDS IT: no commit; B98.99's body.
+
+### B98.53 — an army's recovery after a field stays off · row 63; B22; `IS-MB-B3`; `27_MB_E` §5 · BLOCKED (content: values not established) · HASH EQUAL
+- SOURCE: part 2 §4 row 63; part 33's line: "`references/troops.yaml: aftermath.recuperation` = `off` (with `aftermath.return: unprompted`, `aftermath.acting: on`, every share table and `window` absent; the loader refuses `on` while any is absent); set by: none in v12 — the values are not established (`IS-MB-B3`: Jordan, or a source search filed under `research/historical/`); target: `27_MB_E` §5 rows T-11 to T-16b, T-18 (orderings, no figure)".
+- SETTING: `references/troops.yaml` (`aftermath.recuperation`) = `off`.
+- INSTRUCTION: none. OWNER: Jordan, or a source search (`IS-MB-B3`); listed in the PR body.
+- GATE: `python tools/export_troops.py --check` → exit 0; `aftermath.recuperation` → `off` (R2). B99 QUOTES: as left.
+- DEPENDS ON: V12 Batch B22. COST and TIER: reading; `sonnet`, low. LANDS IT: no commit; B98.99's body.
+
+### B98.54 — a side carries its fatigue into a second field in the same season · row 64; B22; `27_MB_E` §5 row T-17 · BUILD (flip) · HASH MOVER(behaviour)
+- SOURCE: part 2 §4 row 64 (decided there: "TARGETED (an ordering; A44 sweeps)"); part 33's line: "`references/troops.yaml: fatigue.carry` = `off`, `fatigue.carry_laps` = 0; set by: none stated in the source (control 0, 'no reasoned value'); target: `27_MB_E` §5 row T-17"; `27_MB_E` §5 row T-17: "a side fighting its second field of a round against its rested mirror | loses more often than the mirror by more than the sampling band; its `entry_stamina` equals the first field's `stamina_left` plus one lull | `carry: off`" ("round" there is the season's pass: *lap*, A-101, corrected).
+- SETTINGS: `references/troops.yaml` (`fatigue.carry` = `off`; `fatigue.carry_laps` = 0). New: `carry` `on`, `carry_laps` the probe's choice from the whole numbers 1 to the season's `scene_budget` (a closed domain, U9).
+- INSTRUCTION: probe, the MB workbench's paired fields (a side fighting its second field of a lap against its rested mirror), `PYTHONHASHSEED=0`, n 400 per arm `[ASSUMPTION: n — basis: B19.68's gauge runs n 400; T-17 names no n]`, at `carry: on` and each `carry_laps`: the loss share against the mirror's with its sampling band, and `entry_stamina` against the first field's `stamina_left` plus one lull. Rule (U4): the smallest `carry_laps` at which both clauses of T-17 hold. None: ship nothing. One commit: `carry` → `on`, `carry_laps` → the value; `python tools/export_troops.py --build`.
+- FALSIFIER and CONTROL: T-17's second clause (the entry stamina) false at the chosen value. Control arm: at `carry: off` the field goldens (`python tools/ci_golden_modes_check.py`) equal the previous position's tree, and `HASH(2, 1)` equal to its pre-flip reading.
+- GATE: the probe's table quoted; `python tools/export_troops.py --check` → exit 0; `HASH(2, 1)` recorded.
+- HASH MOVERS: every army that fights twice in a season. EXPECTED RED UNTIL B98.99: field goldens with two fields in a lap, if any.
+- REVERT: `carry` → `off`, `carry_laps` → 0.
+- DEPENDS ON: V12 Batch B22; Batch B31 (`16_PESSIMIST_MB_one_stamina_ledger` step 3: `MassBattleInput.entry_stamina`'s writers).
+- STOPS IF: `entry_stamina` has no writer on the base (B31's step not landed): T-17's second clause cannot read.
+- COST and TIER: calibration; `sonnet`, high; `opus` reads T-17. LANDS IT: B98's producer; `Item: B98.54`, `[skip ci]`.
+
+### B98.55 — `standing_ration` stays off · row 65; B22 · BLOCKED (design: no target reading) · HASH EQUAL
+- SOURCE: part 2 §4 row 65; part 33's line: "set by: none stated (the source: 'each flip a declared mover in its own commit', no batch named); target: none stated".
+- SETTING: `engine/season/data/fixtures.py` (`standing_ration`) = `False`.
+- INSTRUCTION: none. OWNER OF THE TARGET: the MB/SE supply design (`07_SE_campaign_supply_and_muster`).
+- GATE: `FIX(standing_ration)` → `False` (R2). B99 QUOTES: as left.
+- DEPENDS ON: V12 Batch B22. COST and TIER: reading; `sonnet`, low. LANDS IT: no commit; B98.99's body.
+
+### B98.56 — a leaderless army does not thin: no rate is stated · row 66; B22.22; `14_VERBS_MILITARY_C` edit 6 · BLOCKED (design: no value stated) · HASH EQUAL
+- SOURCE: part 2 §4 row 66 (TARGETED there; corrected here, U9); B22.22 step 5: "`leaderless_dispersal` = 0 `[ASSUMPTION: 0, no dispersal, as the shipped control — basis: the source names the fixture 'swept' with a NUMBER row and gives no figure; B98 sets it]`". No figure or sweep in any source.
+- SETTING: `engine/season/data/fixtures.py` (`leaderless_dispersal`) = 0.
+- TARGET, recorded: B22.22's dispersal gate ("more than two values across seeds; full strength at some seed and below at another").
+- INSTRUCTION: none (U9). OWNER OF THE VALUE: the MB lane (a rate for `world_q.present_strength`'s draw).
+- GATE: `FIX(leaderless_dispersal)` → 0 (R2). B99 QUOTES: as left.
+- DEPENDS ON: V12 Batch B22, B22.22. COST and TIER: reading; `sonnet`, low. LANDS IT: no commit; B98.99's body.
+
+### B98.57 — the military verbs' obstacle terms stay absent · row 67; B22.01; `14_VERBS_MILITARY_A`–`_D`, `14_VERBS_PHYSICAL_B` · BLOCKED (design: until B22.01's design names each) · HASH EQUAL
+- SOURCE: part 2 §4 row 67; part 33's line: "every obstacle term and leverage level … that the sources ship absent (0) until U1 names it (listed at B22.01); set by: B98, after B22.01's design names each; target: none stated".
+- SETTINGS: the terms B22.01 lists, each absent (0).
+- INSTRUCTION: open B22.01's merged design; record which terms it names with a target reading. Flip nothing.
+- STOPS IF: the design states a target reading for a term: the position stops and is reported at the 0.1 stop (the flip is written from that text).
+- GATE: each listed term read on the closing tree → absent (R2). B99 QUOTES: as left.
+- DEPENDS ON: V12 Batch B22, B22.01. COST and TIER: reading; `sonnet`, low. LANDS IT: no commit; B98.99's body.
+
+### B98.58 — six social obstacle steps stay at 0 · rows 68, 69; B28; S1-B, S1-D · BLOCKED (design: no target reading) · HASH EQUAL
+- SOURCE: part 2 §4 rows 68, 69; part 35's line: `unwelcome_step`, `violated_step`, `divergence_step` = 0 ("S1-B: 'each with a control 0'; no shipped value stated"); `backlog_step`, `grievance_step`, `cross_pressure_step` = 0 ("S1-D: 'NUMBER rows, controls named'; no value stated").
+- SETTINGS: the six in `engine/season/data/fixtures.py` = 0.
+- INSTRUCTION: none. OWNER OF THE TARGET: the SC lane (S1-B, S1-D's readings).
+- GATE: `FIX(<each>)` → 0 (R2). B99 QUOTES: as left.
+- DEPENDS ON: V12 Batch B28. COST and TIER: reading; `sonnet`, low. LANDS IT: no commit; B98.99's body.
+
+### B98.59 — the host's engagement and the precedence draw, if B28 did not switch them on · row 70; B28.29; 28A commit 8 · BUILD (flip, conditional) · HASH MOVER(behaviour)
+- SOURCE: part 2 §4 row 70 ("IN-BATCH (B28.29 if 28A's rows pass), else TARGETED"); B28.29 step 3: "If any fails: no flip; the commit body names the row; the three settings stay at control and join B98 (`DIALS AT CONTROL`), and 'A run that misses row 3 is answered by `precedence_level` and by the formation proposals, not by raising `scenes_per_round`' (28A)".
+- CONDITION (U5): read B28.29's commit body. If it flipped, record "set by B28.29 @<sha>"; POINTER, no commit. Otherwise run.
+- SETTINGS: `engine/season/data/fixtures.py` (`engagement` = `off`; `precedence_level` = `None`; `appointment_level` = `None`). New: `seat_and_debit`, `minor`, `major` (28A's arm).
+- INSTRUCTION: B28.29 step 1 on this base, copied: `PYTHONHASHSEED=0`, realm, seeds 0 to 4, two seasons, `python -m engine.season.harness.access SEED 2` at `engagement: off` and at `seat_and_debit` with `precedence_level: minor`, `appointment_level: major`, and `--strata-cut`; gate rows 2 ("not below 95% at any seed"), 3 ("not below 60% at four seeds of five"), 5 ("no individual with a deferred scene opens zero scenes that season"), 12's first clause (reported); the floors as B28.29 step 2 measured and wrote them. If rows 2, 3, 5 and 12's first clause pass, flip the three.
+- FALSIFIER and CONTROL: "Gate 3 at or below the crude arm" (28A: 46 % to 50 %). Control arm: row 1, `engagement: off` hash-equal to the previous flip's after-reading at every seed (`HASH(0, 2; engagement = off)` the one recorded).
+- GATE: the rows quoted; `python -m pytest engine/season/tests/test_scene_access_engagement.py engine/season/tests/test_scene_access_precedence.py engine/season/tests/test_rem31_grid_suspension.py -q` → pass; `HASH(0, 2)` recorded.
+- HASH MOVERS: 28A's ("`engagement` other than `off`; … in a world with a rivalry group"). EXPECTED RED UNTIL B98.99: the `_realm_goldens` readers.
+- REVERT: the three → `off`, `None`, `None`.
+- DEPENDS ON: V12 Batch B28, B28.21, B28.29.
+- COST and TIER: calibration; `sonnet`, high; `opus` reads rows 2, 3, 5. LANDS IT: B98's producer; `Item: B98.59`, `[skip ci]` (if it runs).
+
+### B98.60 — standing passes down the seat, at a discount · row 71; B32.07; SYN_B gate 2; B39.32 · BUILD (flip) · HASH MOVER(behaviour)
+- SOURCE: part 2 §4 row 71 ("TARGETED, after B39"); part 34's line: "target: SYN_B gate 2 at 0.5 on the realm after B39's prehistory ('among persons holding claims of all six seeded deeds, a majority order them king, Hafenmark, Varfell, **and at least one does not**'), at two seasons (A-114)". "B39's prehistory" is B39.32 (`SYN_B` §2: three founders and their deeds, before tick 0), which B39 lands; it is not the prologue of row 100, so this position keeps its place (U2).
+- SETTING: `engine/season/data/fixtures.py` (`presumption_gain`) = 0 (B32.07). New value: 0.5 (the gate's).
+- INSTRUCTION: read the gate at 0.5, seeds 0 to 2, two seasons, in-process: among persons holding claims of all six seeded deeds (B39.32's), the order of their `legitimacy` readings of the king, Hafenmark and Varfell; if a majority order them so and at least one does not, `presumption_gain` → 0.5.
+- FALSIFIER and CONTROL: B32.07's ("A `legitimacy` that differs from today's at `presumption_gain` 0"). Control arm: `HASH(0, 2; presumption_gain = 0)` equals the previous flip's after-reading.
+- GATE: `python -m pytest engine/season/tests/test_inst_syn_b_deed_ledger.py -q` → pass; the ordering counts per seed quoted; `HASH(0, 2)` recorded.
+- HASH MOVERS: every world where a seat's standing is read (`legitimacy` with a seat). EXPECTED RED UNTIL B98.99: the `_realm_goldens` readers.
+- REVERT: `presumption_gain` → 0.
+- DEPENDS ON: V12 Batch B32, B32.07; Batch B39, B39.32.
+- COST and TIER: calibration; `sonnet`, high; `opus` reads the ordering. LANDS IT: B98's producer; `Item: B98.60`, `[skip ci]`.
