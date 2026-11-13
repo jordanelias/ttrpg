@@ -9,6 +9,8 @@
 - Check lanes K1..K10 (Sonnet), briefs at `/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379/scratchpad/chk_<k>.txt` (the scratchpad may be gone: the brief is `V12_STRUCTURE_part3.md` §10.1, checks 1 to 11, parts ranges 3-6, 7-11, 12-15, 16-20, 21-24, 25-28, 29-32, 33-35, 36-39, 40-43); output `checks/CHK_K<k>.md`. A lane with no closing section in its CHK file did not finish.
 - A local checkpoint loop (`scratchpad/checkpoint.sh`, every 4 minutes) commits and pushes this directory with `[skip ci]`.
 
+**Decided, to apply by one script once A44, K5 and K8 have returned (so no Edit collides):** `register --check` exits 1 at the tree today (verified 2026-11-13: G6 3 violations H-47, H-48, H-59; R2 27 per K4), so every gate line reading `register --check` → exit 0 (about 240 lines in parts 3 to 44, K4 F1) is rewritten to B03's form (`workplan_v12_part5.md:105`): the per-check violation counts do not rise from the batch's opening reading, both quoted (ladder step 4: precedent). A gate on a row the batch itself edits keeps its own sentence.
+
 **Next, in order (one round each; CLAUDE.md §0):**
 1. Read the ten receipts and `checks/CHK_K*.md`; fix what the lanes listed as needing a decision by the five-step ladder; list the rest in `V12_FOR_JORDAN.md`.
 2. One check lane K11 (Sonnet) on part 2, part 44 and the head (`workplan_v12.md`): the six batches part 2 lists as lacking a `.99` row; `knot` design item for B35.28 (decided in part 2, not written); the 'names' and 'symbols with no carrier' tables part 2 did not produce.
