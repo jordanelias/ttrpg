@@ -362,7 +362,7 @@ B02.37 (`IS-A-12`, READING: no code, no commit) is the close line of this batch'
 
 ### B02.99 — re-pin and close readings (EQUAL: the record) · `V12_STRUCTURE_part4.md` E-1 · BUILD · HASH EQUAL (records)
 - SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2; `V12_STRUCTURE_part2.md` §5.12; B02's BATCH GATE and RE-PIN lines; part 2 §11 C-01 (written by repair lane R1).
-- ADVANCES: the close of the readings B02.38 takes and records (R-01 to R-03 `met`; the first `BUILT OUT`, `ENGINES` and `NULL SCENES` baselines); nothing beyond them.
+- ADVANCES: the close of the readings B02.38 takes and records (R-01 to R-03 `met`; the first `BUILT OUT` and `ENGINES` baselines; `NULL SCENES` re-read against `B02.20`'s first reading); nothing beyond them.
 - INSTRUCTION: (1) Re-pin nothing (RE-PIN: none; every item is EQUAL; the BATCH GATE's first line reads every pinned hash against B01's close, `reading @<B01 closing sha>`). (2) Read once on the closing tree and quote in this commit's body every BATCH GATE line, the `HASH READING` at `<s>` = 0, 1, 2 (`<k>` = 1) equal to B01's close, and the batch's measured wall time (build and close apart). The conjuncts' `reading:` records are B02.38's (written on B02.39's tree), not rewritten here. The commit carries no file unless the record needs one (`git commit --allow-empty`).
 - WHERE: none but the commit body.
 - TESTS: none new.

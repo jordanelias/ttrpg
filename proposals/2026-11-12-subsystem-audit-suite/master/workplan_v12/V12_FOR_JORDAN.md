@@ -207,6 +207,27 @@ collection and CP-T08-08's refill, which are credited on hand-built worlds only.
 
 ---
 
+### J-08 · A-80's C8 thresholds: how much must a held world still move? · WR (the census), A-80
+
+(Raised by repair lane E from the Stage E antagonist's finding 2, `checks/E_REPAIR.md`.)
+
+**The situation.** Your ruling A-80 says entrenchment must still move the world. The plan checks it with clause C8 of the cascade census: a run in which every contested draw goes to the holder (the "entrenched" arm), set beside a free run at the same seeds. C8 now fails the batch (B38 does not close) when fewer than three of ten kinds of story (the six ways of turning to another means, blame, refugees or a riot, the side thinning, a petition's intensified stage) appear at two seeds or more of five, or when people in the entrenched run act less than half as often per season as in the free run. The two numbers, three of ten and a half, come from the proposal and were marked for you to correct; nothing measured sets them.
+
+**The question.** Keep three of ten and a half, or set other values?
+
+**Option A — keep them.** A held world must show at least three different kinds of response, and lose no more than half its activity. Loose enough that a two-season run can pass; a world where only one or two kinds of response ever appear fails.
+**Option B — other values.** Tighter (say five of ten, or two thirds) asks more variety and activity of a held world and risks failing a two-season run on noise; looser lets a nearly still world pass.
+
+**Recommendation.** A for v12's two-season gates, re-read at B99's long run, where a tighter value can be set against eight seasons of data.
+
+**What the plan assumes until you answer.** A: three of ten and a half, each marked `[ASSUMPTION; Jordan to correct]` at the gate.
+
+**Blocks.** Nothing; B38 closes or stops on these values.
+
+**Sources.** `workplan_v12_part41.md` B38.71 (step 6, C8; GATE); `workplan_v12_part40.md` B38.13 GATE 3 (row 7, the related flagged rate "`the rate is a seed`"); `proposals/30_WR_E_cascade_chains_and_the_census.md` §4 C8; `unified/DECISIONS_ANSWERED.md` A-80.
+
+---
+
 **Settled by the checks and not asked** (each with what settled it, in `H2_DECISIONS.md`):
 
 | raised as a question for you | settled as | by |
