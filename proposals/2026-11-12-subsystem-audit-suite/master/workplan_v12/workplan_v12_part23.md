@@ -136,7 +136,7 @@ Not in this batch, and where each is: PB step 5 (the `duel` callable through `ne
 - DEPENDS ON: V12 B16.01 ("same files, same batch"); V12 Batch B14 (`03_PC_typed_outcome_one_door`: `bouts` or `CombatOutcome.rounds`); EXISTS-IN-TREE `modules/combat/wrapper.py::TURN_CHOICES`, `::fight(max_bouts=12)`, `engine/season/queries/inputs.py::CombatTurnView`, `systems/combat/combat_engine_v1/state_graph.py`.
 - GLOSSARY: §K *round* and *turn*: the rename candidate notes struck, the owner column a pointer to `fight_round` and `wrapper.engagement`, the rejected column (**turn**, **bout**, **engagement** in prose) kept; *bout* (§E): "the combat code's `max_bouts` counts rounds, rename candidate PCR-3" struck.
 - NAMES: `max_bouts` → `max_rounds`; `turn_start` → `round_start`; `engagement_end` → `round_end`; `CombatTurnView` → `CombatRoundView`; `TURN_CHOICES` → `ROUND_CHOICES` (§5.10's B16 row); `Yield.turn` → `Yield.round`; `bouts` → `rounds`.
-- COST and TIER: small mechanical rename; `haiku` for the edits with a `sonnet` check (PCR-3).
+- COST and TIER: wide mechanical (a rename across the sixteen files of WHERE; class corrected by check lane K5 from "small mechanical rename", which is not a §5.3 class); `haiku` for the edits with a `sonnet` check (PCR-3).
 - LANDS IT: B16's producer; `Item: B16.02`, `[skip ci]`.
 
 ### B16.03 — each round drawn from its own key · PB step 2 · BUILD · HASH MOVER(behaviour)

@@ -369,8 +369,8 @@ EST: 6 h [estimate: the structure's §2.4 formula; nothing timed]
 - COST and TIER: edit; `sonnet`, high.
 - LANDS IT: B22's producer; `Item: B22.09`, `[skip ci]`.
 
-### B22.10 — POINTER · `IS-A-09`
-`IS-A-09`'s INSTRUCTION, WHERE, FALSIFIER and GATE are withdrawn by its own Sonnet check ("v12 keeps one item"): the siege is `IS-MB-02` (B22.11, B22.12). What it still adds is read at the close as B22.R3. Closes G-1 with B22.12.
+### B22.10 — the siege instruction of `IS-A-09` is carried by B22.11 and B22.12 · `IS-A-09` · POINTER · HASH —
+`IS-A-09`'s INSTRUCTION, WHERE, FALSIFIER and GATE are withdrawn by its own Sonnet check ("v12 keeps one item"): the siege is `IS-MB-02` (B22.11, B22.12). Target files and symbols: those of B22.11 and B22.12 (`loop/effects_combat.py::_siege`, `rosters.yaml: march_postures`). Gate: none of its own; what `IS-A-09` still adds is read at the close as B22.R3. Closes G-1 with B22.12.
 
 ### B22.11 — a siege that wears nothing still writes; the scenario offers besiege then storm · `IS-MB-02` steps 1, 3, 4, 5, 6 (the policy) · BUILD · HASH EQUAL
 - SOURCE: `master/instructions/IS_B1_PC_MB_DICE_part2.md` `IS-MB-02` (steps 1–6, FALSIFIER, GATE); `IS-A-09` (2); rulings A-81; closes G-1 of `unified/U4_TRACEABILITY.md` §6 (with B22.12); retires v11 CP-T04-06; unblocks `17_CENSUS_C1A_02`'s `_siege` row and `U5d_STORY_owed_edits` §1.

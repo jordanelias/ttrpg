@@ -437,7 +437,7 @@ Not in this batch, and where each is: COL_A's grounding row changes (`15_INSTITU
 - COST and TIER: edit; `sonnet`, `medium`.
 - LANDS IT: B32's producer; `Item: B32.17`, `[skip ci]`.
 
-### B32.18 — the Church strife signature · PAP_A edit 5 · POINTER
+### B32.18 — the Church strife signature · PAP_A edit 5 · POINTER · HASH —
 - What the pointed section does: "the CH row … `verbs: [arrest, determine, revoke]`, `kinds: [arrest.made]` …, `gap:` removed"; one signature function: an Event of the row's kinds whose causing act has a `via` seat `s` with `ROLE_TEMPLATE_OF.get(office_faction(s.body, s.faction)) == "ecclesiastical"`.
 - Target files: `engine/season/harness/strife_moves.yaml` (CH row), `engine/season/harness/strife.py` (CR-74's files); `data/rosters.py::ROLE_TEMPLATE_OF`.
 - Gate: "a planted restraint through a Church seat reads CH; the same through a secular seat does not and lands in the labelled residue; `content_hash` unchanged by the reading."
