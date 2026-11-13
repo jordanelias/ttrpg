@@ -225,4 +225,173 @@ which does not roll).
   Coordination again as `agi` (§2.2). B05.09 removes `max(attr, have)` from the score, which ends the duplicate; the
   item in §5 makes the exempt rows name no attribute so it cannot return.
 
-<!-- APPEND: 3 onward -->
+## 3. Disagreements with the tree, ranked by how much the game changes
+
+35 of 67 rows disagree. Grouped, most game-changing first:
+
+1. **The persuasion and judging verbs roll on the wrong attribute, or on none** (`tell`, `speak`, `lie`, `argue`'s
+   opposition, `determine`, `interrogate`: six rows). These are the rolls the season makes most often. `tell` and `speak`
+   read Focus because their skill is `copying` (`rosters.yaml:1550-1551`, `:1665`), a copyist's attribute; a lie reads no
+   attribute on either side (`:1563-1567`); every opposition reads the roller's own attribute because `opposed_by` ships
+   empty (`:1676`), so a hearer resists an argument with his own Presence, a prisoner resists questioning with his Reason.
+   Fixed, a well-attuned liar fools the gullible and is caught by the shrewd; a strong-willed hearer is hard to move.
+2. **The governing attribute lives on the skill, and the skill is shared by verbs that rely on different attributes.**
+   `inquiry` serves `examine` and `surveil` (Perception, AR-24) and `research` (Reason); `argue` serves `argue` (Presence,
+   Attunement) and `speak` (Presence, Grace); `arms` serves `arrest` (Strength) and the fight (none of its own). CR-96 found
+   the first case and stopped because *"one row cannot serve both, and a split is a new vocation"* (`rosters.yaml:1652-1654`);
+   U1 §2 lands the same shape again as the skill row's `base:` (`U1_CAPABILITY_AUTHORING_ARCHITECTURE.md:95, 123-133`).
+   Ladder step 4 answers it: the plan already moved the verb's skill and its difficulty onto the verb row (`capability:`,
+   `10_DICE_one_score_two_roles.md` Edit C; `difficulty:`, D-U1-04), and B05.10's level row is keyed `verb.base`
+   (`workplan_v12_part8.md:295`), by the verb. So the verb row owns its attributes; `vocation_attribute` (and its
+   `opposed_by`) and the skill row's `base:`/`opposed_by:` retire, one owner (§5).
+3. **Personal combat reads an authored Coordination twice** (`fight`, `accept`, `capture`: §2.2). B05.09 ends it by
+   removing `max(attr, have)` from the score (`workplan_v12_part8.md:252-259`); the exempt rows naming no attribute keeps it
+   ended.
+4. **Seventeen rows can fail in everyday life and roll nothing** (`carry`, `conceal`, `open_case`, `raze`, `thread_read`,
+   `forge`, `found`, `build`, `requisition`, `restore`, `sabotage`, `seize`, `survey`, `tend`, `reconstruct`, `train`,
+   `recruit`, `work`, `marshal`, `revoke`, `move`, `migrate`, less those whose draw already waits: counted in the table).
+   18_DET gives most of them a draw; without a governing attribute that draw varies by seed alone, every person alike. The
+   attributes here are what make the draw a person's.
+5. **The self-plea is opposed by nobody** (`speak` on one's own matter, `sigma.py:220`): §2.7.
+6. **`tie / knot` is certain** where AR-31 rules a *likelihood* governed by Attunement.
+7. **Smaller opposition choices**: `lie` opposed by Attunement (U1 §2 says Perception); `revoke` opposed by the holder's
+   Grace (AR-34); `arrest` on Strength rather than Coordination.
+
+**Disagreements with proposals, not the tree** (for the lanes that own them): 18_DET's class for `covenant`, `challenge`,
+`interview`, `confer`, `establish`, `pardon`, `release`, `succeed` (contest owed → no roll here: the contested part is
+another person's answer or the precondition), `destroy_record` and `issue` (task → no roll), and `tie / knot`
+(bookkeeping → task, AR-31); U1 §2's `deception` row (Grace, opposed by Perception → the verb row: Attunement and Reason,
+opposed by Attunement).
+
+## 4. What a test would assert
+
+One loader refusal, one test file. `engine/season/tests/test_verb_governing_attributes.py`:
+
+- **`test_every_verb_row_names_its_attributes_or_no_roll_or_its_subsystem`**: for each row of `data/verbs.py::VERB_TABLE`,
+  exactly one holds: (a) `row.attributes` is a tuple of one or two distinct members of `descriptors.ATTRIBUTES`; (b)
+  `row.roll == "none"` and the row carries a non-empty `roll_note`; (c) **the exemption**: `row.contests` names a prize
+  whose row in `contest_subsystems.prizes` says `person_inputs: own` (the subsystem reads the person itself), and then the
+  row names no `attributes`. A row contested on a prize with `person_inputs: pool` must take (a), never (b) or (c); a row
+  contested against a person on such a prize must also name `row.opposed_attribute`, a member of `ATTRIBUTES`. The loop
+  asserts that it asserted: `checked == len(VERB_TABLE)` (67 at writing, CLAUDE.md §0.1 pt 2).
+- **`test_a_row_naming_none_is_refused_at_load`**: a copy of the table with one row's three columns removed, passed to
+  `_load_verb_table`'s check, raises and names the verb. This is the falsifier: delete it and nothing stops a new verb
+  shipping on `pool_default` for everyone, which is how `lie` shipped (`rosters.yaml:1563-1567`).
+- **`test_a_verb_is_exempt_only_by_its_prize`**: plant `person_inputs: own` off `the body` and `fight` is refused for naming
+  nothing; a verb is exempt only if it names the subsystem it calls, through its `contests:` prize.
+
+## 5. Items for the plan (to be inserted after B05.09; the orchestrator inserts them)
+
+### B05.09a — every verb names the one or two attributes its everyday meaning relies on · this proposal §2, §6 · DESIGN-FIRST · HASH EQUAL
+- SOURCE: `proposals/2026-11-13-verb-governing-attributes.md` §2 (the 67 rows), §2.6, §2.7, §6; Jordan, 2026-11-13 (the
+  instruction and the subsystem exception); rulings A-7, A-12, A-71, A-79, A-98, ED-IN-0328, ED-IN-0347 (AR-10 to AR-50),
+  ED-IN-0350.
+- ADVANCES: none of the nine; a decided input for B05.09b, B05.10 and 18_DET's task rows.
+- INSTRUCTION: Jordan reads §2's table and answers §6 Q1 and Q2. His corrections are made in §2 of the proposal file in
+  the same commit, and one ledger row records the ruling: `registers/editorial_ledger_in.jsonl`, an `ED-IN-NNNN` from
+  `references/id_reservations.yaml`'s `next_free` (allocate, bump, co-commit). Where he is silent on a row, the row stands as
+  written (ED-1094: merging ratifies unless the PR body holds a row back).
+- WHERE: this proposal; `registers/editorial_ledger_in.jsonl`; `references/id_reservations.yaml`.
+- TESTS: none (no code).
+- FALSIFIER and CONTROL: a verb in `verb_table.yaml` with no row in §2, or a §2 row for no verb.
+- GATE: `python -c "import yaml,re; t={r['verb'] for r in yaml.safe_load(open('engine/season/verb_table.yaml'))['verbs']}; p=set(re.findall(r'^\| \x60([a-z_ /]+)\x60 \(', open('proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-13-verb-governing-attributes.md').read(), re.M)); print(len(t), len(p), sorted(t ^ p))"` → `67 67 []`; `python tools/validate_ed_citations.py` → exit 0.
+- HASH MOVERS: none.
+- DEPENDS ON: EXISTS-IN-TREE `engine/season/verb_table.yaml` (67 rows); this proposal.
+- GLOSSARY: *governing attribute* — "the first attribute a verb row names" added to the row's meaning; *opposing attribute*
+  — new row: the attribute a person opposite resists a verb with (A-71).
+- IDS: one `ED-IN`.
+- COST and TIER: Jordan's read; drafting corrections `opus`, `high` (a judgement node).
+- LANDS IT: the orchestrator; `Item: B05.09a`, `[skip ci]`.
+
+### B05.09b — the verb row carries its attributes; the loader refuses a row naming none; `vocation_attribute` retires · this proposal §3 item 2, §4 · BUILD · HASH EQUAL
+- SOURCE: this proposal §2 as ruled at B05.09a, §3 item 2, §4; `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §2, §4;
+  `10_DICE_one_score_two_roles.md` Edit C (the verb-row column precedent); D-U1-04 (`difficulty:`).
+- ADVANCES: none of the nine at control; Jordan's 2026-11-13 instruction (every verb names its attributes, or no roll,
+  or the subsystem it calls).
+- INSTRUCTION:
+  1. `engine/season/verb_table.yaml`: each row as ruled carries one of `attributes: [<registry key>, <registry key>?]`
+     (first = the governing attribute), with `opposed_attribute: <registry key>` on a row contested against a person; or
+     `roll: none` with `roll_note:` (the reason, from §2); or nothing of the three where its `contests:` prize is
+     `person_inputs: own` (`fight`, `accept`, `capture`, `march`). The 18_DET task rows carry `attributes:` now; their
+     draw is 18_DET's (B07).
+  2. `engine/season/rosters.yaml: contest_subsystems.prizes`: each prize row gains `person_inputs:` — `own` on `the
+     body` and `a field`, `pool` on `a standing`, `a proposition`, `a matter`. Delete `vocation_attribute` (its `values:`
+     and `opposed_by:`); the history of its rows is in git.
+  3. `engine/season/data/verbs.py`: `_VERB_ROW_KEYS` gains `attributes`, `opposed_attribute`, `roll`; `VerbRow` gains
+     `attributes: tuple = ()`, `opposed_attribute: Optional[str] = None`, `roll: Optional[str] = None`; NEW
+     `_check_governing_attributes(rows, prizes)`, called at the end of `_load_verb_table`, raising `Unspecified` naming
+     every row that holds none or more than one of §4's (a), (b), (c), an attribute outside `descriptors.ATTRIBUTES`, or a
+     missing `opposed_attribute` on a person-contested `pool` row.
+  4. `engine/season/data/rosters.py`: delete `_load_vocation_attribute`, `_load_vocation_opposed_by`,
+     `VOCATION_ATTRIBUTE`, `VOCATION_OPPOSED_BY` (`:631-670`). `engine/season/seam/wrappers/pool.py`:
+     `governing_attribute(p, verb)` (B05.09's) reads `VERB_TABLE[verb].attributes[0]`, held value else the mid-point;
+     NEW `second_attribute(p, verb)` the same on `attributes[1]`, else `None`; `_opposing_attribute(entity, verb)` reads
+     `VERB_TABLE[verb].opposed_attribute`; the import at `pool.py:14` loses the two names; `_authored_attribute` goes if
+     B05.09 left no caller (`git grep -n _authored_attribute engine` at the item's open).
+  5. `references/descriptor_registry.yaml: capabilities.rows`: if B04 landed `base:` and `opposed_by:` on the skill rows,
+     delete both columns and their reader (`git grep -n "\.base\b\|opposed_by" engine tools` at open); re-run
+     `python tools/export_descriptors.py` and its `--check`. B05.10's `edge` rows keyed `verb.base` read the verb row's
+     first attribute (a note for B05.10; no edit here).
+- WHERE: `engine/season/verb_table.yaml`; `engine/season/rosters.yaml` (`contest_subsystems.prizes`, `vocation_attribute`);
+  `engine/season/data/verbs.py` (`VerbRow`, `_VERB_ROW_KEYS`, `_load_verb_table`, NEW `_check_governing_attributes`);
+  `engine/season/data/rosters.py`; `engine/season/seam/wrappers/pool.py` (`governing_attribute`, NEW `second_attribute`,
+  `_opposing_attribute`); `references/descriptor_registry.yaml`; NEW `engine/season/tests/test_verb_governing_attributes.py`.
+- TESTS: §4's three, written first and read red.
+- FALSIFIER and CONTROL: a row with none of the three loads (the test's plant); re-pointing `tell`'s `attributes` to
+  `[attr.mind.focus]` moves `sigma.odds_of` for a `tell` with the teller's Focus once B05.10's `attribute_level` is set in
+  a test's fixtures. Control: `attribute_level` `None` (shipped), so no level reads an attribute.
+- GATE: `python -m pytest engine/season/tests/test_verb_governing_attributes.py -q` → pass, with `checked == 67` asserted;
+  `python -c "import engine.season.data.verbs"` → exit 0; `python tools/export_descriptors.py --check` → exit 0; the
+  seed-0 realm hash after one season (`HASH READING`) → equal to B05.09's reading `[ASSUMPTION: after B05.09 no dice read
+  an attribute and no level is live at control — basis: B05.09 step 1, B05.10's control]`. If the hash moves, stop and
+  name the persons whose pool moved.
+- HASH MOVERS: none at control.
+- DEPENDS ON: V12 B05.09a (ruled), B05.09 (`governing_attribute`); V12 Batch B04-capability-home (B04.02's skill rows);
+  EXISTS-IN-TREE `data/verbs.py::_load_verb_table`, `::_VERB_ROW_KEYS`, `::VerbRow`, `rosters.yaml:
+  contest_subsystems.prizes`, `pool.py::_opposing_attribute`, `descriptors.ATTRIBUTES`.
+- GLOSSARY: *governing attribute* — owner `verb_table.yaml: attributes` (first member) via `pool.py::governing_attribute`;
+  *opposing attribute* — owner `verb_table.yaml: opposed_attribute`; *vocation* (code) — `vocation_attribute` deleted.
+- COST and TIER: small build plus 67 data cells; `sonnet`, `high`.
+- LANDS IT: B05's producer; `Item: B05.09b`, `[skip ci]`.
+
+### B05.11a — the self-plea is opposed by the accuser, else the bench · this proposal §2.7 · BUILD · HASH MOVER(behaviour) — to follow B05.11, whose opposition form it uses
+- INSTRUCTION: `engine/season/seam/wrappers/sigma.py::contest_input` (the self-subject branch at `:220`): where the
+  subject is the actor and the prize row's `heard_by` names a bench, the opponent is the holder of the docketed matter's
+  petition (`DocketItem.petition`), else the presiding holder of the bench (`world_q.judging_set`'s seat), read through
+  `_opposition_of` on `speak`'s `opposed_attribute`.
+- GATE: `python -m pytest engine/season/tests/test_sc01_provider.py -q` with a new
+  `test_a_self_plea_is_opposed_by_its_accuser` → pass; the seed-0 realm hash → moved, the commit naming each self-plea.
+- HASH MOVERS: every world with a docketed party offered his own matter (the row's own declared mover). B05.99.
+- DEPENDS ON: B05.09b, B05.11. COST and TIER: small build; `sonnet`, `high`.
+
+## 6. Questions that survive the ladder
+
+**Q1. Does the governing attribute give dice, or levels?** Two of Jordan's texts and the plan disagree, and no later ruling
+settles it. (A) *Dice*: Jordan, 2026-11-13: *"every verb's dice amount is set by the character's attributes, skill (if
+relevant) and office (if relevant)"*; A-7's own illustration says the same (*"the attribute sets the dice and the skill
+sets the obstacle one is attacked against"*, `DECISIONS_ANSWERED.md:13`). (B) *Levels*: the plan (B05.09: *"No attribute
+(the governing attribute enters as levels)"*, `workplan_v12_part8.md:255-256`; U1 §4, `:269-271`), and A-79 as ruled
+(*"aptitude and wounds as named levels under the soft cap"*, `DECISIONS_ANSWERED.md:105`). The games differ: under (A) a
+gifted untrained courtier out-argues a trained lawyer of ordinary Presence; under (B) training dominates and the gift
+shifts the odds by a named step. Ladder: step 1 favours (A) by date but (B) is a ruling of record for the opposition; the
+cost of either is two rows of `capability_uses` (U1 §4, `:275-276`), so the table here holds under both. Recommendation:
+(A) for the roller, (B) for the opposition, which is the two texts each read where it was spoken `[ASSUMPTION: Jordan's
+2026-11-13 words concern the roller's dice; A-79 concerns the defence]`.
+
+**Q2. Is resisting arrest a contest of standing or of the body?** The row asks it itself (`contests_note`, `:171`:
+*"[CONFIDENCE: medium -- whether resisting arrest is a contest of standing or of the body]"*). (A) Standing: the social
+roll, as shipped; an arrest is submission to authority and cannot wound. (B) Body: a resisted arrest is `capture` (same
+act by force, the yield terms, personal combat), so arrests can wound and kill and draw on martial skill. The table's
+`arrest` row (Strength, Presence) serves (A); under (B) the row moves to the exempt class. Recommendation by precedent
+(step 4): (A) for the arrest, with a subject who refuses free to answer by `fight`, his own act; but the choice makes
+materially different worlds (how often officers die), so it is Jordan's.
+
+## 7. What was not checked
+
+- `proposals/2026-11-05-verb-attribute-map.md` (and `_part2`, and the adjudication) is an earlier per-verb map against the
+  same rulings; it was deliberately not read before the table was written (the brief: do not start from a mapping), and
+  was not compared after. A reader should diff its findings F1 to F27 against §2.
+- The 14_VERBS_* lane proposals were not read row by row; where they set a verb's skill or roll differently, the lane's
+  later text governs its row (U1 §5's rule, `:295`).
+- Nothing was run but the naming check; no code path was executed to confirm a hash claim. Line numbers for verb rows are
+  the `verb:` lines of `engine/season/verb_table.yaml`.
