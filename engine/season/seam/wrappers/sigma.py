@@ -87,7 +87,7 @@ from engine.dice_engine.sigma_leverage import levels_to_net_sigma, record_odds, 
 from engine.substrate import composition
 
 from ...data.rosters import VERB_CAPABILITY, roster
-from ...data.verbs import VERB_TABLE
+from ...data.verbs import SOCIAL_ROLL_PROVIDER, TASK_DIFFICULTY, VERB_TABLE
 from ...gaps import Unspecified
 from ...loop.sides import _contests_of, sides_of
 # ⚠ THE LEAF, NOT THE PACKAGE'S RE-EXPORT. `manifest/providers.py` imports nothing, so no import
@@ -102,11 +102,11 @@ from ...queries.inputs import Margin, SocialContestInput
 from ...queries.world_q import proofs, reception
 from ...state.carriers import EFFORT, effort_of
 from ._entry import entry_for
-from .pool import POOL_ADDENDS, _authored_attribute, _capability, _opposing_attribute, faculty, register_pool_addend  # noqa: F401  (moved: see pool.py)
+from .pool import POOL_ADDENDS, _authored_attribute, _capability, _opposing_attribute, faculty, register_pool_addend, score  # noqa: F401  (moved: see pool.py)
 
 # The prize rows' `provider:` string (`rosters.yaml` `contest_subsystems`): the module's one identity
 # (A-25), so the row says the social contest module runs its own prizes. Reached by that string only.
-_PROVIDER = "social_contest"
+_PROVIDER = SOCIAL_ROLL_PROVIDER   # B11 lane A: one owner of the name (`data/verbs.py`), which `task_difficulty`'s closure reads too
 _RESOLVER = "d10_sigma"
 
 
@@ -131,10 +131,21 @@ def _opposition_of(w: Any, subject: Optional[str], verb: str) -> Optional[float]
     (`None` for a record, a rung or a proposition, or a person with no entry)."""
     if subject and subject in w.persons:
         person = w.persons[subject]
+        # B11 lane A (`10_DICE_one_score_two_roles.md` B): ON THE TASK ARM A PERSON ALWAYS HAS A SCORE -- `pool.score`
+        # (no practice), read on the OPPOSING attribute (CR-96's `opposed_by`, else the row's own), so
+        # `obstacle_default` never stands in for a person. The control arm (`Fixtures obstacle_model: stand_in`)
+        # reads the held values alone, as before.
+        if w.fixtures.get("obstacle_model") == OBSTACLE_MODEL_TASK:
+            return float(score(w, person, verb, attribute=_opposing_attribute))
         held = [float(v) for v in (_capability(person, verb), _opposing_attribute(person, verb)) if v is not None]
         if held:
             return max(held)
     return None
+
+
+#: `Fixtures obstacle_model`'s shipped arm: the obstacle is the task's difficulty plus its named modifiers (B11 lane A,
+#: H-368); `stand_in` is the control, the composition before.
+OBSTACLE_MODEL_TASK = "task"
 
 
 def _effort_levels(fx: Any, operands: dict) -> list:
@@ -206,14 +217,30 @@ def contest_input(w: Any, claimants: list, *, verb: str = "",
     doc = w.records.get(examined) if examined is not None else None
     # NOBODY OPPOSES HIMSELF (v10 CP-T05-02 (ii), AM-D-02): a subject who IS the actor (the self-plea,
     # `speak {subject: himself}`) brings no opposition -- his own score is not an obstacle to himself --
-    # so the obstacle starts at `obstacle_default`, the same at any capability he holds.
+    # so the obstacle starts at `obstacle_default` on the control arm and at the task's difficulty alone on
+    # the task arm (B11 lane A: a task no person opposes has no opposition term), the same at any capability he holds.
     opposition = None if subject == claimants[0] else _opposition_of(w, subject, verb)
     return _frame(fx, faculty(w, w.persons[claimants[0]], verb), opposition,
-                  doc.forgery_quality if doc is not None else 0.0, room_terms, effort)
+                  doc.forgery_quality if doc is not None else 0.0, room_terms, effort, verb)
+
+
+def _difficulty(fx: Any, verb: str) -> Optional[float]:
+    """THE TASK'S DIFFICULTY for `verb` on the shipped arm (`rosters.yaml: task_difficulty`, closed over every verb the
+    social roll deals, refused at import), `None` on the control arm. A verb the roll deals with no row cannot reach
+    here (the import refused it); a hand call naming a verb the table does not carry is refused, naming it -- a task
+    with no difficulty is a loud gap, never a default."""
+    if fx.get("obstacle_model") != OBSTACLE_MODEL_TASK:
+        return None
+    if verb not in TASK_DIFFICULTY:
+        raise Unspecified(f"the social roll was asked to deal {verb!r}, which `rosters.yaml: task_difficulty` gives no "
+                          "difficulty", "rosters.yaml -- task_difficulty",
+                          needs="a row for every verb the social roll deals",
+                          law="B11 lane A -- an obstacle is the task's difficulty and its modifiers, never a stand-in")
+    return TASK_DIFFICULTY[verb]
 
 
 def _frame(fx: Any, pool: int, opposition: Optional[float], forgery_quality: float,
-           room_terms: dict, effort: int) -> SocialContestInput:
+           room_terms: dict, effort: int, verb: str) -> SocialContestInput:
     """THE RECORD, FILLED THE ONE WAY: what `contest_input` (the true input) and `believed_input` (a
     person's) both hand the module. They differ in where the pool's opposition, the forgery quality
     and the room terms COME FROM; the fixtures and the record's shape are this
@@ -225,7 +252,7 @@ def _frame(fx: Any, pool: int, opposition: Optional[float], forgery_quality: flo
         ceiling_per_pool=fx.get("ceiling_per_pool"),
         obstacle_refusal_multiple=fx.get("obstacle_refusal_multiple"),
         leverage=advantage_sigma(fx, {EFFORT: effort}),      # the one place the operands are named
-        forgery_quality=forgery_quality, **room_terms)
+        forgery_quality=forgery_quality, difficulty=_difficulty(fx, verb), **room_terms)
 
 
 # ---------------------------------------------------------------------------------------------
@@ -245,6 +272,13 @@ def _composed_obstacle(inp: SocialContestInput) -> float:
     attribute is read at call time, so the odds follow the owner when it changes."""
     module = importlib.import_module(composition.require(_ROLL_ROLE).__module__)
     return module.obstacle(inp)
+
+
+def _composed_terms(inp: SocialContestInput) -> dict:
+    """The obstacle's named terms for `inp` (`roll.py::obstacle_terms`), through the module that owns them, as
+    `_composed_obstacle` reads the obstacle."""
+    module = importlib.import_module(composition.require(_ROLL_ROLE).__module__)
+    return module.obstacle_terms(inp)[1]
 
 
 def _odds_of_input(inp: SocialContestInput) -> Optional[tuple]:
@@ -297,7 +331,7 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
             return None
         room_terms = dict(reception=room["reception"], reception_gain=fx.get("reception_gain"),
                           proofs=room["proofs"], proof_step=fx.get("proof_step"))
-    return _frame(fx, pool, opposition, 0.0, room_terms, effort)
+    return _frame(fx, pool, opposition, 0.0, room_terms, effort, verb)
 
 
 def _rolled_as(w: Any, act: Any, owner: str = _PROVIDER) -> Optional[tuple]:
@@ -462,7 +496,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     `effort` is the act's own (CP-T01-05, `state/carriers.py::effort_of`, passed by `seam/contest.py`): it
     reaches only `contest_input`, where it becomes `leverage`; the act's draw is unchanged (one id, one draw).
 
-    RESOLVED -> dict(status, module, resolver, pool, ob, net, leverage, settled_margin)   # the entry's Margin + the record
+    RESOLVED -> dict(status, module, resolver, pool, ob, net, leverage, settled_margin, ob_terms)   # the entry's Margin + the record
                  # + the margin's fraction settled by the act's own draw (CP-T01-04), the integer `degree_of` grades
     REFUSED  -> dict(status, why, pool, ob)   # S27.4: ob > obstacle_refusal_multiple x pool
 
@@ -540,9 +574,11 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
             law="08_SEAM provider rule (intent) and S27.2 -- a contest provider returns a MARGIN, never "
                 "a winner; the band is the one ladder's reading of the margin, so a winner here is a "
                 "second resolver")
+    # B11 lane A: every term of the obstacle, named, on the roll's record (`roll.py::obstacle_terms`).
+    ob_terms = _composed_terms(inp)
     if margin.ob > inp.obstacle_refusal_multiple * max(inp.pool, 0):
         return dict(status="REFUSED", why="S27.4", module=_PROVIDER,
-                    resolver=_RESOLVER, pool=inp.pool, ob=margin.ob)
+                    resolver=_RESOLVER, pool=inp.pool, ob=margin.ob, ob_terms=ob_terms)
     # CP-T01-04: the margin's fraction is settled here, AFTER the S27.4 check (a refused act draws
     # nothing), by the act's own generator, and only when there is a fraction to settle -- a whole
     # margin draws nothing, so the act's stream and every whole-Ob hash are unmoved. The owner derives
@@ -552,4 +588,4 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     settled = settle_record(margin.net, inp.leverage, inp.pool, margin.ob, rng.random)
     # The margin's own fields, copied whole: the host reads the pair, it never computes one.
     return dict(status="RESOLVED", module=_PROVIDER, resolver=_RESOLVER, pool=inp.pool,
-                **asdict(margin), leverage=inp.leverage, settled_margin=settled)
+                **asdict(margin), leverage=inp.leverage, settled_margin=settled, ob_terms=ob_terms)

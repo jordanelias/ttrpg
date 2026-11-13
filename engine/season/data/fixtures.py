@@ -450,6 +450,12 @@ DEFAULT_FIXTURES = Fixtures(
     # [JUSTIFIED: engine/season/hole_register.yaml H-127 -- `site: Fixtures obstacle_default`, graded `assumption`; the ruled derivation is `score/2` and reads off a PERSON, so a non-person subject takes this injected and swept stand-in]
     obstacle_default=2,
     obstacle_refusal_multiple=2,
+    # `H-368` (B11 lane A): HOW THE SOCIAL ROLL'S OBSTACLE IS COMPOSED (`modules/social_contest/roll.py::obstacle_terms`).
+    # `task` SHIPS: the task's difficulty (`rosters.yaml: task_difficulty`) plus the opposing person's score halved (the
+    # score he rolls, `seam/wrappers/pool.py::score`) plus the room's and the document's terms -- no stand-in for a
+    # person. `stand_in` is the CONTROL and the REVERT: `score / 2` of a held value, else `obstacle_default`, byte for
+    # byte the composition before. A switch, not a number.
+    obstacle_model="task",            # `H-368`, swept stand_in (the control, the revert) / task (SHIPPED)
     # [JUSTIFIED: engine/season/hole_register.yaml H-213 -- `site: Fixtures obstacle_ceiling`, graded `assumption`; M-7 fails at the 1D floor above 2 (p_success 0.0006 at Ob 3), and 2 = obstacle_refusal_multiple x the 1D floor; swept 1 / 2 / 3, `None` the uncapped control]
     obstacle_ceiling=2,
     # CP-T01-06: THE `chance_floor` ARM OF THE CEILING. From one die the cap is solved per pool (the highest

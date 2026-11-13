@@ -43,7 +43,9 @@ FAR = "p_high"                     # elsewhere
 
 #: `build_realm(s)` then one season (`run(1, s, w=w)`), on this commit's tree; PRE is the parent tree's -- rebased (C3-A2):
 #: the head after B00 (`e8e283c`), read there under PYTHONHASHSEED=0 (was `1424aa7`'s d4c83c8c... / d9f3be70... / 285fb92a...).
-POST = {0: "2b1679bb01ecfbbd489bdd28ca0ed591", 1: "e6976ba83e75f8cf60fb9830d73d57f2", 2: "e92efc2a2ea5f48d1977e21401a60257"}
+#: POST re-pinned in B01.02 to the rebased reach's own reading (B01.01's tree, PYTHONHASHSEED=0; was the branch's 2b1679bb... /
+#: e6976ba8... / e92efc2a..., `1424aa7`'s world, discarded per C3-A2).
+POST = {0: "b4619054a2e47cb87ae4a99da6c98f03", 1: "8b24ff0864bce9f4541f7864ad4de21d", 2: "37baa06098d392eaca4066e4df18aa40"}
 PRE = {0: "5ab73af282d0779646c38839fbab85d8", 1: "aa58ef0b71c947ce5ff9f0a75ffd8ca6", 2: "a21ab6e12e356ccc4261bec1c93ca3b4"}
 
 
@@ -169,6 +171,10 @@ def test_accept_does_not_form_on_a_document_read_as_another_kind():
 
 @pytest.mark.parametrize("seed", [0, 1, 2])
 def test_hash_post_lane_and_revert(seed, monkeypatch):
+    # B11 lane A's second item (persons hold scores; the obstacle by task, a later mover of the build and every season) is
+    # reverted in process, so POST still reads the reach alone.
+    from .test_b11a_scores_and_obstacle import revert_b11a_scores
+    revert_b11a_scores(monkeypatch)
     w = build_realm(seed)
     run(1, seed, w=w)
     assert w.content_hash() == POST[seed] != PRE[seed]

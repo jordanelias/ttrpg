@@ -17,7 +17,7 @@ import pytest
 from engine.season.data.rosters import (
     VERB_CAPABILITY, VOCATION_ATTRIBUTE, VOCATION_OPPOSED_BY, _load_vocation_opposed_by,
 )
-from engine.season.data.verbs import VOCATIONS
+from engine.season.data.verbs import TASK_DIFFICULTY, VOCATIONS   # TASK_DIFFICULTY: B11 lane A
 from engine.season.gaps import Unspecified
 from engine.season.harness import probes as P
 from engine.season.seam.wrappers import pool, sigma
@@ -61,11 +61,17 @@ def test_the_shipped_roster_is_absent_on_every_row_and_reads_the_row_own_attribu
 
 def test_a_row_with_opposed_by_spirit_opposes_at_the_spirit_and_the_row_without_it_at_the_own(monkeypatch):
     w = _w()
-    assert sigma._opposition_of(w, HOLDER, TELL) == 2.0 and _obstacle(w) == 1.0           # the row without it
+    # B11 lane A (rebased in B01.02): on the shipped `task` arm the obstacle is the task's difficulty (`tell`'s,
+    # `rosters.yaml: task_difficulty`) plus the opposing score halved; was 1.0 and 3.0, the score halved alone (the
+    # control arm, `obstacle_model: stand_in`, still reads them, below).
+    d = TASK_DIFFICULTY[TELL]
+    assert sigma._opposition_of(w, HOLDER, TELL) == 2.0 and _obstacle(w) == d + 1.0       # the row without it
     monkeypatch.setattr(pool, "VOCATION_OPPOSED_BY", {VOC: SPIRIT})
     assert sigma._opposition_of(w, HOLDER, TELL) == 6.0                                    # Spirit 6, not the own 2
     ob = _obstacle(w)
-    assert ob == 3.0, f"Spirit 6 halves to 3; read {ob}"                                   # not capped: the roller's pool is 7
+    assert ob == d + 3.0, f"Spirit 6 halves to 3, on the task's {d}; read {ob}"           # not capped: the roller's pool is 7
+    w.fixtures = w.fixtures.sweep("obstacle_model", "stand_in")
+    assert _obstacle(w) == 3.0                                                             # the control: the score halved alone
 
 
 def test_the_column_replaces_the_own_attribute_and_is_not_the_larger_of_the_two(monkeypatch):
@@ -82,8 +88,12 @@ def test_the_column_moves_the_opposition_and_not_the_pool(monkeypatch):
     before = sigma.faculty(w, w.persons[HOLDER], TELL)
     monkeypatch.setattr(pool, "VOCATION_OPPOSED_BY", {VOC: SPIRIT})
     assert sigma.faculty(w, w.persons[HOLDER], TELL) == before == 2                        # the pool is still the own
-    # a person holding the own attribute and no Spirit has nothing to oppose with: `None`, never the fallback
-    assert sigma._opposition_of(w, ROLLER, TELL) is None
+    # B11 lane A (rebased in B01.02): on the shipped `task` arm a person holding the own attribute and no Spirit opposes
+    # with `pool.score`'s fallback, `pool_default`, read on the OPPOSING attribute (so not his own 7); `None` (the
+    # module's stand-in) on the control arm. Was `is None` on every arm.
+    assert sigma._opposition_of(w, ROLLER, TELL) == float(w.fixtures.get("pool_default"))
+    w.fixtures = w.fixtures.sweep("obstacle_model", "stand_in")
+    assert sigma._opposition_of(w, ROLLER, TELL) is None                                   # the control: never the fallback
 
 
 def test_the_planted_failure_the_column_ignored_reads_two_with_the_row_present(monkeypatch):

@@ -2954,7 +2954,13 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # items together (CR-27 `lie`, CP-T05-02, CP-T05-03 and CR-56; CR-55, CR-34 and CR-31 are recorded EQUAL inside one season; the batch's commits name each item's own
     # reading) move the act mix (seed 0, one season: 755 -> 749 shipped, 753 -> 747
     # in the control arm; `test_go07_canonical_digest.py` records the 749). The arms still part by two acts.
-    assert (out["acts"], cout["acts"]) == (749, 747), (
+    # ⚠⚠ B11 lane A, both commits rebased (re-pinned once in B01.02): (749, 747) -> (792, 792), A RE-RECORD WITH THE UNITS THAT
+    # MOVED IT: `challenge` forms on a grievance beside its holder and `accept` on a challenge heard, the dead-end formations
+    # stop, and every person holds a score and a social roll is thrown at the task's difficulty plus it, so the act mix moves
+    # (seed 0, one season; `test_go07_canonical_digest.py` records the 792); the arms no longer part by count, which the
+    # assertions below (the act sequences, the ledgers) still read. CONTROL: `test_b11a_scores_and_obstacle.py::revert_b11a_scores`
+    # and `test_b11a_duel_reach.py::revert_b11a` read the base's one-season hashes (`test_b11a_duel_reach.PRE`).
+    assert (out["acts"], cout["acts"]) == (792, 792), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")

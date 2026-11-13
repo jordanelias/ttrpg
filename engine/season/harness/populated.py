@@ -73,7 +73,7 @@ from ..queries.world_q import (HUNGER_KIND, RESIDE_KIND, WORKS_KIND, ancestry, c
                                 enclosing_territory, home_of as home_of_q, hunger, members, subsistence_draw, uncontrolled)
 from ..gaps import Forbidden, Unspecified
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
-from ..data.rosters import (BODY_FACTION, FACTIONS, FOREIGN_CAST, FOREIGN_SEATS, OFFICES_BY_HOLDER,
+from ..data.rosters import (BODY_FACTION, FACTIONS, FOREIGN_CAST, FOREIGN_SEATS, OFFICES_BY_HOLDER, UNAUTHORED_ATTRIBUTES,
                             OFFICES_SEATS, ROLE_TEMPLATE_OF, RUNG_KINDS, authored_remit,
                             faction_prop_id, load_yaml, refuse_a_titled_post_off_its_rung,
                             remit_or_default, territory_id_of, territory_rung_id, title_domain)
@@ -1013,11 +1013,14 @@ def seed_arms(w: World, seeds: dict | None = None) -> int:
 
 def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
                 goals: bool = True, goals_complete: bool = True, foreign: bool = True,
-                guards: bool = False, acquaintances: bool = True, cast_attributes: bool = False) -> World:
+                guards: bool = False, acquaintances: bool = True, cast_attributes: bool = True) -> World:
     """The whole map, its buildings, and one person per season loop.
 
     `cast_attributes` (v10 CR-20) reads each cast row's `stats:` into `Person.attributes`
-    (`data/cast.py::attributes_of`). `False` SHIPS, and is the CONTROL ARM: no person holds an attribute, so
+    (`data/cast.py::attributes_of`), over `rosters.yaml: unauthored_attributes` for every key a row does not author, and
+    seats that bundle on every other person (the cohorts included) last. ⚠ SINCE B11 LANE A `True` SHIPS (brief A step 3:
+    persons hold scores, so a person is opposed by the score he rolls and never by `obstacle_default`), a declared mover
+    of the build (every `Person` repr) and of every season. `False` is the CONTROL ARM of the earlier reading, kept: no person holds an attribute, so
     `faculty` falls to `pool_default` and the realm acts as it did before the carrier (only the `Person` repr
     moved). The registry authors ONE row's `stats:` (NPC-001: cognition, focus, endurance, and the whole social
     category as attunement, presence and grace at 3-4), and `True` is a MOVER by that one person (her pool on the
@@ -1353,7 +1356,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         # registry), set here and NEVER written in play. Absent where unauthored: `{}` is no key, and
         # `faculty` then falls to `pool_default`.
         if cast_attributes:
-            w.persons[pid].attributes = cast.attributes_of(cast.row(cid) or {})
+            w.persons[pid].attributes = {**UNAUTHORED_ATTRIBUTES, **cast.attributes_of(cast.row(cid) or {})}
         # v10 CR-30: DESCENT, from the same row's `heritage:`, set here and NEVER written in play. No fallback and
         # no draw: a row that states none leaves `None`, which `epistemic._term_marks` deposits as `()`.
         w.persons[pid].heritage = cast.heritage_of(cast.row(cid) or {})
@@ -1990,6 +1993,12 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     # v11 CP-T03-03: THE ARMS A RUNG IS BUILT HOLDING (`rosters.yaml: arms_at_build`), the very last write so the build
     # up to here is byte-identical to the realm without it. The shipped roster is empty (the inventory is Jordan's).
     seed_arms(w)
+    # B11 lane A: EVERY PERSON HOLDS A SCORE (`rosters.yaml: unauthored_attributes`): the cohorts, guards and foreign cast
+    # seated after the case loop take the bundle under anything they already hold. The very last write, after the
+    # arms, so the build up to here is the earlier one; `cast_attributes=False` writes nothing.
+    if cast_attributes:
+        for p in w.persons.values():
+            p.attributes = {**UNAUTHORED_ATTRIBUTES, **(p.attributes or {})}
     return w
 
 

@@ -1556,6 +1556,73 @@ rosters:
       fight:    "arms"
       accept:   "arms"
       capture:  "arms"
+      # B11 lane A (carrying `10_DICE_one_score_two_roles.md` C): three verbs the social roll deals, each on a vocation
+      # that already exists, so `VOCATIONS` and `train`'s candidate count do not grow. `interrogate` -> `inquiry` (the
+      # graded inquiries' key: questioning is inquiry under contest), `arrest` -> `arms` (laying hands on a man, the
+      # body's key), `determine` -> `argue` (a bench weighing a case). Before them each rolled `pool_default` for
+      # every person and opposed at the stand-in (H-312: `interrogate`'s odds did not move with any score). `lie` (v11
+      # CR-27's row, which landed after lane A's base) carries no row here and none is added by this lane: it pools and
+      # opposes at `pool_default`, as CR-27 shipped it. [ASSUMPTION; medium; Jordan to correct; revert: drop the three rows.]
+      interrogate: "inquiry"
+      arrest:      "arms"
+      determine:   "argue"
+
+  unauthored_attributes:
+    source: >-
+      B11 lane A (Jordan, 2026-11-12: *"social contest ob always 2 is so wrong"*; brief A step 3: persons hold scores).
+    note: >-
+      WHAT A PERSON HOLDS ON AN ATTRIBUTE HIS CAST ROW DOES NOT AUTHOR -- one whole number per registry key
+      (`references/descriptor_registry.yaml: attributes`, the ten), closed both ways and refused at import otherwise
+      (`data/rosters.py::_load_unauthored_attributes`). `harness/populated.py::build_realm` seats it under every person's
+      authored `stats:` (`cast_attributes`, which ships ON since this row), so every person holds a score on every
+      vocation's attribute and is opposed by it (`seam/wrappers/sigma.py::_opposition_of`), never by a stand-in.
+      SHIPPED AT 2 ON EVERY KEY, which is `pool_default` (H-126): an unauthored person's pool is what it was, and the
+      score he opposes with is the one he rolls (`10_DICE_one_score_two_roles.md`). It is not a description of anyone:
+      the values are Jordan's content, and a lifepath or a draw over them is a design not taken here. [ASSUMPTION;
+      medium; Jordan to correct; revert: `build_realm(cast_attributes=False)`.]
+    values:
+      attr.body.strength:      2
+      attr.body.endurance:     2
+      attr.body.agility:       2
+      attr.mind.focus:         2
+      attr.mind.acuity:        2
+      attr.mind.will:          2
+      attr.mind.perception:    2
+      attr.social.attunement:  2
+      attr.social.charisma:    2
+      attr.social.grace:       2
+
+  task_difficulty:
+    source: >-
+      B11 lane A (Jordan, 2026-11-12, relayed: *"social contest obstacle is defined by the difficulty of the task and all
+      associated modifiers"*; RULED 2026-08-14, `dice_engine.degree_from_net`'s docstring: an opposed obstacle is *"their
+      corresponding score/2 plus whatever specific modifiers exist for them in that instance"*).
+    note: >-
+      THE DIFFICULTY OF EACH TASK THE SOCIAL ROLL DEALS -- `verb: number`, the obstacle's first term before any
+      modifier. `modules/social_contest/roll.py::obstacle_terms` composes Ob = difficulty + the opposing person's
+      `score / 2` (the ruled term, kept as one modifier, unchanged) - the room's terms (`reception`, `proofs`) +
+      an examined document's `forgery_quality`, under the ceiling (H-213), and names every term on the roll's
+      record (`seam/wrappers/sigma.py::resolve`, `ob_terms`). WHERE THE RULING AND THIS MEET: for a person opponent
+      the ruled form is the score term plus the instance's modifiers, and the task's difficulty is one of those
+      modifiers; at difficulty 0 the obstacle is the ruled form exactly. CLOSED: a row for every verb the social
+      roll deals (a `contests:` prize the `social_contest` provider resolves, or a `graded_inquiries` route to it)
+      and for nothing else, refused at import (`data/verbs.py::_load_task_difficulty`) -- a task with no difficulty
+      is a loud gap, never `obstacle_default`. THE SHIPPED VALUES ARE A CALIBRATION, NOT A DESIGN: a contest against a
+      person is 1.0, so an opponent at the shipped score (2) composes 2.0, the realm's obstacle before this row; an
+      inquiry, which no person opposes, is 2.0, its obstacle before this row (`obstacle_default`). The
+      differences between tasks (a lie against a truth, an arrest against an argument) are Jordan's to author.
+      [ASSUMPTION; medium; Jordan to correct; revert: `Fixtures obstacle_model: stand_in`, the control arm.]
+    values:
+      tell:        1.0
+      lie:         1.0      # v11 CR-27's row (a `tell` saying a false value), dealt by the roll on this tree: a person contest, `tell`'s calibration
+      argue:       1.0
+      speak:       1.0
+      arrest:      1.0
+      determine:   1.0
+      interrogate: 1.0
+      examine:     2.0
+      research:    2.0
+      surveil:     2.0
 
   vocation_attribute:
     source: >-

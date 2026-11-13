@@ -1920,6 +1920,42 @@ def _load_opposed_without_prize(values) -> frozenset:
 
 OPPOSED_WITHOUT_PRIZE = _load_opposed_without_prize(roster("opposed_without_prize"))
 
+#: The provider name the social roll's prize rows and inquiry routes carry (`rosters.yaml: contest_subsystems`,
+#: `graded_inquiries`; `seam/wrappers/sigma.py::_PROVIDER`).
+SOCIAL_ROLL_PROVIDER = "social_contest"
+
+
+def social_roll_verbs() -> frozenset:
+    """THE VERBS THE SOCIAL ROLL DEALS: a row whose `contests:` prize the `social_contest` provider resolves
+    (`rosters.yaml: contest_subsystems`), and a `graded_inquiries` route to it. Read off the rows and the two
+    rosters, no verb named."""
+    from .rosters import GRADED_INQUIRIES
+    prizes = roster_map("contest_subsystems", "prizes")
+    contested = {v for v, r in VERB_TABLE.items()
+                 if r.contests and (prizes.get(r.contests) or {}).get("provider") == SOCIAL_ROLL_PROVIDER}
+    inquired = {v for v, g in GRADED_INQUIRIES.items() if (g or {}).get("provider") == SOCIAL_ROLL_PROVIDER}
+    return frozenset(contested | inquired)
+
+
+def _load_task_difficulty(values: dict) -> dict:
+    """`rosters.yaml: task_difficulty` (B11 lane A), CLOSED BOTH WAYS against `social_roll_verbs()`: a task the roll
+    deals with no difficulty is a loud gap (no `obstacle_default` behind it), and a row for a verb the roll never
+    deals would read as live. Each value a number >= 0."""
+    out = {str(k): v for k, v in (values or {}).items()}
+    rolled = social_roll_verbs()
+    missing, extra = sorted(rolled - set(out)), sorted(set(out) - rolled)
+    bad = sorted(k for k, v in out.items() if isinstance(v, bool) or not isinstance(v, (int, float)) or v < 0)
+    if missing or extra or bad:
+        raise Forbidden(
+            f"`rosters.yaml: task_difficulty` is not closed over the social roll's verbs: no row for {missing}, a "
+            f"row for a verb it never deals {extra}, a value that is no number >= 0 {bad}", "rosters.yaml",
+            needs="exactly one difficulty per verb the social roll deals",
+            law="B11 lane A -- an obstacle is the task's difficulty and its modifiers; no task rolls on a stand-in")
+    return {k: float(v) for k, v in out.items()}
+
+
+TASK_DIFFICULTY = _load_task_difficulty(roster_map("task_difficulty", "values"))
+
 
 def _derive_rung_remit_acts() -> frozenset:
     """v9 IN-49 `requisition` (H-163 limit 3, [ASSUMPTION; medium; Jordan to correct]): THE REMIT ACTS A

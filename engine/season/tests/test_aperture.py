@@ -503,7 +503,8 @@ def _wk_world():
     from .test_in45_carry import DUKE, PARTY, SEAT, _filed
     from .test_u7_remit import JUDGE
     from ..data.fixtures import DEFAULT_FIXTURES
-    w, d = _filed(DEFAULT_FIXTURES.sweep("pool_default", JUDGE["pool_default"]))
+    w, d = _filed(DEFAULT_FIXTURES.sweep("pool_default", JUDGE["pool_default"])
+                   .sweep("obstacle_model", JUDGE["obstacle_model"]))   # B11 lane A: `JUDGE`'s control obstacle
     cast = frozenset(w.persons)
     for key, verb, who, payload in (
             ("a_wk_restore_person", "restore", DUKE, {"subject": PARTY, "site": PARTY}),
@@ -749,4 +750,6 @@ def test_cr18_the_pools_line_reads_the_rolled_pool_and_separates_persons_not_sea
     assert "no pooled roll" in "\n".join(A.pools_lines({"pools": {}}))
     assert realm["pools"], "the fold's records never reached the pools reader"
     default = populated.build_realm(0).fixtures.get("pool_default")
-    assert {p for per in realm["pools"].values() for c in per.values() for _, p in c} == {default}
+    # B11 lane A: `cast_attributes` ships on, so NPC-001's authored Reason (5) is her `inquiry` pool and the realm's rolls
+    # read two pools in season one (was `{default}` alone); every unauthored person holds the bundle at `pool_default`.
+    assert {p for per in realm["pools"].values() for c in per.values() for _, p in c} == {default, 5}

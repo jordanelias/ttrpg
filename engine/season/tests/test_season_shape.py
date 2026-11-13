@@ -6968,7 +6968,14 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     # v11 CP-T03-08 (B10-11): (15, 13) -> (16, 14), A RE-RECORD WITH THE UNIT THAT MOVED IT: `tend` forms only on a `Person`-classed
     # referent and `wounded_with` stamps a man below his ceiling for himself, so the act mix moves. `depths[6]` still does NOT exceed
     # `depths[3]` (14 against 16). CONTROL: `test_cp_t03_08_tend_on_the_wounded.py::revert_cp_t03_08` applied for the session (in process) reads the old value and passes.
-    assert (depths[3], depths[6]) == (16, 14), (
+    # B11 lane A, both commits rebased (re-pinned once in B01.02): (16, 14) -> (11, 12), A RE-RECORD WITH THE UNITS THAT MOVED IT: the dead-end formations stop (`challenge` off its
+    # plain referents, the Record sub-kind rule) and the act mix moves. `depths[6]` EXCEEDS `depths[3]` by one: lane A's walk
+    # on its branch tree (`headless.build_world(0)`, seven seasons, `none`) read the same pair and found at 3 `term.matured x3
+    # -> record.created -> record.created -> finding.made -> record.created -> term.matured -> record.created -> train.refused
+    # -> exchange.refused` (11) and at 6 the same chain with one more `term.matured` at its head (12): a STAGE link on an
+    # otherwise identical chain, neither through `proposition.uttered` [the walk was not re-run on this tree; the pair is equal].
+    # CONTROL: `test_b11a_scores_and_obstacle.py::revert_b11a_scores` with `test_b11a_duel_reach.py::revert_b11a`, applied for the session (in process), reads the old value.
+    assert (depths[3], depths[6]) == (11, 12), (
         f"the maturation depth ceiling moved: {depths}. This is a MEASUREMENT of a mixed chain "
         "whose length the act mix sets, not a discriminator — `H-80`'s discriminator is the COUNT, "
         "asserted below and still live. Re-pin these two numbers with the unit that moved them. "
@@ -8161,8 +8168,12 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # cell, a false value on a held cell claim) forms wherever `tell` does and executes in the corpus. READ OFF the failing assertion's
     # printed set on the batch-final tree (the batch-open tree reads the 22 and passes) [the worlds were not walked one by one; the
     # control, `lie_offered` False, was not run here].
-    assert ever == {"argue", "capture", "carry", "challenge", "commit", "conceal", "create_record", "interview",
-                    "fight", "give", "issue", "lie", "move", "petition", "reconstruct", "release",
+    # ⚠⚠ B11 lane A, both commits rebased (re-pinned once in B01.02), 23 -> 25: `accept` AND `oblige` JOIN, nothing leaves. A RE-RECORD WITH THE UNITS THAT MOVED IT: the
+    # challenged reads a challenge put to him and forms `accept` on it against its challenger, so a duel is fought in the corpus by
+    # the persons' own acts; the dead-end formations stop and the act mix moves (`oblige`) [the worlds were not walked one by one].
+    # MEASURED: this test's own set, read with every assertion non-fatal (scratch, not kept). CONTROL: `test_b11a_scores_and_obstacle.py::revert_b11a_scores` with `test_b11a_duel_reach.py::revert_b11a`, applied for the session (in process), reads the old value.
+    assert ever == {"accept", "argue", "capture", "carry", "challenge", "commit", "conceal", "create_record", "interview",
+                    "fight", "give", "issue", "lie", "move", "oblige", "petition", "reconstruct", "release",
                     "research", "speak", "surveil", "tell", "tend", "transfer", "utter"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
         "must be re-measured rather than reused")
@@ -8415,9 +8426,11 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # ⚠⚠ v11 CP-T03-08 (B10-11), 15 -> 13: `tend` LEAVES, into `ever` (it executes: a man below his ceiling tends himself), and
     # `seize` LEAVES (no longer attempted in the pass: the act mix the class moves). MEASURED: the failing assertion's printed set.
     # CONTROL: `test_cp_t03_08_tend_on_the_wounded.py::revert_cp_t03_08` applied for the session (in process) reads the old set and passes.
-    assert refused_only == {"accept", "build", "found", "survey",
-                            "forge", "sabotage", "train", "covenant",
-                            "comply", "evade / defy", "construe", "exchange", "determine"}, (
+    # ⚠⚠ B11 lane A, both commits rebased (re-pinned once in B01.02), 13 -> 6: `accept` LEAVES into `ever` (a challenge heard is accepted against its challenger); `build`,
+    # `found`, `comply`, `evade / defy` AND `construe` LEAVE, no longer attempted (each formed on a Record its person held no reading
+    # of as its kind and was refused at `exists:<kind>`, the dead end the reach's sub-kind rule removes); `determine` LEAVES,
+    # attempted in no world now (the act mix moved with the obstacle by task) and joins the never-attempted set below. CONTROL: `test_b11a_scores_and_obstacle.py::revert_b11a_scores` with `test_b11a_duel_reach.py::revert_b11a`, applied for the session (in process), reads the old value.
+    assert refused_only == {"survey", "forge", "sabotage", "train", "covenant", "exchange"}, (
         f"the always-refused set moved to {sorted(refused_only)}. `move` and `transfer` left it "
         "when `W-C` closed `H-94`'s structural half — the Candidate carries operands now — and "
         "`work` stays for a reason about the corpus's questions rather than about the channel")
@@ -9196,7 +9209,11 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # `tell` 62 -> 60, `reconstruct` 111 -> 110; every other verb's count is unmoved. THE SAME-BREATH CHECK: the universal set is EMPTY on
     # both sides (the largest executed-world count is `create_record`'s 129 of 143), `ever` is the same 23 verbs on both and `varying` is
     # that 23. Not a ranking change: `H-96` is untouched. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-    assert len(by_sig) == 136, (
+    # ⚠⚠ **136 -> 140, B11 lane A, both commits rebased (re-pinned once in B01.02)**, MEASURED BY THIS TEST'S OWN `by_sig`: the duel pair is reached by the persons' own acts
+    # (`accept` and `oblige` join `ever`) and the dead-end formations stop, so four more live worlds behave distinctly. Variety
+    # rises; the universal set is read in the same run by the assertions below. Not a ranking change: `H-96` is untouched. A GOLDEN
+    # RE-RECORDED, NOT A BALANCE CLAIM. CONTROL: `test_b11a_scores_and_obstacle.py::revert_b11a_scores` with `test_b11a_duel_reach.py::revert_b11a`, applied for the session (in process), reads the old value (136).
+    assert len(by_sig) == 140, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -9422,8 +9439,10 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # above). The reason and its control are at the `by_sig` note.
     # ⚠⚠ v11 B10-13 pin commit (P15, CR-27): `lie` JOINS `varying` (22 -> 23) with `ever`: it executes in some live worlds and not in all
     # 143, so the universal set is unmoved. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-    assert varying == {"argue", "capture", "carry", "challenge", "commit", "conceal", "create_record", "fight", "give",
-                       "interview", "issue", "lie", "move",
+    # ⚠⚠ B11 lane A, both commits rebased (re-pinned once in B01.02): `accept` AND `oblige` JOIN (23 -> 25) with `ever`; the universal set is unmoved (empty, asserted above).
+    # The reason and its control are at the `ever` note.
+    assert varying == {"accept", "argue", "capture", "carry", "challenge", "commit", "conceal", "create_record", "fight", "give",
+                       "interview", "issue", "lie", "move", "oblige",
                        "petition", "reconstruct", "release", "research",
                        "speak", "surveil", "tell", "tend", "transfer", "utter"}, (
         sorted(varying))
@@ -9492,7 +9511,11 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # of the two explanations the message below names is current was NOT isolated [ASSUMPTION; low: a scene `accept` no longer takes is
     # one the one-season case can spend on `tell`; the intra-season channel is untouched]. CONTROL: the base tree (`95f58adb`'s
     # `engine/season`) reads 2 and passes.
-    assert min(hi) == 1, (
+    # ⚠⚠ B11 lane A, both commits rebased (re-pinned once in B01.02): `min(hi)` 1 -> 2, READ OFF this test's own `hi` on this tree: no one-season case reaches `tell` now, by the
+    # act mix the lane moves (`challenge` and `accept` take scenes where a grievance stands; the dead-end formations stop). WHICH
+    # of the two explanations the message below names is current was NOT isolated [ASSUMPTION; low: crowding by the newly
+    # reachable duel pair; the intra-season channel is untouched]. CONTROL: `test_b11a_scores_and_obstacle.py::revert_b11a_scores` with `test_b11a_duel_reach.py::revert_b11a`, applied for the session (in process), reads the old value (1).
+    assert min(hi) == 2, (
         f"the shortest case reaching `tell` runs {min(hi)} seasons. 1 is the INTRA-SEASON channel "
         "`U2` built (a claim deposited by an earlier ROUND of the SAME season) being the binding "
         "constraint, as measured at IN-08's cells commit; a 2 means scene-budget crowding (`7a`'s) "
@@ -9711,7 +9734,10 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # and refused (`refused_only`), and `oblige` (executed in 6 worlds at the revert) is attempted in none.
     # ⚠⚠ v11 B10-11 pin commit (P15): `seize` JOINS the never-attempted set (it left `refused_only` under CP-T03-08 and is attempted in none of
     # the 143 worlds). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM [UNVERIFIED: the worlds were not walked one by one].
-    assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish", "oblige",
+    # ⚠⚠ B11 lane A, both commits rebased (re-pinned once in B01.02): `oblige` LEAVES (it executes, `ever`); `build`, `found`, `comply`, `construe` AND `evade / defy` JOIN from
+    # `refused_only` (no longer attempted: the Record sub-kind rule), and `determine` JOINS from it (the obstacle by task). CONTROL: `test_b11a_scores_and_obstacle.py::revert_b11a_scores` with `test_b11a_duel_reach.py::revert_b11a`, applied for the session (in process), reads the old value.
+    assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish", "determine",
+                                              "build", "found", "comply", "construe", "evade / defy",
                                               "destroy_record", "march", "open_case",
                                               "migrate", "requisition",
                                               "forgive", "interrogate", "succeed",
@@ -9914,7 +9940,7 @@ def test_k1_authored_endurance_is_the_base_the_body_band_penalty_comes_off():
 
 def test_k1_control_an_all_absent_realm_builds_the_record_it_always_built(monkeypatch):
     """CONTROL: no authored attribute -> `attributes` stays the default `()` and building the input moves no
-    `content_hash` (`build_realm(0)` ships `cast_attributes` OFF: nobody is authored). A record with attributes authored
+    `content_hash` (`build_realm(0, cast_attributes=False)`: nobody is authored; the arm shipped until B11 lane A). A record with attributes authored
     only on keys the module has no field for (a social one) is fought exactly as the no-attribute record is, which
     exercises the key filter; the fight itself differs from the pre-batch fight (PC-20 (1)'s head weighting moves a default
     fighter's blows; PC-18 (1) is equal at the defaults), so this control compares attributes against attributes, not against the old tree."""
@@ -9922,8 +9948,10 @@ def test_k1_control_an_all_absent_realm_builds_the_record_it_always_built(monkey
     from ..seam.wrappers import combat as C
     from ..seam.wrappers._entry import entry_for
     import random
-    realm = build_realm(0)
-    assert not any(p.attributes for p in realm.persons.values()), "the shipped realm authors an attribute"
+    # B11 lane A (rebased in B01.02): `cast_attributes` SHIPS ON (`unauthored_attributes` seated on every person), so the
+    # all-absent realm this control is about is the arm built with it OFF -- the control's subject, not the shipped default.
+    realm = build_realm(0, cast_attributes=False)
+    assert not any(p.attributes for p in realm.persons.values()), "the all-absent arm authors an attribute"
     w = P.tiny_world()
     before = w.content_hash()
     inp = C.combat_input(w, ["p_low", "p_mid"], "fight")
@@ -11119,8 +11147,10 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # eligible wherever `tell` is and executes in the corpus. A RE-RECORD WITH ITS REASON (READ OFF the failing assertion's printed
     # set on the batch-final tree; the batch-open tree reads the 22 and passes). CONTROL: `lie_offered` False (the swept control,
     # H-357) withholds the row from `opening_set` [UNVERIFIED: that this set reads the old 22 at the control was not run here].
-    assert set(executed) == {"argue", "capture", "carry", "challenge", "commit", "conceal", "create_record",
-                             "interview", "fight", "give", "issue", "lie",
+    # ⚠⚠ B11 lane A, both commits rebased (re-pinned once in B01.02): `accept` AND `oblige` JOIN (23 -> 25), nothing leaves -- the reason and its control are at the corpus
+    # test's `ever` note.
+    assert set(executed) == {"accept", "argue", "capture", "carry", "challenge", "commit", "conceal", "create_record",
+                             "interview", "fight", "give", "issue", "lie", "oblige",
                              "move", "petition", "reconstruct", "release", "research",
                              "speak", "surveil", "tell", "tend", "transfer", "utter"}, (
         f"the executed set is {sorted(executed)} -- 4 -> 6 was `W-C`'s measurement, 6 -> 10 is "
@@ -11273,11 +11303,9 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # CONTROL: the base tree (`95f58adb`'s `engine/season`) passes the old set.
     # ⚠⚠ v11 CP-T03-08 (B10-11), 13 -> 11: `tend` LEAVES (it executes, the executed set above) and `seize` LEAVES (no longer
     # attempted in this pass). MEASURED: the failing assertion's printed set. CONTROL: `test_cp_t03_08_tend_on_the_wounded.py::revert_cp_t03_08` applied for the session (in process) reads the old set and passes.
-    assert set(refused) - set(executed) == {"found",
-                                            "build", "survey",
-                                            "forge", "covenant",
-                                            "sabotage", "train", "comply",
-                                            "evade / defy", "construe", "exchange"}, (   # v11 CR-87: `tend` JOINS (it left `executed`, above). The old value is the parent tree's pin (the base tree passes it, read in a scratch export of `d2847e7b`); `revert_cr87` was NOT run against it.
+    # ⚠⚠ B11 lane A, both commits rebased (re-pinned once in B01.02), 11 -> 6: `found`, `build`, `comply`, `evade / defy` AND `construe` LEAVE (no longer attempted: the Record
+    # sub-kind rule) -- the reason and its control are at the corpus test's always-refused note.
+    assert set(refused) - set(executed) == {"survey", "forge", "covenant", "sabotage", "train", "exchange"}, (   # v11 CR-87: `tend` JOINS (it left `executed`, above). The old value is the parent tree's pin (the base tree passes it, read in a scratch export of `d2847e7b`); `revert_cr87` was NOT run against it.
         f"the always-refused set is {sorted(set(refused) - set(executed))}. `work` refuses because "
         "its `site` operand binds either to a non-Site referent (UNKNOWN) or to a real site whose "
         "condition never clears the floor in this corpus; `dispatch` WAS refused only in NPC-033's five-seat "
@@ -12721,17 +12749,22 @@ def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_d
     # `("rec:30a013a313fa2ee0", ...)` and `("rec:18e62b2eb9661f52", ...)` (`exists:dispensation`, 0) are out; `("hearth_ostvik",
     # "exists:Rung", 1)` once more and `("hearth_ostvik", "present_at:p_carin", True)` are in. The property this pin is for holds:
     # 11 grammar claims were ever deposited and all 11 are held at the end, none evicted.
+    # B11 lane A, both commits rebased (re-pinned once in B01.02): 11 -> 9 entries, A RE-RECORD WITH THE UNITS THAT MOVED IT, read off this test's own output: the dead-end
+    # formations stop (`comply`, `construe`, `evade / defy` off a Record the person holds no reading of as a dispensation;
+    # `challenge` off a plain referent), so the `actor` arm's act mix moved. Against the 11: both `exists:dispensation` reads, both
+    # `exists:Rung` and both `present_at:` reads and the old `exists:Proposition` are out; an `exists:Record` = 1 read, an
+    # `exists:petition` = 0 read (a `carry` refused on a held Record that is no petition), `("p_carin", "exists:Person", 1)` and two
+    # `exists:Proposition` = 1 reads on a new Proposition are in. The property this pin is for holds: every grammar claim is held
+    # at the end and none evicted. CONTROL: `test_b11a_scores_and_obstacle.py::revert_b11a_scores` with `test_b11a_duel_reach.py::revert_b11a`, applied for the session (in process), reads the old value.
     assert actor_end == [("hearth_ostvik", "stores:grain", 0),
                          ("hearth_ostvik", "exists:Person", 0),
-                         ("rec:2dd19669944564b8", "exists:dispensation", 0),
-                         ("hearth_ostvik", "exists:Rung", 1),
-                         ("hearth_ostvik", "present_at:p_carin", True),
+                         ("prop:a1b7e22481160c2e", "exists:Proposition", 1),
+                         ("rec:2dd19669944564b8", "exists:Record", 1),
+                         ("rec:54de920f22e47ce4", "exists:petition", 0),
                          ("hearth_ostvik", "exists:Person", 0),
                          ("hearth_ostvik", "stores:grain", 0),
-                         ("hearth_ostvik", "exists:Rung", 1),
-                         ("hearth_ostvik", "present_at:p_bailiff", True),
-                         ("prop:d41db7f3b4285af3", "exists:Proposition", 1),
-                         ("rec:2dd19669944564b8", "exists:dispensation", 0)], (
+                         ("p_carin", "exists:Person", 1),
+                         ("prop:a1b7e22481160c2e", "exists:Proposition", 1)], (
         f"the `actor` arm's end-of-run grammar claims are {actor_end}, not the single surviving "
         "`stores:grain` read. Empty would mean the cap is evicting again — i.e. the fan-out "
         "default moved back toward `total`, or a new deposit channel opened — and every `H-40` / "
@@ -13305,9 +13338,11 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # ⚠⚠ NINE -> EIGHT, v11 CP-T03-08 (B10-11): `tend` LEAVES, nothing joins. It forms only on a `Person`-classed referent now (a
     # wounded man `wounded_with` stamps, or a person the question itself names), and the headless run's drops were on the plain
     # `hearth_ostvik`, no person. CONTROL: `test_cp_t03_08_tend_on_the_wounded.py::revert_cp_t03_08` applied for the session (in process) reads the old value and passes.
-    assert {v for v, _ in hl_live} == {"challenge", "comply", "construe", "evade / defy", "exchange",
-                                       "interview",
-                                       "train", "transfer"}, (
+    # ⚠⚠ EIGHT -> FIVE, B11 lane A, both commits rebased (re-pinned once in B01.02): `challenge`, `comply`, `construe` AND `evade / defy` LEAVE, `carry` JOINS (it forms only on
+    # a Record he holds now, `own_hold_declines`, and drops on the `exists:petition` belief a refusal on a held non-petition
+    # deposited). `challenge` forms only on a `Disputant`, which the headless run holds none of; the three Record rows form only
+    # on a document the person's own reading says is a dispensation. CONTROL: `test_b11a_scores_and_obstacle.py::revert_b11a_scores` with `test_b11a_duel_reach.py::revert_b11a`, applied for the session (in process), reads the old value.
+    assert {v for v, _ in hl_live} == {"carry", "exchange", "interview", "train", "transfer"}, (
         f"the headless drops are on {sorted({v for v, _ in hl_live})}. `examine`/`restore`/"
         "`interview`/`fight`/`research` are the `exists:` and `existence:`-cell drops the "
         "investigation and combat acts open, and `restore` is the one worth naming on its own: it "
@@ -13588,8 +13623,10 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # movers change together (CP-T03-02's ending and Observation, CR-85, CP-T03-04's `train` Candidate, CP-T03-07's ceiling and
     # CP-T03-08's `tend` formation). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM: no single item was read for it. The clause still fires.
     # The batch-open tree (`83c3d0b8`) reads 19 and passes.
-    assert len(dropped) == 18, (
-        f"{len(dropped)} executable clause-4 drops, not 18. The drops are the channel itself; if "
+    # B11 lane A, both commits rebased (re-pinned once in B01.02): 18 -> 19, read off this test's own `dropped` on this tree, by the act mix the lane moves (the dead-end
+    # formations stop, so the scenes go to other verbs). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM. The clause still fires. CONTROL: `test_b11a_scores_and_obstacle.py::revert_b11a_scores` with `test_b11a_duel_reach.py::revert_b11a`, applied for the session (in process), reads the old value.
+    assert len(dropped) == 19, (
+        f"{len(dropped)} executable clause-4 drops, not 19. The drops are the channel itself; if "
         "this falls toward zero the clause has stopped firing, which is a different and worse "
         "failure than the loss of outcome-relevance recorded above.")
     # ⚠⚠⚠ **THE BITE CAME BACK UNDER G1a, THE GUARD ABOVE DEMANDED A REASON, AND THE REASON IS
@@ -13731,7 +13768,10 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # referents), so the pair is no longer dropped by clause 4 on this tree. The counterfactual above already read it as a fold-order
     # artifact of the act mix, not a grounded denial, so its leaving is the same artifact moving. A GOLDEN RE-RECORDED, NOT A BALANCE
     # CLAIM [UNVERIFIED: the pair was not walked on the batch-open tree or by counterfactual at this reading].
-    assert bit == {("exchange", "hearth_ostvik")}, (
+    # B11 lane A, both commits rebased (re-pinned once in B01.02): `('exchange', 'hearth_ostvik')` LEAVES and `('transfer', 'rec:6bf46a143f347c12')` JOINS the bite -- the
+    # dead-end formations stop, so the act mix moves. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM [UNVERIFIED: not walked by
+    # counterfactual, P15's precedent]. CONTROL: `test_b11a_scores_and_obstacle.py::revert_b11a_scores` with `test_b11a_duel_reach.py::revert_b11a`, applied for the session (in process), reads the old value.
+    assert bit == {("transfer", "rec:6bf46a143f347c12")}, (
         f"the clause-4 bite is {sorted(bit)}, not the two `rec:6bf4…` pairs measured at CR-10 (EMPTY at REM-2C, the two `transfer` pairs pinned at "
         "REM-22 before it). A "
         "pair beyond those would be a NEW acceptance-chain pair and should be named and grounded "
@@ -13779,8 +13819,9 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # PC-10b's unverified grounding for it. CONTROL: `revert_cr87` reads PC-10b's four triples.
     # v11 B10-11 pin commit (P15): `('p_bailiff', 'tend', 'hearth_ostvik')` LEAVES with the pair-grain `('tend', 'hearth_ostvik')` above
     # (CP-T03-08 changes who forms `tend`). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM [UNVERIFIED: not walked by counterfactual].
-    assert bite_who == {("p_carin", "exchange", "hearth_ostvik"),
-                        ("p_bailiff", "exchange", "hearth_ostvik")}, (
+    # B11 lane A, both commits rebased (re-pinned once in B01.02): the person-grain bite is `p_carin`'s `transfer` on `rec:6bf46a143f347c12` alone; both `exchange` triples on the
+    # hearth LEAVE. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM [UNVERIFIED: not walked by counterfactual]. CONTROL: `test_b11a_scores_and_obstacle.py::revert_b11a_scores` with `test_b11a_duel_reach.py::revert_b11a`, applied for the session (in process), reads the old value.
+    assert bite_who == {("p_carin", "transfer", "rec:6bf46a143f347c12")}, (
         f"the person-grain clause-4 bite is {sorted(bite_who)}, not `p_carin`'s `exchange` on her hearth (CR-17; `transfer` and `exchange` on `rec:6bf46a143f347c12` at CR-10). "
         "Ground any change as the note above does -- disable clause 4 for the new triple's pair alone and see whether "
         "the shipped arm's person then takes it -- before re-pinning")
@@ -14049,9 +14090,11 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # on the batch-final tree (the batch-open tree reads the 11 and passes); the per-verb drop counts were not re-measured and the
     # batch's items were not walked one by one [ASSUMPTION; low: the act mix the batch moves (`lie` joins the table; the self-plea)
     # took `accept` out of the shipped arm's deliberations that this corpus slice reads]. `tell` and `surveil` stay absent.
-    assert {v for v, _ in live} == {"build", "challenge", "comply", "construe", "evade / defy",
-                                    "found", "interview",
-                                    "sabotage", "speak", "train"}, (
+    # ⚠ B11 lane A, both commits rebased (re-pinned once in B01.02): 10 -> 2 verbs. `build`, `challenge`, `comply`, `construe`, `evade / defy` and `found` LEAVE -- each dropped
+    # here on a belief a refusal of its own dead-end formation had deposited, the formations the lane stops; `interview` and
+    # `train` leave with the act mix. `tell` and `surveil` stay absent. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM [UNVERIFIED: not
+    # walked by counterfactual]. CONTROL: `test_b11a_scores_and_obstacle.py::revert_b11a_scores` with `test_b11a_duel_reach.py::revert_b11a`, applied for the session (in process), reads the old value.
+    assert {v for v, _ in live} == {"sabotage", "speak"}, (
         f"the drops are on {sorted({v for v, _ in live})}. `tell` here means a "
         "`claim.held` claim is reaching a ledger again, which is the self-refuting belief "
         "`LEDGER_DERIVED_STEMS` excludes. `surveil` RETURNING means `tell`'s degree has stopped "

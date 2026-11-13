@@ -6564,6 +6564,19 @@ rows:
     cite:      "MEASURED @5b83de9, 2026-11-10, scratch probes not kept. (1) `pursuit_lean(verb, e)` for every verb in `VERB_TABLE` x every pursuit in `PURSUIT_PROJECTION` (67 x 15 = 1005 pairs) under PYTHONHASHSEED 0..9: the frozenset iteration order differed in every process, and the sha256 of all 1005 reprs, and of every `_pursuits_violated_by` verdict, was identical in all ten; the same 1005 sums computed in `_AXES` order matched the frozenset-order sums exactly (0 differ). (2) 443 of the 1005 sums are within 1e-9 of zero, 442 of them exactly 0.0 and one a residue of 2.8e-17; for each of the 443 the sum was recomputed under 2000 random axis orders (random.Random(0)): none varied, so no sign or zero verdict changed. (3) `headless --case NPC-088 --seasons 2 --seed 0` under PYTHONHASHSEED 0..7: content hash 5405522c36b0399247f83fd9f6d29494 in all eight. LIMIT: these are the shipped `ALIGNMENT` and `PURSUIT_PROJECTION` rows only, and `choose.score_terms` was measured through the season hash, not isolated per call; a swept or edited alignment table is outside this reading. The hazard is NAMED, with its reason, at `data/pursuits.py:137-139`, which says `person_q._lean` sorts for it; the two set-order sums were found by the efficiency pass of `jordanelias/ttrpg#599` (the lane that routed `_AXES` to one definition left them as it found them)."
     source:    "efficiency pass over `engine/season/` and `modules/` (`jordanelias/ttrpg#599`), lane D receipt, then measured; Jordan asked for the row 2026-11-10"
 
+  - id:        H-368
+    tier:      1
+    hole:      "HOW THE SOCIAL ROLL'S OBSTACLE IS COMPOSED (B11 lane A). Before: an opposed obstacle was the opponent's held score halved, else the H-127 stand-in `obstacle_default` (2.0) -- and no realm person held a score, so 564 of 568 realm rolls were the same pool-2-against-Ob-2 roll and the stand-in was worth a score of 4 while the same person rolled as a 2 (H-127's inversion). Jordan, 2026-11-12: *social contest ob always 2 is so wrong*; relayed the same day: *social contest obstacle is defined by the difficulty of the task and all associated modifiers*."
+    kind:      "RULING"
+    owner:     "`modules/social_contest/roll.py::obstacle_terms` (the composition, every term named); `engine/season/seam/wrappers/sigma.py::_opposition_of` (a person opposes with `pool.score`, read on the opposing attribute, v10 CR-96) and `_difficulty` (`rosters.yaml: task_difficulty`, closed over the verbs the roll deals, `data/verbs.py::_load_task_difficulty`)"
+    grade:     "assumption"
+    default:   "task -- Ob = the task's difficulty + the opposing person's score / 2 (the 2026-08-14 RULED term, kept as one modifier and unchanged) - the room's terms + an examined document's forgery quality, under the H-213 ceiling; every term on the roll's record (`ob_terms`). The difficulties ship as a calibration (a person-contest 1.0, so an opponent at the shipped score 2 composes the old 2.0; an inquiry 2.0, its old value), not a design [ASSUMPTION; medium; Jordan to correct; revert: `stand_in`]"
+    site:      "Fixtures obstacle_model, read by `engine/season/seam/wrappers/sigma.py::_opposition_of` and `::_difficulty`"
+    sweep:     ["stand_in (control, the revert: the composition before, byte for byte)", "task (SHIPPED)"]
+    unblocks:  "the difficulty of each task authored by Jordan (`rosters.yaml: task_difficulty`); the modifiers the engine knows and does not yet compose into the obstacle (stance or regard, cited evidence, stakes) -- SC-P8 and the SC lane's"
+    cite:      "B11 lane A commit; the readings are its body's (realm rolls by (pool, obstacle) over four seasons and three seeds, both arms)."
+    source:    "B11 lane A (proposals/2026-11-12-subsystem-audit-suite IMPLEMENTATION_BRIEF_A step 4, `10_DICE_one_score_two_roles.md`)"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"

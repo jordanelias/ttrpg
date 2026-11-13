@@ -670,6 +670,26 @@ def _load_vocation_opposed_by(opposed: dict, vocations) -> dict:
 VOCATION_OPPOSED_BY = _load_vocation_opposed_by(roster_map("vocation_attribute", "opposed_by"), VOCATIONS)
 
 
+def _load_unauthored_attributes(values: dict) -> dict:
+    """`rosters.yaml: unauthored_attributes` (B11 lane A), CLOSED BOTH WAYS against the ten registry keys, each a
+    whole number inside the attribute scale. Refused whole, naming the difference."""
+    from ...substrate.descriptors import ATTRIBUTE_CEILING, ATTRIBUTE_FLOOR, ATTRIBUTES
+    out = dict(values or {})
+    missing, extra = sorted(set(ATTRIBUTES) - set(out)), sorted(set(out) - set(ATTRIBUTES))
+    bad = sorted(k for k, v in out.items() if isinstance(v, bool) or not isinstance(v, int)
+                 or not ATTRIBUTE_FLOOR <= v <= ATTRIBUTE_CEILING)
+    if missing or extra or bad:
+        raise Unspecified(
+            f"`rosters.yaml: unauthored_attributes` is not closed over the ten attributes: no row for {missing}, a "
+            f"row for a non-attribute {extra}, a value outside the scale {bad}", "rosters.yaml",
+            needs="exactly one whole number per `attributes` registry key, inside the scale",
+            law="B11 lane A -- every person holds a score on every attribute; one bundle says what an unauthored one is")
+    return out
+
+
+UNAUTHORED_ATTRIBUTES = _load_unauthored_attributes(roster_map("unauthored_attributes", "values"))
+
+
 def _load_lifepath_templates(cells: dict, lifepaths, vocations) -> dict:
     """`rosters.yaml: tables: lifepath_templates`, CLOSED BOTH WAYS against `rosters: lifepaths` (v10 CR-33): a row
     for every lifepath and for nothing else, each `holds:` entry a `verb_capability` value (a vocation), each row

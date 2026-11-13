@@ -176,8 +176,18 @@ DUKE, SEAT, PARTY, WANT = "p_high", "off_duke", "p_mid", "prop_bar_duke_want"
 # runs each) found none; at 7 and 8 seasons (900 runs each) exactly one each, stability/35 (hashes 7214ae32... and 8dac56b0...). 7 is taken,
 # the first. The bar is an existence claim on SELECTED seeds (above), not a rate. [ASSUMPTION; medium; Jordan to correct; revert:
 # restore stability/95/6 if the rows commit is reverted.]
-PROCEEDINGS = (("stability", 35, 7),)
-BAR_FIXTURES = DEFAULT_FIXTURES.sweep("pool_default", 30)       # v9 SC-03b: a judge whose finding opens
+# B11 lane A (the duel chain's reach, rebased; re-pinned in B01.02): RE-TRACED AGAIN, stability/35/7 -> stability/95/7, the conviction
+# and season count unchanged -- the reach's formation changes (a `challenge` only on a grievance beside its holder, the Record sub-kind
+# rule, `carry`/`found`/`build` only on a held Record) moved the act mix of this three-person world: stability/35/7 now fires TWO
+# dates and determines nobody ("0 determined, 2 fired"). ATTRIBUTION, in process on this tree (scratch, not kept): with
+# `revert_b11a` and `revert_b11a_scores` applied stability/35/7 meets every assertion again (e5d27cd7...); with
+# `revert_b11a_scores` alone it misses as above, so the move is the reach's, not the obstacle's (this world is `tiny_world`,
+# which seats no `unauthored_attributes`, and `BAR_FIXTURES` reads the control obstacle). stability/95/7, lane A's own re-trace
+# (its sweep: the 15 convictions at 7 seasons, seed blocks 0-160, stopped at the first hit), meets every assertion on this tree
+# (858b7a77...) and on the batch base. The bar is an existence claim on SELECTED seeds (above), not a rate.
+# [ASSUMPTION; medium; Jordan to correct; revert: restore stability/35/7 with `revert_b11a`.]
+PROCEEDINGS = (("stability", 95, 7),)
+BAR_FIXTURES = DEFAULT_FIXTURES.sweep("pool_default", 30).sweep("obstacle_model", "stand_in")   # B11 lane A: `test_u7_remit.JUDGE`'s control obstacle, for its reason       # v9 SC-03b: a judge whose finding opens
 # v9 IN-12 step 9: RE-TRACED, the conviction and season count unchanged -- `argue`/`sabotage`/`tend`/`train`
 # are new members of the Duke's and the clerk's option sets, so doctrine/8's trajectory moved (it now fires
 # TWO dates). A sweep of the 15 convictions x seeds 0..23 at 5 seasons for a run meeting every assertion of
@@ -356,6 +366,8 @@ def test_the_walk_is_false_for_a_determination_the_ambition_raised_beside_a_fire
     the walk's falsity; the bar's walk is still checked true on `PROCEEDINGS`.]"""
     from .test_b11a_duel_reach import revert_b11a
     revert_b11a(monkeypatch)
+    from .test_b11a_scores_and_obstacle import revert_b11a_scores
+    revert_b11a_scores(monkeypatch)   # B11 lane A (persons hold scores; the obstacle by task: a mover of the build and every season), the same way
     conviction, seed, seasons = CONTROL
     w, d, chosen = _run(conviction, seed, seasons)
     _zero_authored(w, chosen)

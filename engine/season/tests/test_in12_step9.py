@@ -466,8 +466,10 @@ def test_a_pupil_whose_vocation_reads_argue_or_inquiry_is_trained_and_faculty_fo
     assert w.persons[pupil].capability == {"argue": 3, "inquiry": 4}
     p = w.persons[pupil]
     inquiries = [v for v, k in VERB_CAPABILITY.items() if k == "inquiry"]
-    assert len(inquiries) == 3 and {sigma.faculty(w, p, v) for v in inquiries} == {4}
-    assert sigma.faculty(w, p, "argue") == 3 and sigma.faculty(w, p, "determine") == default
+    # B11 lane A: `interrogate` draws on `inquiry` (3 -> 4 verbs) and `determine` on `argue` (it rolled `pool_default`)
+    assert len(inquiries) == 4 and {sigma.faculty(w, p, v) for v in inquiries} == {4}
+    assert sigma.faculty(w, p, "argue") == 3 == sigma.faculty(w, p, "determine")
+    assert sigma.faculty(w, p, "transfer") == default, "a verb drawing on no vocation still rolls the default"
 
 
 def test_the_three_train_candidates_on_one_subject_get_three_act_ids():

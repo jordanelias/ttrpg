@@ -172,6 +172,8 @@ def test_hash_post_item_and_revert(seed, monkeypatch):
     # POST_ITEM still reads this item alone.
     from .test_b11a_duel_reach import revert_b11a
     revert_b11a(monkeypatch)
+    from .test_b11a_scores_and_obstacle import revert_b11a_scores
+    revert_b11a_scores(monkeypatch)   # B11 lane A (persons hold scores; the obstacle by task: a mover of the build and every season), the same way
     w = build_realm(seed)
     run(1, seed, w=w)
     assert w.content_hash() == POST_ITEM[seed] != PRE_ITEM[seed]
@@ -193,8 +195,13 @@ def test_rem52s_fall_is_tended_whole_the_same_season():
     assert short, "setup: nobody went hungry"
     assert short <= tended, sorted(short - tended)
     assert all(w.persons[pid].body == w.persons[pid].body_ceiling for pid in short)
-    assert (len(short), len(tended)) == (37, 37)
+    # B11 lane A (the duel chain's reach; re-pinned in B01.02): (37, 37) -> (37, 38): one person tended who was not short
+    # (`p_npc_033`, wounded by the reach's new formations). With `revert_b11a_scores` alone it reads (37, 38); with
+    # `revert_b11a` too, (37, 37) (scratch, not kept).
+    assert (len(short), len(tended)) == (37, 38)
 
 
-def test_build_hash_is_unmoved():
+def test_build_hash_is_unmoved(monkeypatch):
+    from .test_b11a_scores_and_obstacle import revert_b11a_scores
+    revert_b11a_scores(monkeypatch)   # B11 lane A (persons hold scores: a later mover of the build), so BUILD stands
     assert build_realm(0).content_hash() == BUILD
