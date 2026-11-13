@@ -120,7 +120,7 @@
 - WHERE: `engine/season/loop/predicates.py` (`_req_confer`); `engine/season/verb_table.yaml` (`confer`); `engine/season/tests/test_predicates_clause.py` (B09.19's file).
 - TESTS: `test_predicates_clause.py::test_a_keyed_predicate_row_emits_its_clauses_kind` on the shipped `confer` row `[ASSUMPTION: B09.19's planted-row test gains a shipped-row arm; the item writes it]`, red before step 3.
 - FALSIFIER and CONTROL (copied): "Two refusals for different clauses emitting one kind on a keyed row." Gate, copied: "A seeded season in which a `confer` is refused at the purview clause emits the purview kind and not the cardinality kind, and the actor's ledger holds a claim keyed by it (so §F1 clause 4 can decline the same act through the same seat next round [lap: the season's pass, A-101; B04's `PCR-4`])." Control: the three other rows still flat, their refusals unchanged.
-- GATE: `python -m pytest engine/season/tests/test_predicates_clause.py -q` → pass; `python -c "from engine.season.data import verbs"` → imports (the loader's keyed-row arm admits the row); the realm hash at seed 0, one season → recorded (moved where a `confer` was refused).
+- GATE: `python -m pytest engine/season/tests/test_predicates_clause.py -q` → pass; `python -c "from engine.season.data import verbs"` → imports (the loader's keyed-row arm admits the row); the realm hash (`HASH READING`) at seed 0, one season → moved where a `confer` was refused, else equal to the item before's (quoted, `reading @<sha>`).
 - HASH MOVERS: "step two each keyed row (declared)". B21's one re-pin (B21.99).
 - DEPENDS ON: V12 Batch B09 (B09.18 the clause names; B09.19 the channel and the loader arm); V12 the first half's B21.14 (`confer`'s `contests:`; P-11's `contest_owed` deletion).
 - GLOSSARY: none.
@@ -128,34 +128,48 @@
 - LANDS IT: B21's producer; `Item: B21.80`, `[skip ci]`.
 
 ### B21.81 — a refused `establish` says which clause refused, in its kind · the same source (row `establish`) · BUILD · HASH MOVER(behaviour) · Patched: P-26
-- SOURCE, ADVANCES, FALSIFIER: as B21.80, for the row `establish`.
-- INSTRUCTION: B21.80's steps 2 and 3 for `_req_establish` and the `establish` row: the `clauses=` names are the refusing branches B09.18 named in `_req_establish` (the source gives names for `confer` only; open the predicate and copy its clause names into the decorator, recorded in the commit body); one refusal kind per clause, spelled as B21.80's.
+- SOURCE: `proposals/01_CORE_predicates_name_their_clause.md` "Step two" edit 4 ("The rows that take it first, and the kinds they key: `confer`, `establish`, `revoke`, `oblige` — the kinds are authored in `verb_table.yaml` by the FA lane (they are governance vocabulary); this proposal supplies the channel"; "one commit per row"), its "Gate", "Falsifier", "Hash movers"; B09.18's clause table (`workplan_v12_part11_cont.md`, B09.18 INSTRUCTION 3); B09's UNDECIDED (4).
+- ADVANCES: none of the nine; "predicate rows and typed rows report a failed clause the same way" (B09.19).
+- INSTRUCTION (written out in full by repair lane R2b, K3 F7; B21.80's steps for this row):
+  1. `engine/season/loop/predicates.py::_req_establish`: the decorator declares the clause names B09.18 gave its refusing branches, in branch order (B09.18's table, copied): `@requires_predicate("establish", clauses=("office resolves", "rung held", "conferral basis", "filler", "re-founding", "may fill", "reduction needs revocation"))`, and the predicate returns `(ok, clause)` on B09.19's channel (each `return _refuse("<clause>", …)` B09.18 wrote carries its clause out). At the item's open, re-read the branches (B09.18's `ast` walk test names them); a branch the table does not name takes its comment's phrase, recorded in the commit body.
+  2. `engine/season/verb_table.yaml`, row `establish`: `emits_on_refusal:` becomes a mapping keyed by those clause names (the keyed form `arrest`'s row uses: `emits_on_refusal: {eligibility: ["arrest.unauthorized"], party: ["arrest.refused"], …}`), "a keyed predicate row is admitted when its keys equal the clause names passed in by the driver" (B09.19's loader arm). One kind per clause; the kind names are the FA lane's authoring, spelled as B21.80 recorded for `confer` (its commit body names the precedent row); every new kind `[ASSUMPTION; medium; Jordan to correct]`, listed in the PR body.
 - WHERE: `engine/season/loop/predicates.py` (`_req_establish`); `engine/season/verb_table.yaml` (`establish`); `engine/season/tests/test_predicates_clause.py`.
-- TESTS: one arm per row in `test_a_keyed_predicate_row_emits_its_clauses_kind` for `establish` `[ASSUMPTION: as B21.80]`.
-- GATE: as B21.80, for an `establish` refused at two different clauses (two kinds).
-- HASH MOVERS: declared; B21.99.
+- TESTS: `test_predicates_clause.py::test_a_keyed_predicate_row_emits_its_clauses_kind` gains an `establish` arm on the shipped row `[ASSUMPTION: test arm; the item writes it — E-3]`: two hand-built `establish` acts refused at two different clauses (`rung held`, `conferral basis`) emit two different kinds, and the actor's ledger holds a claim keyed by each; red before step 2.
+- FALSIFIER and CONTROL (the source's): "Two refusals for different clauses emitting one kind on a keyed row." Control: `revoke` and `oblige` still flat (B21.82, B21.83 not landed), their refusals unchanged.
+- GATE: `python -m pytest engine/season/tests/test_predicates_clause.py -q` → pass; `python -c "from engine.season.data import verbs"` → imports (the loader admits the keyed row); the realm hash (`HASH READING`) at seed 0, one season → moved where an `establish` was refused, else equal to B21.80's (either reading quoted, `reading @<sha>`).
+- HASH MOVERS: "step two each keyed row (declared)": every seeded world where an `establish` is refused; B21's one re-pin (B21.99).
 - DEPENDS ON: V12 B21.80; V12 the first half's B21.09 (`establish`'s `contests:`).
 - GLOSSARY: none.
 - COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B21's producer; `Item: B21.81`, `[skip ci]`.
 
 ### B21.82 — a refused `revoke` says which clause refused, in its kind · the same source (row `revoke`) · BUILD · HASH MOVER(behaviour) · Patched: P-26
-- SOURCE, ADVANCES, FALSIFIER: as B21.80, for the row `revoke`.
-- INSTRUCTION: B21.80's steps 2 and 3 for `_req_revoke` and the `revoke` row, the clause names read off `_req_revoke` as B21.81 does.
+- SOURCE: as B21.81 (the same edit 4, "Gate", "Falsifier", "Hash movers"), for the row `revoke`.
+- ADVANCES: none of the nine; "predicate rows and typed rows report a failed clause the same way" (B09.19).
+- INSTRUCTION (written out in full by repair lane R2b, K3 F7):
+  1. `engine/season/loop/predicates.py::_req_revoke`: B09.18's clause table does not list `revoke` (its four rows are `establish`, `confer`, `oblige`, `succeed`), and B09.19 declares `clauses=` only for those four; on the tree read `_req_revoke` already refuses through `_refuse(...)` at four branches, in order: "a revoke names no office the world holds", "a revoke of a seat whose conferral basis has no revocation disposal", "a revoke the seat exercised has no revocation authority over the seat", "a revoke of a seat nobody holds". This item declares them: `@requires_predicate("revoke", clauses=("office", "disposal", "authority", "held"))` `[ASSUMPTION: the four short names, one per `_refuse` phrase in branch order — basis: B09.18's `confer` names are single words; revert: the phrases themselves]`, and returns `(ok, clause)` on B09.19's channel (B09.18 step 2 has already moved its `payload` reads to `subject_of`/`operand_of`). Re-read the branches at the item's open; a fifth branch takes its phrase's short form, recorded in the commit body.
+  2. `engine/season/verb_table.yaml`, row `revoke`: `emits_on_refusal:` keyed by those four names (the `arrest` row's keyed form; B09.19's loader arm admits a keyed predicate row whose keys equal the declared clauses), one kind per clause, spelled as B21.80's precedent; each new kind `[ASSUMPTION; medium; Jordan to correct]`, listed in the PR body.
 - WHERE: `engine/season/loop/predicates.py` (`_req_revoke`); `engine/season/verb_table.yaml` (`revoke`); `engine/season/tests/test_predicates_clause.py`.
-- TESTS, GATE: as B21.81, for `revoke`.
-- HASH MOVERS: declared; B21.99.
+- TESTS: a `revoke` arm in `test_a_keyed_predicate_row_emits_its_clauses_kind` `[ASSUMPTION: test arm; the item writes it — E-3]`: two hand-built `revoke` acts refused at `authority` and at `held` emit two different kinds, each leaving a keyed claim in the actor's ledger; red before step 2.
+- FALSIFIER and CONTROL: "Two refusals for different clauses emitting one kind on a keyed row." Control: `oblige` still flat, its refusals unchanged.
+- GATE: `python -m pytest engine/season/tests/test_predicates_clause.py -q` → pass; `python -c "from engine.season.data import verbs"` → imports; the realm hash (`HASH READING`) at seed 0, one season → moved where a `revoke` was refused, else equal to B21.81's (quoted, `reading @<sha>`).
+- HASH MOVERS: declared, every seeded world where a `revoke` is refused; B21.99.
 - DEPENDS ON: V12 B21.81; V12 the first half's B21.14 (`revoke`'s contested row).
 - GLOSSARY: none.
 - COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B21's producer; `Item: B21.82`, `[skip ci]`.
 
 ### B21.83 — a refused `oblige` says which clause refused, in its kind · the same source (row `oblige`) · BUILD · HASH MOVER(behaviour) · Patched: P-26
-- SOURCE, ADVANCES, FALSIFIER: as B21.80, for the row `oblige`.
-- INSTRUCTION: B21.80's steps 2 and 3 for `_req_oblige` and the `oblige` row, the clause names read off `_req_oblige` as B21.81 does. If `oblige` is a typed row and not a predicate row on this tree (open it), the commit body says so and the item lands nothing for it (the channel is for predicate rows; "a flat predicate row is unchanged").
+- SOURCE: as B21.81 (the same edit 4, "Gate", "Falsifier", "Hash movers"), for the row `oblige`.
+- ADVANCES: none of the nine; "predicate rows and typed rows report a failed clause the same way" (B09.19).
+- INSTRUCTION (written out in full by repair lane R2b, K3 F7). `oblige` is a predicate row on the tree read (`loop/predicates.py:466`, `@requires_predicate("oblige")` over `_req_oblige`), so the item lands:
+  1. `engine/season/loop/predicates.py::_req_oblige`: the decorator declares B09.18's names for it, in branch order (B09.18's table, copied with its mark): `@requires_predicate("oblige", clauses=("seat", "binds", "own_seat", "one_edge", "banned"))` `[ASSUMPTION: names from the branch comments of `_req_oblige` — B09.18's]`; returns `(ok, clause)` on B09.19's channel. Re-read the branches at the item's open; a branch the table does not name takes its comment's phrase, recorded in the commit body.
+  2. `engine/season/verb_table.yaml`, row `oblige`: `emits_on_refusal:` keyed by those names (the `arrest` row's keyed form; B09.19's loader arm), one kind per clause, spelled as B21.80's precedent; each new kind `[ASSUMPTION; medium; Jordan to correct]`, listed in the PR body.
 - WHERE: `engine/season/loop/predicates.py` (`_req_oblige`); `engine/season/verb_table.yaml` (`oblige`); `engine/season/tests/test_predicates_clause.py`.
-- TESTS, GATE: as B21.81, for `oblige`.
-- HASH MOVERS: declared; B21.99.
+- TESTS: an `oblige` arm in `test_a_keyed_predicate_row_emits_its_clauses_kind` `[ASSUMPTION: test arm; the item writes it — E-3]`: two hand-built `oblige` acts refused at `own_seat` and at `banned` emit two different kinds, each leaving a keyed claim; red before step 2.
+- FALSIFIER and CONTROL: "Two refusals for different clauses emitting one kind on a keyed row." Control: every other predicate row (`dispatch`, `convene`, `succeed`, …) still flat, its refusals unchanged.
+- GATE: `python -m pytest engine/season/tests/test_predicates_clause.py -q` → pass; `python -c "from engine.season.data import verbs"` → imports; the realm hash (`HASH READING`) at seed 0, one season → moved where an `oblige` was refused, else equal to B21.82's (quoted, `reading @<sha>`).
+- HASH MOVERS: declared, every seeded world where an `oblige` is refused; B21.99.
 - DEPENDS ON: V12 B21.82.
 - GLOSSARY: none.
 - COST and TIER: small build; `sonnet`, `high`.

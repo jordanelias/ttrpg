@@ -172,7 +172,7 @@ R2 (B27.27, GV-G12): the output of `grep -rn church_standing engine/season` on t
 - HASH MOVERS: the re-pin itself.
 - DEPENDS ON: V12 B27.01 to B27.27.
 - GLOSSARY: the close's glossary read (BATCH GATE).
-- COST and TIER: re-pin; `sonnet`, `high`; the close's terminal critique `opus` (`methodology-close`).
+- COST and TIER: reading (and the re-pin); `sonnet`, `high`; the close's terminal critique `opus` (`methodology-close`).
 - LANDS IT: B27's producer; `Item: B27.99`; the batch's last `Item:` commit, **without** `[skip ci]` (the push that opens BATCH-CLOSE and CI's first run).
 
 | STOP. Batch B27-sc-proceedings closes here |

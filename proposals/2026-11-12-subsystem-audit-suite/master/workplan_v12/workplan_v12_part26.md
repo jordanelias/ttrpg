@@ -320,7 +320,7 @@ Not in this half, and where each is: `27_MB_A` 27A-5 (the four Command reads; af
 - HASH MOVERS: none ("No engine change").
 - DEPENDS ON: EXISTS-IN-TREE `lanchester_signature.py::check_law_exponents` (`:348`), `::_best_exponent` (`:323`), `::_trajectory` (`:248`), `::check_square` (`:118`), `VOLLEY_INSTRUCTIONS = ('kite',)` (`:229`); V12 B19.08.
 - GLOSSARY: none.
-- COST and TIER: an instrument repair with a judgment in it; `opus` producer (the source: "step 1 `opus`"), `high`.
+- COST and TIER: edit (the source's "an instrument repair with a judgment in it"; §5.3's class, R2c, K6 F16); `opus` producer (the source: "step 1 `opus`"), `high`.
 - LANDS IT: B19's producer; `Item: B19.09`, `[skip ci]`.
 
 ### B19.10 — the melee pair, the pursuit and the volley moved to `core/`, unchanged · MBA-04 step 0 (ED-1043) · BUILD · HASH EQUAL

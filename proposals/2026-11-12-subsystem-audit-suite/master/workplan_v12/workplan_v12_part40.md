@@ -448,7 +448,7 @@ Items B38.19 to B38.25 are in this part's continuation file. The second half (fr
 - HASH MOVERS: "`waiting_valence` and `waiting_level` off their controls where the log holds a rebuff". Declared; B38's one re-pin.
 - DEPENDS ON: V12 B38.09, B38.11, B38.12; V12 Batch B28-social-verbs (`28_CORE_scene_access_A`'s row-12 arm fixtures `engagement`, `precedence_level`; `28_CORE_scene_access_B`'s `appointments`).
 - GLOSSARY: none.
-- COST and TIER: calibration reading and an edit; `sonnet`, `high`; the reading of rows 4 and 7 (does the door move the world, or nothing ride it) `opus`.
+- COST and TIER: calibration (a reading and an edit); `sonnet`, `high`; the reading of rows 4 and 7 (does the door move the world, or nothing ride it) `opus`.
 - LANDS IT: B38's producer; `Item: B38.13`, `[skip ci]`.
 
 ### B38.14 — a faction's row may declare the poles its creed stands on; the conviction term reads them · `20_NARRATIVE_D` edits 1–2 (commit 1) · BUILD · HASH EQUAL

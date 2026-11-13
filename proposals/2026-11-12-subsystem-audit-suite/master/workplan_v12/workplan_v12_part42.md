@@ -480,7 +480,7 @@ Not in this batch, and where each is: `SYN_B` edits 1, 3, 4 (B32); `COL_D` edit 
 - HASH MOVERS: none in the realm pins.
 - DEPENDS ON: V12 B39.12 (`base: realm`, `prehistory:`, `off_arm:`, `any_of`); V12 Batch B10 (B10.71 `opens:` and `test_staged_goals.py`; B10.73 the ARC-47 stage row); EXISTS-IN-TREE `lie` (the verb row; grep at the open).
 - GLOSSARY: none.
-- COST and TIER: content and small build; drafting `opus`, `high`; landing `sonnet`.
+- COST and TIER: content (with a small build); drafting `opus`, `high`; landing `sonnet`.
 - LANDS IT: B39's producer; `Item: B39.37`, `[skip ci]`.
 
 ### B39.15 — one card schema, one loader, one draw; the variety instrument · `PROC_D` PG-6 · BUILD · HASH EQUAL

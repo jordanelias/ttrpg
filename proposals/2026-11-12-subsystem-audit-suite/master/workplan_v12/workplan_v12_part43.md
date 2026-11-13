@@ -381,7 +381,7 @@ Not in this batch, and where each is (each member's parts are dispositioned once
 - HASH MOVERS: none (case data on the spine; the realm build is unchanged).
 - DEPENDS ON: V12 B40.01 (the case-file schema, `base: spine`); V12 B40.02 (`harness/institution.py`); V12 Batch B33 (B33.39 `resolve_anchor`'s `venue` form; B33.40 the Guilds' house, list and commune council rows; B33.41 the secret bench and the enrolment ballot; B33.42 the staple and the market's standard); V12 Batch B32 (`SYN_A`'s kit: `term`, `cooling_off`, `audit_at_exit`).
 - GLOSSARY: none.
-- COST and TIER: content and small build; `sonnet`, `high`.
+- COST and TIER: content (with a small build); `sonnet`, `high`.
 - LANDS IT: B40's producer; `Item: B40.29`, `[skip ci]`.
 
 (B40.09 is a READING: no body and no commit of its own; its text is Readings R1, at the batch's end, read at B40.99.)

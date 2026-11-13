@@ -158,6 +158,7 @@
 | `S/tests/test_docket_names_its_case_file.py` | B24.01 | S13 |
 | `S/tests/test_sc_hearing_sitting.py` | B24.03 | S13 |
 | `S/tests/test_sc_hearing_ballots.py` | B24.11 | S13 |
+| `S/tests/test_sc_hearing_evidence.py` | B24.18 | S13 (row added by repair lane R2c, K5 F10) |
 | `S/tests/test_fi_evidence_interface.py` | B24.22 | S13 |
 | `S/tests/test_sc_hearing_admission.py` | B24.25 | S13 |
 | `S/tests/test_sc_hearing_negotiation.py` | B24.30 | S13 |

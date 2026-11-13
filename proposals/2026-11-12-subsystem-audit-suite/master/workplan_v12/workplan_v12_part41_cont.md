@@ -94,7 +94,7 @@ Words, paths and the hash note are the part's head's (the file this one continue
 - HASH MOVERS: none.
 - DEPENDS ON: EXISTS-IN-TREE `S/harness/chronicle.py::lines`; V12 B38.57 (`era_turns`), B38.58 (`era_known`), B38.64 (strand states), B38.75 (`firmness`, the regard band names); V12 `B02.20` (the durable-write predicate); V12 Batch B36 (`09_WR_B_chronicle_that_tells`, `--focus`).
 - GLOSSARY: none (templates are presentation).
-- COST and TIER: edit and data; `sonnet`, `high`; the first templates drafted `sonnet`, `medium` (neutral, one per key).
+- COST and TIER: edit (with data rows); `sonnet`, `high`; the first templates drafted `sonnet`, `medium` (neutral, one per key).
 - LANDS IT: B38's producer; `Item: B38.76`, `[skip ci]`.
 
 ### B38.77 — the end reveal, gated on the run's ending · `30_GO_F` instruction 6 with `IS-B3-GO-04` · BUILD · HASH EQUAL
@@ -220,7 +220,7 @@ Words, paths and the hash note are the part's head's (the file this one continue
 - HASH MOVERS: "moves nothing until its rows are authored (every tier 1.0 is the control)".
 - DEPENDS ON: EXISTS-IN-TREE `S/queries/person_q.py::heritage_regard` (CR-31) `[ASSUMPTION: present — basis: `references/descriptor_registry.yaml:233` names it as the reader]`; V12 Batch B12 (CP-T08-01, `16_PESSIMIST_SE_A` edit 1), Batch B05 (the obstacle composer); V12 B38.84.
 - GLOSSARY: new row *caste practice*: "the informal tiering of what people of a descent earn, are trusted to hold and are heard on, as practised by those who take a man for that descent (A-41)"; owner `rosters.yaml: caste_practice`.
-- COST and TIER: data with a small build; `sonnet`, `high`; the values are Jordan's (D-19: none drafted here; the source says "Jordan to author").
+- COST and TIER: small build (with data rows); `sonnet`, `high`; the values are Jordan's (D-19: none drafted here; the source says "Jordan to author").
 - LANDS IT: B38's producer; `Item: B38.85`, `[skip ci]`.
 
 ### B38.86 — vote blocks · `U5d_SE` edit 5 · POINTER (Batch B21: `U5d_FA_owed_edits` §4)
@@ -244,7 +244,7 @@ Words, paths and the hash note are the part's head's (the file this one continue
 - HASH MOVERS: "moves every seeded realm run (cohort acts are 43% of acts by the GAME pessimist's count …)". Declared; B38.99's re-pin.
 - DEPENDS ON: V12 B38.83, B38.84, B38.85.
 - GLOSSARY: none.
-- COST and TIER: edit with one reading; `sonnet`, `high`.
+- COST and TIER: edit (with one reading); `sonnet`, `high`.
 - LANDS IT: B38's producer; `Item: B38.88`, `[skip ci]`.
 
 ### B38.89 — a hoarding steward is answered: the valley's A-80 reading · `IS-B3-SE-02` · BUILD (a test) · HASH EQUAL
@@ -285,7 +285,7 @@ Words, paths and the hash note are the part's head's (the file this one continue
 - DEPENDS ON: every position of both halves.
 - GLOSSARY: step 5 (reads; no row edited here).
 - IDS: none of its own.
-- COST and TIER: the close; producer `sonnet`, `high`; the readings of C7 to C13, R-1 and the valley read by `opus` against their sources' expected readings; the terminal critique `opus` (BATCH-CLOSE, `methodology-close` Phase 3).
+- COST and TIER: reading (the close); producer `sonnet`, `high`; the readings of C7 to C13, R-1 and the valley read by `opus` against their sources' expected readings; the terminal critique `opus` (BATCH-CLOSE, `methodology-close` Phase 3).
 - LANDS IT: B38's producer; `Item: B38.99`, the batch's last `Item:` commit, **not** `[skip ci]` (CI's first run of the batch, `methodology-execute` CHECKPOINTS AND BASELINES).
 
 | STOP. Batch B38-narrative-regimes closes here |

@@ -17,7 +17,7 @@ Head, words, paths, the position table and "Lines this half adds to B03's block"
 - HASH MOVERS: none.
 - DEPENDS ON: EXISTS-IN-TREE `state/gate.py::Subject` (`earns`, `kinds`), `::Change`, `loop/resolve.py::_fold` (the `earned` set), `engine/season/gaps.py::InstrumentDefect`; V12 B03.57.
 - GLOSSARY: none.
-- COST and TIER: small build; `sonnet`, high (E7: sonnet).
+- COST and TIER: small build; `sonnet`, high (E7: sonnet); the ladder-step-4 pick and the STOPS IF verdict (which shipped effects build a mixed `Change`) are a judgment node, read by `opus` at the close's terminal critique (CLAUDE.md §10; repair lane R2a, K1 F8).
 - LANDS IT: B03's producer; `Item: B03.75`, `[skip ci]`.
 
 ### B03.76 — a gate refusal in the fold emits, never raises · H-143 · BUILD · HASH EQUAL
@@ -138,7 +138,7 @@ Read at B03.99 (no code, no commit of its own): Reading 1 of this batch's `## Re
 - HASH MOVERS: none.
 - DEPENDS ON: EXISTS-IN-TREE `state/world.py::write`; V12 B03.83 (the same file and test file).
 - GLOSSARY: none.
-- COST and TIER: edit; `sonnet`, high.
+- COST and TIER: edit; `sonnet`, high; the DROP-IF reachability verdict of step (0) is a judgment node, read by `opus` at the close's terminal critique before the item lands or drops (CLAUDE.md §10; repair lane R2a, K1 F8).
 - LANDS IT: B03's producer; `Item: B03.84`, `[skip ci]`.
 
 ### B03.85 — a deleted Tenure is seen by the tenure diff · H-139 · BUILD (DROP IF unreached) · HASH EQUAL
@@ -152,7 +152,7 @@ Read at B03.99 (no code, no commit of its own): Reading 1 of this batch's `## Re
 - HASH MOVERS: none.
 - DEPENDS ON: EXISTS-IN-TREE `state/world.py::_tenure_changes`, `::_restore_tenures`, `::_tenure_snapshot`; V12 B03.84.
 - GLOSSARY: none.
-- COST and TIER: edit; `sonnet`, high.
+- COST and TIER: edit; `sonnet`, high; the DROP-IF reachability verdict of step (0) is a judgment node, read by `opus` at the close's terminal critique before the item lands or drops (CLAUDE.md §10; repair lane R2a, K1 F8).
 - LANDS IT: B03's producer; `Item: B03.85`, `[skip ci]`.
 
 ### B03.86 — a seat buys no scene · `U5a_CORE_owed_edits` §H (C3-L8) · BUILD · HASH MOVER(behaviour)

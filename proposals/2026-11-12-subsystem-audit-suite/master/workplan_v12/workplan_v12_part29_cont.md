@@ -22,7 +22,7 @@ The batch block of `B41-go-port-gate` (its head lines, PORT GATE RULES, UNDECIDE
 - WHERE: `tools/export_oracle_pins.py` (the `surface` block, `--build`, `--check`); `engine/season/harness/port_oracle.py` (one line per seat); `engine/engine_params/oracle_pins.json` (rebuilt by `--build`); `tests/valoria/test_oracle_pins.py`.
 - TESTS: in `test_oracle_pins.py`, written before the block and read red: `test_the_surface_block_content_hash_equals_slice_two`, `test_the_surface_seats_are_the_declared_rule` `[ASSUMPTION: names; the first is the falsifier's clause]`.
 - FALSIFIER and CONTROL: "A `surface` block whose `content_hash` differs from slice 2's (the trace moved the run)." Control: slices 1 and 2 of B41.06 unchanged by the rebuild.
-- GATE: `python tools/export_oracle_pins.py --build` then `--check` → OK; `python -m pytest tests/valoria/test_oracle_pins.py engine/season/tests/test_surface_trace.py -q` → pass; `python -m engine.season.harness.port_oracle --slice 2 --seed 0` → one line per declared seat.
+- GATE: `python tools/export_oracle_pins.py --build` then `--check` → OK; `python -m pytest tests/valoria/test_oracle_pins.py engine/season/tests/test_surface_trace.py -q` → pass; `PYTHONHASHSEED=0 python -m engine.season.harness.port_oracle --slice 2 --seed 0` → one line per declared seat.
 - HASH MOVERS: none (a pin of a run, no game state; the `--build` is this item's own, PORT GATE RULES 1).
 - DEPENDS ON: V12 B41.05 (`surface_trace`), B41.06 (the exporter); V12 Batch B03c (`boot/realm.py::COHORT_PREFIX`).
 - GLOSSARY: none.
@@ -54,7 +54,7 @@ The batch block of `B41-go-port-gate` (its head lines, PORT GATE RULES, UNDECIDE
 - DEPENDS ON: V12 B41.06; V12 B11.05 (`SCENARIOS`, `Scenario`); V12 Batch B06 (`draw.seeded`); V12 Batch B16M (L2: the engine's `Unit` is the army, `Subunit` → `Unit`); V12 Batch B17 (`04_MB_typed_outcome_and_one_path` §3, the field's typed outcome; not in §2.1's after-list, closed by S9: UNDECIDED 1); V12 Batch B20 (the decider; conditional, above); EXISTS-IN-TREE `references/module_contracts.yaml` `composition_roles:` (`combat.fight`, `mass_battle.resolve_field`, `social_contest.roll`, `fieldwork.find`), `seam/wrappers/mass_battle.py::field_input`, `seam/wrappers/combat.py::combat_input` (located by symbol).
 - GLOSSARY: none (*scenario* is B11.05's row).
 - NAMES: `harness/populated.py` → `boot/realm.py` (B03c); "subunits" → units, `Subunit` → `Unit` (B16M, L2).
-- COST and TIER: small build per module; `sonnet`, `high`; MB reviews the field scenes, PC the duels (the source's "Lands it").
+- COST and TIER: small build (one per module); `sonnet`, `high`; MB reviews the field scenes, PC the duels (the source's "Lands it").
 - LANDS IT: B41's producer; `Item: B41.08`, `[skip ci]`.
 
 ### B41.09 — the halt roster and its planted worlds · `11_GO_port_gate_order_and_coverage` §4 · BUILD · HASH EQUAL
@@ -91,14 +91,14 @@ The batch block of `B41-go-port-gate` (its head lines, PORT GATE RULES, UNDECIDE
 - INSTRUCTION (copied): "`references/names_index.yaml` gains two classes, `verb` and `event_kind`, each entry a key and a display string. `tools/export_names.py --check` gains one rule: every key of `verb_table.yaml`'s `verbs:` and every member of the derived Event-kind roster (`04_CODE_ARCHITECTURE.md:500`, loader invariant 7: "the Event-kind roster is **derived** from every emission column") has an entry, and no entry names a key that is in neither. This is the exporter's own round-trip for its own chain (§0.05's licensed form), not a tree-wide guard. The strings are authored once, by Jordan or under his review, in the YAML; the port reads `names.json`. The key sets are derivable now: `python -c "from engine.season.data.verbs import VERB_TABLE; print(sorted(VERB_TABLE))"` (the verb keys) and the derived Event-kind roster of loader inv. 7 (the `event_kind` keys) are what `--check` will require." "(the `--check` rule ships with the strings, or reds)."
   At the tree (D-19: drafted here, ratified at the batch's merge): (1) the two key sets read on this batch's base (the derived roster is `data/verbs.py::EMITTED_KINDS`, from `_derive_kind_verb()`) and their counts quoted; (2) one entry per key, in the key form of UNDECIDED 4, each display string a plain-English phrase drafted from the verb row's own `gloss`/note or the Event kind's emitting row, marked `[ASSUMPTION; drafted for Jordan's correction]` in a block comment over each class; (3) the completeness rule in `tools/export_names.py`, landing in the same commit as the strings; (4) `engine/engine_params/names.json` re-derived with the tool. The PR body lists the class counts and says the strings are drafted for Jordan's correction (`V12_STRUCTURE_part3.md` §8.2, "every authored value").
   A rule from this commit on, for every later batch (named for the head's rules, H1): a commit that adds a verb row to `verb_table.yaml` or a new emitted Event kind adds its `names_index.yaml` entry in the same commit, or `export_names.py --check` reds.
-- WHERE: `references/names_index.yaml` (two classes; the prefix table's comment); `tools/export_names.py` (the completeness rule); `engine/engine_params/names.json` (re-derived); `tests/valoria/test_export_names.py` or the existing test of the exporter (located by `grep -rl export_names tests`) `[ASSUMPTION: the existing test file is extended; if none, NEW `tests/valoria/test_names_vocabulary.py`]`.
+- WHERE: `references/names_index.yaml` (two classes; the prefix table's comment); `tools/export_names.py` (the completeness rule); `engine/engine_params/names.json` (re-derived); `tests/valoria/test_names_chain.py` (the existing test of the exporter: `grep -rl export_names tests` finds it, "the naming chain's falsifier: `names_index.yaml` -> `export_names.py` -> `names.json` -> the leaf"; no `test_export_names.py` exists; R2d, CHK_K7 F-18).
 - TESTS: `test_a_verb_row_with_no_entry_reds_check_and_its_entry_clears_it` (gate 3), `test_an_entry_naming_no_verb_or_kind_reds_check` `[ASSUMPTION: names]`, written before step 3 and read red.
 - FALSIFIER and CONTROL: "A verb or Event kind with no word that `--check` passes." Gate 3: "`python tools/export_names.py --check` reds when one verb row is added to `verb_table.yaml` with no entry, and passes when the entry is added." Control: `tools/ci_naming_check.py` and `tools/ci_names_consistency.py` exit 0 (no new entry's `legacy:` names a live word).
-- GATE: `python tools/export_names.py --check` → OK; `python tools/ci_naming_check.py` → exit 0; `python tools/ci_names_consistency.py` → exit 0; the tests above → pass.
+- GATE: `python tools/export_names.py --check` → OK; `python tools/ci_naming_check.py` → exit 0; `python tools/ci_names_consistency.py` → exit 0; `python -m pytest tests/valoria/test_names_chain.py -q` → pass.
 - HASH MOVERS: none (`names.json` is read at import by `engine/substrate/names.py` for name resolution; no new entry is an alias of an existing canonical, which the exporter refuses).
 - DEPENDS ON: V12 B41.06 (the batch's exporter work precedes; no data edge); EXISTS-IN-TREE `references/names_index.yaml` (`entries:`, the prefix table), `tools/export_names.py`, `data/verbs.py::VERB_TABLE`, `::EMITTED_KINDS`.
 - GLOSSARY: none (display strings are the names index's, not the suite's glossary).
-- COST and TIER: content and a small rule; drafting `opus`, `high`; the rule `sonnet`, `high`.
+- COST and TIER: content (with a small rule); drafting `opus`, `high`; the rule `sonnet`, `high`.
 - LANDS IT: B41's producer; `Item: B41.11`, `[skip ci]`.
 
 ### B41.12 — no module reads the process environment · `11_GO_port_gate_order_and_coverage` §5, gate 1 · READING
@@ -140,7 +140,7 @@ The batch block of `B41-go-port-gate` (its head lines, PORT GATE RULES, UNDECIDE
 - HASH MOVERS: none ("EQUAL").
 - DEPENDS ON: V12 B41.13; V12 Batch B03g (GO-01's `engine_series.yaml`, GO-11, GO-05, GO-09); EXISTS-IN-TREE every exporter line (4) names.
 - GLOSSARY: none.
-- COST and TIER: reading and one build; `sonnet`, `high`; the OPEN-line judgment `opus`.
+- COST and TIER: build (with a reading); `sonnet`, `high`; the OPEN-line judgment `opus`.
 - LANDS IT: B41's producer; `Item: B41.14`, `[skip ci]`.
 
 ## Readings (B41)
@@ -275,7 +275,7 @@ Not in this batch, and where each is: CR-104 (B11F2; reads B11F1.02's Sites); SE
 - EXPECTED RED UNTIL B11F1.99: `engine/season/tests/_realm_goldens.py`.
 - DEPENDS ON: V12 B11F1.03.
 - GLOSSARY: none.
-- COST and TIER: content transcription; `sonnet`, `high`; "the content pass is a separate judgment lane" (`opus` reads the PR body's list).
+- COST and TIER: content (a transcription); `sonnet`, `high`; "the content pass is a separate judgment lane" (`opus` reads the PR body's list).
 - LANDS IT: B11F1's producer; `Item: B11F1.04`, `[skip ci]`. The PR body lists the rows as Jordan's to correct (D-19).
 
 ### B11F1.05 — the Schoenland heritage engages Altonia · CR-107 (v11 part 16 head item 4) · BUILD · HASH MOVER(behaviour)

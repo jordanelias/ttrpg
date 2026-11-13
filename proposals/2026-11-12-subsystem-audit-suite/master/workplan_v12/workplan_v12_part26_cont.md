@@ -167,7 +167,7 @@ The batch block's head, its position table and B19.01 to B19.16 are in `workplan
 - HASH MOVERS: "the `arm: grid` flip (every army field)". Declared; `B19.99`'s re-pin.
 - DEPENDS ON: V12 B19.12 (the partition row read before the grid arm), B19.17, B19.22.
 - GLOSSARY: none.
-- COST and TIER: edit; the flip's readings `haiku` (`valoria-measure`) read by `opus` (the source).
+- COST and TIER: edit; `sonnet`, `high` (effort set explicitly, CLAUDE.md §10; R2c, K6 F16); the flip's readings `haiku` (`valoria-measure`), `high`, read by `opus`, `high` (the source).
 - LANDS IT: B19's producer; `Item: B19.23`, `[skip ci]`.
 
 ### B19.24 — flip: the per-arm ranges · `26_MASS_BATTLE_cell_scale_and_time` §2 (flip 1) · BUILD · HASH MOVER(behaviour)
@@ -181,7 +181,7 @@ The batch block's head, its position table and B19.01 to B19.16 are in `workplan
 - HASH MOVERS: every army field with a missile arm. Declared; `B19.99`.
 - DEPENDS ON: V12 B19.21, B19.23.
 - GLOSSARY: none.
-- COST and TIER: edit; `sonnet`.
+- COST and TIER: edit; `sonnet`, `high` (effort set explicitly, CLAUDE.md §10; R2c, K6 F16).
 - LANDS IT: B19's producer; `Item: B19.24`, `[skip ci]`.
 
 ### B19.25 — flip: `opening_rows: auto` · `26_MASS_BATTLE_cell_scale_and_time` §2 (flip 2) · BUILD · HASH MOVER(behaviour)
@@ -195,7 +195,7 @@ The batch block's head, its position table and B19.01 to B19.16 are in `workplan
 - HASH MOVERS: every army field with a missile arm on either side. Declared; `B19.99`.
 - DEPENDS ON: V12 B19.21, B19.24.
 - GLOSSARY: none.
-- COST and TIER: edit; `sonnet`.
+- COST and TIER: edit; `sonnet`, `high` (effort set explicitly, CLAUDE.md §10; R2c, K6 F16).
 - LANDS IT: B19's producer; `Item: B19.25`, `[skip ci]`.
 
 ### B19.26 — flip: `max_bouts: 6` · `26_MASS_BATTLE_cell_scale_and_time` §3 (flip 3) · BUILD · HASH MOVER(behaviour)
@@ -209,7 +209,7 @@ The batch block's head, its position table and B19.01 to B19.16 are in `workplan
 - HASH MOVERS: every army field that is drawn after one bout. Declared; `B19.99`.
 - DEPENDS ON: V12 B19.22, B19.25.
 - GLOSSARY: none.
-- COST and TIER: edit; `sonnet`; the drawn-share reading `haiku` read by `opus`.
+- COST and TIER: edit; `sonnet`, `high` (effort set explicitly, CLAUDE.md §10; R2c, K6 F16); the drawn-share reading `haiku`, `high`, read by `opus`, `high`.
 - LANDS IT: B19's producer; `Item: B19.26`, `[skip ci]`.
 
 ### B19.27 — the report's named draws and the per-bout report · 27_MB_C 27C-1 (the report half) with `26_MASS_BATTLE_cell_scale_and_time` §3 (`report` per bout) · BLOCKED (B20: `FieldOutcome.report` is declared by `04_MB_manager_battle_one_resolver.md` §6, D-U1-11e)
