@@ -486,7 +486,7 @@
 | 66 | the SC `recites` evidence branch | SC | B32.10 BLOCKED (B32); SYN_B gate 5 rides on it |
 | 67 | CP-T09-05's `deed:rung.ceded` alignment cell; H-209 (wars started by a killing) | IN (content), FA | B21b.10's reward arm and B21b.12's killing arm, each absent at ship in a BUILD item (E-14; R2c, K5 F7) (B21b) |
 | 68 | stake cells on any verb row | WR | §4 row 97 (B38) |
-| 69 | `knot`'s effect (a WR design) | WR | B35.28 BLOCKED (B35): `H2_DECISIONS.md` HD-25 decided a DESIGN-FIRST item before it (§11 C-18) |
+| 69 | `knot`'s effect (a WR design) | WR | B35.28 BLOCKED (B35): `H2_DECISIONS.md` HD-25 decided a DESIGN-FIRST item before it (§11 C-18); written by lane H3 as B35.30, B35.28 now HELD on its merge |
 
 Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them) and `pool.py::score` (B01) are built by earlier batches (A28's note of what the tree lacked at its read); `world_q.passage_granted` (B23.05 builds it, checked by the patch lane).
 
@@ -613,7 +613,7 @@ The second table reads every batch's `REQUIREMENT:` line for `R-0n`, so it lists
 | C-15 | B36.08 (NM-W5) takes HELD for a possible `04` §A.2 row; B11.04 and B41.03 land such rows under ED-IN-0300 | ED-IN-0300 covers it on the two conditions of §7 (step 4) | listed: K10 (part 39) |
 | C-16 | HD-21 says B21b edits `loop/sides.py`, `loop/effects_shared.py` and `tests/test_march.py` after B21; no B21b item's `WHERE` names `loop/sides.py` (the other two it does) | the census follows the items; the author confirms whether the `sides_of` union's later edit (B21b.02, .04) needs the file | listed: K6 (part 21) |
 | C-17 | U3 §6.1's `test_referent_class_stamps.py` (B36, `16_PESSIMIST_WR_D`) is written by no item; B36's item names `test_in12_step9.py`'s tests as its control | a gate's named test is written by the item that needs it (`V12_STRUCTURE_part2.md` §5.8) | listed: K10 (part 39) |
-| C-18 | B35.28 (`knot`'s effect) is BLOCKED with no design item; IS-A-08 would stop B35 if `knot` reads not built out | `H2_DECISIONS.md` HD-25 taken (step 4: E-14, D-18): a DESIGN-FIRST item before B35.28 | listed: K9 or the orchestrator writes the item (no source text exists to copy); §8 row 69 |
+| C-18 | B35.28 (`knot`'s effect) is BLOCKED with no design item; IS-A-08 would stop B35 if `knot` reads not built out | `H2_DECISIONS.md` HD-25 taken (step 4: E-14, D-18): a DESIGN-FIRST item before B35.28 | listed: K9 or the orchestrator writes the item (no source text exists to copy); §8 row 69; **resolved by lane H3: B35.30** (`workplan_v12_part36_cont.md`), B35.28 HELD on it |
 | C-19 | REM-30 is "HELD, decide at v12 against B04"; no B04 item records the decision | the decision is due at B04's close | §8 row 6; listed: K3 (part 7); **resolved by repair lane R2a: B04.99 step 4** |
 | C-20 | B12c's `IDS:` line reads H 12; `workplan_v12.md` §12 took 11 | the part's line (step 3) | §9 |
 | C-21 | `workplan_v12.md` §8 lists B21b after B12a, B27 after B25 and B32 after B28 among edges "the authors found"; §12's table predates the IN shift; §8's step table has B41 at S15 | §1.1 of part 2: merge order, not edges; §9 here supersedes §12's table; §1.2 here supersedes §8's step row. §8 already says part 2 governs | **one-line pointer added** to `workplan_v12.md` §12 (below the table's heading paragraph) |
@@ -623,3 +623,72 @@ The second table reads every batch's `REQUIREMENT:` line for `R-0n`, so it lists
 | C-25 | B12b.06 is a POINTER row ("taken and shipped in B12b.43") with no item body | E-5: a POINTER gets three to eight lines (what it points at, the files, the gate) | listed: K7 (part 24) |
 
 **Not conflicts, recorded so a later reader need not re-open them:** no batch handle is duplicated or missing (61 handles; 59 written, B98 and B99 owed by A44); no item cites a handle that is in no position table; no `GATE: Batch` line names a batch that closes at or after its own step; four `gates on` cells name a later batch, all POINTER or HELD rows pointing forward (B21.77, B12a.71, B19.27, B19.52); handle gaps (B34's .11, .13, .14 unused; the `.51` start of each second half) are the authors' numbering, not missing items.
+
+**Conflicts found after this register was written** (lane H3, 2026-11-13; same form):
+
+| id | conflict | decision (ladder step) | done |
+|---|---|---|---|
+| C-26 | `stakes_ob` (SC's stakes table) is marked EXISTS-IN-TREE by B33.38 (`S/data/fixtures.py` `stakes_ob`); the tree has no `stakes_ob` and no item creates it (part 2 §13, `carriers.py`) | `V12_STRUCTURE_part2.md` §5.7 DEP-NOCARRIER (step 3): the `stakes_ob.debt` arm is `BLOCKED (v12: a carrier is owed)`, owner the SC lane; B33.38's other arms stand | listed: the orchestrator (one Edit of B33.38's DEPENDS ON and its `stakes_ob.debt` arm); not edited by H3 (scope: the tables) |
+| C-27 | 24 batches' re-pin `before` readings named a batch other than the mover that merges immediately before them in part 2 §3's order (K5 F5 found four; R2c left five more, `checks/R2c_APPLIED.md`) | §3's merge order and `V12_STRUCTURE_part3.md` §7.4 (step 3): each mover reads the after-reading of the mover merged just before it; the first of a step the last mover of the step before | **edited by lane H3**: 24 batches (part 2 §3's Checks paragraph lists them) |
+| C-28 | B19.07's NAMES line renames `Unit.base_combat_pool`, a spelling B17.05 (S9) has already renamed to `Army.base_combat_pool` before B19 (S15); B38.57, B38.59 and B38.71 cross B38.17's `Regime` → `CreedBody` and `regimes` → `creed_bodies` (part 2 §12.1) | the item's SITE re-grep at its open (§5.7) resolves the spelling on the tree it lands on (step 4) | listed: the B19 and B38 sessions at the item's open; not edited |
+
+### 11.1 Closing status of C-01 to C-28 (lane H3, 2026-11-13: each read against `checks/CHK_K1.md` to `CHK_K10.md`, `R1_APPLIED.md`, `R2a`…`R2d_APPLIED.md` and the parts as they now stand)
+
+| id | status | by |
+|---|---|---|
+| C-01 | **fixed** | R1 repair 5 (six `.99` written) |
+| C-02 | **fixed** | H2 (eight `GATE: Batch` lines); R1 repair 6 added five more edges the same way |
+| C-03 | **fixed** | H2 (B24.04, B23.04); R1 repair 6 (the B26 → B23 edge for `test_vm_mat_d_paper.py`); R2d K8 #24 (B28.33's file) |
+| C-04 | **fixed** | H2 |
+| C-05 | **fixed** | H2 |
+| C-06 | **fixed** | the part's own line, recorded applied by K4 (`CHK_K4.md:45`) |
+| C-07 | **fixed** | K8 finding 12 (B28's DIALS line, B28.13's HASH MOVERS and control) |
+| C-08 | **closed** (decided, no edit needed) | H2 |
+| C-09 | **fixed** | the part's own line and UNDECIDED (3), recorded applied by K4 (`CHK_K4.md:45`) |
+| C-10 | **closed** | H2 (§8 row 4; the held list drops DEF-10) |
+| C-11 | **open in part** | B20.09's fallback (accept `reform` without the reader) stands; B31's part names no re-check of B20.09 (`grep B20.09 workplan_v12_part39_cont.md` → nothing). No check lane read it (K7 holds part 30, K9 part 39). Owed to B31's session at its open |
+| C-12 | **closed** | H2 (§8 row 42) |
+| C-13 | **open by design** | ED-820's trigger is read by B20's session at its open (§7.9); part 30 does not name ED-820 (grep), which is what "read at its open" leaves |
+| C-14 | **open** | no B39 item names ED-507 (`grep ED-507 workplan_v12_part4[0-3]*.md` → nothing); K10 did not take it. Owed: one B39 item, or a sentence in B39.31's text that the `poi: by_draw` placement is not ED-507's reader (§7.9) — the orchestrator's one Edit |
+| C-15 | **closed** | B36.08 is BUILD, not HELD (its row, `workplan_v12_part39.md:71`): ED-IN-0300 covers it (HD-22) |
+| C-16 | **closed** | K5 (`CHK_K5.md:105`): no B21b item edits `loop/sides.py` |
+| C-17 | **open (accepted residue)** | U3 §6.1's `test_referent_class_stamps.py` is written by no item; B36's item gates on `test_in12_step9.py`'s tests instead. No check lane took it (K10 named; part 39 is K9's). The gate executes; the U3 row stays unmatched in §6 |
+| C-18 | **fixed** | lane H3: B35.30 written (HD-25); B35.28 HELD on it |
+| C-19 | **fixed** | R2a (B04.99 step 4) |
+| C-20 | **closed** | H2 (§9) |
+| C-21 | **fixed** | H2 (the pointer in `workplan_v12.md` §12); R1 repair 8 replaced §12's id table |
+| C-22 | **open: Jordan's** | R2d K8 #4: `V12_FOR_JORDAN.md` J-03 (`release`'s class); B32.26 step 5 carries the `[ASSUMPTION]` that `release` stays in `contest_owed` meanwhile |
+| C-23 | **open** | `master/MASTER_FINDINGS.md:65` still reads "the other 132"; outside v12's files: the orchestrator |
+| C-24 | **fixed** | R2d (CHK_K7 F-10, K8 #23): B41's PARALLEL rewritten to S18 |
+| C-25 | **fixed** | K5 finding 13 (B12b.06's heading and body) |
+| C-26 | **open** | above: the orchestrator's Edit of B33.38 |
+| C-27 | **fixed** | lane H3 |
+| C-28 | **open by design** | the item's SITE step at its open |
+
+**Count:** of C-01 to C-28, 20 fixed or closed, 8 open (C-11 in part, C-13 and C-28 by design, C-14, C-17 accepted, C-22 Jordan's, C-23 and C-26 the orchestrator's).
+
+### 11.2 Gates that are a reading, not an execution artifact (lane H3, generated by `residue.py`, hand-classed; the bodies are not rewritten)
+
+`residue.py` scans every item `GATE` and block `BATCH GATE` line for an arm that reads a `## Status:` line, counts lines or keywords of a document, or reads that a document "states (1) to (n)", and skips arms the repair lanes already relabelled as a record line or the critic's verdict. **27 arms in 26 items or blocks.** Listed below are the 15 whose gate has no other executed arm, or whose executed arm is itself a document count; the rest are not residue: B21c.06, B27.14, B27.15, B27.19, B27.22, B27.23, B10.53, B31.01, B38.51 and B10.51's second arm already pair the "states" reading with `test -f` or `ls` and a `git diff --stat` arm (R2c, R2d's form), the "states" half being the `ners` critic's (§5.8); and B03.66, B03.70 read `wc -l CLAUDE.md` against its cap, which is the rule's own instrument on a process surface (CLAUDE.md's preamble; §0.05 clause 4).
+
+**The minimum execution artifact** for every DESIGN-FIRST row below is the one R2c and R2d wrote for B21c.06 and B27.14: `test -f <the item's design file>` → exit 0, and `git diff --stat <item-base>..HEAD -- engine modules tools` → empty (no code), with "states (1) to (n), each with a falsifier" moved to the `ners` critic's verdict in the commit body.
+
+| # | batch | handle | the reading it gates on | minimum execution artifact that could replace it |
+|---|---|---|---|---|
+| 1 | B10 | B10.51 | `grep -c '^## Status: PROPOSED' <file>` → 1 | `test -f` + `git diff --stat` (above); the Status arm dropped (R2b noted it, out of its scope) |
+| 2 | B10 | B10.52 | `grep -c '^## Status: PROPOSED' <file>` → 1 | the same |
+| 3 | B14 | B14.28 | "the file exists and states (1) to (4), each with a falsifier" | `test -f` + `git diff --stat` |
+| 4 | B16 | B16.10 | `grep -c "SUPERSEDED IN PART" <proposal>` → 1 or more (a POINTER, no commit of its own) | E-6's form, `GATE: none (record only)`: a POINTER executes nothing, so a document count is no gate; or `git log -1 --format=%H -- <proposal>` naming the commit that wrote the banner |
+| 5 | B21c | BATCH GATE | `ls <design file>` → "exists and states (1) to (6) of B21c.06" | keep `ls`; the "states" half to B21c.06's critic (it already carries `git diff --stat`) |
+| 6 | B23 | B23.01 | "the file exists and states (1) to (5)" | `test -f` + `git diff --stat` |
+| 7 | B24 | B24.12 | "the file exists and states (1) to (4), each with a falsifier and a control" | the same |
+| 8 | B24 | B24.41 | "the file exists and states (1) to (6) …" | the same |
+| 9 | B24a | B24a.02 | "the file exists and states (1) to (4)" | the same |
+| 10 | B26 | B26.16 | `test -f <file> && grep -c -E 'remit\|members\|holdings\|seats' <file>` → states (1) to (5) (a keyword count) | `test -f` + its own `git diff --stat` arm (present); the keyword count dropped |
+| 11 | B28 | B28.01 | "the file exists and states (1) to (5)" | `test -f` + `git diff --stat` |
+| 12 | B30 | B30.01 | "the file exists and states (1) to (4)" | the same |
+| 13 | B35 | B35.01 | "the file exists and states (1) to (5)" | the same (B35.30, written by H3, already has this form) |
+| 14 | B35 | B35.02 | "the file exists and states (1) to (4)" | the same |
+| 15 | B39 | B39.07 | "the file exists and states (1) to (5)" | the same |
+
+**Count: 15 gates** are a reading where an execution artifact belongs: 10 DESIGN-FIRST items gating only on what their file says (rows 3, 6 to 9, 11 to 15), 2 `## Status:` greps (B10.51, B10.52), 1 POINTER gating on a document count (B16.10), 1 keyword count beside a `test -f` (B26.16), and the "states" half of B21c's BATCH GATE. With the 12 arms not counted above, `residue.py`'s 27. None executes code, so none can be wrong about the engine; each can be wrong only about a document. Not rewritten here (the brief); the replacement is one line per item.
