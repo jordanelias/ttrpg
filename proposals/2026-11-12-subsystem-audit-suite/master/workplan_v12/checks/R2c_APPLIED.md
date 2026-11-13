@@ -44,3 +44,21 @@ Appended finding by finding as each is settled (a restart resumes from the last 
 | K6 F15 | edit for B12c.33 (precedent B12c.32's line); the `.99` cells re-checked: filled by R1 repair 5(b) | part28_cont B12c.33 | ADVANCES "R-04.a (`requisition`), through B12c.34" |
 | K6 F2 | B15 and B34 edges: re-checked, added by R1 repair 6. B18.04: edit (ladder 5: a shared YAML key is §7.3's merge case, not a data edge). B24a.01/.02: HD-17's recorded pair (part 2 §1.1), no edit. B19.22: forward note, no edit | part28_cont2 B18.04 DEPENDS ON | B18.04 says the B12c reference is a shared key (`matter_kinds`, different members), read nothing from B12c.25, and B12c merges first in S15; part 2 §1.1 not edited (its list is of declined data edges) |
 | K5 F6 (part 21) | edit (E-12: copy only the exact edit text, cite the rest by `file:section`) | part21 B21b.01, .05, .06, .11, .12, .13 | each now at or under 6,144 bytes (measured, heading to last field): quoted rationale, "Owner · Layer", "Not built", feeders and stopping-rule paragraphs cited by `master/eval/E1.md` §Carry-forward <entry> instead of copied; file lists, symbols, test names, step edits and gate commands kept. B21b.01's control arm now reads the batch-start reading (with F5) |
+| K5 F6 (parts 22-24) | edit (E-12) | part22 B24.02; part23 B16.01, B16.09, B16.11; part24 B12b.18; part24_cont B19a.01, B19a.02 | at or under 6,144 bytes: B24.02 6,143, B16.01 6,134, B16.11 6,109, B12b.18 5,983, B19a.01 5,892, B19a.02 6,144 (design/source prose cited by section; the two `[ASSUMPTION]` reverts of B24.02 cited to the design's §2 steps; B16.01's dataclass block kept field for field, its comment padding collapsed and the `DuelState` class comment shortened in words, not in meaning). **B16.09: 12,958 → 7,409 bytes**, rewritten whole as edit text only (files, symbols, signatures, the withdrawal's formula, test names, gate); E-12's remedy is applied and it stays over: the rest is edit text one commit carries (U3 §1 item 16: "one commit"). Not split: splitting would add a position and contradict U3's one-commit line; the orchestrator may split it (consult/view/chooser vs withdrawal) if a commit that size is refused |
+| K6 F7 side effect | note | part25 B21c.01 | the copied `ladders:` block (1.6 KB, exact edit text) puts B21c.01 at 7,214 bytes after its prose was cut to citations (E-12's remedy applied; over by the copied data alone) |
+| K5 F11, F12, F13 | re-checked: fixed by K5 | — | — |
+| K6 F10 | re-checked: fixed by R1 repair 4 (`EXPECTED RED UNTIL B19.99` batch line, `workplan_v12_part26.md:45`) | — | — |
+
+## Not changed, for the orchestrator
+
+- RE-PIN baselines of B21c, B34, B12c, B24a, B19 (my parts, no CHK finding names them) read against a batch other than the mover merged before them in part 2 §3 (same shape as K5 F5); not edited.
+- Part 2 §1.3's totals sentence counts conditional movers; B12c now has one (K6 F14), so the sentence is one short.
+- B16.09 (7.4 KB) and B21c.01 (7.2 KB) stay over 6 KB with edit text only (E-12 applied).
+
+## For Jordan
+
+None. Every open finding closed on ladder steps 3 to 5; the two content transcriptions (B21c.01's ladders, B24a.04's rites) are `[ASSUMPTION]` content listed in the PR body by D-19, not design forks.
+
+## Close
+
+`python tools/ci_naming_check.py` run at the end (reading below). No pytest, no commit.
