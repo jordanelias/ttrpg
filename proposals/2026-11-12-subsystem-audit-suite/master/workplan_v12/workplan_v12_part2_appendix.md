@@ -21,6 +21,14 @@
 | 13 | `req.py` | the requirement map and the milestones (§10) |
 | 14 | `held_extract.py` | the intake's held entries and the trigger lines of their carry-forward blocks (§8, hand-read after) |
 | 15 | `dials.py` | the dump of every block-level `DIALS AT CONTROL` line (§4, hand-made from it) |
+| 16 | `totals.py` | lane H3: plan-wide positions by state (both normalisers), movers by kind, mover/EQUAL batches, hours, waves and chains (§1.2) |
+| 17 | `names.py` | lane H3: every rename (`NAMES` lines) and every `NEW` name, with the flags (§12; `names.json`) |
+| 18 | `carriers.py` | lane H3: `MISSING` entries, `EXISTS-IN-TREE` tokens not in the tree, `V12` handles cited before they land, U3 §6.3's rows (§13; `carriers.json`) |
+| 19 | `t13.py` | lane H3: the markdown of §12 and §13's generated tables |
+| 20 | `residue.py` | lane H3: gate arms that read a `## Status:` line, a document count or a document's statements (§11.2) |
+| 21 | `sizes.py` | lane H3: item sizes against E-12's 6 KB cap (`V12_FOR_JORDAN.md` J-04) |
+
+**Lane H3's edits to the scripts above** (2026-11-13): `graph.py`'s `stnorm` reads a state cell's leading word first (it had read "BUILD (HELD if …)" as HELD and B98's "BLOCKED (… reading …)" as READING); `t1.py` writes B98's and B99's rows from their positions now that part 44 gives them. Scripts 16 to 21 are new, below; run them after 1 to 5 (`names.py` before `carriers.py` and `t13.py`).
 
 ## `parse_parts.py`
 
@@ -831,4 +839,369 @@ for b in G['nodes']:
     for fn, ln, t in P['batches'][b]['fields'].get('DIALS AT CONTROL', []):
         out.append(f'##### {b} {fn}:{ln}\n{t}\n')
 open('dials_raw.txt', 'w').write('\n'.join(out)); print(sum(len(x) for x in out), 'bytes')
+```
+
+## `totals.py`
+
+```python
+"""H3: plan-wide totals from parts.json, graph.json, hashinfo.json (part 2 §1.2, §1.3 totals, §3). Read-only."""
+import json, re
+from collections import Counter
+P = json.load(open('parts.json')); G = json.load(open('graph.json')); H = json.load(open('hashinfo.json'))
+KS = ['DESIGN-FIRST', 'POINTER', 'READING', 'HELD', 'BLOCKED', 'CONTENT', 'BUILD', 'GIT']
+def anyword(s):                       # graph.py's / summ.py's normaliser: the first listed word found anywhere in the cell
+    u = s.upper()
+    for k in KS:
+        if k in u: return k
+    return 'OTHER'
+def leading(s):                       # the state cell's leading word (R1: "BUILD (HELD if …)" is BUILD)
+    u = s.upper().lstrip('*` ')
+    for k in KS:
+        if u.startswith(k): return k
+    return anyword(s)
+tot_a, tot_l, per = Counter(), Counter(), {}
+for b in G['nodes']:
+    seen = {}
+    for p in P['batches'][b]['positions']: seen.setdefault(p['pos'], p)
+    a = Counter(anyword(p['cells'][3]) for p in seen.values()); l = Counter(leading(p['cells'][3]) for p in seen.values())
+    tot_a += a; tot_l += l
+    if a != l: per[b] = (dict(a), dict(l))
+print('positions', sum(tot_a.values()), '| by any word', dict(tot_a), '| by leading word', dict(tot_l))
+print('batches where the two normalisers differ:', per)
+nb = sum(len(H[b]['mv']['B']) for b in H); ne = sum(len(H[b]['mv']['E']) for b in H); nq = sum(len(H[b]['mv']['?']) for b in H)
+mb = [b for b in H if any(H[b]['mv'].values())]
+print('movers behaviour', nb, 'encoding', ne, 'conditional', nq, '| mover batches', len(mb), 'EQUAL', len(H) - len(mb), sorted(set(H) - set(mb), key=G['nodes'].index))
+print('conditional handles', [h for b in H for h in H[b]['mv']['?']])
+print('encoding handles', [h for b in H for h in H[b]['mv']['E']])
+print('without B98/B99: behaviour', nb - len(H['B98']['mv']['B']), 'positions', sum(G['pos'][b] for b in G['pos'] if b not in ('B98','B99')))
+r = G['res']['S+G+R']
+print('est B98', G['est']['B98'], 'B99', G['est']['B99'], 'serial', round(sum(G['est'].values()), 1), 'makespan', round(sum(max(G['est'][h] for h in s) for s in r['sched']), 1))
+for k in ('S', 'S+G', 'S+G+R', 'S+G+R+M'):
+    x = G['res'][k]; print(k, 'W', x['W'] + 1, 'steps', len(x['sched']), 'chains', len(x['chains']), 'hours', x['hours'][0])
+print('slack B17', r['slack']['B17'], 'B03g', r['slack']['B03g'], 'B34', r['slack']['B34'], 'B26', r['slack']['B26'])
+```
+
+## `names.py`
+
+```python
+"""H3: the names table (part 2 §12). Every rename an item's NAMES line states (old → new) and every new name a NEW
+mark introduces (a file, tool, test file, harness module, key), in landing order; flags a name two items introduce
+and two spellings of one name. Reads parts.json and graph.json; writes names.json; read-only over the parts."""
+import json, re, os
+from collections import defaultdict
+P = json.load(open('parts.json')); G = json.load(open('graph.json'))
+r = G['res']['S+G+R']; step = r['step']; nodes = G['nodes']
+order = []                                            # landing order: step, then the structure's row order, then the position table
+for b in sorted(nodes, key=lambda b: (step[b], nodes.index(b))):
+    seen = []
+    for p in P['batches'][b]['positions']:
+        if p['pos'] not in seen: seen.append(p['pos'])
+    order += seen
+rank = {h: i for i, h in enumerate(order)}
+TOK = r'`([^`\n]{2,120})`'
+def kind(t):
+    base = os.path.basename(t.split('::')[0])
+    if re.match(r'test_\w+\.py$', base): return 'test file'
+    if t.startswith('tools/') or '/tools/' in t: return 'tool'
+    if 'harness/' in t: return 'harness module'
+    if base.endswith('.py'): return 'module'
+    if re.search(r'\.(ya?ml|json)$', base): return 'data file'
+    if base.endswith('.md'): return 'design file'
+    if '::' in t or re.match(r'^[A-Za-z_][\w.]*$', t): return 'key or symbol'
+    return 'other'
+def clean(t):
+    t = t.strip().rstrip('.,;:')
+    t = re.sub(r'^S/', 'engine/season/', t)          # the parts' S/ shorthand
+    return t
+renames, news = [], defaultdict(list)
+for h in order:
+    it = P['items'].get(h)
+    if not it: continue
+    for fn, ln, t in it['fields'].get('NAMES', []):
+        body = t.split(':', 1)[1]
+        for m in re.finditer(TOK + r'\s*(?:\([^)]*\)\s*)?→\s*' + TOK, body):
+            renames.append({'item': h, 'old': clean(m.group(1)), 'new': clean(m.group(2)), 'at': f'{fn}:{ln}'})
+    for f, v in it['fields'].items():
+        if f in ('DEPENDS ON', 'SOURCE', 'GLOSSARY'): continue      # a NEW there cites another item's creation, or a glossary row
+        for fn, ln, t in v:
+            for m in re.finditer(r'\bNEW\s*' + TOK, t):   # NEW marks the one name after it ("NEW `a`, `b`": `b` is an existing name the item edits)
+                for x in [m.group(1)]:
+                    x = clean(x)
+                    if ' ' in x or len(x) < 3: continue
+                    if not any(e['item'] == h for e in news[x]): news[x].append({'item': h, 'field': f, 'at': f'{fn}:{ln}'})
+def norm(x):                                          # one spelling key: base name lower case, separators and a plural s dropped; file names keep their extension class
+    b = os.path.basename(x.split('::')[-1]); ext = re.search(r'\.(py|ya?ml|json|md)$', b.lower())
+    b = re.sub(r'\.(py|ya?ml|json|md)$', '', b.lower())
+    return re.sub(r'[^a-z0-9]', '', b).rstrip('s') + ('.' + ext.group(1)[:2] if ext else '')
+def same(a, b):                                       # a relative and a full spelling of one path, or a module and a symbol in it
+    a0, b0 = a.split('::')[0], b.split('::')[0]
+    if '/' not in a or '/' not in b: a0, b0 = a.split('::')[-1], b.split('::')[-1]       # a bare symbol and its qualified spelling
+    return a0 == b0 or a0.endswith('/' + b0) or b0.endswith('/' + a0)
+twice = {x: v for x, v in news.items() if len({e['item'] for e in v}) > 1}
+byn = defaultdict(set)
+for x in news:
+    if not x.startswith(('-', '__', '[')) and not x.endswith(('*', '=')) and '__init__' not in x and not x.isupper(): byn[norm(x)].add(x)
+ok = lambda x: not x.startswith(('-', '__', '[')) and not x.endswith(('*', '=')) and '__init__' not in x and not x.isupper()
+for rn in renames:
+    if ok(rn['new']): byn[norm(rn['new'])].add(rn['new'])
+rtwice = defaultdict(list)                            # one rename stated by two items
+for rn in renames: rtwice[(rn['old'], rn['new'])].append(rn['item'])
+rtwice = {f'{a} → {b}': sorted(set(v), key=lambda h: rank.get(h, 0)) for (a, b), v in rtwice.items() if len(set(v)) > 1}
+spell = {}
+for k, v in byn.items():
+    v = sorted(v)
+    if len(v) < 2 or len(k) <= 3: continue
+    if all(same(a, b) for a in v for b in v): continue
+    if all(a.lower() == b.lower() or a.lower().rstrip('s') == b.lower().rstrip('s') for a in v for b in v) and not any('/' in a for a in v): continue   # a class and its constant, or a plural: one word
+    spell[k] = v
+json.dump({'rtwice': rtwice, 'renames': renames, 'news': news, 'twice': twice, 'spell': spell, 'rank': rank}, open('names.json', 'w'), indent=0)
+kinds = defaultdict(int)
+for x in news: kinds[kind(x)] += 1
+print('renames', len(renames), 'from', len({r_['item'] for r_ in renames}), 'items; NAMES lines', sum(len(P['items'][h]['fields'].get('NAMES', [])) for h in P['items']))
+print('new names', len(news), dict(kinds))
+print('introduced NEW by two or more items', len(twice))
+for x, v in sorted(twice.items(), key=lambda kv: rank.get(kv[1][0]['item'], 0)): print('  TWICE', x, [e['item'] for e in v])
+print('renames stated by two or more items', len(rtwice)); [print('  RTWICE', k, v) for k, v in rtwice.items()]
+print('spelling groups', len(spell))
+for k, v in spell.items(): print('  SPELL', v)
+# --- the markdown tables (part 2 §12)
+tail = lambda x: x.split('::')[-1].split('/')[-1]
+first = lambda hs: sorted(set(hs), key=lambda h: rank.get(h, 0))
+pairs = defaultdict(list)
+for rn in renames: pairs[(rn['old'], rn['new'])].append(rn['item'])
+L = ['| old → new | first stated by | also applied by (items) |', '|---|---|---|']
+for (o, n), hs in sorted(pairs.items(), key=lambda kv: rank.get(first(kv[1])[0], 0)):
+    hs = first(hs); more = hs[1:]
+    L.append(f"| `{o}` → `{n}` | {hs[0]} | {', '.join(more[:8]) + (f' … ({len(more)})' if len(more) > 8 else '') if more else '—'} |")
+open('names_renames.md', 'w').write('\n'.join(L) + '\n')
+L = ['| new name | kind | introduced (NEW) by | also marked NEW by |', '|---|---|---|---|']
+for x, v in sorted(news.items(), key=lambda kv: (rank.get(kv[1][0]['item'], 0), kv[0])):
+    hs = first([e['item'] for e in v])
+    L.append(f"| `{x}` | {kind(x)} | {hs[0]} | {', '.join(hs[1:]) or '—'} |")
+open('names_new.md', 'w').write('\n'.join(L) + '\n')
+odd = defaultdict(lambda: defaultdict(list))
+for rn in renames: odd[tail(rn['old'])][tail(rn['new'])].append(rn['item'])
+odd = {o: {n: first(h) for n, h in d.items()} for o, d in odd.items() if len(d) > 1}
+json.dump({'pairs': len(pairs), 'odd': odd}, open('names_flags.json', 'w'), indent=0)
+print('rename pairs', len(pairs), '| one old name, two new spellings', len(odd))
+```
+
+## `carriers.py`
+
+```python
+"""H3: the symbols with no carrier (part 2 §13). From each item's DEPENDS ON marks: every MISSING entry with its owner;
+every EXISTS-IN-TREE token not found in the tree, classed by whether an earlier item creates it (a mismark), only a
+later one does, or none does (no carrier); every V12 handle that lands after the item citing it; and U3 §6.3's 30 rows
+matched to the item that now carries each. Reads parts.json, graph.json, names.json and the working tree; read-only."""
+import json, re, os, subprocess
+from collections import defaultdict
+P = json.load(open('parts.json')); N = json.load(open('names.json')); rank = N['rank']
+ROOT = '/home/user/ttrpg'
+files = subprocess.run(['git', 'ls-files'], cwd=ROOT, capture_output=True, text=True).stdout.split('\n')
+fset = set(files); bases = defaultdict(list)
+for f in files: bases[os.path.basename(f)].append(f)
+CODE = [f for f in files if f.startswith(('engine/', 'modules/', 'tools/', 'references/', 'systems/', 'tests/', 'godot/'))
+        and re.search(r'\.(py|ya?ml|json|gd|ini|toml|cfg)$', f)]
+ident = set(); text = {}
+for f in CODE:
+    try: t = open(f'{ROOT}/{f}', encoding='utf-8', errors='ignore').read()
+    except OSError: continue
+    text[f] = t; ident.update(re.findall(r'[A-Za-z_][A-Za-z0-9_]*', t))
+PRE = ['', 'engine/season/', 'engine/', 'modules/', 'tools/', 'engine/season/tests/', 'tests/valoria/', 'references/']
+def findfile(p):
+    p = re.sub(r'^S/', 'engine/season/', p.strip('/'))
+    for pre in PRE:
+        if pre + p in fset: return pre + p
+        if any(f.startswith(pre + p + '/') for f in files[:0]) or os.path.isdir(f'{ROOT}/{pre}{p}'): return pre + p
+    c = [f for f in bases.get(os.path.basename(p), []) if f.endswith(p)]
+    return c or None
+def found(tok):
+    """True / False / None (not a checkable name)."""
+    t = tok.strip().rstrip('.,;:')
+    if re.search(r'[\s(){}<>=,"\'|*…]', t) or t.startswith('-') or len(t) < 3: return None
+    if re.fullmatch(r'[0-9a-f]{7,40}', t) or re.match(r'^(\d\d_|U\d|[A-Z][A-Z0-9]*_[A-Z])', t) or re.search(r'\.md\b|^res://|^B(?:A1|\d\d)\w*\.\d\d$', t): return None   # a commit, a design document or an item: not a symbol
+    path, sym = (t.split('::', 1) + [''])[:2] if '::' in t else (t, '')
+    m = re.match(r'^([\w./-]+\.(?:ya?ml|json|py)):\s*(\S+)$', t)
+    if m: path, sym = m.group(1), m.group(2)
+    if '/' in path or re.search(r'\.(py|ya?ml|json|md|gd)$', path):
+        fs = findfile(path)
+        if not fs: return False
+        if isinstance(fs, str): fs = [fs]
+        if not sym: return True
+        last = re.findall(r'[A-Za-z_]\w*', sym)
+        if not last: return True
+        for f in fs:
+            body = text.get(f) or (open(f'{ROOT}/{f}', encoding='utf-8', errors='ignore').read() if os.path.isfile(f'{ROOT}/{f}') else '')
+            if re.search(r'\b' + re.escape(last[-1]) + r'\b', body): return True
+        return False
+    parts = re.findall(r'[A-Za-z_]\w*', t)
+    if not parts: return None
+    return parts[-1] in ident
+creators = defaultdict(list)                           # token tail → items that create it (a NEW mark) or name it in WHERE
+def tl(x):                                            # the token's own name: a path's base name, a symbol's last identifier
+    x = re.sub(r'^S/', 'engine/season/', x)
+    if '::' not in x and ('/' in x or re.search(r'\.(py|ya?ml|json|md)$', x)): return [os.path.basename(x)]
+    return re.findall(r'[A-Za-z_]\w*', x.split('::')[-1])[-1:] or [x]
+for x, v in N['news'].items():
+    for e in v: creators[tl(x)[0]].append(e['item']); creators[x].append(e['item'])
+for rn in N['renames']: creators[tl(rn['new'])[0]].append(rn['item']); creators[rn['new']].append(rn['item'])   # a rename creates its new name
+for h, it in P['items'].items():
+    for fn, ln, t in it['fields'].get('WHERE', []) + it['fields'].get('INSTRUCTION', []):
+        for m in re.finditer(r'\b(?:NEW|new|adds?|creates?|writes?)\b[^.;]{0,60}?`([^`]+)`', t):
+            creators[tl(m.group(1))[0]].append(h)
+MARK = r'(EXISTS-IN-TREE|V12|PROPOSED|MISSING(?:-BY-ORDER|-DEP)?)'
+missing, absent, later_v12, checked = [], [], [], 0
+for h, it in P['items'].items():
+    for fn, ln, t in it['fields'].get('DEPENDS ON', []):
+        segs = re.split(MARK, t)
+        for i in range(1, len(segs) - 1, 2):
+            mk, body = segs[i], segs[i + 1]
+            if mk.startswith('MISSING'):
+                missing.append({'item': h, 'mark': mk, 'text': re.sub(r'\s+', ' ', body.strip(' :;,'))[:260], 'at': f'{fn}:{ln}'})
+            elif mk == 'EXISTS-IN-TREE':
+                for tok in re.findall(r'`([^`\n]+)`', body):
+                    r_ = found(tok)
+                    if r_ is None: continue
+                    checked += 1
+                    if r_: continue
+                    key = tl(tok)[0]; cs = [c for c in creators.get(tok, []) + creators.get(key, []) if c != h]
+                    early = sorted({c for c in cs if rank.get(c, 1e9) < rank.get(h, 0)}, key=lambda c: rank[c])
+                    late = sorted({c for c in cs if rank.get(c, -1) > rank.get(h, 0)}, key=lambda c: rank[c])
+                    cls = 'created by an earlier item (mark it V12)' if early else ('created only by a later item' if late else 'no carrier found')
+                    absent.append({'item': h, 'token': tok, 'class': cls, 'early': early[:3], 'late': late[:3], 'at': f'{fn}:{ln}'})
+            elif mk == 'V12':
+                for hh in re.findall(r'\b(B(?:A1|\d\d(?:[a-z]|F\d|L|M)?)\.\d\d)\b', body.split(';')[0]):
+                    if hh in rank and rank[hh] > rank.get(h, 0) and not re.search(r'not a depend|note|forward|STOPS IF', body.split(';')[0], re.I):
+                        later_v12.append({'item': h, 'cites': hh, 'at': f'{fn}:{ln}', 'text': re.sub(r'\s+', ' ', body.split(';')[0])[:160]})
+# U3 §6.3
+u3 = []
+for l in open(f'{ROOT}/proposals/2026-11-12-subsystem-audit-suite/unified/U3_DEPENDENCY_ORDER.md', encoding='utf-8').read().split('### 6.3', 1)[1].split('\n## ', 1)[0].split('\n'):
+    if not l.startswith('| ') or l.startswith('| missing') or l.startswith('|---'): continue
+    c = [x.strip() for x in l.strip().strip('|').split('|')]
+    toks = re.findall(r'`([^`]+)`', c[0]) or [c[0]]
+    st = []
+    for tok in toks:
+        key = tl(tok)[0]; cs = sorted(set(creators.get(tok, []) + creators.get(key, [])), key=lambda x: rank.get(x, 1e9))
+        st.append((tok, found(tok), cs[:2]))
+    u3.append({'row': c[0][:90], 'u3': c[2][:90], 'tokens': st})
+json.dump({'missing': missing, 'absent': absent, 'later_v12': later_v12, 'u3': u3, 'checked': checked}, open('carriers.json', 'w'), indent=0)
+from collections import Counter
+print('MISSING entries', len(missing), '| EXISTS-IN-TREE tokens checked', checked, '| not found', len(absent), Counter(a['class'] for a in absent))
+print('V12 handles landing after the citing item (not marked a note)', len(later_v12))
+print('U3 §6.3 rows', len(u3))
+# --- U3 §6.3: the first item (landing order) whose WHERE or INSTRUCTION names each token, beside the creator match
+def naming(tok):
+    key = tl(tok)[0]; hs = []
+    for h, it in P['items'].items():
+        for f in ('WHERE', 'INSTRUCTION'):
+            if any(re.search(r'`[^`]*\b' + re.escape(key) + r'\b[^`]*`', t) for _, _, t in it['fields'].get(f, [])): hs.append(h); break
+    return sorted(hs, key=lambda x: rank.get(x, 1e9))[:3]
+for u in u3: u['named'] = [(t[0], naming(t[0]) if t[1] is not None else []) for t in u['tokens']]
+json.dump({'missing': missing, 'absent': absent, 'later_v12': later_v12, 'u3': u3, 'checked': checked}, open('carriers.json', 'w'), indent=0)
+```
+
+## `t13.py`
+
+```python
+"""H3: the tables of part 2 §12 (names) and §13 (symbols with no carrier) as markdown, from names.json and carriers.json;
+writes t12_renames.md, t12_new.md, t13_missing.md, t13_absent.md, t13_later.md, t13_u3.md. Read-only over the parts."""
+import json, re
+N = json.load(open('names.json')); C = json.load(open('carriers.json')); rank = N['rank']
+first = lambda hs: sorted(set(hs), key=lambda h: rank.get(h, 0))
+esc = lambda s: s.replace('|', '\\|')
+from collections import defaultdict
+pairs = defaultdict(list)
+for r in N['renames']: pairs[(r['old'], r['new'])].append(r['item'])
+L = ['| # | old → new | first stated by | applied again by |', '|---|---|---|---|']
+for i, ((o, n), hs) in enumerate(sorted(pairs.items(), key=lambda kv: rank.get(first(kv[1])[0], 0)), 1):
+    hs = first(hs); m = hs[1:]
+    L.append(f"| {i} | `{esc(o)}` → `{esc(n)}` | {hs[0]} | {', '.join(m[:6]) + (f' and {len(m) - 6} more' if len(m) > 6 else '') if m else '—'} |")
+open('t12_renames.md', 'w').write('\n'.join(L) + '\n')
+def kind(t):
+    import os
+    base = os.path.basename(t.split('::')[0])
+    if re.match(r'test_\w+\.py$', base): return 'test file'
+    if t.startswith('tools/') or '/tools/' in t: return 'tool'
+    if 'harness/' in t: return 'harness module'
+    if base.endswith('.py'): return 'module'
+    if re.search(r'\.(ya?ml|json)$', base): return 'data file'
+    if base.endswith('.md'): return 'design file'
+    if '::' in t or re.match(r'^[A-Za-z_][\w.]*$', t): return 'key or symbol'
+    return 'other'
+L = ['| # | new name | kind | introduced (NEW) by | also marked NEW by |', '|---|---|---|---|---|']
+for i, (x, v) in enumerate(sorted(N['news'].items(), key=lambda kv: (rank.get(kv[1][0]['item'], 0), kv[0])), 1):
+    hs = first([e['item'] for e in v])
+    L.append(f"| {i} | `{esc(x)}` | {kind(x)} | {hs[0]} | {', '.join(hs[1:]) or '—'} |")
+open('t12_new.md', 'w').write('\n'.join(L) + '\n')
+L = ['| # | item | mark | what is missing, and its owner (the item\'s own words) | at |', '|---|---|---|---|---|']
+for i, a in enumerate(sorted(C['missing'], key=lambda a: rank.get(a['item'], 0)), 1):
+    L.append(f"| {i} | {a['item']} | {a['mark']} | {esc(a['text'])} | {a['at'].replace('workplan_v12_', '')} |")
+open('t13_missing.md', 'w').write('\n'.join(L) + '\n')
+L = ['| # | item | token marked EXISTS-IN-TREE | not in the tree; class | earliest items naming it as created | at |', '|---|---|---|---|---|---|']
+for i, a in enumerate(sorted(C['absent'], key=lambda a: rank.get(a['item'], 0)), 1):
+    L.append(f"| {i} | {a['item']} | `{esc(a['token'])}` | {a['class']} | {', '.join(a['early'] or a['late']) or '—'} | {a['at'].replace('workplan_v12_', '')} |")
+open('t13_absent.md', 'w').write('\n'.join(L) + '\n')
+L = ['| # | item | cites (V12) | landing | the citing clause | at |', '|---|---|---|---|---|---|']
+for i, a in enumerate(C['later_v12'], 1):
+    L.append(f"| {i} | {a['item']} | {a['cites']} | after the citer | {esc(a['text'].strip())} | {a['at'].replace('workplan_v12_', '')} |")
+open('t13_later.md', 'w').write('\n'.join(L) + '\n')
+print('renames', len(pairs), 'new', len(N['news']), 'missing', len(C['missing']), 'absent', len(C['absent']), 'later', len(C['later_v12']))
+```
+
+## `residue.py`
+
+```python
+"""H3: gate-quality residue (part 2 §11). Every item GATE line and every block BATCH GATE / GATE line that reads a
+`## Status:` line or counts lines of a document (a `.md` file, or a `proposals/`, `.designs/`, `canon/` path) instead of
+an execution artifact. Reads parts.json; read-only. Prints one row per hit with the arm's text."""
+import json, re
+P = json.load(open('parts.json')); G = json.load(open('graph.json'))
+STATUS = re.compile(r"##\s*Status|Status:\s*(PROPOSED|RATIFIED|ACCEPTED)|status line", re.I)
+DOCCOUNT = re.compile(r"(grep\s+-[a-zA-Z]*c[a-zA-Z]*|wc\s+-l|grep[^`|;]*\|\s*wc)[^`]*?(\.md\b|proposals/|\.designs/|canon/|CURRENT\.md|HANDOFF)", re.I)
+STATES = re.compile(r"(file|design|document)[^.;]{0,40}\bstates\b[^.;]{0,30}\(1\)|exists and states", re.I)
+RECORD = re.compile(r"record line|not a gate arm|critic's verdict|not a gate claim|not read as a gate|not readings|not a reading|arm is deleted|is not an execution artifact", re.I)
+hits = []
+def scan(where, handle, fn, ln, t):
+    if RECORD.search(t) and not STATES.search(t): return                       # the line already relabels its document arm (R2a, R2b, R2c, R2d)
+    for arm in re.split(r';\s+|\n', t):
+        if (STATUS.search(arm) or DOCCOUNT.search(arm) or STATES.search(arm)) and not RECORD.search(arm):
+            hits.append({'where': where, 'handle': handle, 'at': f'{fn}:{ln}', 'arm': re.sub(r'\s+', ' ', arm.strip())[:240]})
+for h, it in P['items'].items():
+    for fn, ln, t in it['fields'].get('GATE', []): scan('item GATE', h, fn, ln, t)
+for b, bb in P['batches'].items():
+    for fn, ln, t in bb['fields'].get('BATCH GATE', []): scan('BATCH GATE', b, fn, ln, t)
+json.dump(hits, open('residue.json', 'w'), indent=0)
+print('hits', len(hits), 'items/blocks', len({x['handle'] for x in hits}))
+for x in hits: print(x['handle'], '|', x['where'], '|', x['at'], '|', x['arm'][:200])
+```
+
+## `sizes.py`
+
+```python
+"""H3: item sizes (E-12: about 4 KB, 6 KB hard). An item is its `### Bnn.mm` heading to the next heading; bytes UTF-8.
+Prints the count over 6,144 bytes (6 KB) and over 6,000, by part range, and the list. Read-only."""
+import re, glob, os, json
+from collections import Counter
+D = '/home/user/ttrpg/proposals/2026-11-12-subsystem-audit-suite/master/workplan_v12'
+P = json.load(open('parts.json'))
+sz = {}
+for fn in P['files']:
+    cur = None; buf = []
+    for l in open(f'{D}/{fn}', encoding='utf-8'):
+        if l.startswith('## ') or l.startswith('### '):
+            if cur: sz[cur] = sz.get(cur, 0) + len(''.join(buf).encode())
+            m = re.match(r'^### (B(?:A1|\d\d(?:[a-z]|F\d|L|M)?)\.\d\d)\b', l); cur = m.group(1) if m else None; buf = [l] if cur else []
+        elif cur: buf.append(l)
+    if cur: sz[cur] = sz.get(cur, 0) + len(''.join(buf).encode())
+over = sorted([(h, n) for h, n in sz.items() if n > 6144], key=lambda x: -x[1])
+print('items', len(sz), '| over 6,144 bytes', len(over), '| over 6,000', sum(1 for n in sz.values() if n > 6000), '| over 8 KB', sum(1 for _, n in over if n > 8192), '| largest', over[:5])
+def part(h):
+    for fn in P['files']:
+        pass
+rng = Counter()
+for h, n in over:
+    f = P['items'][h]['files'][0]; k = int(re.search(r'part(\d+)', f).group(1))
+    rng['3-11' if k <= 11 else '12-20' if k <= 20 else '21-28' if k <= 28 else '29-43' if k <= 43 else '44'] += 1
+print(dict(rng)); print(' '.join(f'{h}:{n/1024:.1f}' for h, n in over))
+json.dump({'over': over}, open('sizes.json', 'w'))
 ```
