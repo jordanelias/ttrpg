@@ -143,11 +143,75 @@ collection and CP-T08-08's refill, which are credited on hand-built worlds only.
 
 ---
 
+### J-05 · Set the repository to allow merge commits for v12's batch PRs · the plan's run (no game effect)
+
+(Raised by repair lane V1 from the Fable verdict's defect 2, `V12_VERDICT.md`.)
+
+**The situation.** Each v12 batch has its own branch and PR (`workplan_v12.md` §7 point 7). A later batch's gate on an earlier one is met only if the earlier batch's closing commit is an ancestor of the current head (§1's table, the gate row). The `methodology-execute` skill says GitHub squash-merges each batch's PR (its BATCH BOUNDARY item 2). A squash (or a rebase-and-merge) puts a new commit on `main` in place of the batch's own, so the next batch's gate reads unmet and the run stops at B01. Which merge methods the repository allows was not checked (no GitHub call was made).
+
+**The question.** Will you set the repository to allow merge commits, so v12's batch PRs merge that way?
+
+**Option A — allow merge commits.** Each batch PR merges by merge commit; its commits, the closing one included, land on `main` as they are; every gate reads as written. `main`'s history keeps each batch's item commits (one per item) rather than one squash.
+**Option B — keep squash only.** Batches run one after another on one branch under the driver (`tools/methodology_drive.py`), merged to `main` at points you choose; the steps that open several batches at once (S4, S6, S8, S9, S12 to S19) lose their parallel sessions.
+**Option C — keep squash and rewrite each gate at merge.** The coordinator rewrites `@<closing sha>` to the squash's SHA after each merge. One more edit per batch, and the gate no longer names the commit the close read.
+
+**Recommendation.** A: it is the only option under which the plan runs as written, in parallel where §7 allows.
+
+**What the plan assumes until you answer.** Merge commits where the repository allows them; otherwise the driver on one branch (`workplan_v12.md` §7 point 7, `[ASSUMPTION: merge setting of the repository — unverified]`; the difference from the skill, §2.1 (e)).
+
+**Blocks.** Every parallel step's merges; nothing in B00 to B03, which run one at a time.
+
+**Sources.** `workplan_v12.md` §1, §2.1 (e), §7 point 7; `.claude/skills/methodology-execute/SKILL.md`, BATCH OPEN item 3 and BATCH BOUNDARY item 2; `V12_VERDICT.md` defect 2.
+
+---
+
+### J-06 · Batches over about 60 positions are one close each: split them, or keep them whole? · the plan's form (no game effect)
+
+(Raised by repair lane V1 from the Fable verdict's question 8; the plan's forms make a batch one close (RULED 2026-11-06, the skill), and the verdict's question is about size, not a defect, so nothing is re-cut here.)
+
+**The situation.** Six batches hold about 60 positions or more, each one close (one review fan, one full suite, one re-pin): B98 (87 positions, 38 behaviour movers, 39.3 h), B10 (67, 10 movers, 29.3 h), B03 (65, 2 movers, 28.5 h), B38 (65, 13 movers, 28.5 h), B11 (58, 31 movers, 25.7 h), B21 (57, 35 movers, 25.3 h) (part 2's batch table). A larger close carries more risk of a red found late and is harder to resume.
+
+**The question.** Keep each as one close, or split at its first forward cut?
+
+**Option A — keep them whole.** One close each, as written.
+**Option B — split on request, at the first forward cut.** A cut is valid where no row before it gates on a row after it. Verified for B10 only: B10.01 to B10.50 | B10.54 onward, after B10.51 to B10.53 land first (the first half's rows gate on nothing in the second half but those three, `workplan_v12_part12.md`'s position table; `V12_VERDICT.md` question 8). B98 can be cut at any position (each flip gates only on the previous flip's reading). The cuts for B03, B38, B11 and B21 are **unverified**.
+
+**Recommendation.** A until a close of one of them runs long; then B for that batch, at its verified cut.
+
+**What the plan assumes until you answer.** A: each is one close; no batch is re-cut.
+
+**Blocks.** Nothing.
+
+**Sources.** `workplan_v12_part2.md` (the batch table); `workplan_v12.md` §5 ("What shortens the path"); `V12_VERDICT.md` question 8.
+
+---
+
+### J-07 · Two Layer 1 rewordings with no amendment node: give each a node, or say the word · Layer 1
+
+(Raised by repair lane V1 from the Fable verdict's question 7.)
+
+**The situation.** Two items edit `architecture/meta/04_CODE_ARCHITECTURE.md` with no `L1-A*` node in `unified/U3_LAYER1_AMENDMENTS.md`. **B03.71** re-words the `succeed` designation nodes to the title route the code takes, on the assumption that your ruling RS-27 (*"the heir still has to claim their throne"*) owes that wording; CLAUDE.md §0.05 says a spec edited to match its implementation checks nothing, and A-97 says Layer 1 follows a ruling, never the code. **B41.03** step 4 adds a paragraph to §C.12 (a refusal and a defect as two typed shapes, GO-10). ED-IN-0300 lets an agent land unmarked architecture text openly in a PR; its ratified row names the positions whose holds it lifted (CR-29 among them, which covers B11.04's §C.6 row), and names neither A1-81 nor GO-10.
+
+**The question.** For each: apply it as a Layer 1 amendment (a node, or your word in the PR), or leave `04` as it stands?
+
+**Option A — amend.** B03.71 lands its re-wording and B41.03 its paragraph, each cited to your answer.
+**Option B — leave.** `04` keeps its text; B03.71 is retired with a note; B41.03's code (the typed refusal) lands without the paragraph, so the code holds a rule Layer 1 does not state.
+
+**Recommendation.** A for both: RS-27 does make the heir a claimant, and GO-10's shapes are what the port is built against; but each is a Layer 1 text, so it is yours.
+
+**What the plan assumes until you answer.** Neither lands: B03.71 is HELD, and B41.03's step 4 is HELD while its steps 1 to 3 proceed (`workplan_v12_part5.md` B03.71; `workplan_v12_part29.md` B41.03).
+
+**Blocks.** B03.71; B41.03 step 4.
+
+**Sources.** `workplan_v12_part5.md` B03.71; `workplan_v12_part29.md` B41.03; `registers/editorial_ledger_in.jsonl` (ED-IN-0300, the superseding row); `workplan_v12_part2_cont2.md` (the Layer 1 table); `V12_VERDICT.md` question 7.
+
+---
+
 **Settled by the checks and not asked** (each with what settled it, in `H2_DECISIONS.md`):
 
 | raised as a question for you | settled as | by |
 |---|---|---|
-| the guild leader's seat (`off_npc_084`) has no rung, so the stored `scale:` column cannot be cut (B03.69) | the plan drafts the seat's scope as seed content for your correction | precedent: D-19, content is drafted for your correction rather than waited on (HD-24) |
+| the guild leader's seat (`off_npc_084`) has no rung, so the stored `scale:` column cannot be cut (B03.69) | B03.69 stays BLOCKED (owner: you, for the seat's rung or scope, or A1-46's revert); the column is not cut in v12's run, and the position goes to the held table at B03's expunge with that trigger (`workplan_v12_part5.md` B03.69) | the item's own text; HD-24's "drafted as seed content" was not carried into the item (corrected by repair lane V1, `V12_VERDICT.md` defect 4) |
 | `release` is listed as owed a contest, and nobody gives it one | its shape file gives it no contest, so B32 reclassifies it | precedent: a row's shape is owned by its shape file (HD-27). **Re-opened as J-03**: check lane K8 found the move is not mechanical (the bookkeeping class may not touch a seat) |
 | readings that need more than two seasons (the scar flip, the Church Influence bands, claim fade) | they go to the final long re-take (B99) | your ruling A-114 (HD-26) |
 | `knot` has no written effect, but the thread batch must build it out | a design item comes first, inside the batch | precedent: E-14 and D-18 (HD-25); written by lane H3 as B35.30 |

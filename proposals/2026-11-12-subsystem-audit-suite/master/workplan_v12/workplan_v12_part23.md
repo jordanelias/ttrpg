@@ -259,7 +259,7 @@ Not in this batch, and where each is: PB step 5 (the `duel` callable through `ne
 - SOURCE: `proposals/03_PC_duel_round_and_approach.md` (its Status line and "Lands in batch: B16 … as the superseded companion of PB; no edit of its own lands"); U3 §1 item 16 ("`03_PC_duel_round_and_approach` marked superseded").
 - What the pointed section does: nothing lands from it; every build step, test, gate and mover is PB's (its §7: "nothing here lands on its own"), built in B16.01 to B16.09 and PB step 5 in B30.
 - The marking U3 asks for is in the tree's copy of the file at `aa31fd2`: "**Status: SUPERSEDED IN PART by `03_PC_duel_round_and_approach_B.md` (PB); build from PB, read this file for intent.**" No edit.
-- GATE: `grep -c "SUPERSEDED IN PART" proposals/2026-11-12-subsystem-audit-suite/proposals/03_PC_duel_round_and_approach.md` → 1 or more. No commit of its own.
+- GATE: none of its own (a POINTER: no work and no commit; the pointed work is gated by B16.01 to B16.09's own GATE lines). The `grep -c` of the proposal's Status line read a document, not a behaviour, and is dropped (repair lane V1, `V12_VERDICT.md` question 2).
 
 ### B16.11 — the duel scenario: a world, a runner, a report · `IS-PC-01` steps 1–5 · BUILD · HASH EQUAL
 - SOURCE: `IS-B1` §1.2 "Item: IS-PC-01" (as `IS_CHECK.md` D2 corrects it); `IS-B1` §1.1 (IS-PC-01 joins B16); `master/instructions/IS_B1_PC_MB_DICE_part2.md` file rows for `harness/duel_scene.py`, `harness/scenarios.py`; closes `audits/03_PC_audit.md` §9 ordered work 2, 3. Prose not copied is cited by `IS-PC-01`'s steps (E-12; R2c, K5 F6).
