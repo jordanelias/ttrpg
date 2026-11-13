@@ -12,6 +12,7 @@ GATE: Batch B01-laneA
 GATE: Batch B02-tests
 GATE: Batch B13-pc-package
 GATE: Batch B05-one-roll
+HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: none — the batch makes the typed outcome B15, B16, B19a and B19 read (`V12_STRUCTURE.md` §2.2, "none of its own"); IS-B1 §1.1 row 6: after it "the workbench and the loop run one entry; the victor is recorded; an `undecided` fight still writes". The close quotes R-04.c5 (i)'s `aperture 2 s` reading at s = 0, 1, 2 (`combat.fight` in `ENGINES`; `accept` attempted, executed and refused on `exists:challenge`) as a re-read, not a status move (A-114)
 BATCH GATE (read once, on the closing tree, at B14.99; `PYTHONHASHSEED=0` on every seeded command):
   `python tools/export_engine_params.py --check` → exit 0 on schema 8 (B14.12) with the `CFG` moves of B14.08 and B14.18;
@@ -21,7 +22,7 @@ BATCH GATE (read once, on the closing tree, at B14.99; `PYTHONHASHSEED=0` on eve
   `python systems/combat/combat_engine_v1/state_graph.py` → PASS (B14.21);
   the realm hash reading at seeds 0, 1, 2 → moved, each mover named alone in B14.99's commit body with the before-reading (`reading @<sha>` of B05's close, or B06's after-reading if B06 merged first in S8, `V12_STRUCTURE_part3.md` §7.4): `prevailed` (B14.02), `fell_to` (B14.03), the scene's shape (B14.15), the hand (B14.16), the believed price of a fight (B14.24), `accept`'s formation (B14.27); with each reverted alone, the hash before it returns (`03_PC_typed_outcome_one_door` gate 2);
   `python -m engine.season.harness.aperture 2 --seeds 0 1 2` → `ENGINES` `combat.fight` and `accept`'s attempted, executed and refused-on-`exists:challenge` (0) quoted before (`reading @<sha>`) and after (`14_VERBS_PHYSICAL_A` gate; `IS-PC-03`'s reading is B15's and B16's, not this batch's) `[ASSUMPTION: `aperture` takes `<seasons> --seeds …` — basis: IS-A §3's "`aperture 2 --seeds 0 1 2`" (`V12_STRUCTURE.md` §3); its flags were not opened by this lane]`;
-  `python -m engine.season.harness.register --check` → exit 0 (H-98, H-123, H-64, H-264, H-349, H-97, H-258 edited; the two new fixture rows); `--requirements` → nine lines, unchanged in verdict; `python tools/m1_acceptance.py --summary` → verdict line quoted;
+  `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`) (H-98, H-123, H-64, H-264, H-349, H-97, H-258 edited; the two new fixture rows); `--requirements` → nine lines, unchanged in verdict; `python tools/m1_acceptance.py --summary` → verdict line quoted;
   the suites `python tools/tests_for_diff.py --base <batch-start-sha>` names (the batch touches `modules/combat`, the seam, the loop, tools and registers: the full gates), once, at B14.99;
   the glossary rows each item names, read against the code it landed;
   the close's commit body records `register --requirements` (nine lines), `m1_acceptance --summary`'s verdict line, the `BUILT OUT`, `ENGINES` and `NULL SCENES` lines before (`reading @<sha>`) and after, and the batch's measured wall time; no conjunct is named, so no `reading:` record is written; `status:` is not edited (`IS-A-12`).
@@ -114,7 +115,7 @@ Not in this batch, and where each is: `U5b_PC_residue` §1 items 3–5 (B15, the
 - WHERE: `engine/season/queries/inputs.py` (`PartyWounds`, `Surrender`, `DecisiveBeat`, `CombatOutcome`); `modules/combat/fight.py` (`fight`, `_lift`); `engine/season/seam/wrappers/combat.py` (`resolve`, `fight_estimate`); `engine/season/tests/test_combat_module.py`.
 - TESTS: in `engine/season/tests/test_combat_module.py` (existing; "the oracle comparison re-pointed at the record's fields"), written first and read red: `test_resolve_returns_no_winner_key`.
 - FALSIFIER and CONTROL: "any reader of a deleted key (the build fails at that reader)"; `git grep -nE "\[\"(winner|result|unresolved|bouts|parties|seed)\"\]|\.get\(\"(winner|bouts)\"" engine/season -- '*.py'` (tests excluded) prints no reader. Control: the realm hash reading at seed 0 equal to the batch's base (`reading @<sha>`) (the fold reads `wound_state` and `surrender` only).
-- GATE: `python -m pytest engine/season/tests/test_combat_module.py -q` → pass; the realm hash reading at seed 0 → equal to the base.
+- GATE: `python -m pytest engine/season/tests/test_combat_module.py -q` → pass; the realm hash reading (`HASH READING`) at seed 0 → equal to the base.
 - HASH MOVERS: none.
 - DEPENDS ON: EXISTS-IN-TREE `queries/inputs.py::PersonalCombatInput`, `modules/combat/fight.py::fight`, `::_lift`, `seam/wrappers/combat.py::resolve`, `::fight_estimate`, `::surrender_of`; V12 Batch B13 (`modules/combat` a package, CI-09), Batch B05.
 - GLOSSARY: none (*record*'s row already says "dataclass", U4d).
@@ -128,7 +129,7 @@ Not in this batch, and where each is: `U5b_PC_residue` §1 items 3–5 (B15, the
 - WHERE: `engine/season/rosters.yaml` (`fight_endings`); `engine/season/loop/effects_combat.py` (`fight_ending`); `engine/season/loop/witness.py` (only if the reading above finds the deposit missing); `engine/season/tests/test_combat_module.py`.
 - TESTS: `test_the_party_left_standing_is_prevailed` (written first, red: `undecided` today). `[ASSUMPTION: test name; the item creates it]` `test_an_undecided_fight_is_witnessed_by_those_present` (E-3), red only if the reading finds the deposit missing.
 - FALSIFIER and CONTROL: "a hand-built fight whose log names the felled party `prevailed`". Control: with `prevailed` reverted alone, the realm hash at seed 0 equals B14.01's reading (`03_PC_typed_outcome_one_door` gate 2: "each moved alone and named in the commit body").
-- GATE: `python -m pytest engine/season/tests/test_combat_module.py -q -k "prevailed or undecided"` → pass; the realm hash reading at seed 0 → moved from B14.01's, the move named.
+- GATE: `python -m pytest engine/season/tests/test_combat_module.py -q -k "prevailed or undecided"` → pass; the realm hash reading (`HASH READING`) at seed 0 → moved from B14.01's, the move named.
 - HASH MOVERS: "Declared hash mover for every log that carries the field" (`Event.ending`). B14's one re-pin in B14.99.
 - DEPENDS ON: V12 B14.01; EXISTS-IN-TREE `loop/effects_combat.py::fight_ending`, `rosters.yaml: fight_endings`, `loop/witness.py`.
 - GLOSSARY: row *prevailed* (add if absent): "prevailed: the ending of a fight for the party who was neither felled nor yielded while the other was, as one who prevails in a contest wins it"; owner `rosters.yaml: fight_endings`; rejected `standing` (D-U1-11a: it names three other things).
@@ -142,7 +143,7 @@ Not in this batch, and where each is: `U5b_PC_residue` §1 items 3–5 (B15, the
 - WHERE: `engine/season/loop/effects_combat.py` (`_eff_kill`); `engine/season/rosters.yaml` (`observation_terms`); `engine/season/state/carriers.py` (`Event.observed`'s comment); `engine/season/tests/test_combat_module.py`.
 - TESTS: `test_a_felling_deposits_fell_to_under_observation_terms` (written first, red).
 - FALSIFIER and CONTROL: a felled party's Event with no `fell_to`; a `fell_to` value naming a person. Control: with `fell_to` reverted alone, the realm hash at seed 0 equals B14.02's reading.
-- GATE: `python -m pytest engine/season/tests/test_combat_module.py -q -k fell_to` → pass; the realm hash reading at seed 0 → moved from B14.02's, named.
+- GATE: `python -m pytest engine/season/tests/test_combat_module.py -q -k fell_to` → pass; the realm hash reading (`HASH READING`) at seed 0 → moved from B14.02's, named.
 - HASH MOVERS: "Declared hash mover for every log with a felling." B14.99.
 - DEPENDS ON: V12 B14.01 (`DecisiveBeat`), B14.02; EXISTS-IN-TREE `loop/effects_combat.py::broke_observed`, `rosters.yaml: observation_terms`, `state/carriers.py::Event.observed`.
 - GLOSSARY: none `[ASSUMPTION: `fell_to` is a roster member, not a term the glossary carries]`.
@@ -156,7 +157,7 @@ Not in this batch, and where each is: `U5b_PC_residue` §1 items 3–5 (B15, the
 - WHERE: `engine/season/hole_register.yaml` (H-98); `engine/season/requirements.yaml` (R-09 `blocks:`).
 - TESTS: none new.
 - FALSIFIER and CONTROL: `register --check` refuses the edited rows. Control: the realm hash at seed 0 equal to B14.03's (no code).
-- GATE: `python -m engine.season.harness.register --check` → exit 0; `--requirements` → nine lines.
+- GATE: `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`); `--requirements` → nine lines.
 - HASH MOVERS: none.
 - DEPENDS ON: EXISTS-IN-TREE `hole_register.yaml` H-98, `requirements.yaml` R-09 `blocks: [H-98]`; V12 Batch B02 (`IS-A-01` keeps `blocks:`, removes only `measured:`).
 - GLOSSARY: none.
@@ -170,7 +171,7 @@ Not in this batch, and where each is: `U5b_PC_residue` §1 items 3–5 (B15, the
 - WHERE: `engine/season/hole_register.yaml` (H-123 `site:`); `registers/handoffs/HANDOFF_PC.md`; `modules/combat/*.py` (the comments the grep prints).
 - TESTS: none.
 - FALSIFIER and CONTROL: a remaining `designs/audit/` path in `modules/combat`. Control: AST equality of every edited `.py` (comment-only).
-- GATE: `git grep -c "designs/audit/" modules/combat` → 0; `python -m engine.season.harness.register --check` → exit 0.
+- GATE: `git grep -c "designs/audit/" modules/combat` → 0; `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`).
 - HASH MOVERS: none.
 - DEPENDS ON: EXISTS-IN-TREE H-123; V12 Batch B03a (CI-02's comment rewrite of the same files).
 - GLOSSARY: none.
@@ -210,7 +211,7 @@ Not in this batch, and where each is: `U5b_PC_residue` §1 items 3–5 (B15, the
 - WHERE: `modules/combat/combat_systems.py` (the 18 constants, their readers, the three functions' signatures and callers); `modules/combat/config.py` (`CFG`); `engine/engine_params/combat_engine_v1.json` (re-derived).
 - TESTS: `tests/valoria/test_combat_invariants.py`, `tests/valoria/test_engine_params_bridge.py` (existing).
 - FALSIFIER and CONTROL: a constant left at module level in `combat_systems.py` and absent from the export. Control: the combat goldens and the realm hash at seed 0 equal to B14.07's (values unchanged).
-- GATE: `python tools/export_engine_params.py --check` → exit 0; `python -m pytest tests/valoria/test_combat_invariants.py tests/valoria/test_engine_params_bridge.py -q` → pass; the realm hash at seed 0 → equal.
+- GATE: `python tools/export_engine_params.py --check` → exit 0; `python -m pytest tests/valoria/test_combat_invariants.py tests/valoria/test_engine_params_bridge.py -q` → pass; the realm hash (`HASH READING`) at seed 0 → equal.
 - HASH MOVERS: none (the export file's content changes, re-derived by its tool).
 - DEPENDS ON: EXISTS-IN-TREE the 18 names in `modules/combat/combat_systems.py`, `config.py::CFG`, `tools/export_engine_params.py`.
 - GLOSSARY: none.
@@ -253,7 +254,7 @@ Not in this batch, and where each is: `U5b_PC_residue` §1 items 3–5 (B15, the
 - WHERE: `engine/season/queries/inputs.py` (`PersonalCombatInput`: four fields); `modules/combat/fight.py` (`fight`'s signature, the pass-through); `modules/combat/wrapper.py` (`fight`'s `trace`, `_TRACE` binding); `systems/combat/combat_engine_v1/workbench/trace.py` (`run_traced_fight`), `balance.py` (`winrate`), `server.py` (`_make_fighter`, the server class).
 - TESTS: `[ASSUMPTION: test name; the item creates it]` `tests/valoria/test_combat_one_door.py::test_workbench_trace_and_entry_give_identical_events` (gate 3: "A workbench trace and an entry call at one seed and one matchup produce identical event lists"), written first and red (the workbench calls `wrapper.fight` on `Combatant`s).
 - FALSIFIER and CONTROL: "one seed at which the workbench's result differs from the entry's on the same record". Control: `PersonalCombatInput` with the four fields at `()` gives B14.10's realm hash at seed 0 (`PersonalCombatInput` is not a `World` carrier: no encoding move).
-- GATE: `python -m pytest tests/valoria/test_combat_one_door.py engine/season/tests/test_combat_module.py -q` → pass; `git grep -n "wrapper._TRACE\s*=" systems modules engine` → nothing; the realm hash at seed 0 → equal.
+- GATE: `python -m pytest tests/valoria/test_combat_one_door.py engine/season/tests/test_combat_module.py -q` → pass; `git grep -n "wrapper._TRACE\s*=" systems modules engine` → nothing; the realm hash (`HASH READING`) at seed 0 → equal.
 - HASH MOVERS: none.
 - DEPENDS ON: V12 B14.01 (the record), B14.08; EXISTS-IN-TREE `workbench/trace.py::run_traced_fight`, `balance.py::winrate`, `server.py::_make_fighter`, `wrapper.py::_TRACE`.
 - GLOSSARY: none (*skill* already rejects `skills` for the slot family; `axes` is the code's name).
@@ -273,7 +274,7 @@ Not in this batch, and where each is: `U5b_PC_residue` §1 items 3–5 (B15, the
 - WHERE: `tools/export_engine_params.py` (`_weapons_section`, `_derived_section`, `_defined_constants`, `_kit_section`, `SCHEMA_VERSION`); `engine/engine_params/combat_engine_v1.json` (re-derived); `engine/substrate/combat_kit.py` (`WEAPONS`, `FORMS`); `modules/combat/config.py` (line 1); NEW `systems/combat/combat_engine_v1/workbench/export_parity_probe.py`; `tests/valoria/test_engine_params_bridge.py`.
 - TESTS: in `tests/valoria/test_engine_params_bridge.py` (existing), written first and red: `test_kit_weapons_lists_no_halfsword_form`, `test_every_constant_defined_in_the_five_modules_is_exported`; `tests/valoria/test_combat_invariants.py` (existing, reads the export) green.
 - FALSIFIER and CONTROL: "A quantity the engine computes for a weapon that cannot be recomputed from the export; a constant defined in one of the five modules and absent from its section; a form accepted as a person's kit." The probe's planted control: "one exported mass edited in a copy … prints the weapon and exits 1". Control: "`build_realm(0)` one-season hash EQUAL" (B14.11's reading).
-- GATE: `python tools/export_engine_params.py --check` → exit 0; `python systems/combat/combat_engine_v1/workbench/export_parity_probe.py` → `50 weapons; max |derived − recomputed| <= 1e-9`, exit 0 (the 1e-9 parity stated against the float contract, A-29); `python systems/combat/combat_engine_v1/workbench/structure_scan.py` section [H] → `[]`; the realm hash at seed 0 → equal.
+- GATE: `python tools/export_engine_params.py --check` → exit 0; `python systems/combat/combat_engine_v1/workbench/export_parity_probe.py` → `50 weapons; max |derived − recomputed| <= 1e-9`, exit 0 (the 1e-9 parity stated against the float contract, A-29); `python systems/combat/combat_engine_v1/workbench/structure_scan.py` section [H] → `[]`; the realm hash (`HASH READING`) at seed 0 → equal.
 - HASH MOVERS: none in a season; "the export file itself (schema 7 → 8)", re-derived.
 - DEPENDS ON: V12 B14.08 (the `CFG` moves), B14.11; EXISTS-IN-TREE `tools/export_engine_params.py::_kit_section`, `::_module_constants`, `SCHEMA_VERSION = 7`, `workbench/catalogue.py::QUANTITIES`, `engine/substrate/combat_kit.py`.
 - GLOSSARY: none.
@@ -287,7 +288,7 @@ Not in this batch, and where each is: `U5b_PC_residue` §1 items 3–5 (B15, the
 - WHERE: NEW `systems/combat/combat_engine_v1/workbench/round_state_probe.py`; `modules/combat/combat_systems.py` (`base_form`); `modules/combat/wrapper.py` (`engagement`'s open-measure reset); `systems/combat/combat_engine_v1/workbench/data/combat_armour_reference.json` (re-recorded by `--update`); `engine/season/tests/test_combat_module.py`.
 - TESTS: `engine/season/tests/test_combat_module.py::test_no_engagement_opens_in_a_halfsword_form` ("a longsword against plate at three seeds; assert every `engagement_start` weapon key is a base key; `assert checked >= 1`"), written first and red; `tests/valoria/test_combat_invariants.py` must pass.
 - FALSIFIER and CONTROL: "After the edit, an engagement whose `engagement_start` event shows a `_halfsword` record as either fighter's weapon; a fight between two arming swords whose trace differs from today's at any seed." Control: "The mirror control (`build_levers.py mirror`) for longsword in plate stays at 50 ± 2."
-- GATE: `python systems/combat/combat_engine_v1/workbench/round_state_probe.py` → before "1,142 of 3,318 at 800 fights", after "**0**"; `python systems/combat/combat_engine_v1/workbench/armour_participation.py --drift` printed in the commit body, then `--update` once ("Expected movers: the four half-swording weapons at medium and heavy"); the realm hash at seed 0 → equal to B14.12's.
+- GATE: `python systems/combat/combat_engine_v1/workbench/round_state_probe.py` → before "1,142 of 3,318 at 800 fights", after "**0**"; `python systems/combat/combat_engine_v1/workbench/armour_participation.py --drift` printed in the commit body, then `--update` once ("Expected movers: the four half-swording weapons at medium and heavy"); the realm hash (`HASH READING`) at seed 0 → equal to B14.12's.
 - HASH MOVERS: "the armour reference and any pin that fights a half-swording weapon in rigid armour; season hash EQUAL". The armour reference is re-recorded here by its tool (the file's own rule); any such combat pin goes to B14.99.
 - DEPENDS ON: EXISTS-IN-TREE `combat_systems.py::halfsword_target`, `HALFSWORD_BASE`, `wrapper.py` (`c.grip_position = 0.0; c.lunge_depth = 0.0`), `workbench/armour_participation.py`; V12 B14.12.
 - GLOSSARY: none (the round's word is A-101's; `engagement` is the code's name until B16's PCR-3).
@@ -321,7 +322,7 @@ Not in this batch, and where each is: `U5b_PC_residue` §1 items 3–5 (B15, the
 - WHERE: `engine/season/rosters.yaml` (`observation_terms`); `engine/season/queries/inputs.py` (`SceneShape`, `CombatOutcome.shape`); `modules/combat/fight.py`; `engine/season/seam/wrappers/combat.py` (`resolve`); `engine/season/loop/effects_combat.py` (`_eff_kill`, `_eff_capture`); `engine/season/harness/chronicle.py` (`lines`); NEW `tests/valoria/test_combat_scene_shape.py`.
 - TESTS: NEW `tests/valoria/test_combat_scene_shape.py` (beside `test_combat_audit_pins.py`), written first and red: `test_scene_shape_is_a_pure_fold_over_trace`, `test_played_and_automated_scenes_carry_equal_observations` (gate 4), `test_document_post_remit_and_chronicle_witnesses_hold_no_fell_to_hand` (gate 5; its `first_blood` half here, its `fell_to_hand` half green at B14.16). Gate 1 as a test of the same file `[ASSUMPTION: test name; the item creates it]` `test_a_seed_1003_fight_carries_its_shape` (the S1 probe restated, U3 §6.2: "the three Events of the seed-1003 fight carry `fight_rounds 8`, `blows_landed` for both parties summing to 5, `first_blood` and `lead_changes`"; the expected numbers are the scratch probe's at `826b747` and are re-read at this tree, the commit body quoting both).
 - FALSIFIER and CONTROL: "A fight whose Events let a reader recover neither its length nor who struck first." Control: "with the Observations withheld the pre-change hash returns" (B14.13's reading at seed 0).
-- GATE: `python -m pytest tests/valoria/test_combat_scene_shape.py -q -m combat` → pass (EXPECTED RED UNTIL B14.16: `test_fell_to_hand_names_the_prevailing_party`); the realm hash at seed 0 → moved from B14.13's, named.
+- GATE: `python -m pytest tests/valoria/test_combat_scene_shape.py -q -m combat` → pass (EXPECTED RED UNTIL B14.16: `test_fell_to_hand_names_the_prevailing_party`); the realm hash (`HASH READING`) at seed 0 → moved from B14.13's, named.
 - HASH MOVERS: "every log with a fight (`Event.observed` is hashed)". B14.99.
 - DEPENDS ON: V12 B14.01 (`CombatOutcome`), B14.03 (`fell_to`, the roster precedent), B14.13 (its source's order: "after … `03_PC_weapon_form_at_round_start.md`"); EXISTS-IN-TREE `rosters.yaml: observation_terms` (with `supplied_by`), `chronicle.py::lines`, `effects_combat.py::_eff_kill`, `::_eff_capture`.
 - GLOSSARY: none `[ASSUMPTION: the five predicates are roster members, not glossary terms]`.
@@ -335,7 +336,7 @@ Not in this batch, and where each is: `U5b_PC_residue` §1 items 3–5 (B15, the
 - WHERE: `engine/season/loop/effects_combat.py` (`_eff_kill`); `engine/season/queries/person_q.py` (`deed_doer` and its `LIMIT, stated` note); `tests/valoria/test_combat_scene_shape.py`.
 - TESTS: `test_fell_to_hand_names_the_prevailing_party` (gate 2) turns green; gate 5's `fell_to_hand` half green. Gate 2 restates the S7 probe (U3 §6.2): "in every scene where the actor is felled, `deed_doer` on the bystander's `person.died` claim returns the standing party; before the change it returns `None` or the dead man", over 100 fights `assert checked >= 100`.
 - FALSIFIER and CONTROL: "a death in self-defence after which no witness can name the killer"; a `document_key` witness holding `fell_to_hand`. Control: with the Observation withheld, B14.15's hash at seed 0 returns.
-- GATE: `python -m pytest tests/valoria/test_combat_scene_shape.py -q -m combat` → all pass; the realm hash at seed 0 → moved from B14.15's, named.
+- GATE: `python -m pytest tests/valoria/test_combat_scene_shape.py -q -m combat` → all pass; the realm hash (`HASH READING`) at seed 0 → moved from B14.15's, named.
 - HASH MOVERS: every log where an actor is felled. B14.99.
 - DEPENDS ON: V12 B14.15; EXISTS-IN-TREE `person_q.py::deed_doer`.
 - GLOSSARY: none.
@@ -352,7 +353,7 @@ Not in this batch, and where each is: `U5b_PC_residue` §1 items 3–5 (B15, the
 - WHERE: `modules/combat/config.py` (`CFG['READ_SCALE']`); `modules/combat/combat_systems.py` (the read's logistic); `engine/engine_params/combat_engine_v1.json` (re-derived).
 - TESTS: `tests/valoria/test_combat_invariants.py` (existing).
 - FALSIFIER and CONTROL: "A fitted `READ_SCALE` under which Perception 5 against 3 still exceeds four points of score" (read at B15). Control: "`READ_SCALE` at 1.0 is byte-identical": the combat goldens and the realm hash at seed 0 equal to B14.16's.
-- GATE: `python tools/export_engine_params.py --check` → exit 0; the combat goldens → equal; the realm hash at seed 0 → equal.
+- GATE: `python tools/export_engine_params.py --check` → exit 0; the combat goldens → equal; the realm hash (`HASH READING`) at seed 0 → equal.
 - HASH MOVERS: none.
 - DEPENDS ON: V12 B14.12 (the export's schema 8), B14.08; EXISTS-IN-TREE `combat_systems.py` (`core.logistic((read_d-read_a)/1.0)`).
 - GLOSSARY: none.
@@ -378,7 +379,7 @@ Not in this batch, and where each is: `U5b_PC_residue` §1 items 3–5 (B15, the
 - WHERE: `engine/season/seam/wrappers/combat.py` (`resolve`); `modules/combat/wrapper.py` (`fight`'s signature); `modules/combat/fight.py`; `tests/valoria/test_combat_ob_from_defender_consumers.py`; `engine/season/tests/test_combat_module.py`.
 - TESTS: in `engine/season/tests/test_combat_module.py`, written first and red: `test_a_self_fight_is_refused_party_gap`, `test_wrapper_fight_has_no_default_stream`.
 - FALSIFIER and CONTROL: "A combat test that passes with no stream supplied." Control: the realm hash at seed 0 equal to B14.18's ("no shipped act reaches it").
-- GATE: "A hand-built self-fight returns `PARTY-GAP`; `git grep -n "random.Random()" modules/combat` prints nothing; `inspect.signature(wrapper.fight).parameters['rng'].default is inspect._empty`" (and `['cfg']` likewise); the realm hash at seed 0 → equal.
+- GATE: "A hand-built self-fight returns `PARTY-GAP`; `git grep -n "random.Random()" modules/combat` prints nothing; `inspect.signature(wrapper.fight).parameters['rng'].default is inspect._empty`" (and `['cfg']` likewise); the realm hash (`HASH READING`) at seed 0 → equal.
 - HASH MOVERS: none.
 - DEPENDS ON: V12 B14.11 (`fight.py`'s call shape); EXISTS-IN-TREE `seam/wrappers/combat.py::fight_estimate`'s `PARTY-GAP`, `wrapper.py::fight`.
 - GLOSSARY: none.
@@ -420,7 +421,7 @@ Not in this batch, and where each is: `U5b_PC_residue` §1 items 3–5 (B15, the
 - WHERE: `engine/season/rosters.yaml` (`body_mark_models`, `observation_terms`); `engine/season/data/fixtures.py` (`body_mark_model`'s swept set, `mark_ob`); `engine/season/loop/effects_combat.py` (`_marks`); `engine/season/hole_register.yaml` (the `mark_ob` row); `engine/season/tests/test_combat_module.py`.
 - TESTS: "`engine/season/tests/test_combat_module.py::test_drawn_marks_yield_all_three_outcomes_over_200_seeds` (`assert checked >= 200`), `::test_deepest_gate_reproduces_the_pre_change_hash`", written first (the first red: no `drawn`).
 - FALSIFIER and CONTROL: "Under `drawn`, a mark on every such survivor." Control: "(`deepest_gate`) reproduces the pre-change hash" (B14.22's reading at seed 0).
-- GATE: the two tests → pass; `python -m engine.season.harness.register --check` → exit 0; the realm hash at seed 0 → equal to B14.22's.
+- GATE: the two tests → pass; `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`); the realm hash (`HASH READING`) at seed 0 → equal to B14.22's.
 - HASH MOVERS: none at ship ("At the flip: every fight with a survivor at his limit", B15).
 - DEPENDS ON: V12 B14.03; EXISTS-IN-TREE `effects_combat.py::_marks`, `rosters.yaml: body_mark_models`, `fixtures.py::body_mark_model`; V12 Batch B05 (the one sampler, the one pool rule `pool_of`).
 - GLOSSARY: none.
@@ -438,7 +439,7 @@ Not in this batch, and where each is: `U5b_PC_residue` §1 items 3–5 (B15, the
 - WHERE: `engine/season/seam/wrappers/sigma.py` (`believed_chance`); `engine/season/seam/wrappers/combat.py` (`fight_estimate`'s caller-picture input and key); `engine/season/seam/wrappers/_estimate.py` (`rng_of`'s purpose, if the key is built there); `engine/season/data/fixtures.py` (`believed_fight_samples`); `engine/season/hole_register.yaml` (its row).
 - TESTS: `[ASSUMPTION: test name; the item creates it]` `engine/season/tests/test_combat_module.py::test_a_hurt_man_forms_fight_less_often_on_believed_odds` (the gate's reading as a test: "with `odds_weighting: believed`: a person at `body` 400 forms `fight` on an unhurt opponent less often than the same person unhurt, over seeds 0 to 29", `assert checked >= 30`), written first and red; `::test_an_estimate_reads_no_kit_the_believer_has_no_claim_about` (the falsifier).
 - FALSIFIER and CONTROL: "An estimate that reads a kit the believer has no claim about." Control: "the estimate's stream leaves `content_hash` unchanged when the act is not chosen"; with `odds_weighting: none` the hash at seed 0 equals B14.23's.
-- GATE: the two tests → pass; the realm hash at seed 0 → moved (`odds_weighting` ships `believed`, `data/fixtures.py`), named.
+- GATE: the two tests → pass; the realm hash (`HASH READING`) at seed 0 → moved (`odds_weighting` ships `believed`, `data/fixtures.py`), named.
 - HASH MOVERS: "Every world in which a violent Candidate is scored." B14.99.
 - DEPENDS ON: V12 Batch B05 (`10_DICE_believed_odds_have_a_prior` Edits A–B); V12 B14.01 (`fight_estimate` reads the record); EXISTS-IN-TREE `sigma.py::believed_chance`, `combat.py::fight_estimate`, `fixtures.py::odds_weighting` (`believed`, H-248).
 - GLOSSARY: none.
@@ -488,7 +489,7 @@ Not in this batch, and where each is: `U5b_PC_residue` §1 items 3–5 (B15, the
 - WHERE: `engine/season/queries/world_q.py` (`addressed_records`, `challenges_heard`, `_stamped`); `engine/season/verb_table.yaml` (`accept`'s `referent_class_note`); NEW `engine/season/tests/test_vm_phy_a_custody.py`.
 - TESTS: NEW `engine/season/tests/test_vm_phy_a_custody.py` ("four functions, one per gate of the audit's §1.7, §2.7, §3.7, §4.7"); this item writes the A4 function, first and red: `[ASSUMPTION: test name; the item creates it]` `test_accept_forms_on_a_heard_challenge` — the audit §4.7 gate: "A seeded realm with one planted dispute between two co-located persons, run through the real chooser with no hand-built act, produces `challenge.issued`, then an `accept` attempted by the challenged, then a scene fought under `blood` terms with `duel.yielded` or `body.changed`. **Control:** without the new stamp, the challenged's opening set has no `accept` (the pre-change shape after lane A). **Planted failure:** the stamp reader returning `()` reproduces 0 `accept` formations." B15 (A3) and B29 (A1, A2) add the other three functions.
 - FALSIFIER and CONTROL: "return `()` from `challenges_heard`" turns the test red. Control: as the gate's.
-- GATE: `python -m pytest engine/season/tests/test_vm_phy_a_custody.py -q` → pass; `python -m engine.season.harness.aperture 2 --seeds 0 1 2` before and after, quoted: "`accept` refusals on `exists:challenge` equal 0"; the realm hash at seed 0 → moved, named.
+- GATE: `python -m pytest engine/season/tests/test_vm_phy_a_custody.py -q` → pass; `python -m engine.season.harness.aperture 2 --seeds 0 1 2` before and after, quoted: "`accept` refusals on `exists:challenge` equal 0"; the realm hash (`HASH READING`) at seed 0 → moved, named.
 - HASH MOVERS: "every realm and spine pin in which these formations occurred" — `accept`'s formations (37 at the audit's read). B14.99.
 - DEPENDS ON: EXISTS-IN-TREE `world_q.py::_stamped`, `CHALLENGE_KIND`, `RECORD_CONTENT`, `detainees_held`, `person_q.py::ledger_names`; V12 Batch B01 (lane A's duel chain: the challenge Record addressed to the challenged).
 - GLOSSARY: none.

@@ -14,7 +14,7 @@ Short names, paths, words and the `UNDECIDED` numbers are part 21's head.
 - WHERE: `registers/handoffs/HANDOFF_FA.md` (the in-flight row); `engine/season/hole_register.yaml` (one row, only on a null reading).
 - TESTS: none (a reading).
 - FALSIFIER and CONTROL: the realm hash at seed 0 after two seasons differs from B21b.16's: the probe wrote state. Control: that hash, quoted.
-- GATE: the `python -c` above → nine lines in the commit body; `python -m engine.season.harness.register --check` → exit 0 where a row was written.
+- GATE: the `python -c` above → nine lines in the commit body; `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`) where a row was written.
 - HASH MOVERS: none.
 - DEPENDS ON: EXISTS-IN-TREE `queries/person_q.py::legitimacy`, `queries/world_q.py::questions_for`.
 - GLOSSARY: none.
@@ -76,7 +76,7 @@ Short names, paths, words and the `UNDECIDED` numbers are part 21's head.
 - WHERE: `engine/season/state/gate.py` (two docstrings); `engine/season/tests/test_g3_not_yours.py` (one case); `engine/season/hole_register.yaml` (H-142).
 - TESTS: in `test_g3_not_yours.py`, written with the edit: `test_a_rungless_appointed_office_is_filled_by_no_seat` (a hand-built `Office(rung=None, conferral="appointed")`: `may_fill(...)` is False for every seat of the world; `world_q.vacancies` offers it to nobody) `[ASSUMPTION: name]`; green before and after (it pins the reading).
 - FALSIFIER and CONTROL (copied): "a hand-built `Office(rung=None, conferral='appointed')`: `may_fill(...)` is False today (the row's execution); the chosen option flips or forbids it." Under (a) it stays False; a change that makes it True is (b), and the test reddens. Control: the realm hash at seed 0 after one season equal to B21b.21's reading.
-- GATE: `python -m pytest engine/season/tests/test_g3_not_yours.py -q` → pass; `python -m engine.season.harness.register --check` → exit 0.
+- GATE: `python -m pytest engine/season/tests/test_g3_not_yours.py -q` → pass; `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`).
 - HASH MOVERS: none (E7: "HASH: EQUAL [ASSUMPTION]").
 - DEPENDS ON: V12 B21b.21; EXISTS-IN-TREE `state/gate.py::purview_reaches`, `::_ground_reaches`, `::may_fill`, `queries/world_q.py::vacancies`, `hole_register.yaml` H-142, `tests/test_g3_not_yours.py`.
 - GLOSSARY: none.
@@ -91,7 +91,7 @@ Short names, paths, words and the `UNDECIDED` numbers are part 21's head.
 - WHERE: `engine/season/loop/predicates.py` (`_req_confer`), only on a reachable defect; `engine/season/hole_register.yaml` (H-133); `engine/season/tests/test_g3_not_yours.py` (one case, only with the edit).
 - TESTS: with the edit only: `test_req_confer_and_eff_confer_read_the_same_holders` (a hand-built seat with two live holds: precondition and effect name the same set; red before) `[ASSUMPTION: name]`.
 - FALSIFIER and CONTROL: with the edit, a planted two-holder seat whose second holder the precondition does not read; control: the realm hash at seeds 0 to 2 after one season equal to B21b.22's (E6: "hash EQUAL").
-- GATE: the two readings of the STOPS IF in the commit body; with the edit, `python -m pytest engine/season/tests/test_g3_not_yours.py -q` → pass; `python -m engine.season.harness.register --check` → exit 0.
+- GATE: the two readings of the STOPS IF in the commit body; with the edit, `python -m pytest engine/season/tests/test_g3_not_yours.py -q` → pass; `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`).
 - HASH MOVERS: none.
 - DEPENDS ON: EXISTS-IN-TREE `loop/predicates.py::_req_confer`, `loop/effects_governance.py::_eff_confer`, `state/gate.py::tenure_write_basis`, `hole_register.yaml` H-133.
 - GLOSSARY: none.
@@ -128,7 +128,7 @@ Short names, paths, words and the `UNDECIDED` numbers are part 21's head.
 - WHERE: as §10 names; NEW `engine/season/tests/test_in48_delegation.py`; `engine/season/hole_register.yaml` H-108 (closed at this commit, the row's own rule: "this position owns H-108 and closes it when it lands").
 - TESTS: in the new file, written before the edits: §10 (6)'s EXIT and FALSIFIER as named tests, with §10 (2)'s measurement as a test.
 - FALSIFIER and CONTROL: §10 (6), with H-108's: "delegate's act admitted after delegation ended, or a seat exercised by a person with neither hold nor carrier → fail; principal's hold closed by a delegation → regency by term (IN-10), not this." Control: the realm hash at seeds 0 to 2 after one season equal to B21b.23's where no seeded run opens a delegation.
-- GATE: `python -m pytest engine/season/tests/test_in48_delegation.py engine/season/tests/test_g3_not_yours.py -q` → pass; the realm hash control above; `python -m engine.season.harness.register --check` → exit 0.
+- GATE: `python -m pytest engine/season/tests/test_in48_delegation.py engine/season/tests/test_g3_not_yours.py -q` → pass; the realm hash (`HASH READING`) control above; `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`).
 - HASH MOVERS (copied): "possible — 'a new dataclass field would move hash by schema and is declared if the design needs one'"; by D-04, such a field is `MOVER(encoding)` and rides B21b.99's re-pin; data and rules alone are a behaviour mover where a seeded run delegates.
 - DEPENDS ON: V12 B21b.24; EXISTS-IN-TREE as §10 names; v11's satisfied DEPS (IN-10, IN-11, IN-40 landed).
 - GLOSSARY: new row **regent** if §10 builds one: "a person who exercises a seat conferred over a domain whose title stays with its principal", ordinary reading: one who governs in another's place.

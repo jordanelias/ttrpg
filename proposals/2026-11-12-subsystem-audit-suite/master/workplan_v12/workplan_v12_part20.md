@@ -78,7 +78,7 @@
 **BATCH GATE lines this half adds** (the head author merges them into the one `BATCH GATE`, read once on the closing tree, `PYTHONHASHSEED=0` on every seeded command):
   `python -m pytest engine/season/tests/test_endowment.py engine/season/tests/test_demand_delivery.py engine/season/tests/test_hunger.py engine/season/tests/test_in35_lattice_coupling.py engine/season/tests/test_strife_execution.py engine/season/tests/test_territorial_subsistence.py -q` → all pass;
   `python -m pytest engine/season/tests/test_season_shape.py -k "wounded or transfer or exchange" -q` → pass;
-  `python tools/ci_sim_fabrication_check.py` → exit 0 (every new fixture carries its tag); `python -m engine.season.harness.register --check` → exit 0 (the ten new H rows; H-138's row);
+  `python tools/ci_sim_fabrication_check.py` → exit 0 (every new fixture carries its tag); `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`) (the ten new H rows; H-138's row);
   under the batch's shipped arms (`ground`, `granary_seasons` 4, `through`, `hunger_severity_draw` True), two seasons: at seed 0 the hunger band differs between at least two settlements in season 1 (`07_SE_ground_and_granaries.md` §5, "in every season after the first", its seed), and at each of seeds 0 to 2 at least one draw cell's `source` is a rung at which an Office sits (`B12a.55`'s gate); quoted before (`reading @<B12a.53's sha>`) and after;
   with every switch of this half at its control (`uniform`, 0, `first`, `False`, `lattice_coupling` 0): `build_realm(s)` and its one-season hash for s = 0 to 2 equal the first half's last reading (`reading @<sha>`) — the controls equal (U3 §1 item 13's gate).
 
@@ -139,7 +139,7 @@
 - WHERE: `engine/season/rosters.yaml` (`site_endowment`; `site_kinds`, `site_yield`, `wear_per_season`, `band_floors`, `capacity_floor`, `works_cost` rows for `field`); `engine/season/data/fixtures.py` (the loader beside `_load_capacity_floor`; `endowment_for`; `endowment_mode`, `granary_seasons`); `engine/season/boot/realm.py` (`build_realm`, the site loop); `engine/season/hole_register.yaml` (two rows); NEW `engine/season/tests/test_endowment.py`; `unified/U1_GLOSSARY.md` (*endowment*, *field*).
 - TESTS: step 6, written before steps 2–5 and read red; green after. `engine/season/tests/test_hunger.py` stays green unedited (the `uniform` arm).
 - FALSIFIER and CONTROL: "If under `ground` every settlement still shares one band in every season, the endowment is not reaching `produce` (the planted failure: map every territory to `[harbour, seam]`; the test reds). If the `uniform` arm's `build_realm(0)` hash differs from the base, the id scheme moved" (the source). Control: `build_realm(s)` at s = 0 to 2 and its one-season hash equal to the previous item's reading (`reading @<sha>`).
-- GATE: `python -m pytest engine/season/tests/test_endowment.py engine/season/tests/test_hunger.py -q` → pass; `python tools/ci_sim_fabrication_check.py` → exit 0; `python -m engine.season.harness.register --check` → exit 0; `build_realm(0)`'s content hash after one season, `PYTHONHASHSEED=0` → equal to the previous item's reading.
+- GATE: `python -m pytest engine/season/tests/test_endowment.py engine/season/tests/test_hunger.py -q` → pass; `python tools/ci_sim_fabrication_check.py` → exit 0; `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`); `build_realm(0)`'s content hash after one season, `PYTHONHASHSEED=0` → equal to the previous item's reading.
 - HASH MOVERS: none (`Fixtures` is not folded by `World.content_hash()`, `state/world.py::_STATE_COLLECTIONS`; the `uniform` loop mints today's Sites).
 - DEPENDS ON: EXISTS-IN-TREE `engine/season/data/fixtures.py::_load_capacity_floor`, `::_check_keyed_on_site_kinds`, `rosters.yaml: site_kinds`, `site_yield`, `wear_per_season`, `band_floors`, `capacity_floor`, `works_cost`; V12 Batch B03c (`boot/realm.py`); V12 `09_WR_B_draws_not_thresholds` edits 1–2 (earlier in B12a: "the drawn yield and body", the source's "Depends on").
 - GLOSSARY: *endowment*, *field* (step 7).
@@ -204,7 +204,7 @@
 - WHERE: `engine/season/queries/inputs.py` (`LarderInput.walk`; `DrawRow` docstring); `modules/settlements/larder.py` (`larder_draw`, `drawn_under`, the module docstring); `modules/settlements/subsist.py` (`subsist`, the debit loop); `engine/season/queries/world_q.py` (`_larder_parts`, `_draw_dict`, `_draw_record`); `engine/season/data/fixtures.py` (`larder_walk`); `engine/season/hole_register.yaml` (one row); `engine/season/tests/test_demand_delivery.py`.
 - TESTS: step 5, written before step 2 and read red (no `walk`); green after; the file's other `test_19d_*` tests stay green unedited (the `first` arm).
 - FALSIFIER and CONTROL: under `"through"`, the H-303 world takes 1 (the walk stops at the first stocked rung), or the debit lands 6 on the home rung (the per-rung split is lost; matter is created). Control: `"first"` reproduces `build_realm(0)`'s one-season hash (`reading @` B12a.52's).
-- GATE: `python -m pytest engine/season/tests/test_demand_delivery.py engine/season/tests/test_hunger.py -q` → pass; `python -m pytest tests/valoria/test_module_registrar.py -q` → pass (the one `tests/valoria` file naming `larder_draw` at `aa31fd2`); the seed-0 one-season hash → equal to B12a.52's reading.
+- GATE: `python -m pytest engine/season/tests/test_demand_delivery.py engine/season/tests/test_hunger.py -q` → pass; `python -m pytest tests/valoria/test_module_registrar.py -q` → pass (the one `tests/valoria` file naming `larder_draw` at `aa31fd2`); the seed-0 one-season hash (`HASH READING`) → equal to B12a.52's reading.
 - HASH MOVERS: none at `"first"`; the flip is `B12a.56`.
 - DEPENDS ON: EXISTS-IN-TREE `modules/settlements/larder.py::larder_draw`, `::drawn_under`, `modules/settlements/subsist.py::subsist`, `queries/inputs.py::LarderInput`, `::DrawRow`, `queries/world_q.py::_larder_parts`, `::_draw_dict`, `::_draw_record`; V12 B12a.51.
 - GLOSSARY: none (the *larder ladder* row's owner stays `larder_draw`; "walk" is the plain word for going up the ladder).
@@ -291,7 +291,7 @@
 - WHERE: `engine/season/data/fixtures.py` (four rows); `engine/season/hole_register.yaml` (four rows).
 - TESTS: none new (no reader yet).
 - FALSIFIER and CONTROL: a row with no hole-register row (`tools/ci_sim_fabrication_check.py` reds). Control: the seed-0 one-season hash equal to B12a.56's (no reader).
-- GATE: `python tools/ci_sim_fabrication_check.py` → exit 0; `python -m engine.season.harness.register --check` → exit 0; the seed-0 hash → equal to B12a.56's reading.
+- GATE: `python tools/ci_sim_fabrication_check.py` → exit 0; `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`); the seed-0 hash (`HASH READING`) → equal to B12a.56's reading.
 - HASH MOVERS: none.
 - DEPENDS ON: V12 B12a.57; V12 `09_WR_B_draws_not_thresholds` edit 1 (`wear_draw`, the shape matched; earlier in B12a).
 - GLOSSARY: none.
@@ -306,7 +306,7 @@
 - WHERE: `engine/season/queries/inputs.py` (`SubsistInput`).
 - TESTS: none new.
 - FALSIFIER and CONTROL: a caller that builds `SubsistInput` positionally breaks (the default keeps `world_q.subsist_input`'s four-argument call valid). Control: the seed-0 hash equal to B12a.58's (`SubsistInput` is not folded by `World.content_hash()`).
-- GATE: `python -m pytest engine/season/tests/test_hunger.py -q` → pass; the seed-0 hash → equal.
+- GATE: `python -m pytest engine/season/tests/test_hunger.py -q` → pass; the seed-0 hash (`HASH READING`) → equal.
 - HASH MOVERS: none.
 - DEPENDS ON: EXISTS-IN-TREE `queries/inputs.py::SubsistInput`; V12 B12a.58.
 - GLOSSARY: none.
@@ -325,7 +325,7 @@
 - WHERE: `modules/settlements/subsist.py` (`subsist`, the docstring).
 - TESTS: `engine/season/tests/test_hunger.py` gains `test_a_severity_of_two_doubles_the_fall_and_zero_spares_it` (a hand-built `SubsistInput` with one short eater: multiplier 2 gives twice `body_step × units`, 0 gives no `BodyFall`) `[ASSUMPTION: test name — E-3]`, written before the edit and read red.
 - FALSIFIER and CONTROL: an empty `severity` that changes any fall. Control: the seed-0 hash equal to B12a.59's.
-- GATE: `python -m pytest engine/season/tests/test_hunger.py -q` → pass; the seed-0 hash → equal.
+- GATE: `python -m pytest engine/season/tests/test_hunger.py -q` → pass; the seed-0 hash (`HASH READING`) → equal.
 - HASH MOVERS: none (no caller fills `severity` yet).
 - DEPENDS ON: V12 B12a.59; V12 B12a.53 (the same function's debit loop, edited earlier in this batch).
 - GLOSSARY: none.
@@ -339,7 +339,7 @@
 - WHERE: `engine/season/queries/world_q.py` (`subsist_input`).
 - TESTS: `engine/season/tests/test_hunger.py` gains (the source's names) `test_hunger_draw_on_bodies_diverge_and_first_deaths_differ` — "with `hunger_severity_draw` on and a planted shortfall on every cohort for eight seasons, the cohorts' bodies are not all equal at the end and the season of first death differs between at least two cohorts; the loop asserts it asserted (at least 30 cohorts read)" — written at two seasons (eight in the source; A-114) with the planted shortfall deep enough that a first death falls inside two seasons for some cohorts `[ASSUMPTION: the plant's depth — basis: body 1000, body_step 10, Failure's multiple 2; the producer states the depth it uses]`; and `test_hunger_draw_off_is_the_base_hash` ("with `False` they are all equal and the hash is the base hash (the control)"). Both written before the edit; the first red (no draw), the second green.
 - FALSIFIER and CONTROL: "the scratch `x3_famine.py 0 0 20 nullglobal` (not in the repository) printed one synchronized death season; the first test above is its committed form and must no longer show it" (the source). Control: `False` reproduces B12a.60's seed-0 hash.
-- GATE: `python -m pytest engine/season/tests/test_hunger.py -q` → pass; the seed-0 hash at the shipped `False` → equal to B12a.60's reading.
+- GATE: `python -m pytest engine/season/tests/test_hunger.py -q` → pass; the seed-0 hash (`HASH READING`) at the shipped `False` → equal to B12a.60's reading.
 - HASH MOVERS: none at `False`; the flip is B12a.62.
 - DEPENDS ON: V12 B12a.57, B12a.58, B12a.59, B12a.60; V12 Batch B06 (`state/ids.py::draw_factory` as the keyed-draw owner; `EXISTS-IN-TREE draw_factory` at `aa31fd2`); EXISTS-IN-TREE `queries/world_q.py::season_factor_of` (the precedent), `seam/ladder.py::degree_ladder` (which returns `engine/dice_engine/dice_engine.py::degree_from_net`, the one owner of the degree; "the ladder lives once, in the seam").
 - GLOSSARY: none.
@@ -383,7 +383,7 @@
 - WHERE: `engine/season/loop/matter.py` (`_lattice_strain`, its docstring and trace line).
 - TESTS: `engine/season/tests/test_in35_lattice_coupling.py` gains `test_a_realm_with_nothing_broken_couples_nothing` (weight 250, every Site above 0: `_lattice_strain` returns `{}`) and `test_the_pull_is_toward_a_broken_neighbour_only` (weight 250, one Site planted at 0: only Sites in its own and bordering territories are pulled) `[ASSUMPTION: test names — E-3]`; written before the edit, the first red (today's rule pulls toward the weakest). The file's existing weakest-neighbour tests (`test_in35_unmanaged_the_lattice_falls_and_crossings_reach_territories_in_order_of_distance`, `test_in35_the_front_advances_one_ring_a_season_at_most`, `test_in35_managed_holding_the_first_ring_stops_the_front_there_and_the_unmanaged_arm_does_not`, `test_in35_a_mended_source_does_not_recall_a_ring_matter_has_already_pulled`) are read at the item's open: each one whose plant has a Site at 0 stays; each that relies on pulling toward a weaker, unbroken neighbour is rewritten to plant its source at 0, and the commit body names each one changed and why.
 - FALSIFIER and CONTROL: the falsifier world of the source (the ring table the same at both seeds) is B12a.64's; this edit's: a Site pulled with no broken Site in its own or a bordering territory. Control: "at weight 0 the season is the base hash" — `test_in35_weight_zero_is_wear_alone_and_a_nonzero_weight_differs` and `test_in35_the_shipped_weight_is_the_control` green unedited; the seed-0 hash equal to B12a.62's.
-- GATE: `python -m pytest engine/season/tests/test_in35_lattice_coupling.py -q` → pass; the seed-0 one-season hash → equal to B12a.62's reading.
+- GATE: `python -m pytest engine/season/tests/test_in35_lattice_coupling.py -q` → pass; the seed-0 one-season hash (`HASH READING`) → equal to B12a.62's reading.
 - HASH MOVERS: none (behind `lattice_coupling`, shipped 0).
 - DEPENDS ON: EXISTS-IN-TREE `loop/matter.py::_lattice_strain`; V12 `09_WR_world_motion` edit 1 (the wound row and the `build_realm(wound=…)` switch, earlier in B12a); V12 `09_WR_B_draws_not_thresholds` edit 1 (the wear draw that reads the pull as obstacle, earlier in B12a).
 - GLOSSARY: row *broken (Site)*: "a Site at condition 0, a hole in the fabric" (owner: the comparison `condition <= 0` in `_lattice_strain`); A-40's "wearing-down" row unchanged.
@@ -408,7 +408,7 @@
 - WHERE: `engine/season/loop/matter.py` (the wear loop); `engine/season/data/fixtures.py` (`rupture_band`, `rupture_base`, `rupture_pool_cap`); `engine/season/write_matrix.yaml` (`(Site, condition)`, `emits:`); the Event-kind roster rows the grep names; `engine/season/hole_register.yaml` (three rows).
 - TESTS: in `engine/season/tests/test_in35_lattice_coupling.py` (the source's names, at two seasons: "fourteen seasons" in the source; A-114), written before the edit and read red: `test_a_rupture_is_emitted_and_its_season_differs` — weight 250, the wound planted and, at season 0, every Site of the wound's bordering territories set below its kind's lowest floor (so each takes the draw in the first MATTER), seeds 0 to 9: a `site.ruptured` is emitted at some seed and the set of ruptured Sites differs between at least two seeds (`checked >= 10`); `test_yield_at_season_13_differs_between_seeds` — written as `test_yield_differs_between_seeds_after_two_seasons` on the same plant: the realm's summed yield after season 1 differs between seeds 0 and 1 `[ASSUMPTION: the planted form — basis: a drawn break cannot be relied on to occur within two seasons from an unplanted wound; UNDECIDED 5]`; `test_weight_zero_is_the_base_hash` ("at weight 0 the season is the base hash (the control)"). `test_front_stops_where_the_source_is_mended` (the source: the source raised above 0 at season 5, ring means at season 13) is written at two seasons: the source planted at 0 at season 0 and raised to `condition_scale` before season 1; after season 1 no Site is pulled (`_lattice_strain` returns `{}`) and no `site.ruptured` is emitted.
 - FALSIFIER and CONTROL: "The ring table (4,810 → 719) the same at both seeds after the change" (the source; `test_yield_differs_between_seeds_after_two_seasons` is its committed form). Control: weight 0 reproduces B12a.63's seed-0 hash.
-- GATE: `python -m pytest engine/season/tests/test_in35_lattice_coupling.py -q` → pass; `python tools/ci_sim_fabrication_check.py` → exit 0; `python -m engine.season.harness.register --check` → exit 0; the seed-0 hash → equal to B12a.63's reading.
+- GATE: `python -m pytest engine/season/tests/test_in35_lattice_coupling.py -q` → pass; `python tools/ci_sim_fabrication_check.py` → exit 0; `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`); the seed-0 hash (`HASH READING`) → equal to B12a.63's reading.
 - HASH MOVERS: none (behind the weight).
 - DEPENDS ON: V12 B12a.63; V12 `09_WR_B_draws_not_thresholds` edit 1 (earlier in B12a); V12 Batch B06 (`draw_factory`); EXISTS-IN-TREE `loop/matter.py::_crossings`, `seam/ladder.py::degree_ladder`, `write_matrix.yaml` (`Site`, `condition`), the `body_hazard` keyed draw in the same barrier (the precedent, `loop/matter.py`).
 - GLOSSARY: rows *rupture* ("a Site's breaking to condition 0 by a drawn strain") and *knit* ("a strained Site recovering a season's pull") `[new words; the plain words "break" and "hold" are used in prose]`.
@@ -428,7 +428,7 @@
 - WHERE: `engine/season/loop/effects_economy.py` (`_eff_restore`).
 - TESTS: `engine/season/tests/test_in35_lattice_coupling.py` gains `test_restore_is_refused_at_a_broken_site_while_the_coupling_runs` (a hand-built `restore` at a Site at 0: refused at weight 250, admitted at weight 0) `[ASSUMPTION: test name — E-3]`, written before the edit, its first arm red.
 - FALSIFIER and CONTROL: a `restore` at a broken Site executed while the weight is non-zero. Control: at weight 0 a `restore` at a Site at 0 executes as today; the seed-0 hash equal to B12a.64's.
-- GATE: `python -m pytest engine/season/tests/test_in35_lattice_coupling.py -q` → pass; the seed-0 hash → equal.
+- GATE: `python -m pytest engine/season/tests/test_in35_lattice_coupling.py -q` → pass; the seed-0 hash (`HASH READING`) → equal.
 - HASH MOVERS: none.
 - DEPENDS ON: EXISTS-IN-TREE `loop/effects_economy.py::_eff_restore`, `NO_CHANGE`; V12 B12a.64.
 - GLOSSARY: none.
@@ -457,7 +457,7 @@
 - WHERE: `engine/season/rosters.yaml` (`wear_per_season`, `note:`).
 - TESTS: none (roster text; no reader parses the note).
 - FALSIFIER and CONTROL: the note still says `restore` "executes" on the realm. Control: the seed-0 hash equal to B12a.66's; `git diff` of the commit touches only the note.
-- GATE: `git grep -n "restore. now executes on the" engine/season/rosters.yaml` → no hit; `python -m engine.season.harness.register --check` → exit 0.
+- GATE: `git grep -n "restore. now executes on the" engine/season/rosters.yaml` → no hit; `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`).
 - HASH MOVERS: none.
 - DEPENDS ON: V12 B12a.66.
 - GLOSSARY: none.
@@ -515,7 +515,7 @@
 - WHERE: `engine/season/loop/effects_shared.py` (`_shift`); `engine/season/hole_register.yaml` (H-138); `engine/season/tests/test_gate_observation.py`.
 - TESTS: `test_a_zero_amount_transfer_to_a_side_without_the_kind_is_refused` and `test_a_zero_return_exchange_is_refused` (the row's own counterexample: a transfer at `amount=0` of a `kind` absent from both rungs' `stores` reads `transfer.refused` with `NoOpReceipt`, and neither rung's `stores` gains the key; the same for an `exchange` at `return_amount` 0) in `engine/season/tests/test_gate_observation.py` (E6 block 5's coined file, "`[ASSUMPTION: name]`"; created by B03's gate-observation items if they landed, else created here) `[ASSUMPTION: test names — E-3]`; written before the edit and read red (today the key is inserted and `transfer.made` is emitted).
 - FALSIFIER and CONTROL: a zero-amount transfer still publishes `transfer.made`, or a rung gains a `kind: 0` key. Control: at the shipped `default_transfer_amount` 1 the seed-0 to seed-2 one-season hashes equal B12a.69's (the row: "nothing at the shipped `default_transfer_amount = 1` fixture"); `engine/season/tests/test_in33_exchange.py` and `test_season_shape.py`'s H-94 sweep test (all three points executed) green, the 0 point's readings quoted before and after.
-- GATE: `python -m pytest engine/season/tests/test_gate_observation.py engine/season/tests/test_in33_exchange.py -q` → pass; `python -m pytest engine/season/tests/test_season_shape.py -k "transfer or exchange" -q` → pass; `python -m engine.season.harness.register --check` → exit 0; the shipped-arm hash → equal.
+- GATE: `python -m pytest engine/season/tests/test_gate_observation.py engine/season/tests/test_in33_exchange.py -q` → pass; `python -m pytest engine/season/tests/test_season_shape.py -k "transfer or exchange" -q` → pass; `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`); the shipped-arm hash → equal.
 - HASH MOVERS: none at the shipped arm.
 - STOPS IF: at the item's open `_shift` (or each caller) already returns before touching a store at amount 0 — then the item is a POINTER and the row is closed with the landing commit cited.
 - DEPENDS ON: EXISTS-IN-TREE `loop/effects_shared.py::_shift`, `::_debit`, `loop/effects_economy.py::_eff_transfer`, `::_eff_exchange`, `data/fixtures.py` `default_transfer_amount` (H-94); V12 Batch B03 (its gate-observation items, which may create `test_gate_observation.py`).

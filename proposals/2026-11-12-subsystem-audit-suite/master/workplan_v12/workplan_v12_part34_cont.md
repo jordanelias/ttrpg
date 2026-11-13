@@ -114,8 +114,8 @@ Short names and paths are the head of `workplan_v12_part34.md`'s. The batch bloc
   4. Glossary: row *list* (a membership kept by warrant; *roll* rejected as the dice word, U1 glossary).
 - WHERE: `engine/season/rosters.yaml` (`binds_bases`, `tables`); `engine/season/data/rosters.py` (the tables' loader; `_load_offices`); `engine/season/state/carriers.py` (`Office.audit_at_exit`); `engine/season/boot/realm.py` (the Office mint); NEW `engine/season/tests/test_inst_ven_c.py`; `unified/U1_GLOSSARY.md` (*list*).
 - TESTS: in the new file, red before: `test_tables_refusals` and `test_audit_at_exit_must_name_an_arrangement` `[ASSUMPTION: names]`; `test_inst_syn_a_kit.py`'s falsifier: "An `Office` carrying a `patronage`, `eligible_from` or `cooling_off` field, or a `conferral_bases` carrying `lot`" fails.
-- FALSIFIER and CONTROL: an `Office` field for a table; `lot` in `conferral_bases`. Control: act and Event tallies (`corpus_run` seed 0, `headless --case NPC-088 --seasons 2 --seed 0`) equal B32.26's (an encoding mover's control is tallies-equal, D-04).
-- GATE: `python -m pytest engine/season/tests/test_inst_ven_c.py engine/season/tests/test_inst_syn_a_kit.py -q` → pass; the seed-0 hash moved, tallies equal (E-2).
+- FALSIFIER and CONTROL: an `Office` field for a table; `lot` in `conferral_bases`. Control: act and Event tallies (`corpus_run --seasons 2` [v12: two seasons a case, D-17; the case's own span, to `MAX_SEASONS`, is B99's] seed 0, `headless --case NPC-088 --seasons 2 --seed 0`) equal B32.26's (an encoding mover's control is tallies-equal, D-04).
+- GATE: `python -m pytest engine/season/tests/test_inst_ven_c.py engine/season/tests/test_inst_syn_a_kit.py -q` → pass; the seed-0 hash (`HASH READING`) moved, tallies equal (E-2).
 - HASH MOVERS: every content hash, by encoding only (`Office` gains a field name). Declared; re-pinned at B32.99.
 - EXPECTED RED UNTIL B32.99: the realm pins.
 - DEPENDS ON: V12 B32.06, B32.19 (the `tables` family); V12 Batch B21 (`06_FA_seat_terms_and_turnover`, `_by_body_B`: the row `term:`); EXISTS-IN-TREE `state/carriers.py::Office`, `rosters.yaml: binds_bases`.
@@ -226,12 +226,13 @@ INVOCATION: /methodology-execute Batch B37p-wr-kin-and-life
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_WR.md, Open table
 GATE: Batch B12c-material-verbs-and-valley
 GATE: Batch B37-happenings
+HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: none — carried v11 positions (the intake `:363`, CP-T10-04, -06, -07, -09; `V12_STRUCTURE.md` §2.2: "carried v11 positions"); they serve A-15 (natural death makes estates), A-75 (kin for births and `marry`) and the world's no-player half (holdings follow kin; the wounded mend)
 BATCH GATE (read once, on the closing tree, `PYTHONHASHSEED=0`):
   `python -m pytest engine/season/tests/test_kin.py engine/season/tests/test_deeds_to_me.py engine/season/tests/test_estate.py engine/season/tests/test_recovery.py engine/season/tests/test_season_shape.py -k "kin or estate or recovery or tend or wounded or bond" -q` → pass;
   the realm reading of CP-T10-07's LIMIT (AM-F-20), seeds 0 to 2, two seasons (four in the source; A-114): kin edges at build; `estates` entries written; `heir_of` non-empty; estate `succeed` formed / executed — "All zero is the expected base and is recorded as such" for the last two;
   the recovery reading (B37p.05's gate), seeds 0 to 2, two seasons: upward `condition.band_crossed` count and the `tend`-on-a-healed-man pair count (`wounded_with`'s docstring measurement), quoted;
-  `python -m engine.season.harness.register --check` → exit 0; `--requirements` → nine lines; `python tools/m1_acceptance.py --summary` → its verdict line quoted;
+  `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`); `--requirements` → nine lines; `python tools/m1_acceptance.py --summary` → its verdict line quoted;
   the suites `python tools/tests_for_diff.py --base <batch-start-sha>` names;
   the glossary rows named, read against the code;
   the close's commit body records `register --requirements` (nine lines), `m1_acceptance --summary`'s verdict line, the `BUILT OUT`, `ENGINES` and `NULL SCENES` lines before (`reading @<sha>`) and after, and the batch's measured wall time; no conjunct is named, so no `reading:` record is written; `status:` is not edited (`IS-A-12`).

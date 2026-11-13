@@ -17,6 +17,7 @@ GATE: Batch B10-character
 GATE: Batch B21-fa-governance
 GATE: Batch B24-sc-hearing
 GATE: Batch B16-pc-round                                                  (added by this part, not in `V12_STRUCTURE.md` §2.1: UNDECIDED U1)
+HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: R-04.c1 (the sheet) → the creation-sheet test green (`IS_A_NINE_part2.md` §12.2, row B34): `engine/season/tests/test_seat_holders_from_ledger.py::test_creation_sheet_marks_cohorts_and_holdings` and `engine/season/tests/test_season_shape.py::test_creation_sheet_shows_holdings_for_a_seat_holder` pass on the closing tree; the conjunct's `reading:` record is written at B34.99; `status:` is not edited (A-114).
 BATCH GATE (read once, on the closing tree, `PYTHONHASHSEED=0` on every seeded command):
   `python -m pytest engine/season/tests/test_play_surface.py engine/season/tests/test_play_surface_own_outcome.py engine/season/tests/test_scene_contract.py engine/season/tests/test_seat_holders_from_ledger.py engine/season/tests/test_management_orders.py engine/season/tests/test_governance_spine_play.py engine/season/tests/test_scenarios_runner.py engine/season/tests/test_go07_canonical_digest.py engine/season/tests/test_rem30_character_sheet.py engine/season/tests/test_rem31_grid_suspension.py engine/season/tests/test_season_shape.py tests/valoria/test_explain.py -q` → all pass;
@@ -28,7 +29,7 @@ BATCH GATE (read once, on the closing tree, `PYTHONHASHSEED=0` on every seeded c
   (Patched: P-29) `U5a_CORE_owed_edits` §I's falsifier, moved here from B03.65 (§5.8): `grep -rn "footprint(\|density(\|sovereign_fraction(\|provinces_of(" engine/season --include=*.py` outside `tests/` → finds, besides the definitions, `faction_q.standing`'s composition (B03.65) and its two callers' call of `standing` (B21.72's per-season print, B34.04's faction view); "still finds only definitions" is the defect;
   `python -m engine.season.harness.interactions` at seeds 0–2, two seasons → the count of persons named through a classed referent and outside the closure = 0 (B34.23, gate 1 of `16_PESSIMIST_GO_the_offer_names_what_is_held`);
   the realm content hash of `build_realm(s)` after one season at s = 0, 1, 2 → moved by B34.23 and B34.24 (and B34.01 if its branch 2 was taken) as declared, every other item equal (`reading @<sha>` of B24's and B21's merged close, the step's base);
-  `python -m engine.season.harness.register --check` → exit 0; `--requirements` → nine lines, quoted; `python tools/m1_acceptance.py --summary` → its verdict line, quoted;
+  `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`); `--requirements` → nine lines, quoted; `python tools/m1_acceptance.py --summary` → its verdict line, quoted;
   the suites `python tools/tests_for_diff.py --base <batch-start-sha>` names (engine core, harness, an exporter: the full gates, CLAUDE.md §0.4);
   the glossary rows each item names, read against the code it landed: a mismatch fails the close;
   the close's commit body records `register --requirements` (nine lines), `m1_acceptance --summary`'s verdict line, R-04.c1's reading with its tree, the `BUILT OUT`, `ENGINES` and `NULL SCENES` lines before (`reading @<sha>`) and after, and the batch's measured wall time; B34.99 writes R-04.c1's `reading:` record; `status:` is not edited (`IS-A-12`).
@@ -92,7 +93,7 @@ PARALLEL: S14 with B12b (SE+WR), B19a (MB), B21c (FA), B29 (PC). Shared with B21
 - WHERE: NEW `engine/season/tests/test_play_surface.py`; NEW `engine/season/tests/test_play_surface_own_outcome.py`; `engine/season/loop/witness.py` (`witness`, branch 2 only).
 - TESTS: the five above; the four gate tests red until B34.02 to B34.04 land (EXPECTED RED UNTIL B34.04, under `[skip ci]`).
 - FALSIFIER and CONTROL: "Every act the seated person resolved has an `own=True` `AccountRow` …; a planted act of another person yields none" (gate 3, read at B34.03). Control: in branch 1 the realm hash at seed 0 equals the step's base; in branch 2 a planted act by another person deposits no `doer` claim to `p_npc_001`.
-- GATE: `python -m pytest engine/season/tests/test_play_surface_own_outcome.py -q` → pass (in branch 1 before any edit; in branch 2 after step 3); the realm hash at seed 0, one season → equal (branch 1) or moved and declared (branch 2).
+- GATE: `python -m pytest engine/season/tests/test_play_surface_own_outcome.py -q` → pass (in branch 1 before any edit; in branch 2 after step 3); the realm hash (`HASH READING`) at seed 0, one season → equal (branch 1) or moved and declared (branch 2).
 - HASH MOVERS: none in branch 1; branch 2 "a declared hash mover" (WITNESS's self-deposit). Re-pinned at B34.99.
 - DEPENDS ON: EXISTS-IN-TREE `loop/witness.py::witness`, `state/carriers.py::Claim.doer`; V12 Batch B03c (`boot/realm.py::build_realm`); V12 Batch B05 (`05_SC_contest_record_on_event`, SC-P1: the roll's record on `Event.observed`).
 - GLOSSARY: none.
@@ -221,7 +222,7 @@ PARALLEL: S14 with B12b (SE+WR), B19a (MB), B21c (FA), B29 (PC). Shared with B21
 - WHERE: `engine/season/queries/person_q.py` (`Derivation`, `explain`); NEW `tests/valoria/test_explain.py` (U6).
 - TESTS: the two above, red first.
 - FALSIFIER and CONTROL: "a `Derivation` naming an actor the person holds no claim about fails the second test; control: the EQUAL hash."
-- GATE: `python -m pytest tests/valoria/test_explain.py -q` → pass; the realm hash at seed 0, one season → equal.
+- GATE: `python -m pytest tests/valoria/test_explain.py -q` → pass; the realm hash (`HASH READING`) at seed 0, one season → equal.
 - HASH MOVERS: none.
 - DEPENDS ON: V12 Batch B03 (`PersonInterior`); V12 B34.02 (`OfferRow.terms`).
 - GLOSSARY: row *derivation* if absent: "how a value came to be, term by term, from what he holds".
@@ -294,7 +295,7 @@ PARALLEL: S14 with B12b (SE+WR), B19a (MB), B21c (FA), B29 (PC). Shared with B21
 - WHERE: `engine/season/rosters.yaml` (`management_orders`); `engine/season/data/rosters.py` (`MANAGEMENT_ORDERS`, the refusal); `engine/season/state/carriers.py` (`Scene.cost`); `engine/season/decision/choose.py` (`pack_scenes`); `engine/season/loop/deliberate.py` (the two `cost` call sites); NEW `engine/season/tests/test_management_orders.py`.
 - TESTS (copied, written first and read red): "`test_an_order_scene_costs_nothing_and_a_priced_scene_is_unchanged` (with a planted one-member list: the order scene's cost is 0, a plain scene's 1, an extended one's `extended_scene_cost`); `test_an_order_never_shares_a_scene_with_a_priced_act`; `test_a_person_with_a_full_budget_may_still_order` (budget spent to 0, an order is still released); `test_an_order_opens_a_scene_next_round` [next lap] (a planted `dispatch` forms the recipient's `comply` next round [lap], priced 1)."
 - FALSIFIER and CONTROL: the four tests; "Control: the list empty, the realm content hash at seeds 0, 1, 2 equals the base."
-- GATE: `python -m pytest engine/season/tests/test_management_orders.py -q` → pass; the realm hash equal at seeds 0, 1, 2 with the list empty. (The source's "with CL-MGMT's list loaded, `aperture 2 0` and `2 2` print orders per person per season" is the list's own commit's reading, HELD with the list.)
+- GATE: `python -m pytest engine/season/tests/test_management_orders.py -q` → pass; the realm hash (`HASH READING`) equal at seeds 0, 1, 2 with the list empty. (The source's "with CL-MGMT's list loaded, `aperture 2 0` and `2 2` print orders per person per season" is the list's own commit's reading, HELD with the list.)
 - HASH MOVERS: "None at the control. Loading CL-MGMT's list is a declared mover … re-pinned once at that commit."
 - DEPENDS ON: EXISTS-IN-TREE `state/carriers.py::Scene.cost`, `decision/choose.py::pack_scenes`, `loop/deliberate.py`; V12 Batch B21 (`IS-B3-FA-05`, `dispatch`); V12 B34.09; MISSING (content: CL-MGMT's list, held; the load is not an item of v12).
 - GLOSSARY: row **management order**: "an order a seat gives from its desk, costing no scene, as a manager's instruction is", owner `rosters.yaml: management_orders`.
@@ -433,7 +434,7 @@ PARALLEL: S14 with B12b (SE+WR), B19a (MB), B21c (FA), B29 (PC). Shared with B21
 - WHERE: `engine/season/queries/world_q.py` (`_goal_referents`' `seat_holders` branch; `seats_named` returns the named holder; `goal_referents`' docstring); `engine/season/tests/test_seat_holders_from_ledger.py`.
 - TESTS (copied, written first and read red): "`test_goal_referent_reads_own_ledger`, `test_unheard_holder_forms_no_question_until_a_deposit_names_him`". `test_all_chances_one_reproduces_todays_referents` lands with B34.24.
 - FALSIFIER and CONTROL: "A person whose offer names a seat-holder he holds no claim about (gate 1 above zero)." Control at B34.24 (every chance 1.0).
-- GATE: `python -m pytest engine/season/tests/test_seat_holders_from_ledger.py -q` → the two tests pass; the realm hash at seed 0 → moved (declared).
+- GATE: `python -m pytest engine/season/tests/test_seat_holders_from_ledger.py -q` → the two tests pass; the realm hash (`HASH READING`) at seed 0 → moved (declared).
 - HASH MOVERS: "ledgers at build and the questions formed from them (every seeded world)". EXPECTED RED UNTIL B34.99: the realm pins. Re-pinned at B34.99.
 - DEPENDS ON: EXISTS-IN-TREE `queries/world_q.py::_goal_referents`, `::seats_named`, `::goal_referents`, `queries/person_q.py::LedgerReader.latest_about`, `::ledger_names`; V12 B34.12; V12 B34.20 (UNDECIDED: the EQUAL items' tests read an EQUAL tree first).
 - GLOSSARY: none.

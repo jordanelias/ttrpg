@@ -25,7 +25,7 @@ The batch block of `B12b-weather-arcs-population` (its head lines and position t
 - WHERE: `engine/season/rosters.yaml` (`grown_kinds`); `engine/season/data/rosters.py` (`GROWN_KINDS`, the subset check); `engine/season/queries/inputs.py` (`ProduceInput.grown`); `engine/season/queries/world_q.py` (`produce_input`); `modules/settlements/produce.py` (`produce`).
 - TESTS: in `engine/season/tests/test_season_weather_per_territory.py` (exists), written first: `test_ore_and_timber_ignore_the_weather` — "weather arm on, eight seasons at seed 0 [two seasons; eight in the source, A-114]: realm ore and timber yield equal the weather-off run season for season; grain differs"; red before.
 - FALSIFIER and CONTROL: ore following the weather with the arm on. Control: "the weather-off run is hash-equal to base"; `()` arm → realm hash equal.
-- GATE: `python -m pytest engine/season/tests/test_season_weather_per_territory.py -q` → pass; realm hash at seed 0, one season → equal to B12b.21's reading.
+- GATE: `python -m pytest engine/season/tests/test_season_weather_per_territory.py -q` → pass; realm hash (`HASH READING`) at seed 0, one season → equal to B12b.21's reading.
 - HASH MOVERS: none at the shipped arm `()`.
 - DEPENDS ON: V12 B12b.03 (`season_factor_of`'s band factor); EXISTS-IN-TREE `queries/inputs.py::ProduceInput`, `queries/world_q.py::produce_input`, `modules/settlements/produce.py::produce`.
 - GLOSSARY: new row *grown kinds*: "the stores that come from fields and so follow the weather, as a harvest does"; owner `rosters.yaml: grown_kinds` (the source: "The vocabulary gains one word (`grown_kinds`), defined at its roster row").
@@ -49,7 +49,7 @@ The batch block of `B12b-weather-arcs-population` (its head lines and position t
 - WHERE: `modules/settlements/fortification.py` (`fortification`); NEW `engine/season/tests/test_fortification_adds.py`.
 - TESTS: in the new file, written first: "`test_second_wall_never_lowers_the_first`, `test_half_strength_pair_reads_075`, `test_no_garrison_reads_zero`" — gate 3's readings: "(1000,) → 1.0; (1000, 1000) → 1.0; (1000, 0) → 1.0; (500, 500) → 0.75; () → 0.0"; `(1000, 0)` reads 0.5 before the edit (red).
 - FALSIFIER and CONTROL: "any consumer in `modules/mass_battle/` that relies on the mean's property that a ruined second garrison *lowers* the value … with one garrison per settlement the two formulas agree, and the MB lane should read this edit before any settlement gains a second." Control: "`build_realm(0)` barrier-only, three seasons [two; A-114]: hash equal to base".
-- GATE: `python -m pytest engine/season/tests/test_fortification_adds.py -q` → pass; `git grep -n "fortification" -- modules/mass_battle` → each caller listed in the commit body with whether it reads a second garrison; realm hash at seed 0 after two seasons → equal.
+- GATE: `python -m pytest engine/season/tests/test_fortification_adds.py -q` → pass; `git grep -n "fortification" -- modules/mass_battle` → each caller listed in the commit body with whether it reads a second garrison; realm hash (`HASH READING`) at seed 0 after two seasons → equal.
 - HASH MOVERS: none (one garrison per settlement in `build_realm`).
 - DEPENDS ON: EXISTS-IN-TREE `modules/settlements/fortification.py::fortification`, `FortInput`.
 - GLOSSARY: none.
@@ -73,7 +73,7 @@ The batch block of `B12b-weather-arcs-population` (its head lines and position t
 - WHERE: the driver's construction check (`engine/season/loop/driver.py`, beside the `require_entries` call) `[ASSUMPTION: the site — the producer opens the construction path at the item's open]`; `engine/season/hole_register.yaml` (H-241's sweep arm text).
 - TESTS: in `engine/season/tests/test_hunger.py` `[ASSUMPTION: the nearest existing file covering subsistence fixtures — basis: SE_A's gate]` (the source's own tag): `test_field_provisioning_refused_on_empty_treasuries`, written first, red.
 - FALSIFIER and CONTROL: gate 4, copied: "`build_realm(0)` with `field_provisioning=True` and no other change: construction refuses, naming H-241. With the first lane's seat-rung stock applied: construction passes and a seeded march fields more than the floor on both sides." Control: the shipped arm off → nothing read; realm hash equal.
-- GATE: `python -m pytest engine/season/tests/test_hunger.py -k field_provisioning -q` → pass; realm hash at seed 0, one season → equal.
+- GATE: `python -m pytest engine/season/tests/test_hunger.py -k field_provisioning -q` → pass; realm hash (`HASH READING`) at seed 0, one season → equal.
 - HASH MOVERS: none (shipped off).
 - DEPENDS ON: EXISTS-IN-TREE `queries/world_q.py::governing_hold`, `engine/season/gaps.py::Unspecified`, `manifest/registrar.py::require_entries`; V12 Batch B12a (`07_SE_treasury_granary_B`, R-SE-28's seat-rung stock, for the passing arm).
 - GLOSSARY: none.
@@ -87,7 +87,7 @@ The batch block of `B12b-weather-arcs-population` (its head lines and position t
 - WHERE: `engine/season/state/world.py` (`World.write`'s signature and its `Gate.mint` calls); `engine/season/loop/matter.py` (the `yield` write).
 - TESTS: in `test_season_weather_per_territory.py`: `test_yield_receipt_carries_the_produced_map` — "A planted `yield` write: its Event's receipt carries the produced map; `World.content_hash()` of a world with no Site is unchanged"; red before.
 - FALSIFIER and CONTROL: a `yield.taken` receipt with `spec` empty at a rung that produced; a reader in the loop branching on it (none may: "No reader in the loop branches on it"). Control: a world with no Site → hash unchanged.
-- GATE: `python -m pytest engine/season/tests/test_season_weather_per_territory.py -q` → pass; realm hash at seed 0 after one season → moved (declared).
+- GATE: `python -m pytest engine/season/tests/test_season_weather_per_territory.py -q` → pass; realm hash (`HASH READING`) at seed 0 after one season → moved (declared).
 - HASH MOVERS: "every world where a yield is written" (the receipt is in the log the hash folds). Declared; B12b's re-pin. Not an encoding mover: `StateChange.spec` exists; `World.write`'s parameter is no carrier field.
 - DEPENDS ON: EXISTS-IN-TREE `state/world.py::World.write`, `state/gate.py::Gate.mint` (`spec`), `state/carriers.py::StateChange`; V12 B12b.03 (the band); V12 Batch B09 (`16_PESSIMIST_CORE_the_record_holds_what_changed` edit 1, receipts).
 - GLOSSARY: none.
@@ -107,7 +107,7 @@ The batch block of `B12b-weather-arcs-population` (its head lines and position t
 - WHERE: `engine/season/hole_register.yaml` (H-105, H-171, H-309, H-168).
 - TESTS: none (a register edit).
 - FALSIFIER and CONTROL: `register --check` refusing the edited rows. Control: no code moves; realm hash equal.
-- GATE: copied: "`python -m engine.season.harness.register --requirements` loads"; `python -m engine.season.harness.register --check` → exit 0.
+- GATE: copied: "`python -m engine.season.harness.register --requirements` loads"; `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`).
 - HASH MOVERS: none.
 - DEPENDS ON: EXISTS-IN-TREE `hole_register.yaml` rows H-105, H-171, H-309, H-168.
 - GLOSSARY: none.
@@ -121,7 +121,7 @@ The batch block of `B12b-weather-arcs-population` (its head lines and position t
 - WHERE: `engine/season/loop/effects_shared.py` (`_debit`).
 - TESTS: `test_build_leaves_no_zero_key_in_the_payer_stores` in `engine/season/tests/test_demand_delivery.py` `[ASSUMPTION: test name and file]`, written first, red.
 - FALSIFIER and CONTROL: a debit to 0 that leaves the key; a debit to above 0 that drops it. Control: a debit that leaves stock reads as before. Note for B12b.40: SE_A's R2 reads "the key is written when a rung first holds the kind and survives its emptying"; `_debit` is the act's debit (RESOLVE), not the larder's MATTER take, so the larder's survival rule is untouched `[ASSUMPTION: the larder's take does not call `_debit` — the producer greps `_debit(` at the open and records the callers]`.
-- GATE: `python -m pytest engine/season/tests/test_demand_delivery.py -q` → pass; realm hash at seed 0 after one season → moved where a debit emptied a kind (declared).
+- GATE: `python -m pytest engine/season/tests/test_demand_delivery.py -q` → pass; realm hash (`HASH READING`) at seed 0 after one season → moved where a debit emptied a kind (declared).
 - HASH MOVERS: every world where a debit empties a kind. Declared; B12b's re-pin.
 - DEPENDS ON: EXISTS-IN-TREE `loop/effects_shared.py::_debit`, `modules/settlements/provision.py`.
 - GLOSSARY: none.
@@ -147,7 +147,7 @@ The batch block of `B12b-weather-arcs-population` (its head lines and position t
 - WHERE: `engine/season/rosters.yaml` (`works_cost`: five rows).
 - TESTS: none new; the founding tests that read `works_cost` stay green (`grep -rl works_cost engine/season/tests` names them at the open).
 - FALSIFIER and CONTROL: a `build` of a `garrison` that debits no `ore`. Control: a `build` of any other works unchanged.
-- GATE: `python -m pytest $(grep -rl works_cost engine/season/tests) -q` → pass; realm hash at seed 0 after one season → equal unless one of the five was built (the commit body says which).
+- GATE: `python -m pytest $(grep -rl works_cost engine/season/tests) -q` → pass; realm hash (`HASH READING`) at seed 0 after one season → equal unless one of the five was built (the commit body says which).
 - HASH MOVERS: worlds in which one of the five works is built. Declared; B12b's re-pin.
 - DEPENDS ON: EXISTS-IN-TREE `rosters.yaml: works_cost`, `loop/effects_founding.py` (`_cost`); V12 B12b.28 (`_debit`).
 - GLOSSARY: none.
@@ -170,7 +170,7 @@ The batch block of `B12b-weather-arcs-population` (its head lines and position t
 - WHERE: `modules/settlements/subsist.py` (the loss); `engine/season/queries/inputs.py` (`SubsistInput.per_head`); `engine/season/queries/world_q.py` (`subsist_input`); `engine/season/data/fixtures.py` (`hunger_loss`, its tag); NEW `engine/season/tests/test_cr08_census_weight.py`.
 - TESTS: in the new file: `test_per_head_halves_the_loss_at_weight_two`, `test_per_cohort_is_the_control` `[ASSUMPTION: test names]`, red before.
 - FALSIFIER and CONTROL: under `per_head` a weight-20 cohort losing ten times a weight-2 cohort's body for the same per-head shortfall (H-305's defect). Control: `hunger_loss` `per_cohort` → realm hash equal.
-- GATE: `python -m pytest engine/season/tests/test_cr08_census_weight.py engine/season/tests/test_hunger.py -q` → pass; realm hash at seed 0, one season → equal.
+- GATE: `python -m pytest engine/season/tests/test_cr08_census_weight.py engine/season/tests/test_hunger.py -q` → pass; realm hash (`HASH READING`) at seed 0, one season → equal.
 - HASH MOVERS: none at `per_cohort`.
 - DEPENDS ON: EXISTS-IN-TREE `modules/settlements/subsist.py::subsist`, `queries/inputs.py::SubsistInput`, `queries/world_q.py::subsist_input`; V12 Batch B12a (`09_WR_B_draws_not_thresholds` edit 2's drawn loss).
 - GLOSSARY: none.
@@ -198,7 +198,7 @@ The batch block of `B12b-weather-arcs-population` (its head lines and position t
 - WHERE: `engine/season/loop/matter.py` (the hunger fall loop; the death test); `engine/season/data/fixtures.py` (`famine_loss`); `engine/season/write_matrix.yaml` (`(Person, weight)`: `steps: [MAT, CEN]`, the site's ambiguity note); `engine/season/hole_register.yaml` (H-49's arm); `engine/season/tests/test_cr08_census_weight.py`.
 - TESTS: in `test_cr08_census_weight.py`, written first: "on `harness/scarce.build` with `famine_loss 500` and `hunger_loss per_head`: the hungry cohort's weight falls 10 → 5 → 3 → 2 → 1 across the seasons its body stands under the floor, each fall emits `weight.changed` whose cause is a `body.changed`, its `demanded` falls with it, and it is removed only at weight 1 and body 0" — split to keep to two seasons (A-114): `test_hungry_cohort_thins_ten_five_three` (two seasons: 10 → 5 → 3, each `weight.changed` caused by a `body.changed`, `demanded` falling with it) and `test_cohort_at_weight_two_thins_to_one_then_dies_at_body_zero` (a planted cohort at weight 2 under the floor: one season to weight 1, the next removed at body 0); `test_famine_loss_zero_is_the_control` ("`famine_loss 0` reproduces `scarce.build`'s shipped hash and the cohort dies as it does today") `[ASSUMPTION: test names; the split is this plan's, the readings the source's]`.
 - FALSIFIER and CONTROL: copied: "A cohort under the floor that keeps its weight; a cohort over the floor that loses any; a `weight.changed` with `[ROOT]` as cause on a cohort whose body was ever written. Mutation: read `p.body <= 0` instead of the floor, and the 10 → 5 step never fires before death." Control: `famine_loss 0` → realm hash equal. "CR-08's own exit stands: `grep -rn "weight.changed" engine/season` finds the writer."
-- GATE: `python -m pytest engine/season/tests/test_cr08_census_weight.py engine/season/tests/test_hunger.py -q` → pass; `git grep -n "weight.changed" -- engine/season/loop` → the writer; `python -m engine.season.harness.register --check` → exit 0; realm hash at seed 0, one season → equal.
+- GATE: `python -m pytest engine/season/tests/test_cr08_census_weight.py engine/season/tests/test_hunger.py -q` → pass; `git grep -n "weight.changed" -- engine/season/loop` → the writer; `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`); realm hash (`HASH READING`) at seed 0, one season → equal.
 - HASH MOVERS: none at `famine_loss 0`.
 - DEPENDS ON: V12 B12b.35; EXISTS-IN-TREE `loop/matter.py::_die`, `write_matrix.yaml` `(Person, weight)` and `(Rung, envelope)`, `harness/scarce.py::build`, `band_floors.body.withdrawal_only` `[the producer reads the band name at the open]`.
 - GLOSSARY: none (`famine_loss`'s fixture note: "the share of a starving cohort's people lost each season, in thousandths").
@@ -212,7 +212,7 @@ The batch block of `B12b-weather-arcs-population` (its head lines and position t
 - WHERE: `engine/season/rosters.yaml` (`hunger_bands`); `engine/season/queries/world_q.py` (`hunger`; the first/last unpack); `engine/season/tests/test_hunger.py` (the case; `test_g`'s limit text).
 - TESTS: `test_settlement_with_no_cohort_reads_empty` `[ASSUMPTION: test name]` in `test_hunger.py`, red before (reads `fed`).
 - FALSIFIER and CONTROL: a settlement with a cohort and `D == 0` reading `empty` (only the absence of a cohort does). Control: realm hash equal (no loop reader of `hunger`).
-- GATE: `python -m pytest engine/season/tests/test_hunger.py -q` → pass; realm hash at seed 0, one season → equal; the census line printed by `aperture 1 0` lists `empty` where a rung has no cohort.
+- GATE: `python -m pytest engine/season/tests/test_hunger.py -q` → pass; realm hash (`HASH READING`) at seed 0, one season → equal; the census line printed by `aperture 1 0` lists `empty` where a rung has no cohort.
 - HASH MOVERS: none.
 - DEPENDS ON: EXISTS-IN-TREE `queries/world_q.py::hunger`, `rosters.yaml: hunger_bands`, `residence_of`; V12 B12b.36.
 - GLOSSARY: the *hunger band* row gains `empty`: "no one lives there to be fed".
@@ -249,7 +249,7 @@ The batch block of `B12b-weather-arcs-population` (its head lines and position t
 - WHERE: `engine/season/loop/matter.py` (the bodies-clock block); `engine/season/queries/world_q.py` (`quiet_since`); `engine/season/write_matrix.yaml` (`(Person, weight)`'s `by:` cell); `engine/season/data/fixtures.py` (`regrow_seasons`); `engine/season/hole_register.yaml` (H-49's arm); `engine/season/tests/test_in34_bodies_clock.py`.
 - TESTS: in `test_in34_bodies_clock.py`, written first, at two seasons (the source's run is longer; A-114): "on `harness/scarce.build` with `regrow_seasons 2` and the hungry cohort fed from tick 0: its weight rises by 1 every second season until `population == capacity`, then stops; build a dwelling there and it rises once more. Each rise emits `weight.changed`; `|w.persons|` is unchanged throughout" — as `test_quiet_fed_housed_cohort_rises_once_in_two_seasons` (`regrow_seasons 2`: one rise by the second season), `test_no_rise_at_capacity` (planted at `population == capacity`), `test_no_rise_in_a_short_season`, `test_person_count_unchanged`; the two-arm reading ("starve the cohort for three seasons, then feed it. Its weight falls, then returns") is written at two seasons with `regrow_seasons 1` and a one-season starvation `[ASSUMPTION: test names and the shortened arms; the readings are the source's]`.
 - FALSIFIER and CONTROL: copied: "A rise in a season the cohort was short; a rise past capacity; a rise within `regrow_seasons` of a fall; any change in the count of persons; any `weight.changed` written with `w.step == Step.CENSUS` by this branch. Mutation: drop clause (iii) and the capacity assertion reds; remove `MAT` from the `(Person, weight)` cell and the write raises at the gate." "**Control.** `regrow_seasons 0` reproduces the shipped hashes."
-- GATE: `python -m pytest engine/season/tests/test_in34_bodies_clock.py engine/season/tests/test_cr08_census_weight.py -q` → pass; realm hash at seed 0, one season → equal.
+- GATE: `python -m pytest engine/season/tests/test_in34_bodies_clock.py engine/season/tests/test_cr08_census_weight.py -q` → pass; realm hash (`HASH READING`) at seed 0, one season → equal.
 - HASH MOVERS: none at `regrow_seasons 0`.
 - DEPENDS ON: V12 B12b.36 (the `MAT` step on the cell); EXISTS-IN-TREE `queries/world_q.py::residence_of`, `::population`, `::capacity`, `::body_hazard`, `World.last_emission_of`, `loop/matter.py`'s bodies-clock section; V12 Batch B12a (`seasons_of_year`, for A-51's prologue, which is B39's).
 - GLOSSARY: none (`regrow_seasons`' fixture note: "how many quiet, fed seasons a housed cohort waits before it grows by one").
@@ -268,7 +268,7 @@ The batch block of `B12b-weather-arcs-population` (its head lines and position t
 - WHERE: `engine/season/queries/inputs.py` (`LarderInput.order`); `engine/season/queries/world_q.py` (`_larder_parts`); `modules/settlements/larder.py` (`larder_draw`).
 - TESTS: in `engine/season/tests/test_hunger.py`, written first: `test_short_rung_is_shared_in_proportion_to_want` (row 1: "Two cohorts of weight 2 on one rung holding grain 4, salt 2: each takes grain 2, salt 1; each falls 30; `shortfalls` names the rung with the gap (grain 4, salt 2). Control: the rung holding grain 8, salt 4: both fed, no report"), `test_odd_unit_varies_over_season_keys` (row 2: "Three cohorts on a rung holding 4 grain: takes sum to 4; over 200 season keys the cohort receiving the odd unit varies (the falsifier for 'drawn': one cohort receiving it 200 of 200)", asserting it checked 200); in `test_demand_delivery.py`: `test_takes_sum_to_what_was_held`.
 - FALSIFIER and CONTROL: one cohort receiving the odd unit at all 200 keys; takes that do not sum to what was held. Control: "Edit 1 moves no shipped hash in `build_realm`: every settlement there eats from its own rung in surplus"; gate row 6: "`build_realm(0)`, three seasons [two, A-114], barrier-only: content hash equal to base at edit 1".
-- GATE: `python -m pytest engine/season/tests/test_hunger.py engine/season/tests/test_demand_delivery.py -q` → pass; realm hash at seed 0 after two seasons → equal.
+- GATE: `python -m pytest engine/season/tests/test_hunger.py engine/season/tests/test_demand_delivery.py -q` → pass; realm hash (`HASH READING`) at seed 0 after two seasons → equal.
 - HASH MOVERS: none in `build_realm` (one eater per rung, in surplus).
 - DEPENDS ON: EXISTS-IN-TREE `queries/inputs.py::LarderInput`, `queries/world_q.py::_larder_parts`, `modules/settlements/larder.py::larder_draw`; V12 Batch B06 (`draw_factory`); V12 Batch B12a (`07_SE_ground_and_granaries`' `larder_walk`); V12 B12b.01 (the `want` scaling in `_larder_parts`, kept).
 - GLOSSARY: none.
@@ -298,7 +298,7 @@ The batch block of `B12b-weather-arcs-population` (its head lines and position t
 - WHERE: `engine/season/queries/inputs.py` (`SubsistInput.short_before`, `.once_held`); `engine/season/queries/world_q.py` (`subsist_input`); `modules/settlements/subsist.py` (`subsist`); `engine/season/loop/matter.py` (`short_seen`'s carrier).
 - TESTS: in `test_hunger.py`, written first: `test_exact_multiple_granary_reports_once` (row 3: "the exact-multiple granary reports once, in the season the town first goes unfed, at the granary rung; never again while the dearth lasts … Control: a cohort fed every season reports nothing" — the K7 granary replayed at two seasons with one season's stock), `test_never_stocked_ladder_reports_once_at_its_first_rung` ("A ladder with no key for the kind reports once, at its first rung, and then nothing (D-69)").
 - FALSIFIER and CONTROL: a dearth reported twice in one run of short seasons; a never-stocked ladder silent. Control: a fed cohort reports nothing.
-- GATE: `python -m pytest engine/season/tests/test_hunger.py -q` → pass; row 6: "edit 2 moves [the realm hash] by the season-0 ladders' one report each (declared, D-69)" — realm hash at seed 0 after one season → moved.
+- GATE: `python -m pytest engine/season/tests/test_hunger.py -q` → pass; row 6: "edit 2 moves [the realm hash] by the season-0 ladders' one report each (declared, D-69)" — realm hash (`HASH READING`) at seed 0 after one season → moved.
 - HASH MOVERS: "the realm's season-0 ladders hold no key for any kind, so each short cohort's first dearth now reports once at the first rung of its ladder (D-69)". Declared; B12b's re-pin.
 - DEPENDS ON: V12 B12b.39; EXISTS-IN-TREE `queries/inputs.py::SubsistInput`, `World._subsistence_shortfall`, `loop/witness.py`'s seat channel, `world_q.governors_of`.
 - GLOSSARY: none.
@@ -320,7 +320,7 @@ The batch block of `B12b-weather-arcs-population` (its head lines and position t
 - WHERE: `engine/season/loop/matter.py` (the hunger fall's `causes`; `_die`'s `cause` parameter).
 - TESTS: in `test_hunger.py`: `test_hunger_death_cites_the_fall_and_the_store` (row 4: "every death Event's `causes[0]` is a `body.changed` whose `causes[0]` is a `stores.changed` at a highland rung", on a planted world with the highland rungs stocked for one exact season, two seasons), written first, red.
 - FALSIFIER and CONTROL: a hunger death citing `ROOT` or an earlier death. Control: an ageing death (bodies clock) unchanged.
-- GATE: `python -m pytest engine/season/tests/test_hunger.py engine/season/tests/test_in34_bodies_clock.py -q` → pass; realm hash moved where a body falls by hunger (declared).
+- GATE: `python -m pytest engine/season/tests/test_hunger.py engine/season/tests/test_in34_bodies_clock.py -q` → pass; realm hash (`HASH READING`) moved where a body falls by hunger (declared).
 - HASH MOVERS: "every hash in which a body falls by hunger (the cause list is part of the Event)". Declared; B12b's re-pin.
 - DEPENDS ON: V12 B12b.40 (`short_at`); V12 B12b.36 (the guarded death test); EXISTS-IN-TREE `loop/matter.py::_die`, `World.last_emission_of`.
 - GLOSSARY: none.
@@ -334,7 +334,7 @@ The batch block of `B12b-weather-arcs-population` (its head lines and position t
 - WHERE: `engine/season/verb_table.yaml` (row `tend`: `requires_typed`); `engine/season/queries/world_q.py` (the unfed-gap Query); `engine/season/data/requires.py` (the `ScalarThreshold` stem, if the gap needs a stem) `[ASSUMPTION: whether a new stem is needed — the producer reads `04` §F.24a's form at the open]`.
 - TESTS: in `test_hunger.py`: `test_tend_refused_on_an_unfed_cohort` (row 5: "cohort `tend` on a short cohort refused; highland bodies fall season on season. Control: the fed arm unchanged"), written first, red.
 - FALSIFIER and CONTROL: a short cohort tended to full body; a fed cohort refused. Control: the fed arm unchanged.
-- GATE: `python -m pytest engine/season/tests/test_hunger.py -q` → pass; realm hash after one season at seed 0 → moved ("the realm's season 1 (the season-0 fall is tended there today)").
+- GATE: `python -m pytest engine/season/tests/test_hunger.py -q` → pass; realm hash (`HASH READING`) after one season at seed 0 → moved ("the realm's season 1 (the season-0 fall is tended there today)").
 - HASH MOVERS: "any run in which a short cohort is tended". Declared; B12b's re-pin.
 - DEPENDS ON: V12 B12b.39 (the draw the gap reads); EXISTS-IN-TREE `verb_table.yaml` row `tend` (`requires_typed`), `queries/world_q.py::subsistence_draw`, `data/requires.py`.
 - GLOSSARY: none.
@@ -365,7 +365,7 @@ The five positions below are the intake entries the B12a authors routed here by 
 - WHERE: `engine/season/rosters.yaml` (`subsistence_weight.weights`) or `engine/season/data/fixtures.py` (`subsistence_weight`) as the tree holds it `[the producer opens both]`; `engine/season/data/fixtures.py` (`body_step`, if re-derived); `engine/season/hole_register.yaml` (H-11, H-125); `engine/season/requirements.yaml` (R-04's settlement-row `measure:`, per the card) — read at the item's open: `IS-A-01` (B02) restructured `measure:` into conjuncts, and a key it removed is not written (the pilots' rule; written in the commit body).
 - TESTS: in `test_hunger.py`: the exit as `test_shipped_arm_reads_below_fed_after_season_one` (two seasons, seeds 0–2, asserting it checked three) and `test_dropping_the_per_head_term_reads_fed_everywhere` (the planted failure: "`want = Person.weight` (per-head term dropped) and every band reads `fed`"), and the season-0 check `test_floor_check_refuses_the_x20_arm` ("at `body_step` 10 the ×20 arm costs every cohort 1,200 body at season 0, so the floor check must refuse ×20 (the check reds if it admits it)") `[ASSUMPTION: test names]`.
 - FALSIFIER and CONTROL: copied: "at the shipped arm `hunger_by_settlement` reads a band below `fed` after season 1; planted failure: `want = Person.weight` … every band reads `fed`." "CONTROL: ×1 reproduces the base hash."
-- GATE: `python -m pytest engine/season/tests/test_hunger.py -q` → pass; the arms' table (×1, ×5, ×20, and ×10 if bisected) at seeds 0–2, two seasons, in the commit body; `python -m engine.season.harness.register --check` → exit 0.
+- GATE: `python -m pytest engine/season/tests/test_hunger.py -q` → pass; the arms' table (×1, ×5, ×20, and ×10 if bisected) at seeds 0–2, two seasons, in the commit body; `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`).
 - HASH MOVERS: "declared MOVER (every realm-seeded pin, the `BASE_EVENTS` files, `results.json`)". B12b's re-pin.
 - DEPENDS ON: V12 B12b.01, B12b.36, B12b.37, B12b.43; V12 Batch B12a (CP-T08-02, the endowment); EXISTS-IN-TREE REM-50's census line `hunger_by_settlement`, `world_q.hunger`.
 - GLOSSARY: none.
@@ -394,7 +394,7 @@ The five positions below are the intake entries the B12a authors routed here by 
 - WHERE: `engine/season/tensions.yaml` (six rows).
 - TESTS: in `test_tensions.py`: the sub-entry's falsifier, at two seasons (four in the source; A-114): "switch on, seeds 0-5 × four seasons: every drawn card loads and seeds; for each seed at least one person committed to the drawn card's goal forms a candidate whose referent is that goal's object (the count checked asserted ≥ 1 per seed, so a vacuous loop fails). Planted failure: a card whose `seat_holders` object names a seat absent from `offices.yaml` is refused at seeding, naming the row; a built but vacant seat seeds a goal with no stance row."
 - FALSIFIER and CONTROL: as TESTS. "CONTROL: switch off reproduces commit (3)'s hash."
-- GATE: `python -m pytest engine/season/tests/test_tensions.py -q` → pass; realm hash (switch off) at seed 0, one season → equal to B12b.45's reading. The READING ("STORY-BAR on against off, seeds 0-2 … the on-arm's CI and Turmoil readings by CR-90's arc instrument") is taken at two seasons where its instruments exist at this tree (CR-90 is Batch B21d, later: that arm is not read here) and quoted in the commit body, "not a pass condition".
+- GATE: `python -m pytest engine/season/tests/test_tensions.py -q` → pass; realm hash (`HASH READING`) (switch off) at seed 0, one season → equal to B12b.45's reading. The READING ("STORY-BAR on against off, seeds 0-2 … the on-arm's CI and Turmoil readings by CR-90's arc instrument") is taken at two seasons where its instruments exist at this tree (CR-90 is Batch B21d, later: that arm is not read here) and quoted in the commit body, "not a pass condition".
 - HASH MOVERS: none ("HASH: EQUAL (switch off)").
 - DEPENDS ON: V12 B12b.45.
 - GLOSSARY: none.
@@ -441,6 +441,7 @@ GATE: Batch B14-pc-outcome
 GATE: Batch B15-pc-calibration
 GATE: Batch B16-pc-round
 GATE: Batch B17-mb-scale
+HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: none — the measured table B19's contact draw reads (A-100); nothing in a field reads it yet (`V12_STRUCTURE.md` §2.2: "none of its own (the table B19 reads)"); the close reads the nine lines and writes no `reading:` record
 UNDECIDED:
   (1) MBA-02 step 2 loads the duel "through `engine/substrate/pc_engine.py` (`pc_engine.load()`)"; B13 (`CI-09`) deletes that seam before this batch. Taken as D-09 decides: `from modules.combat import wrapper, combatant` (a tool under `tools/`, not the engine), and each duel read per round through B16's `modules/combat/fight.py::fight_round` (PCR-2), not the trace events the pilot read.
@@ -451,7 +452,7 @@ BATCH GATE (read once, on the closing tree; `PYTHONHASHSEED=0`):
   `python tools/export_mb_contact.py --check` → exit 0; `python tools/export_troops.py --check` → exit 0;
   `python -m pytest tests/valoria/test_export_troops.py tests/valoria/test_export_mb_contact.py -q` → all pass;
   `python tools/ci_golden_modes_check.py` → every digest equal to B17's close (`reading @<B17 closing sha>`); the realm hash at seeds 0–2 after one season equal to the step's base (`reading @<sha>`): nothing in a field or a season reads the table;
-  `python -m engine.season.harness.register --check` → exit 0; `--requirements` → nine lines; `python tools/m1_acceptance.py --summary` → its verdict line, quoted;
+  `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`); `--requirements` → nine lines; `python tools/m1_acceptance.py --summary` → its verdict line, quoted;
   the glossary rows B19a.01–.03 name (MBA §8.3: *felling chance*, *exposure*, *matchup row*, *range band*, *power* retired for *skill*), read against the code;
   the suites `python tools/tests_for_diff.py --base <batch-start-sha>` names (`-m mass_battle` plus the tool tests: the batch touches `modules/mass_battle/`, `tools/` and registries);
   the close's commit body records `register --requirements`, `m1_acceptance --summary`'s verdict line, the `BUILT OUT`, `ENGINES` and `NULL SCENES` lines before (`reading @<sha>`) and after, the full run's wall time and worker count, and the batch's measured wall time; `status:` is not edited (`IS-A-12`).
@@ -557,6 +558,7 @@ GATE: Batch B02-tests
 GATE: Batch B15-pc-calibration
 GATE: Batch B16-pc-round
 GATE: Batch B21-fa-governance
+HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: `BUILT OUT`: `arrest`, `accept` (`V12_STRUCTURE.md` §2.2; `IS-A-08`'s rule: the `BUILT OUT` line of `python -m engine.season.harness.aperture 2 --seeds 0 1 2` for each verb is in the gate, and a verb not built out at the close is a failed gate) → both built out; it completes two verbs of R-05 (IS-A §12.3 item 2, D-20); no `status:` edited
 UNDECIDED:
   (1) A0 (`addressed_records`) lands with A4 in B14 (B14.27, "`14_VERBS_PHYSICAL_A` A0, A4"), though this file's Lands line says "A0–A2 in B29": A4 cannot land without its reader, so B14 carries it; here it is a DEPENDS ON.
@@ -567,7 +569,7 @@ BATCH GATE (read once, on the closing tree; `PYTHONHASHSEED=0`):
   `python -m pytest engine/season/tests/test_vm_phy_a_custody.py engine/season/tests/test_cr87_violence_contexts.py -q` → all pass;
   `python -m engine.season.harness.aperture 2 --seeds 0 1 2` → `BUILT OUT` for `arrest` and `accept`; `capture` refusals on `exists:Person` and `individual` 0; `accept` refusals on `exists:challenge` 0 (the source's "`aperture 2 0` and `aperture 2 1` before and after, quoted in the commit"), before `reading @<sha>` and after;
   B29.03's reading (CR-51 (b)'s exit) quoted;
-  `python -m engine.season.harness.register --check` → exit 0; `--requirements` → nine lines; `python tools/m1_acceptance.py --summary` → its verdict line, quoted;
+  `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`); `--requirements` → nine lines; `python tools/m1_acceptance.py --summary` → its verdict line, quoted;
   the suites `python tools/tests_for_diff.py --base <batch-start-sha>` names (engine core: the full gates);
   the close's commit body records `register --requirements`, `m1_acceptance --summary`'s verdict line, the `BUILT OUT`, `ENGINES` and `NULL SCENES` lines before (`reading @<sha>`) and after, and the batch's measured wall time; `status:` is not edited (`IS-A-12`).
 RE-PIN: once, in B29.99: the realm and corpus pins in `engine/season/tests/_realm_goldens.py` that B29.01 and B29.02 move ("every realm and spine pin in which these formations occurred (`capture`'s 26 formations … the arrest stamp's new referents)"), and B29.03's if it builds a link; read against the step's base and, in S14, rebased on B12b's merge (§7.4: B12b precedes B29 in §2.1's order); the commit says "re-pin".
@@ -601,7 +603,7 @@ Not in this batch, and where each is: `14_VERBS_PHYSICAL_A` A0 and A4 (B14.27), 
 - WHERE: `engine/season/queries/world_q.py` (`warrants_for`, `warrants_heard`, `_stamped`); `engine/season/loop/effects_information.py` (`_eff_arrest`, `_eff_seize`, the `seize` licence helper; `_held_warrants` deleted); `engine/season/decision/options.py` (`warranted`); `engine/season/verb_table.yaml` (`arrest`: `requires_typed_note`, `payload_note`).
 - TESTS: in `engine/season/tests/test_vm_phy_a_custody.py`, a function for the audit's §1.7, written first and read red: "`build_realm(0)`; a court seat (a holder of `determine`) issues, through the real fold, a dispensation whose `terms` is a person and whose `to` is a seated holder of `dispatch` co-located with the issuer. One season through `SeasonDriver.season` with the shipped chooser and no hand-built act. Pass: the officer's opening set contains `arrest` on the named person; if attempted, its Event is `arrest.made` or `arrest.resisted`; on `arrest.made` the custodial holder's next opening set contains `interrogate` on the prisoner (`Detainee` read downstream)." — as `test_arrest_on_an_addressed_and_heard_warrant` `[ASSUMPTION: function name]`.
 - FALSIFIER and CONTROL: "**Control:** the same world with `to` set to a third person forms no `arrest` for the officer. **Planted failure:** revert `_eff_arrest` to `_held_warrants`. The act forms and is refused at `write`. The test must fail on the refusal kind."
-- GATE: `python -m pytest engine/season/tests/test_vm_phy_a_custody.py -q` → the A1 function and B14.27's A4 function pass; `git grep -n "_held_warrants" -- engine/season` → nothing; the realm hash at seed 0 after one season → moved where the stamp adds referents (declared).
+- GATE: `python -m pytest engine/season/tests/test_vm_phy_a_custody.py -q` → the A1 function and B14.27's A4 function pass; `git grep -n "_held_warrants" -- engine/season` → nothing; the realm hash (`HASH READING`) at seed 0 after one season → moved where the stamp adds referents (declared).
 - HASH MOVERS: "the arrest stamp's new referents" in every realm and spine pin where they occur. Declared; B29's re-pin.
 - DEPENDS ON: V12 B14.27 (`world_q.addressed_records`); EXISTS-IN-TREE `loop/effects_information.py::_held_warrants`, `::_eff_arrest`, `::_eff_seize`, `queries/world_q.py::_stamped`, `decision/options.py` (`warranted`, the `WARRANT_SOURCED` block), `person_q.ledger_names`; V12 Batch B21 (`06_FA_remit_grant_by_row`; A-22's court that may order the officer).
 - NAMES: none (no identifier this text uses is renamed by an earlier batch; "round" does not occur).
@@ -635,7 +637,7 @@ Not in this batch, and where each is: `14_VERBS_PHYSICAL_A` A0 and A4 (B14.27), 
 - WHERE: none for the reading; for a named gap, the owner the reading names (`decision/options.py`'s `WARRANT_SOURCED` block, or the `arrest` row's rank), stated in the commit before it is edited.
 - TESTS: none for the reading; a built gap adds one function to `test_vm_phy_a_custody.py` named after the link, written first and read red `[ASSUMPTION: the name follows the link]`.
 - FALSIFIER and CONTROL: copied: "`aperture 3 s` [2 s]: `arrest.made` and `detention.ended` or `ban.ended` caused by computed acts; or the exit records the missing link by name and both verbs stay named residue (no position is invented to fix it). A planted `detain` on the seat: `pardon` closes it and emits (the check the effect already passes by hand)." Control: the reading moves nothing ("EQUAL for the reading").
-- GATE: `PYTHONHASHSEED=0 python -m engine.season.harness.aperture 2 --seeds 0 1 2` → `arrest.made` caused by a computed act at some seed, and `detention.ended` or `ban.ended` caused by a computed act, or the missing link named in the commit body; the four MEASURE lines quoted; if a link is built, its test passes and the realm hash moved (declared).
+- GATE: `PYTHONHASHSEED=0 python -m engine.season.harness.aperture 2 --seeds 0 1 2` → `arrest.made` caused by a computed act at some seed, and `detention.ended` or `ban.ended` caused by a computed act, or the missing link named in the commit body; the four MEASURE lines quoted; if a link is built, its test passes and the realm hash (`HASH READING`) moved (declared).
 - STOPS IF: the reading names a link owned by another batch (`pardon`: B32; CR-63's warrant duty: B24a): the item records it and builds nothing.
 - HASH MOVERS: none for the reading; "MOVER if built", declared and re-pinned at B29.99.
 - DEPENDS ON: V12 B29.01, B29.02; EXISTS-IN-TREE `loop/effects_governance.py::_eff_pardon`, `_RESTRAINT_ENDED`, IN-12's warrant channel; V12 Batch B21.

@@ -257,7 +257,7 @@ The batch block's head, its position table and items B98.01 to B98.22 are in `wo
 - WHERE: `engine/season/tests/_realm_goldens.py`; the other pin files the producer names from `git grep -ln "content_hash\|_GOLDEN" engine/season/tests engine/tests` at the item's open; `engine/engine_params/sim_params.json`, `engine/engine_params/troops.json`, `engine/engine_params/combat_engine_v1.json` (re-derived, where drifted).
 - TESTS: none new. EXPECTED RED UNTIL B98.99 ends here: every test the flips' lines named is green on this commit's tree.
 - FALSIFIER and CONTROL: a pin a flip moved and this commit did not re-record (the full suite reds on it); a `status:` line edited; a flip in R1 with no control-arm reading. Control: each BLOCKED position's value read at its control on this tree (R2).
-- GATE: the head's BATCH GATE, read once on this commit's tree; the realm hash at seeds 0 to 2, one season → the re-pinned values, each run twice, equal; the full suite once (`python -m pytest tests/valoria -q -n auto` and the engine suites `python tools/tests_for_diff.py --base <batch-start-sha>` names; CLAUDE.md §0.4: this batch edits engine fixtures, so the local run can observe what CI will).
+- GATE: the head's BATCH GATE, read once on this commit's tree; the realm hash (`HASH READING`) at seeds 0 to 2, one season → the re-pinned values, each run twice, equal; the full suite once (`python -m pytest tests/valoria -q -n auto` and the engine suites `python tools/tests_for_diff.py --base <batch-start-sha>` names; CLAUDE.md §0.4: this batch edits engine fixtures, so the local run can observe what CI will).
 - HASH MOVERS: the re-pin itself.
 - DEPENDS ON: V12 B98.01 to B98.86.
 - GLOSSARY: none (no term introduced, renamed or retired).

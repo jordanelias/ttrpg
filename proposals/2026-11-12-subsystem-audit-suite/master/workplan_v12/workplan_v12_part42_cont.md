@@ -177,7 +177,7 @@ The batch block's head, its position table and items B39.01 to B39.17 are in the
 - WHERE: `engine/season/loop/effects_founding.py` (`_eff_raze`, `_end_rung`); NEW `engine/season/tests/test_abandonment.py`.
 - TESTS: `test_end_rung_extraction_is_hash_equal`, written first (green at control and after; red if `_eff_raze`'s write changes).
 - FALSIFIER and CONTROL: any pinned hash moving. Control: the realm hash at seeds 0 to 2 equal to B39.28's.
-- GATE: `python -m pytest engine/season/tests/test_abandonment.py -q` → pass; the realm hash at seed 0, one season → equal.
+- GATE: `python -m pytest engine/season/tests/test_abandonment.py -q` → pass; the realm hash (`HASH READING`) at seed 0, one season → equal.
 - HASH MOVERS: none.
 - DEPENDS ON: EXISTS-IN-TREE `loop/effects_founding.py::_eff_raze`; V12 Batch B22 (`raze` edits, `14_VERBS_PHYSICAL_B`).
 - GLOSSARY: none.

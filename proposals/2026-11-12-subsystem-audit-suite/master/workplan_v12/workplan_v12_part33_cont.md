@@ -309,9 +309,10 @@ GATE: Batch B11-fi-readers
 GATE: Batch B12c-material-verbs-and-valley
 GATE: Batch B24-sc-hearing
 GATE: Batch B25-fi-questioning
+HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: `BUILT OUT`: `destroy_record`, `examine`, `seize` (a Record) → each built out (IS-A §12.2 row B26). Milestone: M3 (every verb).
 BATCH GATE (read once, on the closing tree; every seeded command under `PYTHONHASHSEED=0`; two seasons at most, A-114):
-  1. `python -m engine.season.harness.register --check` → exit 0; `python -m engine.season.harness.register --requirements` → nine lines, recorded.
+  1. `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`); `python -m engine.season.harness.register --requirements` → nine lines, recorded.
   2. `python tools/m1_acceptance.py --summary` → its verdict line, recorded.
   3. the suites `python tools/tests_for_diff.py --base <batch-start-sha>` names → green.
   4. `python -m engine.season.harness.aperture 2 --seeds 0 1 2` → the `BUILT OUT` line reads built out for `destroy_record`, `examine`, and `seize` on a Record (IS-A-08: a verb not built out is a failed gate); for `create_record`, `forge`, `survey`, `research`, `reconstruct`, `surveil` (rows this batch re-draws) the `BUILT OUT` line quoted; `interview`, `reconstruct`, `thread_read` attempted 0 where B26.06 withholds them.

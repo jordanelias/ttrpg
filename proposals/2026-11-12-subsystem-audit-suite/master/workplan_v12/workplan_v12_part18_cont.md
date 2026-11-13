@@ -15,19 +15,20 @@ GATE: Batch B02-tests
 GATE: Batch B04-capability-home
 GATE: Batch B05-one-roll
 GATE: Batch B10-character
+HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: R-06.a, R-08.a, R-09.b; re-read R-06.d, R-06.e → "no excluded verb; no tie at zero choice score; two actors at different pools" (IS-A §12.2, BA1's row); M2 closes here (`V12_STRUCTURE.md` §3: R-06, R-08, R-09 expected to hold; R-07 holds or is one conjunct short). The readings are written into the conjuncts' `reading:` records by BA1.99; no `status:` is edited (A-114: the re-take is B99's).
 SOFT EDGE (not a `GATE`): B15, B19 and B24 "need not wait for it: a calibration that closes first names the control it ran at and is re-read once at this batch's close" (`IS-B2-CHAR-03`; `V12_STRUCTURE.md` §2.1). At S12, B15 may close first: then BA1.99 re-reads B15's Readings R1 (`IS-PC-03`, `aperture 2 s`, s = 0, 1, 2), the one B15 reading a cast row can move (B15's module-scale readings use default fighters); B19 and B24 close after this batch and read its tree.
 EXPECTED RED UNTIL BA1.99 (added by check lane K4 from this block's RE-PIN line and BA1.01's TESTS line): the realm pins in `engine/season/tests/_realm_goldens.py` and every test that pins a cast row's authored value (`test_cr20_attributes.py`, `test_cr19_competence_gain.py`'s `cast_attributes=True` arm, what `grep -rl _realm_goldens engine/season/tests` lists) may read red from BA1.01, under `[skip ci]` (E-1); every other test is green at every item.
 BATCH GATE (read once, on the closing tree, `PYTHONHASHSEED=0` on every seeded command):
   R-09.b: `python -m engine.season.harness.aperture 2 0` → `POOLS ROLLED`: *two actors at different pools: yes* on a non-combat verb, beside the control (B10's close, every person at the default: "no") (`aperture 4 0` in `IS-A-11`, `IS-B2-CHAR-03` and U1-C; two seasons by A-114, the conjunct's own two-season `argv`);
-  R-06.a and R-08.a: `python -m engine.season.harness.corpus_run` → the `RANKING DISCRIMINATION` line with no verb under `RANKING EXCLUDES`, and the tie ordering showing "no tie between candidates of zero choice score for a person holding a vector" (`IS-A-11`'s gate); `python -m engine.season.harness.decision_spread --decisions` at seeds 0 to 2 → no tie among offered candidates of zero choice score;
+  R-06.a and R-08.a: `python -m engine.season.harness.corpus_run --seasons 2` [v12: two seasons a case, D-17; the case's own span, to `MAX_SEASONS`, is B99's] → the `RANKING DISCRIMINATION` line with no verb under `RANKING EXCLUDES`, and the tie ordering showing "no tie between candidates of zero choice score for a person holding a vector" (`IS-A-11`'s gate); `python -m engine.season.harness.decision_spread --decisions` at seeds 0 to 2 → no tie among offered candidates of zero choice score;
   R-06.d re-read: `decision_spread --decisions`, seeds 0–2: "the strict-top share above one half at the shipped τ, beside the control τ"; R-06.e re-read: `decision_spread --persons` → n of n persons carry a pursuit vector;
   `python -m engine.season.harness.conviction_spread --words` → `signature_breaks: 0` (CHAR_B step 2) and the creed breaks line (CHAR_OWED §7) with each creed's violating set differing from at least one other creed's; `python -m engine.season.harness.decision_spread --signatures` → "no pursuit's single-pursuit holder tops a verb its signature opposes in any reading, and at most two pursuits share a top verb" (CHAR_B gate 2);
   `python -m pytest engine/season/tests/test_cr20_attributes.py engine/season/tests/test_u1_capability_surface.py engine/season/tests/test_manner_offsets.py engine/season/tests/test_relations.py engine/season/tests/test_pursuit_signatures.py engine/season/tests/test_contest_decider.py -q` → all pass (the last three created by B10; `test_contest_decider.py` by `IS-B2-CHAR-02`);
   `python tools/export_npc_roster.py --check` → exit 0; `python tools/export_descriptors.py --check` → exit 0 (`IS-A-11` WHERE: "re-run");
   `IS-B2-CHAR-06`'s three readings (Readings R1 of this block), each against B10's close (`reading @<sha>`);
   the soft edge's re-read (above), if B15 closed first;
-  `python -m engine.season.harness.register --check` → exit 0; `python -m engine.season.harness.register --requirements` → nine lines, R-06.a, R-08.a and R-09.b each with a `reading:` at this tree, no `status:` moved; `python tools/m1_acceptance.py --summary` → its verdict line quoted;
+  `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`); `python -m engine.season.harness.register --requirements` → nine lines, R-06.a, R-08.a and R-09.b each with a `reading:` at this tree, no `status:` moved; `python tools/m1_acceptance.py --summary` → its verdict line quoted;
   the suites `python tools/tests_for_diff.py --base <batch-start-sha>` names (registries and a loader: the full gates, CLAUDE.md §0.4);
   the glossary rows each item names, read against the data it landed (STAGES, "The glossary always matches", rule 2): a mismatch fails the close;
   the close's commit body records `register --requirements` (nine lines), `m1_acceptance --summary`'s verdict line, the named conjuncts' readings with their tree, the `BUILT OUT`, `ENGINES` and `NULL SCENES` lines before (B10's close, `reading @<sha>`) and after, and the batch's measured wall time; the last `Item:` commit (BA1.99) writes the conjuncts' `reading:` records; `status:` is not edited (`IS-A-12`).
@@ -77,7 +78,7 @@ EST: 9.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this bl
 - WHERE: `references/npc_registry.yaml` (each cast row's `stats:`, `capabilities:`).
 - TESTS: none new; `engine/season/tests/test_cr20_attributes.py` and `test_u1_capability_surface.py` (B04) read green; a test that pins an unauthored person's attributes is re-pinned at BA1.99, never weakened.
 - FALSIFIER and CONTROL: "authoring a `stats:` row moves no roll (U1-C's falsifier)" — read as: the seed-0 one-season `POOLS ROLLED` block shows the same pools as B10's close; "control: the row removed, the hash returns" (`IS-B2-CHAR-03`): one planted removal of the first authored row reproduces B10's close build hash (`reading @<sha>`).
-- GATE: `python tools/export_npc_roster.py --check` → exit 0; `python tools/export_descriptors.py --check` → exit 0; `python -m pytest engine/season/tests/test_cr20_attributes.py engine/season/tests/test_u1_capability_surface.py -q` → pass; `python -m engine.season.harness.aperture 1 0` → `POOLS ROLLED` lists at least one non-combat verb with two pools (the two-season reading is the batch gate's); the build hash at seed 0 recorded (moved, declared).
+- GATE: `python tools/export_npc_roster.py --check` → exit 0; `python tools/export_descriptors.py --check` → exit 0; `python -m pytest engine/season/tests/test_cr20_attributes.py engine/season/tests/test_u1_capability_surface.py -q` → pass; `python -m engine.season.harness.aperture 1 0` → `POOLS ROLLED` lists at least one non-combat verb with two pools (the two-season reading is the batch gate's); the build hash (`HASH READING`) at seed 0 recorded (moved, declared).
 - HASH MOVERS: "the build hash and every season hash" (`IS-A-11`), for the authored values. Declared; BA1.99.
 - DEPENDS ON: V12 Batch B04-capability-home (B04.02's `capabilities:` block and `CapabilityRow`; B04.09: "a cast row may author skill scores"; B04.12: the unread-key refusal; B04.26: the draft); V12 Batch B05-one-roll (U1-B: the roll with two inputs, so a skill score gives dice and an attribute gives levels); V12 Batch B10-character; EXISTS-IN-TREE `engine/season/data/cast.py::attributes_of`, `references/npc_registry.yaml`.
 - GLOSSARY: none new; *skill score* and *attribute* rows read against the authored rows at the close (the draft uses A-98's words).
@@ -105,7 +106,7 @@ EST: 9.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this bl
 - WHERE: `engine/season/verb_table.yaml` (the `difficulty:` cell of each row table (b) names).
 - TESTS: none new; `engine/season/tests/test_sc_calibration_targets.py` (B05) reads green: its grid is stated at `plain` and `routine` on ranks (`29_DICE` row 8), which no cell here moves.
 - FALSIFIER and CONTROL: a row whose `difficulty:` is not a `difficulty_levels` member loads; control: with every cell `routine`, the seed-0 one-season hash equals BA1.02's reading.
-- GATE: `python -m pytest engine/season/tests/test_sc_calibration_targets.py -q` → pass; `python -m engine.season.harness.register --check` → exit 0; `aperture 1 0`'s POOLS ROLLED and its obstacle readings (the `Margin.terms` of a `demanding` act carry a nonzero difficulty term) quoted; the seed-0 hash recorded (moved).
+- GATE: `python -m pytest engine/season/tests/test_sc_calibration_targets.py -q` → pass; `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`); `aperture 1 0`'s POOLS ROLLED and its obstacle readings (the `Margin.terms` of a `demanding` act carry a nonzero difficulty term) quoted; the seed-0 hash (`HASH READING`) recorded (moved).
 - HASH MOVERS: every world with an act of a verb whose cell changed. Declared; BA1.99.
 - DEPENDS ON: V12 Batch B05-one-roll (OBS §4 step 1a: the `difficulty:` column, `difficulty_levels`, `difficulty_ob`; `task_difficulty` retired into it); EXISTS-IN-TREE `engine/season/verb_table.yaml` rows.
 - GLOSSARY: none new (*difficulty level* read against the cells).
@@ -119,7 +120,7 @@ EST: 9.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this bl
 - WHERE: `engine/season/rosters.yaml` (`tables.alignment.choices`).
 - TESTS: none new; `engine/season/tests/test_contest_decider.py` (B10: `test_opposite_temperaments_pick_differently`) reads green.
 - FALSIFIER and CONTROL: a cell on an axis off the roster loads; control: with the block empty, BA1.03's hash.
-- GATE: `python -m pytest engine/season/tests/test_contest_decider.py -q` → pass; `python -m engine.season.harness.decision_spread --decisions` (seed 0) → the choice-sourced keys' readings quoted; the seed-0 hash recorded.
+- GATE: `python -m pytest engine/season/tests/test_contest_decider.py -q` → pass; `python -m engine.season.harness.decision_spread --decisions` (seed 0) → the choice-sourced keys' readings quoted; the seed-0 hash (`HASH READING`) recorded.
 - HASH MOVERS: every world in which a `choice_sourced` key with a cell is scored. Declared; BA1.99.
 - DEPENDS ON: V12 Batch B10-character (`ALIGN`: the `choices:` block, `data/verbs.py::align_choice`, the `score_terms` term; `IS-B2-CHAR-02`); EXISTS-IN-TREE `rosters.yaml: choice_sourced`, `tables.alignment`.
 - GLOSSARY: none.
@@ -128,14 +129,14 @@ EST: 9.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this bl
 
 ### BA1.05 — a pursuit does what its name says: the cells · CHAR_B step 2 · CONTENT · HASH MOVER(behaviour)
 - SOURCE: `proposals/16_PESSIMIST_CHAR_B_a_pursuit_does_what_its_name_says.md` step 2 (`:113-119`), "Gate" 2–3 (`:131-149`); `IS-A-11` stage 1 (c) ("the pursuit-signature cells of `16_PESSIMIST_CHAR_B`"); ED-IN-0261.
-- ADVANCES: R-06.a, R-08.a (`corpus_run`'s `RANKING EXCLUDES` empties as the sparse alignment table fills).
+- ADVANCES: R-06.a, R-08.a (`corpus_run --seasons 2`'s `RANKING EXCLUDES` [v12: two seasons a case, D-17; the case's own span, to `MAX_SEASONS`, is B99's] empties as the sparse alignment table fills).
 - INSTRUCTION:
   1. The reading instrument first (CHAR_B gate 2: "committed first as a `--signatures` mode of `harness/decision_spread.py`"): `engine/season/harness/decision_spread.py --signatures` prints, per pursuit, the top verbs of a single-pursuit holder over live candidates, and flags a top verb the pursuit's `pursuit_signatures` row opposes, and verbs shared as top by more than two pursuits. `[ASSUMPTION: that harness builds a realm and calls `score_terms`; `conviction_spread` declares it builds none — basis: both module docstrings]` (CHAR_B's own mark). It is a mode of an existing harness, not a new tool.
   2. The cells, in CHAR_B's order: "First the rows for the uncelled verbs a signature names (`forgive`, `pardon`, `tend`, `arrest`, `capture`, `raze`, `sabotage`, `conceal`, `examine`), then the cells of the five loud rows, each change read back through `--words`. A cell is authored in `tables.alignment` and nowhere else; no pursuit × verb override is added, because that would be a second owner of the lean." The values are the draft's table (c).
 - WHERE: `engine/season/harness/decision_spread.py` (the `--signatures` mode); `engine/season/rosters.yaml` (`tables.alignment` verb cells).
 - TESTS: `engine/season/tests/test_pursuit_signatures.py` (B10, CHAR_B step 1) reads green; in the same file, `test_signatures_mode_flags_a_planted_opposed_top_verb` `[ASSUMPTION: test name; E-3]` for the new mode, written before step 1.
 - FALSIFIER and CONTROL: a single-pursuit holder whose top verb its signature opposes; "today four share `forge` and three `utter`" (CHAR_B gate 2's control reading, re-read on B10's tree before the cells).
-- GATE: `python -m engine.season.harness.conviction_spread --words` → "breaks = 0 (`--words` prints `signature_breaks: 0`)"; `python -m engine.season.harness.decision_spread --signatures` → "no pursuit's single-pursuit holder tops a verb its signature opposes in any reading, and at most two pursuits share a top verb"; "The scar's sign test, re-read: no favoured verb of a pursuit is in that pursuit's violated set" (CHAR_B gate 3); the seed-0 hash recorded.
+- GATE: `python -m engine.season.harness.conviction_spread --words` → "breaks = 0 (`--words` prints `signature_breaks: 0`)"; `python -m engine.season.harness.decision_spread --signatures` → "no pursuit's single-pursuit holder tops a verb its signature opposes in any reading, and at most two pursuits share a top verb"; "The scar's sign test, re-read: no favoured verb of a pursuit is in that pursuit's violated set" (CHAR_B gate 3); the seed-0 hash (`HASH READING`) recorded.
 - STOPS IF: `--words` does not reach 0 with the draft's cells: the item lands the cells it has, records the remaining breaks in the commit body, and BA1.07 becomes a POINTER ("the refusal waits on the breaks"); the remaining cells are listed in the PR body for Jordan.
 - HASH MOVERS: every world (the alignment table scores every candidate of the celled verbs). Declared; BA1.99.
 - DEPENDS ON: V12 Batch B10-character (CHAR_B step 1: `pursuit_signatures`, `signature_breaks()`, `conviction_spread --words`; `test_pursuit_signatures.py`); V12 BA1.04; EXISTS-IN-TREE `engine/season/harness/decision_spread.py`, `conviction_spread.py`.
@@ -150,7 +151,7 @@ EST: 9.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this bl
 - WHERE: `engine/season/rosters.yaml` (`affiliation_signatures` rows; `tables.affiliation_engagement` cells).
 - TESTS: none new; `test_pursuit_signatures.py` reads green (its reader serves both, "same reader").
 - FALSIFIER and CONTROL: "With breaks at zero, the conviction swap still moves the top act in under 5 % of readings (then the engagement gain, not the cells, is what is small: say so and sweep it)" — a finding for the `opus` reader, quoted, not swept here; control: BA1.05's hash.
-- GATE: "`conviction_spread --words` prints the creed breaks; after the cells, each creed's violating set differs from at least one other creed's"; the seed-0 hash recorded.
+- GATE: "`conviction_spread --words` prints the creed breaks; after the cells, each creed's violating set differs from at least one other creed's"; the seed-0 hash (`HASH READING`) recorded.
 - STOPS IF: the creed breaks do not reach 0: as BA1.05's STOPS IF.
 - HASH MOVERS: every world with a person holding a creed. Declared; BA1.99.
 - DEPENDS ON: V12 Batch B10-character (CHAR_OWED §7's edit: the `affiliation_signatures` roster and its reader); V12 BA1.05.
@@ -165,7 +166,7 @@ EST: 9.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this bl
 - WHERE: `engine/season/data/pursuits.py`; `engine/season/tests/test_pursuit_signatures.py`.
 - TESTS: CHAR_B's "`test_loader_raises_when_breaks_nonempty` (step 3 only)", written before the edit and read red (no refusal), green after.
 - FALSIFIER and CONTROL: a planted cell that flips a favoured verb's lean below zero imports without a refusal; control: the shipped table imports (breaks 0), and the seed-0 hash equals BA1.06's.
-- GATE: `python -m pytest engine/season/tests/test_pursuit_signatures.py -q` → pass; the seed-0 hash equal to BA1.06's reading.
+- GATE: `python -m pytest engine/season/tests/test_pursuit_signatures.py -q` → pass; the seed-0 hash (`HASH READING`) equal to BA1.06's reading.
 - STOPS IF: BA1.05 or BA1.06 stopped with breaks above 0: then this item is not built; its row says "waits on the breaks" and the batch closes without it (the receipt's `NOT DONE`).
 - HASH MOVERS: none.
 - DEPENDS ON: V12 BA1.05, BA1.06; V12 Batch B10-character (`signature_breaks()`, `data/pursuits.py`).
@@ -180,7 +181,7 @@ EST: 9.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this bl
 - WHERE: `references/npc_registry.yaml` (`relations:` on six rows' holders).
 - TESTS: none new; REL's "`test_no_relations_key_is_hash_equal` (a); `test_six_rows_give_eleven_directed_stance_pairs` and `test_a_rival_ranks_hostile_acts_higher_than_a_stranger` (b); `test_each_holder_holds_the_bond_claim_at_build` (c); `test_an_unknown_ground_or_id_is_refused`" (B10's `engine/season/tests/test_relations.py`) read green on the shipped rows: (b) and (c) were written against planted rows at B10 and now read the authored ones.
 - FALSIFIER and CONTROL: "With rows authored, a rival ranks hostile acts on his rival no differently from on a stranger"; control: "No `relations:` key: `build_realm(0).content_hash()` EQUAL" (B10's close).
-- GATE: `python -m pytest engine/season/tests/test_relations.py -q` → pass; "eleven directed pairs hold a stance among the ten (five today); for Almud and Baralta, the rank of a hostile act (`challenge`, `open_case`) on the rival is higher than the same act on a person toward whom he holds no row, and the rank of `confer` on the rival lower" (REL gate (b)), read at `build_realm(0)`; the build hash recorded (moved).
+- GATE: `python -m pytest engine/season/tests/test_relations.py -q` → pass; "eleven directed pairs hold a stance among the ten (five today); for Almud and Baralta, the rank of a hostile act (`challenge`, `open_case`) on the rival is higher than the same act on a person toward whom he holds no row, and the rank of `confer` on the rival lower" (REL gate (b)), read at `build_realm(0)`; the build hash (`HASH READING`) recorded (moved).
 - HASH MOVERS: "the content is a declared build-hash mover" (REL). Declared; BA1.99.
 - DEPENDS ON: V12 Batch B10-character (REL edits 1–5: `rosters.yaml: relation_grounds`, `cast.relations_of`, the seeder in `boot/realm.py::build_realm`); V12 BA1.02.
 - GLOSSARY: *ground* (owner `rosters.yaml: relation_grounds`), read against the authored rows; no edit.
@@ -194,7 +195,7 @@ EST: 9.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this bl
 - WHERE: `references/npc_registry.yaml` (rows NPC-034, NPC-071: `goals:`).
 - TESTS: none new.
 - FALSIFIER and CONTROL: one of the two persons holds no live `commit` at build; control: BA1.08's build hash with the two rows removed.
-- GATE: "`data/cast.py` loads; the two persons hold a live `commit` at build" (read at `build_realm(0)`, the two persons' `commit` Tenures listed in the commit body); the build hash recorded.
+- GATE: "`data/cast.py` loads; the two persons hold a live `commit` at build" (read at `build_realm(0)`, the two persons' `commit` Tenures listed in the commit body); the build hash (`HASH READING`) recorded.
 - HASH MOVERS: "A declared build-hash mover" (CHAR_OWED §10). Declared; BA1.99.
 - DEPENDS ON: EXISTS-IN-TREE `engine/season/data/cast.py` (the `goals` reader), `references/npc_registry.yaml` rows NPC-034, NPC-071; V12 BA1.08.
 - GLOSSARY: none.
@@ -208,7 +209,7 @@ EST: 9.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this bl
 - WHERE: `references/npc_registry.yaml` (`unaware:` on NPC-004's and NPC-012's rows).
 - TESTS: none new; B10.64's `test_an_unaware_holder_forms_no_thread_read_and_his_twin_does` and `test_an_unrecognised_pursuit_moves_no_score_and_leaves_the_sheet` (planted marks) stay green with the shipped marks.
 - FALSIFIER and CONTROL: gate 2 on the shipped row: NPC-004 forms a `thread_read` over a seeded realm season (the mark not read); gate 4: NPC-012's decisions differ with and without the mark (the score moved, which the source forbids). Control: B10.64's `test_no_row_marked_is_hash_equal_before_seeding`.
-- GATE: `python -m pytest engine/season/tests/test_self_knowledge.py -q` (B10.64's file) → pass; the realm hash at seed 0, one season → recorded (moved where NPC-004 would have formed a `thread_read`).
+- GATE: `python -m pytest engine/season/tests/test_self_knowledge.py -q` (B10.64's file) → pass; the realm hash (`HASH READING`) at seed 0, one season → recorded (moved where NPC-004 would have formed a `thread_read`).
 - HASH MOVERS: the content is a build-hash mover. Declared; BA1.99.
 - DEPENDS ON: V12 Batch B10 (B10.64 the key, `unaware_of`, `self_believed`; B10.65 the arming); V12 BA1.09.
 - GLOSSARY: none (B10.64 wrote *self-knowledge*).
