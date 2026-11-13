@@ -1,0 +1,64 @@
+# R2c_APPLIED — repair lane R2c (Opus): open findings of `CHK_K5.md` and `CHK_K6.md` (parts 21 to 28)
+
+## Status: WORK RECORD (one round; a record of edits to `master/workplan_v12/`; resolves nothing at runtime, CLAUDE.md §0.05; deleted with the suite when v12 is adopted)
+
+Appended finding by finding as each is settled (a restart resumes from the last row written). Ladder steps are CLAUDE.md §0's: 1 superseded, 2 irrelevant, 3 a design document, 4 precedent, 5 what the architecture needs.
+
+## Per finding
+
+| finding | outcome | file : handle | what was done |
+|---|---|---|---|
+| K5 F1 | re-checked: already fixed by R1 | part22 B24, part23 B16/B08, part24 B12b, part24_cont B29, part21 B21b heads | R1 repair 4's batch-head `EXPECTED RED UNTIL` lines cover every mover of the six batches (ladder 3: E-1 asks a listing, the head line is one) |
+| K5 F2 | edit | part24_cont B12b.43 GATE; B29.02 TESTS, GATE | the pytest arm reads "pass except the pin test(s) the item moves, red until `.99`" |
+| K5 F3 | re-checked: already fixed by R1 | part21 B21b.05 | the `STOPS IF` line R1 added is present |
+| K5 F4 | re-checked: already fixed by R1 | part24_cont B12b.99, B19a.99, B29.99 | R1 repair 5(b) filled the eight cells each |
+| K5 F5 | edit (ladder 3: part 2 §3's merge order and `V12_STRUCTURE_part3.md` §7.4) | part21 head RE-PIN, B21b.01 GATE, REQUIREMENT, part21_cont B21b.99; part22 head RE-PIN, part22_cont B24.99; part24 head RE-PIN, BATCH GATE, B12b controls (two items), part24_cont B12b.99; part24_cont B29 RE-PIN, PARALLEL | baselines now: B21b against B16's after-reading; B24 against B21b's; B12b against the S14 base (B24's after-reading; every "B12a's close" baseline in B12b's text); B29 against B21c's. Not edited (no CHK finding names them, same shape): the RE-PIN lines of B21c ("B21b's close"; B12b precedes it), B34 ("the step's base"; B29 precedes), B12c ("B12b's close"; S14's last is B34), B24a ("B24's close"; B21d precedes), B19 ("B19a's close"; B18 precedes) — for the orchestrator |
+| K5 F7 | edit (ladder 3: E-14) | part21 B21b.10, B21b.12 DEPENDS ON; head DIALS; part2_cont2 §8 row 67 (outside my parts: required by this finding) | state stays BUILD; each item says the absent arm ships absent by E-14 and is held in part 2 §8 row 67; the head and row 67 no longer say "BLOCKED" for the item |
+| K5 F8 | no edit (ladder 4: D-18's shape, B21b.24 → B21b.25, as every DESIGN-FIRST pair) | part21_cont B21b.25 | the item is executable once B21b.24's design is merged; its own `STOPS IF` and gate on B21b.24 hold it; K5 asks nothing |
+| K5 F9 | edit | part22 B24.01 (plan-added line, step 2) | "returns" → "computes"; the item says `_mint_document` returns a `Change` (`engine/season/loop/effects_information.py:205-231`, opened) and how to get the id |
+| K5 F10 | edit outside my parts (required by this finding) | part2_cont2 §6 test census | row `S/tests/test_sc_hearing_evidence.py` / B24.18 / S13 added |
+| K5 F14 | no edit (note only, K5: no back edge) | — | — |
+| K5 F15 | no edit (ladder 3: E-5 asks what the section does, its files and symbols, and the gate — content, which K5 found present; no field label is required) | part24/24_cont B12b.07, .17, .29-.32 | — |
+| K5 F16 | no edit (ladder 3: D-17 / A-114 respected; the copy keeps the source's bytes and the "(eight in the source; A-114)" note beside it is the plan's reading) | part24_cont B12b.44 | — |
+| K5 F17 | edit | part24_cont (B12b, the `07_SE_…` larder-walk copy) | a `[v12: …]` note after the quotation: "round" there is a pass of the larder walk; write "pass" in new text (A-101) |
+| K5 F18 | no edit (ladder 3: `unified/U1_GLOSSARY.md` rows *unit* "men of one troop type" and *kit* "(troop type)" use the word; A-99 refuses size words and "a body of troops", none present) | part24_cont B19a.01, B12b.47 | — |
+| K5 F19 | edit (ladder 3: E-15; part 2 §1.3's figures are the schedule's) | part21, part22, part23 (B16), part24 heads' EST lines | each EST line names part 2 §1.3's figure (13.7, 19.7, 7.7, 21.7 h) as the one the schedule uses |
+| K6 F1 | re-checked: already fixed (K6's row edit; R1 repair 8 regenerated part 2 §1.3 and §3 for B19, 15 behaviour movers, `.60` listed) | part27 B19.60; part2 §1.3, §3 | — |
+| K6 F6 | edit (CLAUDE.md §0.05: a Status line is not an execution artifact) | part25 B21c.06 GATE | the `grep -c "^## Status: PROPOSED"` arm deleted; a `git diff --stat` arm (only the design file and `hole_register.yaml`) stated in its place, the item's own CONTROL |
+| K6 F7 | edit (THIN: the edit text copied from the source) | part25 B21c.01 INSTRUCTION step 1 | the nine ladders' 66 names copied from `faction_politics_v30.md` (archived; opened: Part 1 §1.1–§1.4, Part 2 §2.1–§2.5 ladder tables) as the `ladders:` YAML block, rank 0 first, `livery` per ladder; the count matches the entry's 66 (rank 0 names included); the sub-office ladders' faction carried as `[ASSUMPTION]` (no Riskbreaker/Inquisitor/Templar member in `rosters.yaml: factions`, read from `references/names_index.yaml` `token_class: faction`) |
+| K6 F9 | re-checked: already fixed by K6 | part26_cont B19.17 | — |
+| K6 F13 | edit for B21c and B34 (ladder 3: `V12_STRUCTURE_part2.md` §5.2's order puts SERIAL EDGES and PARALLEL after `C(...)` and before COST); no edit for B19 | part25 (B21c), part25_cont (B34) | the three lines of each block moved verbatim to before COST (multiset of non-blank lines unchanged, checked by `diff` of sorted lines). B19: its head (part26) already carries SERIAL EDGES and PARALLEL in §5.2's place; the second half's paragraphs (part27 :81-84, part26_cont :223-226) are labelled continuation notes for the head ("what the batch head carries from this half"), left in place |
+| K6 copy note (B21c.03) | edit (E-3) | part25 B21c.03 TESTS | `[ASSUMPTION: test name; the item creates it]` added to `test_confer_of_an_elected_seat_refused` |
+| K6 F16 | edit (ladder 3: CLAUDE.md §10 "set it explicitly per call", default `high`; §5.3's eight classes) | part25_cont B34.01 (class), B34.05, .07-.10, .17, .19-.21 (effort); part26_cont B19.23-.26 (effort); part26 B19.09 (class); part25 B21c.01 (class) | each line names `high`; the three non-standard classes mapped to `small build`, `edit`, `small build`, the source's words kept in parentheses |
+| K6 F17 | edit (`V12_STRUCTURE_part2.md` §5.8: a gate arm reading a later item's effect moves to that item's GATE) | part25_cont B34 BATCH GATE, B34.20 GATE and DEPENDS ON; part28_cont B12c.29 GATE | B34 reads `--scenario season` only; the `--scenario valley` arm moved to B12c.29 (which registers the row, S15). No C-11 entry is needed: no fallback names a later batch now |
+| K6 F18 | edit (opened in the tree) | part28_cont B12c.28 DEPENDS ON; part28_cont2 B18.03 DEPENDS ON | `GOVERNANCE_SPINE` → `GOVERNANCE_SPINE_YAML` (`engine/season/data/files.py:111`); `contact.py::GRAB_SHORT_REACH_M` → `CFG['GRAB_SHORT_REACH_M']` in `modules/combat/config.py:339`, read at `contact.py:25`. B19.03's `_UNIT_COMMAND` already marked `[ASSUMPTION … grep at the item's open]`: no edit |
+| K6 F19 | no edit (K6: what BLOCKED and HELD mean) | — | — |
+| K6 F20-F23 | re-checked: fixed by K6 | — | — |
+| K6 F3 | edit (ladder 4: B24a.02's DESIGN-FIRST form) | part28_cont B12c.35 | ADVANCES, WHERE, TESTS, FALSIFIER and CONTROL, HASH MOVERS, GLOSSARY written; the INSTRUCTION numbers the five statements (1)-(5); the GATE reads `ls` of the design path plus a `git diff --stat` arm (no file under `engine/`, `modules/`, `tools/`) |
+| K6 F4 | edit (`V12_STRUCTURE_part2.md` §5.8 last sentence) | part28 B12c.07 GATE | the source's "> 0 at every seed" is kept as quoted, and the gate reads it as a share over seeds 0-2 with `checked == 3`, the reading reproducible at fixed seeds, not a claim about the draw's law |
+| K6 F5 | edit (ladder 3: E-14 and `V12_STRUCTURE_part4.md`'s rule "a reader not yet in the tree: a `STOPS IF` stating the tree condition") | part28_cont B24a.08 DEPENDS ON | state stays BUILD; the item says why (three rows build, the two writ rows ship only if the path is on the base, else move to B28 by its STOPS IF) |
+| K6 F8 | edit (THIN: the edit text copied from the source) | part28_cont B24a.04 INSTRUCTION | P4 §3.4's accusatorial and inquisitorial cells copied (opened: `proposals/2026-10-29-parliament-and-debate/2026-11-01-social-contest-proposal-4-authority-staged.md` §3.4) and the two rows written in B24.09's closed `_RITE_KEYS` form; the mapping is `[ASSUMPTION; medium]` (only `disclosed:` differs; counsel, concession weight, appeal route have no key and are not written) |
+| K6 F11 | edit (R1 repair 4's form) | part28 B12c head | the `EXPECTED RED UNTIL B12c.99` line names the first mover B12c.06 (not B12c.04, which is EQUAL) and the two pin files; "none beyond each item's own line" removed |
+| K6 F12 | re-checked: already fixed by R1 repair 8 | part2 §1.3 | — |
+| K6 F14 | edit (ladder 4: B21b.05's and B29.03's conditional form) | part28 B12c.09 heading and position row; part2 §1.3 B12c hash cell, §3 B12c conditional column (outside my parts: required by this finding) | B12c.09 reads "EQUAL (MOVER if `notice_arm` is on at the batch's open)"; part 2 counts it as conditional 1. Not changed: part 2's totals sentence of conditional movers, for H2/orchestrator |
+| K6 F15 | edit for B12c.33 (precedent B12c.32's line); the `.99` cells re-checked: filled by R1 repair 5(b) | part28_cont B12c.33 | ADVANCES "R-04.a (`requisition`), through B12c.34" |
+| K6 F2 | B15 and B34 edges: re-checked, added by R1 repair 6. B18.04: edit (ladder 5: a shared YAML key is §7.3's merge case, not a data edge). B24a.01/.02: HD-17's recorded pair (part 2 §1.1), no edit. B19.22: forward note, no edit | part28_cont2 B18.04 DEPENDS ON | B18.04 says the B12c reference is a shared key (`matter_kinds`, different members), read nothing from B12c.25, and B12c merges first in S15; part 2 §1.1 not edited (its list is of declined data edges) |
+| K5 F6 (part 21) | edit (E-12: copy only the exact edit text, cite the rest by `file:section`) | part21 B21b.01, .05, .06, .11, .12, .13 | each now at or under 6,144 bytes (measured, heading to last field): quoted rationale, "Owner · Layer", "Not built", feeders and stopping-rule paragraphs cited by `master/eval/E1.md` §Carry-forward <entry> instead of copied; file lists, symbols, test names, step edits and gate commands kept. B21b.01's control arm now reads the batch-start reading (with F5) |
+| K5 F6 (parts 22-24) | edit (E-12) | part22 B24.02; part23 B16.01, B16.09, B16.11; part24 B12b.18; part24_cont B19a.01, B19a.02 | at or under 6,144 bytes: B24.02 6,143, B16.01 6,134, B16.11 6,109, B12b.18 5,983, B19a.01 5,892, B19a.02 6,144 (design/source prose cited by section; the two `[ASSUMPTION]` reverts of B24.02 cited to the design's §2 steps; B16.01's dataclass block kept field for field, its comment padding collapsed and the `DuelState` class comment shortened in words, not in meaning). **B16.09: 12,958 → 7,409 bytes**, rewritten whole as edit text only (files, symbols, signatures, the withdrawal's formula, test names, gate); E-12's remedy is applied and it stays over: the rest is edit text one commit carries (U3 §1 item 16: "one commit"). Not split: splitting would add a position and contradict U3's one-commit line; the orchestrator may split it (consult/view/chooser vs withdrawal) if a commit that size is refused |
+| K6 F7 side effect | note | part25 B21c.01 | the copied `ladders:` block (1.6 KB, exact edit text) puts B21c.01 at 7,214 bytes after its prose was cut to citations (E-12's remedy applied; over by the copied data alone) |
+| K5 F11, F12, F13 | re-checked: fixed by K5 | — | — |
+| K6 F10 | re-checked: fixed by R1 repair 4 (`EXPECTED RED UNTIL B19.99` batch line, `workplan_v12_part26.md:45`) | — | — |
+
+## Not changed, for the orchestrator
+
+- RE-PIN baselines of B21c, B34, B12c, B24a, B19 (my parts, no CHK finding names them) read against a batch other than the mover merged before them in part 2 §3 (same shape as K5 F5); not edited.
+- Part 2 §1.3's totals sentence counts conditional movers; B12c now has one (K6 F14), so the sentence is one short.
+- B16.09 (7.4 KB) and B21c.01 (7.2 KB) stay over 6 KB with edit text only (E-12 applied).
+
+## For Jordan
+
+None. Every open finding closed on ladder steps 3 to 5; the two content transcriptions (B21c.01's ladders, B24a.04's rites) are `[ASSUMPTION]` content listed in the PR body by D-19, not design forks.
+
+## Close
+
+`python tools/ci_naming_check.py` run at the end (reading below). No pytest, no commit.

@@ -1,0 +1,181 @@
+# Workplan v12 — the structure, part 3: the head parts, adoption and what is held back, the master findings, the checks, the limits
+
+## Status: WORK ORDER (part 3 of `master/workplan_v12/V12_STRUCTURE.md`; resolves nothing at runtime; deleted when v12 is adopted)
+
+Short names, words and decision ids (`D-nn`) are part 1's.
+
+---
+
+## 7. The head parts (lanes H1 and H2, after the body parts return)
+
+### 7.1 Part 1, the head (H1 writes it from this file; nothing in it is re-decided)
+
+1. **Title and status lines**, in v11's head form: `## Status: PROPOSED, ratified on merge (ED-1094, ED-IN-<id>)`; `## Lane: IN (cross-cutting), covering all nine lanes`; the successor of v11, retired in the adopting commit; `## Grade under CLAUDE.md §0.2: paper` (a plan moves no row); `## Written against: HEAD <sha>`; the parts in reading order.
+2. **What this is, and how it is run.** v12 is executed by `/methodology-execute Batch <handle>`, one invocation per batch, and was not made by that skill (`STAGES.md`). It states the forms the skill follows: a batch is one block with one close; the position table carries the batch; the boundary row is `STOP. Batch <handle> closes here`; a gate that names a batch is `GATE: Batch <handle>`, met when that batch's close has landed; the in-flight row is in the batch's lane handoff. Until Jordan adopts it the plan is unratified input to the skill's 0.1 stop.
+3. **The plan's own rule for finished positions** (the skill, BATCH BOUNDARY, needs one). At a batch's expunge, in one commit: its block (items, position table, boundary row) is deleted from its part; every remaining `GATE: Batch <handle>` naming it is rewritten `GATE: Batch <handle> @<closing sha>`; its rows leave the batch table, the serial-edge table, the id-block table and any census row that names no other batch; its est. cell has by then been replaced by the measured time in the close's commit body, not in a row; no "done" row, count or narrative is added. A part left with no batch is deleted in that commit with an exact-file `FORK:` row, and the index loses its line. A position only part-finished stays, narrowed to its receipt's `NOT DONE`.
+4. **Head rules.** The intake's 22 (`:77-100`: P1 to P12, P14 to P16, V1 to V4, three `-00` §6 risks), each restated as the evaluation settled it (the ledger of `master/V11_EVALUATION_part2.md` governs where a row's text predates an answer; P10 and P16 (1) as A-114 leaves them). Then the rules this file adds: one item is one commit; an encoding mover is declared and co-batched (D-04); no gate past two seasons before B99 (D-17); `settled:` governs an intake entry (D-14); a design item precedes its build (D-18); authored values are drafted early and ratified at their batch's merge (D-19); a setting shipped at control is set in its own batch or in B98 (D-22); additions to `rosters.yaml` and `verb_table.yaml` go at the end of their family's block (CIP part 2 §5 note 1); cite by symbol, not by line.
+5. **The batch table**: §2.1's columns with §2.2's requirement, hash and est. columns and the part that holds the batch. **The milestones and the requirement map**: §3, with IS-A §12.2's expected readings.
+6. **Waves, the critical path, the schedule**: §2.3 as computed, with the sentence that a step is run at once only where §7.3 allows.
+7. **Time efficiency**, `STAGES.md` practices 1 to 6 as this plan applies them: (1) one re-pin per batch, in its last `Item:` commit; the hash-EQUAL batches first (B02, B03, B03g, B03c, B16L, B03a, B13, B16M), then B04's encoding re-pin, then the movers; a before-reading is the last close's after-reading. (2) the file census and the hot-file rule; owners before consumers (the capability home B04 before every user; the draw owner B06 before the task draw; the troop file B17 before the contact table B19a). (3) `[skip ci]` on every commit but a batch's last `Item:` push and its confirming push; the covering file mid-batch; `-n auto`; a one- or two-season probe before any instrument run; a fact travels as a commit or a plan edit. (4) calibrations after what they depend on: B05 after B04, B15 and B19a after the round, MBA-08 last in B19, BA1's soft edge, B98 after everything; drafting that costs no engine time starts early (`IS-A-11` stage 1 in B04). (5) the critical path and the four tied middles; a slow instrument sized on two small runs and launched in the background at the batch's open. (6) bounded pieces and `WIP checkpoint` commits.
+8. **Parallel sessions and the coordinator**: §7.7. **The glossary rules**: `STAGES.md`'s three, and §5.11.
+9. **Definitions coined here** (CLAUDE.md §4), each in one sentence, also at the place it is invoked: batch, item, wave, step, slack, re-pin, encoding mover, conjunct, reading, held, blocked, setting at control.
+10. **Adoption, retirement and the held-back list**: §8. **The index** (batch handle → file), written last, after the orchestrator's renumbering.
+
+### 7.2 Part 2, the tables (H2; every table is generated by script from the returned parts where it can be, and says so)
+
+| table | columns | made from |
+|---|---|---|
+| serial edges | from item or batch · to item or batch · kind (gate, shared file, re-base on a symbol) · reason · source | each batch block's `SERIAL EDGES`; U3 §1.1's serial instrument files (`harness/storybar.py` C3-K7, `loop/resolve.py::_canonical_order` C3-K8, `decision/choose.py::_stance_arm` C3-K3, `loop/witness.py::_told_value` C3-K1); D-02 and D-03 recorded as edges not taken, with their reasons |
+| file census | file or symbol · items that edit it, in landing order · batches in order · hot (twenty or more items) | every item's `WHERE` line, parsed; compared with U3 §5.1 and CIP §3.2, differences listed |
+| hash movers | batch · EQUAL or mover · items that move (behaviour, encoding) · what is re-pinned · merge position within its step | each item's `HASH MOVERS`; each block's `RE-PIN` |
+| Layer 1 amendment status | node · status and line · batches it concerned · what the batch still holds back | U3 §1.4, copied; then the text still held (§8.3) |
+| tests and probes to write | test file or probe · the item that writes it · its reading before the edit | U3 §6.1 (28 rows) and §6.2 (71 rows), each matched to an item's `TESTS` line; an unmatched row is a defect |
+| tools, exporters, modules and harness files created | path · item · its caller (a CI step, a `ci_checks_registry.yaml` row, a composition role, a named invocation) | every `NEW` in a `WHERE`; a tool with no caller is flagged for the accretion pass |
+| symbols with no carrier | symbol · needed by · carrier item or `BLOCKED` | U3 §6.3 (30 rows) against §5.7's table |
+| ids and row blocks | batch · ED lane and range · H range | §7.5 |
+| settings at control | setting · control value · shipped by · set by · target reading | §7.8 |
+| names | old → new · batch | §5.10, completed from the returned parts |
+| held | id · lane · trigger · where its text is | §7.9 |
+
+### 7.3 Files two open batches may both edit
+
+U3 §1.1's rule, kept: sixteen files are edited by twenty or more proposals (U3 §5.1: `rosters.yaml`, `fixtures.py`, `world_q.py`, `verb_table.yaml`, `person_q.py`, `effects_information.py`, `options.py`, `inputs.py`, `populated.py` (after B03c, `boot/realm.py`), `sigma.py` are the first ten). Two batches open in one step may edit one of them only in different top-level keys or functions; the merge keeps both edits by hand in §2.1's order and never regenerates the file. A pair that cannot keep to that is serialised by the coordinator within the step. The four serial instrument files are edited by one batch at a time. Three steps to look at first, from the census rows this lane read: S4 (B16L edits `rosters.yaml`, `verb_table.yaml`, `data/rosters.py`, `world_q.py`, `inputs.py`, `effects_information.py` while B03c moves the builder and B03g edits `references/module_contracts.yaml`); S6 (B04 and B16M both edit `data/fixtures.py`, different fields; CIP's `[UNVERIFIED]` that B04 edits nothing under `modules/combat` stands until the census shows it); S8 (B14 edits `queries/inputs.py`).
+
+### 7.4 Hash movers in one step
+
+Batches of a step that both move pins merge in §2.1's order. The later rebases on the earlier's merge, re-reads the earlier's after-reading as its baseline (`reading @<sha>`), and re-pins once. A hash-EQUAL batch merges at any point. H2's hash table gives each mover batch its merge position.
+
+### 7.5 Ids and row blocks (B00's instruction, completed here)
+
+Readings at `7c37586`, re-read by B00 on its base: `references/id_reservations.yaml` `lane_ids.lanes.<LANE>.next_free` is MB 82, PC 60, FI 10, SC 41, FA 40, WR 13, IN 361, GO 3, SE 57; the highest hole-register id in `engine/season/hole_register.yaml` is H-362, and the file holds no next-id key (`unified/U3_CONFLICT_LEDGER.md` T-4). B00: (1) sums each batch's declared `IDS:` counts; (2) gives each batch, in §2.1's order within its lane, an ED block of its count plus two and an H block of its count plus five `[ASSUMPTION: the spare — basis: none measured; a batch that runs out stops and takes the next free id on main, it never borrows a sibling's]`; (3) moves each lane's `next_free` past its blocks, with one comment line pointing at the plan's id-block table, co-committed; (4) writes the table into part 2 in the same commit; (5) lands on `main` before any session cites a number (CLAUDE.md §4). A two-lane batch takes its ED ids from SE. Ids a batch did not use are named in its expunge commit body and are not re-used. Lane A's row is renumbered from `H-275` in B01 (C3-A1) from B01's own block.
+
+### 7.6 The permanent surface
+
+`engine/season/hole_register.yaml`, `engine/season/requirements.yaml` (`reading:` records only, by a batch's last `Item:` commit; `status:` only in B99), the ED ledgers (lane-split), `references/id_reservations.yaml`, `references/restructure_ledger.md`, `unified/U1_GLOSSARY.md`, `CURRENT.md` and the plan's own head tables. Each is appended once per batch, from the batch's pre-allocated rows; batches of one step merge their appends in §2.1's order; a conflict in an append-only file keeps both rows and is never resolved by regenerating. `CURRENT.md` and the handoffs stay pointer indexes: a head, an id, a path, a command.
+
+### 7.7 The coordinator
+
+One session (the orchestrator's role). For each step: it checks §7.3 on the census, then opens one session per batch with `create_session` (prompt `/methodology-execute Batch <handle>`; the lane; a worktree; the step's base SHA; the batch's id and row blocks; its merge position). Each session works one branch and opens one PR for its batch. The coordinator reads each session's status line (`NEXT`, `COMPLETE`, `STOPPED`), merges the step's PRs in order, and bases the next step on the merged head. A session never edits another lane's files or opens another lane's batch; a conflict with a sibling is `STOPPED`, reported, never a rebase onto the sibling's work. Our own sessions and local processes may be watched (`Monitor`); no external service is polled, and no session arms a wake-up (CLAUDE.md §11).
+
+**One difference from the skill, to be stated at the 0.1 stop and not adopted silently.** The skill runs CI twice per batch (RULED 2026-10-13: at the batch's last `Item:` push, and to confirm). `STAGES.md`, "Parallel sessions" rule 8, runs the full suite and CI once per merged step on the integrated head, each session running its own close and covering tests. For a step with one batch the two agree. For a step with several, H1 writes the difference as it stands, with both texts, so the first parallel step's 0.1 stop presents it to Jordan. This file does not choose.
+
+### 7.8 Settings at control
+
+H2 collects every block's `DIALS AT CONTROL` line into one table. A setting set by an item of its own batch needs nothing more. The rest are B98's members, one item each, in the order their mechanisms landed; `A44` writes each from its source's own calibration text (the target reading, the seeds, the control arm, the revert). Known before the authors return, from what this lane read: `sway_gain` (`31_WR_B`, A-92), `faction_power_step` (`IS-B3-FA-07`), the load of `management_orders` (`IS-B3-GO-07`; its list is CL-MGMT's, held), `sitting_exchanges` above 0 (HEAR_B's declared mover), `npc_decider_roles` (`IS-B2-CHAR-02`), the thread curve (`IS-B3-WR-04`). Whether each is set in its batch or in B98 is read off its source by its author.
+
+### 7.9 Held, and head rules
+
+The intake's 54 held entries (headings `held / LEAVE` under each lane: IN `:215`, FA `:295`, SE `:341`, WR `:394`, SC `:457`, FI `:482`, PC `:506`, MB `:527`, GO `:551`) go into part 2's held table with each one's trigger, in the lane's own "held and leave" wording. Nothing in it is work until its trigger fires; a trigger that fires makes an item of the batch that fired it, or `STOPPED` if that batch has closed. The two triggers the evaluation found already fired (ED-SC-0001, ED-1043) are items of B15 and B19.
+
+---
+
+## 8. Adoption, the retirement of v11, and what is held back
+
+### 8.1 Adoption is Jordan's
+
+Until he adopts it v12 stays under the suite as a proposal. Merging the PR that moves it into `workplans/` ratifies it (ED-1094) unless the PR body holds something back, and retires v11 in that commit (CLAUDE.md §2). The adopting commit, in order:
+
+1. `git fetch --unshallow` if `.git/shallow` exists (this clone has it): each `<sha>` below is read on `main`.
+2. `git mv` the draft files to `workplans/valoria_master_workplan_v12.md` and `workplans/valoria_master_workplan_v12_partN.md`; rewrite the draft path inside them; one `## Status:` line per file.
+3. Allocate one `ED-IN-` id for the adoption from `references/id_reservations.yaml` (read `next_free`, bump, co-commit); its row in `registers/editorial_ledger_in.jsonl`.
+4. **Delete v11**: `workplans/valoria_master_workplan_v11.md` and `_part2.md` to `_part17.md` (eighteen files), each with this row in `references/restructure_ledger.md`:
+   `| \`workplans/valoria_master_workplan_v11<suffix>.md\` | \`FORK:<sha>\` | FORKED (<date>, superseded by \`workplans/valoria_master_workplan_v12.md\`, the one active plan for every lane (\`ED-IN-<id>\`); every position has one recorded disposition, carried into a v12 batch or retired with the superseding item cited, in the evaluation retired in this same commit; \`<sha>\` is the last commit on main that carries the file, so the text there is the file) |`
+5. **Delete v11's build files**, which v11's own §9 step 5 ties to its batches' rows: the fourteen `proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-build-<name>.md` (`00-sequence`, `B10-11` to `B10-18`, `B10-18b`, `B10-18c`, `B10-19`, `B10-20`, `B10-Z`), each with:
+   `| \`proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-build-<name>.md\` | \`FORK:<sha>\` | FORKED (<date>, workplan v12's adoption (\`ED-IN-<id>\`): the build instructions of a v11 batch; v11 is retired and its carried positions are v12 items; \`<sha>\` is the last commit on main that carries the file) |`
+6. **Delete the suite's work ledgers whose own Status line says so**: the list is `grep -l -i -r 'deleted when .*v12 is adopted' proposals/2026-11-12-subsystem-audit-suite` (36 files at this read, this file's parts apart: the evaluation and its parts, `master/eval/E1.md` to `E5.md` and `E8.md`, the intake, `EVAL_FOR_JORDAN.md`, the two order files, U2, U3, `U3_LAYER1_AMENDMENTS.md`, `U4_DOCUMENT_STATUS.md`, `U4_TRACEABILITY.md`, `V12_ORDER.md`), with `master/instructions/IS_CHECK.md` (its line reads "dies with them when v12 is adopted"), with `master/eval/E6.md` and `E7.md` if their lanes meant the same `[ASSUMPTION: their Status lines read "read-only lane output" and name no deletion — basis: both lines opened]`, and this file's three parts. Each gets an exact-file `FORK:` row; v12's SOURCE lines that cite them resolve through those rows. The proposals, the instruction files, the two design directories and CIP stay: they are design reference (CLAUDE.md §0.05).
+7. **Carry forward what v12 still needs from v11**, and nothing else: the nine `met` texts (inside `IS-A-02`'s item, copied from `IS_A_NINE.md` §2 to §10, until B02 lands them in `requirements.yaml`); the 22 head rules; the 54 held entries with their triggers; the carried positions' own text (in the items).
+8. **Re-point the live pointers**: `CURRENT.md`'s plan row, and the rows that cite a v11 part for held residue (mass battle, social contest) to the v12 batch or held row; `references/lane_assignments.yaml` `source:`; the Open rows of the eight lane handoffs that name a v11 position, each to its v12 item or removed where the evaluation retired it. Docstrings, frozen register text and ledgers that cite a v11 file are left as written and resolve through the rows.
+9. **Verify**: every new row is read as an exact row through `pathres.load_alias_map()`, not `pathres.resolve()` (CLAUDE.md §8); `python tools/currency_consistency_check.py`; `python tools/validate_ed_citations.py`; `python tools/freshness_gate.py`; `python -m engine.season.harness.register --requirements`; `grep -c '^## Status:' workplans/valoria_master_workplan_v12*.md` reads 1 per file; the test files `grep -rl valoria_master_workplan tests engine/season/tests` names. Not the full suite: no program opens a workplan file (§0 fact 3).
+
+`proposals/2026-11-04-strife-flows/00_MASTER.md` and `01_STRIFE_KINDS_DRAFT.md` are **not** deleted, though v11's §9 step 5 scheduled them to go with its last strife position: they are the RATIFIED strife design `CURRENT.md` names (ED-IN-0316), and A-84's held rewording is of that file `[ASSUMPTION — basis: CLAUDE.md §0.05, design documents are not deleted by a plan's retirement; Jordan may say otherwise at the merge]`.
+
+### 8.2 The PR body says what is held back
+
+| held back | why | where its text is |
+|---|---|---|
+| canon lines 76, 90 and 96 and the Coup Counter wording (A-17) | canon changes only by Jordan's amendment; no v12 item edits canon | `audits/15_INSTITUTIONS_SYNTHESIS.md` §4.6, A1–A4 |
+| five sentences of the ratified strife master (A-84) | a ratified design document; B38 builds the era, the master's text waits | `audits/30_ERAS_REGIMES_STRIFE_AND_MOMENTUM.md` §6 |
+| the 2026-07-08 directive A-60 narrows | its sentence was not located by any lane, this one included; leads, unopened: the `registers/editorial_ledger_mb_archive.jsonl` rows dated that day (ED-MB-0004 to -0007, ED-MB-0041) and the quotation at `proposals/04_MB_cr12_linear_law.md:40-43` | — |
+| Layer 1's word "round" for the lap (`04:1065` row 36; `holonic_ARCHITECTURE.md:1166`) | a word in Layer 1; the code is renamed (PCR-4), Layer 1 is not edited to match | `unified/OWED_TO_UNIFICATION.md` §A, last row |
+| the identifier `capability`, and Tenure "edge" | Layer 1 names both; a rename is Jordan's amendment (D-06) | `unified/U1_GLOSSARY.md` §H |
+| CLAUDE.md §3's sentence on the `pc_engine` path seam | B13 deletes the seam; the sentence is edited in B13's commit and named in that PR, not here | D-09 |
+| every authored value | Jordan's, or a content pass he corrects: the cast's five tables (BA1), the troop file's seeds and the stated matchup rows (B19a, B19, B31; A-113), the names and texts of `21_PROCEDURAL_E`, the surface pins, the ages (A-15), the shares of what an army carries back, the settings B98 sets | each batch's PR body lists its own |
+| nine blocked entries | each waits on something outside the tree's reach: CR-07 with H-89 (`off_npc_084`'s rung is content), H-191, H-198 with M9, the B10-16 gates entry (SE), CP-T08-07, H-325 with H-326 (the A-109 design), TL-B6.n, GO-06 and H-5 (a `valoria-game` checkout) | the intake, each entry |
+| the 54 held entries | no work until a trigger fires | §7.9 |
+| the CI cadence of a parallel step | two texts differ (§7.7); presented at the first parallel step | §7.7 |
+| who wrote the design and instruction documents | Fable, by Jordan's direction of this session, a departure from CLAUDE.md §10 that `STAGES.md` records | `STAGES.md`, "Model assignment" |
+
+No engine version is asserted anywhere in v12 (ED-GO-0002 is the owner).
+
+---
+
+## 9. The master findings (`master/MASTER_FINDINGS.md`, lane MF)
+
+**What it is.** One place where every finding of this session stands with its evidence, its disposition, the recommendation that answers it and who lands it. It judges artifacts that exist and orders no work of its own: the work is v12's (CLAUDE.md §0, the terminal-record test). It is written beside the suite and dies with it.
+
+**Sources.** The audits `audits/01_` to `31_` (65 files) with their addenda; the pessimist audits (`16_PESSIMIST_*`); the census (`census/C1` to `C6`, `audits/17_CENSUS_*`); the closure tables `unified/U5_FINDINGS_CLOSURE_U5a.md` to `_U5d.md` (one row per finding: RESOLVED-BY, SUPERSEDED, STALE or FALSE-POSITIVE, DISPUTED, JORDAN) with `U5_CONFLICTS_U5a.md` and `_U5c.md`; the holistic audit (`master/HOLISTIC_AUDIT.md` and parts, H-01 to H-13); the evaluation (`master/V11_EVALUATION.md`, `master/GAP_REGISTER_EVALUATION.md`, their ledgers); `audits/25_GROUNDING_ENGINE.md` for what the suite claimed about the engine and was refuted; the rulings.
+
+**A finding row carries:** the finding's own id (the audit's, never re-numbered) · the finding in one sentence · its evidence (a path and symbol opened, or the probe and its reading, with the audit section) · what it costs the game (which requirement row or ruling it bears on, or "none: hygiene") · its disposition from the closure table · the recommendation, as the proposal or instruction item that carries the edit · the v12 batch · the owner (the lane) · the ruling that settled it, if one did.
+
+**Outline.** (1) Head: status, how to read, the counts, each printed by the script that made it. (2) The game as a whole: the nine as they read today (IS-A §0), the holistic findings, the pessimist findings about the game, what the grounding pass refuted. (3) By subsystem in the dossiers' order (CORE, CHAR, PC, MB, SC, FA, SE, FI, WR, DICE, GO), then the cross-cutting lanes (verbs, institutions, arcs, determinism, the lacuna, narrative, procedural generation, happenings, story, scene access, the one opposed rule, eras and regimes, house stances, the census): for each, a synthesis of at most a page (what is wrong, what was decided, what is built in which batches, what stays open), then its rows. (4) What v11 and the hole register carried and what was retired: the evaluation's counts and the pointer to its ledgers. (5) What is not resolved: DISPUTED rows, blocked items, the held-back list.
+
+**Order of rows** inside a subsystem: by the requirement row the finding bears on (R-01 first), then by v12 batch order, then by id.
+
+**Assignment.** One Opus lane (`MF`), effort `high`, running beside the author lanes: it names batches, which §2 fixes, and needs no item handle. Before it, one `valoria-measure` batch on Haiku extracts the closure tables' rows to a single table (id, disposition, carrier, lane) and joins U3 §3.1's batch column; MF is handed that table and writes the syntheses and the head, and the row tables are the extract, in sequential parts. One lane because the subject is one ledger already reduced to rows: a second would re-read the same rows.
+
+---
+
+## 10. The checks
+
+### 10.1 Sonnet check lanes (one round; each returns a table and edits what the sources decide)
+
+Eleven lanes, grouped so that the parts of one batch sit with one lane: **K1** parts 1 and 2, and the cross-part checks by script; **K2** parts 3–6; **K3** 7–11; **K4** 12–15; **K5** 16–18; **K6** 19–22; **K7** 23–27; **K8** 28–31; **K9** 32–35; **K10** 36–39; **K11** 40–44. Fewer lanes would give one reader more than about half a megabyte of parts and the sources to open against them.
+
+Per part, for every batch block and item:
+
+1. **The forms.** The block has every line of §5.2 in order; the position table lists every item once; the boundary row is present and exact; every `GATE: Batch` names a handle of §2.1 and equals §2.1's `after` list; the invocation text is exact; the in-flight lane file is named.
+2. **Every item has every field** of §5.3: a cell is PRESENT, THIN or ABSENT (the instruction check's three grades), counted per field.
+3. **Every GATE is an execution artifact with an expected reading**: a command that exists or that the item creates before the reading (open the tree: `ls`, `git ls-files`, `grep` the test name); no gate past two seasons; no gate that is a `## Status:` line or a count read off a document.
+4. **Every dependency is marked and true**: EXISTS-IN-TREE opened at the symbol; `V12 <handle>` names an item that lands earlier (same batch, earlier position; or a batch in the `after` list); MISSING has an owner and the item is BLOCKED.
+5. **No back edge**: no item gates on a later item or batch; a cut batch's items (B03 and B03g; B12a, B12b, B12c) depend only backward.
+6. **Coverage, by script**: every member of U3 §2.1's row, every instruction item of §2.2's row and every intake entry under the cited headings appears exactly once as an item, a POINTER, a BLOCKED or a named non-carry; nothing appears twice across parts.
+7. **Copy fidelity**: each item's WHERE, TESTS and GATE against its source, all of them; the INSTRUCTION text against the source in full for every item whose STATE is BUILD and whose hash is a mover, and for one in three of the rest, the choice stated.
+8. **Hash**: every mover declared; one re-pin per batch, in the last item; encoding movers found (an item whose WHERE adds, removes or renames a field of a carrier in `state/carriers.py` or a class `World.content_hash()` reaches and that says EQUAL is a defect).
+9. **Size**: a batch block whose items a single close could not review is listed with its item count and movers; no lane re-cuts a batch.
+10. **Words**: the glossary's words; attribute, skill, skill score, martial skill, derived score; unit, army formation, unit formation and no size word; lap and round; no "capability" in prose; each new term has its one-sentence reading and its glossary line.
+11. **Cost and tier** stated per item; a judgment node names its reader's tier.
+
+K1 also runs, by script over all parts: the item-level graph (acyclic; every gate resolves); the file census against each step's batches (§7.3); the id counts against the blocks; the settings table against the blocks' lines; the names table against the items' `NAMES` lines.
+
+### 10.2 The one Fable verdict (read-only, `valoria-critic`, once; no second wave)
+
+1. Can `methodology-execute` follow v12 exactly as written, at each form its §BATCHES names, and is every place the plan's cadence differs from the skill or CLAUDE.md §0.4 stated rather than silently adopted (§7.7)?
+2. Is every gate an execution artifact with an expected reading that can be wrong, at two seasons or fewer?
+3. Does the plan cover the nine: is every conjunct of IS-A §2 to §10 read by a named batch's close, and does B99 read all of them on one tree?
+4. Is anything dropped silently: do the 300 proposals, the instruction items, CI-01 to CI-11, MBA-01 to MBA-09, PCR-1 to PCR-4, L1, L2 and the intake's 273 entries each have exactly one disposition in v12?
+5. Does any batch or item gate on a later one; is every cut along forward links, with its reason?
+6. Are the movers declared and co-batched, the encoding movers found, and the merge order of each parallel step workable?
+7. Does any item overwrite canon, a `(RULED)` item or Layer 1 without Jordan's amendment; is the held-back list complete?
+8. Are B03, B05, B10, B12a, B21b and B38 small enough for one close's review and critique; if not, where is the forward cut?
+9. Is the critical path what the graph gives, and is every runtime marked as an estimate until measured?
+10. Does anything in v12 make a `.md` the head of a fact code reads (the `met` texts before B02; the id-block table)?
+11. Is B98's list complete, and does each member have a target reading?
+
+---
+
+## 11. What this lane did not check
+
+- **Proposals.** One was read in full (`16_PESSIMIST_FA_C_under_the_seat`); three by their headings; the rest by U3's rows. The 45 % executable share and every size in §4 rest on that sample.
+- **U3.** §0, §1, §1.1, §1.3 to §1.5, §2 and §8 were read in full; §1.2 at B12's row only; §3.1 and §4.1 not at all; §5.1 for the files named in §7.3 and D-08; §6 by its row counts and first rows.
+- **The intake.** §0 to §4 in full; §5 by a script's list of headings and ids, and a dozen entries read; no carry-forward block was opened.
+- **The instruction suite.** IS-A part 2 §11 in part and §12 to §14 in full; the other files by a script's extract of each item's batch, movers and cost, with `IS-B3-FA-07`, `IS-B3-GO-06`, `IS-B2-CHAR-03` and `-05` read in full. The pointer and blocked rows of IS-B1 that carry no item form were not listed.
+- **MBA, PCR, CIP.** MBA-01 and MBA-02 and §7.0 read, the rest through U3 §1.5 and a grep of §8.1; PCR §6 in full; CIP §2, §3, `CI-09` and part 2 §4 to §6 in full, the other items by their heads.
+- **The rulings.** A-17, A-60, A-84 and A-92 to A-114 were read; A-1 to A-6 seen; the rest taken from the documents that cite them.
+- **v11.** Its head's headings, P13, P15 and §9, and the entries for CR-48, CR-49, CR-88 and CR-89; nothing else.
+- **`unified/U4_DOCUMENT_STATUS.md`** §3.1 and §3.5 read, §3.4 by script (batch, code, owner); `OWED_TO_UNIFICATION.md` §A only; `U3_LAYER1_AMENDMENTS.md` at its status lines and held rows; `MB_LEXICON.md` parts 1 and 2 not opened.
+- **Runtime.** Nothing was timed. Every hour in §2 is the formula of §2.4.
+- **Edit sets within a step.** Not verified beyond the census rows named in §7.3; the coordinator's check at each step's open is the instrument.
+- **The carrier of the game reader of `write_matrix.yaml:375-381`** (`U4_DOCUMENT_STATUS.md` §3.1 (ii)) was not traced: §5.7 makes its dependents BLOCKED until an author finds one.
+- **B98's members** are not known until the authors return; the six named in §7.8 are what this lane happened to read.
+- **A-60's directive** was not located.
+- No pytest, no seeded run, no instrument. The three tree facts of §0 are readings of source and of `git grep`, not of a run: that a new carrier field moves a content hash is read from `_object_head` and `_encode_into`, and B04's gate is where it is observed.

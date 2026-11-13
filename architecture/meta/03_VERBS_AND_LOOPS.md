@@ -1,6 +1,6 @@
 # META-ARCHITECTURE — STAGE 3 · VERBS, CONSEQUENCES, SLICES, SEASON LOOPS
 
-## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302, ED-IN-0303): Godot's words name Godot constructs, so a registered module's playable form is a *scene* (a run of it, a *scene instance*), and *rung* is the world side (a *container* left in a quotation, a field name or a plan title predates this); the scene tree lives in `game/`, not `port/`.**
+## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302, ED-IN-0303): Godot's words name Godot constructs, so a registered module's playable form is a *scene* (a run of it, a *scene instance*), and *rung* is the world side (a *container* left in a quotation, a field name or a plan title predates this); the scene tree lives in `game/`, not `port/`. ⚠ AMENDED 2026-11-12 (Jordan-directed, A-97, ED-IN-0358): a pointer appended in place — L1-A12 (§A.3).**
 ## Derives from `01_AXIOMS.md` and `02_HIERARCHIES.md`. Sources: those, and the PR chain #337 → #357.
 ## Top-down. **Nothing here runs and nothing here is meant to.**
 
@@ -31,7 +31,7 @@ supplies dice and gates nothing.
 it deletes the best thing about the option set: **a person who tries something they are bad at is the
 engine working.** An incompetent attempt is a story; an unavailable option is a menu.
 
-## §A.3 · A seat adds no verb and no modifier
+## §A.3 · A seat adds no verb and no modifier — ⚠ AMENDED 2026-11-12 (Jordan, A-12, against this section's argument; A-97, node L1-A12): a seat may carry one optional modifier, `modifier?`, a named level on rolls made through it, that gates nothing (`04` §B.7, PART D row 33); the argument below is the superseded reading, kept legible
 
 A seat makes **ordinary** acts eligible where they otherwise are not, and substitutes the pool
 source. **No verb exists only for seat-holders, and no seat carries a bonus.**

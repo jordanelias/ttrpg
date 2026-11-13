@@ -1,0 +1,160 @@
+# CHAR — relations have a ground: an authored relation seeds a stance row and the holder's own claim of what the other is to him
+
+Reconciled: 2026-11-12, U5a closure (`unified/U5_CONFLICTS_U5a.md` §4) — amended by `U5a_CHAR_owed_amendments.md` §4 (F-PES-CHAR-08: a deed with a person subject is judged through `_bond`).
+
+Reconciled: 2026-11-12, wave-3 rewrite lane W3-2 (`unified/work/R2_READ.md` §1.2 row (CONFORMS), §2 row A-19, §7, §7b-17, §7b-T; `unified/U1_OWNERS_AND_VOCABULARY.md` ledger S-12, S-14; `unified/U3_DEPENDENCY_ORDER.md` node B10, §6.2). Changed: "Kin as an eligibility … is Jordan's" is replaced by the pointer to A-19 (the crown when the line fails is the deed race: heir, consort, princess and both houses' heads may claim; kin stays a ground nothing reads as a rule); the scratch `probe_foils.py` reading becomes named tests; the `to:` id form is stated with its open mapping; lands-it and tier.
+
+Reconciled: 2026-11-12, unification lane U4c (test 9; opened and grepped at the tree) — the `to:` mapping is named: `f"p_{_slug(cid)}"` at `engine/season/harness/populated.py:1291` (`_slug` is `harness/populated.py:113`; the same mapping is used at `:817`, `:898`, `:921`). The `[UNVERIFIED]` at the `to:` paragraph is settled: the edit reuses `_slug` as the build does and adds no second mapping.
+
+**Lands in batch:** B10. **Depends on:** `U5a_CHAR_owed_amendments.md` §4 (B10, `_bond`); `02_CHAR_scar_cap_and_regard_unit.md` Addendum (B10, `regard_sign`; the falsifier names it).
+
+## Status: PROPOSED
+
+Written by the CHAR audit lane, addendum B (`audits/02_CHAR_audit_addendum_B.md`, F-CHAR-18, B3.2
+property P6, B6.2 rows 8 to 10). Ratifies nothing. Reference under `CLAUDE.md` §0.05.
+
+## What this changes in `engine/season/` at runtime
+
+With no `relations:` key on any cast row (the shipped state), nothing: build and season hashes EQUAL.
+With rows authored, world-gen appends one stance row and one firsthand claim per authored relation,
+on the carriers that exist (`Person.stance`, `Person.ledger`). `regard` and the chooser's stance term
+then read them as they read the loyalty row today. A declared build-hash mover when content lands. No
+new carrier, no new tenure kind, no rule keyed on a ground.
+
+## The problem, with evidence
+
+**The designed foils are not foils.** `probe_foils.py` (a scratch script, not in the repository; its reading
+is restated by the named tests below) (`build_realm(0)` and `(1)`, identical; ten named persons; six common
+referents; temperature 0):
+
+| pair | the design calls it (`npc_foils_v30`) | cosine of pursuit vectors | Kendall of score orders | stored stance either way |
+|---|---|---|---|---|
+| Lenneth, Vaynard | *"Diagnosis Without Agreement on Treatment"* | +0.858 | **+0.819** (the highest of the Diamond's six) | none |
+| Lenneth, Baralta | *"The Campaign's Defining Confrontation"* | +0.811 | −0.102 | none |
+| Baralta, Vaynard | *"Total Opposition"* | +0.635 | −0.197 | none |
+| Almud, Baralta | *"The Custodian and the Claimant"*: a rivalry | +0.560 | +0.324 | none |
+| Almud, Lenneth | husband and wife; the argument he has not resolved | +0.199 | +0.260 | Lenneth to Almud +1 |
+| Almud, Vaynard | *"The Manager and the Revolutionary"* | +0.015 | +0.171 | none |
+
+Among the 90 directed pairs of the ten, five hold a stance row. Edeyja holds none and no claim.
+
+**A relation has no kind.** `Person.stance` rows are `(referent, valence, weight)`. World-gen writes
+one per committed member, from the cosine of his pursuits against his faction's role template
+(`data/cast.py::stance_from_loyalty`; `harness/populated.py:977-989`, `:1529-1537`), and none from
+person to person. `tie` and `knot` are tenure kinds with no opener (`rosters.yaml:130-144`).
+`npcs.yaml`'s `tie:` says how the person a want concerns was picked (`named`, `institution`, `roof`,
+`neighbour`). Nothing says *she is his wife*, *he is his rival*, *he swore to him*.
+
+**What the design meant** (ARCHIVED-NOT-CANON; intent only). `npc_relational_graph_v30` (PP-724,
+PROVISIONAL): six typed edges (sworn-bond, liege-vassal, kinship, patronage, rivalry, feud), and
+*"NPC-NPC Disposition is derived from edge state, not tracked separately … Authoring an edge
+implicitly sets Disposition"* (§4.7). Its strain, capacity, break, inheritance and cascade rules were
+never built, and the 2026-08-08 audit recorded its *"BUILT"* as design-written.
+
+## The resolution, decided
+
+Ladder: step 4 (the loyalty row is the precedent: an authored fact about a person seeds one stance
+row at build) and step 5 (the ground is something the person *believes*, so it is a claim in his own
+ledger, the carrier for what a person knows: I-2). The design's principle survives exactly: the
+relation is authored once, and what he feels is derived from it and from what he has since seen.
+
+## Exact edits, by file and owner
+
+1. **`engine/season/rosters.yaml`**: a closed roster.
+
+   ```yaml
+   relation_grounds:
+     source: "the six edge types of the archived relational-graph design, as plain words; CHAR addendum B"
+     values: [kin, oath, service, patronage, rivalry, feud]
+   ```
+
+2. **`references/npc_registry.yaml`** (the cast's owner; `engine/season/npcs.yaml` is regenerated by
+   `tools/export_npc_roster.py --build` and is the wrong home for hand-authored facts): an optional
+   key per row.
+
+   ```yaml
+   relations:
+     - {to: NPC-050, ground: rivalry, valence: -1, weight: 2}
+   ```
+
+   `to` is a registry case id (`NPC-050`), mapped to the seated person id (`p_npc_050`) by the same mapping
+   `build_realm` uses when it seats the cast `[UNVERIFIED: the mapping function's name was not found by grep
+   at this tree; the executing session reuses whichever function mints the seated id, and adds none]`;
+   `ground` a `relation_grounds` member; `valence` is −1 or +1; `weight` a whole
+   number in the stance row's own unit, bounded by `data/cast.py::STANCE_MAX`. A relation is
+   authored on the side that holds it: a symmetric one is two rows, one on each person, and they need
+   not agree (the design's *"asymmetric rivalry"*, and its rulers who misread each other).
+
+3. **`engine/season/data/cast.py`**: `relations_of(r) -> tuple` validates the four fields and
+   refuses an unknown id, ground, valence or an out-of-range weight, as `attributes_of` refuses.
+
+4. **`engine/season/harness/populated.py::build_realm`** (the one seeder), beside the loyalty row:
+   for each authored relation, `stance.append((other_pid, valence, weight))` and one firsthand claim
+   in the holder's ledger, `(other_pid, "bond:<ground>", True)` at `confidence_default`. The claim is
+   his knowledge of what the other is to him; it can be told, doubted and lied about like any claim.
+
+5. **No reader is added.** `regard` already sums the stored row with judged and told deeds;
+   `stance_term` already reads `regard`. Two absent factors gain a source and stay absent until their
+   own positions: `teller_weight`'s stake (H-180: *"whether the teller has a rivalry with the
+   subject, read from the hearer's own claims"*) can read a held `bond:rivalry` claim; the reason
+   trail (`02_CHAR_reason_trail_and_small_edits.md`) can name the ground beside the regard term.
+
+6. **Content, for Jordan to correct** (each `[ASSUMPTION; low]`; the relations are the foil
+   document's own, the numbers are placeholders):
+
+   | holder | to | ground | valence | stated in |
+   |---|---|---|---|---|
+   | Almud | Lenneth | kin | +1 | *"share a household, a family"* |
+   | Lenneth | Almud | kin | +1 | the same; her frustration is a deed judgement, not a stance |
+   | Baralta | Almud | rivalry | −1 | *"the other wants the other's job"* |
+   | Almud | Baralta | rivalry | −1 | *"a rival whose case is strong"* |
+   | Ehrenwall | Almud | service | +1 | the Löwenritter's oath to the Crown; the count is hers to keep |
+   | Vaynard | Baralta | rivalry | −1 | *"The enemy"* |
+
+## What it deliberately does not do
+
+- **Strain, capacity, break, rupture, cascade, inheritance.** Design-first; PP-724 §3 and §7 are
+  provisional and unbuilt, and a relation that changes belongs to the acts that change it (`forgive`,
+  a vow-break, a witnessed betrayal through `deeds_judged`), which already move regard.
+- **Kin as an eligibility.** Answered by A-19 (the crown when the line fails is the deed race: the heir,
+  the consort, the princess and both houses' heads may claim; odds from what others believe of each deed).
+  `kin` here is a ground nothing reads as a rule.
+- **A unified bond primitive.** One row type and one claim; the knot and the tie stay what they are.
+
+## The gate (an execution artifact)
+
+(a) No `relations:` key: `build_realm(0).content_hash()` EQUAL. (b) With the six rows above:
+eleven directed pairs hold a stance among the ten (five today); for Almud and
+Baralta, the rank of a hostile act (`challenge`, `open_case`) on the rival is higher than the same
+act on a person toward whom he holds no row, and the rank of `confer` on the rival lower. (c) Each
+holder's ledger holds the `bond:` claim at build, and a `tell` about the other can carry it.
+Named tests (new, `engine/season/tests/test_relations.py`): `test_no_relations_key_is_hash_equal` (a);
+`test_six_rows_give_eleven_directed_stance_pairs` and `test_a_rival_ranks_hostile_acts_higher_than_a_stranger`
+(b); `test_each_holder_holds_the_bond_claim_at_build` (c); `test_an_unknown_ground_or_id_is_refused`.
+
+## The falsifier
+
+With rows authored, a rival ranks hostile acts on his rival no differently from on a stranger (the
+stance term does not reach those candidates: then F-CHAR-08's sign defect is in the way and the first
+lane's `regard_sign` column lands first). Or the build hash moves with no row authored.
+
+## NERS reading (`CLAUDE.md` §0.06; E last)
+
+- **N.** Top-down, the cast's drama is relational and the realm at build has almost no relations;
+  bottom-up, the stance term is the only score term that reads the subject and it does not vary
+  across a person's candidates in 253 of 276 readings (first audit); lateral, hearsay weighting and the reason trail each want the ground.
+- **R.** Customisation: an author states a rivalry in one line. The no-player half: a rivalry seeded
+  at build is acted on, witnessed, judged and retold without the player. Completeness: a relation
+  that is authored and never changes is still a fixed fact, which is the limit named above.
+- **S.** The same seeding step, unit and bound as the loyalty row; the claim uses the ledger's
+  existing rules; nothing pauses or forks.
+- **E.** One roster, one loader function, two appends. No new mechanism for a property the design
+  spent a sixty-kilobyte document on, because the derived half (regard) was already built.
+
+## Cost class
+
+Edit (roster, loader, seeder), then content.
+
+**Lands it and tier.** The B10 batch, an IN/CHAR `valoria-author` session on `sonnet` (`high`), closed by
+B10's `methodology-close` once. **Hash movers.** None with no row authored (control); the content is a
+declared build-hash mover. **INCOMPLETE, content:** the six rows' numbers are placeholders for Jordan.
