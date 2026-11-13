@@ -48,6 +48,101 @@ Severity: **H** a form or gate defect an executing session would trip on; **M** 
 - **Check 4.** 294 `path::symbol` claims opened by grep in the named file (B22 75, B26 41, B32 55, B37p 20, B28 91, B21s 13); 11 further EXISTS-IN-TREE claims in other forms opened by hand (`REQUIRES_STEMS`, `observation_deposit_mode`, `withheld_verbs`, `b_s_036_cathedral`, `b_s_014_barracks:114`, `negotiation`/`disposes: oblige` in `arrangements.yaml`, `beneficiary_note`, `counterparty: to`, `ED-IN-0282`, `H-286`, `advantage_sources`). Misses: the five fixed in finding 11, and `B32.16`'s `npcs.yaml:105` (a line number, present). Every `B<n>.<mm>` handle cited from another batch exists (`allpos` over 79 parts) and its batch is in the transitive after-list (`edges.py`: no "NOT-IN-TRANS-AFTER"). The only `MISSING` entries are findings 6 and 7 and `B28.03`'s `_writ_term` ("this item writes it").
 - **Check 5.** No item's position-table `gates on` cell names a later item. The forward mentions inside DEPENDS ON/GATE are: finding 5; "reads the effect of B22.12/B22.33 ... moved to the batch gate" (B22.11, .12, .21, .26: the arm moved forward as §5.8 asks, not a gate on a later item); B26.02/.04 "red until B26.03 to .05" (tests the item writes red). B32 and B26 are cut along forward links only.
 - **Check 6.** Declared movers carry through to each batch's RE-PIN line; B22.35, B26.17, B32.99, B37p.99, B28.99 carry the re-pin; B21s.99 records the EQUAL reading. Encoding movers: B32.27 (`Office.audit_at_exit`), B37p.03 (`World.estates`) are declared MOVER(encoding); no EQUAL item's WHERE touches `state/carriers.py` or `state/world.py` (`grep` over WHERE and INSTRUCTION: only B32.27, B37p.03, and B28.03's `OBEYED_WRIT` constant, a MOVER(behaviour)). Every mover item whose own test leaves a pin red lists `EXPECTED RED UNTIL`, now including B22.31.
-- **Check 7.** No `company`, `battalion`, `regiment`, `banner`, `aptitude`, `talent`, `prowess` or `Galbados`; "host" in B22 is the module host, not a size word; the 14 `round`-for-lap quotations in B22, B28 and B32 each carry a `NAMES` line or a gloss; remaining prose "capability" occurrences are identifiers or the name of the U1 document. Finding 18 is the exception.
+- **Check 7.** No `company`, `battalion`, `regiment`, `banner`, `aptitude`, `talent`, `prowess` or the deprecated world name (`tools/ci_naming_check.py`'s list); "host" in B22 is the module host, not a size word; the `round`-for-lap quotations in B22, B28 and B32 (about forty occurrences by grep) each carry a `NAMES` line or a gloss; remaining prose "capability" occurrences are identifiers or the name of the U1 document. Finding 18 is the exception.
 - **Check 8.** Every item has COST and TIER; every judgment node (a gate "read by `opus`") names `opus` in its COST (script: no item reads an `opus` gate without naming it).
 - **Check 11.** No item makes a `.md` the head of a fact code reads: the design items (B22.01, B26.16, B28.01) write a file and a `test -f`/`grep` gate (allowed for design items, §5.8) while the roster rows go to `rosters.yaml`; B32's new `instruments.yaml` and `data/instruments.py` are read at runtime; the CH signature is keyed on `ROLE_TEMPLATE_OF`, not a faction name (anti-scripting-drift); B28.32 routes TL's Layer 1 question to Lens B first and stops `HELD` on a negative. No item edits `architecture/`.
+
+## 2. Counts
+
+### 2.1 Items by batch and state (headings in the parts; positions in the table)
+
+| batch | headings | BUILD | DESIGN-FIRST | POINTER | BLOCKED | READING (heading) | READING rows with no heading | `.99` |
+|---|---|---|---|---|---|---|---|---|
+| B22-mb-armies | 35 | 33 | 1 (B22.01) | 1 (B22.10) | 0 | 0 | 3 (B22.R1 to R3) | none |
+| B26-fi-inquiry | 17 | 16 | 1 (B26.16) | 0 | 0 | 0 | 0 | none |
+| B32-inst-kit | 33 | 31 | 0 | 1 (B32.18) | 1 (B32.10) | 0 | 0 | B32.99 |
+| B37p-wr-kin-and-life | 6 | 6 | 0 | 0 | 0 | 0 | 0 | B37p.99 |
+| B28-social-verbs | 34 | 30 | 1 (B28.01) | 1 (B28.15) | 1 (B28.14) | 1 (B28.31) | 0 | B28.99 |
+| B21s-strife-supply | 3 | 3 | 0 | 0 | 0 | 0 | 0 | B21s.99 |
+
+(B32's 31 BUILD includes B32.99; B28's 30 includes B28.99; B21s's 3 includes B21s.99; B22's 33 and B26's 16 have no `.99`. A POINTER, BLOCKED or READING heading is graded on the E-5 body below, not on the twelve fields.)
+
+### 2.2 Check 2: PRESENT / THIN / ABSENT per field, after this round's fixes (BUILD and DESIGN-FIRST items only; 122 items)
+
+A cell is PRESENT when the field has the content §5.3 asks (a short but complete one-line edit, a test or a gate command with a reading, a named control arm). THIN is judged by hand from the script's flag (`fields2.py`, `final.py`): the shorter-than-a-threshold flags were each opened. Before the fixes of findings 8, 9 and 13 the ABSENT cells among these items were 16 (B32.99 7, B37p.99 8, B21s.99 1) and 8 GATE cells were not commands (finding 8's seven and finding 9's malformed one).
+
+| batch (items graded) | SOURCE | ADVANCES | INSTRUCTION | WHERE | TESTS | FALSIFIER and CONTROL | GATE | HASH MOVERS | DEPENDS ON | GLOSSARY | COST and TIER | LANDS IT |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| B22 (34) | 34/0/0 | 34/0/0 | 34/0/0 | 34/0/0 | 34/0/0 | 34/0/0 | 34/0/0 | 34/0/0 | 34/0/0 | 34/0/0 | 34/0/0 | 34/0/0 |
+| B26 (17) | 17/0/0 | 17/0/0 | 17/0/0 | 17/0/0 | 17/0/0 | 12/5/0 | 17/0/0 | 17/0/0 | 17/0/0 | 17/0/0 | 17/0/0 | 17/0/0 |
+| B32 (31) | 31/0/0 | 31/0/0 | 31/0/0 | 31/0/0 | 31/0/0 | 31/0/0 | 31/0/0 | 31/0/0 | 31/0/0 | 31/0/0 | 31/0/0 | 31/0/0 |
+| B37p (6) | 6/0/0 | 6/0/0 | 6/0/0 | 6/0/0 | 6/0/0 | 6/0/0 | 6/0/0 | 6/0/0 | 6/0/0 | 6/0/0 | 6/0/0 | 6/0/0 |
+| B28 (31) | 31/0/0 | 31/0/0 | 31/0/0 | 31/0/0 | 30/1/0 | 30/1/0 | 31/0/0 | 31/0/0 | 30/1/0 | 31/0/0 | 31/0/0 | 31/0/0 |
+| B21s (3) | 3/0/0 | 3/0/0 | 3/0/0 | 3/0/0 | 2/1/0 | 2/1/0 | 3/0/0 | 3/0/0 | 2/1/0 | 3/0/0 | 3/0/0 | 3/0/0 |
+| **total (122)** | 122/0/0 | 122/0/0 | 122/0/0 | 122/0/0 | 120/2/0 | 115/7/0 | 122/0/0 | 122/0/0 | 120/2/0 | 122/0/0 | 122/0/0 | 122/0/0 |
+
+Cells are PRESENT/THIN/ABSENT. The THIN cells: FALSIFIER and CONTROL, no control arm (B26.08, .11, .13, .14, .15; B28.17; B21s.99); TESTS and DEPENDS ON of B28.99 and B21s.99 name "the suites the batch gate names" and the batch's own items only (as a re-pin item should; counted THIN because the form wants a test or a symbol); TESTS of B21s.99 likewise. Two cells I overrode to PRESENT after opening them: `B32.16` TESTS ("step 1's test", named in INSTRUCTION step 1), and one-line INSTRUCTIONs that are complete (B22.15, B22.28, B26.03, B26.04). The four `.99` GATE cells that read "the BATCH GATE" are counted PRESENT.
+
+POINTER, BLOCKED and READING bodies (E-5; six headings): B22.10 PRESENT (after finding 15), B32.18 PRESENT, B32.10 PRESENT (what, gate, owner; no commit), B28.14 PRESENT (missing fact, owner, dormant form, gate when unblocked), B28.15 PRESENT, B28.31 PRESENT (a READING with a body; §5.3 says a READING has none, the block carries the text: a form deviation, not a field gap). B28.31 and B28.14 carry a body longer than E-5's eight lines; accepted.
+
+### 2.3 Count per check (findings of §1 that bear on it; "fixed" in this round)
+
+| check | opened | found | fixed | left |
+|---|---|---|---|---|
+| 1 forms | 6 blocks, 128 headings, 6 boundary rows, 6 INVOCATION lines, 54 `GATE: Batch` lines | 1, 2, 15, 22, 23 (+ B28 SERIAL EDGES placed after EST, sanctioned by E-11) | 15 | 1, 2, 22, 23 |
+| 2 fields | 122 items x 12 fields, 6 pointer/blocked/reading bodies | 13, 15, 21 | 13, 15 | 21 |
+| 3 gates | every GATE of 128 items; every path/test/tool/module in GATE, WHERE, TESTS | 3, 8, 9, 24 | 8, 9 | 3, 24 |
+| 4 dependencies | 294 `path::symbol` + 11 hand-opened; every cross-batch handle; 4 MISSING | 4, 5, 6, 7, 11, 17, 26 | 11, 17 | 4, 5, 6, 7 (26 recorded) |
+| 5 back edges | every `gates on` cell and every DEPENDS ON/GATE/STOPS IF mention of a later handle | 5, 16 | 16 | 5 |
+| 6 hash | 122 headings v. position-table hash cells (all agree except the two POINTER rows, fixed); pins; carriers | 10, 12, 25 | 10, 12 | 25 |
+| 7 words | banned words, `round`/`lap`, `capability`, size words, `troops` | 14, 18 | 14 | 18 |
+| 8 cost and tier | 128 COST lines | 19 | 0 | 19 |
+| 9 copy fidelity | 56 items by token probe, about ten read against the source by hand (§3) | drift is additive only (§3) | n/a | n/a |
+| 10 charge | 40 items read through by hand | THIN: the seven FALSIFIER cells, B22.15 (a tree condition), B28.33 (test file) | 0 | see §1 |
+| 11 Layer 1 / §0.05 / draws | design items, new registries, signatures, `architecture/` mentions, "every seed" gates | 3 | 0 | 3 |
+
+## 3. Sampled citations (what was opened, and the outcome)
+
+Method for check 9: for each item, `fid5.py` lists the backticked tokens of INSTRUCTION, WHERE, TESTS and GATE that appear nowhere in the cited source (whitespace-normalised, identifiers matched by parts); the absent tokens were each read. Outcomes: **matched** (every absent token is a plan-added field, a test name the item creates, a gate command, or a forward-rule key such as `sequence:` / `capability_note:` the plan inherits), **drifted** (the item adds a location or a clause the source does not state), **unverifiable** (the source is a carry-forward block whose text was read in the intake/E-files, not the proposal).
+
+| batch | item | source opened | outcome |
+|---|---|---|---|
+| B22 | B22.06 | `proposals/14_VERBS_MILITARY_A_movement.md` §3 Edits 1, 2, §4 | matched; the P-03 `migrate` clause is a plan addition marked "(Patched: P-03)"; two test names invented, unmarked |
+| B22 | B22.08 | same, Edits 1 (bands), 4, 5 | matched (two invented test names) |
+| B22 | B22.13 | `14_VERBS_MILITARY_B_train.md` §3 Edits 1 to 5, §4 | matched; four invented test names, unmarked; two note strings corrected for "capability" (finding 14) |
+| B22 | B22.20 | `14_VERBS_MILITARY_C_the_muster.md` §3 Edit 3, §4 | matched; the `UNVERIFIED` is turned into a SITE step as §5.7 asks |
+| B22 | B22.29 | `14_VERBS_PHYSICAL_B_field_and_ruin.md` B1, "Order of landing", Gate; `U5b_VERBS_military_physical_residue.md` §2; `audits/14_VERBS_PHYSICAL.md` §5.7 | matched (the seven table rows are copied one per owner; three test/gate names added) |
+| B22 | B22.31 | same file, B2 rows 3 to 7; `audits/14_VERBS_PHYSICAL.md` §6.7 | matched; the "H-228 pin red until B22.35" is the plan's honest departure from "re-recorded in the same commit" (one re-pin per batch), now with its `EXPECTED RED` line |
+| B26 | B26.05, B26.06 | `16_PESSIMIST_FI_B_a_paper_is_about_something.md`, `16_PESSIMIST_FI_D_withhold_what_has_no_product.md` | matched |
+| B26 | B26.07, B26.09, B26.10 | `14_VERBS_MATERIAL_D_paper.md` | matched (test names added, `H(...,"create_record.task")` draw keys added per A-30) |
+| B26 | B26.12, B26.13 | `14_VERBS_MATERIAL_E_knowledge.md` | matched (B26.13 adds `fixtures.py`/`options.py` for the withheld-list move, stated) |
+| B26 | B26.14, B26.15 | `14_VERBS_PHYSICAL_C_looking.md`; `audits/14_VERBS_PHYSICAL.md` §7.7, §8.7 | matched; B26.14 writes `covert_kinds` as three values because B26.10 added `record.destroyed` (a correct composition, stated in the item) |
+| B26 | B26.01 | `19_LACUNA_questioning_has_an_approach_and_a_cost.md` | not probed by token (read in the batch head only): unverifiable |
+| B32 | B32.05 | `15_INSTITUTIONS_COLONIAL_A_instruments.md`, `_SYNTHESIS_A_one_kit.md` | matched |
+| B32 | B32.12, B32.13 | `15_INSTITUTIONS_BYZANTINE_A_dignities_and_the_roll.md` | B32.12 matched; **B32.13 drifted, additively**: WHERE adds `seam/wrappers/sigma.py::contest_input` and `decision/options.py`, neither named by the source (the item flags a SITE step "record the symbol"; `contest_input` exists at `sigma.py:170`) |
+| B32 | B32.14 | `15_INSTITUTIONS_BYZANTINE_E_accession_recall_and_the_crowd.md`, `22_HAPPENINGS_B_the_throne_is_never_stranded.md` | matched (same `contest_input` addition as B32.13) |
+| B32 | B32.16 | `15_INSTITUTIONS_PAPACY_A_ground.md` | matched |
+| B32 | B32.19, B32.20 | `15_INSTITUTIONS_PAPACY_B_patronage_election_discipline.md`; SYN_A | matched |
+| B32 | B32.22, .24, .25, .26 | `14_VERBS_BINDING_B_sittings.md` | matched (test and file names added; `H(...,"pardon.matter")` per A-30) |
+| B32 | B32.27 | `15_INSTITUTIONS_VENICE_C_roll_lot_ballot.md` | matched; the encoding-mover reasoning (UNDECIDED 3) is a plan correction of the source's "folded only when not None" |
+| B32 | B32.32 | `17_CENSUS_REST_2_wiring.md` W5 | matched |
+| B37p | B37p.01 to .05 | `master/eval/E1.md` (CP-T10-04/-06/-07/-09), `E5.md` AM-F-01..-03, `V12_INTAKE.md`, `proposals/U5d_WR_owed_edits.md` §3 | matched. B37p.03 uses `World.estates` where the E1 card says `w._estates`; E5 AM-F-02 (line 66, "`World.estates`, `estates_named`") is the override, so the item is right and the card stale |
+| B28 | B28.02, .03 | `14_VERBS_SOCIAL1_B_documents_and_obedience.md` | matched; `_writ_term` is declared missing and written by the item |
+| B28 | B28.04, .05, .06, .08 | `14_VERBS_SOCIAL1_D_grievance_and_settlement.md` | matched; B28.06 adds `witness.py`, `hole_register.yaml` in WHERE (plan: NUMBER rows), additive |
+| B28 | B28.09, .10, .11, .12 | `14_VERBS_SOCIAL1_B`/`_C_persuasion_and_deceit.md` | matched |
+| B28 | B28.13 | `master/instructions/IS_B2_SC_FI_CORE_CHAR(_part2).md` IS-B2-SC-05 | matched |
+| B28 | B28.16, .17, .18, .21, .22 | `28_CORE_scene_access_A_occupancy_and_precedence.md` | matched (`world_q.office_rank` is in the source; the probe flagged the `world_q.` prefix) |
+| B28 | B28.23 to .27 | `28_CORE_scene_access_B_appointments.md` | matched |
+| B28 | B28.32 | `proposals/2026-10-25-thrust-layer/00_THRUST_LAYER_DESIGN.md` §4 row 4.2, §8 (file exists) | read, not token-probed: unverifiable beyond the file's existence |
+| B21s | B21s.01, .02 | `master/eval/E1.md`, `E4.md`, `E5.md`, `V12_INTAKE.md`, `15_INSTITUTIONS_PAPACY_A_ground.md` | matched; the "On this tree" re-base sentences are the author's tree reading (`ROLE_TEMPLATE_OF = roster_map(...)` etc.), flagged as such; unverifiable only for the line numbers of the carry-forward blocks |
+
+## 4. What I did not check
+
+- Coverage (§10.1 check 6: every U3 member, instruction item and intake entry appears once) is K1's by script; I only confirmed that no handle repeats inside a batch (`forms.py`: no duplicate) and that the six batches' position counts equal part 2 §1.3 (B22 35 + 3 READING rows, B26 17, B32 33, B37p 6, B28 34, B21s 3).
+- Copy fidelity is a token probe plus hand reading of about a fifth of the items; the INSTRUCTION text of every BUILD mover was not read against its source in full (the structure's check 7 asks that; the brief for this lane asks six per batch). An edit whose words match but whose order differs from the source's would pass the probe; B22.29's seven rows and B32.13's three steps were read in order.
+- EXISTS-IN-TREE: the grep proves a word-bounded identifier appears in the named file, not that it has the signature the item uses. `deps.py` reads only `path::symbol` and `path: key` forms; claims phrased in prose ("the Record mint `boot/realm.py` uses for `works`", "`labour` in the tree at this item's turn") were opened by hand where listed in §1.1 and otherwise not.
+- Hash classes were judged from WHERE and INSTRUCTION text (encoding versus behaviour); no `content_hash` was read (`_object_head`, `_encode_into` were not opened) and nothing was run. The statement that adding optional Record payload keys (B22.02, B22.18, B22.24) is EQUAL rests on "absent by default and no shipped world holds an `army` Record until B22.33", which I did not verify by opening `boot/realm.py` or `rosters.yaml` for army Records `[ASSUMPTION: no shipped army Record exists before B22.33 -- basis: the items say so; B22.33 is named "armies are mustered at realm build"]`.
+- Determinism (check 11) was a text scan for "every seed", "always", "never" in GATE and TESTS, not a reading of every assertion; finding 3 is the one certainty over a draw that I judged, B22.06's and B28.02's "at every seed" are readings of three named seeds.
+- Tiers: I checked that a tier is named and that an `opus` gate names `opus`; I did not judge whether a node's tier is the right one.
+- The prior (stopped) run of this lane: `git diff` showed no edit to parts 33 to 35 before this round; its scratch scripts were in `scratchpad/k8/` and `parse.py` was overwritten here.
+- Parts outside 33 to 35 were not edited. Findings that need an edit elsewhere: finding 4 (the `release` step is B32's, but H2's `contest_owed` row text in `part2_cont2.md` §11 C-22 is its record), finding 23 (C-24's file).
