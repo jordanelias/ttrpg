@@ -26,8 +26,8 @@ Design input, reference under CLAUDE.md §0.05. Lanes that own the files the pla
 ## 0. The rule, and the method
 
 **The rule, in one sentence an ordinary reader gets:** *a verb names one to three attributes; a person's governing score
-for it is the average of his scores in them, rounded to the nearest whole number with a half rounded up (an attribute he
-does not hold counts at the untrained score); his rank in the verb's skill, if the verb names one, is added; that number
+for it is the average of his scores in them, rounded to the nearest tenth, a fraction like 2.5 staying a fraction (an
+attribute he does not hold counts at the untrained score); his rank in the verb's skill, if the verb names one, is added; that number
 plus the base, and never below the floor, is the dice he rolls (A-6); a verb that is a brute function of a seat, of his
 own standing or of another's decision names no attribute and rolls nothing; and a verb that hands its act to a subsystem
 (a fight, a field) names none either, because the subsystem reads him by its own rule.*
@@ -48,12 +48,16 @@ own standing or of another's decision names no attribute and rolls nothing; and 
 - **An office act whose carrying out can be botched is (b), with the office modifier**, not (a): the seat makes it
   eligible, the doer's ability decides how well it is done (`arrest`, `interrogate`, `requisition`, `seize`, `raze`,
   `marshal`, `determine`; §3 item 5).
-- **The mean and its rounding.** `governing_mean(scores) = floor(sum / n + 0.5)`, round half toward plus infinity, never
-  Python's half-to-even; computed in integers as `(2 * sum + n) // (2 * n)`, so no float is rounded. The tree has no
-  public half-up owner at HEAD (its one copy is private, `modules/mass_battle/massbattle.py:106`, `_round_half_up`); the
-  plan creates `round_half_up` at B38.55 in `engine/dice_engine/fmath.py`, which B06.01 creates, both after B05, so B05.25
-  writes the integer form beside `pool_of` and B38.55 may route it (same values). Worked: Presence 6, Attunement 2, Reason
-  5 → 13 / 3 = 4.33 → 4; Perception 4, Reason 5 → 4.5 → 5; Spirit 3 held alone → 3.
+- **The mean and its rounding (Jordan, 2026-11-13).** The verb's governing score is the mean of the character's scores on
+  its 1 to 3 attributes (an attribute he does not hold reads at the untrained score `pool_default`), rounded to the
+  nearest tenth (a value halfway between two tenths rounds up); the result is a fractional number (`2.5`, not `3`) and
+  feeds the dice as a fractional pool, as the engine already takes one (A-5; `sigma_leverage.py`'s continuous path). It is
+  NOT rounded to a whole number and does not use `round_half_up`, which stays B38.55's, for integer counts. Attribute scores
+  are integers on 1 to 7 (`descriptors.ATTRIBUTE_FLOOR`, `ATTRIBUTE_CEILING`), so the sum is exact and
+  `governing_mean(scores) = (20 * sum(scores) + n) // (2 * n) / 10`, in integers until the last division. For `n` of 1 to
+  3 the mean of integers is a multiple of a third, so a true half-tenth never occurs and the half-up clause is vacuous at
+  this input; it is kept for the rule's completeness. Worked: Presence 6, Attunement 2, Reason 5 → 13 / 3 = 4.33 → 4.3;
+  Perception 4, Reason 5 → 4.5; Spirit 3 held alone → 3.0.
 - **The skill rank adds to the mean**, 0 where he holds none or the verb names no skill: an untrained man rolls on his
   attributes alone, and a first rank always adds a die `[ASSUMPTION: basis: ruling (1), "dice amount set by attributes,
   skill (if relevant)"; the plan's earlier form, the skill score as the only dice (B05.09 as first written), is what the
@@ -300,15 +304,17 @@ The loader refuses, the test shows it. `engine/season/tests/test_verb_governing_
 - **`test_a_row_naming_none_is_refused_at_load`**: one row's columns removed → the loader raises, naming the verb. The
   falsifier: without it a new verb ships on `pool_default` for everyone, which is how `lie` shipped.
 - **`test_a_verb_is_exempt_only_by_its_prize`**: `person_inputs: pool` planted on `the body` refuses `fight`.
-- **`test_the_governing_score_is_the_mean_rounded_half_up`**: `governing_mean` equals `floor(sum / n + 0.5)` over every one
-  to three scores on 1 to 7 (`[2, 3]` → 3, never 2) and refuses four.
+- **`test_the_governing_score_is_the_mean_rounded_to_the_tenth`**: `governing_mean` equals the exact mean rounded to the
+  nearest tenth over every one to three scores on 1 to 7 (`[2, 3]` → 2.5, not 3; `[2, 2, 3]` → 2.3; `[2, 3, 3]` → 2.7;
+  `[5]` → 5.0), is a `float`, and refuses four scores, none and a negative.
 
 ## 5. Where the plan carries it
 
 - **B05.24** (DESIGN-FIRST) — the rule of §0 and the row shape; one `ED-IN` row.
 - **B05.25** (BUILD, behaviour mover) — the `governing:` / `brute:` / `opposed_attribute:` columns with §2's cells as
   interim, `person_inputs:` on the prize rows, the loader's closure, `sigma_leverage.governing_mean`,
-  `pool.governing_score` and `rank`, `faculty` on their sum; `vocation_attribute` deleted. B05.09, B05.10 and B05.16 carry
+  `pool.governing_score` (a float) and `rank`, `faculty` on their sum, with the `int` casts in `pool.py` removed (B05.25's
+  WHERE); `vocation_attribute` deleted. B05.09, B05.10 and B05.16 carry
   a reconciliation line.
 - **BA1.13** (CONTENT) — Jordan's corrections of the per-verb cells, through B05.25's loader.
 - **B28.34** (DESIGN-FIRST) and **B28.35** (BUILD) — the persuasion terms of §2.6 and the self-plea's opposition (§2.7).
