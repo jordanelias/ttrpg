@@ -53,7 +53,7 @@ SERIAL EDGES: within the batch: B17.01 first (every later item reads the one sha
   With other batches, by file (U3 §5.1's batch lists, the lexicon's L1/L2 file lists, put in v12's landing order by `V12_STRUCTURE.md` §2.3's steps; U3's own rows are in handle order, which is not landing order here: B15, B16 and B12a–c land after B17): `massbattle.py` B16L → B16M → B17 → B19 → B20 → B31; `orderofbattle.py` B16L → B17 → B19 → B20 → (B22, B32 at S17) → B31; `orchestration.py`, `hierarchy/units.py` B16M → B17 → B19 → B20; `battle_loop.py` B16M → B17 → B15 → B19 → B20; `config.py` B16M → B17 → B19 → B31; `percell.py` B17 → B19 → B31; `troop_types/table.py`, `tools/export_troops.py` B17 → B19a → B19 → B31; `references/troops.yaml` B17 → B19a → B19 → B20 → B22 → B30 → B31; `seam/wrappers/mass_battle.py` B16M → B17 → B19 → B20 → B22 → (B23, B30 at S18) → B31; `seam/ladder.py` B17 → B23; `effects_combat.py` B04 → B14 → B17 → (B12a–c, B16) → B19 → B20 → B22 → B23 → B31; `queries/inputs.py` B05 → B14 → B17 → B15 → then U3's later batches in step order; `data/fixtures.py`, `rosters.yaml` B05 → (B07, B17 at S9) → B09 → …; `verb_table.yaml` B04 → (B07, B17 at S9) → B09 → …; `hole_register.yaml` B14 → B17 → B10 → …; `requirements.yaml` B03 → B17 → B09 → B11 → B26 (the scales note only). Hot files touched (`V12_STRUCTURE_part3.md` §7.3): `rosters.yaml` (`field_degree_bands`, `observation_terms`), `verb_table.yaml` (`march`), `fixtures.py` (three `field_*` keys), `inputs.py` (`MassBattleInput`, the three outcome records).
 PARALLEL: S9 with B07-task-draw (IN). Shared files: `rosters.yaml` and `verb_table.yaml` (B07 edits the task-draw route rows and the loader's shapes; B17 the keys named above: different top-level keys, kept by hand at merge, §7.3); `fixtures.py` if B07 adds a fixture (a different key). Both are movers: B07 merges first (its row precedes B17's in `V12_STRUCTURE.md` §2.1); B17 rebases on B07's merge, takes B07's after-reading as its baseline (`reading @<sha>`) and re-pins once in B17.99 (§7.4). No file under `modules/mass_battle/` or `systems/mass_battle/` is B07's.
 COST: edits and small builds, two wide mechanical moves (B17.05, B17.12); producer `valoria-author` on `sonnet`, `high`; the mechanical moves `haiku`-assisted (the source's tier); the close's terminal critique `opus`.
-EST: 8 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this batch's 14 positions (0.4 h × 14 + 2.5 h); §2.2's 5 h counted the five members, not the commits they order]
+EST: 8.5 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this batch's 15 positions (0.4 h × 15 + 2.5 h; B17.14 added by repair lane R2a); §2.2's 5 h counted the five members, not the commits they order]
 
 | pos | item | source | state | hash | gates on |
 |---|---|---|---|---|---|
@@ -70,7 +70,8 @@ EST: 8 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this batc
 | B17.11 | the four name tests become columns; reach derives from the arm | `04_MB_unit_loadout_and_weapon_in_hand_B` stage 2 | BUILD | EQUAL | B17.10 |
 | B17.12 | no hidden inputs: the environment reads split between the troop file and an explicit `cfg` | `04_MB_typed_outcome_and_one_path` §3 (its commit 3) | BUILD | EQUAL | B17.10, B17.11 |
 | B17.13 | the integrated reading of mass battle at this close | `IS-MB-05` | READING | — | B17.01 to B17.12 |
-| B17.99 | re-pin and close readings | `V12_STRUCTURE_part4.md` E-1 | BUILD | MOVER (the re-pin) | B17.01 to B17.13 |
+| B17.14 | the envelop test counts two arms over twenty seeds (B02.07's carrier) | `01_CORE_tests_delete_what_cannot_fail` row 6 | HELD (only if B02.07 did not land) | EQUAL | Batch B02 |
+| B17.99 | re-pin and close readings | `V12_STRUCTURE_part4.md` E-1 | BUILD | MOVER (the re-pin) | B17.01 to B17.14 |
 
 Not in this batch, and where each is: `04_MB_unit_loadout_and_weapon_in_hand` (SUPERSEDED in whole by `_B`, already marked at its Status line; no item, `V12_STRUCTURE_part2.md` §5.5); `04_MB_unit_loadout_and_weapon_in_hand_B` stages 3–4 (B31, U3 §4.1 row 61); `U5b_MB_residue` §3, §4 item 1, §5, §7, §8, §9 R-25 and R-29, §2 R-23 and R-38 (UNDECIDED (3) above); the `Drawn` write's fatigue (B22, `27_MB_E`; UNDECIDED (1)); a drawn defender's regard and grievance toward the aggressor (`U5d_FA_land_and_seats_pass_on_a_won_march`, B23, the FA reader `04_MB_headcount_grade_and_scale` names); `IS-MB-P3`, `-P4`, `-P5` (pointers of `IS_B1_PC_MB_DICE_part2.md` to this batch's members: carried by B17.01, B17.07 and B17.03, no item of their own).
 
@@ -374,6 +375,20 @@ Not in this batch, and where each is: `04_MB_unit_loadout_and_weapon_in_hand` (S
 - GLOSSARY: none.
 - COST and TIER: edit, large and mechanical (the config object); `sonnet`, `high` ("the record and config `sonnet`", the source).
 - LANDS IT: B17's producer; `Item: B17.12`, `[skip ci]`.
+
+### B17.14 — the envelop test counts two arms over twenty seeds (B02.07's carrier in the MB lane) · 01_CORE_tests_delete_what_cannot_fail row 6 · HELD (lands only if B02.07 did not land in B02) · HASH EQUAL
+- SOURCE: `proposals/01_CORE_tests_delete_what_cannot_fail.md` row 6 and "Lands it" ("it lands in B02 only with that lane's agreement, else in the MB lane's first batch (B17)"); closes F-TEST-10. Added by repair lane R2a (K1 F1): B02.07's fallback named "the B17 block" and no B17 position carried it.
+- ADVANCES: none of the nine: test strength in the MB lane (CLAUDE.md §0.1 pt 2).
+- INSTRUCTION: AT OPEN: `git log --grep "Item: B02.07" --oneline` on the base. One line → this item is closed by B02.07 and lands nothing (say so in B17.99's body). No line → apply the source's edit, copied: "`test_envelop_reaches_rear_node`: remove the `xfail` and replace the single-fixture pass/fail with a two-arm count over the same twenty seeds its reason text already cites: the detachment ordered to envelop reaches behind the defender in strictly more seeds than the same detachment ordered to hold, and the hold arm reaches it in none. A direction with a control, no threshold invented. If the envelop arm does not beat the hold arm, the test is red and the mechanism is the finding."
+- WHERE: `tests/valoria/test_mass_battle_maneuvers.py` (`test_envelop_reaches_rear_node`).
+- TESTS: the rewritten test; `assert checked >= 20` over the seeds (§0.1 pt 2). Its reading before the edit: `xfail` (`strict=False`).
+- FALSIFIER and CONTROL: the hold arm reaches the rear node in any seed. Control: the hold arm reads 0.
+- GATE: `python -m pytest tests/valoria/test_mass_battle_maneuvers.py -q -k envelop` → passes with no `xfail` marker (`grep -n "xfail" tests/valoria/test_mass_battle_maneuvers.py` → nothing at that test). If the envelop arm does not beat the hold arm the test is red and stays red: the finding goes in B17.99's body and the PR body as held back, not "fixed" here.
+- HASH MOVERS: none (a test edit).
+- DEPENDS ON: EXISTS-IN-TREE `tests/valoria/test_mass_battle_maneuvers.py::test_envelop_reaches_rear_node`; V12 B02.07 (its HELD fallback names this item); the names B16L and B16M left in the test file (read on the base; the block's names paragraph governs).
+- GLOSSARY: none.
+- COST and TIER: small build; `sonnet`, high.
+- LANDS IT: B17's producer; `Item: B17.14`, `[skip ci]`; no commit if B02.07 landed.
 
 ## Readings (B17)
 

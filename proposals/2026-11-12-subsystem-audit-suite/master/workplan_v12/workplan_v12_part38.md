@@ -43,7 +43,7 @@ BATCH GATE (read once, on the closing tree, `PYTHONHASHSEED=0` on every seeded c
   the suites `python tools/tests_for_diff.py --base <batch-start-sha>` names (the batch touches engine core and registries: the full gates, CLAUDE.md §0.4);
   the glossary rows each item names, read against the code it landed (`STAGES.md` "The glossary always matches" rule 2): a mismatch fails the close;
   the close's commit body records `register --requirements` (nine lines), `m1_acceptance --summary`'s verdict line, the `BUILT OUT`, `ENGINES` and `NULL SCENES` lines before (`reading @<sha>`) and after, and the batch's measured wall time; no conjunct is named, so no `reading:` record is written; `status:` is not edited (`IS-A-12`).
-EXPECTED RED UNTIL B33.99: none beyond each item's own `EXPECTED RED UNTIL` line (the realm pins move from B33.01 and are re-pinned once at B33.99, under `[skip ci]`).
+EXPECTED RED UNTIL B33.99 (under `[skip ci]`, E-1; one batch line; no item of this batch carries its own line): the realm pins in `engine/season/tests/_realm_goldens.py` (B02's one pin file) and its asserting test `engine/season/tests/test_go07_canonical_digest.py` read red from the first mover (B33.01) to the re-pin at B33.99 (repair lane R2d, CHK_K9 #6: the line said "none beyond each item's own line", and no item has one).
 RE-PIN: once, at B33.99: the realm pins in `engine/season/tests/_realm_goldens.py` (B02's one pin file) at seeds 0 to 2, build, one and two seasons, both arms of `build_realm(foreign=)`; every seeded result the batch's movers moved, read against B32's close (`reading @<sha>`), or against B31's merge where B31 merges first in S19 (§7.4); the commit says "re-pin" and lists the moving handles (B33.01, .02, .03, .04, .08, .09, .10, .11, .12, .14, .15, .16, .17, .19, .21, .25, .26, .31, .40, .47).
 IDS: ED-FA 0; H 7 (NUMBER rows: `border_hops` B33.14; `prescription_seasons` with its second field `prescription_cap` B33.20; `penance_weight` B33.28; `obligation_level`, `obligation_arrears`, `sealed_obligation` B33.34; `credit_terms` B33.38; each written only if B32's `SYN_A` §5 did not already write it, and an id unused is named in the expunge commit); NPC 1 (the court's holder, B33.09; `references/id_reservations.yaml` carries no NPC lane at `30c978f` (`grep -n NPC` finds a comment only), so B00 is asked for an NPC block, UNDECIDED 3).
 DIALS AT CONTROL: `obligation_level` = `None`, `obligation_arrears` = 1.0, `sealed_obligation` = 1.0 (proposed `minor`, 0.5, 0); set by B98; target: none stated (VEN_A's gate reads Arm 1's band counts "read and reported"; "every value is recalibrated with OBS §4 step 5"), so `BLOCKED (design: no target reading)` unless OBS §4 step 5's joint re-centring names one (D-22) ·
@@ -69,7 +69,7 @@ UNDECIDED: (1) BYZ_B edit 5 measures `distance` "from the exercised seat's rung 
 | B33.02 | what a sworn man is owed, read per person | BYZ_B edit 3 | BUILD | MOVER(behaviour) | B33.01 |
 | B33.03 | the bill, read when read | BYZ_B edit 4 | BUILD | MOVER(behaviour) | B33.02; Batch B12c |
 | B33.04 | a tax rendered is not a tax taken: `requisition`'s terms and bands | BYZ_B edit 5 | BUILD | MOVER(behaviour) | B33.03; Batch B12c (B12c.13) |
-| B33.05 | a stage that names a body or a seat is a hand | BYZ_C edit 4, with edit 3's `hand_term` read | BUILD | EQUAL | Batch B21, Batch B32 |
+| B33.05 | a stage that names a body or a seat is a hand | BYZ_C edit 4, with edit 3's `hand_term` read | BUILD | MOVER(encoding) | Batch B21, Batch B32 |
 | B33.06 | the clerk is asked; an unentered stage reads as returned | BYZ_C edits 6–7 | BUILD | EQUAL | B33.05 |
 | B33.07 | `carry` at a hand, drawn | BYZ_C edit 5 | BUILD | EQUAL | B33.06; Batch B28 |
 | B33.08 | the King's and two dukes' papers pass their clerks | BYZ_C edits 1–3 | BUILD | MOVER(behaviour) | B33.07 |
@@ -197,7 +197,7 @@ Not in this batch, and where each is: `BYZ_A`, `BYZ_E`, `COL_A`, `PAP_A`, `PAP_B
 - COST and TIER: build (a row's shape and its effect's dispatch); `sonnet`, `high`; the band table read by `opus`.
 - LANDS IT: B33's producer; `Item: B33.04`, `[skip ci]`.
 
-### B33.05 — a stage that names a body or a seat is a hand · BYZ_C edit 4, with edit 3's `hand_term` · BUILD · HASH EQUAL
+### B33.05 — a stage that names a body or a seat is a hand · BYZ_C edit 4, with edit 3's `hand_term` · BUILD · HASH MOVER(encoding)
 - SOURCE: BYZ_C "Exact edits" 4 and the last sentence of 3, "What it changes" 1 and 4; `SYN_A` §2 (`office_bodies.<body>.term`), §3 (`passes_through`, `hand_term` refusals); rulings A-13, A-21; closes "`_declared_stages` … winds `record_stages_default` stages … They are clocks with no hand" (BYZ_C, the problem).
 - ADVANCES: none of the nine; A-13 (the clerks an order passes).
 - INSTRUCTION:

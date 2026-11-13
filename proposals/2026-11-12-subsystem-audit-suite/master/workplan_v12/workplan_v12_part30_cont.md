@@ -444,7 +444,7 @@ Not in this batch, and where each is: FI08 §1 and §4 (handed to the Thread lan
 - FALSIFIER and CONTROL: "`tie_gain` 0 must hash as the control." Control: B25.19's after-reading (`tie_gain` 0).
 - GATE: `python -m pytest engine/season/tests/test_knots_season_form.py engine/season/tests/test_vm_s2_d_tie.py -q` → pass; `python tools/ci_sim_fabrication_check.py` → exit 0; realm hashes (`HASH READING`) at seeds 0–2 → equal to B25.19's.
 - HASH MOVERS: none at `tie_gain` 0 ("the one declared mover is the later flip of `tie_gain` off 0 … re-pinned once in that flip's own commit": B98, DIALS AT CONTROL).
-- DEPENDS ON: V12 B25.19; EXISTS-IN-TREE `decision/options.py::teller_weight`, `rosters.yaml: task_fraction` (B07).
+- DEPENDS ON: V12 B25.19; EXISTS-IN-TREE `decision/options.py::teller_weight`; V12 B07.02 `rosters.yaml: task_fraction` (not in the tree: B07.02 creates the roster and `data/rosters.py::TASK_FRACTION`).
 - GLOSSARY: none.
 - COST and TIER: small build; `sonnet`, `high`; one `opus` read of the `tie_gain` arms.
 - LANDS IT: B25's producer; `Item: B25.20`, `[skip ci]`.

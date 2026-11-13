@@ -107,7 +107,7 @@ Columns: the wave and step as the structure had them, and now (a change in bold)
 | B14-pc-outcome | PC | W8 | S8 | 3 | 10_cont | 29 (B26 P1 R1 DF1) | MOVER (behaviour 7) | 14.1 | B00, B01, B02, B13, B05 |
 | B15-pc-calibration | PC | W12 | S12 | 0 | 18 | 16 (B13 R2 DF1) | MOVER (behaviour 10) | 10.9 | B00, B01, B02, B04, B05, B10, B14 |
 | B16-pc-round | PC | W13 | S13 | 0 | 23 | 13 (B11 P1 R1) | MOVER (behaviour 1) | 7.7 | B00, B01, B02, B06, B07, B10, B11 +R, B15 |
-| B17-mb-scale | MB | W9 | S9 | 4 | 11 | 14 (B12 P1 R1) | MOVER (behaviour 3) | 8.1 | B00, B01, B02, B16L, B16M, B05, B14 |
+| B17-mb-scale | MB | W9 | S9 | 4 | 11 | 15 (B12 P1 R1 H1; +R2a B17.14) | MOVER (behaviour 3) | 8.5 | B00, B01, B02, B16L, B16M, B05, B14 |
 | B18-pc-content | PC | W14 | S15 | 7 | 28_cont2 | 10 (B9 C1) | MOVER (behaviour 4) | 6.5 | B00, B01, B02, B14, B15, B16, B17 |
 | B19a-mb-contact-instrument | MB | W14 | S14 | 0 | 24_cont | 4 (B4) | EQUAL | 6.1 | B00, B01, B02, B16M, B14, B15, B16, B17 |
 | B19-mb-field-calibration | MB | W15 | S15 | 0 | 26, 26_cont, 27, 27_cont | 49 (B44 P1 R1 H2 BL1) | MOVER (behaviour 15; B19.60 counted, K6 F1) | 24.1 | B00, B01, B02, B16L, B04, B05, B06, B15, B16, B17, B19a, B29 +R |

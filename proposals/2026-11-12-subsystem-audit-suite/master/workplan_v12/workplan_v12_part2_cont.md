@@ -215,7 +215,7 @@ Every file items of two or more batches edit, the permanent surface left out (§
 | `tests/valoria/test_conditional_orders.py` | B19.05, B20.01, B20.06, B20.08, B20.15 | B19 → B20 |  | **not listed** |
 | `tests/valoria/test_degree_ladder_single_owner.py` | B02.09, B05.01, B05.03, B15.03, B24.33 | B02 → B05 → B15 → B24 |  | **not listed** |
 | `tests/valoria/test_mass_battle_army_record.py` | B17.03, B19.04, B19.17, B31.11, B31.12 | B17 → B19 → B31 |  | **not listed** |
-| `tests/valoria/test_mass_battle_maneuvers.py` | B02.07, B19.59, B20.09, B20.10, B31.06 | B02 → B19 → B20 → B31 |  | **not listed** |
+| `tests/valoria/test_mass_battle_maneuvers.py` | B02.07, B17.14 (one of the two lands), B19.59, B20.09, B20.10, B31.06 | B02 or B17 → B19 → B20 → B31 |  | **not listed** |
 | `engine/substrate/descriptors.py` | B04.02, B04.06, B04.07, B38.19, B38.81 | B04 → B38 |  | listed |
 | `modules/combat/vocabulary.py` | B15.01, B15.10, B16.05, B34.07, B18.09 | B15 → B16 → B34 → B18 |  | **not listed** |
 | `modules/mass_battle/` | B16M.03, B06.02, B19.15, B30.03, B30.05 | B16M → B06 → B19 → B30 |  | **not listed** |

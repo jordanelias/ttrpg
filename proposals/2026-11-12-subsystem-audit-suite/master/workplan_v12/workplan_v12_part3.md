@@ -407,7 +407,7 @@ Position numbers in the SERIAL EDGES line above are this table's. The items foll
 - DEPENDS ON: the MB lane's agreement at B02's open (`STAGES.md` "Parallel sessions" rule 6: a session never edits another lane's files); EXISTS-IN-TREE `tests/valoria/test_mass_battle_maneuvers.py::test_envelop_reaches_rear_node`.
 - GLOSSARY: none.
 - COST and TIER: small build; `sonnet`, high.
-- LANDS IT: if the MB lane agrees at B02's open, B02's producer, `Item: B02.07`, `[skip ci]`; otherwise the item leaves this batch at its expunge and is B17's (the B17 block carries it, `UNDECIDED` in this part's receipt).
+- LANDS IT: if the MB lane agrees at B02's open, B02's producer, `Item: B02.07`, `[skip ci]`; otherwise the item leaves this batch at its expunge and is B17's: B17.14 (`workplan_v12_part11.md`) carries the same edit, HELD to land only if no `Item: B02.07` commit exists on its base (repair lane R2a, K1 F1).
 
 ### B02.08 — delete an unused helper · 01_CORE_tests_delete_what_cannot_fail row 7 · BUILD · HASH EQUAL
 - SOURCE: the same file, row 7.

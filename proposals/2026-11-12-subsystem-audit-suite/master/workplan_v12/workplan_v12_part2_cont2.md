@@ -483,7 +483,7 @@
 | 64 | the `conclusion_product` fixture | FI | the B11 second half's item that names it (B11) |
 | 65 | TL-B5.2's standing gate | WR | B21b (no carried text) |
 | 66 | the SC `recites` evidence branch | SC | B32.10 BLOCKED (B32); SYN_B gate 5 rides on it |
-| 67 | CP-T09-05's `deed:rung.ceded` alignment cell; H-209 (wars started by a killing) | IN (content), FA | B21b.10 BLOCKED (B21b) |
+| 67 | CP-T09-05's `deed:rung.ceded` alignment cell; H-209 (wars started by a killing) | IN (content), FA | B21b.10's reward arm and B21b.12's killing arm, each absent at ship in a BUILD item (E-14; R2c, K5 F7) (B21b) |
 | 68 | stake cells on any verb row | WR | §4 row 97 (B38) |
 | 69 | `knot`'s effect (a WR design) | WR | B35.28 BLOCKED (B35): `H2_DECISIONS.md` HD-25 decided a DESIGN-FIRST item before it (§11 C-18) |
 
