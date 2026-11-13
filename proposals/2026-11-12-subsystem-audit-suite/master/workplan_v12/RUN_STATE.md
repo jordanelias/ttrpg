@@ -4,6 +4,8 @@
 
 **Done and committed on `ccr-62958c70-0kjhsw` (PR #602):** head `workplan_v12.md`; body parts 3 to 43 (+ continuations); part 2 (`workplan_v12_part2*.md`, tables, 59 batches); `PATCH_LOG.md`, `H2_DECISIONS.md`, `COVERAGE.md`, `V12_FOR_JORDAN.md`.
 
+**Update (after the lanes returned):** A44 and K1..K10 are done and committed. R1 (Opus, scripted global repairs, receipt `checks/R1_APPLIED.md`) is running; then four item-level repair lanes R2a..d (each reads its CHK files, fixes the open findings by the ladder, lists the rest for Jordan): R2a = K1+K2, R2b = K3+K4, R2c = K5+K6, R2d = K7+K8+K9+K10; then K11, compaction, the Fable verdict. Text below on running lanes is superseded.
+
 **Running at the last write (relaunched after the container restart of 2026-11-13):**
 - A44: `workplan_v12_part44*.md` (B98-dials, B99-nine-retake). If the file is absent or has no boundary row for B99, relaunch from the brief in this session's transcript (input: `workplan_v12_part2.md` §4, 105 settings rows).
 - Check lanes K1..K10 (Sonnet), briefs at `/tmp/claude-0/-home-user-ttrpg/7351887f-4cbe-51b5-ba88-a8b84f6cb379/scratchpad/chk_<k>.txt` (the scratchpad may be gone: the brief is `V12_STRUCTURE_part3.md` §10.1, checks 1 to 11, parts ranges 3-6, 7-11, 12-15, 16-20, 21-24, 25-28, 29-32, 33-35, 36-39, 40-43); output `checks/CHK_K<k>.md`. A lane with no closing section in its CHK file did not finish.
