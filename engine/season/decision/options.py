@@ -511,7 +511,6 @@ def _defence_context(p: Person, q: Question, r: str, records: list, memo: dict) 
     return r in memo["attackers"]
 
 
-
 # The deed kinds a DEFENCE reads: the paired kinds (a patient on the claim) emitted by a VIOLENT opponent-rule row
 # (`data/verbs.py::VIOLENT_VERBS`: `fight`, `capture`), off the table, no kind listed. NARROWED from "any opponent-rule
 # row" [ASSUMPTION; medium; Jordan to correct; revert: drop the `VIOLENT_VERBS` test]: `speak` is an opponent-rule

@@ -670,24 +670,21 @@ def _load_vocation_opposed_by(opposed: dict, vocations) -> dict:
 VOCATION_OPPOSED_BY = _load_vocation_opposed_by(roster_map("vocation_attribute", "opposed_by"), VOCATIONS)
 
 
-def _load_unauthored_attributes(values: dict) -> dict:
-    """`rosters.yaml: unauthored_attributes` (B11 lane A), CLOSED BOTH WAYS against the ten registry keys, each a
-    whole number inside the attribute scale. Refused whole, naming the difference."""
-    from ...substrate.descriptors import ATTRIBUTE_CEILING, ATTRIBUTE_FLOOR, ATTRIBUTES
-    out = dict(values or {})
-    missing, extra = sorted(set(ATTRIBUTES) - set(out)), sorted(set(out) - set(ATTRIBUTES))
-    bad = sorted(k for k, v in out.items() if isinstance(v, bool) or not isinstance(v, int)
-                 or not ATTRIBUTE_FLOOR <= v <= ATTRIBUTE_CEILING)
-    if missing or extra or bad:
-        raise Unspecified(
-            f"`rosters.yaml: unauthored_attributes` is not closed over the ten attributes: no row for {missing}, a "
-            f"row for a non-attribute {extra}, a value outside the scale {bad}", "rosters.yaml",
-            needs="exactly one whole number per `attributes` registry key, inside the scale",
-            law="B11 lane A -- every person holds a score on every attribute; one bundle says what an unauthored one is")
-    return out
-
-
-UNAUTHORED_ATTRIBUTES = _load_unauthored_attributes(roster_map("unauthored_attributes", "values"))
+def unauthored_attributes(pool_default: int) -> dict:
+    """WHAT A PERSON HOLDS ON AN ATTRIBUTE HIS CAST ROW DOES NOT AUTHOR (B11 lane A; Jordan, 2026-11-12: *"social contest
+    ob always 2 is so wrong"*; brief A step 3: persons hold scores): every one of the ten registry keys
+    (`engine.substrate.descriptors.ATTRIBUTES`, their one owner, in its order) at `pool_default` -- `Fixtures
+    pool_default` (H-126), the one owner of the untrained score, handed in by the caller from the realm's own fixtures,
+    as `data/cast.py::capability_of` holds a lifepath key at it. DERIVED, NEVER STORED: a realm built under another
+    `pool_default` seats that score (`test_b11a_scores_and_obstacle`), so an unauthored person's pool is what it was
+    and the score he opposes with is the one he rolls. `harness/populated.py::build_realm` seats it under every
+    person's authored `stats:` (`cast_attributes`, ON since B11 lane A). It describes nobody: per-key values are
+    Jordan's content, and a lifepath or a draw over them is a design not taken here. [ASSUMPTION; medium; Jordan to
+    correct; revert: `build_realm(cast_attributes=False)`.] ⚠ A sweep applied AFTER the build (`harness/arms.py` hands a
+    built world a swept copy) does not reach a seated attribute, as it does not reach a lifepath key held at the
+    build's `pool_default`."""
+    from ...substrate.descriptors import ATTRIBUTES
+    return {key: int(pool_default) for key in ATTRIBUTES}
 
 
 def _load_lifepath_templates(cells: dict, lifepaths, vocations) -> dict:

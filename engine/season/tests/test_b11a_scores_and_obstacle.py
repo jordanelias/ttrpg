@@ -1,7 +1,8 @@
 """B11 lane A -- PERSONS HOLD SCORES, AND THE SOCIAL ROLL'S OBSTACLE IS THE TASK'S DIFFICULTY PLUS ITS NAMED MODIFIERS.
 
-  (3) `build_realm` seats `rosters.yaml: unauthored_attributes` under every person's authored `stats:` (`cast_attributes`
-      ships on), so every person holds a score on every vocation's attribute.
+  (3) `build_realm` seats `data/rosters.py::unauthored_attributes` (`pool_default` on every attribute key, read off the
+      realm's fixtures) under every person's authored `stats:` (`cast_attributes` ships on), so every person holds a score
+      on every vocation's attribute.
   (4) one score, two roles (`10_DICE_one_score_two_roles.md`): `seam/wrappers/pool.py::score` is the base of a person's
       pool and the score his opponent's obstacle halves (`sigma.py::_opposition_of`), so `obstacle_default` never stands in
       for a person. `modules/social_contest/roll.py::obstacle_terms` composes Ob = the task's difficulty
@@ -20,7 +21,7 @@ from ..data import rosters as R
 from ..data import verbs as V
 from ..data import cast
 from ..data.fixtures import DEFAULT_FIXTURES
-from ..gaps import Forbidden, Unspecified
+from ..gaps import Forbidden
 from ..harness import populated
 from ..harness import probes as P
 from ..harness.populated import build_realm, run
@@ -43,7 +44,7 @@ def revert_b11a_scores(monkeypatch) -> None:
     # an earlier item's revert may have swept `populated`'s fixtures into a copy: switch that copy IN PLACE, so a later revert
     # in the same chain that edits the copy (or the original) keeps this switch
     monkeypatch.setitem(populated.DEFAULT_FIXTURES._v, "obstacle_model", "stand_in")
-    monkeypatch.setattr(populated, "UNAUTHORED_ATTRIBUTES", {})
+    monkeypatch.setattr(populated, "unauthored_attributes", lambda pool_default: {})
     monkeypatch.setattr(cast, "attributes_of", lambda r: {})
     for verb in ("interrogate", "arrest", "determine"):          # the three `verb_capability` rows (one dict, read by name)
         monkeypatch.delitem(R.VERB_CAPABILITY, verb)
@@ -80,22 +81,30 @@ def _legacy(inp) -> float:
 
 # ---- (3) the bundle --------------------------------------------------------------------------------------------
 
-def test_the_bundle_is_closed_over_the_ten_attributes_and_refuses_otherwise():
+def test_the_bundle_is_the_ten_attributes_at_pool_default():
     from engine.substrate.descriptors import ATTRIBUTES
-    assert set(R.UNAUTHORED_ATTRIBUTES) == set(ATTRIBUTES)
-    bad = dict(R.UNAUTHORED_ATTRIBUTES)
-    bad.pop(next(iter(bad)))
-    with pytest.raises(Unspecified):
-        R._load_unauthored_attributes(bad)
-    with pytest.raises(Unspecified):
-        R._load_unauthored_attributes({**R.UNAUTHORED_ATTRIBUTES, "attr.body.strength": 99})
+    shipped = R.unauthored_attributes(DEFAULT_FIXTURES.get("pool_default"))
+    assert list(shipped) == list(ATTRIBUTES) and set(shipped.values()) == {DEFAULT_FIXTURES.get("pool_default")}
 
 
 def test_every_realm_person_holds_every_attribute_and_an_authored_one_wins():
     w = build_realm(0)
-    assert all(set(p.attributes) == set(R.UNAUTHORED_ATTRIBUTES) for p in w.persons.values())
-    authored = [p for p in w.persons.values() if p.attributes != R.UNAUTHORED_ATTRIBUTES]
+    bundle = R.unauthored_attributes(w.fixtures.get("pool_default"))
+    assert all(set(p.attributes) == set(bundle) for p in w.persons.values())
+    authored = [p for p in w.persons.values() if p.attributes != bundle]
     assert authored, "no cast row's `stats:` reached a person over the bundle"
+
+
+def test_falsifier_a_realm_built_at_another_pool_default_seats_that_score(monkeypatch):
+    """`Fixtures pool_default` is the one owner of the untrained score (H-126): a realm built under another value seats
+    it on every key a cast row does not author, so a sweep of it is not silently inert where the bundle is seated."""
+    monkeypatch.setitem(populated.DEFAULT_FIXTURES._v, "pool_default", 3)
+    w = build_realm(0)
+    assert w.fixtures.get("pool_default") == 3
+    authored = cast.attributes_of(cast.row("NPC-001"))          # the one cast row whose `stats:` the registry authors
+    for p in w.persons.values():
+        held = {k: v for k, v in p.attributes.items() if not (p.id == "p_npc_001" and k in authored)}
+        assert held and set(held.values()) == {3}, (p.id, p.attributes)
 
 
 # ---- (4) one score, two roles -----------------------------------------------------------------------------------
@@ -139,9 +148,25 @@ def test_the_obstacle_is_the_difficulty_plus_the_ruled_score_term_and_every_term
 def test_falsifier_a_higher_opposing_score_raises_the_obstacle_and_lowers_the_odds():
     from engine.dice_engine.sigma_leverage import record_odds
     obs = [_module().obstacle(_inp(difficulty=1.0, opposition=float(s))) for s in (1, 2, 4, 6)]
-    assert obs == sorted(obs) and len(set(obs)) == 4
+    assert all(a < b for a, b in zip(obs, obs[1:])), obs                 # strictly rising
     fail = [record_odds(2, ob, 0.0)[0] for ob in obs]
-    assert fail == sorted(fail) and fail[0] < fail[-1]
+    assert all(a < b for a, b in zip(fail, fail[1:])), fail              # P(Failure) strictly rising, no step ties
+
+
+@pytest.mark.parametrize("model", ["task", "stand_in"])
+def test_falsifier_a_believers_lie_against_a_person_is_scored_at_the_obstacle_it_is_dealt(model):
+    """`lie` names no vocation (no `verb_capability` row), so nobody holds anything on it and the roll opposes a person
+    at the untrained score (`pool.score`'s fallback, `Fixtures pool_default`): Ob = 1.0 + 2/2 on the task arm. The
+    believer's record (`believed_input`, what the chooser weighs, `odds_weighting: believed`) must compose the SAME
+    obstacle, not the difficulty alone. Both arms: the control composes the stand-in on both sides."""
+    w = P.tiny_world()
+    w.fixtures = w.fixtures.sweep("obstacle_model", model)
+    liar = w.persons["p_mid"]
+    assert "lie" not in R.VERB_CAPABILITY, "the case is a verb naming no vocation"
+    dealt = sigma._composed_obstacle(sigma.contest_input(w, [liar.id], verb="lie", subject="p_low"))
+    believed = sigma.believed_input(liar, "lie", "p_low", w.fixtures, pool=pool.faculty(w, liar, "lie"),
+                                    person_subject=True)
+    assert believed is not None and sigma._composed_obstacle(believed) == dealt == 2.0
 
 
 @pytest.mark.parametrize("opp", [None, 0.0, 1.0, 2.0, 3.0, 7.0])

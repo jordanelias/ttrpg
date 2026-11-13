@@ -102,7 +102,7 @@ from ...queries.inputs import Margin, SocialContestInput
 from ...queries.world_q import proofs, reception
 from ...state.carriers import EFFORT, effort_of
 from ._entry import entry_for
-from .pool import POOL_ADDENDS, _authored_attribute, _capability, _opposing_attribute, faculty, register_pool_addend, score  # noqa: F401  (moved: see pool.py)
+from .pool import POOL_ADDENDS, _authored_attribute, _capability, _opposing_attribute, faculty, register_pool_addend, score, untrained  # noqa: F401  (moved: see pool.py)
 
 # The prize rows' `provider:` string (`rosters.yaml` `contest_subsystems`): the module's one identity
 # (A-25), so the row says the social contest module runs its own prizes. Reached by that string only.
@@ -120,9 +120,11 @@ def _opposition_of(w: Any, subject: Optional[str], verb: str) -> Optional[float]
     attribute is the one that OPPOSES the vocation (`pool._opposing_attribute`, v10 CR-96, AR-44): the row's
     `opposed_by` where it has one, else the row's own.
 
-    ⚠ NEVER THE FALLBACK AND NEVER PRACTICE. A person who holds neither is `None`, so the module falls to
-    `obstacle_default` as it always did; `pool_default` is the roller's stand-in for a pool, not a score
-    anyone holds, and the practice addend raises a pool, not an opposition (`practice_cap`'s note).
+    ⚠ NEVER PRACTICE, AND THE FALLBACK BY ARM. On the shipped `task` arm (`Fixtures obstacle_model`) a person is
+    opposed at `pool.score`, which falls to the untrained score (`pool_default`) where he holds neither, so
+    `obstacle_default` never stands in for a person; on the `stand_in` control arm a person who holds neither is
+    `None`, and the module falls to `obstacle_default` as it did before B11 lane A. The practice addend raises a
+    pool, not an opposition (`practice_cap`'s note), on both arms.
 
     ⚠ v9 SC-01 step 14 DELETED THIS MODULE'S OBSTACLE SITE (`_obstacle_of`; ED-SC-0033 clause (3),
     *the obstacle has a single owner*). What it composed -- `score/2`, the `obstacle_default`
@@ -307,8 +309,10 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
     only from what he holds, and WHERE A FACTOR IS UNKNOWN TO HIM THE ANSWER IS `None`, never a figure:
       * the opposition of a person subject, on a verb that names a capability key: a claim in his
         ledger on that subject at `CAPABILITY_CLAIM + key` (the latest, then the most confident);
-        none held -> unknown. A non-person subject, or a verb naming no key, has no opposition: the
-        module's stand-in applies, and that is known.
+        none held -> unknown. A non-person subject has no opposition (the task's difficulty alone on the
+        task arm, the module's stand-in on the control), and that is known. A person subject on a verb naming
+        no key opposes at the untrained score on the task arm (`pool.untrained`, every person's score on no
+        vocation, so known; the dealt roll reads the same) and has no opposition on the control arm.
       * an examined Record's forgery quality: a property of the Record, held by nobody's claim here
         -> unknown.
       * the room's terms (`reception`, `proofs`) read other persons' ledgers: unknown unless the caller
@@ -323,6 +327,12 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
             return None
         said = max(held, key=lambda c: (c.when, c.round, c.confidence))
         opposition = float(said.value)
+    elif person_subject and subject != p.id and fx.get("obstacle_model") == OBSTACLE_MODEL_TASK:
+        # A VERB NAMING NO KEY (`lie`), ON THE TASK ARM: the roll opposes a person with `pool.score`, which on such a verb is
+        # the untrained score for EVERY person (`pool.untrained`; nothing can be held on no vocation), so it is known,
+        # and the believed obstacle is the dealt one (`test_b11a_scores_and_obstacle`'s believer falsifier). The control
+        # arm keeps `None`: the true roll's `_opposition_of` is `None` there too and both compose the stand-in.
+        opposition = float(untrained(fx))
     if examined_record:
         return None
     room_terms = {}
@@ -498,7 +508,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
 
     RESOLVED -> dict(status, module, resolver, pool, ob, net, leverage, settled_margin, ob_terms)   # the entry's Margin + the record
                  # + the margin's fraction settled by the act's own draw (CP-T01-04), the integer `degree_of` grades
-    REFUSED  -> dict(status, why, pool, ob)   # S27.4: ob > obstacle_refusal_multiple x pool
+    REFUSED  -> dict(status, why, module, resolver, pool, ob, ob_terms)   # S27.4: ob > obstacle_refusal_multiple x pool
 
     ⚠ A RETURN THAT IS NOT A `Margin` RAISES, NAMING THE ENTRY (v9 SC-01 step 15, Lens B: *the provider
     returns a Margin*). It is a software defect in the module -- a winner where a margin belongs is the

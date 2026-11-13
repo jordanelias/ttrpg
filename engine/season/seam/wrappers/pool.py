@@ -106,4 +106,12 @@ def score(w: Any, p: Any, verb: str, attribute: Any = None) -> int:
     attr = (attribute or _authored_attribute)(p, verb)
     if attr is not None:
         return int(attr) if have is None else max(int(attr), int(have))
-    return int(have if have is not None else w.fixtures.get("pool_default"))
+    return int(have) if have is not None else untrained(w.fixtures)
+
+
+def untrained(fx: Any) -> int:
+    """THE UNTRAINED SCORE: what a person brings to a vocation he holds nothing on, `Fixtures pool_default` (H-126) --
+    `score`'s fallback, read here once. On a verb that names NO vocation (no `verb_capability` row: `lie`) nobody can hold
+    a key or an attribute for it, so this is EVERY person's score there, and a believer knows it without asking anyone
+    (`sigma.believed_input` reads it for a person he opposes on such a verb, so the odds he weighs are the odds dealt)."""
+    return int(fx.get("pool_default"))

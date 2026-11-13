@@ -6969,11 +6969,13 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     # referent and `wounded_with` stamps a man below his ceiling for himself, so the act mix moves. `depths[6]` still does NOT exceed
     # `depths[3]` (14 against 16). CONTROL: `test_cp_t03_08_tend_on_the_wounded.py::revert_cp_t03_08` applied for the session (in process) reads the old value and passes.
     # B11 lane A, both commits rebased (re-pinned once in B01.02): (16, 14) -> (11, 12), A RE-RECORD WITH THE UNITS THAT MOVED IT: the dead-end formations stop (`challenge` off its
-    # plain referents, the Record sub-kind rule) and the act mix moves. `depths[6]` EXCEEDS `depths[3]` by one: lane A's walk
-    # on its branch tree (`headless.build_world(0)`, seven seasons, `none`) read the same pair and found at 3 `term.matured x3
-    # -> record.created -> record.created -> finding.made -> record.created -> term.matured -> record.created -> train.refused
-    # -> exchange.refused` (11) and at 6 the same chain with one more `term.matured` at its head (12): a STAGE link on an
-    # otherwise identical chain, neither through `proposition.uttered` [the walk was not re-run on this tree; the pair is equal].
+    # plain referents, the Record sub-kind rule) and the act mix moves. `depths[6]` EXCEEDS `depths[3]` by one, so THE WALK, as
+    # the message below demands, RE-RUN ON THIS TREE (B01 batch close; this test's own sweep, `none`, 7 seasons, deepest
+    # maturation chain, oldest first; about 1 s): n=3 (11 links, matured 69) `exchange.refused, train.refused, record.created,
+    # term.matured, record.created, finding.made, record.created, record.created, term.matured, term.matured, term.matured`;
+    # n=6 (12 links, matured 98) the SAME chain with a fourth trailing `term.matured`. Both run through `record.created`,
+    # neither through `proposition.uttered`; the extra link is a trailing stage on an otherwise identical chain, as at IN-50 and
+    # the B-I close above: the depth clause is not discriminating, and the COUNT below still is.
     # CONTROL: `test_b11a_scores_and_obstacle.py::revert_b11a_scores` with `test_b11a_duel_reach.py::revert_b11a`, applied for the session (in process), reads the old value.
     assert (depths[3], depths[6]) == (11, 12), (
         f"the maturation depth ceiling moved: {depths}. This is a MEASUREMENT of a mixed chain "
@@ -9513,8 +9515,8 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # `engine/season`) reads 2 and passes.
     # ⚠⚠ B11 lane A, both commits rebased (re-pinned once in B01.02): `min(hi)` 1 -> 2, READ OFF this test's own `hi` on this tree: no one-season case reaches `tell` now, by the
     # act mix the lane moves (`challenge` and `accept` take scenes where a grievance stands; the dead-end formations stop). WHICH
-    # of the two explanations the message below names is current was NOT isolated [ASSUMPTION; low: crowding by the newly
-    # reachable duel pair; the intra-season channel is untouched]. CONTROL: `test_b11a_scores_and_obstacle.py::revert_b11a_scores` with `test_b11a_duel_reach.py::revert_b11a`, applied for the session (in process), reads the old value (1).
+    # of the two explanations the message below names is current was NOT isolated [UNVERIFIED: neither the cause nor which of the
+    # lane's two commits moved it was isolated; crowding by the newly reachable duel pair is a guess, not a reading]. CONTROL: `test_b11a_scores_and_obstacle.py::revert_b11a_scores` with `test_b11a_duel_reach.py::revert_b11a`, applied for the session (in process), reads the old value (1).
     assert min(hi) == 2, (
         f"the shortest case reaching `tell` runs {min(hi)} seasons. 1 is the INTRA-SEASON channel "
         "`U2` built (a claim deposited by an earlier ROUND of the SAME season) being the binding "

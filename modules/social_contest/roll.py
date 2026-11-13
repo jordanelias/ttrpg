@@ -87,14 +87,17 @@ def _chance_floor_cap(pool: float, ceiling: float) -> Optional[float]:
 
 
 def obstacle(inp: SocialContestInput) -> float:
-    """What stands against one matter's draw: the opposition's score halved, or the `H-127` stand-in
-    where there is no score, BOUNDED ABOVE by the ceiling.
+    """What stands against one matter's draw, BOUNDED ABOVE by the ceiling: `obstacle_terms`'s first member. On the
+    shipped task arm (`inp.difficulty` set, B11 lane A) the task's difficulty plus the opposing person's score halved
+    where a person opposes, and the difficulty alone where none does; on the control arm (`difficulty` `None`) the
+    opposition's score halved, or the `H-127` stand-in where there is no score.
 
     ⚠ THE RULING IS `score/2 PLUS MODIFIERS` AND IT APPLIES TO A PERSON. Jordan, 2026-08-14, carried
     live in `dice_engine.degree_from_net`'s docstring: an opposed obstacle is *"their corresponding
     score/2 plus whatever specific modifiers exist for them in that instance"*. The instance
-    modifiers are the room's terms and an examined document's forgery quality, below. A record, a rung or a proposition has no score and takes
-    `obstacle_default`. **NO "BASE Ob BY SCALE"** (Jordan, 2026-09-05).
+    modifiers are the room's terms and an examined document's forgery quality, below (and, on the task arm, the task's
+    difficulty). A record, a rung or a proposition has no score: on the task arm it takes the difficulty alone, on the
+    control arm `obstacle_default`. **NO "BASE Ob BY SCALE"** (Jordan, 2026-09-05).
 
     ⚠ THE CEILING (`H-213`, swept; Contradiction 3 of the proceedings reconciliation, resolved): a
     ceiling caps how hard a matter can get. M-7 fails without one -- at the 1D pool floor

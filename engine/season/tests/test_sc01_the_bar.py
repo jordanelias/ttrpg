@@ -182,7 +182,7 @@ DUKE, SEAT, PARTY, WANT = "p_high", "off_duke", "p_mid", "prop_bar_duke_want"
 # dates and determines nobody ("0 determined, 2 fired"). ATTRIBUTION, in process on this tree (scratch, not kept): with
 # `revert_b11a` and `revert_b11a_scores` applied stability/35/7 meets every assertion again (e5d27cd7...); with
 # `revert_b11a_scores` alone it misses as above, so the move is the reach's, not the obstacle's (this world is `tiny_world`,
-# which seats no `unauthored_attributes`, and `BAR_FIXTURES` reads the control obstacle). stability/95/7, lane A's own re-trace
+# which seats no unauthored bundle (`data/rosters.py::unauthored_attributes`), and `BAR_FIXTURES` reads the control obstacle). stability/95/7, lane A's own re-trace
 # (its sweep: the 15 convictions at 7 seasons, seed blocks 0-160, stopped at the first hit), meets every assertion on this tree
 # (858b7a77...) and on the batch base. The bar is an existence claim on SELECTED seeds (above), not a rate.
 # [ASSUMPTION; medium; Jordan to correct; revert: restore stability/35/7 with `revert_b11a`.]
@@ -358,12 +358,17 @@ def test_the_walk_is_false_for_a_determination_the_ambition_raised_beside_a_fire
     clerk out of his ambition (`need`, occasion `[ROOT]`). That determination's `causes[]` reach no
     firing -- so THE BAR's walk is not satisfied by a firing merely preceding a determination.
 
-    ⚠ B11 LANE A: READ WITH THE LANE AT ITS REVERT (`test_b11a_duel_reach.py::revert_b11a`), the world it was measured on --
-    `test_cp_t03_01`'s precedent for a pattern a later mover took out of reach. On this tree stability/8/5 determines nobody
-    (its Record sub-kind rule moves the Duke's act mix: two `case.opened`, no `matter.determined`; with the rule emptied in
-    process the control passes), and a sweep of this test over the 15 convictions found no run with the pattern (seeds 0-159
-    at 5 seasons, 0-99 at 6, 0-59 at 4 and at 7; the producer's scratch, not kept). [GAP: no shipped-tree control world for
-    the walk's falsity; the bar's walk is still checked true on `PROCEEDINGS`.]"""
+    ⚠ B11 LANE A: THIS CONTROL DOES NOT OBSERVE THE SHIPPED TREE. It runs with BOTH of the lane's commits at their revert
+    (`test_b11a_duel_reach.py::revert_b11a` and `test_b11a_scores_and_obstacle.py::revert_b11a_scores`), the world it was
+    measured on -- `test_cp_t03_01`'s precedent for a pattern a later mover took out of reach -- so what it shows is that
+    the walk is false for such a determination on the tree BEFORE the lane, not on the tree that ships. On the shipped tree
+    stability/8/5 determines nobody (the Record sub-kind rule moves the Duke's act mix: two `case.opened`, no
+    `matter.determined`; with the rule emptied in process the control passes), and a sweep of this test over the 15
+    convictions found no run with the pattern (seeds 0-159 at 5 seasons, 0-99 at 6, 0-59 at 4 and at 7; the producer's
+    scratch, not kept). WHAT WOULD OBSERVE IT: one shipped-tree run, with no revert applied, in which a `matter.determined`
+    lands after a `date.fired` and its `causes[]` do not reach the firing -- found by a wider conviction x seed x season
+    sweep than the one above, or by a world planted to convene and dock the case in one season. [GAP: no shipped-tree
+    control world for the walk's falsity; the bar's walk is still checked true on `PROCEEDINGS`, which is shipped-tree.]"""
     from .test_b11a_duel_reach import revert_b11a
     revert_b11a(monkeypatch)
     from .test_b11a_scores_and_obstacle import revert_b11a_scores

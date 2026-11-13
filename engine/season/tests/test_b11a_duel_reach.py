@@ -42,7 +42,7 @@ A, B = "p_mid", "p_low"            # `tiny_world`: both stand at the hearth (`wi
 FAR = "p_high"                     # elsewhere
 
 #: `build_realm(s)` then one season (`run(1, s, w=w)`), on this commit's tree; PRE is the parent tree's -- rebased (C3-A2):
-#: the head after B00 (`e8e283c`), read there under PYTHONHASHSEED=0 (was `1424aa7`'s d4c83c8c... / d9f3be70... / 285fb92a...).
+#: the base of B01 (`8727d1d`), read there under PYTHONHASHSEED=0 (was `1424aa7`'s d4c83c8c... / d9f3be70... / 285fb92a...).
 #: POST re-pinned in B01.02 to the rebased reach's own reading (B01.01's tree, PYTHONHASHSEED=0; was the branch's 2b1679bb... /
 #: e6976ba8... / e92efc2a..., `1424aa7`'s world, discarded per C3-A2).
 POST = {0: "b4619054a2e47cb87ae4a99da6c98f03", 1: "8b24ff0864bce9f4541f7864ad4de21d", 2: "37baa06098d392eaca4066e4df18aa40"}
@@ -122,7 +122,7 @@ def test_the_import_refuses_an_opposed_row_whose_second_side_is_not_its_subject(
         V._load_opposed_without_prize(["tell"])
 
 
-def test_fight_does_not_form_on_a_held_challenge():
+def test_the_violence_context_roster_lists_no_duel_for_fight():
     assert "duel" not in V.VIOLENCE_CONTEXTS["fight"]
 
 

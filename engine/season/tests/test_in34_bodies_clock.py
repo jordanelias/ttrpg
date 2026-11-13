@@ -202,9 +202,7 @@ def test_in34_a_seat_holders_death_by_age_deposits_claims_naming_him_where_he_st
     assert len(on_here) >= 1, (
         f"no one at {place} holds a `person.died` claim naming the dead holder: the death reached "
         "nobody (H-206 not holding)")
-    # B11 lane A: AND a read the person deposited by his OWN act (`Claim.doer` is he) is set aside too -- an away man who tried
-    # an act on the dead holder learns `exists:Person` 0 from his own refusal, which is no news of the death reaching him
-    # (MEASURED at seed 0, arm 0.25: `p_npc_021`, one such read, once every person holds a score and the act mix moved).
+    # `c.doer != p` (B11 lane A): an away man who tried an act on the dead holder reads `exists:Person` 0 off his OWN refusal, which is no news of the death reaching him; dropping the filter reds arm 0.25 (re-run at the B01 close).
     on_away = {p: [c for c in cs if c.id not in at_build and c.doer != p] for p, cs in named(w, holder, away).items()}
     on_away = {p: cs for p, cs in on_away.items() if cs}
     assert not on_away, f"{len(on_away)} persons out of reach hold a claim naming him: {sorted(on_away)}"

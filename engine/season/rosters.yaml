@@ -1561,36 +1561,18 @@ rosters:
       # graded inquiries' key: questioning is inquiry under contest), `arrest` -> `arms` (laying hands on a man, the
       # body's key), `determine` -> `argue` (a bench weighing a case). Before them each rolled `pool_default` for
       # every person and opposed at the stand-in (H-312: `interrogate`'s odds did not move with any score). `lie` (v11
-      # CR-27's row, which landed after lane A's base) carries no row here and none is added by this lane: it pools and
-      # opposes at `pool_default`, as CR-27 shipped it. [ASSUMPTION; medium; Jordan to correct; revert: drop the three rows.]
+      # CR-27's row, which landed after lane A's base) carries no row here and none is added by this lane: it pools at
+      # `pool_default` and, on the shipped `task` arm, a person opposes it at `pool_default` too (`pool.score`'s fallback,
+      # `pool.untrained`), which a believer reads the same way (`sigma.believed_input`); CR-27 shipped it at the
+      # `obstacle_default` stand-in, which the `stand_in` arm still composes. [ASSUMPTION; medium; Jordan to correct;
+      # revert: drop the three rows.]
       interrogate: "inquiry"
       arrest:      "arms"
       determine:   "argue"
 
-  unauthored_attributes:
-    source: >-
-      B11 lane A (Jordan, 2026-11-12: *"social contest ob always 2 is so wrong"*; brief A step 3: persons hold scores).
-    note: >-
-      WHAT A PERSON HOLDS ON AN ATTRIBUTE HIS CAST ROW DOES NOT AUTHOR -- one whole number per registry key
-      (`references/descriptor_registry.yaml: attributes`, the ten), closed both ways and refused at import otherwise
-      (`data/rosters.py::_load_unauthored_attributes`). `harness/populated.py::build_realm` seats it under every person's
-      authored `stats:` (`cast_attributes`, which ships ON since this row), so every person holds a score on every
-      vocation's attribute and is opposed by it (`seam/wrappers/sigma.py::_opposition_of`), never by a stand-in.
-      SHIPPED AT 2 ON EVERY KEY, which is `pool_default` (H-126): an unauthored person's pool is what it was, and the
-      score he opposes with is the one he rolls (`10_DICE_one_score_two_roles.md`). It is not a description of anyone:
-      the values are Jordan's content, and a lifepath or a draw over them is a design not taken here. [ASSUMPTION;
-      medium; Jordan to correct; revert: `build_realm(cast_attributes=False)`.]
-    values:
-      attr.body.strength:      2
-      attr.body.endurance:     2
-      attr.body.agility:       2
-      attr.mind.focus:         2
-      attr.mind.acuity:        2
-      attr.mind.will:          2
-      attr.mind.perception:    2
-      attr.social.attunement:  2
-      attr.social.charisma:    2
-      attr.social.grace:       2
+  # B11 lane A's `unauthored_attributes` bundle (2 on every attribute key) is NOT a row here: its value is `Fixtures
+  # pool_default` (H-126), the one owner of the untrained score, so it is derived at the build
+  # (`data/rosters.py::unauthored_attributes`) and a `pool_default` sweep reaches it.
 
   task_difficulty:
     source: >-
@@ -1640,7 +1622,9 @@ rosters:
       as before CR-20 -- so a held key of 0 stays "under one die" without an attribute and is overridden by one
       (`seam/wrappers/sigma.py::faculty`; the plan's literal "larger of the held key and `pool_default`" would raise
       a held 0 to 2 against `test_odds_of`'s pin). `_opposition_of` reads the larger of the held key and the
-      authored attribute (the row's `opposed_by` where it has one, CR-96), never practice, never the fallback.
+      authored attribute (the row's `opposed_by` where it has one, CR-96), never practice; the fallback by arm: on the
+      shipped `task` arm (`Fixtures obstacle_model`, B11 lane A) a person holding neither opposes at `pool_default`
+      (`pool.py::score`), on the `stand_in` control arm he reads `None` and the module takes `obstacle_default`.
       EACH ROW'S GROUND, so a reviewer can check it against the vocation's own text and not against taste:
       `copying` -> Focus (`attr.mind.focus`): the vocation is `tell`/`speak` (a claim relayed as it was
       held) and NPC-088's case, a repeated multi-week task of copying a text (`cases/exercises/NPC-088.yaml`),
