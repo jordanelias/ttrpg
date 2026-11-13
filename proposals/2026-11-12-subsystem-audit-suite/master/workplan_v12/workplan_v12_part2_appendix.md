@@ -230,9 +230,9 @@ for b in nodes:
     seen = {}
     for p in P['batches'][b]['positions']: seen.setdefault(p['pos'], p)
     pos[b] = len(seen); states[b] = Counter(stnorm(p['cells'][3]) for p in seen.values())
-CALIB = {'B02', 'B05', 'B15', 'B19', 'B19a'}
+CALIB = {'B02', 'B05', 'B15', 'B19', 'B19a', 'B98', 'B99'}   # B98: its probes (part 44 EST); B99: the long re-take (repair lane R1)
 est = {b: round(0.4 * pos[b] + 2.5 + (2 if b in CALIB else 0), 1) for b in pos}
-est['B98'] = 8.0; est['B99'] = 5.0
+est.setdefault('B98', 8.0); est.setdefault('B99', 5.0)   # the structure's guesses, kept only for a batch with no positions (repair lane R1: part 44 gives both)
 def hours_path(res):
     best, prev = {}, {}
     for h in res['topo']:
