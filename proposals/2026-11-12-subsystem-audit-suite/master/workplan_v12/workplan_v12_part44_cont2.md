@@ -27,32 +27,32 @@ The batch block's head, its position table and items B98.01 to B98.22 are in `wo
 - HASH MOVERS: every world with an unopposed entry onto held land. EXPECTED RED UNTIL B98.99: the `_realm_goldens` readers.
 - REVERT: `entry_draw` → `off`.
 - DEPENDS ON: V12 Batch B23, B23.01, B23.05, B23.07.
-- COST and TIER: calibration; `sonnet`, high. LANDS IT: B98's producer; `Item: B98.62`, `[skip ci]` (if it runs).
+- COST and TIER: calibration; `sonnet`, high; `opus` reads the reading against the source's target before the commit (U8; repair lane V1, `CHK_K11.md` finding 6). LANDS IT: B98's producer; `Item: B98.62`, `[skip ci]` (if it runs).
 
 ### B98.63 — three Thread settings stay at control · rows 74 to 76; B35; CP-T07-04, AM-E-07, WR-01 · BLOCKED (design: no target reading) · HASH EQUAL
 - SOURCE: part 2 §4 rows 74 to 76 (row 76 decided there, C-08); part 36's line.
 - SETTINGS, each with its reason: (74) `self_mend_ob_step` = 0: "the share is the measurement; it must differ between arms or the knob is dead" (CP-T07-04); (75) `coherence_band_floors` = `()`: "`[OPEN — Jordan tuning]`, AM-E-07"; (76) `RESILIENCE_GAIN` = 0, swept `(0, 1, 3)`: "WR-01's falsifier is a sign, 'at gain > 0 a practitioner with resilience takes strictly less'": a sweep with no reading that chooses among its arms.
 - INSTRUCTION: none. OWNER OF THE TARGET: the WR lane (74, 76); Jordan (75, "tuning").
-- GATE: each read on the closing tree → its control (R2). B99 QUOTES: the three as left.
+- GATE: on the closing tree, `FIX(self_mend_ob_step)` → 0, `FIX(coherence_band_floors)` → `()`, `SYM(modules.threadwork.params, RESILIENCE_GAIN)` → 0 (its owner after B35.05) (R2). B99 QUOTES: the three as left.
 - DEPENDS ON: V12 Batch B35. COST and TIER: reading; `sonnet`, low. LANDS IT: no commit; B98.99's body.
 
 ### B98.64 — `legibility_curve` stays empty · row 77; B35; `IS-B3-WR-04` · BLOCKED (content: Jordan's curve) · HASH EQUAL
 - SOURCE: part 2 §4 row 77; part 36's line ("`legibility_curve` = `()` (legibility 1.0 for everyone) … 'Jordan to author', `U5d_WR_zero…`; `IS-B3-WR-04` `[BLOCKED: the curve's values — Jordan]`").
 - SETTING: `legibility_curve` = `()`. INSTRUCTION: none. OWNER: Jordan (D-19), listed in the PR body.
-- GATE: read → `()` (R2). B99 QUOTES: everyone legible at 1.0; A-43's zero-coherence person is not unknowable yet.
+- GATE: `FIX(legibility_curve)` on the closing tree → `()` (R2). B99 QUOTES: everyone legible at 1.0; A-43's zero-coherence person is not unknowable yet.
 - DEPENDS ON: V12 Batch B35. COST and TIER: reading; `sonnet`, low. LANDS IT: no commit; B98.99's body.
 
 ### B98.65 — the thread's seed values and `crossing_step` stay as seeded · rows 78, 79; B35, B35.18; `09_WR_B…` · BLOCKED (design: no target reading) · HASH EQUAL
 - SOURCE: part 2 §4 rows 78, 79; part 36's line: "`overweave_step`, `fatigue_scale_per_will`, `ops_per_contact`'s `k`, the `fatigue_cost` column = the design set's values (+1 obstacle, ×5, Focus − 1) `[ASSUMPTION; medium; Jordan to correct]`, shipped as data `status: seed`; set by B98 ('the joint calibration' …; `IS-B3` §5.6 `[BLOCKED: CONTENT]`); target: none stated"; with them the thread pool's re-expression on `pool_of`; `crossing_step` = 1 `[ASSUMPTION]`, `status: seed`, "odds from how far past", no target.
 - SETTINGS: as listed, at their seed values. INSTRUCTION: none. OWNER: the joint calibration (WR lane, no batch) and Jordan for the content (PR body).
-- GATE: each read on the closing tree → its seed value (R2). B99 QUOTES: as left.
+- GATE: `git grep -n -E "overweave_step|fatigue_scale_per_will|ops_per_contact|fatigue_cost|crossing_step" engine/season modules` on the closing tree → each at the seed value B35 shipped (part 2 §4 rows 78, 79; `crossing_step` 1) (R2). B99 QUOTES: as left.
 - DEPENDS ON: V12 Batch B35, B35.18. COST and TIER: reading; `sonnet`, low. LANDS IT: no commit; B98.99's body.
 
 ### B98.66 — the Thread ground's amounts and the knot strain: set in B35 or left · row 80; B35.01, B35.02, B35.24, B35.26 · BLOCKED (design: no target reading), unless B35 set them · HASH EQUAL
 - SOURCE: part 2 §4 row 80 ("IN-BATCH (B35.26, B35.24) if the design items B35.01, B35.02 state a target, else BLOCKED (design: no target reading)").
 - CONDITION (U5): read B35.24's and B35.26's commits. If they set the values on their designs' targets, record "set by B35.2x @<sha>" (not a member). Otherwise the values stand as shipped and this position records why.
 - INSTRUCTION: none beyond the record. OWNER OF THE TARGET: B35.01's and B35.02's designs.
-- GATE: the ground operation's amounts and `knot_strain` read on the closing tree (R2). B99 QUOTES: as left.
+- GATE: `git grep -n -E "knot_strain|thread_operations" engine/season/rosters.yaml engine/season/queries/person_q.py` on the closing tree → the ground operation's amounts and the `knot_strain` threshold as B35.24 and B35.26 shipped them, quoted (R2) `[ASSUMPTION: the two files B35's items name for these keys]`. B99 QUOTES: as left.
 - DEPENDS ON: V12 Batch B35, B35.01, B35.02, B35.24, B35.26. COST and TIER: reading; `sonnet`, low. LANDS IT: no commit; B98.99's body.
 
 ### B98.67 — veterancy, troop upkeep and the drill step stay at control · rows 81 to 83; B31; `04_MB_campaign_party_economy`; `IS-MB-B2` · BLOCKED (design: no target reading; carrier for 82) · HASH EQUAL
@@ -66,13 +66,13 @@ The batch block's head, its position table and items B98.01 to B98.22 are in `wo
 - SOURCE: part 2 §4 rows 84 to 87; part 38's line.
 - SETTINGS, in `engine/season/data/fixtures.py`, each with its reason: (84) `obligation_level` = `None`, `obligation_arrears` = 1.0, `sealed_obligation` = 1.0 (proposed `minor`, 0.5, 0): "VEN_A's gate reads Arm 1's band counts 'read and reported'; 'every value is recalibrated with OBS §4 step 5'"; (85) `penance_weight` = 0 (first value 2): "`pardon` odds printed exactly at `penance_weight` 0 and 2"; (86) `credit_terms` flat 1.0 (proposed `{Overwhelming: 1.1, Success: 1.25, Partial: 1.5}`): none stated; (87) `stakes_ob.debt` = `off` (sweep {off, on}): none stated.
 - INSTRUCTION: none (the proposed values have no reading to keep them by). OWNER OF THE TARGET: OBS §4 step 5's re-centring (84), the FA/SC lanes (85 to 87).
-- GATE: each read → its control (R2). B99 QUOTES: as left.
+- GATE: on the closing tree, `FIX(obligation_level)` → `None`, `FIX(obligation_arrears)` → 1.0, `FIX(sealed_obligation)` → 1.0, `FIX(penance_weight)` → 0, `FIX(credit_terms)` → flat 1.0, `FIX(stakes_ob)` → its `debt` arm `off` (R2). B99 QUOTES: as left.
 - DEPENDS ON: V12 Batch B33, B33.38. COST and TIER: reading; `sonnet`, low. LANDS IT: no commit; B98.99's body.
 
 ### B98.69 — the Church's goal of its liberties stays off · row 88; B33.24; PAP_C · BLOCKED (carrier: a place filter on `deed_doers`) · HASH EQUAL
 - SOURCE: part 2 §4 row 88; part 38's line: "`goal_church_liberties_kept` shipped off (written commented out, B33.24); set by no batch until `data/goals.py`'s owner builds a place filter for `deed_doers` (PAP_C: 'requested, not built here')".
 - SETTING: the goal row in `engine/season/goals.yaml`, commented out. INSTRUCTION: none. OWNER: `data/goals.py`'s owner (the carrier, `V12_STRUCTURE_part2.md` §5.7).
-- GATE: the row is still commented out on the closing tree (R2). B99 QUOTES: as left.
+- GATE: `git show <B33.24's sha> -- engine/season/goals.yaml` names the row; `grep -n "<that row's key>" engine/season/goals.yaml` on the closing tree → its line still begins with `#` (R2). B99 QUOTES: as left.
 - DEPENDS ON: V12 Batch B33, B33.24. COST and TIER: reading; `sonnet`, low. LANDS IT: no commit; B98.99's body.
 
 ### B98.70 — a seat's believed holder enters the stance term · row 89; B38.06; `20_NARRATIVE_C` gates 3, 4 · BUILD (flip) · HASH MOVER(behaviour)
@@ -93,7 +93,7 @@ The batch block's head, its position table and items B98.01 to B98.22 are in `wo
 - GATE: `python -m pytest engine/season/tests/test_narrative_dues.py engine/season/tests/test_strife_credit.py -q` → pass; gates 2 to 4 quoted; `HASH(0, 2)` recorded. World (ii) (`build_realm`, six seasons) is B99's (B99.01 step 6).
 - HASH MOVERS: every world with a lapsed due. EXPECTED RED UNTIL B98.99: the `_realm_goldens` readers.
 - REVERT: `dues_valence` → 0.0. DEPENDS ON: V12 Batch B38, B38.07, B38.10.
-- COST and TIER: calibration; `sonnet`, high. LANDS IT: B98's producer; `Item: B98.71`, `[skip ci]`.
+- COST and TIER: calibration; `sonnet`, high; `opus` reads the reading against the source's target before the commit (U8; repair lane V1, `CHK_K11.md` finding 6). LANDS IT: B98's producer; `Item: B98.71`, `[skip ci]`.
 
 ### B98.72 — a teller's credit reads graded accord · row 91; B38.22; `30_WR_G` commit 4 · BUILD (flip) · HASH MOVER(behaviour)
 - SOURCE: part 2 §4 row 91; B38.22: "Flip only on the strife guard passing and not blind, as CR-79 shipped `regime_gain` (H-275's method)"; "`accord` a **declared mover** at every telling between two persons with a shared axis"; B38.22's GATE recorded the strife guard's reading at `accord` as "the evidence B98 reads".
@@ -123,7 +123,7 @@ The batch block's head, its position table and items B98.01 to B98.22 are in `wo
 - GATE: `python -m pytest engine/season/tests/test_own_side.py -q` → pass; the counts per seed quoted; `HASH(0, 2)` recorded.
 - HASH MOVERS: every member with a hostile stance toward his own side. EXPECTED RED UNTIL B98.99: the `_realm_goldens` readers.
 - REVERT: `stamp_own_side` → `False`. DEPENDS ON: V12 Batch B38, B38.53.
-- COST and TIER: calibration; `sonnet`, high. LANDS IT: B98's producer; `Item: B98.74`, `[skip ci]`.
+- COST and TIER: calibration; `sonnet`, high; `opus` reads the reading against the source's target before the commit (U8; repair lane V1, `CHK_K11.md` finding 6). LANDS IT: B98's producer; `Item: B98.74`, `[skip ci]`.
 
 ### B98.75 — the Revival gathers: the sway draw's dial leaves 0 (lands after B98.76) · row 94; B38.55; `31_WR_B`; A-92 · BUILD (flip) · HASH MOVER(behaviour)
 - SOURCE: part 2 §4 row 94 ("TARGETED (A-92)"); A-92: "The dial ships at zero until the calibration batch sets it"; `proposals/31_WR_B_the_revival_gathers.md` "The gate", expected on `sway_on` against `sway_off` "with `cohort_convictions` on in both": "2. Steps per person-season are above 0 and below 1 at the median seed, and the set of persons who moved is not the same at every seed. The calibration target for the four numbers is a house's live core moving by no more than one step on any axis in four seasons at the median seed `[ASSUMPTION; Jordan to correct]`. 3. Varfell's gap on the two Einhir affiliations is `rising` at some seeds and `stalled` or `falling` at others over five seeds … 4. The Church's core does not shrink in the seeds where the Revival's grows by more than the off arm's seed spread … 5. Entrenched-world arm (`sway_hold` at its highest swept value): stands barely move, and executed acts per person-season and the story census's rate (`23_STORY_D`) are not below the off arm's by more than its seed spread (A-80). 6. The no-null-scene reading is unchanged between arms (A-81)." Read at two seasons (six and four in the source; A-114).
@@ -140,11 +140,12 @@ The batch block's head, its position table and items B98.01 to B98.22 are in `wo
 - SOURCE: part 2 §4 row 95; part 41's line: "`cohort_convictions` = `False` (B38.56); set by B98; target: `test_a_cohort_under_a_house_with_a_core_starts_within_half_a_step_of_it` green with the setting on and `build_realm` hashes moved, declared (A-91 (3): 'the populace starts at the core')".
 - SETTING: `engine/season/data/fixtures.py` (`cohort_convictions`) = `False` (B38.56; read at build by `boot/realm.py::seat_cohorts`). New value: `True`.
 - INSTRUCTION: `cohort_convictions` → `True`, one line; read the named test with it on.
+- PRE-FLIP RULE (repair lane V1, `CHK_K11.md` finding 8): before the edit, run `test_a_cohort_under_a_house_with_a_core_starts_within_half_a_step_of_it` under a scoped override of `DEFAULT_FIXTURES` to `cohort_convictions = True` (restored in `try/finally`); flip only if it is green; red ships nothing, keeps `False` and records the reading (U4).
 - FALSIFIER and CONTROL: the test red at `True`; B38.56's ("a cohort under a faction with no `REGIME_CORES` row given a conviction; the same half-step settled the same way at every seed"). Control arm (a build-time key: `HASH`'s after-build sweep cannot reach it): with `DEFAULT_FIXTURES` overridden to `False` before the build (a scoped override restored in `try/finally`), `build_realm(0).content_hash()` and the two-season hash equal the previous flip's after-readings.
 - GATE: `python -m pytest engine/season/tests/test_territorial_subsistence.py -q` → pass (the named test green at `True`); `build_realm(0).content_hash()` → moved, recorded; `HASH(0, 2)` recorded.
 - HASH MOVERS: the build hash and every seeded world (A-91 (3), declared). EXPECTED RED UNTIL B98.99: `test_go07_canonical_digest.py` (`BUILD[0]`, `SHIPPED`), the `_realm_goldens` readers.
 - REVERT: `cohort_convictions` → `False`. DEPENDS ON: V12 Batch B38, B38.56.
-- COST and TIER: edit; `sonnet`, high. LANDS IT: B98's producer; `Item: B98.76`, `[skip ci]`.
+- COST and TIER: edit; `sonnet`, high; `opus` reads the reading against the source's target before the commit (U8; repair lane V1, `CHK_K11.md` finding 6). LANDS IT: B98's producer; `Item: B98.76`, `[skip ci]`.
 
 ### B98.77 — a vacant head seat is a mandatory question · row 96; B38.61; `30_WR_A` commit 3; `30_WR_E` C7 · BUILD (flip) · HASH MOVER(behaviour)
 - SOURCE: part 2 §4 row 96; part 41's line: "target: `30_WR_E` clause C7's lift for LOOP row L9 (whose switch it is, `30_WR_D` §2) above the spread across fork groups, eight draw seeds, window two seasons"; B38.71: "**C7 it compounds** — reads 'the fork lift of §2 for each loop row of `30_WR_D` §2 (a = the loop's first event, b = its next), eight draw seeds, window two seasons'; fails 'the lift is within the spread across fork groups …, or a occurs in all forks or none'; control 'the loop's switch at control'".
@@ -155,18 +156,18 @@ The batch block's head, its position table and items B98.01 to B98.22 are in `wo
 - GATE: `python -m pytest engine/season/tests/test_strife_flows.py engine/season/tests/test_storybar.py -q` → pass; C7's L9 line quoted; `HASH(0, 2)` recorded (moved only in a season with a vacant head seat: "none at build").
 - HASH MOVERS: "any season with a vacant head seat". EXPECTED RED UNTIL B98.99: the `_realm_goldens` readers if a head seat falls vacant in two seasons.
 - REVERT: `era_mandatory_vacancy` → `False`. DEPENDS ON: V12 Batch B38, B38.61, B38.70, B38.71.
-- COST and TIER: calibration; `sonnet`, high. LANDS IT: B98's producer; `Item: B98.77`, `[skip ci]`.
+- COST and TIER: calibration; `sonnet`, high; `opus` reads the reading against the source's target before the commit (U8; repair lane V1, `CHK_K11.md` finding 6). LANDS IT: B98's producer; `Item: B98.77`, `[skip ci]`.
 
 ### B98.78 — the stake sizes stay off: no row is staked · row 97; B38.66; `23_STORY_A` · BLOCKED (carrier: no item declares stake cells on any verb row) · HASH EQUAL
 - SOURCE: part 2 §4 row 97; part 41's line: "`shortfall_scale` = `off`, `stake_body`, `stake_stores`, `stake_standing` at their proposed sizes (B38.66); B98 member `BLOCKED (v12: a carrier is owed — no item declares stake cells on any verb row)`; target once a row is staked: `23_STORY_A` gate 2 ('step 3 occurs at two seeds or more and on fewer than one failure in five')".
 - SETTINGS: `shortfall_scale` = `off` and the three stake sizes. INSTRUCTION: none. OWNER: a carrier that declares stake cells on verb rows (none in v12).
-- GATE: read → `off` (R2). B99 QUOTES: as left.
+- GATE: on the closing tree, `FIX(shortfall_scale)` → `off` and `FIX(stake_body)`, `FIX(stake_stores)`, `FIX(stake_standing)` → unset (R2) `[ASSUMPTION: the four are `Fixtures` keys, as B38.66 names them]`. B99 QUOTES: as left.
 - DEPENDS ON: V12 Batch B38, B38.66. COST and TIER: reading; `sonnet`, low. LANDS IT: no commit; B98.99's body.
 
 ### B98.79 — the caste practice factors stay at 1.0 · row 98; B38.85 · BLOCKED (content: Jordan's) · HASH EQUAL
 - SOURCE: part 2 §4 row 98; part 41's line: "`caste_practice` factors `earns`, `holds`, `heard` = 1.0 on every row (B38.85); … the values are Jordan's content ('Jordan to author')".
 - SETTING: the three factors on every `caste_practice` row. INSTRUCTION: none. OWNER: Jordan (D-19), listed in the PR body.
-- GATE: read → 1.0 (R2). B99 QUOTES: as left.
+- GATE: `ROW(engine/season/rosters.yaml, caste_practice)` on the closing tree → the three factors 1.0 on every row (R2). B99 QUOTES: as left.
 - DEPENDS ON: V12 Batch B38, B38.85. COST and TIER: reading; `sonnet`, low. LANDS IT: no commit; B98.99's body.
 
 ### B98.80 — the world is generated from its tables · row 99; B39.01 to B39.03; `PROC_A` PG-1, `PROC_B` PG-2; A-50 · BUILD (flip) · HASH MOVER(behaviour), and the build hash
@@ -183,7 +184,7 @@ The batch block's head, its position table and items B98.01 to B98.22 are in `wo
 - SOURCE: part 2 §4 row 100 ("TARGETED at two seasons"; corrected here, U6, U9); B39.10: `worldgen.yaml` "`prologue_years: 5` (A-51) … converted to seasons as `5 × len(SEASONS_OF_YEAR)` … (20 at four seasons)"; "The shipped build passes `prologue=0`"; PG-4's reading "seeds 0–19 at `prologue=2` (twenty seasons in the source; A-114)". The shipped value A-51 rules is five years, twenty seasons: flipping it makes every later build run twenty seasons before tick 0, past the cap of every reading after it, B98.99's re-pin included; flipping to 2 would ship a value no source states.
 - SETTING: `build_realm`'s `prologue` = 0.
 - INSTRUCTION: read PG-4 at `prologue=2` on this base for the record (`python -m engine.season.harness.worldgen --range 20 --prologue 2`, from the cache, B39.10's reading) and quote it; flip nothing.
-- GATE: the shipped build passes `prologue=0` on the closing tree (R2).
+- GATE: `python -c "import inspect; from engine.season.boot.realm import build_realm; print(inspect.signature(build_realm).parameters['prologue'].default)"` on the closing tree → 0 (R2).
 - B99 QUOTES: PG-4's story inventory at A-51's twenty seasons (B99.01 step 6, "twenty seasons in the source: B99's argv"); whether to ship the prologue on is Jordan's (P10).
 - DEPENDS ON: V12 Batch B39, B39.10. COST and TIER: reading; `sonnet`, high (the cached runs). LANDS IT: no commit; B98.99's body.
 
@@ -196,14 +197,14 @@ The batch block's head, its position table and items B98.01 to B98.22 are in `wo
 - GATE: `python -m pytest engine/season/tests/test_world_cards.py -q` → pass; the variety reading quoted; `HASH(0, 2)` recorded.
 - HASH MOVERS: every world that draws a card. EXPECTED RED UNTIL B98.99: the `_realm_goldens` readers.
 - REVERT: `cards` → `False`. DEPENDS ON: V12 Batch B39, B39.15, B39.17; B12b.45 (the Tensions registry).
-- COST and TIER: calibration; `sonnet`, high. LANDS IT: B98's producer; `Item: B98.82`, `[skip ci]` (if it runs).
+- COST and TIER: calibration; `sonnet`, high; `opus` reads the reading against the source's target before the commit (U8; repair lane V1, `CHK_K11.md` finding 6). LANDS IT: B98's producer; `Item: B98.82`, `[skip ci]` (if it runs).
 
 ### B98.83 — the trail of a covert deed does not fade: no rate is stated · row 102; B39.17; `PROC_C` PG-5 (d) · BLOCKED (design: no value stated) · HASH EQUAL
 - SOURCE: part 2 §4 row 102 (TARGETED there; corrected here, U9); `proposals/21_PROCEDURAL_C_prologue_and_case_seeds.md`: every `fade` row "`{per_season: 0, cap: 0}`  # 0 ships: the control arm, today's behaviour"; the reading "(d) **Erosion is real.** With `fade.per_season > 0`, the right rate falls as the proxy is seated later" names no value for `per_season` or `cap`.
 - SETTINGS: `engine/season/rosters.yaml` (`covert_kinds.fade`, every member `{per_season: 0, cap: 0}`).
 - TARGET, recorded: PG-5 (d), read at seasons 0, 1, 2 (4, 8, 12 in the source; A-114).
 - INSTRUCTION: none (U9). OWNER OF THE VALUE: the FI lane (PROC_C's reading names none).
-- GATE: every `fade` row read → `{per_season: 0, cap: 0}` (R2). B99 QUOTES: as left.
+- GATE: `ROW(engine/season/rosters.yaml, covert_kinds)` on the closing tree → every member's `fade` reads `{per_season: 0, cap: 0}` (R2). B99 QUOTES: as left.
 - DEPENDS ON: V12 Batch B39, B39.17. COST and TIER: reading; `sonnet`, low. LANDS IT: no commit; B98.99's body.
 
 ### B98.84 — a marriage may bear a child · row 103; B39.24, B39.26; `STORY_B` gate 2 · BUILD (flip) · HASH MOVER(behaviour)
@@ -215,7 +216,7 @@ The batch block's head, its position table and items B98.01 to B98.22 are in `wo
 - GATE: `python -m pytest engine/season/tests/test_births.py -q` → pass; the reading quoted; `HASH(0, 2)` recorded (moved only if a realm marriage bears within two seasons).
 - HASH MOVERS: every world with a marriage of bearing age at the year's turn. EXPECTED RED UNTIL B98.99: the `_realm_goldens` readers if moved.
 - REVERT: `birth_rate` → 0.0. DEPENDS ON: V12 Batch B39, B39.24, B39.26; Batch B37 (the authored ages, A-15).
-- COST and TIER: calibration; `sonnet`, high. LANDS IT: B98's producer; `Item: B98.84`, `[skip ci]`.
+- COST and TIER: calibration; `sonnet`, high; `opus` reads the reading against the source's target before the commit (U8; repair lane V1, `CHK_K11.md` finding 6). LANDS IT: B98's producer; `Item: B98.84`, `[skip ci]`.
 
 ### B98.85 — the age of majority, if B39 did not set it · row 104; B39.27, B39.28; `STORY_B` gate 4; A-15 · BUILD (flip, conditional) · HASH MOVER(behaviour)
 - SOURCE: part 2 §4 row 104 ("IN-BATCH (B39.28 if the ages are authored), else TARGETED"); part 42's line: "`majority_age` = 0; set in this batch by B39.28 if the cast's ages are authored at the batch's open (`STORY_B` head: 'ships on with the ages'), otherwise by B98; target: `16 × len(SEASONS_OF_YEAR)` and `STORY_B` gate 4".
@@ -226,7 +227,7 @@ The batch block's head, its position table and items B98.01 to B98.22 are in `wo
 - GATE: the readings quoted; the test file B39.27 names → pass; `HASH(0, 2)` recorded.
 - HASH MOVERS: "every seeded world with a person under majority". EXPECTED RED UNTIL B98.99: the `_realm_goldens` readers.
 - REVERT: `majority_age` → 0. DEPENDS ON: V12 Batch B39, B39.27, B39.28; Batch B37 (the ages).
-- COST and TIER: calibration; `sonnet`, high. LANDS IT: B98's producer; `Item: B98.85`, `[skip ci]` (if it runs).
+- COST and TIER: calibration; `sonnet`, high; `opus` reads the reading against the source's target before the commit (U8; repair lane V1, `CHK_K11.md` finding 6). LANDS IT: B98's producer; `Item: B98.85`, `[skip ci]` (if it runs).
 
 ### B98.86 — an empty founded place may be abandoned · row 105; B39.30; `STORY_C` gates 2, 3; A-55 · BUILD (flip) · HASH MOVER(behaviour)
 - SOURCE: part 2 §4 row 105; part 42's line: "`abandonment_draw` = 'off', with `abandonment_pool`, `abandonment_ob`, `abandonment_patience`; set by B98 (A-55: 'licenses turning it on as a declared mover after its reading'); target: `STORY_C` gate 2 and 3 ('the rung stands at the end at some and is abandoned at others'; 'the season of abandonment differs between seeds')"; B39.30 step 4: "their values set at the calibration with the A-5 sampler (starting points: `pool_default`, the `routine` difficulty level, two seasons)".
@@ -236,7 +237,7 @@ The batch block's head, its position table and items B98.01 to B98.22 are in `wo
 - GATE: `python -m pytest engine/season/tests/test_abandonment.py engine/season/tests/test_storybar.py -q` → pass; the reading quoted; `HASH(0, 2)` recorded.
 - HASH MOVERS: every world with an empty founded rung. EXPECTED RED UNTIL B98.99: the `_realm_goldens` readers if moved.
 - REVERT: `abandonment_draw` → `"off"`. DEPENDS ON: V12 Batch B39, B39.30, B39.31.
-- COST and TIER: calibration; `sonnet`, high. LANDS IT: B98's producer; `Item: B98.86`, `[skip ci]`.
+- COST and TIER: calibration; `sonnet`, high; `opus` reads the reading against the source's target before the commit (U8; repair lane V1, `CHK_K11.md` finding 6). LANDS IT: B98's producer; `Item: B98.86`, `[skip ci]`.
 
 ## Readings
 

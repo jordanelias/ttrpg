@@ -71,7 +71,7 @@ The batch block's head (the GATE lines, BATCH GATE, RE-PIN, IDS, UNDECIDED U1 to
 - SOURCE: part 2 §4 row 36; B12b's `DIALS AT CONTROL` line: "`season_terms` = 1.0 on every multiplier and `hardship` 0 (B12b.01's control); … CP-T10-03's winter values are `[ASSUMPTION; medium; Jordan to correct]`, no reading — … unless Jordan names the values".
 - SETTINGS: `engine/season/rosters.yaml` / `data/fixtures.py` (`season_terms`, every multiplier 1.0; `hardship` 0), as B12b.01 placed them.
 - INSTRUCTION: none. OWNER OF THE VALUES: Jordan (D-19); listed in the PR body.
-- GATE: the `season_terms` multipliers and `hardship` read on the closing tree → 1.0 and 0 (R2). B99 QUOTES: as left.
+- GATE: `ROW(engine/season/rosters.yaml, season_terms)` on the closing tree → every multiplier 1.0 and `hardship` 0 (R2; `hardship` is read by `FIX(hardship)` instead where B12b.01 placed it in `data/fixtures.py`, as the SETTINGS line allows). B99 QUOTES: as left.
 - DEPENDS ON: V12 Batch B12b, B12b.01. COST and TIER: reading; `sonnet`, low. LANDS IT: no commit; B98.99's body.
 
 ### B98.31 — shares, hunger loss and regrowth stay at control · rows 37 to 39; B12b.19, B12b.35, B12b.36, B12b.38 · BLOCKED (design: no target reading) · HASH EQUAL
@@ -88,7 +88,7 @@ The batch block's head (the GATE lines, BATCH GATE, RE-PIN, IDS, UNDECIDED U1 to
 - SOURCE: part 2 §4 row 40; B34's `DIALS AT CONTROL` line (part 25_cont): "set by: none in v12 (the list is CL-MGMT's content, held …); target: none stated (A-104 names examples, not a list)"; part 2 §8 (CL-MGMT held).
 - SETTING: `engine/season/rosters.yaml` (`management_orders`) = `[]` (B34.10).
 - INSTRUCTION: none. OWNER: Jordan's list, through CL-MGMT when its trigger fires (part 2 §8); listed in the PR body.
-- GATE: `management_orders` in `engine/season/rosters.yaml` → `[]` on the closing tree (R2). B99 QUOTES: no management order is offered; R-04's management conjunct reads at this.
+- GATE: `ROW(engine/season/rosters.yaml, management_orders)` on the closing tree → `[]` (R2). B99 QUOTES: no management order is offered; R-04's management conjunct reads at this.
 - DEPENDS ON: V12 Batch B34, B34.10. COST and TIER: reading; `sonnet`, low. LANDS IT: no commit; B98.99's body.
 
 ### B98.33 — hands and spoilage stay at control · rows 41, 42; B12c.02, B12c.03; CP-T08-01, CP-T08-03 · BLOCKED (design: no target reading) · HASH EQUAL
@@ -155,7 +155,7 @@ The batch block's head (the GATE lines, BATCH GATE, RE-PIN, IDS, UNDECIDED U1 to
 - SOURCE: part 2 §4 row 49; part 26's line: "('CONTROL. Flip seed 1. [shape from MV E4; no magnitude sourced]', 27_MB_A §4)".
 - SETTING: `orders.obey.in_contact` = 0 (B19's `obey` block).
 - INSTRUCTION: none. OWNER OF THE TARGET: the MB lane (a magnitude for obedience in contact).
-- GATE: the `obey` block's `in_contact` read on the closing tree → 0 (R2). B99 QUOTES: as left.
+- GATE: `git grep -n "in_contact" modules/mass_battle engine/season references` on the closing tree → the `obey` block's `in_contact` reads 0 (R2) `[ASSUMPTION: the block's file is the one B19's `obey` items edit (`modules/mass_battle/core/contact.py::_obey_terms`) or a registry it reads; the grep prints it wherever it is]`. B99 QUOTES: as left.
 - DEPENDS ON: V12 Batch B19. COST and TIER: reading; `sonnet`, low. LANDS IT: no commit; B98.99's body.
 
 ### B98.41 — an elected seat keeps its conferral fallback · row 50; B21c.03; CR-35 (8); H-80 · BLOCKED (design: no computed route; H-80) · HASH EQUAL
@@ -163,14 +163,14 @@ The batch block's head (the GATE lines, BATCH GATE, RE-PIN, IDS, UNDECIDED U1 to
 - SETTING: `FILLED_BY["elected"]` (B21c.03's owner), only if B21c.03 stopped.
 - INSTRUCTION: read B21c.03's commit or its STOPPED record: if it did not stop, this position records "not a member" and closes; else flip nothing.
 - OWNER OF THE TARGET: an election that executes in computed play (H-80).
-- GATE: `FILLED_BY["elected"]` read on the closing tree (R2). B99 QUOTES: as left.
+- GATE: `SYM(engine.season.state.gate, FILLED_BY)` on the closing tree → its `elected` entry as B21c.03 left it (the conferral fallback present), quoted (R2). B99 QUOTES: as left.
 - DEPENDS ON: V12 Batch B21c, B21c.03. COST and TIER: reading; `sonnet`, low. LANDS IT: no commit; B98.99's body.
 
 ### B98.42 — the Church Influence bands and the untested triggers stay off: their reading is past two seasons · rows 51, 52; B21d.06 to B21d.09; CR-89, CR-90 · BLOCKED (A-114: target past two seasons) · HASH EQUAL
 - SOURCE: part 2 §4 rows 51, 52 (HD-26; row 52 decided there); part 29's `DIALS AT CONTROL` lines: the CI band triggers' target "each flip kept only if CR-90's arm moves the reading in the ruled direction and the strife guard closes no terminal route" (CR-89's CONTROL); "CI starts at 28 with a season cap of ±5, so it reads at most 38 after two seasons and no CI band can be crossed in any seeded realm before season 3 (arithmetic on the shipped `[ASSUMPTION]` values, not a run)"; row 52: each Turmoil and goal-row trigger of B21d.07 to B21d.09 "whose flip CR-90's two-season arm does not support (equal arms)".
 - SETTINGS: B21d.06's four Church Influence band switches (CI ≥ 40, 55, 60, 65 and 80) = off; the B21d.07 to B21d.09 switches each B21d's close left off (read their commit bodies).
 - INSTRUCTION: none; flip nothing (`workplan_v12.md` §6).
-- GATE: each switch read on the closing tree → off (R2).
+- GATE: on the closing tree, `FIX(<switch>)` for each of B21d.06's switches (the names its commit body records) and `FIX(turmoil_violence_relief_on)`, `FIX(turmoil_vassal_war_on)`, `FIX(nation_functions_on)` (B21d.07 to B21d.09's WHERE) → each off (R2).
 - B99 QUOTES: CR-90's arm at B99's horizon (B99.01 step 6): the Church Influence reading per seed and whether any band is crossed, and each untested trigger's two arms; whether to flip on it is Jordan's.
 - DEPENDS ON: V12 Batch B21d, B21d.06 to B21d.09. COST and TIER: reading; `sonnet`, low. LANDS IT: no commit; B98.99's body.
 
@@ -178,14 +178,14 @@ The batch block's head (the GATE lines, BATCH GATE, RE-PIN, IDS, UNDECIDED U1 to
 - SOURCE: part 2 §4 row 53; part 29_cont's line: "`wear_per_season` = 0 for `worship`, `templar_quarters`, `school` … (CR-106 gives no target)".
 - SETTING: the three kinds' `wear_per_season` rows = 0 (B11F1's content rows).
 - INSTRUCTION: none. OWNER OF THE TARGET: CR-106 (SE lane).
-- GATE: the three rows read on the closing tree → 0 (R2). B99 QUOTES: as left.
+- GATE: `ROW(engine/season/rosters.yaml, wear_per_season)` on the closing tree → the three kinds' rows read 0 (R2). B99 QUOTES: as left.
 - DEPENDS ON: V12 Batch B11F1. COST and TIER: reading; `sonnet`, low. LANDS IT: no commit; B98.99's body.
 
 ### B98.44 — `window_responses` stays empty · row 54; B20 (`IS-MB-03` step 5) · BLOCKED (content: no authored row) · HASH EQUAL
 - SOURCE: part 2 §4 row 54; part 30's line: "set by no batch (content: CHAR's cells, G-3); B98 lists it `BLOCKED (content: no authored row)`".
 - SETTING: `window_responses` = empty (B20.19).
 - INSTRUCTION: none. OWNER: the cast's content (CHAR's cells, G-3; Jordan), listed in the PR body.
-- GATE: read on the closing tree → empty (R2). B99 QUOTES: an unplayed commander's window answer is the default; R-04.c5 (iii) reads at it.
+- GATE: `ROW(engine/season/rosters.yaml, window_responses)` on the closing tree → empty (R2). B99 QUOTES: an unplayed commander's window answer is the default; R-04.c5 (iii) reads at it.
 - DEPENDS ON: V12 Batch B20, B20.19. COST and TIER: reading; `sonnet`, low. LANDS IT: no commit; B98.99's body.
 
 ### B98.45 — every doctrine's commander stays in reserve; the forward post is read, not shipped · row 55; B20.17; CHO gate 3 · BLOCKED (content: which doctrine rides forward) · HASH EQUAL
@@ -216,7 +216,7 @@ The batch block's head (the GATE lines, BATCH GATE, RE-PIN, IDS, UNDECIDED U1 to
 - HASH MOVERS: every world where a tied teller is weighed. EXPECTED RED UNTIL B98.99: the `_realm_goldens` readers.
 - REVERT: `tie_gain` → 0.
 - DEPENDS ON: V12 Batch B25, B25.20; Batch B35 (the knot reader `tied()` reads, if it moved there).
-- COST and TIER: calibration; `sonnet`, high. LANDS IT: B98's producer; `Item: B98.47`, `[skip ci]`.
+- COST and TIER: calibration; `sonnet`, high; `opus` reads the reading against the source's target before the commit (U8; repair lane V1, `CHK_K11.md` finding 6). LANDS IT: B98's producer; `Item: B98.47`, `[skip ci]`.
 
 ### B98.48 — a sentence moves the hearers' regard · row 58; B27.04; SC_C "Gate" · BUILD (flip) · HASH MOVER(behaviour)
 - SOURCE: part 2 §4 row 58; part 31's line: "SC_C 'Gate': 'With `sentence_gain = 1`: regard for the convicted falls for every witness, by more for one given a positive stance toward the Duke and by less for one given a negative stance (three hearers planted at −25, 0, +25; the run prints three distinct values in that order)', swept 0 / 1 / 2, 'proposed first live value 1.0'".
@@ -226,7 +226,7 @@ The batch block's head (the GATE lines, BATCH GATE, RE-PIN, IDS, UNDECIDED U1 to
 - GATE: `PYTHONHASHSEED=0 python -m pytest engine/season/tests/test_verdict_witnessed.py -q` → pass; the three values quoted; `HASH(0, 2)` recorded.
 - HASH MOVERS: every world where a sentence is witnessed. EXPECTED RED UNTIL B98.99: the `_realm_goldens` readers.
 - REVERT: `sentence_gain` → 0.0.
-- DEPENDS ON: V12 Batch B27, B27.03, B27.04. COST and TIER: calibration; `sonnet`, high. LANDS IT: B98's producer; `Item: B98.48`, `[skip ci]`.
+- DEPENDS ON: V12 Batch B27, B27.03, B27.04. COST and TIER: calibration; `sonnet`, high; `opus` reads the reading against the source's target before the commit (U8; repair lane V1, `CHK_K11.md` finding 6). LANDS IT: B98's producer; `Item: B98.48`, `[skip ci]`.
 
 ### B98.49 — `docket_crossing_floors` stays empty · row 59; B27; TL §8 row B4.1 · BLOCKED (content: TL B6.n, held) · HASH EQUAL
 - SOURCE: part 2 §4 row 59; part 31's line: "TL §8 row B4.1 names the control `()` only; the floors are authored with the ladders, TL B6.n, content held for Jordan".
@@ -263,7 +263,7 @@ The batch block's head (the GATE lines, BATCH GATE, RE-PIN, IDS, UNDECIDED U1 to
 - SETTINGS: `engine/season/data/fixtures.py` (`stamp_flow_within` = `False`; `flow_salience_gain` = 0; `flow_office_gain` = 0, if B11F2.09 built it).
 - INSTRUCTION: read B11F2.10's state on `main`. Both triggers' batches closed long before S23, so the held row's own trigger has fired: the HELD row is by then an item of the batch that fired it, or `STOPPED` (`V12_STRUCTURE_part3.md` §7.9: "a trigger that fires makes an item of the batch that fired it, or `STOPPED` if that batch has closed"). This position flips nothing either way and records which.
 - OWNER OF THE TARGET: CR-103's decision rule, run by whoever takes the fired held row (the 0.1 stop of B98 presents it).
-- GATE: the three read on the closing tree → control (R2). B99 QUOTES: as left.
+- GATE: on the closing tree, `FIX(stamp_flow_within)` → `False`, `FIX(flow_salience_gain)` → 0, `FIX(flow_office_gain)` → 0 (or `None` where B11F2.09 did not build it) (R2). B99 QUOTES: as left.
 - DEPENDS ON: V12 Batch B11F2, B11F2.09, B11F2.10; Batch B21s, B21b. COST and TIER: reading; `sonnet`, low. LANDS IT: no commit; B98.99's body.
 
 ### B98.53 — an army's recovery after a field stays off · row 63; B22; `IS-MB-B3`; `27_MB_E` §5 · BLOCKED (content: values not established) · HASH EQUAL
@@ -305,7 +305,7 @@ The batch block's head (the GATE lines, BATCH GATE, RE-PIN, IDS, UNDECIDED U1 to
 - SETTINGS: the terms B22.01 lists, each absent (0).
 - INSTRUCTION: open B22.01's merged design; record which terms it names with a target reading. Flip nothing.
 - STOPS IF: the design states a target reading for a term: the position stops and is reported at the 0.1 stop (the flip is written from that text).
-- GATE: each listed term read on the closing tree → absent (R2). B99 QUOTES: as left.
+- GATE: for each term B22.01's merged design lists, `git grep -n "<term>" engine/season modules` on the closing tree → absent (R2); where the design lists none: no gate, the row ships nothing (named in B98.99's body). B99 QUOTES: as left.
 - DEPENDS ON: V12 Batch B22, B22.01. COST and TIER: reading; `sonnet`, low. LANDS IT: no commit; B98.99's body.
 
 ### B98.58 — six social obstacle steps stay at 0 · rows 68, 69; B28; S1-B, S1-D · BLOCKED (design: no target reading) · HASH EQUAL
