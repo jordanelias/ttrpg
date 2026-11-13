@@ -504,7 +504,7 @@ Not in this batch, and where each is: `SYN_B` edits 1, 3, 4 (B32); `COL_D` edit 
 - COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B39's producer; `Item: B39.15`, `[skip ci]`.
 
-### B39.16 — arrivals take name and birth from the generator · `PROC_D` PG-7 (g) · POINTER
+### B39.16 — arrivals take name and birth from the generator · `PROC_D` PG-7 (g) · POINTER · HASH —
 `PROC_D` (g) is `PROC_B` (d) "as reconciled" and lands as B39.04 (`engine/season/loop/census.py::_individuate`: name and `born` from `generate_person` keyed by the demand; nothing of the interior written at CENSUS). Its test is `engine/season/tests/test_census_generated_arrival.py` ("proposal B's … covers (g)"); its gate is B39.04's (the `04` PART E row 9 case: a person individuated by a `dispatch` to a post nobody holds acts next season; the same demand under the same seed individuates the same person). (g′) is held with the docket (B39.18).
 
 ### B39.17 — case seeds, leaving patterns, fade, solvability, the inquiry scenario · `PROC_C` PG-5 · BUILD · HASH EQUAL

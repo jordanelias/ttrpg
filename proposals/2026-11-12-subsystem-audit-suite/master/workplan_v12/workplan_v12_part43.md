@@ -448,7 +448,7 @@ Not in this batch, and where each is (each member's parts are dispositioned once
 - COST and TIER: edit (content); `sonnet`, `medium` (BYZ-G); one `opus` read of the band table.
 - LANDS IT: B40's producer; `Item: B40.12`, `[skip ci]`.
 
-### B40.13 — the treaty gate breeds its own offence · BYZ-G item 2 · BLOCKED (v12: a carrier is owed: the place-filtered `deed_doers` form in `data/goals.py`)
+### B40.13 — the treaty gate breeds its own offence · BYZ-G item 2 · BLOCKED (v12: a carrier is owed: the place-filtered `deed_doers` form in `data/goals.py`) · HASH —
 - SOURCE: BYZ-G "Item 2", "Exact edits" row 2; `proposals/15_INSTITUTIONS_PAPACY_C_consecration_and_deed_ledger.md` "Exact edits" 4 and its `[UNVERIFIED]` block (the place filter "is requested, not built here"); U4 §3.4 (BYZ_G: "INCOMPLETE: item 2 blocked").
 - What is missing: the row `goal_kommerkiarios_side_roads` "**ships off** until `data/goals.py` gains the place filter PAPACY-C requests for its own `deed_doers` row (deeds whose claim subject lies under a named rung); with the filter, the row's `under:` names the treaty ground." No item in v12 builds that form (`grep -l "place filter"` over this directory's parts and `master/instructions/` finds none at this read), and `goals.yaml` has no switch by which a row ships off (`grep -n "enabled\|active:" engine/season/goals.yaml` → none). Owner: `data/goals.py`'s owner (CHAR; `12_ARCS_arcs_as_staged_goals`).
 - What lands when the carrier exists (BYZ-G, copied): the row

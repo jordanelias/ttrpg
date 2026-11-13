@@ -223,12 +223,12 @@ Words, paths and the hash note are the part's head's (the file this one continue
 - COST and TIER: small build (with data rows); `sonnet`, `high`; the values are Jordan's (D-19: none drafted here; the source says "Jordan to author").
 - LANDS IT: B38's producer; `Item: B38.85`, `[skip ci]`.
 
-### B38.86 — vote blocks · `U5d_SE` edit 5 · POINTER (Batch B21: `U5d_FA_owed_edits` §4)
+### B38.86 — vote blocks · `U5d_SE` edit 5 · POINTER (Batch B21: `U5d_FA_owed_edits` §4) · HASH —
 - What the pointed section does: "`U5d_FA_owed_edits.md` §4 (`faction_q.weight` and the territory weight, authored as `rosters.yaml: tables.territory_weight` keyed by territory id; a `Rung` field is forbidden, `04` §B.3, U1 ledger F-12). No second table." Landed in Batch B21; `block_lean` (B38.80) reads it.
 - Target files and symbols: `S/queries/faction_q.py::weight`; `S/rosters.yaml: tables.territory_weight`.
 - Gate: none here; B38.80's `block_lean` tests read it.
 
-### B38.87 — farm work · `U5d_SE` edit 6 · POINTER (Batch B12c: CP-T08-01)
+### B38.87 — farm work · `U5d_SE` edit 6 · POINTER (Batch B12c: CP-T08-01) · HASH —
 - What the pointed section does: "`work` is already a verb row and a member of `COHORT_MOVES`; its yield reading is plan CP-T08-01's. Sequenced after edits 1–2 land" (D-68). CP-T08-01 lands in Batch B12c (A19's placement: "B12c gets … CP-T08-01").
 - Target files and symbols: `verb_table.yaml: work`; the labour reader CP-T08-01 builds.
 - Gate: none here; `work` is read in B38.88's flip reading (a cohort's share of `work` acts after the flip).

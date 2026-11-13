@@ -6,7 +6,7 @@ The batch block's head, its position table and items B39.01 to B39.17 are in the
 
 ---
 
-### B39.18 — the docket, and an arrival binding a card · `PROC_D` §5 and (g′) · HELD (PG-6's openings-per-season reading past season 8)
+### B39.18 — the docket, and an arrival binding a card · `PROC_D` §5 and (g′) · HELD (PG-6's openings-per-season reading past season 8) · HASH —
 `PROC_D` §5 (decision D-3, "RULED B behind a test (A-52)") and (g′) are not built here. The trigger is the source's own: "built only after PG-6's reading shows cards read at build run dry (openings per season falling to zero in a long game)"; "read the openings-per-season curve past season 8, and decide on that reading." That reading is past the two-season cap before B99 (D-17), so it cannot be taken by any close of this plan before B99: the position leaves for the held table (§7.9) at this batch's expunge, with this trigger. When it fires, the item is: the docket's carrier is "a Proposition or Record the seat-holder utters at `convene`, which the bound persons' choosers then meet as a classed referent (`propositions_heard`, CR-28)", never goal rows minted on other persons (design-first for that carrier, `opus`; needs `14_VERBS_BINDING_B_sittings`, B32); (g′) takes the same carrier; plan text "B10-18:183" and "B10-19:95" are amended then, by the ruling. Files it would touch: `engine/season/world_cards.yaml` (`family: docket`), `engine/season/loop/resolve.py` or the `convene` effect, `engine/season/worldgen.yaml` (`docket_size`, `arrival_card`).
 
 ### B39.19 — a besieged town's larder · `U5d_STORY` §1 · BUILD · HASH MOVER(behaviour)
@@ -258,10 +258,10 @@ The batch block's head, its position table and items B39.01 to B39.17 are in the
 - COST and TIER: small build; `sonnet`, `high`; one `opus` read of gates 2 and 4 (`SYN_B`'s implementation block).
 - LANDS IT: B39's producer; `Item: B39.32`, `[skip ci]`.
 
-### B39.33 — `foreign_kinds` beside `unrowed_acts` · `17_CENSUS_C1B_02` W-2 · POINTER (non-carry)
+### B39.33 — `foreign_kinds` beside `unrowed_acts` · `17_CENSUS_C1B_02` W-2 · POINTER (non-carry) · HASH —
 U3 §4.1 row 87 and §1 item 39 send "`17_CENSUS_C1B_02_wires` W-2" to this batch as "the `arc.py` build-on-case item". The file's own `Reconciled:` line corrects that row at the tree: "W-2 edits `aperture.py` only and depends on nothing in `12_ARCS_case_on_the_realm.md` …, while the `arc.py` item is W-1, which builds on no case. The order constraint the cut expresses is that `12_ARCS_case_on_the_realm.md`'s `match_beats` (B39) lands after W-1's entry. So both W-1 and W-2 land in B36." Nothing of the file lands here. The order constraint is kept as a dependency of B39.11 (`match_beats` after W-1, Batch B36). Gate of W-2, for H2's check that B36 carries it: `PYTHONHASHSEED=0 python -m engine.season.harness.aperture 2 0` prints the `FOREIGN` line (three seasons in the source; A-114); `engine/season/tests/test_aperture.py` green.
 
-### B39.35 — CR-85's hooks: the build · CR-85 (ED-IN-0331) · HELD (B39.07's design merged and naming a build)
+### B39.35 — CR-85's hooks: the build · CR-85 (ED-IN-0331) · HELD (B39.07's design merged and naming a build) · HASH —
 The intake entry orders a design and states no build (its gate: "a design file naming the carrier … and its falsifier"; "hash none for the design"). B39.07 writes that design; its point (5) states the build as items, or "no build". The build is not written here: D-18 ("a build whose design is unmerged at its batch's open is HELD and leaves for the held list at the expunge"). Trigger: B39's PR merged with the design not held back, and the design's (5) naming a build. When it fires, the items are the design's, in this plan's item form, landed in the WR lane's next open batch (or `STOPPED` if none remains before B98); the CR-85 design §2's FALSIFIER (2) is its gate, read at two seasons. Files it may touch (from the CR-85 design §2): `engine/season/data/cast.py` (`capability_of`, the template expansion), `engine/season/rosters.yaml: tables: lifepath_templates` (the goal-commit column), `engine/season/harness/populated.py::seed_goals`, and B39.03's `worldgen.yaml: lifepaths` if the design makes the two tables one.
 
 ## Readings

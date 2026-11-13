@@ -124,7 +124,7 @@ UNDECIDED (second half):
 - COST and TIER: edit; `sonnet`, `high`.
 - LANDS IT: B38's producer; `Item: B38.53`, `[skip ci]`.
 
-### B38.54 — leaving a creed or a head seat is a move of the era · `20_NARRATIVE_D` edit 4 · POINTER (`B12a.05`)
+### B38.54 — leaving a creed or a head seat is a move of the era · `20_NARRATIVE_D` edit 4 · POINTER (`B12a.05`) · HASH —
 - What the pointed section does: `20_NARRATIVE_D` edit 4 is "the narrow form A-46 rules": "`commitment.ended` joins a strand when the released edge's object is a faction's creed Proposition or its `head_seat` …; every other `commitment.ended` stays `never`". The same step is `09_WR_strand_conclusion.md` edit 2's A-46 step ("the move roster gains one kind, a `release` whose released edge's object is a faction's creed Proposition … or that faction's `head_seat`"), landed in Batch B12a as `B12a.05` (one keyed predicate in `flows_in`'s move filter).
 - Target files and symbols: `S/queries/world_q.py::flows_in` (the move filter), `rosters.yaml: strife_kinds` (as `B12a.05` left them).
 - Gate: the source's test `test_routine_release_does_not_join_a_strand_and_a_creed_release_does` is `B12a.05`'s `test_a_release_of_a_creed_commit_is_a_move_and_a_routine_release_is_not` (`S/tests/test_strife_flows.py`): read green at this batch's close (B38.99), now that B38.25's `creed:` rows name real creed Propositions. Not re-written here: one owner.
@@ -391,7 +391,7 @@ UNDECIDED (second half):
 - COST and TIER: edit; `sonnet`, `high`.
 - LANDS IT: B38's producer; `Item: B38.68`, `[skip ci]`.
 
-### B38.69 — the estimate window and the renewed tie in `dues_unmet` · `30_WR_D` commit 1 · POINTER (B38.07)
+### B38.69 — the estimate window and the renewed tie in `dues_unmet` · `30_WR_D` commit 1 · POINTER (B38.07) · HASH —
 - What the pointed section does: `30_WR_D` commit 1 makes `person_q.dues_unmet(p, x, window)` count only lapses inside the estimate window and net a lapse followed by a renewed tie ("Never below 0"), with `regard` passing `fx.get("estimate_window_seasons")`; the source: "Land commit 1 inside `20_NARRATIVE_B`'s first commit (it changes that proposal's edit 1 before it ships)". U3 §1 item 38: "`20_NARRATIVE_B` (carrying `30_WR_D` commit 1)": B38.07.
 - Target files and symbols: `S/queries/person_q.py::dues_unmet`, `::regard`; `S/tests/test_narrative_dues.py` (`test_a_lapse_older_than_the_window_is_not_counted`, `test_a_renewed_tie_nets_the_lapse_before_it`, `test_two_lapses_and_one_renewal_count_one`, `test_the_count_is_never_negative`).
 - Gate: those four tests, read green in the batch gate (`test_narrative_dues.py` is in its pytest line). Not re-written here.
@@ -442,7 +442,7 @@ UNDECIDED (second half):
 - COST and TIER: small build; `sonnet`, `high`; "a third-tier critic on the fork lift's grouping": `opus` (`valoria-critic`).
 - LANDS IT: B38's producer; `Item: B38.71`, `[skip ci]`.
 
-### B38.72 — a held seat still moves the spine · `IS-B3-FA-03` · READING (R-1)
+### B38.72 — a held seat still moves the spine · `IS-B3-FA-03` · READING (R-1) · HASH —
 A reading quoted at the close: no code, no commit of its own; its text is R-1 of this batch's `## Readings` block; the batch gate quotes it (B38.99).
 
 ### B38.73 — the cause gathers: LOOP row L17 and the regime gap words · `31_WR_B` commit 3 · BUILD · HASH EQUAL

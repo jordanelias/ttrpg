@@ -245,7 +245,7 @@ Batch B38-narrative-regimes's block head (INVOCATION, GATE, REQUIREMENT, BATCH G
 - HASH MOVERS: "then this commit is the declared mover (`opinion_of` changes for everyone standing on a pole)". Declared; B38's one re-pin at B38.99.
 - DEPENDS ON: V12 B38.14 (the key, its loader and `engaged_poles`' reader); V12 B38.19 (the five new poles are rostered); V12 B38.24 (the cores the signs are read off); EXISTS-IN-TREE `rosters.yaml: factions` rows `Valorsmark`, `Hafenmark`, `Varfell`, `Church of Solmund`, `Restoration Movement` (names as the roster spells them, checked at the item's open).
 - GLOSSARY: none (B38.14 wrote *creed*).
-- COST and TIER: content; `sonnet`, `high`.
+- COST and TIER: content (a transcription: the INSTRUCTION copies `31_WR_A` commit 4's five rows, whose values A-87 to A-90 ruled; nothing is drafted here, so no `opus` drafting tier); `sonnet`, `high`; the rows read against the source byte for byte at the batch close (R2d, CHK_K10 #16).
 - LANDS IT: B38's producer; `Item: B38.25`, `[skip ci]`.
 
 Not in this half (the second half's, from `B38.51`): `20_NARRATIVE_D` edits 3 (`own_side`, `stamp_own_side`) and 4 (`strife_kinds`, the narrow A-46 form) — after B38.25 (U3 §1 item 38; NARR_D `:9`); `30_WR_B` commit 3 (the rule-turn row in `30_WR_A` commit 4's `ERA_CONDITION_READERS` siblings, `test_a_rulers_conversion_ends_the_era` in `tests/test_strife_flows.py`) — it edits a table `30_WR_A` commit 4 creates, so it lands after that item, not at `30_WR_B`'s position; `30_WR_D` commit 2 (the nine LOOP rows), whose commit 1 is B38.07; the arms `custom_off` / `custom_on`, the shapes E-08 and E-10 and the clauses C7 to C13 (`30_WR_E`), which B38.03, B38.13 and B38.23 read when they exist; `31_WR_B` (`sway_gain`, `circle_of` reused).

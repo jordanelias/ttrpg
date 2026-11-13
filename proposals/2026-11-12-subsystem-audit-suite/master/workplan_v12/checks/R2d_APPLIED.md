@@ -59,6 +59,22 @@ Appended finding by finding as each is applied (a restart resumes from the last 
 
 ## K10 (parts 40 to 43)
 
+- **#1** edit (ladder step 5, single owner; precedent B06.01 step 2 for `_ltr_sum`) · `part41.md` B38.55: new step 0 adds `round_half_up` to `engine/dice_engine/fmath.py` (B06.01's leaf float owner) and routes `modules/mass_battle/massbattle.py::_round_half_up` (`:106`, the tree's one copy, `math.floor(x + 0.5)`) through it; WHERE, GATE (`test_fmath.py` + a named `[ASSUMPTION]` test, golden-mode digests equal, one `def` left) and DEPENDS ON corrected; `part40.md` B38.14 names its loader `FACTION_CREED = roster_map("factions", "creed")` beside `HEAD_SEAT` (`data/rosters.py:1315`), the name B38.55's copied code reads; `part41.md` head's "made earlier in v12" list corrected for both names.
+- **#2**, **#14** already fixed by K10. **#4** already fixed by K10 (B39, B40 head lines). **#5** already fixed by R1 repair 7.
+- **#3** edit, the open half · `part42_cont.md` B39.23 WHERE, TESTS, GATE: NEW `tests/valoria/test_combat_mutual_felling.py` (`test_combat_` prefix → `combat` marker by `conftest.py::SUBSYSTEM_FILES`), `[ASSUMPTION]` on the name; the three `if defender.felled:` sites read at `wrapper.py:395, 418, 440`.
+- **#6** edit (the brief's ruled handling) · B38.51 and B38.52 rows moved to the head of B38's first-half table (`part40.md`) and their bodies moved before B38.01's (from `part41.md`; part 40 now 118 KB, under the 120 KB cap); `ORDER:` line added above the table; the second-half table caption, `part41.md`'s title line and UNDECIDED 14, `part41_cont.md`'s Status line and part 40's "second half (from B38.51)" sentence updated. Handles unchanged.
+- **#7** edit (CLAUDE.md §0.1 pt 2) · `part41_cont.md` B38.89 TESTS and GATE: the test now asserts `checked >= 3` and that the hoard arm's pooled count of heavy-move acts against the steward is not below the relieve arm's (the source's own control); A-80's "two of three" is reported as a reading, not a pass.
+- **#8** edit · `part43_cont.md` B40.21 GATE: the source's disjunctive pass condition split into an asserted part (five runs exit 0 and print the bearer line, the two columns and the tags) and a read part (the arms' contents, or the "never sent a bearer" finding); the command written in full with `PYTHONHASHSEED=0`.
+- **#9** edit (§5.8) · `part42_cont.md` B39.30's valley-fixture arm (needs B39.31's `hearth` row) moved to B39.31's GATE.
+- **#10** edit · `part41_cont.md` B38.78 WHERE, TESTS, GATE, DEPENDS ON: named from `part34.md` — the acclamation at `seam/wrappers/sigma.py::contest_input`'s `succeed` arm (B32.14; `acclamation` row B32.15; test `test_inst_byz_e.py`); the ballot: VEN_C edit 5 was withdrawn into SC's ballot (`15_INSTITUTIONS_VENICE_C…md:30`), so the per-voter draw is `modules/social_contest/hearing.py::hear` (B24.06) and the test file `test_inst_ven_c.py` (B32.30), with an `[ASSUMPTION]` that the level goes where `hear` composes a voter's levels (SITE step 1 confirms).
+- **#11** edit · `part42_cont.md` B39.20: `test_vm_mat_a_mending.py` (`14_VERBS_MATERIAL_A_mending.md:10`; B12c.04 creates it); B39.22: `test_vm_phy_a_custody.py` (`14_VERBS_PHYSICAL_A…md:12`; B14.27 creates, B15.08 extends) and the `context_terms` reader `seam/wrappers/combat.py::combat_input` (B15.08). TESTS name the file.
+- **#12** edit · `part43.md` B40.05 GATE: the command `PYTHONHASHSEED=0 python -m engine.season.harness.institution INST-BYZ-CHANCERY 2 s`, s = 0–4, per scripted callback, with asserted and read parts; `[ASSUMPTION]` on how the callbacks are selected (as B40.04's).
+- **#13** no action (covered by the block's U14; K10: none).
+- **#15** edit · ` · HASH —` appended to the ten headings (B38.54, .69, .72, .86, .87; B39.16, .18, .33, .35; B40.13), K8 #15's precedent (B22.10, B32.18).
+- **#16** re-checked, premise corrected · B38.25's INSTRUCTION copies `31_WR_A` commit 4's five rows ("Commit 4", copied; ruled by A-87 to A-90): a transcription like B38.20, not authoring; COST line says so and adds the byte-for-byte read at the close. No tier change.
+- **#17** edit with K7 F-13 (the seven K10 COST lines).
+- **#18** edit with K9 #13 (B38.51's `## Status:` grep removed).
+
 ## Part 2 §4 against part 44
 
 ## For Jordan
