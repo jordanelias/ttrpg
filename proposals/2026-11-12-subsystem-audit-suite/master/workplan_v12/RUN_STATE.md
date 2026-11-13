@@ -6,7 +6,7 @@
 
 **Update (after the lanes returned):** A44 and K1..K10 are done and committed. R1 (Opus, scripted global repairs, receipt `checks/R1_APPLIED.md`) is running; then four item-level repair lanes R2a..d (each reads its CHK files, fixes the open findings by the ladder, lists the rest for Jordan): R2a = K1+K2, R2b = K3+K4, R2c = K5+K6, R2d = K7+K8+K9+K10; then K11, compaction, the Fable verdict. Text below on running lanes is superseded.
 
-**Update (2026-11-13, after R1 and R2a..d returned):** lane H3 (Opus) is closing the head parts (part 2 totals, re-pin baselines, names / no-carrier tables, B35.28, the Jordan list, gate residue, the conflicts register); K11 (Sonnet) is checking part 44 meanwhile. If this line is still here with no H3 record below, H3 did not finish: its scripts are in `scratchpad/h3/`.
+**Update (2026-11-13, after R1 and R2a..d returned):** lane H3 (Opus) is closing the head parts (part 2 totals, re-pin baselines, names / no-carrier tables, B35.28, the Jordan list, gate residue, the conflicts register); K11 (Sonnet) is checking part 44 meanwhile. If this line is still here with no H3 record below, H3 did not finish: its scripts are in `scratchpad/h3/`. H3 progress: (2) re-pin baselines DONE (24 batches' RE-PIN / `.99` / before lines set to part 2 §3's merge order, each edit tagged "lane H3").
 
 **Running at the last write (relaunched after the container restart of 2026-11-13):**
 - A44: `workplan_v12_part44*.md` (B98-dials, B99-nine-retake). If the file is absent or has no boundary row for B99, relaunch from the brief in this session's transcript (input: `workplan_v12_part2.md` §4, 105 settings rows).

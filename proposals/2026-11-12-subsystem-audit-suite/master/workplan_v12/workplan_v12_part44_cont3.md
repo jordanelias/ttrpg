@@ -145,7 +145,7 @@ THE NINE, AS `IS_A_NINE.md` §2 TO §10 STATE THEIR CONJUNCTS (reference for B99
 
 ### B99.99 — close readings: the EQUAL reading recorded, nothing re-pinned · `V12_STRUCTURE_part4.md` E-1 · BUILD · HASH EQUAL
 - SOURCE: E-1 ("for a hash-EQUAL batch it records the EQUAL reading and re-pins nothing"), E-2; `V12_STRUCTURE_part2.md` §5.12; B21s.99's form.
-- ADVANCES: the conjuncts the batch's REQUIREMENT line names, read on this tree; their `reading:` records written here (`IS-A-12`), no `status:` edited (A-114) (filled by repair lane R1 from the batch block).
+- ADVANCES: the conjuncts the batch's REQUIREMENT line names, read on this tree; no `reading:` record and no `status:` is written here: B99.01 wrote both (`IS-A-12`, `IS-A-13`, A-114); this commit records the EQUAL reading and the list for Jordan (repair lane R1 filled the line from the batch block; K11 corrected it to match WHERE and the BATCH GATE).
 - INSTRUCTION: read the BATCH GATE once on this tree; record in the commit body the realm content hash at seeds 0, 1, 2 after one season, equal to B98.99's re-pinned `SHIPPED` (`reading @<B98 sha>`); `register --requirements` (nine lines) and `m1_acceptance --summary`'s verdict line; the background runs' wall times and worker counts; the batch's measured wall time; the list for Jordan (every conjunct read `no`, with its tree; step 6's quotations). Re-pin nothing.
 - WHERE: none but the commit body (the batch's last `Item:` commit carries the readings).
 - TESTS: none new.
