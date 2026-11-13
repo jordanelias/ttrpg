@@ -275,7 +275,7 @@ Short names, words and paths are the first file's head. The B28 block's head, it
 - SOURCE: the intake `:372` (G-14, STILL-NEEDED, rows E4:199; carry-forward `master/eval/E4.md` §Carry-forward, line 905: "B4.1 and B4.2 wait on that reading, taken by CR-14's pooled census, not on B10-17's close"; "gate: CR-14 pooled census reads both executing · hash: mover"); joined to B28's tail from B27 by `V12_STRUCTURE_part4.md` E-8's exception (the dependency, `covenant` executing in computed play, lands here: B28.09, B28.13), as A31's part for B27 records (its UNDECIDED (5)).
 - What it is: no code and no commit of its own (`V12_STRUCTURE_part2.md` §5.3, READING). G-14's own work ("The verbs: H-163, IN-61 and G-04's owners") is carried by those owners' items elsewhere; what G-14 owes this batch is the reading that releases B4.2 (B28.32): Reading 1 of this block's Readings, taken on B28.30's tree before B28.32 opens.
 - GATE: `PYTHONHASHSEED=0 python -m engine.season.harness.aperture 2 --seeds 0 1 2` (the CR-14 pooled census: `harness/aperture.py`'s pooled mode, "`aperture <seasons> --seeds S [S ...]`") → `covenant` executed above 0 pooled, and `determine` executed above 0 pooled (B27's close, `reading @<sha>`); the two counts quoted.
-- DEPENDS ON: V12 B28.09, B28.13; V12 Batch B27 (`determine` executing; not in B28's `after` list but closed before it: B27 is at S16, B28 at S17 — H2 to confirm or add the edge, see UNDECIDED (U-8)).
+- DEPENDS ON: V12 B28.09, B28.13; V12 Batch B27 (`determine` executing; B27 → B28 is an edge H2 adopted, HD-14, and B27 is in B28's `after` list and `GATE: Batch` lines; B27 is at S16, B28 at S17; UNDECIDED (U-8) is settled).
 - COST and TIER: reading; `sonnet`.
 
 ### B28.32 — a party to a covenant forms no attack on what it names until he releases his word · TL-B4.2 · BUILD · HASH MOVER(behaviour)
@@ -403,6 +403,7 @@ EST: 3.7 h [estimate: §2.4's formula over 3 positions (0.4 h × 3 + 2.5 h)]
 
 ### B21s.99 — re-pin (none) and close readings · `V12_STRUCTURE_part4.md` E-1 · BUILD · HASH EQUAL
 - SOURCE: E-1 ("for a hash-EQUAL batch it records the EQUAL reading and re-pins nothing"), E-2.
+- ADVANCES: the batch's one reading (no conjunct named; the EQUAL reading is the record).
 - INSTRUCTION: read the BATCH GATE once on this tree; record in the commit body the realm content hash at seeds 0, 1, 2 after one season, equal to the batch's base (`reading @<sha>`), the `strife 2 0 1 2` report's SH and CH lines and residue lines, and the close's record (`IS-A-12`: no conjunct named, no `reading:` record, `status:` not edited). Re-pin nothing.
 - WHERE: none but the commit body (the batch's last `Item:` commit carries the readings).
 - TESTS: the suites `tools/tests_for_diff.py` names, once.
