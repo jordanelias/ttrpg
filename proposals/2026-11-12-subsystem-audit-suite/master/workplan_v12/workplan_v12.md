@@ -336,7 +336,7 @@ No engine version is asserted anywhere in v12 (ED-GO-0002 is the owner).
 ## 12. Ids and row blocks (B00's allocation, proposed)
 
 **This is a proposal, not an allocation.** `references/id_reservations.yaml` is not edited by this part; B00.01 makes the allocation on its own base, from this table (the structure §7.5; `workplan_v12_part3.md` B00.01). B00.01's `WHERE` names "the plan's head part 2" for the table; the table is here, and B00 reads it here.
-⚠ Superseded by `workplan_v12_part2_cont2.md` §9 (lane H2): the same method re-run with IN from 0363 and B12c's H count 12; B00 reads that table.
+⚠ Superseded by `workplan_v12_part2_cont2.md` §9 (lane H2): the same method re-run with IN from 0363 and B12c's H count 12; B00 reads that table. ⚠ The table's rows below are now copied from that §9 table by repair lane R1 (2026-11-13), so the two agree (B98-dials `ED-IN-0399..0400`, `H-846..H-850`; B99-nine-retake `ED-IN-0401..0402`, `H-851..H-855`, as part 44 takes them); the method bullets above keep the H1 readings they were made from.
 
 **How it was made.**
 - **Readings at `bba489b`:** `lane_ids.lanes.<LANE>.next_free` is MB 82, PC 60, FI 10, SC 41, FA 40, WR 13, IN 361, GO 3, SE 57; the highest hole-register id in `engine/season/hole_register.yaml` is H-362 (the file holds no next-id key, `unified/U3_CONFLICT_LEDGER.md` T-4); the highest registry id in `references/npc_registry.yaml` is NPC-090 (46 rows).
@@ -349,67 +349,67 @@ No engine version is asserted anywhere in v12 (ED-GO-0002 is the owner).
 
 | batch | lane | ED block (declared + spare) | H block (declared + spare) |
 |---|---|---|---|
-| B00-ids | IN | ED-IN-0362..0365 (2+2) | H-363..H-367 (0+5) |
-| B01-laneA | IN | ED-IN-0366..0367 (0+2) | H-368..H-373 (1+5) |
-| B02-tests | IN | ED-IN-0368..0369 (0+2) | H-374..H-378 (0+5) |
-| B03-hygiene | IN | ED-IN-0370..0371 (0+2) | H-379..H-383 (0+5) |
+| B00-ids | IN | ED-IN-0363..0366 (2+2) | H-363..H-367 (0+5) |
+| B01-laneA | IN | ED-IN-0367..0368 (0+2) | H-368..H-373 (1+5) |
+| B02-tests | IN | ED-IN-0369..0370 (0+2) | H-374..H-378 (0+5) |
+| B03-hygiene | IN | ED-IN-0371..0372 (0+2) | H-379..H-383 (0+5) |
 | B03g-go-early-landings | GO | ED-GO-0003..0004 (0+2) | H-384..H-388 (0+5) |
-| B03c-boot | IN | ED-IN-0372..0373 (0+2) | H-389..H-393 (0+5) |
+| B03c-boot | IN | ED-IN-0373..0374 (0+2) | H-389..H-393 (0+5) |
 | B16L-mb-words | MB | ED-MB-0082..0083 (0+2) | H-394..H-398 (0+5) |
-| B03a-prose | IN | ED-IN-0374..0375 (0+2) | H-399..H-403 (0+5) |
+| B03a-prose | IN | ED-IN-0375..0376 (0+2) | H-399..H-403 (0+5) |
 | B13-pc-package | PC | ED-PC-0060..0061 (0+2) | H-404..H-408 (0+5) |
 | B16M-mb-engine-words | MB | ED-MB-0084..0085 (0+2) | H-409..H-413 (0+5) |
-| B04-capability-home | IN | ED-IN-0376..0377 (0+2) | H-414..H-419 (1+5) |
-| B05-one-roll | IN | ED-IN-0378..0379 (0+2); ED-SC-0041..0044 (2+2) | H-420..H-439 (15+5) |
-| B06-keyed-draw | IN | ED-IN-0380..0381 (0+2) | H-440..H-444 (0+5) |
-| B07-task-draw | IN | ED-IN-0382..0383 (0+2) | H-445..H-450 (1+5) |
-| B08-scene-order | IN | ED-IN-0384..0385 (0+2) | H-451..H-455 (0+5) |
-| B09-memory | IN | ED-IN-0386..0387 (0+2) | H-456..H-463 (3+5) |
-| B10-character | IN | ED-IN-0388..0389 (0+2) | H-464..H-486 (18+5) |
-| BA1-cast-content | IN | ED-IN-0390..0391 (0+2) | H-487..H-491 (0+5) |
+| B04-capability-home | IN | ED-IN-0377..0378 (0+2) | H-414..H-419 (1+5) |
+| B05-one-roll | IN | ED-IN-0379..0380 (0+2); ED-SC-0041..0044 (2+2) | H-420..H-439 (15+5) |
+| B06-keyed-draw | IN | ED-IN-0381..0382 (0+2) | H-440..H-444 (0+5) |
+| B07-task-draw | IN | ED-IN-0383..0384 (0+2) | H-445..H-450 (1+5) |
+| B08-scene-order | IN | ED-IN-0385..0386 (0+2) | H-451..H-455 (0+5) |
+| B09-memory | IN | ED-IN-0387..0388 (0+2) | H-456..H-463 (3+5) |
+| B10-character | IN | ED-IN-0389..0390 (0+2) | H-464..H-486 (18+5) |
+| BA1-cast-content | IN | ED-IN-0391..0392 (0+2) | H-487..H-491 (0+5) |
 | B11-fi-readers | FI | ED-FI-0010..0011 (0+2) | H-492..H-498 (2+5) |
 | B11F1-flow-se | SE | ED-SE-0057..0058 (0+2) | H-499..H-505 (2+5) |
-| B11F2-flow-in | IN | ED-IN-0392..0393 (0+2) | H-506..H-522 (12+5) |
+| B11F2-flow-in | IN | ED-IN-0393..0394 (0+2) | H-506..H-522 (12+5) |
 | B12a-world-motion-and-ground | SE+WR | ED-SE-0059..0060 (0+2) | H-523..H-540 (13+5) |
 | B12b-weather-arcs-population | SE+WR | ED-SE-0061..0062 (0+2) | H-541..H-549 (4+5) |
-| B12c-material-verbs-and-valley | SE+WR | ED-SE-0063..0064 (0+2) | H-550..H-565 (11+5) |
-| B14-pc-outcome | PC | ED-PC-0062..0063 (0+2) | H-566..H-572 (2+5) |
-| B15-pc-calibration | PC | ED-PC-0064..0065 (0+2) | H-573..H-578 (1+5) |
-| B16-pc-round | PC | ED-PC-0066..0067 (0+2) | H-579..H-583 (0+5) |
-| B17-mb-scale | MB | ED-MB-0086..0087 (0+2) | H-584..H-588 (0+5) |
-| B18-pc-content | PC | ED-PC-0068..0069 (0+2) | H-589..H-593 (0+5) |
-| B19a-mb-contact-instrument | MB | ED-MB-0088..0089 (0+2) | H-594..H-598 (0+5) |
-| B19-mb-field-calibration | MB | ED-MB-0090..0092 (1+2) | H-599..H-603 (0+5) |
-| B20-mb-orders | MB | ED-MB-0093..0094 (0+2) | H-604..H-608 (0+5) |
-| B21-fa-governance | FA | ED-FA-0040..0041 (0+2) | H-609..H-618 (5+5) |
-| B21b-fa-war | FA | ED-FA-0042..0043 (0+2) | H-619..H-626 (3+5) |
-| B21c-fa-seats | FA | ED-FA-0044..0045 (0+2) | H-627..H-631 (0+5) |
-| B21d-fa-arc | FA | ED-FA-0046..0047 (0+2) | H-632..H-640 (4+5) |
-| B21s-strife-supply | IN | ED-IN-0394..0395 (0+2) | H-641..H-645 (0+5) |
-| B22-mb-armies | MB | ED-MB-0095..0096 (0+2) | H-646..H-652 (2+5) |
-| B23-land | FA | ED-FA-0048..0049 (0+2) | H-653..H-659 (2+5) |
-| B24-sc-hearing | SC | ED-SC-0045..0047 (1+2) | H-660..H-674 (10+5) |
-| B24a-sc-outside-the-room | SC | ED-SC-0048..0049 (0+2) | H-675..H-680 (1+5) |
-| B25-fi-questioning | FI | ED-FI-0012..0013 (0+2) | H-681..H-685 (0+5) |
-| B26-fi-inquiry | FI | ED-FI-0014..0015 (0+2) | H-686..H-692 (2+5) |
-| B27-sc-proceedings | SC | ED-SC-0050..0051 (0+2) | H-693..H-700 (3+5) |
-| B28-social-verbs | SC | ED-SC-0052..0053 (0+2) | H-701..H-722 (17+5) |
-| B29-pc-custody | PC | ED-PC-0070..0071 (0+2) | H-723..H-727 (0+5) |
-| B30-mb-nested | MB | ED-MB-0097..0098 (0+2) | H-728..H-732 (0+5) |
-| B31-mb-loadout-economy | MB | ED-MB-0099..0100 (0+2) | H-733..H-737 (0+5) |
-| B32-inst-kit | FA | ED-FA-0050..0051 (0+2) | H-738..H-744 (2+5) |
-| B33-inst-economy-hands | FA | ED-FA-0052..0053 (0+2) | H-745..H-756 (7+5) |
-| B34-go-surface | GO | ED-GO-0005..0006 (0+2) | H-757..H-762 (1+5) |
-| B35-wr-thread | WR | ED-WR-0013..0014 (0+2) | H-763..H-769 (2+5) |
-| B36-wr-story-instruments | WR | ED-WR-0015..0016 (0+2) | H-770..H-774 (0+5) |
-| B37-happenings | IN | ED-IN-0396..0397 (0+2) | H-775..H-787 (8+5) |
-| B37p-wr-kin-and-life | WR | ED-WR-0017..0018 (0+2) | H-788..H-794 (2+5) |
-| B38-narrative-regimes | WR | ED-WR-0019..0021 (1+2) | H-795..H-826 (27+5) |
-| B39-procgen-and-cases | WR | ED-WR-0022..0023 (0+2) | H-827..H-834 (3+5) |
-| B40-inst-scenarios | FA | ED-FA-0054..0055 (0+2) | H-835..H-839 (0+5) |
-| B41-go-port-gate | GO | ED-GO-0007..0009 (1+2) | H-840..H-844 (0+5) |
-| B98-dials | IN | ED-IN-0398..0399 (0+2) | H-845..H-849 (0+5) |
-| B99-nine-retake | IN | ED-IN-0400..0401 (0+2) | H-850..H-854 (0+5) |
+| B12c-material-verbs-and-valley | SE+WR | ED-SE-0063..0064 (0+2) | H-550..H-566 (12+5) |
+| B14-pc-outcome | PC | ED-PC-0062..0063 (0+2) | H-567..H-573 (2+5) |
+| B15-pc-calibration | PC | ED-PC-0064..0065 (0+2) | H-574..H-579 (1+5) |
+| B16-pc-round | PC | ED-PC-0066..0067 (0+2) | H-580..H-584 (0+5) |
+| B17-mb-scale | MB | ED-MB-0086..0087 (0+2) | H-585..H-589 (0+5) |
+| B18-pc-content | PC | ED-PC-0068..0069 (0+2) | H-590..H-594 (0+5) |
+| B19a-mb-contact-instrument | MB | ED-MB-0088..0089 (0+2) | H-595..H-599 (0+5) |
+| B19-mb-field-calibration | MB | ED-MB-0090..0092 (1+2) | H-600..H-604 (0+5) |
+| B20-mb-orders | MB | ED-MB-0093..0094 (0+2) | H-605..H-609 (0+5) |
+| B21-fa-governance | FA | ED-FA-0040..0041 (0+2) | H-610..H-619 (5+5) |
+| B21b-fa-war | FA | ED-FA-0042..0043 (0+2) | H-620..H-627 (3+5) |
+| B21c-fa-seats | FA | ED-FA-0044..0045 (0+2) | H-628..H-632 (0+5) |
+| B21d-fa-arc | FA | ED-FA-0046..0047 (0+2) | H-633..H-641 (4+5) |
+| B21s-strife-supply | IN | ED-IN-0395..0396 (0+2) | H-642..H-646 (0+5) |
+| B22-mb-armies | MB | ED-MB-0095..0096 (0+2) | H-647..H-653 (2+5) |
+| B23-land | FA | ED-FA-0048..0049 (0+2) | H-654..H-660 (2+5) |
+| B24-sc-hearing | SC | ED-SC-0045..0047 (1+2) | H-661..H-675 (10+5) |
+| B24a-sc-outside-the-room | SC | ED-SC-0048..0049 (0+2) | H-676..H-681 (1+5) |
+| B25-fi-questioning | FI | ED-FI-0012..0013 (0+2) | H-682..H-686 (0+5) |
+| B26-fi-inquiry | FI | ED-FI-0014..0015 (0+2) | H-687..H-693 (2+5) |
+| B27-sc-proceedings | SC | ED-SC-0050..0051 (0+2) | H-694..H-701 (3+5) |
+| B28-social-verbs | SC | ED-SC-0052..0053 (0+2) | H-702..H-723 (17+5) |
+| B29-pc-custody | PC | ED-PC-0070..0071 (0+2) | H-724..H-728 (0+5) |
+| B30-mb-nested | MB | ED-MB-0097..0098 (0+2) | H-729..H-733 (0+5) |
+| B31-mb-loadout-economy | MB | ED-MB-0099..0100 (0+2) | H-734..H-738 (0+5) |
+| B32-inst-kit | FA | ED-FA-0050..0051 (0+2) | H-739..H-745 (2+5) |
+| B33-inst-economy-hands | FA | ED-FA-0052..0053 (0+2) | H-746..H-757 (7+5) |
+| B34-go-surface | GO | ED-GO-0005..0006 (0+2) | H-758..H-763 (1+5) |
+| B35-wr-thread | WR | ED-WR-0013..0014 (0+2) | H-764..H-770 (2+5) |
+| B36-wr-story-instruments | WR | ED-WR-0015..0016 (0+2) | H-771..H-775 (0+5) |
+| B37-happenings | IN | ED-IN-0397..0398 (0+2) | H-776..H-788 (8+5) |
+| B37p-wr-kin-and-life | WR | ED-WR-0017..0018 (0+2) | H-789..H-795 (2+5) |
+| B38-narrative-regimes | WR | ED-WR-0019..0021 (1+2) | H-796..H-827 (27+5) |
+| B39-procgen-and-cases | WR | ED-WR-0022..0023 (0+2) | H-828..H-835 (3+5) |
+| B40-inst-scenarios | FA | ED-FA-0054..0055 (0+2) | H-836..H-840 (0+5) |
+| B41-go-port-gate | GO | ED-GO-0007..0009 (1+2) | H-841..H-845 (0+5) |
+| B98-dials | IN | ED-IN-0399..0400 (0+2) | H-846..H-850 (0+5) |
+| B99-nine-retake | IN | ED-IN-0401..0402 (0+2) | H-851..H-855 (0+5) |
 
 **Registry ids** (`references/npc_registry.yaml`; no spare: each row is a named person whose count its source fixes): B33-inst-economy-hands **NPC-091** (B33.09, the court's holder); B39-procgen-and-cases **NPC-092..NPC-094** (B39.32, the three founders, `SYN_B` §2).
 
@@ -499,6 +499,6 @@ Each is also stated where it is invoked (the batch block's lines, the item's fie
 | B38-narrative-regimes | `workplan_v12_part40.md`, `_part40_cont.md`, `_part41.md`, `_part41_cont.md` |
 | B39-procgen-and-cases | `workplan_v12_part42.md`, `_part42_cont.md` |
 | B40-inst-scenarios | `workplan_v12_part43.md`, `_part43_cont.md` |
-| B98-dials, B99-nine-retake | part 44 (lane A44; not yet written) |
+| B98-dials, B99-nine-retake | `workplan_v12_part44.md`, `_part44_cont.md`, `_part44_cont2.md` (B98); `_part44_cont3.md` (B99) |
 
 The file order is reading order, which is execution order only up to the schedule: where a file holds batches of different steps (part 23: B16 at S13 and B08 at S13; part 24's continuation: B19a and B29 at S14), the step table of §8 governs when each opens.
