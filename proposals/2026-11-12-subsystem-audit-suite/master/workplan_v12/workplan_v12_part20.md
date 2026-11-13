@@ -14,7 +14,9 @@
 
 ---
 
-## What the batch head carries from this half (for A19, H1 and H2 to merge)
+## Batch B12a-world-motion-and-ground (continued) · the second half's head lines
+
+These are lines of the B12a block (merged by reference, repair lane R2b, CHK_K4 F3; the block in `workplan_v12_part19.md` names this section in its `SECOND HALF'S HEAD LINES` line): the position table's continuation, intake placements, DIALS AT CONTROL, IDS, UNDECIDED, BATCH GATE additions, SERIAL EDGES, FILE CENSUS, C(B12a) additions, COST and EST below are read with that block at the 0.1 stop. (Its earlier heading read "What the batch head carries from this half (for A19, H1 and H2 to merge)".)
 
 **Position table, continued** (landing order; one row per position; the first half's rows precede these):
 
@@ -277,7 +279,7 @@
 - WHERE: NEW `proposals/2026-11-12-subsystem-audit-suite/proposals/16_PESSIMIST_GAME_hunger_draw_conversion.md` `[ASSUMPTION: the path — basis: CLAUDE.md §3 sends new design work to proposals/, and the pilot parts write design items beside their source; the two fixtures themselves live in data/fixtures.py (B12a.58), never in this file]`.
 - TESTS: none (a design).
 - FALSIFIER and CONTROL: a conversion the design leaves unstated; a stated conversion under which (3)'s shares do not order by body and depth. Control: nothing under `engine/` or `modules/` changes in this commit.
-- GATE: `test -f proposals/2026-11-12-subsystem-audit-suite/proposals/16_PESSIMIST_GAME_hunger_draw_conversion.md && grep -c -E 'hunger_body_pool|hunger_depth_obstacle' <that file>` → the file exists and names both fixtures; `git diff --stat <B12a.56's sha>..HEAD -- engine modules references` → empty for this commit.
+- GATE: `test -f proposals/2026-11-12-subsystem-audit-suite/proposals/16_PESSIMIST_GAME_hunger_draw_conversion.md` → exit 0; `git diff --stat <B12a.56's sha>..HEAD -- engine modules references` → empty for this commit. Nothing else is a gate claim: that the design names and defines both fixtures (`hunger_body_pool`, `hunger_depth_obstacle`) is its critic's verdict in the commit body; B12a.58, which builds the fixtures, is where a count can be read (repair lane R2b, CHK_K4 F8: a keyword count of a document is not a reading, CLAUDE.md §0.05).
 - HASH MOVERS: none.
 - DEPENDS ON: V12 Batch B05 (the one roll and its sampler, U3 §1 item 6); V12 Batch B06 (`draw_factory`, the keyed-draw owner); V12 `09_WR_B_draws_not_thresholds` edit 2 (earlier in B12a, the shape).
 - GLOSSARY: none (no new word: *pool* and *obstacle* are the dice glossary's).

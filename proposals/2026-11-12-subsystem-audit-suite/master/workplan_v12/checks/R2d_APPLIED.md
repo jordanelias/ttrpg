@@ -26,6 +26,21 @@ Appended finding by finding as each is applied (a restart resumes from the last 
 
 ## K8 (parts 33 to 35)
 
+- **#1**, **#2** re-checked, already fixed by R1 repair 5: `B22.99` (`part33.md:121`, body `part33_cont.md:323`), `## Readings (B22)` (`part33_cont.md:296`), `B26.99` (`part33_cont.md:402`, `:849`).
+- **#3** edit (design document, ladder step 3: `V12_STRUCTURE_part4.md` "`IS-MB-05`'s risk") · `part33.md` B22 BATCH GATE line 5: the reading per seed is now stated — a known war at the seed (read through B22.29's `_wars_known`) → the sum above 0, else 0 expected and recorded as IS-MB-05 not met at that seed, a non-zero there a finding; `[ASSUMPTION]` that seeds 0–2 hold no known war in two seasons (basis: B22.29's declared 26 → 0 at seed 0). Reading 1 (the source copied byte for byte) untouched. Not for Jordan: A-58, A-74 (march only against a known enemy) are rulings B22.29 implements.
+- **#4** for Jordan (J-1) · `part34_cont.md` B32.26 step 5 carries the assumption (`release` stays in `contest_owed`); `part34.md` UNDECIDED (9) patched to say why HD-27's move is not mechanical (the bookkeeping refusal forbids a seat-`hold` write; a task route makes abdication drawn).
+- **#5** edit · `part33.md` B22.05 DEPENDS ON: the three later same-batch items (B22.16, B22.21, B22.26) moved out of the dependency list into a "Notes, not dependencies" sentence.
+- **#6** edit (precedent, ladder step 4: B28.08/.10's E-14 absent term) · `part33_cont.md` B22.29 DEPENDS ON: `MISSING world_q.passage_granted` → "absent term (E-14), not a blocker", built by V12 B23.05 (`part37.md:143`); tree grep: no `def passage_granted`.
+- **#7** no action (recorded by H2, no-carrier row 60).
+- **#18** edit (A-101; copied source text says "round" for the season's pass) · `part33.md` B22.03 (TESTS and GATE: `…_in_one_lap_…`, the "source's name kept" clause replaced by the correction note); `part35_cont.md` B28.18 (`…_that_lap_and_folds_it_the_next`), B28.21 (`…_on_his_own_lap`), each with a correction note. Part 2's tests table names none of them (grep). An existing tree test with "round" (`test_u2_a_deposit_in_one_round_…`, part 23) is a code identifier and keeps its name.
+- **#19** edit (CLAUDE.md §10: default `high`, set explicitly) · `, \`high\`` added after the producer tier on the 23 COST lines K8 listed (B22.15, .17, .23, .27, .28, .30–.34; B26.10, .11, .17; B32.14, .99; B37p.99; B28.13, .28–.31, .99; B21s.99).
+- **#20** edit (E-3) · script `scratchpad/r2d_e3.py`: a TESTS line with no `ASSUMPTION` whose `test_` names are in neither the tree (`git grep "def test_"`) nor any file of the suite outside `workplan_v12/` gets `[ASSUMPTION: test names; the item creates them — basis: no source file of the suite names them (E-3); repair lane R2d]`. 43 items marked in B22 (20), B26 (13), B32 (8), B37p (1), B28 (3) (less the three renamed by #18, which their sources name). K8's 57 was an upper bound; the 14 others' names are in a source.
+- **#21** edit · control arms added to the FALSIFIER and CONTROL of B26.08, B26.11, B26.13, B26.14, B26.15 (`part33_cont.md`), B28.17 (named: the off-arm hash equal to B28.16's, in its test) and B21s.99 (hashes and tallies equal the batch's opening reading) (`part35_cont.md`).
+- **#22** edit, the pattern across my range · 14 `GATE: Batch <handle>   (note)` lines in 9 blocks (B41 ×2, B20, B37, B28 ×2, B21s ×2, B30, B33 ×2, B31 ×2, B40) now read `GATE: Batch <handle>` only; each block's notes moved verbatim into one `(G) **Edge notes**` line under its UNDECIDED (B41's "the PARALLEL line below was written for S15" updated: rewritten for S18 by F-10). Files: part29, 30, 32, 35, 35_cont, 37_cont, 38, 39_cont, 43.
+- **#23** edit · `part35_cont.md` B21s PARALLEL gains B41 (GO); the same stale S18 sibling list corrected in B35 (`part36.md`), B23 (`part37.md`), B30 (`part37_cont.md`).
+- **#24** edit (precedent, ladder step 4: C-03, "the earlier landing creates") · `part35_cont.md` B28.33 WHERE and GATE: `test_case_file.py` (no creator) → `test_sc_case_file.py`, created by B24a.05 (`part28_cont.md`; B24a is in B28's after-list).
+- **#25**, **#26** no action (declared arm shipped off; recorded by H2 HD-06).
+
 ## K9 (parts 36 to 39)
 
 - **#2** edit (encoding mover) · `workplan_v12_part38.md` B33.05 heading, position row, FALSIFIER control, GATE, HASH MOVERS; B33's RE-PIN line; `workplan_v12_part38_cont.md` B33.99 step (3) and the FILE CENSUS `carriers.py` entry; `workplan_v12_part2.md` §1.3 B33 row (encoding 7 → 8), §1.3 totals sentence (22 encoding movers), §3 B33 row (05 added). Basis read: `state/world.py::_object_head` (`:260-268`) encodes every dataclass field name and the field count, `_encode_into` folds no absent field; `Office` is a dataclass in `World.offices` (`carriers.py:1019`, comment `:1034-1036`); B32 leaves both fields to B33 (`workplan_v12_part34.md:99`). The control is now read on act tallies, since the source's "every hash is the base hash" cannot hold.
@@ -36,3 +51,21 @@ Appended finding by finding as each is applied (a restart resumes from the last 
 ## Part 2 §4 against part 44
 
 ## For Jordan
+
+### J-1 · Is giving something up a sure act, or a drawn one? · FA, SC (verb `release`)
+
+**The situation.** A person can give up a holding of his own — step down from a seat (a king abdicating), end an oath, let a tie lapse — with one verb, `release`. Today it always succeeds when he chooses it, and no one opposes it. The plan's rule for every act that changes the world (from the task-draw proposal) puts each such act in one of three classes: a contest (someone opposes it), a task (drawn against how hard the job is), or bookkeeping (it only records, and may never touch a seat). `release` fits none cleanly: it can close a seat, which bookkeeping is forbidden to do, and nobody opposes it, so it is no contest. The plan parks it on a list of acts "owed a class", where it resolves as today.
+
+**The question.** Should stepping down (and ending any holding of one's own) stay certain, or be drawn?
+
+**Option A — certain (a bookkeeping act that may close one's own seat).** Abdication and oath-breaking happen exactly when chosen; the drama is in the choice and its consequences, never in failing to let go. Cost: the bookkeeping rule gains one exception (an act may close a seat *its own actor holds*), written at the loader.
+**Option B — drawn (a task).** Letting go can go badly: a Partial abdication that leaves the seat contested, a Failure that leaves him bound. More texture, but a man can fail to resign, which reads oddly, and every `release` in the realm moves the seeded readings.
+**Option C — leave it owed.** `release` stays on the "owed a class" list indefinitely and resolves as today; the three-class rule carries a standing exception.
+
+**Recommendation.** A: it matches what the act is (ending one's own commitment), keeps the "no deterministic outcome" rule intact where there is an outcome to draw (the succession that follows is already drawn), and the exception is narrow and checkable.
+
+**If you do not answer.** C: `release` stays in `contest_owed`, resolved as today (B32.26 step 5 carries this as an `[ASSUMPTION]`).
+
+**Blocks.** Nothing executes differently until answered; the close of the `contest_owed` roster (H2's HD-27) waits on it.
+
+**Sources.** `workplan_v12_part34_cont.md` B32.26 step 5; `workplan_v12_part34.md` UNDECIDED (9); `H2_DECISIONS.md` HD-27; `workplan_v12_part2_cont2.md` §11 C-22; `workplan_v12_part10_cont2.md` B07.01 (the three classes and the bookkeeping refusal); `engine/season/verb_table.yaml:1335` (`release`); CHK_K8 #4.

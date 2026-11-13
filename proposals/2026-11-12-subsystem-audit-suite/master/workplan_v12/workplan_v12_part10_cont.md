@@ -172,7 +172,7 @@ Not in this batch, and where each is: `U5b_PC_residue` §1 items 3–5 (B15, the
 - WHERE: `engine/season/hole_register.yaml` (H-123 `site:`); `registers/handoffs/HANDOFF_PC.md`; `modules/combat/*.py` (the comments the grep prints).
 - TESTS: none.
 - FALSIFIER and CONTROL: a remaining `designs/audit/` path in `modules/combat`. Control: AST equality of every edited `.py` (comment-only).
-- GATE: `git grep -c "designs/audit/" modules/combat` → 0; `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`).
+- GATE: `git grep -c "designs/audit/" modules/combat` → no output, exit 1 (with no hit `git grep -c` prints nothing; at the tree of 2026-11-13 it prints six `file:count` lines, 16 hits, exit 0: the control; repair lane R2a, K2 #13); `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`).
 - HASH MOVERS: none.
 - DEPENDS ON: EXISTS-IN-TREE H-123; V12 Batch B03a (CI-02's comment rewrite of the same files).
 - GLOSSARY: none.
@@ -186,7 +186,7 @@ Not in this batch, and where each is: `U5b_PC_residue` §1 items 3–5 (B15, the
 - WHERE: `proposals/2026-11-05-cr85-histories-hooks-and-combat-input.md` (Status line).
 - TESTS: none.
 - FALSIFIER and CONTROL: `python tools/currency_consistency_check.py` refuses the line. Control: no code.
-- GATE: `python tools/currency_consistency_check.py` → exit 0; `grep -c '^## Status:' proposals/2026-11-05-cr85-histories-hooks-and-combat-input.md` → 1.
+- GATE: `python tools/currency_consistency_check.py` → exit 0. Record line, not a gate arm (it reads a `## Status:` line, which observes the edit and no behaviour; CLAUDE.md §0.05; repair lane R2a, K2 #12): `grep -c '^## Status:' proposals/2026-11-05-cr85-histories-hooks-and-combat-input.md` → 1, quoted in the commit body.
 - HASH MOVERS: none. DEPENDS ON: EXISTS-IN-TREE the file. GLOSSARY: none.
 - COST and TIER: edit; `haiku`.
 - LANDS IT: B14's producer; `Item: B14.06`, `[skip ci]`.

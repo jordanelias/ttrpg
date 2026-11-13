@@ -61,7 +61,8 @@ C(B12a-world-motion-and-ground) (this half's; the second half appends its own):
 SERIAL EDGES: written after the position table (E-11), below it.
 PARALLEL: written after the position table, below it.
 COST: edits and small builds, one judgment build (CR-47); producer `valoria-author` on `sonnet`, `high`; CR-47 on `opus` (its carry-forward: "BUILDER: third tier (judgment)"); B12a.07's content value and the close's terminal critique `opus`.
-EST: this half 7 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this half's 17 positions, 0.4 h × 17; the batch's 2.5 h close and the second half's positions are added by the head parts, E-15]
+SECOND HALF'S HEAD LINES (merged by reference, repair lane R2b, CHK_K4 F3): `workplan_v12_part20.md` §"Batch B12a-world-motion-and-ground (continued) · the second half's head lines" carries the second half's position-table rows, intake placements, DIALS AT CONTROL (4 lines; they supersede this block's `build_realm(wound=False)` line where it says so), IDS (H 10; the batch's H 13), UNDECIDED, BATCH GATE additions, SERIAL EDGES, FILE CENSUS, C(B12a) additions, COST and EST; they are lines of this block, read with it at the 0.1 stop. The batch's C(B12a-world-motion-and-ground) is this block's C line plus that section's C additions.
+EST: 18.5 h for the whole batch, part 2 §1.3's B12a row (40 positions; it governs; repair lane R2b) = this half 7 h + the second half's 11.6 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this half's 17 positions, 0.4 h × 17; the batch's 2.5 h close and the second half's positions are added by the head parts, E-15]
 
 | pos | item | source | state | hash | gates on |
 |---|---|---|---|---|---|
@@ -82,7 +83,8 @@ EST: this half 7 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over
 | B12a.15 | a move to where the mover stands is not a move | `07_SE_kernel_repairs` C | BUILD | MOVER(behaviour) | B12a.14; Batch B09 |
 | B12a.16 | arriving teaches the traveller the place, behind `arrival_report` | `07_SE_kernel_repairs` D | BUILD | EQUAL | B12a.15 |
 | B12a.17 | four stale pointers corrected | `07_SE_kernel_repairs` E | BUILD | EQUAL | B12a.14, B12a.16; Batch B03 |
-| B12a.51 … B12a.99 | the second half: U3 §1.2 steps 6–10, the `lattice_coupling` flip, H-138, their intake entries, the re-pin; the boundary row | lane A20's part | — | — | B12a.17 |
+
+The table continues in `workplan_v12_part20.md` from `B12a.51` (the second half: U3 §1.2 steps 6–10, the `lattice_coupling` flip, H-138, their intake entries, the re-pin; the boundary row; its first row gates on B12a.17). ORDER: execution order is the two position tables', this half's then the second half's, not the handle's (the non-handle row that stood here is a sentence now, repair lane R2b).
 
 Not in this half, and where each is: `20_NARRATIVE_E` edits 2 and the reason line (B38); `09_WR_world_motion` edit 1's `lattice_coupling` flip (this batch's second half, after `16_PESSIMIST_WR_B` edits 1–2) and edit 4 (B37); `09_WR_B_draws_not_thresholds` edit 4 (B38, with `30_WR_A`, U3 §4.1 row 44); `09_WR_B_draws_not_thresholds` edit 2's code (`16_PESSIMIST_GAME_the_world_draws`, this batch's second half; B12a.11 points at it); the intake entries of UNDECIDED (4).
 
@@ -294,6 +296,8 @@ PARALLEL: S13 with B08-scene-order (IN), B16-pc-round (PC), B21b-fa-war (FA), B2
 
 ### B12a.11 — the hungry body is drawn · `09_WR_B_draws_not_thresholds` edit 2 · POINTER
 The source lists this edit "for SE, `modules/settlements/subsist`; the shape stated" (a keyed draw per cohort on a short draw, obstacle from the shortfall's depth, pool from the cohort's body; bands Overwhelming 0, Success half `body_step`, Partial `body_step`, Failure twice; control exactly `body_step`). Its code is carried by `16_PESSIMIST_GAME_the_world_draws.md` ("The hunger draw's code (listed for SE by `09_WR_B` edit 2, "the shape stated") is carried here"; fixture `hunger_severity_draw`, its flip to `True` at its batch's close), which U3 §1.2 places at B12 step 8, in this batch's second half; that item is its owner and its gate (`test_hunger_draw_on_bodies_diverge_and_first_deaths_differ`, `test_hunger_draw_off_is_the_base_hash`). Under `07_SE_population_census.md`'s `hunger_loss: per_head` (B12b) "the Partial band's magnitude is that file's … and the other bands scale from it; this edit owns the draw, that file the magnitude". No commit of its own.
+- Target files and symbols (E-5; written by repair lane R2b, CHK_K4 F6, from the owner items' WHERE lines): `engine/season/data/fixtures.py` and `engine/season/hole_register.yaml` (`hunger_severity_draw` and its three siblings, B12a.58; the flip, B12a.62); `engine/season/queries/inputs.py::SubsistInput.severity` (B12a.59); `modules/settlements/subsist.py::subsist` (B12a.60); `engine/season/queries/world_q.py::subsist_input` (the per-eater draw, B12a.61); `engine/season/tests/test_hunger.py`.
+- Gate: none of its own (POINTER); the owners' — `python -m pytest engine/season/tests/test_hunger.py -q` → pass at B12a.61 (with `test_hunger_draw_on_bodies_diverge_and_first_deaths_differ` and `test_hunger_draw_off_is_the_base_hash`) and at B12a.62 (the flip).
 
 ### B12a.12 — endings are reached by draws, behind `ending_draw` · `09_WR_B_draws_not_thresholds` edit 3 · BUILD · HASH EQUAL
 - SOURCE: `proposals/09_WR_B_draws_not_thresholds.md` "Edit 3 · endings are reached by draws", "The gate" (3), "The falsifier"; rulings A-47 ("an ending's selector is eligibility; the crossing decides nothing"), A-54; closes F-WR-24 for endings.

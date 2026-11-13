@@ -99,7 +99,7 @@ Not in this batch, and where each is: `U5b_PC_residue` §1, §2, §4–§10 (B14
 - FALSIFIER and CONTROL: "a person with no stocked weapon who still fights with an arming sword" (once `ARMS_KINDS` is non-empty). Control: `ARMS_KINDS` empty → `kit_of` unchanged; the season hash at seed 2 equal.
 - GATE: `python -m pytest engine/season/tests/test_cp_t03_03_kit.py tests/valoria/test_combat_invariants.py -q` → pass; `python tools/export_engine_params.py --check` → exit 0; the season hash at seed 2, one season → equal to B18.02's.
 - HASH MOVERS: "Part C `r3_identity_golden.json` and the armour reference" — re-recorded in this commit (E-1: a pin only this item moves); the season pins none.
-- DEPENDS ON: V12 B18.02; EXISTS-IN-TREE `modules/combat/weapons.py::WEAPONS`, `contact.py::GRAB_SHORT_REACH_M`, `engine/substrate/combat_kit.py`, `world_q.py::kit_of`, the generators of the two artifacts `[grep at the open; name each in the commit]`.
+- DEPENDS ON: V12 B18.02; EXISTS-IN-TREE `modules/combat/weapons.py::WEAPONS`, `modules/combat/config.py` `CFG['GRAB_SHORT_REACH_M']` (`config.py:339`, read by `contact.py:25`; R2c, K6 F18), `engine/substrate/combat_kit.py`, `world_q.py::kit_of`, the generators of the two artifacts `[grep at the open; name each in the commit]`.
 - GLOSSARY: none.
 - COST and TIER: small build with two generated artifacts re-derived; `sonnet`, `high`.
 - LANDS IT: B18's producer; `Item: B18.03`, `[skip ci]`.
@@ -113,7 +113,7 @@ Not in this batch, and where each is: `U5b_PC_residue` §1, §2, §4–§10 (B14
 - FALSIFIER and CONTROL: "A realm in which every fight is still pool 8 against obstacle 1.0 after the content lands" (pool and obstacle as B05 and B15 left them, re-read by command). Control (Gate 4): "With `arms_kinds` emptied and the templates reverted, the pre-change season hashes return."
 - GATE: `python -m pytest engine/season/tests/test_cp_t03_04_arms.py engine/season/tests/test_cp_t03_03_kit.py -q` → pass; the realm reading of distinct kit tuples per seed 0–2 above 1, quoted; each admitted kind's worst census cell quoted.
 - HASH MOVERS: "Parts B/D every season fight between persons whose inputs differ". Declared; B18.99.
-- DEPENDS ON: V12 B18.01 (the census table), B18.03; EXISTS-IN-TREE `rosters.yaml: arms_kinds`, `arms_at_build`, `matter_kinds`, `data/rosters.py::_check_arms_at_build`; V12 Batch B12c (B12c.25 adds `arms` to `matter_kinds` in the same step: a different member).
+- DEPENDS ON: V12 B18.01 (the census table), B18.03; EXISTS-IN-TREE `rosters.yaml: arms_kinds`, `arms_at_build`, `matter_kinds`, `data/rosters.py::_check_arms_at_build`; V12 Batch B12c (B12c.25 adds `arms` to `matter_kinds` in the same step: a different member). This is a shared key, not a data dependency: no B18.04 step reads `arms`; B12c merges first in S15 (part 2 §3: B12c 1 of 5, B18 2 of 5) and the two members are kept by hand at merge (`V12_STRUCTURE_part3.md` §7.3); no edge (R2c, K6 F2).
 - GLOSSARY: none.
 - COST and TIER: content (an edit); `sonnet`, `high`; the census reading `opus`.
 - LANDS IT: B18's producer; `Item: B18.04`, `[skip ci]`.

@@ -94,6 +94,7 @@ Short names and paths are the head of `workplan_v12_part34.md`'s. The batch bloc
   2. Edit 11, "`loop/effects_governance.py::_eff_pardon`: at `Partial`, close only the `detain` edges (a ban stands: commutation); else unchanged. `_RESTRAINT_ENDED` is read per band from the row's `emits` (the `Partial` list has one kind), so no kind is spelt in the effect."
   3. Edit 12, "`seam/wrappers/sigma.py::contest_input`: `stakes` keyed by the restraint kind being closed (the heaviest live one on the seat), `standard` from the arrangement that disposed it when the docket records it, else `plain`; `reception` over the seat's bench (`judging_set`)."
   4. `engine/season/rosters.yaml: contest_owed` (B07): delete `pardon` in this commit (the loader refuses a member that declares `contests:`).
+  5. `release` (HD-27, C-22): **not moved; it stays in `contest_owed`** `[ASSUMPTION: `release` stays a member of `contest_owed`, resolved undrawn as today, until Jordan names its class — basis: `checks/R2d_APPLIED.md` "For Jordan" J-1; its row (`verb_table.yaml:1335`, `domain: [hold, commit, oblige, succeed, tie, knot]`) closes a seat `hold`, which B07's loader refuses on a `bookkeeping_verbs` member, and BIND_B gives it no `contests:`, so every class it could join is a design choice]`. The commit body says so; `test_pardon_left_contest_owed` asserts nothing of `release`.
 - WHERE: `engine/season/verb_table.yaml` (`pardon`); `engine/season/loop/effects_governance.py` (`_eff_pardon`); `engine/season/seam/wrappers/sigma.py` (`contest_input`); `engine/season/rosters.yaml` (`contest_owed`: `pardon` removed); `engine/season/loop/witness.py` (the `pardon.denied` deposit, if WITNESS needs a reach row for the new kind; SITE).
 - TESTS: `test_vb_b_sittings.py::test_b4_pardon_bands` ("hand-built world with one `detain` and one `ban` on a bench seat (the `interrogate` tests' fixture), 40 seeds: Partial ends the custody and keeps the ban; Failure ends nothing and emits `pardon.denied`; the act re-forms next scene"; `assert checked >= 40`); `::test_pardon_left_contest_owed` (`"pardon" not in CONTEST_OWED` and its row declares `contests:`) `[ASSUMPTION: names]`; red before.
 - FALSIFIER and CONTROL: "B4: pin the roll: one band only." Control: the roll pinned to Success reproduces B32.25's frees.
@@ -186,7 +187,7 @@ Short names and paths are the head of `workplan_v12_part34.md`'s. The batch bloc
 - ADVANCES: none of the nine.
 - INSTRUCTION: (Resolution, copied) "The condition a sitting must meet is `15_INSTITUTIONS_PAPACY_B…`'s `quorum_share:` (or today's integer `quorum:`), read from the arrangement row the convening names. When that proposal lands: `_eff_convene` writes the row's condition under the key in place of `True`, and CALENDAR tests it against the bench present before `date.fired`; a Date whose condition fails emits nothing and stays due." PAP_B lands in this batch (B32.20), so the fallback (deleting the key) is not taken. The cell `(ConveningCondition, attached)` stays Layer 1's (`04` §A.2's `loop/calendar` row).
 - WHERE: `engine/season/loop/effects_governance.py` (`_eff_convene`, the `convening_attached` write); `engine/season/loop/calendar.py` (the due-Date fire); NEW `engine/season/tests/test_convening_condition.py` `[ASSUMPTION: file and test names; E-3]`.
-- TESTS: `test_a_date_below_its_condition_stays_due` (a Date whose row's `quorum` exceeds the bench present emits no `date.fired` and stays due), `test_a_date_meeting_its_condition_fires`; red before.
+- TESTS: `test_a_date_below_its_condition_stays_due` (a Date whose row's `quorum` exceeds the bench present emits no `date.fired` and stays due), `test_a_date_meeting_its_condition_fires`; red before. `[ASSUMPTION: test names; the item creates them — basis: no source file of the suite names them (E-3); repair lane R2d]`
 - FALSIFIER and CONTROL: a Date below its condition that fires; "Nothing reads the key" (`grep -n convening_attached engine/season` finds a reader after the edit). Control: a row with no `quorum` fires as today.
 - GATE: `python -m pytest engine/season/tests/test_convening_condition.py -q` → the two tests pass; `aperture 2 0`: `date.fired` count before (`reading @<B32.31 sha>`) and after, quoted (the source measured the write 17 times in a three-season run at its tree).
 - HASH MOVERS: every run in which a convened Date's bench falls below its row's condition. Declared; re-pinned at B32.99.
@@ -206,7 +207,7 @@ Short names and paths are the head of `workplan_v12_part34.md`'s. The batch bloc
 - HASH MOVERS: the re-pin itself.
 - DEPENDS ON: V12 B32.01 to B32.32 (B32.10 is BLOCKED and B32.18 a POINTER: no commit).
 - GLOSSARY: the close reads every glossary row the items named against the code (`STAGES.md` rule 2).
-- COST and TIER: reading; `sonnet` runs; the close's terminal critique `opus`.
+- COST and TIER: reading; `sonnet`, `high` runs; the close's terminal critique `opus`.
 - LANDS IT: B32's producer; `Item: B32.99`; the batch's last `Item:` commit, CI runs on its push.
 
 ## Readings (B32)
@@ -271,7 +272,7 @@ Placement (§5.6): no member names these ids (the batch has no proposal members)
   3. Item 3 (the `kin` witness channel, `kin_news_kinds`) "is cut from this item" (AM-F-01; UNDECIDED 1).
   4. Glossary: row *kin* ("a family tie: spouse, parent, child or sibling"); owner → `rosters.yaml: kin_roles`.
 - WHERE: `engine/season/rosters.yaml` (`tenure_kinds`: `kin`; NEW `kin_roles`); `engine/season/verb_table.yaml` (`release.domain`); `references/npc_registry.yaml` (the Princess's and the Doux's `kin:`); `engine/season/data/cast.py` (the `kin:` field); `engine/season/boot/realm.py` (mint the edges beside the person); NEW `engine/season/tests/test_kin.py`; `unified/U1_GLOSSARY.md` (*kin*).
-- TESTS: `test_kin.py` (red before): `test_princess_doux_two_kin_edges_at_build` ("the authored Princess–Doux pair gives two kin edges at build"); `test_kin_row_naming_an_absent_id_raises` ("A `kin:` row naming an absent id raises at load"); `test_release_of_a_spouse_edge_is_one_sided` (AM-F-01: "a `release` of a spouse edge closes it and leaves the other spouse's edge live").
+- TESTS: `test_kin.py` (red before): `test_princess_doux_two_kin_edges_at_build` ("the authored Princess–Doux pair gives two kin edges at build"); `test_kin_row_naming_an_absent_id_raises` ("A `kin:` row naming an absent id raises at load"); `test_release_of_a_spouse_edge_is_one_sided` (AM-F-01: "a `release` of a spouse edge closes it and leaves the other spouse's edge live"). `[ASSUMPTION: test names; the item creates them — basis: no source file of the suite names them (E-3); repair lane R2d]`
 - FALSIFIER and CONTROL: the three tests' plants. Control: "No `kin:` rows → no edges … → base hash."
 - GATE: `python -m pytest engine/season/tests/test_kin.py -q` → pass; `python -c` loading `RELEASABLE_KINDS` → contains `kin`; seed 0 build hash moved (two edges), recorded.
 - HASH MOVERS: "mover once rows are authored" (two edges at build). Re-pinned at B37p.99.
@@ -360,7 +361,7 @@ Placement (§5.6): no member names these ids (the batch has no proposal members)
 - HASH MOVERS: the re-pin itself.
 - DEPENDS ON: V12 B37p.01 to B37p.05.
 - GLOSSARY: the close reads the rows *kin*, *estate*, *heir* against the code (`STAGES.md` rule 2).
-- COST and TIER: reading; `sonnet` runs; the close's terminal critique `opus`.
+- COST and TIER: reading; `sonnet`, `high` runs; the close's terminal critique `opus`.
 - LANDS IT: B37p's producer; `Item: B37p.99`; the batch's last `Item:` commit.
 
 ## Readings (B37p)

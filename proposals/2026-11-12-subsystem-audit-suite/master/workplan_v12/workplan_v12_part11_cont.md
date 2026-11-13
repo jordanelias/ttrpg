@@ -55,7 +55,7 @@ EST: 11 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this bat
 | B09.07 | what a person says, shows and plans by reads the one comparator | `16_PESSIMIST_SC_B_one_reader_of_a_ledger` edits 3–5 | BUILD | MOVER(behaviour) | B09.06 |
 | B09.08 | the comparator weighs how sure the holder still is | `16_PESSIMIST_SC_B_one_reader_of_a_ledger` the flip | BUILD | MOVER(behaviour) | B09.07 |
 | B09.09 | the log refuses a change no gate vouches for | H-145 with NM-W9 (b) (intake `:142`) | BUILD | EQUAL | Batch B02 |
-| B09.10 | a receipt carries the value the gate saw | `16_PESSIMIST_CORE_the_record_holds_what_changed` edit 1 | BUILD | MOVER(encoding) | B09.09 |
+| B09.10 | a receipt carries the value the gate saw | `16_PESSIMIST_CORE_the_record_holds_what_changed` edit 1 | BUILD | MOVER(behaviour) | B09.09 |
 | B09.11 | a scar is recorded and witnessed by nobody | `16_PESSIMIST_CORE_the_record_holds_what_changed` edit 2 | BUILD | MOVER(behaviour) | B09.10 |
 | B09.12 | an act on a standing occasion names the Event that opened it | `16_PESSIMIST_GAME_standing_occasions_carry_their_cause` | BUILD | MOVER(behaviour) | B09.11 |
 | B09.13 | the chooser's observer hook; three harness wrappers deleted | `02_CHAR_reason_trail_and_small_edits` Part A (the hook) | BUILD | EQUAL | B09.12 |
@@ -173,7 +173,7 @@ Not in this batch, and where each is: `U5c_VERBS_residue_and_governance_owner` �
 - HASH MOVERS: "every seeded result at any shipped value (one re-pin in B09)". Declared; B09.99.
 - DEPENDS ON: V12 B09.03, B09.04.
 - GLOSSARY: none.
-- COST and TIER: a value flip and its readings; `sonnet` runs; "the shipped value 0.5 is an `opus`-or-Jordan judgment" — `opus` reads.
+- COST and TIER: calibration (a value flip and its readings); `sonnet` runs; "the shipped value 0.5 is an `opus`-or-Jordan judgment" — `opus` reads.
 - LANDS IT: B09's producer; `Item: B09.05`, `[skip ci]`.
 
 ### B09.06 — one comparator weighs every belief, at control · 16_PESSIMIST_SC_B_one_reader_of_a_ledger edits 1, 2, 6 · BUILD · HASH EQUAL
@@ -243,7 +243,7 @@ Not in this batch, and where each is: `U5c_VERBS_residue_and_governance_owner` �
 - COST and TIER: edit; `sonnet` (E7's tier).
 - LANDS IT: B09's producer; `Item: B09.09`, `[skip ci]`.
 
-### B09.10 — a receipt carries the value the gate saw · 16_PESSIMIST_CORE_the_record_holds_what_changed edit 1 · BUILD · HASH MOVER(encoding)
+### B09.10 — a receipt carries the value the gate saw · 16_PESSIMIST_CORE_the_record_holds_what_changed edit 1 · BUILD · HASH MOVER(behaviour)
 - SOURCE: `proposals/16_PESSIMIST_CORE_the_record_holds_what_changed.md` "Exact edits" 1, 3 (its tests), "Gate"; `04` §C.2; closes F-PES-CORE-02; NM-W9's `Receipt.before/after` half.
 - ADVANCES: none of the nine; the record says how much a write moved.
 - INSTRUCTION (copied, line numbers dropped): "`engine/season/state/world.py::World.write`, the `Change` branch:
@@ -255,7 +255,7 @@ Not in this batch, and where each is: `U5c_VERBS_residue_and_governance_owner` �
 - EXPECTED RED UNTIL: B09.11 for `test_every_minted_receipt_is_in_an_event`.
 - FALSIFIER and CONTROL: a fields-naming `Change` receipt with `delta is None`. Control: acts and per-act outcomes at seed 0, two seasons, identical to B09.09's (only the hash moves).
 - GATE: `python -m pytest engine/season/tests/test_g1a_act_store_and_receipts.py -k delta_decodes -q` → pass; "a planted `Change` raising one cohort's `body` 940 → 1000: receipt's `delta` decodes to `(940, 1000)`".
-- HASH MOVERS: every content hash (`content_hash` folds `Receipt.delta`, a field of a hashed record now filled, D-04). Declared; B09.99.
+- HASH MOVERS: every content hash (`content_hash` folds `Receipt.delta`, an existing field of a hashed record (`state/carriers.py::Receipt`) now filled). Declared `MOVER(behaviour)`: D-04's encoding class is a field or class added, removed or renamed, and no field is (repair lane R2a, K2 #9); the control stays as written (acts and per-act outcomes equal, only the hash moves). Re-pinned in B09.99.
 - DEPENDS ON: V12 B09.09; EXISTS-IN-TREE `World.write`, `World.state_of`, `gate.mint`, `Receipt.delta`, `.mode`.
 - GLOSSARY: none.
 - COST and TIER: small build; `sonnet`, `high`.
@@ -373,7 +373,7 @@ Not in this batch, and where each is: `U5c_VERBS_residue_and_governance_owner` �
 - WHERE: `engine/season/decision/options.py` (`project` docstring); `engine/season/decision/choose.py` (`make_ranker` comment); `engine/season/decision/sheet.py` (module docstring); `engine/season/data/cast.py` (module docstring); `engine/season/requirements.yaml` (R-08 `disposition:`); `engine/season/hole_register.yaml` (H-189, H-237); `CURRENT.md` (the character-model row); DELETE `proposals/2026-09-20-pursuit-basis-worksheet.yaml`; `references/restructure_ledger.md` (one `FORK:` row).
 - TESTS: none new.
 - FALSIFIER and CONTROL: a corrected sentence that still says the opposite of the code. Control: the realm hash at seed 0, two seasons, equal to B09.14's.
-- GATE: `python -m engine.season.harness.register --check` and `--requirements` → exit 0; `python tools/currency_consistency_check.py` → exit 0; `python tools/freshness_gate.py` → its reading quoted; `git grep -n "pursuit-basis-worksheet" -- CURRENT.md` → nothing.
+- GATE: `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`) (R1 repair 1's form; this line's "and `--requirements`" wording escaped it; repair lane R2a); `python -m engine.season.harness.register --requirements` → exit 0; `python tools/currency_consistency_check.py` → exit 0; `python tools/freshness_gate.py` → its reading quoted. Record line, not a gate arm (it observes the edit to a pointer index, not behaviour; repair lane R2a, K2 #12): `git grep -n "pursuit-basis-worksheet" -- CURRENT.md` → nothing.
 - HASH MOVERS: none.
 - DEPENDS ON: EXISTS-IN-TREE the seven sites (opened at `aa31fd2`: `options.py` `project` docstring, `choose.py` comment, `sheet.py` header, R-08 `disposition:` citing `decision.py::make_chooser`, `CURRENT.md:21`); V12 Batch B02 (the requirements file's shape).
 - GLOSSARY: none.

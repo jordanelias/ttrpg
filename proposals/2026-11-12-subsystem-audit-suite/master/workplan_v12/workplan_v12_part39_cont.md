@@ -14,8 +14,8 @@ GATE: Batch B16L-mb-words
 GATE: Batch B17-mb-scale
 GATE: Batch B18-pc-content
 GATE: Batch B19-mb-field-calibration
-GATE: Batch B20-mb-orders          (added by this part: `04_MB_unit_loadout_and_weapon_in_hand_B` stages 3–4 depend on `04_MB_manager_battle_one_resolver.md` §2, B20; §2.1's list lacks it; UNDECIDED (1))
-GATE: Batch B22-mb-armies          (added by this part: `04_MB_campaign_party_economy` depends on `27_MB_E` (B22, the `assigned`/`absent` write); §2.1's list lacks it; UNDECIDED (1))
+GATE: Batch B20-mb-orders
+GATE: Batch B22-mb-armies
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: none — rulings A-69 (armies carry fatigue back), A-78, A-113 (stated matchup rows), A-59 (2) (a unit's prowess from its own row), A-2 (a unit is a row); `IS_A_NINE_part2.md` §12's M5 lists B31 (none moves; all nine re-read at B40)
 BATCH GATE (read once, on the closing tree, `PYTHONHASHSEED=0` on every seeded command; no command past two seasons, A-114):
@@ -44,6 +44,7 @@ C(B31-mb-loadout-economy): this batch's entries; the plan's head parts; `referen
   read whole by B31.20 only: `master/mb_abstraction/MBA_DESIGN_part2.md` §3.2 (the matchup roster and the row schema); by B31.01 only: `proposals/14_VERBS_MILITARY_B_train.md` §1 item 3;
   the closing SHAs of B00, B01, B02, B16L, B17, B18, B19, B20, B22; the permanent surface (CLAUDE.md, `CURRENT.md`, `HANDOFF.md`, `registers/handoffs/HANDOFF_MB.md`, the skill and `methodology-close`).
 UNDECIDED:
+  (G) **Edge notes**, moved here from this block's `GATE: Batch` lines so that each reads `GATE: Batch <handle>` only (repair lane R2d, CHK_K8 #22): `B20-mb-orders`: added by this part: `04_MB_unit_loadout_and_weapon_in_hand_B` stages 3–4 depend on `04_MB_manager_battle_one_resolver.md` §2, B20; §2.1's list lacks it; UNDECIDED (1); `B22-mb-armies`: added by this part: `04_MB_campaign_party_economy` depends on `27_MB_E` (B22, the `assigned`/`absent` write); §2.1's list lacks it; UNDECIDED (1).
   (1) Two gates added beyond §2.1's after-list (B20, B22), each read off a source's `Depends on:` line; neither makes a cycle (no batch but B98 and B99 follows B31); H2 adds both edges or strikes the two GATE lines.
   (2) **A back edge, for H2:** B22.03 (part 33) reads `MassBattleInput.entry_stamina` and `fatigue.lull_recover`, which U3 and `16_PESSIMIST_MB_one_stamina_ledger` place in B31 (step 3; `26_MASS_BATTLE_movement_and_fatigue_as_data` §3). B22's author assumed step 3 lands in B19. B31.06 and B31.07 are written to land only what the tree does not already hold (each opens with a check); recommended: B19's author (A26/A27) carries step 3 and the `fatigue.lull_recover` row, and these two items become the remainder. (Patched: P-10: done — B19.28 lands step 3's field and write and the `lull_recover` row; B31.06 adds the other rows to that block and B31.07 the three writers, each after its presence check.)
   (3) The A-69 record write `16_PESSIMIST_MB_one_stamina_ledger` places in B31 is carried by B22.03 and B22.04 (`last_field`, written under `recuperation: on`): B31.09 is a POINTER that adds only the source's named test.

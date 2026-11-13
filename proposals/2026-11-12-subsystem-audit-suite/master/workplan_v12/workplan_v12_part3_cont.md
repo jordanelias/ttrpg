@@ -357,6 +357,11 @@ B02.37 (READING): its text is Reading 1 of `## Readings (B02)`, before B02.99 (E
 - COST and TIER: edit plus instrument time (`corpus_run` recorded at 2.5 and at 8 minutes by two lanes; not measured here); `sonnet`, high; `opus` reads each reading against its conjunct's text before `holds` and `status:` are written (the judgment node that gates a requirement, CLAUDE.md §10).
 - LANDS IT: B02's producer; `Item: B02.38`, `[skip ci]` (the batch's last `Item:` push is B02.99; repair lane R1, E-1); it writes the conjuncts' `reading:` records (`IS-A-12`).
 
+## Readings (B02)
+
+**Reading 1** (B02.37, `IS-A-12`, `master/instructions/IS_A_NINE_part2.md` "Item: IS-A-12"; the paragraph as the part's author wrote it, moved here unchanged by repair lane R2a, K1 F11, E-10):
+B02.37 (`IS-A-12`, READING: no code, no commit) is the close line of this batch's BATCH GATE, which every later batch's BATCH GATE repeats: "each batch close records, in its commit body and nowhere else (CLAUDE.md §1: no count in a pointer index): `register --requirements` (nine lines), `m1_acceptance --summary`'s verdict line, the named conjuncts' readings with their tree, and for a batch under `IS-A-08` the quoted `BUILT OUT` and `ENGINES` lines before (the previous batch's after-reading, `reading @<sha>`, not re-taken) and after. The batch's last `Item:` commit writes the readings into the conjuncts' `reading:` records; `status:` is not edited there." Its falsifier ("a close that edits `status:` outside a re-take item, or a conjunct at `yes` whose `reading.tree` is older than the last batch that named it") is read by each batch's critic. In B02 alone, B02.38 writes `holds` and the `status:` its own readings give, as `IS-A-02` orders (the conjuncts are new; no row is claimed by landing).
+
 ### B02.99 — re-pin and close readings (EQUAL: the record) · `V12_STRUCTURE_part4.md` E-1 · BUILD · HASH EQUAL (records)
 - SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2; `V12_STRUCTURE_part2.md` §5.12; B02's BATCH GATE and RE-PIN lines; part 2 §11 C-01 (written by repair lane R1).
 - ADVANCES: the close of the readings B02.38 takes and records (R-01 to R-03 `met`; the first `BUILT OUT`, `ENGINES` and `NULL SCENES` baselines); nothing beyond them.

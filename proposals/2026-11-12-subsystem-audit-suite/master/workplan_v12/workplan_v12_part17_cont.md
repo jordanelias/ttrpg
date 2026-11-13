@@ -68,7 +68,7 @@ Written against `aa31fd2`, author lane A17. Words, paths, the position table, UN
 - FALSIFIER and CONTROL: "a claim in his ledger that appears in no group or in two; a group whose `support` differs from what clause 4 weighs for the same claims. Control: the `decision/` and `queries/person_q.py` path scan stays green (no `World` in scope)."
 - GATE: `python -m pytest engine/season/tests/test_shortest_case.py -k board -q` → pass; "`tests/test_season_shape.py`'s path scan" → `python -m pytest engine/season/tests/test_season_shape.py -q` → pass.
 - HASH MOVERS: "none (a reader)".
-- DEPENDS ON: EXISTS-IN-TREE `LedgerReader._support`, `person_q.deed_doers`, `sheet.chronicle`, `decision/options.py::_pair`; V12 B11.76; Batch B24 (EVID_B edit 2's `contradicts`, which replaces the local `_pair` call there).
+- DEPENDS ON: EXISTS-IN-TREE `LedgerReader._support`, `person_q.deed_doers`, `sheet.chronicle`, `decision/options.py::_pair`; V12 B11.76. (Batch B24 is not a dependency: EVID_B edit 2's `contradicts` later replaces the local `_pair` call this item lands; that landing order is in this half's SERIAL EDGES, repair lane R2b, CHK_K4 F9.)
 - GLOSSARY: *board* (row added or edited): "board: the page that lays out what an investigator holds, grouped by what it says, as a detective's case board pins up his evidence" — owner `play_surface.board` over `person_q.dossier`.
 - COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B11's producer; `Item: B11.77`, `[skip ci]`.

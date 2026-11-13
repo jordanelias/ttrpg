@@ -95,7 +95,7 @@ Columns: the wave and step as the structure had them, and now (a change in bold)
 | B06-keyed-draw | IN | W8 | S8 | 0 | 10 | 8 (B7 P1) | MOVER (behaviour 1) | 5.7 | B00, B01, B02, B03, B05 |
 | B07-task-draw | IN | W9 | S9 | 0 | 10_cont2 | 10 (B5 P5) | MOVER (behaviour 1) | 6.5 | B00, B01, B02, B05, B06 |
 | B08-scene-order | IN | W6 → **W9** | S13 | 9 | 23 | 7 (B7) | MOVER (behaviour 3) | 5.3 | B00, B01, B02, B03a, B04 +R, B05 +R, B06 +R |
-| B09-memory | IN | W10 | S10 | 0 | 11_cont | 22 (B21 BL1) | MOVER (behaviour 7, encoding 1) | 11.3 | B00, B01, B02, B05, B07 |
+| B09-memory | IN | W10 | S10 | 0 | 11_cont | 22 (B21 BL1) | MOVER (behaviour 8; B09.10 relabelled from encoding, R2a) | 11.3 | B00, B01, B02, B05, B07 |
 | B10-character | IN | W11 | S11 | 0 | 12, 12_cont, 13, 13_cont | 67 (B48 P8 R2 H3 BL2 C1 DF3) | MOVER (behaviour 9, encoding 1) | 29.3 | B00, B01, B02, B04, B05, B09 |
 | BA1-cast-content | IN | W12 | S12 | 10 | 18_cont | 13 (B2 P1 R1 C9) | MOVER (behaviour 9) | 7.7 | B00, B01, B02, B04, B05, B10 |
 | B11-fi-readers | FI | W12 | S12 | 0 | 16, 16_cont, 17, 17_cont | 58 (B49 P4 R2 H1 DF2) | MOVER (behaviour 29, encoding 2) | 25.7 | B00, B01, B02, B03, B04, B05, B07, B10 |
@@ -103,7 +103,7 @@ Columns: the wave and step as the structure had them, and now (a change in bold)
 | B11F2-flow-in | IN | W17 | S17 | 2 | 32_cont | 12 (B8 P2 H2) | MOVER (conditional 1) | 7.3 | B09, B10, B11F1 |
 | B12a-world-motion-and-ground | SE+WR | W13 | S13 | 0 | 19, 20 | 40 (B35 P2 H1 C1 DF1) | MOVER (behaviour 12, conditional 1) | 18.5 | B00, B01, B02, B04, B05, B07, B10, B11 |
 | B12b-weather-arcs-population | SE+WR | W14 | S14 | 0 | 24, 24_cont | 48 (B38 P7 R1 H1 C1) | MOVER (behaviour 12, encoding 1) | 21.7 | B12a |
-| B12c-material-verbs-and-valley | SE+WR | W15 | S15 | 0 | 28, 28_cont | 36 (B29 P2 R3 H1 DF1) | MOVER (behaviour 13) | 16.9 | B12b, B15 +R1, B34 +R1 |
+| B12c-material-verbs-and-valley | SE+WR | W15 | S15 | 0 | 28, 28_cont | 36 (B29 P2 R3 H1 DF1) | MOVER (behaviour 13, conditional 1; R2c) | 16.9 | B12b, B15 +R1, B34 +R1 |
 | B14-pc-outcome | PC | W8 | S8 | 3 | 10_cont | 29 (B26 P1 R1 DF1) | MOVER (behaviour 7) | 14.1 | B00, B01, B02, B13, B05 |
 | B15-pc-calibration | PC | W12 | S12 | 0 | 18 | 16 (B13 R2 DF1) | MOVER (behaviour 10) | 10.9 | B00, B01, B02, B04, B05, B10, B14 |
 | B16-pc-round | PC | W13 | S13 | 0 | 23 | 13 (B11 P1 R1) | MOVER (behaviour 1) | 7.7 | B00, B01, B02, B06, B07, B10, B11 +R, B15 |
@@ -240,7 +240,7 @@ One row per batch in schedule order: the position handles (the part after the do
 | S8 | B14 | 02, 03, 07, 15, 16, 24, 27 | — | — | `B14.99` | 2 of 2 movers |
 | S9 | B07 | 05 | — | — | `B07.99` | 1 of 2 movers |
 | S9 | B17 | 01, 03, 08 | — | — | `B17.99` | 2 of 2 movers |
-| S10 | B09 | 01, 05, 07, 08, 11, 12, 21 | 10 | — | `B09.99` | 1 of 1 movers |
+| S10 | B09 | 01, 05, 07, 08, 10, 11, 12, 21 | — | — | `B09.99` | 1 of 1 movers |
 | S11 | B10 | 32, 59, 60, 65, 66, 70, 71, 72, 73 | 58 | — | `B10.99` | 1 of 1 movers |
 | S12 | BA1 | 01, 02, 03, 04, 05, 06, 08, 09, 12 | — | — | `BA1.99` | 1 of 4 movers |
 | S12 | B11 | 04, 08, 12, 13, 14, 15, 16, 22, 51, 52, 53, 54, 55, 85, 58, 59, 60, 61, 83, 84, 63, 64, 67, 69, 71, 72, 73, 75, 78 | 17, 74 | — | `B11.99` | 2 of 4 movers |
@@ -256,7 +256,7 @@ One row per batch in schedule order: the position handles (the part after the do
 | S14 | B21c | 01, 03, 04, 05 | — | — | `B21c.99` | 2 of 4 movers |
 | S14 | B29 | 01, 02 | — | 03 | `B29.99` | 3 of 4 movers |
 | S14 | B34 | 01, 23, 24 | — | — | `B34.99` | 4 of 4 movers |
-| S15 | B12c | 06, 07, 08, 12, 13, 14, 15, 16, 19, 20, 21, 22, 34 | — | — | `B12c.99` | 1 of 5 movers |
+| S15 | B12c | 06, 07, 08, 12, 13, 14, 15, 16, 19, 20, 21, 22, 34 | — | 09 (R2c, K6 F14) | `B12c.99` | 1 of 5 movers |
 | S15 | B18 | 04, 05, 08, 09 | — | — | `B18.99` | 2 of 5 movers |
 | S15 | B19 | 12, 13, 23, 24, 25, 26, 51, 58, 60, 61, 63, 64, 70, 67, 68 | — | — | `B19.99` | 3 of 5 movers |
 | S15 | B21d | 05, 07, 08, 09 | — | — | `B21d.99` | 4 of 5 movers |
