@@ -439,7 +439,7 @@ Placement (§5.6, E-8): the intake §3 row orders CR-58 → CR-59 → CR-60 → 
 ### B24a.99 — re-pin and close readings · `_part4` E-1 · BUILD · HASH MOVER (the re-pin)
 - SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2; `V12_STRUCTURE_part2.md` §5.9, §5.12.
 - INSTRUCTION: (1) Re-record, once, the realm pins in `engine/season/tests/_realm_goldens.py`, `test_season_weather.py`'s `BASE_HASHES[1, 2]`, the go07 `BASE` seeds and every seeded result B24a.01, .04, .05, .06, .08 moved, against B24's close rebased on the step's earlier movers' merge (B12c, B18, B19, B21d; §7.4; `reading @<sha>`), by each file's generator; the commit says "re-pin". (2) Seeds 0–2 for every item read at seed 0 only (E-2). (3) The close's readings (BATCH GATE). (4) Name the stopped rows of B24a.08, if any, and the unused H id.
-- WHERE: the pin files above.
+- WHERE: `engine/season/tests/_realm_goldens.py`; `engine/season/tests/test_season_weather.py` (`BASE_HASHES[1, 2]`); `engine/season/tests/test_go07_canonical_digest.py` (`BASE`); the pin files of any other seeded result B24a.01, .04, .05, .06, .08 moved (copied from this item's INSTRUCTION and the block's RE-PIN line by check lane K6).
 - TESTS: the full suite once and the covering suites.
 - FALSIFIER and CONTROL: a pin moved by no declared item. Control: B24a.02, .03, .07 reproduce at seeds 0–2.
 - GATE: the BATCH GATE.

@@ -65,7 +65,7 @@ EST: 9.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this bl
 | BA1.10 | the switch | `IS-A-11` stage 2 step 2; U1-C ("the switch") | POINTER | — | BA1.01 |
 | BA1.11 | the three CHAR readings | `IS-B2-CHAR-06` | READING | — | BA1.10 |
 | BA1.12 | two cast rows marked unaware of what they hold (Patched: P-30) | `U5a_CHAR_self_knowledge_is_a_belief` edit 2's marks (B10.64's DIALS line) | CONTENT | MOVER(behaviour) | BA1.09; Batch B10 (B10.64, B10.65) |
-| BA1.99 | the re-pin and the readings that close M2 | `IS-A-11` (hash movers); `IS-A-12` | BUILD | MOVER (the re-pin) | BA1.01 to BA1.12 |
+| BA1.99 | re-pin and close readings (the readings that close M2) | `IS-A-11` (hash movers); `IS-A-12` | BUILD | MOVER (the re-pin) | BA1.01 to BA1.12 |
 
 ### BA1.01 — the cast's attributes and skill scores · `IS-A-11` stage 2, table (a) · CONTENT · HASH MOVER(behaviour)
 - SOURCE: `master/instructions/IS_A_NINE_part2.md` "Item: IS-A-11" (`:263-307`), stage 2 step 1; `master/instructions/IS_B2_SC_FI_CORE_CHAR_part2.md` "Item: IS-B2-CHAR-03" (`:144-149`); U1 §6, §11 U1-C item 1; `V12_STRUCTURE.md` D-19; rulings A-6, A-7, A-98, ED-1094; closes G-3 ("as far as the nine need it").
@@ -224,7 +224,7 @@ EST: 9.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this bl
 
 - **R1 (BA1.11) — `IS-B2-CHAR-06`, the three CHAR readings** (`master/instructions/IS_B2_SC_FI_CORE_CHAR_part2.md` "Item: IS-B2-CHAR-06", copied): "three readings, quoted at the close of B05, B10 and `BA1-cast-content`, each against the one before: (1) `aperture 4 0` POOLS ROLLED, the line *"two actors at different pools"* per rolled verb (`U5a_capability_home_and_two_inputs.md` Part B gate 4); (2) `python -m engine.season.harness.decision_spread --persons` (distinct pools across the cast); (3) `IS-B2-CORE-04` row 11's share of non-top choices. Expected: (1) stays "no" in the shipped realm at B05 and B10 (the mechanism is in, the content is not) and reads "yes" at the content batch". (1) is read at two seasons, `aperture 2 0` ("four seasons in the source; A-114"); (2) is read as UNDECIDED (5) says. "FALSIFIER and control: a reading taken on a tree whose `aperture` `CONTROL` line reads unequal is void; control: the previous close's after-reading (`reading @<sha>`), not re-taken." Tier: `haiku` extracts.
 
-### BA1.99 — the re-pin and the readings that close M2 · `IS-A-11` (hash movers); `IS-A-12` · BUILD · HASH MOVER (the re-pin)
+### BA1.99 — re-pin and close readings (the readings that close M2) · `IS-A-11` (hash movers); `IS-A-12` · BUILD · HASH MOVER (the re-pin)
 - SOURCE: `IS-A-11` ("Hash movers: the build hash and every season hash; one re-pin, said plainly"); `IS-B2-CHAR-03` ("Hash movers: every realm pin, once, at the batch's last commit"); `IS-A-12` (the `reading:` records); `V12_STRUCTURE_part4.md` E-1, E-2; CLAUDE.md §7.
 - ADVANCES: R-06.a, R-08.a, R-09.b (their readings recorded); R-06.d, R-06.e re-read.
 - INSTRUCTION:

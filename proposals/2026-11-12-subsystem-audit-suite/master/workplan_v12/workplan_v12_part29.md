@@ -297,7 +297,7 @@ EST: 10.5 h [estimate: `V12_STRUCTURE.md` §2.4's formula over 15 positions (0.4
 | B41.12 | no module reads the process environment | `11_GO_port_gate_order_and_coverage` §5, gate 1 | READING | — | B41.06 |
 | B41.13 | the contract freeze row | GO-15a | BUILD | EQUAL | B41.02 to B41.12 |
 | B41.14 | the first behaviour pin and the exit lines | GO-15b | BUILD | EQUAL | B41.13 |
-| B41.99 | the close's readings (EQUAL) | `V12_STRUCTURE_part4.md` E-1 | BUILD | EQUAL | B41.01 to B41.14 |
+| B41.99 | re-pin and close readings: the EQUAL readings recorded | `V12_STRUCTURE_part4.md` E-1 | BUILD | EQUAL | B41.01 to B41.14 |
 
 Not in this batch, and where each is: GO-01, GO-11, GO-05, GO-09, the four early landings (B03g, `IS-B3-GO-06` (2)); GO-12's unseeded fallback (B06, `11_GO_one_draw_owner`, the intake `:547`'s "/ B06 (fallback)") and its 91 environment reads (B17, `04_MB_typed_outcome_and_one_path` §3); GO-16 (not built, A-30); GO-06 and H-5 (held: a `valoria-game` checkout, the intake `:553`, `:555`); ED-509 (held on GO-01's landing, `:554`); `IS-B3-GO-03`'s snapshot key (B34), which B41.10 reads; the field's decider (B20, UNDECIDED 1).
 

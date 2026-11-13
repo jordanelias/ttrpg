@@ -347,7 +347,7 @@ Not in this batch, and where each is: `BYZ_A`, `BYZ_E`, `COL_A`, `PAP_A`, `PAP_B
   3. `S/rosters.yaml: factions.head_seat` gains `"Altonia": off_altonian_court` (BYZ_D edit 2's last clause; COL_B §4).
   4. `test_inst_byz_d.py` gains `test_the_court_may_recall_the_katepano` (gate 4), written before step 2 and read red (`revocation: null` refuses).
 - WHERE: `S/offices.yaml` (`foreign_seats`: `off_altonian_court`, `off_doux` added; `off_katepano`, `off_kommerkiarios` edited); `S/rosters.yaml` (`factions.head_seat`); `S/tests/test_inst_byz_d.py`.
-- TESTS: the one above; `test_the_control_arm_has_no_empire` (B33.09) stays green.
+- TESTS: the one above; `test_the_control_arm_has_no_empire` (B33.09) stays green. `[ASSUMPTION: test names; the item creates them (E-3) — basis: the names appear in no source file of the suite; K9 added this mark]`
 - FALSIFIER and CONTROL: "Delete `passes_through` from the court's row: every instrument is entered at issue and gate 2's lag is zero" (read at B33.11). Control: B33.09's control-arm test.
 - GATE: gate 4, "A hand-placed `revoke` of `off_katepano` through `off_altonian_court`: admitted at eligibility (it is refused today: `revocation: null`); its bands are proposal E's" → `python -m pytest engine/season/tests/test_inst_byz_d.py -q` → pass; `queries/faction_q.py::head` (or the reader `factions.head_seat` feeds) names the court's holder for Altonia.
 - HASH MOVERS: the foreign-arm build hash (two Offices, two edited rows, NPC-011 seated). Declared; B33.99.

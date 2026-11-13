@@ -147,7 +147,7 @@ The batch block of `B41-go-port-gate` (its head lines, PORT GATE RULES, UNDECIDE
 
 **Reading 1 (B41.12), copied from `proposals/11_GO_port_gate_order_and_coverage.md` "The gate" 1 and §5:** "`grep -rn "os.environ" modules --include=*.py` (tests excluded) prints nothing; the realm hash at seeds 0–2, two seasons, is equal before and after; `CASUALTY_SCALE=9 python -m … port_oracle` prints the same line as with the variable unset." "The build is `04_MB_typed_outcome_and_one_path.md` §3's (B17, MB); this file adds none of it and, in B41, only checks it (gate 1)." Read at the close: the `grep` (its output, empty, quoted); `CASUALTY_SCALE=9 python -m engine.season.harness.port_oracle --slice 2 --seed 2` against the same command unset (seed 2: the one seed whose slice 2 fights a field, the source's "0, 0 and 1 fought field at seeds 0, 1, 2"). STOPS IF B17 is not on the base (UNDECIDED 1): then the reading is `STOPPED` with the grep's count, never written as passed.
 
-### B41.99 — the close's readings (EQUAL) · `V12_STRUCTURE_part4.md` E-1 · BUILD · HASH EQUAL
+### B41.99 — re-pin and close readings: the EQUAL readings recorded · `V12_STRUCTURE_part4.md` E-1 · BUILD · HASH EQUAL
 - SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2; `V12_STRUCTURE_part2.md` §5.12; PORT GATE RULES 1.
 - ADVANCES: the close's record.
 - INSTRUCTION: (1) record the realm content hash at seeds 0, 1, 2 (one season) equal to the baseline named in the BATCH GATE, re-pinning nothing; (2) if a hash-moving batch of S15 merged before this one, re-run `python tools/export_oracle_pins.py --build` on the rebased tree and commit the artifact, saying so (PORT GATE RULES 1); (3) the BATCH GATE's readings and the wall time in the commit body.

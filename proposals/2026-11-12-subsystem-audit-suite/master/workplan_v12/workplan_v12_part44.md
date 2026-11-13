@@ -247,3 +247,119 @@ POSITION-TABLE-ROWS
 - DEPENDS ON: V12 Batch B10, B10.10; B98.09 (the regard unit the clamp bounds).
 - COST and TIER: edit; `sonnet`, high.
 - LANDS IT: B98's producer; `Item: B98.11`, `[skip ci]`.
+
+### B98.12 — the crisis of faith is drawn, at a calibrated obstacle · row 13; B10.13, B10.15, B10.16 (POINTER here); `16_PESSIMIST_CHAR_A` · BUILD (flip) · HASH MOVER(behaviour)
+- SOURCE: part 2 §4 row 13; `proposals/16_PESSIMIST_CHAR_A_a_crisis_of_faith_is_drawn_and_told.md` "Gate" 2 ("`on`: the set of persons whose conviction moved differs between at least two seeds, and at least one person in crisis at some seed holds (band Success or better)") and 3 ("Of the persons whose highest-intensity creed changes, the count whose new top creed is one they held at less than half their old top's intensity is 0 without a Failure band on the roll"), its order of edits ("`crisis_arm: drawn` in its own commit"); A-24 (the shipped arm is `drawn`); B10's UNDECIDED 3 (the obstacle set here, the arm flipped with it, one commit); the source's horizon is three seasons, read at two (A-114).
+- SETTINGS: `engine/season/data/fixtures.py` (`crisis_arm` = `rule`; `crisis_obstacle` = `None`), B10.13. New values: `crisis_arm` = `drawn`; `crisis_obstacle` = the level the probe chooses from the swept set B10.13's hole row names ("the difficulty levels of B05's obstacle ladder").
+- INSTRUCTION:
+  1. Probe (no commit): at `crisis_arm = drawn` and each level of the ladder (`plain`, `routine`, `demanding`, `hard`), seeds 0 to 3, two seasons, in-process: the persons with a `conviction.moved` Event per seed, the band of each crisis roll, and gate 3's count; print a table per level.
+  2. Rule (U4): ship the lowest level at which gate 2 and gate 3 both hold `[ASSUMPTION: "lowest" — basis: the source states no level and no preference; the lowest passing level changes least from the rule arm's certainty of breaking]`. None passing: ship nothing (U4); the row becomes a READING for B99.
+  3. One commit: `crisis_obstacle` → the level, `crisis_arm` → `drawn`; both hole rows' texts name the reading.
+- FALSIFIER and CONTROL: gate 3 above; `test_crisis_draw.py::test_off_reproduces_conviction_after_crisis` (gate 1). Control arm: `HASH(0, 2; crisis_arm = rule)` equals B98.11's after-reading.
+- GATE: `python -m pytest engine/season/tests/test_crisis_draw.py -q` → six pass (`test_two_seeds_move_different_persons`, gate 2; `test_lowest_intensity_creed_is_the_one_in_crisis_for_shared_column`, gate 3; gate 4's receipt test); the probe table and the chosen level quoted; `HASH(0, 2)` recorded.
+- HASH MOVERS: "every run in which a crisis fires re-records" (the source). EXPECTED RED UNTIL B98.99: the `_realm_goldens` readers and the NPC-088 headless pin if a crisis fires in its run.
+- REVERT: `crisis_arm` → `rule`, `crisis_obstacle` → `None` (one commit).
+- DEPENDS ON: V12 Batch B10, B10.13, B10.14, B10.15; Batch B05 (the obstacle ladder).
+- STOPS IF: the emitter at `drawn` raises with `crisis_obstacle` set (B10.15's guard not keyed on `None`).
+- COST and TIER: calibration; `sonnet`, high; `opus` reads gate 2 and 3 per level.
+- LANDS IT: B98's producer; `Item: B98.12`, `[skip ci]`.
+
+### B98.13 — `temper_gain` stays at 0 · row 14; B10.28; `02_CHAR_resolve_and_temper`; `U5a_CHAR_owed_amendments` §1 · BLOCKED (design: no target reading) · HASH EQUAL
+- SOURCE: part 2 §4 row 14; B10's `DIALS AT CONTROL` line: "none stated beyond the direction readings … (`U5a_CHAR_owed_amendments` §1: 'No threshold is invented: each line is a direction against a control') … unless CR-93's design (B10.51) states one".
+- SETTING: `engine/season/data/fixtures.py` (`temper_gain`) = 0 (B10.28); read by `decision/choose.py::temper`.
+- INSTRUCTION: open B10.51's merged design file; record whether it states a target reading for `temper_gain`. Flip nothing.
+- OWNER OF THE TARGET: CR-93's design (B10.51; IN lane).
+- STOPS IF: the design states a target reading: the position stops and is reported at the batch's 0.1 stop (the flip is then written from that text, which this plan did not copy).
+- GATE: `FIX(temper_gain)` → 0 (R2). B99 QUOTES: the value as left; R-08.c's magnitude is read at it.
+- DEPENDS ON: V12 Batch B10, B10.28, B10.51. COST and TIER: reading; `sonnet`, low. LANDS IT: no commit; B98.99's body.
+
+### B98.14 — the goal leans on its own question · row 15; B10.30; `02_CHAR_goal_lean_on_its_own_question` · BUILD (flip) · HASH MOVER(behaviour)
+- SOURCE: part 2 §4 row 15; `proposals/02_CHAR_goal_lean_on_its_own_question.md` "Gate": "`aim_gain` 1, `decision_spread --season`, seeds 0–2: … Reading rule, stated before the run: the share of persons with one score-top verb across a `need` question and a `claim_landed` question on the same referent falls below the 36-of-46 read above"; "`aperture 2 0`: no verb's `executed` count falls to 0 that was above 0 at the control". Sweep (B10.30's hole row): `[0, 0.5, 1, 2]`.
+- SETTING: `engine/season/data/fixtures.py` (`aim_gain`) = 0 (B10.30). New value: the probe's choice from `{0.5, 1, 2}`.
+- INSTRUCTION:
+  1. Probe: at each gain, seeds 0 to 2, `harness/decision_spread.py::play_season(w, 1)` on `build_realm(s)` with the gain swept in-process (the source's "`decision_spread --season`", one season); the share of persons with one score-top verb across the two questions, printed with the gain-0 control's share on the same base (the source's 36 of 46 was read on an older tree and is quoted beside it, not used as the bar) `[ASSUMPTION: the share is read from `play_season`'s result; the producer names the key in the commit body]`.
+  2. Rule (U4): the source reads its target at 1: ship 1 if the share falls below the control's at every seed and the `aperture` arm holds; else the smallest of 0.5, 2 that passes; none: ship nothing.
+  3. `aim_gain` → the value; its hole row's text names the reading.
+- FALSIFIER and CONTROL: `test_goal_lean.py`'s hand-built pair (the source's falsifier). Control arm: `HASH(0, 2; aim_gain = 0)` equals B98.12's after-reading.
+- GATE: `python -m pytest engine/season/tests/test_goal_lean.py engine/season/tests/test_in62_decision_spread.py -q` → pass; the probe's shares quoted; `PYTHONHASHSEED=0 python -m engine.season.harness.aperture 2 0` on the item's base and after the edit → no verb whose `executed` was above 0 reads 0; `HASH(0, 2)` recorded.
+- HASH MOVERS: "declared when the gain flips" (B10.30). EXPECTED RED UNTIL B98.99: the `_realm_goldens` readers.
+- REVERT: `aim_gain` → 0.
+- DEPENDS ON: V12 Batch B10, B10.30. COST and TIER: calibration; `sonnet`, high; `opus` reads the shares. LANDS IT: B98's producer; `Item: B98.14`, `[skip ci]`.
+
+### B98.15 — what an act risks enters the choice · row 16; B10.31; `02_CHAR_what_an_act_risks` gate (d) · BUILD (flip) · HASH MOVER(behaviour)
+- SOURCE: part 2 §4 row 16; `proposals/02_CHAR_what_an_act_risks.md` "The gate" (d): "Seeds 0 to 2, after the offer proposal lands: attempts at exposed acts by persons below the top body band fall against the gain-0 control"; "(d) is a realm reading (`decision_spread`), quoted in the flip's commit"; the falsifier ("At a non-zero gain the rank of any candidate whose row contests no bodily prize changes … or, in (d), wounded persons attempt exposed acts as often as before at three seeds"). Sweep (B10.31): `risk_gain` 0, 0.5, 1.0.
+- SETTINGS: `engine/season/data/fixtures.py` (`risk_gain` = 0.0; `nerve_gain` = 0.0; `risk_unknown_chance` 0.5), B10.31. New value: `risk_gain` from `{0.5, 1.0}`. `nerve_gain` stays 0.0: it reads only through a `choice_exposure` uses row and "no row ships" (B10.31 step 5), so a flip would move nothing; it is recorded in R2 as left at control for want of the row (content: the uses row, BA1's or Jordan's).
+- INSTRUCTION: probe at each `risk_gain`, seeds 0 to 2, two seasons, in-process (`play_season(w, 2)`): attempts at exposed acts (rows contesting a prize in `rosters.yaml: bodily_prizes`) by persons below the top body band, against gain 0. Rule (U4): the smallest gain at which the count falls at every seed and `test_an_uncontested_candidate_is_unchanged_at_any_gain` holds; none: ship nothing. `risk_gain` → the value.
+- FALSIFIER and CONTROL: the source's falsifier above. Control arm: `HASH(0, 2; risk_gain = 0.0)` equals B98.14's after-reading.
+- GATE: `python -m pytest engine/season/tests/test_risk_term.py engine/season/tests/test_goal_lean.py -q` → pass; the counts per seed and gain quoted; `HASH(0, 2)` recorded.
+- HASH MOVERS: "declared when the gain flips" (B10.31): every deliberation offering an exposed act. EXPECTED RED UNTIL B98.99: the `_realm_goldens` readers.
+- REVERT: `risk_gain` → 0.0.
+- DEPENDS ON: V12 Batch B10, B10.31; "after the offer proposal lands": `02_CHAR_offer_what_can_be_done` (B10, PROPOSED).
+- COST and TIER: calibration; `sonnet`, high; `opus` reads (d). LANDS IT: B98's producer; `Item: B98.15`, `[skip ci]`.
+
+### B98.16 — `rival_gain` stays at 0 and `stance_polarity` stays `declared` · rows 17, 18; B10.63, B10.69; H-180; `17_CENSUS_C1A_02` W4 · BLOCKED (design: no target reading) · HASH EQUAL
+- SOURCE: part 2 §4 rows 17, 18; `workplan_v12_part13.md` B10's second-half `DIALS AT CONTROL` lines: `rival_gain` "set by B98; target: none stated"; `stance_polarity` "set by: no batch (`17_CENSUS_C1A_02` W4: 'the flip is design-first' …); target: none stated".
+- SETTINGS: (row 17) `engine/season/data/fixtures.py` (`rival_gain`) = 0.0, shipped by B10.63 (read by `decision/options.py::teller_weight`); (row 18) `stance_polarity` = `"declared"` (the `beneficiary` arm ships unswitched; B10.69 reads it).
+- INSTRUCTION: none; flip nothing.
+- OWNER OF THE TARGET: row 17, H-180's design (no design document gives the factor's shape, B10.63); row 18, a design item no batch carries (`17_CENSUS_C1A_02` W4).
+- GATE: `FIX(rival_gain)` → 0.0; `FIX(stance_polarity)` → `'declared'` (R2). B99 QUOTES: both as left.
+- DEPENDS ON: V12 Batch B10, B10.63, B10.69. COST and TIER: reading; `sonnet`, low. LANDS IT: no commit; B98.99's body.
+
+### B98.17 — `said_choices` stays at 1 · row 19; B11.10; `08_FI_02` edit 7 · BLOCKED (design: no target reading) · HASH EQUAL
+- SOURCE: part 2 §4 row 19: "`08_FI_02` edit 7 names 1 as the control only".
+- SETTING: `engine/season/data/fixtures.py` (`said_choices`) = 1, shipped by B11.10 (the operand range of `tell`, `lie` read through `operand_bags`).
+- INSTRUCTION: none; flip nothing. OWNER OF THE TARGET: the FI lane's design of how many sayings a teller weighs.
+- GATE: `FIX(said_choices)` → 1 (R2). B99 QUOTES: the value as left.
+- DEPENDS ON: V12 Batch B11, B11.10. COST and TIER: reading; `sonnet`, low. LANDS IT: no commit; B98.99's body.
+
+### B98.18 — `notice_arm` on, if B11 did not turn it on · row 20; B11.66, B11.67; `18_DETERMINISM_notice_is_a_draw` · BUILD (flip, conditional) · HASH MOVER(behaviour)
+- SOURCE: part 2 §4 row 20 ("IN-BATCH (B11.67 if B11.66's gate reads), else TARGETED"); B11.67: "If any arm fails, do not flip: the commit records the readings, `notice_arm` stays `off`, and the DIALS AT CONTROL line names B98 with this gate as its target"; `proposals/18_DETERMINISM_notice_is_a_draw.md` "Gate" 1, 2, 4 (copied in B11.67).
+- CONDITION (U5): open B11.67's commit on `main` (`git log --grep='Item: B11.67'`) and `FIX(notice_arm)`. If it reads `on`, this position records "set by B11.67 @<sha>" and closes as a POINTER (no commit). If `off`, it runs.
+- SETTING: `engine/season/data/fixtures.py` (`notice_arm`) = `off` (B11.66). New value: `on`. `notice_ob` stays `routine` (row 21).
+- INSTRUCTION: read B11.67's gate at `notice_arm = on` on this base (`PYTHONHASHSEED=0`): "1. Realm seeds 0, 1, 2, one season, `notice_arm: on`: all four bands occur among notice draws; deed claims deposited to non-parties fall strictly below the `off` arm and stay above 0; deposits to doers and subjects are equal across arms (counted per arm). 2. … in a planted world, a witness holding `inquiry` 3 notices a `forge` more often over 200 seeds than one at `pool_default`, and a forger holding a Success cover is noticed less often than one with none; no share is 0 or 1 (`assert checked >= 200`). 4. 04 PART D 41a's permutation test passes at `on`". If every arm reads, `notice_arm` → `on`.
+- FALSIFIER and CONTROL: B11.66's ("A non-party witness whose deposit is identical in both arms at every seed …; a Partial deposit that names the hand; a doer who does not know his own act"). Control arm: `HASH(0, 2; notice_arm = off)` equals B98.16's after-reading.
+- GATE: `python -m pytest engine/season/tests/test_notice_draw.py -q` → pass; arms 1, 2, 4 quoted; R-07's `told_by` shares from `register --requirements` quoted before and after, not gated (the source); `HASH(0, 2)` recorded.
+- HASH MOVERS: "every world with a deed and a non-party witness at `on`" (all of them). EXPECTED RED UNTIL B98.99: the `_realm_goldens` readers, the NPC-088 headless pin, `test_fi03_trail.py`'s realm hash.
+- REVERT: `notice_arm` → `off`.
+- DEPENDS ON: V12 Batch B11, B11.66, B11.67; Batch B12c, B12c.09 (sabotage reads the notice draw).
+- COST and TIER: calibration; `sonnet`, high; `opus` reads arms 1 and 2. LANDS IT: B98's producer; `Item: B98.18`, `[skip ci]` (if it runs).
+
+### B98.19 — `notice_ob` stays `routine` and `record_concluders` stays 0 · rows 21, 22; B11.66, B11.75 · BLOCKED (design: no target reading) · HASH EQUAL
+- SOURCE: part 2 §4 rows 21 ("its member is set at calibration"; "B98 may read row 20's gate 1 as its target": a may, not a stated reading, U2) and 22 ("until CR-83's design (B11, `IS-B2-FI-05`) names a sweep and a target").
+- SETTINGS: (21) `engine/season/data/fixtures.py` (`notice_ob`) = `routine` `[ASSUMPTION: OBS's control arm]`, B11.66; (22) `record_concluders` = 0, B11.75 (`decision/options.py`, `record`'s pairing).
+- INSTRUCTION: none; flip nothing. OWNER OF THE TARGET: (21) the FI lane, a reading for the notice obstacle; (22) CR-83's design (`IS-B2-FI-05`).
+- GATE: `FIX(notice_ob)` → `'routine'`; `FIX(record_concluders)` → 0 (R2). B99 QUOTES: both as left.
+- DEPENDS ON: V12 Batch B11, B11.66, B11.75. COST and TIER: reading; `sonnet`, low. LANDS IT: no commit; B98.99's body.
+
+### B98.20 — four governance steps stay at control · rows 23 to 26; B21.09, B21.12, B21.73, B21.61, B21.69 · BLOCKED (design: no target reading) · HASH EQUAL
+- SOURCE: part 2 §4 rows 23 to 26; `workplan_v12_part14.md` and `_part15.md` B21's `DIALS AT CONTROL` lines.
+- SETTINGS, each in `engine/season/data/fixtures.py`, each with its reason:
+  (23) `rank_step` = 0 (B21.09; obstacle member `rank_gap`): "a proposed 0.25, swept {0, 0.25, 0.5}, `unified/work/R4_READ.md:315`; no reading named".
+  (24) `provisional_term`: its first half is set in its own batch (B21.73 sets 2; IN-BATCH, not a member); the later re-centring is "the joint re-centring (OBS §4 step 5) or the story census sets it" (`14_VERBS_BINDING_C_turnover.md` edit 1), no owner after B21.
+  (25) `cross_chain_step` = 0 (B21.61): `16_PESSIMIST_FA_B` edit 2, "control 0, proposed 2", no reading.
+  (26) `faction_power_step` = 0 (B21.69): `IS-B3-FA-07`, "set by Jordan or the B21 calibration"; B21 runs none.
+- INSTRUCTION: open B21.73's commit and record `provisional_term`'s value (expected 2); flip nothing.
+- OWNER OF THE TARGET: (23), (25) the FA lane's design of a reading; (24) the joint re-centring or the story census (no batch); (26) Jordan, or a calibration item the FA lane writes.
+- GATE: `FIX(rank_step)` → 0; `FIX(provisional_term)` → B21.73's value; `FIX(cross_chain_step)` → 0; `FIX(faction_power_step)` → 0 (R2). B99 QUOTES: all four as left.
+- DEPENDS ON: V12 Batch B21, B21.09, B21.12, B21.61, B21.69, B21.73. COST and TIER: reading; `sonnet`, low. LANDS IT: no commit; B98.99's body.
+
+### B98.21 — the Calamity's weight leaves 0, with the wound planted · row 27; B12a.07, B12a.63 to .65, B12a.71 (HELD there); `09_WR_world_motion` edit 1; `16_PESSIMIST_WR_B` · BUILD (flip) · HASH MOVER(behaviour), and the build hash
+- SOURCE: part 2 §4 row 27 (C-05: part 20 governs); `workplan_v12_part20.md` B12a's `DIALS AT CONTROL` lines and B12a.71; `proposals/09_WR_world_motion.md` edit 1 ("as its own commit and its own mover: `lattice_coupling` 0 → 250 (H-235's swept arm) with `wound=True` the default"); `proposals/16_PESSIMIST_WR_B_the_calamity_strains_and_breaks.md` "The gate that shows it worked" ("On `build_realm` with the wound planted and the weight at 250, nobody acting, fourteen seasons, seeds 0 and 1": the yield "differs between the two seeds"; "at least one `site.ruptured` is emitted in at least one seed, and its season differs between seeds"; "the front stops where it is mended"; "at weight 0 the season is the base hash"); read at two seasons (fourteen in the source; A-114).
+- SETTINGS: `engine/season/data/fixtures.py` (`lattice_coupling`) = 0; `engine/season/boot/realm.py::build_realm` (`wound=False` default); `rupture_band` 100, `rupture_base` 2, `rupture_pool_cap` 6 (B12a.64, inert at weight 0). New: `lattice_coupling` 250, `wound=True`; the three rupture values stay as shipped unless the gate fails on them ("re-read at the joint calibration … before the weight leaves 0": read here, not changed). The wound's Site kind is Jordan's content, set by B12a.07 (listed in the PR body, D-19).
+- INSTRUCTION: one commit: `lattice_coupling` 0 → 250 and `build_realm`'s `wound` default `False` → `True`; H-235's row text names the reading.
+- TESTS: `engine/season/tests/test_in35_lattice_coupling.py` (B12a's four, `test_weight_zero_is_the_base_hash` among them), run at the new defaults.
+- FALSIFIER and CONTROL: the source's falsifier; `test_weight_zero_is_the_base_hash`. Control arm: `HASH(0, 2; lattice_coupling = 0)` with `build_realm(0, wound=False)` equals B98.20's after-reading.
+- GATE: the test file → pass; seeds 0 and 1, two seasons, nobody acting (the test file's fold): the realm yield at the last season, per seed, quoted and differing; `site.ruptured` count and season per seed quoted (the source's season 13 and 719 are fourteen-season figures, quoted beside, not asserted, U6); the mended-front arm read on the test's planted source; `HASH(0, 2)` and `build_realm(0).content_hash()` recorded.
+- HASH MOVERS: every seeded world (the wound strains its neighbours' wear) and the build hash (`wound=True`). EXPECTED RED UNTIL B98.99: `test_go07_canonical_digest.py` (`BUILD[0]` and `SHIPPED`), the `_realm_goldens` readers, the NPC-088 headless pin.
+- REVERT: `lattice_coupling` → 0, `wound` default → `False` (one commit).
+- DEPENDS ON: V12 Batch B12a, B12a.07, B12a.63, B12a.64, B12a.65; Batch B35 (the Mend, `09_WR_B_threadwork_session_and_practitioner`; B35.27, the wound as Thread ground).
+- STOPS IF: H-165 / H-07's wear-0 kinds are not decided on the base (`engine/season/hole_register.yaml` rows H-165 and H-07 still open; `09_WR_world_motion` edit 1: "the flip waits on it"); or the Mend is not callable at the base. Either: stop, report, flip nothing; B99 quotes the weight-0 reading.
+- COST and TIER: calibration; `sonnet`, high; `opus` reads the yields and ruptures.
+- LANDS IT: B98's producer; `Item: B98.21`, `[skip ci]`.
+
+### B98.22 — `site_yield.harbour.grain` under `ground` stays 40 · row 28; B12a.51 · BLOCKED (design: no target reading) · HASH EQUAL
+- SOURCE: part 2 §4 row 28; part 20's `DIALS AT CONTROL` line: "the source's 'a reduced `grain` (fish) of 10' under `ground` is not built here (`B12a.51`, UNDECIDED 3); … target: none stated ('joins JQ-6's sweep')".
+- SETTING: `engine/season/rosters.yaml` (`site_yield.harbour.grain` under `ground`) = 40 (today's, both arms).
+- INSTRUCTION: none; flip nothing. OWNER OF THE TARGET: JQ-6's sweep (SE lane; no batch carries it).
+- GATE: the row `site_yield.harbour.grain` under `ground` in `engine/season/rosters.yaml`, read on the closing tree → 40 (R2). B99 QUOTES: the value as left.
+- DEPENDS ON: V12 Batch B12a, B12a.51. COST and TIER: reading; `sonnet`, low. LANDS IT: no commit; B98.99's body.

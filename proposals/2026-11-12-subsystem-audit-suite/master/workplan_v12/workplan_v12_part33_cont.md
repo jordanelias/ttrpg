@@ -149,7 +149,7 @@
 - FALSIFIER and CONTROL: any seeded hash moving. Control: realm, spine and corpus hashes at seeds 0 to 2 equal.
 - GATE: `python -m pytest engine/season/tests/test_in12_raze.py -q` → green; `git grep -n "def occupying_faction" engine/season` → one line, in `queries/world_q.py`.
 - HASH MOVERS: none.
-- DEPENDS ON: EXISTS-IN-TREE `engine/season/loop/effects_shared.py::occupying_faction` (`:149`), `::_seize_rung`.
+- DEPENDS ON: EXISTS-IN-TREE `engine/season/loop/effects_shared.py::occupying_faction` (`:149`), `engine/season/loop/effects_information.py::_seize_rung` (its caller; not in `effects_shared.py`), `engine/season/loop/effects_founding.py::_eff_raze` (the other caller).
 - GLOSSARY: none.
 - COST and TIER: edit; `sonnet`.
 - LANDS IT: B22's producer; `Item: B22.28`, `[skip ci]`.
@@ -221,6 +221,7 @@
 - FALSIFIER and CONTROL: planted, drop `referent_class: Occupied` (B22.30): the test fails on the formed set. Control: no occupation, no `raze`.
 - GATE: `PYTHONHASHSEED=0 python -m pytest engine/season/tests/test_v14_raze_after_occupation.py engine/season/tests/test_vm_phy_b_field_ruin.py -q` → green; `test_in12_raze.py` → the H-228 pin red, the rest green. The raze-band gate read once by `opus`.
 - HASH MOVERS: every realm pin with a `raze` attempt; `test_in12_raze.py`'s H-228 pin (declared; B22's one re-pin).
+- EXPECTED RED UNTIL B22.35: `engine/season/tests/test_in12_raze.py`'s H-228 pin (the GATE above), under `[skip ci]`.
 - DEPENDS ON: V12 B22.30; V12 `U5b_VERBS_military_physical_residue` §1, `U5c_VERBS_residue_and_governance_owner` §1 (Batch B07); EXISTS-IN-TREE `engine/season/loop/effects_founding.py::_eff_raze` `[ASSUMPTION: present — cited]`, `engine/season/loop/effects_economy.py::_fall`, `engine/season/write_matrix.yaml` row `(Site, exists)` (`:418-424`, cited by the source).
 - GLOSSARY: none.
 - IDS: H block slot 2 (`raze_sack_share`'s NUMBER row).

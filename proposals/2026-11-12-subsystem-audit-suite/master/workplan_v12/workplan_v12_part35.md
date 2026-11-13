@@ -257,7 +257,7 @@ Not in this batch, and where each is: 28C (`28_CORE_scene_access_C_the_petition_
 - GATE: `python -m pytest engine/season/tests/test_vm_s1_d_grievance.py -q` → pass; seed-0 hash after one season → moved, quoted.
 - EXPECTED RED UNTIL B28.99: the realm pins, under `[skip ci]`.
 - HASH MOVERS: every seeded world with a `challenge`. Declared; B28's one re-pin.
-- DEPENDS ON: V12 B28.02 (`served`); V12 B28.05 (`forgive` forms on the grievance); EXISTS-IN-TREE `loop/effects_information.py::_eff_challenge`, `rosters.yaml: challenge_terms`, `::held_document_declines`, `::choice_sourced`; V12 Batch B21 (`14_VERBS_BINDING_A_formation.md`: `rank_gap`, `rank_step`); V12 Batch B05 (OBS §3: `favour`); V12 Batch B01 (lane A: the duel fires); V12 Batch B15 (`14_VERBS_PHYSICAL_A` A4: `accept` on challenges heard; S1-D "Depends on" names B14, which B15 follows).
+- DEPENDS ON: V12 B28.02 (`served`); V12 B28.05 (`forgive` forms on the grievance); EXISTS-IN-TREE `loop/effects_information.py::_eff_challenge`, `rosters.yaml: challenge_terms`, `::held_document_declines`, `::choice_sourced`; V12 Batch B21 (`14_VERBS_BINDING_A_formation.md`: `rank_gap`, `rank_step`); V12 Batch B05 (OBS §3: `favour`); V12 Batch B01 (lane A: the duel fires); V12 B14.27 (`14_VERBS_PHYSICAL_A` A4: `accept` on challenges heard; Batch B14, which B15 follows: B14 is in B28's `after` list through B15).
 - GLOSSARY: *force* (step 6).
 - NAMES: "in a later round" (S1-D "Gate") → in a later lap (B04.01); `verb_capability` `challenge: argue` → the row's `capability: argue` (B04.04).
 - IDS: H block slot 6 (`challenge_answer_ticks`).
@@ -271,9 +271,9 @@ Not in this batch, and where each is: 28C (`28_CORE_scene_access_C_the_petition_
 - WHERE: `engine/season/loop/effects_combat.py` (`_eff_kill`: the spent stage); `engine/season/queries/world_q.py` (`challenges_heard`: the spent filter); `engine/season/tests/test_vm_s1_d_grievance.py`.
 - TESTS: `test_an_accepted_challenge_fought_once_forms_no_second_accept` ("a planted accepted challenge, fought once, forms no second `accept`; control: the edit reverted forms one"), written before the edit and read red.
 - FALSIFIER and CONTROL: a second `accept` formed on a fought challenge. Control: the edit reverted forms one (the test's own arm).
-- GATE: `python -m pytest engine/season/tests/test_vm_s1_d_grievance.py -q -k spent or second_accept` → pass.
+- GATE: `python -m pytest engine/season/tests/test_vm_s1_d_grievance.py -q -k "spent or second_accept"` → pass.
 - HASH MOVERS: worlds where an accepted challenge is fought (no second `accept` forms). Declared; B28's one re-pin.
-- DEPENDS ON: V12 B28.06; EXISTS-IN-TREE `loop/effects_combat.py::_eff_kill`; V12 Batch B15 (`world_q.challenges_heard`, `14_VERBS_PHYSICAL_A` A4; not in the tree at `5c2a9a0`: `git grep -n "def challenges_heard" engine` is empty).
+- DEPENDS ON: V12 B28.06; EXISTS-IN-TREE `loop/effects_combat.py::_eff_kill`; V12 B14.27 (`world_q.challenges_heard`, `14_VERBS_PHYSICAL_A` A4, Batch B14; not in the tree at `5c2a9a0`: `git grep -n "def challenges_heard" engine` is empty).
 - GLOSSARY: NEW row *spent* (a challenge Record's stage): "a challenge already fought cannot license another fight"; owner the stage name in `_eff_kill` and `challenges_heard` (T).
 - COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B28's producer; `Item: B28.07`, `[skip ci]`.
@@ -395,7 +395,7 @@ Not in this batch, and where each is: 28C (`28_CORE_scene_access_C_the_petition_
 - WHERE: `engine/season/rosters.yaml` (the prize row); `engine/season/verb_table.yaml` (`covenant`); `engine/season/seam/wrappers/sigma.py` (`hearing_input`); `engine/season/loop/effects_information.py` (the negotiation file's edit 5: the kind `disposes:` names); `engine/season/tests/test_sc_hearing_negotiation.py`.
 - TESTS: "a new test `test_a_computed_covenant_opens_a_negotiation` (a planted seat-holder with an uttered Proposition and a counterparty present forms `covenant`; the sitting runs; either `covenant_in_force` reads above 0 or the case file holds the parted exchanges)", in `test_sc_hearing_negotiation.py` (B24 created the file), written before step (2) and read red, run with `sitting_exchanges` set above 0 in the test.
 - FALSIFIER and CONTROL: "Falsified if the opener's draw, not the counterparty's own act, makes the agreement." Control: "`sitting_exchanges` 0 leaves `covenant` the single draw SOCIAL1_B defines" (the shipped dial: seed-0 hash equal to B28.12's).
-- GATE: that test → pass; "`aperture 2 0` shows `covenant` executed above its opening reading (0 of 3 attempted at `b07fc1c`, one season)", quoted against B28.09's reading.
+- GATE: `python -m pytest engine/season/tests/test_sc_hearing_negotiation.py -q -k test_a_computed_covenant_opens_a_negotiation` → pass; "`aperture 2 0` shows `covenant` executed above its opening reading (0 of 3 attempted at `b07fc1c`, one season)", quoted against B28.09's reading.
 - HASH MOVERS: "declared, wherever a `covenant` executes with `sitting_exchanges` above 0": at the shipped `sitting_exchanges` (0, a B98 member) EQUAL. Declared; B28's one re-pin covers it if the dial moves before the close.
 - DEPENDS ON: V12 B28.09 (`covenant_in_force`, the drafting draw); V12 Batch B25, through B24 (`05_SC_negotiation_scene.md` edits 1 to 5; HEAR_B edit 1; `HearingInput`); CR-63: "no longer needed for this edit" (`IS-B2-SC-05`); EXISTS-IN-TREE `verb_table.yaml: covenant` (`counterparty: to`), `arrangements.yaml: negotiation` (`disposal: mutual`, `disposes: oblige`).
 - GLOSSARY: row *negotiation* (if absent, NEW): "a sitting with no bench in which two parties trade terms and each binds himself by his own act"; owner the `disposal: mutual` arrangement row and `covenant` (T).

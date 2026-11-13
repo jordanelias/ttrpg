@@ -62,7 +62,7 @@ EST: 6.5 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over the 10 
 | B11F2.09 | office influence on the within-stake, if its gate holds | CR-102 (CONDITIONAL) | BUILD | EQUAL | B11F2.03, .07, .08, .02 |
 | B11F2.10 | evaluate the field route under a rule fixed in advance | CR-103 | HELD (Batch B21s-strife-supply and Batch B21b-fa-war closed) | MOVER only if an arm ships | B11F2.03, .06–.09 |
 | B11F2.11 | a choice-score bias toward what is at stake | CR-105 (CONDITIONAL) | HELD (B11F2.10 ships OFF under "none lifts", and Jordan's AX-2 hunk applied) | EQUAL at 0 | B11F2.10 |
-| B11F2.99 | close readings (EQUAL: nothing re-pinned) | `V12_STRUCTURE_part4.md` E-1 | BUILD | EQUAL | B11F2.01 to B11F2.09 |
+| B11F2.99 | re-pin and close readings: the EQUAL readings recorded (nothing re-pinned) | `V12_STRUCTURE_part4.md` E-1 | BUILD | EQUAL | B11F2.01 to B11F2.09 |
 
 Not in this batch, and where each is: CR-106 and CR-107 and P16 §3.4's territory caps (B11F1); CR-73, CR-74 (B21s); CR-80 (retired: SUPERSEDED by `21_PROCEDURAL_D_world_cards_and_churn.md` (e), B39; `master/V11_EVALUATION_part2.md` ledger); CR-107b (held behind the reader audit, B11F1's block); P16 §3.6's `cohorts.yaml:21-23` and `venues.yaml` `serves:` corrections (B11F1's CR-107 and CR-106 items, B11F2.04).
 
@@ -246,7 +246,7 @@ Not in this batch, and where each is: CR-106 and CR-107 and P16 §3.4's territor
 - COST and TIER: small build; "third tier (judgment) for the term and its gate reading" (`opus`).
 - LANDS IT: the producer of the batch its trigger makes it an item of; `Item: B11F2.11`.
 
-### B11F2.99 — close readings (EQUAL: nothing re-pinned) · `V12_STRUCTURE_part4.md` E-1 · BUILD · HASH EQUAL
+### B11F2.99 — re-pin and close readings: the EQUAL readings recorded (nothing re-pinned) · `V12_STRUCTURE_part4.md` E-1 · BUILD · HASH EQUAL
 - SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2; `V12_STRUCTURE_part2.md` §5.12; `IS-A-12`.
 - ADVANCES: the batch's close record.
 - INSTRUCTION: take the batch gate's readings (seeds 0 to 2, one season, each hash equal to B11F1's close; CR-97's OFF reading at two seasons) and write them in this commit body with the measured wall time; the commit records "EQUAL: no pin re-recorded" and names the entries closed by POINTER (B11F2.01, B11F2.04) and the two held positions left in the plan (B11F2.10, B11F2.11) with their triggers. No `reading:` record (no conjunct named).

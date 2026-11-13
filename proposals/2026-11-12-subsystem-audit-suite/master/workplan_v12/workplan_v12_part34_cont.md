@@ -27,7 +27,7 @@ Short names and paths are the head of `workplan_v12_part34.md`'s. The batch bloc
 - WHERE: `engine/season/loop/predicates.py` (`_req_convene`); `engine/season/loop/effects_governance.py` (`_eff_convene`'s precondition); `engine/season/hole_register.yaml` (H-278); `engine/season/tests/test_vb_b_sittings.py`.
 - TESTS: (E8's falsifier, as tests, red before) `test_convene_at_another_duchy_refused_purview` ("a scope-D duke's `convene` at another duchy is refused with the purview clause named"), `test_past_dated_convene_refused`, and the positive control `test_lawful_convene_executes` `[ASSUMPTION: names]`.
 - FALSIFIER and CONTROL: the two plants above reading admitted. Control: "A positive control for each (the lawful act still executes)".
-- GATE: the three tests pass; "`python -m engine.season.harness.aperture 2 0` before and after for H-278 (the `convene` executed count and the new refusal reading named)", quoted.
+- GATE: `python -m pytest engine/season/tests/test_vb_b_sittings.py -q` → the three tests above pass (with the file's earlier test); "`python -m engine.season.harness.aperture 2 0` before and after for H-278 (the `convene` executed count and the new refusal reading named)", quoted.
 - HASH MOVERS: "H-278 declared (convening by a seat with no purview over the venue is refused where the realm executed it: `06_FA_remit_grant_by_row.md:33` records `convene` executed by `p_npc_032`)". Re-pinned at B32.99.
 - DEPENDS ON: V12 B32.22; V12 Batch B09 (`01_CORE_predicates_name_their_clause`: `_refuse`); EXISTS-IN-TREE `loop/predicates.py::_req_convene`, `state/gate.py::purview_reaches`.
 - GLOSSARY: none.
@@ -45,7 +45,7 @@ Short names and paths are the head of `workplan_v12_part34.md`'s. The batch bloc
 - WHERE: `engine/season/data/verbs.py` (`PARTY_CLASS`); `engine/season/rosters.yaml` (`referent_classes`); `engine/season/queries/world_q.py` (NEW `parties_before`; `questions_for`); `engine/season/verb_table.yaml` (`determine`).
 - TESTS: `test_vb_b_sittings.py::test_b2_determine_forms_only_on_a_party` `[ASSUMPTION: name]`; red before.
 - FALSIFIER and CONTROL: "B2: stamp every plain referent as `Party`: refusals at `party` return." Control: a docketed party at a fired sitting still forms.
-- GATE: the test passes; "`aperture 2 0` and `2 1`: `determine.refused` keyed `party` and `docket` → 0; `matter.determined` not below 0/1. If executions fall (RL2's mode), the reading is recorded and B2 is held, not shipped" (a fall stops the item: HELD, and the batch close says so).
+- GATE: `python -m pytest engine/season/tests/test_vb_b_sittings.py::test_b2_determine_forms_only_on_a_party -q` → the test passes; "`aperture 2 0` and `2 1`: `determine.refused` keyed `party` and `docket` → 0; `matter.determined` not below 0/1. If executions fall (RL2's mode), the reading is recorded and B2 is held, not shipped" (a fall stops the item: HELD, and the batch close says so).
 - HASH MOVERS: declared "where it bites" (every run in which `determine` formed on a non-party). Re-pinned at B32.99.
 - DEPENDS ON: V12 B32.22; EXISTS-IN-TREE `queries/world_q.py::sittings_before`, `::questions_for`, `data/verbs.py::DETAINEE_CLASS`, `::REFERENT_CLASSES`; V12 Batch B24 (`05_SC_playable_hearing_B`: the `a verdict` row).
 - GLOSSARY: row *party*: "a person on the docket of a sitting before the asker's bench" (the class `Party`).
@@ -64,7 +64,7 @@ Short names and paths are the head of `workplan_v12_part34.md`'s. The batch bloc
 - WHERE: `engine/season/data/verbs.py` (`RESTRAINED_CLASS`); `engine/season/rosters.yaml` (`referent_classes`); `engine/season/queries/world_q.py` (NEW `restrained_on_seats`; `questions_for`); `engine/season/verb_table.yaml` (`pardon`).
 - TESTS: `test_vb_b_sittings.py::test_b3_pardon_forms_only_on_the_restrained` and `::test_b3_pardon_through_a_seat_not_the_edge_object_refused` ("a `pardon` formed through a seat that is not the edge's object is refused at formation …; a new holder of that seat may pardon") `[ASSUMPTION: names]`; red before.
 - FALSIFIER and CONTROL: "B3: widen `restrained_on_seats` to every person: refusals return. Stamp `Restrained` for a restraint whose object is another bench's seat: refusals return". Control: `interrogate`'s `Detainee` unchanged.
-- GATE: the tests pass; "`pardon` formed → 0 persons and `pardon.refused` → 0 while no restraint is live" (`aperture 2 0`, `2 1`), quoted.
+- GATE: `python -m pytest engine/season/tests/test_vb_b_sittings.py -q -k "test_b3_"` → the two tests pass; "`pardon` formed → 0 persons and `pardon.refused` → 0 while no restraint is live" (`aperture 2 0`, `2 1`), quoted.
 - HASH MOVERS: declared where it bites (runs in which `pardon` formed on an unrestrained person). Re-pinned at B32.99.
 - DEPENDS ON: V12 B32.24; EXISTS-IN-TREE `queries/world_q.py::detainees_held`, `::restrained`, `RESTRAINT_KINDS` `[ASSUMPTION: the constant's module; the producer greps it]`.
 - GLOSSARY: row *restrained*: "held in custody or under a ban on a seat the asker holds" (the class `Restrained`).
@@ -188,7 +188,7 @@ Short names and paths are the head of `workplan_v12_part34.md`'s. The batch bloc
 - WHERE: `engine/season/loop/effects_governance.py` (`_eff_convene`, the `convening_attached` write); `engine/season/loop/calendar.py` (the due-Date fire); NEW `engine/season/tests/test_convening_condition.py` `[ASSUMPTION: file and test names; E-3]`.
 - TESTS: `test_a_date_below_its_condition_stays_due` (a Date whose row's `quorum` exceeds the bench present emits no `date.fired` and stays due), `test_a_date_meeting_its_condition_fires`; red before.
 - FALSIFIER and CONTROL: a Date below its condition that fires; "Nothing reads the key" (`grep -n convening_attached engine/season` finds a reader after the edit). Control: a row with no `quorum` fires as today.
-- GATE: the tests pass; `aperture 2 0`: `date.fired` count before (`reading @<B32.31 sha>`) and after, quoted (the source measured the write 17 times in a three-season run at its tree).
+- GATE: `python -m pytest engine/season/tests/test_convening_condition.py -q` → the two tests pass; `aperture 2 0`: `date.fired` count before (`reading @<B32.31 sha>`) and after, quoted (the source measured the write 17 times in a three-season run at its tree).
 - HASH MOVERS: every run in which a convened Date's bench falls below its row's condition. Declared; re-pinned at B32.99.
 - DEPENDS ON: V12 B32.20 (`quorum_share`), B32.22 (`_eff_convene`); EXISTS-IN-TREE `loop/calendar.py`, `loop/effects_governance.py::_eff_convene` (`convening_attached`).
 - GLOSSARY: none.
@@ -197,9 +197,16 @@ Short names and paths are the head of `workplan_v12_part34.md`'s. The batch bloc
 
 ### B32.99 — re-pin and close readings · `V12_STRUCTURE_part4.md` E-1 · BUILD · HASH MOVER (the re-pin)
 - SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2; `V12_STRUCTURE_part2.md` §5.9, §5.12; CLAUDE.md §7.
+- ADVANCES: the batch's REQUIREMENT line (R-04.a: `determine`, `convene`; `BUILT OUT`: `determine`, `pardon`).
 - INSTRUCTION: re-record, once, the realm and corpus pins in `engine/season/tests/_realm_goldens.py` at seeds 0 to 2 (build, one season, two seasons) against B27's close (`reading @<sha>`), and every test-local golden two items moved; write the R-04.a conjunct's `reading:` record in `engine/season/requirements.yaml` (`determine`, `convene` via-counts from `aperture 2 0`; `IS-A-12`), `status:` untouched; the commit says "re-pin" and lists the movers of the RE-PIN line.
 - WHERE: `engine/season/tests/_realm_goldens.py`; `engine/season/requirements.yaml` (`reading:` only).
+- TESTS: the full gates the BATCH GATE names, once (CLAUDE.md §0.4); no new test.
+- FALSIFIER and CONTROL: a pin moved that no item declared; a behaviour tally moved where an item said EQUAL (B32.01 to B32.04, B32.06, B32.07, B32.09, B32.11, B32.15, B32.28 to B32.31). Control: B32.31's seed-0 hash equal to B32.30's.
 - GATE: the BATCH GATE, read once.
+- HASH MOVERS: the re-pin itself.
+- DEPENDS ON: V12 B32.01 to B32.32 (B32.10 is BLOCKED and B32.18 a POINTER: no commit).
+- GLOSSARY: the close reads every glossary row the items named against the code (`STAGES.md` rule 2).
+- COST and TIER: reading; `sonnet` runs; the close's terminal critique `opus`.
 - LANDS IT: B32's producer; `Item: B32.99`; the batch's last `Item:` commit, CI runs on its push.
 
 ## Readings (B32)
@@ -208,7 +215,7 @@ None: no position is a READING item.
 SERIAL EDGES (B32): within the batch: B32.01 → B32.02 → B32.03 → B32.04 → B32.05 (registry, rows, kinds, readers, then the formation that offers forms); B32.03 → B32.08 (`resolution` with `recites`); B32.06 → B32.11 → B32.12 (a seat key needs the closed set; dignities need vacant rows) → B32.13 → B32.14 (`legitimacy` with `seat` from B32.07); B32.06 → B32.19 → B32.20, B32.21, B32.27 (the `tables` family) → B32.28 → B32.29 → B32.30 → B32.31; B32.22 → B32.23, B32.24 (both edit `_eff_convene`'s neighbourhood and `questions_for`) → B32.25 → B32.26; B32.24 → B32.31 (`Party`); B32.20 + B32.22 → B32.32; B32.99 last. Encoding mover B32.27 after every behaviour item whose source orders it earlier (none forces it later).
   With other batches: `contest_owed` B07 → B21 → B23 → B25 → B28 → B32 (each deletes its verb); `14_VERBS_SOCIAL1_B`'s `covenant_in_force` B28 ∥ B32 at S17 (UNDECIDED 1: no edge taken); PAP_A edit 5 → B21s (UNDECIDED 4); SYN_B gates 2, 4 → B39; SYN_B gate 5, SYN_A gates 3 (`comply`) and 4 → B33.
 FILE CENSUS (B32; `→` is landing order, U3 §5.1 chains read in v12's order): `instruments.yaml`, `data/instruments.py` B32 (new) → B33 → B39 → B40; `rosters.yaml` (`record_kinds`, `choice_sourced`, `patronage_bases`, `revocation_bases`, `binds_bases`, `tables`, `referent_classes`, `contest_owed`) … B27 → B32 → B33; `offices.yaml` B21 → B21c → B32 → B33 → B40; `arrangements.yaml` B27 → B28 → B32 → B33 → B40; `data/arrangements.py` B27 → B32 → B40; `verb_table.yaml` (`determine`, `pardon`, `confer`) B28 → B32 → B33; `data/rosters.py` (`_load_offices`, tables) B21 → B32 → B33; `data/verbs.py` (`PARTY_CLASS`, `RESTRAINED_CLASS`) B28 → B32 → B38; `state/gate.py` (`may_fill`, `may_seat`, `selection_of`, `PATRONAGE_RULES`, `REVOCATION_RULES`) B28 → B32 → B33; `state/carriers.py` (`Office`) B21 → B32 → B34; `queries/world_q.py` (`instrument_of`…`breaches`, `in_force`, `owed`, `parties_before`, `restrained_on_seats`, `audits_due`, `questions_for`) B28 → B32 → B33 (B37p, same step, `questions_for`); `queries/person_q.py` (`legitimacy`, `kept`) B28 → B32 → B33; `loop/predicates.py` (`_req_confer`, `_req_oblige`, `_req_convene`) B25 → B32; `loop/effects_governance.py` (`_eff_confer`, `_eff_convene`, `_eff_pardon`) B28 → B32 → B33 (B37p, same step, `_eff_succeed`); `loop/effects_information.py` (`_mint_document`, the ballot tally) B28 → B32 → B33; `loop/calendar.py` B32; `seam/wrappers/sigma.py` (`contest_input`: `confer`, `succeed`, `revoke`, `pardon`) B28 → B32 → B33; `decision/options.py` (`operand_bags`) B28 → B32 → B33; `boot/realm.py` B25 → B32 → B33; `npcs.yaml` B32 → B37; `data/fixtures.py` (`presumption_gain`, `dignity_grades`) B28 → B32 → B33; `hole_register.yaml`, `requirements.yaml` (permanent surface).
-PARALLEL (S17): with B11F2 (IN), B22 (MB), B26 (FI), B28 (SC), B37p (WR). Hot files shared, in different keys or functions (`V12_STRUCTURE_part3.md` §7.3; the coordinator checks the census at the step's open): `rosters.yaml`, `verb_table.yaml`, `world_q.py`, `data/fixtures.py`, `boot/realm.py` with all five; `witness.py`, `person_q.py`, `options.py`, `effects_information.py`, `arrangements.yaml`, `state/gate.py`, `sigma.py` with B28; `questions_for`, `state/gate.py` and `loop/effects_governance.py` with B37p (different functions but `questions_for`, which both splice: B32 merges first, slack 0, B37p rebases). B28's `covenant_in_force` is read by B32.04 (UNDECIDED 1). Merge order in S17: B32 is the step's critical-path mover; each later mover rebases on it and re-pins once (§7.4).
+PARALLEL (S17): with B11F2 (IN), B22 (MB), B26 (FI), B28 (SC), B37p (WR). Hot files shared, in different keys or functions (`V12_STRUCTURE_part3.md` §7.3; the coordinator checks the census at the step's open): `rosters.yaml`, `verb_table.yaml`, `world_q.py`, `data/fixtures.py`, `boot/realm.py` with all five; `witness.py`, `person_q.py`, `options.py`, `effects_information.py`, `arrangements.yaml`, `state/gate.py`, `sigma.py` with B28; `questions_for`, `state/gate.py` and `loop/effects_governance.py` with B37p (different functions but `questions_for`, which both splice: B32 merges first, slack 0, B37p rebases). B28's `covenant_in_force` is read by B32.04 (UNDECIDED 1). Merge order in S17 (`workplan_v12_part2.md` §3: B11F2, B22, B26, B28, B32, B37p): B32 rebases on B28's merge before B32.04 and re-pins once; B37p rebases on B32's (§7.4).
 
 | STOP. Batch B32-inst-kit closes here |
 
@@ -341,9 +348,17 @@ Placement (§5.6): no member names these ids (the batch has no proposal members)
 - LANDS IT: B37p's producer; `Item: B37p.05`, `[skip ci]`.
 
 ### B37p.99 — re-pin and close readings · `V12_STRUCTURE_part4.md` E-1 · BUILD · HASH MOVER (the re-pin)
+- SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2; `V12_STRUCTURE_part2.md` §5.9, §5.12; CLAUDE.md §7.
+- ADVANCES: none of the nine (the batch's REQUIREMENT line names no conjunct); the batch's one re-pin.
 - INSTRUCTION: re-record, once, the realm and corpus pins in `engine/season/tests/_realm_goldens.py` at seeds 0 to 2 (build, one and two seasons) against the RE-PIN line's baseline; the commit says "re-pin" and lists the movers; no `requirements.yaml` record (no conjunct named).
 - WHERE: `engine/season/tests/_realm_goldens.py`.
+- TESTS: the full gates the BATCH GATE names, once (CLAUDE.md §0.4); no new test.
+- FALSIFIER and CONTROL: a pin moved that no item declared. Control: no item here is hash EQUAL, so the control is the RE-PIN line's list: every mover it names moved a pin, and nothing else did.
 - GATE: the BATCH GATE, read once.
+- HASH MOVERS: the re-pin itself.
+- DEPENDS ON: V12 B37p.01 to B37p.05.
+- GLOSSARY: the close reads the rows *kin*, *estate*, *heir* against the code (`STAGES.md` rule 2).
+- COST and TIER: reading; `sonnet` runs; the close's terminal critique `opus`.
 - LANDS IT: B37p's producer; `Item: B37p.99`; the batch's last `Item:` commit.
 
 ## Readings (B37p)

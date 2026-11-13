@@ -26,6 +26,7 @@ BATCH GATE (read once, on the closing tree, `PYTHONHASHSEED=0` on every seeded c
   `03_PC_loadout_and_carry` Gate 1: "Hash EQUAL with every secondary absent (the harness term relocated, same value): season pins and the combat goldens unchanged" (read at B18.07);
   `python -m engine.season.harness.aperture 2 --seeds 0 1 2` → `challenge` executed per seed and the `BUILT OUT` line, quoted (before `reading @<B17 close sha>` — the last close that ran this instrument on the PC lane's base is named in the commit);
   `python -m engine.season.harness.register --check` → exit 0; `--requirements` → nine lines; `python tools/m1_acceptance.py --summary` → its verdict line quoted; `python tools/ci_golden_modes_check.py` → the mass-battle digests equal to B17's (`reading @<sha>`): nothing here reads a troop row (B18.06's `carry_demand_of` is not called by the MB host until B31);
+  the suites `python tools/tests_for_diff.py --base <batch-start-sha>` names (combat module and the season's combat seam: the full gates, CLAUDE.md §0.4; added by check lane K6 from `V12_STRUCTURE_part2.md` §5.2);
   the close's commit body records `register --requirements` (nine lines), `m1_acceptance --summary`'s verdict line, the two re-read conjuncts with their tree, the `BUILT OUT`, `ENGINES` and `NULL SCENES` lines before and after, and the batch's measured wall time; no `reading:` record is written (no conjunct is this batch's) and `status:` is not edited (`IS-A-12`).
 RE-PIN: once, at B18.99: the realm pins in `engine/season/tests/_realm_goldens.py` and every seeded result B18.04, .05, .08, .09 moved, against B17's close rebased on B12c's merge (§7.4; `reading @<sha>`). B18.03's `tests/valoria/r3_identity_golden.json` and the armour reference (`workbench/data/combat_armour_reference.json`) are re-recorded in B18.03's own commit by their generators (a pin only that item moves, E-1).
 EXPECTED RED UNTIL B18.99: the realm pins in `engine/season/tests/_realm_goldens.py` after B18.04, .05, .08 and .09 (the movers), under `[skip ci]` (added by check lane K6 from this block's RE-PIN line).
@@ -202,7 +203,7 @@ Not in this batch, and where each is: `U5b_PC_residue` §1, §2, §4–§10 (B14
 ### B18.99 — re-pin and close readings · `_part4` E-1 · BUILD · HASH MOVER (the re-pin)
 - SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2; `V12_STRUCTURE_part2.md` §5.9, §5.12.
 - INSTRUCTION: (1) Re-record, once, the realm pins in `engine/season/tests/_realm_goldens.py` and every seeded result B18.04, .05, .08, .09 moved, against B17's close rebased on B12c's merge (`reading @<sha>`); the commit says "re-pin" and lists them. (2) Seeds 0–2 for every item read at seed 2 only (E-2). (3) The close's readings (BATCH GATE), with the Part A–D gates 1, 2 and 4 and the loadout gates 1–3 quoted. (4) Part B's admitted and refused kinds and the census rows behind each, listed in the PR body for Jordan (D-19).
-- WHERE: the pin files above.
+- WHERE: `engine/season/tests/_realm_goldens.py`; the pin files of any other seeded result B18.04, .05, .08, .09 moved (copied from this item's INSTRUCTION and the block's RE-PIN line by check lane K6).
 - TESTS: the covering suites and the full suite once (CLAUDE.md §0.4).
 - FALSIFIER and CONTROL: a pin moved by no declared item. Control: B18.01–.03, .06, .07 reproduce.
 - GATE: the BATCH GATE.

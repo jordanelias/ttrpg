@@ -119,7 +119,7 @@
   3. `engine/season/verb_table.yaml`, row `confer`: the row becomes a keyed predicate row, one refusal kind per clause name; "a keyed predicate row is admitted when its keys equal the clause names passed in by the driver". The kind names are the FA lane's authoring: at the item's open, open a keyed typed row's refusal kinds in `verb_table.yaml` and follow its spelling; record in the commit body which row was the precedent `[ASSUMPTION: the spelling follows an existing keyed typed row — basis: CLAUDE.md §0 ladder step 4; the source names no kind]`.
 - WHERE: `engine/season/loop/predicates.py` (`_req_confer`); `engine/season/verb_table.yaml` (`confer`); `engine/season/tests/test_predicates_clause.py` (B09.19's file).
 - TESTS: `test_predicates_clause.py::test_a_keyed_predicate_row_emits_its_clauses_kind` on the shipped `confer` row `[ASSUMPTION: B09.19's planted-row test gains a shipped-row arm; the item writes it]`, red before step 3.
-- FALSIFIER and CONTROL (copied): "Two refusals for different clauses emitting one kind on a keyed row." Gate, copied: "A seeded season in which a `confer` is refused at the purview clause emits the purview kind and not the cardinality kind, and the actor's ledger holds a claim keyed by it (so §F1 clause 4 can decline the same act through the same seat next round)." Control: the three other rows still flat, their refusals unchanged.
+- FALSIFIER and CONTROL (copied): "Two refusals for different clauses emitting one kind on a keyed row." Gate, copied: "A seeded season in which a `confer` is refused at the purview clause emits the purview kind and not the cardinality kind, and the actor's ledger holds a claim keyed by it (so §F1 clause 4 can decline the same act through the same seat next round [lap: the season's pass, A-101; B04's `PCR-4`])." Control: the three other rows still flat, their refusals unchanged.
 - GATE: `python -m pytest engine/season/tests/test_predicates_clause.py -q` → pass; `python -c "from engine.season.data import verbs"` → imports (the loader's keyed-row arm admits the row); the realm hash at seed 0, one season → recorded (moved where a `confer` was refused).
 - HASH MOVERS: "step two each keyed row (declared)". B21's one re-pin (B21.99).
 - DEPENDS ON: V12 Batch B09 (B09.18 the clause names; B09.19 the channel and the loader arm); V12 the first half's B21.14 (`confer`'s `contests:`; P-11's `contest_owed` deletion).
@@ -135,6 +135,7 @@
 - GATE: as B21.80, for an `establish` refused at two different clauses (two kinds).
 - HASH MOVERS: declared; B21.99.
 - DEPENDS ON: V12 B21.80; V12 the first half's B21.09 (`establish`'s `contests:`).
+- GLOSSARY: none.
 - COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B21's producer; `Item: B21.81`, `[skip ci]`.
 
@@ -145,6 +146,7 @@
 - TESTS, GATE: as B21.81, for `revoke`.
 - HASH MOVERS: declared; B21.99.
 - DEPENDS ON: V12 B21.81; V12 the first half's B21.14 (`revoke`'s contested row).
+- GLOSSARY: none.
 - COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B21's producer; `Item: B21.82`, `[skip ci]`.
 
@@ -155,6 +157,7 @@
 - TESTS, GATE: as B21.81, for `oblige`.
 - HASH MOVERS: declared; B21.99.
 - DEPENDS ON: V12 B21.82.
+- GLOSSARY: none.
 - COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B21's producer; `Item: B21.83`, `[skip ci]`.
 

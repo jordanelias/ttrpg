@@ -164,7 +164,7 @@ Not in this batch, and where each is: `U5b_PC_residue` §1 items 3–5 (B15, the
 - LANDS IT: B14's producer; `Item: B14.04`, `[skip ci]`.
 
 ### B14.05 — H-123's site, the PC handoff, dead `designs/audit/` citations · Part C R-PC-15 · BUILD · HASH EQUAL
-- SOURCE: Part C row R-PC-15.
+- SOURCE: `proposals/03_PC_typed_outcome_one_door.md` Part C row R-PC-15.
 - ADVANCES: none (stale text; CLAUDE.md §1).
 - INSTRUCTION: "H-123's site to `loop/effects_combat.py`; the handoff names its two documents by bare filename (CLAUDE.md §1); each dead citation rewritten to the bare filename or deleted where the file no longer exists" — the "sixteen `designs/audit/` citations in `modules/combat/*.py`" (`git grep -n "designs/audit/" modules/combat` at the item's open; each resolved through `tools/pathres.py`'s exact-row `load_alias_map()`, never `resolve()`, CLAUDE.md §8). B03a (CI-02) may already have rewritten them as comments: those it rewrote are skipped and listed.
 - WHERE: `engine/season/hole_register.yaml` (H-123 `site:`); `registers/handoffs/HANDOFF_PC.md`; `modules/combat/*.py` (the comments the grep prints).
@@ -178,7 +178,7 @@ Not in this batch, and where each is: `U5b_PC_residue` §1 items 3–5 (B15, the
 - LANDS IT: B14's producer; `Item: B14.05`, `[skip ci]`.
 
 ### B14.06 — the CR-85 design's Status line · Part C R-PC-16 · BUILD · HASH EQUAL
-- SOURCE: Part C row R-PC-16; ED-IN-0351.
+- SOURCE: `proposals/03_PC_typed_outcome_one_door.md` Part C row R-PC-16; ED-IN-0351.
 - ADVANCES: none.
 - INSTRUCTION: `proposals/2026-11-05-cr85-histories-hooks-and-combat-input.md`, its `## Status:` line becomes: "PROPOSED; ratification withdrawn (ED-IN-0351). Its combat build is in the tree (`modules/combat/attributes.py`, `core.py`, `fight.py`) and stands on this unratified design". (A-112 has since answered the question that held its design, the intake `:504`; the line states the record and decides nothing.)
 - WHERE: `proposals/2026-11-05-cr85-histories-hooks-and-combat-input.md` (Status line).
@@ -190,7 +190,7 @@ Not in this batch, and where each is: `U5b_PC_residue` §1 items 3–5 (B15, the
 - LANDS IT: B14's producer; `Item: B14.06`, `[skip ci]`.
 
 ### B14.07 — the exchange's net through the one boost call · Part C R-PC-17 · BUILD · HASH MOVER(behaviour), declared if a golden moves
-- SOURCE: Part C row R-PC-17; "Falsifier" (R-PC-17); "Implementation" ("the golden re-record judgment for R-PC-17 `opus`").
+- SOURCE: `proposals/03_PC_typed_outcome_one_door.md` Part C row R-PC-17; "Falsifier" (R-PC-17); "Implementation" ("the golden re-record judgment for R-PC-17 `opus`").
 - ADVANCES: none; S (one substrate call for the boost).
 - INSTRUCTION: `modules/combat/core.py::resolve`: "`net = roll_net(pool, rng) + SL.net_boost(net_sigma, pool)`. Measured equal to the inline form to one unit in the last place at four points; a golden that moves is re-recorded and said so." At `aa31fd2` the line reads `net = roll_net(pool, rng) + SL.soft_cap(net_sigma) * SL.sigma_n(pool)`; B05 (`U5a_DICE_owed_edits` §1, `10_DICE_one_roller_one_fraction_rule`) may have rewritten it: re-open it at the item's open, and if B05 already routes the boost through `net_boost`, the item is recorded as done by B05 in the commit body and skipped.
 - WHERE: `modules/combat/core.py` (`resolve`).
@@ -204,7 +204,7 @@ Not in this batch, and where each is: `U5b_PC_residue` §1 items 3–5 (B15, the
 - LANDS IT: B14's producer; `Item: B14.07`, `[skip ci]`.
 
 ### B14.08 — the 18 `combat_systems` constants into `CFG` · Part C R-PC-18 · BUILD · HASH EQUAL
-- SOURCE: Part C row R-PC-18; gate 4 ("the count of `combat_systems.py` module-level numeric constants absent from the export is 0"); closes F-PC-10.
+- SOURCE: `proposals/03_PC_typed_outcome_one_door.md` Part C row R-PC-18; gate 4 ("the count of `combat_systems.py` module-level numeric constants absent from the export is 0"); closes F-PC-10.
 - ADVANCES: none; CLAUDE.md §5 (a value the port uses lives in the typed export).
 - INSTRUCTION: "move `REAR_CLEARANCE_TEMPO_K`, `REAR_CLEARANCE_STR_K`, `RANGE_AVAIL_FLOOR`, `RANGE_COMMIT_PEAK`, `RANGE_COMMIT_FLOOR`, `LEGIB_SWING_ROOM_K`, `STOPHIT_RANGE_K`, `FACING_VOID_K`, `FACING_PROFILE_K`, `FACING_VOID_GAIN`, `MODE_PERC_MIN`, `CLOSE_EFF_GAP_REF`, `CLOSE_EFF_FLOOR`, `MODE_EDGE_MIN`, `MODE_TIP_MIN`, `SELECT_EPS`, `TRUE_TIME_REF`, `ARREST_POB_REF` into `CFG`, values unchanged, readers through `cfg[...]`; re-derive the export with `tools/export_engine_params.py --build`. Functions that take no `cfg` today (`close_efficacy`, `range_utilization`, `_commit_range_factor`) gain it."
 - WHERE: `modules/combat/combat_systems.py` (the 18 constants, their readers, the three functions' signatures and callers); `modules/combat/config.py` (`CFG`); `engine/engine_params/combat_engine_v1.json` (re-derived).
@@ -218,7 +218,7 @@ Not in this batch, and where each is: `U5b_PC_residue` §1 items 3–5 (B15, the
 - LANDS IT: B14's producer; `Item: B14.08`, `[skip ci]`.
 
 ### B14.09 — the state graph says it is reference · Part C R-PC-20 · BUILD · HASH EQUAL
-- SOURCE: Part C row R-PC-20.
+- SOURCE: `proposals/03_PC_typed_outcome_one_door.md` Part C row R-PC-20.
 - INSTRUCTION: `systems/combat/combat_engine_v1/state_graph.py`'s module docstring: "state that the graph is reference for the Plan-layer proposal and is not read by `wrapper.engagement`".
 - WHERE: `systems/combat/combat_engine_v1/state_graph.py` (docstring).
 - ADVANCES: none. TESTS: none.
@@ -229,7 +229,7 @@ Not in this batch, and where each is: `U5b_PC_residue` §1 items 3–5 (B15, the
 - LANDS IT: B14's producer; `Item: B14.09`, `[skip ci]`.
 
 ### B14.10 — the workbench's degree distribution reads the dice owner · Part C R-PC-42 · BUILD · HASH EQUAL
-- SOURCE: Part C row R-PC-42 (addendum F-PC-23).
+- SOURCE: `proposals/03_PC_typed_outcome_one_door.md` Part C row R-PC-42 (addendum F-PC-23).
 - ADVANCES: none; S (one sampler's closed form, not a frozen copy).
 - INSTRUCTION: `systems/combat/combat_engine_v1/workbench/probabilities.py::degree_distribution`: "the mean and spread of the exchange roll are read from the dice engine `core.resolve` uses (`roll_net_continuous`'s closed form, `sigma_leverage.band_odds` after `U5a_DICE_owed_edits.md` §1), not rebuilt from the frozen harness's constants; the falsifier the file names (`tests/valoria/test_combat_ob_from_defender_consumers.py`) is run once at landing".
 - WHERE: `systems/combat/combat_engine_v1/workbench/probabilities.py` (`degree_distribution`).

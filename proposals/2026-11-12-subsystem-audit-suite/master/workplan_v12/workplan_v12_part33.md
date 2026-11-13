@@ -387,7 +387,7 @@ EST: 6 h [estimate: the structure's §2.4 formula; nothing timed]
 - FALSIFIER and CONTROL: the three tests' planted arms. Control: with step 4 reverted, the act reads `march.refused`.
 - GATE: `PYTHONHASHSEED=0 python -m pytest engine/season/tests/test_march.py -q` → the three pass; step 1's reading (`restore` executed on a garrison Site at seeds 0, 1, 2) and step 5's reading (`_fall` drawn) quoted in the commit body; and the table, written in this commit's body and read by `opus` at the batch's close: over `field_scene` seeds 0–39, the `win` share and the seasons taken under `storm` and under `besiege_then_storm`, each with its disjoint-seed control. The arm "`aperture 2 0`: `march` with posture `besiege` formed and executed at least once, `Invested` read" reads the effect of B22.12 and of the armies B22.33 musters: moved to the batch gate (line 4, B22.R3).
 - HASH MOVERS: none in the realm (no realm person forms `besiege` while the roster ships `[storm]`); the field scene's worlds move (declared; harness only).
-- DEPENDS ON: V12 `14_VERBS_MILITARY_A` edits 1–5 (B22.06–B22.08); V12 `14_VERBS_MATERIAL_A_mending` (Batch B12c: `restore`); V12 `16_PESSIMIST_SE_B` / `U5b_MB_residue` §8 (Batch B12: `_fall` drawn; if not landed, `STOPPED`); V12 `IS-MB-01` and `04_MB_playable_field_scenario` §A (Batch B20: `field_scene.py`, `POLICIES`); EXISTS-IN-TREE `engine/season/loop/effects_combat.py::_siege`, `engine/season/loop/effects_economy.py::_fall`, `engine/season/rosters.yaml: march_postures`.
+- DEPENDS ON: V12 `14_VERBS_MILITARY_A` edits 1–5 (B22.06–B22.08); V12 `14_VERBS_MATERIAL_A_mending` (Batch B12c: `restore`); V12 `16_PESSIMIST_SE_B` / `U5b_MB_residue` §8 (Batch B12c, B12c.04: `_rise` and `_fall` take the band through `graded_amount`; if not landed, `STOPPED`); V12 `IS-MB-01` and `04_MB_playable_field_scenario` §A (Batch B20: `field_scene.py`, `POLICIES`); EXISTS-IN-TREE `engine/season/loop/effects_combat.py::_siege`, `engine/season/loop/effects_economy.py::_fall`, `engine/season/rosters.yaml: march_postures`.
 - GLOSSARY: none (*besiege*, *invested* have rows).
 - COST and TIER: edit; `sonnet`, high; the table read by `opus`.
 - LANDS IT: B22's producer; `Item: B22.11`, `[skip ci]`.
@@ -418,13 +418,13 @@ EST: 6 h [estimate: the structure's §2.4 formula; nothing timed]
          referent_class: Person
          contests:    "a task"        # shape (b): three kinds across the bands (VRES §1)
          difficulty:  routine
-         referent_class_note: "14-VM-B: FORMED ONLY ON A `Person`-CLASSED REFERENT -- the person the question he answers is about, himself included (`queries/world_q.py::own_referents_of_class`). The class removes the 39-of-85 formations on a Record, a place or a Proposition and claims no execution. The teacher's own capability is NOT read here: capability gates nothing (#353 §9.2, probe P11). REVERT: delete this column."
+         referent_class_note: "14-VM-B: FORMED ONLY ON A `Person`-CLASSED REFERENT -- the person the question he answers is about, himself included (`queries/world_q.py::own_referents_of_class`). The class removes the 39-of-85 formations on a Record, a place or a Proposition and claims no execution. The teacher's own skill is NOT read here: skill gates nothing (#353 §9.2, probe P11). REVERT: delete this column."
          writes:
            Overwhelming: ["Person.capability"]
            Success:      ["Person.capability"]
            Partial:      []
            Failure:      []
-         writes_note: "14-VM-B: ONE RANK ON THE TWO UPPER BANDS (`raised_capability`, minting per `01_CORE_capability_authoring_surface.md` Edit 9). Partial writes nothing and emits `training.practised`, a kind `queries/world_q.py::practice` counts as a good result for the LEARNER in the capability carried (CR-18's addend), so a lesson that did not take still leaves him readier. Failure: `training.fruitless`. At the ceiling of the capability's scale the effect declines (`train.refused`, the read `(subject, capability:<kind>, <rank>)` on the Event). [ASSUMPTION; medium; Jordan to correct; revert: the flat write.]"
+         writes_note: "14-VM-B: ONE RANK ON THE TWO UPPER BANDS (`raised_capability`, minting per `01_CORE_capability_authoring_surface.md` Edit 9). Partial writes nothing and emits `training.practised`, a kind `queries/world_q.py::practice` counts as a good result for the LEARNER in the skill carried (CR-18's addend), so a lesson that did not take still leaves him readier. Failure: `training.fruitless`. At the ceiling of the skill's scale the effect declines (`train.refused`, the read `(subject, capability:<kind>, <rank>)` on the Event). [ASSUMPTION; medium; Jordan to correct; revert: the flat write.]"
          emits:
            Overwhelming: ["capability.raised"]
            Success:      ["capability.raised"]
@@ -451,7 +451,7 @@ EST: 6 h [estimate: the structure's §2.4 formula; nothing timed]
 - GATE: `PYTHONHASHSEED=0 python -m pytest engine/season/tests/test_vm_mil_b_train.py -q` → green; (i) over `aperture 2 s`, s = 0 to 2: `capability.raised` out of the never-emitted list at one seed at least; `train`'s refusals read 0 on `exists:Person`. Reading (iii) read once by `opus`.
 - HASH MOVERS: formation (the class) and every executed `train` (declared; B22's one re-pin).
 - DEPENDS ON: V12 B22.09 (the `with` deposit, on which the 33 absent-pupil refusals depend); V12 `01_CORE_capability_authoring_surface` Edit 9 (Batch B04); V12 `05_SC_obstacle_difficulty_and_modifiers_B`, `U5c_SC_one_obstacle_form` (Batch B05); V12 `U5c_VERBS_residue_and_governance_owner` §1, `18_DETERMINISM_task_draw_for_uncontested_verbs` item 4 (Batch B07); EXISTS-IN-TREE `engine/season/loop/effects_combat.py::_eff_train`, `engine/season/queries/world_q.py::practice`, `::own_referents_of_class` `[ASSUMPTION: present — the source cites it; not opened by this lane]`.
-- GLOSSARY: none new (the prose word is *skill*; `Person.capability` keeps its name, D-06).
+- GLOSSARY: none new (the prose word is *skill*; `Person.capability` keeps its name, D-06). The two copied note strings of Edit 1 say *skill* where the source said *capability* (A-98); identifiers (`raised_capability`, `capability.raised`, `capability:<kind>`) are unchanged.
 - NAMES: `VOCATIONS`, `VOCATION_SOURCED`, `vocation_sourced`, `pool.py::faculty` → read at the tree as B04 (CAP A2/A3, D-U1-08) left them `[ASSUMPTION: CAP A3 derives VOCATIONS from the skill rows or deletes it; the producer composes on the owner B04 left]`; `faculty` → the skill score read through the skill table (B15, `IS-PC-05`).
 - COST and TIER: small build; `sonnet`, high; one `opus` read of reading (iii).
 - LANDS IT: B22's producer; `Item: B22.13`, `[skip ci]`.
@@ -489,7 +489,7 @@ EST: 6 h [estimate: the structure's §2.4 formula; nothing timed]
 - FALSIFIER and CONTROL: labour unchanged by troops raised. Control: `labour_mode` off: hashes equal.
 - GATE: `python -m pytest engine/season/tests/test_standing_ration.py -q` → green.
 - HASH MOVERS: none at `labour_mode` off.
-- DEPENDS ON: V12 B22.14; V12 CP-T08-01's item (the intake's B12 entry `:313`, landed in Batch B12a–B12c by §5.6: `labour(w, rung)` and `labour_mode`) — if `labour` is not in the tree at this item's turn, the item is `BLOCKED (SE: CP-T08-01's labour reader)` and the batch reports it.
+- DEPENDS ON: V12 B22.14; V12 B12c.02 (CP-T08-01, the intake's B12 entry `:313`: `labour(w, rung)` and `labour_mode`) — if `labour` is not in the tree at this item's turn, the item is `BLOCKED (SE: CP-T08-01's labour reader)` and the batch reports it.
 - GLOSSARY: none.
 - COST and TIER: edit; `sonnet`.
 - LANDS IT: B22's producer; `Item: B22.15`, `[skip ci]`.
@@ -552,7 +552,7 @@ EST: 6 h [estimate: the structure's §2.4 formula; nothing timed]
 - FALSIFIER and CONTROL: planted, `share` ignored in `_apply`: Partial raises 60 (read in B22.21's gate). Control: realm hash at seeds 0 to 2 equal (no caller).
 - GATE: `python -m pytest tests/valoria/test_mass_battle_army_record.py tests/valoria/test_army_verbs.py -q` → green.
 - HASH MOVERS: none.
-- DEPENDS ON: V12 B22.02 (absent men), B22.17; EXISTS-IN-TREE `modules/mass_battle/armyrecord.py::KEYS`, `::_apply`, `::options`, `modules/mass_battle/troop_types/presets.py::ARM_SHARES`, `engine/season/loop/effects_shared.py::graded_amount` `[ASSUMPTION: present — cited]`.
+- DEPENDS ON: V12 B22.02 (absent men), B22.17; V12 B12c.04 (`engine/season/loop/effects_shared.py::graded_amount`: absent from the tree today, created by B12c.04); EXISTS-IN-TREE `modules/mass_battle/armyrecord.py::KEYS`, `::_apply`, `::options`, `modules/mass_battle/troop_types/presets.py::ARM_SHARES`.
 - GLOSSARY: rows *doctrine* and *footing* (new if absent): *doctrine* "the share of each kind of troop an army is raised to"; *footing* "whether an army is kept at peace strength or war strength"; owner `armyrecord.KEYS`.
 - NAMES: `subformations` → `units` (B16L, L1-1).
 - COST and TIER: small build; `sonnet`, high.

@@ -126,7 +126,7 @@ Short names, words and paths are the first file's head. The B28 block's head, it
 - WHERE: NEW `engine/season/harness/access.py`; `engine/season/tests/test_scene_access_engagement.py`.
 - TESTS: `test_the_access_instrument_counts_a_planted_kept_waiting` ("one planted world; `assert checked >= 1`"), written before the instrument and read red (no module).
 - FALSIFIER and CONTROL: the instrument prints 0 kept-waiting on the planted world that holds one. Control: a run of the instrument leaves the world's content hash and log length unchanged.
-- GATE: that test → pass; `PYTHONHASHSEED=0 python -m engine.season.harness.access 0 1` → exit 0, its lines printed (quoted in the commit body with its wall time).
+- GATE: `python -m pytest engine/season/tests/test_scene_access_engagement.py -q -k test_the_access_instrument_counts_a_planted_kept_waiting` → pass; `PYTHONHASHSEED=0 python -m engine.season.harness.access 0 1` → exit 0, its lines printed (quoted in the commit body with its wall time).
 - HASH MOVERS: none (an instrument).
 - DEPENDS ON: V12 B28.18 to B28.21; V12 Batch B03c (`boot/realm.py::build_realm`).
 - GLOSSARY: none.
@@ -212,7 +212,7 @@ Short names, words and paths are the first file's head. The B28 block's head, it
 - WHERE: `engine/season/harness/chronicle.py` (the appointment line classes); `engine/season/harness/access.py` (the four outcome counts); `engine/season/tests/test_scene_access_appointments.py`.
 - TESTS: `test_the_chronicle_prints_an_appointment_line_for_a_planted_lapse` (coding row 5), written before the edit and read red.
 - FALSIFIER and CONTROL: a planted lapse with no chronicle line. Control: instruments only: seed-0 hash equal to B28.26's.
-- GATE: that test → pass.
+- GATE: `python -m pytest engine/season/tests/test_scene_access_appointments.py -q -k test_the_chronicle_prints_an_appointment_line_for_a_planted_lapse` → pass.
 - HASH MOVERS: none.
 - DEPENDS ON: V12 B28.25 (`appointment_outcome`), B28.22 (`harness/access.py`); EXISTS-IN-TREE `harness/chronicle.py`.
 - GLOSSARY: none.
