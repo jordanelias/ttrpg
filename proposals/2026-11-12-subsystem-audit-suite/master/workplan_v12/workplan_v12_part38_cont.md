@@ -353,7 +353,7 @@ Placed here by `V12_STRUCTURE_part2.md` §5.6's first rule: PAP_E, the next memb
 - FALSIFIER and CONTROL: the draw falsifier above. Control: `credit_terms` flat 1.0 and `stakes_ob.debt` off (shipped).
 - GATE: `python -m pytest engine/season/tests/test_inst_ven_b.py -q` → pass; "Seeded: a spine fixture with one stocked hearth and its head seat … seeds 0–2, six seasons: bonds minted, reckoning bands, lapses and suits are **read and reported**. If no bond is minted the reading says so" — at two seasons (A-114) on `harness/scarce.py`'s governed arm (a hand-stocked `Rung.stores`), quoted in the commit body. `opus` reads the reckoning's band table (VEN_B's tier line).
 - HASH MOVERS: none (no computed act names an amount; the fixtures ship at control).
-- DEPENDS ON: V12 B33.37; V12 Batch B27 (SC-P4, SC-P6); V12 Batch B24a (the appeal ground, through B27); V12 Batch B12c (`07_SE_treasury_granary_B`'s stocked stores, through B12c); EXISTS-IN-TREE `S/data/fixtures.py` `stakes_ob`, `S/harness/scarce.py`.
+- DEPENDS ON: V12 B33.37; V12 Batch B27 (SC-P4, SC-P6); V12 Batch B24a (the appeal ground, through B27); V12 Batch B12c (`07_SE_treasury_granary_B`'s stocked stores, through B12c); EXISTS-IN-TREE `S/harness/scarce.py`; the `stakes_ob.debt` arm is `BLOCKED (v12: a carrier is owed; owner the SC lane)`: the tree has no `stakes_ob` in `data/fixtures.py` and no item creates it (part 2 C-26), so this item's other arms stand and the `stakes_ob.debt` setting ships nothing until the carrier exists.
 - GLOSSARY: none (*debt*, B33.35).
 - IDS: H block slot 7 (`credit_terms`).
 - COST and TIER: small build; `sonnet`, `high`; `opus` on the band table.
