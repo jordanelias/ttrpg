@@ -219,9 +219,11 @@ def analyse(E, label):
     return {'acyclic': True, 'wave': wave, 'W': W, 'slack': slack, 'chains': allc, 'sched': sched, 'step': stepof,
             'after': {h: sorted(after[h], key=nodes.index) for h in nodes}, 'topo': topo}
 # --- positions and E-15 estimates
-def stnorm(s):
-    u = s.upper()
-    for k in ['DESIGN-FIRST', 'POINTER', 'READING', 'HELD', 'BLOCKED', 'CONTENT', 'BUILD', 'GIT']:
+def stnorm(s):                                      # the state cell's leading word (lane H3: "BUILD (HELD if …)" is BUILD); else the first listed word anywhere
+    u = s.upper(); ks = ['DESIGN-FIRST', 'POINTER', 'READING', 'HELD', 'BLOCKED', 'CONTENT', 'BUILD', 'GIT']
+    for k in ks:
+        if u.lstrip('*` ').startswith(k): return k
+    for k in ks:
         if k in u: return k
     return 'OTHER'
 pos = {}; states = {}
@@ -372,14 +374,14 @@ for b in nodes:
     w0, w1 = G['s_wave'][b], r['wave'][b]; s0, s1 = G['s_step'][b], r['step'][b]
     wv = f'W{w1}' if w0 == w1 else f'W{w0} → **W{w1}**'
     st = f'S{s1}' if s0 == s1 else f'S{s0} → **S{s1}**'
-    if b in ('B98', 'B99'):
+    if b in ('B98', 'B99') and not G['pos'].get(b):   # lane H3: part 44 gives both positions; this row only for a batch with none
         aft = 'every batch but B99' if b == 'B98' else 'every batch'
         rows.append(f"| {name[b]} | {lane[b]} | {wv} | {st} | {r['slack'][b]} | 44 (lane A44, not yet written) | — (A44) | {hashtag(b)} | {G['est'][b]:g} (the structure's figure; no positions yet) | {aft} |")
         continue
     stc = G['states'][b]; n = G['pos'][b]; tot += n
     sts = ' '.join(f"{ab[k]}{v}" for k, v in sorted(stc.items(), key=lambda x: list(ab).index(x[0])))
-    aft = []
-    for a in r['after'][b]:
+    aft = [] if b not in ('B98', 'B99') else ['every batch but B99' if b == 'B98' else 'every batch']
+    for a in (r['after'][b] if b not in ('B98', 'B99') else []):
         t = a
         if (a, b) in R: t += ' +R'
         elif (a, b) in GG and (a, b) not in S: t += ' +G'
