@@ -203,6 +203,7 @@ Not in this batch, and where each is: `U5b_PC_residue` §1, §2, §4–§10 (B14
 
 ### B18.99 — re-pin and close readings · `_part4` E-1 · BUILD · HASH MOVER (the re-pin)
 - SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2; `V12_STRUCTURE_part2.md` §5.9, §5.12.
+- ADVANCES: none of the nine; the batch's record (filled by repair lane R1 from the batch block).
 - INSTRUCTION: (1) Re-record, once, the realm pins in `engine/season/tests/_realm_goldens.py` and every seeded result B18.04, .05, .08, .09 moved, against B17's close rebased on B12c's merge (`reading @<sha>`); the commit says "re-pin" and lists them. (2) Seeds 0–2 for every item read at seed 2 only (E-2). (3) The close's readings (BATCH GATE), with the Part A–D gates 1, 2 and 4 and the loadout gates 1–3 quoted. (4) Part B's admitted and refused kinds and the census rows behind each, listed in the PR body for Jordan (D-19).
 - WHERE: `engine/season/tests/_realm_goldens.py`; the pin files of any other seeded result B18.04, .05, .08, .09 moved (copied from this item's INSTRUCTION and the block's RE-PIN line by check lane K6).
 - TESTS: the covering suites and the full suite once (CLAUDE.md §0.4).
@@ -210,6 +211,7 @@ Not in this batch, and where each is: `U5b_PC_residue` §1, §2, §4–§10 (B14
 - GATE: the BATCH GATE.
 - HASH MOVERS: the re-pin.
 - DEPENDS ON: V12 B18.01 to B18.09.
+- GLOSSARY: none (the batch's glossary rows are read against the code at the close, `workplan_v12.md` §4) (filled by repair lane R1 from the batch block).
 - COST and TIER: reading and a re-pin; `sonnet`, `high`; terminal critique `opus`.
 - LANDS IT: B18's producer; `Item: B18.99`, without `[skip ci]`.
 

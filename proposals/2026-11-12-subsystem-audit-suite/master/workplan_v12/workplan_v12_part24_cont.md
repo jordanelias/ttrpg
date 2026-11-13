@@ -422,8 +422,16 @@ The five positions below are the intake entries the B12a authors routed here by 
 
 ### B12b.99 — re-pin and close readings · `V12_STRUCTURE_part4.md` E-1 · BUILD · HASH MOVER (the re-pin)
 - SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2; `V12_STRUCTURE_part2.md` §5.9, §5.12.
+- ADVANCES: none of the nine; the batch's record (filled by repair lane R1 from the batch block).
 - INSTRUCTION: re-record, once, every realm and corpus pin a B12b item moved (the batch head's RE-PIN line, `workplan_v12_part24.md`) in `engine/season/tests/_realm_goldens.py` against B12a's close (`reading @<sha>`); quote seeds 0–2, one and two seasons; take R1 and R2; the commit says "re-pin" and lists the movers. A pin only one item moved in its own test file stayed in that item's commit (E-1).
+- FALSIFIER and CONTROL: a pin that moved and that no item of B12b declared (then the batch moved behaviour it did not declare: the re-pin stops and the batch is `STOPPED`). Control: the readings of the close this batch rebased on (`reading @<sha>`) (filled by repair lane R1 from the batch block).
+- TESTS: none new; after the re-pin every pinned test the RE-PIN line names reads green (filled by repair lane R1 from the batch block).
+- WHERE: the pin files the RE-PIN line names: `engine/season/tests/_realm_goldens.py`; `engine/season/tests/test_go07_canonical_digest.py`; `engine/season/tests/test_season_weather.py`; `tools/ci_golden_modes_check.py`; `engine/season/requirements.yaml` (`reading:` records only) (filled by repair lane R1 from the batch block).
 - GATE: the BATCH GATE above, once, on this commit's tree, with the one full-suite run CLAUDE.md §0.4 allows at the close.
+- COST and TIER: a re-pin and the readings; `sonnet`, high; the readings read by `opus` (filled by repair lane R1 from the batch block).
+- GLOSSARY: none (the batch's glossary rows are read against the code at the close, `workplan_v12.md` §4) (filled by repair lane R1 from the batch block).
+- DEPENDS ON: V12 B12b.01 to B12b.47 (every earlier position of the batch) (filled by repair lane R1 from the batch block).
+- HASH MOVERS: the batch's one re-pin, here and nowhere else (filled by repair lane R1 from the batch block).
 - LANDS IT: B12b's producer; `Item: B12b.99` — the batch's last `Item:` commit, pushed without `[skip ci]`.
 
 | STOP. Batch B12b-weather-arcs-population closes here |
@@ -541,8 +549,16 @@ Not in this batch, and where each is: MBA-02 stage 2 (`--missile`) and MBA-09 (B
 
 ### B19a.99 — the EQUAL reading and close readings · `V12_STRUCTURE_part4.md` E-1 · BUILD · HASH EQUAL
 - SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2; `V12_STRUCTURE_part2.md` §5.9, §5.12.
+- ADVANCES: none of the nine; the batch's record (filled by repair lane R1 from the batch block).
 - INSTRUCTION: record the EQUAL reading (golden-mode digests and the realm hash at seeds 0–2 equal to the step's base, `reading @<sha>`), the background run's wall time and worker count, the `--trust` and `--spot 20` readings, and the close's record (§5.12); re-pin nothing.
+- FALSIFIER and CONTROL: a moved hash at any seed (`HASH READING`, s = 0, 1, 2; then an item here was not EQUAL). Control: the step's base readings (`reading @<sha>`) (filled by repair lane R1 from the batch block).
+- TESTS: none new (filled by repair lane R1 from the batch block).
+- WHERE: none but the commit body (an EQUAL batch re-pins nothing) (filled by repair lane R1 from the batch block).
 - GATE: the BATCH GATE above, once, on this commit's tree.
+- COST and TIER: reading; `sonnet`, medium (filled by repair lane R1 from the batch block).
+- GLOSSARY: none (the batch's glossary rows are read against the code at the close, `workplan_v12.md` §4) (filled by repair lane R1 from the batch block).
+- DEPENDS ON: V12 B19a.01 to B19a.03 (every earlier position of the batch) (filled by repair lane R1 from the batch block).
+- HASH MOVERS: none (filled by repair lane R1 from the batch block).
 - LANDS IT: B19a's producer; `Item: B19a.99` — the batch's last `Item:` commit, pushed without `[skip ci]`.
 
 | STOP. Batch B19a-mb-contact-instrument closes here |
@@ -573,6 +589,7 @@ BATCH GATE (read once, on the closing tree; `PYTHONHASHSEED=0`):
   the suites `python tools/tests_for_diff.py --base <batch-start-sha>` names (engine core: the full gates);
   the close's commit body records `register --requirements`, `m1_acceptance --summary`'s verdict line, the `BUILT OUT`, `ENGINES` and `NULL SCENES` lines before (`reading @<sha>`) and after, and the batch's measured wall time; `status:` is not edited (`IS-A-12`).
 RE-PIN: once, in B29.99: the realm and corpus pins in `engine/season/tests/_realm_goldens.py` that B29.01 and B29.02 move ("every realm and spine pin in which these formations occurred (`capture`'s 26 formations … the arrest stamp's new referents)"), and B29.03's if it builds a link; read against the step's base and, in S14, rebased on B12b's merge (§7.4: B12b precedes B29 in §2.1's order); the commit says "re-pin".
+EXPECTED RED UNTIL B29.99 (under `[skip ci]`, E-1; one batch line, repair lane R1): the realm and corpus pins any mover item of this batch moves read red from its first mover (B29.01) to the re-pin; the files that pin them (`git grep -lE '"[0-9a-f]{32}"'` over the test trees and the golden files, those this batch names): `engine/season/tests/_realm_goldens.py` (B02's one pin file); `engine/season/tests/test_go07_canonical_digest.py` (its asserting test, `SHIPPED`/`CENSUS`); `engine/season/tests/test_cr87_violence_contexts.py`.
 IDS: ED-PC 0; H 0
 DIALS AT CONTROL: none
 C(B29-pc-custody): this batch's entries; the plan's head parts; `audits/14_VERBS_PHYSICAL.md` §1.7, §2.7 (the gates, read whole); `engine/season/queries/world_q.py` (`addressed_records` from B14.27, `_stamped`, `issuing_seat`, `mustered`); `engine/season/loop/effects_information.py` (`_held_warrants`, `_eff_arrest`, `_eff_seize`, `_may_close_custody`); `engine/season/loop/effects_combat.py` (`_eff_capture`); `engine/season/decision/options.py` (the `WARRANT_SOURCED` block, `warranted`, `violence_context_of`); `engine/season/verb_table.yaml` (rows `arrest`, `capture`); `engine/season/rosters.yaml` (`violence_contexts`); `engine/season/tests/test_vm_phy_a_custody.py`, `test_cr87_violence_contexts.py`; `master/eval/E1.md` "### CR-51" (read whole for B29.03); instruments `aperture`, `register`, `tools/m1_acceptance.py`, `tools/tests_for_diff.py`; the closing SHAs of B14, B15, B16, B21; the permanent surface (CLAUDE.md, `CURRENT.md`, `HANDOFF.md`, `registers/handoffs/HANDOFF_PC.md`, the skill and `methodology-close`).
@@ -647,8 +664,16 @@ Not in this batch, and where each is: `14_VERBS_PHYSICAL_A` A0 and A4 (B14.27), 
 
 ### B29.99 — re-pin and close readings · `V12_STRUCTURE_part4.md` E-1 · BUILD · HASH MOVER (the re-pin)
 - SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2; `V12_STRUCTURE_part2.md` §5.9, §5.12.
+- ADVANCES: the conjuncts the batch's REQUIREMENT line names, read on this tree; their `reading:` records written here (`IS-A-12`), no `status:` edited (A-114) (filled by repair lane R1 from the batch block).
 - INSTRUCTION: re-record once, against B12b's merged after-reading (§7.4), every realm and corpus pin B29.01–.03 moved, in `engine/season/tests/_realm_goldens.py`; quote seeds 0–2; the commit says "re-pin" and lists the movers; write the close's record (§5.12).
+- FALSIFIER and CONTROL: a pin that moved and that no item of B29 declared (then the batch moved behaviour it did not declare: the re-pin stops and the batch is `STOPPED`). Control: the readings of the close this batch rebased on (`reading @<sha>`) (filled by repair lane R1 from the batch block).
+- TESTS: none new; after the re-pin every pinned test the RE-PIN line names reads green (filled by repair lane R1 from the batch block).
+- WHERE: the pin files the RE-PIN line names: `engine/season/tests/_realm_goldens.py`; `engine/season/tests/test_cr87_violence_contexts.py`; `engine/season/tests/test_go07_canonical_digest.py`; `engine/season/requirements.yaml` (`reading:` records only) (filled by repair lane R1 from the batch block).
 - GATE: the BATCH GATE above, once, on this commit's tree, with the one full-suite run CLAUDE.md §0.4 allows at the close.
+- COST and TIER: a re-pin and the readings; `sonnet`, high; the readings read by `opus` (filled by repair lane R1 from the batch block).
+- GLOSSARY: none (the batch's glossary rows are read against the code at the close, `workplan_v12.md` §4) (filled by repair lane R1 from the batch block).
+- DEPENDS ON: V12 B29.01 to B29.03 (every earlier position of the batch) (filled by repair lane R1 from the batch block).
+- HASH MOVERS: the batch's one re-pin, here and nowhere else (filled by repair lane R1 from the batch block).
 - LANDS IT: B29's producer; `Item: B29.99` — the batch's last `Item:` commit, pushed without `[skip ci]`.
 
 | STOP. Batch B29-pc-custody closes here |

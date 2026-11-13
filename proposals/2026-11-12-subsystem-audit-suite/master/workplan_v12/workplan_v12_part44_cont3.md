@@ -145,6 +145,7 @@ THE NINE, AS `IS_A_NINE.md` §2 TO §10 STATE THEIR CONJUNCTS (reference for B99
 
 ### B99.99 — close readings: the EQUAL reading recorded, nothing re-pinned · `V12_STRUCTURE_part4.md` E-1 · BUILD · HASH EQUAL
 - SOURCE: E-1 ("for a hash-EQUAL batch it records the EQUAL reading and re-pins nothing"), E-2; `V12_STRUCTURE_part2.md` §5.12; B21s.99's form.
+- ADVANCES: the conjuncts the batch's REQUIREMENT line names, read on this tree; their `reading:` records written here (`IS-A-12`), no `status:` edited (A-114) (filled by repair lane R1 from the batch block).
 - INSTRUCTION: read the BATCH GATE once on this tree; record in the commit body the realm content hash at seeds 0, 1, 2 after one season, equal to B98.99's re-pinned `SHIPPED` (`reading @<B98 sha>`); `register --requirements` (nine lines) and `m1_acceptance --summary`'s verdict line; the background runs' wall times and worker counts; the batch's measured wall time; the list for Jordan (every conjunct read `no`, with its tree; step 6's quotations). Re-pin nothing.
 - WHERE: none but the commit body (the batch's last `Item:` commit carries the readings).
 - TESTS: none new.
@@ -156,8 +157,8 @@ THE NINE, AS `IS_A_NINE.md` §2 TO §10 STATE THEIR CONJUNCTS (reference for B99
 - COST and TIER: reading; `sonnet`, high.
 - LANDS IT: B99's producer; `Item: B99.99`, no `[skip ci]` (the batch's last `Item:` push, which opens BATCH-CLOSE; as the last batch of the plan it is also the run's `/close`, the skill's "The last batch is also the run's `/close`").
 
-| STOP. Batch B99-nine-retake closes here |
-
 SERIAL EDGES (written last, E-11): within the batch: B99.01 → B99.99. With other batches, by file: `engine/season/requirements.yaml` B02 → (every batch's last `Item:` commit, `reading:` only) → B40 → B99 (`status:` here alone); no other file.
 
 FILE CENSUS (this batch's edits, for H2): `engine/season/requirements.yaml` (B99.01: `holds:`, `reading:`, `status:`). Read only: every instrument and test file a conjunct's `argv` names; `engine/season/tests/_realm_goldens.py` (the EQUAL reading).
+
+| STOP. Batch B99-nine-retake closes here |

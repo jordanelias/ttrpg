@@ -203,10 +203,15 @@ PARALLEL: S14 with B12b (SE+WR), B19a (MB), B29 (PC), B34 (GO). Shared files: `q
 
 ### B21c.99 — re-pin and close readings · `V12_STRUCTURE_part4.md` E-1 · BUILD · HASH MOVER (the re-pin)
 - SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2; `V12_STRUCTURE_part2.md` §5.9, §5.12.
+- ADVANCES: none of the nine; the batch's record (filled by repair lane R1 from the batch block).
 - INSTRUCTION: (1) re-record the realm pins in `engine/season/tests/_realm_goldens.py` once, for the movers of B21c.01, B21c.03 (if it did not STOP), B21c.04, B21c.05, reading seeds 0 to 2 against B21b's close (`reading @<sha>`); the commit says "re-pin". (2) Run the BATCH GATE's readings and write them in this commit body (§5.12). (3) Record "`depose` closed: B21c.05" (B21c.09) and the held rows B21c.07, B21c.08 with their triggers for the expunge.
 - WHERE: `engine/season/tests/_realm_goldens.py`.
+- FALSIFIER and CONTROL: a pin that moved and that no item of B21c declared (then the batch moved behaviour it did not declare: the re-pin stops and the batch is `STOPPED`). Control: the readings of the close this batch rebased on (`reading @<sha>`) (filled by repair lane R1 from the batch block).
+- TESTS: none new; after the re-pin every pinned test the RE-PIN line names reads green (filled by repair lane R1 from the batch block).
 - GATE: the BATCH GATE.
 - HASH MOVERS: the re-pin.
+- GLOSSARY: none (the batch's glossary rows are read against the code at the close, `workplan_v12.md` §4) (filled by repair lane R1 from the batch block).
+- DEPENDS ON: V12 B21c.01 to B21c.09 (every earlier position of the batch) (filled by repair lane R1 from the batch block).
 - COST and TIER: reading and a re-pin; `sonnet`, `high`.
 - LANDS IT: B21c's producer; `Item: B21c.99`, the batch's last `Item:` commit (no `[skip ci]`).
 

@@ -468,10 +468,15 @@ R-1 (B34.22, `17_CENSUS_C1A_02` W1 "The gate these census rows close on", copied
 
 ### B34.99 — re-pin and close readings · `V12_STRUCTURE_part4.md` E-1 · BUILD · HASH MOVER (the re-pin)
 - SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2; `V12_STRUCTURE_part2.md` §5.9, §5.12; PES-GO gate 5 ("One re-record of the seeded goldens, said plainly").
+- ADVANCES: the conjuncts the batch's REQUIREMENT line names, read on this tree; their `reading:` records written here (`IS-A-12`), no `status:` edited (A-114) (filled by repair lane R1 from the batch block).
 - INSTRUCTION: (1) re-record, once, the realm pins in `engine/season/tests/_realm_goldens.py` and every seeded golden B34.23 and B34.24 (and B34.01's branch 2, if taken) moved, reading seeds 0 to 2 against the step's base (`reading @<sha>`); the commit says "re-pin". (2) Read R-1 and every BATCH GATE line; write R-04.c1's `reading:` record in `engine/season/requirements.yaml` (the creation-sheet tests' result and this tree's sha; `status:` not edited, `IS-A-12`). (3) The commit body records the close (§5.12).
 - WHERE: `engine/season/tests/_realm_goldens.py`; `engine/season/requirements.yaml` (R-04.c1's `reading:` record).
+- FALSIFIER and CONTROL: a pin that moved and that no item of B34 declared (then the batch moved behaviour it did not declare: the re-pin stops and the batch is `STOPPED`). Control: the readings of the close this batch rebased on (`reading @<sha>`) (filled by repair lane R1 from the batch block).
+- TESTS: none new; after the re-pin every pinned test the RE-PIN line names reads green (filled by repair lane R1 from the batch block).
 - GATE: the BATCH GATE.
 - HASH MOVERS: the re-pin.
+- GLOSSARY: none (the batch's glossary rows are read against the code at the close, `workplan_v12.md` §4) (filled by repair lane R1 from the batch block).
+- DEPENDS ON: V12 B34.01 to B34.24 (every earlier position of the batch) (filled by repair lane R1 from the batch block).
 - COST and TIER: reading and a re-pin; `sonnet`, `high`.
 - LANDS IT: B34's producer; `Item: B34.99`, the batch's last `Item:` commit (no `[skip ci]`).
 

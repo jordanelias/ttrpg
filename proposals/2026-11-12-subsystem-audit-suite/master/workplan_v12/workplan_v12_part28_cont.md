@@ -262,6 +262,7 @@ Reconciled: 2026-11-12, A-115/A-116 lane: B12c.30 was BLOCKED (SE design: which 
 
 ### B12c.99 — re-pin and close readings · `_part4` E-1 · BUILD · HASH MOVER (the re-pin)
 - SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2; `V12_STRUCTURE_part2.md` §5.9, §5.12; `IS-A-12`.
+- ADVANCES: the conjuncts the batch's REQUIREMENT line names, read on this tree; their `reading:` records written here (`IS-A-12`), no `status:` edited (A-114) (filled by repair lane R1 from the batch block).
 - INSTRUCTION: (1) Re-record, once, the realm pins in `engine/season/tests/_realm_goldens.py` and every seeded result B12c.06, .07, .08, .12, .13, .14, .15, .16, .19, .20, .21, .22, .34 moved (and B12c.09/.10 if `notice_arm` was on at the open), against B12b's close (`reading @<sha>`), with each pin file's own generator; the commit says "re-pin" and lists the handles. (2) Read seeds 0 to 2 at one season for the items that read seed 0 only (E-2). (3) Write R-04.c6's `reading:` record in `engine/season/requirements.yaml` (the valley's two-season readings and the `BUILT OUT` lines; `status:` not edited). (4) Close B12c.27 in the commit body ("`07_SE_capability_and_chooser_surface` §5–§6: reference, no edit"). (5) Name the unused H ids of the block in the expunge commit body.
 - WHERE: `engine/season/tests/_realm_goldens.py`; the pin files the movers reach (named by `python tools/tests_for_diff.py --base <batch-start-sha>`); `engine/season/requirements.yaml` (R-04.c6 `reading:`).
 - TESTS: the full suite once (CLAUDE.md §0.4) and the covering suites, here.
@@ -269,6 +270,7 @@ Reconciled: 2026-11-12, A-115/A-116 lane: B12c.30 was BLOCKED (SE design: which 
 - GATE: the BATCH GATE.
 - HASH MOVERS: the re-pin itself.
 - DEPENDS ON: V12 B12c.01 to B12c.35.
+- GLOSSARY: none (the batch's glossary rows are read against the code at the close, `workplan_v12.md` §4) (filled by repair lane R1 from the batch block).
 - COST and TIER: calibration-reading; `sonnet`, `high`; the close's terminal critique `opus`.
 - LANDS IT: B12c's producer; `Item: B12c.99`, without `[skip ci]` (the batch's last `Item:` push).
 
@@ -439,6 +441,7 @@ Placement (§5.6, E-8): the intake §3 row orders CR-58 → CR-59 → CR-60 → 
 
 ### B24a.99 — re-pin and close readings · `_part4` E-1 · BUILD · HASH MOVER (the re-pin)
 - SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2; `V12_STRUCTURE_part2.md` §5.9, §5.12.
+- ADVANCES: none of the nine; the batch's record (filled by repair lane R1 from the batch block).
 - INSTRUCTION: (1) Re-record, once, the realm pins in `engine/season/tests/_realm_goldens.py`, `test_season_weather.py`'s `BASE_HASHES[1, 2]`, the go07 `BASE` seeds and every seeded result B24a.01, .04, .05, .06, .08 moved, against B24's close rebased on the step's earlier movers' merge (B12c, B18, B19, B21d; §7.4; `reading @<sha>`), by each file's generator; the commit says "re-pin". (2) Seeds 0–2 for every item read at seed 0 only (E-2). (3) The close's readings (BATCH GATE). (4) Name the stopped rows of B24a.08, if any, and the unused H id.
 - WHERE: `engine/season/tests/_realm_goldens.py`; `engine/season/tests/test_season_weather.py` (`BASE_HASHES[1, 2]`); `engine/season/tests/test_go07_canonical_digest.py` (`BASE`); the pin files of any other seeded result B24a.01, .04, .05, .06, .08 moved (copied from this item's INSTRUCTION and the block's RE-PIN line by check lane K6).
 - TESTS: the full suite once and the covering suites.
@@ -446,6 +449,7 @@ Placement (§5.6, E-8): the intake §3 row orders CR-58 → CR-59 → CR-60 → 
 - GATE: the BATCH GATE.
 - HASH MOVERS: the re-pin.
 - DEPENDS ON: V12 B24a.01 to B24a.08.
+- GLOSSARY: none (the batch's glossary rows are read against the code at the close, `workplan_v12.md` §4) (filled by repair lane R1 from the batch block).
 - COST and TIER: reading and a re-pin; `sonnet`, `high`; terminal critique `opus`.
 - LANDS IT: B24a's producer; `Item: B24a.99`, without `[skip ci]`.
 
