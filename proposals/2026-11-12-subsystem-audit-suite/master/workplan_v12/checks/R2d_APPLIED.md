@@ -77,6 +77,22 @@ Appended finding by finding as each is applied (a restart resumes from the last 
 
 ## Part 2 §4 against part 44
 
+`workplan_v12_part2.md` §4, rows 29, 30, 32, 43, 47, 55, 57, 66, 100, 102 (R1's list). Part 44 read the source and says why in each (its U9 and the B98 item's SOURCE); each part 2 status cell now reads part 44's state, the reason cell carries the target as recorded plus part 44's source reading and the line I re-opened:
+- 29, 30 → BLOCKED (design: no value stated): `09_WR_B_draws_not_thresholds.md:69`, `:92` (`[CALIBRATE: …, joint calibration, OWED §B]`, no figure). B98.23, B98.24.
+- 32 → BLOCKED (design: no value stated): `03_PC_duel_round_and_approach_B.md:163` ("no coefficient is chosen before the calibration batch"). B98.26.
+- 43 → BLOCKED (carrier) while B12c.17 is HELD, TARGETED only if its trigger fires (part 2 already said so in its second clause; part 44 B98.34 takes it). 
+- 47 → BLOCKED (design: no value stated): `03_PC_loadout_and_carry…md:83`, `:131` (`[SIM-CALIBRATE]`, 0 shipped, no candidate). B98.38.
+- 55 → BLOCKED (content: which doctrine rides forward): CHO gate 3 prices the post and does not assign it (B98.45; `27_MB_D…md:200-202` seeds `reserve` as the control).
+- 57 → TARGETED at the 0.5 arm, stated as part 44's keep-or-not flip (B98.47): the two already agreed.
+- 66 → BLOCKED (design: no value stated): `14_VERBS_MILITARY_C…md:193` ("swept", no figure). B98.56.
+- 100 → BLOCKED (A-114): A-51's ruled prologue is twenty seasons; a flip to 2 ships an unstated value (B98.81, U6).
+- 102 → BLOCKED (design: no value stated): `21_PROCEDURAL_C…md:161` (`{per_season: 0, cap: 0}`, the control; reading (d) names no value). B98.83.
+No row where part 44 and its source disagree. Counts paragraph recounted by script: 34 TARGETED, 64 BLOCKED (46 design, 8 content, 4 carrier, 1 CR-103, 5 A-114), 7 IN-BATCH = 105; rows 24 and 80 (IN-BATCH here, BLOCKED in B98) are B98 taking their "else" arm, which makes B98's 66. Edited with `Edit` one row at a time (siblings R2a–R2c were writing part 2 concurrently; their edits are untouched).
+
+## Close
+
+Control: R1's `parse_parts.py`, `graph.py`, `gates.py` copied to `scratchpad/r2d/` and re-run on the edited tree → S+G+R 526 edges, acyclic, 25 waves, hours path 358.5 h (unchanged: no edge added or removed); every block's `GATE: Batch` lines equal its after-list, one exact boundary row each (B20 to B41 listed clean). `python tools/ci_naming_check.py` → "no new use of a deprecated name", exit 0. No pytest, no commit. Fan-out: none (0 agents spawned: the findings are independent single-site edits one reader holds; a second reader would only re-read the same files).
+
 ## For Jordan
 
 ### J-1 · Is giving something up a sure act, or a drawn one? · FA, SC (verb `release`)
