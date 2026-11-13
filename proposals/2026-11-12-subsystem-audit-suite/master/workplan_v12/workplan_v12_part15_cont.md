@@ -175,6 +175,24 @@
 - COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B21's producer; `Item: B21.83`, `[skip ci]`.
 
+### B21.84 — cut the stored `scale:` column · `IS-B2-CORE-06`; `U5a_CORE_owed_edits` §E row 3; CR-07, H-89, DEF-5, A1-46 (moved from B03.69, lane D4, E-8) · BUILD · HASH EQUAL
+- SOURCE: `master/instructions/IS_B2_SC_FI_CORE_CHAR_part2.md` "Item: IS-B2-CORE-06"; `proposals/U5a_CORE_owed_edits.md` §E row 3; carry-forward `master/eval/E1.md` "### CR-07" (WHAT, GATE, EXIT and FALSIFIER), `master/eval/E3.md` Block 6 (A1-46, H-89), `master/eval/E4.md` "### DEF-5"; B03.69 (its POINTER, the ladder record).
+- ADVANCES: none of the nine; hygiene: `04` §A.3 row 4 ("`scale:` on modules and on seven verb rows — **deleted; the loader rejects the key**"), §B.13 #10.
+- INSTRUCTION, in order:
+  1. Pre-flight (CR-07's, re-run on this tree): at seeds 0 to 2, two seasons, count the attempted acts of the `scale:`-carrying verbs whose `Act.via.scope` is missing; it must read 0 (it read 19 of 309 before B21.03, all through `off_npc_084`; B21.03 gives that seat the row `off_guild_leader`, `rung: {duchy: "Hafenmark"}`). The count is written in the commit body `[ASSUMPTION: read by a scratch probe over `w.acts` after `run(2, s, w=w)` — basis: CR-07's own pre-flight read the same field over the same verbs; nothing of the probe is committed]`. **STOPS IF** it reads above 0: the seat or seats it names are recorded, and the item leaves to B21c's tail (its next batch on `offices.yaml`, part 2 §5.1), the cut unmade.
+  2. CR-07's deletion, copied: "Delete `scale:` and `scale_note` from the … rows of `engine/season/verb_table.yaml` that carry them, the `VerbRow.scale` field and its `RUNG_KINDS` load check (`data/verbs.py:~860`), the guard test `test_governance_scale_is_a_rung_kind_and_is_crossed_with_the_stratum` and the `.scale` asserts at `test_season_shape.py:~5281` and `:~5386-5387`, and the stale header at `verb_table.yaml:66-79` (it still says nine rows)." Count the rows by symbol at the edit (`grep -n "^    scale:" engine/season/verb_table.yaml`; 15 at `aa31fd2`, 13 in the entry). The `str(r.get("scale") or "person")` read in the row builder and the `row.scale not in RUNG_KINDS` check go with the field.
+  3. `scale` leaves `_VERB_ROW_KEYS`, so a planted `scale:` key is refused by the loader's unknown-key rule (`04` §B.13 #10's other clause, "a `scale:` key fails the load"); the two comments in `data/verbs.py` that say that clause "IS NOT ENFORCED, BECAUSE IT IS ABOUT A DIFFERENT FIELD" are rewritten in the same commit to say it is enforced ("corrected to say the invariant is enforced", `IS-B2-CORE-06`).
+  4. `engine/season/hole_register.yaml` H-89: closed, "the column is deleted, the reader is not needed" (E6 Block 3); DEF-5 (the mapping between the three scale vocabularies) closes with it, one line in the commit body.
+- WHERE: `engine/season/verb_table.yaml` (`scale:`, `scale_note` on every carrying row; the header); `engine/season/data/verbs.py` (`VerbRow.scale`, the row builder's read, the `RUNG_KINDS` check, the two invariant comments); `engine/season/tests/test_season_shape.py` (the guard test, the `.scale` asserts, the new test); `engine/season/hole_register.yaml` (H-89).
+- TESTS: the guard test and the `.scale` asserts deleted; `test_season_shape.py::test_a_planted_scale_key_fails_the_load_naming_the_row` `[ASSUMPTION: test name; the item creates it, E-3]`, written before step 3 and read red (a planted `scale: "settlement"` on one row loads today).
+- FALSIFIER and CONTROL: "the planted key loads" (CR-07). Control: the realm content hash at seed 0, one season, equal to B21.83's reading ("an inert column": `VerbRow.scale` is read by its load check only, `grep -rn "\.scale\b" engine/season --include=*.py` at `aa31fd2`).
+- GATE: "the loader loads; `grep -n "scale:" engine/season/verb_table.yaml` finds none; a planted `scale:` key fails the load naming the row" (CR-07); step 1's count → 0; `python -m pytest engine/season/tests/test_season_shape.py -q` → pass (with the batch's `EXPECTED RED UNTIL B21.99` pin tests excepted).
+- HASH MOVERS: none ("an inert column").
+- DEPENDS ON: V12 B21.03 (`off_guild_leader`'s rung); V12 B21.14 (it rewrites the `confer`, `revoke`, `succeed` rows this item strips; one file, landing order); EXISTS-IN-TREE `data/verbs.py::VerbRow.scale`, `_VERB_ROW_KEYS`, `RUNG_KINDS`, `verb_table.yaml`'s `scale:` rows, `test_season_shape.py::test_governance_scale_is_a_rung_kind_and_is_crossed_with_the_stratum`, H-89.
+- GLOSSARY: none (*scale* keeps its rows; the column is deleted, not the word).
+- COST and TIER: edit (a deletion); `sonnet`, `high`.
+- LANDS IT: B21's producer; `Item: B21.84`, `[skip ci]`.
+
 ### B21.99 — re-pin and close readings · `V12_STRUCTURE_part4.md` E-1 · BUILD · HASH MOVER (the re-pin)
 - SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2; `V12_STRUCTURE_part2.md` §5.9, §5.12; `IS-A-12`; CLAUDE.md §7 ("say plainly when you re-record one").
 - ADVANCES: the batch's readings of R-04.a, R-04.c2 and the `BUILT OUT` lines for `confer`, `revoke`, `succeed` (`V12_STRUCTURE.md` §2.2, B21's row; the first half's `REQUIREMENT` line names them).
@@ -194,7 +212,7 @@
   the glossary rows B21.56, B21.63, B21.68, B21.72, B21.73 name, read against the code they landed (STAGES "The glossary always matches" rule 2);
   "the close's commit body records `register --requirements` (nine lines), `m1_acceptance --summary`'s verdict line, the named conjuncts' readings with their tree, the `BUILT OUT`, `ENGINES` and `NULL SCENES` lines before (`reading @<sha>`) and after, and the batch's measured wall time; the last `Item:` commit writes the conjuncts' `reading:` records; `status:` is not edited" (`IS-A-12`).
 - HASH MOVERS: the re-pin itself.
-- DEPENDS ON: V12 B21.51 to B21.83 (B21.79 Patched: P-24; B21.80 to B21.83 Patched: P-26) and the first half's items.
+- DEPENDS ON: V12 B21.51 to B21.84 (B21.79 Patched: P-24; B21.80 to B21.83 Patched: P-26; B21.84 lane D4) and the first half's items.
 - GLOSSARY: none.
 - COST and TIER: edit (the re-pin) and reading; `sonnet`, `high`; the readings against their conjuncts `opus`.
 - LANDS IT: B21's producer; `Item: B21.99`, no `[skip ci]` (the batch's last `Item:` push, which opens BATCH-CLOSE).

@@ -41,7 +41,7 @@ BATCH GATE (read once, on the closing tree, `PYTHONHASHSEED=0` on every seeded c
   the glossary rows the items name (*scenario*, *case*, *sworn*, *treasury*), read against the code they landed (STAGES "The glossary always matches" rule 2): a mismatch fails the close;
   "the close's commit body records `register --requirements` (nine lines), `m1_acceptance --summary`'s verdict line, the named conjuncts' readings with their tree, the `BUILT OUT`, `ENGINES` and `NULL SCENES` lines before (`reading @<sha>`) and after, and the batch's measured wall time; the last `Item:` commit writes the conjuncts' `reading:` records; `status:` is not edited" (`IS-A-12`).
 RE-PIN: once, in B40.99's commit: the realm pins in `engine/season/tests/_realm_goldens.py` (B02's one pin file) at seeds 0 to 2 and the NPC-088 headless hash, read against B39's close (`reading @<sha>`); the commit says "re-pin: B40, behaviour movers B40.12, B40.14 to B40.20, B40.22 to B40.25 (content rows the realm builds: exit-audit keys, paired officers, seeded capitulations and commissions, the secretary order, the condotta form, the guild bench, the brotherhood, the clause keys `stage`, `after`, `over: any`, the wardship keep, the farm's `hardens`); the scenarios and the report move nothing".
-IDS: ED-FA 0; H 0 (no item writes a ledger or hole-register row; B40.13's missing carrier goes to the receipt, `V12_STRUCTURE_part2.md` §5.7)
+IDS: ED-FA 0; H 0 (no item writes a ledger or hole-register row; B40.13's carrier is V12 B33.50, lane D4)
 DIALS AT CONTROL: none (no setting ships at a control value; the `[ASSUMPTION]` amounts with sweeps in B40.03 to B40.08, B40.14 to B40.25 are authored values listed in the PR body for Jordan's correction at the merge, D-19, not settings)
 C(B40-inst-scenarios): this batch's entries; the plan's head parts;
   `engine/season/harness/governance_spine.py` (`situation`, `situated`, `play`, `ending`, `digest`, `offered`, `loop_closed`: B21.72, B21.74, B21.76); `engine/season/harness/scenarios.py` (`SCENARIOS`, `run`, `Scenario`, `ENDING_KINDS`: B11, `IS-B2-CORE-01`, `IS-B3-GO-01`); `engine/season/harness/corpus_run.py` (`build_case`, the closed set of `setup` keys, the prehistory fold: B39, `12_ARCS_case_on_the_realm`); `engine/season/harness/storybar.py` (the `--pin-rolls` wrapper, B36, `23_STORY_D` edit 3; read only); `engine/season/harness/strife.py` (the report's kind; read only); `engine/season/harness/populated.py::run`; `engine/season/boot/realm.py::build_realm` (B03c); `engine/season/harness/headless.py`, `play_surface.py`; NEW `engine/season/harness/institution.py`; `engine/season/cases/exercises/` (NEW `INST-01.yaml`, `INST-BYZ-ROGA.yaml`, `INST-BYZ-CHANCERY.yaml`, `INST-COLONIAL-01.yaml`, `INST-COLONIAL-02.yaml`, `INST-PAPACY-01.yaml`; B33's `INST-VENICE-01.yaml`);
@@ -55,6 +55,7 @@ COST: small builds (one harness module, the runner's case reading, six case file
 EST: 16 h [estimate: `V12_STRUCTURE.md` §2.4's formula over this batch's 29 positions (0.4 h × 29 + 2.5 h for the close + 2 h for the 200-seed arms); §2.2's 6 h counted the nine members, not the commits they order (E-15)]
 
 UNDECIDED (each reading taken is the one that changes less, `V12_STRUCTURE_part2.md` §5.1; for the receipt and H2):
+  (D4) Lane D4: B40.13's carrier, the place filter on `deed_doers`, is V12 B33.50 (B33 closes at S19, before B40 opens at S22; the first consumer, B33.24's `goal_church_liberties_kept`, is in B33). B40.13 is BUILD and lands its goal row with `under:`; no Jordan decision is owed beyond the row's own `[ASSUMPTION; Jordan to correct]` values (D-19).
   (G) **Edge notes**, moved here from this block's `GATE: Batch` lines so that each reads `GATE: Batch <handle>` only (repair lane R2d, CHK_K8 #22): `B21d-fa-arc`: added by H2: `H2_DECISIONS.md` HD-13, PAP-F needs CR-88; no wave moves; `workplan_v12_part2.md` §1.
   (U1) **B40's hash.** `V12_STRUCTURE.md` §2.2 and U3 §2.1 read B40 "EQUAL (0 of 9)"; the four grounding plans each say "EQUAL" only with their rows *absent* (U3 §3.1: "EQUAL absent", "EQUAL with rows absent"), and VEN-E says it outright: "With every row of this batch absent, nothing … With the rows present: one more form … content rows in `offices.yaml`, `rosters.yaml: office_bodies` and `arrangements.yaml`". Rows the realm builds move the realm's content hash. Taken: B40 is a behaviour mover with one re-pin (B40.99); H2's hash-mover table and §7.1 item 7's list of hash-EQUAL batches change. Whether a new optional clause key (`stage`, `after`, `within`) is an *encoding* mover (D-04) depends on whether `data/instruments.py`'s clause type is a dataclass `World.content_hash()` reaches; B40.18 and B40.22 open it first and declare which.
   (U2) **The edge B21d → B40.** PAP-F depends on CR-88's vacancy duty ("until it lands the case plants the question, never the outcome"); CR-88 is B21d's (the intake `:280`). B21d is not in B40's `after` list and not before it transitively (no batch between them names B21d). It closes at S15, before S22, so the schedule meets it; the graph does not. Taken: no `GATE: Batch B21d` line (the gate list is §2.1's); B40.08 carries the source's own fallback as a `STOPS IF`-free branch. For H2: adding B21d → B40 points forward (W14 → W22) and makes no cycle. (Patched, seen by check lane K10: H2 adopted this edge, `H2_DECISIONS.md` HD-13, and wrote `GATE: Batch B21d-fa-arc` into the block above; "Taken: no `GATE: Batch B21d` line" is superseded, and B40.08's fallback stays as a branch for the case that CR-88 did not land.)
@@ -91,7 +92,7 @@ Not in this batch, and where each is (each member's parts are dispositioned once
 | B40.10 | five readings of the court in the report | BYZ-G item 3 | BUILD | EQUAL | B40.04, B40.05 |
 | B40.11 | an entered paper is a precedent file | BYZ-G item 4 | BUILD | EQUAL | Batch B33 |
 | B40.12 | an exit audit on the seats that hold money or a frontier | BYZ-G item 1 | BUILD | MOVER(behaviour) | B40.03; Batch B33 |
-| B40.13 | the treaty gate breeds its own offence | BYZ-G item 2 | BLOCKED (v12: a carrier is owed: the place-filtered `deed_doers` form in `data/goals.py`) | — | — |
+| B40.13 | the treaty gate breeds its own offence | BYZ-G item 2 | BUILD (lane D4: carrier V12 B33.50) | MOVER(behaviour) | B40.11, B40.12; Batch B33 (B33.50) |
 | B40.14 | paired officers, near and far | VEN-E edit 1 | BUILD | MOVER(behaviour) | Batch B33 |
 | B40.15 | the submission pact | VEN-E edit 2 | BUILD | MOVER(behaviour) | Batch B32 |
 | B40.16 | the appointer answers: the audit's recital | VEN-E edit 3 | BUILD | MOVER(behaviour) | Batch B33 |
@@ -448,23 +449,31 @@ Not in this batch, and where each is (each member's parts are dispositioned once
 - COST and TIER: edit (content); `sonnet`, `medium` (BYZ-G); one `opus` read of the band table.
 - LANDS IT: B40's producer; `Item: B40.12`, `[skip ci]`.
 
-### B40.13 — the treaty gate breeds its own offence · BYZ-G item 2 · BLOCKED (v12: a carrier is owed: the place-filtered `deed_doers` form in `data/goals.py`) · HASH —
-- SOURCE: BYZ-G "Item 2", "Exact edits" row 2; `proposals/15_INSTITUTIONS_PAPACY_C_consecration_and_deed_ledger.md` "Exact edits" 4 and its `[UNVERIFIED]` block (the place filter "is requested, not built here"); U4 §3.4 (BYZ_G: "INCOMPLETE: item 2 blocked").
-- What is missing: the row `goal_kommerkiarios_side_roads` "**ships off** until `data/goals.py` gains the place filter PAPACY-C requests for its own `deed_doers` row (deeds whose claim subject lies under a named rung); with the filter, the row's `under:` names the treaty ground." No item in v12 builds that form (`grep -l "place filter"` over this directory's parts and `master/instructions/` finds none at this read), and `goals.yaml` has no switch by which a row ships off (`grep -n "enabled\|active:" engine/season/goals.yaml` → none). Owner: `data/goals.py`'s owner (CHAR; `12_ARCS_arcs_as_staged_goals`).
-- What lands when the carrier exists (BYZ-G, copied): the row
+### B40.13 — the treaty gate breeds its own offence · BYZ-G item 2 · BUILD (lane D4: its carrier is V12 B33.50) · HASH MOVER(behaviour)
+- SOURCE: BYZ-G "Item 2", "Exact edits" row 2, its gate and falsifier; `proposals/15_INSTITUTIONS_PAPACY_C_consecration_and_deed_ledger.md` "Exact edits" 4 and its `[UNVERIFIED]` block (the place filter "is requested, not built here"); U4 §3.4 (BYZ_G: "INCOMPLETE: item 2 blocked", now carried); the carrier V12 B33.50 (`deed_doers` narrowed `under:` a rung).
+- ADVANCES: none of the nine; a strictness that is a person's goal, not a trigger.
+- INSTRUCTION: `engine/season/goals.yaml`, the row, copied (BYZ-G), with `under:` added as the source says ("with the filter, the row's `under:` names the treaty ground"):
   ```yaml
     - id: goal_kommerkiarios_side_roads
       org: {seat: off_kommerkiarios}
       text: the Kommerkiarios acts against whoever he knows to have traded past the treaty's gate
-      object: {kind: deed_doers, kinds: [<the breach kind of the treaty staple>]}
+      object: {kind: deed_doers, kinds: [<the breach kind of the treaty staple>], under: <the treaty ground>}
       pursuits: {stability: 0.6, justice: 0.3, wealth: 0.1}
       derives: {from: goal_kommerkiarios_treaty_order, kind: establishes}
       source: >-
         INST-BYZ-GROUNDING item 2. [ASSUMPTION; medium; Jordan to correct -- the weights and that the
         strictness is a goal at all. Revert: delete the row.]
   ```
-  with `kinds:` the success kind of the act the `staple` row's `forbears` clause names ("the loader refuses a kind outside `data/verbs.py::DEED_KINDS`"); gate: "Hand-built on the realm with `foreign=True`: one person holds a claim of a breach by a merchant; the Kommerkiarios is told it. Over 200 seeds his chooser forms `open_case` against the merchant in some seeds and not all … *Control:* the row absent: no such case forms in any seed"; falsifier: "The case forming in every seed (a trigger, not a person), or forming against persons he holds no claim about"; test file `engine/season/tests/test_inst_byz_g.py` (B40.11's).
-- LANDS IT: no commit in B40; the receipt and B40.99's commit body name the missing carrier.
+  with `kinds:` "the success kind of the act the `staple` row's `forbears` clause names" ("the loader refuses a kind outside `data/verbs.py::DEED_KINDS`"), read off the treaty `staple` instrument at the item's open; `under:` the rung that staple is held `at:` `[ASSUMPTION: "the treaty ground" is the staple's own `at:` rung — basis: BYZ-G's sentence and the `instruments.yaml` row form, `at: {…}`; recorded in the commit body]`. Listed in the PR body as an authored value for Jordan (D-19).
+- WHERE: `engine/season/goals.yaml` (one row); `engine/season/tests/test_inst_byz_g.py` (B40.11's).
+- TESTS: `test_inst_byz_g.py::test_the_treaty_gate_breeds_its_own_offence` `[ASSUMPTION: test name (E-3)]`, BYZ-G's gate: "Hand-built on the realm with `foreign=True`: one person holds a claim of a breach by a merchant; the Kommerkiarios is told it. Over 200 seeds his chooser forms `open_case` against the merchant in some seeds and not all … *Control:* the row absent: no such case forms in any seed"; `assert checked >= 200`; written first, red.
+- FALSIFIER and CONTROL: "The case forming in every seed (a trigger, not a person), or forming against persons he holds no claim about" (BYZ-G); a breach outside `under:` naming a doer. Control: the row absent, the realm hash at seed 0, one season, equal to B40.12's reading.
+- GATE: `python -m pytest engine/season/tests/test_inst_byz_g.py -q` → pass (`checked >= 200`); `python -c "import engine.season.data.goals"` → loads (the row's `kinds:` and `under:` accepted).
+- HASH MOVERS: every seeded run with `foreign=True` (the shipped default, ED-IN-0310) in which the Kommerkiarios' goal forms a question. Declared; B40.99's one re-pin.
+- DEPENDS ON: V12 B33.50 (`under:` on `deed_doers`); V12 Batch B33 (VEN_D's `staple` form and `off_kommerkiarios`' standing as a foreign seat; COL-B); V12 B40.11 (the test file), B40.12 (the batch's tree before it); EXISTS-IN-TREE `goals.yaml` `goal_kommerkiarios_treaty_order` (`engine/season/goals.yaml:484` at this read), `offices.yaml: foreign_seats` `off_kommerkiarios`.
+- GLOSSARY: none.
+- COST and TIER: content (one goal row) and a test; `sonnet`, `high`; one `opus` read of the 200-seed spread.
+- LANDS IT: B40's producer; `Item: B40.13`, `[skip ci]`.
 
 ### B40.14 — paired officers, near and far · VEN-E edit 1 · BUILD · HASH MOVER(behaviour)
 - SOURCE: `proposals/15_INSTITUTIONS_VENICE_grounding_E_what_the_tree_adds.md` "Edit 1 — the paired officers, near and far (M-1, M-2)", "Exact edits, by owner" row 1, "Gate" 1, 2; rulings A-13 (the U5d line: "content on the three ruled seat facts"); C3-L9 (`cooling_off` is a table entry).

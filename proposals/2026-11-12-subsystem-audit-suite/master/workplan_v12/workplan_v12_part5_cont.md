@@ -184,7 +184,7 @@ Read at B03.99 (no code, no commit of its own): Reading 1 of this batch's `## Re
 - FALSIFIER and CONTROL: a pin re-recorded with no mover landed (a hidden move), or a pin moved that no item declared (then the item that moved it is found by bisecting the batch's commits on the realm hash at seed 0 and the batch stops). Control: every hash-EQUAL item's recorded reading.
 - GATE: the batch gate of B03's head (the first half's lines and the lines "Lines this half adds to B03's block" lists), every command with its expected reading; the re-pinned pins → pass.
 - HASH MOVERS: the re-pin itself (B03.28's encoding move and B03.86's behaviour move, recorded once).
-- DEPENDS ON: V12 B03.01 to B03.28 (first half, B03.28 the encoding mover), B03.51 to B03.86 (B03.69 excepted: BLOCKED); V12 Batch B02 (the pin file and its after-reading).
+- DEPENDS ON: V12 B03.01 to B03.28 (first half, B03.28 the encoding mover), B03.51 to B03.86 (B03.69 excepted: a POINTER to B21.84, lane D4); V12 Batch B02 (the pin file and its after-reading).
 - GLOSSARY: the glossary rows B03.58, B03.63, B03.65, B03.68 name are read against the code they landed (STAGES "The glossary always matches" rule 2): a mismatch fails the close.
 - COST and TIER: reading and a re-pin; `sonnet`, high; the readings read by `opus` at the terminal critique.
 - LANDS IT: B03's producer; `Item: B03.99`, the batch's last `Item:` commit, **without** `[skip ci]` (the push that opens BATCH-CLOSE, the skill's CI cadence).
