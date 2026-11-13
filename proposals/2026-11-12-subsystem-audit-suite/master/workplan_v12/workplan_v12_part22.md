@@ -392,7 +392,7 @@ Not items, and where each is: `05_SC_playable_hearing.md`, `05_SC_evidence_and_r
 - SOURCE: EVID_B "Exact edits" 2, rule 2 ("by `_pair`'s rule exposed once as `decision/options.py::contradicts(a, b) -> bool` (no second copy)"); FI_05_B E-5 item 1.
 - ADVANCES: R-04.c3 (one owner of "pairs and disagrees").
 - INSTRUCTION: "`engine/season/decision/options.py` — `contradicts(a, b)`, the predicate `_pair` already applies, exposed once; `_pair` calls it." The predicate is `_pair`'s ("same key, whole value, `==`", EVID_B problem 4): two claims on the same `(subject, predicate)` with different values.
-- WHERE: `engine/season/decision/options.py` (`contradicts`; `_pair`).
+- WHERE: `engine/season/decision/options.py` (`contradicts`; `_pair`); NEW `engine/season/tests/test_sc_hearing_evidence.py`.
 - TESTS: `engine/season/tests/test_sc_hearing_evidence.py` (new): `test_contradicts_is_the_pairing_rule` `[ASSUMPTION: test name; the item creates it]` (same cell different value → True; same value → False; different predicate → False).
 - FALSIFIER and CONTROL: `_pair` and `contradicts` disagree on any pair. Control: realm hashes equal to B24.17's (`_pair`'s behaviour unchanged).
 - GATE: `PYTHONHASHSEED=0 python -m pytest engine/season/tests/test_sc_hearing_evidence.py -q` → pass; realm hash at seed 0 → equal.

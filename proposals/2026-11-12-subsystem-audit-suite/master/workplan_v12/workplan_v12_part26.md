@@ -77,8 +77,8 @@ EST: this half 13.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula o
 | B19.14 | the pool's constants deleted; `sim_params.json` rebuilt | MBA-04 step 7 | BUILD | EQUAL | B19.13 |
 | B19.15 | the troop loader's `power` alias deleted | MBA-04 step 8 | BUILD | EQUAL | B19.14 |
 | B19.16 | the CellTable owner of the per-cell maps | ED-MB-0045 (the intake `:521`) | HELD (trigger: a position adds a per-cell map in `modules/mass_battle`) | — | — |
-| B19.17 | a unit's formation and the scale of a cell, at the control arm | `04_MB_cell_hierarchy_as_data` §1–§2 | BUILD | EQUAL (at `arm: cap`) | B19.15 |
-| B19.18 | the army's formation as rows; a unit's post | `04_MB_cell_hierarchy_as_data` §3 | BUILD | EQUAL (at `line`) | B19.17 |
+| B19.17 | a unit formation and the scale of a cell, at the control arm | `04_MB_cell_hierarchy_as_data` §1–§2 | BUILD | EQUAL (at `arm: cap`) | B19.15 |
+| B19.18 | the army formation as rows; a unit's post | `04_MB_cell_hierarchy_as_data` §3 | BUILD | EQUAL (at `line`) | B19.17 |
 | B19.19 | the read that names a subformation | `MB_LEXICON_part3.md` L1-6 | BUILD | EQUAL | B19.18 |
 | B19.20 | the scale written once | `26_MASS_BATTLE_cell_scale_and_time` §1 | BUILD | EQUAL | B19.17 |
 | B19.21 | per-arm missile ranges and the opening-distance rule, at control | same, §2 | BUILD | EQUAL | B19.20, B19.18 |

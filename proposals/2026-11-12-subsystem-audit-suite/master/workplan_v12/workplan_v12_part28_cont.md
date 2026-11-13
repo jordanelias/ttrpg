@@ -445,7 +445,7 @@ Placement (§5.6, E-8): the intake §3 row orders CR-58 → CR-59 → CR-60 → 
 - GATE: the BATCH GATE.
 - HASH MOVERS: the re-pin.
 - DEPENDS ON: V12 B24a.01 to B24a.08.
-- COST and TIER: `sonnet`, `high`; terminal critique `opus`.
+- COST and TIER: reading and a re-pin; `sonnet`, `high`; terminal critique `opus`.
 - LANDS IT: B24a's producer; `Item: B24a.99`, without `[skip ci]`.
 
 | STOP. Batch B24a-sc-outside-the-room closes here |

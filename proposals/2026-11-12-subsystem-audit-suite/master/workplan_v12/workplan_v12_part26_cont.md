@@ -6,7 +6,7 @@ The batch block's head, its position table and B19.01 to B19.16 are in `workplan
 
 ---
 
-### B19.17 — a unit's formation and the scale of a cell, at the control arm · `04_MB_cell_hierarchy_as_data` §1–§2 · BUILD · HASH EQUAL (at `arm: cap`)
+### B19.17 — a unit formation and the scale of a cell, at the control arm · `04_MB_cell_hierarchy_as_data` §1–§2 · BUILD · HASH EQUAL (at `arm: cap`)
 - SOURCE: `proposals/04_MB_cell_hierarchy_as_data.md` "The resolution, decided" §1 (words), §2 (the unit's formation), "Exact edits" rows 1–4 (their §2 parts), "Gate" 1–4, "Tests (W3-1)", "Falsifier"; the second `Folded:` line (the sourced depth seeds); `MB_LEXICON_part3.md` D-15, S-7 (`ranks`, `files` → `depth`, `width`); carries R-30, R-32 of `audits/04_MB_audit_addendum_B.md` §B6; rulings A-2, A-59 (2), (3); closes F-MB-20, F-MB-22.
 - ADVANCES: R-04.c5 (ii) (a fought field on a cell battlefield with depth), through the flip B19.23.
 - INSTRUCTION (copied, with S-7 applied to the column names):
@@ -37,7 +37,7 @@ The batch block's head, its position table and B19.01 to B19.16 are in `workplan
 - COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B19's producer; `Item: B19.17`, `[skip ci]`.
 
-### B19.18 — the army's formation as rows; a unit's post · `04_MB_cell_hierarchy_as_data` §3 · BUILD · HASH EQUAL (at `line`)
+### B19.18 — the army formation as rows; a unit's post · `04_MB_cell_hierarchy_as_data` §3 · BUILD · HASH EQUAL (at `line`)
 - SOURCE: the same file, §3, "Exact edits" (the §3 parts and the `systems/mass_battle/sim/engine.py` row), "Gate" 5, "Tests (W3-1)"; `MB_LEXICON_part3.md` D-4 and S-6 (post `front` → `centre`), D-1 (subformation); `26_MASS_BATTLE_cell_scale_and_time.md` / U1 glossary *approach* (`approach_rows` → `opening_rows`); carries R-33; A-1, A-59 (3).
 - ADVANCES: R-04.c4 (placement decides a field; `27_MB_C` gate 3 reads it in the second half).
 - INSTRUCTION (copied, with S-6 applied):

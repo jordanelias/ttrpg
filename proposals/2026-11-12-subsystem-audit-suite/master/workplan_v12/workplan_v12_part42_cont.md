@@ -75,6 +75,7 @@ The batch block's head, its position table and items B39.01 to B39.17 are in the
 - TESTS: `test_both_blows_of_one_exchange_land_before_the_felling_check` ("a planted exchange in which each blow fells"), written first; red before.
 - FALSIFIER and CONTROL: "0 of 5,000 again." Control: an exchange in which only one blow fells reads as before.
 - GATE: the new test → pass; "The PC pessimist's 5,000-duel reading shows mutual fellings above 0", read by `systems/combat/combat_engine_v1/workbench/balance.py` (the combat-balance instrument, CLAUDE.md §9) at 5,000 duels; `python -m pytest tests/valoria -q -m combat` → pass after the combat goldens' re-pin (B39.99); `python tools/export_engine_params.py --check` → exit 0.
+- EXPECTED RED UNTIL B39.99: the combat goldens and golden modes (`python tools/ci_golden_modes_check.py`, the combat suite's pins) read red from this commit to B39.99's re-pin, under `[skip ci]`; the `-m combat` arm of the GATE above is read at B39.99, not here (added by check lane K10, E-1, §5.8).
 - HASH MOVERS: "Every fight's log. Declared"; every season fight and the combat goldens; B39.99's one re-pin. B15's calibration readings (`reading @<sha>`) re-read at the close and any move reported.
 - DEPENDS ON: V12 Batch B15 (the PC calibration, A-31); V12 Batch B13 (`modules.combat` as a package); EXISTS-IN-TREE `modules/combat/wrapper.py` (the exchange loop).
 - GLOSSARY: none (*exchange*, *felled* have rows).

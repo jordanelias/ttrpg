@@ -114,7 +114,7 @@ Not in this batch, and where each is: `04_MB_unit_loadout_and_weapon_in_hand_B` 
 - HASH MOVERS: none ("none at stages 1–3 with every `secondary` null").
 - DEPENDS ON: EXISTS-IN-TREE `hierarchy/units.py::_ORDER_SAFE_FIELDS`, `::_ORDER_TRIGGER_KINDS`, `orchestration.py::volley_phase`; V12 Batch B17 (stages 1–2: `references/troops.yaml`'s `primary`, `secondary`); V12 Batch B19a, B19 (MBA-01 `duel_key`, `sidearm`; MBA-04, MBA-05; `27_MB_A`'s obedience draw); V12 Batch B20 (`04_MB_manager_battle_one_resolver.md` §2: standing orders on the unit row).
 - GLOSSARY: *weapon in hand* (row exists for the duel's `form`, A-101's round): its owner column adds `Unit.in_hand` (mass battle; one state name with the duel's, `…_B.md` NERS S).
-- NAMES: `Subunit` → `Unit` (B16M); `subunits` → `units` (B16M); the army is `Army` (B16M).
+- NAMES: `Subunit` → `Unit` (B16M); `subunits` → `units` (B16M); the army is `Army` (B16M); "body" (a unit) → unit (S-8; K9 added: the item's copied text says "body" for a unit).
 - COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B31's producer; `Item: B31.02`, `[skip ci]`.
 
@@ -133,7 +133,7 @@ Not in this batch, and where each is: `04_MB_unit_loadout_and_weapon_in_hand_B` 
 - HASH MOVERS: none at landing ("stage 4 only rows naming a second weapon"; none does).
 - DEPENDS ON: V12 Batch B18 (`03_PC_loadout_and_carry`: `engine/substrate/combat_kit.py::carry_demand_of`, the export's `mass`); V12 Batch B19 (`04_MB_cell_hierarchy_as_data`, the arrangement; `16_PESSIMIST_MB_one_stamina_ledger` steps 1–2, the one column ledger); V12 B31.02; EXISTS-IN-TREE `percell.py::update_stamina`, `units.py::_node_advance`, `combat_kit.py`.
 - GLOSSARY: *carry demand* (row exists, PC's): owner column `combat_kit.carry_demand_of` for persons and units alike.
-- NAMES: `Subformation` → `UnitRow` (B16L); `Subunit._node_advance` → `Unit._node_advance` (B16M).
+- NAMES: `Subformation` → `UnitRow` (B16L); `Subunit._node_advance` → `Unit._node_advance` (B16M); "body" (a unit) → unit (S-8; K9 added: the item's copied text says "body" for a unit).
 - COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B31's producer; `Item: B31.03`, `[skip ci]`.
 
@@ -147,7 +147,8 @@ Not in this batch, and where each is: `04_MB_unit_loadout_and_weapon_in_hand_B` 
 - GATE: "Every new value at its control: `tools/export_troops.py --check` passes and `tools/ci_golden_modes_check.py` digests are equal"; `git grep -n "MB_CAVALRY_SPEED_MULT\|MB_ENVELOP_SPEED_MULT" modules/ engine/` → nothing; `python tools/export_sim_params.py --check` → exit 0.
 - HASH MOVERS: none ("Sections 1 and the transcribed fatigue rows: edit, hash-equal").
 - DEPENDS ON: V12 Batch B17 (the troop file, its loader and exporter); EXISTS-IN-TREE `config.py::MB_CAVALRY_SPEED_MULT`, `::MB_ENVELOP_SPEED_MULT`, `units.py::_node_advance`; V12 B31.03.
-- GLOSSARY: *pace* (new row): "how many cells a body moves in a tick at its ordinary speed, as a marching pace is"; owner `troops.yaml: troops.<kind>.pace`.
+- GLOSSARY: *pace* (new row): "how many cells a unit moves in a tick at its ordinary speed, as a marching pace is"; owner `troops.yaml: troops.<kind>.pace`.
+- NAMES: "body" (a unit) → unit (S-8; K9 added: the item's copied text says "body" for a unit).
 - COST and TIER: edit (mechanical); `sonnet`, `high`.
 - LANDS IT: B31's producer; `Item: B31.04`, `[skip ci]`.
 
@@ -162,6 +163,7 @@ Not in this batch, and where each is: `04_MB_unit_loadout_and_weapon_in_hand_B` 
 - HASH MOVERS: none at the control.
 - DEPENDS ON: V12 B31.04; EXISTS-IN-TREE `modules/mass_battle/terrain.py` (`OPEN_FLAT`, `FOREST_BROKEN`, the six rows), `massbattle.py::resolve_field`.
 - GLOSSARY: none (*pace* from B31.04).
+- NAMES: "body" (a unit) → unit (S-8; K9 added: the item's copied text says "body" for a unit).
 - COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B31's producer; `Item: B31.05`, `[skip ci]`.
 
@@ -223,8 +225,8 @@ Not in this batch, and where each is: `04_MB_unit_loadout_and_weapon_in_hand_B` 
 - GATE: gate 5, copied: "A body ordered to `reform` from `Line` to `Column` while out of contact: its shape changes, its cells' morale ids match its troop ids, and for `reform_ticks` it deals no damage; the same order given in contact does not fire until contact ends; charged during the reform, it loses more than the same body charged after it." `python -m pytest tests/valoria/test_mass_battle_role_instructions.py -q` → pass; `python tools/ci_golden_modes_check.py` → read and quoted: equal, or moved only where `check_drift` fires (UNDECIDED (6)).
 - HASH MOVERS: fields in which a body drifts (`check_drift` now pays `reform_ticks`), if any: declared; B31's one re-pin.
 - DEPENDS ON: V12 B31.02 (the switch tick); V12 Batch B19 (`27_MB_A` obedience; `04_MB_cell_hierarchy_as_data`: `ranks`, `files`); EXISTS-IN-TREE `units.py::rekey_cells`, `::check_drift`, `::_ORDER_SAFE_FIELDS`.
-- GLOSSARY: *reform* (new row): "to change a body's formation while out of contact, which costs it time"; the word *unit formation* names the arrangement (MB lexicon).
-- NAMES: "the subunit" → the unit (`Unit`, B16M).
+- GLOSSARY: *reform* (new row): "to change a unit's unit formation while out of contact, which costs it time"; the word *unit formation* names the arrangement (MB lexicon).
+- NAMES: "the subunit" → the unit (`Unit`, B16M); "body" (a unit) → unit (S-8; K9 added: the item's copied text says "body" for a unit).
 - COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B31's producer; `Item: B31.08`, `[skip ci]`.
 
@@ -314,7 +316,7 @@ Not in this batch, and where each is: `04_MB_unit_loadout_and_weapon_in_hand_B` 
 - HASH MOVERS: none.
 - DEPENDS ON: V12 B31.10; V12 Batch B19 (MBA-04: the vector; `27_MB_A` §2); EXISTS-IN-TREE `massbattle.py::_weighted_unit`, `::_person_unit`, `::_SEASON_FORCE_POWER`, `orderofbattle.py::build_unit`, `::_UNIT_POWER`, `units.py::eff_power`, `::eff_discipline`.
 - GLOSSARY: *prowess* (row exists: a unit's quality only, D-U1-11p): unchanged; the troop row `infantry` is "the unmustered body", plain words.
-- NAMES: `Subunit` → `Unit`, `Unit` → `Army` (B16M); the troop column `power` → `skill` (MBA-01).
+- NAMES: `Subunit` → `Unit`, `Unit` → `Army` (B16M); the troop column `power` → `skill` (MBA-01); "body" (a unit) → unit (S-8; K9 added: the item's copied text says "body" for a unit).
 - COST and TIER: edit; `sonnet`, `high`.
 - LANDS IT: B31's producer; `Item: B31.14`, `[skip ci]`.
 
@@ -347,6 +349,7 @@ Not in this batch, and where each is: `04_MB_unit_loadout_and_weapon_in_hand_B` 
 - EXPECTED RED UNTIL B31.99: `python tools/ci_golden_modes_check.py` where a field is fought on those grounds (exit 1 while its pinned digests differ from the moved ones this item's GATE reads), under `[skip ci]` (K9 added this line, as B30.10).
 - DEPENDS ON: V12 B31.05.
 - GLOSSARY: none.
+- NAMES: "body" (a unit) → unit (S-8; K9 added: the item's copied text says "body" for a unit).
 - COST and TIER: edit (a value); `sonnet`, `high`.
 - LANDS IT: B31's producer; `Item: B31.17`, `[skip ci]`.
 
@@ -361,6 +364,7 @@ Not in this batch, and where each is: `04_MB_unit_loadout_and_weapon_in_hand_B` 
 - HASH MOVERS: every fought field with a body moving above its pace. Declared; B31.99's re-pin.
 - DEPENDS ON: V12 B31.06, B31.17.
 - GLOSSARY: none.
+- NAMES: "body" (a unit) → unit (S-8; K9 added: the item's copied text says "body" for a unit).
 - COST and TIER: edit (a value); `sonnet`, `high`.
 - LANDS IT: B31's producer; `Item: B31.18`, `[skip ci]`.
 

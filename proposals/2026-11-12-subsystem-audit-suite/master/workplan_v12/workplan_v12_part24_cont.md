@@ -352,6 +352,7 @@ The five positions below are the intake entries the B12a authors routed here by 
 - FALSIFIER and CONTROL: the card's, re-read on the drawn form: "at the live arm two territories at one tick draw different factors at some seed, and a territory at 0.5 [at a Failure band] holds stores below the control's after its yield step; planted failure: the territory dropped from the key gives equal factors." Edit 2's: the shipped set's mean departs from one by more than the control's spread. Control: "`()` reproduces the base hash".
 - GATE: `python -m pytest engine/season/tests/test_season_weather.py engine/season/tests/test_season_weather_per_territory.py -q` → pass; `PYTHONHASHSEED=0 python -m engine.season.harness.aperture 2 0` (seeds 1, 2) → hashes moved (declared); the sweep table in the commit body.
 - HASH MOVERS: every seeded world (every territory's yield is drawn). Declared; B12b's re-pin.
+- EXPECTED RED UNTIL B12b.99: `test_season_weather.py`'s `BASE_HASHES` and `BASE_EVENTS` pins where the shipped arm moves them (TESTS: "a moved shipped-arm pin is B12b.99's"; `[skip ci]`) `[ASSUMPTION: added by check lane K5 — basis: this item's GATE names a file that pins 32-hex season hashes and the item declares every seeded world moved]`.
 - DEPENDS ON: V12 B12b.03 (the drawn form), B12b.01 (`season_terms.hardship`), B12b.22 (grown kinds only); V12 Batch B12a (`seasons_of_year`).
 - GLOSSARY: none.
 - COST and TIER: calibration; `sonnet` runs, `opus` reads the sweep.
@@ -538,6 +539,7 @@ Not in this batch, and where each is: MBA-02 stage 2 (`--missile`) and MBA-09 (B
 - LANDS IT: B19a's producer; `Item: B19a.03`, `[skip ci]`.
 
 ### B19a.99 — the EQUAL reading and close readings · `V12_STRUCTURE_part4.md` E-1 · BUILD · HASH EQUAL
+- SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2; `V12_STRUCTURE_part2.md` §5.9, §5.12.
 - INSTRUCTION: record the EQUAL reading (golden-mode digests and the realm hash at seeds 0–2 equal to the step's base, `reading @<sha>`), the background run's wall time and worker count, the `--trust` and `--spot 20` readings, and the close's record (§5.12); re-pin nothing.
 - GATE: the BATCH GATE above, once, on this commit's tree.
 - LANDS IT: B19a's producer; `Item: B19a.99` — the batch's last `Item:` commit, pushed without `[skip ci]`.
@@ -620,6 +622,7 @@ Not in this batch, and where each is: `14_VERBS_PHYSICAL_A` A0 and A4 (B14.27), 
 - FALSIFIER and CONTROL: "**Control:** with no warrant, the officer forms no `capture` on him. **Planted failure:** delete the `capture` line from `violence_contexts`. Formation on a stranger returns, and the test asserts it does not."
 - GATE: `python -m pytest engine/season/tests/test_vm_phy_a_custody.py engine/season/tests/test_cr87_violence_contexts.py -q` → pass; §2.7's aperture arm at the batch gate ("`aperture 2 s`, s = 0, 1, before and after: `capture` refusals on `exists:Person` and `individual` equal 0, and `capture` formed only on persons for whom `violence_context_of` returns `war` or `crime`"); the arm reading a mustered prisoner moves to B22 (UNDECIDED (3)).
 - HASH MOVERS: "every realm and spine pin in which these formations occurred (`capture`'s 26 formations …)". Declared; B29's re-pin.
+- EXPECTED RED UNTIL B29.99: `test_cr87_violence_contexts.py`'s `BASE_SEASON` pin where `capture` formed in seed 0's first season (`[skip ci]`) `[ASSUMPTION: added by check lane K5 — basis: this item's GATE names a file that pins a one-season seed-0 hash and the item declares the capture formations moved]`.
 - DEPENDS ON: V12 B29.01 (`warrants_for`); EXISTS-IN-TREE `loop/effects_combat.py::_eff_capture`, `loop/effects_information.py::_may_close_custody`, `queries/world_q.py::issuing_seat`, `rosters.yaml: violence_contexts`; V12 Batch B15 (A3: `violence_contexts`' `fight` line drops `duel`, `context_terms`), Batch B16.
 - GLOSSARY: none.
 - COST and TIER: build; `sonnet`, `high`; the gate read by `opus`.
@@ -641,6 +644,7 @@ Not in this batch, and where each is: `14_VERBS_PHYSICAL_A` A0 and A4 (B14.27), 
 - LANDS IT: B29's producer; `Item: B29.03`, `[skip ci]` (a reading-only item commits its readings in the body).
 
 ### B29.99 — re-pin and close readings · `V12_STRUCTURE_part4.md` E-1 · BUILD · HASH MOVER (the re-pin)
+- SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2; `V12_STRUCTURE_part2.md` §5.9, §5.12.
 - INSTRUCTION: re-record once, against B12b's merged after-reading (§7.4), every realm and corpus pin B29.01–.03 moved, in `engine/season/tests/_realm_goldens.py`; quote seeds 0–2; the commit says "re-pin" and lists the movers; write the close's record (§5.12).
 - GATE: the BATCH GATE above, once, on this commit's tree, with the one full-suite run CLAUDE.md §0.4 allows at the close.
 - LANDS IT: B29's producer; `Item: B29.99` — the batch's last `Item:` commit, pushed without `[skip ci]`.

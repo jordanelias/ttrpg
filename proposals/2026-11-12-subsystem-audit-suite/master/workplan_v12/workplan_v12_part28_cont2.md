@@ -208,7 +208,7 @@ Not in this batch, and where each is: `U5b_PC_residue` §1, §2, §4–§10 (B14
 - GATE: the BATCH GATE.
 - HASH MOVERS: the re-pin.
 - DEPENDS ON: V12 B18.01 to B18.09.
-- COST and TIER: `sonnet`, `high`; terminal critique `opus`.
+- COST and TIER: reading and a re-pin; `sonnet`, `high`; terminal critique `opus`.
 - LANDS IT: B18's producer; `Item: B18.99`, without `[skip ci]`.
 
 | STOP. Batch B18-pc-content closes here |

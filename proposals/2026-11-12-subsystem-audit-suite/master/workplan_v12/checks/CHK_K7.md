@@ -24,3 +24,28 @@ Sections are appended as each check finishes. Findings table at the end of the f
 | B11F2 | yes | yes | yes (3 of 3) | 12 = 12 | B11F2.99 "close readings (EQUAL: nothing re-pinned)" | yes |
 
 Every block names its in-flight lane file (`HANDOFF_FA/GO/SE/MB/FI/SC/IN.md`, Open table; B11F1 is SE alone, not a two-lane batch).
+
+## 2. Check 2, fields of §5.3 (script `fieldcheck2.py`; 122 full-form items = BUILD, DESIGN-FIRST, CONTENT and HELD-with-HASH; 12 fields each)
+
+Grade rule used: ABSENT = field line missing; THIN = under 40 characters and not `none`, or "as B21d.07"-style reference, or a COST line with no tier; `.99` positions grade GATE/HASH MOVERS/DEPENDS ON/ADVANCES/GLOSSARY by reference as PRESENT (the form of E-1). NAMES and IDS are conditional and not counted. The 15 POINTER/READING/HELD-without-HASH items (B41.01, B41.12, B11F1.07, B20.18, B20.22, B25.07, B25.08, B25.12, B25.18, B25.21, B37.07, B37.17, B37.18, B11F2.01, B11F2.04) are graded under E-5/§5.3 as pointers/readings (3 to 8 lines, target, gate) and are all present as such.
+
+| field | PRESENT | THIN | ABSENT |
+|---|---|---|---|
+| SOURCE | 119 | 3 (B21d.08, B21d.09, B27.08) | 0 |
+| ADVANCES | 112 | 10 | 0 |
+| INSTRUCTION | 121 | 0 | 1 (B27.27, a READING) |
+| WHERE | 121 | 0 | 1 (B27.27) |
+| TESTS | 120 | 1 (B27.24) | 1 (B27.27) |
+| FALSIFIER and CONTROL | 119 | 2 (B21d.08, B21d.09: "as B21d.07") | 1 (B27.27) |
+| GATE | 120 | 2 (B21d.08, B21d.09: "as B21d.07.") | 0 |
+| HASH MOVERS | 120 | 1 (B20.06 "as B20.05") | 1 (B27.27) |
+| DEPENDS ON | 113 | 8 | 1 (B27.27) |
+| GLOSSARY | 105 | 16 (a row name and a step number only) | 1 (B27.27) |
+| COST and TIER | 122 | 0 | 0 |
+| LANDS IT | 121 | 0 | 1 (B27.27) |
+
+B27.27 is a READING that carries a position-table row, an item heading with HASH EQUAL and four fields (SOURCE, ADVANCES, GATE, COST); the other READING items (B20.22, B25.07, B25.21, B37.17, B37.18, B41.12) carry no fields at all, and all READING items have no COST/TIER line, so check 8 grades them "reading, tier not stated" (B27.27 alone says `haiku`; B20.22 says `haiku` inline).
+
+Per batch, PRESENT/THIN/ABSENT cells of the 12 fields over the full-form items: B21d 108/12/0 (10 items); B41 155/1/0 (13); B11F1 81/3/0 (7 incl. B11F1.99); B20 247/5/0 (21); B25 197/7/0 (18); B27 315/13/8 (27); B37 190/2/0 (16); B11F2 120/0/0 (10).
+
+THIN items an agent cannot run from the item alone (check 10) are listed in §9.
