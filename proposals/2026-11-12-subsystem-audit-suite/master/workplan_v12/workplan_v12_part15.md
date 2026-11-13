@@ -285,7 +285,7 @@ Not in this half, and where each is: `U5d_FA_owed_edits` §2 (the first half, be
 - INSTRUCTION:
   1. First, in `test_fa_eligibility.py`: `test_self_conferral_across_chains_refused` (G2: "the Queen confers the Confessor's seat on herself: `confer.refused` (`self_across_chains`); control, the King confers the heir's title on himself (one chain of seats): admitted as today"), read red.
   2. "**`engine/season/loop/predicates.py::_req_confer`**: after the existing `may_fill` conjunct, refuse (`_refuse("self_across_chains", …)`) when `to == a.actor` and `w.offices[a.via].faction != w.offices[obj].faction` (`Office.faction` is the resolved faction, `gate.py:505-507`)." ("ladder" in the source → "chain of seats", glossary *rung*.)
-  3. The term (BIND_C's table row `confer`, landed at control by the first half's BIND_C C3 item, names `cross_chain`; the source "requests the term of that owner"): if the first half's item did not land the member, land it here in `rosters.yaml: obstacle_terms` in OBS §2's order as member 29 with its fixture `cross_chain_step` in `engine/season/data/fixtures.py` ("fixture, control 0, proposed 2"), "a step harder when `office_faction(via) != office_faction(off)`", read by the one obstacle composer, and its NUMBER row in `engine/season/hole_register.yaml` (block slot 1). Open both at the item's open and record in the commit body which half landed it.
+  3. The term (BIND_C's table row `confer`, landed at control by the first half's BIND_C C3 item, names `cross_chain`; the source "requests the term of that owner"): if the first half's item did not land the member, land it here in `rosters.yaml: obstacle_terms` in OBS §2's order as member 29 with its fixture `cross_chain_step` in `engine/season/data/fixtures.py` ("fixture, control 0, proposed 2"), "a step harder when `office_faction(via) != office_faction(off)`", read by the one obstacle composer, and its NUMBER row in `engine/season/hole_register.yaml` (block slot 4). Open both at the item's open and record in the commit body which half landed it.
 - WHERE: `engine/season/loop/predicates.py` (`_req_confer`); where step 3 applies: `engine/season/rosters.yaml` (`obstacle_terms`), `engine/season/data/fixtures.py` (`cross_chain_step`), `engine/season/hole_register.yaml` (one NUMBER row); `engine/season/tests/test_fa_eligibility.py`.
 - TESTS: `test_self_conferral_across_chains_refused`, first, red; and `test_cross_chain_term_reads_zero_at_control` `[ASSUMPTION: test name; E-3]`: a `confer` across factions composes an obstacle whose `cross_chain` term is 0 at `cross_chain_step` 0 and one step at 1.
 - FALSIFIER and CONTROL: "G2 is wrong if a regency is meant to be exactly this act (a consort taking a vacant seat of another chain of seats); the provided character NPC-032 says she has no action economy of her own, which is why it is refused here." Control: the King's self-conferral of the heir's title inside one chain is admitted; at `cross_chain_step` 0 every `confer`'s composed obstacle equals the previous item's.
@@ -293,7 +293,7 @@ Not in this half, and where each is: `U5d_FA_owed_edits` §2 (the first half, be
 - HASH MOVERS: none at control ("(2) none in shipped runs").
 - DEPENDS ON: V12 B21.60; V12 the first half's BIND_C C3 item (`confer` contested, its term table); Batch B05 (the obstacle composer, `obstacle_terms`); EXISTS-IN-TREE `loop/predicates.py::_req_confer`, `state/gate.py::may_fill`.
 - GLOSSARY: none (*chain of seats* is the glossary's own phrase).
-- IDS: H block slot 1 (the `cross_chain_step` NUMBER row), only where step 3 applies.
+- IDS: H block slot 4 (the `cross_chain_step` NUMBER row; the first half's rows are slots 1–3), only where step 3 applies.
 - COST and TIER: edit; `sonnet`, `high`.
 - LANDS IT: B21's producer; `Item: B21.61`, `[skip ci]`.
 
@@ -429,7 +429,7 @@ Not in this half, and where each is: `U5d_FA_owed_edits` §2 (the first half, be
 - HASH MOVERS: "Step 1: none reachable (clause 5 already refuses every write it narrows) `[UNVERIFIED: not run]`. Step 2: every seeded run in which an `establish` narrowed a sitting grant (it is refused and the `revoke` forms instead); declared, B21's one re-pin. `faction_power_step` above 0: a declared mover", set by B98 (DIALS AT CONTROL).
 - DEPENDS ON: V12 the first half's BIND_C items C2, C3 (`revoke` contested, `_eff_revoke` banded); V12 B21.68 (`faction_q.weight`), B21.61 (`cross_chain_step`); Batch B05 (`U5c_SC_one_obstacle_form`: the composer and `obstacle_terms`); EXISTS-IN-TREE `state/gate.py::tenure_write_basis`, `::may_revoke`, `::may_fill`, `T_O`, `CONFERRAL`, `queries/world_q.py::faction_of`, `loop/predicates.py::_req_establish`; `U5d_FA_owed_edits` §3 is B32's and is not read (UNDECIDED (U4)).
 - GLOSSARY: none (*revocation* stands; "reduction" is plain English).
-- IDS: H block slot 2 (`faction_power_step`'s NUMBER row).
+- IDS: H block slot 5 (`faction_power_step`'s NUMBER row).
 - COST and TIER: small build; `sonnet`; `opus` for the term's form.
 - LANDS IT: B21's producer; `Item: B21.69`, `[skip ci]`.
 

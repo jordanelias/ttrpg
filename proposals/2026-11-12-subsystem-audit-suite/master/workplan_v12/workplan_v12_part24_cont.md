@@ -29,7 +29,7 @@ The batch block of `B12b-weather-arcs-population` (its head lines and position t
 - HASH MOVERS: none at the shipped arm `()`.
 - DEPENDS ON: V12 B12b.03 (`season_factor_of`'s band factor); EXISTS-IN-TREE `queries/inputs.py::ProduceInput`, `queries/world_q.py::produce_input`, `modules/settlements/produce.py::produce`.
 - GLOSSARY: new row *grown kinds*: "the stores that come from fields and so follow the weather, as a harvest does"; owner `rosters.yaml: grown_kinds` (the source: "The vocabulary gains one word (`grown_kinds`), defined at its roster row").
-- COST and TIER: small; `sonnet`, `high`.
+- COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B12b's producer; `Item: B12b.22`, `[skip ci]`.
 
 ### B12b.23 — a second wall adds · `16_PESSIMIST_SE_B` edit 3 · BUILD · HASH EQUAL
@@ -53,7 +53,7 @@ The batch block of `B12b-weather-arcs-population` (its head lines and position t
 - HASH MOVERS: none (one garrison per settlement in `build_realm`).
 - DEPENDS ON: EXISTS-IN-TREE `modules/settlements/fortification.py::fortification`, `FortInput`.
 - GLOSSARY: none.
-- COST and TIER: small; `sonnet`, `high`.
+- COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B12b's producer; `Item: B12b.23`, `[skip ci]`.
 
 ### B12b.24 — the supply arm refuses a realm that cannot eat · `16_PESSIMIST_SE_B` edit 4 · BUILD · HASH EQUAL
@@ -77,7 +77,7 @@ The batch block of `B12b-weather-arcs-population` (its head lines and position t
 - HASH MOVERS: none (shipped off).
 - DEPENDS ON: EXISTS-IN-TREE `queries/world_q.py::governing_hold`, `engine/season/gaps.py::Unspecified`, `manifest/registrar.py::require_entries`; V12 Batch B12a (`07_SE_treasury_granary_B`, R-SE-28's seat-rung stock, for the passing arm).
 - GLOSSARY: none.
-- COST and TIER: small; `sonnet`, `high`.
+- COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B12b's producer; `Item: B12b.24`, `[skip ci]`.
 
 ### B12b.25 — a yield is a fact with a size · `16_PESSIMIST_SE_B` edit 2 · BUILD · HASH MOVER(behaviour)
@@ -91,7 +91,7 @@ The batch block of `B12b-weather-arcs-population` (its head lines and position t
 - HASH MOVERS: "every world where a yield is written" (the receipt is in the log the hash folds). Declared; B12b's re-pin. Not an encoding mover: `StateChange.spec` exists; `World.write`'s parameter is no carrier field.
 - DEPENDS ON: EXISTS-IN-TREE `state/world.py::World.write`, `state/gate.py::Gate.mint` (`spec`), `state/carriers.py::StateChange`; V12 B12b.03 (the band); V12 Batch B09 (`16_PESSIMIST_CORE_the_record_holds_what_changed` edit 1, receipts).
 - GLOSSARY: none.
-- COST and TIER: small; `sonnet`, `high`.
+- COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B12b's producer; `Item: B12b.25`, `[skip ci]`.
 
 ### B12b.26 — the settlement's mood, `unrest(w, S)` · CP-T08-06 · HELD (its stop rule: CP-T08-07's gate, H-163 limit 3(a), unmet)
@@ -272,7 +272,7 @@ The batch block of `B12b-weather-arcs-population` (its head lines and position t
 - HASH MOVERS: none in `build_realm` (one eater per rung, in surplus).
 - DEPENDS ON: EXISTS-IN-TREE `queries/inputs.py::LarderInput`, `queries/world_q.py::_larder_parts`, `modules/settlements/larder.py::larder_draw`; V12 Batch B06 (`draw_factory`); V12 Batch B12a (`07_SE_ground_and_granaries`' `larder_walk`); V12 B12b.01 (the `want` scaling in `_larder_parts`, kept).
 - GLOSSARY: none.
-- COST and TIER: small; `sonnet`, `high`.
+- COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B12b's producer; `Item: B12b.39`, `[skip ci]`.
 
 ### B12b.40 — a first dearth is reported once · `16_PESSIMIST_SE_A` edit 2 · BUILD · HASH MOVER(behaviour)
@@ -302,7 +302,7 @@ The batch block of `B12b-weather-arcs-population` (its head lines and position t
 - HASH MOVERS: "the realm's season-0 ladders hold no key for any kind, so each short cohort's first dearth now reports once at the first rung of its ladder (D-69)". Declared; B12b's re-pin.
 - DEPENDS ON: V12 B12b.39; EXISTS-IN-TREE `queries/inputs.py::SubsistInput`, `World._subsistence_shortfall`, `loop/witness.py`'s seat channel, `world_q.governors_of`.
 - GLOSSARY: none.
-- COST and TIER: small; `sonnet`, `high`.
+- COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B12b's producer; `Item: B12b.40`, `[skip ci]`.
 
 ### B12b.41 — hunger is a cause on the fall and the death · `16_PESSIMIST_SE_A` edit 3 · BUILD · HASH MOVER(behaviour)
@@ -324,7 +324,7 @@ The batch block of `B12b-weather-arcs-population` (its head lines and position t
 - HASH MOVERS: "every hash in which a body falls by hunger (the cause list is part of the Event)". Declared; B12b's re-pin.
 - DEPENDS ON: V12 B12b.40 (`short_at`); V12 B12b.36 (the guarded death test); EXISTS-IN-TREE `loop/matter.py::_die`, `World.last_emission_of`.
 - GLOSSARY: none.
-- COST and TIER: small; `sonnet`, `high`.
+- COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B12b's producer; `Item: B12b.41`, `[skip ci]`.
 
 ### B12b.42 — `tend` declines a cohort the larder cannot feed · `16_PESSIMIST_SE_A` edit 4 · BUILD · HASH MOVER(behaviour)
@@ -338,7 +338,7 @@ The batch block of `B12b-weather-arcs-population` (its head lines and position t
 - HASH MOVERS: "any run in which a short cohort is tended". Declared; B12b's re-pin.
 - DEPENDS ON: V12 B12b.39 (the draw the gap reads); EXISTS-IN-TREE `verb_table.yaml` row `tend` (`requires_typed`), `queries/world_q.py::subsistence_draw`, `data/requires.py`.
 - GLOSSARY: none.
-- COST and TIER: small; `sonnet`, `high`; the typed-form choice read by `opus` if the grammar cannot spell the gap.
+- COST and TIER: small build; `sonnet`, `high`; the typed-form choice read by `opus` if the grammar cannot spell the gap.
 - LANDS IT: B12b's producer; `Item: B12b.42`, `[skip ci]`.
 
 The five positions below are the intake entries the B12a authors routed here by `V12_STRUCTURE_part4.md` E-8 (each needs the calendar, the drawn weather or the census, which land in this batch). They are numbered after B12b.42 and land after it: each moves hashes, and §5.9 puts the hash-EQUAL items first; nothing above gates on them.
