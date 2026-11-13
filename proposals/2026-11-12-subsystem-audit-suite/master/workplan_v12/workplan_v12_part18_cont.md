@@ -50,7 +50,7 @@ SERIAL EDGES: within the batch: BA1.01 → BA1.02 (the same cast rows, a differe
   With other batches, by file (U3 §5.1 rows; `→` is landing order): `references/npc_registry.yaml`: B04 → B10 → BA1 → B39 (A-44's generated cast); `engine/season/verb_table.yaml`: … → B05 (the `difficulty:` column) → B10 → BA1 → B11, B15, B21 (S12, other rows); `engine/season/rosters.yaml`: … → B10 (the rosters BA1 fills) → BA1 → B11, B15, B21 (S12, other keys); `engine/season/data/pursuits.py`: B10 → BA1.
 PARALLEL: S12 with B15-pc-calibration (PC), B11-fi-readers (FI), B21-fa-governance (FA). Shared files: `engine/season/verb_table.yaml` (BA1: the `difficulty:` cells only), `engine/season/rosters.yaml` (BA1: `tables.alignment`'s cells and `choices:`, `pursuit_signatures`, `affiliation_signatures`, `tables.affiliation_engagement`): different keys and rows from the siblings, kept by hand at merge (`V12_STRUCTURE_part3.md` §7.3); `references/npc_registry.yaml` is BA1's alone in S12. Hash: four movers at S12, merged in §2.1's table order (BA1, B11, B15, B21); BA1 merges first and the later three re-read its after-reading as their baseline (§7.4).
 COST: content (data edits from a drafted table); producer `valoria-author` on `sonnet`, `medium` ("landing `sonnet`, `medium`", `IS-A-11`); the readings that close M2 read by `opus` (the judgment node that gates a requirement, CLAUDE.md §10); no value is an agent's to invent ("the values not an agent's to invent", `IS-B2-CHAR-03`).
-EST: 9.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this block's 12 positions (0.4 h × 12 + 2.5 h close + 2 h for the long readings), `V12_STRUCTURE_part4.md` E-15; §2.2's 6 h counted the instruction items]
+EST: 9.7 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this block's 13 positions (0.4 h × 13 + 2.5 h close; BA1.13 added 2026-11-13 + 2 h for the long readings), `V12_STRUCTURE_part4.md` E-15; §2.2's 6 h counted the instruction items]
 
 | pos | item | source | state | hash | gates on |
 |---|---|---|---|---|---|
@@ -66,7 +66,8 @@ EST: 9.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this bl
 | BA1.10 | the switch | `IS-A-11` stage 2 step 2; U1-C ("the switch") | POINTER | — | BA1.01 |
 | BA1.11 | the three CHAR readings | `IS-B2-CHAR-06` | READING | — | BA1.10 |
 | BA1.12 | two cast rows marked unaware of what they hold (Patched: P-30) | `U5a_CHAR_self_knowledge_is_a_belief` edit 2's marks (B10.64's DIALS line) | CONTENT | MOVER(behaviour) | BA1.09; Batch B10 (B10.64, B10.65) |
-| BA1.99 | re-pin and close readings (the readings that close M2) | `IS-A-11` (hash movers); `IS-A-12` | BUILD | MOVER (the re-pin) | BA1.01 to BA1.12 |
+| BA1.13 | each verb's kind and governing attributes, as Jordan corrects them | `2026-11-13-verb-governing-attributes` §2; B05.24 (interim cells) | CONTENT | MOVER(behaviour) | BA1.01; Batch B05 (B05.25) |
+| BA1.99 | re-pin and close readings (the readings that close M2) | `IS-A-11` (hash movers); `IS-A-12` | BUILD | MOVER (the re-pin) | BA1.01 to BA1.13 |
 
 ### BA1.01 — the cast's attributes and skill scores · `IS-A-11` stage 2, table (a) · CONTENT · HASH MOVER(behaviour)
 - SOURCE: `master/instructions/IS_A_NINE_part2.md` "Item: IS-A-11" (`:263-307`), stage 2 step 1; `master/instructions/IS_B2_SC_FI_CORE_CHAR_part2.md` "Item: IS-B2-CHAR-03" (`:144-149`); U1 §6, §11 U1-C item 1; `V12_STRUCTURE.md` D-19; rulings A-6, A-7, A-98, ED-1094; closes G-3 ("as far as the nine need it").
@@ -226,6 +227,20 @@ EST: 9.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this bl
 - COST and TIER: content; `sonnet`, `medium`.
 - LANDS IT: BA1's producer; `Item: BA1.12`, `[skip ci]`.
 
+### BA1.13 — each verb's kind and governing attributes, as Jordan corrects them · `2026-11-13-verb-governing-attributes` §2; B05.24 · CONTENT · HASH MOVER(behaviour)
+- SOURCE: `proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-13-verb-governing-attributes.md` §2 (the 67 rows: kind (a) brute with what authorises it, (b) efficacy with one to three attributes averaged and `opposed_attribute`, (c) hand-off), §6 Q1 and Q2; B05.24 (the rule, ruled; the cells shipped by B05.25 as `[ASSUMPTION; medium; Jordan to correct at BA1.13]`); Jordan, 2026-11-13 (the per-verb values are content: authored with the cast, as `difficulty:` is in BA1.03); `IS-A-11` stage 1 (b)'s per-verb table, of which this is the second column.
+- ADVANCES: R-09.b (the obstacle and the pool are not one number in the shipped realm; the cast's attributes, BA1.01, now reach the verb that relies on them).
+- INSTRUCTION: in `engine/season/verb_table.yaml`, each row Jordan's correction of the proposal's §2 names: its `governing:` list (one to three registry keys), its `opposed_attribute:`, or its kind (`brute:` with `brute_note:`, or `governing:`); rows he does not name keep B05.25's interim cells. A row moved from `brute:` to `governing:` (or back) moves whole, in one commit, so the loader's one-kind rule holds at every commit. Each change through B05.25's loader (`data/verbs.py::_check_governing_attributes`), which refuses a fourth attribute, a key outside the ten, a brute row carrying a difficulty, or a row of no kind; a refusal is fixed in the row. At the item's open the proposal's §7 note is read: `proposals/2026-11-05-verb-attribute-map.md` (and `_part2`) is diffed against §2 and every row where the two disagree is listed in the PR body for Jordan.
+- WHERE: `engine/season/verb_table.yaml` (`governing:`, `opposed_attribute:`, `brute:`, `brute_note:` cells).
+- TESTS: none new; B05.25's `engine/season/tests/test_verb_governing_attributes.py` stays green on the corrected cells (its `checked == len(VERB_TABLE)` read).
+- FALSIFIER and CONTROL: a corrected row that takes two kinds, or a brute row that draws, loads; control: with no row corrected, the seed-0 one-season hash equals BA1.12's reading.
+- GATE: `python -m pytest engine/season/tests/test_verb_governing_attributes.py -q` → pass; `PYTHONHASHSEED=0 python -m engine.season.harness.aperture 2 0` → its `POOLS ROLLED` line quoted, *two actors at different pools* on a non-combat verb read beside BA1.01's reading; the seed-0 hash (`HASH READING`) recorded (moved where a corrected verb was rolled by a person holding an authored attribute).
+- HASH MOVERS: every world with a roll of a verb whose cells changed, by a person holding an authored attribute. Declared; BA1.99.
+- DEPENDS ON: V12 Batch B05-one-roll (B05.24 ruled, B05.25's columns and loader); V12 BA1.01 (the cast's attributes); EXISTS-IN-TREE `engine/season/verb_table.yaml` rows.
+- GLOSSARY: none new (*governing attribute*, *brute function*, *opposing attribute* read against the cells).
+- COST and TIER: content; drafting the corrections with Jordan `opus`, `high`; landing `sonnet`, `medium`.
+- LANDS IT: BA1's producer; `Item: BA1.13`, `[skip ci]`.
+
 ## Readings (BA1)
 
 - **R1 (BA1.11) — `IS-B2-CHAR-06`, the three CHAR readings** (`master/instructions/IS_B2_SC_FI_CORE_CHAR_part2.md` "Item: IS-B2-CHAR-06", copied): "three readings, quoted at the close of B05, B10 and `BA1-cast-content`, each against the one before: (1) `aperture 4 0` POOLS ROLLED, the line *"two actors at different pools"* per rolled verb (`U5a_capability_home_and_two_inputs.md` Part B gate 4); (2) `python -m engine.season.harness.decision_spread --persons` (distinct pools across the cast); (3) `IS-B2-CORE-04` row 11's share of non-top choices. Expected: (1) stays "no" in the shipped realm at B05 and B10 (the mechanism is in, the content is not) and reads "yes" at the content batch". (1) is read at two seasons, `aperture 2 0` ("four seasons in the source; A-114"); (2) is read as UNDECIDED (5) says. "FALSIFIER and control: a reading taken on a tree whose `aperture` `CONTROL` line reads unequal is void; control: the previous close's after-reading (`reading @<sha>`), not re-taken." Tier: `haiku` extracts.
@@ -243,7 +258,7 @@ EST: 9.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this bl
 - FALSIFIER and CONTROL: a pin moved that no BA1 item declared (then the batch moved behaviour it did not declare: the re-pin stops and the batch is `STOPPED`); a conjunct `reading:` whose tree is not this one. Control: B10's close readings.
 - GATE: the BATCH GATE above, every line; `python -m engine.season.harness.register --requirements` → exit 0, nine lines.
 - HASH MOVERS: the batch's one re-pin, here and nowhere else.
-- DEPENDS ON: V12 BA1.01 to BA1.12 (BA1.12 Patched: P-30); V12 Batch B02-tests (`_realm_goldens.py`; `IS-A-01`'s `reading:` record).
+- DEPENDS ON: V12 BA1.01 to BA1.13 (BA1.12 Patched: P-30; BA1.13 added 2026-11-13); V12 Batch B02-tests (`_realm_goldens.py`; `IS-A-01`'s `reading:` record).
 - GLOSSARY: none.
 - COST and TIER: a re-pin and readings; `sonnet`, `high`; the readings read by `opus`.
 - LANDS IT: BA1's producer; `Item: BA1.99`, without `[skip ci]` (the batch's last `Item:` push, CI run 1 of the batch).

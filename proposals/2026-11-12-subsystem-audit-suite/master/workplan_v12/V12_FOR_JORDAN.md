@@ -237,3 +237,12 @@ collection and CP-T08-08's refill, which are credited on hand-built worlds only.
 | readings that need more than two seasons (the scar flip, the Church Influence bands, claim fade) | they go to the final long re-take (B99) | your ruling A-114 (HD-26) |
 | `knot` has no written effect, but the thread batch must build it out | a design item comes first, inside the batch | precedent: E-14 and D-18 (HD-25); written by lane H3 as B35.30 |
 | the two Layer 1 rows edited by B11.04 and B41.03 | ED-IN-0300 covers unmarked architecture text stated in the PR; a (RULED) row stops the item | ED-IN-0300, ratified (HD-22) |
+
+---
+
+**Added 2026-11-13 by the verb pass (`proposals/2026-11-13-verb-governing-attributes.md`; items B05.24, B05.25, BA1.13, B28.34, B28.35)**
+
+| id | question | what the plan assumes meanwhile |
+|---|---|---|
+| J-09 | Does resisting arrest turn on standing (a brute office function) or on the body (an efficacy roll on `attr.body.*`)? | the body: efficacy-relevant, because the person arrested can plainly succeed or fail by ability |
+| J-10 | Do acts on one's own state (`commit`, `forgive`, `give`, `challenge`, `covenant`) roll? B05.25's loader refuses a draw on a brute row; B07's task class (`open_case`, `destroy_record`, `issue`) and B28.02, .05, .06, .08, .09 draw today, so J-10 must be answered before those batches land | they stay efficacy-relevant (they roll) and are NOT marked brute; the loader's refusal applies to rows marked brute only |

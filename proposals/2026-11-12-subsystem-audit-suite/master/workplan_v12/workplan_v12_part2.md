@@ -97,13 +97,13 @@ Columns: the wave and step as the structure had them, and now (a change in bold)
 | B13-pc-package | PC | W6 | S6 | 0 | 6_cont | 2 (B2) | EQUAL | 3.3 | B00, B01, B02, B03, B03a, B03g +R1 |
 | B16M-mb-engine-words | MB | W6 | S6 | 0 | 6_cont | 4 (B4) | EQUAL | 4.1 | B16L, B03a |
 | B04-capability-home | IN | W6 | S6 | 0 | 7 | 27 (B24 P2 C1) | MOVER (encoding 2) | 13.3 | B00, B01, B02, B03g, B03c, B03a |
-| B05-one-roll | IN | W7 | S7 | 0 | 8, 8_cont, 9 | 39 (B35 P3 R1) | MOVER (behaviour 13, encoding 1) | 20.1 | B00, B01, B02, B03a, B13, B16M, B04 |
+| B05-one-roll | IN | W7 | S7 | 0 | 8, 8_cont, 9 | 41 (B36 P3 R1 DF1; +B05.24 DF, +B05.25 B, 2026-11-13) | MOVER (behaviour 14, encoding 1) | 20.9 | B00, B01, B02, B03a, B13, B16M, B04 |
 | B06-keyed-draw | IN | W8 | S8 | 0 | 10 | 8 (B7 P1) | MOVER (behaviour 1) | 5.7 | B00, B01, B02, B03, B05 |
 | B07-task-draw | IN | W9 | S9 | 0 | 10_cont2 | 10 (B5 P5) | MOVER (behaviour 1) | 6.5 | B00, B01, B02, B05, B06 |
 | B08-scene-order | IN | W6 → **W9** | S13 | 9 | 23 | 7 (B7) | MOVER (behaviour 3) | 5.3 | B00, B01, B02, B03a, B04 +R, B05 +R, B06 +R |
 | B09-memory | IN | W10 | S10 | 0 | 11_cont | 22 (B21 BL1) | MOVER (behaviour 8; B09.10 relabelled from encoding, R2a) | 11.3 | B00, B01, B02, B05, B07 |
 | B10-character | IN | W11 | S11 | 0 | 12, 12_cont, 13, 13_cont | 67 (B48 P8 R2 H3 BL2 C1 DF3) | MOVER (behaviour 9, encoding 1) | 29.3 | B00, B01, B02, B04, B05, B09 |
-| BA1-cast-content | IN | W12 | S12 | 10 | 18_cont | 13 (B2 P1 R1 C9) | MOVER (behaviour 9) | 7.7 | B00, B01, B02, B04, B05, B10 |
+| BA1-cast-content | IN | W12 | S12 | 10 | 18_cont | 14 (B2 P1 R1 C10; +BA1.13 C, 2026-11-13) | MOVER (behaviour 10) | 8.1 | B00, B01, B02, B04, B05, B10 |
 | B11-fi-readers | FI | W12 | S12 | 0 | 16, 16_cont, 17, 17_cont | 58 (B49 P4 R2 H1 DF2) | MOVER (behaviour 29, encoding 2) | 25.7 | B00, B01, B02, B03, B04, B05, B07, B10 |
 | B11F1-flow-se | SE | W16 | S16 | 2 | 29_cont | 8 (B4 H1 C2 DF1) | MOVER (behaviour 3) | 5.7 | B12c |
 | B11F2-flow-in | IN | W17 | S17 | 2 | 32_cont | 12 (B8 P2 H2) | MOVER (conditional 1) | 7.3 | B09, B10, B11F1 |
@@ -130,7 +130,7 @@ Columns: the wave and step as the structure had them, and now (a change in bold)
 | B25-fi-questioning | FI | W16 | S16 | 0 | 30_cont | 22 (B17 P3 R2) | MOVER (behaviour 11) | 11.3 | B00, B01, B02, B11, B12c, B24 |
 | B26-fi-inquiry | FI | W17 | S17 | 1 | 33_cont | 18 (B17 DF1) | MOVER (behaviour 13) | 9.7 | B00, B01, B02, B10, B11, B12c, B24, B25 |
 | B27-sc-proceedings | SC | W16 | S16 | 0 | 31, 31_cont | 28 (B20 R1 H1 DF6) | MOVER (behaviour 10) | 13.7 | B00, B01, B02, B11, B24, B24a |
-| B28-social-verbs | SC | W17 | S17 | 2 | 35, 35_cont | 34 (B30 P1 R1 BL1 DF1) | MOVER (behaviour 16) | 16.1 | B00, B01, B02, B05, B07, B08, B11, B15, B21, B24a +R, B25, B27 +R |
+| B28-social-verbs | SC | W17 | S17 | 2 | 35, 35_cont | 36 (B31 P1 R1 BL1 DF2; +B28.34 DF, +B28.35 B, 2026-11-13) | MOVER (behaviour 17) | 16.9 | B00, B01, B02, B05, B07, B08, B11, B15, B21, B24a +R, B25, B27 +R |
 | B29-pc-custody | PC | W14 | S14 | 0 | 24_cont | 4 (B4) | MOVER (behaviour 2, conditional 1) | 4.1 | B00, B01, B02, B15, B16, B21 |
 | B30-mb-nested | MB | W17 → **W18** | S18 | 4 | 37_cont | 11 (B10 DF1) | MOVER (behaviour 4) | 6.9 | B00, B01, B02, B16L, B05, B15, B16, B20, B22 +R, B24 |
 | B31-mb-loadout-economy | MB | W16 → **W18** | S19 | 4 | 39_cont | 21 (B17 P2 C1 DF1) | MOVER (behaviour 5) | 10.9 | B00, B01, B02, B16L, B17, B18, B19, B20 +R, B22 +R |
@@ -174,7 +174,7 @@ Every batch's boundary row with the part and line it sits on, whether its text i
 | B08-scene-order | 23:484 | yes | 7 | yes | none | — |
 | B09-memory | 11_cont:523 | yes | 5 | yes | none | — |
 | B10-character | 13_cont:200 | yes | 6 | yes | none | — |
-| BA1-cast-content | 18_cont:246 | yes | 6 | yes | none | — |
+| BA1-cast-content | 18_cont:266 | yes | 6 | yes | none | — |
 | B11-fi-readers | 17_cont:143 | yes | 8 | yes | none | — |
 | B11F1-flow-se | 29_cont:328 | yes | 1 | yes | none | — |
 | B11F2-flow-in | 32_cont:264 | yes | 3 | yes | none | — |
@@ -193,7 +193,7 @@ Every batch's boundary row with the part and line it sits on, whether its text i
 | B21b-fa-war | 21_cont:182 | yes | 2 | yes | none | — |
 | B21c-fa-seats | 25:218 | yes | 1 | yes | none | — |
 | B21d-fa-arc | 29:231 | yes | 2 | yes | none | — |
-| B21s-strife-supply | 35_cont:419 | yes | 4 | yes | none | — |
+| B21s-strife-supply | 35_cont:456 | yes | 4 | yes | none | — |
 | B22-mb-armies | 33_cont:337 | yes | 14 | yes | none | — |
 | B23-land | 37:359 | yes | 12 | yes | none | —, R1: B26 |
 | B24-sc-hearing | 22_cont:263 | yes | 8 | yes | none | — |
@@ -201,7 +201,7 @@ Every batch's boundary row with the part and line it sits on, whether its text i
 | B25-fi-questioning | 30_cont:475 | yes | 6 | yes | none | — |
 | B26-fi-inquiry | 33_cont:863 | yes | 8 | yes | none | — |
 | B27-sc-proceedings | 31_cont:178 | yes | 6 | yes | none | — |
-| B28-social-verbs | 35_cont:332 | yes | 12 | yes | none | B24a |
+| B28-social-verbs | 35_cont:368 | yes | 12 | yes | none | B24a |
 | B29-pc-custody | 24_cont:679 | yes | 6 | yes | none | — |
 | B30-mb-nested | 37_cont:263 | yes | 10 | yes | none | — |
 | B31-mb-loadout-economy | 39_cont:419 | yes | 9 | yes | none | — |
