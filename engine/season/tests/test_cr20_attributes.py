@@ -164,7 +164,7 @@ def test_a_legacy_spelling_resolves_to_its_key_and_a_range_reads_its_lower_bound
     with pytest.raises(Exception):
         cast.attributes_of({"id": "X", "stats": {"social": "3–4"}})
     assert cast.attributes_of({"id": "X", "stats": {"Reason": 2, "Spirit": 7, "attr.social.grace": 1}}) == {
-        "attr.mind.acuity": 2, "attr.mind.will": 7, "attr.social.grace": 1}
+        "attr.mind.acuity": 2, "attr.spirit.will": 7, "attr.social.grace": 1}
 
 
 @pytest.mark.parametrize("stats", [

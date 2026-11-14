@@ -201,3 +201,46 @@ def test_a_headless_person_holds_a_drawn_sheet():
     assert len(w.persons) == 3
     for pid, p in w.persons.items():
         assert p.attributes == generated_attributes(w.world_seed, pid, w.fixtures.get("generated_attribute_range")), pid
+
+
+# -- B01a.06: Spirit is its own attribute group, ten attributes ---------------------------------------------------
+def test_the_roster_is_ten_keys_with_spirit_its_own_group():
+    import tools.descriptor_registry as dr
+    assert len(ATTRIBUTES) == 10
+    assert "attr.spirit.will" in ATTRIBUTES and not any("threadsensitivity" in k for k in ATTRIBUTES)   # dropped, J-12
+    assert "attr.mind.will" not in ATTRIBUTES
+    # the registry's order: body, mind, spirit, social
+    assert [k.split(".")[1] for k in ATTRIBUTES] == ["body"] * 3 + ["mind"] * 3 + ["spirit"] + ["social"] * 3
+    reg = dr.load()
+    assert dr.by_category(reg, "spirit") == ["attr.spirit.will"]
+    assert dr.by_category(reg, "mind") == ["attr.mind.focus", "attr.mind.acuity", "attr.mind.perception"]
+    assert dr.aggregate_members(reg, "agg.spirit") == ["attr.spirit.will"]
+    assert "attr.mind.will" not in dr.aggregate_members(reg, "agg.mind")
+
+
+def test_the_old_will_key_resolves_to_the_new_one():
+    import tools.descriptor_registry as dr
+    from engine.substrate import names as N
+    from engine.substrate.descriptors import attribute_key
+    assert attribute_key("attr.mind.will") == "attr.spirit.will"
+    assert attribute_key("Will") == attribute_key("Spirit") == "attr.spirit.will"
+    assert dr.resolve(dr.load(), "attr.mind.will")["key"] == "attr.spirit.will"
+    assert N.canonical_for("attr.mind.will") == N.CANONICAL["attr.spirit.will"]
+
+
+def test_a_sheet_holds_ten_keys_in_range():
+    w = build_realm(0)
+    lo, hi = SHIPPED
+    authored = cast.attributes_of(cast.row("NPC-001"))
+    checked = 0
+    for p in w.persons.values():
+        assert list(p.attributes) == list(ATTRIBUTES) and len(p.attributes) == 10, p.id
+        for key, value in p.attributes.items():
+            if p.id == "p_npc_001" and key in authored:
+                continue
+            assert lo <= value <= hi, (p.id, key)
+            # each key is its own stream: no key draws from another key's
+            assert value == draw_factory(w.world_seed, lambda: 0)(p.id, f"attr.generated:{key}").randint(lo, hi), (p.id, key)
+            checked += 1
+    assert checked >= 10 * (len(w.persons) - 1)
+    assert "attr.mind.will" not in next(iter(w.persons.values())).attributes

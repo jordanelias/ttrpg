@@ -27,7 +27,9 @@ domains: [actor, settlement, equipment, environment]
 # ⚠ THE COUNT IS RULED AND THE TEN ARE NAMED, BUT HEDGED. Jordan, 2026-08-14: "it will be 10 attributes";
 # 2026-11-04 (ED-IN-0328, "I think"): the ten below. CR-84 rewrote the roster to them. KEYS ARE STABLE;
 # only names and aliases moved (Agility -> Coordination, Acuity -> Reason, Will -> Spirit, Charisma ->
-# Presence; Perception and Grace added; Bonds dropped, see `retired` below). Every name that resolved
+# Presence; Perception and Grace added; Bonds dropped, see `retired` below). B01a.06 (Jordan 2026-11-14): Spirit
+# is its own group (`attr.spirit.will`, renamed from `attr.mind.will`, which still resolves as an alias); the count stays
+# ten. A second Spirit key, `attr.spirit.threadsensitivity`, was DROPPED (J-12): `prac.thread_sensitivity` stays. Every name that resolved
 # before still resolves to the same key, except Perception, which left Attunement for its own key.
 # "IN FLUX" STAYS and Godot fields stay unbound (CLAUDE.md §5) until Jordan confirms the ten.
 # `Resolve` is NOT an attribute: it is Spirit's derived value (not_descriptors below).
@@ -44,8 +46,9 @@ attributes:
   mind:
     - {key: attr.mind.focus,      name: Focus,      aliases: []}
     - {key: attr.mind.acuity,     name: Reason,     aliases: [Acuity, Faculty, Forecasting, Predicting, Reasoning, Cognition]}   # [ASSUMPTION] legacy 'Cognition' folds to Reason -- Jordan veto
-    - {key: attr.mind.will,       name: Spirit,     aliases: [Will, Willpower]}   # 'spirit move': Spirit is the primary again; 'Will' is the legacy name and back-resolves
     - {key: attr.mind.perception, name: Perception, aliases: []}                   # awareness of surroundings, noticing information; formerly an alias of Attunement
+  spirit:   # its own group (Jordan 2026-11-14, B01a.06): `will` left `mind` and its key moved with it
+    - {key: attr.spirit.will,     name: Spirit,     aliases: [Will, Willpower, attr.mind.will]}   # 'spirit move': Spirit is the primary again; 'Will' is the legacy name and back-resolves; `attr.mind.will` is the LEGACY KEY (B01a.06) and back-resolves the same way, to the new key
   social:
     - {key: attr.social.attunement, name: Attunement, aliases: []}                 # reading people
     # `Influence` is not an attribute (it was `fac.influence`'s name); see names_index.yaml.
@@ -61,8 +64,10 @@ attributes:
 aggregates:
   entries:
     - {key: agg.body,   name: Body,   compute: sum, members: [attr.body.strength, attr.body.endurance, attr.body.agility], status: placeholder}
-    - {key: agg.mind,   name: Mind,   compute: sum, members: [attr.mind.focus, attr.mind.acuity, attr.mind.will, attr.mind.perception], status: placeholder}
+    - {key: agg.mind,   name: Mind,   compute: sum, members: [attr.mind.focus, attr.mind.acuity, attr.mind.perception], status: placeholder}
+    - {key: agg.spirit, name: Spirit Group, compute: sum, members: [attr.spirit.will], status: placeholder}
     - {key: agg.social, name: Social, compute: sum, members: [attr.social.attunement, attr.social.charisma, attr.social.grace], status: placeholder}
+  # `agg.spirit` is named 'Spirit Group', NOT 'Spirit': that is `attr.spirit.will`'s name (a second claimant would be a display collision, names.json `ambiguous`).
   # Placeholders only: R7 + derived_stats §14 remain authoritative for derived values.
 
 # ============================================================================

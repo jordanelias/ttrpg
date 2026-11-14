@@ -199,7 +199,7 @@ def _surface_forms(term):
     # registry-backed forms (§3 canonical identifiers): if `term` is a names_index id or a known
     # display, add its canonical + aliases as PRECISE surface forms — a POINTER into the central
     # registry, not a guess. Pure gain: the registry supplies real aliases the humanizer cannot
-    # infer (e.g. attr.mind.will → 'Spirit'). Unregistered engine ids (module names, Key types)
+    # infer (e.g. attr.spirit.will → 'Spirit'). Unregistered engine ids (module names, Key types)
     # keep the heuristic humanize above.
     key = term if _names.canonical(term) else _names.key_for(term)
     if key and _names.canonical(key):

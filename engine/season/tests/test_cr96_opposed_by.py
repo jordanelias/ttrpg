@@ -2,7 +2,7 @@
 
 WHAT THIS PINS, and the falsifier of each:
 
-  * THE COLUMN IS READ -- a hand-built row `opposed_by: attr.mind.will` makes a party holding Spirit 6 and the
+  * THE COLUMN IS READ -- a hand-built row `opposed_by: attr.spirit.will` makes a party holding Spirit 6 and the
     verb's own attribute 2 oppose at 6.0 (the obstacle halves it to 3), and the row without it at 2.0 (Ob 1).
     FALSIFIER: the column ignored is planted below and reads 2.0 with the row present.
   * THE POOL IS NOT MOVED -- the column is the opposition's only; `faculty` still starts from the row's own attribute.
@@ -26,7 +26,7 @@ from engine.substrate import composition, descriptors
 TELL = "tell"                                   # draws on `copying`
 VOC = VERB_CAPABILITY[TELL]
 OWN = VOCATION_ATTRIBUTE[VOC]
-SPIRIT = "attr.mind.will"
+SPIRIT = "attr.spirit.will"
 ROLLER, HOLDER = "p_high", "p_low"
 
 

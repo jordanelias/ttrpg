@@ -48,7 +48,7 @@ EST: 6.9 h [estimate: E-15, 0.4 h × 6 positions + 2.5 h close + 2 h (an instrum
 | B01a.03 | the generic test cast, and the two pinned instruments' persons draw their sheets | ruling (1) | BUILD | MOVER(behaviour) (corpus and headless readings; the realm hash EQUAL) | B01a.02 |
 | B01a.04 | the random-pairs instrument: outcome by attribute difference, the slope, the spread | rulings (4), (5) | BUILD | EQUAL | B01a.03 |
 | B01a.05 | the ordering gates and the variance rule written into the plan | rulings (1), (4) | POINTER (closed by the plan edit of 2026-11-14, this batch's drafting) | EQUAL | B01a.04 |
-| B01a.06 | Spirit is its own attribute group: `attr.spirit.will` (renamed from `attr.mind.will`) and the new `attr.spirit.threadsensitivity`; eleven attributes | Jordan 2026-11-14 ("spirit is own group. attr.spirit.will, attr.spirit.threadsensitivity") | BUILD | MOVER(behaviour) | B01a.04 |
+| B01a.06 | Spirit is its own attribute group: `attr.spirit.will` (renamed from `attr.mind.will`); ten attributes (J-12 dropped `threadsensitivity`) | Jordan 2026-11-14 ("spirit is own group. attr.spirit.will, attr.spirit.threadsensitivity") | BUILD | MOVER(behaviour) | B01a.04 |
 | B01a.99 | re-pin and close readings | `V12_STRUCTURE_part4.md` E-1 | BUILD | the re-pin | B01a.06 |
 
 The items follow, in the form of `V12_STRUCTURE_part2.md` §5.3.
@@ -158,7 +158,8 @@ The items follow, in the form of `V12_STRUCTURE_part2.md` §5.3.
 - Target files: `workplan_v12.md`; the parts holding those batches' heads; `workplan_v12_part8.md`, `_part8_cont.md`.
 - GATE: the appendix's `gates.py` → every listed batch's `GATE: Batch` lines equal its after-list (part 2 §2); `grep -c "GATE: Batch B01a-attributes-generated" workplan_v12_part*.md` → one per listed batch.
 
-### B01a.06 — Spirit is its own attribute group: `attr.spirit.will` and `attr.spirit.threadsensitivity`; eleven attributes · Jordan 2026-11-14 · BUILD · HASH MOVER(behaviour)
+### B01a.06 — Spirit is its own attribute group: `attr.spirit.will`; the roster stays ten · Jordan 2026-11-14 (J-12: `attr.spirit.threadsensitivity` DROPPED, `prac.thread_sensitivity` kept) · BUILD · HASH MOVER(behaviour)
+- AMENDED 2026-11-14 (J-12, Jordan: "drop threadsensitivity, keep existing prac.thread_sensitivity"): everywhere below, read 'eleven' as ten and ignore every mention of `attr.spirit.threadsensitivity`; the Spirit group holds ONE key, `attr.spirit.will`; `agg.spirit` has that one member; `attr.mind.will` stays as an alias that resolves to it. As built: the registry, names index, three regenerated exports, the group lists in five tools, `modules/combat/attributes.py`, nine tests, the glossary; build hash seed 0 `03a79b0f...` -> `7a1d4d24b3e46d8428744cd1d78cd590`, one season seed 0 `94a2c8c8...` -> `f5b7393a83d8a2fc097d0414254d2eee`; `will` redrawn (the stream name carries the key: `p_npc_088` 3 -> 5).
 - SOURCE: Jordan, 2026-11-14: "spirit is own group. attr.spirit.will / attr.spirit.threadsensitivity" (after `attr.mind.will`'s registry name, Spirit, `references/descriptor_registry.yaml` line 47). The registry is the owner (CLAUDE.md §0.05 cl. 3: edit the owner and re-derive; never hand-edit downstream). Lands before B01a.99 so the batch's one re-pin sees eleven keys.
 - ADVANCES: none of the nine; ruling R5 of the social-contest redesign (`will` is Spirit's, `threadsensitivity` is new).
 - INSTRUCTION:

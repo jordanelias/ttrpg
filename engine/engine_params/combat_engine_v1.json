@@ -43,7 +43,7 @@
    "spirit": {
     "default": 3,
     "neutral": null,
-    "registry_key": "attr.mind.will",
+    "registry_key": "attr.spirit.will",
     "status": "IN_FLUX"
    },
    "strength": {

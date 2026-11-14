@@ -1666,7 +1666,7 @@ rosters:
       inquiry: "attr.mind.acuity"
       arms:    "attr.body.agility"
     # v10 CR-96 (AR-44): OPTIONAL, per vocation, which attribute a PERSON SUBJECT opposes the vocation's verbs
-    # WITH when it is not the row's own (Spirit, `attr.mind.will`, is the attribute that resists influence). A
+    # WITH when it is not the row's own (Spirit, `attr.spirit.will`, is the attribute that resists influence). A
     # vocation with no entry here is opposed by its row's own attribute (`values:`), as CR-20 landed it. Closed
     # against the vocations and valued by one of the ten registry keys, refused at import otherwise
     # (`data/rosters.py::_load_vocation_opposed_by`); read by `seam/wrappers/pool.py::_opposing_attribute`. It moves

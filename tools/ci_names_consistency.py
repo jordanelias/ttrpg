@@ -56,7 +56,7 @@ def descriptor_names():
     d = _load(DESCRIPTOR)
     out = {}
     attrs = d.get('attributes', {})
-    for group in ('body', 'mind', 'social', 'retired'):     # `retired`: Bonds (CR-84), still a named row
+    for group in ('body', 'mind', 'spirit', 'social', 'retired'):     # `retired`: Bonds (CR-84), still a named row
         for e in (attrs.get(group) or []):
             if isinstance(e, dict) and 'key' in e:
                 out[e['key']] = e.get('name')

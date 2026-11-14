@@ -46,7 +46,7 @@ SPEC = (
     AttributeSpec('agi', 4, 4, 'attr.body.agility', IN_FLUX),
     AttributeSpec('end', 4, None, 'attr.body.endurance', IN_FLUX),
     AttributeSpec('att', 3, None, 'attr.mind.perception', IN_FLUX),
-    AttributeSpec('spirit', 3, None, 'attr.mind.will', IN_FLUX),
+    AttributeSpec('spirit', 3, None, 'attr.spirit.will', IN_FLUX),
     AttributeSpec('focus', 3, 3, 'attr.mind.focus', IN_FLUX),
     AttributeSpec('faculty', 3, None, None, IN_FLUX),
     AttributeSpec('disp', 4, 4, None, IN_FLUX),

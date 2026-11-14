@@ -55,8 +55,8 @@ _PRE_CR84 = {
     'Strength': 'attr.body.strength', 'Endurance': 'attr.body.endurance',
     'Vitality': 'attr.body.endurance', 'Agility': 'attr.body.agility',
     'Dexterity': 'attr.body.agility', 'Focus': 'attr.mind.focus', 'Acuity': 'attr.mind.acuity',
-    'Reasoning': 'attr.mind.acuity', 'Cognition': 'attr.mind.acuity', 'Will': 'attr.mind.will',
-    'Spirit': 'attr.mind.will', 'Attunement': 'attr.social.attunement',
+    'Reasoning': 'attr.mind.acuity', 'Cognition': 'attr.mind.acuity', 'Will': 'attr.spirit.will',
+    'Spirit': 'attr.spirit.will', 'Attunement': 'attr.social.attunement',
     'Charisma': 'attr.social.charisma', 'Presence': 'attr.social.charisma',
     'Bonds': 'attr.social.bonds', 'Sincerity': 'attr.social.bonds', 'Affability': 'attr.social.bonds',
 }

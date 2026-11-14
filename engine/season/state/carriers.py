@@ -740,7 +740,7 @@ def generated_attributes(world_seed: int, pid: str, span: Any) -> dict:
     an attribute no cast row authors: it fills `Person.attributes`, and lane A's flat seating at `pool_default`
     (B01) is gone.
 
-    (1) WHAT IS DRAWN. All ten of `engine/substrate/descriptors.py::ATTRIBUTES`, each uniform on the whole numbers `lo`
+    (1) WHAT IS DRAWN. All ten of `engine/substrate/descriptors.py::ATTRIBUTES` (B01a.06: Spirit is its own group, `attr.spirit.will`), each uniform on the whole numbers `lo`
     to `hi` of `span` -- `Fixtures generated_attribute_range`, shipped `(1, 6)`, inside the attribute scale
     (`ATTRIBUTE_FLOOR` to `ATTRIBUTE_CEILING`). `span` None returns `{}` (nothing generated: the world before B01, a
     fighter reads its class defaults and a roll reads `pool_default`); two whole numbers `lo <= hi` inside the scale
