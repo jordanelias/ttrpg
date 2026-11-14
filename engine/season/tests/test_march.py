@@ -357,7 +357,11 @@ def test_the_total_casualty_model_zeroes_the_losing_side():
     w.fixtures = w.fixtures.sweep("field_casualty_model", "total")
     attackers = world_q.mustered(w, "set_s_014", "fac_valorsmark")
     act = _march_act("p_npc_033", "set_s_036", "off_spymaster")
-    _fold_one(w, act, contest_max_depth=2)
+    assert len(attackers) == 2, f"the fixture no longer musters two attackers here: {attackers}"
+    events = _fold_one(w, act, contest_max_depth=2)
+    kinds = [(e.kind, e.degree) for e in events]
+    assert ("field.lost", "Lost") in kinds, (
+        f"this fixture no longer produces a LOST field battle for the arm to grade: {kinds}")
     for pid in attackers:
         assert pid not in w.persons, f"{pid} still recorded, at body 0, instead of removed"
 
@@ -378,8 +382,12 @@ def test_the_none_casualty_model_writes_stance_only():
     attackers = world_q.mustered(w, "set_s_014", "fac_valorsmark")
     before_body = {pid: w.persons[pid].body for pid in attackers}
     before_stance = {pid: list(w.persons[pid].stance or []) for pid in attackers}
+    assert len(attackers) == 2, f"the fixture no longer musters two attackers here: {attackers}"
     act = _march_act("p_npc_033", "set_s_036", "off_spymaster")
-    _fold_one(w, act, contest_max_depth=2)
+    events = _fold_one(w, act, contest_max_depth=2)
+    kinds = [(e.kind, e.degree) for e in events]
+    assert ("field.lost", "Lost") in kinds, (
+        f"this fixture no longer produces a LOST field battle for the arm to grade: {kinds}")
     grudge_w = w.fixtures.get("field_grudge_weight")
     morale_w = w.fixtures.get("field_morale_weight")
     for pid in attackers:
