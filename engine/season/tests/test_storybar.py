@@ -285,3 +285,58 @@ def test_a_repeated_draw_seed_is_refused_before_any_world_is_built():
     with pytest.raises(SystemExit) as e:
         SB.main(["--base-seed", str(SEED), "--seasons", "1", "--draw-seeds", "1", "1"])
     assert e.value.code == 2
+
+
+# -- B02.14: the removal test, beside the draw-seed arm ----------------------------------------------
+# These assert RELATIONS on the cap-10 fixture, never a count from a realm run.
+
+WHEN = (0, 0)
+
+
+def test_removal_replay_arm_reads_zero():
+    """Nobody removed: two independent copies of one built world read the same acts (the wrapper
+    perturbs nothing), the world the arm ran on is unmutated, and the stamping wrapper reproduces the
+    unwrapped run's hash (the control: `wrap_chooser=None` is today's run)."""
+    base = _small_world()
+    before = base.content_hash()
+    first = SB.removal_arm(base, SEASONS, None, WHEN)
+    again = SB.removal_arm(base, SEASONS, None, WHEN)
+    assert sum(first.values()) > 0, "the arm read no acts; a zero difference would be vacuous"
+    assert SB.chain_difference(first, again) == 0
+    assert base.content_hash() == before, "the arm mutated the base world"
+    plain = SB.drive(SEED, SEASONS, "off", CAP)[0].content_hash()
+    stamping = SB._removing(None, WHEN, {}, [])
+    wrapped = SB.drive(SEED, SEASONS, "off", CAP, wrap_chooser=stamping)[0].content_hash()
+    assert wrapped == plain
+    assert SB.drive(SEED, SEASONS, "off", CAP, wrap_chooser=lambda ch: ch)[0].content_hash() == plain
+
+
+def test_removing_a_person_at_the_first_lap_fires_and_leaves_that_person_out_of_the_reading():
+    """The removal can be observed: the wrapper fires once for the person removed, and that person's acts
+    are not in the multiset of the OTHERS (the control: the same person's acts ARE in the unperturbed
+    copy's, so the exclusion is the arm's doing)."""
+    base = _small_world()
+    everyone, _f, _h = SB._removal_run(base, SEASONS, None, WHEN)
+    acting = sorted({k[0] for k in everyone if k[1:3] == WHEN})
+    assert acting, "nobody acted at the first lap; the removal below observed nothing"
+    who = acting[0]
+    assert any(k[0] == who for k in everyone)
+    got, fired, _h = SB._removal_run(base, SEASONS, who, WHEN)
+    assert fired == 1
+    assert not any(k[0] == who and k[1:3] == WHEN for k in got), "the removed choice still acted"
+    assert not any(k[0] == who for k in SB.removal_arm(base, SEASONS, who, WHEN))
+
+
+def test_the_remove_cli_prints_a_replay_of_zero_and_refuses_an_unknown_person(capsys):
+    args = ["--base-seed", str(SEED), "--seasons", "1", "--cap", str(CAP)]
+    who = sorted(_small_world().persons)[0]
+    assert SB.main(args + ["--remove", who]) == 0
+    out = capsys.readouterr().out
+    replay = next(l for l in out.splitlines() if l.startswith("[replay]"))
+    assert "differing=0 " in replay and "(EQUAL to the unperturbed)" in replay
+    assert "(unmutated)" in out
+    control = next(l for l in out.splitlines() if l.startswith("[control: drive with no wrapper]"))
+    assert "(EQUAL to the unperturbed;" in control
+    with pytest.raises(SystemExit) as e:
+        SB.main(args + ["--remove", "no_such_person"])
+    assert e.value.code == 2

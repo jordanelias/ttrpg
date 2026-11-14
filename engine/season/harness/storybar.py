@@ -76,11 +76,13 @@ from collections import Counter
 
 from ..decision import make_chooser
 from ..loop.driver import SeasonDriver, resolvable_verbs
+from ..data.verbs import opportunity_key
 from ..queries.person_q import legitimacy, stability
+from ..state.carriers import subject_of
 from ..state.ids import H, ROOT, draw_factory
 from .aperture import seats
 from .corpus_run import attempts, graded_losses
-from .populated import build_realm
+from .populated import COHORT_PREFIX, build_realm
 
 #: Every forcing setting this tree can run. `off` is the shipped loop; no `on` is built (see the
 #: module docstring). A forcing position adds its own arm here.
@@ -286,7 +288,7 @@ def estimates(w) -> dict:
 # ---------------------------------------------------------------------------------------------
 
 def drive(seed: int, seasons: int, arm: str, cap=None, on_season=None, world=None,
-          draw_seed=None) -> tuple:
+          draw_seed=None, wrap_chooser=None) -> tuple:
     """Build the realm, run `seasons` seasons under `arm`; return `(world, driver, bounds)`.
 
     `on_season(world, season summary, events logged this season)`, when given, is called after each
@@ -296,7 +298,13 @@ def drive(seed: int, seasons: int, arm: str, cap=None, on_season=None, world=Non
     to nothing, which is the shipped reading unchanged: `world`, when given, is a built World this
     call runs instead of building one (`seed` and `cap` are then unused); `draw_seed`, when given,
     replaces `w.world_seed` as the seed of the CHOOSER'S `draw_factory` and of nothing else -- the
-    act-id mint below and every draw inside the driver keep `w.world_seed`."""
+    act-id mint below and every draw inside the driver keep `w.world_seed`.
+
+    `wrap_chooser` is the removal test's seam (`removal_arm`), `None` by default, which is the shipped
+    reading unchanged: `wrap_chooser(chooser) -> chooser` is applied once to the chooser before the
+    first season. A wrapper must know which lap it is in, a fact only the driver holds (`SeasonDriver.
+    round`, a driver local by D-21), so when a wrapper is given the chooser it receives carries the
+    driver as `.driver`; with `None` the chooser is handed to the loop untouched."""
     if arm not in ARMS:
         raise ValueError(f"forcing arm {arm!r} is not built; this tree runs {ARMS}")
     w = build_realm(seed, cap) if world is None else world
@@ -305,6 +313,9 @@ def drive(seed: int, seasons: int, arm: str, cap=None, on_season=None, world=Non
     ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                       draw=draw_factory(w.world_seed if draw_seed is None else draw_seed,
                                         lambda: w.tick))
+    if wrap_chooser is not None:
+        ch.driver = d
+        ch = wrap_chooser(ch)
     bounds = []
     for _ in range(seasons):
         bounds.append(len(w.log))
@@ -448,6 +459,125 @@ def chain_difference(a: Counter, b: Counter) -> int:
     return sum(abs(a.get(k, 0) - b.get(k, 0)) for k in set(a) | set(b))
 
 
+# ---------------------------------------------------------------------------------------------
+# THE `--remove` ARM: suppress one person's choice at one lap, on one built world.
+# ---------------------------------------------------------------------------------------------
+
+def _removing(who, when, stamps: dict, fired: list):
+    """The `wrap_chooser` of `removal_arm`: a chooser that returns nothing for person `who` when
+    `(tick, lap) == when`, and records, for every act any other call returns, the `(tick, lap)` it was
+    chosen at (`stamps[id(act)] = (at, act)`; the act is kept so its `id()` is not reused). `who=None`
+    removes nobody: the stamping alone, the replay control."""
+    def wrap(chooser):
+        d = chooser.driver
+
+        def choose(p, v, s, ask_budget):
+            at = (d.w.tick, d.round)
+            if who is not None and p.id == who and at == when:
+                fired.append(at)
+                return []
+            out = chooser(p, v, s, ask_budget)
+            for item in out:
+                for a in getattr(item, "acts", (item,)):
+                    stamps[id(a)] = (at, a)
+            return out
+        return choose
+    return wrap
+
+
+def _removal_run(base, seasons: int, who, when, draw_seed=None) -> tuple:
+    """`(multiset, fired, end_hash)` of ONE copy of `base` run `seasons` seasons with `who`'s choice
+    suppressed at `when`. The multiset is over EVERY person's attempted acts (the act store), keyed
+    `(actor, tick, lap, verb, opportunity, "executed" | "refused")`, the tick and lap being those the
+    act was CHOSEN at; a refusal is `corpus_run.attempts`' (the one owner of the made/refused rule).
+    `fired` is how many times the wrapper suppressed a call: 0 means the removal never happened and the
+    reading is a replay's, not a removal's."""
+    stamps: dict = {}
+    fired: list = []
+    w = fork(base)
+    w, _d, bounds = drive(w.world_seed, seasons, "off", world=w, draw_seed=draw_seed,
+                          wrap_chooser=_removing(who, when, stamps, fired))
+    read_ = Counter()
+    for a, _made, refused in attempts(w, len(bounds)):
+        (tick, lap), _a = stamps[id(a)]
+        read_[(a.actor, tick, lap, a.verb, opportunity_key(a.verb, subject_of(a), a.payload),
+               "refused" if refused else "executed")] += 1
+    return read_, len(fired), w.content_hash()
+
+
+def _others(acts: Counter, who) -> Counter:
+    """`acts` without person `who`'s keys (`who=None`: all of them)."""
+    return Counter({k: n for k, n in acts.items() if who is None or k[0] != who})
+
+
+def removal_arm(base, seasons: int, who: str, when: tuple) -> dict:
+    """THE REMOVAL TEST (CLAUDE.md §4: the word and its definition). *Suppress one person's choice at
+    one lap and count how many of the other persons' acts differ from the unperturbed copy.*
+
+    ONE built world `base`, deep-copied (`fork`, as `draw_seed_arm` does), run `seasons` seasons through
+    `drive` with the chooser wrapped (`drive(wrap_chooser=...)`) to return no scene for person `who`
+    at `(tick, lap) == when` -- `when` is `(season index, lap index)`, the tick and `SeasonDriver.round`
+    (identifier `round` until the rename `PCR-4`; a lap is one pass of the season's scene budget).
+    Returns the multiset of the OTHER persons' `(actor, tick, lap, verb, opportunity, executed |
+    refused)`; `chain_difference` of two such multisets is the acts that differ. `who=None` removes
+    nobody and returns every person's acts. `base` is never run, so it stays unmutated; every draw is
+    keyed `H(seed, tick, subject, purpose)`, so removing one choice shifts no other person's draw."""
+    return _others(_removal_run(base, seasons, who, when)[0], who)
+
+
+def removal_report(base, seasons: int, who: str, when: tuple, cohort) -> dict:
+    """What `--remove` prints: the unperturbed copy, then each arm against it.
+    `{"base_hash_before", "base_hash_after", "unperturbed": (acts, end hash), "unwrapped_hash", "arms"}`.
+    `unwrapped_hash` is the end hash of a copy run through `drive` with no wrapper: the control that the
+    wrapper perturbs nothing (it must equal the unperturbed copy's, else every figure is void). `arms`
+    maps, in print order, `replay` (nobody removed, MUST read 0), `removed` (`who`), `cohort` (the named
+    cohort person's choice, the control that tends itself) and `draw-seed` (every person's chooser draw
+    re-seeded, `--draw-seeds`' arm: the floor) to `{"acts", "differing", "persons", "by_lap", "fired",
+    "hash", "who"}`. `differing` is the multiset difference (as `chain_difference`) over the persons
+    other than the one removed; `by_lap` counts it per `(tick, lap)` of the act."""
+    before = base.content_hash()
+    ref, _f, ref_hash = _removal_run(base, seasons, None, when)
+    plain = drive(0, seasons, "off", world=fork(base))[0].content_hash()
+    out = {"base_hash_before": before, "unperturbed": (sum(ref.values()), ref_hash),
+           "unwrapped_hash": plain, "arms": {}}
+    specs = (("replay", None, None), ("removed", who, None), ("cohort", cohort, None),
+             ("draw-seed", None, base.world_seed + 1))
+    for name, gone, ds in specs:
+        got, fired, h = _removal_run(base, seasons, gone, when, draw_seed=ds)
+        a, b = _others(ref, gone), _others(got, gone)
+        diff = {k: abs(a.get(k, 0) - b.get(k, 0)) for k in set(a) | set(b) if a.get(k, 0) != b.get(k, 0)}
+        by_lap = Counter()
+        for k, n in diff.items():
+            by_lap[(k[1], k[2])] += n
+        out["arms"][name] = {"acts": sum(b.values()), "differing": sum(diff.values()),
+                             "persons": len({k[0] for k in diff}), "by_lap": dict(sorted(by_lap.items())),
+                             "fired": fired, "hash": h, "who": gone}
+    out["base_hash_after"] = base.content_hash()
+    return out
+
+
+def _print_removal(base_seed: int, seasons: int, cap, when, res: dict) -> None:
+    print(f"storybar --remove base-seed={base_seed} seasons={seasons} cap={cap} at={tuple(when)} "
+          f"PYTHONHASHSEED={os.environ.get('PYTHONHASHSEED')}")
+    print(f"base world hash before={res['base_hash_before']} after={res['base_hash_after']} "
+          f"({'unmutated' if res['base_hash_before'] == res['base_hash_after'] else 'MUTATED'})")
+    n, h = res["unperturbed"]
+    print(f"[unperturbed] acts={n} end_hash={h}")
+    print(f"[control: drive with no wrapper] end_hash={res['unwrapped_hash']} "
+          f"({'EQUAL' if res['unwrapped_hash'] == h else 'DIFFER'} to the unperturbed; DIFFER means "
+          f"the wrapper perturbs the run and every figure below is void)")
+    for name, r in res["arms"].items():
+        who = f" {r['who']}" if r["who"] else ""
+        removes = name in ("removed", "cohort")
+        note = ("  NOT FIRED: the person was not asked at that lap; this is a replay's reading"
+                if removes and not r["fired"] else "")
+        print(f"[{name}{who}] differing={r['differing']} persons_affected={r['persons']} "
+              f"fired={r['fired']} end_hash={r['hash']} "
+              f"({'EQUAL' if r['hash'] == h else 'DIFFER'} to the unperturbed){note}")
+        if r["by_lap"]:
+            print("  by (season, lap): " + " ".join(f"{k}:{v}" for k, v in r["by_lap"].items()))
+
+
 def _print_draw_seeds(base_seed: int, seasons: int, cap, draw_seeds, res: dict) -> None:
     print(f"storybar --draw-seeds base-seed={base_seed} seasons={seasons} cap={cap} "
           f"draw-seeds={list(draw_seeds)} PYTHONHASHSEED={os.environ.get('PYTHONHASHSEED')}")
@@ -515,7 +645,34 @@ def main(argv=None) -> int:
                          "per draw seed D, and vary only the chooser's draw (see `draw_seed_arm` for "
                          "the two residues); prints the chain-depth distribution and the verb-chain "
                          "multiset per draw seed. Takes no --n or --arms")
+    ap.add_argument("--remove", metavar="PERSON",
+                    help="the removal test: suppress PERSON's choice at one lap (--at; the first when "
+                         "omitted) on ONE built world, and count how many of the OTHER persons' acts "
+                         "differ from the unperturbed copy. Prints the acts differing, the persons "
+                         "affected and the (season, lap) of each, beside three controls: replay "
+                         "(nobody removed, MUST read 0), a cohort's choice, and the chooser's draw "
+                         "re-seeded for everybody (`--draw-seeds`' arm, the floor). Takes no --n or "
+                         "--arms; one arm is a full copy of the run")
+    ap.add_argument("--at", type=int, nargs=2, metavar=("SEASON", "LAP"),
+                    help="with --remove: the (season index, lap index) whose choice is suppressed")
     args = ap.parse_args(argv)
+
+    if args.at is not None and args.remove is None:
+        ap.error("--at belongs to --remove")
+    if args.remove is not None:
+        if args.n is not None or args.arms is not None or args.draw_seeds is not None \
+                or args.executed_only:
+            ap.error("--remove takes no --n, --arms, --draw-seeds or --executed-only")
+        base = build_realm(args.base_seed, args.cap)
+        if args.remove not in base.persons:
+            ap.error(f"--remove {args.remove!r} is not a person of the realm built from "
+                     f"--base-seed {args.base_seed}")
+        cohort = next((p for p in sorted(base.persons)
+                       if p.startswith(COHORT_PREFIX) and p != args.remove), None)
+        when = tuple(args.at) if args.at is not None else (0, 0)
+        _print_removal(args.base_seed, args.seasons, args.cap, when,
+                       removal_report(base, args.seasons, args.remove, when, cohort))
+        return 0
 
     if args.draw_seeds is not None:
         if args.n is not None or args.arms is not None:
