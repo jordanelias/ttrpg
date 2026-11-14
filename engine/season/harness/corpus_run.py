@@ -63,7 +63,7 @@ from ..state.carriers import (Act, Event, Office, Person, Proposition, Rung, Sit
                               generated_attributes)
 from ..state.ids import H, ROOT, draw_factory
 from ..state.world import World
-from ..data import cast, files
+from ..data import files
 from . import probes as P
 from . import run_cases as R
 from .run_cases import seed_pursuits, wants_of
@@ -510,11 +510,15 @@ def build_at(case: dict, seed: int = 0) -> World:
     for pid in pids:
         entry = by_pid.get(pid)
         # B01a.03: A SEATED PERSON HOLDS A DRAWN SHEET (`state/carriers.py::generated_attributes`, one keyed draw per
-        # person and attribute, the same owner `build_realm` seats), an entry that authors `stats:` replacing its own
-        # keys only (`data/cast.py::attributes_of`; none does today, so it reads `{}`).
+        # person and attribute, the same owner `build_realm` seats). KEYED ON THE CASE AND THE PERSON, as `seed_pursuits`
+        # below is: every case runs at one seed and seat ids repeat (`p_a`, `p_b`, `p_c`), so a key on the seat id alone
+        # gave every case's first seat one sheet (B01a terminal critique, finding 1); a named seat keys on who it is, so
+        # reordering a cast does not move a sheet. No cast entry authors `stats:` (`CAST_KEYS` refuses it), so there is
+        # nothing to lay over the draw.
         w.persons[pid] = Person(pid, str(entry["who"]) if entry else pid,
-                                attributes={**generated_attributes(w.world_seed, pid, w.fixtures.get("generated_attribute_range")),
-                                            **cast.attributes_of(entry or {})})
+                                attributes=generated_attributes(
+                                    w.world_seed, f"{case.get('id')}:{entry['who'] if entry else pid}",
+                                    w.fixtures.get("generated_attribute_range")))
         # ⚠ A PERSON IS THE BOTTOM RUNG OF THE LADDER, and `tiny_world` models it that way. Without
         # this, `move` is refused everywhere. ⚠ THE STATED REASON IS NOW STALE AND THE FIXTURE
         # IS NOT: `_req_move` was retired by `W-A` and the typed cell short-circuits on an

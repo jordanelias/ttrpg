@@ -21,7 +21,10 @@ Deterministic given its arguments: no `random.Random(`, no clock.
            share of the CARRIED bands (Success and Overwhelming: the margin cleared the obstacle by a whole success);
            every band's share is printed.
 
-THE DIFFERENCE `d`. `sheet` (the duel's default): the mean over the ten keys of `a[k] - b[k]`, bins of 0.5. `read` (the
+THE DIFFERENCE `d`. `sheet` (the duel's default): the mean over the ten keys of `a[k] - b[k]`, bins of 0.5. ⚠ The duel reads six
+keys (`modules/combat/attributes.py`) and the realm's `score` is the larger of an attribute and a capability (`pool.py`),
+so `sheet`'s slope is diluted by the four keys the duel never reads and is not the realm's; `all` names the keys read, and
+a calibration target is set on those (B05.24/B05.25 change which keys a contest reads). `read` (the
 social roll's default): the record's `pool` minus its `opposition` (for a duel, `faculties[0] - faculties[1]`; an
 opposition `None` reads as `obstacle_default`), read off the input so the instrument follows whatever the governing
 score becomes, bins of 1. A registry key: `a[k] - b[k]`, bins of 1. `all` prints one SLOPE per key (a slope near 0 names
@@ -220,7 +223,7 @@ def curve(acc: dict, width: float, min_bin: int, carried: Callable[[Counter], in
                        if sxx > 0 else None)
     out["range"] = max(r["y"] for r in rows) - min(r["y"] for r in rows)
     out["sd"] = math.sqrt(sum(r["n"] * (r["y"] - ybar) ** 2 for r in rows) / total)
-    out["monotone"] = all(r["y"] >= l["y"] - 2 * math.hypot(r["se"], l["se"]) for l, r in zip(rows, rows[1:]))
+    out["monotone"] = None if len(rows) < 2 else all(r["y"] >= l["y"] - 2 * math.hypot(r["se"], l["se"]) for l, r in zip(rows, rows[1:]))
     out["dominant"] = max(((v / r["n"], r["x"], k) for r in rows for k, v in r["counts"].items()),
                           key=lambda t: (t[0], -t[1], t[2]))
     return out
@@ -244,10 +247,12 @@ def _render(title: str, classes: tuple, population: Counter, c: dict, width: flo
         shares = " ".join(f"{r['counts'].get(k, 0) / r['n']:11.4f}" for k in classes)
         lines.append(f"  {r['x']:<6g} {r['n']:<6d} {shares}  {r['y']:.4f} {r['se']:.4f}")
     lines.append(f"SLOPE {_slope_text(c)}")
-    lines.append(f"SPREAD range={_fmt(c['range'])} sd={_fmt(c['sd'])}")
-    lines.append(f"MONOTONE {'n/a' if c['monotone'] is None else ('yes' if c['monotone'] else 'no')}")
+    win = (f" (over the {len(c['rows'])} bins read, x from {c['rows'][0]['x']:g} to {c['rows'][-1]['x']:g}; "
+           f"a bin under min-bin is left out of all four lines)" if c["rows"] else "")
+    lines.append(f"SPREAD range={_fmt(c['range'])} sd={_fmt(c['sd'])}{win}")
+    lines.append(f"MONOTONE {'n/a (under two bins)' if c['monotone'] is None else ('yes' if c['monotone'] else 'no')}{win}")
     d = c["dominant"]
-    lines.append("DOMINANT n/a" if d is None else f"DOMINANT {d[0]:.4f} at x={d[1]:g} ({d[2]})")
+    lines.append("DOMINANT n/a" if d is None else f"DOMINANT {d[0]:.4f} at x={d[1]:g} ({d[2]}){win}")
     return lines
 
 

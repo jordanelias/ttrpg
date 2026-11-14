@@ -8460,7 +8460,12 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # `tend` follows a wound; the cause past the sheets is [UNVERIFIED], not walked world by world). CONTROL, run in process: `Fixtures
     # generated_attribute_range` swept to `None` (nothing generated: B01's close) reads the old set and the executed-world counts above,
     # and passes this test (`(2, 2)` does NOT reproduce it: `covenant` still leaves, so a sheet's PRESENCE moves a world a flat 2 does not hold still).
-    assert refused_only == {"survey", "forge", "sabotage", "train", "build", "exchange"}, (
+        # ⚠⚠ B01a.99 (terminal critique, finding 1: a corpus person's sheet is keyed on the CASE and the person, not the seat id alone, so
+    # the cases no longer share three sheets), 6 -> 5: `build` LEAVES again (the set is B01's, less `covenant`, which stays gone).
+    # MEASURED by `_corpus_rows`, seed 0, 143 live worlds, `ever` UNMOVED (the same 25 verbs): `fight` executes in 8 worlds before this
+    # change and 7 after (a world counted once; the 20 and 3 above were counted another way and are not comparable), `tend` 39 -> 31.
+    # CONTROL: the tree before the key change (014ed89) reads `build` in the set and passes the 6.
+    assert refused_only == {"survey", "forge", "sabotage", "train", "exchange"}, (
         f"the always-refused set moved to {sorted(refused_only)}. `move` and `transfer` left it "
         "when `W-C` closed `H-94`'s structural half — the Candidate carries operands now — and "
         "`work` stays for a reason about the corpus's questions rather than about the channel")
@@ -9248,7 +9253,11 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # behaves distinctly; `ever` is the same 25 verbs, and the universal set is read in the same run by the assertions below. Variety rises by
     # one world; WHICH world is [UNVERIFIED], not walked. Not a ranking change: `H-96` is untouched. CONTROL, run in process: `Fixtures
     # generated_attribute_range` swept to `None` (nothing generated: B01's close) reads 140 and passes.
-    assert len(by_sig) == 141, (
+    # ⚠⚠ **141 -> 140, B01a.99 (terminal critique, finding 1: the corpus sheets are keyed on the case and the person)**, MEASURED BY THIS TEST'S OWN
+    # `by_sig` (`_corpus_rows` at seed 0, 143 live worlds, PYTHONHASHSEED=0); `ever` is the same 25 verbs. THE COINCIDENCE: 140 is also B01's close
+    # value, reached by another route (the sheets differ), so it is a re-record of a drawn world and not a return. CONTROL: the tree before the
+    # key change (014ed89) reads 141 and passes.
+    assert len(by_sig) == 140, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -9774,7 +9783,9 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # ⚠⚠ B01a.99 (every person's attributes are drawn, a population change, not a balance claim): `build` LEAVES (it is refused in 1 world
     # now: `refused_only`) and `covenant` JOINS (it was refused in 1 world, attempted in none now): the always-refused note carries the
     # per-verb world counts and the control (`generated_attribute_range` `None` reads the old set).
-    assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish", "determine",
+    # ⚠⚠ B01a.99 (terminal critique, finding 1; the corpus sheets keyed on the case and the person): `build` JOINS from `refused_only`
+    # (attempted in no world: the set B01's close read) and `covenant` stays. CONTROL: the tree before the key change (014ed89) reads the set without `build`.
+    assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish", "determine", "build",
                                               "covenant", "found", "comply", "construe", "evade / defy",
                                               "destroy_record", "march", "open_case",
                                               "migrate", "requisition",
@@ -11344,7 +11355,8 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # ⚠⚠ B11 lane A, both commits rebased (re-pinned once in B01.02), 11 -> 6: `found`, `build`, `comply`, `evade / defy` AND `construe` LEAVE (no longer attempted: the Record
     # sub-kind rule) -- the reason and its control are at the corpus test's always-refused note.
     # ⚠⚠ B01a.99, 6 -> 6: `covenant` LEAVES and `build` JOINS -- the corpus test's always-refused note carries the reason and its control.
-    assert set(refused) - set(executed) == {"survey", "forge", "build", "sabotage", "train", "exchange"}, (   # v11 CR-87: `tend` JOINS (it left `executed`, above). The old value is the parent tree's pin (the base tree passes it, read in a scratch export of `d2847e7b`); `revert_cr87` was NOT run against it.
+    # ⚠⚠ B01a.99 (terminal critique, finding 1), 6 -> 5: `build` LEAVES again -- the corpus test's always-refused note carries the reading and its control.
+    assert set(refused) - set(executed) == {"survey", "forge", "sabotage", "train", "exchange"}, (   # v11 CR-87: `tend` JOINS (it left `executed`, above). The old value is the parent tree's pin (the base tree passes it, read in a scratch export of `d2847e7b`); `revert_cr87` was NOT run against it.
         f"the always-refused set is {sorted(set(refused) - set(executed))}. `work` refuses because "
         "its `site` operand binds either to a non-Site referent (UNKNOWN) or to a real site whose "
         "condition never clears the floor in this corpus; `dispatch` WAS refused only in NPC-033's five-seat "

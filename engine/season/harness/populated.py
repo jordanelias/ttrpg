@@ -1013,9 +1013,11 @@ def seed_arms(w: World, seeds: dict | None = None) -> int:
 
 def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
                 goals: bool = True, goals_complete: bool = True, foreign: bool = True,
-                guards: bool = False, acquaintances: bool = True, cast_attributes: bool = True) -> World:
+                guards: bool = False, acquaintances: bool = True, cast_attributes: bool = True,
+                fixtures=None) -> World:
     """The whole map, its buildings, and one person per season loop.
 
+    `fixtures` (None: `DEFAULT_FIXTURES`) is the injection point of a sweep: `fixtures=DEFAULT_FIXTURES.sweep("generated_attribute_range", (2, 2))` builds the world H-856's control reads.
     `cast_attributes` (v10 CR-20) reads each cast row's `stats:` into `Person.attributes`
     (`data/cast.py::attributes_of`), over the sheet `state/carriers.py::generated_attributes` DRAWS (`Fixtures
     generated_attribute_range`, B01a.01) for every key a row does not author, and seats a drawn sheet on every other
@@ -1081,7 +1083,11 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     the tree has deleted two rosters on that criterion already (`rosters.yaml:69-73`).
     """
     geo, ven = _load(GEOGRAPHY), _load(VENUES)
-    w = World(seed, DEFAULT_FIXTURES)
+    w = World(seed, DEFAULT_FIXTURES if fixtures is None else fixtures)
+    if not cast_attributes:
+        # The control arm holds no drawn sheet at all: the in-play mint (`loop/census.py::_individuate`) reads the same
+        # range, so a person individuated mid-season would otherwise hold one (B01a terminal critique, finding 6).
+        w.fixtures = w.fixtures.sweep("generated_attribute_range", None)
 
     # -- the canonical layers -------------------------------------------------
     realm = "r_valoria"
