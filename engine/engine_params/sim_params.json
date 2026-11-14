@@ -3,14 +3,14 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 125,
-    "total": 283,
-    "uncited": 158,
+    "total": 286,
+    "uncited": 161,
     "of_which_assumption_grade": 8
   },
-  "count": 283,
+  "count": 286,
   "by_module": {
     "engine.dice_engine": 6,
-    "engine.season": 21,
+    "engine.season": 24,
     "mass_battle": 164,
     "characters": 5,
     "fieldwork": 15,
@@ -197,6 +197,45 @@
       "note": "[canonical: ED-IN-0306 -- display length only, no game meaning]",
       "citation": "ED-IN-0306 -- display length only, no game meaning",
       "citation_grade": "source"
+    },
+    {
+      "key": "engine.season.DEFAULT_MIN_BIN",
+      "name": "DEFAULT_MIN_BIN",
+      "value": 200,
+      "kind": "scalar",
+      "module": "engine.season",
+      "file": "engine/season/harness/pairs.py",
+      "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.DEFAULT_N",
+      "name": "DEFAULT_N",
+      "value": {
+        "duel": 20000,
+        "social": 200000
+      },
+      "kind": "table",
+      "module": "engine.season",
+      "file": "engine/season/harness/pairs.py",
+      "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.DIFF_WIDTH",
+      "name": "DIFF_WIDTH",
+      "value": {
+        "sheet": 0.5,
+        "read": 1.0
+      },
+      "kind": "table",
+      "module": "engine.season",
+      "file": "engine/season/harness/pairs.py",
+      "note": "a registry key's bin is 1.0",
+      "citation": null,
+      "citation_grade": null
     },
     {
       "key": "engine.season.SWEEP_POINTS",
