@@ -2960,7 +2960,9 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # (seed 0, one season; `test_go07_canonical_digest.py` records the 792); the arms no longer part by count, which the
     # assertions below (the act sequences, the ledgers) still read. CONTROL: `test_b11a_scores_and_obstacle.py::revert_b11a_scores`
     # and `test_b11a_duel_reach.py::revert_b11a` read the base's one-season hashes (`test_b11a_duel_reach.PRE`).
-    assert (out["acts"], cout["acts"]) == (792, 792), (
+    # ⚠⚠ B01a.99 (every person's attributes are drawn, a population change, not a balance claim): (792, 792) -> (793, 793);
+    # `test_go07_canonical_digest.py` records the 793; the arms still part in the ledgers, asserted below.
+    assert (out["acts"], cout["acts"]) == (793, 793), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")

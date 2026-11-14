@@ -198,7 +198,11 @@ def test_rem52s_fall_is_tended_whole_the_same_season():
     # B11 lane A (the duel chain's reach; re-pinned in B01.02): (37, 37) -> (37, 38): one person tended who was not short
     # (`p_npc_033`, wounded by the reach's new formations). With `revert_b11a_scores` alone it reads (37, 38); with
     # `revert_b11a` too, (37, 37) (scratch, not kept).
-    assert (len(short), len(tended)) == (37, 38)
+    # B01a.99 (every person's attributes are drawn, a population change): (37, 38) -> (37, 37): the duels the drawn sheets
+    # resolve do not wound `p_npc_033`, so the tended are exactly the short (`tended - short` and `short - tended` both empty,
+    # read in process at PYTHONHASHSEED=0).
+    assert (len(short), len(tended)) == (37, 37)
+    assert tended == short
 
 
 def test_build_hash_is_unmoved(monkeypatch):

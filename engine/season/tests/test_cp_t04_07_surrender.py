@@ -56,7 +56,7 @@ PRUDENCE, PRUDENCE_SEAT = "p_npc_013", "off_cardinal_prudence"      # Church; di
 REP, REP_SEAT = "p_npc_034", "off_archbishops_rep"                  # Church; dispatch; purview does NOT reach TARGET
 FORTITUDE, FORTITUDE_SEAT = "p_npc_040", "off_cardinal_fortitude"   # Church; NO dispatch
 KING, KING_SEAT = "p_npc_020", "off_king"                           # Crown; dispatch; purview reaches TARGET
-BUILD = "8480ad84c25cb665fb41dd2c57a53c15"                          # build_realm(0), unmoved by this item
+BUILD = "03a79b0f76b7a91f09babd18f246be88"                          # build_realm(0), unmoved by this item; B01a.99 re-pin (every person's attributes are drawn): was 8480ad84...
 
 
 @pytest.fixture

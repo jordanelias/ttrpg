@@ -363,7 +363,9 @@ def test_faculty_varies_by_person_once_train_raises_carins_vocation():
     assert carin.capability == {"copying": 4}
     pools = {p.id: sigma.faculty(w, p, "tell") for p in [carin, *others]}
     assert pools[CARIN] == 4, pools
-    assert {pools[p.id] for p in others} == {fx.get("pool_default")}, pools
+    # B01a.99 (every person's attributes are drawn, a population change): the persons without a key were all at `pool_default`
+    # (one pool, `{2}`); they now read their drawn attribute, so the pools part by person: here {p_b: 6, p_c: 5}.
+    assert {pools[p.id] for p in others} == {5, 6}, pools
     assert len(set(pools.values())) > 1, pools
 
 
@@ -453,6 +455,10 @@ def test_a_pupil_whose_vocation_reads_argue_or_inquiry_is_trained_and_faculty_fo
     w, d = _npc088()
     pupil = next(pid for pid, p in sorted(w.persons.items()) if pid != CARIN and not p.capability)
     w.persons[pupil].capability = {"argue": 2, "inquiry": 3}
+    # B01a.99 (every person's attributes are drawn, a population change): the drawn pupil (p_b) reads acuity 5 and charisma 4,
+    # above the keys raised here (4, 3), so `faculty`'s `max(attribute, key)` would hide the key this test observes (read:
+    # inquiry verbs 5, `argue`/`determine` 4). The pupil is planted with no sheet, as the test's subject is the key.
+    w.persons[pupil].attributes = {}
     default = w.fixtures.get("pool_default")
     with monkeypatch.context() as m:                    # the planted failure: the `inquiry` rows removed
         m.setattr(EC, "VOCATIONS", VERBS.VOCATIONS - {"inquiry"})

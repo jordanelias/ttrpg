@@ -22,7 +22,7 @@ from engine.season.decision.options import opening_set
 from engine.season.gaps import Unspecified
 from engine.season.harness import populated as PO
 from engine.season.loop.driver import SeasonDriver, mint_token
-from engine.season.seam.wrappers import sigma
+from engine.season.seam.wrappers import pool, sigma
 from engine.season.state.carriers import Act, Person, Question
 from engine.season.state.gate import WriteClass
 from .test_in10_record_operands import _resolve
@@ -62,9 +62,9 @@ from .test_rem30_character_sheet import _run
 #: Seeds 1 and 2 are the post-B10-11b reading (`reading @4b334f2a`), re-recorded by the batch pin commit: PC-20 (1) (the
 #: head-weighted strike impact, `K_STR_HEAD`) moves a one-season run that reaches `strike_impact`; seed 0 calls none.
 BASE = {
-    0: "28e35026273dd31864765198208a5564",   # B01 re-pin (B11 lane A, both commits rebased): was a64160d4...; B10-13 batch pin commit: was cd42982b...; CP-T03-08: was 39f53dad...; CP-T03-07: was 0036bb2e...; CP-T03-04: was e9d7c897...
-    1: "9d16cf9423f3eb4a603fe9d6cba97f62",   # B01 re-pin (B11 lane A, both commits rebased): was 2f6a308e...; B10-13 batch pin commit: was d8698ba8...; B10-11b pin commit: was 242dac65...; CP-T03-08: was 82310267...; CP-T03-07: was 3b30d0ea...; CP-T03-04: was ae97a48b...; CR-85: was ce8c74e7...
-    2: "9a317f3a8c8903c355e5566711577177",   # B01 re-pin (B11 lane A, both commits rebased): was 6b7e5242...; B10-12 pin commit (CR-24 + MB-07r): was 7d0f47a9...; B10-13 batch pin commit: was af8700b7...; B10-11b pin commit: was 174db5fe...; CP-T03-08: was 3cba88e4...; CP-T03-07: was 4856e80a...; CP-T03-04: was 831dc047...
+    0: "8f2c78609d48f32b588a6d8283f55056",   # B01a.99 re-pin (every person's attributes are drawn): was 28e35026...; B01 re-pin (B11 lane A, both commits rebased): was a64160d4...; B10-13 batch pin commit: was cd42982b...; CP-T03-08: was 39f53dad...; CP-T03-07: was 0036bb2e...; CP-T03-04: was e9d7c897...
+    1: "7f44d7b6ba76cc36d78a09217b1889bf",   # B01a.99 re-pin (every person's attributes are drawn): was 9d16cf94...; B01 re-pin (B11 lane A, both commits rebased): was 2f6a308e...; B10-13 batch pin commit: was d8698ba8...; B10-11b pin commit: was 242dac65...; CP-T03-08: was 82310267...; CP-T03-07: was 3b30d0ea...; CP-T03-04: was ae97a48b...; CR-85: was ce8c74e7...
+    2: "b7504c2a44dee982abea546d0700abc1",   # B01a.99 re-pin (every person's attributes are drawn): was 9a317f3a...; B01 re-pin (B11 lane A, both commits rebased): was 6b7e5242...; B10-12 pin commit (CR-24 + MB-07r): was 7d0f47a9...; B10-13 batch pin commit: was af8700b7...; B10-11b pin commit: was 174db5fe...; CP-T03-08: was 3cba88e4...; CP-T03-07: was 4856e80a...; CP-T03-04: was 831dc047...
 }
 
 #: The four Niflhel ids the archived file STRIKES (it prints no row for them): never members.
@@ -180,7 +180,14 @@ def test_a_planted_lifepath_builds_the_key_held_at_pool_default_and_rolls_the_sa
     default = w.fixtures.get("pool_default")
     p, q = w.persons[P_ID], w.persons[Q_ID]
     assert p.capability == {"inquiry": default} and q.capability == {}
-    assert sigma.faculty(w, p, "research") == sigma.faculty(w, q, "research") == default
+    # B01a.99 (every person's attributes are drawn, a population change): the pool's base is the larger of the attribute he
+    # holds and the key (`pool.score`), so two persons no longer roll the same pool by construction. The claim kept is the
+    # key's: held at `pool_default` it lifts nothing above what the person's attribute reads (it was `== default` for both
+    # when no one held an attribute); the holder of nothing reads his attribute alone.
+    att = lambda x: pool._authored_attribute(x, "research")
+    assert att(p) is not None and att(q) is not None, "the drawn sheets seat the vocation's attribute on both"
+    assert sigma.faculty(w, p, "research") == max(att(p), default)
+    assert sigma.faculty(w, q, "research") == att(q)
     holders = {pid: x.capability for pid, x in w.persons.items() if x.capability}
     assert holders == {P_ID: {"inquiry": default}, "p_npc_004": {"inquiry": default},
                        "p_npc_088": {"inquiry": default}}, holders

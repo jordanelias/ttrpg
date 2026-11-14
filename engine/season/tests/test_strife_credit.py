@@ -38,7 +38,7 @@ LIVE = 0.5                  # the value given (ED-IN-0316), set in the tests exp
 THREAD, INNER, ORTHO, NONE = {"thread_truth": 3}, {"inner_tradition": 3}, {"solmund_orthodoxy": 3}, {}
 # `build_realm(0)` after one season at `regime_gain` 0.5, the shipped value (CR-79 commit (2); the pins that read the
 # control call `revert_cr79`, so this is the one place the shipped season is pinned; it moves with every later mover).
-AT_THE_VALUE_GIVEN_ONE_SEASON = "ad4dad1d9758e343329a7b9b90fbdb46"   # B01 re-pin (B11 lane A, both commits rebased): was 5ab73af2...; RE-PINNED at the B10-13 pin commit (P15): was 180c6863...; the batch's items' own commit bodies report this 1-season reading. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+AT_THE_VALUE_GIVEN_ONE_SEASON = "94a2c8c886293896852900766bdb455f"   # B01a.99 re-pin (every person's attributes are drawn): was ad4dad1d...; B01 re-pin (B11 lane A, both commits rebased): was 5ab73af2...; RE-PINNED at the B10-13 pin commit (P15): was 180c6863...; the batch's items' own commit bodies report this 1-season reading. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 
 
 def _tell(regime: float, refraction: float = 0.0, held: int = HELD_CONF, conviction=None,
@@ -216,7 +216,7 @@ def test_a_person_absent_from_the_world_reads_zero():
 def test_the_realm_reaches_commensurate_at_the_value_given_and_never_at_the_control(monkeypatch):
     """THE CONTROL AND ITS LIVE ARM, on the realm, seed 0, one season. `build_realm(0)` hashes to the base reading.
     At `regime_gain` 0 (set explicitly) `commensurate` is replaced by a raise and the run completes at the
-    one-season base hash `d796fd5e...` (`test_strife_flows.BASE_ONE_SEASON`; B01 re-pin: was `25660615...`; B10-13 pin commit: was `d4c83c8c...`): no told deposit read an affiliation.
+    one-season base hash `5cf205c0...` (`test_strife_flows.BASE_ONE_SEASON`; B01a.99 re-pin: was `d796fd5e...`; B01 re-pin: was `25660615...`; B10-13 pin commit: was `d4c83c8c...`): no told deposit read an affiliation.
     At 0.5 the same run calls `commensurate` (counted, through the real function) and ends elsewhere, so the realm
     does reach the told site and the control above was not vacuous. Seeds 1 and 2, and three seasons, are the
     commit's scratch readings (H-275)."""

@@ -853,8 +853,8 @@ def test_control_the_realm_hash_holds_and_the_reading_is_the_same_read_twice():
 
 #: Read on the base tree @60c27d08 (before CR-78) and again with the switch off: `build_realm(0).content_hash()`, and
 #: the same realm after one season (`populated.run(seasons=1)`; CP-T03-08's `POST_ITEM[0]`).
-BASE_BUILD = "8480ad84c25cb665fb41dd2c57a53c15"   # B01 re-pin (B11 lane A, both commits rebased): was 600d8b27...
-BASE_ONE_SEASON = "d796fd5e099aecdb52545dcc8c55ac51"   # B01 re-pin (B11 lane A, both commits rebased): was 25660615...; RE-PINNED at the B10-13 pin commit (P15; same value as `test_season_weather.BASE_HASHES[1]`): was d4c83c8c... (CP-T03-08's `POST_ITEM[0]`). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+BASE_BUILD = "03a79b0f76b7a91f09babd18f246be88"   # B01a.99 re-pin (every person's attributes are drawn): was 8480ad84...; B01 re-pin (B11 lane A, both commits rebased): was 600d8b27...
+BASE_ONE_SEASON = "5cf205c09f80fd63937d82fc363c2f8a"   # B01a.99 re-pin (every person's attributes are drawn): was d796fd5e...; B01 re-pin (B11 lane A, both commits rebased): was 25660615...; RE-PINNED at the B10-13 pin commit (P15; same value as `test_season_weather.BASE_HASHES[1]`): was d4c83c8c... (CP-T03-08's `POST_ITEM[0]`). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 STAMP = "stamp_flow_stakes"
 
 

@@ -131,7 +131,7 @@ def test_falsifier_arms_5_rolls_pool_11_and_is_attacked_at_ob_2_5_through_the_se
     w.persons[a].capability = {**(w.persons[a].capability or {}), KEY: 5}
     assert KEY not in (w.persons[b].capability or {})
     inp = C.combat_input(w, [a, b], verb)
-    assert inp.faculties == (5, 2), inp.faculties
+    assert inp.faculties == (5, 1), inp.faculties
     mod, attr = entry_target("the body")[1].split(":", 1)
     entry = getattr(importlib.import_module(mod), attr)
     seen = _spy(monkeypatch)
@@ -139,16 +139,20 @@ def test_falsifier_arms_5_rolls_pool_11_and_is_attacked_at_ob_2_5_through_the_se
     for s in range(6):
         entry(inp, random.Random(s))
         checked += 1
-    assert set(seen) == {(11, 1.0), (8, 2.5)}, dict(seen)
+    # B01a.99 (every person's attributes are drawn, a population change): b's drawn attribute reads 1, not `pool_default` 2, so
+    # a's roll meets ob 0.5 (was 1.0) and b's own pool is 7 (was 8); a's pool 11 and the ob 2.5 against a (key 5) are unmoved.
+    assert set(seen) == {(11, 0.5), (7, 2.5)}, dict(seen)
     assert checked == 6
 
 
 def test_control_with_nobody_holding_arms_every_season_roll_still_reads_pool_8_against_ob_1(monkeypatch, _engine):
-    """The item moves formation, not a roll: seed 1's season fights all roll CR-85's (8, 1.0)."""
+    """The item moves formation, not a roll: seed 1's season fights roll no `arms` key (nobody holds one). B01a.99 (every
+    person's attributes are drawn, a population change): the rolls were all CR-85's (8, 1.0) at `pool_default`; they now read
+    the persons' drawn attributes, (pool, ob) = (9, 2.5) x2, (11, 2.0), (11, 1.5), read at PYTHONHASHSEED=0."""
     seen = _spy(monkeypatch)
     w = build_realm(1)
     run(1, 1, w=w)
-    assert seen and set(seen) == {(8, 1.0)}, dict(seen)
+    assert seen and set(seen) == {(9, 2.5), (11, 2.0), (11, 1.5)}, dict(seen)
 
 
 def test_control_with_the_item_off_the_same_holder_rolls_the_fallback(monkeypatch, _engine):
