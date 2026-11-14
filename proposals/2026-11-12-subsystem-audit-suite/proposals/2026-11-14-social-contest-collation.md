@@ -166,7 +166,7 @@ is a receiver's competence at weighing told claims, shipped at gain 0 (`decision
 | B20 | **Spirit is its own group, one key** `attr.spirit.will` | JORDAN (R5 as amended by J-12) | no (`references/descriptor_registry.yaml:47` reads `attr.mind.will`) | B01a.06 — but it also adds `attr.spirit.threadsensitivity` (eleven keys), which J-12 drops (`wp part3.md:51, :161-167`) | V12 (mismatched: §4) |
 | B21 | **P4's four faculties** over attributes: eloquence (Charisma .7, Bonds .3), reasoning (Reason .6, Focus .4), reading (Attunement 1.0), composure (Spirit .7, Focus .3); each row weighs the faculties per role and rite (accusatorial prover: eloquence .4, reasoning .4, composure .2; inquisitorial respondent: composure .7, reasoning .3); a written petition weighs no eloquence | PROPOSAL · P4 §3.2 `:80-136` | no | not carried: v12 cites P4 only for B24a items (`wp part28_cont.md`); B05.25 averages per verb instead | NONE — the nearest earlier design to R2 |
 | B22 | **Capability within a contest** = attribute + title + office + faction, according to venue and contest type; office both licenses acts and carries weight, venue-keyed; office weight affects roll and obstacle; Presence is the attribute part | JORDAN · R-31, R-38, R-41 (PK `:60, :67, :70`) | LIVE: office modifier no; attribute one per verb | office modifier as a level (B05.20, A-12); attributes per verb (B05.25); title, faction and venue-keying: no | V12 (partial) |
-| B23 | **The pool's scale**: across capability, argument, evidence, leverage, standing it should be very hard to hold less than 5D | JORDAN · R-40 (PK `:69`) | no (`pool_default` 2) | base and floor five (A-6; B05.08) `[UNVERIFIED: B05.08's shipped floor]` | V12 |
+| B23 | **The pool's scale**: across capability, argument, evidence, leverage, standing it should be very hard to hold less than 5D | JORDAN · R-40 (PK `:69`) | no (`pool_default` 2) | base and floor five (A-6): `pool_floor` live 5, `pool_add` live 6, both at control 0 until set (B05.08, `wp part8.md:235-251`) | V12 |
 | B24 | **The kernel's binding**: `Pool.size = max(5, 2·faculty + 3)`; `faculty` the only attribute that reaches resolution | CODE-COMMENT · P4 `:88-90` citing `K/resolver.py:184-195`, `K/primitives.py:208-211` | KERNEL | deleted (B24.33) | NONE |
 | B25 | **Reductive audit**: Cognition, Charisma, Attunement, Focus, Spirit, Recall all "Flavour"; "either the one line ships … or the §3 attribute table is deleted" | AUDIT · RED §7 `:195-213` | — | — | reference (§6) |
 | B26 | **The nine capacities are refused as stats**: they become requirements on steps (acts, held claims, or a dimension of capability); "reading the room is four different things and not a stat" | PROPOSAL · PROC `03_PARAMETERS.md` B.2 `:84-108`, Fig. 17 row `:41` | — | — | reference; against R1 (§6) |
@@ -185,12 +185,12 @@ is a receiver's competence at weighing told claims, shipped at gain 0 (`decision
 | C06 | A **petition carried** to a named room by a draw; forgiveness; a challenge naming its stakes; a commitment's band its strength | PROPOSAL · `14_VERBS_SOCIAL1_D_grievance_and_settlement.md` | LIVE rows, undrawn | B28.04-B28.08 | V12 |
 | C07 | A document reaches its addressee; an order obeyed, botched, evaded or defied by a draw; a covenant in force while both keep their word | PROPOSAL · `14_VERBS_SOCIAL1_B_documents_and_obedience.md` | LIVE rows | B28.02, B28.03, B28.09 | V12 |
 | C08 | **A lost argument moves the arguer**; a half-landed one is called held; the size of the backward step a setting | PROPOSAL · `16_PESSIMIST_SC_D_an_argument_moves_someone.md` | LIVE `person_q.argued_pursuits` (`queries/person_q.py:723`) moves the hearer only | B27.05-B27.08 | BOTH |
-| C09 | **Which ground moves whom**: four hearer traits (moved by evidence, consequence, authority, solidarity) each read only when its condition holds | PROPOSAL · `02_CHAR_which_ground_moves_whom.md` | traits seated at B04.07 `[UNVERIFIED: landed?]` | B24.35 | V12 — parallels the v30 armature axes (E05) |
+| C09 | **Which ground moves whom**: four hearer traits (moved by evidence, consequence, authority, solidarity) each read only when its condition holds | PROPOSAL · `02_CHAR_which_ground_moves_whom.md` | no (`Person.traits` is v12's B04.07; grep of `engine/season/data/cast.py` for `traits`: none) | B04.07 (seating), B24.35 (the four rows) | V12 — parallels the v30 armature axes (E05) |
 | C10 | **The persuasion terms**: the teller's roll by his reason, attunement, knowledge of the other person and of plausibility; the hearer's side by faction, opinion of the teller, fit with his understanding, benefit to him, his pursuits and axes, the teller's seat's rung | JORDAN (2026-11-13) · `2026-11-13-verb-governing-attributes.md` §2.6 `:201-220` | partial readers exist (that table's third column) | B28.34 (design), B28.35 (build, at control) | V12 |
 | C11 | **The self-plea is opposed** by the accuser, else the bench's presiding holder | PROPOSAL · same file §2.7 `:222-231` | LIVE: nobody opposes a self-subject (`sigma.py:220-224`) | B28.35 | V12 |
 | C12 | **Frank speech's four licensing conditions** (goodwill shown first, private, unrepeated, no visible advantage), a demote-only veto on `speak` whose failures are heard as attack, standing contest, characterisation, self-interest; an office waives it | PROPOSAL · PROC `03_PARAMETERS.md` B.4 `:137-198`; study Fig. 26 | no | no | NONE |
 | C13 | **Speech kinds**: the charge ladder's six (deny, cite incompatible, impugn motive, concede fact, concede harm, hand the error back); ten promised; each priced, never refused; **a speech kind chooses its faculty** (plain argument → reasoning; hand the error back → eloquence) | PROPOSAL · `arrangements.yaml:57-97`; PROC `19_PLAN.md` step 7 `[UNVERIFIED]`; P4 §4.7 `:437-456` | LIVE loaded; no runtime reader (grep: only `data/arrangements.py`) | held to `ladder_rungs` (B24.36); the faculty per kind: no | V12 (roster only) |
-| C14 | **The approach** on questioning (`press`) and its cost | PROPOSAL · `19_LACUNA_questioning_has_an_approach_and_a_cost.md`; OBS §3 `approach` | no | B25 (FI questioning) `[UNVERIFIED: item]` | V12 |
+| C14 | **The approach** on questioning (`press`) and its cost | PROPOSAL · `19_LACUNA_questioning_has_an_approach_and_a_cost.md`; OBS §3 `approach` | no | `interview` as a draw to engage, then the answer (B25.14); the `approach` leverage source's own item `[UNVERIFIED: not found by heading in B25]` | V12 (partial) |
 | C15 | **Mass-battle rally** (an Attunement-based action) | RATIFIED-era backlog · v30 §12 `:711` ("belongs in mass_battle_v3"); v2 `:409` | no | no | NONE |
 | C16 | **Scene access**: occupancy, precedence by rung of office, appointments, the petition that waits and intensifies | JORDAN (A-63, A-64) + PROPOSAL · `28_CORE_scene_access_A/B/C` | no | B28.16-B28.30 | V12 |
 
@@ -218,4 +218,117 @@ is a receiver's competence at weighing told claims, shipped at gain 0 (`decision
 | D18 | **Chamber violence** forfeits for the violent party; an outside catastrophe postpones | RATIFIED (archived) · v30 §9.6 `:587`; v2 §9.6 `:327-328` | no | no | NONE (meets R7: a fight in the room) |
 | D19 | **Adjudicator's response to thread use**, by the adjudicator's Truth (corrupted, irregular, noted, nothing); a visibility gate | RATIFIED (archived) · v30 §9.4b `:567-580` (ED-667) | no | no | NONE |
 | D20 | **Kernel retirement**: the ten checks that the kernel's mechanisms arrived in the hearing, then deletion | PROPOSAL · `05_SC_sc05_kernel_disposition_B.md` | KERNEL present | B24.32, B24.33 | V12 |
+
+### 2.E Exchanges: one roll or a run
+
+| # | element | origin · source | in code? | in v12? (handle) | status |
+|---|---|---|---|---|---|
+| E01 | **The exchange**: Appraise → choose a style (genre × orientation) → corroborate → argue (both roll; first speaker declares first) → resolve by interaction (CLASH, REINFORCE, CROSS, TIE; an Obscuring win plants a Doubt Marker) → forfeit options (Regroup, Concede a Point) → strain, Face, Concentration | RATIFIED (archived) · v30 §4 `:152-272` | KERNEL `K/resolver.py`, `K/dictionaries.py:270-335` | no | NONE |
+| E02 | **One draw per act** (pool against obstacle, `degree_from_net` to four bands; Partial writes a docket matter) | JORDAN (R-5, R-6, R-17, R-22) · PK `:34-35, :46, :51` | LIVE `modules/social_contest/roll.py:197-206` | kept as the closing draw (B24.06) | BOTH |
+| E03 | **A run of exchanges with one closing draw** (a sitting's moves, each rolled move its own draw, the board entering the close as levels) | PROPOSAL · HEAR_B `:139-149` | no | B24.06, B24.07 (`sitting_exchanges` 0 = control), B24.37 (leaves 0) | V12 |
+| E04 | **Serial acts, one draw each**, as the proceedings design's shape | PROPOSAL (ratified as intent) · PROC; PK `:401` | no | superseded by E03 | — |
+| E05 | **Adjudicator armature**: a hidden vector over Evidence, Consequence, Authority, Insinuation; a Style's alignment with it enters as continuous σ-leverage, never a die; gated off where the adjudicator is the opponent | JORDAN (Gate C, 2026-07-02; ED-1062) · v30 §4 Step 3 `:182-188` | KERNEL `K/armature.py:191-451` | no; the hearer-trait rows (B24.35) are the nearest successor | NONE (KERNEL) |
+| E06 | **Contest styles** (Precedent, Suppression, Vision, Insinuation) as genre × orientation; **Ciceronian stasis × genre** (only FACT sets Memory primary; only CONSEQUENCE/FEASIBILITY sets Projection; stasis only moves up) | RATIFIED (archived) · v30 §2 Step 2 `:56-68`, §8 CR4 `:519-520` | KERNEL `K/dictionaries.py:76-136`, `K/rhetoric.py:91-230` | no | NONE |
+| E07 | **Doubt Marker**, **Terminal Doubt** (ED-1060, open), **CR5 self-Face backfire** on a failed Obscuring move | RATIFIED/OPEN (archived) · v30 `:220-234` | KERNEL `K/dictionaries.py:175-236`, `K/rhetoric.py:413` | no | NONE |
+| E08 | **Citation bonus** (+2D a named verifiable source; one use per source in a Grand Contest); **Momentum** spent as successes; a **combined cap** on non-attribute bonuses (KU-1) | RATIFIED (archived) · v30 §4 Step 3 `:177-180`, `:97` | KERNEL partial | a citing `speak` (B24.25); the soft ceiling on all leverage (B05.52-B05.55) | V12 (different form) |
+| E09 | **The plea's concession reward through the obstacle** (deny is not best alone) | PROPOSAL · CR-62; P4 §4.4 `:387-409` | no | B24a.06 | V12 |
+| E10 | **Chain contests**: a Compromise reopens next season from the last position; deadlock; three compromises make a cold equilibrium | RATIFIED (archived) · v30 §6.3 `:376-391` | no (grep of `K/resolver.py` for `chain`: none) | no; A-80 (entrenchment must move the world) is the ruling it would serve | NONE |
+| E11 | **The parts of a speech as stages** (exordium moves reception's goodwill, attention, receptiveness; narratio a ledger claim; partitio declares proofs, undeclared ones price worse; confirmatio/refutatio the opposed roll; peroratio a last high-variance move) | RESEARCH · `research/social_contest_procedures/03_persuasion_mechanisms.md` §1.2 `:21-37` | no | no | NONE |
+
+### 2.F Topic and derailment (R1 Focus)
+
+| # | element | origin · source | in code? | in v12? (handle) | status |
+|---|---|---|---|---|---|
+| F01 | **Focus as staying on topic**, not pulled from the argument into the irrelevant | JORDAN (R1) | no | no item keys a person's Focus to topic | NONE |
+| F02 | **`irrelevance` fault**: an exhibit presented on another rung stands at half; the rite may set a strike count after which off-rung items do not enter | PROPOSAL · HEAR_B `:119`, `:128-137` | no | B24.03, B24.06 | V12 — a board condition; reads no attribute |
+| F03 | **Evasion strikes**: deflecting the question is a point of defeat (one strike before an inquisitor or a secret council; disabled before a sovereign) | CODE-COMMENT · `K/modes.py:181-198, :241-256` | KERNEL | no | NONE (KERNEL) |
+| F04 | **Nyāya defeat conditions** (*nigrahasthāna*, 22, adjudicated against a checklist; *chala*, *jāti*, *hetvābhāsa*) | RESEARCH · `research/rhetoric_oratory_contest/rhetoric_oratory_contest_research.md` §5.1 `:202-208`; v30 CR5 `:230` | KERNEL `DefeatCatalogue` (`K/primitives.py:262`) | no | NONE |
+| F05 | **Conduct under attack**: answering an immaterial attack concedes its relevance (Q2); faults of "temper, answering more than was asked, being drawn off the matter" (Quintilian VI.4) | RESEARCH · PROC `source/09-figures.md:344-422` (Fig. 9) | no | no | NONE |
+| F06 | **Attention under load** (a double-absent capacity: what the room needs at the two moments attention is most committed elsewhere) | RESEARCH · PROC `source/09-figures.md:527-585` (Fig. 12) | no | no | NONE |
+| F07 | **Undeclared proofs price worse** (*partitio*; a late addition "faulty and unseemly", DI I.33) | RESEARCH · `03_persuasion_mechanisms.md:32-35` | no | no | NONE |
+| F08 | **Concentration** as a Focus-built stamina for the contest | RATIFIED (archived) · v30 `:267-270` | KERNEL attribute-free | no | NONE |
+
+### 2.G Rattle and composure (R1 Attunement, Grace, Will)
+
+| # | element | origin · source | in code? | in v12? (handle) | status |
+|---|---|---|---|---|---|
+| G01 | **Strain → Face → Rattled**: strain accumulates against Face; at threshold a Rattled mark (−1D per level, cumulative), cleared one per scene of rest; Face restored at scene change; attire and regalia add Face | RATIFIED (archived) · v30 §4 Step 6 `:240-258` | KERNEL: Face is the kernel's Standing, monotone up; no strain channel ("unimplemented in code", `:525-528`) | no | NONE |
+| G02 | **Composure = Charisma + 6**; two Rattled marks = socially incapacitated; a Knot may absorb composure damage | RATIFIED then superseded · v2 §4 Step 6 `:213-223`; CR3 retired Composure as the contest tracker (v30 `:242`, `:530-535`) | no | no | superseded |
+| G03 | **Spent** (Concentration 0: −2D, opponent +1D) and **Contest Fatigue** after a total defeat (−1D next social roll) | RATIFIED (archived) · v30 `:268-270`, `:310` | KERNEL `[UNVERIFIED]` | no | NONE |
+| G04 | **Grace is composure** (calm under pressure, nerve) | JORDAN · ED-IN-0328; registry `:53` | no reader | `lie` names Grace as "the liar's nerve" (B05.25 cell, `2026-11-13…:117`) | V12 (one verb) |
+| G05 | **Spirit tolerates harm, strain and stress** | JORDAN · AR-44 | no reader | as resistance to influence only (B05.25 `opposed_attribute`) | V12 (partial) |
+| G06 | R1: **what is most likely to rattle the opponent** (Attunement) and **not getting rattled in the first place** (Will) | JORDAN (R1) | no | no rattle state exists in v12 | NONE |
+| G07 | **Sitting-local penalties**: `silence` two levels against the silent side; a failed `impugn` a level against the mover for the sitting; a fault's levels against the side at fault | PROPOSAL · HEAR_B `:122-137` | no | B24.06 | V12 — the only rattle-like state planned |
+| G08 | **Control of display** under attack ("voluntary control of display — withholding, and releasing deliberately. Not low reactivity"); **anger** is expensive and informational (counterparts concede more to anger; power moderates it) | RESEARCH · PROC `source/09-figures.md:405-421` | no | no | NONE |
+| G09 | **Fears are leverage that can be pressed**; "a cornered man breaks toward the feared thing"; "pressure is the gap" | JORDAN (R-19, ED-SC-0035) · PK `:48` | no (grep of `engine/season/**/*.py` for `fear`, tests excluded: one prose hit, `decision/choose.py:412`) | no (grep of the SC and FI batch parts, `_part22` to `_part35`, for `fear`: none) | NONE |
+| G10 | **How near the opponent is to breaking** (Attunement) | JORDAN · AR-42 | no | `interrogate` names Attunement on that ground (B05.25 cell, `2026-11-13…:127`) | V12 (one verb) |
+
+### 2.H Venue and occasion (R1 Grace; R4 venue)
+
+| # | element | origin · source | in code? | in v12? (handle) | status |
+|---|---|---|---|---|---|
+| H01 | **Grace as acting correctly for the venue and occasion**; venues prioritise it; a parliament penalises its lack | JORDAN (R1; AR-36, AR-36a) | no | B24.41 (3) venue standard (design); `standard` term (B05.21, step 0) | V12 (partial, unkeyed to Grace) |
+| H02 | **`standard`: what the room demands**, the docketed arrangement row's level, an obstacle term on acts an audience hears | PROPOSAL · OBS §2 member 3 `:138`; `05_SC_obstacle_difficulty_and_modifiers_B.md` | no (`arrangements.yaml` rows carry no `standard:`) | B05.21; the two COL_C rows carry `standard:` (B33.18) | V12 |
+| H03 | **The register matrix**: no safe manner; each manner is heard as its misreading (fluent → insincere; blunt → unsystematic; erudite → boastful …); the capacity is knowing which misreading one's own manner invites | RESEARCH · PROC `source/09-figures.md:317-342` (Fig. 8, Han Feizi 3) | no; the `registers[]` key was deleted (`arrangements.yaml:8-12`) | no | NONE |
+| H04 | **Decorum beats utility** (Quintilian XI.1.8-11: expediency must yield to what is becoming); the *vir bonus*: perceived goodness is the strongest influence | RESEARCH · `03_persuasion_mechanisms.md` §1.3 `:39-50` | no | no | NONE |
+| H05 | **Register checked against decorum**: the wrong register for the occasion succeeds at nothing and costs ethos | AUDIT-SOURCE · `.audit/2026-08-06-social-contest-three-lens-audit/sources/04_negotiation_and_persuasion.md` §4 N11 `:282-289` | no | no (rejected as a ladder: `03_persuasion_documents_adjudication.md:255-257`) | NONE |
+| H06 | **Occasion-typed speech templates** (taking office, welcoming dignitaries, swearing peace, pleading a cause) | RESEARCH · `rhetoric_oratory_contest_research.md` §6.2 `:255-257` | no | no | NONE |
+| H07 | **The venue is a rung, and the rung ordinal is the parameter**; people travel to it | PROPOSAL · PROC `03_PARAMETERS.md` C.1 `:327-391`; JORDAN R-27 ("a rung has never been a place") | LIVE `venue_min_rank` loaded, unread | `[UNVERIFIED: readers in B32/B33/B40]` | partial |
+| H08 | **Buildings** (court, chancery, cathedral, chapter house, guildhall, moot hall, keep…) with the institution each serves | CODE (authored for play, ED-IN-0223) · `engine/season/venues.yaml:64-119` | LIVE for seating people only | no proceeding reads a building | LIVE (no rhetorical role) |
+| H09 | **Precedence and seating settled before speech** (Kautilya; Liudprand) | RESEARCH · PK `:390` | no | precedence by rung of office on one person's lap (B28.21, A-64) | V12 (partial) |
+| H10 | **The rhythm of an occasion**: a proceeding that never leaves its opening phase fails whatever its parts | RESEARCH · PROC `source/09-figures.md:886-891` (Fig. 17 B3) | no | no | NONE |
+| H11 | **`ceremony` and `office` as interpositions**; an office waives frank speech's conditions | PROPOSAL · `arrangements.yaml:281`; PROC `03_PARAMETERS.md:149-156` | LIVE loaded, unread | no | NONE |
+
+### 2.I Audience types (R4)
+
+| # | element | origin · source | in code? | in v12? (handle) | status |
+|---|---|---|---|---|---|
+| I01 | **The audience as a parameter of the proceeding** | JORDAN (R4) | no | no audience typing | NONE |
+| I02 | **A crowd as an adjudicator type** (reacts to delivery and force) | RATIFIED (archived) · v30 §2 Step 1 `:43` | KERNEL (a crowd is a `Panel`, `K/modes.py:440-447`) | no | NONE (KERNEL) |
+| I03 | **The room's reception** (the bench's disposition toward the speaker) as an obstacle term; its favourable half as leverage | PROPOSAL (SC-02) · OBS §2 member 8, §3 `favour` | LIVE `reception_gain · reception` subtracted (`roll.py:175`; `sigma.py:215-218`) | re-sourced from commits (B24.02); favour as leverage, hostile room as a term (B05.17) | BOTH |
+| I04 | **Floor**: open, closed, admitted | PROPOSAL · PROC `03_PARAMETERS.md` Part D | LIVE loaded, unread | `[UNVERIFIED: readers in B32/B33]` | partial |
+| I05 | **Two reaches**: who witnessed the arguing and who learns the ruling | JORDAN (2026-09-06) · PROC `03_PARAMETERS.md` B.7 `:249-293` | LIVE WITNESS deposits to those present; `disposal_reach` unread | `[UNVERIFIED]` | partial |
+| I06 | **Route by audience**: a high-stake bench weighs proofs, a distracted crowd weighs cues (rank, count); change made at high elaboration lasts | RESEARCH · `03_persuasion_mechanisms.md` §4 `:137`; `.audit/…/sources/04_negotiation_and_persuasion.md` N3 `:230-238` | no | no | NONE |
+| I07 | **Audience type as a prior**: character by age and fortune (youth, age, prime; birth, wealth, power), overridden by what the speaker learns | RESEARCH · `03_persuasion_mechanisms.md` §2.5 `:107-115` | no | no | NONE |
+| I08 | **Audience triage before speaking**: the assembly learned or ignorant, each friendly, indifferent or hostile; the opponent superior, equal or inferior; strategy conditioned on the triage | RESEARCH · `rhetoric_oratory_contest_research.md` §5.2 `:210-217` (Caraka) | no | no | NONE |
+| I09 | **A body as factions plus indeterminates** (indeterminates courted one by one, cannot win alone) | AUDIT-SOURCE · `.audit/…/sources/04_negotiation_and_persuasion.md` N9 `:268-271` | no | bench seats with `lean` (B24.11) | V12 (partial) |
+| I10 | **Social proof** as a count over `commit` edges, never a stored popularity | RESEARCH · `03_persuasion_mechanisms.md` §3 `:125` | no | `lean` per commit for bench seats (B24.11); the `dissent` term over the actor's own ledger (OBS member 13) `[UNVERIFIED: its item]` | V12 (partial) |
+| I11 | **Rooms an act is heard by** (`audience_of`; `seat_body`, `residents`) | PROPOSAL · `U5c_VERBS_residue_and_governance_owner.md` §2 | no | B07.04 | V12 |
+| I12 | **A crowd that decides nothing** (acclamation) | PROPOSAL · BYZ_E | no | B32.15 | V12 |
+| I13 | **Preaching**: mass persuasion under borrowed authority (theme, division, amplification) | RESEARCH · `rhetoric_oratory_contest_research.md` §6.3 `:259-261` | no | no | NONE — nearest to "rallying a crowd" in the research |
+| I14 | **Display** (K7): reception before a room with no formal power sets standing; a standing is forbidden as a stake (R-21) | PROPOSAL · PK §3.1 K7 `:308-312` | no | `acclamation` (B32.15) only | V12 (partial) |
+
+### 2.J Verdict systems (R4)
+
+| # | element | origin · source | in code? | in v12? (handle) | status |
+|---|---|---|---|---|---|
+| J01 | **Persuasion Track bands**; **exchange majority** where there is no tracker; a tied majority stalls with consequences | RATIFIED (archived) · v30 §2 Step 4 `:103`, §6 `:286-288` | KERNEL | no | NONE |
+| J02 | **Win conditions**: `ProofBar`, `ThresholdRace`, `TallyAtClose`, `GraceThreshold`, `VoteAtClose` (jurors, noise, sharpness) | CODE-COMMENT · `K/modes.py:66-85, :121-140, :254` | KERNEL | no | NONE (KERNEL) |
+| J03 | **One draw → four bands** by `degree_from_net`, the single owner | JORDAN (R-5) | LIVE | kept (B24.06) | BOTH |
+| J04 | **A declared row needs `quorum` live commits** before `determine` forms | PROPOSAL (v11 CR-34) | LIVE `world_q.declared_votes` (`:737`), `arrangements.yaml:265-274` | replaced: "the count is no longer a gate; it is the odds" (B24.11 step 4) | BOTH |
+| J05 | **Each seat balloted**: Success for, Failure against, Partial abstains; veto under quorum demotes to Failure | JORDAN (A-14) + PROPOSAL · PRES §6 | no | B24.06, B24.11 | V12 |
+| J06 | **A count licenses or blocks the owner's own act** (consent, not command; no declaring verb, no stored tally) | JORDAN (R-29) · PK `:58` | no | B24a.01 | V12 |
+| J07 | **Mutual agreement** (both commit) or impasse; an undecided outcome is legitimate | JORDAN (R-1) + PROPOSAL | LIVE row; cannot complete (H-229) | B24.30, B24.31 | V12 |
+| J08 | **Lot**; **conclave and graded count** | PROPOSAL · VEN_C; PAP_B | no | B32.30; B32.20 | V12 |
+| J09 | **Many matters, a vector of verdicts** ("win on one thing but partially lose three items and lose completely on five") | JORDAN (R-11) · PK `:40` | the per-matter ceiling only (H-213, `roll.py:107-110`) | the bundle's design (B27.14) | V12 (design) |
+| J10 | **Mistrial** (a voided stage); **appeal above on new grounds** | PROPOSAL · `19_LACUNA_verdict_ladder_and_reversal.md` | no | B27.12, B27.13 | V12 |
+| J11 | **Consensus, then lot, then majority** (the Althing cascade; 3-mark fines for procedural failure) | RESEARCH · PK `:385` | no | no | NONE |
+| J12 | **Deliberation dynamics**: the first ballot predicts; majorities press normatively and informationally, minorities informationally only; movement accelerates; the first crossing to the minority is the one reversal | AUDIT-SOURCE · `.audit/…/sources/04_negotiation_and_persuasion.md` N10 `:273-280`; ranked first in `03_persuasion_documents_adjudication.md:149-153` | no | no: each seat draws once, independently (B24.11) | NONE |
+| J13 | **Story model**: jurors build a causal narrative and accept by coverage and coherence; proof order shifts verdicts (78 % against 31 % in the 1988 mock-juror study, secondary) | RESEARCH · `03_persuasion_mechanisms.md` §4 `:139` | no | no | NONE |
+| J14 | **Proof regimes**: two witnesses a full proof, confession "queen of proofs"; ordeal refused | RESEARCH · PK `:272`, `:379` | no | proof kinds and corroboration cap (B24.17); a withheld confession is no proof (B24.23); a confession on file by degree (B25.10) | V12 (partial) |
+| J15 | **Thirteen decision-procedure families** (sortition, the athwart pair, council deliberation, assembly democracy, consensus, parliaments and estates, designated electors, succession, competitive examination …), each mapped to a `disposal` value | RESEARCH · `research/social_contest_procedures/04_decision_procedure_catalog.md` §2-§4 `:27-146` | no | no | NONE |
+| J16 | **`records_dissent`** (whether a division is recorded; one key for the old `verdict_reasons`) | PROPOSAL · `arrangements.yaml:8-15` | LIVE loaded, unread | `[UNVERIFIED]` | partial |
+
+### 2.K What a contest leaves behind
+
+| # | element | origin · source | in code? | in v12? (handle) | status |
+|---|---|---|---|---|---|
+| K01 | **Obligations**: a decisive win binds the loser to a verifiable commitment for a term; violation costs; an NPC faction's priority tree is blocked from violating it; Wager obligations; interruption by death or collapse | RATIFIED (archived) · v30 §6.1 `:314-366`, §6.1.1 `:342-360` | LIVE `oblige` as a disposal (`arrangements.yaml:118, :306`) | each party's `oblige` by his own act (B24.31); what a sentence shares with a job (B27.26) | BOTH (partial) |
+| K02 | **Domain echo** by winning genre (Memory → Mandate; Projection → +1D first Domain Action), magnitude from the band | JORDAN (ED-SC-0002) · v30 §6 `:298-308` | no | no | NONE |
+| K03 | **Thread co-movement** by winning genre; **practitioner weaving** in a contest (+1D per 30 thread sensitivity; the Church may file on observation) | RATIFIED (archived) · v30 §6 `:290-295`, §9.3 `:559-560` | no | no | NONE (meets R5: `prac.thread_sensitivity` is the operand) |
+| K04 | **A Conviction Scar** reached by an argument, signalled to the player | RATIFIED (archived) · v30 §6.2 `:368-372` | `[UNVERIFIED]` | a scar is a wound (B10.07, `wp part12.md:244`); the argument-to-scar route and its signal: `[UNVERIFIED]` | not established |
+| K05 | **Opinion drift is world impact** ("even if it is just a change in opinions") | JORDAN (R-26) | LIVE `argued_pursuits` on the hearer | the arguer moved too (B27.05-B27.08) | BOTH |
+| K06 | **The ruling is a durable object** (moved, copied, forged, seized, burned) | JORDAN (S-5, 2026-09-06) · PK `:84` | no (a contest leaves stat deltas or claims) | the case file as a Record (B24a.05); a vetoed motion a citable record (B27.21) | V12 |
+| K07 | **Every scene writes** | JORDAN (A-81) | partial | B24.38 | V12 |
+| K08 | **Attribution**: was the decision attributed to the persuader (decays, accrues a grievance) or self-attributed (durable, no resentment) | AUDIT-SOURCE · `.audit/…/sources/05_persuasion_in_the_era_sources.md` N16 `:155-159`; ranked second in `03_persuasion_documents_adjudication.md:149-155` | no | no (grep of every v12 part for `N16`, `self-attributed`: none) | NONE |
 
