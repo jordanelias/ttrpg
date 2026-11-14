@@ -202,7 +202,7 @@ rows:
   - id: R-01
     statement: "decisions must propagate"
     status: met
-    measure: "python -m engine.season.harness.corpus_run  # check R3 rows + the planted control"
+    measure: "python -m engine.season.harness.storybar --remove --base-seed 0 --seasons 2  # second measure: `python -m engine.season.harness.corpus_run`, check R3 rows + the planted control"
     conjuncts: []
     blocks: [IN-10, IN-11, IN-13, H-116, IN-50]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1: regard is computed at read; the cross-person half is IN-10's, IN-11's, IN-13's); H-111 is FI-01's deposit half
@@ -210,7 +210,7 @@ rows:
   - id: R-02
     statement: "decisions affect subsequent decisions"
     status: met
-    measure: "python proposals/2026-09-04-degree-sweep/wd_collect.py  # after wd_chunk.py x4 per arm per cell over the 143-case corpus (slices 0 36/36 72/72 108/108 143) -- U6's command, workplans/valoria_master_workplan_v11_part2.md §`11`"
+    measure: "python -m engine.season.harness.storybar --remove --base-seed 0 --seasons 2  # second measure: `python -m engine.season.harness.corpus_run`, check R3 rows + the planted control"
     conjuncts: []
     blocks: []
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1); H-111 is FI-01's deposit half
