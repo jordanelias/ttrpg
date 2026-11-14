@@ -59,10 +59,11 @@ from ..gaps import Forbidden, InstrumentDefect, NoProducer, ShapeGap, Unowned, U
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..loop.effects import EFFECTS
 from ..queries.world_q import RESIDE_KIND, questions_for
-from ..state.carriers import Act, Event, Office, Person, Proposition, Rung, Site, Tenure
+from ..state.carriers import (Act, Event, Office, Person, Proposition, Rung, Site, Tenure,
+                              generated_attributes)
 from ..state.ids import H, ROOT, draw_factory
 from ..state.world import World
-from ..data import files
+from ..data import cast, files
 from . import probes as P
 from . import run_cases as R
 from .run_cases import seed_pursuits, wants_of
@@ -508,7 +509,12 @@ def build_at(case: dict, seed: int = 0) -> World:
     by_pid = dict(zip(pids, seated))      # the entry each seated person stands for; the floor has none
     for pid in pids:
         entry = by_pid.get(pid)
-        w.persons[pid] = Person(pid, str(entry["who"]) if entry else pid)
+        # B01a.03: A SEATED PERSON HOLDS A DRAWN SHEET (`state/carriers.py::generated_attributes`, one keyed draw per
+        # person and attribute, the same owner `build_realm` seats), an entry that authors `stats:` replacing its own
+        # keys only (`data/cast.py::attributes_of`; none does today, so it reads `{}`).
+        w.persons[pid] = Person(pid, str(entry["who"]) if entry else pid,
+                                attributes={**generated_attributes(w.world_seed, pid, w.fixtures.get("generated_attribute_range")),
+                                            **cast.attributes_of(entry or {})})
         # ⚠ A PERSON IS THE BOTTOM RUNG OF THE LADDER, and `tiny_world` models it that way. Without
         # this, `move` is refused everywhere. ⚠ THE STATED REASON IS NOW STALE AND THE FIXTURE
         # IS NOT: `_req_move` was retired by `W-A` and the typed cell short-circuits on an

@@ -151,3 +151,53 @@ def test_with_nothing_generated_an_individuated_person_holds_none(monkeypatch):
     w = build_realm(0)
     census._individuate(w, "p_minted_in_play", _place_that_holds_a_person(w))
     assert not w.persons["p_minted_in_play"].attributes
+
+
+# -- B01a.03: the generic test cast, and the two pinned instruments' persons ----------------------------------------
+def test_the_generic_cast_seats_every_empty_sheet_and_keeps_a_fixed_value():
+    from ..harness.probes import tiny_world
+    from ._generic_cast import seat_generic_cast
+    fixed = {"p_low": {"attr.body.strength": 6}}
+    w = seat_generic_cast(tiny_world(), fixed=fixed)
+    span = w.fixtures.get("generated_attribute_range")
+    checked = 0
+    for pid, p in w.persons.items():
+        assert list(p.attributes) == list(ATTRIBUTES) and len(p.attributes) == 10, pid
+        drawn = generated_attributes(w.world_seed, pid, span)
+        for key in ATTRIBUTES:
+            want = 6 if (pid, key) == ("p_low", "attr.body.strength") else drawn[key]
+            assert p.attributes[key] == want, (pid, key)
+            checked += 1
+    assert checked == 10 * len(w.persons)
+    # two calls at one seed are equal; at another seed they differ
+    again = seat_generic_cast(tiny_world(), fixed=fixed)
+    other = seat_generic_cast(tiny_world(), seed=9, fixed=fixed)
+    sheets = lambda x: {pid: dict(p.attributes) for pid, p in x.persons.items()}
+    assert sheets(again) == sheets(w) and sheets(other) != sheets(w)
+    # a key outside the ten refuses
+    with pytest.raises(Exception):
+        seat_generic_cast(tiny_world(), fixed={"p_low": {"attr.body.nonsense": 3}})
+
+
+def test_a_corpus_case_person_holds_a_drawn_sheet():
+    from ..harness import corpus_run
+    from ..harness.run_cases import load_cases
+    lo, hi = SHIPPED
+    checked = 0
+    for case in load_cases("NPC")[:8]:
+        if str(case.get("scale")) not in corpus_run.RUNG_KINDS:
+            continue
+        w = corpus_run.build_at(case, 0)
+        for pid, p in w.persons.items():
+            assert list(p.attributes) == list(ATTRIBUTES), (case.get("id"), pid)
+            assert all(lo <= v <= hi for v in p.attributes.values()), (case.get("id"), pid)
+            checked += 1
+    assert checked >= 5
+
+
+def test_a_headless_person_holds_a_drawn_sheet():
+    from ..harness import headless
+    w = headless.build_world(0)
+    assert len(w.persons) == 3
+    for pid, p in w.persons.items():
+        assert p.attributes == generated_attributes(w.world_seed, pid, w.fixtures.get("generated_attribute_range")), pid
