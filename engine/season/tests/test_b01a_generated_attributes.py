@@ -121,3 +121,33 @@ def test_the_range_refuses_outside_the_scale(bad):
     with pytest.raises(Forbidden) as e:
         generated_attributes(0, "p_x", bad)
     assert "generated_attribute_range" in str(e.value)
+
+
+# -- B01a.02: the in-play mint draws by the same owner -------------------------------------------------------------
+def _place_that_holds_a_person(w) -> str:
+    from ..state.world import rung_kind_ascends
+    return next(r for r, rung in w.rungs.items() if rung_kind_ascends("person", rung.kind))
+
+
+def test_a_person_individuated_in_play_holds_the_ten_drawn():
+    from ..loop import census
+    w = build_realm(0)
+    pid = "p_minted_in_play"
+    assert pid not in w.persons
+    census._individuate(w, pid, _place_that_holds_a_person(w))
+    expected = generated_attributes(w.world_seed, pid, w.fixtures.get("generated_attribute_range"))
+    assert len(expected) == 10
+    assert w.persons[pid].attributes == expected
+    # the falsifier's second half: the sheet does not depend on the tick of the mint
+    w.tick += 5
+    census._individuate(w, "p_minted_later", _place_that_holds_a_person(w))
+    assert w.persons["p_minted_later"].attributes == generated_attributes(
+        w.world_seed, "p_minted_later", w.fixtures.get("generated_attribute_range"))
+
+
+def test_with_nothing_generated_an_individuated_person_holds_none(monkeypatch):
+    from ..loop import census
+    _range_at(monkeypatch, None)
+    w = build_realm(0)
+    census._individuate(w, "p_minted_in_play", _place_that_holds_a_person(w))
+    assert not w.persons["p_minted_in_play"].attributes
