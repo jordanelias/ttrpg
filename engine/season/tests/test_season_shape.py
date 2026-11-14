@@ -1127,8 +1127,6 @@ def test_r3_witness_fans_to_everyone_as_specified():
     d = SeasonDriver(w)
     def choose(p, v, s, ask_budget):
         return [P.Act_(w, p, "speak")] if p.id == "p_low" else []
-    def effect(w, a):
-        return [P.Ev(w, a.actor, "a.shout", a.actor, [ROOT])]
     r = d.season(choose, None)
     assert r["deposits"] >= len(w.persons), (r["deposits"], len(w.persons))
 
