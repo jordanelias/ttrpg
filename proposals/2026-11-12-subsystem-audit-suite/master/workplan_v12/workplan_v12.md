@@ -4,7 +4,7 @@
 ## Lane: IN (cross-cutting), covering all nine lanes — IN, SC, SE, MB, PC, FI, WR, GO, FA. The successor of workplan v11 (`workplans/valoria_master_workplan_v11.md` + `_part2` … `_part17`), retired in the commit that adopts this plan (§11); not a second plan in force.
 ## Grade under CLAUDE.md §0.2: `paper`. A plan, not an execution artifact. It moves no row of THE NINE: a conjunct's `reading:` record is written by the last `Item:` commit of the batch that reads it (`IS-A-12`), and a row's `status:` is edited only by B99, the one re-take (A-114; §6).
 ## Written against: this part, HEAD `bba489b` (branch `ccr-62958c70-0kjhsw`, 2026-11-12, a shallow clone: `.git/shallow` is present); each body part names its own tree in its own head. Author: lane H1 of `master/workplan_v12/V12_STRUCTURE_part3.md` §7.1, one round.
-## Parts, in reading order (execution order): this head (part 1; `workplan_v12_cont.md` continues it if present) → part 2, the tables (lane H2, closed by lane H3: `workplan_v12_part2.md` the batch table, the gate index, the hash-mover table, the settings-at-control table → `_part2_cont.md` the serial-edge table and the file census → `_part2_cont2.md` the tests and tools tables, the Layer 1 status, the held table, the ids, the requirement map, the conflicts register → `_part2_cont3.md` the names table and the symbols with no carrier → `_part2_appendix.md` the scripts) → parts 3 to 43, the batches, each with its `_cont` files → part 44 (`_part44.md` to `_part44_cont3.md`), B98 and B99 (lane A44). 61 batches, 1,455 positions (part 2 §1.2); 2026-11-14: B00 and B01 closed and expunged, B01a-attributes-generated added (part 3; part 2 §1.2's re-run). §14 maps every batch handle to its file.
+## Parts, in reading order (execution order): this head (part 1; `workplan_v12_cont.md` continues it if present) → part 2, the tables (lane H2, closed by lane H3: `workplan_v12_part2.md` the batch table, the gate index, the hash-mover table, the settings-at-control table → `_part2_cont.md` the serial-edge table and the file census → `_part2_cont2.md` the tests and tools tables, the Layer 1 status, the held table, the ids, the requirement map, the conflicts register → `_part2_cont3.md` the names table and the symbols with no carrier → `_part2_appendix.md` the scripts) → parts 3 to 43, the batches, each with its `_cont` files → part 44 (`_part44.md` to `_part44_cont3.md`), B98 and B99 (lane A44). 61 batches, 1,455 positions (part 2 §1.2); 2026-11-14: B00 and B01 closed and expunged, B01a-attributes-generated added (part 3; part 2 §1.2's re-run); B24p-sc-proceeding added (`workplan_v12_part22_b24p.md` and `_cont.md`, read before part 22; the social contest redesigned, `checks/F3_APPLIED.md`). §14 maps every batch handle to its file.
 
 **Short forms.** A path with no directory prefix is under `proposals/2026-11-12-subsystem-audit-suite/` (the suite); a path under `engine/`, `modules/`, `tools/`, `references/`, `registers/`, `tests/`, `architecture/`, `workplans/` is the repository's. `the structure` is `master/workplan_v12/V12_STRUCTURE.md` with `_part2`, `_part3` and `_part4`; `D-nn` is a decision of its §1; `E-nn` is an erratum of `V12_STRUCTURE_part4.md` (which wins where the structure differs). `A-nn` is a ruling in `unified/DECISIONS_ANSWERED.md`. `the skill` is `.claude/skills/methodology-execute/SKILL.md`; `the intake` is `master/eval/V12_INTAKE.md`; `the evaluation` is `master/V11_EVALUATION.md` and its parts, with `master/GAP_REGISTER_EVALUATION.md` and its parts; `IS-A` is `master/instructions/IS_A_NINE.md` and `_part2`; `U3` is `unified/U3_DEPENDENCY_ORDER.md`; `CIP` is `master/CODEBASE_IMPROVEMENT_PROPOSAL.md` and `_part2`; `MBA` is `master/mb_abstraction/MBA_DESIGN_part3.md`; `PCR` is `master/pc_round/PC_ROUND_SPEC_part2.md`; `the lexicon` is `unified/MB_LEXICON.md` and its parts; `04` is `architecture/meta/04_CODE_ARCHITECTURE.md`. Every suite file the adopting commit deletes (§11 step 6) is cited after adoption through its exact-file `FORK:` row.
 
@@ -195,6 +195,8 @@ Each binds every batch. Source in the right column; nothing here is decided by t
 
 **With B01a, 2026-11-14** (part 2 §1.2's re-run: B00 and B01 closed and expunged at 0 h; B01a-attributes-generated added on Jordan's rulings of 2026-11-13/14, 6 positions, 6.9 h): **62 batches, 543 edges, acyclic, 26 waves, 26 steps, 90 tied chains; critical path 390.4 h** (383.5 h on the same tree without B01a): B00 → B01a → B02 → B03 → B03g → B03a → B04 → B05 → B06 → B07 → B09 → B10 → B11 → B12a → B12b → B12c → B25 → B32 → B35 → B36 → B38 → B39 → B40 → B98 → B99; **serial 751.2 h, makespan 426.0 h**; with the five pairs as edges 28 waves, 28 steps, 421.0 h. B01a sits on the critical path with slack 0, and every batch from B02 on moves one wave and one step later.
 
+**With B24p, 2026-11-14** (part 2 §1.2's re-run for B24p-sc-proceeding, Jordan's social-contest rulings R1 to R10 folded in by stage 3: 24 positions, 14.1 h; B98 gains three positions, B98.87 to B98.89, +1.2 h): **63 batches, 558 edges** (543 + 11 structural + the 4 `GATE: Batch B24p-sc-proceeding` lines of B24, B24a, B27, B28), **acyclic, 26 waves, 26 steps, 90 tied chains; critical path 392.0 h** (390.8 h on the same tree without B24p; the chain is unchanged and the +1.2 h is B98's three positions: B24p has slack 2); **serial 766.9 h, makespan 427.6 h**; with the five pairs as edges 28 waves, 28 steps, 422.6 h. **1,491 positions** (1,464 on the same tree before), behaviour movers 482 (+5), mover batches 50. B24p sits at S12, the fifth batch of the step and the first to merge, held there by a schedule floor (it opens after B10 has closed: its UNDECIDED (1)), not by an edge; no other batch moves a wave or a step. Waves and steps in the tables are the pre-B01a numbers (B24p W10 and S12; one later in the script's own numbering).
+
 **What shortens the path.** The four middles are tied by steps (the structure §2.3): shortening one alone shortens nothing. Weighted by hours, the SE chain B11 → B12a → B12b → B12c → B25 is the longest; B10 (67 positions), B03 (65) and B38 (65) are the largest single batches on it. No batch is re-cut by this head (the structure §10.1 item 9: no lane re-cuts a batch).
 
 ---
@@ -251,7 +253,7 @@ For a step with one batch the two texts below agree. For a step with several, th
 | S8 | B06 (IN), B14 (PC) |
 | S9 | B07 (IN), B17 (MB) |
 | S10 · S11 | B09 · B10 (IN) |
-| S12 | BA1 (IN), B11 (FI), B15 (PC), B21 (FA) |
+| S12 | B24p (SC), BA1 (IN), B11 (FI), B15 (PC), B21 (FA) |
 | S13 | B08 (IN), B12a (SE+WR), B16 (PC), B21b (FA), B24 (SC) |
 | S14 | B12b (SE+WR), B19a (MB), B21c (FA), B29 (PC), B34 (GO) |
 | S15 | B12c (SE+WR), B18 (PC), B19 (MB), B21d (FA), B24a (SC) |
@@ -373,6 +375,7 @@ No engine version is asserted anywhere in v12 (ED-GO-0002 is the owner).
 | batch | lane | ED block (declared + spare) | H block (declared + spare) |
 |---|---|---|---|
 | B01a-attributes-generated | IN | ED-IN-0403..0404 (1+1) | H-856..H-860 (1+4) (allocated 2026-11-14 after the table's last block; `id_reservations.yaml` IN `next_free` 403 → 405) |
+| B24p-sc-proceeding | SC | ED-SC-0054..0056 (1+2) | H-861..H-914 (49+5) (allocated 2026-11-14 after B01a's block, on paper: `id_reservations.yaml` is bumped at the batch's opening, SC `next_free` 54 → 57; the fold map's H-856..H-909 assumed H-855 as the last id and B01a had taken H-856..H-860) |
 | B02-tests | IN | ED-IN-0369..0370 (0+2) | H-374..H-378 (0+5) |
 | B03-hygiene | IN | ED-IN-0371..0372 (0+2) | H-379..H-383 (0+5) |
 | B03g-go-early-landings | GO | ED-GO-0003..0004 (0+2) | H-384..H-388 (0+5) |
@@ -435,7 +438,7 @@ No engine version is asserted anywhere in v12 (ED-GO-0002 is the owner).
 
 **Registry ids** (`references/npc_registry.yaml`; no spare: each row is a named person whose count its source fixes): B33-inst-economy-hands **NPC-091** (B33.09, the court's holder); B39-procgen-and-cases **NPC-092..NPC-094** (B39.32, the three founders, `SYN_B` §2).
 
-**`next_free` after B00, as this table leaves it:** MB 101, PC 72, FI 16, SC 54, FA 56, WR 24, IN 402, GO 10, SE 65; the hole register's next id H-855; the registry's NPC-095. B98's counts are not known until part 44 is written: it holds the spare block above, and A44's `IDS:` line, if larger, takes the ids that follow H-854 and ED-IN-0401 on `main` at B98's open.
+**`next_free` after B00, as this table leaves it:** MB 101, PC 72, FI 16, SC 57, FA 56, WR 24, IN 405, GO 10, SE 65; the hole register's next id H-915; the registry's NPC-095. B98's counts are not known until part 44 is written: it holds the spare block above, and A44's `IDS:` line, if larger, takes the ids that follow H-854 and ED-IN-0401 on `main` at B98's open.
 
 ---
 
@@ -486,6 +489,7 @@ Each is also stated where it is invoked (the batch block's lines, the item's fie
 | B11-fi-readers | `workplan_v12_part16.md`, `_part16_cont.md`, `_part17.md`, `_part17_cont.md` |
 | B15-pc-calibration | `workplan_v12_part18.md` |
 | BA1-cast-content | `workplan_v12_part18_cont.md` |
+| B24p-sc-proceeding | `workplan_v12_part22_b24p.md`, `_part22_b24p_cont.md` |
 | B12a-world-motion-and-ground | `workplan_v12_part19.md`, `_part20.md` |
 | B21b-fa-war | `workplan_v12_part21.md`, `_part21_cont.md` |
 | B24-sc-hearing | `workplan_v12_part22.md`, `_part22_cont.md` |

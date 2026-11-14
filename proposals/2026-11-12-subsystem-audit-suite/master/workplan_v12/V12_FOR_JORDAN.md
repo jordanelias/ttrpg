@@ -246,3 +246,43 @@ collection and CP-T08-08's refill, which are credited on hand-built worlds only.
 |---|---|---|
 | J-09 | Does resisting arrest turn on standing (a brute office function) or on the body (an efficacy roll on `attr.body.*`)? | the body: efficacy-relevant, because the person arrested can plainly succeed or fail by ability |
 | J-10 | Do acts on one's own state (`commit`, `forgive`, `give`, `challenge`, `covenant`) roll? B05.25's loader refuses a draw on a brute row; B07's task class (`open_case`, `destroy_record`, `issue`) and B28.02, .05, .06, .08, .09 draw today, so J-10 must be answered before those batches land | they stay efficacy-relevant (they roll) and are NOT marked brute; the loader's refusal applies to rows marked brute only |
+
+---
+
+**Added 2026-11-14 by the social-contest redesign (stage 3; `proposals/2026-11-14-social-contest-redesign_part5.md` §F.7; Batch B24p-sc-proceeding).** These are the two questions the redesign's five-step ladder could not settle: each overwrites the letter of a ratified ruling, which CLAUDE.md §0 reserves to you. Everything else the redesign left open was closed by the ladder and is marked where it is decided (RD §B.5, §D.1, §D.2, §A.5, §C.6, §A.2); the values that are content and yours to correct are marked `[ASSUMPTION; Jordan to correct]` in the items.
+
+### J-SC-1 · What are the dice of an argument: Reason, or Presence? · SC (Batch B24p-sc-proceeding, B24p.07)
+
+**The situation.** When someone argues, the number of dice he rolls comes from one attribute (plus his rank in the skill). Two rulings read differently. ED-IN-0350 (ratified 2026-11-05) says `argue`'s pool attribute is Presence (charisma). Your ruling of 2026-11-14 (R1) says Reason is *"constructing the argument/speech, making it logical and reasonable and evidentiary"* and charisma is *"the ability to be listened to and be compelling with your delivery"*. The redesign gives every one of the six attributes its own mechanism, so the speech needs one of the two as its dice and the other as something else.
+
+**The question.** Is the dice of an argument Reason (the case) or Presence (the speaker)?
+
+**Option A — Reason is the dice (what the plan builds).** The better case rolls the more dice. Presence is the share of the speech that is heard (a quiet room hears little of a poor speaker, a crowd hears the loud) and the leverage of delivery, and it is the larger slope in an open room. Play: a bench is won by the better case, a crowd by the better speaker; a learned, graceless man has a home ground (the bench), a charming fool has another (the crowd).
+**Option B — Presence is the dice.** The better speaker rolls the more dice everywhere; Reason is leverage (the proofs the room can use and the account of the other side). Play: the better speaker has the wider swing in every room, and a learned, graceless speaker has no home ground.
+
+**Recommendation.** A: it is what R1 says in its own words (Reason *constructs* the argument, charisma is *delivery*), it keeps the six attributes' operands separate (the redesign's test that no two roles share an operand), and ED-IN-0350's sentence is kept in the sense it still has (Presence matters most where a crowd listens). B is one cell to switch to (which attribute `_speech_input` passes to `pool_of`) and the role readings of B24p.23 are then re-taken.
+
+**What the plan assumes until you answer.** A: B24p.07 builds Reason as the dice; the one cell is named in its INSTRUCTION step 3.
+
+**Blocks.** Nothing executes differently until B24p.07 lands; a B answer after that is one cell and a re-read of B24p.23's curves (and B98.87).
+
+**Sources.** `proposals/2026-11-14-social-contest-redesign.md` §B.2, §B.4; `_part5.md` §F.7; `proposals/2026-11-14-social-contest-jordan-rulings.md` R1; ED-IN-0350; `master/workplan_v12/workplan_v12_part22_b24p.md` B24p.07.
+
+---
+
+### J-SC-2 · Does the wrong kind of argument cost, or only fail to help? · SC (Batch B24p-sc-proceeding, B24p.08)
+
+**The situation.** An argument can appeal to evidence, to consequence, to authority or to solidarity, and each hearer is moved most by one of them. Attunement is *"identifying what kind of argumentation/speech is most effective for audience adjudicator opponent"* (R1): it lets a speaker find the ground that moves this hearer. The tree's armature (v30, ratified at Gate C, ED-1062) says a misaligned style *"simply forgoes the boost"*: choosing the wrong ground gains nothing, but costs nothing.
+
+**The question.** When a speaker argues on his target's worst ground, does it cost him, or does it only fail to help?
+
+**Option A — it costs (what the plan builds).** The target's worst ground subtracts a level (`misfit_level` `moderate`): reading people matters because misreading them hurts. Play: in the redesign's scratch probe Attunement's slope is about twice what it is under B; a bold speaker who cannot read a room loses rooms.
+**Option B — it never costs (`misfit_level` `None`).** The best ground adds; the worst adds nothing. Play: the worst a poor reader does is argue plainly.
+
+**Recommendation.** A: R1 gives Attunement the work of knowing what *rattles* the opponent and what is most effective, which is an edge only if error can lose something; under B Attunement is a bonus a plain speaker simply does not collect. The scratch figure (about twice) is the redesign's own probe on its own formulas, not repository code: the reading on the built module is B24p.21 and B24p.23's.
+
+**What the plan assumes until you answer.** A: `misfit_level` ships at `moderate` at B24p.23 (it is `None` at control until then) `[ASSUMPTION; Jordan to correct]`.
+
+**Blocks.** Nothing until B24p.23 sets the shipped values; a B answer is one setting (`None`) and a re-read.
+
+**Sources.** `proposals/2026-11-14-social-contest-redesign.md` §B.3; `_part5.md` §F.7; `proposals/2026-11-14-social-contest-jordan-rulings.md` R1; v30 `:154-188` (reference only; ED-1062); `master/workplan_v12/workplan_v12_part22_b24p.md` B24p.04, B24p.08, B24p.23.

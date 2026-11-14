@@ -30,6 +30,8 @@
 
 **The B01a lane's edits** (2026-11-14): `graph.py` injects B01a's row (lane IN, after B00 and B01; not in the structure's §2.1 table), counts it among the `+2 h` batches, and gives an expunged batch (B00, B01: no block left) 0 h; `gates.py` and `totals.py` skip an expunged batch. `t1.py`, `t23.py` and `census.py` still index an expunged batch and stop on B00 (`KeyError`); their tables were edited by hand for B01a (part 2 §1.3, §5.4), not regenerated.
 
+**The B24p lane's edits** (stage 3 of the social-contest redesign, 2026-11-14): `parse_parts.py` reads the files `workplan_v12_part22_b24p.md` and `_part22_b24p_cont.md` (the `_b24p` infix, sorted just before part 22); `graph.py` injects B24p's row (lane SC, after B00, B01, B01a, B02, B03, B04, B05, B06, B07, listed before BA1 so that it is the first to merge in S12), holds it to S12 by `SCHED_FLOOR` (it opens after B10 has closed: a schedule floor, not an edge, so no wave and no hours move by it) and counts it among the `+2 h` batches. `census.py` and the other scripts are unchanged. Run on the tree at `1b42689` and then on the tree after the fold, the two readings are part 2 §1.2's "Re-run 2026-11-14 for B24p".
+
 **Lane H3's edits to the scripts above** (2026-11-13): `graph.py`'s `stnorm` reads a state cell's leading word first (it had read "BUILD (HELD if …)" as HELD and B98's "BLOCKED (… reading …)" as READING); `t1.py` writes B98's and B99's rows from their positions now that part 44 gives them. Scripts 16 to 21 are new, below; run them after 1 to 5 (`names.py` before `carriers.py` and `t13.py`).
 
 ## `parse_parts.py`
@@ -42,10 +44,10 @@ D = '/home/user/ttrpg/proposals/2026-11-12-subsystem-audit-suite/master/workplan
 HB = r'B(?:A1|\d\d(?:[a-z]|F\d|L|M)?)'            # batch number: B00..B99, B03g, B21b, B11F1, BA1, B16L
 HI = HB + r'\.\d\d'                                 # item handle
 def key(f):
-    m = re.match(r'workplan_v12_part(\d+)(_cont(\d*))?\.md$', os.path.basename(f))
-    n = int(m.group(1)); c = 0 if not m.group(2) else (1 if m.group(3) == '' else int(m.group(3)))
+    m = re.match(r'workplan_v12_part(\d+)(_b24p)?(_cont(\d*))?\.md$', os.path.basename(f))   # `_b24p`: Batch B24p-sc-proceeding's files, read just before part 22 (2026-11-14)
+    n = int(m.group(1)) - (0.5 if m.group(2) else 0); c = 0 if not m.group(3) else (1 if m.group(4) == '' else int(m.group(4)))
     return (n, c)
-files = sorted([f for f in glob.glob(f'{D}/workplan_v12_part*.md') if re.search(r'part\d+(_cont\d*)?\.md$', f)], key=key)
+files = sorted([f for f in glob.glob(f'{D}/workplan_v12_part*.md') if re.search(r'part\d+(_b24p)?(_cont\d*)?\.md$', f)], key=key)
 files = [f for f in files if key(f)[0] >= 3]
 def short(h):
     m = re.match(r'(' + HB + r')', h); return m.group(1) if m else None
@@ -172,6 +174,10 @@ for l in open(f'{D}/V12_STRUCTURE.md', encoding='utf-8'):
 # B01a (added 2026-11-14 after the structure was written; its row is not in V12_STRUCTURE.md §2.1): lane IN, after B00, B01
 rows.insert(rows.index('B02'), 'B01a'); name['B01a'] = 'B01a-attributes-generated'; lane['B01a'] = 'IN'
 s_wave['B01a'] = 2; s_step['B01a'] = 2; name['B01a_after'] = ['B00', 'B01']
+# B24p (added 2026-11-14 by stage 3 of the social-contest redesign; not in V12_STRUCTURE.md §2.1; listed before BA1 so it merges first in S12, as its block says): lane SC, after B00, B01, B01a, B02, B03, B04, B05, B06, B07
+if 'B24p' in {b for b in P['batches']}:
+    rows.insert(rows.index('BA1'), 'B24p'); name['B24p'] = 'B24p-sc-proceeding'; lane['B24p'] = 'SC'
+    s_wave['B24p'] = 12; s_step['B24p'] = 12; name['B24p_after'] = ['B00', 'B01', 'B01a', 'B02', 'B03', 'B04', 'B05', 'B06', 'B07']
 S = {(a, b) for b in rows for a in name[b + '_after']}
 # B98: every batch but B99; B99: every batch
 S = {(a, b) for (a, b) in S if b not in ('B98', 'B99')}
@@ -189,6 +195,7 @@ R = {('B11','B16'):'HD-01', ('B04','B08'):'HD-02', ('B05','B08'):'HD-02', ('B06'
      ('B29','B21s'):'HD-14', ('B21s','B33'):'HD-14', ('B20','B31'):'HD-15', ('B22','B31'):'HD-15', ('B24a','B28'):'HD-16'}
 M = {('B11','B21'):'HD-03', ('B12a','B21b'):'HD-04', ('B28','B32'):'HD-06', ('B25','B27'):'HD-08', ('B12c','B24a'):'HD-17'}
 LANE_ORDER = [('B29', 'B18'), ('BA1', 'B08')]      # D-20 (PC lane: B29 before B18); IS-A §12.3 item 1 (IN lane: BA1 before B08); lane order, not edges
+SCHED_FLOOR = {'B24p': ['B10']}                    # not an edge (no wave, no hours): B24p opens only after B10 has closed, its block's UNDECIDED (1) (B09 alone at S10, B10 at S11; the plan's S12)
 EXCLUSIVE = {'B03a', 'B05'}                        # structure §2.3: alone in their step
 CAP = 6                                            # structure §2.3: at most six open batches in a step
 nodes = list(rows)
@@ -221,6 +228,7 @@ def analyse(E, label):
             grew = False
             for h in left:
                 if h in opened or not all(a in done and done[a] < step for a in after[h]): continue
+                if any(not (a in done and done[a] < step) for a in SCHED_FLOOR.get(h, [])): continue
                 if any(y == h and x not in done and x not in opened for x, y in LANE_ORDER): continue
                 if any(y == h and x not in done and x not in opened for (x, y) in M): continue
                 if lanes(h) & used or len(opened) >= CAP: continue
@@ -245,7 +253,7 @@ for b in nodes:
     seen = {}
     for p in P['batches'][b]['positions']: seen.setdefault(p['pos'], p)
     pos[b] = len(seen); states[b] = Counter(stnorm(p['cells'][3]) for p in seen.values())
-CALIB = {'B01a', 'B02', 'B05', 'B15', 'B19', 'B19a', 'B98', 'B99'}   # B98: its probes (part 44 EST); B99: the long re-take (repair lane R1); B01a: the pairs instrument
+CALIB = {'B01a', 'B02', 'B05', 'B15', 'B19', 'B19a', 'B24p', 'B98', 'B99'}   # B24p: the `pairs proceeding` readings (stage 3, 2026-11-14); B98: its probes (part 44 EST); B99: the long re-take (repair lane R1); B01a: the pairs instrument
 est = {b: round(0.4 * pos[b] + 2.5 + (2 if b in CALIB else 0), 1) for b in pos}
 est.setdefault('B98', 8.0); est.setdefault('B99', 5.0)   # the structure's guesses, kept only for a batch with no positions (repair lane R1: part 44 gives both)
 for _b in nodes: est.setdefault(_b, 0.0)   # an expunged batch (closed, its block deleted): 0 h left (B01a lane, 2026-11-14)

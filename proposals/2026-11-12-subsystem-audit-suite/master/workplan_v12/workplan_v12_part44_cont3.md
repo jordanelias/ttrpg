@@ -49,6 +49,7 @@ GATE: Batch B21d-fa-arc
 GATE: Batch B21s-strife-supply
 GATE: Batch B22-mb-armies
 GATE: Batch B23-land
+GATE: Batch B24p-sc-proceeding
 GATE: Batch B24-sc-hearing
 GATE: Batch B24a-sc-outside-the-room
 GATE: Batch B25-fi-questioning

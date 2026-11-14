@@ -411,7 +411,7 @@ Not in this batch, and where each is: CORE Edit 9 and CAP Part B (B05); MAP §G 
 - LANDS IT: B04's producer; `Item: B04.17`, `[skip ci]`.
 
 ### B04.18 — three social skills: `law`, `insight`, `deception` · `05_SC_hearing_capabilities` edit 1 · BUILD · HASH EQUAL
-- SOURCE: `proposals/05_SC_hearing_capabilities.md` "Three new definition rows", "Exact edits" 1, "Gate" 1, "Named tests"; U1 §2 (rows table), §5; U3 §4.1 row 13 (definition rows in B04, `hearing_moves` in B24); rulings A-98 (`insight` is a skill), D-U1-03 (`rhetoric` not created).
+- SOURCE: `proposals/05_SC_hearing_capabilities.md` "Three new definition rows", "Exact edits" 1, "Gate" 1, "Named tests"; U1 §2 (rows table), §5; U3 §4.1 row 13 (definition rows in B04, `proceeding_moves` in B24); rulings A-98 (`insight` is a skill), D-U1-03 (`rhetoric` not created).
 - ADVANCES: none of the nine; the social roll's skills have names (the cast's ranks in them are BA1's).
 - INSTRUCTION: `references/descriptor_registry.yaml: capabilities.rows` gains three rows ("scale `[0, 7]`, `grows_by: [train, practice]`; U1 §2"), each `gloss` the sentence given, each `base` "`grade: assumption`; a designer re-points one by editing one cell":
   ```yaml
