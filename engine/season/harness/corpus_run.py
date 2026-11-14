@@ -458,11 +458,13 @@ def _seat_office(w: World, oid: str, pid: str, scope: str, off: dict) -> None:
     w.add_tenure(Tenure(f"t_{oid}", pid, oid, "hold", 0))
 
 
-def seasons_for(case: dict) -> int:
-    """The case's own `temporal.span_seasons` where it is an integer, clamped to `MAX_SEASONS`."""
+def seasons_for(case: dict, cap: int | None = None) -> int:
+    """The case's own `temporal.span_seasons` where it is an integer, clamped to `MAX_SEASONS`; with
+    `cap`, clamped to `cap` too (a gate's two-season horizon, D-17). With no cap, the shipped clamp."""
     t = case.get("temporal")
     n = t.get("span_seasons") if isinstance(t, dict) else None
-    return min(int(n), MAX_SEASONS) if isinstance(n, int) and n > 0 else DEFAULT_SEASONS
+    n = min(int(n), MAX_SEASONS) if isinstance(n, int) and n > 0 else DEFAULT_SEASONS
+    return n if cap is None else min(n, cap)
 
 
 def build_at(case: dict, seed: int = 0) -> World:
@@ -980,13 +982,13 @@ def told_redeposits_in(ledger) -> int:
     return sum(1 for key, at in told if key in first_own and first_own[key] <= at)
 
 
-def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
+def run_case(case: dict, seed: int = 0, lane: str = "NPC", seasons_cap: int | None = None) -> dict:
     case = apply_rescale(case)
     scale, cid = str(case.get("scale")), case["id"]
     if scale not in set(RUNG_KINDS):
         return dict(id=cid, scale=scale, status="UNREPRESENTABLE", executed=[], refused=[],
                     seasons=0, why=f"`scale: {scale}` is not a rung kind", checks={})
-    n = seasons_for(case)
+    n = seasons_for(case, seasons_cap)
     w = build_at(case, seed)
     d = SeasonDriver(w)
     ch = P.chooser(w, verbs=resolvable_verbs())
@@ -1121,13 +1123,14 @@ def planted_control(seed: int = 0) -> tuple:
     return before, _r3_propagates(w, d)
 
 
-def main(seed: int = 0) -> int:
+def main(seed: int = 0, seasons_cap: int | None = None) -> int:
     rows = []
     for lane in ("NPC", "ARC"):
         for c in R.load_cases(lane):
-            r = run_case(c, seed, lane); r["lane"] = lane; rows.append(r)
+            r = run_case(c, seed, lane, seasons_cap); r["lane"] = lane; rows.append(r)
     by = Counter(r["status"] for r in rows)
-    print(f"CORPUS RUN — {len(rows)} cases, seed {seed}, seasons from `temporal.span_seasons`")
+    print(f"CORPUS RUN — {len(rows)} cases, seed {seed}, seasons from `temporal.span_seasons`"
+          + (f", capped at {seasons_cap}" if seasons_cap is not None else ""))
     for k, v in sorted(by.items()):
         print(f"  {k:18} {v}")
     un = Counter(r["scale"] for r in rows if r["status"] == "UNREPRESENTABLE")
@@ -1283,5 +1286,14 @@ def main(seed: int = 0) -> int:
     return 0
 
 
+def parse_argv(argv: list[str]) -> tuple[list[int], int | None]:
+    """`[seed] [--seasons N]`: the positional seed as before; `--seasons N` caps every case at N seasons."""
+    argv, cap = list(argv), None
+    if "--seasons" in argv:
+        i = argv.index("--seasons"); cap = int(argv[i + 1]); del argv[i:i + 2]
+    return [int(a) for a in argv], cap
+
+
 if __name__ == "__main__":
-    raise SystemExit(main(*(int(a) for a in sys.argv[1:])))
+    args, cap = parse_argv(sys.argv[1:])
+    raise SystemExit(main(*args, seasons_cap=cap))
