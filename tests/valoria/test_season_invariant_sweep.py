@@ -100,6 +100,50 @@ def test_the_engine_is_clean_under_the_sweep():
         f"a declared exception fired but DECLARED is {I.DECLARED!r} — the two have drifted")
 
 
+def _played_realm(seed):
+    """The shipped world (`populated.build_realm`) played one season: the world with offices in it."""
+    from engine.season.harness import populated
+    w = populated.build_realm(seed)
+    populated.run(1, seed, w=w)
+    return w
+
+
+def test_the_engine_is_clean_under_the_sweep_on_a_played_realm():
+    """The second sweep: all eight invariants over a world that HAS offices, stance rows and tenures.
+
+    ⚠ THE HEADLESS ARM ABOVE CANNOT SEE THIS: `headless` builds no Office and no stance row, so
+    `office_singly_held` and `stance_row_shape` quantify over nothing there and the sweep says so
+    (`unexercised`; the `:55` assertion stays a statement about the headless world). Here
+    `unexercised == []` is asserted too, so a zero-violation result is a result over rows, not over
+    an empty collection."""
+    r = I.sweep(_played_realm, range(3))
+    assert r["seeds"] == 3
+    assert not r["violations"], (
+        f"{len(r['violations'])} invariant violation(s) on the played realm:\n  "
+        + "\n  ".join(r["violations"][:20]))
+    assert r["unexercised"] == [], (
+        f"the played realm left {r['unexercised']} unexercised; a zero-violation sweep that never "
+        "looked at those carriers says nothing about them")
+    assert r["examined"]["offices"] > 0 and r["examined"]["stance_rows"] > 0
+    assert not r["declared"], (
+        f"a declared exception fired but DECLARED is {I.DECLARED!r} — the two have drifted")
+
+
+def test_the_played_realm_sweep_reports_an_office_held_twice():
+    """The falsifier of the arm above: plant one office held twice in the played realm, and the
+    sweep must report it. Without this, `violations == []` there could be the sweep looking away."""
+    def build(seed):
+        w = _played_realm(seed)
+        w.offices["x"] = Office("x", "Probe Seat", None, ["issue"], faction="Crown")
+        a, b = list(w.persons)[:2]        # two real persons: only the invariant under test fires
+        w.add_tenure(Tenure("x_hold_a", a, "x", "hold", 0))
+        w.add_tenure(Tenure("x_hold_b", b, "x", "hold", 0))
+        return w
+    r = I.sweep(build, range(1))
+    assert any(": office_singly_held:" in v for v in r["violations"]), (
+        f"a doubly held office in the played realm was not reported: {r['violations'][:5]}")
+
+
 def test_the_entity_set_covers_every_world_collection_a_tenure_can_name():
     """Pinned against `World.__init__`, because the first writing missed `w.records`.
 
