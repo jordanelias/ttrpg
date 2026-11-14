@@ -251,6 +251,10 @@ def test_a_one_entry_cast_moves_nothing_but_the_seated_name(monkeypatch):
     assert cast.persons["p_a"].name == "Fixture 0" and plain.persons["p_a"].name == "p_a"
     assert cast.content_hash() != plain.content_hash(), "the name should be in the hash"
     cast.persons["p_a"].name = "p_a"
+    # B01a (terminal critique, finding 1): a corpus sheet is drawn for the case and WHO the seat is (reordering a cast moves no sheet),
+    # so a named seat draws a sheet of its own and the anonymous one another: the name moves the sheet by construction.
+    assert cast.persons["p_a"].attributes != plain.persons["p_a"].attributes
+    cast.persons["p_a"].attributes = plain.persons["p_a"].attributes
     assert _tally(cast) == _tally(plain)
 
 

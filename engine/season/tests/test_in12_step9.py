@@ -352,6 +352,9 @@ def test_faculty_varies_by_person_once_train_raises_carins_vocation():
     w, d = _npc088()
     fx = w.fixtures
     carin = w.persons[CARIN]
+    # B01a: the corpus seats a drawn sheet and a pool is the larger of an attribute and a capability (`seam/wrappers/pool.py`), so a
+    # drawn 5 would hide the vocation. The test's subject is the vocation, so Carin's sheet is fixed low here, key by key; the others keep theirs.
+    carin.attributes = {k: 1 for k in carin.attributes}
     assert carin.capability == {"copying": 3}, carin.capability
     others = [p for pid, p in sorted(w.persons.items()) if pid != CARIN and not p.capability]
     assert others, "no person without a capability to compare against"
@@ -364,8 +367,9 @@ def test_faculty_varies_by_person_once_train_raises_carins_vocation():
     pools = {p.id: sigma.faculty(w, p, "tell") for p in [carin, *others]}
     assert pools[CARIN] == 4, pools
     # B01a.99 (every person's attributes are drawn, a population change): the persons without a key were all at `pool_default`
-    # (one pool, `{2}`); they now read their drawn attribute, so the pools part by person: here {p_b: 6, p_c: 5}.
-    assert {pools[p.id] for p in others} == {5, 6}, pools
+    # (one pool, `{2}`); they now read their drawn attribute, so the pools part by person: here {p_b: 3, p_c: 2}
+    # (keyed on the case and the person after the terminal critique; the sheets before it read {5, 6}).
+    assert {pools[p.id] for p in others} == {2, 3}, pools
     assert len(set(pools.values())) > 1, pools
 
 
