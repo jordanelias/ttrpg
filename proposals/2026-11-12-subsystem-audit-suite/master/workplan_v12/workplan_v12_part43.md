@@ -15,8 +15,8 @@
 ## Batch B40-inst-scenarios · lane FA · wave W22 · step S22 · HASH MOVER, one re-pin
 INVOCATION: /methodology-execute Batch B40-inst-scenarios
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_FA.md, Open table
-GATE: Batch B00-ids
-GATE: Batch B01-laneA
+GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
+GATE: Batch B01-laneA @cfd9aefb049c2fe49b55c7ada1b0b624919af23d
 GATE: Batch B02-tests
 GATE: Batch B12c-material-verbs-and-valley
 GATE: Batch B21-fa-governance

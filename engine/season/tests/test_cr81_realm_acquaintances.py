@@ -56,8 +56,10 @@ SEEDS = (0, 1, 2)
 # v11 CP-T03-07 re-pin, ONCE (a build hash: `Person.body_ceiling` joins every Person's canonical encoding; seed 0's
 # move, e6a40e18... -> b9928b27..., is the one `test_go07_canonical_digest.py` records and reproduces with the old
 # encoding; seeds 1 and 2 read the same way, not separately reverted): was e6a40e18... / c846864a... / f1894dbf...
-PARENT_HASHES = {0: "b9928b271a022bb49e4a743859bcb386", 1: "d58a1395e28fea7a13783bbcb16cc4fd",
-                 2: "cb800549cffe280834caa31a08bb78ee"}
+# B01a.99 re-pin, ONCE (every person's attributes are drawn; a population change, not a balance claim): was ddf5f3df... /
+# 9366e8ba... / af9581ee... (B01's close, `reading @cfd9aef`).
+PARENT_HASHES = {0: "ca828bd9c1f4a903a09dd7722154febc", 1: "62e78cd58a094180f7ed55a219ec755a",   # B11 lane A (persons hold scores; the obstacle by task): was d58a1395...; B11 lane A (persons hold scores; the obstacle by task): was b9928b27...
+                 2: "e8aa16428b2a0b0c17684e14f564f687"}   # B11 lane A (persons hold scores; the obstacle by task): was cb800549...
 KNOW_NONE_AT_BUILD = 41          # of 83, every seed (read, see the docstring)
 JORDANS_EXAMPLE = frozenset({"King", "Queen", "Duke", "Duchess"})   # his words, an independent pin on the floor
 

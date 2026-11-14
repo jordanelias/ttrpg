@@ -103,7 +103,13 @@ def test_crime_context_a_detainee_stamp_forms_fight():
     assert _fights(w, _q((B, V.DETAINEE_CLASS)))
 
 
-def test_duel_context_a_held_challenge_naming_both_forms_fight_and_one_naming_a_third_does_not():
+def test_duel_context_a_held_challenge_naming_both_forms_fight_and_one_naming_a_third_does_not(monkeypatch):
+    """The `duel` READER, read with `duel` on the line (B11 lane A dropped it from `fight`'s shipped line: a duel is
+    `accept`'s, `test_b11a_duel_reach.py`); the shipped line forms no `fight` on a held challenge."""
+    w = P.tiny_world()
+    _hold(w, A, "rec:c1", "challenge", {"terms": B, "to": (B,), "stakes": None, "challenger": A})
+    assert not _fights(w, _q()), "the shipped line: a challenger forms no `fight` on the man he called out"
+    monkeypatch.setattr(O, "VIOLENCE_CONTEXTS", {**O.VIOLENCE_CONTEXTS, "fight": ("war", "crime", "duel", "defence")})
     w = P.tiny_world()
     _hold(w, A, "rec:c0", "challenge", {"terms": "p_other", "to": ("p_other",), "stakes": None, "challenger": A})
     assert not _fights(w, _q())
@@ -388,6 +394,10 @@ def test_control_the_block_empty_and_every_value_at_its_revert_reproduce_the_pre
     revert_cp_t03_04(monkeypatch)
     revert_cp_t03_07(monkeypatch)   # v11 CP-T03-07 (`body_ceiling`, a schema mover of the build), the same way
     revert_cp_t03_08(monkeypatch)   # v11 CP-T03-08 (`tend` forms on the wounded, a formation mover of every season), the same way
+    from .test_b11a_duel_reach import revert_b11a
+    revert_b11a(monkeypatch)   # B11 lane A (the duel chain's reach, a formation mover of every season), the same way
+    from .test_b11a_scores_and_obstacle import revert_b11a_scores
+    revert_b11a_scores(monkeypatch)   # B11 lane A (persons hold scores; the obstacle by task: a mover of the build and every season), the same way
     assert populated.build_realm(0).content_hash() == BASE_BUILD
     w, _d, _rows = I.run(0, 1, observe=False)          # the audit's own run, which read the base hash
     assert w.content_hash() == BASE_SEASON

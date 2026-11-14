@@ -15,8 +15,8 @@
 ## Batch B11-fi-readers · lane FI · wave W12 · step S12 · HASH MOVER, one re-pin
 INVOCATION: /methodology-execute Batch B11-fi-readers
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_FI.md, Open table
-GATE: Batch B00-ids
-GATE: Batch B01-laneA
+GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
+GATE: Batch B01-laneA @cfd9aefb049c2fe49b55c7ada1b0b624919af23d
 GATE: Batch B02-tests
 GATE: Batch B03-hygiene
 GATE: Batch B04-capability-home

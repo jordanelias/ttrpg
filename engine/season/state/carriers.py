@@ -36,7 +36,8 @@ from ..data.rosters import (
     title_domain,
 )
 from ..gaps import Forbidden, Unowned, Unspecified
-from .ids import SeatId
+from ...substrate.descriptors import ATTRIBUTE_CEILING, ATTRIBUTE_FLOOR, ATTRIBUTES
+from .ids import SeatId, draw_factory
 
 
 @dataclass(frozen=True)
@@ -733,6 +734,42 @@ class Act:
 # S27: FIVE STRATA. movement / binding decisions / contested physical / uncontested material / social
 
 
+def generated_attributes(world_seed: int, pid: str, span: Any) -> dict:
+    """AN ATTRIBUTE VALUE DRAWN FOR A PERSON NOBODY AUTHORED (B01a.01; Jordan, 2026-11-13/14: every person's attributes
+    drawn, so every later pin and calibration records against a varied world). THE ONE OWNER of what a person holds on
+    an attribute no cast row authors: it fills `Person.attributes`, and lane A's flat seating at `pool_default`
+    (B01) is gone.
+
+    (1) WHAT IS DRAWN. All ten of `engine/substrate/descriptors.py::ATTRIBUTES` (B01a.06: Spirit is its own group, `attr.spirit.will`), each uniform on the whole numbers `lo`
+    to `hi` of `span` -- `Fixtures generated_attribute_range`, shipped `(1, 6)`, inside the attribute scale
+    (`ATTRIBUTE_FLOOR` to `ATTRIBUTE_CEILING`). `span` None returns `{}` (nothing generated: the world before B01, a
+    fighter reads its class defaults and a roll reads `pool_default`); two whole numbers `lo <= hi` inside the scale
+    are the range; anything else is `Forbidden`, naming the setting and H-856.
+    (2) THE KEY. One keyed draw per (person, attribute) through `state/ids.py::draw_factory`, `lambda: 0` as the clock,
+    purpose `attr.generated:<key>`, one `randint(lo, hi)` taken from each stream: a sheet is a function of (seed,
+    person id, attribute) alone, whenever and wherever the person is minted. No wall clock, no `random.Random(` here.
+    (3) AUTHORED OVERRIDES. The caller lays an authored value over this dict key by key (`{**generated, **authored}`),
+    so an authored key replaces its own draw and no other: all ten draws are taken whatever a person authors.
+    (6) PROVISIONAL. [ASSUMPTION; medium; Jordan to correct] -- replaced by BA1's authored cast and the later
+    generator; H-856 is graded `assumption` and swept `(1, 6)` SHIPPED / `(2, 2)` B01's flat seating, the control /
+    `None` nothing generated. A sweep applied AFTER the build does not reach a seated sheet."""
+    if span is None:
+        return {}
+    ok = (isinstance(span, (tuple, list)) and len(span) == 2
+          and all(type(v) is int for v in span)
+          and ATTRIBUTE_FLOOR <= span[0] <= span[1] <= ATTRIBUTE_CEILING)
+    if not ok:
+        raise Forbidden(
+            f"`Fixtures generated_attribute_range` is {span!r}: it must be two whole numbers lo <= hi inside the attribute "
+            f"scale {ATTRIBUTE_FLOOR}..{ATTRIBUTE_CEILING}, or None",
+            "engine/season/hole_register.yaml H-856",
+            needs="(lo, hi) whole numbers, ATTRIBUTE_FLOOR <= lo <= hi <= ATTRIBUTE_CEILING; None generates nothing",
+            law="B01a.01 -- one keyed draw per person and attribute, uniform on the declared range")
+    lo, hi = span
+    draw = draw_factory(world_seed, lambda: 0)
+    return {key: draw(pid, f"attr.generated:{key}").randint(lo, hi) for key in ATTRIBUTES}
+
+
 @dataclass
 class Person:
     """S9. A COHORT IS A PERSON AT weight > 1. ONE CLASS (S9.1)."""
@@ -806,13 +843,13 @@ class Person:
     thread_sensitivity: Optional[int] = None
     # v10 CR-20 (M2): THE ATTRIBUTE CARRIER -- `{registry key: whole number 1-7}` over Jordan's ten
     # (`references/descriptor_registry.yaml: attributes`, ED-IN-0328; `engine/substrate/descriptors.py::
-    # ATTRIBUTES`). A person's INPUT is `faculty`, derived at read; these are what it reads. ABSENT WHERE
-    # UNAUTHORED: a key nobody authored is missing, never the registry's `default` and never 0 -- the pool
-    # then falls to `pool_default` (`seam/wrappers/sigma.py::faculty`), so an all-absent realm rolls what it
-    # rolled. Filled ONCE at world build, by a cast row's `stats:` (`harness/populated.py::build_realm`'s
-    # `cast_attributes` switch, which SHIPS OFF; `data/cast.py::attributes_of`, `thread_sensitivity_of`'s
-    # precedent) -- `decision/sheet.py`'s creation sheet only READS it and writes nothing, so no shipped writer
-    # exists until that switch flips: the carrier SHIPS EMPTY, and CR-20 and CR-19 are latent in every shipped realm -- and NEVER WRITTEN IN PLAY: no `write_matrix.yaml` row, so the gate refuses any write to it. READERS:
+    # ATTRIBUTES`). A person's INPUT is `faculty`, derived at read; these are what it reads. Filled ONCE, at world
+    # build (`harness/populated.py::build_realm`) and at an in-play mint (`loop/census.py::_individuate`), by
+    # `generated_attributes` (above) under any value a cast row's `stats:` authors (`data/cast.py::attributes_of`,
+    # key by key), and NEVER WRITTEN IN PLAY: no `write_matrix.yaml` row, so the gate refuses any write to it. A key
+    # nobody holds is missing, never the registry's `default` and never 0 -- the pool then falls to `pool_default`
+    # (`seam/wrappers/sigma.py::faculty`): that is `build_realm(cast_attributes=False)`, or `Fixtures
+    # generated_attribute_range` None. `decision/sheet.py`'s creation sheet only READS it. READERS:
     # `seam/wrappers/sigma.py::faculty` (the pool's base) and `_opposition_of` (the score the obstacle halves), and
     # (PC-06 K-1) `seam/wrappers/combat.py::combat_input`/`party_end`, which pass them to the fight on `PersonalCombatInput.attributes`.
     attributes: dict = field(default_factory=dict)

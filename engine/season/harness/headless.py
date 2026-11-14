@@ -35,7 +35,7 @@ from ..data.verbs import VERB_TABLE
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries.world_q import RESIDE_KIND
 from ..state.attribution import anchor_of
-from ..state.carriers import Person, Proposition, Rung, Site, Tenure
+from ..state.carriers import Person, Proposition, Rung, Site, Tenure, generated_attributes
 from ..state.world import World
 from ..trace_log import TRACE
 from . import probes as P
@@ -67,7 +67,9 @@ def build_world(seed: int = 0, fixtures: "S.Fixtures" = None) -> World:
 
     for pid, name in ((CARIN, "Carin Vedel"), (BAILIFF, "Uwe the bailiff"),
                       (WARDEN, "the warden")):
-        w.persons[pid] = Person(pid, name)
+        # B01a.03: each of the three holds a DRAWN SHEET (`state/carriers.py::generated_attributes`, the owner `build_realm` seats by).
+        w.persons[pid] = Person(pid, name, attributes=generated_attributes(
+            w.world_seed, pid, w.fixtures.get("generated_attribute_range")))
     w.add_tenure(Tenure("t_carin_in", CARIN, "hearth_ostvik", "contain", since=0))
     w.add_tenure(Tenure("t_bailiff_in", BAILIFF, "hearth_ostvik", "contain", since=0))
     w.add_tenure(Tenure("t_warden_in", WARDEN, "ostvik", "contain", since=0))

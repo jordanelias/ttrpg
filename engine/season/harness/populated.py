@@ -83,7 +83,7 @@ from ..decision import make_chooser
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..loop.effects import EFFECTS
 from ..data.requires import KNOWN_PERSON_CLAIM
-from ..state.carriers import Act, Claim, Office, Person, Proposition, Rung, Site, Tenure
+from ..state.carriers import Act, Claim, Office, Person, Proposition, Rung, Site, Tenure, generated_attributes
 from ..state.gate import NO_CHANGE
 from ..state.ids import H, ROOT, draw_factory
 from ..state.world import World
@@ -1013,11 +1013,15 @@ def seed_arms(w: World, seeds: dict | None = None) -> int:
 
 def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
                 goals: bool = True, goals_complete: bool = True, foreign: bool = True,
-                guards: bool = False, acquaintances: bool = True, cast_attributes: bool = False) -> World:
+                guards: bool = False, acquaintances: bool = True, cast_attributes: bool = True) -> World:
     """The whole map, its buildings, and one person per season loop.
 
     `cast_attributes` (v10 CR-20) reads each cast row's `stats:` into `Person.attributes`
-    (`data/cast.py::attributes_of`). `False` SHIPS, and is the CONTROL ARM: no person holds an attribute, so
+    (`data/cast.py::attributes_of`), over the sheet `state/carriers.py::generated_attributes` DRAWS (`Fixtures
+    generated_attribute_range`, B01a.01) for every key a row does not author, and seats a drawn sheet on every other
+    person (the cohorts included) last; `Fixtures generated_attribute_range` None draws nothing. ⚠ SINCE B11 LANE A `True` SHIPS (brief A step 3:
+    persons hold scores, so a person is opposed by the score he rolls and never by `obstacle_default`), a declared mover
+    of the build (every `Person` repr) and of every season. `False` is the CONTROL ARM of the earlier reading, kept: no person holds an attribute, so
     `faculty` falls to `pool_default` and the realm acts as it did before the carrier (only the `Person` repr
     moved). The registry authors ONE row's `stats:` (NPC-001: cognition, focus, endurance, and the whole social
     category as attunement, presence and grace at 3-4), and `True` is a MOVER by that one person (her pool on the
@@ -1353,7 +1357,8 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         # registry), set here and NEVER written in play. Absent where unauthored: `{}` is no key, and
         # `faculty` then falls to `pool_default`.
         if cast_attributes:
-            w.persons[pid].attributes = cast.attributes_of(cast.row(cid) or {})
+            w.persons[pid].attributes = {**generated_attributes(w.world_seed, pid, w.fixtures.get("generated_attribute_range")),
+                                         **cast.attributes_of(cast.row(cid) or {})}
         # v10 CR-30: DESCENT, from the same row's `heritage:`, set here and NEVER written in play. No fallback and
         # no draw: a row that states none leaves `None`, which `epistemic._term_marks` deposits as `()`.
         w.persons[pid].heritage = cast.heritage_of(cast.row(cid) or {})
@@ -1990,6 +1995,14 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     # v11 CP-T03-03: THE ARMS A RUNG IS BUILT HOLDING (`rosters.yaml: arms_at_build`), the very last write so the build
     # up to here is byte-identical to the realm without it. The shipped roster is empty (the inventory is Jordan's).
     seed_arms(w)
+    # B01a.01: EVERY PERSON HOLDS A DRAWN SHEET (`state/carriers.py::generated_attributes`, one keyed draw per person and
+    # attribute on `Fixtures generated_attribute_range`): the cohorts, guards and foreign cast seated after the case loop
+    # take theirs under anything they already hold, key by key. The very last write, after the arms, so the build up to
+    # here is the earlier one; `cast_attributes=False` writes nothing.
+    if cast_attributes:
+        span = w.fixtures.get("generated_attribute_range")
+        for p in w.persons.values():
+            p.attributes = {**generated_attributes(w.world_seed, p.id, span), **(p.attributes or {})}
     return w
 
 

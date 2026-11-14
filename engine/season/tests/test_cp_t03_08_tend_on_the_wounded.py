@@ -168,6 +168,12 @@ def test_hash_post_item_and_revert(seed, monkeypatch):
     # CR-79's credit term (a later mover of the told deposit) is reverted in process: POST_ITEM reads this item alone.
     from .test_strife_credit import revert_cr79
     revert_cr79(monkeypatch)
+    # B11 lane A (the duel chain's reach, a later formation mover of every season) is reverted in process, so
+    # POST_ITEM still reads this item alone.
+    from .test_b11a_duel_reach import revert_b11a
+    revert_b11a(monkeypatch)
+    from .test_b11a_scores_and_obstacle import revert_b11a_scores
+    revert_b11a_scores(monkeypatch)   # B11 lane A (persons hold scores; the obstacle by task: a mover of the build and every season), the same way
     w = build_realm(seed)
     run(1, seed, w=w)
     assert w.content_hash() == POST_ITEM[seed] != PRE_ITEM[seed]
@@ -189,8 +195,17 @@ def test_rem52s_fall_is_tended_whole_the_same_season():
     assert short, "setup: nobody went hungry"
     assert short <= tended, sorted(short - tended)
     assert all(w.persons[pid].body == w.persons[pid].body_ceiling for pid in short)
+    # B11 lane A (the duel chain's reach; re-pinned in B01.02): (37, 37) -> (37, 38): one person tended who was not short
+    # (`p_npc_033`, wounded by the reach's new formations). With `revert_b11a_scores` alone it reads (37, 38); with
+    # `revert_b11a` too, (37, 37) (scratch, not kept).
+    # B01a.99 (every person's attributes are drawn, a population change): (37, 38) -> (37, 37): the duels the drawn sheets
+    # resolve do not wound `p_npc_033`, so the tended are exactly the short (`tended - short` and `short - tended` both empty,
+    # read in process at PYTHONHASHSEED=0).
     assert (len(short), len(tended)) == (37, 37)
+    assert tended == short
 
 
-def test_build_hash_is_unmoved():
+def test_build_hash_is_unmoved(monkeypatch):
+    from .test_b11a_scores_and_obstacle import revert_b11a_scores
+    revert_b11a_scores(monkeypatch)   # B11 lane A (persons hold scores: a later mover of the build), so BUILD stands
     assert build_realm(0).content_hash() == BUILD

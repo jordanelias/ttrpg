@@ -362,6 +362,10 @@ def test_hash_post_item_control_and_revert(seed, monkeypatch):
     # CR-79's credit term (a later mover of the told deposit) is reverted in process too.
     from .test_strife_credit import revert_cr79
     revert_cr79(monkeypatch)
+    from .test_b11a_duel_reach import revert_b11a
+    revert_b11a(monkeypatch)   # B11 lane A (the duel chain's reach, a formation mover of every season), the same way
+    from .test_b11a_scores_and_obstacle import revert_b11a_scores
+    revert_b11a_scores(monkeypatch)   # B11 lane A (persons hold scores; the obstacle by task: a mover of the build and every season), the same way
     w = build_realm(seed)
     run(1, seed, w=w)
     scale = w.fixtures.get("condition_scale")
@@ -379,6 +383,8 @@ def test_hash_post_item_control_and_revert(seed, monkeypatch):
 
 
 def test_build_hash_is_a_schema_mover_and_the_revert_reads_the_old_one(monkeypatch):
+    from .test_b11a_scores_and_obstacle import revert_b11a_scores
+    revert_b11a_scores(monkeypatch)   # B11 lane A (persons hold scores: a later mover of the build), so BUILD_POST stands
     assert build_realm(0).content_hash() == BUILD_POST
     revert_cp_t03_07(monkeypatch)
     assert build_realm(0).content_hash() == BUILD_PRE

@@ -16,8 +16,8 @@
       "attr.body.agility",
       "attr.mind.focus",
       "attr.mind.acuity",
-      "attr.mind.will",
       "attr.mind.perception",
+      "attr.spirit.will",
       "attr.social.attunement",
       "attr.social.charisma",
       "attr.social.grace"
@@ -32,10 +32,11 @@
       "attr.mind.acuity": "attr.mind.acuity",
       "attr.mind.focus": "attr.mind.focus",
       "attr.mind.perception": "attr.mind.perception",
-      "attr.mind.will": "attr.mind.will",
+      "attr.mind.will": "attr.spirit.will",
       "attr.social.attunement": "attr.social.attunement",
       "attr.social.charisma": "attr.social.charisma",
       "attr.social.grace": "attr.social.grace",
+      "attr.spirit.will": "attr.spirit.will",
       "attunement": "attr.social.attunement",
       "charisma": "attr.social.charisma",
       "cognition": "attr.mind.acuity",
@@ -51,11 +52,11 @@
       "presence": "attr.social.charisma",
       "reason": "attr.mind.acuity",
       "reasoning": "attr.mind.acuity",
-      "spirit": "attr.mind.will",
+      "spirit": "attr.spirit.will",
       "strength": "attr.body.strength",
       "vitality": "attr.body.endurance",
-      "will": "attr.mind.will",
-      "willpower": "attr.mind.will"
+      "will": "attr.spirit.will",
+      "willpower": "attr.spirit.will"
     },
     "pending_tenth": null
   },

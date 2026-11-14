@@ -210,6 +210,10 @@ def test_control_the_item_at_its_revert_reproduces_the_pre_item_one_season_hash(
     revert_cp_t03_04(monkeypatch)
     revert_cp_t03_07(monkeypatch)   # v11 CP-T03-07 (`body_ceiling`, a schema mover of every realm), the same way
     revert_cp_t03_08(monkeypatch)   # v11 CP-T03-08 (`tend` forms on the wounded, a formation mover of every season), the same way
+    from .test_b11a_duel_reach import revert_b11a
+    revert_b11a(monkeypatch)   # B11 lane A (the duel chain's reach, a formation mover of every season), the same way
+    from .test_b11a_scores_and_obstacle import revert_b11a_scores
+    revert_b11a_scores(monkeypatch)   # B11 lane A (persons hold scores; the obstacle by task: a mover of the build and every season), the same way
     # v11 CR-85 (`faculty` replaces `history`, a later mover of seed 1) is reverted on BOTH arms too, BEFORE `moved`
     # is taken, so `moved` differs from `PRE_ITEM` by this item alone and a CR-85 move cannot pass for one of its own.
     revert_cr85(monkeypatch)

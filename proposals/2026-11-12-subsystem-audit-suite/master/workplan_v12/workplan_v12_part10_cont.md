@@ -7,8 +7,8 @@
 ## Batch B14-pc-outcome · lane PC · wave W8 · step S8 · HASH MOVER, one re-pin
 INVOCATION: /methodology-execute Batch B14-pc-outcome
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_PC.md, Open table
-GATE: Batch B00-ids
-GATE: Batch B01-laneA
+GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
+GATE: Batch B01-laneA @cfd9aefb049c2fe49b55c7ada1b0b624919af23d
 GATE: Batch B02-tests
 GATE: Batch B13-pc-package
 GATE: Batch B05-one-roll
@@ -20,7 +20,7 @@ BATCH GATE (read once, on the closing tree, at B14.99; `PYTHONHASHSEED=0` on eve
   `python systems/combat/combat_engine_v1/workbench/export_parity_probe.py` → `50 weapons; max |derived − recomputed| <= 1e-9`, exit 0 (B14.12);
   `python systems/combat/combat_engine_v1/workbench/round_state_probe.py` → 0 fighter-starts in a half-sword form (B14.13);
   `python systems/combat/combat_engine_v1/state_graph.py` → PASS (B14.21);
-  the realm hash reading at seeds 0, 1, 2 → moved, each mover named alone in B14.99's commit body with the before-reading (`reading @<sha>` of B05's close, or B06's after-reading if B06 merged first in S8, `V12_STRUCTURE_part3.md` §7.4): `prevailed` (B14.02), `fell_to` (B14.03), the scene's shape (B14.15), the hand (B14.16), the believed price of a fight (B14.24), `accept`'s formation (B14.27); with each reverted alone, the hash before it returns (`03_PC_typed_outcome_one_door` gate 2);
+  the realm hash reading at seeds 0, 1, 2 → moved, each mover named alone in B14.99's commit body with the before-reading (`reading @<sha>` of B05's close, or B06's after-reading if B06 merged first in S8, `V12_STRUCTURE_part3.md` §7.4): `prevailed` (B14.02), `fell_to` (B14.03), the scene's shape (B14.15), the hand (B14.16), the believed price of a fight (B14.24) (`accept`'s formation, once B14.27's, landed in B01 and moves nothing here); with each reverted alone, the hash before it returns (`03_PC_typed_outcome_one_door` gate 2);
   `python -m engine.season.harness.aperture 2 --seeds 0 1 2` → `ENGINES` `combat.fight` and `accept`'s attempted, executed and refused-on-`exists:challenge` (0) quoted before (`reading @<sha>`) and after (`14_VERBS_PHYSICAL_A` gate; `IS-PC-03`'s reading is B15's and B16's, not this batch's) `[ASSUMPTION: `aperture` takes `<seasons> --seeds …` — basis: IS-A §3's "`aperture 2 --seeds 0 1 2`" (`V12_STRUCTURE.md` §3); its flags were not opened by this lane]`;
   `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`) (H-98, H-123, H-64, H-264, H-349, H-97, H-258 edited; the two new fixture rows); `--requirements` → nine lines, unchanged in verdict; `python tools/m1_acceptance.py --summary` → verdict line quoted;
   the suites `python tools/tests_for_diff.py --base <batch-start-sha>` names (the batch touches `modules/combat`, the seam, the loop, tools and registers: the full gates), once, at B14.99;
@@ -67,7 +67,7 @@ EST: 14.1 h [estimate: `V12_STRUCTURE.md` §2.4's formula over this batch's 29 p
 | B14.24 | a fight is priced by believed odds | `U5b_PC_residue` §8 | BUILD | MOVER(behaviour) | B14.01, Batch B05 |
 | B14.25 | five register rows brought to the tree | `U5b_PC_residue` §9 | BUILD | EQUAL | B14.23 |
 | B14.26 | the conditional test loops assert they asserted | `IS-PC-04` (`U5b_PC_residue` §10) | BUILD | EQUAL | — |
-| B14.27 | a challenge heard of is accepted (with the addressed-Record reader) | `14_VERBS_PHYSICAL_A` A0, A4 | BUILD | MOVER(behaviour) | B14.01, Batch B01 |
+| B14.27 | a challenge heard of is accepted (with the addressed-Record reader); the reader and stamp landed in B01, the gate test remains | `14_VERBS_PHYSICAL_A` A0, A4 | BUILD | EQUAL | B14.01, Batch B01 |
 | B14.28 | the opponent model: the design | intake `:492` PC-21 | DESIGN-FIRST | — | — |
 | B14.99 | re-pin and close readings | E-1 | BUILD | MOVER (the re-pin) | B14.01 to B14.28 |
 
@@ -472,10 +472,11 @@ Not in this batch, and where each is: `U5b_PC_residue` §1 items 3–5 (B15, the
 - COST and TIER: edit; `sonnet`.
 - LANDS IT: B14's producer; `Item: B14.26`, `[skip ci]`.
 
-### B14.27 — a challenge heard of is accepted (with the addressed-Record reader) · `14_VERBS_PHYSICAL_A` A0, A4 · BUILD · HASH MOVER(behaviour)
+### B14.27 — a challenge heard of is accepted (with the addressed-Record reader) · `14_VERBS_PHYSICAL_A` A0, A4 · BUILD · HASH EQUAL
 - SOURCE: `proposals/14_VERBS_PHYSICAL_A_custody_and_force.md` "A0 — the shared primitive", "A4 — `accept`", "Order of landing", "Gate", "Falsifier"; `audits/14_VERBS_PHYSICAL.md` §4.7 (the gate); A-21 (a challenge stays in person, `with`); `unified/U3_DEPENDENCY_ORDER.md` §4.1 row 52 (A4 in B14); UNDECIDED (2) (A0 with it); closes the audit's §4 (`accept` refused 27 of 27 on `exists:challenge=0`).
 - ADVANCES: R-05 contributor (`accept`; its BUILT OUT reading is B29's, IS-A §12.2); R-04.c5 (i) re-read.
-- INSTRUCTION:
+- ⚠ STEPS 1 TO 3 ARE EXISTS-IN-TREE (landed in B01; re-marked 2026-11-14, B01's terminal critique): `world_q.py::addressed_records` (with a `named` parameter) and `::challenges_heard`, stamped as `Record` by `questions_for` beside `writs_held`, and `accept`'s `referent_class_note` already says the challenged forms `accept` on a challenge he has heard of (the "minted into the challenger's hand … until H-229's `give`" sentence is gone). Do not rebuild them. What this item still owes is the gate test through the real chooser, its falsifier on the stamp alone, and the aperture reading. The test cannot start red (the behaviour it gates exists), so it is written green and seen red on the planted `()`; nothing in the engine is edited, so the realm hash does not move (HASH EQUAL).
+- INSTRUCTION (as first written; steps 1 to 3 are the record of what B01 landed, not work):
   1. A0, `engine/season/queries/world_q.py`:
      ```python
      def addressed_records(w: World, p: Person, kind: str) -> tuple[str, ...]:
@@ -487,12 +488,12 @@ Not in this batch, and where each is: `U5b_PC_residue` §1 items 3–5 (B15, the
      ```
   2. A4, `queries/world_q.py`: "stamp term `challenges_heard(w, p)` = `addressed_records(w, p, CHALLENGE_KIND)`, stamped under `Record` in `_stamped`."
   3. A4, `verb_table.yaml`, row `accept`, `referent_class_note`: "replace the sentence beginning *'⚠ A CHALLENGE IS MINTED INTO THE CHALLENGER'S HAND'* through *'…until H-229's `give` reaches the realm.'* with *'A challenge is minted into the challenger's hand. The challenged forms `accept` on it once he has heard of it (`world_q.challenges_heard`, 14_VERBS_PHYSICAL_A A4); the cell asks nothing of holding.'*" `STOPS IF` the sentence is not in the note at the item's open (B01's lane A may have rewritten the row): the commit body quotes the note as found, and the replacement sentence is appended in its place.
-- WHERE: `engine/season/queries/world_q.py` (`addressed_records`, `challenges_heard`, `_stamped`); `engine/season/verb_table.yaml` (`accept`'s `referent_class_note`); NEW `engine/season/tests/test_vm_phy_a_custody.py`.
-- TESTS: NEW `engine/season/tests/test_vm_phy_a_custody.py` ("four functions, one per gate of the audit's §1.7, §2.7, §3.7, §4.7"); this item writes the A4 function, first and red: `[ASSUMPTION: test name; the item creates it]` `test_accept_forms_on_a_heard_challenge` — the audit §4.7 gate: "A seeded realm with one planted dispute between two co-located persons, run through the real chooser with no hand-built act, produces `challenge.issued`, then an `accept` attempted by the challenged, then a scene fought under `blood` terms with `duel.yielded` or `body.changed`. **Control:** without the new stamp, the challenged's opening set has no `accept` (the pre-change shape after lane A). **Planted failure:** the stamp reader returning `()` reproduces 0 `accept` formations." B15 (A3) and B29 (A1, A2) add the other three functions.
-- FALSIFIER and CONTROL: "return `()` from `challenges_heard`" turns the test red. Control: as the gate's.
-- GATE: `python -m pytest engine/season/tests/test_vm_phy_a_custody.py -q` → pass; `python -m engine.season.harness.aperture 2 --seeds 0 1 2` before and after, quoted: "`accept` refusals on `exists:challenge` equal 0"; the realm hash (`HASH READING`) at seed 0 → moved, named.
-- HASH MOVERS: "every realm and spine pin in which these formations occurred" — `accept`'s formations (37 at the audit's read). B14.99.
-- DEPENDS ON: EXISTS-IN-TREE `world_q.py::_stamped`, `CHALLENGE_KIND`, `RECORD_CONTENT`, `detainees_held`, `person_q.py::ledger_names`; V12 Batch B01 (lane A's duel chain: the challenge Record addressed to the challenged).
+- WHERE: NEW `engine/season/tests/test_vm_phy_a_custody.py` (the only file this item writes; `world_q.py` and `verb_table.yaml` are read, not edited).
+- TESTS: NEW `engine/season/tests/test_vm_phy_a_custody.py` ("four functions, one per gate of the audit's §1.7, §2.7, §3.7, §4.7"); this item writes the A4 function, first, GREEN on the tree (B01 landed the stamp) and seen red on the planted `()` below: `[ASSUMPTION: test name; the item creates it]` `test_accept_forms_on_a_heard_challenge` — the audit §4.7 gate: "A seeded realm with one planted dispute between two co-located persons, run through the real chooser with no hand-built act, produces `challenge.issued`, then an `accept` attempted by the challenged, then a scene fought under `blood` terms with `duel.yielded` or `body.changed`. **Control:** without the new stamp, the challenged's opening set has no `accept` (the pre-change shape after lane A). **Planted failure:** the stamp reader returning `()` reproduces 0 `accept` formations." B15 (A3) and B29 (A1, A2) add the other three functions.
+- FALSIFIER and CONTROL: "return `()` from `challenges_heard`" (alone, by monkeypatch) turns the test red. Control: as the gate's. (`engine/season/tests/test_b11a_duel_reach.py`'s chain falsifier, B01's, drives formed Candidates through hand-built acts and reverts the whole lane at once; this test is the real chooser and the stamp alone.)
+- GATE: `python -m pytest engine/season/tests/test_vm_phy_a_custody.py -q` → pass; `python -m engine.season.harness.aperture 2 --seeds 0 1 2` read once and quoted (no before/after: nothing is edited): "`accept` refusals on `exists:challenge` equal 0"; the realm hash (`HASH READING`) at seed 0 → equal to B14.25's.
+- HASH MOVERS: none (EQUAL): `accept`'s formation moved the hash in B01 (`test_b11a_duel_reach.py`'s `POST`), not here.
+- DEPENDS ON: EXISTS-IN-TREE `world_q.py::addressed_records`, `::challenges_heard`, `::questions_for`'s stamp, `CHALLENGE_KIND`, `person_q.py::ledger_names` (all landed in B01); V12 Batch B01 (lane A's duel chain: the challenge Record addressed to the challenged).
 - GLOSSARY: none.
 - COST and TIER: small build; `sonnet`, `high`; the gate read by `opus`.
 - LANDS IT: B14's producer; `Item: B14.27`, `[skip ci]`.

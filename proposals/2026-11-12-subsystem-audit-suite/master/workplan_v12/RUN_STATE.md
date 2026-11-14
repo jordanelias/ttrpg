@@ -24,4 +24,6 @@
 6. Adoption of v12 into `workplans/` (retire v11 with `FORK:` rows) is Jordan's call; not done.
 
 
+**2026-11-14 (branch `exec/v12-b00-b03`):** B00 and B01 closed and expunged; batch `B01a-attributes-generated` (Jordan's rulings of 2026-11-13/14: drawn attributes before any pin; the random-pairs instrument) written into `workplan_v12_part3.md` before B02, with its GATE lines in 15 batches, the head rule (§3.B), part 2's rows and ids ED-IN-0403..0404, H-856..H-860; next to run: B01a, then B02.
+
 **Closed 2026-11-13:** Stage E done (`../AGONIST_ANTAGONIST.md` Parts A to C; lane E repairs `checks/E_REPAIR.md`); the Fable verdict repaired (`checks/V1_APPLIED.md`); PR #602 body rewritten; checkpoint loop stopped. Nothing in v12 has been run. Remaining and Jordan's: J-03 to J-08 (`V12_FOR_JORDAN.md`), adoption of v12 into `workplans/` (retires v11, `FORK:` rows), the repository's merge setting (J-05), merge of PR #602.

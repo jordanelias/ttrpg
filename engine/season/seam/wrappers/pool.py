@@ -91,10 +91,27 @@ def faculty(w: Any, p: Any, verb: str) -> int:
     ⚠ `08 §3` GIVES THE POLARITY: an `assumption` grade means *inject the default, declare the site,
     sweep three points* -- never refuse the whole corpus for a missing key. `absent` is the grade
     that refuses, and this is not one."""
+    return score(w, p, verb) + sum(int(add(w, p, verb)) for add in POOL_ADDENDS)
+
+
+def score(w: Any, p: Any, verb: str, attribute: Any = None) -> int:
+    """WHAT `p` HOLDS FOR `verb`'s VOCATION (B11 lane A, `10_DICE_one_score_two_roles.md` A): the larger of the held
+    capability key and the vocation's attribute he holds, else the key alone, else `pool_default` -- `faculty`'s base,
+    split out with no arithmetic moved. ONE SCORE, TWO ROLES: the base of his pool AND the score an opponent's obstacle
+    halves (`sigma.py::_opposition_of`). No addend: practice raises a pool, never an opposition. `attribute` is the
+    attribute read: the vocation's own for the pool (`None`, `_authored_attribute`, looked up at the call so a test's
+    patch reaches it), `_opposing_attribute` for the opposition (v10 CR-96: the row's `opposed_by` where it has one),
+    the one difference between the two roles."""
     have = _capability(p, verb)
-    attr = _authored_attribute(p, verb)
+    attr = (attribute or _authored_attribute)(p, verb)
     if attr is not None:
-        base = int(attr) if have is None else max(int(attr), int(have))
-    else:
-        base = int(have if have is not None else w.fixtures.get("pool_default"))
-    return base + sum(int(add(w, p, verb)) for add in POOL_ADDENDS)
+        return int(attr) if have is None else max(int(attr), int(have))
+    return int(have) if have is not None else untrained(w.fixtures)
+
+
+def untrained(fx: Any) -> int:
+    """THE UNTRAINED SCORE: what a person brings to a vocation he holds nothing on, `Fixtures pool_default` (H-126) --
+    `score`'s fallback, read here once. On a verb that names NO vocation (no `verb_capability` row: `lie`) nobody can hold
+    a key or an attribute for it, so this is EVERY person's score there, and a believer knows it without asking anyone
+    (`sigma.believed_input` reads it for a person he opposes on such a verb, so the odds he weighs are the odds dealt)."""
+    return int(fx.get("pool_default"))

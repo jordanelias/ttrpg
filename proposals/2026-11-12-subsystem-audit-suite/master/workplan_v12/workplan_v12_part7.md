@@ -11,8 +11,8 @@
 ## Batch B04-capability-home · lane IN · wave W6 · step S6 · HASH MOVER(encoding), one re-pin
 INVOCATION: /methodology-execute Batch B04-capability-home
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_IN.md, Open table
-GATE: Batch B00-ids
-GATE: Batch B01-laneA
+GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
+GATE: Batch B01-laneA @cfd9aefb049c2fe49b55c7ada1b0b624919af23d
 GATE: Batch B02-tests
 GATE: Batch B03g-go-early-landings
 GATE: Batch B03c-boot
@@ -142,7 +142,7 @@ Not in this batch, and where each is: CORE Edit 9 and CAP Part B (B05); MAP §G 
 - FALSIFIER and CONTROL: "Delete `capability:` from `argue`'s row: the load refuses naming the row" (CORE). Control: the realm content hash at seeds 0 to 2, one season, equal to B04.02's (`verb_capability` still feeds every reader until B04.04).
 - GATE: `python -m pytest engine/season/tests/test_u1_capability_surface.py -q` → pass; the realm hash (`HASH READING`) at seed 0, one season → equal to B04.02's reading.
 - HASH MOVERS: none.
-- DEPENDS ON: V12 B04.02 (`CAPABILITIES`); V12 Batch B01-laneA (lane A's three `verb_capability` rows); EXISTS-IN-TREE `data/verbs.py::VerbRow`.
+- DEPENDS ON: V12 B04.02 (`CAPABILITIES`); V12 Batch B01-laneA @cfd9aefb049c2fe49b55c7ada1b0b624919af23d (lane A's three `verb_capability` rows); EXISTS-IN-TREE `data/verbs.py::VerbRow`.
 - GLOSSARY: none (the column's word is *capability*, the tree's identifier for skill, glossary §B).
 - COST and TIER: edit; `sonnet`, `high`.
 - LANDS IT: B04's producer; `Item: B04.03`, `[skip ci]`.
@@ -411,7 +411,7 @@ Not in this batch, and where each is: CORE Edit 9 and CAP Part B (B05); MAP §G 
 - LANDS IT: B04's producer; `Item: B04.17`, `[skip ci]`.
 
 ### B04.18 — three social skills: `law`, `insight`, `deception` · `05_SC_hearing_capabilities` edit 1 · BUILD · HASH EQUAL
-- SOURCE: `proposals/05_SC_hearing_capabilities.md` "Three new definition rows", "Exact edits" 1, "Gate" 1, "Named tests"; U1 §2 (rows table), §5; U3 §4.1 row 13 (definition rows in B04, `hearing_moves` in B24); rulings A-98 (`insight` is a skill), D-U1-03 (`rhetoric` not created).
+- SOURCE: `proposals/05_SC_hearing_capabilities.md` "Three new definition rows", "Exact edits" 1, "Gate" 1, "Named tests"; U1 §2 (rows table), §5; U3 §4.1 row 13 (definition rows in B04, `proceeding_moves` in B24); rulings A-98 (`insight` is a skill), D-U1-03 (`rhetoric` not created).
 - ADVANCES: none of the nine; the social roll's skills have names (the cast's ranks in them are BA1's).
 - INSTRUCTION: `references/descriptor_registry.yaml: capabilities.rows` gains three rows ("scale `[0, 7]`, `grows_by: [train, practice]`; U1 §2"), each `gloss` the sentence given, each `base` "`grade: assumption`; a designer re-points one by editing one cell":
   ```yaml

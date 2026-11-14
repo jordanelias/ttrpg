@@ -25,7 +25,7 @@ from engine.season.data.matrix import matrix_row
 from engine.season.data.rosters import (
     VERB_CAPABILITY, VOCATION_ATTRIBUTE, _load_vocation_attribute,
 )
-from engine.season.data.verbs import VOCATIONS
+from engine.season.data.verbs import TASK_DIFFICULTY, VOCATIONS   # TASK_DIFFICULTY: B11 lane A
 from engine.season.gaps import Unspecified
 from engine.season.harness import probes as P
 from engine.season.loop.driver import mint_token
@@ -64,7 +64,12 @@ def test_pools_follow_the_vocation_attribute_and_the_opposition_reads_the_score(
     assert sigma.faculty(w, w.persons[HIGH], TELL) == 6
     assert sigma.faculty(w, w.persons[MID], TELL) == w.fixtures.get("pool_default")      # nothing authored
     assert sigma._opposition_of(w, LOW, TELL) == 2.0 and sigma._opposition_of(w, HIGH, TELL) == 6.0
-    assert sigma._opposition_of(w, MID, TELL) is None                                    # never the fallback
+    # B11 lane A (one score, two roles): a person holding nothing opposes with the score he rolls, `pool_default`, on the
+    # shipped `task` arm; `None` (the module's stand-in) on the control arm. Was `is None` on every arm.
+    assert sigma._opposition_of(w, MID, TELL) == float(w.fixtures.get("pool_default"))
+    w.fixtures = w.fixtures.sweep("obstacle_model", "stand_in")
+    assert sigma._opposition_of(w, MID, TELL) is None                                    # the control: never the fallback
+    w.fixtures = w.fixtures.sweep("obstacle_model", "task")
 
     # What the module composes against a roller of pool 2 (the default): score/2, then the H-213 ceiling.
     roller, SC_ROLL = MID, _roll_module()
@@ -72,10 +77,11 @@ def test_pools_follow_the_vocation_attribute_and_the_opposition_reads_the_score(
     high_inp = sigma.contest_input(w, [roller], verb=TELL, subject=HIGH)
     high_ob = SC_ROLL.obstacle(high_inp)
     assert high_inp.opposition == 6.0 and high_inp.pool == w.fixtures.get("pool_default")
-    assert low_ob == 1.0                                                  # 2 / 2: under any ceiling
+    # B11 lane A: the task's difficulty (`tell`, `rosters.yaml: task_difficulty`) is the obstacle's first term; was 1.0
+    assert low_ob == TASK_DIFFICULTY[TELL] + 1.0                          # difficulty + 2 / 2: under the ceiling
     cap = SC_ROLL._chance_floor_cap(high_inp.pool, float(high_inp.obstacle_ceiling))
     assert 1.0 < cap < 3.0, "the plan's premise (Ob 3 reads) is false at this ceiling: the cap bites"
-    assert high_ob == cap, "the ceiling is the obstacle a 6 reads against a pool of 2, not 3"
+    assert high_ob == cap, "the ceiling is the obstacle a 6 reads against a pool of 2, not difficulty + 3"
 
 
 def test_the_planted_failure_faculty_ignoring_the_base_reads_two_and_not_six(monkeypatch):
@@ -87,10 +93,12 @@ def test_the_planted_failure_faculty_ignoring_the_base_reads_two_and_not_six(mon
 
 
 def test_a_verb_with_no_vocation_ignores_the_attributes():
+    # B11 lane A: `determine` draws on `argue` now (`verb_capability`), so a verb drawing on none is read with `transfer`;
+    # on the shipped arm a person still opposes it with the score he rolls, here `pool_default`.
     w = _w(**{HIGH: {ATTR: 6}})
-    assert VERB_CAPABILITY.get("determine") is None
-    assert sigma.faculty(w, w.persons[HIGH], "determine") == w.fixtures.get("pool_default")
-    assert sigma._opposition_of(w, HIGH, "determine") is None
+    assert VERB_CAPABILITY.get("transfer") is None
+    assert sigma.faculty(w, w.persons[HIGH], "transfer") == w.fixtures.get("pool_default")
+    assert sigma._opposition_of(w, HIGH, "transfer") == float(w.fixtures.get("pool_default"))
 
 
 # ======================================================================================
@@ -156,7 +164,7 @@ def test_a_legacy_spelling_resolves_to_its_key_and_a_range_reads_its_lower_bound
     with pytest.raises(Exception):
         cast.attributes_of({"id": "X", "stats": {"social": "3–4"}})
     assert cast.attributes_of({"id": "X", "stats": {"Reason": 2, "Spirit": 7, "attr.social.grace": 1}}) == {
-        "attr.mind.acuity": 2, "attr.mind.will": 7, "attr.social.grace": 1}
+        "attr.mind.acuity": 2, "attr.spirit.will": 7, "attr.social.grace": 1}
 
 
 @pytest.mark.parametrize("stats", [
@@ -211,15 +219,25 @@ def test_the_creation_sheet_carries_the_attributes_as_a_read_only_copy():
 # ======================================================================================
 
 def test_the_realm_reads_the_cast_stats_only_on_the_arm_that_is_switched_on():
-    """`cast_attributes=False` (the shipped control) leaves every person with no attribute; `True` writes the
-    one row the registry authors (NPC-001, Edeyja) and nobody else. The event-list and hash readings of the two
-    arms are in `build_realm`'s docstring and the CR-20 commit body (the arm-off list equals the parent tree's)."""
+    """`cast_attributes=False` (the control) leaves every person with no attribute; `True` (SHIPPED since B11 lane A)
+    seats the sheet `state/carriers.py::generated_attributes` draws (B01a.01) on every person and the one row the
+    registry authors (NPC-001, Edeyja) over it, key by key. The event-list and hash readings of the two arms are in
+    `build_realm`'s docstring and the CR-20 and B11 lane A commit bodies."""
     from engine.season.harness import populated as PO
-    off = PO.build_realm(0)
+    from engine.season.state.carriers import generated_attributes
+    off = PO.build_realm(0, cast_attributes=False)
     assert not [p.id for p in off.persons.values() if p.attributes]
-    on = PO.build_realm(0, cast_attributes=True)
-    assert [p.id for p in on.persons.values() if p.attributes] == ["p_npc_001"]
-    assert on.persons["p_npc_001"].attributes == cast.attributes_of(cast.row("NPC-001"))
+    on = PO.build_realm(0)
+    span = on.fixtures.get("generated_attribute_range")
+    checked = 0
+    for pid, p in on.persons.items():
+        drawn = generated_attributes(0, pid, span)
+        if pid == "p_npc_001":
+            assert p.attributes == {**drawn, **cast.attributes_of(cast.row("NPC-001"))}
+        else:
+            assert p.attributes == drawn, pid
+        checked += 1
+    assert checked == len(on.persons) and checked > 1
 
 
 # ======================================================================================

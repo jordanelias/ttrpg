@@ -81,8 +81,10 @@ entries:
   # `Reason` is ALSO the conviction `conv.reason`: a recorded display collision (names.json `ambiguous`, like `Order`);
   # the KEY disambiguates.
   attr.mind.acuity:      {canonical: Reason,     aliases: [Acuity, Faculty, Forecasting, Predicting, Reasoning, Cognition], legacy: [], category: attribute, enforce: warn}
-  attr.mind.will:        {canonical: Spirit,     aliases: [Will, Willpower],      legacy: [], category: attribute, enforce: warn}
   attr.mind.perception:  {canonical: Perception, aliases: [],                     legacy: [], category: attribute, enforce: warn}
+  # Spirit is its own group (B01a.06, Jordan 2026-11-14): `attr.mind.will` became `attr.spirit.will`. The old KEY is
+  # carried as an alias, so it still resolves to the display name (a `legacy:` tag would REFUSE it, names.py).
+  attr.spirit.will:      {canonical: Spirit,     aliases: [Will, Willpower, attr.mind.will], legacy: [], category: attribute, enforce: warn}
   attr.social.attunement: {canonical: Attunement, aliases: [],                    legacy: [], category: attribute, enforce: warn}
   # `Influence` is deliberately NOT an alias here: it is the roll stat's own name, not Charisma's.
   attr.social.charisma:  {canonical: Presence,   aliases: [Charisma],  legacy: [], category: attribute, enforce: warn}
@@ -94,6 +96,7 @@ entries:
   # ── AGGREGATES (mirror: descriptor_registry.yaml aggregates; placeholders) ────
   agg.body:   {canonical: Body,   aliases: [], legacy: [], category: aggregate, enforce: warn}
   agg.mind:   {canonical: Mind,   aliases: [], legacy: [], category: aggregate, enforce: warn}
+  agg.spirit: {canonical: Spirit Group, aliases: [], legacy: [], category: aggregate, enforce: warn}   # NOT 'Spirit': that is attr.spirit.will's display
   agg.social: {canonical: Social, aliases: [], legacy: [], category: aggregate, enforce: warn}
 
 # ── CONVICTIONS (the 7-axis character conviction class) ──

@@ -15,8 +15,8 @@
 ## Batch B12a-world-motion-and-ground · lane SE+WR · wave W13 · step S13 · HASH MOVER, one re-pin
 INVOCATION: /methodology-execute Batch B12a-world-motion-and-ground
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_SE.md, Open table; `registers/handoffs/HANDOFF_WR.md` carries one pointer row `Batch B12a-world-motion-and-ground — IN FLIGHT (row in HANDOFF_SE.md)`, deleted at the same expunge (D-21)
-GATE: Batch B00-ids
-GATE: Batch B01-laneA
+GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
+GATE: Batch B01-laneA @cfd9aefb049c2fe49b55c7ada1b0b624919af23d
 GATE: Batch B02-tests
 GATE: Batch B04-capability-home
 GATE: Batch B05-one-roll

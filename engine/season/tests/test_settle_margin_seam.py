@@ -38,7 +38,10 @@ KEY = "copying"
 def _world(opposition):
     """A speaker at pool 4 against a hearer whose score is `opposition`: the obstacle is score/2 (under the
     shipped ceiling of 2), so 3 gives 1.5 and 4 gives 2.0."""
-    w = P.tiny_world(DEFAULT_FIXTURES)
+    # B11 lane A: read on the CONTROL obstacle (`obstacle_model: stand_in`, score / 2 alone): this file is about how a
+    # fraction of a margin is settled, and the whole and fractional Obs below are the stand-in arm's (the shipped `task`
+    # arm adds the task's difficulty, `test_b11a_scores_and_obstacle.py`).
+    w = P.tiny_world(DEFAULT_FIXTURES.sweep("obstacle_model", "stand_in"))
     SeasonDriver(w)                                   # the registrar fills MODULE_ENTRIES
     # roster-exempt: TEST FIXTURE capabilities -- a speaker at pool 4 and a hearer scoring `opposition`.
     w.persons["p_low"].capability = {KEY: 4}
@@ -97,7 +100,8 @@ def test_the_records_own_fields_are_the_entrys_and_only_one_is_added():
     inp = sigma.contest_input(w, ["p_low"], verb="tell", subject="p_mid")
     margin = _module().roll(inp, random.Random(5))
     assert (out["net"], out["ob"], out["pool"]) == (margin.net, margin.ob, inp.pool)
-    assert set(out) == {"status", "module", "resolver", "pool", "net", "ob", "leverage", "settled_margin"}
+    # B11 lane A: AND `ob_terms`, every term of the obstacle named on the record (`roll.py::obstacle_terms`)
+    assert set(out) == {"status", "module", "resolver", "pool", "net", "ob", "leverage", "settled_margin", "ob_terms"}
 
 
 def test_degree_of_grades_the_settled_margin_when_present_and_the_pair_otherwise():

@@ -53,6 +53,10 @@ Three sources, as `H2_DECISIONS.md` Appendix A's script reads them, re-run here 
 | critical path by hours, E-15 | 190 h (the MB middle) | about 354 h | **390.5 h** (lane H3; old 390.1 h): B00 → B01 → B02 → B03 → B03g → B03a → B04 → B05 → B06 → B07 → B09 → B10 → B11 → B12a → B12b → B12c → B25 → B32 → B35 → B36 → B38 → B39 → B40 → B98 → B99 (the SE middle, as H1 found; 356.5 h before: +2.0 h R1's five positions on the path, B00.99, B01.99, B02.39, B02.99, B04.99; +31.3 h B98 at its 87 positions, +0.3 h B99; B03g ties B16L at 4.5 h and is taken); **+0.4 h by lane H3**: B35 is on the path and gains B35.30 (14.5 → 14.9 h); B17.14 is off it (B17's slack is 4 steps); the chain is unchanged |
 | makespan, the longest batch of each step summed | 221 h | — | **425.3 h** (lane H3; old 424.5 h: B17, S9's longest batch, + 0.4 h; B35, S18's longest, + 0.4 h; 390.5 h before part 44 and R1) |
 
+**Re-run 2026-11-14 for B01a** (the B01a drafting lane; the appendix's scripts on the tree after B00 and B01 were expunged, each expunged batch at 0 h; `graph.py` with B01a's row injected; numbers before → after B01a): edges 526 → **543** (+4 structural: B00, B01 → B01a; B01a → B98, B99; +13 `GATE: Batch B01a` lines, B01a.05: B02, B05, B10, B15, B16, B18, B19a, BA1, B24, B24a, B27, B28, B39), acyclic; waves 25 → **26 (W0–W25)**; steps 25 → **26**; 90 tied chains (unchanged); **critical path 383.5 h → 390.4 h**, B00 → B01a → B02 → B03 → B03g → B03a → B04 → B05 → B06 → B07 → B09 → B10 → B11 → B12a → B12b → B12c → B25 → B32 → B35 → B36 → B38 → B39 → B40 → B98 → B99 (B01a's 6.9 h added; the chain is H3's with B01 replaced, B00 and B01 at 0 h as closed); serial 744.3 → **751.2 h**; makespan 419.1 → **426.0 h**; with the five merge-order pairs as edges, 531 → 548 edges, 27 → 28 waves and steps, 414.1 → 421.0 h. Positions (the leading-word normaliser, `totals.py`) 1,457 → **1,463** (B01a: BUILD 5, POINTER 1); behaviour movers 474 → 476 (B01a.01, .02, .03; B05.16 now EQUAL, B05.25 counted: B05 13), mover batches 48 → 49, EQUAL 11 (the base counts are this re-run's on the current parts, which carry the 2026-11-13 additions and B98's later edits that H3's figures below predate). `gates.py`: every block's `GATE: Batch` lines equal its after-list (B98 60 lines, B99 61).
+
+**Re-run 2026-11-14 for B24p** (stage 3 of the social-contest redesign, `checks/F3_APPLIED.md`; the appendix's scripts on the tree after B01a, with B24p's row injected before BA1's in `graph.py` so that it merges first in S12, a schedule floor that holds it until B10 has closed (its block's UNDECIDED (1): a floor, not an edge, so no wave and no hour moves by it), and `parse_parts.py` reading the new `_b24p` files; the same scripts on the tree at `1b42689` give the "before"; numbers before → after): **63 batches** (was 62); edges 543 → **558** (+11 structural: B00, B01, B01a, B02, B03, B04, B05, B06, B07 → B24p, and B24p → B98, B24p → B99; +4 `GATE: Batch B24p-sc-proceeding` lines: B24, B24a, B27, B28), acyclic; waves 26 (W0–W25) → **26** (B24p sits at W10 by its edges in the table's pre-B01a numbering, W11 in the shifted one; slack 2 steps; no other batch moves a wave); steps 26 → **26** (S0–S25; B24p is the fifth batch of S12 and merges first; no other batch moves a step); 90 tied chains (unchanged); **critical path 390.8 h → 392.0 h** (the chain is the same twenty-five batches: +1.2 h is B98's three added positions, B98.87 to B98.89, 87 → 90; B24p, slack 2, is off it); **serial 751.6 h → 766.9 h** (B24p 14.1 h = 0.4 h × 24 + 2.5 h + 2 h for the `pairs proceeding` readings, +15.3 h with B98's +1.2 h); makespan 426.4 h → **427.6 h**; with the five merge-order pairs as edges 28 waves, 28 steps, 421.4 h → **422.6 h**. Positions 1,464 → **1,491** (+24 B24p: BUILD 23, READING 1; +3 B98: READING 1, BUILD (flip) 1, BLOCKED 1); hash movers: behaviour 477 → **482** (B24p.15, .19, .20, .23; B98.88), encoding 22, conditional 6; mover batches 49 → **50**, EQUAL batches 11. (The "before" figures read 0.4 h above the B01a paragraph's 390.4 / 751.2 / 426.0: B01a has gained B01a.06 since, 7 positions, 7.3 h, and is on the path.)
+
 **Lane H3's re-run of `graph.py`** (the tree the repair lanes left, with B35.30): S 501 edges; S + G = S + G + R **526 edges, acyclic, 25 waves (W0–W24), 25 steps, 90 tied chains, 390.5 h** on the path above; S + G + R + M 531 edges, 27 waves, 27 steps, 108 chains, 420.3 h; serial 748.5 h; makespan 425.3 h; slack B17 4, B03g 0, B34 0, B26 1. Edges, waves, steps, chains and the chain of the path are unchanged from R1's figures; the hours moved by B17.14 (+0.4 h serial and makespan) and B35.30 (+0.4 h serial, makespan and path).
 
 **Every hour is an estimate** (E-15: `0.4 h × positions + 2.5 h` for the one close, `+ 2 h` for B02, B05, B15, B19, B19a, the batches running a calibration or a long instrument; B98 and B99 by the same formula from part 44's positions, each with the `+ 2 h` for its probes or its long re-take: 39.3 h and 5.3 h, in place of the structure's 8 h and 5 h; `graph.py` keeps those two guesses only for a batch with no positions, appendix, edited by repair lane R1). The estimate is replaced by each batch's measured wall time at its expunge (`workplan_v12.md` §5). The authors' own `EST:` lines are not used: they count halves, sometimes omit the close or the `+2 h`, and do not compare (two read "0.4 h × (… + the second half's)").
@@ -61,7 +65,7 @@ Three sources, as `H2_DECISIONS.md` Appendix A's script reads them, re-run here 
 
 | step | open at once (the first named merges first among movers, §3) |
 |---|---|
-| S0–S3 | B00 · B01 · B02 · B03, one each (IN) |
+| S0–S3 | B00 · B01 · B02 · B03, one each (IN); ⚠ 2026-11-14: B01a opens at S2, between B01 and B02, and every row from B02 down moves one step later (S2 → S3, …, S24 → S25), membership unchanged |
 | S4 | B03g (GO), B03c (IN), B16L (MB) |
 | S5 | B03a (IN), alone |
 | S6 | B13 (PC), B16M (MB), B04 (IN) |
@@ -69,7 +73,7 @@ Three sources, as `H2_DECISIONS.md` Appendix A's script reads them, re-run here 
 | S8 | B06 (IN), B14 (PC) |
 | S9 | B07 (IN), B17 (MB) |
 | S10 · S11 | B09 · B10 (IN) |
-| S12 | BA1 (IN), B11 (FI), B15 (PC), B21 (FA) |
+| S12 | B24p (SC), BA1 (IN), B11 (FI), B15 (PC), B21 (FA); ⚠ 2026-11-14: B24p is held to S12 by a schedule floor (it opens after B10 has closed: its block's UNDECIDED (1)), not by an edge |
 | S13 | B08 (IN), B12a (SE+WR), B16 (PC), B21b (FA), B24 (SC) |
 | S14 | B12b (SE+WR), B19a (MB), B21c (FA), B29 (PC), B34 (GO) |
 | S15 | B12c (SE+WR), B18 (PC), B19 (MB), B21d (FA), B24a (SC) — B41 no longer here |
@@ -87,9 +91,8 @@ Columns: the wave and step as the structure had them, and now (a change in bold)
 
 | batch | lane | wave (§2.1 → now) | step (§2.1 → now) | slack | part files | positions: total (by state) | hash, from the position rows (§2.2 said) | est. h (E-15) | after: every `GATE: Batch` it needs (`+G` a part's GATE line §2.1 lacked; `+R` an edge H2 adopts) |
 |---|---|---|---|---|---|---|---|---|---|
-| B00-ids | IN | W0 | S0 | 0 | 3 | 3 (B3) | EQUAL | 3.7 | — |
-| B01-laneA | IN | W1 | S1 | 0 | 3 | 3 (B3) | MOVER (behaviour 2) | 3.7 | B00 |
-| B02-tests | IN | W2 | S2 | 0 | 3, 3_cont | 40 (B36 P2 R1 H1) | EQUAL | 20.5 | B00, B01 |
+| B01a-attributes-generated | IN | — → **W2** | — → **S2** | 0 | 3 | 6 (B5 P1) | MOVER (behaviour 3) | 6.9 | B00 @c3418a6, B01 @cfd9aef (both expunged) |
+| B02-tests | IN | W2 → **W3** | S2 → **S3** | 0 | 3, 3_cont | 40 (B36 P2 R1 H1) | EQUAL | 20.5 | B00, B01, B01a (B01a.05) |
 | B03-hygiene | IN | W3 | S3 | 0 | 4, 4_cont, 5, 5_cont | 65 (B60 P1 R1 H2 BL1; V1: B03.71 BUILD → HELD) | **MOVER (behaviour 1, encoding 1)** (§2.2: EQUAL) | 28.5 | B00, B01, B02 |
 | B03g-go-early-landings | GO | W4 | S4 | 0 | 6 | 5 (B5) | EQUAL | 4.5 | B00, B01, B02, B03 |
 | B03c-boot | IN | W4 | S4 | 0 | 6 | 3 (B3) | EQUAL | 3.7 | B00, B01, B02, B03 |
@@ -98,13 +101,13 @@ Columns: the wave and step as the structure had them, and now (a change in bold)
 | B13-pc-package | PC | W6 | S6 | 0 | 6_cont | 2 (B2) | EQUAL | 3.3 | B00, B01, B02, B03, B03a, B03g +R1 |
 | B16M-mb-engine-words | MB | W6 | S6 | 0 | 6_cont | 4 (B4) | EQUAL | 4.1 | B16L, B03a |
 | B04-capability-home | IN | W6 | S6 | 0 | 7 | 27 (B24 P2 C1) | MOVER (encoding 2) | 13.3 | B00, B01, B02, B03g, B03c, B03a |
-| B05-one-roll | IN | W7 | S7 | 0 | 8, 8_cont, 9 | 39 (B35 P3 R1) | MOVER (behaviour 13, encoding 1) | 20.1 | B00, B01, B02, B03a, B13, B16M, B04 |
+| B05-one-roll | IN | W7 | S7 | 0 | 8, 8_cont, 9 | 41 (B36 P3 R1 DF1; +B05.24 DF, +B05.25 B, 2026-11-13) | MOVER (behaviour 13, encoding 1; B05.16 EQUAL after B01a, 2026-11-14) | 20.9 | B00, B01, B01a (B01a.05), B02, B03a, B13, B16M, B04 |
 | B06-keyed-draw | IN | W8 | S8 | 0 | 10 | 8 (B7 P1) | MOVER (behaviour 1) | 5.7 | B00, B01, B02, B03, B05 |
 | B07-task-draw | IN | W9 | S9 | 0 | 10_cont2 | 10 (B5 P5) | MOVER (behaviour 1) | 6.5 | B00, B01, B02, B05, B06 |
 | B08-scene-order | IN | W6 → **W9** | S13 | 9 | 23 | 7 (B7) | MOVER (behaviour 3) | 5.3 | B00, B01, B02, B03a, B04 +R, B05 +R, B06 +R |
 | B09-memory | IN | W10 | S10 | 0 | 11_cont | 22 (B21 BL1) | MOVER (behaviour 8; B09.10 relabelled from encoding, R2a) | 11.3 | B00, B01, B02, B05, B07 |
-| B10-character | IN | W11 | S11 | 0 | 12, 12_cont, 13, 13_cont | 67 (B48 P8 R2 H3 BL2 C1 DF3) | MOVER (behaviour 9, encoding 1) | 29.3 | B00, B01, B02, B04, B05, B09 |
-| BA1-cast-content | IN | W12 | S12 | 10 | 18_cont | 13 (B2 P1 R1 C9) | MOVER (behaviour 9) | 7.7 | B00, B01, B02, B04, B05, B10 |
+| B10-character | IN | W11 | S11 | 0 | 12, 12_cont, 13, 13_cont | 67 (B48 P8 R2 H3 BL2 C1 DF3) | MOVER (behaviour 9, encoding 1) | 29.3 | B00, B01, B01a (B01a.05), B02, B04, B05, B09 |
+| BA1-cast-content | IN | W12 | S12 | 10 | 18_cont | 14 (B2 P1 R1 C10; +BA1.13 C, 2026-11-13) | MOVER (behaviour 10) | 8.1 | B00, B01, B01a (B01a.05), B02, B04, B05, B10 |
 | B11-fi-readers | FI | W12 | S12 | 0 | 16, 16_cont, 17, 17_cont | 58 (B49 P4 R2 H1 DF2) | MOVER (behaviour 29, encoding 2) | 25.7 | B00, B01, B02, B03, B04, B05, B07, B10 |
 | B11F1-flow-se | SE | W16 | S16 | 2 | 29_cont | 8 (B4 H1 C2 DF1) | MOVER (behaviour 3) | 5.7 | B12c |
 | B11F2-flow-in | IN | W17 | S17 | 2 | 32_cont | 12 (B8 P2 H2) | MOVER (conditional 1) | 7.3 | B09, B10, B11F1 |
@@ -112,11 +115,11 @@ Columns: the wave and step as the structure had them, and now (a change in bold)
 | B12b-weather-arcs-population | SE+WR | W14 | S14 | 0 | 24, 24_cont | 48 (B38 P7 R1 H1 C1) | MOVER (behaviour 12, encoding 1) | 21.7 | B12a |
 | B12c-material-verbs-and-valley | SE+WR | W15 | S15 | 0 | 28, 28_cont | 36 (B29 P2 R3 H1 DF1) | MOVER (behaviour 13, conditional 1; R2c) | 16.9 | B12b, B15 +R1, B34 +R1 |
 | B14-pc-outcome | PC | W8 | S8 | 3 | 10_cont | 29 (B26 P1 R1 DF1) | MOVER (behaviour 7) | 14.1 | B00, B01, B02, B13, B05 |
-| B15-pc-calibration | PC | W12 | S12 | 0 | 18 | 16 (B13 R2 DF1) | MOVER (behaviour 10) | 10.9 | B00, B01, B02, B04, B05, B10, B14 |
-| B16-pc-round | PC | W13 | S13 | 0 | 23 | 13 (B11 P1 R1) | MOVER (behaviour 1) | 7.7 | B00, B01, B02, B06, B07, B10, B11 +R, B15 |
+| B15-pc-calibration | PC | W12 | S12 | 0 | 18 | 16 (B13 R2 DF1) | MOVER (behaviour 10) | 10.9 | B00, B01, B01a (B01a.05), B02, B04, B05, B10, B14 |
+| B16-pc-round | PC | W13 | S13 | 0 | 23 | 13 (B11 P1 R1) | MOVER (behaviour 1) | 7.7 | B00, B01, B01a (B01a.05), B02, B06, B07, B10, B11 +R, B15 |
 | B17-mb-scale | MB | W9 | S9 | 4 | 11 | 15 (B12 P1 R1 H1; +R2a B17.14) | MOVER (behaviour 3) | 8.5 | B00, B01, B02, B16L, B16M, B05, B14 |
-| B18-pc-content | PC | W14 | S15 | 7 | 28_cont2 | 10 (B9 C1) | MOVER (behaviour 4) | 6.5 | B00, B01, B02, B14, B15, B16, B17 |
-| B19a-mb-contact-instrument | MB | W14 | S14 | 0 | 24_cont | 4 (B4) | EQUAL | 6.1 | B00, B01, B02, B16M, B14, B15, B16, B17 |
+| B18-pc-content | PC | W14 | S15 | 7 | 28_cont2 | 10 (B9 C1) | MOVER (behaviour 4) | 6.5 | B00, B01, B01a (B01a.05), B02, B14, B15, B16, B17 |
+| B19a-mb-contact-instrument | MB | W14 | S14 | 0 | 24_cont | 4 (B4) | EQUAL | 6.1 | B00, B01, B01a (B01a.05), B02, B16M, B14, B15, B16, B17 |
 | B19-mb-field-calibration | MB | W15 | S15 | 0 | 26, 26_cont, 27, 27_cont | 49 (B44 P1 R1 H2 BL1) | MOVER (behaviour 15; B19.60 counted, K6 F1) | 24.1 | B00, B01, B02, B16L, B04, B05, B06, B15, B16, B17, B19a, B29 +R |
 | B20-mb-orders | MB | W16 | S16 | 0 | 30 | 23 (B21 P1 R1) | MOVER (behaviour 4) | 11.7 | B00, B01, B02, B16L, B05, B15, B16, B17, B19, B34 +R |
 | B21-fa-governance | FA | W12 | S12 | 0 | 14, 14_cont, 15, 15_cont | 57 (B51 P3 R1 H2) | MOVER (behaviour 35) | 25.3 | B00, B01, B02, B05, B07, B10 |
@@ -126,12 +129,13 @@ Columns: the wave and step as the structure had them, and now (a change in bold)
 | B21s-strife-supply | IN | W16 | S18 | 3 | 35_cont | 3 (B3) | **EQUAL** (§2.2: per entry) | 3.7 | B12c, B21, B24a +R, B29 +R |
 | B22-mb-armies | MB | W17 | S17 | 1 | 33, 33_cont | 36 (B34 P1 DF1) | MOVER (behaviour 15) | 16.9 | B00, B01, B02, B16L, B04, B05, B07, B10, B12c, B17, B19, B20, B21, B21b |
 | B23-land | FA | W18 | S18 | 1 | 37 | 19 (B14 P3 C1 DF1; H3: B23.07 "BUILD (HELD if …)" read as BUILD) | MOVER (behaviour 8, conditional 1) | 10.1 | B00, B01, B02, B07, B12c, B17, B19, B20, B21, B21b, B22, B26 +R1 |
-| B24-sc-hearing | SC | W13 | S13 | 0 | 22, 22_cont | 43 (B39 P1 R1 DF2) | MOVER (behaviour 11) | 19.7 | B00, B01, B02, B03, B04, B07, B10, B11 |
-| B24a-sc-outside-the-room | SC | W15 | S15 | 0 | 28_cont | 9 (B8 DF1) | MOVER (behaviour 5) | 6.1 | B21c, B24 |
+| B24p-sc-proceeding | SC | — → **W10** | — → **S12** | 2 | 22_b24p, 22_b24p_cont | 24 (B23 R1) | MOVER (behaviour 4) | 14.1 | B00, B01, B01a (B01a.05), B02, B03, B04, B05, B06, B07 |
+| B24-sc-hearing | SC | W13 | S13 | 0 | 22, 22_cont | 43 (B39 P1 R1 DF2) | MOVER (behaviour 11) | 19.7 | B00, B01, B01a (B01a.05), B02, B03, B04, B07, B10, B11, B24p |
+| B24a-sc-outside-the-room | SC | W15 | S15 | 0 | 28_cont | 9 (B8 DF1) | MOVER (behaviour 5) | 6.1 | B21c, B24, B01a (B01a.05), B24p |
 | B25-fi-questioning | FI | W16 | S16 | 0 | 30_cont | 22 (B17 P3 R2) | MOVER (behaviour 11) | 11.3 | B00, B01, B02, B11, B12c, B24 |
 | B26-fi-inquiry | FI | W17 | S17 | 1 | 33_cont | 18 (B17 DF1) | MOVER (behaviour 13) | 9.7 | B00, B01, B02, B10, B11, B12c, B24, B25 |
-| B27-sc-proceedings | SC | W16 | S16 | 0 | 31, 31_cont | 28 (B20 R1 H1 DF6) | MOVER (behaviour 10) | 13.7 | B00, B01, B02, B11, B24, B24a |
-| B28-social-verbs | SC | W17 | S17 | 2 | 35, 35_cont | 34 (B30 P1 R1 BL1 DF1) | MOVER (behaviour 16) | 16.1 | B00, B01, B02, B05, B07, B08, B11, B15, B21, B24a +R, B25, B27 +R |
+| B27-sc-proceedings | SC | W16 | S16 | 0 | 31, 31_cont | 28 (B20 R1 H1 DF6) | MOVER (behaviour 10) | 13.7 | B00, B01, B01a (B01a.05), B02, B11, B24, B24a, B24p |
+| B28-social-verbs | SC | W17 | S17 | 2 | 35, 35_cont | 36 (B31 P1 R1 BL1 DF2; +B28.34 DF, +B28.35 B, 2026-11-13) | MOVER (behaviour 17) | 16.9 | B00, B01, B01a (B01a.05), B02, B05, B07, B08, B11, B15, B21, B24a +R, B24p, B25, B27 +R |
 | B29-pc-custody | PC | W14 | S14 | 0 | 24_cont | 4 (B4) | MOVER (behaviour 2, conditional 1) | 4.1 | B00, B01, B02, B15, B16, B21 |
 | B30-mb-nested | MB | W17 → **W18** | S18 | 4 | 37_cont | 11 (B10 DF1) | MOVER (behaviour 4) | 6.9 | B00, B01, B02, B16L, B05, B15, B16, B20, B22 +R, B24 |
 | B31-mb-loadout-economy | MB | W16 → **W18** | S19 | 4 | 39_cont | 21 (B17 P2 C1 DF1) | MOVER (behaviour 5) | 10.9 | B00, B01, B02, B16L, B17, B18, B19, B20 +R, B22 +R |
@@ -143,11 +147,13 @@ Columns: the wave and step as the structure had them, and now (a change in bold)
 | B37-happenings | IN | W16 | S16 | 3 | 32 | 19 (B14 P1 R2 C2) | MOVER (behaviour 4) | 10.1 | B00, B01, B02, B05, B10, B11, B12c, B15, B16, B21, B29 +R |
 | B37p-wr-kin-and-life | WR | W17 | S17 | 3 | 34_cont | 6 (B6) | MOVER (behaviour 4, encoding 1) | 4.9 | B12c, B37 |
 | B38-narrative-regimes | WR | W20 | S20 | 0 | 40, 40_cont, 41, 41_cont | 65 (B56 P4 R1 C3 DF1) | MOVER (behaviour 13) | 28.5 | B00, B01, B02, B05, B07, B09, B10, B11, B11F1, B11F2, B12c, B21, B22, B23, B27, B28, B32, B34, B36 |
-| B39-procgen-and-cases | WR | W21 | S21 | 0 | 42, 42_cont | 38 (B27 P2 R2 H2 C4 DF1; H3: B39.18 "HELD (… reading …)" read as HELD) | MOVER (behaviour 9) | 17.7 | B00, B01, B02, B04, B06, B07, B10, B11, B11F1, B12c, B15, B21, B22, B24, B25, B26, B27, B32, B33, B36, B37, B37p, B38 |
+| B39-procgen-and-cases | WR | W21 | S21 | 0 | 42, 42_cont | 38 (B27 P2 R2 H2 C4 DF1; H3: B39.18 "HELD (… reading …)" read as HELD) | MOVER (behaviour 9) | 17.7 | B00, B01, B01a (B01a.05), B02, B04, B06, B07, B10, B11, B11F1, B12c, B15, B21, B22, B24, B25, B26, B27, B32, B33, B36, B37, B37p, B38 |
 | B40-inst-scenarios | FA | W22 | S22 | 0 | 43, 43_cont | 30 (B27 R2 BL1) | **MOVER (behaviour 12)** (§2.2: EQUAL) | 14.5 | B00, B01, B02, B12c, B21, B21b, B21c, B21d +R, B32, B33, B39 |
 | B41-go-port-gate | GO | W15 → **W17** | S15 → **S18** | 5 | 29, 29_cont | 15 (B12 P1 R1 C1) | EQUAL | 8.5 | B00, B01, B02, B03g, B06, B17 +R, B20 +R, B34 |
-| B98-dials | IN | W23 | S23 | 0 | 44, 44_cont, 44_cont2 | 87 (B40 BL47) | MOVER (behaviour 38; its 47 BLOCKED positions leave 66 of §4's 105 rows at control) | 39.3 | every batch but B99 |
+| B98-dials | IN | W23 | S23 | 0 | 44, 44_cont, 44_cont2 | 90 (B41 R1 BL48; +B98.87 R, B98.88 B, B98.89 BL, 2026-11-14) | MOVER (behaviour 39; its 48 BLOCKED positions leave 67 of §4's 108 rows at control) | 40.5 | every batch but B99 |
 | B99-nine-retake | IN | W24 | S24 | 0 | 44_cont3 | 2 (B2) | EQUAL (a reading batch) | 5.3 | every batch |
+
+**B01a-attributes-generated, added 2026-11-14** (Jordan's rulings of 2026-11-13/14: every person's attributes drawn before any pin or calibration; `workplan_v12_part3.md`). Its row and the `B01a (B01a.05)` entries in thirteen after-lists above were written by its drafting lane; `graph.py` was re-run with the B01a row injected (the appendix's `graph.py` carries the injection, and gives an expunged batch 0 h): **B01a sits at W2 and S2, slack 0, on the critical path, and every batch from B02 on sits exactly one wave and one step later than the wave and step cells of this table (and the batches' own headings) say; no other wave, step or slack moves.** The cells are left as they were, the one shift stated here.
 
 **Hash tags the authors corrected, applied** (each read from its part's own rows; `H2_DECISIONS.md` HD-20): **B03** is a mover (encoding B03.28, `Office.body_function` deleted; behaviour B03.86, the office bonus removed), not EQUAL; **B04** an encoding mover (B04.01 `Claim.lap`, B04.07 `Person.traits`); **B05** 13 behaviour and 1 encoding mover (B05.20, `Office.modifier`); **B10** 9 behaviour (B10.32 among them) and 1 encoding (`manner_offset`); **B20** 4 behaviour; **B23** 8 behaviour and one conditional; **B30** 4 behaviour; **B32** 16 behaviour and 1 encoding (`Office.audit_at_exit`, contrary to its source, A34); **B36** a behaviour mover (`thread_read` gains `referent_class: Site`), not EQUAL; **B40** a behaviour mover (the grounding rows change the realm build), not EQUAL; **B34**'s `Scene.cost` moves no hash (A25 corrects D-04's tag; B34 is still a behaviour mover through three other rows); **B21s** EQUAL; **B11F2** EQUAL as shipped, its one mover conditional on the HELD CR-103 arm (B11F2.10); **B19a** and **B41** EQUAL. Totals: **48 mover batches and 11 hash-EQUAL batches** of the 59 written; **402 behaviour movers, 21 encoding movers, 5 conditional** among the positions. Repair lane R1: B19.60 is a behaviour mover (its heading, HASH MOVERS line and B19.99 say so; its row read EQUAL, K6 F1), so **403**; with part 44, **49 mover and 12 EQUAL batches of 61, 441 behaviour movers** (B98 38, B99 none). Repair lane R2d: B33.05 is an encoding mover (it adds `Office.passes_through` and `Office.hand_term`, which B32 leaves to B33; its row read EQUAL, CHK_K9 #2), so 22 encoding movers counted from the sentence above. **Recounted by lane H3 from the rows (`t1.py`, `hashinfo.py`; the sentences above are the history): 442 behaviour, 21 encoding, 6 conditional movers; 49 mover and 12 EQUAL batches of 61.** The sentences above missed two repairs: R2a's B09.10 (encoding → behaviour: behaviour 441 → 442, encoding 22 → 21) and R2c's B12c.09 (EQUAL → conditional, "MOVER if `notice_arm` is on at the batch's open": conditional 5 → 6, the count part 2 had one short).
 
@@ -159,9 +165,8 @@ Every batch's boundary row with the part and line it sits on, whether its text i
 
 | batch | its boundary row (part:line) | exact text | `GATE: Batch` lines | equal to its after-list in §1 | names a batch closing at or after its own step | H2 added |
 |---|---|---|---|---|---|---|
-| B00-ids | 3:93 | yes | 0 | yes | none | — |
-| B01-laneA | 3:186 | yes | 1 | yes | none | — |
-| B02-tests | 3_cont:366 | yes | 2 | yes | none | — |
+| B01a-attributes-generated | 3:174 | yes | 2 | yes | none | — (written 2026-11-14) |
+| B02-tests | 3_cont:515 (B02.16 to B02.22 moved into 3_cont, 2026-11-14) | yes | 3 | yes | none | B01a (B01a.05) |
 | B03-hygiene | 5_cont:192 | yes | 3 | yes | none | — |
 | B03g-go-early-landings | 6:158 | yes | 4 | yes | none | — |
 | B03c-boot | 6:256 | yes | 4 | yes | none | — |
@@ -170,13 +175,13 @@ Every batch's boundary row with the part and line it sits on, whether its text i
 | B13-pc-package | 6_cont:217 | yes | 6 | yes | none | —, R1: B03g |
 | B16M-mb-engine-words | 6_cont:325 | yes | 2 | yes | none | — |
 | B04-capability-home | 7:551 | yes | 6 | yes | none | — |
-| B05-one-roll | 9:432 | yes | 7 | yes | none | — |
+| B05-one-roll | 9:432 | yes | 8 | yes | none | B01a (B01a.05) |
 | B06-keyed-draw | 10:220 | yes | 5 | yes | none | — |
 | B07-task-draw | 10_cont2:173 | yes | 5 | yes | none | — |
 | B08-scene-order | 23:484 | yes | 7 | yes | none | — |
 | B09-memory | 11_cont:523 | yes | 5 | yes | none | — |
-| B10-character | 13_cont:200 | yes | 6 | yes | none | — |
-| BA1-cast-content | 18_cont:246 | yes | 6 | yes | none | — |
+| B10-character | 13_cont:200 | yes | 7 | yes | none | B01a (B01a.05) |
+| BA1-cast-content | 18_cont:266 | yes | 7 | yes | none | B01a (B01a.05) |
 | B11-fi-readers | 17_cont:143 | yes | 8 | yes | none | — |
 | B11F1-flow-se | 29_cont:328 | yes | 1 | yes | none | — |
 | B11F2-flow-in | 32_cont:264 | yes | 3 | yes | none | — |
@@ -184,26 +189,27 @@ Every batch's boundary row with the part and line it sits on, whether its text i
 | B12b-weather-arcs-population | 24_cont:437 | yes | 1 | yes | none | — |
 | B12c-material-verbs-and-valley | 28_cont:277 | yes | 3 | yes | none | —, R1: B15, B34 |
 | B14-pc-outcome | 10_cont:536 | yes | 5 | yes | none | — |
-| B15-pc-calibration | 18:374 | yes | 7 | yes | none | — |
-| B16-pc-round | 23:306 | yes | 8 | yes | none | — |
+| B15-pc-calibration | 18:374 | yes | 8 | yes | none | B01a (B01a.05) |
+| B16-pc-round | 23:306 | yes | 9 | yes | none | B01a (B01a.05) |
 | B17-mb-scale | 11:401 | yes | 7 | yes | none | — |
-| B18-pc-content | 28_cont2:218 | yes | 7 | yes | none | — |
-| B19a-mb-contact-instrument | 24_cont:564 | yes | 8 | yes | none | — |
+| B18-pc-content | 28_cont2:218 | yes | 8 | yes | none | B01a (B01a.05) |
+| B19a-mb-contact-instrument | 24_cont:564 | yes | 9 | yes | none | B01a (B01a.05) |
 | B19-mb-field-calibration | 27_cont:157 | yes | 12 | yes | none | B29 |
 | B20-mb-orders | 30:514 | yes | 10 | yes | none | — |
 | B21-fa-governance | 15_cont:193 | yes | 6 | yes | none | — |
 | B21b-fa-war | 21_cont:182 | yes | 2 | yes | none | — |
 | B21c-fa-seats | 25:218 | yes | 1 | yes | none | — |
 | B21d-fa-arc | 29:231 | yes | 2 | yes | none | — |
-| B21s-strife-supply | 35_cont:419 | yes | 4 | yes | none | — |
+| B21s-strife-supply | 35_cont:456 | yes | 4 | yes | none | — |
 | B22-mb-armies | 33_cont:337 | yes | 14 | yes | none | — |
 | B23-land | 37:359 | yes | 12 | yes | none | —, R1: B26 |
-| B24-sc-hearing | 22_cont:263 | yes | 8 | yes | none | — |
-| B24a-sc-outside-the-room | 28_cont:456 | yes | 2 | yes | none | — |
+| B24p-sc-proceeding | 22_b24p_cont:217 | yes | 9 | yes | none | — (written 2026-11-14, stage 3) |
+| B24-sc-hearing | 22_cont:257 | yes | 10 | yes | none | B01a (B01a.05); B24p (2026-11-14) |
+| B24a-sc-outside-the-room | 28_cont:465 | yes | 4 | yes | none | B01a (B01a.05); B24p (2026-11-14) |
 | B25-fi-questioning | 30_cont:475 | yes | 6 | yes | none | — |
 | B26-fi-inquiry | 33_cont:863 | yes | 8 | yes | none | — |
-| B27-sc-proceedings | 31_cont:178 | yes | 6 | yes | none | — |
-| B28-social-verbs | 35_cont:332 | yes | 12 | yes | none | B24a |
+| B27-sc-proceedings | 31_cont:178 | yes | 8 | yes | none | B01a (B01a.05); B24p (2026-11-14) |
+| B28-social-verbs | 35_cont:368 | yes | 14 | yes | none | B24a; B01a (B01a.05); B24p (2026-11-14) |
 | B29-pc-custody | 24_cont:679 | yes | 6 | yes | none | — |
 | B30-mb-nested | 37_cont:263 | yes | 10 | yes | none | — |
 | B31-mb-loadout-economy | 39_cont:419 | yes | 9 | yes | none | — |
@@ -215,11 +221,11 @@ Every batch's boundary row with the part and line it sits on, whether its text i
 | B37-happenings | 32:415 | yes | 11 | yes | none | B29 |
 | B37p-wr-kin-and-life | 34_cont:373 | yes | 2 | yes | none | — |
 | B38-narrative-regimes | 41_cont:291 | yes | 19 | yes | none | — |
-| B39-procgen-and-cases | 42_cont:301 | yes | 23 | yes | none | — |
+| B39-procgen-and-cases | 42_cont:301 | yes | 24 | yes | none | B01a (B01a.05) |
 | B40-inst-scenarios | 43_cont:187 | yes | 11 | yes | none | B21d |
 | B41-go-port-gate | 29_cont:164 | yes | 8 | yes | none | B17, B20 |
-| B98-dials | 44_cont2:273 | yes | 59 | yes (every batch but B99) | none | — (part 44) |
-| B99-nine-retake | 44_cont3:164 | yes | 60 | yes (every batch) | none | — (part 44) |
+| B98-dials | 44_cont2:372 | yes | 61 | yes (every batch but B99) | none | — (part 44); B01a, B24p (2026-11-14) |
+| B99-nine-retake | 44_cont3:183 | yes | 62 | yes (every batch) | none | — (part 44); B01a, B24p (2026-11-14) |
 
 ---
 
@@ -231,9 +237,8 @@ One row per batch in schedule order: the position handles (the part after the do
 
 | step | batch | behaviour movers (position handles) | encoding movers | conditional movers | the re-pin position and what its text says | merge position in its step |
 |---|---|---|---|---|---|---|
-| S0 | B00 | — | — | — | `B00.99` records the EQUAL reading (record only, E-6; R1) | any (EQUAL, §7.4) |
-| S1 | B01 | 01, 02 | — | — | the re-pin rides `B01.02`'s cherry-pick; `B01.99` records (R1) | 1 of 1 movers |
-| S2 | B02 | — | — | — | `B02.99` records the EQUAL reading (R1) | any (EQUAL, §7.4) |
+| S2 | B01a | 01, 02 (where a person is individuated in the season read), 03 (corpus and headless readings; the realm hash EQUAL) | — | — | `B01a.99` (added 2026-11-14) | 1 of 1 movers |
+| S2 (S3 after B01a) | B02 | — | — | — | `B02.99` records the EQUAL reading (R1); its baseline is B01a's close | any (EQUAL, §7.4) |
 | S3 | B03 | 86 | 28 | — | `B03.99` | 1 of 1 movers |
 | S4 | B03g | — | — | — | `B03g.99` records the EQUAL reading | any (EQUAL, §7.4) |
 | S4 | B03c | — | — | — | `B03c.99` records the EQUAL reading | any (EQUAL, §7.4) |
@@ -242,17 +247,18 @@ One row per batch in schedule order: the position handles (the part after the do
 | S6 | B13 | — | — | — | `B13.99` records the EQUAL reading | any (EQUAL, §7.4) |
 | S6 | B16M | — | — | — | `B16M.99` records the EQUAL reading | any (EQUAL, §7.4) |
 | S6 | B04 | — | 01, 07 | — | `B04.99` (B04.26 steps 2, 3 moved, R1) | 1 of 1 movers |
-| S7 | B05 | 02, 03, 09, 11, 14, 16, 17, 18, 23, 55, 60, 62, 64 | 20 | — | `B05.99` | 1 of 1 movers |
+| S7 | B05 | 02, 03, 09, 25, 11, 14, 17, 18, 23, 55, 60, 62, 64 (2026-11-14: 16 EQUAL after B01a; 25 added 2026-11-13) | 20 | — | `B05.99` | 1 of 1 movers |
 | S8 | B06 | 04 | — | — | `B06.99` | 1 of 2 movers |
 | S8 | B14 | 02, 03, 07, 15, 16, 24, 27 | — | — | `B14.99` | 2 of 2 movers |
 | S9 | B07 | 05 | — | — | `B07.99` | 1 of 2 movers |
 | S9 | B17 | 01, 03, 08 | — | — | `B17.99` | 2 of 2 movers |
 | S10 | B09 | 01, 05, 07, 08, 10, 11, 12, 21 | — | — | `B09.99` | 1 of 1 movers |
 | S11 | B10 | 32, 59, 60, 65, 66, 70, 71, 72, 73 | 58 | — | `B10.99` | 1 of 1 movers |
-| S12 | BA1 | 01, 02, 03, 04, 05, 06, 08, 09, 12 | — | — | `BA1.99` | 1 of 4 movers |
-| S12 | B11 | 04, 08, 12, 13, 14, 15, 16, 22, 51, 52, 53, 54, 55, 85, 58, 59, 60, 61, 83, 84, 63, 64, 67, 69, 71, 72, 73, 75, 78 | 17, 74 | — | `B11.99` | 2 of 4 movers |
-| S12 | B15 | 01, 03, 04, 05, 07, 08, 09, 10, 11, 15 | — | — | `B15.99` | 3 of 4 movers |
-| S12 | B21 | 02, 03, 04, 05, 07, 08, 09, 11, 13, 14, 15, 16, 18, 20, 21, 22, 23, 51, 52, 53, 54, 55, 56, 79, 57, 63, 65, 66, 69, 71, 73, 80, 81, 82, 83 | — | — | `B21.99` | 4 of 4 movers |
+| S12 | B24p | 15, 19, 20, 23 | — | — | `B24p.99` | 1 of 5 movers |
+| S12 | BA1 | 01, 02, 03, 04, 05, 06, 08, 09, 12 | — | — | `BA1.99` | 2 of 5 movers |
+| S12 | B11 | 04, 08, 12, 13, 14, 15, 16, 22, 51, 52, 53, 54, 55, 85, 58, 59, 60, 61, 83, 84, 63, 64, 67, 69, 71, 72, 73, 75, 78 | 17, 74 | — | `B11.99` | 3 of 5 movers |
+| S12 | B15 | 01, 03, 04, 05, 07, 08, 09, 10, 11, 15 | — | — | `B15.99` | 4 of 5 movers |
+| S12 | B21 | 02, 03, 04, 05, 07, 08, 09, 11, 13, 14, 15, 16, 18, 20, 21, 22, 23, 51, 52, 53, 54, 55, 56, 79, 57, 63, 65, 66, 69, 71, 73, 80, 81, 82, 83 | — | — | `B21.99` | 5 of 5 movers |
 | S13 | B08 | 03, 04, 05 | — | — | `B08.99` | 1 of 5 movers |
 | S13 | B12a | 03, 05, 06, 08, 14, 15, 54, 55, 56, 62, 66, 69 | — | 09 | `B12a.99` | 2 of 5 movers |
 | S13 | B16 | 03 | — | — | `B16.99` | 3 of 5 movers |
@@ -290,7 +296,7 @@ One row per batch in schedule order: the position handles (the part after the do
 | S20 | B38 | 03, 04, 05, 11, 13, 20, 25, 60, 63, 67, 78, 84, 88 | — | — | `B38.99` | 1 of 1 movers |
 | S21 | B39 | 04, 19, 20, 21, 22, 23, 25, 28, 32 | — | — | `B39.99` | 1 of 1 movers |
 | S22 | B40 | 12, 14, 15, 16, 17, 18, 19, 20, 22, 23, 24, 25 | — | — | `B40.99` | 1 of 1 movers |
-| S23 | B98 | 02, 04, 05, 06, 09, 10, 12, 14, 15, 18, 21, 27, 29, 36, 39, 46, 47, 48, 50, 51, 54, 59, 60, 61, 62, 70, 71, 72, 73, 74, 76, 75, 77, 80, 82, 84, 85, 86 | — | — | `B98.99` (part 44) | alone |
+| S23 | B98 | 02, 04, 05, 06, 09, 10, 12, 14, 15, 18, 21, 27, 29, 36, 39, 46, 47, 48, 50, 51, 54, 59, 60, 61, 62, 70, 71, 72, 73, 74, 76, 75, 77, 80, 82, 84, 85, 86, 88 | — | — | `B98.99` (part 44) | alone |
 | S24 | B99 | — | — | — | `B99.99` records the EQUAL reading (part 44) | alone |
 
 ---
@@ -406,5 +412,8 @@ One row per batch in schedule order: the position handles (the part after the do
 | 103 | S21 · B39 | `birth_rate` = 0.0 with `birth_pool`, `birth_ob`, `birth_level`, `birth_step`, `fertile_ages`, `fertile_peak` | TARGETED | `STORY_B` gate 2 | 42:57 | B98.84 BUILD |
 | 104 | S21 · B39 | `majority_age` = 0 | IN-BATCH (B39.28 if the ages are authored), else TARGETED | `16 × len(SEASONS_OF_YEAR)` and `STORY_B` gate 4 | 42:57 | B98.85 BUILD |
 | 105 | S21 · B39 | `abandonment_draw` = `off` with `abandonment_pool`, `abandonment_ob`, `abandonment_patience` | TARGETED | `STORY_C` gates 2, 3 | 42:57 | B98.86 BUILD |
+| 106 | S12 · B24p | the forty-six settings of RD §B that B24p.23 sets (`proceeding_dials`, B24p.04): each at control until B24p.23 | TARGETED (a reading only: B24p.23 sets them and B98.87 re-reads them; no flip) | the BATCH GATE's role readings of B24p: each of the six keys a SLOPE off 0 in at least one type, no DOMINANT above 0.90, the four body and perception keys within ±0.002 (`[ASSUMPTION; Jordan to correct]`) | 22_b24p:41 | B98.87 READING |
+| 107 | S12 · B24p | `reading_kept` = False | TARGETED | B24p.22's falsifier: a kept reading is right more often at Attunement 6 than at 2 and never certain; the ledger's growth per season quoted | 22_b24p:41 | B98.88 BUILD |
+| 108 | S12 · B24p | `presumption_level` = None, `strike_level` = None | BLOCKED (design: no target reading) | none stated (RD §C.1, §B.1); B98 writes each BLOCKED unless Jordan gives one | 22_b24p:41 | B98.89 BLOCKED |
 
-**Counts** (rows of this table, counted by script over the table itself; a row may group settings flipped together): **105 rows; 34 TARGETED** (seven with a precondition, an order, a direction-only reading or a sweep noted: rows 27, 33, 57, 61, 64, 71, 72), **64 BLOCKED** (46 design: no target reading, no value stated, no item or no computed route; 8 content; 4 carrier; 1 CR-103 held; and **5 A-114: target past two seasons**, rows 8, 9, 51, 52, 100, whose readings B99 quotes), and **7 IN-BATCH, else B98** (rows 20, 24, 48, 70, 73, 80, 104: a B98 member only if its own batch's gate does not read). **Not B98 members**, each set in its own batch or not a setting, so A44 skips them: `unauthored_attributes` and `task_difficulty` (B01's line; superseded at B05: deleted by B05.16, retired into `difficulty:` by B05.14; C-09), the B05 social-roll settings set by B05.23, `ceiling_form` (B05.55), `OPPOSITION_RATE`, `carried_wound_model`, `mortal_wound_ob`, `YIELD_OB` (B15's own items), `READ_SCALE` (B15.15, C-03), `task_draw_arm` (B07.05), `refusal_memory` (B09.05), `weigh_confidence` (B09.08), `scruple_temperature` and `refusal_axis` (B10.32), `said_slant`, `telling_hearers` (B11.85), `told_pairing` (B11.22), `season_factor_draw` and kin (B12b's own), the B12a fixtures B12a.54 to .62 set, `stand_draw` (B19.61), `deployment.fortune.sigma` (B19.68, A-77), the `deployment.*` rows (B19.23–.26), `npc_decider_roles` (B16, B20, B24, each in its batch), `sitting_exchanges` (B24.37; C-07), `body_mend` (B37p.05), `illness_rate` and the five `spell_*` (B37.10), `held_reading`, `deposit_holder`, `waiting_*`, `strand_links`, `cohort_moves_on` (B38's own items), `appointments` (B28.30, or stays off and is not a member, 28B), `terrain.<row>.pace` and the two `fatigue.*` arms (B31.17–.19), every content cell drafted for Jordan's correction (D-19: the cast's tables, `territory_weight`, `secondary`, the troop seeds, the clock weights, `larder_reach` rows, the `riot` cells), and `MAX_SEASONS` of `claim_fade` edit 5 (not a setting: an eight-season reading, held for B99, HD-26). The structure's §7.8 list named six settings before the authors returned: `sway_gain` (row 94), `faction_power_step` (26), `management_orders` (40), `sitting_exchanges` (set in B24, not B98), `npc_decider_roles` (set in-batch), the thread curve (77). B98's id block (§9) is sized before these counts; A44's `IDS:` line takes ids past it if larger (`workplan_v12.md` §12). **Part 44 (A44, read by repair lane R1):** B98 has 87 positions over these 105 rows; 39 rows are set by a BUILD flip and **66 stay at control** as B98's BLOCKED positions, each quoted by B99 on the tree as left; the last column names each row's B98 position (a position may group rows, part 44's U1). Rows whose status here and part 44's state differed (A44's corrections, part 44 U-notes, which govern): 29, 30, 32, 43, 47, 55, 57, 66, 100, 102. **Reconciled by repair lane R2d:** each of those rows' status now reads part 44's state, with the source reading part 44 gives as its reason (U9: the source states a target and no value, so a flip would invent one: 29, 30, 32, 47, 66, 102; content: 55; carrier: 43; A-114: 100); row 57 agreed already (part 44's B98.47 is the 0.5 flip, kept only on its reading). No row was found where part 44 and its source disagree: each U9 row's "no value stated" was re-read in the source (`09_WR_B_draws_not_thresholds` edits 1, 3; `03_PC_duel_round_and_approach_B.md:163`; `03_PC_loadout_and_carry…md:83`; `14_VERBS_MILITARY_C…md:193`; `21_PROCEDURAL_C…md:161`). The counts above are recounted by script after the change (34 + 64 + 7 = 105). Rows 24 and 80 read IN-BATCH here and BLOCKED in part 44: no disagreement, B98 takes their "else" arm. B98's 66 rows at control are this table's 64 BLOCKED plus those two.
+**Counts** (rows of this table, counted by script over the table itself; a row may group settings flipped together): **108 rows; 36 TARGETED** (seven with a precondition, an order, a direction-only reading or a sweep noted: rows 27, 33, 57, 61, 64, 71, 72; rows 106 and 107 added 2026-11-14 for Batch B24p-sc-proceeding, row 106 a reading with no flip), **65 BLOCKED** (47 design: no target reading, no value stated, no item or no computed route; 8 content; 4 carrier; 1 CR-103 held; and **5 A-114: target past two seasons**, rows 8, 9, 51, 52, 100, whose readings B99 quotes), and **7 IN-BATCH, else B98** (rows 20, 24, 48, 70, 73, 80, 104: a B98 member only if its own batch's gate does not read). **Not B98 members**, each set in its own batch or not a setting, so A44 skips them: `unauthored_attributes` and `task_difficulty` (B01's line; superseded at B05: deleted by B05.16, retired into `difficulty:` by B05.14; C-09), the B05 social-roll settings set by B05.23, `ceiling_form` (B05.55), `OPPOSITION_RATE`, `carried_wound_model`, `mortal_wound_ob`, `YIELD_OB` (B15's own items), `READ_SCALE` (B15.15, C-03), `task_draw_arm` (B07.05), `refusal_memory` (B09.05), `weigh_confidence` (B09.08), `scruple_temperature` and `refusal_axis` (B10.32), `said_slant`, `telling_hearers` (B11.85), `told_pairing` (B11.22), `season_factor_draw` and kin (B12b's own), the B12a fixtures B12a.54 to .62 set, `stand_draw` (B19.61), `deployment.fortune.sigma` (B19.68, A-77), the `deployment.*` rows (B19.23–.26), `npc_decider_roles` (B16, B20, B24, each in its batch), `sitting_exchanges` (B24.37; C-07), `body_mend` (B37p.05), `illness_rate` and the five `spell_*` (B37.10), `held_reading`, `deposit_holder`, `waiting_*`, `strand_links`, `cohort_moves_on` (B38's own items), `appointments` (B28.30, or stays off and is not a member, 28B), `terrain.<row>.pace` and the two `fatigue.*` arms (B31.17–.19), every content cell drafted for Jordan's correction (D-19: the cast's tables, `territory_weight`, `secondary`, the troop seeds, the clock weights, `larder_reach` rows, the `riot` cells), and `MAX_SEASONS` of `claim_fade` edit 5 (not a setting: an eight-season reading, held for B99, HD-26). The structure's §7.8 list named six settings before the authors returned: `sway_gain` (row 94), `faction_power_step` (26), `management_orders` (40), `sitting_exchanges` (set in B24, not B98), `npc_decider_roles` (set in-batch), the thread curve (77). B98's id block (§9) is sized before these counts; A44's `IDS:` line takes ids past it if larger (`workplan_v12.md` §12). **Part 44 (A44, read by repair lane R1):** B98 has 87 positions over these 105 rows; 39 rows are set by a BUILD flip and **66 stay at control** as B98's BLOCKED positions, each quoted by B99 on the tree as left; the last column names each row's B98 position (a position may group rows, part 44's U1). Rows whose status here and part 44's state differed (A44's corrections, part 44 U-notes, which govern): 29, 30, 32, 43, 47, 55, 57, 66, 100, 102. **Reconciled by repair lane R2d:** each of those rows' status now reads part 44's state, with the source reading part 44 gives as its reason (U9: the source states a target and no value, so a flip would invent one: 29, 30, 32, 47, 66, 102; content: 55; carrier: 43; A-114: 100); row 57 agreed already (part 44's B98.47 is the 0.5 flip, kept only on its reading). No row was found where part 44 and its source disagree: each U9 row's "no value stated" was re-read in the source (`09_WR_B_draws_not_thresholds` edits 1, 3; `03_PC_duel_round_and_approach_B.md:163`; `03_PC_loadout_and_carry…md:83`; `14_VERBS_MILITARY_C…md:193`; `21_PROCEDURAL_C…md:161`). The counts above are recounted by script after the change (34 + 64 + 7 = 105). Rows 24 and 80 read IN-BATCH here and BLOCKED in part 44: no disagreement, B98 takes their "else" arm. B98's 66 rows at control are this table's 64 BLOCKED plus those two.

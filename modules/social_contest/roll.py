@@ -87,14 +87,17 @@ def _chance_floor_cap(pool: float, ceiling: float) -> Optional[float]:
 
 
 def obstacle(inp: SocialContestInput) -> float:
-    """What stands against one matter's draw: the opposition's score halved, or the `H-127` stand-in
-    where there is no score, BOUNDED ABOVE by the ceiling.
+    """What stands against one matter's draw, BOUNDED ABOVE by the ceiling: `obstacle_terms`'s first member. On the
+    shipped task arm (`inp.difficulty` set, B11 lane A) the task's difficulty plus the opposing person's score halved
+    where a person opposes, and the difficulty alone where none does; on the control arm (`difficulty` `None`) the
+    opposition's score halved, or the `H-127` stand-in where there is no score.
 
     ⚠ THE RULING IS `score/2 PLUS MODIFIERS` AND IT APPLIES TO A PERSON. Jordan, 2026-08-14, carried
     live in `dice_engine.degree_from_net`'s docstring: an opposed obstacle is *"their corresponding
     score/2 plus whatever specific modifiers exist for them in that instance"*. The instance
-    modifiers are the room's terms and an examined document's forgery quality, below. A record, a rung or a proposition has no score and takes
-    `obstacle_default`. **NO "BASE Ob BY SCALE"** (Jordan, 2026-09-05).
+    modifiers are the room's terms and an examined document's forgery quality, below (and, on the task arm, the task's
+    difficulty). A record, a rung or a proposition has no score: on the task arm it takes the difficulty alone, on the
+    control arm `obstacle_default`. **NO "BASE Ob BY SCALE"** (Jordan, 2026-09-05).
 
     ⚠ THE CEILING (`H-213`, swept; Contradiction 3 of the proceedings reconciliation, resolved): a
     ceiling caps how hard a matter can get. M-7 fails without one -- at the 1D pool floor
@@ -138,20 +141,57 @@ def obstacle(inp: SocialContestInput) -> float:
     adds nothing. Under the fixed `H-213` ceiling (2 = `obstacle_default`) a forgery cannot raise a
     defaulted inquiry's obstacle: the quality reaches the roll only where the ceiling sits above the
     default (the uncapped `None` arm, `3`, or a pool whose solved cap is above 2) -- stated, not hidden."""
-    ob = float(inp.opposition) / 2.0 if inp.opposition is not None else float(inp.obstacle_default)
+    return obstacle_terms(inp)[0]
+
+
+def obstacle_terms(inp: SocialContestInput) -> tuple:
+    """`(ob, terms)`: THE OBSTACLE AND EVERY TERM THAT MADE IT, NAMED (B11 lane A; Jordan, 2026-11-12, relayed: *"social
+    contest obstacle is defined by the difficulty of the task and all associated modifiers"*). `obstacle` returns the
+    first; the host writes the second on the roll's record (`seam/wrappers/sigma.py::resolve`, `ob_terms`), so why a
+    given Ob was thrown at can be read after the draw. `ob` is composed in sequence, never as `sum(terms)`, so the
+    control arm is byte-identical to the obstacle before this function.
+
+    THE TASK ARM (`inp.difficulty` set, shipped): `difficulty` (the task's own, `rosters.yaml: task_difficulty`) PLUS
+    `opposition` -- the opposing person's score halved, the RULED term (2026-08-14), kept as one modifier and unchanged
+    -- where a person opposes; a task no person opposes (an inquiry, a contest against a Record) has no such term and
+    no stand-in. THE CONTROL ARM (`inp.difficulty is None`): `opposition`, or `stand_in` (`obstacle_default`) where
+    there is no score, exactly as before. THEN, on both: `room` (minus the bench's reception and the speaker's
+    proofs, floored as before), `forgery` (an examined document's quality) and `ceiling` (the H-213 cap's cut, zero or
+    negative). A term that does not apply is absent from the record."""
+    terms: dict = {}
+    if inp.difficulty is not None:
+        ob = float(inp.difficulty)
+        terms["difficulty"] = ob
+        if inp.opposition is not None:
+            half = float(inp.opposition) / 2.0
+            terms["opposition"] = half
+            ob = ob + half
+    elif inp.opposition is not None:
+        ob = float(inp.opposition) / 2.0
+        terms["opposition"] = ob
+    else:
+        ob = float(inp.obstacle_default)
+        terms["stand_in"] = ob
     room = float(inp.reception_gain) * float(inp.reception) + float(inp.proof_step) * float(inp.proofs)
-    ob = max(ob - room, min(ob, float(OB_MIN))) if room > 0 else ob - room
+    if room:
+        before = ob
+        ob = max(ob - room, min(ob, float(OB_MIN))) if room > 0 else ob - room
+        terms["room"] = ob - before
+    if inp.forgery_quality:
+        terms["forgery"] = float(inp.forgery_quality)
     ob += float(inp.forgery_quality)
     ceiling = inp.obstacle_ceiling
     if ceiling is None:
-        return ob
+        return ob, terms
     if ceiling < OB_MIN:
         raise ValueError(f"obstacle_ceiling {ceiling!r} is below the Ob minimum {OB_MIN} (PP-232); "
                          "a ceiling under the floor is a bad arm, refused rather than read (H-213)")
     cap = float(ceiling)
     if inp.ceiling_per_pool and inp.pool >= 1:
         cap = _chance_floor_cap(inp.pool, cap) or cap
-    return min(ob, cap)
+    if ob > cap:
+        terms["ceiling"] = cap - ob
+    return min(ob, cap), terms
 
 
 def roll(inp: SocialContestInput, rng: Optional[random.Random] = None) -> Margin:

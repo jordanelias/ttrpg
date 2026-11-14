@@ -2,9 +2,9 @@
 
 ## Status: PROPOSED (the last body part of workplan v12, drafted under `master/workplan_v12/`; unratified input to `methodology-execute`'s 0.1 stop until Jordan adopts v12, `V12_STRUCTURE_part3.md` §8; resolves nothing at runtime, CLAUDE.md §0.05; not canon)
 
-## Written against: the working tree at `f4eb906` (branch `ccr-62958c70-0kjhsw`, read 2026-11-13, a shallow clone); author lane A44 of `master/workplan_v12/V12_STRUCTURE_part2.md` §4.2 (second pass), one round. Input: `workplan_v12_part2.md` §4, "The settings at control" (105 rows), each row's `DIALS AT CONTROL` line and the item that ships the setting, opened in its part, and the source the item cites. Every item is written against the tree as B00 to B41 will leave it; a symbol that does not exist at `f4eb906` names the batch and item that make it.
+## Written against: the working tree at `f4eb906` (branch `ccr-62958c70-0kjhsw`, read 2026-11-13, a shallow clone); author lane A44 of `master/workplan_v12/V12_STRUCTURE_part2.md` §4.2 (second pass), one round. Input: `workplan_v12_part2.md` §4, "The settings at control" (105 rows, and rows 106 to 108 added 2026-11-14 for Batch B24p-sc-proceeding), each row's `DIALS AT CONTROL` line and the item that ships the setting, opened in its part, and the source the item cites. Every item is written against the tree as B00 to B41 will leave it; a symbol that does not exist at `f4eb906` names the batch and item that make it.
 
-**What this part holds.** Two batches of the IN lane, the plan's last two. **`B98-dials`** (W23, S23): one position per setting that an earlier batch shipped at its control value and did not set itself (D-22; `workplan_v12.md` §6), in the order of part 2 §4's table (the order the mechanisms landed), with the few moves the dependencies force (UNDECIDED U2). A TARGETED row is a flip item: the owner's file and symbol, the control value and the new value, the source's reading rule (a sweep run as a probe where the source gives one), the control arm, the revert and a gate read on a command. A BLOCKED row is a short item that flips nothing and records why, who must supply the target and what B99 quotes. An IN-BATCH row is a flip item that runs only if its owner batch's close did not set it. Since the decision pass of lanes D1 to D3 (U10, U11), every design-blocked row the ladder could answer is a flip item: by script over the position table (2026-11-13), 67 of the 86 positions are flips (B98.31, B98.66 and B98.67 each keep a row BLOCKED inside) and 19 are BLOCKED (content 8, carrier 4, A-114 3, CR-103 1, design 3: B98.26 for Jordan's ruling, B98.37, B98.41). Then `## Readings`, `B98.99` (the one re-pin) and the boundary row. **`B99-nine-retake`** (W24, S24): `IS-A-13`, the one longer re-take of all nine on B98's closing tree, the only item of the plan that may edit a row's `status:`; `B99.99` (an EQUAL close) and the boundary row. Files: this file (the head of B98, its position table, `B98.01` to `B98.22`) → `workplan_v12_part44_cont.md` (`B98.23` to `B98.60`) → `workplan_v12_part44_cont2.md` (`B98.61` to `B98.86`, `## Readings`, `B98.99`, the boundary row, SERIAL EDGES and FILE CENSUS) → `workplan_v12_part44_cont3.md` (B99).
+**What this part holds.** Two batches of the IN lane, the plan's last two. **`B98-dials`** (W23, S23): one position per setting that an earlier batch shipped at its control value and did not set itself (D-22; `workplan_v12.md` §6), in the order of part 2 §4's table (the order the mechanisms landed), with the few moves the dependencies force (UNDECIDED U2). A TARGETED row is a flip item: the owner's file and symbol, the control value and the new value, the source's reading rule (a sweep run as a probe where the source gives one), the control arm, the revert and a gate read on a command. A BLOCKED row is a short item that flips nothing and records why, who must supply the target and what B99 quotes. An IN-BATCH row is a flip item that runs only if its owner batch's close did not set it. Since the decision pass of lanes D1 to D3 (U10, U11), every design-blocked row the ladder could answer is a flip item: by script over the position table (2026-11-13), 67 of the 86 positions are flips (B98.31, B98.66 and B98.67 each keep a row BLOCKED inside) and 19 are BLOCKED (content 8, carrier 4, A-114 3, CR-103 1, design 3: B98.26 for Jordan's ruling, B98.37, B98.41). Then `## Readings`, `B98.99` (the one re-pin) and the boundary row. **`B99-nine-retake`** (W24, S24): `IS-A-13`, the one longer re-take of all nine on B98's closing tree, the only item of the plan that may edit a row's `status:`; `B99.99` (an EQUAL close) and the boundary row. Files: this file (the head of B98, its position table, `B98.01` to `B98.22`) → `workplan_v12_part44_cont.md` (`B98.23` to `B98.60`) → `workplan_v12_part44_cont2.md` (`B98.61` to `B98.89`, `## Readings`, `B98.99`, the boundary row, SERIAL EDGES and FILE CENSUS) → `workplan_v12_part44_cont3.md` (B99).
 
 **Paths.** As `V12_STRUCTURE.md` states: a bare path is under `proposals/2026-11-12-subsystem-audit-suite/`; `proposals/<file>` is under that directory's `proposals/`; `IS-A` is `master/instructions/IS_A_NINE.md` and `_part2`; `part 2` is `master/workplan_v12/workplan_v12_part2.md`; `the table` is part 2 §4; "row n" is that table's row n. A path under `engine/`, `modules/`, `tools/`, `references/`, `registers/`, `tests/` is the repository's. An item handle `Bnn.mm` names the item in its own part (the head's §14 maps a handle to its file).
 
@@ -15,8 +15,9 @@
 ## Batch B98-dials · lane IN · wave W23 · step S23 · HASH MOVER, one re-pin
 INVOCATION: /methodology-execute Batch B98-dials
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_IN.md, Open table
-GATE: Batch B00-ids
-GATE: Batch B01-laneA
+GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
+GATE: Batch B01-laneA @cfd9aefb049c2fe49b55c7ada1b0b624919af23d
+GATE: Batch B01a-attributes-generated (B01a.05: every flip whose target reading is a contest between persons is read as a curve over generated pairs with `harness/pairs.py`, never one even-matchup number; `workplan_v12.md` §3.B, "generated attributes, and curves not centres")
 GATE: Batch B02-tests
 GATE: Batch B03-hygiene
 GATE: Batch B03g-go-early-landings
@@ -54,6 +55,7 @@ GATE: Batch B21d-fa-arc
 GATE: Batch B21s-strife-supply
 GATE: Batch B22-mb-armies
 GATE: Batch B23-land
+GATE: Batch B24p-sc-proceeding
 GATE: Batch B24-sc-hearing
 GATE: Batch B24a-sc-outside-the-room
 GATE: Batch B25-fi-questioning
@@ -114,7 +116,7 @@ C(B98-dials): this batch's entries; the plan's head parts (`workplan_v12.md` §6
 PARALLEL: S23, alone in the plan (`V12_STRUCTURE.md` §2.3). No sibling; no merge position.
 BACKGROUND RUN: each probe over many fights or seeds (rows 4, 32, 47, 55, 61: 200 to 6,000 fights; rows 30, 96: 200 planted seeds or eight draw seeds; row 66: 50 planted seeds; row 81: B31.11's 200-seed field and gate 3 at n 200 per `ob`; row 102: PG-5 (d) over seeds 0–19 from the cache) is sized on two small runs at the batch's open, launched in the background (`exec python -u … > log 2>&1`, the skill's "Running a slow instrument"), and read at its item's gate; each item's commit body records the wall time and worker count. No run passes two seasons.
 COST: calibration (one value per commit, read against its target); producer `valoria-author` on `sonnet`, `high`; `opus` reads each flip's reading against its source's target before the commit (U8); BLOCKED positions are reading on `sonnet`, `low`.
-EST: 39 h [estimate: `workplan_v12.md` §5's formula over 87 positions: 0.4 h × 87 + 2.5 h for the close + 2 h for the probes; the structure's 8 h predates the member list]
+EST: 40.5 h [estimate: `workplan_v12.md` §5's formula over 90 positions (87 and B98.87 to B98.89, 2026-11-14, Batch B24p-sc-proceeding): 0.4 h × 90 + 2.5 h for the close + 2 h for the probes; the structure's 8 h predates the member list]
 
 The position table, in landing order (the handles follow part 2 §4's rows, UNDECIDED U1; landing order is the table's except B98.76 before B98.75, U2). Every flip also gates on the last committed flip before it (the control arm's chain); that edge is not repeated per row. The SERIAL EDGES and FILE CENSUS lines are at the batch's end, in `workplan_v12_part44_cont2.md` (E-11).
 
@@ -206,7 +208,10 @@ The position table, in landing order (the handles follow part 2 §4's rows, UNDE
 | B98.84 | a marriage may bear a child | row 103; B39.24, B39.26; `STORY_B` gate 2 | BUILD (flip) | MOVER(behaviour) | Batch B39; Batch B37 |
 | B98.85 | the age of majority, if B39 did not set it | row 104; B39.27, B39.28; `STORY_B` gate 4; A-15 | BUILD (flip, conditional) | MOVER(behaviour) | Batch B39 |
 | B98.86 | an empty founded place may be abandoned | row 105; B39.30; `STORY_C` gates 2, 3; A-55 | BUILD (flip) | MOVER(behaviour) | Batch B39 |
-| B98.99 | re-pin and close readings | `V12_STRUCTURE_part4.md` E-1 | BUILD | MOVER (the re-pin) | B98.01 to B98.86 |
+| B98.87 | the six roles' forty-five settings are re-read on the finished realm | row 106; B24p.23; RD §B | READING | EQUAL | Batch B24p-sc-proceeding |
+| B98.88 | a reading is kept by the one who read | row 107; B24p.22; RD §B.3 | BUILD (flip) | MOVER(behaviour) | B98.87; Batch B24p-sc-proceeding |
+| B98.89 | `presumption_level` and `strike_level` stay at control | row 108; B24p.04; RD §B.1, §C.1 | BLOCKED (design: no target reading) | EQUAL | Batch B24p-sc-proceeding |
+| B98.99 | re-pin and close readings | `V12_STRUCTURE_part4.md` E-1 | BUILD | MOVER (the re-pin) | B98.01 to B98.89 |
 
 ---
 

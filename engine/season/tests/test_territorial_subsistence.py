@@ -343,6 +343,10 @@ def test_rem52_the_shipped_arm_falls_every_short_cohort_by_step_times_its_shortf
     `test_cp_t03_08_tend_on_the_wounded.py::test_rem52s_fall_is_tended_whole_the_same_season`."""
     from .test_cp_t03_08_tend_on_the_wounded import revert_cp_t03_08
     revert_cp_t03_08(monkeypatch)
+    from .test_b11a_duel_reach import revert_b11a
+    revert_b11a(monkeypatch)   # B11 lane A (the duel chain's reach, a formation mover of every season), the same way
+    from .test_b11a_scores_and_obstacle import revert_b11a_scores
+    revert_b11a_scores(monkeypatch)   # B11 lane A (persons hold scores; the obstacle by task: a mover of the build and every season), the same way
     w = POP.build_realm(0)
     assert w.fixtures.get("body_step") == SHIPPED_ARM and SHIPPED_ARM in LIVE_ARMS, (
         "this test reads the SHIPPED default, unswept")

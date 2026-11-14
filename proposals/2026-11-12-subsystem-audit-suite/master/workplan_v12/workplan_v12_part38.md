@@ -17,8 +17,8 @@
 ## Batch B33-inst-economy-hands · lane FA · wave W18 · step S19 · HASH MOVER, one re-pin
 INVOCATION: /methodology-execute Batch B33-inst-economy-hands
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_FA.md, Open table
-GATE: Batch B00-ids
-GATE: Batch B01-laneA
+GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
+GATE: Batch B01-laneA @cfd9aefb049c2fe49b55c7ada1b0b624919af23d
 GATE: Batch B02-tests
 GATE: Batch B04-capability-home
 GATE: Batch B05-one-roll
@@ -515,6 +515,7 @@ Edit 6 adds nothing: "The head's demand is a `covenant` offer addressed to the K
      ```
      The cells' notes, each "`[ASSUMPTION; medium; this lane's; a data edit reverts it]`", are copied as the rows' comment block: `audit`'s Overwhelming `ban` "scoped to the banning seat's purview, FA-P3 change 3"; Success "an `oblige` of the officer to the opening seat, whose instrument is a `tribute`-shaped restitution (`15_INSTITUTIONS_COLONIAL_A_instruments.md`; the `due` is a `transfer.made` to the governed ground's rung)"; Partial "a `Record` (an admonition …) this cell waits on that site and is inert before it"; Failure "nothing is opened and `05_SC_acquittal.md`'s quittance is the officer's". `quo_warranto`'s Overwhelming and Success "a `ban` on the holder from that one seat …, **the file's own fallback, taken**"; "`release` is not a `disposes:` value … so the closing arm once requested of SC is withdrawn. Where the grantor's own seat holds a `revocation` basis over the conferred seat (T-o, `04` §C.2), the calling-in can also be his `revoke` …; the bench is the route when it does not"; Partial "the grant stands for a fee: an `oblige` whose `due` is one `transfer.made` to the grantor's rung"; Failure "the grant stands; the docket's closing Record is the holder's evidence in any later calling-in".
   2. Create `S/tests/test_audit_and_charter.py` (U3 §6.1: MISSING; "write it … red against the control where the claim is a defect") with `test_both_rows_load` and `test_a_fourteenth_key_or_an_off_enum_band_cell_is_refused_naming_the_row` ("both rows load; a fourteenth key or a band cell off the enum is refused naming the row"), written before step 1 (the first red: no row).
+  Added by the B24p fold (F.3): each row seeded here carries the five keys of B24p.03 (`rite`, `exchanges`, `authority`, `presumes`, `strikes`) or the loader refuses it; the values are written at the item's open from RD §C.3's table (the nearest of its thirteen rows) and listed in the PR body (D-19), `[ASSUMPTION; Jordan to correct]`.
 - WHERE: `S/arrangements.yaml` (`audit`, `quo_warranto`); NEW `S/tests/test_audit_and_charter.py`.
 - TESTS: the two above.
 - FALSIFIER and CONTROL: "A row with no docketed matter moves nothing: seeded hash EQUAL." Control: the realm hash at seed 0, one season, equal to B33.17's reading.

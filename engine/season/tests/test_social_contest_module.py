@@ -105,7 +105,8 @@ def test_s27_4_refuses_on_the_derived_pair_strictly_above_the_multiple():
     assert at["status"] == "RESOLVED", f"ob 4 == 2 x pool 2 was refused: {at}"
     fx["obstacle_default"] = 4.5
     assert sigma.resolve(w, ["p"], ["c"], "a standing", rng=random.Random(0)) == dict(
-        status="REFUSED", why="S27.4", module="social_contest", resolver="d10_sigma", pool=2, ob=4.5)
+        status="REFUSED", why="S27.4", module="social_contest", resolver="d10_sigma", pool=2, ob=4.5,
+        ob_terms={"stand_in": 4.5})          # B11 lane A: the obstacle's terms ride the record, a refusal's too
     fx["obstacle_ceiling"] = 2
     capped = sigma.resolve(w, ["p"], ["c"], "a standing", rng=random.Random(0))
     assert capped["status"] == "RESOLVED" and capped["ob"] == 2.0, capped

@@ -17,8 +17,9 @@
 ## Batch B39-procgen-and-cases · lane WR · wave W21 · step S21 · HASH MOVER, one re-pin
 INVOCATION: /methodology-execute Batch B39-procgen-and-cases
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_WR.md, Open table
-GATE: Batch B00-ids
-GATE: Batch B01-laneA
+GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
+GATE: Batch B01-laneA @cfd9aefb049c2fe49b55c7ada1b0b624919af23d
+GATE: Batch B01a-attributes-generated (B01a.05: PROVISIONAL until re-read with `harness/pairs.py duel`: the 5,000-duel reading and the birth and abandonment draws this batch sets against persons are read as curves over generated pairs; a procgen person is minted through `state/carriers.py::generated_attributes` under any authored value; `workplan_v12.md` §3.B, "generated attributes, and curves not centres")
 GATE: Batch B02-tests
 GATE: Batch B04-capability-home
 GATE: Batch B06-keyed-draw

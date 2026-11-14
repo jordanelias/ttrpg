@@ -56,8 +56,8 @@ from ..data.rosters import (
 # (`OPENERS-DERIVE`); `endings_reached` evaluates the `ENDINGS` vocabulary imported above.
 # v10 REM-21: `DECLARED_CLASSES`, the referent classes some row declares, the same way.
 from ..data.verbs import (
-    DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, ENEMY_CLASS, FOUNDING_REMIT_ACTS, HOLDING_RECORD_KINDS,
-    CONVENING_REMIT_ACTS, RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS, VERB_TABLE, _OPENERS_FROM_EFFECTS,
+    DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, DISPUTANT_CLASS, ENEMY_CLASS, FOUNDING_REMIT_ACTS,
+    HOLDING_RECORD_KINDS, CONVENING_REMIT_ACTS, RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS, VERB_TABLE, _OPENERS_FROM_EFFECTS,
 )
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
@@ -68,7 +68,7 @@ from .person_q import (
     _seen_index, deed_valence, paired_deed_term, projected_axes)
 # v9 SC-02 `22a`: `reception` and `proofs` read which claims record a person's deeds, what each is worth
 # to its holder, and which deeds were done TO him, off the same person-side owners `regard` reads.
-from .person_q import attributed_deeds, deed_term, holds_dispute, suffered_deeds   # `holds_dispute`: v11 CR-87, the `dispute` stem's one owner
+from .person_q import attributed_deeds, deed_term, holds_dispute, known_persons, suffered_deeds   # `holds_dispute`: v11 CR-87, the `dispute` stem's one owner
 # v9 IN-69: the one cosine (`cast.loyalty` calls it too).
 from ..data.pursuits import pursuit_cosine_axes, to_axes
 # v9 IN-67: `goal_referents` reads a goal's `object:` off the ONE loader and a `deed_doers` goal's
@@ -3260,6 +3260,28 @@ def writs_held(w: World, p: Person) -> tuple:
                          and addressed_to(w.records[t.object].subject_matter, p.id)}))
 
 
+def addressed_records(w: World, p: Person, kind: str, named: Optional[frozenset] = None) -> tuple:
+    """THE RECORDS OF `kind` ADDRESSED TO `p` THAT HE HAS HEARD OF (B11 lane A, carrying
+    `proposals/2026-11-12-subsystem-audit-suite/proposals/14_VERBS_PHYSICAL_A_custody_and_force.md` A0 [ASSUMPTION;
+    medium; Jordan to correct; revert: return `()`]), sorted by id: each Record of that kind whose addressee list
+    names him (`person_q.addressed_to`, the one owner `writs_held` asks too) and whose id his own ledger names
+    (`person_q.ledger_names`: he saw it made, or was told of it). A document addressed to a man who has not heard of it
+    is not his business. No mint and no custody: the Record stays in its maker's hand (ED-IN-0292 (1), RULED NO, stands).
+    `named` is `ledger_names(p.ledger)` when the caller holds it already. Resolver-side, read-only."""
+    told = ledger_names(p.ledger) if named is None else named
+    return tuple(sorted(rid for rid, r in w.records.items()
+                        if r.kind == kind and rid in told and addressed_to(r.subject_matter, p.id)))
+
+
+def challenges_heard(w: World, p: Person, named: Optional[frozenset] = None) -> tuple:
+    """THE CHALLENGES ADDRESSED TO `p` THAT HE HAS HEARD OF (`addressed_records`, `CHALLENGE_KIND`), the occasion
+    `accept` forms on (14_VERBS_PHYSICAL_A A4). MEASURED before the term (`aperture 2 0`, realm, after the lane's
+    formation repairs): `accept` formed 0, because a challenge is minted into the challenger's hand and reaches the
+    challenged only by a `give`. Stamped by `questions_for` as `Record` (`World.class_of`); `accept`'s cell asks
+    nothing of holding (`names:to`, `names:actor`, `with`, `individual`). `()` for nearly everyone."""
+    return addressed_records(w, p, CHALLENGE_KIND, named)
+
+
 def records_held_for_holding_rows(w: World, p: Person) -> tuple:
     """THE RECORDS `p` HOLDS THAT A ROW ASKING HIM TO HOLD THEM ANSWERS (v10 REM-25, B10-05, AM-A-10; M19
     taken, [ASSUMPTION; medium; Jordan to correct]), sorted by id: the Records on `p`'s own live `hold`
@@ -3833,6 +3855,36 @@ def wounded_with(w: World, p: Person) -> tuple:
     return tuple(out)
 
 
+def disputes_held(w: World, p: Person) -> tuple:
+    """THE PERSONS `p` HOLDS A DISPUTE WITH (B11 lane A, the duel chain's second link [ASSUMPTION; medium; Jordan to
+    correct; revert: drop the term in `questions_for`]), sorted by id: each living person, other than `p`, whom his own
+    ledger names (`person_q.ledger_names`, or a doer seen or a teller, `known_persons`) and of whose deeds his own
+    judgement scores against him -- `person_q.holds_dispute`, the ONE owner the fold's `dispute` stem and the
+    `challenge` decline ask too. A grievance is a standing occasion, `wounded_with`'s shape: MEASURED before the term,
+    `build_realm(0)` after one season, 53 such pairs over 21 holders and `challenge` formed 11 times in two seasons,
+    because the question a holder answers almost never named the man he holds the wrong against. Stamped by
+    `questions_for` as `Disputant` (`data/verbs.py::DISPUTANT_CLASS`, a class of its own: stamped as `Person`, the
+    shared class, `capture` formed on the same men and executed 11 times where it had executed 0, `aperture 2 0`), so
+    `challenge` (`referent_class: Disputant`) and no other row forms on it. ONLY A MAN BESIDE HIM (`place_of`, `with`'s one
+    owner), `wounded_with`'s precedent: the occasion is the grievance and the man together; measured without the
+    filter, `aperture 2 0` (realm), 8 of 8 `challenge` attempts on the stamp were refused `with=False`. The cell's
+    `with` stays world-only (IN-59): a challenge formed on a question's own referent is still the fold's to refuse.
+    Resolver-side and read-only: it reads `p`'s own ledger and pursuits, which ids are living persons and where they
+    stand. `()` for a man who holds no grievance beside him, and for a cohort, on either side (`challenge`'s `individual`
+    conjuncts: a population neither calls out nor is called out)."""
+    if p.is_cohort:                       # a population calls no man out (`challenge`'s `individual` of `actor`)
+        return ()
+    shift = w.fixtures.get("scar_weight_shift")
+    named = (set(ledger_names(p.ledger)) | set(known_persons(p.ledger, p.id))) - {p.id}
+    held = [r for r in sorted(named)
+            if r in w.persons and not w.persons[r].is_cohort and holds_dispute(p, r, shift)]
+    if not held:
+        return ()
+    homes = home_map(w)
+    here = place_of(w, p.id, homes)
+    return tuple(r for r in held if here is not None and place_of(w, r, homes) == here)
+
+
 def _stamped(q: Question, added: tuple, w: World, classed: tuple = ()) -> Question:
     """`q` carrying the ids in `added` as CLASSED referents (IN-53, DECISION 2026-10-13 D1) -- the
     one stamp site. Each id's class is the collection the World holds it in (`World.class_of`:
@@ -4214,6 +4266,8 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # IN-09 (H-203, DECISION 2026-10-13 [ASSUMPTION; medium; Jordan to correct]): AND SO DO THE WRITS
     # HE HOLDS (`writs_held`), after the seats, as `Record` -- only `comply` declares that class, so
     # no other row's formations move. REVERT: drop the term.
+    # B11 lane A (14_VERBS_PHYSICAL_A A4, [ASSUMPTION; medium; Jordan to correct]): AND, BESIDE THEM, THE CHALLENGES
+    # ADDRESSED TO HIM THAT HE HAS HEARD OF (`challenges_heard`), as `Record` -- `accept` forms on them. REVERT: drop.
     # v10 REM-25 (AM-A-10, [ASSUMPTION; medium; Jordan to correct]): AND THE RECORDS HE HOLDS THAT A
     # ROW ASKING HIM TO HOLD THEM ANSWERS (`records_held_for_holding_rows`), directly after the writs,
     # as `Record` -- the same class, widened: `carry`, `found` and `build` declare it beside `comply`,
@@ -4258,7 +4312,8 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # no chooser reads a flow's opening kind or last move. Read only when `Fixtures stamp_flow_stakes` is on (it
     # SHIPS ON, H-274; off, the output is byte-identical). "Never twice" is `_stamped`'s dedup.
     told = ledger_names(p.ledger)
-    added = (vacancies(w, p) + seats_named(w, p, told) + writs_held(w, p) + records_held_for_holding_rows(w, p)
+    added = (vacancies(w, p) + seats_named(w, p, told) + writs_held(w, p) + challenges_heard(w, p, told)
+             + records_held_for_holding_rows(w, p)
              + places_named(w, p, told) + matters_awaiting(w, p) + larders_in_purview(w, p, told)
              + holdings_to_found(w, p)
              + (own_referents_of_class(w, out[0]) if out else ())
@@ -4274,6 +4329,11 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # (`enemies_heard`), as `Enemy` -- no row forms on it; the `fight` decline reads it as the war context. It
     # rides a question he already has and never raises one of its own (a war is a context, not a question). Empty
     # while no war Proposition is live, and then the output is byte-identical. REVERT: drop the term.
+    # B11 lane A ([ASSUMPTION; medium; Jordan to correct; revert: drop the term]): AND THE MEN BESIDE HIM HE HOLDS A
+    # DISPUTE WITH (`disputes_held`), as `Disputant` -- `challenge` forms on them. Empty for a man who holds no
+    # grievance beside him, and then the output is byte-identical. A grievance raises a question of its own when he
+    # has none (the `need` head below), as a prisoner does: it is an occasion, not a context.
+    held += tuple((d, DISPUTANT_CLASS) for d in disputes_held(w, p))
     if out or added or held:
         held += tuple((e, ENEMY_CLASS) for e in enemies_heard(w, p))
     if added or held:

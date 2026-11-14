@@ -20,15 +20,16 @@ _PRE_CR84 = {
     'Agility': 'attr.body.agility', 'Dexterity': 'attr.body.agility',
     'Focus': 'attr.mind.focus',
     'Acuity': 'attr.mind.acuity', 'Reasoning': 'attr.mind.acuity', 'Cognition': 'attr.mind.acuity',
-    'Will': 'attr.mind.will', 'Spirit': 'attr.mind.will',
+    'Will': 'attr.spirit.will', 'Spirit': 'attr.spirit.will',   # B01a.06: the key moved to the Spirit group; the names follow it
     'Attunement': 'attr.social.attunement',
     'Charisma': 'attr.social.charisma', 'Presence': 'attr.social.charisma',
 }
 _RETIRED = {'Bonds': 'attr.social.bonds', 'Sincerity': 'attr.social.bonds',
             'Affability': 'attr.social.bonds'}
-_THE_TEN = [
+_THE_TEN = [   # B01a.06: Spirit is its own group, so `will` sits after the mind three
     'attr.body.strength', 'attr.body.endurance', 'attr.body.agility',
-    'attr.mind.focus', 'attr.mind.acuity', 'attr.mind.will', 'attr.mind.perception',
+    'attr.mind.focus', 'attr.mind.acuity', 'attr.mind.perception',
+    'attr.spirit.will',
     'attr.social.attunement', 'attr.social.charisma', 'attr.social.grace',
 ]
 
@@ -51,20 +52,21 @@ def _lost(reg):
 def test_descriptor_registry():
     reg = _load()
 
-    # the ten, in three categories (3 body, 4 mind, 3 social)
+    # the ten, in four categories (3 body, 3 mind, 1 spirit, 3 social)
     assert [e['key'] for e in dr.all_attributes(reg)] == _THE_TEN
     assert len(dr.all_attributes(reg)) == 10, "expected 10 attributes"
-    assert [len(dr.by_category(reg, c)) for c in ('body', 'mind', 'social')] == [3, 4, 3]
+    assert [len(dr.by_category(reg, c)) for c in ('body', 'mind', 'spirit', 'social')] == [3, 3, 1, 3]
 
     # the 'spirit move' + legacy aliases resolve (this is what makes the move cost no rewrites)
-    assert dr.resolve(reg, 'Spirit')['key'] == 'attr.mind.will'
+    assert dr.resolve(reg, 'Spirit')['key'] == 'attr.spirit.will'
+    assert dr.resolve(reg, 'attr.mind.will')['key'] == 'attr.spirit.will'   # the legacy KEY back-resolves (B01a.06)
     assert dr.resolve(reg, 'Cognition')['key'] == 'attr.mind.acuity'
     assert dr.resolve(reg, 'Presence')['key'] == 'attr.social.charisma'
     assert dr.resolve(reg, 'Vitality')['key'] == 'attr.body.endurance'
     assert dr.resolve(reg, 'Dexterity')['key'] == 'attr.body.agility'
 
     # primary names + keys resolve too; case-insensitive
-    assert dr.resolve(reg, 'Will')['key'] == 'attr.mind.will'
+    assert dr.resolve(reg, 'Will')['key'] == 'attr.spirit.will'
     assert dr.resolve(reg, 'CHARISMA')['key'] == 'attr.social.charisma'
     assert dr.resolve(reg, 'Coordination')['key'] == 'attr.body.agility'
     assert dr.resolve(reg, 'Reason')['key'] == 'attr.mind.acuity'
@@ -76,7 +78,8 @@ def test_descriptor_registry():
 
     # aggregate placeholders (W2.8)
     assert set(dr.aggregate_members(reg, 'agg.mind')) == {
-        'attr.mind.focus', 'attr.mind.acuity', 'attr.mind.will', 'attr.mind.perception'}
+        'attr.mind.focus', 'attr.mind.acuity', 'attr.mind.perception'}
+    assert set(dr.aggregate_members(reg, 'agg.spirit')) == {'attr.spirit.will'}
     assert set(dr.aggregate_members(reg, 'agg.body')) == {
         'attr.body.strength', 'attr.body.endurance', 'attr.body.agility'}
     assert set(dr.aggregate_members(reg, 'agg.social')) == {
@@ -87,7 +90,7 @@ def test_descriptor_registry():
 
     # deprecation
     assert dr.is_deprecated(reg, 'resonance_style')
-    assert not dr.is_deprecated(reg, 'attr.mind.will')
+    assert not dr.is_deprecated(reg, 'attr.spirit.will')
 
 
 def test_every_alias_that_resolved_before_still_resolves_to_the_same_key():

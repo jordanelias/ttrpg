@@ -441,8 +441,9 @@ The five positions below are the intake entries the B12a authors routed here by 
 ## Batch B19a-mb-contact-instrument · lane MB · wave W14 · step S14 · HASH EQUAL
 INVOCATION: /methodology-execute Batch B19a-mb-contact-instrument
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_MB.md, Open table
-GATE: Batch B00-ids
-GATE: Batch B01-laneA
+GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
+GATE: Batch B01-laneA @cfd9aefb049c2fe49b55c7ada1b0b624919af23d
+GATE: Batch B01a-attributes-generated (B01a.05: PROVISIONAL until re-read with `harness/pairs.py duel`: the duel grid this batch's instrument measures is run over fighters with generated attributes, and its cells are read as curves by attribute difference, not at the class defaults alone; `workplan_v12.md` §3.B, "generated attributes, and curves not centres")
 GATE: Batch B02-tests
 GATE: Batch B16M-mb-engine-words
 GATE: Batch B14-pc-outcome
@@ -568,8 +569,8 @@ Not in this batch, and where each is: MBA-02 stage 2 (`--missile`) and MBA-09 (B
 ## Batch B29-pc-custody · lane PC · wave W14 · step S14 · HASH MOVER, one re-pin
 INVOCATION: /methodology-execute Batch B29-pc-custody
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_PC.md, Open table
-GATE: Batch B00-ids
-GATE: Batch B01-laneA
+GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
+GATE: Batch B01-laneA @cfd9aefb049c2fe49b55c7ada1b0b624919af23d
 GATE: Batch B02-tests
 GATE: Batch B15-pc-calibration
 GATE: Batch B16-pc-round

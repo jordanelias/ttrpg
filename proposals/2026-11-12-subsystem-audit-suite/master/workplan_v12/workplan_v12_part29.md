@@ -235,8 +235,8 @@ Not in this batch, and where each is: CR-91 (1), (2), (4), the claim to a territ
 ## Batch B41-go-port-gate · lane GO · wave W17 · step S18 · HASH EQUAL
 INVOCATION: /methodology-execute Batch B41-go-port-gate
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_GO.md, Open table
-GATE: Batch B00-ids
-GATE: Batch B01-laneA
+GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
+GATE: Batch B01-laneA @cfd9aefb049c2fe49b55c7ada1b0b624919af23d
 GATE: Batch B02-tests
 GATE: Batch B03g-go-early-landings
 GATE: Batch B06-keyed-draw

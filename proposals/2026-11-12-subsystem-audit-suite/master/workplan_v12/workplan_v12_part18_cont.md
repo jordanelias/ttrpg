@@ -9,8 +9,9 @@ Words and paths as the head of this part states. `the draft` is the file B04.26 
 ## Batch BA1-cast-content · lane IN · wave W12 · step S12 · HASH MOVER, one re-pin
 INVOCATION: /methodology-execute Batch BA1-cast-content
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_IN.md, Open table
-GATE: Batch B00-ids
-GATE: Batch B01-laneA
+GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
+GATE: Batch B01-laneA @cfd9aefb049c2fe49b55c7ada1b0b624919af23d
+GATE: Batch B01a-attributes-generated (B01a.05: BA1's authored cast replaces B01a's generated attributes for the persons it authors, key by key; every calibration this batch re-reads (its soft edge, the `difficulty:` levels) is PROVISIONAL until re-read with `harness/pairs.py` as a curve over generated pairs; `workplan_v12.md` §3.B, "generated attributes, and curves not centres")
 GATE: Batch B02-tests
 GATE: Batch B04-capability-home
 GATE: Batch B05-one-roll
@@ -34,7 +35,7 @@ BATCH GATE (read once, on the closing tree, `PYTHONHASHSEED=0` on every seeded c
   the close's commit body records `register --requirements` (nine lines), `m1_acceptance --summary`'s verdict line, the named conjuncts' readings with their tree, the `BUILT OUT`, `ENGINES` and `NULL SCENES` lines before (B10's close, `reading @<sha>`) and after, and the batch's measured wall time; the last `Item:` commit (BA1.99) writes the conjuncts' `reading:` records; `status:` is not edited (`IS-A-12`).
 RE-PIN: once, in BA1.99: "the build hash and every season hash; one re-pin, said plainly" (`IS-A-11`): the realm pins in `engine/season/tests/_realm_goldens.py` (B02's one pin file), the build hash, the one-season realm hashes at seeds 0 to 2, and every corpus and test pin that names a cast row's authored value (`test_cr20_attributes.py`, `test_cr19_competence_gain.py`'s `cast_attributes=True` arm, and what `grep -rl _realm_goldens engine/season/tests` lists), read against B10's close (`reading @<sha>`). The commit says "re-pin: cast content (`IS-A-11` stage 2; authored values, ED-1094)".
 IDS: ED-IN 0; H 0
-DIALS AT CONTROL: none left for B98. Set here: the per-verb `difficulty:` levels (BA1.03; B05 retired lane A's `task_difficulty` roster into the column, D-U1-04, each row at `routine`; the levels beyond `routine` are this batch's: the target is R-09.b and `13_SC_calibration` C1, read at B05); the cast's `stats:` (B01.02's DIALS line names BA1 as the setter of `unauthored_attributes` = 2; B05.16 deletes that setting, so there is none to set: BA1.01 authors values for the persons the draft covers, and a person the draft leaves unauthored reads the mid-point `(ATTRIBUTE_FLOOR + ATTRIBUTE_CEILING) / 2` that `governing_attribute` returns for an unauthored key, D-U1-04; UNDECIDED (3); part 2 §11 C-09); `cast_attributes` (BA1.10: on since B01.02). Not touched: `npc_decider_roles` = `()` (`IS-B2-CHAR-02`; its roles are listed by B16, B20, B24); `scar_weight_shift`, `refusal_axis` (CHAR_OWED §8, B10's flips).
+DIALS AT CONTROL: none left for B98. Set here: the per-verb `difficulty:` levels (BA1.03; B05 retired lane A's `task_difficulty` roster into the column, D-U1-04, each row at `routine`; the levels beyond `routine` are this batch's: the target is R-09.b and `13_SC_calibration` C1, read at B05); the cast's `stats:` (B01.02 @dc6585c's DIALS line names BA1 as the setter of `unauthored_attributes` = 2; B05.16 deletes that setting, so there is none to set: BA1.01 authors values for the persons the draft covers, and a person the draft leaves unauthored reads the mid-point `(ATTRIBUTE_FLOOR + ATTRIBUTE_CEILING) / 2` that `governing_attribute` returns for an unauthored key, D-U1-04; UNDECIDED (3); part 2 §11 C-09); `cast_attributes` (BA1.10: on since B01.02 @dc6585c). Not touched: `npc_decider_roles` = `()` (`IS-B2-CHAR-02`; its roles are listed by B16, B20, B24); `scar_weight_shift`, `refusal_axis` (CHAR_OWED §8, B10's flips).
 UNDECIDED:
   (1) `IS-B2-CHAR-03` says "one commit per file above"; `IS-A-11` (the item this batch is, which `IS_CHECK.md` C1's one-owner rule makes govern) lands "the five tables into their owners …, each through its loader". Taken: one item per table and per loader family (BA1.01 to BA1.09), so each loader's refusal and each gate is read alone; `references/npc_registry.yaml` is therefore edited by four items (BA1.01, .02, .08, .09), in that order, each a different key of the cast rows.
   (2) `IS-B2-CHAR-03`: "Until Jordan supplies or approves the values the batch is not opened"; D-19: "drafted early, landed at its batch, ratified at that batch's merge … values marked `[ASSUMPTION]` or `status: seed`, the batch's PR body listing each for Jordan's correction". D-19 governs (the structure lane's decision, step 4: `IS-A-11` is the precedent it cites). A value the draft carries uncorrected lands with its `[ASSUMPTION]` mark and is listed in the PR body; the PR body may hold a table back (ED-1094).
@@ -50,7 +51,7 @@ SERIAL EDGES: within the batch: BA1.01 → BA1.02 (the same cast rows, a differe
   With other batches, by file (U3 §5.1 rows; `→` is landing order): `references/npc_registry.yaml`: B04 → B10 → BA1 → B39 (A-44's generated cast); `engine/season/verb_table.yaml`: … → B05 (the `difficulty:` column) → B10 → BA1 → B11, B15, B21 (S12, other rows); `engine/season/rosters.yaml`: … → B10 (the rosters BA1 fills) → BA1 → B11, B15, B21 (S12, other keys); `engine/season/data/pursuits.py`: B10 → BA1.
 PARALLEL: S12 with B15-pc-calibration (PC), B11-fi-readers (FI), B21-fa-governance (FA). Shared files: `engine/season/verb_table.yaml` (BA1: the `difficulty:` cells only), `engine/season/rosters.yaml` (BA1: `tables.alignment`'s cells and `choices:`, `pursuit_signatures`, `affiliation_signatures`, `tables.affiliation_engagement`): different keys and rows from the siblings, kept by hand at merge (`V12_STRUCTURE_part3.md` §7.3); `references/npc_registry.yaml` is BA1's alone in S12. Hash: four movers at S12, merged in §2.1's table order (BA1, B11, B15, B21); BA1 merges first and the later three re-read its after-reading as their baseline (§7.4).
 COST: content (data edits from a drafted table); producer `valoria-author` on `sonnet`, `medium` ("landing `sonnet`, `medium`", `IS-A-11`); the readings that close M2 read by `opus` (the judgment node that gates a requirement, CLAUDE.md §10); no value is an agent's to invent ("the values not an agent's to invent", `IS-B2-CHAR-03`).
-EST: 9.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this block's 12 positions (0.4 h × 12 + 2.5 h close + 2 h for the long readings), `V12_STRUCTURE_part4.md` E-15; §2.2's 6 h counted the instruction items]
+EST: 9.7 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this block's 13 positions (0.4 h × 13 + 2.5 h close; BA1.13 added 2026-11-13 + 2 h for the long readings), `V12_STRUCTURE_part4.md` E-15; §2.2's 6 h counted the instruction items]
 
 | pos | item | source | state | hash | gates on |
 |---|---|---|---|---|---|
@@ -66,7 +67,8 @@ EST: 9.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this bl
 | BA1.10 | the switch | `IS-A-11` stage 2 step 2; U1-C ("the switch") | POINTER | — | BA1.01 |
 | BA1.11 | the three CHAR readings | `IS-B2-CHAR-06` | READING | — | BA1.10 |
 | BA1.12 | two cast rows marked unaware of what they hold (Patched: P-30) | `U5a_CHAR_self_knowledge_is_a_belief` edit 2's marks (B10.64's DIALS line) | CONTENT | MOVER(behaviour) | BA1.09; Batch B10 (B10.64, B10.65) |
-| BA1.99 | re-pin and close readings (the readings that close M2) | `IS-A-11` (hash movers); `IS-A-12` | BUILD | MOVER (the re-pin) | BA1.01 to BA1.12 |
+| BA1.13 | each verb's kind and governing attributes, as Jordan corrects them | `2026-11-13-verb-governing-attributes` §2; B05.24 (interim cells) | CONTENT | MOVER(behaviour) | BA1.01; Batch B05 (B05.25) |
+| BA1.99 | re-pin and close readings (the readings that close M2) | `IS-A-11` (hash movers); `IS-A-12` | BUILD | MOVER (the re-pin) | BA1.01 to BA1.13 |
 
 ### BA1.01 — the cast's attributes and skill scores · `IS-A-11` stage 2, table (a) · CONTENT · HASH MOVER(behaviour)
 - SOURCE: `master/instructions/IS_A_NINE_part2.md` "Item: IS-A-11" (`:263-307`), stage 2 step 1; `master/instructions/IS_B2_SC_FI_CORE_CHAR_part2.md` "Item: IS-B2-CHAR-03" (`:144-149`); U1 §6, §11 U1-C item 1; `V12_STRUCTURE.md` D-19; rulings A-6, A-7, A-98, ED-1094; closes G-3 ("as far as the nine need it").
@@ -208,7 +210,7 @@ EST: 9.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this bl
 - LANDS IT: BA1's producer; `Item: BA1.09`, `[skip ci]`.
 
 ### BA1.10 — the switch · `IS-A-11` stage 2 step 2 · POINTER
-- What the pointed step does: "`harness/populated.py::build_realm`'s `cast_attributes` default flips to on, in its own commit (U1-C's "the switch")" — after B03c the function is `engine/season/boot/realm.py::build_realm`. B01.02 (lane A's `c5bf18a` step 3) already ships the switch on, at value 2 on every key (B01's note "for the BA1 author": "`IS-A-11` stage 2 step 2 … then finds the switch on and lands only the values"); U1 §6: "With CAP Part B the seating of unauthored values stops …, so the switch then gates only the authored `stats:`".
+- What the pointed step does: "`harness/populated.py::build_realm`'s `cast_attributes` default flips to on, in its own commit (U1-C's "the switch")" — after B03c the function is `engine/season/boot/realm.py::build_realm`. B01.02 @dc6585c (lane A's `c5bf18a` step 3) already ships the switch on, at value 2 on every key (B01's note "for the BA1 author": "`IS-A-11` stage 2 step 2 … then finds the switch on and lands only the values"); U1 §6: "With CAP Part B the seating of unauthored values stops …, so the switch then gates only the authored `stats:`".
 - Target: `engine/season/boot/realm.py::build_realm` (`cast_attributes`).
 - Gate: at the batch's open, `grep -n "cast_attributes" engine/season/boot/realm.py` shows the default `True`; recorded in BA1.99's commit body. If it reads `False`, this position becomes a BUILD item in this place: flip the default to `True` in its own commit, a declared mover read at BA1.99, with `test_cr20_attributes.py`'s "`cast_attributes=False` (the shipped control)" docstring and assertion re-pointed to the new default (never weakened).
 
@@ -225,6 +227,20 @@ EST: 9.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this bl
 - GLOSSARY: none (B10.64 wrote *self-knowledge*).
 - COST and TIER: content; `sonnet`, `medium`.
 - LANDS IT: BA1's producer; `Item: BA1.12`, `[skip ci]`.
+
+### BA1.13 — each verb's kind and governing attributes, as Jordan corrects them · `2026-11-13-verb-governing-attributes` §2; B05.24 · CONTENT · HASH MOVER(behaviour)
+- SOURCE: `proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-13-verb-governing-attributes.md` §2 (the 67 rows: kind (a) brute with what authorises it, (b) efficacy with one to three attributes averaged and `opposed_attribute`, (c) hand-off), §6 Q1 and Q2; B05.24 (the rule, ruled; the cells shipped by B05.25 as `[ASSUMPTION; medium; Jordan to correct at BA1.13]`); Jordan, 2026-11-13 (the per-verb values are content: authored with the cast, as `difficulty:` is in BA1.03); `IS-A-11` stage 1 (b)'s per-verb table, of which this is the second column.
+- ADVANCES: R-09.b (the obstacle and the pool are not one number in the shipped realm; the cast's attributes, BA1.01, now reach the verb that relies on them).
+- INSTRUCTION: in `engine/season/verb_table.yaml`, each row Jordan's correction of the proposal's §2 names: its `governing:` list (one to three registry keys), its `opposed_attribute:`, or its kind (`brute:` with `brute_note:`, or `governing:`); rows he does not name keep B05.25's interim cells. A row moved from `brute:` to `governing:` (or back) moves whole, in one commit, so the loader's one-kind rule holds at every commit. Each change through B05.25's loader (`data/verbs.py::_check_governing_attributes`), which refuses a fourth attribute, a key outside the ten, a brute row carrying a difficulty, or a row of no kind; a refusal is fixed in the row. A row carrying `proceeds:` (B24p.16) is corrected in that cell (the row it opens and the form, RD §D.1), through `_check_proceeds`; it has no `governing:` to correct. At the item's open the proposal's §7 note is read: `proposals/2026-11-05-verb-attribute-map.md` (and `_part2`) is diffed against §2 and every row where the two disagree is listed in the PR body for Jordan.
+- WHERE: `engine/season/verb_table.yaml` (`governing:`, `opposed_attribute:`, `brute:`, `brute_note:` cells).
+- TESTS: none new; B05.25's `engine/season/tests/test_verb_governing_attributes.py` stays green on the corrected cells (its `checked == len(VERB_TABLE)` read).
+- FALSIFIER and CONTROL: a corrected row that takes two kinds, or a brute row that draws, loads; control: with no row corrected, the seed-0 one-season hash equals BA1.12's reading.
+- GATE: `python -m pytest engine/season/tests/test_verb_governing_attributes.py -q` → pass; `PYTHONHASHSEED=0 python -m engine.season.harness.aperture 2 0` → its `POOLS ROLLED` line quoted, *two actors at different pools* on a non-combat verb read beside BA1.01's reading; the seed-0 hash (`HASH READING`) recorded (moved where a corrected verb was rolled by a person holding an authored attribute).
+- HASH MOVERS: every world with a roll of a verb whose cells changed, by a person holding an authored attribute. Declared; BA1.99.
+- DEPENDS ON: V12 Batch B05-one-roll (B05.24 ruled, B05.25's columns and loader); V12 BA1.01 (the cast's attributes); V12 Batch B24p-sc-proceeding (merged first in S12: B24p.16, B24p.19); EXISTS-IN-TREE `engine/season/verb_table.yaml` rows.
+- GLOSSARY: none new (*governing attribute*, *brute function*, *opposing attribute* read against the cells).
+- COST and TIER: content; drafting the corrections with Jordan `opus`, `high`; landing `sonnet`, `medium`.
+- LANDS IT: BA1's producer; `Item: BA1.13`, `[skip ci]`.
 
 ## Readings (BA1)
 
@@ -243,7 +259,7 @@ EST: 9.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this bl
 - FALSIFIER and CONTROL: a pin moved that no BA1 item declared (then the batch moved behaviour it did not declare: the re-pin stops and the batch is `STOPPED`); a conjunct `reading:` whose tree is not this one. Control: B10's close readings.
 - GATE: the BATCH GATE above, every line; `python -m engine.season.harness.register --requirements` → exit 0, nine lines.
 - HASH MOVERS: the batch's one re-pin, here and nowhere else.
-- DEPENDS ON: V12 BA1.01 to BA1.12 (BA1.12 Patched: P-30); V12 Batch B02-tests (`_realm_goldens.py`; `IS-A-01`'s `reading:` record).
+- DEPENDS ON: V12 BA1.01 to BA1.13 (BA1.12 Patched: P-30; BA1.13 added 2026-11-13); V12 Batch B02-tests (`_realm_goldens.py`; `IS-A-01`'s `reading:` record).
 - GLOSSARY: none.
 - COST and TIER: a re-pin and readings; `sonnet`, `high`; the readings read by `opus`.
 - LANDS IT: BA1's producer; `Item: BA1.99`, without `[skip ci]` (the batch's last `Item:` push, CI run 1 of the batch).
