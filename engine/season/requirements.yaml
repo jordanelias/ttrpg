@@ -1466,7 +1466,7 @@ rows:
       attempts, which over-count refusals, the sum is -5 / +4 / +7. REM-29 (a later position) then took most of `migrate`'s
       repeated refusals away (refused 64 / 132 / 84 -> 38 / 77 / 57). The card's base for `requisition` formed (13) is the
       home document's figure; the tree reads 16 on both sides.
-    measure: "python -m pytest engine/season/tests -k 'choose_receives_no_world or a_view or r7_two_persons'"
+    measure: "python -m pytest engine/season/tests -k 'a_view_raises or a_view_is_capped or r7_two_persons or wa_a_planted_claim or decision_package_never_names_world or another_modules_prize_and_a_foreign_actor or r07_realm_regard_differs'"
     blocks: [IN-38]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1); W27: `17` landed, IN-38 remains
 
