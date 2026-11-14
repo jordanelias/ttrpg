@@ -268,22 +268,30 @@ def fight_estimate(w: Any, actor: str, via: Any, target: Optional[str], verb: st
     rng = rng_of(w, actor)
     tally = dict.fromkeys(ESTIMATE_OUTCOMES, 0)
     for _ in range(n):
-        got = entry.fn(inp, rng)
-        # ⚠ THE FELLING IS `ladder.party_degree`'S VERDICT ON THE PARTY'S TRACKER (the walk `_eff_kill` writes by and
-        # `combat_degree` grades by; it refuses a missing tracker), NEVER `result`'s SIGN. `wrapper.fight` flips
-        # `result` after the scene in `UPSET_FLOOR` of the decided fights and leaves the trackers alone, so the sign
-        # names a winner the fold never grades by. Neither or both down is `undecided` (a draw has no one felled; a
-        # mutual felling names no one).
-        a_down, b_down = (party_degree(_wound_state(got["wound_state"].get(pid))) == FELLED for pid in (actor, target))
-        if surrender_of(got["trace"]) is not None:
-            tally["yielded"] += 1
-        elif a_down and not b_down:
-            tally["actor_felled"] += 1
-        elif b_down and not a_down:
-            tally["subject_felled"] += 1
-        else:
-            tally["undecided"] += 1
+        tally[scene_outcome(entry.fn(inp, rng), actor, target)[0]] += 1
     return dict(status="ESTIMATED", module=_PROVIDER, samples=n, **{k: v / n for k, v in tally.items()})
+
+
+def scene_outcome(got: dict, actor: str, target: str) -> tuple:
+    """`(outcome, yielder)` -- HOW ONE SCENE THE MODULE ENTRY DEALT ENDED, THE ONE OWNER OF THAT READING (B01a.04: moved,
+    unchanged, out of `fight_estimate`'s loop, so the random-pairs instrument reads a scene the way the display does).
+    `outcome` is one of `ESTIMATE_OUTCOMES`; `yielder` is the id `surrender_of(got["trace"])["by"]` names, `None` where
+    nobody yielded. `got` is the entry's return (`trace`, `wound_state`).
+
+    ⚠ THE FELLING IS `ladder.party_degree`'S VERDICT ON THE PARTY'S TRACKER (the walk `_eff_kill` writes by and
+    `combat_degree` grades by; it refuses a missing tracker), NEVER `result`'s SIGN. `wrapper.fight` flips
+    `result` after the scene in `UPSET_FLOOR` of the decided fights and leaves the trackers alone, so the sign
+    names a winner the fold never grades by. A yield is read first; neither or both down is `undecided` (a draw has
+    no one felled; a mutual felling names no one)."""
+    a_down, b_down = (party_degree(_wound_state(got["wound_state"].get(pid))) == FELLED for pid in (actor, target))
+    surrender = surrender_of(got["trace"])
+    if surrender is not None:
+        return "yielded", surrender["by"]
+    if a_down and not b_down:
+        return "actor_felled", None
+    if b_down and not a_down:
+        return "subject_felled", None
+    return "undecided", None
 
 
 @provider("estimate", _PROVIDER)
