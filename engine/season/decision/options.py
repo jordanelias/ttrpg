@@ -1693,9 +1693,12 @@ def competence(p: Person, competence_gain: float) -> float:
         competence = min(1, 1 + g * (attunement - mid) / (mid - floor))      g = `competence_gain`
 
     `attunement` is the score `p.attributes` holds at `COMPETENCE_ATTRIBUTE` (`Person.attributes`, CR-20);
-    `mid` is `COMPETENCE_MID`. MONOTONE in Attunement and exactly 1 at `mid`; a receiver with NO authored
-    Attunement reads 1 (a READ, never a default: the cast carries none, so the realm is unmoved). At
-    `g = 0` it is 1 for everyone: THE CONTROL, and the shipped value.
+    `mid` is `COMPETENCE_MID`. MONOTONE in Attunement and exactly 1 at `mid`; a receiver who HOLDS no
+    Attunement reads 1 (a READ, never a default). ⚠ Since B11 lane A the built realm seats every key on every
+    person (`build_realm(cast_attributes=True)`, `pool_default` 2 where unauthored), so no realm receiver reaches
+    that branch and each unauthored one reads Attunement 2, below `mid`. Harmless ONLY while `competence_gain`
+    ships at 0: at `g = 0` it is 1 for everyone (THE CONTROL, and the shipped value); a live gain would lower
+    every unauthored receiver's credit.
 
     ⚠ CAPPED AT 1 ABOVE `mid` [ASSUMPTION; medium; Jordan to correct; revert: drop the `min` and clamp the
     product to a confidence ceiling, which no owner names]: the other two factors only ever LOWER a

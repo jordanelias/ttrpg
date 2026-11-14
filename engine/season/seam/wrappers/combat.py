@@ -141,7 +141,8 @@ def surrender_of(trace: list) -> Optional[dict]:
 
 
 def party_end(person: Any, fx: Any) -> int:
-    """A `Person`'s `Combatant.end` (`H-97`): his authored `attr.body.endurance` (else the class default) less
+    """A `Person`'s `Combatant.end` (`H-97`): the `attr.body.endurance` he HOLDS (authored, or seated at `pool_default`
+    by `build_realm(cast_attributes=True)`; the class default only where he holds none) less
     one point per body band. The other attributes ride on `PersonalCombatInput.attributes` and the module maps
     them (PC-06 K-1). Was `derive_party`, which built the `Combatant` too; since `31b` the module entry
     builds it from this number (`modules/combat/fight.py`)."""
@@ -228,7 +229,9 @@ def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = Non
         kits=(kit_of(w, a_id), kit_of(w, b_id)),
         faculties=(faculty(w, pa, verb), faculty(w, pb, verb)),
         **({} if terms is None else dict(terms=terms)),
-        # PC-06 K-1: the authored attributes, only when someone authored one (the field's default is the record as it was).
+        # PC-06 K-1: the attributes each party HOLDS (authored or seated), whenever either party holds any -- under the
+        # shipped build (`cast_attributes=True`) every person does, so this always passes them; the field's default (the
+        # record as it was) is reached only where neither holds one.
         **({} if not (pa.attributes or pb.attributes) else dict(attributes=(dict(pa.attributes), dict(pb.attributes)))))
 
 

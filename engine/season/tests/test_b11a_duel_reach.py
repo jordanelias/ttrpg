@@ -167,6 +167,57 @@ def test_accept_does_not_form_on_a_document_read_as_another_kind():
     assert not V.RECORD_SUBKINDS_BY_VERB["accept"] & O.documents_known_as(p)["rec:x"]
 
 
+def _reread_as(p, rid, kind):
+    """`p`'s every reading of `rid` re-stemmed to `content:<kind>` (the value kept): the same document, read as `kind`."""
+    n = 0
+    for c in p.ledger:
+        if c.subject == rid and c.predicate.startswith("content:"):
+            c.predicate = f"content:{kind}"
+            n += 1
+    assert n, "the addressee held a reading to re-stem"
+
+
+def test_falsifier_accept_forms_through_opening_set_only_on_a_document_read_as_a_challenge():
+    """THE SUB-KIND FILTER, THROUGH `opening_set` (`decision/options.py`, the non-holding branch of
+    `RECORD_SUBKINDS_BY_VERB`): the challenged holds a reading of a real challenge Record, so `challenges_heard` still
+    puts it on his question, and `accept` forms on it only while his reading says it is a challenge. The same document
+    read as `works` forms no `accept`. Seen RED with the filter deleted (`accept` formed on the misread document, against
+    `p_mid`). `works` and not `dispensation`: a `dispensation` reading answers `accept`'s fan operand from the document
+    (`rosters.yaml: record_sourced_operands`), so the operand bag declines it with or without the filter; a kind that
+    sources no operand falls through to the bag per person known, where the filter is the only gate."""
+    w, d = _world()
+    _grievance(w)
+    (ch,) = _formed(w, A, "challenge")
+    d.witness(mint_token(w, WriteClass.INTERIOR), _resolve(w, d, *_acts(w, A, [ch])))
+    (rid,) = [r for r, rec in w.records.items() if rec.kind == "challenge"]
+    pb = w.persons[B]
+    assert [c.subject for c in _formed(w, B, "accept")] == [rid], "CONTROL: read as a challenge, it forms"
+    _reread_as(pb, rid, "works")
+    assert O.documents_known_as(pb) == {rid: frozenset({"works"})}
+    assert world_q.challenges_heard(w, pb) == (rid,), "the referent still reaches his question"
+    assert not _formed(w, B, "accept"), "a document he reads as works is no challenge to him"
+
+
+def test_falsifier_a_held_document_read_as_another_kind_declines_carry():
+    """THE HOLDING BRANCH (`RECORD_SUBKINDS_HELD`, `carry` on a petition): the petitioner holds his filed petition and
+    `carry` forms on it while he holds no reading of it (unknown forms) and while his reading says petition; the same
+    held document read as a dispensation declines. Seen RED with the filter deleted (`carry` formed on the misread one)."""
+    from .test_in45_carry import PETITION, PETITIONER, _carries, _filed
+    w, _d = _filed()
+    p = w.persons[PETITIONER]
+    assert O.documents_known_as(p) == {}
+    (q,) = world_q.questions_for(w, p)
+    assert [c.subject for c in _carries(w, p, q)] == [PETITION], "CONTROL: unread, it forms"
+    p.ledger.append(Claim("c_pet_read", PETITIONER, PETITION, "content:petition", (("terms", A), ("to", "p_high")),
+                          0, "firsthand", 100, "own"))
+    (q,) = world_q.questions_for(w, p)
+    assert [c.subject for c in _carries(w, p, q)] == [PETITION], "CONTROL: read as a petition, it forms"
+    _reread_as(p, PETITION, "dispensation")
+    (q,) = world_q.questions_for(w, p)
+    assert (PETITION, "Record") in q.classes, "the held document still reaches his question"
+    assert _carries(w, p, q) == [], "a held document he reads as a dispensation is no petition to carry"
+
+
 # ---- the realm hash: mover, and the revert ---------------------------------------------------------------------
 
 @pytest.mark.parametrize("seed", [0, 1, 2])

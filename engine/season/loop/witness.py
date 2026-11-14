@@ -839,7 +839,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # §A.9 -- the separation is what makes a forgery playable). The exact-triple guard is the
         # told channel's, for its reason: one belief is stored once.
         # B11 lane A (the duel chain's third link, [ASSUMPTION; medium; Jordan to correct; revert: `holder != pid`
-        # alone]): AND TO A WITNESS THE DOCUMENT IS ADDRESSED TO (`world_q.addressed_to`, the one owner of the test) --
+        # alone]): AND TO A WITNESS THE DOCUMENT IS ADDRESSED TO (`person_q.addressed_to`, the one owner of the test) --
         # a challenge is put to the challenged's face (its cell asks him present, `with`), so he learns what it says
         # as its maker does, while the Record stays in the maker's hand (no mint into the addressee's, ED-IN-0292 (1)
         # stands). MEASURED before (`build_realm(0..2)`, four seasons): a challenge issued 36 to 46 times a seed and

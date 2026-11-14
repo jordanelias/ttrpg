@@ -2474,7 +2474,7 @@ rosters:
     note: >-
       THE RECORD KINDS WHOSE MAKING IS PUT TO THE ADDRESSEE'S FACE -- a list of `record_kinds` members. WITNESS deposits a
       document's content (`content:<kind>`) to its new holder; for a kind listed here it deposits it too to a witness the
-      document is addressed to (`loop/witness.py::addressee_reads`, the addressee test `world_q.addressed_to`'s), so he reads
+      document is addressed to (`loop/witness.py::addressee_reads`, the addressee test `person_q.addressed_to`'s), so he reads
       what was put to him while the Record stays in its maker's hand (ED-IN-0292 (1), RULED NO on a mint into the
       addressee's, stands). `challenge`: its cell asks the challenged present (`with`), so a challenge is issued to him
       in person. MEASURED before (`build_realm(0..2)`, four seasons): challenges were issued 36 to 46 times a seed and no
