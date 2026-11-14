@@ -17,7 +17,7 @@ revert: none].
   write outside tests and harness is registered in `_BODY_WRITES` with how it stands to the ceiling; a RAISER's
   function must read `body_ceiling` and not `condition_scale`. A new write fails until it is registered.
   CONTROL: `body_mark_model: none` marks nobody. The field is a SCHEMA mover (every Person's canonical encoding), so
-  `revert_cp_t03_07` drops it from the encoding as well and reproduces every pre-item hash.
+  `revert_cp_t03_07` drops it from the encoding as well. The realm hashes are `_realm_goldens.py`'s.
 """
 from __future__ import annotations
 
@@ -34,7 +34,6 @@ from ..data.rosters import BODY_MARK_MODELS, WOUNDED
 from ..data.verbs import VERB_TABLE
 from ..decision.budget import body_band_penalty
 from ..harness import probes as P
-from ..harness.populated import build_realm, run
 from ..loop import effects_combat as EC
 from ..loop.driver import SeasonDriver, mint_token
 from ..loop.effects_shared import EFFECTS
@@ -47,26 +46,6 @@ from .test_in10_record_operands import _resolve
 
 ACTOR, SUBJECT = "p_low", "p_mid"          # `tiny_world`: co-located, a `fight` between them is admitted
 CEILING = "body_ceiling"
-
-#: 1-season hashes before this item (ed983b6a, = CP-T03-04's POST_ITEM) and after it. `build_realm(0)`:
-#: 7266f56bea4e3d75705f5e88eec1b2e1 -> 600d8b27147478e158553552cc1409a5 (the schema).
-#: Seeds 1 and 2 of both are the post-B10-11b reading (`reading @4b334f2a`), re-recorded by the batch pin commit: PC-20 (1)
-#: (the head-weighted strike impact, `K_STR_HEAD`) moves a one-season run that reaches `strike_impact`; seed 0 calls none.
-#: Was, before that pin commit: PRE_ITEM 07634b99... / 1cc4370d...; POST_ITEM fc3201f3... / 6da144ff...; CONTROL seed 2 702d9074....
-#: B10-13 batch pin commit: PRE_ITEM was b2dde1fc... / c58b1a7e... / 5518f31c... (= CP-T03-04's POST_ITEM, re-recorded with it);
-#: POST_ITEM was eb2919ae... / c4ba7a75... / c72aa6fe...; CONTROL seed 2 was 7ee0f657....
-#: B10-12 pin commit (CR-24 `field_winner_casualties: engine` and MB-07r's support cap, both shipped, move a one-season
-#: realm that fights; control: both reverted reads the old pins): seed 2 PRE_ITEM was 6078a950... (= CP-T03-04's POST_ITEM),
-#: POST_ITEM was bc4f92ac....
-PRE_ITEM = {0: "8b5e882b0a4d771d56e8472ef557f84f",
-            1: "e9aad997765ecb589711613cfb194444",
-            2: "1139c7dcac2b0dd2b2ff6cbacc27e55c"}
-POST_ITEM = {0: "1c9939fc22035400981bcf6b99b9d6f9",
-             1: "8fbb92ad369b065bb83f8680d779ae5b",
-             2: "ec354d2a2a8c8f9ad5d23317921b5f08"}
-#: At `none`, the schema alone: seeds 0 and 1 mark nobody, so they equal POST_ITEM; seed 2 marks one survivor.
-CONTROL = {0: POST_ITEM[0], 1: POST_ITEM[1], 2: "73702f7cbebebf053109e7fff536cedc"}   # B10-12 pin commit (CR-24 + MB-07r): seed 2 was 64304e58...
-BUILD_PRE, BUILD_POST = "7266f56bea4e3d75705f5e88eec1b2e1", "600d8b27147478e158553552cc1409a5"
 
 
 def revert_cp_t03_07(monkeypatch):
@@ -349,42 +328,3 @@ def test_the_raiser_branch_of_the_guard_can_fail(why):
     raisers = _check_source(_PLANTED_RAISERS[why], "planted.py", found, offenders)
     assert raisers == 1 and found == ["p.body = whole"], (raisers, found)
     assert len(offenders) == 1 and offenders[0].endswith(why) and "`_eff_tend`" in offenders[0], offenders
-
-
-# ---- hashes: the declared mover and its control ------------------------------------------------------------------
-
-@pytest.mark.parametrize("seed", [0, 1, 2])
-def test_hash_post_item_control_and_revert(seed, monkeypatch):
-    # v11 CP-T03-08 (`tend` forms on the wounded, a later formation mover of every season) is reverted in process, so
-    # POST_ITEM still reads this item alone (imported here: that module imports this one).
-    from .test_cp_t03_08_tend_on_the_wounded import revert_cp_t03_08
-    revert_cp_t03_08(monkeypatch)
-    # CR-79's credit term (a later mover of the told deposit) is reverted in process too.
-    from .test_strife_credit import revert_cr79
-    revert_cr79(monkeypatch)
-    from .test_b11a_duel_reach import revert_b11a
-    revert_b11a(monkeypatch)   # B11 lane A (the duel chain's reach, a formation mover of every season), the same way
-    from .test_b11a_scores_and_obstacle import revert_b11a_scores
-    revert_b11a_scores(monkeypatch)   # B11 lane A (persons hold scores; the obstacle by task: a mover of the build and every season), the same way
-    w = build_realm(seed)
-    run(1, seed, w=w)
-    scale = w.fixtures.get("condition_scale")
-    marked = sum(1 for p in w.persons.values() if p.body_ceiling < scale)
-    assert w.content_hash() == POST_ITEM[seed] != PRE_ITEM[seed]
-    assert marked == {0: 0, 1: 0, 2: 1}[seed], "persons carrying a mark after one season"
-    monkeypatch.setitem(DEFAULT_FIXTURES._v, "body_mark_model", "none")
-    w = build_realm(seed)
-    run(1, seed, w=w)
-    assert w.content_hash() == CONTROL[seed]
-    revert_cp_t03_07(monkeypatch)
-    w = build_realm(seed)
-    run(1, seed, w=w)
-    assert w.content_hash() == PRE_ITEM[seed]
-
-
-def test_build_hash_is_a_schema_mover_and_the_revert_reads_the_old_one(monkeypatch):
-    from .test_b11a_scores_and_obstacle import revert_b11a_scores
-    revert_b11a_scores(monkeypatch)   # B11 lane A (persons hold scores: a later mover of the build), so BUILD_POST stands
-    assert build_realm(0).content_hash() == BUILD_POST
-    revert_cp_t03_07(monkeypatch)
-    assert build_realm(0).content_hash() == BUILD_PRE

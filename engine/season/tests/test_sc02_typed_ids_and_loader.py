@@ -12,7 +12,7 @@ WHAT EACH BLOCK OBSERVES:
      entries (`resolve` and `encounter` share `_survives`); the control is the same string as a plain
      `str` / a person, which is not refused by the tag.
   2. THE BYTE-IDENTITY CONTROL. The wrapper folds IDENTICAL strings: the seats in the realm are
-     `SeatId`s, and `build_realm(0).content_hash()` is `BASE_HASHES[0]`, unchanged.
+     `SeatId`s, and `build_realm(0).content_hash()` is `_realm_goldens.BUILD[0]`, unchanged.
   3. ONE TEST PER LOADER INVARIANT: plant the violation, expect a `SystemExit` naming its row.
 """
 
@@ -94,15 +94,13 @@ def test_the_wrapper_leaves_the_content_hash_where_it_was(monkeypatch):
     commit). The 1- and 2-season pins are `test_season_weather.py::test_in21_control_draw_off_...`, which
     this change was run against. The string-level control beside it: the mint folds a `SeatId` exactly
     as the bare string, and the tag does not survive into an f-string."""
-    from .test_strife_credit import revert_cr79
-    revert_cr79(monkeypatch)    # v11 CR-79 (the credit term, a later mover of the told deposit): reverted, so this pin reads its own item
     from ..harness import populated as POP
     from ..state.ids import H
-    from .test_season_weather import BASE_HASHES
+    from ._realm_goldens import BUILD
     w = POP.build_realm(0)
     seats = [o.id for o in w.offices.values()]
     assert len(seats) >= 20 and all(isinstance(i, SeatId) for i in seats), "the realm's seats are untyped"
-    assert w.content_hash() == BASE_HASHES[0], "the wrapper moved the corpus hash"
+    assert w.content_hash() == BUILD[0], "the wrapper moved the corpus hash"
     s = str(seats[0])
     assert H(1, 2, SeatId(s), "p") == H(1, 2, s, "p") and f"{SeatId(s)}" == s
     assert type(f"{SeatId(s)}") is str and SeatId(s) == s and {SeatId(s): 1}[s] == 1

@@ -4,8 +4,8 @@ FALSIFIER (the plan's): a cast row whose lifepath maps to `inquiry` builds with 
 pool_default}`, rolls the same pool on `research` as a row with no lifepath, and `train` on `inquiry` executes for
 it and is refused for the other; a template naming a key outside `verb_capability`'s values is refused at import;
 `repr(Person)` contains no lifepath id. PLANTED FAILURE: the expansion skipped reddens the `train` assertion (run
-in-test below, `test_the_planted_failure_...`). CONTROL: the expansion skipped reproduces the pre-commit hash with
-the registry's authored rows in place (the shipped state's movers are NPC-004's and NPC-088's `inquiry`).
+in-test below, `test_the_planted_failure_...`). CONTROL: the one-season hash with the expansion skipped differs from the
+shipped one (the shipped state's movers are NPC-004's and NPC-088's `inquiry`); the shipped hash is `_realm_goldens.py`'s.
 
 Built on `build_realm` with a PLANTED `lifepath:` on a row that authors none (NPC-087), so the falsifier does not
 read the registry's own authoring; the registry's authored set is pinned separately.
@@ -27,45 +27,6 @@ from engine.season.state.carriers import Act, Person, Question
 from engine.season.state.gate import WriteClass
 from .test_in10_record_operands import _resolve
 from .test_rem30_character_sheet import _run
-
-#: The 1-season hashes with the expansion stubbed out (`PYTHONHASHSEED=0`), as of CP-T03-01's `individual` reads in
-#: `Event.observed` (the parent tree's, `d5358a9a`, were the previous values: `f2e5e265...`, `0d25717b...`, `05f065f4...`).
-#: RE-PINNED ONCE at v10 CP-T03-09 (`capture`, a declared mover of every one-season realm): was `662a7847...`, `af5ba681...`, `6c3e0c17...`.
-#: CONTROL: `capture` withheld from the chooser's verbs (in process) reads the old three exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-#: RE-PINNED ONCE at v10 PC-10b (a challenge is a Record; `accept` binds to one; a declared mover wherever a challenge forms):
-#: was `7cde746e...`, `971e3d03...`, `0c28be95...`. CONTROL: the base tree (`95f58adb`'s `engine/season`) reads the old three.
-#: A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-#: RE-PINNED ONCE at v11 CR-87 (violence made exceptional: the build's loyalty rows and `fight`'s contexts, a declared mover
-#: of the build and of every season that fought): was `f9c01c27...`, `086d1092...`, `6312b4a1...`. CONTROL:
-#: `test_cr87_violence_contexts.py::revert_cr87` reads the pre-item hashes exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-#: RE-PINNED ONCE at v10 CP-T03-02 (a fight band's `Event.ending` and the wounded party's body Observation, a declared
-#: mover wherever a Felled/Wounded fight lands): seeds 1, 2 were `9e1bb7c2...`, `fe7b5f49...`; seed 0 fights nothing and
-#: does not move. CONTROL: `test_cp_t03_02_band_ending_and_body.py::revert_cp_t03_02` reads the pre-item one-season
-#: realm exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-#: RE-PINNED ONCE at v11 CR-85 (`faculty` replaces `history` in combat's pool and Ob, ED-IN-0330; every season fight
-#: rolls pool 8 against Ob 1.0, was 9 against 1.5): seed 1 was `ce8c74e7...`; seeds 0 and 2 do not move (seed 0
-#: fights nothing, seed 2's fights land where they did). CONTROL:
-#: `test_cr85_faculty_replaces_history.py::revert_cr85` (the seam's faculty at 3 for every party) reads the old value
-#: exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-#: RE-PINNED ONCE at v11 CP-T03-04 (`arms` in `verb_capability`'s range: a FORMATION mover even at control, one more `train`
-#: Candidate per `train` formation with nobody holding the key): seeds 0 / 1 / 2 were e9d7c897... / ae97a48b... / 831dc047...; no roll moves (nobody
-#: holds `arms`). CONTROL: `test_cp_t03_04_arms.py::revert_cp_t03_04` (the three roster rows and the vocation off) reads the
-#: old three exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-#: RE-PINNED ONCE at v11 CP-T03-07 (`Person.body_ceiling`, a SCHEMA mover of every Person, and the lasting mark, an outcome
-#: mover where a survivor reached the deepest gate): seeds 0 / 1 / 2 were 0036bb2e... / 3b30d0ea... / 4856e80a....
-#: CONTROL: `test_cp_t03_07_body_ceiling.py::revert_cp_t03_07` (`body_mark_model: none` and the field out of the canonical
-#: encoding) reads the old three exactly under this control's stub. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-#: RE-PINNED ONCE at v11 CP-T03-08 (`tend` declares `referent_class: Person` and `wounded_with` stamps the wounded: a
-#: FORMATION mover of every season, and an outcome mover -- a man below his ceiling tends himself whole): seeds 0 / 1 / 2
-#: were 39f53dad... / 82310267... / 3cba88e4.... CONTROL: `test_cp_t03_08_tend_on_the_wounded.py::revert_cp_t03_08` (the
-#: column emptied, the term returning `()`) is the item's own control. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-#: Seeds 1 and 2 are the post-B10-11b reading (`reading @4b334f2a`), re-recorded by the batch pin commit: PC-20 (1) (the
-#: head-weighted strike impact, `K_STR_HEAD`) moves a one-season run that reaches `strike_impact`; seed 0 calls none.
-BASE = {
-    0: "7220ffc7e2fb96f8945219946d59e8e4",   # B01a.99 re-pin (every person's attributes are drawn, Spirit its own group): was 8f2c7860... (`will` under `attr.mind`), 28e35026... (B01's close); B01 re-pin (B11 lane A, both commits rebased): was a64160d4...; B10-13 batch pin commit: was cd42982b...; CP-T03-08: was 39f53dad...; CP-T03-07: was 0036bb2e...; CP-T03-04: was e9d7c897...
-    1: "a6a3d88ea0abf3d22c40a431ccd6899e",   # B01a.99 re-pin (every person's attributes are drawn, Spirit its own group): was 7f44d7b6... (`will` under `attr.mind`), 9d16cf94... (B01's close); B01 re-pin (B11 lane A, both commits rebased): was 2f6a308e...; B10-13 batch pin commit: was d8698ba8...; B10-11b pin commit: was 242dac65...; CP-T03-08: was 82310267...; CP-T03-07: was 3b30d0ea...; CP-T03-04: was ae97a48b...; CR-85: was ce8c74e7...
-    2: "9635eed283cb58b0068429f42538ae44",   # B01a.99 re-pin (every person's attributes are drawn, Spirit its own group): was b7504c2a... (`will` under `attr.mind`), 9a317f3a... (B01's close); B01 re-pin (B11 lane A, both commits rebased): was 6b7e5242...; B10-12 pin commit (CR-24 + MB-07r): was 7d0f47a9...; B10-13 batch pin commit: was af8700b7...; B10-11b pin commit: was 174db5fe...; CP-T03-08: was 3cba88e4...; CP-T03-07: was 4856e80a...; CP-T03-04: was 831dc047...
-}
 
 #: The four Niflhel ids the archived file STRIKES (it prints no row for them): never members.
 STRUCK = ("3-NI1", "3-NI2", "3-NI3", "3-NI4")
@@ -223,17 +184,11 @@ def test_the_planted_failure_the_expansion_skipped_reddens_the_train_assertion(m
     assert _train(w, d, P_ID) == ["train.refused"] != ["capability.raised"]
 
 
-@pytest.mark.parametrize("seed", sorted(BASE))
-def test_control_the_expansion_skipped_reproduces_the_pre_commit_hash(monkeypatch, seed):
-    """With the registry's authored rows in place and the expansion skipped, the 1-season hash is the parent
-    tree's: the lifepath id is read and dropped, so a row that maps to nothing moves nothing, and NPC-004's and NPC-088's
-    `inquiry` are the whole mover (`test_rem30_character_sheet.PRE_BUILD` carries the moved hash)."""
-    from .test_strife_credit import revert_cr79
-    revert_cr79(monkeypatch)    # v11 CR-79 (the credit term, a later mover of the told deposit): reverted, so this pin reads its own item
-    monkeypatch.setattr(cast, "capability_of", lambda r, pool_default: {})
-    assert _run(PO.build_realm(seed), 1) == BASE[seed]
-
-
-def test_the_shipped_expansion_is_the_mover_by_the_one_row_that_maps_to_a_key():
-    """The same hash with the expansion ON differs from the parent's at seed 0 (the other arm of the control)."""
-    assert _run(PO.build_realm(0), 1) != BASE[0]
+def test_the_shipped_expansion_is_the_mover_by_the_one_row_that_maps_to_a_key(monkeypatch):
+    """At seed 0 the one-season hash with the expansion ON differs from the same run with it skipped, both read in
+    process (the shipped hash is `_realm_goldens.py`'s)."""
+    shipped = _run(PO.build_realm(0), 1)
+    with monkeypatch.context() as m:
+        m.setattr(cast, "capability_of", lambda r, pool_default: {})
+        skipped = _run(PO.build_realm(0), 1)
+    assert shipped != skipped

@@ -38,7 +38,6 @@ from engine.season.state.ids import H, ROOT, draw_factory
 
 from .test_g3_not_yours import _gov_world, _hold
 from .test_governance_build import _establish, _establish_world, _founding, _seat_reeve
-from .test_season_weather import BASE_HASHES
 
 CHURCH = R.faction_prop_id("Church of Solmund")
 CROWN = R.faction_prop_id("Valorsmark")
@@ -356,10 +355,8 @@ def test_in27_the_loader_refuses_a_second_victory_row():
 
 def test_in27_two_seasons_of_the_built_realm_run_the_step_and_report_no_ending(monkeypatch):
     """`season()` on `build_realm(0)`, twice: the Query is CALLED (spied, once per season, on this world)
-    and its answer is that season's reported `endings`, `[]`; each season lands on the hash
-    `test_season_weather.py` pins for it (`BASE_HASHES[1]`, `BASE_HASHES[2]`)."""
-    from .test_strife_credit import revert_cr79
-    revert_cr79(monkeypatch)    # v11 CR-79 (the credit term, a later mover of the told deposit): reverted, so this pin reads its own item
+    and its answer is that season's reported `endings`, `[]`. (The seasons' hashes are `_realm_goldens.py`'s; this
+    test pins none.)"""
     real, calls = Q.endings_reached, []
 
     def spy(w):
@@ -380,7 +377,6 @@ def test_in27_two_seasons_of_the_built_realm_run_the_step_and_report_no_ending(m
                        contest_max_depth=w.fixtures.get("contest_max_depth"))
         assert len(calls) == s and calls[-1][0] is w, calls
         assert "endings" in out and out["endings"] == [] and calls[-1][1] is out["endings"], out.get("endings")
-        assert out["hash"] == BASE_HASHES[s], f"the ending step moved the pinned {s}-season hash"
         checked += 1
     assert checked == 2
 

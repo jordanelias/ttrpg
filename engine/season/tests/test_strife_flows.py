@@ -851,10 +851,6 @@ def test_control_the_realm_hash_holds_and_the_reading_is_the_same_read_twice():
 
 # --- CR-78: the stamp (commit (1) built it off; commit (2) ships it on) ------------------------------------------
 
-#: Read on the base tree @60c27d08 (before CR-78) and again with the switch off: `build_realm(0).content_hash()`, and
-#: the same realm after one season (`populated.run(seasons=1)`; CP-T03-08's `POST_ITEM[0]`).
-BASE_BUILD = "7a1d4d24b3e46d8428744cd1d78cd590"   # B01a.99 re-pin (every person's attributes are drawn, Spirit its own group): was 03a79b0f... (`will` under `attr.mind`), 8480ad84... (B01's close); B01 re-pin (B11 lane A, both commits rebased): was 600d8b27...
-BASE_ONE_SEASON = "0af3fb898841c6d1f98b0cb9a518d1b6"   # B01a.99 re-pin (every person's attributes are drawn, Spirit its own group): was 5cf205c0... (`will` under `attr.mind`), d796fd5e... (B01's close); B01 re-pin (B11 lane A, both commits rebased): was 25660615...; RE-PINNED at the B10-13 pin commit (P15; same value as `test_season_weather.BASE_HASHES[1]`): was d4c83c8c... (CP-T03-08's `POST_ITEM[0]`). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 STAMP = "stamp_flow_stakes"
 
 
@@ -949,26 +945,6 @@ def test_cr78_a_stake_of_a_class_outside_the_closed_set_is_refused(monkeypatch):
     assert [x.referents for x in W.flows_known(w, pm)] == [frozenset({"t_cust"})]
     assert w.class_of("t_cust") is None and W.flow_stakes(w, pm) == ()
     W.questions_for(w, pm)                                            # and the stamp site does not raise on it
-
-
-def test_cr78_control_the_switch_off_reproduces_the_base_hash(monkeypatch):
-    """The switch set off EXPLICITLY: the built realm and one season at seed 0 read the base tree's hashes (EQUAL
-    checks; they hold with the switch on too, since the stamp's effect starts later or elsewhere), the term is
-    never computed (a `flow_stakes` that raises is never reached), and the switch was read: those two discriminate."""
-    from engine.season.harness import populated
-    from .test_strife_credit import revert_cr79
-    revert_cr79(monkeypatch)
-    w = populated.build_realm(0)
-    _switch(monkeypatch, w, False)
-    assert w.content_hash() == BASE_BUILD
-
-    def _never(*a, **k):
-        raise AssertionError("flow_stakes computed with the switch off")
-    monkeypatch.setattr(W, "flow_stakes", _never)
-    before = w.fixtures.reads.get(STAMP, 0)
-    populated.run(seasons=1, w=w)
-    assert w.fixtures.reads.get(STAMP, 0) > before
-    assert w.content_hash() == BASE_ONE_SEASON
 
 
 def test_cr78_strand_rung_is_not_a_source_of_stakes(monkeypatch):

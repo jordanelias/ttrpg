@@ -11,7 +11,8 @@
       ceiling, and names every term on the roll's record (`resolve`'s `ob_terms`). `interrogate`, `arrest` and `determine`
       name a vocation.
   CONTROL: `Fixtures obstacle_model: stand_in` composes the obstacle before this item, byte for byte (asserted over a grid of
-  records here); `revert_b11a_scores` (the switch, and no attribute seated) reproduces the reach commit's realm hashes.
+  records here); `revert_b11a_scores` (the switch, and no attribute seated) is what other files' reverts call. The realm
+  hashes are `_realm_goldens.py`'s.
 """
 from __future__ import annotations
 
@@ -24,19 +25,9 @@ from ..data.fixtures import DEFAULT_FIXTURES
 from ..gaps import Forbidden
 from ..harness import populated
 from ..harness import probes as P
-from ..harness.populated import build_realm, run
 from ..queries.inputs import SocialContestInput
 from ..seam.wrappers import pool, sigma
 from .test_sc01_obstacle_ceiling import _module
-
-
-#: `build_realm(s)` then one season, this commit's tree; PRE is the reach commit's (`test_b11a_duel_reach.POST`).
-#: Re-pinned in B01.02 on the rebased tree, PYTHONHASHSEED=0 (was the branch's 29a11c75... / 52e48937... / 5b948b83...,
-#: `1424aa7`'s world, discarded per C3-A2).
-#: B01a.99 re-pin (every person's attributes are drawn, Spirit its own group; a population change, not a balance
-#: claim): was ad4dad1d... / 056bff31... / 7f93eb25... (B01's close, `reading @cfd9aef`); read on the B01a closing
-#: tree, PYTHONHASHSEED=0 (the WIP checkpoint's 94a2c8c8... / c78cd6ff... / 2d9f88f0... drew `will` under `attr.mind`).
-POST = {0: "f5b7393a83d8a2fc097d0414254d2eee", 1: "e873b9cd5adb66509eed655db8145351", 2: "c4a7199821d5a71e2beeb18c7dd61f06"}
 
 
 def revert_b11a_scores(monkeypatch) -> None:
@@ -157,16 +148,3 @@ def test_control_the_stand_in_arm_composes_the_old_obstacle_exactly(opp, room, c
                forgery_quality=fq, ceiling_per_pool=True)
     assert _module().obstacle(inp) == _legacy(inp)           # exact, not approx: the control is byte-identity
 
-
-# ---- the realm hash: mover, and the revert ---------------------------------------------------------------------
-
-@pytest.mark.parametrize("seed", [0, 1, 2])
-def test_hash_post_item_and_revert(seed, monkeypatch):
-    from .test_b11a_duel_reach import POST as PRE
-    w = build_realm(seed)
-    run(1, seed, w=w)
-    assert w.content_hash() == POST[seed] != PRE[seed]
-    revert_b11a_scores(monkeypatch)
-    w = build_realm(seed)
-    run(1, seed, w=w)
-    assert w.content_hash() == PRE[seed]

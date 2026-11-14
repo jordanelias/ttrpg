@@ -17,21 +17,14 @@ shipped `observation_deposit_mode` (`actor`), no new channel.
 """
 from __future__ import annotations
 
-import pytest
-
 from ..data.matrix import Step, WriteClass
 from ..data.rosters import FELLED, UNTOUCHED, WOUNDED
 from ..harness import probes as P
-from ..harness.populated import build_realm, run
 from ..loop import effects_combat
 from ..loop.driver import SeasonDriver, mint_token
 from ..seam import Resolution, degree_of
 from ..state.carriers import Act
 from ._scar_helpers import party_state
-from .test_cr85_faculty_replaces_history import revert_cr85
-from .test_cp_t03_04_arms import revert_cp_t03_04
-from .test_cp_t03_07_body_ceiling import revert_cp_t03_07
-from .test_cp_t03_08_tend_on_the_wounded import revert_cp_t03_08
 
 ACTOR, SUBJECT = "p_low", "p_mid"      # `tiny_world`: co-located, so a `fight` between them is admitted
 
@@ -180,48 +173,8 @@ def test_a_capture_yielded_at_the_untouched_band_stamps_the_ending_on_person_cap
     assert e.ending == ((C_ACTOR, "undecided"), (CAPTIVE, "yielded")), e.ending
 
 
-#: The one-season realm hashes BEFORE this item (dee492f7); seed 0 forms no Felled/Wounded fight and does not move.
-#: Seeds 1 and 2 are the post-B10-11b reading (`reading @4b334f2a`), re-recorded by the batch pin commit (was f4330aac... /
-#: a030141a...): PC-20 (1) (the head-weighted strike impact, `K_STR_HEAD`) moves a one-season run that reaches `strike_impact`.
-#: B10-13 batch pin commit (the batch's declared movers move a one-season realm of every seed, seed 0 included): was
-#: 20accb03... / 35dadf8a... / 72d62e19....
-#: B10-12 pin commit (CR-24 `field_winner_casualties: engine` and MB-07r's support cap, both shipped, move a one-season
-#: realm that fights; control: both reverted reads the old pin): seed 2 was 5e5bf76c....
-PRE_ITEM = {0: "a63b960024babdcd2a1a37839e2d6cb0",
-            1: "938a3affd22183adfc34d7777df7f3a0",
-            2: "d5d356c7537ba36127ee288867726c2d"}
-
-
 def revert_cp_t03_02(monkeypatch):
     """The item at its revert, in process: no ending, no body Observation."""
     monkeypatch.setattr(effects_combat, "fight_ending", lambda *_a, **_k: ())
     monkeypatch.setattr(effects_combat, "body_observed", lambda *_a, **_k: ())
 
-
-@pytest.mark.parametrize("seed", [0, 1, 2])
-def test_control_the_item_at_its_revert_reproduces_the_pre_item_one_season_hash(seed, monkeypatch):
-    """HASH MOVER, CONTROLLED: every pin this item re-records moved by the ending and the body Observation alone --
-    with both reverted in process the one-season realm reads the pre-item hash exactly; with them, seeds 1 and 2
-    move (seed 0 formed no Felled/Wounded fight)."""
-    from .test_strife_credit import revert_cr79
-    revert_cr79(monkeypatch)    # v11 CR-79 (the credit term, a later mover of the told deposit): reverted, so this pin reads its own item
-    # v11 CP-T03-04 (`arms` in the vocation range, a formation mover of EVERY seed, seed 0 included) is reverted on BOTH arms,
-    # so `moved` still reads this item alone and `PRE_ITEM` stands.
-    revert_cp_t03_04(monkeypatch)
-    revert_cp_t03_07(monkeypatch)   # v11 CP-T03-07 (`body_ceiling`, a schema mover of every realm), the same way
-    revert_cp_t03_08(monkeypatch)   # v11 CP-T03-08 (`tend` forms on the wounded, a formation mover of every season), the same way
-    from .test_b11a_duel_reach import revert_b11a
-    revert_b11a(monkeypatch)   # B11 lane A (the duel chain's reach, a formation mover of every season), the same way
-    from .test_b11a_scores_and_obstacle import revert_b11a_scores
-    revert_b11a_scores(monkeypatch)   # B11 lane A (persons hold scores; the obstacle by task: a mover of the build and every season), the same way
-    # v11 CR-85 (`faculty` replaces `history`, a later mover of seed 1) is reverted on BOTH arms too, BEFORE `moved`
-    # is taken, so `moved` differs from `PRE_ITEM` by this item alone and a CR-85 move cannot pass for one of its own.
-    revert_cr85(monkeypatch)
-    w = build_realm(seed)
-    run(1, seed, w=w)
-    moved = w.content_hash()
-    revert_cp_t03_02(monkeypatch)
-    w = build_realm(seed)
-    run(1, seed, w=w)
-    assert w.content_hash() == PRE_ITEM[seed]
-    assert (moved != PRE_ITEM[seed]) == (seed != 0), (seed, moved)

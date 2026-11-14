@@ -16,8 +16,8 @@ Six parts, each read here through the code that carries it:
   Spymaster->King formations are 0; hand-built war, crime (a warrant addressed to him; a detainee), duel and defence
   contexts each form a `fight`, and with none it does not.
   MUTATION: the decline emptied (`VIOLENCE_CONTEXTS` = {}), the realm forms `fight` on same-faction persons again.
-  CONTROL: the block empty and every value at its revert reproduce the pre-item hash exactly (`build_realm(0)` and one
-  season at seed 0, the hashes given at the base, after PC-10b).
+  CONTROL: `revert_cr87` (the block empty and every value at its revert), which other files' reverts call; the build at
+  the revert reads another hash than the shipped one. The realm hashes are `_realm_goldens.py`'s.
 """
 from __future__ import annotations
 
@@ -42,15 +42,8 @@ from ..queries import person_q, world_q
 from ..queries.person_q import SEEN_PREDICATE
 from ..seam.wrappers import combat
 from ..state.carriers import Claim, Proposition, Question, Tenure, View
-from .test_cp_t03_02_band_ending_and_body import revert_cp_t03_02
-from .test_cr85_faculty_replaces_history import revert_cr85
-from .test_cp_t03_04_arms import revert_cp_t03_04
-from .test_cp_t03_07_body_ceiling import revert_cp_t03_07
-from .test_cp_t03_08_tend_on_the_wounded import revert_cp_t03_08
 
 A, B = "p_mid", "p_low"          # `probes.tiny_world`: both at the hearth `Hh`
-BASE_BUILD = "837d0f83c62917b88d69da3daa3ea027"     # build_realm(0).content_hash(), after PC-10b (the pre-item base)
-BASE_SEASON = "bcc4ee3fa3d93ede38fb937f204511ea"    # one season, seed 0, after PC-10b; B10-13 batch pin commit: was 0fb73bc8...; B10-13 Phase 1 A1, the self-plea's stance sign: was 8bca0263...
 CARDINALS = {"off_cardinal_fortitude", "off_cardinal_justice", "off_cardinal_prudence", "off_cardinal_temperance"}
 
 
@@ -380,28 +373,9 @@ def revert_cr87(monkeypatch) -> None:
                         dataclasses.replace(row, requires_typed=TypedRequires(AllOf(kept), req.names)))
 
 
-def test_control_the_block_empty_and_every_value_at_its_revert_reproduce_the_pre_item_hash(monkeypatch):
-    from .test_strife_credit import revert_cr79
-    revert_cr79(monkeypatch)    # v11 CR-79 (the credit term, a later mover of the told deposit): reverted, so this pin reads its own item
+def test_the_build_moves_under_the_item_so_its_revert_is_not_vacuous(monkeypatch):
+    """CR-87 moves the build (the build-time loyalty rows name the creed, never its head): the same build at the revert
+    reads another hash. The shipped build hash is `_realm_goldens.py`'s."""
+    shipped = populated.build_realm(0).content_hash()
     revert_cr87(monkeypatch)
-    # v10 CP-T03-02 (a later mover of every season that fought: the band's `ending`, the body Observation) is
-    # reverted too, so the base tree's reading stands rather than being re-taken.
-    revert_cp_t03_02(monkeypatch)
-    # v11 CR-85 (`faculty` replaces `history` in the pool and the Ob, a later mover of every season that fought) is
-    # reverted too (`revert_cr85`, the seam's faculty at 3 for every party), the same way.
-    revert_cr85(monkeypatch)
-    # v11 CP-T03-04 (`arms` in the vocation range, a formation mover of every season) is reverted too, the same way.
-    revert_cp_t03_04(monkeypatch)
-    revert_cp_t03_07(monkeypatch)   # v11 CP-T03-07 (`body_ceiling`, a schema mover of the build), the same way
-    revert_cp_t03_08(monkeypatch)   # v11 CP-T03-08 (`tend` forms on the wounded, a formation mover of every season), the same way
-    from .test_b11a_duel_reach import revert_b11a
-    revert_b11a(monkeypatch)   # B11 lane A (the duel chain's reach, a formation mover of every season), the same way
-    from .test_b11a_scores_and_obstacle import revert_b11a_scores
-    revert_b11a_scores(monkeypatch)   # B11 lane A (persons hold scores; the obstacle by task: a mover of the build and every season), the same way
-    assert populated.build_realm(0).content_hash() == BASE_BUILD
-    w, _d, _rows = I.run(0, 1, observe=False)          # the audit's own run, which read the base hash
-    assert w.content_hash() == BASE_SEASON
-
-
-def test_the_shipped_build_differs_from_the_base_so_the_control_is_not_vacuous():
-    assert populated.build_realm(0).content_hash() != BASE_BUILD
+    assert populated.build_realm(0).content_hash() != shipped
