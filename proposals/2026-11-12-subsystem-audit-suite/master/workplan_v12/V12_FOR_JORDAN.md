@@ -251,7 +251,21 @@ collection and CP-T08-08's refill, which are credited on hand-built worlds only.
 
 **Added 2026-11-14 by the social-contest redesign (stage 3; `proposals/2026-11-14-social-contest-redesign_part5.md` §F.7; Batch B24p-sc-proceeding).** These are the two questions the redesign's five-step ladder could not settle: each overwrites the letter of a ratified ruling, which CLAUDE.md §0 reserves to you. Everything else the redesign left open was closed by the ladder and is marked where it is decided (RD §B.5, §D.1, §D.2, §A.5, §C.6, §A.2); the values that are content and yours to correct are marked `[ASSUMPTION; Jordan to correct]` in the items.
 
-### J-SC-1 · What are the dice of an argument: Reason, or Presence? · SC (Batch B24p-sc-proceeding, B24p.07)
+### J-SC-1 · What are the dice of an argument: Reason, or Presence? · SC (Batch B24p-sc-proceeding, B24p.07) · ANSWERED
+
+**ANSWERED 2026-11-14 (Jordan: *"argument dice is Presence and/or Reason depending upon content of argument and
+venue"*; `proposals/2026-11-14-social-contest-jordan-rulings.md` R11; `unified/DECISIONS_ANSWERED.md` A-127).**
+Neither option as written: a blend. The dice of a speech are a weighted mean of the speaker's Reason and Presence,
+rounded to the nearest tenth; the weight on Reason is the speech's content class (`rosters.yaml: content_classes`,
+named by each ground and by `divert`: evidentiary, logical, procedural, appeal, emotional) plus the proceeding type's
+`reason_bias` (a court leans to Reason, a crowd to Presence, private talk neither), clamped to `[0, 1]`; Presence
+takes the rest. Presence keeps its own role besides (the share heard and delivery, R1). ED-IN-0350's letter
+(*"argue main component is presence"*) is superseded by these words. The plan now does this at B24p.01 (the content
+classes and their loader check), B24p.03 (`reason_bias` on every type row and its check), B24p.04 (the `speech_blend`
+register row), B24p.07 (`_blend`, `weighted_tenth`, and each role's falsifier in two arms plus the slope test by venue
+and content), B24p.13 (the builder fills the weights), B24p.16 (the ledger row records the amendment), B24p.18 and
+B24p.23 (the shipped weights, `[ASSUMPTION; Jordan to correct]`, and the per-type slope bounds). RD §B.2 (a) holds the
+rule and both weight tables. The text below is kept as the question was put.
 
 **The situation.** When someone argues, the number of dice he rolls comes from one attribute (plus his rank in the skill). Two rulings read differently. ED-IN-0350 (ratified 2026-11-05) says `argue`'s pool attribute is Presence (charisma). Your ruling of 2026-11-14 (R1) says Reason is *"constructing the argument/speech, making it logical and reasonable and evidentiary"* and charisma is *"the ability to be listened to and be compelling with your delivery"*. The redesign gives every one of the six attributes its own mechanism, so the speech needs one of the two as its dice and the other as something else.
 

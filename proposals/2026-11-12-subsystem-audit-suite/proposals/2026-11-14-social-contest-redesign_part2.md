@@ -28,8 +28,10 @@ The redesign adds no second catalogue. It gives the unread keys their reader (th
 | what kind of speeches, in what order | `order` (existing, unread); **`rite`** NEW: a row of the `rites:` block (the moves each side may make, the faults); **`exchanges`** NEW: `[min, max]` in one sitting | `proceed` (A.5); `ProceedingType.moves` |
 | what system renders the verdict | `disposal`; **`presumes`** NEW: `for`, `against` or `none`: which side the proceeding presumes for before a word is said; **`strikes`** NEW: how many off-topic speeches a side is allowed | the close (A.5); B.1 |
 | what proof is admitted | `proofs` (existing; B05.21's admission filter is its reader) | `world_q.proofs` (B05.21 step 5) |
+| how the venue weighs the speaker's case against his carriage (R11) | **`reason_bias`** NEW: a number in `[-1, 1]`, in tenths: the venue's lean of every speech's dice toward Reason (+) or Presence (−), added to the speech's content weight (RD §B.2 a) | `ProceedingType.reason_bias` → `_speech_input` |
 
-The five new keys: `rite`, `exchanges`, `authority`, `presumes`, `strikes`. B05.21 adds `standard` and B24a.03 adds
+The six new keys: `rite`, `exchanges`, `authority`, `presumes`, `strikes`, `reason_bias` (the sixth added for R11,
+2026-11-14; its per-row values are RD §B.2 a's venue table, at control 0 on every row until B24p.23). B05.21 adds `standard` and B24a.03 adds
 `appeal_to`; B24.09 planned `rite` and now finds it (§F). The keys this design gives no reader (`bench_basis`,
 `records_dissent`, `term_required`, `interposed`, `disposal_reach`) stay B27.16's to keep or delete by its own rule.
 
@@ -42,9 +44,13 @@ the rite's.
 
 Added to `_load_arrangement`, each refusing at import and naming the row (the file's own pattern, `_refuse_not_in`):
 
-1. `_ARRANGEMENT_KEYS` gains the five keys; `_DISPOSAL_VALUES` gains `hearers` and `exchange`.
+1. `_ARRANGEMENT_KEYS` gains the six keys; `_DISPOSAL_VALUES` gains `hearers` and `exchange`.
 2. `rite` names a row of `rites:`; `authority` is an `authorities` member; `presumes` is one of `for`, `against`, `none`;
-   `strikes` is a whole number at least 0; `exchanges` is two whole numbers with `1 <= min <= max`.
+   `strikes` is a whole number at least 0; `exchanges` is two whole numbers with `1 <= min <= max`; `reason_bias` is
+   present on every row (closure: every proceeding type has a venue bias), in `[-1, 1]` and a whole number of tenths.
+   Its pair in `data/rosters.py` (B24p.01): every `content_classes` row has `w_reason` in `[0, 1]`, a whole number of
+   tenths; every `grounds` row names a `content:` class; every `proceeding_moves` row with `draw: true` and
+   `ground: false` names one, and no other row does (closure: every kind of speech has exactly one content class).
 3. Closure across keys: `disposal: exchange` requires `exchanges: [1, 1]` and is refused on a seeded row (it is produced
    only by `abridged`, C.6); `disposal: hearers` requires `bench_basis: none` and `disposes: none`; `order: scripted`
    requires a rite whose `moves` differ by side; a rite's move outside `rosters.yaml: proceeding_moves` is refused; a
@@ -102,6 +108,9 @@ Notes on the rows.
 - **Heresy** is not one row: the investigation's sittings are `questioning` (the interrogation of a suspect each season,
   v30 §7.3 `:449-460`), the trial is `inquisition_hearing`, the sentence is `excommunication_deliberation`. The lifecycle
   across seasons (its eight closure conditions, COL A11) is the case file's, not the type's: §G.
+- **`reason_bias`** (R11) is not a column of the table above: its thirteen values are RD §B.2 a's venue table (a court
+  +0.2; a formal bench or closed council +0.1; private talk and a plea before one seat 0; an open assembly −0.1; a crowd
+  −0.3), each `[ASSUMPTION; Jordan to correct]`, every row at 0 until B24p.23. `abridged` copies it, as it copies the venue.
 
 ### C.4 Rites and moves
 
@@ -118,6 +127,9 @@ addressed feeds the `resist` source, B.6 d), `ground` (does the move take one).
 | `deceive` | yes | `deception` | attunement | yes | as `argue`, the content false; the mover carries a standing pull of `deceive_pull` (keeping a false story straight is a hold, B.1) |
 | `concede` | no | — | — | no | the track moves `concede_step` toward the other side; the conceder's resolve rises by one (v30 Step 5, *Concede a Point*, `:238`) |
 | `rest` | no | — | — | no | nothing |
+
+A seventh column, `content:`, is set on `divert` alone (`procedural`): the one drawing move that takes no ground names
+its own content class; every other drawing move speaks on a ground and takes the ground's class (RD §B.2 a, R11).
 
 `deceive` is how a `lie` enters: the row's cell names the move (C.6), so no verb is named in the module. Its resistance is
 the hearer's Attunement (B05.25's cell for `lie`: *"seeing intention in the moment"*, AR-30). `deceive_pull` and

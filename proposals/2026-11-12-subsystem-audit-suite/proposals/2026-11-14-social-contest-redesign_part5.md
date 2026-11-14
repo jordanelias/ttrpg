@@ -122,7 +122,7 @@ B98's batch block gains `GATE: Batch B24p-sc-proceeding`. Three positions are ad
 
 | setting | set by | target reading |
 |---|---|---|
-| the forty-five settings of RD §B that B24p.23 sets | B24p.23; **re-read by B98** on the finished realm with `pairs proceeding`, each against its three-point sweep | the BATCH GATE's role readings of B24p (each of the six keys a SLOPE off 0 in at least one type; no DOMINANT above 0.90) |
+| the forty-six settings of RD §B that B24p.23 sets | B24p.23; **re-read by B98** on the finished realm with `pairs proceeding`, each against its three-point sweep | the BATCH GATE's role readings of B24p (each of the six keys a SLOPE off 0 in at least one type; no DOMINANT above 0.90) |
 | `reading_kept` | B98 (flip to on) | B24p.22's falsifier: a kept reading is right more often at Attunement 6 than at 2 and never certain; the ledger's growth per season quoted |
 | `presumption_level`, `strike_level` | no batch | none stated: B98 writes each `BLOCKED (design: no target reading)` unless Jordan gives one |
 
@@ -130,7 +130,7 @@ B98's batch block gains `GATE: Batch B24p-sc-proceeding`. Three positions are ad
 
 - **Movers**: B24p.15 (behaviour: a computed docket item names a row), B24p.19 (behaviour: five verbs resolve through the proceeding), B24p.20 (behaviour and encoding: the `ending`; a cohort addressed is moved hearer by hearer), B24p.23 (behaviour: the roles on). Every other position is EQUAL and says how that is read.
 - **Re-pin**: once, at B24p.99 (Jordan, R10: *"we can re-pin after it's been built"*). B24's re-pin at B24.99 is then read against B24p's after-reading through the S12 merges.
-- **Ids**: ED-SC 1 (B24p.16); H 49. B24 returns three H slots (B24.07's `argument_step`, B24.29's two).
+- **Ids**: ED-SC 1 (B24p.16); H 49 as drafted, H 50 after R11 (B24p.04's `speech_blend` pointer row; the plan's block, `wp part22_b24p.md` `IDS:`, is the owner). B24 returns three H slots (B24.07's `argument_step`, B24.29's two).
 
 ### F.6 The twenty-two contradictions (COL §8): which side wins
 
@@ -161,11 +161,14 @@ B98's batch block gains `GATE: Batch B24p-sc-proceeding`. Three positions are ad
 
 ### F.7 The questions that survive the ladder, with the plan's default meanwhile
 
-Two. Each overwrites the letter of a ratified ruling, which CLAUDE.md §0 reserves to Jordan.
+Two. Each overwrites the letter of a ratified ruling, which CLAUDE.md §0 reserves to Jordan. **J-SC-1 is ANSWERED**
+(Jordan, 2026-11-14, R11: *"argument dice is Presence and/or Reason depending upon content of argument and venue"*):
+neither option as written; the dice are a blend of Reason and Presence weighed by the content class of the speech and
+the venue's `reason_bias` (RD §B.2 a), and ED-IN-0350's letter is superseded by his own later words.
 
 | # | question | option A (the default this proposal builds) | option B | what differs in play |
 |---|---|---|---|---|
-| J-SC-1 | **What are the dice of an argument?** ED-IN-0350 (ratified 2026-11-05) says `argue`'s pool attribute is Presence; R1 (2026-11-14) says Reason *constructs* the argument and charisma is *delivery*. | Reason is the dice; Presence is the share heard and the leverage of delivery, and is the larger slope in an open room (RD §B.2, §B.4) | Presence is the dice; Reason is leverage (proofs and the account of the other side) | under A a bench is won by the better case and a crowd by the better speaker; under B the better speaker has the wider swing everywhere and a learned, graceless speaker has no home ground. One cell decides it: which attribute `_speech_input` passes to `pool_of` |
+| J-SC-1 (**ANSWERED, R11**: a blend, RD §B.2 a) | **What are the dice of an argument?** ED-IN-0350 (ratified 2026-11-05) says `argue`'s pool attribute is Presence; R1 (2026-11-14) says Reason *constructs* the argument and charisma is *delivery*. | Reason is the dice; Presence is the share heard and the leverage of delivery, and is the larger slope in an open room (RD §B.2, §B.4) | Presence is the dice; Reason is leverage (proofs and the account of the other side) | under A a bench is won by the better case and a crowd by the better speaker; under B the better speaker has the wider swing everywhere and a learned, graceless speaker has no home ground. One cell decides it: which attribute `_speech_input` passes to `pool_of` |
 | J-SC-2 | **Does the wrong kind of argument cost, or only fail to help?** v30's armature (ratified at Gate C, ED-1062) says a misaligned style *"simply forgoes the boost"*. | the target's worst ground costs (`misfit_level` `moderate`): reading people matters because misreading them hurts (RD §B.3) | never a penalty (`misfit_level` `None`) | under A Attunement's slope is about twice what it is under B in the scratch probe, and a bold speaker who cannot read a room loses rooms; under B the worst a poor reader does is argue plainly |
 
 Everything else the sources left open was closed by the ladder and is marked where it is decided: the Will and Grace

@@ -2,6 +2,8 @@
 
 ## Status: PROPOSED (the fourth part of `2026-11-14-social-contest-redesign.md`; read that file's head first, and part 3's E.0 for the batch block these items belong to; reference under CLAUDE.md §0.05, nothing reads it at runtime)
 
+⚠ R11 (2026-11-14) is folded into the plan's copy of these items only (`master/workplan_v12/workplan_v12_part22_b24p_cont.md`); where they differ, that copy governs (part 3, §E's note).
+
 ---
 
 ### B24p.13 — the host builder · RD §C.5, §C.7, §A.3 · BUILD · HASH EQUAL

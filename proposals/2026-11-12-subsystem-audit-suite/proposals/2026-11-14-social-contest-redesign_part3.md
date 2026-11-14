@@ -12,6 +12,13 @@ it. A path under `engine/`, `modules/`, `tools/`, `references/`, `registers/`, `
 `engine/season/` is dropped where the context is plain. §A to §D of this proposal are cited as RD §A to RD §D. Every
 INSTRUCTION is complete in itself for the code it names; the formulas it cites are RD §B's, copied where they are short.
 
+⚠ **Superseded by the folded copy for R11 (2026-11-14).** These items were copied into the plan as
+`master/workplan_v12/workplan_v12_part22_b24p.md` and `_cont.md` by stage 3; Jordan's R11 (the dice of a speech are a
+blend of Reason and Presence by content and venue, RD §B.2 a) was folded into THAT copy only, at B24p.01, .02, .03, .04,
+.07, .13, .15, .16, .18, .23, reading R1 and the batch block (`checks/F3_JSC1.md`). Where this part and part 4 differ
+from the plan's copy, the plan's copy governs; this copy is not kept in step `[ASSUMPTION: one live text of the items —
+basis: CLAUDE.md §0.05 cl. 3, edit the owner and never keep a second copy; the plan is the owner after the fold]`.
+
 ### E.0 The batch block
 
 ## Batch B24p-sc-proceeding · lane SC · wave W12 · step S12 · HASH MOVER, one re-pin

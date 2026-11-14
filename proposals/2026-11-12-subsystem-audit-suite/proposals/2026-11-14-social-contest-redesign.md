@@ -12,7 +12,7 @@ files was edited; no commit; the probes named in the text ran with `PYTHONHASHSE
 data; §D the verbs); `_part3.md` and `_part4.md` (§E the build items); `_part5.md` (§F the fold map; §G what was not
 decided).
 
-**Depends on:** Jordan's rulings R1 to R10 (`2026-11-14-social-contest-jordan-rulings.md`, the contract); stage 1
+**Depends on:** Jordan's rulings R1 to R11 (`2026-11-14-social-contest-jordan-rulings.md`, the contract; R11, the blend of the dice, folded 2026-11-14 after stage 3); stage 1
 (`2026-11-14-social-contest-attribute-interrogation.md`, cited as INT); the collation
 (`2026-11-14-social-contest-collation.md`, cited as COL); B01a (drawn attributes, `engine/season/harness/pairs.py`); B04
 (the skill surface, `pool_of`, `opposed_ob`, `even_line`); B05 (the one continuous sampler, the obstacle roster, the signed
@@ -41,7 +41,8 @@ ids: **N1 to N20** (`.audit/2026-08-06-social-contest-three-lens-audit/sources/0
 between sides, then a close in which each decider is balloted. The single roll stays the unit: an exchange is one
 continuous draw with three more beside it (a reading, a hold, the pressed side's steadiness). (2) `tell`, `lie` and `speak` call the same entry under
 a one-exchange type row whose close is that exchange's own margin: no second path (R6). (3) Each attribute has its own
-operand: Reason is the dice of the case; Presence is leverage and the share of the speech that is heard; Attunement is the
+operand: the dice of a speech are a blend of Reason and Presence, weighed by what the speech says and where it is said
+(R11, B.2); Presence besides is leverage and the share of the speech that is heard; Attunement is the
 accuracy of the reading the speaker chooses his ground and his target by; Focus is the hold against being drawn off the
 topic; Grace is the shortfall against what the venue demands, the esteem he holds in the room and the cost of a rattle; Will is
 the resistance to a rattle, the length a side can keep arguing and the discount on everything that counts against it (R1,
@@ -63,7 +64,8 @@ Event and, for a docketed matter, on the case file (Layer 1, `04` §A.2).
 | **side** | `for` (the side that put the proposition) or `against`; one speaker leads each | `queries/inputs.py::Speaker.side` |
 | **topic** | the proposition the proceeding is about (a `Proposition` id or a docket matter), with the live *issue* where the type has an issue ladder | `queries/inputs.py::ProceedingInput.topic` |
 | **move** | the kind of speech an exchange makes (`argue`, `press`, `divert`, `concede`, `rest`, and the evidence and bench moves B24 adds) | `rosters.yaml: proceeding_moves` |
-| **ground** | what an argument appeals to: `evidence`, `consequence`, `authority`, `solidarity` (the four the tree already seats as hearer dispositions, wp `part22_cont.md:120`; v30's armature axes, `:182-188`) | `rosters.yaml: grounds` |
+| **ground** | what an argument appeals to: `evidence`, `consequence`, `authority`, `solidarity` (the four the tree already seats as hearer dispositions, wp `part22_cont.md:120`; v30's armature axes, `:182-188`); each names a content class, which weighs the speech's dice between Reason and Presence (B.2 a) | `rosters.yaml: grounds` |
+| **content class** | what kind of content a speech is (`evidentiary`, `logical`, `procedural`, `appeal`, `emotional`), carrying the weight `w_reason` of Reason in its dice, the rest Presence (R11) | `rosters.yaml: content_classes` |
 | **decider** | a person the close ballots: a bench seat, the one a speech is addressed to, a hearer in a crowd | `queries/inputs.py::Decider` |
 | **audience** | the persons present who are not speakers; the type row says what kind it is, and its hearers are deciders only where the row says `disposal: hearers` | `arrangements.yaml: audience_kinds`; `ProceedingInput.hearers` |
 | **proceeding type** | one row of `arrangements.yaml`: the parameters R4 lists | `data/arrangements.py` |
@@ -165,6 +167,8 @@ class Move:                    # one row of rosters.yaml: proceeding_moves, hand
     fit: bool                  # does the ground's fit to the target count as leverage (B.3)
     holds: bool                # does it carry its own pull (a false story, C.4)
     effect: str                # "track" | "strike" | "pull" | "yield" | "none": what it does when it lands (A.4 step 5)
+    reason_weight: Optional[float]  # a groundless drawing move's content weight toward Reason, its content class's
+                               # `w_reason` (B.2 a); None on a move that takes a ground (the ground's class decides)
 
 @dataclass(frozen=True)
 class ProceedingType:          # the arrangements.yaml row, as the module reads it (C.2)
@@ -177,6 +181,7 @@ class ProceedingType:          # the arrangements.yaml row, as the module reads 
     difficulty: float          # the type's difficulty level, already sized (B05.14 difficulty_ob)
     stakes: float              # the obstacle term of what the close disposes (B05.21 stakes_ob), 0 with none
     presumes: str              # "for" | "against" | "none": which side the proceeding presumes for (C.1)
+    reason_bias: float         # the venue's lean of a speech's dice toward Reason (+) or Presence (-), in tenths (B.2 a, C.1)
     quorum: Optional[int]
     break_at: int              # marks at which a side cannot go on
     strikes: int               # off-topic speeches after which a side's off-topic speech counts for nothing; 0 = never
@@ -191,6 +196,7 @@ class ProceedingInput:
     hearers: tuple             # Decider, ...: the audience present (they may equal `deciders` under `hearers`)
     room: Room
     grounds: tuple             # the members of rosters.yaml: grounds, in roster order (the module holds no roster)
+    ground_reason: tuple       # ((ground, w_reason of its content class), ...) in roster order (B.2 a)
     dials: Mapping             # every setting the formulas read, by name (Fixtures values; the module holds none)
     state: Optional["ProceedingState"] = None   # a resumed sitting's start, else None
 
@@ -265,7 +271,7 @@ exchange k at the same ordinals whatever was chosen before]`.
 | 1 | **The reading.** `S` reads the room and `T`: the first normal settles how exact his reading is; `s.read` is the true dispositions blurred by the error | Attunement | B.3 |
 | 2 | **The choice.** `decide(view)` returns a `Choice`; with no decider the automatic policy takes the legal move and the ground his reading scores highest | (Attunement, through the reading) | A.6 |
 | 3 | **The hold.** If a pull stands on `S` (`s.pull > 0`, from the other side's last `divert` or `press`, plus the room's `distraction`), the second normal settles whether he keeps to the topic; if not, the speech is off the topic | Focus | B.1 |
-| 4 | **The speech.** The third normal is the speech draw: `margin = roll_net_continuous(pool) + net_boost(sigma, pool) - ob`, with the pool from the case (Reason), `sigma` from delivery (Presence), fit (the ground against the target's true dispositions), esteem (Grace) and the other sources, the levels against scaled down by Will, and `ob` from the difficulty, the opposition, the venue's standard (Grace) and the hostile room | Reason, Presence, Grace, Will | B.2, B.4, B.5, B.6 |
+| 4 | **The speech.** The third normal is the speech draw: `margin = roll_net_continuous(pool) + net_boost(sigma, pool) - ob`, with the pool from the case (a blend of Reason and Presence by the ground's content and the venue, R11), `sigma` from delivery (Presence), fit (the ground against the target's true dispositions), esteem (Grace) and the other sources, the levels against scaled down by Will, and `ob` from the difficulty, the opposition, the venue's standard (Grace) and the hostile room | Reason, Presence, Grace, Will | B.2, B.4, B.5, B.6 |
 | 5 | **The effect**, by the move's row: `argue` moves the track by the margin; `press` lands a blow on `T`, heavier on the ground he is most invested in, and `T`'s steadiness draw (the last normal) settles whether he takes a mark or carries the strain; `divert` sets a pull on `T`'s next speech; `concede` yields the issue; `rest` does nothing | Will, Grace | B.5, B.6 |
 | 6 | **The cost of staying.** `s.resolve` falls by one exchange and by what the exchange cost him; at zero he yields | Will | B.6 |
 | 7 | The `Exchange` record is appended | | A.3 |
@@ -387,7 +393,10 @@ exchange the carried share rose per point of the speaker's attribute by about 0.
 crowd Presence read 0.114 and Reason 0.050; before a solemn bench with two proofs Reason read 0.090, Grace 0.070 and
 Presence 0.038. In a two-sided run of six exchanges with one decider: Presence 0.046, Reason 0.036, Grace 0.018, Will
 0.007, Focus 0.005, Attunement 0.005; the other side's Grace −0.015 and Will −0.006; 82 % of sittings ran to the budget,
-11 % ended on a yield and 7 % on a break.
+11 % ended on a yield and 7 % on a break. ⚠ These figures were taken with Reason alone as the dice, before R11 made the
+dice a blend of Reason and Presence (B.2 a): under the blend Presence's slope rises and Reason's falls wherever the
+content or the venue leans to Presence, and the reverse before a bench on evidence. They are kept as the record of that
+probe only; no bound below is read from them without the built code's reading (B24p.21, B24p.23).
 
 ### B.1 Focus — *"staying on topic, not being pulled away from argument into something irrelevant"*
 
@@ -439,27 +448,91 @@ lists are identical for the same keys (Focus changes nothing when nothing pulls)
 
 ### B.2 Reason — *"constructing the argument/speech, making it logical and reasonable and evidentiary with ability to account for opponent's factual circumstances like resources office influence etc"*
 
-**Mechanism: the case.** Three operands, all the speaker's. (a) The dice of his speech are his Reason and his rank in the
-move's skill: the case he built. (b) What he can show counts only as far as he can marshal it: his Reason caps the proofs
+**Mechanism: the case.** Three operands, all the speaker's. (a) The dice of his speech are a blend of his Reason and his
+Presence, weighed by what the speech says and where it is said (R11, below), plus his rank in the move's skill: the
+case he built and how he can carry it. (b) What he can show counts only as far as he can marshal it: his Reason caps the proofs
 one speech uses. (c) The other side's circumstances (his seat's rank, the hearer's contrary commitments and debts, his
 faction) stand against the speaker as obstacle terms; Reason discounts those of them the speaker knows of.
 
 | | |
 |---|---|
-| reads | `Speaker.reason`, `.ranks`, `.addends`, `.proofs`, `.accounts`, `.operands`; `Room.proof_weight` |
+| reads | `Speaker.reason`, `.presence` (the blend only), `.ranks`, `.addends`, `.proofs`, `.accounts`, `.operands`; `Room.proof_weight`; `ProceedingInput.ground_reason`, `Move.reason_weight`, `ProceedingType.reason_bias` |
 | changes | nothing of state; the speech draw's pool, one leverage source, the step of flagged obstacle operands |
 | side | the speaker's own |
-| enters | (a) the pool; (b) leverage source `proofs`; (c) the obstacle, as a smaller step on terms flagged `eased_by: reason` |
+| enters | (a) the pool, as the Reason share of the blend; (b) leverage source `proofs`; (c) the obstacle, as a smaller step on terms flagged `eased_by: reason` |
 | units | dice; sigma; obstacle |
 
+**(a) The dice: the blend of Reason and Presence (R11).** Jordan, 2026-11-14: *"argument dice is Presence and/or Reason
+depending upon content of argument and venue"*. The dice attribute of a speech is a weighted mean of the speaker's
+Reason and Presence. The weights come from data, two rows, never from code:
+
+- **the content**: every kind of speech has a *content class*, a row of NEW `rosters.yaml: content_classes` with one cell
+  `w_reason` in `[0, 1]` (the pair is `(w_reason, 1 - w_reason)`: one cell, so the two sum to 1 by construction). A speech
+  on a ground takes its ground's class (`grounds` gains a `content:` cell); a drawing move that takes no ground (`divert`)
+  names its own (`proceeding_moves` gains a `content:` cell, on such moves only). The ground is the kind of speech: R1's
+  *"what kind of argumentation/speech is most effective"*, chosen by Attunement (B.3).
+- **the venue**: every proceeding type row of `arrangements.yaml` gains a sixth new key, `reason_bias`, in `[-1, 1]`: how
+  far that venue leans every speech made in it toward Reason (+) or Presence (−). `abridged` keeps it (it keeps the venue).
+
+| content class | `w_reason` control | shipped | taken by | |
+|---|---|---|---|---|
+| `evidentiary` | 1.0 | 0.8 | ground `evidence` | proofs and facts: the case made from what can be shown |
+| `logical` | 1.0 | 0.7 | ground `consequence` | what follows from what: reasoning on interest |
+| `procedural` | 1.0 | 0.6 | move `divert` | a point of order, other business (P17) |
+| `appeal` | 1.0 | 0.4 | ground `authority` | to office, faith, law as an allegiance: carried by standing and gravity |
+| `emotional` | 1.0 | 0.2 | ground `solidarity` | to fellow-feeling: carried by the speaker |
+
+| venue (`reason_bias`) | control | shipped |
+|---|---|---|
+| `legal_trial`, `tribunal`, `inquisition_hearing` (a court) | 0 | +0.2 |
+| `arbitration`, `interrogation`, `excommunication_deliberation`, `council_of_state` (formal, before a bench or a closed council) | 0 | +0.1 |
+| `conversation`, `questioning`, `negotiation`, `audience` (private, or a plea before one seat) | 0 | 0 |
+| `parliamentary_debate` (an open assembly) | 0 | −0.1 |
+| `rally` (a crowd) | 0 | −0.3 |
+
 ```
-case     = S.reason + rank(S, skill_of(move))                                   # dice, fractional
+c        = the content class's w_reason: ground_reason[ground] for a move with a ground, move.reason_weight otherwise
+k        = clamp(10 * c + 10 * type.reason_bias, 0, 10)                        # whole tenths: both cells are tenths
+blend    = weighted_tenth((S.reason, S.presence), (k, 10 - k))                  # nearest tenth, a half up
+case     = blend + rank(S, skill_of(move))                                      # dice, fractional
 pool     = pool_of(case, S.addends, pool_add, pool_floor) * heard(S, room)      # heard: B.4
 usable   = min(S.proofs, proofs_per_reason * S.reason)                          # None = uncapped (control)
 proofs   = (level(proof_level) * usable * 2 * room.proof_weight, 0.0)           # (for, against)
 account  = min(account_max, account_step * (S.reason - ATTRIBUTE_FLOOR))
 step'    = step * (1 - account)   for each operand (name, raw, step, "reason") with name in S.accounts
 ```
+
+*The combination rule* is a sum, clamped: the venue shifts the content's weight, `w_reason = clamp(c + reason_bias, 0,
+1)`, `w_presence = 1 - w_reason`. Decided by the ladder, step 4 (precedent): where this design combines a type row's
+cell with a move's, it adds them (`difficulty = type.difficulty + move.difficulty`, B.7), and a bias of 0 leaves the
+content alone, so a balanced venue is the content's own lean. The other reading, the product of the two pairs
+renormalised, was refused at step 5: it is undefined where one pair is `(1, 0)` and the other `(0, 1)`, and a venue
+cell that multiplies is harder to read off the row than one that adds. Both cells are held in tenths (the loaders
+refuse any other value), so `k` is a whole number of tenths and the clamp is exact. *The rounding* is the one rule of
+B05.24's sentence (Jordan's R8: fractional dice, *"round to nearest tenth"*), owned once: NEW
+`sigma_leverage.weighted_tenth(scores, tenths)` beside `governing_mean` (B05.25), `(2 * sum(t_i * round(10 * s_i)) +
+10) // 20 / 10`, exact in integers; `governing_mean` is its equal-weight case `[ASSUMPTION: a sibling of the governing
+mean, not a second rounding rule — basis: CLAUDE.md §8, a rule lives once; B05.25's arithmetic in tenths]`. For whole
+attribute scores and whole tenths the blend is exact and the rounding is vacuous; it binds only on a hand-built
+fractional score.
+
+*At control* every class reads `w_reason` 1.0 and every venue 0: the blend is Reason, the dice are R1's case alone, and
+B.7's control equality holds unchanged. B24p.23 sets the shipped columns. The shipped weights are `[ASSUMPTION; Jordan
+to correct]`; basis: R11's two poles (a logical, evidentiary speech before a court is Reason's; a rhetorical, emotional
+one before a crowd is Presence's), with N4 (logos against pathos) and N3 (high elaboration before a bench, low before a
+crowd) for the order; the numbers are sized so that the two poles reach 1.0 and 0.0 (evidence in a court 0.8 + 0.2;
+solidarity at a rally 0.2 − 0.3, clamped) and the private middle keeps both attributes in the dice.
+
+*Presence is used twice, as two mechanics.* In the blend it is part of what is said: the share of the dice his speech's
+content draws from his Presence (R11). In B.4 it is whether he is listened to and how his manner lands: the share
+heard (a gate on the whole pool, binding only below the room's demand) and the `delivery` source (manner against
+proof, by `Room.proof_weight`) (R1). The first reads the content and the type row; the second reads the room. They are
+distinct operands, each owned once, so no operand reads Presence twice `[ASSUMPTION: not a double count — basis: the
+ladder, step 5: R1 and R11 are both Jordan's and each names a different thing Presence does; dropping either would
+overwrite one of his rulings. Where the two compound, a rally on solidarity, the BATCH GATE's DOMINANT bound (no bin
+above 0.90) is the check, and a breach resizes `delivery_step` first (B24p.23's STOP), never the blend]`. ED-IN-0350's
+letter (*"argue main component is presence"*) is superseded by R11, Jordan's own later words: Presence is a component
+of the dice by content and venue, not the pool attribute in every room.
 
 `skill_of(move)` is the move row's `capability:` cell (B24.04's column: `argue`, or `law` on a procedure or definition
 issue). `S.accounts` is filled by the host from the speaker's OWN ledger: a circumstance term is accounted when he holds
@@ -476,17 +549,30 @@ faction term).
 
 **Sources.** N4 logos (*"operates on story coverage and consistency"*); N3 (argument quality decides at high
 elaboration: `proof_weight`); N12 *Weigh* (*"estimate the counterpart's real situation: resources, pressures,
-standing"*) for (c); P11 and M3 (evidence a party holds) for (b); P4 §3.2's *reasoning* faculty; AR-21. ED-IN-0350 ruled
-Presence the *main component* of `argue`: it is kept in size (Presence's slope is the larger one in an open room, B.4)
-while R1 gives the dice to the case; before a bench the order reverses, as N3 says it should `[ASSUMPTION: this reading
-of "main component" — basis: R1 is the later ruling and names the manner; the sizes are dials]`.
+standing"*) for (c); P11 and M3 (evidence a party holds) for (b); P4 §3.2's *reasoning* faculty; AR-21; R11 for (a).
+ED-IN-0350 ruled Presence the *main component* of `argue` (its pool attribute); R11 (2026-11-14) replaces that letter
+with the blend, which answers J-SC-1: before a bench on evidence the dice are Reason's, before a crowd on solidarity
+Presence's, and in between both.
 
-**Falsifier.** `test_reason_is_the_dice_the_usable_proofs_and_the_account`: (i) Reason 2 and 6, all else equal: the
-recorded pool differs by exactly 4 dice times the share heard, and `Exchange.levels` are equal; (ii) with five proofs
+**Falsifier.** `test_reason_weighs_in_the_dice_the_usable_proofs_and_the_account` `[ASSUMPTION: test name; B24p.07
+creates it]`: (i) the judicial arm: under `reason_bias` +0.2 on an `evidence` ground (`w_reason` 0.8: `k` = 10), Reason
+2 and 6, all else equal: the recorded pool differs by exactly 4 dice times the share heard, and `Exchange.levels` are
+equal; (i′) the crowd arm: under `reason_bias` −0.3 on a `solidarity` ground (`k` = 0), Reason 2 and 6 give equal pools;
+and under a bias of 0 on an `authority` ground (class `appeal`, `k` = 4) the pools differ by exactly 1.6 dice times the share heard; (ii) with five proofs
 held, the `proofs` source reads `usable` 1.0 and 3.0; with none held it reads 0 for both; (iii) with a `rank_gap` operand
 of raw 2.0 and the term in `accounts`, `terms["rank_gap"]` falls strictly with Reason, and is equal across Reason when the
 term is not in `accounts` (he cannot account for what he does not know). Control: `proofs_per_reason` `None` and
-`account_step` 0 give equal `usable` and equal `terms` at every Reason.
+`account_step` 0 give equal `usable` and equal `terms` at every Reason; every `w_reason` 1.0 and every bias 0 give the
+pool of Reason alone at every Presence.
+
+**Falsifier of the blend, by slope** (both roles; R11): `test_the_dice_lean_to_reason_or_presence_by_content_and_venue`
+`[ASSUMPTION: test name; B24p.07 creates it]`, over generated speakers (B01a's `generated_attributes`, 20,000 keys an
+arm) at the shipped settings in the test's own fixtures, the carried share regressed on the speaker's Reason and on his
+Presence: (1) judicial venue (`legal_trial`'s bias, a bench) on `evidence`: Reason's slope exceeds Presence's by at
+least two standard errors of the difference; (2) crowd venue (`rally`'s bias, a crowd) on `solidarity`: Presence's
+slope exceeds Reason's by the same margin; (3) balanced venue (`conversation`'s bias, no audience) on `authority`: both
+slopes exceed 0 by two standard errors. `assert checked == 3 * 20000`. The same three relations are read on the built
+realm by `pairs proceeding --diff all` per type (B24p.23's gate), bounds `[ASSUMPTION; Jordan to correct]`.
 
 ### B.3 Attunement — *"understanding what is most likely to rattle your opponent or reading their intent, being able to read the room, identifying what kind of argumentation/speech is most effective for audience adjudicator opponent"*
 
@@ -567,7 +653,8 @@ equal within two standard errors, and with both fit levels `None` they are ident
 
 ### B.4 Presence (charisma) — *"the ability to be listened to and be compelling with your delivery"*
 
-**Mechanism: the share heard, and delivery.** Two operands. *Listened to*: an audience demands a certain Presence before
+**Mechanism: the share heard, and delivery** (R1), beside Presence's share of the dice (R11, B.2 a: a separate mechanic,
+read off the content and the venue, not the room). Two operands here. *Listened to*: an audience demands a certain Presence before
 it attends; a speaker short of it has only part of his case heard, and the dice of the unheard part are not rolled.
 *Compelling delivery*: Presence over or under the middle is leverage for or against the speech, weighed by how far this
 audience goes by manner rather than proof.
@@ -577,7 +664,7 @@ audience goes by manner rather than proof.
 | reads | `Speaker.presence`; `Room.attention`, `Room.proof_weight`; `ProceedingType.order` |
 | changes | nothing of state |
 | side | the speaker's own |
-| enters | the pool, as a share; leverage source `delivery` |
+| enters | the pool, as a share; leverage source `delivery` (and, by B.2 a, the pool's Presence share of the blend) |
 | units | a share in `[heard_floor, 1]`; sigma |
 
 ```
@@ -587,8 +674,8 @@ delivery       = delivery_step * (S.presence - mid) * 2 * (1 - room.proof_weight
                = 0                                                                 if order is written_only
 ```
 
-`heard` multiplies the pool of every speech (B.2), so being unheard costs the case Reason built, and nothing else stands
-in for it. Both operands are zero-centred or neutral in a private room (`attention` 0, `proof_weight` 0.5).
+`heard` multiplies the pool of every speech (B.2), so being unheard costs the case he built, whatever its blend of
+Reason and Presence, and nothing else stands in for it. Both operands are zero-centred or neutral in a private room (`attention` 0, `proof_weight` 0.5).
 
 | setting | control | shipped | |
 |---|---|---|---|
@@ -602,12 +689,16 @@ the exordium's three states, goodwill, attention, receptiveness (COL E11) for *l
 (Charisma-primary, `dictionaries.py:351-386`) and `public_oration` venue; P4's *eloquence* faculty and its written
 petition; AR-29; ED-IN-0350.
 
-**Falsifier.** `test_presence_is_the_share_heard_and_the_delivery`: (i) in a room of `attention` 0, Presence 2 and 6
-give equal pools and `levels["delivery"]` of `-0.5` and `+0.5` sigma at the shipped step; (ii) in a room of `attention`
+**Falsifier.** `test_presence_weighs_in_the_dice_is_the_share_heard_and_the_delivery` `[ASSUMPTION: test name; B24p.07
+creates it]`: (o) the dice, two arms: under `reason_bias` −0.3 on a `solidarity` ground (`k` = 0) in a room of
+`attention` 0, Presence 2 and 6 give pools differing by exactly 4 dice; under `reason_bias` +0.2 on an `evidence` ground
+(`k` = 10) they give equal pools; (i) under `k` = 10 in a room of `attention` 0, Presence 2 and 6
+give equal pools and `levels["delivery"]` of `-0.5` and `+0.5` sigma at the shipped step; (ii) under `k` = 10 in a room of `attention`
 5, the recorded pool at Presence 2 is the pool at Presence 6 times `0.7` exactly (three points short at 0.1 a point;
 Presence 6 is over the demand and loses nothing); (iii) under `written_only` both
-operands are equal across Presence. Control: `delivery_step` 0 and `heard_step` 0 give identical exchanges at every
-Presence. The profile pair (AR-49, AR-50) is B.5's test.
+operands are equal across Presence. Control: `delivery_step` 0, `heard_step` 0 and every `w_reason` 1.0 with every
+bias 0 give identical exchanges at every Presence. The slope arms are B.2's
+`test_the_dice_lean_to_reason_or_presence_by_content_and_venue`. The profile pair (AR-49, AR-50) is B.5's test.
 
 ### B.5 Grace — *"acting in the correct manner for the venue and occasion, as being seen as respectable, for remaining composed in face of difficulties and challenges"*
 
@@ -752,6 +843,7 @@ operands = S.operands with steps eased (B.2 c, B.6 c)
 sources  = delivery (B.4) · fit (B.3; argue and answer only) · respect (B.5 b) · proofs (B.2 b) · marks (B.5 c)
          · resist (B.6 d) · S.levels (the host's: office, capability, obligation, ...)
 sigma    = sum(for) - sum(against) * (1 - shield)                                       (B.6 c)
+case     = weighted_tenth((S.reason, S.presence), (k, 10 - k)) + rank(S, skill_of(move))   (B.2 a; R11)
 inp_x    = SocialContestInput(pool = pool_of(case, addends, pool_add, pool_floor) * heard,
                               opposition = T.score, difficulty = type.difficulty + move.difficulty,
                               obstacle_operands = operands, leverage = sigma, <the bounds, as contest_input fills them>)
@@ -765,8 +857,8 @@ the host's are bound in `sigma.py::ADVANTAGE_SOURCES`; the import-time check tha
 covers both tables (B24p.05). The roster stays the only door into the sigma term (CP-T01-05's law, `sigma.py:160-170`).
 
 **At control the exchange is the single roll.** With every setting above at its control, `heard` is 1, every new source
-returns `(0, 0)`, both new terms are 0 and no step is eased, so `inp_x` is the record `contest_input` builds today with
-the pool's attribute changed, and `exchange_odds` equals `band_odds` on that record exactly. That equality is B24p.07's
+returns `(0, 0)`, both new terms are 0, no step is eased and the blend is Reason (`k` = 10: every `w_reason` 1.0, every
+bias 0), so `inp_x` is the record `contest_input` builds today with the pool's attribute changed, and `exchange_odds` equals `band_odds` on that record exactly. That equality is B24p.07's
 control, asserted with `==`.
 
 ### B.8 The six, side by side
@@ -774,12 +866,15 @@ control, asserted with `==`.
 | attribute | acts on | operand | when it does nothing |
 |---|---|---|---|
 | Focus | whether the speech stays on the topic | a draw; obstacle term `off_topic`; strikes | nothing pulls |
-| Reason | the size of the case, the proofs it can use, the other side's circumstances | the pool; source `proofs`; eased steps | never (the pool); no proofs held; nothing known of the other side |
+| Reason | the size of the case, the proofs it can use, the other side's circumstances | the pool's Reason share (`w_reason`); source `proofs`; eased steps | `w_reason` 0 (the pool); no proofs held; nothing known of the other side |
 | Attunement | which ground and which move are chosen | the reading's blur; source `fit` through the choice | the target's dispositions are flat; the choice is forced |
-| Presence | how much is heard, and how it lands | a share of the pool; source `delivery` | a written speech |
+| Presence | the pool's Presence share; how much is heard, and how it lands | the pool's Presence share (`1 - w_reason`); `heard`, a share of the pool; source `delivery` | `w_reason` 1 (the pool); a written speech (the other two) |
 | Grace | fit to the venue, esteem in the room, the cost of a mark | obstacle term `standard`; sources `respect`, `marks` | (a) a plain room or a surplus; (c) no mark |
 | Will | marks, staying power, what is against him, being moved | a draw; resolve; the shield; source `resist` | (a) nobody presses; (c) nothing is against him |
 
-No two rows share an operand, which is what R2 asks (*"in the manner that I specified"*) and what a mean of attributes
-(B05.25) cannot give. `test_each_role_moves_only_its_own_operand` (B24p.18) holds it: for each of the six, two speakers
-differing in that attribute alone leave every operand of the other five roles equal on the record.
+No two rows share an operand but one, which is what R2 asks (*"in the manner that I specified"*) and what a mean of
+attributes (B05.25) cannot give. The one: the dice attribute is a blend of Reason and Presence, by Jordan's R11; each
+enters it in its own weight, read from the content and the venue, never as an unweighted mean, and each is exactly
+observable (the pool moves by its weight times the difference, to the tenth). `test_each_role_moves_only_its_own_operand`
+(B24p.18) holds it: for each of the six, two speakers differing in that attribute alone leave every operand of the
+other five roles equal on the record, the pool under Reason and Presence moving only by that attribute's weight.
