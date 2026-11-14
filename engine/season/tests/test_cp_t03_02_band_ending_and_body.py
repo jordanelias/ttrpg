@@ -171,10 +171,3 @@ def test_a_capture_yielded_at_the_untouched_band_stamps_the_ending_on_person_cap
     (e,) = out
     assert e.ending, "the Untouched capture's Event carries no ending"
     assert e.ending == ((C_ACTOR, "undecided"), (CAPTIVE, "yielded")), e.ending
-
-
-def revert_cp_t03_02(monkeypatch):
-    """The item at its revert, in process: no ending, no body Observation."""
-    monkeypatch.setattr(effects_combat, "fight_ending", lambda *_a, **_k: ())
-    monkeypatch.setattr(effects_combat, "body_observed", lambda *_a, **_k: ())
-

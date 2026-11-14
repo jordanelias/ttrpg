@@ -3,7 +3,7 @@
 `loop/witness.py::_credit` grades a told claim's confidence, after `_refract`, by
 `1 + regime_gain * c`, `c` = `world_q.commensurate(hearer, teller)` in {-1, 0, +1}, clamped to
 `[0, max(confidence_default, the uncredited value)]` and applied only when `regime_gain * c` is not 0.
-`regime_gain` is the control 0 at commit (1) and ships 0.5 at commit (2) (`revert_cr79` sets it back).
+`regime_gain` is the control 0 at commit (1) and ships 0.5 at commit (2).
 
 Every world here is hand-built (`probes.tiny_world`, the told deposit driven as `test_ax7_refraction`
 drives it). Each test that means the control sets `regime_gain` to 0 explicitly, and each test runs an
@@ -81,12 +81,6 @@ def _c(conviction: dict) -> dict:
     for pid, conv in conviction.items():
         w.persons[pid].conviction = dict(conv)
     return {pid: W.commensurate(w, pid, TELLER) for pid in (NEAR, OTHER, KNOTTED)}
-
-
-def revert_cr79(monkeypatch):
-    """CR-79 OFF, in process: `regime_gain` at 0, the control. A test that pins a hash from before CR-79's flip to
-    0.5 (a declared mover of the told deposit) calls this, so its pin reads the item it names alone."""
-    monkeypatch.setitem(DEFAULT_FIXTURES._v, "regime_gain", 0.0)
 
 
 def test_the_gain_ships_at_the_value_given_and_zero_is_the_control():

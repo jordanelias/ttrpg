@@ -16,15 +16,14 @@ revert: none].
   ASYMMETRY GUARD (`CLAUDE.md` §0.1 pt 1, `tests/valoria/test_morale_write_sweep.py`'s shape): every bare `body`
   write outside tests and harness is registered in `_BODY_WRITES` with how it stands to the ceiling; a RAISER's
   function must read `body_ceiling` and not `condition_scale`. A new write fails until it is registered.
-  CONTROL: `body_mark_model: none` marks nobody. The field is a SCHEMA mover (every Person's canonical encoding), so
-  `revert_cp_t03_07` drops it from the encoding as well. The realm hashes are `_realm_goldens.py`'s.
+  CONTROL: `body_mark_model: none` marks nobody. The field is a SCHEMA mover (every Person's canonical encoding).
+  The realm hashes are `_realm_goldens.py`'s.
 """
 from __future__ import annotations
 
 import ast
 import pathlib
 import re
-from dataclasses import fields
 
 import pytest
 
@@ -38,7 +37,6 @@ from ..loop import effects_combat as EC
 from ..loop.driver import SeasonDriver, mint_token
 from ..loop.effects_shared import EFFECTS
 from ..seam import Resolution, degree_of
-from ..state import world as W
 from ..state.carriers import Act, Person
 from ._scar_helpers import party_state
 from .test_in12_step9 import _tend_acts, _world
@@ -46,17 +44,6 @@ from .test_in10_record_operands import _resolve
 
 ACTOR, SUBJECT = "p_low", "p_mid"          # `tiny_world`: co-located, a `fight` between them is admitted
 CEILING = "body_ceiling"
-
-
-def revert_cp_t03_07(monkeypatch):
-    """The item OFF, in process: `body_mark_model` at its control (`none`) on the shared fixtures, and the field taken
-    out of `Person`'s canonical encoding (`state/world.py::_OBJECT_HEADS`, the cached head every Person digest reads),
-    so a world hashes as it did before the field existed. Other tests that pin a pre-item hash call it."""
-    monkeypatch.setitem(DEFAULT_FIXTURES._v, "body_mark_model", "none")
-    names = tuple(f.name for f in fields(Person) if f.name != CEILING)
-    monkeypatch.setitem(W._OBJECT_HEADS, Person,
-                        (b"o" + W._str_bytes(Person.__name__) + b"%d:" % len(names),
-                         tuple((n, W._str_bytes(n)) for n in names)))
 
 
 def _floors():
