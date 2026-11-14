@@ -145,13 +145,17 @@ def test_falsifier_arms_5_rolls_pool_11_and_is_attacked_at_ob_2_5_through_the_se
     assert checked == 6
 
 
-def test_control_with_nobody_holding_arms_every_season_roll_still_reads_pool_8_against_ob_1(monkeypatch, _engine):
+def test_control_with_nobody_holding_arms_every_season_roll_reads_the_drawn_attributes_alone(monkeypatch, _engine):
     """The item moves formation, not a roll: seed 1's season fights roll no `arms` key (nobody holds one). B01a.99 (every
     person's attributes are drawn, a population change): the rolls were all CR-85's (8, 1.0) at `pool_default`; they now read
-    the persons' drawn attributes, (pool, ob) = (9, 2.5) x2, (11, 2.0), (11, 1.5), read at PYTHONHASHSEED=0."""
+    the persons' drawn attributes, (pool, ob) = (9, 2.5) x2, (11, 2.0), (11, 1.5), read at PYTHONHASHSEED=0.
+    ⚠ A pool of 11 is what `arms` 5 reads in the falsifier above, so the pool values alone no longer exclude the key: the
+    holders are asserted directly, before the season and after it (`_grown` raises only a key already held)."""
     seen = _spy(monkeypatch)
     w = build_realm(1)
+    assert [pid for pid, p in w.persons.items() if KEY in (p.capability or {})] == []
     run(1, 1, w=w)
+    assert [pid for pid, p in w.persons.items() if KEY in (p.capability or {})] == []
     assert seen and set(seen) == {(9, 2.5), (11, 2.0), (11, 1.5)}, dict(seen)
 
 

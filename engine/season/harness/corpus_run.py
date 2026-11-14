@@ -947,6 +947,35 @@ def emits_and_writes_nothing(table=None, effects=None, rulings=None) -> dict:
     return out
 
 
+def told_redeposits_in(ledger) -> int:
+    """How many `told_by` claims in one person's `ledger` arrived when he ALREADY HELD the same
+    triple untold -- one belief stored twice, which the told channel's deposit-time guard in
+    `loop/witness.py` forbids (a held copy with an empty chain always skips the telling).
+
+    ⚠ DEPOSIT ORDER IS READ OFF THE CLAIM, NEVER OFF ITS LEDGER POSITION. The ledger is not kept in
+    arrival order: `state/ledgers.py::evict_over_cap` sorts it in place by `confidence * (when + 1)`
+    whenever it overflows its cap (`queries/world_q.py::wounded_with`: "position is NOT arrival
+    order"), so comparing positions can put a firsthand claim after a telling it preceded and miss a
+    true redeposit. `Claim.when` is the tick of DEPOSIT: every deposit in `loop/witness.py` stamps
+    `w.tick`, and `_refract` / `_credit` replace only `confidence`. `Claim.round` orders deposits
+    within a tick (`state/carriers.py::Claim`). So a told claim is counted when an untold claim of
+    its triple was deposited at an EARLIER OR EQUAL `(when, round)`.
+    ⚠ A TIE COUNTS. No field orders two deposits of one `(when, round)` (the id is a hash), so a told
+    claim sharing its round with a firsthand copy is counted as a redeposit: the counter's reader
+    asserts zero, and a detector that cannot see the order must not resolve the tie in the
+    defect's favour. A told claim whose holder saw the same thing only in a LATER round is not a
+    redeposit (B01a.99: EMG-C3, drawn sheets, told at `when` 2, firsthand at 3 and 5) and is not
+    counted. The planted ledgers in `engine/season/tests/test_told_by_counter.py` are its falsifier."""
+    first_own, told = {}, []
+    for c in ledger:
+        key = (c.subject, c.predicate, c.value)
+        if c.source == "told_by":
+            told.append((key, (c.when, c.round)))
+        elif key not in first_own or (c.when, c.round) < first_own[key]:
+            first_own[key] = (c.when, c.round)
+    return sum(1 for key, at in told if key in first_own and first_own[key] <= at)
+
+
 def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
     case = apply_rescale(case)
     scale, cid = str(case.get("scale")), case["id"]
@@ -1032,31 +1061,25 @@ def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
     # the tree, and `tools/ci_claim_provenance_check.py` is right to refuse one that cannot be.
     # ⚠ COUNTED PER WORLD AND SUMMED BY THE CALLER, like `degrees` above, rather than recomputed
     # from a second walk: the ledgers are this world's and the report is the corpus's.
-    # ⚠ ONE WALK OVER THE LEDGERS, NOT THREE. `sources`, `told_holders` and `told_redeposits`
-    # were three independent `for p_ in w.persons.values(): for c in p_.ledger` passes over the
-    # same pairs, run once per corpus case (up to 143 a run). The redeposit count reads each person's
-    # ledger IN ORDER (appended in deposit order): a `told_by` claim is a redeposit only if its
-    # triple is already held untold EARLIER in the ledger, which is what the deposit-time guard in
-    # `loop/witness.py` forbids. B01a.99: counted against the whole ledger it also counted a told claim
-    # whose holder SAW the same thing later (EMG-C3, drawn sheets: told at `when` 2, firsthand at 3 and 5,
-    # ledger indices 185 < 265), which no guard can prevent and which is no belief stored twice at deposit.
+    # ⚠ ONE PERSON LOOP, NOT THREE. `sources`, `told_holders` and `told_redeposits` were three
+    # independent `for p_ in w.persons.values(): for c in p_.ledger` passes over the same pairs,
+    # run once per corpus case (up to 143 a run). Each ledger is now walked twice: once for its
+    # sources (which give `told_holders`), once by `told_redeposits_in`, the redeposit count's one
+    # owner (its docstring says how it reads deposit order: the ledger itself is not in it).
     sources, told_holders, told_redeposits = Counter(), 0, 0
     for p_ in w.persons.values():
-        own, holds_told = set(), False
-        for c in p_.ledger:
-            sources[c.source] += 1
-            if c.source == "told_by":
-                holds_told = True
-                if (c.subject, c.predicate, c.value) in own:
-                    told_redeposits += 1
-            else:
-                own.add((c.subject, c.predicate, c.value))
-        told_holders += 1 if holds_told else 0
+        mine = Counter(c.source for c in p_.ledger)
+        sources.update(mine)
+        told_holders += 1 if mine["told_by"] else 0
+        told_redeposits += told_redeposits_in(p_.ledger)
     # ⚠ THE REDEPOSIT COUNT IS THE ONE THAT CAUGHT A REAL DEFECT, so it is reported rather than
-    # left to a probe. A `told_by` claim whose triple the hearer ALREADY HOLDS firsthand is one
-    # belief stored twice — it tells them nothing and takes a `ledger_cap` slot from a claim that
-    # would have. The first cut of the told channel deposited 180 and **175 were this**; the
-    # corpus is where that is visible, because `build_world(0)` produces none.
+    # left to a probe. A `told_by` claim whose triple the hearer ALREADY HELD firsthand WHEN IT
+    # ARRIVED is one belief stored twice — it tells them nothing and takes a `ledger_cap` slot from
+    # a claim that would have. The first cut of the told channel deposited 180 and **175 were
+    # this**; the corpus is where that is visible, because `build_world(0)` produces none. A told
+    # claim whose holder SAW the same thing only LATER is not one (B01a.99: EMG-C3, drawn sheets,
+    # told at `when` 2, firsthand at 3 and 5): no deposit-time guard can prevent it, and the
+    # counter does not count it.
     # `17`: the cast entries that name a player and so were NOT seated, by `who` -- the PLAN's
     # *"reported `WAITS-ON-PLAYER` naming the entry that caused it"*. Read through `seating`, the
     # same resolver `build_at` seats from, so the two cannot disagree about who was left out.

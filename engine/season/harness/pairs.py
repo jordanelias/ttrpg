@@ -33,8 +33,18 @@ WHAT IS PRINTED, per contest and seed. `POPULATION`: the pairs per bin. Per bin 
 count, the share of each outcome, `y` and its binomial standard error `sqrt(y (1 - y) / n)`.
   SLOPE     the least-squares slope of `y` on the bin centre `x`, weighted by the bin's pair count:
             `sum n_b (x_b - xbar)(y_b - ybar) / sum n_b (x_b - xbar)^2`, `xbar` and `ybar` the count-weighted means.
-            It is the change in the curve per point of difference.
-  SPREAD    the range `max y_b - min y_b` and the count-weighted standard deviation of `y_b` about `ybar`.
+            It is the change in the curve per point of difference. Printed with its standard error and the window it
+            was read over, `SLOPE b +/- se per point of difference (k bins read, x from lo to hi)`: which bins clear
+            `--min-bin` depends on `--n`, so a slope is only comparable with another read over the same window.
+            THE STANDARD ERROR. `sum n_b (x_b - xbar) = 0`, so the slope is `sum n_b (x_b - xbar) y_b / Sxx` with
+            `Sxx = sum n_b (x_b - xbar)^2`: a fixed linear combination of the bin shares once the bins' centres and
+            counts are given. Each `y_b` is a binomial share of `n_b` independent pairs (every pair has its own keyed
+            stream), `Var(y_b) = p_b (1 - p_b) / n_b`, and the bins are independent, so
+            `Var(slope) = sum n_b^2 (x_b - xbar)^2 p_b (1 - p_b) / n_b / Sxx^2`; with `y_b` for `p_b`,
+                `se = sqrt(sum n_b (x_b - xbar)^2 y_b (1 - y_b)) / Sxx`.
+            Conditional on the bin counts, and it measures sampling noise only, not whether a line fits the curve. A
+            bin at `y` 0 or 1 adds no variance, so a window of saturated bins understates it.
+  SPREAD   the range `max y_b - min y_b` and the count-weighted standard deviation of `y_b` about `ybar`.
   MONOTONE  `yes` when each bin's `y` is at or above its left neighbour's less two standard errors of their
             difference, `sqrt(se_b^2 + se_left^2)`; else `no`.
   DOMINANT  the largest single outcome share in any bin, with its bin: ruling (4)'s "no bin dominant above a stated
@@ -42,8 +52,9 @@ count, the share of each outcome, `y` and its binomial standard error `sqrt(y (1
 
 `slope` and `spread` are meant in their ordinary statistical sense; this is no check and no gate (it is a reading).
 
-DEFAULTS AND TIMING (measured on the producer's machine, 2026-11-14, with the shell's `time`, `--n 1000` wall seconds,
-of which 0.62 s is importing the package): duel `yield` 2.26, `blood` 2.04, `death` 2.88; `social` 1.20. The cost per
+DEFAULTS AND TIMING. ⚠ A MEASUREMENT ON ONE MACHINE, not a property of the instrument: every figure in this paragraph
+was read once, on the producer's container, 2026-11-14, and another host or a later tree reads others. With the shell's
+`time`, `--n 1000` wall seconds, of which 0.62 s is importing the package: duel `yield` 2.26, `blood` 2.04, `death` 2.88; `social` 1.20. The cost per
 1,000 pairs once warm, from longer runs: `death` 1.7 s (`--n 5000`: 9.3 s wall) and `social` 0.25 s (`--n 20000`: 5.6 s
 wall; the 200,000 default is about 50 s). So the defaults, `--n` 20,000 per duel terms (about 35 to 55 s) and 200,000 for
 `social`, each cost under the two minutes a contest the item allows, and none was lowered. (The drafting lane's scratch
@@ -75,14 +86,14 @@ from ..state.ids import draw_factory
 from . import probes
 
 FIRST, SECOND = "p_low", "p_mid"            # the world's two fighters / speakers (test-fixture ids, `probes.tiny_world`)
-DEFAULT_N = {"duel": 20000, "social": 200000}
-DEFAULT_MIN_BIN = 200
+DEFAULT_N = {"duel": 20000, "social": 200000}   # [JUSTIFIED: instrument default, no game meaning]
+DEFAULT_MIN_BIN = 200   # [JUSTIFIED: instrument default, no game meaning]
 REFUSED = "Refused"                          # S27.4: ob > obstacle_refusal_multiple x pool, no dice dealt (not a band)
 # the four bands in the owner's order (`DEGREE_ORDINAL`, the tuple `band_odds` returns), and the two a carried contest reaches
 BANDS = tuple(DEGREE_LABEL[d] for d in sorted(DEGREE_ORDINAL, key=DEGREE_ORDINAL.get))
 CARRIED = tuple(DEGREE_LABEL[d] for d in (Degree.SUCCESS, Degree.OVERWHELMING))
 DUEL_OUTCOMES = ("a_wins", "b_wins", "undecided")
-DIFF_WIDTH = {"sheet": 0.5, "read": 1.0}     # a registry key's bin is 1.0
+DIFF_WIDTH = {"sheet": 0.5, "read": 1.0}     # [JUSTIFIED: instrument default, no game meaning] a registry key's bin is 1.0
 
 DuelPair = namedtuple("DuelPair", "i a b read outcome yielder winner")
 SocialPair = namedtuple("SocialPair", "i a b read inp band")
@@ -196,7 +207,7 @@ def curve(acc: dict, width: float, min_bin: int, carried: Callable[[Counter], in
             continue
         y = carried(c) / n
         rows.append(dict(idx=idx, x=idx * width, n=n, counts=c, y=y, se=math.sqrt(y * (1 - y) / n)))
-    out = dict(rows=rows, slope=None, range=None, sd=None, monotone=None, dominant=None)
+    out = dict(rows=rows, slope=None, slope_se=None, range=None, sd=None, monotone=None, dominant=None)
     if not rows:
         return out
     total = sum(r["n"] for r in rows)
@@ -204,6 +215,9 @@ def curve(acc: dict, width: float, min_bin: int, carried: Callable[[Counter], in
     ybar = sum(r["n"] * r["y"] for r in rows) / total
     sxx = sum(r["n"] * (r["x"] - xbar) ** 2 for r in rows)
     out["slope"] = sum(r["n"] * (r["x"] - xbar) * (r["y"] - ybar) for r in rows) / sxx if sxx > 0 else None
+    # the slope's binomial standard error (the module docstring derives it)
+    out["slope_se"] = (math.sqrt(sum(r["n"] * (r["x"] - xbar) ** 2 * r["y"] * (1 - r["y"]) for r in rows)) / sxx
+                       if sxx > 0 else None)
     out["range"] = max(r["y"] for r in rows) - min(r["y"] for r in rows)
     out["sd"] = math.sqrt(sum(r["n"] * (r["y"] - ybar) ** 2 for r in rows) / total)
     out["monotone"] = all(r["y"] >= l["y"] - 2 * math.hypot(r["se"], l["se"]) for l, r in zip(rows, rows[1:]))
@@ -216,6 +230,12 @@ def _fmt(v: Optional[float], places: int = 4) -> str:
     return "n/a" if v is None else f"{v:.{places}f}"
 
 
+def _slope_text(c: dict) -> str:
+    """`b +/- se ... (k bins read, x from lo to hi)`: the slope, its standard error and the window of bins it was read over."""
+    window = (f", x from {c['rows'][0]['x']:g} to {c['rows'][-1]['x']:g}" if c["rows"] else "")
+    return f"{_fmt(c['slope'])} +/- {_fmt(c['slope_se'])} per point of difference ({len(c['rows'])} bins read{window})"
+
+
 def _render(title: str, classes: tuple, population: Counter, c: dict, width: float, min_bin: int, label: str) -> list:
     lines = [f"{title} diff={label} bin={width:g} min-bin={min_bin}",
              "POPULATION " + " ".join(f"{i * width:g}:{population[i]}" for i in sorted(population))]
@@ -223,7 +243,7 @@ def _render(title: str, classes: tuple, population: Counter, c: dict, width: flo
     for r in c["rows"]:
         shares = " ".join(f"{r['counts'].get(k, 0) / r['n']:11.4f}" for k in classes)
         lines.append(f"  {r['x']:<6g} {r['n']:<6d} {shares}  {r['y']:.4f} {r['se']:.4f}")
-    lines.append(f"SLOPE {_fmt(c['slope'])} per point of difference ({len(c['rows'])} bins read)")
+    lines.append(f"SLOPE {_slope_text(c)}")
     lines.append(f"SPREAD range={_fmt(c['range'])} sd={_fmt(c['sd'])}")
     lines.append(f"MONOTONE {'n/a' if c['monotone'] is None else ('yes' if c['monotone'] else 'no')}")
     d = c["dominant"]
@@ -231,9 +251,9 @@ def _render(title: str, classes: tuple, population: Counter, c: dict, width: flo
     return lines
 
 
-def _read(pairs_iter, classes: tuple, outcome_of: Callable, carried: Callable, which: tuple, min_bin: int,
-          title: str) -> list:
-    """One contest's pairs binned by every difference in `which`, rendered. `all` prints a SLOPE per key only."""
+def accumulate(pairs_iter, outcome_of: Callable, which: tuple) -> tuple:
+    """`(accs, pops, seen)`: per difference in `which`, `{bin index: Counter of outcomes}` (what `curve` reads) and
+    `{bin index: pairs}`; and the outcome tally over every pair. The one binning the report and the tests read by."""
     accs = {name: {} for name in which}
     pops = {name: Counter() for name in which}
     seen = Counter()
@@ -244,6 +264,13 @@ def _read(pairs_iter, classes: tuple, outcome_of: Callable, carried: Callable, w
             idx = _bin(d, _width(name))
             accs[name].setdefault(idx, Counter())[o] += 1
             pops[name][idx] += 1
+    return accs, pops, seen
+
+
+def _read(pairs_iter, classes: tuple, outcome_of: Callable, carried: Callable, which: tuple, min_bin: int,
+          title: str) -> list:
+    """One contest's pairs binned by every difference in `which`, rendered. `all` prints a SLOPE per key only."""
+    accs, pops, seen = accumulate(pairs_iter, outcome_of, which)
     classes = tuple(k for k in classes if k in seen) or classes
     out = []
     if len(which) == 1:
@@ -253,7 +280,7 @@ def _read(pairs_iter, classes: tuple, outcome_of: Callable, carried: Callable, w
     out.append(f"{title} diff=all bin=1 min-bin={min_bin}")
     for name in which:
         c = curve(accs[name], _width(name), min_bin, carried)
-        out.append(f"SLOPE {name} {_fmt(c['slope'])} ({len(c['rows'])} bins read)")
+        out.append(f"SLOPE {name} {_slope_text(c)}")
     return out
 
 

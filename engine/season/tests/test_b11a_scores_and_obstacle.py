@@ -11,7 +11,7 @@
       ceiling, and names every term on the roll's record (`resolve`'s `ob_terms`). `interrogate`, `arrest` and `determine`
       name a vocation.
   CONTROL: `Fixtures obstacle_model: stand_in` composes the obstacle before this item, byte for byte (asserted over a grid of
-  records here); `revert_b11a_scores` (the switch, the bundle off) reproduces the reach commit's realm hashes.
+  records here); `revert_b11a_scores` (the switch, and no attribute seated) reproduces the reach commit's realm hashes.
 """
 from __future__ import annotations
 

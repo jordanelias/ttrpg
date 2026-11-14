@@ -205,7 +205,7 @@
       "kind": "scalar",
       "module": "engine.season",
       "file": "engine/season/harness/pairs.py",
-      "note": "",
+      "note": "[JUSTIFIED: instrument default, no game meaning]",
       "citation": null,
       "citation_grade": null
     },
@@ -219,7 +219,7 @@
       "kind": "table",
       "module": "engine.season",
       "file": "engine/season/harness/pairs.py",
-      "note": "",
+      "note": "[JUSTIFIED: instrument default, no game meaning]",
       "citation": null,
       "citation_grade": null
     },
@@ -233,7 +233,7 @@
       "kind": "table",
       "module": "engine.season",
       "file": "engine/season/harness/pairs.py",
-      "note": "a registry key's bin is 1.0",
+      "note": "[JUSTIFIED: instrument default, no game meaning] a registry key's bin is 1.0",
       "citation": null,
       "citation_grade": null
     },

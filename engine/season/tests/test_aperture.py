@@ -751,7 +751,7 @@ def test_cr18_the_pools_line_reads_the_rolled_pool_and_separates_persons_not_sea
     assert realm["pools"], "the fold's records never reached the pools reader"
     default = populated.build_realm(0).fixtures.get("pool_default")
     # B11 lane A: `cast_attributes` ships on, so NPC-001's authored Reason (5) is her `inquiry` pool and the realm's rolls
-    # read two pools in season one (was `{default}` alone); every unauthored person holds the bundle at `pool_default`.
+    # read two pools in season one (was `{default}` alone); every unauthored person then held `pool_default` on every key.
     # B01a.99 (every person's attributes are drawn, 1 to 6 by `generated_attribute_range`, a population change): the realm's
     # season-one rolls read every pool 1 to 6 (was `{default, 5}`), so the reader separates persons, not seasons.
     assert {p for per in realm["pools"].values() for c in per.values() for _, p in c} == {1, 2, 3, 4, 5, 6}

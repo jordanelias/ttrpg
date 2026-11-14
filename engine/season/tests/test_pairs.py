@@ -3,9 +3,11 @@
 An instrument every later calibration reads, so its own controls come first. Each arm below can observe the failure
 it excludes:
 
-  * IDENTICAL PAIRS read the even line (duel) or the roll's own odds (social). An instrument that tilts identical
-    sheets, or that cannot reproduce the roll's own exact enumeration, is not measuring the contest.
+  * IDENTICAL PAIRS read the even line (duel, in both seat orders) or the roll's own odds (social). An instrument that
+    tilts identical sheets, or that cannot reproduce the roll's own exact enumeration, is not measuring the contest.
   * A PLANTED EDGE moves the curve. An instrument blind to an attribute would read the same line with +2 on every key.
+  * THE SLOPE'S STANDARD ERROR: a key the roll does not read holds the slope within 3 SE of 0; the pool key moves it
+    more than 3 SE; and the SE is the binomial formula, worked by hand on planted bins.
   * DETERMINISM: the same arguments print the same block; another seed prints another.
   * THE REFACTOR'S CONTROL: `combat.scene_outcome`, the per-scene reading `fight_estimate` moved into, classifies a
     scene the way `fight_estimate` counted it -- planted traces, and the shares `fight_estimate` returns recounted
@@ -16,9 +18,13 @@ it excludes:
 from __future__ import annotations
 
 import math
+from collections import Counter
+
+import pytest
 
 from engine.substrate.descriptors import ATTRIBUTE_CEILING, ATTRIBUTES
 
+from ..data import rosters as R
 from ..harness import pairs
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver
@@ -40,11 +46,16 @@ def _first_share(rows) -> tuple:
     return a / (a + b), a + b
 
 
-def test_identical_fighters_give_the_even_line():
+@pytest.mark.parametrize("first, second", [("p_low", "p_mid"), ("p_mid", "p_low")])
+def test_identical_fighters_give_the_even_line_in_either_seat(first, second, monkeypatch):
+    """Both seat orders: with one order only, the first-named party is always `p_low`, so a first-seat advantage and an
+    advantage of being `p_low` (any field of his besides the sheet) could not be told apart. Each order reads even."""
+    monkeypatch.setattr(pairs, "FIRST", first)
+    monkeypatch.setattr(pairs, "SECOND", second)
     rows = list(pairs.duel_pairs(0, 4000, "blood", plant=lambda i, a, b: (a, a)))
     share, decided = _first_share(rows)
     assert decided >= 3000, decided
-    assert abs(share - 0.5) <= 3 * math.sqrt(0.25 / decided), (share, decided)
+    assert abs(share - 0.5) <= 3 * math.sqrt(0.25 / decided), (first, share, decided)
 
 
 def test_a_planted_edge_of_two_moves_the_line():
@@ -90,6 +101,47 @@ def test_a_planted_edge_moves_the_carried_share():
     assert y1 > y0 + 3 * math.hypot(se0, se1), (y0, y1, se0, se1)
 
 
+def _argue_keys() -> tuple:
+    """`(pool key, opposition key, a key neither role reads)` for `argue`, off the rosters `seam/wrappers/pool.py` reads."""
+    voc = R.VERB_CAPABILITY["argue"]
+    pool_key = R.VOCATION_ATTRIBUTE[voc]
+    opp_key = R.VOCATION_OPPOSED_BY.get(voc) or pool_key
+    unread = next(k for k in ATTRIBUTES if k not in (pool_key, opp_key))
+    return pool_key, opp_key, unread
+
+
+def _social_curve(plant, key: str, n: int = 20000):
+    rows = list(pairs.social_pairs(0, n, "argue", plant=plant))
+    accs, _, _ = pairs.accumulate(rows, lambda p: p.band, (key,))
+    return rows, pairs.curve(accs[key], pairs._width(key), pairs.DEFAULT_MIN_BIN, lambda c: sum(c[b] for b in pairs.CARRIED))
+
+
+def test_the_slope_s_standard_error_holds_a_null_key_at_zero_and_a_planted_edge_away_from_it():
+    """THE SLOPE'S STANDARD ERROR, OBSERVED BOTH WAYS. NULL: the pair differs only on a key neither role reads, so every
+    pair builds ONE record (asserted) and the curve over that key is flat by construction: its slope is within 3 SE of 0.
+    EDGE: the actor's pool key alone is drawn, the other sheet fixed: the slope is more than 3 SE above 0. An SE too small
+    fails the first; an SE too large (or a slope blind to the key) fails the second."""
+    pool_key, _, unread = _argue_keys()
+    rows, null = _social_curve(lambda i, a, b: (FIXED, {**FIXED, unread: b[unread]}), unread)
+    assert all(r.inp == rows[0].inp for r in rows), f"{unread} reaches the record: it is not an unread key"
+    assert len(null["rows"]) >= 5 and null["slope_se"] > 0, null
+    assert abs(null["slope"]) <= 3 * null["slope_se"], (null["slope"], null["slope_se"])
+    _, edge = _social_curve(lambda i, a, b: ({**FIXED, pool_key: a[pool_key]}, FIXED), pool_key)
+    assert len(edge["rows"]) >= 5 and edge["slope_se"] > 0, edge
+    assert edge["slope"] > 3 * edge["slope_se"], (edge["slope"], edge["slope_se"])
+
+
+def test_the_slope_s_standard_error_is_the_binomial_formula():
+    """`curve`'s `slope_se` against the formula worked by hand on three planted bins (to float rounding: a wrong formula
+    misses by far more than 1e-12 relative)."""
+    acc = {0: Counter(win=100, loss=300), 1: Counter(win=200, loss=200), 2: Counter(win=150, loss=50)}
+    c = pairs.curve(acc, 1.0, 1, lambda k: k["win"])
+    xbar = (0 * 400 + 1 * 400 + 2 * 200) / 1000                     # 0.8
+    sxx = 400 * 0.8 ** 2 + 400 * 0.2 ** 2 + 200 * 1.2 ** 2         # 560
+    var = 400 * 0.8 ** 2 * 0.25 * 0.75 + 400 * 0.2 ** 2 * 0.25 + 200 * 1.2 ** 2 * 0.75 * 0.25
+    assert math.isclose(c["slope_se"], math.sqrt(var) / sxx, rel_tol=1e-12, abs_tol=0.0), (c["slope_se"], math.sqrt(var) / sxx)
+
+
 def test_the_instrument_is_deterministic_given_its_seed(capsys):
     def printed(*argv):
         pairs.main(list(argv))
@@ -97,6 +149,9 @@ def test_the_instrument_is_deterministic_given_its_seed(capsys):
 
     duel = printed("duel", "--terms", "blood", "--n", "500", "--seed", "0", "--min-bin", "20")
     assert duel and "SLOPE" in duel
+    # the slope is printed with its standard error and the window of bins it was read over
+    slope_line = next(line for line in duel.splitlines() if line.startswith("SLOPE"))
+    assert " +/- " in slope_line and "bins read, x from " in slope_line, slope_line
     assert printed("duel", "--terms", "blood", "--n", "500", "--seed", "0", "--min-bin", "20") == duel
     assert printed("duel", "--terms", "blood", "--n", "500", "--seed", "1", "--min-bin", "20") != duel
     social = printed("social", "--n", "500", "--seed", "0", "--min-bin", "20")

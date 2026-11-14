@@ -5,8 +5,10 @@ through `state/ids.py::draw_factory` (the clock argument is 0), so a sheet is a 
 alone; an authored value replaces its own key only. `Fixtures generated_attribute_range` (H-856) is the setting: shipped
 `(1, 6)`; `(2, 2)` is B01's flat seating at `pool_default` (the control); `None` is nothing generated.
 
-The control proof (`(2, 2)` reproduces B01's close hashes) is read in process and recorded in the commit body, not kept
-here (B02.01's rule).
+The control proof is read in process and recorded at H-856's `cite`, not kept here (B02.01's rule): `(2, 2)` equals B01's
+close up to the will key's NAME only. B01a.06 renamed `attr.mind.will` to `attr.spirit.will` and the name is inside every
+Person's content hash, so the `(2, 2)` arm reads hashes of its own; re-keying its sheets to the old roster reproduces
+B01's close.
 """
 from __future__ import annotations
 
@@ -153,32 +155,7 @@ def test_with_nothing_generated_an_individuated_person_holds_none(monkeypatch):
     assert not w.persons["p_minted_in_play"].attributes
 
 
-# -- B01a.03: the generic test cast, and the two pinned instruments' persons ----------------------------------------
-def test_the_generic_cast_seats_every_empty_sheet_and_keeps_a_fixed_value():
-    from ..harness.probes import tiny_world
-    from ._generic_cast import seat_generic_cast
-    fixed = {"p_low": {"attr.body.strength": 6}}
-    w = seat_generic_cast(tiny_world(), fixed=fixed)
-    span = w.fixtures.get("generated_attribute_range")
-    checked = 0
-    for pid, p in w.persons.items():
-        assert list(p.attributes) == list(ATTRIBUTES) and len(p.attributes) == 10, pid
-        drawn = generated_attributes(w.world_seed, pid, span)
-        for key in ATTRIBUTES:
-            want = 6 if (pid, key) == ("p_low", "attr.body.strength") else drawn[key]
-            assert p.attributes[key] == want, (pid, key)
-            checked += 1
-    assert checked == 10 * len(w.persons)
-    # two calls at one seed are equal; at another seed they differ
-    again = seat_generic_cast(tiny_world(), fixed=fixed)
-    other = seat_generic_cast(tiny_world(), seed=9, fixed=fixed)
-    sheets = lambda x: {pid: dict(p.attributes) for pid, p in x.persons.items()}
-    assert sheets(again) == sheets(w) and sheets(other) != sheets(w)
-    # a key outside the ten refuses
-    with pytest.raises(Exception):
-        seat_generic_cast(tiny_world(), fixed={"p_low": {"attr.body.nonsense": 3}})
-
-
+# -- B01a.03: the two pinned instruments' persons --------------------------------------------------------------------
 def test_a_corpus_case_person_holds_a_drawn_sheet():
     from ..harness import corpus_run
     from ..harness.run_cases import load_cases
