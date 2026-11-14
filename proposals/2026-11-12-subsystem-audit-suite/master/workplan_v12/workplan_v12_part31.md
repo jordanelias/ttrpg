@@ -17,7 +17,7 @@ INVOCATION: /methodology-execute Batch B27-sc-proceedings
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_SC.md, Open table
 GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
 GATE: Batch B01-laneA @cfd9aefb049c2fe49b55c7ada1b0b624919af23d
-GATE: Batch B01a-attributes-generated (B01a.05: PROVISIONAL until re-read with `harness/pairs.py social`: the band shares this batch re-measures at A-79's centre are read as a curve over generated pairs, the centre its middle; `workplan_v12.md` §3.B, "generated attributes, and curves not centres")
+GATE: Batch B01a-attributes-generated @3b9bda87c5f4459b14f5ddcbe016b492f49273d5 (B01a.05: PROVISIONAL until re-read with `harness/pairs.py social`: the band shares this batch re-measures at A-79's centre are read as a curve over generated pairs, the centre its middle; `workplan_v12.md` §3.B, "generated attributes, and curves not centres")
 GATE: Batch B02-tests
 GATE: Batch B11-fi-readers
 GATE: Batch B24p-sc-proceeding

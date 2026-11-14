@@ -17,7 +17,7 @@ INVOCATION: /methodology-execute Batch B16-pc-round
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_PC.md, Open table
 GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
 GATE: Batch B01-laneA @cfd9aefb049c2fe49b55c7ada1b0b624919af23d
-GATE: Batch B01a-attributes-generated (B01a.05: PROVISIONAL until re-read with `harness/pairs.py duel`: the workbench sweeps and the round's coefficients this batch reads against fights are read as a curve over generated pairs, never one even-matchup number; `workplan_v12.md` §3.B, "generated attributes, and curves not centres")
+GATE: Batch B01a-attributes-generated @3b9bda87c5f4459b14f5ddcbe016b492f49273d5 (B01a.05: PROVISIONAL until re-read with `harness/pairs.py duel`: the workbench sweeps and the round's coefficients this batch reads against fights are read as a curve over generated pairs, never one even-matchup number; `workplan_v12.md` §3.B, "generated attributes, and curves not centres")
 GATE: Batch B02-tests
 GATE: Batch B06-keyed-draw
 GATE: Batch B07-task-draw

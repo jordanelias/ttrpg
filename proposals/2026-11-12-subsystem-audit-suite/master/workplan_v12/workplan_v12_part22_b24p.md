@@ -16,7 +16,7 @@ INVOCATION: /methodology-execute Batch B24p-sc-proceeding
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_SC.md, Open table
 GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
 GATE: Batch B01-laneA @cfd9aefb049c2fe49b55c7ada1b0b624919af23d
-GATE: Batch B01a-attributes-generated (the drawn attributes, `attr.spirit.will` (B01a.06, landed `1257a4a`) and `harness/pairs.py`; every reading this batch takes on a contest between persons is a curve over generated pairs, never one even-matchup number)
+GATE: Batch B01a-attributes-generated @3b9bda87c5f4459b14f5ddcbe016b492f49273d5 (the drawn attributes, `attr.spirit.will` (B01a.06, landed `1257a4a`) and `harness/pairs.py`; every reading this batch takes on a contest between persons is a curve over generated pairs, never one even-matchup number)
 GATE: Batch B02-tests
 GATE: Batch B03-hygiene
 GATE: Batch B04-capability-home
