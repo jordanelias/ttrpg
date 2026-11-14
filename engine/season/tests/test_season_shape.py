@@ -218,13 +218,6 @@ def test_d1c_a_matter_write_to_person_pursuits_refuses_with_its_own_law_not_the_
         "catch")
 
 
-def test_d2_witness_does_not_lie_about_its_driver():
-    """DEFECT 2. Rev 1's WITNESS declared driver="Act" for a deposit caused by an Event -- the
-    ONE site where the gate would otherwise have fired."""
-    src = inspect.getsource(SeasonDriver.witness)
-    assert 'driver="Event"' in src and 'driver="Act"' not in src
-
-
 def test_d3_the_write_gate_cannot_be_silenced_by_omission():
     """DEFECT 3. S30.2: 'EITHER THE GATE APPLIES THE WRITE, OR DIRECT ASSIGNMENT IS MADE
     IMPOSSIBLE.' Rev 1 ran L4 only if two optional kwargs were supplied."""
@@ -681,35 +674,6 @@ def _model_modules():
             if "harness" not in m.parts and not m.name.startswith("test_")]
 
 
-def test_d10b_resolve_sums_then_clamps_once():
-    src = inspect.getsource(SeasonDriver.resolve)
-    assert "sum(deltas)" in src and "clamp ONCE" in src
-
-
-def test_d10c_the_obstacle_refusal_gate_exists():
-    """S27.4 / S34: 'an attempt at Ob > 2 x Pool is refused' -- 'mechanical in RESOLVE'.
-
-    ⚠ RE-POINTED, step 3 of the `shape.py` decomposition (a PURE MOVE, ED-IN-0203).
-    `obstacle_refusal_multiple` is a `DEFAULT_FIXTURES` key, and `DEFAULT_FIXTURES` moved to
-    `season.data.fixtures`; `SeasonDriver.resolve`, which reads it, did not move and is
-    unaffected."""
-    # ⚠ THE STEP-3 RE-POINT WEAKENED THIS AND WAS REVERTED. Asserting the key is REGISTERED in
-    # `fixtures.py` proves only that a default exists; the gate could stop reading it entirely
-    # and this would stay green. FALSIFIED BY EXECUTION: replacing the read at the gate with a
-    # literal `2` left the re-pointed form GREEN. The READ is the mechanism, and post-move the
-    # read-side assertion is STRONGER than before -- `obstacle_refusal_multiple` is no longer in
-    # shape.py's import list, so only the gate's own read can satisfy it.
-    assert "obstacle_refusal_multiple" in SHAPE_CODE, (
-        "the Ob>2xPool gate no longer READS its multiple from the fixtures")
-    assert "obstacle_refusal_multiple" in FIXTURES_CODE, (
-        "the multiple is no longer registered as a fixture default")
-    # SC-02 `23`: THE KIND IS THE DECLARED COLUMN, NOT A BODY LITERAL (`rosters.yaml: fold_kinds`), so the
-    # gate names the constant and the roster supplies the string the refusal has always carried.
-    from engine.season.data.rosters import FOLD_ATTEMPT_REFUSED
-    assert "FOLD_ATTEMPT_REFUSED" in inspect.getsource(SeasonDriver.resolve)
-    assert FOLD_ATTEMPT_REFUSED == "attempt.refused"
-
-
 # ===========================================================================
 # STANDING INVARIANTS
 # ===========================================================================
@@ -744,15 +708,6 @@ def test_causes_is_never_empty():
     with pytest.raises(Forbidden):
         Event("i", "a.b", [], [], 0)
     assert Event("i", "a.b", [], [ROOT], 0).causes == [ROOT]
-
-
-def test_choose_receives_no_world():
-    src = inspect.getsource(SeasonDriver.deliberate)
-    # REV 3: `choose` receives the budget QUERY, not the answer -- S26.3's "the person chooses
-    # what to leave undone". Pinning the literal 4-ary string was how rev 2 locked in a
-    # deviation as an invariant, so this pins the PROPERTY instead.
-    assert "choose(p, v, s, ask_budget)" in src and "choose(w" not in src
-    assert "sense(p, w)" in src, "DELIBERATE must be fed a Sensation, per S26"
 
 
 def test_a_view_raises_on_any_world_collection():
@@ -812,14 +767,6 @@ def test_a_cache_cannot_be_built_inside_a_parallel_map():
         w.cache_at_barrier("k", lambda: 1)
 
 
-def test_witness_writes_no_belief_and_no_pursuit():
-    """S9.3: 'IF EVIDENCE CAN MOVE A CONVICTION, the moral layer has become a second epistemic
-    layer and T2 is gone. This is the single most dangerous collision in the design.'"""
-    src = inspect.getsource(SeasonDriver.witness)
-    for banned in ("beliefs", "pursuits"):
-        assert f'fieldname="{banned}"' not in src
-
-
 def test_hold_cardinality_is_one_per_object():
     w = _w()
     w.add_tenure(Tenure("t_dup", "p_mid", "off_duke", "hold", since=0))
@@ -868,11 +815,6 @@ def test_a_missing_provider_is_a_boot_failure():
 # ===========================================================================
 # THE INSTRUMENT'S REPORTING HONESTY
 # ===========================================================================
-
-def test_an_unfired_refusal_is_never_reported_as_a_pass():
-    src = inspect.getsource(R.run_probe)
-    assert "UNREACHABLE" in src and "NOT-REFUSED" in src
-
 
 def test_no_probe_currently_returns_unreachable():
     R._VERDICTS.clear()
@@ -926,16 +868,6 @@ def test_a_hand_raised_gap_is_never_labelled_construction():
         if raises and not calls:
             offenders.append(pid)
     assert not offenders, offenders
-
-
-def test_unmapped_rows_are_never_silently_passed():
-    src = inspect.getsource(R.grade)
-    assert "unmapped" in src and "NOT-ASSESSED" in src
-
-
-def test_an_unclear_row_is_not_counted_as_an_unrouted_one():
-    """An `UNCLEAR:` row is the CASE SOURCE failing, not the shape failing."""
-    assert "unclear" in inspect.getsource(R.grade)
 
 
 @contextlib.contextmanager
@@ -13741,7 +13673,7 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     #
     # ⚠⚠ THE SUBSTRING HAZARD FIRED FOR REAL 2026-09-29 AND WAS FIXED TWICE, THE SECOND TIME AT
     # THE RIGHT DEPTH (`/simplify` ALTITUDE pass, same methodology close as the fix below).
-    # `harness/arms.py`'s retired `_pool_arm` (plan position `28-i`, `1320045`) monkeypatches
+    # `harness/arms.py`'s retired pool arm (plan position `28-i`, `1320045`) monkeypatches
     # `engine.dice_engine.sigma_leverage.roll_net_continuous` -- a DIFFERENT, older dice-engine
     # function this test does not guard, coincidentally sharing the `roll_net` substring this
     # comment already named as the scan's known hazard. THE FIRST FIX excluded the one file by

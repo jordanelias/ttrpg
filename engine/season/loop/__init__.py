@@ -15,9 +15,9 @@ module, with the §A.2 table's owned state, `emits` and token quoted at the head
 ⚠ **THE STEPS ARE BOUND ONTO THE CLASS, NOT DELEGATED TO.** `driver.py` ends with
 `SeasonDriver.witness = witness` and six siblings, so `SeasonDriver.witness` IS the module function
 and `inspect.getsource` returns the MOVED BODY. Measured rather than argued: replace one binding
-with a delegating stub and `test_d2` and `test_d9b` go red **while
-`test_witness_writes_no_belief_and_no_conviction` — a pure NEGATIVE assertion — keeps PASSING over a
-body it no longer reads.** That is the silent half, and it is why step 9 refused to delegate.
+with a delegating stub and `test_d2` and `test_d9b` went red **while
+`test_witness_writes_no_belief_and_no_conviction` — a pure NEGATIVE assertion — kept PASSING over a
+body it no longer read** (B02.04 deleted `test_d2` and that negative test; `test_d9b` remains). That is the silent half, and it is why step 9 refused to delegate.
 
 ⚠ **`predicates` AND `effects` ARE NOT AMONG THE SIX, AND STAY.** §A.2's line enumerates the STEPS,
 not the totality of `loop/`; these two are the verb-keyed tables the fold dispatches on, and they
