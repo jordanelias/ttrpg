@@ -15,8 +15,9 @@
 ## Batch B16-pc-round · lane PC · wave W13 · step S13 · HASH MOVER, one re-pin
 INVOCATION: /methodology-execute Batch B16-pc-round
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_PC.md, Open table
-GATE: Batch B00-ids
-GATE: Batch B01-laneA
+GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
+GATE: Batch B01-laneA @cfd9aefb049c2fe49b55c7ada1b0b624919af23d
+GATE: Batch B01a-attributes-generated (B01a.05: PROVISIONAL until re-read with `harness/pairs.py duel`: the workbench sweeps and the round's coefficients this batch reads against fights are read as a curve over generated pairs, never one even-matchup number; `workplan_v12.md` §3.B, "generated attributes, and curves not centres")
 GATE: Batch B02-tests
 GATE: Batch B06-keyed-draw
 GATE: Batch B07-task-draw
@@ -309,8 +310,8 @@ R1 (`IS-PC-03`, copied from `IS-B1` §1.2 "Item: IS-PC-03"): "at the close of B0
 ## Batch B08-scene-order · lane IN · wave W6 (W9 with the gates this part adds) · step S13 · HASH MOVER, one re-pin
 INVOCATION: /methodology-execute Batch B08-scene-order
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_IN.md, Open table
-GATE: Batch B00-ids
-GATE: Batch B01-laneA
+GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
+GATE: Batch B01-laneA @cfd9aefb049c2fe49b55c7ada1b0b624919af23d
 GATE: Batch B02-tests
 GATE: Batch B03a-prose
 GATE: Batch B04-capability-home   (added by this part: the items are written with `lap` and `scenes_per_lap`, which B04.01 (PCR-4) makes; §2.1's `after` list lacks the edge)

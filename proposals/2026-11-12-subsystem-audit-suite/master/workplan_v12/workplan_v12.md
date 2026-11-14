@@ -4,7 +4,7 @@
 ## Lane: IN (cross-cutting), covering all nine lanes — IN, SC, SE, MB, PC, FI, WR, GO, FA. The successor of workplan v11 (`workplans/valoria_master_workplan_v11.md` + `_part2` … `_part17`), retired in the commit that adopts this plan (§11); not a second plan in force.
 ## Grade under CLAUDE.md §0.2: `paper`. A plan, not an execution artifact. It moves no row of THE NINE: a conjunct's `reading:` record is written by the last `Item:` commit of the batch that reads it (`IS-A-12`), and a row's `status:` is edited only by B99, the one re-take (A-114; §6).
 ## Written against: this part, HEAD `bba489b` (branch `ccr-62958c70-0kjhsw`, 2026-11-12, a shallow clone: `.git/shallow` is present); each body part names its own tree in its own head. Author: lane H1 of `master/workplan_v12/V12_STRUCTURE_part3.md` §7.1, one round.
-## Parts, in reading order (execution order): this head (part 1; `workplan_v12_cont.md` continues it if present) → part 2, the tables (lane H2, closed by lane H3: `workplan_v12_part2.md` the batch table, the gate index, the hash-mover table, the settings-at-control table → `_part2_cont.md` the serial-edge table and the file census → `_part2_cont2.md` the tests and tools tables, the Layer 1 status, the held table, the ids, the requirement map, the conflicts register → `_part2_cont3.md` the names table and the symbols with no carrier → `_part2_appendix.md` the scripts) → parts 3 to 43, the batches, each with its `_cont` files → part 44 (`_part44.md` to `_part44_cont3.md`), B98 and B99 (lane A44). 61 batches, 1,455 positions (part 2 §1.2). §14 maps every batch handle to its file.
+## Parts, in reading order (execution order): this head (part 1; `workplan_v12_cont.md` continues it if present) → part 2, the tables (lane H2, closed by lane H3: `workplan_v12_part2.md` the batch table, the gate index, the hash-mover table, the settings-at-control table → `_part2_cont.md` the serial-edge table and the file census → `_part2_cont2.md` the tests and tools tables, the Layer 1 status, the held table, the ids, the requirement map, the conflicts register → `_part2_cont3.md` the names table and the symbols with no carrier → `_part2_appendix.md` the scripts) → parts 3 to 43, the batches, each with its `_cont` files → part 44 (`_part44.md` to `_part44_cont3.md`), B98 and B99 (lane A44). 61 batches, 1,455 positions (part 2 §1.2); 2026-11-14: B00 and B01 closed and expunged, B01a-attributes-generated added (part 3; part 2 §1.2's re-run). §14 maps every batch handle to its file.
 
 **Short forms.** A path with no directory prefix is under `proposals/2026-11-12-subsystem-audit-suite/` (the suite); a path under `engine/`, `modules/`, `tools/`, `references/`, `registers/`, `tests/`, `architecture/`, `workplans/` is the repository's. `the structure` is `master/workplan_v12/V12_STRUCTURE.md` with `_part2`, `_part3` and `_part4`; `D-nn` is a decision of its §1; `E-nn` is an erratum of `V12_STRUCTURE_part4.md` (which wins where the structure differs). `A-nn` is a ruling in `unified/DECISIONS_ANSWERED.md`. `the skill` is `.claude/skills/methodology-execute/SKILL.md`; `the intake` is `master/eval/V12_INTAKE.md`; `the evaluation` is `master/V11_EVALUATION.md` and its parts, with `master/GAP_REGISTER_EVALUATION.md` and its parts; `IS-A` is `master/instructions/IS_A_NINE.md` and `_part2`; `U3` is `unified/U3_DEPENDENCY_ORDER.md`; `CIP` is `master/CODEBASE_IMPROVEMENT_PROPOSAL.md` and `_part2`; `MBA` is `master/mb_abstraction/MBA_DESIGN_part3.md`; `PCR` is `master/pc_round/PC_ROUND_SPEC_part2.md`; `the lexicon` is `unified/MB_LEXICON.md` and its parts; `04` is `architecture/meta/04_CODE_ARCHITECTURE.md`. Every suite file the adopting commit deletes (§11 step 6) is cited after adoption through its exact-file `FORK:` row.
 
@@ -141,6 +141,7 @@ Each binds every batch. Source in the right column; nothing here is decided by t
 | keyed refusal rows (after B08.02) | Every keyed refusal row added to `verb_table.yaml` after B08.02 carries a `sequence:` key. | H2 notes (A23) |
 | the display names (after B41.11) | Every batch after B41.11 that adds a verb or an Event kind adds its `references/names_index.yaml` entry in the same commit (`16_PESSIMIST_GO_surface_pins.md` §3: the file gains the classes `verb` and `event_kind`). | H2 notes (A29); `workplan_v12_part29.md` B41 |
 | the glossary always matches | An item that introduces, renames or retires a term edits its row of `unified/U1_GLOSSARY.md` in the same commit; the batch close reads each such row against the code it landed, and a mismatch fails the close (§4). | `STAGES.md`, "The glossary always matches" rule 2; the structure §5.11 |
+| generated attributes, and curves not centres | **Ordering:** no pin is recorded and no value is tuned against persons' attributes before B01a closes: from B01a every person without authored values holds all ten attributes drawn uniform on `generated_attribute_range` by a keyed draw (`state/carriers.py::generated_attributes`; authored values override key by key), every later pin and test records once against that varied world, and every batch that tunes or calibrates against attributes carries `GATE: Batch B01a-attributes-generated` (B01a.05 lists them). A test that builds its own persons and reads an attribute seats the generic cast (`engine/season/tests/_generic_cast.py`); a test that needs a fixed value asks for it there and says why. **Variance:** a calibration that reads a contest between persons reads a CURVE over generated random pairs at very high iteration counts (`python -m engine.season.harness.pairs`, B01a.04): the outcome shares by attribute-difference bin, the count-weighted least-squares slope of the curve and its spread, with bounds asserted across the whole range: monotone in the difference (each bin at or above its left neighbour less two standard errors), no outcome above a stated share in any bin, the slope inside a stated band. Never one even-matchup number: A-79's even centres are the curve's middle bin. The slope band and the dominance share are `[ASSUMPTION]` targets for Jordan, stated by the batch that first asserts them; until its curve is read, every calibrated value is PROVISIONAL. Hash pins stay regression pins only. | Jordan 2026-11-13/14, rulings (1) to (5) (B01a; `ED-IN-0403`, written by B01a.01) |
 
 ---
 
@@ -192,6 +193,8 @@ Each binds every batch. Source in the right column; nothing here is decided by t
 
 **Recomputed from the edited tree** (lane H3, 2026-11-13: part 2's appendix scripts re-run after part 44 and the repair lanes R1, R2a to R2d; part 2 §1.2 holds the table, old against new). **1,455 positions** (this paragraph's 1,353; 1,453 after part 44 and R1, + B17.14 from R2a, + B35.30 from H3), by state BUILD 1,193, POINTER 79, READING 35, HELD 25 (repair lane V1: B03.71 BUILD → HELD; was BUILD 1,194, HELD 24), BLOCKED 57, CONTENT 33, DESIGN-FIRST 33. **Hash movers 442 behaviour, 21 encoding, 6 conditional; 49 mover and 12 EQUAL batches.** **526 edges** (501 + the twenty H2 adopted + R1's five), acyclic, **25 waves, 25 steps, 90 tied chains by waves.** **Serial 748.5 h** (was about 706 h); **critical path 390.5 h** (was about 354 h): B00 → B01 → B02 → B03 → B03g → B03a → B04 → B05 → B06 → B07 → B09 → B10 → B11 → B12a → B12b → B12c → B25 → B32 → B35 → B36 → B38 → B39 → B40 → B98 → B99, still the SE middle (B03g ties B16L at 4.5 h; B98 at its 87 positions is 39.3 h of it, B99 at 2 is 5.3 h, in place of this paragraph's 8 h and 5 h); **makespan 425.3 h**. With the five merge-order pairs taken as edges instead: 27 waves, 27 steps, 420.3 h.
 
+**With B01a, 2026-11-14** (part 2 §1.2's re-run: B00 and B01 closed and expunged at 0 h; B01a-attributes-generated added on Jordan's rulings of 2026-11-13/14, 6 positions, 6.9 h): **62 batches, 543 edges, acyclic, 26 waves, 26 steps, 90 tied chains; critical path 390.4 h** (383.5 h on the same tree without B01a): B00 → B01a → B02 → B03 → B03g → B03a → B04 → B05 → B06 → B07 → B09 → B10 → B11 → B12a → B12b → B12c → B25 → B32 → B35 → B36 → B38 → B39 → B40 → B98 → B99; **serial 751.2 h, makespan 426.0 h**; with the five pairs as edges 28 waves, 28 steps, 421.0 h. B01a sits on the critical path with slack 0, and every batch from B02 on moves one wave and one step later.
+
 **What shortens the path.** The four middles are tied by steps (the structure §2.3): shortening one alone shortens nothing. Weighted by hours, the SE chain B11 → B12a → B12b → B12c → B25 is the longest; B10 (67 positions), B03 (65) and B38 (65) are the largest single batches on it. No batch is re-cut by this head (the structure §10.1 item 9: no lane re-cuts a batch).
 
 ---
@@ -240,7 +243,7 @@ For a step with one batch the two texts below agree. For a step with several, th
 
 | step | open at once |
 |---|---|
-| S0–S3 | B00 · B01 · B02 · B03, one each (IN) |
+| S0–S3 | B00 · B01 · B02 · B03, one each (IN); ⚠ 2026-11-14: B01a opens at S2, between B01 and B02, and every later row moves one step (part 2 §1.2) |
 | S4 | B03c (IN), B16L (MB), B03g (GO) |
 | S5 | B03a (IN), alone in the plan: it edits the comments of every game-code file |
 | S6 | B04 (IN), B13 (PC), B16M (MB) |
@@ -369,6 +372,7 @@ No engine version is asserted anywhere in v12 (ED-GO-0002 is the owner).
 
 | batch | lane | ED block (declared + spare) | H block (declared + spare) |
 |---|---|---|---|
+| B01a-attributes-generated | IN | ED-IN-0403..0404 (1+1) | H-856..H-860 (1+4) (allocated 2026-11-14 after the table's last block; `id_reservations.yaml` IN `next_free` 403 → 405) |
 | B02-tests | IN | ED-IN-0369..0370 (0+2) | H-374..H-378 (0+5) |
 | B03-hygiene | IN | ED-IN-0371..0372 (0+2) | H-379..H-383 (0+5) |
 | B03g-go-early-landings | GO | ED-GO-0003..0004 (0+2) | H-384..H-388 (0+5) |
@@ -465,6 +469,7 @@ Each is also stated where it is invoked (the batch block's lines, the item's fie
 
 | batch | file(s) under `master/workplan_v12/` |
 |---|---|
+| B01a-attributes-generated | `workplan_v12_part3.md` |
 | B02-tests | `workplan_v12_part3.md`, `_part3_cont.md` |
 | B03-hygiene | `workplan_v12_part4.md`, `_part4_cont.md`, `_part5.md`, `_part5_cont.md` |
 | B03g-go-early-landings, B03c-boot, B16L-mb-words | `workplan_v12_part6.md` |

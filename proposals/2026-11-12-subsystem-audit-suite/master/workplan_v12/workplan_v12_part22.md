@@ -15,8 +15,9 @@
 ## Batch B24-sc-hearing · lane SC · wave W13 · step S13 · HASH MOVER, one re-pin
 INVOCATION: /methodology-execute Batch B24-sc-hearing
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_SC.md, Open table
-GATE: Batch B00-ids
-GATE: Batch B01-laneA
+GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
+GATE: Batch B01-laneA @cfd9aefb049c2fe49b55c7ada1b0b624919af23d
+GATE: Batch B01a-attributes-generated (B01a.05: PROVISIONAL until re-read with `harness/pairs.py social`: every even-match or band-share reading this batch takes on the hearing's rolls is read as a curve over generated pairs, never one even-matchup number; `workplan_v12.md` §3.B, "generated attributes, and curves not centres")
 GATE: Batch B02-tests
 GATE: Batch B03-hygiene
 GATE: Batch B04-capability-home
@@ -224,7 +225,7 @@ Not items, and where each is: `05_SC_playable_hearing.md`, `05_SC_evidence_and_r
 - FALSIFIER and CONTROL: a fixture with no `[JUSTIFIED]` tag or an H row whose `site:` names no fixture. Control: realm hashes equal to B24.06's.
 - GATE: `python tools/ci_sim_fabrication_check.py` → exit 0; `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`); `python tools/export_sim_params.py --check` → exit 0 (re-derived with `--build` if it reads `Fixtures`).
 - HASH MOVERS: none (every setting at control).
-- DEPENDS ON: V12 Batch B00-ids (B24's H block); EXISTS-IN-TREE `data/fixtures.py` (`reception_gain`'s tag form), `LEVEL_SIGMA`.
+- DEPENDS ON: V12 Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695 (B24's H block); EXISTS-IN-TREE `data/fixtures.py` (`reception_gain`'s tag form), `LEVEL_SIGMA`.
 - IDS: H block slots 1–5.
 - GLOSSARY: none.
 - COST and TIER: edit; `sonnet`, `high`.

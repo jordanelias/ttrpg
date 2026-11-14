@@ -17,6 +17,7 @@ INVOCATION: /methodology-execute Batch B15-pc-calibration
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_PC.md, Open table
 GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
 GATE: Batch B01-laneA @cfd9aefb049c2fe49b55c7ada1b0b624919af23d
+GATE: Batch B01a-attributes-generated (B01a.05: PROVISIONAL until re-read with `harness/pairs.py duel`: every calibration this batch sets (A-31's damage scale, the fight's obstacle, the even blow) is read as a curve over generated pairs, by attribute-difference bin, with its slope and spread, never one even-matchup number; `workplan_v12.md` §3.B, "generated attributes, and curves not centres")
 GATE: Batch B02-tests
 GATE: Batch B04-capability-home
 GATE: Batch B05-one-roll

@@ -28,6 +28,8 @@
 | 20 | `residue.py` | lane H3: gate arms that read a `## Status:` line, a document count or a document's statements (§11.2) |
 | 21 | `sizes.py` | lane H3: item sizes against E-12's 6 KB cap (`V12_FOR_JORDAN.md` J-04) |
 
+**The B01a lane's edits** (2026-11-14): `graph.py` injects B01a's row (lane IN, after B00 and B01; not in the structure's §2.1 table), counts it among the `+2 h` batches, and gives an expunged batch (B00, B01: no block left) 0 h; `gates.py` and `totals.py` skip an expunged batch. `t1.py`, `t23.py` and `census.py` still index an expunged batch and stop on B00 (`KeyError`); their tables were edited by hand for B01a (part 2 §1.3, §5.4), not regenerated.
+
 **Lane H3's edits to the scripts above** (2026-11-13): `graph.py`'s `stnorm` reads a state cell's leading word first (it had read "BUILD (HELD if …)" as HELD and B98's "BLOCKED (… reading …)" as READING); `t1.py` writes B98's and B99's rows from their positions now that part 44 gives them. Scripts 16 to 21 are new, below; run them after 1 to 5 (`names.py` before `carriers.py` and `t13.py`).
 
 ## `parse_parts.py`
@@ -167,6 +169,9 @@ for l in open(f'{D}/V12_STRUCTURE.md', encoding='utf-8'):
     aft = m.group(6)
     S_after = set() if aft.strip() in ('—',) else ({x for x in rows if x not in ('B99',)} if 'every batch' in aft else {short(a) for a in re.findall(HB, aft)})
     name[b + '_after'] = sorted(S_after - {b})
+# B01a (added 2026-11-14 after the structure was written; its row is not in V12_STRUCTURE.md §2.1): lane IN, after B00, B01
+rows.insert(rows.index('B02'), 'B01a'); name['B01a'] = 'B01a-attributes-generated'; lane['B01a'] = 'IN'
+s_wave['B01a'] = 2; s_step['B01a'] = 2; name['B01a_after'] = ['B00', 'B01']
 S = {(a, b) for b in rows for a in name[b + '_after']}
 # B98: every batch but B99; B99: every batch
 S = {(a, b) for (a, b) in S if b not in ('B98', 'B99')}
@@ -240,9 +245,10 @@ for b in nodes:
     seen = {}
     for p in P['batches'][b]['positions']: seen.setdefault(p['pos'], p)
     pos[b] = len(seen); states[b] = Counter(stnorm(p['cells'][3]) for p in seen.values())
-CALIB = {'B02', 'B05', 'B15', 'B19', 'B19a', 'B98', 'B99'}   # B98: its probes (part 44 EST); B99: the long re-take (repair lane R1)
+CALIB = {'B01a', 'B02', 'B05', 'B15', 'B19', 'B19a', 'B98', 'B99'}   # B98: its probes (part 44 EST); B99: the long re-take (repair lane R1); B01a: the pairs instrument
 est = {b: round(0.4 * pos[b] + 2.5 + (2 if b in CALIB else 0), 1) for b in pos}
 est.setdefault('B98', 8.0); est.setdefault('B99', 5.0)   # the structure's guesses, kept only for a batch with no positions (repair lane R1: part 44 gives both)
+for _b in nodes: est.setdefault(_b, 0.0)   # an expunged batch (closed, its block deleted): 0 h left (B01a lane, 2026-11-14)
 def hours_path(res):
     best, prev = {}, {}
     for h in res['topo']:
@@ -291,7 +297,7 @@ for f in P['files']:
         if m: stops.setdefault(re.match('(' + HB + ')', m.group(1)).group(1), []).append((f, ln, l.strip(), m.group(1)))
 rows = []
 for b in nodes:
-    if b in ('B98', 'B99'): continue
+    if b in ('B98', 'B99') or b not in P['batches']: continue   # an expunged batch has no block (B01a lane, 2026-11-14)
     gl = P['batches'][b]['gates']
     named = []
     for fn, ln, l in gl:
@@ -861,6 +867,7 @@ def leading(s):                       # the state cell's leading word (R1: "BUIL
     return anyword(s)
 tot_a, tot_l, per = Counter(), Counter(), {}
 for b in G['nodes']:
+    if b not in P['batches']: continue   # an expunged batch has no block (B01a lane, 2026-11-14)
     seen = {}
     for p in P['batches'][b]['positions']: seen.setdefault(p['pos'], p)
     a = Counter(anyword(p['cells'][3]) for p in seen.values()); l = Counter(leading(p['cells'][3]) for p in seen.values())

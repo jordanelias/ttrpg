@@ -17,6 +17,7 @@ INVOCATION: /methodology-execute Batch B27-sc-proceedings
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_SC.md, Open table
 GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
 GATE: Batch B01-laneA @cfd9aefb049c2fe49b55c7ada1b0b624919af23d
+GATE: Batch B01a-attributes-generated (B01a.05: PROVISIONAL until re-read with `harness/pairs.py social`: the band shares this batch re-measures at A-79's centre are read as a curve over generated pairs, the centre its middle; `workplan_v12.md` §3.B, "generated attributes, and curves not centres")
 GATE: Batch B02-tests
 GATE: Batch B11-fi-readers
 GATE: Batch B24-sc-hearing
@@ -160,7 +161,7 @@ The items B27.01 to B27.17 follow; B27.18 to B27.99, the `## Readings` block and
 - FALSIFIER and CONTROL: a planted hearer whose regard for the convicted does not move at `sentence_gain = 1`, or three hearers whose values are not in the stance order. Control: `sentence_gain = 0` → every regard equal to B27.03's reading; the realm content hash at seeds 0 to 2, one season, equal to B27.03's.
 - GATE: `PYTHONHASHSEED=0 python -m pytest engine/season/tests/test_verdict_witnessed.py -q` → five pass; `python tools/ci_sim_fabrication_check.py` → exit 0; `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`); realm hash (`HASH READING`) at seed 0, one season → equal to B27.03's.
 - HASH MOVERS: none ("none from edits 3-4 at `sentence_gain = 0`").
-- DEPENDS ON: V12 B27.03 (`counterparty_kinds`); V12 Batch B00-ids (B27's H block); EXISTS-IN-TREE `queries/person_q.py::deeds_judged`, `::regard`, `::stance_toward` (opened), `STANCE_MAX`, `data/fixtures.py` `regard_gain`.
+- DEPENDS ON: V12 B27.03 (`counterparty_kinds`); V12 Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695 (B27's H block); EXISTS-IN-TREE `queries/person_q.py::deeds_judged`, `::regard`, `::stance_toward` (opened), `STANCE_MAX`, `data/fixtures.py` `regard_gain`.
 - IDS: H block slot 1.
 - GLOSSARY: none (no new term; "sentence" is B27.03's row).
 - COST and TIER: small build; `sonnet`, `high`.
@@ -202,7 +203,7 @@ The items B27.01 to B27.17 follow; B27.18 to B27.99, the `## Readings` block and
 - FALSIFIER and CONTROL: a fixture with no tag, or a row whose `site:` names no fixture. Control: realm hashes equal to B27.05's (nothing reads the key yet).
 - GATE: `python tools/ci_sim_fabrication_check.py` → exit 0; `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`); `python tools/export_sim_params.py --check` → exit 0 (re-derived with `--build` if it reads `Fixtures`).
 - HASH MOVERS: none.
-- DEPENDS ON: V12 B27.05; V12 Batch B00-ids (B27's H block).
+- DEPENDS ON: V12 B27.05; V12 Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695 (B27's H block).
 - IDS: H block slot 2.
 - GLOSSARY: none.
 - COST and TIER: edit; `sonnet`, `high`.

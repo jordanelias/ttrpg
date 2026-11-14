@@ -11,6 +11,7 @@ INVOCATION: /methodology-execute Batch BA1-cast-content
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_IN.md, Open table
 GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
 GATE: Batch B01-laneA @cfd9aefb049c2fe49b55c7ada1b0b624919af23d
+GATE: Batch B01a-attributes-generated (B01a.05: BA1's authored cast replaces B01a's generated attributes for the persons it authors, key by key; every calibration this batch re-reads (its soft edge, the `difficulty:` levels) is PROVISIONAL until re-read with `harness/pairs.py` as a curve over generated pairs; `workplan_v12.md` §3.B, "generated attributes, and curves not centres")
 GATE: Batch B02-tests
 GATE: Batch B04-capability-home
 GATE: Batch B05-one-roll

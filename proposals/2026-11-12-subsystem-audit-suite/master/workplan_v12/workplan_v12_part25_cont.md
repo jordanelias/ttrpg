@@ -9,8 +9,8 @@ Words, paths and forms as the head of `workplan_v12_part25.md` states them.
 ## Batch B34-go-surface · lane GO · wave W14 · step S14 · HASH MOVER, one re-pin
 INVOCATION: /methodology-execute Batch B34-go-surface
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_GO.md, Open table
-GATE: Batch B00-ids
-GATE: Batch B01-laneA
+GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
+GATE: Batch B01-laneA @cfd9aefb049c2fe49b55c7ada1b0b624919af23d
 GATE: Batch B02-tests
 GATE: Batch B03-hygiene
 GATE: Batch B10-character

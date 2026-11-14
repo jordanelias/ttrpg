@@ -142,7 +142,7 @@ Not in this batch, and where each is: CORE Edit 9 and CAP Part B (B05); MAP §G 
 - FALSIFIER and CONTROL: "Delete `capability:` from `argue`'s row: the load refuses naming the row" (CORE). Control: the realm content hash at seeds 0 to 2, one season, equal to B04.02's (`verb_capability` still feeds every reader until B04.04).
 - GATE: `python -m pytest engine/season/tests/test_u1_capability_surface.py -q` → pass; the realm hash (`HASH READING`) at seed 0, one season → equal to B04.02's reading.
 - HASH MOVERS: none.
-- DEPENDS ON: V12 B04.02 (`CAPABILITIES`); V12 Batch B01-laneA (lane A's three `verb_capability` rows); EXISTS-IN-TREE `data/verbs.py::VerbRow`.
+- DEPENDS ON: V12 B04.02 (`CAPABILITIES`); V12 Batch B01-laneA @cfd9aefb049c2fe49b55c7ada1b0b624919af23d (lane A's three `verb_capability` rows); EXISTS-IN-TREE `data/verbs.py::VerbRow`.
 - GLOSSARY: none (the column's word is *capability*, the tree's identifier for skill, glossary §B).
 - COST and TIER: edit; `sonnet`, `high`.
 - LANDS IT: B04's producer; `Item: B04.03`, `[skip ci]`.
