@@ -272,7 +272,8 @@ RULINGS = {
 # ── the declared HOLDs — NONE remain ─────────────────────────────────────────────────────────────
 # The last one, `combat_engine_v1/core.py`, left this commit (workplan PC-02): its `degree()` now
 # returns the owner's bands and it is enrolled in LADDERS above. HELD stays as the place a future
-# hold is declared; while it is empty, the divergence test below asserts nothing.
+# hold is declared. The test that asserted a hold still diverges looped over this empty dict and
+# was deleted (B02.09 A6); a hold added here brings its own such test.
 # ⚠ This header read "the TWO declared HOLDs" until 2026-08-27, 143 lines below the same file's
 # own header, which HAD been updated. That is verbatim the failure the comment at the bottom of
 # this file lectures about — a claim about a data structure that a targeted string edit never
@@ -282,22 +283,6 @@ RULINGS = {
 # asserted to STILL DIVERGE below — so when it is resolved, this file fails and forces the update.
 # Silence would let a resolved hold sit here forever looking like a live exception.
 HELD = {}
-
-
-def test_the_held_site_still_diverges_and_the_hold_is_still_needed():
-    """When combat is migrated or recalibrated, this fails — which is the point.
-
-    A hold that has quietly become unnecessary is indistinguishable from a hold that is still
-    load-bearing, and the tree has a documented habit of the former outliving the latter.
-    """
-    owner = _owner()
-    for label, (loader, _reason) in HELD.items():
-        fn = loader()
-        diverging = [(n, o) for n, o in DOMAIN if fn(n, o) != owner(n, o)]
-        assert diverging, (
-            f'{label} no longer diverges from the owner. If it was migrated, move it into LADDERS '
-            f'and delete its HELD entry; if it was recalibrated, re-measure the invariant named in '
-            f'the hold before deciding.')
 
 INT_DOMAIN = [(n, o) for n in range(-4, 26) for o in range(1, 21)]
 FRAC_DOMAIN = [(i / 4, o) for i in range(-8, 81) for o in range(1, 11)]

@@ -2240,7 +2240,6 @@ def test_w3_the_fold_refuses_rather_than_filling_and_the_gap_is_countable(monkey
     def _evaluable(v):
         return v in REQUIRES_PREDICATES or VERB_TABLE[v].requires_typed is not None
     missing = [v for v in prose if not _evaluable(v)]
-    assert len(missing) == len(prose) - len([v for v in prose if _evaluable(v)])
     # ⚠ RE-RECORDED AT v10 REM-2B: THE TABLE HAS NO GAP LEFT TO TAKE A VICTIM FROM. `comply` (v9 IN-09), then
     # `evade / defy`, `construe` and `exchange` (restored at REM-2B) were the last rows with a prose
     # precondition and no evaluator, so `missing` reads `[]` on the shipped table. The REFUSAL this test
@@ -3119,20 +3118,16 @@ def test_t2_one_rebind_moves_score_and_gate(monkeypatch):
     score_a, gate_a = reading({axis: {v0: 0.3, v1: -0.6}})
     score_b, gate_b = reading({axis: {v0: -0.6, v1: 0.3}})
 
-    checked = 0
-    assert score_a and score_b, f"{v0!r} was never scored, so the score half observed nothing"
+    assert len(score_a) >= 1 and len(score_b) >= 1, (
+        f"{v0!r} was never scored, so the score half observed nothing")
     for k in score_a:
         assert score_a[k] != score_b[k], (
             f"rebinding `data.verbs.ALIGNMENT` did not move `choose`'s score for {k}: "
             f"{score_a[k]} vs {score_b[k]}")
-        checked += 1
     assert v0 not in gate_a and v0 in gate_b, (
         f"rebinding `data.verbs.ALIGNMENT` did not move the H-146 gate: {v0!r} in A={v0 in gate_a}, "
         f"in B={v0 in gate_b} -- `refuses` is reading a different binding than `choose`")
-    checked += 1
     assert v1 in gate_a and v1 not in gate_b
-    checked += 1
-    assert checked >= 1
 
 
 def test_t2_align_kind_reads_the_one_emitter_and_a_deed_key_needs_an_emitted_kind(monkeypatch):

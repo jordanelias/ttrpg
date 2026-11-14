@@ -99,21 +99,6 @@ def test_ratified_but_unimplemented_items_stay_visible():
         assert row.get('why_it_matters'), f'{key} records no consequence'
 
 
-def test_the_unimplemented_register_guard_can_observe_an_unauthorised_deletion():
-    """§0.1 pt 2 for the test above — the property is "the set matches", and a set comparison that
-    is never exercised against a mismatch proves nothing about the guard."""
-    assert {'faction_L'} != EXPECTED_UNIMPLEMENTED, (
-        'faction_L must not compare equal — it was implemented on 2026-08-23'
-    )
-    assert {'per_stat_floors'} != EXPECTED_UNIMPLEMENTED, (
-        'a restored per_stat_floors row must not compare equal — it is implemented'
-    )
-    assert {'something_new'} != EXPECTED_UNIMPLEMENTED, (
-        'a newly-filed gap must not compare equal — an addition is the direction this guard still '
-        'protects now that the register is empty'
-    )
-
-
 def test_the_export_is_current():
     """A stale artifact means the engine is running on a roster the registry no longer declares."""
     r = subprocess.run([sys.executable, 'tools/export_descriptors.py', '--check'],
