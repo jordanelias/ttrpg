@@ -191,7 +191,8 @@ derived score, choice score).
 | **owner** | the one file and key a fact is authored in | CLAUDE.md §0.05 | "home" (allowed as a synonym in prose), "source of truth" | — |
 | **check** (of a proposal) | the execution artifact that shows an edit landed (a run, a hash, a test) | — | "gate" (the write gate's word, D-section above) in new text | new suite text |
 | **refusal** | the loader's or the gate's refusal; a precondition failed with no contest | `04` §C.4 | "loss" (a contest that went against), "the gate refuses" for a loader | — |
-| **reading** | a measurement a named instrument prints | — | the `reading:` record on a requirement row keeps its key | — |
+| **conjunct** | one of the readings a requirement row's `met` text joins by "and" | `engine/season/requirements.yaml`'s `conjuncts:` key; `register.py::check_requirements` | the ordinary word for a term of a conjunction; "criterion", "sub-requirement" | — |
+| **reading** | a measurement a named instrument prints | `engine/season/requirements.yaml`'s `reading:` record on a conjunct; `register.py::check_requirements` | the key keeps its name | — |
 | **pin** | a recorded hash a test compares | `engine/season/tests/_realm_goldens.py` (P) | "golden" (allowed as the tree's process word, CLAUDE.md §7; it is software jargon with no ordinary sense, so new prose says "pin" and keeps "golden" for file and test names) | — |
 | **mover** | an edit declared to change seeded results | — | — | — |
 | **Layer** | always numbered and capitalised (Layer 0, Layer 1, Layer 2) | CLAUDE.md (RULED) | "layer" for an epistemic or narrative layer in code keeps its lower case and its qualifier | — |
