@@ -9950,7 +9950,7 @@ def test_k1_control_an_all_absent_realm_builds_the_record_it_always_built(monkey
     from ..seam.wrappers import combat as C
     from ..seam.wrappers._entry import entry_for
     import random
-    # B11 lane A (rebased in B01.02): `cast_attributes` SHIPS ON (`unauthored_attributes` seated on every person), so the
+    # B11 lane A (rebased in B01.02): `cast_attributes` SHIPS ON (a drawn sheet, `state/carriers.py::generated_attributes`, seated on every person), so the
     # all-absent realm this control is about is the arm built with it OFF -- the control's subject, not the shipped default.
     realm = build_realm(0, cast_attributes=False)
     assert not any(p.attributes for p in realm.persons.values()), "the all-absent arm authors an attribute"

@@ -1570,9 +1570,8 @@ rosters:
       arrest:      "arms"
       determine:   "argue"
 
-  # B11 lane A's `unauthored_attributes` bundle (2 on every attribute key) is NOT a row here: its value is `Fixtures
-  # pool_default` (H-126), the one owner of the untrained score, so it is derived at the build
-  # (`data/rosters.py::unauthored_attributes`) and a `pool_default` sweep reaches it.
+  # An unauthored person's attributes are NOT a row here: they are DRAWN (B01a.01, `Fixtures generated_attribute_range`,
+  # H-856), one keyed draw per person and attribute, by `state/carriers.py::generated_attributes`.
 
   task_difficulty:
     source: >-

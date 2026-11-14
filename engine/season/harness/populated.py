@@ -74,7 +74,7 @@ from ..queries.world_q import (HUNGER_KIND, RESIDE_KIND, WORKS_KIND, ancestry, c
 from ..gaps import Forbidden, Unspecified
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
 from ..data.rosters import (BODY_FACTION, FACTIONS, FOREIGN_CAST, FOREIGN_SEATS, OFFICES_BY_HOLDER,
-                            OFFICES_SEATS, unauthored_attributes, ROLE_TEMPLATE_OF, RUNG_KINDS, authored_remit,
+                            OFFICES_SEATS, ROLE_TEMPLATE_OF, RUNG_KINDS, authored_remit,
                             faction_prop_id, load_yaml, refuse_a_titled_post_off_its_rung,
                             remit_or_default, territory_id_of, territory_rung_id, title_domain)
 from ..data.geography import geography
@@ -83,7 +83,7 @@ from ..decision import make_chooser
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..loop.effects import EFFECTS
 from ..data.requires import KNOWN_PERSON_CLAIM
-from ..state.carriers import Act, Claim, Office, Person, Proposition, Rung, Site, Tenure
+from ..state.carriers import Act, Claim, Office, Person, Proposition, Rung, Site, Tenure, generated_attributes
 from ..state.gate import NO_CHANGE
 from ..state.ids import H, ROOT, draw_factory
 from ..state.world import World
@@ -1017,8 +1017,9 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     """The whole map, its buildings, and one person per season loop.
 
     `cast_attributes` (v10 CR-20) reads each cast row's `stats:` into `Person.attributes`
-    (`data/cast.py::attributes_of`), over `data/rosters.py::unauthored_attributes` (`pool_default`) for every key a row does not author, and
-    seats that bundle on every other person (the cohorts included) last. ⚠ SINCE B11 LANE A `True` SHIPS (brief A step 3:
+    (`data/cast.py::attributes_of`), over the sheet `state/carriers.py::generated_attributes` DRAWS (`Fixtures
+    generated_attribute_range`, B01a.01) for every key a row does not author, and seats a drawn sheet on every other
+    person (the cohorts included) last; `Fixtures generated_attribute_range` None draws nothing. ⚠ SINCE B11 LANE A `True` SHIPS (brief A step 3:
     persons hold scores, so a person is opposed by the score he rolls and never by `obstacle_default`), a declared mover
     of the build (every `Person` repr) and of every season. `False` is the CONTROL ARM of the earlier reading, kept: no person holds an attribute, so
     `faculty` falls to `pool_default` and the realm acts as it did before the carrier (only the `Person` repr
@@ -1356,7 +1357,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         # registry), set here and NEVER written in play. Absent where unauthored: `{}` is no key, and
         # `faculty` then falls to `pool_default`.
         if cast_attributes:
-            w.persons[pid].attributes = {**unauthored_attributes(w.fixtures.get("pool_default")),
+            w.persons[pid].attributes = {**generated_attributes(w.world_seed, pid, w.fixtures.get("generated_attribute_range")),
                                          **cast.attributes_of(cast.row(cid) or {})}
         # v10 CR-30: DESCENT, from the same row's `heritage:`, set here and NEVER written in play. No fallback and
         # no draw: a row that states none leaves `None`, which `epistemic._term_marks` deposits as `()`.
@@ -1994,14 +1995,14 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     # v11 CP-T03-03: THE ARMS A RUNG IS BUILT HOLDING (`rosters.yaml: arms_at_build`), the very last write so the build
     # up to here is byte-identical to the realm without it. The shipped roster is empty (the inventory is Jordan's).
     seed_arms(w)
-    # B11 lane A: EVERY PERSON HOLDS A SCORE (`data/rosters.py::unauthored_attributes`, `pool_default` on every key, read
-    # off this realm's fixtures): the cohorts, guards and foreign cast seated after the case loop take the bundle under
-    # anything they already hold. The very last write, after the arms, so the build up to here is the earlier one;
-    # `cast_attributes=False` writes nothing.
+    # B01a.01: EVERY PERSON HOLDS A DRAWN SHEET (`state/carriers.py::generated_attributes`, one keyed draw per person and
+    # attribute on `Fixtures generated_attribute_range`): the cohorts, guards and foreign cast seated after the case loop
+    # take theirs under anything they already hold, key by key. The very last write, after the arms, so the build up to
+    # here is the earlier one; `cast_attributes=False` writes nothing.
     if cast_attributes:
-        bundle = unauthored_attributes(w.fixtures.get("pool_default"))
+        span = w.fixtures.get("generated_attribute_range")
         for p in w.persons.values():
-            p.attributes = {**bundle, **(p.attributes or {})}
+            p.attributes = {**generated_attributes(w.world_seed, p.id, span), **(p.attributes or {})}
     return w
 
 

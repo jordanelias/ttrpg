@@ -670,23 +670,6 @@ def _load_vocation_opposed_by(opposed: dict, vocations) -> dict:
 VOCATION_OPPOSED_BY = _load_vocation_opposed_by(roster_map("vocation_attribute", "opposed_by"), VOCATIONS)
 
 
-def unauthored_attributes(pool_default: int) -> dict:
-    """WHAT A PERSON HOLDS ON AN ATTRIBUTE HIS CAST ROW DOES NOT AUTHOR (B11 lane A; Jordan, 2026-11-12: *"social contest
-    ob always 2 is so wrong"*; brief A step 3: persons hold scores): every one of the ten registry keys
-    (`engine.substrate.descriptors.ATTRIBUTES`, their one owner, in its order) at `pool_default` -- `Fixtures
-    pool_default` (H-126), the one owner of the untrained score, handed in by the caller from the realm's own fixtures,
-    as `data/cast.py::capability_of` holds a lifepath key at it. DERIVED, NEVER STORED: a realm built under another
-    `pool_default` seats that score (`test_b11a_scores_and_obstacle`), so an unauthored person's pool is what it was
-    and the score he opposes with is the one he rolls. `harness/populated.py::build_realm` seats it under every
-    person's authored `stats:` (`cast_attributes`, ON since B11 lane A). It describes nobody: per-key values are
-    Jordan's content, and a lifepath or a draw over them is a design not taken here. [ASSUMPTION; medium; Jordan to
-    correct; revert: `build_realm(cast_attributes=False)`.] ⚠ A sweep applied AFTER the build (`harness/arms.py` hands a
-    built world a swept copy) does not reach a seated attribute, as it does not reach a lifepath key held at the
-    build's `pool_default`."""
-    from ...substrate.descriptors import ATTRIBUTES
-    return {key: int(pool_default) for key in ATTRIBUTES}
-
-
 def _load_lifepath_templates(cells: dict, lifepaths, vocations) -> dict:
     """`rosters.yaml: tables: lifepath_templates`, CLOSED BOTH WAYS against `rosters: lifepaths` (v10 CR-33): a row
     for every lifepath and for nothing else, each `holds:` entry a `verb_capability` value (a vocation), each row

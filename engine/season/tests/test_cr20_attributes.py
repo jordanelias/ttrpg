@@ -220,17 +220,24 @@ def test_the_creation_sheet_carries_the_attributes_as_a_read_only_copy():
 
 def test_the_realm_reads_the_cast_stats_only_on_the_arm_that_is_switched_on():
     """`cast_attributes=False` (the control) leaves every person with no attribute; `True` (SHIPPED since B11 lane A)
-    seats `data/rosters.py::unauthored_attributes` (`pool_default` on every key) on every person and the one row the
-    registry authors (NPC-001, Edeyja) over it. The event-list and hash readings of the two arms are in `build_realm`'s
-    docstring and the CR-20 and B11 lane A commit bodies."""
+    seats the sheet `state/carriers.py::generated_attributes` draws (B01a.01) on every person and the one row the
+    registry authors (NPC-001, Edeyja) over it, key by key. The event-list and hash readings of the two arms are in
+    `build_realm`'s docstring and the CR-20 and B11 lane A commit bodies."""
     from engine.season.harness import populated as PO
-    from engine.season.data.rosters import unauthored_attributes
+    from engine.season.state.carriers import generated_attributes
     off = PO.build_realm(0, cast_attributes=False)
     assert not [p.id for p in off.persons.values() if p.attributes]
     on = PO.build_realm(0)
-    UNAUTHORED_ATTRIBUTES = unauthored_attributes(on.fixtures.get("pool_default"))
-    assert [p.id for p in on.persons.values() if p.attributes != UNAUTHORED_ATTRIBUTES] == ["p_npc_001"]
-    assert on.persons["p_npc_001"].attributes == {**UNAUTHORED_ATTRIBUTES, **cast.attributes_of(cast.row("NPC-001"))}
+    span = on.fixtures.get("generated_attribute_range")
+    checked = 0
+    for pid, p in on.persons.items():
+        drawn = generated_attributes(0, pid, span)
+        if pid == "p_npc_001":
+            assert p.attributes == {**drawn, **cast.attributes_of(cast.row("NPC-001"))}
+        else:
+            assert p.attributes == drawn, pid
+        checked += 1
+    assert checked == len(on.persons) and checked > 1
 
 
 # ======================================================================================

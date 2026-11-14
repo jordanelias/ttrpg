@@ -1,8 +1,8 @@
 """B11 lane A -- PERSONS HOLD SCORES, AND THE SOCIAL ROLL'S OBSTACLE IS THE TASK'S DIFFICULTY PLUS ITS NAMED MODIFIERS.
 
-  (3) `build_realm` seats `data/rosters.py::unauthored_attributes` (`pool_default` on every attribute key, read off the
-      realm's fixtures) under every person's authored `stats:` (`cast_attributes` ships on), so every person holds a score
-      on every vocation's attribute.
+  (3) `build_realm` seats the sheet `state/carriers.py::generated_attributes` draws (B01a.01; B01 seated `pool_default` on
+      every key) under every person's authored `stats:` (`cast_attributes` ships on), so every person holds a score on
+      every vocation's attribute. Its tests moved to `test_b01a_generated_attributes.py`.
   (4) one score, two roles (`10_DICE_one_score_two_roles.md`): `seam/wrappers/pool.py::score` is the base of a person's
       pool and the score his opponent's obstacle halves (`sigma.py::_opposition_of`), so `obstacle_default` never stands in
       for a person. `modules/social_contest/roll.py::obstacle_terms` composes Ob = the task's difficulty
@@ -38,13 +38,15 @@ POST = {0: "ad4dad1d9758e343329a7b9b90fbdb46", 1: "056bff314ba696f54e8ff21212057
 
 def revert_b11a_scores(monkeypatch) -> None:
     """THIS ITEM AT ITS REVERT, for the life of one test: the obstacle composed as before (`obstacle_model: stand_in`) and
-    no attribute seated (the bundle and the cast's `stats:` read as empty, which `cast_attributes=False` writes). A test
-    pinning an earlier hash calls it."""
+    no attribute seated (`generated_attribute_range` None and the cast's `stats:` read as empty, which
+    `cast_attributes=False` writes). A test pinning an earlier hash calls it."""
     monkeypatch.setitem(DEFAULT_FIXTURES._v, "obstacle_model", "stand_in")
     # an earlier item's revert may have swept `populated`'s fixtures into a copy: switch that copy IN PLACE, so a later revert
     # in the same chain that edits the copy (or the original) keeps this switch
     monkeypatch.setitem(populated.DEFAULT_FIXTURES._v, "obstacle_model", "stand_in")
-    monkeypatch.setattr(populated, "unauthored_attributes", lambda pool_default: {})
+    # the `None` point of `generated_attribute_range` is the earlier no-seating world (B01a.01, H-856)
+    monkeypatch.setitem(DEFAULT_FIXTURES._v, "generated_attribute_range", None)
+    monkeypatch.setitem(populated.DEFAULT_FIXTURES._v, "generated_attribute_range", None)
     monkeypatch.setattr(cast, "attributes_of", lambda r: {})
     for verb in ("interrogate", "arrest", "determine"):          # the three `verb_capability` rows (one dict, read by name)
         monkeypatch.delitem(R.VERB_CAPABILITY, verb)
@@ -79,33 +81,7 @@ def _legacy(inp) -> float:
     return min(ob, cap)
 
 
-# ---- (3) the bundle --------------------------------------------------------------------------------------------
-
-def test_the_bundle_is_the_ten_attributes_at_pool_default():
-    from engine.substrate.descriptors import ATTRIBUTES
-    shipped = R.unauthored_attributes(DEFAULT_FIXTURES.get("pool_default"))
-    assert list(shipped) == list(ATTRIBUTES) and set(shipped.values()) == {DEFAULT_FIXTURES.get("pool_default")}
-
-
-def test_every_realm_person_holds_every_attribute_and_an_authored_one_wins():
-    w = build_realm(0)
-    bundle = R.unauthored_attributes(w.fixtures.get("pool_default"))
-    assert all(set(p.attributes) == set(bundle) for p in w.persons.values())
-    authored = [p for p in w.persons.values() if p.attributes != bundle]
-    assert authored, "no cast row's `stats:` reached a person over the bundle"
-
-
-def test_falsifier_a_realm_built_at_another_pool_default_seats_that_score(monkeypatch):
-    """`Fixtures pool_default` is the one owner of the untrained score (H-126): a realm built under another value seats
-    it on every key a cast row does not author, so a sweep of it is not silently inert where the bundle is seated."""
-    monkeypatch.setitem(populated.DEFAULT_FIXTURES._v, "pool_default", 3)
-    w = build_realm(0)
-    assert w.fixtures.get("pool_default") == 3
-    authored = cast.attributes_of(cast.row("NPC-001"))          # the one cast row whose `stats:` the registry authors
-    for p in w.persons.values():
-        held = {k: v for k, v in p.attributes.items() if not (p.id == "p_npc_001" and k in authored)}
-        assert held and set(held.values()) == {3}, (p.id, p.attributes)
-
+# ---- (3) the generated sheet: B01a.01's tests are `test_b01a_generated_attributes.py` -----------------------------
 
 # ---- (4) one score, two roles -----------------------------------------------------------------------------------
 

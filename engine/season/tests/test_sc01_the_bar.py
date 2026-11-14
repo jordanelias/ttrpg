@@ -182,7 +182,7 @@ DUKE, SEAT, PARTY, WANT = "p_high", "off_duke", "p_mid", "prop_bar_duke_want"
 # dates and determines nobody ("0 determined, 2 fired"). ATTRIBUTION, in process on this tree (scratch, not kept): with
 # `revert_b11a` and `revert_b11a_scores` applied stability/35/7 meets every assertion again (e5d27cd7...); with
 # `revert_b11a_scores` alone it misses as above, so the move is the reach's, not the obstacle's (this world is `tiny_world`,
-# which seats no unauthored bundle (`data/rosters.py::unauthored_attributes`), and `BAR_FIXTURES` reads the control obstacle). stability/95/7, lane A's own re-trace
+# which seats no drawn sheet (`state/carriers.py::generated_attributes`), and `BAR_FIXTURES` reads the control obstacle). stability/95/7, lane A's own re-trace
 # (its sweep: the 15 convictions at 7 seasons, seed blocks 0-160, stopped at the first hit), meets every assertion on this tree
 # (858b7a77...) and on the batch base. The bar is an existence claim on SELECTED seeds (above), not a rate.
 # [ASSUMPTION; medium; Jordan to correct; revert: restore stability/35/7 with `revert_b11a`.]
