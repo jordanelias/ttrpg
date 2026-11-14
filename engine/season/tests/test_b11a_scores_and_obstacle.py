@@ -33,9 +33,10 @@ from .test_sc01_obstacle_ceiling import _module
 #: `build_realm(s)` then one season, this commit's tree; PRE is the reach commit's (`test_b11a_duel_reach.POST`).
 #: Re-pinned in B01.02 on the rebased tree, PYTHONHASHSEED=0 (was the branch's 29a11c75... / 52e48937... / 5b948b83...,
 #: `1424aa7`'s world, discarded per C3-A2).
-#: B01a.99 re-pin (every person's attributes are drawn; a population change, not a balance claim): was ad4dad1d... /
-#: 056bff31... / 7f93eb25... (B01's close, `reading @cfd9aef`); read on the B01a closing tree, PYTHONHASHSEED=0.
-POST = {0: "94a2c8c886293896852900766bdb455f", 1: "c78cd6ffc80339ccb56ec4fc4c3c8d2f", 2: "2d9f88f0ab783b82a70178e58193c472"}
+#: B01a.99 re-pin (every person's attributes are drawn, Spirit its own group; a population change, not a balance
+#: claim): was ad4dad1d... / 056bff31... / 7f93eb25... (B01's close, `reading @cfd9aef`); read on the B01a closing
+#: tree, PYTHONHASHSEED=0 (the WIP checkpoint's 94a2c8c8... / c78cd6ff... / 2d9f88f0... drew `will` under `attr.mind`).
+POST = {0: "f5b7393a83d8a2fc097d0414254d2eee", 1: "e873b9cd5adb66509eed655db8145351", 2: "c4a7199821d5a71e2beeb18c7dd61f06"}
 
 
 def revert_b11a_scores(monkeypatch) -> None:

@@ -549,9 +549,12 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # (14292, beed82fc...), [2] (40479, 69f85c16...) -> (39138, 4694dc76...); STEP_OFF_ONE_SEASON ceecb001... / (13613, d7faa3f5...)
 # -> f8e28651... / (13382, 383281be...); THREAD_READ_WITHHELD_EVENTS_1 (14502, 4cd0edad...) -> (14276, 23047403...). Read at
 # PYTHONHASHSEED=0. The `give`-withheld control (the shipped arm equals BASE_HASHES[1] / BASE_EVENTS[1]) holds on the new values.
-BASE_HASHES = {0: "03a79b0f76b7a91f09babd18f246be88",   # B01 re-pin (B11 lane A, both commits rebased): was 600d8b2...; CP-T03-07: was 7266f56b...
-               1: "5cf205c09f80fd63937d82fc363c2f8a",   # B01 re-pin (B11 lane A, both commits rebased): was 2566061...; B10-13 pin commit: was d4c83c8c...; CP-T03-08: was eb2919ae...; CP-T03-07: was b2dde1fc...; CP-T03-04: was 20accb03...
-               2: "e48c7146755966fe9764d94b035e6be7"}   # B01 re-pin (B11 lane A, both commits rebased): was 27d8e86...; B10-13 pin commit: was a350161b...; CP-T03-08: was 4ec8a812...; CP-T03-07: was ae8e79a8...; CP-T03-04: was 31811193...
+# B01a.99, Spirit its own group (`will` redrawn; the key is in the draw stream): the HASHES of the paragraph above moved again
+# and no event count or digest did: BASE_HASHES 03a79b0f... / 5cf205c0... / e48c7146... -> 7a1d4d24... / 0af3fb89... /
+# a368f40e...; STEP_OFF_ONE_SEASON f8e28651... -> fafc1d89... (its (13382, 383281be...) stands).
+BASE_HASHES = {0: "7a1d4d24b3e46d8428744cd1d78cd590",   # B01 re-pin (B11 lane A, both commits rebased): was 600d8b2...; CP-T03-07: was 7266f56b...
+               1: "0af3fb898841c6d1f98b0cb9a518d1b6",   # B01 re-pin (B11 lane A, both commits rebased): was 2566061...; B10-13 pin commit: was d4c83c8c...; CP-T03-08: was eb2919ae...; CP-T03-07: was b2dde1fc...; CP-T03-04: was 20accb03...
+               2: "a368f40eaa24d7117148f7ac4e3affd3"}   # B01 re-pin (B11 lane A, both commits rebased): was 27d8e86...; B10-13 pin commit: was a350161b...; CP-T03-08: was 4ec8a812...; CP-T03-07: was ae8e79a8...; CP-T03-04: was 31811193...
 
 # THE ONE-SEASON PIN WITH CR-81'S STEP OFF (`build_realm(0, acquaintances=False)`: the hash and the event count and digest
 # `BASE_HASHES[1]` / `BASE_EVENTS[1]` held before CR-81). The `give`-withheld arm's control, below.
@@ -572,7 +575,7 @@ BASE_HASHES = {0: "03a79b0f76b7a91f09babd18f246be88",   # B01 re-pin (B11 lane A
 # RE-PINNED ONCE at v10 CR-33 (NPC-088 holds `inquiry`, a Person repr): 4cb09ae3... -> 8aa6e2e7...; the event count and digest do not move.
 # RE-PINNED ONCE at the CR-33 verify pass (NPC-004 holds `inquiry`): 8aa6e2e7... -> d2152860...; the event count and digest do not move.
 # RE-PINNED ONCE at v10 PC-10b (see `BASE_HASHES`): 81aa6671... / (11401, 2275e41e...) -> 63129abb... / (11496, 24d897bb...).
-STEP_OFF_ONE_SEASON = ("f8e28651dc4497cab4e6a0cd9e494c4c",     # B01 re-pin (B11 lane A, both commits rebased): was 9ec591a...; B10-13 pin commit: was bb148d0e... / (11035, 8d00c148...); CP-T03-08: was 2e942f16... / (11206, f5947315...); CP-T03-07: was 1660aedc...; CP-T03-04: was 9b62c4cc... / (10954, 44f3aa68...); CR-87: was 63129abb... / (11496, 24d897bb...)
+STEP_OFF_ONE_SEASON = ("fafc1d89f977d9ba2ee72659bc841299",     # B01 re-pin (B11 lane A, both commits rebased): was 9ec591a...; B10-13 pin commit: was bb148d0e... / (11035, 8d00c148...); CP-T03-08: was 2e942f16... / (11206, f5947315...); CP-T03-07: was 1660aedc...; CP-T03-04: was 9b62c4cc... / (10954, 44f3aa68...); CR-87: was 63129abb... / (11496, 24d897bb...)
                        (13382, "383281beddeaf680d3b606dd7c593e2c33a5289d89caf6f70aaf2adcfe9c3c57"))   # B01 re-pin (B11 lane A, both commits rebased): was (10770, 93c4830d...)
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its

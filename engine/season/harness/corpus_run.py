@@ -1034,22 +1034,24 @@ def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
     # from a second walk: the ledgers are this world's and the report is the corpus's.
     # ⚠ ONE WALK OVER THE LEDGERS, NOT THREE. `sources`, `told_holders` and `told_redeposits`
     # were three independent `for p_ in w.persons.values(): for c in p_.ledger` passes over the
-    # same pairs, run once per corpus case (up to 143 a run). The redeposit count still needs
-    # `own` complete before it can test membership, so it keeps its own second pass over THAT
-    # person's ledger — which is per-person and bounded by `ledger_cap`, not a third world walk.
+    # same pairs, run once per corpus case (up to 143 a run). The redeposit count reads each person's
+    # ledger IN ORDER (appended in deposit order): a `told_by` claim is a redeposit only if its
+    # triple is already held untold EARLIER in the ledger, which is what the deposit-time guard in
+    # `loop/witness.py` forbids. B01a.99: counted against the whole ledger it also counted a told claim
+    # whose holder SAW the same thing later (EMG-C3, drawn sheets: told at `when` 2, firsthand at 3 and 5,
+    # ledger indices 185 < 265), which no guard can prevent and which is no belief stored twice at deposit.
     sources, told_holders, told_redeposits = Counter(), 0, 0
     for p_ in w.persons.values():
-        own, told_here, holds_told = set(), [], False
+        own, holds_told = set(), False
         for c in p_.ledger:
             sources[c.source] += 1
             if c.source == "told_by":
                 holds_told = True
-                told_here.append(c)
+                if (c.subject, c.predicate, c.value) in own:
+                    told_redeposits += 1
             else:
                 own.add((c.subject, c.predicate, c.value))
         told_holders += 1 if holds_told else 0
-        told_redeposits += sum(1 for c in told_here
-                               if (c.subject, c.predicate, c.value) in own)
     # ⚠ THE REDEPOSIT COUNT IS THE ONE THAT CAUGHT A REAL DEFECT, so it is reported rather than
     # left to a probe. A `told_by` claim whose triple the hearer ALREADY HOLDS firsthand is one
     # belief stored twice — it tells them nothing and takes a `ledger_cap` slot from a claim that
