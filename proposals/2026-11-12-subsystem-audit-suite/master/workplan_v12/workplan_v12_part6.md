@@ -22,7 +22,7 @@ Every before-reading is the previous close's after-reading, quoted `reading @<sh
 INVOCATION: /methodology-execute Batch B03g-go-early-landings
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_GO.md, Open table
 GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
-GATE: Batch B01-laneA
+GATE: Batch B01-laneA @cfd9aefb049c2fe49b55c7ada1b0b624919af23d
 GATE: Batch B02-tests
 GATE: Batch B03-hygiene
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`workplan_v12.md` §3.B, "the hash reading") (until B03c's builder move merges, `from engine.season.harness.populated import build_realm` in its place).
@@ -163,7 +163,7 @@ Placement (`V12_STRUCTURE_part2.md` §5.6): the four entries sit under the intak
 INVOCATION: /methodology-execute Batch B03c-boot
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_IN.md, Open table
 GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
-GATE: Batch B01-laneA
+GATE: Batch B01-laneA @cfd9aefb049c2fe49b55c7ada1b0b624919af23d
 GATE: Batch B02-tests
 GATE: Batch B03-hygiene
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`workplan_v12.md` §3.B, "the hash reading") (until B03c's builder move merges, `from engine.season.harness.populated import build_realm` in its place).
@@ -261,7 +261,7 @@ EST: 3.7 h [estimate: §2.4's formula over three positions (0.4 h × 3 + 2.5 h),
 INVOCATION: /methodology-execute Batch B16L-mb-words
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_MB.md, Open table
 GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
-GATE: Batch B01-laneA
+GATE: Batch B01-laneA @cfd9aefb049c2fe49b55c7ada1b0b624919af23d
 GATE: Batch B02-tests
 GATE: Batch B03-hygiene
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`workplan_v12.md` §3.B, "the hash reading") (until B03c's builder move merges, `from engine.season.harness.populated import build_realm` in its place).

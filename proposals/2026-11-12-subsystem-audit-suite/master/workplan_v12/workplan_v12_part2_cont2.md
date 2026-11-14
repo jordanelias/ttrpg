@@ -498,7 +498,6 @@ Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them
 
 | batch | lane | ED block (declared + spare) | H block (declared + spare) | against H1 §12 |
 |---|---|---|---|---|
-| B01-laneA | IN | ED-IN-0367..0368 (0+2) | H-368..H-373 (1+5) | ED shifted |
 | B02-tests | IN | ED-IN-0369..0370 (0+2) | H-374..H-378 (0+5) | ED shifted |
 | B03-hygiene | IN | ED-IN-0371..0372 (0+2) | H-379..H-383 (0+5) | ED shifted |
 | B03g-go-early-landings | GO | ED-GO-0003..0004 (0+2) | H-384..H-388 (0+5) | same |

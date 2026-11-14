@@ -10,7 +10,7 @@ The head of the part before this one (its Status, Written-against, Words, Paths 
 INVOCATION: /methodology-execute Batch B03a-prose
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_IN.md, Open table
 GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
-GATE: Batch B01-laneA
+GATE: Batch B01-laneA @cfd9aefb049c2fe49b55c7ada1b0b624919af23d
 GATE: Batch B02-tests
 GATE: Batch B03-hygiene
 GATE: Batch B03c-boot
@@ -131,7 +131,7 @@ EST: 3.7 h [estimate: §2.4's formula over three positions (0.4 h × 3 + 2.5 h),
 INVOCATION: /methodology-execute Batch B13-pc-package
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_PC.md, Open table
 GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
-GATE: Batch B01-laneA
+GATE: Batch B01-laneA @cfd9aefb049c2fe49b55c7ada1b0b624919af23d
 GATE: Batch B02-tests
 GATE: Batch B03-hygiene
 GATE: Batch B03a-prose

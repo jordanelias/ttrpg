@@ -18,7 +18,7 @@
 INVOCATION: /methodology-execute Batch B33-inst-economy-hands
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_FA.md, Open table
 GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
-GATE: Batch B01-laneA
+GATE: Batch B01-laneA @cfd9aefb049c2fe49b55c7ada1b0b624919af23d
 GATE: Batch B02-tests
 GATE: Batch B04-capability-home
 GATE: Batch B05-one-roll

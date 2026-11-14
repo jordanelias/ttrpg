@@ -369,7 +369,6 @@ No engine version is asserted anywhere in v12 (ED-GO-0002 is the owner).
 
 | batch | lane | ED block (declared + spare) | H block (declared + spare) |
 |---|---|---|---|
-| B01-laneA | IN | ED-IN-0367..0368 (0+2) | H-368..H-373 (1+5) |
 | B02-tests | IN | ED-IN-0369..0370 (0+2) | H-374..H-378 (0+5) |
 | B03-hygiene | IN | ED-IN-0371..0372 (0+2) | H-379..H-383 (0+5) |
 | B03g-go-early-landings | GO | ED-GO-0003..0004 (0+2) | H-384..H-388 (0+5) |
@@ -466,7 +465,6 @@ Each is also stated where it is invoked (the batch block's lines, the item's fie
 
 | batch | file(s) under `master/workplan_v12/` |
 |---|---|
-| B01-laneA | `workplan_v12_part3.md` |
 | B02-tests | `workplan_v12_part3.md`, `_part3_cont.md` |
 | B03-hygiene | `workplan_v12_part4.md`, `_part4_cont.md`, `_part5.md`, `_part5_cont.md` |
 | B03g-go-early-landings, B03c-boot, B16L-mb-words | `workplan_v12_part6.md` |
