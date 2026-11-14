@@ -159,7 +159,7 @@ def social_pairs(seed: int, n: int, verb: str, plant: Plant = None):
             band = REFUSED
         else:
             settled = settle_record(margin.net, inp.leverage, inp.pool, margin.ob, rng.random)
-            band = degree_of(dict(net=margin.net, ob=margin.ob, settled_margin=settled))
+            band = degree_of({"net": margin.net, "ob": margin.ob, "settled_margin": settled})
         opposition = inp.obstacle_default if inp.opposition is None else inp.opposition
         yield SocialPair(i, a, b, inp.pool - opposition, inp, band)
 
