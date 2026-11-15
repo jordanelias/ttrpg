@@ -36,6 +36,6 @@ A row naming a quarantined `.designs/` document gives its **bare filename only**
 | **Narrative engine** | `engine/season/harness/` — `storybar.py`, `chronicle.py`, `strife.py`, `arc.py` (readings over the log, never carriers: ED-IN-0225); design intent `proposals/2026-11-04-strife-flows/00_MASTER.md` | ED-IN-0011 (history); ED-IN-0232; `registers/handoffs/HANDOFF_WR.md` |
 | **Dice / resolution** | in code: `engine/dice_engine/dice_engine.py` (`degree_from_net`) | prose tables EVACUATED (fork ref `c451bcb`); the capture `engine/engine_params/params_tables.yaml` was retired (`FORK:` row) — not the formula |
 | **Board game** | EVACUATED (fork ref `c451bcb`); the capture `engine/engine_params/params_tables.yaml` was retired (`FORK:` row) | — |
-| **Godot conversion** | `godot/godot_conversion_strategy_v1.md` — PROPOSED | ED-GO-0001; ED-GO-0002 (the engine version); `registers/handoffs/HANDOFF_GO.md` |
+| **Godot conversion** | `architecture/meta/04_CODE_ARCHITECTURE.md` §C.12 (RATIFIED, the Godot mapping); the port gate: batch `B41-go-port-gate` of the active master workplan; `godot/godot_conversion_strategy_v1.md` — PROPOSED, intent only | ED-GO-0001; ED-GO-0002 (the engine version); `registers/handoffs/HANDOFF_GO.md` |
 | **Campaign driver** | ⛔ RETIRED — `FORK:5c5d8ec6` (`engine/mc_v18.py`, deleted at plan position `28-iii`); the head is `engine/season/` | ED-IN-0226, ED-IN-0227 |
 | **Decision policy** | `decision_policy_v1.md` — DRAFT FOR RULING | ED-IN-0113 |

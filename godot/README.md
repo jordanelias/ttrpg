@@ -2,7 +2,7 @@
 
 Consolidated (ED-IN-0071 P2, 2026-07-16) from three former homes — `designs/godot/`,
 `designs/videogame/`, and `designs/audit/2026-06-10-godot-conversion-strategy/` — into this
-single top-level primary. It **is** the eventual `res://` project root. See `CLAUDE.md §6` for the
+single top-level primary. The Godot project is `jordanelias/valoria-game`, a separate repository; this directory holds design reference for the port and no project files. See `CLAUDE.md §6` for the
 state-of-the-bridge (the conversion is **PROPOSED and largely un-executed**). Old paths alias via
 `references/restructure_ledger.md`.
 

@@ -195,6 +195,7 @@ derived score, choice score).
 | **reading** | a measurement a named instrument prints | `engine/season/requirements.yaml`'s `reading:` record on a conjunct; `register.py::check_requirements` | the key keeps its name | — |
 | **pin** | a recorded hash a test compares | `engine/season/tests/_realm_goldens.py` (P) | "golden" (allowed as the tree's process word, CLAUDE.md §7; it is software jargon with no ordinary sense, so new prose says "pin" and keeps "golden" for file and test names) | — |
 | **mover** | an edit declared to change seeded results | — | — | — |
+| **fidelity parity** / **port parity** | fidelity parity: a played subsystem against its auto-resolved form (ED-SC-0013); port parity: the Godot port against the Python oracle, by `(key, n) → u` vectors and `content_hash` | — (coined by `11_GO_pointer_and_stale_text_resolutions` item 13; CLAUDE.md §4) | bare "parity" in new text, which a reader cannot place | new suite and plan text; no retrofit |
 | **Layer** | always numbered and capitalised (Layer 0, Layer 1, Layer 2) | CLAUDE.md (RULED) | "layer" for an epistemic or narrative layer in code keeps its lower case and its qualifier | — |
 | **loop** | the season loop | CLAUDE.md | the apparatus pathology is "the apparatus loop", never bare (VOC's measured collision) | — |
 | **roll / draw / check / test** | see §A | — | "test" only for a pytest test | `07_SE_*`, `16_PESSIMIST_SE_A` |
