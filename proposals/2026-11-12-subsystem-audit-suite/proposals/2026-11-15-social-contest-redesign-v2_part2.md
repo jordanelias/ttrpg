@@ -143,14 +143,17 @@ k        = clamp(content[g] + rite.reason_lean - crowd_lean x crowd, 0, 1)      
 pool     = heard(V) x pool_of(weighted_tenth((V.reason, V.presence), (k, 1-k)) + V.rank)
 heard(V) = clamp(1 - heard_step x max(0, (1 + 6 x crowd) - V.presence), heard_floor, 1)      # Presence: heard as assured
 relevance(V) = 2 (V.reason - floor) / (ceiling - floor)                                      # Reason: content to the point; 1 at mid
-sigma_h  = level(fit_level) x era[g] x (fit(h, V, s, g, i, frame, relevance) - repeat_step x uses) x q(h, g)
-         + esteem_step x esteem(V) x 2 (1 - elab(h))                                         # Grace; standing weighs less with the able
-         + relevance(V) x level(answer_level)  if the speech answers what stands
+sound_h  = 1 + 2 validation(h) x (relevance(V) - 1)                                          # A-144: what of its soundness HE can tell
+sigma_h  = level(fit_level) x era[g] x (fit(h, V, s, g, i, frame, sound_h) - repeat_step x uses)
+         + esteem_step x esteem(V) x 2 (1 - validation(h))                                   # Grace; standing weighs less with one who can validate
+         + sound_h x level(answer_level)  if the speech answers what stands
 ob_h     = even + opposed_ob(h.will + h.rank) + weary(V) + gap(V)  [+ difficulty + stakes in the abridged form]
 margin_h = roll_net_continuous(pool) + net_boost(sigma_h, pool) - ob_h
-         - off_step x wF(h) x off  -  ploy_step x wA(h) x insincerity                        # R12 Focus, Attunement
+         - off_step x wF(h) x off  -  ploy_step x wA(h) x tell(V)                            # A-144 Focus, Attunement
+awe(V)   = awe_step x mean over those who decide of max(0, (d.presence - mid)/3 + (d.power - V.power)/power_scale - (V.will - mid)/3)
+tell(V)  = min(1, insincerity + comfort_step x min(1, V.strain + 0.5 x V.rattles))
 esteem(V) = short(the man opposite) - short(V);  short(p) = max(0, rite.standard + show x p.rattles - p.grace)
-weary(V)  = weary_step x max(0, V.spent - (stay_base + stay_per_will x V.will))              # Will: keep arguing
+weary(V)  = weary_step x max(0, V.spent - (stay_base + stay_per_will x V.will - awe(V)))     # Will: keep arguing; the bench's awe shortens it
 gap(V)    = gap_step x max(0, power(the other side) - power(V)) x (1 - (V.reason - floor) / (ceiling - floor))   # Reason: accounts for it
 ```
 
@@ -172,29 +175,29 @@ gap(V)    = gap_step x max(0, power(the other side) - power(V)) x (1 - (V.reason
   max(0, pull - (roll_net_continuous(pool_of(V.focus)) - even))`; `off = drift + evade` where he turned away.
 - **Against his grain.** `strain += grain_strain x insincerity`.
 
-### C.3 What each listener brings (R12)
+### C.3 The adjudicator's five (A-144, later than R12 and governing; a listener who does not decide reads the first three the same way)
 
-| his attribute | Jordan's word | the one operand, in his own track |
+| his | Jordan's words | the one operand |
 |---|---|---|
-| Reason | *"to see if argument/speech makes sense"* | `elab = clamp(0.5 + sense_step (reason - mid) + involve x max|stake| - crowd_lean x crowd, 0, 1)`; `q(h, g) = 2 elab` on a reasoned ground (`content >= 0.5`), `2 (1 - elab)` on a mannered one, and the speaker's esteem counts `2 (1 - elab)`: a **weight**, so that for an able and involved listener the quality of the case decides and manner and standing do not (ELM, `NP:62`) |
-| Focus | *"to see if it's relevant"* | `wF = (focus - floor) / (mid - floor)`: how much of a speech's drift or evasion he deducts |
-| Attunement | *"to see if it's sincere or a ploy"* | `wA = (attunement - floor) / (mid - floor)`: how much of its insincerity he deducts, on an argument and on a press made with something its holder knows false |
+| Reason: **validation** | *"how well the person can understand and dissect a participant's argument/speech, ie the ability to validate whether it is coherent and sound and good"* | `validation = clamp(0.5 + sense_step (reason - mid) + involve x max|stake| - crowd_lean x crowd, 0, 1)`: the share of a speech's true soundness (its speaker's `relevance`) that reaches his judgement (`sound_h`), the rest of his judgement falling on the speaker's standing (`esteem x 2 (1 - validation)`). A polished unsound speech takes in a judge who cannot validate and not one who can. It replaced the weighting by ground class (`q`), which is deleted |
+| Focus: **the relevance filter** | *"not being distracted or misled by participants' acts ... only hold relevant information ... not being swayed by irrelevant things"* | `wF = (focus - floor)/(mid - floor)`, 0 to 2: he deducts what is off the point (drift, evasion, silence under a charge) by `wF`, and the theatre that proves nothing about the merits (a rattle's effect on the room, a failed press's embarrassment) reaches him by `2 - wF` |
+| Attunement: **perception of the participant** | *"perceive the comfort/discomfort and sincerity/insincerity and so forth of a participant"* | `wA = (attunement - floor)/(mid - floor)` on `tell`: the participant's insincerity (what he knows and holds against what he says) and his discomfort (strain, rattles); a played adjudicator is shown each participant's `tell` scaled by his own Attunement |
+| Presence and seat: **intimidation** | *"how intimidating they are to the participants and consequently how confident and composed the participants are"* | `awe`: it acts on the PARTICIPANT's confidence and composure, by how far the adjudicators' Presence and station exceed his own station and Will: his staying power is shorter by it (he tires sooner) and a press on him meets less (he is easier to rattle). It is not an obstacle on his speeches (a first build made it one, and speaking before any bench then moved the room toward the other side: F7 again; changed in this pass). Distinct from `gap` (the other SIDE's circumstances, answered by Reason) |
+| Grace: **reception** | *"how well their decisions are received by audience and in game world"*; *"an otherwise perfect adjudicator who has little grace will have their verdicts seen as those of a brute whose station outstrips their respectability"* | in the fold, not in the sitting: `brute = max(0, power - (grace - floor)) / 6`; `reception = 1 - brute`. Whether the verdict was right and how it is received are two axes (§J) |
 | Will | (R1) | the opposition to whatever is aimed at him |
 
-No draw is taken for the three. Each reads slope exactly 0 with its own setting off and the sign the ruling gives
-with it on, in a full trial (part 3 §B). **Decided (rung 5):** the ploy is carried by `insincerity` on `argue` and
-`press`; `deceive` and `divert` are not restored, because a lie is an argument its speaker knows false (the host
-gives it its item from his own false claim, `person_q.lie_said_of`) and being pulled off the point is what a
-landed press and a heckling room already do (R1 Focus) and what turning away prices (R12 Focus).
+No draw is taken for any of them. **Decided (rung 5):** the ploy is carried by `tell` on `argue` and `press`;
+`deceive` and `divert` are not restored (a lie is an argument its speaker knows false, its item his own false
+claim; being pulled off the point is what a landed press and a heckling room do, and turning away prices it).
 
 ### C.4 The press and the rattle
 
 ```
 sigma  = level(fit_level) x era[g] x aim(T, g, i) + room_level x heat(T) + esteem_step x esteem(V)
-ob     = even + opposed_ob(max(0, T.will + T.rank - T.strain / 0.4)) + weary(V) + gap(V) + press_ob
+ob     = even + opposed_ob(max(0, T.will + T.rank - (T.strain + awe(T)) / 0.4)) + weary(V) + gap(V) + press_ob
 margin = roll_net_continuous(pool) + net_boost(sigma, pool) - ob
 landed (margin >= 0):  T.rattles += 1, T.strain = 0, T.spent += 1, T is pulled on his next speech;
-                       each listener moves rattle_gain x (1 - reactance x T's earlier rattles) x (1 - max(0, bond(h, T)))
+                       each listener moves rattle_gain x (1 - reactance x T's earlier rattles) x (2 - wF(h)) x (1 - max(0, bond(h, T)))
 failed:                T.strain += wear; each listener moves `rebound` against the presser
 either:                less off_step x wF(h) x off, less ploy_step x wA(h) if it was made with a forged item
 ```
@@ -259,8 +262,8 @@ decides whether to give way (Jordan's own example, rung 3); what is then done wi
 separate step. `audience`: where the seat is the other party he speaks, presses and then decides (Jordan's
 example). `inquisition`: the accuser may sit. A speech never moves its own speaker's track: a party who decides is
 moved only by the other side, and a final concession by him puts his own track with the other side. **A played
-adjudicator** is a role: at the close he has `JudgeView(id, track, odds, points)` (his own mind, which he knows,
-and the points as they stood) and three choices: rule for, rule against, or leave it to his draw; how far a
+adjudicator** is a role: at the close he has `JudgeView(id, track, odds, points, tells)` (his own mind, which he
+knows; the points as they stood; what his Attunement perceives of each participant) and three choices: rule for, rule against, or leave it to his draw; how far a
 ruling departs from his own track is returned (`Outcome.ruled`) and deposited as a claim with everyone present.
 What he asks during the sitting (bench moves) is a `moves` cell the rows do not yet fill `[not modelled]`.
 
@@ -274,7 +277,7 @@ class View:                       # own values true; everything else perceived, 
     n: int; mover: str; side: str; issue: str; turns_left: int
     live_theirs: Optional[tuple]; live_own: Optional[tuple]     # (point, ground, item, perceived strength)
     options: tuple                # Option(move, ground, item, relation, ev, p, frame): perceived worth and chance
-    own: Cond; esteem: float; weary: float
+    own: Cond; esteem: float; weary: float; awe: float          # his standing, his weariness, how far the bench cows him
     visible: tuple                # each speaker's rattles
     mood: float; odds: float      # the room as he reads it; P(carried) on that reading before an ordinary bench
     intent: float                 # the perceived stake of the man opposite
@@ -371,6 +374,14 @@ legitimacy both ways, a strife eased or inflamed, an office contested, precedent
 | `ban` | a `ban` Tenure, office contested, precedent | the Tenure, legitimacy up | surety, adjourned | an acquittal, legitimacy down | adjourned |
 | `decree` | the decree, faction up, precedent, legitimacy up | the decree, faction up | adjourned | recorded defeated, faction down | adjourned |
 
+**Reception (A-144, the adjudicator's Grace).** For the presiding adjudicator of a drawn close the fold reads
+`brute` and `reception` (C.3) and whether his verdict went against his own track (a wrong ruling), and scales
+what the verdict does in the world: his faction's legitimacy `+0.1 reception - 0.4 brute` (doubled where wrong);
+compliance with the ruling `reception`; an appeal docketed with weight `brute` (doubled where wrong); each
+person present's regard for him `+0.1 reception - 0.2 brute`; his faction's standing `-0.2 brute`. An accurate
+verdict by a brute is resented; a wrong one by a gracious judge is accepted. A played and a simulated judge pay
+alike `[the five coefficients are ASSUMPTION; Jordan to correct]`.
+
 Every sitting also leaves, from the beats: the stage on the case file; to each present a claim of each rattle,
 item shown, concession, insincere speech an attuned man saw (`hypocrite`), a decider's partiality, a rigged forum,
 a played judge's ruling against the room; regard both ways (down toward a presser and toward a witness who stood
@@ -383,11 +394,11 @@ strife B33.
 
 ## K. The settings
 
-Forty-seven of the proceeding's own (the old design: 53 and three tables), each `[ASSUMPTION; Jordan to correct]`.
+Forty-nine of the proceeding's own (the old design: 53 and three tables), each `[ASSUMPTION; Jordan to correct]`.
 
 | group | settings (shipped) |
 |---|---|
-| the speech | `fit_level` strong; `answer_level` moderate; `repeat_step` 0.35; `sense_step` 0.15, `involve` 0.3; `esteem_step` 0.2 [a fifth of a level a point of Grace better than the other], `show` 1.0; `off_step` 1.0, `evade` 1.5; `ploy_step` 1.5, `grain_strain` 0.5; `heard_step` 0.05, `heard_floor` 0.5; `gap_step` 0.25; `weary_step` 0.5, `stay_base` 1.0, `stay_per_will` 0.5 [Will 4 argues three speeches fresh] |
+| the speech | `fit_level` strong; `answer_level` moderate; `repeat_step` 0.35; `sense_step` 0.15, `involve` 0.3; `esteem_step` 0.2 [a fifth of a level a point of Grace better than the other], `show` 1.0; `off_step` 1.0, `evade` 1.5; `ploy_step` 1.5, `grain_strain` 0.5; `heard_step` 0.05, `heard_floor` 0.5; `gap_step` 0.25; `weary_step` 0.5, `stay_base` 1.0, `stay_per_will` 0.5 [Will 4 argues three speeches fresh]; `awe_step` 1.0; `comfort_step` 0.5 |
 | the press | `press_ob` 1.25, `press_pull` 1.0, `rattle_pull` 0.5, `wear` 0.5, `rattle_gain` 1.5, `rebound` 1.0, `reactance` 0.75, `room_level` 0.5, `heckle` 1.0 |
 | conceding | `concede_step` 2.0, `consent_at` 2.5, `yield_track` 12 |
 | the room and the reading | `crowd_at` 12, `crowd_lean` 0.2, `mood_scale` 5, `read_scale` 1, `read_blur` 2, `read_noise` 0.3, `bias_step` 2, `relevance` on |

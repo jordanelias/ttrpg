@@ -37,7 +37,9 @@ and re-run (`checks_v3.py`, output `v3_out.txt`, n = 400 an arm unless stated). 
 Three later statements were folded in the same day and are rows A-141 to A-143: Attunement gauges the perceived
 worth of a contestant's choices; Attunement frames the speech on what the listener wants and holds; and the
 division of labour on a speech (Reason its content and stakes, Attunement its framing, Presence its delivery,
-Grace its conduct). Their checks are `checks_v4.py`, `checks_v5.py`, `checks_v6.py`.
+Grace its conduct). A-144 then gave the adjudicator his five (validation, the relevance filter, perception of the
+participant, intimidation, the reception of his verdicts). **One battery, `checks_v7.py`, re-measures every figure
+these files state on the current model** (output `v7_out.txt`; n = 400 an arm unless stated).
 
 Markers: `[ASSUMPTION; Jordan to correct]` on every shipped value; `[HOOK]` a carrier that is only proposed in the
 tree, named and not invented; `[UNVERIFIED]` a claim not opened or not run; **(rung n)** a decision taken by the
