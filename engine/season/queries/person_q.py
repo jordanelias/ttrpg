@@ -634,45 +634,9 @@ def opinion(p: Person, expected: dict, engaged: tuple, regarded: tuple, fx=None)
     return pursuit + affiliation + reg
 
 
-def violated_pursuits(p: Person, verb: str) -> tuple:
-    """WHICH OF `p`'s OWN PURSUITS AN ACT OF `verb` VIOLATES -- the per-element half of the scar
-    (IN-08 H3, `ED-IN-0261`'s scar model: a COUNT per element, accrued by WITNESSING).
-
-    A pursuit `e` that `p` holds (weight > 0) is violated when `Σ_axis projection[e][axis] ·
-    alignment(verb, axis) < 0` -- the verb leans against where the pursuit points. ⚠ THAT SIGN TEST
-    IS A CANDIDATE READING RECORDED FOR REVIEW, NOT A RULING (`workplans/valoria_master_workplan_v9_part5.md`,
-    IN-08 H3): no source states the violation predicate; this is the plainest one the two owned
-    tables admit. It composes on the two owners and copies neither: `data/pursuits.py::to_axes`
-    (pursuit -> axes, one owner) and `data/verbs.py::align` (the one binding the alignment sweep
-    rebinds). A verb with no celled axis violates nothing, by construction. Person-side, no World
-    (AX-2). Sorted, so a caller writing counts in this order writes a canonical dict.
-
-    NO PRODUCTION CALLER: `loop/resolve.py::_scar_witnesses` asks `elements_violated_by` once per act
-    and `broken_by` per person, which compose the same `_pursuits_violated_by` below. This wrapper
-    is the per-person reading kept for tests (`test_h11_affiliation_scar.py` asserts it equals
-    the production scar; `test_h3_scar_by_observation.py` computes its own), so a change to the sign test is made in `_pursuits_violated_by`."""
-    return _held(p.pursuits, _pursuits_violated_by(verb))
-
-
-def violated_affiliations(p: Person, verb: str) -> tuple:
-    """WHICH OF `p`'s OWN RELIGIOUS AFFILIATIONS AN ACT OF `verb` VIOLATES -- IN-08 H11, H3's
-    mechanism over the affiliation table (J-5's C4).
-
-    An affiliation `a` that `p` holds (intensity > 0) is violated when `data/affiliations.py::
-    engagement(verb, a) < 0`: the verb's cell for that affiliation, which is the shared column's
-    cell when the affiliation has none of its own (R-C4.1: the vow-shaped verbs engage every creed
-    alike). A sign test, as `violated_pursuits` is; the intensity does not enter it, because the
-    scar is a COUNT per element and an act is witnessed or not. It is `violated_pursuits`'
-    sibling and not a second scar path: `loop/resolve.py::_scar_witnesses` asks for both through
-    `elements_violated_by` + `broken_by` and writes once, so this wrapper has no production caller
-    (it is a test oracle, as `violated_pursuits` is). Person-side, no World (AX-2). Sorted, as
-    `violated_pursuits` is."""
-    return _held(p.conviction, _affiliations_violated_by(verb))
-
-
 def _pursuits_violated_by(verb: str) -> frozenset:
-    """The pursuits an act of `verb` violates, whoever holds them: `violated_pursuits`' sign test,
-    which reads only `(verb, element)`. The candidates are `data/verbs.py::PURSUIT_PROJECTION`'s
+    """The pursuits an act of `verb` violates, whoever holds them: `elements_violated_by`' pursuit
+    half, which reads only `(verb, element)`. The candidates are `data/verbs.py::PURSUIT_PROJECTION`'s
     keys, read through the module at call time so a rebound projection is what is asked; a pursuit
     the projection does not list projects to the zero vector and violates nothing."""
     row = {ax: _verbs.align(verb, ax) for ax in PURSUIT_AXES}
@@ -745,19 +709,37 @@ def argued_pursuits(hearer: Person, arguer: Person, degree, gain: float):
 
 def _affiliations_violated_by(verb: str) -> frozenset:
     """The rostered affiliations an act of `verb` violates, whoever holds them:
-    `violated_affiliations`' sign test, `engagement(verb, a) < 0`. The candidates are
+    `elements_violated_by`' affiliation half, `engagement(verb, a) < 0`. The candidates are
     `rosters.AFFILIATIONS`, the roster `data/affiliations.py::conviction_map` holds every
     `Person.conviction` key to."""
     return frozenset(a for a in AFFILIATIONS if engagement(verb, a) < 0)
 
 
 def elements_violated_by(verb: str) -> tuple:
-    """`(pursuits, affiliations)` an act of `verb` violates, as two frozensets -- the person-free
-    half of `violated_pursuits` and `violated_affiliations`. Whether an element is violated is a
-    property of `(verb, element)` alone, so `loop/resolve.py::_scar_witnesses` asks this once per
-    act and intersects each person's holdings with it (`broken_by`) instead of re-deriving the sign
-    test per person. Reads `ALIGNMENT` and `PURSUIT_PROJECTION` at call time: never cache it
-    across a sweep's rebind."""
+    """WHICH ELEMENTS AN ACT OF `verb` VIOLATES -- `(pursuits, affiliations)`, as two frozensets, the
+    person-free reading under the scar (IN-08 H3, `ED-IN-0261`'s scar model: a COUNT per element,
+    accrued by WITNESSING; H11 over the affiliation table, J-5's C4).
+
+    A pursuit `e` is violated when `Σ_axis projection[e][axis] · alignment(verb, axis) < 0` -- the
+    verb leans against where the pursuit points. ⚠ THAT SIGN TEST IS A CANDIDATE READING RECORDED FOR
+    REVIEW, NOT A RULING (`workplans/valoria_master_workplan_v9_part5.md`, IN-08 H3): no source states
+    the violation predicate; this is the plainest one the two owned tables admit. It composes on the
+    two owners and copies neither: `data/pursuits.py::to_axes` (pursuit -> axes, one owner) and
+    `data/verbs.py::align` (the one binding the alignment sweep rebinds). A verb with no celled axis
+    violates nothing, by construction.
+
+    An affiliation `a` is violated when `data/affiliations.py::engagement(verb, a) < 0`: the verb's
+    cell for that affiliation, which is the shared column's cell when the affiliation has none of
+    its own (R-C4.1: the vow-shaped verbs engage every creed alike). Both halves are a sign test:
+    the intensity or weight a person holds does not enter it, because the scar is a COUNT per element
+    and an act is witnessed or not.
+
+    Whether an element is violated is a property of `(verb, element)` alone, so
+    `loop/resolve.py::_scar_witnesses` asks this once per act and intersects each person's holdings
+    with it (`broken_by`) instead of re-deriving the sign test per person; a change to either sign
+    test is made in `_pursuits_violated_by` or `_affiliations_violated_by`. Person-side, no World
+    (AX-2). Reads `ALIGNMENT` and `PURSUIT_PROJECTION` at call time: never cache it across a sweep's
+    rebind."""
     return _pursuits_violated_by(verb), _affiliations_violated_by(verb)
 
 
@@ -769,8 +751,8 @@ def _held(weights, violated: frozenset) -> tuple:
 
 def broken_by(p: Person, violated: tuple) -> tuple:
     """The elements `p` holds that `violated` (an `elements_violated_by` answer) names: the held
-    pursuits, then the held affiliations, each sorted -- `violated_pursuits(p, verb) +
-    violated_affiliations(p, verb)` without re-asking the sign test."""
+    pursuits, then the held affiliations, each sorted. "Held" is `_held`'s sense (a weight above
+    zero); the sign test is not re-asked, `violated` already carries it."""
     pursuits, affiliations = violated
     return _held(p.pursuits, pursuits) + _held(p.conviction, affiliations)
 

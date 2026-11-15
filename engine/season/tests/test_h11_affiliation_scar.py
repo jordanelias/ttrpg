@@ -29,7 +29,7 @@ from engine.season.epistemic import observers_for
 from engine.season.gaps import Forbidden, Unspecified
 from engine.season.harness import probes as P
 from engine.season.loop.driver import SeasonDriver, mint_token
-from engine.season.queries.person_q import said_of, violated_affiliations, violated_pursuits
+from engine.season.queries.person_q import broken_by, elements_violated_by, said_of
 from engine.season.seam import Resolution
 from engine.season.state.carriers import Act, Claim, Person, Tenure
 from engine.substrate.descriptors import AFFILIATION_CEILING
@@ -69,16 +69,16 @@ def test_h11_shipped_table_loads_and_its_sign_test_reads_both_clauses():
     assert neg, "the shared column has no negative cell; the scar can read nothing from it"
     everyone = Person(id="h11_all", conviction={a: 1 for a in _ROSTER})
     for verb in neg:
-        assert violated_affiliations(everyone, verb) == tuple(_ROSTER), verb
+        assert broken_by(everyone, (frozenset(), elements_violated_by(verb)[1])) == tuple(_ROSTER), verb
     exceptions = {(col, v): x for col, row in A.ENGAGEMENT.items() if col != A.SHARED_COLUMN
                   for v, x in row.items()}
     assert exceptions, "no per-affiliation cell loaded; R-C4.2 is not in the table"
     for (col, verb), x in exceptions.items():
-        assert (col in violated_affiliations(everyone, verb)) is (x < 0), (col, verb, x)
+        assert (col in broken_by(everyone, (frozenset(), elements_violated_by(verb)[1]))) is (x < 0), (col, verb, x)
     nobody = Person(id="h11_none", conviction={})
-    assert not any(violated_affiliations(nobody, v) for v in VERB_TABLE)
+    assert not any(broken_by(nobody, (frozenset(), elements_violated_by(v)[1])) for v in VERB_TABLE)
     positive = [v for v, x in A.ENGAGEMENT[A.SHARED_COLUMN].items() if x > 0]
-    assert positive and not any(violated_affiliations(everyone, v) for v in positive)
+    assert positive and not any(broken_by(everyone, (frozenset(), elements_violated_by(v)[1])) for v in positive)
 
 
 # ------------------------------------------------------------------------- the falsifier, planted
@@ -106,9 +106,9 @@ def test_h11_an_observed_violation_scars_each_observer_on_his_violated_holdings(
     assert scars, f"{mode}: nobody was scarred, so the assertions below are vacuous"
     assert set(scars) <= seen, f"{mode}: scarred {sorted(set(scars) - seen)}, who did not observe"
     for pid in seen:
-        want = violated_affiliations(w.persons[pid], "fight")
+        want = broken_by(w.persons[pid], (frozenset(), elements_violated_by("fight")[1]))
         assert want == tuple(_STRAINED)
-        assert not violated_pursuits(w.persons[pid], "fight")
+        assert not broken_by(w.persons[pid], (elements_violated_by("fight")[0], frozenset()))
         assert scars.get(pid) == {a: 1 for a in want}, (pid, scars.get(pid))
     if mode != "total":
         unseen = set(w.persons) - seen
@@ -138,7 +138,7 @@ def test_h11_a_failure_band_scars_nobody_on_an_affiliation(monkeypatch):
     monkeypatch.setattr(A, "ENGAGEMENT",
                         _rebound(**{A.SHARED_COLUMN: {"tell": -0.3, "fight": -0.3}}))
     w = _world("all_five", _HOLDING)
-    assert violated_affiliations(w.persons["p_mid"], "tell"), "the rebind did not cell `tell`"
+    assert broken_by(w.persons["p_mid"], (frozenset(), elements_violated_by("tell")[1])), "the rebind did not cell `tell`"
     w.persons["p_low"].ledger.append(
         Claim("c_h11", "p_low", "Hh", "stores:grain", 8, 0, "firsthand", 37, "own"))
     tell = Act(id="h11_tell", actor="p_low", verb="tell",
