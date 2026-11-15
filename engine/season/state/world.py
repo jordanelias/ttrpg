@@ -403,6 +403,10 @@ class World:
         # S15.1 -- the store is the SUBJECT'S. `_unowned` holds only the Tenures whose subject
         # is not a person (`contain : Rung -> Rung` is the bulk of them). See the `tenures` view.
         self._unowned: list[Tenure] = []
+        # The store's VERSION: counts every change of which Tenures the store holds (`add_tenure`,
+        # `remove_person`, `_rehome`, `_restore_tenures`). Underscore: derived, never folded into
+        # `content_hash`. `tenure_extent` reads it.
+        self._tenure_version = 0
         # The gate's shadow of the Tenure store (`_tenure_snapshot`). Underscore: derived, never folded into
         # `content_hash`.
         self._tshadow: Optional[_TenureSnap] = None
@@ -513,11 +517,18 @@ class World:
         return _TenureView(out)
 
     def tenure_extent(self) -> tuple:
-        """`(persons, unowned, owned)` -- how many people, unhomed Tenures and owned Tenures the store
-        holds. Stores nothing and reads no Tenure: it is the cheap SHAPE of `tenures`, which the
-        barrier's live-edge view (`state/containment.py::edges_of`) compares to know it is stale."""
-        return (len(self.persons), len(self._unowned),
-                sum(len(p.tenures) for p in self.persons.values()))
+        """`(persons, version)` -- how many people the world holds and the store's VERSION, a counter
+        every site that changes WHICH Tenures the store holds bumps (`add_tenure`, `remove_person`,
+        `_rehome`, `_restore_tenures`: the four that append to or remove from a Tenure list). It
+        stores nothing and reads no Tenure, and it is what the barrier's live-edge view
+        (`state/containment.py::edges_of`) compares to know it is stale. Counts of the lists (people,
+        unhomed, owned) could not say it: one Tenure removed and another added left every count as it was.
+
+        ⚠ THE BOUND. A Tenure whose `subject` or `kind` is REWRITTEN IN PLACE stays in its list and bumps
+        nothing, so the view keeps filing it under the old `(kind, subject)`; likewise a list or the
+        `persons` dict edited by hand rather than through the four (the person count still sees a person
+        added or removed). `_restore_tenures` rewrites those two fields back, which is the same bound."""
+        return (len(self.persons), self._tenure_version)
 
     @property
     def in_parallel_map(self) -> bool:
@@ -593,6 +604,7 @@ class World:
                     "deleted by `13d-i`) walk sideways or loop, and Jordan's governance "
                     "canon reads purview off that walk")
         (self.persons[t.subject].tenures if t.subject in self.persons else self._unowned).append(t)
+        self._tenure_version += 1
         return t
 
     def class_of(self, entity_id: str) -> "str | None":
@@ -756,6 +768,7 @@ class World:
         `apply` is still a closure. What IS guaranteed: no Tenure write the gate refused -- for
         want of a basis (`NotYours`) OR because the write moved nothing it named (`NoOpReceipt`)
         -- survives the refusal."""
+        self._tenure_version += 1
         for t, was in changes:
             if was is None:
                 owner = self.persons.get(t.subject)
@@ -791,7 +804,7 @@ class World:
         for name in {n for n, _k in changes}:
             members = snap[name][0]
             coll = getattr(self, name)
-            if list(coll.items()) != list(members.items()):
+            if list(coll) != list(members) or any(coll[k] is not v for k, v in members.items()):
                 coll.clear()
                 coll.update(members)
         for name, k in changes:
@@ -1162,6 +1175,7 @@ class World:
                     self._departed[who] = (t.object, self.tick)        # H-206: where he stood
                 t.until = self.tick
         self.persons.pop(who, None)
+        self._tenure_version += 1                  # his edges left `tenures` with him
         # ⚠⚠ THE PERSON'S OWN `person`-KIND RUNG DIES WITH THEM, and leaving it behind was a
         # LATENT ID-SCHEME DEFECT that only a death could reach. `class_of`'s own docstring names
         # the hazard -- *"no id is currently in two of these. If one ever is, this returns the
@@ -1227,6 +1241,7 @@ class World:
         for t in self._unowned:
             (self.persons[t.subject].tenures if t.subject in self.persons else keep).append(t)
         self._unowned = keep
+        self._tenure_version += 1
 
     def _refuse_undeclared_kind(self, thing, wclass, sname, record_kind, fieldname,
                                 emits, declared) -> None:

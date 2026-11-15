@@ -367,7 +367,8 @@ def _eff_capture(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     # (every arm), and a WOUNDED one under `wound_harm_model: total` (`_harm` writes body 0 there, so `_wound`
     # removes him). Read off the base's subjects, the one owner, never recomputed from the band: an edge on a man
     # the same write removes -- or opened by a seat whose holder it removes -- is refused at the gate
-    # (`NotYours`), and nothing in the fold catches that, so the season would end.
+    # (`NotYours`); the fold catches that and emits the row's refusal (B03.76), which would refuse the whole
+    # act; returning `base` keeps the capture.
     if any(PERSON_DIED in s.kinds for s in base.subjects) or restrained(w, prisoner, DETAIN_KIND):
         return base
     if a.via is None or not may_warrant(w, a.actor, a.via, prisoner) or not _may_close_custody(w, a.via, prisoner):

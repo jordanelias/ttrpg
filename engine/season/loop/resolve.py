@@ -505,8 +505,10 @@ def _fold(self, w: "World", token: Token, a: Act,
         # raises"* (MECHANICAL). `NotYours` is F3's judgment that the write is not the actor's; a
         # precondition that admitted what the gate then refuses used to end the season here, where
         # `NoOpReceipt` -- the same `Forbidden`, graded the same -- already became the row's refusal.
-        # The store was put back before the raise (`World.write`), so the refusal stands beside an
-        # unchanged world. A DIRECT `World.write` outside the fold still raises: the gate is the
+        # The Tenure store was put back before the raise (`World._restore_tenures`); an entity the
+        # same `apply()` wrote KEEPS the write (H-130's class, pinned by `test_g3_not_yours.py`,
+        # where the Office write stands beside `establish.refused`), so the refusal does NOT always
+        # stand beside an unchanged world. A DIRECT `World.write` outside the fold still raises: the gate is the
         # backstop, and only the fold converts it. A refused first pair leaves the later pairs
         # unchecked, as above.
         except NotYours:

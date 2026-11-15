@@ -336,8 +336,9 @@ def _req_establish(w: "World", a: "Act") -> bool:
     an establish found a seat with no basis, which `_req_confer` then refuses forever -- an office
     that exists and can never be filled. Eligibility (`remit:confer`) already says who may act.
 
-    FOUR CLAUSES, EACH A REFUSAL AND NONE A RAISE -- a raise from inside the effect's `apply()`
-    escapes the fold, and `establish.refused` would never be emitted:
+    FOUR CLAUSES, EACH A REFUSAL AND NONE A RAISE -- a `NotYours` from inside the effect's `apply()`
+    is caught by the fold since B03.76 and emits the row's refusal (a Tenure write put back, an
+    entity the same `apply()` wrote kept), so a refusal asked HERE is cleaner and writes nothing:
       1. the office resolves: `office_founded_by` returns one (since v11 CR-25: the overlay keys
          `office_described_by` reads, else the derivation from `subject` and `Act.via`; since H-291 either
          arm only where `founds_over` admits it, an overlay act refused there naming its own clause), and the constructor's refusals

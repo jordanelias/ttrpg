@@ -874,8 +874,8 @@ def may_renew(w: "World", actor: Optional[str], via: Optional[str], off: Office)
     seat's act and is asked of the seat exercised (`04 §B.7`'s purview invariant) -- and the actor SITS in it
     (`seat_hold`, *"refused the instant the occupant is not seated"*). Asked by the gate for every
     extended `oblige` term, and by `_eff_transfer` before it names one, so the effect never writes a
-    renewal the gate would refuse (a `NotYours` out of the fold would end the season, not refuse the
-    act): one owner, two readers, `may_fill`'s shape.
+    renewal the gate would refuse (the fold catches a `NotYours` and emits the row's refusal, B03.76,
+    so the act is refused either way; asked early, the refusal is the precondition's): one owner, two readers, `may_fill`'s shape.
 
     ⚠ REFLEXIVE ON THE SEAT, THE OPPOSITE OF `may_fill`, AND FOR THE REASON THAT FUNCTION GIVES.
     `may_fill` refuses `via == off` because a holder filling the seat he exercises is authority over
@@ -960,7 +960,8 @@ def may_determine(w: "World", actor: Optional[str], via: Optional[str], party: O
     consumes cannot be read after it (`handover`'s problem, which that basis solves only because
     its licence IS a Tenure). The bench conjunct of the precondition is this function, asked early
     through `WorldReader`'s `bench` stem, so the fold refuses (and emits) exactly what this refuses
-    (and raises): a precondition with its own copy would surface as `NotYours` killing a season.
+    (and raises): a precondition with its own copy would surface as a `NotYours` the fold converts
+    to the row's refusal (B03.76) instead of the precondition's own.
 
     ⚠ THE KIND IS NOT THIS PREDICATE'S. `may_determine` takes no `kind` at all: WHICH edges a bench
     may open or close is `tenure_write_basis`'s DETERMINATION clause. Until v9 SC-03a that clause

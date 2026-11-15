@@ -38,6 +38,7 @@ from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.state.carriers import Act, Receipt, Tenure
 from engine.season.state.gate import Change, NoOpReceipt, Subject
 from engine.season.state.world import World
+from engine.season.trace_log import TRACE
 
 from ._scar_helpers import wounded as _wounded
 
@@ -115,10 +116,17 @@ def test_g4_an_unlawful_edge_write_is_not_yours_even_when_nothing_named_moved(mo
         return Change((Subject.entity("rungs", "Hh"),), lambda: setattr(seat, "until", w.tick))
     _plant(monkeypatch, "utter", plant)
     w = P.tiny_world()
-    evs = _driver(w).resolve(mint_token(w, WriteClass.ACTS),
-                             [Act(id="g4_ny", actor="p_low", verb="utter")])
+    with TRACE.recording():
+        start = len(TRACE.rows)
+        evs = _driver(w).resolve(mint_token(w, WriteClass.ACTS),
+                                 [Act(id="g4_ny", actor="p_low", verb="utter")])
+        decided = [r.what for r in TRACE.rows[start:] if r.channel == "DECISION"]
     assert [e.kind for e in evs] == ["act.refused"], [e.kind for e in evs]    # H-143: emitted, not raised
     assert [t.live for t in w.tenures if t.id == "t9"] == [True], "the unlawful closure stood"
+    # WHICH raise it was: both `NotYours` and `NoOpReceipt` end as `act.refused` with the seat put back,
+    # so the Event and the seat cannot tell F3-before-F9 from F9-alone; the fold's own decision row can.
+    assert decided.count("utter: the gate refused the write") == 1, decided
+    assert "utter wrote nothing" not in decided, decided
 
     # CONTROL: the same effect without the unlawful write is a plain no-op -- raised raw at the
     # gate as `NoOpReceipt`, and folded into the refusal -- so the `NotYours` above came from the

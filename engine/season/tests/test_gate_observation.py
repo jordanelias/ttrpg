@@ -18,7 +18,8 @@ import dataclasses
 from engine.season.data.matrix import WriteClass
 from engine.season.harness import probes as P
 from engine.season.loop.driver import mint_token
-from engine.season.state.carriers import Act
+from engine.season.state.carriers import Act, Tenure
+from engine.season.state.containment import edges_of
 from engine.season.state.gate import Change, Subject
 
 from .test_g4_no_op_receipt import _driver, _plant
@@ -78,3 +79,40 @@ def test_an_effect_that_adds_or_removes_an_entity_in_its_body_is_refused_and_put
     evs = _run(w, "h137_remove")
     assert [e.kind for e in evs] == ["act.refused"], [e.kind for e in evs]
     assert w.sites.get("site_seam") is seam, "the eagerly removed entity stayed gone"
+
+
+def test_an_equal_valued_replacement_is_put_back_as_the_original_object(monkeypatch):
+    """Detection is by identity (`coll.get(k) is not item`); the restore compared members with `==`, so a
+    body that replaced an entity with an EQUAL copy was detected, refused, and left the copy standing."""
+    def replaces(w, a, res=None):
+        w.sites["site_seam"] = dataclasses.replace(w.sites["site_seam"])
+        return _grain(w)
+    _plant(monkeypatch, "utter", replaces)
+    w = P.tiny_world()
+    seam = w.sites["site_seam"]
+    evs = _run(w, "h137_equal_copy")
+    assert [e.kind for e in evs] == ["act.refused"], [e.kind for e in evs]
+    assert w.sites["site_seam"] is seam, "the equal-valued copy stood in place of the original"
+
+
+def test_the_live_edge_view_follows_a_membership_change_that_keeps_the_counts():
+    """`edges_of` caches a view of `(kind, subject)` Tenures at the barrier and rebuilds when the store's
+    stamp moves. A stamp made of COUNTS (persons, unowned, owned) cannot see one Tenure leave and another
+    arrive: every count is as it was and the view answers with the Tenure that is gone."""
+    w = P.tiny_world()
+    scan = lambda: [t for t in w.tenures if t.kind == "contain" and t.subject == "Hh"]
+    old = edges_of(w, "contain", "Hh")
+    assert [t.object for t in old] == ["S"] and old == scan(), "the fixture's edge is not what the test reads"
+    counts = (len(w.persons), len(w._unowned), sum(len(p.tenures) for p in w.persons.values()))
+    w._restore_tenures([(old[0], None)])                          # the store's own removal of an edge
+    w.add_tenure(Tenure("t_swap", "Hh", "D", "contain", since=0))
+    assert counts == (len(w.persons), len(w._unowned), sum(len(p.tenures) for p in w.persons.values()))
+    got = edges_of(w, "contain", "Hh")
+    assert [t.object for t in scan()] == ["D"]
+    assert got == scan(), [t.id for t in got]
+
+    # THE REFUSAL'S RESTORE: an edge opened and then put back is not in the view that read it open.
+    w.add_tenure(Tenure("t_open", "Hh", "R", "contain", since=0))
+    assert [t.id for t in edges_of(w, "contain", "Hh")] == ["t_swap", "t_open"]
+    w._restore_tenures([(next(t for t in w.tenures if t.id == "t_open"), None)])
+    assert [t.id for t in edges_of(w, "contain", "Hh")] == ["t_swap"]
