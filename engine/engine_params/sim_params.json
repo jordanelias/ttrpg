@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 124,
-    "total": 285,
-    "uncited": 161,
+    "total": 279,
+    "uncited": 155,
     "of_which_assumption_grade": 8
   },
-  "count": 285,
+  "count": 279,
   "by_module": {
     "engine.dice_engine": 6,
     "engine.season": 24,
@@ -16,7 +16,7 @@
     "fieldwork": 15,
     "overview": 5,
     "social_contest": 31,
-    "threadwork": 36
+    "threadwork": 30
   },
   "params": [
     {
@@ -3081,138 +3081,6 @@
       "citation_grade": null
     },
     {
-      "key": "threadwork.CO_MOVEMENT_CARDS",
-      "name": "CO_MOVEMENT_CARDS",
-      "value": [
-        [
-          "CM-01",
-          "Temporal Drift",
-          -1,
-          "One clock advances 1 tick",
-          0,
-          "Clock advance still applies"
-        ],
-        [
-          "CM-02",
-          "Substrate Ripple",
-          -2,
-          "All Thread ops in territory +1 Ob next season",
-          -1,
-          "No Ob change"
-        ],
-        [
-          "CM-03",
-          "Echo Cascade",
-          -1,
-          "One resolved Thread op re-manifests minor",
-          0,
-          "No effect"
-        ],
-        [
-          "CM-04",
-          "Coherence Bleed",
-          -1,
-          "Lowest-Coherence entity: Coherence -1",
-          0,
-          "Coherence loss still applies"
-        ],
-        [
-          "CM-05",
-          "Anchor Settling",
-          1,
-          "One Thread Witness Node stabilises",
-          1,
-          "No Node effect"
-        ],
-        [
-          "CM-06",
-          "Resonance Bloom",
-          -2,
-          "Each Practitioner: +1D next Thread op",
-          -1,
-          "No bonus"
-        ],
-        [
-          "CM-07",
-          "Scar Memory",
-          0,
-          "One Dissolution residue visible to non-Sensitives 1 scene",
-          0,
-          "No effect"
-        ],
-        [
-          "CM-08",
-          "Temporal Fold",
-          -1,
-          "One POP +1 season free depth",
-          0,
-          "No depth extension"
-        ],
-        [
-          "CM-09",
-          "Rendering Surge",
-          -3,
-          "All Thread entities: forced Coherence check Ob 1",
-          -2,
-          "No Coherence check"
-        ],
-        [
-          "CM-10",
-          "Ground Harmony",
-          2,
-          "Mending in territory: -1 Ob this season",
-          1,
-          "No Ob change"
-        ],
-        [
-          "CM-11",
-          "Witness Flare",
-          0,
-          "Church Attention Pool +1; all Nodes activate",
-          0,
-          "Church Attention Pool +1"
-        ],
-        [
-          "CM-12",
-          "Ground Stability",
-          1,
-          "Territory Thread Debt cleared",
-          1,
-          "Debt not cleared"
-        ],
-        [
-          "CM-13",
-          "Epistemic Breach",
-          -1,
-          "One non-Sensitive NPC: TS=15 for 1 scene; Certainty pressure; Church Attention +1",
-          0,
-          "Church Attention +1"
-        ],
-        [
-          "CM-14",
-          "Substrate Assertion",
-          -3,
-          "One Locked entity: Lock strength +1",
-          -1,
-          "No Lock change"
-        ],
-        [
-          "CM-15",
-          "Dissolution Wake",
-          -2,
-          "Dissolution residue gains intensity",
-          -1,
-          "Residue intensity +1 if exists"
-        ]
-      ],
-      "kind": "vector",
-      "module": "threadwork",
-      "file": "systems/threadwork/sim/co_movement.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
       "key": "threadwork.DISPLACEMENT_DISSONANT_LOW",
       "name": "DISPLACEMENT_DISSONANT_LOW",
       "value": 2,
@@ -3585,82 +3453,6 @@
       "kind": "scalar",
       "module": "threadwork",
       "file": "systems/threadwork/sim/opposing.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "threadwork.DEACTUALISATION_R1_OB",
-      "name": "DEACTUALISATION_R1_OB",
-      "value": 2,
-      "kind": "scalar",
-      "module": "threadwork",
-      "file": "systems/threadwork/sim/threadcut.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "threadwork.DEACTUALISATION_R2_OB",
-      "name": "DEACTUALISATION_R2_OB",
-      "value": 4,
-      "kind": "scalar",
-      "module": "threadwork",
-      "file": "systems/threadwork/sim/threadcut.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "threadwork.PERCEPTION_BANDS",
-      "name": "PERCEPTION_BANDS",
-      "value": [
-        [
-          10,
-          "nothing or vague unease"
-        ],
-        [
-          30,
-          "a presence; unstable image; details shift"
-        ],
-        [
-          50,
-          "coherent figure but features approximate"
-        ],
-        [
-          70,
-          "stable perception; self-rendering visible as hum"
-        ],
-        [
-          101,
-          "full perception; self-rendering effort perceived"
-        ]
-      ],
-      "kind": "vector",
-      "module": "threadwork",
-      "file": "systems/threadwork/sim/threadcut.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "threadwork.RENDERING_STRAIN_PER_BEYOND_SCENE",
-      "name": "RENDERING_STRAIN_PER_BEYOND_SCENE",
-      "value": 1,
-      "kind": "scalar",
-      "module": "threadwork",
-      "file": "systems/threadwork/sim/threadcut.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "threadwork.RENDERING_STRAIN_PER_EXTERNAL_OP",
-      "name": "RENDERING_STRAIN_PER_EXTERNAL_OP",
-      "value": 1,
-      "kind": "scalar",
-      "module": "threadwork",
-      "file": "systems/threadwork/sim/threadcut.py",
       "note": "",
       "citation": null,
       "citation_grade": null

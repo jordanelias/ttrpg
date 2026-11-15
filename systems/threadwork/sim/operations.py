@@ -209,7 +209,7 @@ class OperationResult:
     ob: int
     coherence_delta: int       # the STRESS applied to the actor's Coherence (<= 0; coherence.py)
     # MS impact. REPORTED, written nowhere: the world MS clock it once fed has no season analogue
-    # (plan position `29a`; struck at position 27 in co_movement.py and opposing.py alike).
+    # (plan position `29a`; struck at position 27 in opposing.py).
     mending_stability_delta: int = 0
     # The elastic displacement a restorative working actually RETURNED to the mender (>= 0): what
     # `coherence.recover` moved, not what was offered to it. Only Mending sets it; see
