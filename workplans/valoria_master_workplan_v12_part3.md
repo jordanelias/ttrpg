@@ -1,0 +1,391 @@
+# Workplan v12 — part 3: batch B02-tests (B00-ids, B01-laneA and B01a-attributes-generated closed and expunged)
+
+## Status: RATIFIED, ED-IN-0362 (a body part of workplan v12, drafted under `master/workplan_v12/`; adopted 2026-11-15 as the one active plan; resolves nothing at runtime, CLAUDE.md §0.05)
+
+**What this part holds.** Batches of the IN lane, in execution order: `B00-ids` (the id and row blocks every later batch draws from) and `B01-laneA` (implementation lane A's two commits, rebased), both closed and expunged (`@cbca1ad`, `@cbca1ad`), and `B01a-attributes-generated` (Jordan's rulings of 2026-11-13/14: every person's attributes drawn, so every later pin and calibration records against a varied world; the random-pairs instrument), closed and expunged (`@cbca1ad`); `B02-tests` (the test owners, the conjunct record of the nine, and the instrument lines every later close quotes). Each batch is one block with one close, in the form of `V12_STRUCTURE_part2.md` §5.2 and §5.3. A part cites another part's batch or item by handle only; the head's index maps a handle to its file.
+
+**Words.** `unified/U1_GLOSSARY.md`; a person's numbers are an attribute, a skill and its skill score, a derived score (A-98); a *lap* is one pass of the season's scene budget and a *round* is one engagement of a fight (A-101). Source text that says `round` for the season's pass is copied with `NAMES:` where the item lands after B04 (none in this part does: every item here lands before `PCR-4`, so the season's `(season, round)` key keeps the tree's word).
+
+**Paths.** As `V12_STRUCTURE.md` states: a bare path is under `proposals/2026-11-12-subsystem-audit-suite/`; `U3` is `unified/U3_DEPENDENCY_ORDER.md`; `IS-A` is `master/instructions/IS_A_NINE.md` and `_part2`; `CIP` is `master/CODEBASE_IMPROVEMENT_PROPOSAL.md` and `_part2`; `the intake` is `master/eval/V12_INTAKE.md`. A path under `engine/`, `tools/`, `references/`, `registers/`, `tests/` is the repository's.
+
+---
+
+## Batch B02-tests · lane IN · wave W2 · step S2 · HASH EQUAL
+INVOCATION: /methodology-execute Batch B02-tests
+IN-FLIGHT ROW: registers/handoffs/HANDOFF_IN.md, Open table
+GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
+GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
+GATE: Batch B01a-attributes-generated @cbca1ad4fcee656f908d8a75e99bf79213ddeeab (B01a.05: every pin this batch records and every reading it quotes is taken on the generated world, B01a's close the baseline; `valoria_master_workplan_v12.md` §3.B, "generated attributes, and curves not centres")
+HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.harness.populated import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading") (this batch runs before B03c moves the builder to `engine/season/boot/realm.py`).
+REQUIREMENT: R-01.a, .b, .c; R-02.a, .b; R-03.a, .b; R-04.b; R-06.d, .e; R-07.a; R-08.b, .c; R-09.a → all `yes`; R-01, R-02, R-03 read `met` with every conjunct held (R-03.c is not written in B02: B08.99 adds it with its reading; repair lane V1) and the six others print their held counts; the first `BUILT OUT`, `ENGINES` and `NULL SCENES` baselines (`ENGINES`: `combat.fight` quoted at each seed, expected 0 after B01 (UNDECIDED below); it read 0 at `6e1ea91`) (IS-A §12.2)
+BATCH GATE: every pinned hash unchanged against B01a's close (`reading @<B01a closing sha>`; B01a.05: B01a moved every pin after B01): `python -m pytest engine/season/tests/test_go07_canonical_digest.py -q` → green with the three shipped pins; each golden has one owner: `git grep -lE '"[0-9a-f]{32}"' -- engine/season/tests` → `_realm_goldens.py` plus the encoding vectors of `test_go07_canonical_digest.py` (U3 §1 item 3);
+  `python -m engine.season.harness.register --requirements` → exit 0; nine lines in the form `R-0n  <status>  <held> of <m> conjuncts  tree <oldest reading.tree>`; R-01, R-02, R-03 `met` with every conjunct held; a held row that fails to read is a STOP reported to Jordan, not an edit of the conjunct (`IS-A-02`);
+  `python tools/m1_acceptance.py --summary` → its verdict line; row 3 prints `conjuncts held <h> of <m>` and stays DOC-DERIVED;
+  `PYTHONHASHSEED=0 python -m engine.season.harness.aperture 1 --seeds 0 1 2` → `CONTROL` EQUAL at each seed; the `ENGINES`, `BUILT OUT`, `FOUGHT FIELDS` and `NULL SCENES` blocks print; their lines are quoted as the baselines every later close reads against (`reading @<B02 closing sha>`; `NULL SCENES`'s first reading is `B02.20`'s, which this one must equal);
+  `IS-PC-03`'s arm moved here from B01: `PYTHONHASHSEED=0 python -m engine.season.harness.aperture 2 s`, s = 0, 1, 2 → the `ENGINES` line for `combat.fight` QUOTED at each seed, not gated: expected 0 after B01 (UNDECIDED below), and a 0 is `IS-PC-03`'s falsifier READING, recorded as such; the gate does not demand above 0; and, read separately, because a duel is not a fight, the DUELS: `accept` executed and `duel.yielded` events at each seed (after B01: 1 / 3 / 0 and 1 / 3 / 0; re-read at B01a's close on the drawn sheets, whose values these must equal), which is the reading that an accepted challenge opens a duel;
+  `python -m engine.season.harness.storybar --remove --base-seed 0 1 2 --seasons 2` → replay 0 at each seed; `R-01.c` and `R-02.b` lines above 0 at each seed (`IS-A-03`);
+  the suites `python tools/tests_for_diff.py --base <batch-start-sha>` names (engine core, tools, a registry: the full gates);
+  the close's commit body records `register --requirements` (nine lines), `m1_acceptance --summary`'s verdict line, the named conjuncts' readings with their tree, the `BUILT OUT`, `ENGINES` and `NULL SCENES` lines (no before: they are first printed here, but `NULL SCENES`, whose before is `B02.20`'s reading) and after, and the batch's measured wall time (build and close apart); the last `Item:` commit writes the conjuncts' `reading:` records; `status:` is not edited outside what `IS-A-02` writes from its own readings (`IS-A-12`).
+RE-PIN: none (every item is hash EQUAL; the readings of B01a's close are the baseline, `reading @<B01a closing sha>`)
+IDS: ED 0; H 0
+DIALS AT CONTROL: none
+UNDECIDED: (1) (added 2026-11-14, B01's terminal critique; corrected the same day: a duel is not a fight) An accepted challenge DOES open a duel: after B01 `accept` executed 1 / 3 / 0 and `duel.yielded` 1 / 3 / 0 at seeds 0 / 1 / 2 (`aperture 2`; a duel is the agreed combat a challenge and its acceptance open, with its own terms and ending; a fight is violence with no agreed terms: war, crime, defence). What B01 leaves at 0 is the VERB `fight` (formed 0 at every seed) (read after B01, `aperture 2`, seeds 0 / 1 / 2: `challenge` executed 29 / 16 / 22, `accept` 1 / 3 / 0, `capture` executed 3 / 3 / 5, `fight` formed 0), because item (6) of `e5d6ab9` dropped `duel` from `fight`'s `violence_contexts` line, and the plan gives fights on enmity to B37 (`fight: [war, crime, defence, enmity]`) and the repeated-accept residue to B28.07. So B02's reading of `combat.fight` is expected 0 and is `IS-PC-03`'s falsifier READING, not a gate that can pass: the BATCH GATE quotes it and does not demand above 0; the DUEL reading (`accept` executed, `duel.yielded`) is quoted beside it and a duel that does not follow an executed `accept` is the defect.
+C(B02-tests): this batch's entries; the plan's head parts;
+  `engine/season/requirements.yaml` (whole: every row and the `scales:` block); `engine/season/harness/register.py` (`check_requirements`, `REQUIREMENTS`, `main`); `tools/m1_acceptance.py` (`row_nine_requirements`);
+  `engine/season/harness/storybar.py` (`drive`, `draw_seed_arm`, the CLI); `engine/season/harness/aperture.py` (`measure_world`, `report`, `pooled_report`, the `CONTROL` line); `engine/season/harness/chronicle.py` (`main`'s parser); `engine/season/harness/decision_spread.py` (`read_decisions`, `play_season`, `print_season`); `engine/season/harness/arms.py`; `engine/season/harness/corpus_run.py` (`attempts`, the `EMITS AND WRITES NOTHING` census); `engine/season/data/verbs.py` (`emits_at`, `writes_at`); `engine/season/write_matrix.yaml`; `engine/substrate/composition.py` (`ROLES`, `require`); `engine/season/data/rosters.py` (`SCALE_OF_RUNG`);
+  the test files the items name: `engine/season/tests/test_go07_canonical_digest.py` and the fourteen files of B02.01's table; `engine/season/tests/test_season_shape.py`; `engine/season/tests/test_storybar.py`; `engine/season/tests/test_aperture.py`; `engine/season/tests/test_march.py`; `engine/season/tests/test_content_operands.py`; `engine/season/tests/test_interactions_log.py`; `engine/season/tests/test_in62_decision_spread.py`; `tests/valoria/test_season_invariant_sweep.py`; `tests/valoria/test_m1_acceptance_probe.py`; `tests/valoria/test_balance_oracle_arms.py`; the sites of B02.09 to B02.12 (opened by each item's first step);
+  `master/instructions/IS_A_NINE.md` §2 to §10 (read whole by B02.38: its conjunct tables are copied into that item, and the `text` of each conjunct quotes them); `references/restructure_ledger.md` (the `engine/season/harness/arms.py` row);
+  B00's and B01's closing SHAs and B01's readings; the permanent surface.
+SERIAL EDGES: within the batch: B02.01 first (every later re-pin is one edit of `_realm_goldens.py`, C3-N27); `engine/season/tests/test_season_shape.py`: B02.01 → B02.04 → B02.08 → B02.09 → B02.10 → B02.12 → B02.23 → B02.26; `engine/season/requirements.yaml`: B02.05 → B02.13 → B02.15 → B02.31 → B02.34 → B02.36 → B02.38; `engine/season/harness/register.py`: B02.13 only; `engine/season/harness/storybar.py` (C3-K7, one batch at a time): B02.14 → B02.19 → B02.20; `engine/season/harness/aperture.py` and `engine/season/tests/test_aperture.py`: B02.17 → B02.18 → B02.20; `engine/season/tests/test_storybar.py`: B02.14 → B02.19 → B02.20; `engine/season/tests/test_realm_requirements.py`: B02.21 (creates it) → B02.22 → B02.32; `harness/decision_spread.py`: B02.28 → B02.32.
+  With other batches (U3 §5.1): `harness/storybar.py` B02 → B36 → B38; `requirements.yaml` B02 → B03 → B09 → B11 → B17 → B26; `harness/register.py` B02; `decision_spread.py` B02 → B10; `test_season_shape.py` B02 → B11 → B12; `references/restructure_ledger.md` B02 → B03; `test_realm_requirements.py` B02 → B10 (`IS-A-05` part 2).
+PARALLEL: S2, alone.
+COST: edits and small builds; `sonnet` high produces; no judgment node in the build; `opus` reads `IS-A-02`'s readings against each conjunct's text at the close (the readings move rows' `holds`). Instrument time: `corpus_run` (recorded at 2.5 and at 8 minutes by two lanes), the removal test (about two minutes an arm, six arms), `aperture 1` and `2` at three seeds: launched in the background at B02.38's open on the tree after B02.37 (`STAGES.md` practice 5), each sized first on one seed.
+EST: 10 h [estimate]
+
+| pos | item | source | state | hash | gates on |
+|---|---|---|---|---|---|
+| B02.01 | one owner of the realm goldens; the shipped world is what is pinned | `01_CORE_tests_one_golden_owner` A–D | BUILD | EQUAL | Batch B01 |
+| B02.02 | delete the knot-pool prose test | `01_CORE_tests_delete_what_cannot_fail` row 1 | BUILD | EQUAL | — |
+| B02.03 | delete the flow-skeleton anchor test and the comment it forced | the same, row 2 | BUILD | EQUAL | — |
+| B02.04 | delete the eight substring tests, after their successors are shown to see the change | the same, row 3 | BUILD | EQUAL | B02.01 |
+| B02.05 | R-07's `measure:` names the tests that observe it | the same, row 4; `U5a_tests_digest_additions` §F1 | BUILD | EQUAL | B02.04 |
+| B02.06 | delete the retired pool-arm pair and the test that kept it importable | the same, row 5 | BUILD | EQUAL | — |
+| B02.07 | the envelop test counts two arms over twenty seeds | the same, row 6 | HELD (the MB lane's file: lands in B02 only with that lane's agreement, else in B17) | EQUAL | — |
+| B02.08 | delete an unused helper | the same, row 7 | BUILD | EQUAL | B02.04 |
+| B02.09 | assertions that cannot fail: a floor or a deletion | `U5a_tests_digest_additions` §A (SITE; `IS-B2-CORE-07`'s first step) | BUILD | EQUAL | B02.08 |
+| B02.10 | source-text assertions beyond the eight: each mutation run, then delete or keep | the same, §B (SITE) | BUILD | EQUAL | B02.09 |
+| B02.11 | hash literals under a revert stack, beyond B02.01's table | the same, §D2 (SITE) | BUILD | EQUAL | B02.01 |
+| B02.12 | count pins and re-pin logs beyond B02.01's list | the same, §E (SITE) | BUILD | EQUAL | B02.10 |
+| B02.13 | a row's `met` text is a list of conjuncts the register reads | `IS-A-01` (lands as `01_CORE_requirements_reading_record` §1; with `16_PESSIMIST_CORE_the_nine_gate…` edit 1 and `IS-A-04`'s three register lines) | BUILD | EQUAL | B02.05 |
+| B02.14 | the removal test, beside the draw-seed arm | `16_PESSIMIST_CORE_the_nine_gate_and_a_knockout_reading` edit 2 | BUILD | EQUAL | B02.13 |
+| B02.15 | R-01 and R-02 measure by the removal test | the same, edit 3 | BUILD | EQUAL | B02.14 |
+| B02.16 | the chronicle reads what persons moved against a world where nobody acts | `16_PESSIMIST_GAME_consequence_reading` | BUILD | EQUAL | B02.15 |
+| B02.17 | the act-count instrument prints which engines a run entered | `CI-11` | BUILD | EQUAL | B02.16 |
+| B02.18 | the act-count instrument prints which verbs are built out, and through which seat | `IS-A-06` | BUILD | EQUAL | B02.17 |
+| B02.19 | the removal test states what it expects | `IS-A-03` | BUILD | EQUAL | B02.14, B02.18 |
+| B02.20 | the count of scenes that wrote nothing, read from here on | `IS-A-07` | BUILD | EQUAL | B02.18, B02.19 |
+| B02.21 | R-01 on the played realm, three seeds, with the witness cut as control | `01_CORE_tests_shipped_world_falsifiers` row 1 | BUILD | EQUAL | B02.13 |
+| B02.22 | R-02 on the played realm at the shipped budget | the same, row 2 | BUILD | EQUAL | B02.21 |
+| B02.23 | the fork test is named for what it runs | the same, row 3 | BUILD | EQUAL | B02.22 |
+| B02.24 | the invariant sweep sees a played realm | the same, row 4 | BUILD | EQUAL | — |
+| B02.25 | three loops assert that they saw something | the same, row 5 | BUILD | EQUAL | — |
+| B02.26 | a skip on an absent combat engine becomes a failure | the same, row 6; `U5a_tests_digest_additions` §C | BUILD | EQUAL | B02.12 |
+| B02.27 | the interactions-log finding is read off the shipped season | the same, row 7 | BUILD | EQUAL | — |
+| B02.28 | a self-plea and an accusation are two rows; R-06's test drops its revert | the same, row 8 | BUILD | EQUAL | B02.26 |
+| B02.29 | the different-seed test cannot pass on an empty season | the same, row 9 | BUILD | EQUAL | — |
+| B02.30 | a fixture that reverted three shipped changes plays the shipped tree | `U5a_tests_digest_additions` §D1 (SITE) | BUILD | EQUAL | B02.27 |
+| B02.31 | each scale of play names its conjunct; the stale line about the scale words goes | `IS-A-04` | BUILD | EQUAL | B02.13 |
+| B02.32 | R-08.c's test: some chosen acts were not the top candidate, and none at zero temperature | `IS-A-05` part 1 | BUILD | EQUAL | B02.22 |
+| B02.33 | the sites of `U5a_tests_digest_additions` opened before each edit | `IS-B2-CORE-07` | POINTER (closed by B02.09, B02.10, B02.11, B02.12, B02.26, B02.30, each of whose first step it is) | EQUAL | — |
+| B02.34 | R-05's `measure:` carries a command, no figure | the intake V9-27 | BUILD | EQUAL | B02.13 |
+| B02.35 | R-01's and R-02's narrative leaves `requirements.yaml` | the intake DEF-8 | POINTER (closed by B02.13: `measured:` leaves, the history is the file's git log) | EQUAL | — |
+| B02.36 | R-03's stale opening text and the file header's "one tick granularity" | the intake H-2 | BUILD | EQUAL | B02.13 |
+| B02.37 | `IS-A-12`'s close record is written from this batch's close on | `IS-A-12` | READING (a form: the close line of this batch's BATCH GATE) | EQUAL | — |
+| B02.39 | the corpus run takes a seasons cap, so a gate reads it at two seasons | v12 repair R1 (K1 F3, K3 F2; D-17) | BUILD | EQUAL | B02.13 |
+| B02.38 | the nine's conjuncts, authored, and the readings this batch takes | `IS-A-02` | BUILD | EQUAL | B02.13 to B02.36, B02.39 |
+| B02.99 | re-pin and close readings (EQUAL: the record) | `V12_STRUCTURE_part4.md` E-1 | BUILD | EQUAL | B02.38 |
+
+Position numbers in the SERIAL EDGES line above are this table's. The items follow, in the form of `V12_STRUCTURE_part2.md` §5.3.
+
+### B02.01 — one owner for the realm goldens; the shipped world is what is pinned · 01_CORE_tests_one_golden_owner A–D · BUILD · HASH EQUAL
+- SOURCE: `proposals/01_CORE_tests_one_golden_owner.md` "The resolution (decided)" A, B, C, D, "Gate", "Falsifier"; `unified/U3_CONFLICT_LEDGER.md` C3-N14, C3-N27, C3-N30; closes F-TEST-02, F-TEST-03, F-TEST-08 (A–D). Its E (the dice golden, superseded in content by A-5) is not here: it lands in B05 with the sampler (the source's own placement).
+- ADVANCES: none of the nine by itself; every later mover batch re-pins one file (STAGES practice 1).
+- INSTRUCTION (A to D, copied):
+  **A. One owner.** New file `engine/season/tests/_realm_goldens.py` (a test-support module beside `_scar_helpers.py`, not a registry: nothing but tests reads it):
+  ```python
+  """The realm goldens: one literal per (seed, seasons, arm). Every hash test imports from here.
+  A re-record is one edit to this file, in the commit that moves the world, with the mover named in
+  that commit's message (CLAUDE.md §7)."""
+  BUILD = {0: "600d8b27147478e158553552cc1409a5"}                      # build_realm(seed), unplayed
+  SHIPPED = {(0, 1): "5ab73af282d0779646c38839fbab85d8",                # (seed, seasons) at DEFAULT_FIXTURES
+             (1, 1): "aa58ef0b71c947ce5ff9f0a75ffd8ca6",
+             (2, 1): "a21ab6e12e356ccc4261bec1c93ca3b4"}
+  CENSUS = {(0, 1): dict(acts=749, log=13379), ...}                      # read with populated.run
+  ```
+  The literals above are `main`'s readings before B01 and move at B01 (C3-N27): the edit records its own on its base, `build_realm(s)` + `populated.run(1, s)` at `PYTHONHASHSEED=0`, seeds 0, 1, 2, `reading @<B01 closing sha>`, and they must equal B01's re-pinned values; B01a (the drawn sheets) moves them again, so the edit records them on B01a's close and they must equal B01a.99's values (B01a.05). The module docstring also carries the rule: *an item that moves the realm proves in its own commit that its revert reads the previous pin, and records that in the commit message; the proof is not kept as a test.*
+  **B. One test owns the shipped pin.** `test_go07_canonical_digest.py::test_go07_control_the_world_did_not_move_only_its_digest` drops `revert_cr79(monkeypatch)` and its `BASE` block and asserts `SHIPPED` and `CENSUS` at the three seeds. `test_go07_control_the_build_world_old_digest_is_unmoved` keeps one assertion, `build_realm(0).content_hash() == BUILD[0]`. The `_old_content_hash` half of both (the pre-GO-07 `repr` digest) and the `foreign=False` / `acquaintances=False` build variants are deleted. The four encoding-vector tests in that file (`TENURE_VECTOR`, `WORLD_FRAMES`, float bit patterns, set order across `PYTHONHASHSEED`) stay untouched.
+  **C. The revert-stacked controls are deleted** (15 tests deleted, the hash arm cut from 2 more; the item's own behaviour and mutation tests in the same files stay):
+
+  | file | test deleted | literals deleted |
+  |---|---|---|
+  | `test_cp_t02_06_continuations.py` | `test_no_death_means_no_behaviour_change_and_the_realm_hash_is_the_pre_build_hash` | `PRE_BUILD` |
+  | `test_cp_t03_01_cohorts_never_fight.py` | `test_control_the_realm_ends_at_the_base_hash_wherever_no_cohort_was_a_party`, `test_where_a_cohort_was_a_party_the_realm_moves_and_the_refusals_are_the_conjuncts` (hash arm only; the refusal-conjunct asserts stay) | `BASE` |
+  | `test_cp_t03_02_band_ending_and_body.py` | `test_control_the_item_at_its_revert_reproduces_the_pre_item_one_season_hash` | `PRE_ITEM` |
+  | `test_cp_t03_04_arms.py` | `test_control_formation_moves_every_hash_and_the_item_off_reproduces_the_pre_item_hash` | `PRE_ITEM`, `POST_ITEM` |
+  | `test_cp_t03_07_body_ceiling.py` | `test_hash_post_item_control_and_revert`, `test_build_hash_is_a_schema_mover_and_the_revert_reads_the_old_one` | `PRE_ITEM`, `POST_ITEM`, `CONTROL`, `BUILD_PRE`, `BUILD_POST` |
+  | `test_cp_t03_08_tend_on_the_wounded.py` | `test_hash_post_item_and_revert`, `test_build_hash_is_unmoved` | `POST_ITEM`, `BUILD` |
+  | `test_cr33_lifepaths.py` | `test_control_the_expansion_skipped_reproduces_the_pre_commit_hash` | the three-seed block |
+  | `test_cr85_faculty_replaces_history.py` | `test_control_faculty_3_for_every_party_reproduces_the_pre_item_hash`; the hash arm of `test_falsifier_every_season_roll_reads_pool_8_against_ob_1` | `PRE_ITEM`, `POST_ITEM` |
+  | `test_cr87_violence_contexts.py` | `test_control_the_block_empty_and_every_value_at_its_revert_reproduce_the_pre_item_hash` | `BASE_BUILD`, `BASE_SEASON` |
+  | `test_rem30_character_sheet.py` | `test_rem30_creation_arm_off_reproduces_the_pre_build_hash` | the three-seed block |
+  | `test_season_weather.py` | `test_in21_control_draw_off_and_draw_at_one_reproduce_the_base_hashes`, `test_the_give_withheld_arm_reproduces_the_one_season_pin` | `BASE_HASHES`, `STEP_OFF_ONE_SEASON`, `BASE_EVENTS` |
+  | `test_strife_flows.py` | `test_cr78_control_the_switch_off_reproduces_the_base_hash` | `BASE_BUILD`, `BASE_ONE_SEASON` |
+  | `test_cp_t04_07_surrender.py`, `test_cr81_realm_acquaintances.py`, `test_strife_credit.py` | none deleted; each imports `BUILD` / `SHIPPED` from the owner in place of its literal | their copies |
+
+  A `revert_*` helper with no remaining caller is deleted with its last caller; one still used by a behaviour test (`revert_cr87` in `test_interactions_log.py`, until B02.27 lands) stays. B01 added pins to several of these files (`c5bf18a`, `e5d6ab9` bodies: `cp_t02_06`, `rem30`, `go07`, `strife`, `weather`, `in27`, `cr33`, `cr81`): each such literal is a trajectory literal and goes by the same rule.
+  **D. The corpus counts go; the properties beside them stay.** In `test_season_shape.py` delete the exact pins and the comment logs that exist only to narrate them, keeping the assertion named in the right-hand column (line numbers are the source's at `785bc62`; find each by its text):
+
+  | deleted | kept beside it |
+  |---|---|
+  | `len(by_sig) == 136` | `universal == set()`; `ever == {…}`; `refused_only == {…}`; the never-attempted set (R-05's state, exactly) |
+  | `d_pub == 10` | `d >= 4`; `redeposits == 1`; no late `ROOT`; the chain's origin is hers |
+  | `(depths[3], depths[6]) == (16, 14)`; the `== 10` in `max(depth5…) == 10 < depths[3]` | `matured[0] == 0`; `matured[3] < matured[6]`; `depths[3] > depths[0]`; `max(depth5…) < depths[3]` |
+  | `(len(before), len(after)) == (20, 18)` | `dropped == ["exchange", "transfer"]`; `len(after) == len(before) - 2` |
+  | the eleven-tuple `actor_end` list; `len(dropped) == 18` | `none_arm == []`; `actor_arm` non-empty; `len(total_arm) >= len(actor_arm)`; `bit == {…}` |
+  | the fork tuples `(31, 3)`, `(28, 2)`, `(28, 2)`, `_TRAIN_KIND_GAP`, the `{none: (10, 31), …}` dict | `windows >= 90`; `bad_windows == 0`; every arm `genuine > 0`; `got["total"]["diverged"] > 0`; `5 * acts_differ > genuine` |
+  | the one-round arm's event census | `d.resolved` non-empty; the planted-round tests |
+  | `total == 85` `raise SystemExit` statements (with the 260-line narrative above it) | `test_h115_the_degree_branches_raise_unspecified_not_systemexit` |
+  | the first of the two `len(VERB_TABLE) == 67` assertions | the second (R-05's denominator, once): a reading of the tree (67 rows, U3 T-7), re-read and re-recorded at B25 (A-28's `tie`/`knot` split, 68) and B38 (`riot`, if it lands, 69), quoted with its batch (C3-N30) |
+- WHERE: NEW `engine/season/tests/_realm_goldens.py`; `engine/season/tests/test_go07_canonical_digest.py`; the fourteen files of C's table; `engine/season/tests/test_season_shape.py`.
+- TESTS: `test_go07_canonical_digest.py::test_go07_control_the_world_did_not_move_only_its_digest` (rewritten: `SHIPPED` and `CENSUS` at three seeds), read green on the base before the deletions (it is the instrument, U3 §6.2: the scratch probes `probe_realm_sweep.py`, `probe_realm_gates.py` are not written).
+- FALSIFIER and CONTROL: the source's: "Sweep any shipped fixture in process (`DEFAULT_FIXTURES._v["regime_gain"] = 0.0`) and run the go07 file: the seed-0 pin must redden. If it stays green the owner is not what the test reads." Control: the base tree's go07 run (every content hash stationary; tests only).
+- GATE: `python -m pytest engine/season/tests/test_go07_canonical_digest.py -q` → green with the three shipped pins; `git grep -lE '"[0-9a-f]{32}"' -- engine/season/tests` → `_realm_goldens.py` and `test_go07_canonical_digest.py` (its encoding vectors) only; `python -m pytest engine/season/tests/test_season_shape.py -q` → green (the kept assertions stand alone). The source's `gen_sigma_parity_goldens.py --check` arm is item E's and is read in B05 (moved, `V12_STRUCTURE_part2.md` §5.8).
+- HASH MOVERS: none (tests only).
+- DEPENDS ON: V12 Batch B01 (the pins it re-recorded are this file's starting values); EXISTS-IN-TREE `engine/season/tests/_scar_helpers.py`, `test_go07_canonical_digest.py`, `harness/populated.py::build_realm`, `::run`.
+- GLOSSARY: none.
+- COST and TIER: edit, mechanical in fourteen files, the judgement in D (each kept assertion still stands alone, which the table settles); `sonnet`, high.
+- LANDS IT: B02's `valoria-author` producer, `isolation: worktree`; one `Item: B02.01` commit, `[skip ci]`.
+
+### B02.02 — delete the test whose subject is a formula in archived prose · 01_CORE_tests_delete_what_cannot_fail row 1 · BUILD · HASH EQUAL
+- SOURCE: `proposals/01_CORE_tests_delete_what_cannot_fail.md` "The resolution (decided)" row 1; closes F-TEST-04 (its first half). The source orders one commit per row.
+- ADVANCES: none: test hygiene (CLAUDE.md §0.1 pt 5: the guarded artifact is load-bearing on this repository's process only).
+- INSTRUCTION: delete `tests/valoria/test_knot_pool_formula.py` (three tests asserting the text `(Spirit*2)+History(Relevant)+3` occurs in three files under `.designs/`; the code reads `pool = spirit * 2`, `systems/fieldwork/sim/knots.py`).
+- WHERE: DELETE `tests/valoria/test_knot_pool_formula.py`.
+- TESTS: none.
+- FALSIFIER and CONTROL: a file under `engine/` or `modules/` imports or reads the deleted file (then it was not process-only). Control: `python -m pytest tests/valoria -q -k knot` collects no test from the deleted file and nothing else changes.
+- GATE: `git ls-files tests/valoria | grep -c 'knot_pool_formula'` → 0.
+- HASH MOVERS: none.
+- DEPENDS ON: EXISTS-IN-TREE `tests/valoria/test_knot_pool_formula.py`.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, high.
+- LANDS IT: B02's producer; `Item: B02.02`, `[skip ci]`.
+
+### B02.03 — delete the flow-skeleton anchor test, and the comment sentence it forced on a module · 01_CORE_tests_delete_what_cannot_fail row 2 · BUILD · HASH EQUAL
+- SOURCE: the same file, row 2; closes F-TEST-04 (its second half).
+- ADVANCES: none: test hygiene (§0.1 pt 5).
+- INSTRUCTION: "delete `tests/valoria/test_flow_skeletons.py`; in `modules/mass_battle/terrain.py` delete the comment sentence that says `WALLS_DEFENDER_DR` is kept below the lookup so a skeleton's line anchor stays put (a constant's position in a module should not be decided by an archived document's line number). `tools/build_engine_atlas.py` is left as it is: its output is reference, and an unguarded reference that can be wrong without cost is the accepted state (§0.1 pt 5)." (The source cites the comment at `terrain.py:269-270`; find it by `WALLS_DEFENDER_DR`.)
+- WHERE: DELETE `tests/valoria/test_flow_skeletons.py`; `modules/mass_battle/terrain.py` (the comment beside `WALLS_DEFENDER_DR`; comment only).
+- TESTS: none.
+- FALSIFIER and CONTROL: a file under `engine/` or `modules/` reads `test_flow_skeletons.py` or the skeleton files' anchors (`grep -rln engine_atlas --include=*.py` lists tools, tests and one skill only, per the source). Control: `modules/mass_battle/terrain.py` compiles to the same AST (a comment edit): `python -c "import ast,sys; ast.parse(open('modules/mass_battle/terrain.py').read())"` and `git diff -U0` shows `#` lines only.
+- GATE: `git ls-files tests/valoria | grep -c 'flow_skeletons'` → 0; `python -m pytest -m mass_battle tests/valoria -q` → green.
+- HASH MOVERS: none.
+- DEPENDS ON: EXISTS-IN-TREE `tests/valoria/test_flow_skeletons.py`, `modules/mass_battle/terrain.py::WALLS_DEFENDER_DR`.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, high.
+- LANDS IT: B02's producer; `Item: B02.03`, `[skip ci]`. The comment edit is in an MB-lane module: named in the batch's PR body.
+
+### B02.04 — delete the eight substring tests, after each successor is shown to see the change · 01_CORE_tests_delete_what_cannot_fail row 3 · BUILD · HASH EQUAL
+- SOURCE: the same file, row 3 and "Falsifier"; closes F-TEST-05.
+- ADVANCES: none: test hygiene; R-07's `measure:` is re-pointed in B02.05.
+- INSTRUCTION:
+  1. First, the source's falsifier, run and recorded before anything is deleted ("the batch's first step runs this mutation and records the outcome in the commit body before row 3 deletes anything"): "in process, apply each staged delta as its own clamped write in `loop/resolve.py` and keep the trace string; `test_a_sabotage_a_restore_cancels_is_refused_after_the_fact` must redden (it would read `site.restored` and `site.damaged`)." If it does not redden: `d10b`'s deletion is wrong and that test gains "a mixed-sign case at the ceiling (a `restore` of more than the headroom and a `sabotage`, folded in both orders, one end condition)" in place of the deletion.
+  2. Delete from `engine/season/tests/test_season_shape.py` the eight tests: `test_d10b_resolve_sums_then_clamps_once`, `test_choose_receives_no_world`, `test_d2_witness_does_not_lie_about_its_driver`, `test_witness_writes_no_belief_and_no_pursuit`, `test_d10c_the_obstacle_refusal_gate_exists`, `test_an_unfired_refusal_is_never_reported_as_a_pass`, `test_unmapped_rows_are_never_silently_passed`, `test_an_unclear_row_is_not_counted_as_an_unrouted_one`. Each one's successor (the source's table): `d10b` → `test_in12_step9.py::test_a_sabotage_a_restore_cancels_is_refused_after_the_fact`; `choose_receives_no_world` → `test_a_view_raises_on_any_world_collection`, `test_decision_package_never_names_world_anywhere_under_it`, `test_w5_sense_is_still_the_only_world_taking_non_decision_function`, `test_g2_deliberate_mutates_no_store_by_any_route`; `d2`, `witness_writes_no_belief…` → `test_d1c_…`, `test_r3_the_l4_limb_is_actually_exercised`, `test_w2_every_write_call_site_names_a_pair_on_the_matrix`; `d10c` → `test_w4_a_refused_attempt_names_the_attempt_not_the_campaign_seed`; the three `run_probe` / `grade` word tests → `test_playable_requires_that_every_core_row_was_actually_aimed_at`, `test_a_blocker_outranks_an_unaimed_row`, `test_no_probe_currently_returns_unreachable`.
+- WHERE: `engine/season/tests/test_season_shape.py` (eight test functions); `engine/season/loop/resolve.py` touched in process only (the mutation is never committed).
+- TESTS: none new (or the mixed-sign case of step 1's failing branch, in `test_in12_step9.py`).
+- FALSIFIER and CONTROL: step 1's mutation leaves `test_a_sabotage_a_restore_cancels_is_refused_after_the_fact` green. Control: every named successor collects and passes on the unmutated tree.
+- GATE: `python -m pytest engine/season/tests/test_season_shape.py -q` → green; `python -m pytest engine/season/tests -q -k "sabotage_a_restore_cancels or a_view_raises or decision_package_never_names_world or w4_a_refused_attempt or playable_requires"` → green; the commit body records step 1's outcome.
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B02.01 (the same file, edited first); EXISTS-IN-TREE each successor test named above (`grep -rn "def <name>" engine/season/tests` at the batch's open).
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, high.
+- LANDS IT: B02's producer; `Item: B02.04`, `[skip ci]`.
+
+### B02.05 — R-07's `measure:` names the tests that observe it · 01_CORE_tests_delete_what_cannot_fail row 4, with U5a_tests_digest_additions §F1 · BUILD · HASH EQUAL
+- SOURCE: the same file, row 4 and "Falsifier" (row 4); `proposals/U5a_tests_digest_additions.md` §F1 ("T2 row 4's `-k` expression for R-07's `measure:` gains `or r07_realm_regard_differs`"); closes F-TEST-05 (R-07's `measure:`).
+- ADVANCES: R-07.a (its command; read in B02.38).
+- INSTRUCTION: `engine/season/requirements.yaml`, R-07's `measure:` becomes
+  `python -m pytest engine/season/tests -k 'a_view_raises or a_view_is_capped or r7_two_persons or wa_a_planted_claim or decision_package_never_names_world or another_modules_prize_and_a_foreign_actor or r07_realm_regard_differs'`
+  (the source's expression with §F1's addition; "the last two [of the source's six] are the type half and the query half; `wa_a_planted_claim` is the test in which a person holding a false belief about a granary declines `transfer` while the world holds the grain"; `r07_realm_regard_differs` is `test_told_by_channel.py::test_r07_realm_regard_differs_between_hearers_by_claim_not_stance_alone`). The current `-k a_view` also selects `test_a_view_with_no_query_forms_no_effort`, about effort; the tightened expression does not.
+- WHERE: `engine/season/requirements.yaml` (R-07, `measure:`).
+- TESTS: none new.
+- FALSIFIER and CONTROL: the source's: "delete `View.__getattr__`'s refusal in process; `a_view_raises` must redden." Control: the expression selects no test of effort (`test_a_view_with_no_query_forms_no_effort` absent from the collection).
+- GATE: `python -m engine.season.harness.register --requirements` → exit 0 (every name resolves); `python -m pytest engine/season/tests -k '<the expression>' -q --collect-only` → seven tests (six of the source's and §F1's one; U5a's gate: "R-07's new expression collecting seven tests"), then the same without `--collect-only` → seven pass.
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B02.04 (deletes `test_choose_receives_no_world`, the expression's former first name); EXISTS-IN-TREE `engine/season/tests/test_told_by_channel.py::test_r07_realm_regard_differs_between_hearers_by_claim_not_stance_alone`.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, high.
+- LANDS IT: B02's producer; `Item: B02.05`, `[skip ci]`.
+
+### B02.06 — delete the retired pool-arm pair, and the test that kept it importable · 01_CORE_tests_delete_what_cannot_fail row 5 · BUILD · HASH EQUAL
+- SOURCE: the same file, row 5; closes F-TEST-09.
+- ADVANCES: none: retirement (CLAUDE.md §1: retiring is deleting plus a `FORK:` row).
+- INSTRUCTION: "delete `test_the_retired_pair_definitions_still_import`; delete `_ARMS_POOL`, `_pool_arm` and the `# noqa: F401 (kept for _pool_arm)` import note in `engine/season/harness/arms.py`; add a symbol-level sentence to the existing `engine/season/harness/arms.py` row in `references/restructure_ledger.md` (the `29b` precedent, same row)." `python -m engine.season.harness.arms`'s `main` reads `ARMS`, not `_ARMS_POOL`.
+- WHERE: `tests/valoria/test_balance_oracle_arms.py` (`test_the_retired_pair_definitions_still_import`); `engine/season/harness/arms.py` (`_ARMS_POOL`, `_pool_arm`, the `noqa` import note); `references/restructure_ledger.md` (the `engine/season/harness/arms.py` row, one sentence).
+- TESTS: none new.
+- FALSIFIER and CONTROL: `python -m engine.season.harness.arms` or any import reaches `_ARMS_POOL` after the deletion (`git grep -n "_ARMS_POOL\|_pool_arm"` → nothing). Control: `python -m engine.season.harness.arms --n 1 --seasons 1` runs as before.
+- GATE: `python -m engine.season.harness.arms --n 1 --seasons 1` → exits 0; `git grep -n "_ARMS_POOL\|_pool_arm" -- engine tests tools` → nothing; `python -m pytest tests/valoria/test_balance_oracle_arms.py -q` → green; the ledger row read through `pathres.load_alias_map()` (an exact row, CLAUDE.md §8).
+- HASH MOVERS: none (dead harness code).
+- DEPENDS ON: EXISTS-IN-TREE `engine/season/harness/arms.py::_ARMS_POOL`, `::_pool_arm`; `references/restructure_ledger.md`'s `harness/arms.py` row.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, high.
+- LANDS IT: B02's producer; `Item: B02.06`, `[skip ci]`.
+
+### B02.07 — the envelop test counts two arms over twenty seeds · 01_CORE_tests_delete_what_cannot_fail row 6 · HELD (the MB lane's file) · HASH EQUAL
+- SOURCE: the same file, row 6 and "Lands it" ("Row 6 is the MB lane's file (`tests/valoria/test_mass_battle_maneuvers.py`): it lands in B02 only with that lane's agreement, else in the MB lane's first batch (B17)"); closes F-TEST-10.
+- ADVANCES: none of the nine: test strength in the MB lane (CLAUDE.md §0.1 pt 2).
+- INSTRUCTION: "`test_envelop_reaches_rear_node`: remove the `xfail` and replace the single-fixture pass/fail with a two-arm count over the same twenty seeds its reason text already cites: the detachment ordered to envelop reaches behind the defender in strictly more seeds than the same detachment ordered to hold, and the hold arm reaches it in none. A direction with a control, no threshold invented. If the envelop arm does not beat the hold arm, the test is red and the mechanism is the finding."
+- WHERE: `tests/valoria/test_mass_battle_maneuvers.py` (`test_envelop_reaches_rear_node`).
+- TESTS: the rewritten test; `assert checked >= 20` over the seeds (§0.1 pt 2).
+- FALSIFIER and CONTROL: the hold arm reaches the rear node in any seed. Control: the hold arm reads 0.
+- GATE: `python -m pytest tests/valoria/test_mass_battle_maneuvers.py -q -k envelop` → passes with no `xfail` marker (`grep -n "xfail" tests/valoria/test_mass_battle_maneuvers.py` → nothing at that test).
+- HASH MOVERS: none.
+- DEPENDS ON: the MB lane's agreement at B02's open (`STAGES.md` "Parallel sessions" rule 6: a session never edits another lane's files); EXISTS-IN-TREE `tests/valoria/test_mass_battle_maneuvers.py::test_envelop_reaches_rear_node`.
+- GLOSSARY: none.
+- COST and TIER: small build; `sonnet`, high.
+- LANDS IT: if the MB lane agrees at B02's open, B02's producer, `Item: B02.07`, `[skip ci]`; otherwise the item leaves this batch at its expunge and is B17's: B17.14 (`valoria_master_workplan_v12_part11.md`) carries the same edit, HELD to land only if no `Item: B02.07` commit exists on its base (repair lane R2a, K1 F1).
+
+### B02.08 — delete an unused helper · 01_CORE_tests_delete_what_cannot_fail row 7 · BUILD · HASH EQUAL
+- SOURCE: the same file, row 7.
+- ADVANCES: none: test hygiene.
+- INSTRUCTION: "delete the unused `effect` in `test_r3_witness_fans_to_everyone_as_specified`" (it defines `effect` and never passes it).
+- WHERE: `engine/season/tests/test_season_shape.py` (`test_r3_witness_fans_to_everyone_as_specified`).
+- TESTS: none new.
+- FALSIFIER and CONTROL: `effect` is read after its definition in that function (then it is not unused). Control: the test passes before and after.
+- GATE: `python -m pytest engine/season/tests/test_season_shape.py -q -k r3_witness_fans` → passes.
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B02.04 (same file).
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, medium.
+- LANDS IT: B02's producer; `Item: B02.08`, `[skip ci]`.
+
+### B02.09 — assertions that cannot fail get a floor or go · U5a_tests_digest_additions §A · BUILD · HASH EQUAL
+- SOURCE: `proposals/U5a_tests_digest_additions.md` §A and "Not edited, with the reason"; `unified/U4_DOCUMENT_STATUS.md` §3.4 code SITE; `master/instructions/IS_B2_SC_FI_CORE_CHAR_part2.md` `IS-B2-CORE-07` (this item's first step); closes the digests' instances of F-TEST-01 to F-TEST-12 at these sites.
+- ADVANCES: none: test strength (CLAUDE.md §0.1 pt 2).
+- INSTRUCTION:
+  1. SITE (`IS-B2-CORE-07`, copied): "open each cited site and confirm the symbol and line before the edit; a site that does not match is dropped from the member with a line in the commit body, not repaired by guess." Record in the commit body, per row, what was found (the line numbers are the digests' at `785bc62`; find each by its symbol or text). Only A3 was opened by the source lane.
+  2. The edits, per row, copied:
+
+  | # | site | defect | exact edit |
+  |---|---|---|---|
+  | A1 | `engine/season/tests/test_information_cluster.py` (`test_20iii_every_sheet_the_populated_realm_makes_says_what_its_holder_holds`) | asserts per sheet inside the loop and `checked + skipped == len(sheets)`; with no sheets both pass | add `assert checked >= 1` after the loop (no count pin) |
+  | A2 | `engine/season/tests/test_in61_succession.py` (the execution half, asserted only `if claimed:`) | the execution half is asserted only `if claimed:` | assert `claimed` before the block. If the fixture cannot make a claim, delete the execution half and keep the formation half; the commit says which |
+  | A3 | `engine/season/tests/test_stress_proceedings_rehost.py` (`assert not hasattr(convene, "scale") or True`) | always true | delete the line; the raw-cell assertion below it is the test |
+  | A4 | `engine/season/tests/test_season_shape.py` (`len(missing) == len(prose) - len(evaluable)`) | a tautology | delete the assertion |
+  | A5 | `engine/season/tests/test_season_shape.py` (`checked >= 1` after unconditional increments) | cannot fail | replace with a floor on the population the loop walks (`assert len(<the iterable>) >= 1` before the loop) |
+  | A6 | `tests/valoria/test_degree_ladder_single_owner.py::test_the_held_site_still_diverges` | loops over an empty dict | delete the test |
+  | A7 | `tests/valoria/test_descriptor_registry_category_b.py` (two assertions on constants); `tests/valoria/test_descriptors_runtime.py` (assertions on constants) | assertions on constants | delete those assertions |
+
+  Not edited (the source's reasons stand): `test_strife_kinds.py`'s does-not-raise call (the control of the planted-refusal tests below it); `test_season_shape.py`'s three harness probe loops with no floor (they guard `engine/season/harness/`, accepted, §0.1 pt 5); the mass-battle and combat files the source hands to their own closure.
+- WHERE: `engine/season/tests/test_information_cluster.py`, `test_in61_succession.py`, `test_stress_proceedings_rehost.py`, `test_season_shape.py`; `tests/valoria/test_degree_ladder_single_owner.py`, `test_descriptor_registry_category_b.py`, `test_descriptors_runtime.py`.
+- TESTS: the edited tests themselves.
+- FALSIFIER and CONTROL: A1: return no sheets in process; the test must fail (it passed before). A2: make the fixture claim nothing; the test must fail. Control: each edited file passes on the unmutated tree.
+- GATE: `python -m pytest <each edited file> -q` → green, one file at a time (the source's gate); the commit body lists per row: found or dropped, and the edit.
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B02.08 (`test_season_shape.py`, serial); EXISTS-IN-TREE each site, checked by step 1.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, high.
+- LANDS IT: B02's producer; `Item: B02.09`, `[skip ci]`.
+
+### B02.10 — source-text assertions beyond the eight: run each mutation, then delete or keep · U5a_tests_digest_additions §B · BUILD · HASH EQUAL
+- SOURCE: the same file, §B; code SITE; `IS-B2-CORE-07`.
+- ADVANCES: none: test strength.
+- INSTRUCTION:
+  1. SITE: open each site and record what is found (as B02.09 step 1). Sites (the digests' line numbers at `785bc62`): `test_season_shape.py:258`, `:311`, `:369`, `:409-410`, `:426`, `:580`, `:1551`, `:3609-3615`, `:4159`, `:4176`, `:5613`, `:7574-7578`; `test_sc02_typed_ids_and_loader.py:63`, `:322`; `test_governance_build.py:776-783`; `test_cp_t03_04_arms.py:93-94`. (`tests/valoria/test_combat_halfsword_affordance.py:62-67` is combat's: not edited here, the source hands it to U5b.) **Finding a site on this tree** (repair lane R2a, K1 F7: B02.01 and B02.04 edit `test_season_shape.py` first, so the numbers have moved): for each `file:L`, `git show 785bc62:engine/season/tests/<file> | sed -n '<L>p'` prints the line as the digest read it (`785bc62` is reachable in this clone: `git cat-file -t 785bc62` → `commit`); `grep -nF '<that line, stripped>' engine/season/tests/<file>` locates it now. No hit → the line is gone (record "absent at base", no edit); two hits → take the one inside the test function the `785bc62` line sat in (`git show 785bc62:… | sed -n '1,<L>p' | grep -n '^def test_' | tail -1`).
+  2. The rule, per line, copied: "In process, make the change the substring guards against. If a behaviour test in the same file goes red, delete the substring assertion: its fact is observed. If none does, keep the line and name it in the commit body; it is then the only observer and a behaviour test is owed by whoever next edits that code. No line is deleted on the digest's word alone."
+  3. Kept as they are: `test_army_menu_presets.py:325-341`, the `ast` walks in `test_in23`, `test_k3`, `test_migrate_capacity`, `test_governance_build.py:1559-1604`; `tests/valoria/test_claim_provenance_fields.py:43-53` (reads a tool's text: process, accepted).
+- WHERE: `engine/season/tests/test_season_shape.py`, `test_sc02_typed_ids_and_loader.py`, `test_governance_build.py`, `test_cp_t03_04_arms.py` (only the lines step 2 deletes).
+- TESTS: none new.
+- FALSIFIER and CONTROL: a line deleted whose mutation turned no behaviour test red (the commit body's per-line record shows it). Control: each file green on the unmutated tree.
+- GATE: `python -m pytest <each edited file> -q` → green, one file at a time; "for section B the commit body lists, per line, the mutation made and the test that went red" (the source's gate).
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B02.09 (`test_season_shape.py`, serial).
+- GLOSSARY: none.
+- COST and TIER: edit, one mutation per line; `sonnet`, high.
+- LANDS IT: B02's producer; `Item: B02.10`, `[skip ci]`.
+
+### B02.11 — hash literals read under a revert stack, beyond B02.01's table · U5a_tests_digest_additions §D2 · BUILD · HASH EQUAL
+- SOURCE: the same file, §D row D2 ("§D2 after T1 in B02"); code SITE; `IS-B2-CORE-07`.
+- ADVANCES: none: test strength.
+- INSTRUCTION:
+  1. SITE: open each site and record what is found.
+  2. Copied: "hash literals asserted under a revert stack in `test_cp_t03_01` (7 reverts), `test_cr17` (8), `test_cr87` (7), `test_cr85` (4), `test_cp_t03_04` (3), `test_in27_endings.py:357-385`, `test_season_weather.py` (first test; the `give`-withheld test) … fall to T1 C by its rule (a hash pin read under `revert_*` is deleted; the one owner holds the shipped trajectory). The behaviour assertions in those files stay." The files B02.01's table already covers are checked, not re-edited; this item deletes what remains: the pins of `test_cr17_odds_weighting.py` and `test_in27_endings.py`, and any other in the list B02.01 left.
+- WHERE: `engine/season/tests/test_cr17_odds_weighting.py`, `test_in27_endings.py`; and the other listed files where step 1 finds a pin B02.01 left.
+- TESTS: none new.
+- FALSIFIER and CONTROL: a deleted literal was the only assertion of a behaviour (then its test loses all its asserts; it must keep at least one). Control: each file green.
+- GATE: `python -m pytest engine/season/tests/test_cr17_odds_weighting.py engine/season/tests/test_in27_endings.py -q` → green; `git grep -lE '"[0-9a-f]{32}"' -- engine/season/tests` → as B02.01's gate.
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B02.01 (the owner and the rule).
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, high.
+- LANDS IT: B02's producer; `Item: B02.11`, `[skip ci]`.
+
+### B02.12 — count pins and re-pin logs beyond B02.01's list · U5a_tests_digest_additions §E · BUILD · HASH EQUAL
+- SOURCE: the same file, §E; code SITE; `IS-B2-CORE-07`; C3-N30.
+- ADVANCES: none: test strength.
+- INSTRUCTION:
+  1. SITE: open each site and record what is found. Sites (the digests' line numbers): `test_season_shape.py:2407`, `:4122`, `:4873`, `:6384`, `:6971`, `:7040`, `:7746`, `:10083`, `:12366`, `:12713`, `:13580`, `:13723`, `:13771`, `:14829`, `:14889`, `:14933`, `:15143`, `:16649`, `:17845`, `:17878`; the `ever` literal at `:8164`, `:9425`, `:11122`; `test_governance_build.py:913`, `:1975-1991`, `:2421`, `:2957`; `test_in53_vacancy_need.py:246`, `:298`; `test_in36_foreign.py:99`, `:273-286`; `test_told_by_channel.py:234-300` (a seed re-picked eight times). Those B02.01 already edited are checked, not re-edited. The numbers are the digests' at `785bc62`: locate each on this tree as B02.10 step 1 says (`git show 785bc62:<file> | sed -n '<L>p'`, then `grep -nF` of that text in the current file; repair lane R2a, K1 F7).
+  2. The rule, per pin, copied: "A pin whose comment states the property it stands for is replaced by that property (a floor, a set inclusion, an equality between two readings of the same run). A pin that states none, and whose re-pin log shows it moved with unrelated commits, is deleted with its log. A pin on a closed roster's size that a loader already refuses (`len(REFERENT_CLASSES) == 8`, `len(VERB_TABLE)`) is deleted: the loader is the owner. The one exception is the pin T1 D keeps (R-05's denominator): it is a reading of `main` (67), re-read and re-recorded at B25 (A-28's `tie`/`knot` split, 68) and B38 (`riot`, 69, if it lands), quoted with its batch (C3-N30); every other copy of `len(VERB_TABLE) == 67` is deleted."
+- WHERE: `engine/season/tests/test_season_shape.py`, `test_governance_build.py`, `test_in53_vacancy_need.py`, `test_in36_foreign.py`, `test_told_by_channel.py`.
+- TESTS: none new.
+- FALSIFIER and CONTROL: a replaced pin's property assertion passes on a mutated run that the pin caught (then the property is weaker than the pin claimed: keep the pin and say so). Control: each file green.
+- GATE: `python -m pytest <each edited file> -q` → green, one file at a time; `git grep -n "len(VERB_TABLE) == 67" -- engine/season/tests` → one line.
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B02.10 (`test_season_shape.py`, serial); V12 B02.01 (its D list).
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, high.
+- LANDS IT: B02's producer; `Item: B02.12`, `[skip ci]`.
+
+### B02.13 — a row's `met` text is a list of conjuncts the register reads · IS-A-01, landing as 01_CORE_requirements_reading_record §1, with 16_PESSIMIST_CORE_the_nine_gate… edit 1 and IS-A-04's register lines · BUILD · HASH EQUAL
+- SOURCE: `master/instructions/IS_A_NINE_part2.md` `IS-A-01` (one commit, "landing *as* §1 of `proposals/01_CORE_requirements_reading_record.md` rather than after it, so the nine rows are reshaped once"); `proposals/01_CORE_requirements_reading_record.md` §1, "Gate", "Falsifier"; `proposals/16_PESSIMIST_CORE_the_nine_gate_and_a_knockout_reading.md` "Exact edits" 1 and "Gate" (its named test file), whose regexes `IS-A-01` says "are not written at all"; `IS-A-04`'s WHERE ("three lines, in `IS-A-01`'s commit"); C-U5a-01, C3-K5; closes F-CORE-03 (the shape), F-PES-CORE-04.
+- ADVANCES: all nine (the definition of done gets an owner; no row moves).
+- INSTRUCTION (`IS-A-01`'s three steps, copied; the reading record's shape and the nine-gate's rules folded where `IS-A-01` names them):
+  1. `engine/season/requirements.yaml`, each of the nine rows: `measured:` leaves (the file's history is its git log); the row gains `conjuncts:`, a list of `{id, text, argv, expects, holds, reading}` where `id` is `R-0n.x`, `argv` is a list (the command, no shell string), `expects` is the printed line or the test names, `holds` is one of `yes | no | unread`, and `reading` is the record (`tree`, `date`, `seed`, `seasons`, `line`, `control`, `does_not_show`), required where `holds` is `yes` or `no`. A retired conjunct is deleted; the commit body names it. `measure:` stays one line per row for `tools/m1_acceptance.py` and the dossier script, and names the row's cheapest conjunct (R-01's and R-02's are B02.15's). The record's shape, as the reading-record proposal gives it for one row:
+     ```yaml
+     - id: R-05
+       statement: ...
+       status: not_met
+       measure: python -m engine.season.harness.corpus_run --seasons 2
+       reading:
+         tree: 601e715
+         date: 2026-11-12
+         seed: 0
+         seasons: per case
+         line: "VERBS THAT EXECUTED : 23 of 67"
+         control: none            # or the arm and what it read
+         does_not_show: "one seed; a verb executing is not a verb built out"
+       blocks: [...]
+     ```
+     (here the `reading:` record sits on each conjunct, not on the row). The `scales:` block is untouched by this step (B02.31). This commit writes the key with an empty list on each row; B02.38 writes the conjuncts.
+  2. `engine/season/harness/register.py::check_requirements` (the owner of the shape): refuse `status: met` unless every conjunct reads `holds: yes` with a `reading.tree`, `reading.seed` and `reading.line`; refuse `partial` with no conjunct at `yes`; refuse a conjunct with no `argv`; resolve `argv[0:3]` by the three rules of the nine-gate edit 1: "a `python -m <module>` head: resolve `<module>` with `importlib.util.find_spec`; absent is a violation, with the same wording as the missing-file case"; a path by existence; "the `-k` case: collect the test names once (`re.findall(r"def (test_\w+)", src)`); **every** identifier in the expression not under a `not` must be a substring of at least one test name" (`names = re.findall(r"[A-Za-z_]\w*", expr)`, drop `and`/`or`/`not` and every identifier directly under a `not`; each remaining name must be a substring of some name in `re.findall(r"def (test_\w+)", src)` over the test files named before `-k`); "a head matching none of `python <path>.py`, `python -m <module>`, `pytest … -k` is a violation (*'the measure is not a command this check can find'*)". The regexes over a prose `measure:` string that the nine-gate edit 1 would have written are not written (`IS-A-01`). The three rules resolve the `argv` of a conjunct at `holds: yes` or `no`; a conjunct at `unread` must carry an `argv` but is not resolved, because `IS-A-02` writes in B02 conjuncts whose instrument a later batch builds (R-09.e's `engine/tests/test_draw.py` in B06, and others; none on a `met` row: R-03.c, whose file B08 writes, is added by B08.99 with its reading, not written here, repair lane V1) `[ASSUMPTION: basis: IS-A-02 writes every conjunct in B02 and IS-A-01 refuses an unresolvable argv; the two hold together only this way; the alternative, each such conjunct written by the batch that builds its instrument, edits the met texts many times; UNDECIDED in this part's receipt]`. Print, per row, `R-0n  <status>  <held> of <m> conjuncts  tree <oldest reading.tree>`. The old `measured:` test and its print line go.
+  3. `IS-A-04`'s three lines, in this commit: `check_requirements` reads `scales[].conjunct` and refuses one that names no conjunct of R-04.
+  4. `tools/m1_acceptance.py::row_nine_requirements`: its detail line adds `conjuncts held <h> of <m>`; it stays DOC-DERIVED and says so.
+- WHERE: `engine/season/requirements.yaml` (every row: `measured:` → `conjuncts: []`); `engine/season/harness/register.py` (`check_requirements`); `tools/m1_acceptance.py` (`row_nine_requirements`); NEW `engine/season/tests/test_register_reading.py`; NEW `engine/season/tests/test_check_requirements.py`.
+- TESTS: written before the edits and read red against today's `check_requirements` (planted scratch copies through `monkeypatch.setattr(register, "REQUIREMENTS", scratch)`; `register.REQUIREMENTS` exists): in `test_register_reading.py`, `test_a_met_row_without_a_reading_is_refused` (the reading record's), `test_a_met_row_with_one_conjunct_unread_is_refused` (`IS-A-01` (a)), `test_a_met_row_whose_conjunct_has_no_reading_line_is_refused` (`IS-A-01` (b)); in `test_check_requirements.py` (the nine-gate's names, on the conjunct form): `test_all_met_with_missing_module_exits_nonzero` (`argv: ["python", "-m", "engine.season.harness.no_such_module"]`, `IS-A-01` (c)), `test_k_expression_naming_only_import_is_refused`, `test_measure_true_is_refused` (`argv: ["true"]`), `test_a_scales_row_naming_no_r04_conjunct_is_refused` (`IS-A-04`'s falsifier: `conjunct: R-04.c9`), and the control `test_shipped_file_exits_zero`, which reads red from this commit until B02.38 writes the conjuncts (expected: the five `partial` rows carry no conjunct at `yes` until then).
+- FALSIFIER and CONTROL: `IS-A-01`'s: (a) a `met` row with one conjunct at `unread` exits non-zero; (b) a `met` row whose conjunct has no `reading.line` exits non-zero; (c) a missing module exits non-zero; (d) control: the shipped file exits 0 (read at B02.38). The nine-gate's stated limit stands: a bare relabel to `met` with honest readings still exits 0; the register executes nothing.
+- GATE: `python -m pytest engine/season/tests/test_register_reading.py engine/season/tests/test_check_requirements.py -q` → every test passes but `test_shipped_file_exits_zero` (expected until B02.38). The arms "`register --requirements` prints nine lines in the new form and exits 0" and "`m1_acceptance --summary` row 3 prints the held count" read the conjuncts B02.38 writes: moved to B02.38's GATE (`V12_STRUCTURE_part2.md` §5.8). Between this item and B02.38, `register --requirements` exits non-zero (expected; every commit between carries `[skip ci]`).
+- EXPECTED RED UNTIL B02.38 (E-9, under `[skip ci]`): `test_check_requirements.py::test_shipped_file_exits_zero` and `register --requirements` (exit non-zero): the five `partial` rows carry no conjunct at `yes` until B02.38 writes them. (Added by check lane K1 from this item's own GATE sentence; no pin is involved.)
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B02.05 (R-07's `measure:` string, carried into the row); EXISTS-IN-TREE `engine/season/harness/register.py::check_requirements`, `::REQUIREMENTS`, `tools/m1_acceptance.py::row_nine_requirements`.
+- GLOSSARY: *conjunct* (one of the readings a row's `met` text joins by "and"; the ordinary word for a term of a conjunction): its row of `unified/U1_GLOSSARY.md` becomes a pointer to `requirements.yaml`'s `conjuncts:` key and `register.py::check_requirements`, in this commit; *reading* likewise points at the `reading:` record.
+- COST and TIER: edit; `sonnet`, high.
+- LANDS IT: B02's producer; `Item: B02.13`, `[skip ci]`. Why this is not a new guard (`IS-A-01`, CLAUDE.md §0.1 pt 5): the register is the existing check of a file its own header calls mechanism, and its count reaches `m1_acceptance`; the edit changes the shape that check owns.
+
+### B02.14 — the removal test, beside the draw-seed arm · 16_PESSIMIST_CORE_the_nine_gate… edit 2 · BUILD · HASH EQUAL
+- SOURCE: `proposals/16_PESSIMIST_CORE_the_nine_gate_and_a_knockout_reading.md` "Exact edits" 2, "Gate" (second bullet), "Falsifier", "Cost class" (one commit for edit 2); C3-K7 (this file edits `harness/storybar.py` first); closes F-PES-CORE-05.
+- ADVANCES: R-01.c, R-02.b (the instrument; the expected readings are B02.19's).
+- INSTRUCTION (copied): "`engine/season/harness/storybar.py` — beside `draw_seed_arm` (same shape, same `fork`, same `drive`). Definition, written in the function's docstring and the `--help` text (CLAUDE.md §4): *a removal test: suppress one person's choice at one round and count how many of the other persons' acts differ from the unperturbed copy.* Signatures: `drive(seed, seasons, arm, cap=None, on_season=None, world=None, draw_seed=None, wrap_chooser=None)` (the existing signature plus one keyword; `wrap_chooser(chooser) -> chooser`, default `None` = today); `removal_arm(base, seasons: int, who: str, when: tuple[int, int]) -> dict[tuple, int]`. `removal_arm(base, seasons, who, when)` runs the copy with the chooser wrapped to return no scene for person `who` at `(tick, round) == when`, and returns the multiset of the *other* persons' `(actor, tick, round, verb, opportunity, executed|refused)`; a `--remove PERSON` CLI switch prints, against the unperturbed copy: acts differing, persons affected, by `(season, round)`, with three control lines in the same output — **replay** (nobody removed: must be 0), **a cohort's scene**, and **`--draw-seeds`'s existing arm** (the floor). `drive` gains one optional parameter (`wrap_chooser`), default `None`, the shipped reading unchanged. About 40 lines; no new module." (`round` here is the season's pass, the tree's identifier until B04's `PCR-4`; the docstring says "lap" in prose with `round` once in backticks.)
+- WHERE: `engine/season/harness/storybar.py` (`drive`, NEW `removal_arm`, the CLI's `--remove`); `engine/season/tests/test_storybar.py` (NEW `test_removal_replay_arm_reads_zero`).
+- TESTS: `test_storybar.py::test_removal_replay_arm_reads_zero` (a planted case: replay with nobody removed reads 0), written with the edit; it fails at import before it (no `removal_arm`).
+- FALSIFIER and CONTROL: the source's: "The replay control prints a non-zero difference (the wrapper perturbs the run, and every figure is void)". Control: `drive(...)` with `wrap_chooser=None` reproduces the unwrapped run's hash.
+- GATE: `python -m pytest engine/season/tests/test_storybar.py -q` → green; `python -m engine.season.harness.storybar --remove <a person id> --base-seed 0 --seasons 2` → the replay line prints 0 differing acts and the baseline hash; the removed line is reported (its expected reading is B02.19's).
+- HASH MOVERS: none (the chooser's draw is keyed per person, `state/ids.py::draw_factory`; a wrapper with `None` changes nothing).
+- DEPENDS ON: EXISTS-IN-TREE `engine/season/harness/storybar.py::drive`, `::draw_seed_arm`; `engine/season/tests/test_storybar.py`.
+- GLOSSARY: *removal test* (glossary row exists, U4d: "knockout" → "removal test"): the row becomes a pointer to `storybar.py::removal_arm`, keeping its rejected word "knockout".
+- COST and TIER: small build; `sonnet`, high.
+- LANDS IT: B02's producer; `Item: B02.14`, `[skip ci]`.
+
+### B02.15 — R-01 and R-02 are measured by the removal test · 16_PESSIMIST_CORE_the_nine_gate… edit 3 · BUILD · HASH EQUAL
+- SOURCE: the same file, "Exact edits" 3; C-U5a-01 and C3-K5 (one instrument per property: the removal arm is R-01's and R-02's `measure:`).
+- ADVANCES: R-01, R-02 (their `measure:` line).
+- INSTRUCTION: "`engine/season/requirements.yaml` — R-01 and R-02 `measure:` re-pointed to `python -m engine.season.harness.storybar --remove <most-cited person> --base-seed 0 --seasons 2`, keeping the corpus `R3` line as a second measure in the comment. The statuses are **not** changed by this proposal." `<most-cited person>` is the bare `--remove` of B02.19 (no name: the instrument picks him); until B02.19 lands, the string names the flag as B02.19 defines it.
+- WHERE: `engine/season/requirements.yaml` (R-01, R-02: `measure:`).
+- TESTS: none new.
+- FALSIFIER and CONTROL: R-02's `measure:` still names `proposals/2026-09-04-degree-sweep/wd_collect.py` (the instrument under `proposals/` the source retires as a measure). Control: `status:` of both rows unchanged (`git diff` shows the `measure:` lines only).
+- GATE: `git diff -U0 engine/season/requirements.yaml` → two `measure:` lines; `python -m engine.season.harness.storybar --help` lists `--remove`. The register's exit-0 arm is read at B02.38 (moved, §5.8).
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B02.13 (the row shape), B02.14 (the flag).
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, high.
+- LANDS IT: B02's producer; `Item: B02.15`, `[skip ci]`.
+
+Last item in this file: B02.15. Batch B02-tests continues at item B02.16 (the head's index maps the handle to its file).

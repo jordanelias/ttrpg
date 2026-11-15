@@ -1,6 +1,6 @@
 # Workplan v12 — questions for Jordan
 
-## Status: WORK FILE (questions the v12 lanes leave to Jordan after the five checks; resolves nothing at runtime; deleted when v12 is adopted)
+## Status: REFERENCE (the questions v12 leaves to Jordan after the ladder; each states what the plan assumes until he answers; resolves nothing at runtime; kept at v12's adoption, `ED-IN-0362`, because J-03 to J-10 and J-SC-2 are open; deleted when the last is answered)
 
 Same form as `unified/DECISIONS_FOR_JORDAN.md`: what the game does today, one question, the options and how
 each plays, a recommendation, and what the plan assumes until you answer. Only questions that every
@@ -15,7 +15,7 @@ the patch lane (`PATCH_LOG.md`, `H2_DECISIONS.md`). Questions those checks did s
 **ANSWERED 2026-11-12 (Jordan: *"J-01 A"*; `unified/DECISIONS_ANSWERED.md` A-115).** Removed. Layer 1 node
 `L1-A115` is applied (`ED-IN-0361`: `04` §B.3's `Rung` tuple and DELETED line, §A.2's `loop/census` row, §C.7,
 F.19; pointers in `holonic_ARCHITECTURE.md`, `01_AXIOMS.md`, `ARCHITECTURE_V2.md`). B12b.18 is now a BUILD deletion
-(`workplan_v12_part24.md`): the field, its write-matrix row, the probe that writes it, the tests that name it;
+(`valoria_master_workplan_v12_part24.md`): the field, its write-matrix row, the probe that writes it, the tests that name it;
 a hash MOVER(encoding), re-pinned at B12b.99. It left the head's held-back list. The text below is the
 question as it was asked.
 
@@ -43,7 +43,7 @@ BLOCKED and on the held-back list.
 
 **Blocks.** B12b.18 (the half of H-171 it limits).
 
-**Sources.** `workplan_v12_part24.md` B12b.18; `proposals/U5d_SE_owed_edits.md` §3 ("Owed to Jordan (Layer 1
+**Sources.** `valoria_master_workplan_v12_part24.md` B12b.18; `proposals/U5d_SE_owed_edits.md` §3 ("Owed to Jordan (Layer 1
 text, not applied)"); `H2_NOTES.md` (A24).
 
 ---
@@ -52,7 +52,7 @@ text, not applied)"); `H2_NOTES.md` (A24).
 
 **ANSWERED 2026-11-12 (Jordan: *"J-02 A typically but B can be selected"*; `unified/DECISIONS_ANSWERED.md`
 A-116).** A report up the chain is the typical rule; reach down the residence ladder can be selected per seat.
-Built in Batch B12c (`workplan_v12_part28_cont.md`): B12c.30 the seat-row key `larder_reach: report | residence`
+Built in Batch B12c (`valoria_master_workplan_v12_part28_cont.md`): B12c.30 the seat-row key `larder_reach: report | residence`
 (default `report`) and its loader refusal; B12c.32 the offer aimed at the stock the lord was told of; B12c.33
 the `residence` reach; B12c.34 the flip (CR-23's stock report every season, the believed read on), whose gate
 is an issuing seat offered a larder in the built realm at seed 0, two seasons, against the 766-of-766 reading
@@ -94,7 +94,7 @@ quotes the computed count (0) as the standing reading.
 **Blocks.** B12c.30, B10.79, B33.30. Also, through them, CP-T08-06's compliance reader, CP-T08-07's
 collection and CP-T08-08's refill, which are credited on hand-built worlds only.
 
-**Sources.** `workplan_v12_part28.md` B12c.30; `master/eval/E5.md` Block C12 (AM-E-21: "which lift to build
+**Sources.** `valoria_master_workplan_v12_part28.md` B12c.30; `master/eval/E5.md` Block C12 (AM-E-21: "which lift to build
 … is a design choice with different information games"); the intake `:326`; `H2_NOTES.md` (A28, A38).
 
 ---
@@ -117,7 +117,7 @@ collection and CP-T08-08's refill, which are credited on hand-built worlds only.
 
 **Blocks.** Nothing executes differently until answered; the close of the `contest_owed` roster (H2's HD-27) waits on it.
 
-**Sources.** `workplan_v12_part34_cont.md` B32.26 step 5; `workplan_v12_part34.md` UNDECIDED (9); `H2_DECISIONS.md` HD-27; `workplan_v12_part2_cont2.md` §11 C-22; `workplan_v12_part10_cont2.md` B07.01 (the three classes and the bookkeeping refusal); `engine/season/verb_table.yaml:1335` (`release`); `checks/CHK_K8.md` finding 4; `checks/R2d_APPLIED.md` J-1.
+**Sources.** `valoria_master_workplan_v12_part34_cont.md` B32.26 step 5; `valoria_master_workplan_v12_part34.md` UNDECIDED (9); `H2_DECISIONS.md` HD-27; `valoria_master_workplan_v12_part2_cont2.md` §11 C-22; `valoria_master_workplan_v12_part10_cont2.md` B07.01 (the three classes and the bookkeeping refusal); `engine/season/verb_table.yaml:1335` (`release`); `checks/CHK_K8.md` finding 4; `checks/R2d_APPLIED.md` J-1.
 
 ---
 
@@ -139,7 +139,7 @@ collection and CP-T08-08's refill, which are credited on hand-built worlds only.
 
 **Blocks.** Nothing; the plan executes either way.
 
-**Sources.** `V12_STRUCTURE_part4.md` E-12; `V12_STRUCTURE.md` §5.4; `checks/R2a_APPLIED.md` (K2 #11), `R2b_APPLIED.md` (K4 F11), `R2c_APPLIED.md` (K5 F6, K6 F7), `R2d_APPLIED.md` (K7 F-17); `workplan_v12_part23.md` B16.09; `workplan_v12_part25.md` B21c.01; part 2 appendix `sizes.py`.
+**Sources.** `V12_STRUCTURE_part4.md` E-12; `V12_STRUCTURE.md` §5.4; `checks/R2a_APPLIED.md` (K2 #11), `R2b_APPLIED.md` (K4 F11), `R2c_APPLIED.md` (K5 F6, K6 F7), `R2d_APPLIED.md` (K7 F-17); `valoria_master_workplan_v12_part23.md` B16.09; `valoria_master_workplan_v12_part25.md` B21c.01; part 2 appendix `sizes.py`.
 
 ---
 
@@ -147,7 +147,7 @@ collection and CP-T08-08's refill, which are credited on hand-built worlds only.
 
 (Raised by repair lane V1 from the Fable verdict's defect 2, `V12_VERDICT.md`.)
 
-**The situation.** Each v12 batch has its own branch and PR (`workplan_v12.md` §7 point 7). A later batch's gate on an earlier one is met only if the earlier batch's closing commit is an ancestor of the current head (§1's table, the gate row). The `methodology-execute` skill says GitHub squash-merges each batch's PR (its BATCH BOUNDARY item 2). A squash (or a rebase-and-merge) puts a new commit on `main` in place of the batch's own, so the next batch's gate reads unmet and the run stops at B01. Which merge methods the repository allows was not checked (no GitHub call was made).
+**The situation.** Each v12 batch has its own branch and PR (`valoria_master_workplan_v12.md` §7 point 7). A later batch's gate on an earlier one is met only if the earlier batch's closing commit is an ancestor of the current head (§1's table, the gate row). The `methodology-execute` skill says GitHub squash-merges each batch's PR (its BATCH BOUNDARY item 2). A squash (or a rebase-and-merge) puts a new commit on `main` in place of the batch's own, so the next batch's gate reads unmet and the run stops at B01. Which merge methods the repository allows was not checked (no GitHub call was made).
 
 **The question.** Will you set the repository to allow merge commits, so v12's batch PRs merge that way?
 
@@ -157,11 +157,11 @@ collection and CP-T08-08's refill, which are credited on hand-built worlds only.
 
 **Recommendation.** A: it is the only option under which the plan runs as written, in parallel where §7 allows.
 
-**What the plan assumes until you answer.** Merge commits where the repository allows them; otherwise the driver on one branch (`workplan_v12.md` §7 point 7, `[ASSUMPTION: merge setting of the repository — unverified]`; the difference from the skill, §2.1 (e)).
+**What the plan assumes until you answer.** Merge commits where the repository allows them; otherwise the driver on one branch (`valoria_master_workplan_v12.md` §7 point 7, `[ASSUMPTION: merge setting of the repository — unverified]`; the difference from the skill, §2.1 (e)).
 
 **Blocks.** Every parallel step's merges; nothing in B00 to B03, which run one at a time.
 
-**Sources.** `workplan_v12.md` §1, §2.1 (e), §7 point 7; `.claude/skills/methodology-execute/SKILL.md`, BATCH OPEN item 3 and BATCH BOUNDARY item 2; `V12_VERDICT.md` defect 2.
+**Sources.** `valoria_master_workplan_v12.md` §1, §2.1 (e), §7 point 7; `.claude/skills/methodology-execute/SKILL.md`, BATCH OPEN item 3 and BATCH BOUNDARY item 2; `V12_VERDICT.md` defect 2.
 
 ---
 
@@ -174,7 +174,7 @@ collection and CP-T08-08's refill, which are credited on hand-built worlds only.
 **The question.** Keep each as one close, or split at its first forward cut?
 
 **Option A — keep them whole.** One close each, as written.
-**Option B — split on request, at the first forward cut.** A cut is valid where no row before it gates on a row after it. Verified for B10 only: B10.01 to B10.50 | B10.54 onward, after B10.51 to B10.53 land first (the first half's rows gate on nothing in the second half but those three, `workplan_v12_part12.md`'s position table; `V12_VERDICT.md` question 8). B98 can be cut at any position (each flip gates only on the previous flip's reading). The cuts for B03, B38, B11 and B21 are **unverified**.
+**Option B — split on request, at the first forward cut.** A cut is valid where no row before it gates on a row after it. Verified for B10 only: B10.01 to B10.50 | B10.54 onward, after B10.51 to B10.53 land first (the first half's rows gate on nothing in the second half but those three, `valoria_master_workplan_v12_part12.md`'s position table; `V12_VERDICT.md` question 8). B98 can be cut at any position (each flip gates only on the previous flip's reading). The cuts for B03, B38, B11 and B21 are **unverified**.
 
 **Recommendation.** A until a close of one of them runs long; then B for that batch, at its verified cut.
 
@@ -182,7 +182,7 @@ collection and CP-T08-08's refill, which are credited on hand-built worlds only.
 
 **Blocks.** Nothing.
 
-**Sources.** `workplan_v12_part2.md` (the batch table); `workplan_v12.md` §5 ("What shortens the path"); `V12_VERDICT.md` question 8.
+**Sources.** `valoria_master_workplan_v12_part2.md` (the batch table); `valoria_master_workplan_v12.md` §5 ("What shortens the path"); `V12_VERDICT.md` question 8.
 
 ---
 
@@ -199,11 +199,11 @@ collection and CP-T08-08's refill, which are credited on hand-built worlds only.
 
 **Recommendation.** A for both: RS-27 does make the heir a claimant, and GO-10's shapes are what the port is built against; but each is a Layer 1 text, so it is yours.
 
-**What the plan assumes until you answer.** Neither lands: B03.71 is HELD, and B41.03's step 4 is HELD while its steps 1 to 3 proceed (`workplan_v12_part5.md` B03.71; `workplan_v12_part29.md` B41.03).
+**What the plan assumes until you answer.** Neither lands: B03.71 is HELD, and B41.03's step 4 is HELD while its steps 1 to 3 proceed (`valoria_master_workplan_v12_part5.md` B03.71; `valoria_master_workplan_v12_part29.md` B41.03).
 
 **Blocks.** B03.71; B41.03 step 4.
 
-**Sources.** `workplan_v12_part5.md` B03.71; `workplan_v12_part29.md` B41.03; `registers/editorial_ledger_in.jsonl` (ED-IN-0300, the superseding row); `workplan_v12_part2_cont2.md` (the Layer 1 table); `V12_VERDICT.md` question 7.
+**Sources.** `valoria_master_workplan_v12_part5.md` B03.71; `valoria_master_workplan_v12_part29.md` B41.03; `registers/editorial_ledger_in.jsonl` (ED-IN-0300, the superseding row); `valoria_master_workplan_v12_part2_cont2.md` (the Layer 1 table); `V12_VERDICT.md` question 7.
 
 ---
 
@@ -224,7 +224,7 @@ collection and CP-T08-08's refill, which are credited on hand-built worlds only.
 
 **Blocks.** Nothing; B38 closes or stops on these values.
 
-**Sources.** `workplan_v12_part41.md` B38.71 (step 6, C8; GATE); `workplan_v12_part40.md` B38.13 GATE 3 (row 7, the related flagged rate "`the rate is a seed`"); `proposals/30_WR_E_cascade_chains_and_the_census.md` §4 C8; `unified/DECISIONS_ANSWERED.md` A-80.
+**Sources.** `valoria_master_workplan_v12_part41.md` B38.71 (step 6, C8; GATE); `valoria_master_workplan_v12_part40.md` B38.13 GATE 3 (row 7, the related flagged rate "`the rate is a seed`"); `proposals/30_WR_E_cascade_chains_and_the_census.md` §4 C8; `unified/DECISIONS_ANSWERED.md` A-80.
 
 ---
 
@@ -232,7 +232,7 @@ collection and CP-T08-08's refill, which are credited on hand-built worlds only.
 
 | raised as a question for you | settled as | by |
 |---|---|---|
-| the guild leader's seat (`off_npc_084`) has no rung, so the stored `scale:` column cannot be cut (B03.69) | B03.69 stays BLOCKED (owner: you, for the seat's rung or scope, or A1-46's revert); the column is not cut in v12's run, and the position goes to the held table at B03's expunge with that trigger (`workplan_v12_part5.md` B03.69) | the item's own text; HD-24's "drafted as seed content" was not carried into the item (corrected by repair lane V1, `V12_VERDICT.md` defect 4) |
+| the guild leader's seat (`off_npc_084`) has no rung, so the stored `scale:` column cannot be cut (B03.69) | B03.69 stays BLOCKED (owner: you, for the seat's rung or scope, or A1-46's revert); the column is not cut in v12's run, and the position goes to the held table at B03's expunge with that trigger (`valoria_master_workplan_v12_part5.md` B03.69) | the item's own text; HD-24's "drafted as seed content" was not carried into the item (corrected by repair lane V1, `V12_VERDICT.md` defect 4) |
 | `release` is listed as owed a contest, and nobody gives it one | its shape file gives it no contest, so B32 reclassifies it | precedent: a row's shape is owned by its shape file (HD-27). **Re-opened as J-03**: check lane K8 found the move is not mechanical (the bookkeeping class may not touch a seat) |
 | readings that need more than two seasons (the scar flip, the Church Influence bands, claim fade) | they go to the final long re-take (B99) | your ruling A-114 (HD-26) |
 | `knot` has no written effect, but the thread batch must build it out | a design item comes first, inside the batch | precedent: E-14 and D-18 (HD-25); written by lane H3 as B35.30 |
@@ -280,7 +280,7 @@ rule and both weight tables. The text below is kept as the question was put.
 
 **Blocks.** Nothing executes differently until B24p.07 lands; a B answer after that is one cell and a re-read of B24p.23's curves (and B98.87).
 
-**Sources.** `proposals/2026-11-14-social-contest-redesign.md` §B.2, §B.4; `_part5.md` §F.7; `proposals/2026-11-14-social-contest-jordan-rulings.md` R1; ED-IN-0350; `master/workplan_v12/workplan_v12_part22_b24p.md` B24p.07.
+**Sources.** `proposals/2026-11-14-social-contest-redesign.md` §B.2, §B.4; `_part5.md` §F.7; `proposals/2026-11-14-social-contest-jordan-rulings.md` R1; ED-IN-0350; `workplans/valoria_master_workplan_v12_part22_b24p.md` B24p.07.
 
 ---
 
@@ -299,4 +299,4 @@ rule and both weight tables. The text below is kept as the question was put.
 
 **Blocks.** Nothing until B24p.23 sets the shipped values; a B answer is one setting (`None`) and a re-read.
 
-**Sources.** `proposals/2026-11-14-social-contest-redesign.md` §B.3; `_part5.md` §F.7; `proposals/2026-11-14-social-contest-jordan-rulings.md` R1; v30 `:154-188` (reference only; ED-1062); `master/workplan_v12/workplan_v12_part22_b24p.md` B24p.04, B24p.08, B24p.23.
+**Sources.** `proposals/2026-11-14-social-contest-redesign.md` §B.3; `_part5.md` §F.7; `proposals/2026-11-14-social-contest-jordan-rulings.md` R1; v30 `:154-188` (reference only; ED-1062); `workplans/valoria_master_workplan_v12_part22_b24p.md` B24p.04, B24p.08, B24p.23.
