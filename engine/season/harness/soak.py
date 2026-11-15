@@ -19,8 +19,8 @@ measured readings and reports it `UNGRADED`, naming the missing flag, rather tha
 threshold. A `FAIL` makes the exit status 1.
 
 WHAT THIS IS NOT. It is not a second `populated.run` — that owner is untouched, imported and
-reused for its construction (`build_realm`, `make_chooser`, `SeasonDriver`, `resolvable_verbs`,
-`H`, `draw_factory`). This module only keeps ONE driver alive across many seasons, where every
+reused for its construction (`build_realm`, `probes.chooser`, `SeasonDriver`, `resolvable_verbs`).
+This module only keeps ONE driver alive across many seasons, where every
 existing caller builds a fresh one, and records what crosses its path along the way. It is not a
 second `corpus_run`/`run_cases`: those still own DECLARED-PRESENT/DEGRADED/BLOCKED and R1/R3/R4/R5; the two
 grades here are about duration alone and read only the rows this harness itself wrote.
@@ -62,12 +62,12 @@ import traceback
 from collections import Counter, defaultdict
 from pathlib import Path
 
-# Four of these five mirror lines `harness/populated.py` already imports for this exact
-# composition; the fifth (`build_realm`/`census`) is imported FROM `populated.py` itself, which
-# obviously does not import from itself.
-from ..decision import make_chooser
+# `SeasonDriver`/`resolvable_verbs` mirror lines `harness/populated.py` already imports for this exact
+# composition; the chooser is `probes.chooser`, the one owner of its composition (`CI-06`); and
+# `build_realm`/`census` are imported FROM `populated.py` itself, which obviously does not import
+# from itself.
 from ..loop.driver import SeasonDriver, resolvable_verbs
-from ..state.ids import H, draw_factory
+from . import probes as P
 from .populated import build_realm, census
 # `corpus_run._attribute_acts` is the ONE owner of the made/refused rule -- `[(act, made, refused)]`;
 # `attribute` calls it over the fold set (this module's reading) and `attempts` over the act store. Reused
@@ -265,9 +265,7 @@ def _run_world(args: argparse.Namespace, head: str, world_dir: Path, argv: list)
     w = build_realm(seed)                                                  # cap=None: the full realm
     w.fixtures = w.fixtures.sweep("question_aggregation_rule", arm)        # BEFORE the chooser
     d = SeasonDriver(w)
-    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
-                      draw=draw_factory(w.world_seed, lambda: w.tick))
+    ch = P.chooser(w, verbs=resolvable_verbs())
 
     pre_census = census(w)
     world_meta = {
