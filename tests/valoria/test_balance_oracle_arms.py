@@ -172,3 +172,41 @@ def test_the_shipped_arms_still_resolve_through_the_string_form():
     for model in oracle.ARMS.values():
         assert isinstance(model, str)
         assert oracle._resolve_arm(model) == ({"field_casualty_model": model}, {})
+
+
+def test_b0360_run_arm_counts_the_field_events_at_a_fought_band():
+    """B03.60: `run_arm` returns `fought`, the field Events at a fought band (`Won`/`Lost`; not
+    `Declared`, `Unopposed` or `Invested`). Asked of hand-built logs with literal counts."""
+    from types import SimpleNamespace as NS
+    ev = lambda kind, degree: NS(kind=kind, degree=degree)
+    log = [ev("field.won", "Won"), ev("field.lost", "Lost"), ev("field.unopposed", "Unopposed"),
+           ev("march.declared", "Declared"), ev("field.lost", "Lost"), ev("fight.done", "Won")]
+    assert oracle.fought_fields(NS(log=log)) == 3
+    assert oracle.fought_fields(NS(log=log[2:4])) == 0
+    assert "fought" in oracle.run_arm({"fixtures": {}}, 0, 0, 1)
+
+
+def test_b0360_main_prints_not_computable_instead_of_a_z_at_zero_fought_fields(monkeypatch, capsys):
+    """B03.60 falsifier: a z printed at zero fought fields. Both arms report zero fought fields and
+    differing tallies, which would give a z; `main` must print NOT-COMPUTABLE and no z. Control: with a
+    fought field in one arm the z is printed."""
+    import collections
+
+    def fake(model, n, base_seed, seasons, fought=0):
+        t = collections.Counter({"self": 5 if model == "total" else 9, "other": 5})
+        return {"tally": t, "acts": sum(t.values()), "seeds": n, "fought": fought}
+    monkeypatch.setattr(oracle, "run_arm", fake)
+    oracle.main(["--n", "1"])
+    out = capsys.readouterr().out
+    assert "NOT-COMPUTABLE" in out and "SIGNIFICANT" not in out
+    monkeypatch.setattr(oracle, "run_arm",
+                        lambda m, n, s, k: fake(m, n, s, k, fought=2 if m == "total" else 0))
+    oracle.main(["--n", "1"])
+    out = capsys.readouterr().out
+    assert "NOT-COMPUTABLE" not in out
+
+
+def test_b0360_fixture_flag_exposes_the_mapping_form():
+    assert oracle._fixture_arms("field_casualty_model=total,none") == {
+        "total": {"fixtures": {"field_casualty_model": "total"}},
+        "none": {"fixtures": {"field_casualty_model": "none"}}}

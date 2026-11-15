@@ -111,7 +111,7 @@ import collections.abc
 import inspect
 import math
 
-from ..data.rosters import FIELD_CASUALTY_MODELS
+from ..data.rosters import FIELD_CASUALTY_MODELS, LOST, WON
 from . import populated
 
 
@@ -185,10 +185,11 @@ def run_arm(model, n: int, base_seed: int, seasons: int) -> dict:
     """`n` seeded realms, the arm `model` applied to each, `seasons` seasons each.
 
     `model` is the shipped `field_casualty_model` value (a `str`) or a mapping
-    `{'fixtures': {name: value}, 'build': {kwarg: value}}` (`_resolve_arm`). There is no CLI for the
-    mapping form: `main` runs `ARMS` only, so a build-flag arm is reachable from Python.
+    `{'fixtures': {name: value}, 'build': {kwarg: value}}` (`_resolve_arm`). The CLI exposes the
+    fixture half as `--fixture NAME=A,B` (`_fixture_arms`); a build-flag arm is reachable from Python.
 
-    Returns `{'tally': Counter(act_subjects), 'acts': total resolved acts, 'seeds': n}`. Building
+    Returns `{'tally': Counter(act_subjects), 'acts': total resolved acts, 'seeds': n, 'fought':
+    count of field Events at a fought band (`fought_fields`)}`. Building
     and running are ONE step per seed (`populated.run`'s own `w=` parameter lets a caller build
     first and inspect after; not needed here, since `act_subjects` is already the census field this
     reads).
@@ -196,6 +197,7 @@ def run_arm(model, n: int, base_seed: int, seasons: int) -> dict:
     fixtures, build = _resolve_arm(model)
     tally: collections.Counter = collections.Counter()
     total_acts = 0
+    fought = 0
     for i in range(n):
         w = populated.build_realm(base_seed + i, **build)
         for name, value in fixtures.items():
@@ -203,9 +205,27 @@ def run_arm(model, n: int, base_seed: int, seasons: int) -> dict:
             w.fixtures = w.fixtures.sweep(name, value)
         out = populated.run(seasons, base_seed + i, None, w=w)
         total_acts += out['acts']
+        fought += fought_fields(w)
         for k, v in out['act_subjects'].items():
             tally[k] += v
-    return {'tally': tally, 'acts': total_acts, 'seeds': n}
+    return {'tally': tally, 'acts': total_acts, 'seeds': n, 'fought': fought}
+
+
+def fought_fields(w) -> int:
+    """The field Events at a fought band: `field.*` Events whose degree is `Won` or `Lost`
+    (`FIELD_BANDS`' two graded members; `Declared` is the fold's deferral token, `Unopposed` no battle,
+    `Invested` a siege's wear). Read off the finished world's log."""
+    return sum(1 for e in w.log if e.kind.startswith('field.') and e.degree in (WON, LOST))
+
+
+def _fixture_arms(spec: str) -> dict:
+    """`NAME=A,B` -> the two arms `{A: {'fixtures': {NAME: A}}, B: {'fixtures': {NAME: B}}}`, the mapping
+    form of an arm (`_resolve_arm`): a pair that differs on the one fixture `NAME` and on nothing else."""
+    name, sep, values = spec.partition('=')
+    pair = values.split(',')
+    if not (sep and name and len(pair) == 2 and all(pair) and pair[0] != pair[1]):
+        raise ValueError(f'--fixture is NAME=A,B with A and B two distinct values, got {spec!r}')
+    return {v: {'fixtures': {name: v}} for v in pair}
 
 
 def two_proportion_z(a_count: int, a_n: int, b_count: int, b_n: int) -> float:
@@ -240,22 +260,33 @@ def main(argv=None) -> int:
     ap.add_argument('--seasons', type=int, default=2, help='seasons per realm (default 2)')
     # [JUSTIFIED: the base seed `tools/balance_oracle.py` defaulted to, carried unchanged so a default-invocation result stays comparable to that tool's own past runs — arbitrary but fixed]
     ap.add_argument('--seed', type=int, default=20260819, help='base seed (default 20260819)')
+    ap.add_argument('--fixture', metavar='NAME=A,B', default=None,
+                    help='run the pair that differs only on fixture NAME (values A and B) in place of '
+                         'the shipped `field_casualty_model` arms')
     args = ap.parse_args(argv)
 
-    names = list(ARMS)
-    results = {name: run_arm(ARMS[name], args.n, args.seed, args.seasons) for name in names}
+    arms = _fixture_arms(args.fixture) if args.fixture else ARMS
+    names = list(arms)
+    results = {name: run_arm(arms[name], args.n, args.seed, args.seasons) for name in names}
     a, b = results[names[0]], results[names[1]]
     categories = sorted(set(a['tally']) | set(b['tally']))
+    # A z over an act-subject tally is a statement about what a FOUGHT field did to the acted-on
+    # population; with none fought in either arm the arms differ in nothing the fixture reaches.
+    computable = bool(a['fought'] or b['fought'])
 
     print(f"\n{args.n} realm(s) per arm, {args.seasons} season(s) each, "
           f"seeds {args.seed}..{args.seed + args.n - 1}")
-    print(f"total resolved acts — {names[0]}: {a['acts']}, {names[1]}: {b['acts']}\n")
+    print(f"total resolved acts — {names[0]}: {a['acts']}, {names[1]}: {b['acts']}")
+    print(f"fought fields — {names[0]}: {a['fought']}, {names[1]}: {b['fought']}\n")
     print(f'{"act subject":<16}{names[0]:>11}{names[1]:>13}{"delta pp":>11}{"z":>9}')
     significant = []
     for cat in categories:
         ac, bc = a['tally'].get(cat, 0), b['tally'].get(cat, 0)
         pa = 100 * ac / a['acts'] if a['acts'] else 0.0
         pb = 100 * bc / b['acts'] if b['acts'] else 0.0
+        if not computable:
+            print(f'{str(cat):<16}{pa:>10.1f}%{pb:>12.1f}%{pb - pa:>+10.1f}  NOT-COMPUTABLE')
+            continue
         z = two_proportion_z(ac, a['acts'], bc, b['acts'])
         flag = '  SIGNIFICANT' if abs(z) > Z_THRESHOLD else ''
         if flag:
@@ -263,7 +294,10 @@ def main(argv=None) -> int:
         print(f'{str(cat):<16}{pa:>10.1f}%{pb:>12.1f}%{pb - pa:>+10.1f}{z:>+9.2f}{flag}')
 
     print()
-    if significant:
+    if not computable:
+        print('[arms] NOT-COMPUTABLE: no field was fought in either arm, so the pair differs in '
+              'nothing the fixture reaches and no z is printed.')
+    elif significant:
         print(f'[arms] {len(significant)} act-subject categor(y/ies) shifted significantly: '
               f'{", ".join(map(str, significant))}. The mechanic MOVED the acted-on population.')
     else:
