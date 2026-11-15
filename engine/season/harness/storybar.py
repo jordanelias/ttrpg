@@ -15,6 +15,13 @@ Entry point: `python -m engine.season.harness.storybar --base-seed S --n N --sea
 `--base-seed S --seasons K --draw-seeds D D ...` (REM-15) replaces `--n`/`--arms`: one realm built from `S`,
 deep-copied per draw seed, only the chooser's draw varied (`draw_seed_arm`, which states the two residues).
 
+`--base-seed S [S ...] --seasons K --remove [PERSON] [--at SEASON LAP]` (the removal test, `removal_arm`):
+one realm per seed, one person's choice suppressed at one lap, the others' acts that differ counted. With no
+PERSON it takes `most_cited`'s and prints the name. Each seed's report ends on two verdict lines,
+`R-01.c  others' acts differing: <n>  (replay <0>)` and `R-02.b  differing at a later (season, round): <m>`
+(`removal_verdict`, which also says what each reading is expected to be). This is the only mode that takes
+several seeds.
+
 THE READING (`read`, a pure function over the log and `SeasonDriver.act_of`, so a test can plant on
 it). For each Event in the log its act is `act_of[e.id]`; an act's antecedents are, over every cause
 `c` of every Event of that act:
@@ -87,6 +94,10 @@ from .populated import COHORT_PREFIX, build_realm
 #: Every forcing setting this tree can run. `off` is the shipped loop; no `on` is built (see the
 #: module docstring). A forcing position adds its own arm here.
 ARMS = ("off",)
+
+#: What `--remove` with no person names: the sentinel `main` swaps for `most_cited`'s person. Not a
+#: person id of any realm (a person is `p_...`).
+MOST_CITED = "<most-cited>"
 
 #: The four antecedent classes, in precedence order (highest first).
 CLASSES = ("cross", "own", "world", "none")
@@ -525,13 +536,59 @@ def removal_arm(base, seasons: int, who: str, when: tuple) -> dict:
     return _others(_removal_run(base, seasons, who, when)[0], who)
 
 
+def citation_counts(acts: dict) -> Counter:
+    """`{person: n}` over `read`'s `acts`: `n` is how many (act, antecedent act) pairs name an act of that
+    person as a CROSS-person antecedent of another person's act, i.e. the actor of the most antecedents
+    of other persons' acts is the person whose acts others' acts most answer. Counted per antecedent
+    ACT, as `read` classes them (a cause Event of the same act twice is one antecedent), not per cause
+    Event [ASSUMPTION: the act is the unit `read` already uses; revert: count the cross causes]."""
+    out: Counter = Counter()
+    for row in acts.values():
+        for b in row["cross"]:
+            if b in acts:
+                out[acts[b]["actor"]] += 1
+    return out
+
+
+def most_cited(base, seasons: int = 1) -> tuple:
+    """`(person, n)`: the person who is the actor of the most `Event.causes` antecedents of OTHER persons'
+    acts in the unperturbed copy of `base`'s first `seasons` season(s) (`citation_counts`), ties by the
+    smallest person id. `(None, 0)` when no act has a cross-person antecedent. `base` is never run."""
+    w, d, bounds = drive(base.world_seed, seasons, "off", world=fork(base))
+    counts = citation_counts(read(w.log, d.act_of, bounds)["acts"])
+    if not counts:
+        return None, 0
+    who = min(counts, key=lambda p: (-counts[p], p))
+    return who, counts[who]
+
+
+def removal_verdict(res: dict, when: tuple) -> dict:
+    """The two readings `--remove` ends on, over `removal_report`'s result and the lap removed at:
+    `n` the OTHER persons' acts differing in the `removed` arm (the removed person's own acts are cut
+    from both sides by `_others`, so none counts), `m` those of them chosen at a LATER `(season, lap)`
+    than `when` (the same lap's differences are the within-lap order's, not a consequence), and `replay`
+    the `replay` arm's differing, the control that MUST read 0: a replay above 0 voids `n` and `m`.
+
+    WHAT IS EXPECTED. `replay` exactly 0 and the unwrapped hash equal to the unperturbed one are the two
+    controls that read zero. `removed` is expected ABOVE 0 for a person who forms a scene at `when`
+    (`fired` 1), and exactly 0 where the unperturbed copy shows him forming none. The `cohort` arm is NOT
+    a zero control: it removes one more person and reads that removal's own consequences, which is why
+    it is printed apart and carries no expectation of 0; `draw-seed` re-draws everybody and is the
+    floor a single removal is read beside."""
+    arm = res["arms"]["removed"]
+    return {"n": arm["differing"],
+            "m": sum(v for k, v in arm["by_lap"].items() if tuple(k) > tuple(when)),
+            "replay": res["arms"]["replay"]["differing"]}
+
+
 def removal_report(base, seasons: int, who: str, when: tuple, cohort) -> dict:
     """What `--remove` prints: the unperturbed copy, then each arm against it.
     `{"base_hash_before", "base_hash_after", "unperturbed": (acts, end hash), "unwrapped_hash", "arms"}`.
     `unwrapped_hash` is the end hash of a copy run through `drive` with no wrapper: the control that the
     wrapper perturbs nothing (it must equal the unperturbed copy's, else every figure is void). `arms`
     maps, in print order, `replay` (nobody removed, MUST read 0), `removed` (`who`), `cohort` (the named
-    cohort person's choice, the control that tends itself) and `draw-seed` (every person's chooser draw
+    cohort person's choice, a SECOND removal read beside the first: it is not a zero control, see
+    `removal_verdict`) and `draw-seed` (every person's chooser draw
     re-seeded, `--draw-seeds`' arm: the floor) to `{"acts", "differing", "persons", "by_lap", "fired",
     "hash", "who"}`. `differing` is the multiset difference (as `chain_difference`) over the persons
     other than the one removed; `by_lap` counts it per `(tick, lap)` of the act."""
@@ -576,6 +633,10 @@ def _print_removal(base_seed: int, seasons: int, cap, when, res: dict) -> None:
               f"({'EQUAL' if r['hash'] == h else 'DIFFER'} to the unperturbed){note}")
         if r["by_lap"]:
             print("  by (season, lap): " + " ".join(f"{k}:{v}" for k, v in r["by_lap"].items()))
+    v = removal_verdict(res, when)
+    print(f"R-01.c  others' acts differing: {v['n']}  (replay {v['replay']})"
+          f"{'' if v['replay'] == 0 else '  REPLAY NOT 0: every figure is void'}")
+    print(f"R-02.b  differing at a later (season, round): {v['m']}")
 
 
 def _print_draw_seeds(base_seed: int, seasons: int, cap, draw_seeds, res: dict) -> None:
@@ -626,7 +687,9 @@ def _fmt_est(e: dict) -> str:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("--base-seed", type=int, required=True)
+    ap.add_argument("--base-seed", type=int, nargs="+", required=True, metavar="S",
+                    help="the realm's seed; with --remove several may be named and each is run in turn, "
+                         "printing its own report; every other mode takes exactly one")
     ap.add_argument("--n", type=int, help="seeded realms per arm (required without --draw-seeds)")
     ap.add_argument("--seasons", type=int, required=True)
     ap.add_argument("--arms", nargs=2, choices=ARMS,
@@ -645,34 +708,51 @@ def main(argv=None) -> int:
                          "per draw seed D, and vary only the chooser's draw (see `draw_seed_arm` for "
                          "the two residues); prints the chain-depth distribution and the verb-chain "
                          "multiset per draw seed. Takes no --n or --arms")
-    ap.add_argument("--remove", metavar="PERSON",
+    ap.add_argument("--remove", metavar="PERSON", nargs="?", const=MOST_CITED,
                     help="the removal test: suppress PERSON's choice at one lap (--at; the first when "
                          "omitted) on ONE built world, and count how many of the OTHER persons' acts "
-                         "differ from the unperturbed copy. Prints the acts differing, the persons "
-                         "affected and the (season, lap) of each, beside three controls: replay "
-                         "(nobody removed, MUST read 0), a cohort's choice, and the chooser's draw "
-                         "re-seeded for everybody (`--draw-seeds`' arm, the floor). Takes no --n or "
-                         "--arms; one arm is a full copy of the run")
+                         "differ from the unperturbed copy. With no PERSON it takes the person who is "
+                         "the actor of the most antecedents of other persons' acts in the unperturbed "
+                         "copy's first season (ties by person id) and prints the name. Prints the "
+                         "acts differing, the persons affected and the (season, lap) of each, beside "
+                         "controls: replay (nobody removed, MUST read 0), a cohort's choice (a second "
+                         "removal, expected above 0, not a zero control), and the chooser's draw "
+                         "re-seeded for everybody (`--draw-seeds`' arm, the floor); it ends on two "
+                         "lines, `R-01.c` (the others' acts differing, beside the replay) and "
+                         "`R-02.b` (those at a later lap). Takes no --n or --arms; one arm is a "
+                         "full copy of the run")
     ap.add_argument("--at", type=int, nargs=2, metavar=("SEASON", "LAP"),
                     help="with --remove: the (season index, lap index) whose choice is suppressed")
     args = ap.parse_args(argv)
 
     if args.at is not None and args.remove is None:
         ap.error("--at belongs to --remove")
+    if args.remove is None and len(args.base_seed) != 1:
+        ap.error("several --base-seed values belong to --remove; every other mode takes one")
     if args.remove is not None:
         if args.n is not None or args.arms is not None or args.draw_seeds is not None \
                 or args.executed_only:
             ap.error("--remove takes no --n, --arms, --draw-seeds or --executed-only")
-        base = build_realm(args.base_seed, args.cap)
-        if args.remove not in base.persons:
-            ap.error(f"--remove {args.remove!r} is not a person of the realm built from "
-                     f"--base-seed {args.base_seed}")
-        cohort = next((p for p in sorted(base.persons)
-                       if p.startswith(COHORT_PREFIX) and p != args.remove), None)
         when = tuple(args.at) if args.at is not None else (0, 0)
-        _print_removal(args.base_seed, args.seasons, args.cap, when,
-                       removal_report(base, args.seasons, args.remove, when, cohort))
+        for seed in args.base_seed:
+            base = build_realm(seed, args.cap)
+            who = args.remove
+            if who == MOST_CITED:
+                who, cited = most_cited(base)
+                if who is None:
+                    ap.error(f"--base-seed {seed}: no act of the first season has a cross-person "
+                             f"antecedent, so no person is the most cited; name one")
+                print(f"storybar --remove names {who}: the actor of {cited} antecedents of other "
+                      f"persons' acts in the unperturbed first season (base-seed={seed})")
+            elif who not in base.persons:
+                ap.error(f"--remove {who!r} is not a person of the realm built from --base-seed {seed}")
+            cohort = next((p for p in sorted(base.persons)
+                           if p.startswith(COHORT_PREFIX) and p != who), None)
+            _print_removal(seed, args.seasons, args.cap, when,
+                           removal_report(base, args.seasons, who, when, cohort))
         return 0
+
+    base_seed = args.base_seed[0]
 
     if args.draw_seeds is not None:
         if args.n is not None or args.arms is not None:
@@ -682,14 +762,14 @@ def main(argv=None) -> int:
         if len(set(args.draw_seeds)) != len(args.draw_seeds):
             ap.error("--draw-seeds names a seed twice: the run is keyed by draw seed, so the repeat "
                      "would silently collapse into one")
-        res = draw_seed_arm(build_realm(args.base_seed, args.cap), args.seasons, args.draw_seeds)
-        _print_draw_seeds(args.base_seed, args.seasons, args.cap, args.draw_seeds, res)
+        res = draw_seed_arm(build_realm(base_seed, args.cap), args.seasons, args.draw_seeds)
+        _print_draw_seeds(base_seed, args.seasons, args.cap, args.draw_seeds, res)
         return 0
     missing = [f for f, v in (("--n", args.n), ("--arms", args.arms)) if v is None]
     if missing:
         ap.error(f"the following arguments are required: {', '.join(missing)}")
 
-    seeds = list(range(args.base_seed, args.base_seed + args.n))
+    seeds = list(range(base_seed, base_seed + args.n))
     res = compare(args.arms, seeds, args.seasons, args.cap, args.executed_only)
     print(f"storybar seeds={seeds[0]}..{seeds[-1]} seasons={args.seasons} arms={list(args.arms)} "
           f"cap={args.cap} PYTHONHASHSEED={os.environ.get('PYTHONHASHSEED')}")

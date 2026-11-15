@@ -340,3 +340,66 @@ def test_the_remove_cli_prints_a_replay_of_zero_and_refuses_an_unknown_person(ca
     with pytest.raises(SystemExit) as e:
         SB.main(args + ["--remove", "no_such_person"])
     assert e.value.code == 2
+
+
+# -- B02.19: the removal test states what it expects, and whom it removes ---------------------------
+
+def test_removal_changes_another_persons_later_act():
+    """Seed 0, two seasons, the most-cited person removed at the first lap: others' acts differ (`n`),
+    some of them at a later (season, lap) (`m`), the replay arm reads 0 (the control: were it above 0
+    every figure would be void), and the removed person's own acts are not in `n`. The second control is
+    a person removed at a lap in which the unperturbed copy shows him forming no scene: `n` reads 0."""
+    base = _small_world()
+    who, cited = SB.most_cited(base)
+    assert who is not None and cited >= 1, "nobody is cited by another person; the removal observed nothing"
+    res = SB.removal_report(base, SEASONS, who, WHEN, None)
+    v = SB.removal_verdict(res, WHEN)
+    assert v["replay"] == 0, "the replay arm moved: every figure below is void"
+    assert res["unwrapped_hash"] == res["unperturbed"][1]
+    assert res["arms"]["removed"]["fired"] == 1
+    assert v["n"] >= 1 and v["m"] >= 1, v
+    assert v["m"] <= v["n"]
+
+    # `n` recomputed by hand over the two multisets, the removed person's keys left out; the same
+    # difference with his keys left IN is larger (his own lap-0 acts are gone), so the exclusion is read
+    everyone, _f, _h = SB._removal_run(base, SEASONS, None, WHEN)
+    got, _f, _h = SB._removal_run(base, SEASONS, who, WHEN)
+    diff = {k: abs(everyone.get(k, 0) - got.get(k, 0)) for k in set(everyone) | set(got)}
+    assert v["n"] == sum(n for k, n in diff.items() if k[0] != who)
+    assert sum(diff.values()) > v["n"], "the removed person's own acts did not differ; nothing was excluded"
+
+    # control 2: a person who forms no scene at a lap, removed there, changes nothing
+    laps = sorted({k[1:3] for k in everyone})
+    quiet = next(((p, at) for at in laps for p in sorted({k[0] for k in everyone})
+                  if not any(k[0] == p and k[1:3] == at for k in everyone)
+                  and any(k[0] == p and k[1:3] > at for k in everyone)), None)
+    assert quiet is not None, "every person acts at every lap; the quiet control observed nothing"
+    p, at = quiet
+    reference = SB._others(everyone, p)
+    assert SB.chain_difference(reference, SB.removal_arm(base, SEASONS, p, at)) == 0
+
+
+def test_the_most_cited_person_is_the_most_cited_with_ties_by_person_id():
+    """Planted: p1's acts are cited by two acts of other persons, p2's by two, p3's by one; p3's own
+    follow-up (no cross-person antecedent) counts for nobody. The tie between p1 and p2 goes to p1."""
+    row = lambda actor, cross: {"actor": actor, "cross": cross}
+    acts = {"a1": row("p1", []), "a2": row("p2", []), "a3": row("p3", []),
+            "b1": row("p2", ["a1"]), "b2": row("p3", ["a1", "a2"]), "b3": row("p1", ["a2"]),
+            "b4": row("p1", ["a3"]), "b5": row("p3", [])}
+    counts = SB.citation_counts(acts)
+    assert counts == {"p1": 2, "p2": 2, "p3": 1}
+    assert min(counts, key=lambda p: (-counts[p], p)) == "p1"
+
+
+def test_the_remove_cli_with_no_name_prints_the_name_and_a_verdict_pair_per_seed(capsys):
+    args = ["--base-seed", "0", "1", "--seasons", "1", "--cap", str(CAP), "--remove"]
+    assert SB.main(args) == 0
+    lines = capsys.readouterr().out.splitlines()
+    named = [l for l in lines if l.startswith("storybar --remove names ")]
+    r01 = [l for l in lines if l.startswith("R-01.c  others' acts differing: ")]
+    r02 = [l for l in lines if l.startswith("R-02.b  differing at a later (season, round): ")]
+    assert len(named) == len(r01) == len(r02) == 2, (named, r01, r02)
+    assert all(l.endswith("(replay 0)") for l in r01), r01
+    with pytest.raises(SystemExit) as e:
+        SB.main(["--base-seed", "0", "1", "--seasons", "1", "--n", "1", "--arms", "off", "off"])
+    assert e.value.code == 2
