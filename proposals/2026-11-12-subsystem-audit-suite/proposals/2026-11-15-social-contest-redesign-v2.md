@@ -28,8 +28,9 @@ grade is **paper with a running model** (CLAUDE.md §0.2), and part 3 says what 
 
 **Reconciled once, 2026-11-15**, after two antagonist passes (execution and logic; rulings, theory and NERS) and
 Jordan's answers to this design's three questions and two further rules (rows A-129 to A-140 of
-`../unified/DECISIONS_ANSWERED.md`, appended in this pass). What changed: the nemo rule (nobody adjudicates his own
-proceeding; consent is an act, not a verdict); the NPC plays its reading while it keeps its temper; six cuts were
+`../unified/DECISIONS_ANSWERED.md`, appended in this pass). What changed: A-139 as Jordan corrected it the same day (only a
+sitting with ONE character is refused; a person may be both a side and an adjudicator: a noble who speaks with you
+and then decides, an inquisitor who questions and judges, a questioned man who decides whether to give way); the NPC plays its reading while it keeps its temper; six cuts were
 overturned because each removed the only carrier of a ruled clause (part 4 §G); the execution defects were fixed
 and re-run (`checks_v3.py`, output `v3_out.txt`, n = 400 an arm unless stated). Part 3's numbers are that run's.
 
@@ -57,8 +58,9 @@ ladder of CLAUDE.md §0 (1 superseded, 2 irrelevant, 3 a design document, 4 prec
   the handshake: bottom-up primitives meet top-down theory, checked.
 - **A-136 to A-140** (2026-11-15): an NPC argues "as well as their view allows so long as they keep their temper";
   "keep 0.4" (the resisting attribute counts in the opposition at 0.4 a point); a quiet tell need not exercise all
-  six; the nemo rule ("it is nonsensical for a character to have a proceeding where they are the only participant
-  and adjudicator"); "overturn cuts based on your refutations", recency winning.
+  six; A-139 ("it is nonsensical for a character to have a proceeding where they are the only participant
+  and adjudicator", corrected: "no, this can be the case like if you're having an audience with a noble who speaks
+  with you then decides. it's the sitting with one character that is nonsensical."); "overturn cuts based on your refutations", recency winning.
 - **Standing rulings read here:** A-79 (one opposed rule, 0.4 a point; equals on a routine matter fail 59 %, half
   land 16 %, carry 25 %), A-80 (entrenchment must still move the world), A-14 (a verdict is a draw on the voter),
   A-92 (`architecture/meta/04_CODE_ARCHITECTURE.md:251`: evidence enters a conviction only as a term in the
@@ -75,7 +77,7 @@ until those who decide come down.** Four sentences carry all of it.
 1. **Everyone in the room is the same kind of record** (`Present`): six attributes and a skill (what he can do),
    and one **bearing reading** (what the matter, each other person and each thing shown mean to him: what he wants,
    what he holds, whom he stands with). A role is two cells on that record: `side` (speaks for, speaks against, or
-   neither) and `decides` (he adjudicates; never true of a side: the nemo rule). An accuser, a judge, a witness and a man in
+   neither) and `decides` (he adjudicates); the two are independent, so one person may hold both. An accuser, a judge, a witness and a man in
    the gallery differ only in those two cells.
 2. **Every exchange is one speech that raises a point, answers the point on the table, presses the man who made
    it, concedes the issue, or rests**, and it moves, for each person listening, how he stands on the matter (his
@@ -207,17 +209,17 @@ arranged by another authority. A type is its cells; the right-hand column is wha
 
 | type (row) | genre: who judges, what they decide | the live thing; how exchanges relate | who may do what | the close | who arranges, and how | what context changes | its own kind, as the model shows |
 |---|---|---|---|---|---|---|---|
-| `conversation` | dyadic; nobody: consent | a **claim**; each may answer or raise | both: argue, press, rest, concede | the party addressed accepts, or not: no verdict is drawn | the speaker picks the moment | strife pulls every speaker; the era weighs grounds | each party's track is how far the other has moved him; he accepts by his own act |
+| `conversation` | dyadic; the one addressed, for himself | a **claim**; each may answer or raise | both: argue, press, rest, concede | the addressed man's own draw (he is a side and decides); his concession gives way early | the speaker picks the moment | strife pulls every speaker; the era weighs grounds | the hearer is also the opponent: his answer moves the proposer, the proposer's speech moves him |
 | `negotiation` | dyadic; nobody: consent | an **offer**; each speech **must** answer the last or is seen to turn away | both: all four; conceding **accepts** | consent; neither accepting is an impasse | whoever needs it less | a need (famine) raises what the needy accept | a need changes who accepts (0.51 to 0.79) |
-| `questioning` | none of its own: it yields what the questioned man chooses to give | a **question**; the answer **must** answer it, evasion is priced and seen | questioner: argue, press, rest; questioned: argue, rest, concede (he talks) | his accept; a confession accepted or a charge laid is a separate proceeding with its own adjudicator | the questioner | war shortens it | only one side presses; conceding at once gives the questioner everything, never conceding nothing |
-| `inquisition` (`inquisition_hearing`, `interrogation`) | judicial; a bench that is not the accuser | a **charge**; the accused **must** answer; fact, then justification | as `questioning` | the presiding seat's draw | the authority whose seats sit; an accuser who holds a seat speaks and the others judge | unlawful in a commune; a theocracy admits confession | the accused cannot press; a full confession convicts 0.79 |
+| `questioning` | judicial; the one questioned, for himself | a **question**; the answer **must** answer it, evasion is priced and seen | questioner: argue, press, rest; questioned: argue, rest, concede (he talks) | the questioned man's own draw; a confession accepted or a charge laid on it is `determine`'s separate step | the questioner | war shortens it | only one side presses, and it presses its own decider; he gives way 0.780 if he concedes at once, 0.370 automatic, 0.297 if he never concedes |
+| `inquisition` (`inquisition_hearing`, `interrogation`) | judicial; a bench, which may be the accuser's own | a **charge**; the accused **must** answer; fact, then justification | as `questioning` | the presiding seat's draw | the authority whose seats sit; an inquisitor may question and judge, and his stake is seen | unlawful in a commune; a theocracy admits confession | the accused cannot press; a full confession convicts 0.79 |
 | `trial` (`legal_trial`, `tribunal`, `arbitration`) | judicial; a bench; a past act | a **charge**; both sides **must** answer; fact, definition, justification | both: all four; conceding **descends** | the presiding seat's draw | the convening seat: bench packed, floor shut, turns cut, presumption | regime sets admissible proof; strife cuts turns | proof and refutation; a concession changes the issue |
 | `debate` (`parliamentary_debate`, `council_of_state`, `excommunication_deliberation`) | deliberative; every seat, against a quorum | a **motion**; speeches may answer or raise | both: all four; conceding withdraws | every seat's draw; a quorum can only demote | the body's presiding seat; a faction forces the floor open or shut | unlawful in a theocracy; the floor sways the dice toward manner | several adjudicators, each moved for himself |
 | `rally` | deliberative; every hearer for himself | a **theme**; nothing to answer: each speech raises | the speaker: argue, rest | each body of the crowd draws | the speaker; a seat may close the ground | a famine sharpens what the hungry want | no opponent; bodies of the crowd split; Presence is what is heard |
-| `audience` | deliberative; one seat | a **plea**, answered by a ruling | the petitioner: argue, rest | the seat's draw | the seat: who is admitted, how long | regime sets what may be shown | one speaker before authority; the seat's own stake is where it starts |
-| the abridged form of any row | as its row | one speech, raised | the speaker | that speech's own margin with the one addressed (a hearer, never a side) | as its row | as its row | at control equal to the one roll (200 of 200 keys) |
+| `audience` | deliberative; one seat, who may speak with the petitioner and then decide | a **plea**, answered by a ruling | the petitioner: argue, rest; the seat, where he is the other party: argue, press, rest | the seat's draw | the seat: who is admitted, how long | regime sets what may be shown | the seat's own stake is where he starts (0.225 against 0.260 flattened) and the room holds a `partial` claim |
+| the abridged form of any row | as its row | one speech, raised | the speaker | that speech's own margin with the one addressed | as its row | as its row | at control equal to the one roll (200 of 200 keys) |
 
-Jordan's seven: heresy trial = `inquisition` arranged by the Church (its bench never the accuser); parliamentary debate = `debate`; private
+Jordan's seven: heresy trial = `inquisition` arranged by the Church; parliamentary debate = `debate`; private
 negotiation = `negotiation`; rallying a crowd = `rally`; interrogation for information = `questioning`; a trial =
 `trial`; the abridged automatic proceeding = the abridged form. **Merged** (identical structure, different
 arranged cells): `tribunal` and `arbitration` into `trial`; `council_of_state` and `excommunication_deliberation`
@@ -248,6 +250,6 @@ class Card:
 The card holds no true attribute and no true start (B05.62: a stranger is an ordinary person); what a chooser
 believes of this room is on his `View`. Invariant, checked in the model on every sitting (part 3 §B): no beat makes a move the card bars; no item of a
 kind the card does not admit is shown; nobody speaks more turns than the card gives; the verdicts returned are the
-card's adjudicators and no others; nobody on it both speaks for a side and judges; and its odds are what an
+card's adjudicators and no others; and its odds are what an
 unmoved sitting delivers (0.277 shown, 0.261 delivered with both sides silent, n = 800). A card that promises what
 the sitting does not do is a defect.

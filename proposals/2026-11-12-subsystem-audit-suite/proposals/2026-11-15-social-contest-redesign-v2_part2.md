@@ -12,7 +12,7 @@ model and text were made to agree line by line in this pass.
 
 ## A. The person in the room
 
-### A.1 One record, and the nemo rule
+### A.1 One record; a sitting needs two characters
 
 ```python
 @dataclass(frozen=True)
@@ -31,11 +31,13 @@ class Present:                 # everyone: participant, adjudicator, audience
     items: tuple; strain: float
 ```
 
-**The nemo rule (A-139), one invariant on the input:** nobody is both a side and an adjudicator; no sitting has
-one character; a drawn close has an adjudicator who is not a party; a cohort has weight. The builder never seats
-a party to judge his own matter (a seat who is the accuser speaks, and the bench is the other seats; if none is
-left the proceeding is refused). Consent is not adjudication: under `close: consent` nobody decides, and the
-outcome is whether a party accepted, which is his act. Everyone in the room has a track; `decides` only says whose
+**One invariant (A-139, as corrected): a sitting has at least two distinct characters; a proceeding with one
+character in every role is refused.** `side` and `decides` are independent cells: a noble who speaks with a
+petitioner and then decides, an inquisitor who questions and judges, a questioned man who decides whether to give
+way, a seat who speaks in debate and votes each hold both. A party who decides is not forbidden; he is *partial*,
+by the same reading as anyone: his stake and ties set where his track starts, the room holds a `partial` claim,
+and a ruling against his own track is deposited. Consent is still not adjudication: under `close: consent` nobody
+decides and the outcome is a party's accept. Everyone in the room has a track; `decides` only says whose
 is drawn at the close. A role changes inside a sitting by one rule: **a cited testimony whose source sits in the
 room with no side and no seat is spoken by its source**, with his own dice, standing and sincerity; the other side
 may press him next; his cells are unchanged after.
@@ -231,14 +233,20 @@ drawn (bench, declared, hearers): for each adjudicator, one normal:
     margin = roll_net_continuous(pool_of(mid)) + net_boost(track_step x track[d], pool)
              - (even + opposed_ob(mid) + rite.difficulty + rite.stakes)
 consent:   nobody adjudicates and nothing is drawn; a party's accept is Success for the bearer, the bearer's
-           withdrawal is Failure, neither is an impasse (no band)
+           withdrawal is Failure, neither is an impasse (no band). Kept for `negotiation` ON THE MERITS (rung 3:
+           the NEG falsifier, "consent decided by a draw"; an obligation is each party's own act)
 exchange:  the one speech's margin with the one addressed, plus his start
 ```
 
 The host reads the verdicts (`act_band`): `bench` the presiding seat's; `declared` the presiding seat's, demoted
 when fewer than `quorum` seats read Success; `hearers` the weight-mean. Never the actor's last exchange.
-**Questioning for information has no verdict:** it yields what the questioned man chooses to give (his accept);
-a confession accepted or a charge laid on it is a separate proceeding with its own adjudicator. **A played
+**Decided on the merits, now that a party may decide.** `conversation`: the man addressed is a side and the
+adjudicator; his draw gives the act a band every time (A-14; the fold's pursuit shift needs a degree), and his
+concession is giving way early (rung 1, rung 4: the 11-14 design's `hearers`). `questioning`: the questioned man
+decides whether to give way (Jordan's own example, rung 3); what is then done with what he gave is `determine`'s
+separate step. `audience`: where the seat is the other party he speaks, presses and then decides (Jordan's
+example). `inquisition`: the accuser may sit. A speech never moves its own speaker's track: a party who decides is
+moved only by the other side, and a final concession by him puts his own track with the other side. **A played
 adjudicator** is a role: at the close he has `JudgeView(id, track, odds, points)` (his own mind, which he knows,
 and the points as they stood) and three choices: rule for, rule against, or leave it to his draw; how far a
 ruling departs from his own track is returned (`Outcome.ruled`) and deposited as a claim with everyone present.
@@ -268,7 +276,7 @@ class View:                       # own values true; everything else believed (e
   theirs, press the man, concede, rest: 4 to 12 options by rite and side. **Before:** whether to come, what and
   whom to bring, his effort (turns), and with power how hard to rig the forum (§H); without it, to accept the
   forum, contest it, or go elsewhere. **After:** accept, appeal, another forum. **To abridge:** no callback.
-- **Any role:** speaker (the menu), adjudicator (§D), audience (a body in the mood; may be called as a witness).
+- **Any role, or two at once:** speaker (the menu), adjudicator (§D; he may also be a side), audience (a body in the mood; may be called as a witness).
   `proceed(inp, rng, decide, deciders, rulings)` takes a callback per person: played and automatic meet in one
   sitting.
 - **Pace.** `turns` decisions a speaker: 1 abridged; 1 to 3 conversation, negotiation, rally; 1 to 2 audience;

@@ -20,9 +20,9 @@ If it is past what his Will and Grace carry he stops choosing coolly: the proud 
 him again and the room gives less, then turns on the presser.
 
 **Why each kind feels like itself.** A trial is points on a charge that must be answered, proof shown, witnesses
-called and pressed, a concession that changes what the fight is about, and a bench that is never a party. A
-negotiation and a conversation have no judge: they end when one of them accepts, or do not. A questioning yields
-only what the questioned man gives. A debate is speeches on a motion before seats that each come down for
+called and pressed, a concession that changes what the fight is about, and a bench whose own stake is seen. A
+negotiation has no judge: it ends when one of them accepts, or does not. In a conversation and a questioning the
+man addressed is the other side and decides for himself whether he is moved. A debate is speeches on a motion before seats that each come down for
 themselves. A rally has nobody to answer and a crowd in several bodies. An audience is a plea and a ruling.
 
 **What the room remembers** (the host writes; part 2 §J): the beats and the end state; who was rattled and by
@@ -47,7 +47,7 @@ reading of the 2026-11-14 design. Readings from the first v2 run that this pass 
 | D1 a bench ignores the sitting | trial carried 0.9 % at every track; excommunication 0 of 2000 | carried 0.054 / 0.217 / 0.369 / 0.673 by the presiding seat's track (≤ -3, < 0, < 3, ≥ 3); excommunication 0.223 | `track_step` 0: 0.228 / 0.304 / 0.243 / 0.230 | 400 |
 | D2 the centre | the tell carried 0.53 to 0.70 | **the plan's plain roll** (B05.25's pool, the skill score alone opposing): fail 0.344, half 0.172, carried 0.483. **Under A-137** (the resisting attribute also at 0.4): fail 0.567, half 0.136, carried 0.297 at the difficulty cell's `routine` 0.5; fail 0.616, half 0.131, carried 0.253 at 0.8. **Residual against A-79's 59 / 16 / 25:** at the 25 % point the tell fails 2.6 points more and half-lands 2.9 fewer, because an 11-die pool is wider than the 8-die pool A-79's figures were taken on; one cell cannot fit all three | at controls the same; the abridged margin equals the one roll under A-137's rule on 200 of 200 keys | 1200 |
 | D3 the rattle | no rattle term; pressing dominated | against a Will-2 Grace-2 respondent **who plays automatically**: one press then argue 0.545, argue only 0.487, press every turn 0.367 (the earlier "pressing throughout wins" was an artifact of a victim forced to argue) | a rattle that does nothing: 0.482 / 0.492 / 0.372 | 400 |
-| F2 a concession decides | a yielding side usually won the draw | questioning: the questioner gets what he asks 1.000 when the questioned concedes at once, 0.255 automatic, 0.000 when he never concedes; trial: `for` carried 0.773 when the accused concedes at every turn, 0.363 automatic; a full confession convicts 0.790; an accuser who withdraws carries 0.038; a debate's mover who withdraws 0.000 | the same sittings without the concession: 0.36 to 0.39 | 400 |
+| F2 a concession decides | a yielding side usually won the draw | questioning (the questioned decides): he gives way 0.780 when he concedes at once, 0.370 automatic, 0.297 when he never concedes; under `must` his turning away is now charged (74 of 1469 beats; it could not fire before, because the test summed only deciders other than the speaker: it now reads everyone who heard the point); trial: `for` carried 0.773 when the accused concedes at every turn, 0.363 automatic; a full confession convicts 0.790; an accuser who withdraws carries 0.038; a debate's mover who withdraws 0.000 | the same sittings without the concession: 0.36 to 0.39 | 400 |
 | D4 strain ratchets | 0 to 5.8-9 | bounded under 1.0 by the formula; greatest carried in 80 three-season runs 0.96 | | 80 runs |
 | D5 the opener | 0.433 against 0.257 | trial: 0.356 against 0.331 (+0.025 ± 0.048); equal turns | | 800 |
 | D6 the act's margin under consent | 198 of 2000 graded Success against the track | negotiation: Success 79, all on the other party's accept; Failure 42, all on the bearer's withdrawal; 279 impasses with no band | by construction | 400 |
@@ -59,14 +59,14 @@ reading of the 2026-11-14 design. Readings from the first v2 run that this pass 
 
 | row | argue : press : concede : rest | answers : raises | ends | beats | bands |
 |---|---|---|---|---|---|
-| conversation | 542 : 193 : 55 : 1 | 24 : 518 | budget 95, yielded 55 | 5.3 | accepted 54, withdrawn 1, impasse 95 |
+| conversation | (v4, 100 sittings) | | budget 66, yielded 34 | | O 23, S 19, P 12, F 46; all-mid carried 0.333 (n = 400; it was accept-or-impasse in the last pass) |
 | negotiation | 532 : 145 : 75 : 1 | 85 : 447 | budget 75, yielded 75 | 5.0 | accepted 72, withdrawn 3, impasse 75 |
-| questioning | 751 : 19 : 84 : 24 | 203 : 548 | budget 66, yielded 84 | 5.9 | he gave it up 84, he did not 66 |
+| questioning | (v4, 100 sittings) | | budget 47, yielded 53 | | O 26, S 22, P 18, F 34 |
 | inquisition | 1078 : 14 : 86 : 22 | 383 : 695 | budget 150 | 8.0 | O 67, S 38, P 17, F 28 |
 | trial | 780 : 266 : 119 : 35 | 264 : 516 | budget 150 | 8.0 | O 49, S 36, P 15, F 50 |
 | debate | 583 : 545 : 0 : 72 | 161 : 422 | budget 150 | 8.0 | O 35, S 22, P 27, F 66 |
 | rally | 424 : 0 : 0 : 17 | 0 : 424 | budget 133, rested 17 | 2.9 | O 25, S 45, P 28, F 52 |
-| audience | 294 : 0 : 0 : 6 | 0 : 294 | budget 144, rested 6 | 2.0 | O 46, S 37, P 14, F 53 |
+| audience | (v4, the seat as the other party; 100 sittings) | | budget 100 | | O 21, S 32, P 14, F 33 |
 
 ### B.3 The attributes (carried at 1 against 7; z of the difference)
 
@@ -113,7 +113,7 @@ reading 0.30 to 0.41. A-138: Focus, Attunement and Will are silent at a quiet te
 | the player against a man in the same seat (A-136), n = 800 | composed men (flat; Will 6 Grace 7 with a grudge): the automatic policy **is** the view-only best chooser: +0.000 by construction. A man who has lost his temper: hot and timid (Will 1, Grace 2) +0.021 trial, +0.029 inquisition, +0.017 debate; hot and proud (Will 6, Grace 1, a grudge) +0.003, -0.030, -0.007. Two standard errors 0.048: **not shown**. Temper changes what he does (press share 0.63 against 0.36 composed; the timid man concedes 0.34 of his trial turns against 0.12) but in this model costs him little |
 | options | 4 to 12 a menu by rite and side (first run); the with-and-without readings for rest, descent, acceptance and answer (+0.07 to +0.09) are the first run's and were **not re-run** |
 | resume | a two-turn sitting resumed under four turns runs four more beats, each speaker ending at four speeches, the beats numbered on from 5; a sitting that ended `yielded` is refused |
-| refusals | a rally with nobody on the floor; an abridged act with nobody addressed; a cohort of weight 0; a judge trying his own charge; a side marked as adjudicator. A seat who accuses speaks and the other seats judge |
+| refusals (structural) | a sitting with one character (A-139); a rally with nobody on the floor; a cohort of weight 0; a drawn close with nobody whose verdict is drawn; resuming a sitting that ended `yielded` |
 | a played judge | he has `JudgeView(id, track, odds, points)` and rules for, against, or by his draw; ruling against his own track of -6.38 came back as a departure of 6.38 for the fold to deposit |
 
 ### B.5 Character, context, power, the world (shipped against its flattened control)
@@ -136,8 +136,9 @@ reading 0.30 to 0.41. A-138: Focus, Attunement and Will are silent at a quiet te
 **Invariants**, over 12,890 beats in the eight rites with automatic and random choosers, 0 violations of each:
 the beats chain; an argued beat names its point; an answer addresses the other side's point; an item is held by
 its mover and admitted by the card; no conceded issue is re-argued; no barred move; evasion is charged; no speech
-moves its own side's track; nobody exceeds the card's turns; the verdicts are the card's adjudicators; no side
-adjudicates; every track equals its start plus the beats; consent returns no verdict.
+moves its own side's track; nobody exceeds the card's turns; the verdicts are the card's adjudicators; every track
+equals its start plus the beats; consent returns no verdict. Re-run after A-139's correction (`checks_v4.py`,
+`v4_out.txt`): 8,993 beats, 0 violations, with a person holding both cells in half the sittings.
 
 ---
 
@@ -222,7 +223,7 @@ The primitives are part 2's (one owner each; the restated ledger was cut as a se
 | T19 | unwatched, each man argues as himself (A-130) | the menu on his attributes and bearing; `auto` | B.5 | pass; the temper terms add little in composed men |
 | T20 | a player's edge includes provoking a man out of his composure (A-136) | `temper` | +0.02 to +0.03 against the timid, about 0 against the proud; 2 s.e. 0.048 | **fail: not shown** |
 | T21 | Reason accounts for the other side's circumstances (R1) | `gap` | 0.092 → 0.323 against 0.233 → 0.323 | pass |
-| T22 | nobody judges his own cause (A-139) | the input's invariant; the builder | 5 refusals; 0 violations | pass |
+| T22 | a sitting needs two characters; a party may also decide, and is then partial and seen to be (A-139, corrected) | the input's one invariant; `start`; the `partial` claim | one character refused; someone held both cells in 800 of 1600 sittings; a noble who is the other party and decides: petitioner carried 0.225, flattened 0.260 (n = 400: within noise, the start moves -0.60); an onlooker holds `partial`; a played noble ruling against his own mind returns a departure of 0.14 | pass on the structure; **the steer is not significant at this n** |
 | T23 | a concession decides something | `yield_track`; the accept | F2 | pass |
 
 **Totals: 23 links; 18 pass; 2 weak (T5's Focus arm, T7); 1 fails in part (T13: regime and era); 1 fails (T20);
