@@ -40,8 +40,8 @@ ed: "ED-IN-0204"
 #
 #   §1 THREE MODES — TTRPG (scene-by-scene, rounds) · Hybrid (BG strategic + TTRPG scenes via
 #   Zoom In/Out, seasons + scenes) · BG (faction Domain Actions, seasonal Accounting). The loop
-#   implements one tick granularity and no zoom, so R-03's scene tick is the Hybrid mode's
-#   precondition, not a local nicety.
+#   ticks scene by scene (R-03's `met` rests on R-03.a and R-03.b) and the zoom between the
+#   modes is not built; the scene tick is the Hybrid mode's precondition, not a local nicety.
 #
 #   §2 FIVE SCALES — Object · Personal · Relational · Territorial · Structural. ⚠ ITS "Base Ob"
 #   COLUMN IS **THREAD-ONLY** AND IS NOT A GENERAL OBSTACLE SOURCE (Jordan, 2026-09-05: "base ob
