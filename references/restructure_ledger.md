@@ -3476,3 +3476,9 @@ Their BUILDERS are forked above; re-running `build_key_graph.py` or `build_contr
 | `proposals/2026-11-12-subsystem-audit-suite/unified/U3_LAYER1_AMENDMENTS.md` | `FORK:72579116` | FORKED (2026-11-15, workplan v12's adoption (`ED-IN-0362`): a work ledger of the v12 fold, deleted on adoption by its own Status line; a v12 `SOURCE:` or `C(...)` line that cites it is read at `git show 72579116:<path>`; `72579116` is the last commit on main that carries the file, so the text there is the file) |
 | `proposals/2026-11-12-subsystem-audit-suite/unified/U4_DOCUMENT_STATUS.md` | `FORK:59cacb29` | FORKED (2026-11-15, workplan v12's adoption (`ED-IN-0362`): a work ledger of the v12 fold, deleted on adoption by its own Status line; a v12 `SOURCE:` or `C(...)` line that cites it is read at `git show 59cacb29:<path>`; `59cacb29` is the last commit on main that carries the file, so the text there is the file) |
 | `proposals/2026-11-12-subsystem-audit-suite/unified/U4_TRACEABILITY.md` | `FORK:c857f4dd` | FORKED (2026-11-15, workplan v12's adoption (`ED-IN-0362`): a work ledger of the v12 fold, deleted on adoption by its own Status line; a v12 `SOURCE:` or `C(...)` line that cites it is read at `git show c857f4dd:<path>`; `c857f4dd` is the last commit on main that carries the file, so the text there is the file) |
+
+<!-- 2026-11-15, the v12 adoption PR (#605): B02.03 (PR #604, `cbca1ad`) deleted this test and wrote no row, so `ci_claim_provenance_check` read ED-IN-0232's `MEASURED-BY:` cite as unrunnable and the blocking validators job was red on `main`. -->
+
+| Old path | New path | Status |
+|---|---|---|
+| `tests/valoria/test_flow_skeletons.py` | `FORK:1b7c2f87` | FORKED (2026-11-15, B02.03 of workplan v12's Batch B02-tests, landed in `cbca1ad`: a line-anchor test on an archived document, with no reader under `engine/` or `modules/`; `1b7c2f87` is the last commit before that deletion that carries the file, so the text there is the file) |
