@@ -1796,8 +1796,8 @@ class Change:
     (`loop/resolve.py::_apply_write`) -- a mutation made there, before this object is even
     constructed, is invisible to F3 as well as F9, not merely to F9. Every shipped effect defers
     its mutation into `apply`. CR-06: `World.effect_body_observed` (called from `_apply_write`)
-    snapshots the tenure store around the effect call and refuses a Tenure the body moved; entity
-    fields stay convention-bound."""
+    snapshots the tenure store and each entity's field values around the effect call and refuses
+    what the body moved (H-137; a mutable value mutated in place escapes it)."""
 
     subjects: tuple
     apply: Callable[[], None]

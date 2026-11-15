@@ -1,0 +1,80 @@
+"""H-137 -- the gate sees an effect body that moves an ENTITY FIELD by itself.
+
+`loop/resolve.py::_apply_write` runs the effect function BEFORE `World.write`, so a field the body
+set before it returned its `Change` was baked into the gate's `before` and judged by nothing.
+`World.effect_body_observed` snapshots every entity of `World._STATE_COLLECTIONS` around the call
+(as it does the tenure store, `test_tenure_gate_effect_body.py`) and, for one that moved, was added
+or was removed, puts it back and raises `NotYours`, which the fold emits as the row's refusal.
+
+What each block proves, and the control that stops it passing vacuously:
+
+  1. A FIELD SET IN THE BODY is refused, the field reads its old value after, and the act is a
+     refusal Event, not a raise. Control (same host, actor, field, value): the same assignment
+     deferred into `Change.apply`, which the gate admits and judges, is a success and stands.
+  2. AN ENTITY ADDED OR REMOVED IN THE BODY is refused and the collection put back.
+"""
+import dataclasses
+
+from engine.season.data.matrix import WriteClass
+from engine.season.harness import probes as P
+from engine.season.loop.driver import mint_token
+from engine.season.state.carriers import Act
+from engine.season.state.gate import Change, Subject
+
+from .test_g4_no_op_receipt import _driver, _plant
+
+
+def _run(w, aid):
+    return _driver(w).resolve(mint_token(w, WriteClass.ACTS),
+                              [Act(id=aid, actor="p_low", verb="utter")])
+
+
+def _grain(w):
+    """An unrelated `Change` that does move its subject (rung `Hh`'s grain 8 -> 9)."""
+    return Change((Subject.entity("rungs", "Hh"),),
+                  lambda: w.rungs["Hh"].stores.__setitem__("grain", 9))
+
+
+def test_an_effect_that_eagerly_mutates_an_unrelated_entity_field_is_refused(monkeypatch):
+    def eager(w, a, res=None):
+        w.persons["p_high"].body = 7                          # the eager mutation of an unrelated field
+        return _grain(w)
+    _plant(monkeypatch, "utter", eager)
+    w = P.tiny_world()
+    assert w.persons["p_high"].body == 1000, "the fixture's field is not what the test reads"
+    evs = _run(w, "h137_eager")         # B03.76: the gate's `NotYours` is the fold's refusal, not a raise
+    assert [e.kind for e in evs] == ["act.refused"], [e.kind for e in evs]
+    assert w.persons["p_high"].body == 1000, "the eager field write stood"
+    assert w.rungs["Hh"].stores == {"grain": 8}, "the refused effect's write still ran"
+
+    # CONTROL: the same assignment DEFERRED into `apply`, naming its subject, is admitted by the
+    # gate and stands, so the refusal above came from the body's own write and from nothing else.
+    def deferred(w, a, res=None):
+        return Change((Subject.entity("persons", "p_high"),),
+                      lambda: setattr(w.persons["p_high"], "body", 7))
+    _plant(monkeypatch, "utter", deferred)
+    w = P.tiny_world()
+    evs = _run(w, "h137_deferred")
+    assert [e.kind for e in evs] == ["proposition.uttered"], [e.kind for e in evs]
+    assert w.persons["p_high"].body == 7
+
+
+def test_an_effect_that_adds_or_removes_an_entity_in_its_body_is_refused_and_put_back(monkeypatch):
+    def adds(w, a, res=None):
+        w.sites["h137_side_site"] = dataclasses.replace(w.sites["site_harbour"], id="h137_side_site")
+        return _grain(w)
+    _plant(monkeypatch, "utter", adds)
+    w = P.tiny_world()
+    evs = _run(w, "h137_add")
+    assert [e.kind for e in evs] == ["act.refused"], [e.kind for e in evs]
+    assert "h137_side_site" not in w.sites, "the eagerly added entity stood"
+
+    def removes(w, a, res=None):
+        del w.sites["site_seam"]
+        return _grain(w)
+    _plant(monkeypatch, "utter", removes)
+    w = P.tiny_world()
+    seam = w.sites["site_seam"]
+    evs = _run(w, "h137_remove")
+    assert [e.kind for e in evs] == ["act.refused"], [e.kind for e in evs]
+    assert w.sites.get("site_seam") is seam, "the eagerly removed entity stayed gone"

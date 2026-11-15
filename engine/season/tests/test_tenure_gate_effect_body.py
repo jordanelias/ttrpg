@@ -20,7 +20,7 @@ What each block proves, and the control that stops it passing vacuously:
   3. A LEGITIMATE `Change` IS NOT REFUSED. An effect that mutates nothing in its body and returns
      a `Change` whose `apply` writes a tenure the gate admits is observed by `World.write` as before.
 
-Tenures only: an eager write to an entity field is still convention-bound (`_apply_write` says so).
+An eager write to an entity field is observed the same way: `test_gate_observation.py`.
 """
 from engine.season.data.matrix import WriteClass
 from engine.season.harness import probes as P

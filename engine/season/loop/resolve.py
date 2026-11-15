@@ -934,8 +934,9 @@ def _apply_write(self, w: "World", token: Token, a: Act, kind: str, fld: str, ef
     `_fold` turns into the refusal.
 
     CR-06 (`H-137`): a Tenure the effect's OWN BODY changes, before it returns its `Change`, is
-    refused as `NotYours` with the store put back. TENURES ONLY -- an eager write to an entity
-    field stays bound by the convention that an effect defers its mutation into `Change.apply`."""
+    refused as `NotYours` with the store put back, and so is an entity field it reassigned or an
+    entity it added or removed (`effect_body_observed` states the bound: a value mutated in place
+    escapes, so an effect still defers its mutation into `Change.apply`)."""
     # ⚠ G2: ASKED FOR ITS SIDE EFFECT ONLY. This was `mrow = matrix_row(kind, fld)` and `mrow` fed
     # the class below. The class now comes from the driver's token, so the row is no longer read
     # here -- but the call still raises `Unspecified` for an absent row BEFORE `World.write` is
@@ -973,12 +974,12 @@ def _apply_write(self, w: "World", token: Token, a: Act, kind: str, fld: str, ef
     # `InstrumentDefect`, `kill / wound`'s `Unspecified`) now raises before the gate's class and
     # step checks rather than after them -- both are call-site defects and neither mutates.
     #
-    # ⚠ CR-06 / `H-137`: THE EFFECT'S OWN BODY IS OBSERVED TOO, FOR TENURES. `World.write` takes its
-    # tenure snapshot only after this call returns, so a Tenure the body moved before handing back
-    # its `Change` was baked into that snapshot and judged by neither F3 nor F9.
-    # `World.effect_body_observed` runs the effect inside its own snapshot and refuses a Tenure the
-    # body moved (the store put back, then `not_yours`); its docstring states the bounds (tenures
-    # only; any tenure moved is refused, lawful or not, since a body is not a write).
+    # ⚠ CR-06 / `H-137`: THE EFFECT'S OWN BODY IS OBSERVED TOO, FOR TENURES AND ENTITY FIELDS.
+    # `World.write` takes its snapshots only after this call returns, so a Tenure or an entity field
+    # the body moved before handing back its `Change` was baked into them and judged by neither F3 nor
+    # F9. `World.effect_body_observed` runs the effect inside its own snapshots and refuses what the
+    # body moved (put back, then `not_yours`); its docstring states the bounds (a value mutated in
+    # place escapes; anything moved is refused, lawful or not, since a body is not a write).
     change = w.effect_body_observed(lambda: eff(w, a, resolution), a.actor, a.via, kind, fld)
     got = w.write(fld, token, None, record_kind=kind, fieldname=fld, driver="Act",
                   actor=a.actor, via=a.via, change=change)
