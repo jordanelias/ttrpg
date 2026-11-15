@@ -133,9 +133,9 @@ work. our design documents in .MD are reference and information only."*
      `references/restructure_ledger.md` are process surfaces a program legitimately reads.
 
   §5, §6 and §8 are instances of this rule. ⚠ **A fact whose chain you cannot name is orphaned or
-  hand-transcribed** (`fac.intel`: ruled bounds, reachable by nothing). **NO TREE-WIDE GUARD IS
-  LICENSED** (§0.1 pt 5); licensed instead: the exporter's `--check` per chain, the loader's refusal per
-  data family, and reading the chain before you delete or migrate.
+  hand-transcribed** (as `fac.intel` was: ruled bounds, reachable by nothing; deleted at `29b`). **NO
+  TREE-WIDE GUARD IS LICENSED** (§0.1 pt 5); licensed instead: the exporter's `--check` per chain, the
+  loader's refusal per data family, and reading the chain before you delete or migrate.
 - **This does NOT demote `CLAUDE.md`, `CURRENT.md` or `HANDOFF.md`**, and **does not license deleting
   design docs.** They stay as reference; what changes is what may be treated as *binding*.
 
@@ -349,8 +349,8 @@ says where an old path went. Only what those cannot tell you:
   `HANDOFF_<LANE>.md`.** Oracle scripts live in `sim/`, imported as `systems.<sub>.sim.*`. ⚠ **`systems/`
   HOLDS NO `.md` AT ALL** — its design documents are in `.designs/systems/<sub>/`;
   `tools/ci_design_prose_quarantine.py` is blocking and the invariant is **zero, not a ratchet**.
-- **`engine/`** — the executable model (substrate leaf readers, cross-scale, campaign
-  driver, `engine/engine_params/` typed exports, `engine/tests/` = CI job `sim-regression`). **It names
+- **`engine/`** — the executable model (substrate leaf readers, `engine/dice_engine/`,
+  `engine/engine_params/` typed exports, `engine/tests/` = CI job `sim-regression`). **It names
   no subsystem by import**: seams resolve through `engine/substrate/composition.py` (`engine/` names a
   ROLE, `references/module_contracts.yaml` the registered MODULE). One `sys.path` seam, `substrate/pc_engine.py` into
   `modules/combat/`, is in `PATH_SEAM_ALLOWED`, **shrink-only**; the execution artifact is
