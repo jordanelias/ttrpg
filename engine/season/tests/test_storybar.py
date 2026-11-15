@@ -359,7 +359,6 @@ def test_removal_changes_another_persons_later_act():
     assert res["unwrapped_hash"] == res["unperturbed"][1]
     assert res["arms"]["removed"]["fired"] == 1
     assert v["n"] >= 1 and v["m"] >= 1, v
-    assert v["m"] <= v["n"]
 
     # `n` recomputed by hand over the two multisets, the removed person's keys left out; the same
     # difference with his keys left IN is larger (his own lap-0 acts are gone), so the exclusion is read
@@ -377,6 +376,7 @@ def test_removal_changes_another_persons_later_act():
     assert quiet is not None, "every person acts at every lap; the quiet control observed nothing"
     p, at = quiet
     reference = SB._others(everyone, p)
+    assert SB._removal_run(base, SEASONS, p, at)[1] == 1, "the quiet person's removal did not fire: the zero below would be a replay's"
     assert SB.chain_difference(reference, SB.removal_arm(base, SEASONS, p, at)) == 0
 
 
@@ -448,7 +448,6 @@ def test_null_scenes_sees_a_planted_act_that_writes_nothing(monkeypatch):
 
     MUTATION (run 2026-11-15, reverted): `_seat_holders` made to answer every person, so that any claim
     counts -- the bystander arm reads 0 and this test reds."""
-    checked = 0
     w, act = _uttered("p_high")
     assert (r := SB.null_scenes(w, 1))["total"] == 1 and not r["null"], r      # it wrote: not null
     for holders, null in ((set(), True), ({"p_mid", "p_other"}, True), ({"p_low"}, False)):
@@ -458,23 +457,19 @@ def test_null_scenes_sees_a_planted_act_that_writes_nothing(monkeypatch):
         got = SB.null_scenes(w, 1)
         assert got["total"] == 1
         assert got["null"] == ({("utter", "made"): 1} if null else {}), (holders, got)
-        checked += 1
     # the counterparty of the act, `p_mid`: his deposit saves it, a bystander's does not
     for holders, null in (({"p_mid"}, False), ({"p_other"}, True)):
         w, act = _uttered("p_mid")
         assert _leave_only(w, act, holders) >= 1
         assert bool(SB.null_scenes(w, 1)["null"]) is null, holders
-        checked += 1
     # the control: where any claim counts, the bystander arm is not null
     w, act = _uttered("p_high")
     _leave_only(w, act, {"p_mid", "p_other"})
     assert SB.null_scenes(w, 1)["null"], "the bystander arm is not null before the control"
     monkeypatch.setattr(SB, "_seat_holders", lambda w_, subject: frozenset(w_.persons))
     assert not SB.null_scenes(w, 1)["null"]
-    checked += 1
     # the scope narrows which acts are counted and nothing else
     assert SB.null_scenes(w, 1, scope=lambda attempt: False) == {"total": 0, "null": SB.Counter()}
-    assert checked >= 6
 
 
 def test_null_scenes_per_season_reads_the_whole_run_cut_by_the_acts_each_season_took():

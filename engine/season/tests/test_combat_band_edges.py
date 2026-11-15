@@ -48,7 +48,7 @@ from engine.season.state.carriers import Act
 @pytest.fixture
 def engine_available():
     if C.engine() is None:
-        pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+        pytest.fail(f"personal_combat engine unavailable: {C.load_error()}")
     # Plan position `31b`: the adapter calls the module entry through `MODULE_ENTRIES`, which the
     # registrar fills at driver construction; a direct `contest()` needs one constructed in the process.
     SeasonDriver(P.tiny_world())

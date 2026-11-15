@@ -6,7 +6,7 @@ An item that moves the realm proves in its own commit that its revert reads the 
 records that in the commit message; the proof is not kept as a test.
 
 Read with `build_realm(s)` and `populated.run(1, s, w=w)` at `PYTHONHASHSEED=0`, seeds 0, 1, 2, on
-the tree of B01a's close (`reading @3b9bda8`, every person's attributes drawn): the shipped world,
+the tree of B01a's close (`reading @cbca1ad`, the commit that carries B01a's close, every person's attributes drawn): the shipped world,
 `DEFAULT_FIXTURES` as they stand, with no revert applied. A test support module beside
 `_scar_helpers.py`, not a registry: nothing but tests reads it.
 """

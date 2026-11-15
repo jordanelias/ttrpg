@@ -135,7 +135,8 @@ from ..state.gate import PERSON_DIED
 from ..state.world import World
 from . import governance_spine, populated
 from . import probes as P
-from .corpus_run import attempts, graded_loss, graded_losses, unrowed_acts
+from .corpus_run import attempts, graded_loss, graded_losses, seats, unrowed_acts
+from .storybar import NULL_CLASSES, null_line, null_scenes
 from .decision_spread import goal_class
 
 
@@ -145,16 +146,6 @@ def seat_gated(row) -> bool:
     (`decision/options.py::_admitted_through`). Parsed exactly as that walk parses it."""
     kinds = [alt.partition(":")[0].strip() for alt in row.eligibility]
     return "remit" in kinds and "own" not in kinds
-
-
-def seats(w) -> dict:
-    """`{person id: [office id, ...]}` — every live `hold` whose object is an OFFICE and whose
-    subject is a person. A `hold` on a Record or a Rung is not a seat and is not counted."""
-    out: dict = defaultdict(list)
-    for t in w.tenures:
-        if t.kind == "hold" and t.live and t.object in w.offices and t.subject in w.persons:
-            out[t.subject].append(t.object)
-    return dict(out)
 
 
 def seat_depth(w, oid: str):
@@ -507,12 +498,6 @@ FIELD_UNOPPOSED = "field.unopposed"
 STANCE_FIELD = "stance"
 
 
-def _writes_nothing(row) -> bool:
-    """Does `row` write nothing in EVERY band it can fold: `writes_at` is empty for each declared band, or
-    for the one undivided write list of a row that keys none."""
-    return all(not row.writes_at(band) for band in (tuple(row.writes_by_degree) or (None,)))
-
-
 def _carries_a_receipt(events) -> bool:
     """Does any of `events` carry a `Receipt`? The gate mints one only for a subject whose state moved
     (`World.write`: before and after read, `NoOpReceipt` when none did), so a Receipt on the Event IS the
@@ -534,20 +519,23 @@ def _kinds_held(row, events) -> bool:
 
 
 def built_out(w, d, rows) -> dict:
-    """`{verb: {"clean", "kinds", "wrote", "via"}}` for EVERY verb of `VERB_TABLE`, sorted, zeros included.
+    """`{verb: {"clean", "kinds", "wrote", "one", "via"}}` for EVERY verb of `VERB_TABLE`, sorted, zeros included.
     `rows` is `corpus_run.attempts(w, n)`; a CLEAN execution is an act `made` and not `refused` (the
     instrument's `ex - both`) whose Events `d.act_of` ties to it -- an act and an Event placed in the log
     by hand are never tied, so a hand-built execution never counts. Per verb:
 
       clean   the count of clean executions
       kinds   True where the Events caused by ONE clean act include every kind of `emits_at` for its band
-      wrote   True where the row writes nothing in every band (`_writes_nothing`), or where one clean act's
+      wrote   True where the row writes nothing in any band (`not row.writes`, the union over its bands), or where one clean act's
               Events carry a Receipt (`_carries_a_receipt`)
+      one     True where ONE clean act did both: its Events hold every kind AND (the row writes nothing, or
+              its Events carry a Receipt). `kinds` and `wrote` are each read over any clean act, so they
+              can be True through two different acts; `one` cannot
       via     the clean executions whose `Act.via` is set (a seat exercised)
 
-    A verb is BUILT OUT when `is_built_out`: `clean >= 1`, `kinds` and `wrote`."""
+    A verb is BUILT OUT when `is_built_out`: `clean >= 1` and `one` (a made, kinds-holding, writing act)."""
     by_act = _events_by_act(w, d)
-    out = {v: {"clean": 0, "kinds": False, "wrote": _writes_nothing(row), "via": 0}
+    out = {v: {"clean": 0, "kinds": False, "wrote": not row.writes, "one": False, "via": 0}
            for v, row in sorted(VERB_TABLE.items())}
     for a, made, no in rows:
         events = [e for _, e in by_act.get(a.id, ())]
@@ -555,15 +543,17 @@ def built_out(w, d, rows) -> dict:
             continue
         row, c = VERB_TABLE[a.verb], out[a.verb]
         c["clean"] += 1
-        c["kinds"] = c["kinds"] or _kinds_held(row, events)
-        c["wrote"] = c["wrote"] or _carries_a_receipt(events)
+        kinds, receipt = _kinds_held(row, events), _carries_a_receipt(events)
+        c["kinds"] = c["kinds"] or kinds
+        c["wrote"] = c["wrote"] or receipt
+        c["one"] = c["one"] or (kinds and (receipt or not row.writes))
         c["via"] += a.via is not None
     return out
 
 
 def is_built_out(c: dict) -> bool:
-    """One `built_out` verb row's verdict: a clean execution, its kinds, and its write."""
-    return c["clean"] >= 1 and c["kinds"] and c["wrote"]
+    """One `built_out` verb row's verdict: a clean execution that, itself, held its kinds and wrote."""
+    return c["clean"] >= 1 and c["one"]
 
 
 def fought_fields(w, d, rows) -> dict:
@@ -678,8 +668,8 @@ def instrumented_season(w, seasons: int) -> dict:
             both[a.verb] += 1
         if not (made or no):
             neither[a.verb] += 1
-    graded = Counter(a.verb for a in graded_losses(w, seasons))
-    from .storybar import null_scenes      # storybar imports this module (`seats`), so only at call time
+    graded_acts = graded_losses(w, seasons)
+    graded = Counter(a.verb for a in graded_acts)
     why = refusal_reading(w, d, rows)
     census = kind_census(w, d)
     told = census["counts"].get("news.told", {}).get("events", 0)
@@ -690,7 +680,7 @@ def instrumented_season(w, seasons: int) -> dict:
             "executed": dict(executed), "refused": dict(refused), "neither": dict(neither),
             "both": dict(both), "graded": dict(graded), "unrowed": unrowed_acts(w),
             "built_out": built_out(w, d, rows), "fought": fought_fields(w, d, rows),
-            "null_scenes": null_scenes(w, seasons),
+            "null_scenes": null_scenes(w, seasons, rows=rows, graded=frozenset(a.id for a in graded_acts)),
             "pools": {v: {a: dict(c) for a, c in per.items()} for v, per in pools.items()},
             "refusal_kinds": {v: dict(c) for v, c in refusal_kinds.items()},
             "wrong_kind": wrong_kind(w, d, rows, why["post_acts"], cast),
@@ -772,7 +762,7 @@ def engine_lines(m: dict) -> list:
     counts = m["engines"]
     if counts is None:
         return [head, f"    not counted: {m['engines_why']}"]
-    rows = [(r, c) for r, c in sorted(counts.items())]
+    rows = sorted(counts.items())
     out = [head] + [f"    {r:<28}{c:>6}" for r, c in rows]
     counted = [c for _, c in rows if c != VALUE_ROW]
     out.append(f"    rows entered {sum(1 for c in counted if c)} of {len(counted)}")
@@ -805,11 +795,11 @@ def built_out_lines(m: dict) -> list:
     sorted, then the total and the FOUGHT FIELDS line. A reading, never a threshold."""
     rows = m["built_out"]
     out = ["\n  BUILT OUT (a verb with a clean execution -- made, not refused -- whose Events hold every kind "
-           "of its band and which wrote where its row declares writes; `via` = clean executions through a seat)"]
+           "of its band and which wrote where its row declares writes, in ONE execution (`one`: `kinds` and `wrote` can each be yes through different acts); `via` = clean executions through a seat)"]
     for v in sorted(rows):
         c = rows[v]
         out.append(f"    {v:<16} clean {c['clean']:>4}  kinds {'yes' if c['kinds'] else 'no ':<3}  "
-                   f"wrote {'yes' if c['wrote'] else 'no ':<3}  via {c['via']:>4}  "
+                   f"wrote {'yes' if c['wrote'] else 'no ':<3}  one {'yes' if c['one'] else 'no ':<3}  via {c['via']:>4}  "
                    f"{'BUILT OUT' if is_built_out(c) else '-'}")
     out.append(f"    built out {sum(1 for c in rows.values() if is_built_out(c))} of {len(VERB_TABLE)}")
     f = m["fought"]
@@ -823,7 +813,6 @@ def null_scene_lines(m: dict) -> list:
     a durable write (`storybar.null_scenes` owns the definition and the count), by verb and by outcome
     class, then the line `storybar --null-scenes` prints. The scene budget's debit is a Query and writes no
     cell, so it is not counted (A-81). A reading, never a threshold."""
-    from .storybar import NULL_CLASSES, null_line      # storybar imports this module, so only at call time
     r = m["null_scenes"]
     out = ["\n  NULL SCENES (acts whose Events carry no durable write)"]
     for v in sorted({v for v, _ in r["null"]}):

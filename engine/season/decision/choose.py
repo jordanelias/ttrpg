@@ -369,8 +369,9 @@ def _sample_order(ranked: list, score, p: Person, fx: "Fixtures", draw) -> list:
     `harness/corpus_run.py` x2, `harness/probes.py` x2, the degree-sweep arms, and the tests).
     **The structural reason: the driver never constructs the chooser.** `SeasonDriver.season(choose,
     ...)` RECEIVES an already-built one, so the only way the driver could own the draw is to hand it
-    to `choose` — and `choose`'s four-parameter signature is pinned by
-    `test_decision_package_never_names_world_anywhere_under_it` and `test_g2_deliberate_mutates_no_store_by_any_route`, which `U4` itself insists must not change. The two clauses of
+    to `choose` — and `choose`'s four-parameter signature, which `U4` itself insists must not change, keeps the world
+    out of it (`test_decision_package_never_names_world_anywhere_under_it` reads that nothing under `decision/` names
+    `World`; no test reads the arity itself since B02.04 deleted `test_choose_receives_no_world`). The two clauses of
     the spec are in tension and this took the one that a test enforces.
     ⚠ SCOPE, STATED SO IT IS NOT OVERREAD: `04:858-860` scopes that sentence to **R-09's** producer
     (*"chains of events within a scene are probabilistic"*), which is unbuilt; this is R-08's
@@ -393,8 +394,8 @@ def _sample_order(ranked: list, score, p: Person, fx: "Fixtures", draw) -> list:
     **(1) STRUCTURAL — THE ROUND CANNOT REACH THIS FUNCTION, AND IT IS THE SAME TENSION AS CLAUSE
     2 ABOVE.** The round is state on the DRIVER; the chooser is built by the CALLER (clause 2's
     finding), so the driver cannot key a draw it never constructs. The only other route is to hand
-    `choose` the round, and `choose`'s four-parameter signature is pinned by
-    `test_decision_package_never_names_world_anywhere_under_it`, which `U4` insists must not change. A caller holding both CAN
+    `choose` the round, and `choose`'s four-parameter signature, which `U4` insists must not change, keeps the world out
+    of it (`test_decision_package_never_names_world_anywhere_under_it`; no test reads the arity itself). A caller holding both CAN
     close over `d.round` when it builds the draw, which is exactly how the arm below was measured —
     but that is a harness reaching past the engine, not the engine meeting the clause.
 
