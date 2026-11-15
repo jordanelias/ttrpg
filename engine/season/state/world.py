@@ -477,6 +477,18 @@ class World:
         out.extend(self._unowned)
         return _TenureView(out)
 
+    def tenure_extent(self) -> tuple:
+        """`(persons, unowned, owned)` -- how many people, unhomed Tenures and owned Tenures the store
+        holds. Stores nothing and reads no Tenure: it is the cheap SHAPE of `tenures`, which the
+        barrier's live-edge view (`state/containment.py::edges_of`) compares to know it is stale."""
+        return (len(self.persons), len(self._unowned),
+                sum(len(p.tenures) for p in self.persons.values()))
+
+    @property
+    def in_parallel_map(self) -> bool:
+        """Whether a parallel map is running, inside which `cache_at_barrier` refuses to answer."""
+        return self._in_parallel_map
+
 
     def contain_ascends(self, subject: str, object_: str) -> bool:
         """MAY `subject` BE CONTAINED IN `object_`? The §10 ladder, asked rather than raised.

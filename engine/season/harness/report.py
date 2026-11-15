@@ -299,8 +299,9 @@ def emit(rep: dict, trace_rows: list) -> None:
 if __name__ == "__main__":
     from . import run_cases as R
     from ..trace_log import TRACE
-    rep = R.main()
-    (RUNS).mkdir(exist_ok=True)
-    (RUNS / "results.json").write_text(json.dumps(rep, indent=1, default=str))
-    (RUNS / "TRACE.txt").write_text(TRACE.dump_text())
-    emit(rep, TRACE.rows)
+    with TRACE.recording():         # the rows below are read here, and `R.main()` fills them
+        rep = R.main()
+        (RUNS).mkdir(exist_ok=True)
+        (RUNS / "results.json").write_text(json.dumps(rep, indent=1, default=str))
+        (RUNS / "TRACE.txt").write_text(TRACE.dump_text())
+        emit(rep, TRACE.rows)

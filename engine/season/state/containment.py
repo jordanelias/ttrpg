@@ -30,9 +30,49 @@ from ..trace_log import TRACE
 # and the import-cycle instrument counts a guarded import as an edge. The type is named as a string.
 
 
+class _LiveEdges:
+    """The barrier's view of the Tenures a hot reader asks by `(kind, subject)`: Tenure OBJECTS, in
+    `w.tenures` order, for the kinds in `_VIEWED`. Objects, not ids, because `seat_hold` returns the
+    Tenure; so a reader re-asks `t.live` / `t.until` of the object it is handed, and a Tenure closed
+    since the view was built reads as closed. What the view cannot see is a Tenure ADDED or REMOVED, which
+    `stamp` (`World.tenure_extent`) catches: `edges_of` rebuilds on a changed stamp."""
+    __slots__ = ("stamp", "by")
+
+    def __init__(self) -> None:
+        self.stamp = None
+        self.by: dict = {}
+
+
+_VIEWED = ("hold", "contain")
+
+
+def edges_of(w: "World", kind: str, subject: str) -> list:
+    """Every `kind` Tenure of `subject` (live or closed), in `w.tenures` order; the caller filters.
+
+    From the barrier's cache (`World.cache_at_barrier`, key `"live_edges"`, dropped by `discard_caches`
+    like every barrier index) where one may be built: `parent_of`, `seat_hold` and `_eligible` read this
+    inside loops, and each asked `w.tenures`, which sorts and concatenates the whole store per call. Where
+    none may be -- inside a parallel map, which refuses the cache even to read -- or for a kind the view
+    does not carry, the answer is the same scan of `w.tenures` those readers made, so the two routes agree.
+
+    This lives in `state/` and not in `queries/cache.py` because `state/` may not import `queries/`
+    (`gate.py` is a reader); the key and the shape have this one owner."""
+    if kind in _VIEWED and not w.in_parallel_map:
+        view = w.cache_at_barrier("live_edges", _LiveEdges)
+        stamp = w.tenure_extent()
+        if view.stamp != stamp:
+            by: dict = {}
+            for t in w.tenures:
+                if t.kind in _VIEWED:
+                    by.setdefault((t.kind, t.subject), []).append(t)
+            view.by, view.stamp = by, stamp
+        return view.by.get((kind, subject), [])
+    return [t for t in w.tenures if t.kind == kind and t.subject == subject]
+
+
 def parent_of(w: "World", rung_id: str) -> Optional[str]:
-    for t in w.tenures:
-        if t.kind == "contain" and t.subject == rung_id and t.live:
+    for t in edges_of(w, "contain", rung_id):
+        if t.live:
             return t.object
     return None
 

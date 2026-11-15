@@ -13,12 +13,20 @@ saw some -- a loop that asserts conditionally must assert that it asserted (`CLA
 
 from __future__ import annotations
 
+import pytest
 from collections import Counter
 
 from ..harness.populated import build_realm, run
 from ..loop.predicates import REQUIRES_PREDICATES
 from ..state.carriers import Act
 from ..trace_log import TRACE
+
+@pytest.fixture(autouse=True)
+def _recording():
+    """`TRACE` keeps rows only inside a window an instrument opens; these tests read them."""
+    with TRACE.recording():
+        yield
+
 
 VERBS = ("confer", "establish")
 

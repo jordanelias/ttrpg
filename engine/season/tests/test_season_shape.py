@@ -9241,6 +9241,7 @@ def test_wa_work_refuses_for_want_of_a_site_and_that_is_a_polarity_correction():
 # W-C — OPERANDS ON THE CANDIDATE, DERIVED PERSON-SIDE. `H-94`'s structural half.
 # ===========================================================================
 
+@TRACE.recording()      # `first`..`TRACE.rows` below is read in this window
 def _wc_corpus_pass():
     """ONE corpus pass, shared by the two tests that measure it, with executions and refusals
     attributed BY ACT ID and the TRACE slice the pass produced.
@@ -9742,6 +9743,7 @@ def test_wc_the_store_kind_sweep_runs_all_three_arms_and_an_unstocked_kind_refus
         "meaninglessly")
 
 
+@TRACE.recording()      # the NOTE rows read below are kept only inside this window
 def test_wc_a_candidate_declines_when_its_hearth_cannot_be_derived():
     """THE RULE THAT MAKES THE OPERAND CHANNEL SAFE: a form whose operands cannot all be bound
     forms **NO Candidate**.

@@ -253,6 +253,7 @@ def _record_escape(exceptions_path: Path, escape_type: str, seed: int, arm: str,
 # ONE WORLD, MANY SEASONS.
 # ---------------------------------------------------------------------------------------------
 
+@TRACE.recording()      # the one window this instrument reads `TRACE.gaps` and `.counts()` in
 def _run_world(args: argparse.Namespace, head: str, world_dir: Path, argv: list) -> str:
     seed, arm = args.seed, args.arm
 

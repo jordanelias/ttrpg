@@ -49,6 +49,13 @@ from ..state.carriers import Act, Person, Rung, Site, Tenure
 from ..state.world import World
 from ..trace_log import TRACE
 
+@pytest.fixture(autouse=True)
+def _recording():
+    """`TRACE` keeps rows only inside a window an instrument opens; these tests read them."""
+    with TRACE.recording():
+        yield
+
+
 SOURCE = territory_rung_id("T15")            # Askeheim, the epicentre
 RING_1 = (territory_rung_id("T6"), territory_rung_id("T13"))
 SEASONS = 8

@@ -59,7 +59,7 @@ from .carriers import Office, Receipt, Tenure
 # import-cycle instrument (`tests/valoria/test_import_cycle_game_state_npe.py`) reads a guarded
 # import as an edge like any other. The functions below take the `World` they are handed and name
 # its type as a string only.
-from .containment import ancestry, descendants, home_of, parent_of
+from .containment import ancestry, descendants, edges_of, home_of, parent_of
 
 
 @dataclass(frozen=True)
@@ -361,8 +361,8 @@ def seat_hold(w: "World", actor: Optional[str], via: Optional[str]) -> Optional[
     holder has (`Tenure.granted_acts`, the `13e` snapshot), not the office's live remit."""
     if not actor or not via or via not in w.offices:
         return None
-    for t in w.tenures:
-        if t.kind == "hold" and t.subject == actor and t.object == via and t.live:
+    for t in edges_of(w, "hold", actor):
+        if t.object == via and t.live:
             return t
     return None
 

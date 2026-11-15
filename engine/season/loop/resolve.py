@@ -40,6 +40,7 @@ from ..queries.world_q import WorldReader, ceiling, demanded_person, occasioned_
 from ..seam import ContestError, ContestRefused, Resolution, contest, degree_of, find_trail, grade
 from ..state.carriers import Act, Event, StateChange, effort_of, subject_of
 from ..state.gate import Change, NoOpReceipt, Subject, Token, seat_hold
+from ..state.containment import edges_of
 from ..state.ids import SeatId, draw_factory, H
 from ..state.world import World
 from ..trace_log import TRACE
@@ -128,8 +129,7 @@ def _eligible(self, w: "World", a: Act, row: "VerbRow") -> bool:
             # over-admission, and `G4` makes that a defect of equal weight to an
             # over-refusal. A `<...>` argument is a KIND, not an id, so it cannot be matched
             # and this declines rather than guessing which store the act meant (`H-75`).
-            mine = [t for t in w.tenures
-                    if t.subject == a.actor and t.kind == "hold" and t.until is None]
+            mine = [t for t in edges_of(w, "hold", a.actor) if t.until is None]
             if not raw:
                 if mine:
                     return True

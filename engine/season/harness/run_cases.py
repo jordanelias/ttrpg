@@ -460,6 +460,7 @@ def grade(case: dict) -> dict:
     )
 
 
+@TRACE.recording()      # `_gaps` and `_trace_counts` below are read off the trace this call keeps
 def main(kinds=("NPC", "ARC")) -> dict:
     report: dict = {}
     for kind in kinds:
