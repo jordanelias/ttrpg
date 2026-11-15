@@ -55,6 +55,7 @@ from ..state.carriers import (
     Candidate, Claim, Event, Office, Person, Proposition, Question, Record, Rung, Scene, Sensation, Site, StateChange, Tenure, View,
 )
 from ..state.ids import H, ROOT, draw_factory
+from ..boot.realm import place_person   # the one placing of a person (B03c.02)
 from ..boot.chooser import chooser   # moved to `boot/` (B03c.01): the game's chooser; the instruments reach it here
 from ..state.world import World
 from ..trace_log import TRACE
@@ -137,14 +138,11 @@ def plant_cohort(w: World, pid: str, rung: str, weight: int = 2, name: str = "")
     returned by id. Plan position `24f`: only a cohort eats (`world_q.subsistence_draw`,
     `ED-IN-0255`), and `tiny_world` seats none, so a test of the larder draw on it plants its eaters
     here. ⚠ A TEST FIXTURE, NOT THE PRODUCER: the realm's cohorts come from `cohorts.yaml` through
-    `harness/populated.py::seat_cohorts`, which also checks the weight against `capacity`. This
+    `boot/realm.py::seat_cohorts`, which also checks the weight against `capacity`. This
     checks nothing past S9's own floor (the `Person` constructor), because a hand-built world has no
     dwellings and every rung would read the capacity floor. `weight` defaults to 2, the smallest
     cohort S9 admits and the weight `cohorts.yaml` ships (`H-170`)."""
-    w.persons[pid] = Person(pid, name or f"the people of {rung}", weight=weight)
-    w.rungs[pid] = Rung(pid, "person")
-    w.add_tenure(Tenure(f"t_{pid}_in", pid, rung, "contain", 0))
-    w.add_tenure(Tenure(f"t_{pid}_home", pid, rung, world_q.RESIDE_KIND, 0))
+    place_person(w, pid, name or f"the people of {rung}", rung, weight=weight)
     return pid
 
 

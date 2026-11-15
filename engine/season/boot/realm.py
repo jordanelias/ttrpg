@@ -332,7 +332,7 @@ def _index_anchor(w: World, anchors: dict, key, rid: str) -> None:
     if (kind, key) in anchors:
         raise Forbidden(
             f"the anchor {{{kind}: {key!r}}} names two rungs: {anchors[(kind, key)]!r} and {rid!r}",
-            "harness/populated.py -- rung anchors",
+            "boot/realm.py -- rung anchors",
             needs="one rung per anchor; a form's key must tell its rungs apart",
             law="r2 03 §A.14 -- an anchor that resolves to more than one rung is refused")
     anchors[(kind, key)] = rid
