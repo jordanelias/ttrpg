@@ -95,8 +95,8 @@ from ..queries.person_q import legitimacy, stability
 from ..state.carriers import Receipt, subject_of
 from ..state.gate import TENURE_CLOSED
 from ..state.ids import H, ROOT, draw_factory
-from .aperture import seats
-from .corpus_run import attempts, graded_losses
+from .arc import _Records
+from .corpus_run import attempts, graded_losses, refusal_sets, seats
 from .populated import COHORT_PREFIX, build_realm
 
 #: Every forcing setting this tree can run. `off` is the shipped loop; no `on` is built (see the
@@ -233,17 +233,6 @@ def per_season(acts, seasons: int) -> list:
 # THE EXECUTED READING (CR-15). Beside the one above, never instead of it.
 # ---------------------------------------------------------------------------------------------
 
-def refusal_sets(w, n: int) -> tuple:
-    """`(refused, graded)`, two frozensets of act ids over the ACT STORE of `w` after `n` seasons.
-    An act is REFUSED when `corpus_run.attempts`' `refused` tuple for it is non-empty -- any Event of
-    one of its row's `emits_on_refusal` kinds is in the log, the driver's rule (`loop/driver.py`), so a
-    graded loss counts as refused. `graded` is `corpus_run.graded_losses`: the refused acts that are
-    losses of a contest rather than refusals (every one of them is also in `refused`). Neither reads
-    `attribute`'s `made`, which counts a graded loss as made too. Reads only."""
-    refused = frozenset(a.id for a, _made, ref in attempts(w, n) if ref)
-    return refused, frozenset(a.id for a in graded_losses(w, n))
-
-
 def executed_items(acts: dict, executed: dict, refused, graded) -> list:
     """`[(default_row, executed_row_or_None, is_refused, is_graded_loss)]` per act of `read`'s `"acts"`,
     `executed` its `"executed"`. A plain list, so a season's slice or several seeds' rows pool by
@@ -296,7 +285,7 @@ NULL_CLASSES = ("made", "refused", "graded_loss", "neither")
 
 def _seat_holders(w, subject: str) -> frozenset:
     """Who an act's `subject` stands for: the person himself, or the live holders of the office it names
-    (`aperture.seats`' inverse); nobody for anything else."""
+    (`corpus_run.seats`' inverse); nobody for anything else."""
     if subject in w.persons:
         return frozenset({subject})
     if subject in w.offices:
@@ -304,7 +293,7 @@ def _seat_holders(w, subject: str) -> frozenset:
     return frozenset()
 
 
-def null_scenes(w, n: int, scope=None) -> dict:
+def null_scenes(w, n: int, scope=None, rows=None, graded=None) -> dict:
     """`{"total": int, "null": Counter((verb, cls))}` over `corpus_run.attempts(w, n)`, the one owner of
     made and refused: how many acts there are, and which of them left no durable write.
 
@@ -329,8 +318,9 @@ def null_scenes(w, n: int, scope=None) -> dict:
     `scope`, `None` by default, is a predicate over an attempt of `attempts` (`(act, made, refused)`) that
     narrows WHICH acts are counted and changes nothing in what counts as a write [ASSUMPTION: the scope is
     an argument of this function, not a filter each caller writes -- basis: one owner of the count,
-    CLAUDE.md §8; it adds no rule]. Reads only."""
-    from .arc import _Records          # arc imports this module (`refusal_sets`), so only at call time
+    CLAUDE.md §8; it adds no rule]. `rows` and `graded`, `None` by default, are `attempts(w, n)` and the ids
+    of `graded_losses(w, n)` where a caller already holds them (`null_by_season` asks once per season over the
+    same world); with `None` each is read here. Reads only."""
     records = _Records(w)
     named: dict = defaultdict(list)    # act id -> the Events naming it in `causes[]`
     by_event: dict = defaultdict(set)  # Event id -> the ids of the acts naming it
@@ -346,8 +336,8 @@ def null_scenes(w, n: int, scope=None) -> dict:
                 for aid in by_event.get(c, ()):
                     if aid not in by_event.get(e.id, ()):
                         named[aid].append(e)
-    rows = attempts(w, n)
-    graded = frozenset(a.id for a in graded_losses(w, n))
+    rows = attempts(w, n) if rows is None else rows
+    graded = frozenset(a.id for a in graded_losses(w, n)) if graded is None else graded
     total, null = 0, Counter()
     for attempt in rows:
         a, made, refused = attempt
@@ -400,11 +390,14 @@ def null_by_season(seed: int, seasons: int, cap=None) -> tuple:
     ends: list = []
     w, _d, _bounds = drive(seed, seasons, "off", cap, on_season=lambda w_, _s, _n: ends.append(len(w_.acts)))
     store, per, lo = tuple(w.acts), [], 0
+    rows = attempts(w, seasons)
+    graded = frozenset(a.id for a in graded_losses(w, seasons))
     for hi in ends:
         ids = frozenset(a.id for a in store[lo:hi])
-        per.append(null_scenes(w, seasons, scope=lambda attempt, ids=ids: attempt[0].id in ids))
+        per.append(null_scenes(w, seasons, scope=lambda attempt, ids=ids: attempt[0].id in ids,
+                               rows=rows, graded=graded))
         lo = hi
-    return per, null_scenes(w, seasons)
+    return per, null_scenes(w, seasons, rows=rows, graded=graded)
 
 
 def _spread(values) -> dict:

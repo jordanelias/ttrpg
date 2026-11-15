@@ -9,7 +9,7 @@ from __future__ import annotations
 
 
 from engine.season.harness import register
-from engine.season.tests.test_register_reading import conjunct, plant, refused, row
+from engine.season.tests.test_register_reading import conjunct, refused, row
 
 TEST_FILE = "engine/season/tests/test_register_reading.py"
 
@@ -51,6 +51,7 @@ def test_k_expression_naming_only_import_is_refused(tmp_path, monkeypatch, capsy
 
 
 def test_k_expression_needs_every_name_not_one(tmp_path, monkeypatch, capsys):
+    """Each name must be found; the boolean is not evaluated (an `and` of names in two tests passes here)."""
     both = ["python", "-m", "pytest", TEST_FILE, "-k",
             "a_met_row_without_a_reading and a_clean_scratch_file"]
     rc, out = refused(tmp_path, monkeypatch, capsys, one(both))
@@ -109,13 +110,26 @@ def test_a_scales_row_naming_no_r04_conjunct_is_refused(tmp_path, monkeypatch, c
     assert rc != 0 and "R-04.c9" in out, out
 
 
-def test_a_scales_row_with_no_conjunct_key_is_not_refused(tmp_path, monkeypatch, capsys):
-    """B02.31 gives each scale its conjunct; until then the key is absent and not a violation."""
+def test_a_scales_row_with_no_conjunct_key_is_refused(tmp_path, monkeypatch, capsys):
+    """B02.31 gave each scale its conjunct, so a row without the key is a violation."""
     rc, out = refused(tmp_path, monkeypatch, capsys, [row()], scales=[{"scale": "x"}])
-    assert rc == 0, out
+    assert rc != 0 and "names no conjunct" in out, out
 
 
 def test_shipped_file_exits_zero(capsys):
-    """The control. Reads red from B02.13 until B02.38 writes the nine's conjuncts: the five
-    `partial` rows carry no conjunct at `yes` until then."""
+    """The control: the shipped file satisfies the register (B02.38 wrote the nine's conjuncts and
+    B02.31 the scales' keys)."""
     assert register.check_requirements() == 0, capsys.readouterr().out
+
+
+def test_a_measure_is_resolved_the_way_an_argv_is(tmp_path, monkeypatch, capsys):
+    """A row's `measure:` goes through the one resolver a conjunct's `argv` does: a `-k` naming no test, a module that
+    does not exist and a command the check cannot find are each refused; the text after `#` is the row's note."""
+    ok = "python -m engine.season.harness.register --requirements  # a note with `-k nothing_here`"
+    rc, out = refused(tmp_path, monkeypatch, capsys, [row(measure=ok)])
+    assert rc == 0, out
+    for bad in ("python -m pytest engine/season/tests -k 'zzz_no_such_test_anywhere'",
+                "python -m engine.season.harness.no_such_module",
+                "true"):
+        rc, out = refused(tmp_path, monkeypatch, capsys, [row(measure=bad)])
+        assert rc != 0 and "R-01" in out, (bad, out)

@@ -12,7 +12,6 @@ If either fails the reading is void.
 
 from __future__ import annotations
 
-import pytest
 
 from ..data.verbs import VERB_TABLE
 from ..harness import chronicle as C

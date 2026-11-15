@@ -6,7 +6,7 @@ occasioned dropped that edge the moment it was refused. The rule now lives once,
 `_act_events(self, w, a, kinds, ...)`, and the three refusals that built `Event` directly
 go through it. This file is the counterfactual: each refusal route is driven with an occasion
 present, and the same route with the append neutered fails (run once, 2026-10-09, IN-50: the
-count is in the commit and in `engine/season/requirements.yaml` R-01's `measured:`).
+count is in the commit).
 
 What each test observes, and the control that stops it passing vacuously:
 

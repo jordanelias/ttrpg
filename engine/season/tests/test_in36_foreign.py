@@ -29,6 +29,8 @@ realm settlement through the real chooser, with no hand-built act; off, byte-ide
 from __future__ import annotations
 
 
+import functools
+
 import pytest
 
 from engine.season.data import cast
@@ -93,10 +95,10 @@ def _ids(w) -> set:
 
 # ---------------------------------------------------------------------------------------------- (a) + (b)
 
-def test_the_control_arm_seats_no_altonian_entity_and_leaves_the_cast_rows_unplaced(control):
+def test_the_control_arm_seats_no_altonian_entity_and_leaves_the_cast_rows_unplaced(control, foreign):
     mentions = sorted(i for i in _ids(control) if any(m in str(i).lower() for m in FOREIGN_MARKERS))
     assert mentions == [], mentions
-    assert len(control.persons) == 83, "the control arm's cast count moved"
+    assert set(control.persons) == set(foreign.persons), "the arms differ in who is placed, not in who is cast"
     unplaced = dict(control._unplaced_cast)
     assert {c: unplaced.get(c) for c in ("NPC-011", "NPC-089", "NPC-090")} == {
         "NPC-011": "Altonia", "NPC-089": "Altonia", "NPC-090": "Altonia"}, unplaced
@@ -270,20 +272,23 @@ def test_the_same_march_with_no_defender_arrives_unopposed_at_the_chokepoint():
     assert world_q.home_of(w)["p_npc_089"] == "set_s_007", "the army did not arrive"
 
 
-#: WITNESS SEEDS for the natural-play test below, found by a scan of seeds 0-79 (`foreign=True`, tick 0): the
-#: seeds where the REAL unrestricted chooser's first released scene on the Katepano's goal Question holds a
-#: `march` on Valorsplatz, `via == "off_katepano"`, and whose march also folds to the seam in a one-season run
-#: with no `field.unopposed`. [ASSUMPTION; medium; Jordan to correct -- two witnesses, not a rate.]
-#: RE-SCANNED at v10 REM-27 (the Katepano told of the capital, `_told_of_the_capital`; this file's own
-#: `_first_scene_of_the_goal_question`, `_fold_one` and `aperture.instrumented_season`, `PYTHONHASHSEED=0`): the first
-#: scene holds the march at 10 of 80 seeds (7, 16, 38, 39, 44, 53, 63, 65, 67, 72), each of the 10 folds alone to the
-#: seam at `field.lost` and reaches it in a full one-season run, and none of the 10 holds it without the claim. The two
-#: witnesses kept are two of those ten.
-#: RE-SCANNED at v11 CR-81 (the realm starts with acquaintances; same helpers, seeds 0-79, `PYTHONHASHSEED=0`): the
-#: Katepano's first question is now an acquaintance claim carrying the capital as `Rung` (see the helper), and the first
-#: scene holds the march at 4 of 80 seeds (27, 44, 53, 63), each folding alone to the seam and reaching it in a full
-#: one-season run. Was (39, 53); 39 is no longer a witness. Fewer witnesses (10 -> 4 of 80) is RECORDED, not targeted.
-WITNESS_SEEDS = (44, 53)
+#: WITNESS SEEDS for the natural-play tests below are FOUND, not pinned: the first two seeds of 0-79 (`foreign=True`, tick 0)
+#: where the REAL unrestricted chooser's first released scene on the Katepano's goal Question holds a `march` on
+#: Valorsplatz, `via == "off_katepano"`. The draws are keyed on (verb, subject), so which seeds those are re-rolls whenever
+#: any upstream input moves; the property the tests state is that such a seed EXISTS and that its march folds to the seam
+#: (alone, and in a full one-season run). [ASSUMPTION; medium; Jordan to correct -- two witnesses, not a rate.]
+_WITNESS_COUNT = 2
+
+
+@functools.lru_cache(maxsize=None)
+def _witness_seeds() -> tuple:
+    found = []
+    for seed in range(80):
+        if _first_scene_of_the_goal_question(seed)[2] is not None:
+            found.append(seed)
+            if len(found) == _WITNESS_COUNT:
+                break
+    return tuple(found)
 
 
 def _first_scene_of_the_goal_question(seed: int):
@@ -310,28 +315,31 @@ def _first_scene_of_the_goal_question(seed: int):
     return w, p, (acts[0] if acts else None)
 
 
-@pytest.mark.parametrize("seed", WITNESS_SEEDS)
-def test_the_unrestricted_chooser_picks_the_march_at_a_witness_seed_and_the_fold_reaches_the_seam(seed):
+def test_the_unrestricted_chooser_picks_the_march_at_a_witness_seed_and_the_fold_reaches_the_seam():
     """H-233's chosen half, met AT A WITNESS SEED and nowhere claimed beyond it (H-175's precedent). The real
     unrestricted chooser, on the Katepano's own goal Question (`q:need:goal_katepano_press_the_capital`), releases
     a first scene holding a `march` on Valorsplatz, and the real driver folds it to `mass_battle.field_input`
     once, with no `field.unopposed`.
 
     SCOPE, STATED: this is an existence witness, NOT a rate. The march scores far below `create_record` on that
-    question; a scan of seeds 0-79 finds it in the first scene at 10 (a first-scene rate of 0.125 at tick 0; Gumbel
-    order, `choice_temperature` 0.1, over ~30 candidates), and all 10 full one-season runs reach the seam (v10
-    REM-27's re-scan, the Katepano told of the capital; the v9 scan read 7, and 2 of the 5 runs it checked): the
-    combined rate over later ticks is NOT measured. The frequency is H-233's
-    remaining half and is the convictions' or IN-08's march cells', not this test's. THE DRAWS ARE KEYED ON (verb, subject), so the witness RE-ROLLS whenever any upstream
-    input moves (a candidate, a score, a seed's cast): the seeds below are then stale, not the mechanism broken.
-    FAILURE MESSAGE NAMES THE SCAN, rather than skipping: re-scan seeds 0-79 (`foreign=True`; per seed
-    `questions_for` -> `aggregate_questions` -> `assemble` -> `make_chooser(... verbs=resolvable_verbs())`, scene 0
-    holds `march` on `set_s_001` with `via == "off_katepano"`) and keep seeds that also fold to the seam."""
+    question, so it is in the first scene at only a minority of seeds at tick 0 (Gumbel order, `choice_temperature`
+    over ~30 candidates), and the combined rate over later ticks is NOT measured. The frequency is H-233's remaining
+    half and is the convictions' or IN-08's march cells', not this test's. THE DRAWS ARE KEYED ON (verb, subject), so
+    which seeds are witnesses re-rolls whenever any upstream input moves (a candidate, a score, a seed's cast).
+    THE WITNESSES ARE SCANNED (`_witness_seeds`: seeds 0-79, `foreign=True`; per seed `questions_for` ->
+    `aggregate_questions` -> `assemble` -> `make_chooser(... verbs=resolvable_verbs())`, scene 0 holds `march` on
+    `set_s_001` with `via == "off_katepano"`), so no seed is pinned; the test fails, and does not skip, when none exists."""
+    witnesses = _witness_seeds()
+    assert len(witnesses) == _WITNESS_COUNT, (
+        "no seed in 0-79 has the Katepano's first scene on her goal Question hold a march on set_s_001: the march is "
+        "no longer reachable by the unrestricted chooser from the empire's seat")
+    for seed in witnesses:
+        _the_witness_seed_picks_the_march_and_the_fold_reaches_the_seam(seed)
+
+
+def _the_witness_seed_picks_the_march_and_the_fold_reaches_the_seam(seed):
     w, p, act = _first_scene_of_the_goal_question(seed)
-    assert act is not None, (
-        f"seed {seed} is no longer a witness: the Katepano's first scene on her goal Question holds no march on "
-        f"set_s_001. RE-SCAN seeds 0-79 for new WITNESS_SEEDS (draws are keyed on (verb, subject), so any upstream "
-        f"move re-rolls them); do not skip this test.")
+    assert act is not None, seed
     assert act.actor == "p_npc_089" and act.via == "off_katepano", f"the chooser did not name the empire's seat: {act.via!r}"
     assert world_q.holder_faction_of(w, "set_s_001") == "fac_valorsmark" and world_q.mustered(w, "set_s_001", "fac_valorsmark")
     records = []
@@ -347,15 +355,19 @@ def test_the_unrestricted_chooser_picks_the_march_at_a_witness_seed_and_the_fold
     assert records[0].territory == "T1" and records[0].origin == FOREIGN_CAST[EMPIRE]["territory"]["code"], records[0]
 
 
-@pytest.mark.parametrize("seed", WITNESS_SEEDS)
-def test_the_witness_seed_reaches_the_seam_in_a_full_one_season_run_too(seed):
-    """The fold above takes the chosen act in isolation. H-233 records seeds (16, 38, 44) whose same march folds to
-    the seam alone and arrives `field.unopposed` in the full run (at v10 REM-27's re-scan, the Katepano told of the
-    capital, all three reach the seam in the full run too), so the witness is not honest until the whole season
-    is run: `aperture.instrumented_season` (the realm section's own instrument, the unrestricted chooser throughout)
-    on the witness seed reaches `mass_battle.field_input` at least once, from the empire's root. If this reddens
-    where the test above stays green, the seed has become one of those; re-scan (see above). The Katepano is
-    told of the capital first (`_told_of_the_capital`, REM-27)."""
+def test_the_witness_seed_reaches_the_seam_in_a_full_one_season_run_too():
+    """The fold above takes the chosen act in isolation. H-233 records seeds whose same march folds to the seam alone
+    and arrives `field.unopposed` in the full run, so a witness is not honest until the whole season is run:
+    `aperture.instrumented_season` (the realm section's own instrument, the unrestricted chooser throughout) on each
+    witness seed (`_witness_seeds`) reaches `mass_battle.field_input` at least once, from the empire's root. The
+    Katepano is told of the capital first (`_told_of_the_capital`, REM-27)."""
+    witnesses = _witness_seeds()
+    assert len(witnesses) == _WITNESS_COUNT, "fewer than two seeds in 0-79 are witnesses (see the test above)"
+    for seed in witnesses:
+        _the_witness_seed_reaches_the_seam_in_a_full_season(seed)
+
+
+def _the_witness_seed_reaches_the_seam_in_a_full_season(seed):
     from engine.season.harness import aperture
     w = _told_of_the_capital(POP.build_realm(seed, foreign=True))
     records = []
@@ -367,7 +379,7 @@ def test_the_witness_seed_reaches_the_seam_in_a_full_one_season_run_too(seed):
         wrapper.field_input = real
     assert run["attempted"]["p_npc_089"].get("march", 0) >= 1, run["attempted"]["p_npc_089"]
     assert any(r.origin == FOREIGN_CAST[EMPIRE]["territory"]["code"] for r in records), (
-        f"seed {seed} no longer reaches the seam in a full season ({len(records)} entries): re-scan the witnesses")
+        f"witness seed {seed} does not reach the seam in a full season ({len(records)} entries)")
 
 
 # ---------------------------------------------------------------------------------------------- (e)

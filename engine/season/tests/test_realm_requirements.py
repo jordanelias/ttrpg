@@ -6,9 +6,10 @@ policy (`probes.chooser` over `resolvable_verbs()`).
 
 R-01.b, read here: an act formed from a `claim_landed` question, where the Event the question walks
 back to (`world_q.occasioned_by`) was emitted by an act of a DIFFERENT person. The control removes the
-cause: with `SeasonDriver.witness` returning 0 no claim is deposited, no `claim_landed` question forms,
-and the count must read 0. A count that is positive with the witness cut would mean the counter reads
-something other than the chain.
+cause: with `SeasonDriver.witness` returning 0 no claim is deposited through the witness, yet
+`claim_landed` questions still form from the other deposit paths (`landed > 0` is asserted, so the zero
+is not by construction), and the count of those walking back to another person's act must read 0. A
+count that is positive with the witness cut would mean the counter reads something other than the chain.
 
 R-02.a, read here: withholding what acts observe changes the acts that follow. One season at the shipped
 fixtures and one with `observation_deposit_mode` swept to `none` (no act deposits what it read) give two
@@ -23,6 +24,7 @@ from __future__ import annotations
 import pytest
 
 from ..data.fixtures import DEFAULT_FIXTURES, Fixtures
+from ..harness import decision_spread as DS
 from ..harness import populated
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver, resolvable_verbs
@@ -86,7 +88,8 @@ def test_r01_control_with_witness_cut_no_act_is_so_occasioned(monkeypatch):
     monkeypatch.setattr(SeasonDriver, "witness", lambda self, token, events: 0)
     w, d = _play(0)
     assert d.resolved, "no act resolved with the witness cut: the zero below would be an empty season"
-    hit, _landed = _occasioned_by_another(w, d)
+    hit, landed = _occasioned_by_another(w, d)
+    assert landed > 0, "no claim_landed question formed with the witness cut: the zero below would hold by construction"
     assert hit == 0
 
 
@@ -107,3 +110,19 @@ def test_r02_control_one_seed_played_twice_is_one_sequence():
     a, b = _sequence(first), _sequence(again)
     assert a, "no act resolved: the equality below would read an empty season"
     assert a == b
+
+
+def _not_the_top(seed: int, fx: Fixtures | None = None) -> tuple[int, int]:
+    """(deliberations in which the sampler's pick was not the leading candidate, deliberations with a strict
+    top), one season through `decision_spread.play_season` (the chooser watched, never steered)."""
+    sp = DS.play_season(populated.build_realm(seed, fixtures=fx), 1)["split"]
+    return sp["strict_outvoted"], sp["strict"]
+
+
+@pytest.mark.parametrize("seed", SEEDS)
+def test_r08_some_chosen_acts_were_not_the_top_candidate_and_none_at_zero_temperature(seed):
+    shipped, deliberated = _not_the_top(seed)
+    zero, zero_deliberated = _not_the_top(seed, DEFAULT_FIXTURES.sweep("choice_temperature", 0.0))
+    assert deliberated > 0 and zero_deliberated > 0, "an arm deliberated over no strict top: the counts below read nothing"
+    assert shipped > 0, f"seed {seed}: no deliberation chose other than its leading candidate at the shipped temperature"
+    assert zero == 0, f"seed {seed}: {zero} deliberations chose other than the leading candidate at zero temperature"

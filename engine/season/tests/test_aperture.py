@@ -803,7 +803,7 @@ def test_built_out_counts_a_clean_execution_with_its_kinds_and_its_receipt():
     w, d = _world()
     _fold(w, d, Act(id="a_b18_utter", actor="p_low", verb="utter"))
     got = _built(w, d)
-    assert got["utter"] == {"clean": 1, "kinds": True, "wrote": True, "via": 0}, got["utter"]
+    assert got["utter"] == {"clean": 1, "kinds": True, "wrote": True, "one": True, "via": 0}, got["utter"]
     assert A.is_built_out(got["utter"])
     assert set(got) == set(VERB_TABLE), "every verb of the table is a row, zeros included"
     assert [v for v, c in got.items() if c["clean"]] == ["utter"], "no other verb executed"
@@ -837,13 +837,34 @@ def test_built_out_counts_a_clean_execution_with_its_kinds_and_its_receipt():
     assert not A.is_built_out(bare)
 
 
+def test_built_out_needs_one_act_that_held_its_kinds_and_wrote():
+    """Two clean `utter`s of one verb: the first holds its kind but its Events lost their Receipts, the
+    second keeps its Receipts but its Event is no longer of the row's kind. Read apart, `kinds` is True
+    (the first) and `wrote` is True (the second); no ONE execution did both, so the verb is not built out.
+    FALSIFIER: `one` replaced by `kinds and wrote` in `is_built_out` reads this verb built out and this reds."""
+    w, d = _world()
+    first = Act(id="a_b18_one_a", actor="p_low", verb="utter")
+    second = Act(id="a_b18_one_b", actor="p_low", verb="utter")
+    _fold(w, d, first)
+    _fold(w, d, second)
+    ev = A._events_by_act(w, d)
+    assert ev[first.id] and ev[second.id], "fixture: both acts left Events"
+    for _, e in ev[first.id]:
+        e.changes = []
+    for _, e in ev[second.id]:
+        e.kind = "proposition.not_of_the_row"
+    got = _built(w, d)["utter"]
+    assert got["clean"] == 2 and got["kinds"] and got["wrote"] and not got["one"], got
+    assert not A.is_built_out(got)
+
+
 def test_built_out_reads_a_write_less_band_as_not_having_written_and_a_seat_as_via():
-    """`_writes_nothing` is true only where EVERY band writes nothing (`tell` keys four bands, all empty), so
+    """`not row.writes` is true only where NO band writes anything (`tell` keys four bands, all empty), so
     `march`, whose `Declared` band writes nothing and whose `Won` band writes, does not read as write-less
     through its empty band. `kinds` takes the LAST keyed band an act's Events name and every kind of it.
     `via` counts the clean executions that exercised a seat."""
-    assert A._writes_nothing(VERB_TABLE["tell"]) and A._writes_nothing(VERB_TABLE["comply"])
-    assert not A._writes_nothing(VERB_TABLE["march"]) and not A._writes_nothing(VERB_TABLE["utter"])
+    assert not VERB_TABLE["tell"].writes and not VERB_TABLE["comply"].writes
+    assert VERB_TABLE["march"].writes and VERB_TABLE["utter"].writes
     row = VERB_TABLE["tell"]
     ev = lambda kind, degree: SimpleNamespace(kind=kind, degree=degree)
     for band, kinds in row.emits_by_degree.items():

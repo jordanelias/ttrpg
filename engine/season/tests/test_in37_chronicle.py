@@ -330,3 +330,20 @@ def test_with_no_cross_person_answer_the_first_logged_act_is_rendered_alone():
     assert text.splitlines()[0].startswith("no act answered another person's act")
     assert "1. season 0 | p1 speak | emitted k | opens the chain" in text
     assert CH.render([], {}, {}, {}) == "no acts in the log; nothing to chronicle"
+
+
+def test_a_matured_term_is_read_term_and_a_same_tick_close_is_not():
+    """MATTER closes a matured term with `causes=[term.declared_by]`, the declaring act's id, so the act
+    names it; only its tick tells it from a close the act made itself. Planted, on a stub world."""
+    acts = {"a_oblige": NS(id="a_oblige", verb="oblige"), "a_revoke": NS(id="a_revoke", verb="revoke"),
+            "a_release": NS(id="a_release", verb="release")}
+    log = [
+        NS(id="e1", kind="tenure.opened", causes=["a_oblige"], emitted_at=3),
+        NS(id="e2", kind="tenure.closed", causes=["a_oblige"], emitted_at=9),     # matured: later than the act
+        NS(id="e3", kind="tenure.closed", causes=["a_revoke"], emitted_at=4),     # the act's own verb
+        NS(id="e4", kind="tenure.opened", causes=["a_release"], emitted_at=5),
+        NS(id="e5", kind="tenure.closed", causes=["a_release"], emitted_at=5),    # closed by the act, same tick
+        NS(id="e6", kind="tenure.closed", causes=[], emitted_at=6),               # no act at all
+    ]
+    got = CH.tenure_changes_by_cause(NS(log=log, acts=acts))
+    assert got["term"] == 2 and got["revocation"] == 1 and got["other"] == 3 and sum(got.values()) == 6, got

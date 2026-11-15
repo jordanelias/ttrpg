@@ -233,19 +233,10 @@ def test_in53v_b_no_office_referent_outside_reach():
 # ======================================================================================
 
 def test_in53v_c_the_classes_survive_the_fold_and_are_closed():
-    # RE-RECORDED AT v9 IN-09: `Record` joins (was `{"Office"}`), the held writs `writs_held` stamps.
-    # RE-RECORDED AT v9 IN-45 `migrate`: `Rung` joins, the places `places_named` stamps (H-168).
-    # Spelled as a size and two memberships: `test_jordan_no_definition_is_hardcoded_in_a_body` flags a
-    # three-string literal here as a roster duplicated from rosters.yaml.
-    # RE-RECORDED AT v10 REM-21: `Site`, `Proposition` and `Person` join (was 3), the classes the
-    # own-referent term stamps once a row declares one (`test_referent_class_stamps.py`).
-    # RE-RECORDED AT v10 IN-12 step 5: `Detainee` joins (6 -> 7), the restrained-persons class
-    # `world_q.detainees_held` stamps (`interrogate`'s, `test_in12_interrogate.py`).
-    # RE-RECORDED AT v11 CR-87: `Enemy` joins (7 -> 8), the war-context class `world_q.enemies_heard` stamps (no row declares
-    # it; the `fight` decline reads it, `test_cr87_violence_contexts.py`).
-    # RE-RECORDED AT B11 lane A: `Disputant` joins (8 -> 9), the dispute-context class `world_q.disputes_held` stamps
-    # (`challenge` declares it, `test_b11a_duel_reach.py`).
-    assert len(REFERENT_CLASSES) == 9 and {"Office", "Record"} <= REFERENT_CLASSES and "Rung" in REFERENT_CLASSES
+    # The class roster is closed by its loader (the `Forbidden` refusals below), so its size is not pinned here: the
+    # memberships this test reads are. Spelled as memberships because `test_jordan_no_definition_is_hardcoded_in_a_body`
+    # flags a three-string literal as a roster duplicated from rosters.yaml.
+    assert {"Office", "Record"} <= REFERENT_CLASSES and "Rung" in REFERENT_CLASSES
     a = Question("q:claim:x", "claim_landed", ("S",), "x")
     b = Question("q:need:off_reeve", "need", (), "off_reeve", (("off_reeve", "Office"),))
     for rule in ("all", "one_per_source"):
@@ -274,43 +265,9 @@ def _planted(monkeypatch, verb, key, value):
 
 
 def test_in53v_c_the_declarations_as_built():
-    # RE-RECORDED AT v9 IN-10 (a): `oblige` declares the class (was `{"confer"}`); AT v9 IN-09 the
-    # `comply` declares `Record` (was `{"confer", "oblige"}`); AT v9 IN-45 `migrate` declares `Rung`;
-    # AT v9 IN-49 `requisition` declares `Rung` beside it; AT v10 REM-22 `restore`, `work` and `examine`
-    # declare `Site` (B10-05); AT v10 REM-23 `commit` declares `Proposition` (B10-05); AT v10 REM-24
-    # `petition` declares `Person` (B10-05); AT v10 REM-25 `carry`, `found` and `build` declare `Record`
-    # beside `comply` (B10-05; ten rows -> thirteen); AT v10 CP-T05-04 `argue` declares `Proposition` and
-    # `open_case` declares `Person` (B10-05; thirteen rows -> fifteen); AT v10 REM-2C `research` declares
-    # `Record` (B10-05; fifteen rows -> sixteen; control: the CP-T05-04 tree `ea6f1dba`, fifteen); AT v10 REM-27
-    # `march` declares `Rung` beside `migrate` and `requisition` (B10-06; sixteen rows -> seventeen; control: the
-    # B10-05 close `2bc4afcf`, sixteen); AT v10 REM-28 (B10-06) `convene` declares `Rung` (seventeen rows -> eighteen;
-    # control: the REM-27 fallout fix `ee5acba1`, seventeen); AT v10 REM-28 (B10-06) `dispatch` declares `Person` beside
-    # `petition` and `open_case` (eighteen rows -> nineteen; control: the convene commit `b8fd583b`, eighteen); AT v10
-    # REM-28 (B10-06) `revoke` declares `Office` beside `confer` and `oblige` (nineteen rows -> twenty; control: the
-    # dispatch commit `a4c508c5`, nineteen); AT v10 REM-2B (B10-06) `evade / defy` and `construe` declare `Record`
-    # beside `comply` (twenty rows -> twenty-two; control: the REM-2A tree `f23194871`, twenty); AT v10 IN-12 step 5
-    # (B10-09) `interrogate` declares `Detainee` (twenty-two rows -> twenty-three; control: `114ae5da4`, twenty-two);
-    # AT v10 IN-61 (B10-09) `succeed` declares `Office` beside `confer`, `oblige` and `revoke` (twenty-three rows ->
-    # twenty-four; control: the CR-26 tree `59e5cf452`, twenty-three); AT v11 CR-25 (B10-09) `establish` declares
-    # `Rung` (twenty-four rows -> twenty-five; control: the CR-81 tree `c35f6599`, twenty-four); AT v10 PC-10b (B10-11)
-    # `accept` declares `Record` on a held `challenge` (twenty-five rows -> twenty-six; control: the CP-T03-09 tree
-    # `95f58adb`, twenty-five); AT v11 CP-T03-08 (B10-11) `tend` declares `Person` (twenty-six rows -> twenty-seven;
-    # control: the CP-T03-07 tree, twenty-six); AT B10-12 (pin commit, P15) `marshal` (CP-T04-02) and `surrender` (CP-T04-07)
-    # declare a referent class (twenty-seven rows -> twenty-nine; both ship WITHHELD; control: the B10-13 tree, twenty-seven);
-    # AT B11 lane A `challenge` declares `Disputant` and `capture` declares `Person` (twenty-nine rows -> thirty-one;
-    # control: `test_b11a_duel_reach.py::revert_b11a`, twenty-nine).
-    assert {v for v, r in VERB_TABLE.items() if r.referent_class} == {"confer", "oblige", "comply", "march",
-                                                                      "establish",
-                                                                      "interrogate", "succeed",
-                                                                      "evade / defy", "construe",
-                                                                      "convene", "dispatch", "revoke", "migrate", "requisition",
-                                                                      "restore", "work", "examine",
-                                                                      "commit", "petition",
-                                                                      "carry", "found", "build",
-                                                                      "argue", "open_case",
-                                                                      "research", "accept", "tend",
-                                                                      "marshal", "surrender",
-                                                                      "challenge", "capture"}
+    # Not pinned as a set of rows: which verbs declare a class moves with every row that adds one, and the rows this test is
+    # about are asserted one by one below. That every declared class is a member of the roster is the loader's refusal
+    # (`test_in53v_c_the_loader_refuses`), not asserted here.
     assert VERB_TABLE["migrate"].referent_class == "Rung" and not VERB_TABLE["migrate"].referent_named
     assert VERB_TABLE["requisition"].referent_class == "Rung" and not VERB_TABLE["requisition"].referent_named
     assert VERB_TABLE["confer"].referent_class == VERB_TABLE["oblige"].referent_class == "Office"
