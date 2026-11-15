@@ -54,12 +54,12 @@ from ..data.verbs import VERB_TABLE
 from ..harness import aperture as A
 from ..harness import governance_spine, populated
 from ..harness import probes as P
-from ..harness.corpus_run import (_attribute_acts, attempts, attribute, foreign_kinds,
+from ..harness.corpus_run import (_attribute_acts, _emission_id, attempts, attribute, foreign_kinds,
                                   graded_loss, graded_losses, unrowed_acts)
 from ..loop.driver import SeasonDriver, mint_token
 from ..queries.inputs import FortInput
 from ..seam import Resolution
-from ..state.carriers import Act, Claim, Said
+from ..state.carriers import Act, Claim, Event, Said
 from .test_fi01_graded_inquiries import ACTOR as FI_ACTOR
 from .test_fi01_graded_inquiries import REC as FI_REC
 from .test_fi01_graded_inquiries import _resolve as _fi_resolve
@@ -782,6 +782,121 @@ def test_the_engines_reading_counts_an_entry_it_can_see():
     assert sum(1 for ln in lines if ln.startswith("    settlements.")) == sum(
         1 for r in counts if r.startswith("settlements."))
     assert lines[-1].strip() == f"rows entered 1 of {len(counts)}"
+
+
+def _built(w, d) -> dict:
+    """`built_out` over every act the world's store holds, as the instrument reads a run."""
+    return A.built_out(w, d, attempts(w, w.tick + 1))
+
+
+def test_built_out_counts_a_clean_execution_with_its_kinds_and_its_receipt():
+    """IS-A-06. One planted `utter` through the fold is a clean execution that emits its kind and wrote (the
+    gate's Receipt): built out, clean 1. The same shape refused (a `transfer` of more than the actor holds)
+    reads clean 0. A `transfer` that executes cleanly but leaves out `term.renewed`, a kind of its row, is
+    clean 1 and NOT built out (the kinds clause). An act and an Event placed by hand, never folded, reads 0
+    (a hand-built execution never counts), though `attempts` reads it as made. An `utter` whose Events lost
+    their Receipts is clean 1 and NOT built out (the write clause: remove the Receipt test from `wrote` and
+    this reads built out).
+
+    MUTATION (run 2026-11-15, reverted): `wrote` set True for every clean act -- the Receipt-less arm
+    reads built out and this test reds."""
+    w, d = _world()
+    _fold(w, d, Act(id="a_b18_utter", actor="p_low", verb="utter"))
+    got = _built(w, d)
+    assert got["utter"] == {"clean": 1, "kinds": True, "wrote": True, "via": 0}, got["utter"]
+    assert A.is_built_out(got["utter"])
+    assert set(got) == set(VERB_TABLE), "every verb of the table is a row, zeros included"
+    assert [v for v, c in got.items() if c["clean"]] == ["utter"], "no other verb executed"
+    # the same shape refused reads 0
+    wr, dr = _world()
+    _fold(wr, dr, Act(id="a_b18_tr_no", actor="p_low", verb="transfer",
+                      payload={"from": "S", "to": "Hh", "kind": "grain", "amount": 10 ** 6}))
+    assert _rows(wr)["a_b18_tr_no"] == ((), ("transfer.refused",)), "fixture: the transfer was not refused"
+    refused = _built(wr, dr)["transfer"]
+    assert refused["clean"] == 0 and not A.is_built_out(refused), refused
+    # a clean execution missing one kind of its row is not built out
+    wt, dt = _world()
+    _fold(wt, dt, Act(id="a_b18_tr_ok", actor="p_low", verb="transfer",
+                      payload={"from": "S", "to": "Hh", "kind": "grain", "amount": 3}))
+    clean = _built(wt, dt)["transfer"]
+    assert clean["clean"] == 1 and clean["wrote"] and not clean["kinds"], clean
+    assert not A.is_built_out(clean)
+    # a hand-built execution never counts: `attempts` reads it as made, the driver never tied it to an Event
+    wh, dh = _world()
+    hand = Act(id="a_b18_hand", actor="p_low", verb="utter")
+    wh.acts.append(hand)
+    wh.log.append(Event(_emission_id(wh, wh.tick, hand, "proposition.uttered"), "proposition.uttered",
+                        [], [hand.id], wh.tick))
+    assert _rows(wh)["a_b18_hand"] == (("proposition.uttered",), ()), "fixture: the hand-built act is not read as made"
+    assert _built(wh, dh)["utter"]["clean"] == 0
+    # the write clause: the same clean `utter` with its Events' Receipts removed has not written
+    for e in w.log:
+        e.changes = []
+    bare = _built(w, d)["utter"]
+    assert bare["clean"] == 1 and bare["kinds"] and not bare["wrote"], bare
+    assert not A.is_built_out(bare)
+
+
+def test_built_out_reads_a_write_less_band_as_not_having_written_and_a_seat_as_via():
+    """`_writes_nothing` is true only where EVERY band writes nothing (`tell` keys four bands, all empty), so
+    `march`, whose `Declared` band writes nothing and whose `Won` band writes, does not read as write-less
+    through its empty band. `kinds` takes the LAST keyed band an act's Events name and every kind of it.
+    `via` counts the clean executions that exercised a seat."""
+    assert A._writes_nothing(VERB_TABLE["tell"]) and A._writes_nothing(VERB_TABLE["comply"])
+    assert not A._writes_nothing(VERB_TABLE["march"]) and not A._writes_nothing(VERB_TABLE["utter"])
+    row = VERB_TABLE["tell"]
+    ev = lambda kind, degree: SimpleNamespace(kind=kind, degree=degree)
+    for band, kinds in row.emits_by_degree.items():
+        assert A._kinds_held(row, [ev(k, band) for k in kinds]), band
+        assert not A._kinds_held(row, [ev(k, band) for k in kinds[:-1]] or [ev("x", band)]), band
+    assert not A._kinds_held(row, [ev("news.told", None)]), "no declared band: it cannot say which it folded"
+    march = VERB_TABLE["march"]
+    assert A._kinds_held(march, [ev("march.declared", "Declared"), ev("field.unopposed", "Unopposed"),
+                                 ev("army.arrived", "Unopposed")])
+    # the LAST band decides: the field's own kinds are owed, `army.arrived` is missing
+    assert not A._kinds_held(march, [ev("march.declared", "Declared"), ev("field.unopposed", "Unopposed")])
+    assert A._kinds_held(march, [ev("march.declared", "Declared")]), "a march that only declared folded `Declared`"
+    from .test_u7_remit import DUKE, SEAT
+    w, d = _world()
+    _fold(w, d, Act(id="a_b18_seat", actor=DUKE, verb="utter", via=SEAT))
+    _fold(w, d, Act(id="a_b18_own", actor=DUKE, verb="utter"))
+    got = _built(w, d)["utter"]
+    assert got["clean"] == 2 and got["via"] == 1, got
+
+
+def test_fought_fields_counts_stance_receipts_only_of_an_act_that_left_a_fought_field():
+    """Planted: a `march` whose Events are `field.lost` (carrying a `stance` and a `body` Receipt) and
+    `march.declared`, a `march` that arrived `field.unopposed` and wrote a stance Receipt (not counted: no
+    field was fought), and a stance Receipt on a verb that leaves no field (not counted). `won_lost` counts
+    the field Events, `unopposed` the unopposed ones, `stance` the stance Receipts of the first act alone."""
+    from ..state.carriers import Receipt
+    from ..state.ids import ROOT
+    rec = lambda field: Receipt("p_x", "set", "Act", field)
+    ev = lambda i, kind, *fields: Event(i, kind, [rec(f) for f in fields], [ROOT], 0)
+    lost, quiet, other = (Act(id=i, actor="p_low", verb=v) for i, v in
+                          (("a_lost", "march"), ("a_quiet", "march"), ("a_other", "utter")))
+    log = [ev("e1", "march.declared"), ev("e2", "field.lost", "stance", "body"), ev("e3", "stance.moved", "stance"),
+           ev("e4", "field.unopposed", "stance"), ev("e5", "proposition.uttered", "stance")]
+    d = SimpleNamespace(act_of={"e1": lost, "e2": lost, "e3": lost, "e4": quiet, "e5": other})
+    rows = [(lost, (), ()), (quiet, (), ()), (other, (), ())]
+    assert A.fought_fields(SimpleNamespace(log=log), d, rows) == {"won_lost": 1, "unopposed": 1, "stance": 2}
+    assert A.fought_fields(SimpleNamespace(log=log), d, []) == {"won_lost": 0, "unopposed": 0, "stance": 0}
+
+
+def test_the_built_out_block_prints_every_verb_and_the_fought_fields_line(realm):
+    """The realm fixture's block: one line per verb of the table, the total as many as the verbs that
+    read built out, the FOUGHT FIELDS line, and the pooled block's per-verb seed counts."""
+    lines = A.built_out_lines(realm)
+    verb_lines = [ln for ln in lines if ln.startswith("    ") and not ln.strip().startswith("built out")]
+    assert len(verb_lines) == len(VERB_TABLE)
+    assert all(ln.startswith(f"    {v:<16}") for ln, v in zip(verb_lines, sorted(VERB_TABLE)))
+    total = sum(1 for c in realm["built_out"].values() if A.is_built_out(c))
+    assert lines[-2].strip() == f"built out {total} of {len(VERB_TABLE)}"
+    assert sum("BUILT OUT" in ln for ln in verb_lines) == total
+    assert lines[-1].startswith("  FOUGHT FIELDS  won+lost ") and "stance receipts on the losing side" in lines[-1]
+    pooled = A.pooled_built_out_lines([realm, realm])
+    assert sum(1 for ln in pooled if ln.endswith("of 2 seeds")) == len(VERB_TABLE)
+    assert pooled[-1].strip() == f"built out in at least one seed {total} of {len(VERB_TABLE)}"
 
 
 def test_the_engines_reading_says_why_it_did_not_count(monkeypatch):
