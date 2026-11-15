@@ -3,7 +3,7 @@
   * `world_q`   -- the thirteen World-FIRST functions, plus `WorldReader`.
   * `person_q`  -- the asker-first family: `entrenchment`, plus `LedgerReader`.
   * `cache`     -- the barrier indexes, single-owned.
-  * `faction_q` -- `resolve, holdings, purview, superiors, subordinates, at_war, head`. §B.6.1's
+  * `faction_q` -- `resolve, holdings, purview, subordinates, at_war, head`. §B.6.1's
     one constructor for the five-field governance VIEW plus the five Queries plan position
     `20-ii` (U9/R-04) completed, and §C.5.1's roster contract calls `resolve` by that dotted name.
     See `faction_q.py`'s own docstring for the history of the ambiguity this WAS: from

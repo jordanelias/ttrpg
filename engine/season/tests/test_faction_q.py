@@ -1,4 +1,4 @@
-"""`queries/faction_q.py` -- `resolve, holdings, purview, superiors, subordinates, at_war, head`.
+"""`queries/faction_q.py` -- `resolve, holdings, purview, subordinates, at_war, head`.
 
 What each block proves, and the control that stops it passing vacuously:
 
@@ -19,7 +19,7 @@ What each block proves, and the control that stops it passing vacuously:
      IDENTITY over every rung in a real world, not merely "returns something": for every seat
      that carries a rung, `rung in purview(w, seat)` must equal `purview_reaches(w, off, rung)`
      for EVERY rung in the world, and the rungless/unknown-seat cases both answer `[]`.
-  7. `superiors`/`subordinates` READ A HAND-BUILT `oblige` EDGE IN BOTH DIRECTIONS, and
+  7. `subordinates` READS A HAND-BUILT `oblige` EDGE, and
      `subordinates` is asserted equal to `sorted(world_q.establishment_of(...))` -- an identity,
      not a coincidence, since the module composes on that function rather than re-deriving it.
   8. `head` -- F.4's first reader, `Tenure.degree`. FOUR claims, each with its own falsifier:
@@ -124,7 +124,7 @@ def test_superiors_and_subordinates_read_a_hand_built_oblige_in_both_directions(
     """Test 7. `H-101`/`§E.1.5`: subordination is an `oblige` edge, never a field. Plants ONE
     live edge directly on `Person.tenures` (the same shape `_eff_oblige` opens, without going
     through the fold, since neither function's own contract requires a computed act) and reads
-    it back from BOTH ends."""
+    it back through `subordinates`."""
     w = build_realm(0)
     seat = next(iter(w.offices))
     person = "p_hand_built_subordinate"
@@ -132,15 +132,9 @@ def test_superiors_and_subordinates_read_a_hand_built_oblige_in_both_directions(
     t = Tenure(id="hand_oblige_20ii", subject=person, object=seat, kind="oblige", since=0)
     w.persons[person].tenures.append(t)
 
-    assert faction_q.superiors(w, person) == [seat]
     assert person in faction_q.subordinates(w, seat)
     assert faction_q.subordinates(w, seat) == sorted(world_q.establishment_of(w, seat)), (
         "subordinates(w, seat) is not composing on world_q.establishment_of")
-
-
-def test_superiors_of_a_person_with_no_oblige_is_empty():
-    w = build_realm(0)
-    assert faction_q.superiors(w, "p_nobody_in_particular") == []
 
 
 # ---------------------------------------------------------------------------------------------

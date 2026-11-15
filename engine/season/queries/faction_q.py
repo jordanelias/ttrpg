@@ -17,7 +17,7 @@ for why `faction_q` is distinguished from it rather than silently overriding it.
 
 ⚠ **SCOPE, WIDENED AT PLAN POSITION `20-ii` (U9/R-04).** The governance workplan that named
 `faction_q` (`ED-IN-0215`, amended `ED-IN-0253`) lists six eventual members -- `resolve, holdings,
-purview, superiors, subordinates, at_war` -- and until this position only `resolve` had a located
+purview, subordinates, at_war`, and one since deleted unreached -- and until this position only `resolve` had a located
 ratified signature and a consumer (§C.5.1). `20-ii`'s own instruction
 (`workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md:1459-1474`) is what supplies
 the other five: *"`faction_q` as queries, never fields: resolve, holdings, purview, superiors,
@@ -64,8 +64,8 @@ differ, in either direction or in order. Without it a field added to `Faction` -
 which `20-ii`'s own instruction still refuses (`workplans/2026-09-28-the-plan-one-order-mc-v18-
 retired.md:747`, quoting `04:301`'s `NEVER:` list -- *"it never makes a faction stat vector a
 field of its own"*) -- would load clean and then crash the first season in which anyone surveyed,
-inside RESOLVE, as a `Forbidden` naming a Record rather than this class. `purview`/`superiors` below
-are FUNCTIONS, never fields, so neither touches this list. This is not a sixth member of the
+inside RESOLVE, as a `Forbidden` naming a Record rather than this class. `purview` below
+is a FUNCTION, never a field, so it does not touch this list. This is not a sixth member of the
 module's scope: it is the constructor's own output, named as a document. Nothing here reads a
 Record.
 """
@@ -142,6 +142,7 @@ def head(w: World, prop: str) -> "str | None":
     one live edge where the model expects one): *"LAST WRITE WINS ... the incumbent behaviour of
     every site this replaces, preserved deliberately rather than quietly tightened here."*"""
     TRACE.query("head", "resolver")
+    # Unreachable until something writes a degree on a `commit` (see the note above).
     graded = [t for t in w.tenures
               if t.kind == "commit" and t.object == prop and t.live and t.degree is not None]
     if graded:
@@ -184,25 +185,6 @@ def purview(w: World, seat: str) -> list:
     if off is None or off.rung is None:
         return []
     return sorted({off.rung} | set(descendants(w, off.rung)))
-
-
-def superiors(w: World, person: str) -> list:
-    """Every live `oblige` edge's OBJECT, for `person` as SUBJECT -- `H-101`'s own candidate
-    (`01_AXIOMS.md` §E.1.1): *"the candidates are `tenure_kinds` members already rostered (`oblige`,
-    `tie`)"*, and `oblige`'s domain is `Person -> Person | Office` (`loop/predicates.py::
-    _req_oblige`'s own comment), so the return type is `(SeatId | PersonId)[]`, not resolved to
-    either -- returning the raw object is the whole of the answer, because `oblige`'s edge IS the
-    superior relation (`§E.1.5`: *"subordination is sworn by a person, at both scales ... there is
-    one relation, and it was never institutional"*), never a field walk over `contain`.
-
-    ⚠ EVERY LIVE `oblige` OBJECT IN THIS TREE IS A SEAT TODAY, MEASURED, NOT ASSUMED --
-    `loop/predicates.py::_req_oblige` clause 1 refuses any subject that is not `w.offices`
-    (*"A person, a rung, a Record or a bare string refuses"*), so the `Person -> Person` half of
-    `oblige`'s own ratified domain is unbuilt. This does not filter for it: a future build of that
-    half needs no second edit here, exactly `head`'s reasoning above for `Tenure.degree`."""
-    TRACE.query("superiors", "resolver")
-    return sorted(t.object for t in w.tenures
-                  if t.kind == "oblige" and t.subject == person and t.live)
 
 
 def subordinates(w: World, seat: str) -> list:
