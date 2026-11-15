@@ -3093,7 +3093,7 @@ rows:
       is the only contesting verb and `resolvable_verbs()`, the set `make_chooser` is given,
       excludes it (intersection empty), so the probe was left unedited and 0 of 89 cases failed in
       any arm. FALSIFIERS:
-      `test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_at_the_control` and
+      `test_wd_a_fork_changes_a_later_decision_at_two_slots` and
       `test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_percent_under_it`,
       both on NPC-088 as a deterministic slice — the full sweep is NOT gated and that is stated in
       both docstrings. Mutations run 2026-09-04: forcing every arm to `none` reds the first;

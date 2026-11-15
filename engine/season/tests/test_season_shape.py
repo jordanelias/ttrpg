@@ -11960,7 +11960,7 @@ def _wd_arm9():
     return A9
 
 
-def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default():
+def test_wd_a_fork_changes_a_later_decision_at_two_slots():
     """**`W-D`'s ACCEPTANCE, PINNED ON A DETERMINISTIC SLICE.**
 
     THE QUESTION. The forking exercise (`runs/arm9.json`, seed 0, 4 seasons, 89 worlds) flipped
@@ -12545,12 +12545,12 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # changes on top of it, `W-B` has stopped reaching a decision"* — and it has, at this
     # resolution, on this 16-fork slice. It is recorded rather than relaxed, and the arm is not
     # re-chosen on it: see the reasoning at
-    # `test_wd_a_fork_changes_a_later_decision_at_the_shipped_default`,
+    # `test_wd_a_fork_changes_a_later_decision_at_two_slots`,
     # where the same loss is pinned and `H-54`'s hash-ordering result is why 16 forks cannot
     # overturn `19_PLAN.md` step 1's choice of arm.
     # ⚠⚠⚠ **EXACT PARITY, POSITION `11a` (`reach`/`place_of`), 2026-09-29 — `>` BECOMES `>=`, THE
     # SAME FINDING AND THE SAME FIX AS THE SIBLING TEST'S NEGATIVE-CONTROL BLOCK
-    # (`test_wd_a_fork_changes_a_later_decision_at_the_shipped_default`),
+    # (`test_wd_a_fork_changes_a_later_decision_at_two_slots`),
     # RE-ARGUED RATHER THAN QUIETLY RE-PINNED AS THIS MESSAGE DEMANDS.** This instrument shares
     # `NPC-088`, seed 0, the same cell and the same Q2/Q4 mechanism with that test — `11a` widens
     # `claim_landed`'s own admission test, and at this slice it now supplies exactly as much
