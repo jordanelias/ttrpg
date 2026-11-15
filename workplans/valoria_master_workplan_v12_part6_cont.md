@@ -14,7 +14,7 @@ GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B03-hygiene @61b37b8dc8a68a5434d423f0ed0695102e89fc9f
 GATE: Batch B03c-boot @544cf5719c620331b70aeda93c1672977b44e9ef
-GATE: Batch B16L-mb-words
+GATE: Batch B16L-mb-words @2d9590e75fd253d1d88612e2d42674e2fdb5db96
 GATE: Batch B03g-go-early-landings @048724cd545117255e71d04a583d99c6cb5fe3a9
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: none — reading cost of every later batch (H-03, H-07; CIP §2: "B03a's reason is reading cost on every later batch"); no row moves
@@ -47,8 +47,8 @@ EST: 3.7 h [estimate: §2.4's formula over three positions (0.4 h × 3 + 2.5 h),
 
 | pos | item | source | state | hash | gates on |
 |---|---|---|---|---|---|
-| B03a.01 | the two largest registries carry values and definitions, not their history | CI-01 (H-03, H-07) | BUILD | EQUAL | Batch B03, Batch B16L |
-| B03a.02 | the source says what it does; its history lives in the commits | CI-02 (H-03) | BUILD | EQUAL | B03a.01; Batch B03c @544cf5719c620331b70aeda93c1672977b44e9ef, Batch B16L |
+| B03a.01 | the two largest registries carry values and definitions, not their history | CI-01 (H-03, H-07) | BUILD | EQUAL | Batch B03, Batch B16L @2d9590e75fd253d1d88612e2d42674e2fdb5db96 |
+| B03a.02 | the source says what it does; its history lives in the commits | CI-02 (H-03) | BUILD | EQUAL | B03a.01; Batch B03c @544cf5719c620331b70aeda93c1672977b44e9ef, Batch B16L @2d9590e75fd253d1d88612e2d42674e2fdb5db96 |
 | B03a.99 | re-pin and close readings: the EQUAL readings recorded | E-1 | BUILD | EQUAL (records) | B03a.01, B03a.02 |
 
 ### B03a.01 — the two largest registries carry values and definitions, not their history · CI-01 · BUILD · HASH EQUAL
@@ -66,7 +66,7 @@ EST: 3.7 h [estimate: §2.4's formula over three positions (0.4 h × 3 + 2.5 h),
 - FALSIFIER and CONTROL (CI-01): "In a scratch worktree: (a) blank one `requires_typed_note` on a row whose `requires_typed` is null → the import must fail (`data/verbs.py`'s presence check); (b) change one roster value → gate 1 must report the file unequal. Both seen, then reverted, before the real edit is read as green."
 - GATE (CI-01): "1. *Parsed-object equality.* A scratch probe (not committed): `yaml.safe_load` each file at the batch's base and at the edit; delete every mapping key equal to `note` or ending in `_note`, and compare. Expected: equal for both files. Then compare the **set of rows that carry** each of `requires_typed_note`, `effect_decline_note`, `requires_decline_note`, `formation_decline_note`: expected equal. 2. `python -c "import engine.season.data"` exits 0 (the loaders' own refusals run at import). 3. The headless hash and the realm hashes at seeds 0 and 2 equal the batch's opening reading. 4. A reading for the close, not a threshold: `wc -c` of the two files before and after." With `python tools/export_season_registries.py --check` → current.
 - HASH MOVERS: none ("Declared hash movers. None").
-- DEPENDS ON: EXISTS-IN-TREE `engine/season/data/verbs.py` (the `requires_typed_note`, `effect_decline_note`, `requires_decline_note` presence checks), `engine/season/manifest/registry.py` (the same), `tests/valoria/test_module_registrar.py` (`formation_decline_note`); V12 Batch B03 ("the census edits to these files land first"), Batch B16L (its renames in both files), Batch B03g @048724cd545117255e71d04a583d99c6cb5fe3a9 (`tools/export_season_registries.py`).
+- DEPENDS ON: EXISTS-IN-TREE `engine/season/data/verbs.py` (the `requires_typed_note`, `effect_decline_note`, `requires_decline_note` presence checks), `engine/season/manifest/registry.py` (the same), `tests/valoria/test_module_registrar.py` (`formation_decline_note`); V12 Batch B03 ("the census edits to these files land first"), Batch B16L @2d9590e75fd253d1d88612e2d42674e2fdb5db96 (its renames in both files), Batch B03g @048724cd545117255e71d04a583d99c6cb5fe3a9 (`tools/export_season_registries.py`).
 - GLOSSARY: none (CI-01 step 5).
 - COST and TIER: edit, large by volume; "two `valoria-author` lanes, `sonnet`, effort `high`, one per file (N−1 would leave one 350 KB file to a lane already holding the other)"; the integrator merges the two worktrees (disjoint files) and runs step 6 once.
 - LANDS IT: B03a's two producers, `isolation: worktree`, fanned (the skill §0.3); a `WIP checkpoint: B03a.01` at each hand-back; one `Item: B03a.01` commit, `[skip ci]`.
@@ -104,7 +104,7 @@ EST: 3.7 h [estimate: §2.4's formula over three positions (0.4 h × 3 + 2.5 h),
   ```
   run as `python probe.py <base-sha> $(git diff --name-only <base-sha> -- '*.py')`. Expected: `AST-EQUAL`. Comments are not in the tree and docstrings are stripped, so equality means no code token moved. 2. `GITHUB_EVENT_NAME=pull_request GITHUB_BASE_REF=main python tools/ci_sim_fabrication_check.py` green. 3. The headless hash and the realm hashes at seeds 0 and 2 equal the opening reading. 4. `python tools/export_engine_params.py --check`, `python tools/export_sim_params.py --check`, `python tools/export_composition.py --check` all current (the exporters read these files). 5. At the close, the suites once. 6. A reading for the close: `W1`'s table re-run (the probe is `census.py` in this lane's scratchpad; it is thirty lines of `ast` and `tokenize` and may be rewritten from the method line of `W1`)." Gate 5 and 6 are the batch gate's.
 - HASH MOVERS: none ("Declared hash movers. None").
-- DEPENDS ON: EXISTS-IN-TREE `tools/ci_sim_fabrication_check.py`, `tools/export_sim_params.py::_comment`, `::_citation`; V12 Batch B03 ("CI-08 trims `driver.py`'s imports first; the census deletions remove files this item would otherwise edit"), Batch B03c @544cf5719c620331b70aeda93c1672977b44e9ef (`boot/` in scope), Batch B16L (its renames land first), V12 B03a.01 ("Lands in: B03a, after CI-01").
+- DEPENDS ON: EXISTS-IN-TREE `tools/ci_sim_fabrication_check.py`, `tools/export_sim_params.py::_comment`, `::_citation`; V12 Batch B03 ("CI-08 trims `driver.py`'s imports first; the census deletions remove files this item would otherwise edit"), Batch B03c @544cf5719c620331b70aeda93c1672977b44e9ef (`boot/` in scope), Batch B16L @2d9590e75fd253d1d88612e2d42674e2fdb5db96 (its renames land first), V12 B03a.01 ("Lands in: B03a, after CI-01").
 - GLOSSARY: none (no term changes).
 - COST and TIER: edit, the largest by volume; "eight `valoria-author` lanes, `sonnet`, effort `high`; no critic fan (the AST probe is the control …)".
 - LANDS IT: B03a's eight producers, `isolation: worktree`, fanned (file-disjoint packages; fire one, await its first token, then the rest, CLAUDE.md §10 point 3); a `WIP checkpoint: B03a.02` at each hand-back (the skill, CHECKPOINTS); the integrator runs gate 1 over the union, then one `Item: B03a.02` commit, `[skip ci]`.
@@ -221,7 +221,7 @@ EST: 3.3 h [estimate: §2.4's formula over two positions (0.4 h × 2 + 2.5 h), E
 ## Batch B16M-mb-engine-words · lane MB · wave W6 · step S6 · HASH EQUAL
 INVOCATION: /methodology-execute Batch B16M-mb-engine-words
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_MB.md, Open table
-GATE: Batch B16L-mb-words
+GATE: Batch B16L-mb-words @2d9590e75fd253d1d88612e2d42674e2fdb5db96
 GATE: Batch B03a-prose
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: none — the port's vocabulary (the lexicon §4 L2: "buys a correct code vocabulary for the port (`godot/`), not a game change"); kept, not cut (D-07: "in the schedule of §2.3 it runs in the MB lane at step S6 while B04 holds the IN lane, and B17, its first follower, opens at S9")
@@ -253,7 +253,7 @@ EST: 4.1 h [estimate: §2.4's formula over four positions (0.4 h × 4 + 2.5 h), 
 
 | pos | item | source | state | hash | gates on |
 |---|---|---|---|---|---|
-| B16M.01 | the battle loop counts field ticks: `max_turns` becomes `max_ticks` | L2-3 (D-7) | BUILD | EQUAL | Batch B16L, Batch B03a |
+| B16M.01 | the battle loop counts field ticks: `max_turns` becomes `max_ticks` | L2-3 (D-7) | BUILD | EQUAL | Batch B16L @2d9590e75fd253d1d88612e2d42674e2fdb5db96, Batch B03a |
 | B16M.02 | a unit whose formation is gone is `disordered`, not `broken` | L2-2 (D-16) | BUILD | EQUAL | B16M.01 |
 | B16M.03 | the engine's `Unit` becomes `Army`, and `Subunit` becomes `Unit` | L2-1 (D-2) | BUILD | EQUAL | B16M.02 |
 | B16M.99 | re-pin and close readings: the EQUAL readings recorded | E-1 | BUILD | EQUAL (records) | B16M.01 to B16M.03 |
@@ -269,7 +269,7 @@ Not in this batch: the struck sub-item of L2-1, "~~`core/exchange.py::subunit_co
 - FALSIFIER and CONTROL: "Any golden digest moving" (the lexicon). Control: `python tools/ci_golden_modes_check.py` digests equal; `python -m systems.mass_battle.sim.lanchester_signature` verdict lines equal to B03a's close.
 - GATE: `git grep -n -w max_turns -- modules systems tests engine tools` → nothing; `python tools/ci_golden_modes_check.py` → equal; `python -m pytest tests/valoria/test_field_golden_pins.py tests/valoria/test_mass_battle_routes.py -q` → pass.
 - HASH MOVERS: none declared (the lexicon: "Python identifiers only: **no dict key or emitted string changes**").
-- DEPENDS ON: EXISTS-IN-TREE `modules/mass_battle/battle_loop.py::run_battle` (`max_turns=18`); V12 Batch B16L, Batch B03a.
+- DEPENDS ON: EXISTS-IN-TREE `modules/mass_battle/battle_loop.py::run_battle` (`max_turns=18`); V12 Batch B16L @2d9590e75fd253d1d88612e2d42674e2fdb5db96, Batch B03a.
 - GLOSSARY: §J row *field tick < engine phase < bout < battle < season*: its lexicon column's "L2-3" marked done, the owner pointing at `battle_loop.run_battle(max_ticks=…)`; §E row *bout* keeps "the engine calls it an "engagement turn"" until B17's `FieldOutcome.ticks` (S-3). "max_ticks": the most field ticks a battle loop runs, a field tick being about four seconds of a battle.
 - NAMES: `max_turns` → `max_ticks` (`V12_STRUCTURE_part2.md` §5.10's B16M row).
 - COST and TIER: wide mechanical; `sonnet`, `high`; the measure on `haiku`.

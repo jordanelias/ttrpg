@@ -478,7 +478,6 @@ Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them
 | batch | lane | ED block (declared + spare) | H block (declared + spare) | against H1 §12 |
 |---|---|---|---|---|
 | B24p-sc-proceeding | SC | ED-SC-0054..0056 (1+2) | H-861..H-914 (50+4) | added 2026-11-14 after the table's last block (B01a's H-856..H-860, on top of B99's); `references/id_reservations.yaml` SC `next_free` 54 → 57 at the batch's opening, not by this plan; the hole register's next id after this block H-915. The fold map's own range H-856..H-909 assumed H-855 as the last allocated id: B01a had taken H-856..H-860 first |
-| B16L-mb-words | MB | ED-MB-0082..0083 (0+2) | H-394..H-398 (0+5) | same |
 | B03a-prose | IN | ED-IN-0375..0376 (0+2) | H-399..H-403 (0+5) | ED shifted |
 | B13-pc-package | PC | ED-PC-0060..0061 (0+2) | H-404..H-408 (0+5) | same |
 | B16M-mb-engine-words | MB | ED-MB-0084..0085 (0+2) | H-409..H-413 (0+5) | same |
@@ -542,7 +541,7 @@ Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them
 
 | milestone | closes at (step now) | its batches, with their step now | a batch of it closing after the close? | rows the closing batch reads |
 |---|---|---|---|---|
-| M0 · ground | B04 (S6; §2.3 S6) | B00 S0, B01 S1, B02 S2, B03 S3, B16L S4, B03a S5, B13 S6, B16M S6, B04 S6 | none | R-01, R-02, R-03, R-04, R-09 |
+| M0 · ground | B04 (S6; §2.3 S6) | B00 S0, B01 S1, B02 S2, B03 S3, B03a S5, B13 S6, B16M S6, B04 S6 | none | R-01, R-02, R-03, R-04, R-09 |
 | M1 · every outcome is drawn | B08 (S13; §2.3 S13) | B05 S7, B06 S8, B07 S9, B08 S13 | none | R-01, R-03, R-09 |
 | M2 · persons | BA1 (S12; §2.3 S12) | B09 S10, B10 S11, BA1 S12 | none | R-06, R-07, R-08, R-09 |
 | M3 · every verb | B35 (S18; §2.3 S18) | B11 S12, B12a S13, B12b S14, B12c S15, B14 S8, B15 S12, B21 S12, B21b S13, B21c S14, B22 S17, B23 S18, B24a S15, B25 S16, B26 S17, B27 S16, B28 S17, B29 S14, B32 S17, B35 S18 | none | R-01, R-04, R-05, R-07, R-08, R-09 |

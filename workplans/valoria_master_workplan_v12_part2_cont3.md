@@ -47,15 +47,6 @@ These are the two tables `V12_STRUCTURE_part3.md` §7.2 asks of part 2 and lane 
 
 | # | old → new | first stated by | applied again by |
 |---|---|---|---|
-| 3 | `order_of_battle` → `standing_order` | B16L.01 | B23.13, B30.04, B30.05 |
-| 4 | `orderofbattle.Subformation` → `UnitRow` | B16L.02 | B22.24 |
-| 5 | `OrderOfBattle.subformations` → `units` | B16L.02 | — |
-| 6 | `subformations` → `units` | B16L.03 | B19a.01, B19.01, B19.04, B19.17, B19.18, B20.20 and 2 more |
-| 7 | `subformation_routs` → `unit_routs` | B16L.03 | B22.24 |
-| 8 | `stance` → `posture` | B16L.04 | B15.08, B19.70, B22.24, B22.32 |
-| 9 | `STANCES` → `POSTURES` | B16L.04 | — |
-| 10 | `UnitRow.stance` → `posture` | B16L.04 | — |
-| 11 | `options()['stances']` → `['postures']` | B16L.04 | — |
 | 12 | `max_turns` → `max_ticks` | B16M.01 | B19.08, B19.22 |
 | 13 | `.broken` → `.disordered` | B16M.02 | B19.12, B19.54, B19.58, B19.59, B19.63 |
 | 14 | `hierarchy.units.Unit` → `Army` | B16M.03 | B22.03 |

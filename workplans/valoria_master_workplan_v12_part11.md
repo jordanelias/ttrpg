@@ -20,7 +20,7 @@ IN-FLIGHT ROW: registers/handoffs/HANDOFF_MB.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
-GATE: Batch B16L-mb-words
+GATE: Batch B16L-mb-words @2d9590e75fd253d1d88612e2d42674e2fdb5db96
 GATE: Batch B16M-mb-engine-words
 GATE: Batch B05-one-roll
 GATE: Batch B14-pc-outcome
@@ -170,7 +170,7 @@ Not in this batch, and where each is: `04_MB_unit_loadout_and_weapon_in_hand` (S
 - FALSIFIER and CONTROL: "an army field whose reserve cohort is cut as deeply as its line." Control: the realm content hash at seeds 0 and 1, one season, equal to B17.01's reading (no natural season fights an army field); the planted side-share control reddens gate 4.
 - GATE: `python -m pytest engine/season/tests/test_mass_battle_module.py tests/valoria/test_mass_battle_army_record.py engine/season/tests/test_march.py -q` → pass; `python tools/ci_golden_modes_check.py` → digests equal to B17.01's reading; the realm hash (`HASH READING`) at seed 0, one season → equal to B17.01's.
 - HASH MOVERS: "step (1) on the army path only (no natural season fights an army field)". Declared; B17's one re-pin in B17.99.
-- DEPENDS ON: V12 B17.01 (the flags `field_degree` reads); EXISTS-IN-TREE `queries/inputs.py::MassBattleInput`, `battle_loop.run_battle`, `armyrecord` `assigned` rows, `OrderOfBattle.drawn_from`; V12 Batch B16L (`UnitRow`, `units`), Batch B16M.
+- DEPENDS ON: V12 B17.01 (the flags `field_degree` reads); EXISTS-IN-TREE `queries/inputs.py::MassBattleInput`, `battle_loop.run_battle`, `armyrecord` `assigned` rows, `OrderOfBattle.drawn_from`; V12 Batch B16L @2d9590e75fd253d1d88612e2d42674e2fdb5db96 (`UnitRow`, `units`), Batch B16M.
 - GLOSSARY: none (`FieldOutcome` is a type, not a new word; *end state* is B17.01's row).
 - NAMES: `drawn: ((subformation, cohort, troops), ...)` → `((unit, cohort, troops), ...)`; `(side, subunit index)` → `(side, unit index)`; "while its unit stands" → "while its army stands" (B16L, B16M).
 - COST and TIER: small build (the outcome record and per-cohort shares); `sonnet`, `high`.
