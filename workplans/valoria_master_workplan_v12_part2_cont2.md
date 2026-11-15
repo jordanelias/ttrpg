@@ -47,7 +47,6 @@
 |---|---|---|
 | `S/tests/test_b11a_duel_reach.py` | B01.01 | S1 |
 | `S/tests/test_b11a_scores_and_obstacle.py` | B01.02 | S1 |
-| `S/tests/test_boot_module.py` | B03c.01 | S4 |
 | `S/tests/test_u1_capability_surface.py` | B04.02 | S6 |
 | `S/tests/test_sc_hearing_capabilities.py` | B04.18 | S6 |
 | `engine/tests/test_opposed_ob.py` | B04.24 | S6 |
@@ -308,7 +307,6 @@
 
 | path created | item | caller the item names (searched in the item's own text) |
 |---|---|---|
-| `engine/season/boot/__init__.py` | B03c.01 | code: imported by the items that consume it (a library file, no CI caller owed) |
 | `modules/combat/__init__.py` | B13.01 | a composition row |
 | `engine/dice_engine/fmath.py` | B06.01 | code: imported by the items that consume it (a library file, no CI caller owed) |
 | `engine/dice_engine/draw.py` | B06.03 | code: imported by the items that consume it (a library file, no CI caller owed) |
@@ -397,7 +395,7 @@
 | 1 | `:217` | IN/GO | CL-MGMT | build "HELD on M31"; settled: "CL-MGMT's M31 hold is lifted by A-104"; what remains is the list of management orders, content (E1:3732) | B34 (the empty `management_orders` roster lands, §4 row 40) once the list is authored | the design hold is gone; the list is Jordan's content |
 | 2 | `:218` | IN | IN-18 | "G5 … when its trigger M0e > 0 is met, and G8 … when judgment lifts its gate"; settled: "re-measure M0e after CR-29" (E1:4103, E2:836) | B11 (CR-29 lands: its close reads M0e) | — |
 | 3 | `:219` | IN | DEF-2 | "LEAVE with ED-606/607 (the eight handoff rules)": deferred out of M1 (E4:4370) | none: no v12 batch builds a zoom stack or reopens DEF-2 | see rows 49, 50 |
-| 4 | `:220` | IN | DEF-10 | "move `build_realm` out of `harness/`"; "no module owns world-gen yet" (E4:4372) | **fired: B03c.01** (CI-07, A-102: the builder moves to `engine/season/boot/`) | superseded, ladder step 1 (§11 C-10) |
+| 4 | `:220` | IN | DEF-10 | "move `build_realm` out of `harness/`"; "no module owns world-gen yet" (E4:4372) | **fired: B03c.01 @544cf5719c620331b70aeda93c1672977b44e9ef** (CI-07, A-102: the builder moves to `engine/season/boot/`) | superseded, ladder step 1 (§11 C-10) |
 | 5 | `:221` | IN | DEF-11 | "loader invariant 5 (`writer:` column) … deferred. L1-3 states honest grade meanwhile" (E4:4378) | none in v12 | — |
 | 6 | `:222` | IN/CHAR | REM-30 | "HELD, decide at v12 against B04"; exit "a creation arm switched off reproduces the pre-build hash" (E5 Block C37) | B04's close | B04.99 step 4 records it: closed by ladder step 1, carried by R-04.c1's batches (B34, B22, B36); exit `test_rem30_character_sheet.py` → pass (repair lane R2a; §11 C-19 resolved) |
 | 7 | `:297` | FA | M39 | settled: "part 15's design-first item (post-freeze mover; A-76 stand-in only)" (E5 Block D5) | B21c (CR-38's design, B21c.06) or B23 (A-76's stand-in) `[ASSUMPTION: M39 is the Court Parliament residue the stand-in covers — basis: the settled text's "A-76 stand-in only"]` | — |
@@ -480,7 +478,6 @@ Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them
 | batch | lane | ED block (declared + spare) | H block (declared + spare) | against H1 §12 |
 |---|---|---|---|---|
 | B24p-sc-proceeding | SC | ED-SC-0054..0056 (1+2) | H-861..H-914 (50+4) | added 2026-11-14 after the table's last block (B01a's H-856..H-860, on top of B99's); `references/id_reservations.yaml` SC `next_free` 54 → 57 at the batch's opening, not by this plan; the hole register's next id after this block H-915. The fold map's own range H-856..H-909 assumed H-855 as the last allocated id: B01a had taken H-856..H-860 first |
-| B03c-boot | IN | ED-IN-0373..0374 (0+2) | H-389..H-393 (0+5) | ED shifted |
 | B16L-mb-words | MB | ED-MB-0082..0083 (0+2) | H-394..H-398 (0+5) | same |
 | B03a-prose | IN | ED-IN-0375..0376 (0+2) | H-399..H-403 (0+5) | ED shifted |
 | B13-pc-package | PC | ED-PC-0060..0061 (0+2) | H-404..H-408 (0+5) | same |
@@ -545,7 +542,7 @@ Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them
 
 | milestone | closes at (step now) | its batches, with their step now | a batch of it closing after the close? | rows the closing batch reads |
 |---|---|---|---|---|
-| M0 · ground | B04 (S6; §2.3 S6) | B00 S0, B01 S1, B02 S2, B03 S3, B03c S4, B16L S4, B03a S5, B13 S6, B16M S6, B04 S6 | none | R-01, R-02, R-03, R-04, R-09 |
+| M0 · ground | B04 (S6; §2.3 S6) | B00 S0, B01 S1, B02 S2, B03 S3, B16L S4, B03a S5, B13 S6, B16M S6, B04 S6 | none | R-01, R-02, R-03, R-04, R-09 |
 | M1 · every outcome is drawn | B08 (S13; §2.3 S13) | B05 S7, B06 S8, B07 S9, B08 S13 | none | R-01, R-03, R-09 |
 | M2 · persons | BA1 (S12; §2.3 S12) | B09 S10, B10 S11, BA1 S12 | none | R-06, R-07, R-08, R-09 |
 | M3 · every verb | B35 (S18; §2.3 S18) | B11 S12, B12a S13, B12b S14, B12c S15, B14 S8, B15 S12, B21 S12, B21b S13, B21c S14, B22 S17, B23 S18, B24a S15, B25 S16, B26 S17, B27 S16, B28 S17, B29 S14, B32 S17, B35 S18 | none | R-01, R-04, R-05, R-07, R-08, R-09 |
@@ -582,7 +579,7 @@ The second table reads every batch's `REQUIREMENT:` line for `R-0n`, so it lists
 | C-07 | `sitting_exchanges`: the structure's §7.8 and B28's line call it a B98 member; B24.37 sets it in its own batch | the item that ships it governs (step 3) | §4 (not a member); listed: K8 (part 35's line) |
 | C-08 | `RESILIENCE_GAIN`: B03 (part 5:68) says no B98 member; B35 lists it BLOCKED in B98 | either way it stays at 0: one BLOCKED row (step 5) | §4 row 76; no edit |
 | C-09 | `unauthored_attributes`: B05.16 deletes it (U1-B step 7); BA1's line and `UNDECIDED` (3) say persons the draft leaves unauthored keep it | superseded at B05 (step 1): an unauthored attribute reads D-U1-04's average after B05; BA1's sentence is to be restated in those words | listed: K4 (part 18_cont) |
-| C-10 | DEF-10 is held ("move `build_realm` out of `harness/`"), and B03c.01 (CI-07, A-102) makes that move | the trigger has fired; superseded by B03c.01 (step 1) | §8 row 4; the adoption's held list drops it |
+| C-10 | DEF-10 is held ("move `build_realm` out of `harness/`"), and B03c.01 @544cf5719c620331b70aeda93c1672977b44e9ef (CI-07, A-102) makes that move | the trigger has fired; superseded by B03c.01 @544cf5719c620331b70aeda93c1672977b44e9ef (step 1) | §8 row 4; the adoption's held list drops it |
 | C-11 | `STOPS IF` sentences naming a batch that closes later (`xref.py`, 104 sentences): B20.09 → B31 (`reform`'s reader, S19), B07.04 → B21, B29.03 → B32; B28.09 → B32 and B39.28 → B98 are descriptive | each names a fallback the item takes; no edge (step 5): B20.09 accepts `reform` without the reader, and B31's matching item re-checks | listed: K8 (B20.09 and B31's item) |
 | C-12 | DEF-3's trigger "milestone M2" is v11's M2 (the any-seed story bar); v12's M2 is "persons" | read as v12's story gate, B36 (step 3: the block names THE BAR, which `23_STORY_D` reads) | §8 row 42 |
 | C-13 | ED-820's trigger ("a commander mid-fight act") may fire at B20 (B20.08's `rally`, `withdraw`) | §7.9's rule: B20's session reads it at its open; an item of B20 or `STOPPED` | §8 row 51; listed: the B20 session, K8 |

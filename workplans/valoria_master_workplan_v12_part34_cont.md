@@ -277,7 +277,7 @@ Placement (§5.6): no member names these ids (the batch has no proposal members)
 - GATE: `python -m pytest engine/season/tests/test_kin.py -q` → pass; `python -c` loading `RELEASABLE_KINDS` → contains `kin`; seed 0 build hash moved (two edges), recorded.
 - HASH MOVERS: "mover once rows are authored" (two edges at build). Re-pinned at B37p.99.
 - EXPECTED RED UNTIL B37p.99: the realm pins.
-- DEPENDS ON: EXISTS-IN-TREE `data/verbs.py` (the release-domain check), `data/rosters.py` (`RELEASABLE_KINDS`'s derivation), `data/cast.py`, `loop/effects_governance.py::_eff_release`; V12 Batch B03c (`boot/realm.py`); V12 Batch B37 (`22_HAPPENINGS_A`: births and ages, A-15).
+- DEPENDS ON: EXISTS-IN-TREE `data/verbs.py` (the release-domain check), `data/rosters.py` (`RELEASABLE_KINDS`'s derivation), `data/cast.py`, `loop/effects_governance.py::_eff_release`; V12 Batch B03c @544cf5719c620331b70aeda93c1672977b44e9ef (`boot/realm.py`); V12 Batch B37 (`22_HAPPENINGS_A`: births and ages, A-15).
 - GLOSSARY: *kin* (step 4).
 - NAMES: `harness/populated.py` → `boot/realm.py` (B03c).
 - COST and TIER: small build (Size M); `sonnet`, `high`.

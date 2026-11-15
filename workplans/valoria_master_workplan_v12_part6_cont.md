@@ -13,7 +13,7 @@ GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B03-hygiene @61b37b8dc8a68a5434d423f0ed0695102e89fc9f
-GATE: Batch B03c-boot
+GATE: Batch B03c-boot @544cf5719c620331b70aeda93c1672977b44e9ef
 GATE: Batch B16L-mb-words
 GATE: Batch B03g-go-early-landings @048724cd545117255e71d04a583d99c6cb5fe3a9
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
@@ -24,7 +24,7 @@ BATCH GATE (read once, on the closing tree, `PYTHONHASHSEED=0` on every seeded c
   CI-02 gate 1, *AST equality modulo docstrings*: `python probe.py <batch-start-sha> $(git diff --name-only <batch-start-sha> -- '*.py')` → `AST-EQUAL`;
   CI-02 gate 2: `GITHUB_EVENT_NAME=pull_request GITHUB_BASE_REF=main python tools/ci_sim_fabrication_check.py` → green;
   CI-02 gate 4: `python tools/export_engine_params.py --check`, `python tools/export_sim_params.py --check`, `python tools/export_composition.py --check` → all current, **with no rebuild** (B03a.02's preserved rule 7); `python tools/export_season_registries.py --check` → current (rebuilt once, in B03a.01, for the note strings it copies);
-  CI-01 gate 3 and CI-02 gate 3: the headless hash and the realm hash at seeds 0 and 2, one season → equal to B03c's close (`reading @<sha>`), and the realm hash at seed 1 → equal;
+  CI-01 gate 3 and CI-02 gate 3: the headless hash and the realm hash at seeds 0 and 2, one season → equal to B03c's close (`reading @544cf5719c620331b70aeda93c1672977b44e9ef`), and the realm hash at seed 1 → equal;
   `python -m pytest engine/season/tests/test_season_shape.py engine/season/tests/test_governance_build.py tests/valoria/test_module_registrar.py -q -n auto` → pass (CI-01's covering files);
   `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`); `python -m engine.season.harness.register --requirements` → nine lines, unchanged; `python tools/m1_acceptance.py --summary` → its verdict line, quoted;
   the suites `python tools/tests_for_diff.py --base <batch-start-sha>` names, once (CI-02: "At the close, the suites once");
@@ -37,9 +37,9 @@ UNDECIDED: (1) CI-02's earning lists four classes of reader of source prose; a f
 C(B03a-prose): this batch's entries; the plan's head parts; `engine/season/rosters.yaml`, `engine/season/verb_table.yaml`; `engine/season/data/rosters.py`, `engine/season/data/verbs.py`, `engine/season/manifest/registry.py` (the presence checks of the four `*_note` columns, read only); `engine/season/tests/test_season_shape.py` (its `writes_note` read), `engine/season/tests/test_governance_build.py` (its raw-text read), `tests/valoria/test_module_registrar.py` (`formation_decline_note`);
   every non-test `*.py` under `engine/season/{loop,state,decision,queries,data,seam,manifest,boot}`, `engine/season/epistemic.py`, `gaps.py`, `trace_log.py`, `engine/substrate/`, `engine/dice_engine/`, `modules/` (CIP §3.2's row, `boot` added by A-102); the test files that read source as text (`grep -rlE "getsource|ast\.parse|read_text\(\)" engine/season/tests tests/valoria`);
   `tools/ci_sim_fabrication_check.py`; `tools/export_engine_params.py`, `tools/export_sim_params.py` (`_comment`, `_citation`), `tools/export_composition.py`, `tools/export_season_registries.py` (B03g @048724cd545117255e71d04a583d99c6cb5fe3a9) and their artifacts; `master/work/W1_AREAS_AND_LINES.md` and `W5_DATA_CHANNELS.md` §1 (the census method, read for the close's readings only);
-  instruments: `register`, `tools/m1_acceptance.py`, `tools/tests_for_diff.py`, `harness/headless.py`; the closing SHAs of B03, B03c, B16L; the permanent surface (CLAUDE.md, `CURRENT.md`, `HANDOFF.md`, `registers/handoffs/HANDOFF_IN.md`, the skill and `methodology-close`).
+  instruments: `register`, `tools/m1_acceptance.py`, `tools/tests_for_diff.py`, `harness/headless.py`; the closing SHAs of B03, B03c (`544cf5719c620331b70aeda93c1672977b44e9ef`), B16L; the permanent surface (CLAUDE.md, `CURRENT.md`, `HANDOFF.md`, `registers/handoffs/HANDOFF_IN.md`, the skill and `methodology-close`).
 SERIAL EDGES: within the batch: B03a.01 → B03a.02 (CIP §3.3: "CI-01 (two files, two lanes at once) → CI-02 (one lane per package, at once, disjoint files)"; CI-02 lands "after CI-01") → B03a.99. CI-02's AST gate is per file and would be broken by any code edit in the batch (CIP §2: "Why its own batch").
-  With other batches, by file: every file of CI-02's scope B03 (CI-08 trims `loop/driver.py` first; the census deletions) → B03c (`boot/` exists) → B16L (its renames, comments included) → B03a → B04, B13 (CI-09 edits the import lines of `modules/combat`: "serial, prose first, so CI-02's AST gate is not disturbed") and B16M (L2's renames in `modules/mass_battle`) and every later batch; `rosters.yaml`, `verb_table.yaml` B16L → B03a → B04 (CIP part 2 §5 note 1: after B03a a batch adds a roster or row at the end of its family's block); `engine/engine_params/season_registries.json` B16L.99 → B03a.01.
+  With other batches, by file: every file of CI-02's scope B03 (CI-08 trims `loop/driver.py` first; the census deletions) → B03c @544cf5719c620331b70aeda93c1672977b44e9ef (`boot/` exists) → B16L (its renames, comments included) → B03a → B04, B13 (CI-09 edits the import lines of `modules/combat`: "serial, prose first, so CI-02's AST gate is not disturbed") and B16M (L2's renames in `modules/mass_battle`) and every later batch; `rosters.yaml`, `verb_table.yaml` B16L → B03a → B04 (CIP part 2 §5 note 1: after B03a a batch adds a roster or row at the end of its family's block); `engine/engine_params/season_registries.json` B16L.99 → B03a.01.
 FILE CENSUS: B03a.01: `engine/season/rosters.yaml`, `engine/season/verb_table.yaml`, `engine/engine_params/season_registries.json` (re-derived). B03a.02: every non-test `*.py` of CI-02's scope (comments and docstrings only).
 PARALLEL: S5, alone in the whole plan (`V12_STRUCTURE.md` §2.3: "it edits the comments of every game-code file").
 COST: edit, the largest by volume (CIP CI-02: "about 31,000 prose lines in scope"); `sonnet`, `high` producers, two for CI-01 and eight for CI-02, `isolation: worktree`, disjoint files; "no critic fan (the AST probe is the control, and a comment-only diff has no behaviour to attack)" (CIP CI-02, read with BATCH-CLOSE: the close's phases still run once, over the batch's range).
@@ -48,7 +48,7 @@ EST: 3.7 h [estimate: §2.4's formula over three positions (0.4 h × 3 + 2.5 h),
 | pos | item | source | state | hash | gates on |
 |---|---|---|---|---|---|
 | B03a.01 | the two largest registries carry values and definitions, not their history | CI-01 (H-03, H-07) | BUILD | EQUAL | Batch B03, Batch B16L |
-| B03a.02 | the source says what it does; its history lives in the commits | CI-02 (H-03) | BUILD | EQUAL | B03a.01; Batch B03c, Batch B16L |
+| B03a.02 | the source says what it does; its history lives in the commits | CI-02 (H-03) | BUILD | EQUAL | B03a.01; Batch B03c @544cf5719c620331b70aeda93c1672977b44e9ef, Batch B16L |
 | B03a.99 | re-pin and close readings: the EQUAL readings recorded | E-1 | BUILD | EQUAL (records) | B03a.01, B03a.02 |
 
 ### B03a.01 — the two largest registries carry values and definitions, not their history · CI-01 · BUILD · HASH EQUAL
@@ -104,7 +104,7 @@ EST: 3.7 h [estimate: §2.4's formula over three positions (0.4 h × 3 + 2.5 h),
   ```
   run as `python probe.py <base-sha> $(git diff --name-only <base-sha> -- '*.py')`. Expected: `AST-EQUAL`. Comments are not in the tree and docstrings are stripped, so equality means no code token moved. 2. `GITHUB_EVENT_NAME=pull_request GITHUB_BASE_REF=main python tools/ci_sim_fabrication_check.py` green. 3. The headless hash and the realm hashes at seeds 0 and 2 equal the opening reading. 4. `python tools/export_engine_params.py --check`, `python tools/export_sim_params.py --check`, `python tools/export_composition.py --check` all current (the exporters read these files). 5. At the close, the suites once. 6. A reading for the close: `W1`'s table re-run (the probe is `census.py` in this lane's scratchpad; it is thirty lines of `ast` and `tokenize` and may be rewritten from the method line of `W1`)." Gate 5 and 6 are the batch gate's.
 - HASH MOVERS: none ("Declared hash movers. None").
-- DEPENDS ON: EXISTS-IN-TREE `tools/ci_sim_fabrication_check.py`, `tools/export_sim_params.py::_comment`, `::_citation`; V12 Batch B03 ("CI-08 trims `driver.py`'s imports first; the census deletions remove files this item would otherwise edit"), Batch B03c (`boot/` in scope), Batch B16L (its renames land first), V12 B03a.01 ("Lands in: B03a, after CI-01").
+- DEPENDS ON: EXISTS-IN-TREE `tools/ci_sim_fabrication_check.py`, `tools/export_sim_params.py::_comment`, `::_citation`; V12 Batch B03 ("CI-08 trims `driver.py`'s imports first; the census deletions remove files this item would otherwise edit"), Batch B03c @544cf5719c620331b70aeda93c1672977b44e9ef (`boot/` in scope), Batch B16L (its renames land first), V12 B03a.01 ("Lands in: B03a, after CI-01").
 - GLOSSARY: none (no term changes).
 - COST and TIER: edit, the largest by volume; "eight `valoria-author` lanes, `sonnet`, effort `high`; no critic fan (the AST probe is the control …)".
 - LANDS IT: B03a's eight producers, `isolation: worktree`, fanned (file-disjoint packages; fire one, await its first token, then the rest, CLAUDE.md §10 point 3); a `WIP checkpoint: B03a.02` at each hand-back (the skill, CHECKPOINTS); the integrator runs gate 1 over the union, then one `Item: B03a.02` commit, `[skip ci]`.
@@ -112,10 +112,10 @@ EST: 3.7 h [estimate: §2.4's formula over three positions (0.4 h × 3 + 2.5 h),
 ### B03a.99 — re-pin and close readings: the EQUAL readings recorded · E-1 · BUILD · HASH EQUAL (records)
 - SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2; `V12_STRUCTURE_part2.md` §5.12.
 - ADVANCES: none; the batch's record.
-- INSTRUCTION: (1) The headless hash and the realm hash at seeds 0, 1, 2, one season, against B03c's close (`reading @<sha>`): all equal is the expected reading; a moved hash reverts the item whose diff reaches it ("A moved hash at any gate below is a defect in the edit: revert the item", CIP §3.1). (2) Every line of the BATCH GATE, the AST probe over the whole batch range included. (3) The close's readings in this commit's body (§5.12), with the two size readings. Nothing is re-pinned.
+- INSTRUCTION: (1) The headless hash and the realm hash at seeds 0, 1, 2, one season, against B03c's close (`reading @544cf5719c620331b70aeda93c1672977b44e9ef`): all equal is the expected reading; a moved hash reverts the item whose diff reaches it ("A moved hash at any gate below is a defect in the edit: revert the item", CIP §3.1). (2) Every line of the BATCH GATE, the AST probe over the whole batch range included. (3) The close's readings in this commit's body (§5.12), with the two size readings. Nothing is re-pinned.
 - WHERE: none but the commit body.
 - TESTS: none new.
-- FALSIFIER and CONTROL: a moved hash, a non-`AST-EQUAL` file, a stale exporter. Control: B03c's close readings.
+- FALSIFIER and CONTROL: a moved hash, a non-`AST-EQUAL` file, a stale exporter. Control: B03c's close readings (`@544cf5719c620331b70aeda93c1672977b44e9ef`).
 - GATE: the BATCH GATE above, every line.
 - HASH MOVERS: none.
 - DEPENDS ON: V12 B03a.01, B03a.02.

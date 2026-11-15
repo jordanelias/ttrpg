@@ -47,7 +47,6 @@ These are the two tables `V12_STRUCTURE_part3.md` §7.2 asks of part 2 and lane 
 
 | # | old → new | first stated by | applied again by |
 |---|---|---|---|
-| 2 | `harness/probes.py::chooser` → `boot/chooser.py` | B03c.01 | — |
 | 3 | `order_of_battle` → `standing_order` | B16L.01 | B23.13, B30.04, B30.05 |
 | 4 | `orderofbattle.Subformation` → `UnitRow` | B16L.02 | B22.24 |
 | 5 | `OrderOfBattle.subformations` → `units` | B16L.02 | — |
@@ -158,8 +157,6 @@ These are the two tables `V12_STRUCTURE_part3.md` §7.2 asks of part 2 and lane 
 |---|---|---|---|---|
 | 1 | `engine/season/tests/test_b11a_duel_reach.py` | test file | B01.01 | — |
 | 2 | `engine/season/tests/test_b11a_scores_and_obstacle.py` | test file | B01.02 | — |
-| 39 | `engine/season/boot/__init__.py` | module | B03c.01 | — |
-| 40 | `engine/season/tests/test_boot_module.py` | test file | B03c.01 | — |
 | 41 | `modules/combat/__init__.py` | module | B13.01 | — |
 | 42 | `engine/season/tests/test_u1_capability_surface.py` | test file | B04.02 | — |
 | 43 | `engine/season/tests/test_sc_hearing_capabilities.py` | test file | B04.18 | — |

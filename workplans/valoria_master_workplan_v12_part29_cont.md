@@ -24,7 +24,7 @@ The batch block of `B41-go-port-gate` (its head lines, PORT GATE RULES, UNDECIDE
 - FALSIFIER and CONTROL: "A `surface` block whose `content_hash` differs from slice 2's (the trace moved the run)." Control: slices 1 and 2 of B41.06 unchanged by the rebuild.
 - GATE: `python tools/export_oracle_pins.py --build` then `--check` → OK; `python -m pytest tests/valoria/test_oracle_pins.py engine/season/tests/test_surface_trace.py -q` → pass; `PYTHONHASHSEED=0 python -m engine.season.harness.port_oracle --slice 2 --seed 0` → one line per declared seat.
 - HASH MOVERS: none (a pin of a run, no game state; the `--build` is this item's own, PORT GATE RULES 1).
-- DEPENDS ON: V12 B41.05 (`surface_trace`), B41.06 (the exporter); V12 Batch B03c (`boot/realm.py::COHORT_PREFIX`).
+- DEPENDS ON: V12 B41.05 (`surface_trace`), B41.06 (the exporter); V12 Batch B03c @544cf5719c620331b70aeda93c1672977b44e9ef (`boot/realm.py::COHORT_PREFIX`).
 - GLOSSARY: none.
 - NAMES: `harness/populated.py::COHORT_PREFIX` → `boot/realm.py::COHORT_PREFIX` (B03c, CI-07); `round` → `lap` in the row (B04).
 - COST and TIER: small build; `sonnet`, `high`; the seat-set rule read by `opus`.
@@ -226,7 +226,7 @@ Not in this batch, and where each is: CR-104 (B11F2; reads B11F1.02's Sites); SE
 - FALSIFIER and CONTROL: "MUTATION: key `owner_of` on the kind's name and (1)'s null-cell variant reads red." "CONTROLS: `wear_per_season` 0 (the control arm); `content_hash` EQUAL when no row carries `site:`."
 - GATE: `python -m pytest engine/season/tests/test_cr106_church_sites.py -q` → (1), (2), (4) pass; the realm hash (`HASH READING`) at seeds 0 to 2, one season → equal to the S16 base, B24a's after-reading (`reading @<sha>`; lane H3).
 - HASH MOVERS: none (no row carries `site:`).
-- DEPENDS ON: EXISTS-IN-TREE `rosters.yaml: site_kinds` (`:1784` at `9c2c3ab`), `queries/world_q.py::holder_faction_of`, `data/rosters.py::HEAD_SEAT`, `::require_member`, `Site.condition`, `band_floors`; V12 Batch B03c (`boot/realm.py`'s dwelling loop, moved from `populated.py`); `ED-IN-0352` (landed). "RE-BASE: `venues.yaml` and `populated.py`'s dwelling loop as the settlement-lane batches that edit them leave them" (B12a to B12c).
+- DEPENDS ON: EXISTS-IN-TREE `rosters.yaml: site_kinds` (`:1784` at `9c2c3ab`), `queries/world_q.py::holder_faction_of`, `data/rosters.py::HEAD_SEAT`, `::require_member`, `Site.condition`, `band_floors`; V12 Batch B03c @544cf5719c620331b70aeda93c1672977b44e9ef (`boot/realm.py`'s dwelling loop, moved from `populated.py`); `ED-IN-0352` (landed). "RE-BASE: `venues.yaml` and `populated.py`'s dwelling loop as the settlement-lane batches that edit them leave them" (B12a to B12c).
 - GLOSSARY: row *owner* (new if absent): "the faction a Site belongs to: its kind's `site_owner` cell if set, else the faction holding its rung (`faction_q.owner_of`)"; ordinary reading: who a thing belongs to.
 - NAMES: `harness/populated.py` dwelling loop → `boot/realm.py` (B03c, CI-07).
 - COST and TIER: small build; `sonnet`, `high`; a third-tier critic (`opus`) on the null-cell rule.
@@ -257,7 +257,7 @@ Not in this batch, and where each is: CR-104 (B11F2; reads B11F1.02's Sites); SE
 - FALSIFIER and CONTROL: "MUTATION: check each row's weight alone and (2) reads red. CONTROLS: the shipped `cohorts.yaml` unchanged gives `content_hash` EQUAL".
 - GATE: `python -m pytest engine/season/tests/test_cr107_cohort_identity.py -q` → (1), (2), (3), (5) pass; the realm hash (`HASH READING`) at seeds 0 to 2, one season → equal to B11F1.02's after-reading.
 - HASH MOVERS: "none from the loader change alone".
-- DEPENDS ON: EXISTS-IN-TREE `harness/populated.py::seat_cohorts`, `COHORT_PREFIX` (moved to `boot/realm.py` by B03c), `queries/world_q.py::capacity`, `::population`, `data/affiliations.py::conviction_map`, `Person.heritage`; V12 Batch B03c. "RE-BASE: … the `temperament_rows`/`seat_cohorts` code as the held batch leaves them."
+- DEPENDS ON: EXISTS-IN-TREE `harness/populated.py::seat_cohorts`, `COHORT_PREFIX` (moved to `boot/realm.py` by B03c), `queries/world_q.py::capacity`, `::population`, `data/affiliations.py::conviction_map`, `Person.heritage`; V12 Batch B03c @544cf5719c620331b70aeda93c1672977b44e9ef. "RE-BASE: … the `temperament_rows`/`seat_cohorts` code as the held batch leaves them."
 - GLOSSARY: row *cohort*: its owner gains the `label:`, `heritage:`, `conviction:` keys and the id `cohort_<rung>_<label>`; "a cohort is the people of a settlement who share a caste, creed or allegiance, seated as one person of weight"; ordinary reading: a group of people with something in common.
 - NAMES: `harness/populated.py::seat_cohorts` and the cohort loader → `boot/realm.py` (B03c).
 - COST and TIER: small build; `sonnet`, `high` ("second tier for the loader").

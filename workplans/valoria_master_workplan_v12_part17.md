@@ -448,7 +448,7 @@ EXPECTED RED UNTIL B11.99: `engine/season/tests/test_fi03_trail.py::test_the_rea
 - FALSIFIER and CONTROL: a builder that authors an outcome (a claim naming the forger in the investigator's ledger at build). Control: `trail_world`'s callers read the same values (the move is the identity).
 - GATE: `python -m pytest engine/season/tests/test_fi03_trail.py engine/season/tests/test_playable_inquiry.py -q` → pass (the realm-hash test excepted until B11.99); `inquiry_world(0)` built twice → one content hash.
 - HASH MOVERS: none (harness only; no realm world changes).
-- DEPENDS ON: V12 the first half's `IS-B2-CORE-01` item (`harness/scenarios.py`, `SCENARIOS`, `run`); V12 Batch B03c (`boot/realm.py`, CI-07's placing function); EXISTS-IN-TREE `test_fi03_trail.py::trail_world`, `harness/play_surface.py::dispatching_chooser`, `queries/person_q.py::deed_doers`, `rosters.yaml: goal_object_kinds`.
+- DEPENDS ON: V12 the first half's `IS-B2-CORE-01` item (`harness/scenarios.py`, `SCENARIOS`, `run`); V12 Batch B03c @544cf5719c620331b70aeda93c1672977b44e9ef (`boot/realm.py`, CI-07's placing function); EXISTS-IN-TREE `test_fi03_trail.py::trail_world`, `harness/play_surface.py::dispatching_chooser`, `queries/person_q.py::deed_doers`, `rosters.yaml: goal_object_kinds`.
 - NAMES: `populated.build_realm` and its primitives → `boot/realm.py` (B03c, `V12_STRUCTURE_part2.md` §5.10).
 - GLOSSARY: none (*inquiry*, *case* are the glossary's).
 - COST and TIER: edit (harness); `sonnet`, `high`.

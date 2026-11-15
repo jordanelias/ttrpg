@@ -22,7 +22,7 @@ These are lines of the B12a block (merged by reference, repair lane R2b, CHK_K4 
 
 | pos | item | source | state | hash | gates on |
 |---|---|---|---|---|---|
-| B12a.51 | places are endowed by territory: the `field` kind, the `site_endowment` table, its loader, `endowment_for`, two fixtures, the site loop | `07_SE_ground_and_granaries` §4 (a), (b), (c) site loop, (e) first half; CP-T08-02 as amended | BUILD | EQUAL | `09_WR_B_draws_not_thresholds` edits 1–2 (earlier in B12a); Batch B03c |
+| B12a.51 | places are endowed by territory: the `field` kind, the `site_endowment` table, its loader, `endowment_for`, two fixtures, the site loop | `07_SE_ground_and_granaries` §4 (a), (b), (c) site loop, (e) first half; CP-T08-02 as amended | BUILD | EQUAL | `09_WR_B_draws_not_thresholds` edits 1–2 (earlier in B12a); Batch B03c @544cf5719c620331b70aeda93c1672977b44e9ef |
 | B12a.52 | the treasury is the granary: `treasury_above` and the stores seed | `07_SE_treasury_granary_B` §4 (a), (b) (superseding `07_SE_ground_and_granaries` (c)'s seed) | BUILD | EQUAL | B12a.51 |
 | B12a.53 | the larder walk continues up the ladder for the remainder | `07_SE_ground_and_granaries` §4 (d), (e) third half; H-303 | BUILD | EQUAL | B12a.51 |
 | B12a.54 | the `endowment_mode` flip: `uniform` → `ground` | `07_SE_ground_and_granaries` §8 (the `ground` flip); CP-T08-02 | BUILD | MOVER(behaviour) | B12a.51, B12a.52, B12a.53 |
@@ -143,7 +143,7 @@ These are lines of the B12a block (merged by reference, repair lane R2b, CHK_K4 
 - FALSIFIER and CONTROL: "If under `ground` every settlement still shares one band in every season, the endowment is not reaching `produce` (the planted failure: map every territory to `[harbour, seam]`; the test reds). If the `uniform` arm's `build_realm(0)` hash differs from the base, the id scheme moved" (the source). Control: `build_realm(s)` at s = 0 to 2 and its one-season hash equal to the previous item's reading (`reading @<sha>`).
 - GATE: `python -m pytest engine/season/tests/test_endowment.py engine/season/tests/test_hunger.py -q` → pass; `python tools/ci_sim_fabrication_check.py` → exit 0; `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`); `build_realm(0)`'s content hash after one season, `PYTHONHASHSEED=0` → equal to the previous item's reading.
 - HASH MOVERS: none (`Fixtures` is not folded by `World.content_hash()`, `state/world.py::_STATE_COLLECTIONS`; the `uniform` loop mints today's Sites).
-- DEPENDS ON: EXISTS-IN-TREE `engine/season/data/fixtures.py::_load_capacity_floor`, `::_check_keyed_on_site_kinds`, `rosters.yaml: site_kinds`, `site_yield`, `wear_per_season`, `band_floors`, `capacity_floor`, `works_cost`; V12 Batch B03c (`boot/realm.py`); V12 `09_WR_B_draws_not_thresholds` edits 1–2 (earlier in B12a: "the drawn yield and body", the source's "Depends on").
+- DEPENDS ON: EXISTS-IN-TREE `engine/season/data/fixtures.py::_load_capacity_floor`, `::_check_keyed_on_site_kinds`, `rosters.yaml: site_kinds`, `site_yield`, `wear_per_season`, `band_floors`, `capacity_floor`, `works_cost`; V12 Batch B03c @544cf5719c620331b70aeda93c1672977b44e9ef (`boot/realm.py`); V12 `09_WR_B_draws_not_thresholds` edits 1–2 (earlier in B12a: "the drawn yield and body", the source's "Depends on").
 - GLOSSARY: *endowment*, *field* (step 7).
 - NAMES: `harness/populated.py::build_realm` → `boot/realm.py::build_realm` (§5.10, B03c).
 - IDS: H block slots 1–2.
