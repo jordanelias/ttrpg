@@ -113,7 +113,7 @@
       "kind": "callable",
       "entry": "query",
       "verb": null,
-      "needed_by": "engine/season/seam/wrappers/sigma.py \u2014 `_composed_obstacle` (the obstacle a contest is rolled against and the one believed odds read), called by role."
+      "needed_by": "engine/season/seam/wrappers/sigma.py \u2014 `_composed_obstacle` (the obstacle a contest is rolled against and the one believed odds read), called by role. Declared in `sigma.QUERY_ENTRIES` and held by `manifest/registrar.py::require_entries`, as `settlements.larder_draw` is."
     },
     "social_contest.roll": {
       "target": "modules.social_contest.roll:roll",

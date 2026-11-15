@@ -538,10 +538,9 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     counter, no service. A single stream threaded through a season would make every roll depend on
     the count of prior draws, so adding one contested verb would move every other verb's outcome.
 
-    ⚠ S27.4 IS EVALUATED HERE, ON THE DERIVED PAIR, AND THE DRIVER'S OWN BRANCH KEEPS ITS JOB. The
-    fold already refuses an act whose HAND-DECLARED `obstacle` exceeds the multiple; this refuses on
-    the pair the provider derived. One rule, two inputs, and neither site re-evaluates the other's —
-    which is §8's *the rule lives once* stated for a rule with two legitimate operands.
+    ⚠ S27.4 IS EVALUATED HERE, ON THE DERIVED PAIR. The fold's own branch, which refused an act whose
+    HAND-DECLARED `obstacle` exceeded the multiple (it emitted `attempt.refused`), was deleted at B03.55;
+    nothing emits that kind now, and the fold no longer evaluates a hand-declared obstacle against it.
     ⚠ SINCE v9 SC-01 STEP 14 IT IS EVALUATED AFTER THE ENTRY, on the pair the entry RETURNS: the
     obstacle is the module's (`roll.py::obstacle`, ED-SC-0033 clause (3)), so the host has no pair
     until the entry has run. A refused act's roll is discarded; its generator is the act's own

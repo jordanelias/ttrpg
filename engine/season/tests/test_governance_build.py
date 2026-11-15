@@ -1358,7 +1358,7 @@ def test_13f_an_existing_id_refuses_any_change_but_the_remit(change):
     (_founding(body="Imperial Court", faction="Church of Solmund"), True),   # a mismatch
     (_founding(remit=["issue", "requisition"]), True),                        # off `REMIT_ACTS`
     (_founding(post="Duke", faction=None, body="Imperial Court"), True),     # a title in a body
-    (_founding(rung="nowhere"), False),                                # a rung the world lacks (H-291: refused at `founds_over`, which asks the rung's existence first)
+    (_founding(rung="nowhere"), False),                                # a rung the world lacks: no constructor raise; refused by `founds_over`'s own guard (`rung not in w.rungs`, H-291)
     (_founding(conferral=None), False),                                # no conferral basis
     (_founding(office="p_low"), False),                                # an id a person holds
 ], ids=["empty", "no-belonging", "unknown-faction", "unknown-body", "mismatch", "off-roster-remit",

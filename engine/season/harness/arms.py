@@ -106,6 +106,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import ast
 import collections
 import collections.abc
 import inspect
@@ -181,6 +182,29 @@ def _resolve_arm(arm) -> tuple:
     return fixtures, build
 
 
+def _typed_fixture(name: str, value, current):
+    """`value` as a value of the fixture's own type, `current` being what the fixture holds now.
+
+    `--fixture NAME=A,B` hands over raw strings and `Fixtures.sweep` checks no type, so `ceiling_per_pool=
+    True,False` would sweep two truthy strings (`bool("False")` is True, so never `type(current)(value)`).
+    A string is read with `ast.literal_eval`; a fixture that holds a `str` keeps the string as given. A
+    value whose type differs from the fixture's raises `ValueError` naming it (an int may stand for a
+    float, and a bool is not an int here)."""
+    if isinstance(current, str):
+        return value
+    parsed = value
+    if isinstance(value, str):
+        try:
+            parsed = ast.literal_eval(value)
+        except (ValueError, SyntaxError):
+            raise ValueError(f'fixture {name!r} holds a {type(current).__name__}; {value!r} is not '
+                             f'a literal of it') from None
+    if type(parsed) is type(current) or (type(current) is float and type(parsed) is int):
+        return parsed
+    raise ValueError(f'fixture {name!r} holds a {type(current).__name__}; {value!r} reads as a '
+                     f'{type(parsed).__name__}')
+
+
 def run_arm(model, n: int, base_seed: int, seasons: int) -> dict:
     """`n` seeded realms, the arm `model` applied to each, `seasons` seasons each.
 
@@ -201,8 +225,8 @@ def run_arm(model, n: int, base_seed: int, seasons: int) -> dict:
     for i in range(n):
         w = populated.build_realm(base_seed + i, **build)
         for name, value in fixtures.items():
-            w.fixtures.get(name)             # an unregistered name raises `Ungraded` here; `sweep` would write it silently
-            w.fixtures = w.fixtures.sweep(name, value)
+            current = w.fixtures.get(name)   # an unregistered name raises `Ungraded` here; `sweep` would write it silently
+            w.fixtures = w.fixtures.sweep(name, _typed_fixture(name, value, current))
         out = populated.run(seasons, base_seed + i, None, w=w)
         total_acts += out['acts']
         fought += fought_fields(w)
@@ -271,8 +295,10 @@ def main(argv=None) -> int:
     a, b = results[names[0]], results[names[1]]
     categories = sorted(set(a['tally']) | set(b['tally']))
     # A z over an act-subject tally is a statement about what a FOUGHT field did to the acted-on
-    # population; with none fought in either arm the arms differ in nothing the fixture reaches.
-    computable = bool(a['fought'] or b['fought'])
+    # population; with none fought in either arm the SHIPPED pair (`field_casualty_model`, read only on a lost
+    # field battle) differs in nothing it reaches. A `--fixture` pair names a fixture that need not act through
+    # a fought field, so its z is printed with the fought counts beside it, for the reader to weigh.
+    computable = bool(a['fought'] or b['fought']) or bool(args.fixture)
 
     print(f"\n{args.n} realm(s) per arm, {args.seasons} season(s) each, "
           f"seeds {args.seed}..{args.seed + args.n - 1}")

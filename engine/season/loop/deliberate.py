@@ -165,7 +165,8 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
         # [ASSUMPTION; medium; revert: `odds_weighting` -> `none`, one re-pin (H-248)]
         # B03.58 (`04` §B.2 row 2, §C.3): WHAT `decision/` IS HANDED OF THE PERSON IS A FROZEN COPY, built once here --
         # `assemble`, `budget` and `choose` get `me`, never the stored `Person`, so a callback (a playable host's
-        # own) cannot assign to the person it decides for. `sense`, `believed_odds_query` and the act-actor check
+        # own) cannot assign to the interior's own fields or into its mappings and reach the person it decides for;
+        # `ledger`, `tenures` and `stance` share the LIVE carriers, so a write THROUGH them lands on the store. `sense`, `believed_odds_query` and the act-actor check
         # below keep `p`: they are the host's, not `decision/`'s.
         me = interior_of(p)
         v = decision.assemble(me, q_p, k_view, questions=qs, odds=believed_odds_query(w, p))

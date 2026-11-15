@@ -5080,8 +5080,6 @@ def test_the_revocation_branch_executes_in_the_fold_and_not_only_as_a_predicate(
     w.step = Step.RESOLVE
     events = SeasonDriver(w).resolve(mint_token(w, WriteClass.ACTS), [act])
     kinds = [e.kind for e in events]
-    assert "attempt.refused" not in kinds, (
-        f"the fold refused a revocation whose preconditions all hold: {kinds}")
     assert "tenure.closed" in kinds, (
         f"the fold accepted the act and closed no tenure — the branch is reachable but inert: "
         f"{kinds}")

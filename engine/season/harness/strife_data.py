@@ -29,8 +29,8 @@ def declared_kinds() -> frozenset:
     A STRICT SUPERSET OF THE ROSTER THIS FUNCTION USED TO BUILD. That one (`EMITTED_KINDS` and the write matrix's
     `emits:`) already held the per-degree and per-clause emission columns, since `VerbRow.emits` and
     `emits_on_refusal` are flat unions over them. What `EVENT_KINDS` adds is `fold_kinds` and `logged_kinds`
-    (`act.ineligible`, `act.refused`, `attempt.refused`, `standing.band_crossed`), so the loader now accepts
-    those four; no kind it accepted is refused, and none of the four is named in the registry."""
+    (`act.ineligible`, `act.refused`, `standing.band_crossed`; `attempt.refused` was a fourth until B03.55), so the
+    loader now accepts those; no kind it accepted is refused, and none of them is named in the registry."""
     return EVENT_KINDS
 
 

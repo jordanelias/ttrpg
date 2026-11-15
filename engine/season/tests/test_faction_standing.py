@@ -46,6 +46,7 @@ def test_standing_footprint_equals_footprint_for_every_holding_faction(realm):
         got = FQ.standing(w, prop, REALM)
         assert got.footprint, f"{prop} holds a rung and its standing has an empty footprint"
         assert list(got.footprint) == Q.footprint(w, prop), prop
+        assert set(FQ.resolve(w, prop).holdings) <= set(got.footprint), prop
         checked += 1
     assert checked >= 1, "no faction with a live hold was checked"
 

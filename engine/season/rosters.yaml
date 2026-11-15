@@ -1470,22 +1470,21 @@ rosters:
       `04_CODE_ARCHITECTURE.md` §B.13 loader invariant 7 and `F.20b` (F13): *"the Event-kind roster is
       derived from every emission column, and the log accepts no other kind"*. v9 SC-02 `23`.
     note: >-
-      ⚠ THE KINDS THE FOLD EMITS WHEN NO VERB ROW DECLARES ONE -- the three that were body literals in
+      ⚠ THE KINDS THE FOLD EMITS WHEN NO VERB ROW DECLARES ONE -- the two that were body literals in
       `loop/resolve.py` (`F.20b`: *"a definition living as a literal in a body is what ID-12 refuses"*).
       `ineligible` is the kind of an act whose actor is gone (S27.1) or whose eligibility declined on a
       row that declares no kind for that clause; `refused` is the fallback of every other refusal
-      point; `attempt_refused` is S27.4's refusal of an attempt past the obstacle ceiling (it
-      declares no verb row). The CLOSED SET OF KEYS is what `loop/resolve.py` reads and the loader
+      point. The CLOSED SET OF KEYS is what `loop/resolve.py` reads and the loader
       checks (`data/rosters.py::check_fold_kinds`): a key the fold reads and this roster lacks, or a
       key nothing reads, refuses the load naming this row. The derived Event-kind roster
-      (`data/verbs.py::EVENT_KINDS`) is the union of every emission column and these three.
+      (`data/verbs.py::EVENT_KINDS`) is the union of every emission column and these two.
       `F.20b` also names `contest.resolved` as a third literal; the live fold emits none of that
-      name (a contest's outcome is the verb row's degree-keyed `emits:`), and `attempt.refused` is the
-      body literal it actually emits, so the roster declares what the code emits.
+      name (a contest's outcome is the verb row's degree-keyed `emits:`). A third key, `attempt_refused`
+      (`attempt.refused`, S27.4's refusal past the obstacle ceiling), was declared here until B03.55
+      deleted the fold's only emitter; nothing emits that kind now, and it is no longer a member.
     values:
       ineligible: "act.ineligible"
       refused: "act.refused"
-      attempt_refused: "attempt.refused"
 
   logged_kinds:
     source: >-

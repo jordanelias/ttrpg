@@ -889,7 +889,9 @@ class Person:
 class PersonInterior:
     """WHAT `choose` IS HANDED OF A PERSON: `04` §B.2 row 2 *"a frozen copy with no store handle"*, §C.3 *"In: a
     frozen `PersonInterior`"*. A person interior is what is inside the person, copied out at the barrier: no
-    assignment to a field, and no item assignment into a mapping, changes anything (`Person` is not touched).
+    assignment to the interior's own fields, and no item assignment into its mappings, reaches the `Person`.
+    That is NOT "nothing the interior holds can change the store": `ledger`, `tenures` and `stance` share the
+    LIVE carriers (below), so an assignment THROUGH one of them (`interior.tenures[0].until = ...`) lands on the store.
 
     THE FIELDS ARE THE ONES `decision/` READS, derived by an `ast` walk of attribute reads on the person
     parameter there (and in the `queries/person_q.py` and `epistemic.py` callees it hands the whole person to), plus

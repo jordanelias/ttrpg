@@ -57,7 +57,7 @@ composition_roles:
   social_contest.obstacle:
     target: "modules.social_contest.roll:obstacle"
     entry: query
-    needed_by: "engine/season/seam/wrappers/sigma.py — `_composed_obstacle` (the obstacle a contest is rolled against and the one believed odds read), called by role."
+    needed_by: "engine/season/seam/wrappers/sigma.py — `_composed_obstacle` (the obstacle a contest is rolled against and the one believed odds read), called by role. Declared in `sigma.QUERY_ENTRIES` and held by `manifest/registrar.py::require_entries`, as `settlements.larder_draw` is."
 
   combat.fight:
     target: "modules.combat.fight:fight"

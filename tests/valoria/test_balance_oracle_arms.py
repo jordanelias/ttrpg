@@ -31,6 +31,8 @@ survivor ratio and floored at 1). Both are read by exactly one call site,
 """
 from __future__ import annotations
 
+import pytest
+
 from engine.season.data.rosters import FIELD_CASUALTY_MODELS
 from engine.season.harness import arms as oracle
 from engine.season.harness.populated import build_realm
@@ -210,3 +212,50 @@ def test_b0360_fixture_flag_exposes_the_mapping_form():
     assert oracle._fixture_arms("field_casualty_model=total,none") == {
         "total": {"fixtures": {"field_casualty_model": "total"}},
         "none": {"fixtures": {"field_casualty_model": "none"}}}
+
+
+@pytest.mark.parametrize("value, current, want", [
+    ("2", 2, 2),                       # a numeric fixture takes its number
+    ("2.5", 1.0, 2.5),
+    ("2", 1.0, 2),                     # an int may stand for a float
+    ("False", True, False),            # `bool("False")` is True: the value is parsed, never coerced
+    ("True", True, True),
+    ("total", "scaled_by_degree", "total"),     # a str fixture keeps the raw string
+    (5, 2, 5),                         # an already-typed value passes through
+])
+def test_b0360_a_fixture_value_is_parsed_to_the_fixtures_own_type(value, current, want):
+    got = oracle._typed_fixture("f", value, current)
+    assert got == want
+    assert type(got) is type(want)
+
+
+@pytest.mark.parametrize("value, current", [
+    ("maybe", True),                   # not a literal at all, and the fixture is not a str
+    ("2", True),                       # an int where a bool lives
+    ("True", 2),                       # a bool where an int lives
+    ("2.5", 2),                        # a float where an int lives
+    ("'x'", 2),                        # a str where an int lives
+])
+def test_b0360_a_wrongly_typed_fixture_value_is_refused_naming_the_fixture(value, current):
+    with pytest.raises(ValueError, match="ceiling_per_pool"):
+        oracle._typed_fixture("ceiling_per_pool", value, current)
+
+
+def test_b0360_run_arm_refuses_a_wrongly_typed_fixture():
+    with pytest.raises(ValueError, match="ceiling_per_pool"):
+        oracle.run_arm({"fixtures": {"ceiling_per_pool": "maybe"}}, 1, 0, 1)
+
+
+def test_b0360_a_fixture_pair_prints_its_z_even_at_zero_fought_fields(monkeypatch, capsys):
+    """NOT-COMPUTABLE is the shipped `field_casualty_model` pair's verdict only: a fixture other than that one need
+    not act through a fought field. A `--fixture` pair prints the z, with the fought counts beside it."""
+    import collections
+
+    def fake(model, n, base_seed, seasons):
+        t = collections.Counter({"self": 50 if model["fixtures"]["obstacle_default"] == "2" else 150, "other": 50})
+        return {"tally": t, "acts": sum(t.values()), "seeds": n, "fought": 0}
+    monkeypatch.setattr(oracle, "run_arm", fake)
+    oracle.main(["--n", "1", "--fixture", "obstacle_default=2,5"])
+    out = capsys.readouterr().out
+    assert "NOT-COMPUTABLE" not in out and "fought fields" in out
+    assert "SIGNIFICANT" in out, out      # 50/100 against 150/200 pooled: well over the threshold

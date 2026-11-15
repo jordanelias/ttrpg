@@ -1261,7 +1261,8 @@ def confided_outside(claims, said: "Said", hearer: str) -> bool:
     `said_of` copies out of it above, so the match lives beside the copy it inverts. A circle is a
     tuple `Claim.visibility` (a confided telling's deposit, `loop/witness.py::_circle_of`); `"own"`
     is none. `claims` is the TELLER'S OWN ledger, passed by the fold (`loop/resolve.py::
-    _confidence_broken`). Asker-less like its sibling `said_of`; `PersonInterior` does not exist;
+    _confidence_broken`). Asker-less like its sibling `said_of`; a `PersonInterior` exists
+    (`state/carriers.py`) but no act carries one to the fold, so `claims` is the live ledger;
     graded CONVENTION either way."""
     key = (said.subject, said.predicate, said.value, tuple(said.chain))
     return any(isinstance(c.visibility, tuple) and hearer not in c.visibility

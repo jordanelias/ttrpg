@@ -154,7 +154,8 @@ def require_entries(needs) -> list:
                     needs="the composition row back in references/module_contracts.yaml "
                           "`composition_roles:` (re-run tools/export_composition.py), or the host's "
                           "need removed with its caller from where it is declared "
-                          "(queries/world_q.py::QUERY_ENTRIES or loop/matter.py::STEP_CALLS)")
+                          "(queries/world_q.py::QUERY_ENTRIES, loop/matter.py::STEP_CALLS or "
+                          "seam/wrappers/sigma.py::QUERY_ENTRIES)")
         if held.entry != kind:
             _refuse(f"the host needs module entry {role!r} as `entry: {kind}`, and its composition "
                     f"row declares `entry: {held.entry}`",

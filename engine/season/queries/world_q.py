@@ -2117,11 +2117,14 @@ def footprint(w: World, faction: str) -> list[str]:
     ⚠ A FACTION HOLDS A RUNG AS THE `hold` SUBJECT, WHICH §15's TABLE TYPES AS `Person -> ...`.
     §14.2's own closing note is the licence and the warning: *"A Proposition may be a `hold`
     subject and is never destroyed, so a memberless faction leaves territory held by a banner
-    nobody carries."* That defect is declared there and is not repaired here."""
+    nobody carries."* That defect is declared there and is not repaired here. Every realm hold is
+    in fact person-subject (`faction_holding`, `provinces_of`), so the hold half reads the faction's
+    own subject OR a member's: the membership `faction_q.resolve` uses."""
     TRACE.query("footprint", "resolver")
-    out = {t.object for t in w.tenures
-           if t.kind == "hold" and t.subject == faction and t.live and t.object in w.rungs}
     inside = set(members(w, faction))
+    out = {t.object for t in w.tenures
+           if t.kind == "hold" and (t.subject == faction or t.subject in inside)
+           and t.live and t.object in w.rungs}
     out |= {t.object for t in w.tenures
             if t.kind == "contain" and t.live and t.subject in inside and t.object in w.rungs}
     return sorted(out)

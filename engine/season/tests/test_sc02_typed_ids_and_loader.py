@@ -120,14 +120,15 @@ from ..data.verbs import EVENT_KINDS, VERB_TABLE, derive_event_kinds  # noqa: E4
 from ..loop import resolve as _resolve   # noqa: E402
 from .test_u7_remit import _plant        # noqa: E402
 
-THREE = tuple(sorted(FOLD_KINDS))      # read off the data; the floor below pins it at the three
+THREE = tuple(sorted(FOLD_KINDS))      # read off the data (the name is history: it held three until B03.55); the floor below pins its size
 
 
-def test_the_three_body_literal_kinds_are_declared_columns_and_in_the_derived_roster():
-    """F.20b's three kinds, as the live fold emits them (`act.ineligible`, `act.refused`, and S27.4's
-    `attempt.refused` -- `04` names `contest.resolved` for the third, which the live fold never emits)."""
-    assert len(THREE) == 3, FOLD_KINDS
-    assert set(FOLD_KINDS.values()) == {"act.ineligible", "act.refused", "attempt.refused"}
+def test_the_two_body_literal_kinds_are_declared_columns_and_in_the_derived_roster():
+    """F.20b's kinds, as the live fold emits them (`act.ineligible` and `act.refused`; `04` names
+    `contest.resolved` for a third, which the live fold never emits, and S27.4's `attempt.refused` lost its
+    only emitter at B03.55)."""
+    assert len(THREE) == 2, FOLD_KINDS
+    assert set(FOLD_KINDS.values()) == {"act.ineligible", "act.refused"}
     assert set(FOLD_KINDS.values()) <= EVENT_KINDS
     # the roster is DERIVED: every verb-row column and every matrix `emits:` is a member
     for name, row in VERB_TABLE.items():
@@ -199,8 +200,8 @@ def test_inv7_the_fold_mints_no_kind_a_column_does_not_declare():
 def test_inv7_the_fold_reads_each_literal_from_the_roster_not_from_its_body(monkeypatch):
     """OBSERVED, NOT GREPPED: point each constant at a kind no column declares and drive
     the fold path that emits it. A body literal left behind would emit the old kind and raise nothing;
-    reading the roster raises on the planted one. Two paths, two observations (the third, S27.4's
-    `attempt_refused` arm of the fold, is deleted: B03.55)."""
+    reading the roster raises on the planted one. Two paths, two observations (a third, S27.4's
+    `attempt_refused` arm of the fold, was deleted at B03.55 with its roster key)."""
     w, d = _world()
     # (1) `ineligible`: a predecessor removed the actor (S27.1)
     monkeypatch.setattr(_resolve, "FOLD_INELIGIBLE", "act.vanished")

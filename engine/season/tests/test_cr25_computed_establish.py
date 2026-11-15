@@ -10,7 +10,8 @@ the same world where one is needed so neither half can pass for the other's reas
      `seated_on_the_rung_above_structure` conjuncts (ii) and (iii) follow from (iv) (CR-11's design, 'card and
      tree differ'), so this test refuses at (iii) and at (iv) alike and CANNOT TELL THE TWO APART; it asserts
      both are false and (i), (ii) true;
-  4. a re-remit of a VACANT office outside purview refuses (H-144 (b)); control: the seat with purview executes;
+  4. a re-remit of a VACANT office outside purview refuses -- since H-291 (B03.81) at the overlay arm's
+     `founds_over`, no longer at H-144 (b); control: the seat with purview executes;
   5. a reduction of a `revocation: None` seat's grant refuses (H-132 (b)); controls: the same seat's grant
      WIDENED executes, and a reduction of a seat whose basis admits the exercised seat executes;
   6. the founder revokes the founded Lord through the seat that holds `revoke`, and it executes.

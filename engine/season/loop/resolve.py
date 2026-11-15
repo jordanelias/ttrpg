@@ -550,7 +550,7 @@ def _fold(self, w: "World", token: Token, a: Act,
     # Outcome-specific earning in the generic fold is the FORCED choice: the data-driven alternative is a
     # conditional-emission column, and `04 §A.3` says of one more column "A seventh column has no such
     # argument available"; `tell` writes nothing, so no effect runs to earn the kind through `earned`.
-    # The fold's own kinds are the declared column `rosters.yaml: fold_kinds` (`act.refused`, `attempt.refused`).
+    # The fold's own kinds are the declared column `rosters.yaml: fold_kinds` (`act.ineligible`, `act.refused`).
     kinds = tuple(k for k in kinds if k != CONFIDENCE_BROKEN or _confidence_broken(w, a, row))
     # Causes: the act and its occasion, both stamped by `_act_events` (IN-50).
     # ⚠ CP-T03-00 (`-08` AM-C-01), FOLD-WIDE: EACH KIND'S EVENT CARRIES ONLY THE CHANGES OF THE SUBJECTS
@@ -604,8 +604,9 @@ def _confidence_broken(w: "World", a: Act, row: "VerbRow") -> bool:
     ⚠ THE ACTOR'S OWN LEDGER AND NO OTHER. `04 §B.2:250` says: *"The carve-out is exact and it is not
     a widening: the fold may ask the ACTOR'S OWN ledger, through the `PersonInterior` snapshot the act
     carries, and no other."* `04 §B.9:423` types the act `Act := ( id, actor, via?, verb, refs,
-    payload, terms?, scene )`, which has no slot for a snapshot, and no `PersonInterior` class exists
-    in `engine/`: the spec is AMBIGUOUS between the two sections. PICKED: the live read of the
+    payload, terms?, scene )`, which has no slot for a snapshot, and `Act` here has none either: a
+    `PersonInterior` now exists (`state/carriers.py`) but `loop/deliberate.py` builds it for `decision/`
+    at CHOOSE and no act carries it to RESOLVE, so the spec is still AMBIGUOUS between the two sections. PICKED: the live read of the
     ACTOR'S OWN ledger, `w.persons[a.actor].ledger`, the precedent `queries/world_q.py`'s `claim.held`
     stem sets for `tell`'s `holds` conjunct (`WorldReader` has no stem for this match), handed bare to
     `queries/person_q.py::confided_outside`, the match's one owner beside `said_of`. REASON: carrying

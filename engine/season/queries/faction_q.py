@@ -149,8 +149,9 @@ def standing(w: World, prop: str, rung_id: str) -> FactionStanding:
 
     ⚠ `footprint` IS `world_q.footprint`'s, NOT `resolve(w, prop).holdings`. The brief named
     `holdings`, and its own test and gate name `footprint(w, f)`; the two differ (holdings is the
-    members' `hold` objects, footprint is the faction's own holds plus its members' presence), and
-    measured at `build_realm(0)` after one season they are unequal for every faction holding a rung."""
+    members' `hold` objects, footprint is those holds, the faction's own, and its members' presence),
+    so `holdings` is a subset of `footprint` (the test asserts it) and the two are equal only for a
+    faction whose members sit nowhere but in rungs they hold."""
     fp = tuple(footprint(w, prop))
     present, persons = density(w, rung_id, prop)
     share, undetermined = sovereign_fraction(w, rung_id)
