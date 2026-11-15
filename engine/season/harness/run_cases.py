@@ -7,7 +7,7 @@ records what went wrong without them, and re-tightened here:
      verdict is a keyword routing over prose, and keyword routing is crude.
   2. **A row that does not route is reported UNMAPPED, never passed.** Silence is not a pass.
   3. **A case more than half of whose `core` rows fail to route is NOT-ASSESSED**, not graded.
-     Grading it PLAYABLE would be the instrument flattering the shape by failing to aim at it.
+     Grading it DECLARED-PRESENT would be the instrument flattering the shape by failing to aim at it.
   4. **Every route matches on WORD BOUNDARIES with explicit negative guards.** #351's most
      expensive correction was a bare substring `ambient` catching ambient-MATERIAL rows (8 -> 3)
      and a bare `counter` matching inside "counter-productive" (10 -> 8). Both are guarded here.
@@ -301,7 +301,7 @@ def grade(case: dict) -> dict:
         # The row's verdict is the WORST of its declarations. A row resting on four things is
         # blocked if any one of them is missing, which is what "rests on" means.
         # ⚠ THREE OUTCOMES. A row every one of whose declarations RESTS ON AN INJECTED DEFAULT
-        # is not a pass: `ASSUMED` carries into the case verdict as DEGRADED, never PLAYABLE.
+        # is not a pass: `ASSUMED` carries into the case verdict as DEGRADED, never DECLARED-PRESENT.
         # Publishing those as PASS is what put seven false passes in the caselog.
         # ⚠ AN UNBOUND TOKEN IS AN AUTHORING ERROR, NOT A DESIGN FINDING, AND CONFLATING THEM
         # PUBLISHED THE SECOND WEARING THE FIRST'S CLOTHES. `resolve()` distinguishes them --
@@ -335,7 +335,7 @@ def grade(case: dict) -> dict:
     # verdict because until it is fixed nothing the row says can be believed.
     broken = [r for r in routed if r["verdict"]["verdict"] == "INSTRUMENT-ERROR"]
 
-    # HONESTY RULE 3: **a case with ANY unmapped `core` row may not be graded PLAYABLE.**
+    # HONESTY RULE 3: **a case with ANY unmapped `core` row may not be graded DECLARED-PRESENT.**
     #
     # ⚠ THE `more than half` CLAUSE THAT STOOD HERE IS DELETED, AS INERT. It read
     # `elif core and len(core_unmapped) * 2 > len(core): NOT-ASSESSED`, and it could never be the
@@ -346,9 +346,9 @@ def grade(case: dict) -> dict:
     # it named -- which is `CLAUDE.md` §0.1 pt 2 exactly: an assertion that cannot observe the
     # failure it excludes. Found by the `W10` adversarial pass.
     #
-    # The strict clause was added after reading the first PLAYABLE list. Five of the twelve PLAYABLE verdicts in
+    # The strict clause was added after reading the first DECLARED-PRESENT list. Five of the twelve DECLARED-PRESENT verdicts in
     # the first run rested on one or two routed core rows with other core rows sitting
-    # unmapped beside them -- one case reached PLAYABLE on a single distinct probe with three
+    # unmapped beside them -- one case reached DECLARED-PRESENT on a single distinct probe with three
     # rows unrouted. That is the instrument certifying a season it never aimed at, which is the
     # flattering direction and the one nobody notices.
     #
@@ -362,18 +362,18 @@ def grade(case: dict) -> dict:
     elif not core_routed:
         # THE ZERO-CORE AND ZERO-DECLARED CASE. This is the only branch the strict clause below
         # cannot reach: a case with NO core rows at all has an empty `core_unmapped`, so nothing
-        # else would stop it reaching PLAYABLE on its non-core rows alone.
+        # else would stop it reaching DECLARED-PRESENT on its non-core rows alone.
         verdict = "NOT-ASSESSED"
     elif core_unmapped:
         verdict = "NOT-ASSESSED"
     # ⚠ `ASSUMED` LANDS HERE, WITH GAP. A row resting on an injected default nobody ratified is
     # a real dependency, and a case built entirely on such rows is DEGRADED — playable only if
-    # the defaults happen to be right. Grading it PLAYABLE is the flattering direction, and it is
+    # the defaults happen to be right. Grading it DECLARED-PRESENT is the flattering direction, and it is
     # what seven rows did until the `W10` adversarial pass read the `detail` strings.
     elif any(r["verdict"]["verdict"] in ("GAP", "NOT-REFUSED", "ASSUMED") for r in routed):
         verdict = "DEGRADED"
     else:
-        verdict = "PLAYABLE"
+        verdict = "DECLARED-PRESENT"
 
     return dict(
         id=case["id"], name=case.get("name", ""), scale=case.get("scale", ""),

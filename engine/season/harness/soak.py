@@ -22,7 +22,7 @@ WHAT THIS IS NOT. It is not a second `populated.run` — that owner is untouched
 reused for its construction (`build_realm`, `make_chooser`, `SeasonDriver`, `resolvable_verbs`,
 `H`, `draw_factory`). This module only keeps ONE driver alive across many seasons, where every
 existing caller builds a fresh one, and records what crosses its path along the way. It is not a
-second `corpus_run`/`run_cases`: those still own PLAYABLE/DEGRADED/BLOCKED and R1/R3/R4/R5; the two
+second `corpus_run`/`run_cases`: those still own DECLARED-PRESENT/DEGRADED/BLOCKED and R1/R3/R4/R5; the two
 grades here are about duration alone and read only the rows this harness itself wrote.
 
 WHERE THE OUTPUT GOES, AND WHY NOT `engine/season/runs/`. That tree is `harness/report.py`'s

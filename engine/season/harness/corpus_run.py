@@ -1,7 +1,7 @@
 """EVERY CASE, EXECUTED — not graded, and not merely attempted.
 
 `run_cases.py` GRADES the corpus: it reads each case's prose `need` rows, looks up the authored
-declaration naming which verb / hole / probe answers each one, and reports PLAYABLE / DEGRADED /
+declaration naming which verb / hole / probe answers each one, and reports DECLARED-PRESENT / DEGRADED /
 BLOCKED / NOT-ASSESSED. That is a judgement about whether the engine COULD support a character.
 
 This RUNS them. Jordan asked for it, 2026-09-02: *"shouldn't we consider running all NPCs and all

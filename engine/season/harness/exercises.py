@@ -269,7 +269,7 @@ def resolve(token: str, *, probes, verb_table, resolvable, register, matrix) -> 
         # is not evidence the design does the thing.
         #
         # THREE STATES, NOT TWO. `absent` blocks; `assumption` is ASSUMED -- the row runs, on
-        # something nobody ratified, and the case is DEGRADED rather than PLAYABLE; `ruled` and
+        # something nobody ratified, and the case is DEGRADED rather than DECLARED-PRESENT; `ruled` and
         # `measured` pass. Found by the `W10` adversarial pass.
         if g == "absent":
             return dict(ok=False, bound=True, kind=what, detail=f"{token}: absent", grade=g)

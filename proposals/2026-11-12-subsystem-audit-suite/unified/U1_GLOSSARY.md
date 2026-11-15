@@ -118,6 +118,7 @@ derived score, choice score).
 | **legibility** | how far others can read a person (A-43) | `person_q.legibility` (P) | — | — |
 | **knowledge kind** | `mundane` or `thread_substrate`: what a claim is about | `rosters.yaml: knowledge_kinds` (T) | "ground" | — |
 | **person interior** | the frozen copy of a person the chooser reads, which no assignment can change, as an interior is what is inside the person (B03.58; `04` §B.2 row 2, §C.3) | `state/carriers.py::PersonInterior`, built by `interior_of` (T) | "snapshot", "projection" for the same copy; the interior as derived scores (the row of §B, *the interior*) is a different sense: it is what a person's state yields, this is the copy of that state; the identifier `capability` stays (§H; a rename is Jordan's amendment, D-06) | — |
+| **declared-present** | the case verdict meaning every token a case declares resolves to something present in the built world; it says nothing about play (B03.63) | `harness/run_cases.py::grade` (C) | **playable** for the same verdict: *playable* keeps its plain sense, a run that was played, and the old verdict `PLAYABLE` (a declared token found) is the rejected use; the REM-31 host mode written `PLAYABLE` (a fight a host plays turn by turn) is a different thing and keeps its name | — |
 
 ## D. World, places, seats and documents
 

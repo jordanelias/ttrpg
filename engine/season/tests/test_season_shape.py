@@ -895,27 +895,27 @@ def _a_satisfied_token() -> str:
     raise AssertionError("no register row is `ruled` or `measured` -- fixture cannot be built")
 
 
-def test_playable_requires_that_every_core_row_was_actually_aimed_at():
-    """A case with ANY unmapped `core` row may not be graded PLAYABLE. Five of the twelve
-    PLAYABLE verdicts in the first run rested on one or two routed core rows with other core
-    rows sitting unmapped beside them -- one reached PLAYABLE on a SINGLE distinct probe with
+def test_declared_present_requires_that_every_core_row_was_actually_aimed_at():
+    """A case with ANY unmapped `core` row may not be graded DECLARED-PRESENT. Five of the twelve
+    DECLARED-PRESENT verdicts in the first run rested on one or two routed core rows with other core
+    rows sitting unmapped beside them -- one reached DECLARED-PRESENT on a SINGLE distinct probe with
     three rows unrouted. That is the instrument certifying a season it never aimed at.
 
     ⚠ REWRITTEN SO IT CAN OBSERVE ITS OWN FAILURE. The old body declared nothing, so both rows
     were unmapped and `not core_routed` decided it -- delete the clause this test names and the
     test still passed. The pair below is the discriminating input: identical cases differing
     ONLY in whether the second core row is declared, and the rule is the sole thing that
-    separates PLAYABLE from NOT-ASSESSED."""
+    separates DECLARED-PRESENT from NOT-ASSESSED."""
     ok = _a_satisfied_token()
     aimed = "a person with no office must be able to act"
     unaimed = "zzzz qqqq wwww vvvv"
 
-    # CONTROL: both core rows declared -> the case is reachable at PLAYABLE.
+    # CONTROL: both core rows declared -> the case is reachable at DECLARED-PRESENT.
     with _declared("T", {aimed: [ok], unaimed: [ok]}):
         both = R.grade({"id": "T", "season_requires": [
             {"need": aimed, "hardness": "core"}, {"need": unaimed, "hardness": "core"}]})
-    assert both["verdict"] == "PLAYABLE", (
-        f"the control does not reach PLAYABLE ({both['verdict']}), so the test below proves "
+    assert both["verdict"] == "DECLARED-PRESENT", (
+        f"the control does not reach DECLARED-PRESENT ({both['verdict']}), so the test below proves "
         "nothing about the rule -- it would pass for any reason at all")
 
     # THE RULE: one core row left undeclared, everything else identical.
@@ -929,7 +929,7 @@ def test_playable_requires_that_every_core_row_was_actually_aimed_at():
 def test_a_case_with_no_core_rows_at_all_is_not_assessed():
     """The one input the strict clause cannot reach, and therefore the only reason the
     `not core_routed` branch still exists. `core_unmapped` is empty here, so nothing else would
-    stop a case reaching PLAYABLE on its non-core rows alone.
+    stop a case reaching DECLARED-PRESENT on its non-core rows alone.
 
     (`test_a_case_more_than_half_unrouted_on_core_is_not_assessed` was RETIRED with the rule it
     named. That rule's own predicate proved `core_unmapped` non-empty, so the strict clause
@@ -984,13 +984,13 @@ def test_a_blocker_outranks_an_unaimed_row():
     assert got["blockers"] == ["tie / knot"], got["blockers"]
 
 
-def test_no_playable_case_has_an_unmapped_core_row():
+def test_no_declared_present_case_has_an_unmapped_core_row():
     """The standing invariant over the ACTUAL run, not a synthetic case."""
     R._VERDICTS.clear()
     rep = R.main()
     bad = [c["id"] for k in ("NPC", "ARC") for c in rep[k]
-           if c["verdict"] == "PLAYABLE" and c["core_unmapped"]]
-    assert not bad, f"PLAYABLE cases with unaimed core rows: {bad}"
+           if c["verdict"] == "DECLARED-PRESENT" and c["core_unmapped"]]
+    assert not bad, f"DECLARED-PRESENT cases with unaimed core rows: {bad}"
 
 
 def test_r3_the_a5_control_actually_fires():
@@ -6791,7 +6791,7 @@ def test_w10_the_deciding_path_is_the_authored_overlay():
     assert bare["verdict"] == "NOT-ASSESSED" and bare["core_unmapped"] == 1, bare
     with _declared("T", {need: [ok]}):
         got = R.grade({"id": "T", "season_requires": [{"need": need, "hardness": "core"}]})
-    assert got["verdict"] == "PLAYABLE" and got["core_routed"] == 1, got
+    assert got["verdict"] == "DECLARED-PRESENT" and got["core_routed"] == 1, got
     assert not (files.PACKAGE_DIR / "route_precision.py").exists(), (
         "route_precision.py survives -- a guard for a thing that no longer exists is the "
         "apparatus §0.3 is about, and `PLAN.md` W10 retires it with the router")
@@ -6914,23 +6914,23 @@ def test_the_binding_guard_sees_all_four_ways_a_token_can_name_nothing():
     assert got["bound"] is True and got["ok"] is False, got
 
 
-def test_w10_no_playable_verdict_rests_on_an_undeclared_row():
+def test_w10_no_declared_present_verdict_rests_on_an_undeclared_row():
     """`PLAN.md` `W10`'s third Proof clause, asserted over the whole corpus rather than sampled.
 
-    ⚠ THE CORPUS CLAUSE IS VACUOUS TODAY AND SAYS SO. Nothing in either lane grades PLAYABLE, so
-    a `for`-loop over the PLAYABLE verdicts iterates zero times and the assertion below is true of
-    an empty set -- §42.2's polarity rule applied to a guard rather than to evidence: no PLAYABLE
-    case is not the same fact as no BAD PLAYABLE case. It is kept because it is the clause that
+    ⚠ THE CORPUS CLAUSE IS VACUOUS TODAY AND SAYS SO. Nothing in either lane grades DECLARED-PRESENT, so
+    a `for`-loop over the DECLARED-PRESENT verdicts iterates zero times and the assertion below is true of
+    an empty set -- §42.2's polarity rule applied to a guard rather than to evidence: no DECLARED-PRESENT
+    case is not the same fact as no BAD DECLARED-PRESENT case. It is kept because it is the clause that
     starts biting the moment authoring reaches a full case, and it is PAIRED with a constructed
     control so the mechanism it guards is exercised now rather than whenever that happens."""
     rep = json.loads(files.RESULTS_JSON.read_text())
     bad = [c["id"] for sec in ("NPC", "ARC") for c in rep[sec]
-           if c["verdict"] == "PLAYABLE" and c["core_unmapped"]]
-    assert not bad, f"PLAYABLE with undeclared core rows: {bad}"
-    live = [c["id"] for sec in ("NPC", "ARC") for c in rep[sec] if c["verdict"] == "PLAYABLE"]
+           if c["verdict"] == "DECLARED-PRESENT" and c["core_unmapped"]]
+    assert not bad, f"DECLARED-PRESENT with undeclared core rows: {bad}"
+    live = [c["id"] for sec in ("NPC", "ARC") for c in rep[sec] if c["verdict"] == "DECLARED-PRESENT"]
     if not live:
-        # THE CONTROL. PLAYABLE must be REACHABLE (or the clause above is unfalsifiable in a
-        # second way -- a pipeline that graded nothing PLAYABLE ever would also pass), and adding
+        # THE CONTROL. DECLARED-PRESENT must be REACHABLE (or the clause above is unfalsifiable in a
+        # second way -- a pipeline that graded nothing DECLARED-PRESENT ever would also pass), and adding
         # one undeclared core row to that same reachable case must take it away.
         ok = _a_satisfied_token()
         a, b = "a fully declared core need", "the same case, one core row undeclared"
@@ -6938,7 +6938,7 @@ def test_w10_no_playable_verdict_rests_on_an_undeclared_row():
             reach = R.grade({"id": "T", "season_requires": [{"need": a, "hardness": "core"}]})
             lose = R.grade({"id": "T", "season_requires": [
                 {"need": a, "hardness": "core"}, {"need": b, "hardness": "core"}]})
-        assert reach["verdict"] == "PLAYABLE", reach
+        assert reach["verdict"] == "DECLARED-PRESENT", reach
         assert lose["verdict"] == "NOT-ASSESSED" and lose["core_unmapped"] == 1, lose
     authored = sum(len(c["routed"]) for sec in ("NPC", "ARC") for c in rep[sec])
     undeclared = sum(len(c["unmapped"]) for sec in ("NPC", "ARC") for c in rep[sec])
