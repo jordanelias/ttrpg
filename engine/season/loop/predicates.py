@@ -139,10 +139,11 @@ def _req_confer(w: "World", a: "Act") -> bool:
     of the conferral basis."""
     obj = office_named_by(a)
     if not obj or not isinstance(obj, str) or obj not in w.offices:
-        return False                       # (a list `subject`/`office` is unhashable: refuse, never raise)
+        # (a list `subject`/`office` is unhashable: refuse, never raise)
+        return _refuse("a confer names no office the world holds", f"{a.actor} on {obj!r}")
     off = w.offices[obj]
     if not has_conferral_basis(off):
-        return False                       # no conferral basis: the office cannot be conferred
+        return _refuse("a confer of an office with no conferral basis", f"{a.actor} on {obj!r}")
     # Batch B-I close (C1): THE CONFEREE IS A LIVING PERSON. `to` comes from the conferrer's own
     # claims (`known_persons`), which can name somebody since dead, and nothing downstream asks:
     # `_admits` refuses only a missing or self `to`, and the gate admits the hold under the
@@ -150,9 +151,13 @@ def _req_confer(w: "World", a: "Act") -> bool:
     # is untyped, so it is asked here -- before `may_fill`'s purview walk, the dearer conjunct.
     conferee = binding_from_act(a).get("to")
     if not isinstance(conferee, str) or conferee not in w.persons:
-        return False                       # (a list `to` is unhashable: refuse, never raise)
+        # (a list `to` is unhashable: refuse, never raise)
+        return _refuse("a confer on a conferee who is no living person the world holds",
+                       f"{a.actor} to {conferee!r}")
     if not may_fill(w, a.actor, a.via, off):
-        return False                       # G3: the seat exercised does not reach the seat conferred
+        # G3: the seat exercised does not reach the seat conferred
+        return _refuse("a confer the seat exercised does not reach the office conferred",
+                       f"{a.actor} via {a.via!r} on {obj!r}")
     tenures = w.tenures                    # one view for the three scans below
     if not any(t.kind == "hold" and t.object == obj and t.live for t in tenures):
         return True                        # 1-per-object satisfied
@@ -171,12 +176,17 @@ def _req_confer(w: "World", a: "Act") -> bool:
     holder = next((t.subject for t in tenures
                    if t.kind == "hold" and t.object == obj and t.live), None)
     if holder is None or holder == conferee:
-        return False                       # B-I close, Phase 3 F1: conferring a seat on its own holder
-                                           # changes nothing but closes and reopens his edge
+        # B-I close, Phase 3 F1: conferring a seat on its own holder changes nothing but closes and
+        # reopens his edge
+        return _refuse("a confer of a seat on its own holder", f"{a.actor} to {conferee!r} on {obj!r}")
     if any(t.kind == "commit" and t.subject == holder and t.live for t in tenures):
-        return False
+        return _refuse("a confer displacing a holder who carries a live commit",
+                       f"{a.actor} displacing {holder!r} on {obj!r}")
     # G3: displacing the holder CLOSES HIS EDGE -- T-o, through the seat exercised.
-    return holder == a.actor or may_revoke(w, a.actor, a.via, off)
+    if holder == a.actor or may_revoke(w, a.actor, a.via, off):
+        return True
+    return _refuse("a confer displacing a holder the seat exercised has no revocation authority over",
+                   f"{a.actor} via {a.via!r} displacing {holder!r} on {obj!r}")
 
 
 @requires_predicate("succeed")
@@ -366,24 +376,32 @@ def _req_establish(w: "World", a: "Act") -> bool:
     try:
         off = office_founded_by(w, a)      # v11 CR-25: the overlay keys, else the derivation from subject and via
     except (Unowned, Unspecified, Forbidden):
-        return False                       # the constructor refused it: translated, never filled
+        # the constructor refused it: translated, never filled
+        return _refuse("an establish the office's constructor refused", f"{a.actor} via {a.via!r}")
     if off is None:
-        return False                       # an operand the office needs is not on the act
+        return _refuse("an establish lacking an operand the office needs", f"{a.actor} via {a.via!r}")
     if off.rung not in w.rungs:
-        return False                       # "a rung to establish it at"
+        # "a rung to establish it at"
+        return _refuse("an establish at no rung the world holds", f"{a.actor} at {off.rung!r}")
     if not has_conferral_basis(off):
-        return False                       # "the establishing office's conferral basis"
+        # "the establishing office's conferral basis"
+        return _refuse("an establish of an office with no conferral basis", f"{a.actor} on {off.id!r}")
     if not has_filler(off):
-        return False                       # a seat only the heir's claim opens, with no title passing it (v10 IN-61)
+        # a seat only the heir's claim opens, with no title passing it (v10 IN-61)
+        return _refuse("an establish of a seat only the heir's claim opens, with no title passing it",
+                       f"{a.actor} on {off.id!r}")
     held_as = w.class_of(off.id)
     if held_as is not None:
         if held_as != "Office":
-            return False                   # the id is a person's, a rung's... -- `class_of` ambiguity
+            # the id is a person's, a rung's... -- `class_of` ambiguity
+            return _refuse("an establish on an id some other class holds", f"{a.actor} on {off.id!r}")
         cur = w.offices[off.id]
         if not (off.post == cur.post and off.rung == cur.rung and off.body == cur.body
                 and off.faction == cur.faction and off.conferral == cur.conferral
                 and off.revocation == cur.revocation):
-            return False                   # re-founding, which `writes:` does not declare
+            # re-founding, which `writes:` does not declare
+            return _refuse("an establish naming a different belonging for an existing office "
+                           "(re-founding)", f"{a.actor} on {off.id!r}")
     # 5. G3 -- the re-stamp writes EVERY sitting holder's grant, the actor's own included.
     #
     # ⚠ CORRECTED (code-review pass on the accumulated Phase alpha+beta diff, 2026-09-27): this
@@ -407,7 +425,8 @@ def _req_establish(w: "World", a: "Act") -> bool:
     # anywhere in the realm. A founding is no existing office; its purview check is `founds_over`'s (ii).
     holds = [t for t in w.tenures if t.kind == "hold" and t.object == off.id and t.live]
     if (held_as == "Office" or holds) and not may_fill(w, a.actor, a.via, off):
-        return False
+        return _refuse("an establish on an existing office the seat exercised does not reach",
+                       f"{a.actor} via {a.via!r} on {off.id!r}")
     # v11 CR-25, M8 taken, H-132 (b) [ASSUMPTION; medium; Jordan to correct; revert: drop this clause]: A
     # REDUCTION IS A PARTIAL REVOCATION. A re-stamp that drops from a sitting holder's grant
     # (`Tenure.granted_acts`, the snapshot the re-stamp overwrites) an act the new remit does not carry must
@@ -421,7 +440,8 @@ def _req_establish(w: "World", a: "Act") -> bool:
     keeps = set(off.remit_acts)
     if (held_as == "Office" and any(set(t.granted_acts) - keeps for t in holds)
             and not may_revoke(w, a.actor, a.via, w.offices[off.id])):
-        return False
+        return _refuse("an establish reducing a sitting holder's grant without revocation authority",
+                       f"{a.actor} via {a.via!r} on {off.id!r}")
     return True
 
 
