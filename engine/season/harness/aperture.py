@@ -103,6 +103,10 @@ state that moved). The block prints one line per verb with its clean count and i
 executions through a seat), then `built out <k> of <len(VERB_TABLE)>` and a `FOUGHT FIELDS` line. It is a
 reading, never a threshold.
 
+**NULL SCENES (IS-A-07).** After BUILT OUT, the acts none of whose Events carries a durable write, by verb
+and by outcome class (made, refused, graded loss), then the line `storybar --null-scenes` prints.
+`harness/storybar.py::null_scenes` owns the count and the definition; this module prints it.
+
 **WHAT THIS DOES NOT DO.** It grades nothing, pins nothing and is wired into no gate. Its output is a
 measurement of one seeded season, re-runnable: `python -m engine.season.harness.aperture [seasons]
 [seed]` or `... <seasons> --seeds S [S ...]`.
@@ -675,6 +679,7 @@ def instrumented_season(w, seasons: int) -> dict:
         if not (made or no):
             neither[a.verb] += 1
     graded = Counter(a.verb for a in graded_losses(w, seasons))
+    from .storybar import null_scenes      # storybar imports this module (`seats`), so only at call time
     why = refusal_reading(w, d, rows)
     census = kind_census(w, d)
     told = census["counts"].get("news.told", {}).get("events", 0)
@@ -685,6 +690,7 @@ def instrumented_season(w, seasons: int) -> dict:
             "executed": dict(executed), "refused": dict(refused), "neither": dict(neither),
             "both": dict(both), "graded": dict(graded), "unrowed": unrowed_acts(w),
             "built_out": built_out(w, d, rows), "fought": fought_fields(w, d, rows),
+            "null_scenes": null_scenes(w, seasons),
             "pools": {v: {a: dict(c) for a, c in per.items()} for v, per in pools.items()},
             "refusal_kinds": {v: dict(c) for v, c in refusal_kinds.items()},
             "wrong_kind": wrong_kind(w, d, rows, why["post_acts"], cast),
@@ -809,6 +815,21 @@ def built_out_lines(m: dict) -> list:
     f = m["fought"]
     out.append(f"  FOUGHT FIELDS  won+lost {f['won_lost']}  unopposed {f['unopposed']}  "
                f"stance receipts on the losing side {f['stance']}")
+    return out
+
+
+def null_scene_lines(m: dict) -> list:
+    """The NULL SCENES block of one world's `report`, after BUILT OUT: the acts none of whose Events carries
+    a durable write (`storybar.null_scenes` owns the definition and the count), by verb and by outcome
+    class, then the line `storybar --null-scenes` prints. The scene budget's debit is a Query and writes no
+    cell, so it is not counted (A-81). A reading, never a threshold."""
+    from .storybar import NULL_CLASSES, null_line      # storybar imports this module, so only at call time
+    r = m["null_scenes"]
+    out = ["\n  NULL SCENES (acts whose Events carry no durable write)"]
+    for v in sorted({v for v, _ in r["null"]}):
+        out.append(f"    {v:<16}" + "  ".join(f"{c.replace('_', ' ')} {r['null'].get((v, c), 0):>4}"
+                                                for c in NULL_CLASSES))
+    out.append("    " + null_line(r))
     return out
 
 
@@ -1278,6 +1299,7 @@ def report(res: dict) -> list:
         out.extend(pools_lines(m))
         out.extend(engine_lines(m))
         out.extend(built_out_lines(m))
+        out.extend(null_scene_lines(m))
         # -- why each refusal refused (REM-11) ----------------------------------------------
         out.extend(_refusal_blocks(m))
         # -- questions by source ----------------------------------------------------------

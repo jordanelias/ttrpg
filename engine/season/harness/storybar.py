@@ -22,6 +22,12 @@ PERSON it takes `most_cited`'s and prints the name. Each seed's report ends on t
 (`removal_verdict`, which also says what each reading is expected to be). This is the only mode that takes
 several seeds.
 
+`--base-seed S [S ...] --seasons K --null-scenes` (`null_scenes`, IS-A-07, A-81): one realm per seed under the
+shipped arm, and per seed, per season and pooled the count of acts that left no durable write, as `null_scenes
+total=<n> null=<n> | <verb/class=n, ...>`. Report-only: it asserts no zero. Takes no `--n` or `--arms`;
+`harness/aperture.py` prints the same reading as its NULL SCENES block. `null_scenes` owns the definitions of
+a durable write and of a null scene.
+
 THE READING (`read`, a pure function over the log and `SeasonDriver.act_of`, so a test can plant on
 it). For each Event in the log its act is `act_of[e.id]`; an act's antecedents are, over every cause
 `c` of every Event of that act:
@@ -79,13 +85,15 @@ import argparse
 import copy
 import os
 import sys
-from collections import Counter
+from collections import Counter, defaultdict
 
+from ..data.matrix import MATRIX, Step
 from ..decision import make_chooser
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..data.verbs import opportunity_key
 from ..queries.person_q import legitimacy, stability
-from ..state.carriers import subject_of
+from ..state.carriers import Receipt, subject_of
+from ..state.gate import TENURE_CLOSED
 from ..state.ids import H, ROOT, draw_factory
 from .aperture import seats
 from .corpus_run import attempts, graded_losses
@@ -271,6 +279,132 @@ def executed_per_season(items, seasons: int) -> list:
     rows = list(items)
     return [(executed_summary(i for i in rows if i[0]["season"] == s),
              executed_summary(i for i in rows if i[0]["season"] <= s)) for s in range(seasons)]
+
+
+# ---------------------------------------------------------------------------------------------
+# THE NULL SCENES READING (IS-A-07, A-81). Report-only; beside the reading above, never instead of it.
+# ---------------------------------------------------------------------------------------------
+
+#: The `(kind, field)` cell a claim deposit writes (`write_matrix.yaml`), and the one write the count
+#: restricts to a holder who matters to the act.
+CLAIM_CELL = ("Person", "claim_ledger")
+
+#: The outcome classes of `null_scenes`, in print order. An act none of whose row's kinds is in the log
+#: (`attempts` gives it neither `made` nor `refused`) is classed `neither` and counted, not dropped.
+NULL_CLASSES = ("made", "refused", "graded_loss", "neither")
+
+
+def _seat_holders(w, subject: str) -> frozenset:
+    """Who an act's `subject` stands for: the person himself, or the live holders of the office it names
+    (`aperture.seats`' inverse); nobody for anything else."""
+    if subject in w.persons:
+        return frozenset({subject})
+    if subject in w.offices:
+        return frozenset(pid for pid, oids in seats(w).items() if subject in oids)
+    return frozenset()
+
+
+def null_scenes(w, n: int, scope=None) -> dict:
+    """`{"total": int, "null": Counter((verb, cls))}` over `corpus_run.attempts(w, n)`, the one owner of
+    made and refused: how many acts there are, and which of them left no durable write.
+
+    A *durable write* is a Receipt on a `write_matrix.yaml` cell whose `steps` include `RES` or `WIT`,
+    other than the scene budget's own cell; a claim deposited in the actor's or a counterparty's ledger
+    counts; a sighting in a bystander's ledger alone does not (the act must matter to someone in it).
+    `[ASSUMPTION; medium; Jordan to correct; revert: any claim counts]`. A-62: the budget is a Query and
+    writes no cell, so nothing is excluded for it; if a later build makes the debit a write, that cell is
+    excluded by name here. A *null scene* is an act none of whose Events carries a durable write.
+
+    An act's Events are those that name it in `causes[]` and, for a claim deposit, those caused by one of
+    them (`loop/witness.py` gives a deposit the witnessed Event as its cause, not the act). A Receipt is
+    read as the cell it wrote by `arc._Records.of`, the one reader of that, and a seat Receipt on a
+    `tenure.closed` Event is skipped as `arc.read_arcs` skips it. The deposit's holder is read off the
+    ledgers as the world ends, so a claim evicted from its ledger has no holder and does not count.
+    The counterparty is `subject_of(act)` when it is a person, or the live holder of the office it names.
+
+    `cls` is `graded_loss` where `corpus_run.graded_losses` has the act, else `refused` where the act has
+    a refusal kind in the log (so a `march` that both declared and was refused is `refused`), else `made`,
+    else `neither`.
+
+    `scope`, `None` by default, is a predicate over an attempt of `attempts` (`(act, made, refused)`) that
+    narrows WHICH acts are counted and changes nothing in what counts as a write [ASSUMPTION: the scope is
+    an argument of this function, not a filter each caller writes -- basis: one owner of the count,
+    CLAUDE.md §8; it adds no rule]. Reads only."""
+    from .arc import _Records          # arc imports this module (`refusal_sets`), so only at call time
+    records = _Records(w)
+    named: dict = defaultdict(list)    # act id -> the Events naming it in `causes[]`
+    by_event: dict = defaultdict(set)  # Event id -> the ids of the acts naming it
+    events = list(w.log)
+    for e in events:
+        for c in e.causes:
+            if w.acts.get(c) is not None:
+                named[c].append(e)
+                by_event[e.id].add(c)
+    for e in events:
+        if any(isinstance(r, Receipt) and (records.of(r, e)[0] == CLAIM_CELL) for r in e.changes):
+            for c in e.causes:
+                for aid in by_event.get(c, ()):
+                    if aid not in by_event.get(e.id, ()):
+                        named[aid].append(e)
+    rows = attempts(w, n)
+    graded = frozenset(a.id for a in graded_losses(w, n))
+    total, null = 0, Counter()
+    for attempt in rows:
+        a, made, refused = attempt
+        if scope is not None and not scope(attempt):
+            continue
+        total += 1
+        mine = {a.actor} | _seat_holders(w, subject_of(a))
+        durable = False
+        for e in named.get(a.id, ()):
+            for r in e.changes:
+                if not isinstance(r, Receipt) or (e.kind == TENURE_CLOSED and r.subject in w.offices):
+                    continue
+                pair, owner = records.of(r, e)
+                row = MATRIX.get(pair)
+                if row is None or not (Step.RESOLVE in row.steps or Step.WITNESS in row.steps):
+                    continue
+                if pair == CLAIM_CELL and owner not in mine:
+                    continue
+                durable = True
+                break
+            if durable:
+                break
+        if not durable:
+            null[(a.verb, "graded_loss" if a.id in graded else "refused" if refused
+                  else "made" if made else "neither")] += 1
+    return {"total": total, "null": null}
+
+
+def pool_null(readings) -> dict:
+    """`null_scenes`' return summed over `readings`, an iterable of such returns (one per seed)."""
+    out = {"total": 0, "null": Counter()}
+    for r in readings:
+        out["total"] += r["total"]
+        out["null"].update(r["null"])
+    return out
+
+
+def null_line(r: dict) -> str:
+    """`null_scenes total=<n> null=<n> | <verb/cls=n, ...>`, the largest count first, one owner of the
+    line `--null-scenes` prints and `aperture`'s NULL SCENES block ends on."""
+    parts = ", ".join(f"{v}/{c}={k}" for (v, c), k in sorted(r["null"].items(),
+                                                           key=lambda kv: (-kv[1], kv[0])))
+    return f"null_scenes total={r['total']} null={sum(r['null'].values())} | {parts or 'none'}"
+
+
+def null_by_season(seed: int, seasons: int, cap=None) -> tuple:
+    """`([season reading, ...], whole-run reading)` of `null_scenes` over one seeded realm run `seasons`
+    seasons under the shipped arm. A season's reading is `null_scenes` with the `scope` of the acts the
+    act store took in that season (the store is append-only, so the lengths at each season's end cut it)."""
+    ends: list = []
+    w, _d, _bounds = drive(seed, seasons, "off", cap, on_season=lambda w_, _s, _n: ends.append(len(w_.acts)))
+    store, per, lo = tuple(w.acts), [], 0
+    for hi in ends:
+        ids = frozenset(a.id for a in store[lo:hi])
+        per.append(null_scenes(w, seasons, scope=lambda attempt, ids=ids: attempt[0].id in ids))
+        lo = hi
+    return per, null_scenes(w, seasons)
 
 
 def _spread(values) -> dict:
@@ -723,12 +857,36 @@ def main(argv=None) -> int:
                          "full copy of the run")
     ap.add_argument("--at", type=int, nargs=2, metavar=("SEASON", "LAP"),
                     help="with --remove: the (season index, lap index) whose choice is suppressed")
+    ap.add_argument("--null-scenes", action="store_true",
+                    help="instead of the arm comparison: run one realm per --base-seed under the shipped "
+                         "arm and print, per seed and per season and pooled, how many acts left no "
+                         "durable write (`null_scenes`, which owns the definition): `null_scenes "
+                         "total=<n> null=<n> | <verb/class=n, ...>`. A reading, never a threshold. "
+                         "Takes no --n, --arms, --draw-seeds, --remove or --executed-only; several "
+                         "--base-seed values may be named")
     args = ap.parse_args(argv)
 
     if args.at is not None and args.remove is None:
         ap.error("--at belongs to --remove")
-    if args.remove is None and len(args.base_seed) != 1:
-        ap.error("several --base-seed values belong to --remove; every other mode takes one")
+    if args.remove is None and not args.null_scenes and len(args.base_seed) != 1:
+        ap.error("several --base-seed values belong to --remove and --null-scenes; every other mode "
+                 "takes one")
+    if args.null_scenes:
+        if args.n is not None or args.arms is not None or args.draw_seeds is not None \
+                or args.remove is not None or args.executed_only:
+            ap.error("--null-scenes takes no --n, --arms, --draw-seeds, --remove or --executed-only")
+        print(f"storybar --null-scenes base-seeds={args.base_seed} seasons={args.seasons} cap={args.cap} "
+              f"PYTHONHASHSEED={os.environ.get('PYTHONHASHSEED')}")
+        got = {seed: null_by_season(seed, args.seasons, args.cap) for seed in args.base_seed}
+        for seed, (per, whole) in got.items():
+            for s, r in enumerate(per):
+                print(f"[seed {seed}] season {s}: {null_line(r)}")
+            print(f"[seed {seed}] all seasons: {null_line(whole)}")
+        if len(got) > 1:
+            for s in range(args.seasons):
+                print(f"[pooled] season {s}: {null_line(pool_null(per[s] for per, _ in got.values()))}")
+            print(f"[pooled] all seasons: {null_line(pool_null(whole for _, whole in got.values()))}")
+        return 0
     if args.remove is not None:
         if args.n is not None or args.arms is not None or args.draw_seeds is not None \
                 or args.executed_only:

@@ -17,6 +17,7 @@ from types import SimpleNamespace as NS
 
 import pytest
 
+from ..harness import probes as P
 from ..harness import storybar as SB
 
 SEED, SEASONS, CAP = 0, 2, 10
@@ -403,3 +404,88 @@ def test_the_remove_cli_with_no_name_prints_the_name_and_a_verdict_pair_per_seed
     with pytest.raises(SystemExit) as e:
         SB.main(["--base-seed", "0", "1", "--seasons", "1", "--n", "1", "--arms", "off", "off"])
     assert e.value.code == 2
+
+
+# -- B02.20: the count of scenes that wrote nothing --------------------------------------------------
+# A planted act on a real, witnessed season; relations, never a count from a realm run.
+
+def _uttered(subject):
+    """`tiny_world`, one season in which `p_low` utters about `subject`, the witness step run as a season
+    runs it. Returns `(w, act)`: the one act of the store."""
+    w = P.tiny_world()
+
+    def choose(p, v, s, ask_budget):
+        return [P.Act_(w, p, "utter", payload={"subject": subject})] if p.id == "p_low" else []
+    P._run_d(w, P.once(choose), contest_max_depth=w.fixtures.get("contest_max_depth"))
+    (act,) = list(w.acts)
+    return w, act
+
+
+def _leave_only(w, act, holders):
+    """Empty the Receipts of every Event naming `act`, and of every claim deposit those Events caused except
+    the ones into a ledger of `holders`. Returns how many deposits were left standing (the plant's size)."""
+    held = {c.id: pid for pid, p in w.persons.items() for c in p.ledger}
+    own = {e.id for e in w.log if act.id in e.causes}
+    kept = 0
+    for e in w.log:
+        if e.id in own:
+            e.changes = []
+        elif e.kind == "claim.deposited" and any(c in own for c in e.causes):
+            if held.get(e.changes[0].subject) in holders:
+                kept += 1
+            else:
+                e.changes = []
+    return kept
+
+
+def test_null_scenes_sees_a_planted_act_that_writes_nothing(monkeypatch):
+    """IS-A-07. The act as the season left it wrote (its Proposition, and claims in the ledgers of those who
+    saw it): not null. The same act with every Receipt of its Events removed, and with the deposits of its
+    own actor's and counterparty's ledgers removed, is null, class `made`. A deposit into a BYSTANDER's
+    ledger alone does not save it; the same deposit into the actor's ledger, or into the counterparty's,
+    does (the definition's clause). The control for that clause is the definition it replaced, any claim
+    counts, which reads the bystander case as written.
+
+    MUTATION (run 2026-11-15, reverted): `_seat_holders` made to answer every person, so that any claim
+    counts -- the bystander arm reads 0 and this test reds."""
+    checked = 0
+    w, act = _uttered("p_high")
+    assert (r := SB.null_scenes(w, 1))["total"] == 1 and not r["null"], r      # it wrote: not null
+    for holders, null in ((set(), True), ({"p_mid", "p_other"}, True), ({"p_low"}, False)):
+        w, act = _uttered("p_high")
+        kept = _leave_only(w, act, holders)
+        assert (kept >= 1) == bool(holders), f"the plant left {kept} deposits for {holders}"
+        got = SB.null_scenes(w, 1)
+        assert got["total"] == 1
+        assert got["null"] == ({("utter", "made"): 1} if null else {}), (holders, got)
+        checked += 1
+    # the counterparty of the act, `p_mid`: his deposit saves it, a bystander's does not
+    for holders, null in (({"p_mid"}, False), ({"p_other"}, True)):
+        w, act = _uttered("p_mid")
+        assert _leave_only(w, act, holders) >= 1
+        assert bool(SB.null_scenes(w, 1)["null"]) is null, holders
+        checked += 1
+    # the control: where any claim counts, the bystander arm is not null
+    w, act = _uttered("p_high")
+    _leave_only(w, act, {"p_mid", "p_other"})
+    assert SB.null_scenes(w, 1)["null"], "the bystander arm is not null before the control"
+    monkeypatch.setattr(SB, "_seat_holders", lambda w_, subject: frozenset(w_.persons))
+    assert not SB.null_scenes(w, 1)["null"]
+    checked += 1
+    # the scope narrows which acts are counted and nothing else
+    assert SB.null_scenes(w, 1, scope=lambda attempt: False) == {"total": 0, "null": SB.Counter()}
+    assert checked >= 6
+
+
+def test_null_scenes_per_season_reads_the_whole_run_cut_by_the_acts_each_season_took():
+    """`null_by_season`'s seasons add to its whole run (total and null, by verb and class) on the cap-10
+    fixture, and the line prints the largest count first."""
+    per, whole = SB.null_by_season(SEED, SEASONS, CAP)
+    assert len(per) == SEASONS and whole["total"] >= 1
+    assert sum(r["total"] for r in per) == whole["total"]
+    assert sum((r["null"] for r in per), SB.Counter()) == whole["null"]
+    assert SB.pool_null([whole, whole]) == {"total": 2 * whole["total"],
+                                            "null": whole["null"] + whole["null"]}
+    line = SB.null_line({"total": 9, "null": SB.Counter({("a", "made"): 1, ("b", "refused"): 3})})
+    assert line == "null_scenes total=9 null=4 | b/refused=3, a/made=1"
+    assert SB.null_line({"total": 2, "null": SB.Counter()}) == "null_scenes total=2 null=0 | none"
