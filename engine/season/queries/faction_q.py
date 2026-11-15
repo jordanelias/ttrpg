@@ -74,6 +74,7 @@ from __future__ import annotations
 from dataclasses import dataclass, fields
 
 from .world_q import WAR_MOOD, at_war, establishment_of, members  # noqa: F401 -- v11 CR-87: the first two MOVED to `world_q` (the war context's `enemies_heard` reads `at_war`, and this module imports `world_q`, so the reverse import would be a cycle); re-exported so every `faction_q.at_war` caller reads the one owner
+from .world_q import density, footprint, provinces_of, sovereign_fraction
 from ..data.rosters import FACTION_BY_PROP, HEAD_SEAT, RECORD_KIND_KEYS
 from ..gaps import Unspecified
 from ..state.containment import descendants
@@ -111,6 +112,51 @@ def resolve(w: World, prop: str) -> Faction:
     seats = sorted({t.object for t in held if t.object in w.offices})
     return Faction(proposition=prop, members=mem, holdings=holdings, seats=seats,
                    head=head(w, prop))
+
+
+@dataclass(frozen=True)
+class FactionStanding:
+    """Where one faction stands across one rung, as `standing` reads it: four readings, each the
+    answer of one `world_q` Query and none computed here. A Query return like `Faction`, never a
+    member of `World` (`04` PART D row 47): a field set on one is dropped with the view.
+
+    `footprint` -- the rung ids the faction reaches (`world_q.footprint`). `present`, `persons` --
+    `world_q.density`'s pair at `rung_id`: the faction's members present, and the persons present.
+    `sovereign_share`, `undetermined` -- `world_q.sovereign_fraction(w, rung_id)`: the share held by
+    the single LARGEST holder over the rung's subtree (the rung's, so the same for every faction
+    asked; it is not this faction's own share), and how many of its rungs nobody holds.
+    `provinces` -- the territory ids `world_q.provinces_of` groups under this faction, `()` when it
+    holds none."""
+    footprint: tuple
+    present: int
+    persons: int
+    sovereign_share: float
+    undetermined: int
+    provinces: tuple
+
+
+def standing(w: World, prop: str, rung_id: str) -> FactionStanding:
+    """B03.65 (`U5a_CORE_owed_edits` §I): the one composed reading of where `prop` stands at
+    `rung_id`, over `world_q.footprint`, `density`, `sovereign_fraction` and `provinces_of`, which
+    this is the first reader of. `endings_reached` is the precedent: a strategic reading as a Query a
+    host reads and nobody stores. It takes no token, stores nothing and emits nothing, and it has
+    no `TRACE.query` row of its own -- a read-only step moves no committed artifact; each inner Query
+    keeps its own row, reached only when a host asks, never inside `season()`.
+
+    ⚠ RESOLVER-SIDE, AND NOT FOR `decision/`. A person's own reading of where a faction stands is a
+    belief (AX-2); this record is the world's, and may not be handed to a chooser. An NPC weighs
+    territory through the claims he holds.
+
+    ⚠ `footprint` IS `world_q.footprint`'s, NOT `resolve(w, prop).holdings`. The brief named
+    `holdings`, and its own test and gate name `footprint(w, f)`; the two differ (holdings is the
+    members' `hold` objects, footprint is the faction's own holds plus its members' presence), and
+    measured at `build_realm(0)` after one season they are unequal for every faction holding a rung."""
+    fp = tuple(footprint(w, prop))
+    present, persons = density(w, rung_id, prop)
+    share, undetermined = sovereign_fraction(w, rung_id)
+    return FactionStanding(footprint=fp, present=present, persons=persons,
+                           sovereign_share=share, undetermined=undetermined,
+                           provinces=tuple(provinces_of(w, rung_id).get(prop, ())))
 
 
 def head(w: World, prop: str) -> "str | None":
