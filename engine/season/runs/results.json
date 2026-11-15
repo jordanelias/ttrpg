@@ -9910,7 +9910,7 @@
   "A5": {
    "id": "A5",
    "verdict": "PASS",
-   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 899 == 899 and the LOG CONTENT HASH matches (c1793c17de31...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
+   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 899 == 899 and the LOG CONTENT HASH matches (b44d81977e18...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
    "kind": null,
    "section": "S32",
    "title": "the fold is order-independent, and the float control actually fires",
@@ -10368,16 +10368,6 @@
    "title": "the five strata order the fold before the content hash does",
    "by": "construction",
    "tests": "movement, binding decisions and social acts must be able to resolve in a fixed order relative to each other"
-  },
-  "A38": {
-   "id": "A38",
-   "verdict": "PASS",
-   "detail": "PASS: at Ob = 2xPool+1 the attempt was REFUSED and the act was spent; at exactly 2xPool it resolved. An uncontested attempt routes to A GATE, never to an Ob=0 roll. Rev 2 had the branch and no probe ever set `obstacle` or `pool`, so both defaulted to 0 and the guard never ran -- while its regression test asserted only that two strings appeared in the source",
-   "kind": null,
-   "section": "S27.4",
-   "title": "an attempt at Ob > 2 x Pool is refused and the season is spent",
-   "by": "construction",
-   "tests": "an attempt far beyond a character's ability must be refused rather than rolled"
   },
   "A31c": {
    "id": "A31c",
@@ -11217,25 +11207,16 @@
   }
  ],
  "_trace_counts": {
-  "STEP": 7231,
-  "BARRIER": 1904,
-  "DECISION": 1948,
-  "QUERY": 30289,
-  "WRITE": 15290,
-  "EVENT": 15316,
-  "ACT": 98,
-  "CLAIM": 1765,
+  "STEP": 7185,
+  "BARRIER": 1892,
+  "DECISION": 1935,
+  "QUERY": 30081,
+  "WRITE": 15262,
+  "EVENT": 15287,
+  "ACT": 96,
+  "CLAIM": 1742,
   "GAP": 88,
   "NOTE": 203
  },
- "_corpus_defects": [
-  "ARC1.yaml: committed inside a markdown fence with transcript preamble",
-  "ARC2.yaml: committed inside a markdown fence with transcript preamble",
-  "ARC3.yaml: TRUNCATED AT HEAD -- 37 lines of a record above the first `- id:`; its identity is unrecoverable from the file",
-  "ARC3.yaml: committed inside a markdown fence with transcript preamble",
-  "ARC3.yaml: recovered 0 row(s) from the truncated head; 37 line(s) above the first parseable `- need:` are UNRECOVERABLE",
-  "NPC1.yaml: committed inside a markdown fence with transcript preamble",
-  "NPC2.yaml: committed inside a markdown fence with transcript preamble",
-  "NPC3.yaml: committed inside a markdown fence with transcript preamble"
- ]
+ "_corpus_defects": []
 }
