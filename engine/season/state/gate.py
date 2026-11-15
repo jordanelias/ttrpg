@@ -1732,7 +1732,8 @@ class Subject:
     @property
     def kinds(self) -> tuple:
         """The kinds this subject earns if it moves, as a tuple: `()` for `None` (the plain-list
-        contract: it narrows nothing), one kind, or the several it names."""
+        contract: it narrows nothing), one kind, or the several it names. A `None` subject may not
+        sit beside a named one: `Change` refuses the mix at construction (H-141)."""
         if not self.earns:
             return ()
         return (self.earns,) if isinstance(self.earns, str) else tuple(self.earns)
@@ -1803,6 +1804,19 @@ class Change:
     # CP-T03-02: the per-party ending a fight's band Events carry (`Event.ending`); `()` for every effect
     # that is not a fight's. The gate does not read it -- the fold copies it onto the act's success Events.
     ending: tuple = ()
+
+    def __post_init__(self) -> None:
+        # H-141: `_fold` reads an EMPTY `earned` set as "every declared kind", so one named subject
+        # beside a `None` one would silently drop what the `None` subject earns. HR-1's rule (see
+        # `Subject`): every subject of a write names its kinds, or none does.
+        named = [s for s in self.subjects if s.kinds]
+        plain = [s for s in self.subjects if not s.kinds]
+        if named and plain:
+            raise InstrumentDefect(
+                "a `Change` mixes subjects that earn every declared kind (`earns=None`: "
+                f"{[s.id for s in plain]}) with subjects that name theirs "
+                f"({[(s.id, s.kinds) for s in named]}); the named kinds would silence the rest in "
+                "`loop/resolve.py::_fold`. Name the kinds of every subject, or of none (H-141).")
 
 
 def _nothing() -> None:

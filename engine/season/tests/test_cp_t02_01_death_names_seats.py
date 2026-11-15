@@ -25,7 +25,10 @@ The three death writes: `loop/effects_combat.py::_eff_kill` (`fight`/`accept` `F
 """
 from __future__ import annotations
 
+import pytest
+
 from ..data.matrix import Step, WriteClass
+from ..gaps import InstrumentDefect
 from ..harness import probes as P
 from ..harness.populated import build_realm
 from ..loop import effects_combat
@@ -227,12 +230,11 @@ def test_c_a_total_won_still_emits_field_won_and_army_arrived_beside_the_deaths(
 def test_c_mutation_with_no_subject_naming_the_bands_kinds_the_deaths_silence_field_won(monkeypatch):
     """THE MUTATION, run: the HR-1 form off -- `own_kinds` returning `()`, so the movers, the losers'
     own outcome and the treasuries name nothing (the pre-HR-1 `None`) while the dead name `person.died`.
-    The non-empty `earned` set then drops the band's kind and the arrival: the falsifier goes red."""
+    The non-empty `earned` set then dropped the band's kind and the arrival (H-141's silencing); that
+    mix is now refused where the `Change` is built, so the mutation cannot publish a silenced set."""
     monkeypatch.setattr(effects_combat, "own_kinds", lambda declared: ())
-    _d, _a, _s, out = _won_total(build_realm(0))
-    kinds = [e.kind for e in out]
-    assert "field.won" not in kinds and "army.arrived" not in kinds, kinds
-    assert "person.died" in kinds
+    with pytest.raises(InstrumentDefect, match="H-141"):
+        _won_total(build_realm(0))
 
 
 def test_c_a_total_lost_emits_field_lost_and_a_person_died_naming_each_pid_removed():
