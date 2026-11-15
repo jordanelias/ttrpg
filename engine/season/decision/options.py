@@ -550,7 +550,7 @@ for _v, _ctx in VIOLENCE_CONTEXTS.items():
 
 
 def project(p: Person, scar_shift: float = 0.0) -> dict:
-    """A person's thirteen conviction weights, in the four-axis basis. `U3` / R-06a.
+    """A person's fifteen pursuit weights, in the seven-axis basis. `U3` / R-06a.
 
     ⚠⚠ **§F2's `conviction[axis]` IS COMPUTED NOW, NOT LOOKED UP, AND THE FORMULA IS UNCHANGED IN
     SHAPE.** V2 §F2 spells `score(c) = Σ_axis conviction[axis] · alignment(c.verb, axis)` and that
@@ -562,7 +562,7 @@ def project(p: Person, scar_shift: float = 0.0) -> dict:
 
         conviction[axis]  :=  Σ_conv  p.pursuits[conv] · projection[conv][axis]
 
-    and `Σ_axis` above is untouched. A person holds weights over the THIRTEEN; the projection is
+    and `Σ_axis` above is untouched. A person holds weights over the FIFTEEN pursuits; the projection is
     the only thing that knows about axes.
 
     ⚠ **THE MATRIX IS READ, NOT INVENTED** — `conviction_axis_matrix_v30.md` §2, with a per-cell
@@ -577,7 +577,7 @@ def project(p: Person, scar_shift: float = 0.0) -> dict:
 
     ⚠ DELEGATED, NOT DUPLICATED. `data.pursuits.to_axes` is the one owner of *convictions → axes*,
     because a second caller appeared that does not have a `Person`: `data.cast.loyalty` projects a
-    ROLE TEMPLATE's expected-conviction vector through the same 13×4. `to_axes` reads
+    ROLE TEMPLATE's expected-conviction vector through the same 15×7. `to_axes` reads
     `data.verbs.PURSUIT_PROJECTION` at call time, so that is still the rebind that reaches here.
 
     ⚠ `scar_shift` is IN-08 H9's crisis reader (`Fixtures.scar_weight_shift`, `H-187`): the weights
