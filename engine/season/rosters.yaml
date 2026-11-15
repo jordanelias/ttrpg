@@ -255,7 +255,7 @@ rosters:
       # for `to` and `terms` for `actor` and `subject`. [ASSUMPTION; medium; Jordan to correct; revert:
       # drop the kind, `challenge` writes nothing and `accept` takes a person as its subject.]
       challenge:    [terms, to, stakes, challenger]
-      # v11 CP-T04-02 (B10-12, `marshal`; AM-C-09 REPAIR): A STANDING ORDER OF BATTLE, minted by `marshal`
+      # v11 CP-T04-02 (B10-12, `marshal`; AM-C-09 REPAIR): A STANDING ORDER, minted by `marshal`
       # (`loop/effects_information.py::_eff_marshal`) into the marshal's hand through `_mint_document`, the one mint. `at`
       # is the settlement the order is read about (the side's place: the attacker's origin, the defender's target),
       # `role` a `order_roles` member and `retreat_at` an `order_retreat_at` member. THREE KEYS, NOT THE HOME'S FIVE:
@@ -263,7 +263,7 @@ rosters:
       # `seam/wrappers/mass_battle.py::field_input`, which picks per side the order whose holder edge is newest.
       # Not a `record_sourced_operands` kind: an order answers no operand. [ASSUMPTION; medium; Jordan to correct; revert:
       # add the omitted keys back with their home wiring.]
-      order_of_battle: [at, role, retreat_at]
+      standing_order: [at, role, retreat_at]
     # HOW A MINTED DOCUMENT'S CONTENT IS READ OFF THE ACT, AND WHAT A HOLDER LEARNS FROM IT. One
     # owner for three facts the mint (`loop/effects.py::_mint_document`) and the deposit rule
     # (`loop/witness.py`) both read, so neither spells them.
@@ -2617,11 +2617,11 @@ rosters:
       # loader admits the kind by derivation (`data/verbs.py::_load_terms_sourced`).
       commit: [dispensation, petition]
 
-  # v11 CP-T04-02: THE TWO CLOSED SETS OF A STANDING ORDER OF BATTLE. NO `values:` -- the members ARE the mass-battle
+  # v11 CP-T04-02: THE TWO CLOSED SETS OF A STANDING ORDER. NO `values:` -- the members ARE the mass-battle
   # module's (`modules/mass_battle/massbattle.py::ORDER_ROLES`, `config.ROLE_SPEC`'s names, and `ORDER_RETREAT_AT`), cooked
   # by `tools/export_battle_orders.py` into `engine/engine_params/battle_orders.json` and read through
   # `engine/substrate/battle_orders.py`. A role is added to `ROLE_SPEC`, never here. `role` ranges over the WHOLE set, not
-  # a troop type's menu: a standing order of battle is the commander's, so it is not gated by `registry.role_allowed`
+  # a troop type's menu: a standing order is the commander's, so it is not gated by `registry.role_allowed`
   # (`H-361`). [ASSUMPTION; medium; Jordan to correct; revert: gate `role` on `registry.role_allowed` for the line's
   # stand-in troop type.]
   order_roles:
@@ -4216,7 +4216,7 @@ tables:
         method.
       marshal: >-
         v11 CP-T04-02: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above); a lean on seven axes is authored content
-        (IN-08's method), and a standing order of battle is a document written before the field, whose moral weight
+        (IN-08's method), and a standing order is a document written before the field, whose moral weight
         is the field's. It scores 0.0 on every axis until a cell is authored, so no witness is scarred by an order
         marshalled and `order.marshaled` judges as no deed. Revert: the seven cells, IN-08's method.
       surrender: >-

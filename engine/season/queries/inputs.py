@@ -198,7 +198,7 @@ class PlayHost:
 
 @dataclass(frozen=True)
 class FieldOrder:
-    """CP-T04-02: ONE SIDE'S STANDING ORDER OF BATTLE as the field reads it -- the content of the `order_of_battle`
+    """CP-T04-02: ONE SIDE'S STANDING ORDER as the field reads it -- the content of the `standing_order`
     Record `seam/wrappers/mass_battle.py::field_input` chose (`rosters.yaml: record_kinds`): `role`, a `config.ROLE_SPEC`
     name the module maps onto each subunit of the side's line, and `retreat_at`, one of `ORDER_RETREAT_AT`, which the
     module reads (CP-T04-03) as each subunit's `own_strength` retreat Order. Plain strings: the closed sets are the module's (`engine/substrate/battle_orders.py`)."""
@@ -243,8 +243,8 @@ class MassBattleInput:
                        `((), ())`, the default, names nobody;
       * `subunits`  -- CP-T04-01: the `field_subunits` fixture (`H-359`), `side` or `person`. `side`, the default, is
                        the side as it was: one subunit sized by Σ weight. `person` is one subunit per member;
-      * `orders`    -- CP-T04-02 (`H-361`): `(attacker, defender)`, each a `FieldOrder` or `None`, the standing order of
-                       battle `field_input` read for that side (the `order_of_battle` Record its faction's seat holds
+      * `orders`    -- CP-T04-02 (`H-361`): `(attacker, defender)`, each a `FieldOrder` or `None`, the standing order
+                       `field_input` read for that side (the `standing_order` Record its faction's seat holds
                        about the side's settlement whose holder edge is newest). `None`, the default, is both sides
                        without one: the field as it was;
       * `geography` -- the parsed geography file (`data/geography.py::geography`, read once per process

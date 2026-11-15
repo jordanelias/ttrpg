@@ -1642,7 +1642,7 @@
               "stakes",
               "challenger"
             ],
-            "order_of_battle": [
+            "standing_order": [
               "at",
               "role",
               "retreat_at"
@@ -3871,7 +3871,7 @@
             "capture": "v10 CP-T03-09: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above); a lean on seven axes is authored content (IN-08's method), and `capture` is `fight`'s fold with a different ending, not a new lean. It scores 0.0 on every axis until a cell is authored, so no witness is scarred by a capture and `person.captured` judges as no deed (a wound beside it is still `fight`'s `body.changed`). Revert: the seven cells, IN-08's method.",
             "pardon": "v9 IN-12 step 5: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above); #453 \u00a79.1 gives the row no lean on any axis. It scores 0.0 on every axis until a cell is authored. Revert: the seven cells, IN-08's method.",
             "raze": "v9 IN-12 step 11: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above); #453 \u00a79.2 gives the row no lean on any axis. It scores 0.0 on every axis until a cell is authored, so no witness is scarred by a razing and `rung.razed` judges as no deed. Revert: the seven cells, IN-08's method.",
-            "marshal": "v11 CP-T04-02: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above); a lean on seven axes is authored content (IN-08's method), and a standing order of battle is a document written before the field, whose moral weight is the field's. It scores 0.0 on every axis until a cell is authored, so no witness is scarred by an order marshalled and `order.marshaled` judges as no deed. Revert: the seven cells, IN-08's method.",
+            "marshal": "v11 CP-T04-02: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above); a lean on seven axes is authored content (IN-08's method), and a standing order is a document written before the field, whose moral weight is the field's. It scores 0.0 on every axis until a cell is authored, so no witness is scarred by an order marshalled and `order.marshaled` judges as no deed. Revert: the seven cells, IN-08's method.",
             "surrender": "v11 CP-T04-07: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above); a lean on seven axes is authored content (IN-08's method), and a place yielded on terms is a moral weight the field would have carried (the stormed town's `fight`/`march` cells). It scores 0.0 on every axis until a cell is authored, so no witness is scarred by a surrender and `place.surrendered` judges as no deed. Revert: the seven cells, IN-08's method.",
             "tell": "No cell on any axis BY DESIGN: testimony's moral weight is in WHAT is told (a claim), which no verb x axis cell can carry, and telling is driven by regard (the telling workplan's G1), not by pursuit (the retired pursuit-cells draft's \u00a73.6, \u00a77.4; G-1, [medium; Jordan to correct]). `corpus_run`'s RANKING counts only candidates whose verb has a celled axis, so a `tell` is neither a tie nor a discrimination there."
           },
@@ -5713,7 +5713,7 @@
         {
           "verb": "marshal",
           "scale": "settlement",
-          "scale_note": "an order of battle is read about a settlement, the place the side stands at when it fights (the attacker's origin, the defender's target): the settlement IS the subject, as `march`'s and `requisition`'s are, and the exercised seat's purview must reach it.",
+          "scale_note": "a standing order is read about a settlement, the place the side stands at when it fights (the attacker's origin, the defender's target): the settlement IS the subject, as `march`'s and `requisition`'s are, and the exercised seat's purview must reach it.",
           "stratum": "binding_decision",
           "eligibility": [
             "remit:dispatch"
@@ -5721,7 +5721,7 @@
           "beneficiary": "actor",
           "beneficiary_note": "`march`'s column: the marshal's own line is the one he orders, so the order is for his gain; the Record is minted into his hand and is no operand's beneficiary.",
           "referent_class": "Rung",
-          "referent_class_note": "v11 CP-T04-02: FORMED ONLY ON A `Rung`-CLASSED REFERENT, `march`'s class and so `march`'s stamps (`queries/world_q.py::places_named`, `larders_in_purview`, `matters_awaiting`): `subject` binds the place through the unchanged referent rule. The class is shared, so a seat granting `dispatch` is offered the same Rungs for both verbs and the fold disposes (`marshal.unauthorized`: the exercised seat's purview must reach the place). [ASSUMPTION; medium; Jordan to correct; revert: drop this row, `order_of_battle`, `choice_sourced` and the field read, and the field is fought as it was.]",
+          "referent_class_note": "v11 CP-T04-02: FORMED ONLY ON A `Rung`-CLASSED REFERENT, `march`'s class and so `march`'s stamps (`queries/world_q.py::places_named`, `larders_in_purview`, `matters_awaiting`): `subject` binds the place through the unchanged referent rule. The class is shared, so a seat granting `dispatch` is offered the same Rungs for both verbs and the fold disposes (`marshal.unauthorized`: the exercised seat's purview must reach the place). [ASSUMPTION; medium; Jordan to correct; revert: drop this row, `standing_order`, `choice_sourced` and the field read, and the field is fought as it was.]",
           "requires": "the exercised seat's purview reaches the subject, a settlement",
           "requires_typed": {
             "form": "basis",
@@ -5733,7 +5733,7 @@
           "writes": [
             "Record.exists"
           ],
-          "writes_note": "`challenge`'s, `issue`'s and `petition`'s column: ONE `(Record, exists)` write through `_mint_document`, the one mint, with the marshal's `hold` riding on the Record's receipt (admitted as `T-m`, `create_record`'s). The Record is kind `order_of_battle` (`rosters.yaml: record_kinds`: `at` the subject, `role`, `retreat_at`). It is WRITTEN ONCE AND NEVER CHANGED: a newer order is a second Record, and `field_input` reads, per side, the one whose holder edge is newest (`since`; ties, later in `w.tenures`); older orders are ignored, not deleted. The `(Record, exists)` matrix row is the tree's. Each order adds one `hold` to its holder's budget (`decision/budget.py`), H-92's known drift, named and not new.",
+          "writes_note": "`challenge`'s, `issue`'s and `petition`'s column: ONE `(Record, exists)` write through `_mint_document`, the one mint, with the marshal's `hold` riding on the Record's receipt (admitted as `T-m`, `create_record`'s). The Record is kind `standing_order` (`rosters.yaml: record_kinds`: `at` the subject, `role`, `retreat_at`). It is WRITTEN ONCE AND NEVER CHANGED: a newer order is a second Record, and `field_input` reads, per side, the one whose holder edge is newest (`since`; ties, later in `w.tenures`); older orders are ignored, not deleted. The `(Record, exists)` matrix row is the tree's. Each order adds one `hold` to its holder's budget (`decision/budget.py`), H-92's known drift, named and not new.",
           "emits": [
             "order.marshaled"
           ],

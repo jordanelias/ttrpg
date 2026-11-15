@@ -97,7 +97,7 @@ def _eff_create_record(w: "World", a: "Act", res: "Resolution | None" = None) ->
         return NO_CHANGE
     if kind == "army" and not _army_mintable(w, a.actor, d.get("subject_matter")):
         return NO_CHANGE
-    if kind == ORDER_KIND:      # an order of battle is minted by `marshal` alone: its closed role / retreat_at sets, its purview conjunct, its withheld arm
+    if kind == ORDER_KIND:      # a standing order is minted by `marshal` alone: its closed role / retreat_at sets, its purview conjunct, its withheld arm
         return NO_CHANGE
     return _mint_document(w, a, kind, d.get("subject_matter"), d.get("rung") or a.actor)
 
@@ -338,7 +338,7 @@ def _eff_challenge(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
 
 @effect_for("marshal")
 def _eff_marshal(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
-    """v11 CP-T04-02 (B10-12): A STANDING ORDER OF BATTLE IS A `Record` OF KIND `order_of_battle`, minted with the
+    """v11 CP-T04-02 (B10-12): A STANDING ORDER IS A `Record` OF KIND `standing_order`, minted with the
     marshal's `hold` through `_mint_document`, the one mint. Its keys (`rosters.yaml: record_kinds`): `at` -- the
     settlement it is read about, the act's `subject` (the side's place when the field is fought: the attacker's origin,
     the defender's target); `role` -- a `order_roles` member, the shape and instruction package the module maps onto

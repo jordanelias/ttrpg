@@ -580,12 +580,12 @@ if not {STAKES_KEY, CHALLENGER_KEY} <= set(RECORD_KIND_KEYS.get(CHALLENGE_KIND, 
         needs=f"a `{CHALLENGE_KIND}` row with both keys, or the challenge mint and its stakes read retired",
         law="PC-10b -- a challenge's term rides `stakes` and its maker `challenger`; the person is `terms`")
 CHALLENGE_TERMS = roster("challenge_terms", ordered=True)
-# v11 CP-T04-02 (B10-12): THE `record_kinds` MEMBER A STANDING ORDER OF BATTLE IS, its three keys, and the two closed sets
+# v11 CP-T04-02 (B10-12): THE `record_kinds` MEMBER A STANDING ORDER IS, its three keys, and the two closed sets
 # its `role` and `retreat_at` range over (`order_roles`, `order_retreat_at`: pointers at the mass-battle module's own
 # vocabulary, `from_battle_orders`). Named once here, `CHALLENGE_KIND`'s shape, for the mint (`_eff_marshal`), the read
 # (`seam/wrappers/mass_battle.py::field_input`) and the chooser's fan (`data/verbs.py::CHOICE_RANGES`). Refused at import if
 # the roster stops carrying the three keys: the mint would write a key set the constructor refuses.
-ORDER_KIND = "order_of_battle"
+ORDER_KIND = "standing_order"
 ORDER_AT_KEY = "at"
 ORDER_ROLE_KEY, ORDER_RETREAT_KEY = "role", "retreat_at"
 if set(RECORD_KIND_KEYS.get(ORDER_KIND, ())) != {ORDER_AT_KEY} | {ORDER_ROLE_KEY, ORDER_RETREAT_KEY}:

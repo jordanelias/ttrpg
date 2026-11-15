@@ -1,5 +1,5 @@
-"""CP-T04-02 (B10-12; AM-C-09 REPAIR): `marshal`, the standing order of battle. A seat granting `dispatch` mints an
-`order_of_battle` Record `[at, role, retreat_at]` through `_mint_document`; `field_input` reads, per side, the one whose
+"""CP-T04-02 (B10-12; AM-C-09 REPAIR): `marshal`, the standing order. A seat granting `dispatch` mints an
+`standing_order` Record `[at, role, retreat_at]` through `_mint_document`; `field_input` reads, per side, the one whose
 holder edge is newest (`world_q.standing_order`); `resolve_field` maps its `role` onto each subunit of a headcount line.
 This file is the item's own; nothing here is a shared pin.
 
@@ -215,14 +215,14 @@ def test_control_an_order_of_another_faction_or_place_or_a_closed_one_is_not_rea
 def test_marshal_mints_an_order_record_with_three_keys_and_a_hold_and_refuses_an_unreaching_seat():
     w = _world([(KING, KING_SEAT, HOME, "Skirmish", "mz1", 7)])
     rec = w.records["rec:mz1"]
-    assert rec.kind == "order_of_battle"
+    assert rec.kind == "standing_order"
     assert rec.subject_matter == {"at": HOME, "role": "Skirmish", "retreat_at": "none"}          # no `reserve`, no `general`
     hold = [t for t in w.tenures if t.kind == "hold" and t.object == "rec:mz1" and t.live]
     assert [(t.subject, t.since) for t in hold] == [(KING, 7)]
     # the Spymaster grants `dispatch` but his purview (terr_T1) does not reach HOME: refused at `authority`
     w2 = _world()
     kinds = [e.kind for e in _fold_one(w2, _marshal("p_npc_033", "off_spymaster", HOME, "Shock", aid="mz2"))]
-    assert kinds == ["marshal.unauthorized"] and not [r for r in w2.records.values() if r.kind == "order_of_battle"]
+    assert kinds == ["marshal.unauthorized"] and not [r for r in w2.records.values() if r.kind == "standing_order"]
 
 
 def test_a_role_outside_the_closed_set_is_refused_before_anything_is_written():
@@ -231,7 +231,7 @@ def test_a_role_outside_the_closed_set_is_refused_before_anything_is_written():
                                  {"subject": HOME, "role": "Shock", "retreat_at": "0.1"}, {"subject": HOME})):
         with pytest.raises(Forbidden):
             _fold_one(w, Act(id=f"bad{i}", actor=KING, verb="marshal", payload=payload, via=KING_SEAT))
-    assert not [r for r in w.records.values() if r.kind == "order_of_battle"]
+    assert not [r for r in w.records.values() if r.kind == "standing_order"]
 
 
 def test_operand_bags_ranges_role_and_retreat_at_over_their_closed_sets():
@@ -293,7 +293,7 @@ def test_the_role_is_not_gated_by_role_allowed():
 
 
 def test_create_record_does_not_mint_an_order_of_battle_marshal_alone_does():
-    """A hand-built `create_record` naming kind `order_of_battle` (the menu's path, as the army verbs have) would skip
+    """A hand-built `create_record` naming kind `standing_order` (the menu's path, as the army verbs have) would skip
     `_eff_marshal`'s closed sets, its purview conjunct and the withheld arm; it declines instead. Control: the same act
     with kind `text` mints."""
     def minted(kind, content):
@@ -303,4 +303,4 @@ def test_create_record_does_not_mint_an_order_of_battle_marshal_alone_does():
                          payload={"kind": kind, "subject_matter": content}))
         return Counter(r.kind for r in w.records.values()) - before
     assert minted("text", None)["text"] == 1, "the control did not mint: the act never reached the effect"
-    assert not minted("order_of_battle", {"at": TARGET, "role": "Banana", "retreat_at": "none"})
+    assert not minted("standing_order", {"at": TARGET, "role": "Banana", "retreat_at": "none"})

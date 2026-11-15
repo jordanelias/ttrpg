@@ -2328,8 +2328,8 @@ def march_origin(w: World, person: str) -> Optional[str]:
 
 
 def standing_order(w: World, faction: Optional[str], place: Optional[str]):
-    """CP-T04-02 (AM-C-09): THE STANDING ORDER OF BATTLE `faction`'s line fights `place` under, or `None` -- the live
-    `order_of_battle` Record about `place` (its `at` key) held by a seat of `faction`, the one whose HOLDER EDGE has the
+    """CP-T04-02 (AM-C-09): THE STANDING ORDER `faction`'s line fights `place` under, or `None` -- the live
+    `standing_order` Record about `place` (its `at` key) held by a seat of `faction`, the one whose HOLDER EDGE has the
     greatest `since`; a tie goes to the later in `w.tenures` (the read-only owner-first view: the last-write rule of
     `containment.home_of`). `Record` has no creation tick (`ttl` has no reader), so the edge's `since` -- opened at
     `w.tick` by `_makers_hold` -- is the order's age. OLDER ORDERS ARE IGNORED, NOT DELETED. A holder is `a seat of
