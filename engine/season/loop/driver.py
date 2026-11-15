@@ -293,22 +293,14 @@ class SeasonDriver:
         #
         # ⚠ SEASON-LOCAL, UNLIKE `resolved` / `scenes` / `act_of` ABOVE, and the asymmetry is the
         # point rather than an oversight: those three are the fold's cumulative record and R3
-        # depends on them crossing seasons, while a scene budget, a queue of chosen-but-unrun
-        # scenes and a "when did this person last deliberate" stamp all reset at the season
-        # boundary by definition. `season()` clears them.
+        # depends on them crossing seasons, while a scene budget and a "when did this person last
+        # deliberate" stamp all reset at the season boundary by definition. `season()` clears them.
         # ---------------------------------------------------------------------
         self.round: int = 0
-        # Scenes a person CHOSE and the driver has not released yet. The person's own triage,
-        # held rather than re-asked — see `deliberate` for why re-asking is the defect.
-        self._queued: dict = {}
         # Scene-action COST each person has spent this season, against `budget(p, v, ...)`.
         self._spent: dict = {}
         # `(tick, round)` of each person's last deliberation — `questions_for`'s `since`.
         self._deliberated_at: dict = {}
-        # The fingerprint of everything `questions_for` and `person_side_eligible` read for a
-        # person, as of their last deliberation. Unchanged ⇒ their candidate set is identical by
-        # construction, so the driver releases their next chosen scene rather than re-deriving it.
-        self._inputs: dict = {}
         # ⚠ WHAT `_drop_what_was_already_done` READS, AND IT IS THE REALISED SET RATHER THAN THE
         # ATTEMPTED ONE — which is the whole of a defect this unit's adversarial pass found. An
         # opportunity KEY (`data/verbs.py::opportunity_key`: `(verb, subject)`, plus the row's
@@ -421,10 +413,9 @@ class SeasonDriver:
         # exactly the shape `H-87`'s `site:` describes.
         w.draw = 0                 # S33: the draw ordinal is per-TICK, so replay is exact
         w._departed.clear()        # H-206: per-tick scratch (`departed_from` answers only for its own tick)
-        # `U2`: season-local. See `__init__` for why these four reset and the three above it do not.
+        # `U2`: season-local. See `__init__` for why these reset and the three above it do not.
         self.round = 0
-        self._queued, self._spent, self._deliberated_at = {}, {}, {}
-        self._inputs, self._realised = {}, {}
+        self._spent, self._deliberated_at, self._realised = {}, {}, {}
         # G2 / `04 §C.1`: ONE TOKEN PER BARRIER, MINTED HERE, PASSED IN, NEVER KEPT. Each is built
         # inline in the call so no local outlives its step -- the pseudocode's `drop` is the end of
         # the expression. DELIBERATE, below, is the one step called with none.

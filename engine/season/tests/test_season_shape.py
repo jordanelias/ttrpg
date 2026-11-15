@@ -13583,10 +13583,8 @@ def test_r8_4_document_key_reaches_a_non_author_through_a_store():
 # `U2` / `R-03` — THE SCENE TICK. R-03 reads *seasons must tick scene-by-scene, so what occurs
 # after one scene can impact the next scene*, and before this a season was ONE PASS: every scene
 # for every person was flattened into one `acts` list before RESOLVE ran, so the only boundary
-# was season-to-season. These FIVE tests are the unit's acceptance (a), its control, and its
-# three falsifiers (b), (c), (d). ⚠ IT SHIPPED WITH FOUR AND THIS LINE SAID FOUR: falsifier
-# (b) was cited twice in `loop/deliberate.py` and never written. See
-# `test_u2_the_inputs_fingerprint_is_complete_for_the_skip_it_licenses`.
+# was season-to-season. These tests are the unit's acceptance (a), its control, and its
+# falsifiers (c), (d); falsifier (b), the fingerprint's completeness, went with the stored plan it licensed.
 # ---------------------------------------------------------------------------
 
 
@@ -13851,8 +13849,8 @@ def test_u2_a_deposit_in_one_round_changes_a_later_rounds_candidate_set_in_the_s
 
 def test_u2_the_one_round_arm_resolves_acts():
     """**U2's ONE-ROUND ARM RESOLVES ACTS; ITS EQUALITY WITH THE PRE-TICK LOOP WAS MEASURED, NOT KEPT (B02.01 D).** At
-    `scene_budget = 1` the season is ONE round, so the rounds loop, the queue, the fingerprint and
-    the release all run and must produce what the one-pass loop produced. An implementation whose
+    `scene_budget = 1` the season is ONE round, so the rounds loop and
+    the release both run and must produce what the one-pass loop produced. An implementation whose
     `R = 1` limit is not the current behaviour changed two things at once.
 
     ⚠ **THE HASH IS NOT ASSERTED, AND NEITHER IS THE EVENT CENSUS.** `Claim` gained a `round` field
@@ -13880,118 +13878,6 @@ def test_u2_the_one_round_arm_resolves_acts():
                  None,
                  contest_max_depth=w.fixtures.get("contest_max_depth"))
     assert d.resolved, "the one-round arm resolved nothing — the loop has no behaviour in it"
-
-
-# [JUSTIFIED: `(0, 1, 7, 13)` are RNG SEEDS and `2` a season count -- the arms of the sweep, not values the design supplies. Four seeds because one world's fingerprint behaviour is not a property; 13 is included because it is the only one of the four where the skip path fires at all]
-def _u2_fingerprint_implication(drop=None, seeds=(0, 1, 7, 13), seasons=2):
-    """Every slot where `choose` ran, as `(driver's own fingerprint, candidate key set)`.
-
-    Returns `(pairs_checked, violations)` where a violation is two slots for ONE person in ONE
-    tick that share a fingerprint and do not share a candidate set. `drop` removes one term from
-    the fingerprint tuple, which is the mutation arm.
-
-    ⚠ THE FINGERPRINT IS THE ONE THE DRIVER COMPUTED, RECORDED THROUGH THE PATCH, AND THE FIRST
-    WRITING OF THIS HELPER RECOMPUTED IT. It called `questions_for(w, p)` with no `since`, so the
-    Q2 floor differed and the two arms were not the same experiment — `CLAUDE.md` §0.1 pt 1. It
-    read 2 violations on the SHIPPED fingerprint that way; recording the driver's own return reads
-    0. A confounded arm looks exactly like evidence."""
-    import collections
-    from ..loop import deliberate as DL
-    from ..harness import headless as HL
-
-    real = DL._inputs_fingerprint
-    last = {}
-
-    def fp_fn(p, qs):
-        t = real(p, qs)
-        if drop is not None:
-            t = tuple(v for i, v in enumerate(t) if i != drop)
-        last[p.id] = t
-        return t
-
-    DL._inputs_fingerprint = fp_fn
-    seen, violations, checked = collections.defaultdict(dict), [], 0
-    try:
-        for seed in seeds:
-            w = HL.build_world(seed)
-            d = SeasonDriver(w)
-            mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-            box = {}
-
-            def wrap(inner):
-                def f(p, verbs, sn, ask_budget):
-                    got = inner(p, verbs, sn, ask_budget)
-                    box[(w.tick, d.round, p.id)] = (last[p.id], frozenset(
-                        (a.verb, DL._subject_of(a))
-                        for sc in got for a in getattr(sc, "acts", [])))
-                    return got
-                return f
-
-            for _ in range(seasons):
-                d.season(wrap(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
-                                           draw=draw_factory(w.world_seed, lambda: w.tick))),
-                         None,
-                         contest_max_depth=w.fixtures.get("contest_max_depth"))
-            for (tick, rnd, pid), (fp, cands) in sorted(box.items()):
-                bucket = seen[(seed, tick, pid)]
-                if fp in bucket:
-                    checked += 1
-                    if bucket[fp] != cands:
-                        violations.append((seed, tick, pid, rnd))
-                else:
-                    bucket[fp] = cands
-    finally:
-        DL._inputs_fingerprint = real
-    return checked, violations
-
-
-def test_u2_the_inputs_fingerprint_is_complete_for_the_skip_it_licenses():
-    """**U2's FALSIFIER (b), AND IT DID NOT EXIST WHILE TWO SITES CITED IT.**
-    `loop/deliberate.py` named this test at its skip condition and again in
-    `_inputs_fingerprint`'s docstring — *"That the list is COMPLETE is a claim about the code as
-    it stands, and U2's falsifier (b) is what tests it"* — and the unit shipped four U2 tests,
-    none of them this one. `CLAUDE.md` §0.1 pt 3: a result claim carries, in the same commit, the
-    test that would have shown it wrong. A cited falsifier that does not exist is the same defect
-    wearing the fix's clothes.
-
-    **THE CLAIM UNDER TEST IS AN IMPLICATION, NOT A LIST.** The skip rests on
-    *fingerprint equal ⟹ candidate set equal*: a person whose six terms have not moved would
-    re-derive the identical set, so the driver releases the next of what they already chose. If
-    the enumeration is incomplete, some world change moves the set while the fingerprint stands
-    still and that person is silently served a stale queue. This asserts the implication directly
-    over every slot where `choose` ran, which is testable at far more slots than the skip itself
-    fires at — MEASURED, the skip path fires 1 time in 120 `(person, round)` slots across these
-    four seeds, so a test that waited for it would be near-vacuous.
-
-    ⚠ **THE MUTATION ARM IS WHAT MAKES THIS AN ASSERTION RATHER THAN AN ABSENT ONE** (§0.1 pt 2).
-    Dropping `q_ids` breaks the implication; if it did not, the check could not observe the
-    failure it excludes.
-
-    ⚠⚠ **AND THE HONEST LIMIT IS STATED RATHER THAN LEFT FOR A READER TO ASSUME: ONLY TERM 0 IS
-    FALSIFIED HERE.** Measured 2026-09-11 over seeds 0/1/7/13, 2 seasons: dropping term 0 (`q_ids`)
-    gives 5 violations; dropping ANY of terms 1-5 (`subsistence`, which REM-44 has since deleted, then
-    `tenures`, `ledger`, `body`, `travel_leg`) gives 0. Those five are not thereby shown redundant — this fixture never moves
-    one of them without also moving `q_ids`, which is a property of a three-person world with one
-    active actor, not of the enumeration. What this test establishes is that the implication HOLDS
-    and that it CAN break; five of the six terms remain unfalsified until a world exercises them."""
-    checked, violations = _u2_fingerprint_implication()
-    # [GROUNDED: measured 2026-09-11, seeds 0/1/7/13 at 2 seasons -- 64 equal-fingerprint pairs, 0 implication violations; the floor below is set under that measurement with headroom, not at it]
-    assert checked >= 24, (
-        f"only {checked} equal-fingerprint pairs were compared (measured 64 on 2026-09-11). The "
-        "implication is being asserted over too few slots to mean anything — either the worlds "
-        "stopped producing repeated fingerprints or the wrapper stopped recording.")
-    assert not violations, (
-        f"the fingerprint is INCOMPLETE: {len(violations)} slots share a fingerprint with an "
-        f"earlier slot in the same tick and produce a DIFFERENT candidate set — {violations[:4]}. "
-        "Every such slot is a person the skip would serve a stale queue. Find what `opening_set` "
-        "or `questions_for` reads that `_inputs_fingerprint` does not, and add the term.")
-    # THE MUTATION ARM. Term 0 is `q_ids`, the whole of `questions_for`'s output.
-    mchecked, mviol = _u2_fingerprint_implication(drop=0)
-    assert mviol, (
-        f"dropping `q_ids` from the fingerprint left the implication INTACT over {mchecked} pairs. "
-        "Then this test cannot observe the failure it excludes and its pass above is vacuous — "
-        "§0.1 pt 2. Either the worlds no longer vary their question sets or the patch is not "
-        "reaching the driver's fingerprint.")
 
 
 def test_u2_two_acts_by_one_person_on_one_subject_in_two_rounds_have_distinct_ids():

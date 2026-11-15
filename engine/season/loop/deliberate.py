@@ -20,7 +20,7 @@ store byte-identical -- by ANY route, not only through the gate.
 only**; token: none."* What the body does beyond that:
 
 - it sets `w.step` and `w._in_parallel_map` -- barrier bookkeeping, not a store -- and writes the
-  DRIVER's own `self.scenes` / `self._queued` / `self._spent` and each released `a.scene` / `a.id`,
+  DRIVER's own `self.scenes` / `self._spent` and each released `a.scene` / `a.id`,
   all on objects that are not `World` stores (the acts are this step's RETURN, the matrix's
   `(Act[], returned)` row, and enter the act store only at RESOLVE).
 
@@ -54,10 +54,8 @@ from ..state.ids import H
 from typing import Any, Callable
 from .. import decision
 from ..data.matrix import Step
-from ..data.requires import REQUIRES_STEMS
 from ..data.verbs import act_key, opportunity_key
 from ..decision import aggregate_questions
-from ..queries.person_q import ledger_names
 from ..gaps import Forbidden, Ungraded
 from ..seam.wrappers.sigma import believed_odds_query
 from ..state.carriers import Act, Person
@@ -176,29 +174,14 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
             0, decision.budget(p, v, k_budget, w.fixtures) - self._spent.get(p.id, 0))
         b = ask_budget()
         # -------------------------------------------------------------------
-        # `U2`: RE-DELIBERATE, OR RELEASE THE NEXT OF WHAT THEY ALREADY CHOSE.
-        #
-        # ⚠ **RE-ASKING EVERY ROUND IS THE DEFECT, NOT THE DESIGN.** `opening_set` is a pure
-        # function of the person's own inputs, so a person for whom nothing moved re-derives THE
-        # IDENTICAL RANKING and takes their top candidate again — and again, five times. Under the
-        # one-pass loop `pack_scenes` sliced five DIFFERENT scenes off one ranking; a naive rounds
-        # loop turns that into one scene done five times. So what the driver holds is the person's
-        # OWN triage, and what it does each round is release the next of it.
-        # ⚠ NOTHING IS DISCARDED, WHICH IS WHY THIS IS NOT THE ENGINE TRUNCATING (S26.3 / L1). A
-        # queued scene is deferred, not dropped; and the moment anything the person reads moves,
-        # they are asked again and may replace everything still queued.
-        # ⚠ THE FINGERPRINT IS WHAT "NOTHING MOVED" MEANS, AND IT IS ENUMERATED RATHER THAN
-        # ASSUMED — see `_inputs_fingerprint`, which lists every input `questions_for`,
-        # `person_side_eligible`, `belief_contradicts` and `budget` read, and says which one each
-        # term covers. If that list is incomplete the skip is wrong, which is what U2's falsifier
-        # (b) tests — `test_u2_the_inputs_fingerprint_is_complete_for_the_skip_it_licenses`,
-        # which asserts *fingerprint equal => candidate set equal* and carries the mutation arm
-        # that proves it can fire. ⚠ IT WAS CITED HERE BEFORE IT EXISTED; see that test's own
-        # docstring for what is and is not falsified (term 0 only, in this fixture).
+        # `U2`: A PERSON WITH BUDGET LEFT IS ASKED TO CHOOSE AT EVERY CALL, AND NO PLAN IS STORED.
+        # What `choose` returns is released this round up to `scenes_per_round` and the unreleased
+        # tail is not kept: the next lap asks again, over what the person then reads. (A stored tail
+        # and a fingerprint of the inputs that would have licensed reusing it stood here until
+        # B03.16; measured, no released scene ever came from a stored tail.)
         # -------------------------------------------------------------------
-        fp = _inputs_fingerprint(p, qs)
-        queue = self._queued.get(p.id) or []
-        if b > 0 and (self._inputs.get(p.id) != fp or not queue):
+        scenes: list = []
+        if b > 0:
             produced = choose(p, v, s, ask_budget)
             # `W17`. THE BUDGETED UNIT IS THE SCENE (Jordan, 2026-09-02), so the bound below
             # counts scenes and the interaction bound is a SEPARATE check. A bare `Act` is one
@@ -257,11 +240,9 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
                         f"of {cap}", "S26.3",
                         needs="a scene carries 1-3 verb applications; the bound is swept, not constant",
                         law="`H-76`, `assumption`. `player_agency_v30.md` §6.3 -- 'A scene contains 1-3 mechanical interactions' -- which is CANONICAL but pre-#337, so under CLAUDE.md §0.05 it is REFERENCE and this is a swept default, not a rule of the design. Jordan ruled the UNIT and the NUMBER of scenes; he did not rule this")
-            queue = _drop_what_was_already_done(chosen, self._realised.get(p.id) or set())
-            _qualify_by_round(queue, w, self.round)
-            self._inputs[p.id] = fp
+            scenes = _drop_what_was_already_done(chosen, self._realised.get(p.id) or set())
+            _qualify_by_round(scenes, w, self.round)
             self._deliberated_at[p.id] = (w.tick, self.round)
-        scenes = queue
         # ⚠ THE TRACE IS PER-SCENE, AND THE UNITS MUST NOT BE MIXED. It read
         # `TRACE.act(p.id, a.verb, b - i - 1)` where `b` is a SCENE budget and `i` enumerated
         # the FLATTENED interactions, so a lawful season published `budget_left=-10` — the
@@ -271,8 +252,8 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
         # a unit. `scene_left` is scenes; `interaction` is the position inside the scene.
         # -------------------------------------------------------------------
         # `U2`: THE RELEASE. At most `scenes_per_round` (`H-124`) of what the person chose runs
-        # this round, and only while their season remainder covers the cost. The rest stays
-        # queued for the next round; a scene they cannot afford stays queued rather than being
+        # this round, and only while their season remainder covers the cost. The rest is not kept
+        # (the next lap asks again); a scene they cannot afford is left unreleased rather than
         # trimmed, because the affordability is a fact about the season and not about the scene.
         # ⚠ THE ONE-PASS ARM IS `scene_budget = 1`, NOT `scenes_per_round = 5`, AND THIS COMMENT
         # SAID THE SECOND. Five releases a person's whole season in round 0 only when their triage
@@ -305,7 +286,6 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
                 TRACE.scene_act(p.id, a.verb, left, n + 1, len(sc.acts))
                 a.scene = sc.id
                 produced.append(a)
-        self._queued[p.id] = scenes
         for i, a in enumerate(produced):
             # L1 -- THE PERSON IS THE ONLY ACTOR. ⚠ REV 4: `Act.actor` is a bare id and
             # nothing checked it, so `Act("x", "the_church", "excommunicate")` reached
@@ -463,93 +443,6 @@ def _qualify_by_round(scenes: list, w: World, r: int) -> None:
         # ALREADY a digest at this point, so embedding it makes the purpose opaque: a reader can no
         # longer see what the id is of, which is the only reason the act branch re-derives.
         sc.id = H(w.world_seed, w.tick, sc.actor, f"scene:{n}:r{r}")
-
-
-def _inputs_fingerprint(p: Person, qs: list) -> tuple:
-    """`U2` / `R-03`: EVERYTHING A PERSON'S DELIBERATION READS, AS ONE COMPARABLE VALUE.
-
-    The scene tick re-enters DELIBERATE `scene_budget` times a season. A person whose inputs have
-    not moved since their last deliberation would re-derive THE IDENTICAL candidate set — that is
-    a property of `opening_set` being a pure function of these terms, not an optimisation — so the
-    driver releases the next of what they already chose instead. This is the predicate for
-    *"unmoved"*, and the unit is only as sound as this list is complete.
-
-    ⚠ **ENUMERATED FROM THE READERS, NOT FROM MEMORY, AND EACH TERM NAMES THE ONE IT COVERS.**
-    U2's design note calls the enumeration *a CONSTRUCTION, not a theorem*: what is provable is the
-    converse — with these equal, `opening_set` is identical by construction. That the list is
-    COMPLETE is a claim about the code as it stands, and U2's falsifier (b) —
-    `test_u2_the_inputs_fingerprint_is_complete_for_the_skip_it_licenses` — is what tests it.
-    ⚠ MEASURED 2026-09-11, seeds 0/1/7/13 at 2 seasons: the implication holds over 64
-    equal-fingerprint pairs, and dropping `q_ids` breaks it (5 violations). Dropping any of
-    the other five terms breaks NOTHING in that fixture — they are declared-and-unfalsified,
-    not shown redundant, because no world there moves one without also moving `q_ids`.
-
-      * `q_ids`      — `questions_for`'s whole output: each question's id AND its classed
-                       referents (`Question.classes`, IN-53 / IN-10 / IN-09 -- the vacancies, the
-                       seats told of and the writs held that `_stamped` adds to the first question
-                       without changing its id; batch B-I close, L1: the id alone missed a vacancy
-                       opening under a person who already had a question).
-                       Covers `claim_landed` (a claim LANDING,
-                       which is why it is computed with `since`, and now ADMITTED through
-                       `reach(w, p)` / `place_of` rather than only `c.subject == p.id or c.subject
-                       in mine` -- position `11a` folded `date_due` and `band_crossed` into it) and
-                       `need` (a live `commit` to an OUGHT). A world-level change that cannot reach
-                       this person cannot move this term, which is what keeps the skip from
-                       degenerating into "anything happened anywhere".
-      * (`Sensation` is not an input: since REM-44 no chooser term reads it, `standing` included.)
-      * `tenures`    — `person_side_eligible` reads them (eligibility `own`), `budget` counts the
-                       live `hold`s, and `questions_for`'s `mine` set is built from them.
-                       ⚠ `live` AND NOT `until`: a tenure CLOSING is the change that matters, and
-                       `until` is `None` on every live edge — sorting a mixed `None`/`int` column
-                       raises `TypeError`, which this first did. `live` is the property the three
-                       readers actually test, and it is totally ordered.
-      * `ledger`     — but ONLY the claims in the `requires` GRAMMAR VOCABULARY, which is the
-                       whole of what `belief_contradicts` can read (§F1 clause 4; the same
-                       `REQUIRES_STEMS` predicate `test_wb_the_control_arm_…` measures the channel
-                       with). `(id, value, confidence)` because such a claim can arrive, be
-                       overturned, or DECAY, and the third is what `claim.decayed` moves.
-                       ⚠⚠ **THE WHOLE LEDGER WAS THE FIRST WRITING AND IT BROKE THE UNIT.** Every
-                       WITNESS deposits into everyone's ledger, so a whole-ledger term moved every
-                       round for everybody: every person's queue was invalidated every round, every
-                       person re-deliberated from the top of a freshly-derived ranking, and a
-                       season became ONE PERSON DOING THEIR TOP ACT FIVE TIMES. Measured at
-                       `build_world(0)`, 2 seasons: `create_record` x10, `reconstruct` x9,
-                       `research` x7, `move` x2, **all by `p_carin`**, with `examine`, `interview`,
-                       `speak`, `tell`, `transfer`, `work` and `release` gone entirely. The
-                       one-pass loop consumed a ranking POSITIONALLY, which did this work
-                       implicitly; restarting at the top each round undoes it. Narrowing the term
-                       to the vocabulary that can actually suppress a candidate is what makes the
-                       queue survive a season, and it is narrower BECAUSE IT IS READ OFF THE
-                       READER rather than guessed at.
-      * `body` / `travel_leg` — `budget`'s condition and distance penalties. A person wounded in round 1
-                       has fewer scenes in round 2, and that must re-open their triage rather than
-                       silently shrink a queue they chose against a larger number.
-      * `told`       — (LAST, so the U2 falsifier's `drop=0` arm keeps meaning `q_ids`) the classed
-                       referents of `qs` that `person_q.ledger_names` says this person was told
-                       of: the `referent_named` decline in `decision/options.py::opening_set`
-                       (`oblige`, `comply`) reads exactly this, so a seat already carried as a
-                       vacancy that he is then TOLD of moves no class and no id, yet starts an
-                       `oblige` forming. Restricted to the classed ids, not the whole
-                       `ledger_names` set, for the whole-ledger reason above.
-
-    ⚠ `said_of` and `known_persons` read `seen` and event-kind claims OUTSIDE the `ledger` term above;
-    `q_ids` covers them only through Q2's reach. `regard`'s deed half does too, read through
-    `teller_weight`'s `relation` by `ledger_weigh`: an event-kind claim about a teller can re-rank
-    beliefs with this fingerprint unmoved -- left out for the whole-ledger reason above.
-
-    ⚠ WHAT IS NOT HERE, AND WHY THAT IS SAFE: `w.fixtures` is constant within a season (the sweep
-    arms are chosen at `build_world`), and `self.round` is not an input to any of the five readers
-    — a person's options do not depend on which round it is, only on what has happened."""
-    classed = {r for q in qs for r, _ in q.classes}
-    return (
-        tuple((q.id, q.classes) for q in qs),
-        tuple(sorted((t.id, t.kind, t.object, t.live) for t in p.tenures)),
-        tuple((c.id, c.value, c.confidence) for c in p.ledger
-              if str(c.predicate).partition(":")[0] in REQUIRES_STEMS),
-        p.body,
-        tuple(p.travel_leg),
-        tuple(sorted(classed & ledger_names(p.ledger))) if classed else (),
-    )
 
 
 def sense(p: Person, w: World) -> Sensation:
