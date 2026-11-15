@@ -43,7 +43,7 @@ def _stamina_pool_penalty(stamina):
 
 def clamp_command(value):
     """[A3, ED-MB-0067 Part A / ED-MB-0073, adversarial-review fix F3/F5] SINGLE OWNER of the Command
-    1-7 clamp (`params/factions/stats_1_7_scale.md`) — extracted from `derive_command`'s own tail so
+    1-7 clamp (`FORK:c451bcb:engine/params/factions/stats_1_7_scale.md`) — extracted from `derive_command`'s own tail so
     `Officer` and the general's own `command` can share ONE clamp instead of each re-implementing it
     (§8: never re-implement a rule). Before this fix, `Officer.__post_init__` had its own copy and
     `Unit`/`build_army` had NONE at all — an unclamped general `command` (e.g. 20) combined with a
@@ -51,7 +51,7 @@ def clamp_command(value):
     number of un-officered subunits, since providing any non-empty `officers` list also skipped the
     flat `SUBUNIT_CAP` check that used to be the only ceiling. Closed by clamping both sides of every
     Command comparison through this one function — see `build_army`'s own note."""
-    return max(1, min(7, int(value)))  # [canonical: params/factions/stats_1_7_scale.md — Command clamped 1-7]
+    return max(1, min(7, int(value)))  # [canonical: FORK:c451bcb:engine/params/factions/stats_1_7_scale.md — Command clamped 1-7]
 
 
 def derive_command(charisma, cognition):

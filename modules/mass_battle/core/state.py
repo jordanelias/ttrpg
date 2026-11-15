@@ -23,9 +23,9 @@ def _rout_resilience(atom):
     lazily on first check, which happens AFTER phase-1 discipline degradation — reading LIVE discipline gave
     identical-quality units different break distributions purely by casualty *timing*, contradicting the
     'stable quality' contract above."""
-    disc = max(0.0, min(1.0, (atom.eff_discipline_start - 2.0) / 3.0))  # [canonical: params/factions/stats_1_7_scale.md — discipline 2->0/5->1 normalization, same curve as resolution._disc_prep]
+    disc = max(0.0, min(1.0, (atom.eff_discipline_start - 2.0) / 3.0))  # [canonical: FORK:c451bcb:engine/params/factions/stats_1_7_scale.md — discipline 2->0/5->1 normalization, same curve as resolution._disc_prep]
     ms = getattr(atom, 'eff_morale_start', 0) or 0
-    # [canonical: params/factions/stats_1_7_scale.md — attributes on the 1-7 scale] normalize starting morale to 0..1
+    # [canonical: FORK:c451bcb:engine/params/factions/stats_1_7_scale.md — attributes on the 1-7 scale] normalize starting morale to 0..1
     mor = max(0.0, min(1.0, ms / 7.0)) if ms else 0.5
     return 0.5 * disc + 0.5 * mor
 
