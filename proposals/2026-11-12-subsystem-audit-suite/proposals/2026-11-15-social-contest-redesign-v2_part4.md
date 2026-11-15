@@ -23,8 +23,8 @@ sees**.
 | `heard` (restored) | a quiet man is heard by a crowd as well as an orator | the room to choose | **N holds** (0.160 → 0.500) |
 | `gap` (restored) | a reeve's office weighs nothing against a commoner's argument, and Reason cannot answer it | whom to face; whom to send | **N holds** (0.092 → 0.323) |
 | the hold (`drift`) | Focus has no role | none of his own | **N holds, weakly** (speaker +0.005; the judge's Focus -0.062 and +0.172) |
-| the blend `k` | a scholar and an orator are one build | which ground suits my dice here | **N holds** |
-| the `View`'s blur; `intent` | everyone reads perfectly | trust the reading or hedge | **N holds, weakly** |
+| the blend `k`; `relevance` (A-143) | a scholar and an orator are one build; what a man says need not be to the point | which ground suits my dice; answer the point | **N holds** (`relevance` own share +0.16 to +0.19) |
+| `perceived` (the gauge) and `frame` (A-141, A-142) | everyone knows what each option is worth and what moves each listener; Attunement has no role | which ground, framed on what, and how far to trust his own reading; the option's perceived worth and its frame | **N holds**: the frame is Attunement's one real operand on the speech (+0.125 to +0.142; 0.000 with a perfect reading); the gauge +0.05 to +0.09. The believed fit, aim and strain it replaced are deleted; a field for the other man's expected move was built and cut (it guessed worse than his commonest move) |
 | `q`, `wF`, `wA` | a judge is a die | who is on the bench decides what I argue | **N holds** (table B.3) |
 | `insincerity`, `believes` | a lie and an honest plea are one speech | say what I hold, or what works here | **N holds** |
 | the bearing reading | every person is his attributes | his stake; what the other seems to want | **N holds** |
@@ -46,8 +46,8 @@ and mixing (0.356) beats both. *World:* part 3 §B.5's seasons; the possible sno
 open.
 **S.** One obstacle composer, one ladder, one opposition rule, which is now the ruled one (A-137), so the earlier
 methodology finding closes when B05 takes §H item 1. Resumption runs. Cross-scale seams were not examined.
-**E, last.** Records 12 to 10. Settings 53 and three tables to 44 (38 before the overturned cuts restored six
-carriers). Moves 6 to 4, ends 6 to 3, closes 6 to 4 and the abridged. Draws 2G+8 an exchange (more than before,
+**E, last.** Records 12 to 10. Settings 53 and three tables to 47 (38 before the overturned cuts restored six
+carriers; three more for A-141 and A-143: `read_noise`, `bias_step`, the `relevance` switch). Moves 6 to 4, ends 6 to 3, closes 6 to 4 and the abridged. Draws 2G+8 an exchange (more than before,
 bought to give every believed number its own noise) and one a decider. *Legibility:* the ground, the press, the
 concession, the venue and now his own standing and weariness are readable from the view; how each decider weighs
 drift, evasion and insincerity is not, except through the room moving. *Over-distillation watchlist:* one `fit`
@@ -59,7 +59,7 @@ carried, part 2 §C.3).
 MUST BE STATED AS A LIMIT
   - provoking a man out of his composure changes what he does and, in this model, costs him little (T20)
   - regime and era move lawfulness, proof and the ground argued, not who wins (T13)
-  - the speaker's Focus and Attunement act weakly
+  - the speaker's Focus acts weakly; Presence's `heard` is silent where there is no crowd
   - a possible history effect across seasons is unresolved
   - bench moves, allies on a side: not designed
 MAY BE CLAIMED, HAVING SURVIVED TWO ANTAGONISTS AND ONE RECONCILIATION
@@ -120,7 +120,9 @@ and its share of the dice); `mark_shame`, `cover_step` (esteem's headroom); `shi
 ballot (Will is the opposition, once); the steadiness draw; `break_at` and the ends `broken`, `struck`,
 `adjourned`; `strikes`; `divert`, `deceive`; the ballot sources and the detection draw; the clamp; `presumes`,
 `scripted`, `order`, `written_only`; `case_rows`; `press_at`; `reading_kept`; the disposals `mutual` and `none`;
-five rows as kinds. **Cut in this pass:** `elicit`; the policy's bonus for the proof; `sense_level`; `manner_step`
+five rows as kinds. **Cut by A-141 and A-142:** the view's per-ground believed fit, believed aim and believed strain (the perceived
+worth of each option and its frame carry them); the reading as a pool draw (accuracy is Attunement with a little
+luck); the expected-move field. **Cut in this pass:** `elicit`; the policy's bonus for the proof; `sense_level`; `manner_step`
 (into `esteem_step`); the restated primitives table.
 
 ---
@@ -210,5 +212,10 @@ from provoking a man (A-136 states it; the model does not yet show it, so it is 
   (D1, D2, F7, F8, the carriers, bearing, context, power, the fold, the seasons) were NOT re-run on the corrected
   engine: the trial, debate, rally and tell paths are unchanged by it, but the seasons' negotiation and the
   fold's conversation counts are the earlier run's. The noble's steer (0.225 against 0.260) is within noise.
+- `checks_v3.py` reads view fields that A-141 removed and no longer runs; its numbers in part 3 (D1, D2, F2 for
+  the trial, F7, F8, the carriers, bearing, context, power, the fold, the seasons, the transcripts of §C) were
+  taken BEFORE the A-139 correction, the gauge, the frame and `relevance`, and were not re-run. A person at the
+  middle of every scale is unchanged by `relevance` and reads nearly as before; the all-mid figures should hold,
+  the cast's will have moved.
 - Failed or weak links are in part 3 §D: T20, T13's regime and era arms, T5's Focus arm, T7, and the unresolved
   history effect across seasons.

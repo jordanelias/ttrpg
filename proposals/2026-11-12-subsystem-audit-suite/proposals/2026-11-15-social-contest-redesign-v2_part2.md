@@ -26,7 +26,9 @@ class Present:                 # everyone: participant, adjudicator, audience
     stake: tuple               # (want, hold, bond) in -1..1: how THIS matter bears on him, toward `for`
     bonds: tuple               # ((other person, -1..1), ...)
     start: float               # where his track starts (host: start_step x mean(stake), plus the arrangement)
+    holds: tuple               # ((channel, tag, weight, how the matter bears on it), ...): his wants and convictions, tag by tag
     believes: float            # what he KNOWS of the matter, -1..1 toward `for` (his own ledger)
+    bias: float                # his stable misjudgement of what his options are worth: -1 pessimist .. +1 optimist
     power: float; precedence: int   # his circumstances: seat, office, wealth, influence, faction (host)
     items: tuple; strain: float
 ```
@@ -58,7 +60,7 @@ care = ( strongest pursuit or need, strongest conviction / scale_max, strongest 
 | read as | formula |
 |---|---|
 | his **stake** (whether he comes, which side, how hard) and his **start** (partiality) | `stake = bearing(p, matter)`; `start = start_step x mean(stake)`; a decider with a tie starts where it puts him and the fold deposits a `partial` claim |
-| the **fit** of an argument to him | it reads the MATTER: `clip(side x stake[channel] + 0.5 x (2 care[channel] - 1))` for `consequence` (want) and `authority` (hold); `clip(bond(him, speaker) + 0.5 x (2 care.bond - 1))` for `solidarity`; `credit(him, item)` for `evidence` |
+| the **fit** of an argument to him | it reads the MATTER, at the **frame** the speaker chose (one pursuit, need or goal of his for `consequence`; one conviction or duty for `authority`): `landing = clip(relevance x side x weight[tag] x bears[tag] + 0.5 x (2 weight[tag] - 1))`, and -0.5 for a frame he does not hold at all; `clip(bond(him, speaker) + 0.5 x (2 care.bond - 1))` for `solidarity`; `credit(him, item)` for `evidence` |
 | the **aim** of a press on him | `2 care[channel] - 1`; on `evidence`, what the item shows of him or of one he is bound to |
 | **credit** of an item | `clip(2 weight - 1 + bond(him, source) - max(0, bond(him, the one implicated)))` |
 | **sincerity** | `insincerity = max( -side x believes, -side x stake[channel], 1 if the item is one he knows false )`, clipped to 0..1: agreement between what he says and what he **knows and holds**; a self-serving lie is insincere through `believes` though it runs with his stake |
@@ -132,17 +134,18 @@ Beat(n, mover, voice, side, move, relation, issue, ground, item, point, target,
 
 ### C.2 The speech: one draw, one margin per listener
 
-A fixed 2G+8 normals an exchange (the reading's accuracy; a blur for each believed fit, each believed aim, the
-strain, the mood, their point, his own point, the other's intent; the hold; the speech), each believed number its
-own. For voice `V`, side `s`, ground `g`, item `i`, heard by `h` (everyone not on the speaking side):
+A fixed 2G+8 normals an exchange (his accuracy; one per ground for what arguing on it is worth to him and one for
+what pressing on it is worth; conceding; the mood; their point; his own point; the other's intent; the hold; the
+speech), each perceived number its own. For voice `V`, side `s`, ground `g`, item `i`, heard by `h` (everyone not on the speaking side):
 
 ```
 k        = clamp(content[g] + rite.reason_lean - crowd_lean x crowd, 0, 1)                  # R11: content AND venue
 pool     = heard(V) x pool_of(weighted_tenth((V.reason, V.presence), (k, 1-k)) + V.rank)
-heard(V) = clamp(1 - heard_step x max(0, (1 + 6 x crowd) - V.presence), heard_floor, 1)      # Presence: listened to
-sigma_h  = level(fit_level) x era[g] x (fit(h, V, s, g, i) - repeat_step x uses) x q(h, g)   # q: R12 Reason (C.3)
+heard(V) = clamp(1 - heard_step x max(0, (1 + 6 x crowd) - V.presence), heard_floor, 1)      # Presence: heard as assured
+relevance(V) = 2 (V.reason - floor) / (ceiling - floor)                                      # Reason: content to the point; 1 at mid
+sigma_h  = level(fit_level) x era[g] x (fit(h, V, s, g, i, frame, relevance) - repeat_step x uses) x q(h, g)
          + esteem_step x esteem(V) x 2 (1 - elab(h))                                         # Grace; standing weighs less with the able
-         + level(answer_level)  if the speech answers what stands
+         + relevance(V) x level(answer_level)  if the speech answers what stands
 ob_h     = even + opposed_ob(h.will + h.rank) + weary(V) + gap(V)  [+ difficulty + stakes in the abridged form]
 margin_h = roll_net_continuous(pool) + net_boost(sigma_h, pool) - ob_h
          - off_step x wF(h) x off  -  ploy_step x wA(h) x insincerity                        # R12 Focus, Attunement
@@ -211,18 +214,27 @@ pulls his next speech (Focus); it spends his staying power (Will); it is witness
 - **Rest**: nothing; silence under `must` while a point stands is turning away.
 - **Ends**: `budget`, `rested`, `yielded`.
 
-### C.6 The six, speaker side (R1, R2)
+### C.6 The division of labour on a speech (A-143, A-141, A-142; R1 for Focus and Will)
 
-| attribute | Jordan's words (R1) | carried by |
-|---|---|---|
-| Reason | *"constructing the argument ... logical and reasonable and evidentiary with ability to account for opponent's factual circumstances like resources office influence"* | its share `k` of the dice (the reasoned grounds; `evidence` is where what he holds becomes fit); and `gap`: it discounts the other side's circumstances |
-| Presence | *"the ability to be listened to and be compelling with your delivery"* | `heard` (the share of him the room listens to); its share `1 - k` of the dice |
-| Attunement | *"what is most likely to rattle your opponent or reading their intent ... read the room ... what kind of argumentation is most effective"* | the accuracy of his `View`: believed aim and strain, believed intent, believed mood and points, believed fit |
-| Focus | *"staying on topic, not being pulled away"* | the hold (`drift`) |
-| Grace | *"correct manner for the venue ... seen as respectable ... composed in face of difficulties"* | `short` against the venue's standard; `esteem` in the room; headroom that absorbs a rattle |
-| Will | *"keep arguing your case ... believe in yourself and remain confident ... not get rattled in first place"* | `weary` (staying power); the opposition to a press; as a listener, to an argument |
+Jordan: *"reason informs the relevancy of contents and stakes of the speech in a logical manner / attunement allows
+one to modulate and frame it in a way that appeals to the other's pursuits ethics personality / presence allows one
+to be heard as assured and convincing / grace allows one to behave in a manner that is befitting the occasion and
+thus be respectable"*. Four operands on one speech, each written on the beat (`relevance`, `frame`, `heard`,
+`esteem`); two speakers who differ in one of the four differ on that field alone (part 3 §B.6).
 
-A-138: at a quiet tell Focus, Attunement and the speaker's Will have no object and are silent.
+| attribute | what it is | its operand | beside it (R1, R11) |
+|---|---|---|---|
+| **Reason**: the CONTENT | how relevant what he says is to the live point and to the stakes that bear on those who decide | `relevance` (0 to 2, 1 at the middle): it scales how far the matter's bearing on the listener is brought home in the fit, and the worth of an answer to the point on the table. Apart from Focus (not being pulled off the point) and from Attunement (how it is framed) | its share `k` of the dice (R11); `gap`: accounting for the other side's circumstances (R1) |
+| **Attunement**: the FRAMING, and the gauge | how the content is aimed at what THIS listener wants and holds, and how well he judges what his own choices are worth | `frame(view, listeners)`: he picks, from his believed reading, the one thing of theirs to frame the ground on; the fit lands on their true interior at that frame. A body has one frame, so a split room dilutes it. And `perceived(true worth, accuracy, his noise, his bias)`: every worth on his view (A-141). One reading: `acc = (1 + tanh((0.4 (attunement - mid) + read_noise x z) / read_scale)) / 2`; nothing opposes it (rung 5: Grace has its own operand). Personality has no carrier in the tree: `[HOOK]`, a third kind of tag in `holds` | its believed mood, points and the other's intent |
+| **Presence**: the DELIVERY | being heard as assured and convincing: how he lands on others (Will is his own inner staying power) | `heard`: the share of him the room listens to | its share `1 - k` of the dice |
+| **Grace**: the CONDUCT | behaving as befits the occasion and so being respectable | `esteem`: how much better he meets the venue's standard, and his own rattles, than the man opposite | |
+| Focus | *"staying on topic, not being pulled away"* | the hold (`drift`) | |
+| Will | *"keep arguing ... believe in yourself ... not get rattled"* | `weary`; the opposition to a press and, as a listener, to an argument | |
+
+**The frame is automatic from the ground** (rung: A-130, game first: a second choice an exchange was refused); the
+option shows it (`Option.frame`) with its perceived worth, so a mis-frame is a risk he can see only as well as he
+reads. It replaced the per-ground believed fit and aim that the view used to carry, and the believed strain. A-138:
+at a quiet tell Focus and the speaker's Will have no object; Attunement now acts there through the frame.
 
 ---
 
@@ -258,16 +270,22 @@ What he asks during the sitting (bench moves) is a `moves` cell the rows do not 
 
 ```python
 @dataclass(frozen=True)
-class View:                       # own values true; everything else believed (each with its own noise) or public
+class View:                       # own values true; everything else perceived, each with its own noise, or public
     n: int; mover: str; side: str; issue: str; turns_left: int
-    live_theirs: Optional[tuple]; live_own: Optional[tuple]     # (point, ground, item, believed strength)
-    options: tuple                # Option(move, ground, item, relation, ev, p)
-    own: Cond; esteem: float; weary: float                      # his condition and standing
+    live_theirs: Optional[tuple]; live_own: Optional[tuple]     # (point, ground, item, perceived strength)
+    options: tuple                # Option(move, ground, item, relation, ev, p, frame): perceived worth and chance
+    own: Cond; esteem: float; weary: float
     visible: tuple                # each speaker's rattles
     mood: float; odds: float      # the room as he reads it; P(carried) on that reading before an ordinary bench
-    intent: float                 # the believed stake of the man opposite
-    fit: tuple; aim: tuple; strain_seen: float; acc: float
+    intent: float                 # the perceived stake of the man opposite
+    acc: float
 ```
+
+`menu(inp, state, mover)` computes each option's TRUE expected worth from the engine's own values (nobody is shown
+it); `perceived(true, acc, x, lean) = true + (1 - acc) x (read_blur x x + bias_step x lean)` is the one function
+through which every worth reaches a view, and the automatic policy chooses on the same numbers. At `acc` 1
+perceived is true; a pessimist underrates acting, an optimist overrates it. A field for the move he expects of
+the man opposite was built and **cut**: its hit rate (0.35 to 0.37) was under always guessing his commonest move.
 
 - **Honest and not omniscient.** `odds` and every option's worth are computed from his believed values and an
   ordinary stranger (B05.62), never from a true attribute or a true start. The card's `odds` is the close before
@@ -286,7 +304,7 @@ class View:                       # own values true; everything else believed (e
 
 ```
 temper = clamp(temper_step x his rattles + (2 mid - will - grace) / 6, 0, 1)      # 0 composed .. 1 lost
-value(option) = option.ev                                                          # what his own reading says
+value(option) = option.ev                                                          # its PERCEIVED worth (A-141)
               + temper x { argue:   grain x ((2 care[channel] - 1) + (presence - mid) / 3 [as one of them])
                            press:   grudge x (-bond(him, the man opposite)) + pride x (will - mid) / 3
                            concede: -pride x (will - mid) / 3 }
@@ -365,14 +383,14 @@ strife B33.
 
 ## K. The settings
 
-Forty-four of the proceeding's own (the old design: 53 and three tables), each `[ASSUMPTION; Jordan to correct]`.
+Forty-seven of the proceeding's own (the old design: 53 and three tables), each `[ASSUMPTION; Jordan to correct]`.
 
 | group | settings (shipped) |
 |---|---|
 | the speech | `fit_level` strong; `answer_level` moderate; `repeat_step` 0.35; `sense_step` 0.15, `involve` 0.3; `esteem_step` 0.2 [a fifth of a level a point of Grace better than the other], `show` 1.0; `off_step` 1.0, `evade` 1.5; `ploy_step` 1.5, `grain_strain` 0.5; `heard_step` 0.05, `heard_floor` 0.5; `gap_step` 0.25; `weary_step` 0.5, `stay_base` 1.0, `stay_per_will` 0.5 [Will 4 argues three speeches fresh] |
 | the press | `press_ob` 1.25, `press_pull` 1.0, `rattle_pull` 0.5, `wear` 0.5, `rattle_gain` 1.5, `rebound` 1.0, `reactance` 0.75, `room_level` 0.5, `heckle` 1.0 |
 | conceding | `concede_step` 2.0, `consent_at` 2.5, `yield_track` 12 |
-| the room and the reading | `crowd_at` 12, `crowd_lean` 0.2, `mood_scale` 5, `read_scale` 1, `read_blur` 2 |
+| the room and the reading | `crowd_at` 12, `crowd_lean` 0.2, `mood_scale` 5, `read_scale` 1, `read_blur` 2, `read_noise` 0.3, `bias_step` 2, `relevance` on |
 | the close | `track_step` 0.2 |
 | the NPC's temper | `temper_step` 0.5, `grain` 2.0, `grudge` 2.0, `pride` 2.0 |
 | the host | `start_step` 2.0, `presume_step` 2.0, `sympathy_step` 1.5, `power_scale` 2.0, `strain_fade` 0.5 |
