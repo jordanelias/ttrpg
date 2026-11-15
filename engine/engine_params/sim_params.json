@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 124,
-    "total": 379,
-    "uncited": 255,
+    "total": 378,
+    "uncited": 254,
     "of_which_assumption_grade": 8
   },
-  "count": 379,
+  "count": 378,
   "by_module": {
     "engine.dice_engine": 6,
     "engine.season": 24,
@@ -17,7 +17,7 @@
     "overview": 5,
     "social_contest": 31,
     "threadwork": 28,
-    "engine.season.settings": 94,
+    "engine.season.settings": 93,
     "engine.season.realm": 8
   },
   "params": [
@@ -3844,17 +3844,6 @@
     {
       "key": "engine.season.settings.record_stage_term",
       "name": "record_stage_term",
-      "value": 1,
-      "kind": "scalar",
-      "module": "engine.season.settings",
-      "file": "engine/season/data/fixtures.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "engine.season.settings.budget_office_bonus",
-      "name": "budget_office_bonus",
       "value": 1,
       "kind": "scalar",
       "module": "engine.season.settings",

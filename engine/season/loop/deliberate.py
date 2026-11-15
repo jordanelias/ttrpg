@@ -89,9 +89,11 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
     acts: list[Act] = []
     k_view = w.fixtures.get("view_k")
     # ⚠⚠ `scene_budget` HAS TWO READERS SINCE `U2` AND THEY READ IT AS TWO DIFFERENT QUANTITIES.
-    # Here it is the BASE a person's own budget starts from, before `H-70`'s office/condition/leg
+    # Here it is the BASE a person's own budget starts from, before `H-70`'s condition/leg
     # modifiers — `H-10`'s declared `site:`. In `driver.py::season` it is the COUNT OF ROUNDS. The
     # register row now names both; a session changing one must decide whether it means the other.
+    # ⚠ **REMOVED, C3-L8 (B03.86): `budget()` carries no live-`hold` term, so the ceiling below binds no one. The
+    # reading that follows is kept as the evidence of what was removed.**
     # ⚠ **AND THE PAIR IMPOSES A CEILING THE DESIGN DOES NOT: a person can hold more budget than
     # the season has slots to release.** Releasable = `rounds x scenes_per_round` =
     # `scene_budget x scenes_per_round`, which is 5 x 1 = 5 at the shipped fixtures, while

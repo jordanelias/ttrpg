@@ -33,9 +33,13 @@ def budget(p: Person, v: View, k: int, fx: "Fixtures") -> int:
     is what lets `:634`'s "the ONE non-decision function permitted a `World`" stay true --
     V2 §F3 took the larger one and made `budget` a second such function.
 
-        budget = base + office_bonus x (own live `hold` Tenures)
-                      - condition_penalty(own body band)
+        budget = base - condition_penalty(own body band)
                       - distance_penalty(own travel legs)
+
+    A SEAT BUYS NO SCENE (C3-L8; `04` §A.3 row 15 refuses an `office_bonus` in `budget` by name). A held
+    `hold` of any kind -- a seat, a landholding, a book, a survey sheet -- adds nothing: a seat's capacity
+    is its establishment, more named persons each with their own budget. The `offices x
+    budget_office_bonus` term this once carried is removed.
 
     `condition_penalty` COUNTS BANDS on the `band_floors["body"]` table the site gate already
     uses -- `H-38` closed with "`Site.condition` is the model", so this spends that closure
@@ -54,9 +58,7 @@ def budget(p: Person, v: View, k: int, fx: "Fixtures") -> int:
     that rather than widening it. The AST proof below tests for a `World` ANNOTATION, so it
     would catch a real regression here and correctly passes this."""
     TRACE.query("budget", "person")
-    offices = sum(1 for t in p.tenures if t.kind == "hold" and t.live)
-    b = k + offices * fx.get("budget_office_bonus")
-    b -= body_band_penalty(p, fx)
+    b = k - body_band_penalty(p, fx)
     b -= len(p.travel_leg) * fx.get("budget_leg_penalty")
     return max(1, b)
 
