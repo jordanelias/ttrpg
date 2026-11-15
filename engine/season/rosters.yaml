@@ -3604,6 +3604,21 @@ rosters:
       `effort` entry -- the channel then sums to 0.0 and `Scene.slots` counts every act as one slot].
     values: [effort]
 
+  # ── B03.68 (`09_WR_threadwork_module` edit 3): THE THREAD OPERATIONS ─────────────────────────────
+  # Appended last in `rosters:` (no threadwork block exists above to end; one ordering rule for additions, H-07).
+  thread_operations:
+    source: "`09_WR_threadwork_module` edit 3: the seven operations `systems/threadwork/sim/operations.py` has an entry point for (`attempt_leap`, `attempt_weaving`, `attempt_pulling`, `attempt_past_pulling`, `attempt_locking`, `attempt_dissolution`, `attempt_mending`)."
+    cite: "B03.68"
+    note: >-
+      WHAT A THREAD OPERATION IS: one named working a practitioner attempts on the thread, as an operation is one
+      task performed. The closed set of their names, read by `data/verbs.py`'s verb loader: a verb row that names
+      one through its `operation:` column names a member or the load refuses at import, as it refuses an
+      off-roster `beneficiary:`. NO SHIPPED ROW NAMES ONE YET -- the thread rows (CP-T07-03, -04, -11) are B35's.
+      The names are the roster's own spelling, not the oracle's labels (`operations.py` reports `Weaving`,
+      `Past-Oriented Pulling`, `Locking`): the oracle under `systems/` may not import `engine/season`, so it
+      reads no list from here and keeps its labels. `knot` joins when the `tie` / `knot` split lands (A-28, B35).
+    values: [leap, weave, pull, past_pull, lock, dissolve, mend]
+
 tables:
 
   site_yield:

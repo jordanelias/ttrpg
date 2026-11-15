@@ -1283,6 +1283,11 @@ if STORM not in MARCH_POSTURES or not set(MARCH_POSTURES) <= {STORM, BESIEGE}:
 SUBTREE_OCCUPATION_KINDS = roster("subtree_occupation_kinds")
 RAZE_TARGET_KINDS = roster("raze_target_kinds")
 ARRIVAL_ONLY_KINDS = roster("arrival_only_kinds")
+#: B03.68 (`09_WR_threadwork_module` edit 3): THE THREAD OPERATIONS -- the closed set of the names of the workings a
+#: practitioner attempts on the thread (leap, weave, pull, past_pull, lock, dissolve, mend). A thread operation is
+#: one named working, as an operation is one task performed. `data/verbs.py`'s verb loader refuses a row whose
+#: `operation:` column names a value outside this set; no shipped row names one yet (the thread rows are B35's).
+THREAD_OPERATIONS = roster("thread_operations")
 # ⚠ BOUND AT IMPORT LIKE THE OTHERS, AND THAT IS THE POINT. `titles` was the ONE roster read
 # lazily through a bare `_ROSTERS.get(...) or {}`, so it alone got no existence refusal -- and
 # because `_req_revoke` fails OPEN into purview-for-everything when the mapping is empty, the one
