@@ -23,7 +23,7 @@ INVOCATION: /methodology-execute Batch B03g-go-early-landings
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_GO.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
-GATE: Batch B02-tests
+GATE: Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0
 GATE: Batch B03-hygiene
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading") (until B03c's builder move merges, `from engine.season.harness.populated import build_realm` in its place).
 REQUIREMENT: none — the port's early checks (CLAUDE.md §6; `IS-B3-GO-06` (2): "so that GO-09's check is live through every later batch that edits a registry, which is the reason the proposal gives for landing it early"; `11_GO_port_gate_order_and_coverage.md` §2)
@@ -164,7 +164,7 @@ INVOCATION: /methodology-execute Batch B03c-boot
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_IN.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
-GATE: Batch B02-tests
+GATE: Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0
 GATE: Batch B03-hygiene
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading") (until B03c's builder move merges, `from engine.season.harness.populated import build_realm` in its place).
 REQUIREMENT: none — the builder's home in the game code (A-102: Jordan's `J-H-01` option A, a tenth module `engine/season/boot/`; Layer 1 already amended, `L1-A102`, `ED-IN-0359`)
@@ -262,7 +262,7 @@ INVOCATION: /methodology-execute Batch B16L-mb-words
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_MB.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
-GATE: Batch B02-tests
+GATE: Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0
 GATE: Batch B03-hygiene
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading") (until B03c's builder move merges, `from engine.season.harness.populated import build_realm` in its place).
 REQUIREMENT: none — Jordan's A-95 and A-99 words in the code's season-facing names (the lexicon §4: "Two code batches, both hash-EQUAL by intent and therefore placed ahead of the MB movers"); no row moves

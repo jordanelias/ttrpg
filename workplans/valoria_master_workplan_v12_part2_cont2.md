@@ -28,7 +28,7 @@
 | `test_narrative_dues.py` | `30_WR_D_momentum_and_its_brakes` (B38) | B38.07, B38.09, B38.10, B39.21 | named by an item |
 | `test_obligees.py` | `17_CENSUS_C1A_02_wires_and_corrections` (B10) | — | not written: dropped at `FORK:217340fc` (ED-IN-0314), B10 second half (part 13_cont) rewrites the rows that cited it |
 | `test_opposed_ob.py` | `29_DICE_one_opposed_rule_form_and_tuning` (B05) | B04.24 | named by an item |
-| `test_realm_requirements.py` | `01_CORE_tests_shipped_world_falsifiers` (B02) | B02.21, B02.22, B02.32, B05.63 … | named by an item |
+| `test_realm_requirements.py` | `01_CORE_tests_shipped_world_falsifiers` | B05.63 … | named by an item |
 | `test_referent_class_stamps.py` | `16_PESSIMIST_WR_D_small_clock_repairs_and_two_readings` (B36) | — | **a stale name, not a test owed** (C-17 closed): the source says the file is not in the tree and gates on `test_in12_step9.py` (B36.10) |
 | `test_remove.py` | `15_INSTITUTIONS_COLONIAL_B_distance` (B33) | B33.14, B33.15, B33.16 | named by an item |
 | `test_sc_calibration_targets.py` | `13_SC_calibration` (B05); `29_DICE_one_opposed_rule_form_and_tuning` (B05) | B05.22, B05.23, B05.51, B05.59 … | named by an item |
@@ -47,10 +47,6 @@
 |---|---|---|
 | `S/tests/test_b11a_duel_reach.py` | B01.01 | S1 |
 | `S/tests/test_b11a_scores_and_obstacle.py` | B01.02 | S1 |
-| `S/tests/test_check_requirements.py` | B02.13 | S2 |
-| `S/tests/test_register_reading.py` | B02.13 | S2 |
-| `S/tests/test_chronicle_propagation.py` | B02.16 | S2 |
-| `S/tests/test_realm_requirements.py` | B02.21 | S2 |
 | `S/tests/test_u5a_core_owed.py` | B03.53 | S3 |
 | `S/tests/test_event_kind_roster.py` | B03.57 | S3 |
 | `S/tests/test_person_interior.py` | B03.58 | S3 |
@@ -499,7 +495,6 @@ Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them
 | batch | lane | ED block (declared + spare) | H block (declared + spare) | against H1 §12 |
 |---|---|---|---|---|
 | B24p-sc-proceeding | SC | ED-SC-0054..0056 (1+2) | H-861..H-914 (50+4) | added 2026-11-14 after the table's last block (B01a's H-856..H-860, on top of B99's); `references/id_reservations.yaml` SC `next_free` 54 → 57 at the batch's opening, not by this plan; the hole register's next id after this block H-915. The fold map's own range H-856..H-909 assumed H-855 as the last allocated id: B01a had taken H-856..H-860 first |
-| B02-tests | IN | ED-IN-0369..0370 (0+2) | H-374..H-378 (0+5) | ED shifted |
 | B03-hygiene | IN | ED-IN-0371..0372 (0+2) | H-379..H-383 (0+5) | ED shifted |
 | B03g-go-early-landings | GO | ED-GO-0003..0004 (0+2) | H-384..H-388 (0+5) | same |
 | B03c-boot | IN | ED-IN-0373..0374 (0+2) | H-389..H-393 (0+5) | ED shifted |

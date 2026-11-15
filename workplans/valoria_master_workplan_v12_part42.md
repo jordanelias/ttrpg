@@ -20,7 +20,7 @@ IN-FLIGHT ROW: registers/handoffs/HANDOFF_WR.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01a-attributes-generated @cbca1ad4fcee656f908d8a75e99bf79213ddeeab (B01a.05: PROVISIONAL until re-read with `harness/pairs.py duel`: the 5,000-duel reading and the birth and abandonment draws this batch sets against persons are read as curves over generated pairs; a procgen person is minted through `state/carriers.py::generated_attributes` under any authored value; `valoria_master_workplan_v12.md` §3.B, "generated attributes, and curves not centres")
-GATE: Batch B02-tests
+GATE: Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0
 GATE: Batch B04-capability-home
 GATE: Batch B06-keyed-draw
 GATE: Batch B07-task-draw

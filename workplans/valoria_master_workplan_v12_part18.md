@@ -18,7 +18,7 @@ IN-FLIGHT ROW: registers/handoffs/HANDOFF_PC.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01a-attributes-generated @cbca1ad4fcee656f908d8a75e99bf79213ddeeab (B01a.05: PROVISIONAL until re-read with `harness/pairs.py duel`: every calibration this batch sets (A-31's damage scale, the fight's obstacle, the even blow) is read as a curve over generated pairs, by attribute-difference bin, with its slope and spread, never one even-matchup number; `valoria_master_workplan_v12.md` §3.B, "generated attributes, and curves not centres")
-GATE: Batch B02-tests
+GATE: Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0
 GATE: Batch B04-capability-home
 GATE: Batch B05-one-roll
 GATE: Batch B10-character
@@ -368,7 +368,7 @@ The two READING positions: no code and no commit of their own; each is a line of
 - FALSIFIER and CONTROL: a pin that moved and that no item of B15 declared (then the batch moved behaviour it did not declare: the re-record stops and the batch is `STOPPED`); a tally that moved in a world with no fight (B15 moves only fights). Control: B11's after-reading readings (`reading @<sha>`); the realm hash at a seed whose two seasons hold no fight is EQUAL `[ASSUMPTION: seed 0 holds no fight in two seasons — basis: `IS-B2-CHAR-02`'s "seed 0 enters no fight in three seasons, H-01", before B01's duel chain; the reading says which seeds hold fights after B01]`.
 - GATE: the BATCH GATE above, every line.
 - HASH MOVERS: the batch's one re-record, here and nowhere else.
-- DEPENDS ON: V12 B15.01 to B15.11; V12 Batch B02-tests (`_realm_goldens.py`).
+- DEPENDS ON: V12 B15.01 to B15.11; V12 Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0 (`_realm_goldens.py`).
 - GLOSSARY: none.
 - COST and TIER: a re-record; `sonnet`, `high`; the readings read by `opus`.
 - LANDS IT: B15's producer; `Item: B15.99`, without `[skip ci]` (the batch's last `Item:` push, CI run 1 of the batch).

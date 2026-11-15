@@ -13,7 +13,7 @@ INVOCATION: /methodology-execute Batch B04-capability-home
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_IN.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
-GATE: Batch B02-tests
+GATE: Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0
 GATE: Batch B03g-go-early-landings
 GATE: Batch B03c-boot
 GATE: Batch B03a-prose
@@ -529,7 +529,7 @@ Not in this batch, and where each is: CORE Edit 9 and CAP Part B (B05); MAP §G 
 - FALSIFIER and CONTROL: for the draft: a table (a) row whose skill key is not a B04 definition row, or a value with no basis cell and no `[NO BASIS IN THE TREE]` mark. For the re-pin: a moved tally (then the batch moved behaviour it did not declare: the re-pin stops and the batch is `STOPPED`). Control: B03a's close readings (`reading @<sha>`).
 - GATE: `python -m engine.season.harness.register --requirements` → exit 0, R-01, R-02, R-03 held; the pin tests pass. Record lines, not gate arms (a draft `.md` is reference; counting its sections observes the drafting and no behaviour, CLAUDE.md §0.05; BA1 lands the values where code reads them; repair lane R2a, K2 #12): `grep -c '^### ([a-e])' proposals/2026-11-12-subsystem-audit-suite/proposals/IS_A_11_cast_values_draft.md` → 5; table (a) has one row per cast row of `references/npc_registry.yaml` (46 at `8ce8d6a`; counted by a one-line `yaml.safe_load` in the commit body).
 - HASH MOVERS: the batch's re-pin (B04.01's and B04.07's declared encoding movers), recorded here and nowhere else.
-- DEPENDS ON: V12 B04.01 to B04.24 (every item before it); V12 Batch B02-tests (`_realm_goldens.py`, `IS-A-01`'s `reading:` record).
+- DEPENDS ON: V12 B04.01 to B04.24 (every item before it); V12 Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0 (`_realm_goldens.py`, `IS-A-01`'s `reading:` record).
 - GLOSSARY: none (the draft uses A-98's words: attribute, skill, skill score).
 - COST and TIER: content (drafting) and a re-pin; drafting `opus`, `high` ("authorship with competing considerations", `IS-A-11`); the re-pin `sonnet`, `high`.
 - LANDS IT: B04's producer (drafting by an `opus` `valoria-author`); `Item: B04.26`, `[skip ci]` (the batch's last `Item:` push is B04.99, which takes steps 2 and 3, the re-pin and the readings, with the GATE's pin-test and `--requirements` arms and HASH MOVERS' re-pin; this commit is the draft; repair lane R1, E-1).
@@ -543,7 +543,7 @@ Not in this batch, and where each is: CORE Edit 9 and CAP Part B (B05); MAP §G 
 - FALSIFIER and CONTROL: a moved tally (then the batch moved behaviour it did not declare: the re-pin stops and the batch is `STOPPED`); a pin that moved and that neither B04.01 nor B04.07 declared. Control: B03a's close readings (`reading @<sha>`).
 - GATE: the BATCH GATE above, every line, read once on this commit's tree; the pin tests pass; `python -m pytest engine/season/tests/test_rem30_character_sheet.py -q` → pass (REM-30's exit, step 4); `python -m engine.season.harness.register --requirements` → R-01, R-02, R-03 held.
 - HASH MOVERS: the batch's one re-pin, here and nowhere else.
-- DEPENDS ON: V12 B04.01 to B04.26; V12 Batch B02-tests (`_realm_goldens.py`, `IS-A-01`'s `reading:` record).
+- DEPENDS ON: V12 B04.01 to B04.26; V12 Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0 (`_realm_goldens.py`, `IS-A-01`'s `reading:` record).
 - GLOSSARY: none.
 - COST and TIER: a re-pin and the readings; `sonnet`, high.
 - LANDS IT: B04's producer; `Item: B04.99`, the batch's last `Item:` push (no `[skip ci]`; CI run 1 of the batch).

@@ -12,7 +12,7 @@ IN-FLIGHT ROW: registers/handoffs/HANDOFF_IN.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01a-attributes-generated @cbca1ad4fcee656f908d8a75e99bf79213ddeeab (B01a.05: BA1's authored cast replaces B01a's generated attributes for the persons it authors, key by key; every calibration this batch re-reads (its soft edge, the `difficulty:` levels) is PROVISIONAL until re-read with `harness/pairs.py` as a curve over generated pairs; `valoria_master_workplan_v12.md` §3.B, "generated attributes, and curves not centres")
-GATE: Batch B02-tests
+GATE: Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0
 GATE: Batch B04-capability-home
 GATE: Batch B05-one-roll
 GATE: Batch B10-character
@@ -259,7 +259,7 @@ EST: 9.7 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this bl
 - FALSIFIER and CONTROL: a pin moved that no BA1 item declared (then the batch moved behaviour it did not declare: the re-pin stops and the batch is `STOPPED`); a conjunct `reading:` whose tree is not this one. Control: B10's close readings.
 - GATE: the BATCH GATE above, every line; `python -m engine.season.harness.register --requirements` → exit 0, nine lines.
 - HASH MOVERS: the batch's one re-pin, here and nowhere else.
-- DEPENDS ON: V12 BA1.01 to BA1.13 (BA1.12 Patched: P-30; BA1.13 added 2026-11-13); V12 Batch B02-tests (`_realm_goldens.py`; `IS-A-01`'s `reading:` record).
+- DEPENDS ON: V12 BA1.01 to BA1.13 (BA1.12 Patched: P-30; BA1.13 added 2026-11-13); V12 Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0 (`_realm_goldens.py`; `IS-A-01`'s `reading:` record).
 - GLOSSARY: none.
 - COST and TIER: a re-pin and readings; `sonnet`, `high`; the readings read by `opus`.
 - LANDS IT: BA1's producer; `Item: BA1.99`, without `[skip ci]` (the batch's last `Item:` push, CI run 1 of the batch).

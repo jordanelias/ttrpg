@@ -9,7 +9,7 @@ INVOCATION: /methodology-execute Batch B31-mb-loadout-economy
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_MB.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
-GATE: Batch B02-tests
+GATE: Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0
 GATE: Batch B16L-mb-words
 GATE: Batch B17-mb-scale
 GATE: Batch B18-pc-content

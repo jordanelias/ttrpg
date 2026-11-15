@@ -159,23 +159,6 @@ These are the two tables `V12_STRUCTURE_part3.md` §7.2 asks of part 2 and lane 
 |---|---|---|---|---|
 | 1 | `engine/season/tests/test_b11a_duel_reach.py` | test file | B01.01 | — |
 | 2 | `engine/season/tests/test_b11a_scores_and_obstacle.py` | test file | B01.02 | — |
-| 3 | `engine/season/tests/_realm_goldens.py` | module | B02.01 | — |
-| 4 | `engine/season/tests/test_check_requirements.py` | test file | B02.13 | — |
-| 5 | `engine/season/tests/test_register_reading.py` | test file | B02.13 | — |
-| 6 | `removal_arm` | key or symbol | B02.14 | — |
-| 7 | `test_removal_replay_arm_reads_zero` | key or symbol | B02.14 | — |
-| 8 | `engine/season/tests/test_chronicle_propagation.py` | test file | B02.16 | — |
-| 9 | `moved_by_persons` | key or symbol | B02.16 | — |
-| 10 | `engines_entered` | key or symbol | B02.17 | — |
-| 11 | `test_the_engines_reading_counts_an_entry_it_can_see` | key or symbol | B02.17 | — |
-| 12 | `built_out` | key or symbol | B02.18 | — |
-| 13 | `test_built_out_counts_a_clean_execution_with_its_kinds_and_its_receipt` | key or symbol | B02.18 | — |
-| 14 | `test_removal_changes_another_persons_later_act` | key or symbol | B02.19 | — |
-| 15 | `null_scenes` | key or symbol | B02.20 | — |
-| 16 | `test_null_scenes_sees_a_planted_act_that_writes_nothing` | key or symbol | B02.20 | — |
-| 17 | `engine/season/tests/test_realm_requirements.py` | test file | B02.21 | — |
-| 18 | `test_r08_some_chosen_acts_were_not_the_top_candidate_and_none_at_zero_temperature` | key or symbol | B02.32 | — |
-| 19 | `engine/season/tests/test_corpus_run_seasons_cap.py` | test file | B02.39 | — |
 | 20 | `engine/season/tests/test_predicate_refusals.py` | test file | B03.24 | — |
 | 21 | `engine/season/tests/test_u5a_core_owed.py` | test file | B03.53 | — |
 | 22 | `engine/season/tests/test_event_kind_roster.py` | test file | B03.57 | — |
@@ -726,7 +709,6 @@ Reading (hand-read): **not missing**: #5 B05.21 (a forward note that the stance 
 
 | # | item | token marked EXISTS-IN-TREE | not in the tree; class | earliest items naming it as created | at |
 |---|---|---|---|---|---|
-| 1 | B02.38 | `engine/mc_v18.py` | no carrier found | — | part3_cont.md:355 |
 | 2 | B09.15 | `decision.py::make_chooser` | no carrier found | — | part11_cont.md:378 |
 | 3 | B11.04 | `boot/realm.py` | created by an earlier item (mark it V12) | B04.07, B04.09, B05.16 | part16.md:158 |
 | 4 | B21b.26 | `boot/realm.py` | created by an earlier item (mark it V12) | B04.07, B04.09, B05.16 | part21_cont.md:155 |

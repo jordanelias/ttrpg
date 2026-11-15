@@ -17,7 +17,7 @@ IN-FLIGHT ROW: registers/handoffs/HANDOFF_SC.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01a-attributes-generated @cbca1ad4fcee656f908d8a75e99bf79213ddeeab (the drawn attributes, `attr.spirit.will` (B01a.06, landed `1257a4a`) and `harness/pairs.py`; every reading this batch takes on a contest between persons is a curve over generated pairs, never one even-matchup number)
-GATE: Batch B02-tests
+GATE: Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0
 GATE: Batch B03-hygiene
 GATE: Batch B04-capability-home
 GATE: Batch B05-one-roll

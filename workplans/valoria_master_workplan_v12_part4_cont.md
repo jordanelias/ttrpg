@@ -18,7 +18,7 @@ The batch block's head, its position table and B03.01 to B03.17 are in the file 
 - FALSIFIER and CONTROL: "if deleting the `old` digest removed the test's ability to see a world move, a planted one-field change in a built realm would pass; it does not, because the `new` hash, the act count and the counts are still pinned." Run the plant the file's head records ("drop a dataclass's last field in `_object_head`") once after the edit → the file reddens; revert. Control: `R(0)` hash equal to B03.17's.
 - GATE: `python tools/currency_consistency_check.py` → exit 0 and `python tools/freshness_gate.py` → exit 0 ("clean after items 1–3"); `python -m pytest engine/season/tests/test_go07_canonical_digest.py -q` → green, and the recorded mutation still reddens it; `git grep -n "RE-RECORDED\|RE-PINNED\|_old_content_hash\|_old_entity_digest" -- engine/season/tests/test_go07_canonical_digest.py` → no hit.
 - HASH MOVERS: none.
-- DEPENDS ON: EXISTS-IN-TREE `CURRENT.md` row *Godot conversion* (opened at `aa31fd2`); `godot/README.md` (the `res://` sentence); `godot/godot_conversion_strategy_v1.md` §V.2 items 2–3 and the marker lines; `test_go07_canonical_digest.py::_old_entity_digest`, `::_old_content_hash`; V12 B02.01 (pins moved to `_realm_goldens.py`), B03.17 (`CURRENT.md`, earlier: "`09_WR_B_pointer_text_for_the_orchestrator.md` (B03, before this file in U3's chain)"); V12 Batch B41 named, not depended on.
+- DEPENDS ON: EXISTS-IN-TREE `CURRENT.md` row *Godot conversion* (opened at `aa31fd2`); `godot/README.md` (the `res://` sentence); `godot/godot_conversion_strategy_v1.md` §V.2 items 2–3 and the marker lines; `test_go07_canonical_digest.py::_old_entity_digest`, `::_old_content_hash`; V12 B02.01 @1c354dbc0aee19371754b7a648eafe48af9c3cb0 (pins moved to `_realm_goldens.py`), B03.17 (`CURRENT.md`, earlier: "`09_WR_B_pointer_text_for_the_orchestrator.md` (B03, before this file in U3's chain)"); V12 Batch B41 named, not depended on.
 - GLOSSARY: §F *fidelity parity* / *port parity* (step 5): "port parity" means the port gives the oracle's results, as a currency's parity means equal value.
 - COST and TIER: edit (transcription); `haiku` for items 1, 2, 11–13 (the source's), `sonnet` reads the go07 file's remains.
 - LANDS IT: B03's producer; one `Item: B03.18` commit, `[skip ci]`. GO reviews (the source's).
@@ -140,7 +140,7 @@ The batch block's head, its position table and B03.01 to B03.17 are in the file 
 - FALSIFIER and CONTROL: an `establish` refusal still read as `no-read`. Control: `R(0)`, `R(2)` hashes equal to B03.23's ("No Event, no claim, no hash").
 - GATE: `PYTHONHASHSEED=0 python -m engine.season.harness.aperture 2 0` → "printing a clause in place of `no-read` for `establish`" (and for `confer` where it refuses); `python -m pytest engine/season/tests/test_predicate_refusals.py -q` → green; `R(0)` hash equal to B03.23's.
 - HASH MOVERS: none.
-- DEPENDS ON: EXISTS-IN-TREE `loop/predicates.py::_req_confer`, `::_req_establish`, `::_refuse`, `harness/aperture.py` (DECIDING READ); V12 Batch B02 (`aperture`'s added lines, B02.17, B02.18).
+- DEPENDS ON: EXISTS-IN-TREE `loop/predicates.py::_req_confer`, `::_req_establish`, `::_refuse`, `harness/aperture.py` (DECIDING READ); V12 Batch B02 @1c354dbc0aee19371754b7a648eafe48af9c3cb0 (`aperture`'s added lines, B02.17, B02.18).
 - GLOSSARY: none.
 - COST and TIER: edit; `sonnet`, `high`.
 - LANDS IT: B03's producer; `Item: B03.24`, `[skip ci]`.

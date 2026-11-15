@@ -18,7 +18,7 @@ IN-FLIGHT ROW: registers/handoffs/HANDOFF_PC.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01a-attributes-generated @cbca1ad4fcee656f908d8a75e99bf79213ddeeab (B01a.05: PROVISIONAL until re-read with `harness/pairs.py duel`: the workbench sweeps and the round's coefficients this batch reads against fights are read as a curve over generated pairs, never one even-matchup number; `valoria_master_workplan_v12.md` §3.B, "generated attributes, and curves not centres")
-GATE: Batch B02-tests
+GATE: Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0
 GATE: Batch B06-keyed-draw
 GATE: Batch B07-task-draw
 GATE: Batch B10-character
@@ -312,7 +312,7 @@ INVOCATION: /methodology-execute Batch B08-scene-order
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_IN.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
-GATE: Batch B02-tests
+GATE: Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0
 GATE: Batch B03a-prose
 GATE: Batch B04-capability-home   (added by this part: the items are written with `lap` and `scenes_per_lap`, which B04.01 (PCR-4) makes; §2.1's `after` list lacks the edge)
 GATE: Batch B05-one-roll   (added: B08.05's draw is "the one sampler (A-5, `roll_net_continuous`), pool from the one pool rule" — `RIVAL`'s "Depends on: … the one sampler (B05)")
@@ -476,7 +476,7 @@ Not in this batch: `SEQ` edit 5 (the Layer 1 text; APPLIED, `L1-A9`, `04:662`, "
 - FALSIFIER and CONTROL: a pin that moved at B08.01 or B08.02 (declared EQUAL): then that item moved it and the batch stops before the re-pin. Control: `interactions_per_scene = 1` with `rival_precedence: hash` reproduces the base hash.
 - GATE: the BATCH GATE above; `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`) after the H-249 append; `python -m pytest engine/season/tests/test_check_requirements.py engine/season/tests/test_register_reading.py -q` → pass; `python -m engine.season.harness.register --requirements` → exit 0 and R-03's line reads `met  3 of 3 conjuncts` (B02.13's refusal rule: a `met` row with R-03.c at anything but `yes` would exit non-zero).
 - HASH MOVERS: the re-pin.
-- DEPENDS ON: V12 B08.01 to B08.06; V12 B02.13 (the register's conjunct form and refusal), B02.38 (R-03's conjuncts R-03.a and .b).
+- DEPENDS ON: V12 B08.01 to B08.06; V12 B02.13 @1c354dbc0aee19371754b7a648eafe48af9c3cb0 (the register's conjunct form and refusal), B02.38 @1c354dbc0aee19371754b7a648eafe48af9c3cb0 (R-03's conjuncts R-03.a and .b).
 - GLOSSARY: none.
 - COST and TIER: edit and readings; `sonnet`; the readings' judgment `opus`.
 - LANDS IT: B08's producer; `Item: B08.99`, the batch's last `Item:` commit (no `[skip ci]`).

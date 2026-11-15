@@ -128,7 +128,7 @@ The batch block (GATE lines, BATCH GATE, RE-PIN, IDS, DIALS AT CONTROL, UNDECIDE
 - FALSIFIER and CONTROL: RES: "any of rows 2 to 6 whose cited line does not say what the row claims at the landing commit (open the line; a citation not opened is not a citation)." Control: `register --check` and `validate_ed_citations.py` exit 0 before and after.
 - GATE: `python -m engine.season.harness.register --requirements` → exit 0, nine lines; `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`); `python tools/validate_ed_citations.py` → exit 0; `python tools/valoria_local.py --staged` → green (RES: "`python tools/valoria_local.py` green").
 - HASH MOVERS: none.
-- DEPENDS ON: V12 B05.18 (row 1 cites SC-P1's test; "after `05_SC_contest_record_on_event.md` lands"); V12 Batch B02-tests (the scale row's `conjunct:` key); EXISTS-IN-TREE the thirteen register rows (H-113 and H-120 quoted ids), the README's Status line, `registers/editorial_ledger_sc.jsonl` (last row ED-SC-0040).
+- DEPENDS ON: V12 B05.18 (row 1 cites SC-P1's test; "after `05_SC_contest_record_on_event.md` lands"); V12 Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0 (the scale row's `conjunct:` key); EXISTS-IN-TREE the thirteen register rows (H-113 and H-120 quoted ids), the README's Status line, `registers/editorial_ledger_sc.jsonl` (last row ED-SC-0040).
 - GLOSSARY: none.
 - IDS: ED-SC block slots 1 and 2.
 - COST and TIER: edit; `sonnet`, `medium`.
