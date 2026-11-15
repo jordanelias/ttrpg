@@ -42,7 +42,7 @@ from ._fresh_process import entry_target
 @pytest.fixture(autouse=True)
 def _engine_available():
     if C.engine() is None:
-        pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+        pytest.fail(f"personal_combat engine unavailable: {C.load_error()}")
 
 _KEY = "cr85_test_arms"   # a test-local capability key: no roster row is added
 

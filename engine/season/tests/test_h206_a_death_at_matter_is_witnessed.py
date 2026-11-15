@@ -159,7 +159,7 @@ def _killing_act_index(model_ids=range(40)):
     """The first act id that kills p_high, or None -- searched once per process, not once per test."""
     from ..seam.wrappers import combat as C
     if C.engine() is None:
-        pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+        pytest.fail(f"personal_combat engine unavailable: {C.load_error()}")
     return next((i for i in model_ids if _fight(i) is not None), None)
 
 

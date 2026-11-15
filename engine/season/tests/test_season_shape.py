@@ -8251,8 +8251,7 @@ def test_the_seam_calls_personal_combat_rather_than_naming_it():
     from ..seam.wrappers import combat as C
     w = P.tiny_world(); w.step = Step.RESOLVE
     if C.engine() is None:                     # a NAMED gap, never a silent skip
-        assert C.load_error(), "the engine is unavailable and the seam reports no reason"
-        pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+        pytest.fail(f"personal_combat engine unavailable: {C.load_error()}")
     SeasonDriver(P.tiny_world())   # `31b`: registers the module entries a direct `contest()` calls
 
     out = contest(w, "S", "the body", ["p_low", "p_mid"], 0, 2, ["act1"])
@@ -8302,7 +8301,7 @@ def test_the_combat_seam_derives_one_field_and_it_decides_something():
     from ..seam.wrappers import combat as C
     w = P.tiny_world()
     if C.engine() is None:
-        pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+        pytest.fail(f"personal_combat engine unavailable: {C.load_error()}")
     SeasonDriver(P.tiny_world())   # `31b`: registers the module entries a direct `contest()` calls
     scale = w.fixtures.get("condition_scale")
     ends = {}
@@ -8333,7 +8332,7 @@ def _k1_combatants(w, monkeypatch):
     from ..seam.wrappers._entry import entry_for
     from engine.substrate import pc_engine
     if C.engine() is None:
-        pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+        pytest.fail(f"personal_combat engine unavailable: {C.load_error()}")
     SeasonDriver(P.tiny_world())   # registers the module entries a direct `entry_for` reads
     entry, _ = entry_for(C._PRIZE, C._PROVIDER)
     wrapper = pc_engine.load().wrapper
@@ -8393,7 +8392,7 @@ def test_k1_authored_endurance_is_the_base_the_body_band_penalty_comes_off():
     from ..seam.wrappers import combat as C
     from ..seam.wrappers._entry import entry_for
     if C.engine() is None:
-        pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+        pytest.fail(f"personal_combat engine unavailable: {C.load_error()}")
     entry_for(C._PRIZE, C._PROVIDER)                 # loads the engine, which puts the flat `attributes` module on the path
     import attributes as spec
     default_end = spec.DEFAULT["end"]
@@ -8432,7 +8431,7 @@ def test_k1_control_an_all_absent_realm_builds_the_record_it_always_built(monkey
     inp = C.combat_input(w, ["p_low", "p_mid"], "fight")
     assert inp.attributes == () and w.content_hash() == before
     if C.engine() is None:
-        pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+        pytest.fail(f"personal_combat engine unavailable: {C.load_error()}")
     SeasonDriver(P.tiny_world())
     entry, _ = entry_for(C._PRIZE, C._PROVIDER)
     explicit = dataclasses.replace(inp, attributes=({}, {}))   # authored-nothing, spelled out
@@ -12904,7 +12903,7 @@ def test_we_a_contested_acts_consequence_differs_by_degree():
     hand-built scene (`test_cp_t03_00_both_parties_take_their_band.py`)."""
     from ..seam.wrappers import combat as C
     if C.engine() is None:                      # a NAMED gap, never a silent skip
-        pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+        pytest.fail(f"personal_combat engine unavailable: {C.load_error()}")
 
     seen = _we_bands()
     # ⚠ ASSERT THAT IT ASSERTED (§0.1 point 2). A search over act ids that happened to find only
@@ -12975,7 +12974,7 @@ def test_we_event_degree_is_assigned_and_stays_none_where_nothing_graded_it():
     assertion goes red; stamp a degree unconditionally and the second does."""
     from ..seam.wrappers import combat as C
     if C.engine() is None:
-        pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+        pytest.fail(f"personal_combat engine unavailable: {C.load_error()}")
     seen = _we_bands()
     for band, got in seen.items():
         # CP-T03-00: every Event carries the FIGHT's band (the worst party's), whichever party is read.
@@ -13002,7 +13001,7 @@ def test_we_emits_at_has_a_caller_and_the_band_selects_the_kind():
     assertion below goes red naming the extra kinds."""
     from ..seam.wrappers import combat as C
     if C.engine() is None:
-        pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+        pytest.fail(f"personal_combat engine unavailable: {C.load_error()}")
     row = VERB_TABLE["fight"]
     union = set(row.emits)
     assert len(union) >= 3, f"the union is no longer bigger than a branch ({union}); re-derive"
@@ -13415,7 +13414,7 @@ def test_we_the_band_is_read_off_the_subject_and_not_off_the_loser():
     that is not `result["winner"]`) and this goes red -- `p_mid` is deleted by a fight he won."""
     from ..seam.wrappers import combat as C
     if C.engine() is None:
-        pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+        pytest.fail(f"personal_combat engine unavailable: {C.load_error()}")
     SeasonDriver(P.tiny_world())   # `31b`: registers the module entries a direct `contest()` calls
     w = _w(); w.step = Step.RESOLVE
     raw = contest(w, "R", "the body", ["p_low", "p_mid"], 0, 2, ["we0"])

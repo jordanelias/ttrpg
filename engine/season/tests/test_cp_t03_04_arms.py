@@ -63,7 +63,7 @@ def revert_cp_t03_04(monkeypatch):
 @pytest.fixture
 def _engine():
     if C.engine() is None:
-        pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+        pytest.fail(f"personal_combat engine unavailable: {C.load_error()}")
 
 
 # ---- (i) the roster ---------------------------------------------------------------------------------------------
