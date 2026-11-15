@@ -202,7 +202,7 @@ The batch block's head, its position table and items B24.01 to B24.28 are in `va
 - FALSIFIER and CONTROL: "the fixture's `--auto` run enters the role (the instrument can see an entry); the realm reads 0 at all three seeds after the edit." Control: the fixture's entry count (B24.15) unchanged.
 - GATE: reading R1 re-taken → `social_contest.proceeding` entered at least once in at least two of seeds 0, 1, 2, two seasons; the new test green.
 - HASH MOVERS: "step (3) if taken (declared then)". Re-pinned at B24.99.
-- DEPENDS ON: reading R1; V12 Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0 (CI-11's `ENGINES` block).
+- DEPENDS ON: reading R1; V12 Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d (CI-11's `ENGINES` block).
 - GLOSSARY: none.
 - COST and TIER: build; `opus` (`IS-B2-SC-09`: "`opus` if step (3) is taken").
 - LANDS IT: B24's producer; `Item: B24.40`, `[skip ci]`; if the repair needs a file outside B24's census, `STOPPED` with the owner named (CLAUDE.md §0).

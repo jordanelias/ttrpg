@@ -21,7 +21,7 @@ INVOCATION: /methodology-execute Batch B03-hygiene
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_IN.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
-GATE: Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0
+GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.harness.populated import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading") (this batch runs before B03c moves the builder to `engine/season/boot/realm.py`).
 REQUIREMENT: none — deletions, owners and pointer text (`STAGES.md` stage 6, rule 5; `V12_STRUCTURE.md` §2.2: "none: deletions and owners"); what it serves: CLAUDE.md §0.05 (a contract row, a register row or a pointer that names code which is not there sends the next session to the wrong owner) and `CI-10`'s `FORK:` rows. R-01 to R-09 are re-read at the close and expected to print what B02's close printed (`reading @<B02 closing sha>`); no `status:` is edited (A-114)
 BATCH GATE (read once, on the closing tree, `PYTHONHASHSEED=0` on every seeded command):
@@ -205,7 +205,7 @@ Not in this batch, and where each is: `17_CENSUS_C1A_01` D1's `cast.defects` row
 - FALSIFIER and CONTROL: "A content hash that moves" (the source's), and the grep `grep -rnw -e newcombe -e _reach_throttle -e mark_belief_revision_pending -e pending_belief_revisions -e get_knot -e get_active_knots -e destabilised -e any_crisis engine modules systems tools tests skills` → no hit outside the deleted lines and the `d.get` read. Control: `R(0)` hash equal to B03.04's; `python -m engine.season.harness.headless --case NPC-088 --seasons 2 --seed 0` → `CONTENT HASH:` equal to B02's close.
 - GATE: `python -m pytest engine/tests/test_knots_ed912.py tests/valoria/test_mass_battle_maneuvers.py -q` → green; `python -c "import modules.mass_battle.hierarchy.units, systems.characters.sim.conviction, systems.fieldwork.sim.knots"` → exit 0.
 - HASH MOVERS: none (the oracle and module classes are not `World` carriers).
-- DEPENDS ON: EXISTS-IN-TREE each symbol above (opened at `aa31fd2`); V12 B02.03 @1c354dbc0aee19371754b7a648eafe48af9c3cb0 (deleted `test_flow_skeletons.py`, which makes its edits void).
+- DEPENDS ON: EXISTS-IN-TREE each symbol above (opened at `aa31fd2`); V12 B02.03 @895dc07319e40f9723a5ad857e068c7bdbde145d (deleted `test_flow_skeletons.py`, which makes its edits void).
 - GLOSSARY: none.
 - COST and TIER: edit; `sonnet`, `high`.
 - LANDS IT: B03's producer; `Item: B03.05`, `[skip ci]`.
@@ -385,7 +385,7 @@ Not in this batch, and where each is: `17_CENSUS_C1A_01` D1's `cast.defects` row
 - FALSIFIER and CONTROL: "`python tools/export_composition.py --check` is current before and after (it reads `composition_roles:` only; if it moves, the edit touched the wrong block). Each parser found in step 1 runs its own check. `grep -rn "domain_actions\|DA_proposal" references engine tools` prints only the provisional banner of `references/action_vocabulary.yaml`" (and, after this edit, the new requirements sentence naming the retired row). Control: `R(0)` hash equal to B03.12's.
 - GATE: `python tools/export_composition.py --check` → `OK — 17 role(s) … wiring valid for 23 module(s)`; `python -m engine.season.harness.register --requirements` → "loads and prints the nine"; `python tools/validate_ed_citations.py` → "passes".
 - HASH MOVERS: none.
-- DEPENDS ON: EXISTS-IN-TREE `references/module_contracts.yaml` row `domain_actions`, phase `DA_proposal`, `faction_state.accounting_phase`; `engine/season/requirements.yaml` `scales:` (the note survives B02: B02.31 edits the `scales:` block's `conjunct:` keys, its header and its first row's note only); `registers/editorial_ledger_fa_archive.jsonl` ED-FA-0002 (closed); V12 B03.10, B03.12 (`module_contracts.yaml`, earlier: "`17_CENSUS_REST_1` D4 first, then CI-03, then this"); V12 Batch B02 @1c354dbc0aee19371754b7a648eafe48af9c3cb0 (B02.31).
+- DEPENDS ON: EXISTS-IN-TREE `references/module_contracts.yaml` row `domain_actions`, phase `DA_proposal`, `faction_state.accounting_phase`; `engine/season/requirements.yaml` `scales:` (the note survives B02: B02.31 edits the `scales:` block's `conjunct:` keys, its header and its first row's note only); `registers/editorial_ledger_fa_archive.jsonl` ED-FA-0002 (closed); V12 B03.10, B03.12 (`module_contracts.yaml`, earlier: "`17_CENSUS_REST_1` D4 first, then CI-03, then this"); V12 Batch B02 @895dc07319e40f9723a5ad857e068c7bdbde145d (B02.31).
 - GLOSSARY: none.
 - COST and TIER: edit; `sonnet`, `high`.
 - LANDS IT: B03's producer; `Item: B03.13`, `[skip ci]`.
