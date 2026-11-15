@@ -554,6 +554,58 @@ def test_the_one_hop_relative_import_resolution_can_observe_the_seam_it_exists_t
     )
 
 
+def _composition_module_file_problems(data):
+    """Everything wrong with `data['module_files']` (a parsed `composition.json`), as strings, and how many
+    paths were checked. The set must equal the one derived from `roles`' targets
+    (`modules.<pkg>.<file>:<attr>` -> `modules/<pkg>/<file>.py`, or `.../__init__.py` for a package), and
+    every path must be a file under `modules/` that exists. A missing block is a problem, not an empty pass."""
+    block = data.get('module_files')
+    if not block:
+        return ['composition.json has no `module_files` block'], 0
+    problems, checked = [], 0
+    for rel in block:
+        checked += 1
+        path = REPO / rel
+        if not rel.startswith('modules/') or not path.is_file():
+            problems.append(f'{rel}: not a file under modules/')
+    derived = set()
+    for row in data['roles'].values():
+        stem = row['target'].split(':', 1)[0].replace('.', '/')
+        derived.add(stem + '.py' if (REPO / (stem + '.py')).is_file() else stem + '/__init__.py')
+    if set(block) != derived:
+        problems.append(f'module_files differs from the files roles name: '
+                        f'only in block {sorted(set(block) - derived)}, only in roles {sorted(derived - set(block))}')
+    return problems, checked
+
+
+def test_every_module_file_the_composition_lists_exists():
+    """GO-05 / B03g.04: the port packs the files `load()` resolves by string, so the list of those files
+    (`composition.json`'s `module_files`, cooked beside `roles` by `tools/export_composition.py`) must be
+    real files. The loop asserts it asserted (§0.1 pt 2); roles may share a file, so the count is the block's."""
+    import json
+    data = json.loads((REPO / 'engine' / 'engine_params' / 'composition.json').read_text(encoding='utf-8'))
+    problems, checked = _composition_module_file_problems(data)
+    assert not problems, problems
+    assert checked >= 1 and checked == len(data['module_files']), (checked, len(data['module_files']))
+
+
+def test_a_planted_path_in_a_copy_of_the_module_files_block_reds_the_check():
+    """The falsifier for the test above: the check can fail. A planted path in a temporary copy of the
+    real block is refused; a block with a path dropped is refused; the real block is not."""
+    import copy
+    import json
+    real = json.loads((REPO / 'engine' / 'engine_params' / 'composition.json').read_text(encoding='utf-8'))
+    assert 'module_files' in real, 'the real block must exist before a copy of it can be planted in'
+    planted = copy.deepcopy(real)
+    planted['module_files'] = sorted(planted['module_files'] + ['modules/combat/no_such_file.py'])
+    problems, _ = _composition_module_file_problems(planted)
+    assert any('no_such_file.py' in p for p in problems), problems
+    short = copy.deepcopy(real)
+    short['module_files'] = short['module_files'][1:]
+    assert _composition_module_file_problems(short)[0], 'a path missing from the block went unseen'
+    assert _composition_module_file_problems(real)[0] == []
+
+
 def test_the_import_probe_can_observe_both_kinds_of_leak():
     """§0.1 pt 2 — the probe must be able to FAIL, and in BOTH the ways it is supposed to catch.
     Its whole result is "the list was empty", which is also what a broken probe returns.
