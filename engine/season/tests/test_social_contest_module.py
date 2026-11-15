@@ -110,3 +110,27 @@ def test_s27_4_refuses_on_the_derived_pair_strictly_above_the_multiple():
     fx["obstacle_ceiling"] = 2
     capped = sigma.resolve(w, ["p"], ["c"], "a standing", rng=random.Random(0))
     assert capped["status"] == "RESOLVED" and capped["ob"] == 2.0, capped
+
+
+def test_the_obstacle_is_reached_by_its_own_composition_row():
+    """`seam/wrappers/sigma.py::_composed_obstacle` reaches the obstacle by the `social_contest.obstacle` row
+    and by no other: with that role's resolved callable replaced (and restored) by a stub returning 7.0, the
+    host returns 7.0 for any record. A missing row is `composition.require`'s refusal, not a reflective import."""
+    from engine.season.queries.inputs import SocialContestInput
+    from engine.season.seam.wrappers import sigma
+    role = "social_contest.obstacle"
+    held = composition._CACHE.get(role)
+    composition._CACHE[role] = lambda inp: 7.0
+    try:
+        checked = 0
+        for pool, opposition in ((1, None), (4, 3.0)):
+            inp = SocialContestInput(pool=pool, opposition=opposition, obstacle_default=2.0, obstacle_ceiling=3.0,
+                                     obstacle_refusal_multiple=3.0, leverage=0.0)
+            assert sigma._composed_obstacle(inp) == 7.0
+            checked += 1
+        assert checked == 2
+    finally:
+        if held is None:
+            composition._CACHE.pop(role, None)
+        else:
+            composition._CACHE[role] = held

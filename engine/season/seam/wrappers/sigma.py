@@ -77,8 +77,8 @@ prize row names. NO entry is added to
 """
 from __future__ import annotations
 
-import importlib
 import random
+import sys
 from dataclasses import asdict
 from typing import Any, Optional
 
@@ -265,22 +265,19 @@ def _frame(fx: Any, pool: int, opposition: Optional[float], forgery_quality: flo
 # ONE TODAY (the told, seen and inferred channels carry no capability), so a believed opposition is
 # `None` for every person in a built realm until a depositor exists; this is the reading, not the writer.
 CAPABILITY_CLAIM = "capability:"
-_ROLL_ROLE = "social_contest.roll"    # the composition row whose module composes the obstacle
+OBSTACLE_ROLE = "social_contest.obstacle"   # the composition row whose module composes the obstacle
+QUERY_ENTRIES = ((OBSTACLE_ROLE, "query"),)  # the host's declared need, held at driver construction (`registrar.require_entries`)
 
 
 def _composed_obstacle(inp: SocialContestInput) -> float:
-    """The obstacle the module composes for `inp`, through the module that owns it. Reached by the
-    composition row's target (`composition.require`), the host's own way of naming a module; the
-    attribute is read at call time, so the odds follow the owner when it changes."""
-    module = importlib.import_module(composition.require(_ROLL_ROLE).__module__)
-    return module.obstacle(inp)
+    """The obstacle the module composes for `inp`, reached by the `social_contest.obstacle` composition row."""
+    return composition.require(OBSTACLE_ROLE)(inp)
 
 
 def _composed_terms(inp: SocialContestInput) -> dict:
-    """The obstacle's named terms for `inp` (`roll.py::obstacle_terms`), through the module that owns them, as
-    `_composed_obstacle` reads the obstacle."""
-    module = importlib.import_module(composition.require(_ROLL_ROLE).__module__)
-    return module.obstacle_terms(inp)[1]
+    """The obstacle's named terms for `inp` (`roll.py::obstacle_terms`), read from the module the obstacle row
+    names (already loaded by `composition.require`), as `_composed_obstacle` reads the obstacle."""
+    return sys.modules[composition.require(OBSTACLE_ROLE).__module__].obstacle_terms(inp)[1]
 
 
 def _odds_of_input(inp: SocialContestInput) -> Optional[tuple]:

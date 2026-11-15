@@ -27,6 +27,7 @@ from ..queries.world_q import questions_for
 from ..loop.effects import EFFECTS
 from ..loop.predicates import REQUIRES_PREDICATES
 from .. import seam  # noqa: F401  -- registers the providers: importing `seam.wrappers` is what does it
+from ..seam.wrappers import sigma
 from ..trace_log import TRACE
 
 
@@ -244,7 +245,7 @@ class SeasonDriver:
         # deleted role-less row (a `query` or `step_call` no role roster names) meets in a fresh
         # process. The `query` entries `world_q` declares (E1, E4-E6, IN-52's `provision`), and the
         # step_calls MATTER calls (E2, E3).
-        require_entries(world_q.QUERY_ENTRIES + MATTER_STEP_CALLS)
+        require_entries(world_q.QUERY_ENTRIES + sigma.QUERY_ENTRIES + MATTER_STEP_CALLS)
         check_rows()
         check_contest_prizes(VERB_TABLE)
         check_graded_inquiries(VERB_TABLE)
