@@ -31,7 +31,7 @@ from typing import Any, NamedTuple, Optional
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.matrix import MATRIX
 from ..data.rosters import (
-    BINDS_BASES, BODY_FUNCTION, CONFERRAL_BASES, QUESTION_SOURCES, RECORD_KIND_KEYS, RECORD_KINDS,
+    BINDS_BASES, CONFERRAL_BASES, QUESTION_SOURCES, RECORD_KIND_KEYS, RECORD_KINDS,
     REFERENT_CLASSES, REMIT_ACTS, REVOCATION_BASES, RUNG_KINDS, office_faction, require_member,
     title_domain,
 )
@@ -1095,7 +1095,6 @@ class Office:
     # rosters and not to the schema that motivated them. Found by the adversarial pass.
     body: Optional[str] = None
     faction: Optional[str] = None
-    body_function: Optional[str] = None
 
     def __post_init__(self):
         # `04` §B.1: A SEAT'S ID IS A `SeatId` -- the same string, tagged (`state/ids.py`), so the fold
@@ -1125,8 +1124,6 @@ class Office:
         # gap -- either the roster is missing a faction, or the office is mis-conceived, and both
         # are findings worth having. An office belongs to something or we do not know what it is.
         self.faction = office_faction(self.body, self.faction)
-        if self.body is not None:
-            self.body_function = BODY_FUNCTION[self.body]
         # HOW THE SEAT IS FILLED AND WHO MAY STRIP IT -- ED-IN-0256 rulings (2) and (3), `13d-i`.
         # The remit clause's shape, one field along: a typo in a declared basis would otherwise
         # make a seat nobody can ever fill or strip, and look like a working precondition while
