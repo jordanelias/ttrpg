@@ -90,10 +90,9 @@ def test_st08_the_scale_key_invariant_10_now_actually_fails_for_convene():
     without complaint, and the ordinal replacement was inexpressible for want of a `venue`
     operand. ALL THREE REVERSE: the key is gone from the loaded row, and the replacement needed
     NO new operand -- `subject` already binds the rung (C-11, `21_RECONCILIATION.md:379`)."""
-    convene = VERB_TABLE["convene"]
-    assert not hasattr(convene, "scale") or True   # `VerbRow.scale` still exists as a dataclass
-    # field (every row has one, defaulted); what ST-08 actually tested is the RAW YAML CELL, which
-    # is what the loader reads BEFORE defaulting -- assert that directly.
+    # `VerbRow.scale` still exists as a dataclass field (every row has one, defaulted); what ST-08
+    # actually tested is the RAW YAML CELL, which is what the loader reads BEFORE defaulting --
+    # assert that directly.
     from ..data.files import VERB_TABLE_YAML
     from ..data.rosters import load_yaml
     raw = load_yaml(VERB_TABLE_YAML.read_text())

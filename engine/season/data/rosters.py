@@ -597,6 +597,14 @@ if set(RECORD_KIND_KEYS.get(ORDER_KIND, ())) != {ORDER_AT_KEY} | {ORDER_ROLE_KEY
             "`reserve` and `general` are not keys")
 ORDER_ROLES = roster("order_roles", ordered=True)
 ORDER_RETREAT_AT = roster("order_retreat_at", ordered=True)
+# B11 lane A: the record kinds whose making is put to the addressee's face (`rosters.yaml: read_to_addressee`), read by
+# `loop/witness.py::addressee_reads`. Refused at import for a member that is no `record_kinds` member.
+READ_TO_ADDRESSEE = frozenset(roster("read_to_addressee"))
+if not READ_TO_ADDRESSEE <= RECORD_KINDS:
+    raise Unspecified(
+        f"`rosters.yaml: read_to_addressee` names {sorted(READ_TO_ADDRESSEE - RECORD_KINDS)}, no record kind",
+        "rosters.yaml -- read_to_addressee", needs="`record_kinds` members only",
+        law="B11 lane A -- only a document can be read to the man it is addressed to")
 # ⚠ ONE STEM READS BOTH VOCABULARIES, SO THEY MAY NOT SHARE A WORD. `exists:<kind>`
 # (`queries/world_q.py::WorldReader.read`) answers a `tenure_kinds` member as a live EDGE and a
 # `record_kinds` member as a Record OF THAT KIND; a word in both rosters would be answered by

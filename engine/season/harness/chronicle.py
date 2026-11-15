@@ -60,8 +60,30 @@ guard. Kinds are counted here once, raw, over the chain ends only: `harness/stri
 its move codes over the whole log and owns that tabulation; this block maps nothing to a code.
 [ASSUMPTION; medium; Jordan to correct; revert: delete the reader]
 
+THE PROPAGATION READING (B02.16, behind `--propagation`; CLAUDE.md §4: the word and its definition). *How
+far the played world's state differs from the same built world in which nobody acts.* ONE built world
+is deep-copied twice (`storybar.fork`); one copy is played as the chronicle plays it, the other runs the
+same seasons with a chooser that returns no act (MATTER and CALENDAR run in both, so the null arm is the
+world's own clock and nothing else). Three columns, each a pure function over `World` that reads the
+stores the content hash reads and owns no rule:
+  (1) `moved_by_persons(w_played, w_null)` -- counts of differing entries, played against null, by
+      component (`COMPONENTS`) and, beside them, the tenure Events by cause (`TENURE_CAUSES`);
+  (2) `answered_outside_writing(w, verb_table)` -- executed cross-person answers whose verb is not
+      deposit-only or emission-only (`corpus_run.emits_and_writes_nothing`'s census, plus the rows whose
+      only `writes` are a Record, a Proposition or a Claim);
+  (3) `terminals_answered(w)` -- per terminal Event kind (`TERMINALS`), how many were emitted and, of
+      those, how many stand among the causes of another person's executed act.
+Nothing here reads a status, a threshold or `requirements.yaml`; no `measure:` reads it (C3-K5: the removal
+test is R-01's and R-02's instrument, this is a reading beside it). THE CONTROLS, both directions
+(`tests/test_chronicle_propagation.py`): the null arm against itself reads zero in columns 1 and 2 and
+answers nothing in column 3; a planted death of one seat-holder is seen in columns 1 and 3. If either
+fails the reading is void. LIMITS: `act_of` is rebuilt from the log (an Event's act is `w.acts` at its
+`causes[0]`, which is the driver's own map on a played run, checked at seed 0 over two seasons) because a
+pure function over `World` cannot read the driver's; a MATTER Event whose first cause is an act id (a term
+closure cites the act that wound the clock) would be read as that act's.
+
 Entry point: `python -m engine.season.harness.chronicle --seed S --seasons K [--cap C] [--all-acts]
-[--chains --min-depth D]`. `--seed` and
+[--chains --min-depth D] [--propagation]`. `--seed` and
 `--seasons` are required and have no default (this file is inside `tools/ci_sim_fabrication_check.py`'s
 blocking scope, the reason `harness/storybar.py` and `harness/soak.py` give); `--cap` is optional and
 is `build_realm`'s own parameter, defaulting to its own `None`, the full realm. The header line
@@ -75,8 +97,11 @@ import os
 import sys
 from collections import Counter
 
+from ..data.verbs import VERB_TABLE
 from . import arc as ARC
 from . import storybar as SB
+from .corpus_run import emits_and_writes_nothing
+from .populated import build_realm
 
 
 # ---------------------------------------------------------------------------------------------
@@ -198,6 +223,191 @@ def render_chains(seed, min_depth: int, res: dict) -> str:
 
 
 # ---------------------------------------------------------------------------------------------
+# THE PROPAGATION READING (B02.16). Pure over `World`s; the module docstring defines it.
+# ---------------------------------------------------------------------------------------------
+
+#: Column 1's components, in print order: what is compared between the played and the null arm.
+COMPONENTS = ("persons", "seat holds", "site conditions", "rungs", "stores", "stance rows",
+              "pursuits", "convictions")
+
+#: Column 1's tenure-change causes, in print order. `other` holds what none of the five names, so the
+#: causes add to the tenure Events read.
+TENURE_CAUSES = ("death", "term", "revocation", "claim", "conquest", "other")
+
+#: The Event kinds that change who holds what. A reading of Events, so a change a verb makes without
+#: one of these kinds is not here.
+TENURE_KINDS = ("tenure.opened", "tenure.closed", "succession.claimed")
+
+#: The acts whose Events name their own cause, by verb row (`verb_table.yaml`). An act with another
+#: verb, or none (MATTER), is read `term` when it closed a tenure and `other` otherwise.
+TENURE_CAUSE_OF_VERB = {"revoke": "revocation", "succeed": "claim", "seize": "conquest"}
+
+#: Column 3's terminal Event kinds: what happened to a person, a seat, a field, a matter, a telling or a body.
+TERMINALS = ("person.died", "tenure.closed", "field.won", "field.lost", "matter.determined",
+             "news.told", "body.changed")
+
+#: The kinds a row may write and still be deposit-only (column 2): a document, a proposition, a claim.
+DEPOSIT_KINDS = ("Record", "Proposition", "Claim")
+
+
+def _act_of(w) -> dict:
+    """`{Event id: Act}` rebuilt from the log: an Event an act emitted carries the act's id first among its
+    `causes` (`loop/resolve.py::_act_events`). Equals `SeasonDriver.act_of` on a played run (checked at
+    seed 0 over two seasons: 1809 of 1809 Events, no difference); a World holds no driver."""
+    out = {}
+    for e in w.log:
+        a = w.acts.get(e.causes[0]) if e.causes else None
+        if a is not None:
+            out[e.id] = a
+    return out
+
+
+def _executed(w, act_of: dict) -> dict:
+    """`storybar.read`'s executed rows over `w`: every act not refused (`corpus_run.attempts`' rule, read
+    over the ticks the world has run), with its `cross` antecedents cut the same way. One season bound
+    stands for the whole run: no column here reads a season."""
+    refused = SB.refusal_sets(w, max(w.tick, 0))[0]
+    return SB.read(w.log, act_of, [0], refused)["executed"]
+
+
+def _differing(a: dict, b: dict) -> int:
+    """How many keys of the union of `a` and `b` read differently (absent counts as a value)."""
+    gone = object()
+    return sum(1 for k in a.keys() | b.keys() if a.get(k, gone) != b.get(k, gone))
+
+
+def _projection(w) -> dict:
+    """`{component: {key: value}}` for `COMPONENTS`: the state a person's choice can move. A reading of
+    the stores the content hash folds; no rule. A stance row is keyed by its text and counted, so two
+    equal rows are two entries."""
+    stance, pursuits, convictions = Counter(), {}, {}
+    for pid, p in w.persons.items():
+        for row in p.stance:
+            stance[(pid, repr(row))] += 1
+        pursuits.update({(pid, k): v for k, v in p.pursuits.items()})
+        convictions.update({(pid, k): v for k, v in p.conviction.items()})
+    return {
+        "persons": {pid: p.weight for pid, p in w.persons.items()},
+        "seat holds": {(t.subject, t.object): True for t in w.tenures
+                       if t.kind == "hold" and t.live and t.object in w.offices},
+        "site conditions": {sid: s.condition for sid, s in w.sites.items()},
+        "rungs": {rid: (r.kind, tuple(sorted(map(str, r.envelope)))) for rid, r in w.rungs.items()},
+        "stores": {(rid, matter): n for rid, r in w.rungs.items() for matter, n in r.stores.items()},
+        "stance rows": dict(stance),
+        "pursuits": pursuits,
+        "convictions": convictions,
+    }
+
+
+def tenure_changes_by_cause(w) -> dict:
+    """`{cause: count}` over `TENURE_CAUSES`: the tenure Events (`TENURE_KINDS`) in `w.log`, each read
+    once. DEATH: a `tenure.closed` whose Events were written with a `person.died` (same `causes`, same
+    tick: the gate's one write for a death, `loop/matter.py::_die` and the fold's kill). Else the act that
+    caused it, by verb (`TENURE_CAUSE_OF_VERB`); else, with no act, a `tenure.closed` is TERM (MATTER's
+    maturing of a declared term); else `other`."""
+    died = {(tuple(e.causes), e.emitted_at) for e in w.log if e.kind == "person.died"}
+    act_of = _act_of(w)
+    out = {c: 0 for c in TENURE_CAUSES}
+    for e in w.log:
+        if e.kind not in TENURE_KINDS:
+            continue
+        a = act_of.get(e.id)
+        if e.kind == "tenure.closed" and (tuple(e.causes), e.emitted_at) in died:
+            cause = "death"
+        elif a is not None:
+            cause = TENURE_CAUSE_OF_VERB.get(a.verb, "other")
+        else:
+            cause = "term" if e.kind == "tenure.closed" else "other"
+        out[cause] += 1
+    return out
+
+
+def moved_by_persons(w_played, w_null) -> dict:
+    """COLUMN 1. `{name: count}`: for each of `COMPONENTS`, how many entries of the played world's
+    state differ from the null world's (an entry in one and not the other differs), then
+    `tenure.<cause>` for each of `TENURE_CAUSES`, the difference in tenure Events of that cause. Zero
+    everywhere exactly when nothing a person did reached the state."""
+    pa, pn = _projection(w_played), _projection(w_null)
+    out = {c: _differing(pa[c], pn[c]) for c in COMPONENTS}
+    ta, tn = tenure_changes_by_cause(w_played), tenure_changes_by_cause(w_null)
+    out.update({f"tenure.{c}": abs(ta[c] - tn[c]) for c in TENURE_CAUSES})
+    return out
+
+
+def _is_deposit_only(row) -> bool:
+    """A row whose `writes` are all documents, propositions or claims (never empty)."""
+    return bool(row.writes) and all(x.split(".")[0] in DEPOSIT_KINDS for x in row.writes)
+
+
+def answered_outside_writing(w, verb_table) -> int:
+    """COLUMN 2. How many executed acts answered another person's act (a `cross` antecedent) by a verb that
+    is not deposit-only or emission-only: not in `corpus_run.emits_and_writes_nothing(verb_table)`'s census
+    and not a row whose only `writes` are a Record, a Proposition or a Claim (`DEPOSIT_KINDS`). An act
+    whose verb has no row in `verb_table` counts: nothing says it only deposits."""
+    silent = set(emits_and_writes_nothing(verb_table)) | {v for v, r in verb_table.items()
+                                                          if _is_deposit_only(r)}
+    rows = _executed(w, _act_of(w))
+    return sum(1 for aid, r in rows.items() if r["cross"] and w.acts.get(aid).verb not in silent)
+
+
+def terminals_answered(w) -> dict:
+    """COLUMN 3. `{kind: (emitted, answered)}` for each of `TERMINALS`: the Events of that kind in the log
+    and, of those, how many stand among the `causes` of an executed act by a person other than the one who
+    caused the terminal (a terminal no act caused, as MATTER's, is another person's to every actor). Each
+    terminal counts once however many acts cite it."""
+    act_of = _act_of(w)
+    executed = _executed(w, act_of)
+    kind = {e.id: e.kind for e in w.log if e.kind in TERMINALS}
+    cited = set()
+    for e in w.log:
+        a = act_of.get(e.id)
+        if a is None or a.id not in executed:
+            continue
+        for c in e.causes:
+            if c in kind and getattr(act_of.get(c), "actor", None) != a.actor:
+                cited.add(c)
+    emitted = Counter(kind.values())
+    answered = Counter(kind[c] for c in cited)
+    return {k: (emitted[k], answered[k]) for k in TERMINALS}
+
+
+def nobody_acts(chooser):
+    """`drive`'s `wrap_chooser` for the null arm: every person's scene is empty, whatever the chooser would
+    have chosen. The season's MATTER and CALENDAR still run."""
+    return lambda p, v, s, ask_budget: []
+
+
+def propagation(base, seasons: int) -> dict:
+    """THE READING over ONE built world `base`, never run itself: a played copy and a null copy
+    (`nobody_acts`), each `seasons` seasons. Returns `{"moved", "outside_writing", "terminals",
+    "null_terminals"}`: columns 1 to 3 of the played arm, and column 3 of the null arm beside it so a
+    terminal MATTER emits in both reads against its own denominator."""
+    arms = {}
+    for name, wrap in (("played", None), ("null", nobody_acts)):
+        w = SB.fork(base)
+        arms[name] = SB.drive(w.world_seed, seasons, "off", world=w, wrap_chooser=wrap)[0]
+    return {"moved": moved_by_persons(arms["played"], arms["null"]),
+            "outside_writing": answered_outside_writing(arms["played"], VERB_TABLE),
+            "terminals": terminals_answered(arms["played"]),
+            "null_terminals": terminals_answered(arms["null"])}
+
+
+def render_propagation(seed, seasons: int, cap, res: dict) -> str:
+    """The three columns as text, one line per entry."""
+    out = [f"propagation seed={seed} seasons={seasons} cap={cap} PYTHONHASHSEED={os.environ.get('PYTHONHASHSEED')}",
+           "(1) moved by persons: entries of the played state that differ from the null arm's"]
+    out += [f"    {k:<22} {n:>6}" for k, n in res["moved"].items()]
+    out.append(f"(2) answered outside writing: {res['outside_writing']} executed cross-person answers "
+               "by a verb that is not deposit-only or emission-only")
+    out.append("(3) terminals answered: emitted / answered by another person's executed act   "
+               "[null arm: emitted / answered]")
+    for k, (n, a) in res["terminals"].items():
+        nn, na = res["null_terminals"][k]
+        out.append(f"    {k:<18} {n:>6} / {a:<6}   [{nn} / {na}]")
+    return "\n".join(out)
+
+
+# ---------------------------------------------------------------------------------------------
 # CLI.
 # ---------------------------------------------------------------------------------------------
 
@@ -220,9 +430,19 @@ def main(argv=None) -> int:
                          "that made them consequence acts; a reading, no bar")
     ap.add_argument("--min-depth", type=int, default=None,
                     help="REQUIRED with --chains, no default: the least cross-person depth of a chain end counted")
+    ap.add_argument("--propagation", action="store_true",
+                    help="print the propagation reading INSTEAD of the chain: how far the played world's state "
+                         "differs from the same built world where nobody acts (three columns: entries moved by "
+                         "persons, executed answers outside writing, terminal Events answered); a reading, no bar")
     args = ap.parse_args(argv)
     if args.chains and args.min_depth is None:
         ap.error("--chains requires --min-depth (no default)")
+    if args.propagation and (args.chains or args.all_acts):
+        ap.error("--propagation prints its own reading; it takes neither --chains nor --all-acts")
+    if args.propagation:
+        base = build_realm(args.seed, args.cap)
+        print(render_propagation(args.seed, args.seasons, args.cap, propagation(base, args.seasons)))
+        return 0
 
     w, d, bounds = SB.drive(args.seed, args.seasons, args.arm, args.cap)
     consequence = ARC.consequence_acts(w, d.act_of)

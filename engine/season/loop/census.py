@@ -22,7 +22,7 @@ from __future__ import annotations
 from ..data.matrix import Step
 from ..queries import world_q
 from ..state.attribution import causing_act
-from ..state.carriers import Person, Rung, Tenure
+from ..state.carriers import Person, Rung, Tenure, generated_attributes
 from ..state.gate import Token
 from ..state.world import rung_kind_ascends
 from ..trace_log import TRACE
@@ -104,6 +104,10 @@ def census(self, token: Token) -> None:
 def _individuate(w, pid: str, at: str) -> None:
     # `born`: a person minted now is `age_at_build` old NOW (v9 IN-34); the bare default would be
     # `-age_at_build`, i.e. that old at tick 0, and so older by every season the realm has run.
-    w.persons[pid] = Person(pid, pid, born=w.tick - w.fixtures.get("age_at_build"))
+    # `attributes`: the sheet is drawn by the build's own owner (B01a.02), passed to the constructor and not
+    # assigned after it; it is a function of (seed, id, key) and never of the tick of the mint.
+    w.persons[pid] = Person(pid, pid, born=w.tick - w.fixtures.get("age_at_build"),
+                            attributes=generated_attributes(w.world_seed, pid,
+                                                            w.fixtures.get("generated_attribute_range")))
     w.rungs[pid] = Rung(pid, "person")
     w.add_tenure(Tenure(f"t_{pid}_in", pid, at, "contain", w.tick))

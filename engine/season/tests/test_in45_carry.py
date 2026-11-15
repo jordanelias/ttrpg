@@ -196,7 +196,8 @@ def test_in45_a_bench_determines_a_carried_matter():
     and takes the matter off it. CONTROL: with no carry the same determination is refused (nothing
     on the docket). v9 SC-03b: `determine` is contested, so the bench is a STRONG JUDGE (`pool_default`
     30, as `test_u7_remit.JUDGE`) and the control asserts the band it opened at."""
-    w, d = _filed(DEFAULT_FIXTURES.sweep("pool_default", JUDGE["pool_default"]))
+    w, d = _filed(DEFAULT_FIXTURES.sweep("pool_default", JUDGE["pool_default"])
+                   .sweep("obstacle_model", JUDGE["obstacle_model"]))   # B11 lane A: `JUDGE`'s control obstacle
     det = Act(id="dt0", actor=DUKE, verb="determine", via=SEAT, payload={"subject": PARTY})
     assert _kinds(_fold(w, d, det)) == ["determine.refused"]
     assert _kinds(_fold(w, d, _carry("c1"))) == ["petition.carried"]

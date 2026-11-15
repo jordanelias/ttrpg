@@ -125,7 +125,7 @@ def load(descriptor_path=None, names_index_path=None):
     descriptor = _load_descriptor(descriptor_path or DESCRIPTOR_PATH)
 
     attrs = descriptor.get('attributes', {}) or {}
-    for group in ('body', 'mind', 'social'):
+    for group in ('body', 'mind', 'spirit', 'social'):
         for e in attrs.get(group, []) or []:
             if not isinstance(e, dict):
                 continue

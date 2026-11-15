@@ -61,7 +61,11 @@ REMIT = ("requisition", "open_case", "determine", "issue")
 # business. The tests below that need the disposal to OPEN take a STRONG JUDGE -- `pool_default` 30 against
 # the same obstacle -- and each such test ASSERTS the band it landed on (`_sentenced`, the `OPENS` checks), so a
 # fixture that stopped being strong fails here and does not quietly turn an executes-test into a refusal-test.
-JUDGE = {"pool_default": 30}
+# B11 lane A: AND THE CONTROL OBSTACLE (`obstacle_model: stand_in`). One score has two roles since the lane (`seam/wrappers/
+# pool.py::score`): on the shipped `task` arm the party opposes with the score he rolls, which in this hand-built world is
+# `pool_default` too, so the strong judge's 30 would meet a party at 30 and the disposal tests would stop being about the
+# disposal. These tests are about what a determination opens, not about the obstacle, so they read the control arm.
+JUDGE = {"pool_default": 30, "obstacle_model": "stand_in"}
 OPENS = ("Overwhelming", "Success")
 
 

@@ -94,6 +94,11 @@ class SocialContestInput:
     proof_step: float = 0.0
     forgery_quality: float = 0.0
     ceiling_per_pool: bool = False
+    # B11 lane A: THE TASK'S DIFFICULTY (`rosters.yaml: task_difficulty`, `data/verbs.py::TASK_DIFFICULTY`), RAW AS THE
+    # OTHERS -- the obstacle's first term, to which the opposing person's `score / 2` and the room's and the document's
+    # terms are added (`roll.py::obstacle_terms`). `None` is the CONTROL ARM (`Fixtures obstacle_model: stand_in`): the
+    # obstacle the module composed before, `score / 2` or the `obstacle_default` stand-in, byte for byte.
+    difficulty: Optional[float] = None
 
 
 @dataclass(frozen=True)

@@ -855,7 +855,7 @@ def derive_tokens(root, record_drops=None):
     prim_rows = []
     attrs = dr.get('attributes', {})
     if isinstance(attrs, dict):
-        for grp in ('body', 'mind', 'social'):
+        for grp in ('body', 'mind', 'social', 'spirit'):
             g = attrs.get(grp, {})
             if isinstance(g, dict) and isinstance(g.get('entries'), list):
                 prim_rows += g['entries']

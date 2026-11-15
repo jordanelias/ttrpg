@@ -229,7 +229,7 @@ def build():
         raise SystemExit('descriptor_registry.yaml: attributes.scale is missing. The attribute scale '
                          'is the one bound the engine clamps every character stat on; it may not be absent.')
     roster = []
-    for domain in ('body', 'mind', 'social'):
+    for domain in ('body', 'mind', 'spirit', 'social'):
         for key in (attrs.get(domain) or []):
             roster.append(key if isinstance(key, str) else key.get('key'))
 

@@ -1,8 +1,146 @@
-# Workplan v12 — part 3, continued: batch B02-tests from item B02.23
+# Workplan v12 — part 3, continued: batch B02-tests from item B02.16 (B02.16 to B02.22 moved here 2026-11-14 to keep part 3 under the 120 KB cap when B01a was added)
 
 ## Status: PROPOSED (the continuation of a body part of workplan v12, split at an item boundary at the part cap; unratified input to `methodology-execute`'s 0.1 stop until Jordan adopts v12; resolves nothing at runtime, CLAUDE.md §0.05)
 
-Batch B02-tests's block head (INVOCATION, GATE, REQUIREMENT, BATCH GATE, C(k), SERIAL EDGES, the position table) and items B02.01 to B02.22 are in the file before this one; the head's index maps each handle to its file. Words and paths as that file states.
+Batch B02-tests's block head (INVOCATION, GATE, REQUIREMENT, BATCH GATE, C(k), SERIAL EDGES, the position table) and items B02.01 to B02.15 are in the file before this one; the head's index maps each handle to its file. Words and paths as that file states.
+
+### B02.16 — the chronicle reads what persons moved, against a world where nobody acts · 16_PESSIMIST_GAME_consequence_reading · BUILD · HASH EQUAL
+- SOURCE: `proposals/16_PESSIMIST_GAME_consequence_reading.md` (head "Reconciled: … U5d closure": the column of tenure changes by cause), "The resolution (decided)", "Edits", "Gate"; C3-K5 (its `requirements.yaml` edit is withdrawn); rulings A-15, A-19, A-57, A-58, A-66 (the producers of the terminals); closes F-PES-GAME-01, F-PES-GAME-02.
+- ADVANCES: none of the nine as a conjunct (C3-K5: no `measure:` reads it); a reading beside the removal test.
+- INSTRUCTION (copied):
+  1. "`engine/season/harness/chronicle.py`: a `--propagation` flag (new; `main`'s parser), running the played arm and the null arm (the same built world, a chooser that returns no act, MATTER and CALENDAR running) for `--seed` and `--seasons`, and printing the three columns. Three pure functions over `World` (they read the stores the content hash reads and own no rule): `moved_by_persons(w_played, w_null) -> dict[str, int]` (column 1, by component), `answered_outside_writing(w, verb_table) -> int` (column 2; reads `verb_table.yaml`'s `writes` column and `corpus_run`'s `EMITS AND WRITES NOTHING` census, the engine map in the scratch file is NOT carried), `terminals_answered(w) -> dict[str, tuple[int, int]]` (column 3: emitted, and among another person's executed act's causes). Source of the projection: the scratch `runs/PES_GAME/pes.py::proj`, rewritten here, not copied (the scratch is not in the repository). The docstring and `--help` define the reading in one sentence (CLAUDE.md §4)."
+  2. The columns: (1) **Moved by persons**: "the state projection of the played arm against the null arm, by component: persons, seat `hold`s, site conditions, rungs, stores, stance rows, pursuits, convictions. Printed as counts of differing entries", with the column the U5d head adds: tenure changes by cause (death, term, revocation, claim, conquest); (2) **Answered outside writing**: "executed cross-person answers whose answering verb is not a deposit-only or emission-only row" (`corpus_run`'s `EMITS AND WRITES NOTHING` census plus the rows whose only `writes` is a `Record`, a `Proposition` or a `Claim`); (3) **Terminals answered**: "for `person.died`, `tenure.closed`, `field.won`/`field.lost`, `matter.determined`, `news.told`, `body.changed`: emitted, and of those, how many stand among the causes of another person's executed act."
+  3. "Nothing else. No `requirements.yaml` edit (withdrawn, C3-K5)." No status is read on these; no threshold beyond "above the null arm".
+- WHERE: `engine/season/harness/chronicle.py` (`main`'s parser; NEW `moved_by_persons`, `answered_outside_writing`, `terminals_answered`); NEW `engine/season/tests/test_chronicle_propagation.py`.
+- TESTS: in the new file, written with the edit: `test_null_arm_against_itself_reads_zero_in_every_column` (control a), `test_planted_body_hazard_moves_persons_and_seat_holds` (control b: the bodies hazard set to 1 for one seat-holder, replacing the scratch `x2_death.py`); red before the edit (no functions).
+- FALSIFIER and CONTROL: the source's two controls: (a) the null arm against itself reads zero in every column; (b) a planted consequence is seen (the hazard moves `persons` and `seat holds` in column 1 and puts a `person.died` in column 3's denominator). "If either control fails the reading is void."
+- GATE: `python -m pytest engine/season/tests/test_chronicle_propagation.py -q` → 2 passed; `PYTHONHASHSEED=0 python -m engine.season.harness.chronicle --seed N --seasons 2 --propagation` for N in 0, 1, 2 → prints the columns (three seasons in the source; A-114).
+- HASH MOVERS: none (a harness reading).
+- DEPENDS ON: V12 B02.15 (after the nine-gate file, the source's order); EXISTS-IN-TREE `engine/season/harness/chronicle.py::main` (its arguments `--seed`, `--seasons`, `--arm`, `--cap`, `--all-acts`, `--chains`, `--min-depth`), `corpus_run`'s census, `verb_table.yaml`'s `writes` column.
+- GLOSSARY: *propagation reading* (new, if no row has it): "how far the played world's state differs from the same world where nobody acts", in one sentence, added in this commit.
+- COST and TIER: edit; `sonnet`, high.
+- LANDS IT: B02's producer; `Item: B02.16`, `[skip ci]`.
+
+### B02.17 — the act-count instrument prints which engines a run entered · CI-11 · BUILD · HASH EQUAL
+- SOURCE: `master/CODEBASE_IMPROVEMENT_PROPOSAL_part2.md` `CI-11` ("Exact edits, in order" 1–4, "Tests", "Gate", "Falsifier and control", "How later batches use it"); closes H-01 (the instrument half).
+- ADVANCES: none of the nine as a conjunct; the `ENGINES` reading `IS-PC-03`, `IS-MB-05` and IS-A §12.2 read at closes (`combat.fight` at this batch's close). B01 leaves the VERB `fight` formed 0 because item (6) of `e5d6ab9` dropped `duel` from `fight`'s violence line (a duel is not a fight: duels are opened by an executed `accept`, 1 / 3 / 0 `duel.yielded` after B01) and the plan gives fights on enmity to B37 and the repeated-accept residue to B28.07; so this batch's reading of `combat.fight` is expected 0 and is `IS-PC-03`'s falsifier READING, quoted, not a gate that can pass (B02's UNDECIDED (1)).
+- INSTRUCTION (copied; line numbers dropped, `aperture.py` is edited here, before B03a):
+  1. "`engine/season/harness/aperture.py`: a function `engines_entered(run: Callable[[], Any]) -> tuple[Any, dict | None]` that, on Python 3.12 or later, takes a monitoring tool id (`sys.monitoring.use_tool_id`), and for each role of `engine.substrate.composition.ROLES` whose resolved target has a `__code__` enables `PY_START` on that code object alone (`sys.monitoring.set_local_events`), counting entries per role; runs `run()`; frees the tool id in a `finally`; returns `run`'s value and `{role: count}`. Where the interpreter is older or the tool id is taken, it returns `None` for the counts and the block says why. A `kind: value` row has no code object and is listed as `value`."
+  2. "`measure_world` wraps its seasons in it and stores the counts as `m["engines"]`."
+  3. "`report` gains a block after the per-verb lines:
+     ```
+     ENGINES (composition rows entered in this run)
+       fieldwork.find              62
+       settlements.housing         79
+       social_contest.roll         48
+       ...
+       rows entered 6 of 16
+     ```
+     every row printed, zeros included, sorted by role."
+  4. "`pooled_report` prints, per role, the number of seeds whose run entered it."
+- WHERE: `engine/season/harness/aperture.py` (NEW `engines_entered`; `measure_world`, `report`, `pooled_report`); `engine/season/tests/test_aperture.py` (NEW `test_the_engines_reading_counts_an_entry_it_can_see`).
+- TESTS: "`test_the_engines_reading_counts_an_entry_it_can_see`: inside `engines_entered`, call one module entry through its row once (`composition.require("settlements.fortification")` on a built `FortInput`, or the row the file's existing tests can already build an input for); assert that role reads `1` and that another role reads `0`, and assert the counts are not `None` on the interpreter CI uses (a named skip below 3.12)." Red before the edit (no `engines_entered`).
+- FALSIFIER and CONTROL: "In a scratch worktree: remove the `set_local_events` call → the new test must fail (the role reads 0, not 1). Restore." Control: the file's existing `CONTROL` line (the measured arm ends in the same `content_hash()` as `populated.run`).
+- GATE: `python -m pytest engine/season/tests/test_aperture.py -q` → green; `PYTHONHASHSEED=0 python -m engine.season.harness.aperture 1 0` → its `CONTROL` line reads as before and the block prints (expected at `4dc8a7b`, before B01: `social_contest.roll` 48, `fieldwork.find` 62, ten rows at 0 with `combat.fight` and `mass_battle.resolve_field` among them, `rows entered 6 of 16`; on this tree it is a reading, quoted, never a threshold).
+- HASH MOVERS: none.
+- DEPENDS ON: EXISTS-IN-TREE `engine/season/harness/aperture.py::measure_world`, `::report`, `::pooled_report`; `engine/substrate/composition.py::ROLES`, `::require`.
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, medium.
+- LANDS IT: B02's producer; `Item: B02.17`, `[skip ci]`.
+
+### B02.18 — the act-count instrument prints which verbs are built out, and through which seat · IS-A-06 · BUILD · HASH EQUAL
+- SOURCE: `master/instructions/IS_A_NINE_part2.md` `IS-A-06`; closes nothing by itself (the instrument R-05.b, R-04.a and R-07.c read).
+- ADVANCES: R-05.b, R-04.a, R-07.c (the instrument).
+- INSTRUCTION (copied; "after CI-11 in the same batch, one edit of `report` and `pooled_report` for both"):
+  1. "`built_out(m) -> dict`: per verb of `VERB_TABLE`, over the acts of `corpus_run.attempts(w, n)` that are `made` and not `refused` (a clean execution, the instrument's `ex - both`): `clean` (the count); `kinds` (true where the Events caused by one such act include every kind of the row's `emits_at(degree)` for the band it folded, `data/verbs.py`); `wrote` (true where the row's `writes_at(degree)` is empty for every band the verb can fold, or at least one such Event carries a `Receipt` whose `delta` is not empty: before ≠ after); `via` (the count of clean executions whose `Act.via` is set). A verb is **built out** when `clean >= 1`, `kinds` and `wrote`."
+  2. "`report` gains, after the per-verb lines, `BUILT OUT` with one line per verb (zeros included, sorted) and the total `built out <k> of <len(VERB_TABLE)>`; then one line `FOUGHT FIELDS  won+lost <a>  unopposed <b>  stance receipts on the losing side <c>`, `c` counted over the `Person.stance` receipts of Events caused by a `march` act whose field Event is `field.won` or `field.lost`."
+  3. "`pooled_report` prints, per verb, the number of seeds in which it is built out, and the pooled total."
+- WHERE: `engine/season/harness/aperture.py` (NEW `built_out`; `report`, `pooled_report`); `engine/season/tests/test_aperture.py` (NEW `test_built_out_counts_a_clean_execution_with_its_kinds_and_its_receipt`).
+- TESTS: "`test_built_out_counts_a_clean_execution_with_its_kinds_and_its_receipt` (one planted act through the fold on the file's existing world: reads 1; the same act refused reads 0; a hand-built `Act` appended to the log without the fold reads 0, which is the 'a hand-built execution never counts' clause)". Red before the edit.
+- FALSIFIER and CONTROL: "the instrument's existing `CONTROL` line shows the block moves no world; plant: drop the `Receipt` test from `wrote` and the new test's refused arm must still read 0 while a write-less band now reads built out (it must not)."
+- GATE: `python -m pytest engine/season/tests/test_aperture.py -q` → green; `PYTHONHASHSEED=0 python -m engine.season.harness.aperture 1 --seeds 0 1 2` → `CONTROL` EQUAL at each seed; the block prints one line per verb of `VERB_TABLE` (67 at `6e1ea91`; the count read by command); the `FOUGHT FIELDS` line is quoted (at `6e1ea91` it read `won+lost 0` at seed 0 and `1` at seed 2; B01 moved the tree). "The built-out total is a reading, never a threshold, until the re-take that closes R-05."
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B02.17 (the shared edit of `report`); EXISTS-IN-TREE `harness/corpus_run.py::attempts`, `data/verbs.py::emits_at`, `::writes_at`, `state/carriers.py` (`Receipt.delta`, from the class docstring: `[UNVERIFIED]` in the source, the producer opens the fold first).
+- GLOSSARY: *built out* (a verb with at least one clean execution that emits its kinds and, where it declares writes, writes): its row becomes a pointer to `aperture.py::built_out`.
+- COST and TIER: small build; `sonnet`, high.
+- LANDS IT: B02's producer; `Item: B02.18`, `[skip ci]`.
+
+### B02.19 — the removal test states what it expects, and whom it removes · IS-A-03 · BUILD · HASH EQUAL
+- SOURCE: `master/instructions/IS_A_NINE_part2.md` `IS-A-03` ("added to that proposal's edit 2"; placed here by `V12_STRUCTURE.md` §2.2's order, after B02.14 on `harness/storybar.py`, C3-K7).
+- ADVANCES: R-01.c, R-02.b.
+- INSTRUCTION (copied): "`engine/season/harness/storybar.py`: (1) `--remove` with no name takes the person who is the actor of the most `Event.causes` antecedents of other persons' acts in the unperturbed copy's first season (ties by person id), and prints the name; (2) the report ends with two verdict lines: `R-01.c  others' acts differing: <n>  (replay <0>)` and `R-02.b  differing at a later (season, round): <m>`; (3) `--base-seed` accepts several seeds and prints one pair of lines per seed."
+- WHERE: `engine/season/harness/storybar.py` (the `--remove` CLI, `removal_arm`'s report); `engine/season/tests/test_storybar.py` (NEW `test_removal_changes_another_persons_later_act`).
+- TESTS: "`test_removal_changes_another_persons_later_act` (seed 0, two seasons: `n >= 1` and `m >= 1`; in the same test the replay arm reads 0 and the removed person's own acts are excluded from `n`)". Red before the edit (no verdict lines).
+- FALSIFIER and CONTROL: "the replay arm non-zero voids every figure (the proposal's own); second control: remove a person at a round in which the unperturbed copy shows him forming no scene: `n` must be 0."
+- GATE: `PYTHONHASHSEED=0 python -m engine.season.harness.storybar --remove --base-seed 0 1 2 --seasons 2` → replay 0 at each seed; `n >= 1` and `m >= 1` at each seed `[ASSUMPTION: above 0 with a control of exactly 0 is the right form — basis: it is the form 01_CORE_tests_shipped_world_falsifiers gives rows 1 and 2; the audit's seed-0 arms read 236 to 634 against 0 on the controls, a scratch comparison]`; `python -m pytest engine/season/tests/test_storybar.py -q` → green.
+- HASH MOVERS: none ("the chooser's draw is keyed on `(world_seed, tick, person, purpose)`, `state/ids.py::draw_factory`, so a suppressed choice shifts no other person's stream").
+- DEPENDS ON: V12 B02.14 (`removal_arm`, `--remove`); V12 B02.18 (placed after it by §2.2's order; no data edge).
+- GLOSSARY: none.
+- COST and TIER: edit; `sonnet`, high; about two minutes an arm, six arms.
+- LANDS IT: B02's producer; `Item: B02.19`, `[skip ci]`.
+
+### B02.20 — the count of scenes that wrote nothing is read from here on · IS-A-07 · BUILD · HASH EQUAL
+- SOURCE: `master/instructions/IS_A_NINE_part2.md` `IS-A-07` (adopts `U4_TRACEABILITY.md` G-11); `proposals/30_WR_E_cascade_chains_and_the_census.md` "Instructions to code" 1 (the function); `proposals/30_WR_D_momentum_and_its_brakes.md` §3 (the definition, copied forward in this commit); ruling A-81, A-62; closes G-11. `IS-B2-CORE-03` is a pointer to this item (`IS-A-07`'s head: "the one owner of `null_scenes` in B02").
+- ADVANCES: R-05.c (the instrument; its asserted zero and clause C9 stay in B38).
+- INSTRUCTION:
+  1. Land `null_scenes` where `30_WR_E` puts it, report-only, as that proposal's instruction 1 gives it: "**`null_scenes(w, n) -> dict`**: `{"total": int, "null": Counter((verb, cls))}` over `corpus_run.attempts(w, n)` (the one owner of made and refused), `cls` in `made`, `graded_loss`, `refused`. An act is null when no Receipt on any Event naming it in `causes[]` writes a `write_matrix.yaml` cell with a `RES` or `WIT` step, counting a `claim.deposited` only where the claim's holder is the actor or the act's counterparty (`state/carriers.py::subject_of(act)` when it is a person, or a seat's live holder). A-62: the budget is a Query and writes no cell, so nothing is excluded for it; if a later build makes the debit a write, that cell is excluded by name here. CLI `--null-scenes`, printed per season and pooled: `null_scenes total=<n> null=<n> | <verb/cls=n, …>`." In `engine/season/harness/storybar.py`.
+  2. The definition of a durable write, copied forward from `30_WR_D` §3 into `null_scenes`'s docstring (`30_WR_D` then points at it): "A *durable write* is a Receipt on a `write_matrix.yaml` cell whose `steps` include `RES` or `WIT`, other than the scene budget's own cell; a claim deposited in the actor's or a counterparty's ledger counts; a sighting in a bystander's ledger alone does not (the act must matter to someone in it). `[ASSUMPTION; medium; Jordan to correct; revert: any claim counts]`." **This item is the plan's one owner** of that definition, of a *null scene* (an act none of whose Events carries a durable write) and of the flag `--null-scenes`, which means this count on every instrument that carries it; every other item, gate and instrument cites `B02.20` and does not reword it. Chosen over 28A's "no gate write and no `claim.deposited` citing them" (B28) by the ladder: `IS-A-07` names this item the one owner (a design document), and 28A's wording counts a bystander's sighting, the defect `30_WR_E`'s falsifier names, so two wordings would be two ladders for one quantity (CLAUDE.md §0.06 S). `null_scenes` takes one keyword argument, `scope=None`: a predicate over an attempt of `corpus_run.attempts` that narrows **which acts are counted** and changes nothing in what counts as a write (B28.22, B38.12 pass one) `[ASSUMPTION: the scope is an argument of this function, not a filter each caller writes — basis: one owner of the count, CLAUDE.md §8; it adds no rule]`.
+  3. `harness/aperture.py::report` prints after `BUILT OUT` one block `NULL SCENES (acts whose Events carry no durable write)` by verb and by outcome class (made, refused, graded loss), with the total. The budget debit does not count (A-81). The asserted zero and clause C9 stay in B38.
+- WHERE: `engine/season/harness/storybar.py` (NEW `null_scenes`, `--null-scenes`); `engine/season/harness/aperture.py` (`report`); `engine/season/tests/test_storybar.py` (NEW `test_null_scenes_sees_a_planted_act_that_writes_nothing`).
+- TESTS: "`test_null_scenes_sees_a_planted_act_that_writes_nothing` (clause C9's planted control, moved forward)", with `assert checked >= 1`; red before the edit.
+- FALSIFIER and CONTROL: "the planted act not counted" (`IS-A-07`); `30_WR_E`'s: "`null_scenes` reading 0 on the shipped engine: the definition counts bystanders' sightings". Control: `aperture`'s `CONTROL` line EQUAL (a report-only block).
+- GATE: `python -m pytest engine/season/tests/test_storybar.py -q` → green; `PYTHONHASHSEED=0 python -m engine.season.harness.aperture 1 0` → prints the block; **the baseline is this item's first reading**, taken on this commit's tree and quoted in its commit body (`reading @<sha>`): `PYTHONHASHSEED=0 python -m engine.season.harness.storybar --base-seed 0 1 2 --seasons 1 --null-scenes` → the `null_scenes` line per seed, per season and pooled, beside the `aperture 1 0` block above; every later close quotes it as its first "before", and B02's close re-reads it (every B02 item is HASH EQUAL, so a difference there is a finding) [ASSUMPTION: `--null-scenes` runs with `--base-seed` and no `--arms` — basis: step 1's "CLI `--null-scenes`, printed per season and pooled" and B02.19's several-seed `--base-seed`]. `30_WR_E` P-2's 59 of 821 acts (seed 0, one season, a looser probe than this definition) is a one-season comparison, not a target and not the baseline.
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B02.18 (`BUILT OUT`, `IS-A-06`); V12 B02.19 (`harness/storybar.py`: the order is the nine-gate proposal, `IS-A-03`, this item, C3-K7); EXISTS-IN-TREE `engine/season/write_matrix.yaml`, `harness/corpus_run.py::attempts`, `state/carriers.py::subject_of`.
+- GLOSSARY: *durable write* and *null scene* (the plain words: "a change that outlasts the scene"; "a scene that changed nothing that lasts"): rows added or pointed at `storybar.py::null_scenes` in this commit.
+- COST and TIER: edit; `sonnet`, medium.
+- LANDS IT: B02's producer; `Item: B02.20`, `[skip ci]`.
+
+### B02.21 — R-01 on the played realm, three seeds, with the witness cut as its control · 01_CORE_tests_shipped_world_falsifiers row 1 · BUILD · HASH EQUAL
+- SOURCE: `proposals/01_CORE_tests_shipped_world_falsifiers.md` "The resolution (decided)" row 1 and the typed shape of the new file; U3 §6.1 (`test_realm_requirements.py` MISSING, written in this batch before its reading); C3-N14, C3-N27; closes F-TEST-01 (R-01). The source orders one commit per row.
+- ADVANCES: R-01.b.
+- INSTRUCTION: create `engine/season/tests/test_realm_requirements.py` with the source's typed shape (composing on existing owners only: `populated.build_realm`, `probes.chooser`, `world_q.occasioned_by`, `SeasonDriver`):
+  ```python
+  SEEDS = (0, 1, 2)
+
+  def _play(seed: int, fx: Fixtures | None = None) -> tuple[World, SeasonDriver]: ...
+  def _occasioned_by_another(w: World, d: SeasonDriver) -> int: ...
+  def _sequence(d: SeasonDriver) -> list[tuple[str, str, str | None]]: ...
+
+  @pytest.mark.parametrize("seed", SEEDS)
+  def test_r01_an_act_is_occasioned_by_a_claim_that_walks_back_to_another_persons_act(seed): ...
+  def test_r01_control_with_witness_cut_no_act_is_so_occasioned(monkeypatch): ...
+  ```
+  Row 1, copied: "New test, parametrised over seeds 0, 1, 2: build the realm, play one season with `P.chooser(w, verbs=resolvable_verbs())`, count resolved acts whose scene's `occasion.source == "claim_landed"` and whose `occasioned_by(w, q)` Events have a cause that is an `Act` by a different person; assert the count is `> 0`. Control in the same test at seed 0: `monkeypatch.setattr(SeasonDriver, "witness", lambda self, token, events: 0)`, same count, assert `== 0`." (`_sequence` and the R-02 tests are B02.22's.)
+- WHERE: NEW `engine/season/tests/test_realm_requirements.py`.
+- TESTS: the two above: green at the base where the claim is a property that holds today, and the control red with the cause removed (it reads `== 0` only with the witness cut). Readings at `main` before B01 (a comparison, not a target): 134 of 749, 141 of 731, 162 of 751; control 0 of 388.
+- FALSIFIER and CONTROL: the witness-cut arm must read 0 (in the file).
+- GATE: `python -m pytest engine/season/tests/test_realm_requirements.py -q -k r01` → three seeds green and the control green.
+- HASH MOVERS: none.
+- DEPENDS ON: EXISTS-IN-TREE `harness/populated.py::build_realm`, `harness/probes.py::chooser`, `queries/world_q.py::occasioned_by`, `loop/driver.py::SeasonDriver` (`witness`).
+- GLOSSARY: none.
+- COST and TIER: small build; `sonnet`, high; about 25 s of test time `[estimate: 7.3 s a realm season, the source's probe]`.
+- LANDS IT: B02's producer; `Item: B02.21`, `[skip ci]`.
+
+### B02.22 — R-02 on the played realm at the shipped budget · 01_CORE_tests_shipped_world_falsifiers row 2 · BUILD · HASH EQUAL
+- SOURCE: the same file, row 2 and the typed shape; `proposals/U5a_tests_digest_additions.md` §F2 (what R-02's reading says, carried into B02.38); closes F-TEST-01 (R-02).
+- ADVANCES: R-02.a.
+- INSTRUCTION: in `engine/season/tests/test_realm_requirements.py`, `_sequence` and:
+  ```python
+  @pytest.mark.parametrize("seed", SEEDS)
+  def test_r02_withholding_what_acts_observe_changes_later_acts_at_the_shipped_budget(seed): ...
+  def test_r02_control_one_seed_played_twice_is_one_sequence(): ...
+  ```
+  Row 2, copied: "Same file, seeds 0, 1, 2: play one season at `DEFAULT_FIXTURES` and one at `.sweep("observation_deposit_mode", "none")`; assert the two `(actor, verb, subject)` sequences differ and share a non-empty common prefix (the worlds start equal and part). Control: the same seed played twice at `DEFAULT_FIXTURES` gives equal sequences."
+- WHERE: `engine/season/tests/test_realm_requirements.py`.
+- TESTS: the two above (readings at `main` before B01, a comparison: the sequences first differ at positions 191, 183, 182).
+- FALSIFIER and CONTROL: the same-seed arm must read equal (in the file).
+- GATE: `python -m pytest engine/season/tests/test_realm_requirements.py -q` → six parametrised cases and two controls green (the source's gate, about 80 s).
+- HASH MOVERS: none.
+- DEPENDS ON: V12 B02.21 (the file, `_play`).
+- GLOSSARY: none.
+- COST and TIER: small build; `sonnet`, high.
+- LANDS IT: B02's producer; `Item: B02.22`, `[skip ci]`.
 
 ### B02.23 — the fork test is named for the budget it runs · 01_CORE_tests_shipped_world_falsifiers row 3 · BUILD · HASH EQUAL
 - SOURCE: `proposals/01_CORE_tests_shipped_world_falsifiers.md` row 3; closes F-TEST-06.
@@ -363,10 +501,10 @@ B02.37 (`IS-A-12`, READING: no code, no commit) is the close line of this batch'
 ### B02.99 — re-pin and close readings (EQUAL: the record) · `V12_STRUCTURE_part4.md` E-1 · BUILD · HASH EQUAL (records)
 - SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2; `V12_STRUCTURE_part2.md` §5.12; B02's BATCH GATE and RE-PIN lines; part 2 §11 C-01 (written by repair lane R1).
 - ADVANCES: the close of the readings B02.38 takes and records (R-01 to R-03 `met`; the first `BUILT OUT` and `ENGINES` baselines; `NULL SCENES` re-read against `B02.20`'s first reading); nothing beyond them.
-- INSTRUCTION: (1) Re-pin nothing (RE-PIN: none; every item is EQUAL; the BATCH GATE's first line reads every pinned hash against B01's close, `reading @<B01 closing sha>`). (2) Read once on the closing tree and quote in this commit's body every BATCH GATE line, the `HASH READING` at `<s>` = 0, 1, 2 (`<k>` = 1) equal to B01's close, and the batch's measured wall time (build and close apart). The conjuncts' `reading:` records are B02.38's (written on B02.39's tree), not rewritten here. The commit carries no file unless the record needs one (`git commit --allow-empty`).
+- INSTRUCTION: (1) Re-pin nothing (RE-PIN: none; every item is EQUAL; the BATCH GATE's first line reads every pinned hash against B01a's close, `reading @<B01a closing sha>`; B01a.05). (2) Read once on the closing tree and quote in this commit's body every BATCH GATE line, the `HASH READING` at `<s>` = 0, 1, 2 (`<k>` = 1) equal to B01a's close, and the batch's measured wall time (build and close apart). The conjuncts' `reading:` records are B02.38's (written on B02.39's tree), not rewritten here. The commit carries no file unless the record needs one (`git commit --allow-empty`).
 - WHERE: none but the commit body.
 - TESTS: none new.
-- FALSIFIER and CONTROL: a pinned hash that differs from B01's close (then an item here was not EQUAL: `STOPPED`). Control: B01's close readings (`reading @<B01 closing sha>`).
+- FALSIFIER and CONTROL: a pinned hash that differs from B01a's close (then an item here was not EQUAL: `STOPPED`). Control: B01a's close readings (`reading @<B01a closing sha>`; B01a.05: B01a moved every pin after B01).
 - GATE: the BATCH GATE above, every line, read once on this commit's tree.
 - HASH MOVERS: none.
 - DEPENDS ON: V12 B02.01 to B02.38, B02.39.

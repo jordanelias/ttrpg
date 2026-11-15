@@ -31,7 +31,7 @@ for a question outside its own subsystem's wiring.
 ⚠ A SECOND, STRUCTURAL REASON IT DOES NOT COME ALONG. `_contest_ladder_arm`'s patch imports
 `systems.social_contest.sim.contest.degree_extension`/`resolver` — a `systems.*` import. Carrying
 that function into a file under `engine/` (even as inert, retired, "importable but not wired in"
-code, as the other retired pair is kept below) would add a NEW nested `engine -> systems`
+code) would add a NEW nested `engine -> systems`
 import that `tests/valoria/test_engine_does_not_import_systems.py`'s `NESTED_BASELINE = 0` ratchet
 does not permit without a deliberate, separately-justified bump to that ceiling — outside this
 position's declared file scope. Both findings point the same way, so the mechanic is retired in
@@ -60,7 +60,7 @@ engine's own survivor ratio and floors at 1 — a wound, never a kill; `total` r
 defect deliberately, "losing costs everything," and floors at 0 (`w.remove_person` follows). Both
 values are real, live, season-reachable settings of a fixture `build_realm`'s own world already
 carries (`data/fixtures.py:521`, default `scaled_by_degree`) — no monkeypatch of module-global
-state is needed, unlike the retired arms below: each `World` owns its own `Fixtures`, so an arm is
+state is needed: each `World` owns its own `Fixtures`, so an arm is
 applied by handing the freshly-built world a swept copy (`w.fixtures = w.fixtures.sweep(...)`,
 the exact idiom `harness/populated.py::creed_sweep` and `engine/season/tests/test_march.py`
 already use for this same fixture) before the season loop runs on it.
@@ -114,10 +114,6 @@ import math
 from ..data.rosters import FIELD_CASUALTY_MODELS
 from . import populated
 
-# Absolute imports reachable without a `sys.path` hack: this module is a real package member
-# (`engine.season.harness.arms`), unlike the standalone script it replaces, which had to insert
-# the repo root by hand to be runnable as `python3 tools/balance_oracle.py`.
-from engine.dice_engine import dice_engine, sigma_leverage as SL  # noqa: F401 (kept for _pool_arm)
 
 # [JUSTIFIED: the conventional two-sided 5% critical z-value, unchanged from `tools/balance_oracle.py`'s identical constant — a standard statistical threshold, not a fitted game magnitude]
 Z_THRESHOLD = 1.96          # two-sided 5%
@@ -236,40 +232,6 @@ def two_proportion_z(a_count: int, a_n: int, b_count: int, b_n: int) -> float:
     if se == 0:
         return 0.0
     return ((b_count / b_n) - (a_count / a_n)) / se
-
-
-# ---------------------------------------------------------------------------------------------
-# RETIRED ARM — historical record only, same status as `tools/balance_oracle.py` gave it:
-# "kept as historical records, importable/constructible but not wired into ARMS." Ported
-# VERBATIM (unchanged logic) because it imports no `systems.*` and still constructs and
-# undoes cleanly against the live tree (verified 2026-09-29). THE OTHER TWO PAIRS THAT WERE PORTED WITH
-# IT, `_ARMS_BOUNDS` (`_pre_ruling_bounds_arm`) AND `_ARMS_FLOOR` (`_floor_arm`), WERE DELETED AT PLAN
-# POSITION `29b` (2026-10-01): they patched `descriptors.faction_bounds` and `game_state.Faction.adjust`,
-# both deleted with the faction layer, and their own note said they ran against the old campaign driver's
-# Faction model, deleted at `28-iii`. Their source is at the `FORK:` ref in `references/restructure_ledger.md`.
-# `_contest_ladder_arm` does NOT
-# appear here — see the module docstring for why it is retired to the `FORK:` ref instead of
-# carried forward inert.
-# ---------------------------------------------------------------------------------------------
-
-def _pool_arm(round_pool: bool):
-    """Patch `roll_net_continuous` to round (the pre-2026-08-21 behaviour) or not. Returns undo."""
-    original = SL.roll_net_continuous
-
-    def patched(pool, tn=SL.TN_STANDARD, rng=None):
-        p = max(1, int(round(pool))) if round_pool else max(1.0, float(pool))
-        return dice_engine.continuous_engine_sample(pool=float(p), tn=tn, rng=rng)
-
-    SL.roll_net_continuous = patched
-    return lambda: setattr(SL, 'roll_net_continuous', original)
-
-
-#: Retired comparison, kept because `_pool_arm` is the record of what `roll_net_continuous` did
-#: before M1 juncture 1 half A.
-_ARMS_POOL = {
-    'rounded':    lambda: _pool_arm(True),
-    'fractional': lambda: _pool_arm(False),
-}
 
 
 def main(argv=None) -> int:

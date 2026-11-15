@@ -17,6 +17,7 @@ from types import SimpleNamespace as NS
 
 import pytest
 
+from ..harness import probes as P
 from ..harness import storybar as SB
 
 SEED, SEASONS, CAP = 0, 2, 10
@@ -285,3 +286,206 @@ def test_a_repeated_draw_seed_is_refused_before_any_world_is_built():
     with pytest.raises(SystemExit) as e:
         SB.main(["--base-seed", str(SEED), "--seasons", "1", "--draw-seeds", "1", "1"])
     assert e.value.code == 2
+
+
+# -- B02.14: the removal test, beside the draw-seed arm ----------------------------------------------
+# These assert RELATIONS on the cap-10 fixture, never a count from a realm run.
+
+WHEN = (0, 0)
+
+
+def test_removal_replay_arm_reads_zero():
+    """Nobody removed: two independent copies of one built world read the same acts (the wrapper
+    perturbs nothing), the world the arm ran on is unmutated, and the stamping wrapper reproduces the
+    unwrapped run's hash (the control: `wrap_chooser=None` is today's run)."""
+    base = _small_world()
+    before = base.content_hash()
+    first = SB.removal_arm(base, SEASONS, None, WHEN)
+    again = SB.removal_arm(base, SEASONS, None, WHEN)
+    assert sum(first.values()) > 0, "the arm read no acts; a zero difference would be vacuous"
+    assert SB.chain_difference(first, again) == 0
+    assert base.content_hash() == before, "the arm mutated the base world"
+    plain = SB.drive(SEED, SEASONS, "off", CAP)[0].content_hash()
+    stamping = SB._removing(None, WHEN, {}, [])
+    wrapped = SB.drive(SEED, SEASONS, "off", CAP, wrap_chooser=stamping)[0].content_hash()
+    assert wrapped == plain
+    assert SB.drive(SEED, SEASONS, "off", CAP, wrap_chooser=lambda ch: ch)[0].content_hash() == plain
+
+
+def test_removing_a_person_at_the_first_lap_fires_and_leaves_that_person_out_of_the_reading():
+    """The removal can be observed: the wrapper fires once for the person removed, and that person's acts
+    are not in the multiset of the OTHERS (the control: the same person's acts ARE in the unperturbed
+    copy's, so the exclusion is the arm's doing)."""
+    base = _small_world()
+    everyone, _f, _h = SB._removal_run(base, SEASONS, None, WHEN)
+    acting = sorted({k[0] for k in everyone if k[1:3] == WHEN})
+    assert acting, "nobody acted at the first lap; the removal below observed nothing"
+    who = acting[0]
+    assert any(k[0] == who for k in everyone)
+    got, fired, _h = SB._removal_run(base, SEASONS, who, WHEN)
+    assert fired == 1
+    assert not any(k[0] == who and k[1:3] == WHEN for k in got), "the removed choice still acted"
+    assert not any(k[0] == who for k in SB.removal_arm(base, SEASONS, who, WHEN))
+
+
+def test_the_remove_cli_prints_a_replay_of_zero_and_refuses_an_unknown_person(capsys):
+    args = ["--base-seed", str(SEED), "--seasons", "1", "--cap", str(CAP)]
+    who = sorted(_small_world().persons)[0]
+    assert SB.main(args + ["--remove", who]) == 0
+    out = capsys.readouterr().out
+    replay = next(l for l in out.splitlines() if l.startswith("[replay]"))
+    assert "differing=0 " in replay and "(EQUAL to the unperturbed)" in replay
+    assert "(unmutated)" in out
+    control = next(l for l in out.splitlines() if l.startswith("[control: drive with no wrapper]"))
+    assert "(EQUAL to the unperturbed;" in control
+    with pytest.raises(SystemExit) as e:
+        SB.main(args + ["--remove", "no_such_person"])
+    assert e.value.code == 2
+
+
+# -- B02.19: the removal test states what it expects, and whom it removes ---------------------------
+
+def test_removal_changes_another_persons_later_act():
+    """Seed 0, two seasons, the most-cited person removed at the first lap: others' acts differ (`n`),
+    some of them at a later (season, lap) (`m`), the replay arm reads 0 (the control: were it above 0
+    every figure would be void), and the removed person's own acts are not in `n`. The second control is
+    a person removed at a lap in which the unperturbed copy shows him forming no scene: `n` reads 0."""
+    base = _small_world()
+    who, cited = SB.most_cited(base)
+    assert who is not None and cited >= 1, "nobody is cited by another person; the removal observed nothing"
+    res = SB.removal_report(base, SEASONS, who, WHEN, None)
+    v = SB.removal_verdict(res, WHEN)
+    assert v["replay"] == 0, "the replay arm moved: every figure below is void"
+    assert res["unwrapped_hash"] == res["unperturbed"][1]
+    assert res["arms"]["removed"]["fired"] == 1
+    assert v["n"] >= 1 and v["m"] >= 1, v
+    assert v["m"] <= v["n"]
+
+    # `n` recomputed by hand over the two multisets, the removed person's keys left out; the same
+    # difference with his keys left IN is larger (his own lap-0 acts are gone), so the exclusion is read
+    everyone, _f, _h = SB._removal_run(base, SEASONS, None, WHEN)
+    got, _f, _h = SB._removal_run(base, SEASONS, who, WHEN)
+    diff = {k: abs(everyone.get(k, 0) - got.get(k, 0)) for k in set(everyone) | set(got)}
+    assert v["n"] == sum(n for k, n in diff.items() if k[0] != who)
+    assert sum(diff.values()) > v["n"], "the removed person's own acts did not differ; nothing was excluded"
+
+    # control 2: a person who forms no scene at a lap, removed there, changes nothing
+    laps = sorted({k[1:3] for k in everyone})
+    quiet = next(((p, at) for at in laps for p in sorted({k[0] for k in everyone})
+                  if not any(k[0] == p and k[1:3] == at for k in everyone)
+                  and any(k[0] == p and k[1:3] > at for k in everyone)), None)
+    assert quiet is not None, "every person acts at every lap; the quiet control observed nothing"
+    p, at = quiet
+    reference = SB._others(everyone, p)
+    assert SB.chain_difference(reference, SB.removal_arm(base, SEASONS, p, at)) == 0
+
+
+def test_the_most_cited_person_is_the_most_cited_with_ties_by_person_id():
+    """Planted: p1's acts are cited by two acts of other persons, p2's by two, p3's by one; p3's own
+    follow-up (no cross-person antecedent) counts for nobody. The tie between p1 and p2 goes to p1."""
+    row = lambda actor, cross: {"actor": actor, "cross": cross}
+    acts = {"a1": row("p1", []), "a2": row("p2", []), "a3": row("p3", []),
+            "b1": row("p2", ["a1"]), "b2": row("p3", ["a1", "a2"]), "b3": row("p1", ["a2"]),
+            "b4": row("p1", ["a3"]), "b5": row("p3", [])}
+    counts = SB.citation_counts(acts)
+    assert counts == {"p1": 2, "p2": 2, "p3": 1}
+    assert min(counts, key=lambda p: (-counts[p], p)) == "p1"
+
+
+def test_the_remove_cli_with_no_name_prints_the_name_and_a_verdict_pair_per_seed(capsys):
+    args = ["--base-seed", "0", "1", "--seasons", "1", "--cap", str(CAP), "--remove"]
+    assert SB.main(args) == 0
+    lines = capsys.readouterr().out.splitlines()
+    named = [l for l in lines if l.startswith("storybar --remove names ")]
+    r01 = [l for l in lines if l.startswith("R-01.c  others' acts differing: ")]
+    r02 = [l for l in lines if l.startswith("R-02.b  differing at a later (season, round): ")]
+    assert len(named) == len(r01) == len(r02) == 2, (named, r01, r02)
+    assert all(l.endswith("(replay 0)") for l in r01), r01
+    with pytest.raises(SystemExit) as e:
+        SB.main(["--base-seed", "0", "1", "--seasons", "1", "--n", "1", "--arms", "off", "off"])
+    assert e.value.code == 2
+
+
+# -- B02.20: the count of scenes that wrote nothing --------------------------------------------------
+# A planted act on a real, witnessed season; relations, never a count from a realm run.
+
+def _uttered(subject):
+    """`tiny_world`, one season in which `p_low` utters about `subject`, the witness step run as a season
+    runs it. Returns `(w, act)`: the one act of the store."""
+    w = P.tiny_world()
+
+    def choose(p, v, s, ask_budget):
+        return [P.Act_(w, p, "utter", payload={"subject": subject})] if p.id == "p_low" else []
+    P._run_d(w, P.once(choose), contest_max_depth=w.fixtures.get("contest_max_depth"))
+    (act,) = list(w.acts)
+    return w, act
+
+
+def _leave_only(w, act, holders):
+    """Empty the Receipts of every Event naming `act`, and of every claim deposit those Events caused except
+    the ones into a ledger of `holders`. Returns how many deposits were left standing (the plant's size)."""
+    held = {c.id: pid for pid, p in w.persons.items() for c in p.ledger}
+    own = {e.id for e in w.log if act.id in e.causes}
+    kept = 0
+    for e in w.log:
+        if e.id in own:
+            e.changes = []
+        elif e.kind == "claim.deposited" and any(c in own for c in e.causes):
+            if held.get(e.changes[0].subject) in holders:
+                kept += 1
+            else:
+                e.changes = []
+    return kept
+
+
+def test_null_scenes_sees_a_planted_act_that_writes_nothing(monkeypatch):
+    """IS-A-07. The act as the season left it wrote (its Proposition, and claims in the ledgers of those who
+    saw it): not null. The same act with every Receipt of its Events removed, and with the deposits of its
+    own actor's and counterparty's ledgers removed, is null, class `made`. A deposit into a BYSTANDER's
+    ledger alone does not save it; the same deposit into the actor's ledger, or into the counterparty's,
+    does (the definition's clause). The control for that clause is the definition it replaced, any claim
+    counts, which reads the bystander case as written.
+
+    MUTATION (run 2026-11-15, reverted): `_seat_holders` made to answer every person, so that any claim
+    counts -- the bystander arm reads 0 and this test reds."""
+    checked = 0
+    w, act = _uttered("p_high")
+    assert (r := SB.null_scenes(w, 1))["total"] == 1 and not r["null"], r      # it wrote: not null
+    for holders, null in ((set(), True), ({"p_mid", "p_other"}, True), ({"p_low"}, False)):
+        w, act = _uttered("p_high")
+        kept = _leave_only(w, act, holders)
+        assert (kept >= 1) == bool(holders), f"the plant left {kept} deposits for {holders}"
+        got = SB.null_scenes(w, 1)
+        assert got["total"] == 1
+        assert got["null"] == ({("utter", "made"): 1} if null else {}), (holders, got)
+        checked += 1
+    # the counterparty of the act, `p_mid`: his deposit saves it, a bystander's does not
+    for holders, null in (({"p_mid"}, False), ({"p_other"}, True)):
+        w, act = _uttered("p_mid")
+        assert _leave_only(w, act, holders) >= 1
+        assert bool(SB.null_scenes(w, 1)["null"]) is null, holders
+        checked += 1
+    # the control: where any claim counts, the bystander arm is not null
+    w, act = _uttered("p_high")
+    _leave_only(w, act, {"p_mid", "p_other"})
+    assert SB.null_scenes(w, 1)["null"], "the bystander arm is not null before the control"
+    monkeypatch.setattr(SB, "_seat_holders", lambda w_, subject: frozenset(w_.persons))
+    assert not SB.null_scenes(w, 1)["null"]
+    checked += 1
+    # the scope narrows which acts are counted and nothing else
+    assert SB.null_scenes(w, 1, scope=lambda attempt: False) == {"total": 0, "null": SB.Counter()}
+    assert checked >= 6
+
+
+def test_null_scenes_per_season_reads_the_whole_run_cut_by_the_acts_each_season_took():
+    """`null_by_season`'s seasons add to its whole run (total and null, by verb and class) on the cap-10
+    fixture, and the line prints the largest count first."""
+    per, whole = SB.null_by_season(SEED, SEASONS, CAP)
+    assert len(per) == SEASONS and whole["total"] >= 1
+    assert sum(r["total"] for r in per) == whole["total"]
+    assert sum((r["null"] for r in per), SB.Counter()) == whole["null"]
+    assert SB.pool_null([whole, whole]) == {"total": 2 * whole["total"],
+                                            "null": whole["null"] + whole["null"]}
+    line = SB.null_line({"total": 9, "null": SB.Counter({("a", "made"): 1, ("b", "refused"): 3})})
+    assert line == "null_scenes total=9 null=4 | b/refused=3, a/made=1"
+    assert SB.null_line({"total": 2, "null": SB.Counter()}) == "null_scenes total=2 null=0 | none"

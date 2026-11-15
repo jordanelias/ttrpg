@@ -205,7 +205,9 @@ def test_the_seam_has_no_second_obstacle_site(monkeypatch):
         "the host record carries an `ob`: a host-derived obstacle can reach the roll again")
     assert not hasattr(sigma, "_obstacle_of"), "the seam's own obstacle site is back"
     mod = _module()
-    w = P.tiny_world(DEFAULT_FIXTURES)
+    # B11 lane A: read on the CONTROL obstacle (`obstacle_model: stand_in`, score / 2): this test is about WHO composes the
+    # obstacle, not its terms (the shipped `task` arm's are `test_b11a_scores_and_obstacle.py`'s)
+    w = P.tiny_world(DEFAULT_FIXTURES.sweep("obstacle_model", "stand_in"))
     SeasonDriver(w)                                  # the registrar fills MODULE_ENTRIES
     w.persons["p_mid"].capability = {"copying": 3}
     seen = sigma.resolve(w, ["p_low"], ["c"], "a standing", verb="tell", subject="p_mid",
@@ -220,7 +222,10 @@ def test_the_seam_has_no_second_obstacle_site(monkeypatch):
 
 def _arm(ceiling):
     # the FIXED arm (CP-T01-06 ships the per-pool arm; the 1 / 2 / 3 sweep is read on the fixed one)
-    w = P.tiny_world(DEFAULT_FIXTURES.sweep("ceiling_per_pool", False).sweep("obstacle_ceiling", ceiling))
+    # B11 lane A: on the CONTROL obstacle (`obstacle_model: stand_in`), the composition these figures were read on; the
+    # ceiling bounds the shipped `task` arm's obstacle the same way (`roll.py::obstacle_terms`'s `ceiling` term)
+    w = P.tiny_world(DEFAULT_FIXTURES.sweep("ceiling_per_pool", False).sweep("obstacle_ceiling", ceiling)
+                     .sweep("obstacle_model", "stand_in"))
     SeasonDriver(w)
     # roster-exempt: TEST FIXTURE capabilities -- one matter far over every sweep point, one under.
     w.persons["p_mid"].capability = {"copying": 10}       # score/2 = 5

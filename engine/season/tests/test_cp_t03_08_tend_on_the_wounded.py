@@ -14,15 +14,14 @@ told copy) puts below `condition_scale`. Stamped as `Person` (`World.class_of`).
   THE LAWFUL-INPUT RULE: the stamper reads no other person's TRUE body. `_lawful_input_violations` checks it by
   moving true bodies and beliefs independently; MUTATION (executed below): a stamper that reads true bodies turns it
   red -- an unwitnessed wound is stamped for a stranger.
-  CONTROL: `revert_cp_t03_08` (the column emptied, the term returning `()`) reproduces the eb34324f hashes.
+  CONTROL: `revert_cp_t03_08` (the column emptied, the term returning `()`), which other files' reverts call; the
+  realm hashes are `_realm_goldens.py`'s.
   REALM READINGS (seeds 0-2, two seasons, the formation/attempt/execution split by arm) are commit-body readings,
   never assertions here.
 """
 from __future__ import annotations
 
 from dataclasses import replace
-
-import pytest
 
 from ..data.rosters import DETAIN_KIND
 from ..data.verbs import VERB_TABLE
@@ -32,23 +31,11 @@ from ..harness import probes as P
 from ..harness.populated import build_realm, run
 from ..queries import world_q
 from ..state.carriers import Claim, Tenure
-from .test_cp_t03_07_body_ceiling import POST_ITEM as PRE_ITEM
 from .test_in10_record_operands import _acts, _resolve
 from .test_in12_step9 import _world
 
 A, B = "p_low", "p_mid"            # `tiny_world`: both stand at the hearth (`with` each other)
 FAR = "p_high"                     # elsewhere
-
-#: 1-season hashes after this item; PRE_ITEM is eb34324f's (CP-T03-07's POST_ITEM). `build_realm(0)` is unmoved
-#: (600d8b27147478e158553552cc1409a5): the item writes no field and no world-gen.
-#: Seeds 1 and 2 are the post-B10-11b reading (`reading @4b334f2a`), re-recorded by the batch pin commit (was d9f3be70... /
-#: 285fb92a...): PC-20 (1) (the head-weighted strike impact, `K_STR_HEAD`) moves a one-season run that reaches `strike_impact`.
-#: B10-13 batch pin commit (the batch's declared movers, CR-27 `lie` among them, move a one-season realm of every seed):
-#: was d4c83c8c... / 7cacc763... / 447ed0d8....
-#: B10-12 pin commit (CR-24 `field_winner_casualties: engine` and MB-07r's support cap move a one-season realm that fights;
-#: control: both reverted reads the old pin): seed 2 was 77a09697....
-POST_ITEM = {0: "256606154c30542f9456b2fe15c76f09", 1: "aa58ef0b71c947ce5ff9f0a75ffd8ca6", 2: "a21ab6e12e356ccc4261bec1c93ca3b4"}
-BUILD = "600d8b27147478e158553552cc1409a5"
 
 
 def revert_cp_t03_08(monkeypatch):
@@ -161,21 +148,6 @@ def test_a_believed_wound_beside_him_forms_tend_on_the_other_through_questions_f
     assert w.persons[B].body == scale
 
 
-# ---- (iv) hash: mover, and the revert -----------------------------------------------------------------------------
-
-@pytest.mark.parametrize("seed", [0, 1, 2])
-def test_hash_post_item_and_revert(seed, monkeypatch):
-    # CR-79's credit term (a later mover of the told deposit) is reverted in process: POST_ITEM reads this item alone.
-    from .test_strife_credit import revert_cr79
-    revert_cr79(monkeypatch)
-    w = build_realm(seed)
-    run(1, seed, w=w)
-    assert w.content_hash() == POST_ITEM[seed] != PRE_ITEM[seed]
-    revert_cp_t03_08(monkeypatch)
-    w = build_realm(seed)
-    run(1, seed, w=w)
-    assert w.content_hash() == PRE_ITEM[seed]
-
 
 def test_rem52s_fall_is_tended_whole_the_same_season():
     """THE REALM READING THE ITEM MAKES, PINNED (seed 0, one season): REM-52's hunger lowers every short cohort's body in
@@ -189,8 +161,12 @@ def test_rem52s_fall_is_tended_whole_the_same_season():
     assert short, "setup: nobody went hungry"
     assert short <= tended, sorted(short - tended)
     assert all(w.persons[pid].body == w.persons[pid].body_ceiling for pid in short)
+    # B11 lane A (the duel chain's reach; re-pinned in B01.02): (37, 37) -> (37, 38): one person tended who was not short
+    # (`p_npc_033`, wounded by the reach's new formations). With `revert_b11a_scores` alone it reads (37, 38); with
+    # `revert_b11a` too, (37, 37) (scratch, not kept).
+    # B01a.99 (every person's attributes are drawn, a population change): (37, 38) -> (37, 37): the duels the drawn sheets
+    # resolve do not wound `p_npc_033`, so the tended are exactly the short (`tended - short` and `short - tended` both empty,
+    # read in process at PYTHONHASHSEED=0).
     assert (len(short), len(tended)) == (37, 37)
+    assert tended == short
 
-
-def test_build_hash_is_unmoved():
-    assert build_realm(0).content_hash() == BUILD

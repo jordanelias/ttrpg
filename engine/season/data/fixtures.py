@@ -447,9 +447,18 @@ DEFAULT_FIXTURES = Fixtures(
     # ⚠ SINCE v9 SC-01 step 14 IT IS AN OPERAND, NOT A SITE: `modules/social_contest/roll.py::obstacle` composes it with the ceiling below (ED-SC-0033 cl. 3, one owner).
     # [JUSTIFIED: engine/season/hole_register.yaml H-126 -- `site: Fixtures pool_default`, graded `assumption`; `capability` is the declared source and is empty on every corpus person, so the magnitude is injected and swept]
     pool_default=2,
+    # B01a.01: WHAT A PERSON HOLDS ON AN ATTRIBUTE NOBODY AUTHORED -- uniform on this range, one keyed draw per person and attribute (`state/carriers.py::generated_attributes`). Read at build and at the in-play mint. `(2, 2)` is B01's flat seating at `pool_default` (the control); `None` generates nothing.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-856 -- site: Fixtures generated_attribute_range, graded assumption; swept (1, 6) SHIPPED / (2, 2) B01's flat seating / None nothing generated]
+    generated_attribute_range=(1, 6),
     # [JUSTIFIED: engine/season/hole_register.yaml H-127 -- `site: Fixtures obstacle_default`, graded `assumption`; the ruled derivation is `score/2` and reads off a PERSON, so a non-person subject takes this injected and swept stand-in]
     obstacle_default=2,
     obstacle_refusal_multiple=2,
+    # `H-368` (B11 lane A): HOW THE SOCIAL ROLL'S OBSTACLE IS COMPOSED (`modules/social_contest/roll.py::obstacle_terms`).
+    # `task` SHIPS: the task's difficulty (`rosters.yaml: task_difficulty`) plus the opposing person's score halved (the
+    # score he rolls, `seam/wrappers/pool.py::score`) plus the room's and the document's terms -- no stand-in for a
+    # person. `stand_in` is the CONTROL and the REVERT: `score / 2` of a held value, else `obstacle_default`, byte for
+    # byte the composition before. A switch, not a number.
+    obstacle_model="task",            # `H-368`, swept stand_in (the control, the revert) / task (SHIPPED)
     # [JUSTIFIED: engine/season/hole_register.yaml H-213 -- `site: Fixtures obstacle_ceiling`, graded `assumption`; M-7 fails at the 1D floor above 2 (p_success 0.0006 at Ob 3), and 2 = obstacle_refusal_multiple x the 1D floor; swept 1 / 2 / 3, `None` the uncapped control]
     obstacle_ceiling=2,
     # CP-T01-06: THE `chance_floor` ARM OF THE CEILING. From one die the cap is solved per pool (the highest

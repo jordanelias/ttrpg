@@ -352,6 +352,9 @@ def test_faculty_varies_by_person_once_train_raises_carins_vocation():
     w, d = _npc088()
     fx = w.fixtures
     carin = w.persons[CARIN]
+    # B01a: the corpus seats a drawn sheet and a pool is the larger of an attribute and a capability (`seam/wrappers/pool.py`), so a
+    # drawn 5 would hide the vocation. The test's subject is the vocation, so Carin's sheet is fixed low here, key by key; the others keep theirs.
+    carin.attributes = {k: 1 for k in carin.attributes}
     assert carin.capability == {"copying": 3}, carin.capability
     others = [p for pid, p in sorted(w.persons.items()) if pid != CARIN and not p.capability]
     assert others, "no person without a capability to compare against"
@@ -363,7 +366,10 @@ def test_faculty_varies_by_person_once_train_raises_carins_vocation():
     assert carin.capability == {"copying": 4}
     pools = {p.id: sigma.faculty(w, p, "tell") for p in [carin, *others]}
     assert pools[CARIN] == 4, pools
-    assert {pools[p.id] for p in others} == {fx.get("pool_default")}, pools
+    # B01a.99 (every person's attributes are drawn, a population change): the persons without a key were all at `pool_default`
+    # (one pool, `{2}`); they now read their drawn attribute, so the pools part by person: here {p_b: 3, p_c: 2}
+    # (keyed on the case and the person after the terminal critique; the sheets before it read {5, 6}).
+    assert {pools[p.id] for p in others} == {2, 3}, pools
     assert len(set(pools.values())) > 1, pools
 
 
@@ -453,6 +459,10 @@ def test_a_pupil_whose_vocation_reads_argue_or_inquiry_is_trained_and_faculty_fo
     w, d = _npc088()
     pupil = next(pid for pid, p in sorted(w.persons.items()) if pid != CARIN and not p.capability)
     w.persons[pupil].capability = {"argue": 2, "inquiry": 3}
+    # B01a.99 (every person's attributes are drawn, a population change): the drawn pupil (p_b) reads acuity 5 and charisma 4,
+    # above the keys raised here (4, 3), so `faculty`'s `max(attribute, key)` would hide the key this test observes (read:
+    # inquiry verbs 5, `argue`/`determine` 4). The pupil is planted with no sheet, as the test's subject is the key.
+    w.persons[pupil].attributes = {}
     default = w.fixtures.get("pool_default")
     with monkeypatch.context() as m:                    # the planted failure: the `inquiry` rows removed
         m.setattr(EC, "VOCATIONS", VERBS.VOCATIONS - {"inquiry"})
@@ -466,8 +476,10 @@ def test_a_pupil_whose_vocation_reads_argue_or_inquiry_is_trained_and_faculty_fo
     assert w.persons[pupil].capability == {"argue": 3, "inquiry": 4}
     p = w.persons[pupil]
     inquiries = [v for v, k in VERB_CAPABILITY.items() if k == "inquiry"]
-    assert len(inquiries) == 3 and {sigma.faculty(w, p, v) for v in inquiries} == {4}
-    assert sigma.faculty(w, p, "argue") == 3 and sigma.faculty(w, p, "determine") == default
+    # B11 lane A: `interrogate` draws on `inquiry` (3 -> 4 verbs) and `determine` on `argue` (it rolled `pool_default`)
+    assert len(inquiries) == 4 and {sigma.faculty(w, p, v) for v in inquiries} == {4}
+    assert sigma.faculty(w, p, "argue") == 3 == sigma.faculty(w, p, "determine")
+    assert sigma.faculty(w, p, "transfer") == default, "a verb drawing on no vocation still rolls the default"
 
 
 def test_the_three_train_candidates_on_one_subject_get_three_act_ids():

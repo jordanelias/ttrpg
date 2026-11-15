@@ -22,7 +22,7 @@ from ..data.matrix import Step
 from ..state.gate import Token
 from ..data.requires import LEDGER_DERIVED_STEMS, UNKNOWN, WORLD_ONLY_STEMS, binding_from_act
 from ..data.rosters import (
-    CHANNEL_CLAIM_SOURCE, OBSERVATION_DEPOSIT_MODES, OBSERVATION_TERMS, RECORD_CONTENT,
+    CHANNEL_CLAIM_SOURCE, OBSERVATION_DEPOSIT_MODES, OBSERVATION_TERMS, READ_TO_ADDRESSEE, RECORD_CONTENT,
     UNDEPOSITED_KINDS, WITNESS_CHANNELS, require_member,
 )
 from ..data.verbs import VERB_TABLE
@@ -48,7 +48,7 @@ from ..epistemic import (SEEN_PREDICATE, _hold_tenure_ends, act_refs, changes_on
                          claim_subjects, held_claim_ids, holds_trail, live_channels,
                          non_anchor_subjects, observers_for, seen_of, seen_showing, seen_subject)
 from ..queries import cache, world_q
-from ..queries.person_q import drifted
+from ..queries.person_q import addressed_to, drifted
 from ..queries.world_q import hold_force
 from ..state.attribution import event_by_id, actor_of, anchor_of, causing_act
 from ..state.carriers import Claim, Event
@@ -86,6 +86,14 @@ def content_value(subject_matter):
     if isinstance(subject_matter, (list, tuple)):
         return tuple(content_value(v) for v in subject_matter)
     return subject_matter
+
+
+def addressee_reads(rec, pid: str) -> bool:
+    """B11 lane A: DOES WITNESS `pid` READ DOCUMENT `rec` AS ITS ADDRESSEE -- its kind is one whose making is put to the
+    addressee's face (`rosters.yaml: read_to_addressee`) and he is among its addressees (`person_q.addressed_to`, the one
+    owner). The content deposit's second reader beside the holder (below, in `witness`). [ASSUMPTION; medium; Jordan to
+    correct; revert: the roster `[]`.]"""
+    return rec.kind in READ_TO_ADDRESSEE and addressed_to(rec.subject_matter, pid)
 
 
 def _told_content(act):
@@ -830,8 +838,15 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # carries NO attribution: it says *this document says X*, never *the Duke wrote X* (r2 `02`
         # §A.9 -- the separation is what makes a forgery playable). The exact-triple guard is the
         # told channel's, for its reason: one belief is stored once.
+        # B11 lane A (the duel chain's third link, [ASSUMPTION; medium; Jordan to correct; revert: `holder != pid`
+        # alone]): AND TO A WITNESS THE DOCUMENT IS ADDRESSED TO (`person_q.addressed_to`, the one owner of the test) --
+        # a challenge is put to the challenged's face (its cell asks him present, `with`), so he learns what it says
+        # as its maker does, while the Record stays in the maker's hand (no mint into the addressee's, ED-IN-0292 (1)
+        # stands). MEASURED before (`build_realm(0..2)`, four seasons): a challenge issued 36 to 46 times a seed and
+        # its addressee held no reading of it, so `accept` could not tell it from any other document. An addressee
+        # who did not witness the making learns nothing here.
         for holder, rec in ((newly_held.get(e.id) or {}) if only is None else {}).values():
-            if holder != pid:
+            if holder != pid and not addressee_reads(rec, pid):
                 continue
             pred = f"{content_stem}:{rec.kind}"
             said = content_value(rec.subject_matter)

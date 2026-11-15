@@ -367,7 +367,7 @@ These are the two tables `V12_STRUCTURE_part3.md` §7.2 asks of part 2 and lane 
 | 208 | `engine/season/tests/test_fa01_trade_demand.py` | test file | B21b.26 | — |
 | 209 | `engine/season/tests/test_docket_names_its_case_file.py` | test file | B24.01 | — |
 | 210 | `engine/season/tests/test_sc_hearing_sitting.py` | test file | B24.03 | — |
-| 211 | `modules/social_contest/hearing.py` | module | B24.06 | — |
+| 211 | `modules/social_contest/proceeding.py` | module | B24.06 | — |
 | 212 | `engine/season/tests/test_sc_hearing_ballots.py` | test file | B24.11 | — |
 | 213 | `engine/season/tests/test_sc_hearing_evidence.py` | test file | B24.18 | — |
 | 214 | `modules/social_contest/evidence.py` | module | B24.19 | — |
@@ -767,14 +767,14 @@ Reading (hand-read): all seven are notes, not dependencies — each clause says 
 | `tools/export_oracle_draws.py` | struck (C3-L3) | none builds it; B06.02 names it |
 | `PersonInterior` as a typed class | B03 | B03.58 |
 | `explain` / `Derivation` | B34 | B34.05 |
-| `DuelRoundInput`; `HearingInput`, `Speaker` | B16; B24 | B16.04; B24.05 |
+| `DuelRoundInput`; `ProceedingInput`, `Speaker` | B16; B24 | B16.04; B24.05 |
 | the `entry:` kind for `combat.round`; the nested entry | B30 | B30 (`U5b_PC_rulings_in_the_fight` §1; the script's match on the generic token `entry:` is not a carrier) |
 | the seat row's `modifier:` | B05 | B05.06, B05.07 |
 | `person_q.present_persons`, `person_q.holders_named` | B11 | B11.08 |
 | `world_q.hearing` | B24 | B24 (first named by B05.23, which reads it) |
 | `world_q.office_rank` | B28 | B28.21 |
 | `ActStore.add_scene` / `scene_of` | B09 | B09.16 |
-| `decision/voices.py`; `modules/social_contest/hearing.py`, `evidence.py`; `harness/scene.py`, `access.py`, `scenarios.py` | B10; B24; others | B10.54; B24.06, B24.19; `harness/scenarios.py` B11.05 |
+| `decision/voices.py`; `modules/social_contest/proceeding.py`, `evidence.py`; `harness/scene.py`, `access.py`, `scenarios.py` | B10; B24; others | B10.54; B24.06, B24.19; `harness/scenarios.py` B11.05 |
 | `state/gate.py::may_levy`, `::may_wage`, `::commands` | B21 | B21.59, B21.58, B21.19 |
 | `world_q.passage_granted` | B23 | B23.05 (B22.29 reads it as an absent term, E-14) |
 | `world_q.root_of` | B33 | B33.14 |

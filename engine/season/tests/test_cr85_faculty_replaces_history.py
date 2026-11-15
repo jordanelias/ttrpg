@@ -15,11 +15,9 @@ withdrawn by ED-IN-0351).
   his opponent rolls against Ob 2.5.
   MUTATION (executed, not by hand): the seam's read dropped (`faculties` left empty, the module default 3) reproduces
   (9, 1.5), and the falsifier's check goes red.
-  CONTROL: the seam's value replaced by 3 for every party reproduces the pre-item one-season hash exactly -- the five
-  deleted sigma terms were exactly 0.0 in every season fight (both parties at history 3, empty `skills`).
-  ⚠ `build_realm(0)` forms no fight in one season since CR-87, so the falsifier reads seeds 1 and 2; seed 0's hash
-  does not move. Seed 2's fights roll at (8, 1.0) and landed where they landed at (9, 1.5) until PC-20 (1) (the
-  head-weighted strike impact, B10-11b) weighted the blows; seed 2 now moves with seed 1.
+  CONTROL: `revert_cr85` (the seam's value replaced by 3 for every party), which other files' reverts call; the realm
+  hashes are `_realm_goldens.py`'s.
+  ⚠ `build_realm(0)` forms no fight in one season since CR-87, so the falsifier reads seeds 1 and 2.
 """
 from __future__ import annotations
 
@@ -36,9 +34,6 @@ from ..harness.populated import build_realm, run
 from ..seam.wrappers import combat as C
 from ..seam.wrappers import pool, sigma
 from ._fresh_process import entry_target
-from .test_cp_t03_04_arms import revert_cp_t03_04
-from .test_cp_t03_07_body_ceiling import revert_cp_t03_07
-from .test_cp_t03_08_tend_on_the_wounded import revert_cp_t03_08
 
 
 # ⚠ A FIXTURE, NOT A MODULE-LEVEL `skipif(C.engine() is None)` (`test_combat_band_edges.py`'s precedent):
@@ -48,24 +43,6 @@ from .test_cp_t03_08_tend_on_the_wounded import revert_cp_t03_08
 def _engine_available():
     if C.engine() is None:
         pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
-
-#: The one-season realm hashes BEFORE this item (93662b9a). `build_realm(seed)` itself does not move (7266f56b...).
-#: Seeds 1 and 2 of both are the post-B10-11b reading (`reading @4b334f2a`), re-recorded by the batch pin commit: PC-20 (1)
-#: (the head-weighted strike impact, `K_STR_HEAD`) moves a one-season run that reaches `strike_impact`; seed 0 calls none.
-#: Was, before that pin commit: PRE_ITEM 20accb03... / f89ea45d... / fe9032ed...; POST_ITEM 20accb03... / 6e25b047... /
-#: fe9032ed... -- ONE string played both roles at seed 2 (the item did not move it); the head weighting makes the (8, 1.0)
-#: and (9, 1.5) fights land differently there, so each role now has its own value.
-#: B10-13 batch pin commit (the batch's declared movers move a one-season realm of every seed): PRE_ITEM was 20accb03... /
-#: a0bb01cb... / cc186ede...; POST_ITEM was 20accb03... / 597fac34... / a157d34a....
-#: B10-12 pin commit (CR-24 `field_winner_casualties: engine` and MB-07r's support cap, both shipped, move a one-season
-#: realm that fights; control: both reverted reads the old pins): seed 2 PRE_ITEM was 5350d34d..., POST_ITEM was 355872c5....
-PRE_ITEM = {0: "a63b960024babdcd2a1a37839e2d6cb0",
-            1: "cbe7de7ff0d61bbdbe396aa3da40cd97",
-            2: "3d89f9a22907a0b4d69f88e16341c43a"}
-#: The same, AFTER: seed 0 fights nothing; seeds 1 and 2 move (seed 2 moved only once PC-20 (1) landed).
-POST_ITEM = {0: "a63b960024babdcd2a1a37839e2d6cb0",
-             1: "0cd4f72e0cb1eba8ce55b78bfbc8201f",
-             2: "b8c1873362190843ad00860275961a7e"}
 
 _KEY = "cr85_test_arms"   # a test-local capability key: no roster row is added
 
@@ -114,16 +91,13 @@ def _off_the_reading(seen: Counter, want=(8, 1.0)) -> list:
 
 @pytest.mark.parametrize("seed", [1, 2])
 def test_falsifier_every_season_roll_reads_pool_8_against_ob_1(seed, monkeypatch):
-    from .test_strife_credit import revert_cr79
-    revert_cr79(monkeypatch)    # v11 CR-79 (the credit term, a later mover of the told deposit): reverted, so this pin reads its own item
-    # v11 CP-T03-04 (`arms` in the vocation range, a formation mover of every season) is reverted so `POST_ITEM` stands;
-    # its own file reads the live tree's rolls (`test_cp_t03_04_arms.py`, every season roll still at (8, 1.0)).
-    revert_cp_t03_04(monkeypatch)
-    revert_cp_t03_07(monkeypatch)        # v11 CP-T03-07 (`body_ceiling`, a schema mover of every realm), the same way
-    revert_cp_t03_08(monkeypatch)   # v11 CP-T03-08 (`tend` forms on the wounded, a formation mover of every season), the same way
-    seen, got = _season_rolls(monkeypatch, seed)
+    """Every roll the engine makes reads pool 8 against Ob 1.0 -- on the world where every person's score is
+    `pool_default` (B11 lane A's persons-hold-scores at its revert: a drawn sheet moves a pool and an Ob by itself, and
+    the falsifier is about the seam's read, not the sheets). The realm's hash is `_realm_goldens.py`'s."""
+    from .test_b11a_scores_and_obstacle import revert_b11a_scores
+    revert_b11a_scores(monkeypatch)
+    seen, _ = _season_rolls(monkeypatch, seed)
     assert _off_the_reading(seen) == [], dict(seen)
-    assert got == POST_ITEM[seed]
 
 
 def test_mutation_the_seam_read_dropped_reproduces_9_against_1_5_and_reddens(monkeypatch):
@@ -132,19 +106,6 @@ def test_mutation_the_seam_read_dropped_reproduces_9_against_1_5_and_reddens(mon
     assert set(seen) == {(9, 1.5)}, dict(seen)
     assert _off_the_reading(seen) != []
 
-
-@pytest.mark.parametrize("seed", [0, 1, 2])
-def test_control_faculty_3_for_every_party_reproduces_the_pre_item_hash(seed, monkeypatch):
-    from .test_strife_credit import revert_cr79
-    revert_cr79(monkeypatch)    # v11 CR-79 (the credit term, a later mover of the told deposit): reverted, so this pin reads its own item
-    revert_cr85(monkeypatch)
-    revert_cp_t03_04(monkeypatch)        # v11 CP-T03-04, a later formation mover of every season: so `PRE_ITEM` stands
-    revert_cp_t03_07(monkeypatch)        # v11 CP-T03-07 (`body_ceiling`, a schema mover of every realm), the same way
-    revert_cp_t03_08(monkeypatch)   # v11 CP-T03-08 (`tend` forms on the wounded, a formation mover of every season), the same way
-    seen, got = _season_rolls(monkeypatch, seed)
-    assert got == PRE_ITEM[seed]
-    assert set(seen) <= {(9, 1.5)}, dict(seen)
-    assert (POST_ITEM[seed] != PRE_ITEM[seed]) == (seed in (1, 2))
 
 
 def test_planted_a_party_holding_the_combat_key_at_5_rolls_11_and_is_attacked_at_ob_2_5(monkeypatch):

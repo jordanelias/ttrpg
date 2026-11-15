@@ -74,8 +74,8 @@ def _frozen(d: Mapping) -> Mapping:
 class CreationRow:
     """One seated person as the creation sheet shows him: the person-side fields world-gen wrote once
     (`capability` by `build_at`; `pursuits` by `build_at` or the realm builder; `conviction` by the realm
-    builder only, `{}` on shipped data; `attributes` by the realm builder from a cast row's `stats:` when its
-    `cast_attributes` switch is on, `{}` otherwise and where unauthored -- CR-20, the ten registry keys). A copy: the player
+    builder only, `{}` on shipped data; `attributes` by the realm builder: a cast row's `stats:` over the sheet
+    `state/carriers.py::generated_attributes` draws, when its `cast_attributes` switch is on, `{}` otherwise -- CR-20, the ten registry keys). A copy: the player
     reads it and picks an `id`."""
     id: str
     name: str

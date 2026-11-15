@@ -267,8 +267,7 @@ def river_crossed(origin, tid, *, geography):
 #: (`orchestration.py`: `DAMAGE_BY_DEGREE[deg](power) - eff_dr`). Applying A.9's +3 1:1 to that unit
 #: is an ASSUMPTION (`H-150`), not a measurement. The row's other two clauses ("no flanking; Slow cannot
 #: advance") are NOT applied -- `massbattle.py::_run_and_grade`'s docstring says why. Kept below the
-#: lookup, not beside the row constants, so the lookup's line stays where the mass-battle flow
-#: skeleton's line anchor cites it (`tests/valoria/test_flow_skeletons.py`). Applied since `20-iv`.
+#: lookup, not beside the row constants. Applied since `20-iv`.
 WALLS_DEFENDER_DR = 3  # [canonical: mass_battle_v30.md §A.9 ENVIRONMENTAL MODIFIERS — "Walls / fortifications | Defender +3 DR"]
 
 #: MB-05. A.9's two dice rows, as DICE -- A.6's currency (`Off dice | Def dice`). They land on

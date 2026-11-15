@@ -33,8 +33,8 @@ def test_find_tags_bare_override_and_none():
     assert tn.find_tags('no tags here') == []
     (t,) = tn.find_tags('the [[attr.body.strength]] check')
     assert t.id == 'attr.body.strength' and t.override is None
-    (t2,) = tn.find_tags('call it [[attr.mind.will|Grit]] today')
-    assert t2.id == 'attr.mind.will' and t2.override == 'Grit'
+    (t2,) = tn.find_tags('call it [[attr.spirit.will|Grit]] today')
+    assert t2.id == 'attr.spirit.will' and t2.override == 'Grit'
     assert len(tn.find_tags('[[a.b]] and [[c.d]] and [[e.f]]')) == 3
 
 

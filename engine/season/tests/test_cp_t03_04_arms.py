@@ -15,9 +15,9 @@ CP-T03-03's `arms_kinds` (equipment).
   roster. A surviving holder of a bloodied fight gains one; a non-holder gains none and nothing is minted.
   MUTATION (executed below): `_grown` minting for a non-holder turns the never-mint check red.
   CONTROL: a FORMATION MOVER EVEN AT CONTROL -- `arms` in the vocation range adds one `train` Candidate per `train`
-  formation, so with nobody holding the key every 1-season hash still moves (POST_ITEM). The control CANNOT
-  reproduce the pre-item hash with the item in place; `revert_cp_t03_04` (the three roster rows and the vocation
-  removed, in process) reproduces all three.
+  formation, so with nobody holding the key every 1-season hash still moves. The realm hashes are
+  `_realm_goldens.py`'s; `revert_cp_t03_04` (the three roster rows and the vocation removed, in process) is what the
+  other files' reverts call.
 """
 from __future__ import annotations
 
@@ -47,23 +47,6 @@ from ._scar_helpers import party_state
 
 KEY = "arms"
 BODY_VERBS = ("fight", "accept", "capture")
-
-#: 1-season hashes BEFORE this item (22ea6e13), and AFTER it with nobody holding the key (formation only).
-#: `build_realm(0).content_hash()` is 7266f56bea4e3d75705f5e88eec1b2e1 before and after.
-#: Seeds 1 and 2 of both are the post-B10-11b reading (`reading @4b334f2a`), re-recorded by the batch pin commit: PC-20 (1)
-#: (the head-weighted strike impact, `K_STR_HEAD`) moves a one-season run that reaches `strike_impact`; seed 0 calls none.
-#: Was, before that pin commit: PRE_ITEM 6e25b047... / fe9032ed...; POST_ITEM 07634b99... / 1cc4370d....
-#: B10-13 batch pin commit: PRE_ITEM was 20accb03... / 597fac34... / a157d34a... (= CR-85's POST_ITEM, re-recorded with it);
-#: POST_ITEM was b2dde1fc... / c58b1a7e... / 5518f31c....
-#: B10-12 pin commit (CR-24 `field_winner_casualties: engine` and MB-07r's support cap, both shipped, move a one-season
-#: realm that fights; control: both reverted reads the old pins): seed 2 PRE_ITEM was 355872c5... (= CR-85's POST_ITEM),
-#: POST_ITEM was 6078a950....
-PRE_ITEM = {0: "a63b960024babdcd2a1a37839e2d6cb0",
-            1: "0cd4f72e0cb1eba8ce55b78bfbc8201f",
-            2: "b8c1873362190843ad00860275961a7e"}
-POST_ITEM = {0: "8b5e882b0a4d771d56e8472ef557f84f",
-             1: "e9aad997765ecb589711613cfb194444",
-             2: "1139c7dcac2b0dd2b2ff6cbacc27e55c"}
 
 
 def revert_cp_t03_04(monkeypatch):
@@ -131,7 +114,7 @@ def test_falsifier_arms_5_rolls_pool_11_and_is_attacked_at_ob_2_5_through_the_se
     w.persons[a].capability = {**(w.persons[a].capability or {}), KEY: 5}
     assert KEY not in (w.persons[b].capability or {})
     inp = C.combat_input(w, [a, b], verb)
-    assert inp.faculties == (5, 2), inp.faculties
+    assert inp.faculties == (5, 1), inp.faculties
     mod, attr = entry_target("the body")[1].split(":", 1)
     entry = getattr(importlib.import_module(mod), attr)
     seen = _spy(monkeypatch)
@@ -139,16 +122,24 @@ def test_falsifier_arms_5_rolls_pool_11_and_is_attacked_at_ob_2_5_through_the_se
     for s in range(6):
         entry(inp, random.Random(s))
         checked += 1
-    assert set(seen) == {(11, 1.0), (8, 2.5)}, dict(seen)
+    # B01a.99 (every person's attributes are drawn, a population change): b's drawn attribute reads 1, not `pool_default` 2, so
+    # a's roll meets ob 0.5 (was 1.0) and b's own pool is 7 (was 8); a's pool 11 and the ob 2.5 against a (key 5) are unmoved.
+    assert set(seen) == {(11, 0.5), (7, 2.5)}, dict(seen)
     assert checked == 6
 
 
-def test_control_with_nobody_holding_arms_every_season_roll_still_reads_pool_8_against_ob_1(monkeypatch, _engine):
-    """The item moves formation, not a roll: seed 1's season fights all roll CR-85's (8, 1.0)."""
+def test_control_with_nobody_holding_arms_every_season_roll_reads_the_drawn_attributes_alone(monkeypatch, _engine):
+    """The item moves formation, not a roll: seed 1's season fights roll no `arms` key (nobody holds one). B01a.99 (every
+    person's attributes are drawn, a population change): the rolls were all CR-85's (8, 1.0) at `pool_default`; they now read
+    the persons' drawn attributes, (pool, ob) = (9, 2.5) x2, (11, 2.0), (11, 1.5), read at PYTHONHASHSEED=0.
+    ⚠ A pool of 11 is what `arms` 5 reads in the falsifier above, so the pool values alone no longer exclude the key: the
+    holders are asserted directly, before the season and after it (`_grown` raises only a key already held)."""
     seen = _spy(monkeypatch)
     w = build_realm(1)
+    assert [pid for pid, p in w.persons.items() if KEY in (p.capability or {})] == []
     run(1, 1, w=w)
-    assert seen and set(seen) == {(8, 1.0)}, dict(seen)
+    assert [pid for pid, p in w.persons.items() if KEY in (p.capability or {})] == []
+    assert seen and set(seen) == {(9, 2.5), (11, 2.0), (11, 1.5)}, dict(seen)
 
 
 def test_control_with_the_item_off_the_same_holder_rolls_the_fallback(monkeypatch, _engine):
@@ -280,25 +271,6 @@ def test_capture_and_accept_grow_by_the_same_rule():
 
 
 # ---- the season: outcome mover once a key is held, formation mover at control -----------------------------------
-
-@pytest.mark.parametrize("seed", [0, 1, 2])
-def test_control_formation_moves_every_hash_and_the_item_off_reproduces_the_pre_item_hash(seed, monkeypatch,
-                                                                                         _engine):
-    from .test_strife_credit import revert_cr79
-    revert_cr79(monkeypatch)    # v11 CR-79 (the credit term, a later mover of the told deposit): reverted, so this pin reads its own item
-    # v11 CP-T03-07 (`Person.body_ceiling`, a schema mover of every realm) is reverted in process on BOTH arms
-    # (`test_cp_t03_07_body_ceiling.py::revert_cp_t03_07`, whose own control reproduces POST_ITEM), so both pins stand.
-    from .test_cp_t03_07_body_ceiling import revert_cp_t03_07
-    revert_cp_t03_07(monkeypatch)
-    from .test_cp_t03_08_tend_on_the_wounded import revert_cp_t03_08
-    revert_cp_t03_08(monkeypatch)   # v11 CP-T03-08 (`tend` forms on the wounded, a formation mover of every season), the same way
-    w = build_realm(seed)
-    run(1, seed, w=w)
-    assert w.content_hash() == POST_ITEM[seed] != PRE_ITEM[seed]
-    revert_cp_t03_04(monkeypatch)
-    w = build_realm(seed)
-    run(1, seed, w=w)
-    assert w.content_hash() == PRE_ITEM[seed]
 
 
 def test_season_every_person_holding_arms_2_some_survivor_grows_at_the_encounter_step(_engine):

@@ -3,7 +3,7 @@
 `loop/witness.py::_credit` grades a told claim's confidence, after `_refract`, by
 `1 + regime_gain * c`, `c` = `world_q.commensurate(hearer, teller)` in {-1, 0, +1}, clamped to
 `[0, max(confidence_default, the uncredited value)]` and applied only when `regime_gain * c` is not 0.
-`regime_gain` is the control 0 at commit (1) and ships 0.5 at commit (2) (`revert_cr79` sets it back).
+`regime_gain` is the control 0 at commit (1) and ships 0.5 at commit (2).
 
 Every world here is hand-built (`probes.tiny_world`, the told deposit driven as `test_ax7_refraction`
 drives it). Each test that means the control sets `regime_gain` to 0 explicitly, and each test runs an
@@ -29,6 +29,7 @@ from ..queries import world_q as W
 from ..queries.person_q import said_of
 from ..state.carriers import Act, Claim, Event, Tenure
 from ..state.ids import H
+from ._realm_goldens import BUILD, SHIPPED
 from .test_ax7_refraction import HELD_CONF, KNOTTED, NEAR, TELLER, _told
 
 OTHER = "p_other"           # a second hearer standing in `Hh` with `NEAR`, so `co_located` reaches both
@@ -36,9 +37,6 @@ LIVE = 0.5                  # the value given (ED-IN-0316), set in the tests exp
 # Conviction maps, one affiliation each (pairs from `test_strife_flows::test_commensurate`):
 # `NONE` holds no affiliation, so it reads 0 against anyone (an unrelated pair).
 THREAD, INNER, ORTHO, NONE = {"thread_truth": 3}, {"inner_tradition": 3}, {"solmund_orthodoxy": 3}, {}
-# `build_realm(0)` after one season at `regime_gain` 0.5, the shipped value (CR-79 commit (2); the pins that read the
-# control call `revert_cr79`, so this is the one place the shipped season is pinned; it moves with every later mover).
-AT_THE_VALUE_GIVEN_ONE_SEASON = "5ab73af282d0779646c38839fbab85d8"   # RE-PINNED at the B10-13 pin commit (P15): was 180c6863...; the batch's items' own commit bodies report this 1-season reading. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 
 
 def _tell(regime: float, refraction: float = 0.0, held: int = HELD_CONF, conviction=None,
@@ -83,12 +81,6 @@ def _c(conviction: dict) -> dict:
     for pid, conv in conviction.items():
         w.persons[pid].conviction = dict(conv)
     return {pid: W.commensurate(w, pid, TELLER) for pid in (NEAR, OTHER, KNOTTED)}
-
-
-def revert_cr79(monkeypatch):
-    """CR-79 OFF, in process: `regime_gain` at 0, the control. A test that pins a hash from before CR-79's flip to
-    0.5 (a declared mover of the told deposit) calls this, so its pin reads the item it names alone."""
-    monkeypatch.setitem(DEFAULT_FIXTURES._v, "regime_gain", 0.0)
 
 
 def test_the_gain_ships_at_the_value_given_and_zero_is_the_control():
@@ -214,15 +206,14 @@ def test_a_person_absent_from_the_world_reads_zero():
 
 
 def test_the_realm_reaches_commensurate_at_the_value_given_and_never_at_the_control(monkeypatch):
-    """THE CONTROL AND ITS LIVE ARM, on the realm, seed 0, one season. `build_realm(0)` hashes to the base reading.
-    At `regime_gain` 0 (set explicitly) `commensurate` is replaced by a raise and the run completes at the
-    one-season base hash `25660615...` (`test_strife_flows.BASE_ONE_SEASON`; B10-13 pin commit: was `d4c83c8c...`): no told deposit read an affiliation.
-    At 0.5 the same run calls `commensurate` (counted, through the real function) and ends elsewhere, so the realm
-    does reach the told site and the control above was not vacuous. Seeds 1 and 2, and three seasons, are the
-    commit's scratch readings (H-275)."""
-    from .test_strife_flows import BASE_BUILD, BASE_ONE_SEASON    # `build_realm(0)` and its season, after B11-S4 (#580)
+    """THE CONTROL AND ITS LIVE ARM, on the realm, seed 0, one season. `build_realm(0)` hashes to the owner's build pin.
+    At `regime_gain` 0 (set explicitly) `commensurate` is replaced by a raise and the run completes: no told deposit
+    read an affiliation.
+    At 0.5 the same run calls `commensurate` (counted, through the real function) and ends at the shipped season's
+    hash (`_realm_goldens.py`), which is not the control's, so the realm does reach the told site and the control
+    above was not vacuous. Seeds 1 and 2, and three seasons, are the commit's scratch readings (H-275)."""
     w = POP.build_realm(0)
-    assert w.content_hash() == BASE_BUILD
+    assert w.content_hash() == BUILD[0]
 
     def _boom(*a, **k):
         raise AssertionError("commensurate read at the control")
@@ -230,7 +221,7 @@ def test_the_realm_reaches_commensurate_at_the_value_given_and_never_at_the_cont
         m.setattr(W, "commensurate", _boom)
         w.fixtures = w.fixtures.sweep("regime_gain", 0.0)
         POP.run(seasons=1, seed=0, w=w)
-    assert w.content_hash() == BASE_ONE_SEASON
+    control = w.content_hash()
     calls = []
     real = W.commensurate
     w2 = POP.build_realm(0)
@@ -239,4 +230,4 @@ def test_the_realm_reaches_commensurate_at_the_value_given_and_never_at_the_cont
         m.setattr(W, "commensurate", lambda *a, **k: calls.append(a) or real(*a, **k))
         POP.run(seasons=1, seed=0, w=w2)
     assert len(calls) >= 1, "the realm never reached the told site at the value given"
-    assert w2.content_hash() == AT_THE_VALUE_GIVEN_ONE_SEASON
+    assert w2.content_hash() == SHIPPED[(0, 1)] != control

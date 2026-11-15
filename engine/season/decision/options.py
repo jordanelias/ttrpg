@@ -39,7 +39,7 @@ from ..data.rosters import (
 from ..data.verbs import (
     CHOICE_RANGES, CHOICE_SOURCED, DETAINEE_CLASS, ELIGIBILITY_KINDS, ENEMY_CLASS, HELD_DOCUMENT_DECLINES, HELD_EDGE_DECLINES, LIE_VERBS,
     OWN_HOLD_DECLINES,
-    OWN_STANCE_DECLINES, OWN_TITLE_DECLINES,
+    OPPOSED_WITHOUT_PRIZE, OWN_STANCE_DECLINES, OWN_TITLE_DECLINES, RECORD_SUBKINDS_BY_VERB, RECORD_SUBKINDS_HELD,
     TERMS_SOURCED, VERB_TABLE, VIOLENCE_CONTEXTS, VIOLENT_VERBS, VOCATION_SOURCED, VOCATIONS, WARRANT_SOURCED,
     align,
 )
@@ -129,6 +129,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
     people: Optional[tuple] = None
     records: Optional[list] = None
     held: Optional[frozenset] = None
+    read: Optional[dict] = None         # `documents_known_as`, once per call, only if a sub-kind row is reached
     # v9 IN-26 (`H-156` option (a) as a switch, `Fixtures withheld_verbs`): A VERB HELD OUT OF FORMATION
     # forms no Candidate for anybody, before any other read -- so a withheld row costs the season nothing
     # and the hand-built fold, which never asks this, is untouched. A member the table lacks is refused,
@@ -238,6 +239,26 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             if held is None:
                 held = _held_objects(p)
             refs = tuple(r for r in refs if SUCCESSIONS.get(r) in held)
+        # B11 lane A (`data/verbs.py::RECORD_SUBKINDS_BY_VERB`): A `Record` ROW WHOSE CELL ASKS A SUB-KIND forms only
+        # on a Record his own content claims say is of that kind (`documents_known_as`) -- `accept` on a challenge,
+        # `comply` on a dispensation. The kind is read off the row's own cell, never a verb name; a document is known
+        # by what it says, so one he holds no reading of is no challenge to him (the addressee of a challenge made
+        # before him reads it, `loop/witness.py`'s content deposit). MEASURED before, `aperture 2 0` (realm):
+        # `accept` 28 of 28 and `comply` 34 of 34 refused on `exists:<kind>=0`; the known-false polarity (unknown
+        # forms) was tried and left 32 to 45 `accept.refused` a seed over four seasons. It NARROWS and widens
+        # nothing; the fold's `existence` conjunct stays for a hand-built act. [ASSUMPTION; medium; Jordan to
+        # correct; revert: empty `RECORD_SUBKINDS_BY_VERB`.]
+        # A HOLDING row (`RECORD_SUBKINDS_HELD`: `carry`, `found`, `build`, held by the person, `own_hold_declines`) keeps
+        # a document he holds no reading of -- unknown forms, clause 4's polarity -- and declines one his reading says is
+        # of another kind.
+        kinds_asked = RECORD_SUBKINDS_BY_VERB.get(verb)
+        if kinds_asked and refs:
+            if read is None:
+                read = documents_known_as(p)
+            if verb in RECORD_SUBKINDS_HELD:
+                refs = tuple(r for r in refs if r not in read or read[r] & kinds_asked)
+            else:
+                refs = tuple(r for r in refs if read.get(r, frozenset()) & kinds_asked)
         if not refs:
             continue
         # v9 IN-12 step 9 (`rosters.yaml: vocation_sourced`): A VERB THAT CARRIES A VOCATION forms one
@@ -418,8 +439,10 @@ def subject_is_opponent(row: "VerbRow") -> bool:
     `decision/choose.py`'s score term 2 under `stance_polarity: declared` (v9 IN-18 `G2`: an act
     against a disliked opponent scores higher, not lower). CR-16: it read `not row.counterparty`,
     which is False for a row that names `counterparty: subject`, so those rows were scored on the
-    wrong side under `declared`."""
-    return row.contested_against_subject()
+    wrong side under `declared`. B11 lane A: OR the row is listed in `rosters.yaml: opposed_without_prize` (`challenge`:
+    no prize, done against the man it calls out)."""
+    return row.contested_against_subject() or (
+        row.verb in OPPOSED_WITHOUT_PRIZE and row.opponent_operand() == "subject")
 
 
 # v11 CR-87: THE VIOLENT ROWS WHOSE SUBJECT IS THEIR OPPONENT (`data/verbs.py::VIOLENT_VERBS`, off `rosters.yaml:
@@ -1002,6 +1025,27 @@ def held_record_claims(p: Person) -> list:
     return out
 
 
+def document_read(p: Person, rid) -> Optional["Claim"]:
+    """`p`'s OWN READING OF DOCUMENT `rid`: the newest `content:<kind>` claim on it in his ledger (`LedgerReader`'s
+    comparator, `held_record_claims`' rule), whether he holds the Record or only read it made before him; `None`
+    where he holds no reading. Person-side and World-free (AX-2)."""
+    return LedgerReader([c for c in p.ledger if c.subject == rid and content_said(c) is not None
+                         and content_kind(c) in RECORD_SOURCED_OPERANDS]).belief_among()
+
+
+def documents_known_as(p: Person) -> dict:
+    """WHAT `p`'s OWN LEDGER SAYS EACH DOCUMENT IS: `{record id: frozenset of kinds}` over every `content:<kind>` claim
+    he holds (`person_q.content_kind`, the one reader of the stem). Person-side and World-free (AX-2): what a document
+    is, to him, is what his reading of it says (B11 lane A, `opening_set`'s sub-kind rule). A document he holds no
+    reading of is absent: its kind is unknown to him."""
+    out: dict = {}
+    for c in p.ledger:
+        k = content_kind(c)
+        if k is not None:
+            out[c.subject] = out.get(c.subject, frozenset()) | {k}
+    return out
+
+
 def holds_own_document(p: Person, kind: str) -> bool:
     """DOES `p` HOLD A DOCUMENT OF `kind` WHOSE CONTENT NAMES HIM? -- v9 IN-12 step 10, the read
     `rosters.yaml: held_document_declines` declines a verb on (`conceal` while a cover is held). Person-side
@@ -1368,6 +1412,18 @@ def _person_bags(p: Person, row: "VerbRow", q: "Question", subject, fx: "Fixture
     if not fan:
         ops = _operands(p, row, q, subject, fx, {}, seat)
         return [] if ops is None else [ops]
+    # B11 lane A (the duel chain's fourth link, [ASSUMPTION; medium; Jordan to correct; revert: drop this branch]):
+    # A ROW ABOUT A DOCUMENT (`referent_class: Record`) WHOSE SUBJECT HE HAS READ, AND WHOSE KIND ANSWERS EVERY FAN
+    # OPERAND (`rosters.yaml: record_sourced_operands`, `_content_answer`), takes them from the document, not one bag
+    # per person known: `accept` is fought against the challenge's `challenger`. MEASURED before (`build_realm(1)`,
+    # four seasons): 35 of 39 `accept.refused` last read `names=False`, a Candidate per acquaintance of which the
+    # fold's `names:to` admits one. `subject` stays the document (no `held=`: the act answers the Record itself).
+    if row.referent_class == _HELD_WRIT_CLASS:
+        doc = document_read(p, subject)
+        given = {n: _content_answer(doc, n) for n in fan}
+        if doc is not None and None not in given.values():
+            ops = _operands(p, row, q, subject, fx, given, seat)
+            return [] if ops is None else [ops]
     if people is None:
         people = known_persons(p.ledger, p.id)
     # IN-53 D2 (H-207): A ROW DECLARING `counterparty_may_be_self` (`confer`) ALSO RANGES OVER THE
@@ -1637,9 +1693,13 @@ def competence(p: Person, competence_gain: float) -> float:
         competence = min(1, 1 + g * (attunement - mid) / (mid - floor))      g = `competence_gain`
 
     `attunement` is the score `p.attributes` holds at `COMPETENCE_ATTRIBUTE` (`Person.attributes`, CR-20);
-    `mid` is `COMPETENCE_MID`. MONOTONE in Attunement and exactly 1 at `mid`; a receiver with NO authored
-    Attunement reads 1 (a READ, never a default: the cast carries none, so the realm is unmoved). At
-    `g = 0` it is 1 for everyone: THE CONTROL, and the shipped value.
+    `mid` is `COMPETENCE_MID`. MONOTONE in Attunement and exactly 1 at `mid`; a receiver who HOLDS no
+    Attunement reads 1 (a READ, never a default). ⚠ Since B01a.01 the built realm seats every key on every
+    person (`build_realm(cast_attributes=True)`, drawn by `state/carriers.py::generated_attributes` where unauthored),
+    so no realm receiver reaches that branch and each unauthored one reads the Attunement he drew, below `mid` for
+    some. Harmless ONLY while `competence_gain`
+    ships at 0: at `g = 0` it is 1 for everyone (THE CONTROL, and the shipped value); a live gain would lower
+    the credit of every receiver drawn below `mid`.
 
     ⚠ CAPPED AT 1 ABOVE `mid` [ASSUMPTION; medium; Jordan to correct; revert: drop the `min` and clamp the
     product to a confidence ceiling, which no owner names]: the other two factors only ever LOWER a

@@ -70,6 +70,7 @@ honest reading of `W0` is that `R0`-`R3` and `G8` pass and `G6` reports its floo
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import re
 import sys
 from collections import Counter
@@ -628,21 +629,192 @@ def verify_citations(reg: dict) -> list:
 REQUIREMENTS = files.REQUIREMENTS_YAML
 
 
+CONJUNCT_HOLDS = ("yes", "no", "unread")
+_PYTHON = ("python", "python3")
+
+
+def _k_names(expr: str) -> list[str]:
+    """The test names a pytest `-k` expression must find: every identifier except `and`/`or`/`not`
+    and except those directly under a `not` (the one after it, or the parenthesised group after
+    it). A name under a `not` selects nothing, so it is not asked to exist."""
+    toks = re.findall(r"[A-Za-z_]\w*|[()]", expr)
+    keep: list[str] = []
+    i = 0
+    while i < len(toks):
+        t = toks[i]
+        if t == "not":
+            i += 1
+            if i < len(toks) and toks[i] == "(":
+                depth = 0
+                while i < len(toks):
+                    depth += (toks[i] == "(") - (toks[i] == ")")
+                    i += 1
+                    if depth == 0:
+                        break
+            else:
+                i += 1  # the identifier directly under the `not`
+            continue
+        if t not in ("and", "or", "(", ")"):
+            keep.append(t)
+        i += 1
+    return keep
+
+
+def _resolve_pytest(args: list[str], cid: str) -> str | None:
+    """`pytest <test paths> [-k <expr>]`: each path exists; with `-k`, every name not under a
+    `not` is a substring of a `def test_...` in the files named BEFORE the `-k` (a directory
+    stands for the test files under it). The first version of the row check passed a `-k` when
+    any one name occurred anywhere in all test source, so `import` satisfied it."""
+    k = args.index("-k") if "-k" in args else None
+    before = args if k is None else args[:k]
+    paths = [a for a in before if a.endswith(".py") or "/" in a.split("::")[0]]
+    if not paths:
+        return f"{cid}: `argv` names no test path before `-k` -- the measure is not a command this check can find"
+    src = ""
+    nodes: list[str] = []
+    for a in paths:
+        name, _, node = a.partition("::")
+        f = files.REPO_ROOT / name
+        if not f.exists():
+            return f"{cid}: `argv` names {name}, which does not exist"
+        for t in ([f] if f.is_file() else sorted(f.rglob("test_*.py"))):
+            src += t.read_text(encoding="utf-8") + "\n"
+        if node:
+            nodes.append(re.split(r"[\[:]", node)[0])
+    tests = re.findall(r"def (test_\w+)", src)
+    for node in nodes:
+        if node not in tests:
+            return f"{cid}: `argv` names test {node}, which is in none of the files named"
+    if k is None:
+        return None
+    if k + 1 >= len(args):
+        return f"{cid}: `-k` with no expression"
+    expr = args[k + 1]
+    names = _k_names(expr)
+    if not names:
+        return f"{cid}: `-k {expr}` names no test it selects -- the measure is dead"
+    missing = [n for n in names if not any(n in t for t in tests)]
+    if missing:
+        return f"{cid}: `-k {expr}` selects NO test for {', '.join(missing)} -- the measure is dead"
+    return None
+
+
+def _resolve_argv(argv: list, cid: str) -> str | None:
+    """Can this check FIND the command? (It executes nothing.) Three forms: `python -m <module>`
+    (`find_spec`, and a `__main__` to run), `python <path>.py` (the file exists and has a
+    `__main__`), `pytest ...` / `python -m pytest ...` (`_resolve_pytest`). Anything else -- `true`
+    among them -- is not a command this check can find. Returns the violation, or None."""
+    head, rest = argv[0], argv[1:]
+    if head == "pytest":
+        return _resolve_pytest(rest, cid)
+    if head in _PYTHON and rest[:1] == ["-m"]:
+        if len(rest) < 2:
+            return f"{cid}: `argv` has `-m` and no module"
+        mod = rest[1]
+        try:
+            spec = importlib.util.find_spec(mod)
+        except (ImportError, ValueError, AttributeError):
+            spec = None
+        if spec is None:
+            return f"{cid}: `argv` names module {mod}, which does not exist"
+        if mod == "pytest":
+            return _resolve_pytest(rest[2:], cid)
+        if spec.submodule_search_locations is not None:
+            runnable = importlib.util.find_spec(mod + ".__main__") is not None
+        else:
+            runnable = bool(spec.origin) and "__main__" in Path(spec.origin).read_text(encoding="utf-8")
+        if not runnable:
+            return (f"{cid}: module {mod} has no `__main__` -- running it prints nothing and "
+                    f"exits 0, so the measure shows nothing")
+        return None
+    if head in _PYTHON and rest and rest[0].endswith(".py"):
+        f = files.REPO_ROOT / rest[0]
+        if not f.exists():
+            return f"{cid}: `argv` names {rest[0]}, which does not exist"
+        if "__main__" not in f.read_text(encoding="utf-8"):
+            return (f"{cid}: {rest[0]} has no `__main__` -- running it prints nothing and exits 0, "
+                    f"so the measure shows nothing")
+        return None
+    return f"{cid}: `argv` {argv[:3]} -- the measure is not a command this check can find"
+
+
+def _present(v) -> bool:
+    """A reading's field is there: `seed: 0` is a reading, so presence is not truthiness."""
+    return v is not None and str(v).strip() != ""
+
+
+def _check_conjuncts(r: dict, bad: list[str]) -> tuple[int, int, str]:
+    """One row's `conjuncts:` -- the list of the readings its `met` text joins by "and". Appends
+    each violation to `bad`; returns (held, total, the tree of the oldest reading)."""
+    rid, st = r.get("id"), r.get("status")
+    cs = r.get("conjuncts")
+    if not isinstance(cs, list):
+        bad.append(f"{rid}: no `conjuncts:` list -- a status is read off its conjuncts")
+        return 0, 0, "-"
+    held, seen, readings = 0, set(), []
+    for i, c in enumerate(cs):
+        if not isinstance(c, dict):
+            bad.append(f"{rid}: conjunct {i} is not a mapping")
+            continue
+        cid, holds = c.get("id"), c.get("holds")
+        if not (isinstance(cid, str) and cid.startswith(f"{rid}.")) or cid in seen:
+            bad.append(f"{rid}: conjunct id {cid!r} is not a unique `{rid}.<x>`")
+        seen.add(cid)
+        argv = c.get("argv")
+        if not (isinstance(argv, list) and argv and all(isinstance(a, str) and a for a in argv)):
+            bad.append(f"{cid}: no `argv` -- a list, the command, never a shell string")
+            argv = None
+        if holds not in CONJUNCT_HOLDS:
+            bad.append(f"{cid}: holds {holds!r} is not one of {'/'.join(CONJUNCT_HOLDS)}")
+            continue
+        held += holds == "yes"
+        if holds == "unread":
+            continue  # its instrument may be built by a later batch: carried, not resolved
+        rd = c.get("reading")
+        if not isinstance(rd, dict):
+            bad.append(f"{cid}: holds {holds} with no `reading:` record")
+            continue
+        for key in ("tree", "seed", "line"):
+            if not _present(rd.get(key)):
+                bad.append(f"{cid}: holds {holds} with no `reading.{key}`")
+        readings.append((str(rd.get("date") or ""), str(rd.get("tree") or "")))
+        if argv:
+            v = _resolve_argv(argv, cid)
+            if v:
+                bad.append(v)
+    if st == "met":
+        if not cs:
+            bad.append(f"{rid}: claims met with no conjunct -- there is nothing it holds")
+        for c in cs:
+            if isinstance(c, dict) and c.get("holds") != "yes":
+                bad.append(f"{rid}: claims met and {c.get('id')} reads {c.get('holds')!r}")
+    elif st == "partial" and held == 0:
+        bad.append(f"{rid}: claims partial with no conjunct at yes")
+    return held, len(cs), (min(readings)[1] if readings else "-") or "-"
+
+
 def check_requirements() -> int:
     """`requirements.yaml` IS THE ACCEPTANCE SURFACE FOR THE ADOPTED LOOP, and this is what makes
     it mechanism rather than prose (CLAUDE.md §0.05). It fails on the one move that would let the
     nine rot into a wish-list: a row claiming progress it cannot show.
 
-    Two rules, both of them §0.2 ("done means it runs") in a form a checker can apply:
-      1. A row at `met` or `partial` MUST carry a non-empty `measured:` AND a `measure:` command.
-         A status is a reading, never a judgement, so a status with no reading behind it is a
-         claim about the game that nothing produced.
-      2. A row at `not_met` must still name a `measure:` -- what WOULD show it, if it held. A
-         requirement nothing could ever measure is not a requirement, it is a mood.
+    A row's `met` text is a list, `conjuncts:` -- `{id, text, argv, expects, holds, reading}` -- and
+    this reads it (`IS-A-01`). It executes nothing: a bare relabel to `met` with honest readings
+    still exits 0. What it refuses:
+      1. `met` unless there is a conjunct and every one holds `yes`, each with a `reading.tree`,
+         `reading.seed` and `reading.line`; `partial` with no conjunct at `yes`.
+      2. A conjunct with no `argv`, or a holds off `yes|no|unread`. A conjunct at `yes` or `no`
+         has its `argv` resolved (`_resolve_argv`); one at `unread` carries an argv and is not
+         resolved, because a later batch may build its instrument.
+      3. A `scales:` row whose `conjunct:` names no conjunct of R-04 (`IS-A-04`).
+      4. A row with no `measure:` -- one line, the row's cheapest conjunct, read by
+         `tools/m1_acceptance.py` -- or one whose `-k` selects no test or whose `python <path>`
+         names no runnable file.
     """
     doc = load_yaml(REQUIREMENTS.read_text())
     rows = doc.get("rows") or []
     bad: list[str] = []
+    lines: list[str] = []
     for r in rows:
         rid, st = r.get("id"), r.get("status")
         if st not in ("not_met", "partial", "met"):
@@ -680,24 +852,30 @@ def check_requirements() -> int:
                     elif "__main__" not in f.read_text(encoding="utf-8"):
                         bad.append(f"{rid}: {m.group(1)} has no `__main__` -- running it prints "
                                    f"nothing and exits 0, so the measure shows nothing")
-        if st in ("met", "partial") and not str(r.get("measured") or "").strip():
-            bad.append(f"{rid}: claims {st} with an empty `measured:` -- a status is a reading")
+        held, total, tree = _check_conjuncts(r, bad)
+        flag = "  ⚠ needs_jordan" if r.get("needs_jordan") else ""
+        lines.append(f"    {rid}  {st}  {held} of {total} conjuncts  tree {tree}{flag}")
         if not str(r.get("statement") or "").strip():
             bad.append(f"{rid}: no `statement:` -- the requirement's own words are the record")
+    r04 = {c.get("id") for r in rows if r.get("id") == "R-04"
+           for c in (r.get("conjuncts") or []) if isinstance(c, dict)}
+    for s in doc.get("scales") or []:
+        named = s.get("conjunct")
+        if named is not None and named not in r04:
+            bad.append(f"scales: {s.get('scale')!r} names conjunct {named!r}, which is no conjunct of R-04")
     counts: dict = {}
     for r in rows:
         counts[r.get("status")] = counts.get(r.get("status"), 0) + 1
     print(f"THE NINE ({len(rows)} rows, ruled {doc.get('ruled_by')}, {doc.get('ed')})")
     print("  " + " · ".join(f"{k} {v}" for k, v in sorted(counts.items())))
-    for r in rows:
-        flag = "  ⚠ needs_jordan" if r.get("needs_jordan") else ""
-        print(f"    {r['id']}  {r['status']:<8} {str(r['statement'])[:64]}{flag}")
+    for line in lines:
+        print(line)
     if bad:
         print("REQUIREMENTS: " + str(len(bad)) + " violation(s)")
         for b in bad:
             print("    " + b)
         return 1
-    print("REQUIREMENTS: every row carries a measurement or names one")
+    print("REQUIREMENTS: every row's status is supported by its conjuncts")
     return 0
 
 
@@ -709,7 +887,7 @@ def main(argv=None) -> int:
                     help="every `:NNN` a cite names exists, and every verbatim quote is there")
     ap.add_argument("--rule", default="", help="comma-separated subset, e.g. R0,R1,R2,R3")
     ap.add_argument("--requirements", action="store_true",
-                    help="THE NINE (ED-IN-0204) -- every row carries a measurement or names one")
+                    help="THE NINE (ED-IN-0204) -- every row's status is supported by its conjuncts")
     a = ap.parse_args(argv)
     if a.requirements:
         return check_requirements()

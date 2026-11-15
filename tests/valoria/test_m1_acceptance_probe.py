@@ -105,15 +105,12 @@ def test_a_different_seed_can_diverge_from_the_probe_seed():
     match against itself no matter what ran."""
     fixed = m1._run_probe_season(m1.M1_PROBE_SEED)
     other = m1._run_probe_season(m1.M1_PROBE_SEED + 1)
-    # Not asserting inequality unconditionally would be too strong a claim to make blind, but
-    # BOTH producing the exact same hash as the fixed-seed probe while differing by only the
-    # seed would mean content_hash() is not keyed on campaign content -- assert that did NOT
-    # happen, which is the property this row's whole design depends on.
-    assert (fixed.content_hash, fixed.stub_hits) != (other.content_hash, other.stub_hits) or \
-        fixed.events == 0, (
-        'two different seeds produced identical (hash, stub_hits) -- either both seasons are '
-        'no-ops (events == 0, checked here) or content_hash() is not actually sensitive to what '
-        'the season did, which would make row_determinism vacuous'
+    # An empty season has nothing to hash, so it could never show the hash is keyed on what
+    # ran: require events first, then the inequality, with no escape hatch.
+    assert fixed.events > 0, 'the probe season produced no Events: nothing for the hash to be keyed on'
+    assert (fixed.content_hash, fixed.stub_hits) != (other.content_hash, other.stub_hits), (
+        'two different seeds produced identical (hash, stub_hits) -- content_hash() is not '
+        'actually sensitive to what the season did, which would make row_determinism vacuous'
     )
 
 

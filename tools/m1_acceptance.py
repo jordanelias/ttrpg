@@ -295,10 +295,11 @@ def row_nine_requirements():
     board (every plan under `workplans/` was retired that day, `FORK:0671283`), to the nine rows
     master workplan v7 §1 named M1's companion instrument.
 
-    ⚠ STILL DOC-DERIVED, AND SAYS SO. It counts `status:` strings in `requirements.yaml`. That is
-    stronger than the board it replaces -- `register --requirements` refuses a `met`/`partial` row
-    with no `measured:` and resolves every `measure:` command statically -- but nothing here
-    executes the game. Rows 1, 2 and 4 do; this one must not read like them.
+    ⚠ STILL DOC-DERIVED, AND SAYS SO. It counts `status:` strings in `requirements.yaml`, and the
+    conjuncts at `holds: yes` beside them (`conjuncts held <h> of <m>`). That is stronger than the
+    board it replaces -- `register --requirements` refuses a `met` row any conjunct of which is
+    not `yes`, and resolves each read conjunct's `argv` statically -- but nothing here executes the
+    game. Rows 1, 2 and 4 do; this one must not read like them.
     """
     path = _repo(REQUIREMENTS)
     try:
@@ -310,6 +311,8 @@ def row_nine_requirements():
     for r in rows:
         states[r.get('status', '?')] = states.get(r.get('status', '?'), 0) + 1
     met = states.get('met', 0)
+    conjuncts = [c for r in rows for c in (r.get('conjuncts') or [])]
+    held = sum(1 for c in conjuncts if c.get('holds') == 'yes')
     return {
         'row': 'nine_requirements',
         'label': 'The nine requirements met',
@@ -320,6 +323,7 @@ def row_nine_requirements():
         'passes': met == len(rows),
         'unblocked_by': None,
         'detail': (' · '.join(f'{k}: {v}' for k, v in sorted(states.items()))
+                   + f' · conjuncts held {held} of {len(conjuncts)}'
                    + '  ⚠ DOC-DERIVED: counts `status:` in engine/season/requirements.yaml, each'
                      ' validated by `register --requirements`; not execution.'),
     }

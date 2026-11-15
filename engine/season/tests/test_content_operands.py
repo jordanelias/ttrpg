@@ -282,12 +282,17 @@ def test_no_writ_derived_operand_is_ever_a_raw_tuple():
     of them was refused for a reason that was never in the design. This pins the fix."""
     w = populated.build_realm(0)
     populated.run(seasons=1, seed=0, w=w)
+    carried = 0
     for pid, p in w.persons.items():
         for q in questions_for(w, p):
             v = View(pid, [], w.fixtures.get("view_k"), q)
             for c in opening_set(p, v, q, w.fixtures):
+                if "to" in c.operands:
+                    carried += 1
                 assert not isinstance(c.operands.get("to"), tuple), (
                     f"{pid}/{c.verb} carries a tuple `to`: {c.operands}")
+    # a floor two orders below the 194,714 candidates read carrying `to`: the loop saw the operand
+    assert carried >= 1000, f"only {carried} candidates carried `to`: the loop checked nothing"
 
 
 # ======================================================================================

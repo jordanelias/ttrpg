@@ -20,10 +20,9 @@ it is NOT season-reachable (`engine/season/seam/ladder.py`'s `degree_of` never c
 code would add a NEW nested `engine -> systems` import `test_engine_does_not_import_systems.py`'s
 `NESTED_BASELINE = 0` ratchet forbids. Its code survives at this commit's `FORK:` row in
 `references/restructure_ledger.md` for `tools/balance_oracle.py`. The OTHER retired pair,
-`_ARMS_POOL`, imports nothing from `systems/` and is ported unchanged, same status as before:
-historical record, importable, not wired into `ARMS`. (`_ARMS_FLOOR` and `_ARMS_BOUNDS` were ported
-with it and DELETED at plan position `29b`, 2026-10-01: they patched `Faction.adjust` and
-`descriptors.faction_bounds`, both deleted with the faction layer.)
+rounded-versus-fractional pool pair, was ported unchanged and has since been deleted with the
+other two retired pairs; the record of all three is the `FORK:` row for `arms.py` in
+`references/restructure_ledger.md`.
 
 The live pair is now `field_casualty_model` — `total` (the pre-M4 control, "losing costs
 everything") vs `scaled_by_degree` (the ruled default, `Person.body` scaled by the engine's own
@@ -128,22 +127,6 @@ def test_two_proportion_z_is_degenerate_safe():
     assert oracle.two_proportion_z(0, 0, 5, 10) == 0.0
     assert oracle.two_proportion_z(5, 10, 0, 0) == 0.0
     assert oracle.two_proportion_z(0, 10, 0, 10) == 0.0   # pooled rate 0 -- degenerate
-
-
-def test_the_retired_pair_definitions_still_import():
-    """The retired comparison is kept as the record of what the old behaviour WAS — same
-    status `tools/balance_oracle.py` gave it. Constructing it is enough to prove the symbols
-    resolve. (Three pairs stood here until `29b` deleted `_ARMS_FLOOR` and `_ARMS_BOUNDS`.) `_contest_ladder_arm` (`private_ladder`/`owner_ladder`) is NOT among them; see
-    `arms.py`'s own module docstring for why it has no surviving code in this tree at all (its
-    record is the `FORK:` row for `tools/balance_oracle.py`, not a fourth retired dict here)."""
-    for attr in ('_ARMS_POOL',):
-        retired = getattr(oracle, attr)
-        assert len(retired) == 2, f"{attr} should keep both arms of its pair"
-        for setup in retired.values():
-            setup()()
-    assert not hasattr(oracle, '_ARMS_CONTEST_LADDER'), (
-        "the contest-ladder pair was deliberately not carried into engine/season/ — "
-        "see the module docstring; do not resurrect it here without re-checking both findings")
 
 
 def test_an_arm_resolves_to_a_fixtures_and_a_build_half_against_literal_pairs():

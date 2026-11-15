@@ -24,6 +24,7 @@ import pytest
 from engine.dice_engine.dice_engine import DEGREE_LABEL, DEGREE_ORDINAL, Degree
 from engine.dice_engine.sigma_leverage import band_odds, net_boost, settle_record
 
+from ..data.verbs import TASK_DIFFICULTY   # B11 lane A
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver
@@ -221,14 +222,16 @@ def test_mode_b_with_no_claim_on_the_opposition_is_none_never_a_figure():
 def test_mode_b_with_a_claim_differs_from_mode_a_where_the_belief_differs_and_equals_it_where_not():
     w = _world()
     p = w.persons["p_low"]
-    act = _tell("p_other")                             # true opposition 3 -> obstacle 1.5
+    act = _tell("p_other")                             # true opposition 3 -> obstacle `tell`'s difficulty + 1.5 (B11 lane A)
     true = sigma.odds_of(w, act)
     p.ledger.append(_claim("p_low", "p_other", 3))     # he believes the truth
     assert sigma.odds_of(w, act, believer=p) == true
-    p.ledger.append(_claim("p_low", "p_other", 1, when=1))   # a later, wrong belief: obstacle 0.5
+    p.ledger.append(_claim("p_low", "p_other", 1, when=1))   # a later, wrong belief: obstacle difficulty + 0.5
     wrong = sigma.odds_of(w, act, believer=p)
     assert wrong is not None and wrong != true
-    assert wrong == band_odds(4, 0.5, 0.0)
+    # B11 lane A: the obstacle is the task's difficulty (`rosters.yaml: task_difficulty`) plus the score term, re-pinned
+    # from `band_odds(4, 0.5, 0.0)` (the score term alone, before the difficulty)
+    assert wrong == band_odds(4, TASK_DIFFICULTY["tell"] + 0.5, 0.0)
 
 
 def test_mode_b_takes_the_latest_then_the_most_confident_claim():
@@ -256,10 +259,10 @@ def test_mode_b_for_a_non_person_subject_needs_no_claim_and_a_record_or_room_is_
     w = _world()
     p = w.persons["p_low"]
     fx = w.fixtures
-    # a non-person subject: the module's stand-in obstacle is known to him
+    # a non-person subject: the task's difficulty is known to him (B11 lane A: no stand-in; was `obstacle_default`)
     inp = sigma.believed_input(p, "tell", "somewhere", fx, pool=4, person_subject=False)
     assert inp is not None and inp.opposition is None
-    assert sigma._odds_of_input(inp) == band_odds(4, fx.get("obstacle_default"), 0.0)
+    assert sigma._odds_of_input(inp) == band_odds(4, TASK_DIFFICULTY["tell"], 0.0)
     # an examined Record's forgery quality, and a bench's terms, are unknown unless he supplies them
     assert sigma.believed_input(p, "tell", "r1", fx, pool=4, person_subject=False, examined_record=True) is None
     assert sigma.believed_input(p, "tell", "x", fx, pool=4, person_subject=False, heard=True) is None
@@ -280,7 +283,7 @@ def test_mode_b_pool_is_faculty_and_an_addend_moves_it(monkeypatch):
     monkeypatch.setattr(pool, "POOL_ADDENDS", list(pool.POOL_ADDENDS))
     sigma.register_pool_addend(lambda w_, who, verb: 2 if who.id == "p_low" else 0)
     after = sigma.odds_of(w, act, believer=p)
-    assert after == band_odds(6, 1.5, 0.0) == sigma.odds_of(w, act) and after != before
+    assert after == band_odds(6, TASK_DIFFICULTY["tell"] + 1.5, 0.0) == sigma.odds_of(w, act) and after != before   # B11 lane A: was band_odds(6, 1.5, 0.0)
 
 
 def test_mode_b_is_only_the_actors_own_odds():

@@ -30,7 +30,7 @@ from engine.substrate import names as _names
 from ..data import files
 from ..data.rosters import load_yaml, remit_or_default
 from ..queries import world_q
-from ..state.carriers import Office, Person, Rung, Site, Tenure
+from ..state.carriers import Office, Person, Rung, Site, Tenure, generated_attributes
 from ..state.world import World
 
 # ⚠ THE ANCHOR IS `data/files.py`, NOT A LOCAL `__file__`. That module is the package's single
@@ -127,7 +127,9 @@ def build(seed: int = 0) -> World:
         w.rungs[rid] = Rung(rid, kind)
 
         pid = f"lp_{key}"
-        w.persons[pid] = Person(pid, name=f"{row['post']} of {key}")
+        # B01a: a drawn sheet, as every other world's persons hold (the aperture measures this world beside the realm).
+        w.persons[pid] = Person(pid, name=f"{row['post']} of {key}",
+                                attributes=generated_attributes(w.world_seed, pid, w.fixtures.get("generated_attribute_range")))
         # ⚠ A PERSON IS ALSO A RUNG, AND OMITTING THIS BROKE THE ONE THING THE SPINE IS FOR.
         # `rung_kinds` opens with `person`, and all three sibling builders mint this seat --
         # `populated.build_realm` (46 of 46), `corpus_run.build_at`, `probes.py`. This builder did

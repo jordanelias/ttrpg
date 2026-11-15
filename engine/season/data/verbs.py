@@ -1613,6 +1613,17 @@ def _derive_holding_record_kinds() -> frozenset:
 
 HOLDING_RECORD_KINDS = _derive_holding_record_kinds()
 
+# B11 lane A (the duel chain's reach): `{verb: record sub-kinds}` -- per `Record`-classed row, the sub-kinds its own
+# cell asks `existence` of on `subject` (`_record_subkinds_answered`, the one owner both derivations above read).
+# `decision/options.py::opening_set` keeps a Record referent of such a row only where the person's own content claim
+# says it is of one of them: `accept` forms on a challenge, `comply` on a dispensation, never on another kind the
+# shared class carries. A row asking only the class (`research`) is absent and forms as before.
+RECORD_SUBKINDS_BY_VERB = {v: k for v, row in VERB_TABLE.items() if (k := _record_subkinds_answered(row))}
+# ...and of them, the rows whose cell asks the actor to HOLD the document (`carry`, `found`, `build`): a document he holds
+# and holds no reading of may be of the kind (clause 4: unknown forms), where a writ row (`accept`, `comply`) asks a
+# document addressed to him, which he knows only by reading it.
+RECORD_SUBKINDS_HELD = frozenset(v for v in RECORD_SUBKINDS_BY_VERB if _asks_subject_held(VERB_TABLE[v]))
+
 
 def _derive_declared_classes() -> frozenset:
     """v10 REM-21 (AM-A-06): THE REFERENT CLASSES SOME ROW DECLARES -- every `referent_class:` value in
@@ -1895,6 +1906,57 @@ def _derive_violent_verbs(prizes) -> frozenset:
 VIOLENT_VERBS = _derive_violent_verbs(roster("violent_prizes"))
 
 
+def _load_opposed_without_prize(values) -> frozenset:
+    """`rosters.yaml: opposed_without_prize` (B11 lane A): verbs naming no prize whose second side is their subject,
+    read as done against him. Refused at import for a verb the table lacks or whose second side is not `subject`."""
+    out = frozenset(values or ())
+    bad = sorted(v for v in out if v not in VERB_TABLE or VERB_TABLE[v].opponent_operand() != "subject")
+    if bad:
+        raise Forbidden(f"`rosters.yaml: opposed_without_prize` names {bad}: no such verb, or its second side is not "
+                        "its subject", "rosters.yaml", needs="a verb whose `counterparty:` is `subject`",
+                        law="B11 lane A -- an act against its subject names him as its second side")
+    return out
+
+
+OPPOSED_WITHOUT_PRIZE = _load_opposed_without_prize(roster("opposed_without_prize"))
+
+#: The provider name the social roll's prize rows and inquiry routes carry (`rosters.yaml: contest_subsystems`,
+#: `graded_inquiries`; `seam/wrappers/sigma.py::_PROVIDER`).
+SOCIAL_ROLL_PROVIDER = "social_contest"
+
+
+def social_roll_verbs() -> frozenset:
+    """THE VERBS THE SOCIAL ROLL DEALS: a row whose `contests:` prize the `social_contest` provider resolves
+    (`rosters.yaml: contest_subsystems`), and a `graded_inquiries` route to it. Read off the rows and the two
+    rosters, no verb named."""
+    from .rosters import GRADED_INQUIRIES
+    prizes = roster_map("contest_subsystems", "prizes")
+    contested = {v for v, r in VERB_TABLE.items()
+                 if r.contests and (prizes.get(r.contests) or {}).get("provider") == SOCIAL_ROLL_PROVIDER}
+    inquired = {v for v, g in GRADED_INQUIRIES.items() if (g or {}).get("provider") == SOCIAL_ROLL_PROVIDER}
+    return frozenset(contested | inquired)
+
+
+def _load_task_difficulty(values: dict) -> dict:
+    """`rosters.yaml: task_difficulty` (B11 lane A), CLOSED BOTH WAYS against `social_roll_verbs()`: a task the roll
+    deals with no difficulty is a loud gap (no `obstacle_default` behind it), and a row for a verb the roll never
+    deals would read as live. Each value a number >= 0."""
+    out = {str(k): v for k, v in (values or {}).items()}
+    rolled = social_roll_verbs()
+    missing, extra = sorted(rolled - set(out)), sorted(set(out) - rolled)
+    bad = sorted(k for k, v in out.items() if isinstance(v, bool) or not isinstance(v, (int, float)) or v < 0)
+    if missing or extra or bad:
+        raise Forbidden(
+            f"`rosters.yaml: task_difficulty` is not closed over the social roll's verbs: no row for {missing}, a "
+            f"row for a verb it never deals {extra}, a value that is no number >= 0 {bad}", "rosters.yaml",
+            needs="exactly one difficulty per verb the social roll deals",
+            law="B11 lane A -- an obstacle is the task's difficulty and its modifiers; no task rolls on a stand-in")
+    return {k: float(v) for k, v in out.items()}
+
+
+TASK_DIFFICULTY = _load_task_difficulty(roster_map("task_difficulty", "values"))
+
+
 def _derive_rung_remit_acts() -> frozenset:
     """v9 IN-49 `requisition` (H-163 limit 3, [ASSUMPTION; medium; Jordan to correct]): THE REMIT ACTS A
     SEAT EXERCISES ON A `Rung`-CLASSED REFERENT -- the act of every `remit:` eligibility alternative
@@ -1964,6 +2026,16 @@ if not CONVENING_REMIT_ACTS:
     raise Forbidden("no verb-table row granted by a remit act writes `Date.due_at`", "verb_table.yaml",
                     needs="the convening row's `writes:` and `remit:` eligibility, or `matters_awaiting` retired",
                     law="v11 CR-56 -- a stamp keyed on an act no row grants offers nothing in every world")
+
+# B11 lane A (the duel chain's second link, [ASSUMPTION; medium; Jordan to correct; revert: drop the value and the
+# stamp, `challenge` declares `Person`]): A PERSON BESIDE THE ASKER WHOM HE HOLDS A DISPUTE WITH, `Enemy`'s shape -- no
+# collection, stamped by name by the standing occasion `queries/world_q.py::disputes_held`, refused at import off
+# `rosters.yaml: referent_classes`. `challenge` declares it.
+DISPUTANT_CLASS = "Disputant"
+if DISPUTANT_CLASS not in REFERENT_CLASSES:
+    raise Forbidden(f"{DISPUTANT_CLASS!r} is not a `rosters.yaml: referent_classes` value", "rosters.yaml",
+                    needs="the dispute-context class in the closed roster",
+                    law="B11 lane A -- a class stamped by name must be one the roster declares")
 
 # v11 CR-25 ([ASSUMPTION; medium; Jordan to correct; revert: drop `holdings_to_found` and the derivation]): THE
 # REMIT ACTS A SEAT FOUNDS AN OFFICE THROUGH -- `establish`'s own `remit:` alternatives (`confer` today), read off

@@ -19,8 +19,8 @@
 ## Batch B03-hygiene · lane IN · wave W3 · step S3 · HASH MOVER(encoding B03.28; behaviour B03.86), one re-pin
 INVOCATION: /methodology-execute Batch B03-hygiene
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_IN.md, Open table
-GATE: Batch B00-ids
-GATE: Batch B01-laneA
+GATE: Batch B00-ids @c3418a6a160fc6a17e5a8bf45112a0e55699a695
+GATE: Batch B01-laneA @cfd9aefb049c2fe49b55c7ada1b0b624919af23d
 GATE: Batch B02-tests
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.harness.populated import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`workplan_v12.md` §3.B, "the hash reading") (this batch runs before B03c moves the builder to `engine/season/boot/realm.py`).
 REQUIREMENT: none — deletions, owners and pointer text (`STAGES.md` stage 6, rule 5; `V12_STRUCTURE.md` §2.2: "none: deletions and owners"); what it serves: CLAUDE.md §0.05 (a contract row, a register row or a pointer that names code which is not there sends the next session to the wrong owner) and `CI-10`'s `FORK:` rows. R-01 to R-09 are re-read at the close and expected to print what B02's close printed (`reading @<B02 closing sha>`); no `status:` is edited (A-114)

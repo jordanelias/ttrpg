@@ -252,6 +252,10 @@ def test_in09_a_witness_who_does_not_hold_the_writ_is_offered_none_of_the_three(
     assert (WRIT, "Record") not in q.classes, q.classes
     assert not [c for c in _formed(w, OTHER, q) if c.verb in THREE]
     monkeypatch.setattr(world_q, "RECORD_REFERENT_KINDS", frozenset())
+    # B11 lane A: a second decline now covers this witness too -- he holds no reading of the writ, so `opening_set`'s
+    # sub-kind rule (`RECORD_SUBKINDS_BY_VERB`) keeps it from the three rows; the control switches both off.
+    from ..decision import options as _O
+    monkeypatch.setattr(_O, "RECORD_SUBKINDS_BY_VERB", {})
     (q, *_) = world_q.questions_for(w, witness)
     assert (WRIT, "Record") in q.classes, "control: the skip off still stamps nothing"
     assert sorted(c.verb for c in _formed(w, OTHER, q) if c.verb in THREE) == sorted(THREE)

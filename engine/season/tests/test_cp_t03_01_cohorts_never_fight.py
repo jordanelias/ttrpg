@@ -12,15 +12,10 @@ from `Person.is_cohort`, `weight > 1`), and `verb_table.yaml`'s `fight` and `acc
   MUTATION (run by hand at the build, reported in the commit body): drop the two `individual` conjuncts from `fight`
   and `accept` and the cohort is removed -- `test_a_cohort_..._is_refused_and_untouched` goes red on the first
   assertion that reads the refusal kind, and the `weight` / `Person.exists` reads follow.
-  CONTROL: `build_realm(seed)`, two seasons, shipped chooser: at seeds 0 and 2 no act was refused on `individual`, and
-  the realm ends at the base's `content_hash` once the conjunct's own reads are left off `Event.observed` (they are
-  hashed: the raw hash moves wherever a `fight`/`accept` cleared the clauses before it). At seed 1 a cohort was a party
-  on the base (`p_npc_007` felled by one), the conjunct refuses it, and the realm moves.
-  ⚠ v10 PC-10b RE-TOOK THE CONTROL (`BASE`, below): `accept` now binds a `challenge` Record and `challenge` mints one, so
-  with `challenge`/`accept` offered the realm walks another trajectory from the pre-conjunct base. They are withheld from
-  the chooser with `capture` (CP-T03-09's precedent), and the base is re-taken on the tree before CP-T03-01 (`778981ed~1`)
-  under the same withholding: seeds 0 and 1 now refuse nothing on `individual` and end at it; seed 2 refuses one act and
-  moves. The hand-built `accept` here binds a planted challenge whose challenger is the act's opponent (`to`).
+  CONTROL: `build_realm(seed)`, two seasons, with `challenge`, `accept` and `capture` withheld from the chooser: at seed 2
+  a cohort was a party (`p_npc_007` felled by one) and the conjunct refuses an act on `individual`. The realm's hash is
+  `_realm_goldens.py`'s, the one owner: this file pins none. The hand-built `accept` here binds a planted challenge whose
+  challenger is the act's opponent (`to`).
 """
 from __future__ import annotations
 
@@ -36,10 +31,7 @@ from ..decision import make_chooser
 from ..queries import world_q
 from ..state.carriers import Act, Record, Scene
 from ..state.ids import H, draw_factory
-from .test_cp_t03_02_band_ending_and_body import revert_cp_t03_02
-from .test_cr85_faculty_replaces_history import revert_cr85
 from .test_cp_t03_04_arms import revert_cp_t03_04
-from .test_cp_t03_07_body_ceiling import revert_cp_t03_07
 from .test_cp_t03_08_tend_on_the_wounded import revert_cp_t03_08
 from .test_cr87_violence_contexts import revert_cr87
 
@@ -165,22 +157,6 @@ def test_the_stem_is_answered_from_is_cohort_and_is_world_only():
 
 # --- THE CONTROL ---------------------------------------------------------------------------------
 
-#: `build_realm(seed).content_hash()` after two seasons of the shipped chooser on the base before this position
-#: (B10-10b's close). Re-take, do not edit: the control is that the realm still ends here wherever no cohort was a party.
-#: ⚠ RE-TAKEN AT v10 PC-10b, on the tree before CP-T03-01 (`778981ed~1`), with `capture`, `challenge` and `accept` withheld from
-#: the chooser (`WITHHELD`): was be2c7f0f... / 3010c440... / 6df7a66e... (taken with `challenge`/`accept` offered, which PC-10b
-#: moves). The same withholding on the CP-T03-09 tree (`95f58adb`) and on PC-10b's reads the identical stripped hashes at all
-#: three seeds (aa4cc67d... / 8ac99151... / 3cf9a0a6...), so PC-10b moves nothing where no duel verb is chosen.
-#: ⚠ RE-TAKEN ONCE MORE by the B10-11b batch pin commit (`reading @4b334f2a`), seeds 0 and 1 (was aa4cc67d... / 8ac99151...):
-#: PC-20 (1) (the head-weighted strike impact, `K_STR_HEAD`) moves a run that reaches `strike_impact`, and these two-season
-#: realms reach it. `reads > 0` and `refused_on_it == 0` still hold, so the conjunct moved no realm; the hash is the trajectory's.
-#: ⚠ RE-TAKEN BY THE B10-13 batch pin commit, seeds 0 and 1 (was 4704d8a6... / b6f1c293...); `reads > 0` and `refused_on_it == 0`
-#: still hold. Seed 2 is read only as `h != BASE[2]` below, and is left at its stale value (not re-taken: no test reads it as equal).
-#: ⚠ SEED 0 RE-TAKEN AGAIN, B10-13 Phase 1 A1, the self-plea's stance sign (`_stance_arm`, `subject != p.id`; a declared mover in
-#: non-shipped arms): was 6438faa5...; the shipped one- and two-season readings are identical.
-BASE = {0: "bb5089bc11145e58f37c401c708277da",
-        1: "a3bd409c6f4cb5870c2ea7362d54ee63",
-        2: "d1594dae7a962dc9bbe9e6a1de9abb91"}
 #: The verbs this control's chooser never offers: `capture` (CP-T03-09) and the duel pair PC-10b re-shaped.
 WITHHELD = frozenset({"capture", "challenge", "accept"})
 
@@ -190,12 +166,8 @@ def _individual_reads(e):
 
 
 def _realm_two_seasons(seed):
-    """Two seasons of the shipped chooser on `build_realm(seed)`. Returns `(content_hash with the `individual` reads left
-    off every Event's `observed`, how many such reads there were, how many Events a False one refused)`.
-
-    ⚠ WHY THE READS ARE LEFT OFF: `World.content_hash` folds `Event.observed`, and the new conjunct is READ (True) by
-    every `fight`/`accept` that clears the clauses before it, so the raw hash moves in a realm where nothing else did.
-    The reads are the only thing that moves it there; the control strips them and compares the rest."""
+    """Two seasons of the shipped chooser on `build_realm(seed)`. Returns `(how many `individual` reads there were, how
+    many Events a False one refused)`."""
     w = build_realm(seed)
     d = SeasonDriver(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
@@ -213,48 +185,23 @@ def _realm_two_seasons(seed):
             continue
         reads += len(mine)
         refused_on_it += any(o.value is False for o in mine)
-        object.__setattr__(e, "observed", tuple(o for o in e.observed if o not in mine))
-    return w.content_hash(), reads, refused_on_it
-
-
-@pytest.mark.parametrize("seed", [0, 1])
-def test_control_the_realm_ends_at_the_base_hash_wherever_no_cohort_was_a_party(seed, monkeypatch):
-    """Seeds 0 and 1 (since PC-10b's re-take; 0 and 2 before it): no `fight`/`accept` was refused by the conjunct, so with its reads left off the realm ends at the
-    base's hash. `reads` is asserted, so the equality cannot hold because the conjunct was never evaluated.
-    ⚠ v11 CR-87 RE-TOOK IT ON THE WORLD IT WAS MEASURED ON: CR-87's contexts leave no `fight` formed in these realms, so the
-    conjunct would never be read and the control would observe nothing; it is read with CR-87 at its revert
-    (`test_cr87_violence_contexts.py::revert_cr87`, whose own control reproduces the pre-CR-87 hash), and `BASE` stands.
-    ⚠ v10 CP-T03-02 (the band's `ending` and the body Observation, a later mover of every realm that fought) is reverted
-    too (`revert_cp_t03_02`), the same way, so `BASE` stands rather than being re-taken.
-    ⚠ v11 CR-85 (`faculty` replaces `history` in the pool and the Ob, a later mover of every realm that fought) is
-    reverted too (`revert_cr85`), the same way.
-    ⚠ v11 CP-T03-04 (`arms` in the vocation range, a formation mover of every realm) is reverted too
-    (`revert_cp_t03_04`), the same way, and v11 CP-T03-07 (`body_ceiling`, a schema mover) by `revert_cp_t03_07`."""
-    from .test_strife_credit import revert_cr79
-    revert_cr79(monkeypatch)    # v11 CR-79 (the credit term, a later mover of the told deposit): reverted, so this pin reads its own item
-    revert_cr87(monkeypatch)
-    revert_cp_t03_02(monkeypatch)
-    revert_cr85(monkeypatch)
-    revert_cp_t03_04(monkeypatch)
-    revert_cp_t03_07(monkeypatch)   # v11 CP-T03-07 (`body_ceiling`, a schema mover of every realm), the same way
-    revert_cp_t03_08(monkeypatch)   # v11 CP-T03-08 (`tend` forms on the wounded, a formation mover of every season), the same way
-    h, reads, refused_on_it = _realm_two_seasons(seed)
-    assert reads > 0, "the conjunct was never read: the equality below observes nothing"
-    assert refused_on_it == 0, f"{refused_on_it} Events were refused on `individual` at seed {seed}"
-    assert h == BASE[seed], "the conjunct moved a realm in which no cohort was a party"
+    return reads, refused_on_it
 
 
 def test_where_a_cohort_was_a_party_the_realm_moves_and_the_refusals_are_the_conjuncts(monkeypatch):
     """Seed 2 (since PC-10b's re-take, under `WITHHELD`; seed 1 before it): a cohort was a party on the pre-conjunct base.
-    The same seed now refuses that act on `individual`, and the realm ends elsewhere -- the mover the position declares.
-    Read with CR-87 at its revert, for the control's reason above, and (v11) CP-T03-04's formation mover at its revert,
-    so the seed forms the cohort-party act it was measured on."""
+    The same seed now refuses that act on `individual` -- the mover the position declares; the realm's hash is
+    `_realm_goldens.py`'s. Read with CR-87 at its revert (CR-87's contexts leave no `fight` formed in these realms, so the
+    conjunct would never be read) and (v11) CP-T03-04's formation mover at its revert, so the seed forms the cohort-party
+    act it was measured on."""
     revert_cr87(monkeypatch)
     revert_cp_t03_04(monkeypatch)
     # v11 CP-T03-08 (`tend` forms on the wounded, a formation mover of every season) moves seed 2's second season off the
     # cohort-party act (MEASURED: 0 refusals on `individual` with it live), so it is read at its revert too, the same way.
     revert_cp_t03_08(monkeypatch)
-    h, reads, refused_on_it = _realm_two_seasons(2)
+    from .test_b11a_duel_reach import revert_b11a
+    revert_b11a(monkeypatch)   # B11 lane A (the duel chain's reach, a formation mover of every season), the same way
+    from .test_b11a_scores_and_obstacle import revert_b11a_scores
+    revert_b11a_scores(monkeypatch)   # B11 lane A (persons hold scores; the obstacle by task: a mover of the build and every season), the same way
+    reads, refused_on_it = _realm_two_seasons(2)
     assert refused_on_it > 0, "no act was refused on `individual` at seed 2"
-    assert h != BASE[2], ("the realm did not move off the pre-conjunct base at seed 2 (the refusal itself is observed "
-                          "by `refused_on_it` above, not by this hash)")

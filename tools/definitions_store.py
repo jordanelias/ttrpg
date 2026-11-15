@@ -62,7 +62,7 @@ def _load_descriptors() -> dict:
     d = yaml.safe_load(DESCRIPTORS.read_text()) or {}
     out: dict[str, dict] = {}
     attrs = d.get("attributes") or {}
-    for grp in ("body", "mind", "social"):
+    for grp in ("body", "mind", "spirit", "social"):
         for e in (attrs.get(grp) or []):
             out[e["key"]] = {"name": e.get("name"), "aliases": e.get("aliases") or [],
                              "scale": attrs.get("scale"), "group": grp, "category": "attribute"}

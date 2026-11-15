@@ -681,3 +681,4 @@ def test_20iii_every_sheet_the_populated_realm_makes_says_what_its_holder_holds(
         assert [c.value for c in _content_claims(w.persons[holder], rec.id)] == [
             content_value(rec.subject_matter)], (holder, rec.id)
     assert checked + skipped == len(sheets), (checked, skipped, len(sheets))
+    assert checked >= 1, (checked, skipped, len(sheets))  # the loop saw a sheet (no count pin)
