@@ -177,12 +177,6 @@ def ratio(fights, who, num, den):
     return p, max(0.0, c - h), min(1.0, c + h), neff, sm
 
 
-def newcombe(a, b):
-    """Newcombe hybrid-score CI for p_a - p_b from the two Wilson intervals. a, b = (p, lo, hi, ...)"""
-    d = a[0] - b[0]
-    return d, d - math.sqrt((a[0] - a[1]) ** 2 + (b[2] - b[0]) ** 2), d + math.sqrt((a[2] - a[0]) ** 2 + (b[0] - b[1]) ** 2)
-
-
 def wilson_wins(w):
     dec = w[1] + w[-1]
     p = w[1] / dec if dec else float('nan')

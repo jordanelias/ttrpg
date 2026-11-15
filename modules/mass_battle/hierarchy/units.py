@@ -184,21 +184,6 @@ def _effective_reach(base_reach, facing_vec, dr, dc):
     return base_reach if angle_deg <= FOV_HALF_DEG else 0.0
 
 
-def _reach_throttle(reach_eff_a, reach_eff_b):
-    """[TOI refactor] Reach-asymmetric closing-budget throttle for one cross-side pair. The side with
-    the LARGER effective threat radius (CELL_RADIUS + facing-gated reach) is capped to a SMALLER share
-    of this tick's closing motion: it needs to close less ground to bring its longer weapon to bear, so
-    it plants its formation first, while the shorter-reach side must cover the rest of the gap to bring
-    its own (shorter) weapon into range. Returns (rho_a, rho_b), each in (0,1]; the larger side is
-    always 1.0 (free to use its full proposed motion, subject to the TOI solve itself). Equal reach ->
-    (1.0, 1.0) -- the plain symmetric case, unchanged in spirit from a shared-t TOI."""
-    if reach_eff_a > reach_eff_b:
-        return (reach_eff_b / reach_eff_a, 1.0)
-    if reach_eff_b > reach_eff_a:
-        return (1.0, reach_eff_a / reach_eff_b)
-    return (1.0, 1.0)
-
-
 def _pair_toi_scale(start_a, start_b, proposed_a, proposed_b, rho_a, rho_b, target):
     """[TOI refactor] Exact continuous-collision (time-of-impact) solve for one cross-side cell pair.
     Both cells' motion this tick is linear from start to proposed (the UNCAPPED end-of-tick position
