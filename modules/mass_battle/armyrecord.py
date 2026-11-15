@@ -11,7 +11,7 @@ THE SHAPE (`subject_matter`'s exact key set, which `rosters.yaml: record_kinds` 
     faction       the faction Proposition id the army belongs to
     strategy      an `orderofbattle.STRATEGIES` key
     trained       ((cohort person id, troop type, count), ...)   troops raised and not yet in a unit
-    units         ({name, troop_type, role, stance, target, fall_back_at, assigned}, ...)
+    units         ({name, troop_type, role, posture, target, fall_back_at, assigned}, ...)
                   where `assigned` is ((cohort person id, count), ...)
 
 A TROOP IS A HEADCOUNT OF A COHORT: `trained` and `assigned` name the cohort `Person` the people are drawn from and how
@@ -28,7 +28,7 @@ from typing import Callable, Optional
 
 from modules.mass_battle.armies import SUBUNIT_CAP
 from modules.mass_battle.config import BLOCK_SIZE, SUBUNIT_ROUT_FLOOR
-from modules.mass_battle.orderofbattle import STANCES, STRATEGIES, TARGETINGS, OrderOfBattle, UnitRow
+from modules.mass_battle.orderofbattle import POSTURES, STRATEGIES, TARGETINGS, OrderOfBattle, UnitRow
 from modules.mass_battle.troop_types.recruitment import TRAINING_SITE, recruit_limit
 from modules.mass_battle.troop_types.registry import TROOP_TYPE_STATS, roles_for, stats_for
 
@@ -145,7 +145,7 @@ def form(record: dict, name: str, troop_type: str, role: Optional[str] = None) -
         raise ValueError(f"an army holds at most {SUBUNIT_CAP} units")
     if role is not None and role not in roles_for(t):
         raise ValueError(f"role {role!r} is not in {t!r}'s menu {roles_for(t)}")
-    sf = {'name': name, 'troop_type': t, 'role': role, 'stance': None, 'target': None, 'fall_back_at': None,
+    sf = {'name': name, 'troop_type': t, 'role': role, 'posture': None, 'target': None, 'fall_back_at': None,
           'assigned': ()}
     return {**record, 'units': (*record['units'], sf)}
 
@@ -200,8 +200,8 @@ def discharge(record: dict, cohort: str, troop_type: str, count) -> dict:
 _UNSET = object()
 
 
-def order(record: dict, name: str, *, role=_UNSET, stance=_UNSET, target=_UNSET, fall_back_at=_UNSET) -> dict:
-    """Set unit `name`'s tactics: its role (from its type's menu), stance, targeting preference and
+def order(record: dict, name: str, *, role=_UNSET, posture=_UNSET, target=_UNSET, fall_back_at=_UNSET) -> dict:
+    """Set unit `name`'s tactics: its role (from its type's menu), posture, targeting preference and
     fall-back point. A field left out is unchanged; passing None clears it. Validated as `orderofbattle.validate`
     validates a unit."""
     i = _sf_index(record, name)
@@ -210,10 +210,10 @@ def order(record: dict, name: str, *, role=_UNSET, stance=_UNSET, target=_UNSET,
         if role is not None and role not in roles_for(sf['troop_type']):
             raise ValueError(f"role {role!r} is not in {sf['troop_type']!r}'s menu {roles_for(sf['troop_type'])}")
         sf['role'] = role
-    if stance is not _UNSET:
-        if stance is not None and stance not in STANCES:
-            raise ValueError(f"stance {stance!r} not in {STANCES}")
-        sf['stance'] = stance
+    if posture is not _UNSET:
+        if posture is not None and posture not in POSTURES:
+            raise ValueError(f"posture {posture!r} not in {POSTURES}")
+        sf['posture'] = posture
     if target is not _UNSET:
         if target not in TARGETINGS:
             raise ValueError(f"target {target!r} not in {TARGETINGS}")
@@ -264,7 +264,7 @@ def to_order_of_battle(record: dict, fitness: Optional[Callable[[str], float]] =
         strength = sum(n * max(0.0, min(1.0, float(fit(c)))) for c, n in sf['assigned'])
         if strength > 0:
             drawn += [c for c, n in sf['assigned'] if n > 0 and float(fit(c)) > 0 and c not in drawn]
-            parts.append(UnitRow(sf['name'], sf['troop_type'], strength, role=sf['role'], stance=sf['stance'],
+            parts.append(UnitRow(sf['name'], sf['troop_type'], strength, role=sf['role'], posture=sf['posture'],
                                  target=sf['target'], fall_back_at=sf['fall_back_at']))
     if not parts:
         raise ValueError("no unit has any troops assigned")
@@ -286,7 +286,7 @@ def apply(cmd) -> dict:
                from `cohort`, no more than `recruit_limit` allows for that cohort's `weight` and `sites`
       form     args name, troop_type, role (optional)
       assign   args name, cohort, count -- a negative count releases troops back to the trained pool
-      order    args name and any of role, stance, target, fall_back_at; or strategy alone, for the army
+      order    args name and any of role, posture, target, fall_back_at; or strategy alone, for the army
       validate no args -- the record unchanged if well formed
     """
     try:
@@ -325,9 +325,9 @@ def _apply(cmd) -> dict:
             if set(a) != {'strategy'}:
                 raise ValueError("an order names a strategy or a unit's tactics, not both")
             return set_strategy(r, a['strategy'])
-        fields = {k: a[k] for k in ('role', 'stance', 'target', 'fall_back_at') if k in a}
+        fields = {k: a[k] for k in ('role', 'posture', 'target', 'fall_back_at') if k in a}
         if not fields:
-            raise ValueError("an order sets at least one of role, stance, target, fall_back_at, or a strategy")
+            raise ValueError("an order sets at least one of role, posture, target, fall_back_at, or a strategy")
         return order(r, a['name'], **fields)
     raise ValueError(f"unknown army command {cmd.op!r} (known: {OPS})")
 
@@ -341,7 +341,7 @@ def options(q) -> dict:
     condition}), ...)`, those the faction may raise), `full` (the condition scale), `others` (the other armies'
     records, whose claims on a cohort count against it).
 
-      strategies, stances, targets  the vocabulary `order` accepts
+      strategies, postures, targets  the vocabulary `order` accepts
       troop_types   ((type, roles, site kind or None), ...), the types `recruit` and `form` accept
       raise         ((cohort, type, room), ...), for each cohort and type with room above 0
       advisories    ((kind, subject, have, floor), ...) -- a unit under `SUBUNIT_ROUT_FLOOR` routs at the first
@@ -370,7 +370,7 @@ def options(q) -> dict:
     idle = sum(n for _c, _t, n in r['trained'])
     if idle:
         notes.append(('unassigned', None, idle, 0))
-    return {'strategies': tuple(sorted(STRATEGIES)), 'stances': STANCES, 'targets': TARGETINGS,
+    return {'strategies': tuple(sorted(STRATEGIES)), 'postures': POSTURES, 'targets': TARGETINGS,
             'troop_types': tuple((t, tuple(roles_for(t)), (TRAINING_SITE.get(t) or (None,))[0])
                                  for t in sorted(TROOP_TYPE_STATS)),
             'raise': tuple(rows), 'advisories': tuple(notes)}

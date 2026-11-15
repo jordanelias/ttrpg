@@ -3,7 +3,7 @@ it into the multi-subunit `Unit` the engine fights with (ED-IN-0306, phase 1).
 
 WHAT THIS IS. `massbattle._weighted_unit` builds every season army as ONE 'infantry' subunit sized by headcount.
 An `OrderOfBattle` says what the army actually is: named UNITS (one `UnitRow` each), each of one troop type (spearmen, archers,
-light cavalry, ...), one size, one role, and optionally a stance and a fall-back point; plus one STRATEGY for the
+light cavalry, ...), one size, one role, and optionally a posture and a fall-back point; plus one STRATEGY for the
 whole army. `build_unit` constructs the Unit through `armies.build_army`, the engine's one multi-subunit
 constructor, so troop-type stats, reach, density, the role -> shape/instruction menu and the SUBUNIT_CAP all come
 from their existing owners: nothing is re-implemented here.
@@ -18,7 +18,7 @@ shape of RTK and Total War deployments and of the engine's own `build_army` defa
 line's own depth plus one row, so nothing is placed inside another unit. If the army cannot fit that layout on
 the field, it degrades to one centred line on the front row rather than raising.
 
-STRATEGY is a named stance policy applied to each class of unit unless the unit sets its own stance
+STRATEGY is a named posture policy applied to each class of unit unless the unit sets its own posture
 (`STRATEGIES`, below). Three are built; the envelopment presets in `systems/mass_battle/sim/engine.py` are the next
 ones and are not folded in here.
 
@@ -36,17 +36,17 @@ from modules.mass_battle.geometry import footprint_for
 from modules.mass_battle.hierarchy.units import Order, _INSTRUCTION_STANCE
 from modules.mass_battle.troop_types.registry import is_mounted, roles_for, stats_for, unit_type_for
 
-__all__ = ['UnitRow', 'OrderOfBattle', 'STRATEGIES', 'STANCES', 'TARGETINGS', 'class_of', 'build_unit',
+__all__ = ['UnitRow', 'OrderOfBattle', 'STRATEGIES', 'POSTURES', 'TARGETINGS', 'class_of', 'build_unit',
            'validate']
 
-#: Stances a unit may be set to (`config.STANCE_SPEED_MOD`'s keys; 'retreat' is reachable only through
+#: Postures a unit may be set to (the engine's stances, `config.STANCE_SPEED_MOD`'s keys; 'retreat' is reachable only through
 #: `fall_back_at`, since a unit that STARTS retreating is not a deployment).
-STANCES = ('balanced', 'aggressive', 'hold')
+POSTURES = ('balanced', 'aggressive', 'hold')
 
 #: Targeting a unit may be told to prefer (`Subunit.target_condition`; None is the engine's 'nearest').
 TARGETINGS = (None, 'nearest', 'weakest')
 
-#: Strategy -> the stance each CLASS of unit takes unless it sets its own. `class_of` names the classes.
+#: Strategy -> the posture each CLASS of unit takes unless it sets its own. `class_of` names the classes.
 #: ASSUMPTION; medium; Jordan to correct. 'line' is the engine's neutral default; 'advance' presses the melee and the
 #: horse; 'defend' holds them and lets the missile troops work. Ranged stay 'balanced' in all three: a held archer
 #: is frozen (`STANCE_SPEED_MOD['hold']` is -99) and braced against shock, which is not what holding means for them.
@@ -80,7 +80,7 @@ class UnitRow:
     """One unit of the order of battle: a body of troops of ONE type, with how it fights.
 
     `troops` is a headcount (the engine sizes the footprint from it). `role` is a `config.ROLE_SPEC` key from the troop
-    type's gated menu (`roles_for`); None is a plain Line with no instructions. `stance` None takes the strategy's. `target`
+    type's gated menu (`roles_for`); None is a plain Line with no instructions. `posture` None takes the strategy's. `target`
     is `TARGETINGS`. `fall_back_at`, if set, is a fraction in (0, 1) of its own starting strength at which it
     withdraws (an `own_strength` Order setting stance 'retreat'); None never does. [ASSUMPTION; medium; Jordan to
     correct: a "fall-back point" is read as a strength, since the record holds no position and a season field is one
@@ -89,7 +89,7 @@ class UnitRow:
     troop_type: str
     troops: float
     role: Optional[str] = None
-    stance: Optional[str] = None
+    posture: Optional[str] = None
     target: Optional[str] = None
     fall_back_at: Optional[float] = None
 
@@ -131,8 +131,8 @@ def validate(oob: OrderOfBattle) -> None:
             raise ValueError(f"{sf.name!r}: troops must be positive, got {sf.troops!r}")
         if sf.role is not None and sf.role not in roles_for(sf.troop_type):
             raise ValueError(f"{sf.name!r}: role {sf.role!r} is not in {sf.troop_type!r}'s menu {roles_for(sf.troop_type)}")
-        if sf.stance is not None and sf.stance not in STANCES:
-            raise ValueError(f"{sf.name!r}: stance {sf.stance!r} not in {STANCES}")
+        if sf.posture is not None and sf.posture not in POSTURES:
+            raise ValueError(f"{sf.name!r}: posture {sf.posture!r} not in {POSTURES}")
         if sf.target not in TARGETINGS:
             raise ValueError(f"{sf.name!r}: target {sf.target!r} not in {TARGETINGS}")
         if sf.fall_back_at is not None and not 0.0 < sf.fall_back_at < 1.0:
@@ -150,12 +150,12 @@ def _spec_for(sf: UnitRow, strategy: str) -> dict:
     role = sf.role or ('Kite' if sf.troop_type == 'mounted_archers' else None)
     spec = dict(troop_type=sf.troop_type, troops=float(sf.troops),
                 concentration=float(cell_cap_for(sf.troop_type)))
-    # STANCE PRECEDENCE: the unit's own, then the one its role's instructions set (ShieldWall and Hold hold,
-    # Push presses -- `Subunit.eff_stance` reads them only while the stance was never written on purpose), then the
-    # strategy's for its class. Always writing the strategy's stance made a role unable to set it.
+    # POSTURE PRECEDENCE: the unit's own, then the one its role's instructions set (ShieldWall and Hold hold,
+    # Push presses -- `Subunit.eff_stance` reads them only while the engine stance was never written on purpose), then
+    # the strategy's for its class. Always writing the strategy's posture made a role unable to set it.
     role_stance = role is not None and any(k in _INSTRUCTION_STANCE for k in ROLE_SPEC[role]['instructions'])
-    if sf.stance is not None:
-        spec['stance'] = sf.stance
+    if sf.posture is not None:
+        spec['stance'] = sf.posture  # D-9: the engine attribute keeps its name; the order format is exported data
     elif not role_stance:
         spec['stance'] = STRATEGIES[strategy][cls]
     if role is not None:

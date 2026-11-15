@@ -100,11 +100,11 @@ def test_the_orders_a_faction_sets_reach_the_battle():
     w, _ = _world()
     base = _input(w).orders_of_battle[0]
     rec = w.records["army_a"]
-    rec.subject_matter = A.set_strategy(A.order(rec.subject_matter, "wall", stance="hold", fall_back_at=0.4), "advance")
+    rec.subject_matter = A.set_strategy(A.order(rec.subject_matter, "wall", posture="hold", fall_back_at=0.4), "advance")
     oob = _input(w).orders_of_battle[0]
     sf = oob.units[0]
-    assert (oob.strategy, sf.stance, sf.fall_back_at) == ("advance", "hold", 0.4)
-    assert (base.strategy, base.units[0].stance) == ("line", None), "vacuous if the base already had the orders"
+    assert (oob.strategy, sf.posture, sf.fall_back_at) == ("advance", "hold", 0.4)
+    assert (base.strategy, base.units[0].posture) == ("line", None), "vacuous if the base already had the orders"
 
 
 # ------------------------------------------------------------------------------------- who is there, and how fit

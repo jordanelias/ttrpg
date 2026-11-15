@@ -1,6 +1,6 @@
 """ED-IN-0306 phase 1 -- a faction's ORDER OF BATTLE reaches the mass-battle engine.
 
-`modules/mass_battle/orderofbattle.py` turns named units (troop type, size, role, stance) plus a strategy
+`modules/mass_battle/orderofbattle.py` turns named units (troop type, size, role, posture) plus a strategy
 into the multi-subunit Unit the engine fights, and `massbattle.resolve_field` takes one per side from the input
 record's `orders_of_battle`. What this proves, and the control beside each claim:
 
@@ -87,7 +87,7 @@ def test_an_order_of_battle_side_and_a_headcount_side_both_deploy():
     (OrderOfBattle((UnitRow('a', 'dragons', 10),)), "no stat preset"),
     (OrderOfBattle((UnitRow('a', 'heavy_infantry', 0),)), "positive"),
     (OrderOfBattle((UnitRow('a', 'heavy_infantry', 10, role='Kite'),)), "menu"),
-    (OrderOfBattle((UnitRow('a', 'heavy_infantry', 10, stance='retreat'),)), "stance"),
+    (OrderOfBattle((UnitRow('a', 'heavy_infantry', 10, posture='retreat'),)), "posture"),
     (OrderOfBattle((UnitRow('a', 'heavy_infantry', 10, target='strongest'),)), "target"),
     (OrderOfBattle((UnitRow('a', 'heavy_infantry', 10, fall_back_at=1.0),)), "fall_back_at"),
     (OrderOfBattle(tuple(UnitRow(f's{i}', 'levy', 10) for i in range(12))), "cap"),
@@ -140,13 +140,13 @@ def test_the_two_sides_start_on_opposite_rows():
 
 
 # ------------------------------------------------------------------------- strategy and tactic fields
-def test_strategy_sets_the_stance_of_each_class_and_an_explicit_stance_wins():
+def test_strategy_sets_the_posture_of_each_class_and_an_explicit_posture_wins():
     for strategy, table in STRATEGIES.items():
         u = build_unit(_mixed(strategy), 'u', 'A', morale_start=5)
         for s in u.subunits:
             assert s.stance == table[class_of(s.troop_type)], (strategy, s.troop_type)
     assert STRATEGIES['advance']['melee'] != STRATEGIES['defend']['melee'], "vacuous if two strategies are one"
-    o = _oob(('w', 'heavy_infantry', 300, {'stance': 'hold'}), strategy='advance')
+    o = _oob(('w', 'heavy_infantry', 300, {'posture': 'hold'}), strategy='advance')
     assert build_unit(o, 'u', 'A', morale_start=5).subunits[0].stance == 'hold'
 
 
@@ -225,13 +225,13 @@ def _stance_of(sf, strategy='line'):
     return unit.subunits[0].eff_stance
 
 
-def test_a_role_sets_the_stance_its_instructions_name_unless_the_unit_says_otherwise():
-    """Precedence: the unit's own stance, then its role's, then the strategy's. Writing the strategy's stance
-    unconditionally made a role unable to set one. FALSIFIER: restore `stance=sf.stance or STRATEGIES[...]` in
+def test_a_role_sets_the_posture_its_instructions_name_unless_the_unit_says_otherwise():
+    """Precedence: the unit's own posture, then its role's, then the strategy's. Writing the strategy's posture
+    unconditionally made a role unable to set one. FALSIFIER: restore `posture=sf.posture or STRATEGIES[...]` in
     `_spec_for` and the first line reads 'balanced'."""
     wall = UnitRow('w', 'heavy_infantry', 120, role='ShieldWall')
     assert _stance_of(wall) == 'hold', "ShieldWall under the neutral strategy must hold"
-    assert _stance_of(UnitRow('w', 'heavy_infantry', 120, role='ShieldWall', stance='aggressive')) == 'aggressive'
+    assert _stance_of(UnitRow('w', 'heavy_infantry', 120, role='ShieldWall', posture='aggressive')) == 'aggressive'
     plain = UnitRow('w', 'heavy_infantry', 120)
     assert _stance_of(plain, 'advance') == 'aggressive' and _stance_of(plain) == 'balanced', "control: no role, the strategy"
 

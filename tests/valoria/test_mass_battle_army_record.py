@@ -119,7 +119,7 @@ def test_record_refusals():
              lambda: A.raised(a, 'c1', 'dragons', 5),
              lambda: A.raised(a, 'c1', 'levy', 0),
              lambda: A.raised(a, 'c1', 'levy', 2.5),
-             lambda: A.order(a, 'wall', stance='retreat'),
+             lambda: A.order(a, 'wall', posture='retreat'),
              lambda: A.order(a, 'wall', fall_back_at=1.5),
              lambda: A.set_strategy(a, 'rout'))
     for bad in cases:
@@ -134,11 +134,11 @@ def test_record_refusals():
 
 def test_order_changes_only_what_it_names():
     a = A.assign(_army(), 'wall', 'c1', 30)
-    b = A.order(a, 'wall', stance='hold', target='weakest')
+    b = A.order(a, 'wall', posture='hold', target='weakest')
     sf = b['units'][0]
-    assert (sf['stance'], sf['target'], sf['role'], sf['assigned']) == ('hold', 'weakest', 'ShieldWall', (('c1', 30),))
-    c = A.order(b, 'wall', stance=None, fall_back_at=0.4)
-    assert c['units'][0]['stance'] is None and c['units'][0]['fall_back_at'] == 0.4
+    assert (sf['posture'], sf['target'], sf['role'], sf['assigned']) == ('hold', 'weakest', 'ShieldWall', (('c1', 30),))
+    c = A.order(b, 'wall', posture=None, fall_back_at=0.4)
+    assert c['units'][0]['posture'] is None and c['units'][0]['fall_back_at'] == 0.4
 
 
 def test_record_to_order_of_battle_scales_by_fitness_and_drops_the_empty():
@@ -200,8 +200,8 @@ def test_apply_runs_each_season_command_and_refuses_each_rule_it_breaks():
     assert A.unassigned(r, 'c1', 'heavy_infantry') == 15
     r = A.apply(_cmd(r, 'assign', name='wall', cohort='c1', count=-5))
     assert A.unassigned(r, 'c1', 'heavy_infantry') == 20 and A.by_type(r) == {'heavy_infantry': 40}
-    r = A.apply(_cmd(r, 'order', name='wall', stance='hold'))
-    assert r['units'][0]['stance'] == 'hold'
+    r = A.apply(_cmd(r, 'order', name='wall', posture='hold'))
+    assert r['units'][0]['posture'] == 'hold'
     assert A.apply(_cmd(r, 'order', strategy='defend'))['strategy'] == 'defend'
     assert A.apply(_cmd(r, 'validate')) == r
     # the recruit limit is per cohort: a second cohort has its own population, the first has spent 40 of its cap

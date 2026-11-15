@@ -53,7 +53,7 @@ class MilitaryMenu:
       * `discharge`       -- ((cohort, troop type, most that may be sent home), ...)
       * `disband`         -- (unit name, ...)
       * `orders`          -- ((unit, the roles its type allows), ...)
-      * `vocabulary`      -- the module's own: strategies, stances, targets, troop_types (type, roles, site kind)
+      * `vocabulary`      -- the module's own: strategies, postures, targets, troop_types (type, roles, site kind)
       * `advisories`      -- ((kind, subject, have, floor), ...), what is wrong with the army as it stands"""
     actor: str
     faction: Optional[str]
@@ -109,7 +109,7 @@ def menu(w, actor: str) -> MilitaryMenu:
         actor, faction, rid, True, False, raise_=opts["raise"], assign=assign, release=release,
         discharge=tuple((c, t, n) for c, t, n in rec["trained"]), disband=tuple(sf["name"] for sf in sfs),
         orders=tuple((sf["name"], roles[sf["troop_type"]]) for sf in sfs),
-        vocabulary={k: opts[k] for k in ("strategies", "stances", "targets", "troop_types")},
+        vocabulary={k: opts[k] for k in ("strategies", "postures", "targets", "troop_types")},
         advisories=opts["advisories"])
 
 
@@ -117,7 +117,7 @@ def act_for(w, actor: str, verb: str, **payload: Any) -> Act:
     """The Act that gives one army command. `verb` is `create_record` (mint the faction's empty army; the payload may name its
     `strategy`) or one of the six army verbs, whose payload is the command (`recruit`: cohort, troop_type, count;
     `form_unit`: name, troop_type, role?; `assign_troops`: name, cohort, count (negative releases); `order_unit`: name and
-    any of role, stance, target, fall_back_at, or strategy alone; `disband_unit`: name; `discharge_troops`: cohort,
+    any of role, posture, target, fall_back_at, or strategy alone; `disband_unit`: name; `discharge_troops`: cohort,
     troop_type, count). The army is the actor's faction's. The id is derived from the tick, the actor, the verb and the
     payload (the same command gives the same id; folding it twice applies it twice). Builds, does not check: the fold's refusals are the check."""
     faction = faction_holding(w, actor)
