@@ -8,7 +8,7 @@ the World once, and hands it on. It holds no token after construction and import
 Three things the builder reads used to live in the instrument and are here because both sides read
 them: the case loader (`load_cases`, with `CORPUS_DEFECTS` and `CASE_SERIES`), the two derivations
 of a person from a case (`seed_pursuits`, `wants_of`), and the `scale:`/`office:` overlay
-(`RESCALES`, with the loader's own checks). `harness/run_cases.py` and `harness/corpus_run.py`
+(`_rescales_once`, with the loader's own checks). `harness/run_cases.py` and `harness/corpus_run.py`
 import them from here.
 
 The census of what was built, the season run and the creed sweep stay in `harness/populated.py`,
@@ -276,7 +276,17 @@ def _check_office(where: str, off) -> None:
         raise SystemExit(f"{where}: {e}") from None
 
 
-RESCALES = rescales()
+_RESCALES = None
+
+
+def _rescales_once() -> dict:
+    """THE OVERLAYS, read on first use and kept (the shape of `_INST_CACHE` below): importing this module reads no
+    YAML and cannot `SystemExit`, which `data/__init__.py` records as the cost of an eager read. `corpus_run` binds the
+    same dict as its `RESCALES`, so the builder and the corpus read one object, as before the move."""
+    global _RESCALES
+    if _RESCALES is None:
+        _RESCALES = rescales()
+    return _RESCALES
 
 
 def _load(rel):
@@ -1842,7 +1852,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     # transparently wrong (every office gets every act), which is what stops it reading as design.
     # This paragraph stays because it states the standard the default is an exception to, and the
     # per-POST remits that replace it must meet it.
-    overlays = RESCALES   # was `from .corpus_run import RESCALES` (an instrument); `boot/` owns the overlay now
+    overlays = _rescales_once()   # was `from .corpus_run import RESCALES` (an instrument); `boot/` owns the overlay now
     seated, no_post, occupations, proposed = 0, [], [], []
     # `offices.yaml` row id -> the Office id that stands for it (matched below, or minted after the
     # loop), and the loop-built offices no row matches. Both reported by `_office_census`.

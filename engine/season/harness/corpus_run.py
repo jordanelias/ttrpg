@@ -67,7 +67,8 @@ from ..state.world import World
 from ..data import files
 from . import probes as P
 from . import run_cases as R
-from ..boot.realm import RESCALES, _check_office, _exercise_docs, seed_pursuits, wants_of   # moved to `boot/` (B03c.01): the builder reads them too
+from ..boot.realm import _check_office, _exercise_docs, _rescales_once, seed_pursuits, wants_of   # moved to `boot/` (B03c.01): the builder reads them too
+RESCALES = _rescales_once()   # the one dict the builder reads, read here at import as before the move
 
 # `CLAUDE.md` §0.1 pt 5 / `G1`: declared here with its reason, not a bare literal in a body.
 # [JUSTIFIED: an INSTRUMENT BUDGET, not a rule of the game -- no design document names a season cap. `W6`'s flood is the measurement it is fitted to: the corpus's longest `span_seasons` is 16, and running those costs more than the grading they buy. Lowering it truncates long cases; raising it changes no verdict this instrument reports]

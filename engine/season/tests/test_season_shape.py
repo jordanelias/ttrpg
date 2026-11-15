@@ -2080,11 +2080,10 @@ def test_jordan_no_definition_is_hardcoded_in_a_body():
     # TRUE: it claimed this test and `test_h115` "both key on this" while this test keyed on one
     # hardcoded path. A false claim of enforcement is worse than none, because it stops the next
     # reader checking -- which is exactly what it did.
-    # `boot/` IS GAME CODE (A-102) AND `_model_modules()` NOW REACHES IT, but it is read by this scan under the CORPUS
-    # rule, not the model's: `04` §A.2's `boot/` row says construction is not a season write, and the literal
-    # collections it moved here from `harness/populated.py` (the title list, the temperament and cohort field sets,
-    # the case-series ids ...) are 10 hits (8 sites) that a pure move may not clear, since each needs its own row in
-    # `rosters.yaml` and a loader (B03c.01 moved them unchanged; clearing them is a later batch's, and this skip drops then).
+    # `boot/` IS GAME CODE (A-102) AND `_model_modules()` NOW REACHES IT, but this scan reads it under the CORPUS rule:
+    # the literal collections B03c.01 moved here unchanged from `harness/populated.py` (the title list, the temperament
+    # and planned-works field sets, the case-series ids, two census and payload dicts) each need a `rosters.yaml` row and
+    # a loader, which a pure move may not add. The hit count is in B03c.01's commit body. Drop this skip when they are cleared.
     MODEL = frozenset(m for m in _model_modules() if files.BOOT_DIR not in m.parents)
     # ANTI-VACUITY, because a MODEL that silently empties makes the strict lane observe nothing
     # and this test go green over the whole package (§0.1 point 2). The floor is the property,
