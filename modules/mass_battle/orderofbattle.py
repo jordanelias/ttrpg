@@ -2,23 +2,23 @@
 it into the multi-subunit `Unit` the engine fights with (ED-IN-0306, phase 1).
 
 WHAT THIS IS. `massbattle._weighted_unit` builds every season army as ONE 'infantry' subunit sized by headcount.
-An `OrderOfBattle` says what the army actually is: named SUBFORMATIONS, each of one troop type (spearmen, archers,
+An `OrderOfBattle` says what the army actually is: named UNITS (one `UnitRow` each), each of one troop type (spearmen, archers,
 light cavalry, ...), one size, one role, and optionally a stance and a fall-back point; plus one STRATEGY for the
 whole army. `build_unit` constructs the Unit through `armies.build_army`, the engine's one multi-subunit
 constructor, so troop-type stats, reach, density, the role -> shape/instruction menu and the SUBUNIT_CAP all come
 from their existing owners: nothing is re-implemented here.
 
-WHAT IT DECIDES AND WHAT IT DOES NOT. It decides placement (where on the field each subformation starts) and which
+WHAT IT DECIDES AND WHAT IT DOES NOT. It decides placement (where on the field each unit starts) and which
 fields it hands `build_army`. It resolves nothing: the fight is `run_battle`'s. It reads no `World`: the host
 (`engine/season/seam/wrappers/mass_battle.py`) builds the record from season state and hands it on.
 
 THE DEPLOYMENT RULE (ASSUMPTION; medium; Jordan to correct): melee in the front line, centred; ranged and artillery in
-a line behind it; mounted subformations on the two flanks, alternating left and right. A battle line is the common
+a line behind it; mounted units on the two flanks, alternating left and right. A battle line is the common
 shape of RTK and Total War deployments and of the engine's own `build_army` default; the rear offset is the front
-line's own depth plus one row, so nothing is placed inside another subformation. If the army cannot fit that layout on
+line's own depth plus one row, so nothing is placed inside another unit. If the army cannot fit that layout on
 the field, it degrades to one centred line on the front row rather than raising.
 
-STRATEGY is a named stance policy applied to each class of subformation unless the subformation sets its own stance
+STRATEGY is a named stance policy applied to each class of unit unless the unit sets its own stance
 (`STRATEGIES`, below). Three are built; the envelopment presets in `systems/mass_battle/sim/engine.py` are the next
 ones and are not folded in here.
 
@@ -36,17 +36,17 @@ from modules.mass_battle.geometry import footprint_for
 from modules.mass_battle.hierarchy.units import Order, _INSTRUCTION_STANCE
 from modules.mass_battle.troop_types.registry import is_mounted, roles_for, stats_for, unit_type_for
 
-__all__ = ['Subformation', 'OrderOfBattle', 'STRATEGIES', 'STANCES', 'TARGETINGS', 'class_of', 'build_unit',
+__all__ = ['UnitRow', 'OrderOfBattle', 'STRATEGIES', 'STANCES', 'TARGETINGS', 'class_of', 'build_unit',
            'validate']
 
-#: Stances a subformation may be set to (`config.STANCE_SPEED_MOD`'s keys; 'retreat' is reachable only through
-#: `fall_back_at`, since a subformation that STARTS retreating is not a deployment).
+#: Stances a unit may be set to (`config.STANCE_SPEED_MOD`'s keys; 'retreat' is reachable only through
+#: `fall_back_at`, since a unit that STARTS retreating is not a deployment).
 STANCES = ('balanced', 'aggressive', 'hold')
 
-#: Targeting a subformation may be told to prefer (`Subunit.target_condition`; None is the engine's 'nearest').
+#: Targeting a unit may be told to prefer (`Subunit.target_condition`; None is the engine's 'nearest').
 TARGETINGS = (None, 'nearest', 'weakest')
 
-#: Strategy -> the stance each CLASS of subformation takes unless it sets its own. `class_of` names the classes.
+#: Strategy -> the stance each CLASS of unit takes unless it sets its own. `class_of` names the classes.
 #: ASSUMPTION; medium; Jordan to correct. 'line' is the engine's neutral default; 'advance' presses the melee and the
 #: horse; 'defend' holds them and lets the missile troops work. Ranged stay 'balanced' in all three: a held archer
 #: is frozen (`STANCE_SPEED_MOD['hold']` is -99) and braced against shock, which is not what holding means for them.
@@ -69,15 +69,15 @@ _SIDE_DIR = {'A': -1, 'B': 1}
 _ANCHOR_COL = 25            # [canonical: armies.build_army's anchor_col default, ED-MB-0017] the field's centre column
 _MIN_COL, _MAX_COL = 1, BATTLEFIELD_SIZE - 2    # keep a 1-cell margin, as `_centered_line_cols` does
 
-#: The Unit-level baseline the subformations inherit where a troop type sets nothing: the season adapter's own
+#: The Unit-level baseline the units inherit where a troop type sets nothing: the season adapter's own
 #: (`massbattle._SEASON_FORCE_POWER`, `_MVP_UNIT_COMMAND`). Duplicated as three literals rather than imported:
 #: `massbattle` imports THIS module, and a cycle is the worse of the two. A test pins them equal.
 _UNIT_POWER, _UNIT_COMMAND, _UNIT_DISCIPLINE = 4, 4, 5  # [canonical: sim_mb_06_v9_historical_spec.md -- T3 baseline P4/C4/D5 defaults, as massbattle._SEASON_FORCE_POWER and _MVP_UNIT_COMMAND carry them]
 
 
 @dataclass(frozen=True)
-class Subformation:
-    """One body of troops of ONE type, with how it fights.
+class UnitRow:
+    """One unit of the order of battle: a body of troops of ONE type, with how it fights.
 
     `troops` is a headcount (the engine sizes the footprint from it). `role` is a `config.ROLE_SPEC` key from the troop
     type's gated menu (`roles_for`); None is a plain Line with no instructions. `stance` None takes the strategy's. `target`
@@ -96,10 +96,10 @@ class Subformation:
 
 @dataclass(frozen=True)
 class OrderOfBattle:
-    """An army: its subformations, in line order, and one strategy for the whole. `drawn_from` is the host's, not the
+    """An army: its units, in line order, and one strategy for the whole. `drawn_from` is the host's, not the
     battle's: the ids of the cohorts the troops were drawn from, so the host writes a fight's casualties to the people
     who fought and not to everybody standing nearby. The battle never reads it."""
-    subformations: Tuple[Subformation, ...]
+    units: Tuple[UnitRow, ...]
     strategy: str = 'line'
     drawn_from: Tuple[str, ...] = ()
 
@@ -116,14 +116,14 @@ def validate(oob: OrderOfBattle) -> None:
     """Refuse an order of battle the engine could not build, loudly and at the boundary. Raises ValueError."""
     if oob.strategy not in STRATEGIES:
         raise ValueError(f"unknown strategy {oob.strategy!r} (known: {sorted(STRATEGIES)})")
-    if not oob.subformations:
-        raise ValueError("an order of battle needs at least one subformation")
-    if len(oob.subformations) > SUBUNIT_CAP:
-        raise ValueError(f"{len(oob.subformations)} subformations exceeds the cap of {SUBUNIT_CAP}")
+    if not oob.units:
+        raise ValueError("an order of battle needs at least one unit")
+    if len(oob.units) > SUBUNIT_CAP:
+        raise ValueError(f"{len(oob.units)} units exceeds the cap of {SUBUNIT_CAP}")
     seen = set()
-    for sf in oob.subformations:
+    for sf in oob.units:
         if sf.name in seen:
-            raise ValueError(f"duplicate subformation name {sf.name!r}")
+            raise ValueError(f"duplicate unit name {sf.name!r}")
         seen.add(sf.name)
         if stats_for(sf.troop_type) is None:
             raise ValueError(f"{sf.name!r}: troop type {sf.troop_type!r} has no stat preset")
@@ -139,8 +139,8 @@ def validate(oob: OrderOfBattle) -> None:
             raise ValueError(f"{sf.name!r}: fall_back_at must be strictly between 0 and 1, got {sf.fall_back_at!r}")
 
 
-def _spec_for(sf: Subformation, strategy: str) -> dict:
-    """The `build_army` spec dict for one subformation (placement is added by `_place`)."""
+def _spec_for(sf: UnitRow, strategy: str) -> dict:
+    """The `build_army` spec dict for one unit (placement is added by `_place`)."""
     cls = class_of(sf.troop_type)
     # No role named -> a plain Line with no instruction package, the shape the headcount line has always fought as.
     # The type's first menu entry is NOT a safe default: a levy's menu is the 'any' fallback (Support, Reserve), and a
@@ -150,7 +150,7 @@ def _spec_for(sf: Subformation, strategy: str) -> dict:
     role = sf.role or ('Kite' if sf.troop_type == 'mounted_archers' else None)
     spec = dict(troop_type=sf.troop_type, troops=float(sf.troops),
                 concentration=float(cell_cap_for(sf.troop_type)))
-    # STANCE PRECEDENCE: the subformation's own, then the one its role's instructions set (ShieldWall and Hold hold,
+    # STANCE PRECEDENCE: the unit's own, then the one its role's instructions set (ShieldWall and Hold hold,
     # Push presses -- `Subunit.eff_stance` reads them only while the stance was never written on purpose), then the
     # strategy's for its class. Always writing the strategy's stance made a role unable to set it.
     role_stance = role is not None and any(k in _INSTRUCTION_STANCE for k in ROLE_SPEC[role]['instructions'])
@@ -193,7 +193,7 @@ def _place(specs: list, classes: list, side: str) -> None:
         row = _A_FRONT_ROW
         rear_row = row + depth + 1                    # footprints run toward +row: the rear line starts past the front's last row
     else:
-        # B's front face is its LAST row: put the deepest front subformation's face `_APPROACH_ROWS` short of A's.
+        # B's front face is its LAST row: put the deepest front unit's face `_APPROACH_ROWS` short of A's.
         row = (_A_FRONT_ROW - _APPROACH_ROWS - 1) - (depth - 1)
         rear_row = row - 1 - rear_depth               # and its rear line ends one clear row before the front's first
     pos = {}
@@ -228,7 +228,7 @@ def _place(specs: list, classes: list, side: str) -> None:
 
 def build_unit(oob: OrderOfBattle, name: str, side: str, *, morale_start: int):
     """The `Unit` for `oob` on `side` ('A' attacker, 'B' defender): `armies.build_army` over one spec per
-    subformation, placed by `_place`. `morale_start` is the side's season morale, applied to every subunit
+    unit, placed by `_place`. `morale_start` is the side's season morale, applied to every subunit
     (`build_army` gives each its own copy). Unit-level power/command/discipline are the season adapter's baseline;
     the TROOP TYPE's own stats override them per subunit (`Subunit.of_type`). [ASSUMPTION; medium; Jordan to correct:
     the side's morale is every subunit's start, so a troop type's own morale preset (levy 2, knights 6) does not apply
@@ -237,8 +237,8 @@ def build_unit(oob: OrderOfBattle, name: str, side: str, *, morale_start: int):
     if side not in _SIDE_DIR:
         raise ValueError(f"side must be 'A' or 'B', got {side!r}")
     validate(oob)
-    specs = [_spec_for(sf, oob.strategy) for sf in oob.subformations]
-    classes = [class_of(sf.troop_type) for sf in oob.subformations]
+    specs = [_spec_for(sf, oob.strategy) for sf in oob.units]
+    classes = [class_of(sf.troop_type) for sf in oob.units]
     _place(specs, classes, side)
     return build_army(specs, name, side, power=_UNIT_POWER, command=_UNIT_COMMAND, discipline=_UNIT_DISCIPLINE,
                       morale=morale_start, morale_start=morale_start)

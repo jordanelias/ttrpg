@@ -32,7 +32,7 @@ from modules.mass_battle import rngsource                                      #
 from modules.mass_battle.massbattle import _grade                              # noqa: E402
 from modules.mass_battle.geometry import _oriented                             # noqa: E402
 from modules.mass_battle.orchestration import run_battle                       # noqa: E402
-from modules.mass_battle.orderofbattle import OrderOfBattle, Subformation, build_unit   # noqa: E402
+from modules.mass_battle.orderofbattle import OrderOfBattle, UnitRow, build_unit   # noqa: E402
 from modules.mass_battle.resolution import tracing                             # noqa: E402
 
 EXAMPLE = os.path.join(_HERE, 'walkthrough_example.json')
@@ -43,7 +43,7 @@ def _oob(side: dict, role) -> OrderOfBattle:
     subs = []
     for sf in side['subformations']:
         r = role if (role and sf['troop_type'] == 'light_cavalry') else sf.get('role')
-        subs.append(Subformation(sf['name'], sf['troop_type'], sf['troops'], role=r))
+        subs.append(UnitRow(sf['name'], sf['troop_type'], sf['troops'], role=r))
     return OrderOfBattle(tuple(subs), strategy=side['strategy'])
 
 

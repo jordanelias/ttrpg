@@ -311,7 +311,7 @@ def _wins_vs_the_churchs_territory(sites):
     assert cmd in att, "fixture: the army's commander is mustered where the army is"
     inp = MB.field_input(w, att, world_q.mustered(w, DEFENDED_TERR, CHURCH), DEFENDED_TERR, factions=(CROWN, CHURCH))
     oob = inp.orders_of_battle[0]
-    assert oob is not None and sum(s.troops for s in oob.subformations) == 900
+    assert oob is not None and sum(s.troops for s in oob.units) == 900
     fn = MODULE_ENTRIES["mass_battle.resolve_field"].fn
     return sum(bool(fn(inp, random.Random(s))["attacker_wins"]) for s in range(1, 9))
 

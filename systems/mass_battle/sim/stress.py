@@ -58,13 +58,13 @@ def _load(arm_env: dict, grid) -> None:
     from modules.mass_battle.config import cell_cap_for
     from modules.mass_battle.geometry import body_depth, cellbody_from, footprint_for
     from modules.mass_battle.orchestration import run_battle
-    from modules.mass_battle.orderofbattle import OrderOfBattle, Subformation, build_unit
+    from modules.mass_battle.orderofbattle import OrderOfBattle, UnitRow, build_unit
     from systems.mass_battle.sim.engine import REFUSE_ECHELON, build_army, build_envelopment, build_refused_flank
     import walkthrough
     M.update(rngsource=rngsource, ENVELOP_WING_GAP=ENVELOP_WING_GAP, _centered_line_cols=_centered_line_cols,
              _spec_span=_spec_span, cell_cap_for=cell_cap_for, body_depth=body_depth,
              cellbody_from=cellbody_from, footprint_for=footprint_for,
-             run_battle=run_battle, OrderOfBattle=OrderOfBattle, Subformation=Subformation, build_unit=build_unit,
+             run_battle=run_battle, OrderOfBattle=OrderOfBattle, UnitRow=UnitRow, build_unit=build_unit,
              REFUSE_ECHELON=REFUSE_ECHELON, build_army=build_army, build_envelopment=build_envelopment,
              build_refused_flank=build_refused_flank, Recorder=walkthrough._Recorder, cfg=cfg)
     if grid:
@@ -122,8 +122,8 @@ def _build_side(desc: dict, side: str, ex: dict, P: dict):
     name = 'side_' + side.lower()
     kind = desc['kind']
     if kind == 'oob':
-        oob = M['OrderOfBattle'](tuple(M['Subformation'](s['name'], s['troop_type'], s['troops'], role=s.get('role'))
-                                       for s in desc['subformations']), strategy=desc['strategy'])
+        oob = M['OrderOfBattle'](tuple(M['UnitRow'](s['name'], s['troop_type'], s['troops'], role=s.get('role'))
+                                  for s in desc['subformations']), strategy=desc['strategy'])
         return M['build_unit'](oob, name, side, morale_start=ms)
     if kind == 'army':
         specs = _prep(desc['subunits'])

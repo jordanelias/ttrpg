@@ -1,6 +1,6 @@
 """ED-IN-0306 phase 1 -- a faction's ORDER OF BATTLE reaches the mass-battle engine.
 
-`modules/mass_battle/orderofbattle.py` turns named subformations (troop type, size, role, stance) plus a strategy
+`modules/mass_battle/orderofbattle.py` turns named units (troop type, size, role, stance) plus a strategy
 into the multi-subunit Unit the engine fights, and `massbattle.resolve_field` takes one per side from the input
 record's `orders_of_battle`. What this proves, and the control beside each claim:
 
@@ -19,7 +19,7 @@ from engine.season.queries.inputs import MassBattleInput
 from modules.mass_battle import massbattle
 from modules.mass_battle.config import TROOP_TYPE_ROLES
 from modules.mass_battle.equipment import loadout_for
-from modules.mass_battle.orderofbattle import (STRATEGIES, OrderOfBattle, Subformation, build_unit, class_of,
+from modules.mass_battle.orderofbattle import (STRATEGIES, OrderOfBattle, UnitRow, build_unit, class_of,
                                                validate)
 from modules.mass_battle.troop_types.registry import (MOUNTED_TYPES, is_mounted, reach_for, stats_for,
                                                       support_ranks_for, unit_type_for)
@@ -35,7 +35,7 @@ def _record(oobs=None, **kw):
 
 
 def _oob(*parts, strategy='line'):
-    return OrderOfBattle(tuple(Subformation(n, t, q, **kw) for n, t, q, kw in parts), strategy)
+    return OrderOfBattle(tuple(UnitRow(n, t, q, **kw) for n, t, q, kw in parts), strategy)
 
 
 def _line(troop_type, n=1000):
@@ -82,15 +82,15 @@ def test_an_order_of_battle_side_and_a_headcount_side_both_deploy():
 # ---------------------------------------------------------------------------------------- refusals
 @pytest.mark.parametrize("bad, why", [
     (OrderOfBattle((), 'line'), "at least one"),
-    (OrderOfBattle((Subformation('a', 'heavy_infantry', 10),), 'nope'), "unknown strategy"),
-    (OrderOfBattle((Subformation('a', 'heavy_infantry', 10), Subformation('a', 'archers', 10))), "duplicate"),
-    (OrderOfBattle((Subformation('a', 'dragons', 10),)), "no stat preset"),
-    (OrderOfBattle((Subformation('a', 'heavy_infantry', 0),)), "positive"),
-    (OrderOfBattle((Subformation('a', 'heavy_infantry', 10, role='Kite'),)), "menu"),
-    (OrderOfBattle((Subformation('a', 'heavy_infantry', 10, stance='retreat'),)), "stance"),
-    (OrderOfBattle((Subformation('a', 'heavy_infantry', 10, target='strongest'),)), "target"),
-    (OrderOfBattle((Subformation('a', 'heavy_infantry', 10, fall_back_at=1.0),)), "fall_back_at"),
-    (OrderOfBattle(tuple(Subformation(f's{i}', 'levy', 10) for i in range(12))), "cap"),
+    (OrderOfBattle((UnitRow('a', 'heavy_infantry', 10),), 'nope'), "unknown strategy"),
+    (OrderOfBattle((UnitRow('a', 'heavy_infantry', 10), UnitRow('a', 'archers', 10))), "duplicate"),
+    (OrderOfBattle((UnitRow('a', 'dragons', 10),)), "no stat preset"),
+    (OrderOfBattle((UnitRow('a', 'heavy_infantry', 0),)), "positive"),
+    (OrderOfBattle((UnitRow('a', 'heavy_infantry', 10, role='Kite'),)), "menu"),
+    (OrderOfBattle((UnitRow('a', 'heavy_infantry', 10, stance='retreat'),)), "stance"),
+    (OrderOfBattle((UnitRow('a', 'heavy_infantry', 10, target='strongest'),)), "target"),
+    (OrderOfBattle((UnitRow('a', 'heavy_infantry', 10, fall_back_at=1.0),)), "fall_back_at"),
+    (OrderOfBattle(tuple(UnitRow(f's{i}', 'levy', 10) for i in range(12))), "cap"),
 ])
 def test_boundary_refusals(bad, why):
     with pytest.raises(ValueError, match=why):
@@ -121,7 +121,7 @@ def test_deployment_puts_melee_front_ranged_behind_and_horse_on_the_flanks():
         assert {by['light_cavalry'].starting_position[1] < lo, by['cavalry'].starting_position[1] < lo} == {True, False}
 
 
-def test_no_two_subformations_start_on_the_same_cell():
+def test_no_two_units_start_on_the_same_cell():
     for side in ('A', 'B'):
         u = build_unit(_mixed(), 'u', side, morale_start=5)
         seen = {}
@@ -159,7 +159,7 @@ def test_tactic_fields_reach_the_subunit():
 
 def test_a_mounted_archers_body_with_no_role_stands_off_as_kite_and_any_other_type_stays_a_plain_line():
     """ED-1095 (`build_army`'s implicit default) must survive the order-of-battle path, which names a shape for a body
-    with no role. The control beside it: the same subformation of another type has no role and no instructions."""
+    with no role. The control beside it: the same unit of another type has no role and no instructions."""
     kite = build_unit(_oob(('m', 'mounted_archers', 300, {})), 'u', 'A', morale_start=5).subunits[0]
     assert kite.role == 'Kite' and kite.instructions, (kite.role, kite.instructions)
     plain = build_unit(_oob(('c', 'light_cavalry', 300, {})), 'u', 'A', morale_start=5).subunits[0]
@@ -225,14 +225,14 @@ def _stance_of(sf, strategy='line'):
     return unit.subunits[0].eff_stance
 
 
-def test_a_role_sets_the_stance_its_instructions_name_unless_the_subformation_says_otherwise():
-    """Precedence: the subformation's own stance, then its role's, then the strategy's. Writing the strategy's stance
+def test_a_role_sets_the_stance_its_instructions_name_unless_the_unit_says_otherwise():
+    """Precedence: the unit's own stance, then its role's, then the strategy's. Writing the strategy's stance
     unconditionally made a role unable to set one. FALSIFIER: restore `stance=sf.stance or STRATEGIES[...]` in
     `_spec_for` and the first line reads 'balanced'."""
-    wall = Subformation('w', 'heavy_infantry', 120, role='ShieldWall')
+    wall = UnitRow('w', 'heavy_infantry', 120, role='ShieldWall')
     assert _stance_of(wall) == 'hold', "ShieldWall under the neutral strategy must hold"
-    assert _stance_of(Subformation('w', 'heavy_infantry', 120, role='ShieldWall', stance='aggressive')) == 'aggressive'
-    plain = Subformation('w', 'heavy_infantry', 120)
+    assert _stance_of(UnitRow('w', 'heavy_infantry', 120, role='ShieldWall', stance='aggressive')) == 'aggressive'
+    plain = UnitRow('w', 'heavy_infantry', 120)
     assert _stance_of(plain, 'advance') == 'aggressive' and _stance_of(plain) == 'balanced', "control: no role, the strategy"
 
 

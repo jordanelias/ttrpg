@@ -145,10 +145,10 @@ def test_record_to_order_of_battle_scales_by_fitness_and_drops_the_empty():
     a = A.assign(A.assign(_army(), 'wall', 'c1', 60), 'wall', 'c2', 40)
     a = A.order(A.set_strategy(a, 'advance'), 'wall', fall_back_at=0.5)
     oob = A.to_order_of_battle(a)                      # 'bows' has nobody assigned: dropped
-    assert [s.name for s in oob.subformations] == ['wall'] and oob.strategy == 'advance'
-    assert oob.subformations[0].troops == 100 and oob.subformations[0].fall_back_at == 0.5
+    assert [s.name for s in oob.units] == ['wall'] and oob.strategy == 'advance'
+    assert oob.units[0].troops == 100 and oob.units[0].fall_back_at == 0.5
     hurt = A.to_order_of_battle(a, fitness=lambda c: 0.5 if c == 'c1' else 1.0)
-    assert hurt.subformations[0].troops == 60 * 0.5 + 40
+    assert hurt.units[0].troops == 60 * 0.5 + 40
     with pytest.raises(ValueError):
         A.to_order_of_battle(_army())                  # nothing assigned anywhere
 

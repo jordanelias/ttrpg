@@ -65,7 +65,7 @@ from modules.mass_battle import rngsource
 from modules.mass_battle.config import CELL_CAP, ROLE_SPEC
 from modules.mass_battle.hierarchy.units import Order, Subunit, Unit, unit_conceded
 from modules.mass_battle.orchestration import run_battle
-from modules.mass_battle.orderofbattle import OrderOfBattle, Subformation, build_unit as _build_oob_unit
+from modules.mass_battle.orderofbattle import OrderOfBattle, UnitRow, build_unit as _build_oob_unit
 from modules.mass_battle.troop_types.recruitment import under_arms_cap
 from modules.mass_battle.terrain import (FOREST_BROKEN, RIVER_CROSSING, RIVER_CROSSING_OFF_D,
                                              SPEED_TIERS, UPHILL, UPHILL_ATTACKER_OFF_D,
@@ -357,7 +357,7 @@ _HEADCOUNT_LINE_TYPE = 'light_infantry'
 
 def _oob_unit(oob, weight, side, morale_start):
     """The Unit for a side when the field carries orders of battle (ED-IN-0306). `oob` None -> a single
-    `_HEADCOUNT_LINE_TYPE` subformation, so both sides deploy by the same rule. Its size is the most the side's
+    `_HEADCOUNT_LINE_TYPE` unit, so both sides deploy by the same rule. Its size is the most the side's
     `weight` could put under arms, `under_arms_cap(weight)` (`troop_types/recruitment.py`), NOT the bare weight:
     an order of battle counts troops (a weight-12 cohort raises up to 120) and a season weight counts households,
     so a side left at its weight would meet a hundred troops with twelve. [ASSUMPTION; medium; Jordan to correct;
@@ -365,8 +365,8 @@ def _oob_unit(oob, weight, side, morale_start):
     Built with `faction` 'A'/'B', the engine's deployment convention, rather than `_weighted_unit`'s side names:
     the sides must start on opposite rows, which the single-line path's shared (8, 12) never needed."""
     if oob is None:
-        oob = OrderOfBattle((Subformation('line', _HEADCOUNT_LINE_TYPE,
-                                          max(float(under_arms_cap(weight)), _MIN_TROOPS)),))
+        oob = OrderOfBattle((UnitRow('line', _HEADCOUNT_LINE_TYPE,
+                                     max(float(under_arms_cap(weight)), _MIN_TROOPS)),))
     return _build_oob_unit(oob, f'side_{side.lower()}', side, morale_start=morale_start)
 
 

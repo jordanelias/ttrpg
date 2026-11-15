@@ -28,7 +28,7 @@ from typing import Callable, Optional
 
 from modules.mass_battle.armies import SUBUNIT_CAP
 from modules.mass_battle.config import BLOCK_SIZE, SUBUNIT_ROUT_FLOOR
-from modules.mass_battle.orderofbattle import STANCES, STRATEGIES, TARGETINGS, OrderOfBattle, Subformation
+from modules.mass_battle.orderofbattle import STANCES, STRATEGIES, TARGETINGS, OrderOfBattle, UnitRow
 from modules.mass_battle.troop_types.recruitment import TRAINING_SITE, recruit_limit
 from modules.mass_battle.troop_types.registry import TROOP_TYPE_STATS, roles_for, stats_for
 
@@ -264,8 +264,8 @@ def to_order_of_battle(record: dict, fitness: Optional[Callable[[str], float]] =
         strength = sum(n * max(0.0, min(1.0, float(fit(c)))) for c, n in sf['assigned'])
         if strength > 0:
             drawn += [c for c, n in sf['assigned'] if n > 0 and float(fit(c)) > 0 and c not in drawn]
-            parts.append(Subformation(sf['name'], sf['troop_type'], strength, role=sf['role'], stance=sf['stance'],
-                                      target=sf['target'], fall_back_at=sf['fall_back_at']))
+            parts.append(UnitRow(sf['name'], sf['troop_type'], strength, role=sf['role'], stance=sf['stance'],
+                                 target=sf['target'], fall_back_at=sf['fall_back_at']))
     if not parts:
         raise ValueError("no subformation has any troops assigned")
     return OrderOfBattle(tuple(parts), record['strategy'], tuple(drawn))

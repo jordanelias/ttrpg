@@ -66,7 +66,7 @@ def _input(w):
 
 
 def _troops(oob):
-    return sum(sf.troops for sf in oob.subformations)
+    return sum(sf.troops for sf in oob.units)
 
 
 # --------------------------------------------------------------------------------------------- who fights as what
@@ -79,11 +79,11 @@ def test_a_world_with_no_army_record_builds_the_field_it_always_did():
 def test_each_side_with_an_army_record_fights_as_that_records_order_of_battle():
     w, _ = _world()
     oob_a, oob_d = _input(w).orders_of_battle
-    assert [s.name for s in oob_a.subformations] == ["wall"] and [s.name for s in oob_d.subformations] == ["wall"]
+    assert [s.name for s in oob_a.units] == ["wall"] and [s.name for s in oob_d.units] == ["wall"]
     assert (_troops(oob_a), _troops(oob_d)) == (120, 120)
     # the defender holds its ground behind a shield wall and the attacker does not: two held lines never close
-    assert oob_a.subformations[0].role is None and oob_d.subformations[0].role == "ShieldWall"
-    assert oob_a.subformations[0].troop_type == "heavy_infantry"
+    assert oob_a.units[0].role is None and oob_d.units[0].role == "ShieldWall"
+    assert oob_a.units[0].troop_type == "heavy_infantry"
 
 
 def test_a_side_without_an_army_record_is_none_while_the_other_fights_its_own():
@@ -102,9 +102,9 @@ def test_the_orders_a_faction_sets_reach_the_battle():
     rec = w.records["army_a"]
     rec.subject_matter = A.set_strategy(A.order(rec.subject_matter, "wall", stance="hold", fall_back_at=0.4), "advance")
     oob = _input(w).orders_of_battle[0]
-    sf = oob.subformations[0]
+    sf = oob.units[0]
     assert (oob.strategy, sf.stance, sf.fall_back_at) == ("advance", "hold", 0.4)
-    assert (base.strategy, base.subformations[0].stance) == ("line", None), "vacuous if the base already had the orders"
+    assert (base.strategy, base.units[0].stance) == ("line", None), "vacuous if the base already had the orders"
 
 
 # ------------------------------------------------------------------------------------- who is there, and how fit

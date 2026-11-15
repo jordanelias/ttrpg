@@ -72,7 +72,7 @@ def _input(w, target):
 
 
 def _troops(oob):
-    return sum(s.troops for s in oob.subformations)
+    return sum(s.troops for s in oob.units)
 
 
 # ---------------------------------------------------------------------------------------- M1, M2, M3: the chain runs

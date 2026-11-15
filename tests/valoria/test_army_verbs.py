@@ -154,7 +154,7 @@ def test_form_assign_and_order_build_the_order_of_battle_and_conserve_every_troo
     assert "army.ordered" in _kinds(strat) and _army(w)["strategy"] == "advance"
     A.validate(_army(w))
     oob = A.to_order_of_battle(_army(w))                       # the record the season holds is the battle's input
-    assert [s.name for s in oob.subformations] == ["wall"] and oob.strategy == "advance"
+    assert [s.name for s in oob.units] == ["wall"] and oob.strategy == "advance"
 
 
 def test_each_menu_refusal_leaves_the_record_as_it_was():
