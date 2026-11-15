@@ -42,8 +42,8 @@ reporting an unruled hole -- the WORLD stops, `end_reason: design_gap_escape`, a
 filled in to make it go away (scripting drift, off the register). Anything else is a genuine code
 defect and is fix-worthy at the raising site, in its own commit, never inside this harness.
 
-ARCS ARE OUT OF SCOPE BY DECISION (`ED-IN-0225`, Jordan 2026-09-13: *"Maybe we just ignore the arcs
-now"*). This module seats and reads the NPC lane only, exactly as `populated.build_realm` already
+AN ARC HAS NO CARRIER (`ED-IN-0225`, 2026-09-13: no type, no rung, no tenure kind; the carrier is not
+to be built). This module seats and reads the NPC lane only, exactly as `populated.build_realm` already
 does, and mints no carrier, field, Event kind, write-matrix row, roster or register row for an arc,
 a story, a thread or a plot. Nothing here is named for one either.
 """

@@ -68,8 +68,9 @@ as refused and is reported apart (`corpus_run.graded_losses`); `attribute`'s `ma
 counts a graded loss as made). `executed_summary` is its own small summary, not `summarise`'s four
 classes. Without the flag the CLI prints exactly what it printed before. It mints no carrier.
 
-ARCS ARE OUT OF SCOPE BY DECISION (`ED-IN-0225`): this reads the cause graph the loop already writes
-and mints no carrier, field, Event kind or register row for an arc, story or thread.
+AN ARC HAS NO CARRIER (`ED-IN-0225`, 2026-09-13: no type, no rung, no tenure kind; the carrier is not
+to be built): this reads the cause graph the loop already writes and mints no carrier, field, Event
+kind or register row for an arc, story or thread.
 
 THE ESTIMATES (`estimates`, v9 IN-23 CARRY-STABILITY), read after each season beside the reading above
 and changing none of it: every person's own `queries/person_q.py::legitimacy` of every live seat-holder

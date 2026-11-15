@@ -5,8 +5,9 @@ antecedents and computes its cross-person chain depth; this module composes on i
 thing: it picks the deepest chain and prints it as lines a reader can follow. It re-implements none
 of the classification, writes nothing to the `World`, grades nothing and is wired into no gate.
 
-THE OBSERVER, NOT A CARRIER (`ED-IN-0225`). The pick is an observer's reading of depth over a finished
-log. Nothing here is stored in the simulation: no arc, story or thread carrier, field, Event kind or
+THE OBSERVER, NOT A CARRIER. `ED-IN-0225` (2026-09-13) ruled that an arc has no carrier -- no type, no
+rung, no tenure kind -- and that the carrier is not to be built. The pick is an observer's reading of
+depth over a finished log. Nothing here is stored in the simulation: no arc, story or thread carrier, field, Event kind or
 register row exists or is created, and nothing is ranked by salience inside the loop (the loop never
 imports this module). `tests/test_in37_chronicle.py` observes this -- the World's content hash, log
 length and write list are unchanged by a render, and the module's AST names no write call.
