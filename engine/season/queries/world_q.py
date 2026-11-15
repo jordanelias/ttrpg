@@ -84,7 +84,7 @@ from ..state.carriers import Person, Question, Site, Tenure
 # write gate's F3 clause needs both -- ruling (3)'s parent rung and ruling (4)'s purview subtree --
 # and the gate is in `state/`, which may not import this module. The bodies moved down unchanged;
 # these names are the same function objects, so every `world_q.parent_of(...)` call is unaffected.
-from ..state.containment import descendants, parent_of  # noqa: F401 -- re-exported
+from ..state.containment import descendants, edges_of, parent_of  # noqa: F401 -- re-exported
 # ⚠ AND `ancestry`/`home_of` BY THE SAME ROUTE (plan position `19`, U7-remit): the write gate's
 # `determination` basis asks the bench's containment test of the party's home, so both walks moved
 # down, unchanged. Same function objects; every `world_q.ancestry(...)`/`world_q.home_of(...)` caller
@@ -994,6 +994,34 @@ def event_place(w: World, e, homes: Optional[dict] = None) -> Optional[str]:
     if here is not None:
         return here
     return w.departed_from(who, e.emitted_at)     # `departed_from(None, t)` is None
+
+
+def event_place_at(w: World, e) -> Optional[str]:
+    """WHERE AN EVENT HAPPENED, AT THE TIME IT HAPPENED -- the rung of the actor's `contain` edge LIVE AT
+    `e.emitted_at` (`since <= t` and `until` unset or after `t`), where `event_place` answers where the actor
+    stands NOW. `event_place` is unchanged and stays WITNESS's read at the Event's own tick; this one is for a
+    reader that comes later (a chronicle line, a reason trail): a closed edge is kept with its `since`/`until`
+    (`Tenure`), so the earlier place is recoverable.
+
+    The actor is `event_place`'s: the causing act's actor for an act-caused Event, else `anchor_of(w, e)`. The
+    edges are `containment.edges_of`'s, the one view of them (live or closed), not a second scan. An edge closed at
+    tick `t` is not live at `t`: the edge the mover opened then (`since == t`) is, so an Event of the very tick of a
+    move reads the new place; the tick is the grain, and the edge carries no finer order. LAST WRITE WINS where a
+    person has two edges live at `t`, as `home_map` does.
+
+    NOT PLACED, AND SAID SO: a person the world no longer holds has no edges (a Tenure is owned by its subject and
+    leaves the store with him), so he is placed only by `World.departed_from` at his own tick, exactly as
+    `event_place` does; an Event whose actor is not a person (a rung, a site, a record) is placed by `event_place`,
+    which is not time-indexed for them. `None` is the answer to both of the rest."""
+    a = causing_act(w, e)
+    who = a.actor if a is not None else anchor_of(w, e)
+    if who not in w.persons:
+        return event_place(w, e)
+    at = None
+    for t in edges_of(w, "contain", who):
+        if t.since <= e.emitted_at and (t.until is None or e.emitted_at < t.until):
+            at = t.object
+    return at
 
 
 # ⚠ v9 SE-01 (`24g`), P1's OTHER HALF -- THE PERSON-KEYED CROSSING REPAIR IS THE PERSON LIMB ABOVE,

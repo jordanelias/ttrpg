@@ -72,3 +72,44 @@ def test_scene_budget_zero_refuses_at_construction():
         w.fixtures = w.fixtures.sweep("scene_budget", bad)
         with expect_refusal(), pytest.raises(Forbidden, match="scene_budget"):
             SeasonDriver(w)
+
+
+def test_event_place_at_answers_the_place_at_emission():
+    """§B row 17: `event_place_at(w, e)` answers the rung of the actor's `contain` edge live at `e.emitted_at`, so an
+    Event's place is recoverable after the actor has moved (`event_place` answers where the actor stands NOW, which is
+    WITNESS's read at the Event's own tick and stays).
+
+    Realm, seed 0, two seasons: the season-0 act Events are placed by `event_place` at the close of season 0 (that is
+    the place at emission, the world has not moved since); after season 1, those whose `event_place` differs must be
+    answered by `event_place_at` with the season-0 place.
+
+    FALSIFIER: any such Event answers the later place (or none). The count of Events checked is asserted and printed,
+    so a world in which nobody moved cannot pass."""
+    from engine.season.harness import probes as P
+    from engine.season.loop.driver import resolvable_verbs
+    from engine.season.queries import world_q
+
+    w = build_realm(0)
+    d = SeasonDriver(w)
+    ch = P.chooser(w, verbs=resolvable_verbs())
+
+    def one_season():
+        d.season(ch, question=None, contest_max_depth=w.fixtures.get("contest_max_depth"))
+
+    one_season()
+    at_emission = {e.id: world_q.event_place(w, e) for e in w.log
+                   if world_q.causing_act(w, e) is not None and e.emitted_at == 0}
+    assert at_emission, "season 0 emitted no act Event"
+    one_season()
+    moved = [e for e in w.log if e.id in at_emission and world_q.event_place(w, e) != at_emission[e.id]]
+    checked, wrong = 0, []
+    for e in moved:
+        if at_emission[e.id] is None:
+            continue                       # no place at emission: nothing to recover
+        checked += 1
+        if world_q.event_place_at(w, e) != at_emission[e.id]:
+            wrong.append((e.id, e.kind, at_emission[e.id], world_q.event_place_at(w, e)))
+    print(f"event_place_at: {checked} season-0 act Events whose event_place differs a season later "
+          f"({len(moved)} differ in all, {len(at_emission)} act Events in season 0)")
+    assert checked >= 1, "no season-0 act Event moved: the test observed nothing"
+    assert not wrong, f"event_place_at answered a later place for {len(wrong)} Events: {wrong[:5]}"
