@@ -97,6 +97,18 @@ def test_the_loader_over_the_json_equals_the_loader_over_the_yaml():
     assert checked == len(art['files'])
 
 
+def test_sources_names_every_registry_a_data_loader_reads():
+    """`SOURCES` is a hand list; a loader under `engine/season/data/` that reads a further `files.*_YAML`
+    would leave it out of the artifact the port reads. The set the loaders read is derived from their text."""
+    import re
+    read = set()
+    for f in sorted((Path(ROOT) / 'engine' / 'season' / 'data').glob('*.py')):
+        if f.name != 'files.py':
+            read |= set(re.findall(r'\b([A-Z][A-Z_]*_YAML)\.read_text', f.read_text(encoding='utf-8')))
+    assert len(read) >= 7, f'only {len(read)} registry read(s) found: the derivation went blind'
+    assert read == set(esr.SOURCES), (sorted(read - set(esr.SOURCES)), sorted(set(esr.SOURCES) - read))
+
+
 def test_a_value_json_would_coerce_is_refused_naming_the_file(tmp_path):
     # a date key and an integer key are what an author adding a YAML entry could write by accident
     for body, what in (("verbs:\n  - verb: x\n    2026-01-01: y\n", 'a date key'),
