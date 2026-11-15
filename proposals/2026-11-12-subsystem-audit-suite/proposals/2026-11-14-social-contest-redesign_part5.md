@@ -9,13 +9,15 @@
 Paths: `wp` is `proposals/2026-11-12-subsystem-audit-suite/master/workplan_v12/workplan_v12_`; line numbers are those read
 on 2026-11-14 at `1257a4a` and are a guide: every edit is located by its quoted text or its handle. An action is one of
 ADD (new text), EDIT (the quoted text changed or extended), REPLACE (an item's step or body), DELETE, RENAME (scripted),
-NONE (already true in the tree). The plan is edited; no code is.
+NONE (already true in the tree). The plan is edited; no code is. ⚠ As applied, the batch landed in
+`workplans/valoria_master_workplan_v12_part22_b24p.md` and `_part22_b24p_cont.md` at wave W10, step S12 (that file's
+batch line), not in a `part18_cont2.md` at W12 as F.1 and F.2 below first planned; the plan's placement governs.
 
 ### F.1 The new batch, and its place in the graph
 
 | what | action | where | text |
 |---|---|---|---|
-| the batch's part | ADD a file | `wp` + `part18_cont2.md` (after BA1's `part18_cont.md`, before B12a's `part19.md`: reading order is execution order) | a head in the form of `wp part22.md:1-11` (title "part 18, continued again: Batch B24p-sc-proceeding"; Status PROPOSED; "Written against" the tree at `1257a4a`; "What this part holds"; "Words"; "Paths", with **RD** = `proposals/2026-11-14-social-contest-redesign.md` and its parts); then, copied whole: part 3 of this proposal from the line `## Batch B24p-sc-proceeding` to its end, and part 4 from `### B24p.13` to the row `STOP. Batch B24p-sc-proceeding closes here` |
+| the batch's part | ADD a file | landed as `workplans/valoria_master_workplan_v12_part22_b24p.md` and `_cont.md` (first planned as `wp` + `part18_cont2.md`, after BA1's `part18_cont.md`) | a head in the form of `wp part22.md:1-11` (title "part 18, continued again: Batch B24p-sc-proceeding"; Status PROPOSED; "Written against" the tree at `1257a4a`; "What this part holds"; "Words"; "Paths", with **RD** = `proposals/2026-11-14-social-contest-redesign.md` and its parts); then, copied whole: part 3 of this proposal from the line `## Batch B24p-sc-proceeding` to its end, and part 4 from `### B24p.13` to the row `STOP. Batch B24p-sc-proceeding closes here` |
 | why S12 | — | — | it needs the drawn attributes (B01a, landed), the skill surface and `pool_of` (B04), the one continuous sampler, the obstacle roster and the signed channel (B05), the keyed `Draw` (B06) and the rooms an act is heard by (B07). Those close at S9. B09 runs alone at S10 and B10 follows it; S12 is the first step with parallel lanes, and B24 (S13) is the first batch that needs it. It comes before every batch that sets a social setting: B24.37, B24a, B27, B28, B98 |
 | why before B24 | — | — | B24 builds the hearing as a sitting of exchanges. Under R6 that run is the proceeding's, so it is built once, here, with the six roles in it, and B24 adds the evidence board, the issue ladder, the faults, the ballots' leans and the played decider to the same entry. Building B24 first would write a second loop and then rewrite it |
 | the calibration batches | — | — | B05.22 and B05.23 calibrate the single roll at S7, before this batch can exist. They stand for the single-roll verbs and for the dials the fight shares (`pool_add`, `pool_floor`, `opposition_rate`, `difficulty_ob`); for the influence verbs they are PROVISIONAL and B24p.23 re-reads them (F.3). Moving them here would strand B05's second half, which gates on B05.23 (wp `part8.md:53`) |
@@ -27,7 +29,7 @@ NONE (already true in the tree). The plan is edited; no code is.
 | `wp` + `.md`, the id-block table (the row `B24-sc-hearing \| SC \| ED-SC-0045..0047`, `:413`) | ADD a row after B24a's | `\| B24p-sc-proceeding \| SC \| ED-SC-0054..0056 (1+2) \| H-856..H-909 (49+5) \|` `[ASSUMPTION: the table's last allocated ids are ED-SC-0053 and H-855 — basis: its B28 and B99 rows; the applier reads the table's last row and the "next_free after B00" sentence and continues from them]` |
 | the same file, the sentence *"`next_free` after B00, as this table leaves it"* | EDIT | `SC 54` → `SC 57`; `H-855` → `H-909` |
 | the same file, the parts table (the row `B24-sc-hearing \| workplan_v12_part22.md`, `:491`) | ADD a row before B12a's | `\| B24p-sc-proceeding \| workplan_v12_part18_cont2.md \|` |
-| `wp` + `part2.md`, the batch table (the row `B24-sc-hearing \| SC \| W13 \| S13`, `:130`) | ADD a row before it | `\| B24p-sc-proceeding \| SC \| W12 \| S12 \| 0 \| 18_cont2 \| 24 (B22 R1 +.99) \| MOVER (behaviour 4) \| 14 \| B00, B01, B01a, B02, B03, B04, B05, B06, B07 \|` |
+| `wp` + `part2.md`, the batch table (the row `B24-sc-hearing \| SC \| W13 \| S13`, `:130`) | ADD a row before it | `\| B24p-sc-proceeding \| SC \| W10 \| S12 \| 0 \| 22_b24p \| 24 (B22 R1 +.99) \| MOVER (behaviour 4) \| 14 \| B00, B01, B01a, B02, B03, B04, B05, B06, B07 \|` |
 | the same table, B24's row | EDIT | its gates cell gains `, B24p` |
 | `wp` + `part2.md`, the step table (`\| S12 \| BA1 (IN), B11 (FI), B15 (PC), B21 (FA) \|`, `:74`) | EDIT | `\| S12 \| B24p (SC), BA1 (IN), B11 (FI), B15 (PC), B21 (FA) \|` |
 | the same file, the merge-order rows for S12 (`:253-256`) | ADD a row first; EDIT the four | `\| S12 \| B24p \| 15, 19, 20, 23 \| — \| — \| B24p.99 \| 1 of 5 movers \|`; `1 of 4` → `2 of 5`, `2 of 4` → `3 of 5`, `3 of 4` → `4 of 5`, `4 of 4` → `5 of 5` |
@@ -122,7 +124,7 @@ B98's batch block gains `GATE: Batch B24p-sc-proceeding`. Three positions are ad
 
 | setting | set by | target reading |
 |---|---|---|
-| the forty-six settings of RD §B that B24p.23 sets | B24p.23; **re-read by B98** on the finished realm with `pairs proceeding`, each against its three-point sweep | the BATCH GATE's role readings of B24p (each of the six keys a SLOPE off 0 in at least one type; no DOMINANT above 0.90) |
+| the fifty-three settings of RD §B (with §A.5's close settings and §B.9's four, R12) that B24p.04 seats and B24p.23 sets, less the three named below | B24p.23; **re-read by B98** on the finished realm with `pairs proceeding`, each against its three-point sweep | the BATCH GATE's role readings of B24p (each of the six keys a SLOPE off 0 in at least one type; the decider's Reason, Focus and Attunement likewise, R12; no DOMINANT above 0.90) |
 | `reading_kept` | B98 (flip to on) | B24p.22's falsifier: a kept reading is right more often at Attunement 6 than at 2 and never certain; the ledger's growth per season quoted |
 | `presumption_level`, `strike_level` | no batch | none stated: B98 writes each `BLOCKED (design: no target reading)` unless Jordan gives one |
 
@@ -132,13 +134,13 @@ B98's batch block gains `GATE: Batch B24p-sc-proceeding`. Three positions are ad
 - **Re-pin**: once, at B24p.99 (Jordan, R10: *"we can re-pin after it's been built"*). B24's re-pin at B24.99 is then read against B24p's after-reading through the S12 merges.
 - **Ids**: ED-SC 1 (B24p.16); H 49 as drafted, H 50 after R11 (B24p.04's `speech_blend` pointer row; the plan's block, `wp part22_b24p.md` `IDS:`, is the owner). B24 returns three H slots (B24.07's `argument_step`, B24.29's two).
 
-### F.6 The twenty-two contradictions (COL §8): which side wins
+### F.6 The twenty-two contradictions (COL §8), and those found later (rows 23 on): which side wins
 
 | # | the thing | wins | why |
 |---|---|---|---|
 | 1 | is reading the room an attribute | R1: Attunement reads it | the latest ruling; PROC's four things read are kept as what the reading returns (RD §B.3) |
 | 2 | Attunement's place in `argue` | ED-IN-0350 and R1: it informs the choice | the 2026-11-13 averaged cell (B05.25) is the interim; R1 restates the choice-side sense |
-| 3 | which attribute is primary | none is | R1 gives each attribute its own operand; the audience's `proof_weight` changes how much case and manner count (N3). v30's per-adjudicator primary and B05.25's mean are both replaced |
+| 3 | which attribute is primary | none is, for the speaker; but the dice are a blend of Reason and Presence (R11) | R1 gives each attribute its own operand; R11 (2026-11-14) puts Reason and Presence together in the dice, weighed by content class and venue (RD §B.2 a), so no single attribute is primary but two share the pool; the audience's `proof_weight` changes how much case and manner count (N3), and each decider shifts it by his own Reason (R12, RD §B.9). v30's per-adjudicator primary and B05.25's mean are both replaced |
 | 4 | who speaks first | the row's `order`; `for` opens under `alternating` | v12 already takes `order` (B24.06); the opener is `[ASSUMPTION]` |
 | 5 | where composure lives | Grace (the cost of a mark) and Will (whether one is taken) | R1; v2's and v30's Charisma buffer and P4's Spirit-and-Focus faculty are replaced |
 | 6 | genre: chosen, derived, refused or priced | priced, never refused (R-16) | a ground is chosen and priced by its fit and, from B24.35, its backing; no genre key is read |
@@ -158,6 +160,19 @@ B98's batch block gains `GATE: Batch B24p-sc-proceeding`. Three positions are ad
 | 20 | does a detailed denial help | open | Jordan's (D-7); nothing here depends on it |
 | 21 | Face and standing | S-7: never stored | esteem lives in one sitting; what persists is read from Events |
 | 22 | a panel's default size | none | dies with the kernel; a bench is `judging_set` |
+| 23 | may the proceedings build refer to prior social-contest work | yes: Jordan's R10 (A-126, 2026-11-14, *"you may find fragments of this in proposals or .designs or .audits"*) | supersedes the standing order once in `registers/handoffs/HANDOFF_SC.md` (the scope ban of `proposals/2026-09-05-proceedings-subsystem/README.md`, which still records that exercise); the order is deleted from the handoff |
+| 24 | does a matter's position persist between sittings | yes, as the case file's own `Record.stages` only (RD §A.2) | the later design governs (rung 1) over `00_DERIVATION.md` §B.2 and `10_LOOPS_AND_GAPS.md` P-22 (*"a matter's ladder position does not persist between seasons"*, itself left to play); no stored standing number on a person, no rung in the Event kind (S-7 and `21_RECONCILIATION.md`'s refusal kept) |
+| 25 | one scalar both measuring and deciding (`AX-3`) | one `track`, never the verdict (RD §A.5) | `AX-3`'s prohibition is superseded only as far as a track that is not itself the verdict: each ballot is the decider's own draw; true versus right is kept apart only by the live rung of B24.03's issue ladder, not by two tracks |
+| 26 | a turn limit or round cap (`21_RECONCILIATION.md` Part E) | per-type `exchanges` and the `budget` end | R6 (2026-11-14), the later ruling (RD §A.5) |
+| 27 | is a reading an act (`AX-2`; the proceedings study's capacity 3, elicitation) | R1: a free reading each exchange | R1 (2026-11-14, *"reading the room"*) is the later ruling; RD §B.3 says plainly the free reading departs from the study's one positive result |
+| 28 | the strain and Rattled algebra (the three-lens synthesis's cut #1, `.audit/2026-08-06-social-contest-three-lens-audit/00_synthesis.md`, 2026-08) | R1: Will's steadiness draw and Grace's cover (RD §B.5, §B.6) | the later ruling |
+| 29 | genre as a priced axis (the 2026-09-06 ruling) | ground, priced by fit (RD §B.3) | the later design: genre as an axis is superseded by ground; *"priced, never refused"* (R-16) is kept |
+| 30 | dyadic and public persuasion as two mechanics (`research/rhetoric_oratory_contest/rhetoric_oratory_contest_research.md` §9.4, §12.2) | one entry, many type rows | R6, the later ruling |
+| 31 | a petition's two closers (ED-IN-0210 Ruling 2: withdrawn by the petitioner, denied by the receiver) | STANDS | no later ruling contradicts it; `petition` stays a brute filing function in this batch (RD §D.1); the withdraw and the deny have no owning item in workplan v12 |
+| 32 | does the contest own its game state (`ED-IN-0285` statement 13, 2026-10-03, as `audits/05_SC_audit_addendum_B.md` C-1 reads it) | met: the sitting's state is its own, inside one call; nothing persists in the module | R6 and `04` §A.2 (later, and Layer 1) govern the persistence reading (RD §A.2) |
+| 33 | v30's asymmetric proceedings (`:398-402`: halved resistance for the accused, no CROSS strain for the advantaged) | replaced by the rite's move set and `presumes` | the later design (RD §A.5 `scripted`, §C.4); the accused loses the halved resistance; no pro-accused term added (rung 5) |
+| 34 | the price of a concession (v30 *Concede a Point* `:238`, one strain and +1D; N8 *always priced*) | the track step only, no standing cost | a departure, recorded at RD §C.4; rung 5, the architecture |
+| 35 | which attributes a decider judges with (K/'s per-adjudicator primary attribute; a seat judging on `faculty`, so with the verb's attribute) | R12 (A-128, 2026-11-15): Reason, Focus, Attunement, each on one operand of his own ballot; the pool is `pool.judging` | Jordan's decision, the latest ruling (RD §B.9) |
 
 ### F.7 The questions that survive the ladder, with the plan's default meanwhile
 
@@ -169,7 +184,7 @@ the venue's `reason_bias` (RD §B.2 a), and ED-IN-0350's letter is superseded by
 | # | question | option A (the default this proposal builds) | option B | what differs in play |
 |---|---|---|---|---|
 | J-SC-1 (**ANSWERED, R11**: a blend, RD §B.2 a) | **What are the dice of an argument?** ED-IN-0350 (ratified 2026-11-05) says `argue`'s pool attribute is Presence; R1 (2026-11-14) says Reason *constructs* the argument and charisma is *delivery*. | Reason is the dice; Presence is the share heard and the leverage of delivery, and is the larger slope in an open room (RD §B.2, §B.4) | Presence is the dice; Reason is leverage (proofs and the account of the other side) | under A a bench is won by the better case and a crowd by the better speaker; under B the better speaker has the wider swing everywhere and a learned, graceless speaker has no home ground. One cell decides it: which attribute `_speech_input` passes to `pool_of` |
-| J-SC-2 | **Does the wrong kind of argument cost, or only fail to help?** v30's armature (ratified at Gate C, ED-1062) says a misaligned style *"simply forgoes the boost"*. | the target's worst ground costs (`misfit_level` `moderate`): reading people matters because misreading them hurts (RD §B.3) | never a penalty (`misfit_level` `None`) | under A Attunement's slope is about twice what it is under B in the scratch probe, and a bold speaker who cannot read a room loses rooms; under B the worst a poor reader does is argue plainly |
+| J-SC-2 | **Does the wrong kind of argument cost, or only fail to help?** v30's armature (ratified at Gate C, ED-1062) says a misaligned style *"simply forgoes the boost"*. | the target's worst ground costs (`misfit_level` `moderate`): reading people matters because misreading them hurts (RD §B.3) | never a penalty (`misfit_level` `None`) | under A Attunement's slope is about twice what it is under B in the scratch probe (a figure taken before R11 made the dice a blend: B24p.23 re-reads it), and a bold speaker who cannot read a room loses rooms; under B the worst a poor reader does is argue plainly |
 
 Everything else the sources left open was closed by the ladder and is marked where it is decided: the Will and Grace
 split (RD §B.5), the commanding verbs (RD §D.1), `determine`'s roll (RD §D.2), consent under `mutual` (RD §A.5), the
@@ -214,4 +229,7 @@ the new cells of RD §C.3, the audience table, and every shipped setting.
 12. **The primitives not used.** Of P1 to P45 the design cites P1, P5, P9, P11, P17 and, through M3, the evidence family;
     the procedure, selection and enforcement families (P12 to P38) are the institutions batches' (B32, B33, B40). Of N1 to
     N20 it cites N1, N3, N4, N5, N8, N9, N11, N12, N17, N20; N2 (the story model), N10, N13 to N16, N18 and N19 are not
-    mechanised here, for the reasons in items 2, 3 and 5 or because the 2026-08-06 adjudication rejected them as specified.
+    mechanised here, for the reasons in items 2, 3 and 5. The 2026-08-06 adjudication did not reject them: it ranked N19
+    #3 and earmarked N13 (`.audit/2026-08-06-social-contest-three-lens-audit/03_persuasion_documents_adjudication.md:155`,
+    `:159`), and N3's durability half is its short-list #4 (`:156`); leaving them out is this design's choice, not that
+    adjudication's.
