@@ -297,7 +297,7 @@ ci_checks:
     level: 5
     subject: compliance
     posture: harden
-    role: "Oracle -> Godot-facing constants round-trip: engine/engine_params/game_constants.json must match the values sim_params.json and combat_engine_v1.json already export from their Python owners (--check mode). It is the WRITER half of the ttrpg -> jordanelias/valoria-game constants bridge; the reader half is that repo's tools/check_constants_parity.py."
+    role: "Oracle -> Godot-facing constants round-trip: engine/engine_params/game_constants.json must match the values sim_params.json and combat_engine_v1.json already export from their Python owners, plus engine_series from references/engine_series.yaml (--check mode). It is the WRITER half of the ttrpg -> jordanelias/valoria-game constants bridge; the reader half is that repo's tools/check_constants_parity.py."
     ci_job: validators
     notes: "BLOCKING (deterministic, composes on two already-gated exports, no external pins). PAIRS ARE HAND-CONFIRMED, NEVER NAME-MATCHED. The tool's COLLISIONS block records the look-alikes so they are not re-derived; DIVERGENCES records real model disagreements that need a ruling, not a value copy, and that list can only shrink."
 
@@ -337,7 +337,7 @@ ci_checks:
     level: 5
     subject: game
     posture: harden
-    role: "Registries -> typed-JSON: engine/engine_params/season_registries.json must equal every season registry engine/season/data/files.py names that a loader parses, read with the loader's own parser (--check mode). The port reads the season's data from it, never from the YAML."
+    role: "Registries -> typed-JSON: engine/engine_params/season_registries.json must equal every registry a loader under engine/season/data/ passes to load_yaml (the tool's SOURCES: eight files named by engine/season/data/files.py), read with the loader's own parser (--check mode). The port reads those registries from it. cohorts, governance_spine, endings and venues/npcs, which harness code parses, are not carried."
     ci_job: ""
     notes: "WIRED locally (valoria_local.py --staged, blocking) and by tests/valoria/test_export_season_registries.py in the suite; the CI workflow line is Jordan's file (.github/CODEOWNERS owns /.github/workflows/): add `v python3 tools/export_season_registries.py --check` beside export_composition there. A batch that edits a registry this artifact copies re-runs --build in the same commit."
 

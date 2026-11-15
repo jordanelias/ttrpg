@@ -61,7 +61,7 @@ def test_a_deleted_key_reds_the_check(tmp_path):
     assert esr.main(['--check'], out=str(mutated)) == 1
     # the control: the same logic over the untouched artifact is green, so the red was the deletion
     intact = tmp_path / 'intact.json'
-    intact.write_text(Path(esr.OUT).read_text(encoding='utf-8'), encoding='utf-8')
+    intact.write_text(json.dumps(_artifact(), indent=2, sort_keys=False) + '\n', encoding='utf-8')
     assert esr.main(['--check'], out=str(intact)) == 0
 
 
@@ -77,6 +77,7 @@ def test_a_registry_row_added_without_a_reexport_reds_the_check(tmp_path):
     grown['verbs'].append(row)
     copy_path = tmp_path / 'verb_table.yaml'
     copy_path.write_text(yaml.safe_dump(grown, sort_keys=False), encoding='utf-8')
+    assert load_yaml(copy_path.read_text(encoding='utf-8')) == grown, 'the dump lost more than the appended row'
     assert load_yaml(copy_path.read_text(encoding='utf-8')) != doc, 'the appended row changed nothing: blind'
     assert esr.main(['--check'], overrides={VERB_TABLE: copy_path}) == 1
     # the control: the tool pointed at an unmodified copy of the same file is green
@@ -94,3 +95,17 @@ def test_the_loader_over_the_json_equals_the_loader_over_the_yaml():
         checked += 1
     assert checked >= 7, f'only {checked} file(s) compared: the control asserted too little'
     assert checked == len(art['files'])
+
+
+def test_a_value_json_would_coerce_is_refused_naming_the_file(tmp_path):
+    # a date key and an integer key are what an author adding a YAML entry could write by accident
+    for body, what in (("verbs:\n  - verb: x\n    2026-01-01: y\n", 'a date key'),
+                       ("verbs:\n  - verb: x\n    1: y\n", 'an integer key')):
+        bad = tmp_path / 'verb_table.yaml'
+        bad.write_text(body, encoding='utf-8')
+        try:
+            esr.build(overrides={VERB_TABLE: bad})
+        except ValueError as exc:
+            assert VERB_TABLE in str(exc), f'{what}: refused, but not naming the file'
+        else:
+            raise AssertionError(f'{what} was exported instead of refused')

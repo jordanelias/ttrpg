@@ -563,6 +563,8 @@ def _composition_module_file_problems(data):
     if not block:
         return ['composition.json has no `module_files` block'], 0
     problems, checked = [], 0
+    if list(block) != sorted(set(block)):
+        problems.append('module_files is not sorted and de-duplicated')
     for rel in block:
         checked += 1
         path = REPO / rel

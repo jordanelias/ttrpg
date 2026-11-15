@@ -134,7 +134,7 @@ modules:
     sim_module: none
     resolver: deterministic_accounting   # read by structure_audit.is_notional: dropping it would flip this row to notional
     wiring:
-      build: deferred
+      build: design
       godot: no-oracle
       port_rank: 2
       parity: seam-io
@@ -166,7 +166,6 @@ modules:
         then: "scene.gossip emitted"
         "on": "beliefs/opinions"
         source: "doc-12 §8 / §6.3"
-    accounting_phase: [B_concern, C_project, D_opinion, E_offscreen]
     gap_notes:
       - "CONSOLIDATED 2026-06-10: absorbs former political_dynamics module — political_dynamics_keys_migration_v30 is \"Doc 12 Procedures — Key-Migration Spec (PP-687)\" i.e. THIS system's Keys migration, not a separate political-dynamics system. The v1 political_dynamics record (incl. its scene.dialogue emit, unsupported by registry) is superseded by this entry. Mechanical-tier consolidation, Jordan-vetoable."
       - "SUPERSEDED 2026-07-07 (ED-IN-0023 / C-KEY-6): the four types this note flagged as registry-absent (scene.displacement, mechanical.project_advanced, state.project_failed, state.project_completed) were registered by ED-935 (2026-06-14, key_type_registry_v30 §9). The residual gap was that npc_behavior's own consumes[] never added the corresponding edges (plus scene.thread_operation / scene.draft_da, also registry-declared to it) despite being both self-loop consumer and emitter for four — closed by this same commit's consumes[] additions above."
@@ -341,7 +340,6 @@ modules:
         then: "knot operations eligible (Memory-Query-checked prerequisite)"
         "on": "Bonds"
         source: "key_substrate_v30 §8.4"
-    accounting_phase: [settlement_accounting]
     gap_notes:
       - "v9 FI-03 (`ED-FI-0002`): the knots state and gates below describe `systems/fieldwork/sim/knots.py`, UNPLUGGED (IN-06/IN-32); the module's one entry today is `find` (`modules/fieldwork/find.py`, what a graded finding uncovers of a covert trail). IN-32 plugs `fieldwork.form_knot` under this same row."
       - "registry attributes scene.gift emission to fieldwork (gift-giving as fieldwork social action) — cross-check vs scene_slate emitting same type"
@@ -467,7 +465,7 @@ modules:
       godot: python-oracle
       port_rank: 1
       parity: seam-io
-      note: "`modules/social_contest/roll.py` (`roll`, `obstacle`) is the running entry, reached through composition role `social_contest.roll` (verb `tell`; the `a standing`, `a proposition` and `a matter` prizes). BUILD gated: it runs only when a contest over one of those prizes forms."
+      note: "`modules/social_contest/roll.py` (`roll`, `obstacle`) is the running entry, reached through composition role `social_contest.roll` (verb `tell`; the `a standing`, `a proposition` and `a matter` prizes). `obstacle` is also its own composition row (`social_contest.obstacle`, a query) and is read by the sigma wrapper's `odds_of` and `believed_chance` during deliberation, outside a formed contest. BUILD gated: `roll` runs only when a contest over one of those prizes forms."
 
   - module: mass_battle
     aliases: ["Mass Combat"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
@@ -546,8 +544,8 @@ modules:
       note: 'owns Turmoil + IP; env.* emitters + occupation ladder unbuilt. [CORRECTED 2026-08-10, ED-IN-0152:
         this note previously claimed IP is not even a clocks key -- false on both readings. engine/autoload/game_state.py:244
         (deleted at plan position `29b`; in git at `5c5d8ec6`) seeded IP: 20.0 inside the clocks mapping, and clock_registry_v30.md:18 lists Institutional Pressure
-        (IP), start 20. What IS true is that no module writes IP after world-gen -- ip_track.py''s two entry
-        points are stubs with no production caller.]'
+        (IP), start 20. What IS true is that no module writes IP after world-gen -- ip_track.py''s entry
+        points were retired at plan position `29a`.]'
 
   - module: settlement_layer
     registry_system: "settlement_layer"   # Key Type Registry vocabulary
@@ -609,7 +607,6 @@ modules:
         inputs: ["Prosperity"]
         formula: "Σ Prosperity across settlements × 10"
         source: "derived_stats §8.1 (quoted in settlement_layer §1.8)"
-    accounting_phase: [settlement_accounting]
     gap_notes:
       - "settlement_layer_v30_index.md is STALE — predates LPS-2e §1.8 (no §1.8 row); index pipeline regeneration needed [tooling defect]"
       - "Key types registered (W3, ED-IN-0096): state.settlement_revolt, mechanical.settlement_captured — emits: declaration lands with the module's build so the census never carries a declared-emit-no-consumer row; see key_type_registry entries for held consumer dispositions."
@@ -705,7 +702,6 @@ modules:
       - {name: "season counter", bucket: clock, writable: true}   # `World.tick`, written by the one `w.tick += 1` in `engine/season/loop/driver.py::SeasonDriver.season`
     transitions: []
     loops: []
-    accounting_phase: [season_tick]
     gap_notes:
       - "registry-derived; the home doc was unlocated until IN-42 set `doc:` to propagation_spec_v1.md (ED-1051); campaign_architecture_v30 was examined and is NOT it (victory-revision consolidation, no clock-spine sections)"
       - "2026-07-02: systems/_architecture/reference/propagation_spec_v1.md (ED-1093, CANONICAL per ED-1094 merge-ratifies-by-default) supplies the candidate home doc. ED-1051 ruled (ED-IN-0125 section 4 C3) and APPLIED at IN-42 (B-C, 2026-10-08): `doc:` now points at it."
@@ -819,7 +815,6 @@ modules:
       - {via: "scale_transitions §3.4 Domain Echo (scene.combat_resolved -> faction/NPC) / §12.3 down-up targeting"}
     loops:
       - {open: true}   # bounded self-loop: Strike emits scene.combat_hit, Wound consumes it; terminates at felling / Health depletion
-    accounting_phase: [emission_processing]
     modules:   # the EngineModules the CombatEngine hosts (the canonical 11-action set)
       - {id: "combat.strike",  resolver: d_sigma,      status: PENDING, in: ["scene.combat_strike"], out: ["scene.combat_hit"]}
       - {id: "combat.wound",   resolver: state_reader, status: PENDING, in: ["scene.combat_hit"], out: ["scene.combat_felled"]}
@@ -889,8 +884,9 @@ wiring_vocabularies:
   #   seam-io    — the module is pinned at its entry: a typed input record against its typed outcome,
   #                the way a drawn role (`combat.fight`, `mass_battle.resolve_field`,
   #                `social_contest.roll`, `fieldwork.find`) is pinned at its entry.
-  # For a row with no code the value follows its `state:` block: a writable entry -> `state-hash`,
-  # none -> `seam-io`.
+  # For a row the loop does not run (no code, or `build: unwired`) the value is prospective and follows
+  # its `state:` block: a writable entry -> `state-hash`, none -> `seam-io`. `n/a`, `state read` and
+  # `data` stand as the rows carry them.
 
 # The one proof-of-concept the whole strategy leans on.
 golden_path:
