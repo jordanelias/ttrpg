@@ -20,6 +20,5 @@ Narrative: `registers/handoffs/HANDOFF_SC_history.md`; finished work: `HANDOFF_S
 
 | order | source |
 |---|---|
-| Proceedings subsystem build must not refer to prior social-contest work (`systems/social_contest/`, the 2026-09-04 branches proposal) | scope ban recorded at `proposals/2026-09-05-proceedings-subsystem/README.md` |
 | Do not read `contest_legacy_stub.py` / the retired kernel as live until the retirement wave actually runs | `ED-SC-0033` clause 2 (ruled, unexecuted) |
 | A port/oracle disagreement is fixed via the ledger + re-export, never a hand-edit into `.gd` | `CLAUDE.md` §6 (ED-1050) |
