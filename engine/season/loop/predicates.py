@@ -384,10 +384,11 @@ def _req_establish(w: "World", a: "Act") -> bool:
         # the constructor refused it: translated, never filled
         return _refuse("an establish the office's constructor refused", f"{a.actor} via {a.via!r}")
     if off is None:
-        if office_described_by(a) is not None:
+        described = office_described_by(a)
+        if described is not None:
             # H-291: an overlay act whose seat does not found over the described rung (clause 1's own refusal)
             return _refuse("an establish over a rung the seat exercised does not found over",
-                           f"{a.actor} via {a.via!r} at {office_described_by(a).rung!r}")
+                           f"{a.actor} via {a.via!r} at {described.rung!r}")
         return _refuse("an establish lacking an operand the office needs", f"{a.actor} via {a.via!r}")
     if off.rung not in w.rungs:
         # "a rung to establish it at"

@@ -919,11 +919,16 @@ class PersonInterior:
     weight: int = 1       # S9: a cohort is a Person at weight > 1; a chooser's callback may ask (harness/probes.py P21)
 
 
+def frozen(d) -> Mapping:
+    """A read-only copy of a mapping (`None` reads as empty): what a handed-down record holds in place of the store's dict."""
+    return MappingProxyType(dict(d or {}))
+
+
 def interior_of(p: Person) -> PersonInterior:
     """THE ONE BUILDER of a `PersonInterior`: copy the fields `decision/` reads out of `p`, mappings read-only."""
-    ro = lambda d: MappingProxyType(dict(d or {}))
     return PersonInterior(
-        p.id, p.name, ro(p.capability), ro(p.pursuits), ro(p.conviction), ro(p.scar), ro(p.attributes),
+        p.id, p.name, frozen(p.capability), frozen(p.pursuits), frozen(p.conviction), frozen(p.scar),
+        frozen(p.attributes),
         p.body, p.thread_sensitivity, tuple(p.stance), tuple(p.travel_leg), tuple(p.tenures), tuple(p.ledger),
         p.weight)
 

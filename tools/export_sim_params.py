@@ -243,10 +243,7 @@ def _scan_settings(path=None) -> tuple[list, int]:
             call = node.value
     if call is None:
         raise ValueError(f"{path}: no module-scope `DEFAULT_FIXTURES = Fixtures(...)` call to read")
-    try:
-        rel = path.relative_to(ROOT).as_posix()
-    except ValueError:
-        rel = path.as_posix()
+    rel = _rel(path)
     rows, skipped = [], 0
     for kw in call.keywords:
         val = _literal(kw.value) if kw.arg else None
@@ -257,6 +254,14 @@ def _scan_settings(path=None) -> tuple[list, int]:
     if not rows:
         raise ValueError(f"{path}: `DEFAULT_FIXTURES` yielded no literal setting")
     return rows, skipped
+
+
+def _rel(path: Path) -> str:
+    """`path` as the artifact records it: repo-relative with "/", else as given (a test's tmp file)."""
+    try:
+        return path.relative_to(ROOT).as_posix()
+    except ValueError:
+        return path.as_posix()
 
 
 def _param_row(module: str, name: str, val, rel: str, note: str) -> dict:
@@ -299,10 +304,7 @@ def _scan_realm_arms(path=None) -> tuple[list, int]:
             fn = node
     if fn is None:
         raise ValueError(f"{path}: no module-scope `def build_realm` to read")
-    try:
-        rel = path.relative_to(ROOT).as_posix()
-    except ValueError:
-        rel = path.as_posix()
+    rel = _rel(path)
     a = fn.args
     positional = a.posonlyargs + a.args
     pairs = list(zip(positional[len(positional) - len(a.defaults):], a.defaults))
@@ -344,25 +346,8 @@ def build() -> dict:
             val = _literal(node.value)
             if val is None or not _is_numericish(val):
                 continue
-            records.append({
-                "key": f"{module}.{tgt.id}",
-                "name": tgt.id,
-                "value": _jsonsafe(val),
-                "kind": _kind(val),
-                "module": module,
-                "file": rel,   # line number deliberately NOT stored — it churns on unrelated edits;
-                "note": _comment(src_lines, node.lineno),
-                # PROVENANCE AS A TYPED FIELD, not prose (ED-IN-0123). It used to live only inside
-                # `note`, the raw trailing comment, so "which values are backed by canon?" was a
-                # regex over free text rather than a query. MEASURED at the time: 68 of 324 records
-                # carried a [canonical: …]/PP-/ED- marker in `note` and 0 had a typed field — so
-                # the fork plan's "0 of 324 carry provenance" was true of the FIELD and wrong about
-                # the corpus; the work is promoting 68 out of prose, not authoring 324 from scratch.
-                # Parsed here rather than by every consumer: one owner, and `citation: null` is now
-                # a queryable gap instead of an absence someone has to notice.
-                "citation": _citation(_comment(src_lines, node.lineno)),
-                "citation_grade": _citation_grade(_citation(_comment(src_lines, node.lineno))),
-            })
+            # `_param_row` types provenance as a field (`citation`, `citation_grade`), not prose (ED-IN-0123).
+            records.append(_param_row(module, tgt.id, val, rel, _comment(src_lines, node.lineno)))
     records.sort(key=lambda r: (r["file"], r["name"]))
     records.extend(_setting_rows())   # B03.14: appended after the sort, in source order
     records.extend(_realm_arm_records())   # B03.15: then the realm's arms, in signature order

@@ -23,17 +23,7 @@ from engine.season.state.containment import edges_of
 from engine.season.state.gate import Change, Subject
 
 from .test_g4_no_op_receipt import _driver, _plant
-
-
-def _run(w, aid):
-    return _driver(w).resolve(mint_token(w, WriteClass.ACTS),
-                              [Act(id=aid, actor="p_low", verb="utter")])
-
-
-def _grain(w):
-    """An unrelated `Change` that does move its subject (rung `Hh`'s grain 8 -> 9)."""
-    return Change((Subject.entity("rungs", "Hh"),),
-                  lambda: w.rungs["Hh"].stores.__setitem__("grain", 9))
+from .test_tenure_gate_effect_body import _grain, _run
 
 
 def test_an_effect_that_eagerly_mutates_an_unrelated_entity_field_is_refused(monkeypatch):

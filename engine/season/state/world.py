@@ -366,7 +366,7 @@ def _entity_values(item: Any) -> dict:
     names = _FIELD_NAMES.get(cls)
     if names is None:
         names = _FIELD_NAMES[cls] = (tuple(sorted(item._DECLARED)) if isinstance(item, Rung)
-                                     else tuple(f.name for f in _dc_fields(item)))
+                                     else tuple(n for n, _ in _object_head(cls)[1]))
     return {n: getattr(item, n) for n in names}
 
 
@@ -851,14 +851,12 @@ class World:
         eager = self._tenure_changes(snap)
         if eager:
             self._restore_tenures(eager)
-        if moved:
+        if moved or eager:
             raise not_yours(eager, actor, via, record_kind, fieldname,
-                            why="moved an entity field in the effect's own body, before it "
-                                "returned its Change (H-137)")
-        if eager:
-            raise not_yours(eager, actor, via, record_kind, fieldname,
-                            why="moved Tenures in the effect's own body, before it returned its "
-                                "Change (CR-06, H-137)")
+                            why=("moved an entity field in the effect's own body, before it "
+                                 "returned its Change (H-137)") if moved else
+                                ("moved Tenures in the effect's own body, before it returned its "
+                                 "Change (CR-06, H-137)"))
         return out
 
     # -- G4: WHAT A SUBJECT READS, BEFORE AND AFTER A WRITE ------------------------------------

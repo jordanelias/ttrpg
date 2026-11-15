@@ -105,7 +105,7 @@ def test_the_wrapper_leaves_the_content_hash_where_it_was(monkeypatch):
 
 
 # ======================================================================================
-# 3 -- LOADER INVARIANT 7: THE EVENT-KIND ROSTER IS DERIVED, THE FOLD'S THREE LITERALS ARE COLUMNS
+# 3 -- LOADER INVARIANT 7: THE EVENT-KIND ROSTER IS DERIVED, THE FOLD'S KIND LITERALS ARE COLUMNS
 # ======================================================================================
 # Each test PLANTS the violation and expects a `SystemExit` naming its row. The control is the shipped
 # data, which loaded to import this file.
@@ -120,14 +120,14 @@ from ..data.verbs import EVENT_KINDS, VERB_TABLE, derive_event_kinds  # noqa: E4
 from ..loop import resolve as _resolve   # noqa: E402
 from .test_u7_remit import _plant        # noqa: E402
 
-THREE = tuple(sorted(FOLD_KINDS))      # read off the data (the name is history: it held three until B03.55); the floor below pins its size
+FOLD_KIND_KEYS = tuple(sorted(FOLD_KINDS))      # read off the data; the floor below pins its size
 
 
 def test_the_two_body_literal_kinds_are_declared_columns_and_in_the_derived_roster():
     """F.20b's kinds, as the live fold emits them (`act.ineligible` and `act.refused`; `04` names
     `contest.resolved` for a third, which the live fold never emits, and S27.4's `attempt.refused` lost its
     only emitter at B03.55)."""
-    assert len(THREE) == 2, FOLD_KINDS
+    assert len(FOLD_KIND_KEYS) == 2, FOLD_KINDS
     assert set(FOLD_KINDS.values()) == {"act.ineligible", "act.refused"}
     assert set(FOLD_KINDS.values()) <= EVENT_KINDS
     # the roster is DERIVED: every verb-row column and every matrix `emits:` is a member
@@ -142,7 +142,7 @@ def test_the_two_body_literal_kinds_are_declared_columns_and_in_the_derived_rost
     assert checked >= 20 and len(EVENT_KINDS) >= 100, (checked, len(EVENT_KINDS))
 
 
-@pytest.mark.parametrize("key", THREE)
+@pytest.mark.parametrize("key", FOLD_KIND_KEYS)
 def test_inv7_a_fold_kind_column_missing_refuses_the_load_naming_its_row(key):
     planted = {k: v for k, v in FOLD_KINDS.items() if k != key}
     with pytest.raises(SystemExit, match=rf"rosters\.yaml: `fold_kinds` misses \['{key}'\]"):
