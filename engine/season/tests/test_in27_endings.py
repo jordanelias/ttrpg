@@ -27,7 +27,7 @@ import pytest
 from engine.season.data import rosters as R
 from engine.season.data.matrix import WriteClass
 from engine.season.gaps import Unspecified
-from engine.season.harness import populated as POP
+from engine.season.boot.realm import build_realm
 from engine.season.harness import probes as P
 from engine.season.loop import driver as DRV
 from engine.season.decision import make_chooser
@@ -78,7 +78,7 @@ def test_in27_the_king_converts_and_the_realm_reaches_theocracy_by_his_act():
     """THE EXIT. The built realm's King coheres under the Crown; he releases that membership and commits
     to the Church of Solmund, two `own` acts through the real fold. The shipped `theocracy` row is then
     reached, and its antecedents are his `commit` act and the Event it emitted."""
-    w = POP.build_realm(0)
+    w = build_realm(0)
     d = SeasonDriver(w)
     off, king = _king(w)
     assert Q.faction_holding(w, king) == CROWN and CHURCH in w.propositions, "fixture"
@@ -146,7 +146,7 @@ def test_in27_peninsular_sovereignty_is_reached_by_the_last_holders_act_and_not_
     holder's (by construction) the condition fails; that holder's own `commit` to the Crown reaches the
     row, naming his act. CONTROL: the same membership planted by construction makes the condition true
     and reports nothing."""
-    w = POP.build_realm(0)
+    w = build_realm(0)
     last = _all_but_one_under_the_crown(w)
     row = _row("peninsular_sovereignty")
     assert w.rungs["terr_T16"].kind == "territory" and "terr_T16" not in _realm_territories(w), "fixture"
@@ -163,7 +163,7 @@ def test_in27_peninsular_sovereignty_is_reached_by_the_last_holders_act_and_not_
     selected = {t.object for t in Q._ending_edges(w, row) if t.kind == "hold"}
     assert "terr_T16" not in selected and selected == set(_realm_territories(w)), selected
 
-    control = POP.build_realm(0)
+    control = build_realm(0)
     last = _all_but_one_under_the_crown(control)
     control.add_tenure(Tenure("t_in27_last_crown", last, CROWN, "commit", 0))
     assert Q._ending_edges(control, row), "control: the planted condition does not hold"
@@ -174,7 +174,7 @@ def test_in27_one_faction_is_not_met_by_a_holder_who_commits_elsewhere():
     """KILLS `want = set(facs)` (A-F2 ii): with every realm territory a Crown man's but one, that last
     holder's own `commit` goes to the CHURCH. The holders now cohere under two factions, so `one_faction`
     fails and nothing is reported, though an act opened an edge the mutated condition would read."""
-    w = POP.build_realm(0)
+    w = build_realm(0)
     last = _all_but_one_under_the_crown(w)
     kinds = _fold(w, SeasonDriver(w), Act(id="in27_stray", actor=last, verb="commit",
                                           payload={"subject": CHURCH}))
@@ -187,7 +187,7 @@ def test_in27_a_king_who_commits_to_a_third_faction_is_no_theocracy():
     """KILLS deleting `set(facs) != want` (A-F2 i): the built realm's King releases the Crown and commits
     by act to a rostered faction that is neither the Crown nor the Church. He coheres under a faction,
     his act opened the edge, and `theocracy` is still not reached: his faction is not the row's."""
-    w = POP.build_realm(0)
+    w = build_realm(0)
     _, king = _king(w)
     third = next(f for f in sorted(R.FACTION_BY_PROP) if f in w.propositions and f not in (CROWN, CHURCH))
     kinds = _fold(w, SeasonDriver(w),
@@ -202,7 +202,7 @@ def test_in27_a_redundant_commit_by_act_is_not_credited():
     the condition true, nothing reported), then the King folds a `commit` to the Church he already
     coheres under. `commit` needs only the Proposition and `_eff_commit` mints a fresh edge, so the act
     executes and changes nothing the condition reads -- it must not be reported as the antecedent."""
-    w = POP.build_realm(0)
+    w = build_realm(0)
     _, king = _king(w)
     for t in _membership(w, king, CROWN):
         t.until = w.tick
@@ -227,7 +227,7 @@ def test_in27_a_condition_planted_with_no_act_is_true_and_reports_nothing(monkey
     the condition failed cannot pass for the act requirement working."""
     checked = 0
     # arm 1: the built realm, its King planted into the Church (the shipped row)
-    w = POP.build_realm(0)
+    w = build_realm(0)
     _, king = _king(w)
     for t in _membership(w, king, CROWN):
         t.until = w.tick
@@ -365,7 +365,7 @@ def test_in27_two_seasons_of_the_built_realm_run_the_step_and_report_no_ending(m
         return got
     monkeypatch.setattr(Q, "endings_reached", spy)
     assert DRV.world_q is Q, "the driver reads a different module than the one spied"
-    w = POP.build_realm(0)
+    w = build_realm(0)
     # `harness/populated.py::run`'s chooser, the one the pinned hashes are taken under.
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
@@ -387,6 +387,6 @@ def test_in27_a_selector_the_query_cannot_enumerate_is_refused_not_read_as_a_run
     from types import SimpleNamespace
     from engine.season.gaps import Forbidden
     from engine.season.queries import world_q
-    w = POP.build_realm(0, 5)
+    w = build_realm(0, 5)
     with pytest.raises(Forbidden, match="no enumerator"):
         world_q._ending_edges(w, SimpleNamespace(holds=("bogus", "x"), under=R.ENDING_ANY_ONE))

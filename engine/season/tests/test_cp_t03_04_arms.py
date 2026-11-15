@@ -35,7 +35,8 @@ from ..data.matrix import Step, WriteClass
 from ..data.rosters import FELLED, UNTOUCHED, WOUNDED
 from ..decision import options as OPT
 from ..harness import probes as P
-from ..harness.populated import build_realm, run
+from ..boot.realm import build_realm
+from ..harness.populated import run
 from ..loop import effects_combat as EC
 from ..loop.driver import SeasonDriver, mint_token
 from ..loop.effects_shared import EFFECTS

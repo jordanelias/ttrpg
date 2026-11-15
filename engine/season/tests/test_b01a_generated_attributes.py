@@ -18,8 +18,8 @@ from engine.substrate.descriptors import ATTRIBUTES
 
 from ..data import cast
 from ..gaps import Forbidden
-from ..harness import populated
-from ..harness.populated import build_realm
+from ..data.fixtures import DEFAULT_FIXTURES
+from ..boot.realm import build_realm
 from ..state.carriers import generated_attributes
 from ..state.ids import draw_factory
 
@@ -30,7 +30,7 @@ def _range_at(monkeypatch, value) -> None:
     """Sweep the setting for the life of one test, on the copy `build_realm` reads and the original."""
     from ..data.fixtures import DEFAULT_FIXTURES
     monkeypatch.setitem(DEFAULT_FIXTURES._v, "generated_attribute_range", value)
-    monkeypatch.setitem(populated.DEFAULT_FIXTURES._v, "generated_attribute_range", value)
+    monkeypatch.setitem(DEFAULT_FIXTURES._v, "generated_attribute_range", value)
 
 
 def test_every_key_is_drawn_in_the_range_one_draw_per_key():
@@ -87,7 +87,7 @@ def test_an_authored_value_overrides_its_key_only():
 def test_the_sheet_does_not_read_pool_default(monkeypatch):
     from ..data.fixtures import DEFAULT_FIXTURES
     at_2 = {pid: dict(p.attributes) for pid, p in build_realm(0).persons.items()}
-    monkeypatch.setitem(populated.DEFAULT_FIXTURES._v, "pool_default", 3)
+    monkeypatch.setitem(DEFAULT_FIXTURES._v, "pool_default", 3)
     monkeypatch.setitem(DEFAULT_FIXTURES._v, "pool_default", 3)
     at_3 = {pid: dict(p.attributes) for pid, p in build_realm(0).persons.items()}
     assert at_2 == at_3

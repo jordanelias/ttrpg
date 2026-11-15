@@ -1296,7 +1296,8 @@ def test_cr44_a_duplicate_or_unprefixed_case_id_is_recorded_not_dropped_silently
     (chain / "ARC1.yaml").write_text(
         "- id: ARC-01\n  name: first\n- id: 19\n  name: bare number\n")
     (cases / "ARC2.yaml").write_text("- id: ARC-01\n  name: second\n")
-    monkeypatch.setattr(R, "CHAIN", chain)
+    from ..boot import realm as boot_realm
+    monkeypatch.setattr(boot_realm, "CHAIN", chain)       # `load_cases` reads it where it now lives
     monkeypatch.setattr(files, "CASES_DIR", cases)
     R.CORPUS_DEFECTS.clear()
     out = R.load_cases("ARC")
@@ -2079,7 +2080,12 @@ def test_jordan_no_definition_is_hardcoded_in_a_body():
     # TRUE: it claimed this test and `test_h115` "both key on this" while this test keyed on one
     # hardcoded path. A false claim of enforcement is worse than none, because it stops the next
     # reader checking -- which is exactly what it did.
-    MODEL = frozenset(_model_modules())
+    # `boot/` IS GAME CODE (A-102) AND `_model_modules()` NOW REACHES IT, but it is read by this scan under the CORPUS
+    # rule, not the model's: `04` §A.2's `boot/` row says construction is not a season write, and the literal
+    # collections it moved here from `harness/populated.py` (the title list, the temperament and cohort field sets,
+    # the case-series ids ...) are 10 hits (8 sites) that a pure move may not clear, since each needs its own row in
+    # `rosters.yaml` and a loader (B03c.01 moved them unchanged; clearing them is a later batch's, and this skip drops then).
+    MODEL = frozenset(m for m in _model_modules() if files.BOOT_DIR not in m.parents)
     # ANTI-VACUITY, because a MODEL that silently empties makes the strict lane observe nothing
     # and this test go green over the whole package (§0.1 point 2). The floor is the property,
     # not a count someone re-pins: the file the model is carved OUT of, and the two files step 4
@@ -5824,7 +5830,7 @@ def test_the_generic_remit_seats_every_office_and_unblocks_the_nine():
     this test asserts FORMABILITY and makes no claim about execution. Stated rather than left as
     an inference."""
     from ..data.rosters import REMIT_ACTS, REMIT_DEFAULT, remit_or_default
-    from ..harness import populated as PP
+    from ..boot.realm import build_realm
 
     # the fill rule itself: fills an empty remit, never overwrites a declared one
     assert remit_or_default([]) == sorted(REMIT_DEFAULT)
@@ -5848,7 +5854,7 @@ def test_the_generic_remit_seats_every_office_and_unblocks_the_nine():
         "is the likely shape once per-post remits land — but it must be a decision, not a silent "
         "omission. Re-read `rosters.yaml: remit_default`'s note and update this assertion")
 
-    w = PP.build_realm(0)
+    w = build_realm(0)
     offices = list(w.offices.values())
     # [GROUNDED: measured 2026-09-18 on `build_realm(0)` -- the populated realm seats 19 offices, of which 3 carried a remit before `remit_default` and 19 after; the seat registry is `harness/populated.py`'s own, not a constant chosen here]
     # [RE-CITED 2026-10-01, `13d-iii`, `python -c "from engine.season.harness.populated import build_realm as b; w=b(0); print(len(w.offices), w._office_census['unauthored'])"` -- 30 offices; `remit_default` now fills ONE of them (`off_npc_084`, the seat no `offices.yaml` row authors) and the other 29 carry their row's `remit_acts` plus whatever `remit_unruled` lets a loop-built seat keep, so this assertion no longer observes the default's reach -- `test_13d_iii_the_remit_overlay_replaces_the_default_and_leaves_only_the_unruled_act` does. ⚠ `assert not ungranted` BELOW PASSES ONLY THROUGH THAT LEAK, NOT BECAUSE A DECLARED `[]` GRANTS ANYTHING. MEASURED, `build_realm(0)`, 2026-10-02: `dispatch` is held by 22 of the 29 authored seats -- 22 of the 23 loop-built (`held` is the testing default; the one exception, `off_parliamentary_clerk`, has an overlay declaring `remit: [issue]`) and 0 of the 6 minted -- so `march` (eligible on `remit:dispatch`) is eligible to all 22. The seven `remit_acts: []` rows are only the seats where `dispatch` is the WHOLE remit, which is why they are the ones this assertion would report; the same `[]` on a MINTED row would hold nothing. Stripping `dispatch` (J-8) is a GRANT decision for Jordan, not a code fix, and would turn this assertion red on those seven seats]
@@ -8385,7 +8391,7 @@ def test_k1_control_an_all_absent_realm_builds_the_record_it_always_built(monkey
     only on keys the module has no field for (a social one) is fought exactly as the no-attribute record is, which
     exercises the key filter; the fight itself differs from the pre-batch fight (PC-20 (1)'s head weighting moves a default
     fighter's blows; PC-18 (1) is equal at the defaults), so this control compares attributes against attributes, not against the old tree."""
-    from ..harness.populated import build_realm
+    from ..boot.realm import build_realm
     from ..seam.wrappers import combat as C
     from ..seam.wrappers._entry import entry_for
     import random
@@ -14195,9 +14201,11 @@ def test_the_populated_world_is_not_everybody_in_one_room():
     ⚠ AND THE CAST IS 46, NOT 143. The NPC lane names PEOPLE; the ARC lane names SITUATIONS
     ("The Unworked Clause"). The first cut seated all 143 and put 97 events in buildings."""
     from ..harness import populated as POP
+    from ..data import cast as _cast_data
+    from ..boot.realm import _slug, build_realm, cohort_rows
     from ..harness.run_cases import load_cases
 
-    w = POP.build_realm(0)
+    w = build_realm(0)
     c = POP.census(w)
 
     # ⚠ PLAN POSITION `24f`: THE WORLD NOW HOLDS TWO KINDS OF PERSON, AND EVERY CLAIM BELOW IS ABOUT
@@ -14208,8 +14216,8 @@ def test_the_populated_world_is_not_everybody_in_one_room():
     # against their own file rather than folded into the NPC lane's count.
     cast = {pid for pid, p in w.persons.items() if not p.is_cohort}
     n_cast = len(cast)
-    assert c["cohorts"] == len(POP.cohort_rows()) and c["persons"] == n_cast + c["cohorts"], (
-        f"{c['cohorts']} cohorts against {len(POP.cohort_rows())} authored rows")
+    assert c["cohorts"] == len(cohort_rows()) and c["persons"] == n_cast + c["cohorts"], (
+        f"{c['cohorts']} cohorts against {len(cohort_rows())} authored rows")
     assert n_cast == len(load_cases("NPC")), (
         f"{n_cast} persons seated against {len(load_cases('NPC'))} NPC cases. One person "
         "per NPC season loop is the whole specification; ARC cases are situations and are not "
@@ -14323,8 +14331,8 @@ def test_the_populated_world_is_not_everybody_in_one_room():
         "every faction back at HOLDS no member has a standing question about their faction at all")
     leaders_named = {p.subject for p in creeds.values()}
     for fid, prop in creeds.items():
-        want = POP.cast.faction_leader(prop.value)
-        assert want and prop.subject == f"p_{POP._slug(want)}", (
+        want = _cast_data.faction_leader(prop.value)
+        assert want and prop.subject == f"p_{_slug(want)}", (
             f"{fid}'s creed names {prop.subject}, but `rosters.yaml: faction_leaders.by_faction` "
             f"names {want} for {prop.value}. The creed's referent is the authored leader or it is "
             "invented canon")
@@ -14361,7 +14369,7 @@ def test_the_populated_world_has_a_governance_ladder_and_scarce_seats():
     because a test suite whose passing assertion is mistaken for the guarding one is `§0.1` pt 2's
     own failure — an assertion that cannot observe the failure it excludes.
     """
-    from ..harness.populated import build_realm
+    from ..boot.realm import build_realm
     from ..queries.world_q import (members, leaders, sovereign_fraction, ancestry,
                                    provinces_of)
     w = build_realm(seed=0)
@@ -14531,27 +14539,28 @@ def test_the_npc_roster_is_read_and_not_merely_shipped(monkeypatch, tmp_path):
     import yaml as _yaml
 
     from ..data import files
-    from ..harness import populated as POP
+    from ..boot import realm as boot_realm
+    from ..boot.realm import ROSTER, _slug, build_realm, load_cases
 
     # `files.REPO_ROOT`, the package's ONE anchor, not a private one in the harness. `populated`
     # carried a `_repo_root()` of its own until this commit and this test read it; both are gone,
     # which is the point of `data/files.py`'s docstring (one anchor, checkable by grep).
-    roster_path = files.REPO_ROOT / POP.ROSTER
+    roster_path = files.REPO_ROOT / ROSTER
     assert roster_path.exists(), (
-        f"{POP.ROSTER} is missing. Regenerate with `python tools/export_npc_roster.py --build`; "
+        f"{ROSTER} is missing. Regenerate with `python tools/export_npc_roster.py --build`; "
         "the harness falls back to deriving, so its absence is silent at runtime and is exactly "
         "why it is asserted here")
 
     data = _yaml.safe_load(roster_path.read_text(encoding="utf-8"))
     rows = data["npcs"]
-    assert len(rows) == len(POP.load_cases("NPC")), (
-        f"the roster holds {len(rows)} NPCs against {len(POP.load_cases('NPC'))} NPC cases. "
+    assert len(rows) == len(load_cases("NPC")), (
+        f"the roster holds {len(rows)} NPCs against {len(load_cases('NPC'))} NPC cases. "
         "Every NPC traces to a case and no row may be authored without one")
 
     # THE PLANT. A home no matcher would pick for this person, applied in memory only.
-    w0 = POP.build_realm(0)
+    w0 = build_realm(0)
     victim = rows[0]["case"]
-    pid = f"p_{POP._slug(victim)}"
+    pid = f"p_{_slug(victim)}"
     homes = [r.kind for r in w0.rungs.values()]
     assert "hearth" in homes
     elsewhere = sorted(k for k, r in w0.rungs.items()
@@ -14573,8 +14582,8 @@ def test_the_npc_roster_is_read_and_not_merely_shipped(monkeypatch, tmp_path):
     doctored_path = tmp_path / "npcs.yaml"
     doctored_path.write_text(_yaml.safe_dump(doctored, sort_keys=False, allow_unicode=True),
                              encoding="utf-8")
-    monkeypatch.setattr(POP, "ROSTER", str(doctored_path))
-    w1 = POP.build_realm(0)
+    monkeypatch.setattr(boot_realm, "ROSTER", str(doctored_path))
+    w1 = build_realm(0)
     assert _home_of(w1, pid) == planted, (
         f"{victim} was seated at {_home_of(w1, pid)!r} after the roster said {planted!r}. "
         "`build_realm` is re-deriving rather than reading — the roster is then a file nobody "

@@ -30,6 +30,7 @@ from ..data import cast, goals
 from ..data.rosters import faction_prop_id
 from ..gaps import Forbidden, Unspecified
 from ..harness import populated as P
+from ..boot.realm import build_realm
 from ..queries.world_q import members
 
 CROWN = {"faction": "Valorsmark"}
@@ -65,7 +66,7 @@ def _realm(monkeypatch, tmp_path, *rows, **kw):
     monkeypatch.setattr(goals, "GOALS_YAML", path)
     monkeypatch.setattr(goals, "_CACHE", None)
     kw.setdefault("goals_complete", False)
-    return P.build_realm(0, **kw)
+    return build_realm(0, **kw)
 
 
 def _committed(w, gid) -> set:
@@ -102,7 +103,7 @@ def test_in68_a_faction_goal_reaches_its_members_and_its_head(monkeypatch, tmp_p
     # the head who is no member: planted by rebinding the owner of "who heads this faction"
     real = cast.faction_leader
     monkeypatch.setattr(cast, "faction_leader", lambda f: "NPC-040" if f == "Valorsmark" else real(f))
-    w2 = P.build_realm(0, goals_complete=False)
+    w2 = build_realm(0, goals_complete=False)
     assert "p_npc_040" not in members(w2, faction_prop_id("Valorsmark")), "control: the head is no member"
     assert _committed(w2, "g_heir") == set(members(w2, faction_prop_id("Valorsmark"))) | {"p_npc_040"}
 
@@ -202,7 +203,7 @@ def test_in68_influences_climbs_while_the_chain_stays_influences_and_stops_at_es
 # ---------------------------------------------------------------------------------------------------
 
 def test_in68_an_orientation_row_mints_no_proposition_and_no_commit_and_is_counted(monkeypatch, tmp_path):
-    base = P.build_realm(0, goals=False)
+    base = build_realm(0, goals=False)
     w = _realm(monkeypatch, tmp_path, _row("g_calm", CROWN, {"kind": "orientation"}, stance=1))
     assert "g_calm" not in w.propositions and not _committed(w, "g_calm")
     assert len(w.propositions) == len(base.propositions), "an OUGHT about nobody is not a motive"
@@ -221,7 +222,7 @@ def test_in68_an_orientation_row_mints_no_proposition_and_no_commit_and_is_count
 # ---------------------------------------------------------------------------------------------------
 
 def test_in68_the_stance_row_is_the_creeds_loyalty_rule_signed_by_the_goals_stance(monkeypatch, tmp_path):
-    base = P.build_realm(0, goals=False)
+    base = build_realm(0, goals=False)
     checked, opposed = 0, 0
     for sign in (1, -1):
         w = _realm(monkeypatch, tmp_path, _heir(stance=sign))
@@ -302,7 +303,7 @@ def test_in68_a_cap_that_drops_the_person_or_the_seats_drops_the_goal_and_counts
 def test_in68_goals_false_mints_nothing_though_the_file_names_goals(monkeypatch, tmp_path):
     rows = [*_derived("establishes"), _heir("g_h2", stance=1)]
     on = _realm(monkeypatch, tmp_path, *rows)
-    off = P.build_realm(0, goals=False)
+    off = build_realm(0, goals=False)
     assert P.census(on)["goals"] == 3 and P.census(on)["goal_commits"] > 0
     assert on.content_hash() != off.content_hash(), "control: the hash observes a seeded goal"
     for gid in ("g_heir", "g_king", "g_h2"):
@@ -318,7 +319,7 @@ def test_in68_an_empty_goals_file_builds_the_control_arms_realm(monkeypatch, tmp
     control that the hash observes the shipped rows is `test_fa05_user_goals.py`'s."""
     empty = _realm(monkeypatch, tmp_path)
     assert goals.goals() == (), "control: the planted file is empty"
-    off = P.build_realm(0, goals=False)
+    off = build_realm(0, goals=False)
     assert empty.content_hash() == off.content_hash()
     assert P.census(empty) == P.census(off)
     assert P.census(empty)["goals"] == 0 and "goal_commits" in P.census(empty)

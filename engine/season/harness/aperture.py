@@ -134,6 +134,7 @@ from ..state.carriers import Receipt, subject_of
 from ..state.gate import PERSON_DIED
 from ..state.world import World
 from . import governance_spine, populated
+from ..boot.realm import build_realm
 from . import probes as P
 from .corpus_run import attempts, graded_loss, graded_losses, seats, unrowed_acts
 from .storybar import NULL_CLASSES, null_line, null_scenes
@@ -864,7 +865,7 @@ def measure(seed: int = 0, seasons: int = 1) -> dict:
     """The populated realm (`populated.build_realm`) and the thirteen-seat spine
     (`governance_spine.build`), each measured with its own control."""
     return {"verbs": sorted(VERB_TABLE), "resolvable": sorted(resolvable_verbs()),
-            "realm": measure_world(populated.build_realm, seed, seasons),
+            "realm": measure_world(build_realm, seed, seasons),
             "spine": measure_world(governance_spine.build, seed, seasons)}
 
 

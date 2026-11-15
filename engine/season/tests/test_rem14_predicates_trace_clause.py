@@ -21,7 +21,7 @@ from __future__ import annotations
 
 import pytest
 from ..harness import probes as P
-from ..harness.populated import build_realm
+from ..boot.realm import build_realm
 from ..loop import predicates as _preds
 from ..loop.sides import sides_of
 from ..state.carriers import Act, Office, Rung

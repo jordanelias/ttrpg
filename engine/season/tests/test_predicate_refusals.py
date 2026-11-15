@@ -16,7 +16,8 @@ from __future__ import annotations
 import pytest
 from collections import Counter
 
-from ..harness.populated import build_realm, run
+from ..boot.realm import build_realm
+from ..harness.populated import run
 from ..loop.predicates import REQUIRES_PREDICATES
 from ..state.carriers import Act
 from ..trace_log import TRACE

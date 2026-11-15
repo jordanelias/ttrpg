@@ -19,8 +19,6 @@ from __future__ import annotations
 import re
 
 from ..data.matrix import MATRIX
-from ..data.rosters import PURSUITS, load_yaml
-from ..state.ids import H
 from ..data.verbs import VERB_TABLE
 from ..loop.driver import resolvable_verbs
 from ..data import files
@@ -28,104 +26,7 @@ from ..gaps import ShapeGap
 from ..trace_log import TRACE
 from . import exercises as EX
 from . import probes as P
-
-
-# ===========================================================================
-# WHAT A CASE SAYS ABOUT THE PERSON IT SEATS. Two derivations, one home.
-#
-# ⚠ THEY LIVED IN TWO DIFFERENT HARNESSES AND THAT WAS THE DEFECT (§8). `wants_of` was in
-# `populated.py` and `seed_pursuits` in `corpus_run.py`, so the two instruments that build a
-# world from a case reached across each other to share them -- and `corpus_run` could not read
-# `wants_of` at all without an import cycle. Both are PURE FUNCTIONS OF A CASE DICT, which is what
-# this module already owns (`load_cases`), so this is where they belong and neither harness now
-# imports the other.
-# ===========================================================================
-
-def seed_pursuits(seed: int, case_id: str, pid: str) -> dict:
-    """WHAT ONE PERSON BELIEVES, DRAWN FROM THE CASE ID. `{conviction: weight}`, 1-3 entries.
-
-    ⚠ **THE SINGLE OWNER OF THIS DRAW (`CLAUDE.md` §8), AND IT BECAME ONE BY BEING COPIED.**
-    `harness/populated.py` seats 46 people and reproduced this formula verbatim -- the same radix,
-    the same `axis:` purpose strings, the same `(0.9, 0.5, 0.3)` ladder -- which is TWO OWNERS OF
-    WHICH PEOPLE ARE ALIKE. Free to drift, and drifting invisibly: `stance` is empty in these
-    worlds, so this draw ALONE orders every candidate, and two copies differing by one weight would give two instruments two different
-    populations while both reported on "the corpus".
-
-    ⚠ THE PURPOSE STRING STAYS `axis:` THOUGH IT PICKS A CONVICTION. Changing it would re-draw
-    every person in the corpus and move every golden for a reason that is a rename, not a
-    behaviour -- `04 PART D row 35` cares about purpose UNIQUENESS, not spelling. The SET it
-    indexes changed from 4 to 13, which moves the draw on its own and is `U3`'s.
-
-    ⚠⚠ **ONE TO THREE CONVICTIONS, NOT ONE, AND #353 §14 IS WHERE THE RANGE COMES FROM:**
-    *"`convictions` | weights over the closed 13 | **1-3 primary + distributed**"*. Seeding exactly
-    one was the harness's simplification and it was load-bearing in the wrong direction. MEASURED
-    2026-09-11 over 86 corpus-shaped seeds, counting DISTINCT axis directions the projection
-    produces: **1 conviction -> 13 · 2 -> 66 · 3 -> 80.** With one, the count is capped at the size
-    of the roster by construction, and worse than that suggests: 9 of the 13 convictions point
-    within 60° of a common direction (`traditional+ sacred+ hierarchical+ instrumental-`), so a
-    single-conviction person is one of about five characters however the draw falls. Two or three
-    COMBINE into vectors that are genuinely apart.
-
-    ⚠ THE COUNT ITSELF IS DRAWN, so cases differ in how many things their people care about rather
-    than all holding exactly N. Weights descend 0.9 / 0.5 / 0.3: "primary" is §14's own word for
-    the first, and the rest are the "distributed" remainder.
-
-    ⚠ THE WEIGHTS ARE OVER THE PURSUIT ROSTER, NOT OVER THE AXES. Seeding from `PURSUIT_AXES`
-    would hand every person a weight on `hierarchical_equal`, which is a basis vector and not
-    something anybody believes.
-    """
-    pursuits = sorted(PURSUITS)
-    # [JUSTIFIED: `16` is `int()`'s RADIX for H()'s blake2b hexdigest -- same as combat_seam.py:153. The `3` is #353 §14's own upper bound: "1-3 primary + distributed"]
-    n_conv = 1 + int(H(seed, 0, case_id, f"axis:{pid}:n"), 16) % 3
-    # [JUSTIFIED: a DESCENDING ladder, not three chosen magnitudes -- #353 §14 distinguishes the "primary" conviction from the "distributed" remainder and supplies no numbers. What the corpus needs is that the first outweighs the rest; 0.9 matches the single-conviction weight this replaced, so a 1-conviction case is unchanged by the ladder]
-    chosen, weights = {}, (0.9, 0.5, 0.3)
-    for k in range(n_conv):
-        purpose = f"axis:{pid}" if k == 0 else f"axis:{pid}:{k}"
-        # [JUSTIFIED: `16` is `int()`'s RADIX for H()'s hex digest -- same as combat_seam.py:153]
-        # ⚠⚠ A REPEATED PICK SILENTLY SHORTENS THE DRAW, AND THE FIX IS DELIBERATELY NOT APPLIED.
-        # `setdefault` is a no-op when the hash lands on a conviction already held, so an intended
-        # 3 becomes a 2 or a 1 and slot `k`'s weight is discarded. MEASURED over the 46 live cases
-        # x 20 seeds: 94 of 920 draws (10.2%) lose one -- 67 of the intended 3s, 27 of the 2s. That
-        # puts a tenth of the corpus back in the regime this docstring says the change exists to
-        # escape, where "a single-conviction person is one of about five characters".
-        #
-        # THE FIX IS SIX LINES -- re-salt the purpose until the pick is not already held, bounded by
-        # the roster size -- AND IT WAS BUILT, RUN AND REVERTED 2026-09-16. It works: the
-        # distribution moves {1:312, 2:373, 3:235} -> {1:283, 2:335, 3:302}, exactly the 94
-        # recovered, and the full suite stays green. It is reverted because it MOVES THE WORLD:
-        # `build_realm(0).content_hash()` goes `e5df63a767a4f38a` -> `9db4676abf6bb53d`, so
-        # `build_realm` reaches this draw rather than being fully covered by the authored roster,
-        # and PR #404's creed-sweep table (+47%/+43% on acts naming another person) was measured
-        # under the current draw and would no longer reproduce.
-        #
-        # RULED by Jordan, 2026-09-16: *"Conviction will be getting overhauled."* The overhaul is
-        # where this belongs -- it re-records whatever it moves, which this change on its own does
-        # not. Take it THEN, not before, and re-run the creed sweep when you do.
-        pick = int(H(seed, 0, case_id, purpose), 16) % len(pursuits)  # [JUSTIFIED: 16 is int()'s RADIX for H()'s blake2b hexdigest, stated in full above -- unchanged by this rename]
-        chosen.setdefault(pursuits[pick], weights[k])
-    return chosen
-
-def wants_of(case: dict) -> str:
-    """WHAT THIS LOOP WANTS, in the case's own words.
-
-    ⚠ THE CASES CARRY THIS AND THE FIRST CUT OF THIS MODULE IGNORED IT, giving all 143 people the
-    string *"a standing ambition"* -- 143 identical wants, which is `build_at`'s three-identical-
-    people defect re-created at scale. `season_requires` is a list of `{need, why, hardness}` and
-    the corpus declares **427 `core` needs across the 143 cases** (median 7 needs each). The first
-    `core` need is what the case says it cannot do without.
-
-    Falls back through `important` and then to the one-line summary, because a case with no `core`
-    row is a corpus gap and a person with no want does not act at all -- and an ambition invented
-    here would be the fabrication this module refuses everywhere else.
-    """
-    rows = [r for r in (case.get("season_requires") or []) if isinstance(r, dict)]
-    for hardness in ("core", "important", "flavour"):
-        for r in rows:
-            if r.get("hardness") == hardness and r.get("need"):
-                return str(r["need"])
-    return str(case.get("one_line") or case.get("name") or case.get("id"))
-
-CHAIN = files.CHAIN_CASES_DIR
+from ..boot.realm import CORPUS_DEFECTS, load_cases   # moved to `boot/` (B03c.01); the builder reads both
 
 
 # ---------------------------------------------------------------------------
@@ -200,52 +101,6 @@ def run_probe(pid: str) -> dict:
 # CASES
 # ---------------------------------------------------------------------------
 
-CORPUS_DEFECTS: list[str] = []
-
-# CASE_SERIES -- series name -> the regex a case id of that series must fully match.
-# THE RULE: an id is its series prefix plus a label. A bare arc number is never an identifier
-# (two series once both numbered their cases 16-18, and the loader dropped the second set with
-# no trace). A colliding series takes a NEW PREFIX, never a new number; bare `ARC-19` is never
-# allocated; a new id needs a row here FIRST. `ARC\d-ORPHAN` is the id a headless fragment once
-# took (retired with the loader's recovery path). Neither of the two 16-18 series is canonical
-# (both are evidence), and no cited id is renumbered.
-CASE_SERIES: dict[str, str] = {
-    "arc": r"ARC-\d{2}",
-    "arc_recovered": r"ARC-R\d{2}",
-    "arc_meta_collision": r"ARC-META-COLLISION",
-    "nsc": r"NSC-\d{2}",
-    "scn": r"SCN-\d{2}|SCN-LOOP-[A-D]",
-    "emg": r"EMG-\d{2}|EMG-[CX]\d",
-    "npc": r"NPC-\d{3}",
-    "orphan": r"ARC\d-ORPHAN",
-}
-
-
-def load_cases(kind: str) -> list[dict]:
-    """`kind` in {NPC, ARC}. NPC cases come from BOTH the in-chain #351 corpus (27) and this
-    session's completion of it (19) -- together the full 46 in the registry. ARC cases are
-    the in-chain corpus in full."""
-    out: list[dict] = []
-    seen: dict[str, str] = {}      # case id -> the file it was first loaded from
-    sources = []
-    if kind == "NPC":
-        sources = sorted(CHAIN.glob("NPC*.yaml")) + sorted(files.CASES_DIR.glob("NPC*.yaml"))
-    else:
-        sources = sorted(CHAIN.glob("ARC*.yaml")) + sorted(files.CASES_DIR.glob("ARC*.yaml"))
-    for f in sources:
-        for c in load_yaml(f.read_text()) or []:
-            cid = str(c["id"])
-            if cid in seen:
-                CORPUS_DEFECTS.append(
-                    f"{f.name}: duplicate case id {cid!r} (first in {seen[cid]}); "
-                    "second not loaded")
-                continue
-            if not any(re.fullmatch(p, cid) for p in CASE_SERIES.values()):
-                CORPUS_DEFECTS.append(f"{f.name}: case id {cid!r} is in no CASE_SERIES row")
-            seen[cid] = f.name
-            c["_source"] = f.name
-            out.append(c)
-    return out
 
 
 def _probe_view() -> dict:

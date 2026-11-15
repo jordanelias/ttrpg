@@ -41,7 +41,7 @@ What each block proves, and the control that stops it passing vacuously:
      after it, both `at_war(w, A, B)` and the symmetric `at_war(w, B, A)` are `True`; after
      `release`-ing the commit (peace, `T-m`'s own discretion) it is `False` again.
 """
-from engine.season.harness.populated import build_realm
+from engine.season.boot.realm import build_realm
 from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.data.matrix import WriteClass
 from engine.season.queries import faction_q, world_q

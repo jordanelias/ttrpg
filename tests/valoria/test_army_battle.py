@@ -20,7 +20,7 @@ import pytest
 
 from engine.season.data.matrix import Step, WriteClass
 from engine.season.harness import probes as P
-from engine.season.harness.populated import build_realm
+from engine.season.boot.realm import build_realm
 from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.manifest.registrar import MODULE_ENTRIES
 from engine.season.queries import world_q

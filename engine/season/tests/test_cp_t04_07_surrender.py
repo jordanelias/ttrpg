@@ -40,7 +40,7 @@ from engine.season.data import rosters
 from engine.season.data.verbs import CHOICE_RANGES, VERB_TABLE
 from engine.season.decision import assemble
 from engine.season.decision.options import opening_set
-from engine.season.harness.populated import build_realm
+from engine.season.boot.realm import build_realm
 from engine.season.loop import effects_information as eff
 from engine.season.queries import world_q
 from engine.season.state import gate as G

@@ -52,7 +52,7 @@ from engine.season.data.matrix import Step, WriteClass
 from engine.season.data.rosters import faction_prop_id
 from engine.season.decision.choose import make_chooser
 from engine.season.decision.options import opening_set
-from engine.season.harness.populated import build_realm
+from engine.season.boot.realm import build_realm
 from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.loop.effects import EFFECTS
 from engine.season.queries import person_q as PQ

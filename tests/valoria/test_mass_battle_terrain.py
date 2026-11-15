@@ -446,7 +446,7 @@ def test_resolve_field_carries_the_river_crossing_signal_to_the_engine():
     unset -- 3 seeds of 16 differed, 2026-10-08; T1's anchor lies on the river, so no origin crosses
     to it, and the field moved to T3, the same OPEN_FLAT row.)"""
     import random
-    from engine.season.harness.populated import build_realm
+    from engine.season.boot.realm import build_realm
     from dataclasses import replace
     from engine.season.queries import world_q
     from engine.season.seam.wrappers.mass_battle import field_input

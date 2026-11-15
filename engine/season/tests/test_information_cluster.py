@@ -50,7 +50,7 @@ from ..data.verbs import _OPENERS_FROM_EFFECTS, VERB_TABLE
 from ..decision import make_chooser
 from ..decision.options import opening_set
 from ..gaps import Unspecified
-from ..harness import populated
+from ..boot.realm import build_realm
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..loop.effects import EFFECTS
@@ -642,7 +642,7 @@ def test_20iii_every_sheet_the_populated_realm_makes_says_what_its_holder_holds(
     realm): its two execution counts -- `faction.surveyed >= 1` and `checked >= 4` -- were DELETED,
     not skipped. What stays is an invariant over whatever sheets the season makes; that a survey
     executes and its sheet is held is asserted on hand-built worlds (sections 1-5 above)."""
-    w = populated.build_realm(0)
+    w = build_realm(0)
     d = SeasonDriver(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),

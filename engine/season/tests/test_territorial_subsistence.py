@@ -54,6 +54,7 @@ from ..data.requires import SHORTFALL_PREDICATE
 from ..epistemic import _ch_co_located
 from ..gaps import Forbidden, ShapeGap, Unspecified
 from ..harness import populated as POP
+from ..boot.realm import COHORT_PREFIX, build_realm, cohort_rows, seat_cohorts, temperament_rows
 from ..harness import probes as P
 from ..harness import register as REG
 from ..harness.run_cases import load_cases
@@ -100,7 +101,7 @@ def _want(weight: int) -> dict:
 def realm():
     """`build_realm(0)`, UNTOUCHED -- read-only tests share it; a test that runs MATTER builds its
     own, because MATTER writes."""
-    return POP.build_realm(0)
+    return build_realm(0)
 
 
 # ======================================================================================
@@ -108,15 +109,15 @@ def realm():
 # ======================================================================================
 
 def test_24f_the_realm_seats_exactly_the_authored_rows_beside_an_unchanged_cast(realm):
-    rows = POP.cohort_rows()
+    rows = cohort_rows()
     cohorts = _cohorts(realm)
     assert rows, "the file is empty; every assertion below would pass over nothing"
-    assert set(cohorts) == {f"{POP.COHORT_PREFIX}{r['rung']}" for r in rows}, (
+    assert set(cohorts) == {f"{COHORT_PREFIX}{r['rung']}" for r in rows}, (
         "the world's cohorts are not the file's rows -- something minted one, or dropped one")
     lives = world_q.residence_of(realm)
     stands = world_q.home_of(realm)
     for r in rows:
-        pid = f"{POP.COHORT_PREFIX}{r['rung']}"
+        pid = f"{COHORT_PREFIX}{r['rung']}"
         assert cohorts[pid].weight == r["weight"], f"{pid}: weight is not the authored one"
         assert lives[pid] == stands[pid] == r["rung"], (
             f"{pid} lives at {lives.get(pid)!r} and stands at {stands.get(pid)!r}, not at its row's "
@@ -167,13 +168,13 @@ def test_24f_the_ceiling_reads_the_dwellings_and_refuses_a_cohort_they_cannot_ho
     row = [{"rung": "S", "weight": 2}]
     assert world_q.capacity(w, "S") < 2, "the fixture already houses two; nothing below can refuse"
     with pytest.raises(ShapeGap):
-        POP.seat_cohorts(w, row)
+        seat_cohorts(w, row)
     assert not _cohorts(w), "a refused row seated its cohort anyway"
     _dwelling(w, "s_hh_dwelling", "Hh")
     with pytest.raises(ShapeGap):
-        POP.seat_cohorts(w, row)
+        seat_cohorts(w, row)
     _dwelling(w, "s_s_dwelling", "S")
-    (pid,) = POP.seat_cohorts(w, row)
+    (pid,) = seat_cohorts(w, row)
     assert w.persons[pid].weight == 2 and world_q.residence_of(w)[pid] == "S"
     # AND IT IS NOW AN EATER, which is the whole point of seating it.
     assert set(world_q.subsistence_draw(w)) == {pid}
@@ -190,13 +191,13 @@ def test_24f_the_ceiling_reads_the_dwellings_and_refuses_a_cohort_they_cannot_ho
 ])
 def test_24f_the_reader_refuses_every_shape_a_cohort_row_cannot_take(text):
     with pytest.raises(ShapeGap):
-        POP.cohort_rows(text)
+        cohort_rows(text)
 
 
 def test_24f_a_row_naming_a_place_the_world_did_not_build_refuses():
     w = P.tiny_world()
     with pytest.raises(ShapeGap):
-        POP.seat_cohorts(w, POP.cohort_rows("cohorts:\n- {rung: set_nowhere, weight: 2}\n"))
+        seat_cohorts(w, cohort_rows("cohorts:\n- {rung: set_nowhere, weight: 2}\n"))
 
 
 # ======================================================================================
@@ -272,7 +273,7 @@ def test_24f_falsifier_in_dearth_the_office_holder_keeps_his_body_and_the_cohort
     THE DEARTH IS THE REALM'S OWN, NOT PLANTED. At build every larder is empty and MATTER draws
     before it takes the first yield (#353 §25's order), so the first draw finds no stock anywhere:
     every settlement's `demanded` exceeds its `delivered`. Nothing here empties a store."""
-    w = POP.build_realm(0)
+    w = build_realm(0)
     w.fixtures = w.fixtures.sweep("body_step", arm)
     pairs = _holder_and_cohort_pairs(w)
     assert pairs, "no office-holder lives under a settlement with a cohort; the falsifier is vacuous"
@@ -308,7 +309,7 @@ def test_24f_control_at_the_control_body_step_no_body_moves_in_the_same_dearth()
     arm. The cohorts are short and no body moves, so the fall above is `body_step`'s. v10 REM-52: the
     control is swept IN-PROCESS (it was the shipped default, read as it stood; the shipped arm is now
     `10`, and its own reading is `test_rem52_...` below); every assertion is the control's, unchanged."""
-    w = POP.build_realm(0)
+    w = build_realm(0)
     w.fixtures = w.fixtures.sweep("body_step", CONTROL_ARM)
     assert w.fixtures.get("body_step") == 0, "the control arm moved; `H-125` and this test disagree"
     before = {pid: p.body for pid, p in w.persons.items()}
@@ -347,7 +348,7 @@ def test_rem52_the_shipped_arm_falls_every_short_cohort_by_step_times_its_shortf
     revert_b11a(monkeypatch)   # B11 lane A (the duel chain's reach, a formation mover of every season), the same way
     from .test_b11a_scores_and_obstacle import revert_b11a_scores
     revert_b11a_scores(monkeypatch)   # B11 lane A (persons hold scores; the obstacle by task: a mover of the build and every season), the same way
-    w = POP.build_realm(0)
+    w = build_realm(0)
     assert w.fixtures.get("body_step") == SHIPPED_ARM and SHIPPED_ARM in LIVE_ARMS, (
         "this test reads the SHIPPED default, unswept")
     scale = w.fixtures.get("condition_scale")
@@ -379,7 +380,7 @@ def test_rem52_the_shipped_arm_falls_every_short_cohort_by_step_times_its_shortf
 def test_rem52_control_the_realm_at_the_control_arm_leaves_every_cohort_at_scale_after_the_season():
     """The control of the test above: `body_step` swept to `H-125`'s control arm in-process, the same
     season. No cohort's body moves, so the fall above is the shipped arm's and not the season's."""
-    w = POP.build_realm(0)
+    w = build_realm(0)
     w.fixtures = w.fixtures.sweep("body_step", CONTROL_ARM)
     scale = w.fixtures.get("condition_scale")
     cohorts = _cohorts(w)
@@ -407,7 +408,7 @@ def test_24f_drain_guard_a_cohort_draws_stock_on_the_built_realm_and_matter_is_c
     cohort drawing (`take > 0`), that nobody else drew, and that the realm's matter after the second
     barrier is exactly `before - drawn + produced` -- so the draw moved real units out of real
     larders, not merely a number in a record."""
-    w = POP.build_realm(0)
+    w = build_realm(0)
     _matter(w)
     w.tick += 1
     seen: list = []
@@ -470,7 +471,7 @@ def test_se01_a_person_keyed_crossing_is_placed_at_the_person_s_parent():
     The bystander is PLANTED, because on the realm as built no named person's `contain` parent is
     a settlement that seats a cohort; a test-built person standing there is the observer the
     channel needs, and it eats nothing (weight 1)."""
-    w = POP.build_realm(0)
+    w = build_realm(0)
     cohort = sorted(_cohorts(w))[0]
     at = world_q.parent_of(w, cohort)
     assert at is not None and at != cohort and at in w.rungs
@@ -720,7 +721,7 @@ def test_se06_a_cohort_at_lowenskyst_holds_what_the_rule_yields_from_t3s_row(rea
     """`set_s_007` is in T3 (alpha = beta = 0.5). The vector is the whole roster, totals 1, and a pursuit with no
     projection on the axis takes 0. The numbers are asserted, not just the shape."""
     assert world_q.parent_of(realm, "set_s_007") == "terr_T3", "set_s_007 is no longer in T3; the row below is stale"
-    cohort = realm.persons[f"{POP.COHORT_PREFIX}set_s_007"]
+    cohort = realm.persons[f"{COHORT_PREFIX}set_s_007"]
     assert _agree(cohort.pursuits, _expected(0.5, 0.5)), cohort.pursuits
     assert abs(sum(cohort.pursuits.values()) - 1.0) < 1e-12
     assert cohort.pursuits["family"] == 0.0 and cohort.pursuits["individuality"] == 0.0
@@ -732,11 +733,11 @@ def test_se06_the_poles_are_not_interchangeable_alpha_is_read_on_the_instrumenta
     instrumental pole) and `honour` -0.7 (the deontological one), so an outcomes-first territory weights wealth
     above honour; a rule reading alpha on the other pole, or the sign the other way, fails here and passes T3."""
     assert world_q.parent_of(realm, "set_s_012") == "terr_T6"
-    cohort = realm.persons[f"{POP.COHORT_PREFIX}set_s_012"]
+    cohort = realm.persons[f"{COHORT_PREFIX}set_s_012"]
     assert _agree(cohort.pursuits, _expected(0.9, 0.1)), cohort.pursuits
     assert cohort.pursuits["wealth"] > cohort.pursuits["honour"]
     assert world_q.parent_of(realm, "set_s_009") == "terr_T5"           # alpha 0.3, beta 0.7: conduct first
-    conduct = realm.persons[f"{POP.COHORT_PREFIX}set_s_009"].pursuits
+    conduct = realm.persons[f"{COHORT_PREFIX}set_s_009"].pursuits
     assert _agree(conduct, _expected(0.3, 0.7)) and conduct["honour"] > conduct["wealth"]
 
 
@@ -752,7 +753,7 @@ def test_se06_every_cohort_holds_a_vector_and_two_of_one_territory_are_identical
     assert checked >= 37, f"only {checked} cohorts were checked; the file has 37 rows"
     assert any(len(v) > 1 for v in by_terr.values()), "no territory holds two cohorts; the identity claim is vacuous"
     assert all(v == [v[0]] * len(v) for v in by_terr.values()), "two cohorts of one territory differ"
-    rows = POP.temperament_rows()
+    rows = temperament_rows()
     want = len({round(r["alpha"] / (r["alpha"] + r["beta"]), 9) for r in rows})     # equal ratio, equal vector
     got = len({tuple(sorted(v[0].items())) for v in by_terr.values()})
     assert got == want > 1, (got, want)         # as many distinct vectors as the source gives distinct ratios
@@ -772,7 +773,7 @@ def test_se06_a_block_that_omits_a_territory_a_cohort_lives_in_refuses_naming_bo
     assert len(kept) == len(lines) - 1, "T3 has no row to remove"
     _planted(tmp_path, monkeypatch, "".join(kept))
     with pytest.raises(Unspecified) as e:
-        POP.build_realm(0)
+        build_realm(0)
     assert "T3" in str(e.value) and "cohort_set_s_007" in str(e.value), str(e.value)[:300]
 
 
@@ -791,11 +792,11 @@ def test_se06_a_block_that_omits_a_territory_a_cohort_lives_in_refuses_naming_bo
 ])
 def test_se06_the_reader_refuses_every_shape_a_temperament_row_cannot_take(block):
     with pytest.raises(ShapeGap):
-        POP.temperament_rows("cohorts: []\n" + block)
+        temperament_rows("cohorts: []\n" + block)
 
 
 def test_se06_the_shipped_block_has_one_row_per_territory_but_askeheim():
-    rows = POP.temperament_rows()
+    rows = temperament_rows()
     assert rows, "the shipped file carries no temperaments block"
     assert sorted(r["territory"] for r in rows) == sorted(f"T{n}" for n in range(1, 18) if n != 15), "T15 holds no cohort"
 
@@ -806,12 +807,12 @@ def test_se06_control_without_the_block_the_realm_is_the_uniform_one(tmp_path, m
     moves cohorts' pursuits and nothing else."""
     text = files.COHORTS_YAML.read_text(encoding="utf-8")
     _planted(tmp_path, monkeypatch, text[:text.index("temperaments:\n")] + text[text.index("# THE GUARD COHORTS"):])
-    assert POP.temperament_rows() is None
-    uniform = POP.build_realm(0)
+    assert temperament_rows() is None
+    uniform = build_realm(0)
     assert len(_cohorts(uniform)) >= 37 and all(not p.pursuits and not p.conviction for p in _cohorts(uniform).values())
     assert uniform.content_hash() != realm.content_hash(), "the block moved nothing"
     monkeypatch.undo()
-    shipped = POP.build_realm(0)
+    shipped = build_realm(0)
     for p in _cohorts(shipped).values():
         p.pursuits = {}
     assert shipped.content_hash() == uniform.content_hash()

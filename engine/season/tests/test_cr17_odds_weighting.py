@@ -311,9 +311,10 @@ def test_withholding_the_batchs_verbs_moves_the_none_and_tau_point_one_world(mon
     season with them chosen. (The realm's own hashes are `_realm_goldens.py`'s; the pre-CR-17 world is a tree no
     longer in the code, and a pin of it read under a stack of reverts is not kept.)"""
     from ..harness import populated as POP
+    from ..boot.realm import build_realm
 
     def season():
-        w = POP.build_realm(0)
+        w = build_realm(0)
         w.fixtures = w.fixtures.sweep("odds_weighting", "none").sweep("choice_temperature", 0.1)
         POP.run(seasons=1, seed=0, w=w)
         return w

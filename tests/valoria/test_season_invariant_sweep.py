@@ -103,7 +103,8 @@ def test_the_engine_is_clean_under_the_sweep():
 def _played_realm(seed):
     """The shipped world (`populated.build_realm`) played one season: the world with offices in it."""
     from engine.season.harness import populated
-    w = populated.build_realm(seed)
+    from engine.season.boot.realm import build_realm
+    w = build_realm(seed)
     populated.run(1, seed, w=w)
     return w
 

@@ -25,7 +25,7 @@ from ..gaps import Forbidden, Unspecified
 from ..harness.heir_hears import HEIR_SEAT, THRONE
 from ..harness.heir_hears import holder as _holder
 from ..harness.play_surface import carry_on, dispatching_chooser
-from ..harness.populated import build_realm
+from ..boot.realm import build_realm
 from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..loop.matter import _die
 from ..queries import world_q

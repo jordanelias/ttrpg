@@ -20,7 +20,7 @@ import importlib
 import pytest
 
 from engine.season.decision.sheet import creation_sheet
-from engine.season.data import cast
+from engine.season.data import cast, files
 from engine.season.data.matrix import matrix_row
 from engine.season.data.rosters import (
     VERB_CAPABILITY, VOCATION_ATTRIBUTE, _load_vocation_attribute,
@@ -223,11 +223,11 @@ def test_the_realm_reads_the_cast_stats_only_on_the_arm_that_is_switched_on():
     seats the sheet `state/carriers.py::generated_attributes` draws (B01a.01) on every person and the one row the
     registry authors (NPC-001, Edeyja) over it, key by key. The event-list and hash readings of the two arms are in
     `build_realm`'s docstring and the CR-20 and B11 lane A commit bodies."""
-    from engine.season.harness import populated as PO
+    from engine.season.boot.realm import build_realm
     from engine.season.state.carriers import generated_attributes
-    off = PO.build_realm(0, cast_attributes=False)
+    off = build_realm(0, cast_attributes=False)
     assert not [p.id for p in off.persons.values() if p.attributes]
-    on = PO.build_realm(0)
+    on = build_realm(0)
     span = on.fixtures.get("generated_attribute_range")
     checked = 0
     for pid, p in on.persons.items():
@@ -251,7 +251,7 @@ def test_no_engine_source_outside_the_world_build_assigns_attributes_or_heritage
     import ast
     import pathlib
     root = pathlib.Path(__file__).resolve().parents[1]
-    build = root / "harness" / "populated.py"
+    build = files.REALM_PY
     fields = {"attributes", "heritage"}
     sites, scanned = [], 0
     for path in sorted(root.rglob("*.py")):

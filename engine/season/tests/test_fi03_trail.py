@@ -57,6 +57,7 @@ from ..decision.options import opening_set
 from ..epistemic import SEEN_PREDICATE, trail_of
 from ..gaps import Unspecified
 from ..harness import populated as POP
+from ..boot.realm import ROSTER, _load, build_realm
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver, mint_token
 from ..loop.witness import HAND_TERM
@@ -663,8 +664,8 @@ def entity_ids() -> dict:
     roster file, `populated._load(ROSTER)`), and the persons `tiny_world()` seats -- the FI-03 test
     world's own ids, the forger and the investigator among them."""
     return {"goals.yaml": frozenset(g.id for g in goals()),
-            "build_realm(0).persons": frozenset(POP.build_realm(0).persons),
-            "npcs.yaml": frozenset(r["case"] for r in POP._load(POP.ROSTER).get("npcs") or ()),
+            "build_realm(0).persons": frozenset(build_realm(0).persons),
+            "npcs.yaml": frozenset(r["case"] for r in _load(ROSTER).get("npcs") or ()),
             "tiny_world().persons": frozenset(P.tiny_world().persons)}
 
 
@@ -802,7 +803,7 @@ def test_the_realm_seed_twice_in_one_process_gives_one_hash_and_reaches_no_find(
     test above."""
     seen = count_finds(monkeypatch)
     def realm():
-        w = POP.build_realm(0)
+        w = build_realm(0)
         for _ in range(2):
             POP.run(seasons=1, seed=0, w=w)
         return w

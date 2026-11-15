@@ -29,7 +29,8 @@ import pytest
 
 from engine.substrate import pc_engine
 
-from ..harness.populated import build_realm, run
+from ..boot.realm import build_realm
+from ..harness.populated import run
 from ..seam.wrappers import combat as C
 from ..seam.wrappers import pool, sigma
 from ._fresh_process import entry_target

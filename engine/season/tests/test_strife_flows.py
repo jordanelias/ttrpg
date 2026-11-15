@@ -510,7 +510,8 @@ def test_the_flow_profile_counts_a_strand_that_leaves_and_rejoins_one_that_never
 
 def test_the_strands_block_prints_the_links_and_the_flow_profile_and_no_longer_says_not_transcribed():
     from engine.season.harness import populated
-    w = populated.build_realm(0)
+    from engine.season.boot.realm import build_realm
+    w = build_realm(0)
     populated.run(seasons=1, w=w)
     before = w.content_hash()
     out = H.strands_block(w, 0)
@@ -816,7 +817,8 @@ def test_control_the_realm_hash_holds_and_the_reading_is_the_same_read_twice():
     read-twice control plants one `opens` claim under the first move claim of a few holders, so their real
     joining claims attach, and reads those holders twice."""
     from engine.season.harness import populated
-    w = populated.build_realm(0)
+    from engine.season.boot.realm import build_realm
+    w = build_realm(0)
     populated.run(seasons=1, w=w)
     before, n_log = w.content_hash(), len(w.log)
     # the world reading, with the harness's code-level terminal test, and its presentation write nothing

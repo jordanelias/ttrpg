@@ -11,7 +11,8 @@ import pytest
 
 from ..data.verbs import EVENT_KINDS
 from ..gaps import Forbidden
-from ..harness.populated import build_realm, run
+from ..boot.realm import build_realm
+from ..harness.populated import run
 from ..state.carriers import Event
 from ..state.ids import ROOT
 from ..state.world import World

@@ -21,6 +21,7 @@ What each test proves, and the failure it can observe:
 import pytest
 import yaml
 
+from engine.season.boot.realm import rescales, wants_of
 from engine.season.harness import corpus_run as C
 from engine.season.harness import run_cases as RC
 from engine.season.queries import world_q
@@ -169,14 +170,14 @@ def test_an_authored_ought_replaces_the_rotation_default_for_that_entry_only(mon
     # Every OTHER seat is the rotation default, with the case's own `wants_of`.
     for i, pid in enumerate(["p_b", "p_c", "p_d"], start=1):
         p = _ambition(w, pid)
-        assert p.subject == ["p_c", "p_d", "p_a"][i - 1] and p.predicate == RC.wants_of(case), pid
+        assert p.subject == ["p_c", "p_d", "p_a"][i - 1] and p.predicate == wants_of(case), pid
 
 
 def test_no_ought_anywhere_is_the_rotation_for_every_seat(monkeypatch):
     case, w = _build(monkeypatch, _cast())
     subjects = [_ambition(w, pid).subject for pid in ("p_a", "p_b", "p_c", "p_d")]
     assert subjects == ["p_b", "p_c", "p_d", "p_a"]
-    assert {_ambition(w, pid).predicate for pid in w.persons} == {RC.wants_of(case)}
+    assert {_ambition(w, pid).predicate for pid in w.persons} == {wants_of(case)}
 
 
 def test_a_mutation_pointing_the_referent_at_the_wrong_seat_is_seen(monkeypatch):
@@ -386,10 +387,10 @@ def test_two_scale_files_naming_one_case_refuse_at_load_instead_of_the_last_one_
                  **{"A-1": {"case": "X-1", "scale": scale},
                     "B-1": {"case": "X-2", "scale": scale},
                     "C-1": {"case": "X-1", "cast": _cast()}})
-    assert sorted(C.rescales()) == ["X-1", "X-2"]          # control: nothing refused here
+    assert sorted(rescales()) == ["X-1", "X-2"]          # control: nothing refused here
     _write_files(tmp_path, monkeypatch, **{"B-1": {"case": "X-1", "scale": scale}})
     with pytest.raises(SystemExit) as red:
-        C.rescales()
+        rescales()
     assert "B-1.yaml" in str(red.value) and "already the case of A-1.yaml" in str(red.value), \
         str(red.value)
 
@@ -398,7 +399,7 @@ def test_the_real_scale_overlays_all_still_load():
     """The checked-in `scale:` overlays load with the duplicate refusal in place, and an
     independent read of the same directory counts the same cases (a loader that dropped
     everything, or refused nothing because it saw nothing, cannot pass)."""
-    real = C.rescales()
+    real = rescales()
     independent = sorted(
         doc["case"] for f in sorted(C.files.EXERCISES_DIR.glob("*.yaml"))
         for doc in [yaml.safe_load(f.read_text(encoding="utf-8")) or {}]

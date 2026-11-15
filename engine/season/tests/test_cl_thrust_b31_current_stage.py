@@ -38,7 +38,7 @@ import pytest
 
 from ..data import goals
 from ..data.requires import UNKNOWN, binding_of, build_typed_requires, evaluate
-from ..harness import populated
+from ..boot.realm import build_realm
 from ..queries import world_q
 from ..queries.person_q import LedgerReader
 from ..state.carriers import Claim, Person, Proposition, Tenure
@@ -278,7 +278,7 @@ def test_every_shipped_goal_and_every_ambition_of_the_realm_reads_none():
     assert checked == len(shipped) >= 30, "every shipped goal row (38 at the base reading)"
     # The same reading over a built realm: every ambition of every person (136 at the base reading, 12 of
     # the authored goals among them).
-    w = populated.build_realm(0)
+    w = build_realm(0)
     before = w.content_hash()
     realm_checked = authored = 0
     for p in w.persons.values():

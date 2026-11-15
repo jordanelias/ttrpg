@@ -83,7 +83,7 @@ from ..state.ids import H, draw_factory
 from . import corpus_run
 from .chronicle import _kinds
 from .decision_spread import attribute_top
-from .populated import build_realm
+from ..boot.realm import build_realm
 
 HOSTILE = tuple(sorted(v for v, r in VERB_TABLE.items() if subject_is_opponent(r)))
 CONTESTED_COUNTERPARTY = tuple(sorted(v for v, r in VERB_TABLE.items()

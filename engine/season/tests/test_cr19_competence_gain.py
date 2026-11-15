@@ -23,6 +23,7 @@ from ..decision import options as OPT
 from ..decision.options import COMPETENCE_ATTRIBUTE, COMPETENCE_MID, competence, refracted_confidence
 from ..epistemic import observers_for
 from ..harness import populated as POP
+from ..boot.realm import build_realm
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver, mint_token
 from ..queries.person_q import said_of
@@ -117,7 +118,7 @@ def test_the_realm_at_the_shipped_gain_is_the_realm_with_the_factor_inert(monkey
     the switch off nobody holds any and `competence` is 1 at every gain, so the equality would be true by
     construction and could not observe a factor leaking at the shipped gain 0 (the Phase 3 close of B10-10)."""
     def run(seed=0):
-        w = POP.build_realm(seed, cast_attributes=True)
+        w = build_realm(seed, cast_attributes=True)
         POP.run(seasons=1, seed=seed, w=w)
         return w.content_hash(), [(e.kind, e.id) for e in w.log]
 

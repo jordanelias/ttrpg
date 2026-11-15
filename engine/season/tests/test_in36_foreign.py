@@ -40,6 +40,8 @@ from engine.season.decision.choose import make_chooser
 from engine.season.decision.options import opening_set
 from engine.season.loop.driver import resolvable_verbs
 from engine.season.harness import populated as POP
+from engine.season.boot.realm import COHORT_PREFIX, _slug, build_realm, guard_rows
+from engine.season.queries.world_q import ancestry
 from engine.season.queries import world_q
 from engine.season.seam.wrappers import mass_battle as wrapper
 from engine.season.state.carriers import Claim, Question, Sensation, Tenure, View
@@ -75,17 +77,17 @@ def _told_of_the_capital(w):
 @pytest.fixture(scope="module")
 def control():
     # ED-IN-0310: `foreign` now defaults to True, so the control arm (the realm before the empire was authored) is asked for by name.
-    return POP.build_realm(0, foreign=False)
+    return build_realm(0, foreign=False)
 
 
 @pytest.fixture(scope="module")
 def foreign():
-    return _told_of_the_capital(POP.build_realm(0, foreign=True))
+    return _told_of_the_capital(build_realm(0, foreign=True))
 
 
 @pytest.fixture(scope="module")
 def guarded():
-    return POP.build_realm(0, guards=True)
+    return build_realm(0, guards=True)
 
 
 def _ids(w) -> set:
@@ -109,7 +111,7 @@ def test_the_control_arm_seats_no_altonian_entity_and_leaves_the_cast_rows_unpla
 def test_the_shipped_default_seats_the_empire():
     """ED-IN-0310 (Jordan, 2026-11-04): `build_realm(0)` with no argument is the foreign arm, byte for byte, and the control arm is only
     reached by `foreign=False`. FALSIFIER: the two worlds hash differently, so a default that silently reverted would fail here."""
-    shipped, on, off = POP.build_realm(0), POP.build_realm(0, foreign=True), POP.build_realm(0, foreign=False)
+    shipped, on, off = build_realm(0), build_realm(0, foreign=True), build_realm(0, foreign=False)
     assert shipped.content_hash() == on.content_hash() != off.content_hash()
     assert FID in shipped.propositions and FID not in off.propositions
 
@@ -126,7 +128,7 @@ def test_the_empire_is_a_faction_in_both_arms_and_its_cast_resolves_with_no_edit
 
 def test_the_empires_persons_live_at_its_settlement_and_the_head_holds_its_root(foreign):
     place = FOREIGN_CAST[EMPIRE]
-    root, town = f"terr_{place['territory']['code']}", f"set_{POP._slug(place['settlement']['code'])}"
+    root, town = f"terr_{place['territory']['code']}", f"set_{_slug(place['settlement']['code'])}"
     assert foreign.rungs[root].kind == "territory" and foreign.rungs[town].kind == "settlement"
     for pid in CAST:
         assert world_q.home_of(foreign)[pid] == town and world_q.residence_of(foreign)[pid] == town
@@ -142,7 +144,7 @@ def test_two_seats_are_held_and_the_head_alone_may_march(foreign):
     assert held == {"off_katepano": "p_npc_089", "off_kommerkiarios": "p_npc_090"}
     for oid in held:
         o = foreign.offices[oid]
-        assert o.faction == EMPIRE and o.rung == f"set_{POP._slug(FOREIGN_CAST[EMPIRE]['settlement']['code'])}"
+        assert o.faction == EMPIRE and o.rung == f"set_{_slug(FOREIGN_CAST[EMPIRE]['settlement']['code'])}"
     granted = {pid: {a for t in foreign.persons[pid].tenures if t.kind == "hold" and t.live
                      for a in (t.granted_acts or ())} for pid in ("p_npc_089", "p_npc_090")}
     assert "dispatch" in granted["p_npc_089"] and "dispatch" not in granted["p_npc_090"], granted
@@ -162,9 +164,9 @@ def test_altonias_goal_rows_are_seeded_with_the_seats_goals_derived_from_the_emp
 # ---------------------------------------------------------------------------------------------- (c)
 
 def test_the_foreign_root_is_outside_the_realm_for_endings_and_the_uncontrolled_census(control):
-    foreign = POP.build_realm(0, foreign=True)          # its own world: the falsifier below ends a hold
+    foreign = build_realm(0, foreign=True)          # its own world: the falsifier below ends a hold
     root = f"terr_{FOREIGN_CAST[EMPIRE]['territory']['code']}"
-    assert not any(foreign.rungs[a].kind == "realm" for a in POP.ancestry(foreign, root)), "the border is breached"
+    assert not any(foreign.rungs[a].kind == "realm" for a in ancestry(foreign, root)), "the border is breached"
     assert [r for r in foreign.rungs.values() if r.kind == "realm"] == [foreign.rungs["r_valoria"]]
     # THE FALSIFIER: end the root's only hold so NOBODY holds it. Were it counted under a realm, `uncontrolled`
     # (and so the census) would grow by one against the control arm, which seats no empire at all.
@@ -177,7 +179,7 @@ def test_the_foreign_root_is_outside_the_realm_for_endings_and_the_uncontrolled_
     # and the victory selector, CALLED (`world_q._ending_edges`, as `test_in27_endings` calls it): with every realm
     # territory a Crown man's, the empire's HELD root is not among the rungs it selects. Were it, Altonia's hold
     # would make the one-faction condition fail and `selected` would come back empty.
-    sel = POP.build_realm(0, foreign=True)
+    sel = build_realm(0, foreign=True)
     last = _all_but_one_under_the_crown(sel)
     sel.add_tenure(Tenure("t_in36_last_crown", last, faction_prop_id("Valorsmark"), "commit", 0))
     assert world_q.governing_hold(sel, root) is not None, "the empire's root must be HELD for this to bite"
@@ -213,7 +215,7 @@ def test_the_natural_goal_question_forms_a_march_candidate_on_the_capital_for_th
     assert qs["q:need:goal_katepano_press_the_capital"].referents == ("set_s_001",)
     q = out[0]
     assert ("set_s_001", "Rung") in q.classes, q
-    off = _told_of_the_capital(POP.build_realm(0, foreign=True, acquaintances=False))
+    off = _told_of_the_capital(build_realm(0, foreign=True, acquaintances=False))
     off_first = world_q.questions_for(off, off.persons["p_npc_089"])[0]
     assert off_first.id == "q:need:goal_katepano_press_the_capital" and ("set_s_001", "Rung") in off_first.classes
     cands = opening_set(p, View(p.id, [], foreign.fixtures.get("view_k"), q), q, foreign.fixtures)
@@ -226,7 +228,7 @@ def test_the_natural_goal_question_forms_a_march_candidate_on_the_capital_for_th
 
 
 def test_a_march_formed_by_a_chooser_restricted_to_march_folds_to_the_mass_battle_entry():
-    w = POP.build_realm(0, foreign=True)       # its own world: the driver below relocates the three Altonians
+    w = build_realm(0, foreign=True)       # its own world: the driver below relocates the three Altonians
     target = "set_s_001"                  # Valorsplatz: Crown-held and peopled by Crown members (a fought field)
     assert world_q.holder_faction_of(w, target) == "fac_valorsmark" and world_q.mustered(w, target, "fac_valorsmark")
     p, v, cands = _march_candidate(w, target)
@@ -261,7 +263,7 @@ def test_the_same_march_with_no_defender_arrives_unopposed_at_the_chokepoint():
     at the empire's own settlement), so a march on the pass is walked into, not fought for - which is why the
     Katepano's goal is aimed at the capital behind it and not at the pass. Recorded as a FINDING, not a design
     (H-233): the realm's defence of its chokepoint is garrison Site and nobody."""
-    w = POP.build_realm(0, foreign=True)
+    w = build_realm(0, foreign=True)
     assert world_q.mustered(w, "set_s_007", "fac_valorsmark") == []
     p, v, _ = _march_candidate(w, "set_s_007")
     act = make_chooser(w.fixtures, lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}"),
@@ -296,7 +298,7 @@ def _first_scene_of_the_goal_question(seed: int):
     `questions_for` -> the shipped aggregation -> `assemble` -> the real unrestricted `make_chooser`
     (`aperture.instrumented_season`'s own construction). Returns `(world, person, act or None)`; the act is READ
     off the scene, never set. The Katepano is told of the capital first (`_told_of_the_capital`, REM-27)."""
-    w = _told_of_the_capital(POP.build_realm(seed, foreign=True))
+    w = _told_of_the_capital(build_realm(seed, foreign=True))
     w._rehome()
     p, fx = w.persons["p_npc_089"], w.fixtures
     qs = world_q.questions_for(w, p, None)
@@ -369,7 +371,7 @@ def test_the_witness_seed_reaches_the_seam_in_a_full_one_season_run_too():
 
 def _the_witness_seed_reaches_the_seam_in_a_full_season(seed):
     from engine.season.harness import aperture
-    w = _told_of_the_capital(POP.build_realm(seed, foreign=True))
+    w = _told_of_the_capital(build_realm(seed, foreign=True))
     records = []
     real = wrapper.field_input
     wrapper.field_input = lambda *a, **k: records.append(real(*a, **k)) or records[-1]
@@ -387,14 +389,14 @@ def _the_witness_seed_reaches_the_seam_in_a_full_season(seed):
 # The guard reading is IN-60's Query, `world_q.guard_weight` (`test_in60_guard_weight.py` holds its falsifiers).
 
 def test_the_control_arm_seats_no_guard_and_reads_zero_at_every_hearth(control):
-    assert not [p for p in control.persons if p.startswith(POP.COHORT_PREFIX + "guard_")]
+    assert not [p for p in control.persons if p.startswith(COHORT_PREFIX + "guard_")]
     assert all(world_q.guard_weight(control, r) == 0 for r in control.rungs if control.rungs[r].kind == "hearth")
 
 
 def test_a_guard_stands_where_each_principal_is_and_the_king_is_guarded_harder_than_a_duke(guarded):
     w = guarded
     home = world_q.home_of(w)
-    by_seat = {row["seat"]: row["weight"] for row in POP.guard_rows()}
+    by_seat = {row["seat"]: row["weight"] for row in guard_rows()}
     assert set(by_seat) == {"off_king", "off_duchess_hafenmark", "off_duke_varfell"}
     authored = w._office_census["authored"]
     reads = {}
@@ -408,18 +410,18 @@ def test_a_guard_stands_where_each_principal_is_and_the_king_is_guarded_harder_t
     gm_home = home["p_npc_070"]
     assert home["p_npc_020"] != gm_home and world_q.guard_weight(w, gm_home) == 0
     # the guard is a cohort (S9) and holds no title and no commitment
-    for pid in (p for p in w.persons if p.startswith(POP.COHORT_PREFIX + "guard_")):
+    for pid in (p for p in w.persons if p.startswith(COHORT_PREFIX + "guard_")):
         assert w.persons[pid].weight > 1 and not [t for t in w.tenures if t.subject == pid and t.kind in ("hold", "commit")]
 
 
 def test_ending_the_guards_oblige_drops_the_reading_with_no_other_write():
-    w = POP.build_realm(0, guards=True)
+    w = build_realm(0, guards=True)
     holder = next(t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == w._office_census["authored"]["off_king"])
     rung = world_q.home_of(w)[holder]
     before = world_q.guard_weight(w, rung)
-    assert before == {r["seat"]: r["weight"] for r in POP.guard_rows()}["off_king"]
+    assert before == {r["seat"]: r["weight"] for r in guard_rows()}["off_king"]
     for t in w.tenures:
-        if t.kind == "oblige" and t.subject == f"{POP.COHORT_PREFIX}guard_off_king":
+        if t.kind == "oblige" and t.subject == f"{COHORT_PREFIX}guard_off_king":
             t.until = w.tick
     assert world_q.guard_weight(w, rung) == 0, "the guard's live oblige edge is what the definition reads; closing it must drop the read"
 
@@ -427,10 +429,10 @@ def test_ending_the_guards_oblige_drops_the_reading_with_no_other_write():
 def test_guard_rows_refuse_what_they_cannot_read():
     from engine.season.gaps import Forbidden, Unspecified
     with pytest.raises(Unspecified):
-        POP.guard_rows("guards: []\n")
+        guard_rows("guards: []\n")
     with pytest.raises(Forbidden):
-        POP.guard_rows("guards:\n- {seat: off_king, weight: 1}\n")
+        guard_rows("guards:\n- {seat: off_king, weight: 1}\n")
     with pytest.raises(Unspecified):
-        POP.guard_rows("guards:\n- {seat: off_nowhere, weight: 2}\n")
+        guard_rows("guards:\n- {seat: off_nowhere, weight: 2}\n")
     with pytest.raises(Unspecified):
-        POP.guard_rows("guards:\n- {seat: off_king, weight: 2}\n- {seat: off_king, weight: 3}\n")
+        guard_rows("guards:\n- {seat: off_king, weight: 2}\n- {seat: off_king, weight: 3}\n")

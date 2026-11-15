@@ -4474,7 +4474,7 @@
       "value": 0,
       "kind": "scalar",
       "module": "engine.season.realm",
-      "file": "engine/season/harness/populated.py",
+      "file": "engine/season/boot/realm.py",
       "note": "",
       "citation": null,
       "citation_grade": null
@@ -4485,7 +4485,7 @@
       "value": true,
       "kind": "scalar",
       "module": "engine.season.realm",
-      "file": "engine/season/harness/populated.py",
+      "file": "engine/season/boot/realm.py",
       "note": "",
       "citation": null,
       "citation_grade": null
@@ -4496,7 +4496,7 @@
       "value": true,
       "kind": "scalar",
       "module": "engine.season.realm",
-      "file": "engine/season/harness/populated.py",
+      "file": "engine/season/boot/realm.py",
       "note": "",
       "citation": null,
       "citation_grade": null
@@ -4507,7 +4507,7 @@
       "value": true,
       "kind": "scalar",
       "module": "engine.season.realm",
-      "file": "engine/season/harness/populated.py",
+      "file": "engine/season/boot/realm.py",
       "note": "",
       "citation": null,
       "citation_grade": null
@@ -4518,7 +4518,7 @@
       "value": true,
       "kind": "scalar",
       "module": "engine.season.realm",
-      "file": "engine/season/harness/populated.py",
+      "file": "engine/season/boot/realm.py",
       "note": "",
       "citation": null,
       "citation_grade": null
@@ -4529,7 +4529,7 @@
       "value": false,
       "kind": "scalar",
       "module": "engine.season.realm",
-      "file": "engine/season/harness/populated.py",
+      "file": "engine/season/boot/realm.py",
       "note": "",
       "citation": null,
       "citation_grade": null
@@ -4540,7 +4540,7 @@
       "value": true,
       "kind": "scalar",
       "module": "engine.season.realm",
-      "file": "engine/season/harness/populated.py",
+      "file": "engine/season/boot/realm.py",
       "note": "",
       "citation": null,
       "citation_grade": null
@@ -4551,7 +4551,7 @@
       "value": true,
       "kind": "scalar",
       "module": "engine.season.realm",
-      "file": "engine/season/harness/populated.py",
+      "file": "engine/season/boot/realm.py",
       "note": "",
       "citation": null,
       "citation_grade": null

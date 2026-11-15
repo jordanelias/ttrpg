@@ -52,7 +52,8 @@ from ...substrate import composition
 from ..data.matrix import Step, WriteClass
 from ..data.verbs import VERB_TABLE
 from ..harness import aperture as A
-from ..harness import governance_spine, populated
+from ..harness import governance_spine
+from ..boot.realm import build_realm
 from ..harness import probes as P
 from ..harness.corpus_run import (_attribute_acts, _emission_id, attempts, attribute, foreign_kinds,
                                   graded_loss, graded_losses, unrowed_acts)
@@ -69,7 +70,7 @@ from .test_u7_remit import _fold, _world
 
 @pytest.fixture(scope="module")
 def realm():
-    return A.measure_world(populated.build_realm, 0, 1)
+    return A.measure_world(build_realm, 0, 1)
 
 
 def test_aperture_the_measured_season_is_the_populated_season(realm):
@@ -109,7 +110,7 @@ def test_aperture_seats_agrees_with_the_builders_own_census():
     """SEATS, not persons: `build_realm` seats NPC-020 twice since `13d-iii` (the King and the Duke
     of Valorsmark), so the per-holder table has fewer keys than the census has seats -- the SUM of
     its lists is what must equal `seated`."""
-    w = populated.build_realm(0)
+    w = build_realm(0)
     table = A.seats(w)
     seats = sum(len(offs) for offs in table.values())
     assert seats == w._office_census["seated"], (
@@ -751,7 +752,7 @@ def test_cr18_the_pools_line_reads_the_rolled_pool_and_separates_persons_not_sea
     assert not A.persons_separated({"a": {(0, 2): 1}, "b": {(1, 3): 1}})
     assert "no pooled roll" in "\n".join(A.pools_lines({"pools": {}}))
     assert realm["pools"], "the fold's records never reached the pools reader"
-    default = populated.build_realm(0).fixtures.get("pool_default")
+    default = build_realm(0).fixtures.get("pool_default")
     # B11 lane A: `cast_attributes` ships on, so NPC-001's authored Reason (5) is her `inquiry` pool and the realm's rolls
     # read two pools in season one (was `{default}` alone); every unauthored person then held `pool_default` on every key.
     # B01a.99 (every person's attributes are drawn, 1 to 6 by `generated_attribute_range`, a population change): the realm's

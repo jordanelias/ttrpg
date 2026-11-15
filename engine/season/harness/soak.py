@@ -68,7 +68,8 @@ from pathlib import Path
 # from itself.
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from . import probes as P
-from .populated import build_realm, census
+from ..boot.realm import build_realm
+from .populated import census
 # `corpus_run._attribute_acts` is the ONE owner of the made/refused rule -- `[(act, made, refused)]`;
 # `attribute` calls it over the fold set (this module's reading) and `attempts` over the act store. Reused
 # rather than re-derived from `emits`/`emits_on_refusal` a second time (CLAUDE.md §8, §0.06 S: "one rule

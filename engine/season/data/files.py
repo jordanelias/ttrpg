@@ -248,6 +248,12 @@ TEST_PY = TESTS_DIR / "test_season_shape.py"
 PROBES_PY = HARNESS_DIR / "probes.py"
 HEADLESS_PY = HARNESS_DIR / "headless.py"
 
+# THE REALM BUILDER'S HOME (A-102): `boot/` builds the World and imports no instrument. It is not a
+# step of the season, so `loop_modules()` does not list it; `package_modules()` finds it by `rglob`.
+BOOT_DIR = PACKAGE_DIR / "boot"
+REALM_PY = BOOT_DIR / "realm.py"
+BOOT_CHOOSER_PY = BOOT_DIR / "chooser.py"
+
 
 def package_modules() -> tuple:
     """EVERY `.py` IN THIS PACKAGE, DISCOVERED AND NEVER LISTED, sorted by package-relative path.

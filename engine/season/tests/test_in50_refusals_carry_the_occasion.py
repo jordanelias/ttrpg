@@ -28,7 +28,7 @@ from engine.season.data.matrix import Step, WriteClass
 from engine.season.decision import make_chooser
 from engine.season.harness import corpus_run as C
 from engine.season.harness import run_cases as R
-from engine.season.harness.populated import build_realm
+from engine.season.boot.realm import build_realm
 from engine.season.data.verbs import VERB_TABLE
 from engine.season.loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from engine.season.loop.resolve import _act_events
