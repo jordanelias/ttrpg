@@ -235,7 +235,7 @@ rows:
       all verbs must be built out, and doing so requires planning out all the different scales
       of play required in a season
     status: not_met
-    measure: "python -m engine.season.harness.corpus_run  # the 'WHERE THE <n> GO' line, which prints len(VERB_TABLE); the denominator is len(VERB_TABLE) at measurement time (v10 REM-02, `workplans/valoria_master_workplan_v11_part2.md` §6; [ASSUMPTION; medium; Jordan to correct]): a row leaves the table only by a ruling or a ratified design decision cited in its commit, never to move R-05, and every removal is recorded in R-05's `measured:` block; a row in the table but outside resolvable_verbs() counts under 'have no predicate/effect', so a row landed dark raises n. 'Built out' = at least one act formed by the chooser in a seeded run of a shipped builder is admitted, folds its band and emits the row's declared kinds; where the admitted band declares writes, at least one minted receipt has before ≠ after; a verb whose bands write nothing (`speak`, `interrogate`) is built out on execution; a hand-built execution never counts; the aperture clause covers realm-only verbs (`found`, `build`, `work`). It was '38' as of ED-IN-0261, '32' until ED-FI-0009 made the count honest and '37' until `release` landed"
+    measure: "python -m engine.season.harness.corpus_run --seasons 2  # the 'WHERE THE <n> GO' line; n is len(VERB_TABLE) at measurement time"
     conjuncts: []
     blocks: [H-65, IN-09, IN-10, IN-33, IN-45]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W10-core removed (it gates corpus_run's R2 check, not this row's WHERE THE <n> GO); H-94 is carried by its owners IN-10, IN-09, IN-45, IN-33
