@@ -53,3 +53,48 @@ def test_no_harness_import_line_in_boot():
                 for name in _names(node):
                     assert "harness" not in name.split("."), f"{path.name}:{node.lineno} imports {name}"
     assert checked >= 3, f"only {checked} files under boot/ -- the walk is broken"
+
+
+class _Logged(dict):
+    """A dict that appends `(label, key)` to a shared log on each item assignment -- how the test sees the ORDER of writes across stores."""
+    def __init__(self, label, log):
+        super().__init__()
+        self._label, self._log = label, log
+
+    def __setitem__(self, key, value):
+        self._log.append((self._label, key))
+        super().__setitem__(key, value)
+
+
+def test_place_person_writes_the_four_records():
+    """ONE call writes the `Person`, its person `Rung`, the `contain` Tenure `t_<pid>_in` and the `reside` Tenure `t_<pid>_home`, in that order -- and `home` defaults to `rung`."""
+    from engine.season.boot.realm import place_person
+    from engine.season.data.fixtures import DEFAULT_FIXTURES
+    from engine.season.queries.world_q import RESIDE_KIND
+    from engine.season.state.carriers import Person, Rung
+    from engine.season.state.world import World
+
+    log = []
+    w = World(0, DEFAULT_FIXTURES)
+    w.persons, w.rungs = _Logged("person", log), _Logged("rung", log)
+    w.rungs["hearth_a"] = Rung("hearth_a", "hearth")
+    w.rungs["hearth_b"] = Rung("hearth_b", "hearth")
+    log.clear()
+    real_add = w.add_tenure
+    w.add_tenure = lambda t: (log.append(("tenure", t.id)), real_add(t))[1]
+
+    p = place_person(w, "p_x", "Xan", "hearth_a")
+    assert isinstance(p, Person) and p is w.persons["p_x"] and (p.name, p.weight) == ("Xan", 1)
+    assert w.rungs["p_x"].kind == "person"
+    assert log == [("person", "p_x"), ("rung", "p_x"), ("tenure", "t_p_x_in"), ("tenure", "t_p_x_home")]
+    tenures = {t.id: t for t in w.persons["p_x"].tenures}
+    assert list(tenures) == ["t_p_x_in", "t_p_x_home"]
+    assert (tenures["t_p_x_in"].kind, tenures["t_p_x_in"].object) == ("contain", "hearth_a")
+    assert (tenures["t_p_x_home"].kind, tenures["t_p_x_home"].object) == (RESIDE_KIND, "hearth_a")
+    assert RESIDE_KIND == "reside"
+
+    # `home` set apart from `rung`, `weight` and a `Person` field pass through.
+    q = place_person(w, "p_y", "Yan", "hearth_a", home="hearth_b", weight=3, pursuits={"a": 1})
+    assert (q.weight, q.pursuits) == (3, {"a": 1})
+    got = {t.id: t.object for t in q.tenures}
+    assert got == {"t_p_y_in": "hearth_a", "t_p_y_home": "hearth_b"}

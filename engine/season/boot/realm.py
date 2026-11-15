@@ -622,6 +622,19 @@ def temperament_rows(text: str | None = None) -> list | None:
     return block
 
 
+def place_person(w: World, pid: str, name: str, rung: str, *, home: str | None = None, weight: int = 1,
+                 **fields) -> Person:
+    """PLACE ONE PERSON: the `Person`, its person `Rung`, the `contain` Tenure `t_<pid>_in` at `rung` and
+    the `reside` Tenure `t_<pid>_home` at `home` (default `rung`), written in that order. The word is
+    *place*, not *seat*: a seat is an office in this tree. `fields` are `Person` fields (`pursuits`,
+    `attributes`, ...). A tenure after these four (a guard's `oblige`) is the caller's own write."""
+    w.persons[pid] = p = Person(pid, name, weight=weight, **fields)
+    w.rungs[pid] = Rung(pid, "person")
+    w.add_tenure(Tenure(f"t_{pid}_in", pid, rung, "contain", 0))
+    w.add_tenure(Tenure(f"t_{pid}_home", pid, rung if home is None else home, RESIDE_KIND, 0))
+    return p
+
+
 def seat_cohorts(w: World, rows: list, names: dict | None = None, temperaments: list | None = None) -> list:
     """SEAT THE AUTHORED COHORTS IN A BUILT WORLD, and return their person ids in row order. Plan
     position `24f`: the producer the design step named (`workplans/2026-09-28-the-plan-one-order-
@@ -696,10 +709,7 @@ def seat_cohorts(w: World, rows: list, names: dict | None = None, temperaments: 
                     needs=f"a `{{territory: {terr}, alpha, beta}}` row, or no `temperaments:` block",
                     law="SE-06 -- a cohort's pursuits are its territory's temperament; a territory with no row is refused, not left uniform")
             pursuits = dict(vector_of[terr])
-        w.persons[pid] = Person(pid, f"the people of {names.get(rung, rung)}", weight=wt, pursuits=pursuits)
-        w.rungs[pid] = Rung(pid, "person")
-        w.add_tenure(Tenure(f"t_{pid}_in", pid, rung, "contain", 0))
-        w.add_tenure(Tenure(f"t_{pid}_home", pid, rung, RESIDE_KIND, 0))
+        place_person(w, pid, f"the people of {names.get(rung, rung)}", rung, weight=wt, pursuits=pursuits)
         out.append(pid)
     return out
 
@@ -874,10 +884,7 @@ def seat_guards(w: World, rows: list, authored: dict, partial: bool = False) -> 
                 f"guard id {pid!r} is already taken in this world", "engine/season/cohorts.yaml",
                 needs="a seat whose guard id no cast member or rung already uses",
                 law="v9 IN-36 -- a guard is seated beside the cast, never over it")
-        w.persons[pid] = Person(pid, f"the guard of {w.offices[oid].post}", weight=wt)
-        w.rungs[pid] = Rung(pid, "person")
-        w.add_tenure(Tenure(f"t_{pid}_in", pid, post, "contain", 0))
-        w.add_tenure(Tenure(f"t_{pid}_home", pid, town, RESIDE_KIND, 0))
+        place_person(w, pid, f"the guard of {w.offices[oid].post}", post, home=town, weight=wt)
         w.add_tenure(Tenure(f"t_{pid}_oblige", pid, oid, "oblige", 0))
 
 
@@ -1506,13 +1513,10 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
             fac_here = cast.faction_of(cast.row(cid) or {})[0]
             if fac_here in foreign_home:
                 home = foreign_home[fac_here][1]
-        w.persons[pid] = Person(pid, str(case.get("name") or cid))
-        w.rungs[pid] = Rung(pid, "person")
-        w.add_tenure(Tenure(f"t_{pid}_in", pid, home, "contain", 0))
-        # Plan position `19c`: and they LIVE there -- the `reside` edge a `move` leaves behind and
-        # only a `migrate` re-homes (`loop/effects.py::_eff_migrate`). Every builder mints it beside
-        # the first `contain`, so `world_q.residence_of` reads one edge and never falls back.
-        w.add_tenure(Tenure(f"t_{pid}_home", pid, home, RESIDE_KIND, 0))
+        # Plan position `19c`: they LIVE where they are -- the `reside` edge a `move` leaves behind and
+        # only a `migrate` re-homes (`loop/effects.py::_eff_migrate`); `place_person` mints it beside the
+        # first `contain`, so `world_q.residence_of` reads one edge and never falls back.
+        place_person(w, pid, str(case.get("name") or cid), home)
         # ⚠⚠ AUTHORED, NOT DRAWN — AND THE DRAW REMAINS AS THE NAMED FALLBACK IT ALWAYS WAS.
         # `references/npc_registry.yaml` carries a weighted conviction vector for all 46 of these
         # people, cited to canon, using only canonical names (the fifteen pursuits since IN-08's
