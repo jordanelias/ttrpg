@@ -227,7 +227,7 @@ def _stance_of(sf, strategy='line'):
 
 def test_a_role_sets_the_posture_its_instructions_name_unless_the_unit_says_otherwise():
     """Precedence: the unit's own posture, then its role's, then the strategy's. Writing the strategy's posture
-    unconditionally made a role unable to set one. FALSIFIER: restore `posture=sf.posture or STRATEGIES[...]` in
+    unconditionally made a role unable to set one. FALSIFIER: restore `stance=sf.posture or STRATEGIES[...]` (the engine spec key) in
     `_spec_for` and the first line reads 'balanced'."""
     wall = UnitRow('w', 'heavy_infantry', 120, role='ShieldWall')
     assert _stance_of(wall) == 'hold', "ShieldWall under the neutral strategy must hold"

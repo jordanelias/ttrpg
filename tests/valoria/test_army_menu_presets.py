@@ -96,7 +96,7 @@ def test_advisories_name_the_routs():
     kinds = {a[0]: a for a in _opts(rec, ())["advisories"]}
     assert kinds["unit_routs"][1:] == ("tiny", 50, SUBUNIT_ROUT_FLOOR)
     assert kinds["army_routs"][2:] == (50, BLOCK_SIZE)
-    # CONTROL, one change: a body the size of a unit has neither warning
+    # CONTROL, one change: a unit of a full block (400 men) has neither warning
     rec2 = A.assign(A.form(A.raised(A.new("fac_x"), "c1", "spearmen", 400), "line", "spearmen"), "line", "c1", 400)
     assert not {a[0] for a in _opts(rec2, ())["advisories"]} & {"unit_routs", "army_routs"}
     rec3 = A.form(A.raised(A.new("fac_x"), "c1", "levy", 90), "pool", "levy")

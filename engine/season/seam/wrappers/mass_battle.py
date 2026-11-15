@@ -215,7 +215,7 @@ def _order_of_battle(w: Any, faction: Optional[str], side: list) -> Any:
 
 
 def _standing_order(w: Any, faction: Optional[str], place: Optional[str]) -> Optional[FieldOrder]:
-    """CP-T04-02: the standing order of battle `faction`'s line fights `place` under, as the module reads it, or `None`.
+    """CP-T04-02: the standing order `faction`'s line fights `place` under, as the module reads it, or `None`.
     Which Record is `world_q.standing_order`'s (the newest holder edge among the faction's seats' orders about the place);
     this lifts its content into the typed `FieldOrder` and decides nothing."""
     rec = world_q.standing_order(w, faction, place)
@@ -245,7 +245,7 @@ def field_input(w: Any, claimants: list, other: list, rung: str,
     ED-IN-0306 phase 3: `factions` is `(attacker, defender)`, each side's faction Proposition id or `None`;
     each side whose faction holds an army Record fights as that Record's order of battle
     (`_order_of_battle`). Neither side having one leaves `orders_of_battle` `None`, the record exactly as it was.
-    CP-T04-02 (`H-361`): `orders` is each side's STANDING ORDER OF BATTLE (`_standing_order`): the attacker's about
+    CP-T04-02 (`H-361`): `orders` is each side's STANDING ORDER (`_standing_order`): the attacker's about
     `origin_place` (the settlement it marched from, `world_q.march_origin`), the defender's about `rung` (the target). A
     side whose faction's seats hold no order about its place reads `None`; neither side having one leaves `orders` `None`,
     the record exactly as it was."""
@@ -474,7 +474,7 @@ def field_estimate(w: Any, actor: str, via: Optional[str], target: Optional[str]
     `samples` 0: `resolve` deals it with no battle, so nothing is sampled. A refusal is `resolve`'s own dict
     (`PARTY-GAP`, `ENGINE-UNAVAILABLE`).
 
-    THE ORDER. `order` None reads the standing order of battle as `field_input` reads it (`world_q.standing_order`, both
+    THE ORDER. `order` None reads the standing order as `field_input` reads it (`world_q.standing_order`, both
     sides'); a `FieldOrder` given is the ATTACKER's order for this estimate in the standing one's place (the defender's
     standing order stays), so the player can ask what a role or a retreat line would change before he issues it.
 

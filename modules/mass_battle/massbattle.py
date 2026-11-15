@@ -214,9 +214,9 @@ _MIN_TROOPS = 1.0  # floor only -- `Unit.total_troops() == 0` divides by zero de
                    # that crash, not a claim about what a minimal army is.
 
 
-#: CP-T04-02 (`H-361`): THE STANDING ORDER OF BATTLE'S VOCABULARY, owned HERE and read by the season through
+#: CP-T04-02 (`H-361`): THE STANDING ORDER'S VOCABULARY, owned HERE and read by the season through
 #: `tools/export_battle_orders.py` -> `engine/engine_params/battle_orders.json` (`engine/substrate/battle_orders.py`),
-#: never from a second list. `ORDER_ROLES` is `config.ROLE_SPEC`'s names, the whole set: a standing order of battle is the
+#: never from a second list. `ORDER_ROLES` is `config.ROLE_SPEC`'s names, the whole set: a standing order is the
 #: commander's, so it is NOT gated by `registry.role_allowed` for the line's stand-in troop type ('infantry', whose
 #: menu is Hold/Push/ShieldWall and moves a field by under 3 points, `H-361`). [ASSUMPTION; medium; Jordan to correct;
 #: revert: gate `role` on `registry.role_allowed` for the stand-in troop type in `_role_fields`.]
@@ -357,7 +357,7 @@ _HEADCOUNT_LINE_TYPE = 'light_infantry'
 
 def _oob_unit(oob, weight, side, morale_start):
     """The Unit for a side when the field carries orders of battle (ED-IN-0306). `oob` None -> a single
-    `_HEADCOUNT_LINE_TYPE` unit, so both sides deploy by the same rule. Its size is the most the side's
+    `_HEADCOUNT_LINE_TYPE` `UnitRow`, so both sides deploy by the same rule. Its size is the most the side's
     `weight` could put under arms, `under_arms_cap(weight)` (`troop_types/recruitment.py`), NOT the bare weight:
     an order of battle counts troops (a weight-12 cohort raises up to 120) and a season weight counts households,
     so a side left at its weight would meet a hundred troops with twelve. [ASSUMPTION; medium; Jordan to correct;

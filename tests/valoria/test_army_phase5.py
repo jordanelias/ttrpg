@@ -77,9 +77,9 @@ def _troops(oob):
 
 # ---------------------------------------------------------------------------------------- M1, M2, M3: the chain runs
 def test_the_shipped_realm_can_raise_field_and_win_with_an_army():
-    """One shipped cohort cannot field a unit (weight 2 = 60 troops, under the engine's 100-troop floor); the faction's
+    """One shipped cohort cannot field an army (weight 2 = 60 troops, under the engine's 100-troop army floor); the faction's
     whole levy, under its commander, can: 15 cohorts = 900, recruited from cohorts that are committed to nobody."""
-    assert R.under_arms_cap(2) < 100, "control: a single shipped cohort is below the engine's unit floor"
+    assert R.under_arms_cap(2) < 100, "control: a single shipped cohort is below the engine's army floor"
     w = build_realm(0)
     cohorts = _governed_cohorts(w, CROWN)
     assert len(cohorts) == 15 and not set(cohorts) & set(world_q.members(w, CROWN)), "fixture: governed, not committed"

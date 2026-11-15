@@ -1,4 +1,4 @@
-"""CP-T04-02 (B10-12; AM-C-09 REPAIR): `marshal`, the standing order. A seat granting `dispatch` mints an
+"""CP-T04-02 (B10-12; AM-C-09 REPAIR): `marshal`, the standing order. A seat granting `dispatch` mints a
 `standing_order` Record `[at, role, retreat_at]` through `_mint_document`; `field_input` reads, per side, the one whose
 holder edge is newest (`world_q.standing_order`); `resolve_field` maps its `role` onto each subunit of a headcount line.
 This file is the item's own; nothing here is a shared pin.
@@ -292,7 +292,7 @@ def test_the_role_is_not_gated_by_role_allowed():
         mb._weighted_unit("a", 20, 5, SCALE, "Berserker")
 
 
-def test_create_record_does_not_mint_an_order_of_battle_marshal_alone_does():
+def test_create_record_does_not_mint_a_standing_order_marshal_alone_does():
     """A hand-built `create_record` naming kind `standing_order` (the menu's path, as the army verbs have) would skip
     `_eff_marshal`'s closed sets, its purview conjunct and the withheld arm; it declines instead. Control: the same act
     with kind `text` mints."""

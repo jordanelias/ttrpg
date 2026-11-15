@@ -155,7 +155,7 @@ def _spec_for(sf: UnitRow, strategy: str) -> dict:
     # the strategy's for its class. Always writing the strategy's posture made a role unable to set it.
     role_stance = role is not None and any(k in _INSTRUCTION_STANCE for k in ROLE_SPEC[role]['instructions'])
     if sf.posture is not None:
-        spec['stance'] = sf.posture  # D-9: the engine attribute keeps its name; the order format is exported data
+        spec['stance'] = sf.posture  # D-9: `build_army`'s spec key is the engine attribute `Subunit.stance`, which keeps its name (an Order sets it by name, `_ORDER_SAFE_FIELDS`)
     elif not role_stance:
         spec['stance'] = STRATEGIES[strategy][cls]
     if role is not None:
