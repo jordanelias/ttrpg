@@ -22,6 +22,7 @@ from engine.season.data import files
 _PROBE = (
     "import sys\n"
     "import engine.season.boot.realm, engine.season.boot.chooser\n"
+    "engine.season.boot.realm.build_realm(0)\n"   # a harness import deferred into a function runs here, not at import
     "loaded = sorted(m for m in sys.modules if m.startswith('engine.season'))\n"
     "print(len(loaded))\n"
     "print('|'.join(m for m in loaded if m.startswith('engine.season.harness')))\n"

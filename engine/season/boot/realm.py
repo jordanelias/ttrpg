@@ -279,9 +279,11 @@ def _check_office(where: str, off) -> None:
 
 @cache
 def _rescales_once() -> dict:
-    """THE OVERLAYS, read on first use and kept: importing this module reads no YAML and cannot `SystemExit`, which
-    `data/__init__.py` records as the cost of an eager read. `corpus_run` binds the same dict as its `RESCALES`, so
-    the builder and the corpus read one object, as before the move."""
+    """THE OVERLAYS, read on first use and kept: importing this module reads no `cases/exercises/` overlay (it still
+    loads `data.rosters`, which can `SystemExit` at import), and `data/__init__.py` records the cost of an eager read.
+    `corpus_run` binds the same dict as its `RESCALES`, so the builder and the corpus read one object, as before the
+    move; never `cache_clear()` this, which would give the builder a new dict and leave `corpus_run` the old one
+    (a test re-reading a patched `EXERCISES_DIR` calls `rescales()` itself, as `test_u8_cast_fields` does)."""
     return rescales()
 
 
