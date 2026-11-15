@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 124,
-    "total": 373,
-    "uncited": 249,
+    "total": 381,
+    "uncited": 257,
     "of_which_assumption_grade": 8
   },
-  "count": 373,
+  "count": 381,
   "by_module": {
     "engine.dice_engine": 6,
     "engine.season": 24,
@@ -17,7 +17,8 @@
     "overview": 5,
     "social_contest": 31,
     "threadwork": 30,
-    "engine.season.settings": 94
+    "engine.season.settings": 94,
+    "engine.season.realm": 8
   },
   "params": [
     {
@@ -4497,6 +4498,94 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "`H-356`, swept None (control) / 2 / 4 (SHIPPED) / 8",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.realm.seed",
+      "name": "seed",
+      "value": 0,
+      "kind": "scalar",
+      "module": "engine.season.realm",
+      "file": "engine/season/harness/populated.py",
+      "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.realm.from_roster",
+      "name": "from_roster",
+      "value": true,
+      "kind": "scalar",
+      "module": "engine.season.realm",
+      "file": "engine/season/harness/populated.py",
+      "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.realm.goals",
+      "name": "goals",
+      "value": true,
+      "kind": "scalar",
+      "module": "engine.season.realm",
+      "file": "engine/season/harness/populated.py",
+      "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.realm.goals_complete",
+      "name": "goals_complete",
+      "value": true,
+      "kind": "scalar",
+      "module": "engine.season.realm",
+      "file": "engine/season/harness/populated.py",
+      "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.realm.foreign",
+      "name": "foreign",
+      "value": true,
+      "kind": "scalar",
+      "module": "engine.season.realm",
+      "file": "engine/season/harness/populated.py",
+      "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.realm.guards",
+      "name": "guards",
+      "value": false,
+      "kind": "scalar",
+      "module": "engine.season.realm",
+      "file": "engine/season/harness/populated.py",
+      "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.realm.acquaintances",
+      "name": "acquaintances",
+      "value": true,
+      "kind": "scalar",
+      "module": "engine.season.realm",
+      "file": "engine/season/harness/populated.py",
+      "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.realm.cast_attributes",
+      "name": "cast_attributes",
+      "value": true,
+      "kind": "scalar",
+      "module": "engine.season.realm",
+      "file": "engine/season/harness/populated.py",
+      "note": "",
       "citation": null,
       "citation_grade": null
     }

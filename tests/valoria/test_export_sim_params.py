@@ -142,3 +142,25 @@ def test_the_season_settings_are_exported_and_a_rename_cannot_empty_them(tmp_pat
     import pytest
     with pytest.raises(ValueError):
         esp._setting_rows(renamed)
+
+    # B03.15 (CI-05): the realm's arms are rows too, `engine.season.realm.<param>`: every `build_realm`
+    # parameter whose default is a literal (`seed` and the seven booleans; `cap` and `fixtures` default to
+    # None, which `_literal` cannot tell from a non-literal, so they are skipped). The values are the
+    # shipped defaults as the signature has them; `cast_attributes` ships True since B11 lane A (the item's
+    # L-08 reading, False, is the control arm), `foreign` True.
+    import inspect
+    from engine.season.harness.populated import build_realm
+    arms = {r["key"]: r for r in rows if r["module"] == "engine.season.realm"}
+    sig = inspect.signature(build_realm).parameters
+    literal_defaults = {n: p.default for n, p in sig.items() if isinstance(p.default, (bool, int, str, float))}
+    assert set(literal_defaults) == {"seed", "from_roster", "goals", "goals_complete", "foreign", "guards",
+                                     "acquaintances", "cast_attributes"}, sorted(literal_defaults)
+    assert set(arms) == {"engine.season.realm." + n for n in literal_defaults}, sorted(arms)
+    for n, v in literal_defaults.items():
+        assert arms["engine.season.realm." + n]["value"] == v, n
+    assert arms["engine.season.realm.cast_attributes"]["value"] is True
+    assert arms["engine.season.realm.foreign"]["value"] is True
+    assert all(r["file"] == "engine/season/harness/populated.py" for r in arms.values())
+    renamed.write_text("def build_world(seed=0):\n    pass\n")
+    with pytest.raises(ValueError):
+        esp._realm_arm_records(renamed)
