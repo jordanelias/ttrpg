@@ -18,6 +18,7 @@ which is the instrument.
 from __future__ import annotations
 
 import re
+from functools import cache
 from collections import Counter, defaultdict
 
 from ..data import cast, files
@@ -276,17 +277,12 @@ def _check_office(where: str, off) -> None:
         raise SystemExit(f"{where}: {e}") from None
 
 
-_RESCALES = None
-
-
+@cache
 def _rescales_once() -> dict:
-    """THE OVERLAYS, read on first use and kept (the shape of `_INST_CACHE` below): importing this module reads no
-    YAML and cannot `SystemExit`, which `data/__init__.py` records as the cost of an eager read. `corpus_run` binds the
-    same dict as its `RESCALES`, so the builder and the corpus read one object, as before the move."""
-    global _RESCALES
-    if _RESCALES is None:
-        _RESCALES = rescales()
-    return _RESCALES
+    """THE OVERLAYS, read on first use and kept: importing this module reads no YAML and cannot `SystemExit`, which
+    `data/__init__.py` records as the cost of an eager read. `corpus_run` binds the same dict as its `RESCALES`, so
+    the builder and the corpus read one object, as before the move."""
+    return rescales()
 
 
 def _load(rel):

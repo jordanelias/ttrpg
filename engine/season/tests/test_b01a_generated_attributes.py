@@ -18,7 +18,6 @@ from engine.substrate.descriptors import ATTRIBUTES
 
 from ..data import cast
 from ..gaps import Forbidden
-from ..data.fixtures import DEFAULT_FIXTURES
 from ..boot import realm as boot_realm
 from ..boot.realm import build_realm
 from ..state.carriers import generated_attributes
