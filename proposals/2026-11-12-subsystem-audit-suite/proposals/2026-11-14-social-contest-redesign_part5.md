@@ -1,6 +1,7 @@
 # SC · DICE — the social contest redesigned, part 5: the fold map into workplan v12, and what was not decided
 
 ## Status: PROPOSED (the fifth part of `2026-11-14-social-contest-redesign.md`; read that file's head first; reference under CLAUDE.md §0.05, nothing reads it at runtime; applied by stage 3, a Sonnet lane, and deleted with the suite when v12 is adopted)
+**Superseded in part by `2026-11-15-social-contest-redesign-v2.md`: read that first.**
 
 ---
 

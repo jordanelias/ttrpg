@@ -1,6 +1,7 @@
 # SC · DICE — the social contest redesigned, part 3: the build items (the batch block; B24p.01 to B24p.12)
 
 ## Status: PROPOSED (the third part of `2026-11-14-social-contest-redesign.md`; read that file's head first: its markers, short names and status sentence apply here; reference under CLAUDE.md §0.05, nothing reads it at runtime)
+**Superseded in part by `2026-11-15-social-contest-redesign-v2.md`: read that first.**
 
 ---
 

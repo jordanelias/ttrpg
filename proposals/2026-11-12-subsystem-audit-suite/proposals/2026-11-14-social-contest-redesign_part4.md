@@ -1,6 +1,7 @@
 # SC · DICE — the social contest redesigned, part 4: the build items (B24p.13 to B24p.99)
 
 ## Status: PROPOSED (the fourth part of `2026-11-14-social-contest-redesign.md`; read that file's head first, and part 3's E.0 for the batch block these items belong to; reference under CLAUDE.md §0.05, nothing reads it at runtime)
+**Superseded in part by `2026-11-15-social-contest-redesign-v2.md`: read that first.**
 
 ⚠ R11 (2026-11-14), the adversarial pass of 2026-11-15 and R12 (2026-11-15) are folded into the plan's copy of these items only (`workplans/valoria_master_workplan_v12_part22_b24p_cont.md`); where they differ, that copy governs (part 3, §E's note).
 

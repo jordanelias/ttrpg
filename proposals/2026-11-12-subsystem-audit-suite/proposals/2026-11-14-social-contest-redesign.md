@@ -23,6 +23,7 @@ leverage channel); B06 (`engine/dice_engine/draw.py::Draw`); B07 (the rooms an a
 B01a, B05, BA1, B24, B24a, B27, B28 and B98 (§F).
 
 ## Status: PROPOSED
+**Superseded in part by `2026-11-15-social-contest-redesign-v2.md`: read that first.**
 
 Design input, reference under CLAUDE.md §0.05: it describes a design and the code it would become; it is not a mechanism
 and nothing reads it at runtime. Every source under `.designs/`, `.audit/`, `research/` and `proposals/` is cited for

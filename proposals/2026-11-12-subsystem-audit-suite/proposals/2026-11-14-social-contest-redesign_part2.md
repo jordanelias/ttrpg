@@ -1,6 +1,7 @@
 # SC · DICE — the social contest redesigned, part 2: the proceeding types as data, and the verbs
 
 ## Status: PROPOSED (the second part of `2026-11-14-social-contest-redesign.md`; read that file's head first: its markers, short names and status sentence apply here; reference under CLAUDE.md §0.05, nothing reads it at runtime)
+**Superseded in part by `2026-11-15-social-contest-redesign-v2.md`: read that first.**
 
 ---
 
