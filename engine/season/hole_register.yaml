@@ -5676,7 +5676,7 @@ rows:
     site:      ""
     sweep:     []
     unblocks:  "one purview rule for every arm of `establish`"
-    cite:      "MEASURED by the S1 agent (EXECUTES, hand-built); not re-run by the author. Related: H-144 (clause 5 asks purview only when the office is occupied; the founding half is ruled intended)."
+    cite:      "MEASURED by the S1 agent (EXECUTES, hand-built); not re-run by the author. Related: H-144 (clause 5 asks purview only when the office is occupied; the founding half is ruled intended). CLOSED IN CODE (B03.81): `loop/predicates.py::office_founded_by` returns the overlay arm's office only where `queries/world_q.py::founds_over` admits it for the described office's rung and the seat `Act.via` names, the call the derived arm makes, and `_req_establish` names the refusal (`an establish over a rung the seat exercised does not found over`); the case is `test_cr25_computed_establish.py::test_overlay_establish_by_a_duke_of_another_body_is_refused`."
     source:    "premise-check run, 2026-11-07, slice S1 seats of the governance/settlement subsystem (a slice the user named, not a PR claim), premise: a body has offices, a person is given one, holds it for a term, leaves it, and a successor takes it [ASSUMPTION: rendered from the user's word 'governance/settlement']. MEASURED by a read-only agent run; the author re-confirmed only what the cite names. Reproduce by the call described, not by any scratch script."
 
   - id:        H-292

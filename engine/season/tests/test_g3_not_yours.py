@@ -439,7 +439,7 @@ _RESTAMP = dict(office="off_reeve", post="Reeve", rung="S", remit=["issue", "dis
                 faction="Crown", conferral="appointed", revocation=_RUNG_ABOVE)
 
 
-def test_g3_the_restamp_of_anothers_grant_needs_the_conferral_basis(gate_only):
+def test_g3_the_restamp_of_anothers_grant_needs_the_conferral_basis(gate_only, monkeypatch):
     """`13f`'s `establish` re-stamps the grant on every live `hold` on the office -- a write on a
     SITTING HOLDER'S edge, the fourth live non-owner write G3's plan text did not list. Admitted
     through a seat with purview over the office (the duke's, over `S`); REFUSED through a seat
@@ -452,6 +452,10 @@ def test_g3_the_restamp_of_anothers_grant_needs_the_conferral_basis(gate_only):
         w.add_tenure(Tenure("t_reeve", "p_mid", "off_reeve", "hold", 0))
         return w, d, next(t for t in w.tenures if t.id == "t_reeve")
 
+    # H-291 (B03.81): the effect's reader `office_founded_by` asks `founds_over` of an overlay act too, a check
+    # BEFORE the gate, so it is bypassed like `_admits` is (this test reads what only the gate refuses; the
+    # sibling duke's own refusal at that check is `test_overlay_establish_by_a_duke_of_another_body_is_refused`).
+    monkeypatch.setattr(_preds, "founds_over", lambda *a, **k: True)
     w, d, t = world()
     assert t.granted_acts == ("issue",), "fixture"
     out = d._fold(w, mint_token(w, WriteClass.ACTS),
@@ -469,17 +473,24 @@ def test_g3_the_restamp_of_anothers_grant_needs_the_conferral_basis(gate_only):
 
 
 def test_g3_the_shipped_establish_refuses_the_restamp_before_the_gate():
-    """`_req_establish`'s clause 5 asks the gate's `may_fill` first, so through the SHIPPED fold
+    """`_req_establish` refuses first -- since H-291 (B03.81) at clause 1, the overlay arm's `founds_over`
+    (a seat without purview over `S`), which precedes clause 5's `may_fill` -- so through the SHIPPED fold
     the sibling duke's re-stamp EMITS `establish.refused`, raises nothing, and leaves the sitting
     reeve's grant -- and, because the effect never ran, the office -- as they were."""
+    from engine.season.trace_log import TRACE
     w, d = _gov_world()
     w.add_tenure(Tenure("t_reeve", "p_mid", "off_reeve", "hold", 0))
     t = next(x for x in w.tenures if x.id == "t_reeve")
-    out = d.resolve(mint_token(w, WriteClass.ACTS),
-                    [Act(id="e2", actor="p_other", verb="establish", payload=_RESTAMP,
-                         via="off_duke2")],
-                    contest_max_depth=w.fixtures.get("contest_max_depth"))
+    with TRACE.recording():
+        first = len(TRACE.rows)
+        out = d.resolve(mint_token(w, WriteClass.ACTS),
+                        [Act(id="e2", actor="p_other", verb="establish", payload=_RESTAMP,
+                             via="off_duke2")],
+                        contest_max_depth=w.fixtures.get("contest_max_depth"))
+        clauses = [r.what.split(" -> ")[0] for r in TRACE.rows[first:]
+                   if r.channel == "DECISION" and r.detail.get("chose") == "refuse"]
     assert [e.kind for e in out] == ["establish.refused"], [e.kind for e in out]
+    assert "an establish over a rung the seat exercised does not found over" in clauses, clauses
     assert t.granted_acts == ("issue",) and w.offices["off_reeve"].remit_acts == ["issue"]
 
 

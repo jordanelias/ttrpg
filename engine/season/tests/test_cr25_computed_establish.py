@@ -47,7 +47,8 @@ def _world():
                                     faction="Crown")
     for i, (sub, obj, kind) in enumerate((("T", "R", "contain"), ("T2", "R", "contain"),
                                           ("D2", "R", "contain"), ("p_king", "off_king", "hold"),
-                                          ("p_king", "T", "hold"), ("p_other", "off_duke2", "hold"))):
+                                          ("p_king", "T", "hold"), ("p_other", "off_duke2", "hold"),
+                                          ("p_high", "S", "hold"))):    # H-291: the overlay arm asks (i) too
         w.add_tenure(Tenure(f"t_cr25_{i}", sub, obj, kind, 0))
     d = SeasonDriver(w)
     d.matter(mint_token(d.w, WriteClass.MATTER), [])
@@ -117,7 +118,7 @@ def test_cr25_4_a_re_remit_of_a_vacant_office_outside_purview_refuses():
     payload = dict(office="off_reeve", post="Reeve", rung="S", remit=["issue", "dispatch"], faction="Crown",
                    conferral="appointed")
     assert not any(t.kind == "hold" and t.object == "off_reeve" and t.live for t in w.tenures), "fixture: held"
-    out = _act(w, d, "e_far", "p_other", "off_duke2", payload)
+    out = _act(w, d, "e_far", "p_other", "off_duke2", payload)       # H-291: refused at the overlay arm's `founds_over`
     assert _kinds(out) == ["establish.refused"], _kinds(out)
     assert w.offices["off_reeve"].remit_acts == ["issue"]
     out = _act(w, d, "e_near", "p_high", "off_duke", payload)            # control: the seat whose purview reaches S
@@ -190,3 +191,30 @@ def test_cr25_holdings_to_found_on_the_realm_offers_the_dukes_their_territories(
     assert sum(map(len, found.values())) == 14, found
     for pid, rungs in found.items():
         assert all(w.rungs[r].kind == "territory" and world_q.in_holdings(w, pid, r) for r in rungs), (pid, rungs)
+
+
+def test_overlay_establish_by_a_duke_of_another_body_is_refused():
+    """H-291 (B03.81): A HAND-BUILT `establish` ON AN OVERLAY KEY ASKS THE FOUNDER'S PURVIEW, as the computed arm does.
+    `p_other`, duke of `D2` (`off_duke2`), founds a new office at `S`, a rung under a different duke (`D`): the
+    act carries the overlay keys and `office_founded_by` returned the described office without asking `founds_over`,
+    so it was admitted. FALSIFIER: the act executes (`office.established`, the office in `w.offices`).
+    CONTROLS, in the same world: the computed act of the same actor on the same rung refuses (the arm the overlay
+    arm now agrees with); and the king, holding `T`, founds the overlay office at `T` through `off_king`
+    (`founds_over` true), so the refusal above is the missing purview and not the overlay keys."""
+    w, d = _world()
+    overlay = dict(office="off_reeve2", post="Reeve", rung="S", remit=["issue"], faction="Crown",
+                   conferral="appointed")
+    far = Act(id="e_far", actor="p_other", verb="establish", payload=overlay, via="off_duke2")
+    assert not world_q.founds_over(w, "p_other", w.offices["off_duke2"], "S"), "fixture: p_other has purview"
+    assert _preds.office_described_by(far) is not None, "fixture: the act carries the overlay keys"
+    assert not _preds._req_establish(w, Act(id="e_comp", actor="p_other", verb="establish",
+                                            payload={"subject": "S"}, via="off_duke2")), "control: computed arm admits"
+    out = _act(w, d, "e_far", "p_other", "off_duke2", overlay)
+    assert _kinds(out) == ["establish.refused"], _kinds(out)
+    assert "off_reeve2" not in w.offices
+    near = dict(office="off_lord_t", post="Lord", rung="T", remit=["issue"], faction="Crown",
+                conferral="appointed")
+    assert world_q.founds_over(w, "p_king", w.offices["off_king"], "T"), "fixture: the king has no purview"
+    out = _act(w, d, "e_near", "p_king", "off_king", near)
+    assert _kinds(out) == ["office.established"], _kinds(out)
+    assert "off_lord_t" in w.offices

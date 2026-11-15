@@ -280,8 +280,10 @@ def office_founded_by(w: "World", a: "Act") -> "Optional[Office]":
     the two cannot disagree on what is founded.
 
     A HAND-BUILT ACT CARRYING THE OVERLAY KEYS KEEPS ITS READING: where `office_described_by(a)` returns an
-    office, that office is returned unchanged. Otherwise the office is DERIVED from what a computed act already
-    carries -- `subject`, a rung, and `Act.via`, the seat exercised (`state/carriers.py::Act`) -- with no ninth
+    office, that office is returned unchanged, and is admitted by the same `founds_over` check (H-291): asked of
+    the actor, the seat `Act.via` names and the described office's rung, exactly as the derived arm asks it, and
+    `None` where it refuses (`_req_establish` names that clause). Otherwise the office is DERIVED from what a
+    computed act already carries -- `subject`, a rung, and `Act.via`, the seat exercised (`state/carriers.py::Act`) -- with no ninth
     operand and no office coined by name:
 
       rung        `subject`, admitted by `queries/world_q.py::founds_over`'s four conjuncts (holding, purview,
@@ -303,10 +305,11 @@ def office_founded_by(w: "World", a: "Act") -> "Optional[Office]":
     ⚠ THE CONSTRUCTOR'S RAISES PROPAGATE, as `office_described_by`'s do, and for its reason: the caller
     translates them (clause 1)."""
     off = office_described_by(a)
-    if off is not None:
-        return off
     held = seat_hold(w, a.actor, a.via)
     seat = w.offices[a.via] if held is not None else None
+    if off is not None:
+        # H-291: the overlay arm asks the call the derived arm makes, for the described office's rung
+        return off if seat is not None and founds_over(w, a.actor, seat, off.rung) else None
     rung = subject_of(a)
     if seat is None or not founds_over(w, a.actor, seat, rung):
         return None
@@ -336,7 +339,8 @@ def _req_establish(w: "World", a: "Act") -> bool:
     FOUR CLAUSES, EACH A REFUSAL AND NONE A RAISE -- a raise from inside the effect's `apply()`
     escapes the fold, and `establish.refused` would never be emitted:
       1. the office resolves: `office_founded_by` returns one (since v11 CR-25: the overlay keys
-         `office_described_by` reads, else the derivation from `subject` and `Act.via`), and the constructor's refusals
+         `office_described_by` reads, else the derivation from `subject` and `Act.via`; since H-291 either
+         arm only where `founds_over` admits it, an overlay act refused there naming its own clause), and the constructor's refusals
          (the three it raises) are translated to False HERE, so each rule still lives once, in the
          constructor. They remain the loud backstop inside the effect;
       2. its rung is one the world holds;
@@ -379,6 +383,10 @@ def _req_establish(w: "World", a: "Act") -> bool:
         # the constructor refused it: translated, never filled
         return _refuse("an establish the office's constructor refused", f"{a.actor} via {a.via!r}")
     if off is None:
+        if office_described_by(a) is not None:
+            # H-291: an overlay act whose seat does not found over the described rung (clause 1's own refusal)
+            return _refuse("an establish over a rung the seat exercised does not found over",
+                           f"{a.actor} via {a.via!r} at {office_described_by(a).rung!r}")
         return _refuse("an establish lacking an operand the office needs", f"{a.actor} via {a.via!r}")
     if off.rung not in w.rungs:
         # "a rung to establish it at"
