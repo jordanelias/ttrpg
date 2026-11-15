@@ -733,8 +733,8 @@ def _conviction_crisis(w: "World", token: Token, a: Act, broken_of: dict) -> Non
 
 
 def _refuse_party_gap(self, w: "World", a: Act) -> list:
-    """A contested or graded act refused AFTER admission (a party the seam cannot derive, or a roll the
-    provider refused): the row's `emits_on_refusal`, `_contest`'s and `_grade`'s one body.
+    """A contested or graded act refused AFTER admission (a party the seam cannot derive, a roll the
+    provider refused, or a contest that reached its depth cap): the row's `emits_on_refusal`, `_contest`'s and `_grade`'s one body.
 
     ⚠ `or (FOLD_REFUSED,)` (`rosters.yaml: fold_kinds`), MATCHING EVERY SIBLING FALLBACK (`_admits`, `_fold`,
     `_refuse_after_the_fact`) -- found missing in the M4 review pass's own correctional
@@ -859,8 +859,10 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
         # plausible-looking game Event.
         return _refuse_party_gap(self, w, a)
     if isinstance(r, ContestError):
+        # A depth-capped contest is a refusal like the one above: the act happened and the contest did not, so it
+        # takes the row's refusal kind and never leaves the fold with no Event (`U5a_CORE_owed_edits` §B row 4).
         TRACE.note(f"contest returned {r}", "S39.3")
-        return []
+        return _refuse_party_gap(self, w, a)
     if not isinstance(r, dict):
         return r
     produced = self._fold(w, token, a, Resolution(degree_of(r, _target, w.fixtures), r))
@@ -1101,7 +1103,7 @@ def resolve(self, token: Token, acts: list[Act],
             # so RESOLVE and `loop/encounter.py` share the one body -- see that function's own
             # docstring for the deferral fork and why it does not re-check `_admits`, just
             # confirmed above. `_contest` always returns a list -- a depth-capped
-            # `ContestError` is converted to `[]` inside it, once, so this loop and
+            # `ContestError` is folded to the row's refusal inside it, once, so this loop and
             # `loop/encounter.py`'s own do not each carry a second copy of that check.
             produced = (self._contest(w, token, a, _contests, contest_max_depth) if _contests
                         else self._grade(w, token, a, _route))
