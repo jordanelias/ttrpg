@@ -44,7 +44,7 @@ onto `settlement` would manufacture a pass for the largest single block of the c
 from __future__ import annotations
 import string
 import sys
-from collections import Counter
+from collections import Counter, defaultdict
 
 from .. import decision
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
@@ -898,6 +898,27 @@ def graded_losses(w: World, n: int) -> list:
 # what the game already holds; none writes, none is read by the game.
 
 NO_ACT = "(no act)"
+
+
+def seats(w) -> dict:
+    """`{person id: [office id, ...]}` — every live `hold` whose object is an OFFICE and whose
+    subject is a person. A `hold` on a Record or a Rung is not a seat and is not counted."""
+    out: dict = defaultdict(list)
+    for t in w.tenures:
+        if t.kind == "hold" and t.live and t.object in w.offices and t.subject in w.persons:
+            out[t.subject].append(t.object)
+    return dict(out)
+
+
+def refusal_sets(w, n: int) -> tuple:
+    """`(refused, graded)`, two frozensets of act ids over the ACT STORE of `w` after `n` seasons.
+    An act is REFUSED when `corpus_run.attempts`' `refused` tuple for it is non-empty -- any Event of
+    one of its row's `emits_on_refusal` kinds is in the log, the driver's rule (`loop/driver.py`), so a
+    graded loss counts as refused. `graded` is `corpus_run.graded_losses`: the refused acts that are
+    losses of a contest rather than refusals (every one of them is also in `refused`). Neither reads
+    `attribute`'s `made`, which counts a graded loss as made too. Reads only."""
+    refused = frozenset(a.id for a, _made, ref in attempts(w, n) if ref)
+    return refused, frozenset(a.id for a in graded_losses(w, n))
 
 
 def degrees_by_verb(log, act_of: dict) -> dict:

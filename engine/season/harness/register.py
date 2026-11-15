@@ -72,6 +72,7 @@ from __future__ import annotations
 import argparse
 import importlib.util
 import re
+import shlex
 import sys
 from collections import Counter
 from pathlib import Path
@@ -664,9 +665,7 @@ def _resolve_pytest(args: list[str], cid: str) -> str | None:
     """`pytest <test paths> [-k <expr>]`: each path exists; with `-k`, every name not under a
     `not` is a substring (any case, as pytest matches) of a `def test_...`, a `class ...` or a
     file name in the files named (a directory stands for the test files under it). An expression
-    that is only `not <name>` selects by exclusion and asks no name to exist. The first version of
-    the row check passed a `-k` when any one name occurred anywhere in all test source, so `import`
-    satisfied it."""
+    that is only `not <name>` selects by exclusion and asks no name to exist."""
     k = args.index("-k") if "-k" in args else None
     rest = args if k is None else args[:k] + args[k + 2:]
     paths = [a for a in rest if a.endswith(".py") or "/" in a.split("::")[0]]
@@ -812,10 +811,10 @@ def check_requirements() -> int:
       2. A conjunct with no `argv`, or a holds off `yes|no|unread`. A conjunct at `yes` or `no`
          has its `argv` resolved (`_resolve_argv`); one at `unread` carries an argv and is not
          resolved, because a later batch may build its instrument.
-      3. A `scales:` row whose `conjunct:` names no conjunct of R-04 (`IS-A-04`).
-      4. A row with no `measure:` -- one line, the row's cheapest conjunct, read by
-         `tools/m1_acceptance.py` -- or one whose `-k` selects no test or whose `python <path>`
-         names no runnable file.
+      3. A `scales:` row with no `conjunct:`, or one naming no conjunct of R-04 (`IS-A-04`).
+      4. A row with no `measure:` -- one line, the row's cheapest conjunct -- or one that is not a
+         command `_resolve_argv` can find (a `-k` selecting no test, a module or file that does
+         not exist or has no `__main__`); the text after `#` is the row's note.
     """
     doc = load_yaml(REQUIREMENTS.read_text())
     rows = doc.get("rows") or []
@@ -829,35 +828,17 @@ def check_requirements() -> int:
         if not cmd:
             bad.append(f"{rid}: no `measure:` -- nothing could ever show this, at any status")
         else:
-            # ⚠ THE FIRST VERSION OF THIS CHECK ONLY ASSERTED `measure:` WAS NON-EMPTY, which is
-            # §0.1 pt 2 exactly: an assertion that cannot observe the failure it excludes. It
-            # shipped with TWO dead commands -- R-09's `-k 'no_roll or ladder_has_no_producer'`
-            # selected ZERO tests, and R-02 named a module with no `__main__` that printed
-            # nothing on a clean exit 0. Both were found by an adversarial pass, not by this
-            # gate. A command is now resolved statically: a `-k` must select at least one test,
-            # and a `python <path>` must name a file that exists and can be run.
-            head = cmd.split("#", 1)[0].strip()
-            if " -k " in head:
-                expr = head.split(" -k ", 1)[1].strip().strip("'\"")
-                names = re.findall(r"[A-Za-z_][A-Za-z0-9_]*", expr)
-                names = [n for n in names if n not in ("or", "and", "not")]
-                src = ""
-                # ⚠ `rglob`, NOT `glob`. A flat glob over `tests/` is the exact shape that made
-                # four guards in this package pass over corpora they no longer reached when the
-                # decomposition moved files one directory down. It costs nothing to be right.
-                for t in files.TESTS_DIR.rglob("test_*.py"):
-                    src += t.read_text(encoding="utf-8")
-                if names and not any(("def test_" in src) and (n in src) for n in names):
-                    bad.append(f"{rid}: `-k {expr}` selects NO test -- the measure is dead")
+            # A `measure:` is a command line that must be FINDABLE, the way a conjunct's `argv` is: one
+            # resolver (`_resolve_argv`) answers for both. The text after `#` is the row's note.
+            try:
+                argv = shlex.split(cmd.split("#", 1)[0])
+            except ValueError as err:
+                bad.append(f"{rid}: `measure:` is not a command line ({err})")
             else:
-                m = re.search(r"python3?\s+([\w./-]+\.py)", head)
-                if m:
-                    f = files.REPO_ROOT / m.group(1)
-                    if not f.exists():
-                        bad.append(f"{rid}: `measure:` names {m.group(1)}, which does not exist")
-                    elif "__main__" not in f.read_text(encoding="utf-8"):
-                        bad.append(f"{rid}: {m.group(1)} has no `__main__` -- running it prints "
-                                   f"nothing and exits 0, so the measure shows nothing")
+                if not argv:
+                    bad.append(f"{rid}: `measure:` has no command before its `#`")
+                elif (v := _resolve_argv(argv, rid)) is not None:
+                    bad.append(v)
         held, total, tree = _check_conjuncts(r, bad)
         flag = "  ⚠ needs_jordan" if r.get("needs_jordan") else ""
         lines.append(f"    {rid}  {st}  {held} of {total} conjuncts  tree {tree}{flag}")

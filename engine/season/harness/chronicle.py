@@ -77,9 +77,8 @@ Nothing here reads a status, a threshold or `requirements.yaml`; no `measure:` r
 test is R-01's and R-02's instrument, this is a reading beside it). THE CONTROLS, both directions
 (`tests/test_chronicle_propagation.py`): the null arm against itself reads zero in columns 1 and 2 and
 answers nothing in column 3; a planted death of one seat-holder is seen in columns 1 and 3. If either
-fails the reading is void. LIMITS: `act_of` is rebuilt from the log (an Event's act is `w.acts` at its
-`causes[0]`, which is the driver's own map on a played run, checked at seed 0 over two seasons) because a
-pure function over `World` cannot read the driver's; a MATTER Event whose first cause is an act id (a term
+fails the reading is void. LIMITS: `act_of` is rebuilt from the log (`attribution.causing_act`: the first cause that is an act, which
+is the driver's own map on a played run) because a World holds no driver; a MATTER Event whose first cause is an act id (a term
 closure cites the act that wound the clock) would be read as that act's.
 
 Entry point: `python -m engine.season.harness.chronicle --seed S --seasons K [--cap C] [--all-acts]
@@ -98,6 +97,7 @@ import sys
 from collections import Counter
 
 from ..data.verbs import VERB_TABLE
+from ..state.attribution import causing_act
 from . import arc as ARC
 from . import storybar as SB
 from .corpus_run import emits_and_writes_nothing
@@ -236,7 +236,7 @@ TENURE_CAUSES = ("death", "term", "revocation", "claim", "conquest", "other")
 
 #: The Event kinds that change who holds what. A reading of Events, so a change a verb makes without
 #: one of these kinds is not here.
-TENURE_KINDS = ("tenure.opened", "tenure.closed", "succession.claimed")
+TENURE_EVENT_KINDS = ("tenure.opened", "tenure.closed", "succession.claimed")
 
 #: The acts whose Events name their own cause, by verb row (`verb_table.yaml`). An act with another
 #: verb, or none (MATTER), is read `term` when it closed a tenure and `other` otherwise.
@@ -251,12 +251,12 @@ DEPOSIT_KINDS = ("Record", "Proposition", "Claim")
 
 
 def _act_of(w) -> dict:
-    """`{Event id: Act}` rebuilt from the log: an Event an act emitted carries the act's id first among its
-    `causes` (`loop/resolve.py::_act_events`). Equals `SeasonDriver.act_of` on a played run (checked at
-    seed 0 over two seasons: 1809 of 1809 Events, no difference); a World holds no driver."""
+    """`{Event id: Act}` rebuilt from the log through `attribution.causing_act`, the one owner of which act
+    caused an Event; equals `SeasonDriver.act_of` on a played run (seed 0, two seasons: 1809 of 1809
+    Events). A World holds no driver."""
     out = {}
     for e in w.log:
-        a = w.acts.get(e.causes[0]) if e.causes else None
+        a = causing_act(w, e)
         if a is not None:
             out[e.id] = a
     return out
@@ -300,7 +300,7 @@ def _projection(w) -> dict:
 
 
 def tenure_changes_by_cause(w) -> dict:
-    """`{cause: count}` over `TENURE_CAUSES`: the tenure Events (`TENURE_KINDS`) in `w.log`, each read
+    """`{cause: count}` over `TENURE_CAUSES`: the tenure Events (`TENURE_EVENT_KINDS`) in `w.log`, each read
     once. DEATH: a `tenure.closed` whose Events were written with a `person.died` (same `causes`, same
     tick: the gate's one write for a death, `loop/matter.py::_die` and the fold's kill). Else the act that
     caused it, by verb (`TENURE_CAUSE_OF_VERB`); else a `tenure.closed` is TERM when it came LATER than
@@ -311,11 +311,11 @@ def tenure_changes_by_cause(w) -> dict:
     act_of = _act_of(w)
     first_at: dict = {}
     for e in w.log:
-        if e.causes and e.causes[0] in w.acts:
-            first_at[e.causes[0]] = min(first_at.get(e.causes[0], e.emitted_at), e.emitted_at)
+        if (a := act_of.get(e.id)) is not None:
+            first_at[a.id] = min(first_at.get(a.id, e.emitted_at), e.emitted_at)
     out = {c: 0 for c in TENURE_CAUSES}
     for e in w.log:
-        if e.kind not in TENURE_KINDS:
+        if e.kind not in TENURE_EVENT_KINDS:
             continue
         a = act_of.get(e.id)
         if e.kind == "tenure.closed" and (tuple(e.causes), e.emitted_at) in died:

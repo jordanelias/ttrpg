@@ -59,7 +59,7 @@ so a succession between is followed; a dead person's ambitions are gone, so his 
 
 THE REFUSAL NULL (G-28). A refusal writes nothing, so the rosters already exclude it -- but clause (1) does
 not: a refused act on the thrust can still sit in the `causes*` of a later person's writes. An act is
-dropped from clause (1) when it is REFUSED, by `harness/storybar.py::refusal_sets` (which reads
+dropped from clause (1) when it is REFUSED, by `harness/corpus_run.py::refusal_sets` (which reads
 `harness/corpus_run.py::attempts`, the one owner of the made/refused rule, over the act store), so a
 graded loss counts as refused, as the driver counts it. Pass `refused=` to override (a planted test).
 
@@ -102,11 +102,10 @@ from collections import defaultdict
 from ..data.matrix import MATRIX, Step
 from ..queries import world_q
 from ..state.carriers import Receipt
-from ..state.gate import TENURE_CLOSED
+from ..state.gate import PERSON_DIED, TENURE_CLOSED
 from ..state.ids import ROOT
-from .aperture import DEATH_KIND
+from .corpus_run import refusal_sets
 from .soak import _occasion_row
-from .storybar import refusal_sets
 
 
 class ArcRosterRefused(ValueError):
@@ -338,7 +337,7 @@ def read_arcs(w, d, on_thrust=None, *, n=None, refused=None, log=None, unrestric
 
     `on_thrust(act, occasion) -> thrust id | None` is clause (1); `None` (default) reads every act
     off-thrust. `refused` is the set of act ids the refusal null drops; by default
-    `storybar.refusal_sets(w, n)[0]` with `n` the seasons run (default `w.tick`, which
+    `corpus_run.refusal_sets(w, n)[0]` with `n` the seasons run (default `w.tick`, which
     `corpus_run.attempts` needs only as the upper bound of the ticks it looks Events up at). `log`
     defaults to `w.log` (a test plants its own). `unrestricted=True` is the bookkeeping null: the
     rosters are ignored. The rosters are `validate_roster`ed on every call."""
@@ -366,7 +365,7 @@ def read_arcs(w, d, on_thrust=None, *, n=None, refused=None, log=None, unrestric
         hit = reach.get(ev.id)
         if not hit:
             continue
-        if ev.kind == DEATH_KIND:
+        if ev.kind == PERSON_DIED:
             dead.update(hit)
             continue
         for r in ev.changes:

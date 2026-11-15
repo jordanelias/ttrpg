@@ -859,12 +859,12 @@ def test_built_out_needs_one_act_that_held_its_kinds_and_wrote():
 
 
 def test_built_out_reads_a_write_less_band_as_not_having_written_and_a_seat_as_via():
-    """`_writes_nothing` is true only where EVERY band writes nothing (`tell` keys four bands, all empty), so
+    """`not row.writes` is true only where NO band writes anything (`tell` keys four bands, all empty), so
     `march`, whose `Declared` band writes nothing and whose `Won` band writes, does not read as write-less
     through its empty band. `kinds` takes the LAST keyed band an act's Events name and every kind of it.
     `via` counts the clean executions that exercised a seat."""
-    assert A._writes_nothing(VERB_TABLE["tell"]) and A._writes_nothing(VERB_TABLE["comply"])
-    assert not A._writes_nothing(VERB_TABLE["march"]) and not A._writes_nothing(VERB_TABLE["utter"])
+    assert not VERB_TABLE["tell"].writes and not VERB_TABLE["comply"].writes
+    assert VERB_TABLE["march"].writes and VERB_TABLE["utter"].writes
     row = VERB_TABLE["tell"]
     ev = lambda kind, degree: SimpleNamespace(kind=kind, degree=degree)
     for band, kinds in row.emits_by_degree.items():
