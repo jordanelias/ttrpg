@@ -683,7 +683,8 @@ def instrumented_season(w, seasons: int) -> dict:
             both[a.verb] += 1
         if not (made or no):
             neither[a.verb] += 1
-    graded = Counter(a.verb for a in graded_losses(w, seasons))
+    graded_acts = graded_losses(w, seasons)
+    graded = Counter(a.verb for a in graded_acts)
     from .storybar import null_scenes      # storybar imports this module (`seats`), so only at call time
     why = refusal_reading(w, d, rows)
     census = kind_census(w, d)
@@ -695,7 +696,7 @@ def instrumented_season(w, seasons: int) -> dict:
             "executed": dict(executed), "refused": dict(refused), "neither": dict(neither),
             "both": dict(both), "graded": dict(graded), "unrowed": unrowed_acts(w),
             "built_out": built_out(w, d, rows), "fought": fought_fields(w, d, rows),
-            "null_scenes": null_scenes(w, seasons),
+            "null_scenes": null_scenes(w, seasons, rows=rows, graded=frozenset(a.id for a in graded_acts)),
             "pools": {v: {a: dict(c) for a, c in per.items()} for v, per in pools.items()},
             "refusal_kinds": {v: dict(c) for v, c in refusal_kinds.items()},
             "wrong_kind": wrong_kind(w, d, rows, why["post_acts"], cast),

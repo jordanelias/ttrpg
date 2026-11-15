@@ -1290,7 +1290,12 @@ def parse_argv(argv: list[str]) -> tuple[list[int], int | None]:
     """`[seed] [--seasons N]`: the positional seed as before; `--seasons N` caps every case at N seasons."""
     argv, cap = list(argv), None
     if "--seasons" in argv:
-        i = argv.index("--seasons"); cap = int(argv[i + 1]); del argv[i:i + 2]
+        i = argv.index("--seasons")
+        if i + 1 >= len(argv):
+            raise SystemExit("--seasons needs a number of seasons")
+        cap = int(argv[i + 1]); del argv[i:i + 2]
+        if cap < 1:
+            raise SystemExit("--seasons must be at least 1")
     return [int(a) for a in argv], cap
 
 

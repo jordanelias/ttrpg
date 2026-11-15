@@ -9,7 +9,7 @@ from __future__ import annotations
 
 
 from engine.season.harness import register
-from engine.season.tests.test_register_reading import conjunct, plant, refused, row
+from engine.season.tests.test_register_reading import conjunct, refused, row
 
 TEST_FILE = "engine/season/tests/test_register_reading.py"
 

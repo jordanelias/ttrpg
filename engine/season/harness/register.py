@@ -662,15 +662,17 @@ def _k_names(expr: str) -> list[str]:
 
 def _resolve_pytest(args: list[str], cid: str) -> str | None:
     """`pytest <test paths> [-k <expr>]`: each path exists; with `-k`, every name not under a
-    `not` is a substring of a `def test_...` in the files named BEFORE the `-k` (a directory
-    stands for the test files under it). The first version of the row check passed a `-k` when
-    any one name occurred anywhere in all test source, so `import` satisfied it."""
+    `not` is a substring (any case, as pytest matches) of a `def test_...`, a `class ...` or a
+    file name in the files named (a directory stands for the test files under it). An expression
+    that is only `not <name>` selects by exclusion and asks no name to exist. The first version of
+    the row check passed a `-k` when any one name occurred anywhere in all test source, so `import`
+    satisfied it."""
     k = args.index("-k") if "-k" in args else None
-    before = args if k is None else args[:k]
-    paths = [a for a in before if a.endswith(".py") or "/" in a.split("::")[0]]
+    rest = args if k is None else args[:k] + args[k + 2:]
+    paths = [a for a in rest if a.endswith(".py") or "/" in a.split("::")[0]]
     if not paths:
-        return f"{cid}: `argv` names no test path before `-k` -- the measure is not a command this check can find"
-    src = ""
+        return f"{cid}: `argv` names no test path -- the measure is not a command this check can find"
+    src, stems = "", ""
     nodes: list[str] = []
     for a in paths:
         name, _, node = a.partition("::")
@@ -679,8 +681,9 @@ def _resolve_pytest(args: list[str], cid: str) -> str | None:
             return f"{cid}: `argv` names {name}, which does not exist"
         for t in ([f] if f.is_file() else sorted(f.rglob("test_*.py"))):
             src += t.read_text(encoding="utf-8") + "\n"
+            stems += t.stem + "\n"
         if node:
-            nodes.append(re.split(r"[\[:]", node)[0])
+            nodes.append(re.split(r"[\[:]", node.split("::")[-1])[0])
     tests = re.findall(r"def (test_\w+)", src)
     for node in nodes:
         if node not in tests:
@@ -692,8 +695,11 @@ def _resolve_pytest(args: list[str], cid: str) -> str | None:
     expr = args[k + 1]
     names = _k_names(expr)
     if not names:
+        if re.search(r"\bnot\b", expr):
+            return None
         return f"{cid}: `-k {expr}` names no test it selects -- the measure is dead"
-    missing = [n for n in names if not any(n in t for t in tests)]
+    named = "\n".join(tests + re.findall(r"class (\w+)", src)).lower() + "\n" + stems.lower()
+    missing = [n for n in names if n.lower() not in named]
     if missing:
         return f"{cid}: `-k {expr}` selects NO test for {', '.join(missing)} -- the measure is dead"
     return None

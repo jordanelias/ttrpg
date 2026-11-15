@@ -304,7 +304,7 @@ def _seat_holders(w, subject: str) -> frozenset:
     return frozenset()
 
 
-def null_scenes(w, n: int, scope=None) -> dict:
+def null_scenes(w, n: int, scope=None, rows=None, graded=None) -> dict:
     """`{"total": int, "null": Counter((verb, cls))}` over `corpus_run.attempts(w, n)`, the one owner of
     made and refused: how many acts there are, and which of them left no durable write.
 
@@ -329,7 +329,9 @@ def null_scenes(w, n: int, scope=None) -> dict:
     `scope`, `None` by default, is a predicate over an attempt of `attempts` (`(act, made, refused)`) that
     narrows WHICH acts are counted and changes nothing in what counts as a write [ASSUMPTION: the scope is
     an argument of this function, not a filter each caller writes -- basis: one owner of the count,
-    CLAUDE.md §8; it adds no rule]. Reads only."""
+    CLAUDE.md §8; it adds no rule]. `rows` and `graded`, `None` by default, are `attempts(w, n)` and the ids
+    of `graded_losses(w, n)` where a caller already holds them (`null_by_season` asks once per season over the
+    same world); with `None` each is read here. Reads only."""
     from .arc import _Records          # arc imports this module (`refusal_sets`), so only at call time
     records = _Records(w)
     named: dict = defaultdict(list)    # act id -> the Events naming it in `causes[]`
@@ -346,8 +348,8 @@ def null_scenes(w, n: int, scope=None) -> dict:
                 for aid in by_event.get(c, ()):
                     if aid not in by_event.get(e.id, ()):
                         named[aid].append(e)
-    rows = attempts(w, n)
-    graded = frozenset(a.id for a in graded_losses(w, n))
+    rows = attempts(w, n) if rows is None else rows
+    graded = frozenset(a.id for a in graded_losses(w, n)) if graded is None else graded
     total, null = 0, Counter()
     for attempt in rows:
         a, made, refused = attempt
@@ -400,11 +402,14 @@ def null_by_season(seed: int, seasons: int, cap=None) -> tuple:
     ends: list = []
     w, _d, _bounds = drive(seed, seasons, "off", cap, on_season=lambda w_, _s, _n: ends.append(len(w_.acts)))
     store, per, lo = tuple(w.acts), [], 0
+    rows = attempts(w, seasons)
+    graded = frozenset(a.id for a in graded_losses(w, seasons))
     for hi in ends:
         ids = frozenset(a.id for a in store[lo:hi])
-        per.append(null_scenes(w, seasons, scope=lambda attempt, ids=ids: attempt[0].id in ids))
+        per.append(null_scenes(w, seasons, scope=lambda attempt, ids=ids: attempt[0].id in ids,
+                               rows=rows, graded=graded))
         lo = hi
-    return per, null_scenes(w, seasons)
+    return per, null_scenes(w, seasons, rows=rows, graded=graded)
 
 
 def _spread(values) -> dict:
