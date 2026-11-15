@@ -208,7 +208,7 @@ The position table, in landing order (the handles follow part 2 §4's rows, UNDE
 | B98.84 | a marriage may bear a child | row 103; B39.24, B39.26; `STORY_B` gate 2 | BUILD (flip) | MOVER(behaviour) | Batch B39; Batch B37 |
 | B98.85 | the age of majority, if B39 did not set it | row 104; B39.27, B39.28; `STORY_B` gate 4; A-15 | BUILD (flip, conditional) | MOVER(behaviour) | Batch B39 |
 | B98.86 | an empty founded place may be abandoned | row 105; B39.30; `STORY_C` gates 2, 3; A-55 | BUILD (flip) | MOVER(behaviour) | Batch B39 |
-| B98.87 | the six roles' forty-five settings are re-read on the finished realm | row 106; B24p.23; RD §B | READING | EQUAL | Batch B24p-sc-proceeding |
+| B98.87 | the six roles' fifty-three settings are re-read on the finished realm | row 106; B24p.23; RD §B | READING | EQUAL | Batch B24p-sc-proceeding |
 | B98.88 | a reading is kept by the one who read | row 107; B24p.22; RD §B.3 | BUILD (flip) | MOVER(behaviour) | B98.87; Batch B24p-sc-proceeding |
 | B98.89 | `presumption_level` and `strike_level` stay at control | row 108; B24p.04; RD §B.1, §C.1 | BLOCKED (design: no target reading) | EQUAL | Batch B24p-sc-proceeding |
 | B98.99 | re-pin and close readings | `V12_STRUCTURE_part4.md` E-1 | BUILD | MOVER (the re-pin) | B98.01 to B98.89 |

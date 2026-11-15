@@ -58,7 +58,7 @@ Added to `_load_arrangement`, each refusing at import and naming the row (the fi
 4. `rites:` rows: keys `id`, `moves` (a map `for` / `against` / `bench` to a list of move ids), `faults` (a list; empty
    until B24.03 rosters them); B24.09 adds `bears` and `disclosed` (§F).
 5. `audience_kinds:` rows: keys `id`, `attention`, `distraction`, `proof_weight`; exactly the four ids of C.5; `attention`
-   and `distraction` at least 0; `proof_weight` in `[0, 1]`.
+   and `distraction` at least 0; `proof_weight` strictly between 0 and 1 (B.9 divides by it and by its complement; B24p.03).
 6. A pure function `abridged(row) -> dict` (C.6).
 
 ### C.3 The rows
@@ -121,7 +121,7 @@ addressed feeds the `resist` source, B.6 d), `ground` (does the move take one).
 
 | move | draw | capability | resisted_by | ground | effect |
 |---|---|---|---|---|---|
-| `argue` | yes | `argue` | will | yes | the track moves by the margin toward the mover, between `-track_clip` and `+track_clip` |
+| `argue` | yes | `argue` | will | yes | the track moves by the margin toward the mover (the margin clipped to `±track_clip`), and the track itself is then clamped to `±track_clip`: it is a position (A.3, A.4) |
 | `press` | yes | `argue` | will | yes | a landed press strikes the other side (B.6 a); a failed one costs the presser esteem |
 | `divert` | yes | `argue` | will | no | a landed divert sets a pull on the other side's next speech (B.1) |
 | `deceive` | yes | `deception` | attunement | yes | as `argue`, the content false; the mover carries a standing pull of `deceive_pull` (keeping a false story straight is a hold, B.1) |
@@ -156,15 +156,18 @@ strikes); A.5's `scripted` row says what he keeps.
 `arrangements.yaml: audience_kinds:` (a new block; four rows). The kind is computed, never authored on a type:
 
 ```
-audience_kind = bench    if the row's disposal is bench or declared and it seats at least one decider
+audience_kind = bench    if the row's base_disposal is bench or declared and it seats at least one decider
               = crowd    if the hearers' summed weight >= crowd_at        (setting; shipped 12 [ASSUMPTION; K/'s crowd of 15])
               = gallery  if there is at least one hearer
               = none     otherwise
 ```
 
-The builder passes the bench count as `len(deciders)` for disposal `bench` or `declared` and 0 for every other disposal,
-so the one addressed (seated as the sole decider under `exchange`, A.4) is never read as a bench: a full `conversation`
-and an abridged `tell` between the same two people, nobody else present, both read `none`.
+`base_disposal` is the row's own disposal before `abridged` swaps it to `exchange` (C.6 item 4; a seeded row's own
+`disposal`). The builder passes the bench count as the size of the (authority-filtered, C.7) bench for a base disposal
+`bench` or `declared` and 0 otherwise, so the one addressed (seated as the sole decider under `exchange`, A.4) is never
+read as a bench, while an abridged `speak` under `legal_trial` still meets one: a full `conversation` and an abridged
+`tell` (base disposal `hearers`) between the same two people, nobody else present, both read `none`; an abridged `speak`
+under `legal_trial` reads `bench`.
 
 | kind | attention | distraction | proof_weight | reading |
 |---|---|---|---|---|
@@ -229,11 +232,12 @@ row is today's path made explicit: an undeclared determination disposes an `obli
 `effects_information.py:693-698`), and `arbitration` disposes `oblige`. Every cell is `[ASSUMPTION; Jordan to correct]`;
 which cases go where is content (P11's rule: the plan builds the mechanism and the rows it must).
 
-**4. The abridged form of any row.** `data/arrangements.py::abridged(row, move) -> dict` returns the row with `order:
+**4. The abridged form of any row.** `data/arrangements.py::abridged(row, move) -> dict` returns the row with `base_disposal` set to the row's own `disposal` (so the room keeps its kind, C.5), and with `order:
 free`, `exchanges: [1, 1]`, `disposal: exchange`, `rite: plain` (its one move replaced by `move`), `strikes: 0`,
 `presumes: none`, and every venue and audience key unchanged. So a `tell` in a kitchen is `abridged(conversation)`, and a
 `speak` at a sitting is `abridged(<the sitting's row>)`: one speech, weighed by that room's standard, audience and bench,
-with no ballot. One rule, applied to any row; no abridged rows are seeded.
+with no ballot. For an act on a matter, not a person (`speak`), the one addressed is the presiding seat of the docket's
+bench (the first of C.7's filtered `judging_set`), seated as the sole unballoted decider (A.4). One rule, applied to any row; no abridged rows are seeded.
 
 ### C.7 How factions, venues, adjudicators and audience bind
 
@@ -244,7 +248,7 @@ Each binding reads a carrier that exists; none adds a field to `World`.
 | the type | the verb row's `proceeds:`; the docket item's `arrangement` (`world_q.docketed`, `:208`) | `world_q.proceeding_row(w, act)` → `(row id, form, move)` |
 | the venue | the act's rung, which is the actor's place (`loop/sides.py:171-172`); for a docketed matter the rung of the sitting's Date | `proceeding_input`; the row's `venue_min_rank` gates row choice (C.6), `standard` the speech (B.5) |
 | the factions | the row's `authority`; the seats' factions (`seat_faction`); each party's own faction (`world_q.faction_of`, `:2550`) reaches a speech only as B28.35's obstacle operand, eased by Reason (B.2 c) | `row_for_case`; B24a.04's conjunct |
-| the adjudicators | `bench`, `declared`: `judging_set(w, venue, matter)`, each seat a `Decider` with his judging pool (`pool.judging`: his held rank in the capability `verb_capability` names for `determine`, else the untrained score, plus the pool addends; never `pool.faculty`, which B24p.19 forbids for a `proceeds` row) and his raw Reason, Focus and Attunement (R12, B.9), his seat's `modifier` (B05.20), his `lean` (B24.02's commit term, B24.11's per-member count); `mutual`: nobody (consent is a move, B24.30); `hearers`: the one addressed (the `against` speaker, or the cohort an address is made to) and every hearer the floor admits (C.5), each with the base pool; `exchange`: the one addressed alone, with his own pool, score, Will, Grace, Attunement and `moved_by`, seated so the speech has a target and NOT balloted (A.4); `none`: nobody | `proceeding_input` |
+| the adjudicators | `bench`, `declared`: `judging_set(w, venue, matter)`, filtered, where the row's `authority` is neither `parties` nor `none`, to the seats whose faction `authorities.by_faction` maps to that authority (`authority` is whose force the proceeding carries; rung 5, the architecture), an empty bench refusing the proceeding with the verb's party-gap refusal; each seat a `Decider` with his judging pool (`pool.judging`: his held rank in the capability `verb_capability` names for `determine`, else the untrained score, plus the pool addends; never `pool.faculty`, which B24p.19 forbids for a `proceeds` row) and his raw Reason, Focus and Attunement (R12, B.9), his seat's `modifier` (B05.20), his `lean` (B24.02's commit term, B24.11's per-member count); `mutual`: nobody (consent is a move, B24.30); `hearers`: the one addressed (the `against` speaker, or the cohort an address is made to) and every hearer the floor admits (C.5), each with the base pool; `exchange`: the one addressed alone, with his own pool, score, Will, Grace, Attunement and `moved_by`, seated so the speech has a target and NOT balloted (A.4); `none`: nobody | `proceeding_input` |
 | the audience | C.5 | `proceeding_input` → `Room` |
 | the speakers | `loop/sides.py::sides_of`: the actor and the row's opponent operand (`resolve.py:812-815`); for a self-plea the accuser, else the presiding seat (B28.35's rule, kept) | `proceeding_input` |
 | the topic | the act's `subject` where the opponent operand is `to` (`argue`, `tell`, `lie`: the Proposition or claim), the docket matter for `speak` and `determine` (INT C.1) | `proceeding_input` → `ProceedingInput.topic` |
@@ -258,7 +262,7 @@ for, the hostile half against), read from the hearer's own interior as OBS membe
 
 | what Jordan named | row | sides and order | deciders and close | what makes it its own kind |
 |---|---|---|---|---|
-| heresy trial | `inquisition_hearing` | inquisitor (`for`) and accused; scripted; 1 to 5 exchanges | the presiding seat's ballot ALONE: `disposal: bench` ballots one seat (A.5), though `judging_set` (`world_q.py:642-718`) seats more (read at `build_realm(0..2)`: five at a venue under `terr_T9`, three church seats, `off_senior_inquisitor`, `off_confessor`, `off_cardinal_justice`, and the realm-wide `off_king` and `off_widow_regent`, since the set is by scope containment, not by faction, `matter` unused); which of the five presides is the first in id order, which need not be a church seat; presumed for the charge; one strike (`k` = 1) | the accused may not press or divert; a `hard` standard; `disposes: ban` |
+| heresy trial | `inquisition_hearing` | inquisitor (`for`) and accused; scripted; 1 to 5 exchanges | the presiding seat's ballot ALONE: `disposal: bench` ballots one seat (A.5). `judging_set` (`world_q.py:642-718`) is by scope containment, not by faction (read at `build_realm(0..2)`: five at a venue under `terr_T9`, the three church seats `off_senior_inquisitor`, `off_confessor`, `off_cardinal_justice` and the realm-wide `off_king`, `off_widow_regent`); the row's `authority: church` filters it to the church seats (C.7), and the presiding seat is the first of those in id order; presumed for the charge; one strike (`k` = 1) | the accused may not press or divert; a `hard` standard; `disposes: ban` |
 | parliamentary debate | `parliamentary_debate` | speakers by rank; 3 to 5 exchanges; open floor | the presiding seat until B24a.01's flip, then every seat's ballot against a quorum | a gallery or crowd in the room; no proofs admitted (`proofs: []`); a `demanding` standard |
 | private negotiation | `negotiation` | two parties alternating; 1 to 3 exchanges; closed | nobody is balloted: agreement is the other party's `accept` (B24.30); an impasse is an ending | no bench, no audience: `attention` 0, so delivery and Reason carry it |
 | rallying a crowd | `rally` | one speaker; 1 to 3 exchanges; open | every hearer for himself | `proof_weight` 0.25, `attention` 5: Presence carries it; a misread crowd costs (B.3) |
@@ -304,7 +308,7 @@ the verb calls into being a subsystem"*.
 | `interrogate` | `a proposition`, one roll, Reason | **full form** | `{row: questioning, form: full}` | R6 names *"interrogation for info"* among the full kinds |
 | `covenant` | no roll; writes a Record, `covenant.offered` | **full form**, when B28.13 opens the negotiation with it | `{row: negotiation, form: full}` | offering terms is the opening of a negotiation (B28.13, B24.30); until then the row is unchanged |
 | `interview` | no roll; a prompt (K-36) | **full form**, when B25.14 draws it | `{row: questioning, form: full}` | questioning a free person is the same type; he may rest and leave |
-| `petition` | no roll; writes a Record | **stays a brute function** (filing) in this batch | none | the filing cannot be done well or badly; the persuasion is where the matter is heard (`speak`, or the `audience` row a carried petition is docketed under). ED-IN-0210 Ruling 2 (a petition is two-sided: withdrawn by the petitioner, denied by the receiver; `registers/archive/editorial_ledger_in_archive_pre-2026-09.yaml:2312-2319`) STANDS, no later ruling contradicting it, and is untouched here; no item of workplan v12 builds the withdraw or the deny (a search of the plan finds none), so it is unowned |
+| `petition` | no roll; writes a Record | **stays a brute function** (filing) in this batch | none | the filing cannot be done well or badly; the persuasion is where the matter is heard (`speak`, or the `audience` row a carried petition is docketed under). ED-IN-0210 Ruling 2 (a petition is two-sided: withdrawn by the petitioner, denied by the receiver; `registers/archive/editorial_ledger_in_archive_pre-2026-09.yaml:2312-2319`) STANDS, no later ruling contradicting it, and is untouched here; no item of workplan v12 builds the withdraw or the deny (a search of the plan finds none), so it is unowned; ED-IN-0211 recast the closers as the generic `release` (`verb_table.yaml`, about `:1351`), whose domain excludes a petition's Record, so that does not own them either |
 | `open_case` | no roll; dockets | **stays a brute function**; it now names the row (C.6) | none | a seat's act; its efficacy is `determine`'s |
 | `challenge` | no roll; a challenge Record | **stays as B28.06 draws it** | none | a declaration answered by the other's `accept`; the fight is combat's (R9) |
 | `construe` | no roll | **stays B25.16's** (FI) | none | a reading of terms, not an address to anyone |

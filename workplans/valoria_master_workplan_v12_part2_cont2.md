@@ -494,7 +494,7 @@ Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them
 
 | batch | lane | ED block (declared + spare) | H block (declared + spare) | against H1 §12 |
 |---|---|---|---|---|
-| B24p-sc-proceeding | SC | ED-SC-0054..0056 (1+2) | H-861..H-914 (50+4) | added 2026-11-14 after the table's last block (B01a's H-856..H-860, on top of B99's); `references/id_reservations.yaml` SC `next_free` 54 → 57 at the batch's opening, not by this plan; the hole register's next id after this block H-915. The fold map's own range H-856..H-909 assumed H-855 as the last allocated id: B01a had taken H-856..H-860 first |
+| B24p-sc-proceeding | SC | ED-SC-0054..0056 (1+2) | H-861..H-914 (54+0) | added 2026-11-14 after the table's last block (B01a's H-856..H-860, on top of B99's); `references/id_reservations.yaml` SC `next_free` 54 → 57 at the batch's opening, not by this plan; the hole register's next id after this block H-915. The fold map's own range H-856..H-909 assumed H-855 as the last allocated id: B01a had taken H-856..H-860 first |
 | B03-hygiene | IN | ED-IN-0371..0372 (0+2) | H-379..H-383 (0+5) | ED shifted |
 | B03g-go-early-landings | GO | ED-GO-0003..0004 (0+2) | H-384..H-388 (0+5) | same |
 | B03c-boot | IN | ED-IN-0373..0374 (0+2) | H-389..H-393 (0+5) | ED shifted |

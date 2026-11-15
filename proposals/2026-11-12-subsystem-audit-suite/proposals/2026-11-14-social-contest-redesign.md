@@ -113,7 +113,7 @@ below). Three places hold it:
 |---|---|---|---|
 | the sides' strain, marks, resolve, hold and esteem in the room; the track; the exchange list | one sitting | local variables of `proceed`, returned whole as `ProceedingOutcome.state` (a frozen `ProceedingState`) | nobody outside the call |
 | the sitting's record: the exchanges, each side's end state, the track, how it ended, the ballots | permanent | **the Event's `ending`** (`state/carriers.py:313`, the tuple a fight's ending already uses; B05.18 puts the social roll's record there) for every proceeding; and **the case file's `Record.stages`** for a docketed matter (B24.01 `case_file_of`, B24.14) | the fold (`loop/resolve.py::_fold`), under the verb's own token, from the outcome |
-| what a later sitting of the same matter starts from: the track, the live issue, the standing items | between sittings | ONLY the case file's own `Record.stages` (a document the proceedings design already licenses); the host builder reads them back into `ProceedingInput.state`. Never a stored standing number on a person, a `Tenure` or a `Proposition`, and never a rung in the Event kind (S-7 kept). This supersedes `proposals/2026-09-05-proceedings-subsystem/00_DERIVATION.md` §B.2 and `10_LOOPS_AND_GAPS.md` P-22 (*"a matter's ladder position does not persist between seasons"*, an assumption P-22 itself left to play) as far as a docketed matter's case file goes; `21_RECONCILIATION.md`'s refusal of a rung in the Event kind and of a `Proposition.rung` field stands. Rung: the later design governs (recency, Jordan 2026-11-14) | the same write as above |
+| what a later sitting of the same matter starts from: the track, the live issue, the standing items | between sittings | ONLY the case file's own `Record.stages`, which store the sitting's exchanges (each with its margin), a document the proceedings design already licenses; on resume the host builder RECOMPUTES the track from those margins (each clipped and the running sum clamped, A.4) and reads the live issue and standing items back into `ProceedingInput.state`. The track is never stored as a scalar, so the stored aggregate `04` G.1.5 forbids is not made; never a stored standing number on a person, a `Tenure` or a `Proposition`, and never a rung in the Event kind (S-7 kept). This answers `00_DERIVATION.md` §B.2 and `10_LOOPS_AND_GAPS.md` P-22 (*"a matter's ladder position does not persist between seasons"*, an assumption P-22 itself left to play): what persists is the record of what was said, and the position is re-derived from it (rung 1, the later design, as far as a docketed matter's case file goes) | the same write as above |
 | what a person carries out of the room: that he was rattled | to the season's end | nowhere new: `person_q.strain_carried(w, p)` reads his own acts' `ending` records of this season, as the practice addend reads his own acts (`sigma.py:306-307`) `[NEW; reason: S-7 (COL §8 row 21) forbids a stored standing number, H-335 needs a repeated argument to cost something; a derived read meets both]` | nobody |
 
 So the carrier named is **the Event's `ending`**, with the case file as the durable copy for docketed matters. No new
@@ -236,7 +236,8 @@ class SideState:
 @dataclass(frozen=True)
 class ProceedingState:
     n: int                     # exchanges run
-    track: float               # signed, toward `for`, in margin units
+    track: float               # signed, toward `for`, in margin units; a position, clamped to [-track_clip, +track_clip]
+                               # after every exchange (A.4); never stored past the sitting (A.2)
     issue: Optional[str]
     sides: tuple               # SideState, ... in speakers' order
 
@@ -284,8 +285,8 @@ does today (`sigma.py:579-586`).
 The mover is `S`, with state `s`; the other side is `T` with state `t`. `T` is, in this order: the other side's lead,
 where the rite gives `against` a move; else the weight-mean of `deciders`; else the weight-mean of `hearers` (built by
 `_target`). `ProceedingInput` is refused (`ValueError`) when it has one speaker and neither a decider nor a hearer, so a
-speech always has someone it is addressed to. Under disposal `exchange` (the abridged form) the one person addressed is
-seated as the ONLY decider so that he is `T`, and he is NOT balloted: the close returns the last exchange's own margin
+speech always has someone it is addressed to. Under disposal `exchange` (the abridged form) the one person addressed (for an act on a matter, `speak`, the presiding
+seat of the docket's bench, C.7) is seated as the ONLY decider so that he is `T`, and he is NOT balloted: the close returns the last exchange's own margin
 against him (A.5). A fixed number of normals is taken from `rng` on every exchange, used or not, in this
 order: the reading's (one for its roll, one per ground, one for the other side's state), the hold's, the speech's, the
 steadiness draw's: `G + 5` for `G` grounds, nine at the shipped four. So a choice in one exchange never shifts the stream of
@@ -298,7 +299,7 @@ exchange k at the same ordinals whatever was chosen before]`.
 | 2 | **The choice.** `decide(view)` returns a `Choice`; with no decider the automatic policy takes the legal move and the ground his reading scores highest | (Attunement, through the reading) | A.6 |
 | 3 | **The hold.** If a pull stands on `S` (`s.pull > 0`, from the other side's last `divert` or `press`, plus the room's `distraction`), the second normal settles whether he keeps to the topic; if not, the speech is off the topic | Focus | B.1 |
 | 4 | **The speech.** The third normal is the speech draw: `margin = roll_net_continuous(pool) + net_boost(sigma, pool) - ob`, with the pool from the case (a blend of Reason and Presence by the ground's content and the venue, R11), `sigma` from delivery (Presence), fit (the ground against the target's true dispositions), esteem (Grace) and the other sources, the levels against scaled down by Will, and `ob` from the difficulty, the opposition, the venue's standard (Grace) and the hostile room | Reason, Presence, Grace, Will | B.2, B.4, B.5, B.6 |
-| 5 | **The effect**, by the move's row: `argue` moves the track by the margin; `press` lands a blow on `T`, heavier on the ground he is most invested in, and `T`'s steadiness draw (the last normal) settles whether he takes a mark or carries the strain; `divert` sets a pull on `T`'s next speech; `concede` yields the issue; `rest` does nothing | Will, Grace | B.5, B.6 |
+| 5 | **The effect**, by the move's row: `argue` moves the track by the margin (the margin clipped to `±track_clip` and the track then clamped to `±track_clip`: it is a position); `press` lands a blow on `T`, heavier on the ground he is most invested in, and `T`'s steadiness draw (the last normal) settles whether he takes a mark or carries the strain; `divert` sets a pull on `T`'s next speech; `concede` yields the issue; `rest` does nothing | Will, Grace | B.5, B.6 |
 | 6 | **The cost of staying.** `s.resolve` falls by one exchange and by what the exchange cost him; at zero he yields | Will | B.6 |
 | 7 | The `Exchange` record is appended | | A.3 |
 
@@ -317,10 +318,9 @@ threshold (R8). The one ladder is read once, by the host, on each verdict margin
 | `rank` | the speakers by `precedence`, highest first, ties by id; then again in the same order |
 | `scripted` | as `alternating`, with `for` (the questioner, the accuser, the inquisitor) holding every move and `against` held to the moves the rite allows the respondent (`answer`, `concede`, `rest`, and `argue` where the rite says): the asymmetry of v30 §7 `:398-402` REPLACED, not carried: v30 gave the disadvantaged party (the accused, the petitioner) halved resistance when moving the track and the advantaged orator no strain from CROSS exchanges; here the asymmetry is the rite's move set and the row's `presumes` (C.1). The accused keeps his own draws, a hearing on the track and every close level that counts against the other side; he loses v30's halved resistance (nothing here eases his speeches), while the questioner's freedom from strain survives in effect, because the respondent's moves hold no `press` (strain is dealt only by a move of effect `strike`). By the ladder (rung 5, the architecture: one move set and one `presumes` key carry the asymmetry with no second number) no pro-accused term is added |
 
-**Ends** (`rosters.yaml: proceeding_ends`, closed): `budget` (the type's maximum reached, or every speaker's `effort`
-spent; the per-type `exchanges` maximum and this end supersede `proposals/2026-09-05-proceedings-subsystem/21_RECONCILIATION.md`
+**Ends** (`rosters.yaml: proceeding_ends`, closed): `budget` (the type's maximum reached; the per-type `exchanges` maximum and this end supersede `proposals/2026-09-05-proceedings-subsystem/21_RECONCILIATION.md`
 Part E's refusal of *"a turn limit or round cap"*: Jordan's R6, 2026-11-14, *"a proceeding is a social contest is a run of
-exchanges"*, is the later ruling and a run has a length), `rested` (every side rests in turn), `yielded` (a side's resolve reached zero, or it conceded the last issue),
+exchanges"*, is the later ruling and a run has a length), `rested` (every side rests in turn, or has no legal move but `rest`, which includes every side's `effort` spent), `yielded` (a side's resolve reached zero, or it conceded the last issue),
 `broken` (a side's rattles, `marks`, reached `break_at`), `struck` (a side reached its k-th off-topic strike, k the type's
 `strikes`, where the type's `struck_ends` says that ends it), `adjourned` (a bench move, B24). An end is never a verdict: `yielded`, `broken` and `struck` enter the close as
 levels against the side concerned (`yield_level`, `break_level`), never as an automatic loss, which is HEAR_B's rule for
@@ -356,19 +356,20 @@ weighted by his Focus (B.9). The ballots are drawn in decider id order after the
 hold, the detection, the ballot: B.9).
 
 **The verdict is never the track.** Each decider's ballot is his own draw, on his own pool, score, lean and Will, and the
-track enters it as one level among several. `proposals/2026-09-05-proceedings-subsystem/00_DERIVATION.md` §A.3 (`AX-3`:
-one scalar both measuring and deciding is forbidden) is superseded only as far as a single track that is NOT itself the
-verdict (rung 1: the later design, Jordan's R6 and R4 of 2026-11-14, governs). This does not by itself keep what a decider
-holds TRUE apart from what he holds RIGHT, which is the other half of `AX-3`: B24.03 (wp `part22.md`) adds the issue ladder
-(`issue_rungs`: `procedure`, `fact`, `definition`, `justification`) and a `descends` cell on `concede`, and no second
-track, so in the built design the two are kept apart only by which rung is live when a speech is made, never by two
-scalars; `00_DERIVATION.md`'s falsifier D-4 (a produced document moving what a bench member holds right) has no test in
-B24p or B24.
+track enters it as one input among several, never as the verdict. The design therefore COMPLIES with the Layer 1 rule
+against *"one quantity that both measures and decides"* (`architecture/meta/04_CODE_ARCHITECTURE.md` G.1.5;
+`architecture/meta/01_AXIOMS.md` `AX-3`, as amended by A-92: what a person has learned enters only as a term in his own
+drawn act); it supersedes nothing. The track is not stored between sittings either: it is recomputed from the recorded
+exchanges (A.2). What the design does not do by itself is keep what a decider holds TRUE apart from what he holds RIGHT,
+the other half of `AX-3`: B24.03 (wp `part22.md`) adds the issue ladder (`issue_rungs`: `procedure`, `fact`,
+`definition`, `justification`) and a `descends` cell on `concede`, and no second track, so the two are kept apart only by
+which rung is live when a speech is made; `proposals/2026-09-05-proceedings-subsystem/00_DERIVATION.md`'s falsifier D-4
+(a produced document moving what a bench member holds right) has no test in B24p or B24.
 
 | setting | control | shipped | meaning |
 |---|---|---|---|
-| `track_step` | 0 | 0.3 | sigma per unit of track in each ballot `[ASSUMPTION; Jordan to correct — basis: `track_clip` 3.0 is the track's range per exchange, so a fully carried track reads 0.9 sigma, just under a `major` level (1.00) and inside `net_boost`'s 1.5 soft cap; B24p.23's R11 slope readings are its check]` |
-| `track_clip` | 3.0 | 3.0 | the most one exchange's margin moves the track |
+| `track_step` | 0 | 0.3 | sigma per unit of track in each ballot `[ASSUMPTION; Jordan to correct — basis: the track is clamped to `±track_clip` (3.0), so a fully carried track reads 0.9 sigma, just under a `major` level (1.00) and inside `net_boost`'s 1.5 soft cap; B24p.23's R11 slope readings are its check]` |
+| `track_clip` | 3.0 | 3.0 | the track's bound: one exchange's margin is clipped to it and the track itself clamped to `±track_clip` |
 | `yield_level`, `break_level` | | | B.6's settings table |
 | `presumption_level` | | | C.1 |
 
@@ -385,7 +386,8 @@ sitting never reaches it. It picks by what a move does (its `effect` cell), neve
 **The abridged form is the same entry under a one-exchange row** (R6: *"TELLING or LYING or SPEAK etc can be abridged auto
 proceedings"*). No abridged row is seeded: one function, `abridged(row)` (C.6), turns any type row into its one-speech
 form: `order: free`, `exchanges: [1, 1]`, `disposal: exchange`, one move, the venue and audience unchanged. The host
-passes `decide=None`. Then `proceed` runs steps 1 to 7 once, the close returns that exchange's margin against the hearer,
+passes `decide=None`. Then `proceed` runs steps 1 to 7 once, the close returns that exchange's margin against the one addressed (for an act on a person, that person; for an act on a matter,
+`speak`, the presiding seat of the docket's bench, C.7; seated as the sole unballoted decider, A.4),
 and the fold reads one band as it does today. A `tell` is the abridged form of `conversation`; a `speak` is the abridged
 form of the row its sitting is held under. Decided, with the reason:
 
@@ -791,8 +793,8 @@ speech; Grace covers part of that cost. Whether a blow marks him at all is Will'
 4, `hard` 5, in points of Grace). The key and its level names are B05.21's (the `difficulty_levels` roster); B05.21 sizes
 the level by `difficulty_ob` as a flat obstacle on every speaker, and this design sizes it as a demand on Grace instead,
 so the term is the speaker's shortfall and not the room's bare level. The two are separate roster members: the host keeps
-`standard` (`bound: host`) for every single-roll row, so B24p.05 moves no hash, and omits it for a row carrying
-`proceeds:` (biting from B24p.19, a declared mover); B24.08 deletes the host `standard` when `determine` routes here.
+`standard` (`bound: host`) for every single-roll row, so B24p.05 moves no hash, and omits it for an act resolving
+through the `proceeds=` path (keyed on the path, not on the verb row's cell; biting from B24p.19, a declared mover); B24.08 deletes the host `standard` when `determine` routes here.
 
 **Where Will ends and Grace begins** (INT §F item 4), decided by the ladder. Step 3, the design documents: the registry
 calls Grace *"composure, calm, etiquette, manners"* and AR-44 gives Spirit *"the capacity to tolerate harm and strain
@@ -880,7 +882,7 @@ a mark reach `press_at` (A.6): the side that is losing the argument goes after t
 | `press_at` | 1.0 (never) | 0.4 | the automatic policy's threshold on believed odds |
 | `strain_rest` | — | 1 | marks cleared per scene spent elsewhere |
 | `yield_level`, `break_level` | `None`, `None` | `moderate`, `strong` | against the side that yielded or broke, at the close |
-| `break_at` | `None` (never) | 3 | rattles at which a side cannot go on `[ASSUMPTION; Jordan to correct — basis: `resolve_0` is 2.0 + 0.5 × Will and a rattle costs one exchange of resolve, so three rattles end a side before a mid-Will side exhausts its resolve; B24p.23's 5 %–30 % band, with `broken` read apart from `yielded`, is its check]` |
+| `break_at` | `None` (never) | 2 | rattles at which a side cannot go on `[ASSUMPTION; Jordan to correct — basis: `resolve_0` is 2.0 + 0.5 × Will, a rattle costs one exchange of resolve (`mark_resolve`) and each of his own speeches one; at Will 4 (resolve 4) two rattles and two speeches reach `broken` before `yielded` can fire (`broken` is tested first), and at Will 5 and 6 likewise, while 3 reached `broken` only at Will 5 or more on the longest rows; B24p.23's 5 %–30 % band, with `broken` read apart from `yielded`, is its check]` |
 
 **Sources.** v30's strain, Rattled, Concentration and Spent (`:197-199`, `:240-270`), recast on the continuous engine with
 Will in place of the Focus defence; N5 (graded T1, UNVERIFIED as to formulation: force beyond a mind's tolerance turns the
@@ -976,7 +978,7 @@ that made them; unseen, the ploy keeps what it gained.
 | reads | `Decider.reason`, `.focus`, `.attunement` (raw); `Room.proof_weight`, `.distraction`; the sitting's `Exchange` records (`levels`, `move`, `ground`, `margin`, `mover`); each `Move.ploy`; `SideState.strikes` |
 | changes | nothing in the sitting; three entries of his ballot's `levels` |
 | side | the decider's own |
-| enters | three module-bound leverage sources of the ballot (members of `rosters.yaml: advantage_sources`, `bound: module`, B24p.05): `sense`, `relevance`, `sincerity` |
+| enters | three module-bound leverage sources of the ballot (members of `rosters.yaml: advantage_sources`, `bound: module`, B24p.05), bound in the module's second table `BALLOT`, which only the ballot calls (the speech's sources are `LEVERAGE`'s): `sense`, `relevance`, `sincerity` |
 | units | `pw_d` a share in [0, 1]; `f_d` a factor in [0, 2]; the three sources sigma |
 
 ```
@@ -1003,10 +1005,11 @@ Three normals per balloted decider, taken whether used or not, in this order: th
 deciders in id order. `k_x` is recomputed from `ground_reason` and `reason_bias` (B.2 a) for the exchange's ground or move.
 The loader (B24p.03) refuses an audience kind whose `proof_weight` is exactly 0 or 1, so `q_x` and `m_x` are defined
 `[ASSUMPTION — basis: the shipped kinds read 0.25 to 0.75]`. The strike levels leave `end_levels` and are carried by
-`relevance` alone, so they are counted once. `sense` is a correction on what the track already carries at the room's
-weight: at `pw_d = pw` it is 0, and the decider in effect weighs at `pw_d` without counting a speech twice
-`[ASSUMPTION: a sigma correction stands in for re-weighing each margin inside the track — basis: the track holds clipped
-margins, not sigma, and cannot be re-weighed exactly after the draw]`.
+`relevance` alone, so they are counted once. `sense` is a FIRST-ORDER correction to the sigma the track and the levels already carry: it approximates re-weighing
+at `pw_d`, and is exact only where a speech source carried the room's proof weight (`proofs`, `delivery`). `respect` and
+the Reason share of the dice carry no room weight in the speech, so for them `sense` ADDS a term rather than correcting
+one `[ASSUMPTION; Jordan to correct — basis: the track holds clipped margins, not sigma, and cannot be re-weighed exactly
+after the draw]`. At `pw_d = pw` it is 0.
 
 **One attribute, two operands, no double count** (decided by the ladder, rung 5, the architecture). Attunement already
 acts in the speech step as the `resist` of the one addressed to a `deceive` (B.6 d, the move's `resisted_by`): that is
@@ -1023,13 +1026,14 @@ and the room) is a third, separate use of the attribute, by speakers, not decide
 | `ploy_level` | `None` | `moderate` | sigma against a side whose ploy was seen `[ASSUMPTION; Jordan to correct — basis: the level `misfit_level` ships at]` |
 
 **Sources.** Jordan's R12 (the three clauses); N3 (the audience's route, which `proof_weight` already encodes); B.1's hold,
-reused for the decider; v30's Appraise against a deceiver (`:154-188`) and K/'s detection of evasion for (iii)
-`[NEW: the decider's three — reason: R12]`. The `ploy` cell is data on `rosters.yaml: proceeding_moves` (true on
+reused for the decider. `[NEW: the detection draw (iii) — reason: R12's "sincere or a ploy"; no earlier source gives a
+decider a draw that sees through a ploy]`. The `ploy` cell is data on `rosters.yaml: proceeding_moves` (true on
 `deceive`, `divert`; false on `argue`, `press`, `concede`, `rest`): no move id is compared in code.
 
 **Falsifier.** `test_a_deciders_reason_weighs_quality_against_manner`: a planted sitting whose `for` speeches carry only
 proofs and whose `against` speeches carry only delivery, deciders of Reason 2 and 6, 20,000 keys: the Reason 6 decider
-carries `for` more often by four standard errors; at `sense_step` 0 the two ballots are `==`.
+carries `for` more often by four standard errors (the direction); at `pw_d = pw` (`sense_step` 0, or a decider at `mid`)
+`sense` is exactly 0 and the two ballots are `==` (the zero); no size is claimed, since `sense` approximates.
 `test_a_deciders_focus_weighs_drift_and_resists_a_divert`: two strikes planted on `for` (`k` = 1): `relevance` against
 `for` is exactly `f_d` times `level(strike_level)` times 2 at Focus 2 and 6; with a landed `divert` planted, the share of
 failed holds is lower at Focus 6 by four standard errors. `test_a_deciders_attunement_sees_a_ploy`: a planted `deceive`
@@ -1037,5 +1041,12 @@ by `against`: the share of ballots with `sincerity` against `against` is higher 
 `sincerity` is 0 at both; the speech-step `levels["resist"]` of the same sitting is unchanged by `ploy_ob` and
 `ploy_level` (two operands). `test_each_decider_role_moves_only_its_own_operand` (B24p.18): two deciders equal but for one
 of the three leave every other ballot operand `==`. `test_a_balloted_decider_takes_three_draws` (a counting `Draw`).
+**What the realm can read.** Only `sense` carries a realm-slope STOP (B24p.23, every type reading). `relevance` and
+`sincerity` read 0 in every automatic sitting by construction: `_auto` never chooses a `divert` and `deceive` is in no
+seeded rite, so no landed divert and no ploy reaches a ballot. They are gated by B24p.18's planted falsifiers (a planted
+`divert`, a planted `deceive`) and take a realm slope only when a decider forms those moves (B24.13's NPC decider,
+B24.05's played decider, the owners). A departure from A-118's *every role must read in the realm*, for these two operands
+only (rung 5: an operand no automatic policy exercises cannot be read in the realm).
+
 Control: with `sense_step` and `relevance_step` 0, `ploy_level` `None` and `divert_pull`, `divert_gain` at control, the
 ballots are `==` to a ballot that counts each strike at weight 1 and has no `sense`, no `sincerity` and no thread lost.
