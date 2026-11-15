@@ -1,286 +1,206 @@
-# SC — the social contest redesigned, v2, part 4: the NERS pass, the cut list, the plan corrections, the questions
+# SC — the social contest redesigned, v2, part 4: the NERS pass, the cuts and the overturned cuts, the plan corrections, the questions
 
 ## Status: PROPOSED (the fourth part of `2026-11-15-social-contest-redesign-v2.md`; read that file's head first; reference under CLAUDE.md §0.05, nothing reads it at runtime)
 
 ---
 
-## E. The NERS pass on this design
+## E. The NERS pass (reconciled)
 
-`[SELF-AUTHORED — bias risk]`: the producer attacking his own work, with the method of `skills/ners/SKILL.md`
-(the cut test; graded on false N-lines; E scored last, as a ratio). Instruments A (the object ledger) and B in
-part (the draw's stress points are part 3 §B, read as evidence). What an independent reviewer would add is at the
-end. Each row: the cut proposed; what the game can no longer do; **game** (the decision it gives and who makes
-it); **played** (what he sees); **simulated** (what the world gets).
+`[SELF-AUTHORED — bias risk]`, by `skills/ners/SKILL.md`; two independent antagonists have since attacked it and
+their findings are folded in. Each row: the cut; what the game can no longer do; **who decides what, and what he
+sees**.
 
-### E.1 The N-line ledger
-
-| object | cut it, and | game / played / simulated | verdict |
+| object | cut it, and | the decision; what he sees | verdict |
 |---|---|---|---|
-| the track per listener | a split room cannot exist: a rally cannot win the guild and lose the toll men, a declared bench cannot divide, a partial seat cannot start elsewhere | which body to speak to; the mood and the card's odds; cohorts moved each for themselves | **N holds** (the walk: with one track every decider's verdict differs only by his draw; nothing else carries the split) |
-| the point and the answer | nothing a man says refers to what was said; a trial has no refutation and R13 dies | answer theirs or raise mine; their point and how far it seems to stand; the record reads as a scene | **N holds, narrowed**: it pays where points stand (a trial between able advocates: 0.688 against 0.602) and is carried by evasion being seen, not by a pay-off, in a negotiation (0.603 against 0.585) |
-| `reply: must` and evasion | an accused can say nothing or go after the man at no cost: silence beats refusal | answer or be seen to turn away; the charge on the menu line | **N holds** (found by the model: before it silence was the best reply) |
-| the issue ladder and descent | a concession is only surrender; "he did it, but it was no crime" cannot be played | give up the issue to fight the next from a fixed step behind; the issue and the cost; trials that end on justification | **N holds** in the trial family (0.540 against 0.458); a one-rung row does not have it |
-| the press and the rattle | the man cannot be attacked, composure means nothing, Will and Grace have no test, an interrogation cannot break anyone | go after the point or the man; his chance and what it risks; rattles witnessed and carried | **N holds** (0.541 against 0.428; a rattle that does nothing 0.485) |
-| `reactance` | pressing a beaten man keeps paying | when to stop | **N holds, narrowed**: it bounds repeats between equals; against a weak man it does not yet (0.655 pressing throughout) |
-| strain and `wear` | a failed press leaves nothing; the second press is the first again | wear him down or change tack; his believed strain | **N holds, narrowed**: one direction only (it eases the next press) |
-| drift (the hold) | Focus has no role; a heckling room and a rattle cost nothing in what he then says | none of his own: it is a consequence he reads | **N holds, weakly**: its slopes are small (part 3 §B.3); it is the only carrier of R1's Focus |
-| `manner` | Grace has no role; a court and a kitchen ask the same of a man; a rattle shows on everyone alike | which venue to seek; the standard on the card | **N holds** (margins after a rattle -3.72 to -1.15 by Grace) |
-| the blend `k` | a scholar and an orator are one build; R11 dies | which ground suits my dice here | **N holds** (0.58 and 0.29 before a bench; 0.29 and 0.44 before a crowd) |
-| the `View`'s blur | everyone reads perfectly; Attunement has no role | trust the reading or hedge | **N holds, weakly**: 0.406 against 0.440 |
-| `elicit` | a reading is as good at the first word as the last | none | **FALSE N-LINE risk**: it is a discount on the blur and no arm isolates it; kept at low confidence because the one positive finding in the reading research is elicitation; **the first cut to make if the blur stays weak** |
-| elaboration, `wF`, `wA` | a judge is a die; R12 dies | who is on the bench decides what I argue; nothing shown of a decider's attributes but through the reading | **N holds** for Reason and Attunement; Focus weak |
-| `insincerity` | a lie and an honest plea are the same speech; a hypocrite cannot be seen | argue what I hold, or what works here and risk being seen | **N holds** (0.282 against 0.105) |
-| the bearing reading | every person is his six attributes; nobody comes to a sitting for anything | his stake on the card; what the other side visibly wants | **N holds** (every arm of part 3 §B.6) |
-| `lean` from stake | no partial judge, no friendly bench, no needy party | where to bring the matter; whom to face | **N holds** |
-| `mood`, `heat`, the crowd | onlookers are scenery; D7 returns | play to the gallery or to the bench | **N holds** (drift 0.358 against 0.059) |
-| `Item` and `credit` | nothing the world holds can be shown; a record is worth the same to its subject's client and to a stranger | what to bring, whom to call | **N holds** |
-| the witness rule | testimony is a number the advocate rolls | call him or not: he can be pressed | **N holds** (402 calls, pressed next in 195) |
-| arrangement (`tilt`) | every forum is neutral; office and power stop at the door | how hard to rig, and what it costs; to accept, contest or appeal | **N holds** (0.617, 0.567, 0.355; legitimacy; appeals) |
-| the context rows | the same trial in a famine and in peace | which forum is lawful, when to bring it | **N holds** for regime and strife; **the era's weights are a FALSE N-LINE as measured** (0.585 and 0.602 against 0.603): they move which ground is argued, not who wins. Kept because a ground choice is play, at low confidence |
-| the disposal rows | an outcome is a band | what each band will do, on the card | **N holds** |
-| the `Card` | a player learns the rules of this room by losing in it | everything he reads before choosing | **N holds** |
-| `auto`'s three terms | every NPC is the same optimiser with different dice | none (it is the NPC's) | **N holds** for the simulation (table B.5); it costs the played game nothing and gives it nothing (T20) |
-| `rest` | a man must speak into a room that has turned | stop while ahead | **N holds** (0.243 against 0.150) |
-| eight rows | | | `conversation` and `negotiation` differ only in three cells (`live`, `reply`, `close`): **narrowed**, kept because consent against a draw is a different game; the five merged rows were false N-lines and are aliases |
+| a track per person | no split room, no divided bench, no partial seat, no party moved toward an accept | which body to speak to; the mood, his odds | **N holds** |
+| the point and the answer | nothing said refers to what was said; no refutation | answer theirs or raise mine; their point and how far it seems to stand | **N holds, narrowed**: it pays between able advocates before a bench; in a negotiation it is carried by evasion being seen |
+| `reply: must`, evasion | the accused says nothing at no cost | answer or be seen to turn away | **N holds** |
+| the issue ladder, descent | a concession is only surrender | give up the issue to fight the next | **N holds** in the trial family |
+| the final concession (`yield_track`), the accept | a man who gives up the matter still wins the draw | when to stop | **N holds** (F2) |
+| the press, the rattle, `reactance`, `wear` | the man cannot be attacked; composure means nothing | the point or the man; his chance and what it risks | **N holds** (0.545 against 0.487; pressing throughout 0.367) |
+| `esteem` (restored) | Grace is a private shortfall; nobody is "seen as respectable"; a rattle shows on everyone alike | which venue, which opponent; his standing on the view | **N holds** (0.142 → 0.400) |
+| `weary` (restored) | Will does not keep a man arguing; effort is free | how many turns to prepare; when to rest | **N holds** (0.307 → 0.398) |
+| `heard` (restored) | a quiet man is heard by a crowd as well as an orator | the room to choose | **N holds** (0.160 → 0.500) |
+| `gap` (restored) | a reeve's office weighs nothing against a commoner's argument, and Reason cannot answer it | whom to face; whom to send | **N holds** (0.092 → 0.323) |
+| the hold (`drift`) | Focus has no role | none of his own | **N holds, weakly** (speaker +0.005; the judge's Focus -0.062 and +0.172) |
+| the blend `k` | a scholar and an orator are one build | which ground suits my dice here | **N holds** |
+| the `View`'s blur; `intent` | everyone reads perfectly | trust the reading or hedge | **N holds, weakly** |
+| `q`, `wF`, `wA` | a judge is a die | who is on the bench decides what I argue | **N holds** (table B.3) |
+| `insincerity`, `believes` | a lie and an honest plea are one speech | say what I hold, or what works here | **N holds** |
+| the bearing reading | every person is his attributes | his stake; what the other seems to want | **N holds** |
+| `mood`, `heat`, the crowd | onlookers are scenery | play to the gallery or the bench | **N holds** on the first run's magnate arm; not re-run |
+| `Item`, `credit`, the witness | nothing the world holds can be shown | what to bring, whom to call | **N holds** |
+| arrangement (`tilt`) | every forum is neutral | how hard to rig; accept, contest, appeal | **N holds** |
+| the context rows | | which forum is lawful, when to bring it | **strife: N holds. Regime's `standard` and the era's ground weights: FALSE N-LINES as measured** (they move no outcome); kept as content because lawfulness, admissible proof and which ground a man reaches for are play, at low confidence |
+| the disposal rows, the `Card` | an outcome is a band; the rules are learnt by losing | what each band will do | **N holds** |
+| `temper` and its three terms | every NPC is one optimiser | none (the NPC's) | **N holds for the simulation's portrait** (press share 0.63 against 0.36; the timid concede 0.34); **its promise to the player is not shown** (T20) |
+| the nemo invariant | a man can try, question and judge himself | | **N holds**: it deleted the three rows' self-verdicts |
+| eight rows | | | `conversation` and `negotiation` now differ in two cells (`live`, `reply`): **narrowed**; kept as rows because the offer that must be answered is a different talk |
 
-**False N-lines found in RD and cut** (the possibility survives the cut because something ruled in already
-provides it): the judging pool (a good judge is his Reason, Focus and Attunement, R12); `esteem` as state (what a
-room thinks of a man is his tie to each person in it, and what it saw is a claim); `resolve` (how long he can go
-on is whether he is rattled and whether speaking still pays); `proof_weight` and `reason_bias` and `sense` (one
-weight of the case against manner: content, venue and the listener's elaboration in one line); `divert` (a press
-already pulls); `deceive` (a lie is an argument its speaker does not hold); `presumes` and `scripted` (the
-arrangement); `case_rows` (the convener names the row); the detection draw (a continuous weight).
-
-### E.2 R
-
-- **R-COMPLETE.** Every branch is written and runs: 0 invariant violations in 12,947 beats, the draw counts
-  asserted. Extremes: an all-7 against an all-1 was not swept in this model `[UNVERIFIED]`; the close cannot
-  saturate (0.79 at a track of 12). Unwritten: a played judge's ruling and bench moves are a `[HOOK]`; several
-  speakers a side run (the order takes any number) but what an ally adds is not designed.
-- **R-VARIETY.** Five builds each win somewhere and lose somewhere (table B.5; the scholar before a bench, the
-  orator before a crowd, the reeve nowhere without power, with power everywhere he can rig). Upper bound, not an
-  estimate.
-- **R-CHOICE.** At the speaker's seat no option is strictly dominated in every matrix read; each of the five
-  relations is best somewhere (part 3 §B.4). **Finding:** between plain people in a `must` rite, saying little is
-  as good as speaking; and against the automatic policy a careful one-step chooser gains nothing (T20), so the
-  played game's edge over an NPC lies before the sitting (what he brings, where he brings it, how it is arranged)
-  and not in the exchange menu. Stated as a limit.
-- **R-WORLD.** A sitting nobody watches leaves the hooks of part 3 §A; the three-season run shows them returning
-  (an appeal in 45 of 80 runs, earned grudges, a famine moved, no snowball: 0.63 against 0.62).
-
-### E.3 S
-
-- **S-UP / S-DOWN.** N-A at the module (a resolver has no docket). At the host: a grievance and an appeal are
-  docketed objects a seat must convene or let lapse; a rigged forum is published to whoever was present and
-  travels as their claims.
-- **Coverage.** Vertical: the abridged form is the first exchange of the full form at control; a cohort is a
-  person at weight. Lateral: every draw is on the one opposed form. Diagonal (to the fight, the field): not
-  examined `[UNVERIFIED]`.
-- **Pauses correctly.** The module returns `Sitting`; the host resumes from it; a played and an automatic side
-  meet in one call. Resumption across seasons was not run `[UNVERIFIED]`.
-- **Methodology.** One obstacle composer; leverage in levels under the soft cap; no second ladder. **Finding:** the
-  opposition here counts an attribute at 0.4 a point where B05 counts it as levels (part 4 §I question 2): two
-  conventions for one quantity until B05 follows or this is reverted.
-
-### E.4 E, last, as a ratio
-
-- **Overhead (counted).** Records: 12 to 9 (`Speaker`, `Decider`, `Room`, `Move`, `ProceedingType`, `SideState`,
-  `ProceedingState`, `ProceedingInput`, `ExchangeView`, `Choice`, `Exchange`, `ProceedingOutcome` against
-  `Present`, `Rite`, `Item`, `Sitting`, `Point`, `Cond`, `Beat`, `View`, `Outcome`, plus `Option`, `Input` and
-  the host's `Card`). Settings: 53 and three tables to 38. Moves: 6 to 4. Ends: 6 to 3. Disposals: 6 to 4 and the
-  abridged. Draws: G+5 an exchange and 3 a decider to 2G+5 and 1 (more normals an exchange, bought to close the
-  leak). Rows that play differently: 13 named to 8. Leverage sources and ballot sources: 5 and 3 to none (one
-  composer). The biggest moves are deletions; the vocabulary is shorter. **Added**, and each argued in E.1: the
-  point, the bearing reading, the item, the arrangement, the context and disposal tables, the card. The meta-rule
-  (a fix that adds a system has failed) is met for D1 to D8 (each fixed by a deletion or an edit) and is strained
-  by the charter's additions, which add six objects; each replaces something (the bearing replaces `moved_by`,
-  `lean` and `proofs`; the arrangement replaces `presumes`, `scripted` and `case_rows`; the item replaces the
-  `proofs` source and roster; the disposal table makes explicit what the fold already keys on).
-- **Legibility.** Can a player predict the shape of the outcome from the choice? Yes for the ground (his dice,
-  their care, both shown), the press (a chance and two outcomes), the concession (a fixed cost against how far
-  behind he is), the venue (the standard and the lean on the card). **No** for elaboration (a decider's Reason is
-  hidden and reaches him only as a believed appeal) and for the sum of drift, evasion and insincerity as each
-  decider weighs them: he sees the room move, not why.
-- **Over-distillation watchlist.** One `fit` function for argument and press: kept, medium confidence (a press on
-  a friend reads oddly as "solidarity"). Three bearing channels for goals, needs, ambitions, arcs, kin, patronage,
-  debts and faction: kept at medium confidence; an arc is the layer most likely to be lost in it. Judging skill
-  cut: kept at high confidence. `esteem` cut: medium (a man's standing in the room no longer changes during the
-  sitting except through rattles). The four parts of a speech cut: high.
-
-### E.5 The verdict
+**R.** *Complete:* every branch runs (0 violations in 12,890 beats; the listed refusals); a played judge is a role
+with a view and three choices; what a bench member asks, and what an ally on a side adds, are not designed.
+Extremes were not swept by me (antagonist A's `p3_extremes.py` did; I did not re-run it against the reconciled
+model `[UNVERIFIED]`). *Variety:* builds win and lose by venue (R11's arm). *Choice:* no move is dominated in the
+matrices of the first run; for flat people in a trial arguing every turn (0.261) and silence (0.285) are level
+and mixing (0.356) beats both. *World:* part 3 §B.5's seasons; the possible snowball (0.57 against 0.38, z 1.6) is
+open.
+**S.** One obstacle composer, one ladder, one opposition rule, which is now the ruled one (A-137), so the earlier
+methodology finding closes when B05 takes §H item 1. Resumption runs. Cross-scale seams were not examined.
+**E, last.** Records 12 to 10. Settings 53 and three tables to 44 (38 before the overturned cuts restored six
+carriers). Moves 6 to 4, ends 6 to 3, closes 6 to 4 and the abridged. Draws 2G+8 an exchange (more than before,
+bought to give every believed number its own noise) and one a decider. *Legibility:* the ground, the press, the
+concession, the venue and now his own standing and weariness are readable from the view; how each decider weighs
+drift, evasion and insincerity is not, except through the room moving. *Over-distillation watchlist:* one `fit`
+for argument and press (kept, medium); three channels for eight layers (kept, medium; an arc is the likeliest
+loss); the judging pool cut (kept, high); `deceive` and `divert` not restored (kept, medium: their clauses are
+carried, part 2 §C.3).
 
 ```
-NERS PASS: the v2 proceeding          INSTRUMENTS: A + B (in part)
-
 MUST BE STATED AS A LIMIT
-  - a careful player does not out-argue the NPC in the exchange (T20)            [R-CHOICE]
-  - Attunement and Focus act, weakly; three attributes are silent at a quiet tell [R2; part 2 C.6]
-  - the era's ground weights do not move who wins on the matter tested            [false N-line as measured]
-  - between plain people under a charge, saying little is as good as speaking     [R-CHOICE]
-  - the opposition's convention differs from B05's until one of them moves        [S methodology]
-  - a played judge, bench moves, allies on a side: hooks, not designs             [R-COMPLETE]
-MAY BE CLAIMED, HAVING SURVIVED
-  - D1 to D8 are closed in the model, each against a control                      (part 3 B.1)
-  - each type differs in play by its cells; every move, end and setting is live   (attacked as "names": failed)
-  - the record alone renders a cogent scene                                       (attacked by invariants: 0 of 12,947)
-  - character, context and power move outcomes and vanish when flattened          (every arm of part 3 B.6)
-
-| axis / test | verdict | what would overturn it |
-| N | FINDINGS: 2 weak (elicit, era weights), 1 narrowed pair (conversation, negotiation) | an arm isolating `elicit`; an era arm on a matter argued from principle |
-| E-OVERHEAD | PASS on the replaced design; FINDINGS on the additions (six objects) | a carrier for an added object that already exists and was missed |
-| E-LEGIBILITY | FINDINGS: elaboration and the per-decider deductions are not readable from the choice | a view line that shows why the room moved |
-| R-COMPLETE | FINDINGS: three hooks; extremes not swept | an all-7 against all-1 sweep that breaks |
-| R-VARIETY | PASS (upper bound) | one build winning every room |
-| R-WORLD | PASS | a season run in which nothing returns |
-| R-CHOICE | FINDINGS: T20; silence between plain people | a view-only chooser that beats `auto` by more than two standard errors |
-| S-UP, S-DOWN | N-A at the module | |
-| S coverage, pause, methodology | FINDINGS: the opposition convention; resumption across seasons not run | |
-| the design's own falsifier | HOLDS: the module names no type, move or person (read: `engine.py` compares `effect`, `reply`, `concede`, `close` cells only) | a row id or move id in a module branch |
-| self-audit | 9a: the gag was removed from parts 1 and 2 after part 2 was written, and table B.2 was replaced with the final run's rows; 9b: `elicit` and the era weights fail §3's test as measured and are flagged, not deleted | an independent reviewer would re-derive every "before", open the six sources the precedent map could not, and attack `fit`'s reuse as `aim` |
-
-GRADE: paper, with a running model (sc_model_v2: core_out_final.txt, world_out_final.txt). Nothing in the tree runs it.
+  - provoking a man out of his composure changes what he does and, in this model, costs him little (T20)
+  - regime and era move lawfulness, proof and the ground argued, not who wins (T13)
+  - the speaker's Focus and Attunement act weakly
+  - a possible history effect across seasons is unresolved
+  - bench moves, allies on a side: not designed
+MAY BE CLAIMED, HAVING SURVIVED TWO ANTAGONISTS AND ONE RECONCILIATION
+  - D1 to D8 and F1 to F8 are closed in the model, each against a control
+  - nobody adjudicates his own proceeding; consent is an act
+  - every clause of R1, R2, R11 and R12 has a carrier that reads a slope with its control (part 3 B.3)
+  - the record alone renders a scene at seed 0 of each rite
+GRADE: paper, with a running model (sc_model_v2/v3_out.txt). Nothing in the tree runs it.
 ```
 
 ---
 
-## F. Decisions taken by the ladder (one place)
+## F. Decisions taken by the ladder
 
 | # | decision | rung |
 |---|---|---|
-| 1 | the opposition is the resisting person's `will + rank` at 0.4 a point, mirroring the pool; A-79's letter put aptitude in as levels | 1 (B05.25 and R7, later, put attributes in the roller's dice; the centre A-79 rules then needs the mirror) and 5; **escalated as question 2 because it touches a ratified letter** |
-| 2 | the decider's three are continuous weights in his own track; no draw, no second pass at the close | 5 (one operand each) |
-| 3 | no judging pool; every decider draws on `pool_of(mid)` | 2 (nothing is carried by it once R12's three act) |
-| 4 | `mutual` and `none` become `consent`: the close's margin without the draw | 3 (NEG's falsifier: consent is never drawn) |
-| 5 | a conviction is never written by a proceeding | 3 (`04:251`, A-92) |
-| 6 | one live point a side; the parts of a speech, inoculation and a self-contradiction rule are not built | the charter, statement 3 (game first over fidelity) |
-| 7 | Focus, Attunement and the speaker's Will are silent at a quiet tell | 5 (the clean centre); **escalated as question 3** |
-| 8 | deliberation among deciders (N10) is not built | 1 (A-14: each verdict is the voter's own draw) |
-| 9 | a wrong ground costs: fit is symmetric about the middle of the scale (RD's J-SC-2) | 5 (one number, and the centre holds at the middle) |
-| 10 | the opener's residual edge (+0.043) is kept | 4 (the bearer opens: RD's burden rule) and the research (`NP:118`, T0) |
-| 11 | `bench` ballots the presiding seat alone; `declared` every seat | 4 (RD §C.8, B24.11) |
-| 12 | the five rows of identical structure are aliases of three rites | 5 |
-| 13 | `written_only` is cut; a filed petition stays a brute act | 2 (it changed no outcome in the stress test) and RD §D.1 |
+| 1 | the ploy is carried by `insincerity` on `argue` and `press`; `deceive` and `divert` are not restored | 5 (their clauses are carried once; A-140 restores only a sole carrier) |
+| 2 | the decider's three are weights in his own track; no draw | 5 |
+| 3 | no judging pool | 2 |
+| 4 | a conviction is never written by a proceeding | 3 (`04:251`, A-92) |
+| 5 | one live point a side; the parts of a speech, inoculation, a self-contradiction rule are not built | A-130 (game first) |
+| 6 | deliberation among deciders (N10) is not built | 1 (A-14) |
+| 7 | fit is symmetric about the middle of the scale and reads the matter | 5 |
+| 8 | `bench` draws the presiding seat alone; `declared` every seat | 4 (RD §C.8, B24.11) |
+| 9 | the rally is deliberative (a crowd urged to a course decides a future action, `RO:77`, `NP:32`); epideictic has no row | 3 |
+| 10 | `consequence` is pathos (what the listener wants, as the matter bears on it), `evidence` alone is logos | 3 (`NP:27-28`) |
+| 11 | a final concession sets the room against the conceder and the bench still draws | 1 (A-14) with HEAR_B's rule that an end is never a verdict |
+| 12 | `Sitting.tracks` stays in the value as the running sum (asserted equal to start plus beats) | 5 (resume without replay); antagonist B's cut declined for that reason |
 
 ---
 
-## G. The cut list (from the 2026-11-14 design; why nothing is lost)
+## G. The cuts, and the cuts overturned (A-140)
 
-| cut | nothing is lost because |
-|---|---|
-| `Speaker`, `Decider`, `hearers`, `Room` as four records | one `Present` with two role cells |
-| `pool.judging`, `Decider.pool`, `Decider.score`, `Decider.modifier` | D1's cause; R12's three are what a judge is |
-| `Decider.lean`, `regard_step` in a ballot, B05.21's `regard` and `reception` operands in a speech | the tie is the `solidarity` ground's fit and the start of his track; counted once |
-| `moved_by`, the `grounds: read:` cells, `fit_body`, the weight-mean target | the bearing reading, per listener |
-| `misfit_level`, `sore_gain` | one `fit_level`, symmetric; aim is the same function |
-| `proofs` as a leverage source, `proof_level`, `proofs_per_reason`, `usable`, the `proofs` roster | an item's `credit` on the `evidence` ground; the matters roster |
-| `accounts`, `account_step`, `account_max` | what he knows of the other side is an item he holds about him |
-| `proof_weight`, `reason_bias`, `sense_step` at the ballot, the audience-kinds table (four kinds by three columns) | one line: content + venue lean - crowd, and the listener's elaboration |
-| `attention`, `heard_step`, `heard_floor`, `delivery_step` | Presence acts through its share of the dice, which grows with the crowd |
-| `esteem`, `respect_step`, `mark_shame`, `cover_step`, `cover_max`, `press_rebound` as esteem | `manner` (headroom is composure); `rebound` moves the room |
-| `resolve`, `resolve_base`, `resolve_per_will`, `mark_resolve`, per-speaker `effort` | equal turns; he stops when he chooses |
-| `shield_step`, `shield_max`, `resist_step` as leverage and at the ballot | Will is the opposition, once |
-| the steadiness draw, `blow_gain`, `press_base`, `strain_carry` | one press draw; strain eases the next |
-| `break_at`, `break_level`, `yield_level`, the ends `broken`, `struck`, `adjourned` | `broken` is a derived word; no flat count; `adjourned` is B24's |
-| `strikes`, `strike_level`, `struck_ends`, `off_topic` as a flag | drift is an amount; evasion is priced when it happens |
-| `divert`, `divert_pull`, `divert_gain`, `deceive`, `deceive_pull`, the `ploy` cell | a press pulls; a lie is an argument he does not hold |
-| `concede_step` as a track nudge with resolve back | conceding closes the issue or ends the sitting |
-| the ballot sources `sense`, `relevance`, `sincerity`; `ploy_ob`, `ploy_level`; the detection draw; the decider's hold | three weights in his track |
-| `track_clip`, the clamp | the soft cap at the close |
-| `presumes`, `presumption_level`, the `scripted` order, `order` as a key, `rank`, `written_only`, `free` | the bearer opens, then precedence; the arrangement |
-| `case_rows`, `row_for_case`, `seat_at_least`, `base_disposal` | the convener names a lawful row |
-| `press_at` and the rule "press only when behind" | the option of greatest worth to him |
-| `reading_kept` (B24p.22's kept reading) | the view is drawn each exchange and sharpens as he engages; what is kept is what was witnessed |
-| the disposals `mutual`, `none`, `exchange` as three | `consent`; the abridged form |
-| five rows as kinds | aliases |
-| `gag` (added and removed in this work) | it moved nothing over the battery |
-| the planning chooser (built and removed in this work) | it did not beat the automatic policy |
+**Overturned** (each removed the only carrier of a ruled clause; restored as the simplest carrier on existing
+structures):
 
----
+| cut | the clause it served | restored as | cost |
+|---|---|---|---|
+| `accounts`, the `eased_by` operands, the host's `rank_gap` | R1 Reason: *"account for opponent's factual circumstances like resources office influence"*; B28.10's *relative rung of the teller's seat*; B28.34, B28.35 | `gap`: the other side's `power` stands as an obstacle, discounted by the speaker's Reason | one setting; `Present.power` (already there for arrangement) |
+| `resolve`, per-speaker `effort` | R1 Will: *"keep arguing your case"* | `weary`: `Cond.spent` against `stay_base + stay_per_will x will`; effort is the turns he prepares | three settings, one number of state |
+| `esteem`, `respect_step` | R1 Grace: *"seen as respectable"* | `esteem`: his shortfall against the other's, derived each exchange (S-7: not stored); it replaced `manner` | one setting, none net |
+| `heard_step`, `heard_floor` | R1 Presence: *"listened to"* | `heard`: the share of his pool the room hears, by the crowd | two settings |
+| the opponent's dispositions in the reading | R1 Attunement: *"reading their intent"* | `View.intent`: the believed stake of the man opposite | one normal |
+| `sense` as a level added to a speech | R12 Reason: *"does it make sense"* | `q`: a weight on fit and on esteem by the listener's elaboration, so quality decides for the able | none (replaces `sense_level`) |
+| sincerity read from stake alone | R12 Attunement: *"sincere or a ploy"*, the self-serving lie, the forged press | `believes` (what he knows) in `insincerity`; the deduction on a press made with a false item; a lie's item from his own false claim | one field |
 
-## H. The plan-item corrections this design requires (ordered; none applied)
+**Confirmed carried, not overturned:** R11 (the blend by content and venue: the venue arm, 0.410 against 0.125 and
+0.255 against 0.213); R12 Focus (the judge's own Focus in a full trial, both signs); R4 (types by stakes,
+factions, venue, adjudicators, audience, speeches and order, verdict system: the rite's cells and the builder);
+R6 (the abridged form).
 
-Files: `p22` = `workplans/valoria_master_workplan_v12_part22_b24p.md`, `p22c` = `_b24p_cont.md`, `p8` =
-`..._part8.md`, `p8c` = `..._part8_cont.md`, `p9` = `..._part9.md`, `B22` = `..._part22.md`, `B22c` =
-`..._part22_cont.md`, `p34` = `..._part34.md`, `p35c` = `..._part35_cont.md`.
-
-1. **`p8c` B05.14 and `p8` B05.25, B05.10** (if question 2 is answered yes): the opposition of a row contested
-   against a person is `opposed_ob(opposing attribute + rank)`; the subject-side levels on `opposed_attribute`
-   are deleted. The same change restores the centre for every single-roll verb.
-2. **`p22` B24p.01** (rosters): `grounds` lose `read:`; `proceeding_moves` is `argue`, `press`, `concede`, `rest`
-   with an `effect` cell; `proceeding_ends` is `budget`, `rested`, `yielded`; add `matters` (it absorbs
-   `rosters.yaml: proofs`); delete `case_rows` and the content class on a move.
-3. **`p22` B24p.02** (records): the nine records of part 2 replace the twelve; `Input.state` is a whole `Sitting`.
-4. **`p22` B24p.03** (rows): each row names its cells (`live`, `bears`, `reply`, `issues`, `concede`, `moves`,
-   `close`, `turns`, `standard`, `lean`, `admits`, `disposes`); add the `context` and `disposal` blocks; delete
-   `audience_kinds`, `presumes`, `strikes`, `order`, `reason_bias`, `base_disposal`; `disposal` values are
-   `bench`, `declared`, `hearers`, `consent`; five rows become aliases.
-5. **`p34` B32.15** (`acclamation`): written as the `rally` rite with `close: hearers` and no `order` key, so it
-   passes the loader (the stress test found `rite: address, order: rank` refused).
-6. **`p22` B24p.04, B24p.05**: the 38 settings at their controls; the obstacle roster gains the one term `manner`;
-   the leverage sources `delivery`, `fit`, `respect`, `marks`, `resist` and the four-tuple `eased_by` are deleted.
-7. **`p22` B24p.06**: `person_q.bearing`, `care`, `tie`, `strain_carried` (part 2 §A) replace `moved_by`; the
-   builder reads the speaker's **own** ledger for his items and never `world_q.proofs` or `world_q.reception`,
-   which read other persons' ledgers.
-8. **`p22` B24p.07 to B24p.10** become one item, the exchange (part 2 §C), with the count 2G+5.
-9. **`p22` B24p.11**: the order (bearer, then precedence; equal turns); three ends; the automatic policy of part 2
-   §F. **Resume:** a resumed sitting takes `Sitting` whole, so each speaker's `spoken` carries and the remaining
-   turns run (the old `n` made a resumed full sitting run no exchanges); a `yielded` sitting is not resumed; the
-   track is `lean` plus the beats' moves, which include concessions (the old recomputation omitted them).
-10. **`p22` B24p.12**: the close of part 2 §D; `closing_odds(inp, state)`; the ballot sources deleted.
-11. **`p22c` B24p.13** (the builder). **The bench filter's real chain:** `world_q.judging_set(w, venue, matter)`
-    returns person ids; `gate.seat_faction(w, via)` takes an office id. The filter needs, for each judging person,
-    the office of his live `hold` Tenure, then `w.offices[office].faction`, then `authorities.by_faction`. So
-    `judging_set` gains a sibling returning `(person, office id)` pairs (the walk already finds the Tenure), and
-    the filter reads `seat_faction(w, office id)`. The builder also takes the arranger and `rig`, applies the
-    context rows, and returns the `Card`.
-12. **`p22c` B24p.14**: `act_band` (part 2 §D). The returned dict carries `settled_margin` (the act's margin),
-    which `p8c` B05.18's fold reads. Believed odds are `closing_odds` on the built input at the opening, never
-    `None`, so `p9` B05.62's `believed_prior: ordinary` has its number. **A new edit item is needed:**
-    `engine/season/seam/ladder.py::degree_of(result, subject, fixtures)` gains `veto: bool = False` (a veto
-    demotes Success or better to Partial); no item edits it today.
-13. **`p22c` B24p.15** is deleted; the arrangement reaches the builder as operands of `open_case` and `convene`
-    (the plan's H-80 gap: a computed act has no operand channel for the arrangement) `[UNVERIFIED: H-80 not opened]`.
-14. **`p22c` B24p.16, B24p.19**: `seam/contest.py` takes the proceeding entry for any verb row carrying
-    `proceeds:`, **whatever its prize**, so `determine` (prize `a verdict`, `B22` B24.03, B24.08) leaves the old
-    path; `lie`'s cell is `{row: conversation, form: abridged}` with a false item, not `move: deceive`.
-15. **`p35c` B28.35** stops reading `opposed_attribute` (which B24p.19 deletes): the self-plea opposed by its
-    accuser is part 2 §C.2's rule (a party who decides is opposed by the other side's lead).
-16. **`p22c` B24p.20, B24p.22**: the Event `ending` stores the beats and the `Sitting`; B24p.22 is rewritten as the
-    witness deposit of what the beats show (rattled, shown, conceded, hypocrite, partial, rigged); the kept
-    reading it deposited is cut, so it no longer reads something the ending does not store.
-17. **`p22c` B24p.17, B24p.18, B24p.21, B24p.23**: the readings and role tests are re-pointed at part 2 §C.3 and
-    §C.6's operands; the gate for each of the decider's three is "its setting off reads slope exactly 0".
-18. **`B22` B24.03, `B22c` B24.30**: a row's `issues` cell lists rungs of B24.03's `issue_rungs`; a negotiation is
-    `close: consent` and its `accept` is a concession under `concede: accepts`.
-
-The information leaks the stress test found (the decide callback's record carried true Will, score and fit; one
-noise term shared between two believed vectors) are closed by item 3 (`View` holds no true value) and item 8 (a
-normal per believed number).
+**Cuts that stand** (no ruled clause lost): the four person records into one; the judging pool; `Decider.lean` and
+a regard step at the ballot (the tie is `solidarity`'s fit and the `start`); `moved_by`, the `read:` cells,
+`fit_body`, `misfit_level`, `sore_gain`; `proofs` as a source and roster (items, `credit`); `proof_weight`,
+`reason_bias` and the audience-kinds table (one line for `k`); `attention`, `delivery_step` (Presence is `heard`
+and its share of the dice); `mark_shame`, `cover_step` (esteem's headroom); `shield_step`, `resist_step` at the
+ballot (Will is the opposition, once); the steadiness draw; `break_at` and the ends `broken`, `struck`,
+`adjourned`; `strikes`; `divert`, `deceive`; the ballot sources and the detection draw; the clamp; `presumes`,
+`scripted`, `order`, `written_only`; `case_rows`; `press_at`; `reading_kept`; the disposals `mutual` and `none`;
+five rows as kinds. **Cut in this pass:** `elicit`; the policy's bonus for the proof; `sense_level`; `manner_step`
+(into `esteem_step`); the self-verdicts of `conversation` and `questioning`; the restated primitives table.
 
 ---
 
-## I. The questions that survive the ladder (three)
+## H. The plan-item corrections (ordered; none applied)
 
-| # | question | A (what this design builds) | B | what differs in play |
-|---|---|---|---|---|
-| 1 | **Should the NPC argue as well as its view allows?** The automatic policy takes the best option its reading shows, coloured by the man's grain, grudge and pride; a careful player choosing from the same view gains nothing on it in the exchange (within ±0.03 in every rite), though he beats a random chooser by 0.05 to 0.20. | NPCs are able advocates of themselves; a player's edge is preparation, forum and arrangement, and reading the room better than a poorly attuned NPC | NPCs are ruled by temper (raise `grain`, `grudge`, `pride`, or let a poor reader mis-weigh his options) so that a cool head out-argues them at the table | under A an exchange against an NPC is a contest of builds and hands; under B it is also a contest of nerve the player can win by choosing well |
-| 2 | **May the opposition count the resisting attribute at 0.4 a point** (here: `will + rank`), where A-79's letter makes aptitude a level under the soft cap? With attributes in the roller's dice (B05.25, R7, R11) and only the skill score opposing, equals carry 40 %, not 25 %. | the mirror: attribute and rank oppose at 0.4 a point; the subject-side levels are deleted (in B05 too) | keep the levels, and move the even line to count an ordinary attribute (`even_line(pool_add + mid)`) | A: a point of the hearer's Will is worth exactly a point of the speaker's blend, at every pool; B: its worth grows with the speaker's pool, and a strong hearer is capped at 1.5 sigma |
-| 3 | **Must a quiet tell exercise all six attributes?** Here Reason, Presence and Grace act in it and the hearer's Will opposes; Focus, Attunement and the speaker's Will have nothing to act on unless something pulls, the hearer is peaked, or someone presses. | they are silent where they have no object; the centre stays clean | give every room a standing pull and every speech a Will term, as the 11-14 design did, and re-centre by the difficulty table | A: a tell is a short honest roll; B: every attribute shows in every roll, and the tell is harder for the unfocused everywhere |
+Files: `p22` = `workplans/valoria_master_workplan_v12_part22_b24p.md`, `p22c` = `_b24p_cont.md`, `p8`, `p8c`, `p9`,
+`B22` = `..._part22.md`, `B22c`, `p34`, `p35c` = `..._part35_cont.md`.
 
-Everything else was closed by the ladder (§F). Content that is Jordan's to correct and blocks nothing: every
-shipped setting, the eight rows' cells, the context rows, the disposal rows, the matters roster.
+1. **`p8c` B05.14, `p8` B05.25, B05.10** (A-137): the opposition of a row contested against a person is
+   `opposed_ob(opposing attribute + score)` at `MU_PER_DIE`; the subject-side levels on `opposed_attribute` are
+   deleted; B05's calibration then sets the difficulty cell to A-79's centre (0.8 reads 25 % carried in the model).
+2. **`p22` B24p.01**: `grounds` lose `read:`; `proceeding_moves` is `argue`, `press`, `concede`, `rest` with
+   `effect`; ends `budget`, `rested`, `yielded`; add `matters` (absorbing `proofs`); delete `case_rows`.
+3. **`p22` B24p.02**: the ten records of part 2 (`Present`, `Rite`, `Item`, `Sitting`, `Point`, `Cond`, `Beat`,
+   `View`, `JudgeView`, `Outcome`) with `Input`'s nemo invariant; `Input.state` is a whole `Sitting`.
+4. **`p22` B24p.03**: each row names its cells; add `context` and `disposal` blocks; a row **declares who
+   adjudicates** through `close`, and the loader refuses a row whose adjudicators can be a side; delete
+   `audience_kinds`, `presumes`, `strikes`, `order`, `reason_bias`, `base_disposal`; five rows are aliases.
+5. **`p34` B32.15** (`acclamation`): the row's glossary says an acclamation decides nothing; it is therefore
+   written with `close: consent` (no adjudicator, no verdict: the record and what each hearer was moved by) on
+   the `rally` structure, not `close: hearers`, and with no `order` key so it passes the loader.
+6. **`p22` B24p.04, B24p.05**: the 44 settings at controls; the obstacle roster gains `weary` and `standing`; the
+   old leverage sources and the four-tuple are deleted.
+7. **`p22` B24p.06** (held under attack): `person_q.bearing`, `care`, `tie`, `strain_carried`; the builder reads
+   the speaker's **own** ledger for items and `believes`, never `world_q.proofs` or `world_q.reception`.
+8. **`p22` B24p.07 to .10**: one item, the exchange (2G+8 normals).
+9. **`p22` B24p.11**: order; three ends; the policy with `temper`; **resume** by `cond.spoken` (the turn budget
+   is not restarted), a `yielded` sitting refused, the issue reached kept.
+10. **`p22` B24p.12**: the close of part 2 §D; believed odds from the chooser's reading.
+11. **`p22c` B24p.13** (the builder; corrected). `world_q.judging_set` returns person ids. For each, the office of
+    his live `hold` Tenure is found by the walk `judging_set` already makes; the filter then reads
+    **`w.offices[office].faction`** (a faction NAME) and looks it up in `authorities.by_faction`, which is keyed by
+    faction names. It does **not** call `gate.seat_faction`, which returns `faction_prop_id` values (`fac_crown`)
+    that the table is not keyed by. `judging_set` gains a sibling returning `(person, office id)` pairs. The
+    builder also enforces the nemo rule, takes the arranger and `rig`, applies context, returns the `Card`.
+12. **`p22c` B24p.14** (corrected). `engine/season/seam/ladder.py::degree_of` returns on `settled_margin` at
+    `:262-263` before any other branch, so a veto must be applied **on both branches**: `degree_of(result, ...,
+    veto=False)` computes the label on whichever branch applies and then demotes Success or better to Partial.
+    The returned dict carries `settled_margin` (B05.18). Believed odds come from the chooser's `View` (B05.62),
+    never `None` and never from true values. A new edit item is needed: none edits `degree_of` today.
+13. **`p22c` B24p.15** is deleted; the arrangement reaches the builder as operands of `open_case` and `convene`.
+14. **`p22c` B24p.16, .19** (held): `seam/contest.py` takes the proceeding entry for any row carrying
+    `proceeds:`, whatever its prize, so `determine` (`a verdict`) leaves the old path; `lie` is `argue` with the
+    liar's own false claim as its item.
+15. **`p35c` B28.34, B28.35, B28.10** (corrected and completed). B28.35 steps 1 to 3 (each hearer point a level or
+    an obstacle term with a fixture) land as: the hearer's ties and stake in `fit` and `start`; *the relative rung
+    of the teller's seat* (B28.10) and the other circumstances in `gap`; nothing reads the deleted
+    `opposed_attribute`. **Step 4, the self-plea, keeps its accuser:** a self-plea is heard by a bench, so it is a
+    two-sided row in which the `against` speaker is the holder of the docketed petition (the accuser), as
+    `part35_cont:336` says; where there is no accuser the plea is one-sided (an `audience`) before the bench. The
+    presiding seat is never made the `against` speaker: that would make an adjudicator a side (A-139).
+16. **`p22c` B24p.20, .22**: the `ending` stores the beats and the `Sitting`; B24p.22 is the witness deposit of
+    what the beats show; the kept reading is cut.
+17. **`p22c` B24p.17, .18, .21, .23**: readings and role tests re-pointed at part 2 §C.3 and §C.6; each of the
+    decider's three is gated on both a positive arm with the ruled sign and "setting off reads exactly 0"; A-138:
+    a role's gate is per type reading.
+18. **`B22` B24.03, B24.08, `B22c` B24.30**: `issues` lists rungs of `issue_rungs`; a negotiation's `accept` is a
+    concession under `concede: accepts`; questioning yields no verdict, and a confession accepted or a charge laid
+    is `determine`'s separate proceeding before a bench.
+
+---
+
+## I. Questions for Jordan
+
+The three of the first pass are answered (A-136, A-137, A-138). **None survives the ladder now.** Two readings
+are reported as limits, not questions, because each has a default the rulings already give: the player's edge
+from provoking a man (A-136 states it; the model does not yet show it, so it is a calibration target for the
+`temper` settings, which are Jordan's to correct); and regime and era moving no outcome (they are content rows).
 
 ## J. What was not verified
 
-- Nothing in the tree runs this design; the model is scratch. The plan edits of §H were not applied or tested.
-- The old probes and `selfcheck.py` were not re-run against the new design (different API); each quantity was
-  re-measured (part 3 §B.1). The "before" figures are the stress test's, not re-derived here.
-- Not opened this session, and cited from the old design or from memory of it: `05_SC_evidence_and_rebuttal_B.md`,
-  the 2026-10-24 character-layer proposals, the `30_WR_*` and institutions proposals, `28_SCENE_ACCESS`, the
-  strife-flows design, `write_matrix.yaml`, H-80, P10 and R-35, HEAR_B. Layer 1 `04` was opened only at `:127`
-  and `:251`. The precedent map's rows cite passages opened this session; the *rest* of each source was not read.
-- Not run: extremes (all-7 against all-1); several speakers a side; resumption across seasons; a played judge;
-  a calibration over random pairs (R8's instrument, `harness/pairs.py`, is the build's); the era on a matter
-  argued from principle.
-- Weak or failed links are listed, not hidden: T20; Attunement; Focus; the era weights; silence between plain
-  people under a charge; repeated pressing of a weak man.
+- Nothing in the tree runs this design; the plan edits of §H were not applied.
+- Not re-run after the reconciliation (first-run readings, marked in part 3): the with-and-without readings for
+  each option; the dominance matrices; a crowd changing bench rows; the hostile magnate; the famine tell.
+- The antagonists' probes (`antagonist_v2/p1..p4`) were written against the pre-reconciliation API and were not
+  re-run; each defect they found was re-measured by `checks_v3.py`.
+- Not opened: `05_SC_evidence_and_rebuttal_B.md`, the 2026-10-24 character-layer proposals, `30_WR_*`, the
+  institutions proposals, `28_SCENE_ACCESS`, the strife-flows design, `write_matrix.yaml`, H-80, P10, R-35,
+  HEAR_B; `04` only at `:127` and `:251`; `ladder.py` at `:255-266`; `part35_cont` at `:334-338`.
+- Not run: extremes; several speakers a side; a calibration over random pairs (the build's `pairs` harness);
+  bench moves by a played judge.
+- Failed or weak links are in part 3 §D: T20, T13's regime and era arms, T5's Focus arm, T7, and the unresolved
+  history effect across seasons.

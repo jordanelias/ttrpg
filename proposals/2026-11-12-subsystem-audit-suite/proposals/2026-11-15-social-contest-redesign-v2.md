@@ -22,9 +22,16 @@ plan copy (`workplans/valoria_master_workplan_v12_part22_b24p.md`, `_cont.md`) s
 
 **Evidence.** Every number below was read from an executable model, `sc_model_v2/` (a copy of the stress test's
 `sc_model/` with a new package `sc2/`: `engine.py` the module, `host.py` the host side, `checks_core.py`,
-`checks_world.py`, `transcripts.py`), run with `PYTHONHASHSEED=0`. "Before" figures are the stress test's, at the
+`checks_world.py`, `transcripts.py`; after the reconciliation `checks_v3.py`), run with `PYTHONHASHSEED=0`. "Before" figures are the stress test's, at the
 old design's shipped values. The model is scratch, not repository code; nothing in the tree runs this design, so its
 grade is **paper with a running model** (CLAUDE.md §0.2), and part 3 says what was not verified.
+
+**Reconciled once, 2026-11-15**, after two antagonist passes (execution and logic; rulings, theory and NERS) and
+Jordan's answers to this design's three questions and two further rules (rows A-129 to A-140 of
+`../unified/DECISIONS_ANSWERED.md`, appended in this pass). What changed: the nemo rule (nobody adjudicates his own
+proceeding; consent is an act, not a verdict); the NPC plays its reading while it keeps its temper; six cuts were
+overturned because each removed the only carrier of a ruled clause (part 4 §G); the execution defects were fixed
+and re-run (`checks_v3.py`, output `v3_out.txt`, n = 400 an arm unless stated). Part 3's numbers are that run's.
 
 Markers: `[ASSUMPTION; Jordan to correct]` on every shipped value; `[HOOK]` a carrier that is only proposed in the
 tree, named and not invented; `[UNVERIFIED]` a claim not opened or not run; **(rung n)** a decision taken by the
@@ -48,6 +55,10 @@ ladder of CLAUDE.md §0 (1 superseded, 2 irrelevant, 3 a design document, 4 prec
   (11) legibility, an array of choices, characterization for everyone, era regime and strife, worldly matters
   brought in, a real change for the world on resolution; (12) Aristotle, Cicero and the persuasion research; and
   the handshake: bottom-up primitives meet top-down theory, checked.
+- **A-136 to A-140** (2026-11-15): an NPC argues "as well as their view allows so long as they keep their temper";
+  "keep 0.4" (the resisting attribute counts in the opposition at 0.4 a point); a quiet tell need not exercise all
+  six; the nemo rule ("it is nonsensical for a character to have a proceeding where they are the only participant
+  and adjudicator"); "overturn cuts based on your refutations", recency winning.
 - **Standing rulings read here:** A-79 (one opposed rule, 0.4 a point; equals on a routine matter fail 59 %, half
   land 16 %, carry 25 %), A-80 (entrenchment must still move the world), A-14 (a verdict is a draw on the voter),
   A-92 (`architecture/meta/04_CODE_ARCHITECTURE.md:251`: evidence enters a conviction only as a term in the
@@ -64,7 +75,8 @@ until those who decide come down.** Four sentences carry all of it.
 1. **Everyone in the room is the same kind of record** (`Present`): six attributes and a skill (what he can do),
    and one **bearing reading** (what the matter, each other person and each thing shown mean to him: what he wants,
    what he holds, whom he stands with). A role is two cells on that record: `side` (speaks for, speaks against, or
-   neither) and `decides`. An accuser, a judge, a witness and a man in the gallery differ only in those two cells.
+   neither) and `decides` (he adjudicates; never true of a side: the nemo rule). An accuser, a judge, a witness and a man in
+   the gallery differ only in those two cells.
 2. **Every exchange is one speech that raises a point, answers the point on the table, presses the man who made
    it, concedes the issue, or rests**, and it moves, for each person listening, how he stands on the matter (his
    own **track**), by one draw on the engine's one opposed form. What the point is called, who must answer whom,
@@ -73,7 +85,8 @@ until those who decide come down.** Four sentences carry all of it.
 3. **The rite is arranged**: a type row gives the structure, the context (era, regime, strife) shifts its cells,
    and whoever holds power over the other party tilts them toward himself and pays for it in the room. All of this
    is the host building one input from data; the module sees only the finished cells.
-4. **The close is each decider's own draw with his own track as its leverage**, the module returns margins and the
+4. **The close is each adjudicator's own draw with his own track as its leverage** (or, where the rite decides by
+   consent, a party's own accept and no draw at all); the module returns margins and the
    record, and the host grades them on the one ladder and performs the typed writes the rite's disposal row names.
    A player is a `decide` callback on the same entry; with no callback the same view goes to the automatic policy,
    which is the man's own judgement.
@@ -114,7 +127,7 @@ Every requirement against the ONE structure that carries it. No row has its own 
 | 0 logic, theme, immersion, world, NERS | the whole; the types table; part 3 §A; part 4 §E | all | V-all |
 | 1 (R13) exchanges relate; cogent narrative | `Sitting.live`, `.issue`, `Beat.relation`, `.point` | p2 §C.1, §C.5 | invariants; six transcripts |
 | 2 by type | the rite's cells `live`, `reply`, `issues`, `concede`, `moves`, `admits` | p2 §B | per-rite table; transcripts differ |
-| 3 game first | the `View`'s options with believed worth; six things to track | p2 §E | options count; no inert setting |
+| 3 game first | the `View`'s options with believed worth; a handful of things to track | p2 §E | options count; no inert setting |
 | 4 played | `decide(view, me)` on the same entry | p2 §E | skill; leak; a mixed sitting |
 | 5 simulated | the automatic policy on the same `View` | p2 §F | character table; three seasons |
 | 6 pursuits, convictions | the bearing reading (`want`, `hold`) | p2 §A | bearing (a) to (d) |
@@ -129,8 +142,8 @@ Every requirement against the ONE structure that carries it. No row has its own 
 | 12 Aristotle, Cicero, research | grounds = the means; genres = the families; stasis = `issues`; decorum = `standard`; elaboration; reactance | p2 §L | the precedent map; transcripts |
 | handshake | primitives ledger, theory ledger, matrix | p3 §D | each link run with a control |
 | D1 bench ignores the sitting | the close: one pool form for every decider, the track as leverage | p2 §D | D1 |
-| D2 the centre | the opposition mirrors the pool; fit centred on the scale, not on the person | p2 §C.2 | D2 |
-| D3 the rattle does nothing | a rattle moves every listener's track and raises what Grace must cover | p2 §C.4 | D3 |
+| D2 the centre | the opposition mirrors the pool (A-137); fit centred on the scale and reading the matter | p2 §C.2 | D2 |
+| D3 the rattle does nothing | a rattle moves every listener's track, lowers his esteem, pulls him, spends his staying power | p2 §C.4 | D3 |
 | D4 strain ratchets | each rattle fades on its own clock, the k-th counting half | p2 §A.4 | D4 |
 | D5 the opener | equal turns; the bearer opens | p2 §C.1 | D5 |
 | D6 the act's margin under consent | the close's margin without the draw | p2 §D | D6 |
@@ -194,17 +207,17 @@ arranged by another authority. A type is its cells; the right-hand column is wha
 
 | type (row) | genre: who judges, what they decide | the live thing; how exchanges relate | who may do what | the close | who arranges, and how | what context changes | its own kind, as the model shows |
 |---|---|---|---|---|---|---|---|
-| `conversation` | dyadic; the one addressed, for himself | a **claim**; each may answer or raise | both: argue, press, rest, concede | the addressed man's own draw | the speaker picks the moment; no tilt between equals | strife pulls every speaker; the era weighs grounds | the hearer is also the opponent: his answer moves his own track |
-| `negotiation` | dyadic; nobody: consent | an **offer**; each speech **must** answer the last offer or is seen to turn away | both: all four; conceding **accepts** | consent: the other party's own move; no draw | whoever needs it less sets the terms' length | a need (famine) raises what the needy accept | no draw at the close; a need changes who accepts |
-| `questioning` | judicial; the one questioned, for himself | a **question**; the answer **must** answer it, evasion is priced and visible | questioner: argue, press, rest; questioned: argue, rest, concede (he talks) | the questioned man's own draw | the questioner; a seat over him sets how long | war shortens it | only one side presses, and it presses its own decider; a yield with rattles is "broken" |
-| `inquisition` (`inquisition_hearing`, `interrogation`) | judicial; a bench | a **charge**; the accused **must** answer; the ladder is fact then quality | as `questioning` | the presiding seat's draw | the authority whose seats sit; it may sit on its own bench | unlawful in a commune; a theocracy raises the standard and admits confession | the accuser may be the judge; the accused cannot press |
-| `trial` (`legal_trial`, `tribunal`, `arbitration`) | judicial; a bench; a past act | a **charge**; both sides **must** answer; fact, definition, quality | both: all four; conceding **descends** | the presiding seat's draw | the convening seat: bench packed, floor closed, turns cut, presumption | regime moves standard and admissible proof; strife cuts turns | proof and refutation: answers and witnesses; a concession changes the issue, not the end |
-| `debate` (`parliamentary_debate`, `council_of_state`, `excommunication_deliberation`) | deliberative; every seat, against a quorum | a **motion**; speeches may answer or raise | both: all four; conceding withdraws | every seat's draw; a quorum can only demote | the body's presiding seat; a faction forces the floor open or shut | unlawful in a theocracy; the floor sways the dice toward manner | several deciders, each moved for himself; the floor is in the room |
-| `rally` | epideictic; every hearer for himself | a **theme**; nothing to answer: each speech raises | the speaker: argue, rest | each body of the crowd draws | the speaker; a seat may close the ground | a famine raises what the hungry want | no opponent; bodies of the crowd split; Presence carries it |
-| `audience` | deliberative; one seat | a **plea**, answered by a ruling | the petitioner: argue, rest | the seat's draw | the seat: who is admitted, how long | regime sets what may be shown | one speaker before authority; the seat's own stake is the case |
-| the abridged form of any row | as its row | one speech, raised | the speaker | that speech's own margin against the one addressed | as its row | as its row | one draw equal to the plain roll at control (200 of 200 keys) |
+| `conversation` | dyadic; nobody: consent | a **claim**; each may answer or raise | both: argue, press, rest, concede | the party addressed accepts, or not: no verdict is drawn | the speaker picks the moment | strife pulls every speaker; the era weighs grounds | each party's track is how far the other has moved him; he accepts by his own act |
+| `negotiation` | dyadic; nobody: consent | an **offer**; each speech **must** answer the last or is seen to turn away | both: all four; conceding **accepts** | consent; neither accepting is an impasse | whoever needs it less | a need (famine) raises what the needy accept | a need changes who accepts (0.51 to 0.79) |
+| `questioning` | none of its own: it yields what the questioned man chooses to give | a **question**; the answer **must** answer it, evasion is priced and seen | questioner: argue, press, rest; questioned: argue, rest, concede (he talks) | his accept; a confession accepted or a charge laid is a separate proceeding with its own adjudicator | the questioner | war shortens it | only one side presses; conceding at once gives the questioner everything, never conceding nothing |
+| `inquisition` (`inquisition_hearing`, `interrogation`) | judicial; a bench that is not the accuser | a **charge**; the accused **must** answer; fact, then justification | as `questioning` | the presiding seat's draw | the authority whose seats sit; an accuser who holds a seat speaks and the others judge | unlawful in a commune; a theocracy admits confession | the accused cannot press; a full confession convicts 0.79 |
+| `trial` (`legal_trial`, `tribunal`, `arbitration`) | judicial; a bench; a past act | a **charge**; both sides **must** answer; fact, definition, justification | both: all four; conceding **descends** | the presiding seat's draw | the convening seat: bench packed, floor shut, turns cut, presumption | regime sets admissible proof; strife cuts turns | proof and refutation; a concession changes the issue |
+| `debate` (`parliamentary_debate`, `council_of_state`, `excommunication_deliberation`) | deliberative; every seat, against a quorum | a **motion**; speeches may answer or raise | both: all four; conceding withdraws | every seat's draw; a quorum can only demote | the body's presiding seat; a faction forces the floor open or shut | unlawful in a theocracy; the floor sways the dice toward manner | several adjudicators, each moved for himself |
+| `rally` | deliberative; every hearer for himself | a **theme**; nothing to answer: each speech raises | the speaker: argue, rest | each body of the crowd draws | the speaker; a seat may close the ground | a famine sharpens what the hungry want | no opponent; bodies of the crowd split; Presence is what is heard |
+| `audience` | deliberative; one seat | a **plea**, answered by a ruling | the petitioner: argue, rest | the seat's draw | the seat: who is admitted, how long | regime sets what may be shown | one speaker before authority; the seat's own stake is where it starts |
+| the abridged form of any row | as its row | one speech, raised | the speaker | that speech's own margin with the one addressed (a hearer, never a side) | as its row | as its row | at control equal to the one roll (200 of 200 keys) |
 
-Jordan's seven: heresy trial = `inquisition` arranged by the Church; parliamentary debate = `debate`; private
+Jordan's seven: heresy trial = `inquisition` arranged by the Church (its bench never the accuser); parliamentary debate = `debate`; private
 negotiation = `negotiation`; rallying a crowd = `rally`; interrogation for information = `questioning`; a trial =
 `trial`; the abridged automatic proceeding = the abridged form. **Merged** (identical structure, different
 arranged cells): `tribunal` and `arbitration` into `trial`; `council_of_state` and `excommunication_deliberation`
@@ -219,18 +232,22 @@ reads before and during a sitting:
 ```python
 @dataclass(frozen=True)
 class Card:
-    kind: str; genre: str                 # which row, which family
-    arranged_by: str; tilt: float         # who holds the forum and how far it is tilted (0 fair .. 1 rigged)
-    stake: str; outcomes: tuple           # what is disposed; ((band, the typed writes), ...) from the disposal table
-    room: tuple                           # ((person, role, visible standing), ...)
-    live: str; bears: str; reply: tuple   # what the live thing is, who bears it, who must answer
-    moves: tuple; barred: tuple           # what each side may do, what is barred to it
-    admits: tuple                         # the kinds of matter that may be shown
-    close: str; decided_by: tuple         # how it is decided and by whom
-    turns: int; issues: tuple             # how long; the rungs it can descend
-    odds: tuple                           # P(carried) per decider as the room stands (pure, no draw)
+    kind: str; genre: str
+    arranged_by: str; tilt: float         # who holds the forum and how far it is tilted
+    stake: str; outcomes: tuple           # what is disposed; ((band, the typed writes), ...)
+    room: tuple                           # ((person, role, visible circumstances), ...)
+    live: str; bears: str; reply: tuple
+    moves: tuple; barred: tuple
+    admits: tuple
+    close: str; decided_by: tuple         # the adjudicators; none under consent: each party's own accept
+    turns: int; issues: tuple
+    standard: float; reason_weight: tuple # the Grace the occasion expects; Reason's share of the dice per ground here
+    odds: Optional[float]                 # P(carried) before an ordinary unmoved bench; None where nothing is drawn
 ```
 
-Invariant, checked in the model on every sitting (part 3 §B): no beat makes a move the card bars; no item of a
+The card holds no true attribute and no true start (B05.62: a stranger is an ordinary person); what a chooser
+believes of this room is on his `View`. Invariant, checked in the model on every sitting (part 3 §B): no beat makes a move the card bars; no item of a
 kind the card does not admit is shown; nobody speaks more turns than the card gives; the verdicts returned are the
-card's deciders and no others. A card that promises what the sitting does not do is a defect.
+card's adjudicators and no others; nobody on it both speaks for a side and judges; and its odds are what an
+unmoved sitting delivers (0.277 shown, 0.261 delivered with both sides silent, n = 800). A card that promises what
+the sitting does not do is a defect.
