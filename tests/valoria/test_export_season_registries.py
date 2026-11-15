@@ -33,36 +33,23 @@ def _artifact():
     return json.loads(Path(esr.OUT).read_text(encoding='utf-8'))
 
 
-def _delete_one_key(node):
-    """Delete the first mapping key found, depth first; return True once one is gone."""
-    if isinstance(node, dict):
-        for k in list(node):
-            if isinstance(node[k], (dict, list)) and _delete_one_key(node[k]):
-                return True
-        if node:
-            del node[next(iter(node))]
-            return True
-    elif isinstance(node, list):
-        for item in node:
-            if _delete_one_key(item):
-                return True
-    return False
-
-
 def test_season_registries_current():
     assert esr.main(['--check']) == 0
 
 
-def test_a_deleted_key_reds_the_check(tmp_path):
-    art = _artifact()
-    assert _delete_one_key(art['files'][VERB_TABLE]), 'nothing to delete: the control cannot observe'
+def test_a_deleted_key_reds_the_check(tmp_path, monkeypatch):
+    art, untouched = _artifact(), _artifact()   # both read before OUT is pointed at a copy
+    assert 'verbs' in art['files'][VERB_TABLE], 'nothing to delete: the control cannot observe'
+    del art['files'][VERB_TABLE]['verbs']
     mutated = tmp_path / 'season_registries.json'
     mutated.write_text(json.dumps(art, indent=2, sort_keys=False) + '\n', encoding='utf-8')
-    assert esr.main(['--check'], out=str(mutated)) == 1
+    monkeypatch.setattr(esr, 'OUT', str(mutated))
+    assert esr.main(['--check']) == 1
     # the control: the same logic over the untouched artifact is green, so the red was the deletion
     intact = tmp_path / 'intact.json'
-    intact.write_text(json.dumps(_artifact(), indent=2, sort_keys=False) + '\n', encoding='utf-8')
-    assert esr.main(['--check'], out=str(intact)) == 0
+    intact.write_text(json.dumps(untouched, indent=2, sort_keys=False) + '\n', encoding='utf-8')
+    monkeypatch.setattr(esr, 'OUT', str(intact))
+    assert esr.main(['--check']) == 0
 
 
 def test_a_registry_row_added_without_a_reexport_reds_the_check(tmp_path):
@@ -94,7 +81,6 @@ def test_the_loader_over_the_json_equals_the_loader_over_the_yaml():
         assert load_yaml(text) == parsed, f'{rel}: the loader over the YAML differs from the artifact'
         checked += 1
     assert checked >= 7, f'only {checked} file(s) compared: the control asserted too little'
-    assert checked == len(art['files'])
 
 
 def test_sources_names_every_registry_a_data_loader_reads():

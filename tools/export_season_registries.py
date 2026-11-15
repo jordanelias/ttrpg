@@ -62,9 +62,7 @@ SOURCES = (
 
 def _refuse_unless_lossless(node, where):
     """Raise on a value JSON would coerce or reject, naming the file and the key path."""
-    if node is None or isinstance(node, (bool, str)):
-        return
-    if isinstance(node, int):
+    if node is None or isinstance(node, (bool, int, str)):
         return
     if isinstance(node, float):
         if not math.isfinite(node):
@@ -114,8 +112,8 @@ def build(overrides=None) -> dict:
     }
 
 
-def main(argv, out=None, overrides=None):
-    out = out or OUT
+def main(argv, overrides=None):
+    out = OUT
     data = build(overrides)
     text = json.dumps(data, indent=2, sort_keys=False) + '\n'
     if '--check' in argv:

@@ -211,7 +211,7 @@ def _engine_series(path=SERIES_YAML):
     """The ruled engine series, read from its one owner (`references/engine_series.yaml`, ED-GO-0002).
     This exporter holds no literal of it. Refuses, naming the file, when the key is absent or not a string."""
     import yaml
-    name = os.path.relpath(path, REPO) if os.path.abspath(path).startswith(REPO) else os.path.basename(path)
+    name = os.path.relpath(path, REPO)
     try:
         with open(path, encoding='utf-8') as fh:
             doc = yaml.safe_load(fh)
