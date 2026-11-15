@@ -36,7 +36,7 @@ from ..data.fixtures import DEFAULT_FIXTURES, Fixtures
 from ..data.matrix import Step, WriteClass
 from ..data.rosters import CLAIM_SOURCES, RUNG_KINDS, STRATA, WITNESS_CHANNELS, roster, table
 from ..data.pursuits import pursuit as _pursuit
-from ..data.verbs import VERB_TABLE
+from ..data.verbs import EVENT_KINDS, VERB_TABLE
 from ..decision import body_band_penalty, make_chooser, standing_of
 from ..epistemic import CHANNEL_PREDICATES, observers_for
 from ..gaps import (
@@ -72,8 +72,15 @@ def probe(pid: str, title: str, section: str, tests: str, by: str):
 # The shared fixture world. Built FRESH per probe.
 # ---------------------------------------------------------------------------
 
+# B03.57. THE KINDS A PROBE APPENDS THAT NO EMISSION COLUMN DECLARES: apparatus Events (`plague.struck`, the
+# class `state/attribution.py` named as the blocker; `sitting.decided`, A2's chained sitting). The log
+# refuses a kind outside `EVENT_KINDS`, so the probe world declares these through the same roster
+# parameter a `World` takes; no production world does.
+PROBE_KINDS = frozenset({"plague.struck", "sitting.decided"})
+
+
 def tiny_world(fixtures: Fixtures = DEFAULT_FIXTURES) -> World:
-    w = World(world_seed=1, fixtures=fixtures)
+    w = World(world_seed=1, fixtures=fixtures, event_kinds=EVENT_KINDS | PROBE_KINDS)
     scale = fixtures.get("condition_scale")
     for rid, kind, stores in (("R", "realm", None), ("D", "duchy", None),
                               ("S", "settlement", {"grain": 40}), ("Hh", "hearth", {"grain": 8})):

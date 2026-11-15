@@ -43,6 +43,7 @@ from typing import Any, Callable, Optional
 from ..data.fixtures import DEFAULT_FIXTURES, Fixtures
 from ..data.matrix import Step, WriteClass, matrix_row, partition_lookup
 from ..data.requires import UNKNOWN
+from ..data.verbs import EVENT_KINDS
 from ..data.rosters import (
     HOLD_OBJECT_KINDS, HOLD_SUBJECT_KINDS, RUNG_KINDS, TENURE_KINDS, roster)
 from ..gaps import Forbidden, InstrumentDefect, NoProducer, Unowned, Unspecified
@@ -353,7 +354,8 @@ def _entity_digest(obj: Any) -> bytes:
 
 
 class World:
-    def __init__(self, world_seed: int, fixtures: Fixtures = DEFAULT_FIXTURES):
+    def __init__(self, world_seed: int, fixtures: Fixtures = DEFAULT_FIXTURES,
+                 event_kinds: frozenset = EVENT_KINDS):
         self.world_seed = world_seed
         self.tick = 0
         self.fixtures = fixtures
@@ -404,7 +406,10 @@ class World:
         # hashed state alone cannot rebuild it. No path restores a World without it (`deepcopy` carries it;
         # nothing pickles or replays one), which is the whole of its standing.
         self._covers_logged: dict[str, str] = {}
-        self.log = EventLog(self.gate, lambda: self.acts.ids(), self._on_logged)
+        # The log is handed the derived roster (`data/verbs.py::EVENT_KINDS`) and refuses a kind outside it
+        # (`04` §B.13 invariant 7); `state/log` imports no `data`. A test or probe that appends a kind no
+        # column declares passes `event_kinds=EVENT_KINDS | {...}` here.
+        self.log = EventLog(self.gate, event_kinds, lambda: self.acts.ids(), self._on_logged)
         self.dates: dict[str, dict] = {}
         self.docket: list[dict] = []
         # ⚠ `petitions` AND `dispensations` WERE TWO PLAIN DICTS HERE AND ARE DELETED (plan position

@@ -357,7 +357,7 @@ def test_in53v_d_an_act_on_a_classed_referent_cites_no_unrelated_occasion():
     cites it, and so does one whose subject is both plain and classed."""
     from engine.season.state.carriers import Event, Scene, StateChange
     w, d = _gov_world()
-    origin = Event("ev_v_origin", "speech.made", [], [ROOT], w.tick)
+    origin = Event("ev_v_origin", "news.told", [], [ROOT], w.tick)
     w.log.append(origin)
     w.log.append(Event("ev_v_deposit", "claim.deposited",
                        [StateChange("claim_v", "set", "Act")], [origin.id], w.tick))

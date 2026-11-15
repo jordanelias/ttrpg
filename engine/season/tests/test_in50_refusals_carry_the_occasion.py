@@ -46,7 +46,7 @@ def _world_with_occasion(scene_actor=ACTOR):
     production route and not by a stub."""
     w = build_realm(0)
     d = SeasonDriver(w)
-    origin = Event("ev_in50_origin", "speech.made", [], [ROOT], w.tick)
+    origin = Event("ev_in50_origin", "news.told", [], [ROOT], w.tick)
     deposit = Event("ev_in50_deposit", "claim.deposited",
                     [StateChange("claim_in50", "set", "Act")], [origin.id], w.tick)
     w.log.append(origin)
