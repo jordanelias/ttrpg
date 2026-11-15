@@ -200,7 +200,72 @@ rows:
     statement: "decisions must propagate"
     status: met
     measure: "python -m engine.season.harness.storybar --remove --base-seed 0 --seasons 2  # second measure: `python -m engine.season.harness.corpus_run`, check R3 rows + the planted control"
-    conjuncts: []
+    conjuncts:
+      - id: R-01.a
+        text: >-
+          the corpus cites cross-person causes (`corpus_run --seasons 2`: two seasons a case, D-17;
+          the case's own span, to `MAX_SEASONS`, is B99's)
+        argv: ["python", "-m", "engine.season.harness.corpus_run", "--seasons", "2"]
+        expects: "`check R3: n of n pass` on both lanes, `not True: none`, control `R3 False -> True`"
+        holds: "yes"
+        reading:
+          tree: "1c9238db4c46af9c92a842b1b11d0f2b3d499bdf"
+          date: "2026-11-15"
+          seed: 0
+          seasons: "2 (capped; `temporal.span_seasons` per case)"
+          line: "     check R3: 97 of 97 pass"
+          control: >-
+            the planted cross-person edge, printed once under both lanes: `CONTROL — planted
+            cross-person edge: R3 False -> True  (the detector works)`; the NPC lane reads
+            `check R3: 46 of 46 pass` and `check R3 not True: none`, the ARC lane (this line)
+            `check R3 not True: none`
+          does_not_show: >-
+            one seed (0); a check that the corpus cites cross-person causes is not a check that
+            the PLAYED realm does (R-01.b) or that removing a person changes others' acts (R-01.c);
+            the lanes' ENDS and RUNS are NOT-COMPUTABLE by the instrument's own banner
+      - id: R-01.b
+        text: >-
+          the played realm does too, on three seeds: an act formed from a `claim_landed` question
+          whose Event walks back to an act of a different person, at seeds 0, 1, 2; the control cuts
+          the witness (`SeasonDriver.witness` returns 0) and reads 0
+        argv: ["python", "-m", "pytest", "engine/season/tests/test_realm_requirements.py", "-q", "-k", "r01"]
+        expects: "three seeds green; the witness-cut control reads 0"
+        holds: "yes"
+        reading:
+          tree: "1c9238db4c46af9c92a842b1b11d0f2b3d499bdf"
+          date: "2026-11-15"
+          seed: "0, 1, 2"
+          seasons: 1
+          line: "4 passed, 7 deselected in 24.94s"
+          control: >-
+            `test_r01_control_with_witness_cut_no_act_is_so_occasioned` (seed 0, witness cut): its
+            assertion `hit == 0` passed, one of the four
+          does_not_show: >-
+            one season a seed; the shipped policy `probes.chooser` and not the game's play; a count
+            above 0, not a share; run with `-p no:cacheprovider` added
+      - id: R-01.c
+        text: >-
+          removing one person's choice changes other persons' acts: the person named is the actor
+          of the most `Event.causes` antecedents of other persons' acts in the unperturbed first
+          season (`IS-A-03`), here p_npc_005 at seed 0, p_npc_020 at seeds 1 and 2
+        argv: ["python", "-m", "engine.season.harness.storybar", "--remove", "--base-seed", "0", "1", "2", "--seasons", "2"]
+        expects: "replay line `0`; removed line above 0 (`R-01.c  others' acts differing: <n>  (replay 0)`, n at least 1)"
+        holds: "yes"
+        reading:
+          tree: "1c9238db4c46af9c92a842b1b11d0f2b3d499bdf"
+          date: "2026-11-15"
+          seed: "0, 1, 2"
+          seasons: 2
+          line: "R-01.c  others' acts differing: 277  (replay 0)"
+          control: >-
+            seed 0 shown (n 277); seeds 1 and 2 read n 303 and 227, each `(replay 0)`; at each
+            seed the `[replay]` arm reads `differing=0 ... (EQUAL to the unperturbed)` and the
+            no-wrapper drive ends on the unperturbed hash; the `[draw-seed]` arm reads 2891, 2853,
+            2892 differing
+          does_not_show: >-
+            one removed person a seed; an act "differing" is not an act caused by the removed
+            choice, and a removal that touches 16 to 25 antecedents is not a tick-by-tick account;
+            run on `PYTHONHASHSEED=0`
     blocks: [IN-10, IN-11, IN-13, H-116, IN-50]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1: regard is computed at read; the cross-person half is IN-10's, IN-11's, IN-13's); H-111 is FI-01's deposit half
 
@@ -208,7 +273,49 @@ rows:
     statement: "decisions affect subsequent decisions"
     status: met
     measure: "python -m engine.season.harness.storybar --remove --base-seed 0 --seasons 2  # second measure: `python -m engine.season.harness.corpus_run`, check R3 rows + the planted control"
-    conjuncts: []
+    conjuncts:
+      - id: R-02.a
+        text: >-
+          withholding what acts observe changes later acts at the shipped budget: one season at the
+          shipped fixtures against one with `observation_deposit_mode` swept to `none`, seeds 0 to 2;
+          the control plays one seed twice
+        argv: ["python", "-m", "pytest", "engine/season/tests/test_realm_requirements.py", "-q", "-k", "r02"]
+        expects: "seeds 0-2 differ after a common prefix; the same seed twice is one sequence"
+        holds: "yes"
+        reading:
+          tree: "1c9238db4c46af9c92a842b1b11d0f2b3d499bdf"
+          date: "2026-11-15"
+          seed: "0, 1, 2"
+          seasons: 1
+          line: "4 passed, 7 deselected in 48.85s"
+          control: >-
+            `test_r02_control_one_seed_played_twice_is_one_sequence` (seed 0 twice at the shipped
+            fixtures reads one sequence): passed, one of the four
+          does_not_show: >-
+            the played sequence parts when observation deposits are cut (T3 row 2); the
+            fork-and-follow test shows divergence in both arms and attributes nothing to the
+            deposit channel
+      - id: R-02.b
+        text: >-
+          a removed choice changes acts in a *later* lap or season: the R-01.c command, at least one
+          differing act at a `(season, round)` after the removed one
+        argv: ["python", "-m", "engine.season.harness.storybar", "--remove", "--base-seed", "0", "1", "2", "--seasons", "2"]
+        expects: "`R-02.b  differing at a later (season, round): <m>`, m at least 1"
+        holds: "yes"
+        reading:
+          tree: "1c9238db4c46af9c92a842b1b11d0f2b3d499bdf"
+          date: "2026-11-15"
+          seed: "0, 1, 2"
+          seasons: 2
+          line: "R-02.b  differing at a later (season, round): 277"
+          control: >-
+            the R-01.c replay arm reads 0 at each seed (a replay that parts would void m); seed 0
+            shown (m 277), seeds 1 and 2 read m 303 and 227; the removal is at `(0, 0)`, and the
+            by-lap line puts differing acts at `(0, 1)` onward and in season 1
+          does_not_show: >-
+            one removed person a seed; m counts differing acts after `(0, 0)` and does not say the
+            removed choice caused each one; m equals n of R-01.c at every seed, so the verdict line
+            adds no act that R-01.c's does not count
     blocks: []
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1); H-111 is FI-01's deposit half
 
@@ -218,7 +325,43 @@ rows:
       scene
     status: met
     measure: "python -m engine.season.harness.headless --case NPC-088 --seasons 2 --seed 0  # and `pytest engine/season/tests -q -k test_u2_`, which is what §0.2 accepts"
-    conjuncts: []
+    conjuncts:
+      - id: R-03.a
+        text: >-
+          a deposit in one lap changes a later lap's candidates (the `test_u2_` tests, the one-lap
+          control among them: `test_u2_the_one_round_arm_reproduces_the_pre_tick_loop`)
+        argv: ["python", "-m", "pytest", "engine/season/tests", "-q", "-k", "test_u2_"]
+        expects: "all pass, the one-lap control among them"
+        holds: "yes"
+        reading:
+          tree: "1c9238db4c46af9c92a842b1b11d0f2b3d499bdf"
+          date: "2026-11-15"
+          seed: "per test"
+          seasons: "per test"
+          line: "5 passed in 15.38s"
+          control: >-
+            the one-lap arm reproduces the pre-tick loop (`test_u2_the_one_round_arm_reproduces_the_pre_tick_loop`),
+            one of the five
+          does_not_show: >-
+            a test reading on corpus-case worlds, not the shipped realm; run with `-n 2` and
+            `-p no:cacheprovider` added
+      - id: R-03.b
+        text: "a real case runs its laps (NPC-088, two seasons)"
+        argv: ["python", "-m", "engine.season.harness.headless", "--case", "NPC-088", "--seasons", "2", "--seed", "0"]
+        expects: "exits 0, prints `rounds=` per season"
+        holds: "yes"
+        reading:
+          tree: "1c9238db4c46af9c92a842b1b11d0f2b3d499bdf"
+          date: "2026-11-15"
+          seed: 0
+          seasons: 2
+          line: "  season 0: rounds=5 acts=16 events=17 deposits=74"
+          control: >-
+            the run exits 0 (`EXIT 0` in the log) and prints the same key for season 1
+            (`rounds=5 acts=17 events=97 deposits=106`)
+          does_not_show: >-
+            one case, one seed; a printed round count is not a read that a later lap's candidates
+            moved (R-03.a); `rounds=` is the tree's key for the lap count
     blocks: []
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W17 spent (the scene landed; this row is met)
 
@@ -226,7 +369,106 @@ rows:
     statement: "strategic and management actions must be possible, ie decisions at differing scales"
     status: partial
     measure: "python -m engine.season.harness.aperture 4 0  # the per-verb lines: `levy` and the seat-gated rows (about 25 minutes); `corpus_run` prints no 'unrepresentable scales:' line any more, the census is empty"
-    conjuncts: []
+    conjuncts:
+      - id: R-04.a
+        text: >-
+          every seat-gated remit verb executes at least once with `Act.via` set: `requisition`,
+          `issue`, `open_case`, `determine`, `convene`, `dispatch`, `confer`, `establish`, `revoke`
+          (two seasons, D-17; the four seasons of the source are B99's `argv`). Last recorded `no`
+          at `4995824`: `confer`, `determine`, `requisition` and `revoke` are among the 34 verbs
+          that execute in neither instrument. `revoke` reads in computed play (A-35 rules a head
+          strips an officer by a resistible draw; `14_VERBS_BINDING_C_turnover` carries the draw,
+          B21), so the hand-built reading ends. Carried by `establish` B21, `confer` and `revoke`
+          B21, `dispatch` B21, `requisition` B12 and B21, `issue` B21, `open_case` B25,
+          `determine` and `convene` B32
+        argv: ["python", "-m", "engine.season.harness.aperture", "2", "0"]
+        expects: "for each of the nine, the `BUILT OUT` block's `via` column at least 1"
+        holds: "unread"
+      - id: R-04.b
+        text: >-
+          no second driver; the faction view is tested (`engine/mc_v18.py` absent, read in this
+          batch as `ls engine/mc_v18.py`: no such file)
+        argv: ["python", "-m", "pytest", "engine/season/tests/test_faction_q.py", "-q"]
+        expects: "`engine/mc_v18.py` absent; `test_faction_q.py` green"
+        holds: "yes"
+        reading:
+          tree: "1c9238db4c46af9c92a842b1b11d0f2b3d499bdf"
+          date: "2026-11-15"
+          seed: "per test"
+          seasons: "per test"
+          line: "14 passed in 5.64s"
+          control: "`ls engine/mc_v18.py` -> No such file or directory (the file-state half)"
+          does_not_show: >-
+            that no other driver exists under another name; a green test file reads the faction
+            view's queries, not that a faction acts through a seat in computed play; run with
+            `-p no:cacheprovider` added
+      - id: R-04.c1
+        text: >-
+          character creation, development, chronicling is in the loop: a seated person is picked
+          and his sheet shown (`11_GO_fidelity_and_campaign_modes` edit 1,
+          `test_creation_sheet_shows_holdings_for_a_seat_holder`); `train` built out (`BUILT OUT`
+          block); `chronicle --seed 0` tells (`09_WR_B_chronicle_that_tells`,
+          `test_in37_chronicle.py`). Last recorded `no` (`in_loop: false`); carried by B34, B22, B36
+        argv: ["python", "-m", "engine.season.harness.chronicle", "--seed", "0"]
+        expects: "the three halves above read"
+        holds: "unread"
+      - id: R-04.c2
+        text: >-
+          grand strategy politics: `governance_spine play 0 8 --world realm` exits `closed True` at
+          seeds 0 to 2 (`06_FA_shortest_loop_B`). The tree's `harness/governance_spine.py` has no
+          `play` command (its `__main__` prints `census(build(0))`, read 2026-11-12); B21 builds
+          it, and B21's author reads whether 8 is a season count (if it is, two, with the A-114
+          note). Last recorded `no`; carried by B21, land on a won march B23
+        argv: ["python", "-m", "engine.season.harness.governance_spine", "play", "0", "8", "--world", "realm"]
+        expects: "exit `closed True` at seeds 0-2"
+        holds: "unread"
+      - id: R-04.c3
+        text: >-
+          social contests and debates: `headless --world hearing` prints the same content hash
+          twice (`05_SC_playable_hearing_B`). Last recorded `no` ("seam unbuilt"); carried by B24
+        argv: ["python", "-m", "engine.season.harness.headless", "--world", "hearing"]
+        expects: "the same content hash twice"
+        holds: "unread"
+      - id: R-04.c4
+        text: >-
+          mass battles and strategy warfare: `field.won + field.lost` above 0 in computed play at
+          `aperture 1 s`, s = 0 to 2, printed beside `field.unopposed`; `test_field_scene.py`
+          (`04_MB_playable_field_scenario`). Last recorded partly: `field.lost` 1 at seed 2, 0 at
+          seed 0 (§0 probe); carried by B19, B20, B22
+        argv: ["python", "-m", "engine.season.harness.aperture", "1", "--seeds", "0", "1", "2"]
+        expects: "`field.won + field.lost` above 0 at seeds 0-2, `field.unopposed` printed beside; `test_field_scene.py` green"
+        holds: "unread"
+      - id: R-04.c5
+        text: >-
+          personal combat and grid combat with units: (i) a duel resolves in computed play at seeds
+          0 to 2 (`aperture 2 s`: `challenge` executed above 0, `03_PC_duel_chain_reach`); (ii) a
+          fought field resolves on the cell battlefield (c4); (iii) commander-chosen orders
+          (`27_MB_D`, `test_none_decider_equals_no_decider`); the grid of named persons
+          (`04_MB_squad_grid_of_named_characters`, `test_squad_field.py`). `[ASSUMPTION; medium;
+          Jordan to correct; revert: commander-chosen orders restored as a third gate]`: the revert
+          is taken, A-1 making the commanded and the automatic battle one resolver, so clause (iii)
+          joins the reading. Last recorded: (i) in the realm at seed 2
+          only (no function of `modules/combat` is entered at seed 0 in three seasons,
+          `HOLISTIC_AUDIT.md` §3; §0 probe: `challenge.refused` 48); (ii) seed 2 only; (iii) and
+          the grid no; carried by B01, B20, B30
+        argv: ["python", "-m", "engine.season.harness.aperture", "2", "0"]
+        expects: "(i) `challenge` executed above 0 at seeds 0-2; (ii) c4; (iii) and the grid green"
+        holds: "unread"
+      - id: R-04.c6
+        text: >-
+          settlement management, city building: `python -m engine.season.harness.valley`
+          (`07_SE_valley_scenario`, `test_valley.py`); `found`, `build`, `work` built out at
+          `aperture 2 0` (two seasons, D-17; four are B99's). Last recorded `no`; carried by B12
+        argv: ["python", "-m", "engine.season.harness.valley"]
+        expects: "`valley` runs and `test_valley.py` is green; `found`, `build`, `work` read built out in the `BUILT OUT` block"
+        holds: "unread"
+      - id: R-04.c7
+        text: >-
+          investigations: `test_shortest_case.py` and `test_playable_inquiry.py` (`08_FI_07`,
+          `08_FI_03`). Last recorded `no`; carried by B11, the hearing piece by B24
+        argv: ["python", "-m", "pytest", "engine/season/tests/test_shortest_case.py", "engine/season/tests/test_playable_inquiry.py", "-q"]
+        expects: "both files green"
+        holds: "unread"
     blocks: [IN-10, IN-40, FA-01, IN-49, SC-01, IN-46, IN-47]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W10 spent (declared routing landed); W13 removed (no conjunct of this row reads the ARC re-authoring lane)
 
@@ -236,7 +478,37 @@ rows:
       of play required in a season
     status: not_met
     measure: "python -m engine.season.harness.corpus_run --seasons 2  # the 'WHERE THE <n> GO' line; n is len(VERB_TABLE) at measurement time"
-    conjuncts: []
+    conjuncts:
+      - id: R-05.a
+        text: >-
+          no verb row is without a predicate and effect, never attempted, or only refused
+          (`corpus_run --seasons 2`: two seasons a case, D-17; the case's own span, to
+          `MAX_SEASONS`, is B99's), or R-05.b for every verb in the last two classes
+        argv: ["python", "-m", "engine.season.harness.corpus_run", "--seasons", "2"]
+        expects: "`WHERE THE <n> GO: 0 have no predicate/effect · 0 foldable but never even attempted · 0 attempted and always refused`; or R-05.b for every verb in the last two classes"
+        holds: "unread"
+      - id: R-05.b
+        text: >-
+          every verb is built out in the realm (`aperture 2 --seeds 0 1 2`: two seasons, D-17; the
+          four seasons of the source are B99's `argv`). "*'Built out'*, as v11 defines it
+          `[ASSUMPTION; medium; Jordan to correct]`, kept: at least one act formed by the chooser in
+          a seeded run of a shipped builder is admitted, folds its band and emits the row's declared
+          kinds; where the band declares writes, a minted receipt has before != after; a hand-built
+          execution never counts; the denominator is `len(VERB_TABLE)` and a row leaves the table
+          only by a ruling. **One clause of it is superseded:** *'a verb whose bands write nothing
+          (`speak`, `interrogate`) is built out on execution'*. A-81 rules that every scene writes
+          a durable change whatever its outcome, so no verb's band may write nothing; R-05.c
+          replaces the clause."
+        argv: ["python", "-m", "engine.season.harness.aperture", "2", "--seeds", "0", "1", "2"]
+        expects: "the `BUILT OUT` block reads `built out <n> of <n>`, n = `len(VERB_TABLE)` at measurement time"
+        holds: "unread"
+      - id: R-05.c
+        text: >-
+          no built-out verb has a band that writes nothing (A-81): the same run as R-05.b, two
+          seasons
+        argv: ["python", "-m", "engine.season.harness.aperture", "2", "--seeds", "0", "1", "2"]
+        expects: "`NULL SCENES` reads 0 for every verb"
+        holds: "unread"
     blocks: [H-65, IN-09, IN-10, IN-33, IN-45]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W10-core removed (it gates corpus_run's R2 check, not this row's WHERE THE <n> GO); H-94 is carried by its owners IN-10, IN-09, IN-45, IN-33
 
@@ -245,7 +517,89 @@ rows:
       characters must be robustly built with goals, ambitions, convictions, moral values, etc
     status: partial
     measure: "python -m engine.season.harness.corpus_run  # 'RANKING DISCRIMINATION' line"
-    conjuncts: []
+    conjuncts:
+      - id: R-06.a
+        text: >-
+          every candidate offered carries a nonzero conviction term (no tie broken by the draw
+          where a person has a reason): `corpus_run --seasons 2` (two seasons a case, D-17; the
+          case's own span, to `MAX_SEASONS`, is B99's), the `RANKING DISCRIMINATION` line, with no
+          verb under `RANKING EXCLUDES`. What moves it: the cells of `02_CHAR_choice_alignment` and
+          `16_PESSIMIST_CHAR_B` (B10 the mechanism; BA1 the values)
+        argv: ["python", "-m", "engine.season.harness.corpus_run", "--seasons", "2"]
+        expects: "`RANKING DISCRIMINATION` all carry a nonzero pursuit score, no verb under `RANKING EXCLUDES`"
+        holds: "no"
+        reading:
+          tree: "1c9238db4c46af9c92a842b1b11d0f2b3d499bdf"
+          date: "2026-11-15"
+          seed: 0
+          seasons: "2 (capped; `temporal.span_seasons` per case)"
+          line: "  RANKING EXCLUDES         ['conceal', 'interview', 'sabotage', 'tend', 'train'] (no celled axis: declared `uncelled:` or all-`null`)"
+          control: "none"
+          does_not_show: >-
+            one seed; the `RANKING DISCRIMINATION` line reads `8..13 (numerator) of 13..13` across
+            the cases, so the verbs it counts are not all verbs; five verbs are excluded, not the
+            eight of the last recorded reading
+      - id: R-06.b
+        text: >-
+          the cast tests pass (`-k 'ambitions or cast'`). Recorded, and by v11's own note blind (it
+          saturated at 5 of 5 seeds in all 46 cases): it does not count. `[ASSUMPTION: the table
+          keeps the row as a recorded, non-counting conjunct — basis: IS_A_NINE.md §7 "it does not
+          count"; UNDECIDED in this part's receipt: drop it as retired, or keep it so]`; written at
+          `holds: unread` so it neither holds nor blocks `met`
+        argv: ["python", "-m", "pytest", "engine/season/tests", "-q", "-k", "ambitions or cast"]
+        expects: "the cast tests pass (recorded, not counted)"
+        holds: "unread"
+      - id: R-06.c
+        text: >-
+          convictions spread decisions: `harness.conviction_spread` passes. Last recorded: not run
+          for the last paragraphs; `16_PESSIMIST_CHAR_B` adds `harness.conviction_spread` readings
+          (B10)
+        argv: ["python", "-m", "engine.season.harness.conviction_spread"]
+        expects: "passes"
+        holds: "unread"
+      - id: R-06.d
+        text: >-
+          pursuit decides more than the draw: `decision_spread --decisions` at seeds 0 to 2, the
+          strict-top share above one half at the shipped tau, beside the control tau
+          `[ASSUMPTION: one half, H-96]`. The share is read as pursuit over (pursuit + draw) from
+          the line `all referents: {'draw': d, 'pursuit': p}`; the control tau is
+          `choice_temperature` swept to 0 (`DEFAULT_FIXTURES.sweep`), read by a one-line call of
+          `read_decisions`, not by a flag of the command. Re-read at B10
+          (`02_CHAR_resolve_and_temper` changes what the departure from the top is)
+        argv: ["python", "-m", "engine.season.harness.decision_spread", "--decisions", "--seed", "0"]
+        expects: "the strict-top share above one half at the shipped tau at seeds 0, 1, 2, beside the control tau's share"
+        holds: "yes"
+        reading:
+          tree: "1c9238db4c46af9c92a842b1b11d0f2b3d499bdf"
+          date: "2026-11-15"
+          seed: "0, 1, 2"
+          seasons: 0
+          line: "  all referents: {'draw': 224, 'pursuit': 274}; distinct tops 79; distinct tops within a faction, summed over its factions 177"
+          control: >-
+            seed 0 shown (274 of 498, 0.55); seeds 1 and 2 read pursuit 301 and 280 of 498 (0.60,
+            0.56); choice_temperature swept to 0 reads pursuit 486 and tiebreak 12 of 498 at each
+            seed; the `--control` arm (pursuits = realm mean) reads pursuit 253, 269, 252 of 498
+          does_not_show: >-
+            a built realm with no season played; the share is derived from two printed counts and
+            the command prints no share; the `--control` arm reads above one half at seed 1 (269 of
+            498), so one half alone does not separate it from the shipped arm
+      - id: R-06.e
+        text: >-
+          every acting person carries a pursuit vector: `decision_spread --persons`, n of n at the
+          built realm. Re-read at B39, where A-44's generated cast (about 94 persons and kin) arrives
+        argv: ["python", "-m", "engine.season.harness.decision_spread", "--persons"]
+        expects: "n of n persons hold a projected vector"
+        holds: "yes"
+        reading:
+          tree: "1c9238db4c46af9c92a842b1b11d0f2b3d499bdf"
+          date: "2026-11-15"
+          seed: "0, 1, 2"
+          seasons: 0
+          line: "  persons 83 (cast 46, cohorts 37); 83 hold a projected vector, 0 hold none"
+          control: "the same line at seeds 1 and 2: 83 hold a projected vector, 0 hold none"
+          does_not_show: >-
+            a built realm with no season played; a vector held is not a vector that moved a choice
+            (R-06.d); the realm of 83 persons, not B39's generated cast
     blocks: [IN-38, IN-08, IN-18, IN-12]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W27: `17` landed (build_at seats a `cast:`), IN-38 remains; H-62 re-scoped to IN-08, IN-18, IN-12 step 9
 
@@ -255,7 +609,73 @@ rows:
       only have imperfect knowledge
     status: partial
     measure: "python -m pytest engine/season/tests -k 'a_view_raises or a_view_is_capped or r7_two_persons or wa_a_planted_claim or decision_package_never_names_world or another_modules_prize_and_a_foreign_actor or r07_realm_regard_differs'"
-    conjuncts: []
+    conjuncts:
+      - id: R-07.a
+        text: >-
+          the chooser is handed no world; two persons hold different things. The table's `-k`
+          expression named `choose_receives_no_world`, which B02.04 deleted, and the register
+          refuses a `-k` name that is no test's: the `argv` is B02.05's expression, the one in this
+          row's `measure:`. Held by B09, B10, B11
+        argv: ["python", "-m", "pytest", "engine/season/tests", "-q", "-k", "a_view_raises or a_view_is_capped or r7_two_persons or wa_a_planted_claim or decision_package_never_names_world or another_modules_prize_and_a_foreign_actor or r07_realm_regard_differs"]
+        expects: "seven tests selected, all pass"
+        holds: "yes"
+        reading:
+          tree: "1c9238db4c46af9c92a842b1b11d0f2b3d499bdf"
+          date: "2026-11-15"
+          seed: "per test"
+          seasons: "per test"
+          line: "7 passed in 48.46s"
+          control: >-
+            `wa_a_planted_claim` is the test in which a person holding a false belief about a
+            granary declines `transfer` while the world holds the grain; the expression selects no
+            test of effort (`test_a_view_with_no_query_forms_no_effort`)
+          does_not_show: >-
+            the falsifier of the first name (delete `View.__getattr__`'s refusal, `a_view_raises`
+            must redden) was not run here; seven passing tests are not the whole of imperfect
+            knowledge (R-07.b to .d); run with `-n 2` and `-p no:cacheprovider` added
+      - id: R-07.b
+        text: >-
+          two hearers with different claims about one subject read different regard after two realm
+          seasons. v11 names no committed command; the `argv` is the test `U5a_tests_digest_additions`
+          §F1 opened ("a two-season realm reader"), which settles the table's `[UNVERIFIED]: the
+          test's name was not opened`. `02_CHAR_scar_cap_and_regard_unit` (B10) changes the unit:
+          re-read there
+        argv: ["python", "-m", "pytest", "engine/season/tests/test_told_by_channel.py::test_r07_realm_regard_differs_between_hearers_by_claim_not_stance_alone", "-q"]
+        expects: "the test passes"
+        holds: "yes"
+        reading:
+          tree: "1c9238db4c46af9c92a842b1b11d0f2b3d499bdf"
+          date: "2026-11-15"
+          seed: 0
+          seasons: 2
+          line: "1 passed in 42.40s"
+          control: >-
+            the test's own control arm (both gains set to 0, every other fixture shipped) must show
+            no pair differing beyond stance (`out["control"][1] == 0`), and passed; seed and
+            seasons are the test body's (`build_realm(0)`, `populated.run(2, 0, w=w)`), the log
+            holds pytest's closing line only
+          does_not_show: >-
+            one seed; a regard that differs between hearers is not a regard that changes a
+            decision (R-07.d); run with `-p no:cacheprovider` added
+      - id: R-07.c
+        text: >-
+          a fought field writes the losers' stance: `aperture 1 s`, s = 0 to 2, `field.won +
+          field.lost` above 0, quoted with `_eff_march`'s `Person.stance` receipt on the losing
+          side, `field.unopposed` printed beside `[ASSUMPTION; medium; Jordan to correct]`. Last
+          recorded: count 0 / not read / 1 at seeds 0 / 1 / 2 (before B01); receipt unread. Moved
+          by B01 (re-pins every realm), then B19, B20, B22; the read is `IS-A-06`'s block
+        argv: ["python", "-m", "engine.season.harness.aperture", "1", "--seeds", "0", "1", "2"]
+        expects: "`field.won + field.lost` above 0 at seeds 0-2, the losing side's `Person.stance` receipt quoted, `field.unopposed` beside"
+        holds: "unread"
+      - id: R-07.d
+        text: >-
+          a feeling, attitude or relationship changes a decision: a planted regard changes the top
+          candidate at least once in seeds 0 to 2; the unplanted seed is equal. Last recorded
+          unread: "no test by any name" (`01_CORE_tests_shipped_world_falsifiers:36`); moved by
+          `IS-A-05` (`U4` G-4 row 10), in B10
+        argv: ["python", "-m", "pytest", "engine/season/tests/test_realm_requirements.py", "-q", "-k", "r07"]
+        expects: "a planted regard changes the top candidate at least once in seeds 0-2; the unplanted seed is equal"
+        holds: "unread"
     blocks: [IN-38]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1); W27: `17` landed, IN-38 remains
 
@@ -265,7 +685,60 @@ rows:
       optimal decision based upon their epistemic knowledge and personal inclinations
     status: partial
     measure: "python -m engine.season.harness.corpus_run  # 'RANKING DISCRIMINATION' + tie ordering"
-    conjuncts: []
+    conjuncts:
+      - id: R-08.a
+        text: >-
+          every tie among offered candidates is between candidates of equal, nonzero choice score:
+          `corpus_run --seasons 2` (two seasons a case, D-17; the case's own span, to
+          `MAX_SEASONS`, is B99's; `RANKING DISCRIMINATION` and the tie ordering) and
+          `decision_spread --decisions`. Last recorded `no` (the same sparse table as R-06.a);
+          moved by BA1 (the cells)
+        argv: ["python", "-m", "engine.season.harness.corpus_run", "--seasons", "2"]
+        expects: "every tie is between candidates of equal, nonzero choice score (`RANKING DISCRIMINATION`, the tie ordering, and `decision_spread --decisions`)"
+        holds: "unread"
+      - id: R-08.b
+        text: >-
+          the choice is sampling, and the argmax is its zero-temperature control
+          (`test_u4_the_choice_is_sampling_and_the_argmax_is_its_zero_temperature_control`). Held by
+          B06 (the draw's owner), B10
+        argv: ["python", "-m", "pytest", "engine/season/tests", "-q", "-k", "test_u4_the_choice_is_sampling"]
+        expects: "the test passes"
+        holds: "yes"
+        reading:
+          tree: "1c9238db4c46af9c92a842b1b11d0f2b3d499bdf"
+          date: "2026-11-15"
+          seed: "per test"
+          seasons: "per test"
+          line: "1 passed in 2.53s"
+          control: "the argmax at zero temperature is the test's own second half, read by its assertions (the log holds pytest's closing line only)"
+          does_not_show: >-
+            that a played season chooses other than its top candidate (R-08.c); run with `-n 2` and
+            `-p no:cacheprovider` added
+      - id: R-08.c
+        text: >-
+          in play, some chosen acts were not the top-ranked candidate: the share of resolved acts
+          whose chosen candidate was not rank 1 is above 0 at the shipped setting and 0 at
+          temperature 0, seeds 0 to 2. The `argv` is the test B02.32 writes, the committed form of
+          the table's command `decision_spread --season --seed s`
+          `[ASSUMPTION: the test is the conjunct's command and decision_spread --season its printed
+          line — basis: IS-A-05 part 1 builds the test and the line for this conjunct]`
+        argv: ["python", "-m", "pytest", "engine/season/tests/test_realm_requirements.py", "-q", "-k", "r08"]
+        expects: "not the top above 0 at the shipped temperature and 0 at temperature 0, at seeds 0, 1, 2"
+        holds: "yes"
+        reading:
+          tree: "1c9238db4c46af9c92a842b1b11d0f2b3d499bdf"
+          date: "2026-11-15"
+          seed: "0, 1, 2"
+          seasons: 1
+          line: "3 passed, 8 deselected in 46.28s"
+          control: >-
+            the same test plays each seed at `choice_temperature` swept to 0 and asserts 0
+            deliberations chose other than the leading candidate, and that both arms deliberated
+            over a strict top
+          does_not_show: >-
+            one season a seed; the counts the test asserts on are not printed in this log (pytest's
+            closing line only); the share is a count above 0, not a size; run with
+            `-p no:cacheprovider` added
     blocks: [SC-01, IN-08, IN-18, IN-12]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W26 is SC-01's; H-62 re-scoped to IN-08, IN-18, IN-12 step 9
     needs_jordan: false
@@ -284,6 +757,73 @@ rows:
     statement: "chains of events within a scene are probabilistic, not deterministic"
     status: partial
     measure: "python -m engine.season.harness.aperture 4 0"
-    conjuncts: []
+    conjuncts:
+      - id: R-09.a
+        text: >-
+          a verb that draws is graded. Today the test
+          `test_we_only_a_verb_that_declares_contests_can_be_graded_today`; from B07 `pytest
+          engine/season/tests/test_task_draw.py -q` (six tests; `checked >= 10` verbs), because B07
+          retires the premise of the present test (an uncontested verb is graded by the task draw)
+          and `IS-A-10` re-points the conjunct in that batch
+        argv: ["python", "-m", "pytest", "engine/season/tests/test_season_shape.py", "-q", "-k", "test_we_only_a_verb_that_declares_contests_can_be_graded_today"]
+        expects: "the test passes"
+        holds: "yes"
+        reading:
+          tree: "1c9238db4c46af9c92a842b1b11d0f2b3d499bdf"
+          date: "2026-11-15"
+          seed: "per test"
+          seasons: "per test"
+          line: "1 passed, 218 deselected in 1.29s"
+          control: "none"
+          does_not_show: >-
+            that an uncontested verb is graded by a draw: the test reads that only a verb declaring
+            `contests:` is graded today, the premise B07 retires; run with `-p no:cacheprovider`
+            added
+      - id: R-09.b
+        text: >-
+          two persons resolve the same verb at different pools because they differ:
+          `aperture 2 0` (two seasons, D-17; the four seasons of the source are B99's `argv`),
+          `POOLS ROLLED` prints "two actors at different pools: yes" on a non-combat verb, beside
+          the control in which every person holds the default. Last recorded `no`; moved by B04
+          (the home), B05 (`U5a_capability_home_and_two_inputs` Part B: the roll with two inputs,
+          A-6, A-7), BA1 (the cast's attributes and skill scores; U1-C's check)
+        argv: ["python", "-m", "engine.season.harness.aperture", "2", "0"]
+        expects: "`POOLS ROLLED` prints `two actors at different pools: yes` on a non-combat verb, beside the default-pool control"
+        holds: "unread"
+      - id: R-09.c
+        text: >-
+          a non-combat verb besides `tell` resolves at two bands whose writes differ:
+          `corpus_run --seasons 2` (two seasons a case, D-17; the case's own span, to
+          `MAX_SEASONS`, is B99's), `DEGREES RESOLVED BY VERB`. Last recorded `no`; moved by B05, B07
+          (`13_SC_draw_for_unrolled_contests`, the task draw)
+        argv: ["python", "-m", "engine.season.harness.corpus_run", "--seasons", "2"]
+        expects: "a non-combat verb besides `tell` shows two bands whose writes differ in `DEGREES RESOLVED BY VERB`"
+        holds: "unread"
+      - id: R-09.d
+        text: >-
+          outcomes that could go either way are drawn: for every converted verb with ten or more
+          resolved acts (seeds 0 to 2, two seasons) at least two bands occur and none is 100 % one
+          band; success Events carrying a degree at least 90 % of non-bookkeeping success Events.
+          Last recorded `no` (61 of 13,379 Events carry a degree, §0); moved by A-24 and the
+          standing rule, `18_DETERMINISM_task_draw_for_uncontested_verbs` gate 1 (B07).
+          `[ASSUMPTION: R-09.d and .e are conjuncts of the row and not only gates of B06 and B07 —
+          basis: the standing rule names R-09; v11's text would read met on one verb at two bands
+          while nine in ten successes stay a fixed function of state. Revert: drop them; the row
+          can then read met at B07 plus BA1.]`
+        argv: ["python", "-m", "pytest", "engine/season/tests/test_task_draw.py::test_converted_verb_resolves_in_at_least_two_bands", "-q"]
+        expects: "the test passes (every converted verb with ten or more resolved acts at two bands or more, none 100 % one band; degrees on at least 90 % of non-bookkeeping success Events)"
+        holds: "unread"
+      - id: R-09.e
+        text: >-
+          the draw is one owner's, keyed: `pytest engine/tests/test_draw.py -q`; same seed twice,
+          same hash. Last recorded `no` (14 `random.Random(` constructions in 7 files,
+          `HOLISTIC_AUDIT_part2.md` H-10); moved by A-30, `11_GO_one_draw_owner` (B06).
+          `[ASSUMPTION: R-09.d and .e are conjuncts of the row and not only gates of B06 and B07 —
+          basis: the standing rule names R-09; v11's text would read met on one verb at two bands
+          while nine in ten successes stay a fixed function of state. Revert: drop them; the row
+          can then read met at B07 plus BA1.]`
+        argv: ["python", "-m", "pytest", "engine/tests/test_draw.py", "-q"]
+        expects: "the test file passes; the same seed twice gives the same hash"
+        holds: "unread"
     blocks: [H-98]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W23 spent in substance (`fight` resolves through the combat seam and is graded)
