@@ -23,7 +23,7 @@ import pytest
 
 from ..harness import probes as P
 from ..harness.play_surface import dispatching_chooser
-from ..harness.populated import build_realm
+from ..boot.realm import build_realm
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..data.requires import CELL_STEMS, REQUIRES_STEMS, WORLD_ONLY_STEMS, UNKNOWN
 from ..data.verbs import VERB_TABLE

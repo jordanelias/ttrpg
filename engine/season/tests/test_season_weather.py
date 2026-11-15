@@ -22,6 +22,7 @@ import hashlib
 from ..data.matrix import Step, WriteClass
 from ..data.requires import SHORTFALL_PREDICATE
 from ..harness import populated as POP
+from ..boot.realm import build_realm
 from ..loop.driver import SeasonDriver, mint_token
 from ..queries import world_q
 from ..state.carriers import Person, Rung, Site, Tenure
@@ -102,13 +103,13 @@ def test_the_thread_read_withheld_arm_is_pinned_and_differs_from_the_shipped_sea
     constant's comment) -- and that differs from the shipped season's own event sequence, read in process, so
     `thread_read`'s formation still moves what a season does. The K-3-time control (the arm equalling the
     pre-K-3 sequence) can no longer be read on one tree."""
-    w = POP.build_realm(0)
+    w = build_realm(0)
     shipped = tuple(w.fixtures.get("withheld_verbs"))
     assert "thread_read" not in shipped, "fixture: `thread_read` is already withheld at the shipped arm"
     w.fixtures = w.fixtures.sweep("withheld_verbs", shipped + ("thread_read",))
     POP.run(seasons=1, seed=0, w=w)
     assert _digest(w) == THREAD_READ_WITHHELD_EVENTS_1, _digest(w)
-    s = POP.build_realm(0)
+    s = build_realm(0)
     POP.run(seasons=1, seed=0, w=s)
     assert THREAD_READ_WITHHELD_EVENTS_1 != _digest(s), "the arm equals the shipped season -- withholding `thread_read` moved nothing"
 

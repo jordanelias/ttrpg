@@ -368,7 +368,7 @@ Not in this half, and where each is: `16_PESSIMIST_DICE_task_difficulty_and_thro
 - FALSIFIER and CONTROL: two persons of ranks 4 and 0, alike in attribute and body, reading equal odds on one verb in the built realm (the skill score does not reach the roll: R-09.b's mechanism absent). Control: step 2 (equal ranks, equal odds); the realm content hash unchanged (a test only).
 - GATE: `PYTHONHASHSEED=0 python -m pytest engine/season/tests/test_realm_requirements.py -q -k r09` → pass.
 - HASH MOVERS: none (a test).
-- DEPENDS ON: V12 B02 (`test_realm_requirements.py`, `01_CORE_tests_shipped_world_falsifiers` rows 1–2); V12 B04.03 (the `capability:` cell); V12 B05 first half: CAP B1, B3, B9 (`pool.score`, the `edge` rows, the mid-point for an unauthored attribute); V12 B05.60 (the wound level, excluded by the unwounded pair); EXISTS-IN-TREE `seam/wrappers/sigma.py::odds_of`, `state/carriers.py::Person.capability`, `engine/season/tests/test_odds_of.py::_world`, `::_tell`; V12 Batch B03c-boot (`boot/realm.py`).
+- DEPENDS ON: V12 B02 (`test_realm_requirements.py`, `01_CORE_tests_shipped_world_falsifiers` rows 1–2); V12 B04.03 (the `capability:` cell); V12 B05 first half: CAP B1, B3, B9 (`pool.score`, the `edge` rows, the mid-point for an unauthored attribute); V12 B05.60 (the wound level, excluded by the unwounded pair); EXISTS-IN-TREE `seam/wrappers/sigma.py::odds_of`, `state/carriers.py::Person.capability`, `engine/season/tests/test_odds_of.py::_world`, `::_tell`; V12 Batch B03c-boot @544cf5719c620331b70aeda93c1672977b44e9ef (`boot/realm.py`).
 - GLOSSARY: none.
 - NAMES: `harness/populated.py::build_realm` → `boot/realm.py::build_realm` (B03c).
 - COST and TIER: small build (a test); `sonnet`, high.

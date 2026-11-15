@@ -126,6 +126,17 @@ def _resolve(target, kind):
     return fn
 
 
+def _module_file(role, target):
+    """The repository-relative file a `dotted.module:attribute` target names: `a/b/c.py`, or
+    `a/b/c/__init__.py` where `c` is a package. Raises naming the role when neither is a file."""
+    stem = target.split(':', 1)[0].replace('.', '/')
+    for rel in (stem + '.py', stem + '/__init__.py'):
+        if os.path.isfile(os.path.join(REPO, rel)):
+            return rel
+    raise SystemExit(f'composition_roles {role!r}: target {target!r} names no file '
+                     f'({stem}.py or {stem}/__init__.py) under the repository.')
+
+
 def validate_wiring(contracts):
     """Return a list of failures in the `wiring:` facts (empty == green).
 
@@ -210,11 +221,13 @@ def build():
                          'block was removed, nothing resolves through engine/substrate/composition.py '
                          '— restore it rather than deleting this exporter.')
     out = {}
+    files = set()
     for role in sorted(roles):
         row = roles[role]
         target = row['target'] if isinstance(row, dict) else row
         kind = (row.get('kind') if isinstance(row, dict) else None) or 'callable'
         _resolve(target, kind)   # fail HERE, in CI, not at first call during a campaign
+        files.add(_module_file(role, target))
         entry, verb = _check_entry(role, row)
         out[role] = {
             'target': target,
@@ -235,6 +248,10 @@ def build():
         'schema_version': 3,
         'source': 'references/module_contracts.yaml#composition_roles',
         'roles': out,
+        # GO-05 (B03g.04): the files the targets above name, derived in this same loop so the list cannot
+        # disagree with `roles`. The port packs files, and `load()` resolves these by string (SM-13).
+        # No runtime reader: `engine/substrate/composition.py` reads `roles` only.
+        'module_files': sorted(files),
     }
 
 

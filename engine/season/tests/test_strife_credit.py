@@ -22,6 +22,7 @@ from ..data.matrix import WriteClass
 from ..decision.options import COMPETENCE_ATTRIBUTE
 from ..epistemic import observers_for
 from ..harness import populated as POP
+from ..boot.realm import build_realm
 from ..harness import probes as P
 from ..loop import witness as WIT
 from ..loop.driver import SeasonDriver, mint_token
@@ -212,7 +213,7 @@ def test_the_realm_reaches_commensurate_at_the_value_given_and_never_at_the_cont
     At 0.5 the same run calls `commensurate` (counted, through the real function) and ends at the shipped season's
     hash (`_realm_goldens.py`), which is not the control's, so the realm does reach the told site and the control
     above was not vacuous. Seeds 1 and 2, and three seasons, are the commit's scratch readings (H-275)."""
-    w = POP.build_realm(0)
+    w = build_realm(0)
     assert w.content_hash() == BUILD[0]
 
     def _boom(*a, **k):
@@ -224,7 +225,7 @@ def test_the_realm_reaches_commensurate_at_the_value_given_and_never_at_the_cont
     control = w.content_hash()
     calls = []
     real = W.commensurate
-    w2 = POP.build_realm(0)
+    w2 = build_realm(0)
     w2.fixtures = w2.fixtures.sweep("regime_gain", LIVE)
     with monkeypatch.context() as m:
         m.setattr(W, "commensurate", lambda *a, **k: calls.append(a) or real(*a, **k))

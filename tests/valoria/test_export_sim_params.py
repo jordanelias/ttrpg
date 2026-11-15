@@ -149,7 +149,7 @@ def test_the_season_settings_are_exported_and_a_rename_cannot_empty_them(tmp_pat
     # shipped defaults as the signature has them; `cast_attributes` ships True since B11 lane A (the item's
     # L-08 reading, False, is the control arm), `foreign` True.
     import inspect
-    from engine.season.harness.populated import build_realm
+    from engine.season.boot.realm import build_realm
     arms = {r["key"]: r for r in rows if r["module"] == "engine.season.realm"}
     sig = inspect.signature(build_realm).parameters
     literal_defaults = {n: p.default for n, p in sig.items() if isinstance(p.default, (bool, int, str, float))}
@@ -160,7 +160,7 @@ def test_the_season_settings_are_exported_and_a_rename_cannot_empty_them(tmp_pat
         assert arms["engine.season.realm." + n]["value"] == v, n
     assert arms["engine.season.realm.cast_attributes"]["value"] is True
     assert arms["engine.season.realm.foreign"]["value"] is True
-    assert all(r["file"] == "engine/season/harness/populated.py" for r in arms.values())
+    assert all(r["file"] == "engine/season/boot/realm.py" for r in arms.values())
     renamed.write_text("def build_world(seed=0):\n    pass\n")
     with pytest.raises(ValueError):
         esp._realm_arm_records(renamed)

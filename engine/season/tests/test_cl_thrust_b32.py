@@ -37,7 +37,7 @@ from engine.substrate.descriptors import PURSUITS
 from ..data import files, goals
 from ..data.requires import binding_of, evaluate
 from ..decision import make_chooser, opening_set
-from ..harness import populated
+from ..boot.realm import build_realm
 from ..harness.corpus_run import attempts
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries import world_q
@@ -212,7 +212,7 @@ def test_the_stage_pursuits_join_the_salience_target_as_the_goals_own_do():
 def test_with_goal_stages_empty_the_realm_stamps_nothing_and_its_questions_are_equal():
     raw = yaml.safe_load(files.GOALS_YAML.read_text(encoding="utf-8"))
     assert "goal_stages" not in raw
-    w = populated.build_realm(0)
+    w = build_realm(0)
     shipped = {pid: world_q.questions_for(w, p) for pid, p in w.persons.items()}
     explicit = copy.deepcopy(raw)
     explicit["goal_stages"] = []
@@ -292,7 +292,7 @@ def stage_run(w, seasons: int) -> dict:
 @pytest.fixture(scope="module")
 def ladder_run():
     with goals.rows_replaced(goals.parse(authored_realm_doc())):
-        w = populated.build_realm(0)
+        w = build_realm(0)
         yield stage_run(w, 1)
 
 
@@ -317,14 +317,14 @@ def test_the_realm_reading_sees_the_term_stubbed_and_news_told_is_read_against_n
     world_q.stage_referents = lambda w, p, ambs=None: ()
     try:
         with goals.rows_replaced(goals.parse(authored_realm_doc())):
-            stubbed = stage_run(populated.build_realm(0), 1)
+            stubbed = stage_run(build_realm(0), 1)
     finally:
         world_q.stage_referents = orig
     assert stubbed["stage"] < r["stage"] and stubbed["hit"] < r["hit"], (
         f"the stub moved neither count: the realm reading cannot see the stamp ({stubbed['stage']}/{stubbed['hit']} "
         f"against {r['stage']}/{r['hit']})")
     with goals.rows_replaced(goals.parse(yaml.safe_load(files.GOALS_YAML.read_text(encoding="utf-8")))):
-        bare = stage_run(populated.build_realm(0), 1)
+        bare = stage_run(build_realm(0), 1)
     assert bare["stage"] == 0, "no ladder, so no stage referent: the control must read zero"
     # v11 CR-87 (B10-11): 6 against 4 at seed 0 (was 5 against 4 with CR-87 at its revert, `revert_cr87`: the ladder arm alone
     # moved, by one telling). THE SEED SPREAD, MEASURED by this file's own `stage_run` (ladder against `goal_stages: []`, one season,

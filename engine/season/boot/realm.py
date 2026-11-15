@@ -1,0 +1,2208 @@
+"""`boot.realm` -- THE REALM BUILDER: the whole map, its buildings, and one person per season loop.
+
+Moved here from `harness/populated.py` (A-102, `04` §A.2's `boot/` row): it reads the authored data
+(`npcs.yaml`, `venues.yaml`, `offices.yaml`, `cohorts.yaml`, `goals.yaml`, the geography), constructs
+the World once, and hands it on. It holds no token after construction and imports no instrument --
+`harness/` imports it, never the reverse (`04` PART D row 53; `tests/test_boot_module.py`).
+
+Three things the builder reads used to live in the instrument and are here because both sides read
+them: the case loader (`load_cases`, with `CORPUS_DEFECTS` and `CASE_SERIES`), the two derivations
+of a person from a case (`seed_pursuits`, `wants_of`), and the `scale:`/`office:` overlay
+(`_rescales_once`, with the loader's own checks). `harness/run_cases.py` and `harness/corpus_run.py`
+import them from here.
+
+The census of what was built, the season run and the creed sweep stay in `harness/populated.py`,
+which is the instrument.
+"""
+
+from __future__ import annotations
+
+import re
+from functools import cache
+from collections import Counter, defaultdict
+
+from ..data import cast, files
+from ..data import goals as goals_data
+from ..queries.world_q import (RESIDE_KIND, WORKS_KIND, ancestry, capacity, enclosing_territory,
+                               home_of as home_of_q, members)
+from ..gaps import Forbidden, Unowned, Unspecified
+from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
+from ..data.rosters import (BODY_FACTION, FACTIONS, FOREIGN_CAST, FOREIGN_SEATS, OFFICES_BY_HOLDER,
+                            OFFICES_SEATS, PURSUITS, ROLE_TEMPLATE_OF, RUNG_KINDS, authored_remit,
+                            faction_prop_id, load_yaml, refuse_a_titled_post_off_its_rung,
+                            remit_or_default, territory_id_of, territory_rung_id, title_domain)
+from ..data.geography import geography
+from ..data.pursuits import temperament_pursuits
+from ..loop.effects import EFFECTS
+from ..data.requires import KNOWN_PERSON_CLAIM
+from ..state.carriers import Act, Claim, Office, Person, Proposition, Rung, Site, Tenure, generated_attributes
+from ..state.gate import NO_CHANGE
+from ..state.ids import H, ROOT
+from ..state.world import World
+
+GEOGRAPHY = files.GEOGRAPHY_YAML.relative_to(files.REPO_ROOT).as_posix()  # the path's one owner is `data/files.py`
+VENUES = "engine/season/venues.yaml"
+ROSTER = "engine/season/npcs.yaml"
+
+
+# ===========================================================================
+# WHAT THE BUILDER READS AND THE INSTRUMENTS READ TOO. Moved from `harness/` (B03c.01): a name both
+# sides read lives here, and `harness/` imports it (`04` PART D row 53).
+# ===========================================================================
+
+CHAIN = files.CHAIN_CASES_DIR
+
+CORPUS_DEFECTS: list[str] = []
+
+# CASE_SERIES -- series name -> the regex a case id of that series must fully match.
+# THE RULE: an id is its series prefix plus a label. A bare arc number is never an identifier
+# (two series once both numbered their cases 16-18, and the loader dropped the second set with
+# no trace). A colliding series takes a NEW PREFIX, never a new number; bare `ARC-19` is never
+# allocated; a new id needs a row here FIRST. `ARC\d-ORPHAN` is the id a headless fragment once
+# took (retired with the loader's recovery path). Neither of the two 16-18 series is canonical
+# (both are evidence), and no cited id is renumbered.
+CASE_SERIES: dict[str, str] = {
+    "arc": r"ARC-\d{2}",
+    "arc_recovered": r"ARC-R\d{2}",
+    "arc_meta_collision": r"ARC-META-COLLISION",
+    "nsc": r"NSC-\d{2}",
+    "scn": r"SCN-\d{2}|SCN-LOOP-[A-D]",
+    "emg": r"EMG-\d{2}|EMG-[CX]\d",
+    "npc": r"NPC-\d{3}",
+    "orphan": r"ARC\d-ORPHAN",
+}
+
+
+def load_cases(kind: str) -> list[dict]:
+    """`kind` in {NPC, ARC}. NPC cases come from BOTH the in-chain #351 corpus (27) and this
+    session's completion of it (19) -- together the full 46 in the registry. ARC cases are
+    the in-chain corpus in full."""
+    out: list[dict] = []
+    seen: dict[str, str] = {}      # case id -> the file it was first loaded from
+    sources = []
+    if kind == "NPC":
+        sources = sorted(CHAIN.glob("NPC*.yaml")) + sorted(files.CASES_DIR.glob("NPC*.yaml"))
+    else:
+        sources = sorted(CHAIN.glob("ARC*.yaml")) + sorted(files.CASES_DIR.glob("ARC*.yaml"))
+    for f in sources:
+        for c in load_yaml(f.read_text()) or []:
+            cid = str(c["id"])
+            if cid in seen:
+                CORPUS_DEFECTS.append(
+                    f"{f.name}: duplicate case id {cid!r} (first in {seen[cid]}); "
+                    "second not loaded")
+                continue
+            if not any(re.fullmatch(p, cid) for p in CASE_SERIES.values()):
+                CORPUS_DEFECTS.append(f"{f.name}: case id {cid!r} is in no CASE_SERIES row")
+            seen[cid] = f.name
+            c["_source"] = f.name
+            out.append(c)
+    return out
+
+
+def seed_pursuits(seed: int, case_id: str, pid: str) -> dict:
+    """WHAT ONE PERSON BELIEVES, DRAWN FROM THE CASE ID. `{conviction: weight}`, 1-3 entries.
+
+    ⚠ **THE SINGLE OWNER OF THIS DRAW (`CLAUDE.md` §8), AND IT BECAME ONE BY BEING COPIED.**
+    `harness/populated.py` seats 46 people and reproduced this formula verbatim -- the same radix,
+    the same `axis:` purpose strings, the same `(0.9, 0.5, 0.3)` ladder -- which is TWO OWNERS OF
+    WHICH PEOPLE ARE ALIKE. Free to drift, and drifting invisibly: `stance` is empty in these
+    worlds, so this draw ALONE orders every candidate, and two copies differing by one weight would give two instruments two different
+    populations while both reported on "the corpus".
+
+    ⚠ THE PURPOSE STRING STAYS `axis:` THOUGH IT PICKS A CONVICTION. Changing it would re-draw
+    every person in the corpus and move every golden for a reason that is a rename, not a
+    behaviour -- `04 PART D row 35` cares about purpose UNIQUENESS, not spelling. The SET it
+    indexes changed from 4 to 13, which moves the draw on its own and is `U3`'s.
+
+    ⚠⚠ **ONE TO THREE CONVICTIONS, NOT ONE, AND #353 §14 IS WHERE THE RANGE COMES FROM:**
+    *"`convictions` | weights over the closed 13 | **1-3 primary + distributed**"*. Seeding exactly
+    one was the harness's simplification and it was load-bearing in the wrong direction. MEASURED
+    2026-09-11 over 86 corpus-shaped seeds, counting DISTINCT axis directions the projection
+    produces: **1 conviction -> 13 · 2 -> 66 · 3 -> 80.** With one, the count is capped at the size
+    of the roster by construction, and worse than that suggests: 9 of the 13 convictions point
+    within 60° of a common direction (`traditional+ sacred+ hierarchical+ instrumental-`), so a
+    single-conviction person is one of about five characters however the draw falls. Two or three
+    COMBINE into vectors that are genuinely apart.
+
+    ⚠ THE COUNT ITSELF IS DRAWN, so cases differ in how many things their people care about rather
+    than all holding exactly N. Weights descend 0.9 / 0.5 / 0.3: "primary" is §14's own word for
+    the first, and the rest are the "distributed" remainder.
+
+    ⚠ THE WEIGHTS ARE OVER THE PURSUIT ROSTER, NOT OVER THE AXES. Seeding from `PURSUIT_AXES`
+    would hand every person a weight on `hierarchical_equal`, which is a basis vector and not
+    something anybody believes.
+    """
+    pursuits = sorted(PURSUITS)
+    # [JUSTIFIED: `16` is `int()`'s RADIX for H()'s blake2b hexdigest -- same as combat_seam.py:153. The `3` is #353 §14's own upper bound: "1-3 primary + distributed"]
+    n_conv = 1 + int(H(seed, 0, case_id, f"axis:{pid}:n"), 16) % 3
+    # [JUSTIFIED: a DESCENDING ladder, not three chosen magnitudes -- #353 §14 distinguishes the "primary" conviction from the "distributed" remainder and supplies no numbers. What the corpus needs is that the first outweighs the rest; 0.9 matches the single-conviction weight this replaced, so a 1-conviction case is unchanged by the ladder]
+    chosen, weights = {}, (0.9, 0.5, 0.3)
+    for k in range(n_conv):
+        purpose = f"axis:{pid}" if k == 0 else f"axis:{pid}:{k}"
+        # [JUSTIFIED: `16` is `int()`'s RADIX for H()'s hex digest -- same as combat_seam.py:153]
+        # ⚠⚠ A REPEATED PICK SILENTLY SHORTENS THE DRAW, AND THE FIX IS DELIBERATELY NOT APPLIED.
+        # `setdefault` is a no-op when the hash lands on a conviction already held, so an intended
+        # 3 becomes a 2 or a 1 and slot `k`'s weight is discarded. MEASURED over the 46 live cases
+        # x 20 seeds: 94 of 920 draws (10.2%) lose one -- 67 of the intended 3s, 27 of the 2s. That
+        # puts a tenth of the corpus back in the regime this docstring says the change exists to
+        # escape, where "a single-conviction person is one of about five characters".
+        #
+        # THE FIX IS SIX LINES -- re-salt the purpose until the pick is not already held, bounded by
+        # the roster size -- AND IT WAS BUILT, RUN AND REVERTED 2026-09-16. It works: the
+        # distribution moves {1:312, 2:373, 3:235} -> {1:283, 2:335, 3:302}, exactly the 94
+        # recovered, and the full suite stays green. It is reverted because it MOVES THE WORLD:
+        # `build_realm(0).content_hash()` goes `e5df63a767a4f38a` -> `9db4676abf6bb53d`, so
+        # `build_realm` reaches this draw rather than being fully covered by the authored roster,
+        # and PR #404's creed-sweep table (+47%/+43% on acts naming another person) was measured
+        # under the current draw and would no longer reproduce.
+        #
+        # RULED by Jordan, 2026-09-16: *"Conviction will be getting overhauled."* The overhaul is
+        # where this belongs -- it re-records whatever it moves, which this change on its own does
+        # not. Take it THEN, not before, and re-run the creed sweep when you do.
+        pick = int(H(seed, 0, case_id, purpose), 16) % len(pursuits)  # [JUSTIFIED: 16 is int()'s RADIX for H()'s blake2b hexdigest, stated in full above -- unchanged by this rename]
+        chosen.setdefault(pursuits[pick], weights[k])
+    return chosen
+
+def wants_of(case: dict) -> str:
+    """WHAT THIS LOOP WANTS, in the case's own words.
+
+    ⚠ THE CASES CARRY THIS AND THE FIRST CUT OF THIS MODULE IGNORED IT, giving all 143 people the
+    string *"a standing ambition"* -- 143 identical wants, which is `build_at`'s three-identical-
+    people defect re-created at scale. `season_requires` is a list of `{need, why, hardness}` and
+    the corpus declares **427 `core` needs across the 143 cases** (median 7 needs each). The first
+    `core` need is what the case says it cannot do without.
+
+    Falls back through `important` and then to the one-line summary, because a case with no `core`
+    row is a corpus gap and a person with no want does not act at all -- and an ambition invented
+    here would be the fabrication this module refuses everywhere else.
+    """
+    rows = [r for r in (case.get("season_requires") or []) if isinstance(r, dict)]
+    for hardness in ("core", "important", "flavour"):
+        for r in rows:
+            if r.get("hardness") == hardness and r.get("need"):
+                return str(r["need"])
+    return str(case.get("one_line") or case.get("name") or case.get("id"))
+
+
+def rescales() -> dict:
+    """`W28`. The corpus's `scale:` re-authoring, as an OVERLAY keyed by case id.
+
+    ⚠ AN OVERLAY, NOT AN EDIT TO THE CORPUS, AND THE REASON IS ARCHITECTURAL. 47 of the 57
+    unrepresentable cases live in `engine/season/cases/chain/` — a PREDECESSOR proposal's
+    committed corpus, which this chain reads and does not own. Editing another chain's extraction
+    would destroy the record of what was extracted, and the corpus is evidence. `cases/exercises/`
+    is already the established overlay: per-case files, bound by id, carrying this chain's answers
+    about someone else's rows. One overlay mechanism, not two (§8).
+
+    ⚠ EVERY RE-SCALE CARRIES ITS `why:`, WHICH IS WHAT MAKES IT AUTHORING RATHER THAN INVENTION.
+    The defect being repaired is that `CASE_BRIEF.md`'s schema offered `faction` and `world`, which
+    `rung_kinds` has never had — so the extractors wrote a vocabulary the architecture had already
+    closed. A re-scale is a reading of the case's OWN text; where the text does not say, the case
+    stays unrepresentable, which is the honest answer (§42.2's polarity rule).
+
+    ⚠ AND THERE IS NO CLASSIFIER. 23 of the 47 match none of the institution words the other 24
+    do, so a keyword rule would cover half the corpus and silently mis-scale the rest — the ROUTER
+    `W10` deleted, returning as a corpus tool. Measured before deciding not to build one."""
+    out: dict = {}
+    files_of: dict = {}                   # case id -> the file that authored its re-scale
+    for f, doc in _exercise_docs():
+        sc = doc.get("scale")
+        if doc.get("case") and isinstance(sc, dict):
+            if not sc.get("why"):
+                raise SystemExit(f"{f.name}: a `scale:` re-authoring with no `why:` — the "
+                                 "derivation is what distinguishes this from an invention")
+            _check_office(f.name, sc.get("office"))
+            # REFUSED, NOT OVERWRITTEN: two files naming one `case:` let the LAST silently replace
+            # the first -- the refusal `cast_overlay` makes for a `cast:`, in the same words.
+            if doc["case"] in files_of:
+                raise SystemExit(f"{f.name}: `case: {doc['case']}` is already the case of "
+                                 f"{files_of[doc['case']]}'s `scale:` -- the later file would "
+                                 "silently replace the earlier one")
+            files_of[doc["case"]] = f.name
+            out[doc["case"]] = sc
+    return out
+
+
+def _exercise_docs():
+    """The one directory walk `rescales()` and `cast_overlay()` both read a different top-level
+    key off — `cases/exercises/*.yaml`, "ONE OVERLAY MECHANISM, NOT TWO" (this module's own
+    header). Factored out (methodology close, 2026-09-29, `/simplify` REUSE lens) after the two
+    functions carried this loop byte-for-byte twice, differing only in which key and which type
+    check each reads afterward — a third overlay key (already anticipated: position `17`'s
+    roles/offices) would otherwise have copied it a third time. Yields `(path, doc)` so a caller
+    can still cite the file by name in its own error messages; tolerant of a missing directory
+    (no `sorted(d.glob(...))` on a `d` that doesn't exist)."""
+    d = files.EXERCISES_DIR
+    if not d.is_dir():
+        return
+    for f in sorted(d.glob("*.yaml")):
+        yield f, (load_yaml(f.read_text()) or {})
+
+
+def _check_office(where: str, off) -> None:
+    """`H-99`. An overlay's `office:` block, resolved against canon AT LOAD.
+
+    ⚠ THE THREE AXES JORDAN ASKED FOR, AND THE CHECK IS HERE BECAUSE THE ERROR IS A RE-SCALING
+    ERROR. 47 cases get an office authored by hand; the failure mode at that volume is a body
+    seated in the wrong faction, which nothing downstream would notice — the world would build,
+    the season would run, and a Cardinal would quietly belong to the Crown. `office_faction`
+    refuses the mismatch, and refusing at LOAD means a bad overlay never reaches a world.
+
+    ⚠ IT ALSO REFUSES A REMIT ACT THAT IS NOT IN THE ROSTER, for the same reason `Office` does:
+    a remit is what the office MAY DO, and an unrecognised verb there is a silent no-op."""
+    if off is None:
+        return
+    if not isinstance(off, dict) or not off.get("post"):
+        raise SystemExit(f"{where}: an `office:` block with no `post:`")
+    if not off.get("why"):
+        raise SystemExit(f"{where}: an `office:` with no `why:` — same rule as `scale:`")
+    if not off.get("body") and not off.get("faction"):
+        # ⚠ REQUIRED AT THE OVERLAY, WHERE THE RULING APPLIES. `Office` leaves belonging optional
+        # because a test fixture is not a canon office; a corpus overlay that names neither a
+        # `body` nor a `faction` has simply not answered Jordan's question, and §42.2's polarity
+        # rule makes no evidence a refusal rather than a default.
+        raise SystemExit(f"{where}: an `office:` names neither a `body` nor a `faction`")
+    # ⚠ THE VALIDATOR IS THE CONSTRUCTOR, NOT A SECOND COPY OF ITS RULES (§8). Rev 1 re-checked
+    # the faction and the remit here by hand, and drifted immediately: `Office.__post_init__`
+    # refuses a post that is both a TITLE and a body, and this loader did not, so
+    # `{post: "King", body: "Cardinal of Justice"}` passed the overlay gate and was refused only
+    # later at world-build. Building a throwaway Office means every rule the class enforces --
+    # present and future -- applies at LOAD, before any world exists.
+    try:
+        Office("probe:" + where, str(off["post"]), None,
+                 list(off.get("remit") or []),
+                 body=off.get("body"), faction=off.get("faction"))
+    except (Unspecified, Forbidden, Unowned) as e:
+        raise SystemExit(f"{where}: {e}") from None
+
+
+@cache
+def _rescales_once() -> dict:
+    """THE OVERLAYS, read on first use and kept: importing this module reads no `cases/exercises/` overlay (it still
+    loads `data.rosters`, which can `SystemExit` at import), and `data/__init__.py` records the cost of an eager read.
+    `corpus_run` binds the same dict as its `RESCALES`, so the builder and the corpus read one object, as before the
+    move; never `cache_clear()` this, which would give the builder a new dict and leave `corpus_run` the old one
+    (a test re-reading a patched `EXERCISES_DIR` calls `rescales()` itself, as `test_u8_cast_fields` does)."""
+    return rescales()
+
+
+def _load(rel):
+    """A repo-relative YAML file, through the package's OWN anchor and its OWN reader.
+
+    ⚠ NEITHER HALF IS A STYLE CHOICE AND THE FIRST CUT GOT BOTH WRONG. It carried a private
+    `_repo_root()` climbing three `.parent`s -- a thirtieth anchor in a package whose
+    `data/files.py` exists to hold the only one, and whose docstring makes that a CHECKABLE
+    property (*"`grep -rln <the dunder> season/` must print this file and nothing else"*), with
+    `combat_seam.py` as the worked case for why a wrong anchor fails SILENTLY. And it called
+    `yaml.safe_load` directly, which keeps the LAST of two identical keys without a word --
+    the defect `data/rosters.load_yaml` was written to refuse, and `venues.yaml` is exactly the
+    shape that hides one (a settlement type listed twice would lose its first building set).
+    """
+    return load_yaml((files.REPO_ROOT / rel).read_text(encoding="utf-8"))
+
+
+def _slug(text: str) -> str:
+    """An id fragment. Lowercase, alphanumerics and underscores only."""
+    return "".join(c if c.isalnum() else "_" for c in str(text).lower()).strip("_")
+
+
+# ---------------------------------------------------------------------------
+# THE RUNG ANCHOR (plan position `13d-iii`; r2 `03` §A.14, A-5 answered at ladder step 3).
+# `offices.yaml` never spells a rung id, so a `build_realm` rename cannot rot the file (`CLAUDE.md`
+# §5's hand-transcription hazard, one layer earlier). A seat's `rung:` is a FORM -- a one-entry
+# mapping `{<rung kind>: <key>}` -- and there is ONE resolver over all of them. The forms in use are
+#     {realm: true} · {duchy: "<faction>"} · {territory: "<code>"} · {settlement: "<code>"}
+#     · {hearth: "<geography code>:<building slug>"} (v10 IN-45: `venues.yaml: planned_works`' `at:`)
+# and the resolver does not know that: it asks the INDEX `build_realm` fills as it mints each rung
+# (`_index_anchor`, at the mint sites, where the key is already in hand) for exactly one rung of
+# exactly that kind. It names no rung kind and no seat, so another form is a line at one more mint
+# site and a row, never a branch here -- and it is why a rung kind with no minted rung (`province`,
+# which `build_realm` deliberately never builds: a province is a QUERY) refuses instead of
+# resolving to something near it.
+# ---------------------------------------------------------------------------
+
+def _index_anchor(w: World, anchors: dict, key, rid: str) -> None:
+    """Record that `rid` is the rung the anchor `{<its kind>: key}` names. A second rung under one
+    anchor is REFUSED, not shadowed: the anchor would then resolve to whichever was minted last,
+    which is `r2 03` §A.14's "resolves to more than one" failure arriving without a sound."""
+    kind = w.rungs[rid].kind
+    if (kind, key) in anchors:
+        raise Forbidden(
+            f"the anchor {{{kind}: {key!r}}} names two rungs: {anchors[(kind, key)]!r} and {rid!r}",
+            "boot/realm.py -- rung anchors",
+            needs="one rung per anchor; a form's key must tell its rungs apart",
+            law="r2 03 §A.14 -- an anchor that resolves to more than one rung is refused")
+    anchors[(kind, key)] = rid
+
+
+def resolve_anchor(w: World, anchors: dict, form, whose: str = "") -> str:
+    """The rung id an `offices.yaml` `rung:` FORM names -- ONE resolver over every form.
+
+    `form` is `{<kind>: <key>}`: exactly one entry, `kind` a rung kind that `build_realm` minted
+    and `key` what tells that kind's rungs apart. Refuses (`Unspecified`) a form that is not a
+    one-entry mapping, and one that resolves to NO rung -- the unknown key, the kind the realm has
+    none of, or a key of the wrong type (`{realm: "x"}` is not `{realm: true}`). It never guesses
+    and never falls back to a nearby rung: a seat with the wrong ground reaches the wrong rungs
+    quietly, which is worse than a seat that does not build."""
+    if not isinstance(form, dict) or len(form) != 1:
+        raise Unspecified(
+            f"{whose or 'a seat'} declares the rung anchor {form!r}", "offices.yaml -- rung",
+            needs="a one-entry mapping `{<rung kind>: <key>}`",
+            law="r2 03 §A.14 -- four anchor forms, never a rung id")
+    (kind, key), = form.items()
+    # THE KEY'S TYPE IS PART OF THE ANCHOR. `True == 1` and the two hash alike, so `{realm: 1}` would
+    # find `{realm: true}`'s rung through the dict below; and an unhashable key (`{duchy: [..]}`)
+    # would raise `TypeError` out of `anchors.get` instead of the refusal this function owes. Every
+    # form is `{<text kind>: <text key>}`, or `true` for the one realm: refuse the rest, by name.
+    if not isinstance(kind, str) or not isinstance(key, (str, bool)):
+        raise Unspecified(
+            f"{whose or 'a seat'} declares the rung anchor {form!r}, whose "
+            f"{'kind' if not isinstance(kind, str) else 'key'} has the wrong type",
+            "offices.yaml -- rung",
+            needs="a text kind and a text key (`true` for the realm)",
+            law="r2 03 §A.14 -- `True == 1` and an unhashable key would otherwise resolve to the "
+                "wrong rung or raise `TypeError`, not refuse")
+    rid = anchors.get((kind, key))
+    if rid is None or rid not in w.rungs or w.rungs[rid].kind != kind:
+        raise Unspecified(
+            f"{whose or 'a seat'} declares the rung anchor {{{kind}: {key!r}}}, which names no "
+            f"{kind} rung in this realm", "offices.yaml -- rung",
+            needs="an anchor `build_realm` indexed as it minted the rung",
+            law="r2 03 §A.14 -- the anchor resolves to exactly one rung or the seat is refused")
+    return rid
+
+
+def seat_anchor(w: World, anchors: dict, row: dict) -> str:
+    """The rung an authored seat ROW stands at: its anchor, resolved, plus the one content rule
+    r2 `03` §A.8 re-homed from the constructor -- a TITLED post stands at the rung kind its title
+    governs, or a Duke seated at the realm has realm-wide purview (`Office.__post_init__`'s own
+    comment; `title_domain` is the ladder's one owner). The rule itself is
+    `rosters.refuse_a_titled_post_off_its_rung`, which `corpus_run._seat_office` calls too."""
+    rid = resolve_anchor(w, anchors, row["rung"], f"{row['id']} ({row['post']!r})")
+    refuse_a_titled_post_off_its_rung(row["id"], row["post"], w.rungs[rid].kind, rid)
+    return rid
+
+
+# ---------------------------------------------------------------------------
+# WHICH INSTITUTION A SEASON LOOP BELONGS TO.
+#
+# ⚠ THE CASES DO NOT NAME PLACES AND THIS IS THE MEASURED REASON FOR THE INDIRECTION. Scanned
+# 2026-09-13 over all 143 cases against every canonical province and settlement name: EXACTLY TWO
+# name one (NPC-083 names Ehrenfeld, ARC-25 names Schoenland). They are requirement specifications
+# -- *"a person holding no office must be able to perform a repeated, multi-week task"* -- and carry
+# no setting whatsoever. So a place cannot be read off a case directly.
+#
+# What 62 of them DO name is an institution, and institutions have canonical seats. That is the
+# overlap this seats people on: the Church's 25 loops share Himmelenger, the Crown's 26 share
+# Valorsplatz. A place that serves many loops is the shared SEAT, not a coincidence of wording.
+#
+# ⚠ ORDER IS SIGNIFICANT AND IS NOT ALPHABETICAL. A case naming both the Church and the Crown is
+# seated by the FIRST match, so the more specific institution is listed first -- `Löwenritter`
+# before `Crown`, because a knightly order is a Crown body and the barracks is the better answer
+# than the court. Re-ordering this list moves people, which is a game change, which is why it is
+# stated rather than sorted.
+_INST_CACHE = None
+
+
+def _mentions(candidate: str, text: str) -> bool:
+    """Does `text` name `candidate` as a whole word? The one owner of this file's match rule.
+
+    Written out three times before 2026-09-15 (`institution_of`, and both loops in `concerns_of`).
+    A change to the boundary rule — a hyphenated title like `Warden-Chief` is already on the
+    `TITLES` roster and does not word-match cleanly — had to be found and made three times, with a
+    reviewer re-verifying each copy rather than reading one function."""
+    return re.search(r"\b" + re.escape(candidate) + r"\b", text) is not None
+
+
+def _institutions() -> list:
+    """The institution match order, from `venues.yaml: seat_precedence`. ONE owner.
+
+    ⚠⚠ THIS WAS A SECOND LITERAL AND NOTHING COMPARED THE TWO. It re-typed the eleven `seats:`
+    keys of `venues.yaml` in a different order, inside this file, four days after ED-IN-0230 fixed
+    exactly that shape for the ethical axes. A seat added to `venues.yaml` was never matched; a
+    seat removed sent its people to `commons` with no signal — failing silently in both
+    directions.
+    ⚠ THE REFUSAL IS THE POINT, not the de-duplication: a precedence list that has drifted from
+    the seats it orders is a world built on a matcher that cannot see part of its own map."""
+    global _INST_CACHE
+    if _INST_CACHE is not None:
+        return _INST_CACHE
+    ven = _load(VENUES)
+    order = list(ven.get("seat_precedence") or [])
+    seats = set(ven.get("seats") or {})
+    if set(order) != seats:
+        raise Unspecified(
+            f"venues.yaml: seat_precedence and seats disagree — "
+            f"only in precedence: {sorted(set(order) - seats)}; "
+            f"only in seats: {sorted(seats - set(order))}",
+            "engine/season/venues.yaml",
+            needs="every `seats:` key ordered exactly once in `seat_precedence`",
+            law="ED-IN-0230 — two literals of one set with no refusal between them is how the "
+                "ethical axes drifted; a seat nobody ordered is a seat nobody is ever matched to")
+    _INST_CACHE = order
+    return order
+
+
+def institution_of(case: dict) -> str | None:
+    """The institution this loop answers to, or `None` for an unaffiliated life."""
+    import json
+    blob = " ".join([str(case.get("name", "")), str(case.get("one_line", "")),
+                     json.dumps(case.get("season_requires", ""), ensure_ascii=False),
+                     json.dumps(case.get("who_acts", ""), ensure_ascii=False),
+                     json.dumps(case.get("knowledge", ""), ensure_ascii=False),
+                     json.dumps(case.get("ends_when", ""), ensure_ascii=False)])
+    for inst in _institutions():
+        if _mentions(inst, blob):
+            return inst
+    return None
+
+
+
+
+# ⚠ TITLES ARE NOT NAMES (Jordan, 2026-09-13: *"inge baralta is Duchess baralta etc. so don't
+# confuse titles with names"*). The corpus refers to a person by title and surname -- "Duchess
+# Baralta", "the Warden-Chief" -- and almost never by the full name its own `name:` field carries.
+# MEASURED: matching the full name finds **11 ties across 9 cases**; matching the surname with
+# titles stripped finds **104 across 66 of 143**. The first number is not a sparse graph, it is a
+# broken matcher, and reporting it as a finding about the corpus would have been wrong.
+TITLES = ("Duchess", "Duke", "Baron", "Baroness", "Count", "Countess", "Bishop", "Archbishop",
+          "Abbot", "Abbess", "Prior", "Prioress", "Sir", "Dame", "Lord", "Lady", "King", "Queen",
+          "Prince", "Princess", "Captain", "Commander", "Warden", "Warden-Chief", "Inquisitor",
+          "Master", "Mistress", "Father", "Mother", "Brother", "Sister", "Chancellor", "Marshal",
+          "Steward", "Reeve", "Provost", "The", "the")
+
+
+def surname_index(cases: list) -> dict:
+    """`surname -> [case_id, ...]`, titles removed. A surname may be SHARED -- `Almqvist` is four
+    NPC cases, which is a family and not a collision to resolve away."""
+    out: dict = defaultdict(list)
+    for c in cases:
+        toks = [t for t in re.split(r"\s+", str(c.get("name", "")).strip())
+                if t and t not in TITLES]
+        # A one-token name ("Orm") is its own surname. Short tokens are skipped: a three-letter
+        # match against free prose is a coincidence generator, not a tie.
+        if toks and len(toks[-1]) >= 4:
+            out[toks[-1]].append(str(c.get("id")))
+    return dict(out)
+
+
+def concerns_of(case: dict, by_name: dict) -> tuple:
+    """WHO THIS LOOP'S WANT CONCERNS: `(case_id | None, institution | None)`.
+
+    Read off `who_acts`, which is a list of the parties a case says are involved. Two kinds of
+    entry, and both are used:
+
+      * A NAMED PERSON who is another case's own person. Measured: **11 such ties across 9 cases**
+        -- sparse, and real, so they are used first and never overridden by a heuristic.
+      * A ROLE: *"any Church Inquisitor investigating the region"*, *"Guild leadership"*,
+        *"the Warden-Chief (his senior)"*. 583 `who_acts` entries exist and most are this. A role
+        resolves to an INSTITUTION, and an institution has a canonical seat, so the tie lands on
+        somebody seated there.
+
+    ⚠ `who_acts[0]` IS NOT RELIABLY THE CASE'S OWN PERSON -- it matches the case `name` in only 38
+    of 143. So self-exclusion is done by id afterwards rather than by skipping the first entry,
+    which is what a reader would assume and what would silently mis-tie 105 cases.
+    """
+    acts = [str(x) for x in (case.get("who_acts") or [])]
+    for entry in acts:
+        for nm, cids in by_name.items():
+            if _mentions(nm, entry):
+                # A shared surname is a FAMILY (`Almqvist` is four cases). The tie lands on the
+                # first by id and the ambiguity is real rather than resolved -- which of four
+                # siblings *"his family"* means is not answerable from the corpus.
+                for cid in sorted(cids):
+                    if cid != case.get("id"):
+                        return cid, None
+    for entry in acts:
+        for inst in _institutions():
+            if _mentions(inst, entry):
+                return None, inst
+    return None, None
+
+
+# -- THE POPULATION SYNECDOCHES (plan position `24f`, `ED-IN-0255`) -----------------------------
+#
+# The row's own field names -- the schema `cohorts.yaml` is checked against, `Rung._DECLARED`'s
+# shape -- not the game's vocabulary.
+COHORT_FIELDS = frozenset({"rung", "weight"})
+# The id a cohort's `Person` (and its `person` rung) is minted under: this prefix and the rung it
+# lives in. One cohort per rung, so the rung id is the whole of what distinguishes two of them.
+COHORT_PREFIX = "cohort_"
+
+
+def cohort_rows(text: str | None = None) -> list:
+    """THE AUTHORED ROWS OF `cohorts.yaml`, schema-checked: `[{rung, weight}, ...]` in file order.
+    Plan position `24f`. `text` is the file's contents, for a caller that plants rows; `None`
+    reads the file through `data/files.py`'s one anchor and `load_yaml`'s duplicate-key refusal.
+
+    Everything a row can get wrong WITHOUT a world is refused here; what needs the built world
+    (the rung exists, the weight fits its capacity) is `seat_cohorts`'s. Each refusal names the row.
+      * NO ROWS AT ALL. The larder draw feeds only cohorts (`world_q.subsistence_draw`), so a realm
+        seeded from an empty file would run its whole subsistence pass over nobody and report a
+        quiet world. That silent emptying is the failure the plan's attack on `24f` names, so the
+        loader refuses it rather than a test catching it later.
+      * A FIELD THE FILE DOES NOT DECLARE (`COHORT_FIELDS`). A `case:`, `want:` or `concerns:` would
+        be `npcs.yaml`'s schema arriving here, the invented character this file exists not to be.
+      * A WEIGHT THAT IS NOT AN INT `> 1`. S9: a person at weight 1 is an individual, and this file
+        mints no individuals. `bool` is refused too, because YAML's `yes` would otherwise pass as 1.
+      * THE SAME RUNG TWICE. One cohort per populated rung is the design (item 10's *"one authored
+        `weight > 1` `Person` row per populated rung"*); a second row would quietly double the
+        mouths under one roof, and the minted ids would collide."""
+    if text is None:
+        text = files.COHORTS_YAML.read_text(encoding="utf-8")
+    rows = (load_yaml(text) or {}).get("cohorts") or []
+    if not rows:
+        raise Unspecified(
+            "`cohorts.yaml` declares no cohort", "engine/season/cohorts.yaml",
+            needs="one `{rung, weight}` row per populated rung",
+            law="plan position `24f` -- only a cohort eats (`ED-IN-0255`), so a world with none "
+                "has no eater and its subsistence pass runs over nobody")
+    seen: set = set()
+    for n, row in enumerate(rows):
+        extra = set(row) - COHORT_FIELDS if isinstance(row, dict) else None
+        if extra is None or extra or not COHORT_FIELDS <= set(row):
+            raise Unspecified(
+                f"`cohorts.yaml` row {n} is {row!r}", "engine/season/cohorts.yaml",
+                needs=f"exactly the fields {sorted(COHORT_FIELDS)}",
+                law="plan position `24f` -- a cohort traces to no case, so it carries none of "
+                    "`npcs.yaml`'s fields and nothing undeclared")
+        wt = row["weight"]
+        if isinstance(wt, bool) or not isinstance(wt, int) or wt <= 1:
+            raise Forbidden(
+                f"`cohorts.yaml` row {n} ({row['rung']!r}) has weight {wt!r}", "S9",
+                law="S9 -- A COHORT IS A PERSON AT weight > 1; a weight-1 row would mint a named "
+                    "individual, which this file never does")
+        if row["rung"] in seen:
+            raise Unspecified(
+                f"`cohorts.yaml` names {row['rung']!r} twice", "engine/season/cohorts.yaml",
+                needs="one row per populated rung",
+                law="plan position `24f` -- one synecdoche per rung; a second row doubles its "
+                    "mouths and collides on the minted id")
+        seen.add(row["rung"])
+    return rows
+
+
+TEMPERAMENT_FIELDS = frozenset({"territory", "alpha", "beta"})
+
+
+def temperament_rows(text: str | None = None) -> list | None:
+    """THE `temperaments:` BLOCK OF `cohorts.yaml`, schema-checked: `[{territory, alpha, beta}, ...]` in file
+    order, or `None` when the file carries no such block (cohorts then stay uniform, as before SE-06: the block's
+    absence IS the revert and the control). `text` is the file's contents, for a caller that plants a block.
+
+    Refused here, without a world: a block with no row, a field the file does not declare
+    (`TEMPERAMENT_FIELDS`), an `alpha` or `beta` that is not a number in `[0, 1]` (`bool` refused: YAML's
+    `yes` is not 1), a territory that is no row of the geography file's `provinces:`, and the same territory
+    twice. What needs the built world (every cohort's territory has a row) is `seat_cohorts`'s."""
+    if text is None:
+        text = files.COHORTS_YAML.read_text(encoding="utf-8")
+    block = (load_yaml(text) or {}).get("temperaments")
+    if block is None:
+        return None
+    if not isinstance(block, list) or not block:
+        raise Unspecified(
+            "`cohorts.yaml: temperaments` declares no list of rows", "engine/season/cohorts.yaml",
+            needs="one `{territory, alpha, beta}` row per territory holding a cohort, or no block at all",
+            law="SE-06 -- an empty block would read as a configured realm and configure nothing")
+    provinces = set(geography()["provinces"])
+    seen: set = set()
+    for n, row in enumerate(block):
+        if not isinstance(row, dict) or set(row) != TEMPERAMENT_FIELDS:
+            raise Unspecified(
+                f"`cohorts.yaml: temperaments` row {n} is {row!r}", "engine/season/cohorts.yaml",
+                needs=f"exactly the fields {sorted(TEMPERAMENT_FIELDS)}",
+                law="SE-06 -- a temperament row is a territory and its two weights, and nothing undeclared")
+        for f in ("alpha", "beta"):
+            v = row[f]
+            if isinstance(v, bool) or not isinstance(v, (int, float)) or not 0 <= v <= 1:
+                raise Forbidden(
+                    f"`cohorts.yaml: temperaments` row {n} ({row['territory']!r}) has {f} {v!r}", "SE-06",
+                    law="SE-06 -- alpha and beta are weights, numbers in [0, 1]")
+        if not isinstance(row["territory"], str) or row["territory"] not in provinces or row["territory"] in seen:
+            raise Unspecified(
+                f"`cohorts.yaml: temperaments` row {n} names the territory {row['territory']!r}, "
+                f"{'twice' if isinstance(row['territory'], str) and row['territory'] in seen else 'which the geography file does not carry'}",
+                "engine/season/cohorts.yaml",
+                needs="one row per geography `provinces:` territory",
+                law="SE-06 -- one temperament per territory; a second would be two answers to one question")
+        seen.add(row["territory"])
+    return block
+
+
+def place_person(w: World, pid: str, name: str, rung: str, *, home: str | None = None, weight: int = 1,
+                 **fields) -> Person:
+    """PLACE ONE PERSON: the `Person`, its person `Rung`, the `contain` Tenure `t_<pid>_in` at `rung` and
+    the `reside` Tenure `t_<pid>_home` at `home` (default `rung`), written in that order. The word is
+    *place*, not *seat*: a seat is an office in this tree. `fields` are `Person` fields (`pursuits`,
+    `attributes`, ...). A tenure after these four (a guard's `oblige`) is the caller's own write."""
+    w.persons[pid] = p = Person(pid, name, weight=weight, **fields)
+    w.rungs[pid] = Rung(pid, "person")
+    w.add_tenure(Tenure(f"t_{pid}_in", pid, rung, "contain", 0))
+    w.add_tenure(Tenure(f"t_{pid}_home", pid, rung if home is None else home, RESIDE_KIND, 0))
+    return p
+
+
+def seat_cohorts(w: World, rows: list, names: dict | None = None, temperaments: list | None = None) -> list:
+    """SEAT THE AUTHORED COHORTS IN A BUILT WORLD, and return their person ids in row order. Plan
+    position `24f`: the producer the design step named (`workplans/2026-09-28-the-plan-one-order-
+    mc-v18-retired.md` §3.1 item 10), read at world-gen beside the case-derived cast.
+
+    Each row becomes what every builder mints for a person, and nothing else: a `Person` at the
+    row's weight, its `person` rung, a `contain` edge (where it IS) and a `reside` edge (where it
+    LIVES, `19c`'s rule) to the row's rung. No `commit`, so it is no faction's member; no `hold`,
+    so it holds nothing; no convictions -- inventing convictions for a population would be authoring a
+    creed nobody wrote, and the conviction half is HELD (`cohorts.yaml: temperaments:` names the residue;
+    `Person.conviction` stays `{}`). Its PURSUITS are its
+    territory's temperament when `temperaments` is given (SE-06, ED-IN-0293 row 1 reading (b), taken by M1 of
+    the v10 decision round: `cohorts.yaml: temperaments:`, translated by `data/pursuits.py::temperament_pursuits`),
+    and none when it is `None`, so it ranks by the uniform arm a person with no authored pursuits gets. Two
+    cohorts of one territory hold the same vector (declared); no spread between them, and no goals.
+    It is a Person in full, though (S9.1, ONE CLASS; probe `P21`: *"a crowd must be able to
+    act"*), so it witnesses, holds claims and deliberates like anyone. Nothing here stops that, and
+    doing so would be special-casing an entity (`CLAUDE.md` §10's scripting drift).
+
+    ⚠ THE CEILING, CHECKED AND NEVER USED AS A SOURCE (`ED-SE-0051`, `ED-WR-0011`). A row whose
+    weight passes `capacity(w, rung)` REFUSES: the synecdoche would stand for more people than the
+    place's dwellings house. It is the COHORT's weight that is checked, not the rung's `population`
+    with it. The case-derived cast already overfills two settlements on the realm as built
+    (measured at `24f`: `set_s_001` houses 10 named residents against 9 dwellings, `set_s_036` 8
+    against 6), and that is `npcs.yaml`'s placement, not this file's; refusing a cohort for it
+    would leave the court's own town with no people. The check reads the Query at build, once, so
+    it sees exactly the dwellings `build_realm` minted.
+      * AN UNKNOWN RUNG REFUSES. A row naming a place the builder did not build would otherwise
+        seat nobody and look like a quiet town.
+      * A CLASH WITH AN EXISTING PERSON ID REFUSES, rather than overwriting a cast member.
+
+    `temperaments` is `temperament_rows()`'s output, or `None` for a uniform cohort. When given, EVERY
+    cohort's territory (the rung that CONTAINS its settlement, `territory_id_of`) must have a row, else
+    `Unspecified` names the territory and the cohort: a block that covered some cohorts would leave the rest
+    uniform and read as complete.
+
+    `names` maps a rung to the place's canon name, so the cohort reads *"the people of
+    Valorsplatz"*; a rung it does not name is named by its id. Display only: nothing resolves on a
+    `Person.name`."""
+    names = names or {}
+    vector_of = ({r["territory"]: temperament_pursuits(r["alpha"], r["beta"]) for r in temperaments}
+                 if temperaments is not None else None)      # territory -> its vector, once; a cohort takes a COPY
+    out: list = []
+    for row in rows:
+        rung, wt = row["rung"], row["weight"]
+        if rung not in w.rungs:
+            raise Unspecified(
+                f"`cohorts.yaml` seats a cohort at {rung!r}, which this world did not build",
+                "engine/season/cohorts.yaml",
+                needs="a rung id `build_realm` builds (a settlement is `set_` + its geography id)",
+                law="plan position `24f` -- a cohort at a missing place seats nobody silently")
+        room = capacity(w, rung)
+        if wt > room:
+            raise Forbidden(
+                f"`cohorts.yaml` gives {rung!r} a cohort of weight {wt}; its capacity is {room}",
+                "ED-SE-0051",
+                law="RR-2 -- capacity bounds POPULATION; an authored cohort may not stand for more "
+                    "people than the rung's dwellings house (checked, never derived)")
+        pid = f"{COHORT_PREFIX}{rung}"
+        if pid in w.persons or pid in w.rungs:
+            raise Unspecified(
+                f"cohort id {pid!r} is already taken in this world", "engine/season/cohorts.yaml",
+                needs="a rung whose cohort id no cast member or rung already uses",
+                law="plan position `24f` -- a cohort is seated beside the cast, never over it")
+        pursuits: dict = {}
+        if vector_of is not None:
+            terr = territory_id_of(enclosing_territory(w, rung))
+            if terr not in vector_of:
+                raise Unspecified(
+                    f"cohort {pid!r} lives in the territory {terr!r}, which `cohorts.yaml: temperaments` has no row for",
+                    "engine/season/cohorts.yaml",
+                    needs=f"a `{{territory: {terr}, alpha, beta}}` row, or no `temperaments:` block",
+                    law="SE-06 -- a cohort's pursuits are its territory's temperament; a territory with no row is refused, not left uniform")
+            pursuits = dict(vector_of[terr])
+        place_person(w, pid, f"the people of {names.get(rung, rung)}", rung, weight=wt, pursuits=pursuits)
+        out.append(pid)
+    return out
+
+
+# -- THE GUARD COHORTS (v9 IN-36 carrying IN-60's guard content, RS-26) ------------------------------
+GUARD_FIELDS = frozenset({"seat", "weight"})
+
+
+def guard_rows(text: str | None = None) -> list:
+    """THE AUTHORED GUARD ROWS OF `cohorts.yaml: guards`, schema-checked: `[{seat, weight}, ...]` in file
+    order. `text` is the file's contents for a caller that plants rows. Refused here, without a world: a row
+    with a field the file does not declare (`GUARD_FIELDS`), a weight that is not an int `> 1` (S9: a guard
+    is a cohort, and a weight-1 row would mint a named individual), a seat that is no `offices.yaml: seats`
+    id, a seat twice, and NO ROWS AT ALL (`guards=True` over an empty section would seat nobody and read as
+    a guarded realm)."""
+    if text is None:
+        text = files.COHORTS_YAML.read_text(encoding="utf-8")
+    rows = (load_yaml(text) or {}).get("guards") or []
+    if not rows:
+        raise Unspecified(
+            "`cohorts.yaml` declares no `guards:` row", "engine/season/cohorts.yaml",
+            needs="one `{seat, weight}` row per guarded principal's seat",
+            law="v9 IN-36 (IN-60's content, RS-26) -- `build_realm(guards=True)` over no row guards nobody")
+    seats = {s["id"] for s in OFFICES_SEATS}
+    seen: set = set()
+    for n, row in enumerate(rows):
+        if not isinstance(row, dict) or set(row) != GUARD_FIELDS:
+            raise Unspecified(
+                f"`cohorts.yaml` guards row {n} is {row!r}", "engine/season/cohorts.yaml",
+                needs=f"exactly the fields {sorted(GUARD_FIELDS)}",
+                law="v9 IN-36 -- a guard row names a seat and a weight, and nothing undeclared")
+        wt = row["weight"]
+        if isinstance(wt, bool) or not isinstance(wt, int) or wt <= 1:
+            raise Forbidden(f"`cohorts.yaml` guards row {n} ({row['seat']!r}) has weight {wt!r}", "S9",
+                            law="S9 -- A COHORT IS A PERSON AT weight > 1; a guard is one")
+        if row["seat"] not in seats or row["seat"] in seen:
+            raise Unspecified(
+                f"`cohorts.yaml` guards row {n} names the seat {row['seat']!r}, "
+                f"{'twice' if row['seat'] in seen else 'which offices.yaml does not carry'}",
+                "engine/season/cohorts.yaml",
+                needs="one row per `offices.yaml: seats` id",
+                law="v9 IN-36 -- one guard per principal's seat; a second doubles the sworn weight under one id")
+        seen.add(row["seat"])
+    return rows
+
+
+def _first_holder(w: World, oid) -> "str | None":
+    """THE PERSON WHO HOLDS THE OFFICE `oid` (a seat held by two persons reads as the FIRST, `w.tenures` order), or
+    `None` when `oid` is `None` or nobody holds it: `seat_guards`' read of a guard's holder and
+    `mint_planned_works`' of a works' master (`world_q.hold_force` raises on two live holders; these post at the first)."""
+    return next((t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == oid
+                 and t.subject in w.persons), None) if oid else None
+
+
+def _seat_id(row, cid: str) -> str:
+    """The Office id a loop-built seat is minted under: its `offices.yaml` row's id where a row stands for
+    it (the throne is `off_king`), else the registry slug (`off_<case>`; NPC-084's `guild leader` has no
+    row). One owner of the choice, so a test can read the pre-CP-T02-02 ids by replacing it."""
+    return row["id"] if row is not None else f"off_{_slug(cid)}"
+
+
+# THE LOWEST RUNG KIND WHOSE TITLED SEAT IS "HIGH STATUS" (CR-81, `ED-IN-0318` source (2)). A seat is high
+# status when its `offices.yaml` row's `post` is a TITLE (`title_domain`) and that title governs a rung kind
+# ranking at or above this one in `rung_kinds`: today the King and Queen (`realm`) and the Dukes and Duchess
+# (`duchy`). Province ranks between them and is never a built rung (a query, `world_q.provinces_of`).
+# [ASSUMPTION; medium; Jordan to correct; revert: delete the build step] the duchy seats are the high-status
+# set with the throne and its consort (Jordan's example: "Duke Duchess king queen").
+HIGH_STATUS_FLOOR = "duchy"
+
+
+def acquaintance_pairs(w: World, seat_rows, authored: dict) -> list:
+    """WHO KNOWS WHOM WHEN THE REALM STARTS (CR-81, `ED-IN-0318`): the sorted `(holder, known)` person-id pairs,
+    each directed, never a person with himself, from two sources and no other:
+
+      (1) FACTION BELONGING -- every two members of one faction, membership read by `world_q.members` (the
+          live `commit` to the faction's Proposition, §14.2's one route; `faction_holding` reads the same
+          edge from the person's end);
+      (2) HIGH STATUS -- every two holders of a high-status seat (`HIGH_STATUS_FLOOR`): an `offices.yaml`
+          seat row (`seat_rows`, the rows this realm seated, through `authored`: row id -> Office id) whose
+          post is a title governing the floor's rung kind or a higher one, held at build (`_first_holder`).
+
+    Chosen by data (the membership edge; a row's post and its title's rung kind), never by a name list.
+    [ASSUMPTION; medium; Jordan to correct; revert: delete the build step] "know one another" is MUTUAL and
+    COMPLETE within a faction (Jordan said "many"; every pair is the reading that needs no draw to thin it).
+    A cohort (`is_cohort`) commits to no faction and holds no seat, so neither source reaches one."""
+    floor = RUNG_KINDS.index(HIGH_STATUS_FLOOR)
+    groups = [members(w, faction_prop_id(f)) for f in sorted(FACTIONS) if faction_prop_id(f) in w.propositions]
+    high = sorted({h for row in seat_rows
+                   if (dom := title_domain(row.get("post"))) is not None and RUNG_KINDS.index(dom) >= floor
+                   and (h := _first_holder(w, authored.get(row["id"]))) is not None})
+    pairs = {(a, b) for g in groups + [high] for a in g for b in g if a != b}
+    return sorted(pairs)
+
+
+def seed_acquaintances(w: World, pairs) -> list:
+    """WRITE EACH ACQUAINTANCE AS THE HOLDER'S OWN CLAIM (CR-81). For each `(holder, known)` pair the holder's
+    ledger takes a truthy `exists:Person` reading of the known person -- the first of `person_q.known_persons`'
+    three sources, the carrier CR-03's arm used (`test_cr03_acquaintance_arm.py::seed_acquaintance_from_concerns`):
+    no new carrier, no new Claim field, no roster of acquaintances (AX-2). Season 0, source `firsthand`, at
+    `confidence_default`. Returns the claim ids written, in pair order.
+    ⚠ A CLAIM AT `when` 0 RANKS LOWEST UNDER `state/ledgers.py::eviction_key` (`confidence * (when + 1)`), so
+    when a ledger reaches `ledger_cap` these are the first claims evicted, and `claim_decay_per_season` wears
+    them like any other. Written at build into empty ledgers, they evict nothing then.
+    [ASSUMPTION; medium; Jordan to correct; revert: delete the build step] the added claims evict no claim
+    the base keeps. ⚠ MEASURED FALSE IN PLAY, AND BOUNDED (CR-81, 2026-11-04, `build_realm(s)`, s = 0-2, four
+    seasons, `PYTHONHASHSEED=0`): ledgers reach `ledger_cap` in season 1, and a base claim ranking below an
+    acquaintance claim (a lower `confidence * (when + 1)`) is evicted while the acquaintance claim stays. THE
+    CONTROL is a shadow ledger per person on the same run -- the same claim stream less the acquaintance claims,
+    evicted by the same comparator: a base claim the real ledger evicted and the shadow still holds is one the
+    step displaced. On the step-off arm the instrument reads 0 at every season (its null control); on the
+    shipped arm the displaced count, at the season ends 1-4, is 46 / 93 / 6 / 0, 99 / 142 / 90 / 26 and
+    96 / 152 / 31 / 26 (max 93, 142, 152), never above the 236 claims written, since a displacement needs an
+    acquaintance claim still held in that ledger. Total evictions in season 1, off -> on: 24 -> 114, 474 -> 613,
+    242 -> 468 (+90, +139, +226); from season 2 the two arms' trajectories differ, so their totals stop being
+    comparable (four seasons: 21,131 -> 24,330, 24,437 -> 19,136, 32,833 -> 25,392).
+    The acquaintance claims fade like any build-time claim: 0, 11 and 0 of 236 still held at season 4. This is
+    the ledger's forgetting rule (`state/ledgers.py`, S20/S34) and is not special-cased: a DURABLE acquaintance
+    would need a carrier eviction does not reach, which is not ruled and is not built here.
+    ⚠ ALL OF THE ABOVE IS READ AT `ledger_cap` 200, WHICH IS NOW THE CONTROL: CR-82 (`ED-IN-0319`) raised the
+    cap to 3200, at which no realm ledger reaches the cap through season 8 (measured, seeds 0-1), so nothing is
+    evicted or displaced that early and 202 and 196 of 236 are still held at season 8 (H-09's `cite:`;
+    `tests/test_cr82_ledger_retention.py`). The comparator is unchanged and still drops these first once the
+    cap binds."""
+    kind = KNOWN_PERSON_CLAIM["predicate"]
+    conf = w.fixtures.get("confidence_default")
+    written = []
+    for who, other in pairs:
+        cid = f"c_acq_{who}_{other}"
+        w.persons[who].ledger.append(Claim(cid, who, other, kind, 1, 0, "firsthand", conf, "own"))
+        written.append(cid)
+    return written
+
+
+def seat_guards(w: World, rows: list, authored: dict, partial: bool = False) -> None:
+    """SEAT THE GUARD COHORTS IN A BUILT WORLD. Each row becomes a
+    Person at the row's weight, its `person` rung, a `contain` edge (where it IS) at the exact rung its seat's
+    HOLDER is present at, a `reside` edge at the nearest settlement above that rung (a guard is posted at a
+    door and lives in the town, so the capacity ceiling is checked against the town's, as for any cohort),
+    and a live `oblige` to the seat -- the edge `world_q.guard_weight` (IN-60) counts. No `commit`, no `hold`,
+    no pursuits (SE-06's `temperaments:` covers the population rows only; a guard stands for no place): a guard is a cohort, not a character.
+
+    `authored` is `_office_census["authored"]` (an `offices.yaml` seat id -> the Office id standing for it).
+    A seat this world did not seat, or one nobody holds, REFUSES -- unless `partial` (a `cap` dropped the
+    cast), where the row is skipped as the per-case loops skip their absent. The holder of a seat held by two
+    persons posts the guard at the FIRST (`w.tenures` order)."""
+    where = home_of_q(w)
+    for row in rows:
+        oid = authored.get(row["seat"])
+        holder = _first_holder(w, oid)
+        if holder is None or holder not in where:
+            if partial:
+                continue
+            raise Unspecified(
+                f"`cohorts.yaml` guards the seat {row['seat']!r}, which this realm "
+                f"{'did not seat' if oid is None else 'seated and nobody holds, or whose holder stands nowhere'}",
+                "engine/season/cohorts.yaml",
+                needs="a seat `build_realm` seated, held by a person who is present at a rung",
+                law="v9 IN-36 (IN-60's content) -- a guard stands where the principal is; none is guessed")
+        post = where[holder]
+        town = next((r for r in ancestry(w, post) if w.rungs[r].kind == "settlement"), post)
+        wt = row["weight"]
+        room = capacity(w, town)
+        if wt > room:
+            raise Forbidden(
+                f"`cohorts.yaml` gives the guard of {row['seat']!r} a weight of {wt}; its town {town!r} "
+                f"has capacity {room}", "ED-SE-0051",
+                law="RR-2 -- capacity bounds POPULATION; a guard lives in the town and may not stand for "
+                    "more people than its dwellings house (checked, never derived)")
+        pid = f"{COHORT_PREFIX}guard_{row['seat']}"
+        if pid in w.persons or pid in w.rungs:
+            raise Unspecified(
+                f"guard id {pid!r} is already taken in this world", "engine/season/cohorts.yaml",
+                needs="a seat whose guard id no cast member or rung already uses",
+                law="v9 IN-36 -- a guard is seated beside the cast, never over it")
+        place_person(w, pid, f"the guard of {w.offices[oid].post}", post, home=town, weight=wt)
+        w.add_tenure(Tenure(f"t_{pid}_oblige", pid, oid, "oblige", 0))
+
+
+# THE KEYS OF ONE `venues.yaml: planned_works` ROW -- a closed set, so a misspelt key REFUSES rather than
+# reading as an absent one (the loader-refuses-per-data-family rule `cohort_rows` and `guard_rows` keep).
+PLANNED_WORKS_FIELDS = frozenset({"id", "kind", "plan", "at", "rung", "master", "terms"})
+
+
+def mint_planned_works(w: World, rows: list, anchors: dict, authored: dict, partial: bool = False) -> list:
+    """MINT THE WORKS THE SETTING PLANNED, IN A BUILT WORLD (v10 IN-45, M5 option (B)). Returns the minted ids.
+
+    Each row is ONE `create_record` EFFECT RUN AT TICK 0: `EFFECTS["create_record"]` is handed the act the row's
+    master would have declared -- `{record, kind, subject_matter: {plan, at}, rung: <the paying rung>, stages}`
+    -- and the `Change` it returns is applied, so the Record, its stages, the master's `hold` and the
+    one-live-works-per-target decline are the ones a master's declaring `create_record` writes, with no second mint here (a COMPUTED `create_record`
+    carries no payload and mints `text`: `loop/effects_information.py`).
+    It is NOT folded: no `Event` is logged, no token is minted, and no driver runs (`build_realm` writes the
+    world straight, as every other section of it does); the effect's own `Change` is the writer, which is what
+    makes a planned works the same Record a master's act would leave. WHY NOT THROUGH THE GATE (`04` §C.2, *"the seam
+    every mutation crosses"*; §A.2, *"The driver is the ONLY constructor of write tokens"*): world generation is
+    §A.2's tenth module, `boot/`, which holds no token after construction; a builder holds no token and can lawfully hold none, and `build_realm` writes the world
+    straight in some two dozen places; the gated route a probe takes (`harness/probes.py`: `w.write(..., mint_token(...),
+    change=EFFECTS[...](w, act))`) mints a token outside the driver and logs an Event, so it is not followed here.
+    No scan sees a `.apply()` under `boot/`, and none is licensed (`layer-conformance` A3). [ASSUMPTION; medium; Jordan to correct;
+    revert: one `create_record` act per row, folded before season 0 -- it moves the log by a `record.created`
+    per row and needs a driver in the builder.]
+
+    `anchors` is `build_realm`'s anchor index and `authored` is `_office_census["authored"]` (an `offices.yaml`
+    seat id -> the Office id standing for it). `at` and `rung` are anchors, resolved by `resolve_anchor` (a
+    building is `{hearth: "<code>:<slug>"}`); `master` is a seat row id and the works' maker is that seat's
+    holder -- the first live `hold` on it (`seat_guards`' read). A row whose `kind` is not a record kind that
+    carries `{plan, at}` mints a Record WITHOUT that content (`create_record`'s own reading of an act that
+    declares none), which `found`, `build` and `work` never name: that is the planted failure
+    (`test_in45_planned_works.py`), and why no shipped row is `kind: text`.
+
+    REFUSES (`Unspecified`), each one change from a row that mints: a row that is not a mapping of exactly
+    `PLANNED_WORKS_FIELDS`; an `id` already a Record's; a `plan` that `works_cost` does not price (every
+    priced key is a `rung_kinds` or `site_kinds` member, `fixtures.py::_check_works_cost`; a place nobody can pay for is dead data, `_cost`'s own
+    decline arriving a season late); `terms` that is not a positive integer; an `at` or `rung` that resolves
+    to no rung (`resolve_anchor`'s refusal, never a guess); a `master` seat this realm did not seat or nobody
+    holds; and a second live works on one `(plan, at)` target (`create_record`'s decline). `partial` (a `cap`
+    dropped the cast) skips, without a sound, a row whose master's seat was not seated, as the per-case loops
+    skip their absent. No operand is coined: the act carries only what `create_record` already reads."""
+    term = w.fixtures.get("record_stage_term")
+    priced = w.fixtures.get("works_cost") or {}
+    made: list = []
+    for row in rows:
+        if not isinstance(row, dict) or set(row) != PLANNED_WORKS_FIELDS:
+            raise Unspecified(
+                f"a `planned_works` row is {row!r}", "engine/season/venues.yaml -- planned_works",
+                needs=f"a mapping of exactly {sorted(PLANNED_WORKS_FIELDS)}",
+                law="v10 IN-45 -- a misspelt key must refuse, not read as a missing one")
+        rid, plan, terms = row["id"], row["plan"], row["terms"]
+        whose = f"planned work {rid!r}"
+        if not isinstance(rid, str) or rid in w.records:
+            raise Unspecified(
+                f"{whose} names an id that is not text, or that a Record already carries",
+                "engine/season/venues.yaml -- planned_works",
+                needs="a unique text id", law="v10 IN-45 -- one Record per id; a mint would replace it")
+        if plan not in priced:           # every priced key is a rung or site kind (`fixtures.py::_check_works_cost`, at import, default fixtures)
+            raise Unspecified(
+                f"{whose} plans {plan!r}, which is no priced `rung_kinds` or `site_kinds` member",
+                "engine/season/venues.yaml -- planned_works",
+                needs="a plan `found` or `build` can make and `rosters.yaml: works_cost` prices",
+                law="v9 IN-28 (H-166 limit 1) -- a plan with no price has nobody to pay for it")
+        if isinstance(terms, bool) or not isinstance(terms, int) or terms < 1:
+            raise Unspecified(
+                f"{whose} declares terms {terms!r}", "engine/season/venues.yaml -- planned_works",
+                needs="a positive integer", law="r2 04 §A.6.3 -- a works with no terms bounds nothing")
+        oid = authored.get(row["master"])
+        master = _first_holder(w, oid)
+        if master is None:
+            if partial:
+                continue
+            raise Unspecified(
+                f"{whose} names the master seat {row['master']!r}, which this realm "
+                f"{'did not seat' if oid is None else 'seated and nobody holds'}",
+                "engine/season/venues.yaml -- planned_works",
+                needs="an `offices.yaml` seat row `build_realm` seated, held by a person",
+                law="v10 IN-45 -- the maker's `hold` is what makes a person a works' master; none is guessed")
+        at = resolve_anchor(w, anchors, row["at"], whose)
+        payer = resolve_anchor(w, anchors, row["rung"], whose)
+        kind = row["kind"]
+        act = Act(id=rid, actor=master, verb="create_record", payload={
+            "record": rid, "kind": kind,
+            "subject_matter": {"plan": plan, "at": at} if kind == WORKS_KIND else None,
+            "rung": payer,
+            # THE WINDER OF EACH TERM IS `ROOT`: MATTER's `term.matured` names `causes[]` the Event that created
+            # the Record, else the stage's third element, and a Record minted without a fold has no Event and no
+            # act in the act store to name. The setting planned it -- authored world data, caused by the world.
+            # A DELIBERATE DEPARTURE from `04` §A.1's AX-5 row (*"a matured term cites the act that wound it"*): no act
+            # wound these terms, `ROOT` is PART D row 6's typed origin, and the card's other route (a folded
+            # `create_record` per row, above) would satisfy the row at the price of moving the log and every pin.
+            "stages": [(w.tick + (i + 1) * term, f"term{i + 1}", ROOT) for i in range(terms)]})
+        change = EFFECTS["create_record"](w, act)
+        if change is NO_CHANGE:
+            raise Unspecified(
+                f"{whose} plans a {plan!r} at {at!r}, where a live works already does",
+                "engine/season/venues.yaml -- planned_works",
+                needs="one live works per (plan, at)", law="r2 04 §A.6.3 -- `create_record` declines the second")
+        change.apply()
+        made.append(rid)
+    return made
+
+
+def goals_missing(w: World, rows: tuple) -> list:
+    """THE ORGANIZATIONS THIS BUILT WORLD SEATS THAT NO GOAL ROW IS ABOUT (v9 FA-06): `["faction X", "body Y",
+    ...]`, in roster order. A faction is seated by an AUTHORED HEAD that stands in the cast (`cast.
+    faction_leader`, the same read `seed_goals` binds a faction goal's head by); a body by a live `hold` of
+    a seat whose `Office.body` it is. Either needs a row whose `org:` is that faction or body -- a goal of
+    any kind, an `orientation` included. A faction with no head and a body with no seated holder
+    (`Lions' Helm`, an unfilled seat) is asked for nothing: a goal there binds no one."""
+    have = {(g.org_kind, g.org) for g in rows}
+    held = {t.object for t in w.tenures if t.kind == "hold" and t.live and t.subject in w.persons}
+    seated = {o.body for oid, o in w.offices.items() if o.body and oid in held}
+    out = []
+    for fac in sorted(FACTIONS):
+        if fac in FOREIGN_CAST and faction_prop_id(fac) not in w.propositions:
+            continue                      # v9 IN-36: a foreign faction this world did not seat is asked for nothing
+        lead = cast.faction_leader(fac)
+        if lead and f"p_{_slug(lead)}" in w.persons and ("faction", fac) not in have:
+            out.append(f"faction {fac!r}")
+    out += [f"body {b!r}" for b in BODY_FACTION if b in seated and ("body", b) not in have]
+    return out
+
+
+def seed_goals(w: World, rows: tuple, authored: dict, cid_of: dict, partial: bool = False,
+               complete: bool = True) -> dict:
+    """SEED THE ORGANIZATIONS' GOALS IN A BUILT WORLD (v9 IN-68, A-32; ED-IN-0293 (8), (10)). `rows` are
+    `data/goals.py` `Goal`s, `authored` is `_office_census["authored"]` (an `offices.yaml` seat id -> the
+    Office id that stands for it: since v10 CP-T02-02 the SAME string wherever a row stands for the seat,
+    `_seat_id`), `cid_of` the built cast's
+    person id -> case id, `partial` true when `cap` dropped part of the cast. Returns the counts
+    `census` reports (never read by the loop).
+
+    Per row, `orientation` mints NOTHING -- an OUGHT about nobody is not a motive (the rule at the tie
+    write above); it is counted, and its `pursuits:` are IN-69's. Every other kind mints
+    `Proposition(goal id, "OUGHT", subject, text, org, 0)` and its org's persons `commit` to it:
+
+      * a faction goal -> the faction's members (the creed's `commit` holders) and its authored head;
+      * a body goal    -> the live holders of the seats whose `Office.body` is the body;
+      * a seat goal    -> the live holder of the seat.
+
+    `derives` combines levels: `establishes` takes the PARENT goal off every person of the child's org
+    (they do not commit to it); `influences` keeps both -- the child's persons ALSO commit to the parent
+    goal (v9 FA-05: before, nothing read `influences` and the parent never reached a child org of another
+    faction), and its stance rows are written as the parent's own members get theirs, the loyalty being to
+    the faction of the org that reached them. [ASSUMPTION; medium; Jordan to correct -- revert: head and
+    seat-holders only.] THE CLIMB IS BY ORG, TRANSITIVE WHILE THE CHAIN STAYS `influences`
+    [ASSUMPTION; medium; Jordan to correct -- revert: the immediate parent only], and `establishes` takes
+    off the one parent only: a person taken off a parent still reaches that parent's `influences`
+    ancestors through any org he belongs to (the Riskbreakers' holders `establish` over
+    `goal_lowenritter_throne_security` yet commit to the Crown goal as Löwenritter members, which
+    `goal_lowenritter_military_security` gives them anyway).
+
+    The subject, per kind: `person` -> that person; `rung` -> the rung (REFUSED if this world built no such
+    rung -- a rung exists only once built, so the loader could not check it); `seat_holders` -> the first
+    listed seat's Office (`world_q.goal_referents` follows the throne and never reads it); `deed_doers` ->
+    the org's own name (read from the ledger at the question, never from the subject).
+
+    A row with `stance` takes a stance row toward each PERSON its referent resolves to at seeding
+    (`person`; `seat_holders`' holders now -- a succession moves the referent, never the row), for each
+    committed person: `(referent, stance * valence, weight)` from `cast.stance_from_loyalty` of that
+    person's loyalty to the org's faction -- the creed's own call, so a `stance: +1` goal reads exactly as
+    the creed does, and an opposed member's regard inverts with the sign. [ASSUMPTION; medium; Jordan to
+    correct -- revert: the row's sign is the goal's `stance` for every member and only the weight is the
+    loyalty's.]
+
+    `partial` drops, without a sound, a goal whose person or seats the cap removed (the per-case loops'
+    own rule); a complete cast refuses it. A goal id already a Proposition's refuses (a mint would
+    replace it).
+
+    `complete` (v9 FA-06, the SHIPPED DEFAULT) refuses a world that seats an organization no row is about:
+    a faction with an authored head, or a body with a seated member, and no goal -- `goals_missing` names
+    each. It is the law of the shipped file, so a test that plants a PARTIAL goals file passes `False`
+    (`build_realm(..., goals_complete=False)`); `build_realm(goals=False)`, the control arm, mints nothing and
+    asks for nothing. [ASSUMPTION; medium; Jordan to correct -- revert: no completeness refusal.]"""
+    if complete:
+        missing = goals_missing(w, rows)
+        if missing:
+            raise Unspecified(
+                "goals.yaml holds no goal for " + ", ".join(missing),
+                "goals.yaml -- completeness",
+                needs="a row whose `org:` is each named faction or body (an `orientation` row counts)",
+                law="v9 FA-06 -- every faction with an authored head and every body with a seated member holds "
+                    "at least one goal; none is guessed")
+
+    def refuse(cls, g, what: str, needs: str):
+        raise cls(f"goal {g.id!r}: {what}", f"goals.yaml -- {g.id}", needs=needs,
+                  law="v9 IN-68 (A-32) -- a goal is seeded onto what the built realm holds; none is guessed")
+
+    def holders(oids) -> list:
+        oids = set(oids)
+        return list(dict.fromkeys(t.subject for t in w.tenures
+                                  if t.kind == "hold" and t.live and t.object in oids
+                                  and t.subject in w.persons))
+
+    def org_persons(g) -> tuple:
+        """`(the org's faction name, its persons)` -- the persons a goal of this org binds."""
+        if g.org_kind == "faction":
+            lead = cast.faction_leader(g.org)
+            head = f"p_{_slug(lead)}" if lead else None
+            mem = members(w, faction_prop_id(g.org))
+            return g.org, mem + ([head] if head in w.persons and head not in mem else [])
+        if g.org_kind == "body":
+            return BODY_FACTION[g.org], holders(oid for oid, o in w.offices.items() if o.body == g.org)
+        oid = authored.get(g.org)
+        office = w.offices.get(oid)
+        return (office.faction if office else None), (holders([oid]) if office else [])
+
+    out = {"goals": 0, "orientation": 0, "commits": 0, "stance_rows": 0, "dropped": 0}
+    bound: dict = {}          # goal id -> (faction name, the org's persons)
+    minted: list = []         # (goal, referent persons)
+    for g in rows:
+        bound[g.id] = org_persons(g)
+        kind, obj = g.object["kind"], g.object
+        if kind == "orientation":
+            out["orientation"] += 1
+            continue
+        if g.id in w.propositions:
+            refuse(Forbidden, g, "its id is already a Proposition of this world",
+                   "an id no creed, tie or other goal mints")
+        referents = ()
+        if kind == "person":
+            subject = f"p_{_slug(obj['case'])}"
+            if subject not in w.persons:
+                if partial:
+                    out["dropped"] += 1
+                    continue
+                refuse(Unspecified, g, f"names {obj['case']!r}, who is not in the cast this realm built",
+                       "a case id of the built cast")
+            referents = (subject,)
+        elif kind == "rung":
+            subject = obj["rung"]
+            if subject not in w.rungs:
+                refuse(Unspecified, g, f"names the rung {subject!r}, which this realm did not build",
+                       "a rung id `build_realm` builds")
+        elif kind == "seat_holders":
+            built = [authored[s] for s in obj["seats"] if s in authored]
+            if not built:
+                if partial:
+                    out["dropped"] += 1
+                    continue
+                refuse(Unspecified, g, f"names the seats {obj['seats']!r}, none of which this realm seated",
+                       "a seat id of offices.yaml")
+            subject, referents = built[0], tuple(holders(built))
+        else:                                   # deed_doers: read from the holder's ledger at the question
+            subject = g.org
+        # A `seat_holders` goal carries the Office ids its listed seats BUILT as (`scope`), read through
+        # `authored`; a seat that stands for a row keeps the row's id (`_seat_id`), so the map is the identity.
+        w.propositions[g.id] = Proposition(g.id, "OUGHT", subject, g.text, g.org, 0,
+                                           tuple(built) if kind == "seat_holders" else None)
+        minted.append((g, referents))
+        out["goals"] += 1
+    # `establishes`: the parent goal is off every person of the child's org (an orientation child too)
+    taken_off: dict = defaultdict(set)
+    for g in rows:
+        if g.derives_kind == "establishes":
+            taken_off[g.derives_from].update(bound[g.id][1])
+    # `influences`: the child's persons ALSO hold the parent goal, and the parent of a parent while the
+    # chain stays `influences` (an `establishes` link stops it: that link replaces). Each carries the FACTION
+    # OF THE ORG THAT REACHED HIM, so a stance row's loyalty is to his own organization, the parent's own
+    # members keeping theirs. [ASSUMPTION; medium; Jordan to correct -- revert: the parent org's faction.]
+    by_id = {g.id: g for g in rows}
+    reach: dict = {g.id: {pid: bound[g.id][0] for pid in bound[g.id][1]} for g in rows}
+    for g in rows:
+        cur = g
+        while cur.derives_kind == "influences":
+            for pid in bound[g.id][1]:
+                reach[cur.derives_from].setdefault(pid, bound[g.id][0])
+            cur = by_id[cur.derives_from]
+    for g, referents in minted:
+        for pid, fac in reach[g.id].items():
+            if pid in taken_off[g.id]:
+                continue
+            w.add_tenure(Tenure(f"t_{g.id}_{pid}_commit", pid, g.id, "commit", 0))
+            out["commits"] += 1
+            if g.stance is None or not referents:
+                continue
+            r = cast.row(cid_of[pid]) if pid in cid_of else None
+            st = cast.stance_from_loyalty(cast.loyalty(r, fac)) if r else None
+            if st is None:
+                continue                        # no template to be loyal to: no row (the creed's rule)
+            # v11 CR-87 (ED-IN-0335; `Fixtures loyalty_toward_creed`, H-256): A DISLOYAL MEMBER'S INVERTED ROW NAMES THE
+            # GOAL'S PROPOSITION (the org's creed), never the persons it is about, and no lower than the member band --
+            # the inversion is disaffection with the creed, not a grudge against its head. A loyal member's row is the
+            # goal's own call, toward its referents, as before. `False` is the revert: every row toward the referents.
+            if st[0] < 0 and w.fixtures.get("loyalty_toward_creed"):
+                w.persons[pid].stance.append((g.id, *cast.loyalty_in_band(st)))
+                out["stance_rows"] += 1
+                continue
+            for ref in referents:
+                w.persons[pid].stance.append((ref, g.stance * st[0], st[1]))
+                out["stance_rows"] += 1
+    return out
+
+
+def seed_arms(w: World, seeds: dict | None = None) -> int:
+    """SEED ARMS INTO STORES (v11 CP-T03-03): every rung of a kind `seeds` names (`rosters.yaml: arms_at_build`, by
+    default) gains that kind's arms, `Rung.stores[arms kind] += amount`, which `world_q.kit_of` reads. Returns how many
+    rungs were seeded (0 for the shipped empty roster, which leaves `Rung.stores` and the hash untouched). Rungs are
+    visited in id order so the insertion order of a store never depends on dict history."""
+    from ..data.rosters import ARMS_AT_BUILD
+    seeds = ARMS_AT_BUILD if seeds is None else seeds
+    n = 0
+    for rid in sorted(w.rungs):
+        stock = seeds.get(w.rungs[rid].kind)
+        if not stock:
+            continue
+        r = w.rungs[rid]
+        r.stores = dict(r.stores or {})
+        for arms, amount in stock.items():
+            r.stores[arms] = r.stores.get(arms, 0) + amount
+        n += 1
+    return n
+
+
+def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
+                goals: bool = True, goals_complete: bool = True, foreign: bool = True,
+                guards: bool = False, acquaintances: bool = True, cast_attributes: bool = True,
+                fixtures=None) -> World:
+    """The whole map, its buildings, and one person per season loop.
+
+    `fixtures` (None: `DEFAULT_FIXTURES`) is the injection point of a sweep: `fixtures=DEFAULT_FIXTURES.sweep("generated_attribute_range", (2, 2))` builds the world H-856's control reads.
+    `cast_attributes` (v10 CR-20) reads each cast row's `stats:` into `Person.attributes`
+    (`data/cast.py::attributes_of`), over the sheet `state/carriers.py::generated_attributes` DRAWS (`Fixtures
+    generated_attribute_range`, B01a.01) for every key a row does not author, and seats a drawn sheet on every other
+    person (the cohorts included) last; `Fixtures generated_attribute_range` None draws nothing. ⚠ SINCE B11 LANE A `True` SHIPS (brief A step 3:
+    persons hold scores, so a person is opposed by the score he rolls and never by `obstacle_default`), a declared mover
+    of the build (every `Person` repr) and of every season. `False` is the CONTROL ARM of the earlier reading, kept: no person holds an attribute, so
+    `faculty` falls to `pool_default` and the realm acts as it did before the carrier (only the `Person` repr
+    moved). The registry authors ONE row's `stats:` (NPC-001: cognition, focus, endurance, and the whole social
+    category as attunement, presence and grace at 3-4), and `True` is a MOVER by that one person (her pool on the
+    `inquiry` vocation is her Reason, 5, not the default 2; on `argue`, her Attunement, 3): measured
+    at CR-20, the event list over two seasons moves at seeds 0, 1 and 2 (her ledger alone at 0 and 1, a
+    cascade through 79 ledgers at 2). [ASSUMPTION; medium; Jordan to correct; revert: none needed -- flipping
+    the default is its own declared mover, with the cast's values Jordan's content.]
+
+    `acquaintances` (CR-81, `ED-IN-0318`) writes the realm's starting acquaintances (`acquaintance_pairs`,
+    `seed_acquaintances`): faction co-members and the high-status seats know one another. `True` ships;
+    `False` is the CONTROL ARM, the realm before the ruling (every world hash as at the parent commit).
+
+    `foreign` (v9 IN-36) seats the EXTERNAL EMPIRE: the factions `rosters.yaml: foreign_cast` names get their
+    root rung, their settlement (no parent, so outside the realm), a Proposition, their cast rows' persons
+    homed there, their `offices.yaml: foreign_seats` and their goal rows. `True` is the shipped default since
+    ED-IN-0310 (Jordan, 2026-11-04: the Altonian Empire and Schoenland are external nations, spoilers and limits on the game
+    world). `False` is the CONTROL ARM: none of it exists, and the world is byte-identical to the realm before the empire
+    was authored (the `foreign_cast` roster says why a faction is a `factions` member in both arms and a world's member in
+    one); the goldens pinned on the default realm were re-recorded with the flip, each against that control.
+
+    `guards` (v9 IN-36, carrying IN-60's guard content) seats `cohorts.yaml: guards` -- a cohort of `weight > 1`
+    sworn (`oblige`) to a principal's seat, posted at the exact rung the seat's holder is present at. `False`
+    (the default) is its control arm, for the same reason. The two switches are independent.
+    [ASSUMPTION; medium; Jordan to correct] `guards` ships OFF: the on arm moves the realm hash
+    and switches on an unmeasured side effect (the guards enter the obligee witness channel and the larder draw),
+    so IN-60's EXIT reads on `build_realm(0, guards=True)` until a position flips the default as its own declared
+    mover. Revert: the default is `True` and the realm hashes and 1-/2-season pins are re-recorded.
+
+    `goals` seeds `goals.yaml`'s organization goals (`seed_goals`, v9 IN-68). `False` is the CONTROL
+    ARM (`harness/decision_spread.py --control`): the same realm with no goal minted, committed to or
+    stanced. The shipped file carries rows (FA-05, FA-06), so the arms differ.
+
+    `goals_complete` (v9 FA-06) is the COMPLETENESS REFUSAL's switch, `True` by default: the world that
+    seats a faction head or a body member with no goal row refuses, naming it (`goals_missing`). A test
+    that plants a deliberately partial goals file passes `False`; nothing else does. Ignored when
+    `goals` is `False` (the control arm seeds nothing and asks for nothing).
+
+    `cap` limits the cast for a fast run; `None` seats every case. The cap is a PARAMETER and never
+    a hidden default -- a run that quietly seated twenty people while reporting on a hundred and
+    forty-three would be the confounded arm `CLAUDE.md` §0.1 pt 1 exists to refuse.
+
+    `from_roster` reads `engine/season/npcs.yaml` for each person's institution, home, want and
+    the SUBJECT of their tie. That file is the AUTHORITY on those four fields once it exists.
+    `False` forces the derivation and is what `tools/export_npc_roster.py` calls to regenerate --
+    the one caller that must not read the file it is about to write.
+
+    ⚠ "THE MATCHERS ARE NOT CONSULTED AT RUNTIME" IS WHAT THE FIRST CUT OF THIS DOCSTRING SAID
+    AND IT WAS NOT TRUE. `institution_of` runs over EVERY case on every build, roster or not,
+    because the institution index the `institution` tie-rule pools over is built from the cases;
+    and `concerns_of` runs for any row whose `concerns` cell is blank. What the roster actually
+    buys is that a row it HAS FILLED is never re-derived -- which is the guarantee that matters
+    (a hand correction survives) and is narrower than the sentence it replaces.
+
+    ⚠ THE ROSTER IS READ, NOT MERELY SHIPPED. `04 §A.2:124` binds `data/` to RAISE on a
+    declared-but-unread row and `01_AXIOMS.md` ID-13 calls such a thing *"a mechanism that does not
+    exist, wearing a schema's clothes"*. A roster the loop did not open would be exactly that, and
+    the tree has deleted two rosters on that criterion already (`rosters.yaml:69-73`).
+    """
+    geo, ven = _load(GEOGRAPHY), _load(VENUES)
+    w = World(seed, DEFAULT_FIXTURES if fixtures is None else fixtures)
+    if not cast_attributes:
+        # The control arm holds no drawn sheet at all: the in-play mint (`loop/census.py::_individuate`) reads the same
+        # range, so a person individuated mid-season would otherwise hold one (B01a terminal critique, finding 6).
+        w.fixtures = w.fixtures.sweep("generated_attribute_range", None)
+
+    # -- the canonical layers -------------------------------------------------
+    realm = "r_valoria"
+    w.rungs[realm] = Rung(realm, "realm")
+    # THE ANCHOR INDEX (`resolve_anchor`'s one input), filled at each mint site below -- the only
+    # places the key that tells a kind's rungs apart is in hand: the realm is the one (`true`), a
+    # duchy is its faction's, a territory and a settlement are their geography codes.
+    anchors: dict = {}
+    _index_anchor(w, anchors, True, realm)
+
+    # ⚠⚠ **THE TIER THESE 17 ROWS BELONG TO IS `territory`, NOT `province`, AND THAT IS A RATIFIED
+    # RULING THIS MODULE WAS ON THE WRONG SIDE OF.** `systems/settlements/reference/scale_hierarchy_v1.md`
+    # — **Status: RATIFIED, direct Jordan ruling 2026-07-13** — states the ladder verbatim:
+    #
+    #     "People in one place comprise settlements comprise territories comprise provinces
+    #      comprise duchies comprise country."
+    #
+    # A TERRITORY IS THE FIXED UNIT HOLDING MULTIPLE SETTLEMENTS, which is exactly what each of
+    # geography's 17 rows is (`settlements: [S-001, ...]`). Its `provinces:` key and `# PROVINCES
+    # (17)` banner are the label the ruling superseded — and the `T` PREFIX ON EVERY ID WAS RIGHT ALL
+    # ALONG. `references/world_initial_state.yaml` (retired at plan position `29d-ii`; open it with
+    # `git show fd321c81:references/world_initial_state.yaml`, `:41`) calls the same rows *"the 16
+    # territory ids"*, so the two canon files disagreed on the noun and the ruling settles it. §6 of
+    # that document lists the propagation as *"tracked, not yet executed … nothing below needs
+    # further Jordan input, it needs authoring"*, which is why the stale label survived to here.
+    #
+    # ⚠⚠ **AND A PROVINCE IS NOT A RUNG AT ALL.** §2: *"Provinces are only formed if the same
+    # faction holds the constituent territories … a province is an emergent aggregation that exists
+    # only while its constituent territories share a common faction holder."* So it is a QUERY, never
+    # a rung this builds — `queries/world_q.provinces_of`. That is the §22 shape arrived at from the
+    # other direction: an aggregate that cannot go stale because there is nothing to initialise.
+    # `contain_ascends` permits `territory -> duchy` directly (checked: the parent need only be
+    # strictly above), so the ladder skipping a conditional tier is legal by construction.
+    #
+    # **THREE DUCHIES, NOT TWO.** The ruling carries PP-726's duchy tier unchanged: *"3 duchies,
+    # unchanged ownership: Almud/Valorsmark, Baralta/Hafenmark, Vaynard/Varfell."* A first writing of
+    # this block built two and reasoned that *"the Crown has no duchy — the King governs the realm
+    # directly"*, which canon contradicts outright: the Crown's duchy is **Valorsmark**, and Almud
+    # holds the realm seat AS WELL, which §5.3 makes the point of him — *"the rulers of a nation are
+    # an exception in that they are able to influence duchies/provinces/territories/settlements
+    # outside their direct chain of control."*
+    #
+    # ⚠ THE TENSION OVER VARFELL IS RECORDED RATHER THAN SMOOTHED. `faction_politics_v30.md:246`
+    # frames Vaynard as *"first among the Jarls, not a monarch"*; tier-1 `worldbuilding_v30.md:25`
+    # says *"Duke of Varfell"*. The rung is a place on a containment ladder and asserts nothing about
+    # how the Jarls choose him.
+    duchy_of: dict = {}
+    for fac_name, duchy_name in (("Valorsmark", "Valorsmark"), ("Hafenmark", "Hafenmark"),
+                                 ("Varfell", "Varfell")):
+        did = f"duchy_{_slug(duchy_name)}"
+        w.rungs[did] = Rung(did, "duchy")
+        w.add_tenure(Tenure(f"t_{did}_in", did, realm, "contain", 0))
+        duchy_of[fac_name] = did
+        _index_anchor(w, anchors, fac_name, did)
+
+    for tid, terr in geo["provinces"].items():          # geography's stale key; the rows are territories
+        rid = territory_rung_id(tid)                    # one owner: data/rosters.py
+        w.rungs[rid] = Rung(rid, "territory")
+        _index_anchor(w, anchors, tid, rid)
+        # CR-86: the geography's `faction: Crown` is Valorsmark's alias; `resolve_faction` is the one owner of
+        # alias -> canonical, so the Crown's territories still hang off its duchy. `Uncontrolled` -> "".
+        holder = cast.resolve_faction(terr.get("faction")) or ""
+        # ⚠ A FOREIGN TERRITORY GETS NO PARENT, AND THAT IS THE POINT RATHER THAN A GAP. Schoenland
+        # is on the faction roster and is FOREIGN — `rosters.yaml` records it as not
+        # player-eligible, holding its territory and granting or refusing Altonian naval passage —
+        # so a `contain` edge into `r_valoria` would assert it is part of the realm. It is a root
+        # rung instead, which keeps it out of `descendants(realm)` and therefore out of the
+        # realm's `sovereign_fraction`, where counting it would be a canon error wearing a number.
+        # `references/world_initial_state.yaml` (retired at `29d-ii`; `git show
+        # fd321c81:references/world_initial_state.yaml`, `:44`) made the same cut from the other side:
+        # it carried 16 territories and deliberately omitted T16, Schoenland's.
+        if holder == "Schoenland":
+            continue
+        # The Church holds one territory and is not a duchy; an unheld territory has no duchy
+        # either. Both hang off the realm, which the ladder permits.
+        w.add_tenure(Tenure(f"t_{rid}_in", rid, duchy_of.get(holder, realm), "contain", 0))
+    for sid, s in geo["settlements"].items():
+        rid = f"set_{_slug(sid)}"
+        w.rungs[rid] = Rung(rid, "settlement")
+        _index_anchor(w, anchors, sid, rid)
+        w.add_tenure(Tenure(f"t_{rid}_in", rid, territory_rung_id(s["territory"]), "contain", 0))
+
+    # -- THE FOREIGN FACTIONS' PLACES (v9 IN-36; `foreign=True` only) ----------------------------------
+    # A ROOT territory with no `contain` edge into `r_valoria` -- T16's own shape (above), so it is outside
+    # `descendants(realm)`, outside `endings_reached`'s victory selector (every territory under a `realm` rung)
+    # and outside `census`'s `uncontrolled_in_realm`. It is a `territory`, NEVER a `realm`: a foreign realm rung
+    # would join both of those silently. THAT ABSENCE IS THE BORDER; crossing it is a `march`'s arrival leg
+    # (`loop/effects_migration.py::_relocate`), not a path authored here. One settlement under the root is where
+    # the faction's persons live. No quarter, building, site or garrison: nothing here is marched on, and the
+    # persons are named individuals who do not eat from a larder (`ED-IN-0255`).
+    foreign_home: dict = {}
+    for fac_name, place in sorted((FOREIGN_CAST if foreign else {}).items()):
+        trid, srid = territory_rung_id(place["territory"]["code"]), f"set_{_slug(place['settlement']['code'])}"
+        w.rungs[trid] = Rung(trid, "territory")
+        _index_anchor(w, anchors, place["territory"]["code"], trid)
+        w.rungs[srid] = Rung(srid, "settlement")
+        _index_anchor(w, anchors, place["settlement"]["code"], srid)
+        w.add_tenure(Tenure(f"t_{srid}_in", srid, trid, "contain", 0))
+        foreign_home[fac_name] = (trid, srid)
+    # A faction named in `foreign_cast` that this world did not build does not exist in it: no Proposition, no
+    # member, no seat, no goal. `absent` is that set, and every site below that reads `FACTIONS` filters by it.
+    absent = frozenset(FOREIGN_CAST) - frozenset(foreign_home)
+
+    # -- the authored layers: quarters, then buildings -------------------------
+    # ⚠ A SETTLEMENT WITH NO VENUE ROW WOULD SILENTLY HOLD NOBODY, so an unknown type RAISES
+    # rather than defaulting. `venues.yaml` covers all seven types the geography uses and a
+    # validator asserts that; this is the second reading of the same rule, at the call site.
+    buildings_at: dict = defaultdict(list)
+    for sid, s in geo["settlements"].items():
+        kind = s["type"]
+        if kind not in ven["buildings"]:
+            raise KeyError(
+                f"settlement {sid} is type {kind!r} and `venues.yaml` has no buildings for it. "
+                f"A settlement with no building holds nobody and would vanish from the world "
+                f"silently. Known: {sorted(ven['buildings'])}")
+        srid = f"set_{_slug(sid)}"
+        for q in ven["quarters"][kind]:
+            qid = f"q_{_slug(sid)}_{q}"
+            w.rungs[qid] = Rung(qid, "community")
+            w.add_tenure(Tenure(f"t_{qid}_in", qid, srid, "contain", 0))
+        for b in ven["buildings"][kind]:
+            bid = f"b_{_slug(sid)}_{b['slug']}"
+            w.rungs[bid] = Rung(bid, "hearth")
+            # THE FIFTH ANCHOR FORM (v10 IN-45): a building is `{hearth: "<geography code>:<slug>"}`, so a
+            # `venues.yaml: planned_works` row names a building the way a seat names a settlement — by what
+            # tells it apart, never by a built rung id. One more line at a mint site, no branch in the resolver.
+            _index_anchor(w, anchors, f"{sid}:{b['slug']}", bid)
+            w.add_tenure(Tenure(f"t_{bid}_in", bid, f"q_{_slug(sid)}_{b['quarter']}",
+                                "contain", 0))
+            buildings_at[sid].append((bid, b))
+
+    # -- a site per producing kind, at the settlement ---------------------------
+    # Same rule `build_at` uses, one layer up: `work` needs somewhere to be done, and a world whose
+    # sites are all in one place is the co-location defect again by another route.
+    for sid in geo["settlements"]:
+        for k in sorted(SITE_YIELD):
+            if SITE_YIELD[k]:
+                s_id = f"s_{_slug(sid)}_{k}"
+                w.sites[s_id] = Site(s_id, f"set_{_slug(sid)}", k,
+                                     condition=w.fixtures.get("condition_scale"))
+
+    # -- a dwelling per hearth, at the hearth (`ED-SE-0055`, plan position `24d-i`) -----------
+    # `ED-SE-0051`'s `capacity(w, rung)` counts *"the rung's dwelling Sites"*, and the
+    # buildings above are `hearth` RUNGS, not Sites. Jordan chose the literal reading on
+    # 2026-09-25: a `dwelling` site kind, one per hearth rung. The id and starting condition are
+    # built the way the producing Sites' are, one layer down: `s_` + the place's key + `_` + kind,
+    # at full `condition_scale`. Iterating `buildings_at` covers every hearth this function builds,
+    # because the building loop above is its only `hearth` constructor.
+    # ⚠ NOTHING READS A DWELLING YET. `capacity` (`24d-ii`) lands with `19c`'s `migrate`. It ships
+    # at the control arm, `wear_per_season.dwelling: 0` and an empty `band_floors.dwelling`
+    # (`rosters.yaml`, which says why), so it wears nothing and crosses no band. It still emits
+    # one `condition.worn` per dwelling per season, because MATTER writes every Site.
+    # ⚠ `governance_spine.build` mints dwellings by the same rule. `corpus_run.build_at`,
+    # `probes.tiny_world` and `headless.build_world` do not.
+    # `engine/season/tests/test_governance_build.py`, section `24d-i`, records why.
+    for sid in geo["settlements"]:
+        for bid, b in buildings_at[sid]:
+            s_id = f"s_{_slug(sid)}_{b['slug']}_dwelling"
+            w.sites[s_id] = Site(s_id, bid, "dwelling",
+                                 condition=w.fixtures.get("condition_scale"))
+
+    # -- a garrison per settlement, at the settlement (M4, `ED-IN-0279` clause (a)) --------------
+    # Jordan ruled WHAT garrison strength is (2026-09-28, M4 planning round 2): a Site's own
+    # `condition` field, `world_q.fortification_of`'s reader. One per settlement is the ruling's
+    # own scope -- there is no second garrison-bearing rung kind to seed against, and `condition
+    # scale` matches every other Site's starting value, so a fresh realm starts every settlement
+    # equally fortified: since `20-iv` every settlement march target here is a `WALLS` field.
+    # ⚠ READ ON THE BATTLE PATH SINCE PLAN POSITION `20-iv` (`H-150`, `hole_register.yaml`).
+    # `seam/wrappers/mass_battle.py` reads `world_q.fortification_of` at the march target and hands
+    # it, with the target's territory, to `terrain.py::terrain_row_for_territory`: a garrison at
+    # any positive condition makes the field `WALLS`, A.9's defender DR bonus. A garrison worn to
+    # condition 0 is no wall. (This comment said "nothing consults this yet" until then.)
+    # ⚠ `governance_spine.build`, `corpus_run.build_at`, `probes.tiny_world` and
+    # `headless.build_world` do NOT seed a garrison -- the dwelling precedent immediately above is
+    # `build_realm`-and-`governance_spine` together; H-150's own docstring and `fortification_of`'s
+    # both name only `harness/populated.py`'s build step 11, and widening past that is a separate
+    # decision, not this one.
+    for sid in geo["settlements"]:
+        s_id = f"s_{_slug(sid)}_garrison"
+        w.sites[s_id] = Site(s_id, f"set_{_slug(sid)}", "garrison",
+                             condition=w.fixtures.get("condition_scale"))
+
+    # -- the cast ---------------------------------------------------------------
+    # ⚠ **NPC CASES ARE PEOPLE; ARC CASES ARE NOT, AND THE FIRST CUT SEATED ALL 143.** The NPC
+    # lane names persons -- "Carin Vedel", "Inge Baralta", "Orm". The ARC lane names SITUATIONS --
+    # "The Unworked Clause", "Vaynard's Wager", "The Penitent Duke". Seating 143 put 97 events in
+    # buildings as though they were people, and their "surnames" (`Know`, `War`, `Economy`,
+    # `Threshold`) then polluted every name match. Jordan asked for *"as many persons as there are
+    # NPC season loops"*, and that count is **46**.
+    #
+    # ⚠ THE ARC CASES ARE NOT DISCARDED, THEY ARE NOT PEOPLE. What an arc is in this world -- a
+    # situation a cast is subject to -- has no carrier yet, and inventing one here would be
+    # authoring a mechanism inside a harness. Named as absent rather than faked.
+    cases = list(load_cases("NPC"))
+    if cap is not None:
+        cases = cases[:cap]
+    roster = None
+    if from_roster:
+        try:
+            roster = {r["case"]: r for r in (_load(ROSTER).get("npcs") or [])}
+        except FileNotFoundError:
+            roster = None
+    seats = ven["seats"]
+    # The unaffiliated are spread over every `serves: []` building on the map, in settlement order,
+    # so an unaffiliated life is somewhere ordinary and NOT all in one place.
+    commons = [(sid, bid) for sid in geo["settlements"]
+               for bid, b in buildings_at[sid] if not b["serves"]]
+    n_common = 0
+    for case in cases:
+        cid = str(case.get("id"))
+        pid = f"p_{_slug(cid)}"
+        row = (roster or {}).get(cid)
+        inst = row.get("institution") if row else institution_of(case)
+        home = None
+        if row and row.get("home") in w.rungs:
+            home = row["home"]
+        if home is None and inst is not None:
+            sid = seats.get(inst)
+            if sid is not None:
+                for bid, b in buildings_at[sid]:
+                    if inst in b["serves"]:
+                        home = bid
+                        break
+        if home is None:
+            home = commons[n_common % len(commons)][1]
+            n_common += 1
+        # v9 IN-36: a person of a faction this world seated FOREIGN lives at that faction's settlement, over
+        # `npcs.yaml`'s home (the roster's home is the realm's derivation, which seats NPC-011 at Lowenskyst's
+        # barracks and the two others in Feldmark's commons -- the empire's persons are not in the realm).
+        # `foreign_home` is empty unless `foreign=True`, so the control arm reads no faction here.
+        if foreign_home:
+            fac_here = cast.faction_of(cast.row(cid) or {})[0]
+            if fac_here in foreign_home:
+                home = foreign_home[fac_here][1]
+        # Plan position `19c`: they LIVE where they are -- the `reside` edge a `move` leaves behind and
+        # only a `migrate` re-homes (`loop/effects.py::_eff_migrate`); `place_person` mints it beside the
+        # first `contain`, so `world_q.residence_of` reads one edge and never falls back.
+        place_person(w, pid, str(case.get("name") or cid), home)
+        # ⚠⚠ AUTHORED, NOT DRAWN — AND THE DRAW REMAINS AS THE NAMED FALLBACK IT ALWAYS WAS.
+        # `references/npc_registry.yaml` carries a weighted conviction vector for all 46 of these
+        # people, cited to canon, using only canonical names (the fifteen pursuits since IN-08's
+        # cells commit; the figures below are the thirteen-name roster's, as measured then -- the
+        # names they quote are retired, the contrast stands). Nothing that executes had ever
+        # opened it, so `seed_pursuits` — a `blake2b(seed, case_id, pid)` draw — was supplying
+        # the one quantity that orders every candidate in these worlds. The contrast is not
+        # cosmetic: Carin Vedel (NPC-088), whose case is hand-copying SUPPRESSED texts, is authored
+        # `Liberty 0.60 / Equity 0.20` and was drawn `Authority 0.90` — the precise opposite of her
+        # own case. Almud Almqvist, the King, is authored `Virtue 0.45 / Authority 0.30` and was
+        # drawn `Faith 0.90`.
+        #
+        # ⚠ THE FALLBACK IS NOT DEAD CODE, AND `ID-13` IS WHY THE DISTINCTION MATTERS. It is
+        # unreachable on TODAY'S data (46 of 46 rows carry convictions, measured) and it is reached
+        # the moment a case is added to the corpus ahead of its registry row — which is the normal
+        # authoring order. A `None` here would seed a person with no convictions at all, and a
+        # person with no convictions scores every candidate identically, which is `uniform`, the
+        # sweep's CONTROL arm, shipped silently as a default.
+        #
+        # ⚠ `seed_pursuits` IS STILL THE SINGLE OWNER OF THE DRAW (§8) and is still called
+        # rather than copied. What changed is which source is consulted first.
+        authored = cast.pursuits_of(cast.row(cid) or {})
+        w.persons[pid].pursuits = authored or seed_pursuits(seed, cid, pid)
+        # IN-08 H10: the religious affiliations, from the same row and NEVER drawn -- a drawn creed
+        # is an invented one. No fallback: a row without `affiliations:` holds none (`{}`).
+        w.persons[pid].conviction = cast.conviction_of(cast.row(cid) or {})
+        # v9 PC-06 K-3 (`H-85`): Thread Sensitivity, from the same row's `ts:`, set here and NEVER
+        # written in play. No fallback and no draw: a row with no authored value leaves `None`, and a
+        # `None` cannot pass `thread_read`'s gate (`Person.thread_sensitivity`'s comment).
+        w.persons[pid].thread_sensitivity = cast.thread_sensitivity_of(cast.row(cid) or {})
+        # v10 CR-20: the ten attributes, from the same row's `stats:` (legacy spellings resolve through the
+        # registry), set here and NEVER written in play. Absent where unauthored: `{}` is no key, and
+        # `faculty` then falls to `pool_default`.
+        if cast_attributes:
+            w.persons[pid].attributes = {**generated_attributes(w.world_seed, pid, w.fixtures.get("generated_attribute_range")),
+                                         **cast.attributes_of(cast.row(cid) or {})}
+        # v10 CR-30: DESCENT, from the same row's `heritage:`, set here and NEVER written in play. No fallback and
+        # no draw: a row that states none leaves `None`, which `epistemic._term_marks` deposits as `()`.
+        w.persons[pid].heritage = cast.heritage_of(cast.row(cid) or {})
+        # v10 CR-33: the row's `lifepath:` EXPANDED into the capability keys its template names, each at
+        # `pool_default` (the grant changes no POOL; it makes the key one `train` can raise, and it LOWERS the
+        # obstacle the holder presents: a held key at 2 is opposed at 2.0 and halved to 1.0, an unheld person at
+        # `obstacle_default` 2 -- unmeasured in magnitude), set here and
+        # written in play only by `train`. The lifepath id is stored on NO Person: `capability_of` reads it and
+        # drops it. No fallback and no draw: a row with no `lifepath:`, or one whose template names no key, leaves
+        # `capability` as it was, `{}`.
+        held = cast.capability_of(cast.row(cid) or {}, w.fixtures.get("pool_default"))
+        if held:
+            w.persons[pid].capability = {**held, **w.persons[pid].capability}
+
+    # -- WHO BELONGS TO WHAT ----------------------------------------------------
+    #
+    # §14.2, verbatim: **"A faction IS a Proposition plus its `commit` edges."** §15's cardinality
+    # table annotates `commit : Person -> Proposition, many` as **"this is faction membership"**.
+    # The edge was ruled, typed and built; nothing had ever used it for membership, so in every
+    # world this repo has constructed the only way to belong to a faction was to hold an office in
+    # one — no laity, no rank and file, and `role_templates` keyed on a population that could not
+    # exist. `members`, `leaders`, `footprint` and `density` (`queries/world_q.py`) read these
+    # edges and return nothing without them.
+    #
+    # ⚠⚠ **MOOD IS `OUGHT` AND THE SUBJECT IS A PERSON — RULED by Jordan, 2026-09-13: *"Faction
+    # creed as an ought: sure. Weight it by their loyalty tho."*** This block previously wrote
+    # `HOLDS` and registered the OUGHT as a live design choice it declined to take. The choice was
+    # put to Jordan and taken; what follows is the reason the narrowing existed and how the ruling
+    # clears it, because the hazard it named is real and is what constrains the SHAPE of the creed.
+    #
+    # Q4 (`world_q.questions_for`) raises a standing question from every live `commit` to an OUGHT,
+    # with `referents = (prop.subject,)`, and `decision/options.py`'s clause 3 is
+    # `subject in referents(q)` — so a Proposition's subject becomes the SUBJECT OF EVERY CANDIDATE
+    # it generates. Subject the creed on a faction NAME and every faction's members deliberate
+    # each season about a string naming no entity in the world. That is the defect `build_at`
+    # demonstrated from the other side: its one Proposition pointed at a RUNG and produced **0 of
+    # 4,870 acts naming another person** (ED-IN-0210 Ruling 1 — *"verbs invoke mechanisms or
+    # interactions between a character and another entity/character. they are not fiats."*).
+    #
+    # So the creed is subjected on **the faction's authored leader**, a person id, and its
+    # CONTENT is the `role_template` — `scope` carries the template name and `value` the faction's.
+    # Neither is invented: the leader comes from `rosters.yaml: faction_leaders.by_faction` and the
+    # template from `role_templates.by_faction`, both transcribed from `faction_canon_v30.md` §4.
+    # This is what the earlier note meant by refusing to invent a creed *"in the one carrier §14.1
+    # makes IMMUTABLE"*: the Proposition names canon's own two handles and no authored sentence.
+    #
+    # ⚠ **A FACTION WITH NO LEADER AND NO TEMPLATE KEEPS `HOLDS`, AND THAT IS THE SILENCE SHOWING
+    # THROUGH RATHER THAN A FALLBACK.** `Guilds` and `Schoenland` have neither in canon, so there
+    # is no creed to utter and nothing to be loyal to — `cast.loyalty` returns `None` for both for
+    # the same reason. `members()` reads a `commit` edge's KIND and OBJECT, never the Proposition's
+    # mood, so membership in those two is unaffected; what they lack is a standing question.
+    for fac_name in sorted(FACTIONS):
+        if fac_name in absent:            # v9 IN-36: a foreign faction this world did not seat has no creed to utter
+            continue
+        fid = faction_prop_id(fac_name)   # one owner: data/rosters.py
+        lead_cid = cast.faction_leader(fac_name)
+        lead_pid = f"p_{_slug(lead_cid)}" if lead_cid else None
+        template = ROLE_TEMPLATE_OF.get(fac_name)
+        if template is None or lead_pid not in w.persons:
+            w.propositions[fid] = Proposition(fid, "HOLDS", fac_name,
+                                              "is a faction of this world", True, 0)
+            continue
+        w.propositions[fid] = Proposition(fid, "OUGHT", lead_pid, "carries the creed of",
+                                          fac_name, 0, scope=template)
+    unplaced: list = []
+    for case in cases:
+        cid = str(case.get("id"))
+        pid = f"p_{_slug(cid)}"
+        r = cast.row(cid)
+        fac_name, sub, raw = cast.faction_of(r) if r else (None, None, "")
+        if fac_name in absent:
+            # v9 IN-36: a person of a foreign faction this world did not seat is UNPLACED, exactly as the
+            # cell read before the faction was on the roster (`Altonia`, raw) -- counted, not dropped.
+            fac_name = None
+        if fac_name is None:
+            # ⭐ **UNPLACED IS A CORRECT OUTCOME, NOT A PENDING ONE — RULED by Jordan,
+            # 2026-09-14: *"Not everyone has to belong to a faction."*** This was carried as an
+            # open question for two days; it is closed, and it is closed in the direction that
+            # makes the branch below RIGHT rather than tolerated. Six of the 46 name an
+            # affiliation on no roster — `Altonia` (3), `Independent (Southernmost Wardens)` (2),
+            # the dissolved Virke syndicate (1) — and they stay unaffiliated.
+            # (v9 IN-36: `Altonia` has since joined the roster as a FOREIGN faction, so in a
+            # `foreign=True` world its three are placed; in the shipped control arm they are
+            # unplaced exactly as above, via `absent`. The other three stay off the roster.)
+            #
+            # ⚠ SO DO NOT "FIX" THIS BY GROWING THE ROSTER. The earlier reading pointed the other
+            # way, on Jordan's precedent at `state/carriers.py`'s Office check (*"Wouldn't it just
+            # imply that we don't have enough factions?"*), and a later session could reasonably
+            # re-derive that and add three faction names. It would be wrong: that precedent is
+            # about an OFFICE, which is a seat inside a faction and cannot exist without one. A
+            # PERSON is not a seat. An unaffiliated person is a person, and a world where everyone
+            # carries a banner has no room for someone who does not.
+            #
+            # They are still COUNTED rather than dropped — `census` reports `_unplaced_cast`, and
+            # `test_the_populated_world_is_not_everybody_in_one_room` asserts
+            # `placed + unplaced == persons`, so a person lost to a resolution bug is still
+            # distinguishable from a person who belongs to nobody.
+            unplaced.append((cid, raw))
+            continue
+        fid = faction_prop_id(fac_name)   # one owner: data/rosters.py
+        w.add_tenure(Tenure(f"t_{pid}_member", pid, fid, "commit", 0))
+        # -- AND WHAT THAT MEMBERSHIP IS WORTH TO THEM --------------------------
+        #
+        # ⭐ Jordan, 2026-09-13: *"The faction one is factored by loyalty."* The `commit` edge says
+        # a person belongs; it cannot say how much they mean it, and a faction whose members all
+        # pull equally hard is not a political game. So the creed's referent — the leader — gets a
+        # STANCE ROW weighted by `cast.loyalty`, and `queries/person_q.py::stance_toward` is what
+        # reads it: `valence * weight` summed over the rows naming a candidate's subject, added to
+        # every candidate the creed's own Q4 question generates.
+        #
+        # ⚠⚠ **THE LOYALTY DOES NOT GO ON `Tenure.degree`, WHICH IS WHERE IT OBVIOUSLY BELONGS AND
+        # WHERE IT WOULD HAVE DIED.** `degree` is declared on `Tenure` (`state/carriers.py:58`) and
+        # MEASURED 2026-09-14 by grep across `engine/season/`: **nothing reads it.** Every `.degree`
+        # in the tree is an `Event`'s or a contest's. Writing loyalty there would reproduce exactly
+        # the defect the field two lines above it was DELETED for — `carriers.py:48` on `conferrer`:
+        # *"It occurred EXACTLY ONCE in the whole tracer — this line — and reached no reader, which
+        # by `ID-13` is not a weak field but one that does not exist, wearing a schema's clothes."*
+        # A stance row has a reader, so the loyalty changes what people do; on `degree` it would
+        # have changed a repr.
+        #
+        # ⚠ **NO ROW WHERE THERE IS NO CREED, AND NO ROW AT ZERO WEIGHT EITHER.** `stance_from_loyalty`
+        # returns `None` for the two template-less factions and `(+1, 0)` at exact indifference,
+        # which `stance_toward` sums to the same nothing as an absent row — so an indifferent member
+        # is not quietly given a push. The row is appended for it anyway, because `census` counting
+        # rows is how a zero-weight member stays visible.
+        # ⚠⚠ **THIS TABLE IS THE BASELINE, NOT A REGRESSION CHECK — RULED by Jordan, 2026-09-14:
+        # *"whatever you run for the first time IS the baseline since this is new stuff."*** No
+        # suite in this tree encodes what a populated world SHOULD do, so none of them could have
+        # validated the creed; what validates it is the control arm, and what a first honest run
+        # buys is a recorded starting point for the next change to move against. It is deliberately
+        # NOT pinned as a golden — a number nobody has argued is correct would be a guard that has
+        # not earned its existence (`CLAUDE.md` §0.1 pt 5). The PINNED claims are structural and
+        # live in `test_the_populated_world_is_not_everybody_in_one_room`.
+        #
+        # ⚠ **AND THE ANSWER DEPENDS ON A FIXTURE NOBODY HAS RULED ON.** Control arm = the same
+        # build with `cast.faction_leader`
+        # stubbed to `None`, so every faction falls back to `HOLDS` and no stance row is
+        # written; two seasons each.
+        #
+        #     creed  rule    seed   acts   other   self   not-a-person   told_by
+        #     ----------------------------------------------------------------------
+        #     no     first      0    831     175    300            356         7
+        #     yes    first      0    814     157    345            312         8
+        #     no     first      1    804     183    337            284         8
+        #     yes    first      1    800     176    327            297         7
+        #     no     all        0    747     272    161            314        10
+        #     yes    all        0    665     400    116            149         0
+        #     no     all        1    737     270    148            319         8
+        #     yes    all        1    653     385    128            140        14
+        #
+        # Under `all` the creed does what it was ruled for: acts naming ANOTHER PERSON rise 47%
+        # (seed 0) and 43% (seed 1). Under `first`, the incumbent default, they move the WRONG WAY
+        # on both seeds, -10% and -4%. BOTH signs replicate, so each is the creed and not the seed
+        # — which is what makes the inversion a finding rather than a wobble.
+        #
+        # THE CAUSE IS A STRING PREFIX, AND IT IS `H-54`'s ROW, NOT A NEW ONE. `question_sources`
+        # puts `need` LAST, so a creed never displaces a date or a landed claim — but the person's
+        # OWN want is also a `need`, and `questions_for` breaks a within-source tie on `q.id`.
+        # `q:need:fac_…` sorts before `q:need:prop_…`, so under `first` **every member's faction
+        # creed silently outranks their personal ambition, decided by the spelling of an id.**
+        # That is exactly the undeclared tiebreak `W-D` measured (*"WHICH QUESTION A PERSON ANSWERS
+        # IS SETTLED BY LEXICOGRAPHIC ORDER OVER HASHES"*) and `H-54` owns. Disposition follows
+        # `W-D`'s, which is precedent on the identical shape (`CLAUDE.md` §0 step 4): DECLARED and
+        # LEFT ALONE — renaming these ids to win the sort would be gaming an undeclared tiebreak,
+        # and flipping `question_aggregation_rule` is a design edit to a hole whose own roster note
+        # says `first` is kept *"as the sweep's control — not because it is argued for"*.
+        # `needs_jordan` is FALSE for the same reason it is on `W-D`.
+        #
+        # ⚠ AND ONE NUMBER THE CONTROL KILLED: at seed 0 alone, `told_by` fell 10 -> 0 under the
+        # creed, which reads as the second-hand channel collapsing. At seed 1 it ROSE, 8 -> 14. It
+        # is noise at this corpus size and is NOT reported as an effect (§0.1 pt 4).
+        prop = w.propositions[fid]
+        st = cast.stance_from_loyalty(cast.loyalty(r, fac_name))
+        if st is not None and str(prop.mood).upper() == "OUGHT":
+            # v11 CR-87 (ED-IN-0335; `Fixtures loyalty_toward_creed`, H-256): THE ROW NAMES THE CREED, NEVER ITS
+            # HEAD PERSON, AND NO LOWER THAN THE MEMBER BAND -- a disloyal member's -4 toward the King was a betrayal
+            # with no series of events behind it. `False` is the revert: the row toward `prop.subject`, unbounded.
+            if w.fixtures.get("loyalty_toward_creed"):
+                w.persons[pid].stance.append((fid, *cast.loyalty_in_band(st)))
+            else:
+                w.persons[pid].stance.append((prop.subject, st[0], st[1]))
+    # Reported by `census`, never read by the loop — the same treatment `_tie_census` gets.
+    w._unplaced_cast = unplaced
+
+    # -- WHAT EACH FACTION HOLDS ------------------------------------------------
+    #
+    # §14.2's closing note is both the licence and the warning: *"A Proposition may be a `hold`
+    # subject and is never destroyed, so a memberless faction leaves territory held by a banner
+    # nobody carries."* That is how canon's holdings attach at all — `geography_v30.md`'s
+    # starting-control table names an owner per PROVINCE and never a person, so the holder has to
+    # be the faction, and a faction IS a Proposition. The declared defect is §54's, not repaired
+    # here.
+    #
+    # ⚠ `Uncontrolled` WRITES NO EDGE, AND THAT IS THE MECHANISM WORKING. It is the geography's own
+    # value for a province nobody holds; `cast.resolve_faction` returns `None` for it, so the
+    # province lands in `sovereign_fraction`'s `undetermined_count` instead of being quietly
+    # assigned to somebody. An unheld province is a fact about the world and a thing to play for.
+    #
+    # ⚠⚠ **ITEM 16, 2026-09-17: THE HOLDER IS THE FACTION'S HEAD, A PERSON, AND THE SENTENCE ABOVE
+    # IS SUPERSEDED RATHER THAN DELETED.** §14.2's note is still true about the CARRIER (a
+    # Proposition may be a `hold` subject); it was read as a licence and it is a description of a
+    # defect. MEASURED on `build_realm(0)` before the change: `hold` Tenures were
+    # `{('person', 'Office'): 19, ('faction', 'Rung'): 16}` and `in_holdings` -- *a `hold` whose
+    # object is a RUNG* -- was **false for every person over every rung in the world**, so a seat
+    # declaring `revocation: "holdings"` refused every revocation forever while looking exactly
+    # like a working precondition. `World._refuse_bad_hold` now raises on the old shape
+    # (`rosters.yaml: hold_subject_kinds`), so this is not a preference: the old line no longer
+    # loads.
+    #
+    # ⚠ **THE LEADER IS `cast.faction_leader`, THE EXISTING OWNER, AND NO SECOND MAPPING IS MINTED
+    # HERE.** The same handle the creed above is subjected on (`rosters.yaml:
+    # faction_leaders.by_faction`, transcribed from `faction_canon_v30.md` §4) decides who holds
+    # the faction's provinces, so "who heads this faction" has one answer in this file rather than
+    # two.
+    #
+    # ⚠ **AND A FACTION WITH NO AUTHORED HEAD HOLDS NOTHING — THE SILENCE SHOWS THROUGH, AS IT
+    # ALREADY DOES FOR THE CREED.** `Guilds` and `Schoenland` have no `leader:` in canon, which is
+    # why `members()` gives them no standing question either. MEASURED: of the 16 provinces held,
+    # **15 re-home to a person and 1 (Schoenland's) does not**, so one province becomes unheld.
+    # That is the same reading `Uncontrolled` already gets one comment up — an unheld province is a
+    # fact about the world and a thing to play for — and inventing a holder for it would put a
+    # person canon does not name in charge of a territory. Counted, not swallowed: the census
+    # reports it below.
+    unheld_for_want_of_a_head: list = []
+    for tid, terr in geo["provinces"].items():
+        held_by = cast.resolve_faction(terr.get("faction"))
+        if held_by is None:
+            continue
+        lead_cid = cast.faction_leader(held_by)
+        lead_pid = f"p_{_slug(lead_cid)}" if lead_cid else None
+        if lead_pid is None or lead_pid not in w.persons:
+            unheld_for_want_of_a_head.append((territory_rung_id(tid), held_by))
+            continue
+        w.add_tenure(Tenure(f"t_hold_{territory_rung_id(tid)}", lead_pid, territory_rung_id(tid), "hold", 0))
+    # v9 IN-36: and a foreign faction holds its own root territory, by its head -- the same `hold` a realm
+    # territory's holder has, so `holder_faction_of` reads the empire's settlement as the empire's (a `march`
+    # INTO it is opposed, and a seat there can `seize` what it holds). No head, no hold: the silence shows.
+    for fac_name, (trid, _srid) in sorted(foreign_home.items()):
+        lead_cid = cast.faction_leader(fac_name)
+        if lead_cid and f"p_{_slug(lead_cid)}" in w.persons:
+            w.add_tenure(Tenure(f"t_hold_{trid}", f"p_{_slug(lead_cid)}", trid, "hold", 0))
+    # Reported by `census`, never read by the loop — the same treatment `_tie_census` gets.
+    w._unheld_for_want_of_a_head = unheld_for_want_of_a_head
+
+    # -- WHO GOVERNS: OFFICES AND TITLES ----------------------------------------
+    #
+    # ⭐ RULED by Jordan, 2026-09-13: *"a faction is not just comprised of people but also offices
+    # and titles."* Membership above is the people; this is the other two. Until now a populated
+    # world held **zero offices** — `leaders()` returned nothing for every faction, `remit:`
+    # eligibility matched nobody, and the whole governance surface was reachable in principle and
+    # empty in fact.
+    #
+    # ⚠ **BUILT FROM `references/npc_registry.yaml`'s `role`, NOT FROM THE PROSE TABLES, AND THAT
+    # CHOICE IS WHAT MAKES IT SAFE.** An adversarial pass found `faction_politics_v30.md` §1.2c/
+    # §1.3c and `npc_behavior_v30.md` §2.16/§2.17 disagreeing about Inner Circle membership BY
+    # HALF — four against two for Hafenmark, five against two for Varfell, with two survivors given
+    # different Conviction and Resonant-Style values. ⭐ Jordan ruled it the same day: *"NPC
+    # behaviour supersedes faction politics"* (recorded at `rosters.yaml`'s precedence block as
+    # tier 2a). MEASURED: the registry already matches the superseding document on every contested
+    # cell, so reading `role` per person builds to the ruling and never touches the contested
+    # prose.
+    #
+    # ⚠ `body` IS `None` FOR ALL BUT THE THREE AUTHORED OVERLAYS, AND THAT IS HONEST RATHER THAN
+    # LAZY. §11 makes `rung?` optional and `office_bodies` carries a faction's TOP organs only —
+    # `Ministries` is one row by the ruling at `rosters.yaml`'s `office_bodies` note, the four Cardinals are there and
+    # the four Dicasteries under them are not, and Hafenmark's Committees and Varfell's Councils
+    # are absent entirely. MEASURED: only 10 of 25 canon-named seats can construct with a body.
+    # An office with a declared FACTION and no body is lawful (`office_faction(None, declared)`)
+    # and says exactly what is known: who they answer to, not which organ they sit in. Expanding
+    # `office_bodies` is a data edit and is the next unit, not this one.
+    #
+    # ⚠ THE THREE OVERLAYS WIN WHERE THEY EXIST. `cases/exercises/{NPC-008,NPC-033,NPC-038}.yaml`
+    # carry an authored `office:` block — post, body-or-faction, and a `remit:` read from the
+    # case's own nouns with the reasoning attached. They are the tree's own worked examples of how
+    # an office is authored, so they are read rather than overridden, and their `body`/`faction` is
+    # taken as-is so a derived faction cannot be forced to disagree with the constructor.
+    #
+    # ⚠ EVERY OTHER OFFICE CARRIES `remit_acts: []`, WHICH IS A DECLARED ABSENCE. Canon states no
+    # per-post remit, and the five remit acts are a CLOSED set whose members gate verbs — inventing
+    # one would silently hand somebody an authority nobody granted. An empty remit is lawful and
+    # grants nothing.
+    # ⚠⚠ **AMENDED 2026-09-18: THE SEATING BELOW NOW FILLS AN EMPTY REMIT FROM
+    # `rosters.yaml: remit_default`, WHICH IS THE THING THIS PARAGRAPH REFUSES TO DO.** The refusal
+    # is correct AS CANON and is not overturned — Jordan asked for a generic remit explicitly and
+    # only *"for testing purposes for now"*, so the tree hands out an authority nobody granted, ON
+    # PURPOSE, and says so in three places rather than letting it look canonical. The default is
+    # transparently wrong (every office gets every act), which is what stops it reading as design.
+    # This paragraph stays because it states the standard the default is an exception to, and the
+    # per-POST remits that replace it must meet it.
+    overlays = _rescales_once()   # was `from .corpus_run import RESCALES` (an instrument); `boot/` owns the overlay now
+    seated, no_post, occupations, proposed = 0, [], [], []
+    # `offices.yaml` row id -> the Office id that stands for it (matched below, or minted after the
+    # loop), and the loop-built offices no row matches. Both reported by `_office_census`.
+    authored: dict = {}
+    unauthored: list = []
+    for case in cases:
+        cid = str(case.get("id"))
+        pid = f"p_{_slug(cid)}"
+        r = cast.row(cid)
+        if r is None:
+            continue
+        fac_name, _sub, _raw = cast.faction_of(r)
+        if fac_name is None or fac_name in absent:
+            continue                          # unplaced above; an office needs a faction (§11)
+        over = (overlays.get(cid) or {}).get("office") or {}
+        title = cast.title_of(r)
+        governs = title_domain(title) if title else None
+        # ⚠⚠ **AN OFFICE IS A SEAT, NOT AN OCCUPATION, AND THE FIRST CUT OF THIS BLOCK CONFLATED
+        # THEM.** It gave every placed person an Office named after their registry `role`, which
+        # made `leaders(w, faction) == members(w, faction)` for every faction — everybody a
+        # leader, the word meaning nothing, and no seat scarce enough to be worth competing for.
+        # §11 is the corrective: an Office carries `conferral`, `revocation`, `establishment[]` and
+        # `upkeep`. A copyist and a hedge-school teacher have none of those; they have work.
+        #
+        # THE DISCRIMINATOR IS AUTHORED, NOT INFERRED. `references/npc_registry.yaml` packs a
+        # SUB-ORGANIZATION into its `faction` cell — `Crown (Inner Circle)`, `Hafenmark (Inner
+        # Council)`, `Varfell (Jarl Council)`, `Crown (Ministry)`, `Crown (Royal Family)` — and an
+        # occupation carries none. So: a sub-organization, a title on the governance ladder, or an
+        # authored `office:` overlay. Anything else is a life, and the registry still records what
+        # they do.
+        #
+        # ⚠ `Royal Family` SEATS ONE, AND THAT IS THE MARGINAL CALL SAID OUT LOUD. A lineage is not
+        # an organ, but the three rows it covers are the Heir Apparent, the Widow Regent and a
+        # Princess married into Altonia — succession seats, which is the one thing a `hold` on a
+        # realm-scale office is for. Recorded rather than silently included.
+        if not (over or governs or _sub):
+            occupations.append(cid)
+            continue
+        # A TITLED POST IS THE BARE TITLE, so `title_domain` resolves and `Office.__post_init__`
+        # sets `scope_rung` to the rung it governs. `role` carries the same fact as prose
+        # ("Duke (Varfell Leader)"), which that lookup cannot match.
+        post = str(over.get("post") or (title if governs else r.get("role") or "")).strip()
+        if not post:
+            no_post.append(cid)
+            continue
+        # ⚠ THE SUB-ORGANIZATION BECOMES THE `body` WHERE IT NAMES ONE, AND THE GAIN IS THE
+        # CONSTRUCTOR'S CROSS-CHECK, NOT THE FIELD. With a body, `office_faction` DERIVES the
+        # faction and refuses a body/faction mismatch; with `body=None` the faction is taken on the
+        # caller's word. So a Crown person whose row said `Hafenmark (Inner Council)` now raises
+        # instead of seating quietly. EXACT MATCH, not substring: `Inner Circle / Löwenritter
+        # Liaison` (NPC-035) and `dual-loyalty: Crown Inner Circle agent…` (NPC-034) resolve to
+        # nothing and keep `body=None`, which is honest — each names two allegiances and canon has
+        # no organ for either shape.
+        body = over.get("body") if over else (_sub if _sub in BODY_FACTION else None)
+        # ⚠ `offices.yaml`'S OVERLAY (plan position `8a`, `13d-i` item 5, then `13d-iii`). The seat
+        # this loop builds is MATCHED to its authored row by `holder` case id, and the row's
+        # `rung` (resolved -- `resolve_anchor`), `remit_acts`, `conferral` and `revocation` are laid
+        # on it; the loop's own `post`, `body` and `faction` stand (a post normalisation is a
+        # separate unit -- `rosters.yaml: remit_default`'s note). Before `13d-iii` this overlaid
+        # the two bases only: 21 of the 24 seats it builds carried NO rung (`H-163` limit 1, a
+        # titled holder's `governs` was the one rule that gave one), so a holder's purview was
+        # empty and `requisition`/`issue`/`open_case` refused on `authority`.
+        # A case may name MORE than one row (NPC-020 holds two): match on `post` first, the one
+        # field both this loop and `offices.yaml` author independently. `offices.yaml`'s `post` is
+        # a NORMALISED spelling for three rows (`03` §A.15 rows 5, 14, 17 -- a live registry post
+        # carrying a parenthetical condition or a co-title, e.g. "Queen (Widow Regent if Almud
+        # eliminated)" against the authored `Queen`), so a holder with exactly ONE row is matched
+        # on the case id alone rather than left unmatched by a spelling this fold does not correct.
+        _off_candidates = OFFICES_BY_HOLDER.get(cid, ())
+        if len(_off_candidates) == 1:
+            _off_row = _off_candidates[0]
+        else:
+            _off_row = next((cand for cand in _off_candidates if cand.get("post") == post), None)
+        oid = _seat_id(_off_row, cid)
+        if _off_row is not None:
+            rung = seat_anchor(w, anchors, _off_row)
+            # `held` is what this seat would have had without the overlay: the acts `offices.yaml:
+            # meta: remit_unruled` names survive it (`authored_remit`), the rest is the row's.
+            remit = authored_remit(_off_row, remit_or_default(over.get("remit")))
+            authored[_off_row["id"]] = oid
+        elif governs is not None:
+            # A TITLED holder with no authored row would be seated rungless, silently -- the one
+            # derivation that used to give it a rung is gone with the second mechanism it was.
+            raise Unspecified(
+                f"{cid} holds the title {title!r} and `offices.yaml` has no row for the seat",
+                "offices.yaml -- seats",
+                needs="a row naming this holder, so the seat has an anchor",
+                law="a titled seat sits at the rung its title governs (r2 03 §A.8); no row, no rung")
+        else:
+            # THE DECLARED EXCEPTION: a seat the registry derives and no row authors (NPC-084's
+            # `guild leader`, measured). It has no anchor to resolve and invents none.
+            rung, remit = None, remit_or_default(over.get("remit"))
+            unauthored.append(oid)
+        w.offices[oid] = Office(
+            oid, post, rung, remit,
+            scope_rung=rung,
+            body=body,
+            faction=(over.get("faction") if over else None) or (None if body else fac_name),
+            conferral=(_off_row or {}).get("conferral"),
+            revocation=(_off_row or {}).get("revocation"),
+        )
+        w.add_tenure(Tenure(f"t_{oid}_hold", pid, oid, "hold", 0))
+        seated += 1
+        # ⚠ A PROPOSED SEAT IS SEATED AND COUNTED AS PROPOSED. The registry marks 35 rows
+        # `canonical` and 11 `proposed`, and the two council members that EXCEED
+        # `npc_behavior_v30.md` §2.16/§2.17's two-per-council — the ruling's superseding
+        # document — are exactly two of the proposed ones (NPC-081, NPC-082, whose `#4` /
+        # `#5` seat numbers YAML ate as comments). Dropping them would discard authored
+        # work; hiding the distinction would let a proposal read as canon a session later.
+        if str(r.get("status")) != "canonical":
+            proposed.append(cid)
+    # -- THE AUTHORED SEATS NO LOOP-BUILT SEAT STANDS FOR: MINTED FROM THE ROW ALONE ---------------
+    # (`13d-iii`.) The loop seats a person from the registry; it never saw these holders as seated
+    # (measured: six of `offices.yaml`'s 29 rows -- the King's second seat and five people the
+    # registry gives no seat). The row IS the seat -- id, post, body/faction, rung, remit, bases --
+    # and its holder takes it with a `hold`. A row's holder must be a person the cast built (a seat
+    # nobody can sit in would be a ghost in `leaders`), and a minted seat grants exactly its
+    # authored remit: it held nothing before, so nothing is "kept" (`authored_remit`).
+    minted: list = []
+    # v9 IN-36: and the foreign seats of the factions this world seated (`offices.yaml: foreign_seats`).
+    seat_rows = tuple(OFFICES_SEATS) + tuple(r for r in FOREIGN_SEATS if r["faction"] in foreign_home)
+    for row in seat_rows:
+        if row["id"] in authored:
+            continue
+        pid = f"p_{_slug(row['holder'])}"
+        if pid not in w.persons and cap is not None:
+            continue                  # a deliberately partial cast: the per-case loop skips its absent too
+        if pid not in w.persons:
+            raise Unspecified(
+                f"{row['id']} names the holder {row['holder']!r}, who is not in the cast this "
+                f"realm built", "offices.yaml -- seats",
+                needs="a holder from the built cast (a `cap` that drops the cast drops the seat)",
+                law="r2 03 §A.14 -- the holder is a case id in the cast")
+        # a person the cast built may still have no registry row (the per-case loop above skips
+        # `r is None` for the same reason), and the seat's `proposed` status is read off that row
+        holder_row = cast.row(row["holder"])
+        if holder_row is None:
+            raise Unspecified(
+                f"{row['id']} names the holder {row['holder']!r}, who is in the cast this realm "
+                f"built but has no `npc_registry.yaml` row", "offices.yaml -- seats",
+                needs="a holder with a registry row, so the seat's canonical/proposed status is known",
+                law="r2 03 §A.14 -- the holder is a case id in the cast; the registry row is what "
+                    "says whether the seat is canon or proposed")
+        rung = seat_anchor(w, anchors, row)
+        if row["id"] in w.offices:
+            # a MINTED seat is one no loop-built seat stands for, so its id must be fresh: the
+            # assignment below would otherwise REPLACE the seat already standing under it, and its
+            # holder's `hold` would then name a different office than the one he sat in
+            raise Forbidden(
+                f"the minted seat {row['id']!r} names an id a seat already stands under "
+                f"({w.offices[row['id']].post!r})", "offices.yaml -- seats",
+                needs="a seat id no other seat in the realm carries",
+                law="one seat per id -- a minted row that reuses an id overwrites the seat it "
+                    "names without a sound")
+        w.offices[row["id"]] = Office(
+            row["id"], row["post"], rung, authored_remit(row), scope_rung=rung,
+            body=row.get("body"), faction=row.get("faction"),
+            conferral=row.get("conferral"), revocation=row.get("revocation"))
+        w.add_tenure(Tenure(f"t_{row['id']}_hold", pid, row["id"], "hold", 0))
+        authored[row["id"]] = row["id"]
+        minted.append(row["id"])
+        seated += 1
+        if str(holder_row.get("status")) != "canonical":
+            proposed.append(row["holder"])
+    # -- A SEAT'S OBLIGEES SERVE IT (`obligees:`; `04 §B.7` call 2: a council is one seat and many
+    # holders, through `oblige`). Opened with no term: `term?` is lawful null, and a seat seeded at
+    # world-gen has no opening act to declare one (`_eff_oblige` is the act that does).
+    for row in seat_rows:
+        seat = authored.get(row["id"])
+        if seat is None:
+            continue                  # a `cap` dropped this seat's holder, so the seat does not exist
+        holder_pid = f"p_{_slug(row['holder'])}"
+        for ob in row.get("obligees") or ():
+            opid = f"p_{_slug(ob)}"
+            if opid == holder_pid:
+                # checked BEFORE the `cap` skip below: a seat's holder does not serve his own seat,
+                # whether or not a partial cast kept him (`_req_oblige` clause 3's rule)
+                raise Forbidden(
+                    f"{row['id']} lists its own holder {row['holder']!r} among its obligees",
+                    "offices.yaml -- seats",
+                    needs="obligees other than the seat's holder",
+                    law="`_req_oblige` clause 3 -- the occupant is not his own seat's obligee")
+            if opid not in w.persons and cap is not None:
+                continue
+            if opid not in w.persons:
+                raise Unspecified(
+                    f"{row['id']} names the obligee {ob!r}, who is not in the cast this realm "
+                    f"built", "offices.yaml -- seats",
+                    needs="an obligee from the built cast", law="r2 03 §A.14 -- `obligees` are case ids")
+            w.add_tenure(Tenure(f"t_{seat}_oblige_{_slug(ob)}", opid, seat, "oblige", 0))
+    # The index `resolve_anchor` read, kept on the world so a test can resolve a form no row uses
+    # (`{settlement: ...}`) and so a mutated resolver is observable. The loop never reads it.
+    w._anchors = anchors
+    w._office_census = {"seated": seated, "no_post": no_post,
+                        "occupations": occupations, "proposed_seats": proposed,
+                        "authored": authored, "minted": minted, "unauthored": unauthored}
+
+    # -- WHAT EACH PERSON WANTS, AND WHO IT CONCERNS ----------------------------
+    #
+    # ⚠ WITHOUT THIS THE WORLD BUILDS AND NOBODY ACTS -- measured: 143 persons, 77 buildings,
+    # **0 acts by 0 actors** over a full season. `questions_for` raises a question from a Date
+    # coming due (Q1), a claim the person holds (Q2), a band (Q3), or a Proposition they have a
+    # live `commit` to (Q4). A world seeded with none of those gives every person an empty option
+    # set, and an empty option set is not a quiet world -- it is no world at all.
+    #
+    # ⚠ THE WANT IS THE CASE'S OWN, NOT A CONSTANT. `wants_of` reads the first `core` row of
+    # `season_requires`; the corpus declares 427 of them. The first cut of this module gave all
+    # 143 people the string "a standing ambition", which is `build_at`'s identical-people defect
+    # rebuilt at scale.
+    #
+    # ⚠ THE SUBJECT IS A PERSON, WHICH IS RULED RATHER THAN CHOSEN. `ED-IN-0210` Ruling 1
+    # (Jordan, 2026-09-10): *"verbs invoke mechanisms or interactions between a character and
+    # another entity/character. they are not fiats."* `world_q`'s Q4 emits `(prop.subject,)` as
+    # the referent, so a person-subject Proposition is the whole difference between an act about a
+    # granary and an act about somebody. `corpus_run.build_at` points its one Proposition at a
+    # RUNG, and 0 of its 4,870 acts name another person.
+    #
+    # THE TIE, IN PRIORITY ORDER, EACH WEAKER THAN THE LAST AND EACH SAID OUT LOUD:
+    #   1. a person another case NAMES in `who_acts` -- 11 real ties, used first;
+    #   2. somebody at the seat of an INSTITUTION the case names -- the 583 role entries;
+    #   3. a person under the same roof;
+    #   4. a person in the next inhabited building.
+    # Nobody is tied to a stranger by a draw. A draw here would read as a relationship and be one
+    # only by accident, which is the scripting drift `CLAUDE.md` §10 names.
+    by_home: dict = defaultdict(list)
+    for t in w.tenures:
+        if t.kind == "contain" and t.live and t.subject in w.persons:
+            by_home[t.object].append(t.subject)
+    homes = sorted(by_home)
+    home_of = {pid: home for home, mates in by_home.items() for pid in mates}
+    by_name = surname_index(cases)
+    at_institution: dict = defaultdict(list)
+    for case in cases:
+        # ROSTER WINS HERE TOO, as at seating -- and SPELLED THE SAME WAY, which the first cut was
+        # not: `or institution_of(case)` re-derives on a FALSY roster value, and `npcs.yaml` ships
+        # `institution: null` and documents it as *"null for an unaffiliated life"*. That spelling
+        # honoured a hand-set null at seating and silently overrode it here.
+        _row = (roster or {}).get(str(case.get("id")))
+        inst = _row.get("institution") if _row else institution_of(case)
+        if inst:
+            at_institution[inst].append(f"p_{_slug(str(case.get('id')))}")
+
+    ties = Counter()
+    tie_of: dict = {}
+    for n, case in enumerate(cases):
+        cid = str(case.get("id"))
+        pid = f"p_{_slug(cid)}"
+        row = (roster or {}).get(cid)
+        # ⚠ THE ROSTER'S `want` APPLIES ON EVERY BRANCH, AND THE FIRST CUT APPLIED IT ON ONE.
+        # It read `row["want"]` inside the roster-tie branch alone, so a hand-corrected want was
+        # DISCARDED for any row whose `concerns` was blank -- the file being the authority on one
+        # field and not on the next, which is exactly the silent-drift the roster exists to end.
+        # (It is a no-op on today's data, because every roster `want` was exported from
+        # `wants_of`. It stops being one the first time somebody edits a row, which is the point.)
+        want = str(row["want"]) if row and row.get("want") else wants_of(case)
+        about = why = None
+        if row and row.get("concerns"):
+            cand = f"p_{_slug(str(row['concerns']))}"
+            if cand in w.persons and cand != pid:
+                about, why = cand, "roster"
+        if about is None:
+            named, inst = concerns_of(case, by_name)
+            if named is not None:
+                cand = f"p_{_slug(named)}"
+                if cand in w.persons and cand != pid:
+                    about, why = cand, "named"
+            # ⚠ ONE LOOP, NOT THREE NEAR-COPIES — and they HAD drifted before this was folded
+            # (2026-09-15): the institution branch carried an extra `q in w.persons` guard the
+            # other two lacked, which is the copies starting to disagree. The guard is now applied
+            # to every tier, which is what each branch meant; a change to the pick rule (the
+            # modulo, or a fifth tier) is one edit.
+            nxt = homes[(homes.index(home_of[pid]) + 1) % len(homes)] if homes else None
+            tiers = ((at_institution.get(inst, []) if inst is not None else [], "institution"),
+                     (by_home.get(home_of.get(pid, ""), []), "roof"),
+                     (by_home.get(nxt, []), "neighbour"))
+            for candidates, tag in tiers:
+                if about is not None:
+                    break
+                pool = [q for q in candidates if q != pid and q in w.persons]
+                if pool:
+                    about, why = pool[n % len(pool)], tag
+        # ⚠ ONE WRITE, AFTER THE WHOLE CHAIN. The roster branch used to carry its own copy of the
+        # Proposition and the `commit` Tenure and then `continue`, so the two paths were free to
+        # disagree about what a tie WRITES -- and they did, on `want`, above. A person with no tie
+        # at all is the one case that writes nothing: an OUGHT about nobody is not a motive.
+        if about is None:
+            continue
+        ties[why] += 1
+        tie_of[cid] = why
+        prop_id = f"prop_{_slug(cid)}"
+        w.propositions[prop_id] = Proposition(prop_id, "OUGHT", about, want, True, 0)
+        w.add_tenure(Tenure(f"t_{prop_id}_commit", pid, prop_id, "commit", 0))
+    w._tie_census = dict(ties)   # reported by `census`, never read by the loop
+    # WHICH RULE CHOSE EACH TIE, per case. Read by `tools/export_npc_roster.py` to fill the
+    # roster's `tie` column -- provenance a human needs to tell a real tie (`named`) from a
+    # filler one (`neighbour`) before correcting a row -- and by its `--check` round-trip. The
+    # loop never reads it; the exporter is why it is not a field nothing reads.
+    w._tie_of = tie_of
+
+    # -- WHAT EACH ORGANIZATION IS FOR: THE GOALS (v9 IN-68, A-32) ---------------------------------
+    # AFTER the creed (its members are the faction goal's), the offices (a body's and a seat's holders)
+    # and the ties (so a goal Proposition cannot enter a tie's pools), and before the cohorts, which
+    # commit to nothing. World-gen only: a person committed here stays committed through a succession
+    # unless a `release` ends it, while a `seat_holders` referent follows the seat (IN-67). `goals=False`
+    # builds the control arm; the shipped `goals.yaml` carries rows (FA-05, FA-06), so the arms differ.
+    # v9 FA-06: the world that seats an organization no row is about REFUSES (`goals_complete`).
+    w._goal_census = seed_goals(
+        w, tuple(g for g in goals_data.goals() if goals_data.org_faction(g.org_kind, g.org) not in absent)
+        if goals else (), w._office_census["authored"],
+        {f"p_{_slug(str(c.get('id')))}": str(c.get("id")) for c in cases}, partial=cap is not None,
+        complete=goals and goals_complete)
+
+    # -- THE POPULATION: ONE AUTHORED COHORT PER POPULATED RUNG (plan position `24f`) ------------
+    #
+    # ⭐ `ED-IN-0255` (Jordan, 2026-09-18): subsistence is *"a territorial issue"*, carried by *"NPC
+    # synecdoches that just represent the overall population affected"*, and *"lords and guild
+    # members"* do not worry about it. So the larder draw feeds only cohorts
+    # (`world_q.subsistence_draw`), and THIS is where the realm gets its cohorts: `cohorts.yaml`,
+    # authored rows read once here (`ED-WR-0011` option A -- no clock and no formula mints one).
+    #
+    # ⚠ LAST, AFTER THE WHOLE CASE-DERIVED CAST, AND THAT ORDER IS WHAT KEEPS IT A SECOND SEED
+    # RATHER THAN AN EDIT TO THE FIRST. The module docstring's *"the cast comes from the case"*
+    # governs everything above unchanged: every tie, membership, holding and office has been
+    # decided before a cohort exists, so none of them can land on one (the `roof`/`neighbour`
+    # tiers pool over `contain` edges, and would otherwise tie an NPC's want to a crowd), and
+    # `tools/export_npc_roster.py`'s derivation is untouched.
+    # ⚠ AND AFTER THE DWELLINGS, because the ceiling reads `capacity`, which counts them.
+    names = {f"set_{_slug(sid)}": str(s.get("name") or sid)
+             for sid, s in geo["settlements"].items()}
+    seat_cohorts(w, cohort_rows(), names, temperament_rows())
+    # v9 IN-36 (IN-60's content): AFTER the population cohorts, so a guard never lands on a population row's
+    # id or capacity read, and AFTER the seats, whose holders it is posted beside. `guards=False` seats none.
+    if guards:
+        seat_guards(w, guard_rows(), w._office_census["authored"], partial=cap is not None)
+    # v10 IN-45 (M5, option (B)): THE WORKS THE SETTING PLANNED, minted LAST so no tie, creed, seat, goal or
+    # cohort above can have read them -- the build up to here is byte-identical to the realm without this
+    # block, which is the control (an empty `planned_works:` reads the old hash). `venues.yaml: planned_works`.
+    mint_planned_works(w, ven.get("planned_works") or [], anchors, w._office_census["authored"],
+                       partial=cap is not None)
+    # -- WHO KNOWS WHOM AT THE START (CR-81, `ED-IN-0318`): last, once every person, seat and membership exists.
+    # `acquaintances=False` is the control arm: the realm before the ruling, every hash unmoved.
+    if acquaintances:
+        w._acquaintances = seed_acquaintances(w, acquaintance_pairs(w, seat_rows, w._office_census["authored"]))
+    # v11 CP-T03-03: THE ARMS A RUNG IS BUILT HOLDING (`rosters.yaml: arms_at_build`), the very last write so the build
+    # up to here is byte-identical to the realm without it. The shipped roster is empty (the inventory is Jordan's).
+    seed_arms(w)
+    # B01a.01: EVERY PERSON HOLDS A DRAWN SHEET (`state/carriers.py::generated_attributes`, one keyed draw per person and
+    # attribute on `Fixtures generated_attribute_range`): the cohorts, guards and foreign cast seated after the case loop
+    # take theirs under anything they already hold, key by key. The very last write, after the arms, so the build up to
+    # here is the earlier one; `cast_attributes=False` writes nothing.
+    if cast_attributes:
+        span = w.fixtures.get("generated_attribute_range")
+        for p in w.persons.values():
+            p.attributes = {**generated_attributes(w.world_seed, p.id, span), **(p.attributes or {})}
+    return w

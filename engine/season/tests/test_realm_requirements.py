@@ -25,7 +25,7 @@ import pytest
 
 from ..data.fixtures import DEFAULT_FIXTURES, Fixtures
 from ..harness import decision_spread as DS
-from ..harness import populated
+from ..boot.realm import build_realm
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries.world_q import occasioned_by
@@ -37,7 +37,7 @@ SEEDS = (0, 1, 2)
 
 def _play(seed: int, fx: Fixtures | None = None) -> tuple[World, SeasonDriver]:
     """The shipped realm at `seed` (built on `fx`, None: the shipped fixtures), played one season."""
-    w = populated.build_realm(seed, fixtures=fx)
+    w = build_realm(seed, fixtures=fx)
     d = SeasonDriver(w)
     ch = P.chooser(w, verbs=resolvable_verbs())
     d.season(ch, question=None, contest_max_depth=w.fixtures.get("contest_max_depth"))
@@ -115,7 +115,7 @@ def test_r02_control_one_seed_played_twice_is_one_sequence():
 def _not_the_top(seed: int, fx: Fixtures | None = None) -> tuple[int, int]:
     """(deliberations in which the sampler's pick was not the leading candidate, deliberations with a strict
     top), one season through `decision_spread.play_season` (the chooser watched, never steered)."""
-    sp = DS.play_season(populated.build_realm(seed, fixtures=fx), 1)["split"]
+    sp = DS.play_season(build_realm(seed, fixtures=fx), 1)["split"]
     return sp["strict_outvoted"], sp["strict"]
 
 

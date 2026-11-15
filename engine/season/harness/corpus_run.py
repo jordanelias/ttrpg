@@ -56,7 +56,7 @@ from ..data.rosters import (GRADED_INQUIRIES, PURSUIT_AXES, RUNG_KINDS, VERB_CAP
                             load_yaml, refuse_a_titled_post_off_its_rung)
 from ..data.verbs import VERB_TABLE, align, celled_verbs
 from ..decision import make_chooser
-from ..gaps import Forbidden, InstrumentDefect, NoProducer, ShapeGap, Unowned, Unspecified
+from ..gaps import Forbidden, InstrumentDefect, NoProducer, ShapeGap, Unspecified
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..loop.effects import EFFECTS
 from ..queries.world_q import RESIDE_KIND, questions_for
@@ -67,7 +67,8 @@ from ..state.world import World
 from ..data import files
 from . import probes as P
 from . import run_cases as R
-from .run_cases import seed_pursuits, wants_of
+from ..boot.realm import _check_office, _exercise_docs, _rescales_once, seed_pursuits, wants_of   # moved to `boot/` (B03c.01): the builder reads them too
+RESCALES = _rescales_once()   # the one dict the builder reads, read here at import as before the move
 
 # `CLAUDE.md` §0.1 pt 5 / `G1`: declared here with its reason, not a bare literal in a body.
 # [JUSTIFIED: an INSTRUMENT BUDGET, not a rule of the game -- no design document names a season cap. `W6`'s flood is the measurement it is fitted to: the corpus's longest `span_seasons` is 16, and running those costs more than the grading they buy. Lowering it truncates long cases; raising it changes no verdict this instrument reports]
@@ -89,101 +90,6 @@ def endings() -> dict:
 
 
 ENDINGS = endings()
-
-
-def rescales() -> dict:
-    """`W28`. The corpus's `scale:` re-authoring, as an OVERLAY keyed by case id.
-
-    ⚠ AN OVERLAY, NOT AN EDIT TO THE CORPUS, AND THE REASON IS ARCHITECTURAL. 47 of the 57
-    unrepresentable cases live in `engine/season/cases/chain/` — a PREDECESSOR proposal's
-    committed corpus, which this chain reads and does not own. Editing another chain's extraction
-    would destroy the record of what was extracted, and the corpus is evidence. `cases/exercises/`
-    is already the established overlay: per-case files, bound by id, carrying this chain's answers
-    about someone else's rows. One overlay mechanism, not two (§8).
-
-    ⚠ EVERY RE-SCALE CARRIES ITS `why:`, WHICH IS WHAT MAKES IT AUTHORING RATHER THAN INVENTION.
-    The defect being repaired is that `CASE_BRIEF.md`'s schema offered `faction` and `world`, which
-    `rung_kinds` has never had — so the extractors wrote a vocabulary the architecture had already
-    closed. A re-scale is a reading of the case's OWN text; where the text does not say, the case
-    stays unrepresentable, which is the honest answer (§42.2's polarity rule).
-
-    ⚠ AND THERE IS NO CLASSIFIER. 23 of the 47 match none of the institution words the other 24
-    do, so a keyword rule would cover half the corpus and silently mis-scale the rest — the ROUTER
-    `W10` deleted, returning as a corpus tool. Measured before deciding not to build one."""
-    out: dict = {}
-    files_of: dict = {}                   # case id -> the file that authored its re-scale
-    for f, doc in _exercise_docs():
-        sc = doc.get("scale")
-        if doc.get("case") and isinstance(sc, dict):
-            if not sc.get("why"):
-                raise SystemExit(f"{f.name}: a `scale:` re-authoring with no `why:` — the "
-                                 "derivation is what distinguishes this from an invention")
-            _check_office(f.name, sc.get("office"))
-            # REFUSED, NOT OVERWRITTEN: two files naming one `case:` let the LAST silently replace
-            # the first -- the refusal `cast_overlay` makes for a `cast:`, in the same words.
-            if doc["case"] in files_of:
-                raise SystemExit(f"{f.name}: `case: {doc['case']}` is already the case of "
-                                 f"{files_of[doc['case']]}'s `scale:` -- the later file would "
-                                 "silently replace the earlier one")
-            files_of[doc["case"]] = f.name
-            out[doc["case"]] = sc
-    return out
-
-
-def _exercise_docs():
-    """The one directory walk `rescales()` and `cast_overlay()` both read a different top-level
-    key off — `cases/exercises/*.yaml`, "ONE OVERLAY MECHANISM, NOT TWO" (this module's own
-    header). Factored out (methodology close, 2026-09-29, `/simplify` REUSE lens) after the two
-    functions carried this loop byte-for-byte twice, differing only in which key and which type
-    check each reads afterward — a third overlay key (already anticipated: position `17`'s
-    roles/offices) would otherwise have copied it a third time. Yields `(path, doc)` so a caller
-    can still cite the file by name in its own error messages; tolerant of a missing directory
-    (no `sorted(d.glob(...))` on a `d` that doesn't exist)."""
-    d = files.EXERCISES_DIR
-    if not d.is_dir():
-        return
-    for f in sorted(d.glob("*.yaml")):
-        yield f, (load_yaml(f.read_text()) or {})
-
-
-def _check_office(where: str, off) -> None:
-    """`H-99`. An overlay's `office:` block, resolved against canon AT LOAD.
-
-    ⚠ THE THREE AXES JORDAN ASKED FOR, AND THE CHECK IS HERE BECAUSE THE ERROR IS A RE-SCALING
-    ERROR. 47 cases get an office authored by hand; the failure mode at that volume is a body
-    seated in the wrong faction, which nothing downstream would notice — the world would build,
-    the season would run, and a Cardinal would quietly belong to the Crown. `office_faction`
-    refuses the mismatch, and refusing at LOAD means a bad overlay never reaches a world.
-
-    ⚠ IT ALSO REFUSES A REMIT ACT THAT IS NOT IN THE ROSTER, for the same reason `Office` does:
-    a remit is what the office MAY DO, and an unrecognised verb there is a silent no-op."""
-    if off is None:
-        return
-    if not isinstance(off, dict) or not off.get("post"):
-        raise SystemExit(f"{where}: an `office:` block with no `post:`")
-    if not off.get("why"):
-        raise SystemExit(f"{where}: an `office:` with no `why:` — same rule as `scale:`")
-    if not off.get("body") and not off.get("faction"):
-        # ⚠ REQUIRED AT THE OVERLAY, WHERE THE RULING APPLIES. `Office` leaves belonging optional
-        # because a test fixture is not a canon office; a corpus overlay that names neither a
-        # `body` nor a `faction` has simply not answered Jordan's question, and §42.2's polarity
-        # rule makes no evidence a refusal rather than a default.
-        raise SystemExit(f"{where}: an `office:` names neither a `body` nor a `faction`")
-    # ⚠ THE VALIDATOR IS THE CONSTRUCTOR, NOT A SECOND COPY OF ITS RULES (§8). Rev 1 re-checked
-    # the faction and the remit here by hand, and drifted immediately: `Office.__post_init__`
-    # refuses a post that is both a TITLE and a body, and this loader did not, so
-    # `{post: "King", body: "Cardinal of Justice"}` passed the overlay gate and was refused only
-    # later at world-build. Building a throwaway Office means every rule the class enforces --
-    # present and future -- applies at LOAD, before any world exists.
-    try:
-        Office("probe:" + where, str(off["post"]), None,
-                 list(off.get("remit") or []),
-                 body=off.get("body"), faction=off.get("faction"))
-    except (Unspecified, Forbidden, Unowned) as e:
-        raise SystemExit(f"{where}: {e}") from None
-
-
-RESCALES = rescales()
 
 
 def apply_rescale(case: dict) -> dict:

@@ -24,7 +24,7 @@ import pathlib
 
 import pytest
 
-from ..data import cast
+from ..data import cast, files
 from ..data.matrix import matrix_row
 from ..data.requires import OWN_STATE_STEMS, UNKNOWN, WORLD_ONLY_STEMS, binding_of, evaluate
 from ..data.verbs import VERB_TABLE
@@ -219,7 +219,7 @@ def test_k3_e_the_carrier_has_no_matrix_row_and_the_gate_refuses_a_write():
 
 #: The one place the engine assigns the carrier: the world build. A season step that wrote it would
 #: make the gate a thing play can move, which the design forbids.
-_BUILD = pathlib.Path(__file__).resolve().parents[1] / "harness" / "populated.py"
+_BUILD = files.REALM_PY
 
 
 def test_k3_e_no_engine_source_outside_the_world_build_assigns_the_carrier():

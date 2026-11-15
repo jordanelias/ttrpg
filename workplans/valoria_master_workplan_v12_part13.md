@@ -302,7 +302,7 @@ ORDER: execution order is the position table's, not the handle's. Rows `B10.53`,
 - FALSIFIER and CONTROL: "With rows authored, a rival ranks hostile acts on his rival no differently from on a stranger (the stance term does not reach those candidates: then F-CHAR-08's sign defect is in the way and the first lane's `regard_sign` column lands first). Or the build hash moves with no row authored." Control: "(a) No `relations:` key: `build_realm(0).content_hash()` EQUAL."
 - GATE: `PYTHONHASHSEED=0 python -m pytest engine/season/tests/test_relations.py -q` → pass; `python tools/export_npc_roster.py --check` → exit 0; `build_realm(s).content_hash()` at s = 0, 1, 2 → equal to `B10.61`'s; gate (b) on the shipped six rows is read at BA1.
 - HASH MOVERS: none with no row authored; "the content is a declared build-hash mover" (BA1).
-- DEPENDS ON: V12 the first half's `U5a_CHAR_owed_amendments` §4 item (`_bond`) and `02_CHAR_scar_cap_and_regard_unit` Addendum item (`regard_sign`; the falsifier names it); EXISTS-IN-TREE `data/cast.py::attributes_of`, `::STANCE_MAX`, `::stance_from_loyalty`, `queries/person_q.py::regard`; V12 Batch B03c (`boot/realm.py`).
+- DEPENDS ON: V12 the first half's `U5a_CHAR_owed_amendments` §4 item (`_bond`) and `02_CHAR_scar_cap_and_regard_unit` Addendum item (`regard_sign`; the falsifier names it); EXISTS-IN-TREE `data/cast.py::attributes_of`, `::STANCE_MAX`, `::stance_from_loyalty`, `queries/person_q.py::regard`; V12 Batch B03c @544cf5719c620331b70aeda93c1672977b44e9ef (`boot/realm.py`).
 - GLOSSARY: new row *relation ground*: "what another person is to him — kin, oath, service, patronage, rivalry or feud — the ground a stance stands on"; owner `rosters.yaml: relation_grounds`.
 - COST and TIER: edit (roster, loader, seeder); `sonnet`, `high`.
 - LANDS IT: B10's producer; `Item: B10.62`, `[skip ci]`.
@@ -352,7 +352,7 @@ ORDER: execution order is the position table's, not the handle's. Rows `B10.53`,
 - FALSIFIER and CONTROL: "an unmarked person stops forming it" (then the seeding missed a held key). Control: every unmarked person's own-state answers equal to `B10.64`'s for every `self_believed` key (the seeded claim reproduces the field); the executed-act tallies at seeds 0 to 2, one season, equal `B10.64`'s reading.
 - GATE: `PYTHONHASHSEED=0 python -m pytest engine/season/tests/test_self_knowledge.py -q` → pass; the realm hash (`HASH READING`) at seed 0, one season → moved ("the seeded `self:` claims are new ledger rows: the build hash moves once when edit 3 lands and is re-recorded"), tallies equal.
 - HASH MOVERS: "The build hash once when edit 3 seeds the `self:` claims (declared)". B10's re-pin.
-- DEPENDS ON: V12 `B10.64`; V12 Batch B03c (`boot/realm.py::build_realm`, moved there from `harness/populated.py::build_realm`, where the tree holds it today); EXISTS-IN-TREE `Claim` (firsthand), `confidence_default`.
+- DEPENDS ON: V12 `B10.64`; V12 Batch B03c @544cf5719c620331b70aeda93c1672977b44e9ef (`boot/realm.py::build_realm`, moved there from `harness/populated.py::build_realm`, where the tree holds it today); EXISTS-IN-TREE `Claim` (firsthand), `confidence_default`.
 - GLOSSARY: none (the row is `B10.64`'s).
 - COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B10's producer; `Item: B10.65`, `[skip ci]`.

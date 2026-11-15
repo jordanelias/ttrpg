@@ -102,7 +102,7 @@ from ..state.attribution import causing_act
 from . import arc as ARC
 from . import storybar as SB
 from .corpus_run import emits_and_writes_nothing
-from .populated import build_realm
+from ..boot.realm import build_realm
 
 
 # ---------------------------------------------------------------------------------------------

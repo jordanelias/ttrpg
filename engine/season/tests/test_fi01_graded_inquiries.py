@@ -34,6 +34,7 @@ from ..data.verbs import VERB_TABLE
 from ..data.requires import binding_from_act, evaluate
 from ..gaps import Unspecified
 from ..harness import populated as POP
+from ..boot.realm import build_realm
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver, mint_token
 from ..manifest import MODULE_ENTRIES, check_graded_inquiries, resolve as manifest_resolve
@@ -283,7 +284,7 @@ def test_the_realm_grades_inquiries_in_one_season():
     inquiry graded; here the realm's own first season (`build_realm(0)`, seed 0) is run and the log is
     read: a `finding.*` Event carries a degree. A `finding.made` with no degree is a flat-`emits:` inquiry
     (`interview`, `reconstruct`, `thread_read`) and is not counted."""
-    w = POP.build_realm(0)
+    w = build_realm(0)
     POP.run(seasons=1, seed=0, w=w)
     graded = [(e.kind, e.degree) for e in w.log if e.kind.startswith("finding.") and e.degree is not None]
     assert graded, "no inquiry in the realm's first season drew a degree"

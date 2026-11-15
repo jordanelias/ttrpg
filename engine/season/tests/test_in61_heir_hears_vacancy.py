@@ -38,7 +38,7 @@ from ..harness.heir_hears import HeirSpy as _HeirSpy      # the names stay: `tes
 from ..harness.heir_hears import holder as _holder        # imports `_holder` and `_one_season` from here
 from ..harness.heir_hears import one_season as _one_season
 from ..harness.heir_hears import reading as _reading
-from ..harness.populated import build_realm
+from ..boot.realm import build_realm
 from ..loop.driver import SeasonDriver, mint_token
 from ..loop.matter import _die
 from ..queries import world_q

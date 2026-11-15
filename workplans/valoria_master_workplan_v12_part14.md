@@ -108,7 +108,7 @@ EST: 25.3 h for the whole batch, part 2 §1.3's B21 row (57 positions by E-15's 
 - FALSIFIER and CONTROL: "Mutation: `_declared_term` ignoring the office reddens the hand-built gate." Control: "every `term: null` reproduces the pre-item `content_hash` at build and at one and two seasons" (realm seed 0; the source's one-and-two-season arm is the batch gate's, E-2).
 - GATE: `python -m pytest engine/season/tests/test_fa_seat_terms.py -q` → four pass, `test_a_ban_is_scoped_to_the_banning_seats_purview` fails (EXPECTED RED UNTIL B21.02, under `[skip ci]`); the realm content hash (`HASH READING`) of `build_realm(0)` after one season → equal to the batch's base reading (`reading @<sha>`).
 - HASH MOVERS: none (no shipped row carries `term:`).
-- DEPENDS ON: EXISTS-IN-TREE `loop/effects_governance.py::_declared_term`, `::_eff_confer`, `::TERM_KEY`, `loop/predicates.py::_req_confer`, `::office_named_by`, `data/rosters.py::_load_offices`, `::SEAT_ROW_BY_ID`, `queries/world_q.py::vacancies`; V12 Batch B03c (`boot/realm.py`).
+- DEPENDS ON: EXISTS-IN-TREE `loop/effects_governance.py::_declared_term`, `::_eff_confer`, `::TERM_KEY`, `loop/predicates.py::_req_confer`, `::office_named_by`, `data/rosters.py::_load_offices`, `::SEAT_ROW_BY_ID`, `queries/world_q.py::vacancies`; V12 Batch B03c @544cf5719c620331b70aeda93c1672977b44e9ef (`boot/realm.py`).
 - GLOSSARY: none (a seat's *term* is the ordinary word: how long a post is held).
 - NAMES: `harness/populated.py` → `boot/realm.py` (B03c).
 - COST and TIER: small build; `sonnet`, `high` (R3 7b-0).

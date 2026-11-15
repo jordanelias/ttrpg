@@ -22,6 +22,7 @@ import copy
 import pytest
 
 from ..harness import populated as POP
+from ..boot.realm import build_realm
 from ..state.carriers import Tenure
 
 
@@ -63,7 +64,7 @@ def _same(a, b):
 
 @pytest.fixture(scope="module")
 def realm():
-    return POP.build_realm(0)
+    return build_realm(0)
 
 
 def _holder(w):
@@ -201,7 +202,7 @@ def test_j_a_tenure_removed_from_the_very_end_of_the_store(realm):
 def test_k_a_random_walk_of_edits_agrees_with_the_reference_at_every_step():
     import random
     from ..state.carriers import Tenure as T
-    w = POP.build_realm(0)
+    w = build_realm(0)
     rng = random.Random(0)
     owners = [p for p in w.persons.values() if p.tenures]
     for p in owners[:6]:                      # some payloads to edit in place
@@ -259,7 +260,7 @@ def test_k_a_random_walk_of_edits_agrees_with_the_reference_at_every_step():
 
 def test_l_a_field_moved_behind_setattr_is_invisible_to_the_diff_and_loud_at_the_barrier():
     from ..gaps import InstrumentDefect
-    w = POP.build_realm(0)
+    w = build_realm(0)
     w._tenure_snapshot()                       # cut the shadow
     t = _holder(w).tenures[0]
     old = t.__dict__["until"]
@@ -272,7 +273,7 @@ def test_l_a_field_moved_behind_setattr_is_invisible_to_the_diff_and_loud_at_the
 
 
 def test_m_a_clean_realm_passes_the_barrier_check_before_and_after_a_season():
-    w = POP.build_realm(0)
+    w = build_realm(0)
     w._tenure_snapshot()
     w.discard_caches()
     POP.run(1, 0, w=w)

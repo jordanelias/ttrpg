@@ -24,7 +24,7 @@ Each loop asserts it checked something (CLAUDE.md 0.1 pt 2).
 from __future__ import annotations
 
 import pytest
-from ..harness import populated as POP
+from ..boot.realm import build_realm
 from ..queries import cache, world_q
 from ..state.carriers import Tenure
 from ..trace_log import TRACE
@@ -42,7 +42,7 @@ def _rows(name):
 
 
 def test_the_home_index_is_home_of_and_place_of_agrees_with_and_without_it():
-    w = POP.build_realm(0)
+    w = build_realm(0)
     persons = sorted(w.persons)
     # a person with two live `contain` edges: the later one wins in `home_of`, so it must in the index
     a, rung_a, rung_b = persons[0], sorted(w.rungs)[0], sorted(w.rungs)[1]
@@ -61,7 +61,7 @@ def test_the_home_index_is_home_of_and_place_of_agrees_with_and_without_it():
 
 
 def test_the_presence_map_is_presence_per_rung_in_the_same_order():
-    w = POP.build_realm(0)
+    w = build_realm(0)
     index = world_q.presence_map(w)
     assert set(index) == set(w.rungs)
     populated = 0
@@ -72,7 +72,7 @@ def test_the_presence_map_is_presence_per_rung_in_the_same_order():
 
 
 def test_a_tenure_written_between_two_asks_is_seen_only_after_a_discard():
-    w = POP.build_realm(0)
+    w = build_realm(0)
     p = sorted(w.persons)[0]
     before = cache.home_index(w).get(p)
     target = next(r for r in sorted(w.rungs) if r != before)
@@ -84,7 +84,7 @@ def test_a_tenure_written_between_two_asks_is_seen_only_after_a_discard():
 
 
 def test_the_trace_stream_is_the_one_the_scans_wrote():
-    w = POP.build_realm(0)
+    w = build_realm(0)
     p = sorted(w.persons)[0]
     homes = cache.home_index(w)
     n0 = _rows("home_of")

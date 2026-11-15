@@ -16,6 +16,7 @@ import pytest
 
 from engine.season.data.rosters import FACTION_BY_PROP
 from engine.season.harness import populated as POP
+from engine.season.boot.realm import build_realm
 from engine.season.queries import faction_q as FQ
 from engine.season.queries import world_q as Q
 
@@ -24,7 +25,7 @@ REALM = "r_valoria"
 
 @pytest.fixture(scope="module")
 def realm():
-    w = POP.build_realm(0)
+    w = build_realm(0)
     POP.run(1, 0, w=w)
     return w
 

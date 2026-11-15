@@ -16,7 +16,7 @@ number is intentionally not stored (it churns on unrelated edits); provenance is
 The season's settings (the literal keywords of `DEFAULT_FIXTURES = Fixtures(...)` in
 engine/season/data/fixtures.py) are rows too, under module `engine.season.settings`; `--build`
 prints how many it read and skipped, and raises if it read none (B03.14, CI-04). The realm's arms (the
-literal-default parameters of `build_realm` in engine/season/harness/populated.py) are rows under module
+literal-default parameters of `build_realm` in engine/season/boot/realm.py) are rows under module
 `engine.season.realm`, read and counted the same way (B03.15, CI-05).
 
 CLI:
@@ -40,6 +40,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import ci_common  # noqa: E402
 
 ROOT = Path(ci_common.REPO)
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+from engine.season.data import files  # noqa: E402  -- the one owner of the builder's path
 OUT = ROOT / "engine" / "engine_params" / "sim_params.json"
 
 
@@ -285,7 +288,7 @@ def _setting_rows(path=None) -> list:
     return _scan_settings(path)[0]
 
 
-REALM_FILE = ROOT / "engine" / "season" / "harness" / "populated.py"
+REALM_FILE = files.REALM_PY
 REALM_MODULE = "engine.season.realm"
 
 

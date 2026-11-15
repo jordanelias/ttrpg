@@ -84,6 +84,7 @@ try:
     from engine.season.harness import headless as _headless
     from engine.season.harness import invariants as _invariants
     from engine.season.harness import populated as _populated
+    from engine.season.boot.realm import build_realm
     from engine.substrate import stubwire as _stubwire
     _ENGINE_IMPORT_ERROR = None
 except Exception as _exc:  # pragma: no cover - defensive; surfaced via row detail, not raised
@@ -378,7 +379,7 @@ def row_invariant_violations():
     # either, so it is swept too — narrow (2 seeds x 1 season) because it costs ~3.2s a seed
     # against headless's 0.13s, but swept.
     def _pop(seed):
-        w = _populated.build_realm(seed)
+        w = build_realm(seed)
         _populated.run(M1_POP_SEASONS, seed, None, w=w)
         return w
     p = _invariants.sweep(_pop, range(M1_POP_SEEDS))

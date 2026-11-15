@@ -11,7 +11,7 @@ import pytest
 from engine.season.data.matrix import Step, WriteClass
 from engine.season.data.verbs import VERB_TABLE
 from engine.season.gaps import InstrumentDefect
-from engine.season.harness.populated import build_realm
+from engine.season.boot.realm import build_realm
 from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.seam.wrappers import sigma
 from engine.season.state.carriers import Act

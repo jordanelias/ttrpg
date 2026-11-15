@@ -123,7 +123,7 @@ DRAWS = (0, 1, 2, 3)
 
 
 def _small_world(**sweeps):
-    from ..harness.populated import build_realm
+    from ..boot.realm import build_realm
     w = build_realm(SEED, CAP)
     for name, value in sweeps.items():
         w.fixtures = w.fixtures.sweep(name, value)

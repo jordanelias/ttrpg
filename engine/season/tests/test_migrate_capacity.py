@@ -123,12 +123,13 @@ def test_19c_every_builder_houses_every_person_where_he_stands():
     of zero under every rung. Asserted over every builder the season engine ships, with the person
     count `>= 1` so an empty world cannot pass, and residence EQUAL to presence at build: the two
     diverge only when somebody travels."""
-    from ..harness import corpus_run as C, governance_spine as G, headless as HL, populated
+    from ..harness import corpus_run as C, governance_spine as G, headless as HL
+    from ..boot.realm import build_realm
     from ..harness import run_cases as R, scarce
     from ..queries import world_q
     case = next(c for c in R.load_cases("NPC") if str(c.get("scale")) == "person")
     for name, w in (("tiny_world", P.tiny_world()), ("spine", G.build(0)),
-                    ("realm", populated.build_realm(0)), ("headless", HL.build_world(0)),
+                    ("realm", build_realm(0)), ("headless", HL.build_world(0)),
                     ("scarce", scarce.build(0)), ("corpus", C.build_at(case, 0))):
         lives, stands = world_q.residence_of(w), world_q.home_of(w)
         assert len(w.persons) >= 1 and set(lives) == set(w.persons), (name, sorted(w.persons))
@@ -259,9 +260,9 @@ def test_19c_the_throttle_on_the_populated_realm_admits_an_empty_hearth_once():
     EMPTY hearth in another settlement is admitted (capacity 1, nobody living there); a second
     newcomer into the same hearth is refused (one lives there now, one dwelling); and a `move` there
     by the second is admitted and leaves his residence where it was."""
-    from ..harness import populated
+    from ..boot.realm import build_realm
     from ..queries import world_q
-    w, d = _world(lambda: populated.build_realm(0))
+    w, d = _world(lambda: build_realm(0))
     lives = world_q.residence_of(w)
     # ⚠ PLAN POSITION `24f`: THE FIRST TWO INDIVIDUALS, NOT THE FIRST TWO RESIDENTS. The realm now
     # seats one authored cohort per settlement (`cohorts.yaml`), and `cohort_set_s_...` sorts ahead

@@ -29,7 +29,7 @@ import pytest
 
 from ..gaps import Forbidden
 from ..harness.play_surface import dispatching_chooser
-from ..harness.populated import build_realm
+from ..boot.realm import build_realm
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries import world_q
 from ..queries.inputs import FieldOrder

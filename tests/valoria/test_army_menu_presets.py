@@ -20,7 +20,7 @@ import pytest
 from engine.season.harness import army_presets as AP
 from engine.season.harness import military_menu as MM
 from engine.season.harness.play_surface import dispatching_chooser
-from engine.season.harness.populated import build_realm
+from engine.season.boot.realm import build_realm
 from engine.season.manifest.registrar import MODULE_ENTRIES
 from engine.season.queries import world_q
 from engine.season.queries.inputs import ArmyOptionsQuery, ArmyPresetQuery

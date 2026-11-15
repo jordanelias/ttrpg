@@ -28,7 +28,8 @@ from ..data.verbs import VERB_TABLE
 from ..decision import assemble
 from ..decision.options import opening_set
 from ..harness import probes as P
-from ..harness.populated import build_realm, run
+from ..boot.realm import build_realm
+from ..harness.populated import run
 from ..queries import world_q
 from ..state.carriers import Claim, Tenure
 from .test_in10_record_operands import _acts, _resolve

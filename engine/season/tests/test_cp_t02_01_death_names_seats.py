@@ -30,7 +30,7 @@ import pytest
 from ..data.matrix import Step, WriteClass
 from ..gaps import InstrumentDefect
 from ..harness import probes as P
-from ..harness.populated import build_realm
+from ..boot.realm import build_realm
 from ..loop import effects_combat
 from ..loop.driver import SeasonDriver, mint_token
 from ..loop.matter import _die

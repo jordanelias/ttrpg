@@ -22,7 +22,7 @@ from engine.season.decision.sheet import (
 )
 from engine.season.gaps import Forbidden
 from engine.season.harness import headless as HL
-from engine.season.harness import populated as PO
+from engine.season.boot.realm import build_realm
 from engine.season.harness.play_surface import dispatching_chooser
 from engine.season.loop.driver import SeasonDriver, resolvable_verbs
 from engine.season.state.carriers import Claim, Person
@@ -60,7 +60,7 @@ def _counting(pick, seen):
 def test_rem30_development_space_taking_the_ranking_is_the_automated_chooser():
     """At the realm's first person by id and at Carin (`headless`): seated, with the control pick, equal
     hash; and the space was really called with candidates (a seat nobody deliberated for proves nothing)."""
-    for build, seasons in ((lambda: HL.build_world(0), 2), (lambda: PO.build_realm(0), 1)):
+    for build, seasons in ((lambda: HL.build_world(0), 2), (lambda: build_realm(0), 1)):
         off = _run(build(), seasons)
         w = build()
         pid = sorted(w.persons)[0] if len(w.persons) > 3 else "p_carin"

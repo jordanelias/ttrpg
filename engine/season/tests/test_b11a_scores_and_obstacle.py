@@ -21,9 +21,9 @@ import pytest
 from ..data import rosters as R
 from ..data import verbs as V
 from ..data import cast
+from ..boot import realm as boot_realm
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..gaps import Forbidden
-from ..harness import populated
 from ..harness import probes as P
 from ..queries.inputs import SocialContestInput
 from ..seam.wrappers import pool, sigma
@@ -37,10 +37,10 @@ def revert_b11a_scores(monkeypatch) -> None:
     monkeypatch.setitem(DEFAULT_FIXTURES._v, "obstacle_model", "stand_in")
     # an earlier item's revert may have swept `populated`'s fixtures into a copy: switch that copy IN PLACE, so a later revert
     # in the same chain that edits the copy (or the original) keeps this switch
-    monkeypatch.setitem(populated.DEFAULT_FIXTURES._v, "obstacle_model", "stand_in")
+    monkeypatch.setitem(boot_realm.DEFAULT_FIXTURES._v, "obstacle_model", "stand_in")
     # the `None` point of `generated_attribute_range` is the earlier no-seating world (B01a.01, H-856)
     monkeypatch.setitem(DEFAULT_FIXTURES._v, "generated_attribute_range", None)
-    monkeypatch.setitem(populated.DEFAULT_FIXTURES._v, "generated_attribute_range", None)
+    monkeypatch.setitem(boot_realm.DEFAULT_FIXTURES._v, "generated_attribute_range", None)
     monkeypatch.setattr(cast, "attributes_of", lambda r: {})
     for verb in ("interrogate", "arrest", "determine"):          # the three `verb_capability` rows (one dict, read by name)
         monkeypatch.delitem(R.VERB_CAPABILITY, verb)

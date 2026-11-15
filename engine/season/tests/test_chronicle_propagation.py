@@ -16,7 +16,7 @@ from __future__ import annotations
 from ..data.verbs import VERB_TABLE
 from ..harness import chronicle as C
 from ..harness import storybar as SB
-from ..harness.populated import build_realm
+from ..boot.realm import build_realm
 from ..queries import world_q
 
 SEED, SEASONS, CAP = 0, 2, 10

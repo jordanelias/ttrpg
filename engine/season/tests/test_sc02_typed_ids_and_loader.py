@@ -92,10 +92,10 @@ def test_the_wrapper_leaves_the_content_hash_where_it_was(monkeypatch):
     """`build_realm(0)` seats the whole governance ladder, so its offices are `SeatId`s; its
     `content_hash()` is `BUILD[0]` (`_realm_goldens.py`, the build's one owner). The string-level control beside it: the mint folds a `SeatId` exactly
     as the bare string, and the tag does not survive into an f-string."""
-    from ..harness import populated as POP
+    from ..boot.realm import build_realm
     from ..state.ids import H
     from ._realm_goldens import BUILD
-    w = POP.build_realm(0)
+    w = build_realm(0)
     seats = [o.id for o in w.offices.values()]
     assert len(seats) >= 20 and all(isinstance(i, SeatId) for i in seats), "the realm's seats are untyped"
     assert w.content_hash() == BUILD[0], "the wrapper moved the corpus hash"

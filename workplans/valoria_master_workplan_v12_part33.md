@@ -535,7 +535,7 @@ EST: 6 h [estimate: the structure's §2.4 formula; nothing timed]
 - FALSIFIER and CONTROL: a `barracks` minted under `uniform`; a second Site minted where a venue already names one. Control: `uniform` reproduces the shipped hashes.
 - GATE: `python -m pytest engine/season/tests/test_standing_ration.py engine/season/tests/test_endowment.py -q` → green; under `ground`, `armyrecord.options` on that realm offers a trained kind beside levy (`U5b_MB_residue` §3's gate), quoted in the commit body.
 - HASH MOVERS: none at `endowment_mode: uniform` ("Movers. Declared, at SE's landing": the `ground` flip is `07_SE_ground_and_granaries`', not this batch's).
-- DEPENDS ON: V12 B22.16; V12 `07_SE_ground_and_granaries` (Batch B12c: `endowment_mode`, `site_endowment` and its loader); V12 Batch B03c (`boot/realm.py`); EXISTS-IN-TREE `engine/season/queries/world_q.py::training_sites`, `engine/season/npcs.yaml` venue `b_s_014_barracks` (`:114`).
+- DEPENDS ON: V12 B22.16; V12 `07_SE_ground_and_granaries` (Batch B12c: `endowment_mode`, `site_endowment` and its loader); V12 Batch B03c @544cf5719c620331b70aeda93c1672977b44e9ef (`boot/realm.py`); EXISTS-IN-TREE `engine/season/queries/world_q.py::training_sites`, `engine/season/npcs.yaml` venue `b_s_014_barracks` (`:114`).
 - GLOSSARY: none.
 - NAMES: `harness/populated.py::build_realm` → `boot/realm.py` (B03c).
 - COST and TIER: small build (data); `sonnet`, `high`. The two-row table is authored content listed in the PR body.
@@ -682,7 +682,7 @@ EST: 6 h [estimate: the structure's §2.4 formula; nothing timed]
 - FALSIFIER and CONTROL: an army Record at `off`. Control: `armies_at_build: off`: hashes EQUAL to the base but for B22.20's declared mover.
 - GATE: `PYTHONHASHSEED=0 python -m pytest engine/season/tests/test_vm_mil_c_muster.py -q` → green; and the source's arm, moved here: `aperture 2 s`, s = 0 to 2, `armies_at_build: empty` → `army.recruited` emitted by an act that passed through DELIBERATE (the act store names a chooser lap, not a hand-built id) at every seed; `recruit`'s refusals on `room` not repeated by the same actor the next season. (Source "chooser round" → "chooser lap", A-101.)
 - HASH MOVERS: none at `off`.
-- DEPENDS ON: V12 B22.22; V12 Batch B03c (`boot/realm.py`); V12 Batch B21 (`may_wage`); EXISTS-IN-TREE `engine/season/data/fixtures.py: withheld_verbs` (shipped `("destroy_record", *ARMY_VERBS, "marshal", "surrender")`, H-156), `engine/season/harness/army_presets.py::install`.
+- DEPENDS ON: V12 B22.22; V12 Batch B03c @544cf5719c620331b70aeda93c1672977b44e9ef (`boot/realm.py`); V12 Batch B21 (`may_wage`); EXISTS-IN-TREE `engine/season/data/fixtures.py: withheld_verbs` (shipped `("destroy_record", *ARMY_VERBS, "marshal", "surrender")`, H-156), `engine/season/harness/army_presets.py::install`.
 - GLOSSARY: none.
 - NAMES: `harness/populated.py` → `boot/realm.py` (B03c).
 - COST and TIER: small build; `sonnet`, `high`.

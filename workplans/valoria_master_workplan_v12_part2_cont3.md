@@ -47,7 +47,6 @@ These are the two tables `V12_STRUCTURE_part3.md` §7.2 asks of part 2 and lane 
 
 | # | old → new | first stated by | applied again by |
 |---|---|---|---|
-| 2 | `harness/probes.py::chooser` → `boot/chooser.py` | B03c.01 | — |
 | 3 | `order_of_battle` → `standing_order` | B16L.01 | B23.13, B30.04, B30.05 |
 | 4 | `orderofbattle.Subformation` → `UnitRow` | B16L.02 | B22.24 |
 | 5 | `OrderOfBattle.subformations` → `units` | B16L.02 | — |
@@ -158,12 +157,6 @@ These are the two tables `V12_STRUCTURE_part3.md` §7.2 asks of part 2 and lane 
 |---|---|---|---|---|
 | 1 | `engine/season/tests/test_b11a_duel_reach.py` | test file | B01.01 | — |
 | 2 | `engine/season/tests/test_b11a_scores_and_obstacle.py` | test file | B01.02 | — |
-| 35 | `engine/engine_params/season_registries.json` | data file | B03g.01 | — |
-| 36 | `tests/valoria/test_export_season_registries.py` | test file | B03g.01 | — |
-| 37 | `tools/export_season_registries.py` | tool | B03g.01 | — |
-| 38 | `references/engine_series.yaml` | data file | B03g.03 | — |
-| 39 | `engine/season/boot/__init__.py` | module | B03c.01 | — |
-| 40 | `engine/season/tests/test_boot_module.py` | test file | B03c.01 | — |
 | 41 | `modules/combat/__init__.py` | module | B13.01 | — |
 | 42 | `engine/season/tests/test_u1_capability_surface.py` | test file | B04.02 | — |
 | 43 | `engine/season/tests/test_sc_hearing_capabilities.py` | test file | B04.18 | — |
@@ -670,7 +663,6 @@ These are the two tables `V12_STRUCTURE_part3.md` §7.2 asks of part 2 and lane 
 
 | # | item | mark | what is missing, and its owner (the item's own words) | at |
 |---|---|---|---|---|
-| 2 | B03g.03 | MISSING | (GO lane, Jordan's side: a `valoria-game` checkout) the parity reader's half, GO-06 — not this item's gate. | part6.md:122 |
 | 3 | B04.05 | MISSING | (B10: `02_CHAR_resolve_and_temper.md`) `decision/choose.py::temper`, `Fixtures temper_gain` — the `choice_temper` site and row land there. | part7.md:211 |
 | 4 | B04.22 | MISSING | the writer of a `capability:` claim about another person (`U4_DOCUMENT_STATUS.md` §3.4, DEP-NOCARRIER; its named owner "U1 capability architecture §8 / CAP lane" defines readers only: `unified/U1_CAPABILITY_AUTHORING_ARCHITECTURE.md` §8 lists no writer of such | part7.md:479 |
 | 5 | B05.21 | MISSING | a later batch is none of them; repair lane R2a, K2 #14): the stance unit T13 names (`02_CHAR_scar_cap_and_regard_unit.md` item 2) lands in B10.09 `[ASSUMPTION: B10.09 is that item — basis: its title, "regard's judged and told halves counted in stance steps", ` | part8_cont.md:170 |
@@ -686,7 +678,7 @@ These are the two tables `V12_STRUCTURE_part3.md` §7.2 asks of part 2 and lane 
 | 15 | B38.53 | MISSING | which the tree contradicts; the source's own STOPS IF — `commit` forms on the creed for a man who holds it if the roster were absent, which the commit body reports — is kept as the fallback). | part41.md:121 |
 | 16 | B38.66 | MISSING | (v12: a carrier is owed — no item adopts a stake on any verb row; owners: the lanes of `move`, `migrate` (MB, SE), `found`, `build` (SE), `requisition`, `sabotage` (SE, FA)). | part41.md:359 |
 
-Reading (hand-read): **not missing**: #5 B05.21 (a forward note that the stance unit lands in B10.09, R2a's form), #6 B21.57 ("none"), #11 B28.03 (the item writes `_writ_term` itself). **Owned by Jordan's content** (D-19 drafts or the item ships at control by E-14): #7 B21b.10, #14 B38.52. **Owned by a lane, no v12 item**: #4 B04.22 (the writer of a `capability:` claim about another; U1 §8 defines readers only; B98.01 BLOCKED), #12 and #13 B28.08, B28.10 (SC: a contrariness reader), #16 B38.66 (the lanes of `move`, `migrate`, `found`, `build`, `requisition`, `sabotage`: a stake on a verb row), #9 B34.10 (CL-MGMT's list, held). **Carried later in v12**: #3 B04.05 (B10's `02_CHAR_resolve_and_temper`), #10 B24a.08 (B28's writ delivery, its STOPS IF), #8 B21b.12 (H-209's row). **Outside the repository**: #2 B03g.03 (a `valoria-game` checkout). #15 B38.53 keeps the source's own STOPS IF as its fallback. **Closed by lane H3**: B35.28's entry (the WR design for `knot`'s effect), now carried by B35.30 (HD-25).
+Reading (hand-read): **not missing**: #5 B05.21 (a forward note that the stance unit lands in B10.09, R2a's form), #6 B21.57 ("none"), #11 B28.03 (the item writes `_writ_term` itself). **Owned by Jordan's content** (D-19 drafts or the item ships at control by E-14): #7 B21b.10, #14 B38.52. **Owned by a lane, no v12 item**: #4 B04.22 (the writer of a `capability:` claim about another; U1 §8 defines readers only; B98.01 BLOCKED), #12 and #13 B28.08, B28.10 (SC: a contrariness reader), #16 B38.66 (the lanes of `move`, `migrate`, `found`, `build`, `requisition`, `sabotage`: a stake on a verb row), #9 B34.10 (CL-MGMT's list, held). **Carried later in v12**: #3 B04.05 (B10's `02_CHAR_resolve_and_temper`), #10 B24a.08 (B28's writ delivery, its STOPS IF), #8 B21b.12 (H-209's row). #15 B38.53 keeps the source's own STOPS IF as its fallback. **Closed by lane H3**: B35.28's entry (the WR design for `knot`'s effect), now carried by B35.30 (HD-25).
 
 ### 13.2 `EXISTS-IN-TREE` tokens not in the tree (12; generated)
 

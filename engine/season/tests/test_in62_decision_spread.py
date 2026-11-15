@@ -36,7 +36,7 @@ from ..data.rosters import PURSUIT_AXES
 from ..data.verbs import VERB_TABLE
 from ..decision import choose as CH
 from ..harness import decision_spread as DS
-from ..harness.populated import build_realm
+from ..boot.realm import build_realm
 from ..state.carriers import Candidate, Person
 from ..state.ids import draw_factory
 

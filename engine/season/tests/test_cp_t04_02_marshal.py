@@ -39,7 +39,7 @@ import pytest
 from engine.season.data.verbs import CHOICE_SOURCED, VERB_TABLE, act_key
 from engine.season.decision.options import operand_bags
 from engine.season.gaps import Forbidden
-from engine.season.harness.populated import build_realm
+from engine.season.boot.realm import build_realm
 from engine.season.queries import world_q
 from engine.season.queries.inputs import FieldOrder
 from engine.season.seam.wrappers import mass_battle as wrapper

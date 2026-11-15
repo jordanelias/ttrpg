@@ -114,6 +114,7 @@ import math
 
 from ..data.rosters import FIELD_CASUALTY_MODELS, LOST, WON
 from . import populated
+from ..boot.realm import build_realm
 
 
 # [JUSTIFIED: the conventional two-sided 5% critical z-value, unchanged from `tools/balance_oracle.py`'s identical constant — a standard statistical threshold, not a fitted game magnitude]
@@ -151,7 +152,7 @@ del _name, _model
 
 #: The `populated.build_realm` keyword arguments an arm may set (CR-14 (iv)), read off its signature so
 #: the two cannot drift. `seed` is the arm's own seed sequence (`base_seed + i`), never a build kwarg.
-BUILD_KWARGS = tuple(p for p in inspect.signature(populated.build_realm).parameters if p != 'seed')
+BUILD_KWARGS = tuple(p for p in inspect.signature(build_realm).parameters if p != 'seed')
 
 
 def _resolve_arm(arm) -> tuple:
@@ -223,7 +224,7 @@ def run_arm(model, n: int, base_seed: int, seasons: int) -> dict:
     total_acts = 0
     fought = 0
     for i in range(n):
-        w = populated.build_realm(base_seed + i, **build)
+        w = build_realm(base_seed + i, **build)
         for name, value in fixtures.items():
             current = w.fixtures.get(name)   # an unregistered name raises `Ungraded` here; `sweep` would write it silently
             w.fixtures = w.fixtures.sweep(name, _typed_fixture(name, value, current))

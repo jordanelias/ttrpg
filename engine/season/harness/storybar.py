@@ -98,7 +98,7 @@ from ..state.ids import ROOT
 from .arc import _Records
 from .corpus_run import attempts, graded_losses, refusal_sets, seats
 from . import probes as P
-from .populated import COHORT_PREFIX, build_realm
+from ..boot.realm import COHORT_PREFIX, build_realm
 
 #: Every forcing setting this tree can run. `off` is the shipped loop; no `on` is built (see the
 #: module docstring). A forcing position adds its own arm here.

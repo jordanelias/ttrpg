@@ -42,6 +42,7 @@ from ..data import verbs as V
 from ..data.pursuits import to_axes
 from ..data.rosters import QUESTION_SOURCES
 from ..harness import populated as POP
+from ..boot.realm import build_realm
 from ..loop import driver as DRV
 from ..queries import world_q
 from ..queries.person_q import deed_valence
@@ -271,7 +272,7 @@ def test_the_scar_shift_arm_reorders_tier_2():
 def test_a_seat_purview_is_tier_1_and_the_ladder_above_home_is_not():
     """Limb 4 (the seat's rung and below) is tier 1; limb 3 (the ladder) is in `reach` but is no
     tier (`own_purview` is limbs 2 and 4 only)."""
-    w = POP.build_realm(0)
+    w = build_realm(0)
     seated = [(p, t) for p in w.persons.values() for t in p.tenures
               if t.kind == "hold" and t.live and t.object in w.offices
               and w.offices[t.object].rung is not None]
@@ -358,7 +359,7 @@ def test_one_person_keys_alike_under_worlds_differing_only_outside_his_own_state
 # ---------------------------------------------------------------------------
 
 def test_reach_composes_on_own_purview():
-    w = POP.build_realm(0)
+    w = build_realm(0)
     checked = 0
     for p in w.persons.values():
         ladder, cur = set(), home_of(w).get(p.id)
@@ -377,7 +378,7 @@ def test_reach_composes_on_own_purview():
 def season_1():
     """Every `questions_for` call DELIBERATE receives in `build_realm(0)`'s first season, with the
     tier of each question taken at the call (the key reads the state then)."""
-    w = POP.build_realm(0)
+    w = build_realm(0)
     real, seen = DRV.questions_for, []
 
     def spy(w_, p, since=None):

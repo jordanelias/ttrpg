@@ -373,7 +373,7 @@ Placed here by `V12_STRUCTURE_part2.md` §5.6's first rule: PAP_E, the next memb
 - FALSIFIER and CONTROL: "Mutation: anchor a head seat on a settlement; clients' upkeep then draws on the town's stores and the conservation reading names the wrong rung" (read at B33.40). Control: no shipped row uses the form; the build hash equals B33.38's reading.
 - GATE: `python -m pytest engine/season/tests/test_inst_ven_d.py -q` → pass.
 - HASH MOVERS: none ("Items 1 and 3 with no row or charter using them: hash EQUAL").
-- DEPENDS ON: V12 Batch B03c (`boot/realm.py::resolve_anchor`); EXISTS-IN-TREE `S/venues.yaml` (the hearth rungs it builds); V12 Batch B32 (`SYN_A` §3).
+- DEPENDS ON: V12 Batch B03c @544cf5719c620331b70aeda93c1672977b44e9ef (`boot/realm.py::resolve_anchor`); EXISTS-IN-TREE `S/venues.yaml` (the hearth rungs it builds); V12 Batch B32 (`SYN_A` §3).
 - GLOSSARY: none.
 - NAMES: `harness/populated.py::resolve_anchor` → `S/boot/realm.py::resolve_anchor` (§5.10, B03c).
 - COST and TIER: small build; `sonnet`, `medium` (VEN_D's tier line for the anchor form).

@@ -53,7 +53,7 @@ from ..data.verbs import KIND_VERB, VERB_TABLE
 from ..decision import assemble
 from ..decision.options import opening_set
 from ..gaps import Forbidden
-from ..harness.populated import build_realm
+from ..boot.realm import build_realm
 from ..loop import effects_combat
 from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..queries import person_q as PQ
@@ -251,8 +251,8 @@ def test_the_field_planted_count_reads_the_fields_grudge_and_not_a_seeded_row(mo
     no loyalty-seeded row names a PERSON for this control to forgive. Read with that one fixture at its revert, where
     `SEEDED` (the King) still carries `LOSER`'s seeded row; the count it guards is IN-12's, not CR-87's."""
     from ..data.fixtures import DEFAULT_FIXTURES
-    from ..harness import populated as _populated
-    monkeypatch.setattr(_populated, "DEFAULT_FIXTURES", DEFAULT_FIXTURES.sweep("loyalty_toward_creed", False))
+    from ..boot import realm as boot_realm
+    monkeypatch.setattr(boot_realm, "DEFAULT_FIXTURES", DEFAULT_FIXTURES.sweep("loyalty_toward_creed", False))
     w = _lost_field()
     assert field_planted_forgivenesses(w) == 0
     assert _kinds(_forgive(w, SEEDED, key="f_seeded")) == ["stance.moved"], "control: a seeded row ends"

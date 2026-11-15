@@ -25,7 +25,7 @@ import pytest
 from ..data.rosters import TITLE_DOMAINS
 from ..data.matrix import WriteClass
 from ..harness import probes as P
-from ..harness.populated import build_realm
+from ..boot.realm import build_realm
 from ..loop import predicates as _preds
 from ..loop.driver import SeasonDriver, mint_token
 from ..queries import world_q

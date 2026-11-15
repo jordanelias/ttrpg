@@ -541,7 +541,7 @@ def test_the_populated_realm_constructs_a_driver_and_every_check_ran():
     refusal sweeps RAN on it, observed by wrapping them, not inferred from the construction."""
     got = _run("""
 import engine.season.manifest as M
-from engine.season.harness.populated import build_realm
+from engine.season.boot.realm import build_realm
 production = sorted(r for r, row in composition.ROLES.items() if row.get("entry"))
 seen = {}
 for name in ("register_module_entries", "check_rows", "check_contest_prizes", "check_effects",
