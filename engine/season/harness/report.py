@@ -26,9 +26,22 @@ import json
 from collections import Counter
 
 from ..data import files
+from ..data.matrix import Step
+from ..trace_log import TRACE
 from . import exercises as EX
 
 RUNS = files.RUNS_DIR
+
+# One gloss per `Step` member, keyed by the member's value.
+_STEP_GLOSS = {
+    "CALENDAR": "barrier 1 -- fires occasions and DECIDES NOTHING",
+    "MATTER": "barrier 2 -- THE WORLD FREEZES AT ITS END",
+    "DELIBERATE": "a MAP, not a barrier -- pure, parallel, no World",
+    "RESOLVE": "barrier 3 -- the ONLY writing step for acts; an ORDERED FOLD",
+    "ENCOUNTER": "shares barrier 3 -- fights the contests RESOLVE deferred",
+    "WITNESS": "barrier 4 -- THE JOIN; fan-out global, deposit per-person",
+    "CENSUS": "shares WITNESS's join",
+}
 
 
 def emit(rep: dict, trace_rows: list) -> None:
@@ -72,20 +85,19 @@ def emit(rep: dict, trace_rows: list) -> None:
            "| write class | step | admitted | count |", "|---|---|---|---|"]
     for (cls, st, ok), n in sorted(wc.items(), key=lambda kv: -kv[1]):
         seq.append(f"| {cls} | {st} | {'yes' if ok else '**NO -- refused**'} | {n} |")
-    seq += ["", "## The loop, as executed", "",
-            "```", "CALENDAR  -- barrier 1 -- fires occasions and DECIDES NOTHING",
-            "MATTER    -- barrier 2 -- THE WORLD FREEZES AT ITS END",
-            "DELIBERATE-- a MAP, not a barrier -- pure, parallel, no World",
-            "RESOLVE   -- barrier 3 -- the ONLY writing step for acts; an ORDERED FOLD",
-            "WITNESS   -- barrier 4 -- THE JOIN; fan-out global, deposit per-person",
-            "CENSUS    -- shares WITNESS's join", "```", ""]
+    # The step NAMES and their order are `Step`'s own (the one owner, ENCOUNTER included); only the
+    # one-line gloss per step is written here, and a step with no gloss fails loudly (KeyError).
+    seq += ["", "## The loop, as executed", "", "```"]
+    seq += [f"{s.value:<10}-- {_STEP_GLOSS[s.value]}" for s in Step]
+    seq += ["```", ""]
     (RUNS / "STEPS.md").write_text("\n".join(seq))
 
     # -- 3. THE PER-CASE LOG -----------------------------------------------
-    for kind, title in (("NPC", "TEST A — 46 unique NPCs"),
-                        ("ARC", "TEST B — every unique arc")):
+    for kind in ("NPC", "ARC"):
         rows = rep.get(kind) or []
-        out = [f"# {title} — the per-case log", "",
+        title = (f"TEST A — {len(rows)} unique NPCs" if kind == "NPC"
+                 else "TEST B — every unique arc")
+        out =[f"# {title} — the per-case log", "",
                "For each case: every `season_requires` row, what it DECLARES it rests on, the",
                "verdict, and the governing section. **Probe verdicts are HARD**",
                "(each is an execution).", "",
@@ -298,7 +310,6 @@ def emit(rep: dict, trace_rows: list) -> None:
 
 if __name__ == "__main__":
     from . import run_cases as R
-    from ..trace_log import TRACE
     with TRACE.recording():         # the rows below are read here, and `R.main()` fills them
         rep = R.main()
         (RUNS).mkdir(exist_ok=True)
