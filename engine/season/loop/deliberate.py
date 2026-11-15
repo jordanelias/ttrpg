@@ -272,6 +272,15 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
             sc = scenes.pop(0)
             left -= cost
             released += 1
+            # `04` PART D row 51 (D-51), HERE BECAUSE NO REGISTER ROW TRACKS IT (a row for a Layer-1 row
+            # is not a hole in the game): behaviour holds -- a refused act costs its scene, since this
+            # debit is made at release. The construction's falsifier fails: 27 refusal Events, 0 with
+            # `changes[]` (the audit's reading, headless, seed 0, three seasons; re-read at B03.51 as 17
+            # Events of `verbs.REFUSAL_KINDS`, 0 with `changes[]`).
+            # Two Layer-1 sources: `04` D-51 (a debit receipt) and #353 `:877`, `:912-913` (budget is a
+            # Query, never a field; H-28). Answered by Jordan's A-62: #353 holds (budget is a Query; a
+            # refusal Event carries no `changes[]`); `04` D-51 is amended (APPLIED 2026-11-12, A-97,
+            # node `L1-A62`: PART D row 51, `04:1081`); nothing is built.
             self._spent[p.id] = self._spent.get(p.id, 0) + cost
             # ⚠ THE RELEASE RECORDS WHAT WAS *ATTEMPTED*; `season()` PROMOTES ONLY WHAT WAS
             # *REALISED*. See `_drop_what_was_already_done` and `SeasonDriver.season` for why a

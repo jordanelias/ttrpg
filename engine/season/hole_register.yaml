@@ -257,7 +257,7 @@ rows:
     site:      ""
     sweep:     []
     unblocks:  "every death"
-    cite:      ""
+    cite:      "FILLED AT B03.51 (`U5a_CORE_owed_edits` §A row 8; audit res. 16): THE TWO WRITERS, each re-found by symbol with `git grep -n 'fieldname=\"exists\"' -- 'engine/season/*.py' ':!engine/season/tests/*'`. BIRTH: `loop/census.py::census` writes `(Person, exists)` through `w.write(\"exists\", ...)` with `driver=\"Event\"`, `emits=\"person.individuated\"` (`:97-100` at B03.51 and at the source's tree), the closure being `_individuate`. DEATH: `loop/matter.py::_die` writes it with `driver=\"Event\"`, `emits=PERSON_DIED`, a `Change` carrying `death_subjects` and `World.remove_person` (`:277-281` at B03.51 and at the source's tree), called from both MATTER callers (hunger, the bodies pass). The only other hits for the field are `harness/probes.py`'s probe worlds (instruments, not the loop)."
     source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **ruled** — Part D, bounded by §15.3"
   - id:        H-25
     tier:      1
@@ -324,12 +324,12 @@ rows:
     hole:      "person-order vs global canonical order"
     kind:      "RULING — **answered by architecture**"
     owner:     "the resolver"
-    grade:     "assumption"
+    grade:     "measured"
     default:   "composite key `(stratum, actor-hash, intra-person position)` — honours both"
-    site:      ""
+    site:      "loop/resolve.py::_canonical_order"
     sweep:     []
     unblocks:  "2"
-    cite:      ""
+    cite:      "REGRADED `assumption` -> `measured` AT B03.51 (`U5a_CORE_owed_edits` §A row 2; audit res. 9, F-PES-CORE-09). THE KEY THE TREE RUNS is `(stratum, H(seed, tick, actor, \"order:verb:id\"))` -- `loop/resolve.py::_canonical_order` sorts on `(stratum_of(a), H(w.world_seed, w.tick, a.actor, f\"order:{a.verb}:{a.id}\"))`, and `loop/encounter.py` calls the same function, so the order lives once. THE READING, the audit's (`16_PESSIMIST_CORE.md` E-07, `ordp.py 0 1`, realm, seed 0), quoted as such and not re-run here: reversing the hash order inside each stratum flips 1 of 175 lap-0 acts and 6 of 774 common acts in a season. (The audit says \"round-0\"; corrected to lap, A-101. The code's key keeps the tree's `round` until B04.) The `default:` above is V2's cell as transcribed and is left so (`--verify-transcription` pins it); the key the code runs is the one this cite gives."
     source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **assumption**"
   - id:        H-31
     tier:      1
@@ -533,7 +533,7 @@ rows:
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
   - id:        H-47
     tier:      1
-    hole:      "`Coherence` -- a 54 fold-in with no Part D row"
+    hole:      "`(Person, coherence)`: row present, producer absent"
     kind:      "SCHEMA_ROW"
     owner:     "unassigned"
     grade:     "absent"
@@ -541,19 +541,19 @@ rows:
     site:      ""
     sweep:     []
     unblocks:  "unmeasured"
-    cite:      ""
+    cite:      "RE-STATED AT B03.51 (`U5a_CORE_owed_edits` §A row 3; audit res. 10). THE ROW IS PRESENT: `write_matrix.yaml`'s `(Person, coherence)` row (`kind: Person`, `field: coherence`, `steps: [RES]`, `class: ACTS`, `unproduced:` naming H-47 and H-62; `:200-207` at B03.51, `:200-205` at the source's tree) and the gate branch in `state/world.py` (`World.write`: `(record_kind, fieldname) == (\"Person\", \"coherence\") and driver != \"Seam\"`, `:1303` at B03.51, `:1305` at the source's tree) that refuses any other driver. THE PRODUCER IS ABSENT: no writer in any `.py`. Command run at B03.51: `git grep -n \"coherence\" -- 'engine/season/*.py' ':!engine/season/tests/*'` -> three lines, all in `state/world.py:1299-1306` (the gate's comment, its test and its trace); none writes the field. (The source's spelling `git grep -n \"coherence\" engine/season -- '*.py'` reads `engine/season` as a revision and fails; the pathspec form above is what ran.) `unproduced:` on the matrix row says the same in the matrix's own words: a section-54 fold-in with no specified trigger, and the verb table carries no verb that writes it. Graded `absent` and refusing: nothing here may invent a producer."
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
   - id:        H-48
     tier:      1
     hole:      "the `disclosure:` column -- a 54 fold-in with no Part D row"
     kind:      "SCHEMA_ROW"
     owner:     "the resolver (Part E)"
-    grade:     "absent"
+    grade:     "measured"
     default:   "none"
     site:      ""
     sweep:     []
     unblocks:  "unmeasured"
-    cite:      ""
+    cite:      "CLOSED AT B03.51 (`U5a_CORE_owed_edits` §A row 4; audit res. 11): NEVER BUILT. There is no `disclosure` column in `write_matrix.yaml` or `verb_table.yaml`. Command run at B03.51: `git grep -nw \"disclosure\" -- engine/season/write_matrix.yaml engine/season/verb_table.yaml` -> nothing (exit 1); `git grep -n \"disclosure:\"` over the same two files -> nothing. (The source's unqualified `git grep -n \"disclosure\"` finds one line, `verb_table.yaml:703`, which is the word inside the swept fixture name `intent_disclosure` in `issue`'s `requires_typed_note`; that is a fixture, not a column.) The hole asked for a column the design never specified; with none built, nothing is absent from it. Graded `measured`: a command on the row establishes it."
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
   - id:        H-49
     tier:      0
@@ -644,12 +644,12 @@ rows:
     hole:      "62/54 carry-over: 'no reaction inside a season' (34.1) vs the seam's nested DELIBERATE (40.2) -- defect `D16`, a COLLISION between two in-chain sentences, and the only one of 26 defects with no Part VII row while being claimed discharged"
     kind:      "RULING"
     owner:     "the seam"
-    grade:     "absent"
+    grade:     "measured"
     default:   "none"
     site:      ""
     sweep:     []
     unblocks:  "unmeasured"
-    cite:      "HALF CLOSED BY IN-43 (batch B-C, 2026-10-08); the grade is unchanged because the other half is present and `absent` is the strictest grade present (the rule this file states for H-02 and H-20). CLOSED HALF, the within-season reaction: `requirements.yaml` R-03 (`status: met`) -- the season is `R = scene_budget` rounds and a deposit at one round's WITNESS is read by the next round's DELIBERATE -- and probe `A14` (`harness/probes.py`) was re-pointed from `Collision(needs=\"a ruling on which sentence binds\")` to a two-arm execution of exactly that: one season on `tiny_world`, `p_mid`'s ledger 0 claims in round 0 and 2 in round 1 after `p_low`'s round-0 `speak`, against 0 in the control arm where `p_low` does nothing. `A14` now returns PASS. HELD HALF, NOT CLOSED: a DELIBERATE nested inside RESOLVE (S40.2's 'a contest can open a contest' against a partially-moved world); no probe exercises it and no row rules it."
+    cite:      "HALF CLOSED BY IN-43 (batch B-C, 2026-10-08); the grade is unchanged because the other half is present and `absent` is the strictest grade present (the rule this file states for H-02 and H-20). CLOSED HALF, the within-season reaction: `requirements.yaml` R-03 (`status: met`) -- the season is `R = scene_budget` rounds and a deposit at one round's WITNESS is read by the next round's DELIBERATE -- and probe `A14` (`harness/probes.py`) was re-pointed from `Collision(needs=\"a ruling on which sentence binds\")` to a two-arm execution of exactly that: one season on `tiny_world`, `p_mid`'s ledger 0 claims in round 0 and 2 in round 1 after `p_low`'s round-0 `speak`, against 0 in the control arm where `p_low` does nothing. `A14` now returns PASS. HELD HALF, NOT CLOSED: a DELIBERATE nested inside RESOLVE (S40.2's 'a contest can open a contest' against a partially-moved world); no probe exercises it and no row rules it. ⚠ RE-GRADED AT B03.51 (`U5a_CORE_owed_edits` §A row 6; audit res. 14), APPENDED AND NOT OVERWRITING THE ABOVE, WHICH STANDS AS THE RECORD OF 2026-10-08: THE HELD HALF IS IRRELEVANT UNTIL A NESTED CONTEST IS DESIGNED; IT RETURNS WITH ITS READER. Jordan's A-4 (a duel inside a battle is a nested contest) schedules that design with the PC/MB plan, and `H-87` records that nothing recurses today. The first paragraph's reason for holding `absent` -- `absent` being the strictest grade present, so a half-closed row cannot be graded by its closed half -- has no second half left to weigh, so the row takes the closed half's grade, `measured`. THE CLOSED HALF cites the one-lap arm: `scene_budget = 1`, `scenes_per_round = 1`, the arm `test_u2_the_one_round_arm_resolves_acts` runs (the test B02 renamed from `..._reproduces_the_pre_tick_loop`, because it asserts only that the arm resolves acts), reads acts 1 and 4 across two seasons against 16 and 17 at the shipped fixtures (headless, `PYTHONHASHSEED=0`, seed 0, re-read at B03.51 on the tree B03.28 left). The source writes \"one-round arm\"; the code's `round` names stay until B04. Probe `A14` and `R-03` are unchanged."
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
   - id:        H-57
     tier:      1
@@ -680,12 +680,12 @@ rows:
     hole:      "62/54 carry-over: GRIEVANCE CLEARANCE"
     kind:      "RULING"
     owner:     "unassigned"
-    grade:     "absent"
+    grade:     "ruled"
     default:   "none"
     site:      ""
     sweep:     []
     unblocks:  "unmeasured"
-    cite:      ""
+    cite:      "CLOSED AT B03.51 (`U5a_CORE_owed_edits` §A row 5; audit res. 12): superseded by H-57: a grudge ends by `forgive`. H-57 is graded `ruled` and carries the ruling and its falsifier (`engine/season/tests/test_in12_forgive.py`); this row asked the same question and takes its grade from that one."
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
   - id:        H-60
     tier:      1
@@ -1014,12 +1014,12 @@ rows:
     hole:      "#353 CONTRADICTS ITSELF ON `causes[]`. `:658` says the ids are \"already in the log, or [ROOT]\"; `:1377` says the Events carry \"causes[] NAMING THE ACTS\". An Act is never in the log, so both cannot hold as written"
     kind:      "COLLISION"
     owner:     "§19 (the Event record) and §39.2 (the seam), which disagree"
-    grade:     "assumption"
+    grade:     "measured"
     default:   "a cause resolves to AN EVENT OR THE ACT THAT PRODUCED IT — referential integrity against `log UNION resolved`"
     site:      "shape._fold's ev() call and SeasonDriver.resolve's contest branch; asserted by probe A28"
     sweep:     ["log union resolved (the default)", "log only — every act emission is [ROOT]", "acts only — no event ever names another"]
     unblocks:  "every arc: it decides whether the narrative substrate is populated at all"
-    cite:      "FOUND BY THE `W9` ADVERSARIAL PASS, WHICH IS THE SECOND TIME THIS SESSION DECIDED IT AND THE FIRST TIME IT WAS WRITTEN DOWN. `W9` changed the fold from `[ROOT]` to `[a.id]` and argued it IN A CODE COMMENT — a decisive interpretive fill on a contradiction in the specification, with no row, while rows were minted the same day for the claim subject, the stage default and the obstacle multiple. ⚠ THE SECOND SWEEP POINT IS NOT HYPOTHETICAL: it is what the instrument did for four revisions, and #353 §19.4 describes the result in its own words — \"the design rests its narrative layer, audit trail and arc model on this edge -- 'the arc itself' -- and the measured state is that the specified loop emits `causes=[]`, so the substrate of the entire emergent-narrative claim is declared and never populated.\" `[ROOT]` everywhere is `[]` wearing a marker. ⚠ AND THE FIX WAS COSMETIC WITH RESPECT TO WHAT `W9` MEASURED: a log walker drops an unresolvable `[a.id]` exactly as it drops `[ROOT]`, so `W9`'s four-Event chain is produced entirely by term maturation (`H-80`) and NOT by this change. Both facts belong on this row. Falsifier: probe `A28`, which asserts the union reading over a real four-season run and which was SHORT-CIRCUITED from `W3` until now — it used the verb `do`, which is on no table row, so it published a routing gap instead of ever checking the invariant."
+    cite:      "FOUND BY THE `W9` ADVERSARIAL PASS, WHICH IS THE SECOND TIME THIS SESSION DECIDED IT AND THE FIRST TIME IT WAS WRITTEN DOWN. `W9` changed the fold from `[ROOT]` to `[a.id]` and argued it IN A CODE COMMENT — a decisive interpretive fill on a contradiction in the specification, with no row, while rows were minted the same day for the claim subject, the stage default and the obstacle multiple. ⚠ THE SECOND SWEEP POINT IS NOT HYPOTHETICAL: it is what the instrument did for four revisions, and #353 §19.4 describes the result in its own words — \"the design rests its narrative layer, audit trail and arc model on this edge -- 'the arc itself' -- and the measured state is that the specified loop emits `causes=[]`, so the substrate of the entire emergent-narrative claim is declared and never populated.\" `[ROOT]` everywhere is `[]` wearing a marker. ⚠ AND THE FIX WAS COSMETIC WITH RESPECT TO WHAT `W9` MEASURED: a log walker drops an unresolvable `[a.id]` exactly as it drops `[ROOT]`, so `W9`'s four-Event chain is produced entirely by term maturation (`H-80`) and NOT by this change. Both facts belong on this row. Falsifier: probe `A28`, which asserts the union reading over a real four-season run and which was SHORT-CIRCUITED from `W3` until now — it used the verb `do`, which is on no table row, so it published a routing gap instead of ever checking the invariant. ⚠ REGRADED `assumption` -> `measured` AT B03.51 (`U5a_CORE_owed_edits` §A row 7; audit res. 15), APPENDED AND NOT OVERWRITING THE ABOVE: THE UNION READING IS NOW ENFORCED AT APPEND AND SWEPT. `state/log.py::EventLog.append` (the IN-56 membership check, by symbol; the register's citation verifier reads any `:NNN` in a cite as a line of #353, so no line number is written here) raises `Forbidden` (S19.4) on a cause that is neither ROOT, a prior Event id nor an act id; so a dangling `causes[]` cannot enter the log, and the default's sweep arms \"log only\" and \"acts only\" are readings the tree refuses. `tools/m1_acceptance.py`'s invariant sweep (row `invariant_violations`, the battery in `harness/invariants.py`) reads 0 violations over 49,735 Events, 24 seeds x 4 seasons: the audit's reading at `601e715`, quoted as such. Re-read at B03.51 on the tree B03.28 left (`python tools/m1_acceptance.py --summary`): 0 violations over 52,002 Events, 24 headless seeds x 4 seasons plus 2 populated x 1 (the populated arm is why the count differs). ⚠ WHAT THAT SWEEP DOES AND DOES NOT OBSERVE: its battery reads log id uniqueness, tick order, tenure shape and the like, and no predicate in it reads `causes[]` -- by its own selection rule a predicate earns a row only if nothing enforces it on write, and `append` enforces this one. So the zero is the log's other integrity, quoted because the source cites it; the `causes[]` guarantee is the append refusal above, and probe `A28` is the over-a-real-run observation of it."
     source:    "W9 — found by the adversarial pass"
   - id:        H-83
     tier:      1
@@ -1082,9 +1082,9 @@ rows:
     grade:     "assumption"
     default:   "`contest_max_depth = 2`"
     site:      "Fixtures contest_max_depth -- read by headless.run and passed to SeasonDriver.season for every RESOLVE"
-    sweep:     [1, 2, 4]
+    sweep:     []
     unblocks:  "every verb that declares `contests:` -- today `kill / wound`, and W7's sitting"
-    cite:      "FOUND BY MAKING PART E's `contests:` COLUMN REAL. Jordan, 2026-09-02: *that would trigger the personal combat scene. you can't just kill or wound imo.* ARCHITECTURE_V2.md:394 declares the column (*if set, routes to the seam at RESOLVE, S39*) and :434 sets `contests: the body` on `kill / wound`; the transcription put it in `requires_note`, which nothing reads, and the fold executed a kill as a DIRECT WRITE. With the routing real the seam fires -- and immediately refuses, because S39.3 gives the cap no default. That refusal is CORRECT and it is the design working; what was missing is a caller who decided. This row is that decision, injected and swept rather than typed into a body, on H-09's precedent for `ledger_cap` and `view_k`. ⚠ NOT `ruled`: S39.3 refuses a default precisely so a harness number is not later cited as canon, and grading this `ruled` would do exactly that."
+    cite:      "FOUND BY MAKING PART E's `contests:` COLUMN REAL. Jordan, 2026-09-02: *that would trigger the personal combat scene. you can't just kill or wound imo.* ARCHITECTURE_V2.md:394 declares the column (*if set, routes to the seam at RESOLVE, S39*) and :434 sets `contests: the body` on `kill / wound`; the transcription put it in `requires_note`, which nothing reads, and the fold executed a kill as a DIRECT WRITE. With the routing real the seam fires -- and immediately refuses, because S39.3 gives the cap no default. That refusal is CORRECT and it is the design working; what was missing is a caller who decided. This row is that decision, injected and swept rather than typed into a body, on H-09's precedent for `ledger_cap` and `view_k`. ⚠ NOT `ruled`: S39.3 refuses a default precisely so a harness number is not later cited as canon, and grading this `ruled` would do exactly that. ⚠ SWEEP EMPTIED AT B03.51 (`U5a_CORE_owed_edits` §A row 1; audit res. 8, F-CORE-07), AND THE SWEEP POINTS `[1, 2, 4]` ARE LEFT HERE AS THE RECORD OF WHAT WAS DECLARED: `contest_max_depth` 1, 2, 3, 7 give one content hash (headless, seed 0, two seasons, tree `601e715`): nothing recurses and the one caller passes `depth=0` (`loop/resolve.py`, the `contest(...)` call), so the swept arms are identical by construction. Re-read at B03.51 on the tree B03.28 left, `PYTHONHASHSEED=0`, `headless.build_world(0)`, `SeasonDriver.season(..., contest_max_depth=n)` twice: `464ca14b838bd8c292fd09f3024e1661` at each of n = 1, 2, 3 and 7. The signature and S39.3's refusal stay (`04` D-19, D-20); the sweep returns with the first nested contest. Jordan's answer A-4 (a duel inside a battle is a nested contest) schedules that first nesting with the PC/MB plan, which sets the cap and restores the sweep."
     source:    "W6 adversarial pass / Jordan 2026-09-02"
 
   - id:        H-88
