@@ -1189,10 +1189,9 @@ def test_r3_the_dead_code_is_reached():
     """DEFECT C8. An implemented rule no probe exercises is indistinguishable from an absent
     one, and reporting it as landed is the flattering direction. Rev 2 declared STRATA and
     never referenced it, and had an Ob>2xPool branch no probe could reach."""
-    for pid in ("A37", "A38", "A39", "A31c"):
+    for pid in ("A37", "A39", "A31c"):
         assert pid in P.PROBES, pid
     assert R.run_probe("A37")["verdict"] == "PASS"
-    assert R.run_probe("A38")["verdict"] == "PASS"
 
 
 def test_r3_the_band_floors_are_swept():
@@ -4021,54 +4020,6 @@ def test_w4_a_claims_decay_walks_back_to_the_act_that_was_witnessed():
         if chain[chain.index("claim.deposited") + 1:]:
             walked += 1
     assert walked, "no decay chain reaches past its deposit to the Event that was witnessed"
-
-
-def test_w4_a_refused_attempt_names_the_attempt_not_the_campaign_seed():
-    """The `[ROOT]` clause, asserted where the FIXTURE CANNOT REACH.
-
-    ⚠ THIS IS THE CASE THAT MADE `W4`'s HEADLINE CLAIM FALSE OF THE DESIGN while true of the run.
-    `resolve`'s S27.4 branch emitted `attempt.refused` with `causes=[ROOT]`, and the rule against
-    it is stated TWICE within sixteen lines of that line — the contest branch below it passes
-    `causes=[a.id]`, and `_fold` carries a paragraph calling `[ROOT]` in an act-caused emission
-    "`[]` wearing a marker". `Act.obstacle` defaults to `None` and the computed chooser never sets
-    one, so no seeded run could reach the branch and the ROOT-count proof could not see it. An
-    `Act` with an obstacle is built here directly. Found by the `W4` adversarial pass."""
-    from ..harness import headless as HL
-    w = HL.build_world(0)
-    d = SeasonDriver(w)
-    pid = next(iter(w.persons))
-    mult = w.fixtures.get("obstacle_refusal_multiple")
-    a = Act(id="act_refused", actor=pid, verb="work")
-    a.obstacle, a.pool = mult * 10 + 1, 1        # Ob > multiple x Pool -> S27.4 refuses
-    d.matter(mint_token(d.w, WriteClass.MATTER), [])
-    out = d.resolve(mint_token(d.w, WriteClass.ACTS), [a], contest_max_depth=2)
-    refused = [e for e in out if e.kind == "attempt.refused"]
-    assert refused, "S27.4 did not refuse the over-obstacle attempt; the fixture no longer reaches it"
-    for e in refused:
-        assert e.causes == [a.id], (
-            f"a refused attempt names {e.causes} — the antecedent is THE ATTEMPT, and `[ROOT]` is "
-            "for the campaign seed and a licensed clock's genuine first emission")
-
-
-def test_the_refusal_gate_reads_its_multiple_from_the_fixture():
-    """`resolve`'s S27.4 gate refuses an attempt at Ob above `obstacle_refusal_multiple` x Pool, and reads
-    the multiple from the fixture. B02.04 deleted `test_d10c_the_obstacle_refusal_gate_exists`, whose
-    source-text read was the only observer of that read; the refusal test above plants `mult * 10 + 1`
-    off the same fixture, so a literal `2` at the gate stayed green. Here the multiple is SWEPT with the
-    attempt held at Ob 21, Pool 10: refused at 1 (21 > 10), refused at 2 (21 > 20), not refused at 3
-    (21 > 30 is false). A literal 2 at the gate refuses at 3; a literal 3 does not refuse at 1."""
-    from ..harness import headless as HL
-    from ..data.fixtures import DEFAULT_FIXTURES
-    refused_at = {}
-    for mult in (1, 2, 3):
-        w = HL.build_world(0, fixtures=DEFAULT_FIXTURES.sweep("obstacle_refusal_multiple", mult))
-        d = SeasonDriver(w)
-        a = Act(id="act_sweep", actor=next(iter(w.persons)), verb="work")
-        a.obstacle, a.pool = 21, 10
-        d.matter(mint_token(d.w, WriteClass.MATTER), [])
-        out = d.resolve(mint_token(d.w, WriteClass.ACTS), [a], contest_max_depth=2)
-        refused_at[mult] = any(e.kind == "attempt.refused" for e in out)
-    assert refused_at == {1: True, 2: True, 3: False}, refused_at
 
 
 def test_w4_h40s_declared_sweep_is_executed_and_its_zero_arm_does_not_fabricate():

@@ -701,11 +701,6 @@ class Act:
     # NOT fixed here: step 4 is a pure move, and the fix changes `Act`'s schema.
     # [JUSTIFIED: an INDEX into the `strata` roster (#353 §27), inherited -- `social` is index 4 and `stratum_of` returns `STRATA.index(row.stratum)`. NOT `[canonical:]`: this 4 is also the "caller declared nothing" sentinel `stratum_of` tests against, so it is a fitted default doing two jobs, not a ratified value -- see the ⚠ below]
     stratum: int = 4
-    # ⚠ S27.4 refuses an attempt at Ob > 2 x Pool and routes an UNCONTESTED attempt to A GATE,
-    # "never to an Ob = 0 roll". `None` means UNCONTESTED (no obstacle was declared); 0 would
-    # be the Ob=0 roll the section names, which is why it is not the default.
-    obstacle: Optional[int] = None
-    pool: Optional[int] = None
     # ⚠ WHICH SCENE THIS INTERACTION BELONGS TO. The meta-architecture's `Act` carries `scene`,
     # and it is what lets the fold ask what occasioned an act without the Act itself carrying a
     # Question — the Scene owns the occasion, the Act names its Scene. Stamped by the driver as

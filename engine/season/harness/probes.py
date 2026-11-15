@@ -2780,37 +2780,6 @@ def a37():
             "as landed")
 
 
-@probe("A38", "an attempt at Ob > 2 x Pool is refused and the season is spent", "S27.4",
-       by="construction",
-       tests="an attempt far beyond a character's ability must be refused rather than rolled")
-def a38():
-    # `U2`: ONE PASS — the refused act and the surviving one must reach the same `resolve`.
-    w = _one_pass(tiny_world())
-    mult = w.fixtures.get("obstacle_refusal_multiple")
-    kinds = []
-    def choose(p, v, s, ask_budget):
-        if p.id != "p_low":
-            return []
-        # W3: `hopeless`/`hard` were invented verbs. This probe's subject is §27.4's Ob > 2xPool
-        # gate, which `resolve` applies BEFORE the fold, so the verb is incidental — one table
-        # verb with two keys tests it and invents nothing.
-        # `utter` since v9 SC-01 step 12: a bare `speak` is refused by its own cell (no docket).
-        # [JUSTIFIED: pool 5 is an arbitrary test pool; the two obstacles sit one above and exactly at S27.4's threshold mult x pool, so only the first is refused]
-        return [Act_(w, p, "utter", key="hopeless", obstacle=mult * 5 + 1, pool=5),
-                Act_(w, p, "utter", key="hard", obstacle=mult * 5, pool=5)]  # [JUSTIFIED: exactly at S27.4's threshold mult x pool, so admitted; the pair above is one over]
-    _run(w, once(choose))   # `U2`: one submitted pair; the subject is §27.4's gate. See `once`.
-    kinds = [e.kind for e in w.log]
-    # W3: the old `effect` lambda emitted `did.{verb}`; the fold emits the TABLE's `emits`, so
-    # the surviving act produces `proposition.uttered` (`speech.made` until SC-01 step 12). The
-    # property is unchanged: ONE refusal, ONE resolution, and the refused act never reached the fold.
-    assert kinds.count("attempt.refused") == 1 and kinds.count("proposition.uttered") == 1, kinds
-    return (f"PASS: at Ob = {mult}xPool+1 the attempt was REFUSED and the act was spent; at exactly "
-            f"{mult}xPool it resolved. An uncontested attempt routes to A GATE, never to an Ob=0 "
-            "roll. Rev 2 had the branch and no probe ever set `obstacle` or `pool`, so both "
-            "defaulted to 0 and the guard never ran -- while its regression test asserted only "
-            "that two strings appeared in the source")
-
-
 @probe("A31c", "the world verdict is stable across the BAND FLOOR sweep", "S42.2.1",
        by="construction",
        tests="a conclusion about which actions a place supports must not depend on a number nobody decided")

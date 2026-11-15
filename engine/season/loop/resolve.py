@@ -20,7 +20,7 @@ from __future__ import annotations
 import random
 from dataclasses import replace
 from ..gaps import InstrumentDefect
-from ..data.rosters import (FOLD_ATTEMPT_REFUSED, PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, GRADED_INQUIRIES,
+from ..data.rosters import (PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, GRADED_INQUIRIES,
                             STRATA)
 
 from typing import Any, Optional
@@ -851,8 +851,8 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
         # `04 §A.2`'s typed refusal (`seam/contest.py::REFUSAL_STATUSES`): `PARTY-GAP` (a missing
         # party) and `REFUSED` (`sigma.py`'s S27.4, `Ob > 2x Pool`). `speak` is contested, so a
         # speaker whose pool is under 1D reaches this whenever a matter is docketed (the ceiling caps
-        # the obstacle at 2); S27.4's rule is that the attempt is refused and the season spent, as the
-        # uncontested branch below does -- never that the season aborts -- so it takes the verb's
+        # the obstacle at 2); S27.4's rule is that the attempt is refused and the season spent --
+        # never that the season aborts -- so it takes the verb's
         # refusal kind, the shape `PARTY-GAP` takes. `ENGINE-UNAVAILABLE` (a wrapper's subsystem
         # failed to import/compose) is NOT a refusal: the seam still raises it, loud on purpose, since
         # folding it into a graceful `march.refused` would hide an infrastructure failure behind a
@@ -1042,27 +1042,6 @@ def resolve(self, token: Token, acts: list[Act],
         _gone = self._survives(w, a)
         if _gone:
             out.extend(_gone)
-            continue
-        # S27.4: an attempt at Ob > 2 x Pool is REFUSED, and the season is spent. An
-        # uncontested attempt routes to a GATE, never to an Ob = 0 roll.
-        mult = w.fixtures.get("obstacle_refusal_multiple")
-        if a.obstacle is not None and a.obstacle > mult * max(a.pool or 0, 0):
-            # ⚠ `[a.id]`, NOT `[ROOT]`. A REFUSED ATTEMPT HAS AN ANTECEDENT — THE ATTEMPT.
-            # This read `[ROOT]`, and the rule against it is stated TWICE in this file within
-            # sixteen lines: the contest branch below passes `[a.id]` plus the occasion ids (`_act_events`), and `_fold`
-            # carries a paragraph saying `[ROOT]` in an act-caused emission is "`[]` wearing a
-            # marker". The rule was written on both sides of this line and violated between
-            # them. It made `W4`'s headline claim — *"`[ROOT]` only for the seed and a licensed
-            # clock's genuine first emission"* — FALSE OF THE DESIGN while true of the fixture,
-            # because `Act.obstacle` defaults to `None` and the computed chooser never sets
-            # one, so no test could reach it. Found by the `W4` adversarial pass.
-            refused = _act_events(self, w, a, (FOLD_ATTEMPT_REFUSED,))
-            for _e in refused:
-                self.act_of[_e.id] = a
-            out.extend(refused)
-            TRACE.decision(f"{a.actor} attempted Ob={a.obstacle} against Pool={a.pool}",
-                           "S27.4", chose="refuse; the season is spent",
-                           alternatives=["roll it anyway", "route to an Ob=0 roll"])
             continue
         # S39.2 line 1: loop -> subsystem, when an act contests something.
         #

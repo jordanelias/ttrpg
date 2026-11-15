@@ -197,9 +197,10 @@ def test_inv7_the_fold_mints_no_kind_a_column_does_not_declare():
 
 
 def test_inv7_the_fold_reads_each_literal_from_the_roster_not_from_its_body(monkeypatch):
-    """OBSERVED, NOT GREPPED: point each of the three constants at a kind no column declares and drive
+    """OBSERVED, NOT GREPPED: point each constant at a kind no column declares and drive
     the fold path that emits it. A body literal left behind would emit the old kind and raise nothing;
-    reading the roster raises on the planted one. Three paths, three observations."""
+    reading the roster raises on the planted one. Two paths, two observations (the third, S27.4's
+    `attempt_refused` arm of the fold, is deleted: B03.55)."""
     w, d = _world()
     # (1) `ineligible`: a predecessor removed the actor (S27.1)
     monkeypatch.setattr(_resolve, "FOLD_INELIGIBLE", "act.vanished")
@@ -209,14 +210,6 @@ def test_inv7_the_fold_reads_each_literal_from_the_roster_not_from_its_body(monk
     monkeypatch.setattr(_resolve, "FOLD_REFUSED", "act.declined")
     with pytest.raises(InstrumentDefect, match="act.declined"):
         _resolve._refuse_party_gap(d, w, Act(id="nowhere", actor=DUKE, verb="no_such_verb"))
-    # (3) `attempt_refused`: S27.4's refusal of an attempt past the obstacle ceiling
-    monkeypatch.setattr(_resolve, "FOLD_ATTEMPT_REFUSED", "attempt.spurned")
-    over = Act(id="over", actor=DUKE, verb="open_case", obstacle=99, pool=1)
-    with pytest.raises(InstrumentDefect, match="attempt.spurned"):
-        _fold(w, d, over)
-    monkeypatch.undo()
-    again = Act(id="over2", actor=DUKE, verb="open_case", obstacle=99, pool=1)
-    assert [e.kind for e in _fold(w, d, again)] == ["attempt.refused"], "control: the shipped kind"
 
 
 # ======================================================================================
