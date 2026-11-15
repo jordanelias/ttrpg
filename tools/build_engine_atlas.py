@@ -176,7 +176,7 @@ def declared_contracts(subsystem):
 
     A package may declare which module contracts it implements::
 
-        VALORIA_CONTRACTS = ["faction_state", "faction_politics"]
+        VALORIA_CONTRACTS = ["settlement_layer", "peninsular_strain"]
 
     in `systems/<subsystem>/sim/__init__.py` (or the folder's own `__init__.py`). This is the
     preferred attribution because it is the only one that survives a file move and needs no

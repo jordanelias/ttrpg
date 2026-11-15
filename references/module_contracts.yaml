@@ -129,30 +129,10 @@ composition_roles:
 modules:
 
   - module: faction_state
-    aliases: ["Faction Layer"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
-    registry_system: "faction_layer"   # Key Type Registry vocabulary
-    doc: .designs/systems/factions/reference/faction_behavior_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the census).
-    sim_module: none   # this contract's state: block describes no code (row kept: other contracts' `with:` joins name it)
-    scales: [provincial]
-    resolver: deterministic_accounting   # [ASSUMPTION] accounting-cadence procedures; d_sigma for contested resolution per ED-874
-    state:
-      - {name: "Mandate", bucket: derived_value, writable: false}   # size-weighted aggregate of settlement L/PS (settlement_layer §1.8 LPS-2e) — F1 guard
-      - {name: "Treasury", bucket: derived_value, writable: false}   # derived_stats §3 (x100)
-      - {name: "faction stats 1-7", bucket: track, writable: true}   # Military/Stability/etc.; ±1 at accounting
-    transitions:
-      - {via: "scale_transitions §3.2 Personal → Faction / §5 Domain Echo"}
-    loops:
-      - {open: true}   # self-loop: consumes own mechanical.cascade_resolution + mission_shift (cascade re-resolution, substrate §8.1); DAMPED [verification LD-5]: drift_coef=0.6/season (faction_behavior §3.2.4) + mission-shift 4-consecutive-season counter; crisis-bypass (scars>=3) is intentional bounded un-damping
-    accounting_phase: [settlement_accounting]
-    gap_notes:
-      - "V1 gap RESOLVED by registry matrix: faction_layer emits mechanical.cascade_resolution, mechanical.mission_shift, state.standing_change (was: \"type ids unnamed\" in substrate §8.6)"
-      - "registry system name faction_layer vs module faction_state — vocabulary unification [OPEN — Jordan]"
-      - "SCOPE [verification A6]: faction_state = {faction_layer_v30 (stability/occupation/treaties/parliament) + faction_behavior_v30 (PP-686 mission/cascade/expectation/Mandate)}; the doc field names only faction_behavior_v30. Boundary vs faction_politics (rank ladder) is the registry dual-emit on state.standing_change/coup_attempted/succession."
-    status: extracted
-    sources:
-      - "key_substrate_v30 §8.1, §8.6 [READ: 2026-06-10]"
-      - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
-      - "settlement_layer_v30 §1.8 LPS-2e [READ: 2026-06-10]"
+    # RETIRED, NO CONTRACT: a faction is `engine/season/queries/faction_q.py`'s view -- no state, no composition role. Row kept (B03.26, ED-IN-0232) because other contracts' `with:` joins name it, `doc:` is read by CODE (workbench node-state, the census, the structure audit) and `validate_wiring` demands a `wiring:` block.
+    doc: .designs/systems/factions/reference/faction_behavior_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled.
+    sim_module: none
+    resolver: deterministic_accounting   # read by structure_audit.is_notional: dropping it would flip this row to notional
     wiring:
       build: deferred
       godot: no-oracle
@@ -742,25 +722,10 @@ modules:
         re-pointed at the season driver at `28-iii`.
 
   - module: faction_politics
-    registry_system: "faction_politics"   # Key Type Registry vocabulary
-    doc: .designs/systems/factions/reference/faction_politics_v30.md   # ED-IN-0231: quarantined, and RESTORED here on purpose. This module has NO CODE, so severing its doc would leave the module a bare name with nothing defining it.
+    # RETIRED, NO CONTRACT: a faction is `engine/season/queries/faction_q.py`'s view -- no state, no composition role. Row kept (B03.26, ED-IN-0232) because `doc:` is read by CODE (workbench node-state, the census, the structure audit) and `validate_wiring` demands a `wiring:` block.
+    doc: .designs/systems/factions/reference/faction_politics_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled.
     sim_module: none
-    scales: [provincial]
-    resolver: deterministic_accounting   # [ASSUMPTION]
-    state:
-      - {name: "Standing", bucket: track, writable: true}   # §1.0 Ladder Architecture: 8-position per-faction rank ladder, 0 (pre-initiation) to 7; bidirectional (§1.0a, ED-776). Emits state.standing_change
-      - {name: "Coup posture", bucket: track, writable: true}   # §1.1d/§2.1 + §10.1 ED-POL-09: the state item behind state.coup_attempted, not a ratified formula (numeric mechanics deferred to a faction_layer_v30 update)
-      - {name: "Succession status", bucket: track, writable: true}   # §1.0 intro + §6 (Baralta Crown Claim succession-contest outcomes A/B/C). Emits state.succession
-    transitions: []
-    loops: []
-    gap_notes:
-      - "registry-derived; distinct system from faction_layer per registry vocabulary (emits succession/coup/standing/investigation) — boundary vs faction_state unestablished [OPEN — Jordan]; home doc [GAP]"
-      - "home doc [GAP] closed 2026-07-08 (ED-IN-0016): the 'home doc [GAP]' clause above is now stale — doc: field flipped to systems/factions/reference/faction_politics_v30.md. The faction_politics-vs-faction_state boundary question remains genuinely open."
-      - "state: [] CLOSED 2026-07-29 (W3 item 3, OI-24/OI-20 contract half): declared the 3 top-level state items (Standing, Coup posture, Succession status) directly off faction_politics_v30.md §1.0/§1.0a/§1.1-1.4/§6/§10.1. This is a contract-truth declaration, not a sim build — OI-20's sim half stays DEFERRED to the FA lane (§3.5 of the orchestration plan)."
-    status: extracted
-    sources:
-      - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
-      - "systems/factions/reference/faction_politics_v30.md §1.0, §1.0a, §1.1-§1.4, §6, §10.1 [READ: 2026-07-29]"
+    resolver: deterministic_accounting   # read by structure_audit.is_notional: dropping it would flip this row to notional
     wiring:
       build: deferred
       godot: python-oracle
