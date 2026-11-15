@@ -890,14 +890,14 @@ class PersonInterior:
     """WHAT `choose` IS HANDED OF A PERSON: `04` §B.2 row 2 *"a frozen copy with no store handle"*, §C.3 *"In: a
     frozen `PersonInterior`"*. A person interior is what is inside the person, copied out at the barrier: no
     assignment to the interior's own fields, and no item assignment into its mappings, reaches the `Person`.
-    That is NOT "nothing the interior holds can change the store": `ledger`, `tenures` and `stance` share the
-    LIVE carriers (below), so an assignment THROUGH one of them (`interior.tenures[0].until = ...`) lands on the store.
+    That is NOT "nothing the interior holds can change the store": `ledger` and `tenures` share the
+    LIVE carriers (below; a stance row is a tuple, so `stance` is not a route), so an assignment THROUGH one of them (`interior.tenures[0].until = ...`) lands on the store.
 
     THE FIELDS ARE THE ONES `decision/` READS, derived by an `ast` walk of attribute reads on the person
     parameter there (and in the `queries/person_q.py` and `epistemic.py` callees it hands the whole person to), plus
     `loop/deliberate.py`'s own `p.id`; the walk found no write to any of them. Mappings are `MappingProxyType`
-    over a copy, sequences are tuples. `ledger`, `tenures` and `stance` hold the carrier objects themselves
-    (`Claim`, `Tenure`, stance rows), not copies of them: a `Tenure` counts its own assignments
+    over a copy, sequences are tuples. `ledger` and `tenures` hold the carrier objects themselves
+    (`Claim`, `Tenure`), not copies of them: a `Tenure` counts its own assignments
     (`_v`, `World._tenure_changes`), so a copy would be a different object to the diff. The reader a
     caller wants over the ledger is `queries/person_q.py::LedgerReader(interior.ledger)` -- built there, because
     this module may not import `queries/`.
