@@ -104,7 +104,7 @@ from ..data import verbs as V
 from ..data.rosters import FACTION_BY_PROP, PURSUIT_AXES, faction_prop_id
 from ..data.verbs import alignment_at
 from ..decision import assemble, choose as CH, opening_set
-from ..decision.options import project
+from ..decision.options import project, subject_is_opponent
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries import world_q
 from ..seam.wrappers.sigma import believed_odds_query
@@ -388,6 +388,16 @@ def formed_set(w, p, q, foldable=None) -> list:
     return [c for c in opening_set(p, view, q, w.fixtures) if c.verb in foldable]
 
 
+def is_self_plea(c, actor: str) -> bool:
+    """WHETHER CANDIDATE `c` IS A SELF-PLEA by `actor`: an act contested against its subject (`options.subject_is_opponent`)
+    whose subject is the actor himself. `opening_set` forms one only on a row declaring `subject_may_be_self` (`speak`);
+    `choose.py`'s polarity (`subject != p.id`) reads the same split. A candidate whose subject is the actor on a row NOT
+    contested against its subject (the referent's own `move`, `train`, ...) is no plea, so the key does not split it: a bare
+    `c.subject == actor` marks every row the referent himself forms and leaves the common set empty."""
+    row = V.VERB_TABLE.get(c.verb)
+    return c.subject == actor and row is not None and subject_is_opponent(row)
+
+
 def read_decisions(w) -> dict:
     """The `--decisions` figures on a built realm (no season is played). Per referent: the persons handed
     the question, those who form any candidate, the common set (intersection of those), the number of
@@ -402,7 +412,7 @@ def read_decisions(w) -> dict:
         q = decision_question(ref)
         split = new_split()
         formed = {pid: formed_set(w, p, q, foldable) for pid, p in sorted(w.persons.items())}
-        keyed = {pid: {(c.verb, c.subject): c for c in cs} for pid, cs in formed.items() if cs}
+        keyed = {pid: {(c.verb, c.subject, is_self_plea(c, pid)): c for c in cs} for pid, cs in formed.items() if cs}
         common = set.intersection(*(set(k) for k in keyed.values())) if keyed else set()
         tops: dict = {}
         deciders: Counter = Counter()
@@ -414,7 +424,7 @@ def read_decisions(w) -> dict:
             deciders[r["decider"]] += 1
             tally_split(split, pid, r)
             tally_split(total, pid, r)
-            tops[pid] = (r["top"].verb, r["top"].subject) if r["top"] else None
+            tops[pid] = (r["top"].verb, r["top"].subject, is_self_plea(r["top"], pid)) if r["top"] else None
         by_faction: dict = {}
         for pid, top in tops.items():
             fac = world_q.faction_holding(w, pid)

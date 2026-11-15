@@ -39,7 +39,6 @@ from ..harness import decision_spread as DS
 from ..harness.populated import build_realm
 from ..state.carriers import Candidate, Person
 from ..state.ids import draw_factory
-from .test_cp_t05_02_self_plea import revert_cp_t05_02
 
 _FX0 = DEFAULT_FIXTURES.sweep("choice_temperature", 0)        # no sampler: the score alone orders
 _SUBJECT = "p_in62_x"
@@ -262,19 +261,23 @@ def test_in62_score_is_the_sum_of_score_terms_for_every_candidate_a_season_forms
     assert any(t[0] != 0 for _, t in season_pairs), "no pursuit term was nonzero: the sum proved nothing"
 
 
-def test_in62_under_the_null_every_realm_top_is_draw_or_tiebreak_and_the_shipped_reading_is_not(monkeypatch):
-    # B10-13 CP-T05-02: the null is read with the self-plea at its revert. `read_decisions` scores the intersection of
-    # every person's opening set at a referent, and the referent is one of those people: with `subject_may_be_self`
-    # his set holds `speak` on himself, so `speak` (the one common row contested against its subject) enters the
-    # common set at every referent, and the `declared` polarity (CR-16) scores it `+regard` for a person who dislikes
-    # the referent against `-regard` on every other row. The null zeroes alignment only, so `stance` then decides
-    # their tops (MEASURED at dcac6650: p_npc_050 on p_npc_021, regard -3: `speak` +6.0, the other 14 rows -6.0).
-    # The claim here is about alignment; the instrument's `(verb, subject)` key does not tell a self-plea from an
-    # accusation. A harness change that keys them apart would lift this revert.
-    revert_cp_t05_02(monkeypatch)
-    shipped = DS.read_decisions(build_realm(0))
+def _pursuit_tops(read: dict) -> int:
+    """The persons whose top a reading attributes to a pursuit term, over the referents."""
+    return sum(n for row in read["rows"] for k, n in row["deciders"].items() if "pursuit" in k)
+
+
+@pytest.mark.parametrize("seed", [0, 1, 2])
+def test_in62_under_the_null_every_realm_top_is_draw_or_tiebreak_and_the_shipped_reading_is_not(seed):
+    # B10-13 CP-T05-02: `read_decisions` scores the intersection of every person's opening set at a referent, and the
+    # referent is one of those people: with `subject_may_be_self` his set holds `speak` on himself. It keys a candidate on
+    # (verb, subject, is_self_plea), so that self-plea and everyone else's `speak` on him (an accusation) are two rows and
+    # neither is common; unkeyed, `speak` entered the common set and the `declared` polarity (CR-16) scored it `+regard`
+    # against `-regard` on every other row, so `stance` decided the null's tops (MEASURED at dcac6650: p_npc_050 on
+    # p_npc_021, regard -3: `speak` +6.0, the other 14 rows -6.0) and this test read the null with the self-plea reverted.
+    # CONTROL: the null arm's pursuit count is 0, so the shipped count above it is the term the null removes, observed.
+    shipped = DS.read_decisions(build_realm(seed))
     with DS.null_alignment():
-        null = DS.read_decisions(build_realm(0))
+        null = DS.read_decisions(build_realm(seed))
     assert DS.alignment_at("uniform") != V.ALIGNMENT, "the null outlived its reading"
     seen_null, checked = set(), 0
     for row in null["rows"]:
@@ -282,8 +285,10 @@ def test_in62_under_the_null_every_realm_top_is_draw_or_tiebreak_and_the_shipped
         checked += sum(row["deciders"].values())
     assert checked >= 400, checked
     assert seen_null <= {"draw", "tiebreak"}, f"under the null a top was attributed to {seen_null}"
-    assert any("pursuit" in k for row in shipped["rows"] for k in row["deciders"]), (
-        "the shipped reading attributed no top to pursuit: the null assertion could not have failed")
+    assert _pursuit_tops(null) == 0, null["rows"]
+    assert _pursuit_tops(shipped) > _pursuit_tops(null), (
+        f"seed {seed}: the shipped reading attributed {_pursuit_tops(shipped)} tops to pursuit, the null "
+        f"{_pursuit_tops(null)}: the null assertion could not have failed")
 
 
 def test_in62_arm_0_holds_one_vector_one_conviction_and_reads_no_goals_file():
