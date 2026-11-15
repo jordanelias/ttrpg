@@ -1,7 +1,7 @@
 """`season.data` — where the package's inputs are resolved.
 
 `files` is the single path anchor for the whole package (see `files.py`). `rosters` and `matrix`
-are the loaders that read those paths; `shape.py` imports them directly, and `matrix` imports
+are the loaders that read those paths; `verbs.py` imports them directly, and `matrix` imports
 `rosters.load_yaml`, so the load order is fixed by the data dependency and needs no help here.
 
 ⚠ THIS MODULE DELIBERATELY DOES NOT IMPORT THE LOADERS. It did, for one commit, to make the

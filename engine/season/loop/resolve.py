@@ -151,8 +151,8 @@ def _eligible(self, w: "World", a: Act, row: "VerbRow") -> bool:
             # It does NOT raise, because eligibility is a DISJUNCTION: `work` is `own |
             # presence:<site>` and `own` already admits, so raising here would refuse acts the
             # design permits. This branch declines and the loop tries the next alternative.
-            TRACE.note(f"`presence:` eligibility is unevaluable (H-33, the presence index); "
-                       f"declining this alternative for {a.verb}", "H-33")
+            TRACE.note(f"`presence:` eligibility is unevaluable (H-75, its argument names a kind of rung, "
+                       f"not an id); declining this alternative for {a.verb}", "H-75")
             continue
     return False
 

@@ -25,17 +25,6 @@ the other: the `H-66` sweep and the `H-146` tests rebind `data.verbs.ALIGNMENT`,
 else binds the name. Every reader (`choose`'s score, `refuses`, `person_q._pursuits_violated_by`, `corpus_run`) calls
 `align`; tests that import `ALIGNMENT` do so function-locally and read it live -- a copy imported
 by name at module scope would be a stale snapshot.
-
-⚠ `VERB_TABLE` IS ASSIGNED TWICE, VERBATIM, AND ONLY THE SECOND ASSIGNMENT EVER RUNS. The
-forward declaration below (`VERB_TABLE: dict = {}`) carries a comment from a PRIOR layout of
-`shape.py`, from before steps 1-2 extracted the write matrix and roster readers: at that time
-real loading code sat physically between the forward declaration and the fill. It does not any
-more -- the two lines are adjacent -- and nothing at IMPORT TIME reads `VERB_TABLE` in the gap:
-checked directly, `_load_alignment`'s own read of it (`admitted = set(VERB_TABLE) | ...`) is inside a
-function BODY, defined a few lines after the real fill but not CALLED (`ALIGNMENT =
-_load_alignment()`) until further still -- by which point the real fill has long since run.
-Preserved unchanged because this is a PURE MOVE and the forward declaration is otherwise
-harmless -- a `dict` type hint on a name the next line immediately rebinds.
 """
 
 from __future__ import annotations
@@ -1183,8 +1172,6 @@ def tenure_kinds_without_an_opener() -> list:
     position `7a` and `oblige` at `17a` -- computed, not read off the roster, so neither needed an
     edit here to leave the list)."""
     return sorted(k for k, vs in _OPENERS_FROM_EFFECTS.items() if not vs)
-
-VERB_TABLE: dict = {}          # filled after STRATA loads, at the bottom of the roster block
 
 VERB_TABLE = _load_verb_table()
 

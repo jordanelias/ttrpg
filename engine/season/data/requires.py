@@ -1,4 +1,4 @@
-"""`season.data.requires` -- the `requires` grammar, extracted from `shape.py` (step 3 of the
+"""`season.data.requires` -- the `requires` grammar, extracted from the retired `shape.py` (step 3 of the
 decomposition, a PURE MOVE: no behaviour changed, only where the code lives).
 
 Owns the requirement grammar in full: the third truth value (`_Unknown`/`UNKNOWN`), the read
@@ -18,8 +18,8 @@ are READERS -- `queries/` territory at a later step -- and the grammar this modu
 `reader.read(subject, predicate)` of whichever one a caller hands it, never anything about WHERE
 the answer came from. Moving a reader in here would give the grammar an opinion about that, which
 is exactly the coupling `WorldReader`'s own docstring argues against (the actor's-own-ledger
-carve-out: *"the fold may ask the ACTOR'S OWN ledger ... and no other"*). `shape.py` still defines
-both readers, and both import `UNKNOWN` back from here -- the one name a reader's `read()` needs
+carve-out: *"the fold may ask the ACTOR'S OWN ledger ... and no other"*). `queries/world_q.py` defines
+`WorldReader` and `queries/person_q.py` defines `LedgerReader`, and both import `UNKNOWN` back from here -- the one name a reader's `read()` needs
 from the grammar it serves.
 
 ⚠ THE ORDERING CONSTRAINT THIS MODULE EXISTS TO SATISFY. `_build_clause` refuses any requirement
@@ -763,12 +763,12 @@ def binding_from_act(a) -> dict:
                       getattr(a, "via", None))
 
 # `WorldReader` and `LedgerReader` -- the two dispatchers `read()` on the stems below -- live in
-# `shape.py`, not here (see this module's docstring). `REQUIRES_STEMS` is the closed vocabulary
+# `queries/world_q.py` and `queries/person_q.py`, not here (see this module's docstring). `REQUIRES_STEMS` is the closed vocabulary
 # `_require_known_stem` (below) checks a cell's stems against at LOAD; `WorldReader.read`'s own
 # `if stem ==` chain is a separate, hand-written dispatcher over the same names -- the two are not
 # generated from one another, so a stem added here without a matching branch there still loads
 # clean and reads UNKNOWN forever. `LEDGER_DERIVED_STEMS` is read at the WITNESS deposit site in
-# `shape.py`, which imports it back from here.
+# `loop/witness.py` and `data/goals.py`, which import it back from here.
 
 # THE STEMS `WorldReader.read`/`LedgerReader.read` DISPATCH ON. The two readers below are the
 # only consumers.

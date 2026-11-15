@@ -61,9 +61,8 @@ def resolvable_verbs() -> frozenset:
     predicate registry moves. W3 measured 12 of 32; this is that measurement as a function, so a
     probe can report both numbers instead of hardcoding either.
 
-    THREE GATES: a precondition the fold can evaluate, an effect for whatever it writes, and NOT
-    routing to a contest — a contesting verb's resolution is the seam's, and the seam does not
-    return yet (`H-31`, `W7`)."""
+    THREE GATES: a precondition the fold can evaluate, an effect for whatever it writes, and, for
+    a verb that contests, a prize with a registered provider and a typed row (the comment below)."""
     out = set()
     for v, row in VERB_TABLE.items():
         # ⚠ BOTH GATES, NOT JUST THE PRECONDITION. The first version checked `requires:` alone and

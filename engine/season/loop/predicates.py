@@ -1,7 +1,7 @@
-"""`season.loop.predicates` — the seven `requires:` cells the grammar does not type (five until
-`establish` joined them at plan position `13f`, 2026-09-25, `give` at position `16` and `oblige`
-at `17a`, both 2026-09-29; `give` left again at `14`, its cell typed on `T4`'s `with` stem; the
-count below is the older one).
+"""`season.loop.predicates` — the `requires:` cells the grammar does not type. The verbs are the keys
+of `REQUIRES_PREDICATES` below, which is the owner: this comment names no list and carries no count
+(`establish` joined at plan position `13f`, `oblige` at `17a`; `give` came and left again at `14`, its
+cell typed on `T4`'s `with` stem).
 
 EXTRACTED, step 5 of the decomposition (a PURE MOVE but for two call sites, named below). The
 registry and its decorator travel with the functions they register, which is the rule step 3
@@ -9,7 +9,7 @@ established for `REQUIREMENT_TYPES` and step 5 applies unchanged: **a decorator-
 in the module that defines the decorated things**, or the table is empty at the moment the loader
 reads it.
 
-WHY FIVE AND NOT EIGHT. `W-A` retired `_req_transfer`, `_req_tell`, `_req_move` and `_req_work` on
+WHY NOT MORE. `W-A` retired `_req_transfer`, `_req_tell`, `_req_move` and `_req_work` on
 2026-09-04 — each is a TYPED CELL in `verb_table.yaml` now, read by `evaluate()`. §8's rule is
 that a rule lives once, and a verb carrying both a typed cell and a predicate here would be two
 readings of one prose cell; that is exactly how `_req_confer` came to drop a disjunct and
@@ -702,11 +702,12 @@ def _req_convene(w: "World", a: "Act") -> bool:
 # `test_wa_one_owner_a_verb_has_a_typed_cell_or_a_predicate_and_never_both` is the guard that
 # fails on a recurrence.
 #
-# THE FIVE THAT REMAIN. Four -- `confer`, `revoke`, `dispatch`, `convene` -- are `remit:`-eligible,
+# THE ONES THAT REMAIN are the keys of `REQUIRES_PREDICATES` (read the registry; no count is kept here).
+# `confer`, `revoke`, `dispatch` and `convene` are `remit:`-eligible,
 # not `own`-eligible, and `W-A`'s scope is the `own` rows. Two of them need grammar forms with no
 # `own` cell (`cardinality`, `basis`) and `confer` needs a DISJUNCTION, which no `own` cell has
 # and which is therefore not built (`ID-13`: a combinator nothing uses is a dead carrier).
-# ⚠ THE FIFTH IS `release` (2026-09-11) AND IT IS AN `own` ROW, WHICH THIS PARAGRAPH ONCE SAID
+# ⚠ `release` (2026-09-11) AND IT IS AN `own` ROW, WHICH THIS PARAGRAPH ONCE SAID
 # COULD NOT HAPPEN. `W-A`'s scope IS the `own` rows, and a predicate on one would ordinarily be a
 # cell somebody failed to type. It is not here, and the reason is the same DISJUNCTION that keeps
 # `confer` out: `release`'s domain is a SET of six tenure kinds, `data/requires.py` carries `all`
@@ -716,16 +717,16 @@ def _req_convene(w: "World", a: "Act") -> bool:
 # is closed) and `04 §A.3` row 14 asks for a verb, not a form. The verb row states the same thing
 # at its `requires_typed_note:` and closes with the condition under which this stops being true:
 # *"IF AN `any` COMBINATOR IS EVER RULED, THIS CELL IS THE FIRST THING TO TYPE."*
-# ⚠ THE SIXTH IS `establish` (`13f`, 2026-09-25), `remit:`-eligible like the first four. Its
+# ⚠ `establish` (`13f`, 2026-09-25), `remit:`-eligible like `confer`, `revoke`, `dispatch` and `convene`. Its
 # operands -- post, rung, remit, body/faction, conferral -- are not in `requires_operands`, and its
 # clauses ask the `Office` constructor and `World.class_of`, neither of which is a grammar form.
-# ⚠ THE SEVENTH IS `give` (position `16`, 2026-09-29), an `own` row like `release` and for the
+# ⚠ `give` (position `16`, since typed and gone from the registry, 2026-09-29), an `own` row like `release` and for the
 # same kind of reason: its first conjunct types (`succeed`'s `held_by`) and its second -- *the
 # receiver is present where the actor is* -- has no stem, because `Relation` pairs its operand with
 # the ACTOR and `present_at` asks where the ACTOR is. A typed cell AND a predicate on one row is
 # what `test_wa_one_owner_...` forbids, so the whole cell is the predicate's. ⚠ IF A PERSON-TO-
 # PERSON CO-LOCATION STEM IS EVER RULED, THIS CELL IS THE ONE WAITING FOR IT (r2 `02` §A.7).
-# ⚠ THE EIGHTH IS `oblige` (position `17a`, 2026-09-29), an `own` row. Its clauses read
+# ⚠ `oblige` (position `17a`, 2026-09-29), an `own` row. Its clauses read
 # `Office.binds` (no stem reads a seat's own field), the seat's occupant, and a NEGATION -- no live
 # `oblige` already -- and the grammar has no `not`, the same wall `release`'s disjunction hits.
 # ---------------------------------------------------------------------------

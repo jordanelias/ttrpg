@@ -433,8 +433,10 @@ DEFAULT_FIXTURES = Fixtures(
     #
     # ⚠ `pool_default` IS WHAT `capability` WOULD SUPPLY AND DOES NOT. `03 §A.2` rules the
     # mechanism — *"Rank supplies dice and gates nothing"* — and `Person.capability` is the store
-    # it would come from, with exactly one writer in the tree, which ZEROES it. So every corpus
-    # person derives this number, the roll varies by SEED and FIXTURE rather than by PERSON, and
+    # it would come from; it is written by a cast overlay (`data/cast.py::capability_of`) and by
+    # `loop/effects_combat.py`'s `_eff_train` and `_grown`, and is empty for a person none of them
+    # reaches. So most corpus persons derive this number, the roll varies by SEED and FIXTURE rather
+    # than by PERSON, and
     # R-09 reads `partial` rather than `met` until capability is written. `08 §3`'s `assumption`
     # row is what licenses injecting it at all: *inject the default, declare the site, sweep three
     # points* — the grade that REFUSES is `absent`, and this is not one.
