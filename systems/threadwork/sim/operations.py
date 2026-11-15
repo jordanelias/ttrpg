@@ -52,28 +52,11 @@ from systems.threadwork.sim.coherence import (RESTING_POINT_START, apply_coheren
 # thread-sensitivity gates, the coherence cost by scale, the forced-resolution surcharge, the resilience
 # gain and its sweep, the resting-point mending amounts) are `params.py`'s, the one owner the exporter
 # reads; they are bound here by name so a test that rebinds `operations.RESILIENCE_GAIN` still moves the
-# one reader (`resist_coherence_cost`). `BREADTH_OB` and `DISTANCE_OB` stay below: nothing reads them.
+# one reader (`resist_coherence_cost`).
 from systems.threadwork.sim.params import (
     COHERENCE_COST_BY_SCALE, DEPTH_OB, FR_SURCHARGE, LEAP_OB_TS_HIGH, LEAP_OB_TS_LOW,
     MENDING_OB, RESILIENCE_GAIN, RESILIENCE_GAIN_SWEEP, RESTING_POINT_MEND_BY_DEGREE, TN_STANDARD,
 )
-
-# §Three-Axis Ob — Breadth Ob
-BREADTH_OB = {
-    "Single":      0,
-    "Small group": 1,
-    "Formation":   2,
-    "Battlefield": 3,
-    "Regional":    4,
-}
-
-# §Three-Axis Ob — Distance Ob
-DISTANCE_OB = {
-    "Contact/Close": 0,
-    "Near":          1,
-    "Distant":       2,
-    "Far":           3,
-}
 
 
 # P-25 "Scale-based Mending Stability" — the SCALE TERM on Mending Stability, authored here because

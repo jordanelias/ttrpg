@@ -7,8 +7,7 @@ any. `tools/export_engine_params.py` collects every uppercase JSON-typeable cons
 port reads is this file's, never a transcription: change a value HERE and regenerate; never edit the JSON.
 
 This module imports nothing, so the exporter's auto-collection sees only constants defined here (a name
-imported from another module would be exported as that module's). `BREADTH_OB` and `DISTANCE_OB` are NOT here:
-they stay in `operations.py` until their deletion (nothing reads them).
+imported from another module would be exported as that module's).
 """
 from __future__ import annotations
 
@@ -57,7 +56,7 @@ MENDING_OB = {
 }
 
 # §Three-Axis Ob — TS minimums per Depth
-DEPTH_TS_MINIMUM = {
+DEPTH_TS_MINIMUM = {  # read by nothing until CR-13 (B35)
     "Object":       30,
     "Personal":     30,
     "Relational":   50,
