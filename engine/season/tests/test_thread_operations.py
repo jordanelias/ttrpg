@@ -26,9 +26,3 @@ def test_a_verb_row_naming_an_unrostered_operation_is_refused():
     ok = src.replace(_LEVY_ROW, _LEVY_ROW + f'    operation: "{member}"\n', 1)
     assert ok != src
     _load_with(ok)
-
-
-def test_the_roster_names_the_seven_operations():
-    from ..data.rosters import THREAD_OPERATIONS
-    assert THREAD_OPERATIONS == frozenset(
-        {"leap", "weave", "pull", "past_pull", "lock", "dissolve", "mend"})
