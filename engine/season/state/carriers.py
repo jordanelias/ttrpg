@@ -26,7 +26,8 @@ these nine classes and this module imports nothing back, so the two files togeth
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, NamedTuple, Optional
+from types import MappingProxyType
+from typing import Any, Mapping, NamedTuple, Optional
 
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.matrix import MATRIX
@@ -882,6 +883,45 @@ class Person:
         the field it is about, and it is not state (`matrix_rows_without_a_field` reads fields,
         and no write-matrix row names it)."""
         return self.weight > 1
+
+
+@dataclass(frozen=True, eq=False)
+class PersonInterior:
+    """WHAT `choose` IS HANDED OF A PERSON: `04` §B.2 row 2 *"a frozen copy with no store handle"*, §C.3 *"In: a
+    frozen `PersonInterior`"*. A person interior is what is inside the person, copied out at the barrier: no
+    assignment to a field, and no item assignment into a mapping, changes anything (`Person` is not touched).
+
+    THE FIELDS ARE THE ONES `decision/` READS, derived by an `ast` walk of attribute reads on the person
+    parameter there (and in the `queries/person_q.py` and `epistemic.py` callees it hands the whole person to), plus
+    `loop/deliberate.py`'s own `p.id`; the walk found no write to any of them. Mappings are `MappingProxyType`
+    over a copy, sequences are tuples. `ledger`, `tenures` and `stance` hold the carrier objects themselves
+    (`Claim`, `Tenure`, stance rows), not copies of them: a `Tenure` counts its own assignments
+    (`_v`, `World._tenure_changes`), so a copy would be a different object to the diff. The reader a
+    caller wants over the ledger is `queries/person_q.py::LedgerReader(interior.ledger)` -- built there, because
+    this module may not import `queries/`.
+
+    `eq=False`: identity equality, so an interior with mappings in it is hashable. Not stored anywhere."""
+    id: str
+    name: str
+    capability: Mapping
+    pursuits: Mapping
+    conviction: Mapping
+    scar: Mapping
+    attributes: Mapping
+    body: int
+    thread_sensitivity: Optional[int]
+    stance: tuple
+    travel_leg: tuple
+    tenures: tuple
+    ledger: tuple
+
+
+def interior_of(p: Person) -> PersonInterior:
+    """THE ONE BUILDER of a `PersonInterior`: copy the fields `decision/` reads out of `p`, mappings read-only."""
+    ro = lambda d: MappingProxyType(dict(d or {}))
+    return PersonInterior(
+        p.id, p.name, ro(p.capability), ro(p.pursuits), ro(p.conviction), ro(p.scar), ro(p.attributes),
+        p.body, p.thread_sensitivity, tuple(p.stance), tuple(p.travel_leg), tuple(p.tenures), tuple(p.ledger))
 
 
 @dataclass

@@ -19,6 +19,7 @@ Four claims, each with the control that stops it passing vacuously:
      have caught `w._rehome()` (`ED-IN-0206`), including the route through the `w.tenures` getter.
 """
 import ast
+import dataclasses
 import enum
 import functools
 import pathlib
@@ -407,8 +408,11 @@ def test_g2_deliberate_mutates_no_store_by_any_route(monkeypatch):
         p.scar = {**p.scar, "g2_plant": 1}     # a space assigning a Person field outside any fold
         return space(p, v, s, ask_budget, auto)
 
+    # B03.58: the space is handed a frozen `PersonInterior`, so the planted assignment raises AT THE ASSIGNMENT
+    # (`FrozenInstanceError`) instead of being found afterwards by the digest. The stored person is untouched.
     w = P.tiny_world()
     ch, used = seated(w, plant)
-    with pytest.raises(AssertionError, match="DELIBERATE mutated"):
+    with pytest.raises(dataclasses.FrozenInstanceError):
         SeasonDriver(w).season(ch, question=None, contest_max_depth=w.fixtures.get("contest_max_depth"))
     assert used["n"] >= 1
+    assert all("g2_plant" not in p.scar for p in w.persons.values()), "the planted write reached the stored person"

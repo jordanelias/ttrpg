@@ -117,6 +117,7 @@ derived score, choice score).
 | **circle** | doers in his ledger who share his faction or his home | `world_q.circle_of` (P) | "Inner Circle" (a canon body) — capitalised, never bare | — |
 | **legibility** | how far others can read a person (A-43) | `person_q.legibility` (P) | — | — |
 | **knowledge kind** | `mundane` or `thread_substrate`: what a claim is about | `rosters.yaml: knowledge_kinds` (T) | "ground" | — |
+| **person interior** | the frozen copy of a person the chooser reads, which no assignment can change, as an interior is what is inside the person (B03.58; `04` §B.2 row 2, §C.3) | `state/carriers.py::PersonInterior`, built by `interior_of` (T) | "snapshot", "projection" for the same copy; the interior as derived scores (the row of §B, *the interior*) is a different sense: it is what a person's state yields, this is the copy of that state; the identifier `capability` stays (§H; a rename is Jordan's amendment, D-06) | — |
 
 ## D. World, places, seats and documents
 

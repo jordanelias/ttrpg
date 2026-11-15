@@ -55,7 +55,7 @@ from typing import Any, Callable, Iterable, Mapping, Optional, Sequence
 from ..data.rosters import AFFILIATIONS
 from ..gaps import Forbidden
 from ..queries.person_q import LedgerReader
-from ..state.carriers import Person, Question, View
+from ..state.carriers import Person, PersonInterior, Question, View
 from .choose import make_ranker, release
 
 _LAW = ("IN-47 / A-25 -- a management space ranks and selects among the candidates the opening set "
@@ -136,7 +136,8 @@ def development_space(fx: Any, mint: Callable[[str, str, str], str],
                       pick: Callable[[DevelopmentSheet], Sequence[int]],
                       verbs: Optional[frozenset] = None,
                       draw: Optional[Callable[[str, str], Any]] = None) -> Callable[..., list]:
-    """A play-surface callback `(p, v, s, ask_budget, auto) -> list[Scene]` for the player's person.
+    """A play-surface callback `(p, v, s, ask_budget, auto) -> list[Scene]` for the player's person; `p` is the
+    `PersonInterior` DELIBERATE hands `choose` (B03.58), the same type, so the space cannot assign to the person.
 
     `pick(sheet)` returns INDICES into `sheet.candidates`, in the order the player would spend his
     budget. The space refuses an index out of range or repeated (`Forbidden`), then packs the picked
@@ -146,7 +147,7 @@ def development_space(fx: Any, mint: Callable[[str, str, str], str],
     `make_chooser`; a different `verbs` or `draw` is a different candidate set, not this space's control."""
     rank = make_ranker(fx, verbs, draw)
 
-    def space(p: Person, v: View, s: Any, ask_budget: Callable[[], int], auto: Any = None) -> list:
+    def space(p: PersonInterior, v: View, s: Any, ask_budget: Callable[[], int], auto: Any = None) -> list:
         q = getattr(v, "question", None)
         if q is None:
             return []

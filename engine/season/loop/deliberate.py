@@ -58,7 +58,7 @@ from ..data.verbs import act_key, opportunity_key
 from ..decision import aggregate_questions
 from ..gaps import Forbidden, Ungraded
 from ..seam.wrappers.sigma import believed_odds_query
-from ..state.carriers import Act, Person
+from ..state.carriers import Act, Person, interior_of
 from ..state.world import World
 from ..trace_log import TRACE
 
@@ -163,15 +163,20 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
         # read: §A.2's `decision/` and `loop/deliberate` may-read cells, §C.11's two rows. The code-side alternative
         # (a per-person projection at barrier 2) would enumerate candidates before the chooser forms them.
         # [ASSUMPTION; medium; revert: `odds_weighting` -> `none`, one re-pin (H-248)]
-        v = decision.assemble(p, q_p, k_view, questions=qs, odds=believed_odds_query(w, p))
+        # B03.58 (`04` §B.2 row 2, §C.3): WHAT `decision/` IS HANDED OF THE PERSON IS A FROZEN COPY, built once here --
+        # `assemble`, `budget` and `choose` get `me`, never the stored `Person`, so a callback (a playable host's
+        # own) cannot assign to the person it decides for. `sense`, `believed_odds_query` and the act-actor check
+        # below keep `p`: they are the host's, not `decision/`'s.
+        me = interior_of(p)
+        v = decision.assemble(me, q_p, k_view, questions=qs, odds=believed_odds_query(w, p))
         # S26.3: the PERSON asks their own budget. `choose` receives the QUERY, not the
         # answer -- rev 2 computed it in the engine and handed the number down, which is
         # the half of retraction 5 that never landed.
         # ⚠ `U2`: THE REMAINDER, NOT THE WHOLE. The budget is the SEASON's and the season is now
         # several rounds, so what a person has left to spend is what they were given minus what
         # they have already spent. At `R = 1` nothing has been spent and this is the old value.
-        ask_budget = lambda p=p, v=v: max(
-            0, decision.budget(p, v, k_budget, w.fixtures) - self._spent.get(p.id, 0))
+        ask_budget = lambda p=p, me=me, v=v: max(
+            0, decision.budget(me, v, k_budget, w.fixtures) - self._spent.get(p.id, 0))
         b = ask_budget()
         # -------------------------------------------------------------------
         # `U2`: A PERSON WITH BUDGET LEFT IS ASKED TO CHOOSE AT EVERY CALL, AND NO PLAN IS STORED.
@@ -182,7 +187,7 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
         # -------------------------------------------------------------------
         scenes: list = []
         if b > 0:
-            produced = choose(p, v, s, ask_budget)
+            produced = choose(me, v, s, ask_budget)
             # `W17`. THE BUDGETED UNIT IS THE SCENE (Jordan, 2026-09-02), so the bound below
             # counts scenes and the interaction bound is a SEPARATE check. A bare `Act` is one
             # scene carrying one interaction -- which is exactly the pre-ruling semantics, so
