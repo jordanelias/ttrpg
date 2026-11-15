@@ -34,7 +34,7 @@ sees**.
 | the context rows | | which forum is lawful, when to bring it | **strife: N holds. Regime's `standard` and the era's ground weights: FALSE N-LINES as measured** (they move no outcome); kept as content because lawfulness, admissible proof and which ground a man reaches for are play, at low confidence |
 | the disposal rows, the `Card` | an outcome is a band; the rules are learnt by losing | what each band will do | **N holds** |
 | `temper` and its three terms | every NPC is one optimiser | none (the NPC's) | **N holds for the simulation's portrait** (press share 0.63 against 0.36; the timid concede 0.34); **its promise to the player is not shown** (T20) |
-| the nemo invariant | a man can try, question and judge himself | | **N holds**: it deleted the three rows' self-verdicts |
+| the two-character invariant; `side` and `decides` independent | a man holds a proceeding with himself; or a noble cannot hear and rule, an inquisitor cannot question and judge | whom to bring a matter before, knowing his stake; the `partial` claim | **N holds** |
 | eight rows | | | `conversation` and `negotiation` now differ in two cells (`live`, `reply`): **narrowed**; kept as rows because the offer that must be answered is a different talk |
 
 **R.** *Complete:* every branch runs (0 violations in 12,890 beats; the listed refusals); a played judge is a role
@@ -64,7 +64,7 @@ MUST BE STATED AS A LIMIT
   - bench moves, allies on a side: not designed
 MAY BE CLAIMED, HAVING SURVIVED TWO ANTAGONISTS AND ONE RECONCILIATION
   - D1 to D8 and F1 to F8 are closed in the model, each against a control
-  - nobody adjudicates his own proceeding; consent is an act
+  - a sitting needs two characters; a party may decide and is then seen to be partial; consent is an act
   - every clause of R1, R2, R11 and R12 has a carrier that reads a slope with its control (part 3 B.3)
   - the record alone renders a scene at seed 0 of each rite
 GRADE: paper, with a running model (sc_model_v2/v3_out.txt). Nothing in the tree runs it.
@@ -87,6 +87,7 @@ GRADE: paper, with a running model (sc_model_v2/v3_out.txt). Nothing in the tree
 | 9 | the rally is deliberative (a crowd urged to a course decides a future action, `RO:77`, `NP:32`); epideictic has no row | 3 |
 | 10 | `consequence` is pathos (what the listener wants, as the matter bears on it), `evidence` alone is logos | 3 (`NP:27-28`) |
 | 11 | a final concession sets the room against the conceder and the bench still draws | 1 (A-14) with HEAR_B's rule that an end is never a verdict |
+| 13 | `conversation` and `questioning` close on the man addressed, who is a side and decides (his own draw); `negotiation` keeps consent; an `audience`'s seat may be the other party and decide | 1 (A-14: a draw on the voter), 3 (A-139 as corrected names these cases; the NEG falsifier keeps consent for an obligation), 4 (the 11-14 design's `hearers`) |
 | 12 | `Sitting.tracks` stays in the value as the running sum (asserted equal to start plus beats) | 5 (resume without replay); antagonist B's cut declined for that reason |
 
 ---
@@ -120,7 +121,7 @@ ballot (Will is the opposition, once); the steadiness draw; `break_at` and the e
 `adjourned`; `strikes`; `divert`, `deceive`; the ballot sources and the detection draw; the clamp; `presumes`,
 `scripted`, `order`, `written_only`; `case_rows`; `press_at`; `reading_kept`; the disposals `mutual` and `none`;
 five rows as kinds. **Cut in this pass:** `elicit`; the policy's bonus for the proof; `sense_level`; `manner_step`
-(into `esteem_step`); the self-verdicts of `conversation` and `questioning`; the restated primitives table.
+(into `esteem_step`); the restated primitives table.
 
 ---
 
@@ -135,9 +136,10 @@ Files: `p22` = `workplans/valoria_master_workplan_v12_part22_b24p.md`, `p22c` = 
 2. **`p22` B24p.01**: `grounds` lose `read:`; `proceeding_moves` is `argue`, `press`, `concede`, `rest` with
    `effect`; ends `budget`, `rested`, `yielded`; add `matters` (absorbing `proofs`); delete `case_rows`.
 3. **`p22` B24p.02**: the ten records of part 2 (`Present`, `Rite`, `Item`, `Sitting`, `Point`, `Cond`, `Beat`,
-   `View`, `JudgeView`, `Outcome`) with `Input`'s nemo invariant; `Input.state` is a whole `Sitting`.
-4. **`p22` B24p.03**: each row names its cells; add `context` and `disposal` blocks; a row **declares who
-   adjudicates** through `close`, and the loader refuses a row whose adjudicators can be a side; delete
+   `View`, `JudgeView`, `Outcome`) with `Input`'s one invariant (two distinct characters); `Input.state` is a whole `Sitting`.
+4. **`p22` B24p.03**: each row names its cells; add `context` and `disposal` blocks; a row declares who
+   adjudicates through `close` (a party may be among them); the loader refuses only a row that can seat one
+   character in every role; delete
    `audience_kinds`, `presumes`, `strikes`, `order`, `reason_bias`, `base_disposal`; five rows are aliases.
 5. **`p34` B32.15** (`acclamation`): the row's glossary says an acclamation decides nothing; it is therefore
    written with `close: consent` (no adjudicator, no verdict: the record and what each hearer was moved by) on
@@ -155,7 +157,7 @@ Files: `p22` = `workplans/valoria_master_workplan_v12_part22_b24p.md`, `p22c` = 
     **`w.offices[office].faction`** (a faction NAME) and looks it up in `authorities.by_faction`, which is keyed by
     faction names. It does **not** call `gate.seat_faction`, which returns `faction_prop_id` values (`fac_crown`)
     that the table is not keyed by. `judging_set` gains a sibling returning `(person, office id)` pairs. The
-    builder also enforces the nemo rule, takes the arranger and `rig`, applies context, returns the `Card`.
+    builder also takes the arranger and `rig`, applies context, returns the `Card`.
 12. **`p22c` B24p.14** (corrected). `engine/season/seam/ladder.py::degree_of` returns on `settled_margin` at
     `:262-263` before any other branch, so a veto must be applied **on both branches**: `degree_of(result, ...,
     veto=False)` computes the label on whichever branch applies and then demotes Success or better to Partial.
@@ -170,16 +172,17 @@ Files: `p22` = `workplans/valoria_master_workplan_v12_part22_b24p.md`, `p22c` = 
     of the teller's seat* (B28.10) and the other circumstances in `gap`; nothing reads the deleted
     `opposed_attribute`. **Step 4, the self-plea, keeps its accuser:** a self-plea is heard by a bench, so it is a
     two-sided row in which the `against` speaker is the holder of the docketed petition (the accuser), as
-    `part35_cont:336` says; where there is no accuser the plea is one-sided (an `audience`) before the bench. The
-    presiding seat is never made the `against` speaker: that would make an adjudicator a side (A-139).
+    `part35_cont:336` says; where there is no accuser the plea is one-sided (an `audience`) before the bench. Where
+    B28.35 falls back to the presiding seat as the `against` speaker, that stands: a seat may speak and decide
+    (A-139 as corrected), and his stake is then read like anyone's.
 16. **`p22c` B24p.20, .22**: the `ending` stores the beats and the `Sitting`; B24p.22 is the witness deposit of
     what the beats show; the kept reading is cut.
 17. **`p22c` B24p.17, .18, .21, .23**: readings and role tests re-pointed at part 2 §C.3 and §C.6; each of the
     decider's three is gated on both a positive arm with the ruled sign and "setting off reads exactly 0"; A-138:
     a role's gate is per type reading.
 18. **`B22` B24.03, B24.08, `B22c` B24.30**: `issues` lists rungs of `issue_rungs`; a negotiation's `accept` is a
-    concession under `concede: accepts`; questioning yields no verdict, and a confession accepted or a charge laid
-    is `determine`'s separate proceeding before a bench.
+    concession under `concede: accepts`; in a questioning the questioned man decides whether he gives way, and a
+    confession accepted or a charge laid on it is `determine`'s separate step.
 
 ---
 
@@ -202,5 +205,10 @@ from provoking a man (A-136 states it; the model does not yet show it, so it is 
   HEAR_B; `04` only at `:127` and `:251`; `ladder.py` at `:255-266`; `part35_cont` at `:334-338`.
 - Not run: extremes; several speakers a side; a calibration over random pairs (the build's `pairs` harness);
   bench moves by a played judge.
+- After A-139's correction only `checks_v4.py` was run (the invariant, the four both-cells cases, conversation,
+  questioning, negotiation, the noble's audience, the invariants over eight rites); `checks_v3.py`'s other arms
+  (D1, D2, F7, F8, the carriers, bearing, context, power, the fold, the seasons) were NOT re-run on the corrected
+  engine: the trial, debate, rally and tell paths are unchanged by it, but the seasons' negotiation and the
+  fold's conversation counts are the earlier run's. The noble's steer (0.225 against 0.260) is within noise.
 - Failed or weak links are in part 3 §D: T20, T13's regime and era arms, T5's Focus arm, T7, and the unresolved
   history effect across seasons.
