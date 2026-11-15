@@ -28,6 +28,7 @@ from ..data.verbs import TASK_DIFFICULTY   # B11 lane A
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver
+from engine.substrate import composition
 from ..seam import ladder
 from ..seam.wrappers import pool, sigma
 from ..state.carriers import Act, Claim
@@ -112,7 +113,7 @@ def test_mode_a_grades_against_the_modules_obstacle_and_follows_it(monkeypatch):
     before = sigma.odds_of(w, act)
     inp = sigma.contest_input(w, ["p_low", "p_mid"], verb="tell", subject="p_mid")
     assert before == band_odds(inp.pool, _module().obstacle(inp), net_boost(inp.leverage, inp.pool))
-    monkeypatch.setattr(_module(), "obstacle", lambda i: 1.0)
+    monkeypatch.setitem(composition._CACHE, "social_contest.obstacle", lambda i: 1.0)   # the row the provider reads (B03.12)
     moved = sigma.odds_of(w, act)
     assert moved == band_odds(inp.pool, 1.0, 0.0) and moved != before
 
@@ -194,7 +195,8 @@ def test_mode_a_has_no_odds_where_s27_4_refuses_and_resolve_refuses_the_same_pai
     assert refused["status"] == "REFUSED" and refused["why"] == "S27.4" and refused["pool"] == 0, refused
     w.persons["p_low"].capability = {KEY: 4}                          # (2) a pool that holds, an obstacle that does not
     assert sigma.odds_of(w, act) is not None
-    monkeypatch.setattr(_module(), "obstacle", lambda i: 1000.0)
+    monkeypatch.setattr(_module(), "obstacle", lambda i: 1000.0)       # what `resolve` rolls against
+    monkeypatch.setitem(composition._CACHE, "social_contest.obstacle", lambda i: 1000.0)   # what `odds_of` reads (B03.12)
     assert sigma.odds_of(w, act) is None
     over = sigma.resolve(w, ["p_low", "p_mid"], ["root"], prize, **claim())
     assert over["status"] == "REFUSED" and over["pool"] == 4 and over["ob"] == 1000.0, over

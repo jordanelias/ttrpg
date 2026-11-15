@@ -275,9 +275,11 @@ def _composed_obstacle(inp: SocialContestInput) -> float:
 
 
 def _composed_terms(inp: SocialContestInput) -> dict:
-    """The obstacle's named terms for `inp` (`roll.py::obstacle_terms`), read from the module the obstacle row
-    names (already loaded by `composition.require`), as `_composed_obstacle` reads the obstacle."""
-    return sys.modules[composition.require(OBSTACLE_ROLE).__module__].obstacle_terms(inp)[1]
+    """The obstacle's named terms for `inp` (`roll.py::obstacle_terms`), read from the module the obstacle row's
+    target names (loaded by `composition.require`), as `_composed_obstacle` reads the obstacle."""
+    composition.require(OBSTACLE_ROLE)
+    module = sys.modules[composition.ROLES[OBSTACLE_ROLE]["target"].partition(":")[0]]
+    return module.obstacle_terms(inp)[1]
 
 
 def _odds_of_input(inp: SocialContestInput) -> Optional[tuple]:
