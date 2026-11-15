@@ -429,8 +429,8 @@ def defects() -> list[str]:
 #
 # ⚠ **THERE WAS A SECOND LOYALTY IN THE TREE AND IT WAS NOT THIS ONE — SAID HERE SO NOBODY HAS TO
 # REDISCOVER IT COLD.** `systems/world/sim/npe.py:70` declared `LOYALTY_MIN = 0` / `LOYALTY_MAX = 3`
-# for a generated NPC's `affiliation_loyalty`, and `tools/link_values_pointers.py` linked both to the
-# same `ppt.loyalty` pointer, which is how it was found — by the link map, not by reading. Plan
+# for a generated NPC's `affiliation_loyalty`, and a literal-token value-to-pointer link map (since
+# retired) linked both to the same `ppt.loyalty` pointer, which is how it was found — by the map, not by reading. Plan
 # position `29d` (2026-10-01) deleted `npe.py`; it is at `FORK:5c5d8ec6` in `restructure_ledger.md`.
 #
 # They were not two ladders for one quantity (`CLAUDE.md` §0.06's S test), and the reason was
