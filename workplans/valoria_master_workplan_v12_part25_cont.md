@@ -12,7 +12,7 @@ IN-FLIGHT ROW: registers/handoffs/HANDOFF_GO.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
-GATE: Batch B03-hygiene
+GATE: Batch B03-hygiene @61b37b8dc8a68a5434d423f0ed0695102e89fc9f
 GATE: Batch B10-character
 GATE: Batch B21-fa-governance
 GATE: Batch B24-sc-hearing
