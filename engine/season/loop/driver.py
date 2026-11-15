@@ -8,72 +8,25 @@ file**, not delegated to -- `SeasonDriver.witness` IS `witness.witness`, so `ins
 the real body and the eight tests that read a step's source keep working. See the note above the
 bindings.
 
-⚠ **THIS DOCSTRING WAS STALE THE MOMENT L5 LANDED AND SAID SO FOR A DAY.** It listed `stratum_of`,
-`as_scenes`, `sense`, `names_a_verb` and `SOURCE_353_TEXT` (the last two deleted by CR-45) as living here -- they moved to
-`resolve.py` and `deliberate.py` in L5's second cut, to break a real `driver <-> deliberate <->
-resolve` import cycle -- and it still promised that *"shape.py re-exports every name below … until
-the facade is deleted at step 10"*, of a file step 10 deleted. `resolvable_verbs` is the one module
-function that stayed, because its callers are all outside `loop/`.
-
-⚠ **THE IMPORT LIST BELOW IS WIDER THAN THIS MODULE USES**, and that is load-bearing rather than
-untidy: `engine/reference/degree-sweep/sweep_core.py` (moved from `proposals/2026-09-04-degree-sweep/`)
-builds a read-only `S` aggregate over the
-package's owner modules so a frozen measurement's `S.<name>` keeps resolving. ⚠ It is ALSO how a dead
-import can make a rebind silent -- `questions_for` sat here unused, so
-`wd_extra.py`'s `DRV.questions_for = qspy` went on succeeding while reaching nothing after
-`deliberate` moved. Found by the Fable gate on Arc 1. ⚠ **THE NAME IS BACK AND LIVE SINCE
-2026-09-25 (ED-IN-0206):** `_questions_at_barrier` builds the per-person question projection at
-barrier 2 and hands it to `deliberate`, which no longer calls `questions_for` itself -- so the spy
-names `loop.driver` again (`wd_extra.py`'s `DRV.questions_for`). **A name kept here for the
-aggregate must not also be a name something rebinds.**
+The driver constructs the write tokens, binds the seven steps onto `SeasonDriver` and owns `resolvable_verbs`.
 """
 from __future__ import annotations
 
-import hashlib
-import inspect
-import itertools
-import json
-import random
-import re
-from typing import Any, Callable, Optional
+from typing import Any, Optional
 
-from ..data import files, load_all
-from ..data.fixtures import Fixtures, SITE_YIELD
-from ..data.matrix import Step, WriteClass, matrix_row
-from ..data.rosters import OBSERVATION_DEPOSIT_MODES, STRATA, WITNESS_CHANNELS
-from ..data.requires import (
-    LEDGER_DERIVED_STEMS, UNKNOWN, Verdict, binding_from_act, binding_of, evaluate,
-)
-from ..data.verbs import VERB_TABLE, VerbRow, opportunity_key
-from ..gaps import (
-    Collision, Forbidden, InstrumentDefect, NoProducer, Ungraded, Unowned, Unspecified,
-)
-from ..state.carriers import (
-    Act, Candidate, Claim, Event, Office, Person, Proposition, Question, Record, Rung, Scene,
-    Sensation, Site, StateChange, Tenure, View, subject_of,
-)
+from ..data import load_all
+from ..data.matrix import WriteClass
+from ..data.verbs import VERB_TABLE, opportunity_key
+from ..state.carriers import Act, Event, subject_of
 from ..state.gate import Token
-from ..state.ids import H, ROOT
 from ..state.world import World
-from ..epistemic import CHANNEL_PREDICATES, act_refs, claim_subjects, observers_for
-from ..queries import cache, world_q
-from ..queries.person_q import entrenchment
-from ..queries.person_q import LedgerReader
-from ..queries.world_q import WorldReader
-from ..queries.world_q import occasioned_by
+from ..queries import world_q
 from ..queries.world_q import questions_for
-from ..loop.effects import EFFECTS, effect_for
-from ..loop.predicates import REQUIRES_PREDICATES, requires_predicate
-from .. import decision
-from ..decision import (
-    aggregate_questions, agreement, assemble, body_band_penalty, budget,
-    containing_rung_of, make_chooser, opening_set, operands_for, pack_scenes,
-    person_side_eligible, standing_of, store_kind_of, view_ids,
-)
-from ..seam import (
-    ContestError, Resolution, combat_degree, contest, contest_subsystem, degree_of,
-    degree_ladder, ladder_error,
-)
+# `EFFECTS` and `REQUIRES_PREDICATES` are read below; importing these two modules is also what
+# registers the `@effect_for` bodies and the `@requires_predicate` entries.
+from ..loop.effects import EFFECTS
+from ..loop.predicates import REQUIRES_PREDICATES
+from .. import seam  # noqa: F401  -- registers the providers: importing `seam.wrappers` is what does it
 from ..trace_log import TRACE
 
 
