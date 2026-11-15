@@ -17,6 +17,7 @@ from typing import Any, Optional
 from ..data import load_all
 from ..data.matrix import WriteClass
 from ..data.verbs import VERB_TABLE, opportunity_key
+from ..gaps import Forbidden
 from ..state.carriers import Act, Event, subject_of
 from ..state.gate import Token
 from ..state.world import World
@@ -253,6 +254,14 @@ class SeasonDriver:
         check_inquiry_modules(VERB_TABLE)
         check_effects(VERB_TABLE, EFFECTS)
         check_preconditions(VERB_TABLE, REQUIRES_PREDICATES)
+        # `U5a_CORE_owed_edits` §B row 18: a season with no lap is not a season. The fixture's own refusal,
+        # at construction (a boot refusal, never a raise in play), naming the fixture.
+        if int(w.fixtures.get("scene_budget")) < 1:
+            raise Forbidden(
+                f"scene_budget is {w.fixtures.get('scene_budget')}, under one: a season with no lap deposits nothing",
+                "loop/driver.py::SeasonDriver.__init__",
+                needs="a `scene_budget` of at least one",
+                law="a season with no lap is not a season (a loader-family refusal, at boot)")
         # OBSERVATION ONLY, and the distinction matters. Six probes used the removed `effect` hook
         # to record which acts reached RESOLVE and in what order. That is a thing to WATCH, not a
         # thing to DECIDE, and giving it back as a resolver parameter is how the second resolver

@@ -53,3 +53,22 @@ def test_sigma_provider_with_no_rng_raises_instrument_defect():
     assert ok["status"] == "RESOLVED", ok
     with pytest.raises(InstrumentDefect, match="sigma"):
         sigma.resolve(*args, **kw)
+
+
+def test_scene_budget_zero_refuses_at_construction():
+    """§B row 18: a season with no lap is not a season, so a `scene_budget` under one is refused when the driver is
+    CONSTRUCTED (a boot refusal naming the fixture), never raised in play.
+
+    FALSIFIER: `SeasonDriver(w)` constructs at `scene_budget = 0`, and a season would run and deposit nothing. The
+    control is the shipped value (and 1, the tick's own control arm): the driver constructs, so the refusal is the
+    bound and not construction itself."""
+    from engine.season.gaps import Forbidden, expect_refusal
+
+    w = build_realm(0)
+    assert SeasonDriver(w).w is w, "the shipped scene_budget did not construct"
+    w.fixtures = w.fixtures.sweep("scene_budget", 1)
+    SeasonDriver(w)
+    for bad in (0, -1):
+        w.fixtures = w.fixtures.sweep("scene_budget", bad)
+        with expect_refusal(), pytest.raises(Forbidden, match="scene_budget"):
+            SeasonDriver(w)
