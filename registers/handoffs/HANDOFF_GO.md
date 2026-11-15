@@ -5,7 +5,7 @@
 ## Open
 | item | where it lives | next step |
 |---|---|---|
-| Batch B03g-go-early-landings — IN FLIGHT | `workplans/valoria_master_workplan_v12_part6.md`, the batch's block; open 0d5bf6aa0655ab1abfc88442c0343ea1cf880bc2 | built B03g.01 B03g.02 B03g.03 B03g.04 B03g.99 · close 1 · BATCH-CLOSE phase 2 |
+| Batch B03g-go-early-landings — IN FLIGHT | `workplans/valoria_master_workplan_v12_part6.md`, the batch's block; open 0d5bf6aa0655ab1abfc88442c0343ea1cf880bc2 | built B03g.01 B03g.02 B03g.03 B03g.04 B03g.99 · close 2 · BATCH-CLOSE phase 3 |
 | port gate (B10-20) | `FORK:1b7c2f87:workplans/valoria_master_workplan_v11_part3.md` §1, the B10-20 card | B10-03b (GO-07) is CLOSED (closing commit `8a80c4fc`; the item is `15593ac4` on `main`); the card's entry gate is B10-18 merged, with every batch before it closed |
 
 ## Standing orders — do not re-raise, do not do
