@@ -600,6 +600,7 @@ DEFAULT_FIXTURES = Fixtures(
     # [JUSTIFIED: engine/season/hole_register.yaml H-80 -- a computed act cannot declare its OPERANDS, so this is the instrument's declared stand-in, swept, and the row says so]
     record_stages_default=3,
     record_stage_term=1,
+    budget_office_bonus=1,
     budget_leg_penalty=1,
     # `H-94`, `W-C`. THE TWO OPERANDS §54 ITEM 7'S FORMULA NAMES AND THE DESIGN NEVER SUPPLIES.
     # `stores(hearth(giver), kind) >= amount`: `hearth(giver)` is the actor's own live `contain`
