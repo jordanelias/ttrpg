@@ -2844,6 +2844,13 @@ def a31c():
             "coefficients' to params and the params document proposes NO VALUES")
 
 
+# Probe A38 ("an attempt at Ob > 2 x Pool is refused and the season is spent", S27.4) was deleted at B03.55 with
+# the fold's S27.4 arm and `Act.obstacle`/`Act.pool`: the provider-side S27.4 refusal stays and is observed by
+# `tests/test_odds_of.py`. The two provenance tags it carried were deleted with the constants they cited:
+# [JUSTIFIED: pool 5 is an arbitrary test pool; the two obstacles sit one above and exactly at S27.4's threshold mult x pool, so only the first is refused]
+# [JUSTIFIED: exactly at S27.4's threshold mult x pool, so admitted; the pair above is one over]
+
+
 @probe("A39", "a contest Event names the act that caused it", "S39.2", by="construction",
        tests="the outcome of a conflict must be traceable back to the action that started it")
 def a39():

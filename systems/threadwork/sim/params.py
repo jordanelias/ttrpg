@@ -36,34 +36,19 @@ from __future__ import annotations
 # [canonical: Jordan ruling 2026-08-25 "TN7 always. Never change TN anywhere ever." — ED-IN-0196]
 TN_STANDARD = 7    # every threadwork operation
 
-# §Three-Axis Ob System — Depth Ob (Fibonacci)
-# [canonical: params/threadwork.md §Depth Ob]
-DEPTH_OB = {
-    "Object":       1,
-    "Personal":     2,
-    "Relational":   3,
-    "Field":        5,
-    "Structural":   8,
-    "Foundational": 13,
-}
+# §Three-Axis Ob System — Depth Ob (Fibonacci). One line each, under its tag: the provenance gate reads a
+# constant's own line and the line above it. The three tables are the Ob, Mending Ob and TS minimum
+# columns of one table at the cited section (FORK:c451bcb: engine/params/threadwork.md, the file at the fork).
+# [canonical: FORK:c451bcb:engine/params/threadwork.md §Depth Ob — the "Ob" column]
+DEPTH_OB = {"Object": 1, "Personal": 2, "Relational": 3, "Field": 5, "Structural": 8, "Foundational": 13}
 
 # §Three-Axis Ob — Mending Ob (different scale per Mending)
-MENDING_OB = {
-    "Relational":   2,
-    "Field":        4,
-    "Structural":   7,
-    "Foundational": 12,
-}
+# [canonical: FORK:c451bcb:engine/params/threadwork.md §Depth Ob — the "Mending Ob" column (Object and Personal: n/a)]
+MENDING_OB = {"Relational": 2, "Field": 4, "Structural": 7, "Foundational": 12}
 
 # §Three-Axis Ob — TS minimums per Depth
-DEPTH_TS_MINIMUM = {  # read by nothing until CR-13 (B35)
-    "Object":       30,
-    "Personal":     30,
-    "Relational":   50,
-    "Field":        50,
-    "Structural":   70,
-    "Foundational": 90,
-}
+# [canonical: FORK:c451bcb:engine/params/threadwork.md §Depth Ob — the "TS minimum" column (30+, 30+, 50+, 50+, 70+, 90+)]
+DEPTH_TS_MINIMUM = {"Object": 30, "Personal": 30, "Relational": 50, "Field": 50, "Structural": 70, "Foundational": 90}  # read by nothing until CR-13 (B35)
 
 # §Leap Ob by Thread Sensitivity
 # [canonical: threadwork_v30 §2.3 — "Thread Sensitivity 30-49 = 2 · Thread Sensitivity 50+ = 1"]

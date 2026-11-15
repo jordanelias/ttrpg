@@ -133,7 +133,7 @@ def _actor_pool(actor) -> int:
     which every caller in the tree passed; `.history` is no longer read.
     """
     spirit = getattr(actor, 'spirit', 4)
-    ts = getattr(actor, 'ts', 30)
+    ts = getattr(actor, 'ts', 30)  # [JUSTIFIED: the default for an actor object that carries no `ts` is the §2.3 eligibility floor, TS 30+, so such an actor is not refused for lack of a reading]
     tps = ts // 10
     # PP-624: (Spirit × 2) + the constant +3 + TPS
     return (spirit * 2) + 3 + tps
@@ -249,7 +249,7 @@ def attempt_leap(actor, target_state: dict, world=None, rng=None) -> OperationRe
     """
     ts = getattr(actor, 'ts', 0)
     # Eligibility: TS 30+
-    if ts < 30:
+    if ts < 30:  # [canonical: threadwork_v30 §2.3 — "Thread Sensitivity 30-49 = 2 · Thread Sensitivity 50+ = 1"]
         return OperationResult(
             operation="Leap", actor=getattr(actor, 'actor_id', 'unknown'),
             degree="Failure", net_successes=0, pool=0, tn=TN_STANDARD, ob=0,
@@ -258,7 +258,7 @@ def attempt_leap(actor, target_state: dict, world=None, rng=None) -> OperationRe
         )
 
     # Leap Ob per TS band
-    ob = LEAP_OB_TS_LOW if ts < 50 else LEAP_OB_TS_HIGH
+    ob = LEAP_OB_TS_LOW if ts < 50 else LEAP_OB_TS_HIGH  # [canonical: threadwork_v30 §2.3 — "Thread Sensitivity 30-49 = 2 · Thread Sensitivity 50+ = 1"]
     # Leap itself has no Coherence cost (operations during contact do)
     return _resolve_operation("Leap", actor, ob, TN_STANDARD,
                               coherence_delta=0, world=world, rng=rng)
@@ -295,8 +295,8 @@ def attempt_past_pulling(actor, target_moment: dict, world=None, rng=None) -> Op
     scale = target_moment.get('scale', 'Object')
     # POP Ob lookup by recency
     recency = target_moment.get('recency', 'same_scene')
-    pop_recency_ob = {'same_scene': 3, '1-2_seasons': 4, '3-5_seasons': 5,
-                      '6-10_seasons': 6, '10+_seasons': 7}
+    # [canonical: threadwork_v30 §Past-Oriented Pulling — Ob by recency (3, 4, 5, 6, 7)]
+    pop_recency_ob = {'same_scene': 3, '1-2_seasons': 4, '3-5_seasons': 5, '6-10_seasons': 6, '10+_seasons': 7}
     ob = pop_recency_ob.get(recency, 3)
     coh = COHERENCE_COST_BY_SCALE.get(scale, 0) - 1  # POP adds -1 per §3.2
     # Per-op cap per TW-05 (POP Coherence -1 additional IS subject to per-op cap)
