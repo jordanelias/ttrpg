@@ -98,6 +98,7 @@ class Rite:
     id: str
     live: str; bears: str   # what the live thing is called (claim, offer, question, charge, motion, theme, plea); who bears it: he opens
     reply: tuple            # per side: must | may | raise
+    silence: str            # what not answering a standing point means here: admits | refusal | free (A-145)
     issues: tuple           # the stasis rungs it runs through (B24.03's `issue_rungs`)
     concede: str            # descends | accepts
     moves: tuple            # per side, of: argue, press, rest, concede
@@ -172,10 +173,14 @@ gap(V)    = gap_step x max(0, power(the other side) - power(V)) x (1 - (V.reason
   only undoes the other side's live point: `min(how far it stands with him, margin)` when it lands, `flop` of the
   shortfall when not. **A party who decides is moved by his own case too:** his own speech (and his own press,
   and his own turning away) moves his own track, measured against the other side's lead: one rule, and it is
-  what makes the speech of a noble who then decides, or of a questioned man, count in the verdict. **Turning away:** under `reply: must`, while their point stands, a raise, a press or silence is
-  charged `off_step x evade x wF(h)`. **Staleness:** each earlier use of a ground or item costs `repeat_step`.
+  what makes the speech of a noble who then decides, or of a questioned man, count in the verdict. **Silence is never free (A-145):** under `reply: must`, while their point stands, a side that
+  rests or turns to anything but an answer or a concession is charged with each listener `silence_cost =
+  contempt_step x (standard / mid) x (1 + his station / 4, if he decides)` (refusal to engage: a disrespect that
+  grows with the occasion and with whom he declines to answer), plus, where the rite's `silence` cell is `admits`,
+  `admit_step x` how far the point stands with that listener (tacit admission); `free` charges nothing. A party
+  who decides pays it on his own track too. It replaced the turning-away charge (`evade`). **Staleness:** each earlier use of a ground or item costs `repeat_step`.
 - **Drift.** `pull = press_pull [just rattled] + rattle_pull x rattles + unrest + heckle x max(0, heat)`; `drift =
-  max(0, pull - (roll_net_continuous(pool_of(V.focus)) - even))`; `off = drift + evade` where he turned away.
+  max(0, pull - (roll_net_continuous(pool_of(V.focus)) - even))`; `off = drift`.
 - **Against his grain.** `strain += grain_strain x insincerity`.
 
 ### C.3 The adjudicator's five (A-144, later than R12 and governing; a listener who does not decide reads the first three the same way)
@@ -217,7 +222,10 @@ pulls his next speech (Focus); it spends his staying power (Will); it is witness
   accept. Before those who decide, he has given the matter up: every listener's track becomes `-side x
   yield_track`, so the close is drawn with the room wholly against him. A confession is still not a verdict (the
   bench's draw stands, A-14), but it is decisive: part 3 §B gives the rates.
-- **Rest**: nothing; silence under `must` while a point stands is turning away.
+- **Rest**: tempo only, except as C.2's silence rule prices it. **A broken temper cannot hold its tongue (A-146):**
+  when `temper >= temper_break` (F), `rest` is not among his legal moves, player or NPC, a party who decides
+  included; the view says so (`broke`), the beat is marked, and the fold leaves a claim. A legality rule on one
+  existing quantity; it resolves nothing.
 - **Ends**: `budget`, `rested`, `yielded`.
 
 ### C.6 The division of labour on a speech (A-143, A-141, A-142; R1 for Focus and Will)
@@ -398,16 +406,16 @@ strife B33.
 
 ## K. The settings
 
-Fifty-two of the proceeding's own (the old design: 53 and three tables), each `[ASSUMPTION; Jordan to correct]`.
+Fifty-four of the proceeding's own (the old design: 53 and three tables), each `[ASSUMPTION; Jordan to correct]`.
 
 | group | settings (shipped) |
 |---|---|
-| the speech | `fit_level` strong; `answer_level` moderate; `repeat_step` 0.35; `sense_step` 0.15, `involve` 0.3; `esteem_step` 0.2 [a fifth of a level a point of Grace better than the other], `show` 1.0; `off_step` 1.0, `evade` 1.5; `ploy_step` 1.5, `grain_strain` 0.5; `heard_step` 0.05, `heard_floor` 0.5; `gap_step` 0.25; `weary_step` 0.5, `stay_base` 1.0, `stay_per_will` 0.5 [Will 4 argues three speeches fresh]; `awe_step` 0.5; `comfort_step` 0.5; `rel_gain` 0.5; `flop` 0.5; `invite` 0.5 |
+| the speech | `fit_level` strong; `answer_level` moderate; `repeat_step` 0.35; `sense_step` 0.15, `involve` 0.3; `esteem_step` 0.2 [a fifth of a level a point of Grace better than the other], `show` 1.0; `off_step` 1.0; `admit_step` 0.5, `contempt_step` 1.0 [silence]; `ploy_step` 1.5, `grain_strain` 0.5; `heard_step` 0.05, `heard_floor` 0.5; `gap_step` 0.25; `weary_step` 0.5, `stay_base` 1.0, `stay_per_will` 0.5 [Will 4 argues three speeches fresh]; `awe_step` 0.5; `comfort_step` 0.5; `rel_gain` 0.5; `flop` 0.5; `invite` 0.5 |
 | the press | `press_ob` 1.25, `press_pull` 1.0, `rattle_pull` 0.5, `wear` 0.5, `rattle_gain` 1.5, `rebound` 1.0, `reactance` 0.75, `room_level` 0.5, `heckle` 1.0 |
 | conceding | `concede_step` 2.0, `consent_at` 2.5, `yield_track` 12 |
 | the room and the reading | `crowd_at` 12, `crowd_lean` 0.2, `mood_scale` 5, `read_scale` 1, `read_blur` 2, `read_noise` 0.3, `bias_step` 2, `relevance` on |
 | the close | `track_step` 0.2 |
-| the NPC's temper | `temper_step` 0.5, `grain` 2.0, `grudge` 2.0, `pride` 2.0 |
+| the NPC's temper | `temper_step` 0.5, `temper_break` 0.75 [an ordinary man breaks at his second rattle; Will plus Grace of 3.5 or less is past it from the start; Will 7 Grace 7 never reaches it in a sitting], `grain` 2.0, `grudge` 2.0, `pride` 2.0 |
 | the host | `start_step` 2.0, `presume_step` 2.0, `sympathy_step` 1.5, `power_scale` 2.0, `strain_fade` 0.5 |
 
 Controls: the levels at none; `repeat_step`, `esteem_step`, `off_step`, `ploy_step`, `grain_strain`, `start_step`,

@@ -4,70 +4,58 @@
 
 ---
 
-## E. The NERS pass (reconciled)
+## E. The NERS pass (as it stands after three reconciliations; figures are part 3's and are not repeated here)
 
-`[SELF-AUTHORED — bias risk]`, by `skills/ners/SKILL.md`; two independent antagonists have since attacked it and
-their findings are folded in. Each row: the cut; what the game can no longer do; **who decides what, and what he
-sees**.
+`[SELF-AUTHORED — bias risk]`, by `skills/ners/SKILL.md`; three critic passes are folded in. Each row: the cut,
+what the game can no longer do, who decides what and what he sees, and the verdict.
 
 | object | cut it, and | the decision; what he sees | verdict |
 |---|---|---|---|
-| a track per person | no split room, no divided bench, no partial seat, no party moved toward an accept | which body to speak to; the mood, his odds | **N holds** |
-| the point and the answer | nothing said refers to what was said; no refutation | answer theirs or raise mine; their point and how far it seems to stand | **N holds, narrowed**: it pays between able advocates before a bench; in a negotiation it is carried by evasion being seen |
-| `reply: must`, evasion | the accused says nothing at no cost | answer or be seen to turn away | **N holds** |
-| the issue ladder, descent | a concession is only surrender | give up the issue to fight the next | **N holds** in the trial family |
-| the final concession (`yield_track`), the accept | a man who gives up the matter still wins the draw | when to stop | **N holds** (F2) |
-| the press, the rattle, `reactance`, `wear` | the man cannot be attacked; composure means nothing | the point or the man; his chance and what it risks | **N holds** (0.545 against 0.487; pressing throughout 0.367) |
-| `esteem` (restored) | Grace is a private shortfall; nobody is "seen as respectable"; a rattle shows on everyone alike | which venue, which opponent; his standing on the view | **N holds** (0.142 → 0.400) |
-| `weary` (restored) | Will does not keep a man arguing; effort is free | how many turns to prepare; when to rest | **N holds** (0.307 → 0.398) |
-| `heard` (restored) | a quiet man is heard by a crowd as well as an orator | the room to choose | **N holds** (0.160 → 0.500) |
-| `gap` (restored) | a reeve's office weighs nothing against a commoner's argument, and Reason cannot answer it | whom to face; whom to send | **N holds** (0.092 → 0.323) |
-| the hold (`drift`) | Focus has no role | none of his own | **N holds, weakly** (speaker +0.005; the judge's Focus -0.062 and +0.172) |
-| the blend `k`; `relevance` (A-143) | a scholar and an orator are one build; what a man says need not be to the point | which ground suits my dice; answer the point | **N holds** (`relevance` own share +0.16 to +0.19) |
-| `perceived` (the gauge) and `frame` (A-141, A-142) | everyone knows what each option is worth and what moves each listener; Attunement has no role | which ground, framed on what, and how far to trust his own reading; the option's perceived worth and its frame | **N holds**: the frame is Attunement's one real operand on the speech (+0.125 to +0.142; 0.000 with a perfect reading); the gauge +0.05 to +0.09. The believed fit, aim and strain it replaced are deleted; a field for the other man's expected move was built and cut (it guessed worse than his commonest move) |
-| `q`, `wF`, `wA` | a judge is a die | who is on the bench decides what I argue | **N holds** (table B.3) |
-| `insincerity`, `believes` | a lie and an honest plea are one speech | say what I hold, or what works here | **N holds** |
-| the bearing reading | every person is his attributes | his stake; what the other seems to want | **N holds** |
-| `mood`, `heat`, the crowd | onlookers are scenery | play to the gallery or the bench | **N holds** on the first run's magnate arm; not re-run |
-| `Item`, `credit`, the witness | nothing the world holds can be shown | what to bring, whom to call | **N holds** |
-| arrangement (`tilt`) | every forum is neutral | how hard to rig; accept, contest, appeal | **N holds** |
-| the context rows | | which forum is lawful, when to bring it | **strife: N holds. Regime's `standard` and the era's ground weights: FALSE N-LINES as measured** (they move no outcome); kept as content because lawfulness, admissible proof and which ground a man reaches for are play, at low confidence |
-| the disposal rows, the `Card` | an outcome is a band; the rules are learnt by losing | what each band will do | **N holds** |
-| `temper` and its three terms | every NPC is one optimiser | none (the NPC's) | **N holds for the simulation's portrait** (press share 0.63 against 0.36; the timid concede 0.34); **its promise to the player is not shown** (T20) |
-| the two-character invariant; `side` and `decides` independent | a man holds a proceeding with himself; or a noble cannot hear and rule, an inquisitor cannot question and judge | whom to bring a matter before, knowing his stake; the `partial` claim | **N holds** |
-| eight rows | | | `conversation` and `negotiation` now differ in two cells (`live`, `reply`): **narrowed**; kept as rows because the offer that must be answered is a different talk |
+| a track per person | no split room, no divided bench, no partial seat | which body to speak to; mood, odds | N holds |
+| the point, the answer, the issue ladder | nothing said refers to what was said; a concession is only surrender | answer, raise or descend; their point | N holds, **narrowed**: the automatic policy under-uses them (part 3 T2) |
+| `silence_cost` and the `silence` cell (A-145) | silence under a charge is free; regime means nothing to a silent man | speak or hold his tongue, knowing what silence means here (on the card) | N holds for the charged side; **the side not charged still does no better by arguing every turn than by silence**: the largest open item |
+| `temper_break` (A-146) | a rattled man may always take refuge in silence; provoking pays nothing | whether to provoke; a menu without rest | N holds (the one link that makes provocation pay) |
+| the press, the rattle, `reactance`, `wear` | the man cannot be attacked | the point or the man | N holds; **over-chosen** between flat people |
+| `relevance`, `k`, `gap` (Reason) | what is said need not be to the point; a scholar and an orator are one build; office weighs nothing | which ground; answer the point; whom to face | N holds, each on its own arm |
+| `frame` and `perceived` (Attunement) | everyone knows what moves each listener and what each option is worth | which ground, framed on what, trusted how far | N holds |
+| `heard` (Presence) | a quiet man is heard by a crowd as well as an orator | the room to choose | N holds before a crowd; silent elsewhere |
+| `esteem` (Grace) | conduct and respectability mean nothing | venue and opponent | N holds |
+| `weary`, the opposition to a press (Will) | effort is free; nobody can be shaken | turns to prepare | N holds |
+| the hold (`drift`) (Focus) | Focus has no speaker role | none of his own | N holds **only under pull** |
+| `validation` (adjudicator's Reason) | a polished unsound speech fools every judge alike | who sits decides how to argue | N holds; it replaced `q` |
+| `wF` and `swayed` (adjudicator's Focus) | irrelevance and theatre sway every judge alike | | the filter of wandering holds; **the theatre half is a false N-line as measured** (no slope): kept at low confidence, first to cut |
+| `tell` (adjudicator's Attunement) | a liar and a strained man look like anyone | say what I hold | N holds |
+| `awe` (adjudicator's Presence and station) | a commoner is as composed before a duke as before a peer | which forum; whom to send | N holds |
+| reception (adjudicator's Grace) | a verdict is received by its rightness alone; a brute judge pays nothing | for a played judge: how to carry his office | N holds (the 2 x 2) |
+| the bearing reading, `start`, `credit`, items, the witness | every person is his attributes; nothing the world holds can be shown | stake, forum, what to bring | N holds |
+| arrangement (`tilt`) | every forum is neutral | how hard to rig | N holds |
+| context rows | | lawful forum; what silence means | strife holds; **a regime's `standard` and the era's ground weights are false N-lines as measured**; a regime now acts through `silence` and lawfulness |
+| the own-case rule for a party who decides | a noble's speech is dead air | whether to speak before ruling | N holds on structure; **its effect is not shown** |
+| the disposal rows, the `Card` | an outcome is a band; rules learnt by losing | | N holds |
 
-**R.** *Complete:* every branch runs (0 violations in 12,890 beats; the listed refusals); a played judge is a role
-with a view and three choices; what a bench member asks, and what an ally on a side adds, are not designed.
-Extremes were not swept by me (antagonist A's `p3_extremes.py` did; I did not re-run it against the reconciled
-model `[UNVERIFIED]`). *Variety:* builds win and lose by venue (R11's arm). *Choice:* no move is dominated in the
-matrices of the first run; for flat people in a trial arguing every turn (0.261) and silence (0.285) are level
-and mixing (0.356) beats both. *World:* part 3 §B.5's seasons; the possible snowball (0.57 against 0.38, z 1.6) is
-open.
-**S.** One obstacle composer, one ladder, one opposition rule, which is now the ruled one (A-137), so the earlier
-methodology finding closes when B05 takes §H item 1. Resumption runs. Cross-scale seams were not examined.
-**E, last.** Records 12 to 10. Settings 53 and three tables to 47 (38 before the overturned cuts restored six
-carriers; three more for A-141 and A-143: `read_noise`, `bias_step`, the `relevance` switch). Moves 6 to 4, ends 6 to 3, closes 6 to 4 and the abridged. Draws 2G+8 an exchange (more than before,
-bought to give every believed number its own noise) and one a decider. *Legibility:* the ground, the press, the
-concession, the venue and now his own standing and weariness are readable from the view; how each decider weighs
-drift, evasion and insincerity is not, except through the room moving. *Over-distillation watchlist:* one `fit`
-for argument and press (kept, medium); three channels for eight layers (kept, medium; an arc is the likeliest
-loss); the judging pool cut (kept, high); `deceive` and `divert` not restored (kept, medium: their clauses are
-carried, part 2 §C.3).
+**E, last.** Records 12 to 10; moves 6 to 4; ends 6 to 3; draws 4G+11 an exchange and one a decider. **Settings
+53 to 54: the count is no longer lower than the design this replaces.** The rulings since the first pass (the
+restored carriers, A-141 to A-146) each brought one to three; four read inert over the battery though each moves
+its own arm. An honest E verdict: the structure is simpler (one record, one reading, one composer, cells for
+types); the dial count is not. *Legibility:* the ground, frame, press, concession, silence, his standing, weariness,
+awe and temper are on the view; how each adjudicator weighs him is seen only as the room moving.
 
 ```
 MUST BE STATED AS A LIMIT
-  - provoking a man out of his composure changes what he does and, in this model, costs him little (T20)
-  - regime and era move lawfulness, proof and the ground argued, not who wins (T13)
-  - the speaker's Focus acts weakly; Presence's `heard` is silent where there is no crowd
-  - a possible history effect across seasons is unresolved
-  - bench moves, allies on a side: not designed
-MAY BE CLAIMED, HAVING SURVIVED TWO ANTAGONISTS AND ONE RECONCILIATION
-  - D1 to D8 and F1 to F8 are closed in the model, each against a control
-  - a sitting needs two characters; a party may decide and is then seen to be partial; consent is an act
-  - every clause of R1, R2, R11 and R12 has a carrier that reads a slope with its control (part 3 B.3)
-  - the record alone renders a scene at seed 0 of each rite
-GRADE: paper, with a running model (sc_model_v2/v3_out.txt). Nothing in the tree runs it.
+  - F7 is not fully closed: for a side that is not charged, arguing every turn does not beat silence
+  - pressing is over-chosen between flat people; the seed-0 trial and debate are contests of presses
+  - a party who decides: his choice to argue or rest is live but its effect is within noise
+  - a regime's standard and the era move no outcome; a regime acts through silence and lawfulness
+  - the theatre half of the adjudicator's Focus is not shown; the speaker's Focus acts only under pull
+  - an opener's edge of +0.075 has returned in the trial
+  - regard falls far more than it rises across seasons
+  - settings: 54
+MAY BE CLAIMED, HAVING SURVIVED
+  - D1, D2 (with its residual), D3, D4, D6, D8, F1 to F6 and F8 are closed in the model against controls
+  - every clause of R1, R11, A-141 to A-146 has a carrier with a measured slope and a control, except those above
+  - silence under a charge is priced and recorded; a broken temper cannot rest; provoking a low man pays
+  - a verdict's reception is a separate axis from its rightness
+GRADE: paper, with a running model (sc_model_v2/v7_out.txt). Nothing in the tree runs it.
 ```
 
 ---
@@ -107,8 +95,7 @@ structures):
 | `sense` as a level added to a speech | R12 Reason: *"does it make sense"* | `q`: a weight on fit and on esteem by the listener's elaboration, so quality decides for the able | none (replaces `sense_level`) |
 | sincerity read from stake alone | R12 Attunement: *"sincere or a ploy"*, the self-serving lie, the forged press | `believes` (what he knows) in `insincerity`; the deduction on a press made with a false item; a lie's item from his own false claim | one field |
 
-**Confirmed carried, not overturned:** R11 (the blend by content and venue: the venue arm, 0.410 against 0.125 and
-0.255 against 0.213); R12 Focus (the judge's own Focus in a full trial, both signs); R4 (types by stakes,
+**Confirmed carried, not overturned:** R11 (the blend by content and venue: the venue arm, part 3 §B.3); R12 Focus (the judge's own Focus in a full trial, both signs); R4 (types by stakes,
 factions, venue, adjudicators, audience, speeches and order, verdict system: the rite's cells and the builder);
 R6 (the abridged form).
 
@@ -120,7 +107,8 @@ and its share of the dice); `mark_shame`, `cover_step` (esteem's headroom); `shi
 ballot (Will is the opposition, once); the steadiness draw; `break_at` and the ends `broken`, `struck`,
 `adjourned`; `strikes`; `divert`, `deceive`; the ballot sources and the detection draw; the clamp; `presumes`,
 `scripted`, `order`, `written_only`; `case_rows`; `press_at`; `reading_kept`; the disposals `mutual` and `none`;
-five rows as kinds. **Cut by A-141 and A-142:** the view's per-ground believed fit, believed aim and believed strain (the perceived
+five rows as kinds. **Cut by A-143 to A-146:** the weighting by ground class (`q`); the turning-away charge (`evade`), subsumed by
+the silence rule; the temper function on the view (one `temper_of`). **Cut by A-141 and A-142:** the view's per-ground believed fit, believed aim and believed strain (the perceived
 worth of each option and its frame carry them); the reading as a pool draw (accuracy is Attunement with a little
 luck); the expected-move field. **Cut in this pass:** `elicit`; the policy's bonus for the proof; `sense_level`; `manner_step`
 (into `esteem_step`); the restated primitives table.
@@ -146,7 +134,7 @@ Files: `p22` = `workplans/valoria_master_workplan_v12_part22_b24p.md`, `p22c` = 
 5. **`p34` B32.15** (`acclamation`): the row's glossary says an acclamation decides nothing; it is therefore
    written with `close: consent` (no adjudicator, no verdict: the record and what each hearer was moved by) on
    the `rally` structure, not `close: hearers`, and with no `order` key so it passes the loader.
-6. **`p22` B24p.04, B24p.05**: the 44 settings at controls; the obstacle roster gains `weary` and `standing`; the
+6. **`p22` B24p.04, B24p.05**: the 54 settings at controls; the obstacle roster gains `weary` and `standing`; the
    old leverage sources and the four-tuple are deleted.
 7. **`p22` B24p.06** (held under attack): `person_q.bearing`, `care`, `tie`, `strain_carried`; the builder reads
    the speaker's **own** ledger for items and `believes`, never `world_q.proofs` or `world_q.reception`.
@@ -188,34 +176,26 @@ Files: `p22` = `workplans/valoria_master_workplan_v12_part22_b24p.md`, `p22c` = 
 
 ---
 
-## I. Questions for Jordan
+## I. Questions for Jordan (two survive the ladder)
 
-The three of the first pass are answered (A-136, A-137, A-138). **None survives the ladder now.** Two readings
-are reported as limits, not questions, because each has a default the rulings already give: the player's edge
-from provoking a man (A-136 states it; the model does not yet show it, so it is a calibration target for the
-`temper` settings, which are Jordan's to correct); and regime and era moving no outcome (they are content rows).
+1. **Regime and era.** Requirement 8 says they "will impact". As built, a regime decides which rites are lawful,
+   what proof is admitted and what silence means (the last moves outcomes, +0.10 for a silent accused between a
+   crown and a commune), and the era weights grounds; neither moves who wins a spoken contest. Options: (A) accept
+   that as their impact; (B) give each regime a term in the close itself (its `difficulty` or `stakes` cell by
+   kind of matter), which would make the same case harder to carry under one regime than another.
+2. **Speaking against silence for the side that is not charged.** A-145 prices silence under a charge. For the
+   accuser or a debate's mover, arguing every turn still does no better than resting, because a flat-interior man
+   has nothing that fits his listeners and tires. Options: (A) accept it (a man with nothing to say gains nothing
+   by saying it; the automatic mix beats both); (B) price the bearer's silence too (a charge not pressed lapses).
 
 ## J. What was not verified
 
 - Nothing in the tree runs this design; the plan edits of §H were not applied.
-- Not re-run after the reconciliation (first-run readings, marked in part 3): the with-and-without readings for
-  each option; the dominance matrices; a crowd changing bench rows; the hostile magnate; the famine tell.
-- The antagonists' probes (`antagonist_v2/p1..p4`) were written against the pre-reconciliation API and were not
-  re-run; each defect they found was re-measured by `checks_v3.py`.
-- Not opened: `05_SC_evidence_and_rebuttal_B.md`, the 2026-10-24 character-layer proposals, `30_WR_*`, the
-  institutions proposals, `28_SCENE_ACCESS`, the strife-flows design, `write_matrix.yaml`, H-80, P10, R-35,
-  HEAR_B; `04` only at `:127` and `:251`; `ladder.py` at `:255-266`; `part35_cont` at `:334-338`.
-- Not run: extremes; several speakers a side; a calibration over random pairs (the build's `pairs` harness);
-  bench moves by a played judge.
-- After A-139's correction only `checks_v4.py` was run (the invariant, the four both-cells cases, conversation,
-  questioning, negotiation, the noble's audience, the invariants over eight rites); `checks_v3.py`'s other arms
-  (D1, D2, F7, F8, the carriers, bearing, context, power, the fold, the seasons) were NOT re-run on the corrected
-  engine: the trial, debate, rally and tell paths are unchanged by it, but the seasons' negotiation and the
-  fold's conversation counts are the earlier run's. The noble's steer (0.225 against 0.260) is within noise.
-- `checks_v3.py` reads view fields that A-141 removed and no longer runs; its numbers in part 3 (D1, D2, F2 for
-  the trial, F7, F8, the carriers, bearing, context, power, the fold, the seasons, the transcripts of §C) were
-  taken BEFORE the A-139 correction, the gauge, the frame and `relevance`, and were not re-run. A person at the
-  middle of every scale is unchanged by `relevance` and reads nearly as before; the all-mid figures should hold,
-  the cast's will have moved.
-- Failed or weak links are in part 3 §D: T20, T13's regime and era arms, T5's Focus arm, T7, and the unresolved
-  history effect across seasons.
+- One battery, `checks_v7.py`, n = 300 an arm: every figure in these files is from it. Not in it: the dominance
+  matrices of the first run, a crowd changing bench rows, the hostile magnate, extremes, several speakers a side,
+  bench questioning by a played judge, a calibration over random pairs.
+- The critics' probes (`antagonist_v2`, `antagonist_v3`) were not re-run by me; their findings were re-measured.
+- Not opened: `05_SC_evidence_and_rebuttal_B.md`, the 2026-10-24 character-layer proposals beyond their head,
+  `30_WR_*`, the institutions proposals, `28_SCENE_ACCESS`, strife-flows, `write_matrix.yaml`, H-80, P10, R-35,
+  HEAR_B; `04` only at `:127` and `:251`.
+- The limits of §E are open defects or properties, each named there.

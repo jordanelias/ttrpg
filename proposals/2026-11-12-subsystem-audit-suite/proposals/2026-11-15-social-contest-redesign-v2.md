@@ -38,8 +38,10 @@ Three later statements were folded in the same day and are rows A-141 to A-143: 
 worth of a contestant's choices; Attunement frames the speech on what the listener wants and holds; and the
 division of labour on a speech (Reason its content and stakes, Attunement its framing, Presence its delivery,
 Grace its conduct). A-144 then gave the adjudicator his five (validation, the relevance filter, perception of the
-participant, intimidation, the reception of his verdicts). **One battery, `checks_v7.py`, re-measures every figure
-these files state on the current model** (output `v7_out.txt`; n = 400 an arm unless stated).
+participant, intimidation, the reception of his verdicts). A-145 priced silence ("silence is often seen as tacit admittance or weakness or refusal to engage
+... and therefore disrespect") and A-146 took it from a man whose temper has broken. **One battery,
+`checks_v7.py`, re-measures every figure these files state on the current model** (output `v7_out.txt`; n = 300 an
+arm unless stated). Part 3 §B and part 4 §E say plainly what is still open.
 
 Markers: `[ASSUMPTION; Jordan to correct]` on every shipped value; `[HOOK]` a carrier that is only proposed in the
 tree, named and not invented; `[UNVERIFIED]` a claim not opened or not run; **(rung n)** a decision taken by the
@@ -217,13 +219,13 @@ arranged by another authority. A type is its cells; the right-hand column is wha
 | type (row) | genre: who judges, what they decide | the live thing; how exchanges relate | who may do what | the close | who arranges, and how | what context changes | its own kind, as the model shows |
 |---|---|---|---|---|---|---|---|
 | `conversation` | dyadic; the one addressed, for himself | a **claim**; each may answer or raise | both: argue, press, rest, concede | the addressed man's own draw (he is a side and decides); his concession gives way early | the speaker picks the moment | strife pulls every speaker; the era weighs grounds | the hearer is also the opponent: his answer moves the proposer, the proposer's speech moves him |
-| `negotiation` | dyadic; nobody: consent | an **offer**; each speech **must** answer the last or is seen to turn away | both: all four; conceding **accepts** | consent; neither accepting is an impasse | whoever needs it less | a need (famine) raises what the needy accept | a need changes who accepts (0.51 to 0.79) |
-| `questioning` | judicial; the one questioned, for himself | a **question**; the answer **must** answer it, evasion is priced and seen | questioner: argue, press, rest; questioned: argue, rest, concede (he talks) | the questioned man's own draw; a confession accepted or a charge laid on it is `determine`'s separate step | the questioner | war shortens it | only one side presses, and it presses its own decider; he gives way 0.780 if he concedes at once, 0.383 automatic, 0.280 if he never concedes |
-| `inquisition` (`inquisition_hearing`, `interrogation`) | judicial; a bench, which may be the accuser's own | a **charge**; the accused **must** answer; fact, then justification | as `questioning` | the presiding seat's draw | the authority whose seats sit; an inquisitor may question and judge, and his stake is seen | unlawful in a commune; a theocracy admits confession | the accused cannot press; a full confession convicts 0.79 |
+| `negotiation` | dyadic; nobody: consent | an **offer**; each speech **must** answer the last or is seen to turn away | both: all four; conceding **accepts** | consent; neither accepting is an impasse | whoever needs it less | a need (famine) raises what the needy accept | a need changes who accepts (0.25 to 0.49) |
+| `questioning` | judicial; the one questioned, for himself | a **question**; the answer **must** answer it, evasion is priced and seen | questioner: argue, press, rest; questioned: argue, rest, concede (he talks) | the questioned man's own draw; a confession accepted or a charge laid on it is `determine`'s separate step | the questioner | war shortens it | only one side presses, and it presses its own decider; he gives way 0.787 if he concedes at once, 0.420 automatic, 0.380 if he never concedes; silence under the question is a refusal and is priced |
+| `inquisition` (`inquisition_hearing`, `interrogation`) | judicial; a bench, which may be the accuser's own | a **charge**; the accused **must** answer; fact, then justification | as `questioning` | the presiding seat's draw | the authority whose seats sit; an inquisitor may question and judge, and his stake is seen | unlawful in a commune; a theocracy admits confession | the accused cannot press; silence admits; a full confession convicts 0.76 |
 | `trial` (`legal_trial`, `tribunal`, `arbitration`) | judicial; a bench; a past act | a **charge**; both sides **must** answer; fact, definition, justification | both: all four; conceding **descends** | the presiding seat's draw | the convening seat: bench packed, floor shut, turns cut, presumption | regime sets admissible proof; strife cuts turns | proof and refutation; a concession changes the issue |
 | `debate` (`parliamentary_debate`, `council_of_state`, `excommunication_deliberation`) | deliberative; every seat, against a quorum | a **motion**; speeches may answer or raise | both: all four; conceding withdraws | every seat's draw; a quorum can only demote | the body's presiding seat; a faction forces the floor open or shut | unlawful in a theocracy; the floor sways the dice toward manner | several adjudicators, each moved for himself |
 | `rally` | deliberative; every hearer for himself | a **theme**; nothing to answer: each speech raises | the speaker: argue, rest | each body of the crowd draws | the speaker; a seat may close the ground | a famine sharpens what the hungry want | no opponent; bodies of the crowd split; Presence is what is heard |
-| `audience` | deliberative; one seat, who may speak with the petitioner and then decide | a **plea**, answered by a ruling | the petitioner: argue, rest; the seat, where he is the other party: argue, press, rest | the seat's draw | the seat: who is admitted, how long | regime sets what may be shown | the seat's own stake is where he starts (0.233 against 0.275 flattened) and the room holds a `partial` claim |
+| `audience` | deliberative; one seat, who may speak with the petitioner and then decide | a **plea**, answered by a ruling | the petitioner: argue, rest; the seat, where he is the other party: argue, press, rest | the seat's draw | the seat: who is admitted, how long | regime sets what may be shown | the seat's own stake is where he starts (0.240 against 0.287 flattened) and the room holds a `partial` claim |
 | the abridged form of any row | as its row | one speech, raised | the speaker | that speech's own margin with the one addressed | as its row | as its row | at control equal to the one roll (200 of 200 keys) |
 
 Jordan's seven: heresy trial = `inquisition` arranged by the Church; parliamentary debate = `debate`; private
@@ -258,5 +260,6 @@ The card holds no true attribute and no true start (B05.62: a stranger is an ord
 believes of this room is on his `View`. Invariant, checked in the model on every sitting (part 3 §B): no beat makes a move the card bars; no item of a
 kind the card does not admit is shown; nobody speaks more turns than the card gives; the verdicts returned are the
 card's adjudicators and no others; and its odds are what an
-unmoved sitting delivers (0.277 shown, 0.261 delivered with both sides silent, n = 800). A card that promises what
+unmoved sitting delivers (0.277 shown, 0.263 delivered with both sides silent, n = 600). The card also carries
+`silence` (what not answering means here: `admits`, `refusal`, `free`). A card that promises what
 the sitting does not do is a defect.
