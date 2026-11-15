@@ -910,11 +910,11 @@ def mint_planned_works(w: World, rows: list, anchors: dict, authored: dict, part
     It is NOT folded: no `Event` is logged, no token is minted, and no driver runs (`build_realm` writes the
     world straight, as every other section of it does); the effect's own `Change` is the writer, which is what
     makes a planned works the same Record a master's act would leave. WHY NOT THROUGH THE GATE (`04` §C.2, *"the seam
-    every mutation crosses"*; §A.2, *"The driver is the ONLY constructor of write tokens"*): world generation is none
-    of §A.2's nine modules, a builder holds no token and can lawfully hold none, and `build_realm` writes the world
+    every mutation crosses"*; §A.2, *"The driver is the ONLY constructor of write tokens"*): world generation is
+    §A.2's tenth module, `boot/`, which holds no token after construction; a builder holds no token and can lawfully hold none, and `build_realm` writes the world
     straight in some two dozen places; the gated route a probe takes (`harness/probes.py`: `w.write(..., mint_token(...),
     change=EFFECTS[...](w, act))`) mints a token outside the driver and logs an Event, so it is not followed here.
-    No scan sees a `.apply()` under `harness/`, and none is licensed (`layer-conformance` A3). [ASSUMPTION; medium; Jordan to correct;
+    No scan sees a `.apply()` under `boot/`, and none is licensed (`layer-conformance` A3). [ASSUMPTION; medium; Jordan to correct;
     revert: one `create_record` act per row, folded before season 0 -- it moves the log by a `record.created`
     per row and needs a driver in the builder.]
 
