@@ -84,29 +84,6 @@ class Ungraded(ShapeGap):
     kind = "UNGRADED"
 
 
-class Ineligible(ShapeGap):
-    """The actor is not eligible for this verb. Not a gap in the design -- a fact about the actor
-    -- so it EMITS rather than raising, per §E2's 'failure emits, never raises'.
-
-    ⚠ THIS CLASS WAS SILENTLY DELETED AND IS RESTORED HERE. Step 1 of the decomposition
-    (ED-IN-0203) removed it from `shape.py` and did not add it to this module, which is where the
-    plan assigns it. **Nothing broke and nothing noticed, because it has no callers** — and that
-    is precisely why it went unseen: a class with no users cannot fail a test when it disappears.
-
-    Found on 2026-09-07 by a check worth keeping and running after any carve: take every
-    top-level name in the PRE-carve `shape.py` and assert it still resolves as `S.<name>`. It ran
-    199 names and returned four — `_HERE`, `_load_rosters` and `_load_write_matrix`, all
-    deliberate (the anchor and the two loaders moved and are patched on the module that READS
-    them), and this one, which was not deliberate at all.
-
-    ⚠ AND IT HAS NO CALLERS TODAY, WHICH IS ITS OWN OPEN QUESTION AND NOT A REASON TO DROP IT.
-    `E2`'s rule is that ineligibility EMITS rather than raises, so the fold's eligibility path
-    correctly never constructs one; whether the taxonomy should carry a class the design forbids
-    raising is a live call. Deleting it as part of a PURE MOVE was not the way to make it, and a
-    move that quietly changes the taxonomy is not a pure move."""
-    kind = "INELIGIBLE"
-
-
 @contextlib.contextmanager
 def expect_refusal():
     """Mark a window in which a refusal is EXPECTED -- the probe is verifying the law fires.

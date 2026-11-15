@@ -115,17 +115,6 @@ def row(case_id: str) -> Optional[dict]:
     return _rows().get(str(case_id))
 
 
-def name_of(r: dict) -> str:
-    """`first_name last_name`, with a one-name person spelled as their one name.
-
-    ⚠ `last_name: None` IS REAL DATA AND NOT A HOLE — Edeyja (NPC-001) and Orm (NPC-075) have one
-    name each, and the corpus cases agree. Formatting it through `str()` would produce the literal
-    string "Edeyja None", which is what a first cut of this function did."""
-    first = str(r.get("first_name") or "").strip()
-    last = str(r.get("last_name") or "").strip() if r.get("last_name") else ""
-    return f"{first} {last}".strip() if last else first
-
-
 def faction_of(r: dict) -> tuple[Optional[str], Optional[str], str]:
     """`(canonical faction | None, sub-organization | None, the raw cell)`.
 

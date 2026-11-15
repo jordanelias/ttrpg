@@ -37,8 +37,7 @@ import struct
 from dataclasses import fields as _dc_fields
 from enum import Enum
 from itertools import compress as _compress, count as _count, repeat as _repeat
-from operator import (attrgetter as _attrgetter, is_ as _is, is_not as _is_not,
-                      itemgetter as _itemgetter, ne as _ne)
+from operator import attrgetter as _attrgetter, is_ as _is, is_not as _is_not, ne as _ne
 from typing import Any, Callable, Optional
 
 from ..data.fixtures import DEFAULT_FIXTURES, Fixtures
@@ -163,7 +162,6 @@ _WRITTEN = _attrgetter(*_WRITTEN_NAMES)
 _PAY = _WRITTEN_NAMES.index("payload")       # where `payload` sits in a fields tuple
 _PAYLOAD_OF = _attrgetter("payload")
 _VERSION_OF = _attrgetter("_v")              # `Tenure._v`: how many attribute sets it has had
-_FIRST, _SECOND = _itemgetter(0), _itemgetter(1)
 
 
 def _snapshot_fields(t: Tenure) -> tuple:
