@@ -391,9 +391,6 @@ class Subunit:
     _prev_offsets: Dict[Tuple[int, int], int] = field(default_factory=dict)
     _prev_offsets_c: Dict[Tuple[int, int], int] = field(default_factory=dict)
     _prev_facings: Dict[Tuple[int, int], Tuple[int, int]] = field(default_factory=dict)
-    # v13: cells flagged as "formation-broken" (failed discipline check on collision).
-    # Used for diagnostics; facing is already corrupted to midpoint vector in cell_facing_vec.
-    merged_cells: Set[Tuple[int, int]] = field(default_factory=set)
     # v13: cells that actually moved this turn (vs halted or already-at-target).
     # Used by resolve_cross_side_contention to distinguish moving vs static cells.
     # Reset at top of advance_cells. [canonical: Jordan design 2026-05-12 — speed priority]
@@ -1062,7 +1059,7 @@ class Subunit:
           * `_cell_target` (the close-ranks fill prescription) — redistributed over the new ids
             exactly as `cell_troops` is, because it IS a prescribed density and the prescription
             follows the shape.
-          * transient per-tick state (`halted_cells`, `merged_cells`, `cell_last_speed`,
+          * transient per-tick state (`halted_cells`, `cell_last_speed`,
             `_speed_accum`) — CLEARED. A body that has just re-formed is not still holding a halt,
             a merge, or a velocity accumulator belonging to a formation it no longer has. Clearing
             is the conservative choice and the only one that cannot carry a dead id forward.
@@ -1080,7 +1077,7 @@ class Subunit:
         if not new_ids:
             self.cell_offsets = {}; self.cell_offsets_c = {}; self.cell_facing_vec = {}
             self.cell_last_speed = {}; self._speed_accum = {}; self._cell_target = {}
-            self.halted_cells = set(); self.merged_cells = set()
+            self.halted_cells = set()
             return
 
         def _mean(d, default=0.0):
@@ -1108,7 +1105,6 @@ class Subunit:
         self.cell_last_speed = {}
         self._speed_accum = {}
         self.halted_cells = set()
-        self.merged_cells = set()
 
     def _rekey_node_state(self, new_ids):
         """Mid-battle re-key of node state to a new pattern id set (movement audit finding 1.5,

@@ -140,7 +140,6 @@ class BandExtension:
 
 @dataclass
 class RollResult:
-    pool_size: int
     tn: int
     rolls: list[int]
     net: int
@@ -212,7 +211,7 @@ def roll_pool(pool_size: int, tn: int = 7, ob: int | float | None = None,
     rolls = [rng.randint(1, 10) for _ in range(effective_pool)]
     net = sum(_die_result(face) for face in rolls)
     deg = degree_from_net(net, ob) if ob is not None else None
-    return RollResult(pool_size=effective_pool, tn=tn, rolls=rolls, net=net, degree=deg, ob=ob)
+    return RollResult(tn=tn, rolls=rolls, net=net, degree=deg, ob=ob)
 
 
 def continuous_engine_sample(pool: float, tn: int = 7,
