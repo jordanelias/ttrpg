@@ -51,7 +51,7 @@ The batch block's head, the position table, its UNDECIDED line and the words and
 - FALSIFIER and CONTROL: the export or a composition check reads a changed `fieldwork.find` row; the row still names an Evidence Track as held. Control: `engine/engine_params/composition.json` byte-identical.
 - GATE: `python tools/export_composition.py --check` → exit 0; `git diff --stat -- engine/engine_params` → empty.
 - HASH MOVERS: none.
-- DEPENDS ON: V12 Batch B03 (CI-03) and Batch B03g (GO-11), which edit the same file earlier; EXISTS-IN-TREE `references/module_contracts.yaml` (`fieldwork`, `fieldwork.find`), `tools/export_composition.py`.
+- DEPENDS ON: V12 Batch B03 (CI-03) and Batch B03g @048724cd545117255e71d04a583d99c6cb5fe3a9 (GO-11), which edit the same file earlier; EXISTS-IN-TREE `references/module_contracts.yaml` (`fieldwork`, `fieldwork.find`), `tools/export_composition.py`.
 - GLOSSARY: none.
 - COST and TIER: edit; `sonnet`, `medium`.
 - LANDS IT: B11's producer; `Item: B11.19`, `[skip ci]`.

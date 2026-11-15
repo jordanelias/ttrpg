@@ -20,7 +20,6 @@ Two batches open in one step and edit one file: the coordinator checks each pair
 
 | step | earlier → later (merge order: §2.1 order) | files both edit (permanent surface and the pin file left out) | hot files among them |
 |---|---|---|---|
-| S4 | B03g → B16L | `engine/engine_params/season_registries.json` | — |
 | S6 | B13 → B04 | `seam/wrappers/combat.py` | combat.py |
 | S6 | B16M → B04 | `data/fixtures.py`, `loop/effects_combat.py` | fixtures.py, effects_combat.py |
 | S8 | B06 → B14 | `queries/person_q.py`, `queries/world_q.py`, `seam/wrappers/_estimate.py`, `seam/wrappers/combat.py`, `seam/wrappers/sigma.py`, `modules/combat/combat_systems.py`, `modules/combat/wrapper.py` | person_q.py, world_q.py, combat.py, sigma.py, wrapper.py |
@@ -127,7 +126,7 @@ Every file items of two or more batches edit, the permanent surface left out (§
 | `state/gate.py` | 26: B03 2, B21 8, B21b 2, B21c 4, B24a 2, B27 1, B37 1, B28 1, B32 3, B37p 1, B23 1 | B21 → B21b → B21c → B24a → B27 → B37 → B28 → B32 → B37p → B23 | hot | listed |
 | `modules/mass_battle/massbattle.py` | 26: B16L 1, B16M 1, B17 5, B19 7, B20 8, B22 1, B31 3 | B16L → B16M → B17 → B19 → B20 → B22 → B31 | hot | listed |
 | `write_matrix.yaml` | 25: B03 1, B04 1, B05 1, B09 1, B10 2, B11 1, B12a 1, B24 1, B12b 4, B24a 2, B27 2, B22 1, B35 2, B31 1, B33 1, B39 3 | B04 → B05 → B09 → B10 → B11 → B12a → B24 → B12b → B24a → B27 → B22 → B35 → B31 → B33 → B39 | hot | listed |
-| `references/module_contracts.yaml` | 25: B03 5, B03g 1, B13 1, B05 1, B24p 1, B11 1, B16 1, B24 3, B12b 2, B12c 1, B37 1, B22 1, B30 2, B35 3, B41 1 | B03g → B13 → B05 → B24p → B11 → B16 → B24 → B12b → B12c → B37 → B22 → B30 → B35 → B41 | hot | listed |
+| `references/module_contracts.yaml` | 25: B03 5, B03g 1, B13 1, B05 1, B24p 1, B11 1, B16 1, B24 3, B12b 2, B12c 1, B37 1, B22 1, B30 2, B35 3, B41 1 | B13 → B05 → B24p → B11 → B16 → B24 → B12b → B12c → B37 → B22 → B30 → B35 → B41 | hot | listed |
 | `tools/export_troops.py` | 24: B17 2, B19a 1, B19 9, B20 2, B22 1, B30 1, B31 8 | B17 → B19a → B19 → B20 → B22 → B30 → B31 | hot | listed |
 | `harness/storybar.py` | 23: B02 3, B03 2, B36 8, B38 10 | B36 → B38 | hot | listed |
 | `seam/wrappers/combat.py` | 25: B01a 2, B13 1, B04 1, B05 4, B06 1, B14 4, B15 4, B16 2, B34 1, B18 3, B37 1, B30 1 | B01a → B13 → B04 → B05 → B06 → B14 → B15 → B16 → B34 → B18 → B37 → B30 | hot | listed |
@@ -205,9 +204,9 @@ Every file items of two or more batches edit, the permanent surface left out (§
 | `modules/combat/core.py` | B05.57, B05.58, B14.07, B15.02, B15.03, B15.05 | B05 → B14 → B15 |  | listed |
 | `modules/mass_battle/armies.py` | B16M.03, B17.11, B19.04, B19.07, B19.55, B20.20 | B16M → B17 → B19 → B20 |  | **not listed** |
 | `modules/settlements/subsist.py` | B12a.53, B12a.60, B12b.14, B12b.35, B12b.40, B39.19 | B12a → B12b → B39 |  | listed |
-| `references/ci_checks_registry.yaml` | B03g.01, B17.10, B19a.02, B19a.03, B41.06, B40.02 | B03g → B17 → B19a → B41 → B40 |  | **not listed** |
+| `references/ci_checks_registry.yaml` | B17.10, B19a.02, B19a.03, B41.06, B40.02 | B17 → B19a → B41 → B40 |  | **not listed** |
 | `architecture/meta/04_CODE_ARCHITECTURE.md` | B11.04, B41.03 | B11 → B41 |  | **not listed** |
-| `engine/engine_params/composition.json` | B03g.04, B13.01, B30.05, B41.02 | B03g → B13 → B30 → B41 |  | **not listed** |
+| `engine/engine_params/composition.json` | B13.01, B30.05, B41.02 | B13 → B30 → B41 |  | **not listed** |
 | `harness/field_scene.py` | B20.11, B20.12, B22.11, B22.12, B30.06 | B20 → B22 → B30 |  | **not listed** |
 | `loop/effects_migration.py` | B12a.15, B12b.10, B12c.14, B22.07, B22.08 | B12a → B12b → B12c → B22 |  | listed |
 | `tests/test_gate_observation.py` | B09.21, B12a.72 | B09 → B12a |  | **not listed** |
@@ -253,10 +252,10 @@ Every file items of two or more batches edit, the permanent surface left out (§
 | `systems/threadwork/sim/operations.py` | B35.03 | B35 |  | **not listed** |
 | `systems/threadwork/sim/params.py` | B35.03, B35.04 | B35 |  | **not listed** |
 | `tools/export_sim_params.py` | B03c.01, B27.25 | B03c → B27 |  | **not listed** |
-| `tools/valoria_local.py` | B03g.01, B17.10, B19a.03, B41.06 | B03g → B17 → B19a → B41 |  | **not listed** |
+| `tools/valoria_local.py` | B17.10, B19a.03, B41.06 | B17 → B19a → B41 |  | **not listed** |
 | `tests/test_sc_calibration_targets.py` | B05.22, B05.51, B05.59, B24p.23 | B05 → B24p |  | **not listed** |
 | `CLAUDE.md` | B13.01 | B13 |  | **not listed** |
-| `engine/engine_params/season_registries.json` | B03g.01, B16L.99, B03a.01 | B03g → B16L → B03a |  | **not listed** |
+| `engine/engine_params/season_registries.json` | B16L.99, B03a.01 | B16L → B03a |  | **not listed** |
 | `decision/budget.py` | B12b.04, B35.16 | B12b → B35 |  | listed |
 | `harness/access.py` | B28.22, B28.27, B38.12 | B28 → B38 |  | **not listed** |
 | `harness/conviction_spread.py` | B06.02, B10.17, B10.19 | B06 → B10 |  | **not listed** |
@@ -338,7 +337,7 @@ Every file items of two or more batches edit, the permanent surface left out (§
 | `tests/valoria/_conservation.py` | B17.09, B19.68 | B17 → B19 |  | **not listed** |
 | `tests/valoria/test_army_verbs.py` | B19.04, B20.02 | B19 → B20 |  | **not listed** |
 | `tests/valoria/test_combat_duel_terms.py` | B14.26, B16.02 | B14 → B16 |  | **not listed** |
-| `tests/valoria/test_engine_does_not_import_systems.py` | B03g.04, B13.01 | B03g → B13 |  | **not listed** |
+| `tests/valoria/test_engine_does_not_import_systems.py` | B13.01 | B13 |  | **not listed** |
 | `tests/valoria/test_mass_battle_signals.py` | B19.05, B20.20 | B19 → B20 |  | **not listed** |
 | `valley.yaml` | B12c.28, B39.31 | B12c → B39 |  | listed |
 | `engine/substrate/battle_orders.py` | B19.03, B20.01 | B19 → B20 |  | **not listed** |
@@ -359,7 +358,7 @@ Every file items of two or more batches edit, the permanent surface left out (§
 | `test_cp_t03_07_body_ceiling.py` | B03c.01, B16M.03 | B03c → B16M |  | **not listed** |
 | `test_season_shape.py` | B03c.01 | B03c |  | listed |
 | `tools/calibrate_mb_contact.py` | B19a.02, B31.20 | B19a → B31 |  | **not listed** |
-| `tools/export_composition.py` | B03g.04, B41.02 | B03g → B41 |  | **not listed** |
+| `tools/export_composition.py` | B41.02 | B41 |  | **not listed** |
 | `tools/export_mb_contact.py` | B19a.03, B31.20 | B19a → B31 |  | **not listed** |
 | `tools/m1_acceptance.py` | B03c.01 | B03c |  | **not listed** |
 | `valoria_master_workplan_v12_part2_cont2.md` | B24.04, B23.04 | B24 → B23 |  | **not listed** |

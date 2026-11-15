@@ -20,7 +20,7 @@ GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01a-attributes-generated @cbca1ad4fcee656f908d8a75e99bf79213ddeeab (B01a.05: every flip whose target reading is a contest between persons is read as a curve over generated pairs with `harness/pairs.py`, never one even-matchup number; `valoria_master_workplan_v12.md` §3.B, "generated attributes, and curves not centres")
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B03-hygiene @61b37b8dc8a68a5434d423f0ed0695102e89fc9f
-GATE: Batch B03g-go-early-landings
+GATE: Batch B03g-go-early-landings @048724cd545117255e71d04a583d99c6cb5fe3a9
 GATE: Batch B03c-boot
 GATE: Batch B16L-mb-words
 GATE: Batch B03a-prose

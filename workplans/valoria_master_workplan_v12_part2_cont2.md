@@ -47,7 +47,6 @@
 |---|---|---|
 | `S/tests/test_b11a_duel_reach.py` | B01.01 | S1 |
 | `S/tests/test_b11a_scores_and_obstacle.py` | B01.02 | S1 |
-| `S/tests/valoria/test_export_season_registries.py` | B03g.01 | S4 |
 | `S/tests/test_boot_module.py` | B03c.01 | S4 |
 | `S/tests/test_u1_capability_surface.py` | B04.02 | S6 |
 | `S/tests/test_sc_hearing_capabilities.py` | B04.18 | S6 |
@@ -309,8 +308,6 @@
 
 | path created | item | caller the item names (searched in the item's own text) |
 |---|---|---|
-| `engine/engine_params/season_registries.json` | B03g.01 | a `ci_checks_registry.yaml` row; the CI workflow (named); the local tier; its exporter's `--check` (named in the item) |
-| `tools/export_season_registries.py` | B03g.01 | a `ci_checks_registry.yaml` row; the CI workflow (named); the local tier; a gate command |
 | `engine/season/boot/__init__.py` | B03c.01 | code: imported by the items that consume it (a library file, no CI caller owed) |
 | `modules/combat/__init__.py` | B13.01 | a composition row |
 | `engine/dice_engine/fmath.py` | B06.01 | code: imported by the items that consume it (a library file, no CI caller owed) |
@@ -449,7 +446,7 @@
 | 50 | `:531` | MB | ED-607 | as ED-606 (E4:797) | none (HD-29) | — |
 | 51 | `:532` | MB | ED-820 | "a v10 position giving a commander a mid-fight act" (E4:845) | **B20** (B20.08 carries the window's `rally` and `withdraw`, B19.52) | B20's session reads it at its open (§11 C-13) |
 | 52 | `:553` | GO | GO-06 | "BLK: `valoria-game` checkout (another repository)" (E1:3506) | none in this repository | — |
-| 53 | `:554` | GO | ED-509 | "`ED-GO-0002` on `main` and ED-507 content exists" (E4:743) | none: ED-507's content is Jordan's; GO-01 (B03g.03) does not fire it (A06) | cited by B03g.03 |
+| 53 | `:554` | GO | ED-509 | "`ED-GO-0002` on `main` and ED-507 content exists" (E4:743) | none: ED-507's content is Jordan's; GO-01 (B03g.03 @048724cd545117255e71d04a583d99c6cb5fe3a9) does not fire it (A06) | cited by B03g.03 @048724cd545117255e71d04a583d99c6cb5fe3a9 |
 | 54 | `:555` | GO | H-5 | "dep: the valoria-game checkout; owner GO lane/Jordan" (E5 Block D11) | none in this repository | — |
 
 **Carriers no item builds** (`H2_DECISIONS.md` HD-33: one held row each, owner lane named, none a Jordan question; the trigger is "a carrier item lands", and "could fire at" is the batch whose BLOCKED or `STOPS IF` item waits):
@@ -483,7 +480,6 @@ Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them
 | batch | lane | ED block (declared + spare) | H block (declared + spare) | against H1 §12 |
 |---|---|---|---|---|
 | B24p-sc-proceeding | SC | ED-SC-0054..0056 (1+2) | H-861..H-914 (50+4) | added 2026-11-14 after the table's last block (B01a's H-856..H-860, on top of B99's); `references/id_reservations.yaml` SC `next_free` 54 → 57 at the batch's opening, not by this plan; the hole register's next id after this block H-915. The fold map's own range H-856..H-909 assumed H-855 as the last allocated id: B01a had taken H-856..H-860 first |
-| B03g-go-early-landings | GO | ED-GO-0003..0004 (0+2) | H-384..H-388 (0+5) | same |
 | B03c-boot | IN | ED-IN-0373..0374 (0+2) | H-389..H-393 (0+5) | ED shifted |
 | B16L-mb-words | MB | ED-MB-0082..0083 (0+2) | H-394..H-398 (0+5) | same |
 | B03a-prose | IN | ED-IN-0375..0376 (0+2) | H-399..H-403 (0+5) | ED shifted |
@@ -549,7 +545,7 @@ Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them
 
 | milestone | closes at (step now) | its batches, with their step now | a batch of it closing after the close? | rows the closing batch reads |
 |---|---|---|---|---|
-| M0 · ground | B04 (S6; §2.3 S6) | B00 S0, B01 S1, B02 S2, B03 S3, B03g S4, B03c S4, B16L S4, B03a S5, B13 S6, B16M S6, B04 S6 | none | R-01, R-02, R-03, R-04, R-09 |
+| M0 · ground | B04 (S6; §2.3 S6) | B00 S0, B01 S1, B02 S2, B03 S3, B03c S4, B16L S4, B03a S5, B13 S6, B16M S6, B04 S6 | none | R-01, R-02, R-03, R-04, R-09 |
 | M1 · every outcome is drawn | B08 (S13; §2.3 S13) | B05 S7, B06 S8, B07 S9, B08 S13 | none | R-01, R-03, R-09 |
 | M2 · persons | BA1 (S12; §2.3 S12) | B09 S10, B10 S11, BA1 S12 | none | R-06, R-07, R-08, R-09 |
 | M3 · every verb | B35 (S18; §2.3 S18) | B11 S12, B12a S13, B12b S14, B12c S15, B14 S8, B15 S12, B21 S12, B21b S13, B21c S14, B22 S17, B23 S18, B24a S15, B25 S16, B26 S17, B27 S16, B28 S17, B29 S14, B32 S17, B35 S18 | none | R-01, R-04, R-05, R-07, R-08, R-09 |

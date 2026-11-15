@@ -113,7 +113,7 @@ The batch block of `B41-go-port-gate` (its head lines, PORT GATE RULES, UNDECIDE
 - FALSIFIER and CONTROL: a row naming a contract item with no owner in the tree; a freeze list in the row. Control: `validate_ed_citations.py` exit 0 before and after.
 - GATE: `python tools/validate_ed_citations.py` → 0 violations, and the last `ED-GO-` row is this one (exit line 7); `python tools/export_oracle_pins.py --check` → OK on this commit.
 - HASH MOVERS: none ("EQUAL").
-- DEPENDS ON: V12 B41.02 to B41.12 ("needs every contract item"); V12 Batch B00 (the `ED-GO` block); V12 Batch B06 (draw type, float contract); V12 Batch B03g (GO-09's registry schema).
+- DEPENDS ON: V12 B41.02 to B41.12 ("needs every contract item"); V12 Batch B00 (the `ED-GO` block); V12 Batch B06 (draw type, float contract); V12 Batch B03g @048724cd545117255e71d04a583d99c6cb5fe3a9 (GO-09's registry schema).
 - GLOSSARY: none (*contract* is B41.06's row).
 - IDS: ED-GO block slot 1.
 - COST and TIER: edit; `opus`, `high` ("third tier (judgment)": which items are contract).
@@ -123,7 +123,7 @@ The batch block of `B41-go-port-gate` (its head lines, PORT GATE RULES, UNDECIDE
 - SOURCE: `E1` §Carry-forward GO-15 ("EXIT and FALSIFIER": "GO-08's `--check` on the freeze commit; each of B10-20's exit lines … prints"), as `11_GO_port_gate_order_and_coverage.md` §1 amends it ("`GO-15b` FIRST BEHAVIOUR PIN (a `--build` and the card's exit lines; repeatable, no row)") and "The gate" 4; B10-20's exit lines, copied from `workplans/valoria_master_workplan_v11_part3.md` B10-20 "Exit" (read at `9c2c3ab`; the file is deleted at v12's adoption, so the lines live here); `U5d_GO_owed_edits.md` §3; UNDECIDED 6; closes GO-15b and GO-15.
 - ADVANCES: GO "S7 integrated".
 - INSTRUCTION: run `python tools/export_oracle_pins.py --build` on the tree after B41.13, commit the artifact, and read each exit line, quoting its output in the commit body (a line that does not print keeps the batch open: "a line that does not keeps B10-20 open"):
-  (1) "`game_constants.json`'s `engine_series`" equals `references/engine_series.yaml`'s value (GO-01, B03g; `ED-GO-0002` owns the value, which this plan does not write);
+  (1) "`game_constants.json`'s `engine_series`" equals `references/engine_series.yaml`'s value (GO-01, B03g @048724cd545117255e71d04a583d99c6cb5fe3a9; `ED-GO-0002` owns the value, which this plan does not write);
   (2) "`python tools/export_oracle_pins.py --check` OK with the oracle SHA equal to `git rev-parse HEAD`";
   (3) "`port_oracle --slice 1 --seed 0` under `PYTHONHASHSEED` 0, 1 and 2 prints three identical lines equal to the pin";
   (4) "the seven existing `--check`s (`export_sim_params`, `export_engine_params`, `export_game_constants`, `export_descriptors`, `export_composition`, `export_npc_roster`, `export_names`) and `export_season_registries --check` … print OK", with every other exporter the `validators` job runs at this tree (`grep -n -- "--check" .github/workflows/valoria-ci.yml`: `export_troops`, `export_mb_contact` and their kin from B17, B19a); [`export_oracle_draws --check`: struck, A-30]; and `export_npc_roster --check` named apart: "reports hand-corrected rows; fails only on a row naming no case, place or seated person" (`U5d_GO_owed_edits.md` §3);
@@ -138,7 +138,7 @@ The batch block of `B41-go-port-gate` (its head lines, PORT GATE RULES, UNDECIDE
 - FALSIFIER and CONTROL: "CONTROL: GO-08's `--check` under two hash seeds" (`PYTHONHASHSEED` 0 and 1).
 - GATE: lines (1) to (8) print as stated; `PYTHONHASHSEED=1 python tools/export_oracle_pins.py --check` → OK.
 - HASH MOVERS: none ("EQUAL").
-- DEPENDS ON: V12 B41.13; V12 Batch B03g (GO-01's `engine_series.yaml`, GO-11, GO-05, GO-09); EXISTS-IN-TREE every exporter line (4) names.
+- DEPENDS ON: V12 B41.13; V12 Batch B03g @048724cd545117255e71d04a583d99c6cb5fe3a9 (GO-01's `engine_series.yaml`, GO-11, GO-05, GO-09); EXISTS-IN-TREE every exporter line (4) names.
 - GLOSSARY: none.
 - COST and TIER: build (with a reading); `sonnet`, `high`; the OPEN-line judgment `opus`.
 - LANDS IT: B41's producer; `Item: B41.14`, `[skip ci]`.
