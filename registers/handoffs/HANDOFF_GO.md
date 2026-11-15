@@ -12,3 +12,4 @@
 |---|---|
 | A port never corrects its oracle in place — fix canon via the ledger and re-export, never hand-edit a value into the `.gd` side | `CLAUDE.md` §6 |
 | Do not build from `godot/godot_architecture_specification.md` (STALE REFERENCE, pre-d+σ) | `CLAUDE.md` §6 |
+| The player surface is specified by the oracle's readings (`decision/sheet.py`, `harness/play_surface.py`); the UI design set and the stale architecture specification are intent only | `11_GO_design_reference_disposition` (workplan v12 B03.21) |
