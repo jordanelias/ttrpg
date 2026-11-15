@@ -1,41 +1,4 @@
-```yaml
-        versing the original world-health decline, whose successful use is the loop's
-        stated counter-mechanism.
-      why: >-
-        the group's own deliberate weaving/repair action, when it succeeds, reduces the
-        same quantity that opened its access — this is the loop's one deliberate
-        off-switch.
-      hardness: core
-    - need: >-
-        a separate automatic consequence of the same world-health decline (a stability
-        check tied to the low band) must be able to strip that group's ability to use its
-        own counter-action, at the specific moment the counter-action is most needed.
-      why: >-
-        this is the self-defeating property explicitly called out — the same root cause
-        must be able to both open the window and disable the only actor who can act
-        inside it, via two unrelated-seeming rules.
-      hardness: core
-  temporal:
-    span_seasons: "ongoing"
-    needs_memory_of: >-
-      the world-health quantity's value (to know if the access threshold is currently
-      crossed) and the specific group's own institutional-standing value (to know
-      whether its counter-action is currently blocked).
-    needs_deadline: "no fixed date, but functionally yes — the window is described as capable of closing on its own"
-  who_acts:
-    - "newly-capable individuals (choose whether to act now that access is open)"
-    - "the specific group's leadership (chooses whether to attempt the counter-action, when able)"
-    - "NOBODY decides that the access threshold opens, that visible use feeds the other clock, or that the group's standing check strips its own counter-capability — all three automatic"
-  knowledge:
-    - >-
-      not primarily epistemic; the one epistemic note is that visible new practitioners
-      must be perceivable by an opposing institution as a condition of the loop's second
-      stage.
-  ends_when: >-
-    the group successfully applies its counter-action before its own standing collapses,
-    reversing the decline and holding the window open, or its standing collapses first,
-    closing the window and leaving the underlying decline to continue via other loops.
-
+# 37 lines above the first `- id:` were lost at authoring: the head of one case (its id, name and first rows) is unrecoverable, and that case is closed.
 - id: EMG-10
   name: "The Endgame Configuration (nine simultaneous conditions)"
   one_line: >-
@@ -207,4 +170,3 @@
     mechanical spec for rank dismissal) and one (a cross-reference dependency on a
     separate stress test) which are explicitly left open pending future work — so the
     case as a whole does not fully end here.
-```

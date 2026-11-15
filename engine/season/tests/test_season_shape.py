@@ -1276,13 +1276,12 @@ def test_r4_event_ids_are_unique_per_draw_and_reproducible():
     assert w1.content_hash() == w2.content_hash(), "and identical across runs of the same seed"
 
 
-def test_the_corpus_defects_are_reported_not_hidden():
-    """Six of the in-chain corpus's seven case files are committed inside a markdown fence
-    with a transcript preamble, and one is TRUNCATED AT ITS HEAD. The instrument works around
-    them at LOAD time and SAYS SO -- it does not edit the chain's evidence."""
+def test_the_shipped_corpus_loads_plain_with_no_defects():
+    """The six chain case files are plain YAML (B03.61): the loader is `load_yaml`, with no
+    recovery path, and the shipped corpus records no defect."""
     R.CORPUS_DEFECTS.clear()
-    R.load_cases("ARC")
-    assert R.CORPUS_DEFECTS and any("TRUNCATED" in d for d in R.CORPUS_DEFECTS)
+    n = len(R.load_cases("ARC")) + len(R.load_cases("NPC"))
+    assert n > 0 and R.CORPUS_DEFECTS == []
 
 
 def test_cr44_a_duplicate_or_unprefixed_case_id_is_recorded_not_dropped_silently(
@@ -14747,8 +14746,8 @@ def test_w28_cast_capability_is_authored_world_gen_not_a_zeroed_default():
     COUNT of authored cast entries is read the way the plan's own GAP note requires — a structured
     YAML parse of each overlay file, independent of `cast_overlay()`'s own filter, never a `grep`
     over the case corpus. That is the exact mistake the plan's `§6` GAP records an antagonist
-    making once already on a different corpus count (`chain/*.yaml` is markdown-fenced and
-    truncated in places; a text scan does not see what `_tolerant_yaml` recovers)."""
+    making once already on a different corpus count (a text scan does not see what
+    `run_cases.load_cases` loads)."""
     import yaml as _y
     from ..harness import corpus_run as C
     from ..harness import run_cases as R
