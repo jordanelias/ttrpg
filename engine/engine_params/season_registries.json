@@ -1634,7 +1634,7 @@
               "faction",
               "strategy",
               "trained",
-              "subformations"
+              "units"
             ],
             "challenge": [
               "terms",
@@ -2743,7 +2743,7 @@
         },
         "army_verbs": {
           "source": "ED-IN-0306 phase 2 (Jordan, 2026-10-28: a faction's army is an order-of-battle record the season changes from a menu). `loop/effects_army.py` is their one body.",
-          "note": "THE VERBS THAT CHANGE AN `army` RECORD, a list of verbs. `data/fixtures.py` adds each to `withheld_verbs`: the command (a cohort, a troop type, a count, a subformation's name and tactics) is the act's payload, the operand vocabulary is closed at eight and none names it, so no Candidate could carry it and no person forms one. Each must be a `verb_table.yaml` verb (`opening_set` refuses a withheld name the table lacks).",
+          "note": "THE VERBS THAT CHANGE AN `army` RECORD, a list of verbs. `data/fixtures.py` adds each to `withheld_verbs`: the command (a cohort, a troop type, a count, a unit's name and tactics) is the act's payload, the operand vocabulary is closed at eight and none names it, so no Candidate could carry it and no person forms one. Each must be a `verb_table.yaml` verb (`opening_set` refuses a withheld name the table lacks).",
           "values": [
             "recruit",
             "form_unit",

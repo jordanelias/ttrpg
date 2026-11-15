@@ -119,9 +119,9 @@ def _army_mintable(w: "World", actor: str, content) -> bool:
         composition.require(ARMY)(ArmyCommand(content, "validate", {}))
     except (ValueError, KeyError, TypeError):
         return False
-    # MINTED EMPTY: troops come in through `recruit` (its cap, its Sites, its membership) and subformations through
+    # MINTED EMPTY: troops come in through `recruit` (its cap, its Sites, its membership) and units through
     # `form_unit`, so a record minted already holding either would bypass the recruiting rule.
-    return not content["trained"] and not content["subformations"]
+    return not content["trained"] and not content["units"]
 
 
 def _content_of(a: "Act", kind: str) -> Optional[dict]:

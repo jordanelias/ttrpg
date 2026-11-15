@@ -3,7 +3,7 @@
 
 Both are pure, so they are tested without a `World`. What each test is able to see go wrong is stated beside it:
 a recruit limit that ignored population, or infrastructure, or a type's own kind of infrastructure, fails the
-test named for that; a record operation that lost or invented a trooper fails the conservation test.
+test named for that; a record operation that lost or invented a man fails the conservation test.
 """
 import random
 
@@ -110,7 +110,7 @@ def test_record_refusals():
     a = _army()
     cases = (lambda: A.assign(a, 'wall', 'c1', 61),            # more than trained
              lambda: A.assign(a, 'wall', 'c9', 1),             # a cohort that raised none
-             lambda: A.assign(a, 'nobody', 'c1', 1),           # no such subformation
+             lambda: A.assign(a, 'nobody', 'c1', 1),           # no such unit
              lambda: A.assign(a, 'bows', 'c2', 1),             # c2 trained no archers
              lambda: A.form(a, 'wall', 'levy'),                # duplicate name
              lambda: A.form(a, ['x'], 'levy'),                 # a name that is no string would crash the battle's name set
@@ -135,10 +135,10 @@ def test_record_refusals():
 def test_order_changes_only_what_it_names():
     a = A.assign(_army(), 'wall', 'c1', 30)
     b = A.order(a, 'wall', stance='hold', target='weakest')
-    sf = b['subformations'][0]
+    sf = b['units'][0]
     assert (sf['stance'], sf['target'], sf['role'], sf['assigned']) == ('hold', 'weakest', 'ShieldWall', (('c1', 30),))
     c = A.order(b, 'wall', stance=None, fall_back_at=0.4)
-    assert c['subformations'][0]['stance'] is None and c['subformations'][0]['fall_back_at'] == 0.4
+    assert c['units'][0]['stance'] is None and c['units'][0]['fall_back_at'] == 0.4
 
 
 def test_record_to_order_of_battle_scales_by_fitness_and_drops_the_empty():
@@ -169,7 +169,7 @@ def _field(oob_a, oob_b):
 
 
 def test_an_army_record_fights():
-    # Every subformation is at least 120 troops: under 80 a subunit routs at the first check and under 100 the unit
+    # Every unit is at least 120 troops: under 80 a subunit routs at the first check and under 100 the army
     # does, so a smaller army would "fight" without anyone fighting. The assertion is that blood was drawn.
     a = A.raised(A.raised(_army(), 'c1', 'heavy_infantry', 60), 'c1', 'archers', 70)            # c1: 120 / 120
     a = A.assign(A.assign(a, 'wall', 'c1', 120), 'bows', 'c1', 120)
@@ -201,7 +201,7 @@ def test_apply_runs_each_season_command_and_refuses_each_rule_it_breaks():
     r = A.apply(_cmd(r, 'assign', name='wall', cohort='c1', count=-5))
     assert A.unassigned(r, 'c1', 'heavy_infantry') == 20 and A.by_type(r) == {'heavy_infantry': 40}
     r = A.apply(_cmd(r, 'order', name='wall', stance='hold'))
-    assert r['subformations'][0]['stance'] == 'hold'
+    assert r['units'][0]['stance'] == 'hold'
     assert A.apply(_cmd(r, 'order', strategy='defend'))['strategy'] == 'defend'
     assert A.apply(_cmd(r, 'validate')) == r
     # the recruit limit is per cohort: a second cohort has its own population, the first has spent 40 of its cap

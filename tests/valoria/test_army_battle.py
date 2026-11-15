@@ -8,7 +8,7 @@ on the field, how fit, which side's faction, and that a field with no army Recor
 
 Fixture: `test_levy_feed.py`'s realm (`build_realm(0)`), the Crown marching `set_s_014` -> `set_s_036` where the
 Church of Solmund stands, plus one cohort of weight 12 planted on each side and committed to its faction, and an
-army Record for each whose one subformation holds that cohort's whole 120.
+army Record for each whose one unit holds that cohort's whole 120.
 """
 
 from __future__ import annotations

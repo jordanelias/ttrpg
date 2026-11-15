@@ -243,7 +243,7 @@ rosters:
       # through the `mass_battle.army` composition row. MINTED by `create_record` (`kind: army`); CHANGED by the
       # four verbs, the one kind whose `subject_matter` is written after the mint (the `(Record, subject_matter)`
       # matrix row). Not a `record_sourced_operands` kind: an army answers no operand.
-      army:         [faction, strategy, trained, subformations]
+      army:         [faction, strategy, trained, units]
       # v10 PC-10b (RS-25; H-240 route (1)): A STANDING CHALLENGE TO A DUEL, minted by `challenge`
       # (`loop/effects_information.py::_eff_challenge`) into the challenger's hand. `terms` is whom it
       # challenges (`read_from`: the act's `subject`) and `to` the same person as its ADDRESSEE (so
@@ -2746,7 +2746,7 @@ rosters:
       from a menu). `loop/effects_army.py` is their one body.
     note: >-
       THE VERBS THAT CHANGE AN `army` RECORD, a list of verbs. `data/fixtures.py` adds each to `withheld_verbs`:
-      the command (a cohort, a troop type, a count, a subformation's name and tactics) is the act's payload, the
+      the command (a cohort, a troop type, a count, a unit's name and tactics) is the act's payload, the
       operand vocabulary is closed at eight and none names it, so no Candidate could carry it and no person forms
       one. Each must be a `verb_table.yaml` verb (`opening_set` refuses a withheld name the table lacks).
     values: [recruit, form_unit, assign_troops, order_unit, disband_unit, discharge_troops]

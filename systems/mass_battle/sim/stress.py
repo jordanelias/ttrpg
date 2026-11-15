@@ -123,7 +123,7 @@ def _build_side(desc: dict, side: str, ex: dict, P: dict):
     kind = desc['kind']
     if kind == 'oob':
         oob = M['OrderOfBattle'](tuple(M['UnitRow'](s['name'], s['troop_type'], s['troops'], role=s.get('role'))
-                                  for s in desc['subformations']), strategy=desc['strategy'])
+                                  for s in desc['units']), strategy=desc['strategy'])
         return M['build_unit'](oob, name, side, morale_start=ms)
     if kind == 'army':
         specs = _prep(desc['subunits'])

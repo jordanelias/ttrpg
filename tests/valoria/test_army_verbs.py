@@ -148,7 +148,7 @@ def test_form_assign_and_order_build_the_order_of_battle_and_conserve_every_troo
     assert "army.assigned" in _kinds(released) and A.unassigned(_army(w), COHORT, "heavy_infantry") == 20
     ordered = _do(w, d, "order_unit", "o1", name="wall", stance="hold", fall_back_at=0.4)
     assert "army.ordered" in _kinds(ordered)
-    sf = _army(w)["subformations"][0]
+    sf = _army(w)["units"][0]
     assert (sf["stance"], sf["fall_back_at"], sf["role"], sf["assigned"]) == ("hold", 0.4, "ShieldWall", ((COHORT, 40),))
     strat = _do(w, d, "order_unit", "o2", strategy="advance")
     assert "army.ordered" in _kinds(strat) and _army(w)["strategy"] == "advance"
@@ -166,7 +166,7 @@ def test_each_menu_refusal_leaves_the_record_as_it_was():
              ("form_unit", dict(name="x", troop_type="dragons")),                        # unknown type
              ("form_unit", dict(name="x", troop_type="heavy_infantry", role="Kite")),    # role outside the menu
              ("assign_troops", dict(name="wall", cohort=COHORT, count=31)),              # more than trained
-             ("assign_troops", dict(name="nobody", cohort=COHORT, count=1)),             # no such subformation
+             ("assign_troops", dict(name="nobody", cohort=COHORT, count=1)),             # no such unit
              ("assign_troops", dict(name="wall", cohort=COHORT, count=-1)),              # releases what is not held
              ("order_unit", dict(name="wall", stance="retreat")),                        # stance outside the roster
              ("order_unit", dict(name="wall", fall_back_at=1.5)),

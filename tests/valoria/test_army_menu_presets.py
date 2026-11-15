@@ -94,11 +94,11 @@ def test_advisories_name_the_routs():
     rec = A.raised(rec, "c1", "spearmen", 50)
     rec = A.assign(rec, "tiny", "c1", 50)
     kinds = {a[0]: a for a in _opts(rec, ())["advisories"]}
-    assert kinds["subformation_routs"][1:] == ("tiny", 50, SUBUNIT_ROUT_FLOOR)
+    assert kinds["unit_routs"][1:] == ("tiny", 50, SUBUNIT_ROUT_FLOOR)
     assert kinds["army_routs"][2:] == (50, BLOCK_SIZE)
     # CONTROL, one change: a body the size of a unit has neither warning
     rec2 = A.assign(A.form(A.raised(A.new("fac_x"), "c1", "spearmen", 400), "line", "spearmen"), "line", "c1", 400)
-    assert not {a[0] for a in _opts(rec2, ())["advisories"]} & {"subformation_routs", "army_routs"}
+    assert not {a[0] for a in _opts(rec2, ())["advisories"]} & {"unit_routs", "army_routs"}
     rec3 = A.form(A.raised(A.new("fac_x"), "c1", "levy", 90), "pool", "levy")
     assert "unassigned" in {a[0] for a in _opts(rec3, ())["advisories"]}
 
@@ -231,7 +231,7 @@ def test_plan_without_sites_is_levy_alone_and_without_people_is_empty():
     p = _plan(_cohorts(10))
     assert {c["troop_type"] for v, c in p if v == "recruit"} == {"levy"}, "no Site, no trained troops"
     assert _plan(()) == () and _plan(_cohorts(1, weight=1)) == ()
-    assert _plan(_cohorts(1, weight=3)) == (), "90 troops clear a subformation's floor but not a unit's block: it would rout at once"
+    assert _plan(_cohorts(1, weight=3)) == (), "90 troops clear a unit's floor but not the army's block: it would rout at once"
     assert _plan(_cohorts(1, weight=4))[0][0] == "recruit", "control: 120 troops clear the block"
 
 
@@ -267,8 +267,8 @@ def test_install_raises_a_whole_organised_army_through_the_real_fold():
     kinds = got[CROWN]
     assert kinds[0] == "record.created" and not [k for k in kinds if k.endswith(".refused")], kinds
     rec = w.records[world_q.army_of(w, CROWN)].subject_matter
-    assert rec["strategy"] == "advance" and not rec["trained"], "everything raised is in a subformation"
-    sizes = {sf["name"]: sum(n for _c, n in sf["assigned"]) for sf in rec["subformations"]}
+    assert rec["strategy"] == "advance" and not rec["trained"], "everything raised is in a unit"
+    sizes = {sf["name"]: sum(n for _c, n in sf["assigned"]) for sf in rec["units"]}
     assert set(sizes) == {"heavy_infantry", "crossbow", "cavalry", "levy"}, sizes
     assert min(sizes.values()) >= SUBUNIT_ROUT_FLOOR and sum(sizes.values()) == 15 * R.under_arms_cap(2) == 900
     for c in _governed_cohorts(w, CROWN):
@@ -276,7 +276,7 @@ def test_install_raises_a_whole_organised_army_through_the_real_fold():
     # the menu agrees: nothing left to raise, and the army is sound
     cmd = next(t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == world_q.army_of(w, CROWN))
     m = MM.menu(w, cmd)
-    assert m.commands and not m.raise_ and not {a[0] for a in m.advisories} & {"subformation_routs", "army_routs", "unassigned"}
+    assert m.commands and not m.raise_ and not {a[0] for a in m.advisories} & {"unit_routs", "army_routs", "unassigned"}
 
 
 def test_install_is_deterministic_idempotent_and_leaves_other_factions_alone():
@@ -294,11 +294,11 @@ def test_install_is_deterministic_idempotent_and_leaves_other_factions_alone():
 
 
 def test_a_realm_without_sites_gets_a_levy_army_that_holds_and_does_not_press():
-    """The shipped realm seats no barracks, range or stable, so its preset army is levy alone: 900 troops, one subformation.
+    """The shipped realm seats no barracks, range or stable, so its preset army is levy alone: 900 troops, one unit.
     A NAMED LIMIT, not a hidden one: the menu says the levy does not close, and the doctrine is what unlocks the rest."""
     w, got = _realm_crown_army(sites=False)
     rec = w.records[world_q.army_of(w, CROWN)].subject_matter
-    assert [sf["troop_type"] for sf in rec["subformations"]] == ["levy"]
+    assert [sf["troop_type"] for sf in rec["units"]] == ["levy"]
     cmd = next(t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == world_q.army_of(w, CROWN))
     assert "levy_never_closes" in {a[0] for a in MM.menu(w, cmd).advisories}
 

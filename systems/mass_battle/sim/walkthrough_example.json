@@ -2,7 +2,7 @@
   "_what": "The example battle behind the mass battle walkthrough page: two armies of 5,200 troops, roles set. Data, not code: every number in walkthrough.py lives here.",
   "side_a": {
     "strategy": "advance",
-    "subformations": [
+    "units": [
       {
         "name": "line",
         "troop_type": "heavy_infantry",
@@ -29,7 +29,7 @@
   },
   "side_b": {
     "strategy": "defend",
-    "subformations": [
+    "units": [
       {
         "name": "line",
         "troop_type": "heavy_infantry",

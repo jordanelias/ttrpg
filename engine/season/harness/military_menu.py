@@ -49,10 +49,10 @@ class MilitaryMenu:
       * `commands`        -- True when `actor` holds the army and so can give it orders; False for a mere member
       * `mint`            -- True when `actor` may mint the faction's (empty) army now
       * `raise_`          -- ((cohort, troop type, most that may be raised now), ...)
-      * `assign`/`release` -- ((subformation, cohort, most that may be moved), ...)
+      * `assign`/`release` -- ((unit, cohort, most that may be moved), ...)
       * `discharge`       -- ((cohort, troop type, most that may be sent home), ...)
-      * `disband`         -- (subformation name, ...)
-      * `orders`          -- ((subformation, the roles its type allows), ...)
+      * `disband`         -- (unit name, ...)
+      * `orders`          -- ((unit, the roles its type allows), ...)
       * `vocabulary`      -- the module's own: strategies, stances, targets, troop_types (type, roles, site kind)
       * `advisories`      -- ((kind, subject, have, floor), ...), what is wrong with the army as it stands"""
     actor: str
@@ -81,7 +81,7 @@ def cohorts_raisable(w, faction: str) -> tuple:
 def _empty_army(faction: str, strategy: str = "line") -> dict:
     """The content an army is minted with (`_army_mintable` checks it is well formed and empty). The key set is
     `rosters.yaml: record_kinds.army`; `line` is the neutral strategy, which `order_unit` changes."""
-    return {"faction": faction, "strategy": strategy, "trained": (), "subformations": ()}
+    return {"faction": faction, "strategy": strategy, "trained": (), "units": ()}
 
 
 def menu(w, actor: str) -> MilitaryMenu:
@@ -102,7 +102,7 @@ def menu(w, actor: str) -> MilitaryMenu:
         ArmyOptionsQuery(rec, cohorts_raisable(w, faction), w.fixtures.get("condition_scale"),
                          world_q.other_army_records(w, rid)))
     roles = {t: r for t, r, _site in opts["troop_types"]}
-    sfs = rec["subformations"]
+    sfs = rec["units"]
     assign = tuple((sf["name"], c, n) for sf in sfs for c, t, n in rec["trained"] if t == sf["troop_type"])
     release = tuple((sf["name"], c, n) for sf in sfs for c, n in sf["assigned"])
     return MilitaryMenu(
@@ -170,12 +170,12 @@ def describe(m: MilitaryMenu) -> str:
     else:
         out.append("Can raise nobody more.")
     if m.disband:
-        out.append("Subformations: " + ", ".join(m.disband) + ".")
+        out.append("Units: " + ", ".join(m.disband) + ".")
     if m.discharge:
-        out.append("Trained, in no subformation: " + "; ".join(f"{n} {t} of {c}" for c, t, n in m.discharge) + ".")
+        out.append("Trained, in no unit: " + "; ".join(f"{n} {t} of {c}" for c, t, n in m.discharge) + ".")
     for kind, subject, have, floor in m.advisories:
-        out.append({"subformation_routs": f"Warning: {subject} has {have} troops; under {floor} it routs at the first check.",
+        out.append({"unit_routs": f"Warning: {subject} has {have} troops; under {floor} it routs at the first check.",
                     "army_routs": f"Warning: the army fields {have} troops; under {floor} it routs at once.",
-                    "unassigned": f"{have} trained troops are in no subformation and will not fight.",
+                    "unassigned": f"{have} trained troops are in no unit and will not fight.",
                     "levy_never_closes": f"{subject} is levy and will not close to contact."}.get(kind, f"{kind}: {subject}"))
     return " ".join(out)

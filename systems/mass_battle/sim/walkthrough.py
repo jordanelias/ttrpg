@@ -41,7 +41,7 @@ TEMPLATE = os.path.join(_HERE, 'walkthrough_template.html')
 
 def _oob(side: dict, role) -> OrderOfBattle:
     subs = []
-    for sf in side['subformations']:
+    for sf in side['units']:
         r = role if (role and sf['troop_type'] == 'light_cavalry') else sf.get('role')
         subs.append(UnitRow(sf['name'], sf['troop_type'], sf['troops'], role=r))
     return OrderOfBattle(tuple(subs), strategy=side['strategy'])
@@ -185,9 +185,9 @@ def table(run: dict) -> str:
 def _summary(example: dict) -> dict:
     """What the page says about the two armies, straight from the example file."""
     def side(d):
-        return {'strategy': d['strategy'], 'subformations': [
+        return {'strategy': d['strategy'], 'units': [
             {'name': sf['name'], 'type': sf['troop_type'], 'troops': sf['troops'], 'role': sf.get('role')}
-            for sf in d['subformations']]}
+            for sf in d['units']]}
     return {'a': side(example['side_a']), 'b': side(example['side_b']), 'seed': None,
             'morale_start': example['morale_start'], 'max_turns': example['max_turns']}
 
