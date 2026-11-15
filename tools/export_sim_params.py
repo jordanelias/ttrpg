@@ -13,6 +13,10 @@ Each record: {key, name, value, kind, module, file, note}. `value` is the litera
 constant; `note` is the trailing inline comment (often the [canonical: …]/ED-/PP- cite). The line
 number is intentionally not stored (it churns on unrelated edits); provenance is file + note.
 
+The season's settings (the literal keywords of `DEFAULT_FIXTURES = Fixtures(...)` in
+engine/season/data/fixtures.py) are rows too, under module `engine.season.settings`; `--build`
+prints how many it read and skipped, and raises if it read none (B03.14, CI-04).
+
 CLI:
   python3 tools/export_sim_params.py --build     # regenerate engine/engine_params/sim_params.json
   python3 tools/export_sim_params.py --check      # drift gate: committed == fresh extract (exit 1 on drift)
@@ -211,6 +215,64 @@ def _citation_grade(citation):
     return "assumption" if _ASSUMPTION_WORD.search(citation) else "source"
 
 
+SETTINGS_FILE = ROOT / "engine" / "season" / "data" / "fixtures.py"
+SETTINGS_MODULE = "engine.season.settings"
+
+
+def _scan_settings(path=None) -> tuple[list, int]:
+    """(rows, skipped) for the season's settings: the keywords of the module-scope
+    `DEFAULT_FIXTURES = Fixtures(...)` call in `engine/season/data/fixtures.py` (B03.14, CI-04).
+
+    A keyword whose value `_literal()` accepts is a row of the exporter's own shape under
+    `module: engine.season.settings`; any other (the table names read from registries, a splat, an
+    explicit `None`, which `_literal` cannot tell from a non-literal) is skipped and counted. Unlike the
+    module-scope loop, `_is_numericish` is NOT applied: a setting may be a bool or a string.
+    RAISES when the call is not found or yields no row, so a renamed `DEFAULT_FIXTURES` cannot produce a
+    smaller artifact that still checks green (CLAUDE.md §0.1 pt 2)."""
+    path = Path(path) if path is not None else SETTINGS_FILE
+    src = path.read_text(encoding="utf-8")
+    src_lines = src.splitlines()
+    call = None
+    for node in ast.parse(src).body:
+        if (isinstance(node, ast.Assign) and len(node.targets) == 1
+                and isinstance(node.targets[0], ast.Name) and node.targets[0].id == "DEFAULT_FIXTURES"
+                and isinstance(node.value, ast.Call)
+                and isinstance(node.value.func, ast.Name) and node.value.func.id == "Fixtures"):
+            call = node.value
+    if call is None:
+        raise ValueError(f"{path}: no module-scope `DEFAULT_FIXTURES = Fixtures(...)` call to read")
+    try:
+        rel = path.relative_to(ROOT).as_posix()
+    except ValueError:
+        rel = path.as_posix()
+    rows, skipped = [], 0
+    for kw in call.keywords:
+        val = _literal(kw.value) if kw.arg else None
+        if val is None:
+            skipped += 1
+            continue
+        note = _comment(src_lines, kw.value.lineno)
+        rows.append({
+            "key": f"{SETTINGS_MODULE}.{kw.arg}",
+            "name": kw.arg,
+            "value": _jsonsafe(val),
+            "kind": _kind(val),
+            "module": SETTINGS_MODULE,
+            "file": rel,
+            "note": note,
+            "citation": _citation(note),
+            "citation_grade": _citation_grade(_citation(note)),
+        })
+    if not rows:
+        raise ValueError(f"{path}: `DEFAULT_FIXTURES` yielded no literal setting")
+    return rows, skipped
+
+
+def _setting_rows(path=None) -> list:
+    """The season's setting rows (see `_scan_settings`, which also returns the skipped count)."""
+    return _scan_settings(path)[0]
+
+
 def build() -> dict:
     records = []
     for p in _iter_py_files():
@@ -251,6 +313,7 @@ def build() -> dict:
                 "citation_grade": _citation_grade(_citation(_comment(src_lines, node.lineno))),
             })
     records.sort(key=lambda r: (r["file"], r["name"]))
+    records.extend(_setting_rows())   # B03.14: appended after the sort, in source order
     from collections import Counter
     by_module = Counter(r["module"] for r in records)
     # The provenance gap as a NUMBER IN THE ARTIFACT, not something a reader has to compute.
@@ -301,6 +364,8 @@ def main(argv: list[str]) -> int:
         p = write()
         s = json.loads(p.read_text())
         print(f"wrote {p.relative_to(ROOT)} — {s['count']} constants across {len(s['by_module'])} modules")
+        read, skipped = _scan_settings()
+        print(f"  settings: read {len(read)} Fixtures keywords, skipped {skipped} non-literal")
         return 0
     if args.check:
         ok, msgs = check()

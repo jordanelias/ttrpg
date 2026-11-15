@@ -120,3 +120,25 @@ def test_a_module_with_its_own_export_is_not_a_sim_reference_root(tmp_path):
 def test_count_matches_records():
     d = json.load(open(os.path.join(ROOT, 'engine', 'engine_params', 'sim_params.json')))
     assert d["count"] == len(d["params"])
+
+
+def test_the_season_settings_are_exported_and_a_rename_cannot_empty_them(tmp_path):
+    """B03.14 (CI-04). Every `Fixtures` keyword of `DEFAULT_FIXTURES` whose value is a literal is a row
+    `engine.season.settings.<name>`, so the port reads the season's settings from a typed artifact with a
+    blocking round-trip (CLAUDE.md §5). The rename case is the falsifier of the count: a source with no
+    `DEFAULT_FIXTURES` call must RAISE, not yield a smaller artifact that still checks green (§0.1 pt 2)."""
+    sys.path.insert(0, ROOT)
+    from engine.season.data.fixtures import DEFAULT_FIXTURES
+    rows = json.load(open(os.path.join(ROOT, 'engine', 'engine_params', 'sim_params.json')))["params"]
+    settings = [r for r in rows if r["module"] == "engine.season.settings"]
+    by_key = {r["key"]: r for r in settings}
+    assert "engine.season.settings.pool_default" in by_key, "no pool_default setting row"
+    assert by_key["engine.season.settings.pool_default"]["value"] == DEFAULT_FIXTURES.get("pool_default")
+    assert len(settings) >= 90, len(settings)
+    assert all(r["file"] == "engine/season/data/fixtures.py" for r in settings)
+    assert all(r["key"] == "engine.season.settings." + r["name"] for r in settings)
+    renamed = tmp_path / "fixtures.py"
+    renamed.write_text("DEFAULT_SETTINGS = Fixtures(pool_default=2)\n")
+    import pytest
+    with pytest.raises(ValueError):
+        esp._setting_rows(renamed)
