@@ -4,11 +4,18 @@ Nothing here is a shared pin; each test names the falsifier its edit answers.
 """
 from __future__ import annotations
 
+import random
+
+import pytest
+
 from engine.season.data.matrix import Step, WriteClass
 from engine.season.data.verbs import VERB_TABLE
+from engine.season.gaps import InstrumentDefect
 from engine.season.harness.populated import build_realm
 from engine.season.loop.driver import SeasonDriver, mint_token
+from engine.season.seam.wrappers import sigma
 from engine.season.state.carriers import Act
+from engine.season.tests.test_u7_remit import _world
 
 
 def test_contest_error_at_depth_zero_emits_one_refusal():
@@ -30,3 +37,19 @@ def test_contest_error_at_depth_zero_emits_one_refusal():
     row = VERB_TABLE["march"]
     assert [e.kind for e in produced] == [row.emits_on_refusal[0]], (
         f"a contest at depth cap 0 left {[e.kind for e in produced]}, not the one refusal {row.emits_on_refusal}")
+
+
+def test_sigma_provider_with_no_rng_raises_instrument_defect():
+    """§B row 6: the social contest provider handed no generator refuses, naming itself, in place of drawing from a
+    fresh unseeded `random.Random()`.
+
+    A direct call with `rng=None` on a world the provider can roll. FALSIFIER: the call returns a RESOLVED dict (it
+    drew from a generator nobody seeded). The control is the same call handed `random.Random(3)`: it resolves, so the
+    refusal is the missing generator and not the party, the verb or the prize."""
+    w, _d = _world()
+    args = (w, ["p_low", "p_mid"], ["c"], "a standing")
+    kw = dict(verb="tell", subject="p_mid")
+    ok = sigma.resolve(*args, **kw, rng=random.Random(3))
+    assert ok["status"] == "RESOLVED", ok
+    with pytest.raises(InstrumentDefect, match="sigma"):
+        sigma.resolve(*args, **kw)

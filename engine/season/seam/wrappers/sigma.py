@@ -88,7 +88,7 @@ from engine.substrate import composition
 
 from ...data.rosters import VERB_CAPABILITY, roster
 from ...data.verbs import SOCIAL_ROLL_PROVIDER, TASK_DIFFICULTY, VERB_TABLE
-from ...gaps import Unspecified
+from ...gaps import InstrumentDefect, Unspecified
 from ...loop.sides import _contests_of, sides_of
 # ⚠ THE LEAF, NOT THE PACKAGE'S RE-EXPORT. `manifest/providers.py` imports nothing, so no import
 # here closes a loop back into this package (`_entry.py` says the same of the entry lookup);
@@ -526,8 +526,8 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     (`contest_input`'s `room`). Every other prize still derives its obstacle from the parties alone.
 
     ⚠ THE RNG IS A PARAMETER: THE DRIVER'S GENERATOR IS PASSED ON EVERY SHIPPED PATH (`loop/resolve.py`), AND A
-    HAND CALL WITH NONE GETS A FRESH UNSEEDED `random.Random()` (never the process-global stream, never a
-    seeded one made here). THAT IS `04 §C.12`'s REJECTION 4 BECOMING
+    HAND CALL WITH NONE IS REFUSED (`InstrumentDefect`, naming the caller; never a fresh unseeded `random.Random()`,
+    never the process-global stream, never a seeded one made here). THAT IS `04 §C.12`'s REJECTION 4 BECOMING
     LOAD-BEARING FOR THE FIRST TIME: *"When R-09's producer is built … its generator must be
     constructed by the driver from the run seed and passed down exactly as `World` is. This is the
     one rejection that is not yet load-bearing, because no roll exists yet."* It exists now.
@@ -569,9 +569,14 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     if entry is None:
         return refusal
     # ONE generator for the act's whole roll: the dice (`entry.fn`) and the margin's fraction (below)
-    # draw from it. An absent `rng` is a fresh `random.Random()`, as `roll_pool` makes one; the process-global
-    # stream is never touched (04 §C.12: the RNG is threaded, never global). The shipped path always passes one.
-    rng = rng if rng is not None else random.Random()
+    # draw from it. An absent `rng` is a caller that handed no generator -- an instrument defect, refused naming
+    # that caller, never a fresh unseeded `random.Random()` and never the process-global stream (04 §C.12: the RNG
+    # is threaded, never global). The shipped path always passes one.
+    if rng is None:
+        caller = sys._getframe(1)
+        raise InstrumentDefect(
+            f"{__name__}.resolve was handed no `rng` by {caller.f_globals.get('__name__', '?')}."
+            f"{caller.f_code.co_name}: the act's generator is the driver's, passed down by parameter (04 §C.12)")
     margin = entry.fn(inp, rng)
     if not isinstance(margin, Margin):
         raise Unspecified(
