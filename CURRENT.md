@@ -25,7 +25,7 @@ A row naming a quarantined `.designs/` document gives its **bare filename only**
 | **Faction / political** | `faction_canon_v30.md`, `faction_layer_v30.md`, `faction_behavior_v30.md`, `faction_state_authoring_v30.md`, `faction_politics_v30.md` | `registers/handoffs/HANDOFF_FA.md`; ED-FA-0008..0023 |
 | **Settlement / territory** | `settlement_layer_v30.md` + `settlement_adjacency_v30.md`, `territory_temperaments_v30.md`, `geography_v30.md` | `registers/handoffs/HANDOFF_SE.md`; proposed redesign `governance_play_redesign_v1.md`; hierarchy ruling `scale_hierarchy_v1.md` |
 | **Clocks & tracks** | `clock_registry_v30.md` | Truth → Conviction: ED-IN-0251 (supersedes ED-IN-0075 for the per-character axis) |
-| **Threadwork** | `threadwork_v30.md` + `thread_horizontal_integration_spec.md` | ED-WR-0010 (last row); `registers/handoffs/HANDOFF_WR.md` |
+| **Threadwork** | `systems/threadwork/sim/` (the oracle; Coherence per ED-WR-0010); design intent `threadwork_v30.md` (Part 3 superseded), `threadwork_applications.md`, `thread_horizontal_integration_spec.md` | ED-WR-0010 (last row); `registers/handoffs/HANDOFF_WR.md` |
 | **Fieldwork / Investigation** | `fieldwork_v30.md` + `investigation_systems_v30.md` | Interview merge ED-FI-0004; `registers/handoffs/HANDOFF_FI.md` |
 | **Scale transitions** | `scale_transitions_v30.md` | ED-IN-0016 |
 | **Player agency** | `player_agency_v30.md` | ED-IN-0016 |
@@ -33,7 +33,7 @@ A row naming a quarantined `.designs/` document gives its **bare filename only**
 | **NPC behaviour** | `npc_behavior_v30.md` | — |
 | **Wrapper doctrine (ARCHIVED, Key-based)** | `holonic_container_doctrine_v1.md` — ED-1083 | — |
 | **Propagation spec** | `propagation_spec_v1.md` — ED-1093 | the doc's own §5; `engine_clock` home is ED-1051 |
-| **Narrative engine** | `narrative_engine_design_v2_churn.md` — ED-IN-0011 | — |
+| **Narrative engine** | `engine/season/harness/` — `storybar.py`, `chronicle.py`, `strife.py`, `arc.py` (readings over the log, never carriers: ED-IN-0225); design intent `proposals/2026-11-04-strife-flows/00_MASTER.md` | ED-IN-0011 (history); ED-IN-0232; `registers/handoffs/HANDOFF_WR.md` |
 | **Dice / resolution** | in code: `engine/dice_engine/dice_engine.py` (`degree_from_net`) | prose tables EVACUATED (fork ref `c451bcb`); the capture `engine/engine_params/params_tables.yaml` was retired (`FORK:` row) — not the formula |
 | **Board game** | EVACUATED (fork ref `c451bcb`); the capture `engine/engine_params/params_tables.yaml` was retired (`FORK:` row) | — |
 | **Godot conversion** | `godot/godot_conversion_strategy_v1.md` — PROPOSED | ED-GO-0001; ED-GO-0002 (the engine version); `registers/handoffs/HANDOFF_GO.md` |

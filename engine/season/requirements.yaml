@@ -178,9 +178,10 @@ scales:
       `verb_table.yaml` (`found`, `build`, `work`, `tend`, `restore`, `requisition`);
       `references/module_contracts.yaml` declares no `domain_actions` or `settlement_economy`
       contract (both retired: A-10, ED-IN-0232). The loop has `Site`, `stores` and `condition`; `found`, `build`, `restore` and
-      `work` are declared in `verb_table.yaml`; in the realm only `restore` executes (cohorts mending
-      their own settlement's fabric since `24f`), while `found`, `build` and `work` are formed and
-      refused because no computed act declares a works (`H-165`); no domain-action mechanism exists.
+      `work` are declared in `verb_table.yaml`; none of the four executes in the shipped realm: `restore` forms only
+      on a Site below a floor and no Site crosses one (wear-0 dwellings and garrisons; no wound, H-235/H-236),
+      and `found`, `build` and `work` are formed and refused because no computed act declares a works
+      (`H-165`); no domain-action mechanism exists.
 
   - scale:    "investigations / detective / interactive fiction"
     conjunct:  R-04.c7
