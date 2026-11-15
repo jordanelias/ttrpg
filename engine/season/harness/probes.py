@@ -77,10 +77,11 @@ def probe(pid: str, title: str, section: str, tests: str, by: str):
 # refuses a kind outside `EVENT_KINDS`, so the probe world declares these through the same roster
 # parameter a `World` takes; no production world does.
 PROBE_KINDS = frozenset({"plague.struck", "sitting.decided"})
+_PROBE_WORLD_KINDS = EVENT_KINDS | PROBE_KINDS      # built once: `tiny_world` is called by the hundred
 
 
 def tiny_world(fixtures: Fixtures = DEFAULT_FIXTURES) -> World:
-    w = World(world_seed=1, fixtures=fixtures, event_kinds=EVENT_KINDS | PROBE_KINDS)
+    w = World(world_seed=1, fixtures=fixtures, event_kinds=_PROBE_WORLD_KINDS)
     scale = fixtures.get("condition_scale")
     for rid, kind, stores in (("R", "realm", None), ("D", "duchy", None),
                               ("S", "settlement", {"grain": 40}), ("Hh", "hearth", {"grain": 8})):
