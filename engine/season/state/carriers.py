@@ -914,6 +914,7 @@ class PersonInterior:
     travel_leg: tuple
     tenures: tuple
     ledger: tuple
+    weight: int = 1       # S9: a cohort is a Person at weight > 1; a chooser's callback may ask (harness/probes.py P21)
 
 
 def interior_of(p: Person) -> PersonInterior:
@@ -921,7 +922,8 @@ def interior_of(p: Person) -> PersonInterior:
     ro = lambda d: MappingProxyType(dict(d or {}))
     return PersonInterior(
         p.id, p.name, ro(p.capability), ro(p.pursuits), ro(p.conviction), ro(p.scar), ro(p.attributes),
-        p.body, p.thread_sensitivity, tuple(p.stance), tuple(p.travel_leg), tuple(p.tenures), tuple(p.ledger))
+        p.body, p.thread_sensitivity, tuple(p.stance), tuple(p.travel_leg), tuple(p.tenures), tuple(p.ledger),
+        p.weight)
 
 
 @dataclass
