@@ -155,21 +155,24 @@ def test_g3_every_live_violation_is_refused_without_its_basis_and_admitted_with_
         claimed, not caused.
 
     COUNTED, and the set is asserted, so a gate that refuses one and admits two cannot pass. Then
-    each lawful twin -- the King's seat, the duke's seat, a real death -- is admitted."""
+    each lawful twin -- the King's seat, the duke's seat, a real death -- is admitted.
+
+    H-143 (B03.76): the gate's refusal is read as the row's refusal Event, no longer as the raise
+    that ended the season (`04 §C`: a refusal emits, never raises); the store is put back as before."""
     refused = []
 
     w, d = _gov_world()
-    with pytest.raises(NotYours):
-        d._fold(w, mint_token(w, WriteClass.ACTS),
-                Act(id="rv0", actor="p_king", verb="revoke", payload={"office": "off_duke"}))
+    out = d._fold(w, mint_token(w, WriteClass.ACTS),
+                  Act(id="rv0", actor="p_king", verb="revoke", payload={"office": "off_duke"}))
+    assert [e.kind for e in out] == ["revoke.refused"], [e.kind for e in out]
     assert _hold(w, "off_duke") is not None, "the refused revocation closed the hold"
     refused.append("revoke")
 
     w, d = _gov_world()
-    with pytest.raises(NotYours):
-        d._fold(w, mint_token(w, WriteClass.ACTS),
-                Act(id="cf0", actor="p_high", verb="confer",
-                    payload={"office": "off_reeve", "to": "p_mid"}))
+    out = d._fold(w, mint_token(w, WriteClass.ACTS),
+                  Act(id="cf0", actor="p_high", verb="confer",
+                      payload={"office": "off_reeve", "to": "p_mid"}))
+    assert [e.kind for e in out] == ["confer.refused"], [e.kind for e in out]
     assert _hold(w, "off_reeve") is None, "the refused conferral left a hold on the seat"
     refused.append("confer")
 
@@ -183,10 +186,10 @@ def test_g3_every_live_violation_is_refused_without_its_basis_and_admitted_with_
                 t.until = w.tick
         return [who]
     w.remove_person = close_without_removing
-    with pytest.raises(NotYours):
-        d._fold(w, mint_token(w, WriteClass.ACTS),
-                Act(id="kw0", actor="p_low", verb="fight", payload={"subject": "p_mid"}),
-                _felled("p_mid"))
+    out = d._fold(w, mint_token(w, WriteClass.ACTS),
+                  Act(id="kw0", actor="p_low", verb="fight", payload={"subject": "p_mid"}),
+                  _felled("p_mid"))
+    assert [e.kind for e in out] == ["kill.refused"], [e.kind for e in out]
     assert all(t.live for t in victim_edges), "the refused cascade left the victim's edges closed"
     refused.append("fight")
 
@@ -238,10 +241,10 @@ def test_g3_the_conferral_opener_is_admitted_only_through_a_seat_with_purview(ga
             assert purview_reaches(w, w.offices["off_reeve"], "S"), "fixture: not reflexive"
         if c.get("no_basis"):
             w.offices["off_reeve"].conferral = None
-        with pytest.raises(NotYours):
-            d._fold(w, mint_token(w, WriteClass.ACTS),
-                    Act(id="cf", actor=c["actor"], verb="confer",
-                        payload={"office": "off_reeve", "to": "p_mid"}, via=c["via"]))
+        out = d._fold(w, mint_token(w, WriteClass.ACTS),
+                      Act(id="cf", actor=c["actor"], verb="confer",
+                          payload={"office": "off_reeve", "to": "p_mid"}, via=c["via"]))
+        assert [e.kind for e in out] == ["confer.refused"], (why, [e.kind for e in out])
         assert not [t for t in w.tenures if t.object == "off_reeve" and t.subject == "p_mid"], (
             f"{why}: the refused opener left the conferee a hold")
         if c.get("seat_self"):
@@ -301,8 +304,9 @@ def test_g3_a_revoke_with_no_seat_is_refused_at_the_gate_itself(gate_only):
     revoke' cannot degrade into 'anyone with a remit string'"*. Three observations:
 
       (a) the gate ALONE -- a bare write, actor present, `via=None` -> `NotYours`;
-      (b) the fold with eligibility AND `requires` bypassed (`gate_only`) -> `NotYours`, so the gate
-          is what refuses when nothing before it does;
+      (b) the fold with eligibility AND `requires` bypassed (`gate_only`) -> the row's refusal
+          Event (H-143: the fold emits the gate's `NotYours`, never raises it), so the gate is
+          what refuses when nothing before it does;
       (c) after either, the duke's hold is LIVE and the mint window is SHUT -- a refused write
           cannot issue a receipt after it. (G4 moved the fold's mint INSIDE `World.write`, so
           `_apply_write` no longer mints after the write returns; the shut window is still what
@@ -314,9 +318,9 @@ def test_g3_a_revoke_with_no_seat_is_refused_at_the_gate_itself(gate_only):
     assert t.live, "(a) the gate refused and the hold closed anyway"
     with pytest.raises(Forbidden):
         w.gate.mint(t.id, "set", "Act", "until")
-    with pytest.raises(NotYours):
-        d._fold(w, mint_token(w, WriteClass.ACTS),
-                Act(id="rv_none", actor="p_king", verb="revoke", payload={"office": "off_duke"}))
+    out = d._fold(w, mint_token(w, WriteClass.ACTS),
+                  Act(id="rv_none", actor="p_king", verb="revoke", payload={"office": "off_duke"}))
+    assert [e.kind for e in out] == ["revoke.refused"], [e.kind for e in out]
     assert t.live, "(b) the fold's refused write closed the hold"
 
 
@@ -435,7 +439,7 @@ _RESTAMP = dict(office="off_reeve", post="Reeve", rung="S", remit=["issue", "dis
                 faction="Crown", conferral="appointed", revocation=_RUNG_ABOVE)
 
 
-def test_g3_the_restamp_of_anothers_grant_needs_the_conferral_basis(gate_only):
+def test_g3_the_restamp_of_anothers_grant_needs_the_conferral_basis(gate_only, monkeypatch):
     """`13f`'s `establish` re-stamps the grant on every live `hold` on the office -- a write on a
     SITTING HOLDER'S edge, the fourth live non-owner write G3's plan text did not list. Admitted
     through a seat with purview over the office (the duke's, over `S`); REFUSED through a seat
@@ -448,11 +452,15 @@ def test_g3_the_restamp_of_anothers_grant_needs_the_conferral_basis(gate_only):
         w.add_tenure(Tenure("t_reeve", "p_mid", "off_reeve", "hold", 0))
         return w, d, next(t for t in w.tenures if t.id == "t_reeve")
 
+    # H-291 (B03.81): the effect's reader `office_founded_by` asks `founds_over` of an overlay act too, a check
+    # BEFORE the gate, so it is bypassed like `_admits` is (this test reads what only the gate refuses; the
+    # sibling duke's own refusal at that check is `test_overlay_establish_by_a_duke_of_another_body_is_refused`).
+    monkeypatch.setattr(_preds, "founds_over", lambda *a, **k: True)
     w, d, t = world()
     assert t.granted_acts == ("issue",), "fixture"
-    with pytest.raises(NotYours):
-        d._fold(w, mint_token(w, WriteClass.ACTS),
-                Act(id="e0", actor="p_other", verb="establish", payload=_RESTAMP, via="off_duke2"))
+    out = d._fold(w, mint_token(w, WriteClass.ACTS),
+                  Act(id="e0", actor="p_other", verb="establish", payload=_RESTAMP, via="off_duke2"))
+    assert [e.kind for e in out] == ["establish.refused"], [e.kind for e in out]
     assert t.granted_acts == ("issue",), "the refused re-stamp reached the sitting holder"
     assert w.offices["off_reeve"].remit_acts == ["issue", "dispatch"], (
         "the office write was undone -- then `_restore_tenures`' stated bound is wrong")
@@ -465,17 +473,24 @@ def test_g3_the_restamp_of_anothers_grant_needs_the_conferral_basis(gate_only):
 
 
 def test_g3_the_shipped_establish_refuses_the_restamp_before_the_gate():
-    """`_req_establish`'s clause 5 asks the gate's `may_fill` first, so through the SHIPPED fold
+    """`_req_establish` refuses first -- since H-291 (B03.81) at clause 1, the overlay arm's `founds_over`
+    (a seat without purview over `S`), which precedes clause 5's `may_fill` -- so through the SHIPPED fold
     the sibling duke's re-stamp EMITS `establish.refused`, raises nothing, and leaves the sitting
     reeve's grant -- and, because the effect never ran, the office -- as they were."""
+    from engine.season.trace_log import TRACE
     w, d = _gov_world()
     w.add_tenure(Tenure("t_reeve", "p_mid", "off_reeve", "hold", 0))
     t = next(x for x in w.tenures if x.id == "t_reeve")
-    out = d.resolve(mint_token(w, WriteClass.ACTS),
-                    [Act(id="e2", actor="p_other", verb="establish", payload=_RESTAMP,
-                         via="off_duke2")],
-                    contest_max_depth=w.fixtures.get("contest_max_depth"))
+    with TRACE.recording():
+        first = len(TRACE.rows)
+        out = d.resolve(mint_token(w, WriteClass.ACTS),
+                        [Act(id="e2", actor="p_other", verb="establish", payload=_RESTAMP,
+                             via="off_duke2")],
+                        contest_max_depth=w.fixtures.get("contest_max_depth"))
+        clauses = [r.what.split(" -> ")[0] for r in TRACE.rows[first:]
+                   if r.channel == "DECISION" and r.detail.get("chose") == "refuse"]
     assert [e.kind for e in out] == ["establish.refused"], [e.kind for e in out]
+    assert "an establish over a rung the seat exercised does not found over" in clauses, clauses
     assert t.granted_acts == ("issue",) and w.offices["off_reeve"].remit_acts == ["issue"]
 
 

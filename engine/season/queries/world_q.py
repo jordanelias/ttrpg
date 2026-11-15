@@ -29,7 +29,6 @@ step adds without anyone remembering to say so.
 
 from __future__ import annotations
 
-import copy
 import functools
 from dataclasses import dataclass, replace
 from fractions import Fraction
@@ -85,7 +84,7 @@ from ..state.carriers import Person, Question, Site, Tenure
 # write gate's F3 clause needs both -- ruling (3)'s parent rung and ruling (4)'s purview subtree --
 # and the gate is in `state/`, which may not import this module. The bodies moved down unchanged;
 # these names are the same function objects, so every `world_q.parent_of(...)` call is unaffected.
-from ..state.containment import descendants, parent_of  # noqa: F401 -- re-exported
+from ..state.containment import descendants, edges_of, parent_of  # noqa: F401 -- re-exported
 # ⚠ AND `ancestry`/`home_of` BY THE SAME ROUTE (plan position `19`, U7-remit): the write gate's
 # `determination` basis asks the bench's containment test of the party's home, so both walks moved
 # down, unchanged. Same function objects; every `world_q.ancestry(...)`/`world_q.home_of(...)` caller
@@ -995,6 +994,34 @@ def event_place(w: World, e, homes: Optional[dict] = None) -> Optional[str]:
     if here is not None:
         return here
     return w.departed_from(who, e.emitted_at)     # `departed_from(None, t)` is None
+
+
+def event_place_at(w: World, e) -> Optional[str]:
+    """WHERE AN EVENT HAPPENED, AT THE TIME IT HAPPENED -- the rung of the actor's `contain` edge LIVE AT
+    `e.emitted_at` (`since <= t` and `until` unset or after `t`), where `event_place` answers where the actor
+    stands NOW. `event_place` is unchanged and stays WITNESS's read at the Event's own tick; this one is for a
+    reader that comes later (a chronicle line, a reason trail): a closed edge is kept with its `since`/`until`
+    (`Tenure`), so the earlier place is recoverable.
+
+    The actor is `event_place`'s: the causing act's actor for an act-caused Event, else `anchor_of(w, e)`. The
+    edges are `containment.edges_of`'s, the one view of them (live or closed), not a second scan. An edge closed at
+    tick `t` is not live at `t`: the edge the mover opened then (`since == t`) is, so an Event of the very tick of a
+    move reads the new place; the tick is the grain, and the edge carries no finer order. LAST WRITE WINS where a
+    person has two edges live at `t`, as `home_map` does.
+
+    NOT PLACED, AND SAID SO: a person the world no longer holds has no edges (a Tenure is owned by its subject and
+    leaves the store with him), so he is placed only by `World.departed_from` at his own tick, exactly as
+    `event_place` does; an Event whose actor is not a person (a rung, a site, a record) is placed by `event_place`,
+    which is not time-indexed for them. `None` is the answer to both of the rest."""
+    a = causing_act(w, e)
+    who = a.actor if a is not None else anchor_of(w, e)
+    if who not in w.persons:
+        return event_place(w, e)
+    at = None
+    for t in edges_of(w, "contain", who):
+        if t.since <= e.emitted_at and (t.until is None or e.emitted_at < t.until):
+            at = t.object
+    return at
 
 
 # ⚠ v9 SE-01 (`24g`), P1's OTHER HALF -- THE PERSON-KEYED CROSSING REPAIR IS THE PERSON LIMB ABOVE,
@@ -2090,11 +2117,14 @@ def footprint(w: World, faction: str) -> list[str]:
     ⚠ A FACTION HOLDS A RUNG AS THE `hold` SUBJECT, WHICH §15's TABLE TYPES AS `Person -> ...`.
     §14.2's own closing note is the licence and the warning: *"A Proposition may be a `hold`
     subject and is never destroyed, so a memberless faction leaves territory held by a banner
-    nobody carries."* That defect is declared there and is not repaired here."""
+    nobody carries."* That defect is declared there and is not repaired here. Every realm hold is
+    in fact person-subject (`faction_holding`, `provinces_of`), so the hold half reads the faction's
+    own subject OR a member's: the membership `faction_q.resolve` uses."""
     TRACE.query("footprint", "resolver")
-    out = {t.object for t in w.tenures
-           if t.kind == "hold" and t.subject == faction and t.live and t.object in w.rungs}
     inside = set(members(w, faction))
+    out = {t.object for t in w.tenures
+           if t.kind == "hold" and (t.subject == faction or t.subject in inside)
+           and t.live and t.object in w.rungs}
     out |= {t.object for t in w.tenures
             if t.kind == "contain" and t.live and t.subject in inside and t.object in w.rungs}
     return sorted(out)
@@ -4414,91 +4444,6 @@ def occasioned_by(w: "World", q: Optional["Question"]) -> list:
         needs=f"a route here, or one of {sorted(QUESTION_SOURCES)}",
         law="ID-5 -- refuse, don't default. A new question source silently taking a plausible "
             "default would answer wrongly for every question it raised")
-
-
-# ---------------------------------------------------------------------------
-# v9 PC-06 `S-2` / `L-1` (#445 `03` S-2, `01` L-1): ONE PERSON'S PROJECTION -- what a client reads
-# for that person, so an interface need not reach into `World` or the driver.
-# ---------------------------------------------------------------------------
-
-def _person_or_refuse(w: World, pid: str) -> Person:
-    p = w.persons.get(pid)
-    if p is None:
-        raise Unspecified(f"no person {pid!r} in this world", "S20",
-                          needs="the id of a person `w.persons` holds",
-                          law="ID-5 -- refuse, don't default: an empty projection for an unknown id "
-                              "would read as a person who knows nothing")
-    return p
-
-
-def witnessed(w: World, pid: str) -> list:
-    """L-1: THE EVENTS IN `w.log` THIS PERSON WITNESSED, IN LOG ORDER -- `w.log` filtered by witness.
-
-    A witness is a deposit (S28 stage 2: *"DEPOSIT IS PER-PERSON, into that person's OWN ledger and no
-    other"*): every claim WITNESS puts in a ledger is written with `emits="claim.deposited"`
-    (`loop/witness.py`, six deposit sites). Five write `causes=[e.id]`, the Event the claim is
-    about; the sixth, v9 FI-03's found deposit, writes `causes=[e.id, f.id]` -- the finding AND the
-    covert trail Event it uncovered. So the Events `pid` witnessed are the causes of the
-    `claim.deposited` Events naming a claim `pid` holds, and that set therefore ALSO lists a trail
-    Event the person INFERRED from a finding and never saw. ⚠ OBSERVATION, NOT A RULING: whether
-    `witnessed` should exclude inferred Events is the PC-06 / S-2 owner's contract question; the code
-    below is unchanged by FI-03. The ORIGINATING Event is returned, not the deposit --
-    `occasioned_by`'s rule, for its reason (the deposit is the transport). Each once, in the order
-    the log holds them.
-
-    ⚠ A FORGOTTEN WITNESSING IS NOT HERE. A claim the `ledger_cap` eviction removed leaves no trace
-    on the person: eviction emits nothing (`loop/witness.py`, *"nobody can witness a forgetting"*),
-    and a claim id cannot be traced back to its holder. So this is what the person still holds
-    evidence of having witnessed, which is the epistemic contract S-2 asks for; it equals every
-    deposit made for `pid` only while nothing was evicted from `pid`'s ledger.
-
-    Read-only over `w.log` and `p.ledger`; no TRACE row (`ambitions`' reason: `TRACE.query` rows are
-    folded into the committed `runs/TRACE.txt`)."""
-    held = {c.id for c in _person_or_refuse(w, pid).ledger}
-    if not held:
-        return []
-    seen: set = set()
-    for e in w.log:
-        if e.kind == "claim.deposited" and any(c.subject in held for c in e.changes):
-            seen.update(x for x in (e.causes or []) if x != ROOT)
-    if not seen:
-        return []
-    return [e for e in w.log if e.id in seen]
-
-
-@dataclass(frozen=True)
-class PersonProjection:
-    """S-2: what a client reads for ONE person, and nothing else -- never a `World`.
-
-      * `holder`    -- the person's id;
-      * `claims`    -- the person's OWN ledger, in ledger order (S20: a claim lives in its holder's
-                       ledger and no other, so no other person's claim can be here);
-      * `witnessed` -- `witnessed(w, holder)`, L-1's read, in log order: cumulative over the whole
-                       log, every season so far, not this season's alone.
-
-    Both are COPIES. A projection holding the live `Claim`s and `Event`s would hand a client a write
-    path around the gate (AX-4: the gate applies every write); a copy is the read-side equivalent of
-    `View`'s *"holds IDS, NEVER REFERENCES"* (S18.1) for a reader that has no `World` to resolve ids
-    against. Each witnessed Event's copy carries `observed == ()`: an Event's `observed` is what the
-    fold READ, and which of those reads a person receives is WITNESS's decision, delivered as that
-    person's claims (above) -- the Event's own copy would hand every witness all of them.
-    The person's View and candidates are not here: DELIBERATE passes `choose` the person, View,
-    Sensation and budget query `(p, v, s, ask_budget)`, and `choose` builds the candidates itself
-    (`decision/choose.py`, `opening_set`); S-1's callback receives the same four plus `auto`, the
-    delegate chooser (`harness/play_surface.py`)."""
-    holder: str
-    claims: tuple
-    witnessed: tuple
-
-
-def projection(w: World, pid: str) -> PersonProjection:
-    """S-2: `pid`'s own claims and the Events `pid` witnessed, as copies, each Event's `observed`
-    emptied (`PersonProjection` says why) and its `ending` too (v11 CP-T03-02: a fight's per-party ending is the
-    resolver's payload, not something WITNESS deposited, so a witness reads it from his ledger or not at all).
-    Read-only."""
-    p = _person_or_refuse(w, pid)
-    return PersonProjection(pid, tuple(copy.deepcopy(c) for c in p.ledger),
-                            tuple(copy.deepcopy(replace(e, observed=(), ending=())) for e in witnessed(w, pid)))
 
 
 # ---------------------------------------------------------------------------

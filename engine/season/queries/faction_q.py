@@ -17,7 +17,7 @@ for why `faction_q` is distinguished from it rather than silently overriding it.
 
 ⚠ **SCOPE, WIDENED AT PLAN POSITION `20-ii` (U9/R-04).** The governance workplan that named
 `faction_q` (`ED-IN-0215`, amended `ED-IN-0253`) lists six eventual members -- `resolve, holdings,
-purview, superiors, subordinates, at_war` -- and until this position only `resolve` had a located
+purview, subordinates, at_war`, and one since deleted unreached -- and until this position only `resolve` had a located
 ratified signature and a consumer (§C.5.1). `20-ii`'s own instruction
 (`workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md:1459-1474`) is what supplies
 the other five: *"`faction_q` as queries, never fields: resolve, holdings, purview, superiors,
@@ -64,8 +64,8 @@ differ, in either direction or in order. Without it a field added to `Faction` -
 which `20-ii`'s own instruction still refuses (`workplans/2026-09-28-the-plan-one-order-mc-v18-
 retired.md:747`, quoting `04:301`'s `NEVER:` list -- *"it never makes a faction stat vector a
 field of its own"*) -- would load clean and then crash the first season in which anyone surveyed,
-inside RESOLVE, as a `Forbidden` naming a Record rather than this class. `purview`/`superiors` below
-are FUNCTIONS, never fields, so neither touches this list. This is not a sixth member of the
+inside RESOLVE, as a `Forbidden` naming a Record rather than this class. `purview` below
+is a FUNCTION, never a field, so it does not touch this list. This is not a sixth member of the
 module's scope: it is the constructor's own output, named as a document. Nothing here reads a
 Record.
 """
@@ -74,6 +74,7 @@ from __future__ import annotations
 from dataclasses import dataclass, fields
 
 from .world_q import WAR_MOOD, at_war, establishment_of, members  # noqa: F401 -- v11 CR-87: the first two MOVED to `world_q` (the war context's `enemies_heard` reads `at_war`, and this module imports `world_q`, so the reverse import would be a cycle); re-exported so every `faction_q.at_war` caller reads the one owner
+from .world_q import density, footprint, provinces_of, sovereign_fraction
 from ..data.rosters import FACTION_BY_PROP, HEAD_SEAT, RECORD_KIND_KEYS
 from ..gaps import Unspecified
 from ..state.containment import descendants
@@ -113,6 +114,52 @@ def resolve(w: World, prop: str) -> Faction:
                    head=head(w, prop))
 
 
+@dataclass(frozen=True)
+class FactionStanding:
+    """Where one faction stands across one rung, as `standing` reads it: four readings, each the
+    answer of one `world_q` Query and none computed here. A Query return like `Faction`, never a
+    member of `World` (`04` PART D row 47): a field set on one is dropped with the view.
+
+    `footprint` -- the rung ids the faction reaches (`world_q.footprint`). `present`, `persons` --
+    `world_q.density`'s pair at `rung_id`: the faction's members present, and the persons present.
+    `sovereign_share`, `undetermined` -- `world_q.sovereign_fraction(w, rung_id)`: the share held by
+    the single LARGEST holder over the rung's subtree (the rung's, so the same for every faction
+    asked; it is not this faction's own share), and how many of its rungs nobody holds.
+    `provinces` -- the territory ids `world_q.provinces_of` groups under this faction, `()` when it
+    holds none."""
+    footprint: tuple
+    present: int
+    persons: int
+    sovereign_share: float
+    undetermined: int
+    provinces: tuple
+
+
+def standing(w: World, prop: str, rung_id: str) -> FactionStanding:
+    """B03.65 (`U5a_CORE_owed_edits` §I): the one composed reading of where `prop` stands at
+    `rung_id`, over `world_q.footprint`, `density`, `sovereign_fraction` and `provinces_of`, which
+    this is the first reader of. `endings_reached` is the precedent: a strategic reading as a Query a
+    host reads and nobody stores. It takes no token, stores nothing and emits nothing, and it has
+    no `TRACE.query` row of its own -- a read-only step moves no committed artifact; each inner Query
+    keeps its own row, reached only when a host asks, never inside `season()`.
+
+    ⚠ RESOLVER-SIDE, AND NOT FOR `decision/`. A person's own reading of where a faction stands is a
+    belief (AX-2); this record is the world's, and may not be handed to a chooser. An NPC weighs
+    territory through the claims he holds.
+
+    ⚠ `footprint` IS `world_q.footprint`'s, NOT `resolve(w, prop).holdings`. The brief named
+    `holdings`, and its own test and gate name `footprint(w, f)`; the two differ (holdings is the
+    members' `hold` objects, footprint is those holds, the faction's own, and its members' presence),
+    so `holdings` is a subset of `footprint` (the test asserts it) and the two are equal only for a
+    faction whose members sit nowhere but in rungs they hold."""
+    fp = tuple(footprint(w, prop))
+    present, persons = density(w, rung_id, prop)
+    share, undetermined = sovereign_fraction(w, rung_id)
+    return FactionStanding(footprint=fp, present=present, persons=persons,
+                           sovereign_share=share, undetermined=undetermined,
+                           provinces=tuple(provinces_of(w, rung_id).get(prop, ())))
+
+
 def head(w: World, prop: str) -> "str | None":
     """F.4's first reader (plan position `20-ii`): the subject of the live `commit` Tenure to
     `prop` carrying a non-`None` `Tenure.degree`; among more than one, the one `w.tenures` places
@@ -142,6 +189,7 @@ def head(w: World, prop: str) -> "str | None":
     one live edge where the model expects one): *"LAST WRITE WINS ... the incumbent behaviour of
     every site this replaces, preserved deliberately rather than quietly tightened here."*"""
     TRACE.query("head", "resolver")
+    # Unreachable until something writes a degree on a `commit` (see the note above).
     graded = [t for t in w.tenures
               if t.kind == "commit" and t.object == prop and t.live and t.degree is not None]
     if graded:
@@ -184,25 +232,6 @@ def purview(w: World, seat: str) -> list:
     if off is None or off.rung is None:
         return []
     return sorted({off.rung} | set(descendants(w, off.rung)))
-
-
-def superiors(w: World, person: str) -> list:
-    """Every live `oblige` edge's OBJECT, for `person` as SUBJECT -- `H-101`'s own candidate
-    (`01_AXIOMS.md` §E.1.1): *"the candidates are `tenure_kinds` members already rostered (`oblige`,
-    `tie`)"*, and `oblige`'s domain is `Person -> Person | Office` (`loop/predicates.py::
-    _req_oblige`'s own comment), so the return type is `(SeatId | PersonId)[]`, not resolved to
-    either -- returning the raw object is the whole of the answer, because `oblige`'s edge IS the
-    superior relation (`§E.1.5`: *"subordination is sworn by a person, at both scales ... there is
-    one relation, and it was never institutional"*), never a field walk over `contain`.
-
-    ⚠ EVERY LIVE `oblige` OBJECT IN THIS TREE IS A SEAT TODAY, MEASURED, NOT ASSUMED --
-    `loop/predicates.py::_req_oblige` clause 1 refuses any subject that is not `w.offices`
-    (*"A person, a rung, a Record or a bare string refuses"*), so the `Person -> Person` half of
-    `oblige`'s own ratified domain is unbuilt. This does not filter for it: a future build of that
-    half needs no second edit here, exactly `head`'s reasoning above for `Tenure.degree`."""
-    TRACE.query("superiors", "resolver")
-    return sorted(t.object for t in w.tenures
-                  if t.kind == "oblige" and t.subject == person and t.live)
 
 
 def subordinates(w: World, seat: str) -> list:

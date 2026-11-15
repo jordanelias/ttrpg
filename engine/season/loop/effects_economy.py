@@ -328,7 +328,7 @@ def _renewals(w: "World", a: "Act", src: str, dst: str, amount) -> list:
     A TRANSFER IS A PAYMENT OF UPKEEP WHEN, AND ONLY WHEN, all of these hold:
       1. it is exercised THROUGH A SEAT (`Act.via`) whose seated holder is the actor -- `may_renew`,
          the gate's own `renewal` test, asked here first so the effect never names an edge the gate
-         would refuse (a `NotYours` would escape the fold and end the season);
+         would refuse (the fold would catch the `NotYours` and emit the row's refusal, B03.76);
       2. it is paid OUT OF THAT SEAT'S OWN RUNG -- *"what the post pays its establishment out of the
          office's stake"* (`holonic_ARCHITECTURE.md:428`). A holder paying from his own hearth is
          giving a gift, not keeping a seat; a seat with no rung has no treasury and cannot pay;

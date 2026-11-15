@@ -54,6 +54,13 @@ answer built before the mutation: stale, exactly as `presence_index` would be af
 `contain`. Such a caller must discard. Carriers hold no counter and no behaviour for this (`04`
 T-i, D-21): the barrier is the invalidation, and nothing else is.
 
+THE LIVE-EDGE VIEW (`parent_of`, `seat_hold`, `_eligible`'s `hold:` branch) is NOT FILED HERE, and the reason
+is the layering: those readers are in `state/` and `loop/`, and `state/` may not import `queries/`. Its one
+owner is `state/containment.py::edges_of`, which files it under `"live_edges"` in the same
+`World.cache_at_barrier` this module uses, with the same lifetime (dropped by `discard_caches()`); unlike
+`tenure_index` it holds Tenure OBJECTS (`seat_hold` returns one) and re-checks `t.live` at read, and it is
+rebuilt whenever `World.tenure_extent()` changes, because those readers run INSIDE a step, after writes.
+
 NOT `establishment_of`. `_ch_post_remit` keeps a live re-scan: caching that Query was tried and
 reverted (r2 `05` §A.1.5 RULED (d)); the index files `hold` and `knot` and answers nothing about
 `oblige`.

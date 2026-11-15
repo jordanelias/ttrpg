@@ -1,10 +1,10 @@
-"""`season.state.log` -- THE EVENT LOG, and the two things it refuses.
+"""`season.state.log` -- THE EVENT LOG, and the three things it refuses.
 
 `04:1024` step 3 names the log beside the gate and the act store, and the three are one unit
 because the log is where the other two become checkable. A gate that mints receipts nobody
 verifies is a naming convention; an act store nothing resolves against is a list.
 
-THE TWO ASSERTIONS, both at `append`:
+THE THREE ASSERTIONS, all at `append`:
 
   1. **Every change on the Event is a receipt this gate minted.** Not "is a Receipt" -- minted,
      by identity (`Gate.issued`). This is what makes `changes[]` a record of writes rather than a
@@ -13,6 +13,11 @@ THE TWO ASSERTIONS, both at `append`:
      field *"the substrate of the entire emergent-narrative claim"*, and `H-80` records what the
      tree actually had: *"a log walker drops an unresolvable `[a.id]` exactly as it drops
      `[ROOT]`"*. An id naming nothing and no id at all were indistinguishable. They are not now.
+  3. **The kind is declared.** `04` §B.13 loader invariant 7: *"the log accepts no other kind"*. The
+     roster (`data/verbs.py::EVENT_KINDS`) is HANDED IN at construction (`kinds`), never imported here:
+     `state/log` reads nothing (`04` §A.2). `World` passes it, so a probe or a test that appends a kind
+     no column declares declares it through `World(event_kinds=...)`; `loop/matter.py`'s direct appends
+     are held to it like every other.
 
 ⚠ IT IS A LIST TO EVERY READER, AND THAT IS LOAD-BEARING. `world.py` iterates it, reverses it and
 takes its length; `content_hash` folds it positionally; probes index it. Replacing the list with
@@ -41,14 +46,17 @@ class EventLog:
     """Append-only event log with provenance checks. Indexable, iterable, reversible."""
 
     # roster-exempt: MECHANISM -- the log's own private attributes, as on `state/gate.py`.
-    __slots__ = ("_events", "_ids", "_gate", "_act_ids", "_on_append")
+    __slots__ = ("_events", "_ids", "_gate", "_act_ids", "_on_append", "_kinds")
 
-    def __init__(self, gate: Any = None,
+    def __init__(self, gate: Any = None, kinds: frozenset = frozenset(),
                  act_ids: Optional[Callable[[], frozenset]] = None,
                  on_append: Optional[Callable[[Event], None]] = None) -> None:
         self._events: list[Event] = []
         self._ids: set[str] = set()
         self._gate = gate
+        # REQUIRED IN SUBSTANCE: the default is the EMPTY roster, which refuses every kind, so a log built
+        # without one cannot quietly accept anything. A VALUE handed in, not an import (see the head).
+        self._kinds = frozenset(kinds)
         # A CALLABLE, not the store. The log must not import the act store (the package layering
         # in `state/__init__.py` is one-way and this would not break it, but a log that holds a
         # store can walk it), and the act ids change as RESOLVE folds. A thunk reads them at
@@ -67,6 +75,14 @@ class EventLog:
                 f"the log holds Event, not {type(ev).__name__}", "S19",
                 needs="an Event",
                 law="acts go in the act store; the log holds what occurred")
+
+        if ev.kind not in self._kinds:
+            raise Forbidden(
+                f"Event {ev.id!r} has kind {ev.kind!r}, which no emission column declares", "S19",
+                needs="a kind in the derived roster (`data/verbs.py::EVENT_KINDS`): declare it in the "
+                      "column that emits it, or hand a test kind in through `World(event_kinds=...)`",
+                law="04 §B.13 loader invariant 7 -- the Event-kind roster is derived from every emission "
+                    "column, and the log accepts no other kind")
 
         if self._gate is not None:
             for c in ev.changes:

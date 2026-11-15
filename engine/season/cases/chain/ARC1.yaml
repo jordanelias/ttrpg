@@ -1,4 +1,3 @@
-```yaml
 - id: ARC-01
   name: "The Unworked Clause"
   one_line: "Two rulers' independently-rational refusals to act compound, through a background cultural-drift track neither is watching, into a forced crisis nobody chose."
@@ -737,19 +736,3 @@
     - "once the surveillance is known, factions can deliberately feed false priorities through the administrator -- knowledge of the surveillance itself becomes a strategic tool"
     - "the administrator himself is never shown to know he is a monitored asset -- an information asymmetry between him and his own superior persists throughout"
   ends_when: "when the superior's year-end review roll succeeds -- its difficulty set by the number of factions currently holding an active influence channel -- and he chooses among three named dispositions for the administrator; on a failed roll, the review produces no resolution at all and the cultivation dynamic simply continues into further seasons with existing channels intact."
-```
-
-**Important finding for the parent process — arc-title mismatch:** The task assignment named ARC-01–09 as "The Hunting Accident" (STRUCK), "Almud's Sympathies," "Baralta and the Solmund Claim," "Niflhel Exposes the Church," "Torben in Altonia," "Elske The Royal Fate," "The Southernmost Spiral," "Ehrenwall's Coup," and "Vaynard." **None of these titles exist in the actual files.** The current `gm_ref/arcs_01_04.md`, `arcs_05_09.md`, `arcs_10_18.md` contain a different, internally-consistent set of 18 arcs (verified against `arc_narrative_analysis.md`, which scores exactly these titles) — extracted above as ARC-01…ARC-18.
-
-Root cause, confirmed in-text: "The Hunting Accident" is real, but it's the **struck E-01 backstory** (PP-675) referenced *inside* `arcs_10_18.md` — that document's own cross-references literally call it "Arc 1" (e.g., "Arc 1 Varfell evidence trail," "Arc 1 accidental resolution"), which is an **older numbering scheme** from `narrative_scenario_chains.md`, not the current `gm_ref` numbering. The brief-writer appears to have pulled arc titles from that stale/superseded numbering rather than the current files. This is the exact documentation-drift failure mode this repo's `CLAUDE.md` warns about repeatedly.
-
-I extracted from the actual current file content (trusting the working tree per repo convention) rather than the mismatched titles, and preserved the STRUCK E-01/Hunting Accident material where it actually lives — as inert cross-references inside ARC-10, ARC-11, ARC-15, and ARC-17 (captured explicitly in their `season_requires`/`knowledge` entries).
-
-Source files read in full:
-- `/tmp/claude-0/-home-user-ttrpg/78360267-ece4-57b1-8568-be13abd76bad/scratchpad/snapshot/designs/arcs/gm_ref/arc_narrative_analysis.md`
-- `/tmp/claude-0/-home-user-ttrpg/78360267-ece4-57b1-8568-be13abd76bad/scratchpad/snapshot/designs/arcs/gm_ref/arcs_01_04.md`
-- `/tmp/claude-0/-home-user-ttrpg/78360267-ece4-57b1-8568-be13abd76bad/scratchpad/snapshot/designs/arcs/gm_ref/arcs_05_09.md`
-- `/tmp/claude-0/-home-user-ttrpg/78360267-ece4-57b1-8568-be13abd76bad/scratchpad/snapshot/designs/arcs/gm_ref/arcs_10_18.md`
-
-Output written and validated (18 entries, all schema fields present, need-counts 6–9 per arc, hardness values all valid) at:
-`/tmp/claude-0/-home-user-ttrpg/78360267-ece4-57b1-8568-be13abd76bad/scratchpad/arc_lane1_cases.yaml`

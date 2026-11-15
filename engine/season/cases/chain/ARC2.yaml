@@ -1,10 +1,3 @@
-The full YAML output is complete and validated (31 entries — 30 arcs + 1 meta-collision finding — parses cleanly with PyYAML, all `season_requires` blocks within the 4-12 range). It is saved at:
-
-`/tmp/claude-0/-home-user-ttrpg/78360267-ece4-57b1-8568-be13abd76bad/scratchpad/arc_lane2_final.yaml`
-
-Per the brief's "emit only the YAML list" instruction, here is the complete output:
-
-```yaml
 - id: ARC-R16
   name: "The World Without Direction"
   one_line: "Multiple factions must advance autonomously via their own distinct institutional logic across several unattended seasons, producing a compounded emergent crisis nobody directed."
@@ -1083,4 +1076,3 @@ Per the brief's "emit only the YAML list" instruction, here is the complete outp
   knowledge:
     - "downstream tooling that indexes arcs by bare number cannot currently tell these two series apart"
   ends_when: "n/a -- stands as an open data-hygiene finding until the two series are reconciled or explicitly namespaced"
-```

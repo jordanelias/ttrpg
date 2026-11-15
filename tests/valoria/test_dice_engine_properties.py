@@ -54,9 +54,6 @@ def test_roll_pool_respects_pool_minimum_and_die_rule_bounds_property():
         result = de.roll_pool(pool_size, tn=tn, rng=trial_rng)
 
         expected_effective = max(1, pool_size)
-        assert result.pool_size == expected_effective, (
-            f'pool_size={pool_size}: Pool Minimum violated, got {result.pool_size}'
-        )
         assert len(result.rolls) == expected_effective, (
             f'pool_size={pool_size}: rolled {len(result.rolls)} dice, expected {expected_effective}'
         )

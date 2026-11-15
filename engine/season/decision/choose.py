@@ -542,8 +542,8 @@ def make_ranker(fx: "Fixtures", verbs: Optional[frozenset] = None,
         cands = opening_set(p, v, q, fx)
         if verbs is not None:
             cands = [c for c in cands if c.verb in verbs]
-        # `U3`: the person's convictions are weights over the THIRTEEN, so they are projected into
-        # the four-axis basis once per deliberation; IN-08 H9's `scar_weight_shift` and IN-08 6f's
+        # `U3`: the person's pursuits are weights over the FIFTEEN (`ED-IN-0261`), so they are projected into
+        # the seven-axis basis once per deliberation; IN-08 H9's `scar_weight_shift` and IN-08 6f's
         # `confliction` damp (`confliction_weight`, H-188; damping the pursuit pull, never
         # inverting it [ASSUMPTION: no source states how strain enters the score]) are hoisted the
         # same way. None depends on `c`; `deliberation_memo` is their owner.

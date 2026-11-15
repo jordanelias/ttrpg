@@ -1,4 +1,3 @@
-```yaml
 - id: NPC-020
   name: Almud Almqvist
   one_line: "A king whose season is entirely triage among pressures he cannot resolve, constrained more tightly by publicness than any private citizen would be."
@@ -481,4 +480,3 @@
     - "she does not know in advance whether a party who wagers a future commitment to her will actually honor it"
     - "the wider world, lacking her kind of perception, cannot know what she knows about the true condition of what she protects"
   ends_when: "never automatically — her holdout is indefinite by default; her personal arc concludes locally via a confrontation's resolution, a wager's pass or fail, or her post's actual transition into one of several possible forms of wider political organization"
-```

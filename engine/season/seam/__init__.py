@@ -23,7 +23,7 @@ flat `seam.py`'s docstring said it *"does NOT move here and is not renamed ... p
 `workplans/2026-09-09-shape-decomposition-plan-v2.md` §3. That is the R-execution plan's **D5
 inverted** -- the cost read as the reason. D5 prices the same edit as *"a rename inside a
 shrink-only set, not a widening"*, and it was on `main` five hours before step 8 merged. The wrapper
-is `seam/wrappers/combat.py` now, with the `PATH_SEAM_ALLOWED` member and `files.COMBAT_SEAM_PY`
+is `seam/wrappers/combat.py` now, with the `PATH_SEAM_ALLOWED` member
 renamed in the same commit. **The yield is not zero, which is why the premise was wrong twice
 over:** `04` §E.1's by-path scan is the enforcement mechanism for AX-2, and `04` §A.2's adapter row puts a wrapper
 under `wrappers/`; a flat file at the package root cannot be either.

@@ -26,12 +26,13 @@ these nine classes and this module imports nothing back, so the two files togeth
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, NamedTuple, Optional
+from types import MappingProxyType
+from typing import Any, Mapping, NamedTuple, Optional
 
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.matrix import MATRIX
 from ..data.rosters import (
-    BINDS_BASES, BODY_FUNCTION, CONFERRAL_BASES, QUESTION_SOURCES, RECORD_KIND_KEYS, RECORD_KINDS,
+    BINDS_BASES, CONFERRAL_BASES, QUESTION_SOURCES, RECORD_KIND_KEYS, RECORD_KINDS,
     REFERENT_CLASSES, REMIT_ACTS, REVOCATION_BASES, RUNG_KINDS, office_faction, require_member,
     title_domain,
 )
@@ -701,11 +702,6 @@ class Act:
     # NOT fixed here: step 4 is a pure move, and the fix changes `Act`'s schema.
     # [JUSTIFIED: an INDEX into the `strata` roster (#353 §27), inherited -- `social` is index 4 and `stratum_of` returns `STRATA.index(row.stratum)`. NOT `[canonical:]`: this 4 is also the "caller declared nothing" sentinel `stratum_of` tests against, so it is a fitted default doing two jobs, not a ratified value -- see the ⚠ below]
     stratum: int = 4
-    # ⚠ S27.4 refuses an attempt at Ob > 2 x Pool and routes an UNCONTESTED attempt to A GATE,
-    # "never to an Ob = 0 roll". `None` means UNCONTESTED (no obstacle was declared); 0 would
-    # be the Ob=0 roll the section names, which is why it is not the default.
-    obstacle: Optional[int] = None
-    pool: Optional[int] = None
     # ⚠ WHICH SCENE THIS INTERACTION BELONGS TO. The meta-architecture's `Act` carries `scene`,
     # and it is what lets the fold ask what occasioned an act without the Act itself carrying a
     # Question — the Scene owns the occasion, the Act names its Scene. Stamped by the driver as
@@ -887,6 +883,54 @@ class Person:
         the field it is about, and it is not state (`matrix_rows_without_a_field` reads fields,
         and no write-matrix row names it)."""
         return self.weight > 1
+
+
+@dataclass(frozen=True, eq=False)
+class PersonInterior:
+    """WHAT `choose` IS HANDED OF A PERSON: `04` §B.2 row 2 *"a frozen copy with no store handle"*, §C.3 *"In: a
+    frozen `PersonInterior`"*. A person interior is what is inside the person, copied out at the barrier: no
+    assignment to the interior's own fields, and no item assignment into its mappings, reaches the `Person`.
+    That is NOT "nothing the interior holds can change the store": `ledger` and `tenures` share the
+    LIVE carriers (below; a stance row is a tuple, so `stance` is not a route), so an assignment THROUGH one of them (`interior.tenures[0].until = ...`) lands on the store.
+
+    THE FIELDS ARE THE ONES `decision/` READS, derived by an `ast` walk of attribute reads on the person
+    parameter there (and in the `queries/person_q.py` and `epistemic.py` callees it hands the whole person to), plus
+    `loop/deliberate.py`'s own `p.id`; the walk found no write to any of them. Mappings are `MappingProxyType`
+    over a copy, sequences are tuples. `ledger` and `tenures` hold the carrier objects themselves
+    (`Claim`, `Tenure`), not copies of them: a `Tenure` counts its own assignments
+    (`_v`, `World._tenure_changes`), so a copy would be a different object to the diff. The reader a
+    caller wants over the ledger is `queries/person_q.py::LedgerReader(interior.ledger)` -- built there, because
+    this module may not import `queries/`.
+
+    `eq=False`: identity equality, so an interior with mappings in it is hashable. Not stored anywhere."""
+    id: str
+    name: str
+    capability: Mapping
+    pursuits: Mapping
+    conviction: Mapping
+    scar: Mapping
+    attributes: Mapping
+    body: int
+    thread_sensitivity: Optional[int]
+    stance: tuple
+    travel_leg: tuple
+    tenures: tuple
+    ledger: tuple
+    weight: int = 1       # S9: a cohort is a Person at weight > 1; a chooser's callback may ask (harness/probes.py P21)
+
+
+def frozen(d) -> Mapping:
+    """A read-only copy of a mapping (`None` reads as empty): what a handed-down record holds in place of the store's dict."""
+    return MappingProxyType(dict(d or {}))
+
+
+def interior_of(p: Person) -> PersonInterior:
+    """THE ONE BUILDER of a `PersonInterior`: copy the fields `decision/` reads out of `p`, mappings read-only."""
+    return PersonInterior(
+        p.id, p.name, frozen(p.capability), frozen(p.pursuits), frozen(p.conviction), frozen(p.scar),
+        frozen(p.attributes),
+        p.body, p.thread_sensitivity, tuple(p.stance), tuple(p.travel_leg), tuple(p.tenures), tuple(p.ledger),
+        p.weight)
 
 
 @dataclass
@@ -1095,7 +1139,6 @@ class Office:
     # rosters and not to the schema that motivated them. Found by the adversarial pass.
     body: Optional[str] = None
     faction: Optional[str] = None
-    body_function: Optional[str] = None
 
     def __post_init__(self):
         # `04` §B.1: A SEAT'S ID IS A `SeatId` -- the same string, tagged (`state/ids.py`), so the fold
@@ -1125,8 +1168,6 @@ class Office:
         # gap -- either the roster is missing a faction, or the office is mis-conceived, and both
         # are findings worth having. An office belongs to something or we do not know what it is.
         self.faction = office_faction(self.body, self.faction)
-        if self.body is not None:
-            self.body_function = BODY_FUNCTION[self.body]
         # HOW THE SEAT IS FILLED AND WHO MAY STRIP IT -- ED-IN-0256 rulings (2) and (3), `13d-i`.
         # The remit clause's shape, one field along: a typo in a declared basis would otherwise
         # make a seat nobody can ever fill or strip, and look like a working precondition while

@@ -77,8 +77,8 @@ prize row names. NO entry is added to
 """
 from __future__ import annotations
 
-import importlib
 import random
+import sys
 from dataclasses import asdict
 from typing import Any, Optional
 
@@ -88,7 +88,7 @@ from engine.substrate import composition
 
 from ...data.rosters import VERB_CAPABILITY, roster
 from ...data.verbs import SOCIAL_ROLL_PROVIDER, TASK_DIFFICULTY, VERB_TABLE
-from ...gaps import Unspecified
+from ...gaps import InstrumentDefect, Unspecified
 from ...loop.sides import _contests_of, sides_of
 # ⚠ THE LEAF, NOT THE PACKAGE'S RE-EXPORT. `manifest/providers.py` imports nothing, so no import
 # here closes a loop back into this package (`_entry.py` says the same of the entry lookup);
@@ -265,21 +265,20 @@ def _frame(fx: Any, pool: int, opposition: Optional[float], forgery_quality: flo
 # ONE TODAY (the told, seen and inferred channels carry no capability), so a believed opposition is
 # `None` for every person in a built realm until a depositor exists; this is the reading, not the writer.
 CAPABILITY_CLAIM = "capability:"
-_ROLL_ROLE = "social_contest.roll"    # the composition row whose module composes the obstacle
+OBSTACLE_ROLE = "social_contest.obstacle"   # the composition row whose module composes the obstacle
+QUERY_ENTRIES = ((OBSTACLE_ROLE, "query"),)  # the host's declared need, held at driver construction (`registrar.require_entries`)
 
 
 def _composed_obstacle(inp: SocialContestInput) -> float:
-    """The obstacle the module composes for `inp`, through the module that owns it. Reached by the
-    composition row's target (`composition.require`), the host's own way of naming a module; the
-    attribute is read at call time, so the odds follow the owner when it changes."""
-    module = importlib.import_module(composition.require(_ROLL_ROLE).__module__)
-    return module.obstacle(inp)
+    """The obstacle the module composes for `inp`, reached by the `social_contest.obstacle` composition row."""
+    return composition.require(OBSTACLE_ROLE)(inp)
 
 
 def _composed_terms(inp: SocialContestInput) -> dict:
-    """The obstacle's named terms for `inp` (`roll.py::obstacle_terms`), through the module that owns them, as
-    `_composed_obstacle` reads the obstacle."""
-    module = importlib.import_module(composition.require(_ROLL_ROLE).__module__)
+    """The obstacle's named terms for `inp` (`roll.py::obstacle_terms`), read from the module the obstacle row's
+    target names (loaded by `composition.require`), as `_composed_obstacle` reads the obstacle."""
+    composition.require(OBSTACLE_ROLE)
+    module = sys.modules[composition.ROLES[OBSTACLE_ROLE]["target"].partition(":")[0]]
     return module.obstacle_terms(inp)[1]
 
 
@@ -529,8 +528,8 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     (`contest_input`'s `room`). Every other prize still derives its obstacle from the parties alone.
 
     ⚠ THE RNG IS A PARAMETER: THE DRIVER'S GENERATOR IS PASSED ON EVERY SHIPPED PATH (`loop/resolve.py`), AND A
-    HAND CALL WITH NONE GETS A FRESH UNSEEDED `random.Random()` (never the process-global stream, never a
-    seeded one made here). THAT IS `04 §C.12`'s REJECTION 4 BECOMING
+    HAND CALL WITH NONE IS REFUSED (`InstrumentDefect`, naming the caller; never a fresh unseeded `random.Random()`,
+    never the process-global stream, never a seeded one made here). THAT IS `04 §C.12`'s REJECTION 4 BECOMING
     LOAD-BEARING FOR THE FIRST TIME: *"When R-09's producer is built … its generator must be
     constructed by the driver from the run seed and passed down exactly as `World` is. This is the
     one rejection that is not yet load-bearing, because no roll exists yet."* It exists now.
@@ -539,10 +538,9 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     counter, no service. A single stream threaded through a season would make every roll depend on
     the count of prior draws, so adding one contested verb would move every other verb's outcome.
 
-    ⚠ S27.4 IS EVALUATED HERE, ON THE DERIVED PAIR, AND THE DRIVER'S OWN BRANCH KEEPS ITS JOB. The
-    fold already refuses an act whose HAND-DECLARED `obstacle` exceeds the multiple; this refuses on
-    the pair the provider derived. One rule, two inputs, and neither site re-evaluates the other's —
-    which is §8's *the rule lives once* stated for a rule with two legitimate operands.
+    ⚠ S27.4 IS EVALUATED HERE, ON THE DERIVED PAIR. The fold's own branch, which refused an act whose
+    HAND-DECLARED `obstacle` exceeded the multiple (it emitted `attempt.refused`), was deleted at B03.55;
+    nothing emits that kind now, and the fold no longer evaluates a hand-declared obstacle against it.
     ⚠ SINCE v9 SC-01 STEP 14 IT IS EVALUATED AFTER THE ENTRY, on the pair the entry RETURNS: the
     obstacle is the module's (`roll.py::obstacle`, ED-SC-0033 clause (3)), so the host has no pair
     until the entry has run. A refused act's roll is discarded; its generator is the act's own
@@ -572,9 +570,14 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     if entry is None:
         return refusal
     # ONE generator for the act's whole roll: the dice (`entry.fn`) and the margin's fraction (below)
-    # draw from it. An absent `rng` is a fresh `random.Random()`, as `roll_pool` makes one; the process-global
-    # stream is never touched (04 §C.12: the RNG is threaded, never global). The shipped path always passes one.
-    rng = rng if rng is not None else random.Random()
+    # draw from it. An absent `rng` is a caller that handed no generator -- an instrument defect, refused naming
+    # that caller, never a fresh unseeded `random.Random()` and never the process-global stream (04 §C.12: the RNG
+    # is threaded, never global). The shipped path always passes one.
+    if rng is None:
+        caller = sys._getframe(1)
+        raise InstrumentDefect(
+            f"{__name__}.resolve was handed no `rng` by {caller.f_globals.get('__name__', '?')}."
+            f"{caller.f_code.co_name}: the act's generator is the driver's, passed down by parameter (04 §C.12)")
     margin = entry.fn(inp, rng)
     if not isinstance(margin, Margin):
         raise Unspecified(

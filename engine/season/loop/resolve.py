@@ -20,7 +20,7 @@ from __future__ import annotations
 import random
 from dataclasses import replace
 from ..gaps import InstrumentDefect
-from ..data.rosters import (FOLD_ATTEMPT_REFUSED, PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, GRADED_INQUIRIES,
+from ..data.rosters import (PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, GRADED_INQUIRIES,
                             STRATA)
 
 from typing import Any, Optional
@@ -39,7 +39,8 @@ from ..queries.person_q import (broken_by, confided_outside, conviction_after_cr
 from ..queries.world_q import WorldReader, ceiling, demanded_person, occasioned_by
 from ..seam import ContestError, ContestRefused, Resolution, contest, degree_of, find_trail, grade
 from ..state.carriers import Act, Event, StateChange, effort_of, subject_of
-from ..state.gate import Change, NoOpReceipt, Subject, Token, seat_hold
+from ..state.gate import Change, NoOpReceipt, NotYours, Subject, Token, seat_hold
+from ..state.containment import edges_of
 from ..state.ids import SeatId, draw_factory, H
 from ..state.world import World
 from ..trace_log import TRACE
@@ -128,8 +129,7 @@ def _eligible(self, w: "World", a: Act, row: "VerbRow") -> bool:
             # over-admission, and `G4` makes that a defect of equal weight to an
             # over-refusal. A `<...>` argument is a KIND, not an id, so it cannot be matched
             # and this declines rather than guessing which store the act meant (`H-75`).
-            mine = [t for t in w.tenures
-                    if t.subject == a.actor and t.kind == "hold" and t.until is None]
+            mine = [t for t in edges_of(w, "hold", a.actor) if t.until is None]
             if not raw:
                 if mine:
                     return True
@@ -151,8 +151,8 @@ def _eligible(self, w: "World", a: Act, row: "VerbRow") -> bool:
             # It does NOT raise, because eligibility is a DISJUNCTION: `work` is `own |
             # presence:<site>` and `own` already admits, so raising here would refuse acts the
             # design permits. This branch declines and the loop tries the next alternative.
-            TRACE.note(f"`presence:` eligibility is unevaluable (H-33, the presence index); "
-                       f"declining this alternative for {a.verb}", "H-33")
+            TRACE.note(f"`presence:` eligibility is unevaluable (H-75, its argument names a kind of rung, "
+                       f"not an id); declining this alternative for {a.verb}", "H-75")
             continue
     return False
 
@@ -501,6 +501,21 @@ def _fold(self, w: "World", token: Token, a: Act,
                            alternatives=["emit `emits:` anyway (publishes an event for a "
                                          "state change that did not happen)"])
             return ev(_demand_earned(w, a, row.refusal_for(WRITE_CLAUSE), False) or (FOLD_REFUSED,))
+        # ⚠ H-143 (B03.76): THE GATE'S REFUSAL EMITS TOO, `04 §C`'s row *"a refusal emits, never
+        # raises"* (MECHANICAL). `NotYours` is F3's judgment that the write is not the actor's; a
+        # precondition that admitted what the gate then refuses used to end the season here, where
+        # `NoOpReceipt` -- the same `Forbidden`, graded the same -- already became the row's refusal.
+        # The Tenure store was put back before the raise (`World._restore_tenures`); an entity the
+        # same `apply()` wrote KEEPS the write (H-130's class, pinned by `test_g3_not_yours.py`,
+        # where the Office write stands beside `establish.refused`), so the refusal does NOT always
+        # stand beside an unchanged world. A DIRECT `World.write` outside the fold still raises: the gate is the
+        # backstop, and only the fold converts it. A refused first pair leaves the later pairs
+        # unchecked, as above.
+        except NotYours:
+            TRACE.decision(f"{a.verb}: the gate refused the write", "C.4",
+                           chose="emit the refusal, not raise",
+                           alternatives=["raise NotYours (ends the season)"])
+            return ev(_demand_earned(w, a, row.refusal_for(WRITE_CLAUSE), False) or (FOLD_REFUSED,))
     # The act's proposed changes ride on the success Events -- §27.3's accumulator sums
     # them across the fold and clamps ONCE, which is order-independent as a fact.
     # ⚠ `[a.id]`, NOT `[ROOT]`, AND THIS WAS THE SUBSTRATE OF THE WHOLE NARRATIVE CLAIM.
@@ -537,7 +552,7 @@ def _fold(self, w: "World", token: Token, a: Act,
     # Outcome-specific earning in the generic fold is the FORCED choice: the data-driven alternative is a
     # conditional-emission column, and `04 §A.3` says of one more column "A seventh column has no such
     # argument available"; `tell` writes nothing, so no effect runs to earn the kind through `earned`.
-    # The fold's own kinds are the declared column `rosters.yaml: fold_kinds` (`act.refused`, `attempt.refused`).
+    # The fold's own kinds are the declared column `rosters.yaml: fold_kinds` (`act.ineligible`, `act.refused`).
     kinds = tuple(k for k in kinds if k != CONFIDENCE_BROKEN or _confidence_broken(w, a, row))
     # Causes: the act and its occasion, both stamped by `_act_events` (IN-50).
     # ⚠ CP-T03-00 (`-08` AM-C-01), FOLD-WIDE: EACH KIND'S EVENT CARRIES ONLY THE CHANGES OF THE SUBJECTS
@@ -591,8 +606,9 @@ def _confidence_broken(w: "World", a: Act, row: "VerbRow") -> bool:
     ⚠ THE ACTOR'S OWN LEDGER AND NO OTHER. `04 §B.2:250` says: *"The carve-out is exact and it is not
     a widening: the fold may ask the ACTOR'S OWN ledger, through the `PersonInterior` snapshot the act
     carries, and no other."* `04 §B.9:423` types the act `Act := ( id, actor, via?, verb, refs,
-    payload, terms?, scene )`, which has no slot for a snapshot, and no `PersonInterior` class exists
-    in `engine/`: the spec is AMBIGUOUS between the two sections. PICKED: the live read of the
+    payload, terms?, scene )`, which has no slot for a snapshot, and `Act` here has none either: a
+    `PersonInterior` now exists (`state/carriers.py`) but `loop/deliberate.py` builds it for `decision/`
+    at CHOOSE and no act carries it to RESOLVE, so the spec is still AMBIGUOUS between the two sections. PICKED: the live read of the
     ACTOR'S OWN ledger, `w.persons[a.actor].ledger`, the precedent `queries/world_q.py`'s `claim.held`
     stem sets for `tell`'s `holds` conjunct (`WorldReader` has no stem for this match), handed bare to
     `queries/person_q.py::confided_outside`, the match's one owner beside `said_of`. REASON: carrying
@@ -733,8 +749,8 @@ def _conviction_crisis(w: "World", token: Token, a: Act, broken_of: dict) -> Non
 
 
 def _refuse_party_gap(self, w: "World", a: Act) -> list:
-    """A contested or graded act refused AFTER admission (a party the seam cannot derive, or a roll the
-    provider refused): the row's `emits_on_refusal`, `_contest`'s and `_grade`'s one body.
+    """A contested or graded act refused AFTER admission (a party the seam cannot derive, a roll the
+    provider refused, or a contest that reached its depth cap): the row's `emits_on_refusal`, `_contest`'s and `_grade`'s one body.
 
     ⚠ `or (FOLD_REFUSED,)` (`rosters.yaml: fold_kinds`), MATCHING EVERY SIBLING FALLBACK (`_admits`, `_fold`,
     `_refuse_after_the_fact`) -- found missing in the M4 review pass's own correctional
@@ -851,16 +867,18 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
         # `04 §A.2`'s typed refusal (`seam/contest.py::REFUSAL_STATUSES`): `PARTY-GAP` (a missing
         # party) and `REFUSED` (`sigma.py`'s S27.4, `Ob > 2x Pool`). `speak` is contested, so a
         # speaker whose pool is under 1D reaches this whenever a matter is docketed (the ceiling caps
-        # the obstacle at 2); S27.4's rule is that the attempt is refused and the season spent, as the
-        # uncontested branch below does -- never that the season aborts -- so it takes the verb's
+        # the obstacle at 2); S27.4's rule is that the attempt is refused and the season spent --
+        # never that the season aborts -- so it takes the verb's
         # refusal kind, the shape `PARTY-GAP` takes. `ENGINE-UNAVAILABLE` (a wrapper's subsystem
         # failed to import/compose) is NOT a refusal: the seam still raises it, loud on purpose, since
         # folding it into a graceful `march.refused` would hide an infrastructure failure behind a
         # plausible-looking game Event.
         return _refuse_party_gap(self, w, a)
     if isinstance(r, ContestError):
+        # A depth-capped contest is a refusal like the one above: the act happened and the contest did not, so it
+        # takes the row's refusal kind and never leaves the fold with no Event (`U5a_CORE_owed_edits` §B row 4).
         TRACE.note(f"contest returned {r}", "S39.3")
-        return []
+        return _refuse_party_gap(self, w, a)
     if not isinstance(r, dict):
         return r
     produced = self._fold(w, token, a, Resolution(degree_of(r, _target, w.fixtures), r))
@@ -919,8 +937,9 @@ def _apply_write(self, w: "World", token: Token, a: Act, kind: str, fld: str, ef
     `_fold` turns into the refusal.
 
     CR-06 (`H-137`): a Tenure the effect's OWN BODY changes, before it returns its `Change`, is
-    refused as `NotYours` with the store put back. TENURES ONLY -- an eager write to an entity
-    field stays bound by the convention that an effect defers its mutation into `Change.apply`."""
+    refused as `NotYours` with the store put back, and so is an entity field it reassigned or an
+    entity it added or removed (`effect_body_observed` states the bound: a value mutated in place
+    escapes, so an effect still defers its mutation into `Change.apply`)."""
     # ⚠ G2: ASKED FOR ITS SIDE EFFECT ONLY. This was `mrow = matrix_row(kind, fld)` and `mrow` fed
     # the class below. The class now comes from the driver's token, so the row is no longer read
     # here -- but the call still raises `Unspecified` for an absent row BEFORE `World.write` is
@@ -958,12 +977,12 @@ def _apply_write(self, w: "World", token: Token, a: Act, kind: str, fld: str, ef
     # `InstrumentDefect`, `kill / wound`'s `Unspecified`) now raises before the gate's class and
     # step checks rather than after them -- both are call-site defects and neither mutates.
     #
-    # ⚠ CR-06 / `H-137`: THE EFFECT'S OWN BODY IS OBSERVED TOO, FOR TENURES. `World.write` takes its
-    # tenure snapshot only after this call returns, so a Tenure the body moved before handing back
-    # its `Change` was baked into that snapshot and judged by neither F3 nor F9.
-    # `World.effect_body_observed` runs the effect inside its own snapshot and refuses a Tenure the
-    # body moved (the store put back, then `not_yours`); its docstring states the bounds (tenures
-    # only; any tenure moved is refused, lawful or not, since a body is not a write).
+    # ⚠ CR-06 / `H-137`: THE EFFECT'S OWN BODY IS OBSERVED TOO, FOR TENURES AND ENTITY FIELDS.
+    # `World.write` takes its snapshots only after this call returns, so a Tenure or an entity field
+    # the body moved before handing back its `Change` was baked into them and judged by neither F3 nor
+    # F9. `World.effect_body_observed` runs the effect inside its own snapshots and refuses what the
+    # body moved (put back, then `not_yours`); its docstring states the bounds (a value mutated in
+    # place escapes; anything moved is refused, lawful or not, since a body is not a write).
     change = w.effect_body_observed(lambda: eff(w, a, resolution), a.actor, a.via, kind, fld)
     got = w.write(fld, token, None, record_kind=kind, fieldname=fld, driver="Act",
                   actor=a.actor, via=a.via, change=change)
@@ -1041,27 +1060,6 @@ def resolve(self, token: Token, acts: list[Act],
         if _gone:
             out.extend(_gone)
             continue
-        # S27.4: an attempt at Ob > 2 x Pool is REFUSED, and the season is spent. An
-        # uncontested attempt routes to a GATE, never to an Ob = 0 roll.
-        mult = w.fixtures.get("obstacle_refusal_multiple")
-        if a.obstacle is not None and a.obstacle > mult * max(a.pool or 0, 0):
-            # ⚠ `[a.id]`, NOT `[ROOT]`. A REFUSED ATTEMPT HAS AN ANTECEDENT — THE ATTEMPT.
-            # This read `[ROOT]`, and the rule against it is stated TWICE in this file within
-            # sixteen lines: the contest branch below passes `[a.id]` plus the occasion ids (`_act_events`), and `_fold`
-            # carries a paragraph saying `[ROOT]` in an act-caused emission is "`[]` wearing a
-            # marker". The rule was written on both sides of this line and violated between
-            # them. It made `W4`'s headline claim — *"`[ROOT]` only for the seed and a licensed
-            # clock's genuine first emission"* — FALSE OF THE DESIGN while true of the fixture,
-            # because `Act.obstacle` defaults to `None` and the computed chooser never sets
-            # one, so no test could reach it. Found by the `W4` adversarial pass.
-            refused = _act_events(self, w, a, (FOLD_ATTEMPT_REFUSED,))
-            for _e in refused:
-                self.act_of[_e.id] = a
-            out.extend(refused)
-            TRACE.decision(f"{a.actor} attempted Ob={a.obstacle} against Pool={a.pool}",
-                           "S27.4", chose="refuse; the season is spent",
-                           alternatives=["roll it anyway", "route to an Ob=0 roll"])
-            continue
         # S39.2 line 1: loop -> subsystem, when an act contests something.
         #
         # ⚠ THE VERB'S COLUMN, NOT ONLY THE ACT'S FIELD, AND THAT IS WHY THE SEAM NEVER FIRED.
@@ -1101,7 +1099,7 @@ def resolve(self, token: Token, acts: list[Act],
             # so RESOLVE and `loop/encounter.py` share the one body -- see that function's own
             # docstring for the deferral fork and why it does not re-check `_admits`, just
             # confirmed above. `_contest` always returns a list -- a depth-capped
-            # `ContestError` is converted to `[]` inside it, once, so this loop and
+            # `ContestError` is folded to the row's refusal inside it, once, so this loop and
             # `loop/encounter.py`'s own do not each carry a second copy of that check.
             produced = (self._contest(w, token, a, _contests, contest_max_depth) if _contests
                         else self._grade(w, token, a, _route))
@@ -1192,6 +1190,14 @@ def resolve(self, token: Token, acts: list[Act],
                            chose=f"refuse every act that staged on it ({len(contribs)})",
                            alternatives=["let each act's provisional success stand (a success "
                                          "Event for a write that did not happen: F9)"])
+            _refuse_after_the_fact(self, w, out, [aid for aid, _d in contribs])
+        except NotYours:
+            # H-143 (B03.76): the gate's refusal of the summed write refuses the staged acts as a
+            # no-op does -- `04 §C`'s "a refusal emits, never raises".
+            TRACE.decision(f"the summed write to a site was refused by the gate -> {sid}.condition",
+                           "C.4",
+                           chose=f"refuse every act that staged on it ({len(contribs)})",
+                           alternatives=["raise NotYours (ends the season)"])
             _refuse_after_the_fact(self, w, out, [aid for aid, _d in contribs])
         TRACE.decision(f"clamping {sid}.condition", "S27.3",
                        chose=f"sum {deltas} = {total}, then clamp ONCE",

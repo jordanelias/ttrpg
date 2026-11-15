@@ -34,9 +34,11 @@ from dataclasses import dataclass
 
 from engine.dice_engine import dice_engine
 from engine.dice_engine.dice_engine import roll_pool
+from systems.threadwork.sim.params import (
+    COHERENCE_COST_BY_SCALE, DEPTH_OB, FR_SURCHARGE, MENDING_OB, TN_STANDARD,
+)
 from systems.threadwork.sim.operations import (
-    DEPTH_OB, MENDING_OB, TN_STANDARD,
-    _actor_pool, COHERENCE_COST_BY_SCALE, FR_SURCHARGE, OperationResult,
+    _actor_pool, OperationResult,
     aims_at_own_configuration, apply_mending_feedback, charge_working, mending_priced_scale,
     price_mending,
 )

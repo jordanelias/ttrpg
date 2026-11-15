@@ -47,18 +47,15 @@ its per-case worlds are what the `R1`/`R3`/`R4`/`R5` checks are computed over. T
 instrument beside it, not a replacement, and nothing here is wired into a gate yet. Read its output
 as a measurement of what a populated world does, not as a claim that a case passes.
 
-⚠ **ARCS ARE OUT OF SCOPE BY DECISION, NOT BY OVERSIGHT (Jordan, 2026-09-13: *"Maybe we just
-ignore the arcs now"*, `ED-IN-0225`).** The 97 ARC cases name SITUATIONS -- "The Unworked Clause",
-"Vaynard's Wager" -- and what an arc IS in this world has no carrier. An earlier draft of this
-module listed that as an open design question; it is closed, and the next session should not
-reopen it.
+⚠ **AN ARC HAS NO CARRIER (`ED-IN-0225`, 2026-09-13): no type, no rung, no tenure kind, and the
+carrier is not to be built.** The 97 ARC cases name SITUATIONS -- "The Unworked Clause",
+"Vaynard's Wager" -- and what an arc IS in this world has no carrier. This module seats the NPC lane
+only and builds no carrier for an arc.
 
-THE DECISION COSTS NOTHING MEASURABLE, which is why it is cheap to take and is recorded with its
-evidence rather than as a preference. `corpus_run`'s own bar reports the ARC lane as
+`corpus_run`'s own bar reports the ARC lane as
 *"ENDS = NOT-COMPUTABLE -- closed by W23 (contest results) + W26 (binding decisions) + W30 (the
-predicates)"*. An arc CARRIER is on none of those three. So the ARC half of the bar was never
-waiting on this and does not start moving if someone builds it -- the ARC cases keep being graded
-by `corpus_run` exactly as before, and only the *design question* is dropped.
+predicates)"*. An arc CARRIER is on none of those three, so the ARC half of the bar was never
+waiting on one -- the ARC cases keep being graded by `corpus_run` exactly as before.
 """
 
 from __future__ import annotations

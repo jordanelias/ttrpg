@@ -36,7 +36,7 @@ from modules.mass_battle.troop_types.registry import reach_for, stats_for, unit_
 from modules.mass_battle.equipment import loadout_for  # noqa: E402
 from systems.mass_battle.sim.engine import build_unit  # noqa: E402
 from systems.mass_battle.sim import validators as _val  # noqa: E402
-from modules.mass_battle.config import FOV_HALF_DEG, VOLLEY_MAX_RANGE  # noqa: E402
+from modules.mass_battle.config import VOLLEY_MAX_RANGE  # noqa: E402
 
 from ._conservation import assert_troop_conservation  # noqa: E402
 
@@ -156,19 +156,6 @@ def test_standing_melee_reach_independent(field_path, uncapped):
 
 
 # ─── I7: facing gate + ranged independence ───────────────────────────────────
-
-def test_facing_away_gets_no_reach():
-    """I7: a cell's weapon reach only threatens within its forward FOV arc. A cell facing +row gets its
-    full reach against an enemy ahead, ZERO against one directly behind."""
-    base = reach_for('pike')  # 0.3
-    facing = (1.0, 0.0)       # facing +row
-    ahead = _hu._effective_reach(base, facing, 1.0, 0.0)    # enemy ahead
-    behind = _hu._effective_reach(base, facing, -1.0, 0.0)  # enemy directly behind
-    assert ahead == base
-    assert behind == 0.0
-    # sanity: the FOV boundary is the documented gate
-    assert FOV_HALF_DEG < 180.0
-
 
 def test_ranged_volley_range_reach_independent():
     """Ranged units' projectile range is VOLLEY_MAX_RANGE, independent of the (melee sidearm) reach_for

@@ -17,8 +17,8 @@ INVOCATION: /methodology-execute Batch B11-fi-readers
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_FI.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
-GATE: Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0
-GATE: Batch B03-hygiene
+GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
+GATE: Batch B03-hygiene @61b37b8dc8a68a5434d423f0ed0695102e89fc9f
 GATE: Batch B04-capability-home
 GATE: Batch B05-one-roll
 GATE: Batch B07-task-draw
@@ -83,7 +83,7 @@ EST: 25.7 h for the whole batch, part 2 §1.3's B11 row (58 positions; it govern
 
 The table continues in `valoria_master_workplan_v12_part17.md` from `B11.51` (the row that stood here as `B11.51 … B11.99` is a sentence now, repair lane R2b, CHK_K4 F13: the second half (A17's part): `16_PESSIMIST_FI_A` onward, the v11 fieldwork cards, `IS-B2-FI-03`, `-04`, `-06`, `-01`, `IS-B2-CHAR-01`, `IS-B2-CORE-03`'s summary line, the flip of `said_slant` and `telling_hearers`, the builds of B11.01's event half and of B11.02 where the designs place them, the re-pin `B11.99`, the boundary row). ORDER: execution order is the two position tables', this half's then the second half's, not the handle's.
 
-Not in this half, and where each is: `08_FI_02` edit 1 (a re-order of v11's B10-14 "Order inside"; v12's D-16 already puts CR-29 first, so no file is edited); `08_FI_02` edit 6 (named, not edited: the telling's roll is SC's, `tell`'s `capability:` column landed in B04 and the obstacle form in B05); `08_FI_02` edit 9 (left as declared defaults, not built, `H-94`); `08_FI_04` §4's budget bullet (`budget_office_bonus` removed by `U5a_CORE_owed_edits` §H in B03, C3-L8); `08_FI_01` edit 7 (R-07's and R-08's `reading:` records, written by B11.99 under `IS-A-12`); FRES §2 (an order, carried by the position table of both halves), §4 (closures, no edit), §5 (the acceptance reading a fix of the chooser's scoring must show; no fix lands here), §7 and §8 (inside `19_LACUNA_conclusion_is_a_committed_assertion`, `08_FI_03`, `08_FI_07` in the second half and `14_VERBS_MATERIAL_E` in B26); `16_PESSIMIST_FI_C` edits 1–3 (second half); `IS-B3-SE-06`'s build (B12c); VRES §1, §2, §4 (B07), §3 (B09), the `a verdict` prize row (B24).
+Not in this half, and where each is: `08_FI_02` edit 1 (a re-order of v11's B10-14 "Order inside"; v12's D-16 already puts CR-29 first, so no file is edited); `08_FI_02` edit 6 (named, not edited: the telling's roll is SC's, `tell`'s `capability:` column landed in B04 and the obstacle form in B05); `08_FI_02` edit 9 (left as declared defaults, not built, `H-94`); `08_FI_04` §4's budget bullet (`budget_office_bonus`: `U5a_CORE_owed_edits` §H's removal was tried in B03 and falsified, and no batch carries it; see `engine/season/hole_register.yaml` H-92); `08_FI_01` edit 7 (R-07's and R-08's `reading:` records, written by B11.99 under `IS-A-12`); FRES §2 (an order, carried by the position table of both halves), §4 (closures, no edit), §5 (the acceptance reading a fix of the chooser's scoring must show; no fix lands here), §7 and §8 (inside `19_LACUNA_conclusion_is_a_committed_assertion`, `08_FI_03`, `08_FI_07` in the second half and `14_VERBS_MATERIAL_E` in B26); `16_PESSIMIST_FI_C` edits 1–3 (second half); `IS-B3-SE-06`'s build (B12c); VRES §1, §2, §4 (B07), §3 (B09), the `a verdict` prize row (B24).
 
 ### B11.01 — finding what is hidden: one design for the place and the event · `IS-B2-FI-07` with `IS-B3-SE-06` · DESIGN-FIRST · HASH EQUAL
 - SOURCE: `master/instructions/IS_B2_SC_FI_CORE_CHAR.md` "Item: IS-B2-FI-07" (`:293-298`); `master/instructions/IS_B3_FA_SE_WR_GO.md` "Item: IS-B3-SE-06" (`:268-279`); the intake §1 row "finding what is hidden (A-109) | H-325, H-326 (r) | SE+FI, design-first" and §4 (A-109); `V12_STRUCTURE.md` D-18; rulings A-109, A-15, A-49; closes the design half of H-325, H-326 (r).

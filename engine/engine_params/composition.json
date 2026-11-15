@@ -108,6 +108,13 @@
       "verb": null,
       "needed_by": "engine/season/loop/matter.py \u2014 MATTER (v9 IN-07 E2, A-25) builds the typed input record (`queries/world_q.py::subsist_input` -> `queries/inputs.py::SubsistInput`), calls this entry ONCE a season through `manifest.MODULE_ENTRIES` (`matter.py::_step_call`, the lookup `fieldwork.find`'s host makes; MATTER runs only inside a driver), and makes every write from the `SubsistOutcome`: the body writes and their crossings, deaths, the debit writes with `observed=`, `World._subsistence_shortfall`. `entry: step_call` because a loop step calls it, before the yield (#353 \u00a725). No role roster names this row, so the host declares the need (`matter.py::STEP_CALLS`) and `manifest/registrar.py::require_entries` refuses at driver construction its absence, or an `entry:` other than `step_call`."
     },
+    "social_contest.obstacle": {
+      "target": "modules.social_contest.roll:obstacle",
+      "kind": "callable",
+      "entry": "query",
+      "verb": null,
+      "needed_by": "engine/season/seam/wrappers/sigma.py \u2014 `_composed_obstacle` (the obstacle a contest is rolled against and the one believed odds read), called by role. Declared in `sigma.QUERY_ENTRIES` and held by `manifest/registrar.py::require_entries`, as `settlements.larder_draw` is."
+    },
     "social_contest.roll": {
       "target": "modules.social_contest.roll:roll",
       "kind": "callable",

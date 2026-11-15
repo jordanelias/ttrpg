@@ -1,7 +1,7 @@
 """EVERY CASE, EXECUTED — not graded, and not merely attempted.
 
 `run_cases.py` GRADES the corpus: it reads each case's prose `need` rows, looks up the authored
-declaration naming which verb / hole / probe answers each one, and reports PLAYABLE / DEGRADED /
+declaration naming which verb / hole / probe answers each one, and reports DECLARED-PRESENT / DEGRADED /
 BLOCKED / NOT-ASSESSED. That is a judgement about whether the engine COULD support a character.
 
 This RUNS them. Jordan asked for it, 2026-09-02: *"shouldn't we consider running all NPCs and all
@@ -273,9 +273,8 @@ def cast_overlay() -> dict:
 
     ⚠ COUNT THIS WITH THIS FUNCTION, NEVER WITH A GREP OVER THE CASE FILES. The historical GAP this
     position's own plan entry names in terms: an antagonist once re-derived a corpus count by
-    grepping raw YAML and got it wrong, because `_tolerant_yaml` is what actually parses the
-    chain's non-standard files (markdown fences, a truncated head) and a grep sees none of that
-    parsing. `len(cast_overlay())` (or `len(CAST)`) is the harness's own count; a
+    grepping raw YAML and got it wrong, because `run_cases.load_cases` is what actually parses
+    the chain's files and a grep sees none of that parsing. `len(cast_overlay())` (or `len(CAST)`) is the harness's own count; a
     `grep -c 'who:' cases/**/*.yaml` is not, and will over- or under-count the moment a comment or
     an unrelated `who:`-shaped string appears in a file this function does not read as one."""
     out: dict = {}

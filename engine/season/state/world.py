@@ -37,13 +37,13 @@ import struct
 from dataclasses import fields as _dc_fields
 from enum import Enum
 from itertools import compress as _compress, count as _count, repeat as _repeat
-from operator import (attrgetter as _attrgetter, is_ as _is, is_not as _is_not,
-                      itemgetter as _itemgetter, ne as _ne)
+from operator import attrgetter as _attrgetter, is_ as _is, is_not as _is_not, ne as _ne
 from typing import Any, Callable, Optional
 
 from ..data.fixtures import DEFAULT_FIXTURES, Fixtures
 from ..data.matrix import Step, WriteClass, matrix_row, partition_lookup
 from ..data.requires import UNKNOWN
+from ..data.verbs import EVENT_KINDS
 from ..data.rosters import (
     HOLD_OBJECT_KINDS, HOLD_SUBJECT_KINDS, RUNG_KINDS, TENURE_KINDS, roster)
 from ..gaps import Forbidden, InstrumentDefect, NoProducer, Unowned, Unspecified
@@ -163,7 +163,6 @@ _WRITTEN = _attrgetter(*_WRITTEN_NAMES)
 _PAY = _WRITTEN_NAMES.index("payload")       # where `payload` sits in a fields tuple
 _PAYLOAD_OF = _attrgetter("payload")
 _VERSION_OF = _attrgetter("_v")              # `Tenure._v`: how many attribute sets it has had
-_FIRST, _SECOND = _itemgetter(0), _itemgetter(1)
 
 
 def _snapshot_fields(t: Tenure) -> tuple:
@@ -354,8 +353,44 @@ def _entity_digest(obj: Any) -> bytes:
     return _canonical(obj)
 
 
+_FIELD_NAMES: dict = {}     # class -> its declared field names, read once (a class's fields do not move)
+
+
+def _entity_values(item: Any) -> dict:
+    """H-137: ONE entity's field values, SHALLOW: `name -> the value the entity holds now`, no value
+    copied. The names are what `_entity_digest` encodes: a `Rung`'s `_DECLARED`, a dataclass's
+    `fields`; a plain dict (`World.dates`' items) is its own mapping."""
+    if type(item) is dict:
+        return dict(item)
+    cls = type(item)
+    names = _FIELD_NAMES.get(cls)
+    if names is None:
+        names = _FIELD_NAMES[cls] = (tuple(sorted(item._DECLARED)) if isinstance(item, Rung)
+                                     else tuple(n for n, _ in _object_head(cls)[1]))
+    return {n: getattr(item, n) for n in names}
+
+
+def _entity_moved(item: Any, was: dict) -> bool:
+    """Does `item` hold something other than `was` (`_entity_values`' copy of it)? A value that
+    cannot be hashed (a list, a dict, a set, a plain object: MUTABLE) is compared by `is`; any other
+    by `==`. A mutable value mutated in place is the same object the copy holds, so it reads as unmoved:
+    `effect_body_observed` says so."""
+    if type(item) is dict:
+        if item.keys() != was.keys():
+            return True
+        read = item.__getitem__
+    else:
+        read = lambda k: getattr(item, k)   # noqa: E731 -- one name for the two readers
+    for k, v in was.items():
+        n = read(k)
+        if n is not v and (type(v).__hash__ is None or n != v):
+            return True
+    return False
+
+
 class World:
-    def __init__(self, world_seed: int, fixtures: Fixtures = DEFAULT_FIXTURES):
+    def __init__(self, world_seed: int, fixtures: Fixtures = DEFAULT_FIXTURES,
+                 event_kinds: frozenset = EVENT_KINDS):
         self.world_seed = world_seed
         self.tick = 0
         self.fixtures = fixtures
@@ -368,6 +403,10 @@ class World:
         # S15.1 -- the store is the SUBJECT'S. `_unowned` holds only the Tenures whose subject
         # is not a person (`contain : Rung -> Rung` is the bulk of them). See the `tenures` view.
         self._unowned: list[Tenure] = []
+        # The store's VERSION: counts every change of which Tenures the store holds (`add_tenure`,
+        # `remove_person`, `_rehome`, `_restore_tenures`). Underscore: derived, never folded into
+        # `content_hash`. `tenure_extent` reads it.
+        self._tenure_version = 0
         # The gate's shadow of the Tenure store (`_tenure_snapshot`). Underscore: derived, never folded into
         # `content_hash`.
         self._tshadow: Optional[_TenureSnap] = None
@@ -406,7 +445,10 @@ class World:
         # hashed state alone cannot rebuild it. No path restores a World without it (`deepcopy` carries it;
         # nothing pickles or replays one), which is the whole of its standing.
         self._covers_logged: dict[str, str] = {}
-        self.log = EventLog(self.gate, lambda: self.acts.ids(), self._on_logged)
+        # The log is handed the derived roster (`data/verbs.py::EVENT_KINDS`) and refuses a kind outside it
+        # (`04` §B.13 invariant 7); `state/log` imports no `data`. A test or probe that appends a kind no
+        # column declares passes `event_kinds=EVENT_KINDS | {...}` here.
+        self.log = EventLog(self.gate, event_kinds, lambda: self.acts.ids(), self._on_logged)
         self.dates: dict[str, dict] = {}
         self.docket: list[dict] = []
         # ⚠ `petitions` AND `dispensations` WERE TWO PLAIN DICTS HERE AND ARE DELETED (plan position
@@ -435,6 +477,10 @@ class World:
         # tick, so everything it decides reaches the hashed log as `claim.deposited` that same tick.
         # Unhashed for that reason, not because it is derived (`test_h118`'s underscore exclusion).
         self._departed: dict[str, tuple] = {}
+        # WHO WAS SHORT OF FOOD IN THE LAST MATTER, `{pid: {kind: units short}}`: set by `loop/matter.py`'s
+        # subsistence pass (cleared at its start), read by `harness/populated.py::census` and by tests.
+        # An instrument's read, not state: the content hash does not fold it and the loop never reads it.
+        self._subsistence_shortfall: dict[str, dict] = {}
         # G4 -- S27.3's SUM-THEN-CLAMP-ONCE ACCUMULATOR, `(record_kind, id, field) -> [(act id,
         # delta)]`. It lived as a local of `loop/resolve.py::resolve` and was fed off the success
         # EVENTS; it is a store now because an act's `work` WRITES to it, through the gate, and the
@@ -469,6 +515,25 @@ class World:
             out.extend(self.persons[pid].tenures)
         out.extend(self._unowned)
         return _TenureView(out)
+
+    def tenure_extent(self) -> tuple:
+        """`(persons, version)` -- how many people the world holds and the store's VERSION, a counter
+        every site that changes WHICH Tenures the store holds bumps (`add_tenure`, `remove_person`,
+        `_rehome`, `_restore_tenures`: the four that append to or remove from a Tenure list). It
+        stores nothing and reads no Tenure, and it is what the barrier's live-edge view
+        (`state/containment.py::edges_of`) compares to know it is stale. Counts of the lists (people,
+        unhomed, owned) could not say it: one Tenure removed and another added left every count as it was.
+
+        ⚠ THE BOUND. A Tenure whose `subject` or `kind` is REWRITTEN IN PLACE stays in its list and bumps
+        nothing, so the view keeps filing it under the old `(kind, subject)`; likewise a list or the
+        `persons` dict edited by hand rather than through the four (the person count still sees a person
+        added or removed). `_restore_tenures` rewrites those two fields back, which is the same bound."""
+        return (len(self.persons), self._tenure_version)
+
+    @property
+    def in_parallel_map(self) -> bool:
+        """Whether a parallel map is running, inside which `cache_at_barrier` refuses to answer."""
+        return self._in_parallel_map
 
 
     def contain_ascends(self, subject: str, object_: str) -> bool:
@@ -539,6 +604,7 @@ class World:
                     "deleted by `13d-i`) walk sideways or loop, and Jordan's governance "
                     "canon reads purview off that walk")
         (self.persons[t.subject].tenures if t.subject in self.persons else self._unowned).append(t)
+        self._tenure_version += 1
         return t
 
     def class_of(self, entity_id: str) -> "str | None":
@@ -594,7 +660,8 @@ class World:
     # the snapshot itself and produces no diff at all. Every shipped effect defers its mutation
     # into `Change.apply`, which this observation does cover. CR-06: `effect_body_observed` (below)
     # takes this snapshot around the effect call too and refuses a Tenure an effect's own body
-    # moved. TENURES ONLY -- an eager write to an entity field is still bound by the convention.
+    # moved, and (H-137) an entity field it reassigned or an entity it added or removed; its
+    # docstring states what an in-place mutation of a shared value escapes.
     def _tenure_walk(self) -> list:
         """Every Tenure in the store, owner-first: the order `_tenure_snapshot` reads them in."""
         cur = [t for p in self.persons.values() for t in p.tenures]
@@ -701,6 +768,7 @@ class World:
         `apply` is still a closure. What IS guaranteed: no Tenure write the gate refused -- for
         want of a basis (`NotYours`) OR because the write moved nothing it named (`NoOpReceipt`)
         -- survives the refusal."""
+        self._tenure_version += 1
         for t, was in changes:
             if was is None:
                 owner = self.persons.get(t.subject)
@@ -710,29 +778,85 @@ class World:
                 (t.subject, t.object, t.kind, t.since, t.until, t.degree, t.payload, t.term) = \
                     _written_fields(was, copy=False)
 
+    def _entity_snapshot(self) -> dict:
+        """H-137: `collection -> (members, values)` for each of `_STATE_COLLECTIONS`: `members` the
+        collection's own `id -> item` mapping COPIED (its order, so a restore keeps it), `values`
+        `id -> _entity_values(item)`. SHALLOW: no field value is copied."""
+        return {name: (dict(coll), {k: _entity_values(v) for k, v in coll.items()})
+                for name in self._STATE_COLLECTIONS
+                for coll in (getattr(self, name),)}
+
+    def _entity_changes(self, snap: dict) -> list:
+        """`(collection, id)` for every entity the snapshot saw that now holds other values, was added
+        or was removed, in `_STATE_COLLECTIONS` order and, within one, the snapshot's then the added."""
+        out = []
+        for name, (members, values) in snap.items():
+            coll = getattr(self, name)
+            out.extend((name, k) for k, item in members.items()
+                       if coll.get(k) is not item or _entity_moved(item, values[k]))
+            out.extend((name, k) for k in coll if k not in members)
+        return out
+
+    def _restore_entities(self, snap: dict, changes: list) -> None:
+        """PUT THE ENTITIES BACK: each collection with a membership change takes its snapshot members
+        in the snapshot's order; each entity named in `changes` gets its fields back one by one
+        (`object.__setattr__`: a `Rung` and a frozen `Proposition` refuse a plain set)."""
+        for name in {n for n, _k in changes}:
+            members = snap[name][0]
+            coll = getattr(self, name)
+            if list(coll) != list(members) or any(coll[k] is not v for k, v in members.items()):
+                coll.clear()
+                coll.update(members)
+        for name, k in changes:
+            if k in snap[name][1]:
+                item, was = snap[name][0][k], snap[name][1][k]
+                if type(item) is dict:
+                    item.clear()
+                    item.update(was)
+                else:
+                    for f, v in was.items():
+                        object.__setattr__(item, f, v)
+
     def effect_body_observed(self, build, actor: Optional[str], via: Optional[str],
                              record_kind: str, fieldname: str) -> Any:
         """CR-06 / `H-137`: call `build()` -- an effect function, which returns its `Change` -- and
-        refuse a Tenure that its OWN BODY moved before returning. The store is put back
-        (`_restore_tenures`) and `not_yours` raised with the reason, the pair `write()` uses for a
-        write the gate refuses. The choreography lives here, in `state/`, so that the undo of a store
-        write is not made by `loop/` reaching into this class's private members (`04 §A.1`, AX-4:
-        one write path, `state/` + the gate).
+        refuse what its OWN BODY moved before returning: a Tenure, or a field of an entity in any of
+        `_STATE_COLLECTIONS` (an entity added or removed too). The store and the entities are put back
+        (`_restore_tenures`, `_restore_entities`) and `not_yours` raised with the reason, the pair
+        `write()` uses for a write the gate refuses; `loop/resolve.py::_fold` emits it as the row's
+        refusal. The choreography lives here, in `state/`, so that the undo of a store write is not
+        made by `loop/` reaching into this class's private members (`04 §A.1`, AX-4: one write path,
+        `state/` + the gate).
 
-        ⚠ TENURES ONLY, AND THAT IS THE BOUND. An eager write to an entity field is still invisible
-        here. A body that moves a tenure and then RAISES is not restored (the raise aborts the act,
-        as any effect's does). `write()` takes its own snapshot after this call returns and is kept
-        apart on purpose: handing this one to it would put a caller-supplied snapshot into F3's own
-        observation of the store. Any tenure the body moves is refused, lawful or not: an effect body
-        is not a write (no class or step check, no trace line, no receipt)."""
+        ⚠ THE BOUND OF THE ENTITY ARM, as the tenure arm's is stated. The snapshot is SHALLOW: each
+        entity's field values, none copied. A field the body REASSIGNS is seen (a value that cannot be
+        hashed -- list, dict, set, a plain object -- by `is`; any other by `==`), and so is an entity
+        added or removed. A mutable value MUTATED IN PLACE (`stores["grain"] = 9`, `scar[axis] += 1`,
+        `ledger.append(...)`) is the same object the copy holds and reads as unmoved: seen only where
+        the body also reassigned it. The restore puts back the values the snapshot held, so an in-place
+        mutation it did not see stays; the gate's own `state_of` digest, taken inside `write()`,
+        covers what `Change.apply` does to a named subject, not what the body did before. A `Tenure`
+        is the tenure arm's, not this one's: `Person.tenures` is a list and an owner's list mutated in
+        place reads as unmoved here. A body that moves something and then RAISES is not restored (the
+        raise aborts the act, as any effect's does). `write()` takes its own snapshot after this call
+        returns and is kept apart on purpose: handing this one to it would put a caller-supplied
+        snapshot into F3's own observation of the store. Anything the body moves is refused, lawful or
+        not: an effect body is not a write (no class or step check, no trace line, no receipt)."""
         snap = self._tenure_snapshot()
+        ents = self._entity_snapshot()
         out = build()
+        moved = self._entity_changes(ents)
+        if moved:
+            self._restore_entities(ents, moved)
         eager = self._tenure_changes(snap)
         if eager:
             self._restore_tenures(eager)
+        if moved or eager:
             raise not_yours(eager, actor, via, record_kind, fieldname,
-                            why="moved Tenures in the effect's own body, before it returned its "
-                                "Change (CR-06, H-137)")
+                            why=("moved an entity field in the effect's own body, before it "
+                                 "returned its Change (H-137)") if moved else
+                                ("moved Tenures in the effect's own body, before it returned its "
+                                 "Change (CR-06, H-137)"))
         return out
 
     # -- G4: WHAT A SUBJECT READS, BEFORE AND AFTER A WRITE ------------------------------------
@@ -1049,6 +1173,7 @@ class World:
                     self._departed[who] = (t.object, self.tick)        # H-206: where he stood
                 t.until = self.tick
         self.persons.pop(who, None)
+        self._tenure_version += 1                  # his edges left `tenures` with him
         # ⚠⚠ THE PERSON'S OWN `person`-KIND RUNG DIES WITH THEM, and leaving it behind was a
         # LATENT ID-SCHEME DEFECT that only a death could reach. `class_of`'s own docstring names
         # the hazard -- *"no id is currently in two of these. If one ever is, this returns the
@@ -1114,6 +1239,7 @@ class World:
         for t in self._unowned:
             (self.persons[t.subject].tenures if t.subject in self.persons else keep).append(t)
         self._unowned = keep
+        self._tenure_version += 1
 
     def _refuse_undeclared_kind(self, thing, wclass, sname, record_kind, fieldname,
                                 emits, declared) -> None:

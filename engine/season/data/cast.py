@@ -115,17 +115,6 @@ def row(case_id: str) -> Optional[dict]:
     return _rows().get(str(case_id))
 
 
-def name_of(r: dict) -> str:
-    """`first_name last_name`, with a one-name person spelled as their one name.
-
-    ⚠ `last_name: None` IS REAL DATA AND NOT A HOLE — Edeyja (NPC-001) and Orm (NPC-075) have one
-    name each, and the corpus cases agree. Formatting it through `str()` would produce the literal
-    string "Edeyja None", which is what a first cut of this function did."""
-    first = str(r.get("first_name") or "").strip()
-    last = str(r.get("last_name") or "").strip() if r.get("last_name") else ""
-    return f"{first} {last}".strip() if last else first
-
-
 def faction_of(r: dict) -> tuple[Optional[str], Optional[str], str]:
     """`(canonical faction | None, sub-organization | None, the raw cell)`.
 
@@ -429,8 +418,8 @@ def defects() -> list[str]:
 #
 # ⚠ **THERE WAS A SECOND LOYALTY IN THE TREE AND IT WAS NOT THIS ONE — SAID HERE SO NOBODY HAS TO
 # REDISCOVER IT COLD.** `systems/world/sim/npe.py:70` declared `LOYALTY_MIN = 0` / `LOYALTY_MAX = 3`
-# for a generated NPC's `affiliation_loyalty`, and `tools/link_values_pointers.py` linked both to the
-# same `ppt.loyalty` pointer, which is how it was found — by the link map, not by reading. Plan
+# for a generated NPC's `affiliation_loyalty`, and a literal-token value-to-pointer link map (since
+# retired) linked both to the same `ppt.loyalty` pointer, which is how it was found — by the map, not by reading. Plan
 # position `29d` (2026-10-01) deleted `npe.py`; it is at `FORK:5c5d8ec6` in `restructure_ledger.md`.
 #
 # They were not two ladders for one quantity (`CLAUDE.md` §0.06's S test), and the reason was

@@ -25,17 +25,6 @@ the other: the `H-66` sweep and the `H-146` tests rebind `data.verbs.ALIGNMENT`,
 else binds the name. Every reader (`choose`'s score, `refuses`, `person_q._pursuits_violated_by`, `corpus_run`) calls
 `align`; tests that import `ALIGNMENT` do so function-locally and read it live -- a copy imported
 by name at module scope would be a stale snapshot.
-
-⚠ `VERB_TABLE` IS ASSIGNED TWICE, VERBATIM, AND ONLY THE SECOND ASSIGNMENT EVER RUNS. The
-forward declaration below (`VERB_TABLE: dict = {}`) carries a comment from a PRIOR layout of
-`shape.py`, from before steps 1-2 extracted the write matrix and roster readers: at that time
-real loading code sat physically between the forward declaration and the fill. It does not any
-more -- the two lines are adjacent -- and nothing at IMPORT TIME reads `VERB_TABLE` in the gap:
-checked directly, `_load_alignment`'s own read of it (`admitted = set(VERB_TABLE) | ...`) is inside a
-function BODY, defined a few lines after the real fill but not CALLED (`ALIGNMENT =
-_load_alignment()`) until further still -- by which point the real fill has long since run.
-Preserved unchanged because this is a PURE MOVE and the forward declaration is otherwise
-harmless -- a `dict` type hint on a name the next line immediately rebinds.
 """
 
 from __future__ import annotations
@@ -55,7 +44,7 @@ from .rosters import (
     COVERT_KINDS, DOMINANCE_KINDS, FOLD_KINDS, LOGGED_KINDS, GRADED_INQUIRIES, MARCH_POSTURE_KEY, MARCH_POSTURES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
     RESTRAINT_KINDS, STRIFE_KINDS, VOCATIONS,
     is_event_kind,
-    RUNG_KINDS, STRATA, TENURE_KINDS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
+    RUNG_KINDS, STRATA, TENURE_KINDS, THREAD_OPERATIONS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
     roster_map,
     table,
     table_meta,
@@ -266,6 +255,11 @@ class VerbRow:
     # `counterparty_may_be_self`, which waives the COUNTERPARTY operand's self-exclusion (`confer`). The
     # loader admits it only on a row `subject_is_opponent` reads as contested against its subject.
     subject_may_be_self: bool = False
+    # B03.68 (`09_WR_threadwork_module` edit 3): WHICH THREAD OPERATION THE ROW PERFORMS, a `thread_operations`
+    # member (`rosters.yaml`; leap, weave, pull, ...). `""` is the declared absence, every row today: the thread
+    # rows that name an operation are B35's (CP-T07-03, -04, -11). The loader refuses a value outside the roster,
+    # so a row naming a working the threadwork module does not have never loads.
+    operation: str = ""
 
     def referents_of(self, q) -> tuple:
         """THE REFERENTS OF QUESTION `q` A CANDIDATE OF THIS VERB MAY BE FORMED ON: `q`'s plain
@@ -668,7 +662,8 @@ def _load_verb_table() -> dict:
                       referent_class=str(r.get("referent_class") or "").strip(),
                       counterparty_may_be_self=r.get("counterparty_may_be_self", False),
                       referent_named=r.get("referent_named", False),
-                      subject_may_be_self=r.get("subject_may_be_self", False))
+                      subject_may_be_self=r.get("subject_may_be_self", False),
+                      operation=str(r.get("operation") or "").strip())
         # THE COUNTERPARTY IS AN OPERAND THE ACT CARRIES, OR IT IS NOTHING. `opening_set` compares
         # it with the person; a name the typed cell does not BIND is absent from every Candidate,
         # so the comparison would pass silently and the rule would be a column nothing enforced.
@@ -722,6 +717,15 @@ def _load_verb_table() -> dict:
                 raise SystemExit(
                     f"verb_table.yaml: {name!r} declares {col} {getattr(row, col)!r}; it is "
                     "`true` or `false`")
+        # B03.68: AN `operation:` IS A `thread_operations` MEMBER, OR THE LOAD REFUSES -- `SystemExit`, the load-time
+        # kind (`H-115`'s split, as `beneficiary:` above). The roster is `rosters.yaml`'s and is read through
+        # `THREAD_OPERATIONS`; a name the threadwork module has no working for would be a verb nothing performs.
+        if row.operation and row.operation not in THREAD_OPERATIONS:
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} declares `operation: {row.operation!r}`, which is not in "
+                f"`thread_operations` ({sorted(THREAD_OPERATIONS)}). A thread operation is one named working a "
+                "practitioner attempts on the thread; add a new one to rosters.yaml and argue for it there, "
+                "never here.")
         # IN-10 (a): `referent_named` ONLY BESIDE A `referent_class:` -- on a row forming on plain
         # referents it would decline nothing the class partition offered, a column read by nothing.
         if row.referent_named and not row.referent_class:
@@ -1183,8 +1187,6 @@ def tenure_kinds_without_an_opener() -> list:
     position `7a` and `oblige` at `17a` -- computed, not read off the roster, so neither needed an
     edit here to leave the list)."""
     return sorted(k for k, vs in _OPENERS_FROM_EFFECTS.items() if not vs)
-
-VERB_TABLE: dict = {}          # filled after STRATA loads, at the bottom of the roster block
 
 VERB_TABLE = _load_verb_table()
 

@@ -8,72 +8,27 @@ file**, not delegated to -- `SeasonDriver.witness` IS `witness.witness`, so `ins
 the real body and the eight tests that read a step's source keep working. See the note above the
 bindings.
 
-⚠ **THIS DOCSTRING WAS STALE THE MOMENT L5 LANDED AND SAID SO FOR A DAY.** It listed `stratum_of`,
-`as_scenes`, `sense`, `names_a_verb` and `SOURCE_353_TEXT` (the last two deleted by CR-45) as living here -- they moved to
-`resolve.py` and `deliberate.py` in L5's second cut, to break a real `driver <-> deliberate <->
-resolve` import cycle -- and it still promised that *"shape.py re-exports every name below … until
-the facade is deleted at step 10"*, of a file step 10 deleted. `resolvable_verbs` is the one module
-function that stayed, because its callers are all outside `loop/`.
-
-⚠ **THE IMPORT LIST BELOW IS WIDER THAN THIS MODULE USES**, and that is load-bearing rather than
-untidy: `engine/reference/degree-sweep/sweep_core.py` (moved from `proposals/2026-09-04-degree-sweep/`)
-builds a read-only `S` aggregate over the
-package's owner modules so a frozen measurement's `S.<name>` keeps resolving. ⚠ It is ALSO how a dead
-import can make a rebind silent -- `questions_for` sat here unused, so
-`wd_extra.py`'s `DRV.questions_for = qspy` went on succeeding while reaching nothing after
-`deliberate` moved. Found by the Fable gate on Arc 1. ⚠ **THE NAME IS BACK AND LIVE SINCE
-2026-09-25 (ED-IN-0206):** `_questions_at_barrier` builds the per-person question projection at
-barrier 2 and hands it to `deliberate`, which no longer calls `questions_for` itself -- so the spy
-names `loop.driver` again (`wd_extra.py`'s `DRV.questions_for`). **A name kept here for the
-aggregate must not also be a name something rebinds.**
+The driver constructs the write tokens, binds the seven steps onto `SeasonDriver` and owns `resolvable_verbs`.
 """
 from __future__ import annotations
 
-import hashlib
-import inspect
-import itertools
-import json
-import random
-import re
-from typing import Any, Callable, Optional
+from typing import Any, Optional
 
-from ..data import files, load_all
-from ..data.fixtures import Fixtures, SITE_YIELD
-from ..data.matrix import Step, WriteClass, matrix_row
-from ..data.rosters import OBSERVATION_DEPOSIT_MODES, STRATA, WITNESS_CHANNELS
-from ..data.requires import (
-    LEDGER_DERIVED_STEMS, UNKNOWN, Verdict, binding_from_act, binding_of, evaluate,
-)
-from ..data.verbs import VERB_TABLE, VerbRow, opportunity_key
-from ..gaps import (
-    Collision, Forbidden, InstrumentDefect, NoProducer, Ungraded, Unowned, Unspecified,
-)
-from ..state.carriers import (
-    Act, Candidate, Claim, Event, Office, Person, Proposition, Question, Record, Rung, Scene,
-    Sensation, Site, StateChange, Tenure, View, subject_of,
-)
+from ..data import load_all
+from ..data.matrix import WriteClass
+from ..data.verbs import VERB_TABLE, opportunity_key
+from ..gaps import Forbidden
+from ..state.carriers import Act, Event, subject_of
 from ..state.gate import Token
-from ..state.ids import H, ROOT
 from ..state.world import World
-from ..epistemic import CHANNEL_PREDICATES, act_refs, claim_subjects, observers_for
-from ..queries import cache, world_q
-from ..queries.person_q import entrenchment
-from ..queries.person_q import LedgerReader
-from ..queries.world_q import WorldReader
-from ..queries.world_q import occasioned_by
+from ..queries import world_q
 from ..queries.world_q import questions_for
-from ..loop.effects import EFFECTS, effect_for
-from ..loop.predicates import REQUIRES_PREDICATES, requires_predicate
-from .. import decision
-from ..decision import (
-    aggregate_questions, agreement, assemble, body_band_penalty, budget,
-    containing_rung_of, make_chooser, opening_set, operands_for, pack_scenes,
-    person_side_eligible, standing_of, store_kind_of, view_ids,
-)
-from ..seam import (
-    ContestError, Resolution, combat_degree, contest, contest_subsystem, degree_of,
-    degree_ladder, ladder_error,
-)
+# `EFFECTS` and `REQUIRES_PREDICATES` are read below; importing these two modules is also what
+# registers the `@effect_for` bodies and the `@requires_predicate` entries.
+from ..loop.effects import EFFECTS
+from ..loop.predicates import REQUIRES_PREDICATES
+from .. import seam  # noqa: F401  -- registers the providers: importing `seam.wrappers` is what does it
+from ..seam.wrappers import sigma
 from ..trace_log import TRACE
 
 
@@ -107,9 +62,8 @@ def resolvable_verbs() -> frozenset:
     predicate registry moves. W3 measured 12 of 32; this is that measurement as a function, so a
     probe can report both numbers instead of hardcoding either.
 
-    THREE GATES: a precondition the fold can evaluate, an effect for whatever it writes, and NOT
-    routing to a contest — a contesting verb's resolution is the seam's, and the seam does not
-    return yet (`H-31`, `W7`)."""
+    THREE GATES: a precondition the fold can evaluate, an effect for whatever it writes, and, for
+    a verb that contests, a prize with a registered provider and a typed row (the comment below)."""
     out = set()
     for v, row in VERB_TABLE.items():
         # ⚠ BOTH GATES, NOT JUST THE PRECONDITION. The first version checked `requires:` alone and
@@ -291,7 +245,7 @@ class SeasonDriver:
         # deleted role-less row (a `query` or `step_call` no role roster names) meets in a fresh
         # process. The `query` entries `world_q` declares (E1, E4-E6, IN-52's `provision`), and the
         # step_calls MATTER calls (E2, E3).
-        require_entries(world_q.QUERY_ENTRIES + MATTER_STEP_CALLS)
+        require_entries(world_q.QUERY_ENTRIES + sigma.QUERY_ENTRIES + MATTER_STEP_CALLS)
         check_rows()
         check_contest_prizes(VERB_TABLE)
         check_graded_inquiries(VERB_TABLE)
@@ -300,6 +254,14 @@ class SeasonDriver:
         check_inquiry_modules(VERB_TABLE)
         check_effects(VERB_TABLE, EFFECTS)
         check_preconditions(VERB_TABLE, REQUIRES_PREDICATES)
+        # `U5a_CORE_owed_edits` §B row 18: a season with no lap is not a season. The fixture's own refusal,
+        # at construction (a boot refusal, never a raise in play), naming the fixture.
+        if int(w.fixtures.get("scene_budget")) < 1:
+            raise Forbidden(
+                f"scene_budget is {w.fixtures.get('scene_budget')}, under one: a season with no lap deposits nothing",
+                "loop/driver.py::SeasonDriver.__init__",
+                needs="a `scene_budget` of at least one",
+                law="a season with no lap is not a season (a loader-family refusal, at boot)")
         # OBSERVATION ONLY, and the distinction matters. Six probes used the removed `effect` hook
         # to record which acts reached RESOLVE and in what order. That is a thing to WATCH, not a
         # thing to DECIDE, and giving it back as a resolver parameter is how the second resolver
@@ -339,22 +301,14 @@ class SeasonDriver:
         #
         # ⚠ SEASON-LOCAL, UNLIKE `resolved` / `scenes` / `act_of` ABOVE, and the asymmetry is the
         # point rather than an oversight: those three are the fold's cumulative record and R3
-        # depends on them crossing seasons, while a scene budget, a queue of chosen-but-unrun
-        # scenes and a "when did this person last deliberate" stamp all reset at the season
-        # boundary by definition. `season()` clears them.
+        # depends on them crossing seasons, while a scene budget and a "when did this person last
+        # deliberate" stamp all reset at the season boundary by definition. `season()` clears them.
         # ---------------------------------------------------------------------
         self.round: int = 0
-        # Scenes a person CHOSE and the driver has not released yet. The person's own triage,
-        # held rather than re-asked — see `deliberate` for why re-asking is the defect.
-        self._queued: dict = {}
         # Scene-action COST each person has spent this season, against `budget(p, v, ...)`.
         self._spent: dict = {}
         # `(tick, round)` of each person's last deliberation — `questions_for`'s `since`.
         self._deliberated_at: dict = {}
-        # The fingerprint of everything `questions_for` and `person_side_eligible` read for a
-        # person, as of their last deliberation. Unchanged ⇒ their candidate set is identical by
-        # construction, so the driver releases their next chosen scene rather than re-deriving it.
-        self._inputs: dict = {}
         # ⚠ WHAT `_drop_what_was_already_done` READS, AND IT IS THE REALISED SET RATHER THAN THE
         # ATTEMPTED ONE — which is the whole of a defect this unit's adversarial pass found. An
         # opportunity KEY (`data/verbs.py::opportunity_key`: `(verb, subject)`, plus the row's
@@ -467,10 +421,9 @@ class SeasonDriver:
         # exactly the shape `H-87`'s `site:` describes.
         w.draw = 0                 # S33: the draw ordinal is per-TICK, so replay is exact
         w._departed.clear()        # H-206: per-tick scratch (`departed_from` answers only for its own tick)
-        # `U2`: season-local. See `__init__` for why these four reset and the three above it do not.
+        # `U2`: season-local. See `__init__` for why these reset and the three above it do not.
         self.round = 0
-        self._queued, self._spent, self._deliberated_at = {}, {}, {}
-        self._inputs, self._realised = {}, {}
+        self._spent, self._deliberated_at, self._realised = {}, {}, {}
         # G2 / `04 §C.1`: ONE TOKEN PER BARRIER, MINTED HERE, PASSED IN, NEVER KEPT. Each is built
         # inline in the call so no local outlives its step -- the pseudocode's `drop` is the end of
         # the expression. DELIBERATE, below, is the one step called with none.

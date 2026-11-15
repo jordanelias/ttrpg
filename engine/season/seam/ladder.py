@@ -64,8 +64,7 @@ from ..gaps import Unspecified
 #      check); what follows is the original rationale.
 #      ⚠ AND ITS OPERAND DOES NOT EXIST YET, WHICH IS SAID HERE RATHER THAN DISCOVERED LATER.
 #      `degree_from_net` reads `net - ob`. NOTHING IN THIS TRACER PRODUCES A `net`: there is no
-#      roll anywhere in `shape.py`, `Act.pool` / `Act.obstacle` are read only by `S27.4`'s
-#      refusal gate, and no subsystem the seam can call returns one. So this branch is a READER
+#      roll anywhere in `shape.py`, and no subsystem the seam can call returns one. So this branch is a READER
 #      WITH NO PRODUCER today. It is written anyway, and recorded on `H-98` -- whose own `cite:` lists
 #      *give the ladder a margin the subsystem can supply* as one of its three options -- because the
 #      alternative is worse in a specific way: without it the shape of the missing thing is a

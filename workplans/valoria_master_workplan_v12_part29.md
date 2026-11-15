@@ -237,7 +237,7 @@ INVOCATION: /methodology-execute Batch B41-go-port-gate
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_GO.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
-GATE: Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0
+GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B03g-go-early-landings
 GATE: Batch B06-keyed-draw
 GATE: Batch B34-go-surface

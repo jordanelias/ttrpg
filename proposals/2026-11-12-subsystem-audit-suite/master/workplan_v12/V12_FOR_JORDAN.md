@@ -199,11 +199,11 @@ collection and CP-T08-08's refill, which are credited on hand-built worlds only.
 
 **Recommendation.** A for both: RS-27 does make the heir a claimant, and GO-10's shapes are what the port is built against; but each is a Layer 1 text, so it is yours.
 
-**What the plan assumes until you answer.** Neither lands: B03.71 is HELD, and B41.03's step 4 is HELD while its steps 1 to 3 proceed (`valoria_master_workplan_v12_part5.md` B03.71; `valoria_master_workplan_v12_part29.md` B41.03).
+**What the plan assumes until you answer.** Neither lands: B03.71 is HELD, and B41.03's step 4 is HELD while its steps 1 to 3 proceed (`FORK:61b37b8d:workplans/valoria_master_workplan_v12_part5.md` B03.71; `valoria_master_workplan_v12_part29.md` B41.03).
 
 **Blocks.** B03.71; B41.03 step 4.
 
-**Sources.** `valoria_master_workplan_v12_part5.md` B03.71; `valoria_master_workplan_v12_part29.md` B41.03; `registers/editorial_ledger_in.jsonl` (ED-IN-0300, the superseding row); `valoria_master_workplan_v12_part2_cont2.md` (the Layer 1 table); `V12_VERDICT.md` question 7.
+**Sources.** `FORK:61b37b8d:workplans/valoria_master_workplan_v12_part5.md` B03.71; `valoria_master_workplan_v12_part29.md` B41.03; `registers/editorial_ledger_in.jsonl` (ED-IN-0300, the superseding row); `valoria_master_workplan_v12_part2_cont2.md` (the Layer 1 table); `V12_VERDICT.md` question 7.
 
 ---
 
@@ -232,7 +232,7 @@ collection and CP-T08-08's refill, which are credited on hand-built worlds only.
 
 | raised as a question for you | settled as | by |
 |---|---|---|
-| the guild leader's seat (`off_npc_084`) has no rung, so the stored `scale:` column cannot be cut (B03.69) | B03.69 stays BLOCKED (owner: you, for the seat's rung or scope, or A1-46's revert); the column is not cut in v12's run, and the position goes to the held table at B03's expunge with that trigger (`valoria_master_workplan_v12_part5.md` B03.69) | the item's own text; HD-24's "drafted as seed content" was not carried into the item (corrected by repair lane V1, `V12_VERDICT.md` defect 4) |
+| the guild leader's seat (`off_npc_084`) has no rung, so the stored `scale:` column cannot be cut (B03.69) | B03.69 stays BLOCKED (owner: you, for the seat's rung or scope, or A1-46's revert); the column is not cut in v12's run, and the position goes to the held table at B03's expunge with that trigger (`FORK:61b37b8d:workplans/valoria_master_workplan_v12_part5.md` B03.69) | the item's own text; HD-24's "drafted as seed content" was not carried into the item (corrected by repair lane V1, `V12_VERDICT.md` defect 4) |
 | `release` is listed as owed a contest, and nobody gives it one | its shape file gives it no contest, so B32 reclassifies it | precedent: a row's shape is owned by its shape file (HD-27). **Re-opened as J-03**: check lane K8 found the move is not mechanical (the bookkeeping class may not touch a seat) |
 | readings that need more than two seasons (the scar flip, the Church Influence bands, claim fade) | they go to the final long re-take (B99) | your ruling A-114 (HD-26) |
 | `knot` has no written effect, but the thread batch must build it out | a design item comes first, inside the batch | precedent: E-14 and D-18 (HD-25); written by lane H3 as B35.30 |

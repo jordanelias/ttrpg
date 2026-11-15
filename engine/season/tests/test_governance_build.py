@@ -1087,9 +1087,12 @@ def test_lb6e_the_matrix_row_finally_has_a_field():
 # =================================================================================================
 
 def _establish_world():
-    """`tiny_world`, unchanged. Its duke `p_high` holds `off_duke`, whose remit grants `confer` --
-    the eligibility `establish` declares -- and `p_mid` holds no office."""
+    """`tiny_world` plus one `hold`: its duke `p_high` holds `S`, the rung `_founding` and `_seat_reeve` name
+    (H-291, B03.81: a hand-built `establish` on the overlay keys asks `founds_over`, whose conjunct (i) is the
+    founder's holding the rung). He holds `off_duke`, whose remit grants `confer` -- the eligibility
+    `establish` declares -- and `p_mid` holds no office."""
     w = P.tiny_world()
+    w.add_tenure(Tenure("t_h291_hold_s", "p_high", "S", "hold", 0))
     d = SeasonDriver(w)
     d.matter(mint_token(d.w, WriteClass.MATTER), [])
     return w, d
@@ -1251,6 +1254,8 @@ def test_13f_a_sole_holder_re_stamping_their_own_office_refuses_and_does_not_cra
     monkeypatch of the module-level name)."""
     w, d = _establish_world()
     _seat_reeve(w, ["confer"])
+    # (H-291, B03.81: this shipped arm is now refused at clause 1, the overlay arm's `founds_over`, which a seat
+    # cannot meet over its own rung; clause 5's own refusal is told from the retired precondition below.)
     out = _establish(w, d, "e_self", _founding(remit=["confer", "dispatch"]),
                      actor="p_mid", via="off_reeve")
     assert [e.kind for e in out] == ["establish.refused"], [e.kind for e in out]
@@ -1260,7 +1265,7 @@ def test_13f_a_sole_holder_re_stamping_their_own_office_refuses_and_does_not_cra
     # MUTATION: the retired precondition, run through the SAME pipeline on a FRESH world --
     # reproduces the uncaught crash this fix closes. `others` (not `held`) is the retired name.
     import engine.season.loop.predicates as PR
-    from ..state.gate import NotYours
+    from ..trace_log import TRACE
 
     def retired_req_establish(w, a):
         off = PR.office_described_by(a)
@@ -1280,17 +1285,29 @@ def test_13f_a_sole_holder_re_stamping_their_own_office_refuses_and_does_not_cra
         return not others or PR.may_fill(w, a.actor, a.via, off)
 
     monkeypatch.setitem(PR.REQUIRES_PREDICATES, "establish", retired_req_establish)
+    # H-291 (B03.81): the effect reads `office_founded_by`, which now asks `founds_over` of an overlay act as
+    # well, and a seat cannot found over its own rung -- so, as the retired precondition predates that
+    # check, it is answered True here and the gate is what refuses.
+    monkeypatch.setattr(PR, "founds_over", lambda *a, **k: True)
     w2, d2 = _establish_world()
     _seat_reeve(w2, ["confer"])
-    with pytest.raises(NotYours):
-        _establish(w2, d2, "e_self_retired", _founding(remit=["confer", "dispatch"]),
-                  actor="p_mid", via="off_reeve")
+    # H-143 (B03.76): the gate's refusal no longer ends the season -- the fold emits the row's
+    # `establish.refused` -- so the retired precondition is told from the shipped one by the
+    # fold's own trace row for the gate's refusal, which the shipped precondition never reaches.
+    with TRACE.recording():
+        first = len(TRACE.rows)
+        out2 = _establish(w2, d2, "e_self_retired", _founding(remit=["confer", "dispatch"]),
+                          actor="p_mid", via="off_reeve")
+        gate = [r for r in TRACE.rows[first:]
+                if r.channel == "DECISION" and r.what == "establish: the gate refused the write"]
+    assert [e.kind for e in out2] == ["establish.refused"], [e.kind for e in out2]
+    assert len(gate) == 1, "the retired precondition admitted and the gate did not refuse"
 
 
 @pytest.mark.parametrize("change", [
     dict(faction="Church of Solmund"),
     dict(post="Warden"),
-    dict(rung="Hh"),
+    dict(rung="S2"),            # H-291 (B03.81): a rung `off_duke` founds over, so the refusal is clause 4's, not `founds_over`'s
     dict(conferral="elected"),
     # ⚠ (`13d-i`) WAS `revocation="purview"`, r2's superseded value. Off the roster it now raises
     # in the constructor, so the act would refuse for THAT reason and this case would stop
@@ -1309,6 +1326,9 @@ def test_13f_an_existing_id_refuses_any_change_but_the_remit(change):
     `change` here must still be a WELL-FORMED office, differing from the seated one by exactly the
     one declared field, or the case is not exercising what its `id` claims."""
     w, d = _establish_world()
+    w.rungs["S2"] = Rung("S2", "settlement")                # a second settlement under `D`, held by the duke
+    w.add_tenure(Tenure("t_h291_s2_in_d", "S2", "D", "contain", 0))
+    w.add_tenure(Tenure("t_h291_hold_s2", "p_high", "S2", "hold", 0))
     t = _seat_reeve(w, ["issue"])
     plain = _founding(remit=["issue", "dispatch"])
     assert _preds._req_establish(w, Act(id="ctl", actor="p_high", verb="establish",
@@ -1338,7 +1358,7 @@ def test_13f_an_existing_id_refuses_any_change_but_the_remit(change):
     (_founding(body="Imperial Court", faction="Church of Solmund"), True),   # a mismatch
     (_founding(remit=["issue", "requisition"]), True),                        # off `REMIT_ACTS`
     (_founding(post="Duke", faction=None, body="Imperial Court"), True),     # a title in a body
-    (_founding(rung="nowhere"), False),                                # a rung the world lacks
+    (_founding(rung="nowhere"), False),                                # a rung the world lacks: no constructor raise; refused by `founds_over`'s own guard (`rung not in w.rungs`, H-291)
     (_founding(conferral=None), False),                                # no conferral basis
     (_founding(office="p_low"), False),                                # an id a person holds
 ], ids=["empty", "no-belonging", "unknown-faction", "unknown-body", "mismatch", "off-roster-remit",

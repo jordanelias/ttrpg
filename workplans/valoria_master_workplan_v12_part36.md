@@ -19,8 +19,8 @@ INVOCATION: /methodology-execute Batch B35-wr-thread
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_WR.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
-GATE: Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0
-GATE: Batch B03-hygiene
+GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
+GATE: Batch B03-hygiene @61b37b8dc8a68a5434d423f0ed0695102e89fc9f
 GATE: Batch B05-one-roll
 GATE: Batch B09-memory
 GATE: Batch B11-fi-readers
@@ -154,7 +154,7 @@ Not in this batch, and where each is: `09_WR_threadwork_module` edit 3 and the `
 - FALSIFIER and CONTROL: a Leap Partial or Failure that nets −1. Control: "a Weaving at the same degrees keeps the blanket penalty. Hash EQUAL: `build_realm(0)` hashes equal to the base commit. No test pins the Leap's current charge."
 - GATE: `python -m pytest engine/season/tests/test_thread_leap_charge.py engine/tests/test_thread_mending_ed871.py tests/valoria/test_threadwork_mending_parity.py tests/valoria/test_threadwork_resilience.py tests/valoria/test_coherence_elastic_plastic.py -q` → pass; `python tools/export_engine_params.py --check` → exit 0; the realm hash (`HASH READING`) at seed 0, one season → equal to B34's close (`reading @<sha>`) ("season-unreachable until CP-T07-02").
 - HASH MOVERS: none ("season-unreachable until CP-T07-02").
-- DEPENDS ON: EXISTS-IN-TREE `systems/threadwork/sim/operations.py::_resolve_operation`, `::attempt_leap`, `::resist_coherence_cost`; V12 B03.68 (`params.py`), B03.74 (`DEPTH_TS_MINIMUM` kept).
+- DEPENDS ON: EXISTS-IN-TREE `systems/threadwork/sim/operations.py::_resolve_operation`, `::attempt_leap`, `::resist_coherence_cost`; V12 B03.68 @61b37b8dc8a68a5434d423f0ed0695102e89fc9f (`params.py`), B03.74 @61b37b8dc8a68a5434d423f0ed0695102e89fc9f (`DEPTH_TS_MINIMUM` kept).
 - GLOSSARY: none.
 - COST and TIER: edit; `sonnet`, `high` (ER-GF10's own tier `haiku`, folded).
 - LANDS IT: B35's producer; `Item: B35.03`, `[skip ci]`.
@@ -207,7 +207,7 @@ Not in this batch, and where each is: `09_WR_threadwork_module` edit 3 and the `
 - FALSIFIER and CONTROL: "A `WorkingInput` field or parameter row that changes nothing when varied (`prior_ops` not read)" is read at B35.05's gate (the module reads them there). Control: the realm hash at seed 0, one season, equal to B35.03's reading (no caller).
 - GATE: `python -m pytest engine/season/tests/test_threadwork_session.py -q` → pass; `python tools/export_engine_params.py --check` → exit 0; `python tools/ci_sim_fabrication_check.py` → exit 0.
 - HASH MOVERS: none (`queries/inputs.py`'s records are not world carriers; nothing calls them yet).
-- DEPENDS ON: EXISTS-IN-TREE `queries/inputs.py::SubsistInput`, `dice_engine.degree_from_net`; V12 B03.68 (`params.py`, `threadwork_params.json`, `thread_operations`); V12 Batch B04 (the `thread` site's home, `capability_uses`), Batch B06 (`ids.draw_factory`'s keyed draw).
+- DEPENDS ON: EXISTS-IN-TREE `queries/inputs.py::SubsistInput`, `dice_engine.degree_from_net`; V12 B03.68 @61b37b8dc8a68a5434d423f0ed0695102e89fc9f (`params.py`, `threadwork_params.json`, `thread_operations`); V12 Batch B04 (the `thread` site's home, `capability_uses`), Batch B06 (`ids.draw_factory`'s keyed draw).
 - GLOSSARY: new rows. *working*: "one attempt by a practitioner to act on the Thread, as a working in craft is one piece of work done"; *contact*: "the span in which a practitioner holds the Thread open and may make several operations, as one keeps contact with something until it is lost or let go". Each row's owner `queries/inputs.py::WorkingInput`.
 - COST and TIER: small build; `opus`, `high` ("edits 1–2 `opus` (the session shape …)", `09_WR_B…` "Cost class").
 - LANDS IT: B35's producer; `Item: B35.04`, `[skip ci]`.
@@ -227,7 +227,7 @@ Not in this batch, and where each is: `09_WR_threadwork_module` edit 3 and the `
 - FALSIFIER and CONTROL: the sources': "a consequential outcome (contact held or lost, the Coherence cost, the breach) that is the same for every draw at a given state"; "a second resolver anywhere for the played working". Control: the four oracle files' expected numbers; the realm hash at seed 0, one season, equal to B35.04's (the season reaches no threadwork code until B35.10).
 - GATE: `python -m pytest tests/valoria/test_threadwork_resilience.py tests/valoria/test_threadwork_mending_parity.py tests/valoria/test_coherence_elastic_plastic.py engine/tests/test_thread_mending_ed871.py engine/season/tests/test_threadwork_session.py engine/season/tests/test_thread_leap_charge.py -q` → pass; `python -m pytest tests/valoria/test_engine_does_not_import_systems.py -q` → pass; `python tools/export_engine_params.py --check` → exit 0; `python tools/export_sim_params.py --check` → exit 0; `git ls-files systems/threadwork` → nothing.
 - HASH MOVERS: none.
-- DEPENDS ON: V12 B35.04; V12 B03.68 (`params.py`, the exporter's second output), B35.03; V12 Batch B03 (`17_CENSUS_C1B_01` D3); EXISTS-IN-TREE `systems/threadwork/sim/coherence.py::_displacement_band`, `operations.py::_resolve_operation`, `tools/export_engine_params.py::_module_constants`.
+- DEPENDS ON: V12 B35.04; V12 B03.68 @61b37b8dc8a68a5434d423f0ed0695102e89fc9f (`params.py`, the exporter's second output), B35.03; V12 Batch B03 (`17_CENSUS_C1B_01` D3); EXISTS-IN-TREE `systems/threadwork/sim/coherence.py::_displacement_band`, `operations.py::_resolve_operation`, `tools/export_engine_params.py::_module_constants`.
 - GLOSSARY: none (*thread operation* is B03.68's row; its owner pointer moves to `modules/threadwork/params.py` in this commit).
 - NAMES: `systems/threadwork/sim/*` → `modules/threadwork/*`; `systems/threadwork/sim/params.py` → `modules/threadwork/params.py`.
 - COST and TIER: small build (a move and a signature change); `opus`, `high` (the entry declarations' judgment, `09_WR_B…` "Cost class"); critic `opus`.

@@ -91,7 +91,6 @@ Columns: the wave and step as the structure had them, and now (a change in bold)
 
 | batch | lane | wave (§2.1 → now) | step (§2.1 → now) | slack | part files | positions: total (by state) | hash, from the position rows (§2.2 said) | est. h (E-15) | after: every `GATE: Batch` it needs (`+G` a part's GATE line §2.1 lacked; `+R` an edge H2 adopts) |
 |---|---|---|---|---|---|---|---|---|---|
-| B03-hygiene | IN | W3 | S3 | 0 | 4, 4_cont, 5, 5_cont | 65 (B60 P1 R1 H2 BL1; V1: B03.71 BUILD → HELD) | **MOVER (behaviour 1, encoding 1)** (§2.2: EQUAL) | 28.5 | B00, B01, B02 |
 | B03g-go-early-landings | GO | W4 | S4 | 0 | 6 | 5 (B5) | EQUAL | 4.5 | B00, B01, B02, B03 |
 | B03c-boot | IN | W4 | S4 | 0 | 6 | 3 (B3) | EQUAL | 3.7 | B00, B01, B02, B03 |
 | B16L-mb-words | MB | W4 | S4 | 0 | 6 | 5 (B5) | EQUAL | 4.5 | B00, B01, B02, B03 |
@@ -163,7 +162,6 @@ Every batch's boundary row with the part and line it sits on, whether its text i
 
 | batch | its boundary row (part:line) | exact text | `GATE: Batch` lines | equal to its after-list in §1 | names a batch closing at or after its own step | H2 added |
 |---|---|---|---|---|---|---|
-| B03-hygiene | 5_cont:192 | yes | 3 | yes | none | — |
 | B03g-go-early-landings | 6:158 | yes | 4 | yes | none | — |
 | B03c-boot | 6:256 | yes | 4 | yes | none | — |
 | B16L-mb-words | 6:385 | yes | 4 | yes | none | — |
@@ -233,7 +231,6 @@ One row per batch in schedule order: the position handles (the part after the do
 
 | step | batch | behaviour movers (position handles) | encoding movers | conditional movers | the re-pin position and what its text says | merge position in its step |
 |---|---|---|---|---|---|---|
-| S3 | B03 | 86 | 28 | — | `B03.99` | 1 of 1 movers |
 | S4 | B03g | — | — | — | `B03g.99` records the EQUAL reading | any (EQUAL, §7.4) |
 | S4 | B03c | — | — | — | `B03c.99` records the EQUAL reading | any (EQUAL, §7.4) |
 | S4 | B16L | — | — | — | `B16L.99` records the EQUAL reading | any (EQUAL, §7.4) |

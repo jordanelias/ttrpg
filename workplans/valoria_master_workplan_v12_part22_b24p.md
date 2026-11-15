@@ -17,8 +17,8 @@ IN-FLIGHT ROW: registers/handoffs/HANDOFF_SC.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01a-attributes-generated @cbca1ad4fcee656f908d8a75e99bf79213ddeeab (the drawn attributes, `attr.spirit.will` (B01a.06, landed `1257a4a`) and `harness/pairs.py`; every reading this batch takes on a contest between persons is a curve over generated pairs, never one even-matchup number)
-GATE: Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0
-GATE: Batch B03-hygiene
+GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
+GATE: Batch B03-hygiene @61b37b8dc8a68a5434d423f0ed0695102e89fc9f
 GATE: Batch B04-capability-home
 GATE: Batch B05-one-roll
 GATE: Batch B06-keyed-draw
@@ -286,7 +286,7 @@ EST: 14.1 h [estimate: 0.4 h × 24 positions + 2.5 h for the close + 2 h for the
 - FALSIFIER and CONTROL: a close that returns a band or a side; a `yielded` sitting whose ballot is certain. Control: with `track_step` 0 and every end level `None`, a ballot equals `roll` on the decider's own record.
 - GATE: `python -m pytest engine/season/tests/test_sc_proceeding_module.py engine/season/tests/test_sc_proceeding_data.py -q` → pass; `python tools/export_composition.py --check` → exit 0; `python -m pytest tests/valoria/test_engine_does_not_import_systems.py -q` → pass; hash equal.
 - HASH MOVERS: none (the role is registered and no prize row names it until B24p.19).
-- DEPENDS ON: V12 B24p.11; V12 Batch B03-hygiene (`tools/export_composition.py`); V12 Batch B05 (B05.04 `d_sigma`; B05.21 `stakes`); EXISTS-IN-TREE `references/module_contracts.yaml: composition_roles`.
+- DEPENDS ON: V12 B24p.11; V12 Batch B03-hygiene @61b37b8dc8a68a5434d423f0ed0695102e89fc9f (`tools/export_composition.py`); V12 Batch B05 (B05.04 `d_sigma`; B05.21 `stakes`); EXISTS-IN-TREE `references/module_contracts.yaml: composition_roles`.
 - GLOSSARY: row *track* ("the running position of the proposition before those who decide; it enters each ballot as leverage").
 - COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B24p's producer; `Item: B24p.12`, `[skip ci]`.

@@ -26,9 +26,9 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Optional
 
+from systems.threadwork.sim.params import COHERENCE_COST_BY_SCALE, DEPTH_OB, MENDING_OB, TN_STANDARD
 from systems.threadwork.sim.operations import (
     attempt_leap,
-    COHERENCE_COST_BY_SCALE, DEPTH_OB, MENDING_OB, TN_STANDARD,
     _actor_pool, OperationResult,
     aims_at_own_configuration, apply_mending_feedback, charge_working, mending_priced_scale,
     price_mending,

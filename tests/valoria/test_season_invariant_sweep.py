@@ -197,7 +197,7 @@ def _break_log_ids_unique(w):
     w.log.append(Event(e.id, e.kind, [], ["ROOT"], e.emitted_at))
 
 def _break_log_not_from_the_future(w):
-    w.log.append(Event("mut_future", "probe", [], ["ROOT"], w.tick + 9))
+    w.log.append(Event("mut_future", "condition.band_crossed", [], ["ROOT"], w.tick + 9))
 
 def _break_claim_not_from_the_future(w):
     p = next(iter(w.persons.values()))

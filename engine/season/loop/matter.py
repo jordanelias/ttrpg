@@ -561,6 +561,7 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # `band_floors["body"]` — the SAME table the site gate and `decision.budget` already read.
     # `H-38` closed with *"`Site.condition` is the model"*, and this spends that closure rather
     # than minting a `band_floors.person` second scheme.
+    w._subsistence_shortfall = {}      # the instrument's read of THIS pass only (`harness/populated.py::census`)
     floors_body = (w.fixtures.get("band_floors") or {}).get("body", {})
     # ⚠ PLAN POSITION `19d`: THE ARITHMETIC ABOVE NOW LIVES IN ONE OWNER, `settlements.larder_draw`,
     # which `settlements.subsist` runs (E2, below); this pass derives its writes from that outcome. The
@@ -660,7 +661,7 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
             f"{len(short_by_person)} eater(s) could not meet subsistence; "
             f"{'first 5 of them' if len(short_by_person) > 5 else 'all of them'}: {sample}"
             f" -- recorded, not acted on (L5: a crossing produces no outcome). The FULL set is "
-            f"`World._subsistence_shortfall`, which `census` counts")
+            f"`World._subsistence_shortfall`, which `harness/populated.py` reads")
     # Reported by `census`, never read by the loop — the same treatment `_tie_census` gets. It is
     # what makes the shortfall MEASURABLE rather than only traceable, and it is item 3b's input.
     w._subsistence_shortfall = short_by_person

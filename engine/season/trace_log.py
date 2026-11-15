@@ -10,10 +10,18 @@ This module is the TRACING AGENT'S instrument. It records, in order:
 It stores nothing derived. It is append-only, which is the same property the design
 gives its own log (ARCHITECTURE.md 19), and for the same reason: a trace that can be
 rewritten cannot be evidence.
+
+IT RECORDS ONLY WHILE AN INSTRUMENT HAS OPENED IT. `with TRACE.recording():` is the window; outside
+one every row, and every gap `gap()` would have kept, is dropped at the door, so a run nobody is
+reading does not build rows (one per write, event and query, ~221,000 a case) for nothing. The
+instruments that read the rows -- `harness/report.py`, `run_cases.py`, `soak.py` -- open it where they
+read; a test that reads `TRACE.rows` opens it around the call. `case` and `expecting` are state a
+reader sets, not records, and they are kept whether or not a window is open.
 """
 
 from __future__ import annotations
 
+import contextlib
 import json
 from dataclasses import dataclass, field
 from typing import Any
@@ -36,12 +44,22 @@ class Trace:
         self._seq = 0
         self.expecting = 0      # >0 while a probe is deliberately provoking a refusal
         self.gaps: list[dict] = []
+        self._open = 0          # windows currently open: `recording()` nests, and a count keeps it so
 
-    def _row(self, channel: str, what: str, where: str = "", **detail: Any) -> Row:
+    @contextlib.contextmanager
+    def recording(self):
+        """Open the trace: rows and gaps are kept while this block runs, dropped outside one."""
+        self._open += 1
+        try:
+            yield self
+        finally:
+            self._open -= 1
+
+    def _row(self, channel: str, what: str, where: str = "", **detail: Any) -> None:
+        if not self._open:
+            return
         self._seq += 1
-        r = Row(self._seq, channel, self.case, what, where, detail)
-        self.rows.append(r)
-        return r
+        self.rows.append(Row(self._seq, channel, self.case, what, where, detail))
 
     def step(self, name: str, phase: str) -> None:
         self._row("STEP", f"{phase} {name}", "S23")
@@ -91,6 +109,8 @@ class Trace:
         ranked as a live remediation."""
         expected = self.expecting > 0
         self._row("GAP", f"[{kind}] {what}", where, needs=needs, law=law, expected=expected)
+        if not self._open:
+            return
         self.gaps.append(
             dict(kind=kind, what=what, where=where, needs=needs, law=law,
                  case=self.case, expected=expected)

@@ -59,7 +59,7 @@ from .carriers import Office, Receipt, Tenure
 # import-cycle instrument (`tests/valoria/test_import_cycle_game_state_npe.py`) reads a guarded
 # import as an edge like any other. The functions below take the `World` they are handed and name
 # its type as a string only.
-from .containment import ancestry, descendants, home_of, parent_of
+from .containment import ancestry, descendants, edges_of, home_of, parent_of
 
 
 @dataclass(frozen=True)
@@ -174,7 +174,7 @@ class NoToken(InstrumentDefect):
 # `_req_revoke` asks `may_revoke` and `_req_confer` asks `may_fill` -- the precondition refuses
 # (and EMITS, `§E2`) exactly what the gate would refuse (and RAISE), because both read one owner.
 # A precondition with its own copy of the rule is how the two would come to disagree, and the
-# disagreement would surface as a season killed by `NotYours` on an act the fold admitted.
+# disagreement would surface as the fold's unnamed gate refusal (B03.76) of an act the precondition admitted.
 # =================================================================================================
 
 
@@ -361,8 +361,8 @@ def seat_hold(w: "World", actor: Optional[str], via: Optional[str]) -> Optional[
     holder has (`Tenure.granted_acts`, the `13e` snapshot), not the office's live remit."""
     if not actor or not via or via not in w.offices:
         return None
-    for t in w.tenures:
-        if t.kind == "hold" and t.subject == actor and t.object == via and t.live:
+    for t in edges_of(w, "hold", actor):
+        if t.object == via and t.live:
             return t
     return None
 
@@ -874,8 +874,8 @@ def may_renew(w: "World", actor: Optional[str], via: Optional[str], off: Office)
     seat's act and is asked of the seat exercised (`04 §B.7`'s purview invariant) -- and the actor SITS in it
     (`seat_hold`, *"refused the instant the occupant is not seated"*). Asked by the gate for every
     extended `oblige` term, and by `_eff_transfer` before it names one, so the effect never writes a
-    renewal the gate would refuse (a `NotYours` out of the fold would end the season, not refuse the
-    act): one owner, two readers, `may_fill`'s shape.
+    renewal the gate would refuse (the fold catches a `NotYours` and emits the row's refusal, B03.76,
+    so the act is refused either way; asked early, the refusal is the precondition's): one owner, two readers, `may_fill`'s shape.
 
     ⚠ REFLEXIVE ON THE SEAT, THE OPPOSITE OF `may_fill`, AND FOR THE REASON THAT FUNCTION GIVES.
     `may_fill` refuses `via == off` because a holder filling the seat he exercises is authority over
@@ -960,7 +960,8 @@ def may_determine(w: "World", actor: Optional[str], via: Optional[str], party: O
     consumes cannot be read after it (`handover`'s problem, which that basis solves only because
     its licence IS a Tenure). The bench conjunct of the precondition is this function, asked early
     through `WorldReader`'s `bench` stem, so the fold refuses (and emits) exactly what this refuses
-    (and raises): a precondition with its own copy would surface as `NotYours` killing a season.
+    (and raises): a precondition with its own copy would surface as a `NotYours` the fold converts
+    to the row's refusal (B03.76) instead of the precondition's own.
 
     ⚠ THE KIND IS NOT THIS PREDICATE'S. `may_determine` takes no `kind` at all: WHICH edges a bench
     may open or close is `tenure_write_basis`'s DETERMINATION clause. Until v9 SC-03a that clause
@@ -1732,7 +1733,8 @@ class Subject:
     @property
     def kinds(self) -> tuple:
         """The kinds this subject earns if it moves, as a tuple: `()` for `None` (the plain-list
-        contract: it narrows nothing), one kind, or the several it names."""
+        contract: it narrows nothing), one kind, or the several it names. A `None` subject may not
+        sit beside a named one: `Change` refuses the mix at construction (H-141)."""
         if not self.earns:
             return ()
         return (self.earns,) if isinstance(self.earns, str) else tuple(self.earns)
@@ -1795,14 +1797,27 @@ class Change:
     (`loop/resolve.py::_apply_write`) -- a mutation made there, before this object is even
     constructed, is invisible to F3 as well as F9, not merely to F9. Every shipped effect defers
     its mutation into `apply`. CR-06: `World.effect_body_observed` (called from `_apply_write`)
-    snapshots the tenure store around the effect call and refuses a Tenure the body moved; entity
-    fields stay convention-bound."""
+    snapshots the tenure store and each entity's field values around the effect call and refuses
+    what the body moved (H-137; a mutable value mutated in place escapes it)."""
 
     subjects: tuple
     apply: Callable[[], None]
     # CP-T03-02: the per-party ending a fight's band Events carry (`Event.ending`); `()` for every effect
     # that is not a fight's. The gate does not read it -- the fold copies it onto the act's success Events.
     ending: tuple = ()
+
+    def __post_init__(self) -> None:
+        # H-141: `_fold` reads an EMPTY `earned` set as "every declared kind", so one named subject
+        # beside a `None` one would silently drop what the `None` subject earns. HR-1's rule (see
+        # `Subject`): every subject of a write names its kinds, or none does.
+        named = [s for s in self.subjects if s.kinds]
+        plain = [s for s in self.subjects if not s.kinds]
+        if named and plain:
+            raise InstrumentDefect(
+                "a `Change` mixes subjects that earn every declared kind (`earns=None`: "
+                f"{[s.id for s in plain]}) with subjects that name theirs "
+                f"({[(s.id, s.kinds) for s in named]}); the named kinds would silence the rest in "
+                "`loop/resolve.py::_fold`. Name the kinds of every subject, or of none (H-141).")
 
 
 def _nothing() -> None:

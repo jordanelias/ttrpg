@@ -17,8 +17,8 @@ INVOCATION: /methodology-execute Batch B36-wr-story-instruments
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_WR.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
-GATE: Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0
-GATE: Batch B03-hygiene
+GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
+GATE: Batch B03-hygiene @61b37b8dc8a68a5434d423f0ed0695102e89fc9f
 GATE: Batch B09-memory
 GATE: Batch B12c-material-verbs-and-valley
 GATE: Batch B27-sc-proceedings

@@ -47,15 +47,6 @@
 |---|---|---|
 | `S/tests/test_b11a_duel_reach.py` | B01.01 | S1 |
 | `S/tests/test_b11a_scores_and_obstacle.py` | B01.02 | S1 |
-| `S/tests/test_u5a_core_owed.py` | B03.53 | S3 |
-| `S/tests/test_event_kind_roster.py` | B03.57 | S3 |
-| `S/tests/test_person_interior.py` | B03.58 | S3 |
-| `S/tests/test_faction_standing.py` | B03.65 | S3 |
-| `S/tests/test_thread_operations.py` | B03.68 | S3 |
-| `S/tests/test_earns_contract.py` | B03.75 | S3 |
-| `S/tests/test_fold_gate_refusal.py` | B03.76 | S3 |
-| `S/tests/test_gate_observation.py` | B03.83 | S3 |
-| `S/tests/test_budget.py` | B03.86 | S3 |
 | `S/tests/valoria/test_export_season_registries.py` | B03g.01 | S4 |
 | `S/tests/test_boot_module.py` | B03c.01 | S4 |
 | `S/tests/test_u1_capability_surface.py` | B04.02 | S6 |
@@ -318,7 +309,6 @@
 
 | path created | item | caller the item names (searched in the item's own text) |
 |---|---|---|
-| `engine/engine_params/threadwork_params.json` | B03.68 | its exporter's `--check` (named in the item) |
 | `engine/engine_params/season_registries.json` | B03g.01 | a `ci_checks_registry.yaml` row; the CI workflow (named); the local tier; its exporter's `--check` (named in the item) |
 | `tools/export_season_registries.py` | B03g.01 | a `ci_checks_registry.yaml` row; the CI workflow (named); the local tier; a gate command |
 | `engine/season/boot/__init__.py` | B03c.01 | code: imported by the items that consume it (a library file, no CI caller owed) |
@@ -393,13 +383,11 @@
 |---|---|---|
 | B11.04 | `04` §C.6, a new row for the event-kind `reach` channel (CR-29) | covered by ED-IN-0300 (HD-22), explicitly: its ratified row (`registers/editorial_ledger_in.jsonl`, the superseding ED-IN-0300) names CR-29 among the positions whose hold it lifted and reads M11's "a new row in ratified 04 section C.6" as yes; ED-IN-0298's superseding row states the shape (checked by repair lane V1); B11.03 lands the code first, as the row's "lands only in the same PR as the channel's code and first reader" asks |
 | B41.03 | `04` §C.12, the Result-shape hunk (GO-10) | **hunk HELD** (repair lane V1): ED-IN-0300's ratified row names the positions whose holds it lifted, and GO-10 is not one; the paragraph adds a Layer 1 rule with no node, so its step 4 waits on J-07 or an `L1-A*` node; the code steps proceed |
-| B03.70 | the stale Layer 0 and Layer 1 passages of IN-44 (`04`, `architecture/PLAN.md`, `VOCABULARY.md`, `holonic_ARCHITECTURE.md`) | covered by ED-IN-0300; the PR body lists them |
-| B03.71 | `04`'s `succeed` designation nodes (A1-81, IN-44 row 14) | **HELD** (repair lane V1): it re-words Layer 1 to the route the code takes on an assumed ruling (RS-27 owing the wording, `[ASSUMPTION]`); CLAUDE.md §0.05 and A-97 need a recorded ruling (an `L1-A*` node or Jordan's word); ED-IN-0300 licenses landing text, it rules nothing on its content; J-07 |
-| B03.66 | `CLAUDE.md` §7's sentence on the seeded pins (Layer 0) | covered by ED-IN-0300; the PR body lists it |
+| B03.71 | `04`'s `succeed` designation nodes (A1-81, IN-44 row 14) | **HELD** (repair lane V1): it re-words Layer 1 to the route the code takes on an assumed ruling (RS-27 owing the wording, `[ASSUMPTION]`); CLAUDE.md §0.05 and A-97 need a recorded ruling (an `L1-A*` node or Jordan's word); ED-IN-0300 licenses landing text, it rules nothing on its content; J-07; its instruction: `FORK:61b37b8d:workplans/valoria_master_workplan_v12_part5.md` B03.71 (expunged) |
 | B36.08 | a possible `04` §A.2 row for NM-W5's journal, if its step 1 finds the journal must read Scenes | **covered by ED-IN-0300 on the same two conditions** (ladder step 4: B11.04's and B41.03's precedent); the item's text takes HELD on that branch instead (§11 C-15, for check lane K10) |
-| B03.19 | `04`'s rejection-5 measurement paragraph made a command (`11_GO_pointer_and_stale_text_resolutions` item 6) | **HELD** by its own text (Jordan merges the amendment): held back |
+| B03.19 | `04`'s rejection-5 measurement paragraph made a command (`11_GO_pointer_and_stale_text_resolutions` item 6) | **HELD** by its own text (Jordan merges the amendment): held back; its instruction: `FORK:61b37b8d:workplans/valoria_master_workplan_v12_part4_cont.md` B03.19 (expunged) |
 
-**The held-back list for the adopting PR body, cross-checked against `valoria_master_workplan_v12.md` §11.2.** Every row of §11.2 stands (canon lines and the Coup Counter, A-17; the strife master's five sentences, A-84; A-60's unlocated directive; the `CLAUDE.md` preamble sentence on ED-GO-0002; `CLAUDE.md` §3's `pc_engine` sentence, edited in B13's own PR; GO-09's workflow line; the Layer 1 items held; `off_npc_084`'s rung; every authored value; the blocked entries; the 54 held entries; the CI cadence of a parallel step; who wrote the documents). **Additions this part makes to it:** (1) the four settings whose targets lie past two seasons stay at control through B99, which only quotes their readings: the scar arms and `scar_weight_shift` (B10) and the Church Influence and unsupported Turmoil triggers (B21d) (§4 rows 8, 9, 51, 52); with them the longer forms B99's argv carries (`claim_fade` edit 5's `MAX_SEASONS`, `lattice_coupling`'s fourteen-season front, `prologue`'s twenty seasons, `dues_valence` world (ii)); (2) the 55 BLOCKED settings of §4, each shipping at control (its PR body is B98's); (3) the Layer 0 and Layer 1 hunks landed under ED-IN-0300 (B03.66, B03.70, B11.04; B36.08 if its branch fires; B03.71 and B41.03's step 4 are HELD on J-07, repair lane V1), stated in their batches' PR bodies, not held back but listed so the adopting PR names them; (4) `knot`'s effect (B35.28 BLOCKED; a WR design item is owed before it, §11 C-18), with R-05's possible `n − 1 of n` at B35. The held-back list does not change for the hash or schedule corrections: none of them is a ruling.
+**The held-back list for the adopting PR body, cross-checked against `valoria_master_workplan_v12.md` §11.2.** Every row of §11.2 stands (canon lines and the Coup Counter, A-17; the strife master's five sentences, A-84; A-60's unlocated directive; the `CLAUDE.md` preamble sentence on ED-GO-0002; `CLAUDE.md` §3's `pc_engine` sentence, edited in B13's own PR; GO-09's workflow line; the Layer 1 items held; `off_npc_084`'s rung; every authored value; the blocked entries; the 54 held entries; the CI cadence of a parallel step; who wrote the documents). **Additions this part makes to it:** (1) the four settings whose targets lie past two seasons stay at control through B99, which only quotes their readings: the scar arms and `scar_weight_shift` (B10) and the Church Influence and unsupported Turmoil triggers (B21d) (§4 rows 8, 9, 51, 52); with them the longer forms B99's argv carries (`claim_fade` edit 5's `MAX_SEASONS`, `lattice_coupling`'s fourteen-season front, `prologue`'s twenty seasons, `dues_valence` world (ii)); (2) the 55 BLOCKED settings of §4, each shipping at control (its PR body is B98's); (3) the Layer 0 and Layer 1 hunks landed under ED-IN-0300 (B11.04; B36.08 if its branch fires; B03.71 and B41.03's step 4 are HELD on J-07, repair lane V1), stated in their batches' PR bodies, not held back but listed so the adopting PR names them; (4) `knot`'s effect (B35.28 BLOCKED; a WR design item is owed before it, §11 C-18), with R-05's possible `n − 1 of n` at B35. The held-back list does not change for the hash or schedule corrections: none of them is a ruling.
 
 ---
 
@@ -495,7 +483,6 @@ Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them
 | batch | lane | ED block (declared + spare) | H block (declared + spare) | against H1 §12 |
 |---|---|---|---|---|
 | B24p-sc-proceeding | SC | ED-SC-0054..0056 (1+2) | H-861..H-914 (50+4) | added 2026-11-14 after the table's last block (B01a's H-856..H-860, on top of B99's); `references/id_reservations.yaml` SC `next_free` 54 → 57 at the batch's opening, not by this plan; the hole register's next id after this block H-915. The fold map's own range H-856..H-909 assumed H-855 as the last allocated id: B01a had taken H-856..H-860 first |
-| B03-hygiene | IN | ED-IN-0371..0372 (0+2) | H-379..H-383 (0+5) | ED shifted |
 | B03g-go-early-landings | GO | ED-GO-0003..0004 (0+2) | H-384..H-388 (0+5) | same |
 | B03c-boot | IN | ED-IN-0373..0374 (0+2) | H-389..H-393 (0+5) | ED shifted |
 | B16L-mb-words | MB | ED-MB-0082..0083 (0+2) | H-394..H-398 (0+5) | same |
@@ -663,7 +650,7 @@ The second table reads every batch's `REQUIREMENT:` line for `R-0n`, so it lists
 
 ### 11.2 Gates that are a reading, not an execution artifact (lane H3, generated by `residue.py`, hand-classed; the bodies are not rewritten)
 
-`residue.py` scans every item `GATE` and block `BATCH GATE` line for an arm that reads a `## Status:` line, counts lines or keywords of a document, or reads that a document "states (1) to (n)", and skips arms the repair lanes already relabelled as a record line or the critic's verdict. **27 arms in 26 items or blocks.** Listed below are the 15 whose gate has no other executed arm, or whose executed arm is itself a document count; the rest are not residue: B21c.06, B27.14, B27.15, B27.19, B27.22, B27.23, B10.53, B31.01, B38.51 and B10.51's second arm already pair the "states" reading with `test -f` or `ls` and a `git diff --stat` arm (R2c, R2d's form), the "states" half being the `ners` critic's (§5.8); and B03.66, B03.70 read `wc -l CLAUDE.md` against its cap, which is the rule's own instrument on a process surface (CLAUDE.md's preamble; §0.05 clause 4).
+`residue.py` scans every item `GATE` and block `BATCH GATE` line for an arm that reads a `## Status:` line, counts lines or keywords of a document, or reads that a document "states (1) to (n)", and skips arms the repair lanes already relabelled as a record line or the critic's verdict. **27 arms in 26 items or blocks.** Listed below are the 15 whose gate has no other executed arm, or whose executed arm is itself a document count; the rest are not residue: B21c.06, B27.14, B27.15, B27.19, B27.22, B27.23, B10.53, B31.01, B38.51 and B10.51's second arm already pair the "states" reading with `test -f` or `ls` and a `git diff --stat` arm (R2c, R2d's form), the "states" half being the `ners` critic's (§5.8).
 
 **The minimum execution artifact** for every DESIGN-FIRST row below is the one R2c and R2d wrote for B21c.06 and B27.14: `test -f <the item's design file>` → exit 0, and `git diff --stat <item-base>..HEAD -- engine modules tools` → empty (no code), with "states (1) to (n), each with a falsifier" moved to the `ners` critic's verdict in the commit body.
 

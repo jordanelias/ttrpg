@@ -725,20 +725,19 @@ def is_event_kind(k) -> bool:
 
 _FOLD_KEY_INELIGIBLE = "ineligible"
 _FOLD_KEY_REFUSED = "refused"
-_FOLD_KEY_ATTEMPT_REFUSED = "attempt_refused"
 
 
 def check_fold_kinds(mapping: dict) -> dict:
     """LOADER INVARIANT 7, THE FOLD'S HALF (`04 §B.13 #7`, `F.20b`): THE KINDS THE FOLD EMITS WITH NO
     VERB ROW BEHIND THEM ARE A DECLARED COLUMN, NOT A BODY LITERAL. The keys are a closed set (the
-    three `loop/resolve.py` reads, below) and every value is a non-empty `<noun>.<verb>` kind; a key
+    two `loop/resolve.py` reads, below) and every value is a non-empty `<noun>.<verb>` kind; a key
     missing is a body literal waiting to come back, and a key nothing reads is `ID-13`. A function and
     not an inline `if`, so a test can plant a drifted mapping and watch the load refuse
     (`CLAUDE.md` §0.1 pt 3). Raises `SystemExit`, as every load-time refusal in this package does
     (`verbs.py`, `H-115`), naming the row."""
-    # The KEYS are the fold's own call sites (`FOLD_INELIGIBLE`, `FOLD_REFUSED`, `FOLD_ATTEMPT_REFUSED`
-    # below read exactly these), named once as constants so no literal collection stands here.
-    wanted = frozenset((_FOLD_KEY_INELIGIBLE, _FOLD_KEY_REFUSED, _FOLD_KEY_ATTEMPT_REFUSED))
+    # The KEYS are the fold's own call sites (`FOLD_INELIGIBLE` and `FOLD_REFUSED` below read exactly
+    # these), named once as constants so no literal collection stands here.
+    wanted = frozenset((_FOLD_KEY_INELIGIBLE, _FOLD_KEY_REFUSED))
     missing, extra = sorted(wanted - set(mapping)), sorted(set(mapping) - wanted)
     bad = sorted(k for k, v in mapping.items() if not is_event_kind(v))
     if missing or extra or bad:
@@ -746,7 +745,7 @@ def check_fold_kinds(mapping: dict) -> dict:
             f"rosters.yaml: `fold_kinds` {'misses ' + str(missing) + '; ' if missing else ''}"
             f"{'carries ' + str(extra) + ' that nothing reads; ' if extra else ''}"
             f"{'has malformed kind(s) for ' + str(bad) + '; ' if bad else ''}"
-            f"04 §B.13 #7 / F.20b -- the fold's three body-literal Event kinds are declared columns "
+            f"04 §B.13 #7 / F.20b -- the fold's two body-literal Event kinds are declared columns "
             f"{sorted(wanted)}, each a `<noun>.<verb>` kind, or the derived Event-kind roster is "
             "not derived.")
     return dict(mapping)
@@ -755,7 +754,6 @@ def check_fold_kinds(mapping: dict) -> dict:
 FOLD_KINDS = check_fold_kinds(roster_map("fold_kinds", "values"))
 FOLD_INELIGIBLE = FOLD_KINDS[_FOLD_KEY_INELIGIBLE]
 FOLD_REFUSED = FOLD_KINDS[_FOLD_KEY_REFUSED]
-FOLD_ATTEMPT_REFUSED = FOLD_KINDS[_FOLD_KEY_ATTEMPT_REFUSED]
 
 
 def check_logged_kinds(mapping: dict) -> dict:
@@ -1283,6 +1281,11 @@ if STORM not in MARCH_POSTURES or not set(MARCH_POSTURES) <= {STORM, BESIEGE}:
 SUBTREE_OCCUPATION_KINDS = roster("subtree_occupation_kinds")
 RAZE_TARGET_KINDS = roster("raze_target_kinds")
 ARRIVAL_ONLY_KINDS = roster("arrival_only_kinds")
+#: B03.68 (`09_WR_threadwork_module` edit 3): THE THREAD OPERATIONS -- the closed set of the names of the workings a
+#: practitioner attempts on the thread (leap, weave, pull, past_pull, lock, dissolve, mend). A thread operation is
+#: one named working, as an operation is one task performed. `data/verbs.py`'s verb loader refuses a row whose
+#: `operation:` column names a value outside this set; no shipped row names one yet (the thread rows are B35's).
+THREAD_OPERATIONS = roster("thread_operations")
 # ⚠ BOUND AT IMPORT LIKE THE OTHERS, AND THAT IS THE POINT. `titles` was the ONE roster read
 # lazily through a bare `_ROSTERS.get(...) or {}`, so it alone got no existence refusal -- and
 # because `_req_revoke` fails OPEN into purview-for-everything when the mapping is empty, the one

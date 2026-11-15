@@ -36,7 +36,7 @@ from ..data.fixtures import DEFAULT_FIXTURES, Fixtures
 from ..data.matrix import Step, WriteClass
 from ..data.rosters import CLAIM_SOURCES, RUNG_KINDS, STRATA, WITNESS_CHANNELS, roster, table
 from ..data.pursuits import pursuit as _pursuit
-from ..data.verbs import VERB_TABLE
+from ..data.verbs import EVENT_KINDS, VERB_TABLE
 from ..decision import body_band_penalty, make_chooser, standing_of
 from ..epistemic import CHANNEL_PREDICATES, observers_for
 from ..gaps import (
@@ -72,8 +72,16 @@ def probe(pid: str, title: str, section: str, tests: str, by: str):
 # The shared fixture world. Built FRESH per probe.
 # ---------------------------------------------------------------------------
 
+# B03.57. THE KINDS A PROBE APPENDS THAT NO EMISSION COLUMN DECLARES: apparatus Events (`plague.struck`, the
+# class `state/attribution.py` named as the blocker; `sitting.decided`, A2's chained sitting). The log
+# refuses a kind outside `EVENT_KINDS`, so the probe world declares these through the same roster
+# parameter a `World` takes; no production world does.
+PROBE_KINDS = frozenset({"plague.struck", "sitting.decided"})
+_PROBE_WORLD_KINDS = EVENT_KINDS | PROBE_KINDS      # built once: `tiny_world` is called by the hundred
+
+
 def tiny_world(fixtures: Fixtures = DEFAULT_FIXTURES) -> World:
-    w = World(world_seed=1, fixtures=fixtures)
+    w = World(world_seed=1, fixtures=fixtures, event_kinds=_PROBE_WORLD_KINDS)
     scale = fixtures.get("condition_scale")
     for rid, kind, stores in (("R", "realm", None), ("D", "duchy", None),
                               ("S", "settlement", {"grain": 40}), ("Hh", "hearth", {"grain": 8})):
@@ -275,18 +283,24 @@ def Act_(w, p, verb, key: str = "", **kw):
 _Q = Question("q:view-probe", "need", ())
 
 
-def chooser(w, only=None, verbs=None):
+def chooser(w, only=None, verbs=None, draw_seed=None):
     """§F2's default policy, built the way the barrier builds it -- the composition of
-    `make_chooser` over a world (act-id mint, `verbs`, the per-candidate draw) that the instruments
-    which play a season on the shipped policy call. `soak`, `interactions` and `storybar` still
-    compose it by hand (`storybar` with its own `draw_seed`). `only` narrows to one person so
-    a probe can watch a single decision; `verbs` narrows the option set to the ones under test.
+    `make_chooser` over a world (act-id mint, `verbs`, the per-candidate draw) that every instrument
+    which plays a season on the shipped policy calls: `populated`, `soak` and `storybar` through
+    here. `interactions` alone still composes it by hand, because its `run` reads `mint` and `draw`
+    again below the composition (`CH.sample_order(..., draw)`, `mint(p.id, ...)`,
+    `attribute_top(..., draw, ...)`), so it needs the parts and not only the chooser. `only`
+    narrows to one person so a probe can watch a single decision; `verbs` narrows the option set to
+    the ones under test; `draw_seed`, when given, replaces `w.world_seed` as the seed of the
+    CHOOSER'S `draw_factory` and of nothing else (the act-id mint keeps `w.world_seed`) -- the
+    `--draw-seeds` arm's seam (`storybar.draw_seed_arm`).
 
     ⚠ IT DOES NOT TAKE A ROSTER, and it cannot: `opening_set` computes from the verb table now.
     A probe that wants a verb in the set must put the verb in `verb_table.yaml`."""
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     inner = make_chooser(w.fixtures, mint, verbs=verbs,
-                         draw=draw_factory(w.world_seed, lambda: w.tick))
+                         draw=draw_factory(w.world_seed if draw_seed is None else draw_seed,
+                                           lambda: w.tick))
     def choose(p, v, s, ask_budget):
         return inner(p, v, s, ask_budget) if (only is None or p.id == only) else []
     return choose
@@ -2780,37 +2794,6 @@ def a37():
             "as landed")
 
 
-@probe("A38", "an attempt at Ob > 2 x Pool is refused and the season is spent", "S27.4",
-       by="construction",
-       tests="an attempt far beyond a character's ability must be refused rather than rolled")
-def a38():
-    # `U2`: ONE PASS — the refused act and the surviving one must reach the same `resolve`.
-    w = _one_pass(tiny_world())
-    mult = w.fixtures.get("obstacle_refusal_multiple")
-    kinds = []
-    def choose(p, v, s, ask_budget):
-        if p.id != "p_low":
-            return []
-        # W3: `hopeless`/`hard` were invented verbs. This probe's subject is §27.4's Ob > 2xPool
-        # gate, which `resolve` applies BEFORE the fold, so the verb is incidental — one table
-        # verb with two keys tests it and invents nothing.
-        # `utter` since v9 SC-01 step 12: a bare `speak` is refused by its own cell (no docket).
-        # [JUSTIFIED: pool 5 is an arbitrary test pool; the two obstacles sit one above and exactly at S27.4's threshold mult x pool, so only the first is refused]
-        return [Act_(w, p, "utter", key="hopeless", obstacle=mult * 5 + 1, pool=5),
-                Act_(w, p, "utter", key="hard", obstacle=mult * 5, pool=5)]  # [JUSTIFIED: exactly at S27.4's threshold mult x pool, so admitted; the pair above is one over]
-    _run(w, once(choose))   # `U2`: one submitted pair; the subject is §27.4's gate. See `once`.
-    kinds = [e.kind for e in w.log]
-    # W3: the old `effect` lambda emitted `did.{verb}`; the fold emits the TABLE's `emits`, so
-    # the surviving act produces `proposition.uttered` (`speech.made` until SC-01 step 12). The
-    # property is unchanged: ONE refusal, ONE resolution, and the refused act never reached the fold.
-    assert kinds.count("attempt.refused") == 1 and kinds.count("proposition.uttered") == 1, kinds
-    return (f"PASS: at Ob = {mult}xPool+1 the attempt was REFUSED and the act was spent; at exactly "
-            f"{mult}xPool it resolved. An uncontested attempt routes to A GATE, never to an Ob=0 "
-            "roll. Rev 2 had the branch and no probe ever set `obstacle` or `pool`, so both "
-            "defaulted to 0 and the guard never ran -- while its regression test asserted only "
-            "that two strings appeared in the source")
-
-
 @probe("A31c", "the world verdict is stable across the BAND FLOOR sweep", "S42.2.1",
        by="construction",
        tests="a conclusion about which actions a place supports must not depend on a number nobody decided")
@@ -2860,6 +2843,13 @@ def a31c():
             "LEFT THE BAND EDGES HARDCODED IN PROBE BODIES AND UNSWEPT, so W1's and P18's pacing "
             "claims were one-dimensional sweeps of a two-parameter model. S22 assigns 'band "
             "coefficients' to params and the params document proposes NO VALUES")
+
+
+# Probe A38 ("an attempt at Ob > 2 x Pool is refused and the season is spent", S27.4) was deleted at B03.55 with
+# the fold's S27.4 arm and `Act.obstacle`/`Act.pool`: the provider-side S27.4 refusal stays and is observed by
+# `tests/test_odds_of.py`. The two provenance tags it carried were deleted with the constants they cited:
+# [JUSTIFIED: pool 5 is an arbitrary test pool; the two obstacles sit one above and exactly at S27.4's threshold mult x pool, so only the first is refused]
+# [JUSTIFIED: exactly at S27.4's threshold mult x pool, so admitted; the pair above is one over]
 
 
 @probe("A39", "a contest Event names the act that caused it", "S39.2", by="construction",

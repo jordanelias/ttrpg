@@ -7,7 +7,7 @@ records what went wrong without them, and re-tightened here:
      verdict is a keyword routing over prose, and keyword routing is crude.
   2. **A row that does not route is reported UNMAPPED, never passed.** Silence is not a pass.
   3. **A case more than half of whose `core` rows fail to route is NOT-ASSESSED**, not graded.
-     Grading it PLAYABLE would be the instrument flattering the shape by failing to aim at it.
+     Grading it DECLARED-PRESENT would be the instrument flattering the shape by failing to aim at it.
   4. **Every route matches on WORD BOUNDARIES with explicit negative guards.** #351's most
      expensive correction was a bare substring `ambient` catching ambient-MATERIAL rows (8 -> 3)
      and a bare `counter` matching inside "counter-productive" (10 -> 8). Both are guarded here.
@@ -19,7 +19,7 @@ from __future__ import annotations
 import re
 
 from ..data.matrix import MATRIX
-from ..data.rosters import PURSUITS
+from ..data.rosters import PURSUITS, load_yaml
 from ..state.ids import H
 from ..data.verbs import VERB_TABLE
 from ..loop.driver import resolvable_verbs
@@ -200,79 +200,14 @@ def run_probe(pid: str) -> dict:
 # CASES
 # ---------------------------------------------------------------------------
 
-def _tolerant_yaml(text: str, fname: str):
-    """The in-chain #351 corpus is COMMITTED WITH AN AGENT-TRANSCRIPT PREAMBLE AND MARKDOWN
-    FENCES: six of its seven case files do not load with `yaml.safe_load`, and one
-    (`ARC3.yaml`) is TRUNCATED AT ITS HEAD -- its first record's `- id:` line was lost when
-    committed, leaving an ORPHANED FRAGMENT of a third emergent case above `EMG-10`.
-
-    Both are real defects in the chain's own evidence base. They are RECORDED (CORPUS_DEFECTS)
-    and worked around at LOAD time, never fixed in place: the committed files are the chain's
-    evidence and this instrument does not edit evidence.
-
-    The orphan's rows are NOT DROPPED. Dropping them would silently delete real `season_requires`
-    needs; they are recovered under a synthetic id that says what happened."""
-    import yaml
-    fenced = re.search(r"```(?:yaml)?\n(.*?)```", text, re.S)
-    body = fenced.group(1) if fenced else text
-    notes: list[str] = []
-    if fenced:
-        notes.append(f"{fname}: committed inside a markdown fence with transcript preamble")
-    try:
-        return yaml.safe_load(body) or [], notes
-    except yaml.YAMLError:
-        pass
-    lines = body.splitlines()
-    first = next((i for i, ln in enumerate(lines) if ln.startswith("- id:")), None)
-    if first is None:
-        notes.append(f"{fname}: UNPARSEABLE and holds no `- id:` record")
-        return [], notes
-    cases = yaml.safe_load("\n".join(lines[first:])) or []
-    head = "\n".join(lines[:first]).strip()
-    if head:
-        notes.append(
-            f"{fname}: TRUNCATED AT HEAD -- {first} lines of a record above the first `- id:`; "
-            "its identity is unrecoverable from the file")
-        # ⚠ REV 5. The reconstruction below FAILED SILENTLY for four revisions -- the fragment
-        # begins mid block-scalar, `yaml` raised, the except branch returned [], and TWO `core`
-        # ROWS WERE LOST while this function's docstring said "NOT DROPPED" and the regression
-        # test asserted only that a NOTE existed. The recovery now starts at the fragment's
-        # first parseable `- need:` and REPORTS how many rows it could not reach.
-        rows, lost = [], 0
-        head_lines = lines[:first]
-        start = next((i for i, ln in enumerate(head_lines)
-                      if ln.lstrip().startswith("- need:")), None)
-        if start is None:
-            lost = len(head_lines)
-        else:
-            lost = start
-            try:
-                indent = len(head_lines[start]) - len(head_lines[start].lstrip())
-                body = "\n".join(ln[indent:] if len(ln) > indent else ln
-                                  for ln in head_lines[start:])
-                rows = yaml.safe_load(body) or []
-                rows = [r for r in rows if isinstance(r, dict) and "need" in r]
-            except yaml.YAMLError:
-                rows, lost = [], len(head_lines)
-        notes.append(f"{fname}: recovered {len(rows)} row(s) from the truncated head; "
-                     f"{lost} line(s) above the first parseable `- need:` are UNRECOVERABLE")
-        if rows:
-            cases = [dict(id=f"{fname.split('.')[0]}-ORPHAN",
-                          name="[IDENTITY LOST] headless fragment recovered from a truncated file",
-                          one_line="A third emergent case whose `- id:` header was lost when the corpus was committed.",
-                          scale="world", season_requires=rows,
-                          ends_when="unrecoverable -- the record's tail is present, its head is not")] + cases
-    return cases, notes
-
-
 CORPUS_DEFECTS: list[str] = []
 
 # CASE_SERIES -- series name -> the regex a case id of that series must fully match.
 # THE RULE: an id is its series prefix plus a label. A bare arc number is never an identifier
 # (two series once both numbered their cases 16-18, and the loader dropped the second set with
 # no trace). A colliding series takes a NEW PREFIX, never a new number; bare `ARC-19` is never
-# allocated; a new id needs a row here FIRST. `ARC\d-ORPHAN` is the loader's own synthetic id
-# for a headless fragment (`_tolerant_yaml`). Neither of the two 16-18 series is canonical
+# allocated; a new id needs a row here FIRST. `ARC\d-ORPHAN` is the id a headless fragment once
+# took (retired with the loader's recovery path). Neither of the two 16-18 series is canonical
 # (both are evidence), and no cited id is renumbered.
 CASE_SERIES: dict[str, str] = {
     "arc": r"ARC-\d{2}",
@@ -298,9 +233,7 @@ def load_cases(kind: str) -> list[dict]:
     else:
         sources = sorted(CHAIN.glob("ARC*.yaml")) + sorted(files.CASES_DIR.glob("ARC*.yaml"))
     for f in sources:
-        data, notes = _tolerant_yaml(f.read_text(), f.name)
-        CORPUS_DEFECTS.extend(notes)
-        for c in data or []:
+        for c in load_yaml(f.read_text()) or []:
             cid = str(c["id"])
             if cid in seen:
                 CORPUS_DEFECTS.append(
@@ -368,7 +301,7 @@ def grade(case: dict) -> dict:
         # The row's verdict is the WORST of its declarations. A row resting on four things is
         # blocked if any one of them is missing, which is what "rests on" means.
         # ⚠ THREE OUTCOMES. A row every one of whose declarations RESTS ON AN INJECTED DEFAULT
-        # is not a pass: `ASSUMED` carries into the case verdict as DEGRADED, never PLAYABLE.
+        # is not a pass: `ASSUMED` carries into the case verdict as DEGRADED, never DECLARED-PRESENT.
         # Publishing those as PASS is what put seven false passes in the caselog.
         # ⚠ AN UNBOUND TOKEN IS AN AUTHORING ERROR, NOT A DESIGN FINDING, AND CONFLATING THEM
         # PUBLISHED THE SECOND WEARING THE FIRST'S CLOTHES. `resolve()` distinguishes them --
@@ -402,7 +335,7 @@ def grade(case: dict) -> dict:
     # verdict because until it is fixed nothing the row says can be believed.
     broken = [r for r in routed if r["verdict"]["verdict"] == "INSTRUMENT-ERROR"]
 
-    # HONESTY RULE 3: **a case with ANY unmapped `core` row may not be graded PLAYABLE.**
+    # HONESTY RULE 3: **a case with ANY unmapped `core` row may not be graded DECLARED-PRESENT.**
     #
     # ⚠ THE `more than half` CLAUSE THAT STOOD HERE IS DELETED, AS INERT. It read
     # `elif core and len(core_unmapped) * 2 > len(core): NOT-ASSESSED`, and it could never be the
@@ -413,9 +346,9 @@ def grade(case: dict) -> dict:
     # it named -- which is `CLAUDE.md` §0.1 pt 2 exactly: an assertion that cannot observe the
     # failure it excludes. Found by the `W10` adversarial pass.
     #
-    # The strict clause was added after reading the first PLAYABLE list. Five of the twelve PLAYABLE verdicts in
+    # The strict clause was added after reading the first DECLARED-PRESENT list. Five of the twelve DECLARED-PRESENT verdicts in
     # the first run rested on one or two routed core rows with other core rows sitting
-    # unmapped beside them -- one case reached PLAYABLE on a single distinct probe with three
+    # unmapped beside them -- one case reached DECLARED-PRESENT on a single distinct probe with three
     # rows unrouted. That is the instrument certifying a season it never aimed at, which is the
     # flattering direction and the one nobody notices.
     #
@@ -429,18 +362,18 @@ def grade(case: dict) -> dict:
     elif not core_routed:
         # THE ZERO-CORE AND ZERO-DECLARED CASE. This is the only branch the strict clause below
         # cannot reach: a case with NO core rows at all has an empty `core_unmapped`, so nothing
-        # else would stop it reaching PLAYABLE on its non-core rows alone.
+        # else would stop it reaching DECLARED-PRESENT on its non-core rows alone.
         verdict = "NOT-ASSESSED"
     elif core_unmapped:
         verdict = "NOT-ASSESSED"
     # ⚠ `ASSUMED` LANDS HERE, WITH GAP. A row resting on an injected default nobody ratified is
     # a real dependency, and a case built entirely on such rows is DEGRADED — playable only if
-    # the defaults happen to be right. Grading it PLAYABLE is the flattering direction, and it is
+    # the defaults happen to be right. Grading it DECLARED-PRESENT is the flattering direction, and it is
     # what seven rows did until the `W10` adversarial pass read the `detail` strings.
     elif any(r["verdict"]["verdict"] in ("GAP", "NOT-REFUSED", "ASSUMED") for r in routed):
         verdict = "DEGRADED"
     else:
-        verdict = "PLAYABLE"
+        verdict = "DECLARED-PRESENT"
 
     return dict(
         id=case["id"], name=case.get("name", ""), scale=case.get("scale", ""),
@@ -460,6 +393,7 @@ def grade(case: dict) -> dict:
     )
 
 
+@TRACE.recording()      # `_gaps` and `_trace_counts` below are read off the trace this call keeps
 def main(kinds=("NPC", "ARC")) -> dict:
     report: dict = {}
     for kind in kinds:

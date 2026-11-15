@@ -225,12 +225,8 @@ def contest(w: World, rung: Optional[str], prize: Any, claimants: list[str],
     # each a doc, a sim module and a declared resolver (`d_sigma` for personal combat, `dice_pool`
     # for the other two). So this seam was never missing a degree ladder it had to invent; it was
     # failing to CALL the engine that owns the prize.
-    #
-    # Wiring those engines is out of this chain's scope (Jordan ruled only this proposal chain is
-    # in scope), so the refusal below NAMES the subsystem and its resolver instead of reporting one
-    # undifferentiated hole. That turns "the degree ladder's margin model is absent" -- which reads
-    # as a missing design -- into "this act belongs to `personal_combat`, whose resolver is
-    # `d_sigma`, and nothing connects them", which is a wiring statement somebody can act on.
+    # `contest` dispatches a prize to the subsystem `contest_subsystem(prize)` names; the provider is
+    # resolved from that manifest row below (`manifest.call`), never by a literal here.
     if depth >= max_depth:
         TRACE.decision("contest depth cap reached", "S39.3",
                        chose="typed error result returned to the caller",

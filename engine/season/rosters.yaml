@@ -344,12 +344,12 @@ rosters:
 
   remit_acts:
     source: "#353 §11 — the CLOSED five remit acts, plus `convene`"
-    open: true
+    open: false
     note: >-
       ⚠ H-52 turns on this roster. `ARCHITECTURE_V2.md` gates `open_case` on `remit:determine`,
       and #353's closed remit acts do not include opening a case — so V2 invented an eligibility.
-      The row stays open; adding a value here would close it by hardcoding, which is the move the
-      ruling above forbids.
+      The roster is closed (#353 §11's five acts plus `convene`), and H-52's case is not added to
+      it: a seventh value here would be the hardcoding the ruling above forbids.
     values: [issue, determine, confer, revoke, dispatch, convene]
 
   remit_default:
@@ -1470,22 +1470,21 @@ rosters:
       `04_CODE_ARCHITECTURE.md` §B.13 loader invariant 7 and `F.20b` (F13): *"the Event-kind roster is
       derived from every emission column, and the log accepts no other kind"*. v9 SC-02 `23`.
     note: >-
-      ⚠ THE KINDS THE FOLD EMITS WHEN NO VERB ROW DECLARES ONE -- the three that were body literals in
+      ⚠ THE KINDS THE FOLD EMITS WHEN NO VERB ROW DECLARES ONE -- the two that were body literals in
       `loop/resolve.py` (`F.20b`: *"a definition living as a literal in a body is what ID-12 refuses"*).
       `ineligible` is the kind of an act whose actor is gone (S27.1) or whose eligibility declined on a
       row that declares no kind for that clause; `refused` is the fallback of every other refusal
-      point; `attempt_refused` is S27.4's refusal of an attempt past the obstacle ceiling (it
-      declares no verb row). The CLOSED SET OF KEYS is what `loop/resolve.py` reads and the loader
+      point. The CLOSED SET OF KEYS is what `loop/resolve.py` reads and the loader
       checks (`data/rosters.py::check_fold_kinds`): a key the fold reads and this roster lacks, or a
       key nothing reads, refuses the load naming this row. The derived Event-kind roster
-      (`data/verbs.py::EVENT_KINDS`) is the union of every emission column and these three.
+      (`data/verbs.py::EVENT_KINDS`) is the union of every emission column and these two.
       `F.20b` also names `contest.resolved` as a third literal; the live fold emits none of that
-      name (a contest's outcome is the verb row's degree-keyed `emits:`), and `attempt.refused` is the
-      body literal it actually emits, so the roster declares what the code emits.
+      name (a contest's outcome is the verb row's degree-keyed `emits:`). A third key, `attempt_refused`
+      (`attempt.refused`, S27.4's refusal past the obstacle ceiling), was declared here until B03.55
+      deleted the fold's only emitter; nothing emits that kind now, and it is no longer a member.
     values:
       ineligible: "act.ineligible"
       refused: "act.refused"
-      attempt_refused: "attempt.refused"
 
   logged_kinds:
     source: >-
@@ -3603,6 +3602,21 @@ rosters:
       [ASSUMPTION; medium; Jordan to correct; revert: delete this row and `sigma.ADVANTAGE_SOURCES`'
       `effort` entry -- the channel then sums to 0.0 and `Scene.slots` counts every act as one slot].
     values: [effort]
+
+  # ── B03.68 (`09_WR_threadwork_module` edit 3): THE THREAD OPERATIONS ─────────────────────────────
+  # Appended last in `rosters:` (no threadwork block exists above to end; one ordering rule for additions, H-07).
+  thread_operations:
+    source: "`09_WR_threadwork_module` edit 3: the seven operations `systems/threadwork/sim/operations.py` has an entry point for (`attempt_leap`, `attempt_weaving`, `attempt_pulling`, `attempt_past_pulling`, `attempt_locking`, `attempt_dissolution`, `attempt_mending`)."
+    cite: "B03.68"
+    note: >-
+      WHAT A THREAD OPERATION IS: one named working a practitioner attempts on the thread, as an operation is one
+      task performed. The closed set of their names, read by `data/verbs.py`'s verb loader: a verb row that names
+      one through its `operation:` column names a member or the load refuses at import, as it refuses an
+      off-roster `beneficiary:`. NO SHIPPED ROW NAMES ONE YET -- the thread rows (CP-T07-03, -04, -11) are B35's.
+      The names are the roster's own spelling, not the oracle's labels (`operations.py` reports `Weaving`,
+      `Past-Oriented Pulling`, `Locking`): the oracle under `systems/` may not import `engine/season`, so it
+      reads no list from here and keeps its labels. `knot` joins when the `tie` / `knot` split lands (A-28, B35).
+    values: [leap, weave, pull, past_pull, lock, dissolve, mend]
 
 tables:
 

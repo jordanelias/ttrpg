@@ -23,10 +23,18 @@ Each loop asserts it checked something (CLAUDE.md 0.1 pt 2).
 
 from __future__ import annotations
 
+import pytest
 from ..harness import populated as POP
 from ..queries import cache, world_q
 from ..state.carriers import Tenure
 from ..trace_log import TRACE
+
+
+@pytest.fixture(autouse=True)
+def _recording():
+    """`TRACE` keeps rows only inside a window an instrument opens; these tests read them."""
+    with TRACE.recording():
+        yield
 
 
 def _rows(name):

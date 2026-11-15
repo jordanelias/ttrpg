@@ -5,17 +5,18 @@
 # (CLAUDE.md §8) instead of hardcoded inside the vector-audit skill — the vector-audit
 # sources CLASSES['action'] from here (token_class: action).
 #
-# ⚠️ STATUS: PROVISIONAL — NOT the authoritative domain-action registry (the `domain_actions`
-# home is unbuilt; see `blocked_on`). History and discussion: references/vocab_history.md
+# ⚠️ STATUS: PROVISIONAL — there is no domain-action registry to defer to: the `domain_actions`
+# contract row is retired (A-10: a faction's acts are persons' verbs via their seats; ED-IN-0232).
+# History and discussion: references/vocab_history.md
 #
 # Distinct from the `da.*` 5-tag OUTCOME taxonomy (da.antinomian_action, da.covert_betrayal,
 # da.diplomatic_alliance, da.economic_intervention, da.public_governance) which lives in
 # references/module_contracts.yaml as emitted Key types — those are the Keys domain-action
 # resolution EMITS; the verbs below are the actions a player SELECTS.
 status: provisional
-# awaiting/pending: this roster is provisional until the authoritative domain_actions
-# home is authored; regenerate or fold in then. ED-FA-0002 is OPEN (a forward dependency,
-# not a resolved basis) — reported as OPEN_INFO by the ED-citation gate, never a basis claim.
+# provisional: the strategic layer's acts are rows of `engine/season/verb_table.yaml`. ED-FA-0002
+# is CLOSED by its superseding row of 2026-10-06 (`registers/editorial_ledger_fa_archive.jsonl`);
+# `blocked_on` keeps its value as a record.
 blocked_on: ED-FA-0002
 token_class: action
 source_note: >-

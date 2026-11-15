@@ -55,8 +55,8 @@ the forcing-off control, and the two arms must read equal. A forcing position ad
 and applies it to the freshly built World before the chooser is made, the idiom `harness/arms.py` and
 `harness/soak.py` use for a fixture sweep.
 
-THE COMPOSITION is `populated.run`'s (`build_realm`, `SeasonDriver`, `make_chooser` over
-`resolvable_verbs()`, `draw_factory`, the caller-passed `contest_max_depth`),
+THE COMPOSITION is `populated.run`'s (`build_realm`, `SeasonDriver`, `probes.chooser` over
+`resolvable_verbs()`, the caller-passed `contest_max_depth`),
 repeated here rather than called because `populated.run` exposes no per-season boundary in the log
 -- the same reason `harness/soak.py` gives for keeping its own driver.
 
@@ -68,8 +68,9 @@ as refused and is reported apart (`corpus_run.graded_losses`); `attribute`'s `ma
 counts a graded loss as made). `executed_summary` is its own small summary, not `summarise`'s four
 classes. Without the flag the CLI prints exactly what it printed before. It mints no carrier.
 
-ARCS ARE OUT OF SCOPE BY DECISION (`ED-IN-0225`): this reads the cause graph the loop already writes
-and mints no carrier, field, Event kind or register row for an arc, story or thread.
+AN ARC HAS NO CARRIER (`ED-IN-0225`, 2026-09-13: no type, no rung, no tenure kind; the carrier is not
+to be built): this reads the cause graph the loop already writes and mints no carrier, field, Event
+kind or register row for an arc, story or thread.
 
 THE ESTIMATES (`estimates`, v9 IN-23 CARRY-STABILITY), read after each season beside the reading above
 and changing none of it: every person's own `queries/person_q.py::legitimacy` of every live seat-holder
@@ -88,15 +89,15 @@ import sys
 from collections import Counter, defaultdict
 
 from ..data.matrix import MATRIX, Step
-from ..decision import make_chooser
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..data.verbs import opportunity_key
 from ..queries.person_q import legitimacy, stability
 from ..state.carriers import Receipt, subject_of
 from ..state.gate import TENURE_CLOSED
-from ..state.ids import H, ROOT, draw_factory
+from ..state.ids import ROOT
 from .arc import _Records
 from .corpus_run import attempts, graded_losses, refusal_sets, seats
+from . import probes as P
 from .populated import COHORT_PREFIX, build_realm
 
 #: Every forcing setting this tree can run. `off` is the shipped loop; no `on` is built (see the
@@ -447,10 +448,7 @@ def drive(seed: int, seasons: int, arm: str, cap=None, on_season=None, world=Non
         raise ValueError(f"forcing arm {arm!r} is not built; this tree runs {ARMS}")
     w = build_realm(seed, cap) if world is None else world
     d = SeasonDriver(w)
-    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
-                      draw=draw_factory(w.world_seed if draw_seed is None else draw_seed,
-                                        lambda: w.tick))
+    ch = P.chooser(w, verbs=resolvable_verbs(), draw_seed=draw_seed)
     if wrap_chooser is not None:
         ch.driver = d
         ch = wrap_chooser(ch)

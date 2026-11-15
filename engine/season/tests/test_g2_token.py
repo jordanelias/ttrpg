@@ -19,6 +19,7 @@ Four claims, each with the control that stops it passing vacuously:
      have caught `w._rehome()` (`ED-IN-0206`), including the route through the `w.tenures` getter.
 """
 import ast
+import dataclasses
 import enum
 import functools
 import pathlib
@@ -375,8 +376,10 @@ def test_g2_deliberate_mutates_no_store_by_any_route(monkeypatch):
     # -- the SPACES arm (v10 REM-30, IN-47) ------------------------------------------------
     # The character sheet's spaces (`decision/sheet.py`) run INSIDE DELIBERATE, for the player's seated
     # person, through the play surface's dispatch. IN-47's falsifier: a space that writes a `Person` field
-    # outside an act's fold reddens THIS spy. The real spaces must leave it green; a planted space
-    # (below) must redden it, or the arm cannot observe what it excludes (§0.1 pt 2).
+    # outside an act's fold reddens THIS spy. The real spaces must leave it green. Two planted spaces (below)
+    # must each fail, or the arm cannot observe what it excludes (§0.1 pt 2): an assignment to the interior's own
+    # field is refused AT THE ASSIGNMENT (B03.58's freeze, `FrozenInstanceError`); a write THROUGH a carrier the
+    # interior shares with the store (a Tenure) is what only this spy sees, and reddens it.
     from engine.season.decision.sheet import (
         chronicle, creation_sheet, development_space, seat, take_ranked)
     from engine.season.harness.play_surface import dispatching_chooser
@@ -407,8 +410,25 @@ def test_g2_deliberate_mutates_no_store_by_any_route(monkeypatch):
         p.scar = {**p.scar, "g2_plant": 1}     # a space assigning a Person field outside any fold
         return space(p, v, s, ask_budget, auto)
 
+    # B03.58: the space is handed a frozen `PersonInterior`, so the planted assignment raises AT THE ASSIGNMENT
+    # (`FrozenInstanceError`) instead of being found afterwards by the digest. The stored person is untouched.
     w = P.tiny_world()
     ch, used = seated(w, plant)
+    with pytest.raises(dataclasses.FrozenInstanceError):
+        SeasonDriver(w).season(ch, question=None, contest_max_depth=w.fixtures.get("contest_max_depth"))
+    assert used["n"] >= 1
+    assert all("g2_plant" not in p.scar for p in w.persons.values()), "the planted write reached the stored person"
+
+    # The freeze stops an assignment to the interior's own fields and into its mappings; it does NOT stop a write
+    # THROUGH a carrier the interior shares with the store (`ledger`, `tenures`, `stance`). That route is the one the
+    # spy still has to see, so plant it: a seated person who holds a Tenure has its `until` assigned from the space.
+    def plant_through(space, p, v, s, ask_budget, auto):
+        assert p.tenures, "the seated person holds no Tenure; the shared-carrier plant has nothing to write"
+        p.tenures[0].until = 99                # a write THROUGH the interior onto the live Tenure
+        return space(p, v, s, ask_budget, auto)
+
+    w = P.tiny_world()
+    ch, used = seated(w, plant_through)
     with pytest.raises(AssertionError, match="DELIBERATE mutated"):
         SeasonDriver(w).season(ch, question=None, contest_max_depth=w.fixtures.get("contest_max_depth"))
     assert used["n"] >= 1

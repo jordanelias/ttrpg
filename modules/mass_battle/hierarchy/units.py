@@ -116,7 +116,7 @@ def unit_lures(unit):
 __all__ = ['Subunit', 'Unit', 'Order', 'Officer', 'clamp_command', 'unit_conceded', 'MB_ENVELOP_PATH', 'MB_SWEEP', 'FIELD_MOVEMENT', 'FIELD_CONTACT', 'CONTACT_REACH', 'COL_WIDTH',
            'MB_FACING_MODEL', 'MB_FACING_ATTENTION', 'MB_FACING_SLEW_BASE', 'MB_FACING_FOV_GATE', 'MB_FACING_ROUT',
            'MB_ROLE_INSTRUCTIONS', 'ROLE_INSTRUCTION_PRIMITIVES', 'unit_lures',
-           'CELL_RADIUS', 'standoff_from_reach', 'standoff', 'MB_REACH_FACING_GATE', 'resolve_toi_and_commit', 'separate_all_bodies', 'turn_to_face_aggressors']
+           'CELL_RADIUS', 'standoff_from_reach', 'standoff', 'resolve_toi_and_commit', 'separate_all_bodies', 'turn_to_face_aggressors']
 
 # [Stage A — true-adjacency halt] Per-cell physical-body radius, distinct from core.contact._cell_radius
 # (a whole-FORMATION bounding radius used by the FIELD_CONTACT centroid bound). Grounded the same way
@@ -134,7 +134,7 @@ def standoff(troop_type_a, troop_type_b):
     """[Stage A] True-adjacency stand-off distance (lattice units) between a cell of troop_type_a and
     a cell of troop_type_b: (CELL_RADIUS + reach(a)) + (CELL_RADIUS + reach(b)). Two Short-Reach cells
     stand off 2.0 lattice units apart; Long vs Short, 3.0. Used by find_contacts (core/contact.py) — a
-    generous, non-facing-gated outer bound (see _effective_reach) — so contact never lags behind the
+    generous, non-facing-gated outer bound (the facing-gated test is geometry.reach_reaches) — so contact never lags behind the
     (tighter, facing-gated) movement halt below."""
     return standoff_from_reach(reach_for(troop_type_a), reach_for(troop_type_b))
 
@@ -159,44 +159,6 @@ def cell_bodies_for(atom, reach_front):
         fv = _cell_heading(atom, (orig_r, orig_c))
         bodies.append(cellbody_from(float(r), float(c), (float(fv[0]), float(fv[1])), reach_front=reach_front))
     return bodies
-
-
-# [TOI refactor] Reach bonus only projects within the forward FOV arc (reuses Stage B's FOV_HALF_DEG) --
-# default ON, no-op unless FIELD_MOVEMENT (only the new cross-side TOI resolve consults this).
-MB_REACH_FACING_GATE = (_hu_os.environ.get('MB_REACH_FACING_GATE', '1') == '1')
-
-
-def _effective_reach(base_reach, facing_vec, dr, dc):
-    """[TOI refactor] A cell's weapon reach only threatens what's within its forward FOV arc -- a cell
-    facing away from a given enemy fights that enemy at CELL_RADIUS-only (no reach bonus) until its
-    facing catches up (ties the reach-advantage mechanic to Stage B's facing/FOV model instead of
-    treating reach as an omnidirectional bubble). dr,dc: direction from this cell toward the enemy
-    (need not be normalized); facing_vec: this cell's current (pre-tick) facing."""
-    if base_reach <= 0 or not MB_REACH_FACING_GATE:
-        return base_reach
-    fr, fc = facing_vec
-    fmag = math.hypot(fr, fc)
-    amag = math.hypot(dr, dc)
-    if fmag < 1e-9 or amag < 1e-9:  # [canonical: epsilon: float magnitude guard]
-        return base_reach
-    cos_a = max(-1.0, min(1.0, (dr * fr + dc * fc) / (amag * fmag)))
-    angle_deg = math.degrees(math.acos(cos_a))
-    return base_reach if angle_deg <= FOV_HALF_DEG else 0.0
-
-
-def _reach_throttle(reach_eff_a, reach_eff_b):
-    """[TOI refactor] Reach-asymmetric closing-budget throttle for one cross-side pair. The side with
-    the LARGER effective threat radius (CELL_RADIUS + facing-gated reach) is capped to a SMALLER share
-    of this tick's closing motion: it needs to close less ground to bring its longer weapon to bear, so
-    it plants its formation first, while the shorter-reach side must cover the rest of the gap to bring
-    its own (shorter) weapon into range. Returns (rho_a, rho_b), each in (0,1]; the larger side is
-    always 1.0 (free to use its full proposed motion, subject to the TOI solve itself). Equal reach ->
-    (1.0, 1.0) -- the plain symmetric case, unchanged in spirit from a shared-t TOI."""
-    if reach_eff_a > reach_eff_b:
-        return (reach_eff_b / reach_eff_a, 1.0)
-    if reach_eff_b > reach_eff_a:
-        return (1.0, reach_eff_a / reach_eff_b)
-    return (1.0, 1.0)
 
 
 def _pair_toi_scale(start_a, start_b, proposed_a, proposed_b, rho_a, rho_b, target):
@@ -429,9 +391,6 @@ class Subunit:
     _prev_offsets: Dict[Tuple[int, int], int] = field(default_factory=dict)
     _prev_offsets_c: Dict[Tuple[int, int], int] = field(default_factory=dict)
     _prev_facings: Dict[Tuple[int, int], Tuple[int, int]] = field(default_factory=dict)
-    # v13: cells flagged as "formation-broken" (failed discipline check on collision).
-    # Used for diagnostics; facing is already corrupted to midpoint vector in cell_facing_vec.
-    merged_cells: Set[Tuple[int, int]] = field(default_factory=set)
     # v13: cells that actually moved this turn (vs halted or already-at-target).
     # Used by resolve_cross_side_contention to distinguish moving vs static cells.
     # Reset at top of advance_cells. [canonical: Jordan design 2026-05-12 — speed priority]
@@ -1100,7 +1059,7 @@ class Subunit:
           * `_cell_target` (the close-ranks fill prescription) — redistributed over the new ids
             exactly as `cell_troops` is, because it IS a prescribed density and the prescription
             follows the shape.
-          * transient per-tick state (`halted_cells`, `merged_cells`, `cell_last_speed`,
+          * transient per-tick state (`halted_cells`, `cell_last_speed`,
             `_speed_accum`) — CLEARED. A body that has just re-formed is not still holding a halt,
             a merge, or a velocity accumulator belonging to a formation it no longer has. Clearing
             is the conservative choice and the only one that cannot carry a dead id forward.
@@ -1118,7 +1077,7 @@ class Subunit:
         if not new_ids:
             self.cell_offsets = {}; self.cell_offsets_c = {}; self.cell_facing_vec = {}
             self.cell_last_speed = {}; self._speed_accum = {}; self._cell_target = {}
-            self.halted_cells = set(); self.merged_cells = set()
+            self.halted_cells = set()
             return
 
         def _mean(d, default=0.0):
@@ -1146,7 +1105,6 @@ class Subunit:
         self.cell_last_speed = {}
         self._speed_accum = {}
         self.halted_cells = set()
-        self.merged_cells = set()
 
     def _rekey_node_state(self, new_ids):
         """Mid-battle re-key of node state to a new pattern id set (movement audit finding 1.5,

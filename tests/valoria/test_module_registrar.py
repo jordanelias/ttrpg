@@ -215,7 +215,8 @@ print(repr((role, in_rows, before, construct())))
 _HOST_NEEDS = """
 from engine.season.queries import world_q
 from engine.season.loop import matter as matter_step
-needs = list(world_q.QUERY_ENTRIES) + list(matter_step.STEP_CALLS)
+from engine.season.seam.wrappers import sigma
+needs = list(world_q.QUERY_ENTRIES) + list(matter_step.STEP_CALLS) + list(sigma.QUERY_ENTRIES)
 """
 
 

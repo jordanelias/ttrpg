@@ -174,12 +174,14 @@ scales:
       ADDED 2026-09-05 on Jordan's correction — the first draft of this roster missed it. The design
       surface is substantial and explicit: `settlement_layer_v30.md`, `settlement_generator_v1.md`,
       `settlements_currency_v1.md`, `march_layer_v30.md`, `governance_play_redesign_v1.md`,
-      `scale_hierarchy_v1.md`. `references/module_contracts.yaml` declares `domain_actions` and
-      `settlement_economy` — BOTH with `doc: null`, two of the nine contracts §6 counts as
-      unimplementable. The loop has `Site`, `stores` and `condition`; `found`, `build`, `restore` and
-      `work` are declared in `verb_table.yaml`; in the realm only `restore` executes (cohorts mending
-      their own settlement's fabric since `24f`), while `found`, `build` and `work` are formed and
-      refused because no computed act declares a works (`H-165`); no domain-action mechanism exists.
+      `scale_hierarchy_v1.md`. The settlement scale's acts are the MATERIAL verb rows of
+      `verb_table.yaml` (`found`, `build`, `work`, `tend`, `restore`, `requisition`);
+      `references/module_contracts.yaml` declares no `domain_actions` or `settlement_economy`
+      contract (both retired: A-10, ED-IN-0232). The loop has `Site`, `stores` and `condition`; `found`, `build`, `restore` and
+      `work` are declared in `verb_table.yaml`; none of the four executes in the shipped realm: `restore` forms only
+      on a Site below a floor and no Site crosses one (wear-0 dwellings and garrisons; no wound, H-235/H-236),
+      and `found`, `build` and `work` are formed and refused because no computed act declares a works
+      (`H-165`); no domain-action mechanism exists.
 
   - scale:    "investigations / detective / interactive fiction"
     conjunct:  R-04.c7
