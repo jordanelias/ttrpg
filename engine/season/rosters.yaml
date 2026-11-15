@@ -344,12 +344,12 @@ rosters:
 
   remit_acts:
     source: "#353 §11 — the CLOSED five remit acts, plus `convene`"
-    open: true
+    open: false
     note: >-
       ⚠ H-52 turns on this roster. `ARCHITECTURE_V2.md` gates `open_case` on `remit:determine`,
       and #353's closed remit acts do not include opening a case — so V2 invented an eligibility.
-      The row stays open; adding a value here would close it by hardcoding, which is the move the
-      ruling above forbids.
+      The roster is closed (#353 §11's five acts plus `convene`), and H-52's case is not added to
+      it: a seventh value here would be the hardcoding the ruling above forbids.
     values: [issue, determine, confer, revoke, dispatch, convene]
 
   remit_default:
