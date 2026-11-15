@@ -106,7 +106,9 @@ from __future__ import annotations
 import sys
 from bisect import bisect_right
 from collections import Counter, defaultdict
+from typing import Any, Callable
 
+from ...substrate import composition
 from ..data.matrix import MATRIX
 from ..data.requires import UNKNOWN, binding_from_act, evaluate
 from ..data.rosters import (CLAIM_SOURCES, QUESTION_AGGREGATION, QUESTION_SOURCES, RECORD_KINDS,
@@ -592,6 +594,104 @@ def instrumented_season(w, seasons: int) -> dict:
             "hash": w.content_hash()}
 
 
+#: The `sys.monitoring` tool id `engines_entered` takes. `PROFILER_ID` is the slot the interpreter
+#: reserves for a profiler, which is what an entry count is; `coverage` holds `COVERAGE_ID` and a debugger
+#: `DEBUGGER_ID`, so a coverage run does not take it.
+_TOOL = getattr(getattr(sys, "monitoring", None), "PROFILER_ID", None)
+#: What the ENGINES block prints for a `kind: value` row: it names a constant, has no code object, and so
+#: has no entry to count.
+VALUE_ROW = "value"
+
+
+def monitoring_blocked() -> str | None:
+    """Why `engines_entered` cannot count here, or `None` when it can: `sys.monitoring` is Python 3.12's,
+    and its tool id may be held by another tool. Read at the moment of the call, so the answer is the
+    run's, not the import's."""
+    if _TOOL is None:
+        return f"sys.monitoring needs Python 3.12 or later (this is {sys.version_info.major}.{sys.version_info.minor})"
+    if sys.monitoring.get_tool(_TOOL) is not None:
+        return f"the monitoring tool id is held by {sys.monitoring.get_tool(_TOOL)!r}"
+    return None
+
+
+def engines_entered(run: Callable[[], Any]) -> tuple[Any, dict | None]:
+    """`run()`'s value, and `{role: entries}` for every row of `engine.substrate.composition.ROLES`: the
+    number of times the row's resolved target began executing during `run()` (`PY_START`, enabled on that
+    code object alone, so nothing else is watched and the world is not touched). A `kind: value` row has no
+    code object and reads `VALUE_ROW`. Where the interpreter is older than 3.12 or the tool id is taken,
+    `run()` is still run and the counts are `None` (`monitoring_blocked` says why).
+
+    The rows are resolved BEFORE the watching starts, so an import is never counted as an entry; and
+    the tool id is freed in a `finally`, so a `run()` that raises leaves it free."""
+    if monitoring_blocked() is not None:
+        return run(), None
+    mon = sys.monitoring
+    counts: dict = {}
+    roles_of: dict = defaultdict(list)           # code object -> the roles that resolve to it
+    for role in sorted(composition.ROLES):
+        code = getattr(composition.require(role), "__code__", None)
+        if code is None:
+            counts[role] = VALUE_ROW
+        else:
+            counts[role] = 0
+            roles_of[code].append(role)
+
+    def entered(code, _offset):
+        for role in roles_of[code]:
+            counts[role] += 1
+
+    try:
+        mon.use_tool_id(_TOOL, "valoria-aperture")
+    except ValueError:                           # taken between the check above and here
+        return run(), None
+    try:
+        mon.register_callback(_TOOL, mon.events.PY_START, entered)
+        for code in roles_of:
+            mon.set_local_events(_TOOL, code, mon.events.PY_START)
+        value = run()
+    finally:
+        for code in roles_of:
+            mon.set_local_events(_TOOL, code, 0)
+        mon.register_callback(_TOOL, mon.events.PY_START, None)
+        mon.free_tool_id(_TOOL)
+    return value, counts
+
+
+def engine_lines(m: dict) -> list:
+    """The ENGINES block of one world's `report`: every composition row, zeros included, sorted by role,
+    then the total. A world measured without the counts says why instead of printing zeros."""
+    head = "\n  ENGINES (composition rows entered in this run)"
+    counts = m["engines"]
+    if counts is None:
+        return [head, f"    not counted: {m['engines_why']}"]
+    rows = [(r, c) for r, c in sorted(counts.items())]
+    out = [head] + [f"    {r:<28}{c:>6}" for r, c in rows]
+    counted = [c for _, c in rows if c != VALUE_ROW]
+    out.append(f"    rows entered {sum(1 for c in counted if c)} of {len(counted)}")
+    return out
+
+
+def pooled_engine_lines(ms: list) -> list:
+    """Per row, the number of seeds whose run entered it (`m["engines"]` of each world in `ms`); a seed
+    measured without the counts is named and left out of the denominator."""
+    head = "\n  ENGINES, POOLED — per composition row, the seeds whose run entered it"
+    have = [m for m in ms if m["engines"] is not None]
+    if not have:
+        return [head, f"    not counted: {ms[0]['engines_why']}"]
+    roles = sorted(have[0]["engines"])
+    out = [head]
+    for r in roles:
+        if have[0]["engines"][r] == VALUE_ROW:
+            out.append(f"    {r:<28}{VALUE_ROW:>6}")
+        else:
+            n = sum(1 for m in have if m["engines"][r])
+            out.append(f"    {r:<28}{n:>3} of {len(have)} seeds")
+    skipped = [m["seed"] for m in ms if m["engines"] is None]
+    if skipped:
+        out.append(f"    seeds not counted: {skipped} ({ms[0]['engines_why']})")
+    return out
+
+
 def measure_world(build, seed: int = 0, seasons: int = 1) -> dict:
     """One world, both arms. `build(seed)` is called twice: once for the CONTROL, run through
     `populated.run` untouched, and once for the MEASURED arm, run through `instrumented_season`."""
@@ -609,10 +709,12 @@ def measure_world(build, seed: int = 0, seasons: int = 1) -> dict:
     granted = {pid: sorted({a for t in w.persons[pid].tenures
                             if t.kind == "hold" and t.live and t.object in w.offices
                             for a in t.granted_acts}) for pid in held}
-    run = instrumented_season(w, seasons)
+    # THE ENGINES READING wraps the seasons alone: the control arm and the build are outside it.
+    run, engines = engines_entered(lambda: instrumented_season(w, seasons))
     return {"seed": seed, "seasons": seasons, "persons": persons, "survivors": len(w.persons),
             "seats": held, "depth": depth, "posts": posts, "granted": granted,
-            "eligible": elig, **run,
+            "eligible": elig, **run, "engines": engines,
+            "engines_why": None if engines is not None else monitoring_blocked() or "the tool id was taken",
             "control": {"acts": control["acts"], "claim_sources": control["claim_sources"],
                         "hash": wc.content_hash()}}
 
@@ -969,6 +1071,7 @@ def pooled_report(results: list) -> list:
     for v in verbs:
         out.append(_verb_line(v, vc[v], foldable))
     out.append(_verb_total_line(vc))
+    out.extend(pooled_engine_lines(ms))
     pm = pool_worlds(ms)
     out.extend(_refusal_blocks(pm))
     out.extend(cr14_blocks(pm))
@@ -1041,6 +1144,7 @@ def report(res: dict) -> list:
             out.append(_verb_line(v, vc[v], foldable))
         out.append(_verb_total_line(vc))
         out.extend(pools_lines(m))
+        out.extend(engine_lines(m))
         # -- why each refusal refused (REM-11) ----------------------------------------------
         out.extend(_refusal_blocks(m))
         # -- questions by source ----------------------------------------------------------

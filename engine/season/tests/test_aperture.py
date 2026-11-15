@@ -48,6 +48,7 @@ from types import SimpleNamespace
 
 import pytest
 
+from ...substrate import composition
 from ..data.matrix import Step, WriteClass
 from ..data.verbs import VERB_TABLE
 from ..harness import aperture as A
@@ -56,6 +57,7 @@ from ..harness import probes as P
 from ..harness.corpus_run import (_attribute_acts, attempts, attribute, foreign_kinds,
                                   graded_loss, graded_losses, unrowed_acts)
 from ..loop.driver import SeasonDriver, mint_token
+from ..queries.inputs import FortInput
 from ..seam import Resolution
 from ..state.carriers import Act, Claim, Said
 from .test_fi01_graded_inquiries import ACTOR as FI_ACTOR
@@ -755,3 +757,52 @@ def test_cr18_the_pools_line_reads_the_rolled_pool_and_separates_persons_not_sea
     # B01a.99 (every person's attributes are drawn, 1 to 6 by `generated_attribute_range`, a population change): the realm's
     # season-one rolls read every pool 1 to 6 (was `{default, 5}`), so the reader separates persons, not seasons.
     assert {p for per in realm["pools"].values() for c in per.values() for _, p in c} == {1, 2, 3, 4, 5, 6}
+
+@pytest.mark.skipif(A.monitoring_blocked() is not None,
+                    reason="engines_entered needs Python 3.12 or later and a free monitoring tool id")
+def test_the_engines_reading_counts_an_entry_it_can_see():
+    """CI-11. One composition row is entered once, through its role, inside `engines_entered`: that role
+    reads 1, another row reads 0, and the counts exist on this interpreter. Remove the
+    `set_local_events` call and the entered role reads 0, which is the falsifier."""
+    seen = []
+
+    def one_wall():
+        seen.append(composition.require("settlements.fortification")(FortInput((1,), 2)))
+        return "ran"
+
+    value, counts = A.engines_entered(one_wall)
+    assert value == "ran" and seen == [0.5], "the run was not made, or not returned"
+    assert counts is not None, f"the counts are None on a Python that supports them: {A.monitoring_blocked()}"
+    assert counts["settlements.fortification"] == 1
+    assert counts["settlements.housing"] == 0
+    assert set(counts) == set(composition.ROLES), "every composition row is printed, zeros included"
+    assert A.monitoring_blocked() is None, "the tool id was not freed"
+    # the block prints every row and the total
+    lines = A.engine_lines({"engines": counts, "engines_why": None})
+    assert sum(1 for ln in lines if ln.startswith("    settlements.")) == sum(
+        1 for r in counts if r.startswith("settlements."))
+    assert lines[-1].strip() == f"rows entered 1 of {len(counts)}"
+
+
+def test_the_engines_reading_says_why_it_did_not_count(monkeypatch):
+    """Where the monitoring is unavailable the run is still made, the counts are `None` and the block
+    says why instead of printing a column of zeros."""
+    monkeypatch.setattr(A, "_TOOL", None)
+    value, counts = A.engines_entered(lambda: 7)
+    assert (value, counts) == (7, None)
+    why = A.monitoring_blocked()
+    assert why and "3.12" in why
+    lines = A.engine_lines({"engines": None, "engines_why": why})
+    assert any(why in ln for ln in lines)
+
+
+def test_the_engines_reading_frees_its_tool_id_when_the_run_raises():
+    if A.monitoring_blocked() is not None:
+        pytest.skip("engines_entered needs Python 3.12 or later and a free monitoring tool id")
+
+    def boom():
+        raise RuntimeError("the run failed")
+
+    with pytest.raises(RuntimeError):
+        A.engines_entered(boom)
+    assert A.monitoring_blocked() is None
