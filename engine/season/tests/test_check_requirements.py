@@ -51,6 +51,7 @@ def test_k_expression_naming_only_import_is_refused(tmp_path, monkeypatch, capsy
 
 
 def test_k_expression_needs_every_name_not_one(tmp_path, monkeypatch, capsys):
+    """Each name must be found; the boolean is not evaluated (an `and` of names in two tests passes here)."""
     both = ["python", "-m", "pytest", TEST_FILE, "-k",
             "a_met_row_without_a_reading and a_clean_scratch_file"]
     rc, out = refused(tmp_path, monkeypatch, capsys, one(both))

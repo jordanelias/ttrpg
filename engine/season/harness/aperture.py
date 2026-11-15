@@ -795,11 +795,11 @@ def built_out_lines(m: dict) -> list:
     sorted, then the total and the FOUGHT FIELDS line. A reading, never a threshold."""
     rows = m["built_out"]
     out = ["\n  BUILT OUT (a verb with a clean execution -- made, not refused -- whose Events hold every kind "
-           "of its band and which wrote where its row declares writes; `via` = clean executions through a seat)"]
+           "of its band and which wrote where its row declares writes, in ONE execution (`one`: `kinds` and `wrote` can each be yes through different acts); `via` = clean executions through a seat)"]
     for v in sorted(rows):
         c = rows[v]
         out.append(f"    {v:<16} clean {c['clean']:>4}  kinds {'yes' if c['kinds'] else 'no ':<3}  "
-                   f"wrote {'yes' if c['wrote'] else 'no ':<3}  via {c['via']:>4}  "
+                   f"wrote {'yes' if c['wrote'] else 'no ':<3}  one {'yes' if c['one'] else 'no ':<3}  via {c['via']:>4}  "
                    f"{'BUILT OUT' if is_built_out(c) else '-'}")
     out.append(f"    built out {sum(1 for c in rows.values() if is_built_out(c))} of {len(VERB_TABLE)}")
     f = m["fought"]

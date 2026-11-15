@@ -239,7 +239,8 @@ TENURE_CAUSES = ("death", "term", "revocation", "claim", "conquest", "other")
 TENURE_EVENT_KINDS = ("tenure.opened", "tenure.closed", "succession.claimed")
 
 #: The acts whose Events name their own cause, by verb row (`verb_table.yaml`). An act with another
-#: verb, or none (MATTER), is read `term` when it closed a tenure and `other` otherwise.
+#: verb is read `term` when its `tenure.closed` came later than the act (MATTER's maturing of a term it declared),
+#: else `other`; an act-less `tenure.closed` is `term` too.
 TENURE_CAUSE_OF_VERB = {"revoke": "revocation", "succeed": "claim", "seize": "conquest"}
 
 #: Column 3's terminal Event kinds: what happened to a person, a seat, a field, a matter, a telling or a body.
@@ -306,7 +307,7 @@ def tenure_changes_by_cause(w) -> dict:
     caused it, by verb (`TENURE_CAUSE_OF_VERB`); else a `tenure.closed` is TERM when it came LATER than
     the act it names (MATTER's maturing of a declared term closes with `causes=[term.declared_by]`, the
     declaring act's id, so `_act_of` ties it to that act and only its tick tells it from a close the act
-    made itself); else `other`."""
+    made itself; with no act at all a `tenure.closed` is `term` too); else `other`."""
     died = {(tuple(e.causes), e.emitted_at) for e in w.log if e.kind == "person.died"}
     act_of = _act_of(w)
     first_at: dict = {}

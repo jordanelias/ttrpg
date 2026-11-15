@@ -239,16 +239,15 @@ rows:
         expects: "three seeds green; the witness-cut control reads 0"
         holds: "yes"
         reading:
-          tree: "1c9238db4c46af9c92a842b1b11d0f2b3d499bdf"
+          tree: "72c288615e7f65ec683b4edbefa9fff8ff3bdf1f"
           date: "2026-11-15"
           seed: "0, 1, 2"
           seasons: 1
-          line: "4 passed, 7 deselected in 24.94s"
+          line: "4 passed, 7 deselected in 23.58s"
           control: >-
             `test_r01_control_with_witness_cut_no_act_is_so_occasioned` (seed 0, witness cut): its
-            assertion `hit == 0` passed, one of the four; with the cut 105 `claim_landed` acts
-            were still examined (`landed > 0` is asserted, so the zero is not by construction), against
-            164 of 681 in the shipped arm (read after the close's edit, seed 0)
+            assertions `landed > 0` (a `claim_landed` question still forms with the cut, so the zero is not by
+            construction) and `hit == 0` passed, one of the four
           does_not_show: >-
             one season a seed; the shipped policy `probes.chooser` and not the game's play; a count
             above 0, not a share; run with `-p no:cacheprovider` added
@@ -341,14 +340,14 @@ rows:
           is among them as `test_u2_the_one_round_arm_resolves_acts`, which asserts the arm resolves acts:
           its equality with the pre-tick loop was measured once, 2026-09-11, and is not kept)
         argv: ["python", "-m", "pytest", "engine/season/tests", "-q", "-k", "test_u2_"]
-        expects: "all pass, the one-lap control among them"
+        expects: "all pass, the one-lap arm among them"
         holds: "yes"
         reading:
-          tree: "1c9238db4c46af9c92a842b1b11d0f2b3d499bdf"
+          tree: "72c288615e7f65ec683b4edbefa9fff8ff3bdf1f"
           date: "2026-11-15"
           seed: "per test"
           seasons: "per test"
-          line: "5 passed in 15.38s"
+          line: "5 passed in 10.96s"
           control: >-
             the one-lap arm resolves acts (`test_u2_the_one_round_arm_resolves_acts`), one of the five; it is no
             comparison against the pre-tick loop (the census that made it one was deleted, B02.01 D)

@@ -665,7 +665,9 @@ def _resolve_pytest(args: list[str], cid: str) -> str | None:
     """`pytest <test paths> [-k <expr>]`: each path exists; with `-k`, every name not under a
     `not` is a substring (any case, as pytest matches) of a `def test_...`, a `class ...` or a
     file name in the files named (a directory stands for the test files under it). An expression
-    that is only `not <name>` selects by exclusion and asks no name to exist."""
+    that is only `not <name>` selects by exclusion and asks no name to exist. The boolean is NOT
+    evaluated: `a and b` passes when each name is found, though in two different tests pytest would
+    select none; every shipped expression is an `or`."""
     k = args.index("-k") if "-k" in args else None
     rest = args if k is None else args[:k] + args[k + 2:]
     paths = [a for a in rest if a.endswith(".py") or "/" in a.split("::")[0]]

@@ -6,9 +6,10 @@ policy (`probes.chooser` over `resolvable_verbs()`).
 
 R-01.b, read here: an act formed from a `claim_landed` question, where the Event the question walks
 back to (`world_q.occasioned_by`) was emitted by an act of a DIFFERENT person. The control removes the
-cause: with `SeasonDriver.witness` returning 0 no claim is deposited, no `claim_landed` question forms,
-and the count must read 0. A count that is positive with the witness cut would mean the counter reads
-something other than the chain.
+cause: with `SeasonDriver.witness` returning 0 no claim is deposited through the witness, yet
+`claim_landed` questions still form from the other deposit paths (`landed > 0` is asserted, so the zero
+is not by construction), and the count of those walking back to another person's act must read 0. A
+count that is positive with the witness cut would mean the counter reads something other than the chain.
 
 R-02.a, read here: withholding what acts observe changes the acts that follow. One season at the shipped
 fixtures and one with `observation_deposit_mode` swept to `none` (no act deposits what it read) give two

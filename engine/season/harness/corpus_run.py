@@ -42,6 +42,7 @@ polarity rule sends zero evidence to the verdict AGAINST the thing measured, and
 onto `settlement` would manufacture a pass for the largest single block of the corpus.
 """
 from __future__ import annotations
+import argparse
 import string
 import sys
 from collections import Counter, defaultdict
@@ -1308,16 +1309,15 @@ def main(seed: int = 0, seasons_cap: int | None = None) -> int:
 
 
 def parse_argv(argv: list[str]) -> tuple[list[int], int | None]:
-    """`[seed] [--seasons N]`: the positional seed as before; `--seasons N` caps every case at N seasons."""
-    argv, cap = list(argv), None
-    if "--seasons" in argv:
-        i = argv.index("--seasons")
-        if i + 1 >= len(argv):
-            raise SystemExit("--seasons needs a number of seasons")
-        cap = int(argv[i + 1]); del argv[i:i + 2]
-        if cap < 1:
-            raise SystemExit("--seasons must be at least 1")
-    return [int(a) for a in argv], cap
+    """`[seed] [--seasons N]`: the positional seed as before; `--seasons N` caps every case at N seasons.
+    A bad value, a second seed or a missing number exits with argparse's message."""
+    ap = argparse.ArgumentParser(prog="corpus_run", add_help=False)
+    ap.add_argument("seed", type=int, nargs="?")
+    ap.add_argument("--seasons", type=int)
+    ns = ap.parse_args(argv)
+    if ns.seasons is not None and ns.seasons < 1:
+        ap.error("--seasons must be at least 1")
+    return ([] if ns.seed is None else [ns.seed]), ns.seasons
 
 
 if __name__ == "__main__":
