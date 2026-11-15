@@ -90,7 +90,7 @@ def test_the_engine_series_is_read_from_its_one_owner():
 
 def test_a_missing_series_refuses(tmp_path):
     import pytest
-    for body in ('other_key: "x"\n', 'engine_series: 4.7\n', ''):
+    for body in ('other_key: "x"\n', 'engine_series: 1.0\n', ''):
         bad = tmp_path / 'engine_series.yaml'
         bad.write_text(body)
         with pytest.raises(SystemExit) as exc:

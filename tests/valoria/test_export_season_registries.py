@@ -107,3 +107,16 @@ def test_a_value_json_would_coerce_is_refused_naming_the_file(tmp_path):
             assert VERB_TABLE in str(exc), f'{what}: refused, but not naming the file'
         else:
             raise AssertionError(f'{what} was exported instead of refused')
+
+
+def test_the_overrides_seam_refuses_to_write_the_artifact(tmp_path):
+    doctored = tmp_path / 'verb_table.yaml'
+    doctored.write_text((Path(ROOT) / VERB_TABLE).read_text(encoding='utf-8'), encoding='utf-8')
+    before = Path(esr.OUT).read_text(encoding='utf-8')
+    try:
+        esr.main([], overrides={VERB_TABLE: doctored})
+    except SystemExit:
+        pass
+    else:
+        raise AssertionError('a build with overrides was allowed to run')
+    assert Path(esr.OUT).read_text(encoding='utf-8') == before

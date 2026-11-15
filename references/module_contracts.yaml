@@ -184,7 +184,7 @@ modules:
       godot: no-oracle
       port_rank: 8
       parity: state-hash
-      note: Procedures B/C/D/E; npc_ai.py is a 28-line stub. The in-12 hub — no oracle.
+      note: Procedures B/C/D/E. The in-12 hub — no oracle.
 
   - module: npc_memory
     registry_system: "npc_memory"   # Key Type Registry vocabulary
@@ -461,11 +461,11 @@ modules:
       - "scale_transitions_v30 §3.4 [READ: 2026-06-10]"
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
     wiring:
-      build: gated
+      build: live
       godot: python-oracle
       port_rank: 1
       parity: seam-io
-      note: "`modules/social_contest/roll.py` (`roll`, `obstacle`) is the running entry, reached through composition role `social_contest.roll` (verb `tell`; the `a standing`, `a proposition` and `a matter` prizes). `obstacle` is also its own composition row (`social_contest.obstacle`, a query) and is read by the sigma wrapper's `odds_of` and `believed_chance` during deliberation, outside a formed contest. BUILD gated: `roll` runs only when a contest over one of those prizes forms."
+      note: "`modules/social_contest/roll.py` (`roll`, `obstacle`) is the running entry, reached through composition role `social_contest.roll` (verb `tell`; the `a standing`, `a proposition` and `a matter` prizes). `obstacle` is also its own composition row (`social_contest.obstacle`, a query) and is read by the sigma wrapper's `odds_of` and `believed_chance` during deliberation, outside a formed contest. `roll` runs only when a contest over one of those prizes forms (gated); `obstacle` is entered every season, so the row reads live."
 
   - module: mass_battle
     aliases: ["Mass Combat"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
@@ -537,7 +537,7 @@ modules:
       - "systems/overview/sim/ms_track.py, systems/overview/sim/accounting.py [READ: 2026-07-29]"
       - "engine/params/core.md §MS Baseline Decay (PP-255) [READ: 2026-07-29]"
     wiring:
-      build: unwired
+      build: deferred
       godot: no-oracle
       port_rank: 8
       parity: state-hash

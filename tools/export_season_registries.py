@@ -114,6 +114,8 @@ def build(overrides=None) -> dict:
 
 def main(argv, overrides=None):
     out = OUT
+    if overrides and '--check' not in argv:
+        raise SystemExit('overrides is a --check seam: building with it would write a doctored artifact.')
     data = build(overrides)
     text = json.dumps(data, indent=2, sort_keys=False) + '\n'
     if '--check' in argv:
