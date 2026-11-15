@@ -128,7 +128,7 @@ def _req_confer(w: "World", a: "Act") -> bool:
     `_eff_confer` writes two Tenures that are somebody else's -- it OPENS the conferee's `hold` and,
     on a held office, CLOSES the incumbent's -- and the gate now refuses both unless a basis admits
     them (`04 §C.2` F3). A precondition that admitted what the gate refuses would turn a refusal
-    that EMITS (`confer.refused`, `§E2`) into a `NotYours` that kills the season, so this asks the
+    that EMITS (`confer.refused`, `§E2`) into a gate refusal the fold emits unnamed (B03.76), so this asks the
     gate's own predicates, not a copy of them:
       * the CONFERRAL basis -- the seat the act exercises (`Act.via`) has purview over the office
         conferred (`may_fill`: ruling (4), `04:332`'s *"every purview walk uses `via.scope`"*);

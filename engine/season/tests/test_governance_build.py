@@ -1260,7 +1260,7 @@ def test_13f_a_sole_holder_re_stamping_their_own_office_refuses_and_does_not_cra
     # MUTATION: the retired precondition, run through the SAME pipeline on a FRESH world --
     # reproduces the uncaught crash this fix closes. `others` (not `held`) is the retired name.
     import engine.season.loop.predicates as PR
-    from ..state.gate import NotYours
+    from ..trace_log import TRACE
 
     def retired_req_establish(w, a):
         off = PR.office_described_by(a)
@@ -1282,9 +1282,17 @@ def test_13f_a_sole_holder_re_stamping_their_own_office_refuses_and_does_not_cra
     monkeypatch.setitem(PR.REQUIRES_PREDICATES, "establish", retired_req_establish)
     w2, d2 = _establish_world()
     _seat_reeve(w2, ["confer"])
-    with pytest.raises(NotYours):
-        _establish(w2, d2, "e_self_retired", _founding(remit=["confer", "dispatch"]),
-                  actor="p_mid", via="off_reeve")
+    # H-143 (B03.76): the gate's refusal no longer ends the season -- the fold emits the row's
+    # `establish.refused` -- so the retired precondition is told from the shipped one by the
+    # fold's own trace row for the gate's refusal, which the shipped precondition never reaches.
+    with TRACE.recording():
+        first = len(TRACE.rows)
+        out2 = _establish(w2, d2, "e_self_retired", _founding(remit=["confer", "dispatch"]),
+                          actor="p_mid", via="off_reeve")
+        gate = [r for r in TRACE.rows[first:]
+                if r.channel == "DECISION" and r.what == "establish: the gate refused the write"]
+    assert [e.kind for e in out2] == ["establish.refused"], [e.kind for e in out2]
+    assert len(gate) == 1, "the retired precondition admitted and the gate did not refuse"
 
 
 @pytest.mark.parametrize("change", [

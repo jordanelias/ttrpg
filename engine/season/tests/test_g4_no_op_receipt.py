@@ -36,7 +36,7 @@ from engine.season.harness import probes as P
 from engine.season.loop import effects as _effects
 from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.state.carriers import Act, Receipt, Tenure
-from engine.season.state.gate import Change, NoOpReceipt, NotYours, Subject
+from engine.season.state.gate import Change, NoOpReceipt, Subject
 from engine.season.state.world import World
 
 from ._scar_helpers import wounded as _wounded
@@ -107,15 +107,17 @@ def test_g4_an_unlawful_edge_write_is_not_yours_even_when_nothing_named_moved(mo
     """The effect names `Hh` (unmoved) and, unnamed, closes `p_high`'s seat on `off_duke` -- an
     edge `p_low` has no basis to write (no seat in `via`). If F9 were asked first the write would
     be refused as a NO-OP and, F9 not being an authority check, the order of the two raises would
-    decide whether the closure is put back. It must be `NotYours`, and the seat must be live."""
+    decide whether the closure is put back. It must be the gate's `NotYours` -- which the fold
+    emits as the row's refusal (`act.refused`: `utter` declares none), H-143 -- and the seat must
+    be live."""
     def plant(w, a, res=None):
         seat = next(t for t in w.tenures if t.id == "t9")
         return Change((Subject.entity("rungs", "Hh"),), lambda: setattr(seat, "until", w.tick))
     _plant(monkeypatch, "utter", plant)
     w = P.tiny_world()
-    with pytest.raises(NotYours):
-        _driver(w).resolve(mint_token(w, WriteClass.ACTS),
-                           [Act(id="g4_ny", actor="p_low", verb="utter")])
+    evs = _driver(w).resolve(mint_token(w, WriteClass.ACTS),
+                             [Act(id="g4_ny", actor="p_low", verb="utter")])
+    assert [e.kind for e in evs] == ["act.refused"], [e.kind for e in evs]    # H-143: emitted, not raised
     assert [t.live for t in w.tenures if t.id == "t9"] == [True], "the unlawful closure stood"
 
     # CONTROL: the same effect without the unlawful write is a plain no-op -- raised raw at the

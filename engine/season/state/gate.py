@@ -174,7 +174,7 @@ class NoToken(InstrumentDefect):
 # `_req_revoke` asks `may_revoke` and `_req_confer` asks `may_fill` -- the precondition refuses
 # (and EMITS, `§E2`) exactly what the gate would refuse (and RAISE), because both read one owner.
 # A precondition with its own copy of the rule is how the two would come to disagree, and the
-# disagreement would surface as a season killed by `NotYours` on an act the fold admitted.
+# disagreement would surface as the fold's unnamed gate refusal (B03.76) of an act the precondition admitted.
 # =================================================================================================
 
 

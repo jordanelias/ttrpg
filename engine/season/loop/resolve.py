@@ -39,7 +39,7 @@ from ..queries.person_q import (broken_by, confided_outside, conviction_after_cr
 from ..queries.world_q import WorldReader, ceiling, demanded_person, occasioned_by
 from ..seam import ContestError, ContestRefused, Resolution, contest, degree_of, find_trail, grade
 from ..state.carriers import Act, Event, StateChange, effort_of, subject_of
-from ..state.gate import Change, NoOpReceipt, Subject, Token, seat_hold
+from ..state.gate import Change, NoOpReceipt, NotYours, Subject, Token, seat_hold
 from ..state.containment import edges_of
 from ..state.ids import SeatId, draw_factory, H
 from ..state.world import World
@@ -500,6 +500,19 @@ def _fold(self, w: "World", token: Token, a: Act,
                            chose="emit the refusal, not the success",
                            alternatives=["emit `emits:` anyway (publishes an event for a "
                                          "state change that did not happen)"])
+            return ev(_demand_earned(w, a, row.refusal_for(WRITE_CLAUSE), False) or (FOLD_REFUSED,))
+        # ⚠ H-143 (B03.76): THE GATE'S REFUSAL EMITS TOO, `04 §C`'s row *"a refusal emits, never
+        # raises"* (MECHANICAL). `NotYours` is F3's judgment that the write is not the actor's; a
+        # precondition that admitted what the gate then refuses used to end the season here, where
+        # `NoOpReceipt` -- the same `Forbidden`, graded the same -- already became the row's refusal.
+        # The store was put back before the raise (`World.write`), so the refusal stands beside an
+        # unchanged world. A DIRECT `World.write` outside the fold still raises: the gate is the
+        # backstop, and only the fold converts it. A refused first pair leaves the later pairs
+        # unchecked, as above.
+        except NotYours:
+            TRACE.decision(f"{a.verb}: the gate refused the write", "C.4",
+                           chose="emit the refusal, not raise",
+                           alternatives=["raise NotYours (ends the season)"])
             return ev(_demand_earned(w, a, row.refusal_for(WRITE_CLAUSE), False) or (FOLD_REFUSED,))
     # The act's proposed changes ride on the success Events -- §27.3's accumulator sums
     # them across the fold and clamps ONCE, which is order-independent as a fact.
@@ -1173,6 +1186,14 @@ def resolve(self, token: Token, acts: list[Act],
                            chose=f"refuse every act that staged on it ({len(contribs)})",
                            alternatives=["let each act's provisional success stand (a success "
                                          "Event for a write that did not happen: F9)"])
+            _refuse_after_the_fact(self, w, out, [aid for aid, _d in contribs])
+        except NotYours:
+            # H-143 (B03.76): the gate's refusal of the summed write refuses the staged acts as a
+            # no-op does -- `04 §C`'s "a refusal emits, never raises".
+            TRACE.decision(f"the summed write to a site was refused by the gate -> {sid}.condition",
+                           "C.4",
+                           chose=f"refuse every act that staged on it ({len(contribs)})",
+                           alternatives=["raise NotYours (ends the season)"])
             _refuse_after_the_fact(self, w, out, [aid for aid, _d in contribs])
         TRACE.decision(f"clamping {sid}.condition", "S27.3",
                        chose=f"sum {deltas} = {total}, then clamp ONCE",
