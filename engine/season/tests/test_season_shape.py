@@ -4050,6 +4050,27 @@ def test_w4_a_refused_attempt_names_the_attempt_not_the_campaign_seed():
             "for the campaign seed and a licensed clock's genuine first emission")
 
 
+def test_the_refusal_gate_reads_its_multiple_from_the_fixture():
+    """`resolve`'s S27.4 gate refuses an attempt at Ob above `obstacle_refusal_multiple` x Pool, and reads
+    the multiple from the fixture. B02.04 deleted `test_d10c_the_obstacle_refusal_gate_exists`, whose
+    source-text read was the only observer of that read; the refusal test above plants `mult * 10 + 1`
+    off the same fixture, so a literal `2` at the gate stayed green. Here the multiple is SWEPT with the
+    attempt held at Ob 21, Pool 10: refused at 1 (21 > 10), refused at 2 (21 > 20), not refused at 3
+    (21 > 30 is false). A literal 2 at the gate refuses at 3; a literal 3 does not refuse at 1."""
+    from ..harness import headless as HL
+    from ..data.fixtures import DEFAULT_FIXTURES
+    refused_at = {}
+    for mult in (1, 2, 3):
+        w = HL.build_world(0, fixtures=DEFAULT_FIXTURES.sweep("obstacle_refusal_multiple", mult))
+        d = SeasonDriver(w)
+        a = Act(id="act_sweep", actor=next(iter(w.persons)), verb="work")
+        a.obstacle, a.pool = 21, 10
+        d.matter(mint_token(d.w, WriteClass.MATTER), [])
+        out = d.resolve(mint_token(d.w, WriteClass.ACTS), [a], contest_max_depth=2)
+        refused_at[mult] = any(e.kind == "attempt.refused" for e in out)
+    assert refused_at == {1: True, 2: True, 3: False}, refused_at
+
+
 def test_w4_h40s_declared_sweep_is_executed_and_its_zero_arm_does_not_fabricate():
     """`H-40`'s sweep `[0, 5, 20]`, RUN — and the `0` arm is the control.
 
@@ -6284,11 +6305,9 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     # again in the first half of the growth clause, which is kept. The COUNT clause carries the
     # discrimination and is asserted in all three arms: 13 < 15 at `none`/`actor`, 25 < 31 at
     # `total`, measured this run and printed above.
-    # ⚠ AND THE SATURATION IS PINNED RATHER THAN ALLOWED, so it cannot quietly drift further or
-    # quietly come back. If a future change makes the 3-stage arm discriminate again, this goes red
-    # and the growth clause should be restored; if the ceiling itself moves, the season count or
-    # the act chain changed and the reading above is stale either way. `>=` here would be the
-    # weakening this block exists to refuse (§0.1 pt 2).
+    # ⚠ THE SATURATION IS NOT PINNED (B02.01 D deleted the exact depth pin): `depths[3] > depths[0]` below
+    # and the ceiling check are what remain, so a future change that makes the 3-stage arm discriminate
+    # again is not caught here; the growth clause would have to be restored by whoever sees it.
     # [GROUNDED: measured 2026-09-11 at `build_world(0)`, 7 seasons, `observation_deposit_mode: none` -- longest maturation chain {0: 0, 3: 7, 6: 7}, maturations {0: 0, 3: 13, 6: 15}]
     assert depths[3] > depths[0], (
         f"the chain does not grow off the zero control: {depths} — then check 2's result does not "
@@ -13830,8 +13849,8 @@ def test_u2_a_deposit_in_one_round_changes_a_later_rounds_candidate_set_in_the_s
         "reported claim -- see H-172 for what it no longer proves")
 
 
-def test_u2_the_one_round_arm_reproduces_the_pre_tick_loop():
-    """**U2's CONTROL, AND IT IS A REAL ONE RATHER THAN IDENTICAL BY CONSTRUCTION.** At
+def test_u2_the_one_round_arm_resolves_acts():
+    """**U2's ONE-ROUND ARM RESOLVES ACTS; ITS EQUALITY WITH THE PRE-TICK LOOP WAS MEASURED, NOT KEPT (B02.01 D).** At
     `scene_budget = 1` the season is ONE round, so the rounds loop, the queue, the fingerprint and
     the release all run and must produce what the one-pass loop produced. An implementation whose
     `R = 1` limit is not the current behaviour changed two things at once.
@@ -13860,7 +13879,7 @@ def test_u2_the_one_round_arm_reproduces_the_pre_tick_loop():
                               draw=draw_factory(w.world_seed, lambda: w.tick)),
                  None,
                  contest_max_depth=w.fixtures.get("contest_max_depth"))
-    assert d.resolved, "the one-round arm resolved nothing — the control has no behaviour in it"
+    assert d.resolved, "the one-round arm resolved nothing — the loop has no behaviour in it"
 
 
 # [JUSTIFIED: `(0, 1, 7, 13)` are RNG SEEDS and `2` a season count -- the arms of the sweep, not values the design supplies. Four seeds because one world's fingerprint behaviour is not a property; 13 is included because it is the only one of the four where the skip path fires at all]

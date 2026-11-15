@@ -87,7 +87,8 @@ def test_r01_control_with_witness_cut_no_act_is_so_occasioned(monkeypatch):
     monkeypatch.setattr(SeasonDriver, "witness", lambda self, token, events: 0)
     w, d = _play(0)
     assert d.resolved, "no act resolved with the witness cut: the zero below would be an empty season"
-    hit, _landed = _occasioned_by_another(w, d)
+    hit, landed = _occasioned_by_another(w, d)
+    assert landed > 0, "no claim_landed question formed with the witness cut: the zero below would hold by construction"
     assert hit == 0
 
 

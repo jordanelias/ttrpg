@@ -109,13 +109,13 @@ def test_a_scales_row_naming_no_r04_conjunct_is_refused(tmp_path, monkeypatch, c
     assert rc != 0 and "R-04.c9" in out, out
 
 
-def test_a_scales_row_with_no_conjunct_key_is_not_refused(tmp_path, monkeypatch, capsys):
-    """B02.31 gives each scale its conjunct; until then the key is absent and not a violation."""
+def test_a_scales_row_with_no_conjunct_key_is_refused(tmp_path, monkeypatch, capsys):
+    """B02.31 gave each scale its conjunct, so a row without the key is a violation."""
     rc, out = refused(tmp_path, monkeypatch, capsys, [row()], scales=[{"scale": "x"}])
-    assert rc == 0, out
+    assert rc != 0 and "names no conjunct" in out, out
 
 
 def test_shipped_file_exits_zero(capsys):
-    """The control. Reads red from B02.13 until B02.38 writes the nine's conjuncts: the five
-    `partial` rows carry no conjunct at `yes` until then."""
+    """The control: the shipped file satisfies the register (B02.38 wrote the nine's conjuncts and
+    B02.31 the scales' keys)."""
     assert register.check_requirements() == 0, capsys.readouterr().out

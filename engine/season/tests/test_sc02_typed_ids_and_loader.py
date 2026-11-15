@@ -90,9 +90,7 @@ def test_the_via_of_an_act_is_typed_as_a_seat():
 
 def test_the_wrapper_leaves_the_content_hash_where_it_was(monkeypatch):
     """`build_realm(0)` seats the whole governance ladder, so its offices are `SeatId`s; its
-    `content_hash()` is `BASE_HASHES[0]`, pinned BEFORE the wrapper existed (`d3edd90a...`, the base
-    commit). The 1- and 2-season pins are `test_season_weather.py::test_in21_control_draw_off_...`, which
-    this change was run against. The string-level control beside it: the mint folds a `SeatId` exactly
+    `content_hash()` is `BUILD[0]` (`_realm_goldens.py`, the build's one owner). The string-level control beside it: the mint folds a `SeatId` exactly
     as the bare string, and the tag does not survive into an f-string."""
     from ..harness import populated as POP
     from ..state.ids import H

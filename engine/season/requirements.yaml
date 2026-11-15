@@ -73,6 +73,7 @@ ed: "ED-IN-0204"
 
 scales:
   - scale:    "character creation / development / chronicling"
+    conjunct:  R-04.c1
     subsystem: [characters, npcs]   # `rosters.yaml` `modules:` entries -- the one owner of where each lives (A-25, plan position `30`)
     retention: "RETAINED (Jordan, 2026-10-02, ED-IN-0283 -- the systems/ folders are the homes of their systems)"
     in_loop:   false
@@ -82,6 +83,7 @@ scales:
       empty on 81 of the 83 persons of `build_realm(0)` and holds `{inquiry: 2}` on two (`p_npc_088`,
       `p_npc_004`): read at `7924400` by counting `p.capability` over `build_realm(0).persons`.
   - scale:    "grand strategy politics"
+    conjunct:  R-04.c2
     subsystem: [factions, settlements, world]   # `rosters.yaml` `modules:` entries -- the one owner of where each lives (A-25, plan position `30`)
     retention: "RETAINED (Jordan, 2026-10-02, ED-IN-0283 -- the systems/ folders are the homes of their systems)"
     in_loop:   false
@@ -97,6 +99,7 @@ scales:
       `engine/season/state/carriers.py`). Intent, for vocabulary only: Layer 1 PART D rows 1/8/14,
       which rule out a faction that acts, a stored aggregate and a banner holding territory.
   - scale:    "social contests / debates"
+    conjunct:  R-04.c3
     subsystem: [social_contest]   # `rosters.yaml` `modules:` entries -- the one owner of where each lives (A-25, plan position `30`)
     retention: RETAINED
     in_loop:   "seam unbuilt"
@@ -112,6 +115,7 @@ scales:
       by `seam/wrappers/sigma.py`, not by this kernel). The kernel retires at plan position `2-ii`
       (`workplans/valoria_master_workplan_v9.md`).
   - scale:    "mass battles / strategy warfare"
+    conjunct:  R-04.c4
     subsystem: [mass_battle]   # `rosters.yaml` `modules:` entries -- the one owner of where each lives (A-25, plan position `30`)
     retention: RETAINED
     in_loop:   "seam built; reached via a constructed `Question` (`test_march.py`) AND, measured,
@@ -140,6 +144,7 @@ scales:
       (`hole_register.yaml` H-175's `cite:`). `H-151`'s OWN `cite:` field, not H-175's, is where
       the earlier retraction of a stale "missing `operands_for` arm" citation actually lives.
   - scale:    "personal combat / grid-based map combat with units"
+    conjunct:  R-04.c5
     subsystem: [combat]   # `rosters.yaml` `modules:` entries -- the one owner of where each lives (A-25, plan position `30`)
     retention: "RETAINED, NOT DONE (Jordan, 2026-09-05: \"combat engine isn't done\")"
     in_loop:   "duel only, via combat_seam.py"
@@ -161,6 +166,7 @@ scales:
       LEAVE). R-04 may read `met` at CP-T04's close when conjunct (1) and the other conjuncts also
       read (`workplans/valoria_master_workplan_v10_part2.md` §5).
   - scale:    "settlement management / city building / domain actions"
+    conjunct:  R-04.c6
     subsystem: [settlements, overview]   # `rosters.yaml` `modules:` entries -- the one owner of where each lives (A-25, plan position `30`)
     retention: "RETAINED (Jordan, 2026-10-02, ED-IN-0283 -- the systems/ folders are the homes of their systems)"
     in_loop:   false
@@ -176,6 +182,7 @@ scales:
       refused because no computed act declares a works (`H-165`); no domain-action mechanism exists.
 
   - scale:    "investigations / detective / interactive fiction"
+    conjunct:  R-04.c7
     subsystem: [fieldwork]   # `rosters.yaml` `modules:` entries -- the one owner of where each lives (A-25, plan position `30`)
     retention: "RETAINED (Jordan, 2026-10-02, ED-IN-0283 -- the systems/ folders are the homes of their systems)"
     in_loop:   false
@@ -239,7 +246,9 @@ rows:
           line: "4 passed, 7 deselected in 24.94s"
           control: >-
             `test_r01_control_with_witness_cut_no_act_is_so_occasioned` (seed 0, witness cut): its
-            assertion `hit == 0` passed, one of the four
+            assertion `hit == 0` passed, one of the four; with the cut 105 `claim_landed` acts
+            were still examined (`landed > 0` is asserted, so the zero is not by construction), against
+            164 of 681 in the shipped arm (read after the close's edit, seed 0)
           does_not_show: >-
             one season a seed; the shipped policy `probes.chooser` and not the game's play; a count
             above 0, not a share; run with `-p no:cacheprovider` added
@@ -328,8 +337,9 @@ rows:
     conjuncts:
       - id: R-03.a
         text: >-
-          a deposit in one lap changes a later lap's candidates (the `test_u2_` tests, the one-lap
-          control among them: `test_u2_the_one_round_arm_reproduces_the_pre_tick_loop`)
+          a deposit in one lap changes a later lap's candidates (the `test_u2_` tests; the one-lap arm
+          is among them as `test_u2_the_one_round_arm_resolves_acts`, which asserts the arm resolves acts:
+          its equality with the pre-tick loop was measured once, 2026-09-11, and is not kept)
         argv: ["python", "-m", "pytest", "engine/season/tests", "-q", "-k", "test_u2_"]
         expects: "all pass, the one-lap control among them"
         holds: "yes"
@@ -340,8 +350,8 @@ rows:
           seasons: "per test"
           line: "5 passed in 15.38s"
           control: >-
-            the one-lap arm reproduces the pre-tick loop (`test_u2_the_one_round_arm_reproduces_the_pre_tick_loop`),
-            one of the five
+            the one-lap arm resolves acts (`test_u2_the_one_round_arm_resolves_acts`), one of the five; it is no
+            comparison against the pre-tick loop (the census that made it one was deleted, B02.01 D)
           does_not_show: >-
             a test reading on corpus-case worlds, not the shipped realm; run with `-n 2` and
             `-p no:cacheprovider` added
@@ -567,7 +577,7 @@ rows:
           `read_decisions`, not by a flag of the command. Re-read at B10
           (`02_CHAR_resolve_and_temper` changes what the departure from the top is)
         argv: ["python", "-m", "engine.season.harness.decision_spread", "--decisions", "--seed", "0"]
-        expects: "the strict-top share above one half at the shipped tau at seeds 0, 1, 2, beside the control tau's share"
+        expects: "the strict-top share above one half at the shipped tau at seeds 0, 1, 2, and above the `--control` arm's (pursuits = realm mean) at each seed: one half alone does not separate the two, the flattened arm clears it too"
         holds: "yes"
         reading:
           tree: "1c9238db4c46af9c92a842b1b11d0f2b3d499bdf"
@@ -578,11 +588,15 @@ rows:
           control: >-
             seed 0 shown (274 of 498, 0.55); seeds 1 and 2 read pursuit 301 and 280 of 498 (0.60,
             0.56); choice_temperature swept to 0 reads pursuit 486 and tiebreak 12 of 498 at each
-            seed; the `--control` arm (pursuits = realm mean) reads pursuit 253, 269, 252 of 498
+            seed (`B02.38_R-06.d.tau0.log`); the `--control` arm (pursuits = realm mean) reads pursuit
+            253, 269, 252 of 498, so the shipped arm exceeds it by 21, 32 and 28 at seeds 0, 1, 2 (274 v
+            253, 301 v 269, 280 v 252): the comparison the `yes` rests on
           does_not_show: >-
             a built realm with no season played; the share is derived from two printed counts and
-            the command prints no share; the `--control` arm reads above one half at seed 1 (269 of
-            498), so one half alone does not separate it from the shipped arm
+            the command prints no share; the `--control` arm reads above one half (249 of 498) at every
+            seed (253, 269, 252), so one half alone does not separate it from the shipped arm; how much
+            of the margin over it (21 to 32 of 498) is the pursuit term and how much the realm-mean
+            projection is not read here
       - id: R-06.e
         text: >-
           every acting person carries a pursuit vector: `decision_spread --persons`, n of n at the

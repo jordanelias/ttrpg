@@ -266,8 +266,8 @@ def _planted(monkeypatch, verb, key, value):
 
 def test_in53v_c_the_declarations_as_built():
     # Not pinned as a set of rows: which verbs declare a class moves with every row that adds one, and the rows this test is
-    # about are asserted one by one below. What holds of the set is that every declared class is a member of the roster.
-    assert {r.referent_class for r in VERB_TABLE.values() if r.referent_class} <= REFERENT_CLASSES
+    # about are asserted one by one below. That every declared class is a member of the roster is the loader's refusal
+    # (`test_in53v_c_the_loader_refuses`), not asserted here.
     assert VERB_TABLE["migrate"].referent_class == "Rung" and not VERB_TABLE["migrate"].referent_named
     assert VERB_TABLE["requisition"].referent_class == "Rung" and not VERB_TABLE["requisition"].referent_named
     assert VERB_TABLE["confer"].referent_class == VERB_TABLE["oblige"].referent_class == "Office"

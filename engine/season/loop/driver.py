@@ -573,9 +573,9 @@ class SeasonDriver:
 #
 # ⚠ **BOUND, NOT DELEGATED, AND THE DIFFERENCE IS LOAD-BEARING.** `SeasonDriver.witness` IS
 # `witness.witness` after this line runs, so `inspect.getsource(SeasonDriver.witness)` returns the
-# MOVED BODY. Several tests read a step's source that way -- `test_d9b` pins the eviction comparator
-# string (B02.04 deleted `test_d2`, which looked for `driver="Event"`, and
-# `test_witness_writes_no_belief_and_no_conviction`, a PURE NEGATIVE assertion). A delegating stub
+# MOVED BODY. Several tests read a step's source that way -- `test_d9b` checks that `witness` calls
+# `ledgers.evict_over_cap(` (B02.04 deleted `test_d2`, which looked for `driver="Event"`, and
+# `test_witness_writes_no_belief_and_no_pursuit`, a PURE NEGATIVE assertion). A delegating stub
 # would fail the first and SILENTLY VACATE any such negative assertion, which is why step 9 of the decomposition
 # refused to delegate and why this does not either. Step 5 established the technique when
 # `class Query` bound `world_q`'s functions as staticmethods.

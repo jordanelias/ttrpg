@@ -15,8 +15,7 @@ withdrawn by ED-IN-0351).
   his opponent rolls against Ob 2.5.
   MUTATION (executed, not by hand): the seam's read dropped (`faculties` left empty, the module default 3) reproduces
   (9, 1.5), and the falsifier's check goes red.
-  CONTROL: `revert_cr85` (the seam's value replaced by 3 for every party), which other files' reverts call; the realm
-  hashes are `_realm_goldens.py`'s.
+  CONTROL: the realm hashes are `_realm_goldens.py`'s.
   ⚠ `build_realm(0)` forms no fight in one season since CR-87, so the falsifier reads seeds 1 and 2.
 """
 from __future__ import annotations
@@ -45,14 +44,6 @@ def _engine_available():
         pytest.fail(f"personal_combat engine unavailable: {C.load_error()}")
 
 _KEY = "cr85_test_arms"   # a test-local capability key: no roster row is added
-
-
-def revert_cr85(monkeypatch):
-    """The item at its control, in process: the seam's faculty replaced by 3 for every party, which is the value
-    `history` held in every season fight before this item. Other tests that pin a pre-item hash call it."""
-    real = C.combat_input
-    monkeypatch.setattr(C, "combat_input",
-                        lambda *a, **k: dataclasses.replace(real(*a, **k), faculties=(3, 3)))
 
 
 def _drop_the_read(monkeypatch):

@@ -534,7 +534,7 @@ def _kinds_held(row, events) -> bool:
 
 
 def built_out(w, d, rows) -> dict:
-    """`{verb: {"clean", "kinds", "wrote", "via"}}` for EVERY verb of `VERB_TABLE`, sorted, zeros included.
+    """`{verb: {"clean", "kinds", "wrote", "one", "via"}}` for EVERY verb of `VERB_TABLE`, sorted, zeros included.
     `rows` is `corpus_run.attempts(w, n)`; a CLEAN execution is an act `made` and not `refused` (the
     instrument's `ex - both`) whose Events `d.act_of` ties to it -- an act and an Event placed in the log
     by hand are never tied, so a hand-built execution never counts. Per verb:
@@ -543,11 +543,14 @@ def built_out(w, d, rows) -> dict:
       kinds   True where the Events caused by ONE clean act include every kind of `emits_at` for its band
       wrote   True where the row writes nothing in every band (`_writes_nothing`), or where one clean act's
               Events carry a Receipt (`_carries_a_receipt`)
+      one     True where ONE clean act did both: its Events hold every kind AND (the row writes nothing, or
+              its Events carry a Receipt). `kinds` and `wrote` are each read over any clean act, so they
+              can be True through two different acts; `one` cannot
       via     the clean executions whose `Act.via` is set (a seat exercised)
 
-    A verb is BUILT OUT when `is_built_out`: `clean >= 1`, `kinds` and `wrote`."""
+    A verb is BUILT OUT when `is_built_out`: `clean >= 1` and `one` (a made, kinds-holding, writing act)."""
     by_act = _events_by_act(w, d)
-    out = {v: {"clean": 0, "kinds": False, "wrote": _writes_nothing(row), "via": 0}
+    out = {v: {"clean": 0, "kinds": False, "wrote": _writes_nothing(row), "one": False, "via": 0}
            for v, row in sorted(VERB_TABLE.items())}
     for a, made, no in rows:
         events = [e for _, e in by_act.get(a.id, ())]
@@ -555,15 +558,17 @@ def built_out(w, d, rows) -> dict:
             continue
         row, c = VERB_TABLE[a.verb], out[a.verb]
         c["clean"] += 1
-        c["kinds"] = c["kinds"] or _kinds_held(row, events)
+        kinds, wrote = _kinds_held(row, events), _writes_nothing(row) or _carries_a_receipt(events)
+        c["kinds"] = c["kinds"] or kinds
         c["wrote"] = c["wrote"] or _carries_a_receipt(events)
+        c["one"] = c["one"] or (kinds and wrote)
         c["via"] += a.via is not None
     return out
 
 
 def is_built_out(c: dict) -> bool:
-    """One `built_out` verb row's verdict: a clean execution, its kinds, and its write."""
-    return c["clean"] >= 1 and c["kinds"] and c["wrote"]
+    """One `built_out` verb row's verdict: a clean execution that, itself, held its kinds and wrote."""
+    return c["clean"] >= 1 and c["one"]
 
 
 def fought_fields(w, d, rows) -> dict:

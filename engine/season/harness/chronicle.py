@@ -303,10 +303,16 @@ def tenure_changes_by_cause(w) -> dict:
     """`{cause: count}` over `TENURE_CAUSES`: the tenure Events (`TENURE_KINDS`) in `w.log`, each read
     once. DEATH: a `tenure.closed` whose Events were written with a `person.died` (same `causes`, same
     tick: the gate's one write for a death, `loop/matter.py::_die` and the fold's kill). Else the act that
-    caused it, by verb (`TENURE_CAUSE_OF_VERB`); else, with no act, a `tenure.closed` is TERM (MATTER's
-    maturing of a declared term); else `other`."""
+    caused it, by verb (`TENURE_CAUSE_OF_VERB`); else a `tenure.closed` is TERM when it came LATER than
+    the act it names (MATTER's maturing of a declared term closes with `causes=[term.declared_by]`, the
+    declaring act's id, so `_act_of` ties it to that act and only its tick tells it from a close the act
+    made itself); else `other`."""
     died = {(tuple(e.causes), e.emitted_at) for e in w.log if e.kind == "person.died"}
     act_of = _act_of(w)
+    first_at: dict = {}
+    for e in w.log:
+        if e.causes and e.causes[0] in w.acts:
+            first_at[e.causes[0]] = min(first_at.get(e.causes[0], e.emitted_at), e.emitted_at)
     out = {c: 0 for c in TENURE_CAUSES}
     for e in w.log:
         if e.kind not in TENURE_KINDS:
@@ -315,7 +321,8 @@ def tenure_changes_by_cause(w) -> dict:
         if e.kind == "tenure.closed" and (tuple(e.causes), e.emitted_at) in died:
             cause = "death"
         elif a is not None:
-            cause = TENURE_CAUSE_OF_VERB.get(a.verb, "other")
+            cause = TENURE_CAUSE_OF_VERB.get(a.verb) or (
+                "term" if e.kind == "tenure.closed" and e.emitted_at > first_at[a.id] else "other")
         else:
             cause = "term" if e.kind == "tenure.closed" else "other"
         out[cause] += 1

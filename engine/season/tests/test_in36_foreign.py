@@ -330,7 +330,7 @@ def test_the_unrestricted_chooser_picks_the_march_at_a_witness_seed_and_the_fold
     `aggregate_questions` -> `assemble` -> `make_chooser(... verbs=resolvable_verbs())`, scene 0 holds `march` on
     `set_s_001` with `via == "off_katepano"`), so no seed is pinned; the test fails, and does not skip, when none exists."""
     witnesses = _witness_seeds()
-    assert witnesses, (
+    assert len(witnesses) == _WITNESS_COUNT, (
         "no seed in 0-79 has the Katepano's first scene on her goal Question hold a march on set_s_001: the march is "
         "no longer reachable by the unrestricted chooser from the empire's seat")
     for seed in witnesses:
@@ -362,7 +362,7 @@ def test_the_witness_seed_reaches_the_seam_in_a_full_one_season_run_too():
     witness seed (`_witness_seeds`) reaches `mass_battle.field_input` at least once, from the empire's root. The
     Katepano is told of the capital first (`_told_of_the_capital`, REM-27)."""
     witnesses = _witness_seeds()
-    assert witnesses, "no seed in 0-79 is a witness (see the test above)"
+    assert len(witnesses) == _WITNESS_COUNT, "fewer than two seeds in 0-79 are witnesses (see the test above)"
     for seed in witnesses:
         _the_witness_seed_reaches_the_seam_in_a_full_season(seed)
 

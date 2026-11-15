@@ -89,69 +89,9 @@ def _seasons(w, n: int):
     return stores, shorts
 
 
-#: The one-season event sequence BEFORE v9 PC-06 K-3 (`BASE_EVENTS[1]` at `26884a93`), kept as the K-3
-#: re-pin's control: the event-level mover must be `thread_read`'s formation and nothing else.
-#: RE-RECORDED at v9 IN-59 (a), STATED: the duel verbs' `with` conjunct moves the `thread_read`-withheld arm
-#: too (6603 / 958f4283... -> 7028 / 4f9b8312...), so the K-3-time sequence is no longer producible on one
-#: tree. The value below is that arm on the IN-59 tree, `PYTHONHASHSEED=0`; from here it is a change detector
-#: that still shows `thread_read` moves the season (it differs from `BASE_EVENTS[1]`), as `BASE_EVENTS` became.
-#: RE-RECORDED at v10 REM-22 with `BASE_HASHES`: 7028 / 4f9b8312... -> 7354 / eb995a13... (the three Site rows).
-#: RE-RECORDED at v10 REM-23 with `BASE_HASHES`: 7354 / eb995a13... -> 6652 / 98bef289... (`commit` declares `Proposition`).
-#: RE-RECORDED at v10 REM-24 with `BASE_HASHES`: 6652 / 98bef289... -> 6401 / 71a40c5a... (`petition` declares `Person`).
-#: RE-RECORDED at v10 REM-25 with `BASE_HASHES`: 6401 / 71a40c5a... -> 6353 / 09edad05... (`carry`, `found` and `build`
-#: declare `Record`).
-#: RE-RECORDED at v10 CP-T05-04 with `BASE_HASHES`: 6353 / 09edad05... -> 6272 / 70a5221e... (`argue` declares
-#: `Proposition`, `open_case` declares `Person`, and the docket question).
-#: RE-RECORDED at v10 REM-2C with `BASE_HASHES`: 6272 / 70a5221e... -> 6382 / adb6a991... (`research` declares `Record`
-#: and `Record` leaves `occasion_only_classes`; the CP-T05-04 tree `ea6f1dba` reads the old value exactly).
-#: RE-RECORDED at v10 REM-52 with `BASE_HASHES`: 6382 / adb6a991... -> 6489 / 177721d7... (`body_step` ships at `10`; the
-#: REM-2C tree `a397fa16` reads the old value exactly, and so does this tree with `body_step` swept back to `0`).
-#: RE-RECORDED at v10 REM-27 with `BASE_HASHES`: 6489 / 177721d7... -> 6487 / a23c37a6... (`march` declares `Rung`; REM-27
-#: reverted in process reads the old value exactly).
-#: RE-RECORDED at v10 REM-28 with `BASE_HASHES`: 6487 / a23c37a6... -> 7198 / c05bfef8... (`convene` declares `Rung`; REM-28
-#: reverted in process reads the old value exactly).
-#: RE-RECORDED at v10 REM-28 `dispatch` with `BASE_HASHES`: 7198 / c05bfef8... -> 7201 / 9a156ea6... (`dispatch` declares `Person`; the
-#: column blanked in process reads the old value exactly).
-#: RE-RECORDED at v10 CR-23 with `BASE_HASHES`: 7201 / 9a156ea6... -> 9275 / d87f09b9... (the stock report at crossings;
-#: `stock_report = off` in process reads the old value exactly).
-#: RE-RECORDED at v10 REM-29 with `BASE_HASHES`: 9275 / d87f09b9... -> 9321 / 41d96575... (`migrate`'s `room` conjunct; the
-#: conjunct and its refusal key deleted read the old value exactly).
-#: RE-RECORDED at v10 REM-2B with `BASE_HASHES`: 9321 / 41d96575... -> 9324 / f14e03ba... (`evade / defy`, `construe` and
-#: `exchange` restored; the three rows put back to their base shape in process read the old value exactly).
-#: RE-RECORDED at v10 IN-45 with `BASE_HASHES`: 9324 / f14e03ba... -> 9339 / a5cb2f02... (the planned works's terms ripen;
-#: `planned_works` emptied in process reads the old value exactly).
-#: RE-RECORDED at ED-IN-0306 with `BASE_HASHES`: 9339 / a5cb2f02... -> 9383 / 1b8ac5b5... (the computed `migrate` onto a territory is
-#: declined; main at 59f2f97f reads the old value exactly).
-#: RE-RECORDED at v10 SE-06 with `BASE_HASHES`: 9383 / 1b8ac5b5... -> 8918 / 0e529f09... (the cohorts' territory pursuits;
-#: `temperaments:` deleted in process reads the old value exactly).
-#: RE-RECORDED at v10 CR-21 with `BASE_HASHES`: 8918 / 0e529f09... -> 9185 / b82a1ea2... (the cell-value pass).
-#: RE-RECORDED at v10 CR-16 with `BASE_HASHES`: 9185 / b82a1ea2... -> 9350 / 714b9f7f... (`stance_polarity` `declared`; swept back to
-#: `legacy` in process reads the old value exactly).
-#: RE-RECORDED at v10 CP-T02-01 with `BASE_HASHES`: 9350 / 714b9f7f... -> 9137 / 6ba88aae... (a death names its seats;
-#: `World.seat_holds` stubbed to `[]` in process reads the old value exactly).
-#: RE-RECORDED at v10 CP-T02-02 with `BASE_HASHES`: 9137 / 6ba88aae... -> 9759 / e17367f6... (a loop-built seat keeps its row's id;
-#: `populated._seat_id` replaced by the slug rule in process reads the old value exactly).
-#: RE-RECORDED at v10 CP-T03-00 with `BASE_HASHES`: 9759 / e17367f6... -> 9337 / c50d4c47... (both parties of a fight take
-#: their band); still differs from `BASE_EVENTS[1]` (9338).
-#: RE-RECORDED at v10 CP-T02-03 with `BASE_HASHES`: 9337 / c50d4c47... -> 9143 / 2a17f775... (a met rung goal forms no `need`;
-#: `aim_state` reading `open` always reads the old value exactly); still differs from `BASE_EVENTS[1]` (9154).
-#: RE-RECORDED at B10-09 close one (D2 + D3, the CP-T02-05 stamp reverted) with `BASE_HASHES`: 9143 / 2a17f775... -> 9161 /
-#: c808dea8...; still differs from `BASE_EVENTS[1]` (9172).
-#: RE-RECORDED at CR-10 (arm D2) with `BASE_HASHES`: 9918 / 37fa2d30... -> 9739 / fde8ab3f... (same count as `BASE_EVENTS[1]`, a
-#: different digest); the tier-1 branch returning tier 4 for an own-act claim reads the old value exactly.
-#: RE-RECORDED at v11 CR-28 with `BASE_HASHES`: 9739 / fde8ab3f... -> 9741 / 1e77a5a4... (same count as `BASE_EVENTS[1]`, a
-#: different digest).
-#: RE-RECORDED at v11 CR-81 with `BASE_HASHES`: 9741 / 1e77a5a4... -> 10847 / 83f4c9a2... (same count as `BASE_EVENTS[1]`, a
-#: different digest); `acquaintances=False` in process reads the old value exactly.
-#: RE-RECORDED at v11 CR-25 with `BASE_HASHES`: 10847 / 83f4c9a2... -> 10316 / af2eb292... (same count as `BASE_EVENTS[1]`, a
-#: different digest); the CR-25 control (the term stubbed and the column dropped) reads the old value exactly.
-#: RE-RECORDED at v11 CR-17 with `BASE_HASHES`: 10316 / af2eb292... -> 11781 / 43774342... (commit 1 `believed` alone moves it not
-#: at all; commit 2, tau 0.05, moves it, and the count now differs from `BASE_EVENTS[1]` too); `none` and 0.1 in process read the
-#: old value exactly.
-#: RE-RECORDED at v10 REM-31 with `BASE_HASHES`: 11799 / 07b7a36b... -> 11852 / e6f3edeb... (every fight deferred to ENCOUNTER;
-#: `the body`'s `step:`/`declares:` popped in process reads the old value exactly); still differs from `BASE_EVENTS[1]` (11846).
-#: RE-RECORDED at v10 REM-30's `verb_capability` rows with `BASE_HASHES`: 11852 / e6f3edeb... -> 11582 / e23a1f6e... (the rows
-#: commit's four source files reverted in process reads the old value exactly).
+#: The one-season event count and digest of the season with `thread_read` added to `withheld_verbs`, a change
+#: detector: it must differ from the shipped season (`_realm_goldens.SHIPPED`), which is what the test below reads.
+#: Its re-record history is in `git log`; the constants it was once recorded against (`BASE_HASHES`, `BASE_EVENTS`) are gone.
 THREAD_READ_WITHHELD_EVENTS_1 = (14276, "23047403833e90ad32f9ff359dfa41dfa5a05632071f80e62614e21b441ad87d")   # B01 re-pin (B11 lane A, both commits rebased): was (13366, b7632953...); B10-13 pin commit: was 13441 / 9f23e5f1...   # CP-T03-08: was 13387 / 1cdf25c4...   # CP-T03-04: was 13386 / 2cea2d08...   # CR-87: was 11767 / c35ef751...   # PC-10b: was 11586 / 860b0d23...   # CP-T03-09: was 11582 / e23a1f6e...   # REM-30 rows: was 11852 / e6f3edeb...   # REM-31: was 11799 / 07b7a36b...   # CR-86: was 11781 / 43774342...   # CR-17: was 10316 / af2eb292...; CR-25: was 10847 / 83f4c9a2...; CR-81: was 9741 / 1e77a5a4...
 
 

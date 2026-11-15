@@ -861,7 +861,9 @@ def check_requirements() -> int:
            for c in (r.get("conjuncts") or []) if isinstance(c, dict)}
     for s in doc.get("scales") or []:
         named = s.get("conjunct")
-        if named is not None and named not in r04:
+        if named is None:
+            bad.append(f"scales: {s.get('scale')!r} names no conjunct: each scale of play is one conjunct of R-04 (IS-A-04)")
+        elif named not in r04:
             bad.append(f"scales: {s.get('scale')!r} names conjunct {named!r}, which is no conjunct of R-04")
     counts: dict = {}
     for r in rows:

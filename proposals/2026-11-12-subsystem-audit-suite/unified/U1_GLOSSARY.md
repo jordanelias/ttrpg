@@ -200,6 +200,10 @@ derived score, choice score).
 | **roll / draw / check / test** | see §A | — | "test" only for a pytest test | `07_SE_*`, `16_PESSIMIST_SE_A` |
 | **wire / reader / orphan** | a declared thing and its caller | `04` ID-13 ("a field nothing reads is not a field") | "cut wire", "dead": say "has no reader". U4d: "uncalled" (a function) and "unread" (a field) are ordinary and exact, and stay | `17_CENSUS_*` new text (U4d: `17_CENSUS_REST_2_wiring.md` done) |
 | **removal test** | suppress one person's choice at one lap, replay, and count the others' acts that differ (renamed by U4d from the coinage "knockout"; the code is `engine/season/harness/storybar.py::removal_arm`, the command `--remove PERSON [--at SEASON LAP]`) | `16_PESSIMIST_CORE_the_nine_gate_and_a_knockout_reading.md` (P; the file name keeps its word) | "knockout" | — (U4d: done in four files) |
+| **propagation reading** | how far the played world's state differs from the same world where nobody acts | `engine/season/harness/chronicle.py` (`propagation`, `terminals_answered`) | — | — |
+| **built out** | a verb with at least one clean execution (made, not refused) whose Events hold every kind of its band and, where the row declares writes, whose Receipt writes: ONE execution does both | `engine/season/harness/aperture.py::built_out`, `is_built_out` | — | — |
+| **durable write** | a change that outlasts the scene | `engine/season/harness/storybar.py::null_scenes` | — | — |
+| **null scene** | a scene that changed nothing that lasts | `engine/season/harness/storybar.py::null_scenes` | "empty scene" | — |
 | **roga, fisc, Kontor, rector, sekreton, catasto, missus, dedizione, commenda…** | historical loan words in institutions prose | — | prose uses the plain word (stipend, treasury, trading house, …); data ids are plain words (`warrant`, `commission`, `tithe`, already) | `15_INSTITUTIONS_BYZANTINE_*`, `_VENICE_*`, `_COLONIAL_*` |
 
 ## G. Names the naming gate binds
