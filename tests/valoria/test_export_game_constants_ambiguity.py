@@ -74,3 +74,25 @@ def test_unambiguous_duplicates_are_still_exported():
     src = egc._load_sources()
     for k in agreeing - _colliding_keys():
         assert k in src, f"{k}'s definition sites agree — it should not have been withheld"
+
+
+# --- the engine series: one machine-read owner (B03g.03, GO-01) -------------------------------------
+# The test names no version string: it compares the artifact against what the YAML holds.
+
+def test_the_engine_series_is_read_from_its_one_owner():
+    import yaml
+    owner = yaml.safe_load(open(os.path.join(ROOT, 'references', 'engine_series.yaml')))
+    assert isinstance(owner['engine_series'], str) and owner['engine_series']
+    built = egc.build()
+    assert built['engine_series'] == owner['engine_series']
+    assert built['schema_version'] == 2
+
+
+def test_a_missing_series_refuses(tmp_path):
+    import pytest
+    for body in ('other_key: "x"\n', 'engine_series: 4.7\n', ''):
+        bad = tmp_path / 'engine_series.yaml'
+        bad.write_text(body)
+        with pytest.raises(SystemExit) as exc:
+            egc._engine_series(str(bad))
+        assert 'engine_series.yaml' in str(exc.value)

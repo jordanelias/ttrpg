@@ -202,6 +202,24 @@ def _load_sources():
     return vals
 
 
+SERIES_YAML = os.path.join(REPO, 'references', 'engine_series.yaml')
+
+
+def _engine_series(path=SERIES_YAML):
+    """The ruled engine series, read from its one owner (`references/engine_series.yaml`, ED-GO-0002).
+    This exporter holds no literal of it. Refuses, naming the file, when the key is absent or not a string."""
+    import yaml
+    name = os.path.relpath(path, REPO) if os.path.abspath(path).startswith(REPO) else os.path.basename(path)
+    try:
+        doc = yaml.safe_load(open(path))
+    except OSError as exc:
+        raise SystemExit(f"{name}: cannot be read ({exc}); it is the one owner of engine_series.")
+    value = doc.get('engine_series') if isinstance(doc, dict) else None
+    if not isinstance(value, str) or not value:
+        raise SystemExit(f"{name}: key `engine_series` is absent or not a string.")
+    return value
+
+
 #: Keys withheld by the most recent _load_sources() because two definition sites disagree on the
 #: value. Populated by _load_sources; read by build() to give the right diagnosis for a missing key.
 _AMBIGUOUS: set = set()
@@ -225,7 +243,8 @@ def build():
             'combat_engine_v1.json. NEVER hand-edit: regenerate and commit together. Read by '
             'valoria-game/tools/check_constants_parity.py, which is the reader half of the bridge.'
         ),
-        'schema_version': 1,
+        'schema_version': 2,
+        'engine_series': _engine_series(),
         'contract': (
             'MAPPING pairs are hand-confirmed against BOTH call sites and are the only pairs the parity '
             'checker may fail on. COLLISIONS are name look-alikes that are NOT the same quantity — never '
