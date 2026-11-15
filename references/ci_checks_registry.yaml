@@ -333,6 +333,14 @@ ci_checks:
     ci_job: validators
     notes: "BLOCKING. It IMPORTS AND RESOLVES every declared target at export time, which is the whole reason import-by-string is safe here: a typo or a moved module reds this gate rather than failing a campaign run. Falsifier: tests/valoria/test_engine_does_not_import_systems.py asserts require() RAISES on an undeclared role (no silent default) and that every declared role resolves. Falsifier for the wiring half: tests/valoria/test_wiring_validation.py, hermetic cases over synthetic registries plus one that runs the live file."
 
+  - path: tools/export_season_registries.py
+    level: 5
+    subject: game
+    posture: harden
+    role: "Registries -> typed-JSON: engine/engine_params/season_registries.json must equal every season registry engine/season/data/files.py names that a loader parses, read with the loader's own parser (--check mode). The port reads the season's data from it, never from the YAML."
+    ci_job: ""
+    notes: "WIRED locally (valoria_local.py --staged, blocking) and by tests/valoria/test_export_season_registries.py in the suite; the CI workflow line is Jordan's file (.github/CODEOWNERS owns /.github/workflows/): add `v python3 tools/export_season_registries.py --check` beside export_composition there. A batch that edits a registry this artifact copies re-runs --build in the same commit."
+
   - path: tools/export_names.py
     level: 5
     subject: compliance
