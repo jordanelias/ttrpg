@@ -222,6 +222,7 @@ def test_b0360_fixture_flag_exposes_the_mapping_form():
     ("True", True, True),
     ("total", "scaled_by_degree", "total"),     # a str fixture keeps the raw string
     (5, 2, 5),                         # an already-typed value passes through
+    ("3", None, 3),                    # a fixture shipped as `None` (`refusal_axis`, ...) has no type to hold: the literal stands
 ])
 def test_b0360_a_fixture_value_is_parsed_to_the_fixtures_own_type(value, current, want):
     got = oracle._typed_fixture("f", value, current)

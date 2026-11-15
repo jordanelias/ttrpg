@@ -199,8 +199,8 @@ def _typed_fixture(name: str, value, current):
         except (ValueError, SyntaxError):
             raise ValueError(f'fixture {name!r} holds a {type(current).__name__}; {value!r} is not '
                              f'a literal of it') from None
-    if type(parsed) is type(current) or (type(current) is float and type(parsed) is int):
-        return parsed
+    if current is None or type(parsed) is type(current) or (type(current) is float and type(parsed) is int):
+        return parsed        # a fixture shipped as `None` (an absent setting) takes any literal: it has no type to hold
     raise ValueError(f'fixture {name!r} holds a {type(current).__name__}; {value!r} reads as a '
                      f'{type(parsed).__name__}')
 
