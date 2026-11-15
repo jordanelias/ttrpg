@@ -493,7 +493,7 @@ modules:
     aliases: ["Mass Combat"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "mass_battle"   # Key Type Registry vocabulary
     doc: .designs/systems/mass_battle/reference/mass_battle_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the census).
-    # sim_module: deliberately absent until the MB lane adds it (reported `undeclared`, not `unresolvable`); mechanics_index.yaml carries `mass_battle -> modules/mass_battle/massbattle.py`.
+    sim_module: modules/mass_battle/
     scales: [scene]
     resolver: dice_pool
     state: []
@@ -512,16 +512,9 @@ modules:
       godot: python-oracle
       port_rank: 1
       parity: key-log
-      note: 'ED-MB-0043 RESOLVED 2026-08-03 by Jordan (commit/PR #274 indicates the canon tree). THE TWO TREES
-        ARE NOT TWO VERSIONS OF ONE ENGINE -- they are a LIVE-BUT-STALE engine and a DEVELOPED-BUT-UNWIRED one,
-        and the fork was about to carry the wrong one. CANON = systems/mass_battle/sim/ (28 modules, 11,269 LOC,
-        last touched 2026-07-31, carries the PC_* flags in 12 files, and is what CI byte-exact goldens run via
-        bat.py). LIVE = systems/mass_battle/sim/massbattle.py (5 modules, 2,375 LOC, last touched 2026-07-21,
-        ZERO PC_* flags) -- verified by resolving the import: faction_action.py:431 does `from systems.mass_battle.sim.massbattle
-        import resolve_mass_battle`, so the ~30-45 battles/campaign run on the SMALL tree. CONSEQUENCE: every
-        MB-lane result -- Track F, the flag bisects, the geometry spec S1-S4, the 9 red CI tests -- is measured
-        on a tree the campaign never executes. FORK IMPACT: plan of record section 5 says carry systems/*/sim
-        and LEAVE tests/, which would carry the stale engine and abandon canon. Section 5 corrected. [SUPERSEDED 2026-10-01: `faction_action.py` and `resolve_mass_battle` were deleted at plan position `29b`; the only live caller of `massbattle.py` is now `seam/wrappers/mass_battle.py` through `resolve_field`.] [SUPERSEDED, plan position `31c`: the canon tree this note names is now `modules/mass_battle/` (the reachable closure); `systems/mass_battle/sim/` keeps the harnesses and workbench.] [BUILD `gated` since the Batch 1a close: the provider runs only when ENCOUNTER admits a march past H-149 target-kind check, and none of the realm marches do (`hole_register.yaml` H-149).]'
+      note: 'modules/mass_battle/ is the reachable closure (moved from systems/mass_battle/sim/ at plan position 31c,
+        which keeps the harnesses and workbench); the one caller is engine/season/seam/wrappers/mass_battle.py through
+        resolve_field. BUILD gated: the provider runs when ENCOUNTER admits a march at a held target (H-149).'
 
   - module: peninsular_strain
     registry_system: "peninsular_strain"   # Key Type Registry vocabulary
@@ -887,21 +880,15 @@ modules:
       - "registers/editorial_ledger.jsonl ED-900/904/1029/1040/1041 [READ: 2026-06-22]"
       - "personal-combat audit 2026-06-22 (this session) — model-correctness + drift findings folded in"
     wiring:
-      build: unwired
+      build: gated
       godot: typed-exported
       port_rank: 0
       parity: key-log + typed-export round-trip
-      note: 'built + typed-exported (the 2-module GDScript slice, strike/wound, was retired at GO-14) — the golden path
-        — BUT the campaign driver read on 2026-08-03 (since deleted; the season seam now calls this engine through
-        engine/season/seam/wrappers/combat.py) never routed here, so end-to-end parity was unvalidated then. BLOCKER IDENTIFIED 2026-08-03
-        (ED-IN-0123), and it is NOT the DISPATCH_COMBAT_BRIDGE flag: flipping that flag ON for a full seeded
-        campaign changes nothing at all — same 157 keys, same key-type composition, same winner, identical Faction.L
-        and Territory.owner. Measured cause: a whole campaign dispatches 29 scene slots and ALL 29 are `contest`.
-        queue_triggered_scenes is the only production caller of scene_slate.queue_scene, and evaluate_triggers
-        can only ever emit scene_type=contest (Stability Crisis -> emergency_council). No trigger anywhere produces
-        a combat scene — combat_bridge.py:37 and scene_dispatch.py:37 both already state this in prose. So wiring
-        personal_combat to live requires AUTHORING THE TRIGGER that says when a personal fight occurs in a campaign,
-        which is canon, not a flag flip or a wiring fix. Jordan call.'
+      note: 'built and typed-exported; reached from the season loop through composition role combat.fight
+        (engine/season/seam/wrappers/combat.py). BUILD gated: a fight needs a challenge accepted or a violence
+        context; the realm at seed 0 forms no fight act in two seasons (aperture 2 0, the fight line: formed 0,
+        offered 0, executed 0), the corpus executes it. The pre-season campaign driver this note used to describe
+        was deleted at plan position 28-iii.'
 
 # Canonical Accounting spine (doc-12 §8 + substrate §4.1). Module accounting_phase
 # entries must name a phase id below (checked by A12).
