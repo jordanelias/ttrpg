@@ -122,3 +122,79 @@ def test_describe_returns_the_gloss():
     assert all(descriptors.ATTRIBUTE_GLOSSES[k] for k in descriptors.ATTRIBUTES)
     with pytest.raises(ValueError):
         describe("no_such_key")
+
+
+# ======================================================================================
+# B04.03 -- THE `capability:` COLUMN ON CONTESTED AND GRADED VERB ROWS
+# ======================================================================================
+# Each test plants the defect in a copy of `verb_table.yaml` and observes `_load_verb_table` refuse it; the shipped
+# table is the control (every contested or graded row declares the column, and the value is a skill or `none`).
+
+def _planted_verb_load(mutate):
+    """Load the verb table from the shipped yaml after `mutate(doc)`; return the refusal's text (or None if it loaded)."""
+    import unittest.mock as mock
+    import yaml
+    from engine.season.data import verbs as V
+    doc = yaml.safe_load(V.VERB_TABLE_YAML.read_text())
+    mutate(doc)
+    with mock.patch.object(V, "VERB_TABLE_YAML") as fake:
+        fake.exists.return_value = True
+        fake.read_text.return_value = yaml.safe_dump(doc)
+        try:
+            V._load_verb_table()
+        except SystemExit as e:
+            return str(e)
+    return None
+
+
+def _row(doc, verb):
+    return next(r for r in doc["verbs"] if r["verb"] == verb)
+
+
+def test_the_shipped_table_declares_the_column_on_every_contested_or_graded_row():
+    """The control: `capability` is a `VerbRow` field; every contested or graded row carries a skill or `none`."""
+    from engine.season.data.verbs import VERB_TABLE
+    from engine.season.data.rosters import GRADED_INQUIRIES
+    owed = [v for v, r in VERB_TABLE.items() if r.contests or v in GRADED_INQUIRIES]
+    assert len(owed) >= 12, owed
+    for v in owed:
+        cap = VERB_TABLE[v].capability
+        assert cap == "none" or cap in descriptors.CAPABILITIES, (v, cap)
+    # the column carries what `verb_capability` holds, row for row (it still feeds every reader until B04.04)
+    from engine.season.data.rosters import VERB_CAPABILITY
+    assert VERB_CAPABILITY and all(VERB_TABLE[v].capability == c for v, c in VERB_CAPABILITY.items())
+    # the two contested rows with no skill say so
+    assert [v for v in owed if v not in VERB_CAPABILITY and VERB_TABLE[v].capability == "none"] \
+        == [v for v in owed if v not in VERB_CAPABILITY]
+    # an uncontested, ungraded row carries no column
+    assert all(r.capability == "" for v, r in VERB_TABLE.items() if v not in owed)
+
+
+def test_a_contested_row_with_no_capability_is_refused_naming_it():
+    """CORE's falsifier: delete `capability:` from `argue`'s row and the load refuses, naming the row."""
+    msg = _planted_verb_load(lambda doc: _row(doc, "argue").pop("capability", None))
+    assert msg is not None and "argue" in msg and "capability" in msg, msg
+
+
+def test_a_graded_row_with_no_capability_is_refused_naming_it():
+    msg = _planted_verb_load(lambda doc: _row(doc, "research").pop("capability", None))
+    assert msg is not None and "research" in msg and "capability" in msg, msg
+
+
+def test_a_capability_naming_no_definition_is_refused():
+    msg = _planted_verb_load(lambda doc: _row(doc, "argue").update(capability="no_such_skill"))
+    assert msg is not None and "argue" in msg and "no_such_skill" in msg, msg
+
+
+def test_none_without_a_capability_note_is_refused():
+    def drop_note(doc):
+        r = _row(doc, "lie")
+        assert r["capability"] == "none"
+        r.pop("capability_note")
+    msg = _planted_verb_load(drop_note)
+    assert msg is not None and "lie" in msg and "capability_note" in msg, msg
+
+
+def test_a_capability_on_a_row_that_neither_contests_nor_is_graded_is_refused():
+    msg = _planted_verb_load(lambda doc: _row(doc, "give").update(capability="argue"))
+    assert msg is not None and "give" in msg and "neither contests nor is graded" in msg, msg

@@ -232,6 +232,11 @@ class VerbRow:
     # rows that name an operation are B35's (CP-T07-03, -04, -11). The loader refuses a value outside the roster,
     # so a row naming a working the threadwork module does not have never loads.
     operation: str = ""
+    # B04.03 (U1-A step 2): THE SKILL THE ROW TESTS -- a `descriptors.CAPABILITIES` id, or `none`, spelled. `""` is
+    # the declared absence on a row that neither contests nor is graded (nothing there draws dice from a skill). The
+    # loader requires it on every contested or graded row (no default by omission), refuses a value that is neither a
+    # skill nor `none`, and refuses `none` with no `capability_note:` saying why nobody has a skill there.
+    capability: str = ""
 
     def referents_of(self, q) -> tuple:
         """THE REFERENTS OF QUESTION `q` A CANDIDATE OF THIS VERB MAY BE FORMED ON: `q`'s plain
@@ -614,7 +619,8 @@ def _load_verb_table() -> dict:
                       counterparty_may_be_self=r.get("counterparty_may_be_self", False),
                       referent_named=r.get("referent_named", False),
                       subject_may_be_self=r.get("subject_may_be_self", False),
-                      operation=str(r.get("operation") or "").strip())
+                      operation=str(r.get("operation") or "").strip(),
+                      capability=str(r.get("capability") or "").strip())
         # THE COUNTERPARTY IS AN OPERAND THE ACT CARRIES, OR IT IS NOTHING. `opening_set` compares
         # it with the person; a name the typed cell does not BIND is absent from every Candidate,
         # so the comparison would pass silently and the rule would be a column nothing enforced.
@@ -783,6 +789,30 @@ def _load_verb_table() -> dict:
                 f"verb_table.yaml: {name!r} declares `contests: {row.contests}` and has a "
                 "`graded_inquiries` route. The route is NOT a prize (`rosters.yaml`: giving an "
                 "inquiry a prize is scripting drift); one degree has one source.")
+        # B04.03 (U1-A step 2): THE `capability:` COLUMN, REQUIRED ON A ROW THAT CONTESTS OR IS GRADED AND ON NO OTHER --
+        # as `beneficiary:` is required below. "No default by omission; `none` is spelled": a missing key, a value that
+        # is neither a `CAPABILITIES` id nor `none`, `none` with no `capability_note:`, and a column on a row nothing
+        # rolls for (a column nothing reads) are each refused here, naming the row.
+        from ...substrate.descriptors import CAPABILITIES
+        if row.contests or _graded:
+            if "capability" not in r:
+                raise SystemExit(
+                    f"verb_table.yaml: {name!r} {'contests' if row.contests else 'is graded'} and declares no "
+                    f"`capability:`. Name the skill it tests ({sorted(CAPABILITIES)}) or spell `none` with a "
+                    "`capability_note:`; a contested row that omits it would roll every person at the untrained "
+                    "default without saying so.")
+            if row.capability != "none" and row.capability not in CAPABILITIES:
+                raise SystemExit(
+                    f"verb_table.yaml: {name!r} declares `capability: {row.capability!r}`, which is neither a "
+                    f"skill defined in `descriptor_registry.yaml: capabilities` ({sorted(CAPABILITIES)}) nor `none`.")
+            if row.capability == "none" and not str(r.get("capability_note") or "").strip():
+                raise SystemExit(
+                    f"verb_table.yaml: {name!r} declares `capability: none` and no `capability_note:`. `none` is a "
+                    "declaration, and a declaration with no reason is indistinguishable from a skill nobody named.")
+        elif "capability" in r:
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} declares `capability: {row.capability!r}` and neither contests nor is "
+                "graded. Nothing rolls dice from a skill for it, so the column would be read by nothing.")
         # LOADER INVARIANT 12 (#358 rev.2 §B.13). The two shapes are NOT interchangeable, and
         # both directions are checked: a contested verb with a flat list is the `kill / wound`
         # defect, and an uncontested verb with a degree map is a verb claiming an outcome it
