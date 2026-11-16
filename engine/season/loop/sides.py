@@ -8,13 +8,12 @@ PERSON-TO-PERSON SUBSYSTEM (M4, `ED-IN-0279` clause (a)).
 PERSONS-ALWAYS claimant list (`seam/contest.py`'s S39.1) would be exactly the violation that
 invariant exists to catch.
 
-⚠ **DISPATCHING ON THE SHAPE OF `target` (person vs. rung) IS UNSAFE, AND THIS MODULE'S FIRST
-WRITING DID EXACTLY THAT -- FOUND BY THE CORPUS SUITE, NOT REASONED OUT IN ADVANCE.**
-`ARC-40`'s `tell` binds a Candidate subject to `r_realm`, the campaign root RUNG -- news can be
-ABOUT a place -- and a shape-based dispatch routed it into the army-muster branch, which found no
-seat (`tell`'s eligibility is `own`, never `remit:`) and returned `claimants=[]`, tripping
-`seam/contest.py`'s own `Forbidden("contest with no claimants")`. A person-shaped subject and a
-rung-shaped subject are NOT one-to-one with which sides a contest needs; `tell` proves it.
+⚠ **DISPATCHING ON THE SHAPE OF `target` (person vs. rung) IS UNSAFE.** `ARC-40`'s `tell` binds a
+Candidate subject to `r_realm`, the campaign root RUNG -- news can be ABOUT a place -- and a
+shape-based dispatch routes it into the army-muster branch, which finds no seat (`tell`'s
+eligibility is `own`, never `remit:`) and returns `claimants=[]`, tripping `seam/contest.py`'s own
+`Forbidden("contest with no claimants")`. A person-shaped subject and a rung-shaped subject are NOT
+one-to-one with which sides a contest needs; `tell` proves it.
 
 THE ACTUAL DISCRIMINANT IS THE PRIZE'S OWN SUBSYSTEM, read the same way `contest_subsystem`
 already reads it (`ED-SC-0033` clause (1): *"the seam dispatches by manifest ROW rather than the
@@ -41,9 +40,8 @@ from ..trace_log import TRACE
 
 def _contests_of(a: Act, row: "VerbRow | None") -> list:
     """Which prize (if any) `a` contests: `a.contests` if the act itself names one, else the
-    verb row's own `contests:` cell. Extracted (M4 review pass, `/simplify` finding): `resolve()`'s
-    own loop and `loop/encounter.py::encounter` each wrote this expression independently, the same
-    duplication `_canonical_order`/`_survives` were extracted to end (§8). No `self`: a pure
+    verb row's own `contests:` cell: one owner (§8) for `resolve()`'s own loop and
+    `loop/encounter.py::encounter`. No `self`: a pure
     function of the act and its row, not of driver state. It lives here, not in `loop/resolve.py`:
     `seam/wrappers/sigma.py::odds_of` derives the fold's own contest arguments through it, and a
     function-local import of `loop.resolve` from `seam/` closes an import cycle the census counts
@@ -86,8 +84,7 @@ def sides_of(w: World, a: Act, target: Optional[str],
       `Proposition.value`, not `.id`. `mustered`/`members` key on the id, via `commit`'s own
       `t.object`. `faction_prop_id`, `data/rosters.py`'s *"ONE OWNER OF THE FACTION-ID
       RELATION"*, converts one to the other -- its own docstring names the exact failure of
-      skipping this step: *"a silently empty query"*, `leaders()` returning `[]` for every
-      faction once `populated.py` formed the id inline instead of through the one owner.
+      skipping this step: *"a silently empty query"*.
 
     ⚠ AN ACTOR WITH NO SEAT, NO HOME, OR NO SETTLEMENT ABOVE THEM MUSTERS AN EMPTY ARMY, NOT A
     RAISE. `contest()`'s own PARTY-GAP discipline is the caller's to apply -- `claimants=[]`
@@ -97,23 +94,21 @@ def sides_of(w: World, a: Act, target: Optional[str],
     prize_row = manifest.resolve("contest", prize)
     if prize_row is not None and prize_row.get("module") == "mass_battle":
         # ⚠ `H-149` (`march_target_kinds`, `[settlement, territory]`) IS ENFORCED HERE, NOT LEFT
-        # DECLARED-AND-UNREAD (found by `valoria-critic`: `_eff_march`'s own comment claimed this
-        # check and it did not exist). `requires_typed` only answers *does a Rung of this id
+        # DECLARED-AND-UNREAD. `requires_typed` only answers *does a Rung of this id
         # exist*, never a sub-kind filter (`march`'s own `requires_typed_note` -- a sixth typed
         # form is the second resolver S27.2 refuses), so the kind check has to live where the
         # target's Rung object is already in scope.
         # ⚠ THE KIND CHECK IS INLINE, MARCH-SPECIFIC BUSINESS LOGIC IN A FUNCTION WHOSE OWN
-        # CONTRACT IS "DISPATCH BY THE PRIZE'S SUBSYSTEM, NEVER THE VERB" -- disclosed (M4 review
-        # pass, `/simplify` altitude finding), not fixed. `sides_of` takes `prize`, not `verb`,
+        # CONTRACT IS "DISPATCH BY THE PRIZE'S SUBSYSTEM, NEVER THE VERB" -- disclosed, not fixed.
+        # `sides_of` takes `prize`, not `verb`,
         # specifically so it stays verb-agnostic; a second `mass_battle`-routed verb with a
         # different target-kind rule would have nowhere generic to read one from. The deeper fix
         # is a target-kind constraint carried as DATA (a manifest or verb-row field, read the way
         # `manifest.resolve(...)["module"]` already is), not this `target_rung.kind` check --
         # left for a future session, since `march` is still the only `mass_battle`-routed verb.
-        # ⚠ AGAINST THE ROSTER, NOT A HARDCODED `"settlement"` STRING (M4 review pass, a second
-        # correctional finding: the first writing checked the literal string, so extending
-        # `march_target_kinds` later would still change nothing here -- exactly the
-        # declared-but-unread defect this check exists to close, reintroduced one level down).
+        # ⚠ AGAINST THE ROSTER, NOT A HARDCODED `"settlement"` STRING: a literal would let
+        # extending `march_target_kinds` change nothing here, the declared-but-unread defect this
+        # check exists to close.
         # v9 IN-13 (#453 §9.6 code edit (iii), §14.8): H-149's REFUSAL NOW RIDES AN EMPTY ARMY, NOT
         # `subject = None`. A non-settlement target musters nobody, so `_contest`'s empty-`_parties`
         # PARTY-GAP refusal (`loop/resolve.py`, BEFORE the provider and its `contest()` catch are

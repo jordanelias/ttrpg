@@ -4,8 +4,7 @@ SC-01 step 15 the AUTOMATED MODE of the social contest scene's contest provider.
 A MODULE ENTRY: reached by the composition row whose target is `roll` below (`entry: verb_call`,
 `verb: tell`), registered in `manifest.MODULE_ENTRIES` by the registrar at driver construction, and
 called by the host adapter `seam/wrappers/sigma.py::resolve` -- the `@provider("contest",
-"social_contest")` the prize rows `a standing`, `a proposition` and `a matter` name (repointed from the
-interim `sigma_leverage` at steps 13 + 15, ED-SC-0033 clause (2)).
+"social_contest")` the prize rows `a standing`, `a proposition` and `a matter` name (ED-SC-0033 clause (2)).
 
 It takes the host's typed input record and a seeded `rng`, and imports the dice engine and the record
 types, nothing else. It never reads or writes `World`, holds no token and keeps no state between calls
@@ -13,28 +12,12 @@ types, nothing else. It never reads or writes `World`, holds no token and keeps 
 any other return. S27.4's refusal stays with the host adapter, which applies it to the pair this entry
 returns (since step 14 the obstacle is composed here, so the host has no pair until the entry has run).
 
-SC-05, MEASURED AT STEP 15 (2026-10-16, base `29af7354`): KEEP THIS ROLL, DO NOT ADOPT THE KERNEL
-(`systems/social_contest/sim/contest/`, evaluated, not deleted; the timing of its retirement is Jordan's,
-`SM-15`). Read by importing `wrapper.build_contest` / `resolve_contest` and calling them, 200 seeds per
-proceeding:
-  * NO RNG PARAMETER. `resolve_contest`'s parameters are `contest, game, policy_a, policy_b, record`;
-    the draws are `random.gauss` / `random.uniform` and `sigma_leverage.roll_net(rng=random)` on the
-    GLOBAL stream (`resolver.py:32, :139, :144, :334`), and one call moves the next unrelated
-    `random.random()` -- `04 §C.12`'s rejection 4 and `04 PART D row 35`'s per-act `H(seed, tick,
-    subject, purpose)` generator cannot be honoured without editing the kernel.
-  * IT RETURNS A WINNER, NOT A MARGIN: `((band, reason), bout)`, and over the eight proceedings the band
-    vocabulary is side labels -- `a`/`b`/`draw`, `A_decisive`/`B_decisive`/`A_total`/`B_total`, and
-    `committee` (199 of 200 at `formal_contest` and `grand_contest`). No `net`/`ob` pair exists to hand
-    `degree_from_net`, so a "degree adapter" would map winners to bands: the second resolver S27.2
-    refuses, and `08_SEAM.md`'s *a MARGIN, never a winner*.
-  * IT READS A FACULTY, NOT THE HOST'S RECORD: sides are `Contestant | int | dict` (faculty, standing,
-    dossier) inside a named proceeding (faculty 1 vs 4 at `casual_dispute`: `b` 145 / `a` 48 / `draw`
-    7); `SocialContestInput` carries a pool and obstacle operands, so adoption needs a new record.
-  * COST: 0.08-0.47 ms per call against this entry's 0.002 ms; importing it loads 23 repository files
-    (9 outside the kernel: `engine/substrate/stubwire.py`, `systems/__init__.py`, the dice engine).
-So the three things the plan names as adoption's price -- a typed input record, a seeded rng, a degree
-adapter -- are each a rewrite of the kernel's entry, and the third is refused by rule. The proceedings
-design's nested run (`21_RECONCILIATION.md` step 15) is not this entry either; it is unbuilt.
+SC-05 (2026-10-16, step 15): THIS ROLL IS KEPT; THE KERNEL (`systems/social_contest/sim/contest/`) IS NOT ADOPTED
+(the timing of its retirement is Jordan's, `SM-15`). The kernel draws on the GLOBAL stream rather than a seeded
+`rng` (`04 §C.12`'s rejection 4 and `04 PART D row 35`'s per-act generator cannot be honoured without editing it),
+returns a winner (side labels, no `net`/`ob` pair to hand `degree_from_net`) where the seam wants *a MARGIN, never a
+winner* (`08_SEAM.md`; a degree adapter would be the second resolver S27.2 refuses), and reads a faculty, not the
+host's record. The proceedings design's nested run (`21_RECONCILIATION.md` step 15) is not this entry either.
 
 RULED, ED-SC-0037 (Jordan, 2026-09-09): *"we have the sigma leverage d10 resolver in engine to use."*
 ⚠ BOTH IMPORTS, AND THE SECOND ONE IS THE POINT: `roll_net` alone is the bare pool roll (a back-compat
@@ -47,7 +30,7 @@ It returns a net/ob pair as a `Margin` and NEVER a band: `seam/ladder.py` grades
 
 THE OBSTACLE IS THIS MODULE'S (v9 SC-01 step 14; ED-SC-0033 clause (3), *the obstacle has a single
 owner*). `obstacle` below composes it from the record's raw operands; the host input builder carries
-them and composes nothing (`seam/wrappers/sigma.py`'s own obstacle site was deleted at this step).
+them and composes nothing (`seam/wrappers/sigma.py`).
 `modules/combat/core.py::ob_from_defender` is the precedent: the module that resolves the contest
 derives what stands against it.
 """
@@ -99,7 +82,7 @@ def obstacle(inp: SocialContestInput) -> float:
     difficulty). A record, a rung or a proposition has no score: on the task arm it takes the difficulty alone, on the
     control arm `obstacle_default`. **NO "BASE Ob BY SCALE"** (Jordan, 2026-09-05).
 
-    ⚠ THE CEILING (`H-213`, swept; Contradiction 3 of the proceedings reconciliation, resolved): a
+    ⚠ THE CEILING (`H-213`): a
     ceiling caps how hard a matter can get. M-7 fails without one -- at the 1D pool floor
     `p_success` is 0.0006 at Ob 3 and effectively zero above, and buying σ-advantage cannot lift it.
     It is NOT a pool floor (that would raise everyone's competence, a statement about people), and
@@ -112,15 +95,14 @@ def obstacle(inp: SocialContestInput) -> float:
     (`_chance_floor_cap`; 2.0 at pool 1, 2.842 at pool 2, rising with the pool), so, AT NO ADVANTAGE, a
     larger pool is never worse for the cap (it is an equality: each pool's chance at its own cap is the
     same 10 %), and at the shipped ceiling (2) S27.4's `ob > multiple x pool` never holds on a derived
-    pair. With an `effort` boost the chance at each pool's own cap is NOT monotone in the pool (B10-08
-    close, measured, not pinned by a test: Partial-or-better at effort 1 reads 21.57 / 20.37 / 18.76 / 20.56 % at pools 1 to 4:
-    the boost grows with the root of the pool while the cap sits where the unboosted chance is 10 %);
+    pair. With an `effort` boost the chance at each pool's own cap is NOT monotone in the pool (the
+    boost grows with the root of the pool while the cap sits where the unboosted chance is 10 %);
     and a ceiling of 3 or more has floor 0 and falls back to the fixed ceiling, which is tighter than the
     solved cap at ceiling 2 for pools of 3 and up (H-213). Below one
-    die the fixed ceiling applies as before and S27.4 refuses as before. `ceiling_per_pool` off is the
+    die the fixed ceiling applies. `ceiling_per_pool` off is the
     fixed arm, which the sentences below describe at ceiling 2. A ceiling below
     the Ob minimum (`OB_MIN`, PP-232) is refused rather than read: it would breach the floor. Nothing floors the composed obstacle itself: a score under 2 composes
-    below `OB_MIN` (score 1 gives 0.5), as the deleted `_obstacle_of` did.
+    below `OB_MIN` (score 1 gives 0.5).
 
     ⚠ THE ROOM'S TERMS ARE THE INSTANCE MODIFIERS THE RULING NAMES (v9 SC-02 `22a`; proceedings
     `19_PLAN.md` steps 17, 18, 20): `room = reception_gain · reception + proof_step · proofs`, both read
@@ -132,7 +114,7 @@ def obstacle(inp: SocialContestInput) -> float:
     hidden; under the per-pool arm it can, up to that pool's cap (a pool of 2 reaches 2.842). THE FAVOURABLE HALF IS CLIPPED THE SAME WAY: the ceiling is applied after the room, so
     against a strong opposition (base above the ceiling) a favourable room bites only where it takes
     the obstacle below the ceiling (`room > base - ceiling`); a room of +1.5 against a base of 4 under
-    a ceiling of 2 changes nothing. With no room (both terms 0) this is the obstacle as it was.
+    a ceiling of 2 changes nothing.
 
     ⚠ AND AN EXAMINED DOCUMENT'S FORGERY QUALITY IS ONE MORE (v9 SC-02 `22b` step 25; `19_PLAN.md` step
     25, *"examination contests the record's forgery quality"*): `forgery_quality`, read raw off the
@@ -148,15 +130,14 @@ def obstacle_terms(inp: SocialContestInput) -> tuple:
     """`(ob, terms)`: THE OBSTACLE AND EVERY TERM THAT MADE IT, NAMED (B11 lane A; Jordan, 2026-11-12, relayed: *"social
     contest obstacle is defined by the difficulty of the task and all associated modifiers"*). `obstacle` returns the
     first; the host writes the second on the roll's record (`seam/wrappers/sigma.py::resolve`, `ob_terms`), so why a
-    given Ob was thrown at can be read after the draw. `ob` is composed in sequence, never as `sum(terms)`, so the
-    control arm is byte-identical to the obstacle before this function.
+    given Ob was thrown at can be read after the draw. `ob` is composed in sequence, never as `sum(terms)`.
 
     THE TASK ARM (`inp.difficulty` set, shipped): `difficulty` (the task's own, `rosters.yaml: task_difficulty`) PLUS
     `opposition` -- the opposing person's score halved, the RULED term (2026-08-14), kept as one modifier and unchanged
     -- where a person opposes; a task no person opposes (an inquiry, a contest against a Record) has no such term and
     no stand-in. THE CONTROL ARM (`inp.difficulty is None`): `opposition`, or `stand_in` (`obstacle_default`) where
-    there is no score, exactly as before. THEN, on both: `room` (minus the bench's reception and the speaker's
-    proofs, floored as before), `forgery` (an examined document's quality) and `ceiling` (the H-213 cap's cut, zero or
+    there is no score. THEN, on both: `room` (minus the bench's reception and the speaker's
+    proofs, floored), `forgery` (an examined document's quality) and `ceiling` (the H-213 cap's cut, zero or
     negative). A term that does not apply is absent from the record."""
     terms: dict = {}
     if inp.difficulty is not None:

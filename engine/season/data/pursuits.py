@@ -42,9 +42,9 @@ def pursuit(name: str) -> str:
 
     ⚠ IT DELEGATES. `engine.substrate.descriptors.resolve_pursuit` already IS this check, against
     the same tuple, with a fuller message that names the canonical fifteen and explains what a
-    LEGACY tag should do instead. A first writing of this function re-did the membership test with a
-    shorter message — a second "is this a real pursuit?" in the tree, which is the exact shape
-    `test_conviction_roster_single_owner.py` exists to prevent one level up. What is season-specific
+    LEGACY tag should do instead. Re-doing the membership test here would be a second "is this a
+    real pursuit?" in the tree, which is the exact shape
+    `test_conviction_roster_single_owner.py` exists to prevent. What is season-specific
     is the EXCEPTION TYPE, not the rule: this package refuses with `Unspecified` so a caller catching
     the season's own gap type sees it, and `resolve_pursuit` raises `ValueError`. So the check is
     borrowed and only the wrapper is local."""
@@ -100,7 +100,7 @@ TEMPERAMENT_AXIS = "deontological_instrumental"
 
 def temperament_pursuits(alpha: float, beta: float) -> dict:
     """A TERRITORY'S TEMPERAMENT AS A PURSUIT VECTOR, `{pursuit: weight}` over the whole roster. THE ONE OWNER
-    of SE-06's translation (`cohorts.yaml: temperaments:`, read by `harness/populated.py::seat_cohorts`).
+    of SE-06's translation (`cohorts.yaml: temperaments:`, read by `boot/realm.py::seat_cohorts`).
 
     The source gives a territory two scalars: `alpha`, the weight on OUTCOMES, and `beta`, the weight on
     CONDUCT. They are the weights on the two poles of `TEMPERAMENT_AXIS`, so a pursuit's raw weight is its

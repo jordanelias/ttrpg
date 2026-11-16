@@ -19,8 +19,7 @@ line's own depth plus one row, so nothing is placed inside another unit. If the 
 the field, it degrades to one centred line on the front row rather than raising.
 
 STRATEGY is a named posture policy applied to each class of unit unless the unit sets its own posture
-(`STRATEGIES`, below). Three are built; the envelopment presets in `systems/mass_battle/sim/engine.py` are the next
-ones and are not folded in here.
+(`STRATEGIES`, below). Three are built.
 
 [canonical: none -- the strategy table and the deployment rule are this module's, marked ASSUMPTION; the troop types,
 stats, reach and roles they refer to are `troop_types/registry.py` and `config.py`'s.]

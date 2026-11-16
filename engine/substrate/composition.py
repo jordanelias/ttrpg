@@ -2,11 +2,10 @@
 
 Status: [live, 2026-08-20]
 
-WHY. `systems/` stems from `engine/` and `references/`. The old campaign driver (deleted at plan position `28-iii`) contradicted that: it imported
-`systems.factions.sim.faction_action` and `systems.overview.sim.season` at module level, so the root named its own dependents and the package graph carried a cycle
-(`faction_action.py` -> `engine.autoload.game_state` -> `systems.factions.sim.treaty`).
+WHY. `systems/` stems from `engine/` and `references/`: `engine/` must not name its own dependents
+at module level, or the package graph carries a cycle.
 
-`engine/` now states WHAT it needs — a role name — and `references/module_contracts.yaml`'s
+`engine/` states WHAT it needs — a role name — and `references/module_contracts.yaml`'s
 `composition_roles:` block states WHICH module provides it. This module is the resolver, reading the
 cooked artifact `engine/engine_params/composition.json` (written by `tools/export_composition.py`,
 blocking `--check`). Adding a subsystem to the campaign loop is a row in the registry, not an import

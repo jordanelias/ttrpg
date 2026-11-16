@@ -54,8 +54,7 @@ class SocialContestInput:
                        uncapped control arm;
       * `ceiling_per_pool` -- the `chance_floor` arm (CP-T01-06): from one die, the module solves the
                        cap for THIS pool from `obstacle_ceiling`'s own chance at one die, and the
-                       fixed value stays the cap below one die. `False` is the fixed arm (the default,
-                       so a record built by hand reads as it always did);
+                       fixed value stays the cap below one die. `False` is the fixed arm (the default);
       * `obstacle_refusal_multiple` -- S27.4's multiple, the fixture the host adapter refuses on,
                        on the pair the entry returns;
       * `leverage`  -- the σ-layer μ-shift: the host's `advantage_sigma` sums the act's advantage sources
@@ -76,7 +75,7 @@ class SocialContestInput:
                        (`queries/world_q.py::proofs`); `0.0` where no room hears the prize;
       * `proof_step` -- the `H-216` fixture: how far one firsthand proof moves the obstacle.
     The module composes them (`roll.py::obstacle`); the host composes nothing. They default to the
-    no-room reading so a record built for a prize no room hears reads exactly as before.
+    no-room reading, which a record built for a prize no room hears carries.
 
     THE EXAMINED DOCUMENT'S OPERAND (v9 SC-02 `22b` step 25), RAW AS THE OTHERS:
       * `forgery_quality` -- `Record.forgery_quality` of the Record an INQUIRY examines (`sigma.py::
@@ -97,7 +96,7 @@ class SocialContestInput:
     # B11 lane A: THE TASK'S DIFFICULTY (`rosters.yaml: task_difficulty`, `data/verbs.py::TASK_DIFFICULTY`), RAW AS THE
     # OTHERS -- the obstacle's first term, to which the opposing person's `score / 2` and the room's and the document's
     # terms are added (`roll.py::obstacle_terms`). `None` is the CONTROL ARM (`Fixtures obstacle_model: stand_in`): the
-    # obstacle the module composed before, `score / 2` or the `obstacle_default` stand-in, byte for byte.
+    # obstacle the module composes without it, `score / 2` or the `obstacle_default` stand-in.
     difficulty: Optional[float] = None
 
 
@@ -131,15 +130,14 @@ class PersonalCombatInput:
       * `terms`     -- the duel's terms (RS-25, PC-10a, CP-T03-09): one of `modules/combat/wrapper.py::DUEL_TERMS`,
                        read by the module entry and handed to `wrapper.fight`. The default is the STRING `'death'`
                        (the engine's `LETHAL_TERMS`, pinned equal by `engine/season/tests/test_cp_t03_09_capture.py`), never `None`:
-                       `wrapper.fight` refuses a term outside `DUEL_TERMS`, so a `None` default would raise, and the
-                       string leaves every record built without the field fighting exactly as before. The ONE path
+                       `wrapper.fight` refuses a term outside `DUEL_TERMS`, so a `None` default would raise. The ONE path
                        a non-lethal term reaches the fight by is `combat.py::combat_input`, from `rosters.yaml:
                        duel_terms` -- and, since v10 PC-10b, from the `stakes` of the `challenge` Record an
                        `accept` is about (`world_q.stakes_of`), into this same field through the same function;
       * `kits`      -- each party's kit, `(weapon, armor)`, in `claimants` order, `ends`' shape (CP-T03-03,
                        `world_q.kit_of`: what the rungs the person holds store, read not consumed). The module
                        passes each to `Combatant(..., weapon=, armor=)`. The default is `()`: a record built
-                       without kits is fought by two Combatants at the engine's own default kit, exactly as before;
+                       without kits is fought by two Combatants at the engine's own default kit;
       * `faculties` -- each party's dice score for the fight's verb, in `claimants` order, `ends`' shape (CR-85,
                        ED-IN-0330: it replaces combat's `history`). Filled by `combat.py::combat_input` from
                        `seam/wrappers/sigma.py::faculty`, THE ONE POOL READER, and passed to `Combatant(..., faculty=)`,
@@ -151,8 +149,7 @@ class PersonalCombatInput:
                        order (PC-06 K-1, ED-IN-0347). The module maps each key to its `Combatant` field by PC-14's
                        `registry_key` (`modules/combat/attributes.py`); a key absent from the dict leaves its field at
                        the class default, and `end` is carried by `ends`, not read from here. The default is `()`:
-                       `combat_input` fills it only when a claimant has an authored attribute, so an all-absent
-                       record is the record it always was."""
+                       `combat_input` fills it only when a claimant has an authored attribute."""
     claimants: tuple
     ends: tuple
     wound_quantities: tuple
@@ -377,7 +374,7 @@ class Under:
 @dataclass(frozen=True)
 class SubsistInput:
     """What `settlements.subsist` reads, and nothing else. Built by `queries/world_q.py::subsist_input`:
-      * `larder`    -- the `LarderInput` the draw reads (`larder_input`'s projection, unchanged);
+      * `larder`    -- the `LarderInput` the draw reads (`larder_input`'s projection);
       * `chains`    -- `((home, (home, parent, ..., root)), ...)` per COHORT home, sorted: each home's whole
                        containment ancestry (`ancestry`), NOT cut at a non-rung as a ladder is. A drained
                        rung's gap counts the eaters whose chain passes through it -- `_subtree`'s
@@ -467,8 +464,8 @@ class ProduceOutcome:
 # `fortification.py`; the public wrappers (`population`, `capacity`, `ceiling`, `share`,
 # `fortification_of`) read the output back. ⚠ A HALF LEFT `None` WAS NOT PROJECTED: one record serves two
 # public names (E4: `population` and `capacity`; E5: `ceiling` and `share`), and each wrapper projects only
-# the half it reads, so it pays the scans, `TRACE.query` rows and fixture reads its old body paid and no
-# more (`residence_of` traces, `presence` traces, `Fixtures.reads` reaches `harness/corpus_run.py`'s
+# the half it reads, so it pays only the scans, `TRACE.query` rows and fixture reads its half needs
+# (`residence_of` traces, `presence` traces, `Fixtures.reads` reaches `harness/corpus_run.py`'s
 # report). The module answers `None` for a half it was not given.
 
 @dataclass(frozen=True)
@@ -501,7 +498,7 @@ class FabricInput:
       * `live_works` -- how many live works name the site (`works_for`; the host refuses two, A6);
       * `declared`   -- that works' declared terms (`len(stages)`), `0` with no live works;
       * `matured`    -- its ripened terms (`matured_terms`, a log scan), counted only when `declared > 0`
-                        (`0` otherwise, unread), so the scan is paid exactly where it was;
+                        (`0` otherwise, unread), so the scan is paid only where a works declares terms;
       * `present`    -- how many persons stand at the site's rung (`len(presence)`); `None` when
                         `ceiling` asks. The first four are `None` when `share` asks."""
     scale: Optional[int]
@@ -523,8 +520,8 @@ class Fabric:
 class FortInput:
     """What `settlements.fortification` reads. Built by `queries/world_q.py::fort_input`:
       * `conditions` -- `(Site.condition, ...)` of every `garrison` Site in the subtree, `World.sites` order;
-      * `scale`      -- the `condition_scale` fixture, read only when `conditions` is non-empty (the old
-                        body's read), else `None`. The entry returns a bare `float`."""
+      * `scale`      -- the `condition_scale` fixture, read only when `conditions` is non-empty,
+                        else `None`. The entry returns a bare `float`."""
     conditions: tuple
     scale: Optional[int]
 

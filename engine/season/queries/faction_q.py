@@ -1,49 +1,31 @@
 """`queries/faction_q.py` -- the fourth `queries/` module.
 
-⚠ **HISTORY, RETRACTED IN PLACE RATHER THAN DELETED.** From 2026-09-03 to plan position `20-ii`
-this docstring said `04 §A.2:132` was STALE and NOT edited to add a fourth `queries/` member,
-citing `layer-conformance` B4's third disposition (an internal ambiguity between `04`'s own
-clauses -- §A.2:132 naming three modules while §B.6.1/§B.10-12/§C.5.1, all also ratified, already
-named `faction_q` by its own dotted path) and CLAUDE.md §0.05's *"a spec edited to match its
-implementation checks nothing"* as the reason NOT to fix it there. **THAT REASONING NO LONGER
-APPLIES: `20-ii` is the module going from partial to complete, which the contradiction's own
-resolution names as exactly the moment to edit §A.2:132 -- not the code catching up to a stale
-spec, but the spec's own deferred edit landing on schedule.** `04:132-141` now names this module;
-`queries/__init__.py` records the same history at more length. Nor is the repair to fold this
-function into `world_q.py`: `world_q.py`'s own docstring already resolved a materially different
-version of this question (whether `WorldReader`/a hypothetical `polity_q` deserves a fourth module)
-the OTHER way, and that precedent is followed where it actually applies -- see `queries/__init__.py`
-for why `faction_q` is distinguished from it rather than silently overriding it.
+`04:132-141` names this module (`04 §A.2`); `queries/__init__.py` records why it is a module of its
+own. `faction_q.resolve` is named by its OWN dotted path in §B.6.1 and §C.5.1, both ratified, which
+is a different case from the one `world_q.py`'s own docstring resolved the other way (whether
+`WorldReader`/a hypothetical `polity_q` deserves a fourth module); see `queries/__init__.py`.
 
-⚠ **SCOPE, WIDENED AT PLAN POSITION `20-ii` (U9/R-04).** The governance workplan that named
-`faction_q` (`ED-IN-0215`, amended `ED-IN-0253`) lists six eventual members -- `resolve, holdings,
-purview, subordinates, at_war`, and one since deleted unreached -- and until this position only `resolve` had a located
-ratified signature and a consumer (§C.5.1). `20-ii`'s own instruction
-(`workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md:1459-1474`) is what supplies
-the other five: *"`faction_q` as queries, never fields: resolve, holdings, purview, superiors,
-subordinates, at_war."* Building them earlier, with no located signature and no consumer, would
-have been the speculative apparatus `CLAUDE.md` forbids -- that is why the note above this one
-stood for as long as it did, and it is retracted here rather than deleted, so the next session sees
-that the deferral was deliberate and not an oversight.
+⚠ **SCOPE (plan position `20-ii`, U9/R-04).** The governance workplan that named `faction_q`
+(`ED-IN-0215`, amended `ED-IN-0253`) lists its members as *"`faction_q` as queries, never fields:
+resolve, holdings, purview, superiors, subordinates, at_war."* A member with no located signature
+and no consumer would be the speculative apparatus `CLAUDE.md` forbids; `resolve` has a located
+ratified signature and a consumer (§C.5.1).
 
-⚠ **`head` HAS A REAL READER NOW, AND IT IS STILL VACUOUS TODAY -- BOTH THINGS ARE TRUE AND NEITHER
-CONTRADICTS THE OTHER.** §B.6.1 cites its derivation input as `F.4` -- PART F's own list of what the
+⚠ **`head` HAS A REAL READER, AND IT IS VACUOUS TODAY -- BOTH THINGS ARE TRUE.** §B.6.1 cites its derivation input as `F.4` -- PART F's own list of what the
 spec declares insufficient: *"what `Tenure.degree` IS -- a field with a writer and no reader ... if
 it is the strength of a `commit`, every faction's leadership Query has no input and every faction is
 leaderless."* `04 §F.34`: *"if `Tenure.degree` gets a reader the head resolves with it."* `20-ii`'s
 own instruction is *"`head` via `Tenure.degree` (F.4's first reader)"*, and `20-iv`'s row names the
-SAME input as its own morale candidate, attacked at that build. **The attack landed here, and is
-recorded rather than routed around:** `harness/populated.py:692` -- the world-builder's ONE `commit`
-opener -- mints every membership edge as `Tenure(id, pid, fid, "commit", 0)`, four positional args,
-no fifth; `degree` is therefore the dataclass default, `None`, on every `commit` Tenure any builder
-in this tree mints. `commit`'s own `verb_table.yaml` row declares `contests: ""` (empty, falsy), and
+SAME input as its own morale candidate. `boot/realm.py` -- the world-builder's `commit` opener --
+mints every membership edge as `Tenure(id, pid, fid, "commit", 0)`, four positional args, no fifth;
+`degree` is therefore the dataclass default, `None`, on every `commit` Tenure any builder in this
+tree mints. `commit`'s own `verb_table.yaml` row declares `contests: ""` (empty, falsy), and
 `04 PART D` row 30a types `writes` as Degree-keyed only for a verb that declares `contests:` -- so an
 uncontested `commit` never reaches a fold branch that could write one, and cannot without a design
 change nothing here makes. So `head` below is a genuine reader -- it
 would pick up a value the instant anything ever writes a non-`None` `degree` onto a live `commit`
-Tenure -- and it MEASURABLY returns `None` for every faction in every world this tree can build
-today, for the reason just given rather than by construction. That is the honest state of F.4's
-first reader, not a second stub wearing the first one's clothes.
+Tenure -- and it returns `None` for every faction in every world this tree can build today, for
+the reason just given rather than by construction.
 
 ⚠ **`holdings` AND `seats` ARE THE SAME SHAPE, READ TWICE.** §B.6.1: `holdings` is "the union of
 MEMBERS' hold objects"; `seats` is "the seats members hold". Both are the identical query -- every
@@ -61,9 +43,8 @@ those Queries, resolved at the moment of writing and frozen into a `Record`"*
 its kind's (⊕L35) and that roster is the one place it reads. So one key list has two owners -- this
 dataclass's fields and that roster row -- and `_check_sheet_keys` below REFUSES AT IMPORT if they
 differ, in either direction or in order. Without it a field added to `Faction` -- a stat vector, say,
-which `20-ii`'s own instruction still refuses (`workplans/2026-09-28-the-plan-one-order-mc-v18-
-retired.md:747`, quoting `04:301`'s `NEVER:` list -- *"it never makes a faction stat vector a
-field of its own"*) -- would load clean and then crash the first season in which anyone surveyed,
+which `20-ii`'s own instruction still refuses (quoting `04:301`'s `NEVER:` list -- *"it never makes
+a faction stat vector a field of its own"*) -- would load clean and then crash the first season in which anyone surveyed,
 inside RESOLVE, as a `Forbidden` naming a Record rather than this class. `purview` below
 is a FUNCTION, never a field, so it does not touch this list. This is not a sixth member of the
 module's scope: it is the constructor's own output, named as a document. Nothing here reads a
@@ -100,10 +81,9 @@ def resolve(w: World, prop: str) -> Faction:
     """§B.6.1's one constructor. `sides = (faction_q.resolve(proj, A), faction_q.resolve(proj, B))`
     -- §C.5.1, called ONCE per side before a provider runs; never re-derived inside one.
 
-    ⚠ `head=None` WAS HARDCODED HERE UNTIL PLAN POSITION `20-ii`; IT NOW CALLS `head()` BELOW, F.4's
-    first reader. The visible behaviour does not move today (`head()`'s own docstring: MEASURED
-    vacuous, for a stated reason) -- what moves is that this is a real read of `Tenure.degree`
-    rather than a literal, so a future `commit` degree writer needs no second edit here."""
+    ⚠ `head` IS `head()` BELOW, F.4's first reader: a real read of `Tenure.degree`, so a future
+    `commit` degree writer needs no second edit here. It is vacuous today, for the reason
+    `head()`'s own docstring states."""
     TRACE.query("resolve", "resolver")
     mem = members(w, prop)
     inside = set(mem)
@@ -147,8 +127,7 @@ def standing(w: World, prop: str, rung_id: str) -> FactionStanding:
     belief (AX-2); this record is the world's, and may not be handed to a chooser. An NPC weighs
     territory through the claims he holds.
 
-    ⚠ `footprint` IS `world_q.footprint`'s, NOT `resolve(w, prop).holdings`. The brief named
-    `holdings`, and its own test and gate name `footprint(w, f)`; the two differ (holdings is the
+    ⚠ `footprint` IS `world_q.footprint`'s, NOT `resolve(w, prop).holdings`: the two differ (holdings is the
     members' `hold` objects, footprint is those holds, the faction's own, and its members' presence),
     so `holdings` is a subset of `footprint` (the test asserts it) and the two are equal only for a
     faction whose members sit nowhere but in rungs they hold."""
@@ -166,17 +145,15 @@ def head(w: World, prop: str) -> "str | None":
     LAST (see the no-cross-domain-ladder note below for why "last", never "highest"). Per
     `04 §F.34`'s *"if `Tenure.degree` gets a reader the head resolves with it"*.
 
-    ⚠ MEASURABLY `None` TODAY, FOR A NAMED REASON, NOT BY CONSTRUCTION. `commit`'s own
+    ⚠ `None` TODAY, FOR A NAMED REASON, NOT BY CONSTRUCTION. `commit`'s own
     `verb_table.yaml` row declares `contests: ""` (empty -- `VERB_TABLE["commit"].contests` is
     falsy), and `04 PART D` row 30a types `writes` as Degree-keyed only for a verb that declares
     `contests:`, so an uncontested `commit` never reaches a fold branch that could write one. The
-    world-builder's one `commit` opener (`harness/populated.py:692`) mints every membership edge
+    world-builder's `commit` opener (`boot/realm.py`) mints every membership edge
     with the dataclass default -- so no live `commit` Tenure this tree can build ever carries a
-    non-`None` `degree`. This is the `20-iv`/MB-lane attack `workplans/2026-09-28-the-plan-one-
-    order-mc-v18-retired.md:808-811` asks `20-ii` to run at the build; it landed here and is a
-    real gap for the MB lane to pick up (`Faction.head`/`resolve_field`'s `morale_start`
-    candidate), not a Jordan escalation from this position -- `commit` staying uncontested is
-    this tree's own design, not an open question.
+    non-`None` `degree`. This is a real gap for the MB lane to pick up (`Faction.head`/`resolve_field`'s
+    `morale_start` candidate), not a Jordan escalation -- `commit` staying uncontested is this tree's
+    own design, not an open question.
 
     ⚠ NO CROSS-DOMAIN DEGREE RANK IS INVENTED HERE. `Tenure.degree` carries whichever band the verb
     that graded it uses (`FELLED/WOUNDED/UNTOUCHED` for combat, `DECLARED/WON/LOST/UNOPPOSED` for a
@@ -217,8 +194,8 @@ def purview(w: World, seat: str) -> list:
     predicate (⚠ SINCE v9 IN-40 ONLY WHERE NO SEAT-HOLDER HAS SWORN AN `oblige` TO `seat`: the
     predicate's oblige clause adds the swearer's ground, and this set form does not see it), and both
     compose on the identical `containment.descendants` walk
-    (`state/gate.py::purview_reaches`'s own docstring, and `world_q.reach`'s inline purview limb,
-    `:445-450`, which unions the same two terms for the identical reason: `descendants` EXCLUDES
+    (`state/gate.py::purview_reaches`'s own docstring, and `world_q.own_purview`,
+    which unions the same two terms for the identical reason: `descendants` EXCLUDES
     its own rung, so the seat's rung must be unioned in explicitly or a Duke seated at his own
     duchy would never be reached by a claim about the duchy itself).
 

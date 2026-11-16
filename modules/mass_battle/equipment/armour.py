@@ -3,8 +3,7 @@
 Separated out of the troop taxonomy (Jordan 2026-06-30): a troop type NAMES an armour; it no longer
 embeds armour facts. A dedicated module lets the armour model evolve on its own and later be re-mapped
 onto the scene-combat (personal) armour model — which routes damage through a tier->material->coverage
-chain (designs/scene/combat_engine_v1/core.py TIER2MAT none/cloth/mail/plate) — without disturbing
-troop_types.
+chain (TIER2MAT none/cloth/mail/plate) — without disturbing troop_types.
 
 This seed is DELIBERATELY light. The only NUMERIC axis is DR-vs-Piercing, which is a CANONICAL value (the
 Ranged DR table), not an assertion. `material` and any future axis (mass_kg for the load/locomotion
@@ -14,8 +13,7 @@ migration.
 
 DYNAMIC: register / override / extend ARMOURY at import or runtime. ADAPTABLE: records are open;
 `.variant()` spins regional/quality variants off a base. No engine import, no resolution logic — a data
-surface. NOT YET WIRED into resolution (the engine still computes DR the old way), so importing this
-changes no engine behaviour (byte-exact).
+surface; resolution does not read DR from it.
 [canonical: params/mass_combat.md §Ranged DR Table — None=0 / Light=1 / Medium=2 / Heavy=3 vs Piercing]
 [provisional source: mass_battle_v30.md §B.2 — TTRPG Armour column]
 """

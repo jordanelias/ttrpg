@@ -1,7 +1,7 @@
 """`manifest/registrar.py` -- THE REGISTRAR: every composition row that carries a module ENTRY,
 resolved by string and recorded in ONE table, `MODULE_ENTRIES`, at driver construction.
 
-Plan position `30` (A-25; `ED-IN-0284`, revised by `ED-IN-0285`). Terms, defined where code invokes
+A-25; `ED-IN-0284`, revised by `ED-IN-0285`. Terms, defined where code invokes
 them (`CLAUDE.md` §4):
 
   * A MODULE is running code reached by a composition row (`references/module_contracts.yaml`

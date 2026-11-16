@@ -4,22 +4,17 @@ import os as _sigma_os
 
 __all__ = ['BATTLEFIELD_SIZE', 'UNIT_GRID_SIZE', 'BUFFER_CELLS', 'SIDE_A_START_ROW', 'SIDE_B_START_ROW', 'POOL_VARIANT', 'TIP_SUPPORT_ENABLED', 'TIP_SUPPORT_GAP', 'TROOPS_PER_TIER', 'TROOPS_PER_SIZE', 'CELL_FLOOR', 'CELL_CAP', 'MB_TROOP_DENSITY_CAP', 'TROOP_TYPE_DENSITY_CAP', 'cell_cap_for', 'SUBUNIT_ROUT_FLOOR', 'ROUT_CASCADE_FRAC', 'MB_CELL_MORALE', 'CELL_MORALE_PULL', 'CELL_BREAK_ROUT_FRAC', 'MAX_TROOPS_PER_UNIT', 'LINE_ASPECT', 'ENCIRCLEMENT_PENALTY', 'SUPPORT_STACK_ENABLED', 'SUPPORT_WEIGHTS', 'SUPPORT_WEIGHT_FLOOR', 'MB_SUPPORT_RANK_CAP', 'PUNCTURE_ENABLED', 'PUNCTURE_CAP', 'CASCADING_ENABLED', 'MAX_SUB_PHASES', 'TICKS_PER_PHASE', 'BLOCK_SIZE', 'CASUALTY_SCALE', 'STAMINA_MAX', 'STAMINA_DRAIN_PER_CONTACT_CELL', 'STAMINA_RECOVERY_PER_RESERVE_RANK', 'STAMINA_POOL_THRESHOLDS', 'STAMINA_EXHAUSTED_POOL_PENALTY', 'MB_STOCHASTIC_ROUT', 'ROUT_ONSET_FRAC', 'ROUT_CAP_FRAC', 'MORALE_PHASE_CAP', 'DISCIPLINE_LOSS_THRESHOLD', 'VOLLEY_ENABLED', 'RANGED_DR_DEFAULT', 'VOLLEY_LETHALITY_SCALE', 'VOLLEY_MIN_RANGE', 'VOLLEY_MAX_RANGE', 'MB_VOLLEY_DENSITY_ENABLED', 'MB_VOLLEY_DENSITY_REF', 'MB_VOLLEY_DENSITY_FLOOR', 'MB_VOLLEY_DENSITY_CAP', 'MIN_DISCIPLINE', 'ANGLE_DEF_MOD', 'OCTAGON_DMG_MULT', 'MB_OCTAGON_DMG', 'FACING_REACTION_TICKS', 'MULTI_SIDE_SHOCK', 'OCTAGON_LOCAL_REACH', 'MB_FEIGNED_RETREAT', 'FEIGNED_RECOGNIZE_OB', 'FEIGNED_RETREAT_OB', 'OVEREXTEND_PENALTY', 'MB_RESERVE_COMMIT', 'RESERVE_COMMIT_TURN', 'MB_YIELD_EMERGENT', 'MB_YIELD_RALLY', 'YIELD_RALLY_MORALE_FRAC', 'MB_YIELD_POCKET', 'YIELD_POCKET_REACH', 'STANCE_SPEED_MOD', 'MB_INTENT_RESOLUTION', 'STANCE_COMMITMENT', 'INTENT_OFFENSE_D', 'INTENT_DEFENSE_D', 'MB_FRACTIONAL_POOL', 'PER_DIE_NET_EV', 'DAMAGE_BY_DEGREE', 'SIGMA_HEAD_ENABLED', 'SIGMA_PER_D', 'RANGED_MELEE_SIGMA', 'MORALE_FIX', 'MORALE_EROSION_DAMP', 'MORALE_SIGMA_SCALE', 'MORALE_SIBLING_PULL', 'MB_FRICTION', 'MB_FRICTION_SIGMA', 'PER_CELL', 'MB_STAMINA_DRAIN', 'MB_STAMINA_REST', 'MB_ROTATE_FLOOR', 'MB_STAM_SIGMA', 'MB_DEPTH_ROTATE', 'MB_FRONTAGE_BLEND', 'MB_FRONTAGE_REF', 'MB_REFILL_FLOOR', 'MB_CLOSE_RANKS', 'MB_CELL_DAMAGE', 'MB_CHARGE_SIGMA', 'MB_SHOCK_FRONT', 'MB_SHOCK_REAR', 'MB_SHOCK_BRACE_FLOOR', 'MB_SHOCK_HOLD_BRACE', 'MB_SHOCK_DISC_FULL', 'MB_SHOCK_DEPTH_FULL', 'MB_SHOCK_DEPTH_REF', 'MB_SHOCK_SHAKEN_GAIN', 'MB_CAVALRY_SPEED_MULT', 'MB_ENVELOP_SPEED_MULT', 'ENVELOP_STANDOFF', 'ENVELOP_ORBIT_CAP', 'MB_BRACE_ENABLED', 'MB_RECOIL_FRONTAL', 'MB_CHARGE_RECOIL', 'MB_BRACE_SETUP_DELAY', 'MB_RECOIL_CHARGER_GATE', 'MB_WHEEL', 'REAR_BLIND_DEG', 'FOV_HALF_DEG', 'MB_PIN_REACH', 'MB_REFUSE', 'MB_ENVELOP_MOD', 'MB_ENVELOP_DEPTH_RESIST', 'MB_POCKET_MOD', 'MB_POCKET_REACH', 'LANCHESTER_ENABLED', 'K_LINEAR', 'K_SQUARE', 'LANCHESTER_STRENGTH_REF', 'LANCHESTER_DENSITY_REF', 'COMMAND_SIGMA_ENABLED', 'COMMAND_POOL_MULT', 'CMD_CHA_WEIGHT', 'CMD_COG_WEIGHT', 'POOL_QUALITY_MODEL', 'POOL_QUALITY_SCALE', 'TROOP_TYPE_ROLES', 'ROLE_SPEC', 'MB_KITE_ENABLED', 'MB_KITE_STANDOFF', 'MB_NODE_COHESION', 'MB_CELL_EXCLUSION', 'ROUTE_WAYPOINT_EPS', 'ROUTE_BUDGET_TICKS', 'MB_AMMO_ENABLED', 'MB_VOLLEYS_START', 'MB_VOLLEYS_RESUPPLY']
 
-# [ED-MB-0041] Volley Size-loss -> troop-casualty scale. Replaces the per-target
-# `max(1,(h_per_size+1)//2)`, which made better armour/discipline/command INCREASE a unit's own missile
-# casualties. 3 == the value the gauge baseline (disc 5 / cmd 4 / dr 1) produced, so the inversion is
-# removed without re-tuning ranged lethality.
+# [ED-MB-0041] Volley Size-loss -> troop-casualty scale. 3 == the value the gauge baseline (disc 5 / cmd 4 /
+# dr 1) produced.
 # [JUSTIFIED: magnitude inherited from the prior baseline; the underlying scale is admitted band-fitting
 #  (orchestration.py header v12 note #4: "moved R1 from 69% to 35%, into 30-50% band") — Tier-3 debt.]
 VOLLEY_LETHALITY_SCALE = 3  # [JUSTIFIED: == the value the prior per-target formula produced at the gauge baseline (disc 5 / cmd 4 / dr 1), so the armour inversion is removed without re-tuning ranged lethality; the underlying scale is admitted band-fitting (ED-MB-0041 Tier-3 debt)]
 BATTLEFIELD_SIZE = 51  # [canonical: designs/provincial/mass_battle_v30.md §A.3b — "engine rescaled; config.py is leading canon" for battlefield geometry]
-# [ED-MB-0055, Jordan directive 2026-07-29] 50 -> 51. An ODD field has a true centre column and a
-# true centre row, so a mirror matchup is exactly symmetric instead of half-cell biased, and the
-# deployment budget divides cleanly: 5 free rows behind B + 13 (B) + 15 approach + 13 (A) + 5
-# behind A = 51. The 5-row margins are the tactical pull-back room a formation needs to have
-# anywhere to go but forward; the 15-row approach is what makes an approach phase visible at all
-# (at the shipped spawn rows the true FRONT-FACE gap was 5, so bodies were in contact within a
-# couple of ticks). ⚠ This moves every golden — every absolute position shifts and the
-# edge-cornering clamp moves with the boundary.
+# [ED-MB-0055, Jordan directive 2026-07-29] 51: an ODD field has a true centre column and a true centre
+# row, so a mirror matchup is exactly symmetric instead of half-cell biased, and the deployment budget
+# divides cleanly: 5 free rows behind B + 13 (B) + 15 approach + 13 (A) + 5 behind A = 51. The 5-row
+# margins are the tactical pull-back room a formation needs to have anywhere to go but forward; the
+# 15-row approach is what makes an approach phase visible at all.
 UNIT_GRID_SIZE = 30  # [canonical: designs/provincial/mass_battle_v30.md §A.3b — "engine rescaled; config.py is leading canon" for battlefield geometry]
 BUFFER_CELLS = 10
 SIDE_A_START_ROW = 34  # step-2 rescale to fit 10k (50-grid)  # [canonical: designs/provincial/mass_battle_v30.md §A.3b — SIDE_A_START_ROW=34/SIDE_B_START_ROW=15 named explicitly in the rescale note]
@@ -39,70 +34,34 @@ CELL_FLOOR = 40             # min troops/cell; below this a cell merges into a n
 CELL_CAP = 200              # max troops/cell that fight; beyond this, troops overflow to new cells  # [canonical: tests/coverage_matrix_archive.md §"2026-06-03 continuous-scale rework - step 1a" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/SUBUNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000]
 # [ED-MB-0041, Tier-3 experiment under Jordan's 2026-07-25 permission] ARMY BREAKS BY CONTAGION, not
 # by fighting to the last section. `Unit.derive_rout` requires ALL subunits routed before the unit
-# breaks, and `run_battle` only stops when a UNIT routs -- so with per-subunit breaking at the historical
-# 15-30% band, the sections that have already broken sit on the field absorbing casualties while their
-# siblings fight on. Measured consequence: the loser reaches 61-87% total casualties on EVERY gauge row
-# against a 15-30% expectation (the casualty scoreboard, ED-MB-0041). Armies do not do this; they come
-# apart once a decisive portion of the line goes, and the rest routs by contagion rather than being
-# destroyed in place (du Picq's central claim about the moral, not physical, end of a battle).
+# breaks, so with per-subunit breaking at the historical 15-30% band, sections that have already broken
+# would sit on the field absorbing casualties while their siblings fight on. Armies come apart once a
+# decisive portion of the line goes, and the rest routs by contagion rather than being destroyed in
+# place (du Picq's central claim about the moral, not physical, end of a battle).
 #
 # This is the fraction of a unit's SPAWN strength that must sit in broken subunits before the whole body
-# breaks. 1.0 reproduces the current all-subunits behaviour exactly, and is the default until the value
-# is chosen on evidence rather than asserted -- the sweep over candidate values is the experiment, and
-# the number that lands is CALIBRATED-DEBT until something outside the engine supports it.
+# breaks. 1.0 reproduces the all-subunits behaviour exactly. The number that lands is CALIBRATED-DEBT
+# until something outside the engine supports it.
 # [ED-MB-0041, Jordan directive 2026-07-25: "the cell needs to be the primitive for morale, discipline,
 # quality, stamina, route, health, armour, facing, damage, troops count, etc"] PHASE 1: MORALE.
 #
-# Today a subunit's morale is ONE scalar. The cell is the primitive for geometry (position, facing,
-# contact, casualty placement) but for no STATE at all -- so a rear cell being cut down and a front cell
-# holding its ground share a single number, and Jordan's own test case ("a cell should be able to have
-# worse morale than another cell in same subunit") is not representable.
+# A subunit's morale is not ONE scalar: the cell is the primitive for morale, so a rear cell being cut
+# down and a front cell holding its ground need not share a single number (Jordan's test case: "a cell
+# should be able to have worse morale than another cell in same subunit").
 #
 # The model is aggregate-up / modulate-down, per Jordan's framing: cells carry morale; the subunit's
 # holistic morale is the troop-weighted MEAN of its cells (so it is derived, not stored); and that
 # holistic value pulls its own cells back toward it (a steady body steadies a shaky corner, a
 # disintegrating one drags a firm corner down). Cohesion is what a formation IS -- men hold because the
-# men beside them hold -- so the pull rate is discipline-gated.
+# men beside them hold -- so the pull rate is discipline-gated. Every body gets internal sections that
+# can break independently: the same contagion mechanism as ROUT_CASCADE_FRAC one level down (a
+# single-subunit army has no line to come apart otherwise).
 #
-# Why this matters beyond tidiness: the casualty scoreboard showed the rows no rout-contagion threshold
-# could move are exactly the SINGLE-SUBUNIT ones (H1/H2/H7/H8/H9), because an army of one subunit has no
-# line to come apart. Per-cell morale gives every body internal sections that can break independently,
-# which is the same contagion mechanism one level down.
-#
-# [ED-MB-0042, 2026-07-25 — the ledger entry covering all of phases 1/2/2b, allocated after the
-# in-code "ED-MB-0041 phase N" labels above were written]
-#
-# ⚠ FLIPPED ON, THEN RETRACTED THE SAME DAY. The measurement below is CONFOUNDED and must not be
-# cited. `between_turn_recovery` and `reset_morale_between_battles` both write the subunit/unit
-# morale SCALAR, which `eff_morale` stops reading the moment cells are seeded — so with the flag ON
-# they are silent no-ops. The multi-mode gauge runs multi-turn battles and resets morale between
-# them, so the ON arm fought with morale that never recovered while the OFF arm's did. "The loser
-# breaks earlier" is exactly what a body that cannot recover would also produce. The two arms were
-# not comparable, and I did not check before reporting the gain.
-#
-# This is the SAME defect class as the `erode_morale` silent no-op caught earlier in this lane —
-# a scalar write that the cell aggregate shadows. I fixed that one instance and did not sweep for
-# the rest of the pattern, which is why it recurred. The sweep is the prerequisite for re-measuring.
-#
-# The retracted numbers, kept only so the retraction is checkable:
-#
-#            win-share bands   casualty/duration realism
-#     OFF          7/20                  2/20
-#     ON           8/20                  7/20
-#
-# The casualty column is the real evidence, and it is a mechanism producing the right SHAPE rather than
-# a fitted number: loser losses fall out of the 31-40% range into 26-30%, which is du Picq's claim that
-# a body comes apart before it is destroyed. H6's loser goes 79.2% -> 48.9%, C7's 39.9% -> 32.1%.
-# Nothing here was tuned to hit a band; cells simply stop being a formation earlier than they stop
-# existing. Costs, stated rather than buried: `single` mode drops 7/20 -> 5/20, but both flipped rows
-# (H2 51.4->46.2, H9 47.5->52.8) are sub-1-sigma moves across a band edge at n=60 (SE ~6.5pp) in the
-# mode the gauge documents as non-resolving; and C4 goes 91.5 -> 96.7 against a 95 ceiling (~0.5 sigma).
-# Reverse-pair symmetry improves 3.8 -> 3.4 sigma; H4/H11 stays ASYMMETRIC and stays open.
-#
-# Reversible with MB_CELL_MORALE=0. The byte-exact goldens were RE-RECORDED under the flip rather than
-# pinned OFF (the test pins it explicitly ON, as it does MB_OCTAGON_DMG) so the change-detector keeps
-# tracking the SHIPPED configuration -- pinning it off would have kept the goldens meaningful while
-# quietly ending their coverage of what the engine actually does.
+# [ED-MB-0042, 2026-07-25 — the ledger entry covering all of phases 1/2/2b] `eff_morale` stops reading the
+# subunit/unit morale SCALAR the moment cells are seeded, so a bare scalar write is a silent no-op: every
+# absolute morale write routes through `set_morale`, every relative one through `erode_morale`/
+# `pull_morale`. Reversible with MB_CELL_MORALE=0; the byte-exact test pins it explicitly ON (as it does
+# MB_OCTAGON_DMG) so the change-detector tracks the SHIPPED configuration.
 MB_CELL_MORALE = _sigma_os.environ.get('MB_CELL_MORALE', '1') == '1'   # default ON: retracted to OFF 2026-07-25 (above), back ON once ED-MB-0058 resolved the scalar-write no-op (ED-MB-0046 closed)
 # [ED-MB-0041 phase 2] Share of a subunit's LIVE troops standing in broken cells at which the body is
 # no longer a formation. The men are still present -- they have stopped being a fighting line, which is
@@ -137,12 +96,9 @@ SUPPORT_STACK_ENABLED = True
 SUPPORT_WEIGHTS = {1: 1.0, 2: 0.7, 3: 0.5}
 SUPPORT_WEIGHT_FLOOR = 0.3  # [CALIBRATED-DEBT: cell-support-stacking floor (F-i) — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
 # [MB-07 / MB-07r, J-18 (A), ED-MB-0041] SUPPORT RANK CAP: support counts only from the ranks a troop type's weapon
-# reaches past the contact rank; a rank deeper than the cap adds 0 to the pool. SHIPPED ON since MB-07r. It shipped
-# OFF at MB-07 because the capped bat.py battery stalled: the cap shrinks the engaged share of every body (the battery's
-# tier-3 infantry Line engages 0.40 of its troops capped against 0.70 uncapped), the pool falls with it, margins fall to
-# Failure/Partial, and mirror/cav_shaken/ranged ran to MAX_TURNS=20 (~3.5x the OFF time; cell_field_mor0 exceeded the golden
-# tool's 300s/mode). MB-07r recalibrated the pool magnitude to the cap (POOL_QUALITY_SCALE below) and flipped this default
-# and FIELD_PINS to '1'. '0' is the control arm: the uncapped stack, exactly (tests/valoria/test_mass_battle_support_rank_cap.py).
+# reaches past the contact rank; a rank deeper than the cap adds 0 to the pool. ON by default; the pool magnitude is
+# recalibrated to the cap (POOL_QUALITY_SCALE below). '0' is the control arm: the uncapped stack, exactly
+# (tests/valoria/test_mass_battle_support_rank_cap.py).
 MB_SUPPORT_RANK_CAP = (_sigma_os.environ.get('MB_SUPPORT_RANK_CAP', '1') == '1')
 PUNCTURE_ENABLED = True
 PUNCTURE_CAP = 3
@@ -163,21 +119,12 @@ STAMINA_EXHAUSTED_POOL_PENALTY = -1  # stamina == 0: -1 die
 # at which the will to fight snaps) in the [ROUT_ONSET, ROUT_CAP] band, SKEWED by its resilience (discipline + starting
 # morale) — a steady, disciplined body holds toward 30%, a shaken/loose one breaks toward 15%. When its
 # casualty fraction crosses that break-point it routs. Fractional throughout (a random draw + a fractional
-# band + fractional loss fraction), reproducible under the seeded RNG. Gated OFF by default (moves the
-# byte-exact goldens when on — it is NOT inert like the other MB_ flags; the draw is only consumed when on).
-# [ED-MB-0041, 2026-07-25] DEFAULT FLIPPED OFF -> ON, on the casualty scoreboard's evidence.
-# This implements the du Picq 15-30% break band (ED-MB-0031); OFF, the engine's own comment notes that
-# "units grind to ~58% before breaking". Measured across all 20 gauge rows:
-#     loser casualties   61-87%  ->  29-41%   (band 15-30)
-#     winner casualties 7.8-38%  ->  3.3-17%  (cap 15)
-#     casualty realism     0/20  ->    2/20
-#     win-share           10/20  ->    7/20
-# The win-share count DROPS BY THREE ROWS and the flip is still correct. That trade is the whole point
-# of the second scoreboard: a win-share gauge cannot tell a double envelopment from two lines colliding
-# (the reachability sweep found a config that passes Cannae with envelopment pathing switched OFF), so
-# it scored "stop annihilating both armies" as a regression. The reachability sweep itself had already
-# tried this flag, found "passes C4, fails H9", and recorded it as a wash -- on the wrong instrument.
-# Reversible in one step (MB_STOCHASTIC_ROUT=0) if the trade is judged wrong.
+# band + fractional loss fraction), reproducible under the seeded RNG. It moves the byte-exact goldens when on
+# — it is NOT inert like the other MB_ flags; the draw is only consumed when on).
+# [ED-MB-0041, 2026-07-25] ON by default: this implements the du Picq 15-30% break band (ED-MB-0031); OFF,
+# units grind to ~58% casualties before breaking. A win-share gauge cannot tell a double envelopment from two
+# lines colliding, so the casualty scoreboard (loser casualties against the 15-30 band, winner against the 15
+# cap) is the instrument for this flag. Reversible in one step (MB_STOCHASTIC_ROUT=0).
 MB_STOCHASTIC_ROUT = (_sigma_os.environ.get('MB_STOCHASTIC_ROUT', '1') == '1')
 ROUT_ONSET_FRAC = 0.15  # [canonical: Jordan historical research 2026-07-23 — routs occur as early as 15% losses] casualty fraction where morale-break risk begins
 ROUT_CAP_FRAC   = 0.30  # [canonical: Jordan historical research 2026-07-23 — 30% the upper bound] casualty fraction by which a break is near-certain
@@ -196,9 +143,6 @@ MB_VOLLEY_DENSITY_CAP = float(_sigma_os.environ.get('MB_VOLLEY_DENSITY_CAP', '2.
 # depth-damping, support vectors, facing/angle. A formation template is a SHAPE, not a bonus carrier.
 MIN_DISCIPLINE = {
     # [canonical: mass_battle_v30.md §ED-815 shape discipline — min disc required by shape]
-    # [LC-8, ED-909, Jordan-approved 2026-07-02] Horseshoe/RefusedFlank entries retired along with
-    # the shapes themselves (geometry.CELL_PATTERN_FN's note) -- they are now Unit-level, multi-body
-    # emergent compositions, not a single Subunit.shape this per-shape table can key on.
     "Line": 1, "Arrowhead": 4, "GappedLine": 5, "Column": 3
 }
 ANGLE_DEF_MOD = {
@@ -318,13 +262,9 @@ MORALE_FIX = _sigma_os.environ.get('MORALE_FIX', '1') == '1'   # toggle; OFF rep
 # instead of a certain (100%) one. Grounding: Kingman, J.F.C. (2002) J.Appl.Prob. 39(3):455-465;
 # Beyerchen (1992) Int.Security 17(3) DOI 10.2307/2539130; Dupuy DLEDB 752-case force-ratio win-rate
 # table; Rowland "The Stress of Battle"; Sabin "Lost Battles" (2007). See audit/2026-07-22-mass-battle-
-# stress-test/dg6_friction_resolution.md. [ED-MB-0016 superseding row, 2026-09-15] DEFAULT ON — the
-# A/B + default-flip ratification this comment used to describe as pending was taken by Jordan's
-# blanket flags-ON ruling (ED-MB-0001, 2026-07-02: "yes, all options/modules must be turned on") and
-# is executed below ('1'). tools/ci_golden_modes_check.py's FIELD_PINS pins it OFF explicitly for its
-# three golden modes (hermeticity, not the ambient default); bat.py's own grid-legacy _PINNED_OFF does
-# NOT pin it, a separate pre-existing digest-mismatch gap tracked at ED-MB-0070/ED-MB-0061, not fixed
-# by this comment edit.
+# stress-test/dg6_friction_resolution.md. [ED-MB-0016] DEFAULT ON, per Jordan's blanket flags-ON ruling
+# (ED-MB-0001, 2026-07-02: "yes, all options/modules must be turned on"). tools/ci_golden_modes_check.py's
+# FIELD_PINS pins it OFF explicitly for its three golden modes (hermeticity, not the ambient default).
 MB_FRICTION = _sigma_os.environ.get('MB_FRICTION', '1') == '1'  # [ED-MB-0045 item (3)] renamed from its CEV name to the ordinary word (CLAUDE.md §4) -- the draw is i.i.d. per battle, not Dupuy's fitted per-force CEV
 # per-side log-SD; CALIBRATED against the Dupuy DLEDB win-rate curve (see dg6_friction_resolution.md),
 # not fitted to the gauge. [canonical: audit/2026-07-22-mass-battle-stress-test/dg6_friction_resolution.md — Dupuy-DLEDB-calibrated combat-friction log-SD]
@@ -343,13 +283,10 @@ PER_CELL = _sigma_os.environ.get('PER_CELL', '1') == '1'   # per-column density/
 # [ED-MB-0059, Jordan directive 2026-07-29] CELL BOUNDARY EXCLUSION, same side.
 # "we are using a field system so there shouldn't even be any assignment issues so long as cell
 # boundaries are respected." resolve_toi_and_commit's own docstring already states the invariant --
-# "two unit squares that must never interpenetrate" -- but applied it only to CROSS-SIDE pairs, so
-# cells of two subunits on the SAME side walked through each other. Measured DEEP interpenetration
-# before this (obb_overlap AND depth >= 0.1, over 140 historical-scale snapshots / 79,226 cell
-# placements): 13,477 inter-subunit, 875 cross-side. (An earlier draft quoted a "17.31%" rounded-
-# square rate; ED-MB-0060 retracts it — do not reintroduce.) Reuses the swept-SAT solve; no new
-# magnitude, no RNG. Default ON per the directive: this is a built model being switched on, not a
-# new one being introduced.
+# "two unit squares that must never interpenetrate" -- and applies it to same-side pairs as well as
+# CROSS-SIDE pairs (cells of two subunits on the SAME side would otherwise walk through each other). Reuses
+# the swept-SAT solve; no new magnitude, no RNG. Default ON per the directive: this is a built model being
+# switched on, not a new one being introduced.
 MB_CELL_EXCLUSION = (_sigma_os.environ.get('MB_CELL_EXCLUSION', '1') == '1')
 MB_NODE_COHESION = _sigma_os.environ.get('MB_NODE_COHESION', '1') == '1'   # step 2: node-relational cohesion (cells=nodes at live positions, held by relational offsets). [ED-1089, Jordan-ratified 2026-07-02] DEFAULT FLIPPED 0 -> 1 together with FIELD_MOVEMENT (units.py) — the field toggle requires the node float path (run_battle asserts FIELD_MOVEMENT => MB_NODE_COHESION); grid oracle = both pinned '0'
 MB_STAMINA_DRAIN   = 12     # front-column stamina lost per clash it fights  # [CALIBRATED-DEBT: per-column fatigue chain (ED-1017) — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
@@ -411,8 +348,8 @@ MB_POCKET_REACH = int(_sigma_os.environ.get('MB_POCKET_REACH', '2'))    # latera
 # landing on the exact float coordinate to count as "passed through B".]
 ROUTE_WAYPOINT_EPS = 0.5
 # Jordan's ruled path-length budget for a route, "0.5*speed*maximum-ticks-in-battle"
-# (2026-07-02, cited verbatim in _resolve_maneuver_goal's own docstring, which records the
-# formula as NOT YET ENFORCED anywhere — A1 is the first thing that enforces it). DERIVED from
+# (2026-07-02, cited verbatim in _resolve_maneuver_goal's own docstring), enforced by check_orders'
+# route clamp. DERIVED from
 # TICKS_PER_PHASE (not a second independently-asserted magnitude): 3 phases/engagement is the
 # same "limit of three phases per simultaneous engagement per turn" convention run_battle's own
 # max_turns=18 default already encodes. [ASSUMPTION: "maximum-ticks-in-battle" read as ONE
@@ -427,40 +364,19 @@ ROUTE_BUDGET_TICKS = 3 * TICKS_PER_PHASE  # [canonical: mass_battle_v30.md §A.7
 # [A2, ED-MB-0067 Part A — "Order conditions limited to what the unit can know"] core/contact.py's
 # _visible_enemy_cells filters an order condition's enemy_cells through FOV_HALF_DEG's facing cone
 # alone (composed on MB_FACING_MODEL/MB_FACING_FOV_GATE, the existing facing-model flags -- see its
-# own docstring). [adversarial-pass fix, 2026-09-26] A first version ALSO filtered by a standalone
-# sight-range distance constant (MB_SIGHT_RANGE). Removed: review found it provably dead by
-# construction, not merely unexercised -- every enemy_range:/refuse_range value anywhere in this
-# package (production or tests) is <=10, and the constant had to be set ABOVE that (to avoid
-# regressing the one shipped consumer, build_refused_flank's refuse_range=10), so no value it could
-# hold would ever actually bind. Simpler and more honest to filter on facing alone until a future
-# order condition's genuinely long-range D makes a distance axis meaningful to add back.
+# own docstring). There is no standalone sight-range distance constant (MB_SIGHT_RANGE): every
+# enemy_range:/refuse_range value in this package is <=10, so a distance axis could never bind; a future
+# order condition with a genuinely long-range D could add one.
 
 # [A6, ED-MB-0067 Part A — "Missile ammunition and resupply"] Per-subunit volley count
 # (Subunit.eff_volleys/drain_volleys/resupply_volleys, mirroring stamina's OWN existing per-subunit
-# ledger and its own-else-inherited-Unit pattern exactly -- ammo belongs to the shooter). A first
-# version put this on percell._ColBlock (column-block granularity); reworked after adversarial
-# review found that ledger structurally unsound (a column position is shared across whatever
-# subunits currently occupy it, so ammo tracked there could regenerate for free under
-# MB_CLOSE_RANKS=1, or silently stop being metered at all under MB_CLOSE_RANKS=0 -- see
-# percell._ColBlock's own note). New CALIBRATED-DEBT either way — canon has sling AMMO TYPES only
-# (mass_battle_v30.md:93-101), no volley count or resupply rate to cite.
+# ledger and its own-else-inherited-Unit pattern exactly -- ammo belongs to the shooter, not to a column
+# other subunits pass through: see percell._ColBlock's own note). New CALIBRATED-DEBT either way — canon
+# has sling AMMO TYPES only (mass_battle_v30.md:93-101), no volley count or resupply rate to cite.
 #
-# [adversarial-pass round 2, 2026-09-26] DEFAULTS ON, per this file's own flags-ON precedent
-# (config.py:331) -- round 1's "defaults OFF" premise is REVERSED here, because it was WRONG, not
-# merely cautious. Round 1's claim ("this sandbox reproduces NONE of bat.py's committed EXPECTED
-# hashes even on an untouched tree") was measured with a HAND-ROLLED bat.py invocation that set
-# only 4 of the ~40 env vars tools/ci_golden_modes_check.py's FIELD_PINS actually pins (missing
-# MB_FACING_MODEL among many others) -- i.e. it silently ran a DIFFERENT, unpinned configuration
-# and its disagreement with EXPECTED never tested what it claimed to. Re-measured PROPERLY (the
-# real tool, `python3 tools/ci_golden_modes_check.py`, plus a direct bat.py invocation using
-# test_mass_battle_byte_exact.py's own _PINNED_OFF for the two legacy modes it is supposed to
-# cover): with EVERY pin in place, THIS sandbox reproduces bat.py's committed EXPECTED hash
-# byte-for-byte for unit_field_mor0, cell_field_mor0 AND cell_legacy_mor1 -- the three modes the
-# real tool checks. (The two remaining modes, unit_legacy_mor0/cell_legacy_mor0, do genuinely
-# mismatch EXPECTED here even properly pinned -- confirmed, by a clean-tree/modified-tree digest
-# comparison, to be a PRE-EXISTING drift unrelated to this feature; see this session's report and
-# the ED-MB-0061 known-red register, `test_mass_battle_byte_exact.py`'s own KNOWN_RED entries.)
-# See bat.py's own EXPECTED comment (this ED, this date) for the actual re-recording.
+# DEFAULTS ON, per this file's own flags-ON precedent. The legacy modes unit_legacy_mor0/cell_legacy_mor0
+# are known-red against bat.py's EXPECTED (ED-MB-0061 register, `test_mass_battle_byte_exact.py`'s
+# KNOWN_RED entries).
 MB_AMMO_ENABLED = _sigma_os.environ.get('MB_AMMO_ENABLED', '1') == '1'
 # [ASSUMPTION, MEASURED against bat.py's own 'ranged' battery row, not asserted — matching A8's own
 # "chosen on evidence rather than asserted" methodology, since no canonical source exists to cite
@@ -553,32 +469,20 @@ POOL_QUALITY_MODEL = _sigma_os.environ.get('POOL_QUALITY_MODEL', '1') == '1'  # 
 # [CALIBRATED, 2026-07-08] `eff_power x eff_size` alone reaches ~16 at the canonical T3-infantry
 # baseline (power=4, eff_size=4 at full strength) vs the Command-driven baseline's ~8 (command=4,
 # full cohesion) -- this constant renormalizes the NEW formula's baseline to reproduce that SAME
-# historical magnitude at that SAME reference point (0.5 = 8/16), so `pen`/`stam_pen`'s existing
-# (unscaled) discipline/stamina penalties keep roughly the same relative weight they always had,
-# and the engine's other magnitude-tuned constants (degree thresholds, DAMAGE_BY_DEGREE, Lanchester
-# coefficients) aren't suddenly fed a pool an order of magnitude outside the range they were tuned
-# against. This is a grounded anchor-point normalization, not a fit to any specific test target --
-# tested (lanchester_signature.py) and disclosed honestly: even at this and smaller scales, the
-# stricter LAW-EXPONENTS trajectory-fit check still measures melee p~1.65-1.7 (vs its own <=1.4
-# bar) -- notably, the PRE-EXISTING Command-driven baseline (POOL_QUALITY_MODEL=0) already fails
-# that same check today (p~1.55, plus a separate, apparently pre-existing "big army loses to a
-# smaller one" defect this session found while testing, unrelated to this change -- see
-# tests/coverage_matrix.md). Swept scale in {1, 0.5, 0.25, 0.2, 0.15, 0.1, 0.0625, 0.03}: the
-# exponent plateaus around 1.65-1.7 below ~0.15 and does not reach <=1.4 at any scale tried -- a
-# uniform scale cannot fix it (it does not change the WIN/LOSS ratio, only the absolute pool
-# magnitude), so this is flagged as a genuine, not-yet-closed follow-up (likely needs the
-# degree/damage-tier discretization or Lanchester's own interaction reconsidered), not
-# silently patched by picking a smaller scale that merely LOOKS closer.
-# [MB-07r, J-18 (A)] 0.5 -> 0.8, the MB-07 cap's own recalibration. This constant is the pool's per-reference-body
-# magnitude, and the support rank cap cuts the battery's reference body (tier-3 infantry Line, one rank of support) to
-# 0.40 of its troops engaged where the uncapped stack engaged 0.70, so the scale that holds that body's pool at the
-# 0.5 anchor above is 0.5 x 0.70 / 0.40 = 0.875. 0.8 is a CHOICE FITTED TO A TEST, not a derived value: at 0.875 the
-# 16-seed braced-charge fixture of test_mass_battle_support_rank_cap.py reads pike 0.9503 < heavy 0.9568, and at 0.8 it
-# reads 0.9604 > 0.9508; the two gaps (0.0065 and 0.0096) are the same size, nothing separates them from that fixture's
-# seed noise, so the ordering assertion is not independent evidence for 0.8 over 0.875 (both fit the golden time budget).
-# Measured on the golden battery (3.11.18): at 0.5 the capped cell_field_mor0 battery ran to MAX_TURNS=20 in the mirror
-# and ranged rows on all 3 probed seeds (8, 8, 5 turns uncapped) and exceeded the 300s per-mode timeout; the timings at
-# 0.8 are in the MB-07r commit. It is the default of every non-golden fight; it bites a season field once
+# historical magnitude at that SAME reference point, so `pen`/`stam_pen`'s existing (unscaled)
+# discipline/stamina penalties keep roughly the same relative weight, and the engine's other
+# magnitude-tuned constants (degree thresholds, DAMAGE_BY_DEGREE, Lanchester coefficients) are not
+# fed a pool an order of magnitude outside the range they were tuned against. A uniform scale does
+# not change the WIN/LOSS ratio, only the absolute pool magnitude, so it cannot fix the melee
+# exponent (lanchester_signature.py's LAW-EXPONENTS check measures p~1.65-1.7 against its <=1.4 bar at
+# every scale tried; the Command-driven baseline already fails it): a not-yet-closed follow-up.
+# [MB-07r, J-18 (A)] 0.8, the MB-07 support rank cap's own recalibration: the cap cuts the battery's
+# reference body (tier-3 infantry Line, one rank of support) to 0.40 of its troops engaged where the
+# uncapped stack engaged 0.70, so the scale that holds that body's pool at the 0.5 anchor above is
+# 0.5 x 0.70 / 0.40 = 0.875. 0.8 is a CHOICE FITTED TO A TEST, not a derived value: the two candidates'
+# gaps on the 16-seed braced-charge fixture of test_mass_battle_support_rank_cap.py are the same size
+# as that fixture's seed noise, so the ordering assertion is not independent evidence for 0.8 over
+# 0.875. It is the default of every non-golden fight; it bites a season field once
 # `field_troops_per_weight` rises above 1 (at 1 every subunit routs on tick 1, H-361).
 POOL_QUALITY_SCALE = float(_sigma_os.environ.get('POOL_QUALITY_SCALE', '0.8'))
 

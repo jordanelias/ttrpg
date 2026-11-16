@@ -35,14 +35,8 @@ def tracing_on():
 
 # [canonical: Jordan ruling 2026-08-25 "TN7 always. Never change TN anywhere ever." — ED-IN-0196]
 def roll_pool(n, tn=7):
-    # `tn` is retained for call-signature compatibility and ASSERTED, not honoured: the success
-    # window is the fixed canonical face rule. This line previously read `elif tn <= f <= 9`,
-    # which made this the one TN-aware roller in the tree. It was never actually exercised at a
-    # non-7 value: every call site passes no `tn` (orchestration.py x14, plus the two internal
-    # recursions below), so the TN-awareness was latent capability, not live behaviour.
-    # NOT the volley path — `_roll_volley_pool` (orchestration.py:1534) hand-rolls its own d10
-    # loop and never calls this function, which is exactly why VOLLEY_TN=6 could be live while
-    # this roller stayed at 7.
+    # `tn` is retained for call-signature compatibility and ASSERTED, not honoured: the success window is the
+    # fixed canonical face rule (every call site passes no `tn`).
     # [canonical: Jordan ruling 2026-08-25 "TN7 always. Never change TN anywhere ever." — ED-IN-0196]
     assert tn == 7, f"TN is 7. Always. (Jordan, 2026-08-25) — got {tn}; a varying difficulty is an Ob."
     net = 0
@@ -59,12 +53,12 @@ def roll_pool_fractional(pool, tn=7):
     to an integer die count. The integer part rolls real d10s (the discrete stochastic base); the
     fractional remainder is realised as ONE extra real die rolled with probability `frac`.
 
-    [Fable-audit A3 fix, 2026-07-24] The prior version added a DETERMINISTIC `frac*PER_DIE_NET_EV` mu-shift.
-    Because `compute_degree` thresholds at `net<=0` (Failure), that constant EV crossed the boundary
-    discontinuously — P(Failure) jumped ~31.8%->10% between pool 3.0 and 3.000001, and a sub-1 pool could
-    NEVER Fail (a near-dead sliver became a guaranteed chip-damage machine). Realising the die stochastically
-    preserves the EV EXACTLY (E[extra die] = PER_DIE_NET_EV = frac contribution when drawn w.p. frac), AND
-    restores the die's own variance, AND keeps the Failure boundary intact (an all-fractional sub-1 pool can
+    The fractional remainder is realised STOCHASTICALLY, not as a deterministic `frac*PER_DIE_NET_EV` mu-shift:
+    because `compute_degree` thresholds at `net<=0` (Failure), a constant EV would cross the boundary
+    discontinuously (P(Failure) would jump ~31.8%->10% between pool 3.0 and 3.000001, and a sub-1 pool could NEVER
+    Fail). Realising the die stochastically preserves the EV EXACTLY (E[extra die] = PER_DIE_NET_EV = frac
+    contribution when drawn w.p. frac), AND restores the die's own variance, AND keeps the Failure boundary intact
+    (an all-fractional sub-1 pool can
     now roll a 1 -> net<0 -> Failure). [canonical: params/core.md continuous engine — the discrete dice carry
     all variance; no deterministic mu-shift.]"""
     # [canonical: Jordan ruling 2026-08-25 "TN7 always. Never change TN anywhere ever." — ED-IN-0196]
@@ -76,28 +70,23 @@ def roll_pool_fractional(pool, tn=7):
         net += roll_pool(1, tn)
     return net
 
-# [ED-MB-0051 / plan-v2 A2] Absolute epsilon for the degree boundaries.
+# [ED-MB-0051 / plan-v2 A2] Absolute epsilon for the degree boundaries. `net` is continuous (fractional pools,
+# the sigma mu-shift), so a value that is MATHEMATICALLY on a boundary can arrive one ulp to the wrong side of
+# it, and every boundary here is a hard step in `DAMAGE_BY_DEGREE` (`3 + _sigma_net_boost(-1e-16, 9)` evaluates
+# to just under 3 and would return "Partial" -> 0 damage at the universal `dr=1`, where the intended answer is
+# "Success" -> 3).
 #
-# THE DEFECT. `net` is continuous (fractional pools, the sigma mu-shift), so a value that is
-# MATHEMATICALLY on a boundary can arrive one ulp to the wrong side of it — and every boundary here
-# is a hard step in `DAMAGE_BY_DEGREE`. The documented repro: `3 + _sigma_net_boost(-1e-16, 9)`
-# evaluates to just under 3 and returned "Partial" -> 0 damage at the universal `dr=1`, where the
-# intended answer is "Success" -> 3. A 1-ulp error erasing an entire exchange.
+# ALL THREE COMPARISONS ARE GUARDED, not just `Success`: guarding one would institutionalise an asymmetric,
+# attacker-favouring correction (`net <= 0` would let a mathematically-ZERO net escape `Failure` whenever its
+# ulp error happens to be positive).
 #
-# ALL THREE COMPARISONS ARE GUARDED, not just `Success`. Guarding one would institutionalise an
-# asymmetric, attacker-favouring correction: `net <= 0` lets a mathematically-ZERO net escape
-# `Failure` whenever its ulp error happens to be positive, while an equally-zero net with negative
-# error is correctly failed. Fixing only the boundary that was noticed is how a rounding repair
-# becomes a balance change.
-#
-# WHY ABSOLUTE, AND WHY 1e-9. Measured over the four shipped batteries, |net| is bounded by pool
-# scale (single digits to low tens), so accumulated float error across the pool sum + softcap +
-# sqrt chain is ~1e-13 at worst — four orders below this epsilon. In the other direction, the
-# epsilon can only alter a verdict for a `net` within 1e-9 of a boundary; for such a net the
-# INTENDED degree IS the boundary value, because no designed quantity in this engine resolves at
-# 1e-9 (the smallest designed sigma decrement is a morale step, ~1e-1 through `_morale_sigma`).
-# So the epsilon cannot promote a designed decrement: it can only recover a boundary the arithmetic
-# lost. A relative epsilon would scale with `ob` and re-introduce the asymmetry at ob=0.
+# WHY ABSOLUTE, AND WHY 1e-9. |net| is bounded by pool scale (single digits to low tens), so accumulated float
+# error across the pool sum + softcap + sqrt chain is ~1e-13 at worst, four orders below this epsilon. The
+# epsilon can only alter a verdict for a `net` within 1e-9 of a boundary, and for such a net the INTENDED
+# degree IS the boundary value, because no designed quantity in this engine resolves at 1e-9 (the smallest
+# designed sigma decrement is a morale step, ~1e-1 through `_morale_sigma`). So it cannot promote a designed
+# decrement: it can only recover a boundary the arithmetic lost. A relative epsilon would scale with `ob` and
+# re-introduce the asymmetry at ob=0.
 _DEGREE_EPS = 1e-9   # [JUSTIFIED: ulp-recovery tolerance, 4 orders above measured accumulated error and 8 below the smallest designed sigma decrement; not a mechanical magnitude]
 
 

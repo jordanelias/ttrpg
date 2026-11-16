@@ -1,17 +1,15 @@
 """`season.epistemic` — what a person can come to KNOW, and who comes to know it.
 
-EXTRACTED, step 6 of the decomposition (a PURE MOVE but for one call site, named below). Two
-halves that belong together because they are the two ends of one channel:
+Two halves that belong together because they are the two ends of one channel:
 
   * **what is knowable** — `belief_contradicts` (§F1 clause 4, the one place a person's OWN
     ledger can refuse a candidate), and the two functions that decide what a deposit is ABOUT
     (`act_refs`, `claim_subjects`).
   * **who learns it** — the five `_ch_*` witness-channel predicates, the `CHANNEL_PREDICATES`
-    table built from the roster, `live_channels` and `observers_for`. ⚠ **`_event_place` MOVED OUT
-    AT POSITION `11a`**, promoted to `queries.world_q.place_of` (`ARCH §F.14`'s own name, taking
-    any id rather than only an Event); its two callers here, `_ch_co_located` and `seen_subject`,
-    now read `world_q.event_place(w, e)`, which was `place_of(w, anchor_of(w, e))` plus H-206's limb (an act-caused
-    Event is now placed by its causing act's actor: a cover's anchor is no place).
+    table built from the roster, `live_channels` and `observers_for`. ⚠ **PLACE IS READ FROM
+    `queries.world_q`**: `_ch_co_located` and `seen_subject` read `world_q.event_place(w, e)`, which is
+    `place_of(w, anchor_of(w, e))` (`ARCH §F.14`'s name, taking any id rather than only an Event) plus H-206's limb (an act-caused
+    Event is placed by its causing act's actor: a cover's anchor is no place).
   * **what they saw** — `R8.1`'s `Seen` struct, its `_term_*` readers and `seen_of` /
     `seen_subject`, which `loop/witness.py` deposits as the `seen` claim.
 
@@ -23,31 +21,17 @@ moves the table, its loop and its `del` as one block rather than as three statem
 package's second such lookup; `state/carriers.py` records the first.
 
 ⚠ NOTHING HERE READS `belief_contradicts`, AND THAT IS LOAD-BEARING RATHER THAN INCIDENTAL. Its
-only bare-name caller is `opening_set`, which lives in `season.decision` since step 7 and resolves
-the name in THAT module's globals at call time — so every rebind must name `decision`, and all of
-them do: the suite's six sites and `wd_acceptance.py`'s five, the latter through `sweep_core.PS`.
+only bare-name caller is `opening_set`, which lives in `season.decision` and resolves
+the name in THAT module's globals at call time — so every rebind must name `decision`
+(`wd_acceptance.py`'s through `sweep_core.PS`).
 **If a function here ever calls it directly, that reader would bind THIS module's copy and those
 rebinds would become no-ops on it** — the same hazard, one module over.
-
-⚠ THIS PARAGRAPH PREDICTED ITS OWN EXPIRY AND THEN OUTLIVED IT. Until step 7 it read *"its only
-bare-name caller is `Query.opening_set`, still in `shape.py`"* and closed with *"plan §0 item 1's
-hazard, which arrives for real at step 7"*. Step 7 arrived; `Query.opening_set` no longer exists;
-three clauses went false at once, and the step that falsified them corrected four other
-breadcrumbs and skipped this one — the file that had named itself as the tripwire. `shape.py`'s
-own rule covers it: WRITE THE RULE, NOT THE ADDRESS. A ruling recorded as a location is a claim
-that expires silently at the next move.
 
 ⚠ `04_CODE_ARCHITECTURE.md` §A.2 DOES NOT NAME AN `epistemic` MODULE, and this docstring says so
 rather than implying otherwise. Its nine are `state/ data/ queries/ decision/ loop/ seam/
 manifest/ port/ tests/`; the channel half of this file is what §A.2's `loop/witness` row calls
 *"channel predicates"*, and the knowable half is read by `decision`. The decomposition plan's §1
-table names `epistemic.py` at layer 9 and that is what this is. Whether it folds into
-`loop/witness` when the driver lands at step 9 is that step's call, not this one — the same
-disposition `queries/readers.py` carries.
-
-⚠ ONE LINE IS NOT A BYTE-IDENTICAL MOVE, declared rather than buried: `Query.presence` in
-`_ch_co_located` is `world_q.presence` here. Same function object — `shape.Query` binds it — but
-a channel predicate reaches a world query through the module that owns it.
+table names `epistemic.py` at layer 9 and that is what this is.
 """
 
 from __future__ import annotations
@@ -84,15 +68,13 @@ def belief_contradicts(p: Person, row: "VerbRow", subject: str, operands: dict,
     actions"* and *"our understanding of all other words and actions is subjective and singular."*
     A filter on world truth would be `choose` reading the world; this reads one person's ledger.
 
-    ⚠ `W-A`: IT ASKS THE VERB'S OWN TYPED CELL, NOT A ROSTER. The previous version filtered on
-    `predicate in PERSON_PREDICATES and value is False` -- a MEMBERSHIP TEST standing in for a
-    requirement, because the `requires:` column was prose and `H-72` recorded that the map from a
-    requirement to a predicate did not exist. `H-116` then measured the consequence: over 4,800
-    deposited claims the two vocabularies were DISJOINT and zero claims were falsy, so clause 4
-    could not fire in any run and the candidate set was invariant with respect to everything that
-    happened in the simulation. The predicate is DERIVED from the form now (`stores:grain`,
-    `condition`, `contain.path:D`), so there is one namespace and the write side has a name to aim
-    at. `H-116`'s other half -- WITNESS depositing claims in that namespace -- is not this item.
+    ⚠ `W-A`: IT ASKS THE VERB'S OWN TYPED CELL, NOT A ROSTER. A filter on
+    `predicate in PERSON_PREDICATES and value is False` is a MEMBERSHIP TEST standing in for a
+    requirement (`H-72`: the map from a requirement to a predicate), and the two vocabularies are
+    DISJOINT, so clause 4 could not fire and the candidate set would be invariant with respect to
+    everything that happened in the simulation (`H-116`). The predicate is DERIVED from the form
+    (`stores:grain`, `condition`, `contain.path:D`), so there is one namespace and the write side
+    has a name to aim at. `H-116`'s other half -- WITNESS depositing claims in that namespace -- is not this item.
 
     ⚠ AN UNTYPED VERB IS NOT CONTRADICTED. `evaluate(None, ...)` is UNKNOWN, and UNKNOWN is not
     False: a person cannot know a requirement fails when nothing states what the requirement is.
@@ -100,11 +82,11 @@ def belief_contradicts(p: Person, row: "VerbRow", subject: str, operands: dict,
     governs the resolver -- and the same `Verdict` carries both readings.
 
     ⚠ `W-C`: IT READS THE CANDIDATE'S OWN OPERANDS, WHICH IS WHAT MAKES THIS THE SAME QUESTION
-    THE FOLD ASKS. It used to call `binding_from`, which rebound `subject` onto whichever operand
-    the cell called its entity -- so for `transfer` the person asked *does the RECEIVER hold the
-    grain*, and §54 item 7 asks about the GIVER's hearth. The person was reading a different cell
-    from the fold and getting a defensible-looking answer to the wrong question. `operands` is the
-    same bag the Act will carry, passed through the same `binding_of`, so the two sides now differ
+    THE FOLD ASKS. `binding_from` would rebind `subject` onto whichever operand
+    the cell called its entity -- so for `transfer` the person would ask *does the RECEIVER hold the
+    grain*, and §54 item 7 asks about the GIVER's hearth: a different cell from the fold's and a
+    defensible-looking answer to the wrong question. `operands` is the
+    same bag the Act will carry, passed through the same `binding_of`, so the two sides differ
     only in WHAT THEY READ (one ledger, one world) and in POLARITY -- which is the difference
     that is supposed to be there.
 
@@ -113,17 +95,16 @@ def belief_contradicts(p: Person, row: "VerbRow", subject: str, operands: dict,
     on `Act.via` -- and `binding_of` carries it exactly as `binding_from_act` does for the fold, so a
     `basis` conjunct (§F.24a form 7, `data/requires.py::Basis`) asks the person's ledger about THE
     SAME seat the fold will ask the world about. Omitted (`None`), the conjunct is UNKNOWN, which
-    contradicts nothing -- the pre-`19` answer for every caller that passes none.
+    contradicts nothing.
 
     ⚠ TELLING WORKPLAN `T3a` (`ED-IN-0282`): `weigh` GRADES HEARSAY AS IT IS READ. `opening_set`
-    passes `decision/options.py::teller_weight(p, fx)`, so a newer claim a teller passed on no
-    longer beats the person's own firsthand claim merely by being newer. The CLOSURE is passed in,
+    passes `decision/options.py::teller_weight(p, fx)`, so a newer claim a teller passed on does
+    not beat the person's own firsthand claim merely by being newer. The CLOSURE is passed in,
     not built here, because `decision.options` imports this module and a deferred import back
-    would hide that cycle rather than remove it. Omitted (`None`), the reader orders as before.
+    would hide that cycle rather than remove it. Omitted (`None`), the reader is unweighted.
 
     ⚠ v9 IN-15 / `H-201`: `actor` IS WHO THE CELL'S `actor` OPERAND BINDS TO, AND IT DEFAULTS TO `p`.
-    The person choosing an act is its actor, so `opening_set` passes nothing and the binding is
-    byte-for-byte what it was. A WITNESS asking whether an act they saw could have happened is a
+    The person choosing an act is its actor, so `opening_set` passes nothing. A WITNESS asking whether an act they saw could have happened is a
     different question -- *could THE ACTOR have done this, on what I hold* -- and answering it with
     `p.id` bound reads the witness's own granary instead of the actor's. The ledger stays `p`'s
     (the belief is the witness's); only the operand moves. `actor=None` is `p.id`, never "no
@@ -153,11 +134,8 @@ def _tenure_by_id(w: "World", tid: str):
     """The Tenure with this id, or `None`. Linear, and deliberately not indexed -- the same
     precedent `state/attribution.py::event_by_id` states for the log: a lookup that is not hot
     does not earn a second structure to keep in step with `w.tenures`. Not called on a hot path
-    -- measured over a 44.6s / 143-case corpus run, this lookup is reached 52 times against
-    39,932 `claim_subjects` calls total, 0.111s of the run (`ED-IN-0267`'s own measurement).
-    ⚠ A THIRD CALLER SINCE PLAN POSITION 16: `loop/witness.py`'s deposit trigger reads every change
-    of every Event through `_hold_tenure_ends`. MEASURED 2026-09-29 on `populated.run(2, 0)`: 8,944
-    calls, 0.18s of a ~43s run over 637 Tenures -- still not enough to earn an index."""
+    (`ED-IN-0267`); `loop/witness.py`'s deposit trigger also reads every change of every Event
+    through `_hold_tenure_ends`, which is not enough to earn an index either."""
     for t in w.tenures:
         if t.id == tid:
             return t
@@ -171,11 +149,10 @@ def _hold_tenure_ends(w: "World", subject: str) -> tuple:
     including a non-`hold` Tenure id (`commit`/`oblige`/`succeed`/`tie`/`knot`), passes through
     unchanged, which is the safe default `claim_subjects` already documents for those kinds.
 
-    ⚠ EXTRACTED FOR `R8.1`, NOT REWRITTEN BESIDE IT (found by adversarial review): the first `seen`
-    writing left `seen_subject` depositing a `hold` Tenure's own opaque id -- unwitnessable, because
-    no live Tenure has a Tenure's own id as its `object` (`questions_for`'s `mine`), so Q2 could
-    never fire for exactly the office-conferral/revocation events `R8.4`'s last row names. One
-    owner closes that gap for both callers at once."""
+    ⚠ ONE OWNER FOR BOTH CALLERS (`R8.1`): `seen_subject` must not deposit a `hold` Tenure's own
+    opaque id -- unwitnessable, because no live Tenure has a Tenure's own id as its `object`
+    (`questions_for`'s `mine`), so Q2 could never fire for exactly the office-conferral/revocation
+    events `R8.4`'s last row names."""
     t = _tenure_by_id(w, subject)
     if t is not None and t.kind == "hold":
         return (subject,) if t.subject == t.object else (t.subject, t.object)
@@ -185,8 +162,7 @@ def _hold_tenure_ends(w: "World", subject: str) -> tuple:
 def claim_subjects(w: "World", e: "Event", rule: str, refs: Optional[list] = None) -> list:
     """`H-79`: what the claims deposited from one Event are ABOUT.
 
-    `actor` is the incumbent — one claim, subject = the Event's anchor (`anchor_of`; it was the
-    Event's own `subject` field until G1b deleted it). `per_change` mints
+    `actor` is the incumbent — one claim, subject = the Event's anchor (`anchor_of`). `per_change` mints
     one per `StateChange`, subject = THE THING CHANGED, which is what makes §F1's Q2 clause
     "something they hold" reachable at all. `both` is the union.
 
@@ -199,11 +175,9 @@ def claim_subjects(w: "World", e: "Event", rule: str, refs: Optional[list] = Non
         "H-79",
         law="#353 §20 types `Claim.subject` and never says what a WITNESS deposit's subject "
             "is; a rule outside the roster is a fourth answer nobody declared")
-    # G1b. `anchor_of` REPLACES `e.subject`, and it is the same value by measurement rather
-    # than by intention -- 1,428 events over 5 seeds, 0 disagreements (`state/attribution.py`).
-    # What it adds is that the two senses the field conflated are now separable: an act-caused
-    # Event anchors on its ACTOR, a MATTER write on the THING WRITTEN, and a reader no longer has
-    # to infer which it received from whether the id happens to name a person.
+    # `anchor_of` (`state/attribution.py`) separates the two senses an Event's subject could carry: an
+    # act-caused Event anchors on its ACTOR, a MATTER write on the THING WRITTEN, and a reader does not
+    # have to infer which it received from whether the id happens to name a person.
     anchor = anchor_of(w, e)
     out = [] if rule == "per_change" else [anchor]
 
@@ -218,15 +192,13 @@ def claim_subjects(w: "World", e: "Event", rule: str, refs: Optional[list] = Non
             # ⚠ H-71's OTHERS HALF -- A `hold` TENURE'S RECEIPT NAMES THE EDGE, NOT WHAT IT
             # CONNECTS, AND A WITNESS CANNOT ACT ON AN EDGE'S OWN ID. `_eff_confer`/`_eff_revoke`/
             # `_eff_release` report the Tenure's own hash id as touched -- correctly, because that
-            # is what the gate actually wrote (the Receipt's honesty is what a rejected earlier
-            # fix broke, by reporting the office and the holder in the Tenure's place). Expanding
+            # is what the gate actually wrote. Expanding
             # here, at the READER, keeps that honesty and still makes the fact legible: a claim
             # about a `hold` that opened or closed is really a claim about its SUBJECT (who) and
             # its OBJECT (what they hold).
             #
-            # ⚠⚠ SCOPED TO `t.kind == "hold"`, NOT TO THE EVENT KIND -- A FIRST VERSION KEYED ON
-            # `e.kind in ("tenure.opened", "tenure.closed")` AND THAT WAS WRONG, FOUND BY
-            # ADVERSARIAL REVIEW. Both kinds are shared by every Tenure closer: `_eff_release`
+            # ⚠⚠ SCOPED TO `t.kind == "hold"`, NOT TO THE EVENT KIND (`e.kind in ("tenure.opened",
+            # "tenure.closed")`). Both kinds are shared by every Tenure closer: `_eff_release`
             # ends ANY of `RELEASABLE_KINDS` (`hold, commit, oblige, succeed, tie, knot`,
             # `data/rosters.py`) through the ONE generic `tenure.closed` emit
             # (`verb_table.yaml`'s `release` row), so keying on the event kind admitted every one
@@ -241,29 +213,25 @@ def claim_subjects(w: "World", e: "Event", rule: str, refs: Optional[list] = Non
             # t.object == c.subject`) -- a search rather than an expansion, and keyed on the OBJECT
             # rather than the Tenure's own id, so it is a related read on the same restriction
             # rather than the identical operation. A `commit`/`oblige`/`succeed`/`tie`/`knot`
-            # closure still deposits the Tenure's own opaque id, unchanged from before this row --
-            # the safe default, and correct: nobody has ruled those witnessable in this form.
+            # closure still deposits the Tenure's own opaque id -- the safe default, and correct: nobody has ruled those witnessable in this form.
             for s in _hold_tenure_ends(w, c.subject):
                 _add(s)
-        # ⚠ **AND WHAT THE ACT NAMED, WHICH IS THE HALF THAT WAS MISSING.** An Event that wrote
-        # nothing has an empty `changes[]`, so every claim deposited from one was minted about
-        # **the actor** — by the `or [anchor]` fallback below (it read `or [e.subject]` until G1b
-        # deleted the field), the anchor being the actor for anything the fold emits. §F1's Q2 admits a claim whose subject is the holder or
+        # ⚠ **AND WHAT THE ACT NAMED.** An Event that wrote
+        # nothing has an empty `changes[]`, so every claim deposited from one is minted about
+        # **the actor** — by the `or [anchor]` fallback below, the anchor being the actor for
+        # anything the fold emits. §F1's Q2 admits a claim whose subject is the holder or
         # something the holder holds, so *a claim about the actor can never raise a listener's
-        # question*: the news arrived in a form nobody could act on. Measured before this line
-        # existed: `R3` = 0 of 30 on the NPC lane, 0 of 59 on ARC.
+        # question*: the news would arrive in a form nobody could act on.
         #
-        # ⚠ **THE RULE IS ABOUT WRITE-NOTHING EVENTS, NOT ABOUT `tell`, AND SAYING OTHERWISE WAS
-        # AN OVERCLAIM A CRITIC BROKE.** The first writing of this comment quoted Reading 07 §3 —
-        # *"the `tell` chain is the only transport"* — as though this line served `tell` alone. It
-        # does not: it fires for every verb with `writes: []` (`speak`, `comply`, `dispatch`,
+        # ⚠ **THE RULE IS ABOUT WRITE-NOTHING EVENTS, NOT ABOUT `tell` ALONE.** Reading 07 §3 says
+        # *"the `tell` chain is the only transport"*; this line does not serve `tell` alone: it fires for every verb with `writes: []` (`speak`, `comply`, `dispatch`,
         # `evade`/`defy`, `construe`, the investigation acts), for `contest.resolved`, and for
         # every refusal. That is **correct and it is a different carrier**: Reading 07 §5 names
         # three, and the first is PRESENCE — *you were there*. A speech changes nothing and is
         # still witnessed, and what a witness learns is what was spoken ABOUT. Transport is what
         # reaches somebody who was NOT there, and that is still `tell` alone.
         #
-        # ⚠ **AND THE CASCADE IS WORTH NAMING, BECAUSE IT EXPLAINS THE MEASUREMENT.** `speak` has
+        # ⚠ **AND THE CASCADE IS WORTH NAMING.** `speak` has
         # no precondition; `_req_tell` requires the teller to hold a claim on the subject. So a
         # witnessed speech about a proposition deposits the very claim `tell` needs, and `tell`
         # then executes *because* `speak` seeded it. The propagation this closes runs through
@@ -275,36 +243,34 @@ def claim_subjects(w: "World", e: "Event", rule: str, refs: Optional[list] = Non
         # ⚠ `actor` STAYS THE DECLARED INCUMBENT and is untouched — it is the roster's control
         # arm, and this adds nothing to it.
         #
-        # ⚠ **AND ONLY WHERE `changes[]` SUPPLIED NOTHING, WHICH IS NARROWER THAN THE FIRST
-        # WRITING AND THE SUITE IS WHY.** Adding the act's referents to EVERY deposit inflated the
-        # ledger enough that `H-40`'s decay sweep stopped being observable: the cap evicts on
-        # `(confidence, recency)`, so the extra claims pushed the decayed ones out and all three
-        # arms reported a minimum confidence of 100 — *"the rate is inert and this sweep is
+        # ⚠ **AND ONLY WHERE `changes[]` SUPPLIED NOTHING.** Adding the act's referents to EVERY
+        # deposit inflates the ledger enough that `H-40`'s decay sweep stops being observable: the
+        # cap evicts on `(confidence, recency)`, so the extra claims push the decayed ones out and
+        # all three arms report a minimum confidence of 100 — *"the rate is inert and this sweep is
         # measuring nothing"*, which is `ID-10` produced by a fix rather than by a bug. The
-        # rationale only ever justified the empty case: an Event that wrote nothing has nothing
+        # rationale only justifies the empty case: an Event that wrote nothing has nothing
         # for `per_change` to find, and that is exactly where a telling lands.
         # ⚠ THE TEST IS ON `changes[]`, NOT ON `out`. Under the `both` rule `out` already holds
-        # the actor, so testing the accumulator would have skipped every telling — which is the
-        # case this exists for, and the first writing of this line did exactly that.
+        # the actor, so testing the accumulator would skip every telling — which is the
+        # case this exists for.
         #
         # ⚠ **AND IT REPLACES THE ACTOR RATHER THAN JOINING IT, WHICH IS BOTH THE CORRECT READING
         # AND THE ONE THAT DOES NOT PERTURB THE LEDGER.** A claim minted from a telling is about
-        # WHAT WAS TOLD; the teller is not the news. Adding it as a second claim was measured and
-        # rejected: it mints one extra claim per telling, the cap evicts on `(confidence,
-        # recency)`, and `H-40`'s decay sweep then reported a minimum confidence of 100 in all
+        # WHAT WAS TOLD; the teller is not the news. Adding it as a second claim mints one extra
+        # claim per telling, the cap evicts on `(confidence,
+        # recency)`, and `H-40`'s decay sweep then reports a minimum confidence of 100 in all
         # three arms — the rate made inert by a fix, which is the `ID-10` defect class arriving
         # from the direction nobody watches. One claim per witnessed Event either way, so the
         # eviction pressure this sweep measures against is unchanged.
         if not any(c.subject for c in e.changes) and any(refs or ()):
             out = [r for r in (refs or ()) if r]
-    # ⚠ G1b: AN EVENT NOTHING ANCHORS IS DEPOSITED ABOUT NOTHING, NOT ABOUT `None`. With
-    # `Event.subject` deleted, `anchor_of` answers `None` for an Event with no act, no change and
+    # ⚠ G1b: AN EVENT NOTHING ANCHORS IS DEPOSITED ABOUT NOTHING, NOT ABOUT `None`.
+    # `anchor_of` answers `None` for an Event with no act, no change and
     # no anchored antecedent. The channel predicates already admit nobody for one, but the `total`
-    # arm fans every Event to everyone, and without this line it minted `Claim(subject=None)` into
-    # every ledger -- measured, 5 of 5 in `tiny_world`. `witness`'s own precedent decides it: a
+    # arm fans every Event to everyone, and without this line it would mint `Claim(subject=None)` into
+    # every ledger. `witness`'s own precedent decides it: a
     # read the instrument cannot answer (`UNKNOWN`) is NOT deposited, because the instrument's gap
-    # would become a belief. No production emitter reaches this (every logged Event in the probe
-    # corpus, headless and the populated realm anchors); `test_g1b_attribution.py` plants one.
+    # would become a belief. No production emitter reaches this; `test_g1b_attribution.py` plants one.
     # v9 IN-12 step 10: A COVERED ACT'S DEPOSIT NAMES THE ALIAS AND NOT THE ACTOR. The anchor is the
     # cover's id, but a receipt that names the actor (`move`'s and `migrate`'s mover, `determine`'s
     # judge, `forgive`'s and a self-`tend`'s own person) re-added him through `changes[]`, so the
@@ -339,7 +305,7 @@ def holds_trail(w: World, p: Person, e: Event, rule: str) -> bool:
 
     THE SPECIFIC SUBJECTS are what the deposit rule makes a claim about `e` (`claim_subjects`) MINUS
     the Event's anchor (`anchor_of`, the actor for an act-caused Event) -- or, where nothing else is
-    left (the `actor` rule, or an Event that names only its anchor), the anchor alone, as before. The
+    left (the `actor` rule, or an Event that names only its anchor), the anchor alone. The
     anchor is excluded because it is not specific to ONE Event: `(forger, record.forged, True)` is the
     same claim for every forging by that forger, so keying on it would close every LATER forging by him
     to an investigator who had found (or witnessed) ANY one of them.
@@ -417,35 +383,22 @@ def trail_of(w: World, subject: Optional[str], pid: str) -> list:
 # ⚠ AND EVERY PREDICATE IS COMPUTED FROM WORLD STATE. §19.3 removes `target` from the Event and
 # says why: *"observers are computed at WITNESS from presence; THE EMITTER DECLARES NO
 # RECIPIENT."* A channel that needed the emitter to name someone would be a different design.
-#
-# ⚠ WHY THIS BECAME URGENT RATHER THAN OPTIONAL. `PLAN.md` §1.4 hole 16: `D22` (MATTER emits per
-# write) and `H-33` (fan-out total) are *"individually fine and JOINTLY FATAL"*, and `W4` made
-# that real -- events per run went 207 -> 896 -> 3389 over two, three and four seasons, ledgers
-# pinned at the `L = 200` cap, and the test suite stopped finishing. The plan predicted it as an
-# argument; it arrived as a measurement.
 # ---------------------------------------------------------------------------
 
 def _ch_co_located(w: "World", e, pid) -> bool:
-    """⚠ READS THE BARRIER'S PRESENCE INDEX, WHICH IS WHAT MAKES THE CLAIM ABOUT IT TRUE. `W6`
-    published *"the presence index this barrier has always built was UNUSED until this line"* while
-    this function called `Query.presence` DIRECTLY, rebuilding the answer with a full `w.tenures`
-    scan for every (event, person) pair. The index stayed unused and the claim was false — which is
-    the failure `shape.py`'s own fidelity rule names: *a false claim of enforcement is worse than
-    none, because it stops the next reader from checking.* It is also where the narrow arm's cost
-    went. `cache_at_barrier` is safe here because the fan is built BEFORE `witness` enters its
-    parallel map. Found by the `W6` adversarial pass.
+    """⚠ READS THE BARRIER'S PRESENCE INDEX (`cache.presence_index`), NOT `Query.presence` DIRECTLY,
+    which would rebuild the answer with a full `w.tenures` scan for every (event, person) pair.
+    `cache_at_barrier` is safe here because the fan is built BEFORE `witness` enters its
+    parallel map.
 
-    ⚠ **`world_q.event_place(w, e)`, NOT A LOCAL LOOKUP -- MOVED AT POSITION `11a`.**
-    This site's own private `_event_place` used to answer it, testing person-before-rung in an
-    order its docstring called *"the whole of this function's correctness"*: the first version
-    tested `e.subject in w.rungs` FIRST, and `probes.py` gives every person a same-id `person`-kind
-    Rung, so a person-subject Event returned the person's OWN rung and `Query.presence` then
-    answered *"who is contained IN p_high"* — nobody. Under `presence_only` that excluded THE
-    SPEAKER AND EVERYONE STANDING IN THE ROOM, and `P15`'s only assertion (`narrow < total`) could
-    not tell a channel broken CLOSED from one working — §0.1 pt 2. **THIS WAS A REPEAT**:
-    `witness`'s own rev-2 retraction records the identical conflation. `world_q.place_of` carries
-    the same order forward (its own docstring names the hazard) and adds the Record/Date limbs
-    `ARCH §F.14` promotion asked for; nothing about the person-before-rung guarantee moved."""
+    ⚠ **`world_q.event_place(w, e)`, NOT A LOCAL LOOKUP.** It tests person-before-rung: testing
+    `e.subject in w.rungs` FIRST fails, because `probes.py` gives every person a same-id
+    `person`-kind Rung, so a person-subject Event returns the person's OWN rung and
+    `Query.presence` then answers *"who is contained IN p_high"* — nobody. Under `presence_only`
+    that excludes THE SPEAKER AND EVERYONE STANDING IN THE ROOM, and `P15`'s only assertion
+    (`narrow < total`) could not tell a channel broken CLOSED from one working — §0.1 pt 2.
+    `world_q.place_of` carries that order (its own docstring names the hazard) and adds the
+    Record/Date limbs `ARCH §F.14` asked for."""
     place = world_q.event_place(w, e, homes=cache.home_index(w))
     if place is None:
         return False
@@ -454,26 +407,22 @@ def _ch_co_located(w: "World", e, pid) -> bool:
 
 
 def _ch_document_key(w: "World", e, pid) -> bool:
-    """⚠ THIS COULD NEVER FIRE ON AN ACT, AND THE REPAIR IS TO READ `changes[]` (`R8.4`).
+    """⚠ READS `changes[]` (`R8.4`): `pid` holds, live, an object some change of this Event wrote.
 
-    It tested `t.object == e.subject`. Every fold-emitted Event sets `subject = a.actor` on the one
-    path every act-emission takes (`shape.py::SeasonDriver::_fold::ev`), and no `hold` Tenure takes
-    a PERSON as object. So the equality could hold only where an Event's subject was ITSELF the
-    held thing, which is
-    `MATTER`/`CALENDAR` kinds alone: those carry no verb and no actor. **`R5`'s bureaucratic
-    channel was unreachable on acts -- not underused, unreachable**, and `R5` names three of the
-    five channels bureaucratic rather than memorial.
+    A test of `t.object == e.subject` could never fire on an act. Every fold-emitted Event sets
+    `subject = a.actor` on the one path every act-emission takes
+    (`shape.py::SeasonDriver::_fold::ev`), and no `hold` Tenure takes a PERSON as object. So the
+    equality could hold only where an Event's subject was ITSELF the held thing, which is
+    `MATTER`/`CALENDAR` kinds alone: those carry no verb and no actor. `R5`'s bureaucratic
+    channel would be unreachable on acts, and `R5` names three of the five channels bureaucratic
+    rather than memorial.
 
-    ⚠ A `hold` IS NOT ONLY OVER A RECORD OR AN OFFICE, and an earlier writing of this docstring
-    said so and was wrong. `hold` over a RUNG is built all over the tree (`probes.py:991,998`;
-    Part E's own `hold:<store>` eligibility cell). `tenure_kinds` declares no object type at all.
-    The load-bearing half survives the correction -- no `hold` takes a PERSON as object, which is
-    what makes the old predicate unsatisfiable on an act -- but the enumeration was false and the
-    repair's reach is wider than it claimed. Found by the adversarial pass.
+    ⚠ A `hold` IS NOT ONLY OVER A RECORD OR AN OFFICE. `hold` over a RUNG is built all over the
+    tree (`probes.py:991,998`; Part E's own `hold:<store>` eligibility cell). `tenure_kinds`
+    declares no object type at all. The load-bearing half: no `hold` takes a PERSON as object,
+    which is what makes the `e.subject` predicate unsatisfiable on an act.
 
-    MEASURED before the repair, Carin's world at seed 0, two seasons, the `all_five` arm: the
-    predicate returned True for **1** (event, person) pair -- on `term.matured`, whose subject IS
-    the record. Not one act. ⚠ Count the predicate EXHAUSTIVELY, not through `observers_for`: that
+    ⚠ Count the predicate EXHAUSTIVELY, not through `observers_for`: that
     function's `any(...)` short-circuits per person, so once `co_located` matches, later channels
     are never called and every count taken through it under-reports.
 
@@ -482,52 +431,44 @@ def _ch_document_key(w: "World", e, pid) -> bool:
     ABOUT; this asks the same primitive who was WATCHING. `PLAN.md` §8.1 forbids an `actor` or
     `target` field on `Event` and this needs neither.
 
-    ⚠ WHY A REPLACEMENT AND NOT A UNION -- BY CONSTRUCTION, WITH ONE NAMED CARVE-OUT. The first
-    writing of this paragraph rested the decision on ONE SEEDED RUN, which is the weaker argument
-    and was available in the stronger form. Structurally: `write()` and `term.matured` both put
-    their subject into `changes[0]`, so NEW is a superset of OLD wherever they fire at all; every
-    fold-emitted Event and every refusal has a PERSON subject, where OLD never fired. **The one
+    ⚠ WHY A REPLACEMENT AND NOT A UNION -- BY CONSTRUCTION, WITH ONE NAMED CARVE-OUT.
+    `write()` and `term.matured` both put their subject into `changes[0]`, so the `changes[]`
+    reading is a superset of the `e.subject` one wherever they fire at all; every
+    fold-emitted Event and every refusal has a PERSON subject, where `e.subject` never fired. **The one
     exception is `condition.band_crossed` (emitted in `shape.py::SeasonDriver::matter`), which
-    carries `subject = <Site>` and `changes = []`** -- a person holding that Site would satisfy OLD
-    and not NEW. No `hold` over a
+    carries `subject = <Site>` and `changes = []`** -- a person holding that Site would satisfy the
+    `e.subject` reading and not `changes[]`. No `hold` over a
     Site exists anywhere in the tree, so the union would admit nobody today; the carve-out is named
     rather than hidden, because a Site-hold is not forbidden and this line is what would break.
-    Found by the adversarial pass, which was right that a measurement was standing in for a proof.
 
-    ⚠ THE CHANNEL DOES REACH A NON-AUTHOR TODAY, AND AN EARLIER WRITING OF THIS DOCSTRING DENIED
-    IT. It said *the channel still fires for nobody but the author*, which is true of Carin's world
-    -- she holds no rung -- and FALSE OF THE MECHANISM. `_eff_transfer` names both rungs (G4: as
-    the subjects of its `Change`, where it returned `[src.id, dst.id]`), the gate mints a receipt
-    subjected to each RUNG that moved, and the fold puts them on the Event. EXECUTED on `tiny_world`: with `p_other` holding `S` and acting, and `p_low` holding
+    ⚠ THE CHANNEL DOES REACH A NON-AUTHOR. `_eff_transfer` names both rungs (G4: as
+    the subjects of its `Change`), the gate mints a receipt
+    subjected to each RUNG that moved, and the fold puts them on the Event. On `tiny_world`, with
+    `p_other` holding `S` and acting, and `p_low` holding
     the destination `Hh`, `transfer.made` carries `changes=['S','Hh']` and `document_key` returns
-    True for `p_low` -- **a non-author, witnessing an act, through the bureaucratic channel**. That
-    is `R5` reachable, which is what this repair was for, and it under-reported itself. Found by the
-    adversarial pass; pinned by `test_r8_4_document_key_reaches_a_non_author_through_a_store`.
+    True for `p_low` -- **a non-author, witnessing an act, through the bureaucratic channel**
+    (pinned by `test_r8_4_document_key_reaches_a_non_author_through_a_store`). Carin's world, where
+    she holds no rung, reaches nobody but the author.
 
-    ⚠ WHAT THIS DOES **NOT** FIX, STATED HERE SO IT IS NOT READ AS FIXED: `H-84`, and it is now
-    narrower than the sentence above once made it sound. No verb in the resolvable vocabulary moves
+    ⚠ WHAT THIS DOES **NOT** FIX: `H-84`. No verb in the resolvable vocabulary moves
     a RECORD to another person, so the only person holding a Record is still its maker. The STORE
     route above is open; the RECORD route is not, and `PHASE 1` step 1's own falsifier is written
     about Records. That is a PRODUCER hole with its own row and its own owner (*Part E -- the verb
     that would do it*), and `H-84` forbids in terms inventing a `give_record` here to make a case
-    pass. Nothing was invented. ⚠ AND NOTHING WAS INVENTED LATER EITHER: the verb came from its
-    owner, Part E -- `give`, ratified plan position 16 (2026-09-29), a row in `verb_table.yaml`
-    with its own effect. This channel did not change for it: once the receiver's `hold` is live,
+    pass. The verb is `give`, ratified plan position 16 (2026-09-29), a row in `verb_table.yaml`
+    with its own effect. This channel is unchanged by it: once the receiver's `hold` is live,
     an Event changing the Record reaches the receiver here, and the giver's closed `hold` reaches
     nobody. No person forms a `give` until `15c` carries a receiver (see `H-84`'s row).
 
     ⚠ AND ONE INTERACTION THIS DOES NOT SETTLE, BECAUSE IT IS `PHASE 1` STEP 3's. A channel decides
-    WHO witnesses, not WHAT they learn. Composed with the deposit layer as it stands -- `observers_for`
-    reports the admitting channel since position `15d`, but only the deposit's SOURCE reads it (a
+    WHO witnesses, not WHAT they learn. Composed with the deposit layer -- `observers_for`
+    reports the admitting channel (position `15d`), but only the deposit's SOURCE reads it (a
     `document_key`-only witness holds the event-kind claim `told_by`), and `claim_subjects` under the default
     `both` rule starts from the Event's anchor, the actor -- a `document_key`-only witness learns WHO ACTED. `R8.5`
     cites a ratified line pointing the other way (*"a document holder saw only that the document
-    changed"*). ⚠ WHEN THIS DOCSTRING WAS FIRST WRITTEN, ON THE PROTOTYPE, IT SAID THAT LINE
-    *"lives on unmerged PR #371, not in this tree"*. That is no longer true of THIS file: #371 was
-    adopted and `engine/season/` is the tree, so the ratified line and the mechanism it constrains
-    now sit in one place. ⚠ THE `seen` CLAIM NOW SUPPLIES THE ASYMMETRY (`R8.1`, `seen_of` below):
+    changed"*). ⚠ THE `seen` CLAIM SUPPLIES THE ASYMMETRY (`R8.1`, `seen_of` below):
     a `document_key`-only witness is shown no term at all -- *only that the document changed* --
-    (`rosters.yaml: observation_terms.supplied_by`). The event-kind deposit above it is unchanged and still names
+    (`rosters.yaml: observation_terms.supplied_by`). The event-kind deposit above it still names
     the actor under `both`, so the attribution leak this paragraph describes survives on THAT
     claim; `seen` is added beside it, as `R8.1` rules, not in its place.
     """
@@ -541,9 +482,8 @@ def _ch_document_key(w: "World", e, pid) -> bool:
 
 
 def _ch_witness_key(w: "World", e, pid) -> bool:
-    # G1b. The witness key is the Event's anchor -- the actor where one acted, the written thing
-    # otherwise. Same value as the field it replaces; see `state/attribution.py` for the control.
-    # v9 IN-12 step 10 (#453 §9.3; K-19): IT CHANGES WITH `anchor_of`, AND NOTHING HERE WAS EDITED FOR IT.
+    # The witness key is the Event's anchor -- the actor where one acted, the written thing otherwise.
+    # v9 IN-12 step 10 (#453 §9.3; K-19): IT CHANGES WITH `anchor_of`.
     # An act by a person holding a live cover anchors on the cover's id (`attribution.live_cover`), a
     # Record id no person is and no `knot` names, so neither clause below admits anyone by key: his
     # knot-partners stop witnessing his covered acts through this channel. He himself, and anyone else
@@ -589,44 +529,25 @@ def _ch_post_remit(w: "World", e, pid) -> bool:
     co-location is with the SEAT, which keeps the channel place-bound (r2 `01`: *"which keeps it
     place-bound"*) while reaching the staff who were not in the room.
 
-    ⚠⚠ WHAT THIS REPLACED, AND IT WAS RETIRED, NOT WIDENED. Until `17a` this channel admitted any
-    person holding a live `hold` whose granted remit covered a `remit:` verb emitting the Event's
-    kind -- every such office-holder, anywhere in the realm (`W6` found it could never fire; `13e`
-    made it read `t.granted_acts`, the snapshot). That is the place-blind broadcast r2 `02` §A.7
-    and `01` both delete (*"would make every seat with `remit:issue` witness every handover in the
-    realm"*), and r2 item 9 re-bases it rather than keeping it beside the obligee rule -- a sixth
-    channel or a union would have kept the broadcast. MEASURED on `populated.build_realm(0)`'s first
-    season (all_five), the same world and seed before and after: the remit channel was the
-    strongest admitting channel for 105 (witness, Event) pairs; 58 of them were `chronicle`'s too
-    and are now credited there, `told_by` as before (so moving `post_remit` behind `chronicle` in
-    the roster changes no claim -- controlled: the old predicate under the new order reproduces the
-    old hash exactly, the field-deletion repr aside); the other 47 -- every one a `march.declared`,
-    heard by `remit:dispatch` holders nowhere near the march -- reach nobody now. Claims `told_by`
-    400 -> 318 over the season as the later rounds re-form (events 5,471 -> 5,378), `inferred` 0 ->
-    0, because nobody in the realm obliged AT `17a`; `post_remit` credited nobody there (⚠ `13d-iii`
-    since seeds one `oblige`, and `inferred` is still 0 -- see *WHO CAN REACH IT TODAY* below).
-    `13e`'s snapshot consolidation is unaffected where it still reads -- `loop/resolve.py`'s
-    `_eligible` and `decision/options.py` -- and this site is simply no longer one of them.
+    ⚠⚠ IT IS PLACE-BOUND, NOT A BROADCAST. A predicate admitting any person holding a live `hold`
+    whose granted remit covers a `remit:` verb emitting the Event's kind -- every such
+    office-holder, anywhere in the realm -- is the place-blind broadcast r2 `02` §A.7 and `01`
+    both delete (*"would make every seat with `remit:issue` witness every handover in the
+    realm"*), and r2 item 9 re-bases it on the obligee rule rather than keeping it beside it -- a
+    sixth channel or a union would keep the broadcast.
 
-    ⚠ (B-E, v9 IN-22: a computed `transfer` through a seat now carries `Act.via`, so seat-borne transfers
-    reach this predicate, and the IN-22 purview limb in `loop/witness.py` mints `inferred` claims for
-    seat holders; the paragraph below predates both.)
-    ⚠ WHO CAN REACH IT TODAY: nobody the chooser drives. `oblige`'s row is untyped and declares
+    ⚠ WHO CAN REACH IT: a computed `transfer` through a seat carries `Act.via` (B-E, v9 IN-22), so
+    seat-borne transfers reach this predicate, and the IN-22 purview limb in `loop/witness.py`
+    mints `inferred` claims for seat holders. `oblige`'s row is untyped and declares
     `counterparty: subject`, so `opening_set` forms no `oblige` Candidate (plan position 16's
-    precedent -- and no Question's referent is ever a seat anyway), and AT `17a` no world builder
-    seeded an `oblige` Tenure: `offices.yaml`'s one authored obligee sat on a `[NEW]` seat nothing
-    minted yet. ⚠ SUPERSEDED AT `13d-iii` (2026-10-01): `build_realm` now mints
-    `off_restoration_leader` and opens its authored obligee, NPC-041, as a term-less `oblige`
-    Tenure -- the realm's one. `inferred` IS NEVERTHELESS STILL 0 THERE: MEASURED at the Batch C
-    close, `populated.run(n, 0)` -- no `inferred` claim in any ledger after 1 season (firsthand
-    5,216, told_by 2,807) or after 4 (firsthand 11,574, told_by 4,708). WHY it stays 0 with an
-    obligee present is NOT isolated here, so the realm's 0 is no longer *for want of an `oblige`*.
-    The corpus figure is `17a`'s and not re-measured: the corpus's 178 built worlds hold 90,988
-    claims, every one `firsthand`, identical before and after. The channel is exercised by acts
+    precedent -- and no Question's referent is ever a seat anyway). The realm seeds one `oblige`
+    Tenure (`boot/realm.py` mints `off_restoration_leader` and opens its authored obligee, NPC-041,
+    as a term-less `oblige`), and `inferred` is nevertheless 0 there; WHY it stays 0 with an
+    obligee present is NOT isolated here. The channel is exercised by acts
     that name their seat (`tests/test_obligees.py`, through the real fold and WITNESS).
 
-    ⚠ NOT CACHED AT THE BARRIER, THOUGH `establishment_of` RE-SCANS `w.tenures` ON EVERY CALL --
-    TRIED AND REVERTED (methodology-close Phase 2, EFFICIENCY finding). r2 `05` §A.1.5 RULED (d) is
+    ⚠ NOT CACHED AT THE BARRIER, THOUGH `establishment_of` RE-SCANS `w.tenures` ON EVERY CALL.
+    r2 `05` §A.1.5 RULED (d) is
     in words, not only in the call: *"the Query has a caller, and the channel has no second copy of
     the set"* -- `test_obligees.py::test_17a_the_channel_reads_the_obligee_set_through_establishment_of`
     is that ruling as a falsifier, monkeypatching `establishment_of` mid-test and asserting this
@@ -635,8 +556,7 @@ def _ch_post_remit(w: "World", e, pid) -> bool:
     barrier across every later one, obligee membership no longer live for the rest of it. The
     re-scan is real cost and the fix stays declined -- `establishment_of` is a small Query over a
     Tenure set no world today grows large (§0.1 pt 5's predicate: correctness the ruling already
-    named beats a saving nothing here is currently paying for -- `inferred` credits nobody in the
-    corpus, per the MEASURED paragraph above)."""
+    named beats a saving nothing here is currently paying for)."""
     act = causing_act(w, e)
     seat = w.offices.get(act.via) if act is not None and act.via else None
     if seat is None:
@@ -652,44 +572,35 @@ def _ch_chronicle(w: "World", e, pid) -> bool:
     ⚠ THIS DOES NOT READ `pid`, AND SAYING SO IS THE HONEST DESCRIPTION. It is an EVENT-KIND
     FILTER, not a per-person predicate: when it fires it fires for everyone alive, so it is
     `total` conditioned on kind. That is a defensible thing for a PUBLIC channel to be -- a matter
-    of record is public to everyone by definition -- but the justification published with `W6` was
-    that `chronicle` is *"deliberately not `everyone`"* and that this is what keeps `all_five`
-    distinct from `total`. **That reasoning was wrong.** What keeps them distinct in the measured
-    run is that `chronicle` matches NOBODY: the eight `binding_decision` verbs all have prose
-    `requires:` and none is in `REQUIRES_PREDICATES`, so `resolvable_verbs()` excludes every one
-    of them, and the MATTER/WITNESS kinds appear on no verb's `emits:` at all. The `any(...)` is
-    over an empty generator for every Event the fold can currently produce.
-    So the whole of `all_five - presence_only` is `document_key`. Recorded rather than papered
-    over, and the register carries it as the reason `H-33`'s `all_five` arm is not yet a
-    measurement of five channels. Found by the `W6` adversarial pass.
+    of record is public to everyone by definition -- but it does not keep `all_five` distinct from
+    `total`. In Carin's world `chronicle` matches NOBODY: the eight `binding_decision` verbs all
+    have prose `requires:` and none is in `REQUIRES_PREDICATES`, so `resolvable_verbs()` excludes
+    every one of them, and the MATTER/WITNESS kinds appear on no verb's `emits:` at all. The
+    `any(...)` is over an empty generator for every Event the fold can produce there.
+    So the whole of `all_five - presence_only` is `document_key`, and the register carries it as
+    the reason `H-33`'s `all_five` arm is not yet a measurement of five channels.
 
-    ⚠ TRUE OF CARIN'S WORLD, NOT OF THE REALM (measured at position `15d`). In
-    `populated.build_realm(0)`'s first season this channel is the STRONGEST admitting one for 131
-    (witness, Event) pairs, and `post_remit` for another 135 -- `order.given` (`dispatch`),
-    `date.scheduled` (`convene`), `tenure.closed`, `march.declared` -- every one a person nowhere
-    near the room. Since `15d` they hold those deposits `told_by`: 553 of that season's 4,294
-    claims, where every one was `firsthand` before. ⚠ RE-MEASURED AT `17a`, which moved this
-    channel AHEAD of `post_remit` (the ordinal: told before inferred) and re-based `post_remit` onto
-    obligees: this channel is now the strongest for 162 pairs there, `post_remit` for none.
+    ⚠ TRUE OF CARIN'S WORLD, NOT OF THE REALM. In the realm (`boot/realm.py`) this channel is the
+    strongest admitting one for `order.given` (`dispatch`), `date.scheduled` (`convene`),
+    `tenure.closed` and `march.declared` -- every one a person nowhere near the room -- and they
+    hold those deposits `told_by`. This channel is ahead of `post_remit` in the roster (the
+    ordinal: told before inferred).
 
-    ⚠ KEPT AT v9 SC-01 STEP 13, WHICH WAS TO DELETE IT -- MEASURED, AND THE DELETION'S PREMISE IS STALE.
-    The proceedings design deletes `chronicle` on the ground that it *"matches nobody"*
-    (`21_RECONCILIATION.md` C-6) and pairs the deletion with the channel that replaces its reach (the
-    `<rung kind>` reach channel, the design's step 15); the v9 plan moved the deletion to step 13 and
-    scheduled no replacement. Arm: this predicate forced `False`, everything else shipped, `build_realm(0)`
-    at `29af7354`: 1 season `told_by` claims 879 -> 0, events 7,060 -> 5,986, acts 608 -> 586, hash
-    `27717c62` -> `8ae2dce6`; 2 seasons `told_by` 3,187 -> 0, events 23,220 -> 17,300. So in the realm it
-    is the ONLY channel minting `told_by` -- every hearsay deposit of a binding decision. Deleting it
-    before its replacement exists removes that reach outright; it goes in the change that builds the
-    `<rung kind>` channel (`19_PLAN.md` step 16's pairing), not before."""
+    ⚠ KEPT, NOT DELETED. The proceedings design deletes `chronicle` on the ground that it *"matches
+    nobody"* (`21_RECONCILIATION.md` C-6) and pairs the deletion with the channel that replaces its
+    reach (the `<rung kind>` reach channel, the design's step 15); the v9 plan scheduled no
+    replacement. In the realm it is the ONLY channel minting `told_by` -- every hearsay deposit of a
+    binding decision. Deleting it before its replacement exists removes that reach outright; it
+    goes in the change that builds the `<rung kind>` channel (`19_PLAN.md` step 16's pairing), not
+    before."""
     return any(r.stratum == "binding_decision" for r in VERB_TABLE.values()
                if e.kind in (r.emits or ()))
 
 
-# ⚠ BUILT FROM THE ROSTER, NOT TYPED HERE. The first version was a dict literal mapping five
-# channel names to five functions -- A ROSTER OF NAMES IN A PYTHON BODY, which is exactly what
-# Jordan ruled against on 2026-09-02 (*"I do not want definitions etc to be hardcoded"*) and what
-# `test_jordan_no_definition_is_hardcoded_in_a_body` exists to catch. It caught it. The names live
+# ⚠ BUILT FROM THE ROSTER, NOT TYPED HERE. A dict literal mapping five channel names to five
+# functions is A ROSTER OF NAMES IN A PYTHON BODY, which is exactly what Jordan ruled against on
+# 2026-09-02 (*"I do not want definitions etc to be hardcoded"*) and what
+# `test_jordan_no_definition_is_hardcoded_in_a_body` exists to catch. The names live
 # once, in `rosters.yaml`; the functions are looked up by a derived name, so adding a channel is a
 # data edit plus a function, and a channel with no function RAISES at import rather than silently
 # never matching.
@@ -709,17 +620,16 @@ del _c, _fn
 def live_channels(mode: str) -> tuple:
     """Which channels are LIVE under a fan-out mode -- the one owner of that dispatch.
 
-    ⚠ EXTRACTED FROM `observers_for` FOR `R8.1`, NOT WRITTEN BESIDE IT. The `seen` deposit asks
-    *which channels admitted this witness* in order to know what they saw, and that is the same
-    mode -> channel-set dispatch `observers_for` makes to decide WHETHER they saw. Two copies of it
+    ⚠ THE ONE OWNER OF THE MODE -> CHANNEL-SET DISPATCH. The `seen` deposit asks
+    *which channels admitted this witness* in order to know what they saw, and `observers_for`
+    makes the same dispatch to decide WHETHER they saw. Two copies of it
     would drift the day a fourth arm lands (§8), so both callers ask here.
 
     `total` returns every channel, and neither caller consults them under that arm: `observers_for`
     admits everyone, and `seen_of` shows every witness every term (see there for why).
 
-    ⚠ THE ARM NAMES ARE DATA (`rosters.yaml: fan_out_modes`), NOT LITERALS HERE. They were
-    literals in the dispatch below until 2026-09-16 -- enforced, because the old `else` refused
-    correctly, but not DEFINED where Jordan's 2026-09-02 ruling puts a definition. The two
+    ⚠ THE ARM NAMES ARE DATA (`rosters.yaml: fan_out_modes`), NOT LITERALS HERE, where Jordan's
+    2026-09-02 ruling puts a definition. The two
     refusals below are DIFFERENT failures and that is the point: the first says a caller named an
     arm the sweep does not declare, the second says THE ROSTER GREW AND THIS FUNCTION DID NOT --
     the data/code drift a single combined check cannot see."""
@@ -767,7 +677,7 @@ def changes_only_held_claims(w: "World", e: "Event", held: frozenset, mode: str)
     anchor is the claim, `place_of` answers `None` (`co_located` admits nobody), `witness_key`'s
     `pid == anchor` and its knot test have no person to match, and `document_key` needs a `hold`
     whose object is that claim id; `chronicle` filters on a verb's `emits:` and no verb emits a
-    claim-changing kind. The test that executed that over a season, `test_in55_held_claim_fan_skip.py`, was dropped 2026-11-04 (Jordan).
+    claim-changing kind.
 
     ⚠ NOT "EVERY CHANGE SUBJECT RESOLVES IN NO WORLD STORE". That also matches a MATTER death:
     `loop/matter.py::_die` routes through `World.remove_person`, which pops the person before
@@ -776,8 +686,8 @@ def changes_only_held_claims(w: "World", e: "Event", held: frozenset, mode: str)
 
     ⚠ NOT UNDER `total`. That arm asks no predicate -- `observers_for` credits every person -- so it
     fans a claim-changing Event to everyone, and skipping it would turn the control into a narrow
-    arm (found by `test_season_shape.py::test_r7_two_persons_hold_different_things_and_at_total_they_
-    cannot` on the first wiring). The other two arms (`presence_only`, `all_five`) ask channels, and
+    arm (`test_season_shape.py::test_r7_two_persons_hold_different_things_and_at_total_they_
+    cannot`). The other two arms (`presence_only`, `all_five`) ask channels, and
     the argument above holds for both.
 
     WHEN IN DOUBT THE FAN RUNS. An Event with no change (`condition.band_crossed`, anchored through
@@ -804,9 +714,7 @@ def observers_for(w: "World", e: "Event", mode: str, everyone: list) -> list:
     the person, and where several do, the STRONGEST: the first live channel in `WITNESS_CHANNELS`'
     order, which `rosters.yaml` declares as the precedence. It is read here, once, so `witness` can
     set a deposit's source from it (`CHANNEL_CLAIM_SOURCE`) instead of re-deriving *how did this
-    person come to know* a second way -- the ad hoc knot scan that stood in `loop/witness.py` did,
-    and disagreed with `_ch_witness_key` (it asked "is this person in ANY knot", the channel asks
-    "are they knotted to THIS Event's anchor"). ⚠ Precedence is iterated over the ROSTER, filtered
+    person come to know* a second way. ⚠ Precedence is iterated over the ROSTER, filtered
     by the arm, not over `live_channels`' own return order, so a later arm that lists a subset in
     another order cannot silently reorder the precedence.
 
@@ -819,9 +727,8 @@ def observers_for(w: "World", e: "Event", mode: str, everyone: list) -> list:
     reason. Asking the predicates here would make the control arm a narrow arm's source rule
     wearing a total fan, and a person no predicate admits would have no channel to report.
 
-    ⚠ CREDITING `total` TO ROSTER POSITION 0 IS DELIBERATE, NOT AN ACCIDENTAL COUPLING (BATCH-CLOSE,
-    methodology-close Phase 1 antagonist, confirming rather than overturning a Phase-1 agonist
-    concern raised against this same line): `WITNESS_CHANNELS[0]` is `co_located` by the roster's
+    ⚠ CREDITING `total` TO ROSTER POSITION 0 IS DELIBERATE, NOT AN ACCIDENTAL COUPLING:
+    `WITNESS_CHANNELS[0]` is `co_located` by the roster's
     own precedence rule (presence first, `rosters.yaml: witness_channels`), and
     `test_told_by_channel.py` pins `CHANNEL_CLAIM_SOURCE[WITNESS_CHANNELS[0]] == "firsthand"`
     directly, so a reorder that moved a non-`firsthand` channel to the head would fail loudly. Not
@@ -902,15 +809,14 @@ def _term_stratum(w: "World", e: "Event", act) -> Optional[str]:
     """The coarse WHAT -- the acted verb's stratum, never the verb TOKEN. Case 3's *doing something
     I can't name*. An actorless Event (MATTER, CALENDAR) has no verb and so no stratum.
 
-    ⚠ NEVER THE TOKEN, NOT NEVER THE INFORMATION -- FOUND BY ADVERSARIAL REVIEW. `movement` has
-    exactly one member, `move` (`data/verbs.py`'s table), so a witness shown `stratum="movement"`
-    can infer the verb with certainty even though the string differs from it. The mitigation is
-    that the event-kind claim beside this one already names `e.kind` under `both`/`per_change`
-    (`claim_subjects`), so this term is not the leak's only source; it is not a leak this term
-    closes for a bijective stratum, which R8.5's *"someone was doing something social"* example
-    (a stratum with several members) does not have to contend with. ⚠ NARROWED AT PLAN POSITION
-    `19c`: `movement` has two members now (`move`, `migrate`), so the stratum alone no longer names
-    the verb -- the event-kind claim still does."""
+    ⚠ NEVER THE TOKEN, NOT NEVER THE INFORMATION. A stratum with exactly one member lets a witness
+    shown it infer the verb with certainty even though the string differs from it. `movement` has
+    two members (`move`, `migrate`; `data/verbs.py`'s table), so the stratum alone does not name
+    the verb -- the event-kind claim still does. The event-kind claim beside this one already
+    names `e.kind` under `both`/`per_change` (`claim_subjects`), so this term is not the leak's
+    only source; it is not a leak this term closes for a bijective stratum, which R8.5's
+    *"someone was doing something social"* example (a stratum with several members) does not
+    have to contend with."""
     row = VERB_TABLE.get(getattr(act, "verb", None)) if act is not None else None
     return getattr(row, "stratum", None)
 
@@ -920,11 +826,8 @@ def _term_marks(w: "World", e: "Event", act) -> Optional[tuple]:
     `()` for one whose is not -- `()` meaning *seen, and nothing describable* -- and `None` where there is no
     actor to see. Public at co-location, with no concealment, and deposited TRUE and verbatim like `who`.
 
-    ⚠ HISTORY. `Person.marks` was DELETED 2026-09-24 (`ED-IN-0261` item 1) as a zero-reader/zero-writer field,
-    and this term read `()` for every actor until heritage gave it a carrier. Heritage is the one member of
-    the old `marks[]` no Tenure derives (faction, rank, office and residence are edges). The case of a
-    witness holding `marks` with `who` `None` (`R8` case (2)) stays unreachable: the only channel that shows
-    marks shows `who` too."""
+    ⚠ The case of a witness holding `marks` with `who` `None` (`R8` case (2)) is unreachable: the only
+    channel that shows marks shows `who` too."""
     actor = w.persons.get(act.actor) if act is not None else None
     if actor is None:
         return None
@@ -939,7 +842,7 @@ def _term_who(w: "World", e: "Event", act) -> Optional[str]:
 def _term_why(w: "World", e: "Event", act) -> Optional[str]:
     """ALWAYS `None`, AND THAT IS A SCOPE DECISION, NOT AN IMPOSSIBILITY. `R8.4` says the engine
     *"forgets the motive before the act executes"*, and that overstates it: the Candidate carries no
-    motive (its `why` was read by nothing and plan position `14` removed it), but the question that
+    motive, but the question that
     occasioned an act survives one hop away --
     `Act.scene` names the Scene, the driver's `scenes[...]` holds it, and `Scene.occasion.source`
     is the question source (the same lookup `loop/resolve.py`'s `_occasion_ids` makes). It is not
@@ -988,9 +891,8 @@ def seen_subject(w: "World", e: "Event", pid: str, mode: str) -> Optional[str]:
     """`R8.1`: the changed thing when there is one, else the rung the Event happened at -- and
     where the Event changed SEVERAL things, the one THIS WITNESS holds.
 
-    ⚠ PER-WITNESS, AND THE FIRST WRITING WAS NOT. It took the first non-empty `changes[]` subject
-    for everyone, so a `transfer` (`changes = [src, dst]`) gave the DESTINATION'S holder a claim
-    about the SOURCE -- a rung not in their live Tenure objects, on which Q2 can never fire. The
+    ⚠ PER-WITNESS. Taking the first non-empty `changes[]` subject for everyone would give a
+    `transfer` (`changes = [src, dst]`) the DESTINATION'S holder a claim about the SOURCE -- a rung not in their live Tenure objects, on which Q2 can never fire. The
     channel that admitted them (`document_key`) admitted them BECAUSE they hold `dst`. So: the first
     changed thing among `pid`'s live Tenure objects (the same set `questions_for` calls `mine`,
     read the same way -- `w.persons[pid].tenures`, not a fresh scan of `w.tenures` filtered by
@@ -1001,9 +903,8 @@ def seen_subject(w: "World", e: "Event", pid: str, mode: str) -> Optional[str]:
     ⚠ AND EACH CHANGED SUBJECT PASSES THROUGH `_hold_tenure_ends` FIRST, FOR THE SAME REASON
     `claim_subjects` ALREADY DOES (`H-71`). A `confer`/`revoke`/`release` on a `hold` Tenure
     reports the Tenure's OWN opaque id in `changes[]` -- correct as a Receipt, unwitnessable as a
-    subject, since no live Tenure has a Tenure's id as its `object`. Found by adversarial review:
-    the first `seen` writing deposited that raw id, so `R8.4`'s office-conferral case could never
-    raise Q2 for anyone. Expanding here keeps one answer to *what is this deposit about* shared
+    subject, since no live Tenure has a Tenure's id as its `object`: depositing that raw id means
+    `R8.4`'s office-conferral case could never raise Q2 for anyone. Expanding here keeps one answer to *what is this deposit about* shared
     with `claim_subjects` rather than two that can drift (§8).
 
     ⚠ EXCEPT UNDER `total`, WHICH IS UNIFORM BY DEFINITION, NOT PER-WITNESS. `total` is `H-33`'s
@@ -1012,24 +913,22 @@ def seen_subject(w: "World", e: "Event", pid: str, mode: str) -> Optional[str]:
     would make two co-located witnesses hold different claims under the one arm designed to be
     the uniform baseline every other arm is measured against.
 
-    ⚠⚠ **`test_r7_two_persons_hold_different_things_and_at_total_they_cannot` DOES NOT CATCH THIS,
-    AND CLAIMING IT DID WAS A DEFECT §0.1 pt 2 NAMES** (found by adversarial review, not by
-    running it). `_r7_witness_claims` keeps only claims whose predicate is a logged Event kind
+    ⚠⚠ **`test_r7_two_persons_hold_different_things_and_at_total_they_cannot` DOES NOT CATCH THIS**
+    (§0.1 pt 2). `_r7_witness_claims` keeps only claims whose predicate is a logged Event kind
     (`test_season_shape.py`), and `seen`'s predicate never is one, so every `seen` claim is
     filtered out of that comparison before it runs -- deleting this whole `if mode == "total"`
     branch passes that test unchanged. The real falsifier is
-    `test_r8_the_total_arm_subjects_a_multi_change_event_uniformly` in `test_seen_claim.py`, added
-    beside it, which exercises a `transfer`-shaped multi-change Event under `total` and asserts
+    `test_r8_the_total_arm_subjects_a_multi_change_event_uniformly` in `test_seen_claim.py`, which
+    exercises a `transfer`-shaped multi-change Event under `total` and asserts
     every co-located witness gets the identical subject -- the one case this branch exists for.
     So under `total`, every witness gets the SAME subject: the first changed thing (after the
-    `hold`-Tenure expansion above), else the rung -- the pre-per-witness rule, deliberately not
-    personalized here.
+    `hold`-Tenure expansion above), else the rung -- deliberately not personalized here.
 
     `None` when the Event changed nothing and has no place; then nothing is deposited, because a
     claim about nothing raises no question and occupies a ledger slot the cap evicts somebody
     else for.
 
-    ⚠ `world_q.event_place(w, e)`, NOT `_event_place` -- MOVED AT POSITION `11a`, same
+    ⚠ `world_q.event_place(w, e)`, NOT A LOCAL LOOKUP: same
     reasoning as `_ch_co_located` above."""
     changed = []
     for c in e.changes:

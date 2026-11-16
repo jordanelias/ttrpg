@@ -1,7 +1,7 @@
 """ONE SEASON'S SUBSISTENCE -- the `settlements` module's `step_call` entry (A-25; v9 IN-07 E2).
 
 MODULE ENTRY: reached by the composition row whose target is `subsist` below (`entry: step_call` -- a
-loop step calls it: MATTER, `loop/matter.py`, once a season, where it called `world_q.subsistence_draw`).
+loop step calls it: MATTER, `loop/matter.py`, once a season).
 Registered in `manifest.MODULE_ENTRIES` by the registrar at driver construction and held there by
 `manifest/registrar.py::require_entries` against the host's declared need (`loop/matter.py::STEP_CALLS`),
 so a deleted, stripped or re-kinded row refuses at construction. MATTER looks it up in `MODULE_ENTRIES`,
@@ -14,8 +14,7 @@ state between calls and draws nothing. EVERY WRITE STAYS HOST, in MATTER: the bo
 (the `shortfall:` predicate is host vocabulary, `data/requires.py`), `World._subsistence_shortfall`
 and the `TRACE.note` sample.
 
-THE RULE (moved here from MATTER's larder pass, items 3a/3b and plan position `19d`; unchanged clause for
-clause):
+THE RULE (items 3a/3b and plan position `19d`):
   * THE DRAW is `larder_draw`'s (`larder.py`) -- the same function, so the draw MATTER writes from and the
     one `demanded`/`delivered` sum cannot disagree: one module computes both (`ED-IN-0246` item 3a).
   * THE DEBIT: per source rung, `take` summed per kind, kinds in the order the draw first debited them.

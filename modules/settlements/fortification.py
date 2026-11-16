@@ -10,8 +10,7 @@ construction and held there by `manifest/registrar.py::require_entries` against 
 It takes the host's typed input record and returns a bare `float`, imports the record type and nothing
 else, never reads or writes `World`, holds no token and keeps no state.
 
-THE RULE (moved here from `world_q.fortification_of`; `H-38`'s *"`Site.condition` is the model"* applied to
-defence): the MEAN garrison condition over the subtree, divided by scale -- `sum / (scale * n)`, the float
+THE RULE (`H-38`'s *"`Site.condition` is the model"* applied to defence): the MEAN garrison condition over the subtree, divided by scale -- `sum / (scale * n)`, the float
 expression operand for operand. Several garrisons AVERAGE rather than sum, which keeps the value in
 `[0.0, 1.0]`. No garrison is `0.0`: an unfortified settlement, not a refusal.
 """

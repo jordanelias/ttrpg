@@ -13,7 +13,7 @@ rewritten cannot be evidence.
 
 IT RECORDS ONLY WHILE AN INSTRUMENT HAS OPENED IT. `with TRACE.recording():` is the window; outside
 one every row, and every gap `gap()` would have kept, is dropped at the door, so a run nobody is
-reading does not build rows (one per write, event and query, ~221,000 a case) for nothing. The
+reading does not build rows (one per write, event and query) for nothing. The
 instruments that read the rows -- `harness/report.py`, `run_cases.py`, `soak.py` -- open it where they
 read; a test that reads `TRACE.rows` opens it around the call. `case` and `expecting` are state a
 reader sets, not records, and they are kept whether or not a window is open.
@@ -83,10 +83,8 @@ class Trace:
     def scene_act(self, actor: str, verb: str, scenes_left: int, n: int, of: int) -> None:
         """`W17`. ONE INTERACTION, INSIDE ONE SCENE, WITH BOTH UNITS NAMED.
 
-        `act()` took a single `budget_left`, and after the scene arrived its caller
-        passed a SCENE budget minus an INTERACTION index — so the artifact recorded
-        `budget_left=-10` for a season the engine had just accepted. Two units in one field is
-        how that happens, and the fix is two fields."""
+        `act()` takes a single `budget_left`; a SCENE budget minus an INTERACTION index in that
+        one field puts two units in it, so this records two fields."""
         self._row("ACT", f"{actor} :: {verb}", "S26",
                   scenes_left=scenes_left, interaction=f"{n}/{of}")
 
@@ -105,8 +103,7 @@ class Trace:
     def gap(self, kind: str, what: str, where: str, needs: str, law: str) -> None:
         """A refusal a probe DELIBERATELY provokes to verify that it fires is recorded, but
         marked `expected` -- it is evidence the law works, not evidence a case is blocked.
-        Without this a PASSING probe deposits a BLOCKING gap row, which the in-chain audit
-        ranked as a live remediation."""
+        Without this a PASSING probe deposits a BLOCKING gap row."""
         expected = self.expecting > 0
         self._row("GAP", f"[{kind}] {what}", where, needs=needs, law=law, expected=expected)
         if not self._open:

@@ -1,6 +1,5 @@
 """
 engine/dice_engine/sigma_leverage.py — σ-leverage advantage layer atop the d10 dice engine.
-(The header read `sim/autoload/...` until 2026-08-27; that tree was retired 2026-07-21.)
 
 Canon source: modifier_system_spec.md (the implementation-pass rewrite)
 Params source: params/core.md, modifier_system_spec.md
@@ -90,10 +89,9 @@ PER_DIE: dict[int, tuple[float, float]] = {
 # face 1 = -1 success, 2-6 = 0, 7-9 = +1, 10 = +2.
 # ⚠ TN IS 7. ALWAYS. THERE IS NO OTHER TN.
 # [Jordan, 2026-08-25, verbatim: "TN7 always. Never change TN anywhere ever."]
-# This SUPERSEDES the 2026-08-15 situational scale that stood here — "Controlled 6 / Standard 7 /
-# Desperate 8, selected by SITUATION" — which is now dead canon. The earlier half of that same
-# ruling ("all weapons are TN7") is subsumed: not just weapons, everything. A varying difficulty
-# is an Ob, never a TN. See ED-IN-0196 and registers/supersession_register.yaml.
+# A situational TN scale ("Controlled 6 / Standard 7 / Desperate 8") is dead canon, and "all weapons
+# are TN7" is subsumed: not just weapons, everything. A varying difficulty is an Ob, never a TN.
+# See ED-IN-0196 and registers/supersession_register.yaml.
 TN_STANDARD = 7         # [canonical: params/core.md §TN Values -- FORK: c451bcb]
 
 # ---------------------------------------------------------------------------
@@ -117,9 +115,8 @@ OB_MIN = 1              # [canonical: params/core.md §Obstacle Scale]
 # — the contest's de-saturation extension reads them from here (ED-SC-0032).
 MU_PER_DIE = dice_engine.MU_PER_DIE        # alias of the owner (engine/dice_engine/dice_engine.py)
 SD_PER_DIE = dice_engine.SIGMA_PER_DIE     # alias of the owner; the owner's name is SIGMA_PER_DIE
-# OVERWHELM_SIGMA MOVED 2026-08-27 (ED-SC-0032) to
-# systems/social_contest/sim/contest/degree_extension.py. It is a contest constant — its own
-# citation is the contest groundup engine — and it belongs with the extension that reads it.
+# OVERWHELM_SIGMA lives in systems/social_contest/sim/contest/degree_extension.py (ED-SC-0032): it
+# is a contest constant and belongs with the extension that reads it.
 
 
 # ---------------------------------------------------------------------------
@@ -221,7 +218,7 @@ def level(name: str) -> float:
     LEVEL_SIGMA (byte-identical: minor 0.25 / moderate 0.50 / strong 0.75 / major 1.00).
     Single-sources LEVEL_SIGMA so combat (levels_to_net_sigma) and contest
     (Leverage.ONGROUND = level("moderate"), groundup primitives.py:9 at import time)
-    share one table. Stage-1a finding 1a: this accessor was missing from the port.
+    share one table.
     [canonical: modifier_system_spec.md §2.3 Player-facing abstraction]
     """
     return LEVEL_SIGMA[name]
@@ -263,19 +260,11 @@ def p_success(
     [canonical: params/core.md §Continuous Engine]
 
     THE POOL FLOOR APPLIES TO THE MEAN AS WELL AS THE VARIANCE (Jordan, 2026-09-04: "1D is
-    floor"). This line read `mu * pool` against `sqrt(max(1, pool))` — flooring the SPREAD but
-    not the LOCATION, so below 1D the closed form drifted away from the sampler that
-    `roll_net_continuous` actually draws from, which floors both via
-    `effective_pool = max(1.0, float(pool))`. Two flooring conventions in one module.
-    Measured before the fix, base_Ob 1.0, net_sigma 0, 200k draws, seed 7:
-        pool 0.25 -> p_success 0.1303 vs sampled 0.2275   (9.7 pp apart)
-        pool 0.50 -> p_success 0.1587 vs sampled 0.2275   (6.9 pp apart)
-        pool 1.00 -> p_success 0.2266 vs sampled 0.2275   (Monte-Carlo noise)
-    CONTROL: no golden row carries a sub-1D pool (p_success pools are 1/5/10/26), and
-    max(1.0, pool) == pool for every one of them, so this is VALUE-IDENTICAL at and above 1D
-    and the byte-exact parity goldens are what proves it. The bug was inherited verbatim from
-    m1_dice_sigma_core.p_success, which the Stage-1a port copied byte-for-byte; that copy is
-    fixed in the same commit so the two stay byte-identical.
+    floor"): flooring only the SPREAD would let the closed form drift below 1D away from the
+    sampler `roll_net_continuous` draws from, which floors both via
+    `effective_pool = max(1.0, float(pool))`. One flooring convention in the module.
+    CONTROL: `max(1.0, pool) == pool` at and above 1D, so the byte-exact parity goldens
+    (no golden row carries a sub-1D pool) prove the floor changes nothing there.
     [canonical: params/core.md §Pool Floor (all systems)]
     """
     mu, sigma = PER_DIE[tn]
@@ -420,14 +409,10 @@ def roll_net_continuous(pool: float, tn: int = TN_STANDARD, rng: random.Random |
     Canonical for Godot; statistically equivalent to the discrete engine.
     [canonical: params/core.md §Continuous Engine, Decision E]
 
-    THE POOL IS FRACTIONAL HERE (M1 juncture 1, 2026-08-21). Jordan ruled "fractional dice" on
-    2026-08-14 and only the fractional RESULT had been implemented: this line read
-    `max(1, int(round(pool)))`, so a 3.5-die pool was sampled as a 4-die pool. The rounding was
-    imposed by THIS CALLER ALONE — `dice_engine.continuous_engine_sample` has always accepted a
-    fractional pool and says so at `dice_engine.py:92`, computing `mu*pool` and `sigma*sqrt(pool)`
-    with no quantisation. ED-IN-0187 recorded the gap and it was written into the ledger without
-    being applied here, which `systems/factions/sim/faction_action.py` called out as worse than an
-    unimplemented feature because the call site asserted the opposite.
+    THE POOL IS FRACTIONAL HERE (M1 juncture 1). Jordan ruled "fractional dice" on 2026-08-14: a
+    3.5-die pool is sampled as a 3.5-die pool, not rounded to 4. `dice_engine.continuous_engine_sample`
+    accepts a fractional pool (`dice_engine.py:92`), computing `mu*pool` and `sigma*sqrt(pool)`
+    with no quantisation.
 
     THE FLOOR STAYS AT 1D and is canon, not caution — `params/core.md §Pool Floor (all systems)`.
     What goes is the rounding, not the floor.
@@ -435,12 +420,11 @@ def roll_net_continuous(pool: float, tn: int = TN_STANDARD, rng: random.Random |
     `roll_net` above is the DISCRETE d10 path and keeps `int(round(pool))`: whole dice are correct
     there, because it deals actual dice rather than sampling their limit distribution.
 
-    MEASURED BLAST RADIUS, because two subsystems share this entry point (§0.1 pt 4 — a number
+    BLAST RADIUS, because two subsystems share this entry point (§0.1 pt 4 — a number
     without a control is not a measurement):
-      * faction strategic actions — 4-season seeded campaign, 40 calls, **20 already fractional**
-        (4.3, 4.6, 4.9, 5.3, 5.5, …), every one silently rounded before this change. These MOVE.
-      * personal combat, via `modules/combat/core.py:56` — 749 calls driven
-        through `workbench.balance.winrate` at n=120, **749 integral, 0 fractional**, because
+      * faction strategic actions — pools are fractional, and were silently rounded before this
+        change. These MOVE.
+      * personal combat, via `modules/combat/core.py:56` — pools are integral, because
         `core.resolution_pool()` returns `max(POOL_FLOOR, int(round(history)) + BASE_POOL)` and no
         call site modifies it. `int(round(n)) == n` for integral n, so combat is value-identical
         and its byte-exact goldens are the CONTROL: if they move, this change did something it
@@ -451,14 +435,11 @@ def roll_net_continuous(pool: float, tn: int = TN_STANDARD, rng: random.Random |
 
 
 # ---------------------------------------------------------------------------
-# Contest-surface degree — RETIRED FROM THIS MODULE 2026-08-27 (ED-SC-0032)
+# Contest-surface degree — NOT IN THIS MODULE (ED-SC-0032)
 # ---------------------------------------------------------------------------
-# `degree(net, ob, pool)`, `overwhelm_bar`, `crossover_pool` and `OVERWHELM_SIGMA` lived here and
-# are now at `systems/social_contest/sim/contest/degree_extension.py`. They were never general:
-# the pool-aware de-saturation is ONE SUBSYSTEM'S rule, and OVERWHELM_SIGMA's own citation says
-# so (`audit/2026-06-03-contest-groundup/engine.py §degree`). The engine carrying it was half of
-# what made Jordan's 2026-08-15 ruling unsatisfied — the other half being that there was no seam,
-# which `dice_engine.BandExtension` now is.
+# `degree(net, ob, pool)`, `overwhelm_bar`, `crossover_pool` and `OVERWHELM_SIGMA` are at
+# `systems/social_contest/sim/contest/degree_extension.py`: the pool-aware de-saturation is ONE
+# SUBSYSTEM'S rule, injected through the seam `dice_engine.BandExtension`.
 #
 # WHAT TO CALL INSTEAD: `dice_engine.degree_from_net(net, ob, extension=..., **context)` for the
 # ladder, and the contest package's own `degree()` adapter if you want the ordinal with the

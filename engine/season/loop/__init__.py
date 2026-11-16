@@ -2,22 +2,19 @@
 
   * `driver`     -- `SeasonDriver`, `season()`, and the four module functions around them
   * `calendar` · `matter` · `deliberate` · `resolve` · `encounter` · `witness` · `census` --
-    THE SEVEN STEPS    L5 (six until M4's `encounter`, `ED-IN-0279` clause (a))
+    THE SEVEN STEPS    L5 (`encounter` is the seventh, `ED-IN-0279` clause (a))
   * `predicates` -- `REQUIRES_PREDICATES`: the four hand-written `requires:` cells.   step 5
   * `effects`    -- `EFFECTS`: one body per verb that writes.                          step 5
   * `sides`      -- `sides_of`: which shape a contest's parties take.                  M4
 
 `04_CODE_ARCHITECTURE.md` §A.2:134 names this module `loop/` and gives it *"driver + six steps. The
-driver is the ONLY constructor of write tokens."* (AMENDED 2026-09-28 to seven). **The original six
-exist as of unit L5 (ED-IN-0206)**; they were methods on `SeasonDriver` and each body now has its own
-module, with the §A.2 table's owned state, `emits` and token quoted at the head of each.
+driver is the ONLY constructor of write tokens."* (AMENDED 2026-09-28 to seven). Each step has its
+own module (unit L5, ED-IN-0206), with the §A.2 table's owned state, `emits` and token quoted at the head of each.
 
 ⚠ **THE STEPS ARE BOUND ONTO THE CLASS, NOT DELEGATED TO.** `driver.py` ends with
 `SeasonDriver.witness = witness` and six siblings, so `SeasonDriver.witness` IS the module function
-and `inspect.getsource` returns the MOVED BODY. Measured rather than argued: replace one binding
-with a delegating stub and `test_d2` and `test_d9b` went red **while
-`test_witness_writes_no_belief_and_no_pursuit` — a pure NEGATIVE assertion — kept PASSING over a
-body it no longer read** (B02.04 deleted `test_d2` and that negative test; `test_d9b` remains). That is the silent half, and it is why step 9 refused to delegate.
+and `inspect.getsource` returns the real body. A delegating stub would fail `test_d9b` and silently
+vacate every pure NEGATIVE assertion over a step's source, which is why step 9 refused to delegate.
 
 ⚠ **`predicates` AND `effects` ARE NOT AMONG THE SIX, AND STAY.** §A.2's line enumerates the STEPS,
 not the totality of `loop/`; these two are the verb-keyed tables the fold dispatches on, and they
@@ -36,12 +33,6 @@ step modules import them the same way -- `resolve` reads both tables and neither
 
 ⚠ THIS FILE IMPORTS NEITHER MODULE — the same reason `season/state/__init__.py` and
 `season/data/__init__.py` both give at length, and for `effects` a sharper one: importing it runs
-ELEVEN `@effect_for` registrations, so an eager package import would make anything wanting one name
-from `loop` build the whole effect table. (This said "thirteen" when it shipped; there were ten
-`_eff_*`, which `effects.py`, `shape.py` and the plan all stated correctly. A count written from
-memory beside three correct copies of it. ⚠ AND IT HAPPENED AGAIN, ON THIS LINE, ON 2026-09-11:
-`release` made eleven and both this sentence and `effects.py`'s still read ten — a count written
-from memory beside the paragraph recording the last count written from memory. Found by the
-`release` adversarial pass. The lesson the first parenthesis drew is the right one and the repair
-is the same; what neither buys is a guarantee, because the carrier is prose.)
+every `@effect_for` registration, so an eager package import would make anything wanting one name
+from `loop` build the whole effect table.
 """

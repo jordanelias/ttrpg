@@ -6,7 +6,7 @@
 resolves.
 
 ⚠ **THE BARE-NAME CLUSTER IS WHY THESE ARE ONE FILE, AND IT IS NOT A STYLE CHOICE.** Two names
-in the old `decision.py` are read bare inside a body and rebound from OUTSIDE as module
+are read bare inside a body and rebound from OUTSIDE as module
 attributes -- `pack_scenes` (by `make_chooser`) and `belief_contradicts` (by `opening_set`). A
 bare name resolves in ITS OWN module's globals, so a rebind reaches it only if it targets the
 module the reader lives in: `PS.pack_scenes = spy` in the degree-sweep arms reaches
@@ -20,9 +20,8 @@ where `align` is defined (telling workplan T2). The `H-66` sweep rebinds it ther
 score and `options.refuses` both reach it through `align`. A stale `decision.choose.ALIGNMENT` or
 `decision.options.ALIGNMENT` read fails loudly rather than rebinding a copy nothing reads.
 
-⚠ **`belief_contradicts` IS NOT RE-EXPORTED FROM `__init__.py`** -- step 8's `_LADDER` lesson: a
-rebound value re-exported is a stale snapshot, and a reader who rebinds the package attribute
-would silently miss the reader.
+⚠ **`belief_contradicts` IS NOT RE-EXPORTED FROM `__init__.py`**: a rebound value re-exported is
+a stale snapshot, and a reader who rebinds the package attribute would silently miss the reader.
 
 AX-2 binds every file under `decision/`: no `World`, as an import, a name, an attribute or a
 string. Enforced BY PATH over this directory (`04 §E.1`).
@@ -33,9 +32,6 @@ from __future__ import annotations
 import math as _math
 from typing import Any, Callable, Optional
 from ..data.rosters import PURSUIT_AXES, SCENE_PACKING_RULES, require_member, roster
-# `PURSUIT_PROJECTION` / `PROJECTION_DEFAULT_CELL` were imported here until 2026-09-16 and
-# are not any more: the loop that read the 13x4 moved into `data/pursuits.to_axes`, its
-# single owner. Keeping the imports declared a dependency this module no longer has.
 from ..data.verbs import VERB_TABLE, act_key, align
 from ..gaps import Unspecified
 # `stance_toward` is the asker-first reader `queries/person_q.py` owns (`04 §C.3`: `decision/`
@@ -68,7 +64,7 @@ def stance_term(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict] = 
     A Rung subject reads 0 at G1's control; at live gains it reads the deed claims held about it
     (`transfer.made` on a changed rung, under `claim_subject_rule: both`) -- nobody holds stance
     about a rung -- where the ROLE reading would regard its HOLDER; that operand needs a `held_by`
-    claim, and M0g measured none (`H-195`).
+    claim (`H-195`).
 
     `memo` caches `regard` per subject for one deliberation: it depends on the subject and `p`'s
     ledger alone, which do not change inside one `choose` call.
@@ -295,7 +291,7 @@ def beneficiary_of(p: Person, c: Candidate) -> Optional[str]:
       * a declared carrier that DID NOT BIND on this candidate -- `to` where the cell admits the
         operand but this particular form carries none. This is a HOLE, and
         `test_lb6d_the_column_resolves_on_candidates_the_engine_actually_forms` counts it
-        separately (measured 0 over a populated season), because a term that silently reads as
+        separately, because a term that silently reads as
         *"benefits nobody"* whenever its operand is missing is `§0.1 pt 2` exactly: an assertion
         that cannot observe the failure it excludes.
     `VERB_TABLE[c.verb].beneficiary` discriminates the two, which is why this returns the id
@@ -322,40 +318,26 @@ def beneficiary_of(p: Person, c: Candidate) -> Optional[str]:
 def _sample_order(ranked: list, score, p: Person, fx: "Fixtures", draw) -> list:
     """`U4` / `H-96`: the triage stops being decided by the SPELLING of a verb.
 
-    THE DEFECT, MEASURED WITH A CONTROL (2026-09-10). `H-96` records that only a handful of
+    THE DEFECT. `H-96` records that only a handful of
     candidates carry a nonzero conviction score and that the triage is *"decided, for most
     candidates, BY ALPHABETICAL ORDER OF THE VERB'S NAME"* (`hole_register.yaml`, H-96's `hole:`).
-    ⚠ THE SHORTER PHRASING *"the rest TIE and are ordered alphabetically by verb name"* IS NOT
-    H-96's and was attributed to it in the first writing of this docstring — it is
-    `requirements.yaml`'s R-08 and this plan's own §6. A paraphrase inside quotation marks, pointed
-    at the wrong row; corrected rather than dropped, because mis-sourcing a quote is the recurring
-    defect this lane's §14 names.
-
-    WHAT THE DEFECT COST, measured by adding one ruled verb (`release`, `04 §A.3` row 14) and then
-    running the SAME verb, predicate and effect again under a name that sorts last: the
-    early-sorting name executed in **18** corpus cases and displaced 71 acts (`utter` ×56); the
-    late-sorting one executed in **5** and displaced **2**. Same mechanism, same world, same seed —
-    only the letters differed. ⚠ **THAT PAIR WAS MEASURED IN-SESSION AND IS NOT REPRODUCIBLE FROM
-    THIS TREE**, because `release` is not in `verb_table.yaml`: it is a separate unit, held behind
-    this one. To re-run it, add the verb and diff the corpus's executed sets against a rename of it.
-    Said plainly rather than left to read as a standing artifact (§0.1 pt 3). A design in which adding a correct verb makes the world
+    A design in which adding a correct verb makes the world
     do LESS, because of where its name falls in the alphabet, has its triage in the wrong place.
 
     THE FIX IS PLACKETT-LUCE VIA GUMBEL, and it is one line of arithmetic for a reason. Adding
     `-log(-log(u))` to `score/tau` and sorting descending samples an ORDER without replacement
-    whose probabilities are `softmax(score/tau)` — so this generalises the old ranking rather than
+    whose probabilities are `softmax(score/tau)` — so this generalises the score ranking rather than
     replacing it: as `tau -> 0` the score term dominates and the order converges on the score
     order, with the residual ties broken by the DRAW instead of by the alphabet. An ORDER is what
     is needed, not a pick: `pack_scenes` takes the ranked list and slices it by budget, so a
     chooser that sampled a single winner would leave the rest of the triage alphabetical.
 
-    ⚠ `tau == 0` SHORT-CIRCUITS TO THE OLD PATH, AND THE ARM VALIDATES THE PLUMBING RATHER THAN
+    ⚠ `tau == 0` SHORT-CIRCUITS TO THE SCORE-ORDER PATH, AND THE ARM VALIDATES THE PLUMBING RATHER THAN
     THE SAMPLER. The zero-temperature limit of a softmax over TIED scores is uniform over the tied
     set, not the alphabetical order — so byte-identity at `tau = 0` needs this discontinuous case,
-    and that case then exercises the OLD code. Stated plainly because both prior plans named the
-    `tau = 0` arm as the sampler's control and neither noticed: it controls that the draw is
+    and that case then exercises the score-order code. The `tau = 0` arm controls that the draw is
     threaded, the signature is unchanged and nothing else moved. The sampler's own falsifier is
-    the rename control above, re-run.
+    renaming a verb to a name that sorts elsewhere: the executed set must not move.
 
     ⚠ NO SILENT FALLBACK. A missing `draw` at `tau > 0` RAISES rather than quietly returning the
     alphabetical order: that would be S42.2.1's *"a silent default does not fail; it answers,
@@ -371,7 +353,7 @@ def _sample_order(ranked: list, score, p: Person, fx: "Fixtures", draw) -> list:
     ...)` RECEIVES an already-built one, so the only way the driver could own the draw is to hand it
     to `choose` — and `choose`'s four-parameter signature, which `U4` itself insists must not change, keeps the world
     out of it (`test_decision_package_never_names_world_anywhere_under_it` reads that nothing under `decision/` names
-    `World`; no test reads the arity itself since B02.04 deleted `test_choose_receives_no_world`). The two clauses of
+    `World`; no test reads the arity itself). The two clauses of
     the spec are in tension and this took the one that a test enforces.
     ⚠ SCOPE, STATED SO IT IS NOT OVERREAD: `04:858-860` scopes that sentence to **R-09's** producer
     (*"chains of events within a scene are probabilistic"*), which is unbuilt; this is R-08's
@@ -383,40 +365,31 @@ def _sample_order(ranked: list, score, p: Person, fx: "Fixtures", draw) -> list:
     ⚠ **ONE CLAUSE OF THE UNIT'S SPEC IS NOT MET, AND IT IS DECLARED RATHER THAN QUIETLY DROPPED.**
     `U4` says *"the draw `purpose` includes the round (U2)"*. The purpose is instead
     `choice:<verb>:<subject>`, seeded per `(world_seed, tick, person)` by the factory.
-    ⚠⚠ **THE REASON THIS PARAGRAPH GIVES FOR THAT IS NOT THE ONE IT GAVE FIRST, AND THE FIRST ONE
-    IS NOW FALSE.** It read *"U2 is unbuilt — `SeasonDriver.season` still runs DELIBERATE once per
-    season, so there is no round index to include"*, and closed by requiring `U2` to add the round
-    *"in the same commit that adds rounds, or the second round is a replay of the first"*. `U2`
-    landed 2026-09-11: `season()` runs DELIBERATE `scene_budget` times, `SeasonDriver.round` is the
-    index, and `_qualify_by_round` already re-derives act and scene ids through it. The clause is
-    still unmet, for two reasons that replace the stale one, and NEITHER is "there is no round".
+    `season()` runs DELIBERATE `scene_budget` times, `SeasonDriver.round` is the index, and
+    `_qualify_by_round` re-derives act and scene ids through it. The clause is unmet for two
+    reasons, and NEITHER is "there is no round".
 
     **(1) STRUCTURAL — THE ROUND CANNOT REACH THIS FUNCTION, AND IT IS THE SAME TENSION AS CLAUSE
     2 ABOVE.** The round is state on the DRIVER; the chooser is built by the CALLER (clause 2's
     finding), so the driver cannot key a draw it never constructs. The only other route is to hand
     `choose` the round, and `choose`'s four-parameter signature, which `U4` insists must not change, keeps the world out
     of it (`test_decision_package_never_names_world_anywhere_under_it`; no test reads the arity itself). A caller holding both CAN
-    close over `d.round` when it builds the draw, which is exactly how the arm below was measured —
-    but that is a harness reaching past the engine, not the engine meeting the clause.
+    close over `d.round` when it builds the draw, but that is a harness reaching past the engine, not the engine meeting the clause.
 
-    **(2) DESIGN — IT CONTRADICTS THE KEYED-NOISE PROPERTY THIS FUNCTION IS BUILT ON**, one axis
-    along from the defect the `⚠⚠` block below records recovering from. The round makes a
+    **(2) DESIGN — IT CONTRADICTS THE KEYED-NOISE PROPERTY THIS FUNCTION IS BUILT ON**
+    (the `⚠⚠` block below). The round makes a
     candidate's noise a property of WHEN IT WAS REACHED; the whole argument for keying on
     `(verb, subject)` is that it must be a property OF THAT CANDIDATE, so that two arms of an
     experiment differ by what differed and not by a reshuffle. Under a scene tick a candidate that
     lost round 0 keeps its margin in rounds 1..4, which is a person whose TASTE is stable across a
     season while their OPTIONS move — and the options do move: what they have already realised is
     removed by `_drop_what_was_already_done`, so the later rounds are them continuing down the list,
-    never repeating it. MEASURED, `build_world(0)`, 2 seasons, tick 1: `p_carin`'s round-2 ranking
-    is `research · reconstruct · create_record · move · work · release · examine`, round 3 is the
-    same order minus `research`, round 4 the same minus `release · examine`. The "replay" the stale
-    sentence feared does not occur; what occurs is continuation, which is what R-03 asked for.
+    never repeating it. A second round is not a replay of the first; it is continuation, which is
+    what R-03 asked for.
 
-    ⚠ **AND THE CLAUSE IS NOT INERT, WHICH IS WHY THIS IS A DECISION AND NOT A SHRUG.** Arm: wrap
-    the caller's draw as `orig(pid, f"{purpose}:r{d.round}")`. `build_world(0)`, 2 seasons, against
-    the shipped arm: events 113 -> 114, `release.refused` 0 -> 1, `finding.none` 3 -> 4,
-    `claim.deposited` 62 -> 63, `travel.blocked` 3 -> 1, content hash `7d64c569..` -> `8886d0aa..`;
-    acts 20 in both. So a reader may not conclude from "unmet" that it would change nothing.
+    ⚠ **AND THE CLAUSE IS NOT INERT, WHICH IS WHY THIS IS A DECISION AND NOT A SHRUG.** Wrapping
+    the caller's draw as `orig(pid, f"{purpose}:r{d.round}")` moves the run's events and content
+    hash, so a reader may not conclude from "unmet" that it would change nothing.
     TAKEN UNDER `CLAUDE.md` §0's fifth step — 1..4 are silent, one option is clearly right for the
     code — rather than escalated: reasons (1) and (2) point the same way and no ruling overwrites a
     design call whose two defensible options are "unreachable" and "self-contradicting".
@@ -442,24 +415,21 @@ def _sample_order(ranked: list, score, p: Person, fx: "Fixtures", draw) -> list:
     keyed = []
     for c in ranked:
         # ⚠⚠ THE NOISE IS KEYED BY THE CANDIDATE, NOT DRAWN IN LIST ORDER, AND THE DIFFERENCE IS
-        # WHAT MAKES A FORK ATTRIBUTABLE. The first version took ONE stream per person and consumed
-        # it down `ranked` — so adding, removing or reordering a single candidate shifted the
-        # noise-to-candidate assignment WHOLESALE, and every downstream difference between two arms
-        # of an experiment was the reshuffle rather than the thing under test. `W-D` measures
-        # exactly that: whether a forked decision changes a LATER one. With a positional stream the
-        # fork's own signal is swamped by its side effect on the draw, and the control arm's
-        # residual channel read 0 where it had read 2. Keying on `(verb, subject)` makes a
+        # WHAT MAKES A FORK ATTRIBUTABLE. ONE stream per person consumed down `ranked` would shift
+        # the noise-to-candidate assignment WHOLESALE when a single candidate is added, removed or
+        # reordered, and every downstream difference between two arms of an experiment would be
+        # the reshuffle rather than the thing under test. `W-D` measures exactly that: whether a
+        # forked decision changes a LATER one. Keying on `(verb, subject)` makes a
         # candidate's noise a property OF THAT CANDIDATE: identical candidates get identical draws
         # in both arms, so what differs between them is what actually differed.
         # ⚠ It is also the only form in which the `tau = 0` control means anything, because it is
         # the only form where a candidate's treatment does not depend on its neighbours.
-        # ⚠ ONE STREAM PER CANDIDATE, AND THE RETRY ADVANCES IT. The first version re-called
-        # `draw(...)` inside the loop with a CONSTANT purpose, which re-seeds an identical
-        # `Random` and returns the identical value — an infinite loop wearing a retry's clothes,
-        # on the one input (`u == 0.0`) the loop exists to handle. Found by this unit's own
-        # adversarial pass rather than in play, because `random()` returns exactly 0.0 about
-        # once in 2^53 draws: a guard that cannot do its job is not a weak guard but an absent
-        # one (`CLAUDE.md` §0.1 pt 2), and a hang is the worst shape for one.
+        # ⚠ ONE STREAM PER CANDIDATE, AND THE RETRY ADVANCES IT. Re-calling `draw(...)` inside the
+        # loop with a CONSTANT purpose would re-seed an identical `Random` and return the identical
+        # value — an infinite loop wearing a retry's clothes, on the one input (`u == 0.0`) the
+        # loop exists to handle. `random()` returns exactly 0.0 about once in 2^53 draws: a guard
+        # that cannot do its job is not a weak guard but an absent one (`CLAUDE.md` §0.1 pt 2),
+        # and a hang is the worst shape for one.
         rng = draw(p.id, f"choice:{c.verb}:{c.subject or '-'}")
         u = rng.random()
         while u <= 0.0:                   # `random()` is [0,1); log(0) is the one unusable draw
@@ -558,12 +528,8 @@ def make_ranker(fx: "Fixtures", verbs: Optional[frozenset] = None,
             # IN-62: the terms have ONE owner, `score_terms`; the score is their left-to-right sum.
             pursuit, stance = score_terms(p, c, fx, memo, odds)
             return pursuit + stance
-        # ⚠ SCORED ONCE, NOT TWICE. `score` was passed to `_sample_order` and re-invoked there for
-        # every candidate it had just been invoked for in this sort key — measured by a `/simplify`
-        # profile as `align()` running 637,324 times for 78,858 candidates across a 143-case corpus
-        # run, almost exactly 2x one pass. The scores are IDENTICAL either way (`score` is pure in
-        # `c` given the closure), so this is the same ranking computed half as often, not a
-        # different one.
+        # ⚠ SCORED ONCE, NOT TWICE. `score` is pure in `c` given the closure, so each candidate is
+        # scored once here and `_sample_order` reads it back from `_scores`.
         _scores = {id(c): score(c) for c in cands}
         # CP-T01-05 NPC half: the person may put effort behind a contested act (`npc_effort`); `off` is a no-op.
         cands, _scores = settle_efforts(cands, _scores, score, fx)
@@ -681,12 +647,8 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
                 occasion: Optional["Question"] = None) -> list:
     """`H-78`: WHICH interactions share one scene. `H-76` says how many; this says which.
 
-    ⚠ THIS WAS A COMMENT IN `make_chooser` UNTIL THE `W17` ADVERSARIAL PASS READ IT -- "the
-    default policy fills scenes greedily in score order", with no row, no alternative and no
-    sweep. That is `H-53`'s defect one level up, and `H-53`'s own row names the shape: the
-    instrument answering a WHICH question the specification left open, inside a slice.
-
-    `greedy` is that behaviour declared and kept as the control. `one_per_scene` is the pre-ruling
+    `greedy` is the default policy, filling scenes in score order, declared and kept as the control.
+    `one_per_scene` is the pre-ruling
     accounting. `by_subject` groups the interactions that share a subject, which is what
     `player_agency_v30.md` §6.3's "one scene opportunity pursued" describes -- an opportunity is
     an opportunity to do something ABOUT something.
@@ -697,8 +659,7 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
     and that is a scheduling fact the driver owns (`SeasonDriver.deliberate`, `H-124`) -- not a
     second bound on the person's triage. Putting it here as a count of 1 would make every extended
     chunk cost 2 > 1 and be trimmed to a single interaction, so no extended scene could form,
-    `Scene.cost` would return 1 unconditionally, and `H-77`'s three-point sweep would go INERT --
-    the exact shape that row records itself recovering from."""
+    `Scene.cost` would return 1 unconditionally, and `H-77`'s three-point sweep would go INERT."""
     rule = fx.get("scene_packing_rule")
     require_member(
         rule,
@@ -715,15 +676,13 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
         # produce anything without one — and dropping it here is what left the act with no route
         # back to what raised it (`N3`).
         return Scene(mint(p.id, "scene", str(n)), p.id,
-                     # ⚠ THE CANDIDATE'S SUBJECT REACHES THE ACT, AND IT USED NOT TO. This read
-                     # `Act(mint(...), p.id, c.verb)` — three arguments — so `opening_set`
-                     # computed a subject from the question's referents, `mint` folded it into the
-                     # act's ID, and the act itself carried NOTHING. `_req_tell` reads
-                     # `payload["subject"]` and got `None`, so `tell` was attempted and refused in
-                     # every world in the corpus; `_eff_tell` had no target either.
+                     # ⚠ THE CANDIDATE'S SUBJECT REACHES THE ACT: `opening_set` computed a subject
+                     # from the question's referents and `mint` folds it into the act's ID, so the
+                     # act itself must carry it -- `_req_tell` reads `payload["subject"]` and
+                     # `_eff_tell` needs its target.
                      #
-                     # ⚠ THAT WAS HALF OF `H-94` AND `W-C` CLOSED THE OTHER HALF. The
-                     # Candidate carries `operands` now, derived person-side from the actor's own
+                     # ⚠ THE OPERANDS RIDE WITH IT (`H-94`, `W-C`). The
+                     # Candidate carries `operands`, derived person-side from the actor's own
                      # Tenures, the question's referent and two fixtures, so
                      # `stores(hearth(giver), kind) >= amount` has a `from`, a `kind` and an
                      # `amount` -- and the act CARRIES them, which is what makes the fold bind
@@ -746,16 +705,15 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
                      # `H-77`: `Scene.cost` prices the scene from the `slots` it fills.
                      occasion=occasion)
 
-    # ⚠ THE BOUND IS THE COST, NOT THE SCENE COUNT, and getting that wrong made the DEFAULT
-    # chooser overspend by construction: once `extended` was actually set, five greedy scenes
-    # cost ten against a budget of five and every season using `make_chooser` refused itself.
-    # Found by running the corpus after `H-77` stopped being inert -- the row and the packer are
-    # the same mechanism seen from two sides, and fixing one without the other is what broke it.
+    # ⚠ THE BOUND IS THE COST, NOT THE SCENE COUNT: once `extended` is set, five greedy scenes
+    # cost ten against a budget of five, so a packer bounded by count would overspend by
+    # construction and every season using `make_chooser` would refuse itself. The row and the
+    # packer are the same mechanism seen from two sides.
     ext = fx.get("extended_scene_cost")
 
     def fill(cands) -> list:
         """Consecutive runs of `cands`, each filling at most `width` interaction slots (a Candidate at effort `e`
-        fills `1 + e`, `Scene.slots`'s own count). With every effort 0 this is the slice by `width` it replaced."""
+        fills `1 + e`, `Scene.slots`'s own count). With every effort 0 this is the slice by `width`."""
         runs, cur, used = [], [], 0
         for c in cands:
             need = 1 + (c.operands or {}).get(EFFORT, 0)
@@ -773,8 +731,7 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
         for chunk in chunks:
             if left <= 0:
                 break
-            # THE PRICE IS `Scene.cost`'s, ASKED OF THE BUILT SCENE: the slots it fills, not the number of acts
-            # (`len(chunk) > 1` was a second owner of it, and a chunk carrying an effort Candidate overspent).
+            # THE PRICE IS `Scene.cost`'s, ASKED OF THE BUILT SCENE: the slots it fills, not the number of acts.
             # An extension the person cannot afford is taken as a PLAIN scene rather than
             # skipped: they still pursue the opportunity, with less in it. Skipping would be the
             # engine deciding what they leave undone, which is L1. The same for a single act at effort that

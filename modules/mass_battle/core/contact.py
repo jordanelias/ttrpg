@@ -19,29 +19,18 @@ def _visible_enemy_cells(sub, enemy_cells):
     unit can know"] Filter `enemy_cells` down to the ones `sub` can actually perceive: within its
     facing cone, angle-to-facing <= FOV_HALF_DEG (105 deg -- ALL of GREEN (<45) and YELLOW (45-90)
     PLUS 15 degrees of RED (90-105); NOT the GREEN+YELLOW boundary itself, which is 90 -- see
-    geometry.octagon_angle's own zone cutoffs; corrected here after a review found the first version
-    of this docstring claimed the two boundaries were the same). Composed on geometry.octagon_angle
+    geometry.octagon_angle's own zone cutoffs). Composed on geometry.octagon_angle
     for the angle itself (not a re-implementation of its cos/acos math). Facing falls back to
     (advance_dir, 0) when the sub-unit's node facing is unset, the same fallback find_contacts'
     head_a/head_b computation and _resolve_maneuver_goal's envelop-wheel both already use.
 
-    [adversarial-pass fix] The facing-cone check is now conditioned on `MB_FACING_MODEL and
-    MB_FACING_FOV_GATE` -- the SAME two flags orchestration.py's own existing FOV-blind-arc gate
-    already composes on (its own comment: "no-op unless the facing model is enabled"), reused here
-    rather than adding a second, parallel, always-on perception check. With either flag off, every
-    enemy cell counts as visible (facing has no bearing under this feature's own convention, which
-    already treats MB_FACING_MODEL as the master switch for every facing-gated mechanic). Both
-    default ON but MB_FACING_MODEL is pinned OFF in every golden-battery mode
-    (tools/ci_golden_modes_check.py's FIELD_PINS), which is what makes this mechanism structurally
-    inert there -- not merely a value someone picked to be large enough to never matter.
+    The facing-cone check is conditioned on `MB_FACING_MODEL and MB_FACING_FOV_GATE` -- the SAME two flags
+    orchestration.py's own FOV-blind-arc gate composes on, rather than a second, parallel, always-on perception
+    check. With either flag off, every enemy cell counts as visible (MB_FACING_MODEL is the master switch for
+    every facing-gated mechanic). Both default ON but MB_FACING_MODEL is pinned OFF in every golden-battery mode
+    (tools/ci_golden_modes_check.py's FIELD_PINS), which is what makes this mechanism structurally inert there.
 
-    [adversarial-pass fix, removed] An earlier version also filtered by a standalone MB_SIGHT_RANGE
-    distance -- removed. Every enemy_range:/refuse_range value anywhere in this package (production
-    or tests) is <=10, so a distance axis set above that (as it had to be, to avoid regressing the
-    one shipped enemy_range: consumer, build_refused_flank's refuse_range=10) could never actually
-    bind: dead by construction, not merely unexercised by the current battery. Simpler and more
-    honest to filter on facing alone until a future caller's genuinely long-range order condition
-    makes a distance axis meaningful to add back.
+    There is no standalone sight-range distance (see config.py's note on MB_SIGHT_RANGE).
 
     Order conditions are the ONLY thing this filters -- assign_targets' own targeting (which enemy a
     sub-unit fights once contact is joined) is untouched; this is command/perception (what a
@@ -129,32 +118,22 @@ def check_orders(unit, t, enemy_cells):
                 break
             for k, v in order.behavior.items():
                 if k == 'fire_signal':
-                    # [A4, ED-MB-0067 Part A -- adversarial-pass fix] Not a real Subunit attribute
-                    # -- a PSEUDO-field consumed here directly, adding the name to the ISSUING
-                    # Unit's fired_signals set (per-Unit, see Unit.fired_signals' own note) instead
-                    # of being setattr-ed onto the subunit. This is the one real, order-writable
-                    # path to fire a 'signal:' trigger from inside a battle: once THIS order's own
-                    # trigger condition is met (any kind -- tick:, enemy_range:, own_strength:,
-                    # another signal:, ...), it releases every other pending order (on any subunit
-                    # of this same Unit) watching for the same name -- WITHIN THIS SAME tick's
-                    # check_orders call if that other subunit's own turn through the `for sub in
-                    # unit.subunits` loop below (see check_orders' own top) has not yet been taken,
-                    # otherwise on the next call. Deliberately not disguised as more precise than it
-                    # is: subunit ITERATION ORDER decides which of the two happens (confirmed by
-                    # direct construction of both orderings), and no messenger latency is modelled
-                    # either way (out of scope for A4) -- so "at most one tick's delay, never more"
-                    # is the honest guarantee, not "always next call".
+                    # [A4, ED-MB-0067 Part A] Not a real Subunit attribute -- a PSEUDO-field consumed here directly, adding
+                    # the name to the ISSUING Unit's fired_signals set (per-Unit, see Unit.fired_signals' own note) instead of
+                    # being setattr-ed onto the subunit. This is the one real, order-writable path to fire a 'signal:'
+                    # trigger from inside a battle: once THIS order's own trigger condition is met (any kind), it releases
+                    # every other pending order (on any subunit of this same Unit) watching for the same name -- WITHIN THIS
+                    # SAME tick's check_orders call if that other subunit's own turn through the `for sub in unit.subunits`
+                    # loop below has not yet been taken, otherwise on the next call. Subunit ITERATION ORDER decides which of
+                    # the two happens, and no messenger latency is modelled (out of scope for A4) -- so "at most one tick's
+                    # delay, never more" is the honest guarantee, not "always next call".
                     unit.fired_signals.add(v)
                     continue
                 if k == 'feign_retreat':
-                    # [C4, ED-MB-0067 Part C / ED-MB-0071] Same shape as fire_signal immediately
-                    # above: not a real Subunit attribute, so it is set on the ISSUING UNIT instead
-                    # -- PP-256's Feigned Retreat is a Unit-wide tactic (Unit.feigned), not a
-                    # per-subunit one. This is the trigger PP-256's resolution machinery
-                    # (feigned_retreat_recognized / feigned_retreat_check / resolve_feigned_retreat,
-                    # all in orchestration.py, all pre-dating this change) was missing: nothing
-                    # anywhere previously set `.feigned` outside its dataclass default and the
-                    # battle-boundary reset, so a fully-built, ratified mechanic never fired.
+                    # [C4, ED-MB-0067 Part C / ED-MB-0071] Same shape as fire_signal immediately above: not a real Subunit
+                    # attribute, so it is set on the ISSUING UNIT instead -- PP-256's Feigned Retreat is a Unit-wide tactic
+                    # (Unit.feigned), not a per-subunit one. This is the trigger for PP-256's resolution machinery
+                    # (feigned_retreat_recognized / feigned_retreat_check / resolve_feigned_retreat, all in orchestration.py).
                     unit.feigned = bool(v)
                     continue
                 if k == 'stance':
@@ -168,22 +147,19 @@ def check_orders(unit, t, enemy_cells):
             # time, not one that silently grows if the sub-unit is later shoved backward by combat
             # contention. Inert whenever 'route' is not one of the fields this order sets.
             #
-            # [F6, adversarial-pass round 2] The resume index is resolved ONCE here
-            # (`order.behavior.get('_route_idx', 0)`, not read back off `sub._route_idx` after
-            # setattr already applied it) and threaded explicitly into BOTH the clamp call
-            # (`start_idx=`, so a resume-partway order's already-passed legs are never measured
-            # against the budget -- see _clamp_route_to_budget's own note) and the cursor
-            # assignment immediately after, so the two can never disagree about which index this
-            # order actually intends to resume at.
+            # The resume index is resolved ONCE here (`order.behavior.get('_route_idx', 0)`, not read back off
+            # `sub._route_idx` after setattr already applied it) and threaded explicitly into BOTH the clamp call
+            # (`start_idx=`, so a resume-partway order's already-passed legs are never measured against the budget)
+            # and the cursor assignment immediately after, so the two can never disagree about which index this
+            # order resumes at.
             if 'route' in order.behavior:
                 _resume_idx = order.behavior.get('_route_idx', 0)
                 sub.route = sub._clamp_route_to_budget(sub.route, start_idx=_resume_idx)
                 sub._route_idx = _resume_idx
-                # [F2 fix, adversarial-pass round 2] A fresh/re-issued route must not inherit a
-                # stalled-waypoint tick count left over from whatever the sub-unit was previously
-                # chasing (see _resolve_route_goal's stall-breaker) -- especially since an index
-                # COLLISION (e.g. both the old and new route resuming at the same idx) would
-                # otherwise silently carry the old count forward onto an unrelated waypoint.
+                # [F2] A fresh/re-issued route must not inherit a stalled-waypoint tick count left over from whatever
+                # the sub-unit was previously chasing (see _resolve_route_goal's stall-breaker): an index COLLISION (old
+                # and new route resuming at the same idx) would otherwise carry the old count onto an unrelated
+                # waypoint.
                 sub._route_wait_ticks = 0
                 sub._route_wait_idx = _resume_idx
             # [ED-1095] Track when 'brace' most recently BECAME present via an order (vs. having been
@@ -232,78 +208,35 @@ def assign_targets(unit_a, unit_b):
 
 # [canonical: Jordan design — speed-priority cell contention; historical: Crécy/Agincourt timing, Leuctra oblique order, hoplite equal-speed combat resolution]
 def resolve_cross_side_contention(unit_a, unit_b):
-    """v13: cross-side cell contention — strict speed-differential resolution.
+    """Cross-side cell contention — strict speed-differential resolution.
 
-    Historical model (per Jordan design this session, confirmed against precedent):
+    Rule (Jordan design): "if they were to occupy the same cell, then the troop with higher speed gets
+    priority for taking up that adjacent cell while the other remains in place."
 
-    The default v11/v12 sim allowed cells from opposing sides to magically
-    co-locate at the same abs position (a contact zone where both sides exist
-    on the same square). Per Jordan: "if they were to occupy the same cell,
-    then the troop with higher speed gets priority for taking up that adjacent
-    cell while the other remains in place."
+    Implementation, for each contested abs position (cells from BOTH sides):
+      - Skip if both sides have only static cells (stale contention)
+      - If a_speed > b_speed: A wins, B loser-cells that moved this turn revert to their pre-move snapshot
+        (didn't advance into A's space)
+      - If b_speed > a_speed: symmetric
+      - Tied speed: NO MOVEMENT-BASED RESOLUTION. Cells stay at the contested position; combat resolves
+        via find_contacts + engagement damage (equal-speed meetings, e.g. phalanx against phalanx, are
+        decided by the push, not by movement priority).
 
-    Historical precedents for the resolution model:
-
-      Crécy and Agincourt (Hundred Years' War): English archers reached their
-      defensive positions BEFORE French cavalry could close. The speed
-      advantage (defenders pre-positioned, attackers slowed by terrain) meant
-      the English took the ground; French had to halt and assault from
-      disadvantaged position. Loser of the timing race stays in place.
-
-      Leuctra (Epaminondas's oblique order, classical Greek): the strong left
-      wing advanced FASTER than the weakened right. Strong wing reached enemy
-      first, hit Spartan elite before Spartan right could engage the
-      weakened Theban right. Speed advantage = first-engagement priority.
-
-      Phalanx-meets-phalanx (Greek hoplite era, Roman vs Roman): two
-      equally-fast disciplined formations meeting at the contact line.
-      Neither side gains ground via movement alone — the push (othismos)
-      decides via combat. Resolution-by-movement only fires on CLEAR speed
-      differential; equal-speed meetings stay at the magical-co-location
-      contact zone where combat resolves the outcome.
-
-    Implementation:
-
-      For each contested abs position (cells from BOTH sides):
-        - Skip if both sides have only static cells (stale contention)
-        - If a_speed > b_speed: A wins, B loser-cells that moved this turn
-          revert to their pre-move snapshot (didn't advance into A's space)
-        - If b_speed > a_speed: symmetric
-        - Tied speed: NO MOVEMENT-BASED RESOLUTION. Cells stay at contested
-          position; combat resolves via find_contacts + engagement damage.
-          This is the historically-correct behavior for equal-speed meetings.
-
-      Size and random tiebreakers from Jordan's spec are NOT applied. Per
-      historical precedent, equal-speed equal-size meetings don't resolve
-      by movement priority — they resolve by combat. Applying random
-      tiebreakers per contested position per turn introduces battery noise
-      that doesn't model anything historical. Reserved for cavalry charge-
-      through cases (where size and morale do matter for penetration depth).
-
-    Charge-through (cavalry past static infantry) and end-of-phase
-    displacement: deferred — no cavalry in current battery, and the
-    framework is in place to add it via speed/power/facing inputs when
-    cavalry units enter the test suite.
+    Size and random tiebreakers from Jordan's spec are NOT applied: random tiebreakers per contested
+    position per turn add noise that does not model anything historical. Charge-through (cavalry past
+    static infantry) and end-of-phase displacement are not implemented.
 
     Citation: see preceding canonical comment.
     """
     if _u.FIELD_MOVEMENT:
-        # ⚠ [ED-MB-0061, 2026-07-30] THIS CLAIM IS FALSE AND IS RETAINED ONLY AS A WARNING.
-        # It used to read: "Co-location is now geometrically impossible on the field path:
-        # _node_advance halts every cell at standoff() before it can ever reach an enemy cell's true
-        # position, so there is nothing left for this function to resolve."
-        #
-        # REFUTED BY MEASUREMENT: 875 DEEP cross-side body interpenetrations (obb_overlap with
-        # penetration depth >= 0.1) over 140 historical-scale snapshots, and independently by
-        # tests/valoria/test_obb_contact_toi.py's two failures under MB_FACING_MODEL=1
-        # ("opposing cell BODIES interpenetrated after a commit"). The stated mechanism does not hold
-        # because the TOI certificate is issued for a heading that _commit_cell_position then
-        # REWRITES (see hierarchy/units.py's resolve_toi_and_commit and the ED-MB-0061 fix plan R2).
-        #
-        # The function stays a no-op on the field path — that part is unchanged and correct, since
-        # cross-side resolution belongs to the TOI solve. But nothing here may be relied on as a
-        # guarantee that co-location cannot occur. The OFF/grid path below is untouched and still
-        # does the full speed-priority resolution.
+        # ⚠ [ED-MB-0061] Co-location on the field path is NOT guaranteed impossible: 875 DEEP cross-side body
+        # interpenetrations (obb_overlap with penetration depth >= 0.1) were measured over 140 historical-scale
+        # snapshots, and tests/valoria/test_obb_contact_toi.py fails under MB_FACING_MODEL=1 ("opposing cell
+        # BODIES interpenetrated after a commit"), because the TOI certificate is issued for a heading that
+        # _commit_cell_position then REWRITES (see hierarchy/units.py's resolve_toi_and_commit and the ED-MB-0061
+        # fix plan R2). This function is a no-op on the field path (cross-side resolution belongs to the TOI
+        # solve), so nothing here may be relied on as a guarantee that co-location cannot occur. The OFF/grid
+        # path below does the full speed-priority resolution.
         return 0
 
     def collect(unit):
@@ -431,11 +364,10 @@ def _find_contacts_standoff(unit_a, unit_b):
         fa, bodies_a = af[id(atom_a)]
         for atom_b in unit_b.subunits:
             fb, bodies_b = bf[id(atom_b)]
-            # Sets, not lists: the engagement envelope is wide enough that one cell can meet several
-            # enemy cells at once, which would otherwise append the SAME snapped identity multiple times
-            # -- confirmed by adversarial review to silently over-count stamina drain downstream
-            # (orchestration.py sums len(a_cells) directly, uncounted duplicates inflate it). Converted
-            # to sorted lists at the end for deterministic output.
+            # Sets, not lists: the engagement envelope is wide enough that one cell can meet several enemy cells at
+            # once, which would otherwise append the SAME snapped identity multiple times and over-count stamina drain
+            # downstream (orchestration.py sums len(a_cells) directly). Converted to sorted lists at the end for
+            # deterministic output.
             contact_cells_a, contact_cells_b, contact_cols = set(), set(), set()
             # [v2 Stage D, ED-MB-0013] Collect the ENGAGED cell boxes (index-deduped) alongside the
             # snapped cell identities. The snapped (rank, file) identities stay -- they key the

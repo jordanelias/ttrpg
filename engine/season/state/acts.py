@@ -2,12 +2,11 @@
 
 `04:1024` step 3 names it among the things the critical path builds at step 3: *"the stores with
 private setters · the gate · the four tokens · the receipt mint · the log · the ledgers · the act
-store · `World`"*. The tree built steps 4-8 and 10 before step 3, which is why this file arrives
-after the loop that needs it rather than before.
+store · `World`"*.
 
 WHAT IT IS FOR, and it is one thing. `loop/resolve.py` folds an Act into Events carrying
-`causes=[a.id]` -- and until now **nothing in the world held that act**, so the id on the most
-load-bearing field in the model resolved against nothing. #353 §19.4 calls `causes[]` *"the
+`causes=[a.id]` -- and without this store **nothing in the world would hold that act**, so the id on
+the most load-bearing field in the model would resolve against nothing. #353 §19.4 calls `causes[]` *"the
 substrate of the entire emergent-narrative claim"*; `hole_register.yaml`'s `H-80` row records the
 consequence in its own words: *"a log walker drops an unresolvable `[a.id]` exactly as it drops
 `[ROOT]`"*. An unresolvable cause and an absent cause are the same object to every reader. This
@@ -15,7 +14,7 @@ store is what makes them different.
 
 ⚠ IT IS NOT A LOG OF EVENTS AND IT IS NOT A LEDGER. The log holds what OCCURRED (`Event`); this
 holds what was ATTEMPTED and resolved (`Act`). An act that was refused is still in here -- the
-refusal Event names it as its cause (`resolve.py:395`), so a store that admitted only successful
+refusal Event names it as its cause (`loop/resolve.py`), so a store that admitted only successful
 acts would make every refusal chain unresolvable, which is the defect one level along.
 
 APPEND-ONLY IS ENFORCED, NOT ASKED. The list is private and there is no remove, no clear, no
@@ -26,10 +25,7 @@ result cannot reach the backing list.
 `append`'s own note for why -- the short version is that a DIFFERING act on a live id makes every
 `causes[]` naming it ambiguous with both readings available, while an EQUAL one changes no
 reading, and a real id collision in the tree (`W17`'s control arm) makes the distinction load-
-bearing rather than theoretical. An earlier draft of this paragraph said re-appending an id "is
-refused rather than ignored" full stop; that was written against rev 1 and left standing when the
-code relaxed, which is a docstring asserting a check the code does not perform -- false in the
-direction that stops the next reader checking.
+bearing rather than theoretical.
 """
 from typing import Iterator, Optional
 
@@ -71,15 +67,13 @@ class ActStore:
         # that enter there directly -- so the invariant holds at the entry point rather than at
         # the one path someone remembered (`CLAUDE.md` §8's shape applied to a store).
         #
-        # ⚠ THE TEST IS EQUALITY, NOT IDENTITY, AND A REAL COLLISION IS WHY. Rev 1 compared
-        # `prior is act` and `W17`'s control arm went red on it: with `interactions_per_scene`
-        # set to `unbounded`, one scene folds four `speak` acts by `p_king`, and the act mint
-        # `H(seed, tick, actor, "act:verb:key")` carries NO DRAW ORDINAL -- so two of them are
-        # distinct objects on one id. That collision is REAL and it PREDATES this store: the
-        # Event ids derived from `a.id` collide with it, which is the same defect `W4` found in
-        # the emission id and fixed there with `new_draw()` (see `World.write`). It is NOT fixed
-        # here: the act mint feeds every Event id, so changing it moves every golden, and that
-        # is its own change with its own re-record.
+        # ⚠ THE TEST IS EQUALITY, NOT IDENTITY, AND A REAL COLLISION IS WHY. With `interactions_per_scene`
+        # set to `unbounded` (`W17`'s control arm), one scene folds four `speak` acts by `p_king`, and the
+        # act mint `H(seed, tick, actor, "act:verb:key")` carries NO DRAW ORDINAL -- so two of them are
+        # distinct objects on one id. That collision is REAL: the Event ids derived from `a.id` collide with
+        # it, which is the same defect `W4` found in the emission id and fixed there with `new_draw()` (see
+        # `World.write`). It is NOT fixed here: the act mint feeds every Event id, so changing it moves
+        # every golden.
         #
         # What this store must not do is FAIL on it, because with equal content the ambiguity
         # does not arise -- `causes[]` naming that id resolves to the same act either way, which

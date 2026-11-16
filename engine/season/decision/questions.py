@@ -2,9 +2,7 @@
 
 `assemble` builds the season's `Question[]` for one person, `aggregate_questions` folds several
 into the one the `QUESTION_AGGREGATION` rule selects, and `view_ids` bounds what a `View` may
-carry. Moved here whole from `decision.py` by unit L1 of
-`workplans/2026-09-09-layer1-conformance-plan.md`; see `__init__.py` for why the package exists
-and for the import-list record this file's imports are derived from.
+carry. See `__init__.py` for why the package exists.
 
 AX-2 binds every file under `decision/`: no `World`, as an import, a name, an attribute or a
 string. Enforced BY PATH over this directory -- `04 §E.1` -- by
@@ -21,13 +19,9 @@ from ..state.carriers import Person, Question, View
 
 def assemble(p: Person, question: Any, k: int, rule: str = "recent",
              questions: tuple = (), odds: Any = None) -> View:
-    # ⚠ W5 REMOVED A `NoProducer` HERE, AND THE REMOVAL IS THE DISCHARGE OF §61, NOT A
-    # SOFTENING OF IT. It read: "`assemble(person, question)` and `view(person, question)`
-    # are UNSATISFIABLE; DELIBERATE HAS NO DECLARED ENTRY POINT." That was TRUE while nothing
-    # produced `q`. `questions_for()` produces it from four sources, so `question is None` no
-    # longer means "the design has no producer" -- it means THIS PERSON HAS NO QUESTION THIS
-    # SEASON, which is an ordinary state (a quiet season, nothing due, no standing commit) and
-    # not a hole. Such a person forms no candidates and does nothing, which is correct.
+    # ⚠ `question is None` MEANS THIS PERSON HAS NO QUESTION THIS SEASON, an ordinary state (a
+    # quiet season, nothing due, no standing commit) and not a hole: `questions_for()` produces
+    # `q` from four sources. Such a person forms no candidates and does nothing, which is correct.
     # A WRONG TYPE STILL RAISES, below: silently accepting one would let a caller's leftover
     # string sit where a Question belongs and read as "no question", which is how a discharged
     # hole comes back as a silent no-op.
@@ -54,8 +48,7 @@ def assemble(p: Person, question: Any, k: int, rule: str = "recent",
 def aggregate_questions(qs: list, rule: str):
     """`H-54`: how many of a person's questions reach `assemble` in one season.
 
-    #353 says NOTHING about this and the instrument answered it silently as `qs[0]` for four
-    revisions. `first` preserves that answer as a declared, swept default; `all` and
+    #353 says NOTHING about this. `first` answers `qs[0]`, as a declared, swept default; `all` and
     `one_per_source` are the alternatives the sweep compares it against. Returns ONE question,
     because `assemble(person, question)` takes one -- the rules differ in WHICH, and in how many
     are folded into it, which is exactly what is open."""
@@ -90,8 +83,7 @@ def view_ids(p: Person, q: Any, k: int, rule: str) -> list:
 
     ⚠ #353 SUPPLIES K AND NEVER SUPPLIES WHICH K, and "built, not filtered" says what a View is
     NOT. `H-09` gives `K = 12`; nothing in the chain says which twelve of a 200-claim ledger a
-    person brings to a question, and taking the last k -- which every revision before `W5` did
-    silently -- is an invention. The rules are `rosters.yaml: view_builder_rules`, `recent` is the
+    person brings to a question, and taking the last k silently is an invention. The rules are `rosters.yaml: view_builder_rules`, `recent` is the
     default because it is the incumbent and a sweep needs an honest control, NOT because it is
     argued for.
 

@@ -6,14 +6,14 @@ are basically tradition primitives" (Jordan): just as a weapon is a bundle of ph
 bundle of ability primitives — the named techniques/concepts it teaches (Indes, mezzo tempo, atajo,
 true-times…), grounded in the historical-combat-manuals corpus.
 
-CURRENT MODEL (levels-of-investment, ED-PC-0024 — ED-PC-0035 citation fix: 0023 is the fiat audit that RECORDED the principle; 0024 is the entry that filed the model. Jordan directive "we'll probably have levels of investment for
+CURRENT MODEL (levels-of-investment, ED-PC-0024 (ED-PC-0023 recorded the principle; ED-PC-0024 filed the model). Jordan directive "we'll probably have levels of investment for
 techniques"): an ability is a tradition-learned MODULATOR a fighter INVESTS IN. `c.equipped` is either a LIST of
 names (each at level 1.0 — full baseline mastery, back-compat) or a DICT {name: level} (graded investment, level>=0).
 Each ability targets a named LEVER with op '+' (additive, scaled value*level) or '*' (multiplicative, value**level).
 Level 0 -> inert (invariant-safe); efficacy EMERGES from the invested level, not tradition membership — the
 tradition gates ACCESS to the kit, investment + skill drive efficacy (the design principle recorded in
-audit/2026-07-23-combat-fiat-audit/fiat_audit_v1.md). This realises the old TARGET MODEL's "effectiveness emerges
-rather than a hand-set value": the per-ability `value` is now the level-1 anchor of a continuum, not a fixed effect.
+audit/2026-07-23-combat-fiat-audit/fiat_audit_v1.md): the per-ability `value` is the level-1 anchor of a
+continuum, not a fixed effect.
 
 LEVER STATUS: the 7 channel levers + counter_success/counter_select/anti_overcommit are live (eff_cw consumed at
 ~9 sites). U10/ED-PC-0022 added FIVE morphology-lever channels — 'edge_read', 'spine_press', 'edge_grab',
@@ -22,9 +22,8 @@ bind_sigma / facing_target, contact.grab_sigma). TWO are populated with abilitie
 2026-07-23 adversarial HEMA pass (shinogi->spine_press, ringen_am_schwert->edge_grab; ILLUSTRATIVE — per-event
 effect, ~0 aggregate, see the block below). 'edge_read' and 'choke_control' have no GROUNDED ability; since PC-17
 (ED-PC-0059) they and five channel levers carry the 21 GENERIC calibration abilities built below the ABILITIES dict.
-'facing_regime' stays BARE (the ability_factor hook is live, factor 1.0 default, byte-identical): a deliberate
-honest gap, NOT invented privilege. ('zwerchhau' was re-homed off edge_read to counter_select
-and 'guardia' removed off facing_regime — both were winden-class category errors, ED-PC-0026.) There is no 'seize' lever, and no 'vorschlag' or 'sen_no_sen' ability.
+'facing_regime' stays BARE (the ability_factor hook is live, factor 1.0 default): a deliberate
+honest gap, NOT invented privilege (ED-PC-0026). There is no 'seize' lever, and no 'vorschlag' or 'sen_no_sen' ability.
 """
 
 ABILITIES = {
@@ -60,14 +59,12 @@ ABILITIES = {
                            desc="Zwerchhau — the Thwart-cut, a Liechtenauer Meisterhau: crossing the hands to form a structural 'roof' that INTERCEPTS an incoming Oberhau and strikes in the SAME TEMPO. Its documented function is tempo-interception (Ringeck / pseudo-Peter-von-Danzig glosses) — reaching for the single-time counter — NOT false-edge unreadability. [GROUNDING-CORRECTED 2026-07-23, ED-PC-0026: was mis-wired to 'edge_read' on a return-line-ambiguity claim the glosses don't give; adversarial HEMA critic. Now amplifies COUNTER_SELECT alongside Italian mezzo_tempo — the in-tempo counter reach.]"),
     'ringen_am_schwert': dict(tradition='german', grade='S1/S2', lever='edge_grab',      op='*', value=0.4,   # [SIM-CALIBRATE]
                            desc="Ringen am Schwert — wrestling at the sword: a trained grappler seizes the strong/bind of a live blade with far less self-injury (a MITIGATOR, factor<1 on GRAB_EDGE self-hazard)"),
-    # 'guardia' REMOVED 2026-07-23 (ED-PC-0026, adversarial HEMA critic): it wired "guardia stretta" onto the
-    # facing_regime (body side-on-vs-square) lever, but "stretta" names a NARROW blade-position / close-MEASURE
-    # guard (paired with misura stretta), a different referent than body facing — the same winden-class category
-    # error (real period term, wrong lever). The Italian profiled-stance TENDENCY facing_regime models is real,
-    # but it has no discrete named technique to anchor an ability honestly, so facing_regime stays a BARE
-    # morphology lever (fires from WP.facing_pref weapon geometry; honest-gap for a tradition amplifier, exactly
-    # like choke_control was) rather than ship a misnamed one. edge_read likewise has no GROUNDED ability (zwerchhau
-    # re-homed to counter_select above); it and choke_control now carry only the GENERIC calibration abilities below.
+    # facing_regime has no ability (ED-PC-0026): "guardia stretta" names a NARROW blade-position / close-MEASURE guard
+    # (paired with misura stretta), a different referent than body facing. The Italian profiled-stance TENDENCY
+    # facing_regime models is real, but it has no discrete named technique to anchor an ability honestly, so
+    # facing_regime stays a BARE morphology lever (fires from WP.facing_pref weapon geometry; honest-gap for a
+    # tradition amplifier). edge_read likewise has no GROUNDED ability (zwerchhau is on counter_select above); it and
+    # choke_control carry only the GENERIC calibration abilities below.
 }
 
 
@@ -160,7 +157,7 @@ def _invested(c):
     """Yield (ability_name, level) over the fighter's LEARNED techniques — the levels-of-investment model
     (ED-PC-0024, Jordan directive "we'll probably have levels of investment for techniques"; efficacy emerges from
     what the fighter INVESTED, not tradition membership). `c.equipped` supports either:
-      · a LIST of names        -> each at level 1.0 (full baseline mastery) — BACK-COMPAT, byte-identical to before;
+      · a LIST of names        -> each at level 1.0 (full baseline mastery);
       · a DICT {name: level}   -> graded investment (level in [0, MAX_INVESTMENT_LEVEL]; 0 = untrained/inert).
     Level is clamped to [0, MAX_INVESTMENT_LEVEL] (bounded scale; also the overflow safety guard).
 
@@ -213,6 +210,6 @@ def ability_factor(c, lever):
 def eff_cw(c, channel):
     """Effective lever modulator for `channel`. The scalar channel WEIGHTS are removed: only a learned ABILITY hooked
     to that lever (ability_factor) moves this off 1.0. With no such ability — the default — this is exactly 1.0, so
-    the channel has no intrinsic effect and traditions differ only via the imposition gate + familiarity. (Name kept
-    so call-sites read as the lever they modulate; an authored ability on e.g. 'measure' goes live here.)"""
+    the channel has no intrinsic effect and traditions differ only via familiarity. (An authored ability on e.g.
+    'measure' goes live here.)"""
     return ability_factor(c, channel)

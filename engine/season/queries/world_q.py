@@ -1,30 +1,22 @@
 """`season.queries.world_q` — THE WORLD-FIRST HALF OF `Query`, AND THE TWO WORLD-FIRST
 FUNCTIONS THAT WERE NEVER IN IT.
 
-EXTRACTED, step 5 of the decomposition. `04_CODE_ARCHITECTURE.md` §A.3 row 2 is the ruling and it
-is a MODULE ruling, not a signature one: *"one `Query` class holding both families -> two modules;
-the second cannot import the first ... In one class, a person-side function calls a resolver-side
-one with no import to scan."* The eleven functions here all take a `World` FIRST. The four
-person-side statics stay on `Query` in `shape.py` until step 7 puts them in `decision`, which is
-the module that may not name `World` at all.
+`04_CODE_ARCHITECTURE.md` §A.3 row 2 is the ruling and it is a MODULE ruling, not a signature one:
+*"one `Query` class holding both families -> two modules; the second cannot import the first ... In
+one class, a person-side function calls a resolver-side one with no import to scan."* The functions
+here all take a `World` FIRST. The person-side statics stay on `Query` in `shape.py`, until
+`decision` takes them, which is the module that may not name `World` at all.
 
-⚠ THE ELEVEN ARE MODULE FUNCTIONS NOW, AND `shape.Query` BINDS THEM AS `staticmethod`s. That is a
+⚠ THESE ARE MODULE FUNCTIONS, AND `shape.Query` BINDS THEM AS `staticmethod`s. That is a
 re-export, not a copy — `Query.parent_of is parent_of` — so every call site reading
-`Query.<world-first>` resolves to these bodies and there is exactly one owner of each rule. The
-binding is what makes the class deletable at step 7 without a second migration.
+`Query.<world-first>` resolves to these bodies and there is exactly one owner of each rule.
 
 ⚠ THIS MODULE MUST NOT LEARN A PERSON. Its one-way rule is the same one `state/` states: nothing
 here imports `shape`, `decision`, `loop` or `seam`. `questions_for` takes a `Person` as its SECOND
 argument and asks the WORLD about them; that is a world-first function, not a person-side one, and
 the AST guard (`test_w5_sense_is_still_the_only_world_taking_non_decision_function`) is what keeps
-the distinction checkable by signature rather than by intention.
-
-⚠ THAT SENTENCE WAS FALSE WHEN FIRST WRITTEN AND IS MADE TRUE RATHER THAN SOFTENED. The guard
-parsed `files.SHAPE_PY` alone, so it could not see this module at all — a claim of enforcement
-naming a gate that does not read the file it is written in, which is the §47 defect the package
-records twice already. Caught by a read-only critic; the guard now parses the model set, and
-`_model_modules()` derives that set from a recursive glob, so it will read the module a later
-step adds without anyone remembering to say so.
+the distinction checkable by signature rather than by intention. The guard parses the model set,
+and `_model_modules()` derives that set from a recursive glob.
 """
 
 from __future__ import annotations
@@ -80,15 +72,12 @@ from ..data.verbs import DEED_KINDS
 from .person_q import PAIRED_KINDS, opinion
 from ..state.attribution import anchor_of, causing_act, event_by_id, matured_terms  # noqa: F401 -- re-exported
 from ..state.carriers import Person, Question, Site, Tenure
-# ⚠ `parent_of` AND `descendants` ARE RE-EXPORTED, NOT DEFINED HERE (G3, plan position 6). The
-# write gate's F3 clause needs both -- ruling (3)'s parent rung and ruling (4)'s purview subtree --
-# and the gate is in `state/`, which may not import this module. The bodies moved down unchanged;
-# these names are the same function objects, so every `world_q.parent_of(...)` call is unaffected.
+# ⚠ `parent_of` AND `descendants` ARE RE-EXPORTED, NOT DEFINED HERE. The write gate's F3 clause needs
+# both -- ruling (3)'s parent rung and ruling (4)'s purview subtree -- and the gate is in `state/`,
+# which may not import this module. These names are the same function objects as `state/containment`'s.
 from ..state.containment import descendants, edges_of, parent_of  # noqa: F401 -- re-exported
-# ⚠ AND `ancestry`/`home_of` BY THE SAME ROUTE (plan position `19`, U7-remit): the write gate's
-# `determination` basis asks the bench's containment test of the party's home, so both walks moved
-# down, unchanged. Same function objects; every `world_q.ancestry(...)`/`world_q.home_of(...)` caller
-# is unaffected.
+# ⚠ AND `ancestry`/`home_of` BY THE SAME ROUTE: the write gate's `determination` basis asks the
+# bench's containment test of the party's home. Same function objects.
 from ..state.containment import ancestry, home_map, home_of  # noqa: F401 -- re-exported
 # `19`: the bench's two rules, owned by the gate that enforces them (`judging_set` asks both), and
 # the seat-authority predicates the `basis` form's stems read (`WorldReader.read`, below).
@@ -129,7 +118,7 @@ def aggregate_guard(w: World, name: str, *, per_person_tally: bool = False,
                     over_ended_edges: bool = False) -> None:
     """S22.4 -- THE AGGREGATION BOUNDARY.
 
-    REV 2 HONESTY NOTE. S22.4 clause 2 is a READ-SIDE rule and is therefore checkable by
+    S22.4 clause 2 is a READ-SIDE rule and is therefore checkable by
     GREPPING THE RESOLVER for a Query crossing holders -- a static check, not a runtime one.
     This function is the runtime half and THE CALLER VOLUNTEERS ITS OWN VIOLATION, which
     detects nothing on its own. `commit_count_guard` below is the part that actually
@@ -144,19 +133,13 @@ def aggregate_guard(w: World, name: str, *, per_person_tally: bool = False,
             law="L3 clause 3 -- any Query monotone in the ENDED-edge set is a ratchet and is REFUSED. `count{commit}` over live AND ended rows is monotone; `count{hold: until != null}` is revocations-ever; each is built only from 'structural' edges and each EVADES clause 2")
 
 def single_holder_counter(w: World, person: str, axis: str, registry: set[str]) -> int:
-    """L3 CLAUSE 1 -- and rev 4 exists because revisions 1-3 refused what this clause
-    EXPLICITLY PERMITS.
+    """L3 CLAUSE 1 -- a monotone counter per `(Person, axis)`, which the clause EXPLICITLY PERMITS.
 
     The head, verbatim: *"a monotone counter exists ONLY per `(Person, axis)` where `axis`
     is on a closed registry"*, and its own note calls such a counter **"legal, since every
     increment is in the holder's own ledger"**. Clause 2 bars only the CROSS-HOLDER SUM.
 
-    Revisions 1-3 routed every "a character's risk builds up quietly" row to a probe that
-    raised clause 2 -- on a need that never crosses a holder. It was THE LARGEST SINGLE
-    BLOCKER IN THE CORPUS (18 cases), and it was the instrument measuring AGAINST the
-    design, which S0.1 point 4 rules is no more acceptable than flattering it.
-
-    What is genuinely missing is narrower and is what this raises: THE CLOSED REGISTRY."""
+    What this raises when it is missing is THE CLOSED REGISTRY."""
     TRACE.query("single_holder_counter", "resolver")
     if not registry:
         raise Unspecified(
@@ -261,7 +244,7 @@ def open_slots(w: World, venue: Optional[str]) -> list[dict]:
     """THE EMPTY SLOTS A SITTING AT `venue` HAS ON THE DOCKET, oldest first -- the items CALENDAR formed
     (`{"date": <id>, "matter": None}`, `loop/calendar.py`, for a date that fired WITH a holder) whose
     Date sits at `venue` and whose `matter` is `None`. v9 SC-01 fired-slot step: `_eff_open_case`
-    fills the first (through `slot_for`), where it used to append a dateless item beside it. A slot a determination emptied
+    fills the first (through `slot_for`) and appends a dateless item only where none is open. A slot a determination emptied
     (`_eff_determine` writes the matter back to `None` and keeps the slot) is open again: a sitting
     hears matters one after another, and nothing rules when a sitting ends. `None` venue: none."""
     if venue is None:
@@ -417,12 +400,8 @@ def docket_question(w: World, p: Person) -> Optional[Question]:
     docketed persons are plain referents of every row that declares no `referent_class`, so those rows
     form on them; (3) `Person` is a class `open_case` declares, so a seat-holder delivered this
     question forms `open_case` on a matter that is already docketed and the fold refuses it
-    (`case.refused`, `_eff_open_case`'s `docketed` decline) -- found at the B10-05 close and pinned in
-    `test_referent_class_stamps.py`. MEASURED: the realm's `open_case` refusals as `case.refused` over
-    `aperture 2 --seeds 0 1 2 3 4` are 9 of 44 attempts at the batch base, 7 of 33 after CP-T05-04 and 7 of
-    31 at the close, so the docket question added none the base lacked (the own-referent term stamps the
-    sitting question's docketed matters as `Person` too, and before the batch `open_case` formed on every
-    plain referent). REVERT, if that count ever rises above the base's: drop the call in `questions_for` (the two `referent_class` columns stay)."""
+    (`case.refused`, `_eff_open_case`'s `docketed` decline), pinned in `test_referent_class_stamps.py`.
+    REVERT: drop the call in `questions_for` (the two `referent_class` columns stay)."""
     held = [c for c in p.ledger if c.predicate in DOCKETING_KINDS]
     if not held:
         return None
@@ -442,8 +421,7 @@ def lapsing_items(w: World, lapse: Optional[int]) -> list[tuple]:
     `None` (v11 CR-55, `Fixtures docket_lapse`; the control: nothing lapses). The one owner of *how
     long has this item been before a room*, read by MATTER's lapse pass. AN ITEM DOCKETED IN SEASON `t` IS
     HEARD IN SEASONS `t` TO `t + lapse` AND LAPSES AT THE BARRIER OPENING `t + lapse + 1`: MATTER precedes
-    DELIBERATE, so `>=` would take a matter from a bench in the very season its count ran out (found at
-    CR-55: `test_sc01_the_bar`'s control determines at the fourth season a matter docketed at the first).
+    DELIBERATE, so `>=` would take a matter from a bench in the very season its count ran out.
     NOTHING IS STORED: an item
     carries no age, so the age is read where the item's beginning is already written --
       * an item naming a matter: the latest docketing Event (`DOCKETING_KINDS`) whose act's `subject`
@@ -472,7 +450,7 @@ def lapsing_items(w: World, lapse: Optional[int]) -> list[tuple]:
         ev = None
         if item.get("matter") is not None:
             # THE LATER of the two: a `carry`'s act subject is the petition, an `open_case`'s the matter, and a matter
-            # carried after an older `open_case` of it must age from the carry, not from the stale case (B10-13 Phase 3).
+            # carried after an older `open_case` of it must age from the carry, not from the stale case.
             cands = [by_ref[r] for r in (item["matter"], item.get(DOCKET_PETITION)) if r is not None and r in by_ref]
             ev = max(cands, key=lambda c: c.emitted_at) if cands else None
         since = ev.emitted_at if ev is not None else date.get("due_at")
@@ -538,7 +516,7 @@ def works_for(w: World, at: Optional[str], plan: Optional[str]) -> list:
     it -- or he destroyed the Record) bounds nothing and plans nothing, r2 §A.6.3's *"a works with no
     master is not a bound"*. `hold_force` is the reader of *who holds this*, and it RAISES on two
     holders rather than choosing. The kind and target are compared FIRST, so a world with no works
-    reaches no `hold_force` scan at all (every world built before `24e`).
+    reaches no `hold_force` scan at all.
 
     ⚠ THE TARGET IS THE PAIR `(at, plan)`, AND ONE LIVE WORKS PER TARGET IS KEPT AT ITS ONE PRODUCER.
     r2 §A.6.3 rules *"one works per target"* and has `ceiling` RAISE on two, because a Query that
@@ -556,8 +534,8 @@ def works_for(w: World, at: Optional[str], plan: Optional[str]) -> list:
 
 
 # `matured_terms` -- HOW MANY OF A RECORD'S DECLARED TERMS HAVE RIPENED, counted off the log -- is owned by
-# `state/attribution.py` since v9 IN-12 step 10 (the `anchor_of` cover read asks it, and `state/` imports
-# nothing from `queries/`); imported above and read here by `ceiling`, unchanged.
+# `state/attribution.py` (the `anchor_of` cover read asks it, and `state/` imports nothing from
+# `queries/`); imported above and read here by `_fabric_ceiling_input`.
 
 
 def ceiling(w: World, site: Site) -> int:
@@ -579,8 +557,8 @@ def ceiling(w: World, site: Site) -> int:
     fixed-point discipline `condition` is kept in (S48). `min(matured, declared)` makes the ratio
     total if a later act shortened the declared list below what the log has seen ripen.
 
-    ⚠ IT IS A BOUND ON THE RISE AND NEVER A CUT. r2 wrote the clamp as `min(ceiling, condition +
-    total)`, which would LOWER a standing fabric the moment a works naming it was declared (0 terms
+    ⚠ IT IS A BOUND ON THE RISE AND NEVER A CUT. A clamp of `min(ceiling, condition +
+    total)` would LOWER a standing fabric the moment a works naming it was declared (0 terms
     ripe: ceiling 0) and any delta was staged. The fold's one clamp (`loop/resolve.py::resolve`)
     therefore takes `max(condition, ceiling)` as its upper bound: a ceiling below a fabric's
     condition stops it rising, and takes nothing away that stands.
@@ -592,8 +570,8 @@ def ceiling(w: World, site: Site) -> int:
 
 
 def share(w: World, site: Site) -> tuple:
-    """`share(w, ...)` -- DECLARED in `holonic_ARCHITECTURE.md` §17's resolver-side roster (`:600`)
-    and never implemented until plan position `24e`. An actor's share of a fabric as a RATIO,
+    """`share(w, ...)` -- DECLARED in `holonic_ARCHITECTURE.md` §17's resolver-side roster (`:600`).
+    An actor's share of a fabric as a RATIO,
     `(1, n)`, where `n` is how many persons stand at its rung (`presence`), floored at one so a
     fabric nobody stands at is not divided by zero.
 
@@ -613,15 +591,14 @@ def share(w: World, site: Site) -> tuple:
 
 def _fabric_share_input(w: World, site: Site) -> FabricInput:
     """THE SHARE HALF of the projection `settlements.fabric` reads (v9 IN-07 E5): `presence` at the
-    site's rung (which traces), and nothing else, so `share` pays only its old body's reads. The
-    ceiling half is `None`."""
+    site's rung (which traces), and nothing else. The ceiling half is `None`."""
     return FabricInput(scale=None, live_works=None, declared=None, matured=None,
                        present=len(presence(w, site.rung)))
 
 
 def _fabric_ceiling_input(w: World, site: Site) -> FabricInput:
-    """THE CEILING HALF of the projection `settlements.fabric` reads (v9 IN-07 E5), so `ceiling` pays
-    only its old body's reads: `condition_scale`, `works_for` (refusing two live works, A6), the works'
+    """THE CEILING HALF of the projection `settlements.fabric` reads (v9 IN-07 E5):
+    `condition_scale`, `works_for` (refusing two live works, A6), the works'
     declared terms and -- only when it declares any -- `matured_terms`' log scan. `live_works` is
     always an int here, which is how the module tells this half was projected. The share half is
     `None`."""
@@ -639,8 +616,8 @@ def _fabric_ceiling_input(w: World, site: Site) -> FabricInput:
 
 
 def judging_set(w: World, venue: str, matter: Optional[str] = None) -> list[str]:
-    """`H-32`, BUILT -- plan position `18` (PROC-A), `21_RECONCILIATION.md` PHASE 2 step 7 /
-    `03_PARAMETERS.md` §D's `bench_basis`. Live holders of a `hold` Tenure GRANTED the bench's
+    """`H-32` (`21_RECONCILIATION.md` PHASE 2 step 7 / `03_PARAMETERS.md` §D's `bench_basis`):
+    THE BENCH AT `venue`. Live holders of a `hold` Tenure GRANTED the bench's
     basis AND whose Office's `scope_rung` CONTAINS `venue` -- the containment walk
     `ancestry(w, venue)` already owns (§8: the walk is a rule, lives once), not a bare equality,
     which is the "a purview walk one rung up still finds it" falsifier: a seat scoped one rung
@@ -648,64 +625,43 @@ def judging_set(w: World, venue: str, matter: Optional[str] = None) -> list[str]
     (S61 -- *"nothing is decided at a sitting"* by fiat of this Query, only by who is actually
     seated).
 
-    ⚠ THE GRANT, NOT THE OFFICE'S OWN FIELD -- plan position `13e`'s consolidation
-    (`Tenure.granted_acts`, `H-71` arm 2). *"An office whose remit changes does so by an ACT ...
-    a hand-mutation reaches nobody."* Reading `off.remit_acts` here would be a SIXTH reader of the
-    field `13e` moved every consumer off of, and would let a bare attribute edit change who may
-    judge without a `confer`/`establish` ever running -- exactly the drift that consolidation
-    exists to stop. `test_13e_no_remit_acts_attribute_read_outside_the_three_allow_listed_sites`
-    is the AST guard that catches a new reader of the retired field; this one reads the Tenure's
-    own snapshot instead, the same as `person_side_eligible`.
+    ⚠ THE GRANT, NOT THE OFFICE'S OWN FIELD (`Tenure.granted_acts`, `H-71` arm 2). *"An office whose
+    remit changes does so by an ACT ... a hand-mutation reaches nobody."* Reading `off.remit_acts`
+    here would let a bare attribute edit change who may judge without a `confer`/`establish` ever
+    running. `test_13e_no_remit_acts_attribute_read_outside_the_three_allow_listed_sites` is the
+    AST guard that catches a reader of that field; this one reads the Tenure's own snapshot
+    instead, the same as `person_side_eligible`.
 
-    ⚠ `matter` IS ACCEPTED, NOT YET LOAD-BEARING. The design's signature is
-    `judging_set(w, venue, matter)` because a per-arrangement `bench_basis` (`engine/season/arrangements.yaml`,
-    part 3 of this same position) is meant to select the remit act a matter's disposal reads --
-    but nothing yet maps a docketed matter to its governing arrangement row (that is PHASE 2 step
-    10's docketing, explicitly weighed and left OPEN by this position's own record rather than
-    built here). Until that mapping exists, `matter` is carried on the signature the design
-    specifies and the basis is `H-32`'s own swept default, `"determine"` -- the one remit act any
-    live matter in the corpus currently asks a bench to exercise. Wiring `matter` through is one
-    line here (`basis = bench_basis_of(w, matter) or "determine"`) once that mapping exists, and
-    is deliberately NOT invented now (§0.05: a mapping this position does not own is not smuggled
-    in to make the signature look busier).
-    ⚠ PLAN POSITION `19` BUILT THE DOCKETING HALF AND NOT THE MAPPING: `open_case` now puts a matter
-    on `World.docket` (`docketed`, above), and `determine` asks this function -- through `WorldReader`'s
-    `bench.size` stem -- for the bench at the matter's PLACE (`place_of`).
-    ⚠ v9 SC-03a BUILT THE MAPPING'S CARRIER, AND STILL NOT THIS READ: a docket item now names its
-    arrangement (`DOCKET_ARRANGEMENT`, `docketed_under`, written by a hand-built `open_case`; a
-    computed one names `None`), and `_eff_determine` reads the row's `disposes:`. `matter` stays
-    unused HERE, and the basis stays the one constant (`BENCH_BASIS`), because every seeded row's
-    `bench_basis` is `determine` -- the constant already -- so
-    wiring `bench_basis_of` would change no bench; it is the one line above, the day a row declares
-    another basis.
+    ⚠ `matter` IS ACCEPTED, NOT LOAD-BEARING. The signature is `judging_set(w, venue, matter)`
+    because a per-arrangement `bench_basis` (`engine/season/arrangements.yaml`) is meant to select
+    the remit act a matter's disposal reads, and the basis here is `H-32`'s own swept default
+    (`BENCH_BASIS`, `"determine"`), because every seeded row's `bench_basis` is `determine`, so
+    wiring `bench_basis_of` would change no bench. `open_case` puts a matter on `World.docket`
+    (`docketed`, above), a docket item names its arrangement (`DOCKET_ARRANGEMENT`,
+    `docketed_under`; a computed `open_case` names `None`), `_eff_determine` reads the row's
+    `disposes:`, and `determine` asks this function -- through `WorldReader`'s `bench.size` stem --
+    for the bench at the matter's PLACE (`place_of`). Wiring `matter` through is one line
+    (`basis = bench_basis_of(w, matter) or "determine"`) the day a row declares another basis,
+    and is NOT invented before (§0.05).
 
-    ⚠ A SEAT WITH NO `scope_rung` REACHES NOTHING -- the office-cluster case (S6.2, `Office.rung
-    is None`) has no ground to be contained on, exactly as `purview_reaches` treats it. It is a
-    CONTENT fact about such a seat, not a bug here.
+    ⚠ A SEAT WITH NO `scope_rung` REACHES NOTHING. `off.scope_rung is None` is not only the
+    office-cluster case (S6.2, `off.rung is None`, which has no ground to be contained on):
+    `carriers.py::Office.__post_init__` auto-sets `scope_rung` ONLY for a TITLED post
+    (`title_domain(self.post)` non-`None`), so a seated, RANKED, non-titled office gets none from
+    the constructor, and `offices.yaml` has no scope key to supply one. A seat's `scope_rung` is
+    set by whoever BUILDS it: the realm (`boot/realm.py`) sets `scope_rung = rung` for every
+    authored row, and `corpus_run._seat_office` leaves an untitled seat at the titled-only default.
+    This function excludes a seat left at `None` from EVERY bench, silently.
+    `state/gate.py::purview_reaches` asks the same containment question of `off.rung` (always set
+    for a seated office) and would not exclude it. This function reads `scope_rung` rather than
+    `rung`/`purview_reaches` by `H-32`'s own ruled default (`hole_register.yaml`, H-32).
 
-    ⚠ CORRECTED (methodology close, terminal critique, 2026-09-29): THE PARAGRAPH ABOVE OVERSTATES
-    THE EQUIVALENCE. `off.scope_rung is None` does NOT only happen in the office-cluster case
-    (`off.rung is None`) -- `carriers.py::Office.__post_init__` auto-sets `scope_rung` ONLY for a
-    TITLED post (`title_domain(self.post)` non-`None`); a seated, RANKED, non-titled office
-    (`off.rung` set, no title) gets no `scope_rung` from the constructor. `offices.yaml` has no
-    scope key to supply one: a seat's `scope_rung` is set by whoever BUILDS it -- the realm
-    (`populated.build_realm`) sets `scope_rung = rung` for every authored row, and
-    `corpus_run._seat_office` leaves an untitled seat at the titled-only default
-    (`state/carriers.py`, `Office.__post_init__`). This function excludes a seat left at `None` from
-    EVERY bench, silently, the same way it excludes a true cluster seat -- a different content fact
-    than the one this docstring claimed, not the same one restated. `state/gate.py::purview_reaches` asks the same containment question of
-    `off.rung` (always set for a seated office) and would not exclude it. This function reads
-    `scope_rung` rather than `rung`/`purview_reaches` by `H-32`'s own ruled default
-    (`hole_register.yaml`, H-32), which is precedent this correction does not reopen -- it corrects
-    only the FALSE claim that the two fields' `None` cases coincide, not the choice of field.
-
-    ⚠ PLAN POSITION `19`: THE TWO RULES THIS LOOP APPLIED ARE NOW NAMED AND OWNED IN `state/gate.py`,
-    UNCHANGED -- the basis (`BENCH_BASIS`, was the local literal `basis = "determine"`) and the
-    containment test (`sits_over`, was `off.scope_rung in set(ancestry(w, venue))`). The write gate's
-    `determination` basis (`may_determine`) asks both of the seat a determination is exercised
-    through, and a bench listed here by one reading and admitted there by another is the
-    disagreement §8 forbids. Same answers: `test_field_deletions.py`/`test_stress_proceedings_
-    rehost.py` pin them, and `ancestry` stays trace-free."""
+    ⚠ THE TWO RULES THIS LOOP APPLIES ARE NAMED AND OWNED IN `state/gate.py`: the basis
+    (`BENCH_BASIS`) and the containment test (`sits_over`). The write gate's `determination` basis
+    (`may_determine`) asks both of the seat a determination is exercised through, and a bench
+    listed here by one reading and admitted there by another is the disagreement §8 forbids.
+    `test_field_deletions.py`/`test_stress_proceedings_rehost.py` pin them, and `ancestry` stays
+    trace-free."""
     TRACE.query("judging_set", "resolver")
     seats: list[str] = []
     for t in w.tenures:
@@ -742,7 +698,7 @@ def declared_votes(w: World, matter: str, row: dict) -> int:
     `judging_set`'s, counted as distinct persons (`bench.size`'s rule).
 
     THE SUBJECT TEST IS THE RULE, NOT AN ADDENDUM: a commit to a faction creed has the faction's LEADER as its
-    subject (`harness/populated.py`'s creed Propositions), so a member's loyal creed is a vote against nobody
+    subject (`boot/realm.py`'s creed Propositions), so a member's loyal creed is a vote against nobody
     unless the leader is the one on trial -- and then only if the creed's predicate names the disposal, which
     it does not. `names` is equality with the kind: a predicate that merely mentions it is not a vote
     [ASSUMPTION; medium; Jordan to correct; revert: any Proposition about the party]. A matter with no place has
@@ -801,12 +757,9 @@ def reception(w: World, speaker: str, venue: Optional[str]) -> float:
         (R8.1's struct, `21_RECONCILIATION.md` PHASE 3's correction), never a bare subject;
       * `v_h(c)` is `person_q.deed_term` -- `h`'s own projected pursuits against the alignment of the
         act's kind (`data/verbs.py::align_kind`), the valence `regard` already reads. ⚠ THE VALENCE
-        SOURCE WAS THE SWEPT CHOICE (step 17): THIS IS ARM 1, the existing alignment table, and it
-        SHIPS BY DEFAULT, NOT BY WINNING. Arm 2, the dedicated regard table the plan names, was never
-        authored: the arm run in its place read only the authored `deed:<kind>` cells (three kinds),
-        so it was zero almost everywhere by construction and did not test the question (over three
-        seeded realms it read non-zero on 19 (bench, speaker) pairs where arm 1 read 3,434;
-        `hole_register.yaml` H-215 carries the numbers and says the sweep is open). The conflation
+        SOURCE IS ARM 1 (step 17's swept choice), the existing alignment table, SHIPPED BY DEFAULT,
+        NOT BY WINNING. Arm 2, the dedicated regard table the plan names, is not authored;
+        `hole_register.yaml` H-215 carries the sweep's numbers and says it is open. The conflation
         arm 1 names -- what a hearer prefers to DO standing in for how he REGARDS a doer -- is
         recorded there, not resolved;
       * `full` is `confidence_default`, so a claim decayed to half counts half.
@@ -877,28 +830,17 @@ def proofs(w: World, speaker: str, opponent: Optional[str], venue: Optional[str]
     mirror = {(c.subject, c.predicate) for c in opp.ledger} if opp is not None else set()
     return sum(remove_weight(c.source) for c in held if (c.subject, c.predicate) not in mirror)
 
-# ⚠ `home_of(w)` WAS HERE; IT MOVED DOWN TO `state/containment.py` AT PLAN POSITION `19`, body and
-# `TRACE` line unchanged, and is re-exported by this module's import block (`world_q.home_of is
-# containment.home_of`). The write gate's `determination` basis asks where the PARTY a determination
-# binds IS PRESENT (`home_of` reads `contain`, presence, since `19c`'s split -- residence is
-# `residence_of`'s `reside` edge, and this basis was never revisited to say which it means), and
-# `state/` may not import `queries/`: `parent_of`/`descendants`' G3 route.
-
 
 def place_of(w: World, x: Optional[str], homes: Optional[dict] = None) -> Optional[str]:
-    """`ARCH §F.14`'s OWN NAME, PROMOTED (position `11a`, r2 `01_ATTENTION_AND_REACH.md` §A.3).
-    The rung a THING is at, for ANY id -- moved in from `epistemic._event_place`, which took only
-    an Event. That caller becomes `event_place(w, e)`, below (`epistemic.py`'s two sites).
+    """`ARCH §F.14`'s OWN NAME (r2 `01_ATTENTION_AND_REACH.md` §A.3).
+    The rung a THING is at, for ANY id. `event_place(w, e)`, below, is the Event's.
 
-    ⚠ PERSON BEFORE RUNG, AND THE ORDER IS THE WHOLE OF THIS FUNCTION'S CORRECTNESS -- carried
-    over from `_event_place`'s own docstring rather than restated: testing `x in w.rungs` FIRST
-    would answer a person's own same-id `person`-kind Rung, and `Query.presence` on THAT answers
-    "who is contained in themselves" -- nobody. A channel BROKEN CLOSED, not merely narrow, and
-    `P15`'s history is the worked case (`epistemic.py`, `_ch_co_located`'s docstring). THIS IS A
-    REPEAT of a conflation `witness` had already retracted once; the order is what prevents it a
-    third time.
+    ⚠ PERSON BEFORE RUNG, AND THE ORDER IS THE WHOLE OF THIS FUNCTION'S CORRECTNESS: testing
+    `x in w.rungs` FIRST would answer a person's own same-id `person`-kind Rung, and
+    `Query.presence` on THAT answers "who is contained in themselves" -- nobody. A channel BROKEN
+    CLOSED, not merely narrow (`epistemic.py`, `_ch_co_located`'s docstring).
 
-    Two limbs promoted `_event_place` did not have, plus the NO SILENT DEFAULT floor (`ID-5`):
+    The limbs, plus the NO SILENT DEFAULT floor (`ID-5`):
       * person  -> `home_of(w)[x]` -- the single owner, not a hand-rolled `contain` scan.
       * site    -> `Site.rung`, the maintained side (S12).
       * record  -> its live holder's place (`hold_force` -- S15's cardinality-1 guard makes this
@@ -919,8 +861,7 @@ def place_of(w: World, x: Optional[str], homes: Optional[dict] = None) -> Option
         if homes is None:
             return home_of(w).get(x)
         # `homes` is the barrier's `cache.home_index(w)`: the same map `home_of(w)` would build, read without
-        # rebuilding it per call (80,000 times a season at WITNESS). The row `home_of` would have traced is
-        # still written, so the trace is byte-for-byte what it was.
+        # rebuilding it per call. The row `home_of` would have traced is still written.
         TRACE.query("home_of", "resolver")
         return homes.get(x)
     if x in w.sites:
@@ -944,45 +885,42 @@ def event_place(w: World, e, homes: Optional[dict] = None) -> Optional[str]:
     `World.remove_person` takes the dead out of `w.persons` and closes every edge naming him in the
     write that kills him, and WITNESS runs after. An Event no act caused (a death at MATTER) anchors
     on the removed person (`state/attribution.py`, tier 2), `place_of` of a person is `home_of(w)`'s
-    LIVE `contain` edge, and so it answered `None` -- the event found no observer under any channel
-    that needs a place, and a dead seat-holder was reported to nobody. A death at RESOLVE anchors on
-    the killer, who is alive, which is why only the MATTER-written one was lost.
+    LIVE `contain` edge, and so it answers `None` -- the event would find no observer under any channel
+    that needs a place, and a dead seat-holder would be reported to nobody. A death at RESOLVE anchors on
+    the killer, who is alive.
 
     The limb, for an ACTORLESS Event (no act among its causes; one act-caused case, below): when the
     anchor is a person the
     world NO LONGER HOLDS, his place is where he stood when
     `remove_person` took him out, if that was this Event's own tick (`World.departed_from`) -- the
     enclosing rung on the `contain` edge the cascade closed. It cannot be read off `w.tenures`: a Tenure is
-    owned by its subject, so his own edge left the store with him (probed on `build_realm(0)`).
+    owned by its subject, so his own edge left the store with him.
     It is NOT `place_of`'s person limb, deliberately: `place_of` is also asked about the dead by
     `reach` (a claim about a dead man), and answering there would move every reader of an old
-    claim; only an EVENT's own tick has a place for him. ⚠ NOT FOR EVERY ACT-CAUSED EVENT, MEASURED: without
-    a clause the limb also placed the refusals of a victim's own acts later in the killing tick
+    claim; only an EVENT's own tick has a place for him. ⚠ NOT FOR EVERY ACT-CAUSED EVENT: without
+    a clause the limb would also place the refusals of a victim's own acts later in the killing tick
     (`act.ineligible`, `travel.blocked`, ... anchored on the dead ACTOR, tier 1); the class is reproduced by
-    `test_h206_an_act_caused_event_of_the_dead_actor...`. `None` otherwise, exactly as before.
+    `test_h206_an_act_caused_event_of_the_dead_actor...`. `None` otherwise.
 
-    ONE ACT-CAUSED CASE IS PLACED (B10-09 close one, D2): an Event one of whose `changes` names a
+    ONE ACT-CAUSED CASE IS PLACED (D2): an Event one of whose `changes` names a
     removed actor as its subject (a felled attacker's `person.died`, CP-T03-00's per-party band; also an earlier act
     of his in that tick that moved him) -- is placed where he stood when he was taken out, by the same
     `departed_from`. That is the discriminator: a refusal carries no receipt (`Act.changes` defaults to
-    `[]`), so the victim's later refusals stay unplaced. LIMIT, MEASURED (B10-09 close, Phase 3): an Event of
+    `[]`), so the victim's later refusals stay unplaced. LIMIT: an Event of
     such an act that carries no receipt OF THE ACTOR -- the wounded subject's `body.changed` in a mixed fight, the
     felled attacker's seat `tenure.closed` (per-kind carriage) -- stays unplaced when its actor is gone, so no
     co-located person witnesses it at `all_five`. Placing every executed act's Event (`e.changes` non-empty, not
-    only one naming the actor) was tried: it moves `test_go07_canonical_digest` and `test_season_weather`'s pins
-    (4 tests red), a declared hash mover with its controls, so it is not taken here.
+    only one naming the actor) is not taken: it moves `test_go07_canonical_digest` and `test_season_weather`'s pins.
 
     The limb places every ACTORLESS Event anchored on a person removed in that Event's own tick, so
     at MATTER also the same dying cohort's `body.changed` and its tier-3 `condition.band_crossed`
     (reachable only at `body_step > 0`, unmeasured; H-206), and an actorless MATTER Event about a
     person killed at RESOLVE later in the same tick, e.g. `travel.ended` (`loop/matter.py`'s travel
     pass), which is reachable at shipped defaults and unmeasured (H-206)."""
-    # v9 IN-12 step 10: AN ACT-CAUSED EVENT IS PLACED WHERE ITS ACTOR STOOD, NOT WHERE ITS ANCHOR IS.
+    # AN ACT-CAUSED EVENT IS PLACED WHERE ITS ACTOR STOOD, NOT WHERE ITS ANCHOR IS.
     # A cover's anchor is the cover's id, and `place_of` of a Record is its LIVE holder's place
     # (or, once the holder's hold closed, `Record.rung` -- the actor's own id for a computed
-    # `conceal`, which `remove_person` pops): CENSUS then indexed `w.rungs` by a dead person and
-    # raised, and a cover `give`n away moved an earlier round's Event. Uncovered, the anchor IS the
-    # actor (tier 1), so this is the old answer.
+    # `conceal`, which `remove_person` pops). Uncovered, the anchor IS the actor (tier 1).
     a = causing_act(w, e)
     if a is not None:
         here = place_of(w, a.actor, homes)
@@ -1024,18 +962,6 @@ def event_place_at(w: World, e) -> Optional[str]:
     return at
 
 
-# ⚠ v9 SE-01 (`24g`), P1's OTHER HALF -- THE PERSON-KEYED CROSSING REPAIR IS THE PERSON LIMB ABOVE,
-# AND NO NEW CODE WAS NEEDED FOR IT. The plan's instruction (*"`world_q` derives `at` from
-# `w.sites.get(who)`; the repair is `at = parent_of(w, who)` when `who` names a person"*) was written
-# against Q3's old `w.crossings` tuple read, which position `11a` deleted: a crossing now reaches a
-# witness through `epistemic._ch_co_located` as `event_place(w, e)` (`place_of` of its anchor), and for a person that
-# is `home_of(w)[who]` -- the person's one live `contain` parent, which is `parent_of(w, who)`. So a
-# cohort's `condition.band_crossed` (anchored, tier 3, on its own `body.changed`) is placed at the
-# settlement the cohort stands in, and everyone standing there is `co_located` with it.
-# `tests/test_territorial_subsistence.py::test_se01_a_person_keyed_crossing_is_placed_at_the_person_s_parent`
-# executes it under a non-zero `body_step`; the plan position is stale on this half, not open.
-
-
 def ever_named(w: World, eid: str) -> bool:
     """Has the world held or recorded this id? `class_of` has no `dates` and forgets the dead, so
     "unheld" is not "never was": a date is held (`place_of` admits it as a referent), and a recorded
@@ -1053,8 +979,7 @@ def demanded_person(w: World, a) -> Optional[str]:
     order to a clerk nobody has individuated. `World.class_of` is the one resolver of *which
     collection holds this id*, and its `None` is documented as *"NOT YET, NOT NOT A THING"*, which is
     exactly what a demand is: a person not yet individuated. ⚠ AN ID THE WORLD HOLDS AS SOMETHING
-    ELSE IS NOT A DEMAND: a `dispatch` naming a building (measured on `build_realm(0)`, 2 seasons:
-    14 of 15 `dispatch` acts name a rung, site or record and are refused) asks for no person, so it
+    ELSE IS NOT A DEMAND: a `dispatch` naming a building asks for no person, so it
     individuates nobody. An act naming no subject at all demands nobody either.
 
     Read through `binding_from_act`, the one reader of an act's operands, so this and the fold's
@@ -1112,7 +1037,7 @@ def own_purview(w: World, p: Person) -> set[str]:
     (`reach`'s AX-2 note). Writes no TRACE row of its own, but `descendants`, which it calls,
     writes a `TRACE.query` (`state/containment.py`), and `reach` and `attention_key` each compute
     it, so one `questions_for` walks a seat's subtree twice. Handing one computation to both moves
-    `runs/TRACE.txt` and `results.json`'s QUERY count (measured: 29,405 -> 28,620; no game state
+    `runs/TRACE.txt` and `results.json`'s QUERY count (no game state
     moves), which is why the two calls stand."""
     P = set()
     for t in p.tenures:
@@ -1134,7 +1059,7 @@ def governors_of(w: World, rung_id: Optional[str]) -> list[str]:
 
     ⚠ v9 IN-40: WHERE THE OBLIGE CLAUSE FIRES, THIS IS WIDER THAN `reach`'s LIMB 4, which may not read
     another person's tenures and so cannot see a sworn holder's seats. A superior listed here for his
-    vassal's ground is deposited a claim no question of his admits. Measured inert in `build_realm(0)`
+    vassal's ground is deposited a claim no question of his admits. Inert in the built realm
     (its one live `oblige`'s swearer holds no seat); named, not repaired, at IN-40.
 
     ⚠ THE SAME RELATION AS `reach`'s LIMB 4, ASKED FROM THE RUNG'S SIDE. Limb 4 unions
@@ -1213,7 +1138,7 @@ def season_factor_of(w: World, territory: Optional[str] = None) -> float:
     one hash, two seeds differ, and two territories at one tick draw independently (v10 CL-EVENTS (1),
     M16 (b): weather is per territory). `territory` is a `territory` rung's id (`enclosing_territory`'s
     answer); `None` is a place that lies in none (a Site at the realm or a duchy) and keys the draw on
-    `"world"`, which is the key this draw had before the territory joined it. An EMPTY table is the
+    `"world"`. An EMPTY table is the
     control arm and returns the bare constant for every territory, drawing nothing, so the default
     world's arithmetic is untouched (`test_season_weather.py` holds the three-hash equality)."""
     base = w.fixtures.get("season_factor")
@@ -1302,13 +1227,11 @@ def subsistence_draw(w: World) -> dict:
     every housed eater asks of the larder ladder this season, what the ladder gives them, and from
     which rung. Read-only; it writes nothing. Plan position `19d`.
 
-    ⚠ EXTRACTED FROM MATTER, NOT WRITTEN BESIDE IT. `loop/matter.py`'s larder pass (item 3a) did
-    exactly this arithmetic inline, and `demanded`/`delivered` below need the same arithmetic. With
-    two copies of *what an eater wants, and what the walk gives them*, MATTER could feed a person
+    ⚠ ONE OWNER OF *what an eater wants, and what the walk gives them*: `demanded`/`delivered` below
+    need the same arithmetic as MATTER's larder pass, and with two copies MATTER could feed a person
     whom the Queries report as hungry (§8). MATTER calls `settlements.subsist` (`subsist_input`), which
     runs the same `larder_draw`; this projection serves tests and bare-world callers, and the two Queries
-    sum it over a subtree. So there is one owner, and the Queries cannot disagree with the draw that
-    actually runs.
+    sum it over a subtree. So the Queries cannot disagree with the draw that actually runs.
 
     ⚠⚠ ONLY A COHORT EATS (plan position `24f`, `ED-IN-0255`, Jordan 2026-09-18: *"NPC synecdoches
     that just represent the overall population affected ... i don't think having lords and guild
@@ -1318,11 +1241,9 @@ def subsistence_draw(w: World) -> dict:
     The test is `Person.is_cohort`, S9's own sentence, owned once on the carrier. It is HERE, in the
     one owner, and not at MATTER's loop, so `demanded`/`delivered` and the body write cannot
     disagree about who eats (§8). WHO EATS INSTEAD is `cohorts.yaml`: authored `weight > 1` rows,
-    one per populated rung, seated by `harness/populated.py::build_realm` at world-gen
-    (`ED-WR-0011` option A -- nothing mints one at run time). The exemption landed IN THE SAME
-    COMMIT as that producer, because alone it empties this record on every built world: `Person
-    .weight` defaults to 1 and no builder set it higher (the plan's own attack on the candidate,
-    `_part2` 24f). A world with no authored cohort -- the corpus's `build_at`, `tiny_world`,
+    one per populated rung, seated by `boot/realm.py::build_realm` at world-gen
+    (`ED-WR-0011` option A -- nothing mints one at run time). `Person.weight` defaults to 1, so a
+    world no builder seated a cohort in has an empty record. A world with no authored cohort -- the corpus's `build_at`, `tiny_world`,
     `headless`, the spine -- therefore has no eater, and `H-171` says so.
     REJECTED, each for a reason: exempting by OFFICE (a seat is not what the ruling measures -- a
     guild member holds none, and an unseated lord is still a lord); exempting at MATTER only (the
@@ -1338,12 +1259,11 @@ def subsistence_draw(w: World) -> dict:
     reads: GO-07 folds a mapping sorted by its encoded keys).
 
     ⚠ IT DOES NOT `TRACE`, on `ancestry`'s rule: a helper extracted to remove duplication must be
-    INVISIBLE to its callers. The `home_of` call inside it traces as MATTER's inline loop did. The
-    per-eater `nearest_store` rows the walk used to trace are gone with the walk (IN-07 E1's
-    assumption A4: no committed artifact carries one, and
+    INVISIBLE to its callers. The `home_of` call inside it traces. The walk traces no per-eater
+    `nearest_store` rows (IN-07 E1's assumption A4: no committed artifact carries one, and
     `test_w15_report_py_reproduces_every_committed_artifact_byte_for_byte` is the control), and the
-    `demanded`, `delivered` and `descendants` rows MATTER traced per drained rung (the gap is now
-    `settlements.subsist`'s, untraced)."""
+    `demanded`, `delivered` and `descendants` rows per drained rung are `settlements.subsist`'s,
+    untraced."""
     return _draw_dict(_entry(LARDER_DRAW)(larder_input(w)))
 
 
@@ -1380,7 +1300,7 @@ QUERY_ENTRIES = ((LARDER_DRAW, "query"), (DRAWN_UNDER, "query"), (HOUSING, "quer
 def _entry(role: str):
     """A module entry by role string, through `composition.require` (cached per process). Not
     `MODULE_ENTRIES`: `subsistence_draw`, `demanded`, `delivered` and `capacity` have driverless callers
-    (`harness/populated.py`: `capacity` at world-gen; tests on a bare world), and the table fills only
+    (`boot/realm.py`: `capacity` at world-gen; tests on a bare world), and the table fills only
     at driver construction."""
     return composition.require(role)
 
@@ -1391,11 +1311,11 @@ def larder_input(w: World) -> LarderInput:
 
       * `eaters` are every person `home_of` houses, in sorted id order, cohort or not -- the module
         applies the exemption and the carrier supplies `is_cohort` (`Person.is_cohort`, S9).
-      * a ladder is `ancestry(home)` cut at the first id that is not a rung, which is where the old
-        walk stopped (`ancestry` itself returns `[id]` for an unknown id); one per cohort eater's home.
+      * a ladder is `ancestry(home)` cut at the first id that is not a rung (`ancestry` itself
+        returns `[id]` for an unknown id); one per cohort eater's home.
       * `stores` is each ladder rung's `Rung.stores` in its own order (`None` read as empty).
     No weights registered projects no eaters and calls no `home_of`, so the trace is MATTER's
-    `if weights:` as it was."""
+    `if weights:`."""
     return _larder_parts(w)[0]
 
 
@@ -1472,7 +1392,7 @@ def _draw_record(draw: dict) -> DrawRecord:
 def under_input(w: World, rung_id: str, draw: Optional[dict], column: str) -> Under:
     """THE PROJECTION `settlements.drawn_under` reads: `rung_id`'s subtree, the draw (MATTER's own
     when given, else the one the stores as they stand would give) and the column. The subtree is
-    read before the draw, the order the trace has always shown."""
+    read before the draw."""
     here = frozenset(_subtree(w, rung_id))
     record = _entry(LARDER_DRAW)(larder_input(w)) if draw is None else _draw_record(draw)
     return Under(record, here, column)
@@ -1480,8 +1400,8 @@ def under_input(w: World, rung_id: str, draw: Optional[dict], column: str) -> Un
 
 def demanded(w: World, rung_id: str, draw: Optional[dict] = None) -> dict:
     """`{kind: units}`: WHAT THE PEOPLE UNDER `rung_id` NEED FROM THE LARDER IN A SEASON. It is the
-    sum of every housed eater's `want` whose home is `rung_id` or any rung beneath it -- and since
-    `24f` an eater is a COHORT (`subsistence_draw`), so this is the TERRITORIAL quantity `ED-IN-0255`
+    sum of every housed eater's `want` whose home is `rung_id` or any rung beneath it -- and an
+    eater is a COHORT (`subsistence_draw`), so this is the TERRITORIAL quantity `ED-IN-0255`
     asks for: the need of the population synecdoches under a rung, never a lord's. Plan position
     `19d`, the retirement plan's G3: *"two new read-only queries (`demanded`, `delivered`)"*.
 
@@ -1505,11 +1425,6 @@ def demanded(w: World, rung_id: str, draw: Optional[dict] = None) -> dict:
     want; `delivered` returns the same keys.
 
     REJECTED READINGS, each for a reason:
-      * ROUND ONE'S `demanded(levy, rung)` -- the share a `levy:` policy clause demanded of a rung
-        (`proposals/2026-09-17-governance-and-holdings/01_SEATS_AND_POLICY.md` §A.13). Its carrier
-        is gone: r2 withdrew both Queries (`04_MATTER_AND_WORKS.md` §A.3.4, §B.2), superseded the
-        policy clauses with the writ (`02_THE_WRIT_AND_THE_WORD.md`), and ruled `levy` deleted
-        (§A.20). What a writ demands is already `15c`'s `_from_content_claim`.
       * THE STORES THEMSELVES (`Rung.stores` against some notion of population). A store is supply,
         not need; a rung holding nothing still has mouths under it.
       * THE EATERS WHOSE WALK *ENDS* AT `rung_id`. That set depends on which rungs hold stock, so an
@@ -1541,8 +1456,7 @@ def delivered(w: World, rung_id: str, draw: Optional[dict] = None) -> dict:
       * `World._subsistence_shortfall` subtracted from `demanded`. That field is census-only. Its
         own site says *"never read by the loop"*. It is also a snapshot of the last MATTER, so
         subtracting it from a LIVE demand mixes two instants. A person who moved since would count
-        in one term and not the other.
-      * ROUND ONE'S `delivered(levy, rung, season)`, for `demanded`'s reason above."""
+        in one term and not the other."""
     TRACE.query("delivered", "resolver")
     return dict(_entry(DRAWN_UNDER)(under_input(w, rung_id, draw, "take")))
 
@@ -1557,7 +1471,7 @@ def presence(w: World, rung_id: str) -> list[str]:
 
 def presence_map(w: World) -> dict:
     """`{rung: presence(w, rung)}` for every rung of `w.rungs`, from ONE scan of `w.tenures` instead of one per
-    rung (412 scans per build on `build_realm(0)`). Same predicate as `presence`, same order (tenure order), a
+    rung. Same predicate as `presence`, same order (tenure order), a
     fresh list per rung. It writes no trace row: `queries/cache.py::presence_index`, its one caller, writes the
     rows `presence` per rung wrote, so the stream is unchanged."""
     by: dict = {}
@@ -1571,7 +1485,7 @@ def guard_weight(w: World, rung_id: str) -> int:
     """v9 IN-60 (RS-26) -- THE SWORN WEIGHT PRESENT AT A RUNG: the summed `Person.weight` of the persons
     `presence` lists at `rung_id` (the exact rung, never a descendant) who owe a live, sworn `oblige`
     (`sworn_to`, IN-40's walk) to a seat HELD by a person ALSO present there. Cohorts (`weight > 1`)
-    are the guard forces (`cohorts.yaml: guards`, written by `build_realm(guards=True)`). Its reader is
+    are the guard forces (`cohorts.yaml: guards`, written by `boot/realm.py`'s `build_realm(guards=True)`). Its reader is
     IN-59 (b)'s `audience` limb, *an unguarded place is open*, which reads `== 0`.
 
     COMPUTE-ON-DEMAND, STORED NOWHERE (T-a): read off live tenures every call, so ending one swearer's
@@ -1615,7 +1529,7 @@ def issuing_seat(w: World, rid: str, verb: Optional[str] = None) -> Optional[str
 
 
 def _creating_act(w: World, rid: str):
-    """THE ACT THAT CAUSED THE EVENT FIRST NAMING `rid` (`issuing_seat`'s read, factored at v10 PC-10b so the
+    """THE ACT THAT CAUSED THE EVENT FIRST NAMING `rid` (`issuing_seat`'s read; the
     `audience` stem's writ limb asks the act's VERB of the same act), or `None` (a hand-planted Record, or an
     Event no act caused)."""
     made = next((e for e in w.log if any(c.subject == rid for c in e.changes)), None)
@@ -1670,7 +1584,7 @@ def admits_audience(w: World, actor: str, rung: str) -> bool:
     order the code asks them:
 
       1. NOBODY GUARDS IT: `guard_weight(w, rung) == 0` (IN-60) -- an unguarded place is open. That is
-         every rung of `build_realm(0)` as built (MEASURED at the B-Y close), and a rung closes wherever a
+         every rung of the realm as built, and a rung closes wherever a
          live sworn `oblige` stands with its principal, so the gate binds where guards stand, whatever
          put them there.
       2. HIS OWN SEAT: he is among `governors_of(w, rung)` -- a live `hold` on a seat whose purview
@@ -1691,12 +1605,12 @@ def admits_audience(w: World, actor: str, rung: str) -> bool:
          [ASSUMPTION; medium; Jordan to correct; revert: read them]; and a writ reaches its addressee
          only by `give` (`ED-IN-0292` (1), RULED NO), so the limb is built but unreached in computed play.
          ⚠ v10 PC-10b: ONLY A RECORD `issue` MINTED (`WRIT_MINTING_VERB`, read off the creating act): `writs_held`
-         now stamps a held `challenge` too, and a challenge is not an invitation.
+         stamps a held `challenge` too, and a challenge is not an invitation.
 
     ⚠ LIMIT, STATED: no limb admits a person to the rung where he LIVES (`residence_of`). Where a live sworn
     `oblige` stands with its principal, limb 1 reads `> 0` and an unsworn, seatless, writless household member
     who steps out cannot `move` or `migrate` back. Inert while `guards` is OFF and no such oath stands at a
-    principal's home (MEASURED at the B-Y close for `build_realm(0)`: no rung reads above 0); a fifth limb
+    principal's home (in the built realm no rung reads above 0); a fifth limb
     extends RS-26's four, which the plan carries as an assumption [ASSUMPTION; medium; Jordan to correct]."""
     TRACE.query("admits_audience", "resolver")
     if guard_weight(w, rung) == 0:
@@ -1820,7 +1734,7 @@ def population(w: World, rung_id: str, residence: Optional[dict] = None) -> int:
     refuses, and `move` the one it does not (`_eff_migrate`'s docstring). `weight`, not a head count,
     because *"a cohort IS a Person at weight > 1"* (`state/carriers.py`): a household of two hundred
     fills two hundred places, as it eats for two hundred at the larder (`subsistence_draw`).
-    ⚠ THE INDIVIDUAL STILL COUNTS HERE, THOUGH SINCE `24f` HE NO LONGER EATS THERE. The exemption is
+    ⚠ THE INDIVIDUAL STILL COUNTS HERE, THOUGH HE DOES NOT EAT AT THE LARDER. The exemption is
     the larder's (`ED-IN-0255`: a lord does not worry about subsistence), not the roof's: a named
     person occupies a dwelling whether or not he draws on the granary, so housing and eating are two
     Queries and read `weight` two ways on purpose.
@@ -1829,14 +1743,13 @@ def population(w: World, rung_id: str, residence: Optional[dict] = None) -> int:
     headcount over live `reside` edges, not a per-person tally summed across holders (clause 2), and
     no ended edge is read (clause 3). ⚠ `Rung.envelope` -- the population not individuated as persons
     -- is NOT counted: it has no producer anywhere (`loop/census.py` writes no envelope), so a term for
-    it would be a read of a dead carrier (`ID-13`). `24f` did not give it one: the territorial
-    population it builds is carried by authored cohort PERSONS (`cohorts.yaml`, S9's one class), so
+    it would be a read of a dead carrier (`ID-13`). The territorial
+    population is carried by authored cohort PERSONS (`cohorts.yaml`, S9's one class), so
     it is counted above through `weight`, and `envelope` stays the ratified-but-unwritten field
     `04 §B.3` declares (`H-171`).
 
     `residence` -- a precomputed `residence_of(w)`, for a caller (`_eff_migrate`) that already built
-    one this same act and would otherwise pay the full-Tenure scan twice (`/simplify`, BATCH-CLOSE
-    Phase 2). `None` (every existing caller) computes it here exactly as before.
+    one this same act and would otherwise pay the full-Tenure scan twice. `None` computes it here.
 
     ⚠ THE SUM IS THE `settlements` MODULE'S (v9 IN-07 E4, A-25): `settlements.housing`
     (`modules/settlements/housing.py`, `entry: query`); this wrapper projects the population half."""
@@ -1845,8 +1758,7 @@ def population(w: World, rung_id: str, residence: Optional[dict] = None) -> int:
 
 
 def _housing_population_input(w: World, rung_id: str, residence: Optional[dict]) -> HousingInput:
-    """THE POPULATION HALF of the projection `settlements.housing` reads (v9 IN-07 E4), so `population`
-    pays only its old body's reads: the subtree, then every `residence_of` entry (the caller's
+    """THE POPULATION HALF of the projection `settlements.housing` reads (v9 IN-07 E4): the subtree, then every `residence_of` entry (the caller's
     precomputed map when given) with its `Person.weight`. The capacity half is `None`."""
     here = frozenset(_subtree(w, rung_id))
     residents = residence_of(w) if residence is None else residence
@@ -1856,8 +1768,7 @@ def _housing_population_input(w: World, rung_id: str, residence: Optional[dict])
 
 
 def _housing_capacity_input(w: World, rung_id: str) -> HousingInput:
-    """THE CAPACITY HALF of the projection `settlements.housing` reads (v9 IN-07 E4), so `capacity`
-    pays only its old body's reads: the subtree, then each `dwelling` Site's own rung and the
+    """THE CAPACITY HALF of the projection `settlements.housing` reads (v9 IN-07 E4): the subtree, then each `dwelling` Site's own rung and the
     `capacity_floor` fixture. The population half is `None`."""
     here = frozenset(_subtree(w, rung_id))
     dwellings = tuple(s.rung for s in w.sites.values() if s.kind == DWELLING_KIND)
@@ -1882,13 +1793,13 @@ if DWELLING_KIND not in SITE_KINDS:
 
 def capacity(w: World, rung_id: str) -> int:
     """`ED-SE-0051` / RR-2, RULED: *"a `capacity(w, rung)` QUERY over the rung's dwelling Sites,
-    with a FLOOR -- never a fixture table"*. Plan position `24d-ii`, landed IN THE SAME COMMIT AS ITS
-    FIRST CALLER, `19c`'s `migrate` (a Query nobody calls is `ID-13`'s shape).
+    with a FLOOR -- never a fixture table"*. Plan position `24d-ii`; its first caller is
+    `19c`'s `migrate` (a Query nobody calls is `ID-13`'s shape).
 
         capacity(w, rung) = max( floor[dwelling],  the dwelling Sites at `rung` and below it )
 
     * THE DERIVED QUANTITY IS THE SITES THEMSELVES: what one dwelling houses is not a cell (plan
-      `24d-ii`, corrected 2026-09-25) -- a per-kind *houses N* is the `hearth_capacity` fixture RR-2
+      `24d-ii`) -- a per-kind *houses N* is the `hearth_capacity` fixture RR-2
       refused. So `found` + `build` (`24e`) GROW capacity by standing a dwelling, and a `migrate` into
       a rung whose `population` would pass it is REFUSED -- RR-2's *"`found` is the throttle"*, read
       as the lever that lifts the bound rather than an act the bound refuses (`24d`'s reading).
@@ -1918,8 +1829,7 @@ def has_room(w: World, person: str, dest: str, residence: Optional[dict] = None)
     TWO READERS, ONE RULE: `WorldReader.read` answers the `room` stem with it (`migrate`'s `room`
     conjunct, so the fold refuses AT ADMISSION and the read `(dest, "room:<person>", False)` rides the
     refusal's `Event.observed` -- the person learns by failing), and `_eff_migrate`'s capacity decline
-    calls it (for a caller that runs the effect without the fold's admission). The effect's inline test
-    is gone; this is that test, moved, not copied. `person` must be a Person (the reader answers UNKNOWN first otherwise).
+    calls it (for a caller that runs the effect without the fold's admission). `person` must be a Person (the reader answers UNKNOWN first otherwise).
 
     `residence` -- a precomputed `residence_of(w)`, `population`'s parameter and for its reason
     (`_eff_migrate` already built one for its own-residence decline). `None` computes it here."""
@@ -1981,7 +1891,7 @@ def hunger(w: World, rung_id: str, draw: Optional[dict] = None) -> tuple:
       * A COUNTS STORES THE EATERS NEVER DRAW. Eaters draw at S and ABOVE (the walk is `ancestry(home)`,
         upward from a cohort's home to the first id that is not a rung, taking from the first rung that holds
         any: `_larder_parts`, `larder_input`), while hearths and communities sit BENEATH S (in the default
-        `build_realm`, `guards=False`, every cohort is homed AT a settlement; `guards=True` posts guard
+        `boot/realm.py::build_realm`, `guards=False`, every cohort is homed AT a settlement; `guards=True` posts guard
         cohorts where their principals stand), and A sums `_subtree`. So a store under S on no cohort's
         ladder is counted though never drawn, and one ABOVE S, which a draw does reach, is not counted.
         `unmet` (the draw itself) is exact; `cover` and the floor bands inherit the mismatch.
@@ -2027,15 +1937,15 @@ def hunger(w: World, rung_id: str, draw: Optional[dict] = None) -> tuple:
 # §14.2 -- THE POLITY QUERIES. "A faction IS a Proposition plus its `commit` edges."
 #
 # §22's `Nobody` row assigns FACTION, LEADERS, PRESENCE, DENSITY and FOOTPRINT to nobody, as
-# Queries stored nowhere, and §17 names each in the resolver-side list. Four of the five had no
-# body. They are written here rather than in a new module because `04 §A.2` types `queries/` as
+# Queries stored nowhere, and §17 names each in the resolver-side list. They are written here
+# rather than in a new module because `04 §A.2` types `queries/` as
 # `world_q · person_q · cache` -- a `polity_q.py` for THESE functions would be a fourth member and
 # a conformance defect, and these are world-first reads like every other function in this file.
 #
 # ⚠ `faction_q.py` IS NOT A COUNTEREXAMPLE TO THIS RULE; IT IS A DIFFERENT CASE, DISTINGUISHED AT
 # ITS OWN SITE. This paragraph's "no fourth module" holds for functions §A.2 does not name outside
-# this file -- exactly the case for `members`/`leaders`/`footprint` below, and for `WorldReader`
-# before unit L3 folded it in. `faction_q.resolve` is named by its OWN dotted path in §B.6.1 and
+# this file -- exactly the case for `members`/`leaders`/`footprint` below, and for `WorldReader`.
+# `faction_q.resolve` is named by its OWN dotted path in §B.6.1 and
 # §C.5.1, both ratified, neither touched by this docstring's reasoning; see `faction_q.py`'s and
 # `queries/__init__.py`'s own docstrings for why that is a genuinely different ambiguity, named
 # rather than resolved the same way.
@@ -2054,11 +1964,9 @@ def hunger(w: World, rung_id: str, draw: Optional[dict] = None) -> tuple:
 def members(w: World, faction: str) -> list[str]:
     """Everyone with a LIVE `commit` to this Proposition. §14.2: *"Membership is `commit`."*
 
-    ⚠ THIS IS THE WHOLE OF MEMBERSHIP AND THERE IS NO SECOND ROUTE. Before this, the only way a
-    person belonged to a faction was to hold an Office whose `body` resolved to one -- so a
-    faction had no laity, no rank-and-file and no congregation, and `role_templates` keyed on
-    faction described a population that could not exist. `commit` was already the ruled edge and
-    was carrying only a person's private want."""
+    ⚠ THIS IS THE WHOLE OF MEMBERSHIP AND THERE IS NO SECOND ROUTE: holding an Office whose `body`
+    resolves to a faction is not membership, so a faction has a laity, a rank-and-file and a
+    congregation."""
     TRACE.query("members", "resolver")
     return sorted(t.subject for t in w.tenures
                   if t.kind == "commit" and t.object == faction and t.live
@@ -2077,24 +1985,17 @@ def leaders(w: World, faction: str) -> list[str]:
     ⚠ `Office.faction` IS DERIVED AT CONSTRUCTION from `body` (`Office.__post_init__`), so this
     never re-derives it and cannot disagree with the constructor.
 
-    ⚠⚠ TWO IDENTIFIERS NAME ONE FACTION, AND THIS FUNCTION HAS NOW RETURNED `[]` FOR A WORLD WITH
-    LEADERS IN IT TWICE, FOR TWO DIFFERENT REASONS. `members` keys on the PROPOSITION ID
+    ⚠⚠ TWO IDENTIFIERS NAME ONE FACTION. `members` keys on the PROPOSITION ID
     (`fac_hafenmark`) because that is what a `commit` edge points at; `Office.faction` carries the
     FACTION NAME (`Hafenmark`) because that is what `rosters.yaml: factions` holds and what
     `office_faction` validates against. So a translation is needed, and WHERE IT READS THE NAME
     FROM is the whole question.
 
-    The first writing compared the two identifiers directly. The second read `Proposition.subject`,
-    which was the faction's name -- until the creed commit made `subject` the LEADER'S PERSON ID
-    for every faction that has a creed and moved the name to `value`, leaving this reader pointed
-    at a field whose meaning had changed underneath it. MEASURED at `build_realm(0)`: `[]` for
-    Crown, Church of Solmund, Hafenmark and Varfell -- all four factions that hold seats -- hiding
-    19 of 19 occupied offices.
-
-    It now reads `FACTION_BY_PROP`, which `data/rosters.py` DERIVES from the roster, so there is no
-    field to guess and no mood to dispatch on. ⚠ BOTH FAILURES WERE INVISIBLE FOR ONE REASON: `[]`
-    is a plausible answer for a faction with no office-holders -- four of the eight genuinely have
-    none -- so nothing raised, and a test asserting `leaders <= members` is satisfied by the empty
+    It reads `FACTION_BY_PROP`, which `data/rosters.py` DERIVES from the roster, so there is no
+    field to guess and no mood to dispatch on: `Proposition.subject` is the LEADER'S PERSON ID for
+    every faction that has a creed, and the name is in `value`. ⚠ A WRONG TRANSLATION IS
+    INVISIBLE: `[]` is a plausible answer for a faction with no office-holders, so nothing
+    raises, and a test asserting `leaders <= members` is satisfied by the empty
     set. `test_leaders_are_found_for_every_faction_that_holds_a_seat` asserts the non-empty case."""
     TRACE.query("leaders", "resolver")
     name = FACTION_BY_PROP.get(faction, faction)
@@ -2131,10 +2032,8 @@ def footprint(w: World, faction: str) -> list[str]:
 
 
 def _subtree(w: World, rung_id: str) -> set:
-    """`rung_id` plus everything under it, by containment (`descendants`). Extracted (M4 review
-    pass, `/simplify` reuse finding): `density`, `mustered` and `fortification_of` each wrote
-    `{rung_id, *descendants(w, rung_id)}` independently -- `mustered`'s own docstring already
-    named the duplication ("density's own composition, one line above") rather than ending it."""
+    """`rung_id` plus everything under it, by containment (`descendants`): the one owner of
+    `{rung_id, *descendants(w, rung_id)}`, read by `density`, `mustered` and `fortification_of`."""
     return {rung_id, *descendants(w, rung_id)}
 
 
@@ -2164,7 +2063,7 @@ def mustered(w: World, rung_id: str, faction: str) -> list[str]:
     settlement plus everything under it, Jordan's ruling on what "present at the target" means
     for a march (planning round 2). `density`'s own composition, one line above, minus the count:
     person containment seldom terminates AT a settlement rung in the seeded corpus -- every person's
-    `contain` targets a `home` building beneath one (`harness/populated.py`) -- so a literal exact-rung
+    `contain` targets a `home` building beneath one (`boot/realm.py`) -- so a literal exact-rung
     read finds nobody home, and the subtree is the only reading that finds anyone at all. (Since v9
     IN-13 an ARRIVED army's `contain` DOES terminate at the settlement rung, `_eff_march`'s legs.)
 
@@ -2238,14 +2137,14 @@ def fortification_of(w: World, rung_id: str) -> float:
     the `garrison` Site(s) in `rung_id`'s subtree -- `H-38`'s *"`Site.condition` is the model"*
     applied to fortification, Jordan's choice over a cohort-Person alternative (planning round 2).
     `0.0` with no garrison in the subtree: an unfortified settlement, not a refusal -- absence of
-    a garrison Site is a legitimate world state (`harness/populated.py`'s M4 build step 11 seeds
+    a garrison Site is a legitimate world state (`boot/realm.py`'s M4 build step 11 seeds
     one per settlement, but nothing enforces that it must).
 
     ⚠ MULTIPLE GARRISONS AVERAGE RATHER THAN SUM: one per settlement is what step 11 ships, and an
     average keeps the return in `[0.0, 1.0]` regardless, which summing would not.
 
-    ⚠ ITS CALLER IS THE BATTLE PATH (plan position `20-iv`, `H-150`; until then nothing called
-    this). `seam/wrappers/mass_battle.py::resolve()` reads it at the march target and passes it to
+    ⚠ ITS CALLER IS THE BATTLE PATH (plan position `20-iv`, `H-150`).
+    `seam/wrappers/mass_battle.py::resolve()` reads it at the march target and passes it to
     `massbattle.resolve_field` as `fort_level`, where any positive value makes the field A.9's
     WALLS row (`terrain.py::terrain_row_for_territory`). This Query decides none of that.
 
@@ -2257,8 +2156,8 @@ def fortification_of(w: World, rung_id: str) -> float:
 
 def fort_input(w: World, rung_id: str) -> FortInput:
     """THE PROJECTION `settlements.fortification` reads (v9 IN-07 E6): every `garrison` Site's condition
-    in the subtree, in `World.sites` order, and `condition_scale` -- read only when there is a garrison,
-    as the old body read it (a no-garrison world reads no fixture)."""
+    in the subtree, in `World.sites` order, and `condition_scale` -- read only when there is a garrison
+    (a no-garrison world reads no fixture)."""
     conditions = tuple(s.condition for s in garrison_sites(w, rung_id))
     return FortInput(conditions, w.fixtures.get("condition_scale") if conditions else None)
 
@@ -2412,7 +2311,7 @@ def sovereign_fraction(w: World, rung_id: str) -> tuple[float, int]:
     holds anything, so no fraction is sovereign; the caller distinguishes that from a contested
     subtree by the second number, which is what it is for.
 
-    ⚠ PERSON-KIND RUNGS ARE EXCLUDED, AND THE FIRST WRITING COUNTED THEM. `descendants` walks
+    ⚠ PERSON-KIND RUNGS ARE EXCLUDED. `descendants` walks
     `contain`, and a person's own rung is contained like everything else, so a realm with four
     inhabitants reported four more `undetermined` places than it has. Counting heads in the
     denominator makes a populous duchy look less determined than an empty one. The exclusion is
@@ -2420,18 +2319,14 @@ def sovereign_fraction(w: World, rung_id: str) -> tuple[float, int]:
     and `own` eligibility is "a person governing themselves", so the other reading exists and is
     simply not what this Query answers.
 
-    ⚠⚠ `undetermined_count` IS NOT "UNHELD TERRITORY", AND THIS DOCSTRING USED TO SAY *"sovereignty
-    is over TERRITORY"*, WHICH INVITED EXACTLY THAT READING -- a reviewer made it. EVERY OTHER rung
+    ⚠⚠ `undetermined_count` IS NOT "UNHELD TERRITORY". EVERY OTHER rung
     kind in the denominator is GOVERNABLE: `offices.yaml: titles: domains:` declares a title for
-    each (moved from `rosters.yaml: titles`, position `8a`, 2026-09-29 -- `TITLE_DOMAINS`/
-    `title_domain` in `data/rosters.py` read the survivor), and `Family Head` governs
+    each (`TITLE_DOMAINS`/`title_domain` in `data/rosters.py` read it), and `Family Head` governs
     `community`, `Mayor` governs `settlement`, `Lord` territory, `Duke`/`Duchess` duchy,
     `King`/`Queen` realm. So an unheld hearth is a governable seat nobody holds, not noise.
 
-    MEASURED at `build_realm(0)`, `r_valoria`: `(0.4, 304)`, and those 304 are
-    `hearth 205 · community 58 · settlement 36 · duchy 3 · territory 1 · realm 1`. That shape is
-    the WORLD's, not this Query's -- the populated world seats 19 offices and none below
-    territory. A caller wanting unheld TERRITORY filters `w.rungs[r].kind` itself; this number is
+    The shape of the count is the WORLD's, not this Query's: the built realm seats no office below
+    territory, so most of what it counts is hearths and communities. A caller wanting unheld TERRITORY filters `w.rungs[r].kind` itself; this number is
     every governable rung in the subtree that nobody holds, which is what §17 asked for."""
     TRACE.query("sovereign_fraction", "resolver")
     here = [r for r in [rung_id, *descendants(w, rung_id)]
@@ -2464,7 +2359,7 @@ def provinces_of(w: World, rung_id: str) -> dict:
     is exactly what an existence-conditional province needs: the moment a territory changes hands
     the province it was part of stops existing, and nothing has to be told. `province` stays a
     declared `rung_kind` (the ladder names it, and `contain_ascends` permits `territory -> duchy`
-    directly), and `build_realm` builds none.
+    directly), and `boot/realm.py` builds none.
 
     ⚠ NO MINIMUM SIZE IS IMPOSED, BECAUSE CANON STATES NONE. A single territory held alone comes
     back as a group of one. Jordan's title note — a Count governs ONE province, a Lord may govern
@@ -2480,15 +2375,7 @@ def provinces_of(w: World, rung_id: str) -> dict:
 
     THE REASON IS WHAT EACH QUESTION IS ABOUT. Sovereignty is a property OF the rung asked about,
     so its own holder belongs in its own answer. A province is an aggregation of the territories
-    BENEATH one, so the rung asked about is the aggregating rung and not a member.
-
-    ⚠ AN EARLIER DRAFT OF THIS PARAGRAPH JUSTIFIED IT BY SAYING THE ROOT WOULD OTHERWISE "report a
-    lone territory as a province of one, which the ruling refuses" -- AND THAT IS FLATLY
-    CONTRADICTED EIGHT LINES ABOVE, where this same docstring says *"NO MINIMUM SIZE IS IMPOSED,
-    BECAUSE CANON STATES NONE. A single territory held alone comes back as a group of one."* The
-    code agrees with the older paragraph: the grouping below applies no cardinality filter. Written
-    down because two incompatible readings of one ratified sentence, both in one docstring, is the
-    §4 idempotence trap -- and it was a fresh adversarial read that caught it, not this author."""
+    BENEATH one, so the rung asked about is the aggregating rung and not a member."""
     TRACE.query("provinces_of", "resolver")
     here = {r for r in descendants(w, rung_id)
             if r in w.rungs and w.rungs[r].kind == "territory"}
@@ -2508,12 +2395,10 @@ def provinces_of(w: World, rung_id: str) -> dict:
 def faction_holding(w: World, subject: str) -> "str | None":
     """WHICH FACTION A `hold`'s SUBJECT COHERES UNDER — the faction Proposition id, or `None`.
 
-    ⚠⚠ THIS EXISTS BECAUSE ITEM 16 RE-HOMED EVERY RUNG `hold` FROM A FACTION TO A PERSON AND
-    `provinces_of` READ THE SUBJECT DIRECTLY. `holonic §15` makes `hold` a PERSON's edge, and
-    `01_BUILD_ORDER` item 16 enforced it -- so the subject stopped being a faction Proposition and
-    `provinces_of`'s `t.subject in w.propositions` filter matched nothing. MEASURED: the Query went
-    from grouping 16 territories to returning `{}`, silently, and the only thing that caught it was
-    a test asserting the OLD shape. The plan that scheduled item 16 did not price this.
+    ⚠⚠ A RUNG `hold`'S SUBJECT IS A PERSON, NOT A FACTION PROPOSITION. `holonic §15` makes `hold` a
+    PERSON's edge, and `01_BUILD_ORDER` item 16 enforced it -- so a filter of
+    `t.subject in w.propositions` over rung holds matches nothing; the faction is read through the
+    holder.
 
     ⚠ **THE RATIFIED SENTENCE IS PRESERVED RATHER THAN AMENDED, AND THAT IS THE WHOLE POINT.**
     `scale_hierarchy_v1.md` §2 (RATIFIED, direct Jordan ruling 2026-07-13) says a province exists
@@ -2525,7 +2410,7 @@ def faction_holding(w: World, subject: str) -> "str | None":
 
     ⚠ MEMBERSHIP HAS ONE OWNER AND THIS DOES NOT MINT A SECOND. §14.2: *"Membership is `commit`"*,
     and `members()` above reads exactly this edge from the other end. A subject that is itself a
-    faction Proposition still answers for itself, so a world built the old way reads the same.
+    faction Proposition answers for itself.
 
     ⚠ NONE AND MANY BOTH RETURN `None`, AND NEITHER IS A DEFAULT. A holder committed to no faction
     holds land that coheres into no province -- which is the same reading `Uncontrolled` already
@@ -2550,17 +2435,13 @@ def holder_faction_of(w: World, rung_id: str) -> Optional[str]:
     ABOVE `rung_id` that IS held, then `faction_holding` on ITS holder (a person) -- never on
     `rung_id` itself, which `faction_holding` cannot answer
     for at all (`subject not in w.persons` returns `None` immediately; it takes the HOLDER, not
-    the held object -- confirmed against the live fixture before this was written, not assumed
-    from the name).
+    the held object).
 
     ⚠ `None` FOR "NOBODY HOLDS ANY RUNG UP THIS CHAIN" IS A SHORTFALL, NOT AN ERROR --
     the larder walk's own reading of an empty root. What a `march` targeting an unheld
     (`Uncontrolled`) settlement means is `march`'s own eligibility to decide, not this Query's.
 
-    ⚠ THE WALK IS `ancestry`, NOT A FOURTH HAND-ROLLED COPY (M4 review pass, `/simplify` reuse
-    finding). A first writing repeated `ancestry`'s own visited-set-guarded parent walk inline,
-    one screen away from `ancestry` itself in this same file -- exactly the duplication that
-    function's own docstring exists to end."""
+    ⚠ THE WALK IS `ancestry`, NOT A HAND-ROLLED COPY (`governing_hold` walks it)."""
     TRACE.query("holder_faction_of", "resolver")
     t = governing_hold(w, rung_id)
     return faction_holding(w, t.subject) if t is not None else None
@@ -2597,16 +2478,14 @@ def uncontrolled(w: World, rung_id: str) -> list[str]:
     faction holds -- GD-3's *Uncontrolled* status, what a revolt leaves behind -- sorted. A read:
     it takes no token, stores nothing, and is recomputed at every call (`AX` T-a).
 
-    ⚠ ITS ORACLE IS CODE, RETIRED AT `29d` AND RECOVERABLE:
-    `git show 5c5d8ec6:systems/world/sim/insurgency_pipeline.py`. `check_insurgency_triggers` began
-    from every territory with `is_uncontrolled()` (`owner is None`, `engine/autoload/game_state.py`
-    at the same ref). This is that line with one season-native stand-in, `holder_faction_of(w, r)
+    ⚠ ITS ORACLE WAS CODE, NOW RETIRED: `check_insurgency_triggers` began
+    from every territory with `is_uncontrolled()` (`owner is None`). This is that line with one season-native stand-in, `holder_faction_of(w, r)
     is None`: the single owner of *which faction holds this rung*, which the march path
     (`loop/sides.py`, `loop/effects_combat.py`) also asks, so the two cannot disagree about who
     holds a place. (`faction_q.resolve(...).holdings` is a second reading with no ancestry walk: a
     two-faction holder's land is in both factions' holdings and uncontrolled here.) Three readings
     come with it, none the oracle's:
-      * no live `hold` on the territory or any rung above it -> uncontrolled. `build_realm`'s
+      * no live `hold` on the territory or any rung above it -> uncontrolled. `boot/realm.py`'s
         geography value `Uncontrolled` writes no edge; nor does faction land with no authored head,
         and a holder's death closes his `hold` (`remove_person`), so a succession gap reads the same;
       * a holder committed to NO rostered faction, or to MORE THAN ONE -> uncontrolled, because
@@ -2626,7 +2505,7 @@ def uncontrolled(w: World, rung_id: str) -> list[str]:
     with no consumer is a false N-line*), and no more: nothing in the loop or the chooser asks it,
     so the content hash cannot move by it and, under `CLAUDE.md` §0.2, it is a tested read that a
     harness reports. `engine/season/tests/test_revolt_query.py` is its falsifier.
-    ⚠ v9 IN-30 TRIED TO GIVE IT A CALLER AND STOPPED: no existing verb takes or governs unheld land
+    ⚠ v9 IN-30 FOUND NO CALLER FOR IT: no existing verb takes or governs unheld land
     (`seize` declines it, `march` moves presence only), and the `Rung` stamp reaches only `migrate`
     and `requisition`, which read no holding -- so any caller needs a ruling first (`H-186`)."""
     TRACE.query("uncontrolled", "resolver")
@@ -2658,7 +2537,7 @@ def endings_reached(w: World) -> list:
     and every holder coheres under `under:` (`faction_holding`; `one_faction`: all under the same one).
     Nothing selected is not reached: "every King is a Church man" is vacuously true of a realm with no
     King. ⚠ UNDER A REALM, by `ancestry`, the walk `harness/populated.py::census` sums its
-    `uncontrolled_in_realm` over: `build_realm` leaves `terr_T16`, Schoenland's foreign territory, a
+    `uncontrolled_in_realm` over: `boot/realm.py::build_realm` leaves `terr_T16`, Schoenland's foreign territory, a
     root rung outside the realm on purpose and held by nobody, so a selector over every territory
     would ask a hold no person can ever take and the victory row would be unreachable by construction.
 
@@ -2684,7 +2563,7 @@ def endings_reached(w: World) -> list:
 
     ⚠ NO `TRACE.query` ROW, `ambitions`' reason: `SeasonDriver.season` calls this once per season, the
     probe corpus runs seasons, and a row here moved the committed `runs/TRACE.txt` and `results.json`
-    (MEASURED, `test_w15_report_py_reproduces_every_committed_artifact_byte_for_byte`) -- a read-only
+    (`test_w15_report_py_reproduces_every_committed_artifact_byte_for_byte`) -- a read-only
     step must move no artifact. It reads through `governing_hold`, not `holder_faction_of`, for the same
     reason."""
     out: list = []
@@ -2750,15 +2629,14 @@ def establishment_of(w: World, office_id: str) -> list[str]:
     """§11 -- *"the named persons the office employs. Finite, contested, durable."* -- AS A QUERY
     OVER LIVE `oblige` TENURES, the persons obliged to this seat, in `w.tenures` order.
 
-    ⚠ REWRITTEN AT PLAN POSITION `17a` (r2 item 9, `03_SEATS_AND_CONTENT.md` §A.9): the body is
-    §A.9's own, verbatim, and the name and signature did not move. It read `Office.establishment`,
-    a field `[]` on every office in every world (nothing wrote it), and `ARCH §B.7` call 2 deletes
-    it: *"`establishment` is a Query over `oblige`, not a field. A set of persons on a seat is two
-    homes for one fact. A person joins by `oblige : Person -> Seat` and leaves by `release`."* The
-    field is gone; this is the one home. A council is one seat whose members oblige (`AX §E.2.5`).
+    ⚠ `Office.establishment` IS NOT A FIELD (plan position `17a`; r2 item 9, `03_SEATS_AND_CONTENT.md`
+    §A.9; `ARCH §B.7` call 2): *"`establishment` is a Query over `oblige`, not a field. A set of
+    persons on a seat is two homes for one fact. A person joins by `oblige : Person -> Seat` and
+    leaves by `release`."* This is the one home. A council is one seat whose members oblige
+    (`AX §E.2.5`).
 
-    ⚠ WITH A CALLER, OR NOT AT ALL (r2 `05` §A.1.5 RULED (d)). It had ZERO callers for as long as
-    it read the field, and a Query with no consumer is a false N-line. Its consumer is
+    ⚠ WITH A CALLER, OR NOT AT ALL (r2 `05` §A.1.5 RULED (d)): a Query with no consumer is a false
+    N-line. Its consumer is
     `epistemic._ch_post_remit`, the obligee channel, which asks it rather than re-deriving the set --
     so the witness layer and anything else that asks *who serves this seat* get one answer.
 
@@ -2776,8 +2654,8 @@ def establishment_of(w: World, office_id: str) -> list[str]:
 
 
 def upkeep_of(w: World, office_id: str) -> int:
-    """`Office.upkeep`'S READER -- plan position `17b`, and the field's first since the ratified `04
-    §B.7` `Seat := ( …, upkeep, dates[], exists )` declared it. WHAT THIS SEAT PAYS EACH PERSON
+    """`Office.upkeep`'S READER -- plan position `17b` (the ratified `04
+    §B.7` `Seat := ( …, upkeep, dates[], exists )` declares the field). WHAT THIS SEAT PAYS EACH PERSON
     OBLIGED TO IT, PER TERM: the seat's own declared amount, or the fixture `default_upkeep`
     (`H-158`) when it declares none. The ONE place that fallback is read, so no caller carries a
     number of its own -- `_eff_transfer` asks it to count how many obligees a payment covers.
@@ -2809,21 +2687,6 @@ def upkeep_of(w: World, office_id: str) -> int:
     return v
 
 
-# ⚠ `ancestry(w, rung_id)` WAS HERE; IT MOVED DOWN TO `state/containment.py` AT PLAN POSITION `19`,
-# body unchanged, beside `home_of` (above), and is re-exported by this module's import block -- the
-# write gate's `determination` basis asks the bench's containment test, and `state/` may not import
-# `queries/`. `world_q.ancestry is containment.ancestry`; its docstring moved with it.
-
-
-# ⚠ `conferral_path(w, office_id)` WAS HERE AND IS DELETED (plan position `18a`, r2 item 14). It
-# was `ancestry(w, off.rung)` behind a name and a TRACE line, and r2 `05:450-451` names what
-# supersedes it: *"superseded by `descendants(w, seat.rung)`, which `03`'s purview rule uses"* --
-# `13d-ii`'s purview walk. Its one caller was a TEST, the executed check of Jordan's 2026-09-13
-# subordination ruling (*"the duchy is underneath the Crown"*), and that test now asserts through
-# `ancestry(w, o.rung)`, the primitive this wrapped, so the check survives the wrapper. No game
-# code called it and no committed run artifact traced it.
-
-
 def ambitions(w: World, p: Person) -> list:
     """WHAT THIS PERSON IS COMMITTED TO AS AN OUGHT: the Proposition ids on `p`'s own LIVE `commit`
     edges whose Proposition (looked up in `w.propositions`) is mood OUGHT, in the order the edges
@@ -2835,15 +2698,13 @@ def ambitions(w: World, p: Person) -> list:
     an id, and the same edge kind also binds a person to a faction, a treaty and a WAR, so the edge
     cannot say whether it is an ambition; the Proposition's MOOD can, and the Proposition is in
     `w.propositions`. `04` §A.2 admits a `PersonInterior` snapshot only (no store handle) to
-    `person_q`, and admits any store, via `World`, to this module; the function was first written
-    in `person_q` taking `w.propositions` as a second argument, which no row of that table allows.
+    `person_q`, and admits any store, via `World`, to this module.
     It reads only the keys `p`'s own edges name and never enumerates the store.
 
     ⚠ FACTION MEMBERSHIP IS NOT A HOLDS THAT THE MOOD FILTERS OUT, FOR SIX OF THE NINE FACTIONS.
-    `populated.build_realm` mints each creed as an OUGHT Proposition (Jordan, 2026-09-13, *"Faction
+    `boot/realm.py` mints each creed as an OUGHT Proposition (Jordan, 2026-09-13, *"Faction
     creed as an ought: sure"*, subject the faction's authored leader) and membership is a `commit`
-    to it, so `ambitions` DOES return a member's `fac_*` creed (MEASURED, `build_realm(0)`, Batch C
-    close: 35 of 83 persons' `ambitions` include one). Only the three factions with no leader or
+    to it, so `ambitions` DOES return a member's `fac_*` creed. Only the three factions with no leader or
     template in canon (`Guilds`, `Schoenland`, `faction x`) keep HOLDS and are filtered by mood -- and `Altonia`
     (v9 IN-36), which has a head and no template, in a `foreign=True` world.
 
@@ -2867,11 +2728,11 @@ def goal_referents(w: World, p: Person, prop) -> tuple:
     """WHO OR WHAT AN AMBITION IS ABOUT, read when the question forms (v9 IN-67, A-31 / ED-IN-0293
     (8)) -- THE ONE OWNER Q4 asks instead of `(prop.subject,)`, and `attention_key`'s tier 0 with it,
     so a goal's tier-0 claims are about its referents and never about the id of a seat. `()` forms no
-    question (`harness/populated.py`'s rule, *an OUGHT about nobody is not a motive*, now at read).
+    question (`boot/realm.py`'s rule, *an OUGHT about nobody is not a motive*, now at read).
 
     The Proposition's id IS the goal's id (`data/goals.py`, the row mints it), so a Proposition no goal
     names -- every creed, tie and want, and every Proposition a goal row does not mint -- reads
-    `(prop.subject,)` exactly as before. A goal reads by the kind of its `object:` (`_goal_referents`):
+    `(prop.subject,)`. A goal reads by the kind of its `object:` (`_goal_referents`):
 
       * `person`, `rung` -> `(prop.subject,)`: seeding (IN-68) minted the Proposition about them;
       * `seat_holders` -> the persons now holding any listed seat (a live `hold`, `w.tenures` order),
@@ -3066,7 +2927,7 @@ def opinion_of(w: World, p: Person, faction: str) -> float:
         owner: its role template plus its faction goals' pursuits);
       * the poles its goals engage: `engaged_poles`;
       * whom `p` regards on its behalf: its head -- the subject of its creed Proposition, the authored
-        leader `harness/populated.py` subjects the creed on, where that is a living person -- then every
+        leader `boot/realm.py` subjects the creed on, where that is a living person -- then every
         doer `p`'s OWN ledger names (`person_q.deed_doers` over every deed kind: a paired deed's doer
         by the `seen.who` pairing, any other by its subject) who is a live member of it (`members`:
         membership is `commit`, a World read, IN-67's `seat_holders` precedent). `p` himself never.
@@ -3162,8 +3023,8 @@ def vacancies(w: World, p: Person) -> tuple:
     ⚠ THAT PROMISE IS THIS FUNCTION'S, NOT THE CLASS'S: the seats a person was told of
     (`seats_named`) ride the same `Office` class and `confer` does not declare `referent_named`, so
     it forms on a told-of seat `may_fill` would refuse (or one he holds) too, and the fold refuses it
-    there at the cost of a scene (batch B-I close, C4; H-207). A seat he holds himself is refused as
-    a no-op by `_req_confer` (Phase 3 F1: conferring a seat on its own holder)."""
+    there at the cost of a scene (H-207). A seat he holds himself is refused as
+    a no-op by `_req_confer` (conferring a seat on its own holder)."""
     seats = [t.object for t in p.tenures
              if t.kind == "hold" and t.live and t.object in w.offices and "confer" in t.granted_acts]
     if not seats:
@@ -3305,8 +3166,7 @@ def addressed_records(w: World, p: Person, kind: str, named: Optional[frozenset]
 
 def challenges_heard(w: World, p: Person, named: Optional[frozenset] = None) -> tuple:
     """THE CHALLENGES ADDRESSED TO `p` THAT HE HAS HEARD OF (`addressed_records`, `CHALLENGE_KIND`), the occasion
-    `accept` forms on (14_VERBS_PHYSICAL_A A4). MEASURED before the term (`aperture 2 0`, realm, after the lane's
-    formation repairs): `accept` formed 0, because a challenge is minted into the challenger's hand and reaches the
+    `accept` forms on (14_VERBS_PHYSICAL_A A4): a challenge is minted into the challenger's hand and reaches the
     challenged only by a `give`. Stamped by `questions_for` as `Record` (`World.class_of`); `accept`'s cell asks
     nothing of holding (`names:to`, `names:actor`, `with`, `individual`). `()` for nearly everyone."""
     return addressed_records(w, p, CHALLENGE_KIND, named)
@@ -3327,8 +3187,8 @@ def records_held_for_holding_rows(w: World, p: Person) -> tuple:
     act then passes is the fold's (the rows' typed cells). It reads `p`'s own edges and the store only
     for the kinds of the Records they name. ⚠ THE CLASS IS SHARED, as `Office` is between `confer` and
     `oblige`: a held petition is a `Record` for `comply` too (which forms on a Record his own ledger
-    names and the fold refuses on `exists:dispensation`), and a held writ is a `Record` for `carry`;
-    the stopping rule of REM-25 measured that cost. ⚠ NO 'ALREADY CARRIED' DECLINE, `writs_held`'s
+    names and the fold refuses on `exists:dispensation`), and a held writ is a `Record` for `carry`.
+    ⚠ NO 'ALREADY CARRIED' DECLINE, `writs_held`'s
     scene tax: a holder who carried a petition is offered it again while he holds it (the fold's
     `docketed` decline refuses a second carry of one matter only while it stays on the docket; a
     `determine` ends the item and the holder may carry again). REVERT: drop the term in
@@ -3345,8 +3205,8 @@ def works_sites(w: World, p: Person) -> tuple:
     whose kind is its `plan` -- `ceiling`'s own match (`works_for`: a works names a site when it plans that site's KIND
     at that site's RUNG), read from the works' side. H-165 limit 2's *'a person-side channel for a works'
     `{plan, at}`'*: `work` declares `referent_class: Site` and `opening_set` forms it on a Site-classed referent only,
-    and no question a master answers is about the fabric his works names, so before this term `work` formed for nobody
-    even with a works held (`aperture 4 s`, realm: formed 0). A `plan` that is a Rung kind (a `hearth`) names no Site
+    and no question a master answers is about the fabric his works names, so without this term `work` forms for nobody
+    even with a works held. A `plan` that is a Rung kind (a `hearth`) names no Site
     and yields none.
 
     A STANDING OCCASION, `records_held_for_holding_rows`' shape: resolver-side and read-only, it reads `p`'s own edges
@@ -3357,7 +3217,7 @@ def works_sites(w: World, p: Person) -> tuple:
     `Record` and `Rung` are: `restore` declares `Site` too, so a master is offered `restore` on the same Sites (the
     same fabric raised by the same formula, `_rise`). ⚠ NO 'ALREADY AT ITS CEILING' DECLINE: a Site the works names
     that stands at full condition is offered and refused until the fabric the works builds is raised -- the cost is
-    named, not prevented. ⚠ TWO LINKS LIE BEYOND THIS TERM, MEASURED (`test_in45_works_sites.py`): `work`'s `floor` read
+    named, not prevented. ⚠ TWO LINKS LIE BEYOND THIS TERM (`test_in45_works_sites.py`): `work`'s `floor` read
     is UNKNOWN for a kind with no band floors (`dwelling`, `garrison`: `band_floors` ships `{}` for them), so a
     dwelling works is offered `work` and the fold refuses it; and a fabric `build` has just stood is at condition 0,
     which clears no floor, so on a kind WITH floors (`harbour`, `seam`) it is `restore` that raises the first course
@@ -3387,7 +3247,7 @@ def places_named(w: World, p: Person, named: Optional[frozenset] = None) -> tupl
     note), so a person who wrongly hopes a full hearth has space still tries and is refused. ⚠ WHY
     NOT WHAT HE LIVES UNDER: a settler who already lives under `dest` changes no population and
     settles nowhere new (`_eff_migrate`'s newcomer rule), and his own residence is the refusal H-168
-    limit 1 measured. REVERT: exclude the residence alone, and a settler may re-seat himself at the
+    limit 1 names. REVERT: exclude the residence alone, and a settler may re-seat himself at the
     town above his hearth. `named` is `ledger_names(p.ledger)` when the caller holds it already.
     The cheap tests run first (class, ladder, his own hearth) and the ancestry walk only for a
     survivor; `ancestry` includes its start, so a hearth is `under` itself."""
@@ -3412,16 +3272,14 @@ def propositions_heard(w: World, p: Person) -> tuple:
     `commitment.made`, a held document whose `terms` name one, a goal or creed some claim of his names.
     `seats_named`' shape, one class over: his own ledger, the World asked only which ids are Propositions.
 
-    WHAT DIFFERS FROM THE FAILED TERM (B10-05's `propositions_named`, reverted `Falsified: CR-28`, H-156):
-    (1) THE LEDGER IS THE ONE SOURCE. The failed term also offered every goal and creed he is committed to
-    off his own edges; a Proposition reaches this term only through a claim he holds. (2) THE OWN-ACT
+    (1) THE LEDGER IS THE ONE SOURCE: a Proposition reaches this term only through a claim he holds, never
+    off the goals and creeds he is committed to by his own edges (H-156). (2) THE OWN-ACT
     SCREEN'S TEST (`attention_key`'s, CR-10): a claim recording his own act is not news, so it does not
     feed this term -- what he uttered he holds (`_eff_utter`'s maker's hold), and its claim reaches him as
     a tier-1 question CR-10 spares, whose own Proposition REM-21's own-referent term already stamps.
     (3) THE 'ALREADY COMMITTED' DECLINE is NOT here and need not be: `rosters.yaml: held_edge_declines`
-    (B10-09 close one, D3) declines `commit` person-side on any object he holds a live `commit` edge on,
-    over every route that carries the referent, which the failed term had no decline for (`commit`
-    executed 612 times at two seasons over seeds 0-4, chiefly repeats). `argue`, the other row declaring
+    (D3) declines `commit` person-side on any object he holds a live `commit` edge on,
+    over every route that carries the referent. `argue`, the other row declaring
     the class, forms on a cause he holds too, as D3 intends.
 
     Resolver-side and read-only: it supplies Proposition IDS, which `questions_for` adds to the question
@@ -3459,10 +3317,9 @@ def larders_in_purview(w: World, p: Person, named: Optional[frozenset] = None) -
     his own live `hold`s granting a `Rung` row's remit act reaches (`data/verbs.py::RUNG_REMIT_ACTS`;
     `state/gate.py::purview_reaches`, the one owner `requisition`'s `authority` conjunct asks) WITHOUT BEING
     THAT SEAT'S OWN RUNG: the seat's rung is its treasury, and a requisition of the treasury into itself
-    moves nothing (`loop/effects_governance.py::_eff_requisition`, G4's `NoOpReceipt` -> `requisition.refused`).
-    MEASURED before that clause (`corpus_run`, seed 0): every computed corpus requisition (4, all NPC-083)
-    was its seat's own rung, refused on the `write` clause -- `places_named`' residence rule, one
-    effect over (a settler who lives under the place changes nothing there). H-163 limit
+    moves nothing (`loop/effects_governance.py::_eff_requisition`, G4's `NoOpReceipt` -> `requisition.refused`):
+    `places_named`' residence rule, one effect over (a settler who lives under the place changes nothing
+    there). H-163 limit
     3's design order, #453's *"a question whose referent is a full larder in purview (a positive
     `stores.changed`)"*: the subject `requisition` binds, carried on the question he answers as
     `Rung`-classed referents (`_stamped`), so `subject` still binds a referent and no operand is
@@ -3474,14 +3331,13 @@ def larders_in_purview(w: World, p: Person, named: Optional[frozenset] = None) -
     v10 CR-23) and whether the seat reaches it. ⚠ THE STORES ARE READ HERE,
     UNLIKE `places_named`' ROOM, and that is `vacancies`' precedent (it asks the write gate's own
     `may_fill`), not an oversight: an empty larder is an occasion for nothing, and a requisition question
-    raised over one is the refusal H-163 limit 3 measured (`requisition.refused` on the `stores` conjunct).
+    raised over one is the refusal H-163 limit 3 names (`requisition.refused` on the `stores` conjunct).
     The person still learns nothing he did not hold; a scarcity between this read and the fold (two
     requisitions on one larder) is the fold's (`requisition.refused`, §27.1).
     ⚠ THE AMOUNT AND KIND are the fixtures' (`default_store_kind`, `default_transfer_amount`, H-94 /
     H-121), because that is what `decision/options.py::_derive_operand` carries on a CLASSED ROW
     (`requisition`'s `referent_class: Rung`): a claim the question is about (a stores level, a shortfall)
-    does not re-aim it, even when the stamped rung is also the question's plain referent (B-K close,
-    COR 4), so the stamp and the act read the same two values. ⚠ PURVIEW IS ASKED LAST, only of a
+    does not re-aim it, even when the stamped rung is also the question's plain referent, so the stamp and the act read the same two values. ⚠ PURVIEW IS ASKED LAST, only of a
     named, stocked rung: `purview_reaches` walks `w.tenures` for its oblige clause when the seat's own
     ground does not reach (the gate's walk, not a new one here). `()` for a person granted no such
     act, which is nearly everyone, so nothing else is read for him. REVERT: drop the term in
@@ -3604,11 +3460,9 @@ def holdings_to_found(w: World, p: Person) -> tuple:
 # `faction_q` imports `world_q` and `enemies_heard` below reads `at_war`, so a definition in `faction_q` is an import
 # cycle. `layer-conformance` B4, third disposition, picked: the rows decide the NAME and the signature, which
 # `faction_q.py`'s re-export carries exactly; neither decides the defining module. `04` is not edited.
-# `20-ii`'s instruction names `at_war` last; the `mood` a war Proposition carries. MOVED here from
-# `faction_q.py`, unchanged, by v11 CR-87 (`faction_q` re-exports both).
-# `Proposition.mood`
+# `faction_q` re-exports both. `Proposition.mood`
 # is a plain string with no roster of allowed values (`OUGHT`/`HOLDS` are the two the tree already
-# mints, `harness/populated.py:658,661`); `WAR` is a third, idiomatic value of the SAME field, never
+# mints, `boot/realm.py`); `WAR` is a third, idiomatic value of the SAME field, never
 # a new one -- `_eff_utter` already writes whatever `payload["mood"]` names, so this needs no new
 # verb and no matrix row. Declared once, beside the one function that reads it, the way `SHEET_KIND`
 # is declared beside `resolve`.
@@ -3622,7 +3476,7 @@ def at_war(w: World, a: str, b: str) -> bool:
     boolean between two factions to set, because there is no faction record to hold one."*
 
     A `WAR_MOOD` Proposition names its two parties directly, the same shape a creed's `OUGHT`
-    Proposition names its leader (`subject`) and faction (`value`, `harness/populated.py:661`):
+    Proposition names its leader (`subject`) and faction (`value`, `boot/realm.py`):
     `subject` and `value` are the two factions, UNORDERED (a war has no "first" side), so this
     compares `{p.subject, p.value}` as a set against `{a, b}` rather than picking a slot for
     either. `at_war` asks whether that Proposition still has ANY live `commit` -- `F.32`: *"a
@@ -3637,7 +3491,7 @@ def at_war(w: World, a: str, b: str) -> bool:
     mints is a REAL fold today, not a hypothetical one -- `10_FACTIONS_AND_DEPLOYMENT.md` §4.1's
     gap list (`F.33`) is about whether `at_war` may gate a verb's `requires`, which is a narrower,
     still-open question than whether the Proposition can exist. No world-generation code (`cast`,
-    `build_realm`, the corpus overlays) currently AUTHORS such an act, which is why every corpus
+    `boot/realm.py`'s `build_realm`, the corpus overlays) currently AUTHORS such an act, which is why every corpus
     and populated-realm world reads `False` for every pair -- a fact about what nothing yet
     chooses to utter, not about this Query. The falsifier this module's test file carries drives
     the real fold rather than planting a Tenure by hand, to prove that."""
@@ -3667,9 +3521,7 @@ def detainees_held(w: World, p: Person) -> tuple:
     the act then passes is the fold's (`loop/predicates.py::_req_interrogate`: custody again, and the
     charge). THE SEAT IS THE CUSTODY'S OWN OBJECT: a man detained to another seat is not offered (the
     predicate's custody clause is `restrained`'s, any seat). `()` for a person granted no such act, or
-    whose seats hold nobody -- every person in the realm while no `detain` is open: `arrest` executes 0 and
-    `capture` (CP-T03-09) opened none in the seeds-0-2 one-season reading, so the realm's formation is unchanged by
-    this reader."""
+    whose seats hold nobody -- every person in the realm while no `detain` is open."""
     if not DETAINEE_REMIT_ACTS:
         return ()
     seats = {t.object for t in p.tenures
@@ -3696,7 +3548,7 @@ def matters_awaiting(w: World, p: Person) -> tuple:
     the venue through the unchanged referent rule. THE CLASS IS SHARED (`migrate`, `march`, `requisition` form
     on a stamped tier too and the fold disposes, H-163's measured cost). WHAT IT ADDS TO `places_named`: his own
     seat's rung where he lives under it (a duke at home in his duchy), which the places-to-settle stamp never
-    offers. ⚠ RL2 (convene stops forming on `places_named`) WAS MEASURED AND NOT TAKEN: `convene`'s score is
+    offers. ⚠ RL2 (convene stops forming on `places_named`) IS NOT TAKEN: `convene`'s score is
     content-blind, so with only the tier stamp a lord almost never convenes (`verb_table.yaml`'s `convene`
     note has the reading).
     WHY THE SEAT'S RUNG AND THE LOWEST ONE: a sitting's tier is its jurisdiction (reasons-to-convene §1), and a
@@ -3772,7 +3624,7 @@ def own_referents_of_class(w: World, q: Question, classes: Optional[frozenset] =
 
     NOT A STANDING OCCASION: it reads the question and never the person's ledger or edges, so a
     person who knows fifty people is offered none of them unless his question names one. `classes`
-    defaults to the one domain `questions_for` stamps (the B10-05 close made this its owner): every
+    defaults to the one domain `questions_for` stamps: every
     class a row declares (`data/verbs.py::DECLARED_CLASSES`) less `rosters.yaml: occasion_only_classes`,
     read at call time, so no class literal lives here; while no row declares a class outside that list
     the set is empty and this returns `()`. A caller may pass another set. Resolver-side and read-only.
@@ -3780,10 +3632,10 @@ def own_referents_of_class(w: World, q: Question, classes: Optional[frozenset] =
     writ kind (`data/verbs.py::RECORD_REFERENT_KINDS`) reaches a question only through `writs_held`,
     whose addressee test is `comply`'s whole formation (its cell asks a claim on the writ, which any
     witness of the issue holds). Since REM-2C released `Record` to this term, a bystander whose question
-    named the writ was offered `comply` and the fold executed it; the kinds `writs_held` owns are
+    names the writ would be offered `comply` and the fold would execute it; the kinds `writs_held` owns are
     skipped, so he is offered none, and no row forms on a writ for a non-addressee. The petition and
     works kinds are NOT skipped: `carry`, `found` and `build` form on an unheld one and the fold refuses
-    it on `held_by`, REM-2C's measured shared-class cost. REVERT: drop the term in `questions_for`
+    it on `held_by`, REM-2C's shared-class cost. REVERT: drop the term in `questions_for`
     (or, for the writ alone, the `RECORD_REFERENT_KINDS` test below)."""
     return _of_stamped_class(w, q.referents, classes)
 
@@ -3859,8 +3711,7 @@ def wounded_with(w: World, p: Person) -> tuple:
     `_eff_tend` and MATTER write none. So a healed man stays stamped for every believer, and so does a MARKED
     survivor sitting at his ceiling (his written body is clamped at or under the mark while this comparison is
     against `condition_scale`): `tend` forms on him and is refused at its write as a no-op (`_eff_tend`'s
-    `NoOpReceipt`) each season. The believed-body arm forms near zero today (the CP-T03-08 commit, 0771ede5,
-    measured 0/3/9 pairs at seeds 0/1/2 over two seasons, none attempted). Carrying the ceiling with the body
+    `NoOpReceipt`) each season. The believed-body arm forms near zero today. Carrying the ceiling with the body
     Observation is the repair, deferred. [GAP: a believed ceiling is not carried] Stamped by `questions_for`
     as `Person` (`World.class_of`), so `tend` (`referent_class: Person`) forms on it -- and so do the other rows
     declaring `Person` (the shared class; the fold disposes). Resolver-side and read-only. `()` for a whole man who
@@ -3890,14 +3741,13 @@ def disputes_held(w: World, p: Person) -> tuple:
     correct; revert: drop the term in `questions_for`]), sorted by id: each living person, other than `p`, whom his own
     ledger names (`person_q.ledger_names`, or a doer seen or a teller, `known_persons`) and of whose deeds his own
     judgement scores against him -- `person_q.holds_dispute`, the ONE owner the fold's `dispute` stem and the
-    `challenge` decline ask too. A grievance is a standing occasion, `wounded_with`'s shape: MEASURED before the term,
-    `build_realm(0)` after one season, 53 such pairs over 21 holders and `challenge` formed 11 times in two seasons,
-    because the question a holder answers almost never named the man he holds the wrong against. Stamped by
+    `challenge` decline ask too. A grievance is a standing occasion, `wounded_with`'s shape: the
+    question a holder answers almost never names the man he holds the wrong against. Stamped by
     `questions_for` as `Disputant` (`data/verbs.py::DISPUTANT_CLASS`, a class of its own: stamped as `Person`, the
-    shared class, `capture` formed on the same men and executed 11 times where it had executed 0, `aperture 2 0`), so
+    shared class, `capture` would form on the same men), so
     `challenge` (`referent_class: Disputant`) and no other row forms on it. ONLY A MAN BESIDE HIM (`place_of`, `with`'s one
-    owner), `wounded_with`'s precedent: the occasion is the grievance and the man together; measured without the
-    filter, `aperture 2 0` (realm), 8 of 8 `challenge` attempts on the stamp were refused `with=False`. The cell's
+    owner), `wounded_with`'s precedent: the occasion is the grievance and the man together; without the
+    filter a `challenge` on the stamp is refused `with=False`. The cell's
     `with` stays world-only (IN-59): a challenge formed on a question's own referent is still the fold's to refuse.
     Resolver-side and read-only: it reads `p`'s own ledger and pursuits, which ids are living persons and where they
     stand. `()` for a man who holds no grievance beside him, and for a cohort, on either side (`challenge`'s `individual`
@@ -3975,7 +3825,7 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None,
     state against the stores his edges name (AX-2). An org that expects nothing (no template, no goal)
     reads `0.0`.
 
-    `(order[source], q.id)` -- the key before IN-57 -- stays the final tiebreak, so within a tier
+    `(order[source], q.id)` stays the final tiebreak, so within a tier
     (and a salience) the old order holds; magnitudes inside tier 1 are not ranked (LIMIT). A source added later
     takes its tier from its referents, so `question_sources`' order is not edited. `ambs` is
     `ambitions(w, p)` where the caller already holds it (`questions_for`); `None` computes it.
@@ -4131,28 +3981,22 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     `claim_landed` question on his own standing crossing this season, about the people who told
     (`standing_crossed`).
 
-    ⚠ THIS CLOSES `H-04` AND §61's `NoProducer`, which between them blocked every NPC case: with
-    no producer for `q`, `assemble(person, question)` was UNSATISFIABLE and DELIBERATE had no
-    declared entry point, so `opening_set` had nothing to compute a set FROM. That is why the
-    instrument needed an authored `roster` -- `D2`.
+    ⚠ THIS IS THE PRODUCER OF `q` (`H-04`, §61's `NoProducer`): `assemble(person, question)` needs one,
+    and DELIBERATE's declared entry point is this function, so `opening_set` has a set to compute FROM.
 
-    ⚠ FOLDED TO TWO AT POSITION `11a` (r2 `01_ATTENTION_AND_REACH.md` §A.2, `05_LEDGER_AND_BUILD.md`
-    §A.4.1 item 2). `date_due` and `band_crossed` MEASURED zero questions in every world the engine
-    could build -- Q1's addressing clause was unsatisfiable and Q3 keyed a verb string where an id
-    was needed (`H-110`) -- and `04 §B.13` `ID-13` treats a declared source that reaches no code as
-    the defect, not as a source worth keeping. Both fold into `claim_landed` rather than vanish: a
-    fired date and a band crossing are each already an Event that WITNESS already deposits as a
-    claim, so the fold is entirely in what admits that claim as a question, not in what produces
-    it. `date_due`'s half needs CALENDAR to emit `date.fired` first (position `11b`, BUILT
-    2026-09-29 -- `loop/calendar.py`'s write now carries `emits="date.fired"`) AND needs that
-    emission to reach WITNESS, which IN-29 closed: `calendar()` returns its own Events and
-    `season()` hands them to `witness()` in round 0 beside MATTER's, so a fired date deposits a
-    claim (`test_calendar_a_forced_corpus_date_*` pins `claimed_any`). Whether `claim_landed` then
-    admits that claim as a question is not measured here;
-    `band_crossed`'s half needs nothing further, because `_crossings` (`loop/matter.py`) already
-    emits a witnessable Event whose claim's subject is the site (`epistemic.claim_subjects`'s
-    anchor fallback) -- `reach`/`place_of`, below, are what let a claim about a place reach someone
-    who was never at that place: a seat's own purview, the ladder above their home.
+    ⚠ TWO SOURCES (r2 `01_ATTENTION_AND_REACH.md` §A.2, `05_LEDGER_AND_BUILD.md` §A.4.1 item 2).
+    `date_due` and `band_crossed` fold into `claim_landed`, because `04 §B.13` `ID-13` treats a declared
+    source that reaches no code as the defect. A fired date and a band crossing are each already an
+    Event that WITNESS already deposits as a claim, so the fold is entirely in what admits that claim
+    as a question, not in what produces it. `date_due`'s half needs CALENDAR to emit `date.fired`
+    (`loop/calendar.py`'s write carries `emits="date.fired"`) AND that emission to reach WITNESS:
+    `calendar()` returns its own Events and `season()` hands them to `witness()` in round 0 beside
+    MATTER's, so a fired date deposits a claim (`test_calendar_a_forced_corpus_date_*` pins
+    `claimed_any`). `band_crossed`'s half needs nothing further, because `_crossings`
+    (`loop/matter.py`) already emits a witnessable Event whose claim's subject is the site
+    (`epistemic.claim_subjects`'s anchor fallback) -- `reach`/`place_of`, below, are what let a claim
+    about a place reach someone who was never at that place: a seat's own purview, the ladder above
+    their home.
 
     Q4 `need` (PLAN `W5`, #353 `:509`, `:605`, `:1297`) survives untouched: a live `commit` to an
     OUGHT Proposition generates a standing question every season, and without it "an NPC with a
@@ -4170,10 +4014,9 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     round 2 of the SAME tick, which `when` cannot express. `since` is the driver-owned
     `(tick, round)` of that person's LAST deliberation, and `Claim.round` is the field that makes
     the pair comparable.
-    ⚠ THE DEFAULT REPRODUCES THE OLD READING BIT FOR BIT, WHICH IS WHY THIS IS A GENERALISATION
-    AND NOT A CHANGE. `since=None` means `(w.tick - 1, 0)`; every claim carries `when <= tick - 1`
-    at DELIBERATE, because WITNESS stamps `when = t` and the tick advances after it -- so
-    `(c.when, c.round) >= (tick - 1, 0)` selects exactly the claims `c.when == w.tick - 1` did.
+    ⚠ THE DEFAULT IS THE SINGLE-PASS READING. `since=None` means `(w.tick - 1, 0)`; every claim carries
+    `when <= tick - 1` at DELIBERATE, because WITNESS stamps `when = t` and the tick advances after it
+    -- so `(c.when, c.round) >= (tick - 1, 0)` selects exactly the claims `c.when == w.tick - 1` selects.
     The one-round arm of `H-124`'s sweep is the executed control for that claim."""
     TRACE.query("questions_for", "resolver")
     out: list[Question] = []
@@ -4184,9 +4027,8 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # REACH covers. `since_tick` is the season boundary: "landing" is new.
     # ⚠ THE PREVIOUS SEASON'S WITNESS, NOT THIS ONE'S. §F1 Q2 is "a claim LANDING in the
     # holder's ledger AT WITNESS", and WITNESS runs at the END of a season: the deposit is
-    # stamped `when = t` and DELIBERATE reads it at `t + 1`. Testing `c.when == w.tick` therefore
-    # matched nothing, ever — Q2 was dead for every person in every season, which is half of why
-    # nothing propagated. Found by running `headless.py` and reading the ledgers.
+    # stamped `when = t` and DELIBERATE reads it at `t + 1`. Testing `c.when == w.tick` would
+    # therefore match nothing, ever.
     # `U2`: the boundary is *since this person last deliberated*, which is the season boundary
     # when nothing else is supplied. See the docstring for why the two readings coincide at R = 1.
     #
@@ -4198,10 +4040,9 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # has no place), and `None in R` must be impossible -- the walrus binds it once so the `is not
     # None` guard is written rather than relied on by accident (`01` §A.5.2, `AR-6`).
     #
-    # ⚠ CLAUSE 3 (`named(c)`, the id set inside a `content:`-predicate claim) SHIPS HERE, at
-    # position `15c` (r2 `01` §A.5.3/§A.5.4, `02` §A.9.1): the deposit rule landed at positions
-    # `15`/`16` (`loop/witness.py`'s content deposit), so a `content:<kind>` claim now carries the
-    # Record's real `subject_matter` instead of `True` -- the producer §A.5.3 was waiting for.
+    # ⚠ CLAUSE 3 (`named(c)`, the id set inside a `content:`-predicate claim) is position `15c`
+    # (r2 `01` §A.5.3/§A.5.4, `02` §A.9.1): a `content:<kind>` claim carries the Record's real
+    # `subject_matter` (`loop/witness.py`'s content deposit).
     # ⚠ NOT A FOURTH SOURCE (§A.5.4). One `Question` shape, one `source` string ("claim_landed",
     # unchanged), one `occasioned_by` route. Clause 3 only ADMITS the claim into `out`; it does not
     # change what the Question is ABOUT: that is `(c.subject,)`, widened only by v9 IN-70's
@@ -4223,8 +4064,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
             out.append(Question(f"q:claim:{c.id}", "claim_landed", (c.subject,) + extra, c.id))
 
     # v9 SC-02 `22b` STEP 23: A STANDING CROSSING IS A QUESTION ABOUT THE PEOPLE WHO TOLD (`standing_crossed`,
-    # above). The crossing question read only SITE crossings before (through WITNESS and Q2); this is the
-    # person-keyed one, which no witness carries. Still `claim_landed`, no source added: the claims that
+    # above). It is the person-keyed crossing, which no witness carries. Still `claim_landed`, no source added: the claims that
     # landed are what crossed. REVERT: drop these two lines; MATTER's record then raises nothing.
     if (sq := standing_crossed(w, p, since)) is not None:
         out.append(sq)
@@ -4233,9 +4073,9 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # question: it recurs every season until the commitment ends, which is what makes an NPC with
     # an ambition act in a quiet season.
     # `17`: the live-`commit`-to-an-OUGHT rule is `ambitions`' alone (above; R-06's READ), so this
-    # asks it rather than restating it; one Question per ambition, in edge order, as before.
+    # asks it rather than restating it; one Question per ambition, in edge order.
     ambs = ambitions(w, p)
-    # v9 IN-67: what the ambition is ABOUT is `goal_referents`' (a goal's, else the subject as before);
+    # v9 IN-67: what the ambition is ABOUT is `goal_referents`' (a goal's, else the subject);
     # an ambition about nobody forms no question.
     refs_of: dict = {}                     # handed to `attention_key`, which reads the same referents
     for pid in ambs:
@@ -4277,8 +4117,8 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     if (dq := docket_question(w, p)) is not None:
         out.append(dq)
 
-    # v9 IN-57: the order is `attention_key`'s tiered read of the person's own state; the old
-    # `(source, q.id)` key is its final tiebreak (history: hole_register H-54).
+    # v9 IN-57: the order is `attention_key`'s tiered read of the person's own state; the
+    # `(source, q.id)` key is its final tiebreak (hole_register H-54).
     out.sort(key=attention_key(w, p, ambs, refs_of))
     # IN-53 (H-207, DECISION 2026-10-13 D1): A VACANT SEAT THE PERSON MAY FILL IS A STANDING
     # OCCASION, AND IT RIDES ON WHATEVER QUESTION HE ANSWERS. After the sort, so it displaces
@@ -4376,13 +4216,11 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
 def occasioned_by(w: "World", q: Optional["Question"]) -> list:
     """What EVENT occasioned a question — the antecedent an act formed from it must cite.
 
-    ⚠ THIS IS `N3`'s MISSING EDGE, AND `N3` WAS MEASURED, NOT INFERRED: *60 act-Events, 0
-    resolving to a question*. An act emitted `causes=[a.id]` and nothing else, so the graph knew
-    which act made an Event and never which Event made the act — and `R3` (an act by one person
-    caused by an act of another) scored **0 of 30** while `R1`, `R4` and `R5` all passed. The
-    chain Reading 07 §4 calls *"the one that is actually the game"* — a claim lands in a ledger,
-    raises a question, forms a candidate, becomes an act, emits an Event, is witnessed, deposits
-    in SOMEONE ELSE'S ledger — was built end to end except for this one edge.
+    ⚠ THIS IS `N3`'s EDGE: which Event made the act. An act emits `causes=[a.id]`, so the graph
+    knows which act made an Event; this says which Event made the act (`R3`: an act by one person
+    caused by an act of another). The chain Reading 07 §4 calls *"the one that is actually the
+    game"* — a claim lands in a ledger, raises a question, forms a candidate, becomes an act, emits
+    an Event, is witnessed, deposits in SOMEONE ELSE'S ledger — runs through it.
 
     **ONE ROUTE, since position `11a` folded `date_due` and `band_crossed` out of
     `question_sources` (`01_ATTENTION_AND_REACH.md` §A.2, `05_LEDGER_AND_BUILD.md` §A.3.1):**
@@ -4397,21 +4235,11 @@ def occasioned_by(w: "World", q: Optional["Question"]) -> list:
         to a plausible default. An act taken out of a standing ambition genuinely has no
         antecedent but the actor, and `[ROOT]` is what the design already has for that.
 
-    ⚠ **WHAT THIS DELETES IS A GUARD AND AN UNREACHABLE SEARCH, NOT TWO BRANCHES.** `date_due` and
-    `band_crossed` never had a branch of their own here — `05` §A.3.1's correction to an earlier
-    draft of this same plan: *"there is no `date_due` branch and no `band_crossed` branch … a
-    NEGATIVE membership guard … lets exactly those two fall through to the generic id search …
-    which finds nothing."* `date_due` was dead because CALENDAR emitted no Event for a fired Date;
-    `band_crossed` was dead because the Question it built carried the crossing's **verb** —
-    `"work"` — where an id belongs, so the id search could never match (`H-110`). Deleting the two
-    sources deletes the guard's tuple and leaves the id search with no caller, so the search goes
-    with it rather than surviving as dead code with nothing left to reach it.
-
-    ⚠ **This count has been wrong twice before landing here**: *"one route per question source"*
-    first, then *"two of four"* after a critic found `band_crossed` still nominally rostered. **The
-    lesson is in the count, not in the routes: a route's liveness is a property of its PRODUCER,
-    and this function cannot see its producers** — which is why, now that both dead sources are
-    gone from the roster, there is exactly one route left to get wrong.
+    ⚠ **THERE IS NO `date_due` OR `band_crossed` BRANCH** (`05` §A.3.1). `date_due` was dead because
+    CALENDAR emitted no Event for a fired Date; `band_crossed` was dead because the Question it built
+    carried the crossing's **verb** — `"work"` — where an id belongs, so the id search could never
+    match (`H-110`). Both fold into `claim_landed`, and a route's liveness is a property of its
+    PRODUCER, which this function cannot see.
 
     ⚠ **IT RETURNS IDS AND WRITES NOTHING.** Resolver-side, read-only over `w.log`, callable from
     a test without a driver — which is `ID-10`: a check that cannot observe the failure it
@@ -4447,13 +4275,8 @@ def occasioned_by(w: "World", q: Optional["Question"]) -> list:
 
 
 # ---------------------------------------------------------------------------
-# `WorldReader` -- MOVED HERE FROM `queries/readers.py` AT UNIT L3 (ED-IN-0206), and the move ANSWERS
-# a question `queries/__init__.py` had already framed and deferred: *"By source they would split
-# `WorldReader` -> `world_q` and `LedgerReader` -> `person_q`; `person_q` does not exist until step 7
-# ... whether §A.2's roster then absorbs them is a Layer-1 call for that step, not this one."*
-# `person_q` exists now, so this is that call, taken the way that docstring predicted rather than
-# left as a FOURTH module in a package `04 §A.2` enumerates with three. `WorldReader` asks THE WORLD
-# -- it takes a `World` and reads the actor's own ledger through it -- so it belongs in the
+# `WorldReader` (ED-IN-0206). `04 §A.2` enumerates three `queries/` modules, and `WorldReader` asks THE
+# WORLD -- it takes a `World` and reads the actor's own ledger through it -- so it belongs in the
 # World-first module; `LedgerReader` takes claims and nothing else, and is in `person_q`.
 # ---------------------------------------------------------------------------
 
@@ -4481,8 +4304,8 @@ class WorldReader:
         w = self._w
         # ⚠ AN UNHASHABLE SUBJECT IS A QUESTION ABOUT NO ONE THING, AND IT REFUSES RATHER THAN CRASHES
         # (plan position `19`). Every stem below looks the subject up in a keyed store, and a LIST
-        # raised `TypeError` from inside `_admits`, ending the season where the row's refusal should
-        # emit. It is reachable once `issue`'s cell reads `to`: a hand-built writ may name several
+        # would raise `TypeError` from inside `_admits`, ending the season where the row's refusal should
+        # emit. It is reachable when `issue`'s cell reads `to`: a hand-built writ may name several
         # executors (r2 §A.3 types the addressee as a list), and a cell that asks about ONE id cannot
         # say which. UNKNOWN is the grammar's answer to an operand it cannot read (§42.2's polarity).
         try:
@@ -4505,8 +4328,8 @@ class WorldReader:
                 return 1 if r is not None and r.kind == arg else 0
             # ⚠ THE `docket` BRANCH (plan position `19`; `21_RECONCILIATION.md` PHASE 2 step 10:
             # *"a `docket` reader branch so `exists:DocketItem` evaluates"*, whose falsifier is *"the
-            # cell still returns UNKNOWN"* -- and it did: `DocketItem` is a SEQUENCE of dicts, not
-            # one of `_STATE_COLLECTIONS`, so the fallback below read `docketitems` and answered
+            # cell still returns UNKNOWN"*: `DocketItem` is a SEQUENCE of dicts, not
+            # one of `_STATE_COLLECTIONS`, so the fallback below would read `docketitems` and answer
             # UNKNOWN in every world). It counts the docket items naming `subject` as their matter,
             # through `docketed`, the one owner of that question.
             if arg == DOCKET_KIND:
@@ -4537,34 +4360,29 @@ class WorldReader:
                     needs="a per-kind floor table -- register row H-08",
                     law="§12.1 gates verbs on `condition` against per-kind FLOORS, and §42.2.1 "
                         "forbids picking a plausible number for a kind nobody registered")
-            # ⚠ THE LOOSEST FLOOR, AND AN ADVERSARIAL PASS CALLED THIS AN UNDER-REFUSAL.
-            # The objection was exact and is answered rather than dismissed. It said: the prose is
-            # `condition >= floor(verb)`, `band_floors`' inner keys are SITE-USE verbs
-            # (bulk_shipping, fishing, deep_mining …) which its roster note says are "NOT
-            # verb-table rows", so `work` is not among them and `min` silently substitutes the
-            # loosest floor for the one the prose names — admitting, on a harbour, every condition
-            # in 100..800 where `floor(bulk_shipping)` is 800.
+            # ⚠ THE LOOSEST FLOOR. `band_floors`' inner keys are SITE-USE verbs (bulk_shipping, fishing,
+            # deep_mining …) which its roster note says are "NOT verb-table rows", so `work` is not among
+            # them and the prose `condition >= floor(verb)` has no floor for it: `min` admits, on a
+            # harbour, every condition in 100..800 where `floor(bulk_shipping)` is 800. This is not
+            # `floor(verb)`, and the site-USE is an operand neither the act nor `requires_operands`
+            # carries (`H-94`).
             #
-            # WHAT THE OBJECTION GETS RIGHT: this is not `floor(verb)`, and the site-USE is an
-            # operand neither the act nor `requires_operands` carries (`H-94`).
-            # WHAT IT GETS WRONG, AND WHY `min` STAYS: `work` is the GENERIC labour verb, so the
-            # question its precondition asks is *can this site be worked at all* — and a site is
-            # workable if it clears the floor of its LEAST demanding use. A seam at condition 100
-            # cannot be deep-mined and CAN be surface-gleaned (`surface_gleaning: 50`); a harbour
-            # at 150 cannot take bulk shipping and can be fished. So `min` is the READING of
-            # `floor(verb)` for a verb that names no use, not a substitute for it.
+            # WHY `min` STAYS: `work` is the GENERIC labour verb, so the question its precondition asks
+            # is *can this site be worked at all* — and a site is workable if it clears the floor of its
+            # LEAST demanding use. A seam at condition 100 cannot be deep-mined and CAN be
+            # surface-gleaned (`surface_gleaning: 50`); a harbour at 150 cannot take bulk shipping and
+            # can be fished. So `min` is the READING of `floor(verb)` for a verb that names no use, not
+            # a substitute for it.
             #
-            # BOTH ALTERNATIVES WERE BUILT AND MEASURED BEFORE SETTLING HERE, which is why this
-            # comment is long: `max` refuses a seam at 100 that surface-gleaning supports, and
-            # turned `test_w8_...` red for exactly that site; `UNKNOWN` destroys the gate outright
-            # — `work`'s precondition could then never return False, so §12.1's condition gate
-            # could not observe the failure it exists to exclude (§0.1 point 2), and it turned
-            # `test_w3_...` red. `min` is the only one of the three that both refuses an unworkable
+            # `max` refuses a seam at 100 that surface-gleaning supports (`test_w8_...`); `UNKNOWN`
+            # destroys the gate outright — `work`'s precondition could then never return False, so
+            # §12.1's condition gate could not observe the failure it exists to exclude (§0.1 point 2;
+            # `test_w3_...`). `min` is the only one of the three that both refuses an unworkable
             # site and admits a workable one.
             #
-            # WHAT REMAINS OPEN AND IS NOT PAPERED OVER: a `work` that MEANS deep-mining is
-            # admitted on a seam only surface-gleaning could support, because nothing on the act
-            # says which use is intended. That is `H-94`'s operand, and when it exists this line
+            # WHAT REMAINS OPEN: a `work` that MEANS deep-mining is admitted on a seam only
+            # surface-gleaning could support, because nothing on the act says which use is intended.
+            # That is `H-94`'s operand, and when it exists this line
             # reads `floors[use]` and the reading collapses to the prose.
             return min(floors.values())
         if stem == "contain.path":
@@ -4848,8 +4666,8 @@ check_strife_openers(STRIFE_KINDS["joins"], VERB_TABLE, RECORD_KIND_KEYS)
 
 def governors(w: World, rung: Optional[str]) -> list:
     """Factions governing `rung`, nearest first and without repeats: the faction of the live `hold` on each rung
-    from `rung` up to the root (`ancestry` includes `rung` itself). THE SIDE READ'S ONE OWNER (CR-76 moved it here
-    from `harness/strife.py`, which imports it): `world_q` may not import the harness, and two copies of the side
+    from `rung` up to the root (`ancestry` includes `rung` itself). THE SIDE READ'S ONE OWNER (`harness/strife.py`
+    imports it): `world_q` may not import the harness, and two copies of the side
     rule would be `CLAUDE.md` §8's defect. NOT `governors_of`, which lists the PERSONS whose seat reaches a rung."""
     out: list = []
     for cur in ancestry(w, rung) if rung is not None else ():
@@ -5546,7 +5364,7 @@ def flow_stakes(w: World, p: Person, classes: frozenset = FLOW_STAKE_CLASSES) ->
     chosen, is the person's own (R10): two persons in one flow choose differently, and none is told what the flow
     does next. Resolver-side and read-only (`04` §A.2: the stamp arrives as Questions, so `decision/` reads
     nothing new and holds no World). `()` for a person whose ledger holds no `opens` claim, which is every person
-    after one season of `build_realm(0)` at the default configuration (CR-77's control).
+    after one season of the realm `boot/realm.py` builds, at the default configuration (CR-77's control).
 
     ⚠ A SHARED-CLASS COST, ACCEPTED ON `holdings_to_found`'s PRECEDENT (the fold disposes): a named settlement the
     person lives under is a stake, and `migrate` (`own`-eligible) forms on it and is refused at `write`

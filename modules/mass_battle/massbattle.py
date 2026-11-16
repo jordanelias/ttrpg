@@ -1,61 +1,20 @@
 """Season-facing adapter: `resolve_field` -> the canon mass-battle engine (it was the strategic-layer faction adapter).
 
-WHAT THIS FILE IS NOW, AND WHAT IT WAS. Until 2026-08-24 this module WAS the mass-battle engine —
-1,905 lines of resolution, geometry, morale and rout code that the campaign ran. Jordan ruled that
-day to port `tests/sim/mass_battle/` (11,342 lines, called "the canon mass-battle engine" by
-`tests/valoria/test_degree_ladder_single_owner.py:25-27`, imported by 43 of 156 `tests/valoria`
-files, and the target of every recent ED-MB batch) over the top of it. The engine now lives beside
-this file as `orchestration.py`, `hierarchy/`, `core/`, `geometry.py`, `percell.py` and the rest.
+The engine lives beside this file (`orchestration.py`, `hierarchy/`, `core/`, `geometry.py`, `percell.py`,
+...). Its entry point is TACTICAL -- `run_battle(unit_a, unit_b, max_turns=18)` takes constructed Units --
+while the season's is STRATEGIC. This module is the adapter between them: `resolve_field`, `_weighted_unit`,
+`_run_and_grade` and the survivor-ratio -> degree map.
 
-WHAT SURVIVED THE OVERWRITE, AND WHY IT HAD TO. The canon engine's entry point is TACTICAL —
-`run_battle(unit_a, unit_b, max_turns=18)` takes constructed Units. The campaign's entry point is
-STRATEGIC: `faction_action._try_conquest` has two factions and needs a degree back. The adapter
-between them — `resolve_mass_battle`, `_faction_to_unit`, the garrison stub, and the size-ratio ->
-degree map — existed ONLY in the old engine, and `systems/factions/sim/faction_action.py:393`
-imports it by this exact path (this citation previously read `:462`, a stale line number pointing at
-an unrelated Muster-cost line — corrected 2026-09-27, ED-MB-0070, caught by adversarial review).
-Overwriting the file wholesale would have broken the campaign at
-import. So the engine was replaced and the adapter was kept, which is what "port the engine" has to
-mean if the campaign is to keep running.
-
-⚠ THIS IS THE "MB CANON ADAPTER" A SEPARATE AUDIT RECORDED AS NEVER BUILT. It is built here in the
-narrow sense (the campaign reaches the canon engine) and NOT in the wide one: the faction -> Unit
-construction below is still the old engine's minimum-viable default (one Line subunit, tier 2,
-command 4, discipline 5, power = round(faction.Mil)) for every field EXCEPT morale — see the
-2026-09-26 update below. The canon engine can express far more than any of this — troop types,
-equipment, formations, multi-subunit hierarchies, orders of battle. Every one of those is a design
-question about what a faction's army IS at the strategic scale, and none of them is answered by
-porting an engine. The remaining defaults are carried over UNCHANGED and marked, so the behaviour
-delta measured for the 2026-08-24 engine-swap commit was attributable to the ENGINE swap alone and
-not to a simultaneous change in how armies are built.
+The faction -> Unit construction is the minimum-viable default (one Line subunit, tier 2, command 4,
+discipline 5, power `_SEASON_FORCE_POWER`) for every field EXCEPT morale and terrain, which come from season
+state: `resolve_field` takes each side's morale-start from its mean stance toward its own faction (the
+carrier `_eff_march` writes a lost field's "decrease in morale" onto; `_morale_start`) and its terrain from
+the target's territory and garrison (`terrain_row_for_territory`, with A.9's Walls DR applied in
+`_run_and_grade`). The canon engine can express far more -- troop types, equipment, formations,
+multi-subunit hierarchies, orders of battle -- and what a faction's army IS at the strategic scale is a design
+question this adapter does not answer.
 
 [GAP: faction -> unit construction lacks canonical spec — carried over from the pre-port adapter.]
-
-[DELETED 2026-10-01, plan position `29b`: `resolve_mass_battle`, `_faction_to_unit` and
-`_morale_start_from_stability` went with `game_state.Faction` and `systems/factions/`, which held their
-only caller (`faction_action._try_conquest`). What is left is the season-facing path: `resolve_field`,
-`_weighted_unit`, `_run_and_grade`. The paragraphs above and below that name the deleted three are the
-history of the 2026-08-24 port and the d.1 change, kept as written; the code is in git at `5c5d8ec6`.
-`_GarrisonStub` and the `_STA_MORALE_*` names are gone, and `_round_half_up` now serves the morale
-source built at `20-iv` (the next block).]
-
-[UPDATED 2026-10-01, plan position `20-iv`]: `resolve_field` now takes its morale-start from season state
--- each side's mean stance toward its own faction, the carrier `_eff_march` writes a lost field's
-"decrease in morale" onto (`_morale_start`'s docstring) -- and its terrain from the target's territory
-and garrison (`terrain_row_for_territory`, with A.9's Walls DR applied in `_run_and_grade`).
-`_round_half_up` and the morale bounds (renamed `_MORALE_FLOOR`/`_MORALE_CEIL`, no longer Stability's)
-have that reader. `_GarrisonStub` had none once `resolve_mass_battle` went, and is deleted (ID-13); it is
-in git at `5c5d8ec6`.
-
-[SUPERSEDED 2026-10-01 by the `20-iv` block above: nothing reads `faction.Sta` any more, and
-`_morale_start_from_stability` and `_GarrisonStub` are deleted. The block below is history.]
-
-[UPDATED 2026-09-26, d.1 / ED-MB-0068]: morale is no longer part of the flat, carried-over default
-this header describes — it is now derived from `faction.Sta` (`_morale_start_from_stability`).
-This is the ONE field this docstring's "carried over UNCHANGED" claim no longer covers; every other
-field it names is still exactly as described. d.1's own behaviour delta is isolated the same way
-the 2026-08-24 swap was: `_GarrisonStub` (the uncontrolled-territory arm) holds its pre-d.1 flat
-morale-start fixed, so the movement traces to real factions' Stability alone — see its docstring.
 """
 from __future__ import annotations
 
@@ -72,8 +31,7 @@ from modules.mass_battle.terrain import (FOREST_BROKEN, RIVER_CROSSING, RIVER_CR
                                              UPHILL_DEFENDER_DEF_D, WALLS, WALLS_DEFENDER_DR,
                                              river_crossed, terrain_row_for_territory)
 
-#: Size-ratio -> degree thresholds. CARRIED OVER VERBATIM from the pre-port adapter so that the
-#: golden movement this commit causes is attributable to the engine swap and nothing else. These are
+#: Size-ratio -> degree thresholds, carried over from the pre-port adapter. These are
 #: NOT the canonical degree ladder (`engine/dice_engine/dice_engine.degree_from_net`, margin-based);
 #: they are a bespoke post-hoc classification of a finished battle's survivor ratios, and
 #: reconciling the two is open MB-lane work, not a port concern.
@@ -86,20 +44,15 @@ OVERWHELMING_DEFENDER_MAX = 0.25   # [canonical: inherited from the pre-port ada
 PARTIAL_ATTACKER_MIN = 0.50        # [canonical: inherited from the pre-port adapter — see note above]
 
 
-#: [d.1, ED-MB-0068; re-sourced at plan position `20-iv`] Canon's Morale ladder, the range a
-#: morale-start must land in: `mass_battle_v30.md:230-231` states it directly ("Morale (1-7)").
-#: These were `_STA_MORALE_FLOOR`/`_CEIL` while `Faction.Sta` (0..7) was the source; the source is
-#: gone (`29b`) and the ladder is not, so the names lose the `STA`. The floor is 1, not 0: rout
-#: fires at morale <= 0, so a side cannot START already routed -- the same reading the d.1
-#: derivation took, and still this implementation's own, Jordan-vetoable.
+#: [d.1, ED-MB-0068] Canon's Morale ladder, the range a morale-start must land in:
+#: `mass_battle_v30.md:230-231` states it directly ("Morale (1-7)"). The floor is 1, not 0: rout fires at
+#: morale <= 0, so a side cannot START already routed -- this implementation's own reading, Jordan-vetoable.
 _MORALE_FLOOR = 1  # [JUSTIFIED: mass_battle_v30.md:230-231 states canon's Morale range directly ("Morale (1-7)") — this is the direct citation, not an inference from the separate in-battle erosion floor at :254]
 _MORALE_CEIL = 7  # [JUSTIFIED: Morale's canon ceiling, mass_battle_v30.md:230-231, "Morale (1-7)"]
 
-#: The morale-start of a side whose members' stance toward their own faction is zero -- no field
-#: lost, nothing written. It is the flat value every strategic and season unit started at before
-#: d.1 (`_faction_to_unit`'s and then `_weighted_unit`'s literal `morale=5`), so a world where
-#: nobody has lost a field fights exactly as it did before `20-iv`: that is the control arm, and it
-#: is the shipped world (`build_realm` seeds no stance row on a faction id; `_morale_start`).
+#: The morale-start of a side whose members' stance toward their own faction is zero -- no field lost,
+#: nothing written. It is the flat value (`morale=5`) every unit started at before d.1: the control arm, and
+#: the shipped world (`boot/realm.py` seeds no stance row on a faction id; `_morale_start`).
 _MORALE_START_BASE = 5  # [canonical: inherited default — the pre-port adapter's flat morale-start, carried by _faction_to_unit until d.1 and by _weighted_unit since; see GAP above]
 
 
@@ -113,30 +66,27 @@ def _round_half_up(x):
     half the side lost a field at `field_morale_weight` 1 and half did not -- and `round()` at those
     boundaries is asymmetric in a way that has nothing to do with game state: `round(4.5) == 4` but
     `round(3.5) == 4` too, so one loss across half a side would cost a point of morale at one level
-    and nothing at the next. `_round_half_up` treats every .5 boundary the same way. (The reason was
-    first written for `Faction.Sta`'s 0.1 steps, d.1; the arithmetic is the same.)"""
+    and nothing at the next. `_round_half_up` treats every .5 boundary the same way."""
     return math.floor(x + 0.5)
 
 
 def _morale_start(stance, loyalty=0.0, gain=0):
-    """A side's starting morale from its members' mean stance toward their own faction -- plan
-    position `20-iv`, d.1 (`ED-MB-0067`: *faction state sets the morale baseline*) carried onto the
-    season path after `29b` deleted the `Faction.Sta` it read.
+    """A side's starting morale from its members' mean stance toward their own faction (`ED-MB-0067`:
+    *faction state sets the morale baseline*).
 
     THE SOURCE, AND WHY IT IS THIS ONE. The season has no faction stat vector, by architecture
     (`04_CODE_ARCHITECTURE.md`, the faction view's list: *"NEVER: a member of `World` · a field of its own · ..."*), so faction state
     is what members hold toward the faction. Jordan's M4 ruling on a lost field (`ED-IN-0279` clause
     (b): *"casualties only, decrease in morale, and a grudge token"*) is already built as a stance row
     on each loser, `(own faction, -1.0, field_morale_weight)` (`loop/effects_combat.py::_eff_march`):
-    that row IS the season's morale, and until this function it had a writer and no reader on the
-    battle path (CLAUDE.md §0.1 pt 1). The provider sums it through `queries.person_q.stance_toward`, the one
+    that row IS the season's morale. The provider sums it through `queries.person_q.stance_toward`, the one
     reader of a stance row, and hands each side's weight-mean here.
 
     THE MAPPING, AND THE ONE THING IT ASSUMES. One stance unit toward one's own faction is one point
     of morale, added to `_MORALE_START_BASE` and clamped to canon's ladder. That identity is the
     assumption; it adds no knob, because the magnitude is already `field_morale_weight`'s (`H-148`,
-    swept 0/1/3): while `_eff_march` is the only writer of a stance row on a faction id (measured at
-    `build_realm(0)`: its 32 seeded rows all name a person), a scale factor here would only multiply
+    swept 0/1/3): while `_eff_march` is the only writer of a stance row on a faction id (`boot/realm.py`'s
+    seeded rows all name a person), a scale factor here would only multiply
     that weight. At weight 0 a lost field writes a zero row and this returns the base -- the control.
     ONE EXCEPTION (`H-151`): in a SAME-FACTION march winner and loser are one faction, so each loser also
     carries the grudge row `(faction, -1.0, field_grudge_weight)` and `stance_toward` sums both: the next
@@ -152,7 +102,7 @@ def _morale_start(stance, loyalty=0.0, gain=0):
     THE TERM IS ZERO and the result is the shipped option (a), battle history only, exactly (the
     control, swept 0 / 0.4 / 1; `data/fixtures.py` says how each arm is derived). At 0.4 a side with
     loyalty >= 3.75 already reaches the ceiling, and the 1:1 arm saturates most creed-holding
-    factions at `build_realm(0)` (the row's own finding, with the per-side starts pinned in
+    factions at the realm `boot/realm.py` builds (the row's own finding, with the per-side starts pinned in
     `tests/valoria/test_mass_battle_d1_morale_baseline.py`), which is why the magnitude is the gain's
     and is swept rather than chosen here."""
     return max(_MORALE_FLOOR, min(_MORALE_CEIL, _round_half_up(
@@ -192,9 +142,8 @@ _MVP_UNIT_COMMAND = dict(
 #: stat (baseline for a subunit with no per-subunit override; `eff_power`'s own fallback, cited
 #: there as "[canonical: sim_mb_06_v9_historical_spec.md -- P4 tier baseline default]"), not
 #: something army headcount should feed. Re-used here rather than derived from weight -- headcount
-#: is a SIZE fact (below), and conflating it with quality was this function's own first-draft
-#: mistake, caught on review (a Crown-sized force would have out-CLASSED a Guild-sized one on
-#: quality alone, backwards of what more bodies means).
+#: is a SIZE fact (below), and conflating it with quality would let a Crown-sized force out-CLASS a
+#: Guild-sized one on quality alone.
 _SEASON_FORCE_POWER = 4  # [canonical: sim_mb_06_v9_historical_spec.md — P4 tier baseline default, eff_power's own fallback]
 
 #: [known risk, disclosed rather than fixed: `resolve_field` has no ratified person-weight ->
@@ -203,7 +152,7 @@ _SEASON_FORCE_POWER = 4  # [canonical: sim_mb_06_v9_historical_spec.md — P4 ti
 #: season Person carries that is a headcount), but this engine's own calibration
 #: (`config.py: SUBUNIT_ROUT_FLOOR`, "a subunit routs below SUBUNIT_ROUT_FLOOR total") targets
 #: battles of hundreds of troops, and a real corpus faction's weight sum (single/double digits,
-#: measured against `harness.populated.build_realm(0)`) routs on contact regardless of who wins.
+#: measured against the realm `boot/realm.py` builds) routs on contact regardless of who wins.
 #: A season-Person-weight -> troop-count conversion is open work this function does not invent one
 #: of; until it lands, `resolve_field`'s outcomes are honest about their INPUT and not yet
 #: calibrated to the engine's own battle scale.
@@ -265,8 +214,8 @@ def _weighted_unit(name, weight, morale_start=_MORALE_START_BASE, troops_per_wei
     cell, the smallest-footprint reading available and not a claim about real troop density.
     `morale_start` is `_morale_start`'s value for this side (the base when omitted); `morale` starts
     equal to it, and the Subunit sets neither, so its `eff_morale` falls through to the Unit's.
-    Every other Subunit/Unit field is the non-canonical inherited default of the pre-port adapter
-    (`_faction_to_unit`, deleted at `29b`), carried via `_MVP_SUBUNIT_SHAPE`/`_MVP_UNIT_COMMAND`.
+    Every other Subunit/Unit field is the non-canonical inherited default of the pre-port adapter, carried
+    via `_MVP_SUBUNIT_SHAPE`/`_MVP_UNIT_COMMAND`.
 
     REM-32: `troops_per_weight` is the weight -> troops SCALE, handed in on the record (`MassBattleInput.
     troops_per_weight`; the season's `field_troops_per_weight` fixture, `hole_register.yaml` H-250, owner Jordan
@@ -371,14 +320,13 @@ def _oob_unit(oob, weight, side, morale_start):
 
 
 def _run_and_grade(unit_a, unit_b, terrain, rng, walls_dr=None, by_troops=False, persons=None):
-    """`run_battle` plus the survivor-ratio classification -- extracted from `resolve_mass_battle`
-    (deleted at `29b`; `resolve_field` is now its only caller).
+    """`run_battle` plus the survivor-ratio classification (`resolve_field` is its only caller).
 
     `walls_dr` (plan position `20-v`, `H-150`): the defender DR the WALLS row adds. `None` -- the
     default -- is A.9's own number, `terrain.WALLS_DEFENDER_DR`, read here and never copied; an int
     overrides it for the one call (the season's `field_walls_dr` fixture, swept 3 / 0 / 1).
 
-    ⚠ CAVEATS THAT LIVED IN THE DELETED FUNCTION'S DOCSTRING AND STILL BIND THIS PATH.
+    ⚠ CAVEATS THAT BIND THIS PATH.
     DETERMINISM: `rng` is scoped over the battle by `rngsource.using`; the canon engine drew from the
     global `random` module at seven sites, so without that holder a seeded run is unpinnable.
     TERRAIN: UPHILL, RIVER_CROSSING and WALLS are applied (UPHILL's two A.9 clauses fully; NARROW_PASS
@@ -439,8 +387,7 @@ def _grade(unit_a, unit_b, by_troops=False):
         # ED-IN-0306 phase 3: the survivor share counted in TROOPS (`hp` over `hp_max`), the quantity `march` scales a
         # losing side's bodies by. `effective_size / size_max` is not that for an army that is not a whole number
         # of `TROOPS_PER_SIZE` blocks: `size_max` floors, `effective_size` does not, so 120 troops read as 1 block
-        # against 1.2 and a side that lost troops could score above 1.0 (found by `test_army_battle.py`: a lost
-        # field raised the loser's body to 1092 of 1000). The headcount path keeps its form, so its goldens do not move.
+        # against 1.2 and a side that lost troops could score above 1.0. The headcount path keeps its form.
         a_size_pct = unit_a.hp / max(1.0, unit_a.hp_max)
         b_size_pct = unit_b.hp / max(1.0, unit_b.hp_max)
     else:
@@ -481,7 +428,7 @@ def resolve_field(inp, rng=None, *, troops_a=None, troops_b=None):
     `engine/season/seam/wrappers/mass_battle.py::resolve` -- the `@provider("contest", "mass_battle")` the
     prize row `a field` names -- calls it with the typed input record its builder `field_input` made
     (`engine/season/queries/inputs.py::MassBattleInput`) and the seeded `rng`. It never reads or writes
-    `World` (until `31c` it took `w` and summed `w.persons[pid].weight` itself), holds no token, and keeps
+    `World`, holds no token, and keeps
     no state between calls: the draws are scoped to this call by `rngsource.using` (`_run_and_grade`), the
     geography arrives on the record (`inp.geography`, the host's read), and no trace block is opened.
 
@@ -489,11 +436,9 @@ def resolve_field(inp, rng=None, *, troops_a=None, troops_b=None):
     record's `weights` are each side's `Person.weight`s (`state/carriers.py`: "A COHORT IS A PERSON AT
     weight > 1"); no `Unit`/`Faction`-shaped object crosses this boundary. Internally, `run_battle` still
     needs a `Unit` -- that requirement does not go away because the caller's contract changed -- and
-    `_faction_to_unit` (deleted at `29b`) was not reused here: it read `faction.Mil` into `Unit.power`, a
-    QUALITY stat, and headcount is a SIZE fact, not a quality one (see `_weighted_unit`, and
-    `_SEASON_FORCE_POWER`'s note on the mistake this corrects). "No unit class, at any scale" is honoured
-    at the SEAM this function's signature draws; it does not reach inside an adapter whose whole job has
-    always been "become a `Unit` for the engine that only speaks one".
+    headcount is a SIZE fact, not a quality one (see `_weighted_unit` and `_SEASON_FORCE_POWER`'s note). "No unit
+    class, at any scale" is honoured at the SEAM this function's signature draws; it does not reach inside an
+    adapter whose whole job is to become a `Unit` for the engine that only speaks one.
 
     ⚠ **AN EMPTY DEFENDING SIDE gets `_MIN_TROOPS`' crash-avoidance floor, not an invented auto-win.**
     What an empty defending force MEANS is eligibility policy for whichever verb calls this (open,

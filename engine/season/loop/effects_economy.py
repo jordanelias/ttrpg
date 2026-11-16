@@ -1,7 +1,7 @@
 """`season.loop.effects_economy` -- labour, repair, damage, material transfer: work, restore,
 sabotage, transfer, exchange (v9 IN-33, restored at v10 REM-2B: `transfer`'s two-sided move, both ways).
 
-EXTRACTED from `effects.py` at the per-subsystem split (Phase 4). Holds the fabric-raising pair
+Holds the fabric-raising pair
 (`work`/`restore`, both routed through the shared `_rise` formula, which stays local -- nothing
 outside this pair calls it), its mirror `sabotage` (v9 IN-12 step 9, `_fall`, the same formula with
 the sign turned, local beside it) and `transfer`, the two-sided store move, whose own private tail helper
@@ -52,16 +52,16 @@ def _eff_work(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     no branch for `work`.
 
     ⚠ THE DELTA IS READ FROM THE ACT'S OWN DECLARED CHANGES, ON ITS OWN SITE, AND NOWHERE ELSE.
-    Before G4 the accumulator summed every integer delta on ANY success Event's `changes[]` for ANY
-    site -- so an act of a verb whose row writes no `Site.condition` could move a site by riding a
-    delta on its Event, a write the matrix never saw declared. Now only an act whose row writes
-    `Site.condition` stages -- `work`, and since plan position `24e` `restore` -- and only on the site
-    it names. The DECLARED delta is unreachable from a computed act (none carries one: `H-94`).
+    Only an act whose row writes `Site.condition` stages -- `work`, and since plan position `24e`
+    `restore` -- and only on the site it names; summing every integer delta on ANY success Event's
+    `changes[]` would let a verb whose row writes no `Site.condition` move a site, a write the
+    matrix never saw declared. The DECLARED delta is unreachable from a computed act (none carries
+    one: `H-94`).
 
     ⚠⚠ PLAN POSITION `24e` -- *"`work` advances `stage` (and inherits G4's accumulator answer)"* --
     AND WHAT THAT MEANS HERE, READ AGAINST THE CONTENT OWNER. A computed `work` carries no declared
-    delta, so before `24e` it staged nothing and every one was `work.unavailable` (`H-105`: *"a loop
-    with one arm cut is a RATCHET wearing a loop's clothes"*). It now has a SECOND source, used only
+    delta, so without a second source it would stage nothing and every one would be `work.unavailable` (`H-105`: *"a loop
+    with one arm cut is a RATCHET wearing a loop's clothes"*). It has a SECOND source, used only
     when the act declares none: THE WORKS NAMING THE SITE. When a live works plans this site's kind
     at this site's rung (`queries/world_q.py::works_for`), the act stages `_rise` -- the headroom to
     the works' `ceiling`, shared among those standing at the fabric -- through the SAME accumulator,
@@ -80,18 +80,16 @@ def _eff_work(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     REJECTED: summing the declared delta AND the works' rise -- one act would then move a fabric by
     two magnitudes from two owners, and the hand-built channel (`H-94`) would stop meaning what the
     act declared."""
-    # ⚠ NO FALLBACK. This read `or next((x for x in sorted(w.sites)), None)` -- the alphabetically
-    # FIRST site in the world -- so a `work` with no site named one nobody chose. `_eff_move`
-    # refused the identical situation and this did not; found by the W-A adversarial pass, which
-    # noted the two are the same defect one verb along. `W-C` gave that answer ONE owner
-    # (`_operand`) rather than two copies of it.
+    # ⚠ NO FALLBACK: defaulting to the alphabetically FIRST site in the world would make a `work`
+    # with no site name one nobody chose. `_eff_move` refuses the identical situation, and `W-C`
+    # gave that answer ONE owner (`_operand`) rather than two copies of it.
     site = _operand(a, "site")
     site_deltas = tuple(c.delta for c in (a.changes or ())
                         if c.subject == site and c.field == "condition" and isinstance(c.delta, int))
     # v9 IN-12 step 9 (#453 K-09): `work`'s DECLARED DELTA IS RESTRICTED TO >= 0, so each verb owns one
     # sign -- `work`/`restore` raise a fabric, `sabotage` lowers it (`_eff_sabotage`, below). A hand-built
     # `work` declaring a negative delta on its site is declined (`NO_CHANGE` -> `work.unavailable`)
-    # rather than staged: before this line it was a sabotage under `work`'s name and beneficiary.
+    # rather than staged: it would be a sabotage under `work`'s name and beneficiary.
     if any(d < 0 for d in site_deltas):
         return NO_CHANGE
     delta = sum(site_deltas)
@@ -179,10 +177,9 @@ def _eff_sabotage(w: "World", a: "Act", res: "Resolution | None" = None) -> Chan
 
 @effect_for("restore")
 def _eff_restore(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
-    """PLAN POSITION `24e` -- `restore` RAISES A FABRIC. The row was TYPED (`verb_table.yaml`, W3's
-    cell: *the site exists and the actor is present at it*) and had NO EFFECT, so
-    `resolvable_verbs()` excluded it: `★` measured it formed 46 times in a populated season and
-    offered never. r2 `04` §A.6.2's moment 4, *"BUILD IT UP"*, and §A.6.5's body, built as
+    """PLAN POSITION `24e` -- `restore` RAISES A FABRIC. The row is TYPED (`verb_table.yaml`, W3's
+    cell: *the site exists and the actor is present at it*) and this is its effect: without one
+    `resolvable_verbs()` excludes the verb. r2 `04` §A.6.2's moment 4, *"BUILD IT UP"*, and §A.6.5's body, built as
     specified but for the degree term (`_rise` says why that is the identity).
 
     `work`'s ACCUMULATOR SHAPE, EXACTLY (G4, `_eff_work`'s docstring): the act STAGES its delta on
@@ -215,44 +212,28 @@ def _eff_restore(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
 def _eff_transfer(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """§54 item 7's mirror: the giver's store goes DOWN and the receiver's goes UP.
 
-    ⚠ THE FIRST VERSION ONLY DECREMENTED, and §E3 says `transfer` writes `(Rung, stores)` **×2**,
-    one per side. A one-sided transfer ANNIHILATES MATTER -- six grain left the world and arrived
-    nowhere, in an economy where `yield` is the only source (#353 `:856`). The scarcity proof still
-    passed, because it only watched the giver: a run can be right about the thing it looks at and
-    wrong about the world.
+    ⚠ BOTH SIDES: §E3 says `transfer` writes `(Rung, stores)` **×2**, one per side. A one-sided
+    transfer ANNIHILATES MATTER -- grain would leave the world and arrive nowhere, in an economy
+    where `yield` is the only source (#353 `:856`) -- and a scarcity proof that watches only the
+    giver would still pass: a run can be right about the thing it looks at and wrong about the
+    world.
 
-    G4 -- WHAT IT NAMES: BOTH RUNGS, giver first, each whole -- the two `(Rung, stores)` writes and
-    the two ids it always reported. Two no-ops become visible that the old contract reported as
-    successes: a transfer of `amount` 0, and a transfer from a rung TO ITSELF (the decrement and
-    the increment land on one store and cancel). Each moved nothing and is now `transfer.refused`.
-    Neither is a transfer; both published `transfer.made` with two receipts. MEASURED BEFORE THIS
-    POSITION on `build_realm(0)`, four seasons: no `transfer` reached this effect at all (every one
-    refused at its precondition), so no run moves."""
-    # ⚠ FOUR SILENT DEFAULTS STOOD HERE AND `W-C` DELETED ALL FOUR: `from`/`to` defaulted to
-    # `""`, `kind` to `"grain"` and `amount` to `1`. Each was §0.05's literal-in-a-body, and
-    # together they made an operand-less `transfer` a WELL-FORMED act about a granary nobody
-    # named. They are `_operand` reads now, and their two open values are fixtures with a register
-    # row and a sweep (`H-94`).
+    G4 -- WHAT IT NAMES: BOTH RUNGS, giver first, each whole -- the two `(Rung, stores)` writes.
+    Two no-ops are visible to the gate: a transfer of `amount` 0, and a transfer from a rung TO
+    ITSELF (the decrement and the increment land on one store and cancel). Each moves nothing and
+    is `transfer.refused`."""
+    # `from`/`to`/`kind`/`amount` are `_operand` reads: defaulting them (`""`, `""`, `"grain"`, `1`)
+    # would make an operand-less `transfer` a WELL-FORMED act about a granary nobody named (§0.05's
+    # literal-in-a-body). Their two open values are fixtures with a register row and a sweep (`H-94`).
     src = w.rungs.get(_operand(a, "from"))
     dst = w.rungs.get(_operand(a, "to"))
     kind, amount = _operand(a, "kind"), _operand(a, "amount")
     # ⚠ A SIDE THAT IS NOT A RUNG MEANS THE TRANSFER DID NOT HAPPEN, and returning nothing is what
-    # makes the fold emit the refusal. This branch became reachable FROM A COMPUTED ACT the moment
-    # operands became real: a person names a receiver from their question's referents and may name
-    # something that is no rung at all. The old shape moved the giver's side anyway, which is the
-    # matter ANNIHILATION this effect's own docstring records -- grain leaving the world and
-    # arriving nowhere. §42.2's polarity: an unperformable transfer refuses; it does not
-    # half-happen.
-    # ⚠ *"IT SURVIVED ONLY BECAUSE NO COMPUTED ACT EVER BOUND `from` TO BEGIN WITH"* STOOD HERE
-    # AND IS FALSE; STRUCK BY THE `W-C` ADVERSARIAL PASS. No COMPUTED act bound `from` -- but
-    # probe `F10` did, in its payload, and omitted `to`, so the old effect decremented `Hh` and
-    # delivered nowhere: `F10` DESTROYED 6 GRAIN ON EVERY PROBE RUN, in an economy where `yield`
-    # is the only source. Measured by weighing every rung across the probe's own season: total
-    # store mass ends at 107 on the pre-`W-C` tree (`45a537c`) and at 113 here, and the difference
-    # is exactly the 6. The path was reachable AND REACHED; only the computed path was closed, and
-    # `F10`'s payload edit is a BUG FIX in a live probe rather than a signature accommodation.
-    # `F10` now asserts conservation, because its old assertion set could not observe the failure
-    # it was sitting on (§0.1 point 2).
+    # makes the fold emit the refusal. A COMPUTED act reaches this branch: a person names a receiver
+    # from their question's referents and may name something that is no rung at all. Moving the
+    # giver's side anyway is the matter ANNIHILATION this effect's own docstring records -- grain
+    # leaving the world and arriving nowhere. §42.2's polarity: an unperformable transfer refuses;
+    # it does not half-happen. Probe `F10` asserts conservation.
     if src is None or dst is None:
         TRACE.decision(f"transfer names a side that is no rung -> from "
                        f"{_operand(a, 'from')!r} to {_operand(a, 'to')!r}", "E3/S27.1",
@@ -267,8 +248,7 @@ def _eff_transfer(w: "World", a: "Act", res: "Resolution | None" = None) -> Chan
         for t, term in renewed:
             t.term = term
     # BOTH SIDES, because §E3 says `transfer` writes `(Rung, stores)` twice -- one per side -- and
-    # a one-sided report would make the Event name half of what it did. The `if r is not None`
-    # filter that stood here is gone with the branch above that made it necessary.
+    # a one-sided report would make the Event name half of what it did.
     # ⚠ PLAN POSITION `17b`: EACH SUBJECT NOW NAMES THE KIND IT EARNS. The row declares
     # `term.renewed` beside `transfer.made`, and a subject earning `None` earns EVERY declared kind
     # (`loop/resolve.py::_fold`) -- so left as they were, the two rungs would publish a renewal on
@@ -336,13 +316,11 @@ def _renewals(w: "World", a: "Act", src: str, dst: str, amount) -> list:
          cancels to nothing (G4 already refuses it as a no-op), and without this clause a seat whose
          obligee lives at the seat's own rung could renew a term by paying itself;
       4. the receiving rung is where an obligee IS PRESENT (`home_of`, the one owner of *where a
-         person is* -- NOT `residence_of`; ⚠ found by the terminal Phase-2-close critique,
-         2026-09-30: this clause was written and reasoned about as "home" meaning residence, before
-         `19c` split presence from residence, and was never revisited. Its own stated reason ("the
-         larder upkeep fills") is ALSO stale since `24f`: individuals no longer draw from a larder
-         at all (`ED-IN-0255`), so upkeep paid to wherever an obligee stands fills nothing today --
-         unruled whether this clause should read `home_of` or `residence_of` (`hole_register.yaml`
-         H-174), and whether it should still cite the larder as its reason once it does).
+         person is* -- NOT `residence_of`). Its stated reason ("the larder upkeep fills") is stale
+         since `24f`: individuals no longer draw from a larder at all (`ED-IN-0255`), so upkeep
+         paid to wherever an obligee stands fills nothing today -- unruled whether this clause
+         should read `home_of` or `residence_of` (`hole_register.yaml` H-174), and whether it
+         should still cite the larder as its reason once it does.
     Then it renews, of that seat's live `oblige` edges carrying a term whose subject is present at
     the receiving rung, as many as the amount covers at `upkeep_of(seat)` apiece (`0`: all of them),
     SOONEST-MATURING FIRST, ties by edge id -- the man about to lapse is paid first, and the order
@@ -363,8 +341,7 @@ def _renewals(w: "World", a: "Act", src: str, dst: str, amount) -> list:
 
     ⚠ WHAT NO COMPUTED ACT CAN REACH TODAY, STATED RATHER THAN IMPLIED. Clause 1 needs `Act.via` on a
     `transfer`, and `decision/options.py::seat_of` sets `via` only for a `remit:` alternative.
-    ~~`transfer` is `own | hold:<store>`, so every computed transfer carries `via=None`~~ -- SINCE
-    `H-160` LIMIT 1 its first alternative is `remit:issue`, so a holder of a seat granting `issue`
+    `transfer`'s first alternative is `remit:issue` (`H-160` LIMIT 1), so a holder of a seat granting `issue`
     gives through it, out of its rung (clauses 1 and 2 met by a computed act). But no computed act
     forms an `oblige` (its row is untyped, `17a`), so there is still no term for one to renew: the
     renewal is EXECUTED by hand-built acts (`tests/test_term_upkeep.py`) and MATTER's maturation

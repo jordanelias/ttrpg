@@ -12,7 +12,7 @@ nothing else, never reads or writes `World`, holds no token and keeps no state. 
 backstop against hand-built worlds, design A6), `loop/resolve.py`'s clamp and `_rise`'s headroom
 arithmetic (fold and effect bodies) stay host.
 
-THE RULE (moved here from `world_q.ceiling` and `world_q.share`; unchanged clause for clause):
+THE RULE:
   * CEILING (r2 `04` §A.6.3): the full `scale` when no live works names the site or it declares no
     terms; otherwise `scale * min(matured, declared) // declared` -- MULTIPLY FIRST, DIVIDE LAST, so a
     2-of-3 works reads 666 and not 0; `min` keeps the ratio total if the declared list shrank below what

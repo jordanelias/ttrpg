@@ -1,10 +1,10 @@
-"""`seam/wrappers/pool.py` -- THE ONE POOL READER (CP-T01-01, moved out of `sigma.py` at B10-11).
+"""`seam/wrappers/pool.py` -- THE ONE POOL READER (CP-T01-01).
 
-`faculty` is read by the social contest (`sigma.py`, `contest_input` and `odds_of`) and, since CR-85, by combat
+`faculty` is read by the social contest (`sigma.py`, `contest_input` and `odds_of`) and, CR-85, by combat
 (`combat.py::combat_input`). `sigma.py` imports `combat.py` at module level (`fight_estimate`, `record_of`), so
-`combat.py` importing `faculty` from `sigma.py` closed a two-module import cycle (`test_import_cycle_game_state_npe`
-counts it). The reader lives here instead, a leaf both adapters import and neither is imported by: ONE OWNER, no copy.
-`sigma.py` re-exports every name it moved, so a caller reaches `sigma.faculty` as before; a test that REPLACES
+`combat.py` importing `faculty` from `sigma.py` would close a two-module import cycle (`test_import_cycle_game_state_npe`
+counts it). The reader lives here, a leaf both adapters import and neither is imported by: ONE OWNER, no copy.
+`sigma.py` re-exports the names it imports from here; a test that REPLACES
 `POOL_ADDENDS` patches THIS module (the list `faculty` reads), not `sigma`'s binding of it.
 """
 from __future__ import annotations
@@ -31,8 +31,8 @@ def _capability(entity: Any, verb: str):
 
 
 # THE POOL'S ADDENDS (CP-T01-01): each `(w, person, verb) -> int` is summed into `faculty`, the one pool
-# reader. Holds the practice addend (CP-T01-02, the first reader of `w.log`, registered below `register_pool_addend`)
-# and takes T07's; this is the place they land, so none grows its own pool rule. An addend reads
+# reader. Holds the practice addend (CP-T01-02, the first reader of `w.log`, registered below `register_pool_addend`);
+# this is the place addends land, so none grows its own pool rule. An addend reads
 # only what it is handed (`w`, the actor, the verb) and returns whole dice; it never replaces the
 # capability read, it adds to it.
 POOL_ADDENDS: list = []
@@ -47,7 +47,7 @@ def register_pool_addend(fn: Any) -> None:
 
 # THE PRACTICE ADDEND (CP-T01-02), `faculty`'s first reader of `w.log`: registered here, the one door into the
 # pool, and called from nowhere else. Its reader is `queries/world_q.py::practice`; the arm ships live (CR-18);
-# `practice_cap` 0 is the control and answers 0 without reading the log, every pool then what it was before it was registered.
+# `practice_cap` 0 is the control and answers 0 without reading the log.
 register_pool_addend(practice)
 
 
@@ -85,9 +85,9 @@ def faculty(w: Any, p: Any, verb: str) -> int:
     only a person already holds. v10 CR-20: WHERE HE HOLDS THE VOCATION'S ATTRIBUTE (`VOCATION_ATTRIBUTE`,
     `Person.attributes`) that score is the pool's base, and the pool is the LARGER of it and the capability
     key he holds (practice raises a key; it never takes dice from an attribute). WHERE HE HOLDS NONE the held
-    key stands alone and `pool_default` is the fallback, exactly as before the carrier -- so a held 0 is still
-    a person under one die (`test_odds_of.py`, `test_sc01_speak.py` pin it) and an all-absent realm rolls what
-    it rolled. Then the registered addends (`POOL_ADDENDS`) are summed on.
+    key stands alone and `pool_default` is the fallback -- so a held 0 is still
+    a person under one die (`test_odds_of.py`, `test_sc01_speak.py` pin it). Then the registered addends
+    (`POOL_ADDENDS`) are summed on.
     ⚠ `08 §3` GIVES THE POLARITY: an `assumption` grade means *inject the default, declare the site,
     sweep three points* -- never refuse the whole corpus for a missing key. `absent` is the grade
     that refuses, and this is not one."""
@@ -96,8 +96,8 @@ def faculty(w: Any, p: Any, verb: str) -> int:
 
 def score(w: Any, p: Any, verb: str, attribute: Any = None) -> int:
     """WHAT `p` HOLDS FOR `verb`'s VOCATION (B11 lane A, `10_DICE_one_score_two_roles.md` A): the larger of the held
-    capability key and the vocation's attribute he holds, else the key alone, else `pool_default` -- `faculty`'s base,
-    split out with no arithmetic moved. ONE SCORE, TWO ROLES: the base of his pool AND the score an opponent's obstacle
+    capability key and the vocation's attribute he holds, else the key alone, else `pool_default` -- `faculty`'s base.
+    ONE SCORE, TWO ROLES: the base of his pool AND the score an opponent's obstacle
     halves (`sigma.py::_opposition_of`). No addend: practice raises a pool, never an opposition. `attribute` is the
     attribute read: the vocation's own for the pool (`None`, `_authored_attribute`, looked up at the call so a test's
     patch reaches it), `_opposing_attribute` for the opposition (v10 CR-96: the row's `opposed_by` where it has one),

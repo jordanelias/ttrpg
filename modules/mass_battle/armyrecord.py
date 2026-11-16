@@ -176,7 +176,7 @@ def release(record: dict, name: str, cohort: str, count) -> dict:
 
 def disband(record: dict, name: str) -> dict:
     """The record without unit `name`; every man in it returns to the trained, unassigned pool, so no one is
-    lost. (A wrong type or a spare slot is no longer permanent.)"""
+    lost."""
     i = _sf_index(record, name)
     sf = record['units'][i]
     trained = record['trained']
@@ -383,8 +383,7 @@ def fielded(muster) -> Optional[OrderOfBattle]:
     for every cohort the host knows of (not only those near this field: an army is where its commander is, and the
     host has already decided the commander is here), the fraction being the share of each still fit to fight. A cohort
     the record names that is not in `fit` has no body left to give, and fights with nobody. A malformed record raises
-    ValueError (`validate`); an army with nobody present is not malformed, it is absent, and reads None so the host
-    fights that side as it always did."""
+    ValueError (`validate`); an army with nobody present is not malformed, it is absent, and reads None."""
     validate(muster.record)
     here = dict(muster.fit)
     try:

@@ -1,8 +1,7 @@
-"""`season.data.matrix` -- S23/S30's write matrix, extracted from `shape.py` (step 2 of the
-decomposition, a PURE MOVE: no behaviour changed, only where the code lives).
+"""`season.data.matrix` -- S23/S30's write matrix.
 
-Owns the seven-step loop's `Step`/`WriteClass` enums (six until M4 added `ENCOUNTER`,
-`04 §A.2:134` as amended 2026-09-28, `ED-IN-0279` clause (a)), the STEP -> WRITE CLASS relation,
+Owns the seven-step loop's `Step`/`WriteClass` enums (`04 §A.2:134`, `ED-IN-0279` clause (a): the
+seventh step is `ENCOUNTER`), the STEP -> WRITE CLASS relation,
 and the
 `(kind, field)` table loaded from `write_matrix.yaml` that says which step may write which record
 field, and how (S30's own rule: ANY UNMARKED CELL IS A WRITE-CLASS VIOLATION).
@@ -199,7 +198,7 @@ MATRIX: dict[tuple[str, str], MatrixRow] = _load_write_matrix()
 # a bare string (W2's own shape: no producing verb, no MATTER write) or a mapping with its own
 # `reason`/`needs` -- `Person.beliefs` is retired because #358 rev.2 §D.1.1 DELETES the field, not
 # because nothing produces it, and telling that writer to "add a producing verb" would be advice
-# for the wrong defect. Found by a read-only critic, layer-conformance pass, 2026-09-25.
+# for the wrong defect.
 _W2_LAW = ("retired by W2 -- its `emits:` kind is produced by no Part E verb "
            "and written at no MATTER site")
 _W2_NEEDS = "a Part E verb that produces its `emits:` kind, added in the same commit as the row"
@@ -218,20 +217,17 @@ MATRIX_RETIRED: dict = {
     for x in (load_yaml(WRITE_MATRIX_YAML.read_text()).get("retired") or [])
 }
 
-# S320's disclosure hook. W2 empties it BY CONSTRUCTION -- the three rows it used to carry were
-# instrument assumptions only because the old two-clause derivation could not reach them, and
-# S D2's DR-3 states all three. `report.py` still reads it, and it now reports zero.
+# S320's disclosure hook, empty BY CONSTRUCTION: S D2's DR-3 states every partition row. `report.py`
+# reads it and reports its length.
 PARTITION_ASSUMED: dict[tuple[str, str], tuple[bool, str]] = {}
 
 
 def assume_partition_row(record_kind: str, fieldname: str, social: bool, why: str) -> None:
     """THE CHANNEL, kept live so its emptiness means something.
 
-    ⚠ W2 emptied `PARTITION_ASSUMED` and reported "ZERO exercised assumptions" as its proof. An
-    adversarial pass observed that the dict had become a LITERAL NO CODE PATH COULD POPULATE, so
-    the claim was satisfiable BY DELETION and `ASSUMPTIONS.md` read "0 of 0" rather than "0 of 3".
-    That is §0.1 point 2 in its purest form: an assertion that cannot observe the failure it
-    excludes. This function is the path, so zero is now a measurement rather than an absence.
+    ⚠ A `PARTITION_ASSUMED` no code path could populate would make "ZERO exercised assumptions"
+    satisfiable BY DELETION -- §0.1 point 2: an assertion that cannot observe the failure it
+    excludes. This function is the path, so zero is a measurement rather than an absence.
 
     An instrument that must assume a schema row calls this. It should never need to — §D2's DR-3
     states the three rows that used to be assumed — and if it ever does, `report.py` says so."""
@@ -239,10 +235,8 @@ def assume_partition_row(record_kind: str, fieldname: str, social: bool, why: st
     ASSUMPTIONS_USED.add((record_kind, fieldname))
 
 
-# ⚠ REV 5. This set was WRITTEN AND NEVER READ for two revisions, while S320's comment promised
-# the assumed rows were "REPORTED IN THE OUTPUT, so a reader can see exactly how much of L4's
-# enforcement rests on the instrument". Under this file's own fidelity rule 6 that was a false
-# claim of a disclosure mechanism. `report.py` now reads it.
+# The assumed rows are "REPORTED IN THE OUTPUT, so a reader can see exactly how much of L4's
+# enforcement rests on the instrument"; `report.py` reads this set.
 ASSUMPTIONS_USED: set[tuple[str, str]] = set()
 
 

@@ -7,17 +7,15 @@ are DYNAMIC (register/override at runtime) and ADAPTABLE (open records — add f
 so the eventual primitive grounding + the cross-scale (mass <-> personal) mapping can land here without a
 schema migration and without touching the troop taxonomy.
 
-NOT YET WIRED into resolution (the engine still reads DR/speed the old way). This is a data surface the
-movement / behaviour / tactics work will read from once the grounding is settled. Importing it changes no
-engine behaviour (byte-exact)."""
+This is a data surface: resolution does not read DR/speed from it. `troop_types.registry.unit_type_for`
+reads a troop type's weapon `reach` ('melee'/'ranged') through `loadout_for`."""
 from modules.mass_battle.equipment import weapons, armour
 from modules.mass_battle.equipment.weapons import ARSENAL
 from modules.mass_battle.equipment.armour import ARMOURY
 
-# Provisional troop -> (weapon, armour) loadout, transcribed from mass_battle_v30 §B.2. INERT (nothing
-# consumes it yet) and intentionally a thin NAMED association, NOT a derivation: the primitive mapping
-# (weapon/armour physics -> speed / DR / lethality) is still being worked out. A troop type is thus a
-# "dictionary definition" that points at equipment entries — the decoupling this split enables.
+# Provisional troop -> (weapon, armour) loadout, transcribed from mass_battle_v30 §B.2. A thin NAMED
+# association, NOT a derivation: the primitive mapping (weapon/armour physics -> speed / DR / lethality)
+# is not worked out. A troop type is thus a "dictionary definition" that points at equipment entries.
 TROOP_LOADOUT = {
     "levy":             ("light_cut",   "none"),
     "light_infantry":   ("light_cut",   "light"),
@@ -29,9 +27,9 @@ TROOP_LOADOUT = {
     "artillery":        ("siege",       "none"),
     "knights_templar":  ("heavy_blunt", "heavy"),
     "pike":             ("pike",        "medium"),  # [v2 Stage E, ED-MB-0014 / P-DEC-1] pike + medium armour (disciplined heavy formation)
-    # [ED-MB-0001, gate 2] mounted_archers isn't a §B.2 troop type -- added by ED-1095/T4 (Jordan
-    # 2026-07-02) with no loadout entry yet. Same weapon as archers (a bow), light armour to keep
-    # it mobile -- the whole point of the troop type is speed + range, not endurance.
+    # [ED-MB-0001, gate 2] mounted_archers isn't a §B.2 troop type (ED-1095/T4, Jordan 2026-07-02).
+    # Same weapon as archers (a bow), light armour to keep it mobile -- the troop type is speed + range,
+    # not endurance.
     "mounted_archers":  ("bow",         "light"),
     # [ED-IN-0306, Jordan 2026-10-28: "draw from romance of the three kingdoms and total war for generic unit
     # types"] three generic types the engine lacked, each PROVISIONAL-BY-ANALOGY like the pike: stats mirror the

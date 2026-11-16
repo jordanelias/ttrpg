@@ -13,7 +13,7 @@ else, never reads or writes `World`, holds no token and keeps no state.
 THE RULE [ASSUMPTION LF-1, delegated-ruled]: a levied treasury PROVISIONS a field; it does not create
 troops. Troops stay people, and the stores bound how many of them can be fielded, at the larder's own
 ration (`subsistence_weight`: a field eats as the people it is made of eat).
-  * `on` false -- the control arm: `troops = weight`, `consumed = ()`, today's field.
+  * `on` false -- the control arm: `troops = weight`, `consumed = ()`.
   * `on` true  -- `troops = min(weight, min over kinds with ration > 0 of stores[k] // ration[k])`, never
     below 0 (a treasury driven negative fields nobody rather than a negative force), and
     `consumed = ration[k] * troops` per kind with ration > 0, in ration order. A kind the treasury does not

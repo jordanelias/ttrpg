@@ -1,8 +1,6 @@
 """`season.loop.effects_shared` -- the primitives more than one domain file in the split needs.
 
-EXTRACTED from `effects.py` at the per-subsystem split (Phase 4 of the decomposition, CLAUDE.md's
-settled requirement that each subsystem be its own module -- per-subsystem files, human-readable,
-self-contained). Holds `EFFECTS` itself and its `effect_for` decorator, the one operand reader
+Holds `EFFECTS` itself and its `effect_for` decorator, the one operand reader
 (`_operand`), the shared §10-ladder refusal (`_decline_ascent`, used by `move`/`migrate`/`found`),
 the oblige-term pair (`_oblige_term`/`_new_oblige_term`, used by `oblige`/`determine`/`_renewals`),
 and the treasury-move trio (`_shift`/`_debit`/`_exercised_office`: `_shift` is used by `transfer`/`requisition`/`found`,
@@ -61,12 +59,10 @@ def _operand(a: "Act", name: str):
     this unreachable from a COMPUTED act: a Candidate whose operands cannot be derived is never
     formed, so an act arriving here without one came from a hand-written call site.
 
-    ⚠ IT IS THE OWNER OF THE RULE, AND THREE EFFECTS HAD THEIR OWN COPY. `_eff_move` raised on a
-    missing `to` and `_eff_work` on a missing `site` -- both correct, both written twice -- while
-    `_eff_transfer` DEFAULTED four operands (`from`/`to` to `""`, `kind` to `"grain"`, `amount` to
-    `1`) and `_eff_confer` defaulted `to` to the actor, i.e. conferred an office on whoever
-    happened to be acting when the act named nobody. Same situation, four verbs, three answers.
-    §8: the rule lives once."""
+    ⚠ IT IS THE OWNER OF THE RULE (§8): an effect that defaulted a missing operand (`from`/`to` to
+    `""`, `kind` to `"grain"`, `amount` to `1`; `to` to the actor, which would confer an office on
+    whoever happened to be acting when the act named nobody) would answer *the same situation*
+    differently from one that raised."""
     d = a.payload if isinstance(getattr(a, "payload", None), dict) else {}
     if d.get(name) is None:
         raise InstrumentDefect(
@@ -82,7 +78,7 @@ def _decline_ascent(msg: str) -> Change:
     """The shared §10-ladder refusal: `move`, `migrate` and `found` each require their
     destination/parent to ascend the containment ladder and decline identically when it does not
     -- one owner for the `chose`/`alternatives` pair rather than a third hand-copy of it
-    (`/simplify`, BATCH-CLOSE Phase 2). Callers still build their own message, since what "not up
+    Callers still build their own message, since what "not up
     the ladder" names differs (a destination for `move`/`migrate`, a parent rung for `found`)."""
     TRACE.decision(msg, "S10/E3", chose="change nothing, so the fold emits the refusal",
                    alternatives=["write the edge anyway (add_tenure raises and the season "
@@ -111,7 +107,7 @@ def _oblige_term(w: "World") -> Optional[int]:
 def _new_oblige_term(w: "World", a: "Act") -> Optional["Term"]:
     """The `Term` an `oblige` edge OPENS with, for the two writers that mint one from scratch
     (`_eff_oblige`, `_eff_determine`) -- one owner for the `None if n is None else Term(...)`
-    ternary rather than a second hand-copy of it (`/simplify`, BATCH-CLOSE Phase 2). `_renewals`
+    ternary rather than a second hand-copy of it. `_renewals`
     winds an EXISTING term rather than minting one and is not one of these two."""
     n = _oblige_term(w)
     return None if n is None else Term(w.tick + n, a.id)
@@ -140,7 +136,7 @@ def _shift(src, dst, kind: str, amount) -> None:
 
 def _exercised_office(w: "World", a: "Act") -> Optional["Office"]:
     """The Office an act's `via` names, or `None` -- the one-line resolution `_eff_requisition` and
-    `_renewals` both did inline (`/simplify`, BATCH-CLOSE Phase 2). NOT `_seat_rung`: that helper's
+    `_renewals` both read. NOT `_seat_rung`: that helper's
     fallback (a document's `payload.rung`, else the actor) is for a Record write, not for either of
     these two, which have their own reasons to want the bare Office or nothing."""
     return w.offices.get(a.via) if a.via else None

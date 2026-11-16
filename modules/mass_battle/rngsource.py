@@ -1,24 +1,7 @@
 """The single owner of randomness for the mass-battle engine.
 
-WHY THIS EXISTS. This engine was developed under `tests/sim/mass_battle/` and drew from the GLOBAL
-`random` module at seven call sites. The engine it replaced at `systems/mass_battle/sim/` threaded an
-explicit `rng` parameter end to end (49 references), because of a documented 2026-05-20 defect:
-
-    "non-determinism 03ce9c79: thread world.rng through run_battle so batch reproducibility no
-     longer requires a global random.seed() pin … Pre-fix run_batch results varied between runs at
-     the same seed; post-fix, byte-identical at the same seed."
-
-Porting the canon engine over the top WITHOUT restoring that property would not merely move the
-seeded campaign goldens — it would make them UNPINNABLE, which is strictly worse: a moved golden is
-a measurement, an unreproducible one is the end of measurement. the campaign-driver regression,
-`test_f7_smoke_oracle` and `test_parliamentary_bridge` (all since deleted) all depended on same-seed byte-exactness.
-
-WHY A SCOPED SOURCE RATHER THAN A THREADED PARAMETER. The old engine's approach — an `rng=None`
-argument on every roll, passed down every call chain — is the more explicit design and it is what the
-canon engine would have if it had grown up here. Retrofitting it means touching every caller of
-`roll_pool`/`roll_pool_fractional` and every function between them and `run_battle`, in an 11,400-line
-tree. This source restores the PROPERTY (same seed -> same bytes) without that, and leaves the
-parameter-threading available as a later, separately-verifiable refactor.
+Every roll draws from `get()`. The property it provides is same seed -> same bytes, so the seeded campaign pins stay
+reproducible without an `rng` parameter threaded through every roll site between `roll_pool` and `run_battle`.
 
 PER-CALL STATE, NOT A MODULE GLOBAL (plan position `31c`, AX-4). The source is a CONTEXT VARIABLE: the
 module holds the variable, never a value; `using()` sets it for the extent of one block and resets it by
@@ -30,9 +13,8 @@ USE. Callers that own a seed scope it:
     with rngsource.using(rng):
         result = run_battle(unit_a, unit_b)
 
-Outside every block the engine draws from the global `random` module exactly as it did under
-`tests/sim/` -- the fallback the unscoped callers (the workbench, `bat.py`'s golden batteries, the
-engine tests that `random.seed`) rely on, so every existing test keeps its behaviour.
+Outside every block the engine draws from the global `random` module -- the fallback the unscoped callers
+(the workbench, `bat.py`'s golden batteries, the engine tests that `random.seed`) rely on.
 """
 from __future__ import annotations
 
