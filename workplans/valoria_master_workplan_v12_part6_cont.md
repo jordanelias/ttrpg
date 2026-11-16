@@ -13,7 +13,7 @@ GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B03-hygiene @61b37b8dc8a68a5434d423f0ed0695102e89fc9f
-GATE: Batch B03a-prose @871a9b81eab42e31963b21b487d698f8552a1cc5
+GATE: Batch B03a-prose @ae7955b7ad09ccd08df79409bed53ac0cfafc05e
 GATE: Batch B03g-go-early-landings @048724cd545117255e71d04a583d99c6cb5fe3a9
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: none — personal combat as a package, the port's first slice and the PC lane's own batches (H-08; CIP §2: "B13's is the port's first slice and the PC lane's own batches"); no row moves
@@ -43,7 +43,7 @@ EST: 3.3 h [estimate: §2.4's formula over two positions (0.4 h × 2 + 2.5 h), E
 
 | pos | item | source | state | hash | gates on |
 |---|---|---|---|---|---|
-| B13.01 | personal combat is a package, and its path seam is gone | CI-09 (H-08); D-09 | BUILD | EQUAL | Batch B03a @871a9b81eab42e31963b21b487d698f8552a1cc5 |
+| B13.01 | personal combat is a package, and its path seam is gone | CI-09 (H-08); D-09 | BUILD | EQUAL | Batch B03a @ae7955b7ad09ccd08df79409bed53ac0cfafc05e |
 | B13.99 | re-pin and close readings: the EQUAL readings recorded | E-1 | BUILD | EQUAL (records) | B13.01 |
 
 ### B13.01 — personal combat is a package, and its path seam is gone · CI-09 · BUILD · HASH EQUAL
@@ -73,7 +73,7 @@ EST: 3.3 h [estimate: §2.4's formula over two positions (0.4 h × 2 + 2.5 h), E
 - FALSIFIER and CONTROL (CI-09): "In a scratch worktree, before the edit: add `1` to one literal on a line of `modules/combat/core.py` that a fight executes → the seed-2 hash must move and the seed-0 hash must not (that pair is what shows which seed sees combat). After the edit: leave one bare `import core` in `wrapper.py` → the new test must fail (two identities) or the import must raise."
 - GATE: the five gate lines of the BATCH GATE; `python -m pytest engine/season/tests/test_combat_module.py tests/valoria/test_engine_does_not_import_systems.py -q` → pass.
 - HASH MOVERS: none ("Declared hash movers. None"; `combat_engine_v1.json` byte-identical).
-- DEPENDS ON: EXISTS-IN-TREE `engine/substrate/pc_engine.py` (`load`), `modules/combat/fight.py` (its `pc_engine.load()` line), `engine/season/seam/wrappers/combat.py::_probe`, `::engine`, `::load_error`, `modules/combat/wrapper.py::DUEL_TERMS`, `tools/export_composition.py::_KINDS`, `tests/valoria/test_engine_does_not_import_systems.py::PATH_SEAM_ALLOWED`; V12 Batch B03a @871a9b81eab42e31963b21b487d698f8552a1cc5 ("CI-02 edits the same files' comments first"), V12 B03g.04 @048724cd545117255e71d04a583d99c6cb5fe3a9 (the `module_files` block the re-export extends).
+- DEPENDS ON: EXISTS-IN-TREE `engine/substrate/pc_engine.py` (`load`), `modules/combat/fight.py` (its `pc_engine.load()` line), `engine/season/seam/wrappers/combat.py::_probe`, `::engine`, `::load_error`, `modules/combat/wrapper.py::DUEL_TERMS`, `tools/export_composition.py::_KINDS`, `tests/valoria/test_engine_does_not_import_systems.py::PATH_SEAM_ALLOWED`; V12 Batch B03a @ae7955b7ad09ccd08df79409bed53ac0cfafc05e ("CI-02 edits the same files' comments first"), V12 B03g.04 @048724cd545117255e71d04a583d99c6cb5fe3a9 (the `module_files` block the re-export extends).
 - GLOSSARY: none (step 9).
 - NAMES: flat `import core` and kin → `from modules.combat import …`; `pc_engine.load()` gone (`V12_STRUCTURE_part2.md` §5.10's B13 row: every later item applies it).
 - COST and TIER: small build, wide by file count; `sonnet`, `high` (`[UNVERIFIED: the exact lines in the 27 test files; step 1's greps list them.]`, CIP).
@@ -100,8 +100,8 @@ EST: 3.3 h [estimate: §2.4's formula over two positions (0.4 h × 2 + 2.5 h), E
 ## Batch B16M-mb-engine-words · lane MB · wave W6 · step S6 · HASH EQUAL
 INVOCATION: /methodology-execute Batch B16M-mb-engine-words
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_MB.md, Open table
-GATE: Batch B16L-mb-words @2d9590e75fd253d1d88612e2d42674e2fdb5db96
-GATE: Batch B03a-prose @871a9b81eab42e31963b21b487d698f8552a1cc5
+GATE: Batch B16L-mb-words @ae7955b7ad09ccd08df79409bed53ac0cfafc05e
+GATE: Batch B03a-prose @ae7955b7ad09ccd08df79409bed53ac0cfafc05e
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: none — the port's vocabulary (the lexicon §4 L2: "buys a correct code vocabulary for the port (`godot/`), not a game change"); kept, not cut (D-07: "in the schedule of §2.3 it runs in the MB lane at step S6 while B04 holds the IN lane, and B17, its first follower, opens at S9")
 BATCH GATE (read once, on the closing tree, `PYTHONHASHSEED=0` on every seeded command; the lexicon's "Gate (expected reading)" for L2, copied):
@@ -132,7 +132,7 @@ EST: 4.1 h [estimate: §2.4's formula over four positions (0.4 h × 4 + 2.5 h), 
 
 | pos | item | source | state | hash | gates on |
 |---|---|---|---|---|---|
-| B16M.01 | the battle loop counts field ticks: `max_turns` becomes `max_ticks` | L2-3 (D-7) | BUILD | EQUAL | Batch B16L @2d9590e75fd253d1d88612e2d42674e2fdb5db96, Batch B03a @871a9b81eab42e31963b21b487d698f8552a1cc5 |
+| B16M.01 | the battle loop counts field ticks: `max_turns` becomes `max_ticks` | L2-3 (D-7) | BUILD | EQUAL | Batch B16L @ae7955b7ad09ccd08df79409bed53ac0cfafc05e, Batch B03a @ae7955b7ad09ccd08df79409bed53ac0cfafc05e |
 | B16M.02 | a unit whose formation is gone is `disordered`, not `broken` | L2-2 (D-16) | BUILD | EQUAL | B16M.01 |
 | B16M.03 | the engine's `Unit` becomes `Army`, and `Subunit` becomes `Unit` | L2-1 (D-2) | BUILD | EQUAL | B16M.02 |
 | B16M.99 | re-pin and close readings: the EQUAL readings recorded | E-1 | BUILD | EQUAL (records) | B16M.01 to B16M.03 |
@@ -148,7 +148,7 @@ Not in this batch: the struck sub-item of L2-1, "~~`core/exchange.py::subunit_co
 - FALSIFIER and CONTROL: "Any golden digest moving" (the lexicon). Control: `python tools/ci_golden_modes_check.py` digests equal; `python -m systems.mass_battle.sim.lanchester_signature` verdict lines equal to B03a's close.
 - GATE: `git grep -n -w max_turns -- modules systems tests engine tools` → nothing; `python tools/ci_golden_modes_check.py` → equal; `python -m pytest tests/valoria/test_field_golden_pins.py tests/valoria/test_mass_battle_routes.py -q` → pass.
 - HASH MOVERS: none declared (the lexicon: "Python identifiers only: **no dict key or emitted string changes**").
-- DEPENDS ON: EXISTS-IN-TREE `modules/mass_battle/battle_loop.py::run_battle` (`max_turns=18`); V12 Batch B16L @2d9590e75fd253d1d88612e2d42674e2fdb5db96, Batch B03a @871a9b81eab42e31963b21b487d698f8552a1cc5.
+- DEPENDS ON: EXISTS-IN-TREE `modules/mass_battle/battle_loop.py::run_battle` (`max_turns=18`); V12 Batch B16L @ae7955b7ad09ccd08df79409bed53ac0cfafc05e, Batch B03a @ae7955b7ad09ccd08df79409bed53ac0cfafc05e.
 - GLOSSARY: §J row *field tick < engine phase < bout < battle < season*: its lexicon column's "L2-3" marked done, the owner pointing at `battle_loop.run_battle(max_ticks=…)`; §E row *bout* keeps "the engine calls it an "engagement turn"" until B17's `FieldOutcome.ticks` (S-3). "max_ticks": the most field ticks a battle loop runs, a field tick being about four seconds of a battle.
 - NAMES: `max_turns` → `max_ticks` (`V12_STRUCTURE_part2.md` §5.10's B16M row).
 - COST and TIER: wide mechanical; `sonnet`, `high`; the measure on `haiku`.

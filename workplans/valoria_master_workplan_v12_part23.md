@@ -313,7 +313,7 @@ IN-FLIGHT ROW: registers/handoffs/HANDOFF_IN.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
-GATE: Batch B03a-prose @871a9b81eab42e31963b21b487d698f8552a1cc5
+GATE: Batch B03a-prose @ae7955b7ad09ccd08df79409bed53ac0cfafc05e
 GATE: Batch B04-capability-home   (added by this part: the items are written with `lap` and `scenes_per_lap`, which B04.01 (PCR-4) makes; §2.1's `after` list lacks the edge)
 GATE: Batch B05-one-roll   (added: B08.05's draw is "the one sampler (A-5, `roll_net_continuous`), pool from the one pool rule" — `RIVAL`'s "Depends on: … the one sampler (B05)")
 GATE: Batch B06-keyed-draw   (added: B08.05's draw is keyed "through the one `Draw` owner (A-30; B06)" — `RIVAL`'s "and the keyed draw (B06)")
@@ -351,7 +351,7 @@ EST: 5.3 h [estimate: §2.4's formula over 7 positions (0.4 h × 7 + 2.5 h), B08
 
 | pos | item | source | state | hash | gates on |
 |---|---|---|---|---|---|
-| B08.01 | where formed NPC efforts are lost, counted before the chooser is rewritten | H-249 (intake `:129`; E8 CF-E8-2) | BUILD | EQUAL | Batch B03a @871a9b81eab42e31963b21b487d698f8552a1cc5 |
+| B08.01 | where formed NPC efforts are lost, counted before the chooser is rewritten | H-249 (intake `:129`; E8 CF-E8-2) | BUILD | EQUAL | Batch B03a @ae7955b7ad09ccd08df79409bed53ac0cfafc05e |
 | B08.02 | an interaction may hang on the band of the one before: the field, its reader, the `sequence` clause | `SEQ` edits 2 and 3 | BUILD | EQUAL | B08.01 |
 | B08.03 | the fold orders scenes, then flattens | `SEQ` edit 1 | BUILD | MOVER(behaviour) | B08.02 |
 | B08.04 | the chooser sets `after` from the row | `SEQ` edit 4, with H-249's reading | BUILD | MOVER(behaviour) | B08.03, B08.01 |
