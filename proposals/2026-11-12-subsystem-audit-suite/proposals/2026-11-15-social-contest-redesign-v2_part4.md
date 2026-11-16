@@ -155,7 +155,7 @@ carrier of "not swayed by irrelevant things".
 
 ---
 
-## H. The plan-item corrections (ordered; none applied)
+## H. The plan-item corrections (ordered; applied to the plan copy)
 
 Files: `p22` = `workplans/valoria_master_workplan_v12_part22_b24p.md`, `p22c` = `_b24p_cont.md`, `p8`, `p8c`, `p9`,
 `B22` = `..._part22.md`, `B22c`, `p34`, `p35c` = `..._part35_cont.md`.
