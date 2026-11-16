@@ -177,8 +177,8 @@ def main() -> int:
     r = run(a.seasons, a.seed)
     print(f"{a.case} · {a.seasons} season(s) · seed {a.seed}")
     for n, s in enumerate(r["seasons"]):
-        # `rounds` since `U2`: a ticked season and a one-pass one are indistinguishable in this
-        # line without it. See `SeasonDriver.season`'s return for why no Event carries a round.
+        # `rounds=` (the lap count, its key kept) since `U2`: a ticked season and a one-pass one are indistinguishable in this
+        # line without it. See `SeasonDriver.season`'s return for why no Event carries a lap.
         print(f"  season {n}: rounds={s['rounds']} acts={s['acts']} events={s['events']} "
               f"deposits={s['deposits']}")
     if a.log:

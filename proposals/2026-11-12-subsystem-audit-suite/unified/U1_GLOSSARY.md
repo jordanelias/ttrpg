@@ -145,7 +145,7 @@ derived score, choice score).
 | **interaction** | one Act inside a Scene | `04` §B.9 | "step" (A-9's word; prose may say "step" only where it quotes A-9) | `16_PESSIMIST_CORE_a_scene_runs_in_its_own_order.md` |
 | **scenario** | a standalone playable setup of one subsystem (AUDIT_BRIEF) | — (plain English) | "case file", "situation" (FA-P4 function keeps its name); `04` PART D 27a's "scenario block" is the naming rule's word | `15_INSTITUTIONS_SYNTHESIS_D` |
 | **occasion** | the Question an act answers (`Scene.occasion`) | `04` §B.9 | the Event that opened a question → **opening Event** | `16_PESSIMIST_GAME_standing_occasions` |
-| **lap** (was *round* in this sense; A-101 takes "round" for the fight) | one pass of DELIBERATE, RESOLVE and WITNESS inside a season; a season runs `scene_budget` laps | `state/carriers.py::Claim.round`, `SeasonDriver.round`, `scenes_per_round` (T; identifiers keep their names until the rename candidate `master/pc_round/PC_ROUND_SPEC_part2.md` §6 PCR-4) | **round** for this sense (A-101's round is personal combat's, §K); "season round" → **season**; "cycle" (the suite's word for a dependency cycle) | `27_MB_E`, `28_CORE_scene_access_A`/`_B`/`_C`, `16_PESSIMIST_CORE_no_stored_plan`, `_a_scene_runs_in_its_own_order`, `_the_nine_gate_and_a_knockout_reading`, `18_DETERMINISM_rival_acts_in_one_fold` (each given a `Reconciled:` note, 2026-11-12, A-101); every other file at its next edit (STAGES.md rule 3) |
+| **lap** (was *round* in this sense; A-101 takes "round" for the fight) | one pass of DELIBERATE, RESOLVE and WITNESS inside a season; a season runs `scene_budget` laps | `state/carriers.py::Claim.lap`, `SeasonDriver.lap`, `Fixtures scenes_per_lap` (T) | **round** for this sense (A-101's round is personal combat's, §K); "season round" → **season**; "cycle" (the suite's word for a dependency cycle) | `27_MB_E`, `28_CORE_scene_access_A`/`_B`/`_C`, `16_PESSIMIST_CORE_no_stored_plan`, `_a_scene_runs_in_its_own_order`, `_the_nine_gate_and_a_knockout_reading`, `18_DETERMINISM_rival_acts_in_one_fold` (each given a `Reconciled:` note, 2026-11-12, A-101); every other file at its next edit (STAGES.md rule 3) |
 | **season / tick** | one turn of the loop; `tick` its index | `loop/driver.py` (T) | "season of the year" → **season of the year** in full (`seasons_of_year`, D-U1-10) | — |
 | **year** | four seasons | ED-IN-0332; `rosters.yaml: seasons_of_year` (P) | "year = len(season_factor_draw)" | `09_WR_B_weather_with_memory_and_the_year.md` |
 | **era** | the named span during which who rules and whether the realm is troubled stay unchanged (A-84) | `world_q.Era` (P) | "reign" (the observer's line, kept apart), "realm-rung slot" (strife master's old sense) | `09_WR_strand_conclusion.md` |
@@ -416,7 +416,7 @@ stored duration.
 | battle | **engine phase** | 6 field ticks | `TICKS_PER_PHASE` (T) | MB lexicon D-7 |
 | battle | **bout** | 18 field ticks, about 70 s; two windows (a duel round may be called at a window) | `bout_ticks` (P*) | MB lexicon D-7 |
 | battle | **battle** | one or more bouts, a lull between | `max_bouts` of the field (P*) | MB lexicon D-7 |
-| season | **lap** | one pass of DELIBERATE, RESOLVE, WITNESS; `scene_budget` of them a season | `Claim.round` (T; `lap`, PCR-4) | `state/carriers.py` (T) |
+| season | **lap** | one pass of DELIBERATE, RESOLVE, WITNESS; `scene_budget` of them a season | `Claim.lap` (T) | `state/carriers.py` (T) |
 | season | **season** | one turn of the loop | `tick` | `loop/driver.py` (T) |
 | year | **year** | four seasons | `seasons_of_year` | §D |
 

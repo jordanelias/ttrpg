@@ -195,14 +195,14 @@ class SeasonDriver:
         # `inquiry` role uncovered at RESOLVE (`loop/resolve.py`'s per-act bookkeeping, `seam.find_trail`);
         # WITNESS pops each entry when it deposits the find (`loop/witness.py`). `act_of`'s shape:
         # event-keyed, driver-owned, resolver-side, and read by no person-side Query. Unlike `act_of` it
-        # does not accumulate: an entry lives from its round's RESOLVE to that round's WITNESS.
+        # does not accumulate: an entry lives from its lap's RESOLVE to that lap's WITNESS.
         self.findings: dict = {}
         # ---------------------------------------------------------------------
         # `U2` / `R-03` -- THE SCENE TICK'S OWN STATE, AND ALL OF IT LIVES HERE.
         #
-        # `D-21`: THE ROUND INDEX IS A DRIVER LOCAL, NEVER A CARRIER FIELD. `Claim.round` is the
+        # `D-21`: THE LAP INDEX IS A DRIVER LOCAL, NEVER A CARRIER FIELD. `Claim.lap` is the
         # single exception, a fact about WHEN a claim landed, which a later deliberation reads.
-        # Everything below is a fact about where the LOOP is; a `round` on `Act`, `Event` or `World`
+        # Everything below is a fact about where the LOOP is; a `lap` on `Act`, `Event` or `World`
         # would make it world state and put a fourth clock in the model (U2's falsifier (d) is the
         # AST scan that holds this).
         #
@@ -211,16 +211,16 @@ class SeasonDriver:
         # "when did this person last deliberate" stamp reset at the season boundary by definition.
         # `season()` clears them.
         # ---------------------------------------------------------------------
-        self.round: int = 0
+        self.lap: int = 0
         # Scene-action COST each person has spent this season, against `budget(p, v, ...)`.
         self._spent: dict = {}
-        # `(tick, round)` of each person's last deliberation — `questions_for`'s `since`.
+        # `(tick, lap)` of each person's last deliberation — `questions_for`'s `since`.
         self._deliberated_at: dict = {}
         # WHAT `_drop_what_was_already_done` READS: the REALISED set, not the ATTEMPTED one. An
         # opportunity KEY (`data/verbs.py::opportunity_key`: `(verb, subject)`, plus the row's
         # counterparty, `T4b`) enters here only after the fold has run and only when the act's
         # Event was not one of its row's `emits_on_refusal` kinds. Recording the ATTEMPT would bar a
-        # refused act from ever being retried, including in a later round whose world had made its
+        # refused act from ever being retried, including in a later lap whose world had made its
         # precondition true -- the channel R-03 exists to open. What the budget was spent on and what
         # may be retried are different sets; only the second is kept.
         self._realised: dict = {}
@@ -241,44 +241,44 @@ class SeasonDriver:
                actorless: Optional[list[Event]] = None,
                contest_max_depth: Optional[int] = None,
                host: Optional[Any] = None) -> dict:
-        """`U2` / `R-03`: **a season is R ROUNDS, and MATTER and CALENDAR are not among them.**
+        """`U2` / `R-03`: **a season is R LAPS, and MATTER and CALENDAR are not among them.**
 
         R-03 reads *seasons must tick scene-by-scene, so what occurs after one scene can impact
-        the next scene*. DELIBERATE, RESOLVE and WITNESS run once per round, so what happens in one
+        the next scene*. DELIBERATE, RESOLVE and WITNESS run once per lap, so what happens in one
         scene reaches a later scene inside the same season.
 
         ⚠ **MATTER AND CALENDAR STAY ONCE PER SEASON, AND THAT IS A LAYER-1 CONSTRAINT RATHER THAN
         A PERFORMANCE CHOICE.** `01_AXIOMS.md:151` names AX-5's three motions — *"MATTER, BODIES,
         AND THE FADING OF MEMORY"* — as seasonal, and `04 §C.1:504`'s barrier 1 with D-17/D-21 make
-        a docket that formed five times a season A FOURTH CLOCK. **Rounds subdivide ACTS, not
+        a docket that formed five times a season A FOURTH CLOCK. **Laps subdivide ACTS, not
         matter.** So the wear, the decay and the calendar tick once and the scene tick runs inside
         them.
 
-        ⚠ **`w.tick` ADVANCES ONCE (D-45, `04:979`), AND `w.draw` RESETS ONCE.** The round is not a
-        tick: ids stay derived from `(seed, tick, subject, purpose)` and the round enters through
+        ⚠ **`w.tick` ADVANCES ONCE (D-45, `04:979`), AND `w.draw` RESETS ONCE.** The lap is not a
+        tick: ids stay derived from `(seed, tick, subject, purpose)` and the lap enters through
         `purpose`, which is what `04 PART D row 35` requires of a new draw (*no counter, no
         service*). U2's falsifier (d) is an AST scan for exactly one assignment to `w.tick` in this
         module.
 
-        ⚠ **THE FREEZE IS PER ROUND.** S26.2 freezes the world from the end of MATTER to the start
+        ⚠ **THE FREEZE IS PER LAP.** S26.2 freezes the world from the end of MATTER to the start
         of RESOLVE, and RESOLVE thaws it (`resolve.py`, `w.frozen = False`). With one pass that was
-        one freeze; with R rounds each round re-freezes before its DELIBERATE, which is the same
+        one freeze; with R laps each lap re-freezes before its DELIBERATE, which is the same
         rule applied R times rather than a second rule.
 
-        ⚠ **WITNESS RUNS PER ROUND AND MATTER'S EVENTS ARE WITNESSED ONCE.** A deposit that only
-        landed at the end of the season could not reach a later round's deliberation, which is the
-        whole channel R-03 asks for. MATTER's and CALENDAR's events are seasonal, so they join round
-        0's fan-out and no other — carrying them into every round would deposit one wear five times.
+        ⚠ **WITNESS RUNS PER LAP AND MATTER'S EVENTS ARE WITNESSED ONCE.** A deposit that only
+        landed at the end of the season could not reach a later lap's deliberation, which is the
+        whole channel R-03 asks for. MATTER's and CALENDAR's events are seasonal, so they join lap
+        0's fan-out and no other — carrying them into every lap would deposit one wear five times.
 
-        ⚠ **THE CONTROL IS THE `scene_budget = 1` ARM**: one round, which is the one-pass loop
-        reproduced THROUGH this code path rather than around it. (`H-124`'s `scenes_per_round = 5`
+        ⚠ **THE CONTROL IS THE `scene_budget = 1` ARM**: one lap, which is the one-pass loop
+        reproduced THROUGH this code path rather than around it. (`H-124`'s `scenes_per_lap = 5`
         is not that arm: a person whose triage leaves budget UNSPENT empties their queue with
-        remainder left, so a later round asks them again.)
+        remainder left, so a later lap asks them again.)
 
         ⚠ `host` (v10 REM-31, IN-46: the grid mode's suspension) IS THE PLAYABLE MODE'S ONE ARGUMENT
         (`queries/inputs.py::PlayHost`), and it reaches ENCOUNTER ALONE: RESOLVE is called without it, so
         the season can suspend at one step only, inside one provider call for one deferred act. `None` is
-        AUTOMATED, every fight engine-decided. The suspension is a CALL-OUT: the round's `acts`, `events`
+        AUTOMATED, every fight engine-decided. The suspension is a CALL-OUT: the lap's `acts`, `events`
         and `pending_matter` stay in this frame, and ENCOUNTER's token is minted ONCE, in the argument
         expression below, never kept, never re-minted on resume -- there is no resume but the decider's
         return. The draw ordinal resets once per tick (above) and the decider is handed no `World`, so by convention it
@@ -299,22 +299,22 @@ class SeasonDriver:
         w.draw = 0                 # S33: the draw ordinal is per-TICK, so replay is exact
         w._departed.clear()        # H-206: per-tick scratch (`departed_from` answers only for its own tick)
         # `U2`: season-local. See `__init__` for why these reset and the three above it do not.
-        self.round = 0
+        self.lap = 0
         self._spent, self._deliberated_at, self._realised = {}, {}, {}
         # G2 / `04 §C.1`: ONE TOKEN PER BARRIER, MINTED HERE, PASSED IN, NEVER KEPT. Each is built
         # inline in the call so no local outlives its step -- the pseudocode's `drop` is the end of
         # the expression. DELIBERATE, below, is the one step called with none.
         calendar_events = self.calendar(mint_token(w, WriteClass.CALENDAR))
         matter_events = self.matter(mint_token(w, WriteClass.MATTER), actorless)
-        rounds = int(w.fixtures.get("scene_budget"))
+        laps = int(w.fixtures.get("scene_budget"))
         n_acts, n_events, deposits = 0, len(matter_events), 0
         # IN-29: CALENDAR's own Events (`date.fired`) are seasonal like MATTER's and ride the same
-        # first-round fan-out, in barrier order. `n_events` does not count them (it counts MATTER's
-        # and each round's); the log already holds these.
+        # first-lap fan-out, in barrier order. `n_events` does not count them (it counts MATTER's
+        # and each lap's); the log already holds these.
         pending_matter = calendar_events + matter_events
-        for r in range(rounds):
-            self.round = r
-            # S26.2 again, not a second rule: RESOLVE thaws, so each round re-freezes before its
+        for r in range(laps):
+            self.lap = r
+            # S26.2 again, not a second rule: RESOLVE thaws, so each lap re-freezes before its
             # own DELIBERATE. MATTER did the first one.
             # Barrier 2 (04:509): the tenure store is made whole BEFORE the freeze, by the driver --
             # the owner of barrier lifetimes (04:155). DELIBERATE owns nothing (04:158). `_rehome`
@@ -337,8 +337,8 @@ class SeasonDriver:
             # ⚠⚠ **WHAT WAS REALISED, AS OPPOSED TO WHAT WAS ATTEMPTED -- KNOWABLE ONLY HERE,
             # AFTER THE FOLD.** `deliberate` records an attempt at RELEASE, when the scene-action is
             # spent. Whether the act DID anything is the fold's answer, and
-            # `_drop_what_was_already_done` must read that: an act attempted and REFUSED in round 0
-            # must be retryable in round 3, because a later round's world may have made its
+            # `_drop_what_was_already_done` must read that: an act attempted and REFUSED in lap 0
+            # must be retryable in lap 3, because a later lap's world may have made its
             # precondition true (R-03's own channel).
             # ⚠ A REFUSAL IS THE ROW'S OWN `emits_on_refusal` KIND, WHICH IS THE ONLY DECLARATION
             # OF WHAT A REFUSAL LOOKS LIKE (§E2: *failure emits, never raises*). An act that emitted
@@ -363,8 +363,8 @@ class SeasonDriver:
             for e in events:
                 w.log.append(e)              # S19.5 -- ONE LOG, NOT TWO
                 TRACE.event(e.id, e.kind, e.causes)
-            # MATTER's and CALENDAR's events are seasonal and join the FIRST round's fan-out only;
-            # the alternative deposits one wear once per round, which is the fourth clock this
+            # MATTER's and CALENDAR's events are seasonal and join the FIRST lap's fan-out only;
+            # the alternative deposits one wear once per lap, which is the fourth clock this
             # docstring refuses.
             deposits += self.witness(mint_token(w, WriteClass.INTERIOR), pending_matter + events)
             pending_matter = []
@@ -376,11 +376,11 @@ class SeasonDriver:
         # what an ending is and why the realm as built reaches none.
         endings = world_q.endings_reached(w)
         w.tick += 1
-        # `rounds` IS REPORTED because the tick is otherwise invisible in the artifacts: the
+        # `rounds` (the lap count; the output key keeps its string) IS REPORTED because the tick is otherwise invisible in the artifacts: the
         # summary's `acts/events/deposits` are also what a one-pass season produces. It is a
-        # SEASON-LEVEL FIGURE and no Event carries a round (`D-21`: the round index is a driver
-        # local; `Claim.round` is the one carrier field, because `questions_for`'s `since` reads it).
-        return dict(acts=n_acts, events=n_events, rounds=rounds,
+        # SEASON-LEVEL FIGURE and no Event carries a lap (`D-21`: the lap index is a driver
+        # local; `Claim.lap` is the one carrier field, because `questions_for`'s `since` reads it).
+        return dict(acts=n_acts, events=n_events, rounds=laps,
                     deposits=deposits, hash=w.content_hash(), endings=endings)
 
 # ---------------------------------------------------------------------------

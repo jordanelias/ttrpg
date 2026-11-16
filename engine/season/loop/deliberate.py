@@ -77,11 +77,11 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
     k_view = w.fixtures.get("view_k")
     # ⚠⚠ `scene_budget` HAS TWO READERS AND THEY READ IT AS TWO DIFFERENT QUANTITIES. Here it is the
     # BASE a person's own budget starts from, before `H-70`'s office/condition/leg modifiers --
-    # `H-10`'s declared `site:`. In `driver.py::season` it is the COUNT OF ROUNDS. The register row
+    # `H-10`'s declared `site:`. In `driver.py::season` it is the COUNT OF LAPS. The register row
     # names both; a session changing one must decide whether it means the other.
     # ⚠ **AND THE PAIR IMPOSES A CEILING THE DESIGN DOES NOT: a person can hold more budget than
-    # the season has slots to release.** Releasable = `rounds x scenes_per_round` =
-    # `scene_budget x scenes_per_round` (5 x 1 = 5 at the shipped fixtures), while `budget()`
+    # the season has slots to release.** Releasable = `laps x scenes_per_lap` =
+    # `scene_budget x scenes_per_lap` (5 x 1 = 5 at the shipped fixtures), while `budget()`
     # returns `scene_budget + budget_office_bonus x live holds - penalties`: one live `hold` gives
     # 6 against a ceiling of 5, so an office-holder's sixth scene is UNSPENDABLE. S26.3 says the
     # budget varies BY OFFICE, so this silently denies what the design grants.
@@ -91,12 +91,12 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
     # hold per office.
     # ⚠ AND THE COUNT IS WIDER THAN OFFICES: `budget()` counts every live `hold`, and
     # `_eff_create_record` mints one per Record, so `headless`'s Carin is over the ceiling from her
-    # first record. That is `H-92`, and it is a PREREQUISITE of any repair that derives the round
+    # first record. That is `H-92`, and it is a PREREQUISITE of any repair that derives the lap
     # count from the budget -- otherwise a season lengthens on records. The repair's shape is still
     # a design call.
     k_budget = w.fixtures.get("scene_budget")
     q_rule = w.fixtures.get("question_aggregation_rule")
-    per_round = w.fixtures.get("scenes_per_round")
+    per_lap = w.fixtures.get("scenes_per_lap")
     w._in_parallel_map = True       # S51: WorkerThreadPool over persons. The one that pays.
     ext = w.fixtures.get("extended_scene_cost")
     # v10 REM-31 (`04` PART D row 41a): `choose` -- and through it a PLAYABLE host's own callback, which may
@@ -147,14 +147,14 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
         v = decision.assemble(me, q_p, k_view, questions=qs, odds=believed_odds_query(w, p))
         # S26.3: the PERSON asks their own budget. `choose` receives the QUERY, not the answer.
         # ⚠ `U2`: THE REMAINDER, NOT THE WHOLE. The budget is the SEASON's and the season is now
-        # several rounds, so what a person has left to spend is what they were given minus what
+        # several laps, so what a person has left to spend is what they were given minus what
         # they have already spent.
         ask_budget = lambda p=p, me=me, v=v: max(
             0, decision.budget(me, v, k_budget, w.fixtures) - self._spent.get(p.id, 0))
         b = ask_budget()
         # -------------------------------------------------------------------
         # `U2`: A PERSON WITH BUDGET LEFT IS ASKED TO CHOOSE AT EVERY CALL, AND NO PLAN IS STORED.
-        # What `choose` returns is released this round up to `scenes_per_round` and the unreleased
+        # What `choose` returns is released this lap up to `scenes_per_lap` and the unreleased
         # tail is not kept: the next lap asks again, over what the person then reads.
         # -------------------------------------------------------------------
         scenes: list = []
@@ -167,10 +167,10 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
             chosen = as_scenes(produced, p.id, w)
             # ⚠⚠ **BOTH CALLER-CONTRACT CHECKS ARE INSIDE THIS BRANCH.** They ask *did `choose` return
             # more than it was given*, which is a question about a RETURN VALUE, so they belong where
-            # the return happens. Outside it they would re-examine the QUEUE every round against a
+            # the return happens. Outside it they would re-examine the QUEUE every lap against a
             # remainder that had since shrunk, and a person holding one unreleased scene with a
             # remainder of 0 would be accused of "returning 1 scene against a budget of 0" -- about
-            # a call made three rounds earlier that was lawful when made. The release loop below
+            # a call made three laps earlier that was lawful when made. The release loop below
             # enforces the remainder by DEFERRING rather than refusing, the only reading that leaves
             # the person's triage intact.
             #
@@ -212,27 +212,27 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
                         needs="a scene carries 1-3 verb applications; the bound is swept, not constant",
                         law="`H-76`, `assumption`. `player_agency_v30.md` §6.3 -- 'A scene contains 1-3 mechanical interactions' -- which is CANONICAL but pre-#337, so under CLAUDE.md §0.05 it is REFERENCE and this is a swept default, not a rule of the design. Jordan ruled the UNIT and the NUMBER of scenes; he did not rule this")
             scenes = _drop_what_was_already_done(chosen, self._realised.get(p.id) or set())
-            _qualify_by_round(scenes, w, self.round)
-            self._deliberated_at[p.id] = (w.tick, self.round)
+            _qualify_by_lap(scenes, w, self.lap)
+            self._deliberated_at[p.id] = (w.tick, self.lap)
         # ⚠ THE TRACE IS PER-SCENE, AND THE UNITS MUST NOT BE MIXED: `b` is a SCENE budget, and
         # enumerating the FLATTENED interactions against it would publish `budget_left=-10` for a
         # lawful season. A name is where the next reader learns what a number counts, and so is a
         # unit. `scene_left` is scenes; `interaction` is the position inside the scene.
         # -------------------------------------------------------------------
-        # `U2`: THE RELEASE. At most `scenes_per_round` (`H-124`) of what the person chose runs
-        # this round, and only while their season remainder covers the cost. The rest is not kept
+        # `U2`: THE RELEASE. At most `scenes_per_lap` (`H-124`) of what the person chose runs
+        # this lap, and only while their season remainder covers the cost. The rest is not kept
         # (the next lap asks again); a scene they cannot afford is left unreleased rather than
         # trimmed, because the affordability is a fact about the season and not about the scene.
-        # ⚠ THE ONE-PASS ARM IS `scene_budget = 1`, NOT `scenes_per_round = 5`: five releases a
-        # person's whole season in round 0 only when their triage spends the whole remainder; one
+        # ⚠ THE ONE-PASS ARM IS `scene_budget = 1`, NOT `scenes_per_lap = 5`: five releases a
+        # person's whole season in lap 0 only when their triage spends the whole remainder; one
         # that leaves budget UNSPENT empties its queue with remainder left and is asked again in a
-        # later round, which the one-pass loop could not do. The arm that reproduces the one-pass
-        # multisets exactly is the one-ROUND arm. See `H-124`.
+        # later lap, which the one-pass loop could not do. The arm that reproduces the one-pass
+        # multisets exactly is the one-LAP arm. See `H-124`.
         # -------------------------------------------------------------------
         produced = []
         left = b
         released = 0
-        while scenes and released < per_round:
+        while scenes and released < per_lap:
             cost = scenes[0].cost(ext)
             if cost > left:
                 break
@@ -290,7 +290,7 @@ def _drop_what_was_already_done(scenes: list, taken: set) -> list:
     ⚠⚠ **THIS IS NOT A NEW RULE — IT IS THE ONE THE ONE-PASS LOOP HAD BY CONSTRUCTION, MADE
     EXPLICIT BECAUSE THE TICK REMOVED THE CONSTRUCTION.** `pack_scenes` consumes a ranking
     POSITIONALLY: chunk 1 is the top three candidates, chunk 2 the next three, chunk 3 the next.
-    One call, three scenes, nine distinct opportunities. Re-deliberating every round restarts at
+    One call, three scenes, nine distinct opportunities. Re-deliberating every lap restarts at
     the top of a freshly-derived ranking, so the person takes their best three again, and again.
 
     ⚠ **AND S26.3 IS WHY IT IS A DEFECT RATHER THAN A CURIOSITY.** The budget exists to create
@@ -307,8 +307,8 @@ def _drop_what_was_already_done(scenes: list, taken: set) -> list:
     could not express at all.
 
     ⚠⚠ **`taken` IS WHAT WAS *REALISED*, NOT WHAT WAS *ATTEMPTED*.** Recording the pair at RELEASE,
-    before RESOLVE, would bar an act ATTEMPTED AND REFUSED in round 0 for the rest of the season --
-    including when a later round's world made its precondition TRUE, the single most natural
+    before RESOLVE, would bar an act ATTEMPTED AND REFUSED in lap 0 for the rest of the season --
+    including when a later lap's world made its precondition TRUE, the single most natural
     instance of *what occurs after one scene can impact the next scene*: a person who tried to
     release a tenure they did not yet hold could never try again once they did.
     `SeasonDriver.season` promotes a pair into this set only after the fold has run and only
@@ -351,35 +351,35 @@ def _drop_what_was_already_done(scenes: list, taken: set) -> list:
     return out
 
 
-def _qualify_by_round(scenes: list, w: World, r: int) -> None:
-    """`U2` / `R-03`: A RE-DELIBERATION MINTS INSIDE THE SAME TICK, SO ITS IDS NEED THE ROUND.
+def _qualify_by_lap(scenes: list, w: World, r: int) -> None:
+    """`U2` / `R-03`: A RE-DELIBERATION MINTS INSIDE THE SAME TICK, SO ITS IDS NEED THE LAP.
 
     ⚠ **THIS IS A NECESSITY, NOT A PRECAUTION.** `mint(pid, verb, subj)` derives
     `H(seed, tick, pid, f"act:{verb}:{subj}")`, and `tick` advances once per SEASON. A person
-    re-deliberated in a later round who chooses the same verb on the same subject therefore mints
+    re-deliberated in a later lap who chooses the same verb on the same subject therefore mints
     THE SAME ACT ID as the one already resolved, and the fold derives each Event id from the act's,
     so the duplication reaches the log. U2's design note calls this out as decision 6.
 
     ⚠ **THE DRIVER DOES IT, AND THE ARGUMENT IS `make_chooser`'s OWN.** That docstring explains why
     a person is handed a minter rather than minting for themselves: *"§33 derives every id from the
     world seed and the tick … the barrier passes a minter closed over the seed and tick, which are
-    THE CLOCK, NOT ANYBODY'S INTERIOR."* The round is part of that clock — a person cannot know
-    which round it is and has no business knowing — so the term that names it is added at the
-    barrier, by the one object that does know. The alternative, threading the round through
+    THE CLOCK, NOT ANYBODY'S INTERIOR."* The lap is part of that clock — a person cannot know
+    which lap it is and has no business knowing — so the term that names it is added at the
+    barrier, by the one object that does know. The alternative, threading the lap through
     thirty-one caller-built minters, would put a fact about the loop into every harness and test
     that builds one.
 
-    ⚠ **ROUND 0 IS UNTOUCHED, WHICH IS WHAT KEEPS THE CONTROL A CONTROL.** `r == 0` returns
-    immediately, so a one-round season mints byte-identical ids to the pre-tick loop and the
+    ⚠ **LAP 0 IS UNTOUCHED, WHICH IS WHAT KEEPS THE CONTROL A CONTROL.** `r == 0` returns
+    immediately, so a one-lap season mints byte-identical ids to the pre-tick loop and the
     `scene_budget = 1` arm reproduces its Event multiset exactly. Only a re-deliberation — the case
     that could not arise before — is qualified.
 
     ⚠ **RE-DERIVED, NOT RE-HASHED.** The new purpose is the original purpose plus `:r{n}`, so a
     reader can see what the id is of; hashing the previous id would make it opaque. The scene is
-    derived from `(actor, index, round)`, which is `pack_scenes`'s own purpose shape with the round
+    derived from `(actor, index, lap)`, which is `pack_scenes`'s own purpose shape with the lap
     added.
     `04 PART D row 35` allows exactly this: `H(seed, tick, subject, purpose)`, *no counter, no
-    service*, with `purpose` uniqueness a CONVENTION — and the round is what makes this one
+    service*, with `purpose` uniqueness a CONVENTION — and the lap is what makes this one
     unique."""
     if r == 0:
         return
@@ -387,7 +387,7 @@ def _qualify_by_round(scenes: list, w: World, r: int) -> None:
         for a in sc.acts:
             a.id = H(w.world_seed, w.tick, a.actor,
                      f"act:{a.verb}:{act_key(a.verb, _subject_of(a), a.payload)}:r{r}")
-        # ⚠ THE SCENE IS RE-DERIVED FROM `(actor, index, round)`, NOT `f"scene:{sc.id}:r{r}"`:
+        # ⚠ THE SCENE IS RE-DERIVED FROM `(actor, index, lap)`, NOT `f"scene:{sc.id}:r{r}"`:
         # `sc.id` is ALREADY a digest at this point, so embedding it makes the purpose opaque -- a
         # reader can no longer see what the id is of, which is the only reason the act branch
         # re-derives.

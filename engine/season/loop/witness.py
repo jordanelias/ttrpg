@@ -6,7 +6,7 @@ function and `inspect.getsource(SeasonDriver.witness)` returns THIS SOURCE, whic
 read a step's body rely on (ED-IN-0203 step 9).
 
 ⚠ **THE TOKEN IS HANDED IN BY THE DRIVER (G2).** `SeasonDriver.season` mints an INTERIOR `Token`
-through `loop/driver.py::mint_token` and passes it as `token`, once per round; every gate write
+through `loop/driver.py::mint_token` and passes it as `token`, once per lap; every gate write
 below presents it. This module constructs none and calls no minter -- `tests/test_g2_token.py`
 fails if it does.
 """
@@ -314,13 +314,13 @@ def _found_claims(self, w, e: Event, claim_rule: str, conf, mode: str, gain, cga
         if HAND_TERM not in terms:
             subjects = non_anchor_subjects(subjects, anchor_of(w, f))
         out = [Claim(H(w.world_seed, w.tick, pid, f"found:{e.id}:{fid}:{n}"), pid, subj, f.kind,
-                     True, w.tick, src, conf, "own", self.round, doer=None)
+                     True, w.tick, src, conf, "own", self.lap, doer=None)
                for n, subj in enumerate(subjects)]
         subj = seen_subject(w, f, pid, mode)
         if subj is not None:
             masked = seen_showing(w, f, act_f, terms)
             out.append(Claim(H(w.world_seed, w.tick, pid, f"found_seen:{e.id}:{fid}"), pid, subj,
-                             SEEN_PREDICATE, masked, w.tick, src, conf, "own", self.round, doer=None))
+                             SEEN_PREDICATE, masked, w.tick, src, conf, "own", self.lap, doer=None))
         for c in out:
             yield p, f, (_refract(c, p, FOUND_CHANNEL, gain, prior_act, prior_weigh, cgain)
                          if refracting else c)
@@ -467,14 +467,14 @@ def witness(self, token: Token, events: list[Event]) -> int:
     # ⚠⚠ `hold_force(w, rec.id)` ANSWERS THE RECORD'S FINAL HOLDER FOR THE WHOLE BARRIER, NOT WHO
     # THIS EVENT'S OWN CHANGE INSTALLED. If
     # the same Record changes hold TWICE within one `witness()` call's `events` (e.g. two chained
-    # `give`s in one round, A->B then B->C), both events' entries here resolve to the SAME final
+    # `give`s in one lap, A->B then B->C), both events' entries here resolve to the SAME final
     # holder (C) -- so B, who genuinely held the Record however briefly and is the one who received
     # it at their own event, never gets listed as a holder anywhere and mints no `content:<kind>`
     # claim for it; the later dedup (below) then suppresses even the eventual C-side deposit if C
     # also witnessed the first event. UNREACHABLE ON THE CURRENT TREE: `give` is the only verb this
     # loop's `_hold_tenure_ends` scan reaches (`oblige` opens no `hold`, so it never enters
     # `newly_held` at all), and `give` is chooser-unreachable (untyped, `operands_for` never derives
-    # it) -- no hand-built test exercises two gives of one Record in one round either. A real fix
+    # it) -- no hand-built test exercises two gives of one Record in one lap either. A real fix
     # keys this off the CHANGE's own before/after Tenure diff (`_hold_tenure_ends` already walks
     # it) rather than a fresh `hold_force` read; not taken here, since nothing on the tree reaches
     # this branch to verify a fix against.
@@ -615,13 +615,13 @@ def witness(self, token: Token, events: list[Event]) -> int:
                                                 act_refs(self.act_of.get(e.id)))):
             cid = (e.id if via_knot and n == 0
                    else H(w.world_seed, w.tick, pid, f"claim:{e.id}:{n}"))
-            # ⚠ `self.round` IS THE LAST ARGUMENT AND `U2` IS WHY. §F1 Q2 is *a claim LANDING in
-            # the holder's ledger*, and a season is now several rounds: a claim deposited in round
-            # 3 is NEW to a person who last deliberated in round 3, and `when` alone cannot say so
-            # because it is the same tick. `questions_for(w, p, since=(tick, round))` compares the
-            # pair. Unstamped, every claim would read `round = 0` and a later round's deposit would
+            # ⚠ `self.lap` IS THE LAST ARGUMENT AND `U2` IS WHY. §F1 Q2 is *a claim LANDING in
+            # the holder's ledger*, and a season is now several laps: a claim deposited in lap
+            # 3 is NEW to a person who last deliberated in lap 3, and `when` alone cannot say so
+            # because it is the same tick. `questions_for(w, p, since=(tick, lap))` compares the
+            # pair. Unstamped, every claim would read `lap = 0` and a later lap's deposit would
             # sort BEFORE the deliberation that should see it -- Q2 dead inside the season.
-            c = Claim(cid, pid, subj, e.kind, True, w.tick, src, conf, "own", self.round,
+            c = Claim(cid, pid, subj, e.kind, True, w.tick, src, conf, "own", self.lap,
                       doer=doer)
             if refracting:
                 c = _refract(c, p, channel, gain, prior_act, prior_weigh, cgain)
@@ -721,7 +721,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
                 # increasing, so no two ids collide.
                 oc = Claim(H(w.world_seed, w.tick, pid, f"obs:{e.id}:{len(seen_obs)}"),
                            pid, o.subject, o.predicate, o.value, w.tick, src, conf, "own",
-                           self.round, doer=doer)   # `U2`: see the deposit above
+                           self.lap, doer=doer)   # `U2`: see the deposit above
                 if refracting:
                     oc = _refract(oc, p, channel, gain, competence_gain=cgain)
                 _deposit(p, oc, e)
@@ -739,7 +739,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
         if _seen is not None:
             sc = Claim(H(w.world_seed, w.tick, pid, f"seen:{e.id}"),
                        pid, _seen[0], SEEN_PREDICATE, _seen[1], w.tick, src, conf, "own",
-                       self.round, doer=doer)   # `U2`: see the first deposit
+                       self.lap, doer=doer)   # `U2`: see the first deposit
             if refracting:
                 sc = _refract(sc, p, channel, gain, prior_act, prior_weigh, cgain)
             _deposit(p, sc, e)
@@ -766,7 +766,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
                 continue
             dc = Claim(H(w.world_seed, w.tick, pid, f"content:{e.id}:{rec.id}"),
                        pid, rec.id, pred, said, w.tick, src, conf,
-                       "own", self.round, doer=doer)   # `U2`: see the first deposit
+                       "own", self.lap, doer=doer)   # `U2`: see the first deposit
             if refracting:
                 dc = _refract(dc, p, channel, gain, competence_gain=cgain)
             _deposit(p, dc, e)
@@ -874,7 +874,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
                     _circle = _circle_of(w, _act, privacy)
                     tc = Claim(_told_hash or H(w.world_seed, w.tick, pid, f"told:{e.id}"),
                                pid, _held.subject, _held.predicate, _told_val, w.tick,
-                               "told_by", _held.confidence, _circle or "own", self.round,
+                               "told_by", _held.confidence, _circle or "own", self.lap,
                                chain=_held.chain + (_act.actor,))
                     if refracting:
                         tc = _refract(tc, p, channel, gain, competence_gain=cgain)
@@ -894,7 +894,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
     # shows (`_found_claims`). After the fan, IN-22's purview append's precedent for a deposit outside the
     # channel fan, so every fan deposit lands in the order it did. `causes=[finding, trail]`: the causal
     # walk runs response -> claim -> finding -> the covert act, the arc ED-FI-0002 asks for.
-    # ⚠ LAYER 1 (`04` §A.2): see `seam/wrappers/fieldwork.py`. An empty `self.findings` -- every round
+    # ⚠ LAYER 1 (`04` §A.2): see `seam/wrappers/fieldwork.py`. An empty `self.findings` -- every lap
     # with no graded finding of a covert trail -- deposits nothing, so this block is inert.
     if self.findings:
         for e in events:

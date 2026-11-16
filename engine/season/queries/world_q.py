@@ -766,7 +766,7 @@ def reception(w: World, speaker: str, venue: Optional[str]) -> float:
     STEP 20, ROUTE EROSION, INSIDE THE SUM: a hearer who holds, UNTOLD, a `dominance`-route deed done
     TO the speaker by somebody else (`person_q.suffered_deeds`; `rosters.yaml: standing_routes`) has
     called his bluff: every `dominance`-route deed of the speaker's that hearer holds no newer
-    (`(when, round)`) than the latest such sighting counts zero. ⚠ `(when, round)` IS THE CLAIM'S
+    (`(when, lap)`) than the latest such sighting counts zero. ⚠ `(when, lap)` IS THE CLAIM'S
     DEPOSIT TIME, NOT THE DEED'S: a told or found copy is stamped with the tick it was deposited
     (`loop/witness.py`), so a hearer told after the bluff of a deed from before it keeps that copy
     at full weight; no field carries the deed's own tick on a copy (`H-215`'s named limit). One
@@ -790,9 +790,9 @@ def reception(w: World, speaker: str, venue: Optional[str]) -> float:
         for c in attributed_deeds(h.ledger, speaker):
             if c.predicate in DOMINANCE_KINDS:
                 if called is _UNREAD:
-                    called = max(((s.when, s.round) for s in suffered_deeds(h.ledger, speaker)
+                    called = max(((s.when, s.lap) for s in suffered_deeds(h.ledger, speaker)
                                   if s.predicate in DOMINANCE_KINDS), default=None)
-                if called is not None and (c.when, c.round) <= called:
+                if called is not None and (c.when, c.lap) <= called:
                     continue
             if axis_w is None:
                 axis_w = projected_axes(h, shift)
@@ -3697,9 +3697,9 @@ def wounded_with(w: World, p: Person) -> tuple:
     is below his OWN ceiling (`Person.body_ceiling`, CP-T03-07), then, sorted by id, each OTHER living person `with`
     him (`place_of`, `with`'s one owner, as the `with` stem reads it) whom HE BELIEVES below whole: the newest
     `(person, "body", v)` claim his own ledger holds about that person (CP-T03-02's Observation, or a told copy of it;
-    newest by `(when, round)`, a later ledger position breaking a tie) under `v < condition_scale`. ⚠ The tie-break
+    newest by `(when, lap)`, a later ledger position breaking a tie) under `v < condition_scale`. ⚠ The tie-break
     is by LEDGER POSITION, and position is NOT arrival order: `state/ledgers.py::evict_over_cap` sorts the ledger in
-    place by eviction key, so a tie between two same-`(when, round)` claims goes to whichever the last sort left later.
+    place by eviction key, so a tie between two same-`(when, lap)` claims goes to whichever the last sort left later.
 
     THE LAWFUL-INPUT RULE: IT READS NO OTHER PERSON'S TRUE BODY -- only `p.body`, `p.body_ceiling`, `p.ledger`, and
     where the others stand. So it does not repeat the AX-7 tension `vacancies` carries (H-207): a wounded man whom
@@ -3719,7 +3719,7 @@ def wounded_with(w: World, p: Person) -> tuple:
     for i, c in enumerate(p.ledger):
         if c.predicate != BODY_STEM or c.subject == p.id or not isinstance(c.value, (int, float)):
             continue
-        key = (c.when, c.round, i)
+        key = (c.when, c.lap, i)
         if c.subject not in newest or key > newest[c.subject][0]:
             newest[c.subject] = (key, c.value)
     if not newest:
@@ -3920,7 +3920,7 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None,
 
 
 def landing_floor(w: World, since: Optional[tuple] = None) -> tuple:
-    """THE `(tick, round)` A CLAIM MUST HAVE LANDED AT OR AFTER TO BE NEW: `since` (the person's last
+    """THE `(tick, lap)` A CLAIM MUST HAVE LANDED AT OR AFTER TO BE NEW: `since` (the person's last
     deliberation, `U2`), else `(w.tick - 1, 0)` -- last season's WITNESS. `questions_for` reads it as
     Q2's boundary and `loop/matter.py::_standing_crossings` as the cut between the past claims and all
     of them (v9 SC-02 `22b` step 23), so the two agree on what *new* means."""
@@ -3937,7 +3937,7 @@ def standing_crossed(w: World, p: Person, since: Optional[tuple] = None) -> Opti
     """v9 SC-02 `22b` STEP 23: THE QUESTION A STANDING CROSSING RAISES, ABOUT THE PEOPLE WHOSE CLAIMS MADE IT.
 
     `p`'s crossing this season (MATTER's record, `standing_crossing_id`), when it is new to him -- it
-    precedes round 0, so it is new unless he has deliberated this season (`landing_floor`). Its
+    precedes lap 0, so it is new unless he has deliberated this season (`landing_floor`). Its
     REFERENTS are every person on the `chain` of a told claim among the crossing's causes (the claims
     whose `claim.deposited` it cites), origin first, `p` himself excepted: the people who TOLD, by
     the claim (`Claim.chain`, `T3b`), including an origin who never spoke to `p` -- *"who may have said
@@ -3988,7 +3988,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     Event that WITNESS already deposits as a claim, so the fold is entirely in what admits that claim
     as a question, not in what produces it. `date_due`'s half needs CALENDAR to emit `date.fired`
     (`loop/calendar.py`'s write carries `emits="date.fired"`) AND that emission to reach WITNESS:
-    `calendar()` returns its own Events and `season()` hands them to `witness()` in round 0 beside
+    `calendar()` returns its own Events and `season()` hands them to `witness()` in lap 0 beside
     MATTER's, so a fired date deposits a claim (`test_calendar_a_forced_corpus_date_*` pins
     `claimed_any`). `band_crossed`'s half needs nothing further, because `_crossings`
     (`loop/matter.py`) already emits a witnessable Event whose claim's subject is the site
@@ -4008,14 +4008,14 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     ⚠ `since` IS `U2`'s ONE ADDITION AND IT GENERALISES Q2 EXACTLY. §F1 Q2 is *a claim LANDING in
     the holder's ledger*, and while a season was ONE PASS "landing" could be read off `when` alone:
     the previous season's WITNESS stamped `when = tick - 1` and DELIBERATE read it at `tick`. Once
-    a season is several rounds, a claim can land in round 1 and be new to a person deliberating in
-    round 2 of the SAME tick, which `when` cannot express. `since` is the driver-owned
-    `(tick, round)` of that person's LAST deliberation, and `Claim.round` is the field that makes
+    a season is several laps, a claim can land in lap 1 and be new to a person deliberating in
+    lap 2 of the SAME tick, which `when` cannot express. `since` is the driver-owned
+    `(tick, lap)` of that person's LAST deliberation, and `Claim.lap` is the field that makes
     the pair comparable.
     ⚠ THE DEFAULT IS THE SINGLE-PASS READING. `since=None` means `(w.tick - 1, 0)`; every claim carries
     `when <= tick - 1` at DELIBERATE, because WITNESS stamps `when = t` and the tick advances after it
-    -- so `(c.when, c.round) >= (tick - 1, 0)` selects exactly the claims `c.when == w.tick - 1` selects.
-    The one-round arm of `H-124`'s sweep is the executed control for that claim."""
+    -- so `(c.when, c.lap) >= (tick - 1, 0)` selects exactly the claims `c.when == w.tick - 1` selects.
+    The one-lap arm of `H-124`'s sweep is the executed control for that claim."""
     TRACE.query("questions_for", "resolver")
     out: list[Question] = []
 
@@ -4050,7 +4050,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     floor = landing_floor(w, since)
     opinions: dict = {}                    # `opinion_referents`' per-call memo of `opinion_of` by faction
     for c in p.ledger:
-        if (c.when, c.round) < floor:
+        if (c.when, c.lap) < floor:
             continue
         if (c.subject in R                                       # clause 1 -- the thing itself
                 or ((pl := place_of(w, c.subject)) is not None and pl in R)   # clause 2 -- where it is
@@ -5144,7 +5144,7 @@ def commensurate(w: World, a: str, b: str) -> int:
     and a grade that raises credit rests on a recorded compatibility, never on the absence of a source
     `[ASSUMPTION; medium; Jordan to correct; revert: read null as compatible, A4 literally, so all-null reads +1]`.
     Two persons are COMMENSURATE (A4's boolean) when this is not -1. A person no longer in `w.persons` (died or
-    removed between RESOLVE and WITNESS, a telling whose teller was felled in the same round) holds none: 0."""
+    removed between RESOLVE and WITNESS, a telling whose teller was felled in the same lap) holds none: 0."""
     if a not in w.persons or b not in w.persons:
         return 0
     ha, hb = _held(w, a), _held(w, b)
@@ -5277,10 +5277,10 @@ check_restraint_kinds(KNOWN_RESTRAINT_KINDS, KNOWN_RESTRAINT_ENDED_KINDS)
 
 
 def _ledger_in_order(p: Person, keep: Callable) -> list:
-    """His claims `keep` accepts, in the order they landed: `(when, round)`, then ledger position (eviction
+    """His claims `keep` accepts, in the order they landed: `(when, lap)`, then ledger position (eviction
     re-sorts the ledger, so position alone is not the order). Filtered before it is sorted."""
     return [c for _, c in sorted(((i, c) for i, c in enumerate(p.ledger) if keep(c)),
-                                 key=lambda ic: (ic[1].when, ic[1].round, ic[0]))]
+                                 key=lambda ic: (ic[1].when, ic[1].lap, ic[0]))]
 
 
 def _known_moves(rd: _StrifeReading, p: Person) -> list:

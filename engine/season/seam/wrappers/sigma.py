@@ -303,7 +303,7 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
                 if c.subject == subject and c.predicate == CAPABILITY_CLAIM + key]
         if not held:
             return None
-        said = max(held, key=lambda c: (c.when, c.round, c.confidence))
+        said = max(held, key=lambda c: (c.when, c.lap, c.confidence))
         opposition = float(said.value)
     elif person_subject and subject != p.id and fx.get("obstacle_model") == OBSTACLE_MODEL_TASK:
         # A VERB NAMING NO KEY (`lie`), ON THE TASK ARM: the roll opposes a person with `pool.score`, which on such a verb is

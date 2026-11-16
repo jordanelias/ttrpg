@@ -1220,7 +1220,7 @@ def act_key(verb: str, subject, operands) -> str:
     deliberation share `(actor, verb, subject)` and `state/acts.py` refuses the second. Present only on
     a row `vocation_sourced` names.
     ONE OWNER for both minting sites: `decision/choose.py::pack_scenes` and
-    `loop/deliberate.py::_qualify_by_round` (`04 PART D row 35`: purpose uniqueness is a
+    `loop/deliberate.py::_qualify_by_lap` (`04 PART D row 35`: purpose uniqueness is a
     convention, and this is where it is kept)."""
     key = "" if subject is None else str(subject)
     row = VERB_TABLE.get(verb)
@@ -1273,7 +1273,7 @@ def opportunity_key(verb: str, subject, operands) -> Optional[tuple]:
     # realised act be realised again. A refused act through the wrong seat is never recorded (the
     # driver records REALISED acts only), so it does not bar the same act through the right seat.
     # Two seat-acts formed in ONE deliberation share this key and BOTH survive: `loop/deliberate.py`
-    # filters only against what EARLIER rounds realised (`_drop_what_was_already_done`, one call
+    # filters only against what EARLIER laps realised (`_drop_what_was_already_done`, one call
     # site) and a queued scene is released without re-filtering, so the key bars a twin only across
     # a re-deliberation.
     if other is None or other == subject:

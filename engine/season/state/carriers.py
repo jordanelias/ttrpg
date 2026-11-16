@@ -303,20 +303,20 @@ class Event:
 class Claim:
     """S20. Lives in the HOLDER'S OWN ledger.
 
-    ⚠ `round` IS THE ONLY CARRIER FIELD `U2` ADDS, AND THE ONLY ONE IT MAY ADD. The scene tick
-    subdivides a season into rounds, and §F1's Q2 asks for *a claim LANDING in the holder's ledger*
+    ⚠ `lap` IS THE ONLY CARRIER FIELD `U2` ADDS, AND THE ONLY ONE IT MAY ADD. The scene tick
+    subdivides a season into laps, and §F1's Q2 asks for *a claim LANDING in the holder's ledger*
     — which was readable off `when` alone while a season was one pass, and is not once a season is
     several. `when` still says WHICH SEASON and is what eviction and decay read
-    (`p.ledger.sort(key=lambda c: c.confidence * (c.when + 1))`); `round` says WHICH ROUND WITHIN
-    it, so `questions_for(w, p, since=(tick, round))` can ask *since I last deliberated* rather
+    (`p.ledger.sort(key=lambda c: c.confidence * (c.when + 1))`); `lap` says WHICH LAP WITHIN
+    it, so `questions_for(w, p, since=(tick, lap))` can ask *since I last deliberated* rather
     than *since last season*.
     ⚠ IT DEFAULTS TO `0` AND EVERY EXISTING CONSTRUCTION IS POSITIONAL, so a Claim built anywhere
-    that predates the tick reads as round 0 — which is exactly what a claim from the one-pass loop
+    that predates the tick reads as lap 0 — which is exactly what a claim from the one-pass loop
     WAS. The generalisation is therefore exact at `R = 1`: `since == (tick - 1, 0)` selects the
     same claims `c.when == w.tick - 1` did.
-    ⚠ AND NO OTHER CARRIER GETS ONE (`D-21`, and U2's falsifier (d)). The round index is a DRIVER
-    LOCAL — `SeasonDriver.round` — because it is a fact about where the loop is, not about any
-    thing in the world. A `round` on `Act` or `Event` would make it world state and put a fourth
+    ⚠ AND NO OTHER CARRIER GETS ONE (`D-21`, and U2's falsifier (d)). The lap index is a DRIVER
+    LOCAL — `SeasonDriver.lap` — because it is a fact about where the loop is, not about any
+    thing in the world. A `lap` on `Act` or `Event` would make it world state and put a fourth
     clock in the model."""
     id: str
     holder: str
@@ -333,7 +333,7 @@ class Claim:
     # a circle to someone outside it emits `confidence.broken`. It binds what a holder may RETELL,
     # never who hears (§10 decision 1). Every other deposit is `"own"`.
     visibility: str | tuple
-    round: int = 0
+    lap: int = 0
     # ⚠ `chain` -- WHO PASSED THIS CLAIM ON, ORIGIN FIRST, AS IT WAS PRESENTED (telling workplan `T3b`,
     # `ED-IN-0282`; closes `RULINGS.yaml` CAT-3, *"STORE THE TELLER... The edit is one argument, not a
     # lookup"*). `()` for every claim nobody told (firsthand, seen, inferred, content-deposit, and a

@@ -82,7 +82,7 @@ SWEEP = 60
 
 
 def step(w, d, *acts):
-    """RESOLVE then WITNESS one round of `acts` through the driver; the Events reach `w.log` between the
+    """RESOLVE then WITNESS one lap of `acts` through the driver; the Events reach `w.log` between the
     two, as `SeasonDriver.season` puts them there. Returns the Events."""
     w.step = Step.RESOLVE
     out = d.resolve(mint_token(w, WriteClass.ACTS), list(acts),
@@ -196,7 +196,7 @@ def find_band(bands):
 
 def step_until(w, d, cand, prefix, ok):
     """Step the investigator's `research` as `<prefix>_<m>` for `m` in `SWEEP` until `ok(degree)` holds
-    of its finding's degree; returns that round's Events. Raises when no id reached it."""
+    of its finding's degree; returns that lap's Events. Raises when no id reached it."""
     for m in range(SWEEP):
         out = step(w, d, research(f"{prefix}_{m}", cand))
         if ok(out[0].degree):
@@ -342,7 +342,7 @@ def test_a_second_research_of_the_same_record_deposits_nothing():
 
 
 def test_two_finds_of_one_trail_in_one_round_deposit_it_once():
-    """Two `research` acts of the same Record in ONE round both find the trail at RESOLVE (the log does
+    """Two `research` acts of the same Record in ONE lap both find the trail at RESOLVE (the log does
     not yet hold the first one's deposits), so the re-check at WITNESS (`_found_claims`' `holds_trail`) is
     what keeps one Event found once: the second finding deposits nothing."""
     picks = [n for n, _ in itertools.islice(drawn_ids(HAND_BANDS), 2)]
@@ -829,17 +829,17 @@ def test_the_realm_seed_twice_in_one_process_gives_one_hash_and_reaches_no_find(
 # ======================================================================================
 
 def test_the_find_lands_through_the_season_loop_in_a_later_round():
-    """D1: the forge -> give world, then ONE REAL SEASON (`d.season`: CALENDAR, MATTER, the rounds of
+    """D1: the forge -> give world, then ONE REAL SEASON (`d.season`: CALENDAR, MATTER, the laps of
     DELIBERATE -> RESOLVE -> ENCOUNTER -> WITNESS, CENSUS). The chooser is the test's -- `choose(p, v, s,
     ask_budget)`, the season's own hook (`test_give.py`'s shape) -- and passes on its first call for the
-    investigator for one or more rounds, so his `research` (the real chooser path's Candidate) is released
-    in a LATER round. The find lands: the deposit's claims are stamped with that round (> 0, which the hand
+    investigator for one or more laps, so his `research` (the real chooser path's Candidate) is released
+    in a LATER lap. The find lands: the deposit's claims are stamped with that lap (> 0, which the hand
     `step` never sets), caused by the finding and the forging, and no find is left on the driver.
-    THE ROUND OF RELEASE IS SWEPT, NOT THE ACT ID: DELIBERATE re-mints a chosen act's id from the
-    world's draw (`(seed, tick, ...)`, the round entering through the purpose), so the id a chooser
-    passes does not reach the roll and only the round moves it. The sweep is asserted reached."""
-    rounds = int(P.tiny_world().fixtures.get("scene_budget"))       # the season's round count
-    for k in range(2, rounds + 1):                                  # release on the k-th call: round >= 1
+    THE LAP OF RELEASE IS SWEPT, NOT THE ACT ID: DELIBERATE re-mints a chosen act's id from the
+    world's draw (`(seed, tick, ...)`, the lap entering through the purpose), so the id a chooser
+    passes does not reach the roll and only the lap moves it. The sweep is asserted reached."""
+    laps = int(P.tiny_world().fixtures.get("scene_budget"))       # the season's lap count
+    for k in range(2, laps + 1):                                  # release on the k-th call: lap >= 1
         w, d, rid = trail_world()
         cand = chooser_research(w, rid)
         calls = []
@@ -847,7 +847,7 @@ def test_the_find_lands_through_the_season_loop_in_a_later_round():
         def choose(p, v, s, ask_budget, k=k, cand=cand, calls=calls, d=d):
             if p.id != INVESTIGATOR:
                 return []
-            calls.append(d.round)
+            calls.append(d.lap)
             return [research("season", cand)] if len(calls) == k else []
         d.season(choose, question=None,
                  contest_max_depth=w.fixtures.get("contest_max_depth"))
@@ -856,7 +856,7 @@ def test_the_find_lands_through_the_season_loop_in_a_later_round():
         if finding is not None and FINDING_TERMS.get(finding.degree):
             break
     else:
-        raise AssertionError(f"no release round in 1..{rounds - 1} drew a finding band for the research")
+        raise AssertionError(f"no release lap in 1..{laps - 1} drew a finding band for the research")
     released = calls[k - 1]
     assert released > 0, calls
     assert d.act_of[finding.id].verb == "research", d.act_of[finding.id]
@@ -865,5 +865,5 @@ def test_the_find_lands_through_the_season_loop_in_a_later_round():
     landed = [c for c in w.persons[INVESTIGATOR].ledger if c.source == "inferred"
               and c.predicate in ("record.forged", SEEN_PREDICATE) and c.subject in (rid, FORGER)]
     assert {c.id for c in landed} == {e.changes[0].subject for e in deposits}, (landed, deposits)
-    assert all(c.round == released for c in landed), [(c.id, c.round, released) for c in landed]
+    assert all(c.lap == released for c in landed), [(c.id, c.lap, released) for c in landed]
     assert d.findings == {}, "the season left a find on the driver"

@@ -890,22 +890,22 @@ def told_redeposits_in(ledger) -> int:
     whenever it overflows its cap (`queries/world_q.py::wounded_with`: "position is NOT arrival
     order"), so comparing positions can put a firsthand claim after a telling it preceded and miss a
     true redeposit. `Claim.when` is the tick of DEPOSIT: every deposit in `loop/witness.py` stamps
-    `w.tick`, and `_refract` / `_credit` replace only `confidence`. `Claim.round` orders deposits
+    `w.tick`, and `_refract` / `_credit` replace only `confidence`. `Claim.lap` orders deposits
     within a tick (`state/carriers.py::Claim`). So a told claim is counted when an untold claim of
-    its triple was deposited at an EARLIER OR EQUAL `(when, round)`.
-    ⚠ A TIE COUNTS. No field orders two deposits of one `(when, round)` (the id is a hash), so a told
-    claim sharing its round with a firsthand copy is counted as a redeposit: the counter's reader
+    its triple was deposited at an EARLIER OR EQUAL `(when, lap)`.
+    ⚠ A TIE COUNTS. No field orders two deposits of one `(when, lap)` (the id is a hash), so a told
+    claim sharing its lap with a firsthand copy is counted as a redeposit: the counter's reader
     asserts zero, and a detector that cannot see the order must not resolve the tie in the
-    defect's favour. A told claim whose holder saw the same thing only in a LATER round is not a
+    defect's favour. A told claim whose holder saw the same thing only in a LATER lap is not a
     redeposit (B01a.99: EMG-C3, drawn sheets, told at `when` 2, firsthand at 3 and 5) and is not
     counted. The planted ledgers in `engine/season/tests/test_told_by_counter.py` are its falsifier."""
     first_own, told = {}, []
     for c in ledger:
         key = (c.subject, c.predicate, c.value)
         if c.source == "told_by":
-            told.append((key, (c.when, c.round)))
-        elif key not in first_own or (c.when, c.round) < first_own[key]:
-            first_own[key] = (c.when, c.round)
+            told.append((key, (c.when, c.lap)))
+        elif key not in first_own or (c.when, c.lap) < first_own[key]:
+            first_own[key] = (c.when, c.lap)
     return sum(1 for key, at in told if key in first_own and first_own[key] <= at)
 
 

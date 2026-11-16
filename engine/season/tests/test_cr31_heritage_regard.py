@@ -46,7 +46,7 @@ def _fx(gain, **more):
 def _seen(pid, who, marks, when=1, rnd=0, chain=(), n=[0]):
     n[0] += 1
     return Claim(f"c_seen_{n[0]}", pid, "Hh", SEEN_PREDICATE, Seen(stratum="speech", marks=marks, who=who),
-                 when, "firsthand", 100, "own", round=rnd, chain=chain)
+                 when, "firsthand", 100, "own", lap=rnd, chain=chain)
 
 
 def _told():
@@ -127,7 +127,7 @@ def test_the_newest_own_untold_seen_claim_that_marks_a_heritage_is_the_belief():
     p.ledger.append(_seen("h", TELLER, (ALT,), when=9, chain=("y",)))   # told, not seen
     fx = _fx(1.0)
     assert heritage_regard(p, TELLER, fx) == STANCE_MAX              # SOUTH (when 3) beats ALT (when 1)
-    p.ledger.append(_seen("h", TELLER, (ALT,), when=3, rnd=1))       # same season, a later round
+    p.ledger.append(_seen("h", TELLER, (ALT,), when=3, rnd=1))       # same season, a later lap
     assert heritage_regard(p, TELLER, fx) == -STANCE_MAX             # ALT engages `altonia`, which `h` rejects
     assert heritage_regard(p, "somebody_else", fx) == -STANCE_MAX
 

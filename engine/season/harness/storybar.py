@@ -442,7 +442,7 @@ def drive(seed: int, seasons: int, arm: str, cap=None, on_season=None, world=Non
     `wrap_chooser` is the removal test's seam (`removal_arm`), `None` by default, which is the shipped
     reading unchanged: `wrap_chooser(chooser) -> chooser` is applied once to the chooser before the
     first season. A wrapper must know which lap it is in, a fact only the driver holds (`SeasonDriver.
-    round`, a driver local by D-21), so when a wrapper is given the chooser it receives carries the
+    lap`, a driver local by D-21), so when a wrapper is given the chooser it receives carries the
     driver as `.driver`; with `None` the chooser is handed to the loop untouched."""
     if arm not in ARMS:
         raise ValueError(f"forcing arm {arm!r} is not built; this tree runs {ARMS}")
@@ -608,7 +608,7 @@ def _removing(who, when, stamps: dict, fired: list):
         d = chooser.driver
 
         def choose(p, v, s, ask_budget):
-            at = (d.w.tick, d.round)
+            at = (d.w.tick, d.lap)
             if who is not None and p.id == who and at == when:
                 fired.append(at)
                 return []
@@ -652,8 +652,8 @@ def removal_arm(base, seasons: int, who: str, when: tuple) -> dict:
 
     ONE built world `base`, deep-copied (`fork`, as `draw_seed_arm` does), run `seasons` seasons through
     `drive` with the chooser wrapped (`drive(wrap_chooser=...)`) to return no scene for person `who`
-    at `(tick, lap) == when` -- `when` is `(season index, lap index)`, the tick and `SeasonDriver.round`
-    (identifier `round` until the rename `PCR-4`; a lap is one pass of the season's scene budget).
+    at `(tick, lap) == when` -- `when` is `(season index, lap index)`, the tick and `SeasonDriver.lap`
+    (named `lap` since the rename `PCR-4`; a lap is one pass of the season's scene budget).
     Returns the multiset of the OTHER persons' `(actor, tick, lap, verb, opportunity, executed |
     refused)`; `chain_difference` of two such multisets is the acts that differ. `who=None` removes
     nobody and returns every person's acts. `base` is never run, so it stays unmutated; every draw is

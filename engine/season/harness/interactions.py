@@ -20,7 +20,7 @@ test pins that they respond to the believed-odds query, not that they equal the 
 
 ROWS (JSONL, one object per line, `kind` first):
   * `deliberation` -- every call of `choose` (a person with no question gets a row with `question: null`):
-    season/tick/round, the actor, the question answered (id, source, referents, classes, `about`), its
+    season/tick/lap, the actor, the question answered (id, source, referents, classes, `about`), its
     position in the person's question list and that list's sources, the CLAIM behind a question whose
     `about` is a claim the person holds (id, subject, predicate, source, chain, and its origin: an
     acquaintance claim written at build by CR-81 is recognised by membership in `w._acquaintances`, the ids
@@ -259,7 +259,7 @@ def run(seed: int, seasons: int, acquaintances: bool = True, observe: bool = Tru
         q = getattr(v, "question", None)
         qs = list(getattr(v, "questions", ()) or ())
         row = {"kind": "deliberation", "i": len(delibs), "season": season_no[0], "tick": w.tick,
-               "round": d.round, "actor": p.id, "name": p.name,
+               "round": d.lap, "actor": p.id, "name": p.name,
                "faction": world_q.faction_holding(w, p.id), "offices": held_offices(w, p.id),
                "question": _question(q, p, acq),
                "question_position": next((i for i, x in enumerate(qs) if x is q), None),

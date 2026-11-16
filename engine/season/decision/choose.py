@@ -363,32 +363,32 @@ def _sample_order(ranked: list, score, p: Person, fx: "Fixtures", draw) -> list:
     lands is the one question in this unit a ruling could change.**
 
     ⚠ **ONE CLAUSE OF THE UNIT'S SPEC IS NOT MET, AND IT IS DECLARED RATHER THAN QUIETLY DROPPED.**
-    `U4` says *"the draw `purpose` includes the round (U2)"*. The purpose is instead
+    `U4` says *"the draw `purpose` includes the lap (U2)"*. The purpose is instead
     `choice:<verb>:<subject>`, seeded per `(world_seed, tick, person)` by the factory.
-    `season()` runs DELIBERATE `scene_budget` times, `SeasonDriver.round` is the index, and
-    `_qualify_by_round` re-derives act and scene ids through it. The clause is unmet for two
-    reasons, and NEITHER is "there is no round".
+    `season()` runs DELIBERATE `scene_budget` times, `SeasonDriver.lap` is the index, and
+    `_qualify_by_lap` re-derives act and scene ids through it. The clause is unmet for two
+    reasons, and NEITHER is "there is no lap".
 
-    **(1) STRUCTURAL — THE ROUND CANNOT REACH THIS FUNCTION, AND IT IS THE SAME TENSION AS CLAUSE
-    2 ABOVE.** The round is state on the DRIVER; the chooser is built by the CALLER (clause 2's
+    **(1) STRUCTURAL — THE LAP CANNOT REACH THIS FUNCTION, AND IT IS THE SAME TENSION AS CLAUSE
+    2 ABOVE.** The lap is state on the DRIVER; the chooser is built by the CALLER (clause 2's
     finding), so the driver cannot key a draw it never constructs. The only other route is to hand
-    `choose` the round, and `choose`'s four-parameter signature, which `U4` insists must not change, keeps the world out
+    `choose` the lap, and `choose`'s four-parameter signature, which `U4` insists must not change, keeps the world out
     of it (`test_decision_package_never_names_world_anywhere_under_it`; no test reads the arity itself). A caller holding both CAN
-    close over `d.round` when it builds the draw, but that is a harness reaching past the engine, not the engine meeting the clause.
+    close over `d.lap` when it builds the draw, but that is a harness reaching past the engine, not the engine meeting the clause.
 
     **(2) DESIGN — IT CONTRADICTS THE KEYED-NOISE PROPERTY THIS FUNCTION IS BUILT ON**
-    (the `⚠⚠` block below). The round makes a
+    (the `⚠⚠` block below). The lap makes a
     candidate's noise a property of WHEN IT WAS REACHED; the whole argument for keying on
     `(verb, subject)` is that it must be a property OF THAT CANDIDATE, so that two arms of an
     experiment differ by what differed and not by a reshuffle. Under a scene tick a candidate that
-    lost round 0 keeps its margin in rounds 1..4, which is a person whose TASTE is stable across a
+    lost lap 0 keeps its margin in laps 1..4, which is a person whose TASTE is stable across a
     season while their OPTIONS move — and the options do move: what they have already realised is
-    removed by `_drop_what_was_already_done`, so the later rounds are them continuing down the list,
-    never repeating it. A second round is not a replay of the first; it is continuation, which is
+    removed by `_drop_what_was_already_done`, so the later laps are them continuing down the list,
+    never repeating it. A second lap is not a replay of the first; it is continuation, which is
     what R-03 asked for.
 
     ⚠ **AND THE CLAUSE IS NOT INERT, WHICH IS WHY THIS IS A DECISION AND NOT A SHRUG.** Wrapping
-    the caller's draw as `orig(pid, f"{purpose}:r{d.round}")` moves the run's events and content
+    the caller's draw as `orig(pid, f"{purpose}:r{d.lap}")` moves the run's events and content
     hash, so a reader may not conclude from "unmet" that it would change nothing.
     TAKEN UNDER `CLAUDE.md` §0's fifth step — 1..4 are silent, one option is clearly right for the
     code — rather than escalated: reasons (1) and (2) point the same way and no ruling overwrites a
@@ -554,10 +554,10 @@ def release(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint, q: "Qu
     # to `interactions_per_scene` of the ranked candidates. The default policy fills scenes
     # greedily in score order -- a person spends a scene on their best option and whatever
     # else it can carry, which is what "1-3 mechanical interactions" describes.
-    # `U2`: `n_scenes` (the caller's `ask_budget()`) is the person's SEASON REMAINDER, not one round's
+    # `U2`: `n_scenes` (the caller's `ask_budget()`) is the person's SEASON REMAINDER, not one lap's
     # allowance. The person chooses the whole of what they will do with the season they have left; the
-    # driver releases `scenes_per_round` of it per round (`H-124`). Nothing is discarded, so S26.3's
-    # *the engine never truncates* is untouched -- what the round bounds is WHEN a chosen scene
+    # driver releases `scenes_per_lap` of it per lap (`H-124`). Nothing is discarded, so S26.3's
+    # *the engine never truncates* is untouched -- what the lap bounds is WHEN a chosen scene
     # runs, not WHETHER.
     # Telling `T7` (G9): what the person has chosen is known HERE, whole, before any of it runs,
     # so this is where a telling may declare a later chosen act. `intent_disclosure` 0 returns
@@ -570,7 +570,7 @@ def declare_intents(p: Person, scenes: list, fx: "Fixtures", draw=None) -> list:
     THEY HAVE CHOSEN AND NOT YET DONE.
 
     `scenes` is the person's own triage, in the order the driver releases it (`pack_scenes`; the
-    driver runs at most `scenes_per_round` of it per round and queues the rest). An act in a LATER
+    driver runs at most `scenes_per_lap` of it per lap and queues the rest). An act in a LATER
     scene than a telling is one the person has chosen and that has not run when the telling does.
     For each act carrying a `said` (a telling: the payload key `opening_set` sets on a NAMED
     own-ledger conjunct, never a verb name), the first act in a later scene that NAMES THE TELLING'S
@@ -589,8 +589,8 @@ def declare_intents(p: Person, scenes: list, fx: "Fixtures", draw=None) -> list:
     declared intent against what was done is `H-191`, absent. A missing `draw` at a non-zero rate
     RAISES rather than declaring every intent or none (`_sample_order`'s precedent).
 
-    ⚠ *not yet done* holds at `scenes_per_round` 1 (shipped, H-124); at 2 or 5 a later scene can
-    release in the telling's own round."""
+    ⚠ *not yet done* holds at `scenes_per_lap` 1 (shipped, H-124); at 2 or 5 a later scene can
+    release in the telling's own lap."""
     rate = float(fx.get("intent_disclosure"))
     if not 0 <= rate <= 1:           # `not ... <=`, so a NaN is refused too
         raise ValueError(f"intent_disclosure {rate} is not a chance in [0, 1] (H-190)")
@@ -634,7 +634,7 @@ def _payload_of(c: "Candidate") -> Optional[dict]:
 
     ⚠ `H-134`: A Candidate formed among several seats carries `VIA` in its operands, and it STAYS on
     the payload -- not as a binding (`binding_of` drops it; `Act.via` is what the fold reads) but
-    because `loop/deliberate.py::_qualify_by_round` re-mints the id with `act_key` from the payload,
+    because `loop/deliberate.py::_qualify_by_lap` re-mints the id with `act_key` from the payload,
     seeing no Candidate, and two acts of one person through two seats must not share an id.
     `opportunity_key` reads the same payload and deliberately ignores the seat (`data/verbs.py`)."""
     d = dict(c.operands or {})
@@ -653,9 +653,9 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
     `player_agency_v30.md` §6.3's "one scene opportunity pursued" describes -- an opportunity is
     an opportunity to do something ABOUT something.
 
-    ⚠ `n_scenes` IS A COST BUDGET AND NOT A SCENE COUNT, WHICH IS WHY `U2`'s ROUND BOUND IS NOT
+    ⚠ `n_scenes` IS A COST BUDGET AND NOT A SCENE COUNT, WHICH IS WHY `U2`'s LAP BOUND IS NOT
     HERE. `take()` spends it, and an extended scene costs `extended_scene_cost` (2) against a
-    plain one's 1. The scene tick bounds how many of a person's chosen scenes RUN in one round,
+    plain one's 1. The scene tick bounds how many of a person's chosen scenes RUN in one lap,
     and that is a scheduling fact the driver owns (`SeasonDriver.deliberate`, `H-124`) -- not a
     second bound on the person's triage. Putting it here as a count of 1 would make every extended
     chunk cost 2 > 1 and be trimmed to a single interaction, so no extended scene could form,

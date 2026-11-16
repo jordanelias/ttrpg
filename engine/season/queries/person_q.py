@@ -113,7 +113,7 @@ def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0) -> tuple:
     judge's own live, un-`imposed` `oblige` to a seat is in `p.tenures` and outlives the victim. What is
     missing is the PAIRING, not the edge: a death's seat reaches a ledger as `(seat, tenure.closed, True)`
     (`state/gate.py::Subject.seat`) beside `(victim, person.died, True)`, two claims that share only
-    `when` and `round`, which this module never reads as a pairing (`deed_doer`: it does not guess), so
+    `when` and `lap`, which this module never reads as a pairing (`deed_doer`: it does not guess), so
     no claim a judge holds says the victim sat in that seat. FACTION-LEVEL grievance is v9 IN-70's: `opinion` here,
     its World half and its referents in `world_q` (`opinion_of`, `opinion_referents`).
     [ASSUMPTION, H-192: a deed's claim subject is read as its doer for every other kind; the sum is
@@ -218,22 +218,22 @@ PAIRED_KINDS = frozenset(k for k in _verbs.DEED_KINDS if k not in _verbs.KIND_VE
 # only if what the witness saw was an act of one of them (`Seen.stratum`). Every channel showing
 # `who` shows `stratum` (`rosters.yaml: observation_terms.supplied_by`), so the test never drops a
 # pairing that `who` alone would have made; it refuses a third party's DIFFERENT act on the patient in
-# the same round being read as the deed's doer.
+# the same lap being read as the deed's doer.
 _KIND_STRATA = {k: frozenset(r.stratum for r in _verbs.VERB_TABLE.values() if k in r.emits)
                 for k in PAIRED_KINDS}
 
 
 def _seen_index(ledger) -> tuple:
-    """A holder's own, untold `seen` claims, indexed twice: `(subject, when, round) -> [seen]`, and
-    `(when, round) -> {(who, stratum)}` -- who the holder saw acting, and at what, in each round."""
+    """A holder's own, untold `seen` claims, indexed twice: `(subject, when, lap) -> [seen]`, and
+    `(when, lap) -> {(who, stratum)}` -- who the holder saw acting, and at what, in each lap."""
     by_subject: dict = {}
     acting: dict = {}
     for s in ledger:
         if s.predicate == SEEN_PREDICATE and not s.chain:
-            by_subject.setdefault((s.subject, s.when, s.round), []).append(s)
+            by_subject.setdefault((s.subject, s.when, s.lap), []).append(s)
             who = getattr(s.value, "who", None)
             if who is not None:
-                acting.setdefault((s.when, s.round), set()).add((who, getattr(s.value, "stratum", None)))
+                acting.setdefault((s.when, s.lap), set()).add((who, getattr(s.value, "stratum", None)))
     return by_subject, acting
 
 
@@ -242,17 +242,17 @@ def deed_doer(c, seen: tuple):
 
     `c` is an untold deed claim `(s, kind, True)` of a `PAIRED_KINDS` kind; `seen` is
     `_seen_index` of the same ledger. A `seen` claim PAIRS with it when it has the same subject
-    `s`, `when` and `round` (WITNESS deposits both from one Event in one pass), names a `who`, that
-    `who` is not `s` (a deed done TO `s` -- `s`'s own act in the same round is not it), and its
+    `s`, `when` and `lap` (WITNESS deposits both from one Event in one pass), names a `who`, that
+    `who` is not `s` (a deed done TO `s` -- `s`'s own act in the same lap is not it), and its
     `stratum` is the stratum of a row emitting `kind`. The doer is the ONE `who` the pairing
     names; none, or two different, is `None` -- the pairing never guesses, so a channel that
     withheld `who` leaves the actor hidden.
-    ⚠ AND `s` MUST NOT HAVE BEEN SEEN DOING SUCH AN ACT IN THAT ROUND: then `c` may be the claim
+    ⚠ AND `s` MUST NOT HAVE BEEN SEEN DOING SUCH AN ACT IN THAT LAP: then `c` may be the claim
     `both` anchors on the ACTOR (`(x, person.died)` for x's kill), and a third party's sighting on
     `s` would name the wrong doer of the wrong death. The price, stated: a person who both struck and was struck in one
-    round is judged a patient by nobody that round.
+    lap is judged a patient by nobody that lap.
     LIMIT, stated: where the ACTOR died attacking, the sighting names him as `who` of his own death,
-    so no killer is named. A `seen` on the same subject, `when` and `round` that names NO `who` (a
+    so no killer is named. A `seen` on the same subject, `when` and `lap` that names NO `who` (a
     channel that withheld the actor) makes the pairing ambiguous, so `None`: an unnamed hand may be
     the one that did it. Holder-side and World-free: `Seen` is read by its fields, never imported
     (AX-2)."""
@@ -260,10 +260,10 @@ def deed_doer(c, seen: tuple):
         return None
     by_subject, acting = seen
     strata = _KIND_STRATA[c.predicate]
-    if any(who == c.subject and st in strata for who, st in acting.get((c.when, c.round), ())):
+    if any(who == c.subject and st in strata for who, st in acting.get((c.when, c.lap), ())):
         return None
     whos = set()
-    for s in by_subject.get((c.subject, c.when, c.round), ()):
+    for s in by_subject.get((c.subject, c.when, c.lap), ()):
         who = getattr(s.value, "who", None)
         if who is None:
             return None             # an actorless sighting on the same key: ambiguous, never guess
@@ -462,7 +462,7 @@ def heritage_regard(p: Person, q: str, fx) -> float:
                           `HERITAGE_ENGAGES[h]` of `conviction_stand(p, a)`
 
     `h` is the heritage named in `p`'s NEWEST own untold `seen` claim whose `who` is `q` and whose `marks`
-    names a heritage (newest by `(when, round)`, a later deposit winning a tie). Each affiliation of the
+    names a heritage (newest by `(when, lap)`, a later deposit winning a tie). Each affiliation of the
     engaged concern contributes `conviction_stand`, an absent key 0 and still counted in the mean. In
     `regard`'s own units, so `teller_weight` reads it through `regard / STANCE_MAX` as it reads any stance.
     `0.0` where `p` holds no such `seen` claim, where the heritage engages no concern, or at `heritage_gain` 0
@@ -480,7 +480,7 @@ def heritage_regard(p: Person, q: str, fx) -> float:
         named = next((m for m in (getattr(c.value, "marks", None) or ()) if m in HERITAGES), None)
         if named is None:
             continue
-        key = (c.when, c.round)
+        key = (c.when, c.lap)
         if best_key is None or key >= best_key:
             best, best_key = named, key
     concern = HERITAGE_ENGAGES.get(best)

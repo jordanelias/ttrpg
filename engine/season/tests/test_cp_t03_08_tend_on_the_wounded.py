@@ -49,7 +49,7 @@ def revert_cp_t03_08(monkeypatch):
 def _believe(w, holder, about, v, cid="c_body", when=0, rnd=0):
     """`holder` holds `(about, "body", v)` -- the Observation CP-T03-02 deposits to a fight's actor."""
     w.persons[holder].ledger.append(Claim(cid, holder, about, world_q.BODY_STEM, v, when, "firsthand", 100, "own",
-                                          round=rnd))
+                                          lap=rnd))
 
 
 def _tends(w, pid):
