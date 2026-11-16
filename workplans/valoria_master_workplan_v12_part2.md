@@ -66,7 +66,6 @@ Three sources, as `H2_DECISIONS.md` Appendix A's script reads them, re-run here 
 | step | open at once (the first named merges first among movers, §3) |
 |---|---|
 | S0–S3 | B00 · B01 · B02 · B03, one each (IN); ⚠ 2026-11-14: B01a opens at S2, between B01 and B02, and every row from B02 down moves one step later (S2 → S3, …, S24 → S25), membership unchanged |
-| S5 | B03a (IN), alone |
 | S6 | B13 (PC), B16M (MB), B04 (IN) |
 | S7 | B05 (IN), alone |
 | S8 | B06 (IN), B14 (PC) |
@@ -90,7 +89,6 @@ Columns: the wave and step as the structure had them, and now (a change in bold)
 
 | batch | lane | wave (§2.1 → now) | step (§2.1 → now) | slack | part files | positions: total (by state) | hash, from the position rows (§2.2 said) | est. h (E-15) | after: every `GATE: Batch` it needs (`+G` a part's GATE line §2.1 lacked; `+R` an edge H2 adopts) |
 |---|---|---|---|---|---|---|---|---|---|
-| B03a-prose | IN | W5 | S5 | 0 | 6_cont | 3 (B3) | EQUAL | 3.7 | B00, B01, B02, B03, B03c, B16L, B03g +R1 |
 | B13-pc-package | PC | W6 | S6 | 0 | 6_cont | 2 (B2) | EQUAL | 3.3 | B00, B01, B02, B03, B03a, B03g +R1 |
 | B16M-mb-engine-words | MB | W6 | S6 | 0 | 6_cont | 4 (B4) | EQUAL | 4.1 | B16L, B03a |
 | B04-capability-home | IN | W6 | S6 | 0 | 7 | 27 (B24 P2 C1) | MOVER (encoding 2) | 13.3 | B00, B01, B02, B03g, B03c, B03a |
@@ -158,7 +156,6 @@ Every batch's boundary row with the part and line it sits on, whether its text i
 
 | batch | its boundary row (part:line) | exact text | `GATE: Batch` lines | equal to its after-list in §1 | names a batch closing at or after its own step | H2 added |
 |---|---|---|---|---|---|---|
-| B03a-prose | 6_cont:126 | yes | 7 | yes | none | —, R1: B03g |
 | B13-pc-package | 6_cont:217 | yes | 6 | yes | none | —, R1: B03g |
 | B16M-mb-engine-words | 6_cont:325 | yes | 2 | yes | none | — |
 | B04-capability-home | 7:551 | yes | 6 | yes | none | — |
@@ -224,7 +221,6 @@ One row per batch in schedule order: the position handles (the part after the do
 
 | step | batch | behaviour movers (position handles) | encoding movers | conditional movers | the re-pin position and what its text says | merge position in its step |
 |---|---|---|---|---|---|---|
-| S5 | B03a | — | — | — | `B03a.99` records the EQUAL reading | any (EQUAL, §7.4) |
 | S6 | B13 | — | — | — | `B13.99` records the EQUAL reading | any (EQUAL, §7.4) |
 | S6 | B16M | — | — | — | `B16M.99` records the EQUAL reading | any (EQUAL, §7.4) |
 | S6 | B04 | — | 01, 07 | — | `B04.99` (B04.26 steps 2, 3 moved, R1) | 1 of 1 movers |

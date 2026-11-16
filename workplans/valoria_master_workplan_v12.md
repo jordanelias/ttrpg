@@ -246,7 +246,6 @@ For a step with one batch the two texts below agree. For a step with several, th
 | step | open at once |
 |---|---|
 | S0–S3 | B00 · B01 · B02 · B03, one each (IN); ⚠ 2026-11-14: B01a opens at S2, between B01 and B02, and every later row moves one step (part 2 §1.2) |
-| S5 | B03a (IN), alone in the plan: it edits the comments of every game-code file |
 | S6 | B04 (IN), B13 (PC), B16M (MB) |
 | S7 | B05 (IN), alone: it edits IN, SC, PC and MB code |
 | S8 | B06 (IN), B14 (PC) |
@@ -365,7 +364,6 @@ No engine version is asserted anywhere in v12 (ED-GO-0002 is the owner).
 | batch | lane | ED block (declared + spare) | H block (declared + spare) |
 |---|---|---|---|
 | B24p-sc-proceeding | SC | ED-SC-0054..0056 (1+2) | H-861..H-914 (50+4) (allocated 2026-11-14 after B01a's block, on paper: `id_reservations.yaml` is bumped at the batch's opening, SC `next_free` 54 → 57; the fold map's H-856..H-909 assumed H-855 as the last id and B01a had taken H-856..H-860) |
-| B03a-prose | IN | ED-IN-0375..0376 (0+2) | H-399..H-403 (0+5) |
 | B13-pc-package | PC | ED-PC-0060..0061 (0+2) | H-404..H-408 (0+5) |
 | B16M-mb-engine-words | MB | ED-MB-0084..0085 (0+2) | H-409..H-413 (0+5) |
 | B04-capability-home | IN | ED-IN-0377..0378 (0+2) | H-414..H-419 (1+5) |
@@ -456,7 +454,7 @@ Each is also stated where it is invoked (the batch block's lines, the item's fie
 
 | batch | file(s) under `master/workplan_v12/` |
 |---|---|
-| B03a-prose, B13-pc-package, B16M-mb-engine-words | `valoria_master_workplan_v12_part6_cont.md` |
+| B13-pc-package, B16M-mb-engine-words | `valoria_master_workplan_v12_part6_cont.md` |
 | B04-capability-home | `valoria_master_workplan_v12_part7.md` |
 | B05-one-roll | `valoria_master_workplan_v12_part8.md`, `_part8_cont.md`, `_part9.md` |
 | B06-keyed-draw | `valoria_master_workplan_v12_part10.md` |
