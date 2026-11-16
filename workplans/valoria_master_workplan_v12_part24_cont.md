@@ -379,9 +379,9 @@ The five positions below are the intake entries the B12a authors routed here by 
 - WHERE: NEW `engine/season/tensions.yaml`; NEW `engine/season/data/tensions.py`; `engine/season/rosters.yaml` (`tension_effects`); `engine/season/data/files.py` (`TENSIONS_YAML`); `engine/season/data/fixtures.py` (`territory_yield_scale`); `engine/season/queries/world_q.py` (`season_factor_of`); `engine/season/boot/realm.py` (`build_realm(tensions=False)`); NEW `engine/season/tests/test_tensions.py`.
 - TESTS: the sub-entry's FALSIFIER, copied, in the new file, written first: "planted rows the loader must refuse, each by its own message: (i) a card with a `fires_at` key; (ii) an effect kind outside the roster; (iii) a `goal` row `data/goals.py::parse` rejects, refused with goals' own law string (one validator); (iv) a goal id colliding with `goals.yaml`. With a planted one-card test registry and the switch on, seeds 0-5: the same seed twice draws the same card and alternat[es] …; the card's Propositions are minted and at least one person commits to each (the count checked asserted ≥ 1 per goal row); a scaled territory's factor equals base × scale, an unscaled territory's equals base."
 - FALSIFIER and CONTROL: the four refusals above. "CONTROL: switch off reproduces the base hash (`build_realm(0).content_hash()`; `aperture 1 s`, s = 0-2); switch on with a card whose lists are empty reproduces it."
-- GATE: "`python -m pytest engine/season/tests/test_tensions.py -q` (new) and `engine/season/tests/test_season_weather.py`" → pass; `GO-09's registries exporter, as B03g landed it, with `--check` → exit 0 (the card's PORT line: "`engine/season/tensions.yaml` is named in `data/files.py`, so GO-09's registries export carries it with `--check`") `[ASSUMPTION: the exporter's path — no `tools/export_registries*` is in the tree at `aa31fd2`; the producer reads B03g's GO-09 item for it]`.
+- GATE: "`python -m pytest engine/season/tests/test_tensions.py -q` (new) and `engine/season/tests/test_season_weather.py`" → pass; `GO-09's registries exporter, as B03g landed it (`048724cd545117255e71d04a583d99c6cb5fe3a9`), with `--check` → exit 0 (the card's PORT line: "`engine/season/tensions.yaml` is named in `data/files.py`, so GO-09's registries export carries it with `--check`") `[the exporter's path: `tools/export_season_registries.py`, as B03g landed it; no `tools/export_registries*` was in the tree at `aa31fd2`]`.
 - HASH MOVERS: none ("HASH: EQUAL (switch off, empty registry, empty scale)").
-- DEPENDS ON: V12 B12b.44 (order only: "the commits follow it for the reading only"); EXISTS-IN-TREE `data/goals.py::parse`, `seed_goals`, `ids.draw_factory`; V12 Batch B03c (`boot/realm.py`), Batch B03g (GO-09's export).
+- DEPENDS ON: V12 B12b.44 (order only: "the commits follow it for the reading only"); EXISTS-IN-TREE `data/goals.py::parse`, `seed_goals`, `ids.draw_factory`; V12 Batch B03c @544cf5719c620331b70aeda93c1672977b44e9ef (`boot/realm.py`), Batch B03g @048724cd545117255e71d04a583d99c6cb5fe3a9 (GO-09's export).
 - NAMES: `harness/populated.py::build_realm` → `boot/realm.py::build_realm` (B03c).
 - GLOSSARY: new row *tension*: "a strain drawn at the world's making that sets some people's aims, as a tension in a household is there before anyone acts on it"; owner `rosters.yaml: tension_effects`' note.
 - COST and TIER: small build; `sonnet`, `high` ("BUILDER: `CLAUDE.md` §10's second tier for (1) to (3)").
@@ -444,7 +444,7 @@ IN-FLIGHT ROW: registers/handoffs/HANDOFF_MB.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01a-attributes-generated @cbca1ad4fcee656f908d8a75e99bf79213ddeeab (B01a.05: PROVISIONAL until re-read with `harness/pairs.py duel`: the duel grid this batch's instrument measures is run over fighters with generated attributes, and its cells are read as curves by attribute difference, not at the class defaults alone; `valoria_master_workplan_v12.md` §3.B, "generated attributes, and curves not centres")
-GATE: Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0
+GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B16M-mb-engine-words
 GATE: Batch B14-pc-outcome
 GATE: Batch B15-pc-calibration
@@ -571,7 +571,7 @@ INVOCATION: /methodology-execute Batch B29-pc-custody
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_PC.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
-GATE: Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0
+GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B15-pc-calibration
 GATE: Batch B16-pc-round
 GATE: Batch B21-fa-governance

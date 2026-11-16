@@ -14,8 +14,8 @@ HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[1]
 sys.path.insert(0, str(REPO))
 
-from engine.season.harness import populated as P                     # noqa: E402
-from engine.season.harness.populated import build_realm               # noqa: E402
+from engine.season.data.rosters import territory_id_of               # noqa: E402
+from engine.season.boot.realm import build_realm                      # noqa: E402
 from engine.season.queries import world_q                             # noqa: E402
 from engine.season.data import cast                                   # noqa: E402
 from engine.season.data.affiliations import conviction_map            # noqa: E402
@@ -43,8 +43,8 @@ settle = {f"set_{s.lower().replace('-', '_')}": (s, d) for s, d in geo["settleme
 territories = sorted(r for r, g in w.rungs.items() if g.kind == "territory")
 realm = next(r for r, g in w.rungs.items() if g.kind == "realm")
 under_realm = {t for t in territories if t in world_q.descendants(w, realm)} if hasattr(world_q, "descendants") \
-    else {t for t in territories if t in P.descendants(w, realm)}
-settles_in = collections.Counter(P.territory_id_of(P.enclosing_territory(w, r))
+    else {t for t in territories if t in world_q.descendants(w, realm)}
+settles_in = collections.Counter(territory_id_of(world_q.enclosing_territory(w, r))
                                  for r, g in w.rungs.items() if g.kind == "settlement")
 
 # ---------------------------------------------------------------- A. Church sites
@@ -99,23 +99,23 @@ for stype, srows in sites["venue_site_rows"].items():
     for r, (sid, d) in settle.items():
         if d["type"] == stype:
             for row in srows:
-                minted.append((P.territory_id_of(P.enclosing_territory(w, r)), sid, row["slug"],
+                minted.append((territory_id_of(world_q.enclosing_territory(w, r)), sid, row["slug"],
                                row["site"]["kind"], row["site"]["condition"]))
 per_kind = collections.Counter(m[3] for m in minted)
 print("Church Sites by kind:", dict(sorted(per_kind.items())), "total", len(minted))
 per_terr = collections.Counter(m[0] for m in minted)
-print("Church Sites by territory:", {t: per_terr.get(P.territory_id_of(t), 0) for t in territories})
+print("Church Sites by territory:", {t: per_terr.get(territory_id_of(t), 0) for t in territories})
 covered = 0
-scope = [t for t in territories if t in under_realm and settles_in.get(P.territory_id_of(t), 0)]
+scope = [t for t in territories if t in under_realm and settles_in.get(territory_id_of(t), 0)]
 for t in scope:
-    n = per_terr.get(P.territory_id_of(t), 0)
+    n = per_terr.get(territory_id_of(t), 0)
     covered += n >= 1
     check(n >= 1, f"{t} (under {realm}, holds a settlement) holds >= 1 Church-owned Site ({n})")
 print(f"coverage: {covered} of {len(scope)} territories under {realm} that hold a settlement")
 for t in territories:
     if t in scope:
         continue
-    tid = P.territory_id_of(t)
+    tid = territory_id_of(t)
     n_set, n_sites = settles_in.get(tid, 0), per_terr.get(tid, 0)
     why = ("holds no settlement" if not n_set else
            f"foreign root (not under {realm}); {n_set} settlement(s)"
@@ -166,10 +166,10 @@ check(not person_like, "no row names a person or keys on a faction/office id")
 bands = {t: b["band"] for b in geo["radiation_bands"] for t in b["territories"]}
 holder = {}
 for t in territories:
-    tid = P.territory_id_of(t)
+    tid = territory_id_of(t)
     if tid in geo["provinces"]:
         holder[tid] = cast.resolve_faction(geo["provinces"][tid].get("faction"))
-foreign_roots = {P.territory_id_of(t) for t in territories if t not in under_realm}
+foreign_roots = {territory_id_of(t) for t in territories if t not in under_realm}
 CON = desc["affiliation_roster"]["concerns"]
 S, E, C = CON["church"][0], CON["einhir"][0], CON["altonia"][0]
 engages = desc["heritage_roster"]["engages"]

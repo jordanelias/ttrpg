@@ -13,7 +13,7 @@ from __future__ import annotations
 import random
 
 from engine.season.data.matrix import Step, WriteClass
-from engine.season.harness.populated import build_realm
+from engine.season.boot.realm import build_realm
 from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.loop.sides import sides_of
 from engine.season.manifest.registrar import MODULE_ENTRIES
@@ -44,7 +44,7 @@ def _governed_cohorts(w, faction):
 
 
 def _crown_levy(w, strategy="advance", troop_type="levy"):
-    """The Crown's whole levy under arms in one subformation, through the real verbs, commanded by ACTOR. A trained
+    """The Crown's whole levy under arms in one unit, through the real verbs, commanded by ACTOR. A trained
     type needs its Site: one full barracks is planted in each cohort's town, as a faction that had built them would
     have (the shipped realm seats none, so it can only raise levy, and a levy line does not advance)."""
     _fold(w, Act(id="mk", actor=ACTOR, verb="create_record",
@@ -72,20 +72,20 @@ def _input(w, target):
 
 
 def _troops(oob):
-    return sum(s.troops for s in oob.subformations)
+    return sum(s.troops for s in oob.units)
 
 
 # ---------------------------------------------------------------------------------------- M1, M2, M3: the chain runs
 def test_the_shipped_realm_can_raise_field_and_win_with_an_army():
-    """One shipped cohort cannot field a unit (weight 2 = 60 troops, under the engine's 100-troop floor); the faction's
+    """One shipped cohort cannot field an army (weight 2 = 60 troops, under the engine's 100-troop army floor); the faction's
     whole levy, under its commander, can: 15 cohorts = 900, recruited from cohorts that are committed to nobody."""
-    assert R.under_arms_cap(2) < 100, "control: a single shipped cohort is below the engine's unit floor"
+    assert R.under_arms_cap(2) < 100, "control: a single shipped cohort is below the engine's army floor"
     w = build_realm(0)
     cohorts = _governed_cohorts(w, CROWN)
     assert len(cohorts) == 15 and not set(cohorts) & set(world_q.members(w, CROWN)), "fixture: governed, not committed"
     _crown_levy(w, troop_type="spearmen")
     rec = w.records["crown_army"].subject_matter
-    assert sum(n for sf in rec["subformations"] for _c, n in sf["assigned"]) == 15 * R.under_arms_cap(2) >= 900
+    assert sum(n for sf in rec["units"] for _c, n in sf["assigned"]) == 15 * R.under_arms_cap(2) >= 900
     # The Church's territory, not its walled town: slow infantry cannot storm walls (A.9, WALLS), which is a rule and
     # not a defect, and a field AT a territory is an open one.
     inp = _input(w, DEFENDED_TERR)

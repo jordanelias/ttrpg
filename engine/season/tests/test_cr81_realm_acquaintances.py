@@ -39,8 +39,9 @@ import pytest
 from ..data.rosters import OFFICES_SEATS
 from ..decision import assemble
 from ..decision.options import opening_set
-from ..harness import populated
-from ..harness.populated import build_realm
+from ..boot import realm as boot_realm
+from ..boot.realm import _first_holder
+from ..boot.realm import build_realm
 from ..queries import world_q
 from ..queries.person_q import KNOWN_PERSON_CLAIM, known_persons
 from ..queries.world_q import faction_holding
@@ -109,7 +110,7 @@ def test_the_high_status_set_is_the_throne_its_consort_and_the_duchy_seats(world
     on, _ = worlds[0]
     rows = [r for r in OFFICES_SEATS if r["post"] in JORDANS_EXAMPLE]
     assert {r["post"] for r in rows} == JORDANS_EXAMPLE and len(rows) == 5   # two Dukes (Valorsmark, Varfell)
-    holders = {populated._first_holder(on, r["id"]) for r in rows}
+    holders = {_first_holder(on, r["id"]) for r in rows}
     assert len(holders) == 4                     # the King also holds Valorsmark's ducal seat
     for a in holders:
         assert holders - {a} <= set(known_persons(on.persons[a].ledger, a)), a
@@ -148,7 +149,7 @@ def test_control_the_step_off_is_the_parent_realm_and_no_base_claim_is_pushed_ou
 def test_planted_failure_the_step_a_no_op_reproduces_the_base_and_reddens_the_exit(monkeypatch):
     """PLANTED FAILURE: with `seed_acquaintances` writing nothing, 83 of 83 know no one again and the
     exit's own assertion goes red."""
-    monkeypatch.setattr(populated, "seed_acquaintances", lambda w, pairs: [])
+    monkeypatch.setattr(boot_realm, "seed_acquaintances", lambda w, pairs: [])
     w = build_realm(0)
     assert _know_none(w) == 83
     assert w.content_hash() == build_realm(0, acquaintances=False).content_hash()

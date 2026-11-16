@@ -60,6 +60,7 @@ from ..loop.driver import resolvable_verbs
 from ..queries import world_q
 from ..state.attribution import causing_act
 from . import populated
+from ..boot.realm import build_realm
 from .strife_data import LINKS, MOVES, SIGNATURES, STUDY_FLOW, base_code
 
 
@@ -448,7 +449,7 @@ def measure(seasons: int, seeds: tuple, strands: bool = False) -> dict:
     seen, act, residue = Counter(), Counter(), Counter()
     block: list = []
     for s in seeds:
-        w = populated.build_realm(s)
+        w = build_realm(s)
         populated.run(seasons, s, w=w)
         rd = readers_for(w)
         for e in w.log:

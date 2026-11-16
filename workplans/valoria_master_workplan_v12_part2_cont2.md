@@ -47,17 +47,6 @@
 |---|---|---|
 | `S/tests/test_b11a_duel_reach.py` | B01.01 | S1 |
 | `S/tests/test_b11a_scores_and_obstacle.py` | B01.02 | S1 |
-| `S/tests/test_u5a_core_owed.py` | B03.53 | S3 |
-| `S/tests/test_event_kind_roster.py` | B03.57 | S3 |
-| `S/tests/test_person_interior.py` | B03.58 | S3 |
-| `S/tests/test_faction_standing.py` | B03.65 | S3 |
-| `S/tests/test_thread_operations.py` | B03.68 | S3 |
-| `S/tests/test_earns_contract.py` | B03.75 | S3 |
-| `S/tests/test_fold_gate_refusal.py` | B03.76 | S3 |
-| `S/tests/test_gate_observation.py` | B03.83 | S3 |
-| `S/tests/test_budget.py` | B03.86 | S3 |
-| `S/tests/valoria/test_export_season_registries.py` | B03g.01 | S4 |
-| `S/tests/test_boot_module.py` | B03c.01 | S4 |
 | `S/tests/test_u1_capability_surface.py` | B04.02 | S6 |
 | `S/tests/test_sc_hearing_capabilities.py` | B04.18 | S6 |
 | `engine/tests/test_opposed_ob.py` | B04.24 | S6 |
@@ -318,10 +307,6 @@
 
 | path created | item | caller the item names (searched in the item's own text) |
 |---|---|---|
-| `engine/engine_params/threadwork_params.json` | B03.68 | its exporter's `--check` (named in the item) |
-| `engine/engine_params/season_registries.json` | B03g.01 | a `ci_checks_registry.yaml` row; the CI workflow (named); the local tier; its exporter's `--check` (named in the item) |
-| `tools/export_season_registries.py` | B03g.01 | a `ci_checks_registry.yaml` row; the CI workflow (named); the local tier; a gate command |
-| `engine/season/boot/__init__.py` | B03c.01 | code: imported by the items that consume it (a library file, no CI caller owed) |
 | `modules/combat/__init__.py` | B13.01 | a composition row |
 | `engine/dice_engine/fmath.py` | B06.01 | code: imported by the items that consume it (a library file, no CI caller owed) |
 | `engine/dice_engine/draw.py` | B06.03 | code: imported by the items that consume it (a library file, no CI caller owed) |
@@ -393,13 +378,11 @@
 |---|---|---|
 | B11.04 | `04` §C.6, a new row for the event-kind `reach` channel (CR-29) | covered by ED-IN-0300 (HD-22), explicitly: its ratified row (`registers/editorial_ledger_in.jsonl`, the superseding ED-IN-0300) names CR-29 among the positions whose hold it lifted and reads M11's "a new row in ratified 04 section C.6" as yes; ED-IN-0298's superseding row states the shape (checked by repair lane V1); B11.03 lands the code first, as the row's "lands only in the same PR as the channel's code and first reader" asks |
 | B41.03 | `04` §C.12, the Result-shape hunk (GO-10) | **hunk HELD** (repair lane V1): ED-IN-0300's ratified row names the positions whose holds it lifted, and GO-10 is not one; the paragraph adds a Layer 1 rule with no node, so its step 4 waits on J-07 or an `L1-A*` node; the code steps proceed |
-| B03.70 | the stale Layer 0 and Layer 1 passages of IN-44 (`04`, `architecture/PLAN.md`, `VOCABULARY.md`, `holonic_ARCHITECTURE.md`) | covered by ED-IN-0300; the PR body lists them |
-| B03.71 | `04`'s `succeed` designation nodes (A1-81, IN-44 row 14) | **HELD** (repair lane V1): it re-words Layer 1 to the route the code takes on an assumed ruling (RS-27 owing the wording, `[ASSUMPTION]`); CLAUDE.md §0.05 and A-97 need a recorded ruling (an `L1-A*` node or Jordan's word); ED-IN-0300 licenses landing text, it rules nothing on its content; J-07 |
-| B03.66 | `CLAUDE.md` §7's sentence on the seeded pins (Layer 0) | covered by ED-IN-0300; the PR body lists it |
+| B03.71 | `04`'s `succeed` designation nodes (A1-81, IN-44 row 14) | **HELD** (repair lane V1): it re-words Layer 1 to the route the code takes on an assumed ruling (RS-27 owing the wording, `[ASSUMPTION]`); CLAUDE.md §0.05 and A-97 need a recorded ruling (an `L1-A*` node or Jordan's word); ED-IN-0300 licenses landing text, it rules nothing on its content; J-07; its instruction: `FORK:61b37b8d:workplans/valoria_master_workplan_v12_part5.md` B03.71 (expunged) |
 | B36.08 | a possible `04` §A.2 row for NM-W5's journal, if its step 1 finds the journal must read Scenes | **covered by ED-IN-0300 on the same two conditions** (ladder step 4: B11.04's and B41.03's precedent); the item's text takes HELD on that branch instead (§11 C-15, for check lane K10) |
-| B03.19 | `04`'s rejection-5 measurement paragraph made a command (`11_GO_pointer_and_stale_text_resolutions` item 6) | **HELD** by its own text (Jordan merges the amendment): held back |
+| B03.19 | `04`'s rejection-5 measurement paragraph made a command (`11_GO_pointer_and_stale_text_resolutions` item 6) | **HELD** by its own text (Jordan merges the amendment): held back; its instruction: `FORK:61b37b8d:workplans/valoria_master_workplan_v12_part4_cont.md` B03.19 (expunged) |
 
-**The held-back list for the adopting PR body, cross-checked against `valoria_master_workplan_v12.md` §11.2.** Every row of §11.2 stands (canon lines and the Coup Counter, A-17; the strife master's five sentences, A-84; A-60's unlocated directive; the `CLAUDE.md` preamble sentence on ED-GO-0002; `CLAUDE.md` §3's `pc_engine` sentence, edited in B13's own PR; GO-09's workflow line; the Layer 1 items held; `off_npc_084`'s rung; every authored value; the blocked entries; the 54 held entries; the CI cadence of a parallel step; who wrote the documents). **Additions this part makes to it:** (1) the four settings whose targets lie past two seasons stay at control through B99, which only quotes their readings: the scar arms and `scar_weight_shift` (B10) and the Church Influence and unsupported Turmoil triggers (B21d) (§4 rows 8, 9, 51, 52); with them the longer forms B99's argv carries (`claim_fade` edit 5's `MAX_SEASONS`, `lattice_coupling`'s fourteen-season front, `prologue`'s twenty seasons, `dues_valence` world (ii)); (2) the 55 BLOCKED settings of §4, each shipping at control (its PR body is B98's); (3) the Layer 0 and Layer 1 hunks landed under ED-IN-0300 (B03.66, B03.70, B11.04; B36.08 if its branch fires; B03.71 and B41.03's step 4 are HELD on J-07, repair lane V1), stated in their batches' PR bodies, not held back but listed so the adopting PR names them; (4) `knot`'s effect (B35.28 BLOCKED; a WR design item is owed before it, §11 C-18), with R-05's possible `n − 1 of n` at B35. The held-back list does not change for the hash or schedule corrections: none of them is a ruling.
+**The held-back list for the adopting PR body, cross-checked against `valoria_master_workplan_v12.md` §11.2.** Every row of §11.2 stands (canon lines and the Coup Counter, A-17; the strife master's five sentences, A-84; A-60's unlocated directive; the `CLAUDE.md` preamble sentence on ED-GO-0002; `CLAUDE.md` §3's `pc_engine` sentence, edited in B13's own PR; GO-09's workflow line; the Layer 1 items held; `off_npc_084`'s rung; every authored value; the blocked entries; the 54 held entries; the CI cadence of a parallel step; who wrote the documents). **Additions this part makes to it:** (1) the four settings whose targets lie past two seasons stay at control through B99, which only quotes their readings: the scar arms and `scar_weight_shift` (B10) and the Church Influence and unsupported Turmoil triggers (B21d) (§4 rows 8, 9, 51, 52); with them the longer forms B99's argv carries (`claim_fade` edit 5's `MAX_SEASONS`, `lattice_coupling`'s fourteen-season front, `prologue`'s twenty seasons, `dues_valence` world (ii)); (2) the 55 BLOCKED settings of §4, each shipping at control (its PR body is B98's); (3) the Layer 0 and Layer 1 hunks landed under ED-IN-0300 (B11.04; B36.08 if its branch fires; B03.71 and B41.03's step 4 are HELD on J-07, repair lane V1), stated in their batches' PR bodies, not held back but listed so the adopting PR names them; (4) `knot`'s effect (B35.28 BLOCKED; a WR design item is owed before it, §11 C-18), with R-05's possible `n − 1 of n` at B35. The held-back list does not change for the hash or schedule corrections: none of them is a ruling.
 
 ---
 
@@ -412,7 +395,7 @@
 | 1 | `:217` | IN/GO | CL-MGMT | build "HELD on M31"; settled: "CL-MGMT's M31 hold is lifted by A-104"; what remains is the list of management orders, content (E1:3732) | B34 (the empty `management_orders` roster lands, §4 row 40) once the list is authored | the design hold is gone; the list is Jordan's content |
 | 2 | `:218` | IN | IN-18 | "G5 … when its trigger M0e > 0 is met, and G8 … when judgment lifts its gate"; settled: "re-measure M0e after CR-29" (E1:4103, E2:836) | B11 (CR-29 lands: its close reads M0e) | — |
 | 3 | `:219` | IN | DEF-2 | "LEAVE with ED-606/607 (the eight handoff rules)": deferred out of M1 (E4:4370) | none: no v12 batch builds a zoom stack or reopens DEF-2 | see rows 49, 50 |
-| 4 | `:220` | IN | DEF-10 | "move `build_realm` out of `harness/`"; "no module owns world-gen yet" (E4:4372) | **fired: B03c.01** (CI-07, A-102: the builder moves to `engine/season/boot/`) | superseded, ladder step 1 (§11 C-10) |
+| 4 | `:220` | IN | DEF-10 | "move `build_realm` out of `harness/`"; "no module owns world-gen yet" (E4:4372) | **fired: B03c.01 @544cf5719c620331b70aeda93c1672977b44e9ef** (CI-07, A-102: the builder moves to `engine/season/boot/`) | superseded, ladder step 1 (§11 C-10) |
 | 5 | `:221` | IN | DEF-11 | "loader invariant 5 (`writer:` column) … deferred. L1-3 states honest grade meanwhile" (E4:4378) | none in v12 | — |
 | 6 | `:222` | IN/CHAR | REM-30 | "HELD, decide at v12 against B04"; exit "a creation arm switched off reproduces the pre-build hash" (E5 Block C37) | B04's close | B04.99 step 4 records it: closed by ladder step 1, carried by R-04.c1's batches (B34, B22, B36); exit `test_rem30_character_sheet.py` → pass (repair lane R2a; §11 C-19 resolved) |
 | 7 | `:297` | FA | M39 | settled: "part 15's design-first item (post-freeze mover; A-76 stand-in only)" (E5 Block D5) | B21c (CR-38's design, B21c.06) or B23 (A-76's stand-in) `[ASSUMPTION: M39 is the Court Parliament residue the stand-in covers — basis: the settled text's "A-76 stand-in only"]` | — |
@@ -461,7 +444,7 @@
 | 50 | `:531` | MB | ED-607 | as ED-606 (E4:797) | none (HD-29) | — |
 | 51 | `:532` | MB | ED-820 | "a v10 position giving a commander a mid-fight act" (E4:845) | **B20** (B20.08 carries the window's `rally` and `withdraw`, B19.52) | B20's session reads it at its open (§11 C-13) |
 | 52 | `:553` | GO | GO-06 | "BLK: `valoria-game` checkout (another repository)" (E1:3506) | none in this repository | — |
-| 53 | `:554` | GO | ED-509 | "`ED-GO-0002` on `main` and ED-507 content exists" (E4:743) | none: ED-507's content is Jordan's; GO-01 (B03g.03) does not fire it (A06) | cited by B03g.03 |
+| 53 | `:554` | GO | ED-509 | "`ED-GO-0002` on `main` and ED-507 content exists" (E4:743) | none: ED-507's content is Jordan's; GO-01 (B03g.03 @048724cd545117255e71d04a583d99c6cb5fe3a9) does not fire it (A06) | cited by B03g.03 @048724cd545117255e71d04a583d99c6cb5fe3a9 |
 | 54 | `:555` | GO | H-5 | "dep: the valoria-game checkout; owner GO lane/Jordan" (E5 Block D11) | none in this repository | — |
 
 **Carriers no item builds** (`H2_DECISIONS.md` HD-33: one held row each, owner lane named, none a Jordan question; the trigger is "a carrier item lands", and "could fire at" is the batch whose BLOCKED or `STOPS IF` item waits):
@@ -495,11 +478,6 @@ Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them
 | batch | lane | ED block (declared + spare) | H block (declared + spare) | against H1 §12 |
 |---|---|---|---|---|
 | B24p-sc-proceeding | SC | ED-SC-0054..0056 (1+2) | H-861..H-914 (54+0) | added 2026-11-14 after the table's last block (B01a's H-856..H-860, on top of B99's); `references/id_reservations.yaml` SC `next_free` 54 → 57 at the batch's opening, not by this plan; the hole register's next id after this block H-915. The fold map's own range H-856..H-909 assumed H-855 as the last allocated id: B01a had taken H-856..H-860 first |
-| B03-hygiene | IN | ED-IN-0371..0372 (0+2) | H-379..H-383 (0+5) | ED shifted |
-| B03g-go-early-landings | GO | ED-GO-0003..0004 (0+2) | H-384..H-388 (0+5) | same |
-| B03c-boot | IN | ED-IN-0373..0374 (0+2) | H-389..H-393 (0+5) | ED shifted |
-| B16L-mb-words | MB | ED-MB-0082..0083 (0+2) | H-394..H-398 (0+5) | same |
-| B03a-prose | IN | ED-IN-0375..0376 (0+2) | H-399..H-403 (0+5) | ED shifted |
 | B13-pc-package | PC | ED-PC-0060..0061 (0+2) | H-404..H-408 (0+5) | same |
 | B16M-mb-engine-words | MB | ED-MB-0084..0085 (0+2) | H-409..H-413 (0+5) | same |
 | B04-capability-home | IN | ED-IN-0377..0378 (0+2) | H-414..H-419 (1+5) | ED shifted |
@@ -562,7 +540,7 @@ Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them
 
 | milestone | closes at (step now) | its batches, with their step now | a batch of it closing after the close? | rows the closing batch reads |
 |---|---|---|---|---|
-| M0 · ground | B04 (S6; §2.3 S6) | B00 S0, B01 S1, B02 S2, B03 S3, B03g S4, B03c S4, B16L S4, B03a S5, B13 S6, B16M S6, B04 S6 | none | R-01, R-02, R-03, R-04, R-09 |
+| M0 · ground | B04 (S6; §2.3 S6) | B00 S0, B01 S1, B02 S2, B03 S3, B13 S6, B16M S6, B04 S6 | none | R-01, R-02, R-03, R-04, R-09 |
 | M1 · every outcome is drawn | B08 (S13; §2.3 S13) | B05 S7, B06 S8, B07 S9, B08 S13 | none | R-01, R-03, R-09 |
 | M2 · persons | BA1 (S12; §2.3 S12) | B09 S10, B10 S11, BA1 S12 | none | R-06, R-07, R-08, R-09 |
 | M3 · every verb | B35 (S18; §2.3 S18) | B11 S12, B12a S13, B12b S14, B12c S15, B14 S8, B15 S12, B21 S12, B21b S13, B21c S14, B22 S17, B23 S18, B24a S15, B25 S16, B26 S17, B27 S16, B28 S17, B29 S14, B32 S17, B35 S18 | none | R-01, R-04, R-05, R-07, R-08, R-09 |
@@ -599,7 +577,7 @@ The second table reads every batch's `REQUIREMENT:` line for `R-0n`, so it lists
 | C-07 | `sitting_exchanges`: the structure's §7.8 and B28's line call it a B98 member; B24.37 sets it in its own batch | the item that ships it governs (step 3) | §4 (not a member); listed: K8 (part 35's line) |
 | C-08 | `RESILIENCE_GAIN`: B03 (part 5:68) says no B98 member; B35 lists it BLOCKED in B98 | either way it stays at 0: one BLOCKED row (step 5) | §4 row 76; no edit |
 | C-09 | `unauthored_attributes`: B05.16 deletes it (U1-B step 7); BA1's line and `UNDECIDED` (3) say persons the draft leaves unauthored keep it | superseded at B05 (step 1): an unauthored attribute reads D-U1-04's average after B05; BA1's sentence is to be restated in those words | listed: K4 (part 18_cont) |
-| C-10 | DEF-10 is held ("move `build_realm` out of `harness/`"), and B03c.01 (CI-07, A-102) makes that move | the trigger has fired; superseded by B03c.01 (step 1) | §8 row 4; the adoption's held list drops it |
+| C-10 | DEF-10 is held ("move `build_realm` out of `harness/`"), and B03c.01 @544cf5719c620331b70aeda93c1672977b44e9ef (CI-07, A-102) makes that move | the trigger has fired; superseded by B03c.01 @544cf5719c620331b70aeda93c1672977b44e9ef (step 1) | §8 row 4; the adoption's held list drops it |
 | C-11 | `STOPS IF` sentences naming a batch that closes later (`xref.py`, 104 sentences): B20.09 → B31 (`reform`'s reader, S19), B07.04 → B21, B29.03 → B32; B28.09 → B32 and B39.28 → B98 are descriptive | each names a fallback the item takes; no edge (step 5): B20.09 accepts `reform` without the reader, and B31's matching item re-checks | listed: K8 (B20.09 and B31's item) |
 | C-12 | DEF-3's trigger "milestone M2" is v11's M2 (the any-seed story bar); v12's M2 is "persons" | read as v12's story gate, B36 (step 3: the block names THE BAR, which `23_STORY_D` reads) | §8 row 42 |
 | C-13 | ED-820's trigger ("a commander mid-fight act") may fire at B20 (B20.08's `rally`, `withdraw`) | §7.9's rule: B20's session reads it at its open; an item of B20 or `STOPPED` | §8 row 51; listed: the B20 session, K8 |
@@ -663,7 +641,7 @@ The second table reads every batch's `REQUIREMENT:` line for `R-0n`, so it lists
 
 ### 11.2 Gates that are a reading, not an execution artifact (lane H3, generated by `residue.py`, hand-classed; the bodies are not rewritten)
 
-`residue.py` scans every item `GATE` and block `BATCH GATE` line for an arm that reads a `## Status:` line, counts lines or keywords of a document, or reads that a document "states (1) to (n)", and skips arms the repair lanes already relabelled as a record line or the critic's verdict. **27 arms in 26 items or blocks.** Listed below are the 15 whose gate has no other executed arm, or whose executed arm is itself a document count; the rest are not residue: B21c.06, B27.14, B27.15, B27.19, B27.22, B27.23, B10.53, B31.01, B38.51 and B10.51's second arm already pair the "states" reading with `test -f` or `ls` and a `git diff --stat` arm (R2c, R2d's form), the "states" half being the `ners` critic's (§5.8); and B03.66, B03.70 read `wc -l CLAUDE.md` against its cap, which is the rule's own instrument on a process surface (CLAUDE.md's preamble; §0.05 clause 4).
+`residue.py` scans every item `GATE` and block `BATCH GATE` line for an arm that reads a `## Status:` line, counts lines or keywords of a document, or reads that a document "states (1) to (n)", and skips arms the repair lanes already relabelled as a record line or the critic's verdict. **27 arms in 26 items or blocks.** Listed below are the 15 whose gate has no other executed arm, or whose executed arm is itself a document count; the rest are not residue: B21c.06, B27.14, B27.15, B27.19, B27.22, B27.23, B10.53, B31.01, B38.51 and B10.51's second arm already pair the "states" reading with `test -f` or `ls` and a `git diff --stat` arm (R2c, R2d's form), the "states" half being the `ners` critic's (§5.8).
 
 **The minimum execution artifact** for every DESIGN-FIRST row below is the one R2c and R2d wrote for B21c.06 and B27.14: `test -f <the item's design file>` → exit 0, and `git diff --stat <item-base>..HEAD -- engine modules tools` → empty (no code), with "states (1) to (n), each with a falsifier" moved to the `ners` critic's verdict in the commit body.
 

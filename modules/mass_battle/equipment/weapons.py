@@ -3,8 +3,7 @@
 Separated out of the troop taxonomy (Jordan 2026-06-30): a troop type NAMES a weapon; it no longer
 embeds weapon facts. Splitting weapons into their own module lets the weapon model evolve on its own and
 later be re-mapped onto the scene-combat (personal) weapon model — which already decomposes a weapon into
-physical primitives (mass, head geometry, reach) in designs/scene/combat_engine_v1/weapons.py — without
-disturbing troop_types.
+physical primitives (mass, head geometry, reach) — without disturbing troop_types.
 
 This seed is DELIBERATELY light. It holds only the descriptive axes the board-game troop table already
 uses (mass_battle_v30 §B.2 — a damage TYPE and a WEIGHT class, plus melee/ranged reach and keywords),
@@ -15,7 +14,7 @@ touching the resolver.
 
 DYNAMIC: register / override / extend ARSENAL at import or runtime. ADAPTABLE: records are open;
 `.variant()` spins regional/quality variants off a base. No engine import, no resolution logic — a data
-surface. NOT YET WIRED into resolution, so importing this changes no engine behaviour (byte-exact).
+surface. `troop_types.registry.unit_type_for` reads a weapon's `reach` through `equipment.loadout_for`.
 [provisional source: mass_battle_v30.md §B.2 — TTRPG Weapon column + Anti-Armour / Volley keywords]
 """
 from modules.mass_battle.equipment._base import Registry

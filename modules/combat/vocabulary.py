@@ -85,9 +85,8 @@ ADEF_MODE_GAP_THRUST = 'gap-thrust'
 ADEF_MODE_CUT = 'cut'
 
 # ── THE GUARDED SET ────────────────────────────────────────────────────────────────────────────────
-# The 18 tokens the ownership guard enforces. This is the set `workbench/structure_scan.py` [D] has always
-# measured (279 occurrences / 18 tokens on the pre-sweep tree); it is declared HERE so the instrument and
-# the test read the same list.
+# The 18 tokens the ownership guard enforces. This is the set `workbench/structure_scan.py` [D] measures; it is
+# declared HERE so the instrument and the test read the same list.
 #
 # DELIBERATE EXCLUSION: HEAD_CUT ('cut') is NOT guarded. The same string is the name of a GEOMETRY primitive
 # field (`geo['cut']`, the derived edge magnitude, alongside `geo['thrust']`/`geo['gap']`), which is a

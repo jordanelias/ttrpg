@@ -35,6 +35,7 @@ import pytest
 
 from ..data.requires import UNKNOWN, Observation
 from ..harness import populated as POP
+from ..boot.realm import build_realm
 from ..state.carriers import Event, Rung, Site, StateChange, Tenure, Term
 from ..state.gate import Subject
 from ..state.world import World, _canonical, _entity_digest
@@ -283,7 +284,7 @@ def test_go07_a_type_with_no_rule_raises_rather_than_guessing():
 
 def test_go07_control_the_build_world_old_digest_is_unmoved():
     """The build world, before a single act, reads the owner's pin."""
-    assert POP.build_realm(0).content_hash() == BUILD[0]
+    assert build_realm(0).content_hash() == BUILD[0]
 
 
 def test_go07_control_the_world_did_not_move_only_its_digest():
@@ -291,7 +292,7 @@ def test_go07_control_the_world_did_not_move_only_its_digest():
     length of its Event log read the owner's literals. Nothing is reverted: this is the shipped world."""
     checked = 0
     for (seed, seasons), want in SHIPPED.items():
-        w = POP.build_realm(seed)
+        w = build_realm(seed)
         out = POP.run(seasons, seed, w=w)
         got = {"acts": out["acts"],
                "census": hashlib.sha256(json.dumps(out, sort_keys=True, default=repr)

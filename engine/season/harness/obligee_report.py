@@ -166,7 +166,8 @@ def main(argv: Optional[list] = None) -> int:
     if len(argv) < 2:
         print(__doc__.split("USAGE:")[-1].strip())
         return 2
-    from .populated import build_realm, run
+    from ..boot.realm import build_realm
+    from .populated import run
     seasons = int(argv[0])
     for s in map(int, argv[1:]):
         w = build_realm(s)

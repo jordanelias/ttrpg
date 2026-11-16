@@ -20,6 +20,11 @@ from engine.season.state.ids import ROOT
 from engine.season.state.log import EventLog
 
 
+# B03.57: the log refuses a kind no column declares, so this file's one kind is declared to each bare
+# `EventLog` it builds, through the roster parameter (`kinds`) a `World` hands in.
+TEST_KINDS = frozenset({"test.kind"})
+
+
 def _ev(eid, causes, changes=None):
     return Event(id=eid, kind="test.kind", changes=changes or [],
                  causes=list(causes), emitted_at=1)
@@ -94,7 +99,7 @@ def test_closing_the_window_stops_the_mint():
 def test_a_hand_built_receipt_fails_append_and_a_minted_one_passes():
     """The plan's OBSERVABLE, both arms, on one log."""
     g = Gate()
-    log = EventLog(g)
+    log = EventLog(g, TEST_KINDS)
 
     with pytest.raises(Forbidden):
         log.append(_ev("e1", [ROOT], [Receipt("p1", "set", "MATTER", "body")]))
@@ -112,7 +117,7 @@ def test_a_bare_statechange_is_still_admitted_and_this_is_the_transitional_seam(
     the older class. Pinned rather than left implicit so that when `G4` closes the seam this
     test goes red and has to be deleted ON PURPOSE -- rather than the weakness being discovered
     by someone who assumed the check was total."""
-    log = EventLog(Gate())
+    log = EventLog(Gate(), TEST_KINDS)
     log.append(_ev("e1", [ROOT], [StateChange("p1", "set", "MATTER", "body")]))
     assert len(log) == 1
 
@@ -122,7 +127,7 @@ def test_a_bare_statechange_is_still_admitted_and_this_is_the_transitional_seam(
 def test_an_act_caused_event_fails_while_the_act_store_is_empty():
     """The plan's FALSIFIER. 'If it passes, the assertion is not reading the store.'"""
     store = ActStore()
-    log = EventLog(Gate(), lambda: store.ids())
+    log = EventLog(Gate(), TEST_KINDS, lambda: store.ids())
 
     with pytest.raises(Forbidden):
         log.append(_ev("e1", ["act_1"]))
@@ -136,7 +141,7 @@ def test_an_act_caused_event_fails_while_the_act_store_is_empty():
 
 
 def test_a_cause_naming_a_prior_event_resolves_and_an_invented_one_does_not():
-    log = EventLog(Gate())
+    log = EventLog(Gate(), TEST_KINDS)
     log.append(_ev("e1", [ROOT]))
     log.append(_ev("e2", ["e1"]))
     with pytest.raises(Forbidden):
@@ -145,7 +150,7 @@ def test_a_cause_naming_a_prior_event_resolves_and_an_invented_one_does_not():
 
 
 def test_root_always_resolves():
-    log = EventLog(Gate(), lambda: frozenset())
+    log = EventLog(Gate(), TEST_KINDS, lambda: frozenset())
     log.append(_ev("e1", [ROOT]))
     assert len(log) == 1
 
@@ -156,10 +161,10 @@ def test_the_log_is_reversible_indexable_and_sized():
     """`world.py:625` does `reversed(self.log)` and `content_hash` folds it positionally. A
     log with only `__iter__` raises on `reversed`, and it would raise at RUNTIME in the clock
     chain rather than here."""
-    log = EventLog(Gate())
+    log = EventLog(Gate(), TEST_KINDS)
     log.append(_ev("e1", [ROOT]))
     log.append(_ev("e2", ["e1"]))
     assert len(log) == 2
     assert [e.id for e in reversed(log)] == ["e2", "e1"]
     assert log[0].id == "e1" and log[-1].id == "e2"
-    assert bool(log) is True and bool(EventLog(Gate())) is False
+    assert bool(log) is True and bool(EventLog(Gate(), TEST_KINDS)) is False

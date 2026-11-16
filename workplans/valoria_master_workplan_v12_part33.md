@@ -16,8 +16,8 @@ INVOCATION: /methodology-execute Batch B22-mb-armies
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_MB.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
-GATE: Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0
-GATE: Batch B16L-mb-words
+GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
+GATE: Batch B16L-mb-words @2d9590e75fd253d1d88612e2d42674e2fdb5db96
 GATE: Batch B04-capability-home
 GATE: Batch B05-one-roll
 GATE: Batch B07-task-draw
@@ -81,7 +81,7 @@ EST: 6 h [estimate: the structure's §2.4 formula; nothing timed]
 | pos | item | source | state | hash | gates on |
 |---|---|---|---|---|---|
 | B22.01 | which military and physical obstacle terms join the obstacle roster, and which levels join the leverage roster | `U5b_VERBS_military_physical_residue` §1 rule 3; `IS-MB-B1` | DESIGN-FIRST | EQUAL | Batch B05, Batch B07 |
-| B22.02 | the unit row holds what the army lost, by kind | `27_MB_E` 27E-1 | BUILD | EQUAL | Batch B17, Batch B16L |
+| B22.02 | the unit row holds what the army lost, by kind | `27_MB_E` 27E-1 | BUILD | EQUAL | Batch B17, Batch B16L @2d9590e75fd253d1d88612e2d42674e2fdb5db96 |
 | B22.03 | the battle returns the stamina each unit ended with; a second battle in a lap starts from it | `27_MB_E` 27E-2 | BUILD | EQUAL | B22.02; Batch B19 |
 | B22.04 | a battle's losses are written on the unit row by kind, and counted once | `27_MB_E` 27E-3 | BUILD | EQUAL (MOVER(behaviour) under `recuperation: on`) | B22.03 |
 | B22.05 | the strength a reader sees adds the men who came back, by a draw; an act writes them | `27_MB_E` 27E-4 | BUILD | EQUAL (MOVER(behaviour) under `recuperation: on`) | B22.04 |
@@ -155,7 +155,7 @@ EST: 6 h [estimate: the structure's §2.4 formula; nothing timed]
 - FALSIFIER and CONTROL: a `restore` that returns more than is absent; absent men not counted by `cohort_claims`. Control: the realm content hash at seeds 0 to 2 equal to the previous close's (`reading @<sha>`): no caller yet.
 - GATE: `python -m pytest tests/valoria/test_mass_battle_army_record.py -q` → the four pass; the rest of the file green (the key set the test pins equal to `rosters.yaml`'s, `:189-190`).
 - HASH MOVERS: none (no caller; no shipped world holds an `army` Record).
-- DEPENDS ON: EXISTS-IN-TREE `modules/mass_battle/armyrecord.py::OPS`, `::_apply`, `::cohort_claims`, `::options`, `::validate`; V12 Batch B16L (the row key `units`, L1-1), Batch B17 (`04_MB_typed_outcome_and_one_path`).
+- DEPENDS ON: EXISTS-IN-TREE `modules/mass_battle/armyrecord.py::OPS`, `::_apply`, `::cohort_claims`, `::options`, `::validate`; V12 Batch B16L @2d9590e75fd253d1d88612e2d42674e2fdb5db96 (the row key `units`, L1-1), Batch B17 (`04_MB_typed_outcome_and_one_path`).
 - GLOSSARY: row *loss* (MB lexicon D-17: dead, captured, injured, fled; regroup, deserters) gains a pointer to `armyrecord.ABSENT_KINDS` for the two kinds the row holds.
 - NAMES: `subformations` → `units` (B16L, L1-1); `Claim.round` → `Claim.lap` (B04, PCR-4).
 - COST and TIER: small build; `sonnet`, high.
@@ -535,7 +535,7 @@ EST: 6 h [estimate: the structure's §2.4 formula; nothing timed]
 - FALSIFIER and CONTROL: a `barracks` minted under `uniform`; a second Site minted where a venue already names one. Control: `uniform` reproduces the shipped hashes.
 - GATE: `python -m pytest engine/season/tests/test_standing_ration.py engine/season/tests/test_endowment.py -q` → green; under `ground`, `armyrecord.options` on that realm offers a trained kind beside levy (`U5b_MB_residue` §3's gate), quoted in the commit body.
 - HASH MOVERS: none at `endowment_mode: uniform` ("Movers. Declared, at SE's landing": the `ground` flip is `07_SE_ground_and_granaries`', not this batch's).
-- DEPENDS ON: V12 B22.16; V12 `07_SE_ground_and_granaries` (Batch B12c: `endowment_mode`, `site_endowment` and its loader); V12 Batch B03c (`boot/realm.py`); EXISTS-IN-TREE `engine/season/queries/world_q.py::training_sites`, `engine/season/npcs.yaml` venue `b_s_014_barracks` (`:114`).
+- DEPENDS ON: V12 B22.16; V12 `07_SE_ground_and_granaries` (Batch B12c: `endowment_mode`, `site_endowment` and its loader); V12 Batch B03c @544cf5719c620331b70aeda93c1672977b44e9ef (`boot/realm.py`); EXISTS-IN-TREE `engine/season/queries/world_q.py::training_sites`, `engine/season/npcs.yaml` venue `b_s_014_barracks` (`:114`).
 - GLOSSARY: none.
 - NAMES: `harness/populated.py::build_realm` → `boot/realm.py` (B03c).
 - COST and TIER: small build (data); `sonnet`, `high`. The two-row table is authored content listed in the PR body.
@@ -682,7 +682,7 @@ EST: 6 h [estimate: the structure's §2.4 formula; nothing timed]
 - FALSIFIER and CONTROL: an army Record at `off`. Control: `armies_at_build: off`: hashes EQUAL to the base but for B22.20's declared mover.
 - GATE: `PYTHONHASHSEED=0 python -m pytest engine/season/tests/test_vm_mil_c_muster.py -q` → green; and the source's arm, moved here: `aperture 2 s`, s = 0 to 2, `armies_at_build: empty` → `army.recruited` emitted by an act that passed through DELIBERATE (the act store names a chooser lap, not a hand-built id) at every seed; `recruit`'s refusals on `room` not repeated by the same actor the next season. (Source "chooser round" → "chooser lap", A-101.)
 - HASH MOVERS: none at `off`.
-- DEPENDS ON: V12 B22.22; V12 Batch B03c (`boot/realm.py`); V12 Batch B21 (`may_wage`); EXISTS-IN-TREE `engine/season/data/fixtures.py: withheld_verbs` (shipped `("destroy_record", *ARMY_VERBS, "marshal", "surrender")`, H-156), `engine/season/harness/army_presets.py::install`.
+- DEPENDS ON: V12 B22.22; V12 Batch B03c @544cf5719c620331b70aeda93c1672977b44e9ef (`boot/realm.py`); V12 Batch B21 (`may_wage`); EXISTS-IN-TREE `engine/season/data/fixtures.py: withheld_verbs` (shipped `("destroy_record", *ARMY_VERBS, "marshal", "surrender")`, H-156), `engine/season/harness/army_presets.py::install`.
 - GLOSSARY: none.
 - NAMES: `harness/populated.py` → `boot/realm.py` (B03c).
 - COST and TIER: small build; `sonnet`, `high`.

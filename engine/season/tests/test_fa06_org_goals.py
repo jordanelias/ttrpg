@@ -25,6 +25,8 @@ import yaml
 from ..data import cast, files, goals
 from ..gaps import Unspecified
 from ..harness import populated as P
+from ..boot.realm import _slug, build_realm, goals_missing
+from ..data.rosters import FACTIONS
 
 CHURCH_HERESY = "goal_church_root_out_heresy"
 INQ = "goal_inquisitors_find_heresy"
@@ -45,7 +47,7 @@ def _plant(monkeypatch, tmp_path, rows):
 
 @pytest.fixture(scope="module")
 def shipped():
-    return P.build_realm(0)
+    return build_realm(0)
 
 
 def _committed(w, gid) -> set:
@@ -57,8 +59,8 @@ def _committed(w, gid) -> set:
 # ---------------------------------------------------------------------------------------------------
 
 def test_fa06_the_shipped_file_covers_every_seated_organization(shipped):
-    assert P.goals_missing(shipped, goals.goals()) == []
-    heads = [f for f in P.FACTIONS if cast.faction_leader(f) and f"p_{P._slug(cast.faction_leader(f))}" in shipped.persons]
+    assert goals_missing(shipped, goals.goals()) == []
+    heads = [f for f in FACTIONS if cast.faction_leader(f) and f"p_{_slug(cast.faction_leader(f))}" in shipped.persons]
     bodies = {o.body for o in shipped.offices.values() if o.body
               and any(t.kind == "hold" and t.live and t.object == oid for t in shipped.tenures
                       for oid in [o.id])}
@@ -80,7 +82,7 @@ def test_fa06_the_reading_lists_exactly_the_organization_a_deleted_row_leaves_ba
     if gone == "goal_varfell_southernmost_dominion":     # Varfell holds three rows; delete them all
         rows = [r for r in rows if r["org"] != {"faction": "Varfell"}]
     _plant(monkeypatch, tmp_path, rows)
-    assert P.goals_missing(shipped, goals.goals()) == [named]
+    assert goals_missing(shipped, goals.goals()) == [named]
 
 
 # ---------------------------------------------------------------------------------------------------
@@ -92,30 +94,30 @@ def test_fa06_a_body_with_a_seated_member_and_no_goal_refuses_seeding_naming_it(
     assert len(rows) == len(_shipped_rows()) - 1, "control: exactly the Guild body's row is deleted"
     _plant(monkeypatch, tmp_path, rows)
     with pytest.raises(Unspecified) as exc:
-        P.build_realm(0)
+        build_realm(0)
     assert "body 'Guild'" in exc.value.what and exc.value.what.count("body ") == 1 and "faction " not in exc.value.what
     # CONTROL: the same partial file builds when the switch is off, and the control arm never asks
-    assert P.build_realm(0, goals_complete=False)._goal_census["goals"] > 0
-    assert P.build_realm(0, goals=False)._goal_census["goals"] == 0
+    assert build_realm(0, goals_complete=False)._goal_census["goals"] > 0
+    assert build_realm(0, goals=False)._goal_census["goals"] == 0
 
 
 def test_fa06_a_faction_with_an_authored_head_and_no_goal_refuses_seeding_naming_it(monkeypatch, tmp_path):
     rows = [r for r in _shipped_rows() if r["org"] != {"faction": "Hafenmark"}]
     _plant(monkeypatch, tmp_path, rows)
     with pytest.raises(Unspecified) as exc:
-        P.build_realm(0)
+        build_realm(0)
     assert "faction 'Hafenmark'" in exc.value.what and "body " not in exc.value.what
     # a bodyless, headless organization (Guilds' head is none) is asked for nothing at the faction level
     assert cast.faction_leader("Guilds") is None
     rows = [r for r in _shipped_rows() if r["org"] != {"faction": "Guilds"}]
     _plant(monkeypatch, tmp_path, rows)
-    assert P.build_realm(0)._goal_census["goals"] > 0, "no authored head: no faction row is required"
+    assert build_realm(0)._goal_census["goals"] > 0, "no authored head: no faction row is required"
 
 
 def test_fa06_an_empty_file_refuses_and_names_every_seated_organization(monkeypatch, tmp_path, shipped):
     _plant(monkeypatch, tmp_path, [])
     with pytest.raises(Unspecified) as exc:
-        P.build_realm(0)
+        build_realm(0)
     for name in ("faction 'Valorsmark'", "faction 'Restoration Movement'", "body 'Riskbreakers'", "body 'Holy See'"):
         assert name in exc.value.what, name
 

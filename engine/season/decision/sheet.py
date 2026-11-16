@@ -49,21 +49,16 @@ from __future__ import annotations
 
 import copy
 from dataclasses import dataclass
-from types import MappingProxyType
 from typing import Any, Callable, Iterable, Mapping, Optional, Sequence
 
 from ..data.rosters import AFFILIATIONS
 from ..gaps import Forbidden
 from ..queries.person_q import LedgerReader
-from ..state.carriers import Person, Question, View
+from ..state.carriers import Person, PersonInterior, Question, View, frozen
 from .choose import make_ranker, release
 
 _LAW = ("IN-47 / A-25 -- a management space ranks and selects among the candidates the opening set "
         "formed and the persons the builder seated; it forms none and writes nothing")
-
-
-def _frozen(d: Mapping) -> Mapping:
-    return MappingProxyType(dict(d or {}))
 
 
 # ---------------------------------------------------------------------------------------------------
@@ -89,8 +84,8 @@ def creation_sheet(persons: Iterable[Person]) -> tuple:
     """The creation sheet: one `CreationRow` per seated person, in id order (a pick list, not a ranking).
     `persons` is what the caller already holds (`w.persons.values()` before the first season); this
     function takes no `World` and writes nothing."""
-    return tuple(CreationRow(p.id, p.name, _frozen(p.capability), _frozen(p.pursuits),
-                             _frozen(p.conviction), _frozen(p.attributes))
+    return tuple(CreationRow(p.id, p.name, frozen(p.capability), frozen(p.pursuits),
+                             frozen(p.conviction), frozen(p.attributes))
                  for p in sorted(persons, key=lambda q: q.id))
 
 
@@ -136,7 +131,8 @@ def development_space(fx: Any, mint: Callable[[str, str, str], str],
                       pick: Callable[[DevelopmentSheet], Sequence[int]],
                       verbs: Optional[frozenset] = None,
                       draw: Optional[Callable[[str, str], Any]] = None) -> Callable[..., list]:
-    """A play-surface callback `(p, v, s, ask_budget, auto) -> list[Scene]` for the player's person.
+    """A play-surface callback `(p, v, s, ask_budget, auto) -> list[Scene]` for the player's person; `p` is the
+    `PersonInterior` DELIBERATE hands `choose` (B03.58), the same type, so the space cannot assign to the person.
 
     `pick(sheet)` returns INDICES into `sheet.candidates`, in the order the player would spend his
     budget. The space refuses an index out of range or repeated (`Forbidden`), then packs the picked
@@ -146,15 +142,15 @@ def development_space(fx: Any, mint: Callable[[str, str, str], str],
     `make_chooser`; a different `verbs` or `draw` is a different candidate set, not this space's control."""
     rank = make_ranker(fx, verbs, draw)
 
-    def space(p: Person, v: View, s: Any, ask_budget: Callable[[], int], auto: Any = None) -> list:
+    def space(p: PersonInterior, v: View, s: Any, ask_budget: Callable[[], int], auto: Any = None) -> list:
         q = getattr(v, "question", None)
         if q is None:
             return []
         cands = rank(p, v)
         n = ask_budget()
-        sheet = DevelopmentSheet(p.id, v, q, tuple(copy.deepcopy(c) for c in cands), n, _frozen(p.capability),
-                                 _frozen(p.pursuits), tuple(p.stance), _frozen(p.conviction),
-                                 _frozen(p.scar), p.body)
+        sheet = DevelopmentSheet(p.id, v, q, tuple(copy.deepcopy(c) for c in cands), n, frozen(p.capability),
+                                 frozen(p.pursuits), tuple(p.stance), frozen(p.conviction),
+                                 frozen(p.scar), p.body)
         chosen = [int(i) for i in pick(sheet)]
         if len(set(chosen)) != len(chosen) or any(not 0 <= i < len(cands) for i in chosen):
             raise Forbidden(f"{p.id}'s pick {chosen} is not a selection from the {len(cands)} candidates "
@@ -203,7 +199,7 @@ def chronicle(p: Person) -> Chronicle:
     return Chronicle(
         p.id, tuple(p.ledger),
         tuple((subj, reader.latest_about(subj)) for subj in subjects),
-        _frozen(p.conviction),
-        _frozen({k: n for k, n in (p.scar or {}).items() if k not in AFFILIATIONS}),
-        _frozen({k: n for k, n in aff.items() if k in held}),
-        _frozen({k: n for k, n in aff.items() if k not in held}))
+        frozen(p.conviction),
+        frozen({k: n for k, n in (p.scar or {}).items() if k not in AFFILIATIONS}),
+        frozen({k: n for k, n in aff.items() if k in held}),
+        frozen({k: n for k, n in aff.items() if k not in held}))

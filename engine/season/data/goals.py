@@ -1,7 +1,7 @@
 """`season.data.goals` -- THE GOALS CARRIER'S ONE LOADER (v9 IN-66, ED-IN-0293 (8)).
 
 `engine/season/goals.yaml` authors the goals of the organizations -- a faction, a body, a seat -- as
-rows; `harness/populated.py` will mint each as an OUGHT Proposition at world-gen (IN-68, the reader).
+rows; `boot/realm.py` mints each as an OUGHT Proposition at world-gen (IN-68, the reader).
 This module READS and VALIDATES; it translates nothing and guesses nothing. Every organization, kind
 and referent a row names is resolved against the one owner of that fact, and a row that does not
 resolve is REFUSED by name -- never skipped, never coerced to a plausible neighbour (`data/cast.py`'s
@@ -228,7 +228,7 @@ def _pursuits(gid, raw, law: str = _LAW, label: str = "goal") -> dict:
 
 
 def _is_orientation(obj: dict) -> bool:
-    """The row mints NO Proposition (`goal_object_kinds`' note; `harness/populated.py::seed_goals` skips it),
+    """The row mints NO Proposition (`goal_object_kinds`' note; `boot/realm.py::seed_goals` skips it),
     so no one can be committed to it."""
     return obj.get("kind") == "orientation"
 

@@ -1,9 +1,8 @@
 """modules.mass_battle.core.state — morale / discipline / rout state transitions.
-Stage-1 behaviour-frozen extract from orchestration.py. The SOLE site (with the exchange pool)
-of the resolver layer that MUTATES unit/subunit morale, discipline, and rout. Pure w.r.t.
-modules: depends on config + duck-typed unit/atom methods (erode_morale, derive_rout,
-degrade_discipline, ...) only; imports nothing from orchestration (no cycle). Re-imported by
-orchestration via star-import so phase_boundary and every caller are unchanged.
+The SOLE site (with the exchange pool) of the resolver layer that MUTATES unit/subunit morale, discipline,
+and rout. Pure w.r.t. modules: depends on config + duck-typed unit/atom methods (erode_morale, derive_rout,
+degrade_discipline, ...) only; imports nothing from orchestration (no cycle). Re-imported by orchestration
+via star-import.
 [canonical: mass_battle_v30.md §A.4 morale/discipline, §A.12 rout]"""
 from modules.mass_battle import rngsource  # single owner of engine randomness (see rngsource.py)
 from modules.mass_battle.config import *
@@ -19,13 +18,12 @@ def _rout_resilience(atom):
     the ROUT_CAP (holds to ~30% losses); a loose, shaken one (resilience -> 0) breaks toward ROUT_ONSET
     (~15%). Uses starting morale AND starting discipline (not live) so the break-point reflects inherent
     quality; live morale erosion still routs a unit independently via the canonical §A.4 path.
-    [Fable-audit A8 fix, 2026-07-24] eff_discipline_start, not eff_discipline: the break-point is drawn
-    lazily on first check, which happens AFTER phase-1 discipline degradation — reading LIVE discipline gave
-    identical-quality units different break distributions purely by casualty *timing*, contradicting the
-    'stable quality' contract above."""
-    disc = max(0.0, min(1.0, (atom.eff_discipline_start - 2.0) / 3.0))  # [canonical: params/factions/stats_1_7_scale.md — discipline 2->0/5->1 normalization, same curve as resolution._disc_prep]
+    eff_discipline_start, not eff_discipline: the break-point is drawn lazily on first check, which happens
+    AFTER phase-1 discipline degradation, so reading LIVE discipline would give identical-quality units different
+    break distributions purely by casualty *timing*, contradicting the 'stable quality' contract above."""
+    disc = max(0.0, min(1.0, (atom.eff_discipline_start - 2.0) / 3.0))  # [canonical: FORK:c451bcb:engine/params/factions/stats_1_7_scale.md — discipline 2->0/5->1 normalization, same curve as resolution._disc_prep]
     ms = getattr(atom, 'eff_morale_start', 0) or 0
-    # [canonical: params/factions/stats_1_7_scale.md — attributes on the 1-7 scale] normalize starting morale to 0..1
+    # [canonical: FORK:c451bcb:engine/params/factions/stats_1_7_scale.md — attributes on the 1-7 scale] normalize starting morale to 0..1
     mor = max(0.0, min(1.0, ms / 7.0)) if ms else 0.5
     return 0.5 * disc + 0.5 * mor
 
@@ -48,7 +46,7 @@ def _stochastic_break(atom, loss_frac):
 
 
 def morale_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
-    """v17: phase-boundary morale = exhaustion pressure ONLY (D-7 fix).
+    """Phase-boundary morale = exhaustion pressure ONLY (D-7).
     Per-tick morale handles casualty-based triggers separately.
     Exhausted units lose -1 morale at phase boundary (within cap).
     Floor is NOT overridden here — that's the per-tick trigger's job.
@@ -60,16 +58,12 @@ def morale_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
         # [DG-4, ED-MB-0002, 2026-07-04 Jordan ruling: "Subunit morale combination of own morale and
         # overall morale; more likely to wilt if other subunits losing, more likely to rally if other
         # subunits winning."] Phase-start snapshot of every living subunit's morale, taken BEFORE any
-        # mutation this phase. [2026-07-04 adversarial-review fix, two findings]: (1) siblings pull
-        # toward this FIXED snapshot, not toward siblings' already-updated values later in this same
-        # loop -- the original per-atom-live-read version was a Gauss-Seidel order-dependency that
-        # systematically favored whichever subunit happened to iterate first. (2) the pull is applied
-        # BEFORE this atom's own casualty/exhaustion erosion below (reordered from after), so a
-        # subunit's own bad phase always has the final say on whether IT routs this phase -- the
-        # original after-erosion ordering let a healthy sibling's pull retroactively rescue a subunit
-        # from a same-phase rout its own casualties would otherwise have caused, before
-        # rout_resolution ever saw the value. A sibling's state can soften/harden the morale a
-        # subunit ENTERS this phase's own erosion with; it can no longer erase that erosion's result.
+        # mutation this phase. Siblings pull toward this FIXED snapshot, not toward siblings' already-updated
+        # values later in this same loop (a per-atom live read is a Gauss-Seidel order-dependency that favors
+        # whichever subunit iterates first), and the pull is applied BEFORE this atom's own casualty/exhaustion
+        # erosion below, so a subunit's own bad phase always has the final say on whether IT routs this phase. A
+        # sibling's state can soften/harden the morale a subunit ENTERS this phase's own erosion with; it cannot
+        # erase that erosion's result.
         snapshot = {id(s): s.eff_morale for s in u.subunits if not s.routed}
         # step 3 (Jordan directive 2026-06-03): canonical Size-fraction morale triggers (§A.4),
         # replacing the per-tick absolute-damage erosion. Routs occur at meaningful casualty levels,
@@ -103,7 +97,7 @@ def morale_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
                     and atom.eff_discipline >= D_YIELD and u.command > 0 and atom.unit_type != 'ranged'):
                 atom.yielding = True
             if loss:
-                # [ED-MB-0036, 2026-07-24 — wire the orphaned MORALE_EROSION_DAMP]. Damp the §A.4 casualty/
+                # [ED-MB-0036, MORALE_EROSION_DAMP]. Damp the §A.4 casualty/
                 # exhaustion morale erosion (<1 slows the bleed -> longer, more attritional battles, per the
                 # constant's own intent). Applied ONLY to this gradual erosion, NOT to the stochastic-rout
                 # punch below (which must reach <=0 to force the break) — so damping cannot cancel a rout.
@@ -111,9 +105,7 @@ def morale_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
                 # §A.4's canonical cap is -3 per Cascade Phase. MORALE_EROSION_DAMP (0.7) scales the whole
                 # capped quantity, so the EFFECTIVE cap is -2.1, NOT -3. This is a deliberate tuning
                 # divergence (Jordan 2026-07-24: "we are allowed to break canon values in the pursuit of
-                # balancing/tuning") — slower morale bleed => longer, more attritional battles. It is
-                # recorded here because the previous comment asserted the -3 cap was still in force,
-                # which was false and misled the v30 §A.4 engine note as well. routes own-else-Unit.
+                # balancing/tuning") — slower morale bleed => longer, more attritional battles. Routes own-else-Unit.
             # [ED-MB-0031] Stochastic morale break at the historical 15-30% casualty band (du Picq): the
             # canonical §A.4 steps above don't fire until 50% losses, so units grind to ~58% before breaking.
             # When gated on, a subunit whose casualties cross its own drawn break-point routs NOW (drive its
@@ -128,16 +120,10 @@ def morale_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
             #      disciplined body can hold a gap closed, a ragged one loses the line. Reversing the
             #      order would let the body paper over a break before the break had spread, and the
             #      contagion would never do anything.
-            # Both are no-ops when per-cell morale is unseeded, so this is inert by default.
-            #
-            # [phase 1 CORRECTION] cohere_cells shipped with ZERO live call sites -- the modulate-down
-            # half of the loop existed, was tested, and never ran in a battle. The phase-1 gauge
-            # measurement was therefore of aggregate-up ONLY. Wired here.
+            # Both are no-ops when per-cell morale is unseeded (MB_CELL_MORALE=0).
             if atom.cell_morale:
                 # [phase 2b] Local break-points FIRST: a cell gives way at its own casualty fraction,
-                # before contagion spreads from it and before cohesion tries to close it. Without this
-                # the only thing that ever broke a cell was the body-wide rout punch, i.e. strictly
-                # after the body had already gone -- measured, see check_cell_breaks.
+                # before contagion spreads from it and before cohesion tries to close it (see check_cell_breaks).
                 atom.check_cell_breaks()
                 atom.propagate_cell_breaks()
                 atom.cohere_cells()
@@ -147,20 +133,18 @@ def morale_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
                 if not atom.routed and atom.broken_cell_share() >= CELL_BREAK_ROUT_FRAC:
                     atom.routed = True
             if MB_STOCHASTIC_ROUT and not atom.routed and _stochastic_break(atom, 1.0 - frac):
-                # [Fable-audit A5 fix, 2026-07-24] Materialize OWN morale before the rout punch. Otherwise a
-                # subunit that inherits the shared unit pool (morale=None) writes that pool <=0, and every
-                # sibling — including 0-casualty reserves — reads morale<=0 and routs too, defeating the whole
-                # point of a per-subunit break. Setting atom.morale here makes the punch local.
+                # Materialize OWN morale before the rout punch: a subunit that inherits the shared unit pool (morale=None)
+                # would write that pool <=0, and every sibling — including 0-casualty reserves — would read morale<=0 and
+                # rout too, defeating the point of a per-subunit break. Setting atom.morale here makes the punch local.
                 if atom.morale is None:
                     # [ED-MB-0042 sweep] materialize the scalar ONLY — deliberately NOT set_morale. This
                     # copies the body's current value down so the punch below is local to this subunit; the
                     # cells already hold that value, and rewriting them here would be a no-op at best and
                     # would flatten genuine per-cell divergence at worst.
                     atom.morale = atom.eff_morale
-                # [Fable-audit A7 fix, 2026-07-24] Clamp the erode amount to >=0. When eff_morale is already
-                # <=-1 (reachable via §A.4 -3/phase stacking), eff_morale+1.0 is negative and erode_morale
-                # would ADD — RAISING a subunit's morale and cancelling a rout canon already earned. max(...,0)
-                # drives morale to -1 (rout) without ever un-routing.
+                # Clamp the erode amount to >=0: when eff_morale is already <=-1 (reachable via §A.4 -3/phase stacking),
+                # eff_morale+1.0 is negative and erode_morale would ADD, raising morale and cancelling a rout canon already
+                # earned. max(...,0) drives morale to -1 (rout) without ever un-routing.
                 atom.erode_morale(max(atom.eff_morale + 1.0, 0.0))   # will breaks -> morale <=0 -> routs
 
 
@@ -170,7 +154,7 @@ def rout_resolution(unit_a, unit_b, phase_idx):  # noqa: ARG001
      "Routing: Slow/Standard cannot fight back."
      "Pursuit: Fast units only. Routing unit loses Size equal to pursuer net
       Offence successes (no Defence) each turn. Recall: Command Ob 2."]
-    v19: Standard infantry cannot pursue. Pursuit is a level-2 mechanic
+    Standard infantry cannot pursue. Pursuit is a level-2 mechanic
     that fires at the battle-map level when a Fast unit is adjacent.
     Morale Cascade (§A.12): friendly units in same engagement make
     Discipline check Ob 1 on rout — modeled when multi-unit engagements exist."""
@@ -180,7 +164,7 @@ def rout_resolution(unit_a, unit_b, phase_idx):  # noqa: ARG001
         for atom in u.subunits:
             if atom.routed:
                 continue
-            # [ED-MB-0036, 2026-07-24 — wire the orphaned SUBUNIT_ROUT_FLOOR]. A subunit also breaks when its
+            # [ED-MB-0036, SUBUNIT_ROUT_FLOOR]. A subunit also breaks when its
             # aggregate troop total falls below SUBUNIT_ROUT_FLOOR — too few men left to hold as a coherent
             # body, independent of the morale track (config.py: "a subunit routs when its aggregate total
             # falls below this"). Complements the morale<=0 break above.
@@ -193,7 +177,7 @@ def rout_resolution(unit_a, unit_b, phase_idx):  # noqa: ARG001
 
 
 def discipline_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
-    """v18 (D-6): discipline degradation at phase boundary using cumulative loss.
+    """Discipline degradation (D-6) at phase boundary using cumulative loss.
     [canonical: params/mass_combat.md §Discipline Degradation —
      deterministic, fires when effective_size loss > threshold AND asymmetric]
     Roll-input fidelity: each subunit's Discipline degrades from ITS OWN cumulative

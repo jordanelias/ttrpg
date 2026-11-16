@@ -26,7 +26,7 @@ docstring), then restored:
 from __future__ import annotations
 
 from ..data.matrix import Step, WriteClass
-from ..harness import populated as POP
+from ..boot.realm import build_realm
 from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..loop.matter import _die
 from ..decision import make_chooser
@@ -324,7 +324,7 @@ def test_a_stage_wound_by_an_act_matures_once_though_no_logged_event_touches_the
 # ======================================================================================
 
 def _realm(lapse):
-    w = POP.build_realm(0)
+    w = build_realm(0)
     w.fixtures = w.fixtures.sweep("docket_lapse", lapse)
     d = SeasonDriver(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")

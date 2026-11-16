@@ -13,6 +13,12 @@ Each record: {key, name, value, kind, module, file, note}. `value` is the litera
 constant; `note` is the trailing inline comment (often the [canonical: …]/ED-/PP- cite). The line
 number is intentionally not stored (it churns on unrelated edits); provenance is file + note.
 
+The season's settings (the literal keywords of `DEFAULT_FIXTURES = Fixtures(...)` in
+engine/season/data/fixtures.py) are rows too, under module `engine.season.settings`; `--build`
+prints how many it read and skipped, and raises if it read none (B03.14, CI-04). The realm's arms (the
+literal-default parameters of `build_realm` in engine/season/boot/realm.py) are rows under module
+`engine.season.realm`, read and counted the same way (B03.15, CI-05).
+
 CLI:
   python3 tools/export_sim_params.py --build     # regenerate engine/engine_params/sim_params.json
   python3 tools/export_sim_params.py --check      # drift gate: committed == fresh extract (exit 1 on drift)
@@ -34,6 +40,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import ci_common  # noqa: E402
 
 ROOT = Path(ci_common.REPO)
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+from engine.season.data import files  # noqa: E402  -- the one owner of the builder's path
 OUT = ROOT / "engine" / "engine_params" / "sim_params.json"
 
 
@@ -211,6 +220,115 @@ def _citation_grade(citation):
     return "assumption" if _ASSUMPTION_WORD.search(citation) else "source"
 
 
+SETTINGS_FILE = ROOT / "engine" / "season" / "data" / "fixtures.py"
+SETTINGS_MODULE = "engine.season.settings"
+
+
+def _scan_settings(path=None) -> tuple[list, int]:
+    """(rows, skipped) for the season's settings: the keywords of the module-scope
+    `DEFAULT_FIXTURES = Fixtures(...)` call in `engine/season/data/fixtures.py` (B03.14, CI-04).
+
+    A keyword whose value `_literal()` accepts is a row of the exporter's own shape under
+    `module: engine.season.settings`; any other (the table names read from registries, a splat, an
+    explicit `None`, which `_literal` cannot tell from a non-literal) is skipped and counted. Unlike the
+    module-scope loop, `_is_numericish` is NOT applied: a setting may be a bool or a string.
+    RAISES when the call is not found or yields no row, so a renamed `DEFAULT_FIXTURES` cannot produce a
+    smaller artifact that still checks green (CLAUDE.md §0.1 pt 2)."""
+    path = Path(path) if path is not None else SETTINGS_FILE
+    src = path.read_text(encoding="utf-8")
+    src_lines = src.splitlines()
+    call = None
+    for node in ast.parse(src).body:
+        if (isinstance(node, ast.Assign) and len(node.targets) == 1
+                and isinstance(node.targets[0], ast.Name) and node.targets[0].id == "DEFAULT_FIXTURES"
+                and isinstance(node.value, ast.Call)
+                and isinstance(node.value.func, ast.Name) and node.value.func.id == "Fixtures"):
+            call = node.value
+    if call is None:
+        raise ValueError(f"{path}: no module-scope `DEFAULT_FIXTURES = Fixtures(...)` call to read")
+    rel = _rel(path)
+    rows, skipped = [], 0
+    for kw in call.keywords:
+        val = _literal(kw.value) if kw.arg else None
+        if val is None:
+            skipped += 1
+            continue
+        rows.append(_param_row(SETTINGS_MODULE, kw.arg, val, rel, _comment(src_lines, kw.value.lineno)))
+    if not rows:
+        raise ValueError(f"{path}: `DEFAULT_FIXTURES` yielded no literal setting")
+    return rows, skipped
+
+
+def _rel(path: Path) -> str:
+    """`path` as the artifact records it: repo-relative with "/", else as given (a test's tmp file)."""
+    try:
+        return path.relative_to(ROOT).as_posix()
+    except ValueError:
+        return path.as_posix()
+
+
+def _param_row(module: str, name: str, val, rel: str, note: str) -> dict:
+    """One row of the exporter's own shape, for a value that is not a module-scope constant (a season
+    setting, a realm arm): the one place the two share it (B03.14, B03.15)."""
+    return {
+        "key": f"{module}.{name}",
+        "name": name,
+        "value": _jsonsafe(val),
+        "kind": _kind(val),
+        "module": module,
+        "file": rel,
+        "note": note,
+        "citation": _citation(note),
+        "citation_grade": _citation_grade(_citation(note)),
+    }
+
+
+def _setting_rows(path=None) -> list:
+    """The season's setting rows (see `_scan_settings`, which also returns the skipped count)."""
+    return _scan_settings(path)[0]
+
+
+REALM_FILE = files.REALM_PY
+REALM_MODULE = "engine.season.realm"
+
+
+def _scan_realm_arms(path=None) -> tuple[list, int]:
+    """(rows, skipped) for the realm's arms: the parameters of `def build_realm` whose default
+    `_literal()` accepts, in signature order, under `module: engine.season.realm` (B03.15, CI-05).
+    A parameter with no default, or a default `_literal` cannot tell from a non-literal (`cap=None`,
+    `fixtures=None`), is skipped and counted. RAISES when `build_realm` is not found or yields no row
+    (CLAUDE.md §0.1 pt 2). `REALM_FILE` is the one line that changes if the builder moves."""
+    path = Path(path) if path is not None else REALM_FILE
+    src = path.read_text(encoding="utf-8")
+    src_lines = src.splitlines()
+    fn = None
+    for node in ast.parse(src).body:
+        if isinstance(node, ast.FunctionDef) and node.name == "build_realm":
+            fn = node
+    if fn is None:
+        raise ValueError(f"{path}: no module-scope `def build_realm` to read")
+    rel = _rel(path)
+    a = fn.args
+    positional = a.posonlyargs + a.args
+    pairs = list(zip(positional[len(positional) - len(a.defaults):], a.defaults))
+    pairs += [(arg, d) for arg, d in zip(a.kwonlyargs, a.kw_defaults) if d is not None]
+    rows, skipped = [], len(positional) + len(a.kwonlyargs) - len(pairs)
+    for arg, default in pairs:
+        val = _literal(default)
+        if val is None:
+            skipped += 1
+            continue
+        rows.append(_param_row(REALM_MODULE, arg.arg, val, rel, _comment(src_lines, default.lineno)))
+    if not rows:
+        raise ValueError(f"{path}: `build_realm` yielded no literal default")
+    return rows, skipped
+
+
+def _realm_arm_records(path=None) -> list:
+    """The realm's arm rows (see `_scan_realm_arms`, which also returns the skipped count)."""
+    return _scan_realm_arms(path)[0]
+
+
 def build() -> dict:
     records = []
     for p in _iter_py_files():
@@ -231,26 +349,11 @@ def build() -> dict:
             val = _literal(node.value)
             if val is None or not _is_numericish(val):
                 continue
-            records.append({
-                "key": f"{module}.{tgt.id}",
-                "name": tgt.id,
-                "value": _jsonsafe(val),
-                "kind": _kind(val),
-                "module": module,
-                "file": rel,   # line number deliberately NOT stored — it churns on unrelated edits;
-                "note": _comment(src_lines, node.lineno),
-                # PROVENANCE AS A TYPED FIELD, not prose (ED-IN-0123). It used to live only inside
-                # `note`, the raw trailing comment, so "which values are backed by canon?" was a
-                # regex over free text rather than a query. MEASURED at the time: 68 of 324 records
-                # carried a [canonical: …]/PP-/ED- marker in `note` and 0 had a typed field — so
-                # the fork plan's "0 of 324 carry provenance" was true of the FIELD and wrong about
-                # the corpus; the work is promoting 68 out of prose, not authoring 324 from scratch.
-                # Parsed here rather than by every consumer: one owner, and `citation: null` is now
-                # a queryable gap instead of an absence someone has to notice.
-                "citation": _citation(_comment(src_lines, node.lineno)),
-                "citation_grade": _citation_grade(_citation(_comment(src_lines, node.lineno))),
-            })
+            # `_param_row` types provenance as a field (`citation`, `citation_grade`), not prose (ED-IN-0123).
+            records.append(_param_row(module, tgt.id, val, rel, _comment(src_lines, node.lineno)))
     records.sort(key=lambda r: (r["file"], r["name"]))
+    records.extend(_setting_rows())   # B03.14: appended after the sort, in source order
+    records.extend(_realm_arm_records())   # B03.15: then the realm's arms, in signature order
     from collections import Counter
     by_module = Counter(r["module"] for r in records)
     # The provenance gap as a NUMBER IN THE ARTIFACT, not something a reader has to compute.
@@ -301,6 +404,10 @@ def main(argv: list[str]) -> int:
         p = write()
         s = json.loads(p.read_text())
         print(f"wrote {p.relative_to(ROOT)} — {s['count']} constants across {len(s['by_module'])} modules")
+        read, skipped = _scan_settings()
+        print(f"  settings: read {len(read)} Fixtures keywords, skipped {skipped} non-literal")
+        arms, askipped = _scan_realm_arms()
+        print(f"  realm arms: read {len(arms)} build_realm defaults, skipped {askipped} (no default or non-literal)")
         return 0
     if args.check:
         ok, msgs = check()

@@ -28,7 +28,7 @@ from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries import world_q
 from ..queries.person_q import ledger_names
 from . import probes as P
-from .populated import build_realm
+from ..boot.realm import build_realm
 
 THRONE, HEIR_SEAT = "off_king", "off_heir"
 

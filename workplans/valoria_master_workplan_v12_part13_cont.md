@@ -29,7 +29,7 @@ Words, paths and the batch's head contributions are the first file's (`valoria_m
 - FALSIFIER and CONTROL: a corrected pointer names a symbol `git grep` does not find. Control: the AST of every edited file equal before and after (comments only; `CI-02`'s check, B03a).
 - GATE: "re-run the resolver scan; the nine sites resolve": for each new pointer, `git grep -n "def <symbol>" engine/season/<file>` → one line; `git grep -n "loop/effects.py::\|shape.py::SeasonDriver" engine/season -- '*.py'` → none of the nine old texts (other hits are not this item's: `harness/headless.py`, `harness/arms.py`, `state/carriers.py` carry the same stale form and are listed in the commit body for B03a's owner, not edited here); the realm hash (`HASH READING`) at seed 0, one season → equal to `B10.66`'s.
 - HASH MOVERS: none.
-- DEPENDS ON: V12 Batch B03a (`CI-02`); EXISTS-IN-TREE `loop/effects_founding.py::_eff_build`, `loop/effects_information.py::_eff_determine`, `::_eff_survey`, `loop/effects_migration.py::_eff_migrate`, `loop/effects_governance.py::_eff_oblige`, `loop/effects_economy.py::_eff_transfer`, `loop/resolve.py::_fold`, `loop/matter.py`.
+- DEPENDS ON: V12 Batch B03a @871a9b81eab42e31963b21b487d698f8552a1cc5 (`CI-02`); EXISTS-IN-TREE `loop/effects_founding.py::_eff_build`, `loop/effects_information.py::_eff_determine`, `::_eff_survey`, `loop/effects_migration.py::_eff_migrate`, `loop/effects_governance.py::_eff_oblige`, `loop/effects_economy.py::_eff_transfer`, `loop/resolve.py::_fold`, `loop/matter.py`.
 - GLOSSARY: none.
 - COST and TIER: edit; `sonnet`, `high` (the source: "sonnet / high (C1, W3, the gates)").
 - LANDS IT: B10's producer; `Item: B10.67`, `[skip ci]`.

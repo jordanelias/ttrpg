@@ -87,7 +87,7 @@ FIELD_PINS = {
     'MB_CHARGE_RECOIL': '6', 'MB_BRACE_SETUP_DELAY': '1', 'MB_RECOIL_CHARGER_GATE': '1',
     # Group C — field/node-gated
     'MB_ENVELOP_SPEED_MULT': '2.0', 'ENVELOP_STANDOFF': '8.0', 'ENVELOP_ORBIT_CAP': '10',
-    'MB_REACH_FACING_GATE': '1', 'MB_WHEEL': '1', 'MB_ENVELOP_PATH': '1', 'MB_SWEEP': '1',
+    'MB_WHEEL': '1', 'MB_ENVELOP_PATH': '1', 'MB_SWEEP': '1',
     # Critic-pass additions (2026-07-29): default-inert but REACHABLE at these pins —
     # an ambient flip produces a loud spurious red, so pin them for hermeticity.
     # (MB_FRICTION enabling shifts the RNG stream — orchestration.py's own comment;

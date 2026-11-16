@@ -2,11 +2,8 @@
 
 ⚠ **THE BODY IS THE DRIVER'S OWN, BOUND BACK ONTO THE CLASS -- NOT A DELEGATING STUB.**
 `loop/driver.py` ends with `SeasonDriver.resolve = resolve`, so `SeasonDriver.resolve` IS this
-function and `inspect.getsource(SeasonDriver.resolve)` returns THIS SOURCE. Eight tests read a
-step's body that way -- three of them `witness`'s, one of those a pure NEGATIVE assertion --
-and a stub would fail two and silently vacate the third, which is why step 9 of the
-decomposition (ED-IN-0203) refused to delegate. Step 5 established the technique when
-`class Query` bound module functions as staticmethods.
+function and `inspect.getsource(SeasonDriver.resolve)` returns THIS SOURCE, which the tests that
+read a step's body rely on (ED-IN-0203 step 9).
 
 ⚠ **THE TOKEN IS HANDED IN BY THE DRIVER (G2).** `SeasonDriver.season` mints an ACTS `Token`
 through `loop/driver.py::mint_token` and passes it as `token`, once per round. `resolve` threads
@@ -20,7 +17,7 @@ from __future__ import annotations
 import random
 from dataclasses import replace
 from ..gaps import InstrumentDefect
-from ..data.rosters import (FOLD_ATTEMPT_REFUSED, PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, GRADED_INQUIRIES,
+from ..data.rosters import (PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, GRADED_INQUIRIES,
                             STRATA)
 
 from typing import Any, Optional
@@ -39,7 +36,8 @@ from ..queries.person_q import (broken_by, confided_outside, conviction_after_cr
 from ..queries.world_q import WorldReader, ceiling, demanded_person, occasioned_by
 from ..seam import ContestError, ContestRefused, Resolution, contest, degree_of, find_trail, grade
 from ..state.carriers import Act, Event, StateChange, effort_of, subject_of
-from ..state.gate import Change, NoOpReceipt, Subject, Token, seat_hold
+from ..state.gate import Change, NoOpReceipt, NotYours, Subject, Token, seat_hold
+from ..state.containment import edges_of
 from ..state.ids import SeatId, draw_factory, H
 from ..state.world import World
 from ..trace_log import TRACE
@@ -63,10 +61,9 @@ def _survives(self, w: "World", a: Act) -> list:
     -- the caller folds normally. Otherwise an `act.ineligible` Event (already registered in
     `self.act_of`) that the caller should emit INSTEAD of folding.
 
-    Extracted from `resolve()`'s own loop (M4) so `loop/encounter.py` shares the one check: a
-    predecessor's act can remove a person just as easily inside RESOLVE as inside an earlier act
-    of the SAME round's ENCOUNTER pass, and the reading is the fold's own rather than borrowed
-    (see the inline comment this replaced, still true of both callers).
+    Shared with `loop/encounter.py`: a predecessor's act can remove a person just as easily inside
+    RESOLVE as inside an earlier act of the SAME round's ENCOUNTER pass, and the reading is the
+    fold's own rather than borrowed.
 
     ⚠ SC-02 `23`: THE TAG ASSERTION IS HERE, BECAUSE THIS IS THE ONE CHECK BOTH FOLD ENTRIES SHARE
     (`resolve` and `encounter` call it before anything else reads the actor). `04:222`, the Python
@@ -103,16 +100,13 @@ def _eligible(self, w: "World", a: Act, row: "VerbRow") -> bool:
         if kind == "own":
             return True                       # every person may attempt their own acts
         if kind == "remit":
-            # ⚠ ADMITS ON THE TENURE'S SNAPSHOT, NOT THE LIVE OFFICE (position `13e`,
-            # 2026-09-26). Was `off = w.offices.get(t.object); if off and arg in
-            # off.remit_acts` -- a second reading of the same fact `decision/options.py`
-            # already read off `t.granted_acts`, and the two could disagree (`epistemic.py`'s
-            # `_ch_post_remit` docstring names the gap). `t.granted_acts` is the grant the
-            # holder actually has; an office hand-mutated after seating does not reach it,
-            # and an `establish` re-stamp does (`13f`).
+            # ⚠ ADMITS ON THE TENURE'S SNAPSHOT, NOT THE LIVE OFFICE (position `13e`).
+            # `t.granted_acts` is the grant the holder actually has, the same fact
+            # `decision/options.py` reads (`epistemic.py`'s `_ch_post_remit` docstring names the
+            # gap a second reading would open); an office hand-mutated after seating does not
+            # reach it, and an `establish` re-stamp does (`13f`).
             #
-            # ⚠ G3: THE SEAT EXERCISED, NOT ANY SEAT HELD. This scanned EVERY live `hold` the
-            # actor owned and admitted if any granted the act. `04:332` -- *"purview is asked of
+            # ⚠ G3: THE SEAT EXERCISED, NOT ANY SEAT HELD. `04:332` -- *"purview is asked of
             # the seat exercised, not the actor"* -- and `04:120`, *"a seat enters through
             # `Act.via`"*: a remit is a SEAT's, so a remit act is eligible only through the one
             # seat it names, which the actor must occupy (`seat_hold`, the gate's own test). An
@@ -123,13 +117,11 @@ def _eligible(self, w: "World", a: Act, row: "VerbRow") -> bool:
             if t is not None and arg in t.granted_acts:
                 return True
         elif kind == "hold":
-            # ⚠ THE ARGUMENT IS COMPARED, as it is person-side. It was parsed and discarded
-            # here too, so `hold:<store>` admitted anyone holding ANY object -- an
-            # over-admission, and `G4` makes that a defect of equal weight to an
+            # ⚠ THE ARGUMENT IS COMPARED, as it is person-side: admitting anyone holding ANY
+            # object is an over-admission, and `G4` makes that a defect of equal weight to an
             # over-refusal. A `<...>` argument is a KIND, not an id, so it cannot be matched
             # and this declines rather than guessing which store the act meant (`H-75`).
-            mine = [t for t in w.tenures
-                    if t.subject == a.actor and t.kind == "hold" and t.until is None]
+            mine = [t for t in edges_of(w, "hold", a.actor) if t.until is None]
             if not raw:
                 if mine:
                     return True
@@ -140,19 +132,17 @@ def _eligible(self, w: "World", a: Act, row: "VerbRow") -> bool:
                 TRACE.note(f"`hold:<{arg}>` names an object KIND, not an id (H-75); "
                            f"{row.verb!r} declines rather than admitting on any held object")
         elif kind == "presence":
-            # ⚠ NOT `return True`, and ⚠ THE REASON WAS CORRECTED BY `W6`'s ADVERSARIAL
-            # PASS: this said "the presence index is `H-33` and does not exist", and `W6`
-            # built it. What still declines the branch is `H-75` -- the argument is a
-            # PLACEHOLDER naming a kind of rung, not an id, so there is nothing to look up.
-            # predicate cannot be evaluated — and admitting on an unevaluable predicate is a
-            # SILENT FILL off the register (G1) at the opposite polarity to §42.2, which sends
-            # zero evidence to the verdict AGAINST. It refuses, and says which hole.
+            # ⚠ NOT `return True`. What declines the branch is `H-75`: the argument is a
+            # PLACEHOLDER naming a kind of rung, not an id, so there is nothing to look up -- and
+            # admitting on an unevaluable predicate is a SILENT FILL off the register (G1) at the
+            # opposite polarity to §42.2, which sends zero evidence to the verdict AGAINST. It
+            # refuses, and says which hole.
             #
             # It does NOT raise, because eligibility is a DISJUNCTION: `work` is `own |
             # presence:<site>` and `own` already admits, so raising here would refuse acts the
             # design permits. This branch declines and the loop tries the next alternative.
-            TRACE.note(f"`presence:` eligibility is unevaluable (H-33, the presence index); "
-                       f"declining this alternative for {a.verb}", "H-33")
+            TRACE.note(f"`presence:` eligibility is unevaluable (H-75, its argument names a kind of rung, "
+                       f"not an id); declining this alternative for {a.verb}", "H-75")
             continue
     return False
 
@@ -188,20 +178,16 @@ def _admits(self, w: "World", a: Act, row: "VerbRow") -> tuple:
     """§E2's FIRST TWO STEPS, FOR BOTH PATHS: eligibility, then `requires` against the world the
     predecessors left. Returns `(ok, refusal_kinds, verdict)`.
 
-    ⚠⚠ THIS FUNCTION EXISTS BECAUSE THE CONTEST BRANCH SKIPPED BOTH OF THEM, and the defect was
-    invisible while no contested verb could be chosen. §E2's order is *eligibility -> `requires`
-    -> resolve*, and `resolve()` routed to the seam BEFORE `_fold` was entered -- so a contested
-    act was carried into personal combat without its precondition ever being read. MEASURED the
-    day `kill / wound` was admitted (`ED-IN-0261`, amended): 85 of 143 corpus cases became
-    whole-case DESIGN-GAPs, 74 of them `PARTY-GAP` -- *claimant not a person: 'p_a' /
-    'rec:cb377aad7694a2da'* -- because `opening_set` binds `subject` from the question's referent
-    and a question's referent is usually a Record or a Rung. The row's own precondition says the
-    subject is a living person and it was never asked.
+    ⚠⚠ THIS FUNCTION EXISTS BECAUSE `resolve()` ROUTES A CONTESTED ACT TO THE SEAM BEFORE `_fold`
+    IS ENTERED, and §E2's order is *eligibility -> `requires` -> resolve*. Without it a contested
+    act is carried into personal combat without its precondition ever being read: `opening_set`
+    binds `subject` from the question's referent, usually a Record or a Rung, so the seam answers
+    `PARTY-GAP` (*claimant not a person*) though the row's own precondition says the subject is a
+    living person.
 
-    ⚠ THE FIX IS AN ORDERING, NOT A NEW RULE, which is why this is an extraction rather than a
-    predicate: the eligibility test and the `requires` evaluation below are `_fold`'s, moved
-    up so the two paths share ONE owner (§8). A `_fold`-local copy of them inside the contest
-    branch would be the second resolver §27.2 forbids, arriving as a guard.
+    ⚠ AN ORDERING, NOT A NEW RULE: the eligibility test and the `requires` evaluation below are
+    `_fold`'s, moved up so the two paths share ONE owner (§8). A `_fold`-local copy of them inside
+    the contest branch would be the second resolver §27.2 forbids, arriving as a guard.
 
     ⚠ A REFUSED CONTESTED ACT EMITS AND IS WITNESSED. It does not raise and it is not dropped:
     `emits_on_refusal` is what a reader sees, the act still cost a scene, and the distinction
@@ -209,10 +195,9 @@ def _admits(self, w: "World", a: Act, row: "VerbRow") -> tuple:
     one the row's degree bands were built to keep."""
     # ⚠ PLAN POSITION `19`: EVERY REFUSAL BELOW IS `row.refusal_for(<clause>)` -- `04 §C.4`'s own
     # spelling, `emit(row.refusal_for(ELIGIBILITY))` / `emit(row.refusal_for(failed_conjunct))`.
-    # On a FLAT row it is `row.emits_on_refusal`, byte for byte what these lines emitted before; on a
-    # KEYED row (`data/verbs.py`, invariant 4's per-conjunct half) it is the failing clause's own kind,
-    # so a refusal says WHICH clause refused -- the gap `★` measured on `confer`/`establish`/`revoke`,
-    # whose refusals *"carry no conjunct"*.
+    # On a FLAT row it is `row.emits_on_refusal`; on a KEYED row (`data/verbs.py`, invariant 4's
+    # per-conjunct half) it is the failing clause's own kind, so a refusal says WHICH clause
+    # refused.
     if not self._eligible(w, a, row):
         TRACE.decision(f"{a.actor} is not eligible for {a.verb}", "E4",
                        chose="emit the refusal", alternatives=["raise", "silently drop"])
@@ -225,17 +210,13 @@ def _admits(self, w: "World", a: Act, row: "VerbRow") -> tuple:
             # three values, and UNKNOWN -- an operand the act does not carry, or a question
             # the world cannot answer -- must REFUSE. §42.2's polarity: zero evidence goes to
             # the verdict AGAINST the thing measured, so an unevaluable precondition is a
-            # refusal and never a silent admission. That is the same polarity the untyped
-            # branch below has always had, and the reason `work` (whose `_req_work` ended in
-            # a bare `return True` for an act naming no site) now refuses instead.
+            # refusal and never a silent admission (the untyped branch below has the same polarity).
             #
             # ⚠ `W-B`: THE VERDICT'S `observed` RIDES ON THE EVENT, AND THE REFUSAL'S READS
-            # ARE THE INFORMATIVE ONES. This block used to say the reads were "deliberately
-            # dropped here ... building the carrier before its reader exists is `ID-13`", and
-            # the reader existed already: `belief_contradicts` evaluates the same cell against
+            # ARE THE INFORMATIVE ONES. `belief_contradicts` evaluates the same cell against
             # `LedgerReader`, so a claim carrying `(subject, predicate, value)` is read by the
-            # same code that produced the Observation. The carrier is no longer dead --
-            # `SeasonDriver.witness` deposits it, gated on `observation_deposit_mode`.
+            # same code that produced the Observation; `SeasonDriver.witness` deposits it, gated on
+            # `observation_deposit_mode`.
             #
             # ⚠ ATTACHED TO SUCCESS AND REFUSAL ALIKE. A refusal's reads are WHY it refused --
             # `stores:grain -> 0` on an emptied hearth -- and it is the only read whose value
@@ -243,24 +224,18 @@ def _admits(self, w: "World", a: Act, row: "VerbRow") -> tuple:
             # grammar that evaluates False. Attaching only to the success would build the
             # channel and leave out the traffic.
             #
-            # ⚠ POSITION `11a`: `S12.1`'s `floor` READ CAN RAISE HERE NOW, AND IT MUST BE CAUGHT
-            # THE WAY `PARTY-GAP` ALREADY IS BELOW (`contest()`'s call, same file) -- NAMED,
-            # NARROW, AND FALLING THROUGH TO THE ORDINARY REFUSAL. `WorldReader.read`'s `floor`
-            # stem raises `Unspecified("S12.1", ...)` for a site KIND with no registered band
-            # floors at all (`dwelling`/`garrison` ship `{}` ON PURPOSE, `24d-i`/M4) -- a real and
-            # documented case, but before `11a` no Question's referent could ever BE a Site id
-            # (Q1/Q3 were dead, Q2's admission test had no place clause), so `work`'s `site`
-            # operand could never bind to a dwelling and this raise was unreachable. `reach`/
-            # `place_of` (`queries/world_q.py`) make a claim about a co-located Site an ordinary
-            # `claim_landed` question, so it is reachable now, and MEASURED: `p_npc_090` mints
-            # `work` on `s_s_009_cottage_dwelling` in `build_realm(0)`'s very first season, which
-            # crashed every populated-world test before this catch existed. This paragraph's own
-            # polarity rule is what decides it: *"an unevaluable precondition is a refusal and
-            # never a silent admission"* -- `no band floors for this kind` IS zero evidence, not a
-            # software defect, so it resolves to `UNKNOWN` (refusal) rather than propagating.
-            # `where == "S12.1"` is this ONE raise's own tag, so a FUTURE raise `WorldReader.read`
-            # might grow for a different reason is not silently swallowed with it -- the same
-            # discipline `PARTY-GAP`'s own catch states for `ENGINE-UNAVAILABLE`.
+            # ⚠ POSITION `11a`: `S12.1`'s `floor` READ CAN RAISE HERE, AND IT MUST BE CAUGHT THE
+            # WAY `PARTY-GAP` ALREADY IS BELOW (`contest()`'s call, same file) -- NAMED, NARROW,
+            # AND FALLING THROUGH TO THE ORDINARY REFUSAL. `WorldReader.read`'s `floor` stem raises
+            # `Unspecified("S12.1", ...)` for a site KIND with no registered band floors at all
+            # (`dwelling`/`garrison` ship `{}` ON PURPOSE, `24d-i`/M4), and `reach`/`place_of`
+            # (`queries/world_q.py`) make a claim about a co-located Site an ordinary
+            # `claim_landed` question, so `work`'s `site` operand can bind to a dwelling. This
+            # paragraph's own polarity rule decides it: `no band floors for this kind` IS zero
+            # evidence, not a software defect, so it resolves to `UNKNOWN` (refusal) rather than
+            # propagating. `where == "S12.1"` is this ONE raise's own tag, so a FUTURE raise
+            # `WorldReader.read` might grow for a different reason is not silently swallowed with
+            # it -- the same discipline `PARTY-GAP`'s own catch states for `ENGINE-UNAVAILABLE`.
             try:
                 verdict = evaluate(row.requires_typed, WorldReader(w, a.actor),
                                    binding_from_act(a))
@@ -332,8 +307,8 @@ def _demand_earned(w: "World", a: Act, kinds: tuple, at_precondition: bool) -> t
     keying needs a typed precondition (`data/verbs.py`, invariant 4's per-conjunct half), and typing
     `dispatch` would also hand its cell to the person side (`belief_contradicts`, `operands_for`), a
     formation change this position neither needs nor measured. And even keyed, `existence` of a
-    `Person` cannot tell *names nothing* (a demand) from *names a building* (14 of the shipped
-    realm's 15 dispatches) -- one conjunct, two meanings."""
+    `Person` cannot tell *names nothing* (a demand) from *names a building* -- one conjunct, two
+    meanings."""
     if PERSON_DEMANDED not in kinds:
         return kinds
     keep = at_precondition and demanded_person(w, a) is not None
@@ -342,29 +317,23 @@ def _demand_earned(w: "World", a: Act, kinds: tuple, at_precondition: bool) -> t
 
 def _fold(self, w: "World", token: Token, a: Act,
           resolution: "Resolution | None" = None) -> list[Event]:
-    """ONE act through the table. This is what `effect` used to be, and the difference is
-    that it is the SAME code for every act and every caller.
+    """ONE act through the table: the SAME code for every act and every caller.
 
-    ⚠ `resolution` IS WHAT THE SEAM RETURNED, AND IT IS THE PARAMETER `W-E` ADDED. It is
+    ⚠ `resolution` IS WHAT THE SEAM RETURNED. It is
     `None` for every uncontested act, which is every act the corpus produces, and on that
     path nothing below changes: `writes_at(None)` and `emits_at(None)` on a verb with no
     degree map return the same flat tuples the fold has always applied. A CONTESTED act
     arrives here only from `resolve()`'s seam branch, carrying the band the subsystem's own
     result decided (`degree_of`)."""
-    # OBSERVATION ONLY, AND DEDUPED BY ID (M4 review pass, `/code-review` finding). `w.acts`'s own
-    # `append` is deliberately idempotent on a repeated id -- "the same act reached the store
-    # twice by two entry points ... harmless, and deliberate" -- because RESOLVE's own Declared
-    # fold and ENCOUNTER's real fold both call `_fold` for the SAME deferred act. `self.resolved`
-    # is a plain list with no such guard, so a march act (or any future verb folding at two
-    # steps) was recorded twice, inflating `len(self.resolved)` -- what `populated.py`'s own
-    # `out["acts"]` reports -- for one act that reached resolution once. Guarding it the same way
-    # `w.acts` already is closes the gap at its one owner rather than at every reader of the
-    # count.
-    # ⚠ `self._resolved_ids` IS THE O(1) COMPANION, NOT A SECOND LIST SCAN (M4 review pass,
-    # `/simplify` efficiency finding). `resolved` is cumulative and NEVER RESET across a whole
-    # campaign's many seasons, so `any(r.id == a.id for r in self.resolved)` costs O(current
-    # length) on EVERY act's fold, not only march's -- O(N) per act over an N-act run,
-    # `ActStore._by_id`'s own reason for existing, applied here the same way.
+    # OBSERVATION ONLY, AND DEDUPED BY ID: `w.acts`'s own `append` is deliberately idempotent on a
+    # repeated id, because RESOLVE's own Declared fold and ENCOUNTER's real fold both call `_fold`
+    # for the SAME deferred act, and `self.resolved` is a plain list with no such guard. A march
+    # act (or any verb folding at two steps) would otherwise be recorded twice, inflating
+    # `len(self.resolved)`, which `out["acts"]` reports.
+    # ⚠ `self._resolved_ids` IS THE O(1) COMPANION, NOT A SECOND LIST SCAN: `resolved` is
+    # cumulative and NEVER RESET across a campaign's seasons, so `any(r.id == a.id for r in
+    # self.resolved)` would cost O(current length) on EVERY act's fold -- `ActStore._by_id`'s own
+    # reason for existing.
     if a.id not in self._resolved_ids:
         self._resolved_ids.add(a.id)
         self.resolved.append(a)
@@ -399,18 +368,16 @@ def _fold(self, w: "World", token: Token, a: Act,
     # it. The alternative -- passing `observed` as a parameter to all four `ev(...)` call
     # sites -- puts the same fact in four places, which is `§8` one seam over.
     verdict = Verdict(UNKNOWN, ())
-    # `W-E`. THE THIRD BROKEN LINK: `Event.degree` was a declared field NOTHING EVER ASSIGNED
-    # -- `ID-13`'s test applied to the epistemic layer's own outcome column. It is assigned
-    # HERE, on the one path every act-emission takes (§8), rather than at the four `ev(...)`
-    # call sites. `None` on every uncontested act, which is honest: no contest graded it.
+    # `W-E`. `Event.degree` IS ASSIGNED HERE, on the one path every act-emission takes (§8),
+    # rather than at the four `ev(...)` call sites. `None` on every uncontested act, which is
+    # honest: no contest graded it.
     _degree = resolution.degree if resolution is not None else None
 
     def ev(kinds, changes=None):
         return _act_events(self, w, a, kinds, changes, _degree, verdict.observed)
 
-    # §E2's first two steps, THROUGH THE ONE OWNER (`_admits`). They used to be written out
-    # here, and writing them here is exactly what let `resolve()`'s contest branch skip them:
-    # that branch never enters this function. `_admits`'s docstring carries the measurement.
+    # §E2's first two steps, THROUGH THE ONE OWNER (`_admits`): `resolve()`'s contest branch never
+    # enters this function, so written out here they would be skipped there.
     # ⚠ `verdict` IS REBOUND, and `ev` reads it at CALL time by closing over the NAME -- so a
     # refusal carries the reads that produced it and an ineligibility carries none, which is
     # honest (eligibility reads tenures, not the requirement).
@@ -429,24 +396,15 @@ def _fold(self, w: "World", token: Token, a: Act,
     # CP-T03-02: what the effect hands the act's success Events beside its receipts -- each moved
     # subject's `observed` (by receipt identity) and the fight's `ending` (`_apply_write`).
     carried: dict = {}
-    # ⚠ `writes_at(degree)`, NOT `row.writes` (#358 rev.2 §C.4 / invariant 12, 2026-09-03).
-    # An UNCONTESTED verb has no `writes_by_degree`, so this returns the flat tuple and the
-    # behaviour is identical -- the call is here so the new column HAS A READER. A column no
-    # resolver consults is not a weak mechanism, it is one that does not exist (ID-13), and
-    # this file already carries three instances of that defect found the hard way.
+    # ⚠ `writes_at(degree)`, NOT `row.writes` (#358 rev.2 §C.4 / invariant 12). An UNCONTESTED verb
+    # has no `writes_by_degree`, so this returns the flat tuple. The degree arrives on `resolution`
+    # from `resolve()`'s seam branch, minted by `degree_of` from what the SUBSYSTEM returned. A
+    # column no resolver consults is not a weak mechanism, it is one that does not exist (ID-13).
     #
-    # ⚠ `W-E`, 2026-09-04. THIS LINE READ `_degree_for_writes = None  # the seam mints this
-    # once H-98 rules the bands`, WITH A HARDCODED `None`, so `writes_at` was called for its
-    # side effect of returning the flat tuple and no branch could ever be selected. That is
-    # the first of the three links this item closed. The degree now arrives on `resolution`
-    # from `resolve()`'s seam branch, minted by `degree_of` from what the SUBSYSTEM returned.
-    #
-    # ⚠ THE GUARD THE OLD COMMENT DESCRIBED IS STILL EXACTLY THE GUARD, and it is now the
-    # reachable one rather than the hypothetical one: `writes_at(None)` on a contested verb
-    # RAISES (`Unspecified`, `H-115`) rather than falling back to the union, so a caller that
-    # folds a contested act WITHOUT a resolution fails loudly here instead of silently
-    # writing the full kill. `test_h115_the_degree_branches_raise_unspecified_not_systemexit`
-    # is that path, executed.
+    # ⚠ `writes_at(None)` on a contested verb RAISES (`Unspecified`, `H-115`) rather than falling
+    # back to the union, so a caller that folds a contested act WITHOUT a resolution fails loudly
+    # here instead of silently writing the full kill.
+    # `test_h115_the_degree_branches_raise_unspecified_not_systemexit` is that path, executed.
     _pairs = row.writes_at(_degree) if row.writes else ()
     if _pairs:
         eff = EFFECTS.get(a.verb)
@@ -459,9 +417,9 @@ def _fold(self, w: "World", token: Token, a: Act,
                     "the cell without the value changes nothing, so a precondition on a "
                     "quantity the act never spends cannot bind twice -- and §27.1's scarcity "
                     "stops happening. Register row H-63")
-        # ⚠ THE EFFECT RUNS ONCE PER ACT, NOT ONCE PER PAIR. It ran per pair, so `move` --
-        # which declares three -- closed and reopened the actor's containment three times and
-        # minted three Tenures with the SAME id. Every pair is still GATED (class, Partition
+        # ⚠ THE EFFECT RUNS ONCE PER ACT, NOT ONCE PER PAIR: `move` declares three, and running it
+        # per pair would close and reopen the actor's containment three times and mint three
+        # Tenures with the SAME id. Every pair is still GATED (class, Partition
         # and driver are checked for each), and the state change happens exactly once.
         # The alternative considered and rejected: gate all pairs dry, then apply. That
         # separates the check from the write, which is precisely what §30.2 forbids -- "the
@@ -477,59 +435,60 @@ def _fold(self, w: "World", token: Token, a: Act,
                 changed.extend(c for c in made if c not in changed)
         # ⚠ AN EFFECT THAT TOUCHED NOTHING DID NOT DO THE THING, AND MUST NOT EMIT THE
         # SUCCESS. `kill / wound`'s effect returns early when its payload names no subject --
-        # which is every computed act, since §F1's Candidate carries no operands (`H-80`) --
-        # and the fold then emitted `person.died` ANYWAY. Artifact 2 published four fabricated
-        # deaths across a four-season run, into every ledger, and `person.died` is one of the
-        # three endings §6.3's own chain check accepts. Found by the `W9` adversarial pass.
+        # which is every computed act, since §F1's Candidate carries no operands (`H-80`) -- and
+        # emitting `person.died` anyway would publish a fabricated death into every ledger.
         #
-        # ⚠⚠ G4: THIS IS NOW THE GATE'S JUDGMENT, CAUGHT HERE -- "CONVERTED AT THE FOLD BOUNDARY
-        # INTO THE ROW'S REFUSAL KIND". It was `if eff is not None and not changed`, a check on
-        # whether the effect REPORTED an id, which is exactly what `work` defeated: it reported its
-        # site and changed nothing, so the check passed and `site.worked` shipped (F9). The gate
-        # now reads every subject the effect names before and after the write and raises
-        # `NoOpReceipt` when none moved; an effect that declines (`NO_CHANGE`) names none, so the
-        # old falsy-return case lands here too, through one channel instead of two. The Event was
-        # unchanged by G4 -- same kinds, same cause, no changes -- so every refusal the old check
-        # produced stayed byte-identical then; since IN-50 its cause is `[a.id]` PLUS the act's
-        # occasion ids, appended by `_act_events` like every Event an act emits. What moved is
-        # that the WRITE is refused too: the trace records it as refused (`F9`), where it used
-        # to record a write that changed nothing as admitted. A refused first pair leaves the
-        # later pairs unchecked: a refused write authorizes nothing after it.
+        # ⚠⚠ G4: THIS IS THE GATE'S JUDGMENT, CAUGHT HERE -- "CONVERTED AT THE FOLD BOUNDARY
+        # INTO THE ROW'S REFUSAL KIND". The gate reads every subject the effect names before and
+        # after the write and raises `NoOpReceipt` when none moved; an effect that declines
+        # (`NO_CHANGE`) names none. A check on whether the effect REPORTED an id would be defeated
+        # by an effect that reports its site and changes nothing (`work`, F9). The refusal's cause
+        # is `[a.id]` PLUS the act's occasion ids, appended by `_act_events` like every Event an
+        # act emits. The WRITE is refused too: the trace records it as refused (`F9`). A refused
+        # first pair leaves the later pairs unchecked: a refused write authorizes nothing after it.
         except NoOpReceipt:
             TRACE.decision(f"{a.verb} wrote nothing", "E3",
                            chose="emit the refusal, not the success",
                            alternatives=["emit `emits:` anyway (publishes an event for a "
                                          "state change that did not happen)"])
             return ev(_demand_earned(w, a, row.refusal_for(WRITE_CLAUSE), False) or (FOLD_REFUSED,))
+        # ⚠ H-143 (B03.76): THE GATE'S REFUSAL EMITS TOO, `04 §C`'s row *"a refusal emits, never
+        # raises"* (MECHANICAL). `NotYours` is F3's judgment that the write is not the actor's; a
+        # precondition that admitted what the gate then refuses would end the season here, where
+        # `NoOpReceipt` -- the same `Forbidden`, graded the same -- already becomes the row's refusal.
+        # The Tenure store was put back before the raise (`World._restore_tenures`); an entity the
+        # same `apply()` wrote KEEPS the write (H-130's class, pinned by `test_g3_not_yours.py`,
+        # where the Office write stands beside `establish.refused`), so the refusal does NOT always
+        # stand beside an unchanged world. A DIRECT `World.write` outside the fold still raises: the gate is the
+        # backstop, and only the fold converts it. A refused first pair leaves the later pairs
+        # unchecked, as above.
+        except NotYours:
+            TRACE.decision(f"{a.verb}: the gate refused the write", "C.4",
+                           chose="emit the refusal, not raise",
+                           alternatives=["raise NotYours (ends the season)"])
+            return ev(_demand_earned(w, a, row.refusal_for(WRITE_CLAUSE), False) or (FOLD_REFUSED,))
     # The act's proposed changes ride on the success Events -- §27.3's accumulator sums
     # them across the fold and clamps ONCE, which is order-independent as a fact.
-    # ⚠ `[a.id]`, NOT `[ROOT]`, AND THIS WAS THE SUBSTRATE OF THE WHOLE NARRATIVE CLAIM.
-    # §19.4: "an Event with NO ANTECEDENT declares `causes: [ROOT]`" — a campaign seed, a
-    # clock's first emission. AN EVENT EMITTED BY AN ACT HAS AN ANTECEDENT: the act. Emitting
-    # `[ROOT]` here made every Event in every season antecedent-free, so NO ARC WALKED
-    # ANYWHERE — and #353 §19.4 says of exactly this: "the design rests its narrative layer,
-    # audit trail and arc model on this edge -- 'the arc itself' -- and the measured state is
-    # that the specified loop emits `causes=[]`, so the substrate of the entire
-    # emergent-narrative claim is declared and never populated." `[ROOT]` is `[]` wearing a
-    # marker.
+    # ⚠ `[a.id]`, NOT `[ROOT]`. §19.4: "an Event with NO ANTECEDENT declares `causes: [ROOT]`" --
+    # a campaign seed, a clock's first emission. AN EVENT EMITTED BY AN ACT HAS AN ANTECEDENT: the
+    # act. `[ROOT]` here would make every Event antecedent-free so NO ARC WALKS ANYWHERE, and
+    # #353 §19.4 says the design rests its narrative layer, audit trail and arc model on this edge.
+    # `[ROOT]` is `[]` wearing a marker.
     #
     # THE RULE IS ALREADY IN THIS FILE, ONE SEAM OVER. `resolve`'s contest branch passes
     # `causes=[a.id]` and its comment records why the "the id must already be in the log"
     # reading is wrong: `w.log` holds Events, an Act is never appended to it, so that
     # predicate is PERMANENTLY FALSE and reading it strictly produces `[ROOT]` forever.
-    # §39.2 line 2 says `causes[]` NAMES THE ACTS. Found by running `headless.py`.
+    # §39.2 line 2 says `causes[]` NAMES THE ACTS.
     # ⚠ ONLY THE KINDS THE EFFECT EARNED. An effect that returns a plain list earns all of
     # them, unchanged; one returning a mapping earns exactly the keys it filled. `confer`
     # declares `tenure.opened` AND `tenure.closed`, and conferring onto an unheld office
     # closes nothing -- publishing the second is a state change that did not happen.
-    # ⚠ `W-E`, 2026-09-04: `emits_at(degree)`, NOT `row.emits`. THIS WAS THE SECOND BROKEN
-    # LINK AND IT IS REGISTER ROW `H-113`: `VerbRow.emits_at` had ZERO CALLERS ANYWHERE IN
-    # THE TRACER, verified by an independent read-only critic, so a contested verb reported
-    # the FLAT UNION of every band -- `kill / wound` emitted `person.died` whether the target
-    # died, was wounded, or walked away untouched. That is `ID-9`'s class (a success report
-    # for something that did not happen) inside the epistemic layer, where every witness then
-    # mints a claim from it. The `earned` intersection is UNCHANGED and still runs; it simply
-    # intersects against the band's own kinds now instead of against all of them.
+    # ⚠ `emits_at(degree)`, NOT `row.emits` (`H-113`): a contested verb would otherwise report the
+    # FLAT UNION of every band -- `kill / wound` emitting `person.died` whether the target died,
+    # was wounded, or walked away untouched. That is `ID-9`'s class (a success report for
+    # something that did not happen) inside the epistemic layer, where every witness then mints a
+    # claim from it. The `earned` intersection still runs, against the band's own kinds.
     _declared = row.emits_at(_degree)
     kinds = tuple(k for k in _declared if k in earned) if earned else _declared
     # v9 IN-18 `G6` (`H-197`): `confidence.broken` IS EARNED BY THE ACT, NOT BY THE BAND -- declared on
@@ -537,18 +496,18 @@ def _fold(self, w: "World", token: Token, a: Act,
     # Outcome-specific earning in the generic fold is the FORCED choice: the data-driven alternative is a
     # conditional-emission column, and `04 §A.3` says of one more column "A seventh column has no such
     # argument available"; `tell` writes nothing, so no effect runs to earn the kind through `earned`.
-    # The fold's own kinds are the declared column `rosters.yaml: fold_kinds` (`act.refused`, `attempt.refused`).
+    # The fold's own kinds are the declared column `rosters.yaml: fold_kinds` (`act.ineligible`, `act.refused`).
     kinds = tuple(k for k in kinds if k != CONFIDENCE_BROKEN or _confidence_broken(w, a, row))
     # Causes: the act and its occasion, both stamped by `_act_events` (IN-50).
     # ⚠ CP-T03-00 (`-08` AM-C-01), FOLD-WIDE: EACH KIND'S EVENT CARRIES ONLY THE CHANGES OF THE SUBJECTS
     # THAT EARNED IT -- a receipt whose subject named kinds rides only those kinds' Events; one whose
     # subject named none (`earns=None`, every kind) rides all of them, as do the act's own `changes`.
-    # Every Event of one fold carried EVERY receipt before, so WITNESS's `both`/`per_change` deposit
-    # minted each kind about every changed subject: a felled actor beside a wounded subject would have
+    # Every Event of one fold carrying EVERY receipt would make WITNESS's `both`/`per_change` deposit
+    # mint each kind about every changed subject: a felled actor beside a wounded subject would have
     # put `(subject, person.died, True)` -- about a living man -- in every ledger, and IN-58's pairing
     # would have named the actor his killer (the ID-9 class). `world.py`'s MATTER emission already
     # carries per kind (CP-T02-01's `extra` loop); this is the same rule on the act's path. Where no
-    # subject names a kind every Event carries every receipt, byte-identical to before.
+    # subject names a kind every Event carries every receipt.
     # CP-T03-02: AND EACH KIND'S EVENT CARRIES, AFTER THE PRECONDITION'S READS, THE `observed` OF THE RECEIPTS
     # RIDING IT (`Subject.observed`: a wounded party's `(pid, "body", v)` on `body.changed`), and every success
     # Event carries the fight's `ending` -- `()` and `()` on every act that is not `fight`/`accept` at Felled/Wounded
@@ -591,8 +550,9 @@ def _confidence_broken(w: "World", a: Act, row: "VerbRow") -> bool:
     ⚠ THE ACTOR'S OWN LEDGER AND NO OTHER. `04 §B.2:250` says: *"The carve-out is exact and it is not
     a widening: the fold may ask the ACTOR'S OWN ledger, through the `PersonInterior` snapshot the act
     carries, and no other."* `04 §B.9:423` types the act `Act := ( id, actor, via?, verb, refs,
-    payload, terms?, scene )`, which has no slot for a snapshot, and no `PersonInterior` class exists
-    in `engine/`: the spec is AMBIGUOUS between the two sections. PICKED: the live read of the
+    payload, terms?, scene )`, which has no slot for a snapshot, and `Act` here has none either: a
+    `PersonInterior` now exists (`state/carriers.py`) but `loop/deliberate.py` builds it for `decision/`
+    at CHOOSE and no act carries it to RESOLVE, so the spec is still AMBIGUOUS between the two sections. PICKED: the live read of the
     ACTOR'S OWN ledger, `w.persons[a.actor].ledger`, the precedent `queries/world_q.py`'s `claim.held`
     stem sets for `tell`'s `holds` conjunct (`WorldReader` has no stem for this match), handed bare to
     `queries/person_q.py::confided_outside`, the match's one owner beside `said_of`. REASON: carrying
@@ -679,9 +639,8 @@ def _scar_witnesses(w: "World", token: Token, a: Act, events: list) -> None:
             counts = dict(p.scar)
             for e in broken:
                 counts[e] = counts.get(e, 0) + 1
-            # SORTED ON WRITE: the dict's iteration order is what a reader sees; the content hash no
-            # longer reads it (GO-07 folds a mapping sorted by its encoded keys), but the retired
-            # `_scar` found, while the digest was a `repr`, that an unsorted write moved it.
+            # SORTED ON WRITE: the dict's iteration order is what a reader sees; the content hash
+            # does not read it (GO-07 folds a mapping sorted by its encoded keys).
             p.scar = {k: counts[k] for k in sorted(counts)}
 
     w.write("scar", token, None, record_kind="Person", fieldname="scar", driver="Act",
@@ -733,14 +692,12 @@ def _conviction_crisis(w: "World", token: Token, a: Act, broken_of: dict) -> Non
 
 
 def _refuse_party_gap(self, w: "World", a: Act) -> list:
-    """A contested or graded act refused AFTER admission (a party the seam cannot derive, or a roll the
-    provider refused): the row's `emits_on_refusal`, `_contest`'s and `_grade`'s one body.
+    """A contested or graded act refused AFTER admission (a party the seam cannot derive, a roll the
+    provider refused, or a contest that reached its depth cap): the row's `emits_on_refusal`, `_contest`'s and `_grade`'s one body.
 
-    ⚠ `or (FOLD_REFUSED,)` (`rosters.yaml: fold_kinds`), MATCHING EVERY SIBLING FALLBACK (`_admits`, `_fold`,
-    `_refuse_after_the_fact`) -- found missing in the M4 review pass's own correctional
-    round: a verb with an empty `emits_on_refusal:` (or a hand-built Act naming no real
-    verb row at all) produced ZERO Events here, a silent drop, where every other refusal
-    path in this module already falls back.
+    ⚠ `or (FOLD_REFUSED,)` (`rosters.yaml: fold_kinds`), MATCHING EVERY SIBLING FALLBACK (`_admits`,
+    `_fold`, `_refuse_after_the_fact`): a verb with an empty `emits_on_refusal:` (or a hand-built
+    Act naming no real verb row at all) would otherwise produce ZERO Events here, a silent drop.
 
     ⚠ v9 IN-12 step 5 (#453 K-02, the party-gap fold edit): THE PARTY GAP IS THE COUNTERPARTY CLAUSE
     FAILING, so a row that KEYS `COUNTERPARTY_CLAUSE` emits `row.refusal_for(COUNTERPARTY_CLAUSE)` here
@@ -821,29 +778,25 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
     # origin that musters nobody -- and that is `march`'s own eligibility/effects question
     # (`ED-IN-0279` clause (a)), not an instrument defect. Refusing it the same way `_admits`'s
     # ineligibility already does, rather than letting `contest()`'s hard raise escape a caller
-    # that does not expect one, is what `_ten_seasons`-style tests (no `corpus_run.run_case`
-    # exception wrapper around them) found the hard way.
+    # that does not expect one.
     if not _parties:
         return _refuse_party_gap(self, w, a)
     # ⚠⚠ `U1`: THE DRIVER CONSTRUCTS THE GENERATOR, AND `04 §C.12`'s REJECTION 4 IS LOAD-BEARING.
-    # `purpose` stays `roll:<prize>:<act id>`, provider-specific by design -- see `resolve()`'s
-    # own history (`git log` on this file) for the fuller account of why.
+    # `purpose` stays `roll:<prize>:<act id>`, provider-specific by design.
     # ⚠ AN `effort` ACT IS ONE ACT, SO IT IS ONE ID AND ONE DRAW (CP-T01-05): the effort is read off the act
     # at the `contest()` call below and reaches the roll as named levels; it spends slots, never a second draw.
     _rng = draw_factory(w.world_seed, lambda: w.tick)(a.actor, f"roll:{contests[0]}:{a.id}")
-    # ⚠ A WRAPPER'S PARTY-GAP REACHES HERE TOO, AND IT IS THE SAME SHAPE OF GAP AS EMPTY `_parties`
-    # (M4, found by `valoria-critic`'s adversarial pass, not anticipated in the build). It was first
-    # written for `subject = None` -- `sides_of`'s `holder_faction_of`, `None` for any Rung with no HELD
-    # ancestor (`H-149` permits an unheld settlement as a march target, and the corpus has several;
-    # `populated.py`'s `Uncontrolled` provinces) -- which every wrapper reported as `status="PARTY-GAP"`;
-    # uncaught before M4, a march on an unheld target crashed the whole season. ⚠ SINCE v9 IN-13
+    # ⚠ A WRAPPER'S PARTY-GAP REACHES HERE TOO, AND IT IS THE SAME SHAPE OF GAP AS EMPTY
+    # `_parties`. `sides_of`'s `holder_faction_of` is `None` for any Rung with no HELD ancestor
+    # (`H-149` permits an unheld settlement as a march target; `boot/realm.py`'s `Uncontrolled`
+    # provinces), which a wrapper reports as `status="PARTY-GAP"`. ⚠ SINCE v9 IN-13
     # `subject = None` NO LONGER REACHES THIS BRANCH: `mass_battle.py` answers it `Unopposed` (no
-    # opposing faction), and an empty army is refused above, at the `_parties` check. The branch stays
-    # for the other wrappers' shapes of missing party (`combat.py`, `sigma.py`, and `mass_battle.py`'s
-    # no-rung). Read off the seam's result, not pre-checked on `_subject` before the call, because
-    # PARTY-GAP is the WRAPPER's own vocabulary for every shape of missing party (empty claimants,
-    # wrong-typed claimant, no subject, no rung) and a pre-check here would have to re-enumerate all of
-    # them to stay in sync.
+    # opposing faction), and an empty army is refused above, at the `_parties` check. The branch
+    # stays for the other wrappers' shapes of missing party (`combat.py`, `sigma.py`, and
+    # `mass_battle.py`'s no-rung). Read off the seam's result, not pre-checked on `_subject`
+    # before the call, because PARTY-GAP is the WRAPPER's own vocabulary for every shape of
+    # missing party (empty claimants, wrong-typed claimant, no subject, no rung) and a pre-check
+    # here would have to re-enumerate all of them to stay in sync.
     r = contest(w, rung=_rung, prize=contests[0], claimants=_parties, depth=0,
                 max_depth=contest_max_depth, causes=[a.id], verb=a.verb, subject=_subject,
                 rng=_rng, effort=effort_of(a), host=host)
@@ -851,16 +804,18 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
         # `04 §A.2`'s typed refusal (`seam/contest.py::REFUSAL_STATUSES`): `PARTY-GAP` (a missing
         # party) and `REFUSED` (`sigma.py`'s S27.4, `Ob > 2x Pool`). `speak` is contested, so a
         # speaker whose pool is under 1D reaches this whenever a matter is docketed (the ceiling caps
-        # the obstacle at 2); S27.4's rule is that the attempt is refused and the season spent, as the
-        # uncontested branch below does -- never that the season aborts -- so it takes the verb's
+        # the obstacle at 2); S27.4's rule is that the attempt is refused and the season spent --
+        # never that the season aborts -- so it takes the verb's
         # refusal kind, the shape `PARTY-GAP` takes. `ENGINE-UNAVAILABLE` (a wrapper's subsystem
         # failed to import/compose) is NOT a refusal: the seam still raises it, loud on purpose, since
         # folding it into a graceful `march.refused` would hide an infrastructure failure behind a
         # plausible-looking game Event.
         return _refuse_party_gap(self, w, a)
     if isinstance(r, ContestError):
+        # A depth-capped contest is a refusal like the one above: the act happened and the contest did not, so it
+        # takes the row's refusal kind and never leaves the fold with no Event (`U5a_CORE_owed_edits` §B row 4).
         TRACE.note(f"contest returned {r}", "S39.3")
-        return []
+        return _refuse_party_gap(self, w, a)
     if not isinstance(r, dict):
         return r
     produced = self._fold(w, token, a, Resolution(degree_of(r, _target, w.fixtures), r))
@@ -906,33 +861,29 @@ def _apply_write(self, w: "World", token: Token, a: Act, kind: str, fld: str, ef
     """The fold's write. It carries no per-verb behaviour -- the effect of a write is the
     matrix row's business, and what a verb writes is the verb table's.
 
-    ⚠ IT NOW RETURNS THE `StateChange`s THE WRITE MADE, and that is what lets an Event say
-    WHAT IT CHANGED. Before, an Event's `changes[]` was whatever the CALLER had put on the
-    Act -- so a computed act, which is every act after `W5`, emitted an Event changing
-    nothing. The fold knows what it wrote. Without this `H-79`'s `per_change` rule has nothing
-    to read and §F1's Q2 clause "a claim whose subject is something they hold" stays
-    unreachable, which is how the narrative substrate stayed empty through four revisions.
+    ⚠ IT RETURNS THE `StateChange`s THE WRITE MADE, and that is what lets an Event say WHAT IT
+    CHANGED: a computed act carries no `changes[]` of its own, and the fold knows what it wrote.
+    `H-79`'s `per_change` rule and §F1's Q2 clause "a claim whose subject is something they hold"
+    read it.
 
-    G4: "what it wrote" is now the GATE'S answer -- the receipts `World.write` minted for the
-    subjects that moved -- where it was the effect's report. An effect naming a subject that did
+    G4: "what it wrote" is the GATE'S answer -- the receipts `World.write` minted for the
+    subjects that moved, not the effect's report. An effect naming a subject that did
     not move gets no receipt for it; one naming nothing that moved raises `NoOpReceipt`, which
     `_fold` turns into the refusal.
 
     CR-06 (`H-137`): a Tenure the effect's OWN BODY changes, before it returns its `Change`, is
-    refused as `NotYours` with the store put back. TENURES ONLY -- an eager write to an entity
-    field stays bound by the convention that an effect defers its mutation into `Change.apply`."""
-    # ⚠ G2: ASKED FOR ITS SIDE EFFECT ONLY. This was `mrow = matrix_row(kind, fld)` and `mrow` fed
-    # the class below. The class now comes from the driver's token, so the row is no longer read
-    # here -- but the call still raises `Unspecified` for an absent row BEFORE `World.write` is
-    # reached, and `World.write` would raise the same thing only after logging a refused
-    # `TRACE.write` line. Kept so a signature move does not also move `runs/TRACE.txt`.
+    refused as `NotYours` with the store put back, and so is an entity field it reassigned or an
+    entity it added or removed (`effect_body_observed` states the bound: a value mutated in place
+    escapes, so an effect still defers its mutation into `Change.apply`)."""
+    # ⚠ G2: ASKED FOR ITS SIDE EFFECT ONLY. The class comes from the driver's token, so the row is
+    # not otherwise read here -- but the call raises `Unspecified` for an absent row BEFORE
+    # `World.write` is reached, and `World.write` would raise the same thing only after logging a
+    # refused `TRACE.write` line (it keeps `runs/TRACE.txt` stable).
     matrix_row(kind, fld)
     earned = earned if earned is not None else set()
-    # G2: THE DRIVER'S ACTS TOKEN, NOT `mrow.write_class(Step.RESOLVE)`. The old expression was the
-    # one non-literal class in the tree, and it was CIRCULAR -- `World.write` computes the same
-    # `STEP_CLASS[step]` from the same map, so S30.2's check could not fail for any fold write
-    # (`test_w3_the_write_class_check_still_refuses_a_wrong_class` named that limit). The token is
-    # a second source: a driver that handed RESOLVE a MATTER token would now be refused.
+    # G2: THE DRIVER'S ACTS TOKEN, NOT `mrow.write_class(Step.RESOLVE)`: `World.write` computes
+    # the same `STEP_CLASS[step]` from the same map, so S30.2's check could not fail for any fold
+    # write. The token is a second source: a driver that handed RESOLVE a MATTER token is refused.
     # G3: WHO IS WRITING, AND THROUGH WHICH SEAT -- the gate's F3 clause asks both of every Tenure
     # the effect touches. `via` is `None` for an act exercising no seat, and then only the actor's
     # own edges (and a cascade the act itself caused) can be written.
@@ -944,36 +895,32 @@ def _apply_write(self, w: "World", token: Token, a: Act, kind: str, fld: str, ef
         w.write(fld, token, lambda: None,
                 record_kind=kind, fieldname=fld, driver="Act", actor=a.actor, via=a.via)
         return []
-    # ⚠ `W-E`: EVERY EFFECT TAKES THE RESOLUTION, AND UNIFORMLY. `H-114` measured the
-    # alternative -- `_eff_kill` took no degree, so the effect that computes the VALUES could not
-    # honour the branch `writes_at` had just selected, and a fold at degree `Wounded` DELETED THE
-    # PERSON. One signature for all twelve rather than an inspect-the-callable dispatch: a fold
+    # ⚠ `W-E`: EVERY EFFECT TAKES THE RESOLUTION, AND UNIFORMLY (`H-114`): an effect that took no
+    # degree could not honour the branch `writes_at` selected, and a fold at degree `Wounded`
+    # would DELETE THE PERSON. One signature for all twelve rather than an inspect-the-callable dispatch: a fold
     # that passes different arguments to different effects has a second contract nobody declared.
     #
     # ⚠⚠ G4: THE EFFECT RUNS HERE, BEFORE THE WRITE, AND WRITES NOTHING -- IT RETURNS THE CHANGE.
     # `04 §C.2`'s signature is `gate.write(token, kind, field, id, change, ...)`: the change is an
-    # ARGUMENT, computed by the caller and applied by the gate. Before G4 the effect ran INSIDE
-    # the gate's `apply()` and reported ids after the fact, so the gate could not read a subject
-    # before it moved. One consequence, stated: an effect's own refusal to be built (`_operand`'s
-    # `InstrumentDefect`, `kill / wound`'s `Unspecified`) now raises before the gate's class and
+    # ARGUMENT, computed by the caller and applied by the gate, so the gate can read a subject
+    # before it moves. One consequence, stated: an effect's own refusal to be built (`_operand`'s
+    # `InstrumentDefect`, `kill / wound`'s `Unspecified`) raises before the gate's class and
     # step checks rather than after them -- both are call-site defects and neither mutates.
     #
-    # ⚠ CR-06 / `H-137`: THE EFFECT'S OWN BODY IS OBSERVED TOO, FOR TENURES. `World.write` takes its
-    # tenure snapshot only after this call returns, so a Tenure the body moved before handing back
-    # its `Change` was baked into that snapshot and judged by neither F3 nor F9.
-    # `World.effect_body_observed` runs the effect inside its own snapshot and refuses a Tenure the
-    # body moved (the store put back, then `not_yours`); its docstring states the bounds (tenures
-    # only; any tenure moved is refused, lawful or not, since a body is not a write).
+    # ⚠ CR-06 / `H-137`: THE EFFECT'S OWN BODY IS OBSERVED TOO, FOR TENURES AND ENTITY FIELDS.
+    # `World.write` takes its snapshots only after this call returns, so a Tenure or an entity field
+    # the body moved before handing back its `Change` was baked into them and judged by neither F3 nor
+    # F9. `World.effect_body_observed` runs the effect inside its own snapshots and refuses what the
+    # body moved (put back, then `not_yours`); its docstring states the bounds (a value mutated in
+    # place escapes; anything moved is refused, lawful or not, since a body is not a write).
     change = w.effect_body_observed(lambda: eff(w, a, resolution), a.actor, a.via, kind, fld)
     got = w.write(fld, token, None, record_kind=kind, fieldname=fld, driver="Act",
                   actor=a.actor, via=a.via, change=change)
     # ⚠ AN EFFECT MAY EARN SOME OF ITS DECLARED KINDS AND NOT OTHERS. A subject that earns `None`
     # earns *all* of them (the original plain-list contract); a named kind earns only that one.
-    # Without this the fold emitted EVERY kind in `emits:` the moment anything changed -- so
-    # `confer` onto an unheld office published `tenure.closed` with nothing closed. That is the
-    # fabricated-`person.died` class committed INSIDE the fix for it. Found by the
-    # governance-slice adversarial pass. G4: a kind is earned by a subject that MOVED, which the
-    # gate decides, not by one the effect listed.
+    # Otherwise the fold would emit EVERY kind in `emits:` the moment anything changed -- `confer`
+    # onto an unheld office would publish `tenure.closed` with nothing closed. G4: a kind is
+    # earned by a subject that MOVED, which the gate decides, not by one the effect listed.
     # CP-T02-01 / HR-1: a subject may name several kinds (`Subject.kinds`): a dead loser earns his
     # band's kind AND `person.died`, which one kind per subject could not say.
     # CP-T03-00: and, where the caller asks (`_fold`'s `earners`), WHICH kinds each receipt's subject
@@ -988,9 +935,9 @@ def _apply_write(self, w: "World", token: Token, a: Act, kind: str, fld: str, ef
     # CP-T03-02: the fight's per-party ending (`Change.ending`), for the fold's success Events.
     if carried is not None and change.ending:
         carried["ending"] = change.ending
-    # G1a -> G4. THE GATE MINTED THESE, INSIDE THE WRITE, FOR THE SUBJECTS THAT MOVED AND NO OTHER.
-    # They were minted here, after `w.write` returned, for every id the effect REPORTED -- which is
-    # how a no-op receipt (`before == after`) came to be issued by the gate and admitted by the log.
+    # G1a -> G4. THE GATE MINTED THESE, INSIDE THE WRITE, FOR THE SUBJECTS THAT MOVED AND NO OTHER:
+    # a receipt minted here for every id the effect REPORTED is how a no-op receipt
+    # (`before == after`) comes to be admitted by the log.
     return [r for _s, r in got]
 
 def resolve(self, token: Token, acts: list[Act],
@@ -1003,15 +950,13 @@ def resolve(self, token: Token, acts: list[Act],
 
     # S27: FIVE STRATA, then S32 rest 3's CONTENT-DERIVED canonicalization WITHIN each.
     # This sorts ONE GLOBAL ARRAY, which is exactly why RESOLVE DOES NOT PARTITION (S31).
-    # ⚠ THE STRATUM COMES FROM THE VERB TABLE, NOT FROM THE ACT'S DEFAULT. `VerbRow.stratum`
-    # is a NAME (`social`, `movement`) validated against the roster at load; `Act.stratum` is
-    # an INT defaulting to 4, and NOTHING MAPPED ONE ONTO THE OTHER -- so every computed act
-    # resolved at 4 whatever its verb, and §27's five-strata ordering was INERT. `rosters.yaml`
-    # says of that roster "ORDER IS SEMANTIC HERE... editing the order changes which acts see
-    # which world", which described a column no resolver read. Found by the `W9` adversarial
-    # pass. An act that names its own stratum still wins, so a caller can still test the
-    # ordering directly (`A37`). Extracted to `_canonical_order` (M4) so `loop/encounter.py`
-    # can fold a subset of a round's acts in the same order without a second copy of the rule.
+    # ⚠ THE STRATUM COMES FROM THE VERB TABLE, NOT FROM THE ACT'S DEFAULT. `VerbRow.stratum` is a
+    # NAME (`social`, `movement`) validated against the roster at load; `Act.stratum` is an INT
+    # defaulting to 4, so without `stratum_of` mapping one onto the other every computed act
+    # would resolve at 4 and §27's five-strata ordering would be INERT (`rosters.yaml` says of
+    # that roster "ORDER IS SEMANTIC HERE... editing the order changes which acts see which
+    # world"). An act that names its own stratum still wins, so a caller can test the ordering
+    # directly (`A37`). `_canonical_order` is shared with `loop/encounter.py`.
     ordered = _canonical_order(w, acts)
     TRACE.decision(f"ordering {len(acts)} acts", "S27/S32",
                    chose="five strata, then a content-derived hash key over one global array",
@@ -1031,45 +976,21 @@ def resolve(self, token: Token, acts: list[Act],
         # each of the five emission sites: `CLAUDE.md` §8, and five sites is five chances to
         # forget the one that refuses.
         w.acts.append(a)
-        # ⚠⚠ S27.1 SAID SO ALL ALONG: *each act sees the world its predecessors left.* A
-        # PREDECESSOR CAN REMOVE THE ACTOR, and until a person could be killed inside the fold
-        # nothing ever tested what the successor does. The answer is that he does not act: acts
-        # are minted for everyone at DELIBERATE, resolved in stratum order at RESOLVE, and a man
-        # felled in the third act of the season is not there for the ninth. Extracted to
-        # `_survives` (M4) so `loop/encounter.py` shares the one check.
+        # ⚠⚠ S27.1: *each act sees the world its predecessors left.* A PREDECESSOR CAN REMOVE THE
+        # ACTOR: acts are minted for everyone at DELIBERATE, resolved in stratum order at RESOLVE,
+        # and a man felled in the third act of the season is not there for the ninth, so he does
+        # not act. `_survives` is shared with `loop/encounter.py`.
         _gone = self._survives(w, a)
         if _gone:
             out.extend(_gone)
             continue
-        # S27.4: an attempt at Ob > 2 x Pool is REFUSED, and the season is spent. An
-        # uncontested attempt routes to a GATE, never to an Ob = 0 roll.
-        mult = w.fixtures.get("obstacle_refusal_multiple")
-        if a.obstacle is not None and a.obstacle > mult * max(a.pool or 0, 0):
-            # ⚠ `[a.id]`, NOT `[ROOT]`. A REFUSED ATTEMPT HAS AN ANTECEDENT — THE ATTEMPT.
-            # This read `[ROOT]`, and the rule against it is stated TWICE in this file within
-            # sixteen lines: the contest branch below passes `[a.id]` plus the occasion ids (`_act_events`), and `_fold`
-            # carries a paragraph saying `[ROOT]` in an act-caused emission is "`[]` wearing a
-            # marker". The rule was written on both sides of this line and violated between
-            # them. It made `W4`'s headline claim — *"`[ROOT]` only for the seed and a licensed
-            # clock's genuine first emission"* — FALSE OF THE DESIGN while true of the fixture,
-            # because `Act.obstacle` defaults to `None` and the computed chooser never sets
-            # one, so no test could reach it. Found by the `W4` adversarial pass.
-            refused = _act_events(self, w, a, (FOLD_ATTEMPT_REFUSED,))
-            for _e in refused:
-                self.act_of[_e.id] = a
-            out.extend(refused)
-            TRACE.decision(f"{a.actor} attempted Ob={a.obstacle} against Pool={a.pool}",
-                           "S27.4", chose="refuse; the season is spent",
-                           alternatives=["roll it anyway", "route to an Ob=0 roll"])
-            continue
         # S39.2 line 1: loop -> subsystem, when an act contests something.
         #
-        # ⚠ THE VERB'S COLUMN, NOT ONLY THE ACT'S FIELD, AND THAT IS WHY THE SEAM NEVER FIRED.
-        # `ARCHITECTURE_V2.md:394` puts `contests:` on the VERB ROW — *"if set, routes to the
-        # seam at RESOLVE"* — and `:434` sets it on `kill / wound`. This read only `a.contests`,
-        # which no chooser sets, so a kill took the EFFECT path and wrote a death directly.
-        # Jordan, 2026-09-02: *"that…would trigger the personal combat scene. you can't just
-        # kill or wound imo."* The design said so at `:434` and the instrument did not read it.
+        # ⚠ THE VERB'S COLUMN, NOT ONLY THE ACT'S FIELD. `ARCHITECTURE_V2.md:394` puts `contests:` on
+        # the VERB ROW -- *"if set, routes to the seam at RESOLVE"* -- and `:434` sets it on
+        # `kill / wound`; reading only `a.contests`, which no chooser sets, would send a kill down
+        # the EFFECT path to write a death directly. Jordan, 2026-09-02: *"that…would trigger the
+        # personal combat scene. you can't just kill or wound imo."*
         _row = VERB_TABLE.get(a.verb)
         _contests = _contests_of(a, _row)
         # v9 FI-01: an inquiry's `graded_inquiries` route -- the second source of a degree, which the
@@ -1077,12 +998,9 @@ def resolve(self, token: Token, acts: list[Act],
         # `contests` (`_contests_of`, hand-built acts only) takes the contest branch below and the route is unread.
         _route = GRADED_INQUIRIES.get(a.verb)
         if _contests or _route:
-            # ⚠⚠ §E2's ORDER, RESTORED: ELIGIBILITY AND `requires` BEFORE THE SEAM, NOT AFTER IT.
-            # This branch used to route straight into personal combat, so a contested act's
-            # precondition was never read -- `_fold`, which owns that check, is the branch this
-            # one is the alternative to. The defect could not be seen while no contested verb was
-            # choosable; admitting `kill / wound` made it 85 whole-case DESIGN-GAPs in one run.
-            # `_admits` carries the measurement and is the single owner (§8).
+            # ⚠⚠ §E2's ORDER: ELIGIBILITY AND `requires` BEFORE THE SEAM, NOT AFTER IT. `_fold`, which
+            # owns that check, is the branch this one is the alternative to, so a contested act's
+            # precondition would otherwise never be read. `_admits` is the single owner (§8).
             #
             # ⚠ A REFUSAL HERE IS AN EVENT, NOT A RAISE. The act happened and was witnessed; what
             # did not happen is the contest. The row's `emits_on_refusal` -- `kill.refused`,
@@ -1101,7 +1019,7 @@ def resolve(self, token: Token, acts: list[Act],
             # so RESOLVE and `loop/encounter.py` share the one body -- see that function's own
             # docstring for the deferral fork and why it does not re-check `_admits`, just
             # confirmed above. `_contest` always returns a list -- a depth-capped
-            # `ContestError` is converted to `[]` inside it, once, so this loop and
+            # `ContestError` is folded to the row's refusal inside it, once, so this loop and
             # `loop/encounter.py`'s own do not each carry a second copy of that check.
             produced = (self._contest(w, token, a, _contests, contest_max_depth) if _contests
                         else self._grade(w, token, a, _route))
@@ -1109,12 +1027,9 @@ def resolve(self, token: Token, acts: list[Act],
             # S27.1: CONTENTION IS AN ORDERED FOLD. Each act sees the world its predecessors
             # left. SEQUENCE, NOT SIMULTANEITY -- and NO ACT NEEDS TO KNOW ANOTHER EXISTED.
             produced = self._fold(w, token, a)
-        # ⚠ `W-E`: THE TWO PATHS SHARE THE BOOKKEEPING BELOW, AND THAT IS §8 RATHER THAN
-        # TIDINESS. The contest branch used to `continue` past all of it, so a contested act's
-        # Events were never entered in `act_of` and its deltas never reached §27.3's
-        # accumulator. The moment the seam started returning something the fold could write,
-        # duplicating those three loops inside the branch would have been the second copy of
-        # a rule that gets to disagree with the first.
+        # ⚠ `W-E`: THE TWO PATHS SHARE THE BOOKKEEPING BELOW (§8): duplicating those three loops
+        # inside the contest branch would be a second copy of a rule that gets to disagree with
+        # the first.
         # ⚠ WHICH ACT EMITTED WHICH EVENT, recorded once here rather than re-derived from the
         # id hash by every consumer. WITNESS needs it to answer *what is this deposit ABOUT*
         # for an Event that wrote nothing: an act that changes no state has an empty
@@ -1141,12 +1056,9 @@ def resolve(self, token: Token, acts: list[Act],
             _found = find_trail(w, a, _e)
             if _found:
                 self.findings[_e.id] = _found
-        # ⚠ G4: THE `for ch in e.changes: if isinstance(ch.delta, int): pending[...]` LOOP THAT
-        # STOOD HERE IS GONE. It fed §27.3's accumulator off the success EVENTS, so any verb whose
-        # act rode an integer delta on its `changes[]` moved a site whose `Site.condition` its
-        # row never declared -- and it could not tell the accumulator WHICH acts a site's total
-        # came from, which is what judging that total's write needs. `_eff_work` stages its own
-        # delta through the gate instead (`World.stage`).
+        # ⚠ G4: NO LOOP FEEDS §27.3's ACCUMULATOR OFF THE SUCCESS EVENTS: it could not tell the
+        # accumulator WHICH acts a site's total came from, which judging that total's write needs.
+        # `_eff_work` stages its own delta through the gate instead (`World.stage`).
         out.extend(produced)
 
     # S27.3 / S32 rest 4: SUM ALL DELTAS, CLAMP ONCE. Clamping may not depend on arrival
@@ -1159,7 +1071,7 @@ def resolve(self, token: Token, acts: list[Act],
     # `NoOpReceipt`. Every act that staged on the site then gets its refusal in place of its
     # provisional success (`_refuse_after_the_fact`): the site did not change, so no act changed
     # it. A site that is gone by now names an absent subject that stays absent, and refuses the
-    # same way -- where the old loop skipped it silently and left every `site.worked` standing.
+    # same way.
     scale = w.fixtures.get("condition_scale")
     for (rk, sid, fname), contribs in w.take_staged():
         if (rk, fname) != ("Site", "condition"):
@@ -1171,8 +1083,7 @@ def resolve(self, token: Token, acts: list[Act],
         site = w.sites.get(sid)
         # ⚠ PLAN POSITION `24e`: THE UPPER BOUND IS THE WORKS' CEILING, NOT ONLY THE SCALE -- r2 `04`
         # §A.6.3, RULED: *"the ceiling is one more term in that one `min`"*, and `ceiling` returns the
-        # scale when no works names the site, so the bound is unchanged for every site in every world
-        # built before `24e`. ⚠ `max(condition, ceiling)`, NOT r2's bare `ceiling`: the ceiling bounds
+        # scale when no works names the site. ⚠ `max(condition, ceiling)`, NOT r2's bare `ceiling`: the ceiling bounds
         # the RISE and never takes away what stands (a works declared on a standing fabric has 0 terms
         # ripe, ceiling 0, and r2's form would drop the fabric to 0 on the next staged delta).
         # Computed from the world BEFORE the sum, not from the deltas, so the clamp stays
@@ -1193,6 +1104,14 @@ def resolve(self, token: Token, acts: list[Act],
                            alternatives=["let each act's provisional success stand (a success "
                                          "Event for a write that did not happen: F9)"])
             _refuse_after_the_fact(self, w, out, [aid for aid, _d in contribs])
+        except NotYours:
+            # H-143 (B03.76): the gate's refusal of the summed write refuses the staged acts as a
+            # no-op does -- `04 §C`'s "a refusal emits, never raises".
+            TRACE.decision(f"the summed write to a site was refused by the gate -> {sid}.condition",
+                           "C.4",
+                           chose=f"refuse every act that staged on it ({len(contribs)})",
+                           alternatives=["raise NotYours (ends the season)"])
+            _refuse_after_the_fact(self, w, out, [aid for aid, _d in contribs])
         TRACE.decision(f"clamping {sid}.condition", "S27.3",
                        chose=f"sum {deltas} = {total}, then clamp ONCE",
                        alternatives=["clamp per delta (arrival-order dependent)"])
@@ -1210,19 +1129,17 @@ def _act_events(self, w: "World", a: Act, kinds, changes=None, degree=None,
 
     ⚠ **THE OCCASION IS APPENDED HERE, FOR EVERY EVENT THE ACT EMITS, REFUSAL OR SUCCESS** (IN-50).
     Every Event cites `[a.id]` and then `_occasion_ids`, the antecedent Events of the Scene that
-    carried the act, de-duplicated and in that order. `[a.id]` ALONE WAS `N3`: §39.2 line 2 says
-    `causes[]` NAMES THE ACTS, and that is necessary and was treated as sufficient -- an Event named
-    the act that emitted it and nothing named what occasioned the act, so the walk stopped dead at
-    every decision and `R3`, the only check the corpus failed, could never fire from a real run.
-    Only `_fold`'s success return added the occasion, so a REFUSED act chosen from a scene another
-    person's act-Event occasioned dropped the edge to that person, on every one of the refusal
-    returns that built an Event on its own. `self` is the driver, for `scenes`; an act with no scene
-    has no occasion and cites its own id alone.
+    carried the act, de-duplicated and in that order. §39.2 line 2 says `causes[]` NAMES THE ACTS,
+    which is necessary and not sufficient: an Event naming only the act that emitted it leaves the
+    walk stopping dead at every decision, and `R3` could never fire from a real run (`N3`). A
+    REFUSED act chosen from a scene another person's act-Event occasioned keeps the edge to that
+    person. `self` is the driver, for `scenes`; an act with no scene has no occasion and cites
+    its own id alone.
 
     ⚠ SC-02 `23`, LOADER INVARIANT 7 AT EXECUTION (`04 §B.13 #7`, `F.20b`): *"the log accepts no other
     kind"* -- the fold may mint only a kind the DERIVED roster (`data/verbs.py::EVENT_KINDS`, the
-    union of every emission column and `rosters.yaml: fold_kinds`) holds. The three kinds that were
-    body literals here are that last column now. A kind outside it is a body literal come back, and
+    union of every emission column and `rosters.yaml: fold_kinds`) holds. A kind outside it is a
+    body literal come back, and
     it raises before the Event exists rather than reaching a log that would carry it. Scoped to the
     FOLD'S Events: a probe's hand-built Event is appended by the probe (`H-220`)."""
     if not EVENT_KINDS.issuperset(kinds):
@@ -1279,9 +1196,9 @@ def _refuse_after_the_fact(self, w: "World", out: list, act_ids: list) -> None:
 
 
 # ---------------------------------------------------------------------------
-# ⚠ `stratum_of` LIVES HERE FOR THE SAME REASON `sense` LIVES IN `deliberate.py`:
-# RESOLVE is its only caller, and leaving it in `driver.py` made this module import the driver
-# that imports it back -- a cycle the tree's own count test caught on the first cut.
+# ⚠ `stratum_of` LIVES HERE FOR THE SAME REASON `sense` LIVES IN `deliberate.py`: RESOLVE is its
+# only caller, and leaving it in `driver.py` would make this module import the driver that imports
+# it back.
 # ---------------------------------------------------------------------------
 
 def stratum_of(a: "Act") -> int:

@@ -1,18 +1,16 @@
-"""`run_battle` -- one engagement turn (up to 3 phases = 18 ticks) -- moved out of `orchestration.py` VERBATIM.
+"""`run_battle` -- one engagement turn (up to 3 phases = 18 ticks).
 
-ED-1043 (the mass-battle god-file split): CP-T04-03 edits this function's stop test, so its first change was this
-extraction, hash EQUAL -- the body below was `orchestration.run_battle` byte for byte except the one call-time import
-that stands for the globals it read there; CP-T04-03's one stop-test line (`unit_conceded`) is the only edit since.
-`orchestration` re-exports it (`from modules.mass_battle.battle_loop import
-run_battle`), so every caller and every `orchestration.run_battle` name resolves as before. Nothing imports this module
-directly: it needs `orchestration` loaded, which loads it."""
+ED-1043 (the mass-battle god-file split): CP-T04-03's stop test (`unit_conceded`) lives in this function.
+`orchestration` re-exports it (`from modules.mass_battle.battle_loop import run_battle`), so every caller and
+every `orchestration.run_battle` name resolves there. Nothing imports this module directly: it needs
+`orchestration` loaded, which loads it."""
 import math  # noqa: F401  (read by the nested helpers below, as `orchestration`'s own `math` was)
 from modules.mass_battle.hierarchy.units import unit_conceded
 
 
 def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md §A.7 — 18-tick battle (3 phases x 6)]
     """Run one engagement turn (up to 3 phases = 18 ticks).
-    v16: max_turns=18 = one battle turn's engagement cap (3 phases).
+    max_turns=18 = one battle turn's engagement cap (3 phases).
     Multi-turn battles call this repeatedly with persistent unit state.
     [canonical: Jordan direction — "limit of three phases per simultaneous
      engagement per turn"]
@@ -97,20 +95,15 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
                         if (abs_r, abs_c) == cell:
                             _atom.halted_cells.add((orig_r, orig_c)); break
         # [Stage C] check_orders BEFORE assign_targets -- a fired order's behavior dict may itself set
-        # target_condition/target_delay_ticks/stance/instructions, so orders must land first. Hoisting
-        # a_cells_set/b_cells_set up here (they were computed just after assign_targets) is a pure,
-        # behavior-preserving reorder: both are recomputed fresh from current cell positions with no
-        # side effects, so moving the computation 3 lines earlier changes nothing else.
+        # target_condition/target_delay_ticks/stance/instructions, so orders must land first.
         b_cells_set = set(c for sub in unit_b.subunits for c in sub.cells())
         a_cells_set = set(c for sub in unit_a.subunits for c in sub.cells())
         check_orders(unit_a, t, b_cells_set)
         check_orders(unit_b, t, a_cells_set)
         assign_targets(unit_a, unit_b)
-        # v21: SIMULTANEOUS RESOLUTION — cache all target centroids BEFORE any
-        # atom moves. Without this, unit_a advances toward unit_b's pre-move
-        # centroid, but unit_b advances toward unit_a's POST-move centroid,
-        # creating ~10% first-arg bias. With caching, both sides see each
-        # other's pre-move positions symmetrically.
+        # SIMULTANEOUS RESOLUTION — cache all target centroids BEFORE any atom moves, so both sides see each
+        # other's pre-move positions symmetrically (otherwise unit_b would advance toward unit_a's POST-move
+        # centroid: a first-argument bias).
         # [canonical: params/mass_combat.md PP-233 — "Damage is simultaneous"]
         cached_centroids = {}
         for atom in unit_a.subunits + unit_b.subunits:
@@ -118,15 +111,13 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
                 cached_centroids[id(atom)] = atom.target_atom.centroid()
 
         # [Stage C] Escort / formation-relative positioning ("hold position in front of the marching
-        # archers"). A screening subunit (escort_of set) has no enemy target yet, so it was never in
-        # cached_centroids above and the movement gate below (`if atom.target_atom:`) never fired for
-        # it — confirmed dead code in an earlier draft. Two additive fixes, computed here (same
-        # synchronized pre-move point as cached_centroids, preserving the v21 simultaneity discipline):
-        # latch the one-shot engage-on-contact switch now that assign_targets has run (a just-acquired
-        # real target_atom takes over targeting immediately, not one tick late), then give any
-        # still-escorting atom a centroid to advance toward -- the escorted subunit's live centroid
-        # plus escort_offset ROTATED into its current facing frame (not the static spawn-time
-        # advance_dir), so screening survives the escorted unit wheeling/enveloping/sweeping.
+        # archers"). A screening subunit (escort_of set) has no enemy target yet, so it is not in
+        # cached_centroids above. Computed here, at the same synchronized pre-move point as cached_centroids
+        # (preserving simultaneity): latch the one-shot engage-on-contact switch now that assign_targets has run
+        # (a just-acquired real target_atom takes over targeting immediately, not one tick late), then give any
+        # still-escorting atom a centroid to advance toward -- the escorted subunit's live centroid plus
+        # escort_offset ROTATED into its current facing frame (not the static spawn-time advance_dir), so
+        # screening survives the escorted unit wheeling/enveloping/sweeping.
         def _escort_facing(sub):
             if MB_NODE_COHESION and getattr(sub, '_node_facing', None) is not None:
                 fr, fc = sub._node_facing
@@ -143,18 +134,14 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
             if (atom.escort_of is not None and atom.escort_engage_on_contact
                     and not atom._escort_engaged and atom.target_atom is not None):
                 atom._escort_engaged = True
-            # NOTE: the escort centroid overrides cached_centroids whenever escorting-and-not-yet-
-            # engaged, regardless of target_atom -- assign_targets' default 'nearest' condition sets
-            # target_atom to SOME enemy unconditionally the instant one exists (it is not gated on
-            # range), so gating this override on "target_atom is None" (an earlier version of this
-            # fix did) left it dead in every ordinary scenario: target_atom becomes non-None almost
-            # immediately, long before real contact, and the escort would silently start chasing the
-            # enemy directly instead of holding its screening position -- confirmed empirically (a
-            # screen with escort_engage_on_contact=False still switched to chasing the enemy on tick
-            # 1). "Screen IS the front line" (the False default) means movement is governed by the
-            # escort relationship until the one-shot latch above actually fires; a caller wanting
-            # real range-gated engagement should set target_condition='in_range:D' on the escorting
-            # subunit (an existing primitive) rather than relying on target_atom's mere presence.
+            # NOTE: the escort centroid overrides cached_centroids whenever escorting-and-not-yet-engaged,
+            # regardless of target_atom -- assign_targets' default 'nearest' condition sets target_atom to SOME enemy
+            # unconditionally the instant one exists (it is not gated on range), so gating this override on
+            # "target_atom is None" would leave it dead in every ordinary scenario: the escort would start chasing
+            # the enemy directly instead of holding its screening position. "Screen IS the front line" (the False
+            # default) means movement is governed by the escort relationship until the one-shot latch above actually
+            # fires; a caller wanting real range-gated engagement should set target_condition='in_range:D' on the
+            # escorting subunit (an existing primitive) rather than relying on target_atom's mere presence.
             if atom.escort_of is not None and not atom._escort_engaged:
                 _esc = atom.escort_of
                 _fr, _fc = _escort_facing(_esc)
@@ -165,15 +152,11 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         def _cells_float_of(unit):
             return [(r, c, reach_for(sub.troop_type)) for sub in unit.subunits for (r, c) in sub.cells_float()]
 
-        # [TOI refactor] b_cells_float/a_cells_float are now consulted by _node_advance ONLY for
-        # truthiness -- a non-empty list signals "defer to the cross-side TOI resolve rather than
-        # commit immediately" (see _node_advance's toi_deferred). The actual cross-side standoff
-        # computation (reach- and facing-asymmetric, exact time-of-impact) now runs once, after both
-        # sides have proposed, in resolve_toi_and_commit below -- replacing the old sequential,
-        # halved-closing-budget anchor pre-cap this comment used to describe (see git history: that
-        # design fixed a real first-mover bias but only approximately, and was retired once the bias's
-        # true fix -- exact per-pair TOI -- was designed properly instead of adopted under time
-        # pressure). None when FIELD_MOVEMENT is off -> zero cost, byte-exact.
+        # [TOI refactor] b_cells_float/a_cells_float are consulted by _node_advance ONLY for truthiness -- a
+        # non-empty list signals "defer to the cross-side TOI resolve rather than commit immediately" (see
+        # _node_advance's toi_deferred). The cross-side standoff computation (reach- and facing-asymmetric, exact
+        # time-of-impact) runs once, after both sides have proposed, in resolve_toi_and_commit below. None when
+        # FIELD_MOVEMENT is off -> zero cost, byte-exact.
         b_cells_float = _cells_float_of(unit_b) if FIELD_MOVEMENT else None
         a_cells_float = _cells_float_of(unit_a) if FIELD_MOVEMENT else None
         # [Stage C] additive `or` clause: a screening escort (escort_of set, not yet engaged) moves
@@ -186,9 +169,8 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         # a bare [id(atom)] indexing and pass target_centroid=None for it; _node_advance's own gate
         # (see its comment) is what makes a None target_centroid safe here, and its _resolve_route_
         # goal/_resolve_maneuver_goal chain is what actually supplies the route as the goal.
-        # [F5, adversarial-pass round 2] The route clause is gated on the node path actually being
-        # active -- see _is_moving_atom's own docstring for why inclusion without that guard was
-        # not the harmless no-op it looked like on the legacy-lattice arm.
+        # [F5] The route clause is gated on the node path actually being active -- see _is_moving_atom's own
+        # docstring.
         moving_a = [atom for atom in unit_a.subunits if _is_moving_atom(atom)]
         moving_b = [atom for atom in unit_b.subunits if _is_moving_atom(atom)]
         for atom in moving_a:
@@ -199,38 +181,29 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         for atom in moving_b:
             atom.advance_cells(atom.eff_discipline, cached_centroids.get(id(atom)),
                                enemy_cells=a_cells_set, enemy_cells_float=a_cells_float)
-        # [TOI refactor] On the FIELD_MOVEMENT path, the advance_cells calls above only PROPOSED
-        # (uncapped) end-of-tick positions for every atom on BOTH sides -- enemy_cells_float being
-        # non-empty (b_cells_float/a_cells_float, built above) signals _node_advance to defer rather
-        # than commit. Resolve the cross-side continuous-collision time-of-impact ONCE, across both
-        # sides together (not per-atom, not sequential), and commit final positions now. Replaces the
-        # old per-atom halved-anchor-precap + iterated per-cell pull-back entirely.
+        # [TOI refactor] On the FIELD_MOVEMENT path, the advance_cells calls above only PROPOSED (uncapped)
+        # end-of-tick positions for every atom on BOTH sides -- enemy_cells_float being non-empty
+        # (b_cells_float/a_cells_float, built above) signals _node_advance to defer rather than commit. Resolve
+        # the cross-side continuous-collision time-of-impact ONCE, across both sides together (not per-atom, not
+        # sequential), and commit final positions now.
         #
-        # Pass ALL subunits (unit_a.subunits/unit_b.subunits), not just moving_a/moving_b: a subunit
-        # with no target yet (a reserve, or gated by target_delay_ticks/target_condition) never called
-        # advance_cells and so has no pending proposal, but its cells are real, occupied positions that
-        # the OTHER side's moving cells must still treat as obstacles -- resolve_toi_and_commit reads
-        # such atoms' current true positions directly (adversarial-review-caught: an earlier version
-        # passed only moving_a/moving_b, silently dropping idle/reserve subunits as obstacles for a
-        # tick, a regression versus the pre-refactor enemy_cells_float, which was always built from
-        # ALL of a unit's subunits unconditionally).
+        # Pass ALL subunits (unit_a.subunits/unit_b.subunits), not just moving_a/moving_b: a subunit with no
+        # target yet (a reserve, or gated by target_delay_ticks/target_condition) never called advance_cells and
+        # so has no pending proposal, but its cells are real, occupied positions that the OTHER side's moving
+        # cells must still treat as obstacles -- resolve_toi_and_commit reads such atoms' current true positions
+        # directly.
         if FIELD_MOVEMENT:
             resolve_toi_and_commit(unit_a.subunits, unit_b.subunits)
         # v11: vector halt-at-contact — prevent over-run that creates paradoxical angles
         for atom in unit_a.subunits: atom.halt_before_enemy(unit_b)
         for atom in unit_b.subunits: atom.halt_before_enemy(unit_a)
-        # v13: cross-side cell contention (speed → size → random priority).
+        # Cross-side cell contention (speed → size → random priority).
         # After both sides have advanced, cells from opposing sides may occupy the
         # same abs position. Resolve per Jordan design 2026-05-12: higher-speed
         # cell wins; tie → greater size; tie → random. Losers that moved this turn
         # revert; static losers shift back 1 step ("end-of-phase displacement").
         # [canonical: Jordan design 2026-05-12 — same-cell contention rules]
         resolve_cross_side_contention(unit_a, unit_b)
-        # v13: within-side discipline-gated formation hold (Subunit method
-        # resolve_internal_collisions, DELETED per ED-MB-0057's re-adjudicated disposition —
-        # zero call sites since 2026-05-29; it over-tuned battery 12/13 -> 9/13 and its
-        # co-location case is closed by ED-MB-0059's same-side field exclusion below instead).
-        # No replacement call site: nothing here invokes it, before or after.
         pairs = find_contacts(unit_a, unit_b)
         # v20: stamina drain proportional to cells in contact (bottom-up).
         # More front-line cells fighting = more exhaustion. Emergent from formation.
@@ -265,26 +238,14 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         max_groups = max(max_groups, result.get("n_groups", 0))
         # Apply Phase 2 Volley + Phase 5 Engagement damage simultaneously at Phase 6 Step 1
         # [canonical: mass_battle_v30.md §A.7 — Volley/Thread/Engagement damage applied together]
-        # v12: Volley size-loss → hp uses ceil(h_per_size / 2), not full h_per_size.
-        # Bottom-up rationale: a ranged "size loss" represents arrows finding targets in
-        # the formation; many hits glance off shields/armor. Melee size loss represents
-        # men killed in close combat, where wounds are decisive. Halving the conversion
-        # captures that volley size loss is less lethal per unit than melee size loss.
-        # Reduces R1 (Ranged vs Line) without breaking R3 (mirror — same scaling on both sides).
         # [canonical: Jordan design 2026-05-12 — volley hp scaling tuned for historical match]
-        # [ED-MB-0041 FIX] Volley loss -> troop conversion must NOT depend on the target's own quality.
-        # This previously read `max(1, (u.h_per_size + 1) // 2)` where
-        # `h_per_size = max(1, min(discipline, command) + dr)`, so BETTER ARMOUR, DISCIPLINE OR COMMAND
-        # STRICTLY INCREASED the missile casualties that unit took (dr 1 -> x3, dr 3 -> x4). Historically
-        # backwards without qualification. It is a fossil of the retired `hp = size x h_per_size` model;
-        # `hp_max` is now the raw troop count (hierarchy/units.py:1924), so the factor is a pure
-        # Size->troops lethality scale and has no business reading the target's stats.
-        # Held at 3 = the value the gauge baseline (disc 5, cmd 4, dr 1) produced, so this removes the
-        # inversion WITHOUT silently re-tuning ranged lethality; armour's real effect now lives where it
-        # belongs, in the DR subtraction above.
+        # [ED-MB-0041] Volley loss -> troop conversion must NOT depend on the target's own quality: `hp_max` is
+        # the raw troop count (hierarchy/units.py), so the factor is a pure Size->troops lethality scale and has
+        # no business reading the target's stats; armour's real effect lives in the DR subtraction above. Held
+        # at 3 = the value the gauge baseline (disc 5, cmd 4, dr 1) produced.
         # [JUSTIFIED: magnitude preserved from the prior baseline to isolate the inversion fix; the
         #  underlying scale is admitted band-fitting (file header v12 note #4) and is Tier-3 debt.]
-        # v20: scale engagement damage by contact fraction.
+        # Scale engagement damage by contact fraction.
         # More cells in contact = more soldiers fighting = more damage dealt.
         # Bottom-up: the envelopment advantage EMERGES from having more cells engaged.
         # contact_fraction = cells_in_contact / total_cells. Capped at 1.0.
@@ -321,9 +282,7 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
                 else:
                     opp_frac = len(opp_cells_contact) / max(1, opp_total)
                 result[dmg_key] = result[dmg_key] * max(0.2, opp_frac)
-        # v21: SIMULTANEOUS HP — apply damage to both units, THEN recalc_size
-        # for both. Prevents size recalc of unit_a from affecting anything
-        # before unit_b's damage is applied.
+        # SIMULTANEOUS HP — apply damage to both units, THEN recalc_size for both.
         # [canonical: params/mass_combat.md PP-233 — "Damage is simultaneous.
         #  Both sides deal and receive damage before Size is recalculated."]
         # [ED-MB-0052 / C1] Attribution brackets the EXISTING assignment; the arithmetic below is
@@ -391,17 +350,15 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
             update_stamina(unit_b, pairs)
         unit_a.recalc_size()
         unit_b.recalc_size()
-        # v18: discipline degradation moved to phase_boundary (D-6).
-        # Per-tick integer Size changes are rare at TroopCount HP scale.
-        # check_drift still runs per-tick for formation coherence.
+        # Discipline degradation runs at phase_boundary (D-6). Per-tick integer Size changes are rare at
+        # TroopCount HP scale. check_drift still runs per-tick for formation coherence.
         for u in [unit_a, unit_b]:
             if not u.routed and not u.broken:
                 u.check_drift()
-        # v21: SIMULTANEOUS MORALE — compute erosion for both units, then
-        # check rout for both. Prevents ordering from affecting which unit
-        # routs first within a single tick.
+        # SIMULTANEOUS MORALE — compute erosion for both units, then check rout for both, so ordering cannot
+        # affect which unit routs first within a single tick.
         # [canonical: designs/provincial/mass_battle_v30.md §A.4 — generalship]
-        # step 3 (Jordan directive 2026-06-03): per-tick ABSOLUTE-damage morale erosion REMOVED.
+        # (Jordan directive 2026-06-03) No per-tick ABSOLUTE-damage morale erosion.
         # Morale degrades by canonical Size-fraction triggers at the phase boundary (morale_check_phase, §A.4).
         for u in [unit_a, unit_b]:
             if u.routed: continue
@@ -412,23 +369,16 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
                 u.set_morale(0.0)   # [ED-MB-0042 sweep] must reach the cells, else the rout never lands
                 continue  # rout check below
 
-        # [ED-MB-0075 option (2), superseding row 2026-09-28 — C2/C3, ED-MB-0067 Part C] Envelopment-shock
-        # damage-to-morale coupling. C2 ruled the rear/flank damage multiplier (ED-MB-0018) a CONTRIBUTING
-        # CAUSE of morale collapse; C3 ruled it "checked against Discipline". This is that check, at the
-        # scale run_battle already commits damage at (above, dmg_a/dmg_b — NOT run_multi_unit_battle's
-        # cross-pair post-processing, a different scale of the simulation). A unit flagged shocked this
-        # tick (result["shocked_a"/"shocked_b"], OR-accumulated over every engaged pair/sub-phase) rolls
-        # discipline_check_cascade (Ob 1); on FAIL (does not resist), the damage it received this tick
-        # erodes morale by the SAME formula run_multi_unit_battle's freed_attacker path uses (erosion =
-        # dmg / (agg_discipline x command), via cascade_morale_hit) rather than the erosion formula-only
-        # (no-roll) or roll-scaled-by-margin alternatives Part D also specified and did not recommend.
-        # REPLACES the prior pre-combat delta-sigma penalty on the shocked unit's own net successes
-        # (resolve_engagements's old `ns_a/ns_b += _charge_shock_sigma(...)` in this same elif) — the
-        # sibling CHARGE-shock branches (the `if a_pen/b_pen > 0` arms immediately above them in
-        # resolve_engagements) are untouched: a different, already-ratified mechanism (engine.py:58,
-        # status WIRED), out of scope here. MB_ENVELOP_SHOCK-gated defensively even though shocked_a/b can
-        # only be True when it is already on (resolve_engagements only sets them inside its own
-        # MB_ENVELOP_SHOCK-gated elif) — byte-exact OFF, same convention as every other MB_ flag here.
+        # [ED-MB-0075 option (2), C2/C3, ED-MB-0067 Part C] Envelopment-shock damage-to-morale coupling. C2 ruled
+        # the rear/flank damage multiplier (ED-MB-0018) a CONTRIBUTING CAUSE of morale collapse; C3 ruled it
+        # "checked against Discipline". This is that check, at the scale run_battle already commits damage at
+        # (above, dmg_a/dmg_b — NOT run_multi_unit_battle's cross-pair post-processing). A unit flagged shocked
+        # this tick (result["shocked_a"/"shocked_b"], OR-accumulated over every engaged pair/sub-phase) rolls
+        # discipline_check_cascade (Ob 1); on FAIL (does not resist), the damage it received this tick erodes
+        # morale by the SAME formula run_multi_unit_battle's freed_attacker path uses (erosion = dmg /
+        # (agg_discipline x command), via cascade_morale_hit). The sibling CHARGE-shock branches in
+        # resolve_engagements are a different mechanism. MB_ENVELOP_SHOCK-gated defensively (shocked_a/b can
+        # only be True when it is already on) — byte-exact OFF, same convention as every other MB_ flag here.
         if MB_ENVELOP_SHOCK:
             for u, _shocked, _dmg in ((unit_a, result.get("shocked_a", False), result["dmg_a"]),
                                        (unit_b, result.get("shocked_b", False), result["dmg_b"])):
@@ -439,13 +389,10 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
                     u.cascade_morale_hit(_dmg / (_sdisc * u.command))
 
         # Rout check AFTER both erosions applied — per-subunit, then derive the unit rout
-        # [ED-MB-0041 Tier-2] The two rout triggers are now aligned. Morale collapse was checked here,
-        # per TICK; the annihilation trigger (troop_total below SUBUNIT_ROUT_FLOOR) was checked only in
-        # rout_resolution, which runs at a PHASE boundary — every TICKS_PER_PHASE (=6) ticks. So a
-        # subunit ground below the floor kept fighting, at full effectiveness, for up to 5 more ticks
-        # before it was allowed to break. Both are "this body has stopped being a body"; both belong on
-        # the same clock. rout_resolution still runs the same check at the boundary (harmless: setting
-        # an already-set flag), so its canonical §A.12 sequencing is untouched.
+        # [ED-MB-0041 Tier-2] The two rout triggers share one clock: morale collapse and the annihilation
+        # trigger (troop_total below SUBUNIT_ROUT_FLOOR) are both checked here, per TICK, since both mean "this
+        # body has stopped being a body". rout_resolution still runs the same check at the phase boundary
+        # (setting an already-set flag is harmless), so its canonical §A.12 sequencing is untouched.
         for u in [unit_a, unit_b]:
             if u.routed:
                 continue

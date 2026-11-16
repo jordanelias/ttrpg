@@ -106,7 +106,8 @@ AUTHORED_PARSERS = {
 _PATHISH = re.compile(r"(os\.path\.join|Path\(|open\(|load_yaml|safe_load|read_text|/ ['\"])")
 #: A name bound to a string literal — `_PATHS = ('references/x.yaml',)`, `SRC = '...'`.
 _BINDING = re.compile(r"[A-Za-z_][A-Za-z0-9_]*\s*(?::[^=]+)?=\s*[\(\[]?\s*['\"]")
-_OUT_BINDING = re.compile(r"^\s*(?:OUT|OUT_PATH|DEST|TARGET)\s*=.*$", re.M)
+# B03.68: `export_engine_params.py` has a second output, bound as `THREADWORK_OUT_PATH`; a `<NAME>_OUT_PATH` is one too.
+_OUT_BINDING = re.compile(r"^\s*(?:[A-Z_]+_OUT_PATH|OUT|OUT_PATH|DEST|TARGET)\s*=.*$", re.M)
 
 
 def _artifacts():

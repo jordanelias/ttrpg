@@ -146,15 +146,15 @@ def test_form_assign_and_order_build_the_order_of_battle_and_conserve_every_troo
     assert A.unassigned(_army(w), COHORT, "heavy_infantry") == 15
     released = _do(w, d, "assign_troops", "a2", name="wall", cohort=COHORT, count=-5)
     assert "army.assigned" in _kinds(released) and A.unassigned(_army(w), COHORT, "heavy_infantry") == 20
-    ordered = _do(w, d, "order_unit", "o1", name="wall", stance="hold", fall_back_at=0.4)
+    ordered = _do(w, d, "order_unit", "o1", name="wall", posture="hold", fall_back_at=0.4)
     assert "army.ordered" in _kinds(ordered)
-    sf = _army(w)["subformations"][0]
-    assert (sf["stance"], sf["fall_back_at"], sf["role"], sf["assigned"]) == ("hold", 0.4, "ShieldWall", ((COHORT, 40),))
+    sf = _army(w)["units"][0]
+    assert (sf["posture"], sf["fall_back_at"], sf["role"], sf["assigned"]) == ("hold", 0.4, "ShieldWall", ((COHORT, 40),))
     strat = _do(w, d, "order_unit", "o2", strategy="advance")
     assert "army.ordered" in _kinds(strat) and _army(w)["strategy"] == "advance"
     A.validate(_army(w))
     oob = A.to_order_of_battle(_army(w))                       # the record the season holds is the battle's input
-    assert [s.name for s in oob.subformations] == ["wall"] and oob.strategy == "advance"
+    assert [s.name for s in oob.units] == ["wall"] and oob.strategy == "advance"
 
 
 def test_each_menu_refusal_leaves_the_record_as_it_was():
@@ -166,9 +166,9 @@ def test_each_menu_refusal_leaves_the_record_as_it_was():
              ("form_unit", dict(name="x", troop_type="dragons")),                        # unknown type
              ("form_unit", dict(name="x", troop_type="heavy_infantry", role="Kite")),    # role outside the menu
              ("assign_troops", dict(name="wall", cohort=COHORT, count=31)),              # more than trained
-             ("assign_troops", dict(name="nobody", cohort=COHORT, count=1)),             # no such subformation
+             ("assign_troops", dict(name="nobody", cohort=COHORT, count=1)),             # no such unit
              ("assign_troops", dict(name="wall", cohort=COHORT, count=-1)),              # releases what is not held
-             ("order_unit", dict(name="wall", stance="retreat")),                        # stance outside the roster
+             ("order_unit", dict(name="wall", posture="retreat")),                       # posture outside the roster
              ("order_unit", dict(name="wall", fall_back_at=1.5)),
              ("order_unit", dict(name="wall")),                                          # an order that sets nothing
              ("order_unit", dict(strategy="rout")))
@@ -211,7 +211,7 @@ def test_a_missing_or_mistyped_payload_field_is_a_refusal_not_a_crash():
     cases = (("form_unit", dict(troop_type="levy")),                          # no name
              ("assign_troops", dict(name="x", cohort=COHORT)),                # no count
              ("recruit", dict(cohort=COHORT, troop_type="levy", count=None)),
-             ("order_unit", dict(stance="hold")),                             # no name
+             ("order_unit", dict(posture="hold")),                            # no name
              ("order_unit", dict(name="x", fall_back_at="soon")),
              ("recruit", dict(cohort=[COHORT], troop_type="levy", count=1)),  # unhashable: a dict key must not be tried
              ("form_unit", dict(name=["x"], troop_type="levy")),              # a name no string would crash the battle

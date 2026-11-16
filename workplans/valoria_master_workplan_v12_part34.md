@@ -17,7 +17,7 @@ INVOCATION: /methodology-execute Batch B32-inst-kit
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_FA.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
-GATE: Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0
+GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B04-capability-home
 GATE: Batch B05-one-roll
 GATE: Batch B07-task-draw
@@ -298,7 +298,7 @@ Not in this batch, and where each is: COL_A's grounding row changes (`15_INSTITU
 - GATE: `python -m pytest engine/season/tests/test_inst_syn_b_deed_ledger.py engine/season/tests/test_instruments.py -q` → pass; COL_A's realm reading: "`build_realm(0)` with SYNTHESIS-B §3's two seeded `homage` instruments …, two seasons, seeds 0–2: the count of `dues` referents stamped, and of acts whose `occasioned_by` is one, printed" (quoted in the commit body; a zero is reported, not asserted against).
 - HASH MOVERS: the build hash (four Records minted; "A declared build-hash mover", SYN_B). Re-pinned at B32.99.
 - EXPECTED RED UNTIL B32.99: the realm pins.
-- DEPENDS ON: V12 B32.03 (`resolution` with `recites`), B32.06; V12 Batch B21c (CR-36: `off_parliamentary_clerk`, `resolution`); V12 Batch B03c (`boot/realm.py`); EXISTS-IN-TREE the Record mint `boot/realm.py` uses for `works`.
+- DEPENDS ON: V12 B32.03 (`resolution` with `recites`), B32.06; V12 Batch B21c (CR-36: `off_parliamentary_clerk`, `resolution`); V12 Batch B03c @544cf5719c620331b70aeda93c1672977b44e9ef (`boot/realm.py`); EXISTS-IN-TREE the Record mint `boot/realm.py` uses for `works`.
 - GLOSSARY: none.
 - NAMES: `harness/populated.py::build_realm` → `boot/realm.py::build_realm` (§5.10, B03c).
 - COST and TIER: small build; `sonnet`, `high`.
@@ -341,7 +341,7 @@ Not in this batch, and where each is: COL_A's grounding row changes (`15_INSTITU
 - FALSIFIER and CONTROL: "Delete the vacant-row edit: the build raises." Control: no shipped row has `holder: null`; realm hash equal to B32.10's tree.
 - GATE: `python -m pytest engine/season/tests/test_inst_byz_a.py -q` → pass.
 - HASH MOVERS: none.
-- DEPENDS ON: V12 B32.06; V12 Batch B03c (`boot/realm.py`); EXISTS-IN-TREE `data/rosters.py::OFFICES_BY_HOLDER`.
+- DEPENDS ON: V12 B32.06; V12 Batch B03c @544cf5719c620331b70aeda93c1672977b44e9ef (`boot/realm.py`); EXISTS-IN-TREE `data/rosters.py::OFFICES_BY_HOLDER`.
 - GLOSSARY: none.
 - NAMES: `harness/populated.py` → `boot/realm.py` (B03c).
 - COST and TIER: edit; `sonnet`, `high`.

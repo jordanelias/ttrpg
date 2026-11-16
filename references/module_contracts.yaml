@@ -24,7 +24,7 @@
 
 schema_version: 2
 generated: "2026-06-10"
-status: EXTRACTED_STAGE1   # campaign_architecture stub remains
+status: EXTRACTED_STAGE1
 
 
 # ── COMPOSITION ROLES (added 2026-08-20, plan Act C3) ────────────────────────────────────────────
@@ -54,6 +54,10 @@ composition_roles:
     entry: verb_call
     verb: tell
     needed_by: "engine/season/seam/wrappers/sigma.py — the host adapter `@provider(\"contest\", \"social_contest\")` (repointed from the interim `sigma_leverage` at v9 SC-01 steps 13 + 15) builds the typed input record, calls this entry through `manifest.MODULE_ENTRIES` (plan position `31a`, A-25) and refuses any return that is not a `Margin`. The registrar's first production row. The prize rows `a standing`, `a proposition` and `a matter` (`engine/season/rosters.yaml` `contest_subsystems`) name it in `module_entry:`, and `manifest/registry.py::check_contest_prizes` refuses at driver construction a prize row whose `module_entry:` no composition row declares, or one that disagrees with it."
+  social_contest.obstacle:
+    target: "modules.social_contest.roll:obstacle"
+    entry: query
+    needed_by: "engine/season/seam/wrappers/sigma.py — `_composed_obstacle` (the obstacle a contest is rolled against and the one believed odds read), called by role. Declared in `sigma.QUERY_ENTRIES` and held by `manifest/registrar.py::require_entries`, as `settlements.larder_draw` is."
 
   combat.fight:
     target: "modules.combat.fight:fight"
@@ -125,35 +129,15 @@ composition_roles:
 modules:
 
   - module: faction_state
-    aliases: ["Faction Layer"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
-    registry_system: "faction_layer"   # Key Type Registry vocabulary
-    doc: .designs/systems/factions/reference/faction_behavior_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the census).
-    sim_module: none   # this contract's state: block describes no code (row kept: other contracts' `with:` joins name it)
-    scales: [provincial]
-    resolver: deterministic_accounting   # [ASSUMPTION] accounting-cadence procedures; d_sigma for contested resolution per ED-874
-    state:
-      - {name: "Mandate", bucket: derived_value, writable: false}   # size-weighted aggregate of settlement L/PS (settlement_layer §1.8 LPS-2e) — F1 guard
-      - {name: "Treasury", bucket: derived_value, writable: false}   # derived_stats §3 (x100)
-      - {name: "faction stats 1-7", bucket: track, writable: true}   # Military/Stability/etc.; ±1 at accounting
-    transitions:
-      - {via: "scale_transitions §3.2 Personal → Faction / §5 Domain Echo"}
-    loops:
-      - {open: true}   # self-loop: consumes own mechanical.cascade_resolution + mission_shift (cascade re-resolution, substrate §8.1); DAMPED [verification LD-5]: drift_coef=0.6/season (faction_behavior §3.2.4) + mission-shift 4-consecutive-season counter; crisis-bypass (scars>=3) is intentional bounded un-damping
-    accounting_phase: [DA_proposal, settlement_accounting]
-    gap_notes:
-      - "V1 gap RESOLVED by registry matrix: faction_layer emits mechanical.cascade_resolution, mechanical.mission_shift, state.standing_change (was: \"type ids unnamed\" in substrate §8.6)"
-      - "registry system name faction_layer vs module faction_state — vocabulary unification [OPEN — Jordan]"
-      - "SCOPE [verification A6]: faction_state = {faction_layer_v30 (stability/occupation/treaties/parliament) + faction_behavior_v30 (PP-686 mission/cascade/expectation/Mandate)}; the doc field names only faction_behavior_v30. Boundary vs faction_politics (rank ladder) is the registry dual-emit on state.standing_change/coup_attempted/succession."
-    status: extracted
-    sources:
-      - "key_substrate_v30 §8.1, §8.6 [READ: 2026-06-10]"
-      - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
-      - "settlement_layer_v30 §1.8 LPS-2e [READ: 2026-06-10]"
+    # RETIRED, NO CONTRACT: a faction is `engine/season/queries/faction_q.py`'s view -- no state, no composition role. Row kept (B03.26, ED-IN-0232) because other contracts' `with:` joins name it, `doc:` is read by CODE (workbench node-state, the census, the structure audit) and `validate_wiring` demands a `wiring:` block.
+    doc: .designs/systems/factions/reference/faction_behavior_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled.
+    sim_module: none
+    resolver: deterministic_accounting   # read by structure_audit.is_notional: dropping it would flip this row to notional
     wiring:
-      build: deferred
+      build: design
       godot: no-oracle
       port_rank: 2
-      parity: key-log
+      parity: seam-io
       note: the in-13 hub; its action code (conquest/muster/govern/uniques) was deleted at plan position `29b`, so there is nothing to port from; resolver [ASSUMPTION].
 
   - module: npc_behavior
@@ -182,7 +166,6 @@ modules:
         then: "scene.gossip emitted"
         "on": "beliefs/opinions"
         source: "doc-12 §8 / §6.3"
-    accounting_phase: [B_concern, C_project, D_opinion, E_offscreen]
     gap_notes:
       - "CONSOLIDATED 2026-06-10: absorbs former political_dynamics module — political_dynamics_keys_migration_v30 is \"Doc 12 Procedures — Key-Migration Spec (PP-687)\" i.e. THIS system's Keys migration, not a separate political-dynamics system. The v1 political_dynamics record (incl. its scene.dialogue emit, unsupported by registry) is superseded by this entry. Mechanical-tier consolidation, Jordan-vetoable."
       - "SUPERSEDED 2026-07-07 (ED-IN-0023 / C-KEY-6): the four types this note flagged as registry-absent (scene.displacement, mechanical.project_advanced, state.project_failed, state.project_completed) were registered by ED-935 (2026-06-14, key_type_registry_v30 §9). The residual gap was that npc_behavior's own consumes[] never added the corresponding edges (plus scene.thread_operation / scene.draft_da, also registry-declared to it) despite being both self-loop consumer and emitter for four — closed by this same commit's consumes[] additions above."
@@ -200,8 +183,8 @@ modules:
       build: design
       godot: no-oracle
       port_rank: 8
-      parity: key-log
-      note: Procedures B/C/D/E; npc_ai.py is a 28-line stub. The in-12 hub — no oracle.
+      parity: state-hash
+      note: Procedures B/C/D/E. The in-12 hub — no oracle.
 
   - module: npc_memory
     registry_system: "npc_memory"   # Key Type Registry vocabulary
@@ -222,7 +205,7 @@ modules:
       build: design
       godot: no-oracle
       port_rank: 8
-      parity: key-log
+      parity: seam-io
       note: doc:null; schema lives in a doc-12 bridge.
 
   - module: piety_track
@@ -255,11 +238,11 @@ modules:
       - "conviction_track_v1.md header + §1-§4 index [READ: 2026-06-10]"
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
     wiring:
-      build: deferred
+      build: unwired
       godot: python-oracle
       port_rank: 3
-      parity: key-log
-      note: conviction.py Scar accumulation real; reached only via the unwired knot chain.
+      parity: state-hash
+      note: conviction.py Scar accumulation real (`apply_conviction_scar`, `check_conviction_threshold`); no caller under `engine/` or `modules/` (only tests and the unplugged `systems/fieldwork/sim/knots.py`).
 
   - module: territorial_piety
     doc: .designs/systems/characters/reference/conviction_track_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the census).
@@ -291,10 +274,10 @@ modules:
       - "conviction_track_v30 index §1-§11 [READ: 2026-06-10]"
       - "clock_registry_v30 Shared Clocks table [READ: 2026-06-10]"
     wiring:
-      build: deferred
+      build: design
       godot: no-oracle
       port_rank: 2
-      parity: key-log
+      parity: state-hash
       note: CI generation WAS live via ci_track (deleted at plan position `29b`, 2026-10-01); CANONICAL doc with ZERO Key integration.
 
   - module: threadwork
@@ -323,7 +306,7 @@ modules:
       build: unwired
       godot: python-oracle
       port_rank: 2
-      parity: key-log
+      parity: state-hash
       note: 13 operations built, zero live callers; rendering is STRUCK (no entry point; plan position 27).
 
   - module: fieldwork   # one identity per module, its directory name (A-25; the `combat` row's precedent). RE-KEYED from `fieldwork_knots` at v9 FI-02 + FI-03 (`SM-3`, `ED-FI-0002`): the `inquiry_modules` row `finding.made` (`engine/season/rosters.yaml`) names it by this key, and `manifest.resolve` refuses a `module:` no contract declares. The re-key IN-06 §6 left to B-S, in IN-06's own naming (`fieldwork.*`)
@@ -357,7 +340,6 @@ modules:
         then: "knot operations eligible (Memory-Query-checked prerequisite)"
         "on": "Bonds"
         source: "key_substrate_v30 §8.4"
-    accounting_phase: [settlement_accounting]
     gap_notes:
       - "v9 FI-03 (`ED-FI-0002`): the knots state and gates below describe `systems/fieldwork/sim/knots.py`, UNPLUGGED (IN-06/IN-32); the module's one entry today is `find` (`modules/fieldwork/find.py`, what a graded finding uncovers of a covert trail). IN-32 plugs `fieldwork.form_knot` under this same row."
       - "registry attributes scene.gift emission to fieldwork (gift-giving as fieldwork social action) — cross-check vs scene_slate emitting same type"
@@ -370,9 +352,9 @@ modules:
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
     wiring:
       build: gated
-      godot: no-oracle
+      godot: python-oracle
       port_rank: 8
-      parity: key-log
+      parity: seam-io
       note: "BUILD `gated` since v9 FI-03 (was `stub`): `find` runs only when an inquiry's `finding.made` carries a band `finding_terms` keys (`engine/season/rosters.yaml`) -- the condition -- and uncovers only a covert trail the finder did not witness; knots built but unplugged (IN-06/IN-32)."
 
   - module: scene_slate
@@ -395,7 +377,7 @@ modules:
       build: deferred
       godot: no-oracle
       port_rank: 8
-      parity: key-log
+      parity: seam-io
       note: doc:null; the 59-line queue it described was deleted at `28-iii`, and the canonical §4 generator is unbuilt.
 
   - module: game_director
@@ -416,7 +398,7 @@ modules:
       build: deferred
       godot: no-oracle
       port_rank: 8
-      parity: key-log
+      parity: seam-io
       note: doc:null; scene lifecycle + zoom stack.
 
   - module: scene_timer
@@ -464,7 +446,7 @@ modules:
   - module: social_contest
     registry_system: "social_contest"   # Key Type Registry vocabulary
     doc: .designs/systems/social_contest/reference/social_contest_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the census).
-    sim_module: systems/social_contest/sim/contest/
+    sim_module: modules/social_contest/   # the running entry is `modules/social_contest/roll.py` (composition rows `social_contest.roll`, `social_contest.obstacle`); the evaluated predecessor `systems/social_contest/sim/contest/` is kept, not deleted (`roll.py`'s docstring)
     scales: [scene]
     resolver: dice_pool
     state:
@@ -479,17 +461,17 @@ modules:
       - "scale_transitions_v30 §3.4 [READ: 2026-06-10]"
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
     wiring:
-      build: gated
+      build: live
       godot: python-oracle
       port_rank: 1
-      parity: key-log
-      note: Agon kernel built (1 of 4 games); reached live only via emergency_council.
+      parity: seam-io
+      note: "`modules/social_contest/roll.py` (`roll`, `obstacle`) is the running entry, reached through composition role `social_contest.roll` (verb `tell`; the `a standing`, `a proposition` and `a matter` prizes). `obstacle` is also its own composition row (`social_contest.obstacle`, a query) and is read by the sigma wrapper's `odds_of` and `believed_chance` during deliberation, outside a formed contest. `roll` runs only when a contest over one of those prizes forms (gated); `obstacle` is entered every season, so the row reads live."
 
   - module: mass_battle
     aliases: ["Mass Combat"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "mass_battle"   # Key Type Registry vocabulary
     doc: .designs/systems/mass_battle/reference/mass_battle_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the census).
-    # sim_module: deliberately absent until the MB lane adds it (reported `undeclared`, not `unresolvable`); mechanics_index.yaml carries `mass_battle -> modules/mass_battle/massbattle.py`.
+    sim_module: modules/mass_battle/
     scales: [scene]
     resolver: dice_pool
     state: []
@@ -507,44 +489,10 @@ modules:
       build: gated
       godot: python-oracle
       port_rank: 1
-      parity: key-log
-      note: 'ED-MB-0043 RESOLVED 2026-08-03 by Jordan (commit/PR #274 indicates the canon tree). THE TWO TREES
-        ARE NOT TWO VERSIONS OF ONE ENGINE -- they are a LIVE-BUT-STALE engine and a DEVELOPED-BUT-UNWIRED one,
-        and the fork was about to carry the wrong one. CANON = systems/mass_battle/sim/ (28 modules, 11,269 LOC,
-        last touched 2026-07-31, carries the PC_* flags in 12 files, and is what CI byte-exact goldens run via
-        bat.py). LIVE = systems/mass_battle/sim/massbattle.py (5 modules, 2,375 LOC, last touched 2026-07-21,
-        ZERO PC_* flags) -- verified by resolving the import: faction_action.py:431 does `from systems.mass_battle.sim.massbattle
-        import resolve_mass_battle`, so the ~30-45 battles/campaign run on the SMALL tree. CONSEQUENCE: every
-        MB-lane result -- Track F, the flag bisects, the geometry spec S1-S4, the 9 red CI tests -- is measured
-        on a tree the campaign never executes. FORK IMPACT: plan of record section 5 says carry systems/*/sim
-        and LEAVE tests/, which would carry the stale engine and abandon canon. Section 5 corrected. [SUPERSEDED 2026-10-01: `faction_action.py` and `resolve_mass_battle` were deleted at plan position `29b`; the only live caller of `massbattle.py` is now `seam/wrappers/mass_battle.py` through `resolve_field`.] [SUPERSEDED, plan position `31c`: the canon tree this note names is now `modules/mass_battle/` (the reachable closure); `systems/mass_battle/sim/` keeps the harnesses and workbench.] [BUILD `gated` since the Batch 1a close: the provider runs only when ENCOUNTER admits a march past H-149 target-kind check, and none of the realm marches do (`hole_register.yaml` H-149).]'
-
-  - module: domain_actions
-    aliases: ["Domain Echo"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
-    registry_system: "da_framework"   # Key Type Registry vocabulary
-    doc: null
-    sim_module: none
-    scales: [provincial]
-    resolver: d_sigma   # [ASSUMPTION] Domain Action resolver = deterministic+stochastic d+sigma (ED-874)
-    state: []
-    transitions: []
-    loops: []
-    accounting_phase: [DA_proposal]
-    gap_notes:
-      - "home doc unlocated [GAP] — DA resolver spec at designs/audit/2026-05-28-resolution-diagnostic/domain_action_resolver_spec.md is audit output, not a designs/ home"
-      - "ED-FA-0006 (2026-07-08, pessimist-action audit REFINE — resolves the C-FA-12 triple-vocabulary defect): the da.* five-bucket set is an OUTCOME-TAG taxonomy (it classifies a resolved Domain Action's *consequence* for generic consumers like faction_state/npc_behavior), realized as a per-verb tag on the EXISTING Domain-Action catalogs -- engine/params/bg/core.md Standard Action Ob Reference, faction_layer_v30 §5.4 Parliamentary, engine/params/bg/faction_actions.md unique cards -- NOT a standalone module needing its own design doc. The doc:null closure therefore shrinks from 'author a new system' to 'add the per-verb da.* tag + a short crosswalk note' (a REFINE, not a new-doc GAP)."
-      - "ED-FA-0006 residual authoring task (per-verb bucket assignment — the audit deliberately did NOT fabricate this; intent gate UNDETERMINED, boundaries are Jordan's ruling): DIRECTIONAL first pass only -- Treaty/Diplomacy/Recognition-Challenge/Succession-Endorsement/War-Authorisation -> da.diplomatic_alliance; Spy/Investigate/Counter-Intelligence + covert unique cards -> da.covert_betrayal; Govern/Trade/Subsidy/Piety-Spread/Community-Organising/Martial-Governance -> da.public_governance or da.economic_intervention; Censure/Embargo/Outlawry/Excommunication/Active-Inquisition/Church-Seizure -> da.antinomian_action (coercive) or da.public_governance. Genuinely ambiguous boundaries flagged for Jordan, NOT ruled here: (a) economic_intervention vs public_governance for fiscal-administrative verbs; (b) antinomian_action vs public_governance for punitive-institutional verbs; (c) covert_betrayal scope for lawful intelligence (Spy/Investigate) vs treachery proper. Direct-effect military verbs (Muster/March/Fortify/Blockade-Naval) are not consequence-classified and take no da.* tag."
-    status: extracted
-    sources:
-      - "key_substrate_v30 §8.6 [READ: 2026-06-10]"
-      - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
-      - "designs/audit/2026-07-08-pessimist-action-audit/ (ED-FA-0006 da.* crosswalk decision) [READ: 2026-07-08]"
-    wiring:
-      build: design
-      godot: no-oracle
-      port_rank: 8
-      parity: key-log
-      note: da.* 5-tag taxonomy; doc:null, zero code.
+      parity: seam-io
+      note: 'modules/mass_battle/ is the reachable closure (moved from systems/mass_battle/sim/ at plan position 31c,
+        which keeps the harnesses and workbench); the one caller is engine/season/seam/wrappers/mass_battle.py through
+        resolve_field. BUILD gated: the provider runs when ENCOUNTER admits a march at a held target (H-149).'
 
   - module: peninsular_strain
     registry_system: "peninsular_strain"   # Key Type Registry vocabulary
@@ -592,12 +540,12 @@ modules:
       build: deferred
       godot: no-oracle
       port_rank: 8
-      parity: key-log
+      parity: state-hash
       note: 'owns Turmoil + IP; env.* emitters + occupation ladder unbuilt. [CORRECTED 2026-08-10, ED-IN-0152:
         this note previously claimed IP is not even a clocks key -- false on both readings. engine/autoload/game_state.py:244
         (deleted at plan position `29b`; in git at `5c5d8ec6`) seeded IP: 20.0 inside the clocks mapping, and clock_registry_v30.md:18 lists Institutional Pressure
-        (IP), start 20. What IS true is that no module writes IP after world-gen -- ip_track.py''s two entry
-        points are stubs with no production caller.]'
+        (IP), start 20. What IS true is that no module writes IP after world-gen -- ip_track.py''s entry
+        points were retired at plan position `29a`.]'
 
   - module: settlement_layer
     registry_system: "settlement_layer"   # Key Type Registry vocabulary
@@ -659,7 +607,6 @@ modules:
         inputs: ["Prosperity"]
         formula: "Σ Prosperity across settlements × 10"
         source: "derived_stats §8.1 (quoted in settlement_layer §1.8)"
-    accounting_phase: [settlement_accounting]
     gap_notes:
       - "settlement_layer_v30_index.md is STALE — predates LPS-2e §1.8 (no §1.8 row); index pipeline regeneration needed [tooling defect]"
       - "Key types registered (W3, ED-IN-0096): state.settlement_revolt, mechanical.settlement_captured — emits: declaration lands with the module's build so the census never carries a declared-emit-no-consumer row; see key_type_registry entries for held consumer dispositions."
@@ -671,31 +618,8 @@ modules:
       build: design
       godot: no-oracle
       port_rank: 3
-      parity: key-log
+      parity: state-hash
       note: its code (the `systems/settlements/sim/` tree, formerly "territory/ substrate built but unwired") was deleted at `29c`, so godot is reset to the vocabulary's zero-code state (was python-oracle) and build stays `design`; the Mandate aggregation (7T/(T+6)) was never built; `port_rank` is the pre-deletion audit verdict and is not re-derived here.
-
-  - module: settlement_economy
-    registry_system: "settlement_economy"   # Key Type Registry vocabulary
-    doc: null
-    sim_module: none
-    scales: [settlement]
-    resolver: deterministic_accounting   # [ASSUMPTION]
-    state: []
-    transitions: []
-    loops: []
-    gap_notes:
-      - "registry-derived; relationship to settlement_layer §1.3 Local Economy derived value unestablished — possibly the same system [OPEN — Jordan]; home doc [GAP]"
-      - "RECOMMEND RETIRE [verification Lens-2/LD-2]: phantom module (no doc/state/logic). Fold da.economic_intervention -> settlement_layer Prosperity delta; re-point env.population_change consumer to settlement_layer. Adding a Population stat is a DESIGN decision (deferred — open_decisions §2). Self-edge hazard: settlement_layer both emits and would consume env.population_change — route peninsular_strain -> settlement_layer."
-      - "ED-SE-0005 (2026-07-08): the SETTLEMENT-ACTION side of this retirement is CONFIRMED by the ratified pessimist-action audit (ED-IN-0027). The player_agency_v30 §9 Trade action -- this phantom module's likely intended settlement-economy player verb -- is PRUNED and folded into the existing income sources; no dedicated settlement-economy player action survives. The da.economic_intervention -> settlement_layer Prosperity fold and the deferred Population-stat design decision (above) remain the open structural half."
-    status: extracted
-    sources:
-      - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
-    wiring:
-      build: design
-      godot: retire
-      port_rank: 9
-      parity: n/a
-      note: phantom (in-3/out-0); ED-SE-0005 folds it into settlement_layer.
 
   - module: ci_political
     doc: .designs/systems/factions/reference/ci_political_v30.md   # ED-IN-0231: quarantined, and RESTORED here on purpose. This module has NO CODE, so severing its doc would leave the module a bare name with nothing defining it.
@@ -716,10 +640,10 @@ modules:
       - "ci_political_v30 full [READ: 2026-06-10]"
       - "clock_registry_v30 Shared Clocks [READ: 2026-06-10]"
     wiring:
-      build: deferred
+      build: design
       godot: no-oracle
       port_rank: 8
-      parity: key-log
+      parity: state-hash
       note: CANONICAL doc, ZERO Key integration; card system unbuilt.
 
   - module: victory
@@ -775,10 +699,9 @@ modules:
     scales: [provincial]
     resolver: clock_advance
     state:
-      - {name: "season counter", bucket: clock, writable: true}   # [ASSUMPTION]
+      - {name: "season counter", bucket: clock, writable: true}   # `World.tick`, written by the one `w.tick += 1` in `engine/season/loop/driver.py::SeasonDriver.season`
     transitions: []
     loops: []
-    accounting_phase: [season_tick]
     gap_notes:
       - "registry-derived; the home doc was unlocated until IN-42 set `doc:` to propagation_spec_v1.md (ED-1051); campaign_architecture_v30 was examined and is NOT it (victory-revision consolidation, no clock-spine sections)"
       - "2026-07-02: systems/_architecture/reference/propagation_spec_v1.md (ED-1093, CANONICAL per ED-1094 merge-ratifies-by-default) supplies the candidate home doc. ED-1051 ruled (ED-IN-0125 section 4 C3) and APPLIED at IN-42 (B-C, 2026-10-08): `doc:` now points at it."
@@ -787,39 +710,24 @@ modules:
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
     wiring:
       build: live
-      godot: no-oracle
+      godot: python-oracle
       port_rank: 8
-      parity: key-log
+      parity: state-hash
       note: temporal spine — `doc:` set at IN-42 (ED-1051 applied), so it no longer blocks the season/accounting
         cadence port on that count. `build` was `design` while `sim_module` read `none`; re-set to `live` when the row was
         re-pointed at the season driver at `28-iii`.
 
   - module: faction_politics
-    registry_system: "faction_politics"   # Key Type Registry vocabulary
-    doc: .designs/systems/factions/reference/faction_politics_v30.md   # ED-IN-0231: quarantined, and RESTORED here on purpose. This module has NO CODE, so severing its doc would leave the module a bare name with nothing defining it.
+    # RETIRED, NO CONTRACT: a faction is `engine/season/queries/faction_q.py`'s view -- no state, no composition role. Row kept (B03.26, ED-IN-0232) because `doc:` is read by CODE (workbench node-state, the census, the structure audit) and `validate_wiring` demands a `wiring:` block.
+    doc: .designs/systems/factions/reference/faction_politics_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled.
     sim_module: none
-    scales: [provincial]
-    resolver: deterministic_accounting   # [ASSUMPTION]
-    state:
-      - {name: "Standing", bucket: track, writable: true}   # §1.0 Ladder Architecture: 8-position per-faction rank ladder, 0 (pre-initiation) to 7; bidirectional (§1.0a, ED-776). Emits state.standing_change
-      - {name: "Coup posture", bucket: track, writable: true}   # §1.1d/§2.1 + §10.1 ED-POL-09: the state item behind state.coup_attempted, not a ratified formula (numeric mechanics deferred to a faction_layer_v30 update)
-      - {name: "Succession status", bucket: track, writable: true}   # §1.0 intro + §6 (Baralta Crown Claim succession-contest outcomes A/B/C). Emits state.succession
-    transitions: []
-    loops: []
-    gap_notes:
-      - "registry-derived; distinct system from faction_layer per registry vocabulary (emits succession/coup/standing/investigation) — boundary vs faction_state unestablished [OPEN — Jordan]; home doc [GAP]"
-      - "home doc [GAP] closed 2026-07-08 (ED-IN-0016): the 'home doc [GAP]' clause above is now stale — doc: field flipped to systems/factions/reference/faction_politics_v30.md. The faction_politics-vs-faction_state boundary question remains genuinely open."
-      - "state: [] CLOSED 2026-07-29 (W3 item 3, OI-24/OI-20 contract half): declared the 3 top-level state items (Standing, Coup posture, Succession status) directly off faction_politics_v30.md §1.0/§1.0a/§1.1-1.4/§6/§10.1. This is a contract-truth declaration, not a sim build — OI-20's sim half stays DEFERRED to the FA lane (§3.5 of the orchestration plan)."
-    status: extracted
-    sources:
-      - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
-      - "systems/factions/reference/faction_politics_v30.md §1.0, §1.0a, §1.1-§1.4, §6, §10.1 [READ: 2026-07-29]"
+    resolver: deterministic_accounting   # read by structure_audit.is_notional: dropping it would flip this row to notional
     wiring:
-      build: deferred
+      build: unwired
       godot: python-oracle
       port_rank: 3
-      parity: key-log
-      note: contest/faction.py succession/coalition math exists but unwired.
+      parity: seam-io
+      note: "`systems/social_contest/sim/contest/faction.py` succession/coalition math (`vote`, `succession`) exists but has no caller."
 
   - module: miraculous_event
     registry_system: "miraculous_event"   # Key Type Registry vocabulary
@@ -839,7 +747,7 @@ modules:
       build: design
       godot: no-oracle
       port_rank: 8
-      parity: key-log
+      parity: seam-io
       note: its code (a stubwire no-op, formerly "trigger raises") was deleted at `29d`, so build is reset to the vocabulary's zero-code state (was stub); `port_rank` is the pre-deletion audit verdict and is not re-derived here.
 
   - module: scenario_authoring
@@ -860,7 +768,7 @@ modules:
       build: design
       godot: no-oracle
       port_rank: 8
-      parity: key-log
+      parity: seam-io
       note: compile-time injection; execution unbuilt.
 
   - module: clock_registry
@@ -907,7 +815,6 @@ modules:
       - {via: "scale_transitions §3.4 Domain Echo (scene.combat_resolved -> faction/NPC) / §12.3 down-up targeting"}
     loops:
       - {open: true}   # bounded self-loop: Strike emits scene.combat_hit, Wound consumes it; terminates at felling / Health depletion
-    accounting_phase: [emission_processing]
     modules:   # the EngineModules the CombatEngine hosts (the canonical 11-action set)
       - {id: "combat.strike",  resolver: d_sigma,      status: PENDING, in: ["scene.combat_strike"], out: ["scene.combat_hit"]}
       - {id: "combat.wound",   resolver: state_reader, status: PENDING, in: ["scene.combat_hit"], out: ["scene.combat_felled"]}
@@ -933,68 +840,15 @@ modules:
       - "registers/editorial_ledger.jsonl ED-900/904/1029/1040/1041 [READ: 2026-06-22]"
       - "personal-combat audit 2026-06-22 (this session) — model-correctness + drift findings folded in"
     wiring:
-      build: unwired
+      build: gated
       godot: typed-exported
       port_rank: 0
-      parity: key-log + typed-export round-trip
-      note: 'built + typed-exported (the 2-module GDScript slice, strike/wound, was retired at GO-14) — the golden path
-        — BUT the campaign driver read on 2026-08-03 (since deleted; the season seam now calls this engine through
-        engine/season/seam/wrappers/combat.py) never routed here, so end-to-end parity was unvalidated then. BLOCKER IDENTIFIED 2026-08-03
-        (ED-IN-0123), and it is NOT the DISPATCH_COMBAT_BRIDGE flag: flipping that flag ON for a full seeded
-        campaign changes nothing at all — same 157 keys, same key-type composition, same winner, identical Faction.L
-        and Territory.owner. Measured cause: a whole campaign dispatches 29 scene slots and ALL 29 are `contest`.
-        queue_triggered_scenes is the only production caller of scene_slate.queue_scene, and evaluate_triggers
-        can only ever emit scene_type=contest (Stability Crisis -> emergency_council). No trigger anywhere produces
-        a combat scene — combat_bridge.py:37 and scene_dispatch.py:37 both already state this in prose. So wiring
-        personal_combat to live requires AUTHORING THE TRIGGER that says when a personal fight occurs in a campaign,
-        which is canon, not a flag flip or a wiring fix. Jordan call.'
-
-  - module: campaign_architecture
-    doc: .designs/systems/_architecture/reference/campaign_architecture_v30.md   # ED-IN-0231: quarantined, and RESTORED here on purpose. This module has NO CODE, so severing its doc would leave the module a bare name with nothing defining it.
-    sim_module: none
-    scales: [provincial]
-    gap_notes:
-      - "RECLASSIFIED 2026-06-10: doc is the 2026-04-17 victory-revision CONSOLIDATION (Church infra, RM identity, MS/Coherence reform, Thread revelation, IP escalation, Warden, Portrait/Lineage) — a cross-cutting design doc, not a runtime module; its contents distribute across victory/threadwork/settlement_layer/peninsular_strain. Recommend stub retirement [OPEN — Jordan]"
-      - "clock-spine hypothesis WITHDRAWN — engine_clock is the registry system for season/accounting; its home doc remains unlocated"
-    status: stub
-
-
-# Canonical Accounting spine (doc-12 §8 + substrate §4.1). Module accounting_phase
-# entries must name a phase id below (checked by A12).
-    wiring:
-      build: design
-      godot: retire
-      port_rank: 9
-      parity: n/a
-      note: 'reclassified: a consolidation doc, not a runtime module.'
-accounting_sequence:
-  - phase: season_tick
-    does: "engine_clock emits mechanical.season_change"
-    source: "key_type_registry (engine_clock)"
-  - phase: accounting_boundary
-    does: "engine_clock emits mechanical.accounting"
-    source: "doc-12 §8"
-  - phase: B_concern
-    does: "Procedure B: Knowledge Decay -> Concern Generation (memory_query reads Keys) -> Resolution (state.concern_resolved, state.belief_revised, MemoryReferences)"
-    source: "doc-12 §8"
-  - phase: DA_proposal
-    does: "DA Proposal Phase: select_proposal() reads Faction Meta-Armature; execute_proposed_domain_actions() emits da_outcome.*; displacement_neglect_observed -> scene.displacement [unreg]"
-    source: "doc-12 §8"
-  - phase: C_project
-    does: "Procedure C: mechanical.project_advanced [unreg]; state.project_failed [unreg] (stall >= 8); state.project_completed [unreg]"
-    source: "doc-12 §8"
-  - phase: D_opinion
-    does: "Procedure D: state.opinion_revised per drift threshold"
-    source: "doc-12 §8"
-  - phase: E_offscreen
-    does: "Procedure E: scene.interaction (ambient pairs); scene.dialogue (knowledge sharing); scene.gossip (cumulative_drift > 0.5)"
-    source: "doc-12 §8"
-  - phase: emission_processing
-    does: "substrate single-update rule: validate (registry + invariants, causes[] DAG) -> append immutable KEY_LOG -> resolve observers — inline, deterministic"
-    source: "key_substrate_v30 §4.1"
-  - phase: settlement_accounting
-    does: "derived-value-at-0-through-Accounting -> stat -1; Mandate feedback drift ±1; Knot strain decay check"
-    source: "settlement §1.3/§1.8; knots §5"
+      parity: seam-io + typed-export round-trip
+      note: 'built and typed-exported; reached from the season loop through composition role combat.fight
+        (engine/season/seam/wrappers/combat.py). BUILD gated: a fight needs a challenge accepted or a violence
+        context; the realm at seed 0 forms no fight act in two seasons (aperture 2 0, the fight line: formed 0,
+        offered 0, executed 0), the corpus executes it. The pre-season campaign driver this note used to describe
+        was deleted at plan position 28-iii.'
 
 # ═══════════════════════════════════════════════════════════════════════════════════════════
 # WIRING — build state and Godot port status. `tier`/`scale`/`resolver` are NOT carried here: the contract row owns them.
@@ -1020,6 +874,19 @@ wiring_vocabularies:
   #   python-oracle  — real Python to port FROM; no GDScript yet   ← the port work-list
   #   no-oracle      — nothing to port from; canon must be authored first (Gate-0.5 halts)
   #   retire         — recommended for removal; do not port
+  # `parity:` on a module's `wiring:` is free text, not a validated vocabulary (`validate_wiring` reads
+  # `build` and `godot` only). Its values: `state-hash`, `seam-io`, `state read`, `data`, `n/a`, and
+  # the combat row's `seam-io + typed-export round-trip`. They replace the retired Key-log reading of
+  # parity (ED-IN-0232):
+  #   state-hash — the module's effect reaches a collection `World.content_hash` folds
+  #                (`engine/season/state/world.py`: `_STATE_COLLECTIONS`, `_STATE_SEQUENCES`, tenures,
+  #                the log), so a port is checked by the same-seed hash of the world.
+  #   seam-io    — the module is pinned at its entry: a typed input record against its typed outcome,
+  #                the way a drawn role (`combat.fight`, `mass_battle.resolve_field`,
+  #                `social_contest.roll`, `fieldwork.find`) is pinned at its entry.
+  # For a row the loop does not run (no code, or `build: unwired`) the value is prospective and follows
+  # its `state:` block: a writable entry -> `state-hash`, none -> `seam-io`. `n/a`, `state read` and
+  # `data` stand as the rows carry them.
 
 # The one proof-of-concept the whole strategy leans on.
 golden_path:
@@ -1033,9 +900,9 @@ golden_path:
 foundation_gaps:
   godot_spine:
     godot: no-oracle
-    note: BaseEngine / EngineModule / KeyBus / Resolver / GameState are referenced by the skeleton but class_name
-      def = NONE anywhere. Gate-0; the skeleton is non-compilable. The map's Wrapper tier = this undefined
-      spine.
+    note: No GDScript is in the tree (`godot/` holds documents only; the skeleton slice was retired at GO-14), so
+      the port's base types (a module entry, a resolver, a world-state holder) are defined nowhere. KeyBus is
+      retired (ED-IN-0232) and is not one of them.
   character_layer:
     godot: no-oracle
     note: No Character/Actor dataclass in World; 9- vs 10-attribute rival rosters, neither wired. Every

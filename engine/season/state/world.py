@@ -1,17 +1,12 @@
 """`season.state.world` -- THE STORE, AND THE GATE ON IT.
 
-Extracted from `shape.py` at step 4 of the decomposition (ED-IN-0203), a PURE MOVE: `World`, the
-read-only tenure concatenation `_TenureView`, the per-entity digest `_entity_digest` that
-`World.content_hash` folds, and `MATRIX_REFUSAL_LAW`. `shape.py` re-exports all four, so
-importers name this module directly (`from ..state.world import World`). The `shape.py`
-facade that used to re-export it was deleted at step 10 of the decomposition.
+`World`, the read-only tenure concatenation `_TenureView`, the per-entity digest `_entity_digest`
+that `World.content_hash` folds, and `MATRIX_REFUSAL_LAW`. Importers name this module directly
+(`from ..state.world import World`; ED-IN-0203).
 
 ⚠ `MATRIX_REFUSAL_LAW` TRAVELS WITH ITS READER, NOT WITH THE MATRIX. It is a table and it looks
-like data, and `data/matrix.py`'s own docstring records the adjudication at step 2: it goes with
-`World.write`, its only reader. That docstring used to state the ruling as an ADDRESS -- *"stays in
-`shape.py`"* -- which named where the reader happened to be, and went false the moment the reader
-moved; it now states the ruling. The table's home followed the gate here, which is the same ruling
-applied, not a new one. What makes it not-data is what it holds: a cell's `("no")` here
+like data, and `data/matrix.py`'s own docstring records the adjudication: it goes with
+`World.write`, its only reader. What makes it not-data is what it holds: a cell's `("no")` here
 carries the NAME OF THE LAW REFUSING (`S3-L4`, `S24`, `S9.3`, `S20`, `S30`), so that the gate can
 log a refusal as *the design saying no* rather than as bookkeeping. The matrix says which cells are
 closed; this says on whose authority.
@@ -20,8 +15,7 @@ closed; this says on whose authority.
 worked hazard is exactly `_TenureView` + `World.tenures` + `add_tenure` + `_rehome`: the store moved
 onto `Person`, and a getter that returned a plain `list(...)` would have let all nine
 `w.add_tenure(...)` sites go on appending to a throwaway, silently, with every test still green.
-The decomposition plan §2 item 6 lists the four as un-splittable for that reason, and they are all
-here.
+The four are un-splittable for that reason, and they are all here.
 
 ⚠ THIS MODULE IMPORTS `state.carriers` AND NOTHING ABOVE IT. The store knows the things it holds;
 the things do not know the store. `queries`, `decision` and `loop` are later steps and none of them
@@ -37,13 +31,13 @@ import struct
 from dataclasses import fields as _dc_fields
 from enum import Enum
 from itertools import compress as _compress, count as _count, repeat as _repeat
-from operator import (attrgetter as _attrgetter, is_ as _is, is_not as _is_not,
-                      itemgetter as _itemgetter, ne as _ne)
+from operator import attrgetter as _attrgetter, is_ as _is, is_not as _is_not, ne as _ne
 from typing import Any, Callable, Optional
 
 from ..data.fixtures import DEFAULT_FIXTURES, Fixtures
 from ..data.matrix import Step, WriteClass, matrix_row, partition_lookup
 from ..data.requires import UNKNOWN
+from ..data.verbs import EVENT_KINDS
 from ..data.rosters import (
     HOLD_OBJECT_KINDS, HOLD_SUBJECT_KINDS, RUNG_KINDS, TENURE_KINDS, roster)
 from ..gaps import Forbidden, InstrumentDefect, NoProducer, Unowned, Unspecified
@@ -78,22 +72,16 @@ MATRIX_REFUSAL_LAW: dict[tuple[tuple[str, str], Step], tuple[str, str]] = {
         "S20", "S20 -- `witness` is THE ONLY MINTER of a root token, and it runs at WITNESS"),
 }
 
-# ⚠ W2 AUDIT. Rekeying the table on `(kind, field)` NARROWED IT FOUR-FOLD without anyone noticing.
-# Under the old thing-keying, every field written with `thing="stance"` INHERITED stance's laws --
-# so `(Person, convictions)`, `(Person, beliefs)`, `(Person, scar)` and `(Person, axis_count)` got
-# L4/§25 and §9.3 for free, and after the rekey they fell through to the generic "ANY UNMARKED
-# CELL" branch. Four of the design's proudest refusals began logging as bookkeeping, which is
-# exactly what REV 4's comment in `write()` exists to prevent.
-#
-# THE FIX IS NOT TO RESTORE THE RIDE-ON -- that inheritance WAS defect D1, and getting the law by
-# riding on a neighbour's row is how `(Person, convictions)` became a PASS in the first place.
-# Each row states its own law, which is what keying on the pair is for.
-# roster-exempt: MECHANISM. The four rows that lost their law to the rekey, listed so each gets
+# EACH ROW STATES ITS OWN LAW. The table is keyed on `(kind, field)`, and a field gets L4/S25 and
+# S9.3 only from its own row -- never by riding on a neighbour's (`(Person, convictions)` becoming a
+# PASS that way is the defect keying on the pair prevents); an unlisted cell falls through to the
+# generic "ANY UNMARKED CELL" branch and logs as bookkeeping, which `write()`'s comment on the
+# matrix-refusal branch exists to prevent.
+# roster-exempt: MECHANISM. The rows listed so each gets
 # its own entry. Which rows these are is derivable from the matrix (`social: true`, Person);
 # the list is a loop over a fix, not a definition.
-# (`beliefs` left this loop 2026-09-25 with its row and its carrier field; a write to it now
-# refuses as RETIRED through `matrix_row`; `axis_count` left it at IN-08 H3 the same way.
-# `conviction` joined it at IN-08 H10 with its row: a religious affiliation is a belief.)
+# (`beliefs` and `axis_count` have no row: a write to either refuses as RETIRED through `matrix_row`.
+# `conviction` is listed: a religious affiliation is a belief.)
 for _pk_field in ("pursuits", "scar", "conviction"):
     MATRIX_REFUSAL_LAW[(("Person", _pk_field), Step.MATTER)] = (
         "S3-L4",
@@ -146,7 +134,7 @@ def _written_fields(t: Tenure, copy: bool) -> tuple:
     -- so `Tenure(t.id, *fields)` rebuilds it. `copy=True` deep-copies the payload (see
     `World._tenure_snapshot`); comparison needs no copy, because `==` on a dict is by value.
 
-    ⚠ `term` IS THE EIGHTH, ADDED AT PLAN POSITION `17b`, AND OMITTING IT HERE WOULD HAVE BEEN THE
+    ⚠ `term` IS THE EIGHTH, AND OMITTING IT HERE WOULD BE THE
     WHOLE FEATURE'S BYPASS: a renewal writes nothing but `term`, so a snapshot blind to it reports
     no change, F3 judges nothing, and F9 refuses the renewal as a no-op -- or, through a closure,
     admits an unjudged clock-wind on another person's edge. `Term` is frozen, so it needs no copy:
@@ -163,7 +151,6 @@ _WRITTEN = _attrgetter(*_WRITTEN_NAMES)
 _PAY = _WRITTEN_NAMES.index("payload")       # where `payload` sits in a fields tuple
 _PAYLOAD_OF = _attrgetter("payload")
 _VERSION_OF = _attrgetter("_v")              # `Tenure._v`: how many attribute sets it has had
-_FIRST, _SECOND = _itemgetter(0), _itemgetter(1)
 
 
 def _snapshot_fields(t: Tenure) -> tuple:
@@ -198,8 +185,7 @@ def rung_kind_ascends(child_kind: str, parent_kind: str) -> bool:
     `parent_kind`? Strictly above on `rung_kinds` (an ORDERED roster, `person` first) -- strict
     ascent, not adjacency, so a hearth under a settlement is lawful and a duchy under a hearth is not.
 
-    Factored out of `World.contain_ascends` at plan position `24e`, which reads it unchanged,
-    because `found` must ask the rule of a Rung that does not exist yet -- `contain_ascends` answers
+    `World.contain_ascends` reads it, and `found` must ask the rule of a Rung that does not exist yet -- `contain_ascends` answers
     `True` for an id it cannot resolve (its own docstring: *"Non-rungs pass"*), so asking it before
     the new Rung is stored would admit anything and let `add_tenure` raise inside RESOLVE. One owner,
     three readers: `add_tenure` raises on it, `_eff_move` and `_eff_found` decline on it."""
@@ -244,10 +230,10 @@ def rung_kind_ascends(child_kind: str, parent_kind: str) -> bool:
 # name. Dataclass fields are never sorted. A class is encoded by its bare `__name__`, an Enum member
 # by its value alone. `t`/`l` and `u`/`z` follow the stored Python type, which the oracle's writers
 # fix per site (`_grant_remit`'s `remit_acts` is a tuple, an addressee list a list). Nested mapping
-# key order is not state. EVERY declared field folds, `repr=False` and `compare=False` ones included
-# (the retired `repr` digest dropped a `repr=False` field). A float is its bits as stored: a NaN
+# key order is not state. EVERY declared field folds, `repr=False` and `compare=False` ones included.
+# A float is its bits as stored: a NaN
 # has no canonical form here and `-0.0` differs from `0.0`, as under `repr`; neither was seen when the
-# encoder was spied over four worlds at GO-07 (7605 floats; a one-off reading, not kept).
+# encoder was spied over four worlds at GO-07 (a one-off reading, not kept).
 _UNKNOWN_TYPE = type(UNKNOWN)
 _OBJECT_HEADS: dict = {}
 
@@ -343,7 +329,7 @@ def _canonical(v: Any) -> bytes:
 def _entity_digest(obj: Any) -> bytes:
     """`H-118`: ONE entity's own state, for `World.content_hash` and the gate's `state_of`.
 
-    GO-07: it is the entity's canonical encoding (the table above), no longer its `repr()`. `Person`,
+    GO-07: it is the entity's canonical encoding (the table above). `Person`,
     `Site`, `Tenure` and the other carriers are `@dataclass`, encoded field by field in DECLARATION
     order, which is fixed by the class and not by insertion, so it is stable across two runs of the
     same seed (R4). `Rung` is not a dataclass (S10 -- it stores its fields via `object.__setattr__`
@@ -354,8 +340,44 @@ def _entity_digest(obj: Any) -> bytes:
     return _canonical(obj)
 
 
+_FIELD_NAMES: dict = {}     # class -> its declared field names, read once (a class's fields do not move)
+
+
+def _entity_values(item: Any) -> dict:
+    """H-137: ONE entity's field values, SHALLOW: `name -> the value the entity holds now`, no value
+    copied. The names are what `_entity_digest` encodes: a `Rung`'s `_DECLARED`, a dataclass's
+    `fields`; a plain dict (`World.dates`' items) is its own mapping."""
+    if type(item) is dict:
+        return dict(item)
+    cls = type(item)
+    names = _FIELD_NAMES.get(cls)
+    if names is None:
+        names = _FIELD_NAMES[cls] = (tuple(sorted(item._DECLARED)) if isinstance(item, Rung)
+                                     else tuple(n for n, _ in _object_head(cls)[1]))
+    return {n: getattr(item, n) for n in names}
+
+
+def _entity_moved(item: Any, was: dict) -> bool:
+    """Does `item` hold something other than `was` (`_entity_values`' copy of it)? A value that
+    cannot be hashed (a list, a dict, a set, a plain object: MUTABLE) is compared by `is`; any other
+    by `==`. A mutable value mutated in place is the same object the copy holds, so it reads as unmoved:
+    `effect_body_observed` says so."""
+    if type(item) is dict:
+        if item.keys() != was.keys():
+            return True
+        read = item.__getitem__
+    else:
+        read = lambda k: getattr(item, k)   # noqa: E731 -- one name for the two readers
+    for k, v in was.items():
+        n = read(k)
+        if n is not v and (type(v).__hash__ is None or n != v):
+            return True
+    return False
+
+
 class World:
-    def __init__(self, world_seed: int, fixtures: Fixtures = DEFAULT_FIXTURES):
+    def __init__(self, world_seed: int, fixtures: Fixtures = DEFAULT_FIXTURES,
+                 event_kinds: frozenset = EVENT_KINDS):
         self.world_seed = world_seed
         self.tick = 0
         self.fixtures = fixtures
@@ -368,6 +390,10 @@ class World:
         # S15.1 -- the store is the SUBJECT'S. `_unowned` holds only the Tenures whose subject
         # is not a person (`contain : Rung -> Rung` is the bulk of them). See the `tenures` view.
         self._unowned: list[Tenure] = []
+        # The store's VERSION: counts every change of which Tenures the store holds (`add_tenure`,
+        # `remove_person`, `_rehome`, `_restore_tenures`). Underscore: derived, never folded into
+        # `content_hash`. `tenure_extent` reads it.
+        self._tenure_version = 0
         # The gate's shadow of the Tenure store (`_tenure_snapshot`). Underscore: derived, never folded into
         # `content_hash`.
         self._tshadow: Optional[_TenureSnap] = None
@@ -406,15 +432,12 @@ class World:
         # hashed state alone cannot rebuild it. No path restores a World without it (`deepcopy` carries it;
         # nothing pickles or replays one), which is the whole of its standing.
         self._covers_logged: dict[str, str] = {}
-        self.log = EventLog(self.gate, lambda: self.acts.ids(), self._on_logged)
+        # The log is handed the derived roster (`data/verbs.py::EVENT_KINDS`) and refuses a kind outside it
+        # (`04` §B.13 invariant 7); `state/log` imports no `data`. A test or probe that appends a kind no
+        # column declares passes `event_kinds=EVENT_KINDS | {...}` here.
+        self.log = EventLog(self.gate, event_kinds, lambda: self.acts.ids(), self._on_logged)
         self.dates: dict[str, dict] = {}
         self.docket: list[dict] = []
-        # ⚠ `petitions` AND `dispensations` WERE TWO PLAIN DICTS HERE AND ARE DELETED (plan position
-        # `15`, `04_CODE_ARCHITECTURE.md` §B.5): both are KINDS OF `Record` now, stored in
-        # `self.records` and named by `rosters.yaml: record_kinds`. No production world ever wrote
-        # either -- only `harness/probes.py` planted them -- so the content hash is unmoved by the
-        # deletion itself (an empty mapping folds nothing). A second home for a document is how a
-        # `hold` on a dispensation came to have nothing to point at.
         self.manifest: dict[str, str] = {}      # S43 -- role -> provider, resolved AT BOOT
         self.step: Optional[Step] = None
         self.frozen = False
@@ -435,6 +458,10 @@ class World:
         # tick, so everything it decides reaches the hashed log as `claim.deposited` that same tick.
         # Unhashed for that reason, not because it is derived (`test_h118`'s underscore exclusion).
         self._departed: dict[str, tuple] = {}
+        # WHO WAS SHORT OF FOOD IN THE LAST MATTER, `{pid: {kind: units short}}`: set by `loop/matter.py`'s
+        # subsistence pass (cleared at its start), read by `harness/populated.py::census` and by tests.
+        # An instrument's read, not state: the content hash does not fold it and the loop never reads it.
+        self._subsistence_shortfall: dict[str, dict] = {}
         # G4 -- S27.3's SUM-THEN-CLAMP-ONCE ACCUMULATOR, `(record_kind, id, field) -> [(act id,
         # delta)]`. It lived as a local of `loop/resolve.py::resolve` and was fed off the success
         # EVENTS; it is a store now because an act's `work` WRITES to it, through the gate, and the
@@ -456,12 +483,10 @@ class World:
     def tenures(self) -> "_TenureView":
         """Every live-or-dead Tenure, owner-first. Read-only -- see `_TenureView`.
 
-        ⚠ A READ, AND AS OF G2 ONLY A READ. This getter called `self._rehome()` first, so every
-        read of the aggregate -- 219 of them inside DELIBERATE alone on `build_realm(0)` over one
-        season, 67,005 inside WITNESS -- was also a store mutation, and DELIBERATE (a barrier that
-        owns nothing) mutated the tenure store through any `world_q` query it made. The repair now
-        runs at exactly one place, the MATTER barrier (see `_rehome`). Nothing is lost from THIS
-        view by not rehoming here: an unhomed Tenure is still in `_unowned`, which is appended
+        ⚠ A READ, AND ONLY A READ: the getter does not `_rehome()`, so a read of the aggregate is never
+        a store mutation (DELIBERATE, a barrier that owns nothing, reads it through any `world_q` query).
+        The repair runs at exactly one place, the MATTER barrier (see `_rehome`). Nothing is lost from
+        THIS view by not rehoming here: an unhomed Tenure is still in `_unowned`, which is appended
         below, so the aggregate holds every Tenure either way -- only its position moves, and only
         for a Tenure whose subject was created after it, which no builder in the tree produces."""
         out: list[Tenure] = []
@@ -470,18 +495,35 @@ class World:
         out.extend(self._unowned)
         return _TenureView(out)
 
+    def tenure_extent(self) -> tuple:
+        """`(persons, version)` -- how many people the world holds and the store's VERSION, a counter
+        every site that changes WHICH Tenures the store holds bumps (`add_tenure`, `remove_person`,
+        `_rehome`, `_restore_tenures`: the four that append to or remove from a Tenure list). It
+        stores nothing and reads no Tenure, and it is what the barrier's live-edge view
+        (`state/containment.py::edges_of`) compares to know it is stale. Counts of the lists (people,
+        unhomed, owned) could not say it: one Tenure removed and another added left every count as it was.
+
+        ⚠ THE BOUND. A Tenure whose `subject` or `kind` is REWRITTEN IN PLACE stays in its list and bumps
+        nothing, so the view keeps filing it under the old `(kind, subject)`; likewise a list or the
+        `persons` dict edited by hand rather than through the four (the person count still sees a person
+        added or removed). `_restore_tenures` rewrites those two fields back, which is the same bound."""
+        return (len(self.persons), self._tenure_version)
+
+    @property
+    def in_parallel_map(self) -> bool:
+        """Whether a parallel map is running, inside which `cache_at_barrier` refuses to answer."""
+        return self._in_parallel_map
+
 
     def contain_ascends(self, subject: str, object_: str) -> bool:
         """MAY `subject` BE CONTAINED IN `object_`? The §10 ladder, asked rather than raised.
 
-        ⚠ ONE OWNER, TWO POLARITIES, AND `W-C` MADE THE SECOND ONE REACHABLE. The rule lived
-        inside `add_tenure`, where its only expression was a `Forbidden`. That was survivable while
-        no COMPUTED act ever named a destination: once `move` carries a real `to`, a person can
-        name any rung their containment path reaches -- including a SIBLING, because
-        `contain.path` asks for a shared ancestor and a sibling has one -- and the ladder then
-        refused the write by RAISING, which kills the season. A person attempting a journey the
-        world will not seat them in is not an instrument defect and not a design gap; it is a
-        BLOCKED TRAVEL, which is the Event `move` already declares.
+        ⚠ ONE OWNER, TWO POLARITIES. Once `move` carries a real `to`, a person can name any rung
+        their containment path reaches -- including a SIBLING, because `contain.path` asks for a
+        shared ancestor and a sibling has one -- and the ladder would then refuse the write by
+        RAISING, which kills the season. A person attempting a journey the world will not seat them
+        in is not an instrument defect and not a design gap; it is a BLOCKED TRAVEL, which is the
+        Event `move` already declares.
 
         So the question is asked here and answered twice: `add_tenure` raises on it, because a
         caller writing an illegal edge directly is a bug, and `_eff_move` declines on it, because a
@@ -500,22 +542,18 @@ class World:
         """The ONE writer. Routes to `t.subject`'s own list, or to `_unowned` when the subject is
         not a person (`contain : Rung -> Rung` is most of those).
 
-        ⚠ IT NOW VALIDATES, AND REV 1 VALIDATED NOTHING -- so `rung_kinds` was a MEMBERSHIP SET
-        WEARING THE NAME OF A HIERARCHY. Jordan, 2026-09-02: *settlements are nested inside
+        ⚠ IT VALIDATES, so `rung_kinds` is a HIERARCHY and not a membership set. Jordan, 2026-09-02:
+        *settlements are nested inside
         territories inside provinces inside duchies inside realm? I think that is required too, or
         is that unnecessary to nest these and instead just explicitly define scale?* The nesting is
-        required and it is the thing the purview walk climbs (`under_purview`, since deleted by
-        `13d-i`; its successor is `state/gate.py::purview_reaches`/`descendants`) -- a scale label
-        cannot be walked, so the two are not interchangeable. But no `contain` edge was
-        direction-checked, so a
-        settlement containing a duchy was accepted, and `probes` builds an outright cycle.
-        Measured: `corpus_run.build_at` gives 37 person-scale cases a `person`-kind rung containing
-        three person rungs, and nothing refused.
+        required and it is the thing the purview walk climbs (`state/gate.py::purview_reaches`/
+        `descendants`) -- a scale label cannot be walked, so the two are not interchangeable. So every
+        `contain` edge is direction-checked: a settlement containing a duchy is refused.
 
-        ⚠ AND `Tenure.kind` WAS UNCHECKED, which made `TENURE_KINDS` a write-only roster.
-        `Tenure(..., "holds", ...)` -- the plural typo -- was accepted, and `_eligible` tests
-        `t.kind == "hold"`, so the office would be silently unheld by everybody. That is the same
-        failure shape `Office.__post_init__` already refuses for remit acts (§8: one rule, applied
+        ⚠ `Tenure.kind` IS CHECKED, which keeps `TENURE_KINDS` from being a write-only roster.
+        `Tenure(..., "holds", ...)` -- the plural typo -- would otherwise be accepted, and `_eligible`
+        tests `t.kind == "hold"`, so the office would be silently unheld by everybody. That is the same
+        failure shape `Office.__post_init__` refuses for remit acts (§8: one rule, applied
         at every constructor rather than at one)."""
         if t.kind not in TENURE_KINDS:
             raise Unowned(
@@ -539,6 +577,7 @@ class World:
                     "deleted by `13d-i`) walk sideways or loop, and Jordan's governance "
                     "canon reads purview off that walk")
         (self.persons[t.subject].tenures if t.subject in self.persons else self._unowned).append(t)
+        self._tenure_version += 1
         return t
 
     def class_of(self, entity_id: str) -> "str | None":
@@ -551,7 +590,7 @@ class World:
         decide what `None` means for IT; `_refuse_bad_hold` treats it as PERMITTED.
 
         The order is `_entity_stores`' and it IS LOAD-BEARING at one place: a `person`-kind rung
-        carries its person's id (`harness/probes.py`, `populated.py`: every person has a same-id
+        carries its person's id (`harness/probes.py`, `boot/realm.py`: every person has a same-id
         rung), so that id is in `persons` and in `rungs`, and `Person` is answered first -- the
         answer `place_of`, `places_named`, `larders_in_purview` and the formation classes (v10 REM-24,
         B10-05) all rely on. Any other id in two collections returns the first, and the ambiguity is
@@ -565,7 +604,7 @@ class World:
         """`(class name, collection)` for every collection an id can resolve in, in `class_of`'s
         order. ONE list, read by `class_of` and by the F3 gate's existence-change observation
         (`write`'s `gone`), so *what counts as a thing that can cease to exist* cannot drift
-        between the resolver and the cascade (§8). It was inline in `class_of` until G3."""
+        between the resolver and the cascade (§8)."""
         return (("Person", self.persons), ("Rung", self.rungs), ("Office", self.offices),
                 ("Site", self.sites), ("Record", self.records),
                 ("Proposition", self.propositions))
@@ -579,22 +618,21 @@ class World:
     # its legs inside `(Person, travel_leg)`). A check keyed on `record_kind == "Tenure"` would see
     # none of them. So the store is OBSERVED instead: a snapshot before `apply()`, a diff after, and
     # every changed Tenure put to `state/gate.py::tenure_write_basis` -- whatever pair it hid in.
-    # ⚠ THIS SAID *"G4 replaces the opaque closure with a gate-applied change; this observation is
-    # ... cheap to delete once the gate knows the change before it applies it"*, AND G4 DID NOT
-    # DELETE IT, FOR TWO REASONS. (1) A `Change` names its subjects before it runs, but its
+    # ⚠ THE OBSERVATION STAYS UNDER A GATE-APPLIED `Change`, FOR TWO REASONS. (1) A `Change` names its subjects before it runs, but its
     # `apply` is still a closure, so an effect can still touch a Tenure it did not name -- and F3
     # must see EVERY Tenure written, named or not, or an unnamed edge write is the bypass. (2) G4
     # READS it: an `edge` subject has moved iff this diff lists it, so F9 and F3 share one
     # observation of the tenure store rather than taking two.
     # ⚠⚠ "EVERY TENURE WRITTEN" IS TRUE ONLY OF WHAT `apply` DOES, NOT OF THE EFFECT'S WHOLE
-    # EXECUTION -- CORRECTED (antagonist pass, 2026-09-27, `H-137`). The snapshot above is taken
+    # EXECUTION (`H-137`). The snapshot above is taken
     # inside `write()`, and an effect's own body runs BEFORE `write()` is ever called
     # (`loop/resolve.py::_apply_write`'s `change = eff(w, a, resolution)`) -- so a mutation an
     # effect made EAGERLY, before constructing and returning its `Change`, is already baked into
     # the snapshot itself and produces no diff at all. Every shipped effect defers its mutation
     # into `Change.apply`, which this observation does cover. CR-06: `effect_body_observed` (below)
     # takes this snapshot around the effect call too and refuses a Tenure an effect's own body
-    # moved. TENURES ONLY -- an eager write to an entity field is still bound by the convention.
+    # moved, and (H-137) an entity field it reassigned or an entity it added or removed; its
+    # docstring states what an in-place mutation of a shared value escapes.
     def _tenure_walk(self) -> list:
         """Every Tenure in the store, owner-first: the order `_tenure_snapshot` reads them in."""
         cur = [t for p in self.persons.values() for t in p.tenures]
@@ -608,14 +646,14 @@ class World:
         IN PLACE, so a reference would compare equal to itself after the write and the re-stamp
         -- `establish`'s write on another person's edge -- would be invisible.
 
-        THE STORE IS NOT RE-READ FIELD BY FIELD ON EVERY WRITE. This and `_tenure_changes` ran over every
-        Tenure twice per watched write, the season loop's largest per-write cost, linear in the store
-        and paid whether or not the write touched a Tenure. The world keeps a SHADOW (`_tshadow`): the
+        THE STORE IS NOT RE-READ FIELD BY FIELD ON EVERY WRITE: this and `_tenure_changes` would
+        otherwise run over every Tenure twice per watched write, linear in the store and paid whether
+        or not the write touched a Tenure. The world keeps a SHADOW (`_tshadow`): the
         walk, each Tenure's fields and each one's `Tenure._v`. A snapshot walks the store again (cheap:
         nothing is read from a Tenure but its version), takes the shadow when the same objects stand in
         the same order, and re-reads only the Tenures whose version moved since the shadow was cut and
         the payloads that no longer equal their copy. A store that is not the shadow's (a Tenure opened,
-        removed or reordered, or no shadow yet) is read in full, as it always was. What the shadow
+        removed or reordered, or no shadow yet) is read in full. What the shadow
         trusts is that every field set goes through `Tenure.__setattr__`; `discard_caches` checks that at
         each barrier against a full read."""
         cur = self._tenure_walk()
@@ -651,7 +689,7 @@ class World:
         When the same objects stand in the snapshot's order (checked by identity, so a Tenure opened,
         removed or moved is never missed), only a Tenure whose version moved or whose payload no longer
         equals its copy can have changed, and those are compared field by field; the shadow is brought up
-        to date with them. Any other shape of the store takes the identity-set walk that always answered,
+        to date with them. Any other shape of the store takes the identity-set walk,
         and the shadow is dropped to be read in full at the next snapshot."""
         cur = self._tenure_walk()
         sh = snap.origin
@@ -697,10 +735,11 @@ class World:
         ⚠ THE TENURE STORE ONLY, AND THAT IS STATED RATHER THAN IMPLIED. An effect that also wrote
         something else in the same `apply()` -- `establish`'s new office, `kill / wound`'s removed
         person -- keeps that write; undoing an arbitrary closure is not something the gate can do
-        (`H-130` is this class). G4 did not change that: a `Change` names its subjects but its
-        `apply` is still a closure. What IS guaranteed: no Tenure write the gate refused -- for
+        (`H-130` is this class): a `Change` names its subjects but its
+        `apply` is a closure. What IS guaranteed: no Tenure write the gate refused -- for
         want of a basis (`NotYours`) OR because the write moved nothing it named (`NoOpReceipt`)
         -- survives the refusal."""
+        self._tenure_version += 1
         for t, was in changes:
             if was is None:
                 owner = self.persons.get(t.subject)
@@ -710,29 +749,85 @@ class World:
                 (t.subject, t.object, t.kind, t.since, t.until, t.degree, t.payload, t.term) = \
                     _written_fields(was, copy=False)
 
+    def _entity_snapshot(self) -> dict:
+        """H-137: `collection -> (members, values)` for each of `_STATE_COLLECTIONS`: `members` the
+        collection's own `id -> item` mapping COPIED (its order, so a restore keeps it), `values`
+        `id -> _entity_values(item)`. SHALLOW: no field value is copied."""
+        return {name: (dict(coll), {k: _entity_values(v) for k, v in coll.items()})
+                for name in self._STATE_COLLECTIONS
+                for coll in (getattr(self, name),)}
+
+    def _entity_changes(self, snap: dict) -> list:
+        """`(collection, id)` for every entity the snapshot saw that now holds other values, was added
+        or was removed, in `_STATE_COLLECTIONS` order and, within one, the snapshot's then the added."""
+        out = []
+        for name, (members, values) in snap.items():
+            coll = getattr(self, name)
+            out.extend((name, k) for k, item in members.items()
+                       if coll.get(k) is not item or _entity_moved(item, values[k]))
+            out.extend((name, k) for k in coll if k not in members)
+        return out
+
+    def _restore_entities(self, snap: dict, changes: list) -> None:
+        """PUT THE ENTITIES BACK: each collection with a membership change takes its snapshot members
+        in the snapshot's order; each entity named in `changes` gets its fields back one by one
+        (`object.__setattr__`: a `Rung` and a frozen `Proposition` refuse a plain set)."""
+        for name in {n for n, _k in changes}:
+            members = snap[name][0]
+            coll = getattr(self, name)
+            if list(coll) != list(members) or any(coll[k] is not v for k, v in members.items()):
+                coll.clear()
+                coll.update(members)
+        for name, k in changes:
+            if k in snap[name][1]:
+                item, was = snap[name][0][k], snap[name][1][k]
+                if type(item) is dict:
+                    item.clear()
+                    item.update(was)
+                else:
+                    for f, v in was.items():
+                        object.__setattr__(item, f, v)
+
     def effect_body_observed(self, build, actor: Optional[str], via: Optional[str],
                              record_kind: str, fieldname: str) -> Any:
         """CR-06 / `H-137`: call `build()` -- an effect function, which returns its `Change` -- and
-        refuse a Tenure that its OWN BODY moved before returning. The store is put back
-        (`_restore_tenures`) and `not_yours` raised with the reason, the pair `write()` uses for a
-        write the gate refuses. The choreography lives here, in `state/`, so that the undo of a store
-        write is not made by `loop/` reaching into this class's private members (`04 §A.1`, AX-4:
-        one write path, `state/` + the gate).
+        refuse what its OWN BODY moved before returning: a Tenure, or a field of an entity in any of
+        `_STATE_COLLECTIONS` (an entity added or removed too). The store and the entities are put back
+        (`_restore_tenures`, `_restore_entities`) and `not_yours` raised with the reason, the pair
+        `write()` uses for a write the gate refuses; `loop/resolve.py::_fold` emits it as the row's
+        refusal. The choreography lives here, in `state/`, so that the undo of a store write is not
+        made by `loop/` reaching into this class's private members (`04 §A.1`, AX-4: one write path,
+        `state/` + the gate).
 
-        ⚠ TENURES ONLY, AND THAT IS THE BOUND. An eager write to an entity field is still invisible
-        here. A body that moves a tenure and then RAISES is not restored (the raise aborts the act,
-        as any effect's does). `write()` takes its own snapshot after this call returns and is kept
-        apart on purpose: handing this one to it would put a caller-supplied snapshot into F3's own
-        observation of the store. Any tenure the body moves is refused, lawful or not: an effect body
-        is not a write (no class or step check, no trace line, no receipt)."""
+        ⚠ THE BOUND OF THE ENTITY ARM, as the tenure arm's is stated. The snapshot is SHALLOW: each
+        entity's field values, none copied. A field the body REASSIGNS is seen (a value that cannot be
+        hashed -- list, dict, set, a plain object -- by `is`; any other by `==`), and so is an entity
+        added or removed. A mutable value MUTATED IN PLACE (`stores["grain"] = 9`, `scar[axis] += 1`,
+        `ledger.append(...)`) is the same object the copy holds and reads as unmoved: seen only where
+        the body also reassigned it. The restore puts back the values the snapshot held, so an in-place
+        mutation it did not see stays; the gate's own `state_of` digest, taken inside `write()`,
+        covers what `Change.apply` does to a named subject, not what the body did before. A `Tenure`
+        is the tenure arm's, not this one's: `Person.tenures` is a list and an owner's list mutated in
+        place reads as unmoved here. A body that moves something and then RAISES is not restored (the
+        raise aborts the act, as any effect's does). `write()` takes its own snapshot after this call
+        returns and is kept apart on purpose: handing this one to it would put a caller-supplied
+        snapshot into F3's own observation of the store. Anything the body moves is refused, lawful or
+        not: an effect body is not a write (no class or step check, no trace line, no receipt)."""
         snap = self._tenure_snapshot()
+        ents = self._entity_snapshot()
         out = build()
+        moved = self._entity_changes(ents)
+        if moved:
+            self._restore_entities(ents, moved)
         eager = self._tenure_changes(snap)
         if eager:
             self._restore_tenures(eager)
+        if moved or eager:
             raise not_yours(eager, actor, via, record_kind, fieldname,
-                            why="moved Tenures in the effect's own body, before it returned its "
-                                "Change (CR-06, H-137)")
+                            why=("moved an entity field in the effect's own body, before it "
+                                 "returned its Change (H-137)") if moved else
+                                ("moved Tenures in the effect's own body, before it returned its "
+                                 "Change (CR-06, H-137)"))
         return out
 
     # -- G4: WHAT A SUBJECT READS, BEFORE AND AFTER A WRITE ------------------------------------
@@ -750,9 +845,7 @@ class World:
         GO-07: BOTH readings are the one canonical encoding, so a write that only re-orders a mapping
         (an entity's, or a named attribute's) reads as unmoved and F9 refuses it as a no-op -- the
         reading `before == after` has on a dict, where `repr` saw key order. It also keeps `1`, `True`
-        and `1.0` apart, as `repr` did. (Until the terminal critique of B10-03b a `fields` reading
-        stayed `repr`: two ladders for one question, and F9's verdict on ten effects depended on
-        CPython's formatting.)
+        and `1.0` apart, as `repr` did.
 
         ⚠ A STORE THAT IS NOT A STATE COLLECTION IS A CALLER BUG, AND IT RAISES. Read as "absent"
         it would compare `(False,)` to `(False,)` and every write naming it would be refused as a
@@ -804,10 +897,9 @@ class World:
 
         ⚠ IT IS HERE AND NOT IN `_eff_confer`, AND THAT PLACEMENT IS THE WHOLE FIX. `confer`'s
         effect is one of MANY mint paths -- `corpus_run.build_at`, `probes.edge`,
-        `populated.build_realm` and the fixtures all open `hold` Tenures directly at world build.
-        Writing the grant in the effect alone would leave every world-built holder ungranted, the
-        new eligibility branch would admit nobody in the corpus, and `H-71` would read closed while
-        changing no run -- the `DONE-INERT` shape `3b` is in. This method sits in `add_tenure`,
+        `boot/realm.py` and the fixtures all open `hold` Tenures directly at world build.
+        Writing the grant in the effect alone would leave every world-built holder ungranted and the
+        eligibility branch would admit nobody in the corpus. This method sits in `add_tenure`,
         which its own docstring calls *"The ONE writer"* and which cites §8 for exactly this
         reason: *"one rule, applied at every constructor rather than at one"*. Every mint path gets
         the grant, `confer`'s included, and a path added later gets it without knowing it exists.
@@ -816,15 +908,12 @@ class World:
         is the grant AS AT SEATING. Mutating `w.offices[x].remit_acts` afterwards does NOT reach a
         sitting holder -- `test_h71_the_grant_is_a_snapshot_not_a_mirror` pins it. That is arm 2's
         own semantics and not an oversight: the GRANT is what the holder has, and an office whose
-        remit changes does so by an act. ~~The RESOLVER is unaffected either way, because
-        `_eligible` has a `World` and reads `w.offices` directly; this is the person's reading
-        only, and the gap between the two readings is what `H-71` was.~~ ⚠ **NO LONGER TRUE, since
-        position `13e` (2026-09-26): `_eligible` now reads `t.granted_acts` too**, the same
-        snapshot this method writes -- the gap `H-71` named between the resolver's reading and the
-        person's reading is closed, not merely unaffected by it.
+        remit changes does so by an act. `_eligible` reads `t.granted_acts` too, the same
+        snapshot this method writes, so the resolver's reading and the person's reading agree
+        (`H-71`).
 
         ⚠ `force=True` IS HOW THE ACT REACHES SITTING HOLDERS, AND IT IS HERE SO THE KEY HAS ONE
-        WRITER (`13f`, 2026-09-25). The act that changes a remit is `establish`, and its effect
+        WRITER. The act that changes a remit is `establish`, and its effect
         re-stamps every live `hold` on the office it wrote, in the same act -- so a hand-mutation
         still reaches nobody (snapshot's property) while an act reaches every sitting holder
         (mirror's observable), and `choose` still receives no `World`. It also reaches a `hold`
@@ -843,7 +932,7 @@ class World:
         """
         off = self.offices.get(t.object)
         if off is None:
-            # ⚠ TRACED, NOT SILENT, and `/code-review` is why. A `hold` may be added BEFORE its
+            # ⚠ TRACED, NOT SILENT. A `hold` may be added BEFORE its
             # Office exists -- an ordering `class_of` and `_rehome` explicitly tolerate -- and a
             # bare `return` left that holder permanently remit-ineligible with no error and no
             # tell. It is still not an error here (the object may legitimately be a Rung, Record
@@ -861,9 +950,8 @@ class World:
         # `World.content_hash`, so this key alone moves the digest of every world holding a seat -- a
         # declared, structural hash move, the `Office.establishment` deletion's shape.
         stamp = {"remit_acts": grant, "seat_rung": off.rung}
-        # ⚠ KEY-SCOPED, NOT WHOLE-FIELD, and `/code-review` found the defect this fixes. The first
-        # writing was `if t.payload is not None: return`, which made the grant FIRST-WRITER-WINS on
-        # a public constructor field: `Tenure(..., "hold", 0, payload={"note": "x"})` produced a
+        # ⚠ KEY-SCOPED, NOT WHOLE-FIELD. A whole-field `if t.payload is not None: return` would make
+        # the grant FIRST-WRITER-WINS on a public constructor field: `Tenure(..., "hold", 0, payload={"note": "x"})` produced a
         # seated holder whose `granted_acts` was `()`, indistinguishable from an office that grants
         # nothing. The payload is a dict of independent keys, so only the grant's two keys are this
         # method's to own; a payload already carrying `remit_acts` is left alone, both keys, unless
@@ -883,11 +971,9 @@ class World:
         """`holonic §15`'s own row for `hold`, enforced: *"`hold` | Person -> Office | Rung |
         Record | Proposition | 1 per object"*.
 
-        ⚠ NOTHING CHECKED THIS AND THE COST WAS MEASURED BEFORE IT WAS WRITTEN. On
-        `build_realm(0)`, 2026-09-17: `hold` Tenures by (subject class, object class) were
-        `{('person', 'Office'): 19, ('faction', 'Rung'): 16}`, so `in_holdings` -- *a `hold`
-        whose object is a RUNG* -- was **false for every person over every rung in the world**.
-        A seat declaring `revocation: "holdings"` refused every revocation forever AND LOOKED
+        ⚠ WITHOUT THIS A `hold` WHOSE SUBJECT IS NOT A PERSON (a faction's `hold` on a Rung) PASSES, so
+        `in_holdings` -- *a `hold` whose object is a RUNG* -- is **false for every person over that
+        rung**. A seat declaring `revocation: "holdings"` refused every revocation forever AND LOOKED
         EXACTLY LIKE A WORKING PRECONDITION, which is the shape `CLAUDE.md` §0.2 exists to catch:
         the branch executes, and it can never execute to True.
 
@@ -931,100 +1017,41 @@ class World:
         """THE ONE DEATH CASCADE: every live edge naming this person closes, then they are gone.
 
         CP-T02-01: IT RETURNS THE SEAT `hold`s IT CLOSED (`seat_holds`, read before the closures), not
-        `[who]`. No caller read the old return; the death writes name these holds as earning subjects
+        `[who]`. The death writes name these holds as earning subjects
         (`state/gate.py::death_subjects`), so the seats the death empties are on its receipts.
 
-        ⚠⚠ IT IS FACTORED OUT OF `_eff_kill` BECAUSE IT NOW HAS THREE CALLERS, AND A SECOND COPY IS
-        HOW THEY WOULD DRIFT. `kill / wound` (now `fight`) at RESOLVE was the only way to die;
-        item 3b gives MATTER a second — a body that reaches 0 from an empty larder
-        (`loop/matter.py`) — and the M4 review pass's correctional round gave `_eff_march`'s
-        `total`-casualty-model arm a third (`H-152`). `(Person, body)` is licensed at **both**
+        ⚠⚠ ONE CASCADE, THREE CALLERS, AND A SECOND COPY IS HOW THEY WOULD DRIFT: `_eff_kill` (`fight`)
+        at RESOLVE, MATTER's body that reaches 0 from an empty larder (`loop/matter.py`), and
+        `_eff_march`'s `total`-casualty-model arm (`H-152`). `(Person, body)` is licensed at **both**
         steps by the write matrix (`[MAT, RES]`, `social: false`, emitting `body.changed` and
         `person.died`). Three sites closing tenures by hand is the shape §8 is about: *the rule
         lives once*.
 
-        ⚠ `self.tenures`, NOT `p.tenures`, AND THAT IS `W-E`'s OWN FINDING CARRIED ACROSS RATHER
-        THAN RE-DERIVED. A Tenure is owned by its SUBJECT (§15.1), so scanning the dead person's
-        own list cannot see an edge ANOTHER person owns that names them as its OBJECT — measured
-        in `tiny_world`: a live `tie` from `p_low` to `p_mid` survived `p_mid`'s death and then
-        DANGLED. §15.3 is explicit that the tenure ends THROUGH the death.
+        ⚠ `self.tenures`, NOT `p.tenures`. A Tenure is owned by its SUBJECT (§15.1), so scanning the
+        dead person's own list cannot see an edge ANOTHER person owns that names them as its OBJECT (a
+        live `tie` from `p_low` to `p_mid` would survive `p_mid`'s death and DANGLE). §15.3 is explicit
+        that the tenure ends THROUGH the death.
 
         ⚠ IT MUTATES AND RETURNS THE SEAT `hold`s IT CLOSED (v10 CP-T02-01; not ids); IT DOES NOT CALL `write`. Every caller is
         already inside a gated write when it reaches here — `_eff_kill` and `_eff_march` through
         their own `Change`'s `apply`, which the gate calls (G4; neither effect reads the return
         value, the gate reads the victim instead), MATTER through its own `w.write(..., change=Change(death_subjects(...), ...))` — and
-        a nested write would be a write inside a write. ⚠ CORRECTED (antagonist pass, 2026-09-27):
-        this said "which the gate refuses" and nothing did -- `World.write` has no re-entrancy
-        check of any kind, so the property held only because every caller was careful to call this
-        from inside its own already-open write rather than opening a second one -- a discipline on
-        the call sites, not a guarantee the gate enforced.
+        a nested write would be a write inside a write.
 
-        ⚠⚠ MADE MECHANICAL (`GATE-REMOVE-PERSON`, plan position 7, 2026-09-29): the check below
-        reads `self.gate.is_open` (`state/gate.py::Gate`), true for exactly the span `World.write`
-        holds a window open around `apply()`/`change.apply()` (`.opening()` before the `try`, an
-        unconditional `.close()` in its `finally`, whatever the exit) — which is precisely
-        "already inside a gated write" made CHECKABLE instead of trusted, one more property AX-4
-        (`04:115`, "one write path") now
-        holds through `World.write` + the gate's own state rather than through caller discipline.
-        It is not a second, nested `world.write(...)` call — that would check a (kind, field) pair
-        this function does not itself declare and would re-open a window already open — it is a
-        REFUSAL of the one failure mode the discipline above could not catch: a future caller
-        reaching this function with no write open at all. Every call site in the tree today
-        (`_eff_kill`, `_eff_march`, `loop/matter.py`, and the two `harness/probes.py` /
-        `test_season_shape.py` falsifiers that already wrap it in `w.write(...)`) already
-        satisfies it, so this changes no existing behaviour or emission.
+        ⚠⚠ THE CHECK BELOW IS MECHANICAL: it reads `self.gate.is_open` (`state/gate.py::Gate`), true for
+        exactly the span `World.write` holds a window open around `apply()`/`change.apply()`
+        (`.opening()` before the `try`, an unconditional `.close()` in the single `finally`, whatever
+        the exit) -- "already inside a gated write" made CHECKABLE instead of trusted, one more property
+        AX-4 (`04:115`, "one write path") holds through `World.write` + the gate's own state rather than
+        through caller discipline. It is not a second, nested `world.write(...)` call -- that would check a
+        (kind, field) pair this function does not itself declare and would re-open a window already open --
+        it is a REFUSAL of a future caller reaching this function with no write open at all. Every call
+        site in the tree (`_eff_kill`, `_eff_march`, `loop/matter.py`, and the two `harness/probes.py` /
+        `test_season_shape.py` falsifiers that wrap it in `w.write(...)`) satisfies it.
 
-        ⚠ THE CHECK IS "SOME WRITE OPEN", NOT "THE RIGHT WRITE OPEN" -- see `hole_register.yaml`
-        H-131's own further-narrowed correction (methodology close, terminal critique, 2026-09-29):
+        ⚠ THE CHECK IS "SOME WRITE OPEN", NOT "THE RIGHT WRITE OPEN" (`hole_register.yaml` H-131):
         `is_open` cannot see WHICH `(record_kind, fieldname)` is open, only that one is. Not a live
-        gap (every real caller opens one of three pairs); disclosed there rather than tightened
-        here, since nothing exercises the gap today.
-
-        ⚠⚠ CORRECTED (methodology close, antagonist pass, 2026-09-29): THE ORIGINAL WRITING OF THIS
-        NOTE CLAIMED MORE THAN THE CODE THEN DELIVERED. `World.write`'s success path did not call
-        `gate.close()` — only its two refusal branches did (H-131, `hole_register.yaml`, found this
-        gap unwired three days earlier for a DIFFERENT reason, `gate.mint()`'s reuse safety, and
-        judged it harmless because `opening()` always resets `_open` before any mint; H-131 never
-        analyzed a bare `is_open` READ, which is what THIS check is). So `is_open` stayed
-        permanently True after a World's first successful write and never reset at a season or step
-        boundary — the check below could only ever catch a call on a PRISTINE, never-written
-        World, not the realistic misuse case (a world already in play) this note claimed to
-        prevent. Fixed in the same pass: `World.write`'s success path now calls `self.gate.close()`
-        too, symmetric with the two refusal-path calls, so the property genuinely holds now.
-        ⚠ THE LINE CITATION THIS PARAGRAPH ORIGINALLY GAVE (`:1056`) WAS ALREADY STALE, AND ITS OWN
-        REPLACEMENT (a line number to the `finally:`) WENT STALE AGAIN THE MOMENT IT WAS WRITTEN —
-        because a docstring correction added ABOVE code it cites shifts every line number below it,
-        making a numeric self-citation in this exact paragraph unfixable by construction, not merely
-        unlucky twice. Cited by SYMBOL instead, which a later edit cannot move: the hand-written
-        success-path call this paragraph named was replaced one paragraph below, by the
-        `/simplify` pass the same day, with the single `finally: self.gate.close()` closing this
-        same method (`World.write`) — there is exactly one `finally` clause in this class, so
-        `rg -n 'finally:' state/world.py` finds it without a line number going stale again.
-        Leaving a numeric citation here would be exactly `CLAUDE.md` §0.1 pt 3's *"a citation you
-        have not opened is not a citation"* — a reader following a stale one would land on
-        whatever code happened to drift into that slot instead. MEASURED, not assumed: every
-        existing death/`remove_person` test in
-        `engine/season/tests` still passes unchanged (`test_march.py`, `test_g3_not_yours.py`,
-        `test_season_shape.py`'s P24/P25 probes and its partition-seam test), and
-        `test_gate_remove_person_requires_an_open_write.py` gained a second case exercising the
-        REALISTIC scenario (a world that already completed a legitimate write, then a later bare
-        call) — the one the original falsifier, testing only a pristine world, could not
-        distinguish from the vacuous-guard failure mode.
-
-        ⚠⚠ CORRECTED AGAIN, SAME DAY (methodology close, `/simplify` ALTITUDE pass, 2026-09-29):
-        the fix directly above added a THIRD hand-written `self.gate.close()` at the success
-        return, mirroring the two refusal-branch calls already there (F3 `not_yours`, F9 `no_op`)
-        — and missed a FOURTH exit that already existed and still leaked: later in this same
-        method's body, the S33 `Forbidden` (a declared emission with no `subject=`) also raises after
-        `.opening()`, with no `close()` on that path either. Enumerating exits by hand to patch
-        them one at a time is exactly how the first gap survived three days and how this second
-        one survived the first fix. Replaced all three scattered calls with the body wrapped in
-        `try`/`finally: self.gate.close()`, so closure is unconditional on how `write()` exits
-        rather than manually mirrored at each raise or return site — self-healing against any
-        exit this function gains later, known or not yet written. `before` (the return value) is
-        assigned only inside the `try` but stays readable after it ends, Python scoping being
-        function-level, so `return before` sits outside the `try`/`finally`, unchanged in what it
-        returns on the success path.
+        gap (every real caller opens one of three pairs).
 
         ⚠ G3: AND THAT IS WHAT MAKES THE CASCADE ATTRIBUTABLE. The gate's F3 clause admits an edge
         closed by a non-owner -- or by no actor at all, at MATTER -- only as `destroy's cascade`:
@@ -1049,18 +1076,18 @@ class World:
                     self._departed[who] = (t.object, self.tick)        # H-206: where he stood
                 t.until = self.tick
         self.persons.pop(who, None)
-        # ⚠⚠ THE PERSON'S OWN `person`-KIND RUNG DIES WITH THEM, and leaving it behind was a
+        self._tenure_version += 1                  # his edges left `tenures` with him
+        # ⚠⚠ THE PERSON'S OWN `person`-KIND RUNG DIES WITH THEM, and leaving it behind would be a
         # LATENT ID-SCHEME DEFECT that only a death could reach. `class_of`'s own docstring names
         # the hazard -- *"no id is currently in two of these. If one ever is, this returns the
         # first and the ambiguity is a defect in the id scheme"* -- and a person-kind rung is
         # exactly that case: `persons` is scanned first, so the id reads `Person` while they live
         # and silently becomes `Rung` the moment they do not.
         #
-        # MEASURED, the day `kill / wound` was admitted to `resolvable_verbs()` (`ED-IN-0261`,
-        # amended), over the 143-case corpus: 11 cases died on `_refuse_bad_hold` -- *"`hold`
-        # tenure has subject 'p_c', which is a Rung"* -- because `confer` seated an office on a
-        # corpse, and 2 more on `PARTY-GAP` -- *"claimant not a person"* -- because a later act
-        # named one as an adversary. Both are the same fact: THE DEAD STAYED REFERENCEABLE. A
+        # A rung left standing keeps the dead referenceable: `confer` seats an office on a corpse
+        # (`_refuse_bad_hold` -- *"`hold` tenure has subject 'p_c', which is a Rung"*), and a later act
+        # names one as an adversary (`PARTY-GAP` -- *"claimant not a person"*). Both are the same fact:
+        # THE DEAD STAYED REFERENCEABLE. A
         # rung is what `questions_for` walks, so as long as the node stood, the world went on
         # offering the man as something to confer on and someone to fight.
         #
@@ -1089,23 +1116,20 @@ class World:
         read/write asymmetry of exactly the shape §0.1 point 1 describes, and it would be
         invisible because both surfaces are individually correct.
 
-        ⚠ ONE CALLER TODAY, THE MATTER BARRIER (`loop/matter.py`), AND THAT IS G2's DISPOSITION OF
-        IT -- NOT A STRUCTURAL GUARANTEE (corrected 2026-09-26, antagonist pass on G2: the
-        original wording read as though this were enforced tree-wide). It had two: the `tenures`
-        getter, on every read, and an explicit call at the head of DELIBERATE. Both made
-        DELIBERATE -- which `04 §A.2` says *"owns nothing ... token: none"* -- a mutator of the
-        tenure store. Moving it rather than licensing it: no step between MATTER and any
-        DELIBERATE round can create a Person (checked by grepping every `Person(` construction in
-        the tree -- `harness/` only), so a Tenure homed at MATTER stays homed for the whole map;
-        MATTER holding a token is not what makes this true, `_rehome` itself is not a gate write
-        and is not token-checked (below). WHAT IS ACTUALLY GUARDED: `test_g2_token.py`'s DELIBERATE
+        ⚠ ONE CALLER TODAY, THE MATTER BARRIER (`loop/matter.py`) -- NOT A STRUCTURAL GUARANTEE.
+        DELIBERATE -- which `04 §A.2` says *"owns nothing ... token: none"* -- must not mutate the
+        tenure store, so the repair runs at MATTER and not in the `tenures` getter or at the head of
+        DELIBERATE. No step between MATTER and any DELIBERATE round can create a Person (checked by
+        grepping every `Person(` construction in the tree -- `harness/` only), so a Tenure homed at
+        MATTER stays homed for the whole map; MATTER holding a token is not what makes this true,
+        `_rehome` itself is not a gate write and is not token-checked (below). WHAT IS ACTUALLY GUARDED: `test_g2_token.py`'s DELIBERATE
         falsifier catches a call restored to DELIBERATE or to the `tenures` getter. It does NOT
         catch a new call added to RESOLVE, WITNESS or CENSUS -- there is no scan for that, only
         this docstring's word that the disposition is "here, once a season, and nowhere else." A
         future caller elsewhere would need its own review, not an automatic red.
         ⚠ IT IS STILL NOT A GATE WRITE, and that is stated rather than left to be found: it moves
         an already-admitted Tenure between two Python lists and changes none of its fields, so it
-        has no `(kind, field)` row to be checked against. What G2 changes is WHERE it may run.
+        has no `(kind, field)` row to be checked against.
         `test_g2_token.py::test_g2_deliberate_mutates_no_store_by_any_route` is the falsifier --
         restore either old call and it goes red on a planted unhomed Tenure."""
         if not self._unowned:
@@ -1114,17 +1138,15 @@ class World:
         for t in self._unowned:
             (self.persons[t.subject].tenures if t.subject in self.persons else keep).append(t)
         self._unowned = keep
+        self._tenure_version += 1
 
     def _refuse_undeclared_kind(self, thing, wclass, sname, record_kind, fieldname,
                                 emits, declared) -> None:
         """A kind no Part D row declares is a FABRICATED kind, and the `emits:` column is the only
         thing that may name one.
 
-        ⚠ ONE RULE, ONE MESSAGE. This lived twice — once on the must-name-a-kind path and once on
-        the exempt path — and the two copies said *"which Part D does not declare for it"* and
-        *"undeclared"*, so a test matching one passed and the other did not. §8 broken inside a
-        single function, which is the smallest scale this repo has yet found it at. Found by the
-        `W4` adversarial pass."""
+        ⚠ ONE RULE, ONE MESSAGE, for the must-name-a-kind path and the exempt path alike, so a test
+        matching one message matches both (§8)."""
         if emits is None or emits in declared:
             return
         TRACE.write(thing, wclass.value, sname, False)
@@ -1159,14 +1181,12 @@ class World:
         as `NotYours` and put back rather than excused as a no-op that left it standing.
 
         A closure is every other writer's -- MATTER's clocks, CALENDAR, WITNESS's deposits, the
-        probes, and the fold's check-only pairs after its first. It is applied unjudged, exactly as
-        before G4, and its return value is returned. ⚠ THAT IS A BOUND, NOT AN OVERSIGHT: `04 §C.2`
-        puts the no-op check on EVERY write, and the plan's position G4 rewrites the EFFECTS'
-        contract. A MATTER write that moves nothing still traces as written and still emits its
+        probes, and the fold's check-only pairs after its first. It is applied unjudged, and its return
+        value is returned. ⚠ THAT IS A BOUND, NOT AN OVERSIGHT: `04 §C.2`
+        puts the no-op check on EVERY write, and the closure path does not apply it. A MATTER write that moves nothing still traces as written and still emits its
         declared kind -- and that is LIVE, not hypothetical: `dwelling` wears at 0
         (`rosters.yaml`), so every dwelling's `condition.worn` every season is exactly F9's shape.
-        Moving those writers onto `Change` is their own position's question, and MATTER has no
-        refusal kind for a no-op to become.
+        MATTER has no refusal kind for a no-op to become.
 
         `G3`. `actor` AND `via` ARE WHO IS WRITING AND THROUGH WHICH SEAT -- `04 §C.2`'s
         `gate.write(token, kind, field, id, change, actor?, via?)`. Both default to `None`, which
@@ -1179,23 +1199,12 @@ class World:
         (write_class, tick)` -- constructed by loop/driver and NOWHERE ELSE"* -- and `04 §C.2`'s
         *"`gate.write(token, ...)`"*. The token is checked FIRST, before the matrix row, so a
         caller holding no token is refused as `NoToken` whatever it was trying to write; its class
-        then feeds the existing S30.2 check unchanged. It stays in the second position, where the
-        bare class sat, so every call site changed by one argument and nothing else moved.
+        then feeds the S30.2 check.
 
-        ⚠ THE S30.2 CHECK STOPPED BEING WEAK HERE, NOT WHOLLY CIRCULAR (corrected 2026-09-26,
-        antagonist pass on G2: "could not fail for any of them" overstated it). Before G2 the
-        fold's own writes passed `mrow.write_class(Step.RESOLVE)` -- a class computed from the
-        HARDCODED step `Step.RESOLVE`, not from `self.step`. On a row written at more than one
-        step (`[MAT,RES]`, e.g. `(Person, body)`), a fold write that somehow ran while
-        `self.step` was NOT `RESOLVE` would still have been checked correctly, because the two
-        sides used different steps to compute the SAME class value only when they agreed by
-        construction -- every real fold write happens at RESOLVE, where they always did agree.
-        What was genuinely circular, and is the property G2 actually fixes: a fold write AT
-        RESOLVE could never disagree with itself, because both sides derived the identical class
-        from the identical step. The class now comes from the token the DRIVER minted for the
-        step, and the step name from `self.step` -- two INDEPENDENT sources for the same
-        real-world case, so a driver that handed RESOLVE a MATTER token is refused here, which
-        the old comparison could not express because it never asked the driver at all.
+        ⚠ THE S30.2 CHECK HAS TWO INDEPENDENT SOURCES: the class comes from the token the DRIVER
+        minted for the step, and the step name from `self.step`, so a driver that handed RESOLVE a
+        MATTER token is refused here. (A class computed from a hardcoded step on the write side and
+        the same step on the check side could never disagree with itself.)
 
         `W4`. THE GATE IS ALSO THE EMITTER, because `H-12` is `ruled` that way: *"MATTER emits
         an Event per write so crossings have an antecedent"*, default *"Part D's `emits:` column"*.
@@ -1212,10 +1221,10 @@ class World:
         the social partition are already read from, so a new MATTER write inherits its emission by
         existing rather than by remembering.
 
-        `observed=` (plan position `19d`) is WHAT THE WRITER READ TO REACH THIS WRITE: a tuple of
+        `observed=` is WHAT THE WRITER READ TO REACH THIS WRITE: a tuple of
         `data/requires.py::Observation`, put on the Event this call emits, which is `Event.observed`'s
         own meaning (`W-B`). The fold fills that field from a Verdict. The one writer here is MATTER's
-        larder pass, which records the shortfall a drained larder left (`loop/matter.py`, `19d`).
+        larder pass, which records the shortfall a drained larder left (`loop/matter.py`).
         ⚠ IT RIDES ONLY ON AN EMISSION: observations passed with no `emits=` are refused rather than
         dropped, since a read no Event carries reaches no witness and would be lost silently."""
         # G2. NO TOKEN, NO WRITE -- and nothing else is consulted first, so the refusal is
@@ -1232,9 +1241,9 @@ class World:
                 f"World.write({thing!r}, ...) was handed a token minted at tick {token.tick}; the "
                 f"world is at tick {self.tick}. A token is dropped at its barrier (04 §C.1) and a "
                 f"kept one authorizes nothing a season later.")
-        # G4. ONE OR THE OTHER, AND A `Change` THAT IS NOT ONE IS REFUSED BY TYPE: an effect still
-        # written to the pre-G4 contract (mutate, return ids) returns a list, and admitting it as a
-        # closure would re-open exactly the unjudged path this position closes. After the token
+        # ONE OR THE OTHER, AND A `Change` THAT IS NOT ONE IS REFUSED BY TYPE: an effect on the
+        # retired contract (mutate, return ids) returns a list, and admitting it as a
+        # closure would re-open the unjudged path. After the token
         # checks, so a write with no token is still refused for want of a token first (G2).
         if (apply is None) == (change is None):
             raise InstrumentDefect(
@@ -1247,7 +1256,7 @@ class World:
                 f"change. An effect returns a `state/gate.py::Change` -- the subjects it writes and "
                 f"the write -- so the gate can read them before and after (G4); an effect still "
                 f"mutating and returning ids is on the retired contract")
-        # `19d`. Checked after the token and the closure-or-Change checks, so those refusals stay
+        # Checked after the token and the closure-or-Change checks, so those refusals stay
         # the first ones a malformed call meets (G2's attributability).
         if observed and emits is None:
             raise InstrumentDefect(
@@ -1257,9 +1266,9 @@ class World:
         wclass = token.write_class
         step = self.step
         sname = step.value if step else "-"
-        # W2: THE GATE IS KEYED ON `(kind, field)`, which is how S30's own rule is stated. It was
-        # keyed on `thing`, and that is defect D1 in one line: `(Person, convictions)` rode on
-        # `stance`'s row, so a real gap became a PASS. `thing` survives as a TRACE label only.
+        # THE GATE IS KEYED ON `(kind, field)`, which is how S30's own rule is stated. Keyed on
+        # `thing`, `(Person, convictions)` would ride on `stance`'s row, so a real gap became a PASS.
+        # `thing` is a TRACE label only.
         try:
             row = matrix_row(record_kind, fieldname)
         except Unspecified:
@@ -1268,9 +1277,8 @@ class World:
         allowed = row.steps
         if step not in allowed:
             TRACE.write(thing, wclass.value, sname, False)
-            # ⚠ REV 4. Rev 3 raised Unspecified here on the argument that S30 and S30.1 are
-            # one doctrinal condition. THEY ARE NOT, and the over-correction reported THREE OF
-            # THE DESIGN'S PROUDEST REFUSALS AS DEBTS: W3 ("the world sours a mood"), A3 ("an
+            # ⚠ A REFUSAL IS NOT A DEBT. S30 and S30.1 are not one doctrinal condition, and raising
+            # Unspecified here would report THREE OF THE DESIGN'S PROUDEST REFUSALS AS DEBTS: W3 ("the world sours a mood"), A3 ("an
             # arc ends at a counter"), P19 ("a threshold produces an outcome") all showed as
             # UNSPECIFIED at S30 -- L4 and L5 tallied as things the design failed to say.
             #
@@ -1298,10 +1306,9 @@ class World:
                 f"({record_kind}, {fieldname}) is social:true and was written by {driver}", "S3-L4",
                 needs="a named person's act",
                 law=f"L4 -- social:true means ONLY AN ACT may write it. The world may silt a harbour; IT MAY NOT SOUR A TOWN'S MOOD. [row provenance: {prov}]")
-        # W2 AUDIT: `(Person, coherence)` is written ONLY through seam Events (#353 :1904), and
-        # the seam is RESOLVE via `contest` (:98). The row said so IN A COMMENT, which constrains
-        # nothing -- this file's own fidelity rule 6: a false claim of enforcement is worse than
-        # none. Bounded here, on `(Tenure, until)`'s precedent one block below.
+        # `(Person, coherence)` is written ONLY through seam Events (#353 :1904), and
+        # the seam is RESOLVE via `contest` (:98). A row's comment constrains nothing, so it is
+        # bounded here, on `(Tenure, until)`'s precedent one block below.
         if (record_kind, fieldname) == ("Person", "coherence") and driver != "Seam":
             TRACE.write(thing, wclass.value, sname, False)
             raise Forbidden(
@@ -1312,8 +1319,8 @@ class World:
                     "licensed clock, and §25.1 says the three are exhaustive")
 
         # S15.3 -- THE SEAM IS BOUNDED BY A CAUSATION RULE, NOT BY THE COLUMN. An actorless row
-        # may write Tenure.until ONLY on a (Person, exists) change THE SAME ROW ALSO CAUSED -- OR,
-        # SINCE PLAN POSITION `17b`, ON THE MATURATION OF A TERM DECLARED BY AN ACT. That second
+        # may write Tenure.until ONLY on a (Person, exists) change THE SAME ROW ALSO CAUSED -- OR
+        # ON THE MATURATION OF A TERM DECLARED BY AN ACT. That second
         # cause is not a second seam: `04 §B.8`'s synthesis call rules it ONE seam with the rule
         # generalised, *"an actorless row may write `until` only where its cause is the existence
         # change it also caused, OR the maturation of a term declared by the act that opened this
@@ -1366,16 +1373,12 @@ class World:
                 self._refuse_undeclared_kind(thing, wclass, sname, record_kind, fieldname,
                                              k, declared)
 
-        # G1a. THE WINDOW OPENS HERE -- after every refusal above has had its chance and
+        # THE WINDOW OPENS HERE -- after every refusal above has had its chance and
         # immediately before the mutation, so a write that is going to be refused never
-        # authorizes a mint. ⚠ CORRECTED (methodology close, terminal critique, 2026-09-29): this
-        # comment described the PRE-G4 shape, where the window stayed open past `apply()` so
-        # `loop/resolve.py`'s `_apply_write` could mint from outside, after this call returned.
-        # Since G4 the gate mints internally -- for a `Change`, at both `self.gate.mint(...)` call
-        # sites below, inside this same `try` -- and the fold mints nothing; the window now closes,
-        # unconditionally,
-        # before THIS call returns (the `finally` at the method's end), never surviving past it.
-        # `state/gate.py`'s header states the bound that buys and the one it does not.
+        # authorizes a mint. The gate mints internally -- for a `Change`, at both `self.gate.mint(...)`
+        # call sites below, inside this same `try` -- and the fold mints nothing; the window closes,
+        # unconditionally, before THIS call returns (the `finally` at the method's end), never
+        # surviving past it. `state/gate.py`'s header states the bound that buys.
         self.gate.opening(record_kind, fieldname, wclass.value, self.tick)
         try:
             # G3 -- F3, `04 §C.2`: WHO WROTE EACH TENURE. The store is observed around `apply()`
@@ -1404,7 +1407,7 @@ class World:
                 if changes:
                     gone = frozenset().union(*(was_ids - set(store) for was_ids, (_, store)
                                                in zip(existed, self._entity_stores())))
-                    # `24e`: AND `born`, THE MIRROR -- every id this same write ADDED, observed the
+                    # AND `born`, THE MIRROR -- every id this same write ADDED, observed the
                     # same way, for the `founding` basis (a newborn Rung's `contain` edge). The
                     # caller claims neither set; the store's before-and-after is the evidence.
                     born = frozenset().union(*(set(store) - was_ids for was_ids, (_, store)
@@ -1438,24 +1441,18 @@ class World:
             if change is not None:
                 # THE GATE MINTS, AND ONLY FOR WHAT MOVED -- `04 §C.2`'s `r = Receipt(...)` after the
                 # no-op check, so a receipt for a write that did not happen is never issued at all.
-                # Field and mode are the pair's and `"set"`, the receipt the fold used to mint by hand.
+                # Field and mode are the pair's and `"set"`.
                 before = [(s, self.gate.mint(s.id, "set", driver, fieldname)) for s in moved]
             if emits is not None:
                 # ⚠ THE SUBJECT IS THE RECORD, NOT THE TRACE LABEL. `thing` is a human label for the
                 # trace line (`"condition"`); the emission's subject has to be the RECORD ID or
-                # nothing can find the emission again. The first version used `thing`, so every
-                # site's wear emitted under the subject `"condition"` — and `last_emission_of`
-                # therefore never matched, so season 1's wear re-rooted at `[ROOT]` and the clock did
-                # not chain. That is exactly the failure `W4`'s ROOT-count proof exists to catch, and
-                # it caught it.
+                # nothing can find the emission again: `last_emission_of` would never match, season 1's
+                # wear would re-root at `[ROOT]` and the clock would not chain (`W4`'s ROOT-count proof).
                 #
-                # ⚠ `subject=` OUTLIVED `Event.subject` (G1b, 2026-09-26), AND IT HAD TO. The plan
-                # said to delete both; this parameter is not the field. It is the ONLY place the gate
-                # learns WHICH RECORD it wrote -- `thing` is a label, `apply` is opaque -- and it goes
-                # on the minted receipt below as `Receipt.subject`, which is `anchor_of`'s tier 2 and
-                # therefore what `last_emission_of` matches on. Deleting it would have vacated the
-                # change channel on every gate emission and re-rooted every MATTER clock: the
-                # "channel goes quiet" failure G1b's own plan row warns of.
+                # ⚠ `subject=` IS THE ONLY PLACE THE GATE LEARNS WHICH RECORD IT WROTE -- `thing` is a
+                # label, `apply` is opaque -- and it goes on the minted receipt below as
+                # `Receipt.subject`, which is `anchor_of`'s tier 2 and therefore what
+                # `last_emission_of` matches on.
                 if subject is None:
                     raise Forbidden(
                         f"({record_kind}, {fieldname}) emits {emits!r} with no `subject=`", "S33",
@@ -1469,14 +1466,11 @@ class World:
                             "to be remembered -- and a one-shot emission with a forgotten `subject=` "
                             "is silent. Found by the `W4` adversarial pass")
                 subj = subject
-                # ⚠ THE DRAW ORDINAL IS PART OF THE ID, AND IT WAS NOT. Without it the id is
+                # ⚠ THE DRAW ORDINAL IS PART OF THE ID. Without it the id is
                 # `(seed, tick, subject, kind)`, so TWO EMISSIONS OF ONE KIND ON ONE SUBJECT IN ONE
                 # TICK GET THE SAME ID — and `W8` produces exactly that: MATTER's larder draw and its
                 # yield credit both write `(Rung, stores)` and both emit `stores.changed` for the same
-                # rung in the same season. The `W4` adversarial pass named this months of work ago in
-                # the abstract (*"the emission id carries no draw ordinal; `new_draw()` has zero
-                # callers"*) and nothing could reach it until there were two same-kind writes; the
-                # uniqueness guard caught it the moment there were. S33's ordinal is the mechanism the
+                # rung in the same season. S33's ordinal is the mechanism the
                 # design already carries, reset per tick by `season()`, so ids stay reproducible: the
                 # write order is deterministic (every loop here is sorted) and the counter follows it.
                 ev = Event(
@@ -1486,11 +1480,9 @@ class World:
                     # widening `H`'s signature would have been a second way to say the same thing.
                     id=H(self.world_seed, self.tick, subj, f"emit:{emits}#{self.new_draw()}"),
                     kind=emits,
-                    # G1a. MINTED, NOT CONSTRUCTED. This Event is the gate's own emission, so its
-                    # change is the one receipt in the tree whose provenance was never in doubt --
-                    # which is exactly why it is the right place to prove the mint works end to end.
-                    # `Receipt` subclasses `StateChange` and adds no hashed field, so this line moves
-                    # no content hash and `runs/` stays byte-identical.
+                    # MINTED, NOT CONSTRUCTED. This Event is the gate's own emission, so its
+                    # change is a receipt the gate minted. `Receipt` subclasses `StateChange` and adds
+                    # no hashed field.
                     changes=[self.gate.mint(subj, "set", wclass.value, fieldname, None)],
                     # ⚠ `causes` IS REQUIRED IN SUBSTANCE AND THE DEFAULT IS NOT `[ROOT]`. Handing an
                     # un-caused emission the root is how every Event in the `W9` artifact came to
@@ -1502,16 +1494,14 @@ class World:
                     observed=tuple(observed))
                 # ⚠ NO EMPTY-`causes[]` CHECK HERE. `Event.__post_init__` already refuses one at
                 # S19.4, and re-implementing it would be `CLAUDE.md` §8's violation one constructor
-                # apart — the first version of this block did exactly that and shipped two messages
-                # for one rule. The Event constructor raises before this line is reached.
+                # apart. The Event constructor raises before this line is reached.
                 self.log.append(ev)
                 TRACE.event(ev.id, ev.kind, ev.causes)
                 # ⚠ BUFFERED ONLY AT MATTER, AND THE SCOPE IS THE POINT. `matter()` drains this to
                 # decide what WITNESS fans out. A WITNESS-step emission (`claim.deposited`) left in
                 # the buffer survives into the NEXT season's MATTER and is fanned there, which closes
-                # a loop: a deposit emits, the emission is witnessed, that deposit emits. Measured
-                # before this guard: `claim.deposited` reached 249 in a two-season run and was
-                # accelerating. The buffer is MATTER's, so only MATTER fills it.
+                # a loop: a deposit emits, the emission is witnessed, that deposit emits. The buffer
+                # is MATTER's, so only MATTER fills it.
                 if step is Step.MATTER:
                     self._emitted_by_write.append(ev)
                 # CP-T02-01: one Event per further kind a MOVED subject earned, carrying those
@@ -1530,27 +1520,14 @@ class World:
                     if step is Step.MATTER:
                         self._emitted_by_write.append(ev_k)
         finally:
-            # H-131 / GATE-REMOVE-PERSON, TWICE (methodology close, 2026-09-29). FIRST PASS: the
-            # two refusal branches above closed the window by hand (`not_yours`, `no_op`); the
-            # SUCCESS path did not, so `gate.is_open` stayed permanently True after any world's
-            # first successful write, never resetting at a season/step boundary — making
-            # `remove_person`'s bare-call guard (its `if not self.gate.is_open:` line, above)
-            # vacuous the instant a season actually ran,
-            # since it could only ever catch a call on a pristine, never-written World. The first
-            # fix added a THIRD hand-written `close()` at the success return, matching the two —
-            # and missed a FOURTH exit that already existed: the S33 `Forbidden`, earlier in this
-            # same try block,
-            # (no `subject=` on a declared emission) also raises after `opening()`, and nothing had
-            # ever closed the window on THAT path either. Enumerating exits by hand is exactly the
-            # failure mode that let both gaps stand — the SECOND pass (ALTITUDE lens, same
-            # methodology close) replaced all three hand-written calls with this ONE unconditional
-            # `finally`, so window-closure no longer depends on anyone remembering to add it at a
-            # new or overlooked exit. Safe for the same reason as before: `is_open` has exactly one
-            # production reader (`remove_person`'s bare-call guard, above) and `mint()` has exactly
-            # one caller
-            # (`World.write` itself, both calls inside this `try`, so nothing after it still needs
-            # the window). Narrower than H-131's own open question (closing at ORDINARY BARRIER
-            # TRANSITIONS independent of any write) — this closes only the window THIS call opened.
+            # THE WINDOW CLOSES ON EVERY EXIT -- success, the F3 and F9 refusals, the S33 `Forbidden` --
+            # by this ONE `finally`, not by a call mirrored at each exit, so a new exit cannot leak it
+            # (`gate.is_open` stays False between writes, which `remove_person`'s bare-call guard
+            # reads). `is_open` has exactly one production reader (that guard) and `mint()` has
+            # exactly one caller (`World.write` itself, both calls inside this `try`, so nothing after
+            # it still needs the window). Narrower than H-131's own open question (closing at ORDINARY
+            # BARRIER TRANSITIONS independent of any write) -- this closes only the window THIS call
+            # opened.
             self.gate.close()
         return before
 
@@ -1573,32 +1550,15 @@ class World:
         `W4`'s chaining primitive: a licensed clock's next tick names its previous one, so
         `[ROOT]` stops appearing after the clock's genuine first emission.
 
-        G1b. Reads `anchor_of`; `Event.subject` is deleted. ⚠ CORRECTED 2026-09-26, ANTAGONIST
-        PASS ON G1b's OWN CLOSURE: the first writing of this docstring claimed every emission
-        this method is EVER asked about comes from `write`'s own auto-emission block above, "by
-        construction, not by coincidence" -- true for a kind MATTER alone emits (`stores.changed`,
-        `condition.worn`, `yield.taken`, `claim.deposited`, `claim.decayed`), false for
-        `body.changed` and `person.died`, which the FOLD also emits on `Wounded`/`Felled`
-        (`verb_table.yaml`). A fold-emitted Event of either kind carries `causes=[a.id]`
-        (`loop/resolve.py`), so `anchor_of`'s tier 1 (actor) wins over tier 2, and the id returned
-        is the COMBATANT's, not the victim's `pid` this method was asked about. NOT A REGRESSION:
-        the deleted field carried the identical value for a fold-emitted Event (`Event(H(...), k,
-        a.actor, ...)`), so `last_emission_of("body.changed", <victim>)` already missed a
-        combat-caused wound before this deletion -- this docstring's overclaim is new, the gap it
-        describes is not. Both halves of H-129 are FIXED at their one caller each
-        (`hole_register.yaml` H-129): `person.died` through `written=True` and, at v10 REM-52 (where
-        `body_step` shipped at 10, so the caller is reached on a built world), the bodies pass's
-        `body.changed`.
-        Every OTHER caller of this method (the six kinds above) is unaffected: each names a kind
-        with exactly one emitter, MATTER's own auto-emission block, so tier 2 still returns `subj`
-        by construction for all of them. ⚠ "SIX", NOT SEVEN, AND "MATTER'S OWN" NO LONGER COVERS
-        EVERY ONE -- STALE, NOT WRONG (BATCH-CLOSE, methodology-close Phase 3 terminal critique,
-        F12, 2026-09-29): plan position `11b` added a seventh caller, CALENDAR's own `date.fired`
-        chain (`loop/calendar.py:46`), with a single emitter of its OWN (CALENDAR's explicit
-        `emits=`, not MATTER's auto-emission block), and the same tier-2-by-construction argument
-        holds for it -- one emitter, one match, `subj` returned by construction -- just not for
-        the reason this sentence states. Not corrected further here: the count is cosmetic and
-        the property this paragraph defends is unaffected."""
+        Reads `anchor_of` (`Event.subject` does not exist). ⚠ `body.changed` and `person.died` are also
+        emitted by the FOLD (on `Wounded`/`Felled`, `verb_table.yaml`) with `causes=[a.id]`
+        (`loop/resolve.py`), so `anchor_of`'s tier 1 (actor) wins over tier 2 and the id returned is the
+        COMBATANT's, not the victim's `pid` this method was asked about: `last_emission_of("body.changed",
+        <victim>)` misses a combat-caused wound. Both halves of H-129 are FIXED at their one caller each
+        (`hole_register.yaml` H-129): `person.died` through `written=True` and the bodies pass's
+        `body.changed`. Every OTHER caller names a kind with exactly one emitter (MATTER's own
+        auto-emission block, or CALENDAR's own `emits=` for the `date.fired` chain,
+        `loop/calendar.py`), so tier 2 returns `subj` by construction for all of them."""
         # IN-56. A LOOKUP. The two maps are filled by `_on_logged` on every append, so the answer
         # is the last-appended Event of `kind` that matches -- what the reverse scan returned.
         return (self._last_by_subject if written else self._last_by_anchor).get((kind, subject))
@@ -1627,7 +1587,7 @@ class World:
         self._barrier_cache.clear()
         self._verify_tenure_shadow()
 
-    # -- S33/S45.2/S66: THE ARTIFACT IS A CONTENT HASH OVER THE LOG. Rev 1 had none, and it is
+    # -- S33/S45.2/S66: THE ARTIFACT IS A CONTENT HASH OVER THE LOG. It is
     # the one execution artifact the architecture names as its done-condition.
     def new_draw(self) -> int:
         """S33's draw ordinal. Reset at the start of every tick by `season()`."""
@@ -1641,16 +1601,9 @@ class World:
     # `test_h118_content_hash_folds_every_game_state_collection` can assert this covers the
     # World's actual attributes rather than a copy of them (§8: the rule lives once).
     #
-    # ⚠ THE FIRST VERSION OF THIS FIX FOLDED FOUR OF ELEVEN AND ITS DOCSTRING CLAIMED THE GAP
-    # CLOSED. Found by the W-0 adversarial pass, which is the reason the set is derived and
-    # tested rather than typed: `records` and `propositions` were among the omissions, and
-    # `create_record` and `utter` -- two of the FIVE verbs that execute in the corpus -- write
-    # exactly those (`_eff_create_record`, `_eff_destroy_record`, `_eff_utter`). So the same
-    # blindness H-118 measured on `persons` was live on the collections the corpus actually
-    # moves, behind a docstring saying otherwise.
-    # ⚠ `petitions` and `dispensations` LEFT THIS TUPLE WITH THEIR DICTS (plan position `15`) --
-    # both are Record kinds, folded here under `records`. MEASURED rather than assumed inert: no
-    # production builder populated either, so every world's hash is what it was.
+    # ⚠ THE SET IS DERIVED AND TESTED, NOT TYPED: `records` and `propositions` must be among
+    # them -- `create_record` and `utter` write exactly those (`_eff_create_record`,
+    # `_eff_destroy_record`, `_eff_utter`) -- or a state divergence behind them is invisible to the hash.
     # roster-exempt: MECHANISM, on the same ground as `_STEP_CLASS` above. These are `World`'s
     # OWN PYTHON ATTRIBUTE NAMES -- what the object calls its own fields -- not the game's
     # vocabulary. `rosters.yaml` holds what the WORLD contains; this holds where THIS CLASS puts
@@ -1665,11 +1618,9 @@ class World:
     _STATE_SEQUENCES = ("docket",)
 
     def content_hash(self) -> str:
-        """`H-118`: REV 1 hashed the log alone. Demonstrated there -- delete a person from one of
-        two identical worlds with no Event appended, and the hashes still matched. It now folds
-        EVERY game-state collection (`_STATE_COLLECTIONS` + `_STATE_SEQUENCES` + `tenures`; `_departed` is the one per-tick exception, cleared at each season and read only for its own tick) --
-        IN ID ORDER -- ahead of the log, so a state divergence that never reaches the log is no
-        longer invisible to it.
+        """`H-118`: folds EVERY game-state collection (`_STATE_COLLECTIONS` + `_STATE_SEQUENCES` + `tenures`; `_departed` is the one per-tick exception, cleared at each season and read only for its own tick) --
+        IN ID ORDER -- ahead of the log, so a state divergence that never reaches the log is visible to it
+        (delete a person from one of two identical worlds with no Event appended, and the hashes differ).
 
         ⚠ SORTED-KEY ORDER, NEVER INSERTION ORDER (R4). Every mapping is hashed via `sorted(...)`
         over its own keys, and `self.tenures` (the read-only owner-first VIEW, S15.1) is re-sorted
@@ -1678,12 +1629,8 @@ class World:
         added tenures in a different sequence for the same eventual world. `docket` is a LIST and
         its order is semantic (S31's queue), so it is folded in place, positionally.
 
-        `Event.observed` EXISTS AS OF `W-B` (2026-09-04) and this fold reaches it with no edit
-        here, which is what the forward-compatibility `getattr` was written for. ⚠ THE `getattr`
-        STAYS AND THE SENTENCE THAT SAID THE FIELD DOES NOT EXIST IS GONE: the guard is cheap and
-        keeps this callable on a stripped Event a test builds, but a docstring asserting the
-        absence of a field the dataclass declares is false, and false in the direction that stops
-        the next reader checking (found by the `W-B` adversarial pass).
+        `Event.observed` is folded. The `getattr` default is not a claim that the field is absent: it
+        keeps this callable on a stripped Event a test builds.
 
         GO-07: WHAT IS HASHED IS A RUN OF CANONICAL ENCODINGS (the table above `_OBJECT_HEADS`), not
         `repr()` or f-string text, so another language can rebuild it byte for byte. It is the
@@ -1707,9 +1654,8 @@ class World:
         for t in sorted(self.tenures, key=lambda t: t.id):
             h.update(_canonical(("T", t.id, t)))
         for e in self.log:
-            # G1b (2026-09-26): `Event.subject` is deleted, so it is no longer folded -- the one
-            # DECLARED hash move of that position, and it moves every hash that has a log. The
-            # written thing is still folded, as `changes[]` below; an act's actor is not folded
+            # `Event.subject` does not exist, so it is not folded. The
+            # written thing is folded as `changes[]` below; an act's actor is not folded
             # as a name, only through the ids it was minted into (`e.id`, `causes[]`).
             h.update(_canonical(("E", e.id, e.kind, e.emitted_at, e.degree, tuple(e.causes))))
             for c in e.changes:
@@ -1728,12 +1674,11 @@ class World:
     # -- S43: resolution AT BOOT, by string. A missing provider is a STARTUP FAILURE WITH A
     # NAME IN IT, not a null three seasons into a campaign.
     def boot(self, required_roles: tuple[str, ...]) -> None:
-        """⚠ THE RULE MOVED AND THE METHOD STAYED, WHICH IS THE POINT (L4, ED-IN-0206).
+        """⚠ THE RULE LIVES IN `manifest.check_roles` AND THE METHOD DELEGATES (L4, ED-IN-0206).
 
-        `04 §A.2:136` gives role->provider resolution its own module, `manifest/`, and the scan and
-        the `NoProducer` raise sat inline here -- on a STORE, which owns rows and not seams. They
-        live in `manifest.check_roles` now and this delegates, because every caller holds a `World`
-        rather than a manifest and changing that would be a wider edit than the rule needs.
+        `04 §A.2:136` gives role->provider resolution its own module, `manifest/`, because a STORE
+        owns rows and not seams; this delegates, since every caller holds a `World` rather than a
+        manifest.
 
         `check_rows()` is the other half of `04:1031`'s done-condition -- *"a misspelled manifest
         row fails at boot naming the row"* -- and it runs HERE rather than at import, so a reader

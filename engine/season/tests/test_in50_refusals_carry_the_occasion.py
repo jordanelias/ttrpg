@@ -10,8 +10,10 @@ count is in the commit).
 
 What each test observes, and the control that stops it passing vacuously:
 
-  1-4. THE FOUR REFUSAL ROUTES that did not append: `_survives`' `act.ineligible`; the S27.4
-       `attempt.refused`; the contest branch's `_admits` refusal; `_refuse_party_gap`.
+  1-4. THE REFUSAL ROUTES that did not append: `_survives`' `act.ineligible`; the contest branch's
+       `_admits` refusal; `_refuse_party_gap`. (The fold's own S27.4 `attempt.refused` arm is deleted,
+       B03.55: no act carries an obstacle of its own, and the provider's S27.4 refusal folds through
+       `_refuse_party_gap`.)
   5.   THE FOLD'S OWN REFUSAL (`_fold`'s `ev` through `_admits`) -- the route that already went
        through `_act_events` and so already named the occasion only on success.
   6.   THE NO-SCENE CONTROL: an act with no scene has no occasion and keeps `[a.id]` alone on every
@@ -26,7 +28,7 @@ from engine.season.data.matrix import Step, WriteClass
 from engine.season.decision import make_chooser
 from engine.season.harness import corpus_run as C
 from engine.season.harness import run_cases as R
-from engine.season.harness.populated import build_realm
+from engine.season.boot.realm import build_realm
 from engine.season.data.verbs import VERB_TABLE
 from engine.season.loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from engine.season.loop.resolve import _act_events
@@ -44,7 +46,7 @@ def _world_with_occasion(scene_actor=ACTOR):
     production route and not by a stub."""
     w = build_realm(0)
     d = SeasonDriver(w)
-    origin = Event("ev_in50_origin", "speech.made", [], [ROOT], w.tick)
+    origin = Event("ev_in50_origin", "news.told", [], [ROOT], w.tick)
     deposit = Event("ev_in50_deposit", "claim.deposited",
                     [StateChange("claim_in50", "set", "Act")], [origin.id], w.tick)
     w.log.append(origin)
@@ -58,13 +60,6 @@ def _resolve(w, d, act, depth=2):
     w.step = Step.RESOLVE
     w.frozen = False
     return d.resolve(mint_token(w, WriteClass.ACTS), [act], depth)
-
-
-def _over_attempt(w, act_id, **kw):
-    """A `work` whose obstacle is past the refusal multiple of its pool: the S27.4 `attempt.refused`."""
-    a = Act(id=act_id, actor=ACTOR, verb="work", **kw)
-    a.obstacle, a.pool = w.fixtures.get("obstacle_refusal_multiple") * 10 + 1, 1
-    return a
 
 
 def _check_route(events, act, occasion, kinds):
@@ -84,14 +79,6 @@ def test_in50_route_1_act_ineligible_cites_the_occasion():
     assert a.actor not in w.persons
     out = d._survives(w, a)
     _check_route(out, a, occ, ("act.ineligible",))
-
-
-# -- 2 ---------------------------------------------------------------------------------------------
-def test_in50_route_2_attempt_refused_cites_the_occasion():
-    w, d, occ = _world_with_occasion()
-    a = _over_attempt(w, "a_over", scene=SCENE)
-    out = _resolve(w, d, a)
-    _check_route([e for e in out if e.kind == "attempt.refused"], a, occ, ("attempt.refused",))
 
 
 # -- 3 ---------------------------------------------------------------------------------------------
@@ -140,7 +127,6 @@ def test_in50_control_an_act_with_no_scene_keeps_its_own_id_alone():
     w, d, _occ = _world_with_occasion()
     bare = Act(id="a_bare", actor="p_removed", verb="work")                  # no scene at all
     unknown = Act(id="a_unknown", actor="p_removed", verb="work", scene="sc_nowhere")
-    over = _over_attempt(w, "a_bare_over")
     # A SCENE THAT EXISTS AND CARRIES NO OCCASION (`occasion=None`), and one whose occasion is a
     # `need` Question about the same claim the occasioned fixture's question names: `occasioned_by`
     # returns nothing for either, so the act keeps `[a.id]` -- the scene's presence alone adds nothing.
@@ -151,13 +137,12 @@ def test_in50_control_an_act_with_no_scene_keeps_its_own_id_alone():
     need = Act(id="a_need", actor="p_removed", verb="work", scene="sc_in50_need")
     checked = 0
     for a, out in ((bare, d._survives(w, bare)), (unknown, d._survives(w, unknown)),
-                   (over, [e for e in _resolve(w, d, over) if e.kind == "attempt.refused"]),
                    (no_occ, d._survives(w, no_occ)), (need, d._survives(w, need))):
         assert out, a.id
         for e in out:
             assert e.causes == [a.id], f"{e.kind} cites {e.causes}: an act with no occasion got one"
             checked += 1
-    assert checked >= 5
+    assert checked >= 4
 
 
 # -- 7 ---------------------------------------------------------------------------------------------

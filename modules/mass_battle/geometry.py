@@ -153,17 +153,9 @@ def octagon_angle(attacker_pos, defender_pos, defender_facing_vec):
     angle_deg = math.degrees(math.acos(cos_a))
     # [canonical: Jordan design — octagon: GREEN<45deg, YELLOW 45-90deg, RED>=90deg]
     # 45.0 = half of GREEN 90deg face; 90.0 = boundary of rear hemisphere
-    # [ED-MB-0061, 2026-07-30] TWO FALSE CITATIONS REMOVED from the three lines below. They read
-    # "[canonical: mass_battle_v30.md §A.3b — 45deg octagon GREEN boundary]" and
-    # "[canonical: designs/provincial/mass_battle_v30.md §octagon]". Neither resolves:
-    # mass_battle_v30.md contains ZERO occurrences of "octagon", §A.3b is BATTLEFIELD GEOMETRY (grid
-    # dimensions, itself banner-flagged as superseded by config.py), and `designs/` is retired.
-    # This is CLAUDE.md §7's leaky-anti-fabrication-gate pattern — a fabricated citation passing the
-    # gate — sitting on the boundary constants of the facing model. Found by a read-only fable audit
-    # and re-derived by hand before removal (G12).
-    #
-    # The REAL provenance is the Jordan design line above plus ED-MB-0018 (config.py's
-    # OCTAGON_DMG_MULT block, Jordan 2026-07-22: front 1.0x / flank 1.5x / rear 2.0x damage-received).
+    # [ED-MB-0061] The provenance of these boundary constants is the Jordan design line above plus ED-MB-0018
+    # (config.py's OCTAGON_DMG_MULT block, Jordan 2026-07-22: front 1.0x / flank 1.5x / rear 2.0x
+    # damage-received); mass_battle_v30.md contains no octagon model.
     # These boundaries are vertex-forward by construction: two 45deg front faces meeting at the
     # forward VERTEX together span +/-45 (GREEN), the next face each side spans 45-90 (YELLOW), and
     # the four rear faces span 90-180 both ways (RED). A face-forward octagon would put the
@@ -238,13 +230,11 @@ def _oriented_abs_map(atom):
     import modules.mass_battle.hierarchy.units as _u
     amap = {}
     if _u.FIELD_MOVEMENT and _u.MB_NODE_COHESION and hasattr(atom, '_node_pos'):
-        # [Fable-audit B1 fix, 2026-07-24] Iterate the atom's LIVE continuous footprint (_oriented) and
-        # SKIP any id absent from _node_pos -- do NOT default a missing key to the origin (0,0). The prior
-        # version iterated oriented_pattern(shape,tier) (the LEGACY CELL_PATTERN_FN tier ids) while _node_pos
-        # is keyed by the continuous _build_shape_n/footprint_for ids. For any density-built subunit whose
-        # continuous footprint diverges from the tier pattern (Arrowhead: only 1/6 ids matched) every miss
-        # collapsed to abs (0,0) -> contact cells resolved to [] -> the pool floored -> the wedge lost 0/100.
-        # _oriented(atom) IS the footprint _node_pos was populated from, so the keys now match.
+        # Iterate the atom's LIVE continuous footprint (_oriented) and SKIP any id absent from _node_pos -- do NOT
+        # default a missing key to the origin (0,0): _node_pos is keyed by the continuous _build_shape_n/
+        # footprint_for ids, which for a density-built subunit diverge from the legacy CELL_PATTERN_FN tier ids
+        # (Arrowhead: only 1/6 ids matched), and a miss would collapse to abs (0,0). _oriented(atom) IS the
+        # footprint _node_pos was populated from, so the keys match.
         for orig_r, orig_c, or_r, or_c in _oriented(atom):
             if (orig_r, orig_c) not in atom._node_pos:
                 continue                                        # unseeded cell: skip, never default to origin
@@ -253,12 +243,11 @@ def _oriented_abs_map(atom):
             abs_c = int(round(_pc / _u.COL_WIDTH))
             amap.setdefault((abs_r, abs_c), (orig_r, orig_c))   # FIRST-wins: matches the file-binned cells() keys
         return amap
-    # [Fable-audit B1/B3 fix, 2026-07-24] Grid path: iterate _oriented(atom) — the SAME footprint
-    # cell_offsets is keyed by (units.py: "_oriented(self) is the sole source of the (or_r,or_c) offset").
-    # The prior version iterated oriented_pattern(shape,tier), which diverges from the footprint ids for any
-    # density-built continuous subunit, so this map disagreed with the octagon damage layer (which already
-    # open-coded off _oriented). Byte-identical for legacy troops=None subunits (_oriented falls back to
-    # oriented_pattern); consistent for continuous ones. This makes _oriented_abs_map the single identity map.
+    # Grid path: iterate _oriented(atom) — the SAME footprint cell_offsets is keyed by (units.py:
+    # "_oriented(self) is the sole source of the (or_r,or_c) offset"), not oriented_pattern(shape,tier),
+    # which diverges from the footprint ids for density-built continuous subunits. Byte-identical for legacy
+    # troops=None subunits (_oriented falls back to oriented_pattern). This makes _oriented_abs_map the
+    # single identity map.
     for orig_r, orig_c, or_r, or_c in _oriented(atom):
         abs_r = (atom.starting_position[0] + or_r
                  + atom.cell_offsets.get((orig_r, orig_c), 0) * atom.advance_dir)
@@ -305,23 +294,11 @@ def support_engage_frac(atom, contact_abs_cells):
     effective_engaged = len(contact_orig) + supporter_total
     return min(1.0, effective_engaged / max_w)
 
-# ─── F-iii: FACING HELPERS — RETIRED (ED-MB-0041 Tier-2) ─────────────────────
-#
-# `_cell_facing_key` / `_rotate_defender_facing` / `_init_dynamic_facings` / `_atom_avg_facing`
-# and the `dynamic_facings` dict they operated on are DELETED. They were a **write-only** parallel
-# facing store: `run_battle` built the dict, passed it into `resolve_engagements` (which never read
-# it), and `_rotate_defender_facing` wrote rotations into it after each sub-phase. Its only reader,
-# `_atom_avg_facing`, had ZERO call sites anywhere in the corpus.
-#
-# The concept it encoded — "an engaged defender's cells pivot to face their attacker" — is LIVE and
-# strictly better implemented by `Subunit.cell_facing_vec` (`hierarchy/units.py`): MB_FACING_ATTENTION
-# turns each cell toward the committed target, `_slew_facing` gates the turn rate by Discipline
-# (no instant full pivot), MB_FACING_ROUT flips a routed body's facing, and `get_cell_facing` is what
-# `_octagon_cell_mods` / `_cell_facing_for_box` actually read. `dynamic_facings` was the superseded
-# duplicate, not the mechanism.
-#
-# Deletion is behaviour-preserving by construction (nothing read the dict), so the byte-exact goldens
-# are unchanged. Per the audit's Tier-2 rule: wire or delete, no third option.
+# ─── F-iii: FACING ───────────────────────────────────────────────────────────
+# An engaged defender's cells pivot to face their attacker via `Subunit.cell_facing_vec`
+# (`hierarchy/units.py`): MB_FACING_ATTENTION turns each cell toward the committed target, `_slew_facing`
+# gates the turn rate by Discipline (no instant full pivot), MB_FACING_ROUT flips a routed body's
+# facing, and `get_cell_facing` is what `_octagon_cell_mods` / `_cell_facing_for_box` read.
 
 # ─── PER-CELL SPEED ──────────────────────────────────────────────────────────
 
@@ -360,11 +337,9 @@ def _oriented(su):
 #
 # THE BODY IS A CIRCLE of radius CELL_RADIUS (0.5), so its diameter is the formation pitch (COL_WIDTH = 1.0).
 # It is the one shape for which two cells at the formation's OWN spacing cannot overlap at ANY relative rotation:
-# a cell turning to face an enemy can never push its body into a neighbour's. Measured (systems/mass_battle/sim/
-# stress.py, then a direct SAT of two bodies one pitch apart, the second turned by theta): a unit square turned to
-# its own facing overlapped its neighbour by 0.079 at 10 degrees, 0.153 at 22.5 and 0.207 at 45; a regular
-# octagon of the same apothem still by up to 0.041; a circle by none. The unit square this replaces (CellBox) was
-# the cause of overlap inside every wheeling formation, which no tolerance could fix without freezing it.
+# a cell turning to face an enemy can never push its body into a neighbour's.
+# (A unit square turned to its own facing overlaps its neighbour at any non-zero rotation; a regular
+# octagon of the same apothem still does; a circle never does.)
 #
 # FACING IS NOT THE BODY'S SHAPE. The octagon is the partition of the directions a cell is struck FROM
 # (`octagon_angle`: front under 45 degrees, flank 45 to 90, rear beyond), turned with the cell's facing vector;

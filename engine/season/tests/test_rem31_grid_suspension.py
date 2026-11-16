@@ -35,7 +35,7 @@ import random
 from engine.season.data.matrix import Step, WriteClass
 from engine.season.decision import make_chooser
 from engine.season.harness.play_surface import dispatching_chooser
-from engine.season.harness.populated import build_realm
+from engine.season.boot.realm import build_realm
 from engine.season.loop import deliberate as deliberate_mod
 from engine.season.loop import driver as driver_mod
 from engine.season.loop.driver import SeasonDriver, resolvable_verbs

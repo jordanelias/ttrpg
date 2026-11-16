@@ -19,7 +19,7 @@ INVOCATION: /methodology-execute Batch B33-inst-economy-hands
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_FA.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
-GATE: Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0
+GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B04-capability-home
 GATE: Batch B05-one-roll
 GATE: Batch B07-task-draw
@@ -306,7 +306,7 @@ Not in this batch, and where each is: `BYZ_A`, `BYZ_E`, `COL_A`, `PAP_A`, `PAP_B
 - FALSIFIER and CONTROL: the control arm's hash moves (the centre leaked into `foreign=False`). Control: gate 1, "`build_realm(0, foreign=False)`: `content_hash` unchanged".
 - GATE: `python -m pytest engine/season/tests/test_inst_byz_d.py -q` → pass; `python tools/validate_ed_citations.py` → exit 0 (the registry row cites nothing new); the foreign-arm build hash (`HASH READING`) at seed 0 → moved, recorded for B33.99.
 - HASH MOVERS: "the foreign-arm build hash" (BYZ_D "Cost class"): one Person, one Rung. Declared; B33.99.
-- DEPENDS ON: EXISTS-IN-TREE `S/rosters.yaml: foreign_cast.by_faction."Altonia"` (`territory: {code: "ALT"}`, `settlement: {code: "ALT-1"}`), `faction_leaders`, `S/data/rosters.py::FOREIGN_CAST`, `references/npc_registry.yaml` (last row NPC-090); V12 Batch B03c (`boot/realm.py`); V12 B33.08.
+- DEPENDS ON: EXISTS-IN-TREE `S/rosters.yaml: foreign_cast.by_faction."Altonia"` (`territory: {code: "ALT"}`, `settlement: {code: "ALT-1"}`), `faction_leaders`, `S/data/rosters.py::FOREIGN_CAST`, `references/npc_registry.yaml` (last row NPC-090); V12 Batch B03c @544cf5719c620331b70aeda93c1672977b44e9ef (`boot/realm.py`); V12 B33.08.
 - GLOSSARY: none (`[PLACEHOLDER]` posts are not words; the place has a code and no name, as the `foreign_cast` note states).
 - NAMES: `harness/populated.py::build_realm` → `S/boot/realm.py::build_realm` (§5.10, B03c).
 - IDS: NPC 1 (UNDECIDED 3).

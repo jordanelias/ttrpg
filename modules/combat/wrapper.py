@@ -57,20 +57,16 @@ def _select(c, opp, closed, cfg, measure_gap):
 def _carry(ready, cfg):
     """Phase-transition readiness: keep each fighter's RESIDUAL cadence phase, drop any banked whole action.
 
-    [ED-PC-0037, F16] These transitions used to hard-zero `ready` for both fighters — 'the closed phase starts fair
-    (no banked approach tempo)'. The intent was fairness; the effect was the opposite. Zeroing RE-SYNCHRONISES the
-    cadence race, and a synchronised race is won by the same fighter every single time, so a weapon with a 1.5% tempo
-    edge did not act 1.5% more often — it acted FIRST always, converting a rounding-error advantage into a 2:1 action
-    economy. Keeping the residual (ready mod ACT_THRESHOLD) preserves the real intent — nobody carries a free
-    completed action across the transition — while leaving each fighter where their own cadence actually left them.
+    [ED-PC-0037, F16] A hard zero of `ready` would RE-SYNCHRONISE the cadence race, and a synchronised race is won by
+    the same fighter every single time, so a weapon with a 1.5% tempo edge would act FIRST always — a 2:1 action
+    economy. Keeping the residual (ready mod ACT_THRESHOLD) means nobody carries a free completed action across the
+    transition, while each fighter stays where their own cadence actually left them.
     A fighter mid-recovery when the measure closes is genuinely a beat behind one who had just recovered."""
     # [ED-PC-0037.1] max(0.0, r) BEFORE the modulo. Python's `%` maps a NEGATIVE readiness — recovery DEBT, which
-    # overcommit can drive deeply negative (recoverability_factor spans 0.3-67.8, so a committed guandao can owe
-    # ~-30) — onto a near-CREDIT: -1.0 % 2.5 = 1.5, and -30.5 wraps to ~2.0, granting the most over-committed
-    # fighter 80% of a banked action at a phase transition. That inverts this function's own contract ('a fighter
-    # mid-recovery is genuinely a beat behind'). Latent when found (0 occurrences in ~3300 instrumented fights,
-    # because separations end engagements before a transition catches a debtor) but one reopen-timing change from
-    # going live. Debt now clamps to 0 — no banked action, and no free one either.
+    # overcommit can drive deeply negative (recoverability_factor spans 0.3-67.8) — onto a near-CREDIT: -1.0 % 2.5 = 1.5,
+    # which would grant the most over-committed fighter a banked action at a phase transition and invert this
+    # function's own contract ('a fighter mid-recovery is genuinely a beat behind'). Debt clamps to 0 — no banked
+    # action, and no free one either.
     return {c: (max(0.0, r) % cfg['ACT_THRESHOLD']) for c, r in ready.items()}
 
 def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
@@ -95,15 +91,12 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
     # matchups), which the attacker-favouring mechanics amplified. Different reach is deterministic as before.
     longer = A if erA>erB else (B if erB>erA else (A if rng.random()<0.5 else B)); shorter = B if longer is A else A
     measure_gap=max(0.0, er[longer]-er[shorter])
-    # SOFT CLOSED-LATCH (ED-PC-0037, F17). This used to be the hard step `closed = measure_gap <= 0.3`, and that step
-    # was a CLIFF: a synthetic reach ladder read 51/48/51/55% at gaps 0.00-0.28 and then 63.8% at gap 0.32 — +9pp across
-    # two centimetres — because the latch decides whether an APPROACH PHASE EXISTS AT ALL (stop-hits, arrest, true-time)
-    # rather than scaling anything. Live casualties: katana (gap 0.22 -> starts closed) 28.7% vs the near-identical
-    # tachi (gap 0.44 -> starts open) 62.5%; goedendag (reach 6.29) 80.0% vs mace (5.14) 17.8%, the same weapon concept
-    # on opposite sides of the line. Whether two fighters find themselves AT MEASURE or ALREADY ENGAGED when their reach
-    # differs marginally is genuinely uncertain — it turns on the approach, the ground, who committed first — so the
-    # latch is now a probabilistic BAND: certainly closed well inside the threshold, certainly open well outside, and a
-    # smooth ramp between. Beyond the band this is exactly the old behaviour.
+    # SOFT CLOSED-LATCH (ED-PC-0037, F17). A hard step `closed = measure_gap <= 0.3` would be a CLIFF: the latch
+    # decides whether an APPROACH PHASE EXISTS AT ALL (stop-hits, arrest, true-time) rather than scaling anything.
+    # Whether two fighters find themselves AT MEASURE or ALREADY ENGAGED when their reach differs marginally is
+    # genuinely uncertain — it turns on the approach, the ground, who committed first — so the
+    # latch is a probabilistic BAND: certainly closed well inside the threshold, certainly open well outside, and a
+    # smooth ramp between.
     _lo, _hi = cfg['CLOSE_GAP_REF']-cfg['CLOSE_LATCH_BAND'], cfg['CLOSE_GAP_REF']+cfg['CLOSE_LATCH_BAND']
     if measure_gap<=_lo:   closed=True
     elif measure_gap>=_hi: closed=False
@@ -122,15 +115,13 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
         _rep = S.represent_measure_p(longer, shorter, cfg, TR, measure_gap=measure_gap)
         if _rep < 1.0 and rng.random() >= _rep:   # short-circuit: represent_p==1.0 (none/light) draws NO rng — the gate is inert on the stream off-plate
             closed=True; measure_gap=0.0
-    # Pre-contact seizure CUT 2026-06-05 (Jordan; verified inert - ablation ~0, washed out by per-beat dynamics):
-    # initiatives start even (0.0 from _init_live); the ongoing Vor (hit-gains/steals/decay) decides who holds it.
+    # No pre-contact seizure contest (Jordan 2026-06-05): initiatives start even (0.0 from _init_live); the ongoing
+    # Vor (hit-gains/steals/decay) decides who holds it.
     A.initiative, B.initiative = 0.0, 0.0
     # tempo is CONDITIONAL (grip/stance/fatigue), recomputed per-beat below — not a static pre-loop property.
-    # ARBITRARY CADENCE PHASE AT ENGAGEMENT START (ED-PC-0037, F16 — the root of the first-actor monopoly).
-    # This was `{A:0.0, B:0.0}`: both fighters began every engagement in LOCKSTEP. A synchronised race between two
-    # metronomes is won by the same fighter every single time, so a weapon with a 1.5% cadence edge did not act 1.5%
-    # more often — it acted FIRST always, in all twelve engagements of every fight, which is how a 0.0002 tempo delta
-    # bought a 2:1 action economy and how a 20 g mass step flipped a mirror 57% <-> 42%.
+    # ARBITRARY CADENCE PHASE AT ENGAGEMENT START (ED-PC-0037, F16 — the first-actor monopoly).
+    # Both fighters beginning in LOCKSTEP would let the same fighter act first every time (a synchronised race between
+    # two metronomes is won by the same fighter), so a 1.5% cadence edge would buy a 2:1 action economy.
     # The fix is NOT noise on the physics: cadence stays exactly as derived. What is genuinely unknown is the INITIAL
     # CONDITION — where in his own rhythm each fighter happens to be at the instant the blades cross. Nobody enters a
     # measure on a shared downbeat. Drawing that phase uniformly across the cycle is the honest statement of that
@@ -172,10 +163,9 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
             er[c]=S.reach_base(c,cfg)   # er REFRESH #1 (I3, D3, two-recompute contract — designs/audit/2026-07-02-scene-combat-closing-distance-redesign/): re-derives ONLY er[c] on the grip-aware CURRENT (pre-swap) form; NEVER measure_gap (the running approach decrement, below) or `closed` (latched); longer/shorter LABELS stay frozen at engagement start (JD-2 plan default). Feeds reopen (below) and close_tempo/tempo (next line) via reach-derived close_unwieldiness.
         if not closed: rate={c:S.weapon_tempo(c,cfg,ffat[c]) for c in (A,B)}
         else:          rate={c:S.close_tempo(c,cfg,ffat[c]) for c in (A,B)}
-        # WHO ACTS FIRST = CADENCE x ANTICIPATION (ED-PC-0037, F16). `ready` used to accumulate at exactly `rate`, so
-        # weapon cadence ALONE decided the fight's most important question, deterministically: the marginally faster
-        # weapon crossed ACT_THRESHOLD first every time (jian's +1.5% edge -> a 2:1 action economy; a 20 g mass step
-        # flipped a mirror 57% <-> 42% on a cadence delta of 0.0002). systems.tempo_pressure supplies the missing half —
+        # WHO ACTS FIRST = CADENCE x ANTICIPATION (ED-PC-0037, F16). Weapon cadence ALONE would decide the fight's most
+        # important question deterministically: the marginally faster weapon would cross ACT_THRESHOLD first every time
+        # (a 1.5% edge -> a 2:1 action economy). systems.tempo_pressure supplies the other half —
         # the VOR and the READ, i.e. anticipation. Cadence proposes; initiative and reading dispose.
         for c in (A,B): ready[c]+=rate[c]*S.tempo_pressure(c, (B if c is A else A), cfg, TR)
         # REACH RE-OPENING (corrections: a created moment, not just balance+reach). The longer weapon can make
@@ -210,7 +200,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
                     continue
                 else:                                            # READ -> the closer pursues into the withdrawal (Nachreisen)
                     pool=max(1, core.resolution_pool(shorter.faculty))
-                    deg,net=core.resolve(pool, S.pursuit_sigma(shorter, longer, ffat[shorter], ffat[longer], cfg, TR), rng, core.ob_from_defender(longer))   # ED-PC-0036: was a FLAT cfg['DISENGAGE_PURSUIT_NSIG'], bypassing the whole sigma-assembly (no armour, no wounds, no attribute of the withdrawer — every pair resolved identically). systems.pursuit_sigma owns the formula. Ob-from-defender (ED-PC-0058): `longer` is struck if the pursuit lands, so `longer` is the defender this roll is against.
+                    deg,net=core.resolve(pool, S.pursuit_sigma(shorter, longer, ffat[shorter], ffat[longer], cfg, TR), rng, core.ob_from_defender(longer))   # ED-PC-0036: systems.pursuit_sigma owns the formula (the whole sigma-assembly: armour, wounds, the withdrawer's attributes). Ob-from-defender (ED-PC-0058): `longer` is struck if the pursuit lands, so `longer` is the defender this roll is against.
                     _emit('disengage', longer=longer.label, shorter=shorter.label, ok=False, pursued=True, degree=deg)
                     if deg in ('success','overwhelming'):
                         d=core.strike(shorter, longer, deg, cfg, net=net, pool=pool)
@@ -232,8 +222,8 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
             # threaten the harness lands fewer meaningful stop-hits); it is NOT re-counted in the arrest magnitude. The
             # beat's net movement is the closer's advance MINUS that arrest (systems.approach_step): a long braced pole
             # nets the closer backward (driven out -> reach controls); a short/whippy/cutting weapon arrests little and
-            # the closer walks in. (A fable physics/HEMA audit retired the prior recoil = K*damage: damage is wound, not
-            # impulse; keying arrest on it crowned big CUTTERS and stranded the staff Silver's Paradoxes crowns.)
+            # the closer walks in. (Arrest is not keyed on damage: damage is wound, not impulse; keying it on damage
+            # would crown big CUTTERS and strand the staff Silver's Paradoxes crowns.)
             close_rate=S.close_rate(shorter, ffat[shorter], displ, rt, cfg)   # TA-02 fatigued closer + displace point + walk through un-threatening reach (FIX-1)
             recoil = 0.0
             stophit_p = cfg['STOPHIT_CHANCE'] * min(1.0, measure_gap/cfg['STOPHIT_FULL_GAP']) * (1-displ) * rt  # FIX-1: a stop-hit that can't pierce the armour deters less
@@ -356,7 +346,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
             if rng.random()<max(0.0,neutralize-cfg['NEUTRALIZE_OVERWHELM_DROP']): hit=0
             else: hit=core.strike(aggressor, defender, 'overwhelming', cfg, net=net, pool=pool)
         if counter_attempt:
-            # SUCCESS scales with reflex (the training term read `history` and went with it, CR-85/ED-IN-0330); the untrained single-time counter mostly fails — a
+            # SUCCESS scales with reflex (CR-85/ED-IN-0330); the untrained single-time counter mostly fails — a
             # desperate-idiot move. Tradition abilities will modulate this upward (added later). (systems.counter_success_prob)
             if rng.random() < S.counter_success_prob(defender, cfg, TR):
                 hit=0; bind=False; riposte=True            # LANDS: committed attack voided in-tempo, defender ripostes (keeps the seized Vor)
@@ -543,7 +533,7 @@ def _terms_yielder(A, B, terms, cfg):
 # the precedent not to follow). `decide(turn)` is called at the top of each turn, before every draw of that turn and after
 # a declared `Yield` of the same turn (the declaration is the earlier fact), and returns one member of this closed set:
 #   - 'engage'   : the turn is fought. Today's loop engages every turn, so `decide=None` (the default, AUTOMATED) is
-#                  exactly 'engage' every turn, and the call is byte-identical to the one before this parameter.
+#                  exactly 'engage' every turn.
 #   - 'withdraw' : the loop's existing UNRESOLVED exit, taken early -- no further turn, no UPSET_FLOOR draw (the fight is
 #                  undecided, result 0, the ruled outcome). A `withdraw` trace event names the turn.
 # [ASSUMPTION; the set is {engage, withdraw}, Jordan's "you choose to attack" (#445 `05:8-11`); PC's Plan layer (M-4) may
@@ -564,9 +554,9 @@ def fight(A, B, cfg=None, rng=None, max_bouts=12, yield_decl=None, terms=LETHAL_
             raise ValueError(f"Yield.turn {yield_decl.turn} is outside 1..max_bouts ({max_bouts}): it would never fire")
     cfg=cfg or CFG; rng=rng or random.Random()   # stdlib RNG (ED-1085 numpy de-leak; pass random.Random(seed) for determinism)
     # A FIGHT BEGINS UNWOUNDED: zero each tracker's damage here, at the fight's own start (PC-13's `wound` events sum to
-    # the tracker within one fight). The maxima are NOT rebuilt by a mirrored constructor call any more: `_init_live`
-    # calls `Combatant.rederive(cfg)`, the one derivation path (PC-14), which reads the fighter's attributes as they
-    # stand now (an attribute edited after construction is followed) and itself never touches damage.
+    # the tracker within one fight). `_init_live` calls `Combatant.rederive(cfg)`, the one derivation path (PC-14),
+    # which reads the fighter's attributes as they stand now (an attribute edited after construction is followed) and
+    # itself never touches damage.
     A.wt.cumulative_damage = 0; B.wt.cumulative_damage = 0
     _init_live(A,cfg); _init_live(B,cfg)
     _emit('fight_start', A=A.label, B=B.label, weapon_A=A.weapon, weapon_B=B.weapon,

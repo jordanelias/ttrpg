@@ -1,6 +1,3 @@
-I already displayed the full content via the Read tool above. Here is the complete YAML output:
-
-```yaml
 - id: NPC-088
   name: Carin Vedel
   one_line: A copyist with no institutional position who hand-reproduces suppressed Einhir cultural texts
@@ -634,4 +631,3 @@ I already displayed the full content via the Read tool above. Here is the comple
     what she knows and what she tells
   ends_when: never explicitly named as a terminus; presumably resolved only when she defects, successfully
     compartmentalizes, or her patron falls and she inherits.
-```

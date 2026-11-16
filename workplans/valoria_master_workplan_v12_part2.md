@@ -66,8 +66,6 @@ Three sources, as `H2_DECISIONS.md` Appendix A's script reads them, re-run here 
 | step | open at once (the first named merges first among movers, §3) |
 |---|---|
 | S0–S3 | B00 · B01 · B02 · B03, one each (IN); ⚠ 2026-11-14: B01a opens at S2, between B01 and B02, and every row from B02 down moves one step later (S2 → S3, …, S24 → S25), membership unchanged |
-| S4 | B03g (GO), B03c (IN), B16L (MB) |
-| S5 | B03a (IN), alone |
 | S6 | B13 (PC), B16M (MB), B04 (IN) |
 | S7 | B05 (IN), alone |
 | S8 | B06 (IN), B14 (PC) |
@@ -91,11 +89,6 @@ Columns: the wave and step as the structure had them, and now (a change in bold)
 
 | batch | lane | wave (§2.1 → now) | step (§2.1 → now) | slack | part files | positions: total (by state) | hash, from the position rows (§2.2 said) | est. h (E-15) | after: every `GATE: Batch` it needs (`+G` a part's GATE line §2.1 lacked; `+R` an edge H2 adopts) |
 |---|---|---|---|---|---|---|---|---|---|
-| B03-hygiene | IN | W3 | S3 | 0 | 4, 4_cont, 5, 5_cont | 65 (B60 P1 R1 H2 BL1; V1: B03.71 BUILD → HELD) | **MOVER (behaviour 1, encoding 1)** (§2.2: EQUAL) | 28.5 | B00, B01, B02 |
-| B03g-go-early-landings | GO | W4 | S4 | 0 | 6 | 5 (B5) | EQUAL | 4.5 | B00, B01, B02, B03 |
-| B03c-boot | IN | W4 | S4 | 0 | 6 | 3 (B3) | EQUAL | 3.7 | B00, B01, B02, B03 |
-| B16L-mb-words | MB | W4 | S4 | 0 | 6 | 5 (B5) | EQUAL | 4.5 | B00, B01, B02, B03 |
-| B03a-prose | IN | W5 | S5 | 0 | 6_cont | 3 (B3) | EQUAL | 3.7 | B00, B01, B02, B03, B03c, B16L, B03g +R1 |
 | B13-pc-package | PC | W6 | S6 | 0 | 6_cont | 2 (B2) | EQUAL | 3.3 | B00, B01, B02, B03, B03a, B03g +R1 |
 | B16M-mb-engine-words | MB | W6 | S6 | 0 | 6_cont | 4 (B4) | EQUAL | 4.1 | B16L, B03a |
 | B04-capability-home | IN | W6 | S6 | 0 | 7 | 27 (B24 P2 C1) | MOVER (encoding 2) | 13.3 | B00, B01, B02, B03g, B03c, B03a |
@@ -163,11 +156,6 @@ Every batch's boundary row with the part and line it sits on, whether its text i
 
 | batch | its boundary row (part:line) | exact text | `GATE: Batch` lines | equal to its after-list in §1 | names a batch closing at or after its own step | H2 added |
 |---|---|---|---|---|---|---|
-| B03-hygiene | 5_cont:192 | yes | 3 | yes | none | — |
-| B03g-go-early-landings | 6:158 | yes | 4 | yes | none | — |
-| B03c-boot | 6:256 | yes | 4 | yes | none | — |
-| B16L-mb-words | 6:385 | yes | 4 | yes | none | — |
-| B03a-prose | 6_cont:126 | yes | 7 | yes | none | —, R1: B03g |
 | B13-pc-package | 6_cont:217 | yes | 6 | yes | none | —, R1: B03g |
 | B16M-mb-engine-words | 6_cont:325 | yes | 2 | yes | none | — |
 | B04-capability-home | 7:551 | yes | 6 | yes | none | — |
@@ -229,15 +217,10 @@ Every batch's boundary row with the part and line it sits on, whether its text i
 
 One row per batch in schedule order: the position handles (the part after the dot) that move a content hash by behaviour, by encoding (a field or class of a hashed carrier added, removed or renamed, D-04), or conditionally; the re-pin position and whether its text names the re-pin; the batch's merge position among the movers of its step (§1.2 order, `V12_STRUCTURE_part3.md` §7.4: the later mover rebases on the earlier's merge, reads its after-reading as its baseline and re-pins once; an EQUAL batch merges at any point).
 
-**Checks.** Every mover batch's `.99` text names its re-pin (`t1.py`: none without). **Four mover batches and two EQUAL batches have no `.99` position** (B01, B04, B22, B26; B00, B02): the pilot parts A03, A07 and A33 were written before E-1 made `.99` the rule, and each puts its re-pin (or its EQUAL reading) in its last item (B01.02, B04.26, B22.35, B26.17; B00.02, B02.38). Not renumbered here (other parts cite those handles); listed for check lanes K2, K3 and K8 (§11 C-01). Every hash-EQUAL batch with a `.99` records the EQUAL reading in it. Orders the authors wrote and this table keeps: S4 B03g, B03c, B16L (all EQUAL); S6 B13 and B16M before B04, which re-runs `tools/export_composition.py` and `tools/export_sim_params.py --build` after its rebase (P-32, HD-18); S13 B08 first, B16 rebases on it (HD-02); S17 B28 before B32 (HD-06); S18 B23 before B30 (HD-19). The structure's §2.1 row order, which the table uses, already gives every one of those orders and the four merge-order pairs of §1.1: S12 B11 before B21 (HD-03), S13 B08, B12a, B16, B21b, B24 (B12a before B21b, HD-04), S15 B12c before B24a (HD-17), S16 B25 before B27 (HD-08); no author's order contradicts it. **Resolved by repair lane R1** (`checks/R1_APPLIED.md` repair 5): B00.99, B01.99, B02.99, B04.99, B22.99 and B26.99 are written; B04's, B22's and B26's re-pin moved to the `.99` (the earlier item's step cited, not copied); B01's stays in B01.02's cherry-pick and B01.99 records. **Re-pin baselines set to this table's order by lane H3** (one round, after K5 F5 / R2c): each mover's `before` reading is the after-reading of the mover that merges immediately before it in its step; the first mover of a step reads the last mover of the previous step (an EQUAL batch leaves the hash where it found it, so it is skipped). 24 batches' RE-PIN lines, `.99` steps and named before-readings were edited (each tagged "lane H3"): B14 (B06), B07 (B14), B17 (B07), B11 (BA1), B15 (B11), B21 `.99` (B15), B12a (B08), B21c (B12b), B29 `.99` (B21c), B34 (B29), B12c (B34), B19 (B18), B21d (B19), B24a (B21d), B11F1 (B24a), B20 (B11F1), B25 (B20), B22 (B11F2, which leaves B37's reading when it ships EQUAL), B32 (B28), B37p (B32), B23 (B37p), B31 (B35), B33 (B31), B36 (B33). Already right: B06, BA1, B08, B16, B21b, B24, B12b, B18, B27, B37, B26, B28, B30, B35. Every step with two or more movers has its order stated in the last column; none needed the ladder. Single-mover steps (S3, S6, S7, S10, S11, S20 to S24) were not in the brief and were not re-read.
+**Checks.** Every mover batch's `.99` text names its re-pin (`t1.py`: none without). **Four mover batches and two EQUAL batches have no `.99` position** (B01, B04, B22, B26; B00, B02): the pilot parts A03, A07 and A33 were written before E-1 made `.99` the rule, and each puts its re-pin (or its EQUAL reading) in its last item (B01.02, B04.26, B22.35, B26.17; B00.02, B02.38). Not renumbered here (other parts cite those handles); listed for check lanes K2, K3 and K8 (§11 C-01). Every hash-EQUAL batch with a `.99` records the EQUAL reading in it. Orders the authors wrote and this table keeps: S4 B03g (landed `@048724cd545117255e71d04a583d99c6cb5fe3a9`), B03c (landed `@544cf5719c620331b70aeda93c1672977b44e9ef`), B16L (all EQUAL); S6 B13 and B16M before B04, which re-runs `tools/export_composition.py` and `tools/export_sim_params.py --build` after its rebase (P-32, HD-18); S13 B08 first, B16 rebases on it (HD-02); S17 B28 before B32 (HD-06); S18 B23 before B30 (HD-19). The structure's §2.1 row order, which the table uses, already gives every one of those orders and the four merge-order pairs of §1.1: S12 B11 before B21 (HD-03), S13 B08, B12a, B16, B21b, B24 (B12a before B21b, HD-04), S15 B12c before B24a (HD-17), S16 B25 before B27 (HD-08); no author's order contradicts it. **Resolved by repair lane R1** (`checks/R1_APPLIED.md` repair 5): B00.99, B01.99, B02.99, B04.99, B22.99 and B26.99 are written; B04's, B22's and B26's re-pin moved to the `.99` (the earlier item's step cited, not copied); B01's stays in B01.02's cherry-pick and B01.99 records. **Re-pin baselines set to this table's order by lane H3** (one round, after K5 F5 / R2c): each mover's `before` reading is the after-reading of the mover that merges immediately before it in its step; the first mover of a step reads the last mover of the previous step (an EQUAL batch leaves the hash where it found it, so it is skipped). 24 batches' RE-PIN lines, `.99` steps and named before-readings were edited (each tagged "lane H3"): B14 (B06), B07 (B14), B17 (B07), B11 (BA1), B15 (B11), B21 `.99` (B15), B12a (B08), B21c (B12b), B29 `.99` (B21c), B34 (B29), B12c (B34), B19 (B18), B21d (B19), B24a (B21d), B11F1 (B24a), B20 (B11F1), B25 (B20), B22 (B11F2, which leaves B37's reading when it ships EQUAL), B32 (B28), B37p (B32), B23 (B37p), B31 (B35), B33 (B31), B36 (B33). Already right: B06, BA1, B08, B16, B21b, B24, B12b, B18, B27, B37, B26, B28, B30, B35. Every step with two or more movers has its order stated in the last column; none needed the ladder. Single-mover steps (S3, S6, S7, S10, S11, S20 to S24) were not in the brief and were not re-read.
 
 | step | batch | behaviour movers (position handles) | encoding movers | conditional movers | the re-pin position and what its text says | merge position in its step |
 |---|---|---|---|---|---|---|
-| S3 | B03 | 86 | 28 | — | `B03.99` | 1 of 1 movers |
-| S4 | B03g | — | — | — | `B03g.99` records the EQUAL reading | any (EQUAL, §7.4) |
-| S4 | B03c | — | — | — | `B03c.99` records the EQUAL reading | any (EQUAL, §7.4) |
-| S4 | B16L | — | — | — | `B16L.99` records the EQUAL reading | any (EQUAL, §7.4) |
-| S5 | B03a | — | — | — | `B03a.99` records the EQUAL reading | any (EQUAL, §7.4) |
 | S6 | B13 | — | — | — | `B13.99` records the EQUAL reading | any (EQUAL, §7.4) |
 | S6 | B16M | — | — | — | `B16M.99` records the EQUAL reading | any (EQUAL, §7.4) |
 | S6 | B04 | — | 01, 07 | — | `B04.99` (B04.26 steps 2, 3 moved, R1) | 1 of 1 movers |

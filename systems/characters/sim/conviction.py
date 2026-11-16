@@ -19,13 +19,6 @@ commit per stub_infill_plan cyclic-pair protocol.
  coherence.py's pre-schema-migration shape. _store(world) router pattern
  prepared for future schema migration.]
 
-[ASSUMPTION: cycle resolution — beliefs.revise_belief calls into
- conviction.check_conviction_threshold for actor state; conviction.
- apply_conviction_scar references beliefs by string id, not by importing
- the Belief class. This breaks the literal import cycle while preserving
- the conceptual coupling per canon §2 row-2 "NPC enters arc transition
- state if X was the highest-weighted primary".]
-
 Dependencies:
   - sim/personal/beliefs (string references only; no class import)
 
@@ -126,8 +119,6 @@ class ConvictionState:
     resonant_active: set[str] = field(default_factory=set)
     # Crisis state per Conviction (3+ Scars)
     in_crisis: set[str] = field(default_factory=set)
-    # Belief revision opportunities (string ids of beliefs marked for revision)
-    pending_belief_revisions: list[str] = field(default_factory=list)
     # Last-Scar-event season tracker per Conviction (for season cap enforcement)
     last_scar_season: dict[str, int] = field(default_factory=dict)
     # Log of all Scar events
@@ -139,7 +130,6 @@ class ConvictionState:
             'scars': dict(self.scars),
             'resonant_active': sorted(self.resonant_active),
             'in_crisis': sorted(self.in_crisis),
-            'pending_belief_revisions': list(self.pending_belief_revisions),
             'last_scar_season': dict(self.last_scar_season),
             'log': [r.to_dict() for r in self.log],
         }
@@ -151,7 +141,6 @@ class ConvictionState:
             scars=dict(d.get('scars', {})),
             resonant_active=set(d.get('resonant_active', [])),
             in_crisis=set(d.get('in_crisis', [])),
-            pending_belief_revisions=list(d.get('pending_belief_revisions', [])),
             last_scar_season=dict(d.get('last_scar_season', {})),
             log=[ScarRecord.from_dict(r) for r in d.get('log', [])],
         )
@@ -162,10 +151,8 @@ class ConvictionThresholdState:
     """Return value of check_conviction_threshold — summarises actor's state."""
     actor: str
     scar_counts: dict[str, int]
-    destabilised: list[str]    # Convictions at 1 Scar
     shifted: list[str]         # Convictions at 2 Scars
     in_crisis: list[str]       # Convictions at 3+ Scars
-    any_crisis: bool
 
 
 def _get_or_create(actor: str, world=None) -> ConvictionState:
@@ -246,33 +233,18 @@ def check_conviction_threshold(actor: str, world=None) -> ConvictionThresholdSta
     """Summarise actor's per-Conviction Scar state per §2 thresholds.
 
     Returns:
-      destabilised: Convictions at exactly 1 Scar
       shifted: Convictions at 2 Scars
       in_crisis: Convictions at 3+ Scars
-      any_crisis: True if any Conviction has 3+ Scars
     """
     state = _get_or_create(actor, world)
-    destabilised = [c for c, s in state.scars.items() if s == SCAR_DESTABILISE]
     shifted = [c for c, s in state.scars.items() if s == SCAR_SHIFT]
     in_crisis = [c for c, s in state.scars.items() if s >= SCAR_CRISIS]
     return ConvictionThresholdState(
         actor=actor,
         scar_counts=dict(state.scars),
-        destabilised=destabilised,
         shifted=shifted,
         in_crisis=in_crisis,
-        any_crisis=bool(in_crisis),
     )
-
-
-def mark_belief_revision_pending(actor: str, belief_id: str, world=None):
-    """Called by beliefs.revise_belief when a Conviction-engaging Belief is
-    flagged for revision per fieldwork §5.5 'Belief-challenging social
-    success' or §9.5 narrative pressure. Stores belief_id by string only
-    to avoid import cycle."""
-    state = _get_or_create(actor, world)
-    if belief_id not in state.pending_belief_revisions:
-        state.pending_belief_revisions.append(belief_id)
 
 
 def get_state(actor: str, world=None) -> Optional[ConvictionState]:

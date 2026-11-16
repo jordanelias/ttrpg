@@ -23,7 +23,7 @@ import random
 
 import pytest
 
-from engine.season.harness.populated import build_realm
+from engine.season.boot.realm import build_realm
 from engine.season.queries import world_q
 from engine.season.queries.inputs import MassBattleInput
 from engine.season.tests.test_march import _fold_one, _march_act

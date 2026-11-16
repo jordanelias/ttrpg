@@ -2,7 +2,7 @@
 
 Consolidated (ED-IN-0071 P2, 2026-07-16) from three former homes — `designs/godot/`,
 `designs/videogame/`, and `designs/audit/2026-06-10-godot-conversion-strategy/` — into this
-single top-level primary. It **is** the eventual `res://` project root. See `CLAUDE.md §6` for the
+single top-level primary. The Godot project is `jordanelias/valoria-game`, a separate repository; this directory holds design reference for the port and no project files. See `CLAUDE.md §6` for the
 state-of-the-bridge (the conversion is **PROPOSED and largely un-executed**). Old paths alias via
 `references/restructure_ledger.md`.
 
@@ -10,8 +10,8 @@ state-of-the-bridge (the conversion is **PROPOSED and largely un-executed**). Ol
 - `godot_conversion_strategy_v1.md` — **the conversion plan** (status **PROPOSED**, Jordan-vetoable
   throughout; the Part-VIII `[OPEN — Jordan]` register is the veto surface). The season loop's ratified
   Godot mapping is Layer 1: `architecture/meta/04_CODE_ARCHITECTURE.md` §C.12. Details below.
-- `godot_architecture_specification.md` — the Godot architecture specification (formerly under
-  `designs/videogame/`).
+- `godot_architecture_specification.md` — STALE REFERENCE by its own Status line (pre-d+σ). Do not
+  implement from it; its autoload, signal and generator designs are each rejected by name in `04` §C.12.
 - Four **stale** pre-`d+σ` docs (`scene_tree_architecture.md`, `gm_to_engine_conversion.md`,
   `data_serialization_spec.md`, `implementation_sequence.md`, all 2026-04-18) — each carries a
   `⚠️ STALE / PARTIALLY SUPERSEDED` banner. Do not implement from them; defer to the strategy doc.

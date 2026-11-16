@@ -1,6 +1,6 @@
 """`season.loop.effects_founding` -- minting works: found, build; and their closer, raze.
 
-EXTRACTED from `effects.py` at the per-subsystem split (Phase 4). Holds the pair that grows the
+Holds the pair that grows the
 world rather than only wearing it down (`ARCH` F.20): `found` mints a Rung of whatever kind a works
 plans, `build` mints a Site at condition 0. `_works_named` (what a works names, plans and is placed
 at) and `_made_by` (the one id scheme so one works makes one thing) are this pair's own reading of
@@ -113,8 +113,7 @@ def _eff_found(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         the works' rung INTO the new Rung (`_cost`, `_shift`), so the place starts with what was
         staked on it and no matter leaves the world. A works whose rung cannot pay is refused.
       * HELD BY ITS FOUNDER (v9 IN-28, `H-166` limit 2): the actor's `hold` on the new Rung, opened
-        in the same write. ⚠ This read *"no `hold` is minted on it -- a `hold` written here would be
-        a claim of ownership nobody made"*. The founding IS the claim: CLAUDE.md §0's ladder step 4,
+        in the same write. The founding IS the claim: CLAUDE.md §0's ladder step 4,
         the maker's-hold precedent `create_record` and `utter` both carry. The holder is the person
         who acted, never a seat: a seat whose rung contains `at` already reaches the new Rung through
         purview, and minting a seat's `hold` would be a grant (`conferral`) nobody conferred.

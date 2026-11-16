@@ -1,13 +1,11 @@
-"""`season.data.verbs` -- the verb table and the alignment table, extracted from `shape.py`
-(step 3 of the decomposition, a PURE MOVE: no behaviour changed, only where the code lives).
+"""`season.data.verbs` -- the verb table and the alignment table.
 
 Owns `VerbRow` and its loader (`_load_verb_table`/`VERB_TABLE`), the load-time constants a row is
 checked against (`VERB_TABLE_YAML`, `ELIGIBILITY_KINDS`), `NO_PRECONDITION` (the "no cell" prose
-sentinel both `requires` and `requires_typed` use), `rows_without_a_producer` (§7.2's report --
-it reads `VERB_TABLE`, which is why it did not move with the write matrix in step 2), and the
-alignment table in full: its loader (`_load_alignment`/`ALIGNMENT`), its immutable baseline
-(`ALIGNMENT_DECLARED`, `ALIGNMENT_DEFAULT_CELL`), and its sweep (`ALIGNMENT_SWEEP`/
-`alignment_at`).
+sentinel both `requires` and `requires_typed` use), `rows_without_a_producer` (§7.2's report,
+which reads `VERB_TABLE`), and the alignment table in full: its loader
+(`_load_alignment`/`ALIGNMENT`), its immutable baseline (`ALIGNMENT_DECLARED`,
+`ALIGNMENT_DEFAULT_CELL`), and its sweep (`ALIGNMENT_SWEEP`/`alignment_at`).
 
 `verb_table.yaml` is Part E's body, loaded once at import: *"#353 types `resolve : (Act[],
 World) -> Event[]` and never says what any verb DOES... with no table, every act needed a
@@ -17,25 +15,11 @@ hand-written `effect` lambda, and A LAMBDA PER ACT IS A SECOND RESOLVER."*
 module's docstring for the ordering constraint this creates and how it is satisfied structurally
 by THIS module's own import of `requires`, below, rather than by file position.
 
-⚠ `align()` AND `align_kind()` LIVE HERE, BESIDE THE TABLE THEY READ (telling workplan T2). `align`
-was in `shape.py`, then `decision.py`, then `decision/options.py`; each move carried the rebind
-address with it, and the last one left a reader in `options.py` and the table here. Now the
-`ALIGNMENT` binding and its only reader share this module, so the rebind that moves one moves
-the other: the `H-66` sweep and the `H-146` tests rebind `data.verbs.ALIGNMENT`, and nothing
-else binds the name. Every reader (`choose`'s score, `refuses`, `person_q._pursuits_violated_by`, `corpus_run`) calls
+⚠ `align()` AND `align_kind()` LIVE HERE, BESIDE THE TABLE THEY READ. The `ALIGNMENT` binding and
+its only reader share this module, so the rebind that moves one moves the other: the `H-66` sweep
+and the `H-146` tests rebind `data.verbs.ALIGNMENT`, and nothing else binds the name. Every reader (`choose`'s score, `refuses`, `person_q._pursuits_violated_by`, `corpus_run`) calls
 `align`; tests that import `ALIGNMENT` do so function-locally and read it live -- a copy imported
 by name at module scope would be a stale snapshot.
-
-⚠ `VERB_TABLE` IS ASSIGNED TWICE, VERBATIM, AND ONLY THE SECOND ASSIGNMENT EVER RUNS. The
-forward declaration below (`VERB_TABLE: dict = {}`) carries a comment from a PRIOR layout of
-`shape.py`, from before steps 1-2 extracted the write matrix and roster readers: at that time
-real loading code sat physically between the forward declaration and the fill. It does not any
-more -- the two lines are adjacent -- and nothing at IMPORT TIME reads `VERB_TABLE` in the gap:
-checked directly, `_load_alignment`'s own read of it (`admitted = set(VERB_TABLE) | ...`) is inside a
-function BODY, defined a few lines after the real fill but not CALLED (`ALIGNMENT =
-_load_alignment()`) until further still -- by which point the real fill has long since run.
-Preserved unchanged because this is a PURE MOVE and the forward declaration is otherwise
-harmless -- a `dict` type hint on a name the next line immediately rebinds.
 """
 
 from __future__ import annotations
@@ -55,7 +39,7 @@ from .rosters import (
     COVERT_KINDS, DOMINANCE_KINDS, FOLD_KINDS, LOGGED_KINDS, GRADED_INQUIRIES, MARCH_POSTURE_KEY, MARCH_POSTURES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
     RESTRAINT_KINDS, STRIFE_KINDS, VOCATIONS,
     is_event_kind,
-    RUNG_KINDS, STRATA, TENURE_KINDS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
+    RUNG_KINDS, STRATA, TENURE_KINDS, THREAD_OPERATIONS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
     roster_map,
     table,
     table_meta,
@@ -65,8 +49,8 @@ VERB_TABLE_YAML = files.VERB_TABLE_YAML
 
 ELIGIBILITY_KINDS = roster("eligibility_kinds")
 
-# The "no cell" prose sentinel `requires` and `requires_typed` use. Defined ABOVE the loader (it sat
-# at the foot of this module until 2026-09-25) because loader invariant 4 now reads it at load.
+# The "no cell" prose sentinel `requires` and `requires_typed` use. Defined ABOVE the loader because
+# loader invariant 4 reads it at load.
 NO_PRECONDITION = ("—", "-", "")
 
 # Loader invariant 9's roster: the prizes `contest_subsystems` claims, read once at load.
@@ -79,13 +63,9 @@ BENEFICIARY_KINDS = roster("beneficiary_kinds")
 #                 (`actor` is held unconditionally, `subject` is a field, `none` carries nothing);
 #   operand    -- carried only where the row's own cell binds or admits it, so invariant 13's
 #                 third check must verify carriability for it.
-# ⚠⚠ THIS WAS A LITERAL TUPLE AND JORDAN'S OWN GUARD CAUGHT IT
-# (`test_jordan_no_definition_is_hardcoded_in_a_body`). Two versions were wrong in the same
-# direction: first `("to",)`, a hand-kept list of operand members; then a hardcoded structural
-# set subtracted from the roster, which is the same definition written the other way round.
-# Either one silently stops covering a member the moment `rosters.yaml` gains one -- which is
-# precisely the edit that roster's own note invites. Now a new member with no `carriage:` entry
-# REFUSES at load, so the check cannot fall behind the roster.
+# ⚠⚠ A hand-kept list of either half (`test_jordan_no_definition_is_hardcoded_in_a_body`) would
+# silently stop covering a member the moment `rosters.yaml` gains one. A new member with no
+# `carriage:` entry REFUSES at load, so the check cannot fall behind the roster.
 _BENEFICIARY_CARRIAGE = roster_map("beneficiary_kinds", "carriage")
 _unclassified = set(BENEFICIARY_KINDS) - set(_BENEFICIARY_CARRIAGE)
 if _unclassified:
@@ -121,46 +101,39 @@ class VerbRow:
     #
     # ⚠ A FACTION IS NOT ONE OF THEM, AND THAT IS A RULING RATHER THAN AN OMISSION.
     # `ARCHITECTURE_V2.md:93` lists *"a **faction acting** as an actor"* in its REFUSAL table, at
-    # `L1`, with three corpus cases that wanted it; `H-21` completes it — *"a faction's treasury is
-    # matter at the rung or office that holds it"*. So a faction never acts: a PERSON HOLDING AN
-    # OFFICE acts, and the scale is the rung that office reaches. Governance at faction scale is
-    # `binding_decision x <rung>`, not a faction verb.
+    # `L1`; `H-21` completes it — *"a faction's treasury is matter at the rung or office that
+    # holds it"*. So a faction never acts: a PERSON HOLDING AN OFFICE acts, and the scale is the
+    # rung that office reaches. Governance at faction scale is `binding_decision x <rung>`, not a
+    # faction verb.
     #
-    # ⚠ SAME NAME AS A RETIRED FIELD, AND THE COLLISION IS WORTH NAMING HERE RATHER THAN AT ITS
-    # OWN SITE. `04_CODE_ARCHITECTURE.md` §A.3 row 4 (`04:173`) and §B.13 invariant 10 (`04:470`)
-    # both say a `scale:` key is "deleted; the loader rejects the key" — but that row describes
-    # THE CHAIN's `scale:` (a per-module/per-verb-row concept, retired at Stage 1/2, ID-13). This
-    # field is a later, unrelated ruling under the same word (`CLAUDE.md` §4's exact hazard: one
-    # spelling, two meanings, no shared context between the sessions that met each). It is not
-    # rejected by 04's rows above; those rows are about a different, already-dead field. `04` is
-    # ratified and this comment does not edit it (`CLAUDE.md` §0.05) — it names the ambiguity at
-    # the site that would otherwise be misread, per the layer-conformance skill's B4.
+    # ⚠ SAME NAME AS A RETIRED FIELD. `04_CODE_ARCHITECTURE.md` §A.3 row 4 (`04:173`) and §B.13
+    # invariant 10 (`04:470`) say a `scale:` key is "deleted; the loader rejects the key" — but
+    # that row describes THE CHAIN's `scale:` (a per-module/per-verb-row concept, ID-13). This
+    # field is an unrelated ruling under the same word (`CLAUDE.md` §4's hazard: one spelling, two
+    # meanings). `04` is ratified and this comment does not edit it (`CLAUDE.md` §0.05) — it names
+    # the ambiguity at the site that would otherwise be misread, per the layer-conformance
+    # skill's B4.
     scale: str = "person"
-    # ⚠ PART E'S `contests:` COLUMN, WHICH WAS TRANSCRIBED INTO A NOTE AND LOST.
-    # `ARCHITECTURE_V2.md:394` declares it — *"`contests: <prize> | none` — if set, ROUTES TO THE
-    # SEAM AT RESOLVE (§39)"* — and `:434` sets it on `kill / wound` (*"`contests: the body` → the
-    # seam"*). The loader had no such field, so the routing landed in `requires_note`, which
-    # nothing reads, and the fold executed a kill AS A DIRECT WRITE. Jordan, 2026-09-02:
-    # *"that…would trigger the personal combat scene. you can't just kill or wound imo."* The
-    # design agrees with him and the instrument was the thing disagreeing.
+    # ⚠ PART E'S `contests:` COLUMN. `ARCHITECTURE_V2.md:394` declares it — *"`contests: <prize> |
+    # none` — if set, ROUTES TO THE SEAM AT RESOLVE (§39)"* — and `:434` sets it on `kill / wound`
+    # (*"`contests: the body` → the seam"*). Jordan, 2026-09-02: *"that…would trigger the personal
+    # combat scene. you can't just kill or wound imo."*
     contests: str = ""
-    # ⚠ THE SIXTH COLUMN, ADDED 2026-09-03 (#358 rev.2 §C.4 / F6, loader invariant 12).
-    # `writes` was a flat tuple applied UNCONDITIONALLY AFTER THE SEAM RESOLVED, so a LOST contest
-    # wrote exactly what a won one did -- `kill / wound` killed on any degree, and `Event.degree`
-    # was read by nothing anywhere. A resolution whose result is discarded is not a weak outcome
-    # model; it is a contest that did not happen.
+    # ⚠ THE SIXTH COLUMN (#358 rev.2 §C.4 / F6, loader invariant 12). A flat `writes` is applied
+    # UNCONDITIONALLY AFTER THE SEAM RESOLVED, so a LOST contest would write what a won one did.
+    # A resolution whose result is discarded is not a weak outcome model; it is a contest that did
+    # not happen.
     #
     # A verb WITHOUT `contests:` keeps the flat tuple and this stays empty.
     # A verb WITH `contests:` declares `writes` as a MAP from degree, and `writes` holds the union
     # (so the load-time Part D check below still sees every pair it must validate).
     writes_by_degree: dict = field(default_factory=dict)
     # ⚠ AND SO IS `emits:`, FOR THE SAME REASON ONE FIELD DEEPER. A flat `emits` on a contested
-    # verb reports ONE outcome for every band -- `kill / wound` emitted `person.died` whether the
-    # target died, was wounded, or walked away untouched. That is ID-9's class (a success report
-    # for something that did not happen) inside the epistemic layer, where every witness then
-    # mints a claim from it.
+    # verb reports ONE outcome for every band, which is ID-9's class (a success report for
+    # something that did not happen) inside the epistemic layer, where every witness then mints a
+    # claim from it.
     emits_by_degree: dict = field(default_factory=dict)
-    # ⚠ THE SEVENTH COLUMN, ADDED BY `W-A` (2026-09-04). THE PROSE `requires` STAYS BESIDE IT AND
+    # ⚠ THE SEVENTH COLUMN (`W-A`). THE PROSE `requires` STAYS BESIDE IT AND
     # IS THE PROVENANCE -- each cell names the §E3 line it was transcribed from, so the derivation
     # can be checked rather than trusted. `None` means the column is NOT typed for this verb and
     # the fold falls back to `REQUIRES_PREDICATES`, which for a verb with no predicate is the
@@ -169,17 +142,13 @@ class VerbRow:
     # Why a row carries `requires_typed: none`. Required BY THE LOADER on such a row: an untyped
     # cell with no reason is indistinguishable from one nobody got to.
     requires_typed_note: str = ""
-    # ⚠ THE EIGHTH COLUMN, ADDED BY PHASE-6 ITEM `6d` (2026-09-17). WHO THE ACT IS TAKEN FOR THE
-    # GOOD OF -- a `beneficiary_kinds` member, resolving to a carrier THE CANDIDATE ALREADY HOLDS.
-    # `CAT-2`, closed at step 5: *"DECLARE IT -- and declare it as a STATIC COLUMN ON
-    # `verb_table.yaml` ... NOT as a fifth field on `Candidate`."*
+    # ⚠ THE EIGHTH COLUMN. WHO THE ACT IS TAKEN FOR THE GOOD OF -- a `beneficiary_kinds` member,
+    # resolving to a carrier THE CANDIDATE ALREADY HOLDS. `CAT-2`: *"DECLARE IT -- and declare it
+    # as a STATIC COLUMN ON `verb_table.yaml` ... NOT as a fifth field on `Candidate`."*
     #
-    # ⚠ THE OTHER TWO OPTIONS ARE DEAD BY MEASUREMENT AND BY RULING, AND THE MEASUREMENT IS
-    # RE-RUNNABLE HERE. Deriving the beneficiary from the operand binding fails because 24 of 38
-    # verbs are UNTYPED and can carry no operand at all; only 12 admit `to`. Re-take it with
-    # `requires_typed.operands() | ({"subject","to"} & requires_typed.needs())` over this table.
-    # A post-hoc attribution modifier is dead by Jordan's own correction -- orientation is a
-    # weight AT APPRAISAL, not a rescoring of what a win was worth.
+    # ⚠ DERIVING THE BENEFICIARY FROM THE OPERAND BINDING FAILS: most verbs are UNTYPED and can
+    # carry no operand at all. A post-hoc attribution modifier is dead by Jordan's own
+    # correction -- orientation is a weight AT APPRAISAL, not a rescoring of what a win was worth.
     #
     # ⚠⚠ AND IT CANNOT BE DERIVED FROM `writes:` EITHER, WHICH IS WHY IT IS DECLARED RATHER THAN
     # COMPUTED. `kill / wound` writes `Person.body` and `Person.exists` ON THE SUBJECT and the
@@ -191,57 +160,49 @@ class VerbRow:
     # cannot arrive without one; an absent column would read as `false` for every verb, which is
     # the UNKNOWN/False collapse `operands_for` refuses one level down.
     beneficiary: str = ""
-    # ⚠ THE NINTH COLUMN, ADDED AT PLAN POSITION `15` -- THE OTHER PARTY, NAMED BY THE OPERAND
-    # THAT CARRIES THEM. `ED-IN-0210` ruling 1: *a real interaction has a COUNTERPARTY, an OBSTACLE
+    # ⚠ THE NINTH COLUMN -- THE OTHER PARTY, NAMED BY THE OPERAND THAT CARRIES THEM. `ED-IN-0210` ruling 1: *a real interaction has a COUNTERPARTY, an OBSTACLE
     # and a DEGREE*; ruling 2: `petition` is *the first in the set where a counterparty is
     # structurally required*. `decision/options.py::opening_set` reads it and forms no Candidate
     # whose counterparty is the person themselves -- the contested-verb rule beside it (`contests:`
     # makes `subject` the second claimant), generalised to a row that names its counterparty
     # directly. `""` is the declared absence; the loader requires a named operand to be one the
     # row's typed cell BINDS, so the Candidate always carries the thing compared -- or, on an
-    # UNTYPED row (`oblige`; `give` until plan position `14` typed it), a `requires_operands` member
-    # no Candidate can carry, which makes `opening_set` form none: a second party the grammar
-    # cannot yet name. Plan position `14` asks the same column again IN THE FOLD
-    # (`loop/resolve.py::_admits`, `COUNTERPARTY_CLAUSE`), for the hand-built act no person forms.
+    # UNTYPED row (`oblige`), a `requires_operands` member no Candidate can carry, which makes
+    # `opening_set` form none: a second party the grammar cannot yet name. The same column is asked
+    # again IN THE FOLD (`loop/resolve.py::_admits`, `COUNTERPARTY_CLAUSE`), for the hand-built act
+    # no person forms.
     counterparty: str = ""
-    # ⚠ THE TENTH COLUMN'S SECOND SHAPE, ADDED AT PLAN POSITION `19` -- `04 §B.13` INVARIANT 4'S
-    # PER-CONJUNCT HALF (F7): *"every failable clause has a refusal kind -- not only a verb with a
+    # ⚠ THE TENTH COLUMN'S SECOND SHAPE -- `04 §B.13` INVARIANT 4'S PER-CONJUNCT HALF (F7): *"every failable clause has a refusal kind -- not only a verb with a
     # `requires`, but each CONJUNCT of it, and any eligibility alternative that can decline."* §C.4's
     # fold spells the reader: `emit(row.refusal_for(ELIGIBILITY))` and
     # `emit(row.refusal_for(failed_conjunct))`. A row may declare `emits_on_refusal:` as a MAPPING
     # from a FAILABLE CLAUSE to its kinds, and this holds it; `emits_on_refusal` above holds the
     # UNION, so every reader that asks *is this Event one of the row's refusals* (`corpus_run`,
     # `loop/driver.py`, `loop/deliberate.py`) is unchanged. `writes`/`writes_by_degree` is the
-    # precedent, one column over. Empty = a flat row, whose every refusal emits the flat tuple exactly
-    # as before `19` -- so no row that did not opt in moves by a byte.
+    # precedent, one column over. Empty = a flat row, whose every refusal emits the flat tuple.
     refusals_by_clause: dict = field(default_factory=dict)
-    # ⚠ THE TWO DECLARED ABSENCES A DRIVER-CONSTRUCTION REFUSAL READS (plan position IN-41, `SM-9` +
-    # `SM-11`). Each is the row SAYING WHY the fold cannot carry it, so `resolvable_verbs()` drops it
+    # ⚠ THE TWO DECLARED ABSENCES A DRIVER-CONSTRUCTION REFUSAL READS (`SM-9` + `SM-11`). Each is the row SAYING WHY the fold cannot carry it, so `resolvable_verbs()` drops it
     # with a reason on record rather than without a word; `manifest/registry.py` refuses both
     # directions -- a gap with no note, and a note on a row that has no gap (for `effect_decline_note:`
     # a row that has an effect or writes nothing).
     #
     # `effect_decline_note:` -- the row WRITES and no `@effect_for` body exists, and here is why
-    # (refusal (a), `check_effects`). It is one of THREE columns the retired `decline_note:` was split
-    # into, because that one column declined an effect on some rows and a FORMATION on others
-    # (`oblige`, `destroy_record` have effects; their notes say why no Candidate forms). The formation
-    # half is `formation_decline_note:`, an annotation this loader ignores (its `*_note` rule) and no
-    # gate reads -- a row whose effect EXISTS is resolvable, and why nobody forms it is a reader's fact.
+    # (refusal (a), `check_effects`). The formation half is `formation_decline_note:`, an annotation
+    # this loader ignores (its `*_note` rule) and no gate reads -- a row whose effect EXISTS is
+    # resolvable, and why nobody forms it is a reader's fact.
     effect_decline_note: str = ""
     # `requires_decline_note:` -- the row has a precondition that NOTHING EVALUATES (no typed cell, no
-    # `REQUIRES_PREDICATES` entry), and here is why (`check_preconditions`). The third column of the
-    # split. NOT `requires_typed_note`, which says why the cell is untyped and stands on rows a
+    # `REQUIRES_PREDICATES` entry), and here is why (`check_preconditions`). NOT `requires_typed_note`, which says why the cell is untyped and stands on rows a
     # registered predicate DOES evaluate (`oblige`, `release`).
     requires_decline_note: str = ""
     # IN-53 (H-207): THE REFERENT CLASS -- the carrier type (`Office`) a Candidate of this verb must
-    # be ABOUT. `""` is the declared absence: the verb forms on the question's PLAIN referents, as
-    # every row did before. A named class must be a `rosters.yaml: referent_classes` value or the
+    # be ABOUT. `""` is the declared absence: the verb forms on the question's PLAIN referents. A named class must be a `rosters.yaml: referent_classes` value or the
     # load refuses; the verb then forms ONLY on referents the question carries as that class, and
     # never on its plain ones (`referents_of`, `Question.referents_for`): the class is a PARTITION
     # (DECISION 2026-10-13 D1), so a classed referent never reaches an undeclared row. It exists
     # because `opening_set` has no World (L2) and cannot ask what kind of thing a referent is:
     # `confer` formed on every rung, person, Record and Site a question named and was refused by
-    # the fold on every one (`30d38a12`).
+    # the fold on every one.
     referent_class: str = ""
     # IN-53 (H-207, DECISION 2026-10-13 D2): MAY THE COUNTERPARTY BE THE PERSON THEMSELF? `False`
     # (every row but one) keeps ED-IN-0210's counterparty clause as it was: no Candidate, and no
@@ -266,6 +227,11 @@ class VerbRow:
     # `counterparty_may_be_self`, which waives the COUNTERPARTY operand's self-exclusion (`confer`). The
     # loader admits it only on a row `subject_is_opponent` reads as contested against its subject.
     subject_may_be_self: bool = False
+    # B03.68 (`09_WR_threadwork_module` edit 3): WHICH THREAD OPERATION THE ROW PERFORMS, a `thread_operations`
+    # member (`rosters.yaml`; leap, weave, pull, ...). `""` is the declared absence, every row today: the thread
+    # rows that name an operation are B35's (CP-T07-03, -04, -11). The loader refuses a value outside the roster,
+    # so a row naming a working the threadwork module does not have never loads.
+    operation: str = ""
 
     def referents_of(self, q) -> tuple:
         """THE REFERENTS OF QUESTION `q` A CANDIDATE OF THIS VERB MAY BE FORMED ON: `q`'s plain
@@ -283,7 +249,7 @@ class VerbRow:
         """THE PAYLOAD OPERAND AN ACT OF THIS ROW CONTESTS AGAINST: its `counterparty:` when the row names one, else
         `subject` (telling workplan `T4`, `ED-IN-0282`: `tell` contests against its hearer `to`; `fight` and `march`
         name none and read `subject`). The one owner of that rule, asked by `loop/resolve.py` (the fold's `_target`)
-        and `decision/options.py::subject_is_opponent`, which had each written it inline (CR-16)."""
+        and `decision/options.py::subject_is_opponent`."""
         return self.counterparty or "subject"
 
     def contested_against_subject(self) -> bool:
@@ -339,8 +305,7 @@ class VerbRow:
     def refusal_for(self, clause: Optional[str]) -> tuple:
         """`04 §C.4`'s `row.refusal_for(clause)`: the kinds a refusal AT `clause` emits.
 
-        A FLAT row answers its flat tuple for every clause, which is every row's behaviour before
-        plan position `19`. A KEYED row answers the clause's own kinds -- and a clause it does not
+        A FLAT row answers its flat tuple for every clause. A KEYED row answers the clause's own kinds -- and a clause it does not
         key RAISES, because the loader has already required a key for every clause that can fail
         (`ELIGIBILITY_CLAUSE` if an alternative can decline, each named conjunct, `WRITE_CLAUSE` if
         the row writes, `COUNTERPARTY_CLAUSE` if it names a second party). Reaching this with an
@@ -365,16 +330,13 @@ class VerbRow:
         an uncontested verb ignores the degree; a contested one with no degree, or with a degree
         it does not declare, RAISES rather than reporting the wrong outcome.
 
-        ⚠ `H-115`: THESE TWO RAISES USED TO BE `SystemExit`, THE ONLY RUN-TIME REFUSALS IN
-        `shape.py` OUTSIDE THE TYPED GAP TAXONOMY (which now lives in `season/gaps.py`). `SystemExit` derives from `BaseException`, so
-        `corpus_run.run_case`'s `except (S.ShapeGap, S.Unspecified, S.Forbidden, S.NoProducer)`
-        clause never catches it -- a one-case design gap escaped as a whole-corpus run
-        termination, with no DESIGN-GAP row and no section citation. The load-time raises
-        beside these (missing/malformed YAML, in the loader functions -- locate them by grepping for the
-        load-time exit token itself, NOT from a line list, which rots on every edit and had
-        already rotted before step 1) are CORRECTLY fatal and are UNCHANGED -- this file loads once, and a
-        broken table should end the process. These four are not load-time; they fire per-act,
-        mid-corpus, and belong in the taxonomy every other per-case refusal in the package uses."""
+        ⚠ `H-115`: THESE RAISES ARE TYPED GAPS (`season/gaps.py`), NOT `SystemExit`. `SystemExit`
+        derives from `BaseException`, so `corpus_run.run_case`'s `except (S.ShapeGap, S.Unspecified,
+        S.Forbidden, S.NoProducer)` clause would never catch it -- a one-case design gap would end
+        the whole-corpus run. The load-time raises (missing/malformed YAML, in the loader
+        functions) are correctly fatal: this file loads once, and a broken table should end the
+        process. These fire per-act, mid-corpus, and belong in the taxonomy every other per-case
+        refusal in the package uses."""
         if not self.emits_by_degree:
             return self.emits
         if degree is None:
@@ -407,8 +369,7 @@ class VerbRow:
         lawful and means the act still EMITS having written nothing, which is what separates a
         LOSS from a REFUSAL.
 
-        ⚠ `H-115`, SAME FIX AS `emits_at` ABOVE -- see that docstring. These two raised
-        `SystemExit` and escaped `run_case`'s `ShapeGap` clause whole."""
+        ⚠ `H-115`, SAME RULE AS `emits_at` ABOVE -- see that docstring."""
         if not self.writes_by_degree:
             return self.writes
         if degree is None:
@@ -433,14 +394,14 @@ class VerbRow:
         return tuple(self.writes_by_degree[degree])
 
 # Loader invariant 10's verb-row key set, DERIVED from `VerbRow` rather than listed: every field a
-# YAML column fills (the two `*_by_degree` maps are built from `writes:`/`emits:`, and `19`'s
+# YAML column fills (the two `*_by_degree` maps are built from `writes:`/`emits:`, and
 # `refusals_by_clause` from `emits_on_refusal:`, not read), plus `domain` (read for `release`,
 # invariant 6) and `source` (every row's provenance column).
 _VERB_ROW_KEYS = (frozenset(f.name for f in fields(VerbRow)
                             if not f.name.endswith(("_by_degree", "_by_clause")))
                   | {"domain", "source"})
 
-# THE TWO FAILABLE CLAUSES THE FOLD OWNS, BESIDE A ROW'S OWN NAMED CONJUNCTS (plan position `19`) --
+# THE TWO FAILABLE CLAUSES THE FOLD OWNS, BESIDE A ROW'S OWN NAMED CONJUNCTS --
 # the keys a keyed `emits_on_refusal:` uses for them. `ELIGIBILITY_CLAUSE` is `04 §C.4`'s own
 # `refusal_for(ELIGIBILITY)`: no alternative of the row admitted the actor. `WRITE_CLAUSE` is F9's:
 # the precondition held and the write moved nothing (`NoOpReceipt`, `state/gate.py`) -- an effect
@@ -448,7 +409,7 @@ _VERB_ROW_KEYS = (frozenset(f.name for f in fields(VerbRow)
 # that requires them, and imported by the fold (`loop/resolve.py`) that emits them.
 ELIGIBILITY_CLAUSE = "eligibility"
 WRITE_CLAUSE = "write"
-# THE THIRD, PLAN POSITION `14` (U7-own): `ED-IN-0210` ruling 1's SECOND PARTY, ASKED ONCE, IN THE
+# THE THIRD: `ED-IN-0210` ruling 1's SECOND PARTY, ASKED ONCE, IN THE
 # FOLD. A row naming a `counterparty:` operand is refused here when the act names nobody there or
 # names the actor -- the `Tenure(X, X)` self-loop ruling 1 calls a fiat. `opening_set` already declines the
 # same case person-side, so no computed act reaches it; this is the clause a HAND-BUILT act meets,
@@ -458,44 +419,35 @@ COUNTERPARTY_CLAUSE = "counterparty"
 
 
 def _derive_openers_from_effects() -> dict:
-    """LOADER INVARIANT 6'S SECOND HALF, DERIVED RATHER THAN HAND-COPIED (`OPENERS-DERIVE`,
-    2026-09-29, `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md` §3.1 item 6).
-    `rosters.yaml`'s `tenure_kinds` row used to carry an `openers:` mapping BY HAND, kept in sync
-    by a human re-reading `loop/effects.py` -- correct the day it was transcribed (2026-09-25) and
-    silently wrong the day a new opener effect landed with no matching edit here (`CLAUDE.md` §8's
-    every-rule-lives-once hazard). The single owner of "which verb opens which kind" is the
-    `Tenure(...)` construction itself, inside the function `@effect_for` registers for that verb:
-    every site today names `kind` as a STRING LITERAL -- `Tenure(id, subject, object, kind, ...)`,
-    positional, or a `kind=` keyword -- so an AST walk over `effects.py`'s own source (read as
-    TEXT, never imported -- no `data` -> `loop` import edge) reads the identical fact the
-    hand-written roster used to transcribe, with no second copy to fall behind.
+    """LOADER INVARIANT 6'S SECOND HALF, DERIVED RATHER THAN HAND-COPIED (`OPENERS-DERIVE`). The
+    single owner of "which verb opens which kind" is the `Tenure(...)` construction itself, inside
+    the function `@effect_for` registers for that verb (`CLAUDE.md` §8's every-rule-lives-once):
+    every site names `kind` as a STRING LITERAL -- `Tenure(id, subject, object, kind, ...)`,
+    positional, or a `kind=` keyword -- so an AST walk over the effect modules' own source (read as
+    TEXT, never imported -- no `data` -> `loop` import edge) reads the fact with no second copy to
+    fall behind.
 
-    Returns EVERY tenure kind, including the ones no effect opens today -- an empty list, the same
-    "declared means present" contract the hand-written roster kept -- because a kind with a
-    `writes: Tenure.since` cell and no opener (`commit`, `oblige`, `succeed`, `tie`, `knot`) is a
-    real, disclosed hole, not an absent declaration. MEASURED against the mapping it replaced: the
-    two agree exactly (`hold: [confer, create_record]`, `contain: [move]`, the other five empty).
+    Returns EVERY tenure kind, including the ones no effect opens -- an empty list, the "declared
+    means present" contract -- because a kind with a `writes: Tenure.since` cell and no opener
+    (`commit`, `oblige`, `succeed`, `tie`, `knot`) is a real, disclosed hole, not an absent
+    declaration. Run this function for the current set.
 
-    ⚠ THE WALK FOLLOWS A REGISTERED EFFECT INTO THE MODULE'S OWN HELPERS (plan position `15`).
-    `create_record`, `issue` and `petition` share ONE mint, `_mint_document`, and the `hold` it
-    opens is constructed there rather than in any decorated body -- so a walk confined to the
-    decorated function would have DROPPED `create_record` from `hold`'s openers the day the mint
-    was shared, a derived fact going quietly wrong in the direction nobody reads. A call to a
-    function defined at the top of the SAME FILE, or imported from a SIBLING `effects_*.py` (below), is
-    walked as if inlined (transitively, each helper once). MEASURED after the change: `hold: [confer, create_record, issue,
-    petition]`, every other kind unchanged. (LIVE since: `hold: [confer, create_record, give, issue,
-    open_case, petition, survey, utter]`; run this function for the current set.)
+    ⚠ THE WALK FOLLOWS A REGISTERED EFFECT INTO THE MODULE'S OWN HELPERS. `create_record`, `issue`
+    and `petition` share ONE mint, `_mint_document`, and the `hold` it opens is constructed there
+    rather than in any decorated body -- so a walk confined to the decorated function would DROP
+    `create_record` from `hold`'s openers, a derived fact going quietly wrong in the direction
+    nobody reads. A call to a function defined at the top of the SAME FILE, or imported from a
+    SIBLING `effects_*.py`, is walked as if inlined (transitively, each helper once).
 
-    ⚠⚠ SEVEN FILES, NOT ONE, SINCE THE PHASE-4 PER-SUBSYSTEM SPLIT (2026-09-30). `effects.py` itself
-    is now a thin aggregator -- no `@effect_for`, no `Tenure(...)` -- and every decorated function
-    moved into one of its `effects_*.py` siblings (`files.effects_modules()`, discovered by name
-    rather than hand-listed, `loop_modules`'s own lesson one split down). Every sibling is parsed
-    first and a decorated function's helpers are resolved through its OWN file's namespace: the
-    top-level functions it defines plus the ones it imports from a sibling (`from .effects_x import
-    name`), so a shared helper that constructs a Tenure is walked from every sibling that reaches it
-    (SINCE v9 IN-13: `_relocate`, defined in `effects_migration.py`, opens `contain` for `march` in
-    `effects_combat.py`); the shared helpers in `effects_shared.py` construct none today. A call
-    through anything but a bare name, or a `Tenure` whose `kind` is not a literal, is not read.
+    ⚠⚠ SEVERAL FILES, NOT ONE. `effects.py` is a thin aggregator -- no `@effect_for`, no
+    `Tenure(...)` -- and every decorated function lives in one of its `effects_*.py` siblings
+    (`files.effects_modules()`, discovered by name rather than hand-listed). Every sibling is
+    parsed first and a decorated function's helpers are resolved through its OWN file's namespace:
+    the top-level functions it defines plus the ones it imports from a sibling (`from .effects_x
+    import name`), so a shared helper that constructs a Tenure is walked from every sibling that
+    reaches it (v9 IN-13: `_relocate`, defined in `effects_migration.py`, opens `contain` for
+    `march` in `effects_combat.py`). A call through anything but a bare name, or a `Tenure` whose
+    `kind` is not a literal, is not read.
     """
     openers: dict = {k: set() for k in TENURE_KINDS}
 
@@ -561,13 +513,8 @@ def _derive_openers_from_effects() -> dict:
     return {k: sorted(v) for k, v in openers.items()}
 
 
-#: Computed ONCE, same discipline as `effects.py`'s own source not changing mid-process
-#: (`_OFFICES_DOC`/`OFFICES_SEATS` in `rosters.py` cache their own derivation the same way).
-#: Found uncached at the Phase-1 methodology close (2026-09-29, `/simplify`, EFFICIENCY and
-#: SIMPLIFICATION lenses, convergent): all three call sites below re-read and re-parsed
-#: `loop/effects.py` from scratch on every call, though the derivation "once instead of a second
-#: copy" was the function's own whole premise -- the same discipline now applies to the
-#: derivation's runtime cost, not only to the source file it replaces.
+#: Computed ONCE: the effect modules' source does not change mid-process, and all three call sites
+#: below read the same derivation (`_OFFICES_DOC`/`OFFICES_SEATS` in `rosters.py` cache theirs alike).
 _OPENERS_FROM_EFFECTS = _derive_openers_from_effects()
 
 
@@ -595,8 +542,8 @@ def _record_subkinds_answered(row: "VerbRow") -> frozenset:
     other class or none. A clause asking `existence` of the COLLECTION (`research`: `kind: Record`, any
     document) names no sub-kind a standing occasion could stamp by -- every Record answers it -- so it is
     in neither derivation below; such a row forms on the question's own Records, which
-    `queries/world_q.py::own_referents_of_class` stamps since the class left `rosters.yaml:
-    occasion_only_classes`, and (the class being shared) on every Record the two standing occasions stamp.
+    `queries/world_q.py::own_referents_of_class` stamps, and (the class being shared) on every Record the
+    two standing occasions stamp.
     The ONE place that exclusion is written: both derivations read it."""
     return (_record_kinds_answered(row) or frozenset()) - {row.referent_class}
 
@@ -614,8 +561,7 @@ def _load_verb_table() -> dict:
             raise SystemExit(f"verb_table.yaml: {name!r} appears more than once")
         # LOADER INVARIANT 10, VERB HALF (`04 §B.13 #10`, `04:470`): UNKNOWN KEYS ARE REJECTED.
         # A column is either one this loader reads or an annotation spelled `*_note`; anything else
-        # is a column that silently does nothing, which is what `writes_grade:`, `writes_source:`,
-        # `eligibility_substitution:`, `eligibility_sweep:` and `effect:` were until 2026-09-25.
+        # is a column that silently does nothing.
         # ⚠ #10's OTHER CLAUSE -- *"a `scale:` key fails the load"* -- IS NOT ENFORCED, BECAUSE IT
         # IS ABOUT A DIFFERENT FIELD: the chain's retired per-module `scale:`, not the ruled
         # rung-kind column `VerbRow.scale` carries (see the comment on that field above).
@@ -642,8 +588,7 @@ def _load_verb_table() -> dict:
             flat_emits = tuple(dict.fromkeys(e for v in emits_by_degree.values() for e in v))
         else:
             flat_emits = tuple(raw_emits)
-        # ⚠ `emits_on_refusal:` TAKES TWO SHAPES TOO (plan position `19`, invariant 4's per-conjunct
-        # half). A mapping is keyed by FAILABLE CLAUSE; a sequence is the flat form. The union is the
+        # ⚠ `emits_on_refusal:` TAKES TWO SHAPES TOO (invariant 4's per-conjunct half). A mapping is keyed by FAILABLE CLAUSE; a sequence is the flat form. The union is the
         # flat column either way, so every reader of *is this a refusal* sees the same kinds.
         raw_refusals = r["emits_on_refusal"]
         by_clause: dict = {}
@@ -668,11 +613,12 @@ def _load_verb_table() -> dict:
                       referent_class=str(r.get("referent_class") or "").strip(),
                       counterparty_may_be_self=r.get("counterparty_may_be_self", False),
                       referent_named=r.get("referent_named", False),
-                      subject_may_be_self=r.get("subject_may_be_self", False))
+                      subject_may_be_self=r.get("subject_may_be_self", False),
+                      operation=str(r.get("operation") or "").strip())
         # THE COUNTERPARTY IS AN OPERAND THE ACT CARRIES, OR IT IS NOTHING. `opening_set` compares
         # it with the person; a name the typed cell does not BIND is absent from every Candidate,
         # so the comparison would pass silently and the rule would be a column nothing enforced.
-        # ⚠ AN UNTYPED ROW MAY NAME ONE (`oblige`; `give` until `14`), AND IT MEANS SOMETHING ELSE
+        # ⚠ AN UNTYPED ROW MAY NAME ONE (`oblige`), AND IT MEANS SOMETHING ELSE
         # THERE: no cell binds it, so no Candidate carries it, and `opening_set` forms none -- the
         # row declares a second party the grammar cannot yet name, and a person does not mint an
         # act with that hole (`operands_for`'s rule, reached through the one column that says the
@@ -696,7 +642,7 @@ def _load_verb_table() -> dict:
                 f"is not a declared class (the classes are {sorted(REFERENT_CLASSES)}, from "
                 "`rosters.yaml: referent_classes`). `opening_set` forms the verb only on a "
                 "referent carried as that class, so an undeclared one never forms.")
-        # IN-09 (batch B-I close, layer-conformance, A7): A `Record` ROW NAMES THE RECORD KINDS IT
+        # IN-09: A `Record` ROW NAMES THE RECORD KINDS IT
         # ANSWERS, OR THE LOAD REFUSES. `writs_held` stamps a held Record only if its kind is one a
         # `Record` row's typed cell asks `existence` of on `subject` (`RECORD_REFERENT_KINDS`, read
         # off `_record_kinds_answered`; v10 REM-25: a row whose cell also asks `held_by` is stamped by
@@ -722,6 +668,15 @@ def _load_verb_table() -> dict:
                 raise SystemExit(
                     f"verb_table.yaml: {name!r} declares {col} {getattr(row, col)!r}; it is "
                     "`true` or `false`")
+        # AN `operation:` IS A `thread_operations` MEMBER, OR THE LOAD REFUSES -- `SystemExit`, the load-time
+        # kind (`H-115`'s split, as `beneficiary:` above). The roster is `rosters.yaml`'s and is read through
+        # `THREAD_OPERATIONS`; a name the threadwork module has no working for would be a verb nothing performs.
+        if row.operation and row.operation not in THREAD_OPERATIONS:
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} declares `operation: {row.operation!r}`, which is not in "
+                f"`thread_operations` ({sorted(THREAD_OPERATIONS)}). A thread operation is one named working a "
+                "practitioner attempts on the thread; add a new one to rosters.yaml and argue for it there, "
+                "never here.")
         # IN-10 (a): `referent_named` ONLY BESIDE A `referent_class:` -- on a row forming on plain
         # referents it would decline nothing the class partition offered, a column read by nothing.
         if row.referent_named and not row.referent_class:
@@ -777,15 +732,11 @@ def _load_verb_table() -> dict:
                 "is the UNKNOWN/False collapse `operands_for` refuses one level down.")
         # (2) IT IS ROSTERED. `beneficiary_kinds` is the closed set, in `rosters.yaml`, so a
         #     fifth carrier is a data edit argued for in the roster rather than a new string here.
-        #     ⚠⚠ IT RAISES `SystemExit`, NOT `Unspecified`, AND THE FIRST VERSION HAD THAT
-        #     BACKWARDS. This went through `require_member`, which raises `Unspecified` -- and
-        #     this file's own `H-115` docstring codifies the opposite split: load-time refusals
-        #     are CORRECTLY fatal `SystemExit`, while `Unspecified`/`ShapeGap`/`Forbidden`/
-        #     `NoProducer` are the PER-ACT gap taxonomy. `corpus_run.run_case` catches that
-        #     taxonomy, so a broken TABLE imported inside its try block was reported as ONE
-        #     CASE's `status="DESIGN-GAP"` -- a whole-table defect attributed to a case, which is
-        #     the mis-attribution `H-115` was raised to end, arriving through the new check.
-        #     It was also invisible to `test_h115_...`, which counts `raise SystemExit` only.
+        #     ⚠⚠ IT RAISES `SystemExit`, NOT `Unspecified` (`require_member` raises
+        #     `Unspecified`): load-time refusals are fatal `SystemExit`, while `Unspecified`/
+        #     `ShapeGap`/`Forbidden`/`NoProducer` are the PER-ACT gap taxonomy
+        #     `corpus_run.run_case` catches, so a broken TABLE would be reported as ONE CASE's
+        #     `status="DESIGN-GAP"` (`H-115`). `test_h115_...` counts `raise SystemExit` only.
         if row.beneficiary not in BENEFICIARY_KINDS:
             raise SystemExit(
                 f"verb_table.yaml: {name!r} declares `beneficiary: {row.beneficiary!r}`, which is "
@@ -794,12 +745,9 @@ def _load_verb_table() -> dict:
                 "`subject`, or a named operand); a name outside the roster is a carrier nothing "
                 "can resolve. Add it to rosters.yaml and argue for it there, never here.")
         # (3) AN OPERAND BENEFICIARY MUST BE CARRIABLE BY THIS ROW'S OWN CELL, AND THIS IS THE
-        #     CHECK THAT KEEPS THE COLUMN HONEST. `CAT-2` killed option 1 -- derive the
-        #     beneficiary from the operand binding -- by MEASURING that 24 of 38 verbs are
-        #     untyped and can carry nothing whatever. A static column dodges that failure only
+        #     CHECK THAT KEEPS THE COLUMN HONEST. A static column escapes the dead reference only
         #     while it declares carriers the row can actually hold: `beneficiary: to` on a verb
-        #     whose cell never binds `to` is the same dead reference, moved into the column that
-        #     was supposed to escape it, and it would resolve to `None` forever in silence.
+        #     whose cell never binds `to` would resolve to `None` forever in silence.
         #     `actor` and `subject` are exempt BY CONSTRUCTION, not by leniency -- the first is
         #     structural on every Candidate (`operands_for` skips it for exactly that reason) and
         #     the second is a field on the carrier, so neither depends on a cell.
@@ -849,17 +797,12 @@ def _load_verb_table() -> dict:
             raise SystemExit(
                 f"verb_table.yaml: {name!r} has a degree-keyed `writes:` and no `contests:`. "
                 "Nothing resolves a degree for it, so no branch could ever be selected.")
-        # ⚠ **INVARIANT 12 WAS ONE-SIDED AND THE OTHER SIDE IS THE SAME DEFECT.** The four checks
-        # above read `writes:` only, so a row with a FLAT `writes:` (`[]` included), a DEGREE-KEYED
-        # `emits:` and no `contests:` LOADED CLEAN and then raised `Unspecified` at the first act
-        # that folded it -- `emits_at(None)` has nowhere to look. That is precisely what invariant
-        # 12 exists to make unwritable, escaping through the column it did not read.
-        # ⚠ FOUND BY BUILDING THE SIX INVESTIGATION ACTS (ED-FI-0009), WHOSE `writes:` IS `[]` BY
-        # DESIGN -- a finding is a Claim minted at WITNESS, not a typed write -- so they are the
-        # exact shape that slips through: keying their `emits:` on a Degree would have been
-        # accepted at load and would have failed per-act, mid-corpus, as a design gap rather than
-        # as the table defect it is. They ship with a FLAT `emits:` because nothing grades an
-        # investigation act yet; this check is what makes that a decision rather than a habit.
+        # ⚠ **INVARIANT 12 HAS A SECOND SIDE.** A row with a FLAT `writes:` (`[]` included), a
+        # DEGREE-KEYED `emits:` and no `contests:` would load clean and then raise `Unspecified` at
+        # the first act that folded it -- `emits_at(None)` has nowhere to look. The investigation
+        # acts (ED-FI-0009) have `writes: []` by design -- a finding is a Claim minted at WITNESS,
+        # not a typed write -- and ship with a FLAT `emits:` because nothing grades them yet; this
+        # check is what makes that a decision rather than a habit.
         # ⚠ v9 FI-01 (J-22 option (A)): THE ARM ACCEPTS A SECOND SOURCE OF A DEGREE, a `graded_inquiries`
         # ROUTE (`rosters.yaml`; `loop/resolve.py::_grade` rolls it). A routed row keys `emits:` by degree
         # and writes nothing (both refused below), so its roll has no band-blind write to apply.
@@ -915,9 +858,9 @@ def _load_verb_table() -> dict:
             raise SystemExit(f"verb_table.yaml: {name!r} has stratum {row.stratum!r}, which is "
                              f"not one of rosters.yaml's {list(STRATA)}")
         # LOADER INVARIANT 9 (`04 §B.13 #9`, `04:469`): CONTEST PRIZES ⊆ THE SUBSYSTEM ROSTER. A
-        # misspelled prize used to load clean, boot clean, and reach the seam's generic refusal at
-        # first call naming no row (`manifest.registry.unclaimed_contest_prizes`'s docstring). The
-        # roster, `contest_subsystems.prizes`, owns which prizes exist.
+        # misspelled prize would otherwise reach the seam's generic refusal at first call naming no
+        # row (`manifest.registry.unclaimed_contest_prizes`'s docstring). The roster,
+        # `contest_subsystems.prizes`, owns which prizes exist.
         if row.contests and row.contests not in _CONTEST_PRIZES:
             raise SystemExit(
                 f"verb_table.yaml: {name!r} declares `contests: {row.contests}`, which is not a "
@@ -928,12 +871,10 @@ def _load_verb_table() -> dict:
         # REFUSAL KIND. A clause can fail if the row has a `requires` cell, or if any eligibility
         # alternative is other than `own` (which cannot decline). Such a row with an empty
         # `emits_on_refusal` would refuse by emitting a kind nobody declared.
-        # ⚠ THE PER-CONJUNCT HALF OF F7 IS ENFORCED BELOW SINCE PLAN POSITION `19`, FOR A KEYED ROW.
-        # It said *"NOT ENFORCED HERE ... that schema does not exist"* until `19` built the schema
-        # for its first consumers (`requisition`, `open_case`, `determine`, `issue`). A FLAT row is still
-        # checked at row grain only (the block directly below): `restore`, `examine` and `surveil`
-        # carry an `AllOf` of two and one flat kind, which is lawful -- a flat row DECLARES that all
-        # its conjuncts refuse alike -- and moving them is not `19`'s.
+        # ⚠ THE PER-CONJUNCT HALF OF F7 IS ENFORCED BELOW, FOR A KEYED ROW. A FLAT row is checked at
+        # row grain only (the block directly below): `restore`, `examine` and `surveil` carry an
+        # `AllOf` of two and one flat kind, which is lawful -- a flat row DECLARES that all its
+        # conjuncts refuse alike.
         _failable = (row.has_precondition
                      or any(k != "own" for k in row.eligibility_kinds()))
         if _failable and not row.emits_on_refusal:
@@ -942,7 +883,7 @@ def _load_verb_table() -> dict:
                 f"eligibility other than `own`: {list(row.eligibility)}) and an empty "
                 "`emits_on_refusal:`. 04 §B.13 #4 (F7) -- every failable clause has a refusal "
                 "kind; a refusal with no declared kind is a fabricated emission.")
-        # LOADER INVARIANT 4, PER-CONJUNCT HALF (plan position `19`; `04:465-468`, F7): A KEYED ROW
+        # LOADER INVARIANT 4, PER-CONJUNCT HALF (`04:465-468`, F7): A KEYED ROW
         # KEYS EXACTLY ITS FAILABLE CLAUSES. The clause set is DERIVED from the row, never listed:
         #   * `ELIGIBILITY_CLAUSE`  iff an eligibility alternative can decline (anything but `own`);
         #   * every NAMED top-level conjunct of its typed cell (`conjunct:`, `data/requires.py`) --
@@ -950,7 +891,7 @@ def _load_verb_table() -> dict:
         #     predicate's conjuncts (`REQUIRES_PREDICATES`) live in `loop/`, which this loader may not
         #     import, so a keyed predicate row is a set of keys nothing here can check;
         #   * `WRITE_CLAUSE`         iff the row writes (an effect can decline, F9's `NoOpReceipt`);
-        #   * `COUNTERPARTY_CLAUSE`  iff the row names a `counterparty:` (plan position `14`).
+        #   * `COUNTERPARTY_CLAUSE`  iff the row names a `counterparty:`.
         # MISSING is a failable clause with no kind -- the fold would reach `refusal_for` and raise;
         # EXTRA is a kind for a clause that cannot fail, read by nothing (`ID-13`). A name on a FLAT
         # row is refused for the same reason: nothing keys it. A CONTESTED row may key its refusals
@@ -974,11 +915,11 @@ def _load_verb_table() -> dict:
                     or None in row.requires_typed.names):
                 _defects.append("keys its refusals, so its precondition must be a typed cell with "
                                 "EVERY top-level conjunct named")
-            # ⚠ NARROWED AT TELLING WORKPLAN `T4`: the party-gap refusal emits the UNION, which is
-            # `ID-9` only if the union holds more than one kind -- a kind published for a conjunct
-            # that did not fail. A contested row whose every key emits ONE kind (`tell`:
-            # `tell.refused` for `holds` and `hearer`) emits exactly that kind at the party gap too.
-            # ⚠ NARROWED AGAIN AT v9 IN-12 step 5 (#453 K-02, the party-gap fold edit): THE SEAM'S
+            # ⚠ The party-gap refusal emits the UNION, which is `ID-9` only if the union holds more
+            # than one kind -- a kind published for a conjunct that did not fail. A contested row
+            # whose every key emits ONE kind (`tell`: `tell.refused` for `holds` and `hearer`) emits
+            # exactly that kind at the party gap too.
+            # ⚠ v9 IN-12 step 5 (#453 K-02, the party-gap fold edit): THE SEAM'S
             # PARTY GAP IS THE COUNTERPARTY CLAUSE FAILING, so a row that KEYS `COUNTERPARTY_CLAUSE`
             # emits that key's kinds there (`loop/resolve.py::_refuse_party_gap`) and not the union,
             # and may key two kinds (`arrest`: `arrest.unauthorized` / `arrest.refused`). The rule
@@ -1009,9 +950,8 @@ def _load_verb_table() -> dict:
                     f"verb_table.yaml: {name!r} " + "; ".join(_defects) + ". 04 §B.13 #4 (F7), "
                     "the per-conjunct half -- every failable clause has a refusal kind, and a key "
                     f"is a failable clause. Its failable clauses: {sorted(_expected)}.")
-        # LOADER INVARIANT 4, THE FLAT HALF (SC-02 `23`; S-8's residue, as v8 `_part3` at git 59004d86 words
-        # it -- retired, at its FORK ref, not in the live tree: a row that still uses the flat form where
-        # a conjunct is failable). A FLAT row's `emits_on_refusal:` is emitted WHOLE at every
+        # LOADER INVARIANT 4, THE FLAT HALF (SC-02 `23`; S-8's residue: a row that still uses the flat
+        # form where a conjunct is failable). A FLAT row's `emits_on_refusal:` is emitted WHOLE at every
         # refusal (`VerbRow.refusal_for`), so a flat row with two or more failable clauses -- eligibility,
         # each top-level conjunct of its cell (named or not: a flat row cannot name them), the write, the
         # counterparty -- and two or more refusal kinds publishes a kind for a clause that did not fail,
@@ -1038,14 +978,10 @@ def _load_verb_table() -> dict:
     # LOADER INVARIANT 6 (`04_CODE_ARCHITECTURE.md` PART D row 15, MECHANICAL at load):
     # *"`release` generic; the loader asserts its domain equals `tenure_kinds \ {contain}`"*.
     #
-    # ⚠⚠ **IT RUNS AFTER THE LOOP, AND THAT IS THE WHOLE OF THE DIFFERENCE BETWEEN A CHECK AND A
-    # CHECK THAT CAN OBSERVE ITS OWN SUBJECT'S ABSENCE.** The first writing sat INSIDE the row
-    # loop behind `if name == "release"`, so deleting or renaming the row meant the check never
-    # executed: the load succeeded and the vocabulary was open-without-close again, which is the
-    # exact state row 15 grades MECHANICAL at load. §0.1 pt 2 applied one notch too narrowly — the
-    # branch could see a wrong domain and not a missing verb. Found by the unit's own adversarial
-    # pass. The tests would have caught the deletion (`len(VERB_TABLE) == 38`, the executed-set
-    # pins), but the tests are not the load and the row's grade claims the load.
+    # ⚠⚠ **IT RUNS AFTER THE LOOP, SO IT CAN OBSERVE ITS OWN SUBJECT'S ABSENCE.** Inside the row
+    # loop behind `if name == "release"`, deleting or renaming the row would mean the check never
+    # executed: the load would succeed and the vocabulary be open-without-close again, which is the
+    # state row 15 grades MECHANICAL at load (§0.1 pt 2).
     #
     # ⚠ THE ASSERTION IS AGAINST THE ROSTER, WHICH IS WHY THE COLUMN IS DECLARED AND NOT DERIVED.
     # `contain` is excluded because it is the one Tenure kind whose subject may be a Rung (PART D
@@ -1060,9 +996,8 @@ def _load_verb_table() -> dict:
     #
     # ⚠ ROW 15's SECOND HALF -- `04:466-467`, *"every kind's OPENER set is declared too"* -- IS
     # BELOW, after this check: `_derive_openers_from_effects()`, an AST walk over
-    # `loop/effects.py`'s own `Tenure(...)` construction sites (`OPENERS-DERIVE`, 2026-09-29;
-    # `rosters.yaml`'s `tenure_kinds` row carried this mapping by hand before this and no longer
-    # does). Declared-and-empty is REPORTED (`tenure_kinds_without_an_opener`), not refused.
+    # `loop/effects.py`'s own `Tenure(...)` construction sites (`OPENERS-DERIVE`).
+    # Declared-and-empty is REPORTED (`tenure_kinds_without_an_opener`), not refused.
     if "release" not in out:
         raise SystemExit(
             "verb_table.yaml: no `release` row. Loader invariant 6 (04 PART D row 15) is the "
@@ -1074,7 +1009,7 @@ def _load_verb_table() -> dict:
     # derivation lives once, in `data/rosters.py` beside the roster it reads; this is the
     # comparison against the verb table's DECLARED column, which is the whole point of the column.
     # The excluded kinds are READ OFF the derivation rather than spelled, so the message cannot go
-    # stale when the exclusion grows (`contain`, and `reside` since plan position `19c`).
+    # stale when the exclusion grows (`contain`, `reside`).
     if _release_domain != RELEASABLE_KINDS:
         raise SystemExit(
             f"verb_table.yaml: `release` declares domain {sorted(_release_domain)}, and "
@@ -1087,8 +1022,7 @@ def _load_verb_table() -> dict:
     # outside `RELEASABLE_KINDS ∪ {contain, reside}` must sit in some row's declared `domain:`, read on
     # every row"*. The check above compares `release`'s domain with `RELEASABLE_KINDS` and EXEMPTS every
     # excluded kind, so a kind its holder may not release (`detain`, `ban`, `data/rosters.py::
-    # RESTRAINT_KINDS`) could be opened and closed by nobody and load clean -- ID-14 open for both
-    # until `pardon` (step 5) declared `[detain, ban]`. The kinds that end by a relocation stay exempt
+    # RESTRAINT_KINDS`) could be opened and closed by nobody and load clean. The kinds that end by a relocation stay exempt
     # (`contain`, `reside`: `_eff_move`/`_eff_migrate` close the old edge as they open the new). The set
     # that needs a declared closer is READ off `data/rosters.py`, never spelt: `RESTRAINT_KINDS`, the
     # kinds excluded from `RELEASABLE_KINDS` because an AUTHORITY ends them -- today exactly the kinds
@@ -1115,14 +1049,11 @@ def _load_verb_table() -> dict:
             "declare its closer's `domain:` (`pardon`: `[detain, ban]`).")
     # LOADER INVARIANT 6, SECOND HALF (`04 §B.13 #6`, `04:466-467`, `ID-14`): EVERY KIND'S OPENER
     # SET IS DECLARED. `_derive_openers_from_effects()` seeds every `TENURE_KINDS` member with an
-    # empty list before it reads anything, so "a kind with no entry" is now impossible BY
-    # CONSTRUCTION rather than checked -- the `set(_openers) != set(TENURE_KINDS)` refusal this
-    # block carried before `OPENERS-DERIVE` (2026-09-29) tested a failure mode only a HAND-WRITTEN
-    # roster could reach; deleted rather than kept unreachable (`CLAUDE.md` §0.1 pt 2 -- "an
-    # assertion must be able to observe the failure it excludes"; 44 -> 43 `raise SystemExit`s
-    # across the model set, `test_season_shape.py`'s own pinned count). What survives is the check
-    # a derivation cannot rule out by construction: an opener naming a verb `verb_table.yaml` does
-    # not have -- a typo or an orphaned `@effect_for` registration in `loop/effects.py`.
+    # empty list before it reads anything, so "a kind with no entry" is impossible BY
+    # CONSTRUCTION rather than checked (`CLAUDE.md` §0.1 pt 2 -- "an assertion must be able to
+    # observe the failure it excludes"). What is checked is what a derivation cannot rule out by
+    # construction: an opener naming a verb `verb_table.yaml` does not have -- a typo or an
+    # orphaned `@effect_for` registration in `loop/effects.py`.
     _openers = _OPENERS_FROM_EFFECTS
     _stray = sorted((k, v) for k, vs in _openers.items() for v in (vs or []) if v not in out)
     if _stray:
@@ -1178,13 +1109,8 @@ def tenure_kinds_without_an_opener() -> list:
     (`_derive_openers_from_effects()`, an AST walk over `loop/effects.py`) is empty -- relations no
     act can open today. Reported, not refused: an unopenable kind may be correct for now, and
     which of them are holes is a judgement `rosters.yaml`'s `tenure_kinds` row comment records
-    (`commit`/`oblige`/`succeed`/`tie`/`knot` when `OPENERS-DERIVE` replaced the hand-written
-    mapping with this function; `succeed`/`tie`/`knot` since `commit` gained its opener at plan
-    position `7a` and `oblige` at `17a` -- computed, not read off the roster, so neither needed an
-    edit here to leave the list)."""
+    (computed, not read off the roster)."""
     return sorted(k for k, vs in _OPENERS_FROM_EFFECTS.items() if not vs)
-
-VERB_TABLE: dict = {}          # filled after STRATA loads, at the bottom of the roster block
 
 VERB_TABLE = _load_verb_table()
 
@@ -1230,7 +1156,7 @@ def derive_event_kinds(table: dict, matrix: dict, fold_kinds: dict, logged_kinds
     """LOADER INVARIANT 7 (`04 §B.13 #7`, `F.20b`): THE EVENT-KIND ROSTER IS DERIVED FROM EVERY EMISSION
     COLUMN. The columns are: each verb row's `emits` (every Degree branch), its `emits_on_refusal`
     (every clause) and `write_matrix.yaml`'s `emits:` (the kinds a gate write may emit), plus the
-    fold's own `fold_kinds` (`rosters.yaml`; the three that were body literals) and `logged_kinds` (the
+    fold's own `fold_kinds` (`rosters.yaml`) and `logged_kinds` (the
     kinds `loop/matter.py` logs with no write behind them). Nothing else adds a
     member, and the derivation is a function of its arguments so a test can plant a malformed column.
 
@@ -1272,29 +1198,27 @@ EVENT_KINDS = derive_event_kinds(VERB_TABLE, MATRIX, FOLD_KINDS, LOGGED_KINDS)
 def act_key(verb: str, subject, operands) -> str:
     """WHAT AN ACT'S ID IS OF, AFTER ITS VERB: `H(seed, tick, actor, f"act:{verb}:{act_key}")`.
     The subject, and -- for a row whose cell binds a known-person operand beside `subject`
-    (`VerbRow.known_person_operands`: `tell`'s `to`, since plan position `14` `give`'s, since IN-53
-    the untyped `confer`'s, and since plan position IN-10 `issue`'s, whose `terms` conjunct binds
-    `subject` beside its executor) -- that operand too, as `subject>to`. A bag a HELD Record forms
-    (`decision/options.py::operand_bags`, IN-10) names its addressee there the same way, so it keys
-    exactly as the known-person bag for that person would and the fan drops it as a duplicate.
+    (`VerbRow.known_person_operands`: `tell`'s and `give`'s `to`, the untyped `confer`'s, and
+    `issue`'s, whose `terms` conjunct binds `subject` beside its executor) -- that operand too, as
+    `subject>to`. A bag a HELD Record forms (`decision/options.py::operand_bags`, IN-10) names its
+    addressee there the same way, so it keys exactly as the known-person bag for that person would
+    and the fan drops it as a duplicate.
 
-    ⚠ TELLING WORKPLAN `T4`, AND IT IS MEASURED NECESSITY: one topic now forms one `tell` per person
-    the teller knows, so two acts in one deliberation shared `(actor, verb, subject)` and therefore
-    one id, and `state/acts.py` refused the second (`act id ... is already in the store`) on the
-    first realm season. Every row that binds no such operand answers its subject alone, so its ids
-    are byte-identical to before.
+    ⚠ ONE TOPIC FORMS ONE `tell` PER PERSON THE TELLER KNOWS, so two acts in one deliberation would
+    share `(actor, verb, subject)` and therefore one id, and `state/acts.py` would refuse the
+    second (`act id ... is already in the store`). Every row that binds no such operand answers its
+    subject alone.
 
     ⚠ `H-134`: AND THE SEAT, WHEN THE CANDIDATE WAS FORMED AMONG SEVERAL. A person holding two seats
     that grant the same act forms one Candidate per seat (`decision/options.py::opening_set`), the
     seat riding in the operands under `VIA`; two of them share `(actor, verb, subject)`, so without it
     they would share an id and `state/acts.py` would refuse the second. Present only for such a
-    Candidate -- a person with one seat carries no `VIA`, so every id is byte-identical to before.
+    Candidate -- a person with one seat carries no `VIA`.
     ⚠ AND THE VOCATION, FOR A ROW THAT CARRIES ONE (`VOCATION_SOURCED`, v10 REM-30's `verb_capability`
     rows). A `train` Candidate is formed once per vocation in `VOCATIONS` on the same subject, the
-    vocation riding on the `kind` operand (`decision/options.py::opening_set`); with one vocation they
-    shared nothing, with `copying`, `argue` and `inquiry` two chosen in one deliberation share
-    `(actor, verb, subject)` and `state/acts.py` refuses the second. Present only on a row `vocation_sourced`
-    names, so every other row's id is byte-identical to before.
+    vocation riding on the `kind` operand (`decision/options.py::opening_set`); two chosen in one
+    deliberation share `(actor, verb, subject)` and `state/acts.py` refuses the second. Present only on
+    a row `vocation_sourced` names.
     ONE OWNER for both minting sites: `decision/choose.py::pack_scenes` and
     `loop/deliberate.py::_qualify_by_round` (`04 PART D row 35`: purpose uniqueness is a
     convention, and this is where it is kept)."""
@@ -1325,17 +1249,14 @@ def opportunity_key(verb: str, subject, operands) -> Optional[tuple]:
     column names>)`. `None` for an act that names no subject: it has no opportunity to be the same as,
     so it is never recorded and never filtered (`loop/deliberate.py::_drop_what_was_already_done`).
 
-    ⚠ TELLING WORKPLAN `T4b`, A DEFECT JORDAN NAMED. `T4` made one `tell` Candidate per known present
-    hearer, but the filter keyed `(verb, subject)`, so once a topic was told to B it could never be
-    told to D that season -- and a person can obviously tell several hearers. The key is the GENERAL
-    rule for a row that names a `counterparty:`, read off the ROW'S COLUMN and never a verb name; `tell`
-    and, since plan position `14`, `give` are the rows where it changes anything TODAY (`give` is typed
-    and formable, its subject the Record and its counterparty `to` the receiver, one Candidate per
-    person the giver knows: `decision/options.py::operand_bags`), and since plan position IN-10
-    `issue` (one writ about a referent per executor the issuer knows). `petition` always has
-    `to` == `subject` (a computed Candidate's one referent), so its key is unchanged. Where the
-    counterparty IS the subject (`determine`, `oblige`) it adds nothing and is left out, so those
-    keys are byte-identical to before.
+    ⚠ A PERSON CAN TELL SEVERAL HEARERS, so a `(verb, subject)` key would bar telling a topic told
+    to B to D that season. The key is the GENERAL rule for a row that names a `counterparty:`, read
+    off the ROW'S COLUMN and never a verb name; `tell`, `give` (typed and formable, its subject the
+    Record and its counterparty `to` the receiver, one Candidate per person the giver knows:
+    `decision/options.py::operand_bags`) and `issue` (one writ about a referent per executor the
+    issuer knows) are the rows where it changes anything. `petition` always has `to` == `subject`
+    (a computed Candidate's one referent), so its key is unchanged. Where the counterparty IS the
+    subject (`determine`, `oblige`) it adds nothing and is left out.
 
     ONE OWNER, BOTH SITES: `loop/driver.py` (writes a realised act) and `loop/deliberate.py`
     (reads it) both call this, so the key cannot be spelled two ways (`CLAUDE.md` §8). It sits beside
@@ -1372,11 +1293,9 @@ def _check_sparse_table(name: str, cells: dict, rows: "set|tuple", row_what: str
     table makes the whole mechanism inert while passing every test, which is the dead-carrier defect
     #353 `:739-744` names.
 
-    ⚠⚠ THE TWO LOADERS HAD THIS CHECK-FOR-CHECK, AND `_load_projection`'s DOCSTRING SAID SO — *"the
-    exact shape `_load_alignment` uses one table over -- the rule lives once in kind, not in copy"*.
-    Writing that down is not the same as doing it: §8 says the rule lives once, full stop, and a
-    fourth check or a change to the all-zero test would otherwise have to be made twice to stay in
-    step. The LAW STRINGS stay per-caller, because what a violation means differs by table."""
+    ⚠⚠ THE LOADERS SHARE THESE CHECKS HERE: §8 says the rule lives once, so a fourth check or a
+    change to the all-zero test is made once. The LAW STRINGS stay per-caller, because what a
+    violation means differs by table."""
     for outer, row in cells.items():
         if outer not in rows:
             raise Forbidden(
@@ -1401,13 +1320,7 @@ def _load_projection() -> dict:
     """`tables.pursuit_projection`, the 15x7 that maps a person's pursuits into axis space
     (IN-08's cells commit).
 
-    ⚠⚠ **THIS TABLE EXISTS BECAUSE `pursuit_axes` USED TO DO TWO JOBS AND COULD DO NEITHER
-    WELL.** Before `U3` the roster held four names -- `Precedent`, `self_preservation`,
-    `suspicion`, `harm_borne` -- one of which is a CONVICTION and three of which are ad-hoc
-    scalars, and §F2's `conviction[axis]` looked a person's weight up in that one index set.
-    `pursuit_axes`'s own note called the conflation out and predicted this repair: *"THIRTEEN
-    convictions projecting onto FOUR axes through a 13x4 matrix ... It is the likeliest thing to
-    change when `H-46` closes."* It changed here, and `H-46` did NOT close -- Jordan, 2026-09-02:
+    ⚠⚠ **THIS TABLE MAPS CONVICTIONS TO AXES, WHICH ARE TWO ROSTERS.** Jordan, 2026-09-02:
     *"convictions roster and axes etc may be modified in future."*
 
     THREE CHECKS, each for a failure that would otherwise be SILENT, and each the exact shape
@@ -1435,17 +1348,15 @@ PURSUIT_PROJECTION = _load_projection()
 # ⚠ NO `PROJECTION_DECLARED` HERE, AND ITS ABSENCE IS DELIBERATE. `ALIGNMENT_DECLARED` below
 # exists because `ALIGNMENT` is REBOUND by `alignment_at()`'s sweep, so every arm must be
 # built from an immutable baseline rather than from the previous arm. The projection has a
-# declared `sweep:` on its row and NO `projection_at()` yet, so a frozen copy here would be a
+# declared `sweep:` on its row and NO `projection_at()`, so a frozen copy here would be a
 # second 15x7 in memory that a reader assumes is wired to something because its sibling is.
-# It comes back in the commit that adds the sweep, the way `ALIGNMENT_DECLARED` arrived with
-# `ALIGNMENT_SWEEP`.
 PROJECTION_DEFAULT_CELL = float(table_meta("pursuit_projection").get("default_cell", 0.0))
 
 
 def _load_role_template_pursuits(rows: Optional[dict] = None) -> dict:
     """`tables.role_template_pursuits`, CHECKED AT LOAD, because its one read path cannot refuse.
 
-    ⚠ THE VALIDATION STEP IN-08 OWES. `data/cast.py::loyalty` reads this table through
+    ⚠ `data/cast.py::loyalty` reads this table through
     `data/pursuits.py::to_axes`, which SKIPS a pursuit `PURSUIT_PROJECTION` has no row for -- the
     sparse default, correct for a person's map that `pursuit()` has already checked, and SILENT for
     this table, whose names nothing checks. A template still keyed on a retired name would project
@@ -1588,7 +1499,7 @@ def _derive_record_referent_kinds() -> frozenset:
     the class: then nothing is stamped. A row declaring it and naming no record kind is refused at
     load (`_load_verb_table`), so the union of both sets is empty only when no row declares `Record`.
     v10 REM-2C: SUB-KINDS ONLY (`_record_subkinds_answered`) -- `research` asks `existence` of the class
-    itself and adds no kind here, so `writs_held` stamps exactly what it stamped before."""
+    itself and adds no kind here."""
     return frozenset(k for row in VERB_TABLE.values() if not _asks_subject_held(row)
                      for k in _record_subkinds_answered(row))
 
@@ -1605,8 +1516,8 @@ def _derive_holding_record_kinds() -> frozenset:
     different kinds, and no verb or kind literal lives at the stamp site. A row's kinds are in exactly
     one of the two sets (the `held_by` test splits them), so `comply`'s dispensation is stamped by its
     addressee test alone and a held petition by the person's holding alone. Empty when no Record row
-    asks `held_by`: then the term stamps nothing, which is the revert. Sub-kinds only, as above (v10
-    REM-2C, `_record_subkinds_answered`)."""
+    asks `held_by`: then the term stamps nothing. Sub-kinds only, as above (v10 REM-2C,
+    `_record_subkinds_answered`)."""
     return frozenset(k for row in VERB_TABLE.values() if _asks_subject_held(row)
                      for k in _record_subkinds_answered(row))
 
@@ -1649,9 +1560,7 @@ def _load_terms_sourced(values: dict) -> dict:
     alone, and `commit: [dispensation]`]): A KIND IS LIVE WHERE EITHER RECORD TERM STAMPS A HELD ONE --
     `RECORD_REFERENT_KINDS` (`writs_held`, the addressee's writ) OR `HOLDING_RECORD_KINDS`
     (`records_held_for_holding_rows`, a document he holds, a petition among them) -- both read off the
-    rows, so the union is derived and names no verb. Before this the check named the first term alone and
-    refused `petition` at import, so a witness holding a petition never formed `commit` on the charge it
-    names. `opening_set`'s reader reads a held document's `terms` only where it is ADDRESSED to the holder
+    rows, so the union is derived and names no verb. `opening_set`'s reader reads a held document's `terms` only where it is ADDRESSED to the holder
     (`person_q.addressed_to`, `writs_held`'s rule), so a petitioner holding his own petition forms nothing."""
     out = {v: tuple(ks or ()) for v, ks in values.items()}
     live = RECORD_REFERENT_KINDS | HOLDING_RECORD_KINDS
@@ -1965,13 +1874,12 @@ def _derive_rung_remit_acts() -> frozenset:
     (`queries/world_q.py::larders_in_purview`, which offers a larder only to a holder of a seat
     granting one of these) and the fold's eligibility cannot name different acts, and no act literal
     lives at the stamp site. Empty when no `Rung` row is exercised through a seat (`migrate` is
-    `own`): then nothing is stamped, which is the revert.
+    `own`): then nothing is stamped.
     THE DERIVED WIDENING, NAMED (v10 REM-27, REM-28; B10-06): the set is the UNION over every `Rung`-classed
     row, so a row that gains `referent_class: Rung` (`march`, `convene`) widens it and `larders_in_purview` is
-    asked of that row's remit holders too, whatever `requisition` itself is eligible on (the cost is named, not
-    prevented). Its current value is pinned in `tests/test_referent_class_stamps.py` (asserted three times there); each widening's
-    measurement is in that row's `referent_class_note:` and its commit. REVERT: a row's column, and the set
-    loses that row's act unless another `Rung` row grants it."""
+    asked of that row's remit holders too, whatever `requisition` itself is eligible on. Its current value is
+    pinned in `tests/test_referent_class_stamps.py`; each widening's measurement is in that row's
+    `referent_class_note:`."""
     return _remit_acts_of_class("Rung")
 
 
@@ -1984,7 +1892,7 @@ def _remit_acts_of_class(cls: str) -> frozenset:
 
 def _remit_acts_of(row: "VerbRow") -> frozenset:
     """The act of every `remit:` eligibility alternative on ONE row -- `_remit_acts_of_class`'s per-row read,
-    factored out at v11 CR-25 so `FOUNDING_REMIT_ACTS` (below) takes the same parse, never a second one."""
+    which `FOUNDING_REMIT_ACTS` (below) takes too, never a second parse."""
     return frozenset(raw.strip() for kind, _, raw in (alt.partition(":") for alt in row.eligibility)
                      if kind.strip() == "remit" and raw.strip())
 
@@ -2063,12 +1971,11 @@ def _check_alignment_density(cells: dict, uncelled: dict) -> None:
     (a number, or an explicit `null` -- "considered; no source, no lean") or named in `uncelled:`
     with a reason, and then keyed on NO axis.
 
-    ⚠ WHY IT IS NEEDED, IN THE LOADER'S OWN WORDS: `_check_sparse_table` *"does not check that all
-    ... cells are present"*, and that is right for the VALUES -- sparse is lawful. What it let
-    through silently is a NEW VERB ROW that nobody celled: it scores 0.0 on every axis, which reads
-    exactly like a verb considered and judged neutral. Every verb row added after IN-08 (IN-12's
-    steps, IN-51, IN-32, PC-06 K-3) lands its cells or its `uncelled:` line, or this refuses,
-    naming the verb and the axes it is missing."""
+    ⚠ `_check_sparse_table` does not check that all cells are present, which is right for the
+    VALUES -- sparse is lawful. What it would let through silently is a NEW VERB ROW that nobody
+    celled: it scores 0.0 on every axis, which reads exactly like a verb considered and judged
+    neutral. Every verb row lands its cells or its `uncelled:` line, or this refuses, naming the
+    verb and the axes it is missing."""
     if not isinstance(uncelled, dict):
         raise Forbidden(
             f"alignment `uncelled:` is a {type(uncelled).__name__}, not a mapping of verb -> reason",
@@ -2188,19 +2095,16 @@ def align_kind(kind: str, axis: str) -> float:
 def rows_without_a_producer() -> dict:
     """Every `social: true` row that no verb writes — §7.2's rule for W2, as a REPORT.
 
-    ⚠ IT IS A FLAG AND NOT A DELETE INSTRUCTION, and the W2 audit is why. W2 retired six rows on
-    this rule; applied literally the same rule condemns `(Person, pursuits)`, which #353 §9.3
-    REQUIRES ("moved by argument and consequence"). So a producerless row is one of two different
-    things and the report cannot tell them apart:
+    ⚠ IT IS A FLAG AND NOT A DELETE INSTRUCTION. Applied literally the rule condemns
+    `(Person, pursuits)`, which #353 §9.3 REQUIRES ("moved by argument and consequence"). So a
+    producerless row is one of two different things and the report cannot tell them apart:
 
-      * A HOLE — the verb is missing. `(Person, pursuits)` had no verb because Part E carries
-        no argument verb (since v9 SC-02 `22b` step 24 `determine` writes it; `argue`/`train` are IN-12
-        step 9), which is a gap in Part E, not a reason to delete a row #353 mandates.
-      * DEAD — nothing in the design produces it. That was the six.
+      * A HOLE — the verb is missing (`determine` writes `(Person, pursuits)`; `argue`/`train`
+        are IN-12 step 9), a gap in Part E, not a reason to delete a row #353 mandates.
+      * DEAD — nothing in the design produces it.
 
-    Distinguishing them is a judgement, so this reports and a human decides. What it MUST NOT do
-    is what the first reading of the rule did: delete on sight. `emits:` was parsed and never read
-    by anything until this function, so the column the retirement rested on was inert data."""
+    Distinguishing them is a judgement, so this reports and a human decides; it MUST NOT delete
+    on sight."""
     produced = _produced_pairs(VERB_TABLE)
     out = {}
     for (kind, fld), row in MATRIX.items():
@@ -2211,8 +2115,7 @@ def rows_without_a_producer() -> dict:
     return out
 
 # From `rosters.yaml`, not a literal: the three points ARE a definition -- each names a claim
-# the sweep compares -- so Jordan's no-hardcoding ruling reaches them. The guard caught this
-# as a literal tuple and was right to; it is one of the few hits that was not mechanism.
+# the sweep compares -- so Jordan's no-hardcoding ruling reaches them.
 ALIGNMENT_SWEEP = tuple(table_meta("alignment")["sweep"])
 
 def alignment_at(point: str) -> dict:
@@ -2235,18 +2138,16 @@ def alignment_at(point: str) -> dict:
         law="§G -- declare it, default it, sweep it. A fourth point is a fourth claim")
     # ⚠ EVERY POINT IS BUILT FROM `ALIGNMENT_DECLARED`, NEVER FROM `ALIGNMENT`. A sweep works by
     # rebinding `ALIGNMENT`, so a transform reading the live global transforms whatever the last
-    # point left: `alignment_at("sign_only")` after `uniform` returned sign(1.0) == 1.0 — i.e.
-    # uniform again — and the sweep reported two arms as one. The baseline is captured at import
-    # and never rebound, which is what makes the three points independent.
+    # point left (`sign_only` after `uniform` would be uniform again). The baseline is captured at
+    # import and never rebound, which is what makes the three points independent.
     if point == "declared":
         return {ax: dict(row) for ax, row in ALIGNMENT_DECLARED.items()}
     if point == "uniform":
         # ⚠ EVERY (verb, axis) PAIR, NOT EVERY LISTED CELL, and the difference is the whole
-        # control. The first version returned `{v: 1.0 for v in row}`, which left UNLISTED pairs
-        # falling through `align()` to `default_cell = 0.0` — so a verb absent from an axis still
-        # scored differently from one present on it, convictions could still discriminate, and
-        # `P31` passed under the "control". The test's own observability check caught it: a
-        # control that the probe survives is not a control (§0.1 point 2).
+        # control: UNLISTED pairs would fall through `align()` to `default_cell = 0.0`, a verb
+        # absent from an axis would still score differently from one present on it, and
+        # convictions could still discriminate. A control that the probe survives is not a
+        # control (§0.1 point 2).
         # The deed keys too: `align_kind` reads a `deed:<kind>` cell first, so under the control a
         # kind several rows emit (no `KIND_VERB`) reads 1.0 like every verb, not 0.0. Since v9
         # IN-58, though, `person_q.deed_valence` returns 0 for those `PAIRED_KINDS`, so under this

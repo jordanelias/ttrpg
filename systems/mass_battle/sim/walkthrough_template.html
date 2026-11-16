@@ -410,8 +410,8 @@ function nodesSVG(det, side) {
 /* header */
 (function () {
   function army(sd, who) {
-    var parts = sd.subformations.map(function (f) { return num(f.troops) + ' ' + nm(f.type) + (f.role ? ' (' + f.role + ')' : ''); });
-    var tot = sd.subformations.reduce(function (a, f) { return a + f.troops; }, 0);
+    var parts = sd.units.map(function (f) { return num(f.troops) + ' ' + nm(f.type) + (f.role ? ' (' + f.role + ')' : ''); });
+    var tot = sd.units.reduce(function (a, f) { return a + f.troops; }, 0);
     return '<span><b>' + who + '</b> ' + num(tot) + ': ' + parts.join(', ') + ' · <i>' + sd.strategy + '</i></span>';
   }
   document.getElementById('meta').innerHTML = army(ARM.a, 'A') + army(ARM.b, 'B') +

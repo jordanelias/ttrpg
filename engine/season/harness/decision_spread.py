@@ -111,7 +111,7 @@ from ..seam.wrappers.sigma import believed_odds_query
 from ..state.carriers import Question, subject_of
 from ..state.ids import draw_factory
 from . import probes as P
-from .populated import build_realm
+from ..boot.realm import build_realm
 
 # [JUSTIFIED: a float-tie tolerance for the attribution (two scores within it are a tie), an instrument constant and not a game number]
 EPS = 1e-9

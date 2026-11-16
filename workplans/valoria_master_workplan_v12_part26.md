@@ -17,8 +17,8 @@ INVOCATION: /methodology-execute Batch B19-mb-field-calibration
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_MB.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
-GATE: Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0
-GATE: Batch B16L-mb-words
+GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
+GATE: Batch B16L-mb-words @2d9590e75fd253d1d88612e2d42674e2fdb5db96
 GATE: Batch B04-capability-home
 GATE: Batch B05-one-roll
 GATE: Batch B06-keyed-draw
@@ -65,7 +65,7 @@ EST: this half 13.3 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula o
 | B19.01 | the "results" block: the T-rows of the calibration targets in the gauge | `26_MASS_BATTLE_calibration_targets` §1–§2 | BUILD | EQUAL | Batch B17, Batch B19a |
 | B19.02 | the commander's and officer's typed record on the field's input | 27_MB_A 27A-1 | BUILD | EQUAL | Batch B17 |
 | B19.03 | the default command, the order-draw block and the span table, exported | 27_MB_A 27A-2 | BUILD | EQUAL | B19.02 |
-| B19.04 | the army and its units carry the commander, his post and each officer's record | 27_MB_A 27A-3 | BUILD | EQUAL | B19.03; Batch B16L, Batch B17 (B16M before it) |
+| B19.04 | the army and its units carry the commander, his post and each officer's record | 27_MB_A 27A-3 | BUILD | EQUAL | B19.03; Batch B16L @2d9590e75fd253d1d88612e2d42674e2fdb5db96, Batch B17 (B16M before it) |
 | B19.05 | an order takes effect by a draw: the obedience draw at `check_orders` | 27_MB_A 27A-4 | BUILD | EQUAL (at `arm: off`) | B19.04; Batch B05, Batch B06 |
 | B19.06 | every named draw that exists is traced | 27_MB_C 27C-1 (the trace sites) | BUILD | EQUAL | B19.05 |
 | B19.07 | one stamina ledger: the unit ledger deleted | `16_PESSIMIST_MB_one_stamina_ledger` step 1 | BUILD | EQUAL | B19.06; Batch B17 |
@@ -190,7 +190,7 @@ Not in this half, and where each is: `27_MB_A` 27A-5 (the four Command reads; af
 - FALSIFIER and CONTROL: a record without the new keys that validates differently than before. Control: golden digests equal (all absent).
 - GATE: `python -m pytest tests/valoria/test_mass_battle_army_record.py tests/valoria/test_army_verbs.py tests/valoria/test_mass_battle_order_of_battle.py -q` → pass; `python tools/ci_golden_modes_check.py` → digests equal to B19.03's.
 - HASH MOVERS: none (the keys are absent in every shipped world; a Record's `subject_matter` keys enter the content hash only where present).
-- DEPENDS ON: EXISTS-IN-TREE `hierarchy/units.py` (`_order_idx` at `:516`, `class Officer` at `:2752`), `armyrecord.py::KEYS`, `::order`, `::validate`, `armies.py::build_army`, `orderofbattle.py::_spec_for`; V12 Batch B16L, Batch B16M (the names), B19.03.
+- DEPENDS ON: EXISTS-IN-TREE `hierarchy/units.py` (`_order_idx` at `:516`, `class Officer` at `:2752`), `armyrecord.py::KEYS`, `::order`, `::validate`, `armies.py::build_army`, `orderofbattle.py::_spec_for`; V12 Batch B16L @2d9590e75fd253d1d88612e2d42674e2fdb5db96, Batch B16M (the names), B19.03.
 - GLOSSARY: none (*commander*, *officer* rows already point at the MB lexicon D-5; their owner columns gain `armyrecord` `commander_post` and the unit row's `officer` in this commit).
 - NAMES: `Unit` → `Army`; `Subunit` → `Unit`; `Subformation` → `UnitRow`; Record key `subformations` → `units` (B16L, B16M; `V12_STRUCTURE_part2.md` §5.10).
 - COST and TIER: edit; `sonnet`, `high`.

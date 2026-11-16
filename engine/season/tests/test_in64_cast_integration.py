@@ -23,7 +23,9 @@ from engine.season.data import cast
 from engine.season.data.rosters import PURSUITS
 from engine.season.gaps import Unspecified
 from engine.season.harness import decision_spread as DS
-from engine.season.harness import populated
+from engine.season.boot import realm as boot_realm
+from engine.season.boot.realm import build_realm, seed_pursuits
+from engine.season.data.rosters import OFFICES_BY_HOLDER, OFFICES_SEATS
 from engine.substrate.descriptors import AFFILIATION_CONCERNS
 
 from . import test_governance_build as GB
@@ -150,12 +152,12 @@ def test_in64_the_exporter_refuses_an_unrostered_or_twice_filed_member(tmp_path,
 def _drawn():
     """The shipped realm, with every `seed_pursuits` call counted."""
     calls = []
-    real = populated.seed_pursuits
-    populated.seed_pursuits = lambda seed, cid, pid: calls.append(cid) or real(seed, cid, pid)
+    real = seed_pursuits
+    boot_realm.seed_pursuits = lambda seed, cid, pid: calls.append(cid) or real(seed, cid, pid)
     try:
-        w = populated.build_realm(0)
+        w = build_realm(0)
     finally:
-        populated.seed_pursuits = real
+        boot_realm.seed_pursuits = real
     return w, calls
 
 
@@ -212,14 +214,14 @@ def test_in64_a_case_with_no_row_still_falls_back_to_seed_pursuits(monkeypatch):
     from engine.season.data.rosters import roster_map
     leaders = set((roster_map("faction_leaders", "by_faction") or {}).values())
     cid = next(c for c in sorted(cast._rows())
-               if c not in populated.OFFICES_BY_HOLDER and c not in leaders)
+               if c not in OFFICES_BY_HOLDER and c not in leaders)
     pid = f"p_{cid.lower().replace('-', '_')}"
     calls = []
-    real_draw, real_row = populated.seed_pursuits, cast.row
-    monkeypatch.setattr(populated, "seed_pursuits",
+    real_draw, real_row = seed_pursuits, cast.row
+    monkeypatch.setattr(boot_realm, "seed_pursuits",
                         lambda seed, c, p: calls.append((c, p)) or real_draw(seed, c, p))
     monkeypatch.setattr(cast, "row", lambda c: None if c == cid else real_row(c))
-    w = populated.build_realm(0)
+    w = build_realm(0)
     assert calls == [(cid, pid)], calls
     assert w.persons[pid].pursuits == real_draw(0, cid, pid) and w.persons[pid].pursuits
     assert w.persons[pid].conviction == {}
@@ -229,12 +231,12 @@ def test_in64_a_third_unauthored_seat_turns_13d_iii_red(monkeypatch):
     """MUTATION: drop one Riskbreakers row -- its seat is still built by the loop from the registry
     cell, now with no row -> unauthored beside `off_npc_084`, and the declared-exception test is red.
     CONTROL: the same test on the shipped realm is green (it runs in `test_governance_build.py`)."""
-    real = populated.OFFICES_SEATS
+    real = OFFICES_SEATS
     row = next(r for r in real if r["id"] == "off_riskbreaker_doctrine")
-    monkeypatch.setattr(populated, "OFFICES_SEATS", [r for r in real if r is not row])
-    monkeypatch.setattr(populated, "OFFICES_BY_HOLDER",
-                        {h: v for h, v in populated.OFFICES_BY_HOLDER.items() if h != row["holder"]})
-    w = populated.build_realm(0)
+    monkeypatch.setattr(boot_realm, "OFFICES_SEATS", [r for r in real if r is not row])
+    monkeypatch.setattr(boot_realm, "OFFICES_BY_HOLDER",
+                        {h: v for h, v in OFFICES_BY_HOLDER.items() if h != row["holder"]})
+    w = build_realm(0)
     assert sorted(w._office_census["unauthored"]) == ["off_npc_080", "off_npc_084"], \
         w._office_census["unauthored"]
     with pytest.raises(AssertionError):

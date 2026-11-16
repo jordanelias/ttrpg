@@ -13,10 +13,10 @@ INVOCATION: /methodology-execute Batch B04-capability-home
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_IN.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
-GATE: Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0
-GATE: Batch B03g-go-early-landings
-GATE: Batch B03c-boot
-GATE: Batch B03a-prose
+GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
+GATE: Batch B03g-go-early-landings @048724cd545117255e71d04a583d99c6cb5fe3a9
+GATE: Batch B03c-boot @544cf5719c620331b70aeda93c1672977b44e9ef
+GATE: Batch B03a-prose @871a9b81eab42e31963b21b487d698f8552a1cc5
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: every conjunct of R-01, R-02, R-03, re-read (M0 closes here, `V12_STRUCTURE.md` §3) → all three hold; R-04 to R-09 print their held counts; no `status:` edited (A-114). No row moves: what the batch serves is A-6, A-7, A-11, A-12, A-98, A-101, A-106, A-107 (one skill roster, its uses as data, the trait roster, "lap" for the season's pass)
 BATCH GATE (read once, on the closing tree, `PYTHONHASHSEED=0` on every seeded command):
@@ -39,16 +39,16 @@ C(B04-capability-home): this batch's entries; the plan's head parts; `unified/U1
   `engine/season/data/fixtures.py`; `engine/season/data/verbs.py`; `engine/season/data/rosters.py`; `engine/season/data/cast.py`; `engine/season/decision/options.py`; `engine/season/decision/sheet.py`; `engine/season/loop/effects_combat.py`; `engine/season/loop/predicates.py`; `engine/season/boot/realm.py` (B03c); `engine/season/harness/corpus_run.py`, `probes.py`, `soak.py`, `interactions.py`;
   `engine/season/verb_table.yaml`; `engine/season/rosters.yaml`; `engine/season/offices.yaml`; `engine/season/write_matrix.yaml`; `engine/season/hole_register.yaml`; `references/descriptor_registry.yaml`; `references/npc_registry.yaml`; `tools/export_descriptors.py`; `engine/engine_params/descriptors.json`; `engine/substrate/descriptors.py`; `engine/dice_engine/sigma_leverage.py`;
   the tests named in the items; instruments: `headless`, `corpus_run`, `register`, `tools/m1_acceptance.py`, `tools/tests_for_diff.py`, `tools/ci_sim_fabrication_check.py`, `tools/export_sim_params.py`; `engine/season/tests/_realm_goldens.py` (B02);
-  the closing SHAs of B00, B01, B02, B03g, B03c, B03a; the permanent surface.
+  the closing SHAs of B00, B01, B02, B03g (`048724cd545117255e71d04a583d99c6cb5fe3a9`), B03c (`544cf5719c620331b70aeda93c1672977b44e9ef`), B03a; the permanent surface.
 SERIAL EDGES: within the batch: B04.01 first (D-05: every later item is written with `lap`); B04.02 → B04.03 (the column refuses a skill with no definition row) → B04.04 (the maps are derived from the column) → B04.05 (the uses loader resolves keys through the leaf and the derived maps) → B04.06 (the choice-side readers read the table) → B04.07 (the uses loader accepts a trait only at `edge`) → B04.17 (a believed trait); B04.05 → B04.08 (`fed_by` names table rows) and → B04.10 (`rank_at_least` is a `when` key of the table); B04.07 → B04.12 (`resonant_style` is read before the unread-key refusal lands); B04.17 → B04.22 (the claim read B04.17 extends is moved into one function); B04.09 → B04.11 (a bundle's rank is checked as a cast row's is); B04.18 → B04.19 (the cells name the new rows) → B04.21 (a seat row names a defined skill) → B04.22; B04.24 has no edge inside the batch (no caller); B04.26 last (the re-pin).
-  With other batches, by file (U3 §5.1 rows, `→` is landing order): `rosters.yaml` B03 → B04 → B05; `verb_table.yaml` B03 → B04 → B07; `data/fixtures.py` B04 → B05 (and B16M in S6, a different key: `max_turns`); `seam/wrappers/sigma.py` B03 (CI-03) → B04 → B05; `seam/wrappers/pool.py` B04 → B05 → B12; `engine/dice_engine/sigma_leverage.py` B04 → B05; `queries/person_q.py` B03 → B04 → B09; `decision/options.py` B01 → B04 → B09; `decision/choose.py` B04 → B08; `data/rosters.py`, `data/verbs.py` B04 → B07; `offices.yaml` B04 → B21; `loop/effects_combat.py` B04 → B12; `seam/wrappers/combat.py` B04 → B06; `boot/realm.py` (was `populated.py`) B03c → B04 → B10; `engine/substrate/descriptors.py` B04 only.
+  With other batches, by file (U3 §5.1 rows, `→` is landing order): `rosters.yaml` B03 → B04 → B05; `verb_table.yaml` B03 → B04 → B07; `data/fixtures.py` B04 → B05 (and B16M in S6, a different key: `max_turns`); `seam/wrappers/sigma.py` B03 (CI-03) → B04 → B05; `seam/wrappers/pool.py` B04 → B05 → B12; `engine/dice_engine/sigma_leverage.py` B04 → B05; `queries/person_q.py` B03 → B04 → B09; `decision/options.py` B01 → B04 → B09; `decision/choose.py` B04 → B08; `data/rosters.py`, `data/verbs.py` B04 → B07; `offices.yaml` B04 → B21; `loop/effects_combat.py` B04 → B12; `seam/wrappers/combat.py` B04 → B06; `boot/realm.py` (was `populated.py`) B03c @544cf5719c620331b70aeda93c1672977b44e9ef → B04 → B10; `engine/substrate/descriptors.py` B04 only.
 PARALLEL: S6 with B13-pc-package (PC) and B16M-mb-engine-words (MB). Shared file: `engine/season/data/fixtures.py` with B16M (B04 edits the `scenes_per_round` key and adds `confer_fit_weight`; B16M renames `max_turns`): different keys, kept by hand at merge (`V12_STRUCTURE_part3.md` §7.3). No item here edits a file under `modules/` (every WHERE below), so CIP's `[UNVERIFIED]` that B04 edits nothing under `modules/combat` reads true for this part. B13 and B16M are hash EQUAL: B04 is the step's one mover and may merge at any position (§7.4). (Patched: P-32) Part 6 (A06) orders S6's merges B13 and B16M before B04: "B04 must re-run `export_composition.py` and `export_sim_params.py --build` after its rebase" (B13 edits `references/module_contracts.yaml` and `composition.json`; B16M.03 rebuilds `sim_params.json` with L2-1's renamed keys). So B04 merges last in S6, and after its rebase, before B04.99, it runs `python tools/export_composition.py` and `python tools/export_sim_params.py --build` and then their `--check` (expected exit 0), and re-reads its own gate lines on the rebased tree. The merge order is H2's to confirm (`H2_DECISIONS.md`).
 COST: edits and small builds, one encoding rename; producer `valoria-author` on `sonnet`, `high`; B04.26's drafting on `opus`, `high`; the close's terminal critique `opus` (CAP "Lands it and tier").
 EST: 13 h [estimate: `V12_STRUCTURE.md` §2.4's formula over this part's 27 positions (0.4 h × 27 + 2.5 h; B04.99 added by repair lane R1); §2.2's 7 h counted the eight members, not the commits they order]
 
 | pos | item | source | state | hash | gates on |
 |---|---|---|---|---|---|
-| B04.01 | the season's "round" becomes "lap" | PCR-4 (D-05) | BUILD | MOVER(encoding) | Batch B03a |
+| B04.01 | the season's "round" becomes "lap" | PCR-4 (D-05) | BUILD | MOVER(encoding) | Batch B03a @871a9b81eab42e31963b21b487d698f8552a1cc5 |
 | B04.02 | the skill definition block, its exporter check and its leaf reader; one kind | CAP A1: CORE Edits 1–2, DEF Edit 1; `IS-B2-CHAR-05` | BUILD | EQUAL | B04.01 |
 | B04.03 | the `capability:` column on contested and graded verb rows | CAP A2: CORE Edit 3 (Edit 8's values) | BUILD | EQUAL | B04.02 |
 | B04.04 | the verb maps derived from the column; two rosters deleted | CAP A3: CORE Edit 4 | BUILD | EQUAL | B04.03 |
@@ -61,17 +61,17 @@ EST: 13 h [estimate: `V12_STRUCTURE.md` §2.4's formula over this part's 27 posi
 | B04.11 | a bundle may grant a skill at a rank | CAP A7: DEF Edit 3 | BUILD | EQUAL | B04.09 |
 | B04.12 | the cast row's unread keys: read, removed or listed | CAP A7: DEF Edit 4 | BUILD | EQUAL | B04.07 |
 | B04.13 | the development sheet shows the person | CAP A8: CORE Edit 6, DEF Edit 5 | BUILD | EQUAL | B04.02 |
-| B04.14 | one Endurance default in a fight | CAP A9: CORE Edit 7 | BUILD | EQUAL | Batch B03a |
+| B04.14 | one Endurance default in a fight | CAP A9: CORE Edit 7 | BUILD | EQUAL | Batch B03a @871a9b81eab42e31963b21b487d698f8552a1cc5 |
 | B04.15 | a rank never passes its row's ceiling | CAP A10: MAP §G part two | BUILD | EQUAL | B04.02 |
-| B04.16 | three register rows brought to the tree | DEF Edit 6 | BUILD | EQUAL | Batch B03a |
+| B04.16 | three register rows brought to the tree | DEF Edit 6 | BUILD | EQUAL | Batch B03a @871a9b81eab42e31963b21b487d698f8552a1cc5 |
 | B04.17 | a believed trait is read only from a held claim | `05_SC_capability_surface` edit 4 | BUILD | EQUAL | B04.07 |
 | B04.18 | three social skills: `law`, `insight`, `deception` | `05_SC_hearing_capabilities` edit 1 | BUILD | EQUAL | B04.02 |
 | B04.19 | `lie` draws on `deception`, `determine` on `law` | `05_SC_hearing_capabilities` edit 2 | BUILD | EQUAL | B04.18, B04.03 |
 | B04.20 | the governance verbs' cells | `06_FA_office_capabilities` edit 1 | POINTER | — | B04.03, B04.19 |
 | B04.21 | a seat row may name the skill its post calls on | `06_FA_office_capabilities` edit 3 | BUILD | EQUAL | B04.19 |
 | B04.22 | the conferrer weighs the candidate, behind a setting at 0 | `06_FA_office_capabilities` edit 4 | BUILD | EQUAL | B04.21, B04.17 |
-| B04.23 | a founded office's grant as data | `06_FA_office_capabilities` edit 5 | BUILD | EQUAL | Batch B03a |
-| B04.24 | the pool rule, the opposition and the even line as pure functions | `29_DICE` item 29-1 (row 1) with `pool_of` (U1-A step 6) | BUILD | EQUAL | Batch B03a |
+| B04.23 | a founded office's grant as data | `06_FA_office_capabilities` edit 5 | BUILD | EQUAL | Batch B03a @871a9b81eab42e31963b21b487d698f8552a1cc5 |
+| B04.24 | the pool rule, the opposition and the even line as pure functions | `29_DICE` item 29-1 (row 1) with `pool_of` (U1-A step 6) | BUILD | EQUAL | Batch B03a @871a9b81eab42e31963b21b487d698f8552a1cc5 |
 | B04.25 | a skill is never lost | `IS-B2-CHAR-04` (A-106) | POINTER | — | — |
 | B04.26 | the cast's values drafted; the batch's re-pin | `IS-A-11` stage 1 | CONTENT | MOVER (the re-pin) | B04.01 to B04.24 |
 | B04.99 | re-pin and close readings | `V12_STRUCTURE_part4.md` E-1; B04.26 steps 2 and 3, moved | BUILD | MOVER (the re-pin) | B04.26 |
@@ -92,7 +92,7 @@ Not in this batch, and where each is: CORE Edit 9 and CAP Part B (B05); MAP §G 
 - FALSIFIER and CONTROL: a remaining `.round` read of the season's pass, or `scenes_per_round`, under `engine/season` (`git grep -n "\.round\b\|scenes_per_round" engine/season` prints nothing but harness output keys and the fight's words); a moved tally. Control: the NPC-088 headless act and Event tallies and `corpus_run --seasons 2` [v12: two seasons a case, D-17; the case's own span, to `MAX_SEASONS`, is B99's] seed 0's tallies equal B03a's close (`reading @<sha>`).
 - GATE: `git grep -n "scenes_per_round\|\.round\b" engine/season -- '*.py'` → no hit naming the season's pass (a numeric `.round(` call, if the grep shows one, is listed in the commit body and kept); `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`); `python tools/ci_sim_fabrication_check.py` → exit 0; `python -m pytest engine/season/tests/test_fi03_trail.py engine/season/tests/test_cp_t03_08_tend_on_the_wounded.py engine/season/tests/test_cr31_heritage_regard.py -q` → pass, and the `test_season_shape.py` tests naming `round` (`-k round`) → pass; the realm content hash (`HASH READING`) after one season at seed 0 → moved (field name in the encoding: `state/world.py::_object_head`, `_encode_into`; D-04), the tallies equal.
 - HASH MOVERS: every content hash, by encoding only: `Claim`'s field name enters `World.content_hash()` (D-04; `loop/driver.py`'s own docstring: "the content hash moves only by `Claim` gaining `round`"). Declared; B04's one re-pin in B04.26.
-- DEPENDS ON: EXISTS-IN-TREE `state/carriers.py::Claim.round`, `loop/driver.py::SeasonDriver.round`, `data/fixtures.py` `scenes_per_round`, `hole_register.yaml` H-124; V12 Batch B03a (comment edits on the same files, CI-02).
+- DEPENDS ON: EXISTS-IN-TREE `state/carriers.py::Claim.round`, `loop/driver.py::SeasonDriver.round`, `data/fixtures.py` `scenes_per_round`, `hole_register.yaml` H-124; V12 Batch B03a @871a9b81eab42e31963b21b487d698f8552a1cc5 (comment edits on the same files, CI-02).
 - GLOSSARY: *lap* (step 5). "lap": one pass of the season's deliberate, resolve and witness phases, as a runner's lap is one pass of the track.
 - NAMES: `Claim.round` → `Claim.lap`; `SeasonDriver.round` → `SeasonDriver.lap`; `scenes_per_round` → `scenes_per_lap` (§5.10's B04 row).
 - COST and TIER: wide mechanical rename; `sonnet`, `high` (PCR-4: a `haiku` count first; the count is step 1's command).
@@ -253,7 +253,7 @@ Not in this batch, and where each is: CORE Edit 9 and CAP Part B (B05); MAP §G 
 - FALSIFIER and CONTROL: "A `dice` row keyed on `moved_by_evidence` that loads; a cast row's trait found in `Person.capability`" (§2a). Control: the NPC-088 headless act and Event tallies and `corpus_run --seasons 2` [v12: two seasons a case, D-17; the case's own span, to `MAX_SEASONS`, is B99's] seed 0's tallies equal B04.06's reading (no reader reads `Person.traits` in this batch).
 - GATE: `python tools/export_descriptors.py --check` → exit 0, and → refusal with a planted `scale: [0, 2]` (§2a "Check"); `python -m pytest engine/season/tests/test_u1_capability_surface.py -q` → pass; on `build_realm(0)`: the persons whose cast row carries `resonant_style:` hold exactly one trait each and no trait id appears in any `Person.capability`; the realm content hash (`HASH READING`) at seed 0, one season → moved (a new `Person` field, D-04), tallies equal.
 - HASH MOVERS: every content hash, by encoding (`Person` gains a field; A-107: "a declared hash mover"). Declared; B04's one re-pin in B04.26.
-- DEPENDS ON: V12 B04.02 (`_capability_roster`, `CAPABILITIES`), B04.05 (`_load_capability_uses`); V12 Batch B03c-boot (`boot/realm.py`); EXISTS-IN-TREE `data/cast.py::heritage_of`, `references/npc_registry.yaml` `resonant_style:`.
+- DEPENDS ON: V12 B04.02 (`_capability_roster`, `CAPABILITIES`), B04.05 (`_load_capability_uses`); V12 Batch B03c-boot @544cf5719c620331b70aeda93c1672977b44e9ef (`boot/realm.py`); EXISTS-IN-TREE `data/cast.py::heritage_of`, `references/npc_registry.yaml` `resonant_style:`.
 - GLOSSARY: *trait* (step 6).
 - NAMES: `harness/populated.py` (the builder) → `boot/realm.py` (B03c).
 - COST and TIER: small build; `sonnet`, `high`.
@@ -282,7 +282,7 @@ Not in this batch, and where each is: CORE Edit 9 and CAP Part B (B05); MAP §G 
 - FALSIFIER and CONTROL: a cast row naming an undefined skill, or a rank above 7, that builds. Control: no cast row authors `capabilities:` at ship, so the realm content hash at seeds 0 to 2, one season, equals B04.08's reading.
 - GATE: `python -m pytest engine/season/tests/test_u1_capability_surface.py -q` → pass; the realm hash (`HASH READING`) at seed 0, one season → equal to B04.08's reading.
 - HASH MOVERS: none.
-- DEPENDS ON: V12 B04.02; V12 Batch B03c-boot; EXISTS-IN-TREE `data/cast.py::attributes_of`, `::capability_of`, `harness/corpus_run.py::_check_capability` (`:336` at `8ce8d6a`).
+- DEPENDS ON: V12 B04.02; V12 Batch B03c-boot @544cf5719c620331b70aeda93c1672977b44e9ef; EXISTS-IN-TREE `data/cast.py::attributes_of`, `::capability_of`, `harness/corpus_run.py::_check_capability` (`:336` at `8ce8d6a`).
 - GLOSSARY: none.
 - NAMES: `harness/populated.py` (the builder) → `boot/realm.py` (B03c).
 - COST and TIER: edit; `sonnet`, `high`.
@@ -529,7 +529,7 @@ Not in this batch, and where each is: CORE Edit 9 and CAP Part B (B05); MAP §G 
 - FALSIFIER and CONTROL: for the draft: a table (a) row whose skill key is not a B04 definition row, or a value with no basis cell and no `[NO BASIS IN THE TREE]` mark. For the re-pin: a moved tally (then the batch moved behaviour it did not declare: the re-pin stops and the batch is `STOPPED`). Control: B03a's close readings (`reading @<sha>`).
 - GATE: `python -m engine.season.harness.register --requirements` → exit 0, R-01, R-02, R-03 held; the pin tests pass. Record lines, not gate arms (a draft `.md` is reference; counting its sections observes the drafting and no behaviour, CLAUDE.md §0.05; BA1 lands the values where code reads them; repair lane R2a, K2 #12): `grep -c '^### ([a-e])' proposals/2026-11-12-subsystem-audit-suite/proposals/IS_A_11_cast_values_draft.md` → 5; table (a) has one row per cast row of `references/npc_registry.yaml` (46 at `8ce8d6a`; counted by a one-line `yaml.safe_load` in the commit body).
 - HASH MOVERS: the batch's re-pin (B04.01's and B04.07's declared encoding movers), recorded here and nowhere else.
-- DEPENDS ON: V12 B04.01 to B04.24 (every item before it); V12 Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0 (`_realm_goldens.py`, `IS-A-01`'s `reading:` record).
+- DEPENDS ON: V12 B04.01 to B04.24 (every item before it); V12 Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d (`_realm_goldens.py`, `IS-A-01`'s `reading:` record).
 - GLOSSARY: none (the draft uses A-98's words: attribute, skill, skill score).
 - COST and TIER: content (drafting) and a re-pin; drafting `opus`, `high` ("authorship with competing considerations", `IS-A-11`); the re-pin `sonnet`, `high`.
 - LANDS IT: B04's producer (drafting by an `opus` `valoria-author`); `Item: B04.26`, `[skip ci]` (the batch's last `Item:` push is B04.99, which takes steps 2 and 3, the re-pin and the readings, with the GATE's pin-test and `--requirements` arms and HASH MOVERS' re-pin; this commit is the draft; repair lane R1, E-1).
@@ -543,7 +543,7 @@ Not in this batch, and where each is: CORE Edit 9 and CAP Part B (B05); MAP §G 
 - FALSIFIER and CONTROL: a moved tally (then the batch moved behaviour it did not declare: the re-pin stops and the batch is `STOPPED`); a pin that moved and that neither B04.01 nor B04.07 declared. Control: B03a's close readings (`reading @<sha>`).
 - GATE: the BATCH GATE above, every line, read once on this commit's tree; the pin tests pass; `python -m pytest engine/season/tests/test_rem30_character_sheet.py -q` → pass (REM-30's exit, step 4); `python -m engine.season.harness.register --requirements` → R-01, R-02, R-03 held.
 - HASH MOVERS: the batch's one re-pin, here and nowhere else.
-- DEPENDS ON: V12 B04.01 to B04.26; V12 Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0 (`_realm_goldens.py`, `IS-A-01`'s `reading:` record).
+- DEPENDS ON: V12 B04.01 to B04.26; V12 Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d (`_realm_goldens.py`, `IS-A-01`'s `reading:` record).
 - GLOSSARY: none.
 - COST and TIER: a re-pin and the readings; `sonnet`, high.
 - LANDS IT: B04's producer; `Item: B04.99`, the batch's last `Item:` push (no `[skip ci]`; CI run 1 of the batch).

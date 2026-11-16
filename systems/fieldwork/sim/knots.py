@@ -381,14 +381,6 @@ def apply_knot_loss(actor: str, knot_id: str, mode: str = 'break',
     return consequences
 
 
-def get_knot(knot_id: str, world=None) -> Optional[Knot]:
-    return _store(world).get(knot_id)
-
-
-def get_active_knots(world=None) -> list[Knot]:
-    return [k for k in _store(world).values() if k.active]
-
-
 def reset_knots(world=None):
     """Test helper."""
     _store(world).clear()

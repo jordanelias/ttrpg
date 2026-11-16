@@ -24,7 +24,7 @@ The batch block of `B41-go-port-gate` (its head lines, PORT GATE RULES, UNDECIDE
 - FALSIFIER and CONTROL: "A `surface` block whose `content_hash` differs from slice 2's (the trace moved the run)." Control: slices 1 and 2 of B41.06 unchanged by the rebuild.
 - GATE: `python tools/export_oracle_pins.py --build` then `--check` → OK; `python -m pytest tests/valoria/test_oracle_pins.py engine/season/tests/test_surface_trace.py -q` → pass; `PYTHONHASHSEED=0 python -m engine.season.harness.port_oracle --slice 2 --seed 0` → one line per declared seat.
 - HASH MOVERS: none (a pin of a run, no game state; the `--build` is this item's own, PORT GATE RULES 1).
-- DEPENDS ON: V12 B41.05 (`surface_trace`), B41.06 (the exporter); V12 Batch B03c (`boot/realm.py::COHORT_PREFIX`).
+- DEPENDS ON: V12 B41.05 (`surface_trace`), B41.06 (the exporter); V12 Batch B03c @544cf5719c620331b70aeda93c1672977b44e9ef (`boot/realm.py::COHORT_PREFIX`).
 - GLOSSARY: none.
 - NAMES: `harness/populated.py::COHORT_PREFIX` → `boot/realm.py::COHORT_PREFIX` (B03c, CI-07); `round` → `lap` in the row (B04).
 - COST and TIER: small build; `sonnet`, `high`; the seat-set rule read by `opus`.
@@ -113,7 +113,7 @@ The batch block of `B41-go-port-gate` (its head lines, PORT GATE RULES, UNDECIDE
 - FALSIFIER and CONTROL: a row naming a contract item with no owner in the tree; a freeze list in the row. Control: `validate_ed_citations.py` exit 0 before and after.
 - GATE: `python tools/validate_ed_citations.py` → 0 violations, and the last `ED-GO-` row is this one (exit line 7); `python tools/export_oracle_pins.py --check` → OK on this commit.
 - HASH MOVERS: none ("EQUAL").
-- DEPENDS ON: V12 B41.02 to B41.12 ("needs every contract item"); V12 Batch B00 (the `ED-GO` block); V12 Batch B06 (draw type, float contract); V12 Batch B03g (GO-09's registry schema).
+- DEPENDS ON: V12 B41.02 to B41.12 ("needs every contract item"); V12 Batch B00 (the `ED-GO` block); V12 Batch B06 (draw type, float contract); V12 Batch B03g @048724cd545117255e71d04a583d99c6cb5fe3a9 (GO-09's registry schema).
 - GLOSSARY: none (*contract* is B41.06's row).
 - IDS: ED-GO block slot 1.
 - COST and TIER: edit; `opus`, `high` ("third tier (judgment)": which items are contract).
@@ -123,7 +123,7 @@ The batch block of `B41-go-port-gate` (its head lines, PORT GATE RULES, UNDECIDE
 - SOURCE: `E1` §Carry-forward GO-15 ("EXIT and FALSIFIER": "GO-08's `--check` on the freeze commit; each of B10-20's exit lines … prints"), as `11_GO_port_gate_order_and_coverage.md` §1 amends it ("`GO-15b` FIRST BEHAVIOUR PIN (a `--build` and the card's exit lines; repeatable, no row)") and "The gate" 4; B10-20's exit lines, copied from `workplans/valoria_master_workplan_v11_part3.md` B10-20 "Exit" (read at `9c2c3ab`; the file is deleted at v12's adoption, so the lines live here); `U5d_GO_owed_edits.md` §3; UNDECIDED 6; closes GO-15b and GO-15.
 - ADVANCES: GO "S7 integrated".
 - INSTRUCTION: run `python tools/export_oracle_pins.py --build` on the tree after B41.13, commit the artifact, and read each exit line, quoting its output in the commit body (a line that does not print keeps the batch open: "a line that does not keeps B10-20 open"):
-  (1) "`game_constants.json`'s `engine_series`" equals `references/engine_series.yaml`'s value (GO-01, B03g; `ED-GO-0002` owns the value, which this plan does not write);
+  (1) "`game_constants.json`'s `engine_series`" equals `references/engine_series.yaml`'s value (GO-01, B03g @048724cd545117255e71d04a583d99c6cb5fe3a9; `ED-GO-0002` owns the value, which this plan does not write);
   (2) "`python tools/export_oracle_pins.py --check` OK with the oracle SHA equal to `git rev-parse HEAD`";
   (3) "`port_oracle --slice 1 --seed 0` under `PYTHONHASHSEED` 0, 1 and 2 prints three identical lines equal to the pin";
   (4) "the seven existing `--check`s (`export_sim_params`, `export_engine_params`, `export_game_constants`, `export_descriptors`, `export_composition`, `export_npc_roster`, `export_names`) and `export_season_registries --check` … print OK", with every other exporter the `validators` job runs at this tree (`grep -n -- "--check" .github/workflows/valoria-ci.yml`: `export_troops`, `export_mb_contact` and their kin from B17, B19a); [`export_oracle_draws --check`: struck, A-30]; and `export_npc_roster --check` named apart: "reports hand-corrected rows; fails only on a row naming no case, place or seated person" (`U5d_GO_owed_edits.md` §3);
@@ -138,7 +138,7 @@ The batch block of `B41-go-port-gate` (its head lines, PORT GATE RULES, UNDECIDE
 - FALSIFIER and CONTROL: "CONTROL: GO-08's `--check` under two hash seeds" (`PYTHONHASHSEED` 0 and 1).
 - GATE: lines (1) to (8) print as stated; `PYTHONHASHSEED=1 python tools/export_oracle_pins.py --check` → OK.
 - HASH MOVERS: none ("EQUAL").
-- DEPENDS ON: V12 B41.13; V12 Batch B03g (GO-01's `engine_series.yaml`, GO-11, GO-05, GO-09); EXISTS-IN-TREE every exporter line (4) names.
+- DEPENDS ON: V12 B41.13; V12 Batch B03g @048724cd545117255e71d04a583d99c6cb5fe3a9 (GO-01's `engine_series.yaml`, GO-11, GO-05, GO-09); EXISTS-IN-TREE every exporter line (4) names.
 - GLOSSARY: none.
 - COST and TIER: build (with a reading); `sonnet`, `high`; the OPEN-line judgment `opus`.
 - LANDS IT: B41's producer; `Item: B41.14`, `[skip ci]`.
@@ -226,7 +226,7 @@ Not in this batch, and where each is: CR-104 (B11F2; reads B11F1.02's Sites); SE
 - FALSIFIER and CONTROL: "MUTATION: key `owner_of` on the kind's name and (1)'s null-cell variant reads red." "CONTROLS: `wear_per_season` 0 (the control arm); `content_hash` EQUAL when no row carries `site:`."
 - GATE: `python -m pytest engine/season/tests/test_cr106_church_sites.py -q` → (1), (2), (4) pass; the realm hash (`HASH READING`) at seeds 0 to 2, one season → equal to the S16 base, B24a's after-reading (`reading @<sha>`; lane H3).
 - HASH MOVERS: none (no row carries `site:`).
-- DEPENDS ON: EXISTS-IN-TREE `rosters.yaml: site_kinds` (`:1784` at `9c2c3ab`), `queries/world_q.py::holder_faction_of`, `data/rosters.py::HEAD_SEAT`, `::require_member`, `Site.condition`, `band_floors`; V12 Batch B03c (`boot/realm.py`'s dwelling loop, moved from `populated.py`); `ED-IN-0352` (landed). "RE-BASE: `venues.yaml` and `populated.py`'s dwelling loop as the settlement-lane batches that edit them leave them" (B12a to B12c).
+- DEPENDS ON: EXISTS-IN-TREE `rosters.yaml: site_kinds` (`:1784` at `9c2c3ab`), `queries/world_q.py::holder_faction_of`, `data/rosters.py::HEAD_SEAT`, `::require_member`, `Site.condition`, `band_floors`; V12 Batch B03c @544cf5719c620331b70aeda93c1672977b44e9ef (`boot/realm.py`'s dwelling loop, moved from `populated.py`); `ED-IN-0352` (landed). "RE-BASE: `venues.yaml` and `populated.py`'s dwelling loop as the settlement-lane batches that edit them leave them" (B12a to B12c).
 - GLOSSARY: row *owner* (new if absent): "the faction a Site belongs to: its kind's `site_owner` cell if set, else the faction holding its rung (`faction_q.owner_of`)"; ordinary reading: who a thing belongs to.
 - NAMES: `harness/populated.py` dwelling loop → `boot/realm.py` (B03c, CI-07).
 - COST and TIER: small build; `sonnet`, `high`; a third-tier critic (`opus`) on the null-cell rule.
@@ -257,7 +257,7 @@ Not in this batch, and where each is: CR-104 (B11F2; reads B11F1.02's Sites); SE
 - FALSIFIER and CONTROL: "MUTATION: check each row's weight alone and (2) reads red. CONTROLS: the shipped `cohorts.yaml` unchanged gives `content_hash` EQUAL".
 - GATE: `python -m pytest engine/season/tests/test_cr107_cohort_identity.py -q` → (1), (2), (3), (5) pass; the realm hash (`HASH READING`) at seeds 0 to 2, one season → equal to B11F1.02's after-reading.
 - HASH MOVERS: "none from the loader change alone".
-- DEPENDS ON: EXISTS-IN-TREE `harness/populated.py::seat_cohorts`, `COHORT_PREFIX` (moved to `boot/realm.py` by B03c), `queries/world_q.py::capacity`, `::population`, `data/affiliations.py::conviction_map`, `Person.heritage`; V12 Batch B03c. "RE-BASE: … the `temperament_rows`/`seat_cohorts` code as the held batch leaves them."
+- DEPENDS ON: EXISTS-IN-TREE `harness/populated.py::seat_cohorts`, `COHORT_PREFIX` (moved to `boot/realm.py` by B03c), `queries/world_q.py::capacity`, `::population`, `data/affiliations.py::conviction_map`, `Person.heritage`; V12 Batch B03c @544cf5719c620331b70aeda93c1672977b44e9ef. "RE-BASE: … the `temperament_rows`/`seat_cohorts` code as the held batch leaves them."
 - GLOSSARY: row *cohort*: its owner gains the `label:`, `heritage:`, `conviction:` keys and the id `cohort_<rung>_<label>`; "a cohort is the people of a settlement who share a caste, creed or allegiance, seated as one person of weight"; ordinary reading: a group of people with something in common.
 - NAMES: `harness/populated.py::seat_cohorts` and the cohort loader → `boot/realm.py` (B03c).
 - COST and TIER: small build; `sonnet`, `high` ("second tier for the loader").

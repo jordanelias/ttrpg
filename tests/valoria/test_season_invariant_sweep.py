@@ -103,7 +103,8 @@ def test_the_engine_is_clean_under_the_sweep():
 def _played_realm(seed):
     """The shipped world (`populated.build_realm`) played one season: the world with offices in it."""
     from engine.season.harness import populated
-    w = populated.build_realm(seed)
+    from engine.season.boot.realm import build_realm
+    w = build_realm(seed)
     populated.run(1, seed, w=w)
     return w
 
@@ -197,7 +198,7 @@ def _break_log_ids_unique(w):
     w.log.append(Event(e.id, e.kind, [], ["ROOT"], e.emitted_at))
 
 def _break_log_not_from_the_future(w):
-    w.log.append(Event("mut_future", "probe", [], ["ROOT"], w.tick + 9))
+    w.log.append(Event("mut_future", "condition.band_crossed", [], ["ROOT"], w.tick + 9))
 
 def _break_claim_not_from_the_future(w):
     p = next(iter(w.persons.values()))

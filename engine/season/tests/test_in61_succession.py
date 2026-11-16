@@ -24,7 +24,7 @@ from ..data.matrix import Step, WriteClass
 from ..data.rosters import CONFERRAL_BASES, SUCCESSIONS
 from ..decision import choose as CH
 from ..gaps import Unspecified
-from ..harness.populated import build_realm
+from ..boot.realm import build_realm
 from ..loop.driver import SeasonDriver, mint_token
 from ..loop.matter import _die
 from ..state import gate as G

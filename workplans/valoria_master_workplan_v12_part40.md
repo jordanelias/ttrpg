@@ -17,7 +17,7 @@ INVOCATION: /methodology-execute Batch B38-narrative-regimes
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_WR.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
-GATE: Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0
+GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B05-one-roll
 GATE: Batch B07-task-draw
 GATE: Batch B09-memory
@@ -250,7 +250,7 @@ Items B38.19 to B38.25 are in this part's continuation file. The second half (fr
 - FALSIFIER and CONTROL: "The build hash moving with `seed_holders=False`: the switch is not a control." Control: `build_realm(0, seed_holders=False).content_hash()` equal to B38.03's build reading (`reading @<sha>`).
 - GATE: `python -m pytest engine/season/tests/test_held_by.py -q` → pass; on `build_realm(s)`, s = 0, 1, 2: "the share of persons holding a `held_by` claim at build, by seed, is above 5 % (expected: every person under a held seat)" — H-195's own trigger, printed per seed; the build hash (`HASH READING`) at seed 0 → moved (declared).
 - HASH MOVERS: "A build-hash mover (a ledger is state)": every build and season hash. Declared; B38's one re-pin at B38.99.
-- DEPENDS ON: EXISTS-IN-TREE `state/gate.py::purview_reaches`, `queries/world_q.py::governing_hold`, `queries/person_q.py::known_persons`; V12 Batch B03c-boot (`boot/realm.py`); V12 Batch B21-fa-governance and B23-land (the seats and holds the seeding reads; `06_FA_seat_terms_and_turnover`, `06_FA_seat_terms_by_body_B`, `06_FA_war_lives_in_seats_B`).
+- DEPENDS ON: EXISTS-IN-TREE `state/gate.py::purview_reaches`, `queries/world_q.py::governing_hold`, `queries/person_q.py::known_persons`; V12 Batch B03c-boot @544cf5719c620331b70aeda93c1672977b44e9ef (`boot/realm.py`); V12 Batch B21-fa-governance and B23-land (the seats and holds the seeding reads; `06_FA_seat_terms_and_turnover`, `06_FA_seat_terms_by_body_B`, `06_FA_war_lives_in_seats_B`).
 - GLOSSARY: *believed holder* — row added if absent: "the person someone believes holds a seat or a rung, from his own newest `held_by` claim; it can be stale"; owner `person_q.believed_holder`.
 - NAMES: `harness/populated.py::build_realm` → `boot/realm.py::build_realm` (B03c); `(when, round)` → `(when, lap)` (B04, PCR-4).
 - COST and TIER: small build; `sonnet`, `high`.

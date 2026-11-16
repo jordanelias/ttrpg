@@ -1,7 +1,5 @@
 """
 engine/dice_engine/dice_engine.py — d10 dice pool, TN values, degree of success, continuous engine
-(The header read `sim/autoload/...` until 2026-08-27; that tree was retired 2026-07-21. Its twin
-in sigma_leverage.py was fixed the same day and this one was missed — §0.1 pt 5's sweep-the-pattern.)
 
 Canon source: params/core.md (Die Rule, TN Values, Degrees of Success, Continuous Engine Decision E)
 Params source: params/core.md
@@ -60,12 +58,9 @@ DEGREE_ORDINAL: dict["Degree", int] = {
 #    if a system does require any modification or extension, then the wrapper needs to inject
 #    the engine in such a manner that it can be modified cleanly."
 #
-# ED-SC-0031 satisfied the first clause — every subsystem's bands became this module's — and
-# NOT the second: the social contest's pool-aware de-saturation survived as a hard-coded
-# post-filter inside `sigma_leverage`, with no hook here and nothing stopping the next
-# subsystem bolting on a differently-shaped one. This is the hook, and the point of putting it
-# HERE rather than leaving each subsystem to police itself is that the constraint becomes
-# STRUCTURAL:
+# Every subsystem's bands are this module's (ED-SC-0031); this is the hook for the second clause,
+# and the point of putting it HERE rather than leaving each subsystem to police itself is that
+# the constraint becomes STRUCTURAL:
 #
 #   * an extension's only power is to VETO the top band. `may_overwhelm`'s return is coerced with
 #     `not` and consulted in exactly one branch below — the OVERWHELMING one — so the only band
@@ -74,13 +69,11 @@ DEGREE_ORDINAL: dict["Degree", int] = {
 #   * `context` is the subsystem's own state (the contest passes its pool). The engine neither
 #     interprets it nor stores it. Unknown keys are REFUSED rather than swallowed (below).
 #
-# ⚠ THE LIMIT OF "STRUCTURAL", stated because an adversarial pass broke the stronger claim this
-# comment first made. Two sentences are retracted. (1) "the ladder itself is never passed to the
-# extension, so an extension cannot re-derive it" — FALSE: `may_overwhelm` is arbitrary Python and
-# can import `degree_from_net` in one line. What the design prevents is RETURNING a different
-# band, not re-deriving one. (2) "whatever its author intends" — OVERSTATED: an extension runs in
-# this process with access to this module's mutable state, and `DEGREE_ORDINAL` is a plain dict a
-# hostile extension could mutate mid-call. The honest claim is narrower and still worth having:
+# ⚠ THE LIMIT OF "STRUCTURAL". `may_overwhelm` is arbitrary Python and can import
+# `degree_from_net` in one line: what the design prevents is RETURNING a different band, not
+# re-deriving one. An extension runs in this process with access to this module's mutable state,
+# and `DEGREE_ORDINAL` is a plain dict a hostile extension could mutate mid-call. The claim is
+# narrower and still worth having:
 # an extension that confines itself to its own contract CANNOT express any band change but 3 -> 2,
 # and any attempt to do more has to reach outside the seam, where it is visible in a diff. That is
 # an auditable convention with a structurally-bounded return channel — not a sandbox, and this
@@ -113,11 +106,10 @@ class BandExtension:
     def validate_context(self, context) -> None:
         """Refuse a context key this extension does not declare. Called by the ladder.
 
-        ⚠ THIS EXISTS BECAUSE THE SEAM SHIPPED WITH A SILENT-NO-OP HOLE, found by an adversarial
-        pass on the commit that built it. `**context` accepts any keyword, and an extension that
-        defaults its parameter (`pool=None` -> abstain) turns a MISSPELLED OR RENAMED key into a
-        band change: `degree_from_net(net, ob, extension=E, poool=8)` returned Overwhelming where
-        `pool=8` would have returned Success, with no error and no warning. That is CLAUDE.md
+        ⚠ `**context` accepts any keyword, and an extension that defaults its parameter (`pool=None`
+        -> abstain) would turn a MISSPELLED OR RENAMED key into a band change:
+        `degree_from_net(net, ob, extension=E, poool=8)` would return Overwhelming where
+        `pool=8` returns Success, with no error and no warning. That is CLAUDE.md
         §0.1 point 1's read/write asymmetry exactly — the write silently misses the read — and it
         is the failure mode a seam must not have, because the whole point of a declared extension
         is that its inputs are declared.
@@ -140,7 +132,6 @@ class BandExtension:
 
 @dataclass
 class RollResult:
-    pool_size: int
     tn: int
     rolls: list[int]
     net: int
@@ -163,14 +154,6 @@ def _die_result(face: int) -> int:
 
 # Per-die EV at TN 7 — the only TN there is.
 # [Jordan, 2026-08-25: "TN7 always. Never change TN anywhere ever." — ED-IN-0196]
-# The table used to carry TN 6 (μ=0.50, σ=0.806) and TN 8 (μ=0.30, σ=0.781). Those rows are
-# dead under the ruling and are deleted rather than left as reachable-looking configuration.
-# The historical table was reference-only and NOT a mechanism (§0.05); its capture
-# (params_tables.yaml) was retired (`FORK:` row in references/restructure_ledger.md).
-#
-# Note the TN 6 row was always in tension with `_die_result` below, which has never read `tn`:
-# μ=0.50 is only reachable if faces 6-9 score, and no face rule here has ever done that. The
-# ruling resolves that tension in favour of the die rule.
 #
 # The ONE owner, within engine/dice_engine/, of the per-die mean and sigma. The PUBLIC names carry the
 # literals (plain assignments: tools/export_sim_params.py reads only those, so the typed export keeps
@@ -212,7 +195,7 @@ def roll_pool(pool_size: int, tn: int = 7, ob: int | float | None = None,
     rolls = [rng.randint(1, 10) for _ in range(effective_pool)]
     net = sum(_die_result(face) for face in rolls)
     deg = degree_from_net(net, ob) if ob is not None else None
-    return RollResult(pool_size=effective_pool, tn=tn, rolls=rolls, net=net, degree=deg, ob=ob)
+    return RollResult(tn=tn, rolls=rolls, net=net, degree=deg, ob=ob)
 
 
 def continuous_engine_sample(pool: float, tn: int = 7,
@@ -250,11 +233,10 @@ def degree_from_net(net: int | float, ob: int | float,
     Both operands may be fractional. `net` already is — the continuous engine returns fractional
     nets. `ob` is RULED to become fractional (Jordan, 2026-08-14: an obstacle rolled against a
     character or faction is "their corresponding score/2 plus whatever specific modifiers exist for
-    them in that instance"). ⚠ CORRECTED 2026-09-05 (ED-IN-0202) — this read "THAT DERIVATION IS
-    IMPLEMENTED NOWHERE — every call site in the tree still passes a hand-set Ob", and the second
-    clause is FALSE. Measured: `systems/factions/sim/crown_initiative.py::coronation_renewal_ob`
-    implements `floor(Church.L / 2) + 1` exactly, Royal Progress derives its Ob from the standing
-    gap, and the tribunal derives under formal grounds. What is true is narrower: there is NO
+    them in that instance"). ⚠ (ED-IN-0202) The derivation is implemented at some sites:
+    `systems/factions/sim/crown_initiative.py::coronation_renewal_ob` implements
+    `floor(Church.L / 2) + 1` exactly, Royal Progress derives its Ob from the standing
+    gap, and the tribunal derives under formal grounds. But there is NO
     SINGLE-OWNER derivation — most sites still hand-set (Muster 1, Govern 2, the
     threadwork table; combat's fixed Ob 3 is deleted, PC-03), the three opposed sites disagree, and `parliamentary_transfer`'s `L+2`
     contradicts the ruling while being stated as canon in `parliamentary_transfer_v30.md`.
@@ -267,12 +249,11 @@ def degree_from_net(net: int | float, ob: int | float,
     only the windowed one survives contact with fractional obstacles, where exact equality
     essentially never occurs and Partial would otherwise vanish.
 
-    ⚠ THE RETIRED PARAMS CAPTURE (`params_tables.yaml`, `FORK:` row) HELD THE OLD LADDER: the
-    PRE-RULING bands (Overwhelming at Net >= 2*Ob, Failure at Net <= 0), from the evacuated
-    `params/core.md`. It is history, not canon: where it disagrees with code, the code wins
-    (principle 7 / ED-1050). Do not restore bands from it.
+    ⚠ THE PRE-RULING BANDS (Overwhelming at Net >= 2*Ob, Failure at Net <= 0) ARE NOT CANON: where
+    any capture of them disagrees with code, the code wins (principle 7 / ED-1050). Do not restore
+    bands from one.
 
-    RULED OUT, explicitly, by the same ruling (all three were live here until 2026-08-14):
+    RULED OUT, explicitly, by the same ruling:
       * Ob-scaled Overwhelming (`net >= 2*Ob`) — Overwhelming no longer depends on difficulty.
       * The separate PP-232 `net >= 3` floor — subsumed; the margin bar IS 3.
       * The Ob-20 exception (Overwhelming unavailable, Partial needing net >= 10) — "always"

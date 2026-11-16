@@ -1,12 +1,11 @@
 """`season.data.cast` — THE CAST, READ FROM CANON INSTEAD OF DERIVED FROM A HASH.
 
 `references/npc_registry.yaml` declares itself *"Canonical source of truth for ALL named
-characters"* and carries 46 rows. MEASURED 2026-09-13: its ids are an EXACT 1:1 MATCH with
-`run_cases.load_cases("NPC")` — 46 for 46, zero symmetric difference — and every row carries an
-authored `faction` and `role`, 31 a `territory`, 30 `goals`, 29 `stats`, 32 `ts`, and 7 a `title`.
-Every weighted `conviction:` entry across the 46 names one of the canonical fifteen pursuits since
-IN-08's cells commit migrated them (`references/descriptor_registry.yaml: pursuit_roster`); not one
-is invalid, and `pursuits_of` raises on the first that would be.
+characters"*. Its ids are an EXACT 1:1 MATCH with `boot/realm.py::load_cases("NPC")`, and every
+row carries an authored `faction` and `role`, some a `territory`, `goals`, `stats`, `ts` or
+`title`. Every weighted `conviction:` entry names one of the canonical fifteen pursuits
+(`references/descriptor_registry.yaml: pursuit_roster`), and `pursuits_of` raises on the first that
+does not.
 
 ⚠ NOTHING THAT EXECUTES HAD EVER OPENED IT. The only two Python files naming it are a test that
 checks it PARSES (`tests/valoria/test_references_yaml_parse.py`, a regression guard from when it
@@ -69,8 +68,7 @@ NPC_REGISTRY_YAML = files.NPC_REGISTRY_YAML
 # caller's, downstream), so raising here would turn a counted gap into a crash at import.
 # `{alias: canonical}` over every `token_class: faction` row is `rosters.FACTION_ALIAS` (imported above), built ONCE
 # at import from the naming leaf: both readers below run per row (46 cast rows, and the geography file's
-# per-province `faction:` column). Schoenland was invisible to it until 2026-09-16: its `names_index.yaml` row is
-# filed with the PLACES and simply never carried `token_class: faction`; the class is set now and the eighth resolves.
+# per-province `faction:` column). A faction resolves only if its `names_index.yaml` row carries `token_class: faction`.
 
 
 
@@ -113,17 +111,6 @@ def load() -> dict:
 def row(case_id: str) -> Optional[dict]:
     """The registry row for a case, or `None` where the registry does not carry one."""
     return _rows().get(str(case_id))
-
-
-def name_of(r: dict) -> str:
-    """`first_name last_name`, with a one-name person spelled as their one name.
-
-    ⚠ `last_name: None` IS REAL DATA AND NOT A HOLE — Edeyja (NPC-001) and Orm (NPC-075) have one
-    name each, and the corpus cases agree. Formatting it through `str()` would produce the literal
-    string "Edeyja None", which is what a first cut of this function did."""
-    first = str(r.get("first_name") or "").strip()
-    last = str(r.get("last_name") or "").strip() if r.get("last_name") else ""
-    return f"{first} {last}".strip() if last else first
 
 
 def faction_of(r: dict) -> tuple[Optional[str], Optional[str], str]:
@@ -206,7 +193,7 @@ def pursuits_of(r: dict) -> dict:
     must have a fully populated and coherent 15x7 pursuit-axis matrix"*). The roster is the leaf's
     `PURSUITS` (through `rosters`), never a count typed here. An EMPTY mapping is "no row" -- the
     caller's `cast.row(cid) or {}` for a corpus case added ahead of its registry row, the normal
-    authoring order -- and returns `{}`, so `harness/populated.py` still falls back to
+    authoring order -- and returns `{}`, so `boot/realm.py` still falls back to
     `seed_pursuits` there."""
     from .pursuits import pursuit
     from .rosters import PURSUITS
@@ -285,7 +272,7 @@ def thread_sensitivity_of(r: dict) -> Optional[int]:
     The two non-numeric shapes the registry authors are read by `_TS_RANGE` / `_TS_APPROX` (above);
     ANY OTHER SHAPE REFUSES, naming the row, rather than being coerced to a plausible number -- this
     module reads and validates, it does not guess (its docstring). `conviction_of`'s precedent: one
-    reader, called once per person at world build (`harness/populated.py::build_realm`)."""
+    reader, called once per person at world build (`boot/realm.py::build_realm`)."""
     v = (r or {}).get("ts")
     if v is None:
         return None
@@ -427,20 +414,10 @@ def defects() -> list[str]:
 # SCALE is his; the SHAPE is read off canon rather than drawn, because a varying quantity makes a
 # better game than a constant and canon supplies the material for one.
 #
-# ⚠ **THERE WAS A SECOND LOYALTY IN THE TREE AND IT WAS NOT THIS ONE — SAID HERE SO NOBODY HAS TO
-# REDISCOVER IT COLD.** `systems/world/sim/npe.py:70` declared `LOYALTY_MIN = 0` / `LOYALTY_MAX = 3`
-# for a generated NPC's `affiliation_loyalty`, and `tools/link_values_pointers.py` linked both to the
-# same `ppt.loyalty` pointer, which is how it was found — by the link map, not by reading. Plan
-# position `29d` (2026-10-01) deleted `npe.py`; it is at `FORK:5c5d8ec6` in `restructure_ledger.md`.
-#
-# They were not two ladders for one quantity (`CLAUDE.md` §0.06's S test), and the reason was
-# structural rather than a judgment call. MEASURED by AST 2026-09-14: `npe` had exactly ONE
-# importer in the whole tree, `systems/overview/sim/accounting.py` (deleted at `29a`), and nothing
-# under `engine/` names `affiliation_loyalty` at all — so the two never met at runtime. `npe` was
-# in the superseded tree; Jordan's 0-100 ruling is newer and names this scale explicitly.
-#
-# **So: do not read `npe`'s 0-3, wherever you meet it in old text, as a prior bound on this one.** If the
-# season engine ever needs an affiliation strength, it comes from here.
+# ⚠ **AN OLD `affiliation_loyalty` BOUND OF 0-3 (`systems/world/sim/npe.py`, deleted; `FORK:5c5d8ec6`
+# in `restructure_ledger.md`) IS NOT A PRIOR BOUND ON THIS SCALE.** The two never met at runtime and
+# were not two ladders for one quantity (`CLAUDE.md` §0.06's S test); Jordan's 0-100 ruling names
+# this scale explicitly. If the season engine needs an affiliation strength, it comes from here.
 LOYALTY_SCALE = 100   # [JUSTIFIED: Jordan's ruled 0-100 scale, ED-IN-0229 — the unit's definition, not a tunable]
 # Orthogonal ethics: neither aligned with the creed nor against it. DERIVED from the scale and
 # not written as a second number — the cosine's `[-1,+1]` maps onto `[0, LOYALTY_SCALE]`, so

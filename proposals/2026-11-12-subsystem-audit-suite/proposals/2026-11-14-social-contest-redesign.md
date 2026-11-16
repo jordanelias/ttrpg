@@ -83,7 +83,7 @@ Event and, for a docketed matter, on the case file (Layer 1, `04` §A.2).
 ### A.2 The module, and where the state lives (Layer 1)
 
 `04` §A.2 gives a registered module one shape: a typed input in, a typed outcome back, no `World`, no token, no state kept
-between calls; `roll.py:10-14` says it of the live entry. The proceeding keeps that shape, on the fight's precedent
+between calls; `roll.py:8-12` says it of the live entry. The proceeding keeps that shape, on the fight's precedent
 (`queries/inputs.py:165-196`: `CombatTurnView`, `PlayHost`): the entry runs every exchange of one sitting inside one
 call, calls a decider it is handed for each choice, and returns.
 

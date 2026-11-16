@@ -11,8 +11,8 @@ INVOCATION: /methodology-execute Batch B34-go-surface
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_GO.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
-GATE: Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0
-GATE: Batch B03-hygiene
+GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
+GATE: Batch B03-hygiene @61b37b8dc8a68a5434d423f0ed0695102e89fc9f
 GATE: Batch B10-character
 GATE: Batch B21-fa-governance
 GATE: Batch B24-sc-hearing
@@ -94,7 +94,7 @@ Order notes. U3 §1 item 34 orders GO-B → SURF → fidelity → `16_PESSIMIST_
 - FALSIFIER and CONTROL: "Every act the seated person resolved has an `own=True` `AccountRow` …; a planted act of another person yields none" (gate 3, read at B34.03). Control: in branch 1 the realm hash at seed 0 equals the step's base; in branch 2 a planted act by another person deposits no `doer` claim to `p_npc_001`.
 - GATE: `python -m pytest engine/season/tests/test_play_surface_own_outcome.py -q` → pass (in branch 1 before any edit; in branch 2 after step 3); the realm hash (`HASH READING`) at seed 0, one season → equal (branch 1) or moved and declared (branch 2).
 - HASH MOVERS: none in branch 1; branch 2 "a declared hash mover" (WITNESS's self-deposit). Re-pinned at B34.99.
-- DEPENDS ON: EXISTS-IN-TREE `loop/witness.py::witness`, `state/carriers.py::Claim.doer`; V12 Batch B03c (`boot/realm.py::build_realm`); V12 Batch B05 (`05_SC_contest_record_on_event`, SC-P1: the roll's record on `Event.observed`).
+- DEPENDS ON: EXISTS-IN-TREE `loop/witness.py::witness`, `state/carriers.py::Claim.doer`; V12 Batch B03c @544cf5719c620331b70aeda93c1672977b44e9ef (`boot/realm.py::build_realm`); V12 Batch B05 (`05_SC_contest_record_on_event`, SC-P1: the roll's record on `Event.observed`).
 - GLOSSARY: none.
 - NAMES: `populated.build_realm` → `boot/realm.py::build_realm` (B03c).
 - COST and TIER: small build (a test, then nothing or one WITNESS rule; §5.3's class, R2c, K6 F16); `sonnet`, `high`; `opus` reads branch 2's decision (GO-B "Lands it").
@@ -454,7 +454,7 @@ Order notes. U3 §1 item 34 orders GO-B → SURF → fidelity → `16_PESSIMIST_
 - FALSIFIER and CONTROL (copied): "A run in which the seeded claims make every person know every holder (the draw is decoration). A goal that never forms for anyone at the shipped chances (the seed is too thin and ambition dies)." "Control, exact: with every chance set to 1.0, the set of `need` questions and their referents returned by `questions_for` for every person at tick 0 equals today's [B34.23's base, before §1]." Gate 3: "At the shipped chances, over seeds 0–9: the share of persons with a `seat_holders` goal who hold no claim on any of its seats at build is neither 0 nor more than a quarter (the draw is a draw); and at least one such person forms the question later in the run [within two seasons], after a deposit names the holder." Gate 1: "The count inside `harness/interactions.py` at seeds 0–2, two seasons: occurrences of a person named through a classed referent and outside the closure = **0**."
 - GATE: `python -m pytest engine/season/tests/test_seat_holders_from_ledger.py -q` → pass; `python -m engine.season.harness.interactions` at seeds 0–2, two seasons → the out-of-closure count 0 `[ASSUMPTION: `interactions` prints that count — basis: PES-GO "its count is committed as a reading of `python -m engine.season.harness.interactions` (exists)"; if it prints none, the count is computed in the gate-3 test and the commit says so]`; `python tools/ci_sim_fabrication_check.py` → exit 0 (the new fixture's tag).
 - HASH MOVERS: "ledgers at build" (every seeded world). Re-pinned at B34.99.
-- DEPENDS ON: V12 B34.23; V12 Batch B03c (`boot/realm.py`); V12 Batch B06 (`draw`, the keyed purpose); EXISTS-IN-TREE `harness/populated.py::seed_acquaintances` (moved to `boot/realm.py` by B03c), `hole_register.yaml` H-203.
+- DEPENDS ON: V12 B34.23; V12 Batch B03c @544cf5719c620331b70aeda93c1672977b44e9ef (`boot/realm.py`); V12 Batch B06 (`draw`, the keyed purpose); EXISTS-IN-TREE `harness/populated.py::seed_acquaintances` (moved to `boot/realm.py` by B03c), `hole_register.yaml` H-203.
 - GLOSSARY: none.
 - NAMES: `harness/populated.py` → `boot/realm.py` (B03c, `CI-07`).
 - IDS: H block slot 1 (the NUMBER row).

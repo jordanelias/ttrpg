@@ -40,7 +40,7 @@ from engine.season.data import rosters
 from engine.season.data.verbs import CHOICE_RANGES, VERB_TABLE
 from engine.season.decision import assemble
 from engine.season.decision.options import opening_set
-from engine.season.harness.populated import build_realm
+from engine.season.boot.realm import build_realm
 from engine.season.loop import effects_information as eff
 from engine.season.queries import world_q
 from engine.season.state import gate as G
@@ -265,8 +265,8 @@ def test_planted_failure_a_predicate_that_answers_yes_leaves_the_refusal_to_the_
     monkeypatch.setattr(eff, "may_cede", lambda *a, **k: True)
     w = _world(3, 1.0)
     _besiege(w)
-    with pytest.raises(G.NotYours):
-        _surrender(w, KING, KING_SEAT)
+    out = _surrender(w, KING, KING_SEAT)
+    assert [e.kind for e in out] == ["surrender.refused"], [e.kind for e in out]   # H-143: emitted, not raised
     assert world_q.holder_faction_of(w, TARGET) == CHURCH
 
 
@@ -276,8 +276,8 @@ def test_planted_failure_without_the_cession_clause_the_gate_refuses_the_effects
     monkeypatch.setattr(G, "may_cede", lambda *a, **k: False)
     w = _world(3, 1.0)
     _besiege(w)
-    with pytest.raises(G.NotYours):
-        _surrender(w)
+    out = _surrender(w)
+    assert [e.kind for e in out] == ["surrender.refused"], [e.kind for e in out]   # H-143: emitted, not raised
     assert world_q.holder_faction_of(w, TARGET) == CHURCH
 
 

@@ -19,13 +19,21 @@ reds; delete the `TRACE.decision` call in `sides_of` and the march test reds.
 
 from __future__ import annotations
 
+import pytest
 from ..harness import probes as P
-from ..harness.populated import build_realm
+from ..boot.realm import build_realm
 from ..loop import predicates as _preds
 from ..loop.sides import sides_of
 from ..state.carriers import Act, Office, Rung
 from ..trace_log import TRACE
 from ..state.world import World
+
+
+@pytest.fixture(autouse=True)
+def _recording():
+    """`TRACE` keeps rows only inside a window an instrument opens; these tests read them."""
+    with TRACE.recording():
+        yield
 
 
 def _rows_of(call) -> tuple[object, list]:

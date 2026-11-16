@@ -5,41 +5,19 @@ the type a write must present.
 the critical path. The mint is `Gate`; the tokens are `Token` (G2, below).
 
 WHAT THIS FILE OWNS AND WHAT IT DOES NOT. It owns **the authority to say a write happened**, and
-the TYPE of the authority to ask for one. It does NOT own the matrix check, the step check, the
-emission rule or the `(kind, field)` keying -- those are still `World.write`, which is ~160 lines
-of Layer-2 policy welded to `World`'s own state. G2 changed WHAT `World.write` is handed (a
-`Token`, not a bare `WriteClass`) and left WHERE the checks live alone: moving them out of `World`
-is not a signature change and no plan position asks for it. **G1a made the receipt unforgeable;
-G2 made the write class something only the driver can hand out; G3 (below, `NotYours`) made the
-gate ask WHO wrote a Tenure, which every check before it -- row, step, class -- never did; G4
-(below, `NoOpReceipt`) made the gate ask WHETHER the write changed anything, and refuse the
-receipt when it did not.**
+the TYPE of the authority to ask for one (`Token`). It does NOT own the matrix check, the step check,
+the emission rule or the `(kind, field)` keying -- those are `World.write`, Layer-2 policy welded to
+`World`'s own state. The gate also asks WHO wrote a Tenure (`NotYours`, G3) and WHETHER the write
+changed anything, refusing the receipt when it did not (`NoOpReceipt`, G4).
 
-⚠ THE AUTHORIZATION WINDOW, AND WHY IT WAS NOT A PER-CALL RETURN VALUE (G1a) -- AND WHAT G4 CHANGED
-ABOUT THAT. The obvious design is `write() -> Receipt`, and G1a found it did not fit the one caller
-that matters: `loop/resolve.py`'s `_apply_write` could not know WHAT it changed until the effect
-had run, because the effect reported touched ids from inside the `apply()` closure. So the window
-opens when a gate write begins and, AT THE TIME G1a/G4 SHIPPED, stayed open until the NEXT gate
-write opened its own, or the step barrier closed it; `mint()` outside a window raises. The property
-that buys: **you cannot mint a receipt without having just performed a real gate write.** What it
-does not buy: a second receipt minted after an unrelated later write would be attributed to that
-write.
-
-G4 makes the obvious design fit. An effect now hands the gate a `Change` that NAMES ITS SUBJECTS
-BEFORE IT RUNS, so `World.write` reads each subject before and after applying it and mints the
-receipts itself, for the subjects that moved and no others (`04 §C.2`: *"before = get();
-store._set(); after = get() / before == after or raise NoOpReceipt / r = Receipt(...)"*). The fold
-mints nothing any more. The window's open-past-the-write property therefore had no production
-consumer left at the time G4 shipped; it was unchanged BY G4 because closing it was `H-131`'s
-barrier question, not G4's.
-
-⚠ CORRECTED (methodology close, terminal critique, 2026-09-29): THE LIFETIME DESCRIBED ABOVE IS
-STALE. `H-131` was answered, in two passes the same day, by `World.write` wrapping its whole body
-in `try`/`finally: self.gate.close()` — so the window no longer survives past the write that opened
-it AT ALL: it closes unconditionally at the end of every `World.write` call, success or exception,
-never carrying open into a next write or a step barrier. The paragraph above is kept as the
-history of why the window shape existed and what G4 did to it; it does not describe `opening()`'s
-current lifetime, which is `World.write`'s docstring and `close()`'s own docstring below."""
+THE AUTHORIZATION WINDOW. An effect hands the gate a `Change` that NAMES ITS SUBJECTS BEFORE IT RUNS,
+so `World.write` reads each subject before and after applying it and mints the receipts itself, for
+the subjects that moved and no others (`04 §C.2`: *"before = get(); store._set(); after = get() /
+before == after or raise NoOpReceipt / r = Receipt(...)"*). `mint()` outside an open window raises, so
+**you cannot mint a receipt without having just performed a real gate write.** The window closes
+unconditionally at the end of every `World.write` call, success or exception (`try`/`finally:
+self.gate.close()`), never carrying open into a next write or a step barrier; see `opening()` and
+`close()`."""
 from collections import Counter
 from dataclasses import dataclass
 from typing import Any, Callable, Optional
@@ -59,13 +37,13 @@ from .carriers import Office, Receipt, Tenure
 # import-cycle instrument (`tests/valoria/test_import_cycle_game_state_npe.py`) reads a guarded
 # import as an edge like any other. The functions below take the `World` they are handed and name
 # its type as a string only.
-from .containment import ancestry, descendants, home_of, parent_of
+from .containment import ancestry, descendants, edges_of, home_of, parent_of
 
 
 @dataclass(frozen=True)
 class Token:
     """`04:199` -- *"`Token := (write_class, tick)` -- constructed by loop/driver and NOWHERE
-    ELSE"*. What `World.write` takes where it used to take a bare `WriteClass`.
+    ELSE"*.
 
     WHY A TYPE AND NOT THE ENUM. `04 §A.3` row 3: *"A parameter can be passed by anyone; a token
     only by whoever was handed it."* `WriteClass.ACTS` is a module constant, so any function that
@@ -119,49 +97,15 @@ class NoToken(InstrumentDefect):
 # plus the clause `04 §C.2` does not carry and `proposals/2026-09-05-proceedings-subsystem/
 # 04_VERBS.md` (the `determine` row's correction ⑴) found missing: *"a conferral-basis opener
 # matches none of the four. So does `confer`, today"*. The plan (position 6) makes this the ONLY
-# place the F3 branch is authored, so it is authored here, once, as the fifth basis. The SIXTH,
-# `handover`, was settled by G3's pre-flight and built at plan position 16 with `give` -- see
-# `tenure_write_basis` and `refuse_unauthored`, which is where the one judgment that spans two
+# place the F3 branch is authored, so it is authored here, once, as the fifth basis. The sixth,
+# `handover`, is in `tenure_write_basis` and `refuse_unauthored`, which is where the one judgment that spans two
 # Tenures of the same write is made.
 #
-# ⚠ PLAN POSITION `17b` (TERM · UPKEEP) BUILT `T-n`, THE ONE CLAUSE ABOVE THAT ADMITTED NOTHING,
-# AND ADDED A SEVENTH, `renewal`. `T-n` needed `Tenure.term`, which did not exist until `17b` added
-# it (`state/carriers.py::Term`). `renewal` is the write `T-n`'s own rule cannot cover: a seat's
-# holder PAYING an obligee's `upkeep` (`_eff_transfer`) winds the clock on an `oblige` edge the
-# OBLIGEE owns, which is no maturation, no revocation, no conferral and not the owner's act. Both
-# are in `04 §C.2`'s enumeration now, amended inline the same day with the plan position cited.
-#
-# ⚠ PLAN POSITION `19` (U7-remit) ADDED AN EIGHTH, `determination`, AND THE QUESTION IT ANSWERS IS
-# THE ONE THE PLAN'S OWN `19` ENTRY SAID IT COULD NOT ADD ITSELF -- *"a determination that opens a
-# Tenure on another's subject needs that fourth case, and position 6 is the only place the gate's F3
-# branch is written"*. Position 6 wrote it for `confer` (`conferral`), and `19` re-derived whether
-# `determine`'s write is that shape: it is NOT, on all three of `conferral`'s terms at once -- the
-# edge is an `oblige`, not a `hold`; its object is the seat EXERCISED (`via`), which `may_fill`
-# refuses by name (*"exclusive on the SEAT"*); and what licenses it is a BENCH's jurisdiction over
-# the person bound, not a seat's purview over another seat. A reading of `conferral` wide enough to
-# admit it would have to flip its reflexivity, which is a different rule wearing the old name. So it
-# is written here, once, as `may_determine`, and `04 §C.2`'s enumeration is amended inline the same
-# day, with the plan position cited (`conferral`/`handover`/`renewal`'s route).
-#
-# ⚠ PLAN POSITION `24e` (WORKS & FOUNDING) ADDED A NINTH, `founding` -- THE MIRROR OF THE CASCADE
-# RATHER THAN A SEAT-AUTHORITY BASIS LIKE THE THREE BEFORE IT. `found` opens a `contain` edge whose
-# SUBJECT is a newly minted Rung, and a Tenure lives and dies through its object (`holonic §15.3`):
-# what closes an edge through a death (`cascade`) may also open one through a birth, and nothing
-# else reaches it -- `T-m` cannot (a Rung is nobody's actor), and `conferral`/`T-o`/`renewal`/
-# `determination` all read a seat or an `oblige`, neither of which a founding Rung's `contain` edge
-# is. Written here, once, as the `FOUNDING` clause in `tenure_write_basis`, and `04 §C.2`'s
-# enumeration amended inline the same day (⚠ COMPLETING THIS HEADER'S OWN COUNT, terminal
-# whole-of-Phase-2 critique, 2026-09-30: this narrative stopped at eight for a full close before
-# being read against `04`'s own nine-clause enumeration).
-#
-# ⚠ v9 SC-03a (#453 §10.4 steps 2b/3, K-52) ADDED A TENTH, `warrant`, AND WIDENED `determination` --
-# the header's "opens an oblige" no longer bounds it: a determination OPENS any kind some arrangement
-# row disposes (`DISPOSABLE_KINDS`: `oblige`, `detain`, `ban`) and CLOSES a `detain` or `ban`
-# (`RESTRAINT_KINDS`), never an `oblige`. `warrant` opens a `detain` on a seat for a person the
-# exercised seat's purview reaches, by a holder granted `WARRANT_ACT`. `T-m` no longer admits an
-# owner opening or closing his own restraint. `04 §C.2` still enumerates nine and is Layer 1 text
-# (the IN-44 table's row, `workplans/valoria_master_workplan_v9_part8.md`: "no batch edits these
-# files; Jordan does"), not edited here.
+# Each further basis (`renewal`, `determination`, `founding`, `warrant`, ...) is defined at its constant
+# below and its clause in `tenure_write_basis`. `04 §C.2` still enumerates nine and is Layer 1 text, not
+# edited here; the constants below are the code's enumeration. A determination OPENS any kind some
+# arrangement row disposes (`DISPOSABLE_KINDS`: `oblige`, `detain`, `ban`) and CLOSES a `detain` or `ban`
+# (`RESTRAINT_KINDS`), never an `oblige`; `T-m` does not admit an owner opening or closing his own restraint.
 #
 # WHAT IS HERE AND WHAT IS NOT. This module owns the JUDGMENT -- which basis, if any, admits one
 # Tenure change -- and the seat-authority rules the judgment composes on (ruling (3)'s revocation
@@ -174,7 +118,7 @@ class NoToken(InstrumentDefect):
 # `_req_revoke` asks `may_revoke` and `_req_confer` asks `may_fill` -- the precondition refuses
 # (and EMITS, `§E2`) exactly what the gate would refuse (and RAISE), because both read one owner.
 # A precondition with its own copy of the rule is how the two would come to disagree, and the
-# disagreement would surface as a season killed by `NotYours` on an act the fold admitted.
+# disagreement would surface as the fold's unnamed gate refusal (B03.76) of an act the precondition admitted.
 # =================================================================================================
 
 
@@ -195,41 +139,42 @@ class NotYours(Forbidden):
 
 # THE BASES' NAMES -- what `tenure_write_basis` returns, and what a refusal message lists. `T-m`,
 # `T-o` and `T-n` are `04 §B.8`'s own names (Stage 1 `§E.1.2`); `cascade` is `04 §C.2`'s *destroy's
-# cascade*; `conferral` is the fifth basis, named for the thing that licenses it -- the seat's
-# declared conferral basis -- rather than coined.
+# cascade*; `conferral` is named for the thing that licenses it -- the seat's declared conferral
+# basis -- rather than coined.
 T_M = "T-m"
 T_O = "T-o"
-# `04 §B.8`'s own name, BUILT at plan position `17b`: the actorless closure of an edge whose declared
-# `term` has matured -- MATTER's write, the second cause `04 §B.8`'s synthesis call licenses.
+# `04 §B.8`'s own name: the actorless closure of an edge whose declared `term` has matured -- MATTER's
+# write, the second cause `04 §B.8`'s synthesis call licenses.
 T_N = "T-n"
 CASCADE = "cascade"
 CONFERRAL = "conferral"
-# THE SEVENTH BASIS (plan position `17b`): a seat's seated holder, exercising that very seat,
+# `renewal`: a seat's seated holder, exercising that very seat,
 # extending the `term` of an `oblige` edge on it -- the post paying its establishment (`04 §B.7`'s
 # `upkeep`; `F.18`: *"the repair is a verb"*). Named, like `conferral`, in the ordinary word for
 # the change it admits. See `may_renew` and the block in `tenure_write_basis`.
 RENEWAL = "renewal"
-# THE SIXTH BASIS (plan position 16, `give`): a `hold` on something that is not a seat, opened in
+# `handover`: a `hold` on something that is not a seat, opened in
 # the same write that ended the actor's own live `hold` on it under `T-m`. Named, like `cascade`
 # and `conferral`, for the thing that licenses it -- the giver's own edge, handed over -- and in
 # the ordinary word for passing a thing into another's keeping. ⚠ NOT A `T-` LETTER: `T-a`..`T-o`
 # are `architecture/meta/01_AXIOMS.md`'s theorem labels, of which only `T-m`/`T-n`/`T-o` are
 # tenure bases, and the obvious next letter for a GIVE, `T-g`, is already that file's OBSTRUCTION.
 HANDOVER = "handover"
-# THE EIGHTH BASIS (plan position `19`, U7-remit): a judging seat's seated holder, exercising that
+# `determination`: a judging seat's seated holder, exercising that
 # very seat, OPENING an `oblige` on it for the person a determination binds. Named, like `conferral`,
 # for the thing that licenses it -- confer is to `conferral` as determine is to `determination` --
 # and NOT `disposal`, the unratified proceedings design's word for the edge (`21_RECONCILIATION.md`
 # C-1): read cold, *"the disposal basis"* is a licence to throw an edge away, which is the opposite of
 # what it admits (`CLAUDE.md` §4's idempotence test). See `may_determine`.
 DETERMINATION = "determination"
-# THE NINTH BASIS (plan position `24e`, `found`): an OPENING of a `contain` edge whose SUBJECT the
-# SAME write brought into existence -- `found`'s only exerciser today is a newly founded Rung placed
+# `founding` (`found`): an OPENING of a `contain` edge whose SUBJECT the
+# SAME write brought into existence -- `found`'s only exerciser is a newly founded Rung placed
 # in its parent, but the TEST ITSELF is not Rung-typed (`born` spans every store, `world.py`'s
-# existence diff; ⚠ NOTED, terminal Phase-2-close critique, 2026-09-30 -- a future producer minting
-# some OTHER newborn kind with a `contain` edge would be admitted the same way, and no ruling has
-# considered that case; CENSUS's `person.individuated` birth is now one such producer -- SE-01, B-F, `loop/census.py::_individuate`, a `contain` edge only). Named, like `conferral` and `determination`, for the act it licenses (found
-# is to founding as confer is to conferral) and in the ordinary word for bringing a place into being.
+# existence diff): any producer minting some OTHER newborn kind with a `contain` edge is admitted the
+# same way, no ruling has considered that case, and CENSUS's `person.individuated` birth
+# (`loop/census.py::_individuate`, a `contain` edge only) is one such producer. Named, like `conferral`
+# and `determination`, for the act it licenses (found is to founding as confer is to conferral) and in
+# the ordinary word for bringing a place into being.
 # CAUSATION-BOUND, the mirror of `cascade`: a Tenure lives and dies THROUGH its object
 # (`holonic §15.3`), so what closes an edge through a death may also open one through a birth -- and
 # nothing else. See the block in `tenure_write_basis`.
@@ -248,13 +193,12 @@ FOUNDING = "founding"
 # determination's election arm, "any claimant" (CR-35, B10-17). (It was already short of the code before `claim`:
 # `warrant`, `seizure`, `muster` and T-o's ban arm below are in neither it nor D-10a's nine.) The heir's claim is
 # taken from §B.7: a seat with `conferral: inheritance` is filled by `succeed`, which needs a gate basis, so `claim`
-# is that basis. The Layer 1 wording is IN-44 row 14 (`workplans/valoria_master_workplan_v10_part7.md` A1-81:
-# CLOSED-SUPERSEDED, "lands with IN-61's build"); NOT landed by B10-09 close one, which edits no `architecture/` file.
+# is that basis. The Layer 1 wording is IN-44 row 14.
 CLAIM = "claim"
 
 # THE REMIT ACT THAT MAKES A SEAT A JUDGING SEAT -- `H-32`'s swept default, and the `bench_basis` of
-# every seeded `arrangements.yaml` row. ONE OWNER, read by `queries/world_q.py::judging_set` (which
-# carried it as a local literal until `19`) and by `may_determine` below, so *who sits in judgment*
+# every seeded `arrangements.yaml` row. ONE OWNER, read by `queries/world_q.py::judging_set`
+# and by `may_determine` below, so *who sits in judgment*
 # cannot mean one thing to the bench and another to the gate. A per-arrangement basis
 # (`judging_set`'s `bench_basis_of(w, matter)`, not built) would narrow it HERE.
 BENCH_BASIS = "determine"
@@ -273,7 +217,7 @@ UNDECLARED_DISPOSAL = "oblige"
 DISPOSABLE_KINDS = frozenset(
     {UNDECLARED_DISPOSAL} | {row["disposes"] for row in ARRANGEMENTS.values()
                              if row["disposes"] in TENURE_KINDS})
-# THE TENTH BASIS (v9 SC-03a, K-52): `warrant` -- an OPENING of a `detain` on a SEAT, for a person the
+# `warrant` (v9 SC-03a, K-52) -- an OPENING of a `detain` on a SEAT, for a person the
 # exercised seat's purview reaches, by a seated holder whose grant carries `WARRANT_ACT`. Named for
 # the instrument that licenses an arrest, in the ordinary word. AUTHORITY-BOUND ON `via` AND READING
 # TENURES AND `state/` READERS ONLY (K-52's resolution): the warrant RECORD itself, and which seat
@@ -287,8 +231,8 @@ WARRANT = "warrant"
 # `meta: remit_unruled`) -- so which posts carry the grant, and whether it is a remit act at all, is
 # Jordan's to rule, and this basis moves with the ruling.
 WARRANT_ACT = "dispatch"
-# THE ELEVENTH BASIS (v9 IN-12 step 6, #453 §10.4 step 6, `seize`'s Record half; v9 IN-13 added the Rung
-# half): `seizure` -- the PURE CLOSURE of another person's live `hold` on a RECORD or a RUNG, by a seated
+# `seizure` (v9 IN-12 step 6, #453 §10.4 step 6, `seize`'s Record half; v9 IN-13 the Rung
+# half) -- the PURE CLOSURE of another person's live `hold` on a RECORD or a RUNG, by a seated
 # holder whose grant carries `SEIZURE_ACT` and whose seat's purview reaches the dispossessed holder's
 # home (a Record) or the rung itself (`may_seize`, its `place`).
 # Named, in the ordinary word, for the act it licenses. AUTHORITY-BOUND ON `via` AND READING TENURES
@@ -303,7 +247,7 @@ SEIZURE = "seizure"
 # whose grant licenses a seizure. #453 §9.1 / the `seize` row: eligibility `remit:issue`, "its grant
 # carrying `issue`" -- the same remit act `requisition` and `transfer` ride, `RUNG_REMIT_ACTS`' shape.
 SEIZURE_ACT = "issue"
-# THE TWELFTH BASIS (v9 IN-13, #453 §10.4 step 8, K-33 + K-52, the arrival): `muster` -- a `contain`
+# `muster` (v9 IN-13, #453 §10.4 step 8, K-33 + K-52, the arrival) -- a `contain`
 # RE-HOME of ANOTHER person (one or more closures and exactly one opening of that person's `contain` in
 # ONE write, judged across the batch as `handover` is), by a seated holder whose grant carries
 # `MUSTER_ACT`, for a subject holding a live `commit` to the exercised seat's faction Proposition
@@ -324,7 +268,7 @@ MUSTER = "muster"
 # admitting the march while `_not_yet_under`'s `may_muster` filter drops every non-actor claimant:
 # the field is graded on the whole army and only the commander arrives.
 MUSTER_ACT = WARRANT_ACT
-# THE THIRTEENTH BASIS (v11 CP-T04-07, B10-12, AM-C-12): `cession` -- a `hold` on a SETTLEMENT-class Rung (a
+# `cession` (v11 CP-T04-07, B10-12, AM-C-12) -- a `hold` on a SETTLEMENT-class Rung (a
 # `march_target_kinds` kind), opened for ANOTHER person or purely closed on another's, by a seated holder whose grant
 # carries `CESSION_ACT`, whose exercised seat's PURVIEW reaches the place, and whose FACTION is not the receiver's
 # (`may_cede`). Named in the ordinary word for the act it licenses (a place yielded on terms). AUTHORITY-BOUND ON `via`
@@ -361,8 +305,8 @@ def seat_hold(w: "World", actor: Optional[str], via: Optional[str]) -> Optional[
     holder has (`Tenure.granted_acts`, the `13e` snapshot), not the office's live remit."""
     if not actor or not via or via not in w.offices:
         return None
-    for t in w.tenures:
-        if t.kind == "hold" and t.subject == actor and t.object == via and t.live:
+    for t in edges_of(w, "hold", actor):
+        if t.object == via and t.live:
             return t
     return None
 
@@ -393,12 +337,8 @@ def purview_reaches(w: "World", seat: Office, rung: Optional[str]) -> bool:
     walk the plan names for this ruling (part 2 `18a`, r2 `05:450-451`) -- or, since v9 IN-40, when a
     seat sworn to this one brings it (the oblige clause, below); True ONLY for those two. `Office.rung` IS `via.scope`:
     `04 §B.7`'s `scope? (null = a cluster)` is the field this tree spells `rung: Optional[str]`, with
-    the same null. `Office.scope_rung` is a DIFFERENT field, this one, from a DIFFERENT purview
-    question (a bench's, `judging_set`'s `H-32` containment test) -- CORRECTED (methodology close,
-    antagonist pass, 2026-09-29): this docstring said `scope_rung` "has no reader in the game and
-    `18a` deletes it", true when written (`13d-i`, 2026-09-26) and false since `queries/world_q.py
-    ::judging_set` (position `18`/PROC-A, 2026-09-29) made it that mechanism's only containment
-    check. `18a` MAY NOT delete it as things stand; see `carriers.py`'s matching correction.
+    the same null. `Office.scope_rung` is a DIFFERENT field, from a DIFFERENT purview question (a
+    bench's, `judging_set`'s `H-32` containment test).
 
     ⚠ THE READING OF "HIGHEST", STATED BECAUSE THE RULING ADMITS TWO. (a) ADOPTED: every seat on
     the chain above a rung has purview over it -- the Duke over a territory in his duchy, and the
@@ -475,7 +415,7 @@ def sworn_to(w: "World", seat_id: Optional[str]) -> list:
     in `w.tenures` order. ONE WALK, TWO READERS: `purview_reaches`' oblige clause (v9 IN-40) and
     `queries/world_q.py::establishment_of` (the persons obliged to a seat), which composes on it. It
     lives here, not in `queries/`, because the gate asks it and `state/` may not import `queries/`
-    (`ancestry`'s move to `state/containment.py`, plan position `19`, is the precedent); `world_q`
+    (`ancestry`, in `state/containment.py`, is the precedent); `world_q`
     re-exports it as its Query. `[]` for an unknown seat or `None`."""
     if seat_id is None:
         return []
@@ -485,23 +425,19 @@ def sworn_to(w: "World", seat_id: Optional[str]) -> list:
 def seated_on_the_rung_above(w: "World", seat: Office, off: Office) -> bool:
     """`ED-IN-0256` ruling (3), verbatim: *"rung above of same faction"* -- WHO MAY STRIP A SEAT.
 
-    ⚠ RE-POINTED BY G3 FROM THE ACTOR TO THE SEAT EXERCISED, AND THAT IS THE WHOLE CHANGE. Built at
-    `13d-i` (in `loop/predicates.py`) as `(w, actor, off)`: *does the actor hold ANY live `hold` on a
-    seat on the rung directly above, of the same faction*. `04:332` says purview is asked of the
-    seat exercised, not the actor, and `04 §B.8` says T-o is *"the Seat's `revocation` basis,
-    exercised through `Act.via`"* -- so it now asks of ONE seat, the one the act names: is `seat` on
-    the rung directly above `off`'s rung (`parent_of`, the one owner of the containment edge), in
-    `off`'s faction. Whether the actor SITS in that seat is `seat_hold`'s question, asked by
-    `may_revoke` before this is. Moved here from `loop/predicates.py` because the gate's T-o clause
-    evaluates it and the gate may not import the loop.
+    ⚠ ASKED OF THE SEAT EXERCISED, NOT THE ACTOR: `04:332` says purview is asked of the seat
+    exercised, and `04 §B.8` says T-o is *"the Seat's `revocation` basis, exercised through
+    `Act.via`"* -- so this asks of ONE seat, the one the act names: is `seat` on the rung directly
+    above `off`'s rung (`parent_of`, the one owner of the containment edge), in `off`'s faction.
+    Whether the actor SITS in that seat is `seat_hold`'s question, asked by `may_revoke` before this
+    is. Lives here, not in `loop/predicates.py`, because the gate's T-o clause evaluates it and the
+    gate may not import the loop.
 
-    ⚠ THE RULE ITSELF IS UNCHANGED, and the `13d-i` reading stands (its docstring, kept verbatim in
-    substance): GENERAL over every seat and every depth -- no post is read and no rung kind named;
+    ⚠ THE RULE: GENERAL over every seat and every depth -- no post is read and no rung kind named;
     the rung above means the PARENT, not any ancestor, so a King does not reach past an empty duchy
     to a Lord (`test_13d_i_an_empty_parent_refuses_even_a_same_faction_grandparent` pins it); a
     rungless seat has no rung above it, so NOBODY may strip it, nor may a rungless seat strip
-    anyone; a seat on a TOP rung is strippable by nobody. Two readings REJECTED at `13d-i` stay
-    rejected: LAND (`in_holdings` -- who owns the parent rung) and THE NEAREST SAME-FACTION SEAT
+    anyone; a seat on a TOP rung is strippable by nobody. Two readings are REJECTED: LAND (`in_holdings` -- who owns the parent rung) and THE NEAREST SAME-FACTION SEAT
     ABOVE (a walk, which is ruling (4)'s verb, `purview_reaches`, not ruling (3)'s)."""
     # `Office.faction` is the RESOLVED faction -- `__post_init__` writes `office_faction`'s answer
     # back, deriving it from `body` where there is one -- so it is compared as held.
@@ -524,9 +460,8 @@ def seat_on_parent_of(w: "World", seat: Office, rung: Optional[str]) -> bool:
     return above is not None and seat.rung == above
 
 
-# ⚠ MOVED HERE FROM `loop/predicates.py` (2026-10-12): the write gate's T-o clause evaluates the
-# `rung_above_in_holdings` basis below and the gate may not import the loop -- `seated_on_the_rung_above`'s
-# own reason for living here. `predicates` re-exports it; every caller is unchanged.
+# The write gate's T-o clause evaluates the `rung_above_in_holdings` basis below and the gate may not
+# import the loop -- `seated_on_the_rung_above`'s own reason for living here. `predicates` re-exports it.
 def in_holdings(w: "World", actor: str, rung: Optional[str]) -> bool:
     """Is this rung one of the actor's HOLDINGS? A `hold` Tenure whose object is a RUNG.
 
@@ -538,42 +473,18 @@ def in_holdings(w: "World", actor: str, rung: Optional[str]) -> bool:
     have all territories/provinces/duchies in their holdings"*, made mechanical.
 
     ⚠ NO NEW TENURE KIND, AND NOT EVEN A NEW OBJECT CLASS. `hold` is already polymorphic over an
-    office and over a Record (§13) — and a `hold` WHOSE OBJECT IS A RUNG ALREADY EXISTED in the
-    corpus before this function did: probe `F2` writes one at `probes.py:978` and `:985`, holding
-    the settlement `S`. So this names a shape the tree was already using rather than adding one,
-    and `tenure_kinds` does not move (§8).
+    office and over a Record (§13), and a `hold` WHOSE OBJECT IS A RUNG is a shape the tree already
+    uses (probe `F2` writes one holding the settlement `S`; `test_r8_4_document_key_reaches_a_non_author_through_a_store`
+    holds the hearth `Hh`), so `tenure_kinds` does not move (§8). It does not bound the READERS:
+    `decision/budget.py::budget` counts every live `hold` as an office, so a landholding buys scene actions, and
+    `_ch_document_key` makes a landholder a witness of every Event that changed their rung (`H-92`).
 
-    ⚠ THE ORIGINAL WORDING ALSO CITED *"a store"* AS AN EXISTING INSTANCE, AND THAT WAS
-    UNSUPPORTED — no `hold` Tenure over a store is constructed anywhere in the instrument.
-    Corrected rather than kept, because the sentence's whole job is to say what the tree already
-    does. Found by the governance-canon adversarial pass. ⚠ **AND IT IS TRUE NO LONGER, AS OF
-    `R8.4` (2026-09-07):** `test_r8_4_document_key_reaches_a_non_author_through_a_store` constructs
-    a `hold` over the hearth `Hh`, a rung carrying `stores`, precisely to exercise Part E's own
-    `hold:<store>` cell. The sentence is kept with its retraction attached rather than deleted,
-    because it is the argument that produced the paragraph.
-
-    ⚠ AND THE NARROW CLAIM WAS THE WRONG THING TO CHECK. *`tenure_kinds` does not move* is true
-    and proves nothing about the READERS: `Query.budget` counts every live `hold` as an office, so
-    a landholding buys scene actions, and `_ch_document_key` makes a landholder a witness. Both
-    pre-date this function; registered as `H-92`.
-
-    ⚠ **THAT SECOND READER MOVED UNDER `R8.4` AND THIS SENTENCE SAID THE OLD THING.** It read
-    *"a witness of every Event whose subject is their rung"*, which was the pre-repair predicate —
-    and that predicate could not fire on an act at all, because a fold Event's subject is the
-    ACTOR. `_ch_document_key` now reads `changes[]`, so a landholder witnesses every Event that
-    **changed** their rung, which is strictly wider and is the first form in which `H-92`'s concern
-    is actually reachable: a `transfer` into a hearth now makes its holder a witness of an act they
-    took no part in. `H-92` is not re-graded here — it is an `FI`/`IN` register row with its own
-    owner, and this note exists so the next reader of it is not working from the retracted
-    mechanism. Found by the `R8.4` adversarial pass.
-
-    ⚠ **(`13d-i`, 2026-09-26) `_req_revoke` NO LONGER CALLS THIS.** The ruling quoted at the top
-    is superseded for revocation by `ED-IN-0256` ruling (3), *"rung above of same faction"*, which
-    is neither holdings nor purview (`seated_on_the_rung_above`, below). Kept, not deleted: the
-    `hold`-on-a-rung relation it names is live (item 16's re-homing, whose falsifiers read it), and
-    `ED-IN-0256` ruling (4) defines purview as *"owner of highest rung in chain of ownership"* --
-    an ownership walk, BUILT BY G3 as `state/gate.py::purview_reaches`, asked of the seat an act
-    exercises (`Act.via`) and not of anything the actor holds, this relation included."""
+    ⚠ `_req_revoke` DOES NOT CALL THIS. Revocation is `ED-IN-0256` ruling (3), *"rung above of same
+    faction"* (`seated_on_the_rung_above`, below), which is neither holdings nor purview. The
+    `hold`-on-a-rung relation is live, and `ED-IN-0256` ruling (4) defines purview as *"owner of
+    highest rung in chain of ownership"* -- an ownership walk, `state/gate.py::purview_reaches`,
+    asked of the seat an act exercises (`Act.via`) and not of anything the actor holds, this relation
+    included."""
     if rung is None or rung not in w.rungs:
         return False
     return any(t.kind == "hold" and t.subject == actor and t.object == rung and t.live
@@ -592,7 +503,7 @@ def holdings_of(w: "World", actor: Optional[str]) -> tuple:
 # THE REVOCATION BASES, DISPATCHED BY VALUE -- `H-109`'s shape: *"two VALUES of a seat's declared
 # `revocation` basis instead of two code paths"*. The members are DATA (`rosters.yaml:
 # revocation_bases`); the rule each names is BEHAVIOUR and lives here, the `fan_out_modes` split.
-# Moved from `loop/predicates.py` with `seated_on_the_rung_above` (G3); `predicates` imports it.
+# `predicates` imports it.
 def seated_on_the_rung_above_in_holdings(w: "World", actor: Optional[str], seat: Office,
                                           off: Office) -> bool:
     """Jordan, 2026-10-12: *"it's basically a flag as to whether that office is in the holdings of the
@@ -735,7 +646,7 @@ def filled_by(off: Office) -> frozenset:
 
 
 def has_filler(off: Office) -> bool:
-    """CAN ANY ACT EVER FILL `off`? (v10 IN-61, B10-09 close.) `confer` fills a seat whose `FILLED_BY` names
+    """CAN ANY ACT EVER FILL `off`? (v10 IN-61.) `confer` fills a seat whose `FILLED_BY` names
     `conferral`; the heir's claim fills a seat it names only if a title passes it (`successions`). A seat whose
     basis only the claim opens and that no title passes is a seat nobody can ever fill, the defect
     `_req_establish` exists to prevent (`check_successions` refuses it at import for the authored rows)."""
@@ -818,7 +729,7 @@ def has_conferral_basis(off: Office) -> bool:
     conferral_bases`, `ED-IN-0256` ruling (2) -- *appointed · elected · annex*, and `inheritance` since v10 IN-61.
     `None` refuses; so
     does a string off the roster, which `Office.__post_init__` refuses to construct, so that arm is
-    reached only by a hand-mutated office. Moved here from `loop/predicates.py` (G3), because the
+    reached only by a hand-mutated office. Lives here because the
     gate asks it and the gate may not import the loop; `predicates` imports the name, so a
     `monkeypatch` of `predicates.has_conferral_basis` still reaches both preconditions.
 
@@ -854,8 +765,8 @@ def may_fill(w: "World", actor: Optional[str], via: Optional[str], off: Office) 
     `via` is not `off` itself: reflexive on the RUNG, exclusive on the SEAT, so a holder does not
     fill the seat he is exercising (r2 `03` §A.6).
 
-    ⚠ WHICH conferral basis this basis may fill IS `FILLED_BY`'s (v10 IN-61): it narrowed HERE, as this
-    docstring said it would, and the preconditions inherit it by asking this. `appointed`, `elected`
+    ⚠ WHICH conferral basis this basis may fill IS `FILLED_BY`'s (v10 IN-61): the preconditions inherit it
+    by asking this. `appointed`, `elected`
     and `annex` pass; `inheritance` is refused -- a throne is claimed by its title's holder
     (`may_claim`), never conferred by any seat."""
     if seat_hold(w, actor, via) is None or via == off.id:
@@ -866,7 +777,7 @@ def may_fill(w: "World", actor: Optional[str], via: Optional[str], off: Office) 
 
 
 def may_renew(w: "World", actor: Optional[str], via: Optional[str], off: Office) -> bool:
-    """THE RENEWAL BASIS, AS ONE PREDICATE (plan position `17b`): may `actor`, exercising `via`,
+    """THE RENEWAL BASIS, AS ONE PREDICATE: may `actor`, exercising `via`,
     wind the `term` of somebody's `oblige` edge on the seat `off`?
 
     Two conjuncts: `via` IS `off` -- the seat pays its OWN establishment, *"what the post pays its
@@ -874,8 +785,8 @@ def may_renew(w: "World", actor: Optional[str], via: Optional[str], off: Office)
     seat's act and is asked of the seat exercised (`04 §B.7`'s purview invariant) -- and the actor SITS in it
     (`seat_hold`, *"refused the instant the occupant is not seated"*). Asked by the gate for every
     extended `oblige` term, and by `_eff_transfer` before it names one, so the effect never writes a
-    renewal the gate would refuse (a `NotYours` out of the fold would end the season, not refuse the
-    act): one owner, two readers, `may_fill`'s shape.
+    renewal the gate would refuse (the fold catches a `NotYours` and emits the row's refusal, B03.76,
+    so the act is refused either way; asked early, the refusal is the precondition's): one owner, two readers, `may_fill`'s shape.
 
     ⚠ REFLEXIVE ON THE SEAT, THE OPPOSITE OF `may_fill`, AND FOR THE REASON THAT FUNCTION GIVES.
     `may_fill` refuses `via == off` because a holder filling the seat he exercises is authority over
@@ -902,14 +813,12 @@ def sits_over(w: "World", seat: Office, rung: Optional[str]) -> bool:
     `H-32`'s ruled default, verbatim in substance: *"an Office ... whose `scope_rung` contains the
     sitting's rung"* -- `seat.scope_rung` is `rung` itself or one of its ancestors (`ancestry`, the
     one owner of the walk up), so a seat scoped one rung above still finds it (`21_RECONCILIATION.md`
-    PHASE 2 step 7's own falsifier). Extracted at plan position `19` from `queries/world_q.py::
-    judging_set`'s loop, which now asks it, so the bench `judging_set` lists and the bench the write
+    PHASE 2 step 7's own falsifier). `queries/world_q.py::judging_set` asks it, so the bench `judging_set` lists and the bench the write
     gate's `determination` basis admits are ONE test (`CLAUDE.md` §8).
 
     ⚠ `scope_rung`, NOT `rung` -- AND SO NOT `purview_reaches`, AND THE DIFFERENCE IS KEPT, NOT
     PAPERED OVER. `purview_reaches` asks ruling (4)'s purview of `Office.rung` (`04:330`'s `via.scope`);
-    `judging_set` reads `scope_rung` by `H-32`'s own default, which its methodology-close correction
-    (`judging_set`'s docstring, 2026-09-29) declined to reopen. The two agree on every TITLED seat
+    `judging_set` reads `scope_rung` by `H-32`'s own default. The two agree on every TITLED seat
     (`Office.__post_init__` sets `scope_rung = rung` for a titled post) and differ on a ranked,
     untitled seat with no authored `scope_rung`, which purview reaches and no bench seats. Whether a
     bench's ground IS its purview is `H-32`'s sweep (*"remit+scope · remit only · scope only"*), not
@@ -920,7 +829,7 @@ def sits_over(w: "World", seat: Office, rung: Optional[str]) -> bool:
 
 
 def may_determine(w: "World", actor: Optional[str], via: Optional[str], party: Optional[str]) -> bool:
-    """THE DETERMINATION BASIS, AS ONE PREDICATE (plan position `19`): may `actor`, exercising
+    """THE DETERMINATION BASIS, AS ONE PREDICATE: may `actor`, exercising
     `via`, open (or, for a restraint, close) a disposal edge on that seat that `party` owns -- bind
     `party` to the bench? (An `oblige` when no arrangement is declared; see `DISPOSABLE_KINDS`.)
 
@@ -935,18 +844,15 @@ def may_determine(w: "World", actor: Optional[str], via: Optional[str], party: O
          the occupant is not his own seat's obligee (`_req_oblige` clause 3's rule, one step over).
       3. the bench's ground holds the party: `sits_over(w, via, <party's home>)`, the SAME test
          `judging_set` lists a bench by, asked of where the person bound IS PRESENT (`home_of`,
-         the one owner of *where a person is*, moved to `state/` for this) -- `04:330`'s *"purview is
+         the one owner of *where a person is*) -- `04:330`'s *"purview is
          asked of the seat, never the actor"*, with the bench's ground as the seat's reach. ⚠ PRESENCE,
-         NOT RESIDENCE, SINCE `19c`'S SPLIT (found by the terminal Phase-2-close critique,
-         2026-09-30): `home_of` reads `contain`, and `19c` gave residence its own edge
-         (`residence_of`'s `reside`) without this clause being revisited. A party STANDING in a
+         NOT RESIDENCE: `home_of` reads `contain`, and residence is its own edge
+         (`residence_of`'s `reside`). A party STANDING in a
          bench's ground binds him, whether or not he LIVES there -- settled by J-17 (delegated-ruled
          2026-10-12, [ASSUMPTION; medium; Jordan to correct]): jurisdiction follows presence; the
          revert, `residence_of`, is in `hole_register.yaml` H-174.
 
-    ⚠ WHY A NEW BASIS AND NOT A WIDER READING OF `conferral` -- the question plan position `19`
-    carried in from its own entry (*"a conferral-basis opener"*), re-derived rather than taken on
-    trust. `conferral` admits an opening of a `hold` ON A SEAT OTHER THAN `via`, by `via`'s
+    ⚠ WHY A BASIS OF ITS OWN AND NOT A WIDER READING OF `conferral`: `conferral` admits an opening of a `hold` ON A SEAT OTHER THAN `via`, by `via`'s
     purview over that seat. This admits an opening of an `oblige` ON `via` ITSELF, by the bench's
     ground over a PERSON. Kind, object and authority all differ, and `may_fill` refuses the object
     case by name (*"exclusive on the SEAT"*). Its nearest sibling is `renewal` -- an `oblige` on the
@@ -960,14 +866,13 @@ def may_determine(w: "World", actor: Optional[str], via: Optional[str], party: O
     consumes cannot be read after it (`handover`'s problem, which that basis solves only because
     its licence IS a Tenure). The bench conjunct of the precondition is this function, asked early
     through `WorldReader`'s `bench` stem, so the fold refuses (and emits) exactly what this refuses
-    (and raises): a precondition with its own copy would surface as `NotYours` killing a season.
+    (and raises): a precondition with its own copy would surface as a `NotYours` the fold converts
+    to the row's refusal (B03.76) instead of the precondition's own.
 
     ⚠ THE KIND IS NOT THIS PREDICATE'S. `may_determine` takes no `kind` at all: WHICH edges a bench
-    may open or close is `tenure_write_basis`'s DETERMINATION clause. Until v9 SC-03a that clause
-    hard-coded `t.kind == "oblige"` (`arbitration`'s disposal, the one seeded Tenure-kind
-    `disposes:`); SC-03a widened it to OPEN any kind some arrangement row disposes
-    (`DISPOSABLE_KINDS`) and to CLOSE `detain`/`ban` only (`RESTRAINT_KINDS`), and this predicate,
-    the authority half, is asked unchanged for both. The clause sits BEFORE the `if seat is None`
+    may open or close is `tenure_write_basis`'s DETERMINATION clause: it OPENS any kind some
+    arrangement row disposes (`DISPOSABLE_KINDS`) and CLOSES `detain`/`ban` only
+    (`RESTRAINT_KINDS`), and this predicate, the authority half, is asked unchanged for both. The clause sits BEFORE the `if seat is None`
     branch, so a disposal edge on the judging seat is judged here and never reaches `T-o`/`conferral`
     (which claim every seat-`hold`); a `hold` is not a `DISPOSABLE_KIND` and no row disposes one."""
     if not _seat_grants(w, actor, via, BENCH_BASIS):
@@ -1104,7 +1009,7 @@ def _moved(t: Tenure, was: Optional[Tenure]) -> Optional[set]:
     write OPENED. The ends (`subject`, `object`, `kind`) are not listed: rewriting them is refused
     before this is read (`tenure_write_basis`'s *nothing admits rewriting an edge's ends*).
 
-    ⚠ `term` IS THE FIFTH (plan position `17b`), AND LEAVING IT OUT WOULD HAVE ADMITTED A TERM
+    ⚠ `term` IS THE FIFTH, AND LEAVING IT OUT WOULD ADMIT A TERM
     REWRITE UNDER EVERY BASIS THAT TESTS `moved`: a `T-o` closure that also shortened the edge's
     term would read as `{"until"}`, a pure closure, and a `conferral` re-grant that also wound a
     term would read as `{"payload"}`. Each basis now sees the term as the change it is."""
@@ -1118,17 +1023,14 @@ def _moved(t: Tenure, was: Optional[Tenure]) -> Optional[set]:
 
 def _closes(t: Tenure, was: Optional[Tenure], moved: Optional[set] = None) -> bool:
     """A PURE CLOSURE: an edge that was live before the write, has `until` set after it, and had
-    nothing else moved. The one change `cascade`, `T-o` and `T-n` (`17b`, ⚠ ADDED to this count,
-    terminal Phase-2-close critique, 2026-09-30 -- `T-n`'s own clause reads `closed` exactly as
-    `cascade` and `T-o` do) may make -- and, since position 16, the change on the giver's side that
-    licenses a `handover` on the receiver's -- and, since v9 SC-03a, the change a `determination`
-    makes to a `detain` or `ban` (its clause reads `closed` exactly as the others do). One test for
+    nothing else moved. The one change `cascade`, `T-o` and `T-n` may make -- and the change on the giver's side that
+    licenses a `handover` on the receiver's -- and the change a `determination`
+    makes to a `detain` or `ban` (each clause reads `closed` the same way). One test for
     every reader, so what counts as *ended in this write* cannot differ between them.
 
     `moved` is the caller's own `_moved(t, was)`, when it already has one -- `tenure_write_basis`
-    computes it the line above its own `_closes` call (BATCH-CLOSE, methodology-close Phase 2,
-    SIMPLIFICATION/EFFICIENCY findings: this recomputed it internally on every call). `None`
-    derives it here exactly as before, so every other caller is unaffected."""
+    computes it the line above its own `_closes` call. `None`
+    derives it here, so every other caller is unaffected."""
     if moved is None:
         moved = _moved(t, was)
     return (was is not None and was.until is None and t.until is not None and moved == {"until"})
@@ -1145,9 +1047,9 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
     `t` is the Tenure as it stands after the write; `was` is a detached copy of it from before, or
     `None` if the write OPENED it. `gone` is every id the same write removed from the world -- the
     existence changes THIS act caused, observed by the store rather than claimed by the caller.
-    `born` is its mirror (plan position `24e`): every id the same write ADDED to the world, observed
+    `born` is its mirror: every id the same write ADDED to the world, observed
     the same way (`World.write` diffs the same collections either side of `apply()`), keyword-only
-    and empty by default so every caller that predates it is unchanged.
+    and empty by default.
     `released` is every OBJECT on which the same write ended the actor's own live `hold` under
     `T-m` and has not yet handed it on -- computed by `refuse_unauthored` from the batch it holds,
     because this function sees one Tenure and cannot (see `handover` below). Empty by default, so a
@@ -1168,17 +1070,12 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
                   seat-`hold` (never T-m's, even the actor's own -- `conferral`'s alone) or rewind
                   its `term` (`release`, `move`'s legs, `create_record`'s `hold` are what remains)
                   -- a `term` rewrite on an existing edge is `T-n`'s or `renewal`'s to admit, never
-                  T-m's (BATCH-CLOSE, methodology-close Phase 1, 2026-09-30: the bare guard once
-                  admitted it too, the same over-admission class the seat carve-out below exists
-                  to prevent, one kind over -- see the clause's own comment). ⚠ The owner is read
+                  T-m's (see the clause's own comment). ⚠ The owner is read
                   from BEFORE the write, so an effect cannot make itself the owner by rewriting
                   `subject` and then be admitted as it.
       `T-n`       an ACTORLESS CLOSURE (`until` set, nothing else, no actor) of an edge whose OWN
                   declared `term` -- read from BEFORE the write -- has `matures_at <= w.tick`.
-                  BUILT AT PLAN POSITION `17b`, which added `Tenure.term`; until then this entry
-                  read *"NOT BUILT, AND NOT BUILDABLE HERE: `Tenure` carries no `term`"*, and it
-                  was right to admit nothing rather than test a field that did not exist. The
-                  cause is the term itself, so it is CAUSATION-BOUND like `cascade` and reads no
+                  The cause is the term itself, so it is CAUSATION-BOUND like `cascade` and reads no
                   seat: `04 §B.8`, *"an actorless row may write `until` only where its cause is
                   the existence change it also caused, OR the maturation of a term declared by
                   the act that opened this Tenure"*. MATTER is its one writer
@@ -1217,11 +1114,11 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
                   exercised. Not spent: one title opens every vacant seat naming it.
       `handover`  an OPENING of a `hold` on something that is NOT a seat, whose object is in
                   `released` -- the actor ended their own live `hold` on that object under `T-m`
-                  in this same write. `give` (plan position 16) is the verb; the basis is general
+                  in this same write. `give` is the verb; the basis is general
                   over every non-seat `hold` object. See the block below.
       `renewal`   a change to `term` ALONE on a LIVE `oblige` edge, that pushes a term the edge
                   already carried LATER, by `may_renew` -- `via` IS the seat the edge is on and the
-                  actor sits in it. Plan position `17b`: the post paying its establishment's
+                  actor sits in it: the post paying its establishment's
                   `upkeep` (`_eff_transfer`) winds each paid obligee's clock. AUTHORITY-BOUND like
                   `T-o` (a seat's act through `Act.via`), and NARROWER than every other basis in
                   what it may write: it cannot open, close, grade or re-grant, cannot ADD a term
@@ -1235,11 +1132,11 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
                   (`DISPOSABLE_KINDS`: `oblige`, `detain`, `ban`), or a PURE CLOSURE of a `detain`
                   or `ban` (`RESTRAINT_KINDS`), whose OBJECT is `via` itself and whose owner is
                   someone other than the actor, by `may_determine` -- `via` is a judging seat the
-                  actor sits in and its bench's ground holds the owner's home. Plan position `19`:
+                  actor sits in and its bench's ground holds the owner's home:
                   `determine`'s disposal, *"a determination opens the disposal Tenure on its
                   subject via the seat"* (`21_RECONCILIATION.md:575`). AUTHORITY-BOUND like `T-o`
-                  and `renewal`. ⚠ v9 SC-03a REVERSED ITS "OPENING ONLY" DEFINITION, ON ONE SIDE
-                  AND NARROWLY (#453 §8.3, §10.4 step 3): it may now CLOSE the two kinds whose
+                  and `renewal`. ⚠ IT MAY CLOSE, ON ONE SIDE AND NARROWLY
+                  (#453 §8.3, §10.4 step 3), the two kinds whose
                   holder cannot release them, so a bench (and, with step 5, `pardon`) can end a
                   custody or an exclusion -- and never an `oblige`, which would be the obligee-side
                   closer D-5 refused, nor any other kind. It still cannot grade, re-grant or touch a
@@ -1274,7 +1171,7 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
       `founding`  an OPENING of a `contain` edge whose SUBJECT is in `born` -- a thing this same
                   write brought into existence -- and which is that subject's ONLY live `contain`
                   (*"`contain : Rung → Rung`, one parent"*, `rosters.yaml: rung_kinds`' source).
-                  Plan position `24e`: `found` mints a Rung and places it in the works' `at`,
+                  `found` mints a Rung and places it in the works' `at`,
                   `add_tenure` enforcing strict ascent. CAUSATION-BOUND, the MIRROR OF `cascade`:
                   the cascade may close an edge through the death of what it names, and nothing
                   else; this may open the edge that places what was just born, and nothing else --
@@ -1293,13 +1190,11 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
     existing Tenure is a different edge wearing this one's id, and no basis licenses it -- not even
     `T-m`, because the new subject is somebody else's store.
 
-    ⚠ `handover` -- `give` (PLAN POSITION 16 ≡ `15a`) -- SETTLED BY G3's PRE-FLIGHT (`ED-IN-0277`),
-    BUILT AT POSITION 16. The giver's close is `T-m`. The RECEIVER'S open matches none of the other
-    bases (each checked by name, terminal Phase-2-close critique, 2026-09-30, and again at
-    v9 SC-03a): `renewal` (`17b`) pushes an `oblige`'s term and
-    opens nothing, `determination` (`19`) opens only a kind some arrangement disposes
+    ⚠ `handover` -- `give` (`ED-IN-0277`). The giver's close is `T-m`. The RECEIVER'S open matches
+    none of the other bases: `renewal` pushes an `oblige`'s term and
+    opens nothing, `determination` opens only a kind some arrangement disposes
     (`DISPOSABLE_KINDS`: `oblige`, `detain`, `ban` -- never a `hold`), `warrant` opens a `detain`, and
-    `founding` (`24e`) admits only a `contain` for a newborn `Rung` --
+    `founding` admits only a `contain` for a newborn `Rung` --
     it is not the receiver's act, no seat is exercised (`give` is `own`-eligible, `via` is
     `None`), and nothing ceased to exist. So it has its own basis, CAUSATION-BOUND like the cascade
     rather than authority-bound like T-o: *a `hold` opened on an object that is NOT a seat, of the
@@ -1309,12 +1204,11 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
     the effect's discipline, and a `give` that forgets the release is refused here (`NotYours`,
     store put back) before `hold_force` ever sees two holders. SEATS ARE EXCLUDED: a seat passes by
     its conferral basis, never by its holder handing it on. It does NOT read `via` (no seat is
-    exercised), and it is NOT the receiver's own act (position 16 specifies one two-party verb, by
+    exercised), and it is NOT the receiver's own act (`give` is one two-party verb, by
     the giver). ⚠ `hold` ONLY, as the settled rule says: `hold` is the custody edge, one per object
     (`holonic §15`), and so the one edge there is something to hand on; a `commit` or a `tie` is the
     holder's own relation and an ending of one licenses nobody else's opening.
-    ⚠ THE CLAUSE IS JUDGED HERE, THE LICENCE IS COMPUTED IN `refuse_unauthored` -- CORRECTED
-    2026-09-26 (antagonist pass on G3) and built that way at position 16. This function judges ONE
+    ⚠ THE CLAUSE IS JUDGED HERE, THE LICENCE IS COMPUTED IN `refuse_unauthored`. This function judges ONE
     changed Tenure and cannot see what the same write did to any OTHER; `gone` carries existence
     removals only, and `until == w.tick` cannot tell this write's closure from an earlier write's in
     the same tick. So `refuse_unauthored`, which holds the whole batch, judges every change first,
@@ -1330,38 +1224,29 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
     moved = _moved(t, was)
     closed = _closes(t, was, moved)
     seat = w.offices.get(t.object) if t.kind == "hold" else None
-    # ⚠ T-M NEVER ADMITS OPENING OR RE-GRANTING A SEAT-HOLD, EVEN THE ACTOR'S OWN (found by the
-    # antagonist pass, 2026-09-26: "the wrong answer is a quietly permissive gate" was exactly
-    # this). `owner` on an OPENED edge is read from the write itself (`t.subject`), so "the actor
-    # IS the owner" is self-fulfilling for any actor who names themselves the new holder --
-    # measured: a bare gate write let an UNRELATED actor with no via and no purview open a hold on
-    # ANY seat naming themselves subject, and let a sole holder re-stamp their own seat's remit
-    # (`establish`'s re-grant) the same way. `04:330` -- purview is asked of the SEAT exercised,
+    # ⚠ T-M NEVER ADMITS OPENING OR RE-GRANTING A SEAT-HOLD, EVEN THE ACTOR'S OWN. `owner` on an
+    # OPENED edge is read from the write itself (`t.subject`), so "the actor IS the owner" is
+    # self-fulfilling for any actor who names themselves the new holder: a bare gate write would let
+    # an UNRELATED actor with no via and no purview open a hold on ANY seat naming themselves
+    # subject, and let a sole holder re-stamp their own seat's remit (`establish`'s re-grant) the
+    # same way. `04:330` -- purview is asked of the SEAT exercised,
     # never the actor -- and a seat's authority over itself is never personal, not even to its own
     # sitting holder: a duke does not grant himself new powers by re-founding his own duchy. A
     # PURE CLOSURE is unaffected -- voluntary resignation of one's own seat (`release`) is still
     # T-m, because closing what you hold is not an act of authority over the seat, it is giving it
     # up. Only `closed` distinguishes the two; `is_seat_hold` alone would also refuse `release`.
     #
-    # ⚠ T-M NEVER ADMITS A CHANGE TO AN EXISTING EDGE'S `term`, EITHER -- CORRECTED (BATCH-CLOSE,
-    # methodology-close Phase 1, CORRECTNESS lens + antagonist, 2026-09-30): the seat carve-out
-    # above is computed only for `t.kind == "hold"` (`seat` is `None` for every other kind), so an
-    # `oblige` edge's T-m guard reduced to bare `actor == owner` -- no check on `moved` at all. The
-    # same class of over-admission the seat carve-out exists to prevent, one kind over: `may_renew`'s
-    # own docstring REJECTS "the obligee's own act (T-m) -- a term the servant can extend for
-    # himself is not a term," and the bare guard admitted exactly that read for ANY term rewrite
-    # (extend, shorten, add, remove) an obligee makes on their own edge, bypassing `renewal`'s
-    # `may_renew` seat-authorization and its later-only direction. LATENT, NOT REACHABLE TODAY: the
-    # one non-test writer of an existing `.term` is `_eff_transfer`'s `_renewals` (`loop/effects.py`),
-    # which already calls `may_renew` before ever proposing a change -- so no shipped effect
-    # currently exploits the gap, and the admitted OUTCOME does not move. The gate itself was not
-    # the backstop for the invariant its own docstring states; only `_renewals`' incidental
-    # discipline was. `moved` (computed above, not yet spent when this clause was first written)
-    # is the fix: T-m admits an owner's own OPENING (`moved is None`) and PURE CLOSURE (`release`,
-    # including a convict discharging his own penance) exactly as before, and now excludes a `term`
-    # rewrite on an existing edge, which is `T-n`'s or `renewal`'s to admit.
+    # ⚠ T-M NEVER ADMITS A CHANGE TO AN EXISTING EDGE'S `term`, EITHER. The seat carve-out above is
+    # computed only for `t.kind == "hold"` (`seat` is `None` for every other kind), so an `oblige`
+    # edge's T-m guard would reduce to bare `actor == owner`: `may_renew`'s own docstring REJECTS "the
+    # obligee's own act (T-m) -- a term the servant can extend for himself is not a term," and the
+    # bare guard would admit exactly that for ANY term rewrite (extend, shorten, add, remove) an
+    # obligee makes on their own edge, bypassing `renewal`'s `may_renew` seat-authorization and its
+    # later-only direction. `moved` is what excludes it: T-m admits an owner's own OPENING
+    # (`moved is None`) and PURE CLOSURE (`release`, including a convict discharging his own
+    # penance), and not a `term` rewrite on an existing edge, which is `T-n`'s or `renewal`'s to admit.
     #
-    # ⚠ T-M NEVER ADMITS AN OWNER OPENING OR CLOSING HIS OWN RESTRAINT EITHER (v9 SC-03a close, COR4):
+    # ⚠ T-M NEVER ADMITS AN OWNER OPENING OR CLOSING HIS OWN RESTRAINT EITHER:
     # a `detain`/`ban` is the one kind whose holder cannot release it (`RELEASABLE_KINDS`), and a
     # prisoner closing his own at the gate would be exactly that release by another door, or
     # self-opening one a bench had not imposed. Only `determination` (a bench) and `warrant` open one;
@@ -1374,14 +1259,12 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
         return T_M
     if closed and (t.subject in gone or t.object in gone):
         return CASCADE
-    # `24e`: THE FOUNDING -- `cascade` read in the other direction. WHY A NINTH BASIS AND NOT AN
-    # EXISTING ONE, re-derived against this function's current body rather than assumed: the edge
+    # THE FOUNDING -- `cascade` read in the other direction. WHY A BASIS OF ITS OWN: the edge
     # `found` opens is `contain : <the new Rung> -> <its parent>`, and S15.1 makes a Tenure its
     # SUBJECT's -- here a Rung, which is nobody's (`World._unowned` holds every such edge). So `T-m`
     # can never admit it (no actor IS a Rung); `conferral`/`T-o` read seats and `determination`/
     # `renewal` read `oblige` edges on `via`; `handover` admits only a `hold` licensed by a closure;
-    # and `cascade` admits only CLOSING. Before `24e` no act ever opened a Rung-subject edge -- every
-    # one was a builder's, written outside the gate -- so the question had never been asked. The
+    # and `cascade` admits only CLOSING. The
     # licence is the BIRTH, observed by the store (`born`), never claimed by the caller; the authority
     # to found at all is the precondition's (`found`'s typed cell: the subject is a works the actor
     # holds), which is `may_fill`/`_req_confer`'s split -- the gate observes Tenures, and a works'
@@ -1405,11 +1288,10 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
         served = w.offices.get(t.object)
         if served is not None and may_renew(w, actor, via, served):
             return RENEWAL
-    # `19`: THE BENCH'S DISPOSAL. Asked only of an edge ON THE SEAT EXERCISED -- the one shape
+    # THE BENCH'S DISPOSAL. Asked only of an edge ON THE SEAT EXERCISED -- the one shape
     # `may_determine` licenses -- so no other seat reaches it. `via is not None` is `may_determine`'s
     # own first conjunct too (`seat_hold`); it is written here as well so the object test cannot
-    # match a `None` object on a malformed edge. v9 SC-03a WIDENED IT ON BOTH SIDES, AND NO FURTHER:
-    # it OPENS any kind an arrangement row disposes (`DISPOSABLE_KINDS` -- `oblige`, `detain`, `ban`),
+    # match a `None` object on a malformed edge. It OPENS any kind an arrangement row disposes (`DISPOSABLE_KINDS` -- `oblige`, `detain`, `ban`),
     # and it CLOSES (a pure closure, `_closes`) a `detain` or a `ban` only (`RESTRAINT_KINDS`) -- the
     # kinds the holder cannot release himself, so a bench's act is what ends them. NEVER an `oblige`:
     # a bench closing a service disposal would be the obligee-side closer D-5 refused (*"no creditor
@@ -1433,7 +1315,7 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
     # object is in `w.records` (existence only; the gate reads no content) -- by a seat the actor sits in,
     # granted `SEIZURE_ACT`, whose purview reaches the dispossessed (`may_seize`). Closing only: the
     # seizer's own opening is `T-m`. The warrant that licenses the taking is the effect's to read.
-    # v9 IN-13 WIDENED IT TO A RUNG (#453 §10.4 step 8, the Rung half): the same pure closure of
+    # v9 IN-13 (#453 §10.4 step 8, the Rung half): it also covers a RUNG -- the same pure closure of
     # another person's `hold` on a RUNG, the seat's purview asked over the rung itself -- a Rung is its
     # own place, a Record is where its holder is (`may_seize`'s `place`). Still never a seat (`seat is
     # None`); whether the seat's faction occupies the rung is the effect's licence, never the gate's.
@@ -1484,13 +1366,13 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
 def refuse_unauthored(w: "World", changes: list, actor: Optional[str], via: Optional[str],
                       gone: frozenset, born: frozenset = frozenset()) -> list:
     """Every `(t, was)` in `changes` that NO basis admits, as `(t, was)` pairs -- `[]` admits all.
-    `born` (plan position `24e`) is passed through to every judgment, for `founding`.
+    `born` is passed through to every judgment, for `founding`.
 
     Asked by `World.write` after `apply()` and before anything is traced as written. It returns
     rather than raises so the store can put the tenures back FIRST: the refusal is only honest if
     the edge it refused is as it was (`NotYours`' own raise is `World.write`'s, via `not_yours`).
 
-    TWO PASSES, BECAUSE ONE BASIS SPANS TWO TENURES (position 16). The first judges every change
+    TWO PASSES, BECAUSE ONE BASIS SPANS TWO TENURES. The first judges every change
     on its own -- the bases that need nothing but the change, the actor, `via`, `gone`,
     `born` and `rehomed` (every basis but `handover`; none of them reads another CHANGE of
     the batch -- `founding`'s one-parent check reads the store the write left, which holds them).
@@ -1503,22 +1385,14 @@ def refuse_unauthored(w: "World", changes: list, actor: Optional[str], via: Opti
     seat-`hold` closed under `T-o` whose seat's `REVOCATION_DISPOSAL` is `ban`, counted; the second
     pass passes it too, and spends one unit per `ban` it admits under `T-o`. Exact for the same
     reason: the ban arm admits only an OPENED `ban`, and the licence is read off closures of `hold`s.
-    ⚠ THE LICENCE IS COMPUTED HERE AND NOT IN `World.write`, which is why `World.write`'s call did
-    not change: *which change was a `T-m` closure* is a judgment, and the store observes changes
-    and never judges them -- the split this module's G3 header states.
+    ⚠ THE LICENCE IS COMPUTED HERE AND NOT IN `World.write`: *which change was a `T-m` closure* is a
+    judgment, and the store observes changes and never judges them -- the split this module's G3
+    header states.
 
-    ⚠ `closes` IS A NAMED LIST, NOT AN EFFICIENCY FIX -- CORRECTED (BATCH-CLOSE, methodology-close
-    Phase 3 terminal critique, F5): the Phase 2 EFFICIENCY finding this replaced claimed it removed
-    "the second pass through `_moved`/`_closes`," and that claim was false. `_closes(t, was)` is
-    still called exactly once per change here (now via this list comprehension, before it was
-    inline in the `released` Counter's own generator) -- the SAME count as before, only relocated
-    -- and `tenure_write_basis` still computes its own `_moved`/`_closes` internally, one call per
-    change, inside the `bases` comprehension two lines up. The two calls per change (one inside
-    `tenure_write_basis`, one here) are UNCHANGED by this list; eliminating that pair would need
-    `tenure_write_basis` to return `closed` alongside its basis, a signature change to the write
-    gate's own judgment function not attempted here. What this list actually buys: `closed` is a
-    named, reused value inside the `zip` loop below rather than re-spelled inline -- a readability
-    change, not a performance one, and the docstring saying otherwise was the defect."""
+    ⚠ `closes` IS A NAMED LIST, NOT AN EFFICIENCY FIX: `closed` is a named, reused value inside the
+    `zip` loop below rather than re-spelled inline. `_closes` still runs twice per change (once inside
+    `tenure_write_basis`, once here); removing the pair would need `tenure_write_basis` to return
+    `closed` alongside its basis, a signature change to the write gate's own judgment function."""
     closes = [_closes(t, was) for t, was in changes]
     # v9 IN-13: THE `muster` LICENCE, read off the batch BEFORE any judgment, because it is a
     # property of the WRITE, never of one edge: whose presence this write re-homes -- a person with
@@ -1619,9 +1493,7 @@ def not_yours(refused: list, actor: Optional[str], via: Optional[str], record_ki
 # checks the pair a write DECLARES, not what its closure touches -- no step does that today (every
 # CALENDAR closure fires a Date or forms a docket item, every WITNESS closure appends a claim to a
 # ledger; `loop/calendar.py`, `loop/witness.py`), and the day one does, this set is
-# where to widen F3's watch. The cost of widening, measured on `build_realm(0)` over one season: 532
-# writes observed today (359 MATTER, 173 ACTS) against 2,688 in all -- the 2,156 WITNESS deposits
-# are the difference, so watching every class would snapshot the tenure store ~5x as often.
+# where to widen F3's watch.
 TENURE_WRITE_CLASSES = frozenset(
     row.write_class(step) for (kind, _f), row in MATRIX.items() if kind == "Tenure"
     for step in row.steps)
@@ -1637,15 +1509,12 @@ TENURE_WRITE_CLASSES = frozenset(
 # and PART D row 5 both state it the one way: *"The gate now refuses `before == after` at the
 # write, so the receipt is never minted"*. EQUAL raises.
 #
-# WHAT CHANGED, AND IT IS THE CONTRACT OF EVERY EFFECT IN `loop/effects.py`. Before G4 an effect
-# MUTATED inside an opaque `apply()` and RETURNED the ids it touched, and the fold minted a receipt
-# for every id it was told -- so an effect that named an id it never changed produced a success
-# Event carrying a gate-minted receipt, and `state/log.py`'s provenance check (which asks only
-# WHO minted it) admitted it. That is `ID-9`'s own worked example surviving PART D row 5 (F9):
-# `work` emitted `site.worked` over a condition nothing wrote. Now an effect returns a `Change`:
-# the SUBJECTS it writes, named before it runs, and the write. `World.write` reads every subject,
-# applies the write, reads them again, and mints a receipt for each subject that moved and for no
-# other. None moved: `NoOpReceipt`, and the fold turns it into the row's refusal.
+# THE CONTRACT OF EVERY EFFECT IN `loop/effects.py`: it returns a `Change` -- the SUBJECTS it writes,
+# named before it runs, and the write. `World.write` reads every subject, applies the write, reads
+# them again, and mints a receipt for each subject that moved and for no other, so an effect cannot
+# name an id it never changed and obtain a gate-minted receipt (`ID-9`'s own worked example, `state/
+# log.py`'s provenance check asking only WHO minted it). None moved: `NoOpReceipt`, and the fold turns
+# it into the row's refusal.
 #
 # WHAT `get()` READS -- ONE RULE, THREE SUBJECT SHAPES, OWNED BY `World.state_of`:
 #
@@ -1732,7 +1601,8 @@ class Subject:
     @property
     def kinds(self) -> tuple:
         """The kinds this subject earns if it moves, as a tuple: `()` for `None` (the plain-list
-        contract: it narrows nothing), one kind, or the several it names."""
+        contract: it narrows nothing), one kind, or the several it names. A `None` subject may not
+        sit beside a named one: `Change` refuses the mix at construction (H-141)."""
         if not self.earns:
             return ()
         return (self.earns,) if isinstance(self.earns, str) else tuple(self.earns)
@@ -1757,13 +1627,13 @@ class Subject:
         no world stamp is added. It earns `tenure.closed` alone.
 
         ⚠ THE ONE RECEIPT WHOSE SUBJECT IS NOT THE RECORD WRITTEN, AND IT DEPARTS FROM A PINNED RULE ON
-        PURPOSE (B10-09 close, antagonist D1). `loop/effects_governance.py::_eff_confer` keeps its Receipts on
+        PURPOSE. `loop/effects_governance.py::_eff_confer` keeps its Receipts on
         the TENURE'S OWN ID "after a rejected alternative" (a Receipt must name what was ACTUALLY written;
         `epistemic.py` states the same, `tests/test_season_shape.py` pins it for `confer`). A seat Receipt
         names the OFFICE with the write's own field (`body`/`exists`), which is no write on an Office. The
-        reason is the plan's (`2026-10-24-v10-09-build-B10-09.md` CP-T02-01, deleted at B10-09's close; `git show 1ef8d273:proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-build-B10-09.md`) and the alternative's cost: a
+        reason is the alternative's cost: a
         dead man's Tenures leave `World.tenures` with him, so a Receipt on a Tenure id cannot be expanded to
-        the seat by `_hold_tenure_ends`; that is H-206's option (b), which the plan keeps at LEAVE.
+        the seat by `_hold_tenure_ends`; that is H-206's option (b), which is not built.
         Its one known misreader is `harness/arc.py::_Records.of`; `read_arcs` skips a seat Receipt on a
         `tenure.closed` Event (nothing in the game reads it, so no hash depends on it)."""
         return cls(t.object, (EDGE, t), TENURE_CLOSED)
@@ -1777,7 +1647,7 @@ class Subject:
 class Change:
     """WHAT AN EFFECT HANDS THE GATE: the subjects it writes, NAMED BEFORE IT RUNS, and the write.
 
-    The gate calls `apply()` between its two reads -- *"the gate applies the write"* (S30.2) is now
+    The gate calls `apply()` between its two reads -- *"the gate applies the write"* (S30.2) is
     literal for the fold. `apply` still mutates through the store's own methods (`add_tenure`,
     `remove_person`, `_grant_remit`), because those are the one owners of their rules; what moved
     is WHO DECIDES WHETHER IT HAPPENED. An effect says what it will write; the gate says whether it
@@ -1789,20 +1659,33 @@ class Change:
     mutation of a non-Tenure entity is as invisible to F9 as it was to everything before it;
     `H-130` is the same class one step over.
 
-    ⚠⚠ AND THE BOUND ITSELF HAS A BOUND -- CORRECTED (antagonist pass, 2026-09-27, `H-137`). "The
+    ⚠⚠ AND THE BOUND ITSELF HAS A BOUND (`H-137`). "The
     gate sees ... every Tenure" is true only of what runs INSIDE `apply`. The effect that BUILDS
     this `Change` runs earlier, before `World.write` (and its tenure snapshot) is ever reached
     (`loop/resolve.py::_apply_write`) -- a mutation made there, before this object is even
     constructed, is invisible to F3 as well as F9, not merely to F9. Every shipped effect defers
     its mutation into `apply`. CR-06: `World.effect_body_observed` (called from `_apply_write`)
-    snapshots the tenure store around the effect call and refuses a Tenure the body moved; entity
-    fields stay convention-bound."""
+    snapshots the tenure store and each entity's field values around the effect call and refuses
+    what the body moved (H-137; a mutable value mutated in place escapes it)."""
 
     subjects: tuple
     apply: Callable[[], None]
     # CP-T03-02: the per-party ending a fight's band Events carry (`Event.ending`); `()` for every effect
     # that is not a fight's. The gate does not read it -- the fold copies it onto the act's success Events.
     ending: tuple = ()
+
+    def __post_init__(self) -> None:
+        # H-141: `_fold` reads an EMPTY `earned` set as "every declared kind", so one named subject
+        # beside a `None` one would silently drop what the `None` subject earns. HR-1's rule (see
+        # `Subject`): every subject of a write names its kinds, or none does.
+        named = [s for s in self.subjects if s.kinds]
+        plain = [s for s in self.subjects if not s.kinds]
+        if named and plain:
+            raise InstrumentDefect(
+                "a `Change` mixes subjects that earn every declared kind (`earns=None`: "
+                f"{[s.id for s in plain]}) with subjects that name theirs "
+                f"({[(s.id, s.kinds) for s in named]}); the named kinds would silence the rest in "
+                "`loop/resolve.py::_fold`. Name the kinds of every subject, or of none (H-141).")
 
 
 def _nothing() -> None:
@@ -1811,8 +1694,7 @@ def _nothing() -> None:
 
 # AN EFFECT THAT DECLINES WRITES NOTHING: no subjects, nothing applied. The gate raises
 # `NoOpReceipt` on it like on any other write that moved nothing, so "the effect declined" and "the
-# effect ran and changed nothing" reach the fold through ONE channel and emit ONE refusal. Before G4
-# they were two (a falsy return, and -- for `work` -- nothing at all).
+# effect ran and changed nothing" reach the fold through ONE channel and emit ONE refusal.
 NO_CHANGE = Change((), _nothing)
 
 
@@ -1892,8 +1774,7 @@ class Gate:
 
     def close(self) -> None:
         """Called by `World.write`'s own `finally`, unconditionally, at the end of every write --
-        not only at a step barrier (CORRECTED, methodology close, terminal critique, 2026-09-29;
-        this docstring described the pre-`H-131`-fix lifetime). A window left open past its own
+        not only at a step barrier (`H-131`). A window left open past its own
         write would let a LATER write's first hand-built change mint against this one's instead."""
         self._open = None
 

@@ -92,10 +92,10 @@ def test_the_wrapper_leaves_the_content_hash_where_it_was(monkeypatch):
     """`build_realm(0)` seats the whole governance ladder, so its offices are `SeatId`s; its
     `content_hash()` is `BUILD[0]` (`_realm_goldens.py`, the build's one owner). The string-level control beside it: the mint folds a `SeatId` exactly
     as the bare string, and the tag does not survive into an f-string."""
-    from ..harness import populated as POP
+    from ..boot.realm import build_realm
     from ..state.ids import H
     from ._realm_goldens import BUILD
-    w = POP.build_realm(0)
+    w = build_realm(0)
     seats = [o.id for o in w.offices.values()]
     assert len(seats) >= 20 and all(isinstance(i, SeatId) for i in seats), "the realm's seats are untyped"
     assert w.content_hash() == BUILD[0], "the wrapper moved the corpus hash"
@@ -105,7 +105,7 @@ def test_the_wrapper_leaves_the_content_hash_where_it_was(monkeypatch):
 
 
 # ======================================================================================
-# 3 -- LOADER INVARIANT 7: THE EVENT-KIND ROSTER IS DERIVED, THE FOLD'S THREE LITERALS ARE COLUMNS
+# 3 -- LOADER INVARIANT 7: THE EVENT-KIND ROSTER IS DERIVED, THE FOLD'S KIND LITERALS ARE COLUMNS
 # ======================================================================================
 # Each test PLANTS the violation and expects a `SystemExit` naming its row. The control is the shipped
 # data, which loaded to import this file.
@@ -120,14 +120,15 @@ from ..data.verbs import EVENT_KINDS, VERB_TABLE, derive_event_kinds  # noqa: E4
 from ..loop import resolve as _resolve   # noqa: E402
 from .test_u7_remit import _plant        # noqa: E402
 
-THREE = tuple(sorted(FOLD_KINDS))      # read off the data; the floor below pins it at the three
+FOLD_KIND_KEYS = tuple(sorted(FOLD_KINDS))      # read off the data; the floor below pins its size
 
 
-def test_the_three_body_literal_kinds_are_declared_columns_and_in_the_derived_roster():
-    """F.20b's three kinds, as the live fold emits them (`act.ineligible`, `act.refused`, and S27.4's
-    `attempt.refused` -- `04` names `contest.resolved` for the third, which the live fold never emits)."""
-    assert len(THREE) == 3, FOLD_KINDS
-    assert set(FOLD_KINDS.values()) == {"act.ineligible", "act.refused", "attempt.refused"}
+def test_the_two_body_literal_kinds_are_declared_columns_and_in_the_derived_roster():
+    """F.20b's kinds, as the live fold emits them (`act.ineligible` and `act.refused`; `04` names
+    `contest.resolved` for a third, which the live fold never emits, and S27.4's `attempt.refused` lost its
+    only emitter at B03.55)."""
+    assert len(FOLD_KIND_KEYS) == 2, FOLD_KINDS
+    assert set(FOLD_KINDS.values()) == {"act.ineligible", "act.refused"}
     assert set(FOLD_KINDS.values()) <= EVENT_KINDS
     # the roster is DERIVED: every verb-row column and every matrix `emits:` is a member
     for name, row in VERB_TABLE.items():
@@ -141,7 +142,7 @@ def test_the_three_body_literal_kinds_are_declared_columns_and_in_the_derived_ro
     assert checked >= 20 and len(EVENT_KINDS) >= 100, (checked, len(EVENT_KINDS))
 
 
-@pytest.mark.parametrize("key", THREE)
+@pytest.mark.parametrize("key", FOLD_KIND_KEYS)
 def test_inv7_a_fold_kind_column_missing_refuses_the_load_naming_its_row(key):
     planted = {k: v for k, v in FOLD_KINDS.items() if k != key}
     with pytest.raises(SystemExit, match=rf"rosters\.yaml: `fold_kinds` misses \['{key}'\]"):
@@ -197,9 +198,10 @@ def test_inv7_the_fold_mints_no_kind_a_column_does_not_declare():
 
 
 def test_inv7_the_fold_reads_each_literal_from_the_roster_not_from_its_body(monkeypatch):
-    """OBSERVED, NOT GREPPED: point each of the three constants at a kind no column declares and drive
+    """OBSERVED, NOT GREPPED: point each constant at a kind no column declares and drive
     the fold path that emits it. A body literal left behind would emit the old kind and raise nothing;
-    reading the roster raises on the planted one. Three paths, three observations."""
+    reading the roster raises on the planted one. Two paths, two observations (a third, S27.4's
+    `attempt_refused` arm of the fold, was deleted at B03.55 with its roster key)."""
     w, d = _world()
     # (1) `ineligible`: a predecessor removed the actor (S27.1)
     monkeypatch.setattr(_resolve, "FOLD_INELIGIBLE", "act.vanished")
@@ -209,14 +211,6 @@ def test_inv7_the_fold_reads_each_literal_from_the_roster_not_from_its_body(monk
     monkeypatch.setattr(_resolve, "FOLD_REFUSED", "act.declined")
     with pytest.raises(InstrumentDefect, match="act.declined"):
         _resolve._refuse_party_gap(d, w, Act(id="nowhere", actor=DUKE, verb="no_such_verb"))
-    # (3) `attempt_refused`: S27.4's refusal of an attempt past the obstacle ceiling
-    monkeypatch.setattr(_resolve, "FOLD_ATTEMPT_REFUSED", "attempt.spurned")
-    over = Act(id="over", actor=DUKE, verb="open_case", obstacle=99, pool=1)
-    with pytest.raises(InstrumentDefect, match="attempt.spurned"):
-        _fold(w, d, over)
-    monkeypatch.undo()
-    again = Act(id="over2", actor=DUKE, verb="open_case", obstacle=99, pool=1)
-    assert [e.kind for e in _fold(w, d, again)] == ["attempt.refused"], "control: the shipped kind"
 
 
 # ======================================================================================

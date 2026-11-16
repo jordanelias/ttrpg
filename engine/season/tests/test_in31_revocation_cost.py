@@ -25,7 +25,7 @@ import pytest
 from engine.season.data import verbs as V
 from engine.season.data.matrix import Step, WriteClass
 from engine.season.gaps import Unspecified
-from engine.season.harness import populated as POP
+from engine.season.boot.realm import build_realm
 from engine.season.loop import predicates as _preds
 from engine.season.loop.effects import EFFECTS
 from engine.season.loop.driver import SeasonDriver, mint_token
@@ -265,7 +265,7 @@ def _realm(place=True):
     """`build_realm(0)`, plus (by hand: Jordan 2026-10-12's *"a flag as to whether that office is in the
     holdings of the monarch"*) the King NPC-020 holding `duchy_varfell` and `duchy_hafenmark`, which makes
     their dukes revocable through the realm seat."""
-    w = POP.build_realm(0)
+    w = build_realm(0)
     if place:
         for rung in ("duchy_varfell", "duchy_hafenmark"):
             w.add_tenure(Tenure(f"t_in31_{rung}", "p_npc_020", rung, "hold", 0))

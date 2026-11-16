@@ -11,7 +11,7 @@ INVOCATION: /methodology-execute Batch B09-memory
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_IN.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
-GATE: Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0
+GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B05-one-roll
 GATE: Batch B07-task-draw
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
@@ -70,7 +70,7 @@ EST: 11 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this bat
 | B09.21 | a zero-wear clock write is not written | H-135 (intake `:144`) | BUILD | MOVER(behaviour) | B09.01 |
 | B09.99 | re-pin and close readings | `V12_STRUCTURE_part4.md` E-1 | BUILD | MOVER (the re-pin) | B09.01 to B09.22 |
 
-Not in this batch, and where each is: `U5c_VERBS_residue_and_governance_owner` §3 (B11, UNDECIDED (3)); `01_CORE_predicates_name_their_clause` step two's four keyed rows (B21, UNDECIDED (4)); `01_CORE_claim_fade_as_read` edit 5 (held to B99, UNDECIDED (1)); `02_CHAR_reason_trail_and_small_edits` Part A's sheet `terms` (B34, with `person_q.explain`) and Part B row B1 (deleted, C3-L8; `U5a_CORE_owed_edits` §H in B03) and B3 (`02_CHAR_resolve_and_temper` edit 3, B10); `16_PESSIMIST_CORE_the_record_holds_what_changed`'s `conviction.moved` (`16_PESSIMIST_CHAR_A`, B10); the refusal-by-a-person half of A-81 (`30_WR_D_momentum_and_its_brakes` §3, B38).
+Not in this batch, and where each is: `U5c_VERBS_residue_and_governance_owner` §3 (B11, UNDECIDED (3)); `01_CORE_predicates_name_their_clause` step two's four keyed rows (B21, UNDECIDED (4)); `01_CORE_claim_fade_as_read` edit 5 (held to B99, UNDECIDED (1)); `02_CHAR_reason_trail_and_small_edits` Part A's sheet `terms` (B34, with `person_q.explain`) and Part B row B1 (C3-L8; `U5a_CORE_owed_edits` §H's removal was tried in B03 and falsified, no batch carries it: `engine/season/hole_register.yaml` H-92) and B3 (`02_CHAR_resolve_and_temper` edit 3, B10); `16_PESSIMIST_CORE_the_record_holds_what_changed`'s `conviction.moved` (`16_PESSIMIST_CHAR_A`, B10); the refusal-by-a-person half of A-81 (`30_WR_D_momentum_and_its_brakes` §3, B38).
 
 ### B09.01 — fading is computed where a claim is read · 01_CORE_claim_fade_as_read edits 1–4 · BUILD · HASH MOVER(behaviour)
 - SOURCE: `proposals/01_CORE_claim_fade_as_read.md` "Edits, by owner" 1–4, "Gate", "Falsifier"; D-48 (Option A); `04` §B.13 invariant 7, §A.2; closes F-CORE-01 (resolution 1).

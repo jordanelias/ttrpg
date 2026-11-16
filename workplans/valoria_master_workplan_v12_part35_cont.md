@@ -128,7 +128,7 @@ Short names, words and paths are the first file's head. The B28 block's head, it
 - FALSIFIER and CONTROL: the instrument prints 0 kept-waiting on the planted world that holds one. Control: a run of the instrument leaves the world's content hash and log length unchanged.
 - GATE: `python -m pytest engine/season/tests/test_scene_access_engagement.py -q -k test_the_access_instrument_counts_a_planted_kept_waiting` → pass; `PYTHONHASHSEED=0 python -m engine.season.harness.access 0 1` → exit 0, its lines printed (quoted in the commit body with its wall time).
 - HASH MOVERS: none (an instrument).
-- DEPENDS ON: V12 B28.18 to B28.21; V12 B02.20 @1c354dbc0aee19371754b7a648eafe48af9c3cb0 (`null_scenes`, its `scope`); V12 Batch B03c (`boot/realm.py::build_realm`).
+- DEPENDS ON: V12 B28.18 to B28.21; V12 B02.20 @895dc07319e40f9723a5ad857e068c7bdbde145d (`null_scenes`, its `scope`); V12 Batch B03c @544cf5719c620331b70aeda93c1672977b44e9ef (`boot/realm.py::build_realm`).
 - GLOSSARY: none.
 - NAMES: `harness/populated.py` (the scratch probes' builder) → `boot/realm.py` (B03c, CI-07).
 - COST and TIER: small build; `sonnet`, `high`.

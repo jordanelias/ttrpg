@@ -104,7 +104,7 @@ Not in this batch, and where each is: `14_VERBS_MATERIAL_C`'s `_stamped` pair fo
 - TESTS: none new; the two files that open this YAML's `provinces:` are the covering run.
 - FALSIFIER and CONTROL: EXIT and FALSIFIER, copied: "`python -c \"import yaml; d=yaml.safe_load(open('systems/settlements/valoria_geography_v30.yaml')); assert not [t for t,v in d['provinces'].items() if 'starting_pros' in v]; assert len(d['settlements'])==37 and all(len(s['stats'])==3 for s in d['settlements'].values())\"`. CONTROL: at the base commit the first assert fails (17 rows), so the defect is observable; the second holds on both sides."
 - GATE: the command above → exit 0 (and, run on the parent commit, the first assert fails); `python -m pytest engine/season/tests/test_mass_battle_module.py tests/valoria/test_mass_battle_terrain.py -q` → pass; `python tools/freshness_gate.py` → exit 0; the realm content hash (`HASH READING`) of `build_realm(0)` after one season → equal to B34's after-reading (`reading @<sha>`).
-- HASH MOVERS: none ("EQUAL (`build_realm(0)` content hash equal against the base commit)"). Port: the YAML crosses through GO-09 (B03g); the port binds Prosperity at settlement grain only.
+- HASH MOVERS: none ("EQUAL (`build_realm(0)` content hash equal against the base commit)"). Port: the YAML crosses through GO-09 (B03g @048724cd545117255e71d04a583d99c6cb5fe3a9); the port binds Prosperity at settlement grain only.
 - DEPENDS ON: EXISTS-IN-TREE `systems/settlements/valoria_geography_v30.yaml` `provinces:` (`starting_pros`, 17 rows at `fe09cdd`), `tools/freshness_gate.py --update`, `tools/build_identifier_census.py`.
 - GLOSSARY: none.
 - COST and TIER: edit (data; retire a field); `sonnet`, `high` (BUILDER: second tier).

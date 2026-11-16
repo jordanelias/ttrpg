@@ -83,7 +83,7 @@ The batch block's head, its position table and B19.01 to B19.16 are in `valoria_
 - FALSIFIER and CONTROL: a subformation that is stored rather than read (a new field on `OrderOfBattle`). Control: the hash equal to B19.18's.
 - GATE: `python -m pytest tests/valoria/test_mass_battle_order_of_battle.py -q` → pass; `git grep -n -w "subformations" -- modules/mass_battle` → only the new read and its `__all__` entry.
 - HASH MOVERS: none.
-- DEPENDS ON: V12 B19.18 (`UnitRow.post`); V12 Batch B16L (L1-1, L1-2 freed the name).
+- DEPENDS ON: V12 B19.18 (`UnitRow.post`); V12 Batch B16L @2d9590e75fd253d1d88612e2d42674e2fdb5db96 (L1-1, L1-2 freed the name).
 - GLOSSARY: row *subformation* (§J): owner column → `orderofbattle.subformations` (L1's glossary line, STAGES rule 2).
 - COST and TIER: edit; `sonnet`, `high`.
 - LANDS IT: B19's producer; `Item: B19.19`, `[skip ci]`.

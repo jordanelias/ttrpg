@@ -133,9 +133,9 @@ work. our design documents in .MD are reference and information only."*
      `references/restructure_ledger.md` are process surfaces a program legitimately reads.
 
   §5, §6 and §8 are instances of this rule. ⚠ **A fact whose chain you cannot name is orphaned or
-  hand-transcribed** (`fac.intel`: ruled bounds, reachable by nothing). **NO TREE-WIDE GUARD IS
-  LICENSED** (§0.1 pt 5); licensed instead: the exporter's `--check` per chain, the loader's refusal per
-  data family, and reading the chain before you delete or migrate.
+  hand-transcribed** (as `fac.intel` was: ruled bounds, reachable by nothing; deleted at `29b`). **NO
+  TREE-WIDE GUARD IS LICENSED** (§0.1 pt 5); licensed instead: the exporter's `--check` per chain, the
+  loader's refusal per data family, and reading the chain before you delete or migrate.
 - **This does NOT demote `CLAUDE.md`, `CURRENT.md` or `HANDOFF.md`**, and **does not license deleting
   design docs.** They stay as reference; what changes is what may be treated as *binding*.
 
@@ -349,8 +349,8 @@ says where an old path went. Only what those cannot tell you:
   `HANDOFF_<LANE>.md`.** Oracle scripts live in `sim/`, imported as `systems.<sub>.sim.*`. ⚠ **`systems/`
   HOLDS NO `.md` AT ALL** — its design documents are in `.designs/systems/<sub>/`;
   `tools/ci_design_prose_quarantine.py` is blocking and the invariant is **zero, not a ratchet**.
-- **`engine/`** — the executable model (substrate leaf readers, cross-scale, campaign
-  driver, `engine/engine_params/` typed exports, `engine/tests/` = CI job `sim-regression`). **It names
+- **`engine/`** — the executable model (substrate leaf readers, `engine/dice_engine/`,
+  `engine/engine_params/` typed exports, `engine/tests/` = CI job `sim-regression`). **It names
   no subsystem by import**: seams resolve through `engine/substrate/composition.py` (`engine/` names a
   ROLE, `references/module_contracts.yaml` the registered MODULE). One `sys.path` seam, `substrate/pc_engine.py` into
   `modules/combat/`, is in `PATH_SEAM_ALLOWED`, **shrink-only**; the execution artifact is
@@ -453,16 +453,16 @@ none of them.
 ## 7. Simulation / balance
 
 **Rule: the Python model (`engine/` + `systems/<sub>/sim/`) is the oracle the port validates against, and
-a campaign-level balance claim needs a campaign-level instrument.** The seeded goldens under
-`engine/tests/` observe any output-moving change to campaign-reachable code but cannot separate a balance
-regression from noise, and nothing verifies a golden re-pin was intended — say plainly when you
-re-record one. ⚠ **`tools/balance_oracle.py` IS RETIRED** (`FORK:` row in
-`references/restructure_ledger.md`): the campaign-level instrument has **no live successor** — an open
-gap. `python -m engine.season.harness.arms` is NOT a replacement: a season-loop-only n-seed comparison
-over one mechanic (`field_casualty_model`). Running either instrument on a campaign-unreachable change
-(or, for `arms.py`, a season-unreachable one) is a fake control — both arms are identical by
-construction. Ledger provenance is advisory (schemas differ,
-provenance fields unchecked, no generating SHA pinned) — verify a cited `PP-NNN`/`ED-NNN` by hand.
+a campaign-level balance claim needs a campaign-level instrument.** The seeded hash pins under
+`engine/season/tests/` observe any output-moving change to season-reachable code but cannot separate a
+balance regression from noise (`engine/tests/goldens/` holds one pure-function dice table), and nothing
+verifies a golden re-pin was intended — say plainly when you re-record one. ⚠ **`tools/balance_oracle.py`
+IS RETIRED** (`FORK:` row in `references/restructure_ledger.md`): the campaign-level instrument has **no
+live successor** — an open gap. `python -m engine.season.harness.arms` is NOT a replacement: a
+season-loop-only n-seed comparison over one mechanic (`field_casualty_model`). Running either instrument
+on a campaign-unreachable change (or, for `arms.py`, a season-unreachable one) is a fake control — both
+arms are identical by construction. Ledger provenance is advisory (schemas differ, provenance fields
+unchecked, no generating SHA pinned) — verify a cited `PP-NNN`/`ED-NNN` by hand.
 `engine/tests/` is CI job `sim-regression`; the reference model is partly stubbed (`NotImplementedError`)
 and its README's "all modules are stubs" line is stale — grep for the stubs.
 

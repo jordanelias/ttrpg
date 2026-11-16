@@ -11,14 +11,13 @@ It DECIDES NOTHING. `fieldwork_input` (the host input builder) projects the trai
 `Findings`. What a finding uncovers is `modules/fieldwork/find.py`'s; what the finder then HOLDS is
 WITNESS's (`loop/witness.py`'s found deposit), as what a witness holds is.
 
-⚠ THE PLACEMENT QUESTION, ADJUDICATED AT THE SITE RATHER THAN ASSUMED (`sigma.py`'s precedent, and its
-form). `04_CODE_ARCHITECTURE.md` §A.2 types `seam/wrappers/*` as CONTEST provider adapters: they write
+⚠ THE PLACEMENT QUESTION (`sigma.py`'s precedent, and its form). `04_CODE_ARCHITECTURE.md` §A.2 types `seam/wrappers/*` as CONTEST provider adapters: they write
 *"nothing, ever"*, read *"the projection"*, return *"a `Margin`"*, hold token *"none"*. This module is
 not a contest provider and returns no `Margin`. Two readings were available: **(i)** it is a wrapper BY
 ROLE -- it writes nothing, reads a projection, holds no token, and returns the typed record its module
 returns, which is that row's contract with the record's type generalised from one role to two; **(ii)**
 §A.2's row is a contest-only row, and a second role's adapter is a new row the document must gain. **This
-unit takes (i)** and states the deviation for amendment: column 3, *"a `Margin`"*, is met by its analogue
+module takes (i)** and states the deviation for amendment: column 3, *"a `Margin`"*, is met by its analogue
 (`Findings`, held at the module boundary as `sigma.py` holds `Margin`), and nothing else in the row moves.
 A second deviation lives with the caller: `loop/witness`'s may-read column (`04` §A.2) does not list a
 driver-held `findings` store, and the found deposit reads one (`SeasonDriver.findings`, `act_of`'s shape:

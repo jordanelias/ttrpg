@@ -1,6 +1,4 @@
-"""`season.data.fixtures` -- the harness fixtures and the matter-economy tables, extracted from
-`shape.py` (step 3 of the decomposition, a PURE MOVE: no behaviour changed, only where the code
-lives).
+"""`season.data.fixtures` -- the harness fixtures and the matter-economy tables.
 
 Owns `Fixtures` (S42.2.1's inject/grade/sweep registry: *"never invent a constant. Inject it,
 declare it a harness fixture at `grade: assumption`, name the injection site, run a 3-point
@@ -9,14 +7,11 @@ economy's three roster-backed tables and their loader (`_load_matter_tables` / `
 `BAND_FLOORS`, `SUBSISTENCE_WEIGHTS`, `SITE_YIELD`), and `DEFAULT_FIXTURES`, the baseline
 instance built from all of it.
 
-⚠ `_load_matter_tables` SITS BETWEEN `Fixtures` AND `DEFAULT_FIXTURES` HERE TOO, FOR THE SAME
-REASON IT DID IN `shape.py`. `DEFAULT_FIXTURES` reads three of its values (`wear_per_season`,
-`band_floors`, `subsistence_weight`) OFF `rosters.yaml` rather than as literals (`W8` --
-splitting them into the registry would otherwise "put one declaration in two files"; reading the
-data instead keeps it at one), so it cannot be built until those tables have loaded, and
-`Fixtures` must exist first because `DEFAULT_FIXTURES` is an instance of it. The order is: class,
-then loader, then baseline -- moving all three together keeps that dependency in one file
-instead of re-splitting it across an import.
+⚠ `_load_matter_tables` SITS BETWEEN `Fixtures` AND `DEFAULT_FIXTURES`. `DEFAULT_FIXTURES` reads
+three of its values (`wear_per_season`, `band_floors`, `subsistence_weight`) OFF `rosters.yaml`
+rather than as literals (`W8` -- one declaration, and it is the data), so it cannot be built
+until those tables have loaded, and `Fixtures` must exist first because `DEFAULT_FIXTURES` is an
+instance of it. The order is: class, then loader, then baseline.
 """
 
 from __future__ import annotations
@@ -31,10 +26,10 @@ class Fixtures:
     `grade: assumption`, name the injection site, run a 3-point sweep, and treat A VERDICT
     THAT FLIPS ACROSS THE SWEEP AS ITSELF A FINDING.
 
-    REV 2 added `wear_per_season` (per SITE KIND, with NO SILENT DEFAULT -- S42.2.1 names a
-    wear table with a silent default as the exact prior sin), `confidence_default`, and
-    `entrenchment_seasons`. It REMOVED `caller_supplied_max_depth`: S39.3 says the depth cap
-    has NO DEFAULT, and a default relocated into a default-argument object is still a default."""
+    `wear_per_season` is per SITE KIND, with NO SILENT DEFAULT -- S42.2.1 names a wear table with
+    a silent default as the exact prior sin. There is no `caller_supplied_max_depth`: S39.3 says
+    the depth cap has NO DEFAULT, and a default relocated into a default-argument object is still
+    a default."""
 
     def __init__(self, **vals: Any):
         self._v = dict(vals)
@@ -72,13 +67,10 @@ class Fixtures:
         `assumption`), not a value the design states. It is registered rather than literal for the
         same reason `wear` is: *"a wear table that returns 20 for an unregistered site kind does
         not fail — it answers, plausibly and wrongly, forever."*"""
-        # ⚠ ROUTED THROUGH `get()`, AND THE BYPASS WAS LOAD-BEARING ON A GREEN CHECK. This read
-        # `self._v` directly, so `self.reads` was never incremented and `claim_decay_per_season`
-        # was INVISIBLE to R5 and to `W9`'s check 3 -- the two guards whose whole job is "no fill
-        # off the register". Check 3 was green BECAUSE of the bypass: route the read properly and
-        # it fails with `missing == ["claim_decay_per_season"]` unless the fixture is named in a
-        # register row's `site:`. A guard that cannot see the thing it guards is not a weak guard,
-        # it is an absent one (§0.1 point 2). Found by the adversarial pass.
+        # ⚠ ROUTED THROUGH `get()` so `self.reads` counts the read: `claim_decay_per_season` must be
+        # VISIBLE to R5 and to `W9`'s check 3 -- the two guards whose whole job is "no fill off the
+        # register". A guard that cannot see the thing it guards is not a weak guard, it is an
+        # absent one (§0.1 point 2).
         if "claim_decay_per_season" not in self._v:
             raise Ungraded(
                 "claim confidence decay is not registered", "S42.2.1",
@@ -94,10 +86,8 @@ class Fixtures:
 def _load_matter_tables() -> tuple:
     """`W8`. The matter economy's three tables, from `rosters.yaml`, with load-time checks.
 
-    ⚠ THESE WERE LITERALS IN `DEFAULT_FIXTURES` AND PLAN `W8` ASKS FOR THEM AS REGISTRY ROWS. The
-    comment that stood beside them objected, reasonably, that *"splitting them into rosters.yaml
-    would put one declaration in two files"* — and the answer is that the fixture READS the data
-    rather than restating it, so there is still exactly one declaration and it is the data.
+    ⚠ THE FIXTURE READS THE DATA RATHER THAN RESTATING IT (PLAN `W8`), so there is exactly one
+    declaration and it is the data.
 
     ⚠ THE CHECKS ARE THE POINT, not the relocation. A wear or weight table whose keys drift from
     the roster is §42.2.1's worked sin arriving through a data edit instead of through a literal:
@@ -142,9 +132,9 @@ def _load_matter_tables() -> tuple:
 
 def _check_keyed_on_site_kinds(name: str, got: set, kinds: set) -> None:
     """THE BOTH-DIRECTION KEY CHECK every per-site-kind mapping gets: a row for a kind no roster
-    carries is FORBIDDEN, and a site kind with no row is UNGRADED. One owner since plan position
-    `19c` gave it a third caller (`capacity_floor`), extracted unchanged from `_load_matter_tables`'s
-    loop so the three mappings cannot come to disagree about what "keyed on `site_kinds`" means (§8)."""
+    carries is FORBIDDEN, and a site kind with no row is UNGRADED. One owner for the three mappings
+    (`wear_per_season`, `band_floors`, `capacity_floor`) so they cannot come to disagree about what
+    "keyed on `site_kinds`" means (§8)."""
     if got - kinds:
         raise Forbidden(
             f"{name} names site kind(s) no roster carries: {sorted(got - kinds)}",
@@ -161,7 +151,7 @@ def _check_keyed_on_site_kinds(name: str, got: set, kinds: set) -> None:
 
 
 def _load_capacity_floor() -> dict:
-    """`24d-ii`'s FLOOR (landed with its caller, plan position `19c`): `rosters.yaml:
+    """`24d-ii`'s FLOOR: `rosters.yaml:
     capacity_floor.floors`, `{site kind: the lower bound on world_q.capacity}`, checked in both
     directions against `site_kinds` exactly as `wear_per_season` and `band_floors` are. The row says
     why its cells hold the floor and nothing else, and `H-167` grades and sweeps the number. A
@@ -219,29 +209,18 @@ DEFAULT_FIXTURES = Fixtures(
     # the SCENE and the number is 5 -- *"5 scenes for a character to play per season"*. A band is
     # not an integer; this is the integer the instrument runs on, and A31 sweeps it because the
     # verdict moves with it.
-    # ⚠ `W17` RENAMED THIS FROM `act_budget`. #353 §26.3's prose counts ACTS throughout and the
-    # ruling re-states it in scenes: "a wounded duke gets fewer SCENES than a healthy one". The
-    # spray argument survives the noun change unaltered -- five scenes each spent petitioning is
-    # exactly the triage the budget exists to create -- but the key must not keep saying `act`,
-    # because a name is where the next reader learns what the number counts.
+    # ⚠ THE KEY SAYS `scene`, NOT `act`: the ruling counts scenes ("a wounded duke gets fewer
+    # SCENES than a healthy one"), and a name is where the next reader learns what the number counts.
     # [JUSTIFIED: engine/season/hole_register.yaml H-10 -- *the SCENE budget as an integer of the ruled band ~5*; #353 §26.3 gives the band, Jordan's 2026-09-02 ruling the unit, and a band is not an integer]
     scene_budget=5,
     # S20: the ledger cap L. Params-owned; no in-chain value.
-    # CR-82 (ED-IN-0319: people remember one another for years) RAISED THIS FROM 200 TO 3200.
-    # MEASURED (`build_realm`, `populated.run` chooser, PYTHONHASHSEED=0; acq = the 236 claims
-    # `seed_acquaintances` writes): at 200 a realm ledger fills in season 1 and the eviction
-    # comparator (S20/S34, `state/ledgers.py::eviction_key`) drops the acquaintance claims first,
-    # 0 and 0 of 236 held at season 8 on seeds 0 and 1; 3200 is the smallest swept value
-    # (200/400/800/1600/3200) holding them through eight seasons, two years at four seasons to
-    # the year (ED-IN-0332): 202 and 196 of 236 (1600 holds 75 and 116); seed 2, read at 3200
-    # only, holds 185. ⚠ 3200 BUYS TIME, NOT
-    # RETENTION: the ledger grows with the horizon and does not plateau (longest 2506, 2074 and
-    # 2178 at season 8, 3988 at season 12 on seed 0 at cap 6400), so at this value the cap is not reached through
-    # season 8 and eviction does not run; on the measured growth it binds near season ten, and
-    # then the comparator forgets the oldest first again. That figure is extrapolated, not
-    # measured. The next lever is a selective eviction rule (a change to the S20/S34
-    # comparator), not a larger number; it is not built. Cost, seed 0: eight seasons 377 s
-    # against 215 s at 200, peak 1584 MB against 1203 MB.
+    # CR-82 (ED-IN-0319: people remember one another for years): the cap is large enough that the
+    # eviction comparator (S20/S34, `state/ledgers.py::eviction_key`), which drops the acquaintance
+    # claims first, does not run through eight seasons (two years at four seasons to the year,
+    # ED-IN-0332). ⚠ THE VALUE BUYS TIME, NOT RETENTION: the ledger grows with the horizon and does
+    # not plateau, so on the growth the cap binds near season ten (extrapolated, not measured), and then the comparator forgets
+    # the oldest first again. The next lever is a selective eviction rule (a change to the S20/S34
+    # comparator), not a larger number; it is not built.
     # [ASSUMPTION; medium; Jordan to correct; revert: ledger_cap back to 200]
     # [JUSTIFIED: engine/season/hole_register.yaml H-09 -- `site: Fixtures ledger_cap (L) · view_k (K) · confidence_default`; S20 names L, no in-chain value exists, 3200 is injected and swept (CR-82)]
     ledger_cap=3200,
@@ -254,12 +233,10 @@ DEFAULT_FIXTURES = Fixtures(
     # unregistered kind, so the kinds are already declared data; splitting them into
     # rosters.yaml would put one declaration in two files. ⚠ `site_kinds` belongs in
     # rosters.yaml when W8 builds H-07's per-kind table, and not before.
-    # ⚠ `W8` MOVED THE TABLE TO `rosters.yaml` AND THIS READS IT. The literal that stood here
-    # carried an objection to splitting it out ("one declaration in two files"); the fixture
-    # reading the data answers it, because the declaration is now in exactly one place and this
-    # is not a copy of it. `Fixtures.wear` still refuses an unregistered kind.
+    # ⚠ THE TABLE LIVES IN `rosters.yaml` (`W8`) AND THIS READS IT: the declaration is in exactly
+    # one place and this is not a copy of it. `Fixtures.wear` still refuses an unregistered kind.
     wear_per_season=WEAR_RATES,
-    # S20: Claim.confidence. Rev 1 hardcoded 1, which degenerated the eviction comparator.
+    # S20: Claim.confidence. A value of 1 would degenerate the eviction comparator.
     confidence_default=100,
     # `U4` / `H-96`. THE TEMPERATURE OF THE TRIAGE — how far a person's choice of what to leave
     # undone departs from the top of their own ranking. `0` is the pre-U4 behaviour exactly
@@ -271,51 +248,29 @@ DEFAULT_FIXTURES = Fixtures(
     # inclinations"* — so THAT the choice is sampled is ruled; how sharply is a number no document
     # supplies.
     #
-    # ⚠ AND `0.1` IS CHOSEN ON A SWEEP, NOT ASSERTED. Two earlier writings of this comment argued a
-    # value a priori (`1.0`, *"the one value that adds no second scale factor"*), which is the shape
-    # §0.1 pt 4 refuses: a number with no control. What decides it is one analytic fact plus one
-    # measurement.
+    # ⚠ THE VALUE IS CHOSEN ON A SWEEP BY A RULE, NOT ASSERTED: tau is the LARGEST grid value at
+    # which REM-12's split (`harness/decision_spread.py --decisions`, the built realm) reads the
+    # sampler's top as the strict score leader in MORE THAN ONE HALF of the readings, among persons
+    # holding a pursuit vector, AND `test_u4_the_choice_is_sampling_and_the_argmax_is_its_zero_
+    # temperature_control` passes. Between-world variety falls MONOTONICALLY with temperature,
+    # because a hotter draw makes every world sample the same broad mixture.
     #
-    # THE ANALYTIC FACT — and it is why the value is a FLOOR question, not a tuning one. For TIED
-    # candidates `score/tau` is equal whatever tau is, so their order is decided by the draw ALONE
-    # at any nonzero temperature. The alphabetical tie-break this unit exists to remove is therefore
-    # dead at 0.1 exactly as it is at 1.0, BY CONSTRUCTION rather than by degree. Nothing is bought
-    # by going hotter.
+    # THE ANALYTIC FACT: for TIED candidates `score/tau` is equal whatever tau is, so their order is
+    # decided by the draw ALONE at any nonzero temperature. The alphabetical tie-break this unit
+    # exists to remove is therefore dead at any nonzero tau, BY CONSTRUCTION rather than by degree.
     #
-    # [THE 2026-09-10 RULE BELOW ("the smallest we sweep above zero") IS SUPERSEDED BY THE v11 CR-17 RULE AT THE END OF THIS
-    # BLOCK: on the extended grid the smallest above zero would be 0.01, and the shipped value is the LARGEST at which the
-    # strict-top share exceeds one half; the measurement that follows still reads.]
-    # THE MEASUREMENT — and it says something IS bought by going colder. Sweeping the shipped
-    # corpus, 89 live cases at seed 0, distinct executed sets: **tau=0 -> 16 · 0.1 -> 10 ·
-    # 0.25 -> 8 · 0.5 -> 7 · 1.0 -> 7**. Between-world variety falls MONOTONICALLY with temperature,
-    # because a hotter draw makes every world sample the same broad mixture. So the right value is
-    # the LEAST one that removes the defect, and that is the smallest we sweep above zero.
+    # WHAT THIS MEANS IN PLAY: a scored candidate beats a lower-scored one essentially always, and
+    # where the table says NOTHING, chance decides. *Inclinations are decisive where they exist; the
+    # draw decides where they do not.* That is a closer reading of Jordan's *"characters make
+    # choices based on their own inclinations"* than a hot temperature, which would override the
+    # inclinations it is supposed to express. ⚠ RE-DERIVE THIS IF the alignment table densifies: fewer
+    # ties move what tau is doing.
     #
-    # WHAT THIS MEANS IN PLAY, stated because the arithmetic hides it: the conviction spread is
-    # **1.62** across a person's candidates, so at 0.1 a scored candidate beats a lower-scored one
-    # essentially always, and where the table says NOTHING — 15 to 20 of 22 candidates, which is
-    # `H-96`'s own pair of numbers subtracted (*"with 22 candidates … the conviction term can
-    # separate only 2 to 7 of the 22"*) rather than a third measurement —
-    # chance decides. *Inclinations are decisive where they exist; the draw decides where they do
-    # not.* That is a closer reading of Jordan's *"characters make choices based on their own
-    # inclinations"* than a hot temperature, which would override the inclinations it is supposed
-    # to express. ⚠ RE-DERIVE THIS IF `U3` LANDS: a denser alignment table means fewer ties, which
-    # moves what tau is doing.
-    #
-    # ⚠ RE-DERIVED AT v11 CR-17 (B10-09 close two, its last commit), 0.1 -> 0.05, BY THE RULE THE CARD STATES AND NOT
-    # BY TUNING: H-96's `sweep:` gained 0.01 / 0.02 / 0.03 / 0.05, and tau is the LARGEST grid value at which REM-12's
-    # split (`harness/decision_spread.py --decisions`, the built realm, seeds 0-2) reads the sampler's top as the strict
-    # score leader in MORE THAN ONE HALF of the readings, among persons holding a pursuit vector (every person since
-    # SE-06 gave the cohorts one: `field_zero` reads 0 of 498), AND `test_u4_the_choice_is_sampling_and_the_argmax_is_its_
-    # zero_temperature_control` passes. MEASURED (strict-top-decided share of 498 readings, seeds 0 / 1 / 2): 0.1 ->
-    # 28.5 / 32.5 / 28.3 %; 0.05 -> 54.4 / 59.6 / 54.8 %; 0.03 -> 74.3 / 78.1 / 75.7 %; 0.02 -> 85.5 / 87.6 / 87.2 %; 0.01 ->
-    # 93.4 / 93.8 / 93.2 %; 0 -> 100 %. test_u4 passes at every grid value (15 distinct tops in 20 seeds at each; 1 at 0: the
-    # fixture's candidates score alike, so the draw alone decides). So 0.05 is the largest value above one half at all three
-    # seeds. THE ODDS WEIGHTING (`odds_weighting`, below) MOVES THESE SHARES BY NOTHING AT ANY GRID VALUE (`none` and
-    # `believed` read the same counts at every cell): it reaches only `determine`'s pursuit term, 46 of the 498 readings'
-    # candidates, and not one top. ⚠ THIS IS A PROPERTY OF THIS FLAT FIELD, NOT A TUNED OPTIMUM: most contested rows score
-    # alike at stance 0, so the share is a function of how tau compares to the score gaps (median outvoted lead 0.065 at
-    # 0.1). It goes stale under any later mover of those gaps (B10-18's, CL-PERSON's first non-neutral value).
+    # ⚠ THE ODDS WEIGHTING (`odds_weighting`, below) MOVES THESE SHARES BY NOTHING AT ANY GRID VALUE: it
+    # reaches only `determine`'s pursuit term. ⚠ THIS IS A PROPERTY OF THIS FLAT FIELD, NOT A TUNED
+    # OPTIMUM: most contested rows score alike at stance 0, so the share is a function of how tau
+    # compares to the score gaps. It goes stale under any later mover of those gaps (B10-18's,
+    # CL-PERSON's first non-neutral value).
     # [ASSUMPTION; medium; Jordan to correct; revert: choice_temperature 0.1, one re-pin]
     # [JUSTIFIED: engine/season/hole_register.yaml H-96 -- `site: Fixtures choice_temperature`, graded `measured`; the alphabetical tie-break is the measured defect and this is the injected magnitude of its remedy, swept 0 / 0.01 / 0.02 / 0.03 / 0.05 / 0.1 / 0.25 / 0.5 / 1.0, the row's own `sweep:`]
     choice_temperature=0.05,
@@ -328,93 +283,51 @@ DEFAULT_FIXTURES = Fixtures(
     claim_decay_per_season=5,
     # `W6` / `H-33`. WHICH WITNESS CHANNELS ARE LIVE.
     #
-    # ⚠ THE DEFAULT MOVED OFF `total` ON 2026-09-07, BY RULING, AND `total` IS STILL THE CONTROL.
-    # It was both until then, on the ground that S61's *"WITNESS AS SPECIFIED FANS EVERY EVENT TO
-    # EVERY PERSON"* is the design as written. `R7` (`references/design_rulings_2026-09-06.md`)
-    # overtakes that: Jordan chose the architecture model over the echo model -- *legitimacy falls
-    # where the news has reached* -- and `total` IS the echo model arriving one layer down, at the
-    # deposit. Under it nothing is hideable, so there is no secret, no lie, no rumour and no such
-    # thing as being ABSENT: the person who never travelled holds what the person in the room holds.
-    # `19_PLAN.md` step 1 is the same instruction from the subsystem's side.
+    # ⚠ THE DEFAULT IS `all_five`, BY RULING, AND `total` IS THE CONTROL. S61's *"WITNESS AS
+    # SPECIFIED FANS EVERY EVENT TO EVERY PERSON"* is the design as written; `R7`
+    # (`references/design_rulings_2026-09-06.md`) overtakes it: Jordan chose the architecture model
+    # over the echo model -- *legitimacy falls where the news has reached* -- and `total` IS the echo
+    # model arriving one layer down, at the deposit. Under it nothing is hideable, so there is no
+    # secret, no lie, no rumour and no such thing as being ABSENT. `19_PLAN.md` step 1 is the same
+    # instruction from the subsystem's side.
     #
-    # WHY `all_five` AND NOT `presence_only` -- MEASURED, both arms, `build_world(0)`, 3 seasons:
-    #   deposits          649 (total) -> 57 (presence_only) -> 60 (all_five)
-    #   ledgers      [200,200,200]    -> [0,28,29]          -> [0,28,32]   (cap L=200; `total` pins)
-    #   questions raised    5/9/10    -> 5/8/8              -> 5/9/10
-    # `presence_only` COSTS QUESTIONS and `all_five` does not: the narrowest arm thins the
-    # claim->question link, while `all_five` removes 91% of the deposits and leaves that link
-    # exactly where `total` had it. So the arm chosen is the one that buys the epistemic gap
-    # without paying for it upstream. (`all_five` names five channels and is currently a
-    # measurement of THREE -- `chronicle` matches nobody and `post_remit` needs an obligee at the
-    # seat an act was exercised through (since `17a`; before it, an office whose remit covers the
-    # emitting verb); `test_w6_every_named_channel_has_a_predicate…` asserts
-    # exactly which two are inert.)
+    # WHY `all_five` AND NOT `presence_only`: `presence_only` COSTS QUESTIONS (the narrowest arm
+    # thins the claim->question link), while `all_five` removes most of the deposits and leaves that
+    # link where `total` had it. (`all_five` names five channels and is currently a measurement of
+    # THREE -- `chronicle` matches nobody and `post_remit` needs an obligee at the seat an act was
+    # exercised through; `test_w6_every_named_channel_has_a_predicate…` asserts exactly which two
+    # are inert.)
     #
-    # ⛔⛔ AND IT IS NOT FREE -- **THE COST IS LARGER THAN THE REASON, AND THIS COMMENT FIRST SAID
-    # THE OPPOSITE.** It argued the cost away as a 16-fork artifact, citing `H-54`'s hash ordering.
-    # An adversarial pass demanded the corpus-scale control; it was run, and it REFUTES that
-    # argument. `W-D`, 89 worlds, 1,467 genuine forks, `narrow` cell, at the shipped
-    # `observation_deposit_mode: actor`:
+    # ⛔ AND IT IS NOT FREE. At the shipped `observation_deposit_mode: actor`, `W-D` (89 worlds, 1,467
+    # genuine forks) reads zero forks changing a later decision at `all_five`, against `total`'s 62
+    # and `presence_only`'s 229. A fork can change a later decision by exactly ONE route: §F1
+    # clause 4 (`engine/season/epistemic.py::belief_contradicts`) -- a claim in the actor's own
+    # ledger contradicts a candidate's precondition, so the candidate is DROPPED
+    # (`wd_extra.corpus_drops`). The divergences track the drops exactly: at the shipped
+    # configuration clause 4 SIMPLY NEVER FIRES, so a fork has nothing to change.
     #
-    #     fan_out_mode        forks that changed a later decision      reconvergence
-    #     total  (before)              62 of 1467                         95.77%
-    #     all_five (SHIPPED)            0 of 1467                        100.00%   <- ZERO
-    #     presence_only               229 of 1467                         84.39%
+    # ⭐ **Every clause-4 drop in the corpus is the verb `move` refusing on a `contain.path:<person>`
+    # belief** -- *there is no road from here to there*, formed by witnessing a `travel.blocked` and
+    # overturned by a later `travel.moved`. So the reactivity this metric measures is produced
+    # ENTIRELY BY PEOPLE BEING WRONG, and a wider channel set **corrects the stale belief before it
+    # can bite.**
     #
-    # **Zero of 1,467 is not noise.** At the shipped arm a fork NEVER changes a later decision, and
-    # `presence_only` -- the arm this comment rejected on a 2-question difference in one 3-person
-    # world -- diverges 229 times, nearly four times the pre-flip arm. On the property `W-D` exists
-    # to establish, the ranking is the reverse of the one chosen here.
+    # ⚠ THE ARM MUST NOT BE CHOSEN ON THIS METRIC AT ALL, in either direction: it is a monoculture of
+    # one verb, one predicate, one stale-belief shape. **The real defect it exposes is that §F1
+    # clause 4 has exactly ONE reachable instance in the corpus.** So the fixture holds
+    # `19_PLAN.md` step 1's arm, which is also the only arm that produces a SECRET BETWEEN TWO PEOPLE
+    # IN THE SAME ROOM (`presence_only` gives absence, not secrecy: two co-located persons hold
+    # identical witness sets, and `test_r7_two_persons_hold_different…` asserts the difference
+    # `presence_only` cannot produce). Recorded on `H-33`.
     #
-    # ⭐⭐ AND THE ZERO IS NOW DIAGNOSED, WHICH DISSOLVES THE CHOICE RATHER THAN SETTLING IT.
-    # A fork can change a later decision by exactly ONE route: §F1 clause 4 (`engine/season/epistemic.py::belief_contradicts`,
-    # `belief_contradicts`) -- a claim in the actor's own ledger contradicts a candidate's
-    # precondition, so the candidate is DROPPED. `wd_extra.corpus_drops` counts that population
-    # over the same 89 worlds. Measured at `observation_deposit_mode: actor`:
-    #
-    #     fan_out_mode        clause-4 drops        fork divergences
-    #     total                    37                  62 of 1467
-    #     all_five (SHIPPED)        0                   0 of 1467
-    #     presence_only           114                 229 of 1467
-    #
-    # **The divergences track the drops exactly.** The zero is not a property of the arm and not a
-    # defect in the channels: at the shipped configuration clause 4 SIMPLY NEVER FIRES, so a fork
-    # has nothing to change. Beliefs still form (22 false-when-recorded at that cell) -- they never
-    # contradict anything.
-    #
-    # ⭐ AND THE REASON IS THE FINDING. **Every clause-4 drop in the entire corpus, in every cell,
-    # is the verb `move` refusing on a `contain.path:<person>` belief** -- *there is no road from
-    # here to there*, formed by witnessing a `travel.blocked` and overturned by a later
-    # `travel.moved`. Nothing else in the corpus ever fires clause 4. So the reactivity this metric
-    # measures is produced ENTIRELY BY PEOPLE BEING WRONG, and a wider channel set does not suppress
-    # propagation -- **it corrects the stale belief before it can bite.** Better-informed people
-    # refuse fewer acts.
-    #
-    # ⚠ WHICH MEANS THE ARM MUST NOT BE CHOSEN ON THIS METRIC AT ALL, in either direction. It is a
-    # monoculture: one verb, one predicate, one stale-belief shape. Picking an epistemic model to
-    # preserve `move`'s refusals would be tuning the whole design's knowledge layer to protect a
-    # single worked instance. **The real defect it exposes is that §F1 clause 4 has exactly ONE
-    # reachable instance in the corpus** -- that is the thing to fix, and it is not this fixture's.
-    # So the fixture holds `19_PLAN.md` step 1's arm, which is also the only arm that produces a
-    # SECRET BETWEEN TWO PEOPLE IN THE SAME ROOM (`presence_only` gives absence, not secrecy: two
-    # co-located persons hold identical witness sets, and `test_r7_two_persons_hold_different…`
-    # asserts the difference `presence_only` cannot produce). Recorded on `H-33`.
-    #
-    # ⚠ AND M-6 IS NOT REPORTED AS "PASSED", because its instrument cannot observe the third link.
-    # `_r3_propagates` is an `Event.causes[]` walk over `driver.resolved` and never reads a ledger:
-    # the corpus tallies (NPC R3 30/30, ARC 54/59) are identical across all three arms BOTH
-    # co-located AND with the three persons dispersed to distinct rungs. M-6 as `19_PLAN.md`
-    # specifies it therefore CANNOT FAIL, and a check that cannot fail is not a measurement
-    # (§0.1 pt 2). What is licensed by the numbers above is narrower and is what is claimed: the
-    # first two links survive the flip.
-    #
-    # ⚠ THE THIRD LINK IS REAL, AND A FIRST WRITING OF THIS COMMENT DENIED IT. It said the
-    # resolved-act set is identical under all three arms, full stop. That is true of
-    # `build_world(0)` -- three persons, one of whom acts -- and FALSE of `tiny_world`, five
-    # persons across four rungs, where the same flip takes 233 acts to 221 and makes suppressing
-    # `move` stop being larder-neutral (`test_w8_the_proof_clause_is_still_not_met…`, which caught
-    # this). So what `question_aggregation_rule: first` and the five-scene budget flatten
-    # (`ID-16`; the gain is `H-106`) is the SIZE of the third link, not its existence.
+    # ⚠ M-6 CANNOT OBSERVE THE THIRD LINK: `_r3_propagates` is an `Event.causes[]` walk over
+    # `driver.resolved` and never reads a ledger, so M-6 as `19_PLAN.md` specifies it CANNOT FAIL, and
+    # a check that cannot fail is not a measurement (§0.1 pt 2). The third link is real: in
+    # `tiny_world` (five persons across four rungs) the same flip changes the resolved-act set and
+    # makes suppressing `move` stop being larder-neutral
+    # (`test_w8_the_proof_clause_is_still_not_met…`). What `question_aggregation_rule: first` and the
+    # five-scene budget flatten (`ID-16`; the gain is `H-106`) is the SIZE of the third link, not its
+    # existence.
     #
     # The three points remain `H-33`'s own declared sweep and the channel list is untouched
     # (`19_PLAN.md` step 1: *"do not touch the channel list itself -- it is a sweep's arm set"*).
@@ -431,10 +344,11 @@ DEFAULT_FIXTURES = Fixtures(
     # S27.4: "an attempt at Ob > 2 x Pool is refused, and the season is spent."
     # `U1` / `H-126` / `H-127`. THE TWO OPERANDS OF A CONTESTED ROLL THAT NOTHING ELSE SUPPLIES.
     #
-    # ⚠ `pool_default` IS WHAT `capability` WOULD SUPPLY AND DOES NOT. `03 §A.2` rules the
+    # ⚠ `pool_default` IS WHAT `capability` WOULD SUPPLY. `03 §A.2` rules the
     # mechanism — *"Rank supplies dice and gates nothing"* — and `Person.capability` is the store
-    # it would come from, with exactly one writer in the tree, which ZEROES it. So every corpus
-    # person derives this number, the roll varies by SEED and FIXTURE rather than by PERSON, and
+    # it would come from; it is written by a cast overlay (`data/cast.py::capability_of`) and by
+    # `loop/effects_combat.py`'s `_eff_train` and `_grown`, and is empty for a person none of them
+    # reaches. For such a person the roll varies by SEED and FIXTURE rather than by PERSON, and
     # R-09 reads `partial` rather than `met` until capability is written. `08 §3`'s `assumption`
     # row is what licenses injecting it at all: *inject the default, declare the site, sweep three
     # points* — the grade that REFUSES is `absent`, and this is not one.
@@ -522,11 +436,10 @@ DEFAULT_FIXTURES = Fixtures(
     # S12.1 gates verbs on `condition` against per-kind band FLOORS. S22 assigns "band
     # coefficients" and "the obstacle floor" to params; the params document proposes NO
     # VALUES, so these are harness fixtures and A31c sweeps them. S42.2.1 names "three band
-    # edges" as one of the four constants a prior instrument in the chain invented -- rev 2
-    # fixed the other three and left these hardcoded in probe bodies, unswept.
+    # edges" as one of the four constants a prior instrument in the chain invented.
     # roster-exempt: Fixtures keys, as `wear_per_season` above. These are H-08 and are swept.
     band_floors=BAND_FLOORS,          # `W8` -- `rosters.yaml: tables.band_floors`, `H-08`
-    # `24d-ii`, landed with its caller at plan position `19c`: the lower bound on
+    # `24d-ii`: the lower bound on
     # `world_q.capacity`, per site kind, read off `rosters.yaml: capacity_floor` (`H-167`, swept).
     capacity_floor=CAPACITY_FLOORS,
     # v9 IN-28: what a works' plan costs its rung, read off `rosters.yaml: works_cost` (`H-166`, swept).
@@ -576,12 +489,9 @@ DEFAULT_FIXTURES = Fixtures(
     # never truncates* is untouched. Making this the person's bound instead would have trimmed
     # every extended chunk to one interaction and driven `H-77`'s sweep inert.
     #
-    # ⚠ `5` IS A REAL ARM AND NOT A CONTROL, AND THE FIRST WRITING OF THIS COMMENT SAID OTHERWISE.
-    # It called the 5 arm "the one-pass loop". Measured at `build_world(0)`, 2 seasons, it is not:
-    # `claim.deposited` 50 -> 53, `claim.decayed` 21 -> 24, `finding.made` 2 -> 3. A person whose
-    # triage leaves budget UNSPENT empties their queue with remainder left, so a later round asks
-    # them again and they spend it — where the one-pass loop simply lost it. THE CONTROL IS THE
-    # `scene_budget = 1` ARM (one round), which reproduces the pre-tick Event multiset exactly.
+    # ⚠ `5` IS A REAL ARM AND NOT A CONTROL. A person whose triage leaves budget UNSPENT empties
+    # their queue with remainder left, so a later round asks them again and they spend it — where
+    # the one-pass loop simply lost it. THE CONTROL IS THE `scene_budget = 1` ARM (one round).
     # [JUSTIFIED: engine/season/hole_register.yaml H-124 -- `site: Fixtures scenes_per_round`, graded `assumption`; Jordan ruled the unit, the per-season count and that the tick is scene-granular, and supplied no number for the round, so this is injected, declared and swept 1 / 2 / 5]
     scenes_per_round=1,                # `H-124`, swept 1 / 2 / 5; the control is `scene_budget = 1`
     claim_subject_rule="both",         # `H-79`, swept actor / per_change / both
@@ -606,27 +516,17 @@ DEFAULT_FIXTURES = Fixtures(
     # and `amount` are values nobody states, which is `H-80`'s shape exactly (a declared stand-in
     # for operands the person cannot supply). Declare, default, sweep.
     #
-    # ⚠ THESE ARE A MOVE, NOT AN INVENTION, AND THE OLD HOME IS DELETED. They were
-    # `transfer`'s `operand_defaults: {kind: grain, amount: 1}` in `verb_table.yaml` -- the
-    # relocated form of `_req_transfer`'s two literals -- and that cell filled them AT THE FOLD,
-    # under the person, for an act whose payload carried neither. Two owners of one value, and
-    # the fold's copy would have admitted a `transfer` whose effect then raised on the operands
-    # the precondition had invented for it. The values are carried across unchanged.
-    # ⚠ THE COMMENT HERE READ *"`H-94`, swept with the amount below"* AND NOTHING SWEPT IT. Struck
-    # by the `W-C` adversarial pass: every `.sweep(...)` in the instrument named
-    # `default_transfer_amount`, and `H-94`'s `sweep: [0, 1, 3]` are INTEGERS, which cannot be
-    # arms for a matter kind -- one `sweep:` field was carrying two declared fixtures and
-    # `register.rule_R2` cannot see that, so R2 was green on an unswept default. It has its own
-    # row now (`H-121`) and its own three arms, RUN: `grain` (stocked) · `salt` (a second stocked
-    # kind, which proves the fixture reaches the effect -- the store that moves is the one it
+    # ⚠ ONE OWNER OF THESE VALUES: the fold does not fill them under the person for an act whose
+    # payload carried neither (a `transfer` whose effect then raised on operands the precondition
+    # had invented for it).
+    # ⚠ `H-94`'s `sweep: [0, 1, 3]` are INTEGERS, which cannot be arms for a matter kind, so the
+    # kind has its own row (`H-121`) and its own three arms: `grain` (stocked) · `salt` (a second
+    # stocked kind, which proves the fixture reaches the effect -- the store that moves is the one it
     # names) · `coin` (registered in `rosters.yaml: matter_kinds`, produced by no site and held by
     # no rung: THE CONTROL, and the only arm that can flip the verdict, because
     # `WorldReader.read` returns 0 rather than UNKNOWN for a kind a rung does not hold, so
-    # `0 >= amount` is False and the transfer REFUSES).
-    # ⚠ AND THE POLARITY WAS INVERTED: the SWEPT fixture was the decision-inert one and this
-    # UNSWEPT one is decision-live. Measured over all 89 corpus worlds -- `transfer` executes
-    # 702 / refuses 21 at both `grain` and `salt`, and 0 / 723 at `coin`, where it leaves the
-    # executed set entirely (6 verbs -> 5). The 702-execution headline does rest on this value.
+    # `0 >= amount` is False and the transfer REFUSES). The kind is decision-live: at `coin`
+    # `transfer` leaves the executed set entirely.
     default_store_kind="grain",        # `H-121`, swept grain / salt / coin
     # ⚠ `0` IS THE CONTROL AND IT IS SWEPT FIRST. Nothing is spent, so scarcity never binds and
     # `stores >= 0` admits every giver: a run at this point shows how much of the transfer
@@ -666,24 +566,21 @@ DEFAULT_FIXTURES = Fixtures(
     # seasons · `67` crosses it in one. The three arms therefore bracket the question the number
     # actually decides — IS STARVATION A SEASON OR A CAMPAIGN — instead of bracketing a magnitude.
     # Injection site: this line, read by `loop/matter.py`'s subsistence pass.
-    # ⚠⚠ SHIPPED AT `10` SINCE REM-52 (v10, B10-05): H-125's REGISTERED LIVE ARM, TAKEN AS A DELEGATED
+    # ⚠⚠ SHIPPED AT `10` (REM-52, v10, B10-05): H-125's REGISTERED LIVE ARM, TAKEN AS A DELEGATED
     # PICK (M6 taken (a)), `[ASSUMPTION; medium; Jordan to correct; revert: 0]`. THIS LINE DOES NOT
     # ARGUE THE MAGNITUDE: CR-22 (B10-18) re-derives it by `H-125`'s own test above, IS STARVATION A
-    # SEASON OR A CAMPAIGN. `0` stays the CONTROL arm and the first sweep point, and it is the pre-3b
-    # tree exactly; the readers of that arm sweep this fixture back to `0` in-process
+    # SEASON OR A CAMPAIGN. `0` stays the CONTROL arm and the first sweep point; the readers of that
+    # arm sweep this fixture back to `0` in-process
     # (`test_lb3b_the_zero_arm_is_the_pre_item_tree_exactly`). `67` stays a swept arm only.
-    # ⚠ WHY IT WAS PARKED AT `0` UNTIL NOW, KEPT BECAUSE IT STILL BOUNDS WHAT THE LIVE ARM MEASURES.
-    # MEASURED then, at `10`: **all 86 buildable corpus worlds hold ZERO stores** while 258 persons
-    # live in them, so every person in every case world starved from season 1 and 19 tests moved —
-    # not because scarcity bit, but because A CASE FIXTURE MODELS A SCENE AND NOT AN ECONOMY. A famine
-    # in a world with no larder measures the fixture's silence, not the world's scarcity, which is
-    # `CLAUDE.md` §0.1 pt 2 from the other side: the reading cannot observe the thing it names. The
-    # corpus, the spine and `headless` hold no cohort, hence no eater (H-171); read what the live arm
-    # moves in a world that stocks a larder (the built realm), not in a case world.
-    # ⚠ v9 SE-01 (`24g`): THE LIVE ARM WAS BUILT AND EXERCISED BEFORE THE VALUE WAS CHOSEN.
-    # J-6 settles the SHAPE -- a fixture, the control kept for the corpus, a one-line revert.
-    # `tests/test_territorial_subsistence.py` reads `H-125`'s `sweep:` off the register and runs every
-    # non-control arm on the built realm.
+    # ⚠ A CASE FIXTURE MODELS A SCENE AND NOT AN ECONOMY: the buildable corpus worlds hold ZERO
+    # stores, so every person in a case world starves from season 1. A famine in a world with no
+    # larder measures the fixture's silence, not the world's scarcity (`CLAUDE.md` §0.1 pt 2: the
+    # reading cannot observe the thing it names). The corpus, the spine and `headless` hold no
+    # cohort, hence no eater (H-171); read what the live arm moves in a world that stocks a larder
+    # (the built realm), not in a case world.
+    # v9 SE-01 (`24g`): J-6 settles the SHAPE -- a fixture, the control kept for the corpus, a
+    # one-line revert. `tests/test_territorial_subsistence.py` reads `H-125`'s `sweep:` off the
+    # register and runs every non-control arm on the built realm.
     body_step=10,                      # `H-125`, swept 0 (control) / 10 (SHIPPED, REM-52) / 67
     # v9 IN-34 FORCE-BODIES (#457 D2, answered [medium; Jordan to correct]: ageing and illness are in
     # scope, a HAZARD READER only, rates swept). The hazard is `world_q.body_hazard`, a Query over
@@ -714,14 +611,6 @@ DEFAULT_FIXTURES = Fixtures(
     # `Wounded` deleted the person). The default introduces NO CONSTANT: it scales the body by the
     # health fraction the ENGINE computed. `total` is the CONTROL and is the code exactly as it
     # stood before `W-E`. Injection site: this line, read by `_eff_kill`.
-    # ⚠ THE ROW IS `H-123` AND SEVEN CITATIONS SAID `H-125`, WHICH IS A ROW THAT HAS NEVER
-    # EXISTED. Corrected 2026-09-11 across `fixtures.py` x2, `loop/effects.py` x3,
-    # `verb_table.yaml`, `rosters.yaml` and `test_season_shape.py`. A reader following the
-    # old id found nothing and would have concluded this fixture was unregistered — the
-    # exact failure `W9` check 3 exists to prevent, arriving through a typo rather than
-    # through a missing row. `tools/validate_ed_citations.py` covers `ED-` ids only, so no
-    # gate saw it; `corpus_run`'s R5 passed throughout because it matches on the fixture
-    # KEY in a `site:`, never on the id a comment cites.
     wound_harm_model="scene_fraction",  # `H-123`, swept scene_fraction / total / none
     # v11 CP-T03-07 (P32): WHETHER A FIGHT LEAVES A LASTING MARK on `Person.body_ceiling`
     # (`rosters.yaml: body_mark_models`). SHIPPED LIVE at `deepest_gate`, on REM-52's precedent for a
@@ -730,7 +619,7 @@ DEFAULT_FIXTURES = Fixtures(
     # Injection site: this line, read by `loop/effects_combat.py::_eff_kill`.
     # [JUSTIFIED: engine/season/hole_register.yaml H-258 -- the gate and the ceiling walk are the CP-T03-07 home's; only whether the live arm ships is undocumented, so it is injected and swept none / deepest_gate]
     body_mark_model="deepest_gate",    # `H-258`, swept none (control) / deepest_gate (SHIPPED)
-    # `H-184` (plan position `8`; split out of `H-98`). WHERE THE `Wounded` BAND STARTS: the threshold `wounds` must be
+    # `H-184` (split out of `H-98`). WHERE THE `Wounded` BAND STARTS: the threshold `wounds` must be
     # strictly above for a standing subject to read `Wounded` rather than `Untouched`. The edge is
     # `rosters.yaml: combat_band_edges` and `None` MEANS ITS VALUE (`0`, any wound), so the number is
     # authored once -- `field_walls_dr`'s precedent, and for its reason: a literal `0` here would be a
@@ -744,13 +633,12 @@ DEFAULT_FIXTURES = Fixtures(
     # M4 (`ED-IN-0279` clause (a)). `H-148`'s question asked of mass_battle's own result instead
     # of a scene's `WoundTracker` -- HOW MUCH `Person.body` A LOST FIELD COSTS. `total`/`none` are
     # the same two controls `wound_harm_model` ships above, for the same reason. Injection site:
-    # this line, read by `_eff_march` (`loop/effects.py`, M4 build step 7). The default is settled
+    # this line, read by `_eff_march` (`loop/effects.py`). The default is settled
     # by `wound_harm_model`'s own precedent (Jordan, 2026-09-04: *"the combat engine determines
-    # the result there"*) applied to this magnitude too -- not by `tools/balance_oracle.py`, which
-    # was a campaign-driver instrument and could not observe an `engine/season`-only mechanic (`rosters.yaml`'s
-    # `field_casualty_models` note, M4 build step 8).
-    # ⚠ NOT YET REGISTERED ON `hole_register.yaml`'s `site:` column -- deferred to M4 build step 10,
-    # in the same pass as `field_morale_weight`/`field_grudge_weight` below.
+    # the result there"*) applied to this magnitude too (`rosters.yaml`'s `field_casualty_models`
+    # note).
+    # ⚠ NOT YET REGISTERED ON `hole_register.yaml`'s `site:` column, with
+    # `field_morale_weight`/`field_grudge_weight` below.
     field_casualty_model="scaled_by_degree",  # `H-148`, swept scaled_by_degree / total / none
     # `H-148`, second half: HOW MUCH `Person.stance` A LOST FIELD MOVES against the winning
     # faction (the grudge) and against the loser's own creed (the morale hit) -- one weight for
@@ -769,16 +657,12 @@ DEFAULT_FIXTURES = Fixtures(
     # at which the bound lands exactly ON the ceiling -- and since `massbattle._morale_start` rounds
     # half-up, a side of loyalty >= 3.75 already starts at 7 at 0.4 (5 + 0.4 * 4.0 = 6.6 -> 7; at
     # `build_realm(0)` every creed-holding faction fields at least one such side); `1` = the 1:1 unit
-    # `_morale_start` already gives the morale row (and the row's own reading, 2026-10-01). Every
-    # creed-holding faction's WHOLE-MEMBERSHIP weight-mean rounds to the ceiling at 1 (measured
-    # 2026-10-12: Church 4.0, Loewenritter 4.0, Restoration 2.75, Hafenmark 2.25, Varfell 2.0, Crown
-    # 1.64 -> 6.64 -> 7; Guilds and Schoenland have no creed and read 0), but a fielded SIDE reads its
-    # own members' mean, and a low-loyalty side does not saturate: the Crown's two at `set_s_014` (0.5)
-    # start at 5 at 0.4 and 6 at 1, the Church's six at `set_s_036` (4.0) at 7 at both
+    # `_morale_start` already gives the morale row (and the row's own reading, 2026-10-01). A fielded
+    # SIDE reads its own members' mean, and a low-loyalty side does not saturate
     # (`test_mass_battle_d1_morale_baseline.py`'s pinned rows). Injection site: this line, read by
     # `seam/wrappers/mass_battle.py::field_input` into the record's `loyalty_gain`.
     field_morale_loyalty_gain=0,  # `H-148`, swept 0 (control, SHIPPED) / 0.4 / 1
-    # `H-150` (plan position `20-v`). THE DEFENDER DR A WALLED FIELD ADDS -- A.9's one Walls number,
+    # `H-150`. THE DEFENDER DR A WALLED FIELD ADDS -- A.9's one Walls number,
     # applied 1:1 to the engine's own `Unit.dr` (an ASSUMPTION about the unit, which is why it is
     # swept). `None` IS THE DEFAULT AND IT MEANS A.9's NUMBER, NOT "NO WALLS": `engine/` cannot name
     # `systems/`, so the 3 stays authored once, at `terrain.WALLS_DEFENDER_DR`, and the engine reads it
@@ -816,10 +700,8 @@ DEFAULT_FIXTURES = Fixtures(
     # CONTROL, SHIPPED -- every field is Σ weight, as before the feed. The flip ON is its own declared
     # hash-moving commit. Injection site: this line, read by `seam/wrappers/mass_battle.py::provision_input`.
     field_provisioning=False,  # `H-241`, swept False (control, SHIPPED) / True / True on empty treasuries
-    # IN-08 H3 (`ED-IN-0261`'s scar model). `scar_step` -- a float magnitude per unit of alignment,
-    # written on the wounded person by `_eff_kill` -- RETIRED with that mechanism: the scar is a
-    # COUNT per pursuit, one per observer per violated pursuit (`loop/resolve.py::_scar_witnesses`),
-    # so it has no magnitude to sweep. What IS open is WHETHER THE ACTOR COUNTS AS AN OBSERVER OF
+    # IN-08 H3 (`ED-IN-0261`'s scar model). The scar is a COUNT per pursuit, one per observer per
+    # violated pursuit (`loop/resolve.py::_scar_witnesses`), so it has no magnitude to sweep. What IS open is WHETHER THE ACTOR COUNTS AS AN OBSERVER OF
     # HIS OWN ACT, and that is this arm. Injection site: this line, read by `_scar_witnesses`.
     # `False` -- the actor is scarred exactly when `epistemic.observers_for` admits him, like anyone
     # else (no actor rule at all; under `all_five` the witness-key channel admits the actor, under
@@ -872,8 +754,7 @@ DEFAULT_FIXTURES = Fixtures(
     # `H-153` (D-6, `19_PLAN.md:952-955`) -- THE ONE CORPUS FAULT THAT DOES NOT RECONCILE WITH
     # FAIL-FORWARD: *"whoever touches it is killed"* has no corpus-supplied next move. Swept
     # fixture, in the `H-128` shape: nothing reads it (the speech-kind resolution ladder this
-    # would gate is PHASE 2/3 work, not this position's five parts), so the control arm changes
-    # no behaviour today. `"removal"` is shipped -- the design's own two options are *"treat it as
+    # would gate is not built), so the control arm changes no behaviour. `"removal"` is shipped -- the design's own two options are *"treat it as
     # the one place the ladder's failure is not the outcome -- the outcome is removal from the
     # world, which is a different contest entirely"* or *"soften the corpus."* D-6 itself: *"Handed
     # forward unsoftened."* Softening a corpus figure this position did not author is the invented
@@ -891,7 +772,7 @@ DEFAULT_FIXTURES = Fixtures(
     # branch in this position's whole set. `False` is the control (no extraction effect), matching
     # `H-128`'s neutral-start convention; nothing reads it today for the same reason as above.
     displayed_anger_extracts_concessions=False,   # `H-154`, swept False (control, SHIPPED) / True
-    # `H-155` (plan position `15b`, r2 `02_THE_WRIT_AND_THE_WORD.md` §A.10.2, `ED-IN-0222`). HOW
+    # `H-155` (r2 `02_THE_WRIT_AND_THE_WORD.md` §A.10.2, `ED-IN-0222`). HOW
     # FAR A RUMOUR MAY DRIFT A BARE NUMBER at `Partial`. r2's own words give the fixture its
     # licence on `default_transfer_amount`'s precedent (`:432-436` above): "direction ruled,
     # magnitude open, is exactly a fixture." `0` is the CONTROL -- `_told_value`'s drift branch
@@ -1010,15 +891,12 @@ DEFAULT_FIXTURES = Fixtures(
     # grudge alone decided a killing. `None` is the REVERT: `1 + stance_gain`, exactly. Chosen by CR-87's reading rule
     # (the largest grid value at which, on seeds 0-4 at two seasons, no `fight` forms at stance above -3 and a
     # hand-built grudge in a war context still forms one). Must be >= 0 or None.
-    # READ (CR-87's rule, grid 0 / 0.5 / 1.0 / 1.5 / 2.0, `harness/interactions.py`'s run, seeds 0-4, two seasons):
-    # `fight` formed 0 times at every value read (0.5, 1.0, and the revert's 2.0), so the rule's first arm holds across
-    # the grid and its largest value is taken; the second arm (a -4 grudge in a war context ranks `fight` first) holds
-    # there (`tests/test_cr87_violence_contexts.py`). Once the contexts gate formation the bound is not binding on
-    # `fight`; it moves `capture` only (attempts 10/12/20/8/13 at 2.0 against 6/8/7/6/9 at 0.5, seeds 0-4).
+    # Once the contexts gate formation the bound is not binding on `fight`; it moves `capture` only. The second arm
+    # of the rule (a -4 grudge in a war context ranks `fight` first) holds (`tests/test_cr87_violence_contexts.py`).
     # [JUSTIFIED: engine/season/hole_register.yaml H-255 -- the grudge's weight on a violent row; §F2 gives the term and no gain, and no document says how far a grudge may carry a man to violence, so it is injected, chosen by a declared reading rule and swept None (the revert) / the grid]
     hostile_stance_gain=2.0,           # `H-255`, swept None (revert: 1 + stance_gain) / 0 / 0.5 / 1.0 / 1.5 / 2.0 (SHIPPED)
     # `H-256` (v11 CR-87, ED-IN-0335: a major betrayal needs a series of events). WHERE A MEMBER'S BUILD-TIME LOYALTY
-    # IS WRITTEN (`harness/populated.py`, its two `cast.stance_from_loyalty(cast.loyalty(...))` sites): `True` writes
+    # IS WRITTEN (`boot/realm.py`, its two `cast.stance_from_loyalty(cast.loyalty(...))` sites): `True` writes
     # the row toward the CREED Proposition (the faction's, or the goal's) and never toward its head person, and no
     # lower than the member band (valence x weight >= -1); `False` is the REVERT, the rows as they stood (a disloyal
     # member's -4 toward the King). A switch, not a number.
@@ -1093,7 +971,7 @@ DEFAULT_FIXTURES = Fixtures(
     # to 0.0 (the control)]. Must lie in [0, 1] (`witness` raises outside it).
     # [JUSTIFIED: engine/season/hole_register.yaml H-275 -- the credit gain; strife-00 §5 gives the shape 1 + g*c and ED-IN-0316 the value 0.5, no document gives a measured magnitude, so it is injected and swept 0 / 0.5 / 1.0; shipped live at 0.5 at CR-79 commit (2), on its strife guard (ED-IN-0316)]
     regime_gain=0.5,                   # `H-275`, swept 0 (control) / 0.5 (SHIPPED at CR-79 (2)) / 1.0
-    # `H-159` (plan position `17b`, `04 §B.8`'s `term?`; `T-n`, `architecture/meta/01_AXIOMS.md`:
+    # `H-159` (`04 §B.8`'s `term?`; `T-n`, `architecture/meta/01_AXIOMS.md`:
     # *"the opening act declares the terms"*). HOW MANY SEASONS AN `oblige` RUNS BEFORE IT MATURES
     # UNPAID -- the term `_eff_oblige` declares on the edge it opens (`matures_at = tick + this`),
     # and the length each paying act winds it on by (`_eff_transfer`'s renewal: `matures_at + this`,
@@ -1107,11 +985,11 @@ DEFAULT_FIXTURES = Fixtures(
     # it is harsh in a way worth knowing: RESOLVE runs AFTER MATTER within a tick, so the only window
     # to pay is the rest of the season in which the oblige was taken. `4` is SHIPPED: a holder has
     # three further seasons to pay in. NOT MEASURED, AND IT CANNOT BE YET -- no computed act forms an
-    # `oblige` (its row is untyped; plan position `17a`'s own docstring), so no corpus run mints a
+    # `oblige` (its row is untyped), so no corpus run mints a
     # term and the shipped value moves no artifact; the falsifiers set it explicitly.
     # [JUSTIFIED: engine/season/hole_register.yaml H-159 -- the term an oblige is declared for; T-n rules THAT the opening act declares it and no document gives the length, so it is injected and swept None / 1 / 4]
     oblige_term=4,                     # `H-159`, swept None (control) / 1 / 4 (SHIPPED)
-    # `H-158` (plan position `17b`, `04 §B.7` `Seat := ( …, upkeep, … )`, `F.18`). WHAT A SEAT PAYS
+    # `H-158` (`04 §B.7` `Seat := ( …, upkeep, … )`, `F.18`). WHAT A SEAT PAYS
     # EACH PERSON OBLIGED TO IT, PER TERM, WHEN THE SEAT DECLARES NO `upkeep` OF ITS OWN -- which is
     # every seat any builder makes today. Read at ONE place, `queries/world_q.py::upkeep_of`, which
     # `_eff_transfer` asks when a seated holder pays out of the seat's own rung. `default_transfer_
@@ -1124,7 +1002,7 @@ DEFAULT_FIXTURES = Fixtures(
     # establishment three times as dear.
     # [JUSTIFIED: engine/season/hole_register.yaml H-158 -- the per-obligee upkeep; ARCH §B.7 declares the field and F.18 its mechanism, and no document gives the amount, so it is injected and swept 0 / 1 / 3]
     default_upkeep=1,                  # `H-158`, swept 0 (control) / 1 (SHIPPED) / 3
-    # `H-161` (plan position `19`, `determine`; `21_RECONCILIATION.md:575`'s observable, *"below
+    # `H-161` (`determine`; `21_RECONCILIATION.md:575`'s observable, *"below
     # quorum, `determine.refused`"*). HOW MANY PERSONS MUST SIT ON A BENCH FOR IT TO DETERMINE A
     # MATTER -- the RIGHT side of `determine`'s quorum conjunct (`bench.size >= quorum`, read by
     # `WorldReader`'s `quorum` stem, the only injection site). QUORUM IN ITS ORDINARY SENSE, the

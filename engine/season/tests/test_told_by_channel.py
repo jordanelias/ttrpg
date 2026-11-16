@@ -28,6 +28,8 @@ from ..data.rosters import CHANNEL_CLAIM_SOURCE, CLAIM_SOURCES, WITNESS_CHANNELS
 from .. import epistemic as EP
 from ..epistemic import CHANNEL_PREDICATES, SEEN_PREDICATE, observers_for
 from ..harness import populated
+from ..boot import realm as boot_realm
+from ..boot.realm import build_realm
 from ..harness import probes as P
 from ..loop import witness as WITNESS_MODULE
 from ..loop.driver import SeasonDriver, mint_token
@@ -236,7 +238,7 @@ def test_15d_falsifier_the_realm_holds_hearsay_no_telling_minted(monkeypatch):
     # realm's act mix, which every upstream change re-rolls, so the test takes the lowest seed of 0-39 that does: the
     # precondition is that the told channel is live where the control compares, not that one seed is.
     def told_by_count(seed) -> tuple:
-        w = populated.build_realm(seed)
+        w = build_realm(seed)
         out = populated.run(1, seed, w=w)
         told_by = [c for p in w.persons.values() for c in p.ledger if c.source == "told_by"]
         channel = sum(1 for c in told_by if c.chain)
@@ -442,8 +444,8 @@ def test_t3_unplanted_members_with_opposite_loyalty_reach_different_verdicts(mon
     # leader, so no unplanted row toward a leader exists on the shipped build; this test's subject is the told channel's
     # regard, so it reads the build with that one fixture at its revert, where the loyalty rows still name the leader.
     from ..data.fixtures import DEFAULT_FIXTURES as _DF
-    monkeypatch.setattr(populated, "DEFAULT_FIXTURES", _DF.sweep("loyalty_toward_creed", False))
-    w = populated.build_realm(0)
+    monkeypatch.setattr(boot_realm, "DEFAULT_FIXTURES", _DF.sweep("loyalty_toward_creed", False))
+    w = build_realm(0)
     toward = defaultdict(dict)
     for pid, p in w.persons.items():
         for r in p.stance:
@@ -1709,7 +1711,7 @@ def test_t7_intent_disclosure_zero_is_the_control_on_the_realm(monkeypatch):
     hashes, carried = {}, {}
     for arm, fn in (("shipped", spy), ("excised", lambda p, scenes, fx, draw=None: scenes)):
         monkeypatch.setattr(CH, "declare_intents", fn)
-        w = populated.build_realm(0)
+        w = build_realm(0)
         populated.run(1, 0, w=w)
         hashes[arm] = w.content_hash()
         carried[arm] = [(a.id, a.payload.get("said")) for a in w.acts
@@ -1915,7 +1917,7 @@ def test_r07_realm_regard_differs_between_hearers_by_claim_not_stance_alone():
     out = {}
     for arm, fx in (("control", _g1_fx(0.0, 0.0)),
                     ("live", DEFAULT_FIXTURES)):
-        w = populated.build_realm(0)
+        w = build_realm(0)
         w.fixtures = fx
         populated.run(2, 0, w=w)
         out[arm] = _r07_pairs(w, fx)

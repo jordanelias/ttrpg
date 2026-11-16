@@ -12,7 +12,7 @@ nothing else, never reads or writes `World`, holds no token and keeps no state. 
 two-edge `Forbidden`), the public wrappers with their `TRACE.query` lines and `_eff_migrate`'s refusal
 (`population + weight > capacity`, an effect body) stay host.
 
-THE RULE (moved here from `world_q.population` and `world_q.capacity`; unchanged clause for clause):
+THE RULE:
   * POPULATION: the summed `Person.weight` of the residents whose residence lies in the subtree --
     RESIDENTS, not persons present (RR-2); `weight`, not a head count (a cohort fills `weight` places).
   * CAPACITY: `max(floor, the dwelling Sites whose own rung lies in the subtree)` (`ED-SE-0051`): a rung

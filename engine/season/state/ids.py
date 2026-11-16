@@ -1,12 +1,8 @@
-"""S33 -- DETERMINISM. The mint (`H`) and its sentinel (`ROOT`), extracted from `shape.py`
-(step 1 of the shape.py decomposition, ED-IN-0203) with no behaviour change. Importers name
-this module directly (`from ..state.ids import H, ROOT`); the `shape.py` facade that used to
-re-export them was deleted at step 10. Living here, on their own, makes "the mint lives once" CHECKABLE in one grep
-(`grep -rln "def H(" season/` prints exactly this file today). ⚠ That is a CONVENTION,
-not an enforcement -- no test asserts it. Said plainly per S47: "a false claim of
-enforcement is worse than none, because it stops the next reader from checking."
-The property is also narrower than "hashing lives once": it covers the id MINT, not
-hashing generally -- `World.content_hash` hashes too, and correctly."""
+"""S33 -- DETERMINISM. The mint (`H`) and its sentinel (`ROOT`). Importers name this module directly
+(`from ..state.ids import H, ROOT`). Living here, on their own, makes "the mint lives once" CHECKABLE in
+one grep (`grep -rln "def H(" season/` prints exactly this file). ⚠ That is a CONVENTION,
+not an enforcement -- no test asserts it. The property is also narrower than "hashing lives once": it
+covers the id MINT, not hashing generally -- `World.content_hash` hashes too, and correctly."""
 
 from __future__ import annotations
 
@@ -59,12 +55,7 @@ def draw_factory(world_seed: int, tick_of):
 
     ⚠ DETERMINISM IS PRESERVED, AND THAT IS NOT A SIDE NOTE — `m1_acceptance.py` row 2 is
     *"same seed -> same `World.content_hash()`"* and would fail on a wall-clock or process-entropy
-    seed. (It said `KeyLog.content_hash()` until 2026-09-16. ED-IN-0226 re-pointed that row to
-    `World.content_hash()` on 2026-09-13 — the stronger comparison, since the World hash folds every
-    state collection in sorted-key order ahead of the log. The stale name mattered more than a wrong
-    citation usually does: it implied this tree emits Keys, and MEASURED 2026-09-16 it emits none —
-    a seeded season of `engine/season/` constructs ZERO `Key` objects, positive control 37 events.
-    The Key substrate belongs to the generation this loop superseded.) Two runs of one world draw identical streams because the seed is `(world_seed, tick,
+    seed. Two runs of one world draw identical streams because the seed is `(world_seed, tick,
     pid, purpose)` and nothing else. What sampling removes is the ARGMAX, not the replay.
 
     ⚠ `purpose` IS PER DRAW, as `H`'s own contract states. Two different decisions by one person in
@@ -74,11 +65,7 @@ def draw_factory(world_seed: int, tick_of):
     its chooser ONCE and runs it for N seasons — `harness/corpus_run.py`'s `run_case`, where `ch` is
     built before the season loop — would otherwise freeze the clock, and `mint` survives the same
     shape only because it is a lambda reading `w.tick` at CALL time.
-    ⚠ ONE WORKED EXAMPLE IN THE FIRST WRITING OF THIS PARAGRAPH WAS WRONG AND IS CORRECTED RATHER
-    THAN DROPPED: it named `headless.py:129` alongside `corpus_run.py:355`. **`headless` rebuilds
-    the chooser INSIDE its season loop**, so a factory closed over an integer tick would be
-    re-closed each season there and would NOT freeze. `corpus_run` is the real instance; `headless`
-    was not one, and citing it overstated the hazard by exactly one call site. A factory
+    A factory
     closed over an integer tick would freeze the season: a person would draw the identical stream
     every season and take the identical choice forever, which reads as a plausible world and is an
     artifact of the seeding. `lambda: w.tick` puts the late binding at the call site where a reader

@@ -23,7 +23,7 @@ from __future__ import annotations
 from ..data.matrix import Step, WriteClass
 from ..data.rosters import FELLED, UNTOUCHED, WOUNDED
 from ..harness import probes as P
-from ..harness.populated import build_realm
+from ..boot.realm import build_realm
 from ..loop.driver import SeasonDriver, mint_token
 from ..queries import person_q, world_q
 from ..seam import Resolution, combat_degree, degree_of, party_degree

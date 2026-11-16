@@ -20,7 +20,7 @@ from engine.season.data import verbs as VERBS
 from engine.season.decision import assemble
 from engine.season.decision.options import opening_set
 from engine.season.gaps import Unspecified
-from engine.season.harness import populated as PO
+from engine.season.boot.realm import build_realm
 from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.seam.wrappers import pool, sigma
 from engine.season.state.carriers import Act, Person, Question
@@ -119,7 +119,7 @@ def _planted_cache():
 
 def _world(monkeypatch, planted=True):
     monkeypatch.setattr(cast, "_CACHE", _planted_cache() if planted else cast._CACHE)
-    w = PO.build_realm(0)
+    w = build_realm(0)
     d = SeasonDriver(w)
     d.matter(mint_token(w, WriteClass.MATTER), [])
     return w, d
@@ -187,8 +187,8 @@ def test_the_planted_failure_the_expansion_skipped_reddens_the_train_assertion(m
 def test_the_shipped_expansion_is_the_mover_by_the_one_row_that_maps_to_a_key(monkeypatch):
     """At seed 0 the one-season hash with the expansion ON differs from the same run with it skipped, both read in
     process (the shipped hash is `_realm_goldens.py`'s)."""
-    shipped = _run(PO.build_realm(0), 1)
+    shipped = _run(build_realm(0), 1)
     with monkeypatch.context() as m:
         m.setattr(cast, "capability_of", lambda r, pool_default: {})
-        skipped = _run(PO.build_realm(0), 1)
+        skipped = _run(build_realm(0), 1)
     assert shipped != skipped

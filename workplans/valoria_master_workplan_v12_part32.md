@@ -17,7 +17,7 @@ INVOCATION: /methodology-execute Batch B37-happenings
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_IN.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
-GATE: Batch B02-tests @1c354dbc0aee19371754b7a648eafe48af9c3cb0
+GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B05-one-roll
 GATE: Batch B10-character
 GATE: Batch B11-fi-readers
@@ -227,7 +227,7 @@ Not in this batch, and where each is: `HAP_A` edit 3's `mortal_terms` body, `mor
 - FALSIFIER and CONTROL: the year read from a literal 4 (the test plants a five-season `seasons_of_year` in a scratch roster and the age follows it); two writers of `born` (`git grep -n "born=" engine/season -- '*.py'` lists the builder's conversion and `loop/census.py` only). Control: with both rates 0, the act and Event tallies of seeds 0 to 2 at one season equal B37.07's tree (`born` is read only by `age_of` and `body_hazard`: `world_q.py:1244`); the content hash moves.
 - GATE: `python -m pytest engine/season/tests/test_in34_bodies_clock.py -q -k age_years` → pass; `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`); seed-0 realm hash (`HASH READING`) after one season → moved (every person's `born` is now −140), tallies equal.
 - HASH MOVERS: every world hash: `born` is in the content hash (`HAP_A`: "[GROUNDED, 25 G-07]"); every person's `born` moves from 0 to −140. Declared; B37's one re-pin (B37.99).
-- DEPENDS ON: EXISTS-IN-TREE `state/carriers.py::Person.born`, `data/fixtures.py` `age_at_build`, `world_q.age_of`; V12 Batch B03c-boot (`boot/realm.py`); V12 Batch B12c (`seasons_of_year`, `SEASONS_OF_YEAR`); V12 B37.04.
+- DEPENDS ON: EXISTS-IN-TREE `state/carriers.py::Person.born`, `data/fixtures.py` `age_at_build`, `world_q.age_of`; V12 Batch B03c-boot @544cf5719c620331b70aeda93c1672977b44e9ef (`boot/realm.py`); V12 Batch B12c (`seasons_of_year`, `SEASONS_OF_YEAR`); V12 B37.04.
 - GLOSSARY: *age* (step 4).
 - NAMES: `harness/populated.py::build_realm` and its roster reader → `boot/realm.py` (B03c).
 - COST and TIER: small build; `sonnet`, `high`.

@@ -27,6 +27,7 @@ from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.rosters import RUNG_KINDS
 from ..gaps import Forbidden, InstrumentDefect
 from ..harness import populated as POP
+from ..boot.realm import build_realm
 from ..harness import probes as PR
 from ..harness import register as REG
 from ..harness import scarce as S
@@ -209,7 +210,7 @@ def test_h_it_reads_and_writes_nothing_and_the_census_reports_it():
 
 
 def test_i_on_the_built_realm_every_populated_settlement_starves_before_the_first_yield():
-    realm = POP.build_realm(0)
+    realm = build_realm(0)
     draw = world_q.subsistence_draw(realm)
     hist = POP.census(realm)["hunger_by_settlement"]
     settlements = [r for r in sorted(realm.rungs) if realm.rungs[r].kind == world_q.HUNGER_KIND]

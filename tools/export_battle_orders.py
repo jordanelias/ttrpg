@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Cook the mass-battle module's standing-order vocabulary so the season reads it from an artifact, not a second list.
 
-WHY THIS EXISTS (CP-T04-02, `marshal`). A standing order of battle (`order_of_battle`, `engine/season/rosters.yaml:
+WHY THIS EXISTS (CP-T04-02, `marshal`). A standing order (`standing_order`, `engine/season/rosters.yaml:
 record_kinds`) names a `role` and a `retreat_at`. The role names are the MODULE's: `modules/mass_battle/config.py::
 ROLE_SPEC` is their one owner and `massbattle.ORDER_ROLES` / `ORDER_RETREAT_AT` are the order's two closed sets. The
 season (`engine/season/`) names no module by import, so it reads them from `engine/engine_params/battle_orders.json`

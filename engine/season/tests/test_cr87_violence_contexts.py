@@ -35,7 +35,8 @@ from ..decision import options as O
 from ..decision.options import opening_set
 from ..epistemic import Seen
 from ..harness import interactions as I
-from ..harness import populated
+from ..boot import realm as boot_realm
+from ..boot.realm import build_realm
 from ..harness import probes as P
 from ..loop.witness import content_value
 from ..queries import person_q, world_q
@@ -151,7 +152,7 @@ def test_the_roster_is_refused_at_import_for_an_unknown_verb_and_the_reader_set_
 
 
 def test_enemies_heard_stamps_the_other_faction_only_once_he_knows_of_a_live_war():
-    w = populated.build_realm(0)
+    w = build_realm(0)
     me = "p_npc_033"                                    # the Spymaster (a Valorsmark officer)
     mine = world_q.faction_holding(w, me)
     other = next(f for f in sorted({world_q.faction_holding(w, x) for x in w.persons} - {None, mine}))
@@ -247,7 +248,7 @@ def test_loyalty_in_band_cuts_a_negative_row_to_the_member_band_and_passes_a_pos
 
 
 def test_at_build_no_loyalty_row_names_a_faction_head_below_the_band_and_the_revert_does(monkeypatch):
-    w = populated.build_realm(0)
+    w = build_realm(0)
     heads = I.faction_heads(w)
     spy, king = "p_npc_033", "p_npc_020"
     assert king in heads.values()
@@ -256,8 +257,8 @@ def test_at_build_no_loyalty_row_names_a_faction_head_below_the_band_and_the_rev
     assert creed_rows and all(float(r[1]) * float(r[2]) >= MEMBER_BAND for r in creed_rows)
     # THE REVERT, OBSERVED (batch close B3): the same Spymaster, with the fixture at its revert, holds the grudge toward the
     # King the audit found -- so the `>= 0` above is the fix and not an absent row.
-    monkeypatch.setattr(populated, "DEFAULT_FIXTURES", DEFAULT_FIXTURES.sweep("loyalty_toward_creed", False))
-    reverted = populated.build_realm(0)
+    monkeypatch.setattr(boot_realm, "DEFAULT_FIXTURES", DEFAULT_FIXTURES.sweep("loyalty_toward_creed", False))
+    reverted = build_realm(0)
     assert person_q.stance_toward(reverted.persons[spy], king) < 0, reverted.persons[spy].stance
 
 
@@ -362,7 +363,7 @@ def revert_cr87(monkeypatch) -> None:
     world it was measured on."""
     monkeypatch.setattr(O, "VIOLENCE_CONTEXTS", {})                                     # (1) the block empty
     _old_cells(monkeypatch)                                                            # (2) today's cells
-    monkeypatch.setattr(populated, "DEFAULT_FIXTURES",                                 # (3), (5) the reverts
+    monkeypatch.setattr(boot_realm, "DEFAULT_FIXTURES",                                 # (3), (5) the reverts
                         DEFAULT_FIXTURES.sweep("hostile_stance_gain", None).sweep("loyalty_toward_creed", False))
     monkeypatch.delitem(V.DUEL_TERMS_BY_VERB, "accept")                                # (4) death duels
     row = V.VERB_TABLE["challenge"]
@@ -376,6 +377,6 @@ def revert_cr87(monkeypatch) -> None:
 def test_the_build_moves_under_the_item_so_its_revert_is_not_vacuous(monkeypatch):
     """CR-87 moves the build (the build-time loyalty rows name the creed, never its head): the same build at the revert
     reads another hash. The shipped build hash is `_realm_goldens.py`'s."""
-    shipped = populated.build_realm(0).content_hash()
+    shipped = build_realm(0).content_hash()
     revert_cr87(monkeypatch)
-    assert populated.build_realm(0).content_hash() != shipped
+    assert build_realm(0).content_hash() != shipped

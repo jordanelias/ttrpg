@@ -106,13 +106,15 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import ast
 import collections
 import collections.abc
 import inspect
 import math
 
-from ..data.rosters import FIELD_CASUALTY_MODELS
+from ..data.rosters import FIELD_CASUALTY_MODELS, LOST, WON
 from . import populated
+from ..boot.realm import build_realm
 
 
 # [JUSTIFIED: the conventional two-sided 5% critical z-value, unchanged from `tools/balance_oracle.py`'s identical constant — a standard statistical threshold, not a fitted game magnitude]
@@ -150,7 +152,7 @@ del _name, _model
 
 #: The `populated.build_realm` keyword arguments an arm may set (CR-14 (iv)), read off its signature so
 #: the two cannot drift. `seed` is the arm's own seed sequence (`base_seed + i`), never a build kwarg.
-BUILD_KWARGS = tuple(p for p in inspect.signature(populated.build_realm).parameters if p != 'seed')
+BUILD_KWARGS = tuple(p for p in inspect.signature(build_realm).parameters if p != 'seed')
 
 
 def _resolve_arm(arm) -> tuple:
@@ -181,14 +183,38 @@ def _resolve_arm(arm) -> tuple:
     return fixtures, build
 
 
+def _typed_fixture(name: str, value, current):
+    """`value` as a value of the fixture's own type, `current` being what the fixture holds now.
+
+    `--fixture NAME=A,B` hands over raw strings and `Fixtures.sweep` checks no type, so `ceiling_per_pool=
+    True,False` would sweep two truthy strings (`bool("False")` is True, so never `type(current)(value)`).
+    A string is read with `ast.literal_eval`; a fixture that holds a `str` keeps the string as given. A
+    value whose type differs from the fixture's raises `ValueError` naming it (an int may stand for a
+    float, and a bool is not an int here)."""
+    if isinstance(current, str):
+        return value
+    parsed = value
+    if isinstance(value, str):
+        try:
+            parsed = ast.literal_eval(value)
+        except (ValueError, SyntaxError):
+            raise ValueError(f'fixture {name!r} holds a {type(current).__name__}; {value!r} is not '
+                             f'a literal of it') from None
+    if current is None or type(parsed) is type(current) or (type(current) is float and type(parsed) is int):
+        return parsed        # a fixture shipped as `None` (an absent setting) takes any literal: it has no type to hold
+    raise ValueError(f'fixture {name!r} holds a {type(current).__name__}; {value!r} reads as a '
+                     f'{type(parsed).__name__}')
+
+
 def run_arm(model, n: int, base_seed: int, seasons: int) -> dict:
     """`n` seeded realms, the arm `model` applied to each, `seasons` seasons each.
 
     `model` is the shipped `field_casualty_model` value (a `str`) or a mapping
-    `{'fixtures': {name: value}, 'build': {kwarg: value}}` (`_resolve_arm`). There is no CLI for the
-    mapping form: `main` runs `ARMS` only, so a build-flag arm is reachable from Python.
+    `{'fixtures': {name: value}, 'build': {kwarg: value}}` (`_resolve_arm`). The CLI exposes the
+    fixture half as `--fixture NAME=A,B` (`_fixture_arms`); a build-flag arm is reachable from Python.
 
-    Returns `{'tally': Counter(act_subjects), 'acts': total resolved acts, 'seeds': n}`. Building
+    Returns `{'tally': Counter(act_subjects), 'acts': total resolved acts, 'seeds': n, 'fought':
+    count of field Events at a fought band (`fought_fields`)}`. Building
     and running are ONE step per seed (`populated.run`'s own `w=` parameter lets a caller build
     first and inspect after; not needed here, since `act_subjects` is already the census field this
     reads).
@@ -196,16 +222,35 @@ def run_arm(model, n: int, base_seed: int, seasons: int) -> dict:
     fixtures, build = _resolve_arm(model)
     tally: collections.Counter = collections.Counter()
     total_acts = 0
+    fought = 0
     for i in range(n):
-        w = populated.build_realm(base_seed + i, **build)
+        w = build_realm(base_seed + i, **build)
         for name, value in fixtures.items():
-            w.fixtures.get(name)             # an unregistered name raises `Ungraded` here; `sweep` would write it silently
-            w.fixtures = w.fixtures.sweep(name, value)
+            current = w.fixtures.get(name)   # an unregistered name raises `Ungraded` here; `sweep` would write it silently
+            w.fixtures = w.fixtures.sweep(name, _typed_fixture(name, value, current))
         out = populated.run(seasons, base_seed + i, None, w=w)
         total_acts += out['acts']
+        fought += fought_fields(w)
         for k, v in out['act_subjects'].items():
             tally[k] += v
-    return {'tally': tally, 'acts': total_acts, 'seeds': n}
+    return {'tally': tally, 'acts': total_acts, 'seeds': n, 'fought': fought}
+
+
+def fought_fields(w) -> int:
+    """The field Events at a fought band: `field.*` Events whose degree is `Won` or `Lost`
+    (`FIELD_BANDS`' two graded members; `Declared` is the fold's deferral token, `Unopposed` no battle,
+    `Invested` a siege's wear). Read off the finished world's log."""
+    return sum(1 for e in w.log if e.kind.startswith('field.') and e.degree in (WON, LOST))
+
+
+def _fixture_arms(spec: str) -> dict:
+    """`NAME=A,B` -> the two arms `{A: {'fixtures': {NAME: A}}, B: {'fixtures': {NAME: B}}}`, the mapping
+    form of an arm (`_resolve_arm`): a pair that differs on the one fixture `NAME` and on nothing else."""
+    name, sep, values = spec.partition('=')
+    pair = values.split(',')
+    if not (sep and name and len(pair) == 2 and all(pair) and pair[0] != pair[1]):
+        raise ValueError(f'--fixture is NAME=A,B with A and B two distinct values, got {spec!r}')
+    return {v: {'fixtures': {name: v}} for v in pair}
 
 
 def two_proportion_z(a_count: int, a_n: int, b_count: int, b_n: int) -> float:
@@ -240,22 +285,35 @@ def main(argv=None) -> int:
     ap.add_argument('--seasons', type=int, default=2, help='seasons per realm (default 2)')
     # [JUSTIFIED: the base seed `tools/balance_oracle.py` defaulted to, carried unchanged so a default-invocation result stays comparable to that tool's own past runs — arbitrary but fixed]
     ap.add_argument('--seed', type=int, default=20260819, help='base seed (default 20260819)')
+    ap.add_argument('--fixture', metavar='NAME=A,B', default=None,
+                    help='run the pair that differs only on fixture NAME (values A and B) in place of '
+                         'the shipped `field_casualty_model` arms')
     args = ap.parse_args(argv)
 
-    names = list(ARMS)
-    results = {name: run_arm(ARMS[name], args.n, args.seed, args.seasons) for name in names}
+    arms = _fixture_arms(args.fixture) if args.fixture else ARMS
+    names = list(arms)
+    results = {name: run_arm(arms[name], args.n, args.seed, args.seasons) for name in names}
     a, b = results[names[0]], results[names[1]]
     categories = sorted(set(a['tally']) | set(b['tally']))
+    # A z over an act-subject tally is a statement about what a FOUGHT field did to the acted-on
+    # population; with none fought in either arm the SHIPPED pair (`field_casualty_model`, read only on a lost
+    # field battle) differs in nothing it reaches. A `--fixture` pair names a fixture that need not act through
+    # a fought field, so its z is printed with the fought counts beside it, for the reader to weigh.
+    computable = bool(a['fought'] or b['fought']) or bool(args.fixture)
 
     print(f"\n{args.n} realm(s) per arm, {args.seasons} season(s) each, "
           f"seeds {args.seed}..{args.seed + args.n - 1}")
-    print(f"total resolved acts — {names[0]}: {a['acts']}, {names[1]}: {b['acts']}\n")
+    print(f"total resolved acts — {names[0]}: {a['acts']}, {names[1]}: {b['acts']}")
+    print(f"fought fields — {names[0]}: {a['fought']}, {names[1]}: {b['fought']}\n")
     print(f'{"act subject":<16}{names[0]:>11}{names[1]:>13}{"delta pp":>11}{"z":>9}')
     significant = []
     for cat in categories:
         ac, bc = a['tally'].get(cat, 0), b['tally'].get(cat, 0)
         pa = 100 * ac / a['acts'] if a['acts'] else 0.0
         pb = 100 * bc / b['acts'] if b['acts'] else 0.0
+        if not computable:
+            print(f'{str(cat):<16}{pa:>10.1f}%{pb:>12.1f}%{pb - pa:>+10.1f}  NOT-COMPUTABLE')
+            continue
         z = two_proportion_z(ac, a['acts'], bc, b['acts'])
         flag = '  SIGNIFICANT' if abs(z) > Z_THRESHOLD else ''
         if flag:
@@ -263,7 +321,10 @@ def main(argv=None) -> int:
         print(f'{str(cat):<16}{pa:>10.1f}%{pb:>12.1f}%{pb - pa:>+10.1f}{z:>+9.2f}{flag}')
 
     print()
-    if significant:
+    if not computable:
+        print('[arms] NOT-COMPUTABLE: no field was fought in either arm, so the pair differs in '
+              'nothing the fixture reaches and no z is printed.')
+    elif significant:
         print(f'[arms] {len(significant)} act-subject categor(y/ies) shifted significantly: '
               f'{", ".join(map(str, significant))}. The mechanic MOVED the acted-on population.')
     else:
