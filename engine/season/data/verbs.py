@@ -249,7 +249,7 @@ class VerbRow:
         """THE PAYLOAD OPERAND AN ACT OF THIS ROW CONTESTS AGAINST: its `counterparty:` when the row names one, else
         `subject` (telling workplan `T4`, `ED-IN-0282`: `tell` contests against its hearer `to`; `fight` and `march`
         name none and read `subject`). The one owner of that rule, asked by `loop/resolve.py` (the fold's `_target`)
-        and `decision/options.py::subject_is_opponent`, which had each written it inline (CR-16)."""
+        and `decision/options.py::subject_is_opponent`."""
         return self.counterparty or "subject"
 
     def contested_against_subject(self) -> bool:
@@ -1022,8 +1022,7 @@ def _load_verb_table() -> dict:
     # outside `RELEASABLE_KINDS ∪ {contain, reside}` must sit in some row's declared `domain:`, read on
     # every row"*. The check above compares `release`'s domain with `RELEASABLE_KINDS` and EXEMPTS every
     # excluded kind, so a kind its holder may not release (`detain`, `ban`, `data/rosters.py::
-    # RESTRAINT_KINDS`) could be opened and closed by nobody and load clean -- ID-14 open for both
-    # until `pardon` (step 5) declared `[detain, ban]`. The kinds that end by a relocation stay exempt
+    # RESTRAINT_KINDS`) could be opened and closed by nobody and load clean. The kinds that end by a relocation stay exempt
     # (`contain`, `reside`: `_eff_move`/`_eff_migrate` close the old edge as they open the new). The set
     # that needs a declared closer is READ off `data/rosters.py`, never spelt: `RESTRAINT_KINDS`, the
     # kinds excluded from `RELEASABLE_KINDS` because an AUTHORITY ends them -- today exactly the kinds
@@ -1157,7 +1156,7 @@ def derive_event_kinds(table: dict, matrix: dict, fold_kinds: dict, logged_kinds
     """LOADER INVARIANT 7 (`04 §B.13 #7`, `F.20b`): THE EVENT-KIND ROSTER IS DERIVED FROM EVERY EMISSION
     COLUMN. The columns are: each verb row's `emits` (every Degree branch), its `emits_on_refusal`
     (every clause) and `write_matrix.yaml`'s `emits:` (the kinds a gate write may emit), plus the
-    fold's own `fold_kinds` (`rosters.yaml`; the three that were body literals) and `logged_kinds` (the
+    fold's own `fold_kinds` (`rosters.yaml`) and `logged_kinds` (the
     kinds `loop/matter.py` logs with no write behind them). Nothing else adds a
     member, and the derivation is a function of its arguments so a test can plant a malformed column.
 

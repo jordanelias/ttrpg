@@ -11,7 +11,7 @@ may not name `World` at all.
 rule.
 
 ⚠ THIS MODULE MUST NOT LEARN A PERSON. Its one-way rule is the same one `state/` states: nothing
-here imports `shape`, `decision`, `loop` or `seam`. `questions_for` takes a `Person` as its SECOND
+here imports `decision`, `loop` or `seam`. `questions_for` takes a `Person` as its SECOND
 argument and asks the WORLD about them; that is a world-first function, not a person-side one, and
 the AST guard (`test_w5_sense_is_still_the_only_world_taking_non_decision_function`) is what keeps
 the distinction checkable by signature rather than by intention. The guard parses the model set,
@@ -1006,8 +1006,7 @@ def reach(w: World, p: Person) -> set[str]:
       2. mine                -- every live Tenure's object -- `questions_for`'s own `mine`, read
                                  the same way.
       3. the ladder above me -- `ancestors-or-self` of `home_of(w)[p.id]`, via `parent_of` -- the
-                                 walk `ancestry` (below) owns. `under_purview` and
-                                 `conferral_path` made it too, and are deleted (`13d-i`, `18a`).
+                                 walk `ancestry` (below) owns.
       4. purview             -- `{seat.rung} | descendants(seat.rung)` over every live `hold` on
                                  an Office with a rung. `descendants` EXCLUDES its own rung
                                  (`state/containment.py`), so the seat's own rung must be unioned

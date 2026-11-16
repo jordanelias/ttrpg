@@ -19,7 +19,7 @@ from modules.mass_battle.resolution import *
 
 import os as _hu_os
 # Consumer-local maneuver toggles (read by advance_cells; runtime-togglable by validators on this
-# module). Kept here, not config, to stay within the touched-file set during the Stage-1 extraction.
+# module).
 MB_ENVELOP_PATH = (_hu_os.environ.get("MB_ENVELOP_PATH", "1") == "1")  # [canonical: mass_battle_v30.md §A.8 — directed envelop maneuver toggle]
 MB_SWEEP = (_hu_os.environ.get("MB_SWEEP", "1") == "1")  # [canonical: mass_battle_v30.md §A.8 — lateral sweep maneuver toggle]
 # [movement-substrate review 06 — finding 2] Continuous-speed toggle. ON: a per-cell fractional-speed
@@ -254,7 +254,7 @@ _ORDER_SAFE_FIELDS = frozenset({
     'feign_retreat',
 })
 
-# [Stage C, adversarial review] Recognized trigger prefixes -- validated eagerly at construction so a
+# Recognized trigger prefixes -- validated eagerly at construction so a
 # malformed trigger (a typo, e.g. 'tickk:4') fails loudly immediately rather than silently never firing
 # for the rest of the battle (the two failure modes -- "malformed trigger" and "condition legitimately
 # never met" -- are otherwise behaviourally indistinguishable to a caller; a condition that's correctly
@@ -1067,8 +1067,7 @@ inert today.
         grid (byte-exact prior behaviour). FIELD_MOVEMENT ON -> the COORDINATE FIELD: row stays rank-snapped
         (ranks are integer bins) and column is binned to its FILE (frontage=distinct files, depth=rank count)
         via round(c/COL_WIDTH); the raw int(round(c)) grid-snap is deleted on the ON branch only. This is the
-        coordinated flip that makes cells() emit file-binned floats end-to-end. [movement-substrate review 06 —
-        position + column clusters; folds the COL file-quantizer with the P snap-deletion at one line.]"""
+        coordinated flip that makes cells() emit file-binned floats end-to-end."""
         out = []
         for orig_r, orig_c, _o_r, _o_c in _oriented(self):
             r, c = self._node_pos.get((orig_r, orig_c), (0.0, 0.0))
@@ -2422,7 +2421,7 @@ def resolve_toi_and_commit(all_atoms_a, all_atoms_b):
             if not b_halted and s < eb.best_t: eb.best_t = s
     # (2) SAME-SIDE first contact [ED-MB-0059]. s > 0 IS LOAD-BEARING: a formation is a lattice at pitch D, so every
     #     adjacent cell is touching BY CONSTRUCTION and no cell is halted against its own neighbour; accepting
-    #     s == 0.0 here capped essentially the whole army to zero motion (measured: 46.9% of same-side solves).
+    #     s == 0.0 here capped essentially the whole army to zero motion.
     #     A pair already touching at the start is therefore left to (3), which holds it from getting closer.
     if MB_CELL_EXCLUSION:
         for entries in (cells_a, cells_b):

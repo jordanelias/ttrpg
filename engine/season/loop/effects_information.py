@@ -695,8 +695,7 @@ def _eff_petition(w: "World", a: "Act", res: "Resolution | None" = None) -> Chan
     """§36.1 / #353 §26.3: A PETITION IS A `Record` OF KIND `petition`, minted with the
     petitioner's `hold` -- `{terms, to, from}`: what it is about (the act's `subject`), the person
     it is addressed to (`to`), and the place it rises from (`from`). Drawn up where it rises from,
-    so `Record.rung` is a place and not the petitioner's id (the defect r2 `02` §A.4 measured on
-    every `create_record`).
+    so `Record.rung` is a place and not the petitioner's id.
 
     ⚠ TWO-SIDED (`ED-IN-0210` ruling 2 -- *withdraw (petitioner) or deny (receiver)*): the row's
     typed cell makes both sides EXIST, `opening_set` never forms a Candidate addressed to its own
@@ -704,8 +703,7 @@ def _eff_petition(w: "World", a: "Act", res: "Resolution | None" = None) -> Chan
     (`loop/resolve.py::_admits`'s counterparty clause, plan position `14`) before this body runs.
     ⚠ WHAT THIS DOES NOT BUILD: the two closers. Ruling 2's
     WITHDRAW and DENY both close `(Record, exists)`, whose one closer is `destroy_record` -- which
-    declines on both its eligibility alternatives today (`H-75`; plan position `14` built its
-    formable shape and HELD it on measurement, the row's `formation_decline_note`), and which the receiver
+    declines on both its eligibility alternatives today (`H-75`; the row's `formation_decline_note`), and which the receiver
     can only reach once `give` (position `16`) puts the petition in his hand. The fold makes both
     sides NAMEABLE on the document; neither side can yet end it."""
     return _mint_document(w, a, "petition", _content_of(a, "petition"), _operand(a, "from"))
@@ -1021,7 +1019,7 @@ def _seize_rung(w: "World", a: "Act", rid: str) -> Change:
     """v9 IN-13 (#453 §10.4 step 8), `seize`'S RUNG HALF: the actor opens a `hold` on an OCCUPIED
     SETTLEMENT, and whatever `hold` it already carries closes -- one town changing hands without its
     territory (#453 §9.1: a hold on the settlement itself shadows a territory hold in
-    `holder_faction_of`'s walk). The ROW stays keyed as IN-12 step 6 built it; the halves split HERE, on
+    `holder_faction_of`'s walk). The ROW is keyed as IN-12 step 6; the halves split HERE, on
     what the subject is (a Record, or not), and share the gate's `seizure` basis for the closure and
     `T-m` for the opening.
 

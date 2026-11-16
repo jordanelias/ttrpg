@@ -43,7 +43,7 @@ from .containment import ancestry, descendants, edges_of, home_of, parent_of
 @dataclass(frozen=True)
 class Token:
     """`04:199` -- *"`Token := (write_class, tick)` -- constructed by loop/driver and NOWHERE
-    ELSE"*. What `World.write` takes where it used to take a bare `WriteClass`.
+    ELSE"*.
 
     WHY A TYPE AND NOT THE ENUM. `04 §A.3` row 3: *"A parameter can be passed by anyone; a token
     only by whoever was handed it."* `WriteClass.ACTS` is a module constant, so any function that
@@ -193,13 +193,12 @@ FOUNDING = "founding"
 # determination's election arm, "any claimant" (CR-35, B10-17). (It was already short of the code before `claim`:
 # `warrant`, `seizure`, `muster` and T-o's ban arm below are in neither it nor D-10a's nine.) The heir's claim is
 # taken from §B.7: a seat with `conferral: inheritance` is filled by `succeed`, which needs a gate basis, so `claim`
-# is that basis. The Layer 1 wording is IN-44 row 14 (`workplans/valoria_master_workplan_v10_part7.md` A1-81:
-# CLOSED-SUPERSEDED, "lands with IN-61's build"); NOT landed by B10-09 close one, which edits no `architecture/` file.
+# is that basis. The Layer 1 wording is IN-44 row 14.
 CLAIM = "claim"
 
 # THE REMIT ACT THAT MAKES A SEAT A JUDGING SEAT -- `H-32`'s swept default, and the `bench_basis` of
-# every seeded `arrangements.yaml` row. ONE OWNER, read by `queries/world_q.py::judging_set` (which
-# carried it as a local literal until `19`) and by `may_determine` below, so *who sits in judgment*
+# every seeded `arrangements.yaml` row. ONE OWNER, read by `queries/world_q.py::judging_set`
+# and by `may_determine` below, so *who sits in judgment*
 # cannot mean one thing to the bench and another to the gate. A per-arrangement basis
 # (`judging_set`'s `bench_basis_of(w, matter)`, not built) would narrow it HERE.
 BENCH_BASIS = "determine"
@@ -647,7 +646,7 @@ def filled_by(off: Office) -> frozenset:
 
 
 def has_filler(off: Office) -> bool:
-    """CAN ANY ACT EVER FILL `off`? (v10 IN-61, B10-09 close.) `confer` fills a seat whose `FILLED_BY` names
+    """CAN ANY ACT EVER FILL `off`? (v10 IN-61.) `confer` fills a seat whose `FILLED_BY` names
     `conferral`; the heir's claim fills a seat it names only if a title passes it (`successions`). A seat whose
     basis only the claim opens and that no title passes is a seat nobody can ever fill, the defect
     `_req_establish` exists to prevent (`check_successions` refuses it at import for the authored rows)."""

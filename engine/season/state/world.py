@@ -230,8 +230,8 @@ def rung_kind_ascends(child_kind: str, parent_kind: str) -> bool:
 # name. Dataclass fields are never sorted. A class is encoded by its bare `__name__`, an Enum member
 # by its value alone. `t`/`l` and `u`/`z` follow the stored Python type, which the oracle's writers
 # fix per site (`_grant_remit`'s `remit_acts` is a tuple, an addressee list a list). Nested mapping
-# key order is not state. EVERY declared field folds, `repr=False` and `compare=False` ones included
-# (the retired `repr` digest dropped a `repr=False` field). A float is its bits as stored: a NaN
+# key order is not state. EVERY declared field folds, `repr=False` and `compare=False` ones included.
+# A float is its bits as stored: a NaN
 # has no canonical form here and `-0.0` differs from `0.0`, as under `repr`; neither was seen when the
 # encoder was spied over four worlds at GO-07 (a one-off reading, not kept).
 _UNKNOWN_TYPE = type(UNKNOWN)
@@ -329,7 +329,7 @@ def _canonical(v: Any) -> bytes:
 def _entity_digest(obj: Any) -> bytes:
     """`H-118`: ONE entity's own state, for `World.content_hash` and the gate's `state_of`.
 
-    GO-07: it is the entity's canonical encoding (the table above), no longer its `repr()`. `Person`,
+    GO-07: it is the entity's canonical encoding (the table above). `Person`,
     `Site`, `Tenure` and the other carriers are `@dataclass`, encoded field by field in DECLARATION
     order, which is fixed by the class and not by insertion, so it is stable across two runs of the
     same seed (R4). `Rung` is not a dataclass (S10 -- it stores its fields via `object.__setattr__`
@@ -1017,7 +1017,7 @@ class World:
         """THE ONE DEATH CASCADE: every live edge naming this person closes, then they are gone.
 
         CP-T02-01: IT RETURNS THE SEAT `hold`s IT CLOSED (`seat_holds`, read before the closures), not
-        `[who]`. No caller read the old return; the death writes name these holds as earning subjects
+        `[who]`. The death writes name these holds as earning subjects
         (`state/gate.py::death_subjects`), so the seats the death empties are on its receipts.
 
         ⚠⚠ ONE CASCADE, THREE CALLERS, AND A SECOND COPY IS HOW THEY WOULD DRIFT: `_eff_kill` (`fight`)
@@ -1587,7 +1587,7 @@ class World:
         self._barrier_cache.clear()
         self._verify_tenure_shadow()
 
-    # -- S33/S45.2/S66: THE ARTIFACT IS A CONTENT HASH OVER THE LOG. Rev 1 had none, and it is
+    # -- S33/S45.2/S66: THE ARTIFACT IS A CONTENT HASH OVER THE LOG. It is
     # the one execution artifact the architecture names as its done-condition.
     def new_draw(self) -> int:
         """S33's draw ordinal. Reset at the start of every tick by `season()`."""

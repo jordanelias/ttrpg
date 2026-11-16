@@ -443,7 +443,7 @@ class Relation(Requirement):
 @requirement_form("own_ledger")
 @dataclass(frozen=True)
 class OwnLedger(Requirement):
-    """§F.24a form 6 -- *membership in the ACTOR'S OWN ledger*, and the form the cross-read missed.
+    """§F.24a form 6 -- *membership in the ACTOR'S OWN ledger*.
 
     `tell`'s *the teller holds a claim on the subject* (§E3 `:417`). §B.2's corrected row (`F8`):
     *"the fold may ask the ACTOR'S OWN ledger ... and no other."* That carve-out is what licenses
@@ -452,7 +452,7 @@ class OwnLedger(Requirement):
 
     ⚠ IT READS WHETHER THE CLAIM IS HELD, NEVER WHETHER IT IS TRUE, which is the whole of `T3`.
     A liar and a mistaken witness both pass it, and the distortion lands at the receiver's
-    WITNESS deposit -- `_req_tell`'s own docstring said so and this preserves it exactly."""
+    WITNESS deposit."""
     of: str
 
     def operands(self) -> tuple:
@@ -833,8 +833,7 @@ OPERAND_NAMED_STEMS = frozenset({"names"})
 # UNKNOWN for them whatever the ledger holds, so §F1 clause 4 never declines on them. `with` asks
 # where another person is NOW, which a ledger cannot hold current: the fold reads it
 # (`Observation(to, "with:<actor>", ...)` rides `Event.observed`) but WITNESS does NOT deposit it
-# (`loop/witness.py` skips `WORLD_ONLY_STEMS` beside `LEDGER_DERIVED_STEMS`, `ED-IN-0282` batch-2
-# close `F1`). Depositing it would make a stale belief decide presence if anything read it back
+# (`loop/witness.py` skips `WORLD_ONLY_STEMS` beside `LEDGER_DERIVED_STEMS`, `ED-IN-0282`). Depositing it would make a stale belief decide presence if anything read it back
 # -- and something else would: `claim.held` accepts any claim on the subject, Q2 raises a question
 # on the hearer for a claim landing about them, and `said_of` can hand it on as the content of a
 # telling. Presence is the world's to decide (the telling workplan's T-e; hearing is by presence,
