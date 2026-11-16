@@ -473,7 +473,7 @@ sitting resolved, an office contested, precedent, a matter docketed in turn.
 
 **How era and regime act (requirement 8, decided by the ladder):** they act on PLAY, the choices men make: the era
 changes which ground a speaker reaches for where his listeners want and hold alike; a regime changes what silence
-means (under a commune the charged side rests three times as often), what may be shown, what the occasion asks of
+means (under a commune the charged side rests more than twice as often), what may be shown, what the occasion asks of
 Grace, and which rites exist at all. **And a regime enters the close the same way strife does** (rung 4, the
 precedent of strife's `gravity`: one method for context's three inputs): each regime carries a `gravity` delta, so
 a change is graver under a theocracy (+0.5) than under a crown or a commune (0), and the same case is harder to
