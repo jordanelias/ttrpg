@@ -8,9 +8,9 @@ import math  # noqa: F401  (read by the nested helpers below, as `orchestration`
 from modules.mass_battle.hierarchy.units import unit_conceded
 
 
-def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md §A.7 — 18-tick battle (3 phases x 6)]
+def run_battle(unit_a, unit_b, max_ticks=18):  # [canonical: mass_battle_v30.md §A.7 — 18-tick battle (3 phases x 6)]
     """Run one engagement turn (up to 3 phases = 18 ticks).
-    max_turns=18 = one battle turn's engagement cap (3 phases).
+    max_ticks=18 = one battle turn's engagement cap (3 phases).
     Multi-turn battles call this repeatedly with persistent unit state.
     [canonical: Jordan direction — "limit of three phases per simultaneous
      engagement per turn"]
@@ -48,7 +48,7 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
     # `random` stream so determinism (I2) holds; enabling it shifts the stream (field goldens re-record).
     _draw_friction(unit_a)
     _draw_friction(unit_b)
-    turns = 0
+    ticks = 0
     current_phase = 0
     separate_all_bodies(unit_a, unit_b)   # an army is deployed clear of itself and of the enemy
     # [ED-MB-0048 / A3] battle-scoped totals for the sub-phase truncation counter; see
@@ -57,8 +57,8 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
     trunc_groups = trunc_pairs = 0
     trunc_troops = 0.0
     max_groups = 0
-    for t in range(1, max_turns + 1):
-        turns = t
+    for t in range(1, max_ticks + 1):
+        ticks = t
         trace_event('tick', t=t)
         if unit_a.routed or unit_b.routed: break
         # CP-T04-03: a side every subunit of which has retreated or routed has conceded the field; the battle stops for
@@ -414,8 +414,8 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
             trace_event('positions', t=t, a=_unit_snapshot(unit_a), b=_unit_snapshot(unit_b))
     winner = ("A" if not unit_a.routed and unit_b.routed else
               "B" if not unit_b.routed and unit_a.routed else "draw")
-    tick_in_phase = turns % TICKS_PER_PHASE if turns else 0
-    return {"winner": winner, "turns": turns,
+    tick_in_phase = ticks % TICKS_PER_PHASE if ticks else 0
+    return {"winner": winner, "turns": ticks,
             "phases": current_phase, "tick_in_phase": tick_in_phase,
             "a_stamina": unit_a.agg_stamina(), "b_stamina": unit_b.agg_stamina(),
             "a_hp_pct": round(unit_a.hp / unit_a.hp_max * 100, 1) if unit_a.hp_max else 0,

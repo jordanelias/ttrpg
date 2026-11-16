@@ -151,7 +151,7 @@ def test_yield_facing_stays_locked_toward_engaged_enemy():
     from modules.mass_battle.core.contact import check_orders
     check_orders(a, 1, [c for c in dd.subunits[0].cells()])
     assert atk.yield_active
-    run_battle(a, dd, max_turns=6)
+    run_battle(a, dd, max_ticks=6)
     # The subunit must have actually moved (yield's flee vector is live, not a no-op).
     assert atk._moved_this_turn or atk.cell_offsets, "yielding subunit never moved at all"
     # Facing must point TOWARD the defender's centroid, not away (the flee direction).

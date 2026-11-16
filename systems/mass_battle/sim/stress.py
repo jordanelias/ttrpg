@@ -289,7 +289,7 @@ def fight_one(task: tuple) -> dict:
         sys.setprofile(rec)
         try:
             with M['rngsource'].using(random.Random(seed)):
-                res = M['run_battle'](a, b, max_turns=cap)
+                res = M['run_battle'](a, b, max_ticks=cap)
         finally:
             sys.setprofile(None)
         if rec.t not in rec.snaps:

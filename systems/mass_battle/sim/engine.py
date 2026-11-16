@@ -284,7 +284,7 @@ def build_refused_flank(strong_specs, refused_specs, name, faction, *,
 def resolve_battle(*args, kind='multi', **kwargs):
     """Battle-type ROUTER — the wrapper's routing duty. Transparently dispatches to the loop in
     orchestration; it computes no outcome itself. Kinds:
-      'single'     → run_battle(unit_a, unit_b, max_turns=18)
+      'single'     → run_battle(unit_a, unit_b, max_ticks=18)
       'multi'      → run_multi_turn_battle(unit_a, unit_b, shape_a, shape_b, anchor_map, max_battle_turns=8)
       'multi_unit' → run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b, anchor_map, max_battle_turns=8)
     Args/kwargs pass straight through, so routing is byte-exact with calling the run_* function directly."""

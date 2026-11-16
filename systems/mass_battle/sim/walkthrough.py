@@ -134,7 +134,7 @@ def fight(example: dict, seed: int, role=None) -> dict:
     try:
         with rngsource.using(random.Random(seed)):
             with tracing() as events:
-                result = run_battle(a, b, max_turns=example['max_turns'])
+                result = run_battle(a, b, max_ticks=example['max_ticks'])
     finally:
         sys.setprofile(None)
     if rec.t not in rec.snaps:
@@ -189,7 +189,7 @@ def _summary(example: dict) -> dict:
             {'name': sf['name'], 'type': sf['troop_type'], 'troops': sf['troops'], 'role': sf.get('role')}
             for sf in d['units']]}
     return {'a': side(example['side_a']), 'b': side(example['side_b']), 'seed': None,
-            'morale_start': example['morale_start'], 'max_turns': example['max_turns']}
+            'morale_start': example['morale_start'], 'max_ticks': example['max_ticks']}
 
 
 def build_page(run: dict, out: str, example: dict, seed: int, role=None) -> None:

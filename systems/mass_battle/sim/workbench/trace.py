@@ -85,7 +85,7 @@ def run_traced_battle(spec_a, spec_b, *, seed=0, max_battle_turns=8, kind='multi
 
     with tracing() as recorded:
         if kind == 'single':
-            r = resolve_battle(ua, ub, kind='single', max_turns=18)  # [canonical: mass_battle_v30.md §A.7 — 18-tick battle (3 phases x 6), same default as orchestration.run_battle]
+            r = resolve_battle(ua, ub, kind='single', max_ticks=18)  # [canonical: mass_battle_v30.md §A.7 — 18-tick battle (3 phases x 6), same default as orchestration.run_battle]
         else:
             anchor_map = {(shape_a, tier_a): anchor_a, (shape_b, tier_b): anchor_b}
             r = resolve_battle(ua, ub, shape_a, shape_b, anchor_map,

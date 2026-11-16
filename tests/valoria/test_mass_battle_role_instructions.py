@@ -45,7 +45,7 @@ def _fight(role, seed):
     b = build_unit('Line', 3, 'E', 'B', 25)
     su = a.subunits[0]
     r0 = su.centroid()[0]
-    _orch.run_battle(a, b, max_turns=18)
+    _orch.run_battle(a, b, max_ticks=18)
     advance = r0 - su.centroid()[0]
     occupied = [t for t in su.cell_troops.values() if t > 0]
     density = sum(occupied) / len(occupied) if occupied else 0.0

@@ -367,7 +367,7 @@ group (A–D in `MB_LEXICON.md`, E–G in `_part2`); "D-n" a ladder decision and
 | **stamina, fatigue, endurance** | the reserve, its loss, A-60's lasting | D |
 | **battle** (field) | a fight between two sides at one place in one season, of one or more bouts | E, D-18 |
 | engagement, skirmish (as a size), fight (for a battle) | refused | E |
-| **field tick** < **engine phase** < **bout** < **battle** < **season**; **lull** | one clock word per quantity; the pause between bouts | E, D-7; L2-3 |
+| **field tick** < **engine phase** < **bout** < **battle** < **season**; **lull** | one clock word per quantity; the pause between bouts; the most field ticks a battle loop runs, a field tick being about four seconds, is `max_ticks` in `battle_loop.run_battle(max_ticks=…)` (the returned dict keeps its key `"turns"`) | E, D-7; L2-3 (done) |
 | **contact**, **flank**, **envelopment**, **refused flank**, **wheel** | ordinary tactical words, as the engine uses them | E |
 | **stand** (draw), **give ground**, **fall back**, **withdraw** | hold; step back still fighting; leave at the fall-back point; leave the field in order | E, D-10 |
 | **break**, **rout**, **disordered**, **rally**, **run**, **pursuit** | start to run; the running; formation gone but not fled (engine `broken`); brought back in the battle; flee; chase the broken | E, D-16; L2-2 |

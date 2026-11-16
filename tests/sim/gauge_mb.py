@@ -498,7 +498,7 @@ def matchup(sa, sb, ka, kb, mode, n=60, seed_base=1_000_000):  # [Jordan directi
         # meaning anything, while still reporting a number.
         cap = SINGLE_TURN_CAP if mode=='single' else MULTI_BATTLE_TURN_CAP
         if mode=='single':
-            r=resolve_battle(ua,ub,kind='single',max_turns=cap); turns.append(r.get('turns',cap))
+            r=resolve_battle(ua,ub,kind='single',max_ticks=cap); turns.append(r.get('turns',cap))
         else:
             r=resolve_battle(ua,ub,shape_a,shape_b,ANCHOR_MAP,kind='multi',max_battle_turns=cap); turns.append(r.get('battle_turns',cap))
         w=winner_of(r)

@@ -207,7 +207,7 @@ def test_the_battle_stops_for_a_conceding_side_without_routing_it():
         a = mb._weighted_unit("side_a", 20, 5, M.SCALE, None, "0.5")
         b = mb._weighted_unit("side_b", 20, 5, M.SCALE)
         with rngsource.using(random.Random(s)):
-            res = bl.run_battle(a, b, max_turns=18)
+            res = bl.run_battle(a, b, max_ticks=18)
         checked += 1
         if units.unit_conceded(a) and not a.routed:      # (a side can retreat and rout in the same tick: that one is a rout)
             stopped += 1

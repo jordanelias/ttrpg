@@ -116,7 +116,7 @@ def _attacker_retained(pin, fix, shock, def_stance='hold', def_disc=_DISC,
         random.seed(s)
         a = _attacker(pin)
         d = _defender(def_stance, def_disc)
-        run_battle(a, d, max_turns=turns)
+        run_battle(a, d, max_ticks=turns)
         out.append(a.hp / a.hp_max if a.hp_max else 0.0)
     return out
 
@@ -245,7 +245,7 @@ def _envelop_reach(path_on, path='grid', seeds=_SEEDS, turns=_TURNS):
     for s in range(seeds):
         random.seed(s)
         a = _attacker_envelop(); d = _defender('hold', _VULN_DISC)
-        run_battle(a, d, max_turns=turns)
+        run_battle(a, d, max_ticks=turns)
         det = a.subunits[1]; dfn = d.subunits[0]
         diffs.append(det.centroid()[0] - dfn.centroid()[0])
     return diffs
@@ -344,7 +344,7 @@ def _archer_far_loss(target_idx, on, seeds=_SEEDS, turns=6):  # [canonical: vali
         random.seed(s)
         a, b = _archer_pair(target_idx)
         far0 = sum(b.subunits[1].cell_troops.values())
-        run_battle(a, b, max_turns=turns)
+        run_battle(a, b, max_ticks=turns)
         far1 = sum(b.subunits[1].cell_troops.values())
         cellsum = sum(sum(su.cell_troops.values()) for su in b.subunits)
         assert abs(cellsum - b.hp) < 1, "cell==hp invariant broken under ordered volley"
@@ -391,7 +391,7 @@ def _sweep_disp(sweep_on, path='grid', seeds=_SEEDS, turns=_TURNS):
         random.seed(s)
         a = _attacker_sweep(); d = _defender('hold', _VULN_DISC)
         c0 = a.subunits[0].centroid()[1]
-        run_battle(a, d, max_turns=turns)
+        run_battle(a, d, max_ticks=turns)
         c1 = a.subunits[0].centroid()[1]
         out.append(abs(c1 - c0))
     return out

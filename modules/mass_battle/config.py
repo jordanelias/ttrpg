@@ -352,7 +352,7 @@ ROUTE_WAYPOINT_EPS = 0.5
 # route clamp. DERIVED from
 # TICKS_PER_PHASE (not a second independently-asserted magnitude): 3 phases/engagement is the
 # same "limit of three phases per simultaneous engagement per turn" convention run_battle's own
-# max_turns=18 default already encodes. [ASSUMPTION: "maximum-ticks-in-battle" read as ONE
+# max_ticks=18 default already encodes. [ASSUMPTION: "maximum-ticks-in-battle" read as ONE
 # engagement (run_battle's own 18-tick cap), not a whole multi-turn campaign — basis: `t` resets
 # to 1 at the start of every run_battle call and neither check_orders nor the route resolver has
 # any visibility into which multi-turn battle-turn is currently running, so "one engagement" is

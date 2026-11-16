@@ -192,7 +192,7 @@ def test_conservation_with_friction(friction):
     random.seed(2026)
     a = build_unit('Line', 3, 'A', 'A', 9)
     b = build_unit('Line', 3, 'B', 'B', 9)
-    _orch.run_battle(a, b, max_turns=18)
+    _orch.run_battle(a, b, max_ticks=18)
     checked = assert_troop_conservation(a, b, context='friction seed=2026')
     assert checked >= 2, f"conservation checked {checked} units, expected both"
 
@@ -204,7 +204,7 @@ def test_determinism_with_friction(friction):
         random.seed(414)
         a = build_unit('Line', 3, 'A', 'A', 9)
         b = build_unit('Line', 3, 'B', 'B', 9)
-        r = _orch.run_battle(a, b, max_turns=18)
+        r = _orch.run_battle(a, b, max_ticks=18)
         return (r['winner'], r['turns'], round(a.hp, 6), round(b.hp, 6),
                 round(a._friction, 6), round(b._friction, 6))
 

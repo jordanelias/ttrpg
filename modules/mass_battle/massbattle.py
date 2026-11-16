@@ -1,7 +1,7 @@
 """Season-facing adapter: `resolve_field` -> the canon mass-battle engine (it was the strategic-layer faction adapter).
 
 The engine lives beside this file (`orchestration.py`, `hierarchy/`, `core/`, `geometry.py`, `percell.py`,
-...). Its entry point is TACTICAL -- `run_battle(unit_a, unit_b, max_turns=18)` takes constructed Units --
+...). Its entry point is TACTICAL -- `run_battle(unit_a, unit_b, max_ticks=18)` takes constructed Units --
 while the season's is STRATEGIC. This module is the adapter between them: `resolve_field`, `_weighted_unit`,
 `_run_and_grade` and the survivor-ratio -> degree map.
 
@@ -377,7 +377,7 @@ def _run_and_grade(unit_a, unit_b, terrain, rng, walls_dr=None, by_troops=False,
 
     with rngsource.using(rng):
         # [canonical: mass_battle_v30.md §A.7 — 18-tick battle (3 phases x 6), the canon engine's own default]
-        run_battle(unit_a, unit_b, max_turns=18)
+        run_battle(unit_a, unit_b, max_ticks=18)
 
     graded = _grade(unit_a, unit_b, by_troops)
     if persons is not None:

@@ -135,7 +135,7 @@ def test_route_moves_a_subunit_with_no_enemy_in_sight():
     calls advance_cells at all."""
     ua, sa, spawn, _route = _route_unit_from_offsets((2, 4), faction='A', target_condition='in_range:1')
     ub, _sb, _spawn_b, _route_b = _route_unit_from_offsets((), faction='B')   # plain far-side unit; no route of its own
-    run_battle(ua, ub, max_turns=6)
+    run_battle(ua, ub, max_ticks=6)
     assert sa.target_atom is None, "control: the enemy must still be out of the in_range:1 gate after 6 ticks"
     assert sa._route_idx >= 1 or sa._node_anchor != spawn, \
         "the route-holder never moved: run_battle's moving_a/moving_b must have excluded it"

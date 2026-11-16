@@ -151,7 +151,7 @@ def test_head_on_no_interpenetration_no_stall(field_path):
     b = build_unit('Line', 3, 'B', 'B', 9)
     hp_a0, hp_b0 = a.hp, b.hp
     with _CommitProbe() as probe:
-        _orch.run_battle(a, b, max_turns=18)
+        _orch.run_battle(a, b, max_ticks=18)
     assert probe.commits > 0, "the end-of-tick pass never ran -> not on the field path"
     assert not probe.body_interpenetration, "opposing cell BODIES interpenetrated after a commit"
     # no stall: contact was reached and combat resolved -> at least one side lost troops.
@@ -168,7 +168,7 @@ def test_cavalry_charge_reaches_contact(field_path):
     inf = build_unit('Line', 3, 'INF', 'B', 9, troop_type='infantry')
     hp_c0, hp_i0 = cav.hp, inf.hp
     with _CommitProbe() as probe:
-        _orch.run_battle(cav, inf, max_turns=18)
+        _orch.run_battle(cav, inf, max_ticks=18)
     assert probe.commits > 0
     assert not probe.body_interpenetration, "charge drove bodies into interpenetration"
     assert (cav.hp < hp_c0) or (inf.hp < hp_i0), "cavalry charge stalled short of contact"
@@ -194,7 +194,7 @@ def test_grid_path_never_calls_body_code(grid_path, monkeypatch):
     random.seed(1)
     a = build_unit('Line', 3, 'A', 'A', 9)
     b = build_unit('Line', 3, 'B', 'B', 9)
-    res = _orch.run_battle(a, b, max_turns=18)  # must NOT raise
+    res = _orch.run_battle(a, b, max_ticks=18)  # must NOT raise
     assert res['winner'] in ('A', 'B', 'draw')
 
 
@@ -212,7 +212,7 @@ def test_conservation_over_short_battle(field_path):
     random.seed(2026)
     a = build_unit('Line', 3, 'A', 'A', 9)
     b = build_unit('Line', 3, 'B', 'B', 9)
-    _orch.run_battle(a, b, max_turns=18)
+    _orch.run_battle(a, b, max_ticks=18)
     checked = assert_troop_conservation(a, b, context='body seed=2026')
     assert checked >= 2, f"conservation checked {checked} units, expected both"
 
@@ -227,7 +227,7 @@ def test_determinism_same_seed(field_path):
         random.seed(9001)
         a = build_unit('Line', 3, 'A', 'A', 9)
         b = build_unit('Line', 3, 'B', 'B', 9)
-        res = _orch.run_battle(a, b, max_turns=18)
+        res = _orch.run_battle(a, b, max_ticks=18)
         return (res['winner'], res['turns'], round(a.hp, 6), round(b.hp, 6))
 
     assert _run() == _run()

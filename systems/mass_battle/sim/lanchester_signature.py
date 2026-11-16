@@ -287,7 +287,7 @@ def _trajectory(big_tier, small_tier, unit_type, stance, diag=None, instructions
         tr = []
         routed_here = False
         for _ in range(TRAJ_TICKS):
-            run_battle(ua, ub, max_turns=1)
+            run_battle(ua, ub, max_ticks=1)
             tr.append((ua.hp, ub.hp))
             # [ED-MB-0049 / A5a falsifier] The pin's WHOLE PURPOSE is "no rout, pure attrition".
             # Record whether it held, per trajectory, instead of assuming it. `checked` is the
