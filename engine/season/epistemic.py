@@ -411,7 +411,7 @@ def _ch_document_key(w: "World", e, pid) -> bool:
 
     A test of `t.object == e.subject` could never fire on an act. Every fold-emitted Event sets
     `subject = a.actor` on the one path every act-emission takes
-    (`shape.py::SeasonDriver::_fold::ev`), and no `hold` Tenure takes a PERSON as object. So the
+    (`loop/resolve.py::_fold`'s `ev`), and no `hold` Tenure takes a PERSON as object. So the
     equality could hold only where an Event's subject was ITSELF the held thing, which is
     `MATTER`/`CALENDAR` kinds alone: those carry no verb and no actor. `R5`'s bureaucratic
     channel would be unreachable on acts, and `R5` names three of the five channels bureaucratic
@@ -435,7 +435,7 @@ def _ch_document_key(w: "World", e, pid) -> bool:
     `write()` and `term.matured` both put their subject into `changes[0]`, so the `changes[]`
     reading is a superset of the `e.subject` one wherever they fire at all; every
     fold-emitted Event and every refusal has a PERSON subject, where `e.subject` never fired. **The one
-    exception is `condition.band_crossed` (emitted in `shape.py::SeasonDriver::matter`), which
+    exception is `condition.band_crossed` (emitted in `loop/matter.py`), which
     carries `subject = <Site>` and `changes = []`** -- a person holding that Site would satisfy the
     `e.subject` reading and not `changes[]`. No `hold` over a
     Site exists anywhere in the tree, so the union would admit nobody today; the carve-out is named

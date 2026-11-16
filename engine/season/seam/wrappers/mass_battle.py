@@ -35,7 +35,7 @@ position `20-iv`, `H-150`).** Jordan's ruling (planning round 2) fixed garrison 
 about the fight off the world and hands them on as plain values -- it decides none of what they do:
   * the TERRITORY the target sits in, `_territory_of` below: the nearest `territory`-kind rung up
     the target's ancestry, turned back into its geography row by `data/rosters.territory_id_of`
-    (the one owner of that id relation, which `harness/populated.py` mints through);
+    (the one owner of that id relation, which `boot/realm.py` mints through);
   * its FORTIFICATION, `world_q.fortification_of` at the target;
   * each side's MORALE source, `_side_stance` below;
 and one injected value: the `field_walls_dr` fixture (`H-150`). Two more facts and one more value: the
@@ -110,7 +110,7 @@ def _creed_referent(w: Any, fac: str) -> Optional[str]:
     """Whom a member of faction `fac` holds their build-time LOYALTY row toward: the subject of the
     faction's creed Proposition when its mood is OUGHT (its authored leader), else `None` (MB-03).
 
-    This is the writer's own rule read back, not a second one: `harness/populated.py` appends the
+    This is the writer's own rule read back, not a second one: `boot/realm.py::build_realm` appends the
     row `(prop.subject, *cast.stance_from_loyalty(...))` exactly when the creed's mood is OUGHT, and a
     HOLDS faction (`Guilds`, `Schoenland`: no leader or template in canon) gets no row and reads `None`
     here -- `cast.loyalty`'s *"`None` FOR A FACTION WITH NO TEMPLATE, NEVER A DEFAULT"*. ⚠ The row

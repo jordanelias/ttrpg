@@ -941,7 +941,7 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
                 # facing-vs-charger (b_angle_mod for B: GREEN 0 / YELLOW -1 / RED -2 via ANGLE_DEF_MOD).
                 if PER_CELL:
                     if a_pen > 0:
-                        _zb = "GREEN" if b_angle_mod > -0.5 else ("YELLOW" if b_angle_mod > -1.5 else "RED")  # [canonical: config.py:65 ANGLE_DEF_MOD GREEN 0/YELLOW -1/RED -2; -0.5, -1.5 are the zone-value midpoints re-binning the per-cell-averaged angle_mod to a zone: -0.5=mid(0,-1), -1.5=mid(-1,-2)]
+                        _zb = "GREEN" if b_angle_mod > -0.5 else ("YELLOW" if b_angle_mod > -1.5 else "RED")  # [canonical: config.py:148 ANGLE_DEF_MOD GREEN 0/YELLOW -1/RED -2; -0.5, -1.5 are the zone-value midpoints re-binning the per-cell-averaged angle_mod to a zone: -0.5=mid(0,-1), -1.5=mid(-1,-2)]
                         ns_b += _charge_shock_sigma(unit_b, p["b_cells"], _zb, atom_b, t)
                     elif MB_ENVELOP_SHOCK and b_fixed_other and b_angle_mod <= -0.5:
                         # B (envelopment shock): a subunit FIXED frontally by a separate body and struck on
@@ -957,7 +957,7 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
                         # run_battle's per-tick loop, after damage commits.
                         shocked_b = True
                     if b_pen > 0:
-                        _za = "GREEN" if a_angle_mod > -0.5 else ("YELLOW" if a_angle_mod > -1.5 else "RED")  # [canonical: config.py:65 ANGLE_DEF_MOD zone midpoints — see the _zb line above]
+                        _za = "GREEN" if a_angle_mod > -0.5 else ("YELLOW" if a_angle_mod > -1.5 else "RED")  # [canonical: config.py:148 ANGLE_DEF_MOD zone midpoints — see the _zb line above]
                         ns_a += _charge_shock_sigma(unit_a, p["a_cells"], _za, atom_a, t)
                     elif MB_ENVELOP_SHOCK and a_fixed_other and a_angle_mod <= -0.5:
                         # A (envelopment shock), mirror of the B branch above — see its comment for the
@@ -972,7 +972,7 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
                     # wall's frontal (GREEN) octagon zone -- a brace cannot repel what it cannot face
                     # (Burkholder 2007), so a flank/rear charge into a braced wall is not recoiled. Zone read: the defender's
                     # per-cell-averaged angle_mod, same GREEN midpoint re-binning as the charge-shock above.
-                    # [canonical: config.py:65 ANGLE_DEF_MOD GREEN 0/YELLOW -1/RED -2; -0.5=mid(0,-1)]
+                    # [canonical: config.py:148 ANGLE_DEF_MOD GREEN 0/YELLOW -1/RED -2; -0.5=mid(0,-1)]
                     # [ED-1095, Jordan-ruled 2026-07-02] MB_RECOIL_CHARGER_GATE additionally requires the
                     # CHARGING atom to actually be cavalry (mounted_archers -- who should never be closing
                     # at all, see T4 -- explicitly excluded) AND the defender's reach >= the charger's reach
@@ -1221,7 +1221,7 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs, t=None):
     # `_pair_engaged_troops`, the single owner of "troops actually in contact plus depth-weighted support")
     # expresses that where a count of ticks-that-truncated cannot. No RNG draws, no writes to engine state.
     # `n_groups` is the control: carried against the bound MAX_SUB_PHASES it turns "0 truncations" into a
-    # headroom reading. MAX_SUB_PHASES itself is CALIBRATED-DEBT (config.py:136).
+    # headroom reading. MAX_SUB_PHASES itself is CALIBRATED-DEBT (config.py:106).
     truncated_groups = 0
     truncated_pairs = 0
     truncated_troops = 0.0

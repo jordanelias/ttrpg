@@ -120,7 +120,7 @@ def morale_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
             #      disciplined body can hold a gap closed, a ragged one loses the line. Reversing the
             #      order would let the body paper over a break before the break had spread, and the
             #      contagion would never do anything.
-            # Both are no-ops when per-cell morale is unseeded, so this is inert by default.
+            # Both are no-ops when per-cell morale is unseeded (MB_CELL_MORALE=0).
             if atom.cell_morale:
                 # [phase 2b] Local break-points FIRST: a cell gives way at its own casualty fraction,
                 # before contagion spreads from it and before cohesion tries to close it (see check_cell_breaks).

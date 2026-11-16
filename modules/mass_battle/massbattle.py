@@ -99,9 +99,11 @@ def _morale_start(stance, loyalty=0.0, gain=0):
     THE BUILD-TIME LOYALTY ROW, BEHIND A GAIN (MB-03, `ED-MB-0078`'s superseding row, option (b)).
     `loyalty` is the side's weight-mean stance toward its faction creed's UTTERER -- the row
     `data/cast.py::stance_from_loyalty` seeds at build, `-5..+5` -- and it is added at `gain`, the
-    season's `field_morale_loyalty_gain` fixture. It is a SECOND TERM, not merged into `stance`: the
-    loyalty row names the faction's LEADER, a person, and the morale row names the faction, so the host
-    reads and hands on the two referents apart and only their sum on the ladder is shared. AT `gain` 0
+    season's `field_morale_loyalty_gain` fixture. It is a SECOND TERM, not merged into `stance`: with
+    `loyalty_toward_creed` False the loyalty row names the faction's LEADER, a person, and the morale row
+    names the faction, so the host reads and hands on the two referents apart; at the shipped True the row
+    lands on the faction id and the `stance` term reads it instead (`H-256`;
+    `seam/wrappers/mass_battle.py::_creed_referent`). Only their sum on the ladder is shared. AT `gain` 0
     THE TERM IS ZERO and the result is the shipped option (a), battle history only, exactly (the
     control, swept 0 / 0.4 / 1; `data/fixtures.py` says how each arm is derived). At 0.4 a side with
     loyalty >= 3.75 already reaches the ceiling, and the 1:1 arm saturates most creed-holding

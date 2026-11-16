@@ -143,7 +143,7 @@ class SeasonDriver:
         # ROW. The registrar records every composition row carrying `entry:` in
         # `manifest.MODULE_ENTRIES`, resolving by string (never at import), and refuses (b) a
         # `verb:` naming no verb row and (d) an entry registered twice; it is idempotent. Then (c)
-        # the contest roster, both halves, and (a) a writing row with no effect and no
+        # the contest roster, all three halves, and (a) a writing row with no effect and no
         # `effect_decline_note:` (and its converse), and -- plan position IN-41, `SM-11` -- (a)'s
         # precondition twin: a precondition nothing evaluates and no `requires_decline_note:` (and
         # its converse). `manifest/registrar.py` and `manifest/registry.py` hold the rules.

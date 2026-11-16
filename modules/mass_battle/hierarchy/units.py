@@ -1300,7 +1300,7 @@ inert today.
         return None
 
     def _envelop_goal(self, enemy_cells):
-        """[ED-MB-0035, Jordan 2026-07-23] Uses perimeter.py's target-point/normal primitive in the maneuver
+        """[ED-MB-0035; the perimeter.py primitive is Jordan's, 2026-07-23] Uses perimeter.py's target-point/normal primitive in the maneuver
         pathing (the ad-hoc wide_c/rear_r geometry is kept as _envelop_goal_legacy). An enveloping body picks a TARGET
         FACE on the enemy's perimeter and approaches it SQUARE-ON along that face's OUTWARD normal (swing wide, come
         in perpendicular). Face choice depends on
