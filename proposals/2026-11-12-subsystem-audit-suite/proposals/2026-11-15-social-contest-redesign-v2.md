@@ -17,8 +17,8 @@ Design input, reference under CLAUDE.md §0.05: nothing reads it at runtime and 
 §A to §D (the model, the six roles, the types, the verbs' routing) and the body of every build item of Batch
 `B24p-sc-proceeding` that implements them; it keeps RD's Layer 1 placement (§A.2: the module keeps no state, the
 host writes), RD's verb routing table (§D.1 to §D.4) and RD's F.6 table of source corrections, which stand. The
-plan copy (`workplans/valoria_master_workplan_v12_part22_b24p.md`, `_cont.md`) still states the old design; part 4
-§H lists the edits it needs, and applies none.
+plan copy (`workplans/valoria_master_workplan_v12_part22_b24p.md`, `_cont.md`) states this design; part 4
+§H lists the edits that were applied to it.
 
 **Evidence.** Every number below was read from an executable model, `sc_model_v2/` (a copy of the stress test's
 `sc_model/` with a new package `sc2/`: `engine.py` the module, `host.py` the host side, `checks_core.py`,

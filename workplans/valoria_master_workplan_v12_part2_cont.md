@@ -223,7 +223,7 @@ Every file items of two or more batches edit, the permanent surface left out (§
 | `modules/combat/vocabulary.py` | B15.01, B15.10, B16.05, B34.07, B18.09 | B15 → B16 → B34 → B18 |  | **not listed** |
 | `modules/mass_battle/` | B16M.03, B06.02, B19.15, B30.03, B30.05 | B16M → B06 → B19 → B30 |  | **not listed** |
 | `modules/mass_battle/core/exchange.py` | B17.12, B19.07, B19.12, B19.55 | B17 → B19 |  | listed |
-| `modules/social_contest/proceeding.py` | B24p.07, B24p.08, B24p.09, B24p.10, B24p.11, B24p.12, B24.06, B24.20, B24.26, B24.30, B30.09 | B24p → B24 → B30 |  | listed |
+| `modules/social_contest/proceeding.py` | B24p.07, B24p.11, B24p.12, B24.06, B24.20, B24.26, B24.30, B30.09 | B24p → B24 → B30 |  | listed |
 | `tools/export_battle_orders.py` | B34.07, B19.03, B20.01, B20.09, B30.04 | B34 → B19 → B20 → B30 |  | **not listed** |
 | `tools/export_descriptors.py` | B04.02, B04.07, B35.10, B38.19, B38.81 | B04 → B35 → B38 |  | **not listed** |
 | `tests/test_obstacle_form.py` | B05.14, B05.15, B05.17, B05.21, B24p.05 | B05 → B24p |  | **not listed** |
@@ -265,7 +265,7 @@ Every file items of two or more batches edit, the permanent surface left out (§
 | `harness/valley.py` | B12c.28, B12c.29, B39.31 | B12c → B39 |  | listed |
 | `loop/census.py` | B01a.02, B12b.18, B39.04, B39.26 | B01a → B12b → B39 |  | listed |
 | `loop/encounter.py` | B08.05, B37.14, B28.18 | B08 → B37 → B28 |  | **not listed** |
-| `manifest/registry.py` | B07.01, B07.04, B24p.16, B41.02 | B07 → B24p → B41 |  | **not listed** |
+| `manifest/registry.py` | B07.01, B07.04, B41.02 | B07 → B41 |  | **not listed** |
 | `seam/ladder.py` | B17.01, B17.03, B23.09 | B17 → B23 |  | listed |
 | `tests/test_aperture.py` | B12a.01 | B12a |  | **not listed** |
 | `tests/test_cr87_violence_contexts.py` | B15.08, B37.14, B37.99 | B15 → B37 |  | **not listed** |

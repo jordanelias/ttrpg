@@ -363,7 +363,7 @@ No engine version is asserted anywhere in v12 (ED-GO-0002 is the owner).
 
 | batch | lane | ED block (declared + spare) | H block (declared + spare) |
 |---|---|---|---|
-| B24p-sc-proceeding | SC | ED-SC-0054..0056 (1+2) | H-861..H-914 (54+0) (allocated 2026-11-14 after B01a's block, on paper: `id_reservations.yaml` is bumped at the batch's opening, SC `next_free` 54 → 57; the fold map's H-856..H-909 assumed H-855 as the last id and B01a had taken H-856..H-860) |
+| B24p-sc-proceeding | SC | ED-SC-0054..0056 (1+2) | H-861..H-940 (80+0) (allocated 2026-11-14 after B01a's block, on paper: `id_reservations.yaml` is bumped at the batch's opening, SC `next_free` 54 → 57; the fold map's H-856..H-909 assumed H-855 as the last id and B01a had taken H-856..H-860; 80 NUMBER rows since the V2 fold: 55 settings, the fold's 24, the `speech_blend` pointer row) |
 | B13-pc-package | PC | ED-PC-0060..0061 (0+2) | H-404..H-408 (0+5) |
 | B16M-mb-engine-words | MB | ED-MB-0084..0085 (0+2) | H-409..H-413 (0+5) |
 | B04-capability-home | IN | ED-IN-0377..0378 (0+2) | H-414..H-419 (1+5) |
@@ -420,7 +420,7 @@ No engine version is asserted anywhere in v12 (ED-GO-0002 is the owner).
 
 **Registry ids** (`references/npc_registry.yaml`; no spare: each row is a named person whose count its source fixes): B33-inst-economy-hands **NPC-091** (B33.09, the court's holder); B39-procgen-and-cases **NPC-092..NPC-094** (B39.32, the three founders, `SYN_B` §2).
 
-**`next_free` after B00, as this table leaves it:** MB 101, PC 72, FI 16, SC 57, FA 56, WR 24, IN 405, GO 10, SE 65; the hole register's next id H-915; the registry's NPC-095. B98's counts are not known until part 44 is written: it holds the spare block above, and A44's `IDS:` line, if larger, takes the ids that follow H-854 and ED-IN-0401 on `main` at B98's open.
+**`next_free` after B00, as this table leaves it:** MB 101, PC 72, FI 16, SC 57, FA 56, WR 24, IN 405, GO 10, SE 65; the hole register's next id H-941; the registry's NPC-095. B98's counts are not known until part 44 is written: it holds the spare block above, and A44's `IDS:` line, if larger, takes the ids that follow H-854 and ED-IN-0401 on `main` at B98's open.
 
 ---
 
