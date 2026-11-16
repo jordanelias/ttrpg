@@ -22,8 +22,8 @@ plan copy (`workplans/valoria_master_workplan_v12_part22_b24p.md`, `_cont.md`) s
 
 **Evidence.** Every number below was read from an executable model, `sc_model_v2/` (a copy of the stress test's
 `sc_model/` with a new package `sc2/`: `engine.py` the module, `host.py` the host side, `checks_core.py`,
-`checks_world.py`, `transcripts.py`; after the reconciliation `checks_v3.py`), run with `PYTHONHASHSEED=0`. "Before" figures are the stress test's, at the
-old design's shipped values. The model is scratch, not repository code; nothing in the tree runs this design, so its
+`checks_world.py`, `transcripts.py`; now `acts.py` and the battery `checks_v8.py`), run with `PYTHONHASHSEED=0`. "Before" figures are
+the stress test's (at the old design's shipped values) or the premise-check's (on the model as it stood, `fix2/before/`). The model is scratch, not repository code; nothing in the tree runs this design, so its
 grade is **paper with a running model** (CLAUDE.md §0.2), and part 3 says what was not verified.
 
 **Reconciled once, 2026-11-15**, after two antagonist passes (execution and logic; rulings, theory and NERS) and
@@ -32,7 +32,8 @@ Jordan's answers to this design's three questions and two further rules (rows A-
 sitting with ONE character is refused; a person may be both a side and an adjudicator: a noble who speaks with you
 and then decides, an inquisitor who questions and judges, a questioned man who decides whether to give way); the NPC plays its reading while it keeps its temper; six cuts were
 overturned because each removed the only carrier of a ruled clause (part 4 §G); the execution defects were fixed
-and re-run (`checks_v3.py`, output `v3_out.txt`, n = 400 an arm unless stated). Part 3's numbers are that run's.
+and re-run (`checks_v3.py`, output `v3_out.txt`, n = 400). That run's numbers are history: every figure these
+files now state is from `checks_v8.py` (below).
 
 Three later statements were folded in the same day and are rows A-141 to A-143: Attunement gauges the perceived
 worth of a contestant's choices; Attunement frames the speech on what the listener wants and holds; and the
