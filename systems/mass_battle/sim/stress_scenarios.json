@@ -395,7 +395,7 @@
    "a": {
     "kind": "oob",
     "strategy": "advance",
-    "subformations": [
+    "units": [
      {
       "name": "line",
       "troop_type": "heavy_infantry",
@@ -423,7 +423,7 @@
    "b": {
     "kind": "oob",
     "strategy": "defend",
-    "subformations": [
+    "units": [
      {
       "name": "line",
       "troop_type": "heavy_infantry",
@@ -455,7 +455,7 @@
    "a": {
     "kind": "oob",
     "strategy": "advance",
-    "subformations": [
+    "units": [
      {
       "name": "line",
       "troop_type": "heavy_infantry",
@@ -483,7 +483,7 @@
    "b": {
     "kind": "oob",
     "strategy": "defend",
-    "subformations": [
+    "units": [
      {
       "name": "line",
       "troop_type": "heavy_infantry",

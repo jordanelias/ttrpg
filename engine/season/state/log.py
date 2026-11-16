@@ -12,7 +12,7 @@ THE THREE ASSERTIONS, all at `append`:
   2. **Every cause resolves.** `causes[] ⊆ log ids ∪ act ids ∪ {ROOT}`. #353 §19.4 calls this
      field *"the substrate of the entire emergent-narrative claim"*, and `H-80` records what the
      tree actually had: *"a log walker drops an unresolvable `[a.id]` exactly as it drops
-     `[ROOT]`"*. An id naming nothing and no id at all were indistinguishable. They are not now.
+     `[ROOT]`"*. Without the check an id naming nothing and no id at all are indistinguishable.
   3. **The kind is declared.** `04` §B.13 loader invariant 7: *"the log accepts no other kind"*. The
      roster (`data/verbs.py::EVENT_KINDS`) is HANDED IN at construction (`kinds`), never imported here:
      `state/log` reads nothing (`04` §A.2). `World` passes it, so a probe or a test that appends a kind
@@ -21,19 +21,18 @@ THE THREE ASSERTIONS, all at `append`:
 
 ⚠ IT IS A LIST TO EVERY READER, AND THAT IS LOAD-BEARING. `world.py` iterates it, reverses it and
 takes its length; `content_hash` folds it positionally; probes index it. Replacing the list with
-an object that is merely list-LIKE would have moved the content hash if the fold order changed,
-and would have broken `reversed(self.log)` at `world.py:625` silently -- `reversed` needs
+an object that is merely list-LIKE would move the content hash if the fold order changed,
+and would break `reversed(self.log)` in `world.py` silently -- `reversed` needs
 `__reversed__` or the `__len__`+`__getitem__` pair, and a class with only `__iter__` raises. Both
 are implemented for that reason, not for completeness.
 
 ⚠ WHAT IS DELIBERATELY NOT REFUSED: an Event carrying a bare `StateChange`. Refusing it outright
-is the correct end state and it is not reachable in this unit -- `harness/probes.py:1797` builds
-one outside any gate write, and rewriting the probe corpus is its own change. So a bare
+is the correct end state and it is not reachable -- `harness/probes.py` builds
+one outside any gate write. So a bare
 `StateChange` is admitted and a `Receipt` is verified: the type you reach for when you mean "the
 gate wrote this" is checked, and the one that predates the distinction is not. **This is a
 transitional asymmetry and it is the file's weakest seam** -- anyone wanting to forge provenance
-today simply uses the older class. What it stops is the accident, not the adversary. `G4`
-finalises the effect contract and is where the bare class should stop being admitted.
+today simply uses the older class. What it stops is the accident, not the adversary.
 """
 from typing import Any, Callable, Iterator, Optional
 
@@ -143,12 +142,10 @@ class EventLog:
 
     def extend(self, events) -> None:
         """⚠ ROUTES THROUGH `append`, ONE AT A TIME, AND THAT IS THE WHOLE REASON IT EXISTS.
-        `harness/corpus_run.py:565` does `w.log.extend([e1, e2])` where `e2` names `e1` as its
+        `harness/corpus_run.py` does `w.log.extend([e1, e2])` where `e2` names `e1` as its
         cause, so the two must be checked IN ORDER -- a bulk insert that validated against the
         pre-extend id set would reject a legitimate chain built in one call. Implementing it as
-        a loop rather than letting `AttributeError` stand also keeps the refusals on the path:
-        the alternative fix was to rewrite the caller, which would have quietly moved one more
-        log write outside the checks."""
+        a loop also keeps the refusals on the path."""
         for e in events:
             self.append(e)
 

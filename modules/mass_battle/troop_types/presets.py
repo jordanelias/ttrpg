@@ -40,7 +40,7 @@ ARM_SHARES = (
     ('mounted', 0.20, ('cavalry', 'knights_templar', 'light_cavalry')),  # [canonical: ED-IN-0306 -- ASSUMPTION: the doctrine's share of a cohort's cap; Jordan to correct]
 )
 
-#: type -> the role its subformation takes, from `roles_for(type)`: a plain line for the heavy foot, volleys for the
+#: type -> the role its unit takes, from `roles_for(type)`: a plain line for the heavy foot, volleys for the
 #: bows, the flank for the horse, the reserve for the levy. None is a plain Line.
 ROLE_OF = {
     'heavy_infantry': None, 'spearmen': None, 'pike': None, 'light_infantry': None,
@@ -70,7 +70,7 @@ def plan(q) -> tuple:
 
     # Each class in turn, and from EVERY cohort its share of that cohort's cap (a cohort's people are split across the
     # arms, so a class filled from the first cohorts alone would leave the later classes nothing to stand on). A trial pass
-    # sees what the class WOULD raise; a type that comes to less than a subformation can stand on is dropped, then the real
+    # sees what the class WOULD raise; a type that comes to less than a unit can stand on is dropped, then the real
     # pass. `given` is restored between, so both passes see the same rooms.
     for _cls, share, types in ARM_SHARES:
         trial = []
@@ -92,7 +92,7 @@ def plan(q) -> tuple:
         for c, t, n in trial:
             if by_t[t] >= SUBUNIT_ROUT_FLOOR:
                 take(c, t, n)
-    # The levy takes the rest of every cohort's room, as the reserve, if it comes to a standing subformation.
+    # The levy takes the rest of every cohort's room, as the reserve, if it comes to a standing unit.
     levy = []
     for c, w, sites in cohorts:
         n = room(c, w, sites, 'levy')

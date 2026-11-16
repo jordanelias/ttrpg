@@ -1,6 +1,6 @@
 """`season.loop.effects_migration` -- travel and settlement: move, migrate.
 
-EXTRACTED from `effects.py` at the per-subsystem split (Phase 4). Holds the presence/residence pair:
+Holds the presence/residence pair:
 `move` re-homes `contain` alone, `migrate` re-homes `contain` AND `reside` in one write. `_relocate`,
 the journey the two share (the traveller's live `contain` legs close, a new one opens, and `dest` is
 appended to `Person.travel_leg`), stays in this file; `move` and `migrate` call it, and since v9 IN-13
@@ -35,19 +35,11 @@ def _eff_move(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     would put two receipts on every `travel.moved` that has always carried one, which moves a hash
     for a reason that is not a no-op. A traveller who is not a Person (a hand-built act; RESOLVE
     never folds one, `act.ineligible` stops it first) names an absent subject that stays absent,
-    so the move is refused and the legs it opened are put back -- where before G4 it published
-    `travel.moved` about a mover that does not exist."""
+    so the move is refused and the legs it opened are put back."""
     dest = _operand(a, "to")
-    # ⚠ THE GUARD MOVED TO `_operand` AND ITS HISTORY IS KEPT HERE, because the history is what
-    # makes the guard's shape legible. Rev 1 fell through on a missing destination, closed every
-    # live leg and STILL returned `[a.actor]`, so `_fold` saw a non-empty `changed` and published
-    # `travel.moved` for a move that did not happen. Returning `[]` would be quieter and just as
-    # wrong: the caller would report a no-op as a legitimate nothing. §42.2's polarity rule -- no
-    # destination is a refusal, never a silent success. The version of this guard that lived here
-    # was found to pass `needs=`/`law=` to `InstrumentDefect`, which takes no keywords, so it
-    # would have raised `TypeError` if it had ever fired -- a guard that crashes instead of
-    # reporting, unfired because the precondition refuses first. One owner is also one place for
-    # that mistake to be made.
+    # ⚠ NO DESTINATION IS A REFUSAL, NEVER A SILENT SUCCESS (§42.2's polarity), and the guard is
+    # `_operand`'s, the one owner: a `move` that fell through on a missing destination would close
+    # every live leg and publish `travel.moved` for a move that did not happen.
     if restrained(w, a.actor, DETAIN_KIND):
         return _decline_custody(a, dest)
     # ⚠ A DESTINATION THE LADDER WILL NOT SEAT THE MOVER IN IS A BLOCKED TRAVEL, NOT A CRASH, and
@@ -99,11 +91,10 @@ def _relocate(w: "World", a: "Act", dest: str, mover: "str | None" = None) -> No
     """THE JOURNEY, `move`'s and `migrate`'s one body: the actor's live `contain` legs close, a new
     one opens to `dest`, and `dest` is appended to `Person.travel_leg` -- the movement in progress
     (`ARCHITECTURE_V2.md` §D4) that `loop/matter.py`'s travel pass ends at the next MATTER. Called
-    inside an effect's `perform`, so the gate observes every edge it writes. Extracted UNCHANGED from
-    `_eff_move` at plan position `19c` because `migrate` is a journey too (a settler travels to his new
-    home and pays the same distance penalty the season he goes), and a second copy of *what a journey
-    writes* would let the two verbs disagree about it (§8). The leg's id is `move`'s, byte for byte,
-    so every run that only moves is unmoved by the extraction.
+    inside an effect's `perform`, so the gate observes every edge it writes. One body because
+    `migrate` is a journey too (a settler travels to his new home and pays the same distance penalty
+    the season he goes), and a second copy of *what a journey writes* would let the two verbs
+    disagree about it (§8). The leg's id is `move`'s.
 
     v9 IN-13 (#453 §9.6, the arrival): `mover` -- WHO makes the journey, the actor when omitted. A won
     or unopposed `march` relocates EVERY claimant of its army through this one body (`_eff_march`), so
@@ -116,11 +107,10 @@ def _relocate(w: "World", a: "Act", dest: str, mover: "str | None" = None) -> No
             t.until = w.tick
     w.add_tenure(Tenure(H(w.world_seed, w.tick, who, f"leg:{a.id}"),
                         who, dest, "contain", since=w.tick))
-    # ⚠ THE DECLARED WRITE, NOW ACTUALLY WRITTEN. `verb_table.yaml`'s `move` row names
-    # `(Person, travel_leg)` as its FIRST write and rev 1 never touched the field, so
-    # `Query.budget`'s distance penalty read `len(p.travel_leg)` == 0 in every run and the only
-    # test of it set the field by hand. A declared write that no effect performs is a lie the
-    # write matrix cannot catch, because the matrix gates writes that HAPPEN.
+    # ⚠ THE DECLARED WRITE: `verb_table.yaml`'s `move` row names `(Person, travel_leg)` as its FIRST
+    # write, and `decision/budget.py::budget`'s distance penalty reads `len(p.travel_leg)`. A declared write that
+    # no effect performs is a lie the write matrix cannot catch, because the matrix gates writes
+    # that HAPPEN.
     traveller = w.persons.get(who)
     if traveller is not None:
         traveller.travel_leg = list(traveller.travel_leg) + [dest]
@@ -134,8 +124,7 @@ def _eff_migrate(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     destination, in one write.
 
     ⚠⚠ THE PRESENCE/RESIDENCE SPLIT, DECIDED HERE (plan position `19c`; `CLAUDE.md` §0 step 5 -- part
-    1 `§5` routes it to architecture, not to Jordan). The tree had ONE edge for where you are and where
-    you live, and `move` re-homed it. The split keeps `contain` as PRESENCE and adds `reside` as
+    1 `§5` routes it to architecture, not to Jordan). The split keeps `contain` as PRESENCE and adds `reside` as
     RESIDENCE, and `move` is defined by what it leaves behind: the `reside` edge.
       * WHY `contain` STAYS PRESENCE. It is ratified: `04_CODE_ARCHITECTURE.md` §B, *"LOCATION: ... its
         contain edge is where they are"*, and `ARCHITECTURE_V2.md` §D4, *"A person's location IS their

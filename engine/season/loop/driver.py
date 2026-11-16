@@ -1,14 +1,14 @@
 """`season.loop.driver` -- `SeasonDriver` and `season()`.
 
 `04_CODE_ARCHITECTURE.md` §A.2:134 -- *"loop/  driver + six steps. The driver is the ONLY constructor
-of write tokens."* (AMENDED 2026-09-28, `ED-IN-0279` clause (a), to SEVEN -- see the note at the
-bindings below). This module is the DRIVER half. The seven steps are `loop/{calendar,matter,
-deliberate,resolve,encounter,witness,census}.py` and are **bound onto the class at the foot of this
-file**, not delegated to -- `SeasonDriver.witness` IS `witness.witness`, so `inspect.getsource` reaches
-the real body and the eight tests that read a step's source keep working. See the note above the
-bindings.
+of write tokens."* (AMENDED 2026-09-28, `ED-IN-0279` clause (a), to SEVEN.) This module is the DRIVER
+half. The seven steps are `loop/{calendar,matter,deliberate,resolve,encounter,witness,census}.py`; each
+is **bound onto the class at the foot of this file**, not delegated to -- `SeasonDriver.witness` IS
+`witness.witness`, so `inspect.getsource` reaches the real body, which the tests that read a step's
+source rely on.
 
-The driver constructs the write tokens, binds the seven steps onto `SeasonDriver` and owns `resolvable_verbs`.
+The driver mints the write tokens (`mint_token`, one per barrier, handed to the step and never kept),
+binds the seven steps onto `SeasonDriver` and owns `resolvable_verbs`.
 """
 from __future__ import annotations
 
@@ -59,104 +59,54 @@ def resolvable_verbs() -> frozenset:
 
     COMPUTED, NEVER LISTED. A caller narrowing an option set to these is not authoring a roster --
     it is asking the fold what it can execute, and the answer moves when `verb_table.yaml` or the
-    predicate registry moves. W3 measured 12 of 32; this is that measurement as a function, so a
-    probe can report both numbers instead of hardcoding either.
+    predicate registry moves.
 
     THREE GATES: a precondition the fold can evaluate, an effect for whatever it writes, and, for
-    a verb that contests, a prize with a registered provider and a typed row (the comment below)."""
+    a verb that contests, a prize whose row names a provider and a typed row (the comment below)."""
     out = set()
     for v, row in VERB_TABLE.items():
-        # ⚠ BOTH GATES, NOT JUST THE PRECONDITION. The first version checked `requires:` alone and
-        # called `create_record` resolvable -- it has no precondition and no EFFECT, so the fold
-        # admits it and then raises `Unspecified` on "Part E does not say WHAT VALUE". A caller
-        # narrowing to "what the fold can execute" got a set the fold could not execute, and the
-        # gap only surfaced when `W17`'s packing started attempting more verbs per season. Found
-        # by running the corpus, not by reading it.
-        # ⚠ `requires_typed` IS THE FIRST OF THE THREE, AND ONE OWNER IS WHY IT IS HERE. This
-        # question -- *can the fold evaluate this precondition* -- is the same question `_fold`
-        # asks two hundred lines down, and leaving it reading only `REQUIRES_PREDICATES` would
-        # give the two sites different answers for every typed verb (§8: the rule lives once).
-        # ⚠ (plan position IN-41, `SM-11`) AND THE ANSWER LIVES ON `VerbRow`, ONE OWNER FOR THIS
-        # GATE AND THE REFUSAL OVER IT: a row this gate drops reaches it only if its
-        # `verb_table.yaml` row carries a `requires_decline_note:` saying why nothing evaluates its
-        # precondition -- `manifest.check_preconditions()` refuses every other such row at
-        # `SeasonDriver` construction, naming it. Before IN-41 this drop was without a word.
+        # BOTH GATES, NOT JUST THE PRECONDITION: `create_record` has no precondition and no EFFECT,
+        # so checking `requires:` alone would count it, and the fold would then raise `Unspecified`.
+        # `precondition_evaluable` is the question `_fold` asks, answered by one owner on `VerbRow`
+        # (§8): a row it drops reaches this gate only if its `verb_table.yaml` row carries a
+        # `requires_decline_note:`; `manifest.check_preconditions()` refuses every other such row at
+        # `SeasonDriver` construction, naming it (plan position IN-41, `SM-11`).
         gated = row.precondition_evaluable(REQUIRES_PREDICATES)
         effected = row.effect_carried(EFFECTS)
-        # ⚠ (plan position `30`) THE EXCLUSION ABOVE IS NO LONGER SILENT. A writing row with no
-        # effect reaches it only if its `verb_table.yaml` row carries an `effect_decline_note:`
-        # saying why: `manifest.check_effects()` refuses every other such row at `SeasonDriver`
-        # construction, naming it (refusal (a); two-sided since IN-41 split `SM-9`'s column) -- a
-        # CONTESTED row included, because `loop/resolve.py::_contest` folds the seam's result
-        # through `EFFECTS`.
-        # ⚠ AND A THIRD GATE: A VERB THAT CONTESTS ROUTES TO THE SEAM FIRST, AND FOLDS WHAT IT RETURNS.
-        # `ARCHITECTURE_V2.md:394` — *"`contests: <prize>` — if set, ROUTES TO THE SEAM at
-        # RESOLVE (§39)"* — so such a verb is executable only if the SEAM can return. It was
-        # counted as executable only because the instrument read its own `EFFECTS` entry and never
-        # read the column that says the effect is not the path. Jordan, 2026-09-02: *"you can't
-        # just kill or wound imo."* Correct, and the design agreed at `:434` all along.
+        # A writing row with no effect reaches the exclusion above only if its `verb_table.yaml` row
+        # carries an `effect_decline_note:`; `manifest.check_effects()` refuses every other such row
+        # at `SeasonDriver` construction, naming it (refusal (a)) -- a CONTESTED row included,
+        # because `loop/resolve.py::_contest` folds the seam's result through `EFFECTS`.
+        # The third gate: a verb that contests ROUTES TO THE SEAM FIRST and folds what it returns
+        # (`ARCHITECTURE_V2.md:394`, *"`contests: <prize>` -- if set, ROUTES TO THE SEAM at RESOLVE
+        # (§39)"*), so it is executable only if the seam can return. Jordan, 2026-09-02: *"you can't
+        # just kill or wound imo."*
         #
-        # ⚠ THE GATE'S OLD REASON IS NOW FALSE AND ITS NEW ONE IS NARROWER AND MEASURED. What
-        # stood here said *"today `contest()` raises `Unspecified` at S39.4 before it returns
-        # anything"*. That stopped being true for `the body` when the seam started CALLING
-        # personal combat, and `W-E` (2026-09-04) closed the rest: the seam returns, `degree_of`
-        # reads the band off the scene, and `_fold` executes all three branches. THE GATE STAYS,
-        # ON A DIFFERENT AND CHECKABLE GROUND: a contested act needs a `subject` operand to name
-        # the second claimant, and `operands_for` returns `{}` for an UNTYPED verb (`H-80`,
-        # `H-94`) — `kill / wound`'s `requires` is `—`, so it is untyped. A computed
-        # `kill / wound` would therefore reach the seam with ONE claimant, `combat_seam` would
-        # return `PARTY-GAP`, and every case that produced one would become a whole-case
-        # DESIGN-GAP. Admitting the verb here is `H-80`'s item, not this one, and the corpus
-        # measures the difference: at the shipped fixtures no contested act arises from the loop,
-        # which is why closing the seam moved ZERO bytes of the run artifacts.
-        #
-        # ⚠⚠ **`U1` REPLACED `not contested` WITH A MANIFEST-DERIVED TEST, AND WITHOUT THAT
-        # AMENDMENT `U1`'s OBSERVABLE COULD NOT OCCUR.** The bare refusal is the right answer to
-        # the question *can the seam return* only while the answer is no for everything. The moment
-        # a verb declares `contests:` on a prize a provider IS registered for, refusing it here
-        # would drop it out of every chooser's candidate set — every corpus driver narrows to this
-        # set — so the unit would move R-05's executing count DOWN and its controls would pass
-        # trivially.
-        #
-        # THE CLAUSES ARE THE GATE'S OWN GROUNDS, READ FORWARD:
-        #   * ⚠ **a provider is registered for the prize** -- `manifest.has(role, module)`, asking
-        #     the CODE, not the data -- STOOD HERE AND PLAN POSITION `30` DELETED IT. It dropped a
-        #     contested verb from the game without a word when its prize's provider was unregistered
-        #     (`mass_battle` was exactly that until ED-IN-0279, M3). `manifest.check_contest_prizes()`
-        #     now refuses that state at `SeasonDriver` construction, naming the prize, so on any run
-        #     the clause could no longer be false; a gate that cannot be false is not a gate.
-        #     `tests/valoria/test_season_providers_are_registered.py` watches the refusal instead.
-        #   * **the verb is typed.** The paragraph above is the reason and it is unchanged:
-        #     `operands_for` returns `{}` for an untyped row, so a computed contested act would
-        #     reach the seam with ONE claimant and every case producing one would become a
-        #     whole-case DESIGN-GAP.
+        # THE CLAUSES:
+        #   * the prize's row names a provider -- `manifest.resolve("contest", prize)`'s `provider:`.
+        #     There is no `manifest.has(role, module)` clause here: `manifest.check_contest_prizes()`
+        #     refuses an unregistered provider at `SeasonDriver` construction, naming the prize, so
+        #     such a clause could never be false. `tests/valoria/test_season_providers_are_registered.py`
+        #     watches the refusal.
+        #   * the verb is typed: a contested act needs a `subject` operand to name the second
+        #     claimant, and `operands_for` returns `{}` for an UNTYPED verb (`H-80`, `H-94`). A
+        #     computed `kill / wound` (`requires` is `—`, so untyped) would reach the seam with ONE
+        #     claimant, `combat_seam` would return `PARTY-GAP`, and every case producing one would
+        #     become a whole-case DESIGN-GAP. Admitting it is `H-80`'s item.
         #   * ⚠ v10 IN-12 step 5 (H-226 route (a) [ASSUMPTION; medium; Jordan to correct; revert:
         #     `row.requires_typed is not None` alone]): **OR the untyped row names `counterparty:
-        #     subject`.** The clause's reason -- an untyped row carries no `subject` -- IN-10 (a) made
-        #     false for exactly that row: `decision/options.py::_operands` carries the referent on
-        #     `subject` when the row names it as its counterparty, so the seam has its second
-        #     claimant. NARROWED TO A ROW DECLARING A REGISTERED PREDICATE, because an untyped row
-        #     with a precondition reaches here only through `REQUIRES_PREDICATES` (the first gate) and
-        #     one with none would contest with no custody or party read at all. ROWS IT NEWLY ADMITS,
-        #     ENUMERATED AT THE EDIT over the shipped table: `interrogate` alone -- no other contested
-        #     row is untyped (`oblige`, the one other untyped `counterparty: subject` row, contests
-        #     nothing and was resolvable before).
-        # `kill / wound` still fails the second clause — its `requires` is `—` — which is what
-        # keeps Jordan's *"you can't just kill or wound imo."* true. Admitting it is `H-80`'s item.
-        #
-        # ⚠ FALSIFIER, RE-POINTED AT `30`: delete the `@provider("contest", "social_contest")`
-        # registration from `seam/wrappers/sigma.py` and `SeasonDriver` construction refuses naming
-        # the first prize `social_contest` runs -- where this set used to shrink by every verb contesting
-        # them, with the data unchanged and nothing said.
+        #     subject`.** `decision/options.py::_operands` carries the referent on `subject` when the
+        #     row names it as its counterparty, so the seam has its second claimant. NARROWED TO A
+        #     ROW DECLARING A REGISTERED PREDICATE, because an untyped row with a precondition
+        #     reaches here only through `REQUIRES_PREDICATES` (the first gate) and one with none
+        #     would contest with no custody or party read at all.
         contested = bool(row.contests)
         resolvable_contest = False
         if contested:
-            # ⚠ THROUGH `manifest.resolve`, NOT BY RE-READING THE ROSTER. This planted the literals
-            # `"contest_subsystems"` / `"prizes"` here and re-implemented the row unwrap, which
-            # `registry.py`'s own comment forbids in as many words — *"THE ROLE NAMES ARE DATA, NOT
-            # A LITERAL HERE ... the map exists so `resolve` does not branch on a role's name."*
-            # Two readings of one row's `provider:` is how a role added to `_ROLE_ROSTERS`, or a new
-            # case in the row shape, silently stops reaching the verb set.
+            # THROUGH `manifest.resolve`, NOT BY RE-READING THE ROSTER: `registry.py` forbids a
+            # literal role name here -- *"THE ROLE NAMES ARE DATA, NOT A LITERAL HERE ... the map
+            # exists so `resolve` does not branch on a role's name."* Two readings of one row's
+            # `provider:` is how a new role or row shape silently stops reaching the verb set.
             from ..manifest import resolve as _resolve_row
             _mod = (_resolve_row("contest", row.contests) or {}).get("provider")
             resolvable_contest = bool(_mod) and (
@@ -167,39 +117,9 @@ def resolvable_verbs() -> frozenset:
     return frozenset(out)
 
 
-# ⚠ `sense_subsistence_only(p, w, formula)` STOOD HERE AND W5 DELETED IT, on the evidence of its
-# own proof. It was a SECOND non-decision function taking a `World` -- exactly what #353 `:634`
-# permits only `sense()` to be -- and it had ZERO CALLERS anywhere in the tree. It survived
-# because nothing checked SIGNATURES: the file's dead-code guard looks for switched-off rules
-# (`if False`), not for unused functions, and every claim about "the ONE" was made in prose.
-# `test_w5_sense_is_still_the_only_world_taking_non_decision_function` walks the AST for any
-# person-side function annotated with a `World` and found this on its first run. Recovered at
-# `git log -S sense_subsistence_only` if the injected-formula helper is ever wanted again.
-
-
 # ===========================================================================
 # PART III -- THE SEASON LOOP
 # ===========================================================================
-
-
-# ===========================================================================
-# THE FOLD -- W3. ONE `resolve`, READING `verb_table.yaml`.
-#
-# What was here: `resolve(acts, effect, ...)`, where `effect` was a CALLER-SUPPLIED LAMBDA that
-# inspected `a.verb` and returned Events. Every probe wrote its own. That is defect `D20` and it
-# is §27.2's "no second resolver" arriving as a PARAMETER rather than as a function -- a resolver
-# per caller, each free to disagree with the others about what a verb does.
-#
-# THE FOLD, per §E2: eligibility -> `requires` AGAINST THE WORLD THE PREDECESSORS LEFT -> each
-
-
-
-
-# Verbs the probe corpus uses that #353 does not name AS A VERB — checked, not assumed: the
-# strings `take_seat`, `press_claim`, `raid` and `confer_authority` appear ZERO times in its 2,067
-# lines, and `fight`/`refuse`/`do`/`act` appear only as ordinary English. They are the caller's
-# inventions and the fold says so, rather than charging them to the design. Register row H-64.
-
 
 
 class SeasonDriver:
@@ -208,34 +128,25 @@ class SeasonDriver:
 
     def __init__(self, w: World):
         self.w = w
-        # ⚠ SC-02 `23`: THE `data/` LOADERS BEHIND ONE ENTRY (`04:131`, *"the ONE loader"*). Every run
-        # constructs a driver, so a loader's refusal (a `SystemExit` naming its row, or `Unspecified` for
-        # a lazy file that is gone) fires here, first, rather than at the first world to read that file.
+        # THE `data/` LOADERS BEHIND ONE ENTRY (`04:131`, *"the ONE loader"*). Every run constructs
+        # a driver, so a loader's refusal (a `SystemExit` naming its row, or `Unspecified` for a lazy
+        # file that is gone) fires here, first, rather than at the first world to read that file.
         # Idempotent; `data/__init__.py::load_all` has the rest.
         load_all()
-        # ⚠ **THE MANIFEST'S ROWS ARE VALIDATED HERE, BECAUSE THIS IS THE ONE PLACE EVERY RUN
-        # PASSES.** `04 PART E step 10`'s done-condition is *"a misspelled manifest row fails at boot naming
-        # the row"*, and unit L4 built `manifest.check_rows()` for it and wired it into
-        # `World.boot()` -- which NOTHING ON A RUN PATH CALLS. `headless`, `corpus_run` and
-        # `run_cases` never boot a world; only two probes and three tests do. So the behaviour
-        # existed and did not EXECUTE, which `CLAUDE.md` §0.2 says is not done. Found by the Fable
-        # gate on Arc 1.
+        # THE MANIFEST'S ROWS ARE VALIDATED HERE, THE ONE PLACE EVERY RUN PASSES. `04 PART E
+        # step 10`: *"a misspelled manifest row fails at boot naming the row"*. `check_rows()` and not
+        # `check_roles()`: `check_roles` needs `w.manifest`, which is EMPTY in every real run, and
+        # would raise `NoProducer` on every season. `check_rows` validates the REGISTRY and needs no
+        # manifest; the roles half stays on `World.boot()` for callers that have one.
         #
-        # ⚠ IT IS `check_rows()` AND NOT `check_roles()`, AND THE SPLIT IS FORCED RATHER THAN
-        # CHOSEN. `check_roles` needs `w.manifest`, which is populated by exactly one probe and is
-        # EMPTY in every real run -- calling it here would raise `NoProducer` on every season.
-        # `check_rows` validates the REGISTRY, needs no manifest, and is the half `04 PART E step 10` names.
-        # The roles half stays on `World.boot()` for the callers that have a manifest to check.
-        #
-        # ⚠ PLAN POSITION `30` (A-25): THE REGISTRAR RUNS FIRST, THEN THE REFUSALS, EACH NAMING ITS
-        # ROW -- here for `check_rows()`'s reason, the one place every run passes. The registrar
-        # records every composition row carrying `entry:` in `manifest.MODULE_ENTRIES`, resolving by
-        # string (never at import), and refuses (b) a `verb:` naming no verb row and (d) an entry
-        # registered twice; it is idempotent, so a corpus constructing many drivers is refused
-        # nothing new. Then (c) the contest roster, both halves, and (a) a writing row with no effect
-        # and no `effect_decline_note:` (and its converse), and -- plan position IN-41, `SM-11` --
-        # (a)'s precondition twin: a precondition nothing evaluates and no `requires_decline_note:`
-        # (and its converse). `manifest/registrar.py` and `manifest/registry.py` hold the rules.
+        # PLAN POSITION `30` (A-25): THE REGISTRAR RUNS FIRST, THEN THE REFUSALS, EACH NAMING ITS
+        # ROW. The registrar records every composition row carrying `entry:` in
+        # `manifest.MODULE_ENTRIES`, resolving by string (never at import), and refuses (b) a
+        # `verb:` naming no verb row and (d) an entry registered twice; it is idempotent. Then (c)
+        # the contest roster, all three halves, and (a) a writing row with no effect and no
+        # `effect_decline_note:` (and its converse), and -- plan position IN-41, `SM-11` -- (a)'s
+        # precondition twin: a precondition nothing evaluates and no `requires_decline_note:` (and
+        # its converse). `manifest/registrar.py` and `manifest/registry.py` hold the rules.
         from ..manifest import (
             check_contest_prizes, check_effects, check_graded_inquiries, check_inquiry_modules,
             check_preconditions, check_rows, register_module_entries, require_entries,
@@ -262,25 +173,21 @@ class SeasonDriver:
                 "loop/driver.py::SeasonDriver.__init__",
                 needs="a `scene_budget` of at least one",
                 law="a season with no lap is not a season (a loader-family refusal, at boot)")
-        # OBSERVATION ONLY, and the distinction matters. Six probes used the removed `effect` hook
-        # to record which acts reached RESOLVE and in what order. That is a thing to WATCH, not a
-        # thing to DECIDE, and giving it back as a resolver parameter is how the second resolver
-        # returns. This list is appended by the fold and read by nobody inside it.
+        # OBSERVATION ONLY: the fold appends here and nothing inside it reads the list. It is a
+        # thing to WATCH, not to DECIDE; giving it back as a resolver parameter is how a second
+        # resolver returns.
         self.resolved: list[Act] = []
-        # ⚠ COMPANION SET, `ActStore._by_id`'s OWN SHAPE, FOR THE SAME REASON (M4 review pass,
-        # `/simplify` efficiency finding). `_fold` dedupes `resolved` by id -- a march act reaches
-        # it once from RESOLVE's Declared fold and once more from ENCOUNTER's real fold -- and a
-        # per-call `any(r.id == a.id for r in self.resolved)` scan is O(n) against a list that is
-        # NEVER RESET across a whole campaign's many `season()` calls, making every act's fold
-        # O(N) over the run's total act count instead of O(1). `_resolved_ids` is maintained
-        # alongside `resolved`, never read on its own, and exists only so the dedup check in
-        # `loop/resolve.py::_fold` is a set membership test.
+        # COMPANION SET, `ActStore._by_id`'s OWN SHAPE. `_fold` dedupes `resolved` by id -- a march
+        # act reaches it once from RESOLVE's Declared fold and once more from ENCOUNTER's real fold --
+        # and `resolved` is NEVER RESET across a campaign's `season()` calls, so a per-call scan would
+        # make every act's fold O(N) over the run's total act count. `_resolved_ids` is maintained
+        # alongside `resolved`, never read on its own, so the dedup check in `loop/resolve.py::_fold`
+        # is a set membership test.
         self._resolved_ids: set = set()
-        # ⚠ RESOLVER-SIDE, AND CUMULATIVE — like `resolved`, which is also never reset. The
-        # Scene is the budgeted unit and carries the `occasion`, so the fold can name what
-        # occasioned an act. No person-side Query reaches it, exactly as none reaches `resolved`.
-        # It is NOT season-local: see the note at the `_fold` call site for why R3 depends on
-        # that, and do not "fix" it into one.
+        # RESOLVER-SIDE, AND CUMULATIVE, like `resolved`. The Scene is the budgeted unit and
+        # carries the `occasion`, so the fold can name what occasioned an act. No person-side Query
+        # reaches it. It is NOT season-local: see the note at the `_fold` call site for why R3
+        # depends on that.
         self.scenes: dict = {}
         # Event id -> the Act that emitted it. See the note at the `_fold` call site.
         self.act_of: dict = {}
@@ -291,40 +198,31 @@ class SeasonDriver:
         # does not accumulate: an entry lives from its round's RESOLVE to that round's WITNESS.
         self.findings: dict = {}
         # ---------------------------------------------------------------------
-        # `U2` / `R-03` — THE SCENE TICK'S OWN STATE, AND ALL OF IT LIVES HERE.
+        # `U2` / `R-03` -- THE SCENE TICK'S OWN STATE, AND ALL OF IT LIVES HERE.
         #
-        # ⚠ `D-21`: THE ROUND INDEX IS A DRIVER LOCAL, NEVER A CARRIER FIELD. `Claim.round` is the
-        # single exception and it is a different thing — a fact about WHEN a claim landed, which a
-        # later deliberation reads. Everything below is a fact about where the LOOP is, and a
-        # `round` on `Act`, `Event` or `World` would make it world state and put a fourth clock in
-        # the model. U2's falsifier (d) is the AST scan that holds this.
+        # `D-21`: THE ROUND INDEX IS A DRIVER LOCAL, NEVER A CARRIER FIELD. `Claim.round` is the
+        # single exception, a fact about WHEN a claim landed, which a later deliberation reads.
+        # Everything below is a fact about where the LOOP is; a `round` on `Act`, `Event` or `World`
+        # would make it world state and put a fourth clock in the model (U2's falsifier (d) is the
+        # AST scan that holds this).
         #
-        # ⚠ SEASON-LOCAL, UNLIKE `resolved` / `scenes` / `act_of` ABOVE, and the asymmetry is the
-        # point rather than an oversight: those three are the fold's cumulative record and R3
-        # depends on them crossing seasons, while a scene budget and a "when did this person last
-        # deliberate" stamp all reset at the season boundary by definition. `season()` clears them.
+        # SEASON-LOCAL, UNLIKE `resolved` / `scenes` / `act_of` ABOVE: those three are the fold's
+        # cumulative record and R3 depends on them crossing seasons, while a scene budget and a
+        # "when did this person last deliberate" stamp reset at the season boundary by definition.
+        # `season()` clears them.
         # ---------------------------------------------------------------------
         self.round: int = 0
         # Scene-action COST each person has spent this season, against `budget(p, v, ...)`.
         self._spent: dict = {}
         # `(tick, round)` of each person's last deliberation — `questions_for`'s `since`.
         self._deliberated_at: dict = {}
-        # ⚠ WHAT `_drop_what_was_already_done` READS, AND IT IS THE REALISED SET RATHER THAN THE
-        # ATTEMPTED ONE — which is the whole of a defect this unit's adversarial pass found. An
+        # WHAT `_drop_what_was_already_done` READS: the REALISED set, not the ATTEMPTED one. An
         # opportunity KEY (`data/verbs.py::opportunity_key`: `(verb, subject)`, plus the row's
-        # counterparty, `T4b` -- the general rule; `tell` is the row it changes anything for today)
-        # enters here only after the fold has run and only when the act's
-        # Event was not one of its row's `emits_on_refusal` kinds. Recording the ATTEMPT instead
-        # barred a refused act from ever being retried, including in a later round whose world had made its precondition
-        # true — the exact channel R-03 exists to open, closed by the filter meant to protect the
-        # season's variety.
-        # ⚠⚠ **THERE WAS A SECOND SET, `_attempted`, AND IT WAS WRITTEN EVERY ROUND AND READ BY
-        # NOTHING.** Its comment claimed both were live; a `/simplify` pass proved otherwise. The
-        # split it described is real and survives — it is the difference between what the budget
-        # was spent on and what may be retried — but only ONE side of it was ever consulted, so
-        # keeping the other was carrying a set the code did not use behind a comment that said it
-        # did. Deleted; if the attempted set is ever genuinely needed, it comes back with its
-        # reader in the same commit.
+        # counterparty, `T4b`) enters here only after the fold has run and only when the act's
+        # Event was not one of its row's `emits_on_refusal` kinds. Recording the ATTEMPT would bar a
+        # refused act from ever being retried, including in a later round whose world had made its
+        # precondition true -- the channel R-03 exists to open. What the budget was spent on and what
+        # may be retried are different sets; only the second is kept.
         self._realised: dict = {}
 
     # -- the question projection, built at barrier 2 -----------------------
@@ -346,10 +244,8 @@ class SeasonDriver:
         """`U2` / `R-03`: **a season is R ROUNDS, and MATTER and CALENDAR are not among them.**
 
         R-03 reads *seasons must tick scene-by-scene, so what occurs after one scene can impact
-        the next scene*. Before this, DELIBERATE ran once, RESOLVE once and WITNESS once — every
-        scene for every person was flattened into ONE `acts` list before RESOLVE ever ran, so
-        nothing that happened in one scene could reach a later scene inside the same season. The
-        only boundary was season-to-season.
+        the next scene*. DELIBERATE, RESOLVE and WITNESS run once per round, so what happens in one
+        scene reaches a later scene inside the same season.
 
         ⚠ **MATTER AND CALENDAR STAY ONCE PER SEASON, AND THAT IS A LAYER-1 CONSTRAINT RATHER THAN
         A PERFORMANCE CHOICE.** `01_AXIOMS.md:151` names AX-5's three motions — *"MATTER, BODIES,
@@ -374,16 +270,10 @@ class SeasonDriver:
         whole channel R-03 asks for. MATTER's and CALENDAR's events are seasonal, so they join round
         0's fan-out and no other — carrying them into every round would deposit one wear five times.
 
-        ⚠ **THE CONTROL IS THE `scene_budget = 1` ARM, AND THE FIRST WRITING OF THIS DOCSTRING
-        NAMED THE WRONG ONE.** It read that `H-124`'s `scenes_per_round = 5` gives every person
-        their whole season in round 0 and finds them spent in rounds 1..4, which IS the one-pass
-        loop. Measured at `build_world(0)`, 2 seasons, it is not: `claim.deposited` 50 -> 53,
-        `claim.decayed` 21 -> 24, `finding.made` 2 -> 3. A person whose triage leaves budget
-        UNSPENT empties their queue with remainder left, so a later round asks them again and they
-        spend it — where the one-pass loop simply lost it. What DOES reproduce the pre-tick season
-        is ONE ROUND: at `scene_budget = 1` the act multiset and the Event-kind multiset are
-        identical to the pre-`U2` run, and the content hash moves only by `Claim` gaining `round`.
-        That arm is the one-pass loop reproduced THROUGH this code path rather than around it.
+        ⚠ **THE CONTROL IS THE `scene_budget = 1` ARM**: one round, which is the one-pass loop
+        reproduced THROUGH this code path rather than around it. (`H-124`'s `scenes_per_round = 5`
+        is not that arm: a person whose triage leaves budget UNSPENT empties their queue with
+        remainder left, so a later round asks them again.)
 
         ⚠ `host` (v10 REM-31, IN-46: the grid mode's suspension) IS THE PLAYABLE MODE'S ONE ARGUMENT
         (`queries/inputs.py::PlayHost`), and it reaches ENCOUNTER ALONE: RESOLVE is called without it, so
@@ -396,29 +286,16 @@ class SeasonDriver:
         DELIBERATE's per-person map, which must not depend on the order it visits persons
         (`loop/deliberate.py::deliberation_order`)."""
         w = self.w
-        # ⚠⚠ **THE DEPTH CAP IS THE CALLER'S AND THE DRIVER MUST NOT FILL IT IN. `U2` ADDED A
-        # FALLBACK HERE AND IT WAS WRONG; THE REGISTER ROW IS WHAT OVERTURNED IT.**
-        # The fallback read `contest_max_depth = w.fixtures.get("contest_max_depth")` when the
-        # caller passed none, argued from §8's *the rule lives once*, and reasoned that `H-87` is a
-        # declared, sited, swept row rather than an invented number — so reading it here could not
-        # be the default S39.3 refuses. **`H-87` says otherwise, in its own fields.** Its `owner:`
-        # is *"the harness (the caller of `resolve`), per S39.3"* and its `site:` is *"Fixtures
-        # contest_max_depth — read by `headless.run` AND PASSED TO `SeasonDriver.season` for every
-        # RESOLVE"*. The row names the call site as the reading place and the driver as the
-        # receiver. A driver that reads it is not obeying the row, it is relocating it.
-        # ⚠ AND S39.3's REFUSAL IS ABOUT A DECIDER, NOT ONLY ABOUT A NUMBER. `H-87`'s cite: *"That
-        # refusal is CORRECT and it is the design working; what was missing is a caller who
-        # decided."* Filling the cap in here means no caller ever decides again — the refusal
-        # becomes unreachable and the guard that proves it
-        # (`test_d9c_max_depth_has_no_default_anywhere`) goes green on a design that no longer
-        # holds. §8 does not apply: reading one registry row from several call sites is not
-        # re-implementing a rule, and the row's `site:` is where it is read.
-        # ⚠ THE COST IS REAL AND WAS THE REASON FOR THE FALLBACK, SO IT IS PAID RATHER THAN
-        # ARGUED AWAY: once `U1` gave `tell` a `contests:`, every caller whose world can reach a
-        # contest needed a cap. MEASURED 2026-09-11: removing the fallback took the suite from 8
-        # failures to 17, and the seventeen resolve to SEVENTEEN CALLERS THAT HAD NOT DECIDED.
-        # Each now passes `contest_max_depth=<world>.fixtures.get("contest_max_depth")`, which is
-        # exactly the shape `H-87`'s `site:` describes.
+        # ⚠⚠ **THE DEPTH CAP IS THE CALLER'S AND THE DRIVER MUST NOT FILL IT IN.** `H-87`'s
+        # `owner:` is *"the harness (the caller of `resolve`), per S39.3"* and its `site:` is
+        # *"Fixtures contest_max_depth — read by `headless.run` AND PASSED TO `SeasonDriver.season`
+        # for every RESOLVE"*: the row names the call site as the reading place and the driver as
+        # the receiver, so a driver that reads it relocates the row. S39.3's refusal is about a
+        # DECIDER, not only a number (`H-87`'s cite: *"what was missing is a caller who decided"*);
+        # a fallback here means no caller decides again and the refusal becomes unreachable
+        # (`test_d9c_max_depth_has_no_default_anywhere`). §8 does not apply: reading one registry
+        # row from several call sites is not re-implementing a rule. Every caller whose world can
+        # reach a contest passes `contest_max_depth=<world>.fixtures.get("contest_max_depth")`.
         w.draw = 0                 # S33: the draw ordinal is per-TICK, so replay is exact
         w._departed.clear()        # H-206: per-tick scratch (`departed_from` answers only for its own tick)
         # `U2`: season-local. See `__init__` for why these reset and the three above it do not.
@@ -432,9 +309,8 @@ class SeasonDriver:
         rounds = int(w.fixtures.get("scene_budget"))
         n_acts, n_events, deposits = 0, len(matter_events), 0
         # IN-29: CALENDAR's own Events (`date.fired`) are seasonal like MATTER's and ride the same
-        # first-round fan-out, in barrier order. They were discarded here, so they reached `w.log`
-        # and no ledger. `n_events` does not count them (it counts MATTER's and each round's, as
-        # before): that figure is not this position's, and the log already holds these.
+        # first-round fan-out, in barrier order. `n_events` does not count them (it counts MATTER's
+        # and each round's); the log already holds these.
         pending_matter = calendar_events + matter_events
         for r in range(rounds):
             self.round = r
@@ -458,13 +334,12 @@ class SeasonDriver:
             # v10 REM-31: the host rides THIS call only -- the one step a PLAYABLE fight suspends at.
             events = events + self.encounter(mint_token(w, WriteClass.ACTS), events,
                                              contest_max_depth, host)
-            # ⚠⚠ **WHAT WAS REALISED, AS OPPOSED TO WHAT WAS ATTEMPTED — AND IT CAN ONLY BE KNOWN
-            # HERE, AFTER THE FOLD.** `deliberate` records an attempt at RELEASE, because that is
-            # when the scene-action is spent and the budget does not care how it went. Whether the
-            # act DID anything is the fold's answer, and `_drop_what_was_already_done` must read the
-            # second: an act attempted and REFUSED in round 0 must be retryable in round 3, because
-            # a later round's world may have made its precondition true. That is R-03's own channel,
-            # and recording the attempt directly closed it.
+            # ⚠⚠ **WHAT WAS REALISED, AS OPPOSED TO WHAT WAS ATTEMPTED -- KNOWABLE ONLY HERE,
+            # AFTER THE FOLD.** `deliberate` records an attempt at RELEASE, when the scene-action is
+            # spent. Whether the act DID anything is the fold's answer, and
+            # `_drop_what_was_already_done` must read that: an act attempted and REFUSED in round 0
+            # must be retryable in round 3, because a later round's world may have made its
+            # precondition true (R-03's own channel).
             # ⚠ A REFUSAL IS THE ROW'S OWN `emits_on_refusal` KIND, WHICH IS THE ONLY DECLARATION
             # OF WHAT A REFUSAL LOOKS LIKE (§E2: *failure emits, never raises*). An act that emitted
             # nothing at all — eligibility declined before the fold reached the table — is not
@@ -501,42 +376,32 @@ class SeasonDriver:
         # what an ending is and why the realm as built reaches none.
         endings = world_q.endings_reached(w)
         w.tick += 1
-        # ⚠ `rounds` IS REPORTED BECAUSE THE TICK IS OTHERWISE INVISIBLE IN EVERY ARTIFACT `U2`
-        # PRODUCES. The unit reshaped a season into R rounds and no observable said so: the
-        # summary read `acts/events/deposits`, all of which a one-pass season also produces, and
-        # `--log` prints `(kind, subject, causes)` per Event. A reader could not tell a ticked
-        # season from a flat one by looking at the output, which is §0.2's *something ran it*
-        # missing its *something*.
-        # ⚠ AND NO EVENT CARRIES A ROUND, WHICH IS WHY THIS IS A SEASON-LEVEL FIGURE AND NOT A
-        # COLUMN IN `--log`. `D-21` keeps the round index a DRIVER LOCAL; `Claim.round` is the one
-        # carrier field `U2` added, because a claim's round is read by `questions_for`'s `since`.
-        # Stamping Events too would be a second carrier for a fact nothing reads — the dead-carrier
-        # defect — so the artifact reports the COUNT of rounds the season ran and stops there.
+        # `rounds` IS REPORTED because the tick is otherwise invisible in the artifacts: the
+        # summary's `acts/events/deposits` are also what a one-pass season produces. It is a
+        # SEASON-LEVEL FIGURE and no Event carries a round (`D-21`: the round index is a driver
+        # local; `Claim.round` is the one carrier field, because `questions_for`'s `since` reads it).
         return dict(acts=n_acts, events=n_events, rounds=rounds,
                     deposits=deposits, hash=w.content_hash(), endings=endings)
 
 # ---------------------------------------------------------------------------
 # THE SEVEN STEPS, BOUND BACK ONTO THE CLASS (unit L5, ED-IN-0206; the seventh, `encounter`,
-# added M4 -- `ED-IN-0279` clause (a)).
+# `ED-IN-0279` clause (a)).
 #
 # `04_CODE_ARCHITECTURE.md` §A.2:134 -- *"loop/  driver + six steps. The driver is the ONLY
-# constructor of write tokens."* (AMENDED 2026-09-28 to seven) -- and the §A.2 table gives each
-# step its own owned state, its own `emits`, and its own token. They were methods on this class;
-# each body now lives in its own module and is BOUND HERE.
+# constructor of write tokens."* (AMENDED 2026-09-28 to seven). The §A.2 table gives each step its
+# own owned state, its own `emits`, and its own token; each body lives in its own module and is
+# BOUND HERE.
 #
 # ⚠ **BOUND, NOT DELEGATED, AND THE DIFFERENCE IS LOAD-BEARING.** `SeasonDriver.witness` IS
 # `witness.witness` after this line runs, so `inspect.getsource(SeasonDriver.witness)` returns the
-# MOVED BODY. Several tests read a step's source that way -- `test_d9b` checks that `witness` calls
-# `ledgers.evict_over_cap(` (B02.04 deleted `test_d2`, which looked for `driver="Event"`, and
-# `test_witness_writes_no_belief_and_no_pursuit`, a PURE NEGATIVE assertion). A delegating stub
-# would fail the first and SILENTLY VACATE any such negative assertion, which is why step 9 of the decomposition
-# refused to delegate and why this does not either. Step 5 established the technique when
-# `class Query` bound `world_q`'s functions as staticmethods.
+# MOVED BODY. Tests read a step's source that way (`test_d9b` checks that `witness` calls
+# `ledgers.evict_over_cap(`); a delegating stub would fail them and SILENTLY VACATE any negative
+# assertion over the step's source.
 #
-# ⚠ `season()` CALLS ALL SIX THROUGH `self`, so the binding is what keeps those calls resolving. As
-# of G2 five of them take the barrier's `Token` as their first argument after `self` -- `04 §C.1`'s
+# ⚠ `season()` CALLS ALL SEVEN THROUGH `self`, so the binding is what keeps those calls resolving.
+# Six of them take the barrier's `Token` as their first argument after `self` -- `04 §C.1`'s
 # `calendar(w,cal)`, `matter(w,mat)`, `resolve(w,act,scenes)`, `witness(w,intr,cache)`,
-# `census(w,mat2)` -- and `deliberate` takes none.
+# `census(w,mat2)`, and `encounter` -- and `deliberate` takes none.
 # ---------------------------------------------------------------------------
 from .calendar import calendar                                            # noqa: E402
 from .census import census                                                # noqa: E402
@@ -551,7 +416,6 @@ SeasonDriver.calendar = calendar
 SeasonDriver.matter = matter
 SeasonDriver.deliberate = deliberate
 SeasonDriver.resolve = resolve
-# M4 (`ED-IN-0279` clause (a)): the seventh step, bound the same way as the original six --
 # `SeasonDriver.encounter` IS `encounter.encounter` after this line, not a delegating stub.
 SeasonDriver.encounter = encounter
 SeasonDriver.witness = witness
@@ -564,9 +428,8 @@ SeasonDriver._admits = _admits
 SeasonDriver._occasion_ids = _occasion_ids
 SeasonDriver._fold = _fold
 SeasonDriver._apply_write = _apply_write
-# M4 (`ED-IN-0279` clause (a)): extracted from `resolve()`'s own loop so `loop/encounter.py`
-# shares both (§8) -- see their own docstrings in `resolve.py` for what each does and does not
-# re-check.
+# Extracted from `resolve()`'s own loop so `loop/encounter.py` shares both (§8) -- see their own
+# docstrings in `resolve.py` for what each does and does not re-check.
 SeasonDriver._survives = _survives
 SeasonDriver._contest = _contest
 # v9 FI-01 (`ED-FI-0009`): an inquiry's routed roll, the branch beside `_contest` in `resolve()`.

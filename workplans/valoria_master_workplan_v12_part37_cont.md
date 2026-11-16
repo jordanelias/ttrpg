@@ -12,7 +12,7 @@ IN-FLIGHT ROW: registers/handoffs/HANDOFF_MB.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
-GATE: Batch B16L-mb-words
+GATE: Batch B16L-mb-words @2d9590e75fd253d1d88612e2d42674e2fdb5db96
 GATE: Batch B05-one-roll
 GATE: Batch B15-pc-calibration
 GATE: Batch B16-pc-round
@@ -146,7 +146,7 @@ Not in this batch, and where each is: PB steps 1–4 and PCR-2, PCR-3 (B16); `IS
 - FALSIFIER and CONTROL: a sheet member with more than `standing_order_cap` rows that loads. Control: both exporters' `--check` exit 0 with the new blocks; the realm hash at seed 0, one season, equal to B30.03's reading (nothing reads the sheet yet).
 - GATE: `python tools/export_troops.py --check` → exit 0; `python tools/export_battle_orders.py --check` → exit 0; `python -m pytest tests/valoria/test_export_troops.py tests/valoria/test_export_battle_orders.py -q` → pass; `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`).
 - HASH MOVERS: none.
-- DEPENDS ON: V12 B30.01; V12 Batch B17 (`references/troops.yaml`, `tools/export_troops.py`); V12 Batch B20 (MGR §2: standing orders on the unit row, `standing_order_cap`); V12 Batch B16L (the Record kind `standing_order`); V12 Batch B16 (PB §4: the view's fields the conditions read).
+- DEPENDS ON: V12 B30.01; V12 Batch B17 (`references/troops.yaml`, `tools/export_troops.py`); V12 Batch B20 (MGR §2: standing orders on the unit row, `standing_order_cap`); V12 Batch B16L @2d9590e75fd253d1d88612e2d42674e2fdb5db96 (the Record kind `standing_order`); V12 Batch B16 (PB §4: the view's fields the conditions read).
 - GLOSSARY: rows *grid place* and *pairing round* (`unified/U1_GLOSSARY.md` *cell*, *exchange*) owner columns gain `troops.yaml: deployment` (`rows`, `files`, `field_exchanges`).
 - NAMES: Record kind `order_of_battle` → `standing_order` (B16L, L1).
 - COST and TIER: edit and small build; `sonnet`.

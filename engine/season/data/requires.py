@@ -1,5 +1,4 @@
-"""`season.data.requires` -- the `requires` grammar, extracted from the retired `shape.py` (step 3 of the
-decomposition, a PURE MOVE: no behaviour changed, only where the code lives).
+"""`season.data.requires` -- the `requires` grammar.
 
 Owns the requirement grammar in full: the third truth value (`_Unknown`/`UNKNOWN`), the read
 carrier (`Observation`) and its verdict (`Verdict`), the five typed forms `@requirement_form`
@@ -13,8 +12,8 @@ supplied none... The 32 `requires` cells in the executable chain are the specifi
 reading them yields SEVEN forms."* `rosters.yaml: requires_forms` is the closed roster of their
 names -- a cell naming an eighth REFUSES AT LOAD.
 
-⚠ `WorldReader` AND `LedgerReader` DO NOT LIVE HERE, DELIBERATELY. Adjudicated at the move: they
-are READERS -- `queries/` territory at a later step -- and the grammar this module owns asks only
+⚠ `WorldReader` AND `LedgerReader` DO NOT LIVE HERE, DELIBERATELY. They
+are READERS -- `queries/` territory -- and the grammar this module owns asks only
 `reader.read(subject, predicate)` of whichever one a caller hands it, never anything about WHERE
 the answer came from. Moving a reader in here would give the grammar an opinion about that, which
 is exactly the coupling `WorldReader`'s own docstring argues against (the actor's-own-ledger
@@ -123,7 +122,7 @@ RECORD_SOURCED_OPERANDS = {k: dict(v) for k, v in
                            roster_map("record_sourced_operands", "values").items()}
 _check_record_sourced(RECORD_SOURCED_OPERANDS, frozenset(REQUIRES_OPERANDS), RECORD_KIND_KEYS,
                       RECORD_CONTENT.get("read_from"))
-# Plan position `19d`. The operand names a SHORTFALL claim answers (`kind`, `amount`), and the
+# The operand names a SHORTFALL claim answers (`kind`, `amount`), and the
 # predicate stem it is recorded under: `(rung, "<stem>:<kind>", units)`. MATTER writes the claim
 # (`loop/matter.py`) and `decision/options.py::_from_shortfall_claim` reads it, so the stem
 # lives here once and neither side spells it. The stem's collision checks (it may be neither a
@@ -180,21 +179,16 @@ class Observation:
 class Verdict:
     """`True | False | UNKNOWN`, plus every read that produced it.
 
-    `observed` is kept here AND is attached to every Event the act emits -- that is `W-B`
-    (`H-122`), landed 2026-09-04. `W-A` refused to attach it because *"building the carrier before
-    its reader exists is the dead-carrier defect `ID-13` refuses"*; the reader is
-    `belief_contradicts`, which evaluates the SAME cell against `LedgerReader`, so the refusal is
-    DISCHARGED rather than overridden and no second evaluator exists (§27.2). ⚠ THIS DOCSTRING
-    SAID THE OPPOSITE UNTIL THE `W-B` ADVERSARIAL PASS READ IT: it still described attaching the
-    field as the defect, in the file that had just attached it. A comment asserting the absence of
-    a field the class above it carries is the *doctrine asserting an enforcement that does not
-    exist* failure, one seam over."""
+    `observed` is kept here AND is attached to every Event the act emits (`W-B`, `H-122`). Building
+    the carrier before its reader exists is the dead-carrier defect `ID-13` refuses; the reader is
+    `belief_contradicts`, which evaluates the SAME cell against `LedgerReader`, so no second
+    evaluator exists (§27.2)."""
     value: Any
     observed: tuple = ()
-    # ⚠ PLAN POSITION `19` -- WHICH NAMED CONJUNCT DECIDED A VERDICT THAT IS NOT `True`: the first
+    # ⚠ WHICH NAMED CONJUNCT DECIDED A VERDICT THAT IS NOT `True`: the first
     # clause that read False, else the first that read UNKNOWN (`AllOf`'s own precedence: FALSE
-    # dominates UNKNOWN). `None` for a True verdict, an unnamed clause, or a cell with no names --
-    # every row before `19`. It is `04 §C.4`'s `(ok, failed_conjunct) = eval(row.requires, ...)`,
+    # dominates UNKNOWN). `None` for a True verdict, an unnamed clause, or a cell with no names.
+    # It is `04 §C.4`'s `(ok, failed_conjunct) = eval(row.requires, ...)`,
     # the second half of that tuple, and the fold reads it as `row.refusal_for(failed_conjunct)`
     # (`loop/resolve.py::_admits`). It is NOT on the Event: which conjunct refused is carried by the
     # refusal KIND the row keys to it, and `observed` already carries the reads.
@@ -215,13 +209,13 @@ def _bound(binding: dict, name: str):
 
 COMPARATORS = {">=": lambda a, b: a >= b, "<=": lambda a, b: a <= b}
 
-# THE SEAT AN ACT EXERCISES, AS A BINDING KEY (plan position `19`). Structural like `actor` -- the
+# THE SEAT AN ACT EXERCISES, AS A BINDING KEY. Structural like `actor` -- the
 # Act carries it (`Act.via`), the payload does not -- so it is NOT a `requires_operands` member and
 # `binding_of` adds it beside the actor. (`H-134`: ONE exception, and not a binding: a Candidate formed
 # among several seats names its seat under this key in its operands, so the payload of its act repeats
 # `Act.via` as a DISCRIMINATOR for `data/verbs.py::act_key`; `binding_of` drops it like any key
 # outside `requires_operands` and `Act.via` is what the fold reads.) One spelling for the writer
-# (`binding_of`) and the one reader (`Basis.check`); `H-134` adds three more spellings that are not
+# (`binding_of`) and the one reader (`Basis.check`); three more spellings are not
 # bindings: `decision/options.py` writes it onto a multi-seat Candidate's operands and reads it back
 # (`seat_of`), and `data/verbs.py::act_key` appends it to the id.
 VIA = "via"
@@ -237,9 +231,7 @@ def requirement_form(name: str):
         REQUIREMENT_TYPES[name] = cls
         # ⚠ THE FORM'S NAME, ON THE CLASS. `rosters.yaml` gives each form a `needs:` -- the closed
         # set of operands a cell OF THAT FORM MAY reference -- and `operands_for` reads it to
-        # decide which operands a Candidate carries BEYOND the ones its own cell binds. Without
-        # this the mapping would have to be re-derived by scanning `REQUIREMENT_TYPES` backwards,
-        # which is the same declaration written twice.
+        # decide which operands a Candidate carries BEYOND the ones its own cell binds.
         cls._form = name
         return cls
     return deco
@@ -451,7 +443,7 @@ class Relation(Requirement):
 @requirement_form("own_ledger")
 @dataclass(frozen=True)
 class OwnLedger(Requirement):
-    """§F.24a form 6 -- *membership in the ACTOR'S OWN ledger*, and the form the cross-read missed.
+    """§F.24a form 6 -- *membership in the ACTOR'S OWN ledger*.
 
     `tell`'s *the teller holds a claim on the subject* (§E3 `:417`). §B.2's corrected row (`F8`):
     *"the fold may ask the ACTOR'S OWN ledger ... and no other."* That carve-out is what licenses
@@ -460,7 +452,7 @@ class OwnLedger(Requirement):
 
     ⚠ IT READS WHETHER THE CLAIM IS HELD, NEVER WHETHER IT IS TRUE, which is the whole of `T3`.
     A liar and a mistaken witness both pass it, and the distortion lands at the receiver's
-    WITNESS deposit -- `_req_tell`'s own docstring said so and this preserves it exactly."""
+    WITNESS deposit."""
     of: str
 
     def operands(self) -> tuple:
@@ -486,24 +478,20 @@ class OwnLedger(Requirement):
 @dataclass(frozen=True)
 class Basis(Requirement):
     """§F.24a form 7 -- *a basis lookup on the exercised seat* (`04_CODE_ARCHITECTURE.md:1144`),
-    IMPLEMENTED AT PLAN POSITION `19` (U7-remit). The form was in the closed roster from the start
-    (`rosters.yaml: requires_forms`, `needs: [subject, from, to]`) with no class behind it, because
-    its only live cells -- `confer`'s and `revoke`'s -- stayed on `REQUIRES_PREDICATES`; `_build_clause`
-    refused any cell naming it (*"IN the grammar and has no implementation"*). So this is the
-    grammar's own seventh form given its body, NOT a widening: no form, no operand and no combinator is
-    added. What `19` adds to the vocabulary is two STEMS, below.
+    (U7-remit). It is in the closed roster (`rosters.yaml: requires_forms`, `needs: [subject,
+    from, to]`); no form, operand or combinator is added beyond the grammar's seventh form. The
+    vocabulary it adds is two STEMS, below.
 
-    WHY IT IS THE FORM `19` NEEDED. The plan's `19` gives four remit verbs *"a predicate reading
-    `via.scope`"*, and three of them (`requisition`, `issue`, `determine`) also need OPERANDS a computed act
-    can carry -- `kind`/`amount`, the executor `to` -- which only a TYPED cell earns
-    (`decision/options.py::operands_for` returns `{}` for an untyped row). A predicate beside a
-    typed cell is two owners of one cell (`test_wa_one_owner_...`, `give`'s and `oblige`'s notes),
-    so without this form the choice was *operands or the seat, never both* -- and `transfer`'s own
-    form-2 cell, which the plan names for `requisition`, could not be written at all.
+    WHY THE FORM EXISTS. The remit verbs (`requisition`, `issue`, `determine`) read *"a predicate
+    reading `via.scope`"* and also need OPERANDS a computed act can carry -- `kind`/`amount`, the
+    executor `to` -- which only a TYPED cell earns (`decision/options.py::operands_for` returns `{}`
+    for an untyped row). A predicate beside a typed cell is two owners of one cell
+    (`test_wa_one_owner_...`, `give`'s and `oblige`'s notes), so without this form the choice would
+    be *operands or the seat, never both*.
 
-    THE SEAT IS STRUCTURAL, NOT AN OPERAND -- the correction `04_VERBS.md`'s own determine row
-    records (⑵: *"the conjunct binds `subject`; the actor is the acting person by construction and
-    needs no operand"*). `Act.via` is to the binding what `Act.actor` is: carried by the Act itself,
+    THE SEAT IS STRUCTURAL, NOT AN OPERAND -- as `04_VERBS.md`'s determine row records (⑵: *"the
+    conjunct binds `subject`; the actor is the acting person by construction and needs no
+    operand"*). `Act.via` is to the binding what `Act.actor` is: carried by the Act itself,
     never by the payload as a binding (`H-134`: a Candidate formed among several seats repeats it
     on the payload as an id discriminator, which `binding_of` drops; see `VIA`), and put into the
     binding by `binding_of`'s `via=` (`04:120` AX-1, *"a seat
@@ -586,7 +574,7 @@ class AllOf(Requirement):
 
     def decide(self, reader, binding, observed) -> tuple:
         """`(value, index)` -- `check`'s verdict and the position of the clause that DECIDED it:
-        the first False, else the first UNKNOWN, else `None` (True). Plan position `19`: the
+        the first False, else the first UNKNOWN, else `None` (True). The
         per-conjunct half of `04 §B.13` invariant 4 needs to know WHICH conjunct refused, and this
         is `check`'s own loop returning what it already knew -- one body, so the reads, their order
         and the short-circuit on False are exactly `check`'s (a second loop could observe
@@ -604,18 +592,14 @@ class AllOf(Requirement):
 class TypedRequires:
     """ONE `requires_typed:` CELL -- the clause tree, and nothing else.
 
-    ⚠ `operand_defaults` WAS A FIELD HERE AND `W-C` DELETED IT, WHICH IS THE ONE-OWNER HALF OF
-    `H-94`. It held `transfer`'s `{kind: grain, amount: 1}` -- the relocated form of
-    `_req_transfer`'s two literals -- and it filled them INSIDE `evaluate`, i.e. at the FOLD, for
-    an act whose payload carried neither. Two consequences, and the second is why it could not
-    stay once operands became real: (1) the value had two homes, the cell and the person's
-    derivation, free to disagree; (2) the fold would ADMIT a `transfer` on operands the cell had
-    invented and `_eff_transfer` would then raise on the very same operands being absent from the
-    payload -- a precondition and an effect reading different acts. The values moved to
-    `DEFAULT_FIXTURES` (`default_store_kind`, `default_transfer_amount`), unchanged, where the
-    person derives them and the act CARRIES them.
+    ⚠ THE CELL CARRIES NO OPERAND DEFAULTS (the one-owner half of `H-94`): a default filled INSIDE
+    `evaluate`, at the FOLD, would give the value two homes and let the fold ADMIT a `transfer` on
+    operands the cell invented while `_eff_transfer` raised on the same operands being absent from
+    the payload -- a precondition and an effect reading different acts. The values live in
+    `DEFAULT_FIXTURES` (`default_store_kind`, `default_transfer_amount`), where the person derives
+    them and the act CARRIES them.
 
-    ⚠ `names` (plan position `19`) -- THE CELL'S TOP-LEVEL CONJUNCTS, NAMED, one per clause of a
+    ⚠ `names` -- THE CELL'S TOP-LEVEL CONJUNCTS, NAMED, one per clause of a
     top-level `all:` (or one for a single clause), `None` where a clause carries no `conjunct:`. They
     exist for ONE reader, the keyed `emits_on_refusal:` (`data/verbs.py`, loader invariant 4's
     per-conjunct half), which maps each name to the refusal kind that conjunct emits; the loader
@@ -629,8 +613,8 @@ class TypedRequires:
 
     def known_person_operands(self) -> tuple:
         """The `known_person_operands` members this cell BINDS, where it binds `subject` too, so the
-        topic and the person addressed are different operands (telling workplan `T4`; `issue` since
-        plan position IN-10, whose `terms` conjunct binds `subject`). Empty for a cell binding `to`
+        topic and the person addressed are different operands (`issue`'s `terms` conjunct binds
+        `subject`). Empty for a cell binding `to`
         without `subject` (`petition`): there `to` is what the act is about, the referent.
         `decision/options.py::operand_bags` fans these over known persons;
         `data/verbs.py::act_key` puts them in the act's id, since one topic now forms several acts."""
@@ -642,7 +626,7 @@ class TypedRequires:
     def named_own_ledger_operands(self) -> tuple:
         """The operands of the `own_ledger` clauses that carry a `conjunct:` NAME, in order.
 
-        Telling workplan `T4`: a NAMED own-ledger conjunct is a row declaring that *holding
+        A NAMED own-ledger conjunct is a row declaring that *holding
         something about the operand* is a clause of its own, keyed to its own refusal (`tell`'s
         `holds`). `decision/options.py::opening_set` reads it to carry what the actor would SAY and
         to decline a Candidate with nothing to say. An unnamed one (`survey`, `reconstruct`) only
@@ -700,32 +684,24 @@ def evaluate(req: Optional[TypedRequires], reader, binding: dict) -> Verdict:
     polarities the two sites actually have."""
     if req is None:
         return Verdict(UNKNOWN, ())
-    # ⚠ THE BINDING IS THE CALLER'S AND THE CELL CONTRIBUTES NOTHING TO IT. Until `W-C` this
-    # started from `req.operand_defaults`, so an operand the ACT did not carry was supplied HERE
-    # -- under both readers, invisibly. An unsupplied operand is UNKNOWN now, and UNKNOWN refuses
-    # in the fold and does not contradict for the person, which is the polarity pair the rest of
-    # this block is built on.
+    # ⚠ THE BINDING IS THE CALLER'S AND THE CELL CONTRIBUTES NOTHING TO IT: an operand the ACT did
+    # not carry is not supplied here. An unsupplied operand is UNKNOWN, and UNKNOWN refuses in the
+    # fold and does not contradict for the person, which is the polarity pair the rest of this
+    # block is built on.
     b = {k: v for k, v in (binding or {}).items() if v is not None}
     observed: list = []
-    # `19`: `decide`, not `check` -- the same reads in the same order (`AllOf.check` IS `decide`'s
+    # `decide`, not `check` -- the same reads in the same order (`AllOf.check` IS `decide`'s
     # first half), plus the name of the conjunct that decided a refusal, for `refusal_for`.
     value, failed = req.decide(reader, b, observed)
     return Verdict(value, tuple(observed), failed)
 
 def binding_of(actor: str, operands: dict, via: Optional[str] = None) -> dict:
     """THE ONE BINDING. An actor, plus the operands something carries -- and BOTH READERS BUILD IT
-    HERE, which is `W-C`'s whole point.
+    HERE (`W-C`): the person and the fold evaluate the same cell over the same bag, with no second,
+    undeclared decision about WHOSE granary a requirement is about (§54 item 7 says
+    `hearth(GIVER)`, and the giver is the actor, never the referent).
 
-    ⚠ WHAT THIS REPLACED WAS TWO DIFFERENT DECISIONS WEARING ONE DECLARATION'S CLOTHES.
-    `binding_from_act` did a LITERAL key match on the payload; `binding_from` (the person's side,
-    now deleted) REBOUND the Candidate's `subject` onto whatever the requirement's entity operand
-    happened to be called -- `from` for `transfer`, `to` for `move`, `site` for `restore`. So the
-    person evaluated `stores(SUBJECT, kind)` and the fold evaluated `stores(<unbound>, kind)`:
-    not the same cell asked twice, but a second, undeclared decision about WHOSE granary the
-    requirement is about. The person's rebinding was also WRONG on its own terms -- §54 item 7
-    says `hearth(GIVER)`, and the giver is the actor, never the referent.
-
-    There is nothing left to rebind: `operands_for` derives every operand the cell names, the act
+    There is nothing to rebind: `operands_for` derives every operand the cell names, the act
     CARRIES them, and both sides pass the same bag through here. `actor` is the one operand that
     is never carried, because it is structural on both sides -- `Act.actor` for the fold, `p.id`
     for the person -- and a copy of it on the payload would be a second home for a fact the Act
@@ -735,12 +711,11 @@ def binding_of(actor: str, operands: dict, via: Optional[str] = None) -> dict:
     `venue`, `harm` and `said` (a telling's `Said`, set at CHOOSE by `opening_set` and read by WITNESS)
     ride, and the grammar's vocabulary is closed -- `said` is a non-scalar the grammar never reads.
 
-    ⚠ `via=` (plan position `19`) -- THE SEAT THE ACT EXERCISES, STRUCTURAL ON BOTH SIDES FOR THE
+    ⚠ `via=` -- THE SEAT THE ACT EXERCISES, STRUCTURAL ON BOTH SIDES FOR THE
     REASON `actor` IS: `Act.via` for the fold (`binding_from_act`), `st` (the seat `opening_set` formed
     the Candidate for, which `seat_of` reads back onto `Act.via`) for the person
     (`epistemic.belief_contradicts`). It is read by one form, `Basis` (§F.24a form 7), and
-    is added only when there is one, so a seatless act's binding is byte-for-byte what it was and a
-    `basis` clause over it reads UNKNOWN. It is never taken from the payload: `via` is not an
+    is added only when there is one, so a `basis` clause over a seatless act reads UNKNOWN. It is never taken from the payload: `via` is not an
     operand, and a payload key of that name would be dropped by the filter above like any other."""
     out = {"actor": actor,
            **{k: v for k, v in (operands or {}).items() if k in REQUIRES_OPERANDS}}
@@ -751,11 +726,8 @@ def binding_of(actor: str, operands: dict, via: Optional[str] = None) -> dict:
 def binding_from_act(a) -> dict:
     """THE RESOLVER'S BINDING -- `Act.payload`, plus the actor.
 
-    ⚠ IT WAS ALLOWED TO BE INCOMPLETE AND IT ALWAYS WAS; `W-C` CLOSED THAT AND DID NOT MAKE IT
-    IMPOSSIBLE. `pack_scenes` used to put only the Candidate's `subject` on the payload, so
-    `transfer` had no `kind`, `move` had no `to` and `work` had no `site`, and every one of those
-    evaluated UNKNOWN and refused. A COMPUTED act now carries the operands its verb's cell names,
-    because a Candidate that could not bind them was never formed. A HAND-BUILT act still binds
+    ⚠ THE BINDING CAN STILL BE INCOMPLETE. A COMPUTED act carries the operands its verb's cell
+    names, because a Candidate that could not bind them is never formed. A HAND-BUILT act still binds
     whatever its author put on the payload, and an author who omits one still gets UNKNOWN and a
     refusal -- which is the polarity §42.2 wants and the reason this is not asserted here."""
     return binding_of(a.actor,
@@ -773,29 +745,27 @@ def binding_from_act(a) -> dict:
 # THE STEMS `WorldReader.read`/`LedgerReader.read` DISPATCH ON. The two readers below are the
 # only consumers.
 #
-# ⚠ WHY THIS EXISTS: THE GRAMMAR CLOSED ON FORM AND OPERAND NAMES AND NOT ON THE STRINGS THAT
-# ACTUALLY SELECT THE PREDICATE. Found by the W-A adversarial pass. `_build_clause` refused at load
-# on an unrostered form, an unrostered operand, and an operand outside the form's `needs:` -- and
-# validated NOTHING about `Existence.kind`, `ScalarThreshold.scalar`/`threshold_predicate` or
-# `Relation.relation`. Those four strings are what `read` dispatches on, and an unrecognised one
-# fell through to `return UNKNOWN` forever: `kind: Commit` for `commit`, or `relation: present-at`
-# for `present_at`, LOADED CLEAN, evaluated UNKNOWN in every world, and the fold refused the verb
-# everywhere -- reported as `H-94`'s honest operand famine. A typo and a design gap were
-# indistinguishable, which is the silent-wrong-answer shape this file refuses everywhere else.
-# ⚠ PLAN POSITION `19` ADDED FOUR, EACH A QUESTION A REMIT VERB'S CELL ASKS AND NONE A NEW FORM:
+# ⚠ WHY THIS EXISTS: THE GRAMMAR CLOSES ON FORM AND OPERAND NAMES AND ALSO ON THE STRINGS THAT
+# ACTUALLY SELECT THE PREDICATE. `Existence.kind`, `ScalarThreshold.scalar`/`threshold_predicate`
+# and `Relation.relation` are what `read` dispatches on, and an unrecognised one would fall
+# through to `return UNKNOWN` forever: `kind: Commit` for `commit`, or `relation: present-at`
+# for `present_at`, would load clean, evaluate UNKNOWN in every world, and the fold would refuse
+# the verb everywhere -- indistinguishable from `H-94`'s honest operand famine. A typo and a design
+# gap must not be indistinguishable, which is the silent-wrong-answer shape this file refuses
+# everywhere else.
+# ⚠ FOUR MORE, EACH A QUESTION A REMIT VERB'S CELL ASKS AND NONE A NEW FORM:
 # `purview` and `bench` are `Basis`'s (§F.24a form 7) two seat rules -- ruling (4)'s purview and the
 # `determination` basis's bench, each the write gate's own predicate read early; `bench.size` and
 # `quorum` are `determine`'s quorum conjunct, a `scalar_threshold` (form 2) of the bench's size
 # against a SECOND READ, `work`'s `floor` shape, so no operand is added to `cardinality` (the
 # widening `21_RECONCILIATION.md` A.1 struck). `WorldReader.read` answers all four.
-# ⚠ TELLING WORKPLAN `T4` ADDED `with` (`ED-IN-0282`): `relation` (form 5) asked of TWO PERSONS --
+# ⚠ `with` (`ED-IN-0282`): `relation` (form 5) asked of TWO PERSONS --
 # *are `of` and the actor in the same place* -- the person-to-person co-location stem `give`'s
 # `requires_typed_note` records as the cell waiting for it. `WorldReader.read` answers it through
 # `world_q.place_of`; the person side never does (`WORLD_ONLY_STEMS`, below).
 # roster-exempt: MECHANISM. These are the grammar's own predicate stems -- what a REQUIREMENT MAY
 # ASK -- not the game's vocabulary; `rosters.yaml` says what the world contains.
-# ⚠ v9 PC-06 K-3 (`H-85`) ADDED TWO, A STEM AND NOT AN OPERAND (`requires_operands` stays the closed
-# eight): `thread_sensitivity`, the actor's own `Person.thread_sensitivity`, and `thread_sensitivity.gate`,
+# ⚠ v9 PC-06 K-3 (`H-85`): TWO STEMS, NOT OPERANDS (`requires_operands` stays closed): `thread_sensitivity`, the actor's own `Person.thread_sensitivity`, and `thread_sensitivity.gate`,
 # the SECOND READ it is held against (`Fixtures thread_sensitivity_gate`) -- `determine`'s `bench.size`
 # against `quorum`, `work`'s `floor` shape. Both are `OWN_STATE_STEMS` (below).
 # THE STEMS A PERSON ANSWERS OF HIMSELF, WITH NO LEDGER AND NO WORLD (v9 PC-06 K-3): his own Thread
@@ -808,11 +778,11 @@ def binding_from_act(a) -> dict:
 # himself, not vocabulary the world contains.
 OWN_STATE_STEMS = frozenset({"thread_sensitivity", "thread_sensitivity.gate"})
 
-# ⚠ v9 IN-59 (b) (RS-26, the AUDIENCE half of the access gate) ADDED `audience`: `relation` (form 5)
+# ⚠ v9 IN-59 (b) (RS-26, the AUDIENCE half of the access gate): `audience`: `relation` (form 5)
 # asked of a DESTINATION RUNG and the actor, `with`'s shape -- *may the actor enter this place* --
 # on `move` and `migrate`. `WorldReader.read` answers it through `world_q.admits_audience`; WORLD-ONLY
 # (below), so the person forms the Candidate and the fold refuses. One stem; no form, no operand.
-# ⚠ v10 REM-29 (B10-06, `-08` AM-A-15) ADDED `room`: `relation` (form 5) asked of a DESTINATION RUNG
+# ⚠ v10 REM-29 (B10-06, `-08` AM-A-15): `room`: `relation` (form 5) asked of a DESTINATION RUNG
 # and the actor, `audience`'s shape -- *is there room under this rung for the actor* (RR-2's throttle,
 # `migrate`'s `room` conjunct). `WorldReader.read` answers it through `world_q.has_room`, the one owner
 # `_eff_migrate` also calls. NOT world-only and NOT ledger-derived, so it is a `CELL_STEMS` member: the
@@ -820,13 +790,13 @@ OWN_STATE_STEMS = frozenset({"thread_sensitivity", "thread_sensitivity.gate"})
 # actor at `observation_deposit_mode: actor`, and `LedgerReader.read` answers the same cell from that
 # claim, so §F1 clause 4 (`epistemic.belief_contradicts`) declines his next `migrate` there. One stem;
 # no form, no operand.
-# ⚠ v10 CP-T03-01 (B10-11) ADDED `individual`: `relation` (form 5) asked of ONE PERSON, `with`'s shape
+# ⚠ v10 CP-T03-01 (B10-11): `individual`: `relation` (form 5) asked of ONE PERSON, `with`'s shape
 # -- *is `of` a single person, not a cohort* (`Person.is_cohort`, `weight > 1`, one owner in
 # `state/carriers.py`). The relation's second argument (the actor) is not read. `WorldReader.read` answers
 # it; WORLD-ONLY (below), because a weight can fall and whether a person is an individual NOW is the world's
 # to decide -- a CELL stem would have WITNESS deposit an `individual:<actor>` reading into every witness's
 # ledger. One stem; no form, no operand, no second meaning of an existing one.
-# ⚠ v10 PC-10b (B10-11; H-240 route (1)) ADDED `names`: `relation` (form 5) asked of a RECORD and ONE
+# ⚠ v10 PC-10b (B10-11; H-240 route (1)): `names`: `relation` (form 5) asked of a RECORD and ONE
 # NAMED OPERAND -- *does the Record `of` name this operand's value, under the content key its kind maps
 # for that operand* (`rosters.yaml: record_sourced_operands`, the one map of what a document says; no
 # second key list). Spelt `names:<operand>` (`Relation`'s operand-named shape, `OPERAND_NAMED_STEMS`
@@ -835,13 +805,13 @@ OWN_STATE_STEMS = frozenset({"thread_sensitivity", "thread_sensitivity.gate"})
 # COPY OF A RELATION: no other stem reads a Record's content (`held_by` reads a `hold` edge, `exists` a
 # kind, `claim.held` the actor's ledger), and the person-side readers of the same map
 # (`decision/options.py::_content_answer`) DERIVE operands, they ask nothing of the fold. WORLD-ONLY (below).
-# ⚠ v11 CR-87 (B10-11; the DISPUTE, `ED-IN-0337`) ADDED `dispute`: `relation` (form 5) asked of a PERSON and the
+# ⚠ v11 CR-87 (B10-11; the DISPUTE, `ED-IN-0337`): `dispute`: `relation` (form 5) asked of a PERSON and the
 # actor -- *does the actor hold a deed claim of `of` that his own judgement scores against him*
 # (`queries/person_q.py::holds_dispute`, over `deeds_judged`, the one owner). `challenge`'s conjunct: a duel settles a
 # dispute, so a man challenges only one he holds a wrong against. `WorldReader.read` answers it off the ACTOR'S OWN
 # ledger (`claim.held`'s F8 carve-out). WORLD-ONLY (below), for `names`' reason: a witness's ledger must not gain a
 # `dispute:<actor>` reading from a refusal it saw. CR-88 re-points it to `grievance_against`. One stem; no form.
-# ⚠ v11 CR-34 (B10-13; C-7, `ED-SC-0034`) ADDED `declared.votes` and `declared.quorum`: `determine`'s `vote` conjunct, a
+# ⚠ v11 CR-34 (B10-13; C-7, `ED-SC-0034`): `declared.votes` and `declared.quorum`: `determine`'s `vote` conjunct, a
 # `scalar_threshold` (form 2) of the live commits bench members hold against the matter, against the arrangement row's OWN
 # `quorum:` key -- `quorum`'s shape, a SECOND READ, so no operand is added and nothing is stored. Both are 0 for a matter
 # heard under no declared row, so the conjunct is vacuous there. `WorldReader.read` answers both through
@@ -863,8 +833,7 @@ OPERAND_NAMED_STEMS = frozenset({"names"})
 # UNKNOWN for them whatever the ledger holds, so §F1 clause 4 never declines on them. `with` asks
 # where another person is NOW, which a ledger cannot hold current: the fold reads it
 # (`Observation(to, "with:<actor>", ...)` rides `Event.observed`) but WITNESS does NOT deposit it
-# (`loop/witness.py` skips `WORLD_ONLY_STEMS` beside `LEDGER_DERIVED_STEMS`, `ED-IN-0282` batch-2
-# close `F1`). Depositing it would make a stale belief decide presence if anything read it back
+# (`loop/witness.py` skips `WORLD_ONLY_STEMS` beside `LEDGER_DERIVED_STEMS`, `ED-IN-0282`). Depositing it would make a stale belief decide presence if anything read it back
 # -- and something else would: `claim.held` accepts any claim on the subject, Q2 raises a question
 # on the hearer for a claim landing about them, and `said_of` can hand it on as the content of a
 # telling. Presence is the world's to decide (the telling workplan's T-e; hearing is by presence,
@@ -902,7 +871,7 @@ CELL_STEMS = REQUIRES_STEMS - WORLD_ONLY_STEMS
 
 
 def _check_known_person_claim(claim, requires_stems: frozenset, observation_terms) -> None:
-    """Telling workplan `T4`. `known_person_operands.claim` names the two claim shapes that make a
+    """`known_person_operands.claim` names the two claim shapes that make a
     person KNOWN: `predicate` -- an existence reading the grammar deposits (`<stem>:<kind>`, the
     stem a `REQUIRES_STEMS` member), held truthy; `seen_term` -- the `seen` claim's term naming who
     was seen (an `observation_terms` member). A told claim's teller is the third source and needs
@@ -941,19 +910,16 @@ _check_known_person_claim(KNOWN_PERSON_CLAIM, REQUIRES_STEMS, OBSERVATION_TERMS)
 # principled exclusion at the deposit site and it has the same shape as the other two -- UNKNOWN
 # (the instrument's gap must not become a belief) and duplicates (one belief, stored once).
 #
-# ⚠ MEASURED BEFORE EXCLUDING, seed 0, NPC-088 at `actor`, 8 seasons (`W-B` adversarial pass,
-# 2026-09-04): at end of season 0 `LedgerReader(p_a).read('r_hearth','claim.held')` is **False**
-# while `WorldReader(w,'p_a').read('r_hearth','claim.held')` is **True** -- the two readers
-# disagreeing about the SAME person's SAME ledger, which is the one thing `belief_contradicts`'
-# docstring says cannot happen (*"the same cell asked of two readers, differing only in WHAT THEY
-# READ and in POLARITY"*). The person then declines `tell` for a season on a belief the fold
-# would have admitted. It is not permanent: the block is per-SUBJECT and the claim is EVICTED by
-# the ledger cap at season 2, after which `tell` runs again -- so the belief is corrected by
-# FORGETTING rather than by anything the world did, which is a worse property than a wrong belief,
-# not a milder one.
+# ⚠ WHY IT IS EXCLUDED: `LedgerReader(p_a).read('r_hearth','claim.held')` is **False** once the
+# claim is recorded while `WorldReader(w,'p_a').read('r_hearth','claim.held')` is **True** -- the
+# two readers disagreeing about the SAME person's SAME ledger, which is the one thing
+# `belief_contradicts`' docstring says cannot happen (*"the same cell asked of two readers,
+# differing only in WHAT THEY READ and in POLARITY"*). The person would decline `tell` on a belief
+# the fold would admit, and the belief would be corrected by FORGETTING (ledger eviction) rather
+# than by anything the world did, which is a worse property than a wrong belief, not a milder one.
 #
-# ⚠ THE ALTERNATIVE WAS BUILT IN ARGUMENT AND REJECTED, and is recorded so it is not re-derived:
-# make `LedgerReader` answer `claim.held` FROM MEMBERSHIP too, so the readers agree. That fails
+# ⚠ THE ALTERNATIVE IS REJECTED: make `LedgerReader` answer `claim.held` FROM MEMBERSHIP too, so
+# the readers agree. That fails
 # three ways -- the deposited Claim's `value` would then be written and never read (`ID-13`'s dead
 # carrier, exactly what `W-A` refused to build), `any(c.subject == ...)` would live in two classes
 # (§8: never re-implement a rule), and the belief store would become incapable of being wrong for
@@ -964,7 +930,7 @@ LEDGER_DERIVED_STEMS = frozenset({"claim.held"})
 
 
 def _check_shortfall_stem(stem, requires_stems: frozenset, content_stem) -> None:
-    """Plan position `19d`. THE SHORTFALL CLAIM'S STEM MUST MEAN ONE THING, so it may be neither a
+    """THE SHORTFALL CLAIM'S STEM MUST MEAN ONE THING, so it may be neither a
     stem the `requires` grammar reads nor the `content:` stem. The first collision would have
     `LedgerReader` answer the claim as a belief about a store LEVEL, and `belief_contradicts` would
     then decline a transfer on a number that was never a level. The second would have
@@ -989,7 +955,7 @@ def _check_shortfall_stem(stem, requires_stems: frozenset, content_stem) -> None
 
 _check_shortfall_stem(SHORTFALL_PREDICATE, REQUIRES_STEMS, RECORD_CONTENT.get("predicate"))
 
-# THE KEY A TOP-LEVEL `requires_typed:` CLAUSE IS NAMED BY (plan position `19`), so a keyed
+# THE KEY A TOP-LEVEL `requires_typed:` CLAUSE IS NAMED BY, so a keyed
 # `emits_on_refusal:` can say which refusal kind that conjunct emits. One spelling for the builder
 # above and the verb loader (`data/verbs.py`), which checks the names against the keys.
 CONJUNCT_KEY = "conjunct"
@@ -998,7 +964,7 @@ CONJUNCT_KEY = "conjunct"
 def _require_known_stem(stem: str, where: str) -> None:
     """A predicate stem outside `REQUIRES_STEMS` REFUSES AT LOAD rather than reading UNKNOWN
     forever. The three sibling closure checks below already do this for forms and operands; this
-    is the fourth, and its absence made a typo indistinguishable from a design gap."""
+    is the fourth, and without it a typo is indistinguishable from a design gap."""
     if stem not in REQUIRES_STEMS:
         raise SystemExit(
             f"verb_table.yaml: {where} names predicate stem {stem!r}, which no reader dispatches "
@@ -1010,7 +976,7 @@ def _build_clause(verb: str, cell: dict) -> Requirement:
     if not isinstance(cell, dict):
         raise SystemExit(f"verb_table.yaml: {verb!r} `requires_typed:` clause is not a mapping: "
                          f"{cell!r}")
-    # ⚠ `conjunct:` IS A TOP-LEVEL NAME ONLY (plan position `19`). `build_typed_requires` strips it
+    # ⚠ `conjunct:` IS A TOP-LEVEL NAME ONLY. `build_typed_requires` strips it
     # from each top-level clause before this runs; one arriving HERE sits inside a nested `all:`,
     # which is one conjunct of its parent and cannot have a refusal kind of its own. Refused rather
     # than ignored: a name nothing can key to is the dead label `ID-13` refuses.
@@ -1043,9 +1009,7 @@ def _build_clause(verb: str, cell: dict) -> Requirement:
         raise SystemExit(f"verb_table.yaml: {verb!r}'s {form!r} cell does not fit the form: {e}")
     allowed = set(REQUIRES_FORM_NEEDS.get(form) or ())
     # THE CLOSURE. A name joins `requires_operands` only by a roster edit made at the position that
-    # owns it -- v9 IN-33 added `exchange`'s `return_kind` (the matter kind the actor receives in
-    # return) and `return_amount` (how many units), H-94's reserved coining, restored at v10 REM-2B --
-    # never by a cell.
+    # owns it (`exchange`'s `return_kind` and `return_amount`, v9 IN-33), never by a cell.
     for o in req.operands():
         if o not in REQUIRES_OPERANDS:
             raise SystemExit(
@@ -1056,7 +1020,7 @@ def _build_clause(verb: str, cell: dict) -> Requirement:
             raise SystemExit(
                 f"verb_table.yaml: {verb!r}'s {form!r} cell binds {o!r}, which is not in that "
                 f"form's `needs:` ({sorted(allowed)})")
-    # ⚠ THE FOURTH CLOSURE CHECK, AND THE ONE THAT WAS MISSING. The three above close the FORM
+    # ⚠ THE FOURTH CLOSURE CHECK. The three above close the FORM
     # and the OPERANDS; this closes the PREDICATE STEM, which is what the readers actually
     # dispatch on. Every stem a requirement can ask for is read off the requirement itself, so a
     # new form contributes its stems automatically rather than needing this list edited.
@@ -1080,13 +1044,10 @@ def build_typed_requires(verb: str, cell) -> Optional[TypedRequires]:
                          "`requires_typed_note:` saying why")
     if not isinstance(cell, dict):
         raise SystemExit(f"verb_table.yaml: {verb!r} `requires_typed:` is not a mapping: {cell!r}")
-    # ⚠ `operand_defaults:` IS NO LONGER A KEY AND A CELL CARRYING ONE MUST REFUSE, not be
-    # ignored. `W-C` moved `transfer`'s two to `DEFAULT_FIXTURES`; dropping the key silently would
-    # let a later table edit re-introduce a fold-side default that no longer has a reader, and it
-    # would read as accepted. `_build_clause` raises on any key the form does not take, so the
-    # refusal is already structural -- this comment is here so the next reader knows the absence
-    # is a decision and not an oversight.
-    # ⚠ PLAN POSITION `19`: EACH TOP-LEVEL CONJUNCT MAY CARRY A `conjunct:` NAME -- stripped here,
+    # ⚠ `operand_defaults:` IS NOT A KEY AND A CELL CARRYING ONE MUST REFUSE, not be ignored
+    # (`transfer`'s defaults live in `DEFAULT_FIXTURES`). `_build_clause` raises on any key the
+    # form does not take, so the refusal is already structural.
+    # ⚠ EACH TOP-LEVEL CONJUNCT MAY CARRY A `conjunct:` NAME -- stripped here,
     # before the form is built (a form takes only its own fields), and kept on the cell as
     # `TypedRequires.names`, which is what a keyed `emits_on_refusal:` maps from. Whether every
     # conjunct is named, and every name keyed, is the VERB loader's check (`data/verbs.py`,

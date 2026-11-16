@@ -14,23 +14,17 @@ PRIMITIVES consumed (per weapon: a weapons.WEAPONS record, whose schema is weapo
 DERIVED (the intended single basis; wiring is PARTIAL — see WIRING STATUS):
   STAGE 1 composite mass -> PoB, m_head, MoI, static_moment   (recovered weapon_physics 2026-06-22, self-tested 0.05cm)
   STAGE 2 PoB+mass -> percussion authority, puncture pressure, armour-defeat mode   (recovered percussion_authority)
-  STAGE 3 dynamics -> agility, authority(impact), reach, the {parry,dodge,wind} defence affinities
+  STAGE 3 dynamics -> agility, the {parry,dodge,wind} defence affinities
 
-WIRING STATUS (2026-06-30, Gate-1 audit — SUPERSEDES the prior "BUILD-ONLY; nothing live reads STAGE 3/4" claim,
-which is now FALSE):
-  · LIVE consumers (read by systems.py / core via Phase-3 wiring): derive(), agility(), defense_affinities(),
+WIRING STATUS:
+  · LIVE consumers (read by systems.py / core): derive(), agility(), defense_affinities(),
     percussion_authority(), puncture_pressure(), at_grip(), grip_choke_max().
-  · DIAGNOSTIC-ONLY (still defined, called by no resolution code): armour_defeat_mode(). (STALE-DOC FIX, ED-PC-0023
-    audit: the prior text here listed authority()/reach() as "NOT YET WIRED / diagnostic-only" and cited an OPEN
-    "core.p_auth vs WP.percussion_authority" single-source debt — but authority()/reach() were DELETED outright the
-    SAME day, 2026-06-30, see the deletion note below the STAGE-3 block, and core.p_auth was retired, see core.py's
-    header. Both claims described functions/debt that no longer exist; struck. percussion_authority now lives ONCE in
-    this module, read by core.strike — the split is closed.)
-  · The STAGE-4 consumer-term helpers (reach_term/heft_term/tempo_penalty/strdemand_term) AND authority()/reach()
-    were DELETED 2026-06-30 — dead alternative-wiring the live systems.* derivations (reach_base/wield_heft) superseded.
+  · DIAGNOSTIC-ONLY (called by no resolution code): armour_defeat_mode().
+  percussion_authority lives ONCE in this module, read by core.strike. Reach and heft are derived by the live
+  systems.* derivations (reach_base/wield_heft).
 
 CALIBRATION: the composite constants are physically sourced; the engine-scale K_* gains are [SIM-CALIBRATE] —
-fit in the re-baseline (REARCHITECTURE_v1 Phase 3), not asserted.
+fit in the re-baseline, not asserted.
 """
 import math
 
@@ -44,9 +38,7 @@ def _ltr_sum(xs):
     which is correctly rounded on every platform, so the ACCUMULATION is bit-identical everywhere (the parts' own
     `**` is the platform's libm and is not controlled here). The builtin `sum()` is NOT: CPython 3.12 changed it
     to Neumaier-compensated summation for floats, so `sum()` of the same parts reads one ULP apart on 3.11 and on
-    3.12+ (CR-01: bind_sigma for bear_spear, 16 of 52 roster binds, measured on 3.13). This is the pre-3.12 value
-    the pins that tests/valoria/test_combat_lever_sign_safety.py held before ED-IN-0314's cull (FORK:8047c6e0) were
-    recorded under; the file re-created at PC-17 holds sign probes, not pins. CI pins 3.11, where `sum()`
+    3.12+ (CR-01: bind_sigma for bear_spear). This is the pre-3.12 value. CI pins 3.11, where `sum()`
     and this agree, so CI cannot observe the difference. Pure."""
     total = 0
     for x in xs:
@@ -54,23 +46,14 @@ def _ltr_sum(xs):
     return total
 
 # ── composite-mass constants (sourced; recovered weapon_physics_calibration_2026-06-22) ──
-# UNIT_M DELETED (U0 units honesty, ED-PC-0002, 2026-07-05 — consolidation_v1.md §4): head_len/grip_len/
-# the GRIP_*/LEVER_*/PERC_GRIP_1H/REC_GRIP_REF/GRAB_SHORT_REACH thresholds are now all HONEST METRES
-# (the old length-unit was 0.30 m; every stored length ×0.30, every ÷/×UNIT_M site deleted, every
-# per-length-unit gain rescaled by /0.30). Proven byte-identical against tests/valoria/
-# r3_identity_golden.json (built pre-edit) at 1e-9.
+# head_len/grip_len/the GRIP_*/LEVER_*/PERC_GRIP_1H/REC_GRIP_REF/GRAB_SHORT_REACH thresholds are all HONEST
+# METRES (ED-PC-0002).
 RHO_WOOD = 700.0        # kg/m^3 ash/oak
-# RHO_IRON (7860.0) REMOVED (ED-PC-0042): unread since the mass model moved to per-part authored `mass_kg`
-# records — no derivation back-solves an iron volume any more. The sourced figure survives in the recovery
-# corpus (audit/2026-06-29-combat-corpus-recovery/) if a future density model needs it.
 D_HAFT = 0.040          # m haft diameter (staff back-solve)
 D_GRIP = 0.030          # m sword grip
 RHO_SWORD_GRIP = 900.0  # kg/m^3 wood scales + thin tang
 GUARD = {V.HILT_COMPOUND: 0.30, V.HILT_SIMPLE: 0.12, V.HILT_NONE: 0.0}   # hilt mass at the cross (kg)
 C_HEAD = {'bladed': 0.45, 'hafted_tip': 0.97, 'hafted_block': 0.88}  # head-mass centroid frac of head_len
-# _A_HAFT REMOVED (ED-PC-0042): the haft cross-section it fed (m_shaft = min(_A_HAFT*Lt*RHO_WOOD, m)) belongs to
-# the retired whole-weapon back-solve; D_HAFT is retained because the recovery corpus documents it as the staff
-# back-solve primitive. _A_GRIP below is LIVE.
 _A_GRIP = math.pi * (D_GRIP / 2) ** 2
 
 # ── percussion authority (recovered percussion_authority.py) ──
@@ -78,18 +61,16 @@ PERC_SCALE = 9.5
 PERC_EXP = 0.30
 PERC_CAP = 8.0          # the "steel-hammer reference" ceiling = the top of the canonical 0-8 percussion-authority
                         # scale (recovered percussion_authority.py:61). SINGLE OWNER of that anchor (ED-PC-0042
-                        # rider I1b): it was spelled four times as independent literals — here, core.PERC_AUTH_REF,
-                        # core.damage()'s blunt `perc/8.0` + its `perc=8` default, and config.CFG['ADEF_PERC_REF'] —
-                        # with nothing enforcing agreement. This one is the PRIMITIVE (the clamp that CREATES the
-                        # scale); the others are DENOMINATORS normalising an authority value against the scale top,
-                        # so they must move WITH it. The two core sites now bind from here; the CFG seed cannot
-                        # (config.py is a zero-import leaf and CFG is per-run overridable — see the note there) and
-                        # is held equal by tests/valoria/test_combat_invariants.py::test_percussion_anchor_has_one_owner.
-                        # THE PHASE-C RE-FIT (PERC_SCALE/PERC_EXP, deferred — see percussion_authority's docstring)
-                        # IS THE EVENT THIS OWNERSHIP EXISTS FOR: change the scale here, once.
-# HEAVY_BLUNT_THRESHOLD (6.0) REMOVED (ED-PC-0042): it keyed the retired blunt_heavy/blunt_light ARMOUR-ROW split
-# (audit/2026-06-29-combat-corpus-recovery/percussion_authority.py:84). Armour-defeat is continuous now —
-# core.adef_cap scales percussion_authority against ADEF_PERC_REF — so there is no row to select.
+                        # rider I1b). This one is the PRIMITIVE (the clamp that CREATES the
+                        # scale); core.PERC_AUTH_REF, core.damage()'s blunt `perc/8.0` + its `perc=8` default, and
+                        # config.CFG['ADEF_PERC_REF'] are DENOMINATORS normalising an authority value against the
+                        # scale top, so they must move WITH it. The two core sites bind from here; the CFG seed
+                        # cannot (config.py is a zero-import leaf and CFG is per-run overridable — see the note
+                        # there) and is held equal by
+                        # tests/valoria/test_combat_invariants.py::test_percussion_anchor_has_one_owner.
+                        # A re-fit of PERC_SCALE/PERC_EXP (see percussion_authority's docstring) changes the
+                        # scale here, once.
+# Armour-defeat is continuous: core.adef_cap scales percussion_authority against ADEF_PERC_REF.
 
 # ── concussion energy-credit (2H grip + arc/haft-length) — GROUNDED biomechanics ──
 # designs/audit/2026-06-30-combat-grounding/grounded_weapon_armour_usemode_model.md §1 (task wpwi3b9qf,
@@ -113,38 +94,29 @@ def energy_credit(w):
 
 # ── engine-scale mapping gains — [SIM-CALIBRATE] starting values, fit in the Phase-3 re-baseline ──
 MOI_AGILITY_K = 6.0     # LIVE [SIM-CALIBRATE]: the bind-leverage normaliser in defense_affinities.wind (reaches the
-                        # engine via systems.mode_sigma's 'wind' cap). The agility POWER LAW below replaced this
-                        # rational form FOR AGILITY only; this constant is still load-bearing here — NOT dead.
-                        # (The dead STAGE-4 gains K_REACH/K_HEFT/K_TEMPO/K_STRD were removed with STAGE-4, 2026-06-30.)
-# agility power law (Phase-3 grounding): EXPONENT is GROUNDED (Cross & Nathan 2009 / Fleisig 2002, handle-axis,
-# mass-independent, n≈0.20–0.28); the ANCHOR is [SIM-CALIBRATE] (sets where agility≈1). Replaces 1/(1+K·MoI).
+                        # engine via systems.mode_sigma's 'wind' cap).
+# agility power law: EXPONENT is GROUNDED (Cross & Nathan 2009 / Fleisig 2002, handle-axis,
+# mass-independent, n≈0.20–0.28); the ANCHOR is [SIM-CALIBRATE] (sets where agility≈1).
 AGILITY_EXP = 0.25      # grounded exponent (band 0.20–0.28)
-# [SIM-CALIBRATE] anchor MoI. RE-ANCHORED 2026-06-30 (Track-2 primitive-law purge, gate1_audit agility-fiat-clamp):
-# set JUST BELOW the lightest weapon's swing inertia (~0.9× the dagger's MoI 0.0024) so AGILITY_REF/MoI ≤ 1 for the
-# WHOLE roster — nothing pins to the min(1.0) cap, which becomes an inert safety guard. The prior 0.088 (an arming
-# sword's MoI) put ~5 light weapons ABOVE the anchor, so the cap flat-topped dagger=paired=sabre=arming=half-sword to
-# agility 1.0 and ERASED the emergent light-weapon dodge/parry ordering. With this anchor agility ∈ (0,1] emerges
-# strictly from MoI (dagger highest → spear lowest). Chosen so the dodge/parry _band spread (renormalised below to the
-# compressed range) reproduces the previously-calibrated spread — a re-baseline that restores emergence, not a re-tune.
+# [SIM-CALIBRATE] anchor MoI: set JUST BELOW the lightest weapon's swing inertia (~0.9× the dagger's MoI 0.0024) so
+# AGILITY_REF/MoI ≤ 1 for the WHOLE roster — nothing pins to the min(1.0) cap, which is an inert safety guard (an
+# anchor above the light weapons' MoI would flat-top them all to agility 1.0 and ERASE the emergent light-weapon
+# dodge/parry ordering). Agility ∈ (0,1] emerges strictly from MoI (dagger highest → spear lowest). The dodge/parry
+# _band spread (renormalised below to the compressed range) is calibrated against this anchor.
 AGILITY_REF = 0.00215
-# [RESOLVED — Phase B6] weapon_physics.reach() (the head_len-based diagnostic, ~0.7-6.0 span) is DELETED; the LIVE
-# systems.reach_base (grip-aware, ~4.5-7.8 span, CLOSE_REACH_REF-compatible) remains the sole reach source, so the
-# once-live wiring hazard (unscaled reach() zeroing the long-weapon close penalty) no longer applies — there is no
-# second reach function left to accidentally wire in raw.
+# Reach comes from systems.reach_base (grip-aware); this module has no reach function.
 
 
 # ════════════════════ STAGE 1 — located-part mass model -> balance & inertia ════════════════════
-# RE-ARCHITECTURE 2026-07-02: a weapon's balance/inertia is the SUM over LOCATED PARTS about the working-hand
-# axis — moment=Σ mᵢ·xᵢ, MoI=Σ mᵢ·(xᵢ² + extentᵢ²/12), m_total=Σ mᵢ, PoB=moment/m_total. This RETIRES the
-# single-C_HEAD-centroid head LUMP: every physical part (head elements, guards, haft/grip, pommel, butt) is a
+# A weapon's balance/inertia is the SUM over LOCATED PARTS about the working-hand
+# axis — moment=Σ mᵢ·xᵢ, MoI=Σ mᵢ·(xᵢ² + extentᵢ²/12), m_total=Σ mᵢ, PoB=moment/m_total. Every physical part
+# (head elements, guards, haft/grip, pommel, butt) is a
 # named located mass in the roster record (w['elements']/['guards']/['haft']/['pommel']/['butt']), sourced from
-# specimen/typology physical facts (designs/audit/2026-07-02-morphology-rearch-phase0/), not a formula split by
+# specimen/typology physical facts, not a formula split by
 # weapon-class centroid. A compound head's mass is the sum of its located elements, not one point at wclass's
-# centroid — the bec de corbin's hammer/beak/spike each carry their own measured mass and position. Phase A
-# (2026-07-02, byte-identical scaffold) synthesized a single reproduction element per weapon; Phase B (below)
-# replaced every roster weapon's synthesized element with its real Phase-0 part list, so the Phase-A fallback
-# path is now LIVE ONLY for a record with no explicit `elements` (a hypothetical un-migrated/synthetic record —
-# none remain in the roster; kept for generality/safety, not exercised by weapons.py today).
+# centroid — the bec de corbin's hammer/beak/spike each carry their own measured mass and position. The
+# single-C_HEAD-centroid fallback path is LIVE ONLY for a record with no explicit `elements` (a synthetic record;
+# none in the roster).
 def _head_elements(w):
     """Phase-A fallback: no explicit `elements` → one synthetic element at the old C_HEAD centroid (pos_frac)
     carrying the whole head-mass residual (mass_share 1.0). Not exercised by any current roster weapon."""
@@ -154,12 +126,12 @@ def _head_elements(w):
     return [dict(pos_frac=C_HEAD[w.get('wclass', 'bladed')], mass_share=1.0)]
 
 def _all_parts(w):
-    """The weapon's full located-mass part list (Phase B): head elements + guards + haft/grip + pommel + butt,
+    """The weapon's full located-mass part list: head elements + guards + haft/grip + pommel + butt,
     each as (mass_kg, x_m, extent_m) about the working-hand axis (x=0, +toward tip, −toward butt — the SAME
-    axis convention Phase 0 collected under). A guard flagged `dual_role_element` is also a head element (e.g.
+    axis convention the specimen data was collected under). A guard flagged `dual_role_element` is also a head element (e.g.
     the hook_sword's crescent, which both catches AND strikes) — its mass is carried by the element entry only,
     so it is excluded here to avoid double-counting. Empty when the record carries no explicit parts (the
-    Phase-A single-element fallback below covers that case). Pure."""
+    single-element fallback below covers that case). Pure."""
     parts = []
     for e in w.get('elements', ()):
         parts.append((e['mass_kg'], e['x_m'], e.get('extent_m', 0.0)))
@@ -179,9 +151,9 @@ def _all_parts(w):
 
 def derive(w):
     """Located-part mass model -> {PoB, m_head, MoI, static_moment, ...}. PoB DERIVED. Pure. Roster weapons
-    carry the real Phase-0 part list (elements/guards/haft/pommel/butt); derive() is a positional sum over it —
-    no per-weapon-class formula. Records without explicit parts fall back to the Phase-A C_HEAD-centroid
-    reproduction (kept for generality; not exercised by the live roster). Roster records carry a bake-once
+    carry a part list (elements/guards/haft/pommel/butt); derive() is a positional sum over it —
+    no per-weapon-class formula. Records without explicit parts fall back to the C_HEAD-centroid
+    reproduction (not exercised by the live roster). Roster records carry a bake-once
     '_derived' cache (weapons.py import loop) — mutation after bake is out of contract, same as the baked
     geo/gap; synthetic dicts without the key compute fresh."""
     cached = w.get('_derived')
@@ -198,12 +170,12 @@ def derive(w):
         m_head = _ltr_sum(e['mass_kg'] for e in w.get('elements', ()))
         return dict(PoB_m=PoB, PoB_cm=PoB * 100, PoB_frac=PoB / Lt, m_head=m_head,
                     MoI=moi, static_moment=moment, fwd_extent_m=Lh, length_m=Lt)
-    # ── Phase-A fallback (byte-identical reproduction; not exercised by the live roster) ──
+    # ── fallback (not exercised by the live roster) ──
     m, cls = w['mass'], w.get('wclass', 'bladed')
     if w.get('gripped'):
-        # HAND-ON-BLADE (half-sword) lumped-rod special case — kept for any un-migrated synthetic record; the
-        # live roster's half-sword forms (longsword_halfsword/estoc_halfsword) carry real Phase-0 parts instead
-        # (a shifted-origin part list), which reproduces this same physics without the uniform-rod approximation.
+        # HAND-ON-BLADE (half-sword) lumped-rod special case for a synthetic record; the
+        # live roster's half-sword forms (longsword_halfsword/estoc_halfsword) carry a shifted-origin part list
+        # instead, which gives the same physics without the uniform-rod approximation.
         ch = C_HEAD[cls]
         m_lin = m / Lt
         m_fwd = m_lin * Lh
@@ -243,20 +215,15 @@ def derive(w):
 
 
 # ════════════════════ STAGE 2 — percussion / puncture authority ════════════════════
-# ── circumstance degradation (I2, D2/D2b, 2026-07-03 — designs/audit/2026-07-02-scene-combat-closing-distance-
-# redesign/) — mode-split, thrust-protected, floored, NaN-guarded Phi_grip; a SEPARATE floored Phi_room for
-# percussion only (Phi_room is CUT from the heft path — JD-1(d), R-8: a monotone heft-room multiply violates C4).
+# ── circumstance degradation (I2, D2/D2b) — mode-split, thrust-protected, floored, NaN-guarded Phi_grip; a
+# SEPARATE floored Phi_room for percussion only (Phi_room is CUT from the heft path — JD-1(d), R-8: a monotone
+# heft-room multiply violates C4).
 SWING_FLOOR = 0.5      # [SIM-CALIBRATE] floor on the swing-fraction degradation (a fully-gathered swing never drops below half its open-measure authority)
-# U5/ED-PC-0019 CHOKE_THRUST — RETIRED FROM THE FORCE CHANNEL (U10/ED-PC-0022, 2026-07-23). U5 parked a choke
-# CONTROL cost against phi_grip('point') — the axial-FORCE multiplier — where the ratified D2 grip-invariant-thrust
-# gate (phi>=0.9 at full gather) correctly zeroed it, manufacturing a false "break D2 or kill the lever" dilemma.
-# Radical re-examination (ED-PC-0022): the grip-invariant-thrust principle is PHYSICALLY CORRECT for FORCE MAGNITUDE
-# — a rigid shaft transmits axial compression independent of hand position, so choking up a pole does NOT reduce the
-# force delivered by an axial thrust. What choking up DOES cost is CONTROL: a shortened rear lever lets the point be
-# beaten off-line more easily, and the gathered posture telegraphs. That cost is a legibility/accuracy effect and
-# already has its correct home in systems.choke_counterbalance -> CHOKE_ACCURACY_K (the SAME channel, all modes). So
-# CHOKE_THRUST is not "activated" or "cut" (the U9 false dilemma) — it is RE-HOMED to the channel it always belonged
-# in, and phi_grip('point') is grip-invariant UNCONDITIONALLY (no constant), keeping the D2 gate byte-identical.
+# phi_grip('point') is grip-INVARIANT UNCONDITIONALLY (no constant; the D2 grip-invariant-thrust gate, phi>=0.9 at
+# full gather): a rigid shaft transmits axial compression independent of hand position, so choking up a pole does
+# NOT reduce the force of an axial thrust. What choking up costs is CONTROL (a shortened rear lever lets the point
+# be beaten off-line, and the gathered posture telegraphs): a legibility/accuracy effect whose home is
+# systems.choke_counterbalance -> CHOKE_ACCURACY_K (U5/ED-PC-0019, U10/ED-PC-0022).
 PERC_ROOM_FLOOR = 0.5  # [SIM-CALIBRATE] floor on percussion's room degradation (identity at room=1.0/r*; monotone-down FORBIDDEN, C4)
 
 def grip_swing_ratio(w, grip):
@@ -278,12 +245,10 @@ def phi_grip(w, grip, sel_head, sel_pc=None):
     point_concentration (`sel_pc`, sourced from c.sel_pc — D2b/I2; None falls back to the native whole-weapon
     point_concentration): Phi_grip = pc_sel*1.0 + (1-pc_sel)*Phi_swing — the within-mode thrust-ness a pure cutter
     still carries (guandao pc=0.30) as well as a genuinely versatile cut_thrust blade (JD-8: spetum
-    retains its swing degradation weighted by its own low pc). Verified against the plan's own measured
-    fixed-pc table: guandao (curved_cut, pc=0.30, g=1.0) -> 0.650 exact; bardiche (straight_cut, pc=0.18, g=0.627)
-    -> 0.743 exact. At grip=0, rho(0)==1.0 always, so Phi_swing==1.0 and the blend collapses to 1.0 for EVERY
-    head — the byte-identical default. Pure."""
+    retains its swing degradation weighted by its own low pc). At grip=0, rho(0)==1.0 always, so Phi_swing==1.0
+    and the blend collapses to 1.0 for EVERY head. Pure."""
     if sel_head == V.HEAD_POINT:
-        return 1.0   # D2 gate: an axial point thrust's TRANSMISSION is grip-invariant — a rigid shaft carries axial compression from the hands to the point independent of WHERE on the shaft it is gripped (`[ASSERTED — rigid-body transmission only]`). NARROWED 2026-07-23 (ED-PC-0026, adversarial HEMA critic): the prior tag `[ASSERTED — rigid-body first principles]` OVERCLAIMED — the force is human-GENERATED (choking up shortens the rear body-lever available to drive the thrust), which is a real grip-dependent cost. That cost is not zero; it is booked ELSEWHERE as a CONTROL/authority cost — systems.choke_counterbalance -> CHOKE_ACCURACY_K (the legibility/control channel) and thrust_authority(head_len) (the gap-press lever) — NOT as a phi_grip force term. So this 1.0 is the transmission invariant, not a claim of zero total cost.
+        return 1.0   # D2 gate: an axial point thrust's TRANSMISSION is grip-invariant — a rigid shaft carries axial compression from the hands to the point independent of WHERE on the shaft it is gripped (`[ASSERTED — rigid-body transmission only]`). The force is human-GENERATED (choking up shortens the rear body-lever available to drive the thrust), a real grip-dependent cost (ED-PC-0026). That cost is not zero; it is booked ELSEWHERE as a CONTROL/authority cost — systems.choke_counterbalance -> CHOKE_ACCURACY_K (the legibility/control channel) and thrust_authority(head_len) (the gap-press lever) — NOT as a phi_grip force term. So this 1.0 is the transmission invariant, not a claim of zero total cost.
     rho = grip_swing_ratio(w, grip)
     phi_swing = SWING_FLOOR + (1.0 - SWING_FLOOR) * rho
     pc = sel_pc if sel_pc is not None else w['geo']['point_concentration']   # whole-weapon fallback off the BAKED surface (geometry.bake passes the raw primitives through so `geo` is the single read path — ED-PC-0042/I3)
@@ -379,7 +344,7 @@ def delivered_strike(w):
     Reads the same located-part list as `derive()` (`_all_parts`), so the two cannot disagree about the weapon.
 
     FALLBACK (no located parts — a synthetic dict; not exercised by the weapon roster, every member of which
-    carries a Phase-B part list): the whole mass, at the derived balance point, clamped forward. Pure."""
+    carries a part list): the whole mass, at the derived balance point, clamped forward. Pure."""
     m_f = 0.0
     s_f = 0.0
     m_total = 0.0
@@ -415,30 +380,24 @@ def strike_point_lever(w, m_strike, x_strike):
 
     Read it as: **the fraction of the weapon's MAXIMUM swing moment that this strike delivers** — the maximum
     being the whole weapon's mass presented at its own tip, which is why `lambda(m_total, Lt) == 1.0` exactly.
-    It GENERALISES the lever it replaces: `lambda(m_total, PoB_m)` at a zero hand-floor IS `derive()['PoB_frac']`
-    for every weapon whose balance point sits at or ahead of the hand. The change is not a new quantity — it is the
-    SAME quantity re-pointed from "the whole mass at the centre of balance" to "the delivered mass at the strike
-    point".
-    [ED-PC-0048 CORRECTION] E2a's docstring called that a STRICT generalisation. It is not: `lambda` takes `|x|`,
-    so the three roster weapons whose PoB sits BEHIND the hand (estoc_halfsword -0.309, longsword_halfsword -0.223,
-    cinquedea -0.031) map to the POSITIVE lever rather than the negative `PoB_frac`. No behaviour depends on it —
-    all three are non-blunt heads, so they route to `reversed_grip_percussion` and never reach this line — but the
-    claim as written was false, and "verify the claim, not the prose" is why it was checked (CLAUDE.md §0.1 point 3).
+    It generalises `derive()['PoB_frac']`: `lambda(m_total, PoB_m)` at a zero hand-floor IS `PoB_frac` for every
+    weapon whose balance point sits at or ahead of the hand: the SAME quantity re-pointed from "the whole mass at
+    the centre of balance" to "the delivered mass at the strike point".
+    [ED-PC-0048] It is not a STRICT generalisation: `lambda` takes `|x|`, so the three roster weapons whose PoB sits
+    BEHIND the hand (estoc_halfsword, longsword_halfsword, cinquedea) map to the POSITIVE lever rather than the
+    negative `PoB_frac`. No behaviour depends on it — all three are non-blunt heads, so they route to
+    `reversed_grip_percussion` and never reach this line.
 
-    TWO defects die here, at two scales, and they are the same defect (a lever that can be exactly 0):
+    TWO scales share it, because they are the same defect (a lever that can be exactly 0):
       · E2a (M1): PoB_frac is a CoM offset, so a rear counterweight cancels it — staff 0.0. Fixed by measuring
         the moment of the DELIVERED mass (`delivered_strike`), which no counterweight can cancel.
-      · E2b (M9, DONE — ED-PC-0048): `percussion_element_authority`'s `|x| / Lt` zeroed any element mounted at
-        x=0 (hook_sword's authored crescent was unreachable). Fixed by STRIKE_HAND_LEVER: a blow landed at the
-        hand still swings on the hand/hilt's own lever. It routes through THIS function, as
-        `sqrt(elem_mass) * strike_point_lever(w, delivered_strike(w)[2], elem_x)`.
-        ⚠ **NOTE THE FIRST ARGUMENT.** E2a originally prescribed `strike_point_lever(w, elem_mass, elem_x)` here.
-        That is WRONG and E2b measured it before consuming it: this function divides its mass argument by the
-        weapon's total, so passing `elem_mass` puts mass in at power 1.5 — dropping percussion 19-37% on every weapon.
-        The element's own mass belongs in `sqrt()`; the lever is geometric, which is exactly what this
-        function returns when handed the delivered mass. Both properties E2b consumes (the element's lever does not
-        double-count mass; the lever is nonzero at the hand) were pinned by tests dropped at ED-IN-0313 and
-        ED-IN-0314, so only this docstring now keeps the two scales from shipping two different lever forms (R-11.4).
+      · E2b (M9, ED-PC-0048): `percussion_element_authority`'s `|x| / Lt` zeroed any element mounted at x=0.
+        Fixed by STRIKE_HAND_LEVER: a blow landed at the hand still swings on the hand/hilt's own lever. It routes
+        through THIS function, as `sqrt(elem_mass) * strike_point_lever(w, delivered_strike(w)[2], elem_x)`.
+        ⚠ **NOTE THE FIRST ARGUMENT.** This function divides its mass argument by the weapon's total, so passing
+        `elem_mass` puts mass in at power 1.5 (dropping percussion 19-37% on every weapon). The element's own mass
+        belongs in `sqrt()`; the lever is geometric, which is exactly what this function returns when handed the
+        delivered mass (R-11.4).
       · NOT `|x| / Lt` and NOT `PoB_frac`. If a third lever form ever appears in this module, one of them is wrong.
 
     Symmetric in the sign of x (a rear-facing fluke swings on |x| like any other located element). Monotone
@@ -455,45 +414,25 @@ def strike_point_lever(w, m_strike, x_strike):
 def percussion_authority(w, grip=0.0, room=1.0, sel_head=None, sel_pc=None):
     """Blunt swing authority from the DELIVERED mass and its STRIKE-POINT LEVER (p ~ sqrt(m_strike)*lambda),
     times the GROUNDED 2H/arc energy_credit (§1) folded INSIDE the authority term. Saturating.
-    [ED-PC-0047, E2a] The lever was `derive()['PoB_frac']` — the whole weapon's centre of balance about the hand —
-    until 2026-07-29. That made a rear counterweight SUBTRACT authority and zeroed a centre-gripped haft outright:
-    the staff derived perc_auth 0.0 / puncture 0.0 / adef_cap 0.0 / percussion_stagger (0,0) regardless of its
-    1.478 kg, contradicting BOTH percussion_stagger's own docstring (which cites the staff as ED-PC-0031's worked
-    example) and core.py's FIX-1b comment ("a wooden staff (p_auth ~4)"). It now reads `strike_point_lever` (see
-    that function — the single owner E2b consumes too) against `delivered_strike`'s forward mass.
-    NON-BLUNT HEADS (U2/ED-PC-0008/0009, 2026-07-08): the self-gate no longer hard-zeroes every non-blunt head —
-    it routes to reversed_grip_percussion(w) (see its own docstring), the historically-grounded Mordhau/pommel-
-    strike option, correctly weak (roughly 1.4-1.8 on this 0-8 scale for a two-handed sword vs a dedicated mace's
-    8.0/poleaxe's ~7.5) rather than either hard-zero (the old behaviour, which made the blunt/percussion mode
-    invisible to a sword facing armour its edge cannot defeat) or the naive whole-weapon-formula reuse first
-    attempted for JD-4 (which put swords at 5.8-6.3, mace-parity — measured wrong, see ED-PC-0008). 0.0 for a
-    one-handed/short bladed weapon or a hafted weapon whose native head genuinely isn't blunt (no comparable
-    technique is attested in the sourced material).
-    [RESOLVED 2026-07-02->2026-07-08] The 2026-06-30 anchors (mace 7.45 > poleaxe 5.83 > staff 2.52) were tuned
-    against the Phase-A whole-weapon-lump PoB; morphology-rearch Phase B's located-part model gives the poleaxe
-    a materially more forward, more accurate PoB_frac (0.091->0.206), lifting it to ~7.48. Mace itself now pins
-    at PERC_CAP=8.0 (Phase B also raised its own PoB_frac) — mace remains the ceiling, poleaxe close behind;
-    test_gap_game_poleaxe_thrusts_in_the_duel (ED-PC-0035: was cited here as "test_gap_game_poleaxe_spikes_plate", a name retired with the ED-PC-0027 resolution — the poleaxe now thrusts at EVERY tier and the test PASSES) and test_use_mode_selection_emerges_from_primitives' poleaxe-switches
-    finding are still deliberately left red pending Phase C's PERC_SCALE/PERC_EXP re-fit (unchanged by U2 — this
-    docstring previously described mace as 7.45, stale since the Phase-B mass re-baseline; corrected here, no
-    behaviour change).
-    [ED-PC-0047 MEASURED ANCHORS, and an HONEST LIMIT.] With the strike-point lever the blunt-native family reads
-    mace 8.000 = poleaxe 8.000 = goedendag 8.000 > lucerne 7.590 > bec 7.487 > staff 5.629. The staff is repaired
-    and stays the family's weakest percussor, but it lands ABOVE core.py's recorded "~4" intent and the poleaxe
-    family COMPRESSES against PERC_CAP. Neither is a calibration choice available to this batch, and the reason is
-    arithmetic, not judgement: at PERC_EXP=0.30 an authority RATIO of 0.5 demands an INPUT ratio of 0.5^(1/0.30) =
-    0.099, and no honest mass/lever form puts a 1.478 kg two-handed staff at one tenth of a 1.2 kg mace's swing
-    moment (every candidate measured lands in 0.2-0.9). **The ~4 anchor is unreachable while the mace is pinned at
-    PERC_CAP — it is a PERC_SCALE/PERC_EXP question, i.e. exactly the deferred Phase-C re-fit PERC_CAP's ownership
-    note names as "the event this ownership exists for".** The cap compression is the same signal. This batch fixes
-    the LEVER (a structural defect: a lever that can be exactly zero) and discloses the calibration residue rather
-    than tuning the roster around it; core.py's FIX-1b comment is corrected to the measured 5.6.
+    [ED-PC-0047, E2a] The lever is `strike_point_lever` (see that function — the single owner E2b consumes too)
+    against `delivered_strike`'s forward mass, not `derive()['PoB_frac']` (the whole weapon's centre of balance about
+    the hand, which a rear counterweight would SUBTRACT from and which is exactly 0 for a centre-gripped haft): the
+    staff derives a real perc_auth / puncture / adef_cap / percussion_stagger.
+    NON-BLUNT HEADS (U2/ED-PC-0008/0009): a non-blunt head routes to reversed_grip_percussion(w) (see its own
+    docstring), the historically-grounded Mordhau/pommel-strike option, correctly weak (roughly 1.4-1.8 on this 0-8
+    scale for a two-handed sword vs a dedicated mace's 8.0/poleaxe's ~7.5; a whole-weapon-formula reuse would put
+    swords at mace-parity, ED-PC-0008). 0.0 for a one-handed/short bladed weapon or a hafted weapon whose native
+    head genuinely isn't blunt (no comparable technique is attested in the sourced material).
+    [ED-PC-0047] HONEST LIMIT: the blunt-native family reads mace = poleaxe = goedendag at PERC_CAP > lucerne > bec >
+    staff (5.6, the family's weakest percussor). The poleaxe family COMPRESSES against PERC_CAP, and the staff's ~4
+    intent is unreachable while the mace is pinned at PERC_CAP: at PERC_EXP=0.30 an authority RATIO of 0.5 demands an
+    INPUT ratio of 0.5^(1/0.30) = 0.099. That is a PERC_SCALE/PERC_EXP re-fit question (see PERC_CAP's ownership
+    note), not a lever question; test_gap_game_poleaxe_thrusts_in_the_duel and test_use_mode_selection_emerges_from_
+    primitives' poleaxe-switches finding await that re-fit.
     CIRCUMSTANCE-DEGRADED (I2, D2b): grip/room-threaded via the SAME mode-split Phi_grip as heft (JD-4: percussion
-    is grip-aware too, avoiding the M-08 blunt/cut asymmetry) PLUS a floored Phi_room (D2b — retained here, unlike
-    heft). `sel_head` overrides w['head'] for the affordance gate (None = native). At grip=0/room=1.0 this is
-    byte-identical to the pre-I2 return for every BLUNT-headed weapon (both Phi terms are 1.0 there); the
-    non-blunt branch's own reversed_grip_percussion (U2/ED-PC-0009) is NOT byte-identical to the pre-U2 hard-
-    zero — that is the intended, deliberate behaviour change this increment makes."""
+    is grip-aware too, avoiding the M-08 blunt/cut asymmetry) PLUS a floored Phi_room (D2b — percussion keeps it,
+    heft does not). `sel_head` overrides w['head'] for the affordance gate (None = native). At grip=0/room=1.0 both
+    Phi terms are 1.0 for a BLUNT-headed weapon."""
     head = sel_head if sel_head is not None else w['head']
     if head != V.HEAD_BLUNT:
         return reversed_grip_percussion(w, grip=grip, room=room)
@@ -512,51 +451,25 @@ def puncture_pressure(w, grip=0.0, room=1.0, sel_head=None, sel_pc=None):
 
 
 def percussion_element_authority(w, elem_mass, elem_x, grip=0.0, room=1.0):
-    """Per-element application of the percussion_authority FORM (I2, D2b — capstone finding M4 correction: this is
-    a per-element percussion_authority variant, NOT `at_circumstance`, which returns {I_g,S_g,d_g,u,...} and
-    computes no percussion value at all). Uses THIS striking element's own mass_kg + its x_m as the moment-arm
-    FRACTION of the weapon's total length (the per-element analogue of percussion_authority's whole-weapon
-    sqrt(mass)*PoB_frac), with the whole-weapon `energy_credit` (a 2H/arc credit is a property of how the WHOLE
-    weapon is gripped, not of one striking element). Distinguishes multi-blunt composites (lucerne_hammer's
-    hammer face vs its rear 3-4 tine fluke) that, pre-I2, both read the SAME whole-weapon percussion_authority(w).
-    Degraded by the SAME grip/room Phi as the whole-weapon percussion_authority (D2/D2b) — a property of the grip/
-    room circumstance, not of which element is striking. Pure.
-    [ED-PC-0048, E2b] The lever was `abs(elem_x) / Lt` — the element's offset from the working hand as a fraction of
-    the weapon's length — until 2026-07-29. That is the SECOND FACE of the M1/F1 defect E2a repaired one scale up: a
-    lever that can be EXACTLY ZERO. Any element mounted AT the hand derived 0 authority regardless of its mass, so
-    the affordance gate never emitted its token, so it could never be selected. hook_sword's authored crescent
-    (`mode_elements[1]`, 0.140 kg at x = +0.000 m — "a genuine strike alternative", JD-5) was dead data:
-    `afforded_heads(hook_sword)` returned {curved_cut, point}. It GENERALISES beyond that one weapon — any
-    guard-mounted striking element has an arm's lever, not zero.
-    Now routed through `strike_point_lever`, the single owner E2a shipped, so the weapon and element scales cannot
-    carry two different lever forms (review R-11.4).
-    ⚠ **CALLED WITH THE DELIVERED MASS, NOT `elem_mass` — and the distinction is load-bearing.** E2a's own docstring
-    prescribed `sqrt(elem_mass) * strike_point_lever(w, elem_mass, elem_x)` for this line. That signature
-    DOUBLE-COUNTS the striking mass: `strike_point_lever`'s first argument is a mass it divides by the weapon's
-    total, so mass would enter at power 1.5 and be normalised by the whole weapon. Measured across the roster, that
-    drops percussion 19-37% on EVERY weapon in the roster (odachi -37.1%, mace -31.6%, poleaxe's hammer element
-    7.613 -> 4.885) — a roster-wide balance change inside a batch with no balance intent. The element's own mass
-    belongs in `sqrt()`, where it has always been; the LEVER is geometric. Passing `delivered_strike(w)[2]` makes
+    """Per-element application of the percussion_authority FORM (I2, D2b — a per-element percussion_authority
+    variant, NOT `at_circumstance`, which returns {I_g,S_g,d_g,u,...} and computes no percussion value at all). Uses
+    THIS striking element's own mass_kg + its x_m as the moment-arm FRACTION of the weapon's total length (the
+    per-element analogue of percussion_authority's whole-weapon sqrt(mass)*PoB_frac), with the whole-weapon
+    `energy_credit` (a 2H/arc credit is a property of how the WHOLE weapon is gripped, not of one striking element).
+    Distinguishes multi-blunt composites (lucerne_hammer's hammer face vs its rear 3-4 tine fluke). Degraded by the
+    SAME grip/room Phi as the whole-weapon percussion_authority (D2/D2b) — a property of the grip/room circumstance,
+    not of which element is striking. Pure.
+    [ED-PC-0048, E2b] The lever is routed through `strike_point_lever`, the single owner, so the weapon and element
+    scales carry one lever form (review R-11.4). It is never exactly zero: an element mounted AT the hand (hook_sword's
+    crescent, `mode_elements[1]`, 0.140 kg at x = +0.000 m, JD-5) still has an arm's lever via STRIKE_HAND_LEVER, so
+    any guard-mounted striking element can be afforded and selected.
+    ⚠ CALLED WITH THE DELIVERED MASS, NOT `elem_mass` — load-bearing. `strike_point_lever`'s first argument is a mass
+    it divides by the weapon's total, so passing `elem_mass` would double-count the striking mass (power 1.5). The
+    element's own mass belongs in `sqrt()`; the LEVER is geometric. Passing `delivered_strike(w)[2]` makes
     `strike_point_lever` reduce exactly to `(STRIKE_HAND_LEVER + |x|) / (STRIKE_HAND_LEVER + Lt)` — the same single
     owner, the same form, no third lever, and no mass term where none belongs.
-    MEASURED CONSEQUENCE, disclosed not tuned: the hand-floor is the fix, so authority rises slightly everywhere it
-    was already non-zero. LIVE movers, exhaustively — 3 located blunt elements (poleaxe hammer 7.613->7.769 +2.1%,
-    bec_de_corbin beak 6.510->6.776 +4.1%, lucerne fluke/hammer +3.7/+4.8%) and the 9 two-handed blades that reach
-    `reversed_grip_percussion` (longsword +8.8%, nandao +8.0%, greatsword +6.1%, katana +6.1%, tachi +6.0%,
-    flamberge +5.2%, estoc/odachi +5.1%, changdao +2.6%). No other weapon's percussion moves: the Mordhau path is
-    gated to hands==2 bladed weapons, so the short-gripped 1H weapons where a 0.12 m floor would be proportionally
-    largest never reach this line at all. hook_sword's crescent goes 0.0 -> 4.132 and its blunt token becomes
-    reachable — the batch's target.
-    SELECTION CONSEQUENCE — exactly two weapons, four (damage_mode, head) pairs, both moving the way the repair
-    intends: `hook_sword` now selects its crescent (percussion/blunt) at light/medium/heavy instead of a point it
-    barely has, keeping its native curved_cut unarmoured; and `bec_de_corbin` @heavy flips puncture/point ->
-    percussion/blunt, rejoining its poleaxe-family sibling lucerne_hammer, which already struck blunt at medium and
-    heavy. A crow's-beak warhammer meeting plate should swing the hammer, not thrust.
-    ⚠ MAGNITUDE RESIDUE, disclosed not tuned (same class E2a disclosed for the staff): a 0.140 kg hand-mounted
-    crescent reading 4.132 on a 0-8 scale where a 1.2 kg mace reads 8.0 is the PERC_EXP=0.30 low-mass compression —
-    the deferred Phase-C PERC_SCALE/PERC_EXP re-fit, not a lever question. This batch fixes the structural defect (a
-    lever that can be exactly zero) and leaves the calibration where the ledger already tracks it. hook_sword is
-    additionally measured in a configuration it was never used in (no off-hand slot — plan §9 defers that to E6).
+    ⚠ MAGNITUDE RESIDUE: a 0.140 kg hand-mounted crescent reads 4.132 on a 0-8 scale where a 1.2 kg mace reads 8.0;
+    that is the PERC_EXP=0.30 low-mass compression (a PERC_SCALE/PERC_EXP re-fit question), not a lever question.
     See tests/valoria/test_combat_element_reachability.py."""
     m_total = delivered_strike(w)[2]
     lever = strike_point_lever(w, m_total, elem_x)     # == (STRIKE_HAND_LEVER + |x|) / (STRIKE_HAND_LEVER + Lt)
@@ -579,31 +492,15 @@ def armour_defeat_mode(w):
 def agility(w):
     """Speed/handiness from swing inertia. GROUNDED SHAPE — a constant-exponent POWER LAW about the grip axis:
     agility ∝ MoI^(−AGILITY_EXP), EXP≈0.25 (Cross & Nathan 2009 / Fleisig 2002 — handle-axis bat/racket/golf swing
-    studies, mass-independent, exponent 0.20–0.28). Replaces the prior 1/(1+K·MoI), whose LOCAL exponent climbed
-    0.1→0.9 across the roster and over-penalised heavy weapons ~2× (greatsword 0.22 vs the power-law ~0.6). Anchored
-    at AGILITY_REF (set just BELOW the lightest weapon's MoI), so the whole roster sits at agility ≤ 1 and the spread
-    EMERGES strictly from MoI: dagger highest (~0.97) → spear lowest (~0.18). The exponent is grounded; AGILITY_REF is
-    [SIM-CALIBRATE]. In (0,1].
-    FIAT-CLAMP RESOLVED (2026-06-30, Track-2 / gate1_audit agility-fiat-clamp): the anchor now sits below the lightest
-    MoI (AGILITY_REF ≈ 0.9× dagger), so AGILITY_REF/MoI ≤ 1 for EVERY weapon and the min(1.0,…) NEVER binds — it is an
-    inert safety guard, not the spread-destroying flat-top it was at the old 0.088 anchor (which pinned dagger, paired,
-    sabre, arming and the half-sword all to 1.0). The light-weapon dodge/parry ordering (dagger>paired>sabre>arming) is
-    restored; the consumers (defense_affinities' dodge _band window + the parry agility-pivot) were renormalised to the
-    compressed agility range so the OUTPUT affinity spread matches the previously-calibrated one — see defense_affinities.
-    MIGRATED (I1, D11a, 2026-07-03 — designs/audit/2026-07-02-scene-combat-closing-distance-redesign/): reads
-    at_grip(w,0.0)['I_g'] instead of derive(w)['MoI'] directly — the SAME grip-adjusted MoI wield_heft/
-    _recovery_mode_commitment/recoverability_factor already read (at grip=0 today; a future increment may thread
-    a real grip here). Proven byte-identical across the full roster (at_grip(w,0)['I_g'] reconstructs derive(w)
-    ['MoI'] to within float round-trip noise, <2e-17 absolute, on 3 roster weapons — see I1 commit note; every other
-    weapon is EXACT)."""
+    studies, mass-independent, exponent 0.20–0.28). Anchored at AGILITY_REF (set just BELOW the lightest weapon's
+    MoI), so the whole roster sits at agility ≤ 1 and the spread EMERGES strictly from MoI: dagger highest (~0.97) →
+    spear lowest (~0.18). The exponent is grounded; AGILITY_REF is [SIM-CALIBRATE]. In (0,1].
+    AGILITY_REF/MoI ≤ 1 for EVERY weapon, so the min(1.0,…) NEVER binds — it is an inert safety guard. The consumers
+    (defense_affinities' dodge _band window + the parry agility-pivot) are renormalised to this agility range.
+    I1, D11a: reads at_grip(w,0.0)['I_g'] (the SAME grip-adjusted MoI wield_heft/_recovery_mode_commitment/
+    recoverability_factor read), at grip=0; at_grip(w,0)['I_g'] reconstructs derive(w)['MoI'] to within float
+    round-trip noise."""
     return min(1.0, (AGILITY_REF / max(1e-6, at_grip(w, 0.0)['I_g'])) ** AGILITY_EXP)
-
-
-# authority()/reach() DELETED (morphology-rearch Phase B6, 2026-07-02, Gate-1's single-source-target decision
-# resolved): both were BUILD-ONLY diagnostics, never wired into live resolution (which gets impact force from
-# percussion_authority/heft/core.coupling and reach from systems.reach_base), kept-but-labeled pending this
-# ratification. No remaining consumer anywhere in the corpus (verified) — deleted outright rather than carried
-# further; systems.reach_base and weapon_physics.heft() are the sole live sources for reach and impact force.
 
 
 def defense_affinities(w):
@@ -621,17 +518,15 @@ def defense_affinities(w):
     onehand = 1.0 if w['hands'] == 1 else 0.78
     wind = w.get('blade_guard', 0.4) * rigidity * (0.45 + 0.55 * lever_norm) * (0.7 + 0.3 * min(1.0, w['head_len'] / 0.90))   # 0.90 m = the old 3.0-lu edge-length saturation (U0)
     dodge = ag * onehand
-    # AGILITY-PIVOT (was ag/0.6): agility() was re-anchored below the lightest MoI (capless), so its live range
-    # COMPRESSED (a handy 1H sword now reads ag≈0.4, not the old flat-topped 1.0). The parry saturation pivot is
-    # renormalised to that new range so the parry-affinity spread reproduces the previously-calibrated one.
-    # [SIM-CALIBRATE 0.39] — fit to the pre-re-anchor parry spread; travels with the AGILITY_REF re-baseline.
+    # AGILITY-PIVOT: agility() is anchored below the lightest MoI (capless), so its live range is compressed (a handy
+    # 1H sword reads ag≈0.4); the parry saturation pivot is set to that range.
+    # [SIM-CALIBRATE 0.39]
     parry = (0.45 + 0.55 * w.get('hand_guard', 0.4)) * (0.55 + 0.45 * min(1.0, ag / 0.39))
 
     def _band(x, lo, hi):                                         # remap into the ~[0.4,1.0] affinity band
         return round(0.4 + 0.6 * max(0.0, min(1.0, (x - lo) / (hi - lo))), 2)
-    # DODGE _band window RENORMALISED (was [0.2,0.95]) to the compressed capless-agility range so the dodge spread
-    # reproduces the previously-calibrated one (dagger 1.0 > paired > sabre > arming > … > heavies at the 0.4 floor)
-    # rather than flat-topping at 1.0. [SIM-CALIBRATE 0.19,0.54] — fit to the pre-re-anchor dodge spread.
+    # DODGE _band window is set to the capless-agility range so the dodge spread runs dagger 1.0 > paired > sabre >
+    # arming > … > heavies at the 0.4 floor rather than flat-topping at 1.0. [SIM-CALIBRATE 0.19,0.54]
     return dict(parry=_band(parry, 0.55, 1.0), dodge=_band(dodge, 0.19, 0.54), wind=_band(wind, 0.05, 0.45))
 
 
@@ -682,9 +577,8 @@ def blade_guard(w):
 # ════════════════════ STAGE 3c — DISTRACTION: adornment motion degrades the defender's read (Phase B5) ════════════
 # "a feather and ring distract eyes which makes it harder to read intent" (the design brief this re-architecture
 # was built for). A weapon's `adornments` — a tassel, streamer, or plume attested for its type (Phase 0 physical
-# facts, designs/audit/2026-07-02-morphology-rearch-phase0/) — adds visual clutter near the striking motion. Empty
-# adornments (the overwhelming majority of the roster) -> distraction()==0 -> legibility() is byte-identical to
-# before this function existed (the plan's "empty ⇒ identity" requirement).
+# facts) — adds visual clutter near the striking motion. Empty adornments (the overwhelming majority of the
+# roster) -> distraction()==0 -> legibility() is unaffected.
 DISTRACT_K = 2.0  # [SIM-CALIBRATE] saturating-sum gain on Σ count·extent_m; the 3 roster examples (ranseur/guandao/
                    #   jian tassels, each a single ~0.15-0.35m attachment) are ALL period-documented as a
                    #   ceremonial-phase feature, not a primary combat design element — deliberately kept small.
@@ -776,48 +670,29 @@ def grab_hazard(w):
     return max((_el(ed) for ed in _blade_edges(w)), default=0.0)
 
 
-# ════════════════════ STAGE 3e — HEFT / TEMPO_SHAPE / HANDLING: the wt/spd/hand de-leak (Phase B6) ════════════════
-# The three remaining fiat aggregates — wt{light,heavy}, spd (a bare per-weapon tempo bonus), hand{Forgiving,
-# Standard,Demanding} — replaced with derivations off the SAME real per-part mass model every other Phase-B stage
-# already reads. All three are DIFFERENT physical quantities (impact force is a static moment, tempo is a shape
-# ratio, control demand is a balance/guard composite) that happen to share one mass model as their common source —
-# "de-leaked" means grounded in the same data, not literally the same scalar (verified: reusing wield_heft's own
-# MoI-based swing-inertia formula for the IMPACT path violates the plan's own falsifiable spear<arming<longsword<
-# greatsword ordering — a spear's swing-inertia about the working hand is LARGE even though its striking mass is
-# small, which is exactly the COST/IMPACT distinction wield_heft's own docstring already draws).
+# ════════════════════ STAGE 3e — HEFT / HANDLING: derived off the per-part mass model (Phase B6) ════════════════
+# Heft (impact force is a static moment) and handling (control demand is a balance/guard composite) are DIFFERENT
+# physical quantities that share one mass model as their common source — grounded in the same data, not literally
+# the same scalar (reusing wield_heft's own MoI-based swing-inertia formula for the IMPACT path would violate the
+# falsifiable spear<arming<longsword<greatsword ordering: a spear's swing-inertia about the working hand is LARGE
+# even though its striking mass is small, which is exactly the COST/IMPACT distinction wield_heft's own docstring
+# draws).
 HEFT_REF = 0.09609384729140724  # [ANCHOR, RE-DERIVED U1/ED-PC-0010, 2026-07-08] the 2H cut-thrust reference's
-                    #   (longsword) own m_head*PoB_frac, so heft(longsword)==1.0 exactly. Re-computed from
-                    #   longsword's U1-recalibrated PoB (JD-1: blade/pommel mass redistributed, PoB 19.4cm->13.9cm
-                    #   — weapons.py) to preserve this invariant by construction; was 0.1545336822851806 pre-U1.
-                    #   Rescales heft() for every weapon uniformly (a deliberate re-baseline, not a per-weapon
-                    #   fudge) — DMG_SCALE's old ~3.0 class magnitude at this SAME anchor weapon is unaffected by
-                    #   a uniform rescale. NEW FINDING (U1): the correctly-banded arming/longsword now read BELOW
-                    #   spear's own (untouched) heft numerator — test_falsifiable_heft_ordering's spear<arming
-                    #   term now fails; see that test's updated docstring (test_combat_heft.py) — this is the
-                    #   SAME reach-class dominance already tracked in registers/handoffs/HANDOFF_PC.md ("SPEAR flat-
-                    #   dominance"). RESOLVED 2026-07-23 (ED-PC-0027): the defect was heft() crediting a THRUST with
-                    #   the SWING moment (m_head*PoB_frac) — see THRUST_POB below.
+                    #   (longsword) own m_head*PoB_frac, so heft(longsword)==1.0 exactly (longsword's PoB is
+                    #   weapons.py's). Rescales heft() for every weapon uniformly; DMG_SCALE's ~3.0 class magnitude
+                    #   at this SAME anchor weapon is unaffected by a uniform rescale. The thrust lever is
+                    #   THRUST_POB below (ED-PC-0027).
 THRUST_POB = 0.16   # [SIM-CALIBRATE] the PoB-DECOUPLED effective lever for a THRUST's axial impact (ED-PC-0027,
                     # Jordan-ruled). A thrust delivers momentum ALONG THE LINE — its penetrating impact scales with
                     # the STRIKING MASS at the business end (m_head) but is INDEPENDENT of the weapon's forward
-                    # balance (PoB_frac), unlike a swing (whose impact IS the forward-balance moment). Using the swing
-                    # moment for a thrust was the SPEAR flat-dominance root: the spear is very forward-balanced
-                    # (PoB_frac 0.344) yet light-headed, so its thrust wrongly read hefty (1.43 > arming's 0.77). With
-                    # the PoB decoupled, the spear's light head reads a low thrust heft (0.46 < 0.77) — the falsifiable
-                    # ordering spear<arming<longsword<greatsword holds. Value ~ a hand-neutral balance (the controlled
-                    # posture a thrust is delivered from), well below the forward swing PoBs (0.08-0.34). Total mass was
-                    # rejected (the long light shaft does not add to point impact and would keep the 2.0kg spear heavy).
+                    # balance (PoB_frac), unlike a swing (whose impact IS the forward-balance moment): the spear is
+                    # very forward-balanced (PoB_frac 0.344) yet light-headed, so its thrust must not read hefty. The
+                    # falsifiable ordering spear<arming<longsword<greatsword holds. Value ~ a hand-neutral balance
+                    # (the controlled posture a thrust is delivered from), well below the forward swing PoBs
+                    # (0.08-0.34). Total mass is not used (the long light shaft does not add to point impact).
 
-# NOTE (ED-PC-0029, 2026-07-24): a `thrust_extension` heft-penalty for a 2H sword's thrust was PROTOTYPED here and
-# RETIRED before commit after an adversarial (fable) physics/HEMA audit. It de-rated a POINT thrust by a
-# head_len/m_head "light-and-forward" proxy — but that proxy discriminates "light head", not "polearm", so it
-# penalised the armour-defeating SPIKE polearms (poleaxe/bec_de_corbin/lucerne_hammer) and the half-sword forms
-# (the very technique that makes a sword thrust polearm-like) identically to a greatsword, and it created 1H>2H
-# inversions (arming > estoc). It also largely MISSED its target — the armoured sword thrust rides the `cut_thrust`
-# token, which bypasses the `head=='point'` heft branch. The "polearm out-thrusts a 2H sword at range" intent
-# (Jordan review 2026-07-24, option A) is delivered where it physically lives — the REACH/ARREST exchange during
-# the approach (systems.arrest_impulse), not a raw-heft penalty. THRUST_POB (the PoB-decoupled thrust lever,
-# ED-PC-0027) stays; it is the correct, already-merged thrust-heft model.
+# The "polearm out-thrusts a 2H sword at range" intent (Jordan review 2026-07-24) lives in the REACH/ARREST exchange
+# during the approach (systems.arrest_impulse), not in a raw-heft penalty; THRUST_POB is the thrust-heft model.
 
 def _arm_lever(d, head, sel_arm):
     """The base lever `heft` multiplies by the striking mass: the axial thrust lever for the puncture arm, the swing
@@ -846,35 +721,24 @@ def heft(w, grip=0.0, sel_head=None, sel_pc=None, sel_arm=None):
     reduced. Read ONLY by the cut/thrust/point damage path (core.heft_resp); a BLUNT head's impact force already
     derives independently from percussion_authority. FALSIFIABLE ACCEPTANCE (verified at authoring time): spear <
     arming < longsword < greatsword, greatsword not collapsed onto longsword.
-    CIRCUMSTANCE-DEGRADED (I2, D2, 2026-07-03 — designs/audit/2026-07-02-scene-combat-closing-distance-redesign/):
-    the ideal-circumstance ceiling above is UNCHANGED; grip enters ONLY through the mode-split, thrust-protected,
-    floored, NaN-guarded phi_grip multiplier — NEVER through a room term (Phi_room is explicitly CUT from the heft
-    path, JD-1(d): a monotone heft-room multiply violates C4). `sel_head` is the SELECTED use-mode head (None =
-    native w['head']); `sel_pc` is the selected element's own point_concentration (None = native whole-weapon
-    point_concentration). At grip=0 this is byte-identical to the pre-I2 return for EVERY weapon (phi_grip(w,0,
-    ...)==1.0 always, by construction — see phi_grip). Pure."""
+    CIRCUMSTANCE-DEGRADED (I2, D2): grip enters ONLY through the mode-split, thrust-protected, floored, NaN-guarded
+    phi_grip multiplier — NEVER through a room term (Phi_room is explicitly CUT from the heft path, JD-1(d): a
+    monotone heft-room multiply violates C4). `sel_head` is the SELECTED use-mode head (None = native
+    w['head']); `sel_pc` is the selected element's own point_concentration (None = native whole-weapon
+    point_concentration). At grip=0 phi_grip(w,0,...)==1.0 always, by construction — see phi_grip. Pure."""
     d = derive(w)
     head = sel_head if sel_head is not None else w['head']
     # MODE-SPLIT (ED-PC-0027): a SWING's impact is the forward-balance moment (m_head*PoB_frac); a THRUST's is axial,
     # PoB-DECOUPLED (m_head*THRUST_POB) — see THRUST_POB. phi_grip already grip-splits (point->1.0); this splits the
-    # BASE lever too, so a forward-balanced light-headed weapon (spear) no longer over-credits its thrust.
+    # BASE lever too, so a forward-balanced light-headed weapon (spear) does not over-credit its thrust.
     # [ED-PC-0050, E3b] SPLIT ON THE RESOLVED ARM, NOT THE TOKEN. `cut_thrust` is ONE token whose arm is resolved
-    # separately, in core.cut_thrust_arm — so a cut_thrust weapon that resolves the PUNCTURE arm was still paid the
-    # SWING moment (ranseur 2.5151 as a swing vs 0.7992 as a thrust, 3.1x; damage @none ranseur 26 vs spear 13).
-    # ED-PC-0027 decoupled the thrust lever from the PoB for exactly this reason; the fix was simply never extended
-    # from the `point` token to the composite that resolves a thrust, and the comment above this function already
-    # conceded the bypass. `sel_arm` is 'shear' | 'puncture' | None; None keeps the token-keyed behaviour and is
-    # byte-identical for every caller that does not pass it (pinned by test_arm_defaults_are_byte_identical).
+    # separately, in core.cut_thrust_arm — so a cut_thrust weapon that resolves the PUNCTURE arm is paid the thrust
+    # lever, not the SWING moment. `sel_arm` is 'shear' | 'puncture' | None; None keeps the token-keyed behaviour
+    # (pinned by test_arm_defaults_are_byte_identical).
     # Arm tokens come from vocabulary (V.MODE_PUNCTURE / V.MODE_SHEAR) — the alphabet has one owner (E0/ED-PC-0042).
     lever = _arm_lever(d, head, sel_arm)
     base = (d['m_head'] * lever) / HEFT_REF
     return base * phi_grip(w, grip, head, sel_pc)
-
-# tempo_shape() RETIRED at authoring time (a shallow point_concentration/head-length-ratio proxy, corrected before
-# commit): tempo's balance-recovery component is NOT a static geometry ratio — it is the SAME grip-aware physics
-# recoverability_factor already models (point of balance, head mass, and how the weapon is HELD, via WP.at_grip's
-# I_g/S_g at the chosen grip-position). systems.weapon_tempo now reads systems._recovery_mode_commitment (the
-# shared swing-arrest/thrust-retract core, extracted from recoverability_factor) directly instead.
 
 HANDLING_POB_K = 1.00    # [SIM-CALIBRATE] PoB_frac contribution (forward-loaded balance demands more correction)
 HANDLING_GUARD_K = 0.50  # [SIM-CALIBRATE] hand_guard REDUCES demand (a guarded grip is more forgiving to hold)
@@ -923,11 +787,10 @@ def grip_choke_max(w):
     return max(0.0, min(1.0, (L - GRIP_SHORT) / (GRIP_LONG - GRIP_SHORT)))
 
 def _geom_slide_max(w):
-    """The MAXIMUM geometric forward hand-offset, in METRES (U0: was _geom_slide_max_lu, length-units), floored
-    so the forward head extent kept ahead of the working hand never drops below GRIP_MIN_WORKING (M-04 underflow
-    fix, D1): min(grip_travel_max(w), head_len - GRIP_MIN_WORKING). A pure geometric bound — decoupled from the
-    CoM-clamped inertia slide u, so a centre-balanced staff's reach/rear-clearance still change with grip though
-    its u==0 (M-20)."""
+    """The MAXIMUM geometric forward hand-offset, in METRES, floored so the forward head extent kept ahead of the
+    working hand never drops below GRIP_MIN_WORKING (M-04, D1): min(grip_travel_max(w), head_len - GRIP_MIN_WORKING).
+    A pure geometric bound — decoupled from the CoM-clamped inertia slide u, so a centre-balanced staff's
+    reach/rear-clearance still change with grip though its u==0 (M-20)."""
     return min(grip_travel_max(w), w['head_len'] - GRIP_MIN_WORKING)
 
 def at_circumstance(w, grip=0.0, room=1.0):
@@ -939,17 +802,16 @@ def at_circumstance(w, grip=0.0, room=1.0):
     gather REACH is morphology-bounded ([FIAT] GRIP_*). A POLE regrips up the whole haft toward balance (the spear
     gathers to a short staff); a HILT slides within its grip only, gated by grip_len (a short hilt cannot gather —
     its half-sword form, not a slide, is its mid-blade grip).
-    L0 CIRCUMSTANCE BUNDLE (I2, D1, 2026-07-03 — designs/audit/2026-07-02-scene-combat-closing-distance-redesign/):
-    extends the prior at_grip(w,g) with two NEW members, both PURE weapon+scalar functions (no Combatant — L0
-    purity, a structural test asserts this): `rear_clearance` — length trailing behind the working hand, from
-    LOCATED parts (`_all_parts`, never `derive()['length_m']` — M-19: the full length is wrong for exactly the
-    half-sword composites this is for), gathered-in via the geometric slide (below), NOT the CoM-bounded inertia
+    L0 CIRCUMSTANCE BUNDLE (I2, D1): two members beyond {I_g,S_g,d_g,u}, both PURE weapon+scalar functions (no
+    Combatant — L0 purity, a structural test asserts this): `rear_clearance` — length trailing behind the working
+    hand, from LOCATED parts (`_all_parts`, never `derive()['length_m']` — M-19: the full length is wrong for exactly
+    the half-sword composites this is for), gathered-in via the geometric slide (below), NOT the CoM-bounded inertia
     slide `u` — a fighter's hand genuinely moves forward by `geom_slide` regardless of whether that motion buys
     any inertia benefit, and the rear overhang is a direct geometric consequence of THAT motion (M-20: a centre-
     balanced staff's `u` is clamped to 0 since it is already at the inertial optimum, but its rear_clearance must
     still lengthen as the grip slides forward — I7a's own acceptance gate). `geom_slide` — a geometric forward
     hand-offset (metres), FLOORED and decoupled from the CoM-bounded inertia slide `u` (M-04/M-20); scaled by the
-    SAME `grip` fraction as `u`. `room` is accepted for the L0 bundle's future consumers (D4/I5's swing-room
+    SAME `grip` fraction as `u`. `room` is accepted for the L0 bundle's consumers (D4/I5's swing-room
     term) but is UNUSED here — no member of THIS bundle degrades with room (that lever lives in commit_depth/
     legibility/percussion, never in the static kinematics)."""
     d = derive(w)
@@ -966,7 +828,7 @@ def at_circumstance(w, grip=0.0, room=1.0):
                 rear_clearance=rear_clearance, geom_slide=geom_slide)
 
 def at_grip(w, g):
-    """Thin alias onto at_circumstance's original {I_g,S_g,d_g,u} members — kept so every existing caller stays
-    byte-identical (D1, I2). New code should call at_circumstance directly."""
+    """Thin alias onto at_circumstance's original {I_g,S_g,d_g,u} members (D1, I2). New code should call
+    at_circumstance directly."""
     a = at_circumstance(w, g, 1.0)
     return dict(I_g=a['I_g'], S_g=a['S_g'], d_g=a['d_g'], u=a['u'])

@@ -1,26 +1,14 @@
 """`season.loop.predicates` — the `requires:` cells the grammar does not type. The verbs are the keys
-of `REQUIRES_PREDICATES` below, which is the owner: this comment names no list and carries no count
-(`establish` joined at plan position `13f`, `oblige` at `17a`; `give` came and left again at `14`, its
-cell typed on `T4`'s `with` stem).
+of `REQUIRES_PREDICATES` below, which is the owner: this comment names no list and carries no count.
 
-EXTRACTED, step 5 of the decomposition (a PURE MOVE but for two call sites, named below). The
-registry and its decorator travel with the functions they register, which is the rule step 3
-established for `REQUIREMENT_TYPES` and step 5 applies unchanged: **a decorator-filled table lives
-in the module that defines the decorated things**, or the table is empty at the moment the loader
-reads it.
+The registry and its decorator live with the functions they register: **a decorator-filled table
+lives in the module that defines the decorated things**, or the table is empty at the moment the
+loader reads it.
 
-WHY NOT MORE. `W-A` retired `_req_transfer`, `_req_tell`, `_req_move` and `_req_work` on
-2026-09-04 — each is a TYPED CELL in `verb_table.yaml` now, read by `evaluate()`. §8's rule is
-that a rule lives once, and a verb carrying both a typed cell and a predicate here would be two
-readings of one prose cell; that is exactly how `_req_confer` came to drop a disjunct and
-`_req_revoke` an entire clause.
-`test_wa_one_owner_a_verb_has_a_typed_cell_or_a_predicate_and_never_both` is the guard, and it is
-unmoved by this carve — it reads `S.REQUIRES_PREDICATES`, which is this module's dict.
-
-⚠ TWO LINES ARE NOT A BYTE-IDENTICAL MOVE, and they are declared rather than buried: the two
-`Query.parent_of` calls are `world_q.parent_of` here. Same function object; a governance predicate
-reaches a world query through the module that owns it rather than through a class that also holds
-the person-side family.
+A verb carries a typed cell in `verb_table.yaml` or a predicate here, never both. §8's rule is that
+a rule lives once, and a verb carrying both would be two readings of one prose cell.
+`test_wa_one_owner_a_verb_has_a_typed_cell_or_a_predicate_and_never_both` is the guard; it reads
+`S.REQUIRES_PREDICATES`, which is this module's dict.
 """
 
 from __future__ import annotations
@@ -34,10 +22,9 @@ from ..queries.person_q import ABOUT_KEYS
 from ..queries.world_q import BAN_KIND, DETAIN_KIND, DOCKET_PETITION, docketed, founds_over, restrained
 from ..state.carriers import Office, subject_of
 from ..trace_log import TRACE
-# G3: THE SEAT-AUTHORITY RULES LIVE WITH THE GATE THAT ENFORCES THEM. `seated_on_the_rung_above`,
-# `REVOCATION_RULES` and `has_conferral_basis` were defined here; the write gate's F3 clause now
-# evaluates the first two (T-o) and the third (the conferral basis), and `state/` may not import the
-# loop. They moved to `state/gate.py` UNCHANGED except that ruling (3)'s rule is asked of the SEAT
+# G3: THE SEAT-AUTHORITY RULES LIVE WITH THE GATE THAT ENFORCES THEM. The write gate's F3 clause
+# evaluates `seated_on_the_rung_above` and `REVOCATION_RULES` (T-o) and `has_conferral_basis` (the
+# conferral basis), and `state/` may not import the loop. Ruling (3)'s rule is asked of the SEAT
 # exercised instead of the actor (`04:332`). The names are imported, not copied, so a precondition
 # here and the gate there cannot disagree (`CLAUDE.md` §8) -- and a `monkeypatch` of this module's
 # `has_conferral_basis` still reaches both preconditions that call it by that name.
@@ -77,10 +64,8 @@ def _refuse(clause: str, ids: str) -> bool:
 
 # ---------------------------------------------------------------------------
 # THE GOVERNANCE SLICE. Jordan, 2026-09-02, asked for governance and management across scales of
-# governing bodies. The verbs for it ALREADY EXIST -- all eight `binding_decision` rows -- and not
-# one of them executed, because each states its precondition in PROSE. So `post_remit` and
-# `chronicle`, two of `W6`'s five witness channels, could never fire: both need a binding decision
-# and no binding decision could happen.
+# governing bodies. The verbs for it are the eight `binding_decision` rows; `post_remit` and
+# `chronicle`, two of `W6`'s five witness channels, need a binding decision.
 #
 # ⚠ A FACTION DOES NOT ACT. `ARCHITECTURE_V2.md:93` puts *"a faction acting as an actor"* in its
 # REFUSAL table at `L1`, with three corpus cases that wanted it, and `H-21` completes it -- *"a
@@ -89,40 +74,14 @@ def _refuse(clause: str, ids: str) -> bool:
 # ---------------------------------------------------------------------------
 
 
-
-# ---------------------------------------------------------------------------
-# ⚠ `under_purview`, `titles_held` AND `highest_title_rank` ARE DELETED (`13d-i`, 2026-09-26), with
-# `data/rosters.py::title_rank`. Their one game reader was `_req_revoke`'s `is_title` branch --
-# purview alone for an office; purview + holdings + strictly higher rank for a title (Jordan,
-# 2026-09-02) -- and `ED-IN-0256` ruling (3) replaces both rules with one structural rule over
-# every seat alike, *"rung above of same faction"*, which reads no title, no rank and no purview
-# (`H-109` closes: no `is_title` branch). `under_purview`'s whole body was `titles_held`'s seat
-# list walked by containment, so it could not outlive it, and nothing else called it. PURVIEW
-# ITSELF WAS NOT GONE, IT WAS UNBUILT, AND G3 BUILT IT: ruling (4), *"owner of highest rung in chain
-# of ownership"*, asked of `via.scope`, is `state/gate.py::purview_reaches` -- read by `_req_confer`
-# and `_req_establish` here through `may_fill`, and by the write gate's conferral basis.
-# ---------------------------------------------------------------------------
-
-
-# ⚠ `seated_on_the_rung_above` (ruling (3)), `REVOCATION_RULES` and its import-time cross-check,
-# and `has_conferral_basis` (ruling (2)'s membership test) LIVED HERE UNTIL G3 and are now in
-# `state/gate.py`, imported above. The write gate evaluates them (T-o, the conferral basis), and the
-# gate may not import the loop. Their `13d-i` docstrings moved with them; the one behavioural change
-# is that ruling (3) is asked of the seat the act exercises (`Act.via`), not of every seat the actor
-# holds -- `04:332`, *"purview is asked of the seat exercised, not the actor"*.
-
-
 @requires_predicate("confer")
 def _req_confer(w: "World", a: "Act") -> bool:
     """Part E, IN FULL: *"the office's **conferral basis**, and 1-per-object: no live `hold` on the
     object, **or** the holder-Proposition has zero live `commit` (§54 it. 20)"*.
 
-    ⚠ THE FIRST VERSION IMPLEMENTED HALF OF ONE OF TWO CLAUSES -- it dropped the conferral-basis
-    conjunct entirely and the `or` disjunct with it, while its docstring claimed *"the cardinality
-    rule stated structurally"*. Dropping a disjunct is an OVER-REFUSAL: an office whose
-    holder-Proposition has no live commit was refused where Part E admits it. `G4` weighs that
-    equally with an invention, and the docstring made it invisible. Found by the governance-slice
-    adversarial pass.
+    ⚠ BOTH CLAUSES, AND THE `or` DISJUNCT. Dropping a disjunct is an OVER-REFUSAL -- an office
+    whose holder-Proposition has no live commit would be refused where Part E admits it -- and `G4`
+    weighs that equally with an invention.
 
     ⚠ G3 (plan position 6) ADDS TWO CONJUNCTS, AND BOTH ARE THE WRITE GATE'S OWN RULES ASKED EARLY.
     `_eff_confer` writes two Tenures that are somebody else's -- it OPENS the conferee's `hold` and,
@@ -214,9 +173,7 @@ def office_named_by(a: "Act") -> "Optional[str]":
     `corpus_run._check_office`); a COMPUTED act carries it as its `subject`, the classed Office
     referent of the question it was formed from (`queries/world_q.py::questions_for`'s vacancies),
     read through `binding_from_act`, the fold's own binding. `office` wins where both are present,
-    so no hand-built act changes meaning; `None` when the act names neither. Before this both read
-    `office` alone, so a computed act passed nothing to the precondition and the effect wrote
-    nothing. ⚠ `revoke` IS NOT A CALLER (DECISION 2026-10-13 D1): it keeps the base's `office`-only read of
+    so no hand-built act changes meaning; `None` when the act names neither. ⚠ `revoke` IS NOT A CALLER (DECISION 2026-10-13 D1): it keeps the base's `office`-only read of
     `payload['office']` (since v10 REM-28 it declares `referent_class: Office`, which changes what is
     offered, not this read), so a computed `revoke` stays refused at its precondition as at the base
     (H-207 (A): a computed `revoke` is not driven). `establish` is not a caller either:
@@ -229,7 +186,7 @@ def office_described_by(a: "Act") -> "Optional[Office]":
     """THE OFFICE AN `establish` ACT DESCRIBES, read once for the precondition and the effect.
 
     The operands are the office overlay's own keys (`corpus_run._check_office`,
-    `populated.build_realm`): `office` (the id), `post`, `rung`, `remit`, `body` and/or `faction`,
+    `boot/realm.py::build_realm`): `office` (the id), `post`, `rung`, `remit`, `body` and/or `faction`,
     `conferral`, `revocation`. `None` when the id, post, rung or remit is absent, or any operand is
     not the shape the constructor takes -- which is every COMPUTED `establish` today, because the
     row is untyped and `operands_for` carries nothing (`15c` is what changes that).
@@ -373,11 +330,7 @@ def _req_establish(w: "World", a: "Act") -> bool:
     reduction of a sitting holder's grant also asks `may_revoke` (H-132 (b)), both at the clause. ⚠ It is STRICTER THAN THE GATE by one case, deliberately: a
     re-stamp that changes no grant writes nothing the gate would see, and this still asks for the
     authority -- mirroring `_grant_remit`'s equal-grant test here would be a second copy of it
-    (§8). ⚠ CORRECTED (antagonist pass on the accumulated Phase alpha+beta diff, 2026-09-27): this
-    said "every live hold ... is the actor's own, OR the seat ... may fill the office" and "an
-    office nobody ELSE sits in is unaffected" -- both described the RETIRED rule, which excluded
-    the actor's own hold from needing `may_fill` at all. See the corrected comment on clause 5's
-    body below for the reproduction that found this."""
+    (§8)."""
     try:
         off = office_founded_by(w, a)      # v11 CR-25: the overlay keys, else the derivation from subject and via
     except (Unowned, Unspecified, Forbidden):
@@ -414,19 +367,13 @@ def _req_establish(w: "World", a: "Act") -> bool:
                            "(re-founding)", f"{a.actor} on {off.id!r}")
     # 5. G3 -- the re-stamp writes EVERY sitting holder's grant, the actor's own included.
     #
-    # ⚠ CORRECTED (code-review pass on the accumulated Phase alpha+beta diff, 2026-09-27): this
-    # excluded `t.subject == a.actor` from the check, on the docstring's own reasoning -- "another
-    # person's needs the seat" -- but that reasoning stopped being true the moment G3's antagonist
-    # pass closed T-m for seat-hold re-grants (`state/gate.py::tenure_write_basis`, `04:330`): T-m
-    # NEVER admits re-granting a seat-hold, not even the actor's own, so a sole holder's re-stamp
-    # needs `may_fill` exactly as another person's does. REPRODUCED DIRECTLY before the fix:
-    # `p_king`, sole holder of `off_mayor`, re-establishing it via `off_mayor` itself passed this
-    # precondition (`others` was `False`) and then raised an UNCAUGHT `NotYours` inside `_fold`,
-    # which does not catch it -- a season-killing crash where the row's own `establish.refused`
-    # should have fired. ⚠ `held` IS `False` FOR A FOUNDING (no holder exists yet, self or other
-    # -- corrected 2026-09-27, this line previously said `True`), so founding a brand-new office
-    # short-circuits `not held` to `True` and is unaffected -- `may_fill` is only asked when a
-    # live `hold` already exists to re-stamp.
+    # ⚠ THE ACTOR'S OWN HOLD IS NOT EXCLUDED: T-m NEVER admits re-granting a seat-hold
+    # (`state/gate.py::tenure_write_basis`, `04:330`), not even the actor's own, so a sole holder's
+    # re-stamp needs `may_fill` exactly as another person's does -- else `p_king`, sole holder of
+    # `off_mayor`, re-establishing it via `off_mayor` itself would pass this precondition and
+    # raise an UNCAUGHT `NotYours` inside `_fold`. A FOUNDING IS UNAFFECTED: no holder exists yet,
+    # so `may_fill` is asked only where a live `hold` already exists to re-stamp (or the id is an
+    # existing Office, below).
     #
     # v11 CR-25, M8 taken, H-144 (b) [ASSUMPTION; medium; Jordan to correct; revert: `return not held or
     # may_fill(...)` over `held` alone]: A REMIT CHANGE ON AN EXISTING OFFICE, VACANT OR HELD, ASKS `may_fill`
@@ -464,7 +411,7 @@ def _req_release(w: "World", a: "Act") -> bool:
     eligibility `own` made real: `_eligible` returns True for every `own` verb without looking at
     anything (*"every person may attempt their own acts"*), so a verb whose whole point is that it
     acts on WHAT THE ACTOR HOLDS must check ownership in its precondition or it is a licence to
-    close other people's edges. `_req_revoke` learned this the hard way one column along.
+    close other people's edges.
 
     ⚠ THIS CANNOT FABRICATE, AND THAT IS STRUCTURAL RATHER THAN CAREFUL. `_eff_oblige` was reverted
     (F8, `ED-IN-0211`) for opening a Tenure to `einhir_texts`, a bare string naming no entity,
@@ -484,13 +431,6 @@ def _req_release(w: "World", a: "Act") -> bool:
         return True
     return _refuse("a release of a tenure the actor does not own toward the subject "
                    "(live, of a releasable kind)", f"{a.actor} toward {subj!r}")
-
-
-# ⚠ `_req_give` (plan position 16) WAS HERE AND PLAN POSITION `14` RETIRED IT: `give`'s cell is
-# typed now (`verb_table.yaml`), on the `with` stem the telling workplan's `T4` built for the
-# co-location conjunct this predicate existed to carry, and its *a person other than the actor*
-# clause is the fold's `counterparty` clause (`loop/resolve.py::_admits`). A verb carries a typed
-# cell or a predicate, never both (`test_wa_one_owner_...`).
 
 
 @requires_predicate("oblige")
@@ -597,19 +537,17 @@ def _req_interrogate(w: "World", a: "Act") -> bool:
 def _req_revoke(w: "World", a: "Act") -> bool:
     """Part E: *"the office's **revocation basis**, and a live `hold` exists"*.
 
-    ⚠ THE FIRST VERSION DROPPED THE OFFICE CLAUSE AND WAS AN OVER-ADMISSION -- it scanned for any
-    live `hold` on the payload's object with no check that the object IS AN OFFICE, and §13 makes
-    possession of a Record a `hold` Tenure. So a holder of `remit:revoke` could revoke a person's
-    possession of a book, and `_eff_revoke` would close it. Asymmetric with `confer`, which did
-    check. Found by the governance-slice adversarial pass.
+    ⚠ THE OFFICE CLAUSE: without a check that the object IS AN OFFICE, any live `hold` on the
+    payload's object would do, and §13 makes possession of a Record a `hold` Tenure -- a holder of
+    `remit:revoke` could revoke a person's possession of a book. Asymmetric with `confer`, which
+    checks.
 
-    ⚠ (`13d-i`, 2026-09-26) THE BASIS IS A ROSTERED VALUE AND IT SELECTS THE RULE -- no `is_title`
-    branch (`H-109`). This carried two rules chosen by whether the target's POST named a title:
-    purview alone for an office, purview + holdings + strictly higher rank for a title (Jordan,
-    2026-09-02, and two adversarial passes each corrected one conjunct). `ED-IN-0256` ruling (3),
-    *"rung above of same faction"*, replaces both with one structural rule over every seat, and it
-    arrives the way `H-109` asked: as the VALUE of the seat's declared `revocation` basis,
-    dispatched through `REVOCATION_RULES`, never as a code path computed from a name.
+    ⚠ (`13d-i`) THE BASIS IS A ROSTERED VALUE AND IT SELECTS THE RULE -- no `is_title` branch
+    (`H-109`). `ED-IN-0256` ruling (3), *"rung above of same faction"*, is one structural rule over
+    every seat, and it arrives as the VALUE of the seat's declared `revocation` basis, dispatched
+    through `REVOCATION_RULES`, never as a code path computed from a name. (Jordan, 2026-09-02:
+    purview alone for an office; purview + holdings + strictly higher rank for a title --
+    superseded by ruling (3).)
 
     THREE CLAUSES: the office's basis is on `rosters.yaml: revocation_bases` (`None` or off-roster
     refuses -- a seat declaring no basis is strippable by nobody); the actor satisfies the rule
@@ -634,8 +572,8 @@ def _req_revoke(w: "World", a: "Act") -> bool:
                        f"{a.actor} on {obj!r}")
     # ⚠ G3: THE WRITE GATE'S T-o PREDICATE, ASKED EARLY -- `may_revoke` is `seat_hold` (`via`
     # present, the actor seated in it) + the basis on the roster (`None` or off-roster: the seat
-    # cannot be stripped) + the rule that basis names, asked of `via`'s seat. Before G3 the rule
-    # was asked of the ACTOR, over every seat they held; `04:332` asks it of the seat exercised.
+    # cannot be stripped) + the rule that basis names, asked of `via`'s seat (`04:332`: the seat
+    # exercised, not the actor).
     # The same function refuses the write at the gate, so this cannot admit what the gate refuses.
     if not may_revoke(w, a.actor, a.via, off):
         return _refuse("a revoke the seat exercised has no revocation authority over the seat",
@@ -704,11 +642,10 @@ def _req_convene(w: "World", a: "Act") -> bool:
 
 
 # ---------------------------------------------------------------------------
-# ⚠ FOUR PREDICATES WERE RETIRED HERE BY `W-A` (2026-09-04) -- `_req_transfer`, `_req_tell`,
-# `_req_move` and `_req_work`. Each is now a TYPED CELL in `verb_table.yaml`'s `requires_typed:`
-# column, read by `evaluate()`, and §8's rule is that the rule lives once: a verb with both would
-# be two readings of one cell, which is exactly how `_req_confer` came to drop a disjunct and
-# `_req_revoke` an entire clause.
+# ⚠ `transfer`, `tell`, `move`, `work` AND `give` CARRY NO PREDICATE HERE: each is a TYPED CELL in
+# `verb_table.yaml`'s `requires_typed:` column, read by `evaluate()`, and §8's rule is that the rule
+# lives once -- a verb with both would be two readings of one cell, which is how `_req_confer` came
+# to drop a disjunct and `_req_revoke` an entire clause.
 # `test_wa_one_owner_a_verb_has_a_typed_cell_or_a_predicate_and_never_both` is the guard that
 # fails on a recurrence.
 #
@@ -717,8 +654,7 @@ def _req_convene(w: "World", a: "Act") -> bool:
 # not `own`-eligible, and `W-A`'s scope is the `own` rows. Two of them need grammar forms with no
 # `own` cell (`cardinality`, `basis`) and `confer` needs a DISJUNCTION, which no `own` cell has
 # and which is therefore not built (`ID-13`: a combinator nothing uses is a dead carrier).
-# ⚠ `release` (2026-09-11) AND IT IS AN `own` ROW, WHICH THIS PARAGRAPH ONCE SAID
-# COULD NOT HAPPEN. `W-A`'s scope IS the `own` rows, and a predicate on one would ordinarily be a
+# ⚠ `release` IS AN `own` ROW. `W-A`'s scope IS the `own` rows, and a predicate on one would ordinarily be a
 # cell somebody failed to type. It is not here, and the reason is the same DISJUNCTION that keeps
 # `confer` out: `release`'s domain is a SET of six tenure kinds, `data/requires.py` carries `all`
 # and no `any`, and §F.24a form 1 `existence` takes ONE `kind:` -- so `all` of the six would mean
@@ -730,12 +666,6 @@ def _req_convene(w: "World", a: "Act") -> bool:
 # ⚠ `establish` (`13f`, 2026-09-25), `remit:`-eligible like `confer`, `revoke`, `dispatch` and `convene`. Its
 # operands -- post, rung, remit, body/faction, conferral -- are not in `requires_operands`, and its
 # clauses ask the `Office` constructor and `World.class_of`, neither of which is a grammar form.
-# ⚠ `give` (position `16`, since typed and gone from the registry, 2026-09-29), an `own` row like `release` and for the
-# same kind of reason: its first conjunct types (`succeed`'s `held_by`) and its second -- *the
-# receiver is present where the actor is* -- has no stem, because `Relation` pairs its operand with
-# the ACTOR and `present_at` asks where the ACTOR is. A typed cell AND a predicate on one row is
-# what `test_wa_one_owner_...` forbids, so the whole cell is the predicate's. ⚠ IF A PERSON-TO-
-# PERSON CO-LOCATION STEM IS EVER RULED, THIS CELL IS THE ONE WAITING FOR IT (r2 `02` §A.7).
 # ⚠ `oblige` (position `17a`, 2026-09-29), an `own` row. Its clauses read
 # `Office.binds` (no stem reads a seat's own field), the seat's occupant, and a NEGATION -- no live
 # `oblige` already -- and the grammar has no `not`, the same wall `release`'s disjunction hits.

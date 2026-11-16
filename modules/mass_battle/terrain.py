@@ -27,7 +27,7 @@ repo's provisioner installs pyyaml/pytest/numpy only), and correct whenever a pr
 inside its own dominant terrain, which held for every province sampled while building this. A
 genuinely split province whose anchor lands in a minority polygon is a known gap, not silently
 claimed as solved by "dominant... by area weight" — a real area-weighted version is follow-up work,
-not this pass's. **A known instance of this exact gap, found by adversarial review (2026-09-27):**
+not this pass's. **A known instance of this exact gap:**
 T3 and T10 each "gate" a mountain pass (`altonian_passes`, geography YAML) but their own `anchor`
 sits inside their OWN territory polygon, south of and outside the pass polygon's y-range entirely —
 not a near-miss, a disjoint region — so neither can resolve to NARROW_PASS via this point-test
@@ -130,15 +130,11 @@ def terrain_row_for_territory(tid, fort_level=0, river_crossing=False, *, geogra
     `massbattle.resolve_field`,
     fed by `engine/season/seam/wrappers/mass_battle.py` with `queries/world_q.py::fortification_of`
     at the march target (a garrison Site's `condition`, Jordan's ruling on what garrison strength IS),
-    a float in `[0.0, 1.0]`; only `> 0` is read here. [CORRECTED, adversarial review 2026-09-27] This
-    function does NOT read the geography YAML's own `provinces.<tid>.fort_level` key for this check,
-    though that key exists in the file and an earlier version of this function read it: the YAML's
-    copy is authored and static, a second owner of a fact the world holds live, and it already
-    disagreed with the live value for real territories (T2: YAML `fort_level: 1`, while the
-    since-deleted `Territory` derived 0 from `garrison: false`). Reading it would silently fork a
-    single-owned fact (CLAUDE.md §0.05 clause 3). The 2026-09-27 caller this paragraph first named,
-    `faction_action._try_conquest`, and the `game_state.Territory` it read were deleted at plan
-    position `29b`.
+    a float in `[0.0, 1.0]`; only `> 0` is read here. This function does NOT read the geography YAML's own
+    `provinces.<tid>.fort_level` key for this check, though that key exists in the file: the YAML's copy is
+    authored and static, a second owner of a fact the world holds live, and it disagrees with the live value for
+    real territories (T2: YAML `fort_level: 1`). Reading it would silently fork a single-owned fact (CLAUDE.md
+    §0.05 clause 3).
 
     [ED-780] FORTIFICATION DOMINATES: a fielded `fort_level > 0` resolves as WALLS regardless of the
     surrounding terrain polygon — a walled city's defining battle character is its walls, not whatever
@@ -151,14 +147,12 @@ def terrain_row_for_territory(tid, fort_level=0, river_crossing=False, *, geogra
     defensible default absent a ruling, since a fortified anchor point still physically sits somewhere,
     but an un-fortified point cannot retroactively acquire walls.]`
 
-    SMALLEST-AREA MATCH WINS among overlapping terrain polygons — found empirically, not assumed: the
-    geography file nests smaller features inside larger ones on purpose (its own description: the
-    Northern Mountains polygon has "Two passes embedded"), so a point can legitimately test inside
-    BOTH `terrain-mountain-north` (type mountain) and `terrain-pass-lowenskyst` (type mountain_pass)
-    at once. Taking the first list match arbitrarily picked whichever was written first in the file
-    (the enclosing mountain, wrongly) rather than the more specific feature actually at that point —
-    caught by this module's own test (`test_mountain_pass_polygon_maps_to_narrow_pass_directly`)
-    failing on the naive version, not assumed correct without checking. Smallest-area-wins matches the
+    SMALLEST-AREA MATCH WINS among overlapping terrain polygons: the geography file nests smaller features
+    inside larger ones on purpose (its own description: the Northern Mountains polygon has "Two passes embedded"),
+    so a point can legitimately test inside BOTH `terrain-mountain-north` (type mountain) and
+    `terrain-pass-lowenskyst` (type mountain_pass) at once; the first list match would pick the enclosing
+    mountain rather than the more specific feature actually at that point
+    (`test_mountain_pass_polygon_maps_to_narrow_pass_directly`). Smallest-area-wins matches the
     geography file's own framing of the pass as embedded IN the mountain (`terrain_cost_matrix`'s
     comment: "Mountain interior is impassable except via embedded mountain_pass polygons") — the
     embedded feature is what's actually underfoot, not "standard GIS convention" (no such external
@@ -266,8 +260,7 @@ def river_crossed(origin, tid, *, geography):
 #: lands on the engine's own `Unit.dr`, the quantity melee already subtracts from damage
 #: (`orchestration.py`: `DAMAGE_BY_DEGREE[deg](power) - eff_dr`). Applying A.9's +3 1:1 to that unit
 #: is an ASSUMPTION (`H-150`), not a measurement. The row's other two clauses ("no flanking; Slow cannot
-#: advance") are NOT applied -- `massbattle.py::_run_and_grade`'s docstring says why. Kept below the
-#: lookup, not beside the row constants. Applied since `20-iv`.
+#: advance") are NOT applied -- `massbattle.py::_run_and_grade`'s docstring says why.
 WALLS_DEFENDER_DR = 3  # [canonical: mass_battle_v30.md §A.9 ENVIRONMENTAL MODIFIERS — "Walls / fortifications | Defender +3 DR"]
 
 #: MB-05. A.9's two dice rows, as DICE -- A.6's currency (`Off dice | Def dice`). They land on

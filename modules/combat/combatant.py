@@ -8,17 +8,12 @@ from weapons import WEAPONS, GEOMETRY, HALFSWORD_FORM, HALFSWORD_BASE  # noqa: F
 import attributes as _A   # the attribute spec, the one owner of which attributes exist (PC-14)
 from config import CFG    # conc_max's coefficients when rederive() is given no cfg
 
-# ---- COMBAT-STATE KERNEL (relocated verbatim, ED-1085 container de-leak 2026-07-01) ----
-# Previously imported from the FROZEN tests/sim/v32-combat-balance/ harness (r2_consequence_wounds /
-# r5_strength_stamina via r8_parity_harness) through a sys.path hack that dragged numpy into the
-# engine runtime. The live engine owns its state kernel (holonic doctrine §3); the frozen harness
-# keeps its historical copies for its own archived runs. Formulas and constants are byte-identical
-# to the r2/r5 originals; provenance tags carried over.
+# ---- COMBAT-STATE KERNEL (ED-1085 container de-leak) ----
+# The live engine owns its state kernel (holonic doctrine §3); provenance tags are carried over from the r2/r5
+# originals.
 
-# WOUND_POOL_PENALTY removed 2026-07-08 (ED-PC-0005 ruling: wounds NEVER cut pools -1D; each wound
-# adds a fractional Ob — combat = ED-1041's bilateral WOUND_ATK_OB/WOUND_DEF_OB in config.py, applied
-# in systems.py). The dead pool_penalty() method (zero callers) was deleted in the same pass and
-# derived_stats_v30 §4.1 was rewritten to the fractional-Ob model (reverses PP-716).
+# Wounds NEVER cut pools -1D (ED-PC-0005 ruling): each wound adds a fractional Ob — combat = ED-1041's bilateral
+# WOUND_ATK_OB/WOUND_DEF_OB in config.py, applied in systems.py (derived_stats_v30 §4.1).
 SPI_WI_W = 0.4               # [D-A noise, Jordan 2026-06-18: Spirit at low weight increases the Wound Interval -> reduces uniformity]
 STR_HEALTH_W = 0.25          # [D-A noise, Jordan 2026-06-18: Strength at very low weight, proportional to Endurance, into Health -> reduces uniformity]
 WOUND_INTERVAL_BASE = 4      # [D-A recalib, Jordan 2026-06-18: flat base lowered 6->4; 2 pts moved into Spirit/Strength terms, conserving avg Health=40]
@@ -54,8 +49,7 @@ class WoundTracker:
     Health depletes; every WI of cumulative damage is a wound gate; a single hit larger than WI
     crosses multiple gates at once (the decisive strike). Felled at Health depletion (D-A reshape).
     Wounds add a fractional Ob per wound (combat: ED-1041 bilateral WOUND_ATK_OB/WOUND_DEF_OB in
-    config.py/systems.py) — NEVER a -1D pool cut (Jordan ruling 2026-07-08, ED-PC-0005, which
-    reversed PP-716's -1D and deleted the old pool_penalty() here). Damage is held on the tracker
+    config.py/systems.py) — NEVER a -1D pool cut (Jordan ruling 2026-07-08, ED-PC-0005). Damage is held on the tracker
     and zeroed at the start of each fight (`wrapper.fight`).
     PER-SCENE WORKING STATE, NEVER STORED (CR-85 §4 step 1): "non-resetting" means within one fight -- the archived
     tabletop rule that damage persists between encounters is not this module's. Health between scenes is the HOST's,
@@ -129,8 +123,7 @@ class Combatant:
         self.sel_head=None                    # SELECTED use-mode head token for this exchange (systems.select_mode); None = use the native weapon head. Set per-beat by the wrapper (mirrors grip_position); routes into core.strike / adef_cap / legibility.
         self.sel_dmg=None                     # SELECTED damage-mode ('percussion'/'shear'/'puncture') for this exchange; read by systems.legibility (thrust hard / cut+percuss easy). None = head-inferred fallback.
         # ---- circumstance-degradation scaffold (I1, D11a, closing-distance redesign — designs/audit/2026-07-02-
-        # scene-combat-closing-distance-redesign/) — all default to IDEAL so the added surface is byte-identical
-        # until a later increment wires a live reader. ----
+        # scene-combat-closing-distance-redesign/) — all default to IDEAL (neutral). ----
         self.sel_gap=None                     # SELECTED element's own geo['gap'] (systems.select_mode's widened 5-tuple, I2/D2b); None = native w['gap'] fallback. Canonical gap source for core.strike/adef_cap/the select_mode comparator (fixes M-02's object confusion).
         self.sel_perc=None                    # SELECTED element's own percussion (I2/D2b); None = native WP.percussion_authority(w) fallback. Canonical perc source for core.strike (fixes BLOCKER-2).
         self.sel_pc=None                      # SELECTED element's own point_concentration (I2/D2b, capstone M2 fix); None = native whole-weapon point_concentration fallback. Sources D2's cut_thrust Φ_grip blend (I2), D5's close_efficacy (I4), D4's swing-room legibility term (I5).
@@ -140,10 +133,8 @@ class Combatant:
         self.skills=skills or {}            # per-axis skill bias {axis: bonus}, read by skill(axis); 0 = untrained
         self.equipped=equipped or []        # LEARNED techniques (ability_primitives): a LIST of names (each level 1.0) OR a DICT {name: level} for graded levels-of-investment (level>=0; 0=untrained/inert). Efficacy emerges from the invested level, not tradition membership (ED-PC-0023). Default none.
         # ---- DERIVED CHARACTER FIGURES — the combatant is the HOST; core/systems CONSUME these, never recompute ----
-        # (resolution pool is NOT hosted here: the live engine calls core.resolution_pool(faculty) directly, and a
-        # second hardcoded `self.pool=max(5,history+6)` here was a dead re-implementation of that rule with ZERO
-        # readers — removed ED-PC-0023 audit, §8 "every rule lives once". Any consumer needing the pool calls
-        # core.resolution_pool.)
+        # (resolution pool is NOT hosted here: §8 "every rule lives once" — any consumer needing the pool calls
+        # core.resolution_pool(faculty).)
         a = self.attrs
         self.wt=WoundTracker(a['end'], spirit=a['spirit'], strength=a['strength'])
         # ---- live state (reset/managed by the wrapper each bout) ----
@@ -161,8 +152,7 @@ class Combatant:
     def w(self): return WEAPONS[self.weapon]
     @property
     def head(self): return WEAPONS[self.weapon]['head']
-    # (.reach / .weight categorical accessors removed 2026-06-30 — dead vestigial; reach derives via
-    #  systems.reach_base, heft via systems.wield_heft / core.heft_resp; no live consumer read these.)
+    # (reach derives via systems.reach_base, heft via systems.wield_heft / core.heft_resp.)
     # ---- derived-figure host (the combatant computes its own; consumers import these, never recompute) ----
     def rederive(self, cfg=None):
         """THE ONE DERIVATION PATH (PC-14): every figure derived from `attrs`, re-computed from the current values.

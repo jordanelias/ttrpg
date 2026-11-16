@@ -1,5 +1,4 @@
-"""`season.data.rosters` -- the roster/table layer, extracted from `shape.py` (step 2 of the
-decomposition, a PURE MOVE: no behaviour changed, only where the code lives).
+"""`season.data.rosters` -- the roster/table layer.
 
 A ROSTER, in this repo, is a closed set of allowed values that a loader validates against
 (`rosters.yaml` is the file; the `roster()` reader below is the check).
@@ -27,19 +26,10 @@ from ..gaps import Forbidden, Unspecified
 # ---------------------------------------------------------------------------
 # ONE YAML READER FOR EVERY DATA FILE THIS INSTRUMENT OWNS, AND IT REFUSES A DUPLICATE KEY.
 #
-# ⚠ `yaml.safe_load` SILENTLY KEEPS THE LAST OF TWO IDENTICAL KEYS. `verb_table.yaml` declared
-# `writes_note` TWICE on `issue` and twice on `petition` -- once with Part E's transcribed cell
-# (*"a Dispensation is not a state write -- §37.3"*, *"a Petition is created, not written"*) and
-# once with the `W3` audit's correction of it. The transcription was discarded at load, in the one
-# file whose whole purpose is to be a faithful capture of Part E, and nothing said so. Both cells
-# are merged in the data now; this is the guard that fails on recurrence.
-#
-# ⚠ SEVERITY, STATED ACCURATELY: `writes_note` is not a field of `VerbRow`, so nothing in the fold
-# read either cell -- THAT instance lost transcribed text in a capture whose purpose is fidelity to
-# Part E, and changed no behaviour. What earns the guard under `CLAUDE.md` §0.1 pt 5 is the same
-# class at the ROW level, which DID change behaviour: two `(Office, exists)` rows where the loader
-# took the last, so gate behaviour depended on file order. That fix guarded rows only; this guards
-# every mapping in every file.
+# ⚠ `yaml.safe_load` SILENTLY KEEPS THE LAST OF TWO IDENTICAL KEYS. What earns the guard under
+# `CLAUDE.md` §0.1 pt 5 is the class at the ROW level: two `(Office, exists)` rows where the loader
+# took the last would make gate behaviour depend on file order. This guards every mapping in every
+# file.
 # ---------------------------------------------------------------------------
 
 def load_yaml(text: str):
@@ -90,20 +80,15 @@ def _load_rosters() -> tuple:
         raise SystemExit(f"rosters.yaml not found at {ROSTERS_YAML}")
     doc = load_yaml(ROSTERS_YAML.read_text()) or {}
     rosters = doc.get("rosters") or {}
-    # ⚠ BOTH KEYS IS A DECLARED-BUT-UNREAD `values:`, AND THE CHECK IS AT LOAD FOR A MEASURED
-    # REASON. `04 §B.13` ID-12 puts the loader's cross-validation at load, "not at the first act
-    # that would have hit it", and this rule proves why: it first shipped inside `roster()`, where
-    # it only ever saw rows something CALLED `roster()` on. `pursuits` is not one of those --
-    # its runtime route is the direct `PURSUITS` import below, so the row that MOTIVATED the
-    # rule was the one row the rule could not reach. Driving the loop with both keys planted on it
-    # ran clean and emitted a content hash; planted on `pursuit_axes`, which IS read through
-    # `roster()`, it refused. Here it fires on every row whatever reads it, or nothing does.
+    # ⚠ BOTH KEYS IS A DECLARED-BUT-UNREAD `values:`, AND THE CHECK IS AT LOAD. `04 §B.13` ID-12
+    # puts the loader's cross-validation at load, "not at the first act that would have hit it": a
+    # check inside `roster()` only sees rows something CALLED `roster()` on, and `pursuits` is read
+    # through the direct `PURSUITS` import below. Here it fires on every row whatever reads it.
     for _n, _r in rosters.items():
         if not isinstance(_r, dict):
             continue
-        # ⚠ ONE RULE OVER EVERY POINTER, NOT ONE PER POINTER. `from_names:` joined
-        # `from_descriptor:` on 2026-09-16 and `from_roster:` on 2026-09-19; spelling the refusal
-        # once per pointer is how they would drift apart, which is the defect this refusal is about.
+        # ⚠ ONE RULE OVER EVERY POINTER, NOT ONE PER POINTER: spelling the refusal once per pointer
+        # is how they would drift apart, which is the defect this refusal is about.
         # roster-exempt: these are THIS LOADER'S OWN YAML GRAMMAR -- the key names a row may carry
         # to name its owner -- not a definition the game resolves from. Moving them into
         # `rosters.yaml` is circular by construction: `roster()` would have to read the file to
@@ -136,19 +121,15 @@ OFFICES_YAML = files.OFFICES_YAML
 
 def _load_offices() -> dict:
     """`engine/season/offices.yaml`, parsed once at import -- world-gen content: the governance
-    ladder's titles (folded from `rosters.yaml: titles`, plan position `8a`, `13d-i` item 5) and
-    the authored seats (`seats:`, and `foreign_seats:` for a foreign faction). Not a `rosters.yaml` row, so it does not go through `_load_rosters`'s
+    ladder's titles and the authored seats (`seats:`, and `foreign_seats:` for a foreign faction). Not a `rosters.yaml` row, so it does not go through `_load_rosters`'s
     `from_descriptor`/`from_names`/`from_roster` pointer machinery -- it is a sibling content file
     with its own top-level shape (`meta:`, `titles:`, `seats:`, `foreign_seats:`), read the same way
     `harness/governance_spine.py::spec` reads `governance_spine.yaml`: through this module's own
     `load_yaml` (the duplicate-key refusal), never a bare `yaml.safe_load`.
 
-    ⚠ SAME REFUSAL SHAPE AS THE ROSTER IT REPLACED. `TITLE_DOMAINS`'s own comment (below) records
-    why `titles` was bound at import rather than read lazily: an absent or empty mapping fails OPEN
-    into `_req_revoke`'s old purview-for-everything default, which `ED-IN-0256` superseded but a
-    silently-empty `title_domain` would still misfire on today's title-in-a-body refusal
-    (`state/carriers.py::refuse_a_title_in_a_body`). This file inherits that refusal rather than
-    dropping it because the source moved."""
+    ⚠ `titles` is bound at import rather than read lazily: an absent or empty mapping fails OPEN,
+    and a silently-empty `title_domain` would misfire on the title-in-a-body refusal
+    (`state/carriers.py::refuse_a_title_in_a_body`)."""
     if not OFFICES_YAML.exists():
         raise SystemExit(f"offices.yaml not found at {OFFICES_YAML}")
     doc = load_yaml(OFFICES_YAML.read_text()) or {}
@@ -165,9 +146,9 @@ def _load_offices() -> dict:
             needs="give `seats:` at least one row",
             law="`04_CODE_ARCHITECTURE.md` §B.13 ID-12 -- a declared-but-empty section is the "
                 "defect this file's own loader refuses, applied to its own top level")
-    # A ROW ID IS UNIQUE, CHECKED HERE AND NOWHERE ELSE. `populated.build_realm` keys the seats it
+    # A ROW ID IS UNIQUE, CHECKED HERE AND NOWHERE ELSE. `boot/realm.py::build_realm` keys the seats it
     # matched by row id (`authored[row["id"]]`) and skips a row already in that dict, so a second row
-    # under one id was collapsed without a sound -- and the minted-id guard runs after that skip.
+    # under one id would be collapsed without a sound -- and the minted-id guard runs after that skip.
     # `foreign_seats:` (v9 IN-36) is the same row shape under its own key; its ids share the one namespace.
     ids = [row.get("id") for row in (*doc["seats"], *(doc.get("foreign_seats") or ())) if isinstance(row, dict)]
     repeated = sorted({i for i in ids if i is not None and ids.count(i) > 1}, key=str)
@@ -182,7 +163,7 @@ def _load_offices() -> dict:
 
 
 _OFFICES_DOC = _load_offices()
-# Every authored seat, in file order. `harness/populated.py` is the caller (the `8a` overlay);
+# Every authored seat, in file order. `boot/realm.py` is the caller (the `8a` overlay);
 # read directly rather than through a second index for anything that must see BOTH of NPC-020's
 # two rows (`off_king`, `off_duke_valorsmark`) -- `OFFICES_BY_HOLDER` below deliberately is not
 # that reader.
@@ -219,13 +200,11 @@ def roster(name: str, ordered: bool = False):
     # `from_descriptor:` — THE ROW POINTS AT THE SINGLE OWNER INSTEAD OF COPYING IT (ED-IN-0230).
     # A roster whose definition belongs to `references/descriptor_registry.yaml` names the block
     # and carries no `values:`, so there is exactly one place to edit and no second list to drift.
-    # This is the `conviction_roster` shape made general: that row was handled by importing
-    # `PURSUITS` directly, which works but SKIPS the `forbidden:` bar below — and that bar is
-    # load-bearing on `pursuit_axes` (#353 `:1897`, the Exposure collision). Routing through
-    # here keeps the data-side bar on a pointed-at roster, which a direct import could not.
+    # A direct import of `PURSUITS` would SKIP the `forbidden:` bar below, which is load-bearing
+    # on `pursuit_axes` (#353 `:1897`, the Exposure collision); routing through here keeps the
+    # data-side bar on a pointed-at roster.
     if "from_descriptor" in r:
-        # ⚠ THE BOTH-KEYS REFUSAL IS AT LOAD, IN `_load_rosters`, NOT HERE. It lived here first and
-        # could only see rows a caller reached -- see that function for what that missed.
+        # ⚠ THE BOTH-KEYS REFUSAL IS AT LOAD, IN `_load_rosters`, NOT HERE.
         from engine.substrate import descriptors as _desc
         block = _desc.block(r["from_descriptor"])
         if not block or not block.get("names"):
@@ -240,10 +219,10 @@ def roster(name: str, ordered: bool = False):
     elif "from_names" in r:
         # `from_names:` — the same pointer aimed at `references/names_index.yaml`, whose rows carry
         # a `token_class:`. A roster of NAMES (factions, clocks, the npc cast) belongs to the naming
-        # index, not the descriptor registry: `names_index.yaml` has called itself *"the one place a
-        # definition's name lives"* since 2026-06-28, and its canonical/alias pair is what resolves
-        # `Church` to `Church of Solmund`. Pointing here rather than copying is what lets a naming
-        # ruling reach `systems/` — which, MEASURED on 2026-09-16, no register previously did.
+        # index, not the descriptor registry: `names_index.yaml` calls itself *"the one place a
+        # definition's name lives"*, and its canonical/alias pair is what resolves `Church` to
+        # `Church of Solmund`. Pointing here rather than copying is what lets a naming ruling reach
+        # `systems/`.
         from engine.substrate import names as _names
         vals = list(_names.of_class(r["from_names"]))
         if not vals:
@@ -270,12 +249,9 @@ def roster(name: str, ordered: bool = False):
                     "would be the silent-false `rosters.yaml`'s own header forbids")
     elif "from_roster" in r:
         # `from_roster:` — the same pointer aimed at a SIBLING ROW IN THIS FILE, for the case where
-        # one roster's members ARE another's. ⚠ IT EXISTS BECAUSE `remit_default` SPELLED
-        # `remit_acts`' SIX VALUES A SECOND TIME, and a test pinned the two equal — so adding a
-        # seventh remit act meant editing two rows, or reddening a test for a reason unrelated to
-        # the edit (§0.05 cl.3, "never keep a second copy"). A row that later needs to NARROW the
-        # set replaces this pointer with its own `values:`, which is an explicit edit rather than a
-        # silent divergence.
+        # one roster's members ARE another's (`remit_default` points at `remit_acts`; §0.05 cl.3,
+        # "never keep a second copy"). A row that later needs to NARROW the set replaces this
+        # pointer with its own `values:`, which is an explicit edit rather than a silent divergence.
         src = _ROSTERS.get(r["from_roster"])
         if not isinstance(src, dict) or not src.get("values"):
             raise Unspecified(
@@ -298,12 +274,9 @@ def roster(name: str, ordered: bool = False):
                 "other's function raises, so the two shapes cannot be confused at a call site")
     else:
         vals = r["values"]
-        # ⚠ PRESENT BUT EMPTY IS THE SAME DEFECT AS ABSENT, AND THIS FILE'S HEADER ALREADY SAID
-        # SO WITHOUT ENFORCING IT: *"an absent roster is a REFUSAL, never an empty set, because
-        # an empty set silently makes every membership test false and every closed-set guard
-        # vacuous"*. `contest_subsystems` carried `values: []` from its authoring until
-        # 2026-09-16 and `roster()` handed back an empty frozenset for it -- the polarity stated
-        # in prose and not in code. The header is the law; this is the line that applies it.
+        # ⚠ PRESENT BUT EMPTY IS THE SAME DEFECT AS ABSENT: *"an absent roster is a REFUSAL, never
+        # an empty set, because an empty set silently makes every membership test false and every
+        # closed-set guard vacuous"*. The header is the law; this is the line that applies it.
         if not vals:
             raise Unspecified(
                 f"roster {name!r} carries an EMPTY `values:`", "rosters.yaml",
@@ -328,19 +301,13 @@ def roster(name: str, ordered: bool = False):
 def roster_map(name: str, key: str) -> dict:
     """A MAPPING that lives inside a roster row -- `titles.domains`, `contest_subsystems.prizes`.
 
-    ⚠ THIS EXISTS BECAUSE TWO CALL SITES HAD ALREADY WRITTEN IT AS `_ROSTERS.get(x) or {}`, WHICH
-    SILENTLY DEFAULTS. `rosters.yaml`'s own header states the polarity: *"a name the code asks for
-    that is not here RAISES rather than defaulting, which is §42.2's polarity rule applied to
-    definitions -- an absent roster is a refusal, never an empty set."* The bare-dict reads broke
-    exactly that rule, and the consequence was not cosmetic: delete the `titles` key and
-    `title_domain` returns `None` for every post, `target_is_title` becomes universally false, and
-    `_req_revoke` SILENTLY REVERTS TO PURVIEW-FOR-EVERYTHING -- the reading Jordan's fourth
-    message exists to forbid. A guard that fails open into the ruled-against behaviour.
-    (That consequence is history since `13d-i`, 2026-09-26, which deleted `target_is_title`; the
-    refusal still guards every mapping read here.)
+    ⚠ A BARE `_ROSTERS.get(x) or {}` SILENTLY DEFAULTS. `rosters.yaml`'s own header states the
+    polarity: *"a name the code asks for that is not here RAISES rather than defaulting, which is
+    §42.2's polarity rule applied to definitions -- an absent roster is a refusal, never an empty
+    set."* A guard that fails open would, for `titles`, make `title_domain` return `None` for every
+    post.
 
-    One owner, so a third mapping inherits the refusal by existing (§8). Found by the
-    governance-canon adversarial pass."""
+    One owner, so a third mapping inherits the refusal by existing (§8)."""
     r = _ROSTERS.get(name)
     if r is None:
         raise Unspecified(
@@ -422,18 +389,11 @@ def table(name: str) -> dict:
 def faction_prop_id(name: str) -> str:
     """`'Valorsmark'` -> `'fac_valorsmark'`. THE ONE OWNER OF THE FACTION-ID RELATION.
 
-    ⚠ IT HAD NO OWNER UNTIL 2026-09-16, AND THAT COST A SILENTLY EMPTY QUERY. `populated.py`
-    formed the id inline as `f"fac_{_slug(fac_name)}"`; `queries/world_q.py: leaders()` recovered
-    the NAME from the other end by reading `Proposition.subject`. That worked while `subject` WAS
-    the faction name -- and then the creed commit made `subject` the LEADER'S PERSON ID for every
-    faction that has a creed, while leaving the name in `value`. One relation, two guesses, and the
-    reader kept reading a field whose meaning had moved underneath it.
-
-    MEASURED at `build_realm(0)` before the repair: `leaders()` returned `[]` for Crown, Church of
-    Solmund, Hafenmark and Varfell -- all four factions that hold seats -- making 19 of 19 occupied
-    offices invisible. It is the §0.1 pt 1 shape exactly: a getter's source changed while its
-    readers went on reading the old one, and the wrong answer (`[]`) is a PLAUSIBLE answer, so
-    nothing raised.
+    ⚠ ONE RELATION, ONE OWNER: `boot/realm.py` forms the id from the name, and `queries/world_q.py:
+    leaders()` must not recover the NAME from the other end by reading `Proposition.subject`, which
+    is the LEADER'S PERSON ID for every faction that has a creed (the name is in `value`). It is the
+    §0.1 pt 1 shape: a getter's source changes while its readers go on reading the old one, and the
+    wrong answer (`[]`) is a PLAUSIBLE answer, so nothing raises.
     """
     return "fac_" + "".join(c if c.isalnum() else "_" for c in str(name).lower()).strip("_")
 
@@ -444,13 +404,11 @@ _TERRITORY_RUNG_PREFIX = "terr_"  # [JUSTIFIED: an id SPELLING, not a game value
 
 def territory_rung_id(tid: str) -> str:
     """`'T9'` -> `'terr_T9'`. THE ONE OWNER OF THE TERRITORY-RUNG-ID RELATION, `faction_prop_id`'s
-    shape one row down: `harness/populated.py` mints a `territory` Rung per geography row
+    shape one row down: `boot/realm.py` mints a `territory` Rung per geography row
     (`systems/settlements/valoria_geography_v30.yaml: provinces`, whose rows are territories) and
-    the battle path (`seam/wrappers/mass_battle.py`, plan position `20-iv`) has to get from that
-    Rung back to the geography row `terrain.py::terrain_row_for_territory` is keyed on. Before
-    `20-iv` the builder spelled the id inline at four sites and nothing read it back, so the
-    relation had no owner because it had no second reader; it has one now, and two spellings of
-    one relation is how `leaders()` went silently empty (the docstring above)."""
+    the battle path (`seam/wrappers/mass_battle.py`) has to get from that Rung back to the
+    geography row `terrain.py::terrain_row_for_territory` is keyed on. Two spellings of one
+    relation is how `leaders()` goes silently empty (the docstring above)."""
     return _TERRITORY_RUNG_PREFIX + str(tid)
 
 
@@ -468,21 +426,15 @@ def territory_id_of(rung_id: "str | None") -> "str | None":
 
 
 def require_member(value, roster, what: str, where: str, law: str, needs: str = "") -> None:
-    """THE ROSTER-MEMBERSHIP REFUSAL, IN ONE PLACE. Ten call sites had it check-for-check.
-
-    The same shape recurred across `epistemic`, `decision/`, `loop/` and this file: test a runtime
-    value against a bound roster, and on a miss raise `Unspecified` naming the hole, the accepted
-    members and the law. `data/verbs._check_sparse_table` made this move already for the two
-    sparse-table loaders and states the split it used -- centralise the mechanical check, leave
-    the LAW STRINGS per-caller "because what a violation means differs by table". Same split here:
+    """THE ROSTER-MEMBERSHIP REFUSAL, IN ONE PLACE: test a runtime value against a bound roster,
+    and on a miss raise `Unspecified` naming the hole, the accepted members and the law.
+    `data/verbs._check_sparse_table` states the split used here -- centralise the mechanical
+    check, leave the LAW STRINGS per-caller "because what a violation means differs by table":
     `what`, `where` and `law` stay the caller's words; the test and the rendering come here.
 
-    ⚠ THE RENDERING IS THE PART THAT WAS WORTH CENTRALISING, and it was not a style difference.
-    An ORDERED roster is a tuple and its order is semantic, so it renders with `list()`; an
-    unordered one is a frozenset and renders `sorted()` so the message is stable. Nine sites chose
-    between those by hand and nine chose correctly -- measured, `QUESTION_AGGREGATION` and
-    `ALIGNMENT_SWEEP` are the tuples and are exactly the two that used `list()`. Nine correct
-    independent guesses is not a rule; this is. A caller needing prose instead passes `needs=`.
+    ⚠ THE RENDERING IS WORTH CENTRALISING. An ORDERED roster is a tuple and its order is semantic,
+    so it renders with `list()`; an unordered one is a frozenset and renders `sorted()` so the
+    message is stable. A caller needing prose instead passes `needs=`.
     """
     if value in roster:
         return
@@ -504,16 +456,13 @@ TENURE_KINDS = roster("tenure_kinds")
 # invariant 6 compares them. `contain` is the one kind whose end is a MOVE rather than a release:
 # `_eff_move` closes the old leg and opens the new one, so a releasable `contain` would let a
 # person leave a place for nowhere.
-# ⚠ IT LIVES BESIDE `TENURE_KINDS` BECAUSE THE DERIVATION MUST LIVE ONCE (§8). It was written
-# twice -- once in `data/verbs.py`'s loader and once in `loop/predicates.py` -- and the
-# declared-there/derived-here argument is satisfied by ONE derivation, not two. Today the
-# exclusion is a single member so drift would be cheap; the moment it is not, two code sites would
-# have to move together and only one of them is guarded. Found by the `release` adversarial pass.
-# ⚠ TWO MEMBERS SINCE PLAN POSITION `19c`, FOR `contain`'s OWN REASON: `reside` (where a person
-# lives) ends by a relocation too -- `_eff_migrate` closes the old edge as it opens the new -- and a
-# releasable residence would let a person leave a home for nowhere. Still ONE derivation (this
-# line): `verb_table.yaml`'s declared `release` domain is unchanged, because the six kinds it lists
-# are exactly what remains, and loader invariant 6 compares the two.
+# ⚠ IT LIVES BESIDE `TENURE_KINDS` BECAUSE THE DERIVATION MUST LIVE ONCE (§8): `data/verbs.py`'s
+# loader and `loop/predicates.py` both read it, and the declared-there/derived-here argument is
+# satisfied by ONE derivation, not two.
+# ⚠ `reside` IS EXCLUDED FOR `contain`'s OWN REASON: it (where a person lives) ends by a relocation
+# too -- `_eff_migrate` closes the old edge as it opens the new -- and a releasable residence would
+# let a person leave a home for nowhere. `verb_table.yaml`'s declared `release` domain lists exactly
+# what remains, and loader invariant 6 compares the two.
 # ⚠ FOUR MEMBERS SINCE v9 SC-03a (#453 §8.2/§8.3, K-53), AND FOR A DIFFERENT REASON THAN THE FIRST
 # TWO: `detain` and `ban` end by an AUTHORITY, not a relocation. Each is a sentence (a custody, an
 # exclusion) its holder would otherwise end himself under `release` (`_req_release` admits any live
@@ -542,7 +491,7 @@ RELEASABLE_KINDS = frozenset(TENURE_KINDS) - {"contain", "reside"} - RESTRAINT_K
 # REFUSES instead of defaulting to a silent pass.
 HOLD_OBJECT_KINDS = roster("hold_object_kinds")
 HOLD_SUBJECT_KINDS = roster("hold_subject_kinds")
-# Plan position `15` -- `ARCH §B.5`'s fold: `Petition` and `Dispensation` are KINDS of `Record`, and
+# `ARCH §B.5`'s fold: `Petition` and `Dispensation` are KINDS of `Record`, and
 # each kind declares the EXACT key set of its `subject_matter` (r2 `05`'s ⊕L35, refused in
 # `Record.__post_init__`). `RECORD_KINDS` is the member set; `RECORD_KIND_KEYS` is the mapping,
 # read through `roster_map` so an absent row refuses rather than answering `{}`; `RECORD_CONTENT`
@@ -580,12 +529,12 @@ if not {STAKES_KEY, CHALLENGER_KEY} <= set(RECORD_KIND_KEYS.get(CHALLENGE_KIND, 
         needs=f"a `{CHALLENGE_KIND}` row with both keys, or the challenge mint and its stakes read retired",
         law="PC-10b -- a challenge's term rides `stakes` and its maker `challenger`; the person is `terms`")
 CHALLENGE_TERMS = roster("challenge_terms", ordered=True)
-# v11 CP-T04-02 (B10-12): THE `record_kinds` MEMBER A STANDING ORDER OF BATTLE IS, its three keys, and the two closed sets
+# v11 CP-T04-02 (B10-12): THE `record_kinds` MEMBER A STANDING ORDER IS, its three keys, and the two closed sets
 # its `role` and `retreat_at` range over (`order_roles`, `order_retreat_at`: pointers at the mass-battle module's own
 # vocabulary, `from_battle_orders`). Named once here, `CHALLENGE_KIND`'s shape, for the mint (`_eff_marshal`), the read
 # (`seam/wrappers/mass_battle.py::field_input`) and the chooser's fan (`data/verbs.py::CHOICE_RANGES`). Refused at import if
 # the roster stops carrying the three keys: the mint would write a key set the constructor refuses.
-ORDER_KIND = "order_of_battle"
+ORDER_KIND = "standing_order"
 ORDER_AT_KEY = "at"
 ORDER_ROLE_KEY, ORDER_RETREAT_KEY = "role", "retreat_at"
 if set(RECORD_KIND_KEYS.get(ORDER_KIND, ())) != {ORDER_AT_KEY} | {ORDER_ROLE_KEY, ORDER_RETREAT_KEY}:
@@ -792,13 +741,13 @@ def _check_scale_of_rung(mapping: dict, kinds) -> None:
                 "does not have, is the defect the loader's cross-validation exists to catch")
 
 
-# Plan position `20-ii` (U9/R-04). A rung_kind -> one of canon's five scales (`rosters.yaml:
-# scale_of_rung`'s own note states, BEFORE this mapping, which of the two problems it solves and
-# which it does not -- read that note before touching either roster row). Bound beside
-# `RUNG_KINDS`, its domain, for the identical reason `SITE_KINDS` is bound beside it above.
+# U9/R-04. A rung_kind -> one of canon's five scales (`rosters.yaml:
+# scale_of_rung`'s own note states which of the two problems it solves and which it does not --
+# read that note before touching either roster row). Bound beside `RUNG_KINDS`, its domain, for
+# the identical reason `SITE_KINDS` is bound beside it above.
 SCALE_OF_RUNG = roster_map("scale_of_rung", "scale")
 _check_scale_of_rung(SCALE_OF_RUNG, RUNG_KINDS)
-# Plan position `24e`: the kinds `build` may make -- a works' `plan` is a Site only if it is one of
+# The kinds `build` may make -- a works' `plan` is a Site only if it is one of
 # these (`loop/effects.py::_eff_build`). Bound beside `RUNG_KINDS`, `found`'s twin roster, rather
 # than read by a bare `roster(...)` at the one call site. `data/fixtures.py` reads the same row for
 # its both-direction table checks, so a kind here always has a wear and a band-floor row.
@@ -865,18 +814,17 @@ from engine.substrate import combat_kit as _combat_kit  # noqa: E402
 ARMS_KINDS = _check_arms_kinds(roster_map("arms_kinds", "kinds"), roster("matter_kinds"), _combat_kit.FIELDS)
 ARMS_AT_BUILD = _check_arms_at_build(roster_map("arms_at_build", "kinds"), RUNG_KINDS, ARMS_KINDS)
 REMIT_ACTS = roster("remit_acts")
-# `data/arrangements.py`'s four content rosters -- plan position `18` (PROC-A). Bound here beside
+# `data/arrangements.py`'s four content rosters (PROC-A). Bound here beside
 # their nearest kin (`RUNG_KINDS`/`REMIT_ACTS`, both read by the same loader) rather than left to a
 # bare `roster(...)` call at the one call site, on this file's own established convention.
 INTERPOSITION_KINDS = roster("interposition_kinds")
 GENRES = roster("genres")
 PROOFS = roster("proofs")
 LADDER_RUNGS = roster("ladder_rungs", ordered=True)
-# ED-IN-0256 rulings (2) and (3), plan position `13d-i`: HOW A SEAT IS FILLED and WHO MAY STRIP IT.
-# Bound at import for `TITLE_DOMAINS`' reason below -- an unbound roster is the one whose absence
-# goes unnoticed. `Office.__post_init__` refuses a declared basis off either; `state/gate.py`'s
-# `has_conferral_basis`/`REVOCATION_RULES` read them (moved there by G3; CORRECTED, antagonist
-# pass, 2026-09-27 -- this said `loop/predicates.py`).
+# ED-IN-0256 rulings (2) and (3): HOW A SEAT IS FILLED and WHO MAY STRIP IT.
+# Bound at import: an unbound roster is the one whose absence goes unnoticed.
+# `Office.__post_init__` refuses a declared basis off either; `state/gate.py`'s
+# `has_conferral_basis`/`REVOCATION_RULES` read them.
 CONFERRAL_BASES = roster("conferral_bases")
 REVOCATION_BASES = roster("revocation_bases")
 # v10 IN-61 (RS-27): `{seat: title}` -- which title a seat of conferral basis `inheritance` passes to
@@ -890,7 +838,7 @@ SUCCESSIONS = {str(k): str(v) for k, v in roster_map("successions", "values").it
 # (`rosters.yaml: continuation_ties`, ORDERED). The reader per member is `queries/world_q.py::_TIE_READERS`,
 # cross-checked there at import (`data/` may not import `queries/`, `SUCCESSIONS`' reason).
 CONTINUATION_TIES = roster("continuation_ties", ordered=True)
-# Plan position `17a` (r2 `05` RULED (b), `ARCH F.17`): HOW A SEAT TAKES ON THOSE WHO SERVE IT, the
+# r2 `05` RULED (b), `ARCH F.17`: HOW A SEAT TAKES ON THOSE WHO SERVE IT, the
 # third basis beside the two above and bound the same way. `Office.__post_init__` refuses a value
 # off it; `loop/predicates.py::_req_oblige` admits an `oblige` only to a seat whose `binds` is on it.
 BINDS_BASES = roster("binds_bases")
@@ -905,27 +853,25 @@ def remit_or_default(declared) -> list[str]:
 
     ⚠ IT FILLS AN EMPTY REMIT AND NEVER OVERWRITES A DECLARED ONE. The three grounded overlays
     (NPC-008/033/038) keep exactly what their case text supports; `remit_default` reaches only the
-    seats that carry `[]`, which was 16 of the populated realm's 19 when this landed. ⚠ SINCE
-    `13d-iii` (2026-10-01) IT REACHES ONE REALM SEAT: every seat with an `offices.yaml` row takes
-    the row's remit through `authored_remit` (below), so only the seat no row authors
-    (`off_npc_084`), the spine and the fixtures still fall through to this default.
+    seats that carry `[]`. Every seat with an `offices.yaml` row takes the row's remit through
+    `authored_remit` (below), so only the seat no row authors (`off_npc_084`), the spine and the
+    fixtures fall through to this default.
 
     ⚠⚠ THE DEFAULT IS NOT CANON — see `rosters.yaml: remit_default`'s own note for why a
     transparently-wrong placeholder is the safe shape and what replaces it (per-POST remits, which
     need `Office.post` normalised first). Jordan, 2026-09-18: *"for testing purposes for now, just
     build out a generic remit"*.
 
-    ⚠ NO FILTERING, DELIBERATELY. `corpus_run`'s own comment records why: a rev-1 filter
-    `[a for a in ... if a in REMIT_ACTS]` dropped an unrecognised remit act on the floor, *"a quiet
-    default sitting underneath `Office.__post_init__`'s loud one"*. A declared remit passes through
-    untouched and `Office.__post_init__` refuses it loudly if it is off-roster.
+    ⚠ NO FILTERING, DELIBERATELY: a filter `[a for a in ... if a in REMIT_ACTS]` would drop an
+    unrecognised remit act on the floor, *"a quiet default sitting underneath
+    `Office.__post_init__`'s loud one"*. A declared remit passes through untouched and
+    `Office.__post_init__` refuses it loudly if it is off-roster.
     """
     declared = list(declared or [])
-    # ⚠ `sorted`, NOT `list`. `REMIT_DEFAULT` is a frozenset, so `list()` gave a PER-PROCESS order
-    # and `build_realm(0).content_hash()` returned a different digest on every run — measured 3/3
-    # distinct under three `PYTHONHASHSEED`s, 3/3 identical without this. Gameplay was unaffected,
-    # but R4 byte-identical replay is not, and a determinism break that only shows across processes
-    # is exactly the kind a same-process self-comparison cannot see. Found by `/code-review`.
+    # ⚠ `sorted`, NOT `list`. `REMIT_DEFAULT` is a frozenset, so `list()` would give a PER-PROCESS
+    # order and `build_realm(0).content_hash()` a different digest on every run. R4 byte-identical
+    # replay breaks, and a determinism break that only shows across processes is exactly the kind a
+    # same-process self-comparison cannot see.
     return declared if declared else sorted(REMIT_DEFAULT)
 
 
@@ -944,8 +890,8 @@ if not OFFICES_REMIT_UNRULED <= REMIT_ACTS:
 
 
 def authored_remit(row: dict, held=()) -> list[str]:
-    """A seat's remit from its authored `offices.yaml` row -- the ONE owner of the overlay rule
-    (plan position `13d-iii`), beside `remit_or_default`, which it supersedes wherever a row exists.
+    """A seat's remit from its authored `offices.yaml` row -- the ONE owner of the overlay rule,
+    beside `remit_or_default`, which it supersedes wherever a row exists.
 
     ⚠ THE ROW'S `remit_acts` IS THE REMIT, `[]` INCLUDED, EXCEPT FOR WHAT `held` BRINGS. A declared
     empty list is NOT passed to `remit_or_default` (which would fill it with every act): the row
@@ -955,13 +901,10 @@ def authored_remit(row: dict, held=()) -> list[str]:
     ⚠ `held` IS WHAT THE SEAT HAD BEFORE THE OVERLAY, and only the acts in `OFFICES_REMIT_UNRULED`
     survive from it -- `dispatch` today, an open ruling (J-8). THIS GRANTS IT, it does not stay
     neutral: a loop-built seat was seated with `remit_default` (every act) unless its case's own
-    overlay declares a remit, so its `held` carries `dispatch` and it keeps it. MEASURED,
-    `build_realm(0)`, 2026-10-02: 22 of the 29 authored seats hold it -- 22 of the 23 loop-built
-    (seven whose row is `remit_acts: []`, where it is the whole remit, and fifteen that carry it
-    beside the acts their row names; the one loop-built seat without it is `off_parliamentary_clerk`,
-    whose overlay declares `remit: [issue]`) and 0 of the 6 minted -- and `march`, eligible on
-    `remit:dispatch`, is eligible to every holder. A seat the loop did not build (a MINTED row)
-    passes nothing and so does NOT gain it: two identical rows diverge by build route. Stripping
+    overlay declares a remit, so its `held` carries `dispatch` and it keeps it, and `march`,
+    eligible on `remit:dispatch`, is eligible to every such holder. A seat the loop did not build
+    (a MINTED row) passes nothing and so does NOT gain it: two identical rows diverge by build
+    route. Stripping
     `dispatch` (J-8) is a GRANT decision for Jordan, not a code fix. `sorted`, for
     `remit_or_default`'s reason: a set's order is per-process and the grant folds into
     `World.content_hash`."""
@@ -970,7 +913,7 @@ def authored_remit(row: dict, held=()) -> list[str]:
 
 WITNESS_CHANNELS = roster("witness_channels", ordered=True)
 CLAIM_SOURCES = roster("claim_sources")
-# Plan position `15d` (proceedings `19_PLAN.md` step 4 (b)): the source a deposit carries is set by
+# Proceedings `19_PLAN.md` step 4 (b): the source a deposit carries is set by
 # the ONE channel `epistemic.observers_for` credits the witness to -- `WITNESS_CHANNELS`' order is
 # that precedence. Cross-validated here, where both rosters it is keyed on are bound, and at import:
 # a channel with no source would deposit under a source nothing declared (or `KeyError` mid-barrier,
@@ -1050,11 +993,8 @@ CLAIM_SUBJECT_RULES = roster("claim_subject_rules")
 # roster is the one whose absence goes unnoticed.
 OBSERVATION_DEPOSIT_MODES = roster("observation_deposit_modes")
 # `H-33`. THE THREE ARMS OF THE FAN-OUT SWEEP, and the SIBLING of the line above -- two switches
-# on one pipeline, and until 2026-09-16 only one of them was data. `observers_for` carried these
-# three names as Python literals in an if/elif/else whose `else` refused correctly, so the closed
-# set was ENFORCED and simply not DEFINED where a definition belongs (Jordan 2026-09-02, quoted
-# at the head of this file). Bound at import for `TITLE_DOMAINS`' reason: an unbound roster is
-# the one whose absence goes unnoticed.
+# on one pipeline, both data (Jordan 2026-09-02, quoted at the head of this file). Bound at
+# import: an unbound roster is the one whose absence goes unnoticed.
 FAN_OUT_MODES = roster("fan_out_modes")
 # `R8.1`. THE `seen` CLAIM -- its four terms (ordered: they are the struct's fields), the one
 # predicate it is deposited under, and which terms each witness channel shows. Bound at import for
@@ -1099,10 +1039,8 @@ def _load_finding_terms(mapping: dict, bands, terms) -> dict:
 
 # THE DEGREE BANDS, FROM THE LADDER'S OWNER, BOUND ONCE HERE. `engine/dice_engine/dice_engine.py::DEGREE_LABEL`
 # is the single owner of the ladder (Jordan ruling, 2026-08-14: "THE degree ladder... for every scale of
-# the game"); `data/arrangements.py` imports `DEGREE_BANDS` from this module. A fresh `degree_bands`
-# roster of the same four names collided with a PRE-EXISTING literal in `tests/test_mass_battle_provider.py`,
-# which `test_jordan_no_definition_is_hardcoded_in_a_body` correctly read as two owners of one fact the
-# moment a second one was written down -- so a second spelling of the four labels is a second owner.
+# the game"); `data/arrangements.py` imports `DEGREE_BANDS` from this module. A second spelling of the
+# four labels is a second owner (`test_jordan_no_definition_is_hardcoded_in_a_body`).
 from engine.dice_engine.dice_engine import DEGREE_LABEL as _DEGREE_LABEL   # noqa: E402
 from engine.dice_engine.dice_engine import DEGREE_ORDINAL as _DEGREE_ORDINAL   # noqa: E402
 from engine.dice_engine.dice_engine import Degree as _Degree   # noqa: E402
@@ -1286,22 +1224,12 @@ ARRIVAL_ONLY_KINDS = roster("arrival_only_kinds")
 #: one named working, as an operation is one task performed. `data/verbs.py`'s verb loader refuses a row whose
 #: `operation:` column names a value outside this set; no shipped row names one yet (the thread rows are B35's).
 THREAD_OPERATIONS = roster("thread_operations")
-# ⚠ BOUND AT IMPORT LIKE THE OTHERS, AND THAT IS THE POINT. `titles` was the ONE roster read
-# lazily through a bare `_ROSTERS.get(...) or {}`, so it alone got no existence refusal -- and
-# because `_req_revoke` fails OPEN into purview-for-everything when the mapping is empty, the one
-# unbound roster was the one whose absence silently restores a ruled-against behaviour.
-# ⚠ (`13d-i`, 2026-09-26) `_req_revoke` NO LONGER READS IT -- revocation is `revocation_bases`
-# (ED-IN-0256 ruling (3)), so the fail-open above is history. An empty mapping would now make
-# every post a non-title: `Office` would stop refusing a title in a body and `build_realm` would
-# seat no titled office. Still worth the import-time refusal.
-# ⚠⚠ FOLDED FROM `rosters.yaml: titles` INTO `engine/season/offices.yaml` (plan position `8a`,
-# `13d-i` item 5 -- Layer 1 `04_CODE_ARCHITECTURE.md` §B.7/§E.1 rules `titles.domains` world-gen
-# DATA, and r2 `05_LEDGER_AND_BUILD.md` RULED (c) names the destination). Same mapping, same
-# eleven entries, moved rather than copied -- read `_load_offices`'s docstring for the refusal
-# shape. `rosters.yaml: titles` is physically deleted as of the Phase-1 methodology close
-# (2026-09-29, `/simplify` ALTITUDE lens) -- it stood as orphaned residue for one session while a
-# concurrent plan position owned that file, per `offices.yaml`'s own header, and the deletion
-# HANDOFF_IN.md named as follow-up lands here.
+# ⚠ BOUND AT IMPORT LIKE THE OTHERS, AND THAT IS THE POINT: an unbound roster is the one whose
+# absence goes unnoticed. An empty mapping would make every post a non-title: `Office` would
+# stop refusing a title in a body and `build_realm` would seat no titled office.
+# ⚠⚠ `titles.domains` is world-gen DATA in `engine/season/offices.yaml` (Layer 1
+# `04_CODE_ARCHITECTURE.md` §B.7/§E.1; r2 `05_LEDGER_AND_BUILD.md` RULED (c)) -- read
+# `_load_offices`'s docstring for the refusal shape.
 TITLE_DOMAINS = dict(_OFFICES_DOC["titles"]["domains"])
 
 # ⚠ THE OFFICE'S THREE CANON AXES -- `H-99`, and they are BOUND AT IMPORT for the reason the
@@ -1336,7 +1264,7 @@ BODY_FUNCTION = roster_map("office_bodies", "function")
 ROLE_TEMPLATE_OF = roster_map("role_templates", "by_faction")
 #: `{faction name: {territory: {code}, settlement: {code}}}` -- the factions whose persons and
 #: places exist only in a world built with `build_realm(foreign=True)` (v9 IN-36). A member of `FACTIONS` in
-#: both arms; absent from the control arm's world. Read by `harness/populated.py`, nothing else.
+#: both arms; absent from the control arm's world. Read by `boot/realm.py`, nothing else.
 FOREIGN_CAST = roster_map("foreign_cast", "by_faction")
 if not FOREIGN_CAST:
     raise Unspecified(
@@ -1564,18 +1492,13 @@ def office_faction(body: str | None, declared: str | None) -> str:
     return declared
 
 
-# `title_domain` -- RELOCATED FROM shape.py's governance slice (step 2). A pure content read
-# (`TITLE_DOMAINS`), not a verb, so it belongs beside the roster/content layer rather than beside
-# the governance verbs that once called it.
-# ⚠ `title_rank` IS DELETED (`13d-i`, 2026-09-26). Its one decision was `_req_revoke`'s
-# strictly-higher-rank conjunct, and ED-IN-0256 ruling (3) makes revocation *"rung above of same
-# faction"* -- structural, not a rank comparison. `title_domain` SURVIVES THAT POSITION, and not by
-# choice: `harness/populated.py`'s office seating calls it to decide who holds a titled seat and
-# at which rung, and `Office.__post_init__`'s title-in-a-body refusal cannot be stated without it
-# (see `state/carriers.py`).
-# ⚠⚠ `TITLE_DOMAINS` NO LONGER READS `rosters.yaml: titles` (plan position `8a`, `13d-i` item 5).
-# It is folded into `engine/season/offices.yaml: titles: domains:`, same eleven entries, moved
-# rather than copied -- see `_load_offices` above and `offices.yaml`'s own header.
+# `title_domain` -- a pure content read (`TITLE_DOMAINS`), not a verb, so it belongs beside the
+# roster/content layer. ED-IN-0256 ruling (3) makes revocation *"rung above of same faction"* --
+# structural, not a rank comparison. `boot/realm.py`'s office seating calls `title_domain` to
+# decide who holds a titled seat and at which rung, and `Office.__post_init__`'s title-in-a-body
+# refusal cannot be stated without it (see `state/carriers.py`).
+# ⚠⚠ `TITLE_DOMAINS` READS `engine/season/offices.yaml: titles: domains:` -- see `_load_offices`
+# above and `offices.yaml`'s own header.
 def title_domain(post: Optional[str]) -> Optional[str]:
     """The rung kind a title governs, from `offices.yaml: titles: domains:`. `None` for a post
     that is not a title -- a Dicastery is an office, not a rank."""
@@ -1587,10 +1510,10 @@ def refuse_a_titled_post_off_its_rung(who: str, post, kind: str, rung_id: str) -
     re-homed from `Office.__post_init__`), beside `title_domain`, its one input. Raises `Forbidden`
     for a post that IS a title and stands at a rung of any other `kind`; a post that is not a title
     (a Dicastery, an organ) stands anywhere. `who` names the seat in the refusal, `rung_id` the
-    rung it was given. Two seaters call it so neither keeps a copy: `harness/populated.py::
+    rung it was given. Two seaters call it so neither keeps a copy: `boot/realm.py::
     seat_anchor` (an `offices.yaml` row) and `harness/corpus_run.py::_seat_office` (a corpus
-    overlay's `office:`) -- without it a cast entry `{post: Duke}` seated a Duke at a hearth, whose
-    purview is then the hearth's, which is canon inverted by a data-entry slip."""
+    overlay's `office:`) -- without it a cast entry `{post: Duke}` would seat a Duke at a hearth,
+    whose purview is then the hearth's, which is canon inverted by a data-entry slip."""
     dom = title_domain(post)
     if dom is not None and kind != dom:
         raise Forbidden(

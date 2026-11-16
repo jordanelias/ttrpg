@@ -1,8 +1,7 @@
 """modules.mass_battle.troop_types.registry — troop-type stat presets + gated role menus.
-Stage-1 behaviour-frozen extract from orchestration.py (TROOP_TYPE_STATS, stats_for, roles_for,
-role_allowed). The "stat home" for the taxonomy (ED-1018): a subunit OF a type draws these
-per-subunit combat stats. Depends on config (TROOP_TYPE_ROLES) only — no up-DAG import, no cycle.
-Re-imported by orchestration via star-import (Subunit.of_type and the stress-test imports unchanged).
+Owns TROOP_TYPE_STATS, stats_for, roles_for, role_allowed. The "stat home" for the taxonomy (ED-1018):
+a subunit OF a type draws these per-subunit combat stats. Depends on config (TROOP_TYPE_ROLES) only —
+no up-DAG import, no cycle.
 [canonical: mass_battle_v30.md §B.2 troop table; config TROOP_TYPE_ROLES/ROLE_SPEC]"""
 from modules.mass_battle.config import *
 import modules.mass_battle.config as _cfg
@@ -16,7 +15,7 @@ __all__ = ['MOUNTED_TYPES', 'is_mounted', 'roles_for', 'role_allowed', 'TROOP_TY
 
 
 def is_mounted(troop_type):
-    """True iff `troop_type` fights mounted (MOUNTED_TYPES, below). Case-sensitive like the inline checks it replaces."""
+    """True iff `troop_type` fights mounted (MOUNTED_TYPES, below). Case-sensitive."""
     return troop_type in MOUNTED_TYPES
 
 
@@ -33,14 +32,11 @@ def role_allowed(troop_type, role):
 # The "stat home" for the troop taxonomy: a subunit OF a given type carries these
 # per-subunit combat stats. Values are transcribed directly from the canonical BG
 # unit table (mass_battle_v30.md §B.2) — the TTRPG Power / Discipline / Morale columns.
-# Keyed to match the config TROOP_TYPE_ROLES snake_case taxonomy. Co-located here with
-# its accessor (stats_for) and constructor (Subunit.of_type) — the role accessors
-# (roles_for / role_allowed) already live in this module. Constructions that do not call
-# stats_for / of_type are untouched (byte-exact). dr (armour) and stamina (endurance) are
-# intentionally left to inherit: §B.2's Armour column maps to a vs-Piercing DR scale
-# (orch L413-417, None=0/Light=1/Medium=2/Heavy=3) whose identity with the Subunit.dr
-# field is unconfirmed, and Endur (1-6) has no clean bridge to the 0-100 stamina pool.
-# Both are deferred to an explicit follow-up rather than guessed. [ED-1018]
+# Keyed to match the config TROOP_TYPE_ROLES snake_case taxonomy. Accessor: stats_for;
+# constructor: Subunit.of_type. dr (armour) and stamina (endurance) are intentionally
+# left to inherit: §B.2's Armour column maps to a vs-Piercing DR scale
+# (None=0/Light=1/Medium=2/Heavy=3) whose identity with the Subunit.dr
+# field is unconfirmed, and Endur (1-6) has no clean bridge to the 0-100 stamina pool. [ED-1018]
 TROOP_TYPE_STATS = {
     # troop_type        : power, discipline, morale   (morale_start defaults to morale)
     "levy":             {"power": 1, "discipline": 1, "morale": 2},
@@ -69,16 +65,14 @@ TROOP_TYPE_STATS = {
     "mounted_archers":  {"power": 3, "discipline": 3, "morale": 3},  # mirrors archers (U-5 of proposals/2026-09-30-character-and-play-surface/08_mass_battle_units.md: it had reach, roles and a density cap but no stat line); differs by mounted speed/density and the Kite role
     "light_cavalry":    {"power": 3, "discipline": 3, "morale": 4},  # mirrors light_infantry (light cut, light armour); differs by mounted speed/density and flank/pursuit roles, no lance (no charge penetration)
 }
-# Types that fight mounted: the one owner of "is this a horse", read where the engine used to spell
-# ('cavalry', 'mounted_archers') or == 'cavalry' inline. knights_templar is deliberately NOT here: it is not in
-# those inline sites today either, and adding it would move existing behaviour (flagged, not changed).
+# Types that fight mounted: the one owner of "is this a horse". knights_templar is deliberately NOT here.
 MOUNTED_TYPES = frozenset({"cavalry", "mounted_archers", "light_cavalry"})
 
 
 def stats_for(troop_type):
     """Canonical per-subunit combat stats for a troop type (mass_battle_v30 §B.2), as a
     fresh dict {power, discipline, morale}, or None if the type has no preset. None lets
-    the caller fall back to Unit inheritance (byte-exact). Lookup is case-insensitive."""
+    the caller fall back to Unit inheritance. Lookup is case-insensitive."""
     if troop_type is None:
         return None
     preset = TROOP_TYPE_STATS.get(str(troop_type).strip().lower())
@@ -96,13 +90,10 @@ REACH_SHORT = 0.5  # [canonical: params/core.md §Reach Terminology (PP-290) —
 # lattice units (COL_WIDTH=1.0 pitch), feeding the front-reach body (hierarchy/units.cell_bodies_for
 # -> geometry.reach_reaches). Jordan-ruled weapon-class map: non-pole melee 0.1, pole/spear
 # 0.2, PIKE 0.3, cavalry/knights lance 0.2, ranged = projectile band (VOLLEY_MAX_RANGE, handled
-# separately) + a 0.1 melee sidearm. This SUPERSEDES the flat REACH_SHORT=0.5 placeholder that Stages
-# B/C carried while the shape swap (circle->OBB) was validated at unchanged reach. NOTE (flagged for
-# Stage F / Jordan): the 0.1/0.2/0.3 scale is a FINER differentiation than PP-290's Short≤1m (0.5) /
-# Long≤3m (1.5) meter-grounding above -- P-DEC-1 is the newer, explicit ruling and governs the field OBB
-# model; the PP-290 meter→lattice reconciliation (do the two scales coexist, or does one re-ground the
-# other?) is deferred to Stage F's historical-revalidation pass, NOT silently overwritten here (REACH_
-# SHORT/REACH_LONG stay defined + exported for any PP-290 consumer).
+# separately) + a 0.1 melee sidearm. NOTE (flagged for Jordan): the 0.1/0.2/0.3 scale is a FINER
+# differentiation than PP-290's Short≤1m (0.5) / Long≤3m (1.5) meter-grounding above -- P-DEC-1 is
+# the newer, explicit ruling and governs the field OBB model; whether the two scales coexist or one
+# re-grounds the other is open (REACH_SHORT/REACH_LONG stay defined + exported for any PP-290 consumer).
 # [canonical: audit/2026-07-22-mass-battle-stress-test/spatial_model_v2_plan.md §9 P-DEC-1 — weapon-class reach map (ED-MB-0014)]
 REACH_MELEE_DEFAULT = 0.1   # non-pole melee (P-DEC-1); the fallthrough for unmapped/bare 'infantry'
 TROOP_TYPE_REACH = {
@@ -128,7 +119,7 @@ def reach_for(troop_type):
     """[v2 Stage E, ED-MB-0014] Per-troop-type front-face weapon reach in lattice units (COL_WIDTH=1.0
     pitch), from the Jordan-ruled P-DEC-1 weapon-class map (TROOP_TYPE_REACH). Unmapped types, including
     bare 'infantry' (a real call-site default, not a TROOP_TYPE_STATS key), fall through to
-    REACH_MELEE_DEFAULT=0.1 (non-pole melee) -- stated as intended, not an implicit side effect. Lookup
+    REACH_MELEE_DEFAULT=0.1 (non-pole melee). Lookup
     is case-insensitive, matching stats_for."""
     if troop_type is None:
         return REACH_MELEE_DEFAULT
@@ -160,20 +151,15 @@ def support_weight(depth, troop_type):
 
 # ─── unit_type (movement audit gate 2, ED-MB-0001) ──────────────────────────────
 # [canonical: Jordan-ruled 2026-07-02, verbatim: "Ranged is troop type as per the weapon assigned
-#  to troop."] unit_type ('ranged'/'melee') must derive from the troop's ASSIGNED WEAPON, not from
-# its role -- ED-1095/T4's mistake was defaulting a mounted_archers spec to role='Kite' without
-# this half, so the unit never actually got unit_type='ranged' (role='Kite' carries no unit_type
-# of its own; ROLE_SPEC never has). The primitive already existed and was already "NOT YET WIRED
-# into resolution" per its own docstring: modules.mass_battle.equipment.loadout_for(troop_type) returns
-# (weapon_record, armour_record) from the provisional TROOP_LOADOUT table (mass_battle_v30 §B.2 +
-# the mounted_archers extension added alongside this fix); a weapon record's `reach` field is
-# already exactly 'melee'/'ranged' (equipment/weapons.py ARSENAL). This wires that existing,
-# previously-inert mapping -- no new primitive invented.
+#  to troop."] unit_type ('ranged'/'melee') derives from the troop's ASSIGNED WEAPON, not from its
+# role (role='Kite' carries no unit_type of its own; ROLE_SPEC never has).
+# modules.mass_battle.equipment.loadout_for(troop_type) returns (weapon_record, armour_record) from
+# the provisional TROOP_LOADOUT table (mass_battle_v30 §B.2); a weapon record's `reach` field is
+# exactly 'melee'/'ranged' (equipment/weapons.py ARSENAL).
 def unit_type_for(troop_type):
     """'ranged'/'melee' derived from troop_type's assigned weapon (TROOP_LOADOUT/loadout_for). An
     unmapped troop type (no loadout entry -- e.g. bare 'infantry', a real call-site default that is
-    not a TROOP_TYPE_STATS/TROOP_LOADOUT key) falls through to 'melee', preserving every existing
-    call site's byte-exact default. Lookup is case-insensitive, matching stats_for/reach_for."""
+    not a TROOP_TYPE_STATS/TROOP_LOADOUT key) falls through to 'melee'. Lookup is case-insensitive, matching stats_for/reach_for."""
     weapon, _armour = loadout_for(troop_type)
     if weapon is None:
         return 'melee'

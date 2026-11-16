@@ -154,9 +154,9 @@ def test_per_cell_break_subsumes_the_body_level_one():
     inverted.** It inherited the same mistaken premise as the docstring above — that per-cell morale
     ships ON. It does not (`config.py:100`, default `'0'`, RETRACTED 2026-07-25). In the SHIPPED
     configuration `atom.cell_morale` is empty, so the entire per-cell break block at
-    `core/state.py:137-149` (`check_cell_breaks` / `propagate_cell_breaks` / `cohere_cells` /
-    `CELL_BREAK_ROUT_FRAC`) is skipped, and `MB_STOCHASTIC_ROUT` at `core/state.py:150` — itself
-    defaulted ON (`config.py:167`) — is the ONLY early break-point the engine ships. Far from being a
+    `core/state.py:124-134` (`check_cell_breaks` / `propagate_cell_breaks` / `cohere_cells` /
+    `CELL_BREAK_ROUT_FRAC`) is skipped, and `MB_STOCHASTIC_ROUT` at `core/state.py:135` — itself
+    defaulted ON (`config.py:128`) — is the ONLY early break-point the engine ships. Far from being a
     retirement candidate, it is the single mechanism keeping shipped battles out of the ~90% grind;
     the subsumption measured below is what WOULD happen if the cell flag were flipped back on, which
     is why it is worth pinning, not evidence that the body-level flag is dead.

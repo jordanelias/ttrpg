@@ -15,8 +15,7 @@ draws nothing, so it takes no rng. The projection (`world_q.larder_input`, `worl
 public names (`subsistence_draw`, `demanded`, `delivered`) with their `TRACE.query` lines, and every
 write MATTER makes from the record stay host.
 
-THE RULE (moved here from `world_q.subsistence_draw` and its walk, the old `nearest_store`; unchanged
-clause for clause, `ED-IN-0246` item 3a, `ED-IN-0255`):
+THE RULE (`ED-IN-0246` item 3a, `ED-IN-0255`):
   * ONLY A COHORT EATS. An eater whose `is_cohort` is false is not in the record: he wants nothing,
     draws nothing and is never short (`ED-IN-0255`, Jordan 2026-09-18, *"it's a territorial issue"*).
   * No weights registered gives an empty record (`H-11`: the loop is over the weights, so a kind with

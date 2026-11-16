@@ -1,9 +1,8 @@
-"""`manifest/registry.py` -- the role -> provider rows and the checks over them: `check_rows()`, and
-(plan position `30`) the driver-construction refusals `check_contest_prizes()` and `check_effects()`,
-and (plan position IN-41) `check_preconditions()`, refusal (a)'s precondition twin. Plan position
-`31a` adds `check_contest_prizes()`'s third half: a prize row's `module_entry:` agrees with its
-composition row. v9 FI-02 (`SM-3`) adds the second role, `inquiry`, and its refusal,
-`check_inquiry_modules()`.
+"""`manifest/registry.py` -- the role -> provider rows and the checks over them: `check_rows()`, the
+driver-construction refusals `check_contest_prizes()` and `check_effects()`, and
+`check_preconditions()`, refusal (a)'s precondition twin. `check_contest_prizes()`'s third half is that
+a prize row's `module_entry:` agrees with its composition row. The second role is `inquiry` (v9 FI-02,
+`SM-3`), with its refusal `check_inquiry_modules()`.
 
 A REGISTRY, in this repo, is a register (see `harness/register.py`) that code reads at load to look
 a key up; these rows are one.
@@ -93,8 +92,7 @@ from .providers import PROVIDERS, provider      # noqa: F401
 
 def has(role: str, module: str) -> bool:
     """Is a provider REGISTERED for this row? Read by `check_contest_prizes()` at driver construction
-    (plan position `30`; it was `resolvable_verbs()`'s third gate, deleted there because the refusal
-    made it unable to be false).
+    (`resolvable_verbs()` carries no third gate for it: the refusal makes it unable to be false).
 
     ⚠ IT IS A QUESTION ABOUT THE CODE, NOT ABOUT THE DATA, WHICH IS WHY IT IS SEPARATE FROM
     `resolve`. A roster row may name a module the contracts file declares and nothing may have
@@ -183,8 +181,7 @@ def resolve(role: str, key: Any) -> Optional[dict]:
             # ⚠ THE PYTHON, NOT THE MARKDOWN. Jordan, 2026-09-02: *"we aren't using the .md or
             # anything for those systems. those are super outdated."* The contracts file carries
             # both a `doc:` (markdown) and a `sim_module:` (the live Python) for these three, and
-            # the first version of this refusal printed the `doc:` -- so it pointed a reader at a
-            # file its owner calls superseded.
+            # printing the `doc:` would point a reader at a file its owner calls superseded.
             where = m.get("sim_module") or ""
             if not where:
                 guess = files.subsystem_sim_dir(name)
@@ -302,12 +299,10 @@ def unclaimed_contest_prizes(verb_table: dict) -> list:
     declares. It says nothing about the KEY side: a verb declaring `contests: the bodyy` loads
     clean, boots clean, and at first call `resolve` returns `None` (a real answer, for a prize no row
     claims), so the seam falls through to its generic refusal, **naming no row.** That is the
-    first-call failure mode `04 PART E step 10` replaces, surviving in the half nobody checked. Found by the
-    Fable gate on Arc 1.
+    first-call failure mode `04 PART E step 10` replaces.
 
-    ⚠ (plan position `30`) IT IS RAISED NOW, AT DRIVER CONSTRUCTION, by `check_contest_prizes()`;
-    it was returned for a test to assert on while §B.13's loader was unbuilt. The loader half landed
-    too -- `data/verbs.py` refuses an unclaimed prize at load (invariant 9) -- so a violation reaches
+    ⚠ IT IS RAISED AT DRIVER CONSTRUCTION, by `check_contest_prizes()`. `data/verbs.py` also
+    refuses an unclaimed prize at load (invariant 9), so a violation reaches
     the driver only through a table changed after load, which is exactly what a planted-violation
     test does."""
     claimed = set(roster_map(*_ROLE_ROSTERS["contest"]))
@@ -328,20 +323,19 @@ def _as_list(x: Any) -> list:
 
 
 def check_contest_prizes(verb_table: dict) -> list:
-    """Refusal (c), plan position `30`: **the contest roster, both halves, at driver construction.**
+    """Refusal (c): **the contest roster, all three halves, at driver construction.**
 
     1. A verb whose `contests:` prize no prize row claims -- refused naming the VERB
        (`unclaimed_contest_prizes`, above).
     2. A prize row whose `provider:` nobody registered -- refused naming the PRIZE. `has()` asks the
        CODE (`PROVIDERS`, filled when `seam/` is imported), not the data; a row with no `provider:`
        at all is the same defect, since nothing can be registered under no name.
-    3. (plan position `31a`) A prize row whose `module_entry:` disagrees with its composition row, or
+    3. A prize row whose `module_entry:` disagrees with its composition row, or
        names one no row declares -- refused naming the role (`_check_module_entry`, below).
 
-    ⚠ HALF 2 IS WHY `loop/driver.py::resolvable_verbs()` LOST ITS `manifest.has` CLAUSE. That clause
-    dropped a contested verb from the game SILENTLY when its prize's provider was not registered;
-    once construction refuses that state, the clause can no longer be false on any run, and a gate
-    that cannot be false is not a gate. Returns the `(role, prize)` rows checked, so a caller can see
+    ⚠ HALF 2 IS WHY `loop/driver.py::resolvable_verbs()` HAS NO `manifest.has` CLAUSE: dropping a
+    contested verb SILENTLY when its prize's provider was not registered would be a gate that
+    cannot be false once construction refuses that state. Returns the `(role, prize)` rows checked, so a caller can see
     the sweep was not empty (`CLAUDE.md` §0.1 pt 2)."""
     unclaimed = unclaimed_contest_prizes(verb_table)
     if unclaimed:
@@ -517,7 +511,7 @@ _VERB_CALL, _STEP_CALL = "verb_call", "step_call"
 
 def _bound_verb_contests_it(role: str, key: Any, entry_role: str, comp: dict, verb_table: dict,
                             law: str) -> None:
-    """Half 3 for the CONTEST role (plan position `31a`): the composition row's `verb:` contests a prize
+    """Half 3 for the CONTEST role: the composition row's `verb:` contests a prize
     whose row names the same entry, so the verb the entry is bound to reaches it through the seam."""
     verb = comp.get("verb")
     contests = getattr(verb_table.get(verb), "contests", None) or []
@@ -550,7 +544,7 @@ def _graded_verb_emits_it(role: str, key: Any, entry_role: str, comp: dict, verb
 
 def _check_module_entry(role: str, key: Any, row: dict, verb_table: dict,
                         entry_kind: str, reached) -> None:
-    """Refusal (c), half 3 -- plan position `31a`, generalised at v9 FI-02 (`SM-3`): **a role's row's
+    """Refusal (c), half 3 (v9 FI-02, `SM-3`): **a role's row's
     `module_entry:` and its composition row agree** (A-25: *"two owners say which module is called"* --
     the role's row and the composition row). A row with no `module_entry:` calls no module entry and is
     not checked here; a role whose rows must name one refuses its absence before calling this
@@ -563,7 +557,7 @@ def _check_module_entry(role: str, key: Any, row: dict, verb_table: dict,
 
     THIS IS THE DECLARATION THAT A ROW MUST EXIST. The registrar refuses only a role it already holds
     (`manifest/registrar.py`), so in a fresh process a deleted composition row left nothing to refuse
-    on (plan position `30`'s falsifier 2, observed only within one process). The role's row names the
+    on (observed only within one process). The role's row names the
     entry, so the row's absence is refused here, at driver construction, naming it. The composition
     rows are read through `engine/substrate/composition.py` (data loaded at import), never through
     `MODULE_ENTRIES`, so this refusal does not depend on a driver having been constructed earlier in
@@ -599,25 +593,21 @@ def _check_module_entry(role: str, key: Any, row: dict, verb_table: dict,
 
 
 # ---------------------------------------------------------------------------
-# REFUSAL (a), plan position `30`: A WRITING VERB ROW WITH NO EFFECT AND NO `effect_decline_note:`
+# REFUSAL (a): A WRITING VERB ROW WITH NO EFFECT AND NO `effect_decline_note:`
 # -- AND, SINCE PLAN POSITION IN-41 (`SM-9`), ITS CONVERSE: A ROW WITH AN EFFECT THAT DECLARES IT HAS
 # NONE. Its twin, `check_preconditions` (`SM-11`), follows it.
 #
 # `EFFECTS` (`loop/effects_shared.py`) is the verb -> effect table and `@effect_for` its decorator --
 # this module's `PROVIDERS`/`@provider` pattern one table over (the comment above `providers` says
 # so) -- so the check over it sits beside `check_contest_prizes()`. `resolvable_verbs()`'s second
-# gate (`loop/driver.py`) drops a writing verb with no effect from the game, and it used to do that
-# WITHOUT A WORD: a row whose effect was deleted, or never written, quietly left the game. After
-# this refusal every row that gate drops has SAID why, in its `effect_decline_note:`, or the driver
-# does not construct.
+# gate (`loop/driver.py`) drops a writing verb with no effect from the game: a row whose effect
+# was deleted, or never written, would quietly leave the game. With this refusal every row that
+# gate drops has SAID why, in its `effect_decline_note:`, or the driver does not construct.
 #
-# ⚠ TWO-SIDED SINCE IN-41. At `30` it was one-sided by [ASSUMPTION] (`SM-9`): the converse
-# (`SM-9`) -- a row carrying BOTH an effect and a declining note -- fired on the shipped
-# tree, because `oblige` and `destroy_record` used the one `decline_note:` column to decline their
-# FORMATION (`14`), not their effect. IN-41 split the column: `effect_decline_note:` (read here),
-# `formation_decline_note:` (an annotation nothing gates on; those two rows) and
-# `requires_decline_note:` (`check_preconditions`, below). With the split the converse fires on
-# nothing shipped, so it is armed: a note declining an effect that exists is a stale declaration,
+# ⚠ TWO-SIDED SINCE IN-41 (one-sided by [ASSUMPTION] before it, `SM-9`): the converse -- a row
+# carrying BOTH an effect and a declining note -- is refused. The decline columns are `effect_decline_note:` (read here),
+# `formation_decline_note:` (an annotation nothing gates on) and `requires_decline_note:`
+# (`check_preconditions`, below). A note declining an effect that exists is a stale declaration,
 # and a declaration that can be false is the silent state this refusal ends.
 #
 # ⚠ A CONTESTED ROW IS NOT EXEMPT. It routes to the seam first, but `loop/resolve.py::_contest` then
@@ -677,7 +667,7 @@ def check_effects(verb_table: dict, effects: dict) -> list:
 
 
 def check_preconditions(verb_table: dict, predicates: dict) -> list:
-    """`SM-11`, refusal (a)'s PRECONDITION TWIN (plan position IN-41), both arms: every row whose
+    """`SM-11`, refusal (a)'s PRECONDITION TWIN (IN-41), both arms: every row whose
     precondition NOTHING EVALUATES -- no typed cell, no `predicates` entry -- carries a
     `requires_decline_note:` saying why, and no row whose precondition IS evaluable carries one.
 

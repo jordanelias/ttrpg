@@ -57,21 +57,13 @@
 #            directly a faction's IDENTITY, and world must not say otherwise.
 #   TIER 2a · `systems/npcs/reference/npc_behavior_v30.md` SUPERSEDES
 #            `systems/factions/reference/faction_politics_v30.md`. ⭐ RULED by Jordan, 2026-09-13,
-#            verbatim: *"NPC behaviour supersedes faction politics."* It was asked because the two
-#            disagree about WHO SITS IN A FACTION'S INNER CIRCLE, by half: politics §1.2c gives
-#            Hafenmark four named and §1.3c gives Varfell five; behaviour §2.16/§2.17 give TWO and
-#            TWO, dropping Almstedt, Feldhaus, Thorvald Hann, Maret Uln and Edeyja, and assigning
-#            two of the survivors different Conviction and Resonant-Style values for the same
-#            people. Both are tier 2, so the tier order could not settle it — which is why it went
-#            to a ruling rather than being resolved by precedence.
-#            ⚠ THE RULING CHANGES NO DATA IN THIS TREE, AND THAT IS THE USEFUL PART.
-#            `references/npc_registry.yaml` — the structured 46-row cast — ALREADY matches
-#            behaviour on every contested cell: two-person councils, the same two people in each,
-#            the same four resonant styles. The one apparent difference is Björn Holdar's
-#            conviction (behaviour `Continuity`, registry `Warden`), and that is the ratified
-#            PP-685 §4 legacy migration (its Continuity -> Warden default: NPC-001's note, references/npc_registry_history.md), not a conflict.
-#            So the superseding document and the machine-readable cast agree, and building from
-#            the registry IS building to this ruling. MEASURED 2026-09-13.
+#            verbatim: *"NPC behaviour supersedes faction politics."* The two disagree about WHO SITS
+#            IN A FACTION'S INNER CIRCLE (politics gives Hafenmark four and Varfell five; behaviour
+#            gives two and two). `references/npc_registry.yaml` already matches behaviour on every
+#            contested cell, so building from the registry IS building to this ruling. The one
+#            apparent difference, Björn Holdar's conviction (behaviour `Continuity`, registry
+#            `Warden`), is the ratified PP-685 §4 legacy migration (its Continuity -> Warden default:
+#            NPC-001's note, references/npc_registry_history.md), not a conflict.
 #   TIER 3 · `research/`        — REFERENCE. Verbatim: *"research/ contains useful information to
 #            make everything more robust"*, and *"the research directory will also speak towards
 #            the kind of governance and bureaucratic functions that may be relevant to game too."*
@@ -79,15 +71,10 @@
 #   TIER 4 · `systems/settlements/reference/governance_play_redesign_v1.md` — IDEAS. Verbatim: *"governance
 #            play redesign is just for ideas. do not treat as required."*
 #
-# ⚠ THE PRECEDENCE IS A RULE ABOUT SOURCING, AND IT HAS ALREADY CAUGHT TWO ERRORS IN THIS FILE —
-# which is why it is written here rather than in a plan nobody re-reads.
-#   1. `factions` was sourced from TIER 2 and included `Ministry of the Peninsula`. World never
-#      names it, and tier 2 itself says it is *"institutional infrastructure, not a faction"*.
-#   2. Two rosters (`governance_modes`, `power_bases`) were built from TIER 3 and DELETED again.
-#      They were not wrong; they were UNREAD — nothing in the loop or the office schema consumed
-#      either, and `§0.1` point 5 forbids minting apparatus that is load-bearing on nothing. The
-#      insight that motivated them is real and is recorded at `H-100`, where it can be acted on,
-#      instead of sitting here as two lists shaped like mechanism.
+# ⚠ THE PRECEDENCE IS A RULE ABOUT SOURCING. `factions` takes its members from TIER 1 (world never
+# names `Ministry of the Peninsula`, which tier 2 itself calls *"institutional infrastructure, not a
+# faction"*). A roster nothing in the loop or the office schema consumes is not minted (`§0.1`
+# point 5); the insight behind such a list is recorded at `H-100`.
 #
 # ⚠ SILENCE IN TIER 1 IS NOT SUPERSESSION. `role_templates` is tier 2 and survives because world
 # has no competing concept — not because tier 2 won. The day world names one, world wins.
@@ -102,62 +89,46 @@ rosters:
     source: "#353 §15 `:537-544` — the seven Tenure kinds and their cardinalities; `reside` is plan position `19c`'s"
     open: true
     note: >-
-      ⚠ `reside` (Person -> Rung, ONE live per person) IS THE EIGHTH, ADDED AT PLAN POSITION `19c`
-      (MIGRATE, 2026-09-30), AND IT IS WHERE A PERSON LIVES AS DISTINCT FROM WHERE THEY ARE. `contain`
-      is where they are (`04_CODE_ARCHITECTURE.md` §B: *"its contain edge is where they are"*) and
-      `move` re-homes it; `reside` is opened only by `migrate` (and minted beside the first
-      `contain` by every world builder), so a `move` leaves it behind. It is what `world_q.population`
-      counts and `world_q.capacity` throttles (`RULINGS.yaml` RR-2). Like `contain`, it is NOT in
-      `release`'s domain: its end is a relocation (`migrate` closes the old edge as it opens the
-      new), and a released residence would leave a person living nowhere. The reasoning for a
-      Tenure kind over a claim, a `Person` field or a flag on `contain` is `loop/effects.py::
-      _eff_migrate`'s docstring.
+      ⚠ `reside` (Person -> Rung, ONE live per person) IS THE EIGHTH, AND IT IS WHERE A PERSON LIVES AS
+      DISTINCT FROM WHERE THEY ARE. `contain` is where they are (`04_CODE_ARCHITECTURE.md` §B: *"its
+      contain edge is where they are"*) and `move` re-homes it; `reside` is opened only by `migrate`
+      (and minted beside the first `contain` by every world builder), so a `move` leaves it behind. It
+      is what `world_q.population` counts and `world_q.capacity` throttles (`RULINGS.yaml` RR-2). Like
+      `contain`, it is NOT in `release`'s domain: its end is a relocation (`migrate` closes the old
+      edge as it opens the new), and a released residence would leave a person living nowhere.
       ⚠ `detain` (prisoner -> a seat) AND `ban` (person -> the excluding seat) ARE THE NINTH AND
-      TENTH, ADDED AT v9 SC-03a (#453 §10.4 step 3, K-53; ratified as intent, ED-IN-0288). Each is
-      a disposal a determination opens under an arrangement whose `disposes:` names it
+      TENTH (#453 §10.4 step 3, K-53; ratified as intent, ED-IN-0288). Each is a disposal a
+      determination opens under an arrangement whose `disposes:` names it
       (`loop/effects_information.py::_eff_determine`). Neither is in `release`'s domain
       (`data/rosters.py::RESTRAINT_KINDS`): a prisoner who could release his own custody, or an
       outlaw his own ban, would walk out of the sentence, which is why they are kinds and not an
       `oblige` (#453 §8.3). Their readers: `move`/`migrate` decline a person holding a live `detain`,
       a mustered army excludes him (`loop/sides.py`), `oblige` refuses a `ban` holder service and
-      `confer` declines to seat one. v9 IN-31 (H-100): `revoke` opens a `ban` too, on the man whose
-      `appointed` seat it strips, objected on the revoking seat (`state/gate.py::
-      REVOCATION_DISPOSAL`), so `ban`'s derived openers are `determine` and `revoke`; a revocation's
-      ban has no term. v9 IN-12 step 5: `arrest` opens a `detain` too (on the seat that ISSUED the
-      warrant), so `detain`'s derived openers are `arrest` and `determine`; and `pardon` is the CLOSER of
-      both (`domain: [detain, ban]`, the loader's closer clause), through the seat that is the edge's
-      object, under the gate's `determination` basis.
+      `confer` declines to seat one. `revoke` opens a `ban` too, on the man whose `appointed` seat it
+      strips (`state/gate.py::REVOCATION_DISPOSAL`), so `ban`'s derived openers are `determine` and
+      `revoke`; a revocation's ban has no term. `arrest` opens a `detain` too (on the seat that
+      ISSUED the warrant), so `detain`'s derived openers are `arrest` and `determine`; and `pardon`
+      is the CLOSER of both (`domain: [detain, ban]`, the loader's closer clause), through the seat
+      that is the edge's object, under the gate's `determination` basis.
     values: [hold, contain, commit, oblige, succeed, tie, knot, reside, detain, ban]
     # ⚠ LOADER INVARIANT 6's SECOND HALF (`04 §B.13 #6`, `04:466-467`, `ID-14`): every kind's OPENER
-    # set is declared. THIS ROW USED TO CARRY THE MAPPING BY HAND -- `openers: {hold: [confer,
-    # create_record], contain: [move], commit: [], oblige: [], succeed: [], tie: [], knot: []}` --
-    # a SECOND COPY of a fact `engine/season/loop/effects.py`'s own `_eff_*` bodies already state
-    # structurally (which verb's `Tenure(...)` construction names which `kind`). Correct the day it
-    # was hand-transcribed (2026-09-25) and silently wrong the day a new opener effect landed with
-    # no matching edit here -- `CLAUDE.md` §8's every-rule-lives-once hazard. Plan position
-    # `OPENERS-DERIVE` (2026-09-29) DELETED the hand-written mapping: `data/verbs.py`'s
-    # `_derive_openers_from_effects()` reads the same fact by walking `effects.py`'s own source (an
-    # AST scan for `Tenure(...)` calls inside each `@effect_for`-registered function), so there is
-    # one owner and no second copy to fall behind. The holes are UNCHANGED and still true, MEASURED
-    # the same way, now computed rather than read off this roster: `succeed`, `tie` and `knot` each
-    # declare `writes: Tenure.since` (verb_table.yaml) and no effect constructs a Tenure of that
-    # kind -- `tenure_kinds_without_an_opener()` still reports them. `commit` left the list at plan
-    # position `7a` (`_eff_commit`) and `oblige` at `17a` (`_eff_oblige`), each by gaining an
-    # opener, which the derivation saw without an edit here.
+    # set is declared, and it is DERIVED, not written here: `data/verbs.py`'s
+    # `_derive_openers_from_effects()` walks `effects.py`'s own source (an AST scan for `Tenure(...)`
+    # calls inside each `@effect_for`-registered function), so one owner states which verb opens
+    # which kind. `succeed`, `tie` and `knot` each declare `writes: Tenure.since` (verb_table.yaml)
+    # and no effect constructs a Tenure of that kind -- `tenure_kinds_without_an_opener()` reports
+    # them.
 
   hold_object_kinds:
     source: "`architecture/holonic_ARCHITECTURE.md` §15's Tenure table — *\"`hold` | Person → Office | Rung | Record | Proposition | 1 per object\"*. Item 16 of `proposals/2026-09-17-governance-and-behaviour/01_THE_BUILD_ORDER.md` (⊕ R13)."
     open: true
     note: >-
       ⚠ THE CLASSES A `hold` MAY POINT AT, AND THE ROSTER IS THE OWNER RATHER THAN A LITERAL IN
-      `add_tenure`. `holonic §15` states the domain and the codomain of every Tenure kind and
-      NOTHING CHECKED EITHER: `add_tenure` validated the KIND against `tenure_kinds` and
-      `contain`'s DIRECTION, and let a `hold` point at anything at all. Measured 2026-09-17 on
-      `build_realm(0)`, that admitted 16 `hold` Tenures whose SUBJECT was a faction — a
-      Proposition, not a person — and `in_holdings` (which reads *a `hold` whose object is a
-      Rung*) was consequently **false for every person over every rung in the world**. A seat
-      whose `revocation` basis is `"holdings"` therefore refused every revocation forever while
-      looking exactly like a working precondition.
+      `add_tenure`. `holonic §15` states the domain and the codomain of every Tenure kind; `add_tenure`
+      validates the KIND against `tenure_kinds` and `contain`'s DIRECTION, and this roster checks a
+      `hold`'s object. A `hold` whose subject is a faction (a Proposition, not a person) would make
+      `in_holdings` (which reads *a `hold` whose object is a Rung*) false for every person over
+      every rung.
       ⚠ **AN UNRESOLVABLE ID PASSES, AND THAT IS DELIBERATE RATHER THAN A HOLE.** `_rehome` exists
       because a Tenure may legitimately be added BEFORE its subject is in `w.persons`, so a guard
       that refused every unknown id would refuse the ordering the store is built to tolerate. The
@@ -189,35 +160,30 @@ rosters:
       ⚠ THE KEYS ARE EXACT, NOT A MINIMUM. `Record.__post_init__` (`state/carriers.py`) refuses a
       `subject_matter` whose key set is not its kind's IN EITHER DIRECTION, and refuses a kind that is
       not listed here -- r2 `05_LEDGER_AND_BUILD.md`'s ⊕L35. A missing key is an operand no reader can
-      bind; an extra key is a second vocabulary. `text: []` is why every Record minted before this
-      roster stays lawful: its `subject_matter` is `None`, which has no keys.
-      ⚠ r2's `commission` (r2 item 11, plan position `19`) IS STILL NOT HERE, AND THE OMISSION IS
-      DELIBERATE: it has no producer yet and lands with the effect that mints it. A kind nothing mints
-      is a member no reader reaches (`ID-13`). (`faction_sheet` below is NOT r2's `commission` and
-      does not stand in for it -- a commission there is a document conferring a charge; a sheet is a
-      description of a faction. Read cold, the plan's *"commissioned by an act"* for a sheet means
-      only that an act pays for it.)
-      ⚠ `works` LANDED AT PLAN POSITION `24e` (r2 item 12, `04_MATTER_AND_WORKS.md` §A.6) WITH ITS
-      READERS: `found` and `build` make what its `plan` names at the rung its `at` names, and
-      `queries/world_q.py::ceiling` bounds a Site's condition by how many of its declared terms have
-      matured. Its PRODUCER is the `create_record` that already runs (r2 §A.6.2 moment 1): an act
-      declaring `kind: works` and `subject_matter: {plan, at}`. `plan` is a KIND -- a `rung_kinds`
-      member for `found`, a `site_kinds` member for `build` -- and `at` is a RUNG id: "a <plan> at
-      <at>". r2's `{plan: {as, kind}}` is not taken: the verb says whether a Rung or a Site is made,
-      so an `as` key would be a second place saying it. ⚠ THERE IS NO `stage` KEY -- r2 §A.6.1
-      RULED it out (an ungated write on `subject_matter`, which has no matrix row, and a second
-      progress ladder beside `Site.condition`); the terms are `Record.stages`, matured at MATTER.
-      ⚠ `faction_sheet` LANDED AT PLAN POSITION `20-iii` WITH ITS PRODUCER, `survey`
-      (`loop/effects.py::_eff_survey`): a document whose content is `queries/faction_q.py::resolve`'s
-      five-field view of ONE faction -- who is committed to it, the rungs and the seats they hold --
-      RESOLVED AT THE MOMENT OF WRITING and frozen there, so it goes stale as the world moves and
-      nothing re-reads it. ITS KEYS ARE `faction_q.Faction`'s FIELDS, IN THAT DATACLASS'S ORDER, and
-      `faction_q.py` REFUSES AT IMPORT if the two drift: the view owns the shape, this row owns what a
-      Record of the kind may carry (⊕L35 reads it), and the import check is what keeps two owners
-      of one key list from disagreeing silently. It has NO addressee key, so `world_q.named` reads
-      nobody out of it and a sheet summons no one into a question; its HOLDER learns what it says
-      through the content deposit below, like any document -- which is the whole of *"read free by
-      holders"*: holding a document is reading it, and no act is spent to do so.
+      bind; an extra key is a second vocabulary. `text: []` is why every plain Record stays lawful:
+      its `subject_matter` is `None`, which has no keys.
+      ⚠ r2's `commission` (r2 item 11) IS NOT HERE, DELIBERATELY: it has no producer yet and lands with
+      the effect that mints it. A kind nothing mints is a member no reader reaches (`ID-13`).
+      (`faction_sheet` below is NOT r2's `commission` -- a commission is a document conferring a
+      charge; a sheet is a description of a faction.)
+      ⚠ `works` (r2 item 12, `04_MATTER_AND_WORKS.md` §A.6): `found` and `build` make what its `plan`
+      names at the rung its `at` names, and `queries/world_q.py::ceiling` bounds a Site's condition by
+      how many of its declared terms have matured. Its PRODUCER is the `create_record` that already
+      runs (r2 §A.6.2 moment 1): an act declaring `kind: works` and `subject_matter: {plan, at}`.
+      `plan` is a KIND -- a `rung_kinds` member for `found`, a `site_kinds` member for `build` -- and
+      `at` is a RUNG id: "a <plan> at <at>". The verb says whether a Rung or a Site is made, so there
+      is no `as` key. ⚠ THERE IS NO `stage` KEY -- r2 §A.6.1 RULED it out (an ungated write on
+      `subject_matter`, which has no matrix row, and a second progress ladder beside
+      `Site.condition`); the terms are `Record.stages`, matured at MATTER.
+      ⚠ `faction_sheet` (producer `survey`, `loop/effects.py::_eff_survey`): a document whose content
+      is `queries/faction_q.py::resolve`'s five-field view of ONE faction -- who is committed to it,
+      the rungs and the seats they hold -- RESOLVED AT THE MOMENT OF WRITING and frozen there, so it
+      goes stale as the world moves and nothing re-reads it. ITS KEYS ARE `faction_q.Faction`'s
+      FIELDS, IN THAT DATACLASS'S ORDER, and `faction_q.py` REFUSES AT IMPORT if the two drift: the
+      view owns the shape, this row owns what a Record of the kind may carry (⊕L35 reads it). It has
+      NO addressee key, so `world_q.named` reads nobody out of it and a sheet summons no one into a
+      question; its HOLDER learns what it says through the content deposit below, like any document
+      -- holding a document is reading it, and no act is spent to do so.
       ⚠ THIS ROW IS ALSO A VOCABULARY OF THE `exists:` STEM. `requires_typed: {form: existence, kind:
       petition}` asks *a Record of kind petition exists* (`queries/world_q.py::WorldReader.read`), so a
       member here must never also be a `tenure_kinds` member -- `data/rosters.py` refuses the overlap at
@@ -228,7 +194,7 @@ rosters:
       petition:     [terms, to, from]
       works:        [plan, at]
       faction_sheet: [proposition, members, holdings, seats, head]
-      # v9 IN-12 step 10 (#453 §8.2, §9.3; K-19): A CONCEALED IDENTITY. ONE key, `terms`, and it names
+      # A CONCEALED IDENTITY (#453 §8.2, §9.3; K-19). ONE key, `terms`, and it names
       # the ACTOR, written by `conceal`'s effect whatever the act's `subject` (the one kind whose
       # `terms` does not follow `content.read_from` below); the Record's own id is the alias. Its
       # stages are the mint's (`_declared_stages`). Its reader is `state/attribution.py::anchor_of`:
@@ -236,15 +202,15 @@ rosters:
       # anchors on the cover's id. Not a `record_sourced_operands` kind: a cover answers no operand,
       # and `ledger_names` reads nobody out of it (`ABOUT_KEYS`).
       cover:        [terms]
-      # ED-IN-0306 phase 2 (Jordan, 2026-10-28: a faction's army is an order-of-battle record, not only
+      # (Jordan, 2026-10-28: a faction's army is an order-of-battle record, not only
       # `PersonId[] at weight`): A FACTION'S ARMY. Its four keys are `modules/mass_battle/armyrecord.py::KEYS`
       # (`test_mass_battle_army_record.py` pins the two equal); that module owns what each key says and every
       # operation on it, and the four army verbs (`recruit`, `form_unit`, `assign_troops`, `order_unit`) call it
       # through the `mass_battle.army` composition row. MINTED by `create_record` (`kind: army`); CHANGED by the
       # four verbs, the one kind whose `subject_matter` is written after the mint (the `(Record, subject_matter)`
       # matrix row). Not a `record_sourced_operands` kind: an army answers no operand.
-      army:         [faction, strategy, trained, subformations]
-      # v10 PC-10b (RS-25; H-240 route (1)): A STANDING CHALLENGE TO A DUEL, minted by `challenge`
+      army:         [faction, strategy, trained, units]
+      # A STANDING CHALLENGE TO A DUEL (H-240 route (1)), minted by `challenge`
       # (`loop/effects_information.py::_eff_challenge`) into the challenger's hand. `terms` is whom it
       # challenges (`read_from`: the act's `subject`) and `to` the same person as its ADDRESSEE (so
       # `world_q.writs_held` stamps it on his question once he holds it); `stakes` is the TERM the duel
@@ -255,7 +221,7 @@ rosters:
       # for `to` and `terms` for `actor` and `subject`. [ASSUMPTION; medium; Jordan to correct; revert:
       # drop the kind, `challenge` writes nothing and `accept` takes a person as its subject.]
       challenge:    [terms, to, stakes, challenger]
-      # v11 CP-T04-02 (B10-12, `marshal`; AM-C-09 REPAIR): A STANDING ORDER OF BATTLE, minted by `marshal`
+      # A STANDING ORDER (B10-12, `marshal`), minted by `marshal`
       # (`loop/effects_information.py::_eff_marshal`) into the marshal's hand through `_mint_document`, the one mint. `at`
       # is the settlement the order is read about (the side's place: the attacker's origin, the defender's target),
       # `role` a `order_roles` member and `retreat_at` an `order_retreat_at` member. THREE KEYS, NOT THE HOME'S FIVE:
@@ -263,7 +229,7 @@ rosters:
       # `seam/wrappers/mass_battle.py::field_input`, which picks per side the order whose holder edge is newest.
       # Not a `record_sourced_operands` kind: an order answers no operand. [ASSUMPTION; medium; Jordan to correct; revert:
       # add the omitted keys back with their home wiring.]
-      order_of_battle: [at, role, retreat_at]
+      standing_order: [at, role, retreat_at]
     # HOW A MINTED DOCUMENT'S CONTENT IS READ OFF THE ACT, AND WHAT A HOLDER LEARNS FROM IT. One
     # owner for three facts the mint (`loop/effects.py::_mint_document`) and the deposit rule
     # (`loop/witness.py`) both read, so neither spells them.
@@ -299,39 +265,24 @@ rosters:
       Territorial -- "a duchy, a district"; Structural -- "a kingdom, an institution".
     open: false
     note: >-
-      ⚠ **STATED BEFORE WRITING IT, PER THE PLAN'S OWN INSTRUCTION: THIS SOLVES ONE OF TWO
-      PROBLEMS, AND NOT THE OTHER.** `workplans/2026-09-09-r-execution-plan.md:1622-1633`
-      (unretracted by the later plan) drew the line: problem (1) is a VOCABULARY MAPPING -- the
-      eight `rung_kinds` admit neither `faction` nor `world`, and canon's five scales are a
-      DIFFERENT vocabulary again, so something must translate between the two ladders wherever a
-      caller needs canon's scale-band language (Thread mechanics' Base Ob / Min Thread
-      Sensitivity / Coherence auto-cost, `scale_transitions_v30.md` §2's own columns -- NOT read
-      here, since `04:5` rules the `Base Ob` column thread-only and never an obstacle source,
-      Jordan 2026-09-05). Problem (2) is REPRESENTABILITY -- making a `faction`- or `world`-scale
-      corpus CASE buildable at all, which `rung_kinds` itself must answer (it is the roster
-      `corpus_run.run_case` checks membership against) and which THIS roster does **not** touch:
-      a `scale_of_rung` mapping from the eight rungs onto five canon scales does not, by itself,
-      make a faction or world case representable, because neither `faction` nor `world` is a
-      `rung_kinds` member for this mapping to receive as a KEY. Problem (2) is answered
-      separately, by `harness/corpus_run.py::rescales` and the 54 `cases/exercises/*.yaml`
-      overlays this same position lands (`H-95`).
-      ⚠ **THE MAPPING ITSELF, DERIVED FROM THE SCOPE CELLS ABOVE, NOT INVENTED.** `person` is
-      canon's own example of `Personal` ("one person") -- an exact match, no judgment call.
-      `hearth`/`community` are sub-settlement social units, matching `Relational`'s "small group,
-      social agreement" -- neither is a geographic-political unit the way `settlement` and
-      everything above it is. `Territorial`'s own example is *"a duchy, a district"* -- `duchy`
-      appears in the example by name, and `settlement`/`territory`/`province` are every rung
-      strictly between `community` and `duchy` on the SAME containment ladder, none of them
-      bigger than a duchy, so all four take `Territorial`. `Structural`'s example is *"a kingdom,
-      an institution"* -- `realm` is the one rung above `duchy`, canon's "kingdom" by name.
-      ⚠ **`Object` RECEIVES NO RUNG, AND THAT IS AN HONEST GAP, NOT AN OMISSION.** Canon's `Object`
-      scale is "one item, one wound" -- sub-personal, a Thread-mechanic reading of damage to a
-      thing or a wound on a body, which has no analogue on the CONTAINMENT ladder at all (nothing
-      in `rung_kinds` sits below `person`). Mapping any rung onto `Object` to fill the cell would
-      be exactly the fabrication `CLAUDE.md` §0.05 forbids -- "generate none automatically rather
-      than fabricate" (`faction_q.py::head`'s own precedent). `SCALE_OF_RUNG` is therefore a
-      TOTAL map on `rung_kinds` (every rung has exactly one scale) and a PARTIAL map onto canon's
-      five scales (`Object` is reachable by nothing here).
+      ⚠ **A VOCABULARY MAPPING, AND ONLY THAT.** The eight `rung_kinds` admit neither `faction` nor
+      `world`, and canon's five scales are a DIFFERENT vocabulary, so something must translate
+      between the two ladders wherever a caller needs canon's scale-band language. This roster does
+      **not** make a `faction`- or `world`-scale corpus CASE representable (neither is a `rung_kinds`
+      member for the mapping to receive as a KEY); that is `harness/corpus_run.py::rescales` and the
+      `cases/exercises/*.yaml` overlays (`H-95`).
+      ⚠ **THE MAPPING IS DERIVED FROM THE SCOPE CELLS ABOVE, NOT INVENTED.** `person` is canon's own
+      example of `Personal` ("one person"). `hearth`/`community` are sub-settlement social units,
+      matching `Relational`'s "small group, social agreement". `Territorial`'s own example is *"a
+      duchy, a district"*: `duchy` appears by name, and `settlement`/`territory`/`province` are every
+      rung strictly between `community` and `duchy` on the SAME containment ladder, so all four take
+      `Territorial`. `Structural`'s example is *"a kingdom, an institution"* -- `realm` is the one
+      rung above `duchy`.
+      ⚠ **`Object` RECEIVES NO RUNG, AND THAT IS AN HONEST GAP.** Canon's `Object` scale is "one item,
+      one wound" -- sub-personal, with no analogue on the CONTAINMENT ladder (nothing in `rung_kinds`
+      sits below `person`). Mapping a rung onto it would be fabrication (`CLAUDE.md` §0.05: "generate
+      none automatically rather than fabricate"). `SCALE_OF_RUNG` is therefore a TOTAL map on
+      `rung_kinds` (every rung has exactly one scale) and a PARTIAL map onto canon's five scales.
     scale:
       person:     Personal
       hearth:     Relational
@@ -359,51 +310,38 @@ rosters:
       ⚠⚠ **THIS IS A TEST FIXTURE AND IT IS OBVIOUSLY NOT A DESIGN. READ THIS BEFORE USING IT FOR
       ANYTHING.** It hands EVERY seated office EVERY remit act, which is exactly the authority
       `harness/populated.py` refused to invent on its own account: *"inventing one would silently
-      hand somebody an authority nobody granted"*. That refusal was right and is not overturned —
-      what changed is that Jordan asked for a generic remit SO THE GOVERNANCE VERBS CAN BE
-      EXERCISED AT ALL, and a value that is transparently wrong is safer as a placeholder than a
-      plausible one, because nobody will mistake *"every office can do everything"* for canon.
+      hand somebody an authority nobody granted"*. That refusal stands; Jordan asked for a generic
+      remit SO THE GOVERNANCE VERBS CAN BE EXERCISED AT ALL, and a value that is transparently wrong
+      is safer as a placeholder than a plausible one, because nobody will mistake *"every office can
+      do everything"* for canon.
 
-      WHY IT EXISTS. `H-71` closed 2026-09-18 (`ED-IN-0255`): a holder's remit now rides on their
-      `hold` Tenure and `person_side_eligible` reads it. But of the 19 offices the populated realm
-      seats, only THREE carried a remit — blocked by DATA, not by any mechanism. This roster is
-      that data, provisionally.
-      ⚠ IT BUYS FOUR VERBS, NOT EIGHT, AND THE FIRST WRITING OF THIS NOTE SAID EIGHT WITHOUT
-      MEASURING IT. Measured on `build_realm(0)`, both arms: BEFORE, five of the nine were already
-      formable off the three granted seats (`determine`, `dispatch`, `issue`, `requisition`, `open_case`)
-      and FOUR were unreachable (`confer`, `convene`, `establish`, `revoke`). The default closes
-      those four. `H-71`'s own `cite:` says the never-attempted set went 5 -> 4 and is consistent;
-      the "eight" was invented. `CLAUDE.md` §0.1 pt 3 — a number without its measurement.
+      WHY IT EXISTS. A holder's remit rides on their `hold` Tenure and `person_side_eligible` reads
+      it (`H-71`, `ED-IN-0255`); an office with no remit blocks the governance verbs by DATA, not by
+      any mechanism. This roster is that data, provisionally.
 
       ⚠ IT DEFERS TO ANY REAL REMIT AND NEVER OVERWRITES ONE. The three grounded overlays
       (NPC-008 `issue`; NPC-033 `issue`/`dispatch`; NPC-038 `issue`/`determine`/`dispatch`) keep
       exactly what their case text supports. This fills ONLY an empty remit.
 
       WHAT REPLACES IT, and the shape is already known. A remit belongs to a POST, and an office is
-      a post plus a scope. ⚠ BUT `Office.post` DOES NOT CURRENTLY HOLD A POST — measured
-      2026-09-18, the realm's 19 posts include `"Cardinal Justice"`, `"Queen (Widow Regent if
-      Almud eliminated)"`, `"Senior Jarl of the Western Highlands"` and `"Archbishop's
-      Representative / Father"`, each fusing a post with a scope, a condition or a relationship.
-      Jordan, same session: *"cardinal is a post / king is a post / confessor is a post"*. So
-      per-post remits need the post field normalised first, and that is a prior unit rather than a
-      detail of this one.
+      a post plus a scope. ⚠ BUT `Office.post` DOES NOT CURRENTLY HOLD A POST: the realm's posts
+      include `"Cardinal Justice"`, `"Queen (Widow Regent if Almud eliminated)"`, `"Senior Jarl of
+      the Western Highlands"` and `"Archbishop's Representative / Father"`, each fusing a post with
+      a scope, a condition or a relationship. Jordan, 2026-09-18: *"cardinal is a post / king is a
+      post / confessor is a post"*. So per-post remits need the post field normalised first.
 
-      ⚠ AND ECCLESIASTICAL POSTS ARE THE AWKWARD CASE, named here so the later work does not
-      rediscover it. Jordan: *"Confessor governs the Church tho"* and *"they are super weird in
-      that they don't have territories at first"*. So a Confessor's scope is a BODY
-      (`rosters.yaml` maps `"Church of Solmund": ecclesiastical`) and NOT a rung, with territory
-      arriving later if at all. `data/cast.py::title_of` says `Doux`, `Confessor`, `Father` and
-      `Prince` *"are real titles that govern no rung"* — correct about the RUNG LADDER and wrong
-      if read as governing nothing. No schema change is needed: `Office.rung` is already
-      `Optional` (*"null is the office-cluster case (S6.2)"*) and `Office.body`/`faction` carry
-      the institution.
+      ⚠ ECCLESIASTICAL POSTS ARE THE AWKWARD CASE. Jordan: *"Confessor governs the Church tho"* and
+      *"they are super weird in that they don't have territories at first"*. So a Confessor's scope
+      is a BODY (`rosters.yaml` maps `"Church of Solmund": ecclesiastical`) and NOT a rung, with
+      territory arriving later if at all. `data/cast.py::title_of` says `Doux`, `Confessor`, `Father`
+      and `Prince` *"are real titles that govern no rung"* -- true of the RUNG LADDER, not of
+      governing nothing. `Office.rung` is already `Optional` (*"null is the office-cluster case
+      (S6.2)"*) and `Office.body`/`faction` carry the institution.
 
-      ⚠ IT POINTS AT `remit_acts` RATHER THAN RESTATING IT. The first writing spelled the same six
-      values here, and a test pinned the two sets equal — so a seventh remit act meant editing two
-      rows or reddening a test for an unrelated reason (§0.05 cl.3). "Every remit act" is what the
-      fixture MEANS, so the pointer states the intent as well as removing the copy. Narrowing it
-      later means replacing `from_roster:` with a `values:` list, which the loader accepts and
-      which is a visible edit rather than a silent divergence.
+      ⚠ IT POINTS AT `remit_acts` RATHER THAN RESTATING IT: "every remit act" is what the fixture
+      MEANS, so the pointer states the intent and carries no second copy (§0.05 cl.3). Narrowing it
+      later means replacing `from_roster:` with a `values:` list, which the loader accepts and which
+      is a visible edit rather than a silent divergence.
     from_roster: remit_acts
 
   witness_channels:
@@ -422,30 +360,22 @@ rosters:
       channels the order decides only which channel is reported, never the source: the holder of
       the changed thing before the public record. Editing the order changes who holds what as
       hearsay, a game change, which is why it is data.
-      ⚠ `post_remit` IS LAST, AND THAT IS THE SAME ORDINAL TAKEN ONE STEP FURTHER (plan position
-      `17a`, 2026-09-29). `19_PLAN.md`'s ordinal of remove is *firsthand > knot-sourced > told >
-      inferred* in full (`:517`), and `post_remit` now mints `inferred`, so it ranks below both
-      `told_by` channels: an obligee who is ALSO admitted by the public record (`chronicle`, every
-      `binding_decision` emission) holds the Event `told_by`, never downgraded to `inferred`. At
-      `15d` it sat fourth with source `told_by`, where its place among the told channels decided
-      nothing; left there with `inferred` it would have decided the source against the ordinal.
-      `claim_source:` is keyed on exactly these five and names only `claim_sources` members
-      (`data/rosters.py` refuses at import otherwise). `chronicle` is `told_by` on
-      `04_CODE_ARCHITECTURE.md` §C.6's own row, and so is `post_remit`'s `inferred` (§C.6: *"the
-      change claims, `inferred`"*). ⚠ `post_remit` WAS `told_by` from `15d` to `17a`, following
-      `19_PLAN.md` step 4 (*"a document or a remit gives told_by"*) -- right for the channel it
-      then was, a remit-holder learning of every covered act realm-wide. `17a` REPLACED that
-      channel (r2 item 9: *"the place-blind remit channel -> obligees co-located, minting
-      `inferred`"*), so step 4's remit clause describes a predicate that no longer exists; see
-      `epistemic._ch_post_remit` for what was retired and what it cost, measured.
+      ⚠ `post_remit` IS LAST, AND THAT IS THE SAME ORDINAL TAKEN ONE STEP FURTHER. `19_PLAN.md`'s
+      ordinal of remove is *firsthand > knot-sourced > told > inferred* in full (`:517`), and
+      `post_remit` mints `inferred`, so it ranks below both `told_by` channels: an obligee who is
+      ALSO admitted by the public record (`chronicle`, every `binding_decision` emission) holds the
+      Event `told_by`, never downgraded to `inferred`. `claim_source:` is keyed on exactly these five
+      and names only `claim_sources` members (`data/rosters.py` refuses at import otherwise).
+      `chronicle` is `told_by` on `04_CODE_ARCHITECTURE.md` §C.6's own row, and so is
+      `post_remit`'s `inferred` (§C.6: *"the change claims, `inferred`"*). `post_remit` is the
+      place-bound remit channel (r2 item 9: *"the place-blind remit channel -> obligees co-located,
+      minting `inferred`"*); see `epistemic._ch_post_remit`.
       ⚠ `witness_key` ADMITS THE EVENT'S OWN ANCHOR AS WELL AS ITS KNOT PARTNERS
       (`_ch_witness_key`'s `pid == anchor`), and one channel carries one source. So an actor with
       NO PLACE -- whom `co_located` cannot admit -- holds their own act `firsthand_via_knot`, under
       the event id (S28's knot deposit). §C.6 separates the two (*"change claims about self; via a
-      knot, the partner's deposits"*) and one channel cannot. MEASURED at `15d`: reached only by
-      probe `P21`'s placeless cohort (`crowd_1`, now `firsthand_via_knot` in `runs/TRACE.txt`,
-      where it was `firsthand`); in Carin's world, the realm and the 143-case corpus every anchor
-      that witnessed its own Event was also `co_located`, so presence credited it first.
+      knot, the partner's deposits"*) and one channel cannot. A placed actor is credited first by
+      presence (`co_located`).
     ordered: true
     values: [co_located, witness_key, document_key, chronicle, post_remit]
     claim_source:
@@ -483,47 +413,35 @@ rosters:
       makes an ORDINARY verb eligible; no verb exists only for office-holders. Adding a fifth kind
       is a DESIGN CHANGE — a new way to make a verb unavailable to someone — and not a table edit,
       so it needs a ruling before it needs an entry.
-      This roster was itself a literal in `shape.py` for about ten minutes, and the guard Jordan's
-      ruling earned caught it. Recorded because a guard that has never fired on its author is one
-      nobody has tested.
     values: [own, remit, hold, presence]
 
-  # The season-side roster of PURSUITS (`ED-IN-0261`), read from the single owner. IN-08's cells
-  # commit (B-G) swapped the owner block to the fifteen; this row's values move with it.
+  # The season-side roster of PURSUITS (`ED-IN-0261`), read from the single owner.
   pursuits:
     source: >-
       references/descriptor_registry.yaml `pursuit_roster`, count 15 (ED-IN-0261), exported to
       engine/engine_params/descriptors.json behind a BLOCKING --check (tools/export_descriptors.py).
     open: true
     note: >-
-      ⚠ **READ FROM THE SINGLE OWNER, NOT RE-TYPED.** `H-46` was closed by IN-43 AS FRAMED: the
-      fifteen pursuits over seven axes (`ED-IN-0261`) are what this roster carries since IN-08's
-      cells commit. JORDAN, 2026-09-02, VERBATIM: *"please note that convictions roster and axes
-      etc may be modified in future."* Populating a roster from a single-owner export is a DATA
-      EDIT, which the same ruling says is the correct shape; `open: true` says in data that the
-      roster may change.
-      ⚠ **THESE ARE PURSUITS AND THEY ARE NOT AXES.** The row immediately below carries SEVEN
-      bipolar axes; a person's pursuits are weights over THESE FIFTEEN, and they reach the axes
-      only through `tables.pursuit_projection` (15×7). Before `U3` this file held one index set
-      doing both jobs.
-    # ⚠⚠ **NO `values:` HERE, AND THAT IS THE WHOLE POINT OF THE ROW.** A first writing of `U3`
-    # listed the thirteen names in this file, and that was a SECOND ROSTER —
-    # `tests/valoria/test_conviction_roster_single_owner.py` exists because three incompatible
-    # conviction rosters once shipped at the same time (nine names in
-    # `systems/characters/sim/conviction.py`, eight in `systems/world/sim/npe.py`, thirteen
-    # registered) and the disagreement silently disabled ED-912 §6.1's Conviction Scar. That guard
-    # scans PYTHON, so a copy in YAML would have slipped past it while being the same defect.
+      ⚠ **READ FROM THE SINGLE OWNER, NOT RE-TYPED.** The fifteen pursuits over seven axes
+      (`ED-IN-0261`) are what this roster carries. JORDAN, 2026-09-02, VERBATIM: *"please note that
+      convictions roster and axes etc may be modified in future."* Populating a roster from a
+      single-owner export is a DATA EDIT, which the same ruling says is the correct shape; `open:
+      true` says in data that the roster may change.
+      ⚠ **THESE ARE PURSUITS AND THEY ARE NOT AXES.** The row below carries SEVEN bipolar axes; a
+      person's pursuits are weights over THESE FIFTEEN, and they reach the axes only through
+      `tables.pursuit_projection` (15×7).
+    # ⚠⚠ **NO `values:` HERE, AND THAT IS THE WHOLE POINT OF THE ROW.** A `values:` list would be a
+    # SECOND ROSTER. `tests/valoria/test_conviction_roster_single_owner.py` scans PYTHON, so a copy in
+    # YAML would slip past it while being the same defect (three incompatible conviction rosters once
+    # shipped at the same time and silently disabled ED-912 §6.1's Conviction Scar).
     # `data/rosters.py` binds `PURSUITS` from `engine.substrate.descriptors` (as `CONVICTIONS`,
     # the leaf's own unrenamed name) — the one leaf reader, fed by the one exporter, from the one
     # owner at `references/descriptor_registry.yaml:pursuit_roster`. This row carries the
     # SOURCE and the NOTE, which is what a roster row is for when the values live somewhere better.
-    # ⚠ `from_descriptor:`, NOT `values: []` (2026-09-15). This row carried an EMPTY list
-    # while the real thirteen arrived by a separate direct import in `data/rosters.py`, so
-    # `roster("pursuits")` returned `frozenset()` — the "membership test silently false"
-    # outcome `roster()`'s own refusal text forbids, in the file whose header promises the
-    # opposite. `from_descriptor` is the mechanism ED-IN-0230 built; this is the row that
-    # motivated it, finally migrated. It also puts the data-side `forbidden:` bar within
-    # reach of this roster, which a direct import cannot do.
+    # ⚠ `from_descriptor:`, NOT `values: []`: an EMPTY list makes `roster("pursuits")` return
+    # `frozenset()` — the "membership test silently false" outcome `roster()`'s own refusal text
+    # forbids. `from_descriptor` is the mechanism ED-IN-0230 built; it also puts the data-side
+    # `forbidden:` bar within reach of this roster, which a direct import cannot do.
     from_descriptor: pursuit_roster
 
   pursuit_axes:
@@ -545,48 +463,19 @@ rosters:
     refusing_pole:
       deontological_instrumental: -1
     note: >-
-      ⚠⚠ **SEVEN SINCE IN-08's CELLS COMMIT (`ED-IN-0261`).** What follows is the history of the
-      roster's shape; the count it argues about was four, and it is seven now.
-      ⚠⚠ **FOUR, AND FOUR WAS THE WHOLE COUNT — THIS ROW USED TO SAY "FOUR OF THIRTEEN".** It read
-      *"#353 says 'the closed 13' and NEVER ENUMERATES THEM ... this roster is NOT the closed 13 and
-      must never be cited as it"*, and carried `incomplete: {have: 4, target: 13}` in data. That was
-      an honest statement of a CONFLATION, not of a shortfall: the thirteen are CONVICTIONS and the
-      four are AXES, and one index set was doing both jobs.
-      ⚠ **THE OLD FOUR WERE NOT AXES AT ALL.** They were `Precedent` (one of the thirteen
-      convictions), plus `self_preservation`, `suspicion` and `harm_borne` — three names the chain
-      happened to use in probes `P31`/`P37` and PLAN §3.2. A roster mixing one conviction with three
-      ad-hoc scalars could not be projected onto anything.
-      ⚠ **THE FIX IS THE ONE THIS ROW ITSELF PREDICTED.** Its previous note closed: *"`key_substrate_v30.md`
-      §2.5 has THIRTEEN convictions projecting onto FOUR axes through a 13×4 matrix ... V2 §F2's
-      formula indexes convictions BY axis, i.e. treats them as ONE index set ... It is the likeliest
-      thing to change when `H-46` closes."* `U3` makes that change WITHOUT closing `H-46`, which
-      stayed open until IN-43 closed it as framed (2026-10-08): the roster above holds the thirteen,
-      this row holds the four, and `tables.pursuit_projection` is the 13×4 between them. What V2
-      §F2 spells `conviction[axis]` is now computed rather than looked up —
-      `Σ_conv conviction[conv] · projection[conv][axis]` — so the formula is unchanged in shape and
-      its index set is no longer overloaded.
+      ⚠⚠ **SEVEN BIPOLAR AXES (`ED-IN-0261`).** Convictions (now pursuits) and axes are different
+      index sets: the roster above holds the fifteen pursuits, this row holds the seven axes, and
+      `tables.pursuit_projection` is the 15×7 between them. V2 §F2's `conviction[axis]` is computed
+      rather than looked up -- `Σ_conv conviction[conv] · projection[conv][axis]`.
       ⚠ `exposure` IS FORBIDDEN AS A BARE AXIS NAME and the loader RAISES on it — #353 `:1897`
       names "The Exposure collision — three senses of one word, including a need scalar and a
       per-person tally". Spell the sense you mean.
-      ⚠⚠ **THE `values:` LIST IS GONE AND THAT IS THE REPAIR, NOT A REGRESSION (2026-09-14,
-      ED-IN-0230).** This row used to carry its own literal copy and claimed, right here, that
-      *"the engine substrate already single-owns this tuple, so a fifth axis or a rename is one
-      edit there and a loader refusal here rather than two rosters drifting apart"*. **That
-      refusal did not exist.** MEASURED by AST across the whole tree: exactly ONE module imports
-      `engine/substrate/keys.py::AXES` — `engine/substrate/__init__.py`, re-exporting it — and
-      NOTHING under `engine/season/` reads it. So the two literals could disagree in either
-      direction in silence: a fifth axis in `keys.py` alone left `decision/choose.py` scoring on
-      four, and a fifth here alone left the season engine scoring on five while `keys.py`
-      invariant 6 rejected every Key that named it. Two failures, opposite directions, neither
-      side able to see the other. A note asserting a guard that is not there is worse than no
-      note, because it is trusted.
-      ⚠ **`from_descriptor:` IS THE FIX AND IT IS THE `conviction_roster` PRECEDENT.** The 13
-      Convictions were literals in two subsystems until 2026-08-24, when nine-vs-eight-vs-thirteen
-      was found to have silently disabled a ratified mechanic; the roster moved to
+      ⚠⚠ **THERE IS NO `values:` LIST, AND THAT IS THE REPAIR (ED-IN-0230).** A literal copy here
+      could disagree in silence with `engine/substrate/keys.py::AXES` (nothing under `engine/season/`
+      read it), so a fifth axis in one place would leave the other scoring on four.
+      ⚠ **`from_descriptor:` IS THE `conviction_roster` PRECEDENT.** The roster lives in
       `references/descriptor_registry.yaml` with `engine/substrate/descriptors.py` as the one
-      code-side reader. The axes are the same object one level up and get the same treatment.
-      `keys.py::AXES` now reads that leaf too, so a fifth axis or a rename is genuinely ONE edit —
-      `axis_roster.names` — and both readers see it.
+      code-side reader, so a fifth axis or a rename is ONE edit -- `axis_roster.names`.
     from_descriptor: axis_roster
 
   # IN-08 H10: the religious affiliations `Person.conviction` is keyed on (ED-IN-0251 R1/R2), read
@@ -607,33 +496,20 @@ rosters:
     open: true
     ordered: true
     note: >-
-      ⚠ FOLDED FROM FOUR TO TWO AT POSITION `11a` (`ARCH §B.13` `ID-13` -- a declared source that
-      reaches no code is the defect, not a design worth keeping). `date_due` and `band_crossed`
-      MEASURED zero questions in every world the engine could build: Q1's addressing clause
-      admitted every person unconditionally and its route out was dead (CALENDAR emitted no Event
-      for a fired Date); Q3 keyed its Question on the crossing's VERB where an id was needed
-      (`H-110`), so `occasioned_by`'s search could never match. Both fold into `claim_landed`
-      rather than vanish -- the underlying Event (a fired date, a band crossing) is already
-      witnessable and already deposits a claim; what was missing was a way for that claim to reach
-      someone who was not literally standing where it happened, which `reach`/`place_of`
-      (`queries/world_q.py`) now supply as a FILTER over the claims a person's own ledger already
-      holds, never as a new witness channel (`01` §A.4.4).
-      ⚠ V2 §F1 SAYS "EXACTLY THREE SOURCES, AND BY NOTHING ELSE" AND WAS WRONG BY ONE. PLAN `W5`:
-      "**Without Q4 an NPC with a standing ambition and a quiet season forms no candidates at
-      all**, which is most of the NPC corpus" (#353 `:509`, `:605`, `:1297`). A closed set that
-      turned out to be missing a member is the strongest possible argument for keeping closed sets
-      in data.
+      ⚠ TWO SOURCES (`ARCH §B.13` `ID-13` -- a declared source that reaches no code is the defect, not
+      a design worth keeping). Dates coming due and bands being crossed fold into `claim_landed`:
+      the underlying Event is already witnessable and already deposits a claim, and `reach`/`place_of`
+      (`queries/world_q.py`) carry that claim to someone not standing where it happened as a FILTER
+      over the claims a person's own ledger already holds, never as a new witness channel (`01` §A.4.4).
+      ⚠ `need` IS THE SECOND SOURCE. PLAN `W5`: "**Without Q4 an NPC with a standing ambition and a
+      quiet season forms no candidates at all**, which is most of the NPC corpus" (#353 `:509`,
+      `:605`, `:1297`). A closed set that turned out to be missing a member is the strongest possible
+      argument for keeping closed sets in data.
       THE ORDER IS A TIEBREAK WITHIN AN ATTENTION TIER (v9 IN-57, RS-22): `questions_for` sorts on
       `world_q.attention_key`, a tiered read of the person's own state, and `(order[q.source],
       q.id)` breaks ties inside a tier, so editing this order changes which question a
-      budget-bounded person answers first only among questions of one tier.
-      ⚠ BEFORE IN-57 THE WHOLE SORT WAS `(order[q.source], q.id)`, so WITHIN one source the
-      tiebreak was `q.id` — and for `claim_landed`, the source that supplies most of the corpus's
-      questions, `q.id` carries a CONTENT HASH minted off the depositing Event. MEASURED over 89
-      corpus baselines: the leading source is SHARED with at least one other question in **801 of
-      1,068 deliberations**, so three quarters of the time this roster's order did not decide the
-      answer and a hash did. Recorded 2026-09-04 by the `W-D` adversarial pass; disposition on
-      `H-54`. Within a tier `q.id` is still the last tiebreak.
+      budget-bounded person answers first only among questions of one tier. Within a tier `q.id`
+      is still the last tiebreak.
     values: [claim_landed, need]
 
   referent_classes:
@@ -657,8 +533,7 @@ rosters:
       writs a person HOLDS (`queries/world_q.py::writs_held` -- a live `hold` on a Record of a kind
       `data/verbs.py::RECORD_REFERENT_KINDS` derives from the rows declaring this class), which
       `questions_for` adds to the question he answers beside his seats; `comply` declares it,
-      and since v10 REM-2B `evade / defy` and `construe` do too (typed beside it at v9 IN-09, reverted at B-I,
-      restored; H-203).
+      and since v10 REM-2B `evade / defy` and `construe` do too (H-203).
       REVERT: drop the value and the row's column.
       v10 REM-25 (B10-05, AM-A-10, [ASSUMPTION; medium; Jordan to correct]): WIDENED. `carry`, `found`
       and `build` declare it too, and the term gains its second half beside the writs
@@ -747,8 +622,7 @@ rosters:
       standing occasion `queries/world_q.py::disputes_held` (over `person_q.holds_dispute`, the one owner) onto the
       question he answers, `Enemy`'s shape (no collection; named by `data/verbs.py::DISPUTANT_CLASS`; occasion-only).
       `challenge` declares it. It is a class of its own, not `Person`, because `Person` is shared: stamped as
-      `Person`, `capture` formed on the same men and executed 11 times in two realm seasons at seed 0 where it had
-      executed 0 (measured, `aperture 2 0`), violence no context licensed (ED-IN-0337).
+      `Person`, `capture` formed on the same men and executed where no context licensed violence (ED-IN-0337).
     values: [Office, Record, Rung, Site, Proposition, Person, Detainee, Enemy, Disputant]
 
   occasion_only_classes:
@@ -761,29 +635,25 @@ rosters:
       ledger (`vacancies` and `seats_named` as `Office`, `writs_held` and `records_held_for_holding_rows`
       as `Record`, `places_named` and `larders_in_purview` as `Rung`), or `own_referents_of_class`, which carries the question's own
       plain referents of every class a verb row declares EXCEPT the ones listed here. The three of
-      REM-21 (two since REM-2C, below) were held back because their rows (`confer`, `oblige`, `comply`, `migrate`, `requisition`, and since
-      v10 REM-25 `carry`, `found` and `build`) were measured forming on plain referents and stopped by
-      their class (rem-02 REM-21, rejected option
-      (a)): carrying the question's own seat, writ or place as that class would widen them onto it
-      again. A member must be a `referent_classes` value (`data/rosters.py` refuses another at load).
+      REM-21 were held back because their rows (`confer`, `oblige`, `comply`, `migrate`, `requisition`, and
+      `carry`, `found` and `build`) form on plain referents: carrying the question's own seat, writ or
+      place as that class would widen them onto it. A member must be a `referent_classes` value
+      (`data/rosters.py` refuses another at load).
       Removing a class from this list is the edit that lets the own-referent term stamp it. REVERT:
       with the term, the list goes.
-      v10 REM-2C (B10-05, AM-A-11; M19 taken, [ASSUMPTION; medium; Jordan to correct]): `Record` LEFT
-      THE LIST -- the one class AM-A-11 releases. `research` declares it and asks `existence` of the
-      collection itself (any document), which no standing occasion answers, so the own-referent term
-      now stamps the question's own Records too, beside `writs_held` and
-      `records_held_for_holding_rows` (`_stamped` keeps one pair where both name one Record). NOT the
-      stamp rem-02 REM-2C rejected (every Record the person has heard of): the term reads the question
-      and never the ledger. The class is shared, so `comply`, `carry`, `found` and `build` form on a
-      question's own Record as well and the fold disposes (`verb_table.yaml`'s `research` note has the
-      readings). A WRIT IS THE EXCEPTION (the B10-05 close): the term skips a Record of a writ kind
-      (`data/verbs.py::RECORD_REFERENT_KINDS`), which only `writs_held`'s addressee test stamps, so a
-      bystander who saw a writ issued is offered no `comply`. REVERT: put `Record` back here (with
-      `research`'s column).
-      v10 IN-12 step 5: `Detainee` joins -- only `detainees_held` stamps it (no collection is named
-      `Detainee`, so the own-referent term could never match it; listed so the roster says so).
-      v11 CR-87: `Enemy` joins, for `Detainee`'s reason -- only `enemies_heard` stamps it.
-      B11 lane A: `Disputant` joins, for the same reason -- only `disputes_held` stamps it.
+      v10 REM-2C (B10-05, AM-A-11; M19 taken, [ASSUMPTION; medium; Jordan to correct]): `Record` IS NOT
+      ON THE LIST. `research` declares it and asks `existence` of the collection itself (any
+      document), which no standing occasion answers, so the own-referent term stamps the question's
+      own Records too, beside `writs_held` and `records_held_for_holding_rows` (`_stamped` keeps one
+      pair where both name one Record). The term reads the question and never the ledger. The class
+      is shared, so `comply`, `carry`, `found` and `build` form on a question's own Record as well
+      and the fold disposes (`verb_table.yaml`'s `research` note has the readings). A WRIT IS THE
+      EXCEPTION: the term skips a Record of a writ kind (`data/verbs.py::RECORD_REFERENT_KINDS`),
+      which only `writs_held`'s addressee test stamps, so a bystander who saw a writ issued is offered
+      no `comply`. REVERT: put `Record` back here (with `research`'s column).
+      `Detainee`, `Enemy` and `Disputant` are members because only their standing occasions
+      (`detainees_held`, `enemies_heard`, `disputes_held`) stamp them: no collection is named so, so
+      the own-referent term could never match them.
     values: [Office, Rung, Detainee, Enemy, Disputant]
 
   flow_stake_classes:
@@ -825,13 +695,11 @@ rosters:
     source: "PLAN.md §1.4 hole 15 / `H-54` — \"nothing says how many questions a person forms per season\""
     open: true
     note: >-
-      ⚠ THE INSTRUMENT ANSWERED THIS SILENTLY FOR FOUR REVISIONS. `deliberate` took `qs[0]` — the
-      first question in `question_sources` order — with no row, no marker and no alternative, so
-      an `absent` hole was being FILLED inside a subscript. That is `G1`, and it was decisive
-      rather than cosmetic: `question_sources` is ORDERED, so `qs[0]` silently meant *a Date
-      always beats a need*, an unruled priority rule that decides what every NPC does first.
-      `first` is that same behaviour DECLARED, kept as the default because it is the incumbent
-      and a sweep needs an honest control — not because it is argued for.
+      ⚠ `deliberate` once took `qs[0]` -- the first question in `question_sources` order -- with no
+      row or marker, and `question_sources` is ORDERED, so that silently meant *a Date always beats a
+      need*, an unruled priority rule that decides what every NPC does first. `first` is that
+      behaviour DECLARED, kept as the default because it is the incumbent and a sweep needs an honest
+      control -- not because it is argued for.
       `all` gives the person every question and lets the budget triage them, which is what §26.3's
       triage is FOR; `one_per_source` is the middle reading. `H-54` is the row.
     ordered: true
@@ -841,12 +709,9 @@ rosters:
     source: "`W17` — which interactions share one scene. `player_agency_v30.md` §6.3 says a scene HOLDS 1–3 and never says WHICH"
     open: true
     note: >-
-      ⚠ THIS IS `H-53`'S DEFECT ONE LEVEL UP, AND IT WAS FOUND THE SAME WAY — by an adversarial
-      pass reading the body rather than the summary. `H-76` registers HOW MANY interactions a
-      scene admits; nothing registered WHICH ones share one, and `make_chooser` answered it in a
-      comment: *"the default policy fills scenes greedily in score order"*. H-53's own row says
-      the shape of that error out loud: *"H-09 supplies `K = 12` and NOT WHICH K; the instrument
-      takes the last k, WHICH IS AN INVENTION."*
+      ⚠ `H-76` registers HOW MANY interactions a scene admits; this roster says WHICH ones share
+      one (`make_chooser` once answered it in a comment: *"the default policy fills scenes greedily
+      in score order"*, which H-53 calls *"AN INVENTION"*).
       `greedy` is that invention DECLARED and kept as the sweep's control, not argued for.
       `one_per_scene` is the pre-ruling accounting — one interaction per scene action — and is
       the honest floor. `by_subject` is the reading `player_agency_v30.md` §6.3's own words
@@ -858,57 +723,38 @@ rosters:
     source: "#353 §20 — `Claim := (id, holder, subject, predicate, value, ...)`, and NOTHING says what `subject` is for a WITNESS deposit"
     open: true
     note: >-
-      ⚠ FOUND BY RUNNING ARTIFACT 2, AND ITS CONSEQUENCE IS THE WHOLE NARRATIVE SUBSTRATE.
-      WITNESS deposited every claim with `subject = event.subject`, which the fold sets to the
-      ACTOR. So every claim in the world is "I hold that <actor> did <kind>", and §F1's Q2 —
+      ⚠ WITNESS once deposited every claim with `subject = event.subject`, which the fold sets to the
+      ACTOR, so every claim in the world was "I hold that <actor> did <kind>" and §F1's Q2 --
       *"a claim landing in the holder's ledger whose subject is that person, SOMETHING THEY HOLD,
-      or a Proposition they have committed to"* — can never fire on its second clause, because no
-      claim's subject is ever an object. Measured on NPC-088: the bailiff held 23 claims about
-      Carin across three seasons and formed ZERO questions. Nothing propagates, nobody but the
-      actor ever has a reason to act, and no arc walks past one link.
+      or a Proposition they have committed to"* -- could never fire on its second clause. These
+      rules say what a deposit's `subject` is.
       `actor` is the incumbent, kept as the sweep's control. `per_change` mints one claim per
       `StateChange` with the CHANGED THING as its subject, which is what makes "something they
       hold" reachable and what #353 §13.1's own narration needs — a copy that can be found,
       carried, hidden or destroyed. `both` keeps the actor claim and adds the per-change ones.
-      ⚠ **AND SINCE 2026-09-03 THAT LAST CLAUSE HOLDS ONLY WHERE `changes[]` IS NON-EMPTY.** An
-      Event that WROTE NOTHING has no per-change subject to add, and under `per_change` and
-      `both` alike its deposit is now minted about WHAT THE ACT NAMED instead of about the actor.
-      That is what makes a listener's Q2 reachable at all — a claim about the teller can never
-      satisfy *the holder, or something they hold* — and it is what took `R3` from 0 of 30 to 30
-      of 30 (`H-102`).
-      ⚠ **THE PRICE, STATED RATHER THAN LEFT TO BE DISCOVERED: WHERE THE ACT NAMED SOMETHING, NO
-      LEDGER RECORDS WHO SPOKE.** For a speech, a telling, a compliance or a refusal THAT NAMES ITS
-      SUBJECT, the deposit no longer names the actor, so under the DEFAULT arm the attribution of
-      that act is in nobody's ledger. ⚠ **NARROWED 2026-09-04 — the first writing said this of every
-      write-nothing act and that is not what the code does.** The replacement is guarded on
-      `any(refs)`: a write-nothing act that names NOTHING leaves `out` untouched, and the actor
-      survives — via the standing `out or [anchor]` fallback under `per_change` (`e.subject` until
-      G1b deleted the field; `anchor_of` returns the same actor), and because the
-      actor is already in `out` under `both`. So the price is paid exactly where there is a named
-      subject to pay it with, which is also the only place the Q2 reachability it buys applies.
-      ⚠ **AND THE NARROWING IS CODE-TRUE BUT CORPUS-VACUOUS, SAID HERE BECAUSE THE FIRST WRITING OF
-      IT READ AS A LIVE CASE.** Measured 2026-09-04 by wrapping `claim_subjects` over a full
-      `corpus_run`: **17,352 write-nothing deposits, 17,352 of them naming something, ZERO reaching
-      the `refs == []` fallback.** Every Act the fold mints comes from `pack_scenes`, which sets
-      `payload={"subject": ...}` from a Candidate drawn from `q.referents`, and all four question
-      sources produce non-empty referents — so the guard's false arm is unreachable from the corpus
-      as it stands. The branch is correct code and the sentence above is true OF it; what is not
-      true is that anything exercises it. Falsifier, and it is what makes this a measurement rather
-      than a reading of the source: a non-zero no-refs count would witness the case, and the count
-      is zero. `H-111`'s refusal question is where a witness would first appear.
-      Attribution is `T-d`'s subject and `H-107`'s — an Event carries no actor, and since G1b
-      (2026-09-26) no `subject` either: `H-107`'s field is deleted and attribution reads
-      `causes[]` through `state/attribution.py`. The `actor` arm is untouched and is
-      where the incumbent behaviour survives.
-      ⚠ **AND THE REASON IT REPLACES RATHER THAN JOINS IS RECORDED HONESTLY, BECAUSE IT IS NOT A
-      DERIVATION.** Joining mints one extra claim per write-nothing Event; the cap evicts on
-      `(confidence, recency)`; `H-40`'s decay sweep then reported a minimum confidence of 100 in
-      all three arms. **That interaction is a real finding — a damping loop made unobservable by
-      an amplifying one, which is `H-103`'s cite — and it is not the ground for the choice.** The
-      ground is that the teller is not the news.
+      ⚠ **THAT HOLDS ONLY WHERE `changes[]` IS NON-EMPTY.** An Event that WROTE NOTHING has no
+      per-change subject to add, and under `per_change` and `both` alike its deposit is minted about
+      WHAT THE ACT NAMED instead of about the actor (`H-102`): a claim about the teller can never
+      satisfy *the holder, or something they hold*.
+      ⚠ **THE PRICE: WHERE THE ACT NAMED SOMETHING, NO LEDGER RECORDS WHO SPOKE.** For a speech, a
+      telling, a compliance or a refusal THAT NAMES ITS SUBJECT, the deposit no longer names the
+      actor, so under the DEFAULT arm the attribution of that act is in nobody's ledger. The
+      replacement is guarded on `any(refs)`: a write-nothing act that names NOTHING leaves `out`
+      untouched, and the actor survives via the standing `out or [anchor]` fallback under
+      `per_change` (`anchor_of` returns the same actor), and because the actor is already in `out`
+      under `both`. That false arm is unreachable from the corpus as it stands (every Act the fold
+      mints comes from `pack_scenes` with `payload={"subject": ...}` drawn from non-empty
+      referents); `H-111`'s refusal question is where a witness would first appear.
+      Attribution reads `causes[]` through `state/attribution.py` -- an Event carries no actor and
+      no `subject` (`T-d`, `H-107`). The `actor` arm is where the incumbent behaviour survives.
+      ⚠ **IT REPLACES RATHER THAN JOINS, AND THAT IS NOT A DERIVATION.** Joining mints one extra
+      claim per write-nothing Event; the cap evicts on `(confidence, recency)`, and `H-40`'s decay
+      sweep then read a minimum confidence of 100 in all three arms (a damping loop made
+      unobservable by an amplifying one, `H-103`'s cite). The ground for the choice is that the
+      teller is not the news.
       ⚠ THIS ADDS NO FIELD TO `Event`. `PLAN.md` §8.1 forbids adding a `target` or `actor` field
-      to Event, and this needs neither: `changes[]` already names what was written, so the
-      subject is READ off the Event the design already has. `H-79` is the row.
+      to Event; `changes[]` already names what was written, so the subject is READ off the Event
+      the design already has. `H-79` is the row.
     values: [actor, per_change, both]
 
   observation_deposit_modes:
@@ -916,17 +762,14 @@ rosters:
     cite: "H-122"
     open: true
     note: >-
-      ⚠ THIS IS THE WRITE SIDE OF `H-116`, AND THE READ SIDE ALREADY SHIPPED. `belief_contradicts`
-      evaluates the verb's own `requires_typed:` cell against `LedgerReader`, so the vocabulary a
-      claim must be in to reach §F1 clause 4 is `stores:<kind>` / `condition` / `contain.path:<to>`
-      / `claim.held` / `exists:<kind>` / a relation stem — the strings `Observation` DERIVES from
-      the cell's own fields. Every deposit before `W-B` carried `predicate = e.kind` and
-      `value = True`, which is a DISJOINT vocabulary and a value no comparator can send to False,
-      so clause 4 could not fire in any run. Measured on NPC-088 over 3 seasons at seed 0: **600
-      claims in ledgers, 0 of them in the derived namespace, 0 of them falsy.** The channel was
-      closed by a theorem, not by a bug.
-      `none` is THE CONTROL and is the behaviour before `W-B` exactly, so every measurement of this
-      item has a baseline (`CLAUDE.md` §0.1 point 4). `actor` deposits an act's reads to the actor
+      ⚠ THIS IS THE WRITE SIDE OF `H-116`. `belief_contradicts` evaluates the verb's own
+      `requires_typed:` cell against `LedgerReader`, so the vocabulary a claim must be in to reach §F1
+      clause 4 is `stores:<kind>` / `condition` / `contain.path:<to>` / `claim.held` / `exists:<kind>`
+      / a relation stem — the strings `Observation` DERIVES from the cell's own fields. A deposit
+      carrying `predicate = e.kind` and `value = True` is a DISJOINT vocabulary and a value no
+      comparator can send to False, so clause 4 could never fire on it.
+      `none` is THE CONTROL (no read is deposited), so every measurement of this item has a
+      baseline (`CLAUDE.md` §0.1 point 4). `actor` deposits an act's reads to the actor
       alone — the minimum that closes the loop, and the arm where every claim minted is one its
       holder can read back, because `belief_contradicts` binds `from` to the person's OWN
       containing rung and `actor` to their own id. `total` gives the reads the same fan-out the
@@ -1015,10 +858,10 @@ rosters:
       refuses a verb the table lacks or a non-string, and `combat_input` refuses a value outside the engine's tuple,
       NAMING this roster, before the call -- a term is checked against that tuple and never re-declared here.
       [ASSUMPTION; medium; Jordan to correct; revert: drop this roster and `capture` fights to the death, which is
-      `fight`.] ⚠ v10 PC-10b FEEDS THE SAME FIELD AND ADDS NO PATH: an act whose `subject` is a `challenge` Record
-      (`accept`) is fought under that Record's `stakes` (`challenge_terms`), read by the same `combat_input` into the
-      same `PersonalCombatInput.terms`; a challenge naming no stakes falls through to this roster's `accept` line.
-      v11 CR-87 (ED-IN-0336, RS-25: *"a duel doesn't have to be lethal"*) ADDS `accept: blood`: a duel whose
+      `fight`.] ⚠ AN ACT WHOSE `subject` IS A `challenge` Record (`accept`) is fought under that Record's `stakes`
+      (`challenge_terms`), read by the same `combat_input` into the same `PersonalCombatInput.terms`; a challenge
+      naming no stakes falls through to this roster's `accept` line.
+      `accept: blood` (ED-IN-0336, RS-25: *"a duel doesn't have to be lethal"*): a duel whose
       challenge names no stakes (every computed `challenge`: it carries no payload) is fought to the first wound,
       not to the death -- through `duel_terms_of`'s fall-through, the same one path; a challenge that names its
       stakes is still fought under them. [ASSUMPTION; medium; Jordan to correct; revert: drop the `accept` line,
@@ -1079,10 +922,10 @@ rosters:
       the engine's own `WoundTracker` computed on Combatants `combat_seam` still holds. That is
       Jordan's 2026-09-04 ruling applied to the magnitude as well as to the band — *the combat
       engine determines the result there* — rather than a number this chain chose.
-      ⚠ `total` IS THE CONTROL AND IT IS THE CODE AS IT STOOD. Before `W-E`, `_eff_kill` subtracted
-      `d.get("harm", p.body)`, i.e. the whole body, so every wound killed and `Wounded` was
-      indistinguishable from `Felled`. Running this arm re-runs the defect deliberately, which is
-      how the degree's worth is measured rather than asserted (`CLAUDE.md` §0.1 point 4).
+      ⚠ `total` IS THE CONTROL: `_eff_kill` subtracts `d.get("harm", p.body)`, i.e. the whole body, so
+      every wound kills and `Wounded` is indistinguishable from `Felled`. Running this arm re-runs
+      that defect deliberately, which is how the degree's worth is measured rather than asserted
+      (`CLAUDE.md` §0.1 point 4).
       `none` is the SECOND control and isolates the other half: a wound writes nothing, the fold's
       own write-nothing guard emits the REFUSAL instead of the success, and what is left is only
       the difference the SELECTED WRITE SET makes.
@@ -1144,14 +987,6 @@ rosters:
       invented in this chain) is that same shape of number for a field battle. No fresh ruling
       settles the magnitude, so this row still ships `assumption`-graded -- but the choice among
       the three arms is settled by that precedent, not by a pending measurement.
-      ⚠ `tools/balance_oracle.py` DOES NOT APPLY TO THIS QUESTION AND MUST NOT BE RUN FOR IT.
-      That tool patched `dice_engine` and compared campaign-driver arms (the driver was deleted at
-      plan position `28-iii`); `march` and `field_casualty_model` live entirely in `engine/season/`,
-      which that driver could not reach.
-      Patching it would leave both of `balance_oracle.py`'s arms identical by construction --
-      exactly the "campaign-unreachable change" `CLAUDE.md` §7 names as **a fake control**, not a
-      measurement. If this arm is ever re-examined, the instrument is a `field_casualty_model`
-      sweep through `engine/season`'s own corpus (`corpus_run.run_case`), never this tool.
     values: [scaled_by_degree, total, none]
 
   field_winner_casualty_arms:
@@ -1187,9 +1022,9 @@ rosters:
     source: "M4, `ED-IN-0279` clause (a). What a `march` may target."
     row: H-149
     note: >-
-      ⚠ A CLOSED SET, NOT AN OPEN ONE, AND THE ROSTER IS CLOSED FOR A REASON BOUND ELSEWHERE. It was one member,
-      `settlement`; ED-IN-0306 phase 4 added `territory` on Jordan's ruling (a territory is marched on, occupied
-      and seized), which is the data edit this note said a second ruled kind would be.
+      ⚠ A CLOSED SET, NOT AN OPEN ONE, AND THE ROSTER IS CLOSED FOR A REASON BOUND ELSEWHERE. Its members are
+      `settlement` and, on Jordan's ruling (ED-IN-0306 phase 4), `territory` (a territory is marched on, occupied
+      and seized).
       Person containment never terminates at a settlement rung -- every person's `contain` targets
       a `home` building beneath one (`harness/populated.py`) -- and `contain_ascends`
       (`state/world.py`) forbids a sideways move to a foreign settlement, so "the exact rung
@@ -1236,22 +1071,18 @@ rosters:
       ⚠ THESE PREDICATES ARE AN INJECTED DEFAULT, NOT SOMETHING #353 STATES. `H-33` is graded
       `assumption` for exactly that reason, and its declared sweep is `total / presence-only / all
       five`.
-      ⚠ **`total` IS THE CONTROL AND THE SPECIFIED BEHAVIOUR, AND SINCE 2026-09-07 IT IS NO LONGER
-      THE DEFAULT** (`ED-IN-0205`; this line read *"`total` is BOTH the default and the control"*
-      until then). `R7` chose the architecture model over the echo model -- *legitimacy falls where
+      ⚠ **`total` IS THE CONTROL AND THE SPECIFIED BEHAVIOUR, AND IT IS NOT THE DEFAULT**
+      (`ED-IN-0205`). `R7` chose the architecture model over the echo model -- *legitimacy falls where
       the news has reached* -- and total fan-out is that echo model at the deposit layer. The
       shipped arm is `all_five`, in `data/fixtures.py`. **The GRADE does not move with it**: `R7`
       rules which arm ships and says nothing about what these five predicates are, so they remain
       an injected default and this row stays `assumption`.
-      ⚠ **AND THE GRADE NOW CARRIES MORE WEIGHT THAN IT DID.** Under `total`, `observers_for`
-      returned everyone and these predicates were **never consulted**; under `all_five` they decide
-      every deposit in the game. An `assumption`-grade `FORMULA x5` went from decorative to
-      load-bearing on the whole epistemic layer -- and only THREE of the five can admit anyone in a
+      ⚠ **UNDER `all_five` THESE PREDICATES DECIDE EVERY DEPOSIT.** Under `total`, `observers_for`
+      returned everyone and they were never consulted. Only THREE of the five can admit anyone in a
       world the fold can currently drive (`chronicle` matches nobody, `post_remit` needs an obligee
-      standing at the seat an act was exercised through -- since `17a`; before it, an office whose
-      remit covers the emitting verb; `test_w6_every_named_channel_has_a_predicate_and_they_are_data`
-      asserts exactly which two are inert). That is the risk this row is carrying, said here rather
-      than left for a reader to derive.
+      standing at the seat an act was exercised through;
+      `test_w6_every_named_channel_has_a_predicate_and_they_are_data` asserts exactly which two are
+      inert).
       Every predicate below is computed from WORLD STATE and never from a recipient the emitter
       declared -- §19.3 is explicit that an Event carries NO TARGET, *"observers are computed at
       WITNESS from presence; the emitter declares no recipient"*, so a channel that needed the
@@ -1264,13 +1095,10 @@ rosters:
       institutional rather than private.
     # ⚠ THE NAMES ARE NOT REPEATED HERE. `witness_channels` above is the one place the five are
     # named; this row carries only what each one MEANS. The names are loaded by `data/rosters.py`
-    # (`WITNESS_CHANNELS`) and read by `epistemic.py` -- which built `CHANNEL_PREDICATES` from them
-    # and picks the `all_five` arm with them; this said `shape.py` until step 6 of the decomposition
-    # moved that reader out. ⚠ This file is MECHANISM under `CLAUDE.md` §0.05 -- code opens it at
-    # runtime -- so a stale reader named here is worse than one in a design doc. The first version listed all five again in a `values:` key, so a
-    # definition lived twice in one file and a test had to guard that the two copies agreed —
-    # guarding a duplicate is the shape §8 asks you not to create. Found by the `W6` adversarial
-    # pass.
+    # (`WITNESS_CHANNELS`) and read by `epistemic.py`, which builds `CHANNEL_PREDICATES` from them
+    # and picks the `all_five` arm with them. ⚠ This file is MECHANISM under `CLAUDE.md` §0.05 --
+    # code opens it at runtime. A `values:` key listing the five again would be a definition living
+    # twice in one file.
     predicates:
       co_located:    "the person shares a live `contain` Tenure with the Event's place -- the presence index S28 already builds and the fan-out never read"
       document_key:  "the person holds a live `hold` Tenure over something THIS EVENT CHANGED -- a subject named in `changes[]` (a Record, a store). ⚠ THIS ROW READ *the Event's SUBJECT* until `R8.4`, and that clause is why the channel could not fire on a single act: every fold-emitted Event sets `subject = a.actor` and no `hold` takes a PERSON as object, so the equality held only on `MATTER`/`CALENDAR` kinds, which carry no verb and no actor. The parenthetical was always right and the clause it qualified was wrong. Corrected here in the same change as the predicate, because this row is where the meaning lives (see the note above) and `R5` quotes it verbatim as the channel's definition"
@@ -1289,15 +1117,12 @@ rosters:
       `CHANNEL_PREDICATES` precedent: a named member with no reader RAISES, never quietly reads
       `None`). `stratum` is the coarse WHAT (`strata`), never the verb TOKEN -- a witness can say
       *someone was doing something social* without naming `tell`. ⚠ Not never the INFORMATION:
-      `movement` has exactly one member (`move`), so that one stratum is bijective with its verb --
-      see `epistemic._term_stratum`'s docstring, found by adversarial review. (⚠ TWO since plan
-      position `19c` added `migrate` to it; a `movement` witness no longer knows which.) `marks` is the
-      actor's appearance, and since v10 CR-30 it carries ONE member, the actor's `Person.heritage` (descent,
-      the one member of the dropped `marks[]` no Tenure derives): `(heritage,)` where it is authored and
-      `()` where it is not (`epistemic._term_marks`), public at co-location and deposited true and
-      verbatim, as `who` is. (`Person.marks` itself was DELETED 2026-09-24, `ED-IN-0261` item 1, as a
-      zero-reader/zero-writer field.) `()` still means *seen, and nothing describable*, and `None` still
-      means *this channel does not show a body at all*. `who` is the actor's id. `why` is the motive.
+      `movement` has two members (`move`, `migrate`), so a `movement` witness does not know which
+      (`epistemic._term_stratum`'s docstring). `marks` is the actor's appearance and carries ONE
+      member, the actor's `Person.heritage` (descent): `(heritage,)` where it is authored and `()`
+      where it is not (`epistemic._term_marks`), public at co-location and deposited true and
+      verbatim, as `who` is. `()` means *seen, and nothing describable*, and `None` means *this
+      channel does not show a body at all*. `who` is the actor's id. `why` is the motive.
       ⚠ `supplied_by:` IS WHAT EACH CHANNEL SHOWS, and a witness's struct is the UNION over the
       channels that admit them under the live `fan_out_mode` (`epistemic.live_channels`). The
       `total` arm is `H-33`'s control and shows EVERY term to every witness, so this table is read
@@ -1307,14 +1132,12 @@ rosters:
       (the claim's subject still says WHERE something happened). `witness_key`, `post_remit` and
       `chronicle` are unruled: they withhold rather than invent, and are an injected default in
       `H-33`'s sense, exactly as the channel predicates themselves are.
-      ⚠ NO CHANNEL SUPPLIES `why`, AND THAT IS `R8.4`'s DEFECT, NOT A CHOICE MADE HERE:
-      `Candidate.why` is dropped at `pack_scenes` and `Act` carries no motive, so the engine
-      forgets it before the act executes and no witness can learn it. Case 4 (*no discernible
-      reason*) is therefore every deposit today. `Person.heritage` has ONE writer, the world build
-      (`data/cast.py::heritage_of`), and `marks` shows it wherever `who` is shown -- so case 2 (*someone
-      looking like y*, `who=None`) is supported by the struct and reached by nothing until a recognition
-      producer exists, which `R8.2` defers to its own commit, and a channel that withholds `who` while
-      showing `marks`.
+      ⚠ NO CHANNEL SUPPLIES `why`: `Candidate.why` is dropped at `pack_scenes` and `Act` carries no
+      motive, so the engine forgets it before the act executes and no witness can learn it. Case 4
+      (*no discernible reason*) is therefore every deposit. `Person.heritage` has ONE writer, the
+      world build (`data/cast.py::heritage_of`), and `marks` shows it wherever `who` is shown -- so
+      case 2 (*someone looking like y*, `who=None`) is supported by the struct and reached by
+      nothing until a recognition producer exists (`R8.2`).
     values: [stratum, marks, who, why]
     deposit:
       predicate: seen
@@ -1389,10 +1212,8 @@ rosters:
   # architecture rather than recording it, and the seam is precisely the thing that must not be
   # invented.
   #
-  # ⚠ SETTLEMENT WAS THE ONE THE RULING RESOLVED, AND IT IS NOW CALLED. `systems/settlements` held no sim
-  # module (its economy sims were deleted at plan position `29c`), and MATTER ran stores/yield/subsistence
-  # INLINE; since v9 IN-07 MATTER calls the `settlements` module (`modules/settlements/`), so the loop's
-  # inline economy is gone and there is one ladder for each quantity (two would be a NERS **S** defect,
+  # ⚠ SETTLEMENT IS CALLED. MATTER calls the `settlements` module (`modules/settlements/`), so the loop
+  # has no inline economy and there is one ladder for each quantity (two would be a NERS **S** defect,
   # §0.06, *calculations consistent in methodology*).
   #
   # ⚠ FACTION CANNOT BE A STRAIGHT PORT even once its seam is ruled. Layer 1 PART D rows 1/8/14
@@ -1460,9 +1281,8 @@ rosters:
       THE SKIP IS STRICT, AND ITS CONSEQUENCE IS THE THING TO CORRECT: the plan's words ("a refused
       inquiry deposits nothing") drop the actor's own observation reads and `seen` claims as well as the
       event-kind claim, so a refused or failed inquiry teaches its actor nothing and the same person
-      re-forms it (measured at v9 FI-01: refused `research` 3 -> 12 headless, clause-4 drops 240 -> 104 on
-      `ARC-01`; the W-B and W-D notes in `test_season_shape.py`). The narrower
-      arm -- skip only the `finding.none` event-kind claim -- is the alternative Jordan would name.
+      re-forms it. The narrower arm -- skip only the `finding.none` event-kind claim -- is the
+      alternative Jordan would name.
     values: ["finding.none"]
 
   fold_kinds:
@@ -1479,9 +1299,7 @@ rosters:
       key nothing reads, refuses the load naming this row. The derived Event-kind roster
       (`data/verbs.py::EVENT_KINDS`) is the union of every emission column and these two.
       `F.20b` also names `contest.resolved` as a third literal; the live fold emits none of that
-      name (a contest's outcome is the verb row's degree-keyed `emits:`). A third key, `attempt_refused`
-      (`attempt.refused`, S27.4's refusal past the obstacle ceiling), was declared here until B03.55
-      deleted the fold's only emitter; nothing emits that kind now, and it is no longer a member.
+      name (a contest's outcome is the verb row's degree-keyed `emits:`).
     values:
       ineligible: "act.ineligible"
       refused: "act.refused"
@@ -1517,21 +1335,17 @@ rosters:
       to `pool_default`, which is the `assumption` grade's own polarity: `absent` refuses, and this
       is not one. The table is therefore OPEN in the sense that matters -- adding a contested verb
       does not require adding a row before the seam will run it.
-      ⚠ AND IT IS NEARLY INERT ON THE CORPUS TODAY, WHICH IS SAID HERE SO NOBODY READS THE ROWS AS
-      DOING WORK: the writers of `Person.capability` are a `cast:` overlay's `capability:`
-      (`harness/corpus_run.py`, `build_at`), a cast row's `lifepath:` (v10 CR-33, `data/cast.py::capability_of`,
-      held at `pool_default`) and, in play, `train` (v9 IN-12 step 9: +1 on a key the subject already holds). AS
-      MEASURED 2026-10-02 (a dated count, before CR-33) one entry carried one (NPC-088's Carin Vedel,
-      `{copying: 3}`; with `cast_overlay()`: 1 of 430 built persons), so every
+      ⚠ AND IT IS NEARLY INERT ON THE CORPUS, SO NOBODY SHOULD READ THE ROWS AS DOING WORK: the writers
+      of `Person.capability` are a `cast:` overlay's `capability:` (`harness/corpus_run.py`, `build_at`),
+      a cast row's `lifepath:` (`data/cast.py::capability_of`, held at `pool_default`) and, in play,
+      `train` (+1 on a key the subject already holds). Nearly every built person holds none, so every
       other derivation lands on `pool_default` and the roll varies by SEED and FIXTURE rather than by
-      PERSON. That is why R-09 reads `partial` after `U1` and not `met`.
-      ⚠ FOUR ROWS WERE DEFERRED AT CP-T01-01 (v11 B10-08, AM-B-01) AND LANDED AT v10 B10-10, REM-30, BEFORE
-      THEIR FIRST WRITER (the creation sheet writes nothing; the first writer of an `argue` or `inquiry` key is
-      CR-33's `lifepath:` expansion and, in play, `train`): `argue: "argue"` and the three
-      inquiries `research`, `examine`, `surveil: "inquiry"`. They are VALUES of this table, so they ARE the
-      vocation range (`data/verbs.py::VOCATIONS`, a frozenset of these values; no second roster to extend):
-      `argue` and `inquiry` join `copying`, and every `train` formation (`vocation_sourced`) forms one
-      Candidate per vocation, three where it formed one. A DECLARED MOVER where formation moves, not before.
+      PERSON. That is why R-09 reads `partial` and not `met`.
+      ⚠ `argue: "argue"` and the three inquiries `research`, `examine`, `surveil: "inquiry"` (REM-30,
+      B10-10) are VALUES of this table, so they ARE the vocation range (`data/verbs.py::VOCATIONS`, a
+      frozenset of these values; no second roster to extend): `argue` and `inquiry` join `copying`, and
+      every `train` formation (`vocation_sourced`) forms one Candidate per vocation. A DECLARED MOVER
+      where formation moves.
       ⚠ v11 CP-T03-04 (B10-11): `fight`, `accept` and `capture` -- the three rows contesting `the body` -- draw on
       `arms`, so a held `arms` key reaches combat's pool and Ob through `faculty` (CR-85: `combat_input` fills
       `PersonalCombatInput.faculties` from it; no second skill input), `train` may raise it (one more Candidate per
@@ -1558,13 +1372,10 @@ rosters:
       # B11 lane A (carrying `10_DICE_one_score_two_roles.md` C): three verbs the social roll deals, each on a vocation
       # that already exists, so `VOCATIONS` and `train`'s candidate count do not grow. `interrogate` -> `inquiry` (the
       # graded inquiries' key: questioning is inquiry under contest), `arrest` -> `arms` (laying hands on a man, the
-      # body's key), `determine` -> `argue` (a bench weighing a case). Before them each rolled `pool_default` for
-      # every person and opposed at the stand-in (H-312: `interrogate`'s odds did not move with any score). `lie` (v11
-      # CR-27's row, which landed after lane A's base) carries no row here and none is added by this lane: it pools at
-      # `pool_default` and, on the shipped `task` arm, a person opposes it at `pool_default` too (`pool.score`'s fallback,
-      # `pool.untrained`), which a believer reads the same way (`sigma.believed_input`); CR-27 shipped it at the
-      # `obstacle_default` stand-in, which the `stand_in` arm still composes. [ASSUMPTION; medium; Jordan to correct;
-      # revert: drop the three rows.]
+      # body's key), `determine` -> `argue` (a bench weighing a case). `lie` (CR-27's row) carries no row here: it pools
+      # at `pool_default` and, on the shipped `task` arm, a person opposes it at `pool_default` too (`pool.score`'s
+      # fallback, `pool.untrained`), which a believer reads the same way (`sigma.believed_input`). [ASSUMPTION; medium;
+      # Jordan to correct; revert: drop the three rows.]
       interrogate: "inquiry"
       arrest:      "arms"
       determine:   "argue"
@@ -1643,13 +1454,11 @@ rosters:
       hearer's standing, `verb_table.yaml` `tell`); `argue` -- none: ruled (above);
       `inquiry` -- Perception for `surveil` ("awareness of surroundings, noticing information",
       `references/descriptor_registry.yaml`). Focus, Reason and Presence carry no registry description, so
-      no row rests on one. Checked by a read-only pass at CR-20's close; the pass changed `argue` to Attunement and two
-      citations, and Jordan's ruling of 2026-11-05 returned `argue` to Presence.
-      CR-96 RE-READ every row against the rulings of 2026-11-05 and CHANGED NONE: `argue` -> Presence stands (AR-29, influence);
-      no vocation here is forgery or other precise-hand work (AR-16: `forge` draws on no capability key, and its quality is
-      CR-94's); `inquiry` -> Reason is the one row AR-24 (Perception, "surveillance and fieldwork") presses on, through
-      `surveil` and `examine`, while `research` stays Reason's. One row cannot serve both, and a split is a new vocation
-      (`verb_capability`'s values), which is a decision and not a re-read [ASSUMPTION; medium; Jordan to correct].
+      no row rests on one. `argue` -> Presence stands (AR-29, influence); no vocation here is forgery or other
+      precise-hand work (AR-16: `forge` draws on no capability key, and its quality is CR-94's); `inquiry` -> Reason
+      is the one row AR-24 (Perception, "surveillance and fieldwork") presses on, through `surveil` and `examine`,
+      while `research` stays Reason's. One row cannot serve both, and a split is a new vocation
+      (`verb_capability`'s values), which is a decision [ASSUMPTION; medium; Jordan to correct].
       `arms` -> Coordination (`attr.body.agility`, v11 CP-T03-04): the row is forced by this table's closure (a
       vocation with no row refuses the import), and the choice is the cheap swap
       [ASSUMPTION; medium; Jordan to correct; revert: Strength (`attr.body.strength`) or Endurance]. Ground:
@@ -1697,45 +1506,31 @@ rosters:
     note: >-
       ⚠ A CONTEST IS A DISPATCH, NOT A GENERIC ROLL. Jordan, 2026-09-02: *"a contest seems like it
       can be a call for a different subsystem like personal combat, mass battle or social
-      contest."* The seam was ONE function raising `Unspecified` on a degree ladder nobody had
-      written — but the three subsystems it should be calling ARE BUILT, each with a doc, a sim
-      module and a declared resolver (`d_sigma` for personal combat, `dice_pool` for the other
-      two). So the seam was not missing a ladder; it was failing to dispatch.
+      contest."* The three subsystems each have a doc, a sim module and a declared resolver
+      (`d_sigma` for personal combat, `dice_pool` for the other two), so the seam dispatches to
+      them rather than rolling generically.
       ⚠ JORDAN, 2026-09-02, VERBATIM: *"we aren't using the .md or anything for those systems.
       those are super outdated. you are allowed to refer to the currently existing python work for
       those systems (and only those systems) in repository."* So the LIVE artifact for each is its
       Python, not its `*_v30.md`: `systems/combat/combat_engine_v1/`,
       `systems/mass_battle/sim/`, `systems/social_contest/sim/contest/`. `contest_subsystem` reads
-      `sim_module:` and never `doc:` for that reason — printing the markdown path would aim a
-      reader at a file its owner calls superseded. `references/module_contracts.yaml` still carries
-      the stale `doc:` for `mass_battle` and `social_contest`; correcting it is outside this
-      proposal chain and is NOT done here.
-      ⚠ AND WIRING THEM IS NOT WANTED YET. Jordan, same exchange: *"we don't NEED to worry about
-      them at this point in time."* The seam names the subsystem and refuses; that is the whole of
-      the intended behaviour for now, and the third sweep point records what calling them would be
-      without inviting anybody to do it.
+      `sim_module:` and never `doc:` for that reason.
       This roster maps a PRIZE to the subsystem that owns it. The prize is what Part E's column
       carries; the subsystem is what `module_contracts.yaml` already names, so neither half is
-      invented here. ⚠ WIRING THE ACTUAL ENGINES IS OUT OF THIS CHAIN'S SCOPE (Jordan ruled only
-      this proposal chain is in scope), so the seam names the subsystem and its resolver and
-      REFUSES — which is a far more useful refusal than a generic one, and makes the remaining
-      work visible per subsystem rather than as one undifferentiated hole.
-    # ⚠⚠ **`U1` TURNED EACH PRIZE FROM A MODULE STRING INTO A ROW, AND THE SECOND FIELD IS THE
-    # REASON.** `module:` is WHOSE prize it is — the subsystem that owns the contest, which is what
-    # `references/module_contracts.yaml` is checked against and what the seam names when it refuses.
-    # `provider:` is WHAT ACTUALLY RUNS IT, which is a different question the moment an interim
-    # resolver stands in for a subsystem that has not been built. Collapsing them, as the string
-    # form did, makes *this prize belongs to social_contest* and *this prize is rolled by
-    # sigma_leverage* the same sentence — and they are not.
-    # ⚠ `interim: true` CARRIED ED-SC-0033 CLAUSE (2), which rules that the prizes mapping to `social_contest` REPOINT to its own provider. With the two
-    # fields split, that repoint was ONE FIELD ON A ROW rather than a code change (`02 §D.4`), and v9 SC-01
-    # steps 13 + 15 made it in one change with the provider it names (`test_sc01_provider.py`).
+      invented here.
+    # ⚠⚠ **`module:` AND `provider:` ARE TWO FIELDS ON PURPOSE.** `module:` is WHOSE prize it is — the
+    # subsystem that owns the contest, which is what `references/module_contracts.yaml` is checked
+    # against and what the seam names when it refuses. `provider:` is WHAT ACTUALLY RUNS IT, which is a
+    # different question the moment an interim resolver stands in for a subsystem that has not been
+    # built: *this prize belongs to social_contest* and *this prize is rolled by sigma_leverage* are
+    # not the same sentence. Repointing a provider is ONE FIELD ON A ROW rather than a code change
+    # (`02 §D.4`; ED-SC-0033 clause (2)).
     prizes:
       "the body":
         module:   "combat"
         provider: "personal_combat"
-        module_entry: "combat.fight"   # `31b`, as `a standing`'s: the composition role `seam/wrappers/combat.py` calls through `MODULE_ENTRIES`, for EVERY verb contesting this prize (`fight` and `accept`); the composition row's `verb:` names one of them (`fight`), the registrar's one-verb shape. Line-neutral: the comment block above lost a line for this one.
-        step:     "ENCOUNTER"   # v10 REM-31 (IN-46): `a field`'s pair. Every fight is declared at RESOLVE and fought at ENCOUNTER, in AUTOMATED and PLAYABLE alike -- the one step the host may suspend at (`seam/wrappers/combat.py::resolve`'s `host`). Declared content-hash mover: every seeded season that fights re-pinned.
+        module_entry: "combat.fight"   # `31b`, as `a standing`'s: the composition role `seam/wrappers/combat.py` calls through `MODULE_ENTRIES`, for EVERY verb contesting this prize (`fight` and `accept`); the composition row's `verb:` names one of them (`fight`), the registrar's one-verb shape.
+        step:     "ENCOUNTER"   # `a field`'s pair. Every fight is declared at RESOLVE and fought at ENCOUNTER, in AUTOMATED and PLAYABLE alike -- the one step the host may suspend at (`seam/wrappers/combat.py::resolve`'s `host`).
         declares: "Declared"
         cite:     "H-88; the seam already calls it (seam/wrappers/combat.py); `step:`/`declares:` v10 REM-31, design `proposals/2026-10-07-grid-mode-suspension.md` §1 (PROPOSED, held back)"
       "a field":
@@ -1761,9 +1556,9 @@ rosters:
           `the body` carries the same pair since v10 REM-31.
       "a standing":
         module:   "social_contest"
-        provider: "social_contest"   # v9 SC-01 steps 13 + 15 (ONE change): repointed from the interim `sigma_leverage`, ED-SC-0033 clause (2) -- a ROW change. `seam/wrappers/sigma.py` registers this string; refusal (c) refuses construction if nothing does
+        provider: "social_contest"   # repointed from the interim `sigma_leverage`, ED-SC-0033 clause (2) -- a ROW change. `seam/wrappers/sigma.py` registers this string; refusal (c) refuses construction if nothing does
         module_entry: "social_contest.roll"   # `31a`: the composition role the provider calls through `MODULE_ENTRIES`; refused at construction (`manifest/registry.py::check_contest_prizes`) unless a composition row declares it, as a `verb_call` into this row's `module:`, bound to a verb whose prize names it. A-25: the prize row and the composition row are the two owners of which module is called.
-        # `interim: true` DELETED at steps 13 + 15. The entry stays the σ-leverage roll: SC-05's measurement kept it over the kernel (`modules/social_contest/roll.py`'s docstring), and it returns a `Margin` the provider holds it to.
+        # The entry is the σ-leverage roll: SC-05's measurement kept it over the kernel (`modules/social_contest/roll.py`'s docstring), and it returns a `Margin` the provider holds it to.
         cite: >-
           JORDAN, 2026-09-09, VERBATIM: "we have the sigma leverage d10 resolver in engine to use." A third option neither
           of ED-SC-0037's two costed, and the row is `status: ruled`. ⚠ ED-SC-0033 (2026-09-06) rules that (2) the two
@@ -1777,27 +1572,20 @@ rosters:
           `interim: true` carried CLAUSE (2) ALONE, and steps 13 + 15 discharged it: the row names `social_contest` (`02 §D.4`).
       "a proposition":
         module:   "social_contest"
-        provider: "social_contest"   # as `a standing`'s: repointed at steps 13 + 15
+        provider: "social_contest"   # as `a standing`'s
         module_entry: "social_contest.roll"   # as `a standing`'s
-        # `interim: true` deleted at steps 13 + 15, as `a standing`'s. `determine` contests it since v9 SC-03b (`speak` -> `a matter`, `tell` -> `a standing`).
+        # `determine` contests it (`speak` -> `a matter`, `tell` -> `a standing`).
         cite:     "as `a standing`. Same ruling, clause (3) honoured by the module since step 14, same repoint."
       "a matter":
         module:   "social_contest"
-        provider: "social_contest"   # as `a standing`'s: repointed at steps 13 + 15
+        provider: "social_contest"   # as `a standing`'s
         module_entry: "social_contest.roll"   # as `a standing`'s
-        heard_by: "bench"   # v9 SC-02 `22a`: the bench at the act's rung hears this prize (`world_q.reception`, `world_q.proofs`; `manifest/registry.py::_check_heard_by`). Line-neutral: it replaced the comment that `interim: true` was deleted at steps 13 + 15, as `a standing`'s.
+        heard_by: "bench"   # the bench at the act's rung hears this prize (`world_q.reception`, `world_q.proofs`; `manifest/registry.py::_check_heard_by`).
         cite:     "v9 SC-01 step 12 (B-N): `speak`'s prize (`proposals/2026-09-05-proceedings-subsystem/04_VERBS.md` §B.1, `08_SEAM.md`: `a matter` -> the proceedings provider). Routed to the interim provider at step 12; ED-SC-0033 clause (2)'s repoint (steps 13 + 15, ONE change) reached THIS row too, so it was three rows, not the two the plan names [ASSUMPTION; medium; revert: no row, and `speak` declares no `contests:`]."
-    # NO `values:` — the members ARE the `prizes:` mapping above, read with `roster_map()`. A `values: []` stood here and was a declared-but-unread key (`04 §B.13` ID-12): `roster()` returned an EMPTY frozenset, which is the silent-false this file's own header forbids. Line-neutral edit — 209 citations index this file by line.
+    # NO `values:` — the members ARE the `prizes:` mapping above, read with `roster_map()`. A `values: []` would be a declared-but-unread key (`04 §B.13` ID-12) and `roster()` would return an EMPTY frozenset, which is the silent-false this file's own header forbids.
 
-  # titles: DELETED (methodology close, 2026-09-29, /simplify ALTITUDE lens -- plan position
-  # 8a's own r2 05_LEDGER_AND_BUILD.md RULED (c): "...its domains move into offices.yaml...
-  # and the roster goes." Deferred at 8a's own commit only because a concurrent plan position
-  # owned this file in the same shared working tree that day (offices.yaml's own header names
-  # the scope decision); that window closed by the end of the same session's Phase 1, so the
-  # physical deletion HANDOFF_IN.md's position-8a row named as follow-up lands here. Full text
-  # (Jordan's 2026-09-02 ruling, the H-90/H-91 history, the superseded revocation rule) survives
-  # at `engine/season/offices.yaml: titles:`'s own header and in this file's git history --
-  # nothing here reads this key any more (`data/rosters.py::TITLE_DOMAINS` reads `offices.yaml`).
+  # titles: DELETED -- its domains live in `engine/season/offices.yaml: titles:`
+  # (`data/rosters.py::TITLE_DOMAINS` reads `offices.yaml`); nothing here reads such a key.
 
   conditional_emission_rows:
     source: "`W4`. Part D's `emits:` column does not distinguish a kind emitted ON EVERY WRITE from one emitted only WHEN A CONDITION HOLDS, and the two are different things."
@@ -1850,25 +1638,19 @@ rosters:
       not transcription.
       ⚠⚠ `body` IS NOT A SITE. It is `(Person, body)`'s band row, here because `band_floors` keys on
       THIS roster and `H-38` ruled *"`Site.condition` is the model"* — no second scheme. See `p32`.
-      ⚠ `dwelling` IS JORDAN'S, 2026-09-25 (`ED-SE-0055`, plan position `24d-i`): `ED-SE-0051`'s
-      `capacity(w, rung)` counts *"the rung's dwelling Sites"*, and he chose to make that phrase
-      literal rather than re-read it as the hearth rungs. `harness/populated.build_realm` mints one
-      per `hearth` rung. Adding it forced the `wear_per_season` and `band_floors` rows below
-      (`data/fixtures.py`'s `_load_matter_tables` refuses a site kind with no row); it has no
-      `site_yield` row, because a dwelling produces nothing and that table's `default_cell` is 0.
+      ⚠ `dwelling` IS JORDAN'S, 2026-09-25 (`ED-SE-0055`): `ED-SE-0051`'s `capacity(w, rung)` counts
+      *"the rung's dwelling Sites"*, and he chose to make that phrase literal rather than re-read it
+      as the hearth rungs. `harness/populated.build_realm` mints one per `hearth` rung. A site kind
+      needs a `wear_per_season` and a `band_floors` row (`data/fixtures.py`'s `_load_matter_tables`
+      refuses one without); `dwelling` has no `site_yield` row, because a dwelling produces nothing and
+      that table's `default_cell` is 0.
       ⚠ `garrison` IS JORDAN'S, 2026-09-28 (`ED-IN-0279` clause (a), M4): asked how a settlement's
       fortification should be modelled, given he wants it build-able and upgradeable, he chose *"a
       Site's condition"* over a cohort-Person alternative -- `H-38`'s *"`Site.condition` is the
-      model"* ruling applied to fortification rather than a second scheme invented for it. Adding
-      it forces the same two rows `dwelling` forced, for the same loader reason, and it has no
-      `site_yield` row for `dwelling`'s reason: a wall produces nothing. **UPGRADING ONE IS NOT
-      BUILT BY M4** -- the pre-existing, declared `restore` verb (`verb_table.yaml`,
-      `writes: Site.condition`) is the disclosed route and it shipped M4 still unimplemented
-      (no `_eff_restore`, excluded from `resolvable_verbs()`); M4 only reads the field a field
-      battle already needs, at whatever condition a garrison was seeded with. ⚠ AMENDED
-      2026-09-29 (plan position `24e`): `_eff_restore` EXISTS and `restore` is resolvable, raising
-      any fabric its actor stands at toward the ceiling a works allows (the full scale where none
-      names it).
+      model"* ruling applied to fortification rather than a second scheme invented for it. It needs
+      the same two rows `dwelling` does, and has no `site_yield` row for `dwelling`'s reason: a wall
+      produces nothing. The `restore` verb (`writes: Site.condition`) raises any fabric its actor
+      stands at toward the ceiling a works allows (the full scale where none names it).
     # ED-IN-0306 (Jordan, 2026-10-28: recruiting needs "specific infrastructure for specific kinds of troops"): FOUR TRAINING
     # KINDS, `barracks`, `archery_range`, `stable`, `siege_workshop`. Each is a Site whose CONDITION is how much of its
     # troop class the place can train (`modules/mass_battle/troop_types/recruitment.py`, the one reader and the owner of
@@ -1922,45 +1704,34 @@ rosters:
     source: "#353 §22 assigns `wear per site kind` to params; no in-chain table exists. `H-07`."
     row: H-07
     note: >-
-      ⚠ MOVED OUT OF THE INSTRUMENT BODY BY `W8`, WHICH IS WHAT PLAN `W8` ASKS FOR: *per-kind wear
-      and floors as registry rows rather than `DEFAULT_FIXTURES` literals*. `DEFAULT_FIXTURES`
-      READS this mapping, so the declaration still lives once — the objection recorded in
-      `shape.py` when these were literals (*"splitting them into rosters.yaml would put one
-      declaration in two files"*) is answered by the fixture reading the data rather than
-      restating it.
-      ⚠ `dwelling: 0` IS THE CONTROL ARM, SHIPPED DELIBERATELY (`24d-i`), and it is `H-07`'s own
-      *"no wear at all"* sweep point applied to one kind. ⚠ **NOT THE SAME SHAPE AS `body_step = 0`**
-      (corrected 2026-09-26 — a prior version of this note claimed it was): that arm `continue`s
-      past the write itself (`loop/matter.py`), so nothing is emitted at its control arm. `wear_per_season` carries no such skip — MATTER writes every Site every
+      ⚠ `W8`: per-kind wear and floors are registry rows rather than `DEFAULT_FIXTURES` literals.
+      `DEFAULT_FIXTURES` READS this mapping, so the declaration lives once.
+      ⚠ `dwelling: 0` IS THE CONTROL ARM, SHIPPED DELIBERATELY, and it is `H-07`'s own
+      *"no wear at all"* sweep point applied to one kind. ⚠ **NOT THE SAME SHAPE AS `body_step = 0`**:
+      that arm `continue`s past the write itself (`loop/matter.py`), so nothing is emitted at its
+      control arm. `wear_per_season` carries no such skip — MATTER writes every Site every
       season whatever its rate, so `dwelling: 0` still emits (see below). A dwelling sits AT a
       hearth and persons live in hearths. A non-zero rate
       together with any floor in `band_floors.dwelling` would let a dwelling's condition cross it;
-      the crossing Event is witnessed `co_located` regardless of any of this (position `11a` did
-      not touch witnessing), and the claim it deposits (subject = the dwelling) would then reach
-      every co-located resident as a live `claim_landed` question, once `reach`/`place_of`
-      (`queries/world_q.py`, `11a`) admit a claim about a place through a person's own ledger. That
-      would put a dwelling-condition Question in front of every resident every season, which is
-      exactly what `test_24d_i_the_control_arm_crosses_no_band_and_moves_no_question_in_one_season`'s
+      the crossing Event is witnessed `co_located`, and the claim it deposits (subject = the
+      dwelling) would then reach every co-located resident as a live `claim_landed` question, once
+      `reach`/`place_of` (`queries/world_q.py`) admit a claim about a place through a person's own
+      ledger. That would put a dwelling-condition Question in front of every resident every season,
+      which is exactly what
+      `test_24d_i_the_control_arm_crosses_no_band_and_moves_no_question_in_one_season`'s
       control-arm identity pins against. Either half at its control arm blocks the crossing; both
       ship there. At 0 no dwelling's condition moves.
       ⚠ ZERO IS NOT SILENT. `loop/matter.py`'s wear loop still WRITES every Site every season,
       and `World.write` emits one `condition.worn` per write (`H-12`), so every dwelling emits
       one wear Event a season, and its residents witness it (`co_located`) as a claim. A non-zero
       rate is chosen with a consumer in front of it, at `24e`/`24f`, never here.
-      ⚠ `garrison: 0` IS `dwelling`'s CONTROL ARM APPLIED FOR THE SAME REASON, NOT A SEPARATE
-      CHOICE (M4, `ED-IN-0279` clause (a)): `restore` -- the declared writer of `Site.condition`
-      upward -- ships this plan unimplemented, so a non-zero rate here would erode every
-      garrison's condition every season with no consumer able to counteract it, silently drifting
-      every field battle's fortification term toward zero over a long campaign. That is exactly
-      the undisclosed drift `dwelling`'s note above refuses. A non-zero rate is chosen once
-      `restore` exists to answer it, never here.
-      ⚠ `restore` EXISTS SINCE PLAN POSITION `24e` (2026-09-29), SO THIS NOTE'S STATED REASON HAS
-      LAPSED AND THE RATE IS STILL `0`: choosing one is a pacing decision (where every fabric sits
-      at rest), `24e`'s instruction does not make it, and it is registered rather than taken --
-      `H-165` and `H-07` (the rate). ⚠ CORRECTED (`24f`, 2026-09-30): `restore` now executes on the
-      populated realm's SETTLEMENT fabrics (harbour, seam -- rate 10, a cohort stands beside them),
-      so `H-165`'s limit is the DWELLING/GARRISON rate specifically -- the two rows this note is
-      actually about, both still `0`, and still never below full for that reason alone.
+      ⚠ `garrison: 0` IS `dwelling`'s CONTROL ARM FOR THE SAME REASON (M4, `ED-IN-0279` clause (a)):
+      a non-zero rate would erode every garrison's condition every season, silently drifting every
+      field battle's fortification term toward zero over a long campaign. The rate is a pacing
+      decision (where every fabric sits at rest), registered rather than taken -- `H-165` and
+      `H-07` (the rate). `restore` executes on the populated realm's SETTLEMENT fabrics (harbour,
+      seam -- rate 10, a cohort stands beside them), so `H-165`'s limit is the DWELLING/GARRISON
+      rate specifically, both `0`.
     rates:
       harbour:  10
       seam:     10
@@ -1977,7 +1748,7 @@ rosters:
     row: H-167
     sweep: [declared, zero, doubled]
     note: >-
-      ⚠ ITS CELLS HOLD THE FLOOR AND NOTHING ELSE (plan `24d-ii`, corrected 2026-09-25). A cell is a
+      ⚠ ITS CELLS HOLD THE FLOOR AND NOTHING ELSE (plan `24d-ii`). A cell is a
       LOWER BOUND on `queries/world_q.py::capacity`'s derived quantity -- `max(floor, the dwelling
       Sites at the rung and below)` -- never what one dwelling houses: a per-kind *houses N* cell is
       capacity AUTHORED per kind, the `hearth_capacity` fixture RR-2 refused, a second home for a
@@ -2080,32 +1851,27 @@ rosters:
     source: "`systems/world/reference/geography_v30.md` (`## Status: CANONICAL`) starting-control table; `systems/world/reference/worldbuilding_v30.md` §3, §4, §5, §8, §10."
     row: H-99
     note: >-
-      ⚠ SOURCED FROM `systems/world/` BECAUSE JORDAN RULED THE PRECEDENCE, AND THE FIRST VERSION OF
-      THIS ROSTER WAS SOURCED WRONG. It cited `systems/factions/reference/faction_canon_v30.md`. Jordan,
+      ⚠ SOURCED FROM `systems/world/` BECAUSE JORDAN RULED THE PRECEDENCE. Jordan,
       2026-09-02: *"systems/factions, systems/settlements are for inspiration/reference only.
       systems/world contains information to use regarding factions ... but for the
       identity/names/organizations it is canon"*, then: *"systems/factions if it concerns directly
       the identity of a faction can be concerned near-canon but superseded by anything in world."*
       A faction's NAME is identity, so this roster is world's to give. See the file header for the
       three-tier order.
-      ⚠ `Ministry of the Peninsula` IS EXCLUDED, AND NOT BY THE PRECEDENCE RULING — BY THE
-      NEAR-CANON SOURCE'S OWN WORDS. It was in the first version of this list. It appears ZERO
+      ⚠ `Ministry of the Peninsula` IS EXCLUDED BY THE NEAR-CANON SOURCE'S OWN WORDS. It appears ZERO
       times in all of `systems/world/`, and `faction_canon_v30.md:374` says of it: *"Treated as
-      institutional infrastructure, NOT a faction."* So the tier-2 document I had over-read
-      excludes it itself. An office may still BELONG to a ministry — that is `office_bodies`'
-      `Ministries` row, which is what a ministry actually is here.
+      institutional infrastructure, NOT a faction."* An office may still BELONG to a ministry — that
+      is `office_bodies`' `Ministries` row, which is what a ministry actually is here.
       ⚠ TWO NAMES IN CIRCULATION ARE SUPERSEDED AND ARE NOT MEMBERS. `People's Revolution`
       (`southernmost_v30.md` §6.2, one occurrence) is the old name for `Restoration Movement` —
       `geography_v30.md`'s ED-061 is *"'Revolution' -> 'Restoration Movement' naming
       standardisation across all docs"*, i.e. the rename is ordered and unpropagated, not a second
-      faction. `Niflhel` (10 occurrences) is DISSOLVED: `worldbuilding_v30.md` §3.2 renames the
+      faction. `Niflhel` is DISSOLVED: `worldbuilding_v30.md` §3.2 renames the
       mechanic *"Olafsson-Broker Exposure (formerly Olafsson-Niflhel)"* and §10 says
-      *"post-Niflhel-dissolution"*. A frequency-ranked grep over `systems/world/` returns both at
-      ranks that would have carried them in; they are excluded by reading, not by counting.
+      *"post-Niflhel-dissolution"*.
       ⚠ `Schoenland` IS A MEMBER AND IS FOREIGN. Canon gives it T16 and Altonian naval passage
       (`geography_v30.md`). ⚠ THE TYPED LAYER CARRIES NO T16 ROW AND THAT IS DELIBERATE, NOT A GAP
-      TO FILL: `references/world_initial_state.yaml:44` (retired at plan position `29d-ii`; open it
-      with `git show fd321c81:references/world_initial_state.yaml`) — *"There is no T16 — the gap is
+      TO FILL: `references/world_initial_state.yaml:44` (retired) — *"There is no T16 — the gap is
       in the source data"* — and `harness/populated.py:331`. No `role_template`; recorded, not filled.
       ⚠ REFERENCE, NOT MECHANISM (§0.05), AND A FACTION STILL NEVER ACTS. `ARCHITECTURE_V2.md:93`
       lists a faction acting among five refusals held under all 143 cases. This roster names what
@@ -2176,16 +1942,13 @@ rosters:
       faction's creed is an `OUGHT`. `world_q.questions_for`'s Q4 raises a standing question from
       every live `commit` to an OUGHT and emits `(prop.subject,)` as the referent — and a faction
       NAME is not a person and not even a rung, so a creed subject-ed on the faction would put a
-      non-entity into every member's deliberation. That is `build_at`'s measured rung-subject defect
-      one level worse: its one rung-subject Proposition produced **0 of 4,870 acts naming another
-      person**, which `ED-IN-0210` Ruling 1 exists to correct (*"verbs invoke mechanisms or
-      interactions between a character and another entity/character. they are not fiats."*).
+      non-entity into every member's deliberation (`ED-IN-0210` Ruling 1: *"verbs invoke mechanisms
+      or interactions between a character and another entity/character. they are not fiats."*).
       So the creed is subject-ed on the faction's LEADER, who is a person an act can name.
-      ⚠ **THE SLUGS WERE VERIFIED AGAINST THE CAST, NOT ASSUMED.** Each authored slug resolves to
-      exactly one of the 46 registry rows, checked by surname match: `cardinal_himlensendt` is Arne
-      Himlensendt (NPC-021) and `ehrenwall` is Lisbeth Ehrenwall (NPC-070) — neither spelling
-      appears in the roster the way the faction file writes it, which is why this is a transcribed
-      mapping and not a runtime string match.
+      ⚠ **EACH AUTHORED SLUG RESOLVES TO EXACTLY ONE OF THE 46 REGISTRY ROWS**, by surname match:
+      `cardinal_himlensendt` is Arne Himlensendt (NPC-021) and `ehrenwall` is Lisbeth Ehrenwall
+      (NPC-070) — neither spelling appears in the roster the way the faction file writes it, which
+      is why this is a transcribed mapping and not a runtime string match.
       ⚠ **SIX OF EIGHT, AND THE SAME TWO ARE MISSING AS EVERYWHERE ELSE.** `Guilds` and
       `Schoenland` have no authored leader — and no `role_template`, and no expected-conviction
       vector. That is consistent rather than coincidental: a faction canon gives no head and no
@@ -2244,11 +2007,9 @@ rosters:
     note: >-
       ⚠ THIS IS THE *TYPE OF OFFICE* AXIS JORDAN ASKED FOR, AND IT IS CANON'S OWN ORGANIZATION
       NAMES RATHER THAN A TAXONOMY FOLDED OUT OF THEM. Jordan, 2026-09-02: *"does the office schema
-      include faction belonging, scale of office, type of office, etc?"* — it did not; the office
-      block carried `post`, `remit`, `why` and nothing else. World gives four tables of bodies with
-      a Function column each, and the temptation was to collapse those functions into a tidy set
-      (`judicial, military, economic, knowledge, administrative, ...`) because the Church's four
-      arms and the Crown's five bodies genuinely do converge on one. THAT FOLD IS NOT TAKEN. World
+      include faction belonging, scale of office, type of office, etc?"* World gives four tables of
+      bodies with a Function column each; collapsing those functions into a tidy set
+      (`judicial, military, economic, knowledge, administrative, ...`) is NOT TAKEN. World
       is canon for ORGANIZATIONS; an invented functional taxonomy sitting where canon named bodies
       would read as canon to the next session, which is the defect the precedence ruling names.
       ⚠ `faction` AND `function` ARE PROPERTIES OF THE BODY, SO AN OFFICE AUTHORS ONE FIELD AND
@@ -2308,7 +2069,7 @@ rosters:
       #   * `worldbuilding_v30.md` (world, TIER 1) names the ORGAN, `Ministries` ("Execute
       #     government services"), and, in its Ministry Collapse card, the SERVICES: Law, Taxation,
       #     Guilds, Water/Granaries.
-      #   * PP-194 (its frozen capture is no longer in this tree) names Law, Guilds, Logothetes,
+      #   * PP-194 names Law, Guilds, Logothetes,
       #     Granaries and Pure Water, which read onto those services; Logothetes is read as the
       #     fiscal ministry, i.e. Taxation. [ASSUMPTION; medium; Jordan to correct; revert: delete
       #     this inserted comment and restore the sentence above to its earlier wording]
@@ -2319,8 +2080,7 @@ rosters:
       # takes a PP-194 name, and nothing else is added. `offices.yaml`'s `off_parliamentary_clerk`
       # seats at that one row (NPC-008's authored overlay), and the Court Parliament's `function`
       # cell below, which nominates Ministers, reads against an organ rather than a list.
-      # `harness/populated.py` points here and carries no count. ED-648 is not acted on here
-      # (it reads `open` in the editorial ledger; the plan treats it as closed, and this note is the ruling's home).
+      # `harness/populated.py` points here and carries no count.
       "Inner Circle": "Valorsmark"
       "Inner Council": "Hafenmark"
       "Jarl Council": "Varfell"
@@ -2442,21 +2202,16 @@ rosters:
     source: "`W-A`. The names a `requires_typed` cell may bind, closed."
     note: >-
       ⚠ THE OPERAND VOCABULARY IS CLOSED, AND THAT CLOSURE IS WHAT STOPS THE GRAMMAR BECOMING A
-      SECOND RESOLVER. A cell naming an operand outside this roster REFUSES AT LOAD. It was the
-      reason `exchange` carried `requires_typed: none` rather than a typed cell: it needs the
-      counterparty's side of a trade, which had no name here. Coining one is filling `H-94` by
-      keyword argument, which only the position `H-94` reserves it to (v9 IN-33, restored at v10 REM-2B, below) may do.
-      (`comply`, `evade / defy` and `construe` carried the same reason, for a DISPENSATION, until v9
-      IN-09 typed them without a new name: the act's `subject` IS the held writ, a `Record` of kind
-      `dispensation` -- `verb_table.yaml`'s `comply` row.)
-      ⚠ v9 IN-33 (H-58, the position H-94 reserved the coining to; reverted at 0 executions and
-      RESTORED at v10 REM-2B, which carries the roster edit as a declared mover) ADDED TWO, AND ONLY TWO,
-      FOR `exchange`'s OTHER SIDE: `return_kind` -- the matter kind the actor RECEIVES IN RETURN -- and
-      `return_amount` -- how many units of it. The plain sense of *in return*: in an exchange the
+      SECOND RESOLVER. A cell naming an operand outside this roster REFUSES AT LOAD. Coining one is
+      filling `H-94` by keyword argument, which only the position `H-94` reserves it to may do.
+      (`comply`, `evade / defy` and `construe` need no new name: the act's `subject` IS the held
+      writ, a `Record` of kind `dispensation` -- `verb_table.yaml`'s `comply` row.)
+      ⚠ `return_kind` AND `return_amount` (v9 IN-33, H-58) ARE `exchange`'S OTHER SIDE:
+      `return_kind` -- the matter kind the actor RECEIVES IN RETURN -- and
+      `return_amount` -- how many units of it. In an exchange the
       actor gives `amount` of `kind` from `from` to `to`, and `to` gives `return_amount` of
       `return_kind` back. `kind`/`amount` keep their one meaning (what moves from `from`), so no
-      name carries two. Inside the old eight a two-sided cell could only bind one kind and one
-      amount for both sides -- a like-for-like swap that moves nothing. The closure still binds:
+      name carries two. The closure still binds:
       the roster is closed over its `values`, and a cell naming any other operand refuses at load
       (`data/requires.py::_build_clause`). Derived person-side in
       `decision/options.py::_derive_operand`.
@@ -2475,8 +2230,7 @@ rosters:
       document is addressed to (`loop/witness.py::addressee_reads`, the addressee test `person_q.addressed_to`'s), so he reads
       what was put to him while the Record stays in its maker's hand (ED-IN-0292 (1), RULED NO on a mint into the
       addressee's, stands). `challenge`: its cell asks the challenged present (`with`), so a challenge is issued to him
-      in person. MEASURED before (`build_realm(0..2)`, four seasons): challenges were issued 36 to 46 times a seed and no
-      challenged person held a reading of one, so `accept` could not tell it from any other document. A writ or a petition
+      in person; without this deposit `accept` could not tell it from any other document. A writ or a petition
       is not listed: who learns what it says is `give`'s (`test_give.py`). Refused at import for a member that is no record
       kind. [ASSUMPTION; medium; Jordan to correct; revert: `[]`.]
     values: [challenge]
@@ -2617,11 +2371,11 @@ rosters:
       # loader admits the kind by derivation (`data/verbs.py::_load_terms_sourced`).
       commit: [dispensation, petition]
 
-  # v11 CP-T04-02: THE TWO CLOSED SETS OF A STANDING ORDER OF BATTLE. NO `values:` -- the members ARE the mass-battle
+  # v11 CP-T04-02: THE TWO CLOSED SETS OF A STANDING ORDER. NO `values:` -- the members ARE the mass-battle
   # module's (`modules/mass_battle/massbattle.py::ORDER_ROLES`, `config.ROLE_SPEC`'s names, and `ORDER_RETREAT_AT`), cooked
   # by `tools/export_battle_orders.py` into `engine/engine_params/battle_orders.json` and read through
   # `engine/substrate/battle_orders.py`. A role is added to `ROLE_SPEC`, never here. `role` ranges over the WHOLE set, not
-  # a troop type's menu: a standing order of battle is the commander's, so it is not gated by `registry.role_allowed`
+  # a troop type's menu: a standing order is the commander's, so it is not gated by `registry.role_allowed`
   # (`H-361`). [ASSUMPTION; medium; Jordan to correct; revert: gate `role` on `registry.role_allowed` for the line's
   # stand-in troop type.]
   order_roles:
@@ -2746,7 +2500,7 @@ rosters:
       from a menu). `loop/effects_army.py` is their one body.
     note: >-
       THE VERBS THAT CHANGE AN `army` RECORD, a list of verbs. `data/fixtures.py` adds each to `withheld_verbs`:
-      the command (a cohort, a troop type, a count, a subformation's name and tactics) is the act's payload, the
+      the command (a cohort, a troop type, a count, a unit's name and tactics) is the act's payload, the
       operand vocabulary is closed at eight and none names it, so no Candidate could carry it and no person forms
       one. Each must be a `verb_table.yaml` verb (`opening_set` refuses a withheld name the table lacks).
     values: [recruit, form_unit, assign_troops, order_unit, disband_unit, discharge_troops]
@@ -2774,8 +2528,7 @@ rosters:
       effect (`give.refused`). [ASSUMPTION; medium; Jordan to correct; revert: drop the member, and restore
       the `existence` conjunct.]
       B11 lane A JOINED `carry`, `found` AND `build`, the three `Record` rows whose cell asks `held_by` of `subject`: they
-      formed on the question's own Records of every kind and the fold refused each it does not hold (MEASURED before,
-      `aperture 2 0`, realm: `found` 6 and `build` 2 refused, never executed; `carry` 15 refused of 19). Their own holding
+      formed on the question's own Records of every kind and the fold refused each it does not hold. Their own holding
       is the actor's own state; what the document IS stays the sub-kind rule's (`decision/options.py`,
       `RECORD_SUBKINDS_BY_VERB`). [ASSUMPTION; medium; Jordan to correct; revert: drop the three members.]
     values: [destroy_record, give, carry, found, build]
@@ -2846,8 +2599,7 @@ rosters:
       for. An empty block is the CONTROL: no decline. [ASSUMPTION; medium; Jordan to correct; revert: `{}`.]
       B11 lane A (carrying `14_VERBS_PHYSICAL_A` A3's first line): `duel` DROPPED from `fight`. The challenger
       holds every challenge he issues, so the context licensed him to attack the man he had called out, under
-      `fight`'s lethal terms, without an acceptance -- MEASURED once challenges were reachable (`build_realm(0..2)`,
-      four seasons): 2 / 0 / 7 such fights, 2 / 0 / 6 deaths. A duel is `accept`'s, fought under its challenge's
+      `fight`'s lethal terms, without an acceptance. A duel is `accept`'s, fought under its challenge's
       terms. The `duel` reader stays in the closed set for a later line. [ASSUMPTION; medium; Jordan to correct;
       revert: restore `duel`.]
     values:
@@ -2861,10 +2613,8 @@ rosters:
       verbs whose second side is their `subject` (`counterparty: subject`). `decision/options.py::subject_is_opponent`
       reads a member as it reads a contested row, so the chooser's stance term (`stance_polarity: declared`) scores
       it AGAINST the subject: a grievance raises a challenge to the man it is held against, where it had lowered it.
-      MEASURED before (`build_realm(0..2)`, four seasons, the real chooser): `challenge` executed 0 times in twelve
-      realm-seasons while formed on every standing grievance beside its holder -- the planted-dispute run scored it
-      -0.11 (pursuit +0.07, stance -0.18) against a best candidate of +0.69 at `choice_temperature` 0.05; read
-      against its subject, 36 to 48 challenges a seed were issued. `oblige` shares the columns and is not listed: a
+      Without it `challenge` was never chosen: it was formed on every standing grievance beside its holder and
+      scored below the best candidate. `oblige` shares the columns and is not listed: a
       man asking service of another is not acting against him. Refused at import for a verb the table lacks or one
       whose second side is not its subject. [ASSUMPTION; medium; Jordan to correct; revert: `[]`.]
     values: [challenge]
@@ -3052,13 +2802,10 @@ rosters:
       graded. Absence would read as `false` for every verb -- the UNKNOWN/False collapse
       `operands_for` refuses one level down.
       ⚠ WHAT THIS ROSTER DOES NOT DECIDE: the WEIGHT. `synthesis.md` §1.3 spells the term
-      `orient · benefits_me(c)`. CORRECTED 2026-09-20 (`ED-IN-0260`): this note read *"`orient` is
-      a Person-interior scalar with no producer (`STR-1`, phase 6e)"*, which proves too much --
-      no verb writes `Person.convictions` either, and that is term 1 of the live score. The
-      missing piece is the STATE: `Person` has no `orient` field and `data/cast.py` skips the 28
-      authored `self_other_initial` values in `references/npc_registry.yaml`. The term is `6f`'s.
-      This roster and its column deliver `beneficiary_of(p, c)`, which no game code reads (tests only). (The 0/1
-      `benefits_me(c)`, never multiplied into the score, was deleted by REM-44 with `urgency`.)
+      `orient · benefits_me(c)`. The missing piece is the STATE: `Person` has no `orient` field and
+      `data/cast.py` skips the 28 authored `self_other_initial` values in
+      `references/npc_registry.yaml` (`ED-IN-0260`). The term is `6f`'s.
+      This roster and its column deliver `beneficiary_of(p, c)`, which no game code reads (tests only).
     values: [actor, subject, to, none]
     # ⚠ WHICH MEMBERS NEED A CELL TO BIND, DECLARED PER MEMBER RATHER THAN DERIVED IN A BODY.
     # `structural` -- the carrier is on the Candidate no matter what the row's `requires_typed`
@@ -3122,12 +2869,10 @@ rosters:
     source: "`H-33`'s declared sweep. The three arm names were PYTHON LITERALS in `epistemic.py::observers_for`'s if/elif/else until 2026-09-16; its `else` already REFUSED an unrecognised mode, so the closed set was enforced — it was simply not data."
     cite: "H-33"
     note: >-
-      ⚠ MOVED HERE UNDER JORDAN'S 2026-09-02 RULING, WHICH `data/rosters.py:70-73` quotes:
+      ⚠ THE ARM NAMES ARE DATA UNDER JORDAN'S 2026-09-02 RULING, WHICH `data/rosters.py:70-73` quotes:
       *"I do not want definitions etc to be hardcoded"* … *"these must be easy to modify"* …
-      *"that goes for all"*. Six rosters moved then and this one was missed, which is visible
-      in the asymmetry it left: its SIBLING switch `observation_deposit_modes` is a roster read
-      at `loop/witness.py`, while this one's arms lived in code. Two switches on the same
-      pipeline, one governed as data and one not.
+      *"that goes for all"*. Its SIBLING switch `observation_deposit_modes` is a roster read
+      at `loop/witness.py`; two switches on the same pipeline are governed alike.
       ⚠ THIS ROSTER NAMES THE ARMS AND NOTHING ELSE. Which channels each arm selects is
       BEHAVIOUR and stays in `epistemic.py::observers_for` — `total` short-circuits to everyone,
       `presence_only` selects `co_located`, `all_five` selects `witness_channels` entire. Moving
@@ -3151,8 +2896,8 @@ rosters:
       `remit_acts` refusal's shape, so a typo is loud rather than a seat nobody can ever fill), and
       `state/gate.py::has_conferral_basis` (moved from `loop/predicates.py` by G3, since the gate
       asks it and may not import the loop; `predicates.py` re-imports the name), the ONE basis test
-      `_req_confer` and `_req_establish` share, and `state/gate.py::REVOCATION_DISPOSAL` (v9 IN-31: what a revocation costs, by this basis) -- CORRECTED (antagonist pass, 2026-09-27), this
-      said `loop/predicates.py::has_conferral_basis`. ⚠ NOTHING DISCRIMINATES BETWEEN THE THREE YET: `confer` admits a seat
+      `_req_confer` and `_req_establish` share, and `state/gate.py::REVOCATION_DISPOSAL` (v9 IN-31: what a revocation costs, by this basis).
+      ⚠ NOTHING DISCRIMINATES BETWEEN THE THREE YET: `confer` admits a seat
       declaring any of them. Which act fills an `elected` or an `annex` seat is not ruled, and no
       election or annexation verb exists; narrowing `confer` to `appointed` would leave the other
       two seats fillable by nothing.
@@ -3218,14 +2963,10 @@ rosters:
       revoker sits on the rung directly above; a seat whose rung nobody holds is stripped by nobody, its
       holder resigns. `rung_above_same_faction`, the one value ED-IN-0256 ruled: the holder of a seat on the rung DIRECTLY ABOVE the
       seat's own rung, in the SAME faction -- structural, NOT a rank comparison, and applied to
-      every seat alike. It replaces both of the 2026-09-02 rules the `titles` note above records
-      (purview for an office; purview + holdings + higher rank for a title) and r2's
-      `[purview, holdings, none]`. A seat with NO declared basis (`None`) is revocable by nobody,
+      every seat alike. A seat with NO declared basis (`None`) is revocable by nobody,
       which is what r2's `none` meant; it needs no member of its own.
       ⚠ THIS ROSTER NAMES THE BASIS AND NOTHING ELSE -- the `fan_out_modes` split above. The rule
-      is BEHAVIOUR and lives in `state/gate.py` (`REVOCATION_RULES`, moved from `loop/predicates.py`
-      by G3 for the same reason as `has_conferral_basis` above -- CORRECTED, antagonist pass,
-      2026-09-27), which refuses at IMPORT if a member here has no rule there or the reverse, so
+      is BEHAVIOUR and lives in `state/gate.py` (`REVOCATION_RULES`), which refuses at IMPORT if a member here has no rule there or the reverse, so
       the roster cannot grow a value the resolver silently treats as another.
     values: [rung_above_same_faction, rung_above_in_holdings]
 
@@ -3377,7 +3118,6 @@ rosters:
       dominance: [person.died, body.changed, field.won, rung.seized, record.seized, requisition.taken]
 
   # ── v9 FI-02 + FI-03 (`SM-3`, `ED-FI-0002`): THE INQUIRY ROLE AND WHAT A FINDING UNCOVERS ─────────
-  # Appended after `modules:` rather than beside `graded_inquiries`, so no line-cited row above moves.
   inquiry_modules:
     source: >-
       v9 FI-02 (`SM-3`, Jordan 2026-09-05: *"investigation is not a contest seam. it is its own
@@ -3475,7 +3215,7 @@ rosters:
       The checks at import: a kind in any list absent from `EVENT_KINDS`; a kind in more than one of
       opens, joins and never; a `concludes` kind outside opens and joins.
       `concludes` is checked against `ends` counts hand-read from the study and cross-checked against it (A3,
-      `strife-00` §10; `strife_moves.yaml`) before CR-78's stamp first made a step of the loop read it.
+      `strife-00` §10; `strife_moves.yaml`).
       [ASSUMPTION; medium; Jordan to correct; revert: each of the five rulings of `strife-01` §6 reverses
       alone by moving one kind between `opens` and `joins`, or striking one content opener; to revert
       `concludes`, make it an empty derivation in code: a code edit at `Move.terminal`'s construction in
@@ -3511,8 +3251,7 @@ rosters:
     values: [Altonia, Schoenland]
 
   # ── v9 IN-27 (END-VICTORY; H-176, GD-1): THE ENDING VOCABULARY ────────────────────────────────────
-  # Appended last, `inquiry_modules`' reason: no line-cited row above moves. Here and not a file of its
-  # own: a closed set of definitions the loop reads is a roster (this file's header), and `modules:` is
+  # A closed set of definitions the loop reads is a roster (this file's header), and `modules:` is
   # the sibling row shape (`members:` keyed by identity, each row refused by name at load).
   endings:
     source: >-
@@ -3576,7 +3315,6 @@ rosters:
           The land half ("seize lands") is not a condition. Revert: Jordan names the Church's endpoint.
 
   # ── CP-T01-05 (v10, B10-08): THE SOCIAL ROLL'S ADVANTAGE CHANNEL ─────────────────────────────────
-  # Appended last in `rosters:` (the T01 members add closed rosters here and serialise on this file).
   advantage_sources:
     source: >-
       CP-T01-05 (`proposals/2026-10-23-subsystem-completion/2026-10-23-subsystem-completion-01-resolution-
@@ -3604,7 +3342,6 @@ rosters:
     values: [effort]
 
   # ── B03.68 (`09_WR_threadwork_module` edit 3): THE THREAD OPERATIONS ─────────────────────────────
-  # Appended last in `rosters:` (no threadwork block exists above to end; one ordering rule for additions, H-07).
   thread_operations:
     source: "`09_WR_threadwork_module` edit 3: the seven operations `systems/threadwork/sim/operations.py` has an entry point for (`attempt_leap`, `attempt_weaving`, `attempt_pulling`, `attempt_past_pulling`, `attempt_locking`, `attempt_dissolution`, `attempt_mending`)."
     cite: "B03.68"
@@ -3668,12 +3405,10 @@ tables:
       nothing for a dwelling at any wear. `halved` and `doubled` leave an empty cell empty.
       ⚠ AN EMPTY CELL IS NOT A WORKABLE SITE, AND THE `floor` READ SAYS SO TYPED: `queries/
       world_q.py`'s `floor` stem checks `if not floors:` before `min(floors.values())` and raises
-      a typed `Unspecified` (S12.1) rather than a bare `ValueError` on `{}` -- CORRECTED
-      (code-review pass on the accumulated Phase alpha+beta diff, 2026-09-27): this said the read
-      was untyped and would crash, which was true when `24d-i` first landed and is not true of the
-      tree today (`world_q.py`'s own comment at the guard names `dwelling`'s control-arm row by
-      id). It is unreached only while no question names a dwelling as a referent, since `work`
-      binds its `site` from the referent. None does at the control arm; `24d-i`'s test in
+      a typed `Unspecified` (S12.1) rather than a bare `ValueError` on `{}` (`world_q.py`'s own
+      comment at the guard names `dwelling`'s control-arm row by id). It is unreached only while no
+      question names a dwelling as a referent, since `work` binds its `site` from the referent.
+      None does at the control arm; `24d-i`'s test in
       `engine/season/tests/test_governance_build.py` asserts it over one populated season.
       ⚠ `garrison: {}` IS EMPTY FOR THE SAME REASON, NOT A SEPARATE CHOICE (M4, `ED-IN-0279` clause
       (a)). A field battle's fortification term reads `Site.condition` DIRECTLY -- `queries/
@@ -3730,9 +3465,8 @@ tables:
       named when it says relaying or copying a text; no starting skill does, so no row holds it. A text that
       says only a bonus in a domain, a defence, a strain, an identification of forces, the threat of a being
       or a navigation holds nothing, and the near misses are said in the row's own `ground:` (3-CH3, 3-CR5,
-      3-HA3, 3-LO2, 3-LO4, and 3-CF4's Knot, which names copying). The rule was widened once, by the read-only
-      pass at CR-33's close, from "the word Argue" to the exchange itself; the wider reading (Appraise, strain
-      and Regroup effects inside the contest also hold `argue`) was left unadopted, and would add argue to
+      3-HA3, 3-LO2, 3-LO4, and 3-CF4's Knot, which names copying). The wider reading (Appraise, strain
+      and Regroup effects inside the contest also hold `argue`) is NOT adopted; it would add argue to
       3-CR3, 3-VA1, 3-VA4, 3-GU1, 3-LO3, 3-CF3 and 3-CF5.
       CLOSED, BOTH WAYS (`data/rosters.py::_load_lifepath_templates`): a row for every id of `rosters:
       lifepaths` and for nothing else, each `holds:` entry a `verb_capability` value, a `ground:` on every row.
@@ -3884,8 +3618,6 @@ tables:
       thread_truth:
         thread_read:     1      # derived, sign only: the pole that holds the Thread as the ground of being
 
-  # ⚠ RENAMED 2026-09-24 (`ED-IN-0261` item 1, rename half only): this table was
-  # `role_template_convictions:`; cells, `row:` and `default_cell:` are byte-identical.
   role_template_pursuits:
     source: >-
       systems/factions/reference/faction_canon_v30.md §4 "Role Templates and Expected Convictions"
@@ -3916,15 +3648,13 @@ tables:
       differentiation comes from Mission, leader Convictions, and stat profile, not role template."*
       So the two factions have the SAME expectation vector and differ in who actually holds what —
       which is precisely the quantity `cast.loyalty` measures.
-    # ⚠ IN-08's CELLS COMMIT (B-G): §4's thirteen-name weights migrated to the fifteen pursuits by
-    # the retired pursuit-cells draft's §4.1 derivation rule and §4.2 table (folded into the build,
-    # Jordan 2026-10-06, RS-1), with `doctrine` and `stewardship` as named (RS-2, RS-4). Weights are
-    # §4's own and nothing is renormalised; where two old names collapse into one pursuit their
-    # weights ADD (§4.2: `ecclesiastical` and `military-order`'s `stability`). TWO DROPS, BOTH IN
-    # `intelligence-diplomatic`: §4.2 leaves its `Utility .30` and `Identity .10` with no successor
-    # ("Recommend Jordan either drops the template or names the two") and the template is held by
-    # no faction; the weights are DROPPED rather than given an invented home, the draft's own
-    # precedent for an orphan with nothing to read from (§4.3, NPC-033 and NPC-086).
+    # ⚠ §4's thirteen-name weights are migrated to the fifteen pursuits by the retired pursuit-cells draft's §4.1
+    # derivation rule and §4.2 table (folded into the build, Jordan 2026-10-06, RS-1), with `doctrine`
+    # and `stewardship` as named (RS-2, RS-4). Weights are §4's own and nothing is renormalised; where
+    # two old names collapse into one pursuit their weights ADD (§4.2: `ecclesiastical` and
+    # `military-order`'s `stability`). TWO DROPS, BOTH IN `intelligence-diplomatic`: §4.2 leaves its
+    # `Utility .30` and `Identity .10` with no successor and the template is held by no faction; the
+    # weights are DROPPED rather than given an invented home.
     # ⚠ CR-21 (M14) NAMES ONE OF THE TWO: `Identity .10` -> `community 0.10`, by §4.1's rule
     # (Identity -> community, the `military-order` row's own reading). `Utility .30` stays DROPPED.
     # ⚠ THE READ PATH DOES NOT RAISE ON AN UNKNOWN NAME (`data/pursuits.py::to_axes` skips a pursuit
@@ -3992,10 +3722,9 @@ tables:
       DIRECTION (which side is `Person.conviction`'s, ED-IN-0251 R1/R2) — so its cells are non-zero
       only where all four of Jordan's examples agree (§2.11). THE DOCTRINE PAIR (Jordan's devout
       Solmund builder against the Einhir dismantler, both high `doctrine`) IS MEASURED, NOT GATED:
-      at the draft's weights (`doctrine` .45, §5.1 arm A) the two persons' projections through
-      THIS table read cos +0.229 — inside the 60-degree bar (cos <= 0.5) — recomputed on these
-      rows at IN-08's cells commit; at `doctrine` .60 / .70 (arms B, C) the draft read +0.524 /
-      +0.527, just outside it. H7 (B-H) builds the standing test that pins it.
+      at `doctrine` .45 the two persons' projections through THIS table read cos +0.229 — inside
+      the 60-degree bar (cos <= 0.5); at `doctrine` .60 / .70 the draft read +0.524 / +0.527, just
+      outside it. H7 (B-H) builds the standing test that pins it.
       ⚠ **`row: H-46`, CLOSED AS FRAMED BY IN-43.** Jordan, 2026-09-02: *"convictions roster and
       axes etc may be modified in future."* The sweep is the standard three: `declared` is this
       matrix, `uniform` makes every pursuit project identically and is THE CONTROL — under it a
@@ -4092,7 +3821,7 @@ tables:
         rigid_flexible:               0.0
         grandiose_humble:             0.0
         deontological_instrumental:  -0.3
-      happiness:         # §2.12 · reasoned: six of the seven (deontological_instrumental is CR-21's) · CR-21 (M14): deontological_instrumental +0.4 -> 0.0 [ASSUMPTION; medium; Jordan to correct; revert: the old value, +0.4, one re-pin for the set] -- happiness is an END and not an instrument (the draft's §1b(b) wealth-vs-happiness pair: "wealth-seeking is instrumental reason's paradigm; happiness is an end"); the direction is the source's, the magnitude 0.0 is delegated. cos(wealth, happiness) 0.969 -> 0.818
+      happiness:         # §2.12 · reasoned: six of the seven (deontological_instrumental is CR-21's) · CR-21 (M14): deontological_instrumental 0.0 [ASSUMPTION; medium; Jordan to correct; revert: the old value, +0.4, one re-pin for the set] -- happiness is an END and not an instrument (the draft's §1b(b) wealth-vs-happiness pair: "wealth-seeking is instrumental reason's paradigm; happiness is an end"); the direction is the source's, the magnitude 0.0 is delegated.
         hierarchical_equal:           0.0
         precedent_substantive:        0.3
         partisan_equitable:          -0.2
@@ -4216,7 +3945,7 @@ tables:
         method.
       marshal: >-
         v11 CP-T04-02: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above); a lean on seven axes is authored content
-        (IN-08's method), and a standing order of battle is a document written before the field, whose moral weight
+        (IN-08's method), and a standing order is a document written before the field, whose moral weight
         is the field's. It scores 0.0 on every axis until a cell is authored, so no witness is scarred by an order
         marshalled and `order.marshaled` judges as no deed. Revert: the seven cells, IN-08's method.
       surrender: >-
@@ -4267,9 +3996,7 @@ tables:
       does NOT move between `declared` and `uniform` is a verdict the table was never deciding.
       VERB KEYS ARE VERB-TABLE KEYS, spelled exactly as `verb_table.yaml` spells them (`evade /
       defy`, `fight`). The loader raises on a key naming no verb, so a rename over there cannot
-      leave a silently dead cell over here -- exactly what caught this cell when `kill / wound`
-      was renamed to `fight` (2026-09-29, plan `FIGHT-RENAME`). The draft's `kill`/`wound` cells
-      are moot: they are not verbs (Jordan, RS-5; ED-IN-0288).
+      leave a silently dead cell over here. The draft's `kill`/`wound` cells are moot: they are not verbs (Jordan, RS-5; ED-IN-0288).
     cells:
       # ⚠⚠ RE-CELLED OVER THE SEVEN BIPOLAR AXES BY IN-08's CELLS COMMIT (B-G). The source is the
       # draft's §3, which carried the four-axis table's cells forward where an old reason still
@@ -4611,7 +4338,7 @@ tables:
         "deed:commitment.ended": 0.8
         seize:          null    # reasoned (IN-12 step 6): the warrant is what licenses it, so it is neither a disagreeable act taken for an end nor one refused -- considered, no lean
         forge:           0.8    # carried: the purest means-to-ends act on the table
-        lie:             0.5    # CR-27 [ASSUMPTION; medium; Jordan to correct; revert: delete this cell and its six `null` twins, and `lie` joins `uncelled:`]: reasoned -- a falsehood told for an end is `forge`'s means-to-ends reading in the mouth, smaller (0.5 against 0.8) because it leaves no document behind. The plan's premise that CR-21 celled `tell` was false (`tell` is `uncelled:`); `lie` alone is celled, so where this axis weighs positive `lie` outscores an otherwise identical `tell`
+        lie:             0.5    # CR-27 [ASSUMPTION; medium; Jordan to correct; revert: delete this cell and its six `null` twins, and `lie` joins `uncelled:`]: reasoned -- a falsehood told for an end is `forge`'s means-to-ends reading in the mouth, smaller (0.5 against 0.8) because it leaves no document behind. `tell` is `uncelled:` and `lie` alone is celled, so where this axis weighs positive `lie` outscores an otherwise identical `tell`
         commit:         -0.8    # carried: binds regardless of what later calculation would recommend
         utter:          -0.7    # carried: the uttered word binds the utterer whatever advantage later counsels
         evade / defy:    0.7    # carried: putting your own calculus over a demand

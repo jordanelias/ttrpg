@@ -1,8 +1,7 @@
 """modules.mass_battle.core.exchange — combat-pool assembly primitives.
-Stage-1 behaviour-frozen extract from orchestration.py (derive_command, command_base_pool,
-subunit_combat_pool, _stamina_pool_penalty). Pure: depends on config + math + duck-typed
-unit/atom attributes only; imports nothing from orchestration (no cycle). Re-imported by
-orchestration via `from modules.mass_battle.core.exchange import *` so every call site is unchanged.
+(derive_command, command_base_pool, subunit_combat_pool, _stamina_pool_penalty). Pure: depends on config +
+math + duck-typed unit/atom attributes only; imports nothing from orchestration (no cycle). Re-imported by
+orchestration via `from modules.mass_battle.core.exchange import *`.
 [canonical: mass_battle_v30.md §A.4 Effective Combat Pool; ED-899 Command-only base -- SUPERSEDED
 for the base pool term by Jordan's 2026-07-08 directive, see config.py's POOL_QUALITY_MODEL;
 `derive_command`/`command_base_pool` below remain live for whatever still reads Command
@@ -42,15 +41,10 @@ def _stamina_pool_penalty(stamina):
 
 
 def clamp_command(value):
-    """[A3, ED-MB-0067 Part A / ED-MB-0073, adversarial-review fix F3/F5] SINGLE OWNER of the Command
-    1-7 clamp (`FORK:c451bcb:engine/params/factions/stats_1_7_scale.md`) — extracted from `derive_command`'s own tail so
-    `Officer` and the general's own `command` can share ONE clamp instead of each re-implementing it
-    (§8: never re-implement a rule). Before this fix, `Officer.__post_init__` had its own copy and
-    `Unit`/`build_army` had NONE at all — an unclamped general `command` (e.g. 20) combined with a
-    single, entirely UNREFERENCED officer let `build_army`'s span-of-control check pass an arbitrary
-    number of un-officered subunits, since providing any non-empty `officers` list also skipped the
-    flat `SUBUNIT_CAP` check that used to be the only ceiling. Closed by clamping both sides of every
-    Command comparison through this one function — see `build_army`'s own note."""
+    """[A3, ED-MB-0067 Part A / ED-MB-0073] SINGLE OWNER of the Command
+    1-7 clamp (`FORK:c451bcb:engine/params/factions/stats_1_7_scale.md`) — so `Officer` and the general's own
+    `command` share ONE clamp instead of each re-implementing it (§8: never re-implement a rule). Both sides of
+    every Command comparison in `build_army` go through this one function — see `build_army`'s own note."""
     return max(1, min(7, int(value)))  # [canonical: FORK:c451bcb:engine/params/factions/stats_1_7_scale.md — Command clamped 1-7]
 
 
@@ -90,8 +84,7 @@ def subunit_combat_pool(unit, atom):
         # Per-subunit broken state (ED-1020 fix): this SUBUNIT's formation is gone (Discipline 0,
         # §A.4 "Formation broken; cannot attack") -> it contributes 0. The UNIT is broken only when
         # EVERY subunit is broken (the whole formation is gone); a single broken section must NOT zero
-        # its healthy siblings' pools -- that was an unintended intra-unit break cascade, contradicting
-        # §A.12's inter-unit-only cascade decision and the per-subunit "siblings fight on" model.
+        # its healthy siblings' pools (§A.12's cascade is inter-unit only; per-subunit "siblings fight on").
         # Single-subunit: the lone subunit broken => all() true => unit.broken set exactly as before
         # (byte-exact for the homogeneous gauge).
         atom.broken = True
@@ -171,11 +164,9 @@ def pair_pool_contribution(atom, contact_abs_cells, base_pool):
     its actual share, not a blind 50/50 -- solving RC-1(a)'s multi-front asymmetry from the bottom up
     instead of an atom-level fudge factor.
 
-    Known accepted residual (same discipline as Stage A's TOI multi-body approximation, designs/
-    audit/2026-07-01-mass-battle-.../ (see plan file Stage A.5b, finding 3): a single cell
-    simultaneously adjacent to TWO enemy atoms contributes its full troop share to BOTH pairs -- a
-    genuine dogpile edge case, not solved here, not observed to be dense enough to matter in the
-    gauge battery, flagged as a possible future refinement rather than blocking this fix."""
+    Known accepted residual: a single cell simultaneously adjacent to TWO enemy atoms contributes its full
+    troop share to BOTH pairs (a dogpile edge case, not observed to be dense enough to matter in the gauge
+    battery)."""
     if atom.cur_troops <= 0 or base_pool <= 0:
         return 0.0
     weighted_troops = _pair_engaged_troops(atom, contact_abs_cells)
@@ -189,13 +180,11 @@ def _pair_engaged_troops(atom, contact_abs_cells):
     """Troop-weighted engagement magnitude for ONE atom in ONE pair -- the same "actual troops in
     contact, plus depth-weighted support from ranks behind" quantity `pair_pool_contribution`
     needs internally, factored out so a caller can also use it to weigh SEVERAL atoms against a
-    shared target (see orchestration.py's convergence-normalization pass, the fix for the
-    partition-invariance gap this docstring's sibling function's "known accepted residual" para
-    flags on the OTHER axis -- one atom split across enemies vs several atoms sharing one enemy).
+    shared target (see orchestration.py's convergence-normalization pass: one atom split across enemies vs
+    several atoms sharing one enemy).
 
-    [2026-07-04 adversarial-review fix, carried from pair_pool_contribution] Iterates the atom's
-    ACTUAL `cell_troops` directly, not a freshly recomputed CELL_PATTERN_FN[shape](tier) -- see
-    pair_pool_contribution's docstring for why."""
+    Iterates the atom's ACTUAL `cell_troops` directly, not a freshly recomputed CELL_PATTERN_FN[shape](tier)
+    -- see pair_pool_contribution's docstring for why."""
     contact_orig = set(cells_to_orig_coords(atom, set(contact_abs_cells)))
     if not contact_orig:
         return 0.0

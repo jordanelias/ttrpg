@@ -2,20 +2,17 @@
 
 Status: [live, 2026-09-25]. Declared in
 tests/valoria/test_engine_does_not_import_systems.py::PATH_SEAM_ALLOWED (shrink-only); this file is
-its single entry. Plan position `31b` moved the import closure of `wrapper`/`combatant` here from systems/combat/combat_engine_v1/
-(the ledger's MOVE rows). It is a FLAT module set whose modules bare-import each other (wrapper.py:4), so it cannot be imported
-as `modules.combat.wrapper` without giving `wrapper`/`combatant` a second identity in any process that also loads them flat (the
-balance workbench does). Its two former loaders — engine/cross_scale/combat_bridge.py::_load_engine and
-engine/season/seam/wrappers/combat.py::engine — each spelled this path and this insert, and returned
-the two modules in OPPOSITE tuple orders. One spelling, one insert, named fields.
+its single entry. `wrapper`/`combatant` are a FLAT module set whose modules bare-import each other
+(wrapper.py:4), so it cannot be imported as `modules.combat.wrapper` without giving
+`wrapper`/`combatant` a second identity in any process that also loads them flat (the balance
+workbench does). One spelling of the path, one insert, named fields.
 
 FAILURE MODE: RAISES, on first use. A loader that swallows an import error is the silent-green
 failure engine/season/data/files.py names; composition.require raises on a missing role for the same
 reason. The module entry (modules/combat/fight.py) lets the raise through raw; only the availability
 probe, seam/wrappers/combat.py::engine(), translates it (into a named reason, for the tests that skip).
-The path is hand-transcribed from references/module_contracts.yaml combat.sim_module (the contract
-was named personal_combat until plan position 30)
-(CLAUDE.md §5's live drift risk, now in one place instead of two). IT IS A LEAF: stdlib only;
+The path is hand-transcribed from references/module_contracts.yaml combat.sim_module
+(CLAUDE.md §5's live drift risk, in one place). IT IS A LEAF: stdlib only;
 `import engine.substrate.pc_engine` mutates nothing (no sys.path change until load()).
 """
 from __future__ import annotations

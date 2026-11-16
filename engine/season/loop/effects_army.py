@@ -11,7 +11,7 @@ which is the verb's refusal (`NO_CHANGE` -> the row's `*.refused`).
 THE ONE WRITE IS `(Record, subject_matter)`, a matrix row this position adds: every other Record kind is written
 once, inside its mint. Each effect declines a Record that is not an `army`, so no other kind gains a mutable body.
 
-WHAT THE COMMAND SAYS IS THE ACT'S PAYLOAD (a cohort, a troop type, a count, a subformation's name and tactics), not
+WHAT THE COMMAND SAYS IS THE ACT'S PAYLOAD (a cohort, a troop type, a count, a unit's name and tactics), not
 an operand: the operand vocabulary is closed at eight and names none of these (`rosters.yaml: requires_operands`).
 So these verbs are reached by a hand-built act -- what the menu builds -- and `Fixtures withheld_verbs` keeps
 `decision/options.py::opening_set` from forming them for anybody.
@@ -90,20 +90,20 @@ def _eff_recruit(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
 
 @effect_for("form_unit")
 def _eff_form_unit(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
-    """FORM A SUBFORMATION: an empty, named one of `troop_type` (and optionally a `role` from the type's menu)."""
+    """FORM A UNIT: an empty, named one of `troop_type` (and optionally a `role` from the type's menu)."""
     return _apply(w, a, "form", _payload(a, "name", "troop_type", "role"), "army.formed")
 
 
 @effect_for("assign_troops")
 def _eff_assign_troops(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
-    """ASSIGN TROOPS: move `count` trained troops of `cohort` into subformation `name`, or out of it when `count` is
-    negative. No trooper is created or lost."""
+    """ASSIGN TROOPS: move `count` trained troops of `cohort` into unit `name`, or out of it when `count` is
+    negative. No man is created or lost."""
     return _apply(w, a, "assign", _payload(a, "name", "cohort", "count"), "army.assigned")
 
 
 @effect_for("disband_unit")
 def _eff_disband_unit(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
-    """DISBAND A SUBFORMATION: remove subformation `name`; its troops return to the trained, unassigned pool."""
+    """DISBAND A UNIT: remove unit `name`; its troops return to the trained, unassigned pool."""
     return _apply(w, a, "disband", _payload(a, "name"), "army.disbanded")
 
 
@@ -116,7 +116,7 @@ def _eff_discharge_troops(w: "World", a: "Act", res: "Resolution | None" = None)
 
 @effect_for("order_unit")
 def _eff_order_unit(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
-    """ORDER A SUBFORMATION OR THE ARMY: set subformation `name`'s `role`, `stance`, `target` and `fall_back_at`
+    """ORDER A UNIT OR THE ARMY: set unit `name`'s `role`, `posture`, `target` and `fall_back_at`
     (a field the payload leaves out is unchanged), or the army's `strategy` alone."""
-    return _apply(w, a, "order", _payload(a, "name", "role", "stance", "target", "fall_back_at", "strategy"),
+    return _apply(w, a, "order", _payload(a, "name", "role", "posture", "target", "fall_back_at", "strategy"),
                   "army.ordered")

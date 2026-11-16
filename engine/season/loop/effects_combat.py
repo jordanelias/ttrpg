@@ -2,12 +2,11 @@
 the duel's `accept`, capture, march; and the person raised (v9 IN-12 step 9, G15): tend, train; and the
 grudge's closer (v9 IN-12 step 13, G15): forgive.
 
-EXTRACTED from `effects.py` at the per-subsystem split (Phase 4). Holds the two effects that read a
+Holds the two effects that read a
 severity off a scene the seam already resolved rather than choosing one (Jordan, 2026-09-04: *"the
 combat engine determines the result there. your code just has to accept the result."*) -- personal
-combat's `fight` and mass battle's `march`. `_scar` and `_SCAR_DP` (the moral-layer write on the
-wounded person) are RETIRED at IN-08 H3: the scar is now written by the fold on the act's OBSERVERS
-(`loop/resolve.py::_scar_witnesses`), not by an effect. See `effects_shared.py` for `effect_for`
+combat's `fight` and mass battle's `march`. The moral-layer scar is written by the fold on the
+act's OBSERVERS (`loop/resolve.py::_scar_witnesses`), not by an effect. See `effects_shared.py` for `effect_for`
 and `_operand`, the helpers `march` takes from `effects_shared.py`; its arrival also calls
 `effects_migration.py::_relocate`, the journey `move` shares (v9 IN-13).
 """
@@ -78,11 +77,9 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         (`state/gate.py::death_subjects`), so the death names the seats it empties. The other edges
         are still not named.
       * the dead person's own `person`-kind rung, popped by the same owner -- the same reasoning.
-    THE NEW NO-OP THIS MAKES VISIBLE: a `Wounded` outcome under `scene_fraction` whose fraction
+    THE NO-OP THIS MAKES VISIBLE: a `Wounded` outcome under `scene_fraction` whose fraction
     rounds back to the body it started from (`max(1, body * left // full)` at `body == 1`, or a
-    scene that took no health) used to emit `body.changed` over an unchanged body and is now
-    `kill.refused`. MEASURED BEFORE THIS POSITION on `build_realm(0)`, four seasons: every
-    `kill / wound` that reached this effect moved its subject, so no run moves.
+    scene that took no health) is `kill.refused`, not `body.changed` over an unchanged body.
 
     ⚠ AND THE TWO `Unspecified` RAISES COME BEFORE ANYTHING IS WRITTEN: both are read while the
     `Change` is built, which touches nothing.
@@ -92,18 +89,13 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     tenure THROUGH THE DEATH; A STORM CANNOT TOUCH IT." A wound that does not kill writes only
     the band, so the same verb covers both -- which is why the table's row is `kill / wound`.
 
-    ⚠ `W-E`, 2026-09-04. THE EFFECT NOW TAKES THE RESOLUTION, AND `harm` IS GONE. Register row
-    `H-114` measured what the old signature cost: the effect could not honour the branch
-    `writes_at` had just selected, and the payload's `harm` key was read with the person's ENTIRE
-    body as its fallback -- so a fold at degree `Wounded` reached `p.body == 0`, passed
-    `if p.body > 0`, and DELETED THE PERSON. Both halves are closed here, and the `W-C` carve-out
-    that named `harm` as `W-E`'s to own is retired with its subject rather than widened.
-    ⚠ THE OLD SPELLING IS DELIBERATELY NOT QUOTED IN THIS DOCSTRING. `W-C`'s guard
+    ⚠ `W-E`: THE EFFECT TAKES THE RESOLUTION, AND THERE IS NO `harm` OPERAND (`H-114`): an effect
+    that read `harm` with the person's ENTIRE body as its fallback would, at degree `Wounded`,
+    reach `p.body == 0`, pass `if p.body > 0`, and DELETE THE PERSON.
+    ⚠ THE `harm` SPELLING IS DELIBERATELY NOT QUOTED IN THIS DOCSTRING: `W-C`'s guard
     (`test_wc_no_operand_is_defaulted_by_a_get_or_setdefault_in_shape_py_outside_eff_kill`) scans
-    RAW SOURCE TEXT, so quoting the deleted line here would keep its carve-out "used" and leave
-    an open licence on the name `harm` -- the exact staleness that test's own `used == EXEMPT`
-    assertion exists to catch, satisfied by prose describing the defect rather than by the defect.
-    Found while running that test against this change.
+    RAW SOURCE TEXT, so quoting it would keep a carve-out "used" and leave an open licence on the
+    name `harm`.
 
     WHERE THE MAGNITUDE COMES FROM NOW, AND WHY IT IS NOT INVENTED. JORDAN, 2026-09-04, VERBATIM:
     *"the combat engine determines the result there. your code just has to accept the result."*
@@ -114,21 +106,11 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
 
     THE THREE ARMS (`wound_harm_model`, registered at `H-123`, injected at `DEFAULT_FIXTURES`):
       `scene_fraction`  body <- body x health_remaining / health_full. The scene decides.
-      `total`           any wound is lethal. ⚠ THIS IS THE CONTROL AND IT IS THE BEHAVIOUR THIS
-                        FUNCTION HAD BEFORE `W-E` (`harm` defaulting to full body), so the arm
-                        that shows what the degree is worth is the code as it stood.
+      `total`           any wound is lethal. ⚠ THIS IS THE CONTROL: it is the arm that shows what
+                        the degree is worth.
       `none`            a wound writes nothing. The fold's own write-nothing guard then emits the
                         REFUSAL rather than the success -- the second control, and it isolates
                         "the band selected a different write set" from "the band changed a value".
-
-    ⚠ AND THIS SUPERSEDES ONE HARNESS TECHNIQUE, WHICH IS SAID HERE SO ITS OUTPUT IS NOT
-    MISREAD. `proposals/2026-09-04-degree-sweep/arm3_tree.py` injects a degree by monkeypatching
-    `VerbRow.writes_at` / `emits_at` and then calls `_fold` bare. That reached the effect while
-    the effect took no degree; it cannot now, because the degree travels on the `Resolution` the
-    SEAM returns and a patched READER is invisible from here. Re-run after `W-E`, its `Felled` and
-    `Wounded` nodes report REFUSED with the message below. That is the closure of `H-114` seen
-    from the probe's side -- the probe measured a world in which the degree could not reach the
-    effect -- and not a new defect.
 
     ⚠ A WOUND CANNOT KILL, AND THE FLOOR IS STRUCTURAL RATHER THAN NUMERIC. The `Wounded` band
     means the engine did NOT fell this person; a model that took their body to 0 would contradict
@@ -143,8 +125,8 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         return NO_CHANGE
     # ⚠ NO SCENE, NO HARM -- AND THIS IS A REFUSAL TO INVENT, NOT A MISSING FEATURE. `kill / wound`
     # declares `contests: the body`, so the only lawful route into this effect is through the
-    # seam; an act folded without one has no scene to read a severity off, and the pre-`W-E`
-    # answer to that was to kill. `writes_at(None)` already refuses one line earlier for the same
+    # seam; an act folded without one has no scene to read a severity off, and killing would invent one.
+    # `writes_at(None)` already refuses one line earlier for the same
     # reason, so this is the second gate on the same road rather than a new rule.
     if res is None or not isinstance(res.result, dict):
         raise Unspecified(
@@ -166,8 +148,7 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     # CP-T03-00 (`-08` AM-C-01): BOTH PARTIES TAKE THEIR BAND. The actor and the subject are each read
     # off the scene by his OWN band (`seam/ladder.py::party_degree`, the walk `combat_degree` takes the
     # worst of) and written by it: `Felled` -> body 0 and `World.remove_person`; `Wounded` ->
-    # `wound_harm_model`; `Untouched` -> nothing. Before this item only the subject was read, so an
-    # attacker his target felled walked away and `person.died` was never his. A party who is no
+    # `wound_harm_model`; `Untouched` -> nothing. A party who is no
     # longer a person is not written (the subject's case is the `NO_CHANGE` above).
     above = w.fixtures.get("combat_wounded_above")
     bands = {}
@@ -198,19 +179,13 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         w.persons[pid].body = body
         if body > 0:
             return
-        # ⚠ `w.tenures`, NOT `p.tenures + w._unowned`, AND THAT IS A FIX `W-E`'s OWN TEST FOUND.
-        # `p.tenures` is the tenures this person is the SUBJECT of (§15.1 -- a Tenure is owned by
-        # its subject), so the old scan could not see an edge ANOTHER PERSON owns that names the
-        # dead one as its OBJECT. Measured in `tiny_world`: `t10`, a live `tie` from `p_low` to
-        # `p_mid`, survived `p_mid`'s death and then DANGLED, because `del w.persons[who]` had
-        # already removed the person it pointed at. §15.3 is explicit that the tenure ends THROUGH
-        # THE DEATH; this is the write the `Felled` branch declares (`Tenure.until`) actually
-        # reaching every edge it names. `w.tenures` is owner-first over every person plus
-        # `_unowned`, so it is a WIDENING of the same scan and not a second rule.
-        # ⚠ THE CASCADE MOVED TO `World.remove_person` (item 3b) AND THE COMMENT ABOVE IS ITS
-        # PROVENANCE. It is unchanged in behaviour — the same `w.tenures` scan, for the same `W-E`
-        # reason — and it moved because MATTER is now a SECOND way to die (a body reaching 0 from
-        # an empty larder), and two sites closing tenures by hand is how the two drift apart (§8).
+        # ⚠ `w.tenures`, NOT `p.tenures + w._unowned`: `p.tenures` is the tenures this person is the
+        # SUBJECT of (§15.1 -- a Tenure is owned by its subject), so a scan of it cannot see an edge
+        # ANOTHER PERSON owns that names the dead one as its OBJECT, which would DANGLE once
+        # `remove_person` deletes the person it points at. §15.3: the tenure ends THROUGH THE
+        # DEATH. `w.tenures` is owner-first over every person plus `_unowned`. The cascade lives in
+        # `World.remove_person` because MATTER is a SECOND way to die (a body reaching 0 from an
+        # empty larder), and two sites closing tenures by hand is how the two drift apart (§8).
         # ⚠ G3: THESE CLOSURES ARE `destroy's cascade`, AND THE GATE RECOGNISES THEM BY
         # OBSERVATION. They run inside this act's own gated write (the `(Person, body)` pair, the
         # first in the `Felled` band), `remove_person` takes `who` out of `w.persons` in the same
@@ -222,7 +197,7 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     # (`own_kinds`: `body.changed` on `Wounded`), plus `person.died` where this write takes his body to
     # 0; each seat his death empties earns `tenure.closed`, its receipt naming the Office
     # (`death_subjects`). A band that does not declare a kind still does not emit it (`_fold`).
-    # CP-T03-00: A FELLED PARTY EARNS THE DEATH'S KINDS ALONE, as before this item. The `Felled` cell's
+    # CP-T03-00: A FELLED PARTY EARNS THE DEATH'S KINDS ALONE. The `Felled` cell's
     # `body.changed` is there for the OTHER party of a mixed fight -- the cell is the ACT's band, the
     # worst over both, so it must license what a Wounded party earns beside a felled one -- and is not
     # the felled man's own kind. And because `_fold` gives each kind's Event only its earners' changes,
@@ -490,8 +465,7 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     re-running "losing costs everything" deliberately), `none` (body is not written at all -- the
     second control, isolating the write from the band). The default is settled by Jordan's
     2026-09-04 ruling on `wound_harm_model` -- *"the combat engine determines the result there"*
-    -- applied to this magnitude too, not by a fresh measurement; `tools/balance_oracle.py` was
-    a campaign-driver instrument and could not observe an `engine/season`-only mechanic (`rosters.yaml`'s
+    -- applied to this magnitude too, not by a fresh measurement (`rosters.yaml`'s
     `field_casualty_models` note).
 
     ⚠ THE STANCE ROWS FOLLOW THE SEEDED-LOYALTY SHAPE (`harness/data/cast.py`'s own
@@ -605,14 +579,14 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     # *every* declared kind, a non-empty one means *only* those). So the kinds are earned as a whole:
     # with an army that moves, the band publishes both its kind and the arrival; with nobody moving
     # (`Lost`, or a `Won` whose army already stood there), the losers earn the band's own kind alone and
-    # no arrival is published. Before CP-T02-01 every subject earned `None` beside a moving army.
+    # no arrival is published.
     # CP-T02-01 / HR-1: THE SAME RULE WITH EVERY SUBJECT'S KINDS NAMED. `Won` and `Lost` declare
     # `person.died` and `tenure.closed` too, so a subject earning `None` (every declared kind) would
     # publish a death on every fought field; and a dead loser naming `person.died` beside subjects
     # earning `None` would silence the band's kind and the arrival (`_fold` keeps only named kinds once
     # any is named). So a mover earns the band's own kinds (`own_kinds`: the band's kind and the
     # arrival), a loser and a treasury the same beside a moving army and the band's kind alone when
-    # nobody moves -- the kinds `None` and `_band_kind` earned before -- and a loser the `total` arm
+    # nobody moves, and a loser the `total` arm
     # kills earns `person.died` beside them, his seats `tenure.closed` (`death_subjects`).
     own = own_kinds(VERB_TABLE["march"].emits_at(res.degree))
     loser_earns = own if movers else (_band_kind(res.degree),)
@@ -643,14 +617,11 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
             if loser_faction:
                 rows.append((loser_faction, -1.0, morale_w))
             p.stance = rows
-            # ⚠ `remove_person` ON THE `total` ARM'S OWN body==0, `_eff_kill`'s PRECEDENT
-            # (`_eff_kill` above: "the body goes to 0 ... `w.remove_person(who)`" whenever a write
-            # leaves `p.body <= 0`) -- found missing by `/code-review` on the M4 diff. Without it,
-            # `total` left a living person recorded at body 0, a state no other path in this
-            # engine produces (`_eff_kill` never does), and ED-IN-0279's own first row named
-            # `Person.exists` on participants as the recommended option this omitted.
-            # `scaled_by_degree` floors at 1 and never reaches this, on `wound_harm_model`'s own
-            # precedent that a wound (never total) cannot kill.
+            # ⚠ `remove_person` ON THE `total` ARM'S OWN body==0, `_eff_kill`'s PRECEDENT (whenever a
+            # write leaves `p.body <= 0`): without it `total` would leave a living person recorded at
+            # body 0, a state no other path in this engine produces, and ED-IN-0279's own first row
+            # named `Person.exists` on participants. `scaled_by_degree` floors at 1 and never reaches
+            # this, on `wound_harm_model`'s own precedent that a wound (never total) cannot kill.
             if p.body <= 0:
                 w.remove_person(pid)
         # CR-24: the winners' casualty is `body` ONLY -- no stance row (the loop above is the only place one is written).

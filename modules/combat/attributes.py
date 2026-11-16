@@ -25,8 +25,7 @@ season's carrier (`Person.attributes`, CR-20) names a key for one; that commit s
 the same change. `att` is Perception (ED-IN-0347) and is the whole of the read (PC-18 (1)); Reason (`attr.mind.acuity`) has no combat
 role, so an authored acuity does not reach a `Combatant`. (the revert marker is on `combat_systems.reading`).
 
-`faculty` (CR-85's build, ED-IN-0330/0331) REPLACES `history`, which stopped being an integer added to a roll. It is
-the party's dice score for the verb that opened the fight -- the season's ONE pool reader
+`faculty` (CR-85, ED-IN-0330/0331) is the party's dice score for the verb that opened the fight -- the season's ONE pool reader
 (`engine/season/seam/wrappers/sigma.py::faculty`), passed in `PersonalCombatInput.faculties` -- and it is read in
 exactly two places, the pool (`core.resolution_pool`) and the Ob the opponent rolls against (`core.ob_from_defender`).
 No sigma term reads it, so nothing centres on it: no `neutral`. It is not a registry attribute: `registry_key` None.

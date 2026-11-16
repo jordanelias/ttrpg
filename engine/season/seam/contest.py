@@ -7,11 +7,8 @@ enforces `max_depth`; returns Events + degree, or a typed refusal."*
 The degree side lives in `seam/ladder.py` and this module calls into it; the dependency is
 one-directional by construction, because §A.2 gives the ladder its own row (*"nothing.
 `degree(margin, veto?) -> Degree`"*) and a seam that graded its own result would be the second
-resolver `S27.2` names as its highest-value refusal.
-
-Moved whole from the flat `seam.py` by unit L2 of
-`workplans/2026-09-09-layer1-conformance-plan.md`; `seam/` is a directory on §A.2's nine-module
-list (`04:135`) and was shipped as a file at step 8 (ED-IN-0206).
+resolver `S27.2` names as its highest-value refusal. `seam/` is a directory on §A.2's nine-module
+list (`04:135`, ED-IN-0206).
 """
 
 from __future__ import annotations
@@ -26,8 +23,8 @@ from ..trace_log import TRACE
 
 class ContestError:
     """S39.3/S53 -- GDScript HAS NO EXCEPTIONS and exceeding recursion depth is a CRASH, so the
-    cap must produce a TYPED ERROR RESULT, CHECKED BY THE CALLER. Rev 1 returned `[]`, which is
-    indistinguishable from a lawful no-event contest. This type is distinguishable."""
+    cap must produce a TYPED ERROR RESULT, CHECKED BY THE CALLER. A bare `[]` is
+    indistinguishable from a lawful no-event contest; this type is distinguishable."""
 
     def __init__(self, reason: str, depth: int, max_depth: int):
         self.reason, self.depth, self.max_depth = reason, depth, max_depth
@@ -65,13 +62,11 @@ class ContestRefused:
 def contest_subsystem(prize: Any) -> Optional[dict]:
     """Which subsystem owns a contest for this prize.
 
-    ⚠ **THE CROSSING MOVED TO `manifest/` AT UNIT L4 (ED-IN-0206) AND THIS IS NOW THE SEAM ASKING
-    IT.** `04 §C.5`'s pseudocode spells the call the seam makes as
+    ⚠ **THE CROSSING IS `manifest/`'s (ED-IN-0206) AND THIS IS THE SEAM ASKING IT.** `04 §C.5`'s
+    pseudocode spells the call the seam makes as
     `provider = manifest.resolve("contest", prizes[prize])`, and §A.2:136 gives role->provider rows
-    their own module; the `rosters.yaml` x `module_contracts.yaml` crossing sat here, resolved at
-    FIRST CALL rather than at boot. Behaviour is unchanged for every caller: `None` for a prize no
-    roster row claims -- a real answer, not a failure, leaving the generic refusal below intact --
-    and a raise for a row naming a module no contract declares.
+    their own module. `None` for a prize no roster row claims -- a real answer, not a failure, leaving
+    the generic refusal below intact -- and a raise for a row naming a module no contract declares.
 
     The wrapper is kept rather than inlined at the call sites because the seam's own vocabulary is
     *"which subsystem owns a contest for this prize"*, and `resolve`'s is *"role, key"*."""
@@ -82,7 +77,7 @@ def contest_subsystem(prize: Any) -> Optional[dict]:
 class Resolution:
     """WHAT THE SEAM RETURNED, AS THE FOLD SEES IT. `None` for an uncontested verb, and that is
     the whole of the uncontested path's change: `writes_at(None)`/`emits_at(None)` on a verb with
-    no degree map return the flat tuples they always did.
+    no degree map return the flat tuples.
 
     Two fields and no third. `degree` is the token `verb_table.yaml` keys on; `result` is the
     subsystem's own return, kept whole so an effect can read a quantity the SCENE computed rather
@@ -94,7 +89,7 @@ class Resolution:
 def _returned(out: dict, what: str, called: str):
     """WHAT A PROVIDER RETURNED, AS THE SEAM HANDS IT BACK -- the one reading of a provider's status,
     shared by `contest()` and `grade()` (v9 FI-01) so the two cannot disagree on what is a refusal.
-    `what` names the call in a raise, `called` in the trace (both kept byte-identical for a contest).
+    `what` names the call in a raise, `called` in the trace.
     `RESOLVED` returns the result whole; a `REFUSAL_STATUSES` member is a `ContestRefused`; anything
     else is a gap in the call, raised and named, never a missing design."""
     if out.get("status") == "RESOLVED":
@@ -196,20 +191,15 @@ def contest(w: World, rung: Optional[str], prize: Any, claimants: list[str],
 
     Every argument attaches at EXACTLY ONE PLACE -- RESOLVE.
 
-    ⚠ `U1` ADDED THREE KEYWORD-ONLY PARAMETERS (`verb`, `subject`, `rng`) AND CHANGED NO EXISTING CALL. `verb` and `subject`
+    ⚠ `verb`, `subject` AND `rng` ARE KEYWORD-ONLY AND DEFAULT. `verb` and `subject`
     are what a provider needs to derive a pool and an obstacle from the act rather than from the
     prize; `rng` is the generator `04 §C.12`'s rejection 4 requires the DRIVER to construct — *"its
     generator must be constructed by the driver from the run seed and passed down exactly as
-    `World` is"* — which that rejection records as *"the one rejection that is not yet
-    load-bearing, because no roll exists yet."* It exists now. All three default, so a caller that
-    does not contest passes nothing and reads as it always did.
+    `World` is"*. A caller that does not contest passes nothing.
 
-    REV 2. Rev 1 was THE SECOND RESOLVER -- S27.2's highest-value refusal, broken inside the
-    seam. It hardcoded `band = "Partial"` with no margin, no pool and no obstacle; it guarded
-    the demote-only veto with dead code; and it named THE MOST RECENT UNRELATED EVENT as its
-    cause, which is worse than [ROOT] because it produces a plausible, wrong arc graph THAT
-    WALKS. S39.4's ladder reads off the MARGIN and no in-chain document supplies a margin
-    model, so the honest behaviour is to REFUSE (S42.2.1)."""
+    S39.4's ladder reads off the MARGIN and no in-chain document supplies a margin
+    model, so a contest that no provider claims REFUSES (S42.2.1) rather than inventing a band
+    (S27.2's second resolver)."""
     if not claimants:
         raise Forbidden("contest with no claimants", "S39.1",
                         law="S39.1 -- claimant[] is PERSONS, ALWAYS. Not factions, not units, not sides")
@@ -221,10 +211,9 @@ def contest(w: World, rung: Optional[str], prize: Any, claimants: list[str],
                         law="S39.2 line 2 -- Events, into the same log, WITH causes[] NAMING THE ACTS")
     # ⚠ A CONTEST IS A DISPATCH TO A SUBSYSTEM, NOT A GENERIC ROLL. Jordan, 2026-09-02: *"a
     # contest seems like it can be a call for a different subsystem like personal combat, mass
-    # battle or social contest."* All three ARE BUILT -- `references/module_contracts.yaml` gives
+    # battle or social contest."* `references/module_contracts.yaml` gives
     # each a doc, a sim module and a declared resolver (`d_sigma` for personal combat, `dice_pool`
-    # for the other two). So this seam was never missing a degree ladder it had to invent; it was
-    # failing to CALL the engine that owns the prize.
+    # for the other two). The seam invents no degree ladder; it CALLS the engine that owns the prize.
     # `contest` dispatches a prize to the subsystem `contest_subsystem(prize)` names; the provider is
     # resolved from that manifest row below (`manifest.call`), never by a literal here.
     if depth >= max_depth:
@@ -232,48 +221,34 @@ def contest(w: World, rung: Optional[str], prize: Any, claimants: list[str],
                        chose="typed error result returned to the caller",
                        alternatives=["recurse (a CRASH in GDScript, not a catchable error)"])
         return ContestError("max_depth reached", depth, max_depth)
-    # ⚠ THE DISPATCH RUNS **AFTER** THE DEPTH CHECK, AND IT DID NOT. Raising here first made
-    # `ContestError("max_depth reached")` UNREACHABLE for every prize the roster claims — so
-    # `H-87`'s registered cap was a number no branch could read and its three-point sweep was a
-    # set of arms identical by construction. Found by the governance-slice adversarial pass.
-    # ⚠ AND THE FIX IS A MOVE, NOT A SECOND CHECK. My first attempt added a duplicate cap test
-    # twelve lines above this one — §8 broken in the act of fixing an ordering bug.
+    # ⚠ THE DISPATCH RUNS **AFTER** THE DEPTH CHECK: raising first would make
+    # `ContestError("max_depth reached")` UNREACHABLE for every prize the roster claims, and
+    # `H-87`'s registered cap a number no branch could read.
     _sub = contest_subsystem(prize)
     if _sub is not None:
-        # ⚠ THE SEAM CALLS NOW. Jordan, 2026-09-02: *"kill / wound points towards a seam that
-        # should be calling in the personal combat system."* This block used to resolve the
-        # subsystem by name and then REFUSE — a pointer, not a call — on a scope note that ruling
-        # overrides. The wrappers are the IN-side, built on `engine/cross_scale/combat_bridge.py`'s
-        # precedent rather than a new pattern.
+        # ⚠ THE SEAM CALLS. Jordan, 2026-09-02: *"kill / wound points towards a seam that
+        # should be calling in the personal combat system."* The wrappers are the IN-side, built on
+        # `engine/cross_scale/combat_bridge.py`'s precedent rather than a new pattern.
         #
-        # ⚠⚠ **`U1` DELETED `if _sub["module"] == "personal_combat":` AND ED-SC-0033 RULES EXACTLY
-        # THAT**, in these words: *"(1) the seam dispatches by manifest ROW rather than the
+        # ⚠⚠ **ED-SC-0033 RULES**: *"(1) the seam dispatches by manifest ROW rather than the
         # hardcoded personal_combat literal"*. A literal here is a SECOND REGISTRY, and it disagrees
         # with the first the day a row moves — the failure `04:1031`'s *"a misspelled manifest row
-        # fails at boot naming the row"* exists to make impossible, surviving in the half that was
-        # still a branch. `manifest.call` returns the provider a module registered with
-        # `@provider(role, module)`, or `None`.
-        # ⚠ **`None` IS A REAL ANSWER AND IS WHY THIS IS BYTE-INVARIANT TODAY.** (HISTORY, before M3 and
-        # v9 SC-01 steps 13+15: `mass_battle` and `social_contest` named modules nothing had
-        # registered, so they fell through to the refusal below exactly as they did under the literal) — the seam names the subsystem and its
-        # resolver rather than reporting one undifferentiated hole. `proposals/…/08_SEAM.md` PART B
-        # is titled *THE MANIFEST ROW, AND WHY THIS DESIGN REFUSES THE `if`-BRANCH* and registers
-        # the `if` as a shim; this is the shim coming out.
+        # fails at boot naming the row"* exists to make impossible. `manifest.call` returns the
+        # provider a module registered with `@provider(role, module)`, or `None`.
+        # ⚠ **`None` IS A REAL ANSWER**: the seam names the subsystem and its
+        # resolver rather than reporting one undifferentiated hole.
         from ..manifest import call as _provider_for
         # ⚠ THE `provider:` FIELD, NOT THE `module:`. A prize names WHOSE contest it is and,
-        # separately, WHAT RUNS IT. The two differed while `a standing` was rolled by the interim
-        # `sigma_leverage` (ED-SC-0033 clause 2); v9 SC-01 steps 13 + 15 repointed it to
-        # `social_contest` as a ROW change, which is what reading `provider:` here made possible.
+        # separately, WHAT RUNS IT; reading `provider:` makes repointing a prize a ROW change.
         _run = _provider_for("contest", _sub.get("provider"))
         if _run is not None:
-            # M4 (`ED-IN-0279` clause (a)). `rung` -- ALREADY A PARAMETER OF THIS FUNCTION, ALREADY
-            # PASSED AT EVERY CALL SITE, AND UNUSED UNTIL NOW -- is threaded to the provider for
-            # the same reason `verb`/`subject`/`rng` were: the seam's call is uniform, and which
-            # keyword a provider actually reads is the provider's business. `mass_battle` is the
-            # first to read it, to scope a derived defending side to presence at a place; since v9 SC-02
-            # `22a` `social_contest` reads it too, as the room whose bench hears the speaker, for a prize
-            # row saying `heard_by: bench`; every other provider accepts and ignores it, a deliberate non-change (`combat.py`'s own
-            # note on `rng` is the precedent for what that comment looks like).
+            # `rung` is threaded to the provider for
+            # the same reason `verb`/`subject`/`rng` are: the seam's call is uniform, and which
+            # keyword a provider actually reads is the provider's business (`ED-IN-0279` clause (a)).
+            # `mass_battle` reads it to scope a derived defending side to presence at a place;
+            # `social_contest` reads it as the room whose bench hears the speaker, for a prize
+            # row saying `heard_by: bench`; every other provider accepts and ignores it (`combat.py`'s own
+            # note on `rng` is the precedent).
             out = _run(w, claimants, causes, prize, verb=verb, subject=subject, rng=rng, rung=rung,
                        effort=effort, host=host)
             return _returned(out, f"a contest for {prize!r}", f"contest for {prize!r}")

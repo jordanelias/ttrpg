@@ -7,12 +7,10 @@ the module entry the prize row names (`module_entry:`, registered in `manifest.M
 composition row) and interprets what comes back -- the winner, the surrender, the bouts, the wound-state
 refusal -- and returns the scene's trace beside them (PC-06 M-1). The fight itself is
 `modules/combat/fight.py`, reached by string; it, not this module, constructs the `Combatant`s and calls
-`wrapper.fight`. Below, "this module constructs" and "the seam holds the Combatants" mean THE ENTRY's.
+`wrapper.fight`.
 
 ⚠ JORDAN, 2026-09-02: *"kill / wound points towards a seam that should be calling in the personal
-combat system."* That is a ruling, and it overrides the scope note that stood in `contest()` —
-*"wiring those engines is out of this chain's scope"* — which made the seam resolve the subsystem
-by name and then refuse. Resolving and refusing is a pointer; this is the call.
+combat system."* The seam calls the engine; it does not resolve the subsystem by name and refuse.
 
 WHAT THIS IS, AND WHAT IT DELIBERATELY IS NOT
 ---------------------------------------------
@@ -25,19 +23,19 @@ legitimate outcome."*
 
 This module does not decide anything about combat. It derives two parties, hands them to that
 engine with a deterministic RNG, and returns what the engine says. Every combat rule stays in
-the engine (`modules/combat/` since `31b`), which this chain may read and may not edit.
+the engine (`modules/combat/`), which this chain may read and may not edit.
 
 ⚠ THE LOADER: `engine/substrate/pc_engine.py`, the one path seam into the engine, which the module
 entry calls. This module reads it only for `engine()`, the availability probe its tests skip on, and
 `load_error()`, the leaf's raise translated into a named reason. The adapter's typed refusal
 `ENGINE-UNAVAILABLE` is the unregistered entry's (no driver constructed in the process), as in `sigma.py`.
-⚠ THE PARTY DISCIPLINE FOLLOWS `combat_bridge.py` AS PRECEDENT RATHER THAN REINVENTING IT (§0:
-*answered by precedent — the tree has already decided this shape somewhere else*). Its discipline is the part worth copying:
-set a field only from something the actor genuinely has (his authored attributes, PC-06 K-1), leave every
+⚠ THE PARTY DISCIPLINE FOLLOWS `combat_bridge.py` AS PRECEDENT (§0:
+*answered by precedent — the tree has already decided this shape somewhere else*): set a field only from
+something the actor genuinely has (his authored attributes, PC-06 K-1), leave every
 other field at the class's own constructor default, and return a typed gap rather than fabricate a party. The
 `Combatant` defaults it names — strength 4, agi 4, end 4, att 3, spirit 3, focus 3, disp 4,
-weapon `arming`, armor `light`, tradition `none` — are the class's, not this module's. The record has since grown
-each party's kit (CP-T03-03) and `faculty` (CR-85, `combat_input`), which replaced the class's `history`.
+weapon `arming`, armor `light`, tradition `none` — are the class's, not this module's. The record carries
+each party's kit (CP-T03-03) and `faculty` (CR-85, `combat_input`).
 
 ⚠ THE ONE FIELD THE SEAM COMPUTES IS `end`, FROM `body_band_penalty`, AND IT INVENTS NO NUMBER. A
 `Person` carries `body`, an int on the condition scale, and `attributes` (PC-06 K-1: those ride
@@ -51,22 +49,18 @@ band), and `H-38` closed with *"`Site.condition` is the model"* so that table is
 Which field the penalty lands on is the injected part and is registered (`H-97`); the magnitude is
 not invented, because the bands already exist.
 
-⚠ THE SEAM STILL DOES NOT MINT A DEGREE — IT NOW READS ONE. ⚠ SUPERSEDED IN PART 2026-09-03 BY A
-JORDAN RULING: *"kill/wound degrees should be directly taken from scene combat, which is what
-actually needs to be called when kill/wound is considered."*
+⚠ THE SEAM DOES NOT MINT A DEGREE — IT READS ONE. JORDAN, 2026-09-03: *"kill/wound degrees should be
+directly taken from scene combat, which is what actually needs to be called when kill/wound is
+considered."*
 
-The paragraph that stood here said the subsystem returns a WINNER, that `contest()` wants a band
-off a MARGIN, and that **no mapping between them exists in any document**. The first two are still
-true. The third was true of the DOCUMENTS and false of the DATA, and that is the correction:
-
-  `wrapper.fight` returns `+1 / -1 / 0` and THROWS AWAY WHAT IT COMPUTED. But the seam constructs
+  `wrapper.fight` returns `+1 / -1 / 0` and THROWS AWAY WHAT IT COMPUTED. But the module entry constructs
   `A` and `B` and still holds them after the call, and each carries a `WoundTracker` (`.wt`) with
   `felled`, `wounds`, `max_wounds`, `health_remaining` and `health_full`. The severity of the
-  outcome was computed by scene combat and is sitting on objects this module owns.
+  outcome was computed by scene combat and is sitting on objects the entry owns.
 
-**So the degree is READ OFF THE SCENE, not mapped from a winner.** That is the ruling made
-mechanical, and it invents nothing: this module already returns `parties={id: A.end}` by reading
-the Combatants after the fight, and the wound state is the same read one field deeper.
+**So the degree is READ OFF THE SCENE, not mapped from a winner.** It invents nothing: this module
+returns `parties={id: A.end}` by reading the Combatants after the fight, and the wound state is the same
+read one field deeper.
 
 ⚠ WHAT IS STILL REGISTERED, NARROWED RATHER THAN CLOSED (`H-98`). The engine distinguishes exactly
 two terminal states — DECIDED (`result != 0`; `wrapper.fight` sets a result when a fighter is
@@ -144,8 +138,7 @@ def party_end(person: Any, fx: Any) -> int:
     """A `Person`'s `Combatant.end` (`H-97`): the `attr.body.endurance` he HOLDS (authored, or drawn by
     `state/carriers.py::generated_attributes` and seated by `build_realm(cast_attributes=True)`; the class default only where he holds none) less
     one point per body band. The other attributes ride on `PersonalCombatInput.attributes` and the module maps
-    them (PC-06 K-1). Was `derive_party`, which built the `Combatant` too; since `31b` the module entry
-    builds it from this number (`modules/combat/fight.py`)."""
+    them (PC-06 K-1). The module entry builds the `Combatant` from this number (`modules/combat/fight.py`)."""
     bands = body_band_penalty(person, fx)
     # `end`'s class default is 4 (`modules/combat/attributes.py`). One band = one point, floored at 1: a dying
     # person still fights, which is the same floor `decision.budget` applies for the same reason.
@@ -159,7 +152,7 @@ def duel_terms_of(verb: str, stakes: Optional[str] = None) -> Optional[str]:
 
     v10 PC-10b: `stakes`, a standing challenge's term (`queries/world_q.py::stakes_of`, `rosters.yaml:
     challenge_terms`), when the act fights under one -- THE SAME FIELD AND THE SAME CHECK, no second path. `None`
-    (no challenge, or a challenge naming no stakes) falls through to the verb's roster line, as before.
+    (no challenge, or a challenge naming no stakes) falls through to the verb's roster line.
 
     ⚠ THE CLOSED SET IS THE ENGINE'S, AND THE CHECK IS AGAINST IT, NEVER A COPY: the term must be a member of
     `modules/combat/wrapper.py::DUEL_TERMS`, read off the loaded engine, and a value outside it REFUSES here naming
@@ -273,8 +266,8 @@ def fight_estimate(w: Any, actor: str, via: Any, target: Optional[str], verb: st
 
 
 def scene_outcome(got: dict, actor: str, target: str) -> tuple:
-    """`(outcome, yielder)` -- HOW ONE SCENE THE MODULE ENTRY DEALT ENDED, THE ONE OWNER OF THAT READING (B01a.04: moved,
-    unchanged, out of `fight_estimate`'s loop, so the random-pairs instrument reads a scene the way the display does).
+    """`(outcome, yielder)` -- HOW ONE SCENE THE MODULE ENTRY DEALT ENDED, THE ONE OWNER OF THAT READING (the random-pairs
+    instrument reads a scene the way the display does).
     `outcome` is one of `ESTIMATE_OUTCOMES`; `yielder` is the id `surrender_of(got["trace"])["by"]` names, `None` where
     nobody yielded. `got` is the entry's return (`trace`, `wound_state`).
 
@@ -296,7 +289,7 @@ def scene_outcome(got: dict, actor: str, target: str) -> tuple:
 
 @provider("estimate", _PROVIDER)
 def estimate(w: Any, act: Any, claimants: list, target: Optional[str]) -> Optional[tuple]:
-    """THIS PROVIDER'S CASE FOR `sigma.odds_of`, MODE (a) (CP-T04-08 moved the dispatch off a direct import): the
+    """THIS PROVIDER'S CASE FOR `sigma.odds_of`, MODE (a): the
     shares `fight_estimate` samples for the act, as `(actor felled, subject felled, yielded, undecided)`
     (`ESTIMATE_OUTCOMES`' order), or `None` for a party gap or a refusal. `claimants` is the fold's own derivation
     of the act's parties (`loop/sides.py::sides_of`, which `odds_of` calls once for every provider); `target` is
@@ -359,31 +352,28 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     `effort` (CP-T01-05) is accepted and NOT USED HERE, as `rung`: the seam's call is uniform, and combat
     sums its own sigma (`modules/combat/core.py`), outside `rosters.yaml: advantage_sources`.
 
-    ⚠ `rung` IS ACCEPTED AND NOT USED HERE, THE SAME DELIBERATE NON-CHANGE AS `rng` BELOW (M4,
-    `ED-IN-0279` clause (a)). The seam's call is uniform; two duellists need no place to scope
-    a derivation over.
+    ⚠ `rung` IS ACCEPTED AND NOT USED HERE, AS `rng` BELOW (`ED-IN-0279` clause (a)). The seam's call is
+    uniform; two duellists need no place to scope a derivation over.
 
     The RNG is seeded from the WORLD's own clock and the causing act, so a contest is reproducible
     exactly as every other draw in this instrument is (`S33`: *unique per DRAW, not per
     operation*). `wrapper.fight`'s own note says to pass `random.Random(seed)` for determinism.
 
-    ⚠ **`U1` ADDED `@provider` AND THREE KEYWORD PARAMETERS, AND THE SEED IS DELIBERATELY UNCHANGED.**
-    ED-SC-0033 clause (1) rules that *"the seam dispatches by manifest ROW rather than the hardcoded
-    personal_combat literal"*, so this function is now reached by lookup rather than by an `if`; the
-    keywords are the second provider's signature, which the seam calls uniformly.
-    ⚠ **AND `rng` IS ACCEPTED AND NOT USED HERE, WHICH IS A DELIBERATE NON-CHANGE.** `04 §C.12`'s
+    ⚠ **`@provider` AND THE KEYWORD PARAMETERS ARE THE PROVIDER SIGNATURE.** ED-SC-0033 clause (1) rules that
+    *"the seam dispatches by manifest ROW rather than the hardcoded personal_combat literal"*, so this
+    function is reached by lookup; the keywords are the signature the seam calls every provider with.
+    ⚠ **`rng` IS ACCEPTED AND NOT USED HERE, DELIBERATELY.** `04 §C.12`'s
     rejection 4 wants the generator constructed by the driver, and `seam/wrappers/sigma.py` is built
-    that way. This module already derives its own seed from `H(world_seed, tick, a_id,
+    that way. This module derives its own seed from `H(world_seed, tick, a_id,
     f"contest:{prize}:{causes[0]}")` — a DIFFERENT string from the driver's, with a different third
-    argument — so consuming the driver's `rng` here would re-seed every existing `kill / wound`
+    argument — so consuming the driver's `rng` here would re-seed every `kill / wound`
     result and silently re-record the goldens under cover of a refactor. `04 PART D row 35` needs
-    `purpose` UNIQUENESS, not one spelling across providers, and forcing one costs a golden re-record
-    for nothing. The parameter is in the signature because the SEAM's call is uniform; whose seed a
-    provider uses is the provider's.
+    `purpose` UNIQUENESS, not one spelling across providers. The parameter is in the signature because
+    the SEAM's call is uniform; whose seed a provider uses is the provider's.
     """
     if len(claimants) < 2:
         # `combat_bridge.derive_parties` returns None on a derivation gap rather than faking a
-        # side; the same rule, stated once more because the shape of the gap is different here.
+        # side; the same rule here.
         return dict(status="PARTY-GAP", why=f"personal combat needs two parties; got {len(claimants)}",
                     module=_PROVIDER)
     a_id, b_id = claimants[0], claimants[1]
@@ -393,8 +383,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
                     module=_PROVIDER)
     inp = combat_input(w, claimants, verb, _cause_record(w, causes))
     # `H` returns a blake2b hexdigest (`state/ids.py`), so 16 is the RADIX that parses it back to
-    # an int for the RNG -- structural, not a game value. Pre-existing; surfaced because step 8's
-    # `S.H(...)` -> `H(...)` lift rewrote the line and the gate scores added lines.
+    # an int for the RNG -- structural, not a game value.
     # [JUSTIFIED: radix for parsing H()'s hex digest, not a mechanical constant]
     seed = int(H(w.world_seed, w.tick, a_id, f"contest:{prize}:{causes[0] if causes else ''}"), 16)
     entry, refusal = entry_for(prize, _PROVIDER)
@@ -424,7 +413,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
                 # §11.4: `None` unless a yield ended the scene; then a non-zero `result` with nobody felled.
                 surrender=surrender_of(trace),
                 bouts=sum(1 for e in trace if e.get("kind") == "turn_start"),
-                # v9 PC-06 M-1 (#445 `05` M-1 / `03` S-4): THE SCENE'S OWN TRACE, AS THE MODULE ENTRY
+                # PC-06 M-1: THE SCENE'S OWN TRACE, AS THE MODULE ENTRY
                 # CAPTURED IT, returned rather than reduced to `bouts` alone -- the read a grid display
                 # or B-3's per-event measure plays the bout from. `bouts` above is its `turn_start`
                 # count. Nothing here or downstream folds it into `World`: `contest()` hands this dict
