@@ -11,7 +11,7 @@ WHAT IS BUILT, each asked of the real manifest, the real registrar, the real fol
     (`module_entry: social_contest.roll`, registered by `30`'s registrar at driver construction, never
     imported by the host) and holds the entry to a `Margin` at the boundary -- a margin, never a winner
     (`08_SEAM.md`'s provider rule, intent only). The automated mode stays the σ-leverage roll: SC-05's
-    measurement, recorded in `modules/social_contest/roll.py`'s docstring, keeps it over the kernel.
+    decision, recorded in `modules/social_contest/roll.py`'s docstring, keeps it over the kernel.
   * THE RUNG (C-8): a contested act on a non-`mass_battle` prize dispatches at the actor's place
     (`world_q.place_of`), where it dispatched at the placeholder `"R"`.
 

@@ -40,6 +40,9 @@
 #     - STRICT speed differential only: faster cell wins, loser cells that
 #       moved this turn revert to pre-move snapshot.
 #     - Tied speed → NO movement resolution (combat decides via engagement).
+#     - Size and random tiebreakers DEFERRED until cavalry units exist: applying them per contested
+#       position per turn produces battery noise in symmetric matchups without modelling anything
+#       historical (equal infantry formations don't resolve by random; they resolve by combat).
 #
 #   Charge-through (cavalry past static infantry) and end-of-phase
 #   displacement (opponent shifts back when overlapping with cavalry) are
