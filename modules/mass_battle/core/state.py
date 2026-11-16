@@ -83,7 +83,7 @@ def morale_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
             loss = 0.0
             if frac < 0.50: loss += 1.0    # [canonical: mass_battle_v30.md §A.4 — Size<50% morale trigger] Size < 50% max -> -1
             if frac < 0.25: loss += 1.0    # Size < 25% max -> -1 additional
-            if u.broken: loss += 1.0       # unit formation-broken pressure (kept unit-scoped for byte-exactness)
+            if u.disordered: loss += 1.0       # unit formation-disordered pressure (kept unit-scoped for byte-exactness)
             if atom.eff_stamina <= 0 and atom.eff_discipline > 0 and u.command > 0:
                 loss += 1.0 / (atom.eff_discipline * u.command)   # per-subunit exhaustion pressure
             # [ED-MB-0024, DG-2 §2.2 EMERGENT auto-entry] When the casualty-fraction trigger pushes a
@@ -159,7 +159,7 @@ def rout_resolution(unit_a, unit_b, phase_idx):  # noqa: ARG001
     Morale Cascade (§A.12): friendly units in same engagement make
     Discipline check Ob 1 on rout — modeled when multi-unit engagements exist."""
     for u, opponent in [(unit_a, unit_b), (unit_b, unit_a)]:
-        if u.routed or u.broken:
+        if u.routed or u.disordered:
             continue
         for atom in u.subunits:
             if atom.routed:
@@ -191,11 +191,11 @@ def discipline_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
     a_loss = (unit_a.hp_max - unit_a.hp) / BLOCK_SIZE if BLOCK_SIZE else 0
     b_loss = (unit_b.hp_max - unit_b.hp) / BLOCK_SIZE if BLOCK_SIZE else 0
     for u, their_loss in [(unit_a, b_loss), (unit_b, a_loss)]:
-        if u.routed or u.broken:
+        if u.routed or u.disordered:
             continue
         single = len(u.subunits) == 1
         for atom in u.subunits:
-            if atom.routed or atom.broken:
+            if atom.routed or atom.disordered:
                 continue
             # per-subunit own Size loss drives THIS subunit's degradation
             if single:

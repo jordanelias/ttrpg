@@ -427,14 +427,14 @@ class Subunit:
     # regenerate for free or silently stop being metered, depending on MB_CLOSE_RANKS) -- see
     # percell._ColBlock's own note.
     volleys: Optional[float] = None
-    # Per-subunit rout lifecycle (Jordan directive 2026-06-17): a subunit tracks its OWN rout/broken
+    # Per-subunit rout lifecycle (Jordan directive 2026-06-17): a subunit tracks its OWN rout/disordered
     # state, so a heavily-hit subunit can break while a fresh sibling holds ("a section of the line
-    # breaks" — §A.12 Cannae/Hastings). routed = its eroding morale reached 0; broken = its discipline
+    # breaks" — §A.12 Cannae/Hastings). routed = its eroding morale reached 0; disordered = its discipline
     # reached 0 (formation gone, contributes 0 to combat). For a single-subunit unit these coincide with
-    # the parent Unit's routed/broken so the homogeneous gauge stays byte-exact. discipline_start mirrors
+    # the parent Unit's routed/disordered so the homogeneous gauge stays byte-exact. discipline_start mirrors
     # morale_start (the per-subunit nominal start for degradation tracking); None inherits the Unit.
     routed: bool = False
-    broken: bool = False
+    disordered: bool = False
     discipline_start: Optional[int] = None
     # [DG-2, designs/proposals/mass_battle_fighting_withdrawal_v1.md, Jordan-ruled "build it now"
     # 2026-07-08] A yielding subunit gives ground under pressure but keeps FIGHTING and keeps FACING
@@ -2516,7 +2516,7 @@ class Unit:
     hp: int = 0
     hp_max: int = 0
     routed: bool = False
-    broken: bool = False
+    disordered: bool = False
     # ED-MB-0022: Feigned Retreat (PP-256). `feigned` = this unit declared a Feigned Retreat and is
     # withdrawing to bait a pursuer (its "rout" is a ruse). `overextended` = a pursuer that failed the
     # PP-256 Discipline check while chasing a feigning enemy — its NEXT engagement pool is cut by
@@ -2704,14 +2704,14 @@ class Unit:
 
     def discipline_penalty(self):
         # SMOOTH (Jordan 2026-06-15 'fix discipline'): continuous linear penalty over the SAME range as the
-        # old tiers' endpoints (discipline>=5 -> 0, discipline 1 -> -2) -- no step/cliff. disc<=0 -> broken.
-        if self.discipline <= 0: return -99  # [canonical: mass_battle_v30.md §A.4 — sentinel: Disc<=0 formation-broken]
+        # old tiers' endpoints (discipline>=5 -> 0, discipline 1 -> -2) -- no step/cliff. disc<=0 -> disordered.
+        if self.discipline <= 0: return -99  # [canonical: mass_battle_v30.md §A.4 — sentinel: Disc<=0 formation-disordered]
         return -max(0.0, min(2.0, (5.0 - self.discipline) * 0.5))
 
     def base_combat_pool(self):
-        if self.routed or self.broken: return 0
+        if self.routed or self.disordered: return 0
         pen = self.discipline_penalty()
-        if pen == -99: self.broken = True; return 0  # [canonical: mass_battle_v30.md §A.4 — sentinel: -99 broken-formation flag]
+        if pen == -99: self.disordered = True; return 0  # [canonical: mass_battle_v30.md §A.4 — sentinel: -99 disordered-formation flag]
         # Pool uses continuous effective_size (float), floored for dice count.
         # [canonical: mass_battle_v30.md §A.4 Effective Combat Pool; live value =
         #  Command*(1+cohesion) (2*Command at full strength -> Command at annihilation,

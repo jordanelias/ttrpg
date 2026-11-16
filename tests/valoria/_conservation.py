@@ -6,7 +6,7 @@ Four acceptance suites each open-coded the same loop, and each of the four opene
 UNCOUNTED skip::
 
     for unit in (a, b):
-        if unit.routed or unit.broken:
+        if unit.routed or unit.disordered:
             continue
         assert math.isclose(_unit_troops(unit), unit.hp, ...)
 
@@ -99,7 +99,7 @@ def assert_troop_conservation(*units, context=''):
         assert math.isclose(troops, unit.hp, rel_tol=REL_TOL, abs_tol=ABS_TOL), (
             f"{where}{getattr(unit, 'name', unit)}"
             f"{' [routed]' if getattr(unit, 'routed', False) else ''}"
-            f"{' [broken]' if getattr(unit, 'broken', False) else ''}"
+            f"{' [broken]' if getattr(unit, 'disordered', False) else ''}"
             f": Sum(cell_troops)={troops} != hp={unit.hp}")
         checked += 1
     return checked

@@ -216,7 +216,7 @@ def run_battle(unit_a, unit_b, max_ticks=18):  # [canonical: mass_battle_v30.md 
                 if u.routed:
                     continue
                 for atom in u.subunits:
-                    if atom.routed or atom.broken:
+                    if atom.routed or atom.disordered:
                         continue
                     cic = 0
                     for p in pairs:
@@ -353,7 +353,7 @@ def run_battle(unit_a, unit_b, max_ticks=18):  # [canonical: mass_battle_v30.md 
         # Discipline degradation runs at phase_boundary (D-6). Per-tick integer Size changes are rare at
         # TroopCount HP scale. check_drift still runs per-tick for formation coherence.
         for u in [unit_a, unit_b]:
-            if not u.routed and not u.broken:
+            if not u.routed and not u.disordered:
                 u.check_drift()
         # SIMULTANEOUS MORALE — compute erosion for both units, then check rout for both, so ordering cannot
         # affect which unit routs first within a single tick.
@@ -382,7 +382,7 @@ def run_battle(unit_a, unit_b, max_ticks=18):  # [canonical: mass_battle_v30.md 
         if MB_ENVELOP_SHOCK:
             for u, _shocked, _dmg in ((unit_a, result.get("shocked_a", False), result["dmg_a"]),
                                        (unit_b, result.get("shocked_b", False), result["dmg_b"])):
-                if not _shocked or u.routed or u.broken:
+                if not _shocked or u.routed or u.disordered:
                     continue
                 _sdisc = u.agg_discipline()
                 if _sdisc > 0 and u.command > 0 and not discipline_check_cascade(u):

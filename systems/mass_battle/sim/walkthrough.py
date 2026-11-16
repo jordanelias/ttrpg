@@ -70,7 +70,7 @@ def _snap_unit(u, d: int) -> dict:
             nodes.append([round(r, d), round(c, d), round(s.cell_troops.get(cid, 0.0)),
                           None if f is None else [round(f[0], d), round(f[1], d)]])
         bf = getattr(s, '_node_facing', None)
-        subs.append({'type': s.troop_type, 'routed': bool(s.routed), 'broken': bool(s.broken), 'stance': s.eff_stance,
+        subs.append({'type': s.troop_type, 'routed': bool(s.routed), 'broken': bool(s.disordered), 'stance': s.eff_stance,
                      'morale': round(s.eff_morale, d), 'discipline': s.eff_discipline,
                      'stamina': round(s.eff_stamina, d),
                      'body_facing': None if bf is None else [round(bf[0], d), round(bf[1], d)], 'nodes': nodes})

@@ -121,14 +121,14 @@ def test_broken_scope():
     a = mk_su('levy', col=8, discipline=0); b = mk_su('heavy_infantry', col=9, discipline=5)
     u = mk_unit([a, b])
     pa, pb = subunit_combat_pool(u, a), subunit_combat_pool(u, b)
-    _ok("S8 broken pool 0 + flagged", pa == 0 and a.broken)
-    _ok("S8 unit NOT broken on one section down", u.broken is False)
+    _ok("S8 broken pool 0 + flagged", pa == 0 and a.disordered)
+    _ok("S8 unit NOT broken on one section down", u.disordered is False)
     _ok("S8 healthy sibling fights", pb > 0)
     a2 = mk_su('levy', col=8, discipline=0); b2 = mk_su('light_infantry', col=9, discipline=0)
     u2 = mk_unit([a2, b2]); subunit_combat_pool(u2, a2); subunit_combat_pool(u2, b2)
-    _ok("S8 all broken -> unit.broken", u2.broken is True)
+    _ok("S8 all broken -> unit.disordered", u2.disordered is True)
     s = mk_su('levy', col=8, discipline=0); us = mk_unit([s])
-    _ok("S8 single-subunit disc0 -> unit.broken (byte-exact)", subunit_combat_pool(us, s) == 0 and us.broken)
+    _ok("S8 single-subunit disc0 -> unit.disordered (byte-exact)", subunit_combat_pool(us, s) == 0 and us.disordered)
 
 
 def test_deep_erosion():
@@ -195,7 +195,7 @@ def test_between_battle_reset():
     _ok("S13 unit morale reset to start", u.morale == u.morale_start)
     _ok("S13 own-subunit morale reset to start", own.eff_morale == own.eff_morale_start)
     _ok("S13 inherited subunit morale follows unit", inh.eff_morale == u.morale_start)
-    _ok("S13 rout/broken cleared (unit+subunits)", not (u.routed or u.broken or own.routed or inh.routed))
+    _ok("S13 rout/broken cleared (unit+subunits)", not (u.routed or u.disordered or own.routed or inh.routed))
     _ok("S13 Discipline persists (not reset)", own.eff_discipline == pre_disc_own and pre_disc_own == 3)
 
 

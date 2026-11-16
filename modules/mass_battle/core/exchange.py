@@ -77,19 +77,19 @@ def subunit_combat_pool(unit, atom):
     for the homogeneous gauge; differentiates per subunit for mixed units.
     [canonical: mass_battle_v30.md §A.4 Effective Combat Pool; the (5.0-disc)*0.5 discipline penalty
      mirrors Unit.discipline_penalty 'fix discipline']"""
-    if unit.routed or unit.broken or atom.routed or atom.broken:
+    if unit.routed or unit.disordered or atom.routed or atom.disordered:
         return 0
     disc = atom.eff_discipline
     if disc <= 0:
-        # Per-subunit broken state (ED-1020 fix): this SUBUNIT's formation is gone (Discipline 0,
-        # §A.4 "Formation broken; cannot attack") -> it contributes 0. The UNIT is broken only when
-        # EVERY subunit is broken (the whole formation is gone); a single broken section must NOT zero
+        # Per-subunit disordered state (ED-1020 fix): this SUBUNIT's formation is gone (Discipline 0,
+        # §A.4 "Formation broken; cannot attack") -> it contributes 0. The UNIT is disordered only when
+        # EVERY subunit is disordered (the whole formation is gone); a single disordered section must NOT zero
         # its healthy siblings' pools (§A.12's cascade is inter-unit only; per-subunit "siblings fight on").
-        # Single-subunit: the lone subunit broken => all() true => unit.broken set exactly as before
+        # Single-subunit: the lone subunit disordered => all() true => unit.disordered set exactly as before
         # (byte-exact for the homogeneous gauge).
-        atom.broken = True
-        if all(s.broken for s in unit.subunits):
-            unit.broken = True
+        atom.disordered = True
+        if all(s.disordered for s in unit.subunits):
+            unit.disordered = True
         return 0
     pen = -max(0.0, min(2.0, (5.0 - disc) * 0.5))
     stam_pen = _stamina_pool_penalty(atom.eff_stamina)
