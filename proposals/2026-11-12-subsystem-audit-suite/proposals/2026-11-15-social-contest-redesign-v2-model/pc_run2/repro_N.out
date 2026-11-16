@@ -1,0 +1,26 @@
+n=600; claim | N's figure | this run +- se | within 2 se (of the difference, N's se taken as ours)?
+  crown/peace                    0.527 | 0.517+-0.020 | yes (diff -0.010, 2se 0.058)
+  war                            0.433 | 0.440+-0.020 | yes (diff +0.007, 2se 0.057)
+  famine                         0.510 | 0.445+-0.020 | NO (diff -0.065, 2se 0.057)
+  theocracy                      0.520 | 0.495+-0.020 | yes (diff -0.025, 2se 0.058)
+  commune                        0.507 | 0.485+-0.020 | yes (diff -0.022, 2se 0.058)
+  age of faith                   0.507 | 0.493+-0.020 | yes (diff -0.014, 2se 0.058)
+  mercantile                     0.557 | 0.545+-0.020 | yes (diff -0.012, 2se 0.058)
+  fair (bully arranges, rig 0)   0.527 | 0.490+-0.020 | yes (diff -0.037, 2se 0.058)
+  firm (rig .5)                  0.483 | 0.465+-0.020 | yes (diff -0.018, 2se 0.058)
+  rigged (rig 1)                 0.327 | 0.345+-0.019 | yes (diff +0.018, 2se 0.055)
+  rigged, power flattened        0.577 | 0.550+-0.020 | yes (diff -0.027, 2se 0.057)
+
+== the accused arranges: does his tilt depend on whether he bears the accuser a grudge? (bully, rig 1)
+  bully's tie to the scholar -0.7: card arranged_by bully tilt 0.94 decided_by ('judge2',) turns 2 | accuser carried 0.375
+  bully's tie to the scholar -0.1: card arranged_by bully tilt 0.94 decided_by ('judge2',) turns 2 | accuser carried 0.365
+  bully's tie to the scholar +0.0: card arranged_by bully tilt 0.0 decided_by ('judge',) turns 4 | accuser carried 0.520
+  bully's tie to the scholar +0.3: card arranged_by bully tilt 0.0 decided_by ('judge',) turns 4 | accuser carried 0.487
+
+== reception, a rung-5 'moderate' judge (power 7), played, right/wrong by the fold's own test (N's table)
+  Grace 7 right (n=171): +0.02, +0.83, +0.17, +0.05, -0.03
+  Grace 7 wrong (n=129): -0.05, +0.75, +0.33, +0.02, -0.03
+  Grace 4 right (n=191): -0.23, +0.33, +0.67, -0.10, -0.13
+  Grace 4 wrong (n=109): -0.50, +0.30, +1.33, -0.23, -0.13
+  Grace 1 right (n=201): -0.47, +0.00, +1.17, -0.23, -0.23
+  Grace 1 wrong (n=99): -0.93, +0.00, +2.33, -0.47, -0.23

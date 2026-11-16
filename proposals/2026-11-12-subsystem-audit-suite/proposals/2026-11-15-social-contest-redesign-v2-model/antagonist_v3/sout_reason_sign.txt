@@ -1,0 +1,3 @@
+tell, arguing consequence, the matter helps the listener: Reason 1/4/7 carried 0.215/0.646/0.755  (7-1 +0.540, z +35.2)
+tell, arguing consequence, the matter hurts the listener: Reason 1/4/7 carried 0.225/0.095/0.101  (7-1 -0.125, z -9.4)
+  landing at relevance 0 / 1 / 2: [0.4, -0.5, -1.0]

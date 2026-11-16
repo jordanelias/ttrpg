@@ -1,0 +1,4 @@
+rally grace 1->7: 0.287->0.297 (+0.010, z +0.5) n=1200
+rally reason 1->7: 0.283->0.306 (+0.023, z +1.2) n=1200
+  grace 1: ends {'rested': 300} beats/sitting 1.04
+  grace 7: ends {'rested': 274, 'budget': 26} beats/sitting 1.98

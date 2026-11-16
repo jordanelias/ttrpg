@@ -1,0 +1,2 @@
+producer battery: 49 settings; moving nothing when zeroed AND doubled: ['gap_step', 'bias_step']
+enriched battery: 49 settings; moving nothing when zeroed AND doubled: ['bias_step']

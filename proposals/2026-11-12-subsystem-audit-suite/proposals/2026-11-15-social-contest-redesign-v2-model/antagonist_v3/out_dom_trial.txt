@@ -1,0 +1,1 @@
+trial        (for, vs automatic; n=800, se~0.017): auto 0.297 | argue 0.159 | press 0.241 | rest 0.383 | concede 0.018 | answer_else_rest 0.364 | press_then_argue 0.182

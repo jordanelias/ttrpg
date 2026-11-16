@@ -1,0 +1,53 @@
+
+== P5.3/5 the same record credited by two hearers by tie to its SOURCE; an item that implicates a man's patron
+  credit(judge    ) = +0.40  bonds to clerk +0.00, to bully +0.00
+  credit(judge2   ) = -0.10  bonds to clerk +0.00, to bully +0.50
+  credit(judge3   ) = +0.40  bonds to clerk +0.00, to bully +0.00
+  credit(toll_men ) = -0.10  bonds to clerk +0.00, to bully +0.50
+  credit(guildsmen) = +0.40  bonds to clerk +0.00, to bully +0.00
+  credit(clerk    ) = +0.40  bonds to clerk +0.00, to bully -0.20
+  a source-only record (about nobody): judge3 neutral +0.40 vs judge3 a friend of the clerk +1.00
+  -> outcome: the scholar argues the ledger (about the bully) before judge (neutral) vs judge2 (the bully's client), scholar forced to argue on evidence; n=1000
+     bench judge   [shipped] carried 0.673
+     bench judge   [flat] carried 0.587
+     bench judge2  [shipped] carried 0.608
+     bench judge2  [flat] carried 0.614
+
+== P5.6 office, faction, regime, strife: SAME matter and persons, n=1000
+  control (commoners, crown, peace)          carried 0.361  (vs control +0.000, z +0.0)
+  accused b holds office rung4+moderate      carried 0.282  (vs control -0.079, z -3.8)
+    same, power flattened                    carried 0.355  (vs control -0.006, z -0.3)
+  accuser a shares the bench's faction       carried 0.369  (vs control +0.008, z +0.4)
+    same, bearing flattened                  carried 0.361  (vs control +0.000, z +0.0)
+  regime theocracy                           carried 0.347  (vs control -0.014, z -0.7)
+  regime commune                             carried 0.347  (vs control -0.014, z -0.7)
+  strife war                                 carried 0.267  (vs control -0.094, z -4.6)
+  strife famine                              carried 0.299  (vs control -0.062, z -3.0)
+  strife schism                              carried 0.280  (vs control -0.081, z -3.9)
+  era age_of_faith                           carried 0.361  (vs control +0.000, z +0.0)
+  era mercantile                             carried 0.361  (vs control +0.000, z +0.0)
+  theocracy+war+faith, context flattened     carried 0.361  (vs control +0.000, z +0.0)
+  the same office-holder b under crown vs theocracy (Crown seat): power 6.0 -> 5.0
+  office-holder b under theocracy carried 0.288 vs crown 0.282
+
+== P5.7 a party who also decides: the noble (audience: a petitions, j1 is the other party AND the bench), n=2000
+  noble argues every turn  petitioner carried 0.258
+  noble presses            petitioner carried 0.296
+  noble rests              petitioner carried 0.283
+  noble auto               petitioner carried 0.271
+  a noble with a stake (the plea costs him): start -0.60; carried 0.241 vs flattened 0.273
+
+== P5.8 a one-character sitting
+  refused: conversation, a alone (no other party, no floor): ValueError: a sitting with one character is refused (A-139)
+  refused: rally, a alone (empty floor): ValueError: a sitting with one character is refused (A-139)
+  refused: audience, a petitions a bench of himself: ValueError: a sitting with one character is refused (A-139)
+  refused: trial a vs a: ValueError: the two parties to a matter are one character: refused (A-139)
+  refused: module: Input with one id: ValueError: a sitting with one character is refused (A-139)
+  NOT refused: trial, a for, b absent from matter (no against), bench j1: ('j1',)
+
+== P5 roles: one person (merchant) as speaker, judge and hearer reads the same bearing
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-ttrpg/2a1f4990-cd7a-5bdc-982c-435886385374/scratchpad/sc_model_v2/pc_run4/p5b.py", line 69, in <module>
+    pp2 = copy.deepcopy(pp); pp2["merchant"]["office"] = F.seat(3, "Crown")
+                        ^^
+NameError: name 'pp' is not defined. Did you mean: 'mp'?

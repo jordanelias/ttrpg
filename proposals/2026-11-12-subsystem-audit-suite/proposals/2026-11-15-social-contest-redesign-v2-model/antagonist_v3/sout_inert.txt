@@ -1,0 +1,12 @@
+== a party who decides: does his own arguing change the verdict? (all-mid, effort 3)
+  conversation: the man addressed (b)            carried auto 0.306 | b argues every turn 0.290 | b rests every turn 0.306  (se 0.017); decides=True side=against
+  questioning: the questioned man (b)            carried auto 0.415 | b argues every turn 0.323 | b rests every turn 0.340  (se 0.017); decides=True side=against
+  audience: the noble who is the other party (j1) carried auto 0.291 | j1 argues every turn 0.276 | j1 rests every turn 0.299  (se 0.017); decides=True side=against
+  inquisition: the inquisitor who judges (c1)    carried auto 0.405 | c1 argues every turn 0.438 | c1 rests every turn 0.304  (se 0.017); decides=True side=for
+  control, trial: the accused (b), not a decider carried auto 0.315 | b argues every turn 0.669 | b rests every turn 0.356  (se 0.017); decides=False side=against
+== what the view tells the party-decider his argument is worth (turn 1, perfect reader acc irrelevant: TRUE menu ev)
+  questioning b    argue/consequence/raises ev +0.00; argue/authority/raises ev +0.00; argue/solidarity/raises ev +0.00
+  conversation b   argue/consequence/raises ev +0.00; argue/authority/raises ev +0.00; argue/solidarity/raises ev +0.00
+  inquisition c1   argue/consequence/raises ev +0.00; argue/authority/raises ev +0.00; argue/solidarity/raises ev +0.00
+== evasion charged on the questioned man: whose tracks move
+  {'evasions': 36, 'moved a decider': 0}

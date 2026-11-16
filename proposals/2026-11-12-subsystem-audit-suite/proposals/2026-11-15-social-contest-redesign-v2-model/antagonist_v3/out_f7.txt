@@ -1,0 +1,3 @@
+F7 seed f7b n=1600: argue every turn 0.163  rest every turn 0.363  auto 0.284  rest-argue +0.200 z +13.2
+F7 seed f7c n=1600: argue every turn 0.156  rest every turn 0.378  auto 0.300  rest-argue +0.222 z +14.7
+F7 perceived=true: argue 0.131 rest 0.289 diff +0.158 z +11.1

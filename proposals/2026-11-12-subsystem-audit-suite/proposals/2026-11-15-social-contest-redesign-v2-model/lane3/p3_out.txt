@@ -1,0 +1,38 @@
+== single-attribute: `for` speaker attr at 1 / 4 / 7 (others 4) vs mid opponent; and the same on the `against` side
+conversation  base=0.422±0.011 | focu 0.431/0.469 reas 0.369/0.522 attu 0.396/0.494 pres 0.347/0.518 grac 0.399/0.473 will 0.379/0.440
+  as against  base=0.422         | focu 0.460/0.434 reas 0.463/0.464 attu 0.510/0.378 pres 0.447/0.463 grac 0.452/0.459 will 0.584/0.279
+negotiation   base=0.645±0.011 | focu 0.580/0.642 reas 0.521/0.676 attu 0.585/0.637 pres 0.444/0.840 grac 0.586/0.667 will 0.573/0.676
+  as against  base=0.645         | focu 0.631/0.630 reas 0.713/0.624 attu 0.673/0.604 pres 0.645/0.600 grac 0.685/0.580 will 0.727/0.554
+questioning   base=0.281±0.010 | focu 0.280/0.317 reas 0.254/0.312 attu 0.250/0.321 pres 0.248/0.355 grac 0.281/0.318 will 0.254/0.351
+  as against  base=0.281         | focu 0.320/0.287 reas 0.354/0.224 attu 0.344/0.263 pres 0.411/0.211 grac 0.344/0.267 will 0.490/0.173
+arbitration   base=0.010±0.002 | focu 0.012/0.013 reas 0.008/0.020 attu 0.011/0.015 pres 0.013/0.013 grac 0.007/0.011 will 0.008/0.012
+  as against  base=0.010         | focu 0.011/0.011 reas 0.015/0.015 attu 0.010/0.011 pres 0.013/0.013 grac 0.011/0.011 will 0.014/0.011
+legal_trial   base=0.006±0.002 | focu 0.004/0.007 reas 0.005/0.008 attu 0.005/0.005 pres 0.004/0.009 grac 0.005/0.011 will 0.003/0.009
+  as against  base=0.006         | focu 0.007/0.008 reas 0.009/0.004 attu 0.010/0.007 pres 0.010/0.004 grac 0.016/0.005 will 0.006/0.010
+rally         base=0.503±0.011 | focu 0.489/0.529 reas 0.468/0.529 attu 0.502/0.534 pres 0.068/0.653 grac 0.490/0.579 will 0.515/0.529
+
+== AR-49/50: P6/G2 vs P2/G6 as `for` vs mid opponent; routine standard; gallery room (patched)
+  conversation  gallery  carry P6G2=0.430±0.011 P2G6=0.405±0.011  room=none
+  conversation  native   carry P6G2=0.467±0.011 P2G6=0.407±0.011  room=none
+  negotiation   gallery  carry P6G2=0.683±0.010 P2G6=0.535±0.011  room=none
+  negotiation   native   carry P6G2=0.742±0.010 P2G6=0.551±0.011  room=none
+  arbitration   gallery  carry P6G2=0.017±0.003 P2G6=0.013±0.003  room=bench
+  arbitration   native   carry P6G2=0.011±0.002 P2G6=0.010±0.002  room=bench
+  legal_trial   gallery  carry P6G2=0.004±0.001 P2G6=0.004±0.001  room=bench
+  legal_trial   native   carry P6G2=0.004±0.001 P2G6=0.005±0.002  room=bench
+
+== P6/R2 (orator) vs R6/P2 (scholar), head to head, both seatings; and each vs mid
+  conversation  orator-for vs scholar 0.406 | scholar-for vs orator 0.435 | orator vs mid 0.456 | scholar vs mid 0.466  (se<=0.011) room=none
+  negotiation   orator-for vs scholar 0.681 | scholar-for vs orator 0.621 | orator vs mid 0.705 | scholar vs mid 0.615  (se<=0.011) room=none
+  questioning   orator-for vs scholar 0.256 | scholar-for vs orator 0.242 | orator vs mid 0.314 | scholar vs mid 0.298  (se<=0.010) room=none
+  arbitration   orator-for vs scholar 0.009 | scholar-for vs orator 0.019 | orator vs mid 0.011 | scholar vs mid 0.013  (se<=0.003) room=bench
+  legal_trial   orator-for vs scholar 0.009 | scholar-for vs orator 0.006 | orator vs mid 0.004 | scholar vs mid 0.007  (se<=0.002) room=bench
+  rally         orator-for vs scholar 0.612 | scholar-for vs orator 0.240 | orator vs mid 0.649 | scholar vs mid 0.235  (se<=0.011) room=crowd
+
+== all-7 (rank 3, proofs 3) vs all-1 (rank 0, proofs 0), and all-7 vs all-1 attributes only
+  conversation  full7-for 0.779 ends={'budget': 2000} | full1-for 0.033 | attr7-for 0.745 | attr1-for 0.084
+  negotiation   full7-for 0.985 ends={'budget': 2000} | full1-for 0.015 | attr7-for 0.953 | attr1-for 0.082
+  questioning   full7-for 0.783 ends={'budget': 1998, 'yielded': 2} | full1-for 0.037 | attr7-for 0.722 | attr1-for 0.072
+  arbitration   full7-for 0.024 ends={'budget': 2000} | full1-for 0.001 | attr7-for 0.021 | attr1-for 0.000
+  legal_trial   full7-for 0.022 ends={'budget': 1999, 'yielded': 1} | full1-for 0.000 | attr7-for 0.019 | attr1-for 0.000
+  rally         full7-for 0.670 ends={'budget': 2000} | full1-for 0.037 | attr7-for 0.660 | attr1-for 0.034
