@@ -218,6 +218,69 @@ def _heritage_roster(reg, concerns):
             'engages': {str(m): str(c) for m, c in engages.items()}}
 
 
+def _attribute_glosses(reg):
+    """`{attribute key: gloss}` over the ten, each gloss a non-empty string (B04.02, DEF Edit 1). One plain
+    sentence per attribute, so `decision/sheet.py::describe` can show a player what a name means."""
+    out = {}
+    for e in descriptor_registry.all_attributes(reg):
+        gloss = e.get('gloss')
+        if not isinstance(gloss, str) or not gloss.strip():
+            raise SystemExit(f'descriptor_registry.yaml: attributes {e["key"]} has an empty or missing gloss. '
+                             f'Every attribute carries a one-sentence gloss.')
+        out[e['key']] = gloss.strip()
+    return out
+
+
+def _capability_roster(reg, attribute_keys):
+    """The skills, defined once (B04.02; U1 §2, A-98 (4)). Refused, naming the row: a `kind` that is not
+    `skill` (a leftover `aptitude` or `trait` row, `IS-B2-CHAR-05`), a `base` or `opposed_by` that is none of the ten
+    attribute keys (`opposed_by` may also be `none`, or absent, which reads `base`), a `grows_by` or `untrained`
+    value outside the block's closed set, an empty `gloss`, and a `scale` that is not `[int, int]` with floor <= ceiling.
+    `attribute_keys` is the live roster, so the ten are named once."""
+    block = reg.get('capabilities')
+    if not isinstance(block, dict) or not block.get('rows'):
+        raise SystemExit('descriptor_registry.yaml: capabilities is missing or has no rows. It is the one '
+                         'definition of each skill; the engine reads it through engine/substrate/descriptors.py.')
+    if list(block.get('kinds') or []) != ['skill']:
+        raise SystemExit(f'descriptor_registry.yaml: capabilities.kinds is {block.get("kinds")!r}; it is closed '
+                         f'at [skill] (A-98 (4)): the attributes and the traits are not defined here.')
+    grows_set, untrained_set = list(block.get('grows_by') or []), list(block.get('untrained') or [])
+    if not grows_set or not untrained_set:
+        raise SystemExit('descriptor_registry.yaml: capabilities.grows_by and capabilities.untrained are the '
+                         'closed sets a row is held to; neither may be empty.')
+    rows = {}
+    for name, r in block['rows'].items():
+        where = f'descriptor_registry.yaml: capabilities.rows.{name}'
+        if not isinstance(r, dict):
+            raise SystemExit(f'{where} is not a mapping.')
+        if r.get('kind') != 'skill':
+            raise SystemExit(f'{where}: kind {r.get("kind")!r} is not skill. The one kind is skill (A-98 (4)); '
+                             f'an aptitude or trait row is not a capability.')
+        gloss = r.get('gloss')
+        if not isinstance(gloss, str) or not gloss.strip():
+            raise SystemExit(f'{where}: empty or missing gloss. Every skill carries a one-sentence gloss.')
+        if r.get('base') not in attribute_keys:
+            raise SystemExit(f'{where}: base {r.get("base")!r} is not one of the ten attribute keys.')
+        opp = r.get('opposed_by')
+        if opp is not None and opp != 'none' and opp not in attribute_keys:
+            raise SystemExit(f'{where}: opposed_by {opp!r} is none of the ten attribute keys or none.')
+        if r.get('untrained') not in untrained_set:
+            raise SystemExit(f'{where}: untrained {r.get("untrained")!r} is outside {untrained_set}.')
+        grows = r.get('grows_by')
+        if not isinstance(grows, list) or not grows or any(g not in grows_set for g in grows) \
+                or len(set(grows)) != len(grows):
+            raise SystemExit(f'{where}: grows_by {grows!r} is not a non-empty, repeat-free subset of {grows_set}.')
+        sc = r.get('scale')
+        if (not isinstance(sc, list) or len(sc) != 2
+                or any(isinstance(v, bool) or not isinstance(v, int) for v in sc) or sc[0] > sc[1]):
+            raise SystemExit(f'{where}: scale {sc!r} is not [int, int] with floor <= ceiling.')
+        rows[str(name)] = {'kind': 'skill', 'gloss': gloss.strip(), 'base': r['base'],
+                           'opposed_by': opp, 'floor': sc[0], 'ceiling': sc[1],
+                           'untrained': r['untrained'], 'grows_by': list(grows), 'source': r.get('source')}
+    return {'source': block.get('source'), 'kinds': ['skill'], 'grows_by': grows_set,
+            'untrained': untrained_set, 'rows': rows}
+
+
 def build():
     reg = ci_common.load_yaml(SRC, default=None)
     if not reg:
@@ -253,6 +316,8 @@ def build():
             # without a second alias list. A retired attribute's names (Bonds) are absent: a value
             # authored under one is refused as not one of the ten.
             'names': _attribute_names(reg),
+            # B04.02: each attribute's one-sentence gloss, by key (`decision/sheet.py::describe`).
+            'glosses': _attribute_glosses(reg),
             'pending_tenth': (
                 'Jordan ruled 2026-08-14 that the roster WILL BE 10 attributes. The registry ships '
                 f'{len(roster)} and the tenth is UNNAMED. This sentinel exists so a reader cannot mistake '
@@ -273,6 +338,8 @@ def build():
         'affiliation_roster': _affiliation_roster(reg),
         # THE HERITAGE ROSTER (CR-30): what `Person.heritage` is one of, with the concern each engages.
         'heritage_roster': _heritage_roster(reg, _affiliation_roster(reg)['concerns']),
+        # THE SKILLS (B04.02), defined once: what each is, its attribute, what opposes it, how it grows.
+        'capabilities': _capability_roster(reg, set(roster)),
         'settlement_stats': _section(reg, 'settlement_stats'),
         'practitioner_stats': _section(reg, 'practitioner_stats'),
         'territory_stats': _section(reg, 'territory_stats'),

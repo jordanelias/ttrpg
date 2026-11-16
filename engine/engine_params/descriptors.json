@@ -58,6 +58,18 @@
       "will": "attr.spirit.will",
       "willpower": "attr.spirit.will"
     },
+    "glosses": {
+      "attr.body.strength": "Raw bodily force: lifting, striking and holding.",
+      "attr.body.endurance": "How long the body keeps going under strain, hurt or hunger.",
+      "attr.body.agility": "Quickness and control of the body: balance, aim and a steady hand.",
+      "attr.mind.focus": "Sustained, exact attention to one thing.",
+      "attr.mind.acuity": "Working things out: analysis, recall and judgment from what is known.",
+      "attr.mind.perception": "Awareness of surroundings and noticing information.",
+      "attr.spirit.will": "The resolve that resists being swayed or influenced.",
+      "attr.social.attunement": "Reading people: sensing how another is taking what is said.",
+      "attr.social.charisma": "The force of a person's presence: how strongly one draws, moves and persuades others.",
+      "attr.social.grace": "Composure, calm, etiquette and manners."
+    },
     "pending_tenth": null
   },
   "pursuit_roster": {
@@ -136,6 +148,80 @@
     "engages": {
       "southern_einhir": "einhir",
       "altonian": "altonia"
+    }
+  },
+  "capabilities": {
+    "source": "U1; A-6, A-7, A-11 (2026-11-12)",
+    "kinds": [
+      "skill"
+    ],
+    "grows_by": [
+      "train",
+      "practice",
+      "use"
+    ],
+    "untrained": [
+      "default",
+      "none"
+    ],
+    "rows": {
+      "copying": {
+        "kind": "skill",
+        "gloss": "Carries a text or a message on exactly as it was given.",
+        "base": "attr.mind.focus",
+        "opposed_by": "none",
+        "floor": 0,
+        "ceiling": 7,
+        "untrained": "default",
+        "grows_by": [
+          "train",
+          "practice"
+        ],
+        "source": "rosters.yaml vocation_attribute (CR-20)"
+      },
+      "argue": {
+        "kind": "skill",
+        "gloss": "Makes a case to someone's face and moves them by it.",
+        "base": "attr.social.charisma",
+        "opposed_by": "attr.spirit.will",
+        "floor": 0,
+        "ceiling": 7,
+        "untrained": "default",
+        "grows_by": [
+          "train",
+          "practice"
+        ],
+        "source": "rosters.yaml vocation_attribute (CR-20); ED-IN-0350"
+      },
+      "inquiry": {
+        "kind": "skill",
+        "gloss": "Finds things out: from a record, a place or a watched person.",
+        "base": "attr.mind.acuity",
+        "opposed_by": "attr.spirit.will",
+        "floor": 0,
+        "ceiling": 7,
+        "untrained": "default",
+        "grows_by": [
+          "train",
+          "practice"
+        ],
+        "source": "rosters.yaml vocation_attribute (CR-20)"
+      },
+      "arms": {
+        "kind": "skill",
+        "gloss": "Fights with a weapon in hand.",
+        "base": "attr.body.agility",
+        "opposed_by": null,
+        "floor": 0,
+        "ceiling": 7,
+        "untrained": "default",
+        "grows_by": [
+          "train",
+          "practice",
+          "use"
+        ],
+        "source": "rosters.yaml vocation_attribute (CR-20); CP-T03-04 (iv)"
+      }
     }
   },
   "settlement_stats": {

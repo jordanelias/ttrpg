@@ -18,6 +18,9 @@ from __future__ import annotations
 
 import json
 import os
+from dataclasses import dataclass
+from types import MappingProxyType
+from typing import Mapping, Optional, Tuple
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _PATH = os.path.normpath(os.path.join(_HERE, '..', 'engine_params', 'descriptors.json'))
@@ -51,6 +54,47 @@ def attribute_key(name):
     """The roster key a name, alias or key spells, or `None` if it is none of the ten (a retired attribute's
     names included). Case-insensitive. A READ: the caller decides whether `None` refuses."""
     return ATTRIBUTE_NAMES.get(str(name).strip().lower())
+
+#: `{attribute key: one-sentence gloss}` over the ten (B04.02, DEF Edit 1), cooked by the exporter, which refuses an empty one.
+ATTRIBUTE_GLOSSES = dict(_DATA['attributes']['glosses'])
+
+
+# ---------------------------------------------------------------------------
+# CAPABILITIES (SKILLS) -- B04.02. THE ONLY SKILL DEFINITION IN THE ENGINE.
+# ---------------------------------------------------------------------------
+# `references/descriptor_registry.yaml: capabilities`, validated by the exporter's `_capability_roster` and read here:
+# one kind (`skill`, A-98 (4)); the attributes and the traits are defined elsewhere and not re-defined here.
+@dataclass(frozen=True)
+class CapabilityRow:
+    """One skill's definition. `base` is the attribute key its pool starts from; `opposed_by` is an attribute key,
+    `'none'` (no opposition) or `None` (absent: the opposition reads `base`); `floor`/`ceiling` bound the held rank;
+    `untrained` is what a non-holder brings (`default` or `none`); `grows_by` is the rules that may raise it."""
+    kind: str
+    gloss: str
+    base: str
+    opposed_by: Optional[str]
+    floor: int
+    ceiling: int
+    untrained: str
+    grows_by: Tuple[str, ...]
+
+
+CAPABILITIES: Mapping[str, CapabilityRow] = MappingProxyType({
+    name: CapabilityRow(r['kind'], r['gloss'], r['base'], r['opposed_by'], r['floor'], r['ceiling'],
+                        r['untrained'], tuple(r['grows_by']))
+    for name, r in _DATA['capabilities']['rows'].items()})
+
+
+def capability(name) -> CapabilityRow:
+    """The definition row of skill `name`; raises ValueError naming the roster, as `resolve_pursuit` does."""
+    try:
+        return CAPABILITIES[name]
+    except (KeyError, TypeError):
+        raise ValueError(
+            f'unknown capability {name!r}. The roster is owned by references/descriptor_registry.yaml:capabilities '
+            f'and read here; the defined skills are: ' + ', '.join(CAPABILITIES) + '. A skill is defined there once, '
+            'then exported (tools/export_descriptors.py); do not add one anywhere else.') from None
+
 
 #: {registry key -> {name, floor, ceiling}} for each declared domain.
 SETTLEMENT_STATS = _DATA['settlement_stats']

@@ -51,11 +51,24 @@ import copy
 from dataclasses import dataclass
 from typing import Any, Callable, Iterable, Mapping, Optional, Sequence
 
+from ...substrate.descriptors import ATTRIBUTE_GLOSSES, CAPABILITIES, attribute_key
 from ..data.rosters import AFFILIATIONS
 from ..gaps import Forbidden
 from ..queries.person_q import LedgerReader
 from ..state.carriers import Person, PersonInterior, Question, View, frozen
 from .choose import make_ranker, release
+
+def describe(key: str) -> str:
+    """The gloss of a skill or an attribute: the leaf's text, no `World` (B04.02, DEF Edit 1). A skill is read by
+    its name (`inquiry`), an attribute by its key, name or alias (`attr.mind.acuity`, `Reason`, `Cognition`).
+    Raises `ValueError` for a name that is neither."""
+    if key in CAPABILITIES:
+        return CAPABILITIES[key].gloss
+    attr = attribute_key(key)
+    if attr is not None:
+        return ATTRIBUTE_GLOSSES[attr]
+    raise ValueError(f"{key!r} is neither a defined skill ({', '.join(CAPABILITIES)}) nor one of the ten attributes")
+
 
 _LAW = ("IN-47 / A-25 -- a management space ranks and selects among the candidates the opening set "
         "formed and the persons the builder seated; it forms none and writes nothing")
