@@ -425,7 +425,7 @@ def roll_net_continuous(pool: float, tn: int = TN_STANDARD, rng: random.Random |
       * faction strategic actions — pools are fractional, and were silently rounded before this
         change. These MOVE.
       * personal combat, via `modules/combat/core.py:56` — pools are integral, because
-        `core.resolution_pool()` returns `max(POOL_FLOOR, int(round(history)) + BASE_POOL)` and no
+        `core.resolution_pool()` returns `max(POOL_FLOOR, int(round(faculty)) + BASE_POOL)` and no
         call site modifies it. `int(round(n)) == n` for integral n, so combat is value-identical
         and its byte-exact goldens are the CONTROL: if they move, this change did something it
         was not meant to.

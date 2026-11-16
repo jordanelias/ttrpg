@@ -3,7 +3,7 @@
   * `world_q`   -- the World-FIRST functions, plus `WorldReader`.
   * `person_q`  -- the asker-first family: `entrenchment`, plus `LedgerReader`.
   * `cache`     -- the barrier indexes, single-owned.
-`faction_q` -- `resolve, holdings, purview, subordinates, at_war, head`. §B.6.1's
+  * `faction_q` -- `resolve, holdings, purview, subordinates, at_war, head`. §B.6.1's
     one constructor for the five-field governance VIEW plus the five Queries plan position
     `20-ii` (U9/R-04) completed, and §C.5.1's roster contract calls `resolve` by that dotted name;
     `04 §A.2:132` names the module. It also names `SHEET_KIND`, the `record_kinds` member a `survey`

@@ -2,10 +2,10 @@
 #  §A.7 battle turn structure, §A.12 rout/pursuit; params/mass_combat.md;
 #  derived_stats architecture — TroopCount as granular health pool]
 #
-#   v12 note #4 — VOLLEY HP SCALING: one Size loss from a volley is ceil(h_per_size/2) hp, not the full
-#   h_per_size (a volley's loss is arrows finding targets, many glancing; a melee loss is a decisive wound).
-#   Admitted band-fitting: it moved R1 (Ranged vs Line) from 69% to 35%, into the 30-50% band (Tier-3 debt).
-#   Cited by `config.py` VOLLEY_LETHALITY_SCALE and `battle_loop.py`'s volley note.
+#   v12 note #4 — VOLLEY HP SCALING (superseded): v12 made one volley Size loss ceil(h_per_size/2) hp, an
+#   admitted band-fit that moved R1 from 69% to 35%, into 30-50% band. ED-MB-0041 replaced that per-target
+#   formula with the flat `config.VOLLEY_LETHALITY_SCALE` (3, its value at the gauge baseline); the Tier-3
+#   debt carries over. Cited by `config.py` VOLLEY_LETHALITY_SCALE and `battle_loop.py`'s volley note.
 #
 #   G-3 CONTINUOUS EFFECTIVE SIZE — HP represents TroopCount at Company scale.
 #   effective_size = hp / h_per_size (FLOAT, not floored to integer).

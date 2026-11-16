@@ -475,8 +475,7 @@ rosters:
       read it), so a fifth axis in one place would leave the other scoring on four.
       ⚠ **`from_descriptor:` IS THE `conviction_roster` PRECEDENT.** The roster lives in
       `references/descriptor_registry.yaml` with `engine/substrate/descriptors.py` as the one
-      code-side reader; `keys.py::AXES` reads that leaf too, so a fifth axis or a rename is ONE edit
-      -- `axis_roster.names` -- and both readers see it.
+      code-side reader, so a fifth axis or a rename is ONE edit -- `axis_roster.names`.
     from_descriptor: axis_roster
 
   # IN-08 H10: the religious affiliations `Person.conviction` is keyed on (ED-IN-0251 R1/R2), read
@@ -3649,7 +3648,7 @@ tables:
       differentiation comes from Mission, leader Convictions, and stat profile, not role template."*
       So the two factions have the SAME expectation vector and differ in who actually holds what —
       which is precisely the quantity `cast.loyalty` measures.
-    # ⚠ §4's thirteen-name weights are migrated to the fifteen pursuits by the pursuit-cells draft's §4.1
+    # ⚠ §4's thirteen-name weights are migrated to the fifteen pursuits by the retired pursuit-cells draft's §4.1
     # derivation rule and §4.2 table (folded into the build, Jordan 2026-10-06, RS-1), with `doctrine`
     # and `stewardship` as named (RS-2, RS-4). Weights are §4's own and nothing is renormalised; where
     # two old names collapse into one pursuit their weights ADD (§4.2: `ecclesiastical` and
@@ -3724,7 +3723,8 @@ tables:
       only where all four of Jordan's examples agree (§2.11). THE DOCTRINE PAIR (Jordan's devout
       Solmund builder against the Einhir dismantler, both high `doctrine`) IS MEASURED, NOT GATED:
       at `doctrine` .45 the two persons' projections through THIS table read cos +0.229 — inside
-      the 60-degree bar (cos <= 0.5). H7 (B-H) builds the standing test that pins it.
+      the 60-degree bar (cos <= 0.5); at `doctrine` .60 / .70 the draft read +0.524 / +0.527, just
+      outside it. H7 (B-H) builds the standing test that pins it.
       ⚠ **`row: H-46`, CLOSED AS FRAMED BY IN-43.** Jordan, 2026-09-02: *"convictions roster and
       axes etc may be modified in future."* The sweep is the standard three: `declared` is this
       matrix, `uniform` makes every pursuit project identically and is THE CONTROL — under it a

@@ -1257,7 +1257,7 @@ def close_rate(shorter, ffat_shorter, displ, rt, cfg):
     sped by displacing a thrusting point (displ) and by walking through an un-threatening reach (2.0-rt). I6/D6:
     a small lateral-void contribution (Fiore fol. 39r) — angling off-line aids the close; exactly 0 at neutral
     facing (0.0). Pure."""
-    cr =cfg['CLOSE_RATE_K']*balance_eff(shorter,ffat_shorter,cfg)/3 * weapon_tempo(shorter,cfg,ffat_shorter)/2
+    cr = cfg['CLOSE_RATE_K']*balance_eff(shorter,ffat_shorter,cfg)/3 * weapon_tempo(shorter,cfg,ffat_shorter)/2
     cr *= (1.0 + FACING_VOID_GAIN*getattr(shorter,'facing',0.0))
     return cr*(1+displ)*(2.0-rt)
 

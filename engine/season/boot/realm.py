@@ -1379,8 +1379,8 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     # any positive condition makes the field `WALLS`, A.9's defender DR bonus. A garrison worn to
     # condition 0 is no wall.
     # ⚠ `governance_spine.build`, `corpus_run.build_at`, `probes.tiny_world` and
-    # `headless.build_world` do NOT seed a garrison; H-150's own docstring and `fortification_of`'s
-    # both name only `harness/populated.py`'s build step 11.
+    # `headless.build_world` do NOT seed a garrison; `fortification_of`'s docstring names only
+    # `boot/realm.py`'s build step 11.
     for sid in geo["settlements"]:
         s_id = f"s_{_slug(sid)}_garrison"
         w.sites[s_id] = Site(s_id, f"set_{_slug(sid)}", "garrison",
@@ -1566,10 +1566,10 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         # reads it: `valence * weight` summed over the rows naming a candidate's subject, added to
         # every candidate the creed's own Q4 question generates.
         #
-        # ⚠⚠ **THE LOYALTY DOES NOT GO ON `Tenure.degree`.** `degree` is declared on `Tenure`
-        # (`state/carriers.py`) and nothing reads it: every `.degree` in the tree is an `Event`'s or
-        # a contest's, and by `ID-13` a field that reaches no reader does not exist. A stance row has
-        # a reader, so the loyalty changes what people do; on `degree` it would have changed a repr.
+        # ⚠⚠ **THE LOYALTY DOES NOT GO ON `Tenure.degree`.** No builder writes `degree` on a `commit`
+        # Tenure (`state/carriers.py`); its one reader, `queries/faction_q.py::head`, is vacuous until
+        # one does, and writing the loyalty there would change who heads the faction. A stance row has
+        # a reader today, so the loyalty changes what people do.
         #
         # ⚠ **NO ROW WHERE THERE IS NO CREED, AND NO ROW AT ZERO WEIGHT EITHER.** `stance_from_loyalty`
         # returns `None` for the two template-less factions and `(+1, 0)` at exact indifference,

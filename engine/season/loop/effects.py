@@ -1,8 +1,7 @@
 """`season.loop.effects` — the resolver's BODY. One effect per verb that writes.
 
-`EFFECTS` is one flat dict every domain module's `@effect_for(...)` decorators fill; the decorator and
-the ONE operand reader (`_operand`) live in `effects_shared.py`. A decorator-filled table has to be
-defined where the decorated functions are, or it is empty when the fold reads it; §8's *"THE OWNER OF
+`EFFECTS` is one flat dict every domain module's `@effect_for(...)` decorators fill; the dict, the
+decorator and the ONE operand reader (`_operand`) live in `effects_shared.py`. §8's *"THE OWNER OF
 THE RULE, AND THREE EFFECTS HAD THEIR OWN COPY"* is about `_operand` specifically.
 
 WHAT THIS MODULE IS AGAINST, which is the reason it exists at all (§27.2). The fold once took an

@@ -386,7 +386,7 @@ def trail_of(w: World, subject: Optional[str], pid: str) -> list:
 # ---------------------------------------------------------------------------
 
 def _ch_co_located(w: "World", e, pid) -> bool:
-    """⚠ READS THE BARRIER'S PRESENCE INDEX (`cache.presence_index`), NOT `Query.presence` DIRECTLY,
+    """⚠ READS THE BARRIER'S PRESENCE INDEX (`cache.presence_index`), NOT `world_q.presence` DIRECTLY,
     which would rebuild the answer with a full `w.tenures` scan for every (event, person) pair.
     `cache_at_barrier` is safe here because the fan is built BEFORE `witness` enters its
     parallel map.
@@ -394,7 +394,7 @@ def _ch_co_located(w: "World", e, pid) -> bool:
     ⚠ **`world_q.event_place(w, e)`, NOT A LOCAL LOOKUP.** It tests person-before-rung: testing
     `e.subject in w.rungs` FIRST fails, because `probes.py` gives every person a same-id
     `person`-kind Rung, so a person-subject Event returns the person's OWN rung and
-    `Query.presence` then answers *"who is contained IN p_high"* — nobody. Under `presence_only`
+    `world_q.presence` then answers *"who is contained IN p_high"* — nobody. Under `presence_only`
     that excludes THE SPEAKER AND EVERYONE STANDING IN THE ROOM, and `P15`'s only assertion
     (`narrow < total`) could not tell a channel broken CLOSED from one working — §0.1 pt 2.
     `world_q.place_of` carries that order (its own docstring names the hazard) and adds the
@@ -542,7 +542,7 @@ def _ch_post_remit(w: "World", e, pid) -> bool:
     `counterparty: subject`, so `opening_set` forms no `oblige` Candidate (plan position 16's
     precedent -- and no Question's referent is ever a seat anyway). The realm seeds one `oblige`
     Tenure (`boot/realm.py` mints `off_restoration_leader` and opens its authored obligee, NPC-041,
-    as a term-less `oblige`), and `inferred` is nevertheless 0 there; WHY it stays 0 with an
+    as a term-less `oblige`), and at the Batch C close `populated.run(n, 0)` measured no `inferred` claim in any ledger after 1 season or after 4 (re-measure before citing: the IN-22 limb above post-dates it); WHY it stays 0 with an
     obligee present is NOT isolated here. The channel is exercised by acts
     that name their seat (`tests/test_obligees.py`, through the real fold and WITNESS).
 

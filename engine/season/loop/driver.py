@@ -62,7 +62,7 @@ def resolvable_verbs() -> frozenset:
     predicate registry moves.
 
     THREE GATES: a precondition the fold can evaluate, an effect for whatever it writes, and, for
-    a verb that contests, a prize with a registered provider and a typed row (the comment below)."""
+    a verb that contests, a prize whose row names a provider and a typed row (the comment below)."""
     out = set()
     for v, row in VERB_TABLE.items():
         # BOTH GATES, NOT JUST THE PRECONDITION: `create_record` has no precondition and no EFFECT,
@@ -83,10 +83,11 @@ def resolvable_verbs() -> frozenset:
         # just kill or wound imo."*
         #
         # THE CLAUSES:
-        #   * a provider is registered for the prize -- `manifest.has(role, module)`, asking the
-        #     CODE, not the data. `manifest.check_contest_prizes()` refuses an unregistered one at
-        #     `SeasonDriver` construction, naming the prize.
-        #     `tests/valoria/test_season_providers_are_registered.py` watches the refusal.
+        #   * the prize's row names a provider -- `manifest.resolve("contest", prize)`'s `provider:`.
+        #     There is no `manifest.has(role, module)` clause here: `manifest.check_contest_prizes()`
+        #     refuses an unregistered provider at `SeasonDriver` construction, naming the prize, so
+        #     such a clause could never be false. `tests/valoria/test_season_providers_are_registered.py`
+        #     watches the refusal.
         #   * the verb is typed: a contested act needs a `subject` operand to name the second
         #     claimant, and `operands_for` returns `{}` for an UNTYPED verb (`H-80`, `H-94`). A
         #     computed `kill / wound` (`requires` is `—`, so untyped) would reach the seam with ONE
@@ -398,9 +399,9 @@ class SeasonDriver:
 # assertion over the step's source.
 #
 # ⚠ `season()` CALLS ALL SEVEN THROUGH `self`, so the binding is what keeps those calls resolving.
-# Five of them take the barrier's `Token` as their first argument after `self` -- `04 §C.1`'s
+# Six of them take the barrier's `Token` as their first argument after `self` -- `04 §C.1`'s
 # `calendar(w,cal)`, `matter(w,mat)`, `resolve(w,act,scenes)`, `witness(w,intr,cache)`,
-# `census(w,mat2)` -- and `deliberate` takes none.
+# `census(w,mat2)`, and `encounter` -- and `deliberate` takes none.
 # ---------------------------------------------------------------------------
 from .calendar import calendar                                            # noqa: E402
 from .census import census                                                # noqa: E402

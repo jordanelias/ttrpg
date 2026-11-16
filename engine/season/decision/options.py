@@ -602,7 +602,7 @@ def person_side_eligible(p: Person, row: "VerbRow") -> bool:
     resolver's `_eligible` still evaluates both, because it HAS a `World`; this is the person's
     reading, and the gap between the two readings is the finding.
 
-      * `remit:<act>` -- needs the OFFICE's `remit_acts`, and #353 §11.1: "who holds an office
+      * `remit:<act>` -- ADMITS (closed 2026-09-18; not a declining kind): it needs the OFFICE's `remit_acts`, and #353 §11.1: "who holds an office
         is NOT a field on the office -- it is a `hold` Tenure, owned by the holder". Two holders
         of one office share one remit, so it is not the person's state to move; a SNAPSHOT of the
         office's remit is stamped onto the Tenure when the hold opens, so the person reads their

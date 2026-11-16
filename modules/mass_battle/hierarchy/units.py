@@ -2643,7 +2643,8 @@ class Unit:
 
     def derive_rout(self):
         # Unit-level rout DERIVED from subunit state (per-subunit rout, Jordan directive): the unit routs
-        # when its general is gone (Command<=0), when every subunit has routed, or when its troop-weighted
+        # when its general is gone (Command<=0), when the broken share of its spawn strength reaches
+        # ROUT_CASCADE_FRAC, or when its troop-weighted
         # aggregate morale reaches 0 (the canonical Morale-0 rout, §A.4/§A.12, now read as the composite).
         # A routed unit's subunits all rout (the whole body flees). Single-subunit: agg_morale == the lone
         # subunit's morale == unit.morale, so this fires exactly when the old `unit.morale<=0` did (byte-exact).
@@ -2735,8 +2736,9 @@ class Unit:
             raw = min(self.effective_size, self.command) + self.command + pen + stam_pen
         # ED-MB-0022: an OVEREXTENDED pursuer (failed the PP-256 Feigned Retreat Discipline check)
         # re-engages at a bounded pool penalty. Gated by MB_FEIGNED_RETREAT (default ON). `.overextended` is set
-        # only via resolve_feigned_retreat, which requires `.feigned` True first, which only the 'feign_retreat'
-        # order pseudo-field (C4, ED-MB-0067 Part C / ED-MB-0071) sets -- see Unit.feigned's own comment.
+        # only via resolve_feigned_retreat, which requires the feigning unit's `.feigned` (the 'feign_retreat'
+        # order pseudo-field, C4, ED-MB-0067 Part C / ED-MB-0071) or a 'lure' instruction (`unit_lures`, MB-04)
+        # -- see Unit.feigned's own comment.
         # [canonical: mass_battle_v30.md §B.4 — Overextended -2D]
         if MB_FEIGNED_RETREAT and self.overextended:
             raw -= OVEREXTEND_PENALTY
@@ -2761,7 +2763,7 @@ class Unit:
                 # (keyed by the NEW ids) would fall through to their (0.0,0.0)/anchor setdefaults and cells would teleport
                 # to the battlefield corner or collapse onto the anchor. Only reachable when node state exists at all
                 # (MB_NODE_COHESION); the legacy grid path has no _node_pos.
-                # [ED-MB-0054 / B1c] The grid-path containers (see _rekey_grid_state): runs on BOTH paths — the node path's
+                # [ED-MB-0054 / B1c] The grid-path containers (`Subunit.rekey_cells`): runs on BOTH paths — the node path's
                 # position state is separately handled, but facing/halt/target live on both.
                 a.rekey_cells(new_ids)
                 if MB_NODE_COHESION and hasattr(a, '_node_pos'):

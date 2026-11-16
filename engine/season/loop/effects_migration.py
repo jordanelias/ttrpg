@@ -108,7 +108,7 @@ def _relocate(w: "World", a: "Act", dest: str, mover: "str | None" = None) -> No
     w.add_tenure(Tenure(H(w.world_seed, w.tick, who, f"leg:{a.id}"),
                         who, dest, "contain", since=w.tick))
     # ⚠ THE DECLARED WRITE: `verb_table.yaml`'s `move` row names `(Person, travel_leg)` as its FIRST
-    # write, and `Query.budget`'s distance penalty reads `len(p.travel_leg)`. A declared write that
+    # write, and `decision/budget.py::budget`'s distance penalty reads `len(p.travel_leg)`. A declared write that
     # no effect performs is a lie the write matrix cannot catch, because the matrix gates writes
     # that HAPPEN.
     traveller = w.persons.get(who)

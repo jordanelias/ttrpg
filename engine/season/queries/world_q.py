@@ -4,12 +4,11 @@ FUNCTIONS THAT WERE NEVER IN IT.
 `04_CODE_ARCHITECTURE.md` §A.3 row 2 is the ruling and it is a MODULE ruling, not a signature one:
 *"one `Query` class holding both families -> two modules; the second cannot import the first ... In
 one class, a person-side function calls a resolver-side one with no import to scan."* The functions
-here all take a `World` FIRST. The person-side statics stay on `Query` in `shape.py`, until
-`decision` takes them, which is the module that may not name `World` at all.
+here all take a `World` FIRST. The person-side functions live in `decision`, the module that
+may not name `World` at all.
 
-⚠ THESE ARE MODULE FUNCTIONS, AND `shape.Query` BINDS THEM AS `staticmethod`s. That is a
-re-export, not a copy — `Query.parent_of is parent_of` — so every call site reading
-`Query.<world-first>` resolves to these bodies and there is exactly one owner of each rule.
+⚠ THESE ARE MODULE FUNCTIONS, CALLED AS `world_q.<name>`, so there is exactly one owner of each
+rule.
 
 ⚠ THIS MODULE MUST NOT LEARN A PERSON. Its one-way rule is the same one `state/` states: nothing
 here imports `shape`, `decision`, `loop` or `seam`. `questions_for` takes a `Person` as its SECOND
@@ -1965,8 +1964,8 @@ def members(w: World, faction: str) -> list[str]:
     """Everyone with a LIVE `commit` to this Proposition. §14.2: *"Membership is `commit`."*
 
     ⚠ THIS IS THE WHOLE OF MEMBERSHIP AND THERE IS NO SECOND ROUTE: holding an Office whose `body`
-    resolves to a faction is not membership, so a faction has a laity, a rank-and-file and a
-    congregation."""
+    resolves to a faction is not membership. A `commit` needs no office, so a faction has a laity,
+    a rank-and-file and a congregation."""
     TRACE.query("members", "resolver")
     return sorted(t.subject for t in w.tenures
                   if t.kind == "commit" and t.object == faction and t.live

@@ -60,9 +60,9 @@ CELL_CAP = 200              # max troops/cell that fight; beyond this, troops ov
 # [ED-MB-0042, 2026-07-25 — the ledger entry covering all of phases 1/2/2b] `eff_morale` stops reading the
 # subunit/unit morale SCALAR the moment cells are seeded, so a bare scalar write is a silent no-op: every
 # absolute morale write routes through `set_morale`, every relative one through `erode_morale`/
-# `pull_morale`. Reversible with MB_CELL_MORALE=0; the byte-exact test pins it explicitly ON (as it does
-# MB_OCTAGON_DMG) so the change-detector tracks the SHIPPED configuration.
-MB_CELL_MORALE = _sigma_os.environ.get('MB_CELL_MORALE', '1') == '1'   # default ON: retracted to OFF 2026-07-25 (above), back ON once ED-MB-0058 resolved the scalar-write no-op (ED-MB-0046 closed)
+# `pull_morale`. Reversible with MB_CELL_MORALE=0; `tools/ci_golden_modes_check.py` pins it '0' in four modes and '1' in
+# `cell_legacy_mor1`.
+MB_CELL_MORALE = _sigma_os.environ.get('MB_CELL_MORALE', '1') == '1'   # default ON since ED-MB-0058 resolved the scalar-write no-op (ED-MB-0046 closed)
 # [ED-MB-0041 phase 2] Share of a subunit's LIVE troops standing in broken cells at which the body is
 # no longer a formation. The men are still present -- they have stopped being a fighting line, which is
 # what a local break is. Same shape as ROUT_CASCADE_FRAC one scale down (army:sections :: subunit:cells),
@@ -120,7 +120,7 @@ STAMINA_EXHAUSTED_POOL_PENALTY = -1  # stamina == 0: -1 die
 # morale) — a steady, disciplined body holds toward 30%, a shaken/loose one breaks toward 15%. When its
 # casualty fraction crosses that break-point it routs. Fractional throughout (a random draw + a fractional
 # band + fractional loss fraction), reproducible under the seeded RNG. It moves the byte-exact goldens when on
-# — it is NOT inert like the other MB_ flags; the draw is only consumed when on).
+# — it is NOT inert like the other MB_ flags; the draw is only consumed when on.
 # [ED-MB-0041, 2026-07-25] ON by default: this implements the du Picq 15-30% break band (ED-MB-0031); OFF,
 # units grind to ~58% casualties before breaking. A win-share gauge cannot tell a double envelopment from two
 # lines colliding, so the casualty scoreboard (loser casualties against the 15-30 band, winner against the 15

@@ -477,7 +477,7 @@ def in_holdings(w: "World", actor: str, rung: Optional[str]) -> bool:
     office and over a Record (§13), and a `hold` WHOSE OBJECT IS A RUNG is a shape the tree already
     uses (probe `F2` writes one holding the settlement `S`; `test_r8_4_document_key_reaches_a_non_author_through_a_store`
     holds the hearth `Hh`), so `tenure_kinds` does not move (§8). It does not bound the READERS:
-    `Query.budget` counts every live `hold` as an office, so a landholding buys scene actions, and
+    `decision/budget.py::budget` counts every live `hold` as an office, so a landholding buys scene actions, and
     `_ch_document_key` makes a landholder a witness of every Event that changed their rung (`H-92`).
 
     ⚠ `_req_revoke` DOES NOT CALL THIS. Revocation is `ED-IN-0256` ruling (3), *"rung above of same
@@ -1634,7 +1634,7 @@ class Subject:
         names the OFFICE with the write's own field (`body`/`exists`), which is no write on an Office. The
         reason is the alternative's cost: a
         dead man's Tenures leave `World.tenures` with him, so a Receipt on a Tenure id cannot be expanded to
-        the seat by `_hold_tenure_ends`; that is H-206's option (b), which the plan keeps at LEAVE.
+        the seat by `_hold_tenure_ends`; that is H-206's option (b), which is not built.
         Its one known misreader is `harness/arc.py::_Records.of`; `read_arcs` skips a seat Receipt on a
         `tenure.closed` Event (nothing in the game reads it, so no hash depends on it)."""
         return cls(t.object, (EDGE, t), TENURE_CLOSED)

@@ -5,14 +5,16 @@ The engine lives beside this file (`orchestration.py`, `hierarchy/`, `core/`, `g
 while the season's is STRATEGIC. This module is the adapter between them: `resolve_field`, `_weighted_unit`,
 `_run_and_grade` and the survivor-ratio -> degree map.
 
-The faction -> Unit construction is the minimum-viable default (one Line subunit, tier 2, command 4,
-discipline 5, power `_SEASON_FORCE_POWER`) for every field EXCEPT morale and terrain, which come from season
+`resolve_field` builds each side one of three ways: from an order of battle when either side carries one
+(`_oob_unit`, ED-IN-0306); one subunit per commanding person when `field_subunits` is `'person'`
+(`_person_unit`, CP-T04-01); else the minimum-viable default, one Line subunit (`_weighted_unit`: tier 2,
+command 4, discipline 5, power `_SEASON_FORCE_POWER`). Morale and terrain come from season
 state: `resolve_field` takes each side's morale-start from its mean stance toward its own faction (the
 carrier `_eff_march` writes a lost field's "decrease in morale" onto; `_morale_start`) and its terrain from
 the target's territory and garrison (`terrain_row_for_territory`, with A.9's Walls DR applied in
 `_run_and_grade`). The canon engine can express far more -- troop types, equipment, formations,
-multi-subunit hierarchies, orders of battle -- and what a faction's army IS at the strategic scale is a design
-question this adapter does not answer.
+multi-subunit hierarchies -- and what a faction's army IS at the strategic scale, beyond an authored order of
+battle, is a design question this adapter does not answer.
 
 [GAP: faction -> unit construction lacks canonical spec — carried over from the pre-port adapter.]
 """
@@ -51,8 +53,9 @@ _MORALE_FLOOR = 1  # [JUSTIFIED: mass_battle_v30.md:230-231 states canon's Moral
 _MORALE_CEIL = 7  # [JUSTIFIED: Morale's canon ceiling, mass_battle_v30.md:230-231, "Morale (1-7)"]
 
 #: The morale-start of a side whose members' stance toward their own faction is zero -- no field lost,
-#: nothing written. It is the flat value (`morale=5`) every unit started at before d.1: the control arm, and
-#: the shipped world (`boot/realm.py` seeds no stance row on a faction id; `_morale_start`).
+#: nothing written. It is the flat value (`morale=5`) every unit started at before d.1: the control arm.
+#: ⚠ Not the shipped world: with `loyalty_toward_creed` True, `boot/realm.py` seeds each member's loyalty row
+#: on the creed id `_side_stance` reads as morale (`H-256`; `_morale_start`).
 _MORALE_START_BASE = 5  # [canonical: inherited default — the pre-port adapter's flat morale-start, carried by _faction_to_unit until d.1 and by _weighted_unit since; see GAP above]
 
 
@@ -85,8 +88,8 @@ def _morale_start(stance, loyalty=0.0, gain=0):
     THE MAPPING, AND THE ONE THING IT ASSUMES. One stance unit toward one's own faction is one point
     of morale, added to `_MORALE_START_BASE` and clamped to canon's ladder. That identity is the
     assumption; it adds no knob, because the magnitude is already `field_morale_weight`'s (`H-148`,
-    swept 0/1/3): while `_eff_march` is the only writer of a stance row on a faction id (`boot/realm.py`'s
-    seeded rows all name a person), a scale factor here would only multiply
+    swept 0/1/3): `_eff_march` writes its row on a faction id, and `boot/realm.py`'s build-time loyalty rows land
+    on the same id when `loyalty_toward_creed` is True (`H-256`), so a scale factor here would only multiply
     that weight. At weight 0 a lost field writes a zero row and this returns the base -- the control.
     ONE EXCEPTION (`H-151`): in a SAME-FACTION march winner and loser are one faction, so each loser also
     carries the grudge row `(faction, -1.0, field_grudge_weight)` and `stance_toward` sums both: the next

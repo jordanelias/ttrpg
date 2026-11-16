@@ -14,7 +14,7 @@ PRIMITIVES consumed (per weapon: a weapons.WEAPONS record, whose schema is weapo
 DERIVED (the intended single basis; wiring is PARTIAL — see WIRING STATUS):
   STAGE 1 composite mass -> PoB, m_head, MoI, static_moment   (recovered weapon_physics 2026-06-22, self-tested 0.05cm)
   STAGE 2 PoB+mass -> percussion authority, puncture pressure, armour-defeat mode   (recovered percussion_authority)
-  STAGE 3 dynamics -> agility, authority(impact), reach, the {parry,dodge,wind} defence affinities
+  STAGE 3 dynamics -> agility, the {parry,dodge,wind} defence affinities
 
 WIRING STATUS:
   · LIVE consumers (read by systems.py / core): derive(), agility(), defense_affinities(),
@@ -224,7 +224,6 @@ SWING_FLOOR = 0.5      # [SIM-CALIBRATE] floor on the swing-fraction degradation
 # NOT reduce the force of an axial thrust. What choking up costs is CONTROL (a shortened rear lever lets the point
 # be beaten off-line, and the gathered posture telegraphs): a legibility/accuracy effect whose home is
 # systems.choke_counterbalance -> CHOKE_ACCURACY_K (U5/ED-PC-0019, U10/ED-PC-0022).
-# in, and phi_grip('point') is grip-invariant UNCONDITIONALLY (no constant), keeping the D2 gate byte-identical.
 PERC_ROOM_FLOOR = 0.5  # [SIM-CALIBRATE] floor on percussion's room degradation (identity at room=1.0/r*; monotone-down FORBIDDEN, C4)
 
 def grip_swing_ratio(w, grip):

@@ -218,7 +218,7 @@ DEFAULT_FIXTURES = Fixtures(
     # eviction comparator (S20/S34, `state/ledgers.py::eviction_key`), which drops the acquaintance
     # claims first, does not run through eight seasons (two years at four seasons to the year,
     # ED-IN-0332). ⚠ THE VALUE BUYS TIME, NOT RETENTION: the ledger grows with the horizon and does
-    # not plateau, so on the growth the cap binds near season ten, and then the comparator forgets
+    # not plateau, so on the growth the cap binds near season ten (extrapolated, not measured), and then the comparator forgets
     # the oldest first again. The next lever is a selective eviction rule (a change to the S20/S34
     # comparator), not a larger number; it is not built.
     # [ASSUMPTION; medium; Jordan to correct; revert: ledger_cap back to 200]
@@ -253,8 +253,7 @@ DEFAULT_FIXTURES = Fixtures(
     # sampler's top as the strict score leader in MORE THAN ONE HALF of the readings, among persons
     # holding a pursuit vector, AND `test_u4_the_choice_is_sampling_and_the_argmax_is_its_zero_
     # temperature_control` passes. Between-world variety falls MONOTONICALLY with temperature,
-    # because a hotter draw makes every world sample the same broad mixture, so the right value is
-    # the LEAST one that removes the defect.
+    # because a hotter draw makes every world sample the same broad mixture.
     #
     # THE ANALYTIC FACT: for TIED candidates `score/tau` is equal whatever tau is, so their order is
     # decided by the draw ALONE at any nonzero temperature. The alphabetical tie-break this unit

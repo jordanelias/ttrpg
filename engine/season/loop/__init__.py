@@ -16,14 +16,14 @@ own module (unit L5, ED-IN-0206), with the §A.2 table's owned state, `emits` an
 and `inspect.getsource` returns the real body. A delegating stub would fail `test_d9b` and silently
 vacate every pure NEGATIVE assertion over a step's source, which is why step 9 refused to delegate.
 
-⚠ **`predicates` AND `effects` ARE NOT AMONG THE SIX, AND STAY.** §A.2's line enumerates the STEPS,
+⚠ **`predicates` AND `effects` ARE NOT AMONG THE STEPS, AND STAY.** §A.2's line enumerates the STEPS,
 not the totality of `loop/`; these two are the verb-keyed tables the fold dispatches on, and they
 sit beside the fold that reads them. Recorded rather than left for a later reader to re-derive as a
 conformance gap — the same disposition L3 took for `queries/readers.py`, except that one had a
 `04`-sanctioned home to go to and these do not.
 
 ⚠ **THE TOKEN (G2).** §A.3 row 3's token type is `state/gate.py::Token`, constructed only in
-`driver.py::mint_token`. `SeasonDriver.season` mints one per barrier and passes it to five of the six
+`driver.py::mint_token`. `SeasonDriver.season` mints one per barrier and passes it to six of the seven
 steps as their first argument; `deliberate` receives none. `tests/test_g2_token.py` is the scan
 `04:206` grades MECHANICAL.
 
