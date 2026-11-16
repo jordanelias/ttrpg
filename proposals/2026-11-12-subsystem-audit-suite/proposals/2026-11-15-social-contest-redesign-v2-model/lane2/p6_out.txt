@@ -1,0 +1,31 @@
+(a) audience kinds reachable:
+    ('conversation', 'full'): ['none']
+    ('conversation', 'abridged'): ['none']
+    ('questioning', 'full'): ['none']
+    ('questioning', 'abridged'): ['none']
+    ('rally', 'full'): ['crowd', 'gallery', 'none']
+    ('rally', 'abridged'): ['crowd', 'gallery', 'none']
+    ('audience', 'full'): ['bench']
+    ('audience', 'abridged'): ['bench']
+    ('negotiation', 'full'): ['none']
+    ('negotiation', 'abridged'): ['none']
+    ('arbitration', 'full'): ['bench']
+    ('arbitration', 'abridged'): ['bench']
+    ('legal_trial', 'full'): ['bench']
+    ('legal_trial', 'abridged'): ['bench']
+    ('tribunal', 'full'): ['bench']
+    ('tribunal', 'abridged'): ['bench']
+    ('interrogation', 'full'): ['bench']
+    ('interrogation', 'abridged'): ['bench']
+    ('inquisition_hearing', 'full'): ['bench']
+    ('inquisition_hearing', 'abridged'): ['bench']
+    ('excommunication_deliberation', 'full'): ['bench']
+    ('excommunication_deliberation', 'abridged'): ['bench']
+    ('parliamentary_debate', 'full'): ['bench']
+    ('parliamentary_debate', 'abridged'): ['bench']
+    ('council_of_state', 'full'): ['bench']
+    ('council_of_state', 'abridged'): ['bench']
+(b) bench/declared rows: sittings whose outcome changes with onlookers present: {'audience': 0, 'arbitration': 0, 'legal_trial': 0, 'tribunal': 0, 'interrogation': 0, 'inquisition_hearing': 0, 'excommunication_deliberation': 0, 'parliamentary_debate': 0, 'council_of_state': 0} of 200 each
+(c) rally, lone cohort       room=none    : Success+ Presence 2 0.476, Presence 6 0.629, diff +0.153
+(c) rally, cohort + h1       room=gallery : Success+ Presence 2 0.396, Presence 6 0.632, diff +0.237
+(c) rally, cohort + crowd12  room=crowd   : Success+ Presence 2 0.203, Presence 6 0.649, diff +0.446

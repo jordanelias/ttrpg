@@ -1,0 +1,2 @@
+noble steer n=3000: shipped 0.228 flattened 0.267 diff -0.038 z -3.4
+same seat, not a party: shipped 0.187 flattened 0.270 diff -0.083

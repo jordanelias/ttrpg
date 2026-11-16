@@ -1,0 +1,21 @@
+===== RIGGED TRIAL: card kind=trial arranged_by=bully tilt=0.94 decided_by=('judge2',) room=(('scholar', 'speaks for', 0.0), ('bully', 'speaks against', 3.5), ('judge2', 'judges', 4.0)) turns=2 silence=refusal odds=0.277
+[trial: a judicial proceeding on a charge, arranged by bully (tilt 0.94); decided by judge2; 2 turn(s) each]
+  1. [fact] scholar presses bully from what it will bring: bully is rattled. (room -0.26)
+  2. [fact] bully presses scholar from what is owed: scholar is rattled. (room -0.55)
+  3. [fact] scholar rests. (room -0.55)
+  4. [fact] bully raises point 0 on fact as one of their own: it half lands; he wanders from the point. (room -0.58)
+  -> ended budget
+  band failure margin -3.2410639102692262
+  writes: (('case_file:stage', 'tolls'), ('record:acquittal', 'tolls'), ('precedent', 'tolls'), ('regard-', 'judge2', 'scholar', 'a charge that failed'), ('regard-', 'bully', 'scholar', 'accused and acquitted'), ('regard+', 'scholar', 'judge2', 'how he ruled'), ('regard+', 'bully', 'judge2', 'how he ruled'), ('appeal_weight', 'judge2'), ('reception', 'judge2', 0.83), ('regard-', 'judge2', 'scholar', 'what he heard'), ('regard-', 'bully', 'scholar', 'pressed'), ('strain_carried', 'bully'), ('regard-', 'scholar', 'bully', 'pressed'), ('strain_carried', 'scholar'), ('regard-', 'scholar', 'bully', 'lost to him'), ('legitimacy-', 'Crown'), ('docket:appeal', 'scholar'), ('strife', 'famine'))
+  ledgers: {'scholar': [('rattled', 'bully', 'scholar'), ('rattled', 'scholar', 'bully'), ('rigged', 'bully', 0.94), ('partial', 'judge2', -0.2)], 'bully': [('rattled', 'bully', 'scholar'), ('rattled', 'scholar', 'bully'), ('partial', 'judge2', -0.2)], 'judge2': [('rattled', 'bully', 'scholar'), ('rattled', 'scholar', 'bully'), ('rigged', 'bully', 0.94)]}
+  legitimacy {'Crown': -0.13999999999999996} standing {'Crown': -0.03333333333333333} docket [('appeal:tolls', 'appeal')] strife {'famine': 1.25}
+===== RALLY: card kind=rally arranged_by=orator tilt=0.0 decided_by=('guildsmen', 'townsfolk', 'toll_men') room=(('orator', 'speaks for', 0.0), ('guildsmen', 'judges', 0.0), ('townsfolk', 'judges', 0.0), ('toll_men', 'judges', 0.0)) turns=3 silence=free odds=0.277
+[rally: a deliberative proceeding on a theme, arranged by orator; decided by guildsmen, townsfolk, toll_men; 3 turn(s) each]
+  1. [the theme] orator raises point 0 on the theme from what is owed (framed on commons): it lands. (room +0.30)
+  2. [the theme] orator raises point 1 on the theme as one of their own: it falls flat. (room +0.27)
+  3. [the theme] orator raises point 2 on the theme from what it will bring (framed on trade): it falls flat. (room +0.01)
+  -> ended budget
+  band failure margin -3.878909284734829
+  writes: (('case_file:stage', 'rally'), ('regard-', 'guildsmen', 'orator', 'unmoved'), ('regard-', 'townsfolk', 'orator', 'unmoved'), ('regard-', 'toll_men', 'orator', 'unmoved'), ('grievance', 'orator'), ('regard+', 'orator', 'guildsmen', 'how he ruled'), ('regard+', 'townsfolk', 'guildsmen', 'how he ruled'), ('regard+', 'toll_men', 'guildsmen', 'how he ruled'), ('reception', 'guildsmen', 1.0), ('regard+', 'guildsmen', 'orator', 'what he heard'), ('regard-', 'townsfolk', 'orator', 'what he heard'), ('regard-', 'toll_men', 'orator', 'what he heard'), ('strife', 'famine'))
+  ledgers: {'orator': [('partial', 'guildsmen', 0.47), ('partial', 'townsfolk', 0.05), ('partial', 'toll_men', -0.27)], 'guildsmen': [('partial', 'townsfolk', 0.05), ('partial', 'toll_men', -0.27)], 'townsfolk': [('partial', 'guildsmen', 0.47), ('partial', 'toll_men', -0.27)], 'toll_men': [('partial', 'guildsmen', 0.47), ('partial', 'townsfolk', 0.05)]}
+  legitimacy {'Guild': 0.1} standing {} docket [('grievance:orator:rally', 'grievance')] strife {'famine': 1.25}

@@ -1,0 +1,59 @@
+null arm (not held): world hash bfe92848b9c0a6bb; n=300 sittings per example; the toy fold of sc2/host.py
+
+== heresy trial = `inquisition_hearing` disposes `ban`; bands {'overwhelming': 40, 'failure': 188, 'success': 38, 'partial': 34}; determinism 20/20 same-hash
+   failure      n=188 | sittings writing nothing but the case-file stage: 0 | net regard/sitting -0.23 | write kinds: {'case_file:stage': 188, 'record:acquittal': 188, 'legitimacy-': 188, 'regard+': 146, 'appeal_weight': 188, 'reception': 188, 'regard-': 188, 'strain_carried': 168, 'strife': 188}
+   overwhelming n= 40 | sittings writing nothing but the case-file stage: 0 | net regard/sitting -0.28 | write kinds: {'case_file:stage': 40, 'tenure:ban': 40, 'precedent': 40, 'regard+': 37, 'appeal_weight': 40, 'reception': 40, 'regard-': 40, 'strain_carried': 39, 'strife': 40}
+   partial      n= 34 | sittings writing nothing but the case-file stage: 0 | net regard/sitting -0.27 | write kinds: {'case_file:stage': 34, 'tenure:oblige': 34, 'docket:adjourned': 34, 'regard+': 22, 'appeal_weight': 34, 'reception': 34, 'regard-': 34, 'strain_carried': 32, 'strife': 34}
+   success      n= 38 | sittings writing nothing but the case-file stage: 0 | net regard/sitting -0.28 | write kinds: {'case_file:stage': 38, 'tenure:ban': 38, 'legitimacy+': 38, 'regard+': 31, 'appeal_weight': 38, 'reception': 38, 'regard-': 38, 'strain_carried': 38, 'strife': 38}
+   world changes with NO write naming them (sittings of 300): {'pursuits': 300, 'standing': 300, 'legitimacy': 74, 'ledgers': 300, 'compliance(no reader)': 300, 'reception(no reader)': 300, 'appeal_weight(no reader)': 300}
+
+== parliamentary debate = `debate` disposes `decree`; bands {'partial': 47, 'overwhelming': 87, 'success': 76, 'failure': 90}; determinism 20/20 same-hash
+   failure      n= 90 | sittings writing nothing but the case-file stage: 0 | net regard/sitting -0.48 | write kinds: {'case_file:stage': 90, 'record:defeated': 90, 'faction-': 90, 'regard-': 90, 'appeal_weight': 90, 'reception': 90, 'regard+': 62, 'strain_carried': 88, 'strife': 90}
+   overwhelming n= 87 | sittings writing nothing but the case-file stage: 0 | net regard/sitting +0.90 | write kinds: {'case_file:stage': 87, 'record:decree': 87, 'faction+': 87, 'precedent': 87, 'legitimacy+': 87, 'regard-': 87, 'appeal_weight': 87, 'reception': 87, 'regard+': 87, 'strain_carried': 86, 'strife': 87}
+   partial      n= 47 | sittings writing nothing but the case-file stage: 0 | net regard/sitting -0.09 | write kinds: {'case_file:stage': 47, 'docket:adjourned': 47, 'regard-': 47, 'appeal_weight': 47, 'reception': 47, 'regard+': 44, 'strain_carried': 45, 'strife': 47}
+   success      n= 76 | sittings writing nothing but the case-file stage: 0 | net regard/sitting +0.65 | write kinds: {'case_file:stage': 76, 'record:decree': 76, 'faction+': 76, 'regard-': 76, 'appeal_weight': 76, 'reception': 76, 'regard+': 76, 'strain_carried': 76, 'strife': 76}
+   world changes with NO write naming them (sittings of 300): {'pursuits': 300, 'standing': 47, 'legitimacy': 213, 'ledgers': 300, 'compliance(no reader)': 300, 'reception(no reader)': 300, 'appeal_weight(no reader)': 300}
+
+== private negotiation = `negotiation` disposes `oblige`; bands {None: 285, 'failure': 12, 'success': 3}; determinism 20/20 same-hash
+   None         n=285 | sittings writing nothing but the case-file stage: 0 | net regard/sitting -0.22 | write kinds: {'case_file:stage': 285, 'docket:other_forum': 285, 'regard-': 285, 'strain_carried': 255}
+   failure      n= 12 | sittings writing nothing but the case-file stage: 0 | net regard/sitting -0.10 | write kinds: {'case_file:stage': 12, 'grievance': 12, 'docket:other_forum': 12, 'regard-': 10, 'strife': 12, 'strain_carried': 7}
+   success      n=  3 | sittings writing nothing but the case-file stage: 0 | net regard/sitting +0.17 | write kinds: {'case_file:stage': 3, 'tenure:oblige': 3, 'regard+': 3, 'regard-': 3, 'strain_carried': 3, 'strife': 3}
+   world changes with NO write naming them (sittings of 300): {'ledgers': 300, 'pursuits': 15}
+
+== rallying a crowd = `rally` disposes `none`; bands {'failure': 128, 'success': 78, 'overwhelming': 29, 'partial': 65}; determinism 20/20 same-hash
+   failure      n=128 | sittings writing nothing but the case-file stage: 0 | net regard/sitting +0.08 | write kinds: {'case_file:stage': 128, 'regard-': 128, 'grievance': 128, 'regard+': 128, 'reception': 128, 'strife': 128}
+   overwhelming n= 29 | sittings writing nothing but the case-file stage: 0 | net regard/sitting +1.14 | write kinds: {'case_file:stage': 29, 'pursuits+': 29, 'regard+': 29, 'claim:converted': 29, 'reception': 29, 'strife': 29, 'regard-': 1}
+   partial      n= 65 | sittings writing nothing but the case-file stage: 0 | net regard/sitting +0.80 | write kinds: {'case_file:stage': 65, 'regard+': 65, 'reception': 65, 'regard-': 29, 'strife': 65}
+   success      n= 78 | sittings writing nothing but the case-file stage: 0 | net regard/sitting +0.94 | write kinds: {'case_file:stage': 78, 'pursuits+': 78, 'regard+': 78, 'reception': 78, 'strife': 78, 'regard-': 19}
+   world changes with NO write naming them (sittings of 300): {'legitimacy': 300, 'ledgers': 271, 'compliance(no reader)': 300, 'reception(no reader)': 300}
+
+== interrogation for information = `questioning` disposes `none`; bands {'overwhelming': 122, 'failure': 54, 'success': 81, 'partial': 43}; determinism 20/20 same-hash
+   failure      n= 54 | sittings writing nothing but the case-file stage: 0 | net regard/sitting -0.06 | write kinds: {'case_file:stage': 54, 'regard-': 54, 'grievance': 54, 'regard+': 54, 'reception': 54, 'strife': 54, 'strain_carried': 18}
+   overwhelming n=122 | sittings writing nothing but the case-file stage: 0 | net regard/sitting +0.28 | write kinds: {'case_file:stage': 122, 'regard+': 122, 'reception': 122, 'regard-': 122, 'strife': 122, 'strain_carried': 68}
+   partial      n= 43 | sittings writing nothing but the case-file stage: 0 | net regard/sitting +0.28 | write kinds: {'case_file:stage': 43, 'regard+': 43, 'reception': 43, 'regard-': 43, 'strain_carried': 21, 'strife': 43}
+   success      n= 81 | sittings writing nothing but the case-file stage: 0 | net regard/sitting +0.28 | write kinds: {'case_file:stage': 81, 'regard+': 81, 'reception': 81, 'regard-': 81, 'strife': 81, 'strain_carried': 48}
+   world changes with NO write naming them (sittings of 300): {'pursuits': 300, 'legitimacy': 300, 'ledgers': 300, 'compliance(no reader)': 300, 'reception(no reader)': 300}
+
+== a trial = `trial` disposes `detain`; bands {'success': 74, 'overwhelming': 75, 'failure': 114, 'partial': 37}; determinism 20/20 same-hash
+   failure      n=114 | sittings writing nothing but the case-file stage: 0 | net regard/sitting -1.32 | write kinds: {'case_file:stage': 114, 'record:acquittal': 114, 'precedent': 114, 'regard-': 114, 'appeal_weight': 114, 'reception': 114, 'regard+': 61, 'strain_carried': 99, 'strife': 114}
+   overwhelming n= 75 | sittings writing nothing but the case-file stage: 0 | net regard/sitting +0.47 | write kinds: {'case_file:stage': 75, 'tenure:detain': 75, 'office:stripped': 75, 'precedent': 75, 'legitimacy+': 75, 'regard-': 75, 'appeal_weight': 75, 'reception': 75, 'regard+': 75, 'strain_carried': 59, 'strife': 75}
+   partial      n= 37 | sittings writing nothing but the case-file stage: 0 | net regard/sitting -0.58 | write kinds: {'case_file:stage': 37, 'tenure:oblige': 37, 'docket:adjourned': 37, 'regard-': 37, 'appeal_weight': 37, 'reception': 37, 'regard+': 26, 'strain_carried': 32, 'strife': 37}
+   success      n= 74 | sittings writing nothing but the case-file stage: 0 | net regard/sitting +0.13 | write kinds: {'case_file:stage': 74, 'tenure:detain': 74, 'precedent': 74, 'legitimacy+': 74, 'regard-': 74, 'appeal_weight': 74, 'reception': 74, 'regard+': 70, 'strain_carried': 59, 'strife': 74}
+   world changes with NO write naming them (sittings of 300): {'pursuits': 300, 'standing': 300, 'ledgers': 300, 'compliance(no reader)': 300, 'reception(no reader)': 300, 'appeal_weight(no reader)': 300, 'legitimacy': 151}
+
+== abridged (a tell) = `conversation` disposes `none`; bands {'partial': 39, 'overwhelming': 90, 'success': 76, 'failure': 95}; determinism 20/20 same-hash
+   failure      n= 95 | sittings writing nothing but the case-file stage: 0 | net regard/sitting -0.09 | write kinds: {'case_file:stage': 95, 'regard-': 95, 'grievance': 95, 'regard+': 95, 'reception': 95, 'strife': 95}
+   overwhelming n= 90 | sittings writing nothing but the case-file stage: 0 | net regard/sitting +0.57 | write kinds: {'case_file:stage': 90, 'pursuits+': 90, 'regard+': 90, 'claim:converted': 90, 'reception': 90, 'regard-': 90, 'strife': 90}
+   partial      n= 39 | sittings writing nothing but the case-file stage: 0 | net regard/sitting +0.45 | write kinds: {'case_file:stage': 39, 'regard+': 39, 'reception': 39, 'regard-': 39, 'strife': 39}
+   success      n= 76 | sittings writing nothing but the case-file stage: 0 | net regard/sitting +0.49 | write kinds: {'case_file:stage': 76, 'pursuits+': 76, 'regard+': 76, 'reception': 76, 'regard-': 76, 'strife': 76}
+   world changes with NO write naming them (sittings of 300): {'pursuits': 134, 'legitimacy': 300, 'ledgers': 210, 'compliance(no reader)': 300, 'reception(no reader)': 300}
+
+== the same Success under each strife: does what is 'at stake' change any write? (trial, the fold's writes for band 'success')
+   peace   stakes 0.0: non-regard write kinds on a success ['appeal_weight', 'case_file:stage', 'legitimacy+', 'precedent', 'reception', 'tenure:detain']
+   war     stakes 0.5: non-regard write kinds on a success ['appeal_weight', 'case_file:stage', 'legitimacy+', 'precedent', 'reception', 'tenure:detain']
+   famine  stakes 0.25: non-regard write kinds on a success ['appeal_weight', 'case_file:stage', 'legitimacy+', 'precedent', 'reception', 'tenure:detain']
+   schism  stakes 0.5: non-regard write kinds on a success ['appeal_weight', 'case_file:stage', 'legitimacy+', 'precedent', 'reception', 'tenure:detain']
+
+== matter with no strife in the world yet: a famine is created at 1.0 by the first sitting that names it
+   empty world -> after one conversation on the tolls (matter strife=famine): strife {'famine': 1.25} band failure
+   an arranger with an office but no faction rigs (tilt 0.99): legitimacy written to [None, 'Crown']

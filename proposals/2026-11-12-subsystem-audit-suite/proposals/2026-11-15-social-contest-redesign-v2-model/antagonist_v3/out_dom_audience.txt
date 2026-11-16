@@ -1,0 +1,1 @@
+audience     (for, vs automatic; n=800, se~0.017): auto 0.318 | argue 0.286 | press 0.318 | rest 0.355 | concede 0.318 | answer_else_rest 0.346 | press_then_argue 0.286

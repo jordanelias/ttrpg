@@ -1,0 +1,17 @@
+(1) a's Will 1 vs 7, staying power/temper/awe OFF
+  conversation b argues only (no press)   W1 0.230 W7 0.392 d=+0.162±0.020
+  conversation b rests only               W1 0.289 W7 0.287 d=-0.002±0.020
+  conversation b auto                     W1 0.281 W7 0.389 d=+0.108±0.021
+  questioning  b argues only (no press)   W1 0.233 W7 0.367 d=+0.134±0.020
+  questioning  b rests only               W1 0.344 W7 0.322 d=-0.022±0.021
+  questioning  b auto                     W1 0.272 W7 0.397 d=+0.125±0.021
+(2) a's Presence 1 vs 7 with heard_step 0 AND Reason's dice share forced to 10/10
+  tell         P1 0.286 P7 0.286 d=+0.000±0.020
+  conversation P1 0.336 P7 0.337 d=+0.001±0.021
+  rally        P1 0.349 P7 0.349 d=+0.000±0.021
+  trial        P1 0.341 P7 0.343 d=+0.002±0.021
+(3) Focus: tell with listener stake s (mood -> heat -> pull); mean drift and carried at Focus 1 / 7
+  b's stake from pursuit 0.0: F1: pull 0.0000 drift 0.000 carried 0.290 | F7: pull 0.0000 drift 0.000 carried 0.290
+  b's stake from pursuit 0.01: F1: pull 0.0001 drift 0.673 carried 0.208 | F7: pull 0.0001 drift 0.260 carried 0.241
+  b's stake from pursuit 0.3: F1: pull 0.0033 drift 0.661 carried 0.188 | F7: pull 0.0033 drift 0.265 carried 0.225
+  b's stake from pursuit 0.9: F1: pull 0.0100 drift 0.682 carried 0.141 | F7: pull 0.0100 drift 0.260 carried 0.181

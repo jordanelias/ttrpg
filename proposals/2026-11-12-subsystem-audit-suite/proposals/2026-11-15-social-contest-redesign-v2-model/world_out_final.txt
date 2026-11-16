@@ -1,0 +1,125 @@
+
+== PLAYED: what he sees and chooses. Options on the first menu, per rite and side; decisions per sitting
+  conversation  turns 3 -> 3 decisions each | for: 12 (argue, concede, press, rest) | against: 8 (argue, concede, press, rest)
+  negotiation   turns 3 -> 3 decisions each | for: 10 (argue, concede, press, rest) | against: 8 (argue, concede, press, rest)
+  questioning   turns 4 -> 4 decisions each | for: 11 (argue, press, rest) | against: 5 (argue, concede, rest)
+  inquisition   turns 4 -> 4 decisions each | for: 11 (argue, press, rest) | against: 5 (argue, concede, rest)
+  trial         turns 4 -> 4 decisions each | for: 12 (argue, concede, press, rest) | against: 8 (argue, concede, press, rest)
+  debate        turns 4 -> 4 decisions each | for: 10 (argue, concede, press, rest) | against: 8 (argue, concede, press, rest)
+  rally         turns 3 -> 3 decisions each | for: 4 (argue, rest)
+  audience      turns 2 -> 2 decisions each | for: 5 (argue, rest)
+  skill: one side played by a view-only chooser, the other automatic; mean over five characters in the played seat (carried; n=300 each)
+   conversation  random 0.253  automatic (the man himself) 0.367  view-only best 0.341  (best-random +0.088, best-automatic -0.027; 2se 0.036)
+   negotiation   random 0.128  automatic (the man himself) 0.301  view-only best 0.303  (best-random +0.175, best-automatic +0.003; 2se 0.036)
+   questioning   random 0.301  automatic (the man himself) 0.404  view-only best 0.409  (best-random +0.109, best-automatic +0.005; 2se 0.036)
+   inquisition   random 0.399  automatic (the man himself) 0.493  view-only best 0.498  (best-random +0.099, best-automatic +0.005; 2se 0.036)
+   trial         random 0.299  automatic (the man himself) 0.473  view-only best 0.498  (best-random +0.199, best-automatic +0.025; 2se 0.036)
+   debate        random 0.253  automatic (the man himself) 0.393  view-only best 0.395  (best-random +0.142, best-automatic +0.003; 2se 0.036)
+   rally         random 0.281  automatic (the man himself) 0.311  view-only best 0.326  (best-random +0.045, best-automatic +0.015; 2se 0.036)
+   audience      random 0.360  automatic (the man himself) 0.411  view-only best 0.431  (best-random +0.071, best-automatic +0.019; 2se 0.036)
+  a poor reader chooses worse only through the view: Attunement 1 -> 0.406, 7 -> 0.440, diff +0.034 [shipped]
+  a poor reader chooses worse only through the view: Attunement 1 -> 0.467, 7 -> 0.467, diff +0.000 [control: read_blur 0 (everyone reads perfectly)]
+  every move on a menu is best somewhere: the view-only chooser with and without the option
+   rest: rally, a plain man before a cold crowd               with 0.243  without 0.150  (+0.093)
+   concede (descend): the accused against a strong accuser    with 0.540  without 0.458  (+0.082)
+   concede (accept): negotiation, the party addressed         with 0.335  without 0.263  (+0.072)
+   answer: trial, two able advocates before a bench that can be moved with 0.688  without 0.602  (+0.087)
+   answer: negotiation, the same two                          with 0.603  without 0.585  (+0.018)
+  leaks: the View's fields: ['n', 'mover', 'side', 'issue', 'live_theirs', 'live_own', 'options', 'own', 'visible', 'mood', 'fit', 'aim', 'strain_seen', 'turns_left', 'acc']
+  believed fit(consequence) vs fit(authority): corr of the noise +0.008 given accuracy shared; s.d. of the believed difference 1.375 (0 would leak the true difference; before: exactly 0); fit vs aim corr +0.041
+  the View holds no Present, no Beat.terms, no track: True; a mixed sitting (played `for`, automatic `against`) ran above in every rite
+
+== SIMULATION: the automatic policy is the man. `for` in a trial against an ordinary respondent (400 sittings each)
+  orator    press 0.18 argue 0.77 rest 0.03 concede 0.03 | evidence 0.00 consequence 0.23 authority 0.48 solidarity 0.23 | insincere/beat 0.00 | carried 0.39
+  scholar   press 0.00 argue 0.98 rest 0.00 concede 0.01 | evidence 0.83 consequence 0.02 authority 0.14 solidarity 0.00 | insincere/beat 0.00 | carried 0.43
+  bully     press 0.79 argue 0.20 rest 0.01 concede 0.00 | evidence 0.00 consequence 0.16 authority 0.31 solidarity 0.51 | insincere/beat 0.01 | carried 0.27
+  diplomat  press 0.21 argue 0.66 rest 0.05 concede 0.08 | evidence 0.00 consequence 0.26 authority 0.51 solidarity 0.10 | insincere/beat 0.00 | carried 0.40
+  fox       press 0.52 argue 0.39 rest 0.07 concede 0.02 | evidence 0.21 consequence 0.43 authority 0.15 solidarity 0.12 | insincere/beat 0.24 | carried 0.37
+  plain     press 0.30 argue 0.49 rest 0.09 concede 0.12 | evidence 0.00 consequence 0.23 authority 0.41 solidarity 0.15 | insincere/beat 0.00 | carried 0.34
+  who prevails (carried as `for` against each other; trial before the bench / rally before the floor):
+
+   trial orator    scho 0.29 bull 0.52 dipl 0.38 plai 0.36
+   trial scholar   orat 0.58 bull 0.68 dipl 0.55 plai 0.55
+   trial bully     orat 0.37 scho 0.16 dipl 0.28 plai 0.30
+   trial diplomat  orat 0.45 scho 0.30 bull 0.56 plai 0.39
+   trial plain     orat 0.44 scho 0.28 bull 0.52 dipl 0.37   rally orator    0.44;   rally scholar   0.29;   rally bully     0.21;   rally diplomat  0.31;   rally plain     0.33;
+
+== BEARING: pursuits, convictions, ties (each with a flattened control)
+  (a) orator    bearing of the toll matter (want, hold, bond) = (0.8, 0.3, 0.6) -> stands for, lean +1.13
+  (a) bully     bearing of the toll matter (want, hold, bond) = (-1.0, 0.0, -1.0) -> stands against, lean -1.33
+  (a) scholar   bearing of the toll matter (want, hold, bond) = (0.0, 0.0, 0.3) -> stands for, lean +0.20
+  (a) townsfolk bearing of the toll matter (want, hold, bond) = (0.15, 0.0, 0.0) -> stands for, lean +0.10
+  (b) a press on what he wants: the pressed man's pursuit at 0.1 -> rattled 0.162; at 0.9 -> 0.548 [shipped]
+  (b) a press on what he wants: the pressed man's pursuit at 0.1 -> rattled 0.343; at 0.9 -> 0.343 [control: bearing flattened]
+  (c) arguing from principle against the matter's bearing on his own conviction: no conviction carried 0.282 (insincere 0.00); conviction 5 carried 0.105 (insincere 1.00, strain after 1.00) [shipped]
+  (c) arguing from principle against the matter's bearing on his own conviction: no conviction carried 0.282 (insincere 0.00); conviction 5 carried 0.282 (insincere 1.00, strain after 0.00) [control: ploy_step 0, grain_strain 0]
+  (d) the verdict moves what each wanted: the orator (trade 0.8) wins -> orator +0.67, bully -0.53; loses -> orator -0.67, bully +0.53 [shipped]
+  (d) the verdict moves what each wanted: the orator (trade 0.8) wins -> orator +0.10, bully -0.10; loses -> orator -0.10, bully +0.10 [control: bearing flattened]
+  (e) a decider tied to the respondent (judge2, the bully's client) carries 0.318; a neutral seat (judge3) 0.413; 'partial' claims the petitioner now holds: [('partial', 'judge2', -0.2)] [shipped]
+  (e) a decider tied to the respondent (judge2, the bully's client) carries 0.400; a neutral seat (judge3) 0.420; 'partial' claims the petitioner now holds: [] [control: bearing flattened]
+  (f) one record (ledger_of_tolls, weight 0.9, about the bully), credited by: the neutral judge +0.80; the bully's client judge2 +0.30; the toll men (his friends) +0.30
+  (g) a letter implicating the bishop: the bishop's client credits it +0.10 and a press with it aims -0.20 at him; a stranger credits it +0.60, aim -1.00
+  (h) a pressing need changes a concession: the diplomat accepts the grain terms 0.537 with no need, 0.828 with need 0.9 [shipped]
+  (h) a pressing need changes a concession: the diplomat accepts the grain terms 0.563 with no need, 0.563 with need 0.9 [control: bearing flattened]
+
+== CONTEXT: the same matter and persons (trial of the toll matter; 600 sittings an arm)
+  crown, peace, plain era            standard 5.0 lean +0.2 turns 4 unrest 0.0 stakes 0.0 admits 6 era - | beats 8.0 carried 0.603
+  theocracy                          standard 6.0 lean +0.1 turns 4 unrest 0.0 stakes 0.0 admits 7 era - | beats 8.0 carried 0.528
+  commune                            standard 4.0 lean +0.2 turns 4 unrest 0.0 stakes 0.0 admits 7 era - | beats 8.0 carried 0.612
+  famine                             standard 5.0 lean +0.2 turns 4 unrest 0.75 stakes 0.25 admits 6 era - | beats 8.0 carried 0.530
+  war                                standard 5.0 lean +0.2 turns 3 unrest 0.5 stakes 0.5 admits 6 era - | beats 6.0 carried 0.505
+  age of faith                       standard 5.0 lean +0.2 turns 4 unrest 0.0 stakes 0.0 admits 6 era {'consequence': 0.8, 'authority': 1.4} | beats 8.0 carried 0.585
+  mercantile age                     standard 5.0 lean +0.2 turns 4 unrest 0.0 stakes 0.0 admits 6 era {'consequence': 1.4, 'authority': 0.8} | beats 8.0 carried 0.602
+  theocracy+famine+faith, FLATTENED  standard 5.0 lean +0.2 turns 4 unrest 0.0 stakes 0.0 admits 6 era - | beats 8.0 carried 0.603
+  lawful under crown: ('conversation', 'negotiation', 'questioning', 'inquisition', 'trial', 'debate', 'rally', 'audience')
+  lawful under theocracy: ('conversation', 'negotiation', 'questioning', 'inquisition', 'trial', 'rally', 'audience')
+  lawful under commune: ('conversation', 'negotiation', 'questioning', 'trial', 'debate', 'rally', 'audience')
+  an office-holder (the bully, rung 2) as accuser  power 3.5 tilt 0.94 turns 2 room ['bully', 'scholar', 'judge2'] carried 0.322
+  a commoner (the clerk) as accuser                power 0.0 tilt 0.0 turns 4 room ['clerk', 'scholar', 'judge', 'guildsmen', 'toll_men'] carried 0.243
+  a partisan bench (judge2 presides alone)         carried 0.432; flattened 0.383
+  a neutral bench (judge presides)                 carried 0.597; flattened 0.457
+
+== ROLES: one record, one reading
+  (a) the judge as speaks for / judges: care (0.5, 0.8, 0.5) / (0.5, 0.8, 0.5) (equal: True); his stake differs only with the parties ((0.0, 0.4, 0.0) / (0.0, 0.4, -0.3))
+  (b) two identical men swapped between advocate and judge: carried 0.320 / 0.320 (identical: True); a Reason-7 man as the judge only 0.278, as the advocate only 0.313: the role's operands, not the person
+  (d) no magnate in the gallery        `for` mean drift per speech 0.059, rattles per sitting 0.390, carried 0.322
+  (d) a hostile magnate (power 4.5)    `for` mean drift per speech 0.358, rattles per sitting 0.462, carried 0.315
+  (d) a friendly magnate               `for` mean drift per speech 0.213, rattles per sitting 0.387, carried 0.342
+  (e) the clerk is called from the floor in 402 beats of 400 trials (he speaks his own testimony with his own dice); he is the one pressed next in 195; his role cell is unchanged after in 400/400
+
+== POWER: who arranges, and what it costs (trial of the toll matter; the bully arranges against the scholar)
+  fair (rig 0)                                 tilt 0.00 turns 4 bench ('judge',) floor 3 presiding lean +0.07 | accuser carried 0.617 | legitimacy {} appeal []
+  a strong arranger, firm (rig 0.5)            tilt 0.47 turns 3 bench ('judge',) floor 3 presiding lean -0.87 | accuser carried 0.567 | legitimacy {'Crown': -0.47} appeal []
+  a strong arranger, rigged (rig 1)            tilt 0.94 turns 2 bench ('judge2',) floor 0 presiding lean -2.28 | accuser carried 0.355 | legitimacy {'Crown': -0.15666666666666665} appeal [('appeal:tolls', 'appeal')]
+  two equals, rig 1                            tilt 0.00 turns 4 bench ('judge',) floor 3 presiding lean +0.07 | accuser carried 0.617 | legitimacy {} appeal []
+  a weak arranger, rig 1                       tilt 0.00 turns 4 bench ('judge',) floor 3 presiding lean +0.07 | accuser carried 0.617 | legitimacy {} appeal []
+  rigged, power FLATTENED                      tilt 0.00 turns 4 bench ('judge',) floor 3 presiding lean +0.07 | accuser carried 0.617 | legitimacy {} appeal []
+
+== THE FOLD: the disposal table, and two outcomes leaving two worlds (control: the proceeding is not held)
+  heresy trial                   (inquisition, disposes ban): overwhelming: tenure:ban+office:stripped+precedent; success: tenure:ban; partial: tenure:oblige+docket:adjourned; failure: record:acquittal+legitimacy-arranger
+  parliamentary debate           (debate, disposes decree): overwhelming: record:decree+faction++precedent; success: record:decree+faction+; partial: docket:adjourned; failure: record:defeated+faction-
+  private negotiation            (negotiation, disposes oblige): overwhelming: tenure:oblige+regard++precedent; success: tenure:oblige; partial: docket:adjourned; failure: grievance+docket:other_forum
+  rallying a crowd               (rally, disposes none): overwhelming: pursuits++regard++convert; success: pursuits++regard+; partial: regard+; failure: regard-+grievance
+  interrogation for information  (questioning, disposes none): overwhelming: pursuits++regard++convert; success: pursuits++regard+; partial: regard+; failure: regard-+grievance
+  a trial                        (trial, disposes detain): overwhelming: tenure:detain+office:stripped+precedent; success: tenure:detain+precedent; partial: tenure:oblige+docket:adjourned; failure: record:acquittal+precedent+regard-accuser
+  the abridged form (tell)       (conversation, disposes none): overwhelming: pursuits++regard++convert; success: pursuits++regard+; partial: regard+; failure: regard-+grievance
+  trial overwhelming tenures [('detain', 'bully', 'tolls')] offices {'bully': 'contested'} precedents ['prec:tolls'] docket [] strife {'famine': 0.75} | typed writes 7: ['case_file:stage', 'office:stripped', 'precedent', 'regard-', 'strife', 'tenure:detain']
+  trial success      tenures [('detain', 'bully', 'tolls')] offices {} precedents ['prec:tolls'] docket [] strife {'famine': 0.75} | typed writes 8: ['case_file:stage', 'precedent', 'regard-', 'strife', 'tenure:detain']
+  trial partial      tenures [('oblige', 'bully', 'tolls')] offices {} precedents [] docket [('tolls', 'adjourned')] strife {'famine': 1.25} | typed writes 9: ['case_file:stage', 'docket:adjourned', 'regard-', 'strife', 'tenure:oblige']
+  trial failure      tenures [] offices {} precedents ['prec:tolls'] docket [] strife {'famine': 1.25} | typed writes 11: ['case_file:stage', 'precedent', 'record:acquittal', 'regard-', 'strain_carried', 'strife']
+  control, not held: tenures [] offices {} precedents [] docket [] strife {}
+
+== THREE SEASONS: a famine convenes a debate; its outcome moves the strife and a faction; a rigged trial returns as an appeal
+   debate:remit_0[famine] orator v bully: overwhelming, budget
+   trial:tolls_0[famine] scholar v bully: failure, budget, tilt 0.94
+   audience:appeal:tolls_0[famine] scholar v bully: failure, budget
+   negotiation:grain_0[famine] diplomat v bully: success, yielded
+   trial:tolls_1[peace] scholar v bully: overwhelming, budget
+   negotiation:grain_1[peace] diplomat v bully: success, budget
+   trial:tolls_2[peace] scholar v bully: overwhelming, budget
+   negotiation:grain_2[peace] diplomat v bully: failure, yielded
+  after: famine 0.50 (began 1.00); standing {'Guild': 0.5}; legitimacy {'Crown': -0.15666666666666665}; tenures [('oblige', 'bully', 'grain_0'), ('detain', 'bully', 'tolls_1'), ('oblige', 'bully', 'grain_1'), ('detain', 'bully', 'tolls_2')]
+  earned grudges: scholar->bully -0.54 (began 0), bully->scholar -0.76 (began -0.70); strain carried in: bully 0.00, scholar 0.00
+  80 runs: the recurring trial carried in season 1 (rigged) 0.44, season 2 0.61, season 3 0.62; season 3 carried after a season-1 win 0.63 (n=35), after a loss 0.62 (n=45): no snowball if these are close
+  famine after three seasons mean 1.36 range 0.00..2.50 (began 1.00); the rigged trial returned as an appeal in 45/80 runs; greatest strain carried by anyone 0.91 (bound 1.00)
+  control (bearing flattened): a trial carried in some season in 0.91 of runs (shipped: 0.91)

@@ -1,0 +1,30 @@
+
+== A-139 the invariant
+  refused: a sitting with one character is refused (A-139)
+  an audience with a noble who speaks and then decides both cells: ['j1']; adjudicators ('j1',); verdicts ['j1']; band success
+  an inquisitor who questions and judges               both cells: ['c1']; adjudicators ('c1',); verdicts ['c1']; band overwhelming
+  a questioned man who decides whether to give way     both cells: ['b']; adjudicators ('b',); verdicts ['b']; band partial
+  a seat who speaks in debate and votes                both cells: ['j1']; adjudicators ('j1', 'j2', 'j3'); verdicts ['j1', 'j2', 'j3']; band failure
+
+== the three types re-decided on the merits (before = the consent version of the last pass)
+  conversation (close: the man addressed, a draw on him): bands {'partial': 45, 'failure': 223, 'overwhelming': 54, 'success': 78}; carried 0.330   [before: accepted or impasse, no band in 63%]
+  questioning, the questioned concedes at once   the questioner gets it 0.780; the questioned man's beats charged as evasion 0/400   [before: 1.000 / 0.255 / 0.000; evasion could not fire]
+  questioning, the questioned automatic          the questioner gets it 0.383; the questioned man's beats charged as evasion 0/1418   [before: 1.000 / 0.255 / 0.000; evasion could not fire]
+  questioning, the questioned never concedes     the questioner gets it 0.280; the questioned man's beats charged as evasion 14/1600   [before: 1.000 / 0.255 / 0.000; evasion could not fire]
+  negotiation (consent, kept on the merits): {None: 281, 'success': 86, 'failure': 33}
+
+== a party who decides is steered by his own stake, and the room reads it
+  the noble (speaks against, decides; the plea would cost him his tolls) [shipped]: start -0.60; petitioner carried 0.233; `partial` claims an onlooker (j2) holds: [('partial', 'j1', -0.3)]
+  the noble (speaks against, decides; the plea would cost him his tolls) [bearing flattened]: start +0.00; petitioner carried 0.275; `partial` claims an onlooker (j2) holds: []
+  a played noble (a side AND the adjudicator) rules against his own mind: band success; departure from his own track returned (('j1', 1.59),)
+
+== invariants over the eight rites (cast, effort 3; automatic and random choosers)
+  conversation bands {'failure': 46, 'overwhelming': 18, 'partial': 12, 'success': 24} ends {'budget': 78, 'yielded': 22}
+  negotiation  bands {None: 70, 'success': 30} ends {'budget': 70, 'yielded': 30}
+  questioning  bands {'failure': 49, 'success': 22, 'partial': 13, 'overwhelming': 16} ends {'budget': 66, 'yielded': 34}
+  inquisition  bands {'overwhelming': 33, 'success': 20, 'failure': 31, 'partial': 16} ends {'budget': 100}
+  trial        bands {'overwhelming': 30, 'failure': 31, 'partial': 12, 'success': 27} ends {'budget': 100}
+  debate       bands {'failure': 42, 'partial': 23, 'success': 16, 'overwhelming': 19} ends {'budget': 100}
+  rally        bands {'failure': 40, 'success': 32, 'overwhelming': 13, 'partial': 15} ends {'budget': 88, 'rested': 12}
+  audience     bands {'overwhelming': 26, 'partial': 16, 'success': 28, 'failure': 30} ends {'budget': 100}
+  beats 9227; sittings in which someone held both cells 800/1600; violations {'chain': 0, 'no point': 0, 'closed issue re-argued': 0, 'move not on the card': 0, 'evasion unpriced': 0, 'a speech moved its own side': 0, 'one character': 0, "verdicts != the card's adjudicators": 0, 'track != start + beats': 0}

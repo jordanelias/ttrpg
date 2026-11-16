@@ -1,0 +1,1 @@
+negotiation  (for, vs automatic; n=800, se~0.017): auto 0.204 | argue 0.236 | press 0.052 | rest 0.001 | concede 0.000 | answer_else_rest 0.003 | press_then_argue 0.180

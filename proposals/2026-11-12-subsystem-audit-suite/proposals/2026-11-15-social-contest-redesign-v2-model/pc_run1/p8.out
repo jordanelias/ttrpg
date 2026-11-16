@@ -1,0 +1,51 @@
+[P8.5] under controls(), random attributes both sides, stakes on: margin == plain one roll on 200/200 keys (mismatch 0)
+   controls: all-mid P(carried) 0.279 P(lands, m>=0) 0.416 (n=2400, se 0.009)
+   shipped: all-mid P(carried) 0.279 P(lands, m>=0) 0.416 (n=2400, se 0.009)
+   closed form of the plain roll: P(m>=1) 0.286 P(m>=0) 0.425
+
+[P8.4] abridged conversation, speaker argues on a record item (weight .8); hearer Attunement 1..7; n=600 each
+   att | lie: carried  lands | true item: carried lands | 'hypocrite' ledger rows when the lie CARRIED
+    1  | 0.468 0.603      | 0.468 0.603            | 0 of 281
+    2  | 0.382 0.540      | 0.468 0.603            | 0 of 229
+    3  | 0.323 0.468      | 0.468 0.603            | 0 of 193
+    4  | 0.243 0.382      | 0.468 0.603            | 146 of 146
+    5  | 0.172 0.323      | 0.468 0.603            | 103 of 103
+    6  | 0.130 0.243      | 0.468 0.603            | 78 of 78
+    7  | 0.085 0.172      | 0.468 0.603            | 51 of 51
+
+[P8.2] lie without an item: speaker KNOWS the matter cuts against his side (believes -1) vs believes +1; hearer Att 7 / 1
+   hearer att 1, believes -1: carried 0.665  insincerity on the beat 1.00
+   hearer att 1, believes +0: carried 0.665  insincerity on the beat 0.00
+   hearer att 1, believes +1: carried 0.665  insincerity on the beat 0.00
+   hearer att 7, believes -1: carried 0.220  insincerity on the beat 1.00
+   hearer att 7, believes +0: carried 0.665  insincerity on the beat 0.00
+   hearer att 7, believes +1: carried 0.665  insincerity on the beat 0.00
+
+[P8.2 word] speaker argues FOR a matter that costs him (his pursuit bears -1), believing it right; hearer Att 7 / 1
+   hearer att 1, matter serves the speaker: carried 0.650 insincerity 0.00
+   hearer att 1, matter COSTS the speaker: carried 0.650 insincerity 0.90
+   hearer att 7, matter serves the speaker: carried 0.650 insincerity 0.00
+   hearer att 7, matter COSTS the speaker: carried 0.230 insincerity 0.90
+
+[P8.3] hearer disposition (n=600)
+   neutral                            solidarity 0.285 | consequence 0.285 | auto 0.285
+   friend (tie +0.8 to speaker)       solidarity 0.642 | consequence 0.352 | auto 0.577
+   foe (tie -0.8 to speaker)          solidarity 0.108 | consequence 0.205 | auto 0.190
+   matter serves hearer (pursuit +)   solidarity 0.352 | consequence 0.642 | auto 0.562
+   matter hurts hearer (pursuit -)    solidarity 0.205 | consequence 0.108 | auto 0.183
+   hearer will       1:0.803 4:0.662 7:0.447
+   hearer reason     1:0.662 4:0.662 7:0.662
+   hearer attunement 1:0.662 4:0.662 7:0.662
+   hearer focus      1:0.662 4:0.662 7:0.662
+
+[P8.1] scope
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-ttrpg/2a1f4990-cd7a-5bdc-982c-435886385374/scratchpad/sc_model_v2/pc_run1/p8.py", line 137, in <module>
+    inp, card, out, band = sit_ab(pp, m, ("sc", 0), rite="trial", floor=("crowd",))
+                           ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-0/-home-user-ttrpg/2a1f4990-cd7a-5bdc-982c-435886385374/scratchpad/sc_model_v2/pc_run1/p8.py", line 21, in sit_ab
+    inp, card = host.build(pp, rite, m, form="abridged", D=D, **kw)
+                ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-0/-home-user-ttrpg/2a1f4990-cd7a-5bdc-982c-435886385374/scratchpad/sc_model_v2/sc2/host.py", line 285, in build
+    raise ValueError(f"{rid}: no seat of authority {r['authority']} (party-gap refusal)")
+ValueError: trial: no seat of authority polity (party-gap refusal)

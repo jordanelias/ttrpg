@@ -1,0 +1,13 @@
+== each attribute's own operand on the speech: carried at 1 -> 7, arguing consequence; and with its own operand off
+  reason     a private exchange (the tell): 0.463->0.800 (+0.338); off +0.167; the operand's own share +0.170 | before a bench: 0.228->0.728 (+0.500); off +0.312; the operand's own share +0.188 | before a crowd: 0.212->0.435 (+0.223); off +0.060; the operand's own share +0.163   (se of a difference 0.034)
+  attunement a private exchange (the tell): 0.642->0.767 (+0.125); off +0.000; the operand's own share +0.125 | before a bench: 0.522->0.655 (+0.133); off +0.000; the operand's own share +0.133 | before a crowd: 0.330->0.472 (+0.142); off +0.000; the operand's own share +0.142   (se of a difference 0.034)
+  presence   a private exchange (the tell): 0.657->0.755 (+0.098); off +0.080; the operand's own share +0.018 | before a bench: 0.583->0.608 (+0.025); off +0.013; the operand's own share +0.012 | before a crowd: 0.168->0.637 (+0.470); off +0.290; the operand's own share +0.180   (se of a difference 0.034)
+  grace      a private exchange (the tell): 0.662->0.718 (+0.055); off +0.000; the operand's own share +0.055 | before a bench: 0.522->0.620 (+0.098); off +0.000; the operand's own share +0.098 | before a crowd: 0.242->0.398 (+0.155); off +0.000; the operand's own share +0.155   (se of a difference 0.034)
+== four strengths, the SAME argument (consequence) to the SAME listener (the hungry man), the same key: the beat record
+  (key 2: the first of 0..49 on which a poor reader frames differently from a good one; he does so on 14 of 50)
+  ordinary      relevance 1.00 | framed on coin   | heard 0.85 | esteem -1.00 | margin with the judge -2.32
+  Reason 7      relevance 2.00 | framed on coin   | heard 0.85 | esteem -1.00 | margin with the judge -1.62
+  Attunement 7  relevance 1.00 | framed on grain  | heard 0.85 | esteem -1.00 | margin with the judge +0.03
+  Attunement 1  relevance 1.00 | framed on coin   | heard 0.85 | esteem -1.00 | margin with the judge -2.32
+  Presence 7    relevance 1.00 | framed on coin   | heard 1.00 | esteem -1.00 | margin with the judge -1.51
+  Grace 7       relevance 1.00 | framed on coin   | heard 0.85 | esteem +0.00 | margin with the judge -1.93

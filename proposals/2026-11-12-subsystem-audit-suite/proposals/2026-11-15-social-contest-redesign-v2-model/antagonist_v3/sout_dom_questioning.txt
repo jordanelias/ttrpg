@@ -1,0 +1,1 @@
+questioning  (for, vs automatic; n=800, se~0.017): auto 0.384 | argue 0.372 | press 0.273 | rest 0.276 | concede 0.384 | answer_else_rest 0.196 | press_then_argue 0.331

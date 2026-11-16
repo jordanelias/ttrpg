@@ -1,0 +1,21 @@
+(a) legal_trial, shipped judging pool: presiding pool {2.0: 2000}
+      track <=-2   : n=  415 for carried 0.000
+      track (-2,0) : n=  268 for carried 0.000
+      track [0,2)  : n=  351 for carried 0.003
+      track >=2    : n=  966 for carried 0.008
+(a) legal_trial, control: pool_of(judging, 0, pool_add, pool_floor): presiding pool {8.0: 2000}
+      track <=-2   : n=  415 for carried 0.125
+      track (-2,0) : n=  268 for carried 0.209
+      track [0,2)  : n=  351 for carried 0.279
+      track >=2    : n=  966 for carried 0.513
+    abridged legal_trial (speak): Success+ 0.620
+(b) negotiation: act from a press 202/2000; Success+ 1244/2000; Success+ with track<0 198/2000
+      track <=-2   : n=  322 Success+ 0.230
+      track (-2,0) : n=  279 Success+ 0.444
+      track [0,2)  : n=  306 Success+ 0.366
+      track >=2    : n= 1093 Success+ 0.855
+(c) declared, 1 church seats (quorum 2): {'presiding Success+': 20, 'vetoed given presiding Success+': 20, 'majority for, act failure': 0}
+(c) declared, 2 church seats (quorum 2): {'presiding Success+': 20, 'vetoed given presiding Success+': 20, 'majority for, act failure': 0}
+(c) declared, 3 church seats (quorum 2): {'presiding Success+': 17, 'vetoed given presiding Success+': 17, 'majority for, act failure': 0}
+(c) declared, 5 church seats (quorum 2): {'presiding Success+': 15, 'vetoed given presiding Success+': 15, 'majority for, act failure': 0}
+(d) rally cohort(30)+h1: {'act band == cohort band': 1944, 'room': 'gallery'} of 2000

@@ -1,0 +1,201 @@
+
+=== trial: n=200 ends={'budget': 182, 'rested': 18} bands={'failure': 100, 'partial': 27, 'success': 37, 'overwhelming': 36}
+     ...charged (evaded): 2
+     concede moves judge (n): 111
+   answer to a point that no longer stands: 7
+   answers: 151
+   beats: 1588
+   concede by against (descends): 83
+   concede by for (descends): 28
+   ignores a standing point: 2
+   move:argue: 537
+   move:concede: 111
+   move:press: 732
+   move:rest: 208
+   raise buries own standing point (it can no longer be answered): 41
+   raises: 386
+   descending concessions: by side {'against': 83, 'for': 28}; judge track toward conceder pre->post mean -4.55 -> -3.03; share where conceding IMPROVED conceder's standing 0.79
+
+=== negotiation: n=200 ends={'yielded': 62, 'budget': 136, 'rested': 2} bands={'success': 54, None: 138, 'failure': 8}
+     ...NOT charged (reply must, silence free): 35
+   answer to a point that no longer stands: 8
+   answers: 63
+   beats: 1082
+   concede by against (yield): 54
+   concede by for (yield): 8
+   ignores a standing point: 35
+   move:argue: 293
+   move:concede: 62
+   move:press: 583
+   move:rest: 144
+   raise buries own standing point (it can no longer be answered): 26
+   raises: 230
+
+=== rally: n=200 ends={'budget': 151, 'rested': 49} bands={'success': 63, 'partial': 37, 'overwhelming': 19, 'failure': 81}
+   beats: 562
+   move:argue: 513
+   move:rest: 49
+   raise buries own standing point (it can no longer be answered): 181
+   raises: 513
+
+=== questioning: n=200 ends={'budget': 168, 'yielded': 32} bands={'success': 43, 'failure': 101, 'partial': 25, 'overwhelming': 31}
+     ...NOT charged (reply may, silence refusal): 74
+   answer to a point that no longer stands: 41
+   answers: 165
+   beats: 1536
+   concede by against (yield): 32
+   ignores a standing point: 74
+   move:argue: 711
+   move:concede: 32
+   move:press: 565
+   move:rest: 228
+   raise buries own standing point (it can no longer be answered): 137
+   raises: 546
+
+=== debate: n=200 ends={'budget': 149, 'rested': 51} bands={'failure': 106, 'partial': 35, 'success': 32, 'overwhelming': 27}
+     ...NOT charged (reply may, silence free): 116
+   answer to a point that no longer stands: 15
+   answers: 45
+   beats: 1540
+   ignores a standing point: 116
+   move:argue: 262
+   move:press: 723
+   move:rest: 555
+   raise buries own standing point (it can no longer be answered): 23
+   raises: 217
+
+--- trial seed 0: room [('scholar', 'for', False), ('diplomat', 'against', False), ('judge', None, True), ('guildsmen', None, False), ('toll_men', None, False), ('clerk', None, False)] turns 4 issues ('fact', 'definition', 'justification')
+  1. scholar [for] argue/raises issue=fact ground=evidence item=ledger_of_tolls point=0 target=None m=3.636 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.66
+  2. diplomat [against] argue/answers issue=fact ground=solidarity item=None point=0 target=None m=-2.576 drift=0.341 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.886
+  3. scholar [for] press/presses issue=fact ground=consequence item=None point=None target=diplomat m=-3.383 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.711
+  4. diplomat [against] concede/concedes issue=fact ground=None item=None point=None target=None m=0.0 drift=1.375 evaded=False insinc=0.0 rattled=None broke=False closed=fact mood=0.638
+  5. scholar [for] argue/raises issue=definition ground=evidence item=ledger_of_tolls point=1 target=None m=2.505 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=1.0
+  6. diplomat [against] concede/concedes issue=definition ground=None item=None point=None target=None m=0.0 drift=0.931 evaded=False insinc=0.0 rattled=None broke=False closed=definition mood=0.638
+  7. scholar [for] press/presses issue=justification ground=consequence item=None point=None target=diplomat m=-2.412 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.462
+  8. diplomat [against] press/presses issue=justification ground=authority item=None point=None target=scholar m=-2.722 drift=1.153 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.897
+  -> ended budget by None; band failure margin -1.59; verdicts [('judge', -1.59)]; points [(0, 'for', 'evidence', 'scholar'), (1, 'for', 'evidence', 'scholar')]
+
+--- trial seed 1: room [('scholar', 'for', False), ('diplomat', 'against', False), ('judge', None, True), ('guildsmen', None, False), ('toll_men', None, False), ('clerk', None, False)] turns 4 issues ('fact', 'definition', 'justification')
+  1. scholar [for] press/presses issue=fact ground=authority item=None point=None target=diplomat m=0.674 drift=0.0 evaded=False insinc=0.0 rattled=diplomat broke=False closed=None mood=0.301
+  2. diplomat [against] press/presses issue=fact ground=authority item=None point=None target=scholar m=1.263 drift=1.757 evaded=False insinc=0.0 rattled=scholar broke=False closed=None mood=0.432
+  3. scholar [for] argue/raises issue=fact ground=authority item=None point=0 target=None m=-0.57 drift=0.588 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.199
+  4. diplomat [against] press/presses issue=fact ground=authority item=None point=0 target=scholar m=-0.748 drift=1.282 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.662
+  5. scholar [for] argue/raises issue=fact ground=authority item=None point=1 target=None m=-2.32 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.227
+  6. diplomat [against] press/presses issue=fact ground=authority item=None point=1 target=scholar m=-1.118 drift=1.937 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.837
+  7. scholar [for] press/presses issue=fact ground=consequence item=None point=None target=diplomat m=-3.056 drift=2.484 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.104
+  8. diplomat [against] press/presses issue=fact ground=authority item=None point=1 target=scholar m=-1.729 drift=0.553 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.404
+  -> ended budget by None; band failure margin -0.08; verdicts [('judge', -0.08)]; points [(0, 'for', 'authority', 'scholar'), (1, 'for', 'authority', 'scholar')]
+
+--- trial seed 2: room [('scholar', 'for', False), ('diplomat', 'against', False), ('judge', None, True), ('guildsmen', None, False), ('toll_men', None, False), ('clerk', None, False)] turns 4 issues ('fact', 'definition', 'justification')
+  1. scholar [for] argue/raises issue=fact ground=authority item=None point=0 target=None m=1.794 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.052
+  2. diplomat [against] argue/answers issue=fact ground=solidarity item=None point=0 target=None m=-6.079 drift=3.41 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.462
+  3. scholar [for] press/presses issue=fact ground=consequence item=None point=None target=diplomat m=-1.837 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.286
+  4. diplomat [against] argue/answers issue=fact ground=authority item=None point=0 target=None m=-1.563 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.473
+  5. scholar [for] press/presses issue=fact ground=solidarity item=None point=None target=diplomat m=2.903 drift=0.0 evaded=False insinc=0.0 rattled=diplomat broke=False closed=None mood=0.736
+  6. diplomat [against] concede/concedes issue=fact ground=None item=None point=None target=None m=0.0 drift=1.107 evaded=False insinc=0.0 rattled=None broke=False closed=fact mood=0.638
+  7. scholar [for] press/presses issue=definition ground=authority item=None point=None target=diplomat m=-2.96 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.462
+  8. diplomat [against] rest/rests issue=definition ground=None item=None point=None target=None m=0.0 drift=2.228 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.462
+  -> ended budget by None; band failure margin -1.73; verdicts [('judge', -1.73)]; points [(0, 'for', 'authority', 'scholar')]
+
+--- negotiation seed 0: room [('orator', 'for', False), ('diplomat', 'against', False)] turns 3 issues ('the terms',)
+  1. orator [for] argue/raises issue=the terms ground=solidarity item=None point=0 target=None m=3.895 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.459
+  2. diplomat [against] concede/concedes issue=the terms ground=None item=None point=None target=None m=0.0 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=the terms mood=1.0
+  -> ended yielded by diplomat; band success margin None; verdicts []; points [(0, 'for', 'solidarity', 'orator')]
+
+--- negotiation seed 1: room [('orator', 'for', False), ('diplomat', 'against', False)] turns 3 issues ('the terms',)
+  1. orator [for] argue/raises issue=the terms ground=solidarity item=None point=0 target=None m=4.703 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.54
+  2. diplomat [against] concede/concedes issue=the terms ground=None item=None point=None target=None m=0.0 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=the terms mood=1.0
+  -> ended yielded by diplomat; band success margin None; verdicts []; points [(0, 'for', 'solidarity', 'orator')]
+
+--- negotiation seed 2: room [('orator', 'for', False), ('diplomat', 'against', False)] turns 3 issues ('the terms',)
+  1. orator [for] press/presses issue=the terms ground=solidarity item=None point=None target=diplomat m=-0.71 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=-0.03
+  2. diplomat [against] press/presses issue=the terms ground=consequence item=None point=None target=orator m=2.682 drift=0.0 evaded=False insinc=0.0 rattled=orator broke=False closed=None mood=-0.18
+  3. orator [for] argue/raises issue=the terms ground=solidarity item=None point=0 target=None m=-6.457 drift=3.175 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=-0.503
+  4. diplomat [against] argue/raises issue=the terms ground=authority item=None point=1 target=None m=4.568 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=-0.96
+  5. orator [for] argue/answers issue=the terms ground=solidarity item=None point=1 target=None m=-2.14 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=-1.0
+  6. diplomat [against] press/presses issue=the terms ground=consequence item=None point=0 target=orator m=-0.214 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=-0.967
+  -> ended budget by None; band None margin None; verdicts []; points [(0, 'for', 'solidarity', 'orator'), (1, 'against', 'authority', 'diplomat')]
+
+--- rally seed 0: room [('orator', 'for', False), ('guildsmen', None, True), ('toll_men', None, True), ('townsfolk', None, True)] turns 3 issues ('the theme',)
+  1. orator [for] argue/raises issue=the theme ground=authority item=None point=0 target=None m=1.351 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.331
+  2. orator [for] argue/raises issue=the theme ground=solidarity item=None point=1 target=None m=2.35 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.801
+  3. orator [for] argue/raises issue=the theme ground=consequence item=None point=2 target=None m=0.248 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.909
+  -> ended budget by None; band success margin 2.48; verdicts [('guildsmen', 5.98), ('toll_men', 1.36), ('townsfolk', -0.46)]; points [(0, 'for', 'authority', 'orator'), (1, 'for', 'solidarity', 'orator'), (2, 'for', 'consequence', 'orator')]
+
+--- rally seed 1: room [('orator', 'for', False), ('guildsmen', None, True), ('toll_men', None, True), ('townsfolk', None, True)] turns 3 issues ('the theme',)
+  1. orator [for] argue/raises issue=the theme ground=authority item=None point=0 target=None m=-0.311 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.063
+  2. orator [for] argue/raises issue=the theme ground=solidarity item=None point=1 target=None m=-1.162 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=-0.053
+  3. orator [for] argue/raises issue=the theme ground=authority item=None point=2 target=None m=0.165 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.012
+  -> ended budget by None; band partial margin 0.03; verdicts [('guildsmen', 3.33), ('toll_men', 3.82), ('townsfolk', -5.16)]; points [(0, 'for', 'authority', 'orator'), (1, 'for', 'solidarity', 'orator'), (2, 'for', 'authority', 'orator')]
+
+--- rally seed 2: room [('orator', 'for', False), ('guildsmen', None, True), ('toll_men', None, True), ('townsfolk', None, True)] turns 3 issues ('the theme',)
+  1. orator [for] argue/raises issue=the theme ground=consequence item=None point=0 target=None m=5.875 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=1.0
+  2. orator [for] argue/raises issue=the theme ground=consequence item=None point=1 target=None m=-0.712 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=1.0
+  3. orator [for] rest/rests issue=the theme ground=None item=None point=None target=None m=0.0 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=1.0
+  -> ended rested by None; band success margin 2.25; verdicts [('guildsmen', 2.53), ('toll_men', 1.95), ('townsfolk', 2.12)]; points [(0, 'for', 'consequence', 'orator'), (1, 'for', 'consequence', 'orator')]
+
+--- questioning seed 0: room [('fox', 'for', False), ('bully', 'against', True)] turns 4 issues ('the question',)
+  1. fox [for] press/presses issue=the question ground=consequence item=None point=None target=bully m=-1.637 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=-0.373
+  2. bully [against] rest/rests issue=the question ground=None item=None point=None target=None m=0.0 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=-0.373
+  3. fox [for] press/presses issue=the question ground=consequence item=None point=None target=bully m=-2.925 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=-0.573
+  4. bully [against] argue/raises issue=the question ground=solidarity item=None point=0 target=None m=-3.677 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=-0.306
+  5. fox [for] press/presses issue=the question ground=consequence item=None point=0 target=bully m=2.212 drift=0.0 evaded=False insinc=0.0 rattled=bully broke=False closed=None mood=-0.006
+  6. bully [against] argue/raises issue=the question ground=solidarity item=None point=1 target=None m=-0.653 drift=2.918 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.01
+  7. fox [for] rest/rests issue=the question ground=None item=None point=None target=None m=0.0 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.01
+  8. bully [against] argue/raises issue=the question ground=consequence item=None point=2 target=None m=0.274 drift=1.58 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=-0.145
+  -> ended budget by None; band success margin 1.85; verdicts [('bully', 1.85)]; points [(0, 'against', 'solidarity', 'bully'), (1, 'against', 'solidarity', 'bully'), (2, 'against', 'consequence', 'bully')]
+
+--- questioning seed 1: room [('fox', 'for', False), ('bully', 'against', True)] turns 4 issues ('the question',)
+  1. fox [for] press/presses issue=the question ground=consequence item=None point=None target=bully m=2.766 drift=0.0 evaded=False insinc=0.0 rattled=bully broke=False closed=None mood=0.127
+  2. bully [against] argue/raises issue=the question ground=consequence item=None point=0 target=None m=1.244 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=-0.222
+  3. fox [for] argue/answers issue=the question ground=solidarity item=None point=0 target=None m=5.226 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.127
+  4. bully [against] argue/raises issue=the question ground=consequence item=None point=1 target=None m=-5.432 drift=1.609 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.62
+  5. fox [for] press/presses issue=the question ground=consequence item=None point=1 target=bully m=3.511 drift=0.0 evaded=False insinc=0.0 rattled=bully broke=False closed=None mood=0.695
+  6. bully [against] argue/raises issue=the question ground=solidarity item=None point=2 target=None m=-4.453 drift=0.63 evaded=False insinc=0.0 rattled=None broke=True closed=None mood=1.0
+  7. fox [for] argue/raises issue=the question ground=evidence item=forged_writ point=3 target=None m=-0.08 drift=0.0 evaded=False insinc=1.0 rattled=None broke=False closed=None mood=1.0
+  8. bully [against] argue/answers issue=the question ground=consequence item=None point=3 target=None m=-0.075 drift=0.0 evaded=False insinc=0.0 rattled=None broke=True closed=None mood=1.0
+  -> ended budget by None; band success margin 2.46; verdicts [('bully', 2.46)]; points [(0, 'against', 'consequence', 'bully'), (1, 'against', 'consequence', 'bully'), (2, 'against', 'solidarity', 'bully'), (3, 'for', 'evidence', 'fox')]
+
+--- questioning seed 2: room [('fox', 'for', False), ('bully', 'against', True)] turns 4 issues ('the question',)
+  1. fox [for] press/presses issue=the question ground=consequence item=None point=None target=bully m=-4.768 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=-0.373
+  2. bully [against] argue/raises issue=the question ground=consequence item=None point=0 target=None m=-3.159 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=-0.107
+  3. fox [for] press/presses issue=the question ground=consequence item=None point=0 target=bully m=-0.589 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=-0.307
+  4. bully [against] rest/rests issue=the question ground=None item=None point=None target=None m=0.0 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=-0.307
+  5. fox [for] press/presses issue=the question ground=consequence item=None point=0 target=bully m=-1.406 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=-0.507
+  6. bully [against] rest/rests issue=the question ground=None item=None point=None target=None m=0.0 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=-0.507
+  7. fox [for] press/presses issue=the question ground=consequence item=None point=0 target=bully m=2.68 drift=0.0 evaded=False insinc=0.0 rattled=bully broke=False closed=None mood=-0.207
+  8. bully [against] rest/rests issue=the question ground=None item=None point=None target=None m=0.0 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=-0.207
+  -> ended budget by None; band failure margin -2.47; verdicts [('bully', -2.47)]; points [(0, 'against', 'consequence', 'bully')]
+
+--- debate seed 0: room [('orator', 'for', False), ('diplomat', 'against', False), ('judge', None, True), ('judge2', None, True), ('judge3', None, True), ('guildsmen', None, False)] turns 4 issues ('the question',)
+  1. orator [for] press/presses issue=the question ground=authority item=None point=None target=diplomat m=4.743 drift=0.0 evaded=False insinc=0.0 rattled=diplomat broke=False closed=None mood=0.374
+  2. diplomat [against] rest/rests issue=the question ground=None item=None point=None target=None m=0.0 drift=2.431 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.374
+  3. orator [for] press/presses issue=the question ground=consequence item=None point=None target=diplomat m=-2.132 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.19
+  4. diplomat [against] rest/rests issue=the question ground=None item=None point=None target=None m=0.0 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.19
+  5. orator [for] argue/raises issue=the question ground=authority item=None point=0 target=None m=3.513 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.69
+  6. diplomat [against] rest/rests issue=the question ground=None item=None point=None target=None m=0.0 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.69
+  7. orator [for] press/presses issue=the question ground=authority item=None point=None target=diplomat m=-1.897 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.506
+  8. diplomat [against] rest/rests issue=the question ground=None item=None point=None target=None m=0.0 drift=1.427 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.506
+  -> ended budget by None; band failure margin -2.56; verdicts [('judge', -2.56), ('judge2', 2.35), ('judge3', 2.57)]; points [(0, 'for', 'authority', 'orator')]
+
+--- debate seed 1: room [('orator', 'for', False), ('diplomat', 'against', False), ('judge', None, True), ('judge2', None, True), ('judge3', None, True), ('guildsmen', None, False)] turns 4 issues ('the question',)
+  1. orator [for] press/presses issue=the question ground=consequence item=None point=None target=diplomat m=3.282 drift=0.0 evaded=False insinc=0.0 rattled=diplomat broke=False closed=None mood=0.374
+  2. diplomat [against] rest/rests issue=the question ground=None item=None point=None target=None m=0.0 drift=1.735 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.374
+  3. orator [for] press/presses issue=the question ground=solidarity item=None point=None target=diplomat m=2.218 drift=0.0 evaded=False insinc=0.0 rattled=diplomat broke=False closed=None mood=0.443
+  4. diplomat [against] rest/rests issue=the question ground=None item=None point=None target=None m=0.0 drift=5.287 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.443
+  5. orator [for] argue/raises issue=the question ground=authority item=None point=0 target=None m=-0.507 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.291
+  6. diplomat [against] rest/rests issue=the question ground=None item=None point=None target=None m=0.0 drift=1.932 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=0.291
+  7. orator [for] press/presses issue=the question ground=consequence item=None point=None target=diplomat m=1.493 drift=0.0 evaded=False insinc=0.0 rattled=diplomat broke=False closed=None mood=0.153
+  8. diplomat [against] argue/answers issue=the question ground=authority item=None point=0 target=None m=-8.768 drift=3.329 evaded=False insinc=0.0 rattled=None broke=True closed=None mood=1.0
+  -> ended budget by None; band partial margin 0.05; verdicts [('judge', 0.05), ('judge2', 5.78), ('judge3', 4.88)]; points [(0, 'for', 'authority', 'orator')]
+
+--- debate seed 2: room [('orator', 'for', False), ('diplomat', 'against', False), ('judge', None, True), ('judge2', None, True), ('judge3', None, True), ('guildsmen', None, False)] turns 4 issues ('the question',)
+  1. orator [for] press/presses issue=the question ground=solidarity item=None point=None target=diplomat m=-1.056 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=-0.085
+  2. diplomat [against] press/presses issue=the question ground=consequence item=None point=None target=orator m=4.499 drift=0.0 evaded=False insinc=0.0 rattled=orator broke=False closed=None mood=-0.361
+  3. orator [for] rest/rests issue=the question ground=None item=None point=None target=None m=0.0 drift=0.326 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=-0.361
+  4. diplomat [against] press/presses issue=the question ground=authority item=None point=None target=orator m=2.03 drift=0.0 evaded=False insinc=0.0 rattled=orator broke=False closed=None mood=-0.43
+  5. orator [for] press/presses issue=the question ground=authority item=None point=None target=diplomat m=-0.761 drift=4.113 evaded=False insinc=0.0 rattled=None broke=True closed=None mood=-1.0
+  6. diplomat [against] press/presses issue=the question ground=consequence item=None point=None target=orator m=3.219 drift=0.0 evaded=False insinc=0.0 rattled=orator broke=False closed=None mood=-1.0
+  7. orator [for] argue/raises issue=the question ground=solidarity item=None point=0 target=None m=-8.662 drift=0.0 evaded=False insinc=0.0 rattled=None broke=True closed=None mood=-1.0
+  8. diplomat [against] argue/answers issue=the question ground=authority item=None point=0 target=None m=-2.594 drift=0.0 evaded=False insinc=0.0 rattled=None broke=False closed=None mood=-1.0
+  -> ended budget by None; band failure margin -4.13; verdicts [('judge', -4.13), ('judge2', -5.9), ('judge3', -0.76)]; points [(0, 'for', 'solidarity', 'orator')]

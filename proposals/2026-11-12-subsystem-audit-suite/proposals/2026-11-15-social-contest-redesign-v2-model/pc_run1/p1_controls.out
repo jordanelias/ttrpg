@@ -1,0 +1,52 @@
+== P positive: trial, all-mid, bench of 3, both automatic
+   {'carried': 0.307, 'se': 0.019, 'judge_track': -0.0, 'track_pos': 0.485, 'beats': 7.8, 'ends': {'budget': 527, 'rested': 73}, 'moved': 592}
+== N one-condition negatives
+  N one character (both parties one): refused -> ValueError: the two parties to a matter are one character: refused (A-139)
+  N one character in the room: refused -> ValueError: a sitting with one character is refused (A-139)
+  N trial with no seat (nobody decides): refused -> ValueError: trial: no seat of authority polity (party-gap refusal)
+  N drawn close, deciders removed: refused -> ValueError: close `bench` with nobody to adjudicate
+  N nobody speaks: refused -> ValueError: nobody speaks
+  N trial with no opposing party (against=None):
+    refused -> None
+== C counterfactual: who speaks (same seeds); null = both rest
+  -- trial
+    both auto                  {'carried': 0.308, 'se': 0.019, 'judge_track': 0.25, 'track_pos': 0.503, 'beats': 7.7, 'ends': {'rested': 81, 'budget': 519}, 'moved': 587}
+    against silent (rests)     {'carried': 0.317, 'se': 0.019, 'judge_track': 0.74, 'track_pos': 0.378, 'beats': 6.5, 'ends': {'rested': 312, 'budget': 288}, 'moved': 528}
+    for silent (rests)         {'carried': 0.293, 'se': 0.019, 'judge_track': -0.35, 'track_pos': 0.538, 'beats': 6.5, 'ends': {'rested': 296, 'budget': 304}, 'moved': 525}
+    both silent (null)         {'carried': 0.247, 'se': 0.018, 'judge_track': 0.0, 'track_pos': 0.0, 'beats': 2.0, 'ends': {'rested': 600}, 'moved': 0}
+    for argues only            {'carried': 0.228, 'se': 0.017, 'judge_track': -2.28, 'track_pos': 0.367, 'beats': 8.0, 'ends': {'budget': 600}, 'moved': 600}
+    both argue only            {'carried': 0.31, 'se': 0.019, 'judge_track': 0.17, 'track_pos': 0.485, 'beats': 8.0, 'ends': {'budget': 600}, 'moved': 600}
+  -- debate
+    both auto                  {'carried': 0.228, 'se': 0.017, 'judge_track': 0.62, 'track_pos': 0.523, 'beats': 7.7, 'ends': {'budget': 508, 'rested': 92}, 'moved': 593}
+    against silent (rests)     {'carried': 0.175, 'se': 0.016, 'judge_track': -0.35, 'track_pos': 0.328, 'beats': 6.6, 'ends': {'budget': 279, 'rested': 321}, 'moved': 533}
+    for silent (rests)         {'carried': 0.208, 'se': 0.017, 'judge_track': 0.6, 'track_pos': 0.59, 'beats': 6.4, 'ends': {'budget': 247, 'rested': 353}, 'moved': 529}
+    both silent (null)         {'carried': 0.132, 'se': 0.014, 'judge_track': 0.0, 'track_pos': 0.0, 'beats': 2.0, 'ends': {'rested': 600}, 'moved': 0}
+    for argues only            {'carried': 0.143, 'se': 0.014, 'judge_track': -1.94, 'track_pos': 0.382, 'beats': 8.0, 'ends': {'budget': 600}, 'moved': 600}
+    both argue only            {'carried': 0.183, 'se': 0.016, 'judge_track': 0.18, 'track_pos': 0.502, 'beats': 8.0, 'ends': {'budget': 600}, 'moved': 600}
+  -- conversation
+    both auto                  {'carried': 0.357, 'se': 0.02, 'judge_track': 1.69, 'track_pos': 0.538, 'beats': 5.7, 'ends': {'budget': 451, 'yielded': 117, 'rested': 32}, 'moved': 597}
+    against silent (rests)     {'carried': 0.313, 'se': 0.019, 'judge_track': 0.5, 'track_pos': 0.438, 'beats': 5.4, 'ends': {'budget': 436, 'rested': 145, 'yielded': 19}, 'moved': 539}
+    for silent (rests)         {'carried': 0.282, 'se': 0.018, 'judge_track': -0.13, 'track_pos': 0.482, 'beats': 5.5, 'ends': {'budget': 441, 'rested': 150, 'yielded': 9}, 'moved': 555}
+    both silent (null)         {'carried': 0.255, 'se': 0.018, 'judge_track': 0.0, 'track_pos': 0.0, 'beats': 2.0, 'ends': {'rested': 600}, 'moved': 0}
+    for argues only            {'carried': 0.328, 'se': 0.019, 'judge_track': 0.9, 'track_pos': 0.478, 'beats': 5.7, 'ends': {'budget': 496, 'yielded': 104}, 'moved': 600}
+    both argue only            {'carried': 0.3, 'se': 0.019, 'judge_track': -0.47, 'track_pos': 0.452, 'beats': 6.0, 'ends': {'budget': 600}, 'moved': 600}
+== M mirror/swap (n=600; band at p=.5 about +-0.041)
+  trial: identical sides: P(judge track>0) 0.53 mean 0.44 carried 0.325
+     A=Reason7 as for: track>0 0.638 mean 1.49 carried 0.375 | as against: track>0 0.418 mean -0.78 carried 0.283
+  debate: identical sides: P(judge track>0) 0.507 mean 0.49 carried 0.225
+     A=Reason7 as for: track>0 0.575 mean 1.41 carried 0.262 | as against: track>0 0.458 mean -0.41 carried 0.208
+  conversation: identical sides: P(judge track>0) 0.532 mean 1.87 carried 0.38
+     A=Reason7 as for: track>0 0.7 mean 4.89 carried 0.502 | as against: track>0 0.353 mean -0.73 carried 0.265
+== determinism (same seed twice) and spread
+  same seed: ['e73a024389e8c26e', 'e73a024389e8c26e'] equal
+  distinct hashes over 50 seeds: 50
+== sweep turns via effort (trial row 2..5)
+  effort 0: turns 2 {'carried': 0.307, 'se': 0.027, 'judge_track': 0.12, 'track_pos': 0.49, 'beats': 3.9, 'ends': {'budget': 269, 'rested': 31}, 'moved': 289}
+  effort 1: turns 2 {'carried': 0.307, 'se': 0.027, 'judge_track': 0.12, 'track_pos': 0.49, 'beats': 3.9, 'ends': {'budget': 269, 'rested': 31}, 'moved': 289}
+  effort 2: turns 3 {'carried': 0.29, 'se': 0.026, 'judge_track': 0.01, 'track_pos': 0.48, 'beats': 5.8, 'ends': {'budget': 272, 'rested': 28}, 'moved': 292}
+  effort 3: turns 4 {'carried': 0.363, 'se': 0.028, 'judge_track': 0.1, 'track_pos': 0.537, 'beats': 7.8, 'ends': {'budget': 272, 'rested': 28}, 'moved': 298}
+  effort 4: turns 5 {'carried': 0.327, 'se': 0.027, 'judge_track': 0.17, 'track_pos': 0.567, 'beats': 9.8, 'ends': {'budget': 265, 'rested': 35}, 'moved': 300}
+  effort 5: turns 5 {'carried': 0.327, 'se': 0.027, 'judge_track': 0.17, 'track_pos': 0.567, 'beats': 9.8, 'ends': {'budget': 265, 'rested': 35}, 'moved': 300}
+  effort 6: turns 5 {'carried': 0.327, 'se': 0.027, 'judge_track': 0.17, 'track_pos': 0.567, 'beats': 9.8, 'ends': {'budget': 265, 'rested': 35}, 'moved': 300}
+== close monotone in presiding track (closed form p_carried)
+   [(-10, 0.029), (-5, 0.071), (-3, 0.122), (0, 0.277), (3, 0.491), (5, 0.611), (10, 0.762), (20, 0.814)]

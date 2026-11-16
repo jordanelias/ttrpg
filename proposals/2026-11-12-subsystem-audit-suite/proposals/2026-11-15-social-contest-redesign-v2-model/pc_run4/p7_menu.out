@@ -1,0 +1,49 @@
+== P7.2 options on the played View, first turn and over a sitting (mid people, effort 3): count by move
+  conversation for    : first menu {'argue': 3, 'press': 3, 'rest': 1, 'concede': 1} (total 8); over 3 views mean 10.0 options
+  conversation against: first menu {'argue': 6, 'press': 3, 'rest': 1, 'concede': 1} (total 11); over 3 views mean 11.0 options
+  negotiation  for    : first menu {'argue': 3, 'press': 3, 'rest': 1, 'concede': 1} (total 8); over 2 views mean 8.0 options
+  negotiation  against: first menu {'argue': 3, 'press': 3, 'rest': 1, 'concede': 1} (total 8); over 1 views mean 8.0 options
+  questioning  for    : first menu {'argue': 3, 'press': 3, 'rest': 1} (total 7); over 4 views mean 9.2 options
+  questioning  against: first menu {'argue': 3, 'rest': 1, 'concede': 1} (total 5); over 4 views mean 5.0 options
+  inquisition  for    : first menu {'argue': 3, 'press': 3, 'rest': 1} (total 7); over 4 views mean 8.5 options
+  inquisition  against: first menu {'argue': 3, 'rest': 1, 'concede': 1} (total 5); over 4 views mean 5.2 options
+  trial        for    : first menu {'argue': 3, 'press': 3, 'rest': 1, 'concede': 1} (total 8); over 4 views mean 8.0 options
+  trial        against: first menu {'argue': 3, 'press': 3, 'rest': 1, 'concede': 1} (total 8); over 4 views mean 8.8 options
+  debate       for    : first menu {'argue': 3, 'press': 3, 'rest': 1, 'concede': 1} (total 8); over 4 views mean 8.0 options
+  debate       against: first menu {'argue': 3, 'press': 3, 'rest': 1, 'concede': 1} (total 8); over 4 views mean 8.2 options
+  rally        for    : first menu {'argue': 3, 'rest': 1} (total 4); over 3 views mean 4.0 options
+  audience     for    : first menu {'argue': 3, 'rest': 1} (total 4); over 2 views mean 4.0 options
+  audience     against: first menu {'argue': 3, 'press': 3, 'rest': 1} (total 7); over 2 views mean 8.5 options
+
+== P7.3 DOMINANCE over the REAL menus: share the chooser's side wins, per policy (forced moves fall back to the best option when absent); n=400
+  conversation for     opp auto   argue 0.378 press 0.403 rest 0.307 concede 0.033 answer>best 0.365 smart 0.385 random 0.268 auto 0.385  | best press; within 2se: ['argue', 'press', 'answer>best', 'smart', 'auto']
+  conversation for     opp random argue 0.482 press 0.487 rest 0.422 concede 0.033 answer>best 0.482 smart 0.500 random 0.350 auto 0.500  | best smart; within 2se: ['argue', 'press', 'answer>best', 'smart', 'auto']
+  conversation against opp auto   argue 0.623 press 0.618 rest 0.650 concede 0.235 answer>best 0.632 smart 0.615 random 0.522 auto 0.615  | best rest; within 2se: ['argue', 'press', 'rest', 'answer>best', 'smart', 'auto']
+  conversation against opp random argue 0.775 press 0.740 rest 0.698 concede 0.305 answer>best 0.740 smart 0.705 random 0.632 auto 0.705  | best argue; within 2se: ['argue', 'press', 'answer>best']
+  negotiation  for     opp auto   argue 0.205 press 0.107 rest 0.000 concede 0.000 answer>best 0.100 smart 0.113 random 0.105 auto 0.113  | best argue; within 2se: ['argue']
+  negotiation  for     opp random argue 0.250 press 0.302 rest 0.235 concede 0.000 answer>best 0.287 smart 0.270 random 0.210 auto 0.270  | best press; within 2se: ['argue', 'press', 'answer>best', 'smart', 'auto']
+  negotiation  against opp auto   argue 1.000 press 1.000 rest 0.970 concede 0.000 answer>best 0.975 smart 0.887 random 0.718 auto 0.887  | best argue; within 2se: ['argue', 'press']
+  negotiation  against opp random argue 1.000 press 1.000 rest 0.985 concede 0.117 answer>best 0.978 smart 0.885 random 0.790 auto 0.885  | best argue; within 2se: ['argue', 'press']
+  questioning  for     opp auto   argue 0.393 press 0.485 rest 0.268 answer>best 0.412 smart 0.458 random 0.407 auto 0.458  | best press; within 2se: ['press', 'smart', 'auto']
+  questioning  for     opp random argue 0.568 press 0.662 rest 0.485 answer>best 0.598 smart 0.662 random 0.588 auto 0.662  | best press; within 2se: ['press', 'answer>best', 'smart', 'auto']
+  questioning  against opp auto   argue 0.560 rest 0.610 concede 0.228 answer>best 0.557 smart 0.542 random 0.412 auto 0.542  | best rest; within 2se: ['argue', 'rest', 'answer>best', 'smart', 'auto']
+  questioning  against opp random argue 0.670 rest 0.640 concede 0.228 answer>best 0.613 smart 0.603 random 0.453 auto 0.603  | best argue; within 2se: ['argue', 'rest', 'answer>best']
+  inquisition  for     opp auto   argue 0.280 press 0.365 rest 0.242 answer>best 0.310 smart 0.343 random 0.325 auto 0.343  | best press; within 2se: ['press', 'answer>best', 'smart', 'random', 'auto']
+  inquisition  for     opp random argue 0.500 press 0.512 rest 0.372 answer>best 0.485 smart 0.525 random 0.512 auto 0.525  | best smart; within 2se: ['argue', 'press', 'answer>best', 'smart', 'random', 'auto']
+  inquisition  against opp auto   argue 0.583 rest 0.603 concede 0.203 answer>best 0.632 smart 0.657 random 0.477 auto 0.657  | best smart; within 2se: ['rest', 'answer>best', 'smart', 'auto']
+  inquisition  against opp random argue 0.615 rest 0.552 concede 0.203 answer>best 0.647 smart 0.685 random 0.495 auto 0.685  | best smart; within 2se: ['answer>best', 'smart', 'auto']
+  trial        for     opp auto   argue 0.233 press 0.328 rest 0.247 concede 0.020 answer>best 0.312 smart 0.325 random 0.217 auto 0.325  | best press; within 2se: ['press', 'answer>best', 'smart', 'auto']
+  trial        for     opp random argue 0.445 press 0.443 rest 0.285 concede 0.098 answer>best 0.453 smart 0.487 random 0.347 auto 0.487  | best smart; within 2se: ['argue', 'press', 'answer>best', 'smart', 'auto']
+  trial        against opp auto   argue 0.557 press 0.565 rest 0.610 concede 0.223 answer>best 0.613 smart 0.675 random 0.530 auto 0.675  | best smart; within 2se: ['rest', 'answer>best', 'smart', 'auto']
+  trial        against opp random argue 0.703 press 0.665 rest 0.652 concede 0.302 answer>best 0.728 smart 0.780 random 0.627 auto 0.780  | best smart; within 2se: ['answer>best', 'smart', 'auto']
+  debate       for     opp auto   argue 0.190 press 0.270 rest 0.185 concede 0.003 answer>best 0.233 smart 0.230 random 0.120 auto 0.230  | best press; within 2se: ['press', 'answer>best', 'smart', 'auto']
+  debate       for     opp random argue 0.417 press 0.500 rest 0.395 concede 0.003 answer>best 0.453 smart 0.497 random 0.318 auto 0.497  | best press; within 2se: ['press', 'answer>best', 'smart', 'auto']
+  debate       against opp auto   argue 0.677 press 0.730 rest 0.797 concede 0.220 answer>best 0.755 smart 0.770 random 0.555 auto 0.770  | best rest; within 2se: ['rest', 'answer>best', 'smart', 'auto']
+  debate       against opp random argue 0.828 press 0.868 rest 0.840 concede 0.338 answer>best 0.850 smart 0.887 random 0.723 auto 0.887  | best smart; within 2se: ['press', 'answer>best', 'smart', 'auto']
+  rally        for     opp auto   argue 0.265 rest 0.292 answer>best 0.260 smart 0.260 random 0.290 auto 0.260  | best rest; within 2se: ['argue', 'rest', 'answer>best', 'smart', 'random', 'auto']
+  rally        for     opp random argue 0.265 rest 0.292 answer>best 0.260 smart 0.260 random 0.290 auto 0.260  | best rest; within 2se: ['argue', 'rest', 'answer>best', 'smart', 'random', 'auto']
+  audience     for     opp auto   argue 0.323 rest 0.245 answer>best 0.295 smart 0.300 random 0.292 auto 0.300  | best argue; within 2se: ['argue', 'answer>best', 'smart', 'random', 'auto']
+  audience     for     opp random argue 0.323 rest 0.255 answer>best 0.297 smart 0.302 random 0.300 auto 0.302  | best argue; within 2se: ['argue', 'answer>best', 'smart', 'random', 'auto']
+  audience     against opp auto   argue 0.710 press 0.677 rest 0.662 answer>best 0.695 smart 0.700 random 0.690 auto 0.700  | best argue; within 2se: ['argue', 'press', 'rest', 'answer>best', 'smart', 'random', 'auto']
+  audience     against opp random argue 0.723 press 0.662 rest 0.675 answer>best 0.703 smart 0.705 random 0.703 auto 0.705  | best argue; within 2se: ['argue', 'press', 'rest', 'answer>best', 'smart', 'random', 'auto']
+  cells 30; best policy count {'press': 8, 'smart': 8, 'rest': 5, 'argue': 9}

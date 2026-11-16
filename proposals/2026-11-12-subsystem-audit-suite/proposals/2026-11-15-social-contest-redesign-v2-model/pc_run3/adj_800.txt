@@ -1,0 +1,44 @@
+n=800 per cell
+A1 ADJ REASON: a sound-but-plain (R7 G2) vs b polished-unsound (R1 G7); judge j1 Reason sweep; P(for carried)
+  trial: sound a vs polished b                               1:0.203 4:0.234 7:0.344  (d=+0.141, se_d=0.022)
+  trial: polished a vs sound b                               1:0.455 4:0.388 7:0.299  (d=-0.156, se_d=0.024)
+  trial: sound a vs polished b, CONTROL relevance=0 esteem_step=0 1:0.344 4:0.344 7:0.344  (d=+0.000, se_d=0.024)
+  trial: equal mid parties (null)                            1:0.307 4:0.306 7:0.304  (d=-0.004, se_d=0.023)
+  conversation: sound a vs polished b                        1:0.282 4:0.282 7:0.282  (d=+0.000, se_d=0.023)
+  conversation: polished a vs sound b                        1:0.409 4:0.409 7:0.409  (d=+0.000, se_d=0.025)
+  conversation: sound a vs polished b, CONTROL relevance=0 esteem_step=0 1:0.424 4:0.424 7:0.424  (d=+0.000, se_d=0.025)
+  conversation: equal mid parties (null)                     1:0.352 4:0.352 7:0.352  (d=+0.000, se_d=0.024)
+  debate: sound a vs polished b                              1:0.074 4:0.115 7:0.199  (d=+0.125, se_d=0.017)
+  debate: polished a vs sound b                              1:0.385 4:0.326 7:0.241  (d=-0.144, se_d=0.023)
+  debate: sound a vs polished b, CONTROL relevance=0 esteem_step=0 1:0.190 4:0.190 7:0.190  (d=+0.000, se_d=0.020)
+  debate: equal mid parties (null)                           1:0.166 4:0.165 7:0.161  (d=-0.005, se_d=0.019)
+A2 ADJ FOCUS: judge Focus sweep
+  off-point: a Focus1 vs b Focus7, famine                    1:0.292 4:0.258 7:0.253  (d=-0.040, se_d=0.022)
+  off-point mirrored: a Focus7 vs b Focus1, famine           1:0.250 4:0.264 7:0.291  (d=+0.041, se_d=0.022)
+  theatre: b presses every turn, a argues (peace)            1:0.417 4:0.410 7:0.388  (d=-0.030, se_d=0.025)
+  theatre: a presses every turn, b argues (peace)            1:0.281 4:0.316 7:0.351  (d=+0.070, se_d=0.023)
+  theatre a presses, CONTROL rattle_gain=0 rebound=0         1:0.315 4:0.338 7:0.356  (d=+0.041, se_d=0.024)
+  both argue only (null)                                     1:0.318 4:0.311 7:0.319  (d=+0.001, se_d=0.023)
+A3 ADJ ATTUNEMENT: judge Attunement sweep; a's insincerity via believes; strain via rattled_ago
+  a strained liar (believes -1, rattled_ago 0,0)             1:0.284 4:0.270 7:0.274  (d=-0.010, se_d=0.022)
+  a comfortable honest (believes +1)                         1:0.284 4:0.289 7:0.289  (d=+0.005, se_d=0.023)
+  a honest but strained (believes +1, rattled_ago 0,0)       1:0.282 4:0.279 7:0.274  (d=-0.009, se_d=0.022)
+  a strained liar, CONTROL ploy_step=0                       1:0.269 4:0.269 7:0.269  (d=+0.000, se_d=0.022)
+A4 ADJ PRESENCE+OFFICE: awe on a; a's rattles/sitting; P(for carried). b mid.
+  judge Presence 7 rung 5 moderate  a Will 1: awe 2.75  a rattled 0.77/sitting  P(a carried) 0.221
+  judge Presence 7 rung 5 moderate  a Will 2: awe 2.58  a rattled 0.72/sitting  P(a carried) 0.220
+  judge Presence 7 rung 5 moderate  a Will 4: awe 2.25  a rattled 0.34/sitting  P(a carried) 0.306
+  judge Presence 7 rung 5 moderate  a Will 7: awe 1.75  a rattled 0.12/sitting  P(a carried) 0.336
+  judge Presence 4 rung 3           a Will 1: awe 1.50  a rattled 0.65/sitting  P(a carried) 0.240
+  judge Presence 4 rung 3           a Will 2: awe 1.33  a rattled 0.51/sitting  P(a carried) 0.270
+  judge Presence 4 rung 3           a Will 4: awe 1.00  a rattled 0.27/sitting  P(a carried) 0.316
+  judge Presence 4 rung 3           a Will 7: awe 0.50  a rattled 0.06/sitting  P(a carried) 0.334
+  judge Presence 1 rung 0           a Will 1: awe 0.25  a rattled 0.51/sitting  P(a carried) 0.255
+  judge Presence 1 rung 0           a Will 2: awe 0.08  a rattled 0.37/sitting  P(a carried) 0.301
+  judge Presence 1 rung 0           a Will 4: awe 0.00  a rattled 0.20/sitting  P(a carried) 0.270
+  judge Presence 1 rung 0           a Will 7: awe 0.00  a rattled 0.07/sitting  P(a carried) 0.304
+  CONTROL awe_step=0, judge P7 rung5, a Will 2: awe 0.00 rattled 0.40 P 0.279
+  commoner deciders (conversation, b decides): b Presence sweep, a Will 2
+    b(decider) Presence 1: awe on a 0.00  rattled 0.28  P(a carried) 0.333
+    b(decider) Presence 4: awe on a 0.33  rattled 0.43  P(a carried) 0.300
+    b(decider) Presence 7: awe on a 0.83  rattled 0.60  P(a carried) 0.210

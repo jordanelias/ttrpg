@@ -1,0 +1,54 @@
+== P7.2 CALIBRATION of the shown chance on each option (a random chooser for `a`; b automatic; trial+debate+conversation; mid people, a's Attunement 1/4/7)
+  Attunement 1: shown ev - true ev mean +0.008 sd 1.801; shown p - true p mean +0.004 sd 0.175; options scored 4431
+     shown-p bin: 0.0:0.25(n402) 0.1:0.33(n424) 0.2:0.37(n625) 0.3:0.39(n797) 0.4:0.43(n831) 0.5:0.41(n622) 0.6:0.42(n394) 0.7:0.42(n203) 0.8:0.46(n87) 0.9:0.52(n46)
+     true-p  bin: 0.0:0.09(n107) 0.1:0.18(n250) 0.2:0.27(n568) 0.3:0.36(n1646) 0.4:0.42(n702) 0.5:0.49(n1013) 0.6:0.67(n109) 0.7:0.64(n36)
+  Attunement 4: shown ev - true ev mean +0.009 sd 1.043; shown p - true p mean +0.002 sd 0.103; options scored 4486
+     shown-p bin: 0.0:0.16(n167) 0.1:0.28(n330) 0.2:0.35(n687) 0.3:0.40(n1074) 0.4:0.42(n1115) 0.5:0.47(n715) 0.6:0.53(n281) 0.7:0.64(n86) 0.8:0.54(n28)
+     true-p  bin: 0.0:0.07(n98) 0.1:0.20(n230) 0.2:0.28(n550) 0.3:0.38(n1728) 0.4:0.45(n720) 0.5:0.51(n1016) 0.6:0.70(n112) 0.7:0.78(n32)
+  Attunement 7: shown ev - true ev mean -0.002 sd 0.213; shown p - true p mean -0.000 sd 0.021; options scored 4447
+     shown-p bin: 0.0:0.04(n90) 0.1:0.23(n253) 0.2:0.29(n570) 0.3:0.35(n1469) 0.4:0.46(n1181) 0.5:0.52(n734) 0.6:0.64(n121) 0.7:0.90(n29)
+     true-p  bin: 0.0:0.05(n105) 0.1:0.24(n246) 0.2:0.27(n586) 0.3:0.36(n1618) 0.4:0.45(n713) 0.5:0.53(n1052) 0.6:0.63(n112)
+
+== P7.2 the View's believed odds (last view of `a`) against the delivered verdict (trial, mid; a smart; b automatic), n=1200
+  Attunement 1: 0.0:0.11(n166) 0.1:0.22(n241) 0.2:0.32(n223) 0.3:0.38(n180) 0.4:0.38(n167) 0.5:0.50(n129) 0.6:0.61(n94)
+  Attunement 7: 0.0:0.06(n35) 0.1:0.22(n231) 0.2:0.28(n247) 0.3:0.40(n188) 0.4:0.51(n392) 0.5:0.62(n68) 0.6:0.79(n39)
+
+== P7.2 LEAK / BEAT-THE-MODEL probes (trial, mid), n=1200
+  Att 2, unbiased              random 0.235 auto 0.335 smart(view) 0.335 debiased(view+own bias) 0.335 oracle(true ev) 0.378
+  Att 2, pessimist (bias -1)   random 0.235 auto 0.324 smart(view) 0.324 debiased(view+own bias) 0.336 oracle(true ev) 0.378
+  Att 2, optimist (bias +1)    random 0.235 auto 0.326 smart(view) 0.326 debiased(view+own bias) 0.334 oracle(true ev) 0.378
+  Att 6, unbiased              random 0.237 auto 0.366 smart(view) 0.366 debiased(view+own bias) 0.366 oracle(true ev) 0.378
+  Attunement-1 viewer's View.esteem vs an opponent of Grace 1: mean +3.94 sd 1.07 (true at start +3.00)
+  Attunement-1 viewer's View.esteem vs an opponent of Grace 7: mean -1.93 sd 0.93 (true at start -1.00)
+
+== P7.4 SKILL: `a` random vs automatic vs view-best vs answer-else-best, by rite and Attunement, b automatic, n=600
+  trial        Att 1: random 0.223 auto 0.303 smart 0.303 answer>best 0.303
+  trial        Att 4: random 0.240 auto 0.318 smart 0.318 answer>best 0.308
+  trial        Att 7: random 0.220 auto 0.350 smart 0.350 answer>best 0.332
+  debate       Att 1: random 0.135 auto 0.260 smart 0.260 answer>best 0.238
+  debate       Att 4: random 0.130 auto 0.273 smart 0.273 answer>best 0.253
+  debate       Att 7: random 0.140 auto 0.287 smart 0.287 answer>best 0.258
+  questioning  Att 1: random 0.373 auto 0.435 smart 0.435 answer>best 0.370
+  questioning  Att 4: random 0.388 auto 0.445 smart 0.445 answer>best 0.383
+  questioning  Att 7: random 0.378 auto 0.492 smart 0.492 answer>best 0.410
+  conversation Att 1: random 0.248 auto 0.370 smart 0.370 answer>best 0.355
+  conversation Att 4: random 0.265 auto 0.375 smart 0.375 answer>best 0.363
+  conversation Att 7: random 0.272 auto 0.428 smart 0.428 answer>best 0.415
+  negotiation  Att 1: random 0.108 auto 0.140 smart 0.140 answer>best 0.125
+  negotiation  Att 4: random 0.107 auto 0.143 smart 0.143 answer>best 0.132
+  negotiation  Att 7: random 0.130 auto 0.165 smart 0.165 answer>best 0.152
+  audience     Att 1: random 0.348 auto 0.342 smart 0.342 answer>best 0.342
+  audience     Att 4: random 0.347 auto 0.343 smart 0.343 answer>best 0.343
+  audience     Att 7: random 0.348 auto 0.352 smart 0.352 answer>best 0.353
+
+== P7.6 temperament: two NPCs, different traits, same state -> different choices? (trial, `for` = each, first 3 beats' moves, 300 sittings)
+  flat               argue 0.28 press 0.56 concede 0.06 rest 0.11
+  hot proud grudge   argue 0.16 press 0.76 concede 0.01 rest 0.07
+  timid              argue 0.53 press 0.06 concede 0.41 rest 0.00
+  cool scholar       argue 0.46 press 0.51 concede 0.01 rest 0.03
+
+== P7.7 same rules both ways: a played seat whose callback IS the automatic policy reproduces the all-automatic sitting
+  identical outcomes 300/300
+  determinism: same seed twice 4ab703484b94 4ab703484b94
+  a mixed sitting (a played by a view-only callback, b automatic, three drawn judges): ended budget, beats 8, band failure
+  a played judge in the same sitting: verdicts [('j1', 2.0)], departures returned (('j1', 0.0),)

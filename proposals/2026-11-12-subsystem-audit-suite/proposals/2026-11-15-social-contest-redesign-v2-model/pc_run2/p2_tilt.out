@@ -1,0 +1,39 @@
+n=600 per arm; trial, bench j1..j3 (Crown rung 3; j2 tied to a +0.6, j3 tied to b +0.6), floor crowd (weight 30), effort 3
+== P2.3/P2.4 sweep: a (for) arranges; b holds no office. gap = power(a)-power(b)
+ a_rung | gap | rig | tilt | presiding | floor | turns | P(a's side carried) +- se | rig price (tilt*seen/12) | seen | rigged claims/sitting | appeal rate
+  None  |   0 | 0.0 | 0.00 | ('j1',) | 1 | 4 | 0.317+-0.019 | 0.000 | 32 | 0.00 | 0.00
+  None  |   0 | 0.5 | 0.00 | ('j1',) | 1 | 4 | 0.335+-0.019 | 0.000 | 32 | 0.00 | 0.00
+  None  |   0 | 1.0 | 0.00 | ('j1',) | 1 | 4 | 0.297+-0.019 | 0.000 | 32 | 0.00 | 0.00
+  0     |   1 | 0.0 | 0.00 | ('j1',) | 1 | 4 | 0.310+-0.019 | 0.000 | 32 | 0.00 | 0.00
+  0     |   1 | 0.5 | 0.23 | ('j2',) | 1 | 3 | 0.355+-0.020 | 0.230 | 32 | 3.00 | 0.35
+  0     |   1 | 1.0 | 0.46 | ('j2',) | 1 | 3 | 0.398+-0.020 | 0.460 | 32 | 3.00 | 0.40
+  1     |   2 | 0.0 | 0.00 | ('j1',) | 1 | 4 | 0.362+-0.020 | 0.000 | 32 | 0.00 | 0.00
+  1     |   2 | 0.5 | 0.38 | ('j2',) | 1 | 3 | 0.353+-0.020 | 0.380 | 32 | 3.00 | 0.35
+  1     |   2 | 1.0 | 0.76 | ('j2',) | 0 | 2 | 0.493+-0.020 | 0.127 | 2 | 2.00 | 0.49
+  2     |   3 | 0.0 | 0.00 | ('j1',) | 1 | 4 | 0.357+-0.020 | 0.000 | 32 | 0.00 | 0.00
+  2     |   3 | 0.5 | 0.45 | ('j2',) | 1 | 3 | 0.380+-0.020 | 0.450 | 32 | 3.00 | 0.38
+  2     |   3 | 1.0 | 0.91 | ('j2',) | 0 | 2 | 0.488+-0.020 | 0.152 | 2 | 2.00 | 0.49
+  4     |   5 | 0.0 | 0.00 | ('j1',) | 1 | 4 | 0.392+-0.020 | 0.000 | 32 | 0.00 | 0.00
+  4     |   5 | 0.5 | 0.49 | ('j2',) | 1 | 3 | 0.352+-0.019 | 0.490 | 32 | 3.00 | 0.35
+  4     |   5 | 1.0 | 0.99 | ('j2',) | 0 | 2 | 0.518+-0.020 | 0.165 | 2 | 2.00 | 0.52
+  6     |   7 | 0.0 | 0.00 | ('j1',) | 1 | 4 | 0.335+-0.019 | 0.000 | 32 | 0.00 | 0.00
+  6     |   7 | 0.5 | 0.50 | ('j2',) | 1 | 3 | 0.403+-0.020 | 0.500 | 32 | 3.00 | 0.40
+  6     |   7 | 1.0 | 1.00 | ('j2',) | 0 | 2 | 0.530+-0.020 | 0.167 | 2 | 2.00 | 0.53
+
+== equal power (both rung 3), and the weaker arranging (b rung 0 arranges against a rung 4)
+  equal, a arranges, rig 0.0: tilt 0.0 P(a) 0.322+-0.019 appeal 0.00 rigged/sitting 0.00
+  equal, a arranges, rig 1.0: tilt 0.0 P(a) 0.303+-0.019 appeal 0.00 rigged/sitting 0.00
+  weaker b arranges vs a rung 4, rig 0.0: arranged_by b tilt 0.0 P(b) 0.632+-0.020
+  weaker b arranges vs a rung 4, rig 1.0: arranged_by b tilt 0.0 P(b) 0.630+-0.020
+
+== MIRROR: the powerful party arranges, on side `for` vs side `against` (rung 4 vs none); effect = P(arranger's side | rig) - P(| rig 0)
+  for powerful      P(arr side) rig0 0.327 rig.5 0.395 (tilt 0.49) rig1 0.550 (tilt 0.99) | effect .5 +0.068 1 +0.223 (band +-0.058)
+  against powerful  P(arr side) rig0 0.720 rig.5 0.743 (tilt 0.0) rig1 0.767 (tilt 0.0) | effect .5 +0.023 1 +0.047 (band +-0.058)
+
+== third-party arranger: the presiding seat's superior j? use a Crown rung-6 lord 'lord' tied to a
+  lord arranges for a, rig 0.0: tilt 0.0 P(a) 0.308; appeals docketed when a (the FAVOURED side) lost: 0/415
+  lord arranges for a, rig 1.0: tilt 1.0 P(a) 0.442; appeals docketed when a (the FAVOURED side) lost: 335/335
+
+== who resents whom after a rigged loss: arranger a (rung 4) loses at rig 1 -> regard(a->b) 'lost to him'
+  rig 0.0: weak b lost (n=217): regard b->a -0.194; arranger a lost (n=383): regard a->b -0.114
+  rig 1.0: weak b lost (n=300): regard b->a -0.413; arranger a lost (n=300): regard a->b -0.367

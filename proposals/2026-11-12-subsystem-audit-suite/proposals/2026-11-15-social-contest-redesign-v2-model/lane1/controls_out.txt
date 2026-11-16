@@ -1,0 +1,21 @@
+n=2000 keys/level CRN, shipped unless overridden
+bench pool=8 (C.7 hearer pool)   bench_full   a   reason     slope=+0.0219 se=0.0017 z= +12.7 shares=0.303 0.359 0.385 0.403 0.422 0.436 0.443
+bench pool=8 (C.7 hearer pool)   bench_full   a   presence   slope=+0.0127 se=0.0012 z= +10.6 shares=0.355 0.390 0.399 0.403 0.416 0.430 0.441
+bench pool=8 (C.7 hearer pool)   bench_full   a   grace      slope=+0.0170 se=0.0015 z= +11.5 shares=0.325 0.365 0.386 0.403 0.412 0.428 0.432
+bench pool=8 (C.7 hearer pool)   bench_full   a   focus      slope=+0.0037 se=0.0006 z=  +5.8 shares=0.390 0.397 0.400 0.403 0.407 0.408 0.414
+bench pool=8 (C.7 hearer pool)   bench_full   a   will       slope=+0.0133 se=0.0025 z=  +5.4 shares=0.379 0.382 0.392 0.403 0.454 0.455 0.434
+bench pool=8 (C.7 hearer pool)   bench_full   a   attunement slope=+0.0068 se=0.0015 z=  +4.4 shares=0.383 0.389 0.396 0.403 0.409 0.420 0.421
+bench pool=8                     bench_full   dec reason     slope=+0.0108 se=0.0011 z=  +9.6 shares=0.358 0.373 0.385 0.403 0.404 0.412 0.426
+bench pool=8                     bench_full   b   will       slope=-0.0085 se=0.0013 z=  -6.4 shares=0.438 0.430 0.416 0.403 0.403 0.395 0.387
+fit off (fit/misfit None)        private_abr  dec reason     slope=+0.0000 se=0.0000 z=  +0.0 shares=0.574 0.574 0.574 0.574 0.574 0.574 0.574
+fit off                          crowd_full   dec reason     slope=+0.0107 se=0.0009 z= +11.3 shares=0.227 0.240 0.249 0.262 0.271 0.282 0.292
+sense_step 0                     crowd_full   dec reason     slope=+0.0096 se=0.0011 z=  +9.1 shares=0.326 0.340 0.351 0.379 0.375 0.377 0.383
+fit off (fit/misfit None)        private_abr  dec attunement slope=+0.0000 se=0.0000 z=  +0.0 shares=0.574 0.574 0.574 0.574 0.574 0.574 0.574
+fit off                          crowd_full   dec attunement slope=+0.0000 se=0.0000 z=  +0.0 shares=0.262 0.262 0.262 0.262 0.262 0.262 0.262
+sense_step 0                     crowd_full   dec attunement slope=+0.0014 se=0.0009 z=  +1.6 shares=0.350 0.356 0.363 0.379 0.367 0.361 0.359
+bands all-mid private_abr   failure=0.183 overwhelming=0.459 partial=0.104 success=0.255
+bands all-mid private_full  failure=0.378 overwhelming=0.187 partial=0.154 success=0.281
+bands all-mid bench_abr     failure=0.154 overwhelming=0.490 partial=0.097 success=0.259
+bands all-mid bench_full    failure=0.940 partial=0.050 success=0.010
+bands all-mid crowd_full    failure=0.444 overwhelming=0.148 partial=0.158 success=0.250
+bands all-mid question_full failure=0.550 overwhelming=0.105 partial=0.141 success=0.203

@@ -1,0 +1,61 @@
+runs per arm: 1872
+  account_max          shipped->control changed     0/1872   control->shipped changed     0/1872   (control == shipped)
+  account_step         shipped->control changed  1496/1872   control->shipped changed  1496/1872   
+  audience_room        shipped->control changed  1541/1872   control->shipped changed   976/1872   
+  blow_gain            shipped->control changed   154/1872   control->shipped changed     0/1872   dead-on-control-base
+  break_at             shipped->control changed     3/1872   control->shipped changed     0/1872   dead-on-control-base
+  break_level          shipped->control changed     3/1872   control->shipped changed     0/1872   dead-on-control-base
+  concede_step         shipped->control changed     0/1872   control->shipped changed     0/1872   DEAD
+  content_w_reason     shipped->control changed  1480/1872   control->shipped changed  1536/1872   
+  cover_max            shipped->control changed     0/1872   control->shipped changed     0/1872   (control == shipped)
+  cover_step           shipped->control changed    54/1872   control->shipped changed     0/1872   dead-on-control-base
+  crowd_at             shipped->control changed     0/1872   control->shipped changed     0/1872   (control == shipped)
+  deceive_pull         shipped->control changed    50/1872   control->shipped changed     0/1872   dead-on-control-base
+  delivery_step        shipped->control changed  1636/1872   control->shipped changed  1604/1872   
+  divert_gain          shipped->control changed     0/1872   control->shipped changed     0/1872   DEAD
+  divert_pull          shipped->control changed     0/1872   control->shipped changed     0/1872   DEAD
+  fit_level            shipped->control changed  1573/1872   control->shipped changed  1555/1872   
+  guard_step           shipped->control changed   212/1872   control->shipped changed   206/1872   
+  heard_floor          shipped->control changed   360/1872   control->shipped changed     0/1872   dead-on-control-base
+  heard_step           shipped->control changed   360/1872   control->shipped changed     0/1872   dead-on-control-base
+  mark_level           shipped->control changed    70/1872   control->shipped changed     0/1872   dead-on-control-base
+  mark_resolve         shipped->control changed    35/1872   control->shipped changed     0/1872   dead-on-control-base
+  mark_shame           shipped->control changed    70/1872   control->shipped changed     0/1872   dead-on-control-base
+  misfit_level         shipped->control changed   436/1872   control->shipped changed   497/1872   
+  off_topic_step       shipped->control changed   794/1872   control->shipped changed     0/1872   dead-on-control-base
+  ploy_level           shipped->control changed     0/1872   control->shipped changed     0/1872   DEAD
+  ploy_ob              shipped->control changed     0/1872   control->shipped changed     0/1872   DEAD
+  press_at             shipped->control changed   161/1872   control->shipped changed     6/1872   
+  press_base           shipped->control changed     0/1872   control->shipped changed     0/1872   (control == shipped)
+  press_rebound        shipped->control changed     5/1872   control->shipped changed     0/1872   dead-on-control-base
+  presumption_level    shipped->control changed     0/1872   control->shipped changed     0/1872   (control == shipped)
+  proofs_per_reason    shipped->control changed  1024/1872   control->shipped changed  1024/1872   
+  rattle_pull          shipped->control changed     3/1872   control->shipped changed     0/1872   dead-on-control-base
+  read_blur            shipped->control changed     0/1872   control->shipped changed     0/1872   (control == shipped)
+  read_ob              shipped->control changed     0/1872   control->shipped changed     0/1872   (control == shipped)
+  read_scale           shipped->control changed     0/1872   control->shipped changed     0/1872   (control == shipped)
+  reading_kept         shipped->control changed     0/1872   control->shipped changed     0/1872   (control == shipped)
+  reason_bias          shipped->control changed  1076/1872   control->shipped changed   228/1872   
+  relevance_step       shipped->control changed     0/1872   control->shipped changed     0/1872   DEAD
+  resist_step          shipped->control changed  1628/1872   control->shipped changed  1628/1872   
+  resolve_base         shipped->control changed    56/1872   control->shipped changed   288/1872   
+  resolve_per_will     shipped->control changed   282/1872   control->shipped changed     0/1872   dead-on-control-base
+  respect_step         shipped->control changed  1604/1872   control->shipped changed  1604/1872   
+  row_standard         shipped->control changed   656/1872   control->shipped changed     0/1872   dead-on-control-base
+  sense_step           shipped->control changed   546/1872   control->shipped changed   350/1872   
+  shield_max           shipped->control changed     0/1872   control->shipped changed     0/1872   (control == shipped)
+  shield_step          shipped->control changed  1352/1872   control->shipped changed     0/1872   dead-on-control-base
+  sore_gain            shipped->control changed    60/1872   control->shipped changed     0/1872   dead-on-control-base
+  standard_demand      shipped->control changed   656/1872   control->shipped changed     0/1872   dead-on-control-base
+  standard_step        shipped->control changed   656/1872   control->shipped changed     0/1872   dead-on-control-base
+  strain_carry         shipped->control changed     2/1872   control->shipped changed     0/1872   dead-on-control-base
+  strain_rest          shipped->control changed     0/1872   control->shipped changed     0/1872   (control == shipped)
+  strike_level         shipped->control changed     0/1872   control->shipped changed     0/1872   (control == shipped)
+  track_clip           shipped->control changed     0/1872   control->shipped changed     0/1872   (control == shipped)
+  track_step           shipped->control changed   552/1872   control->shipped changed   524/1872   
+  yield_level          shipped->control changed    49/1872   control->shipped changed     0/1872   dead-on-control-base
+
+G17: shipped -> RD literal
+  strike_level         changed 59/1872
+  presumption_level    changed 192/1872
+  reading_kept         changed 0/1872

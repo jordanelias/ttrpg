@@ -1,0 +1,20 @@
+n=150 per cell; trial; presiding j1 played; legitimacy(Crown), compliance, appeal weight, crowd->judge regard, Crown standing
+== the 2x2 at a rung-4 'moderate' judge (power 6); verdict 'for' with the judge leaning to a = right, leaning to b = wrong
+
+== sweep Grace 1..7 x station (no office / rung 1 / rung 4 moderate / rung 6 major), right and wrong; legitimacy(Crown) | regard
+  station rung 0  (power 1) RIGHT: +0.02/+0.05  +0.10/+0.10  +0.10/+0.10  +0.10/+0.10  +0.10/+0.10  +0.10/+0.10  +0.10/+0.10
+                               WRONG: -0.05/+0.02  +0.10/+0.10  +0.10/+0.10  +0.10/+0.10  +0.10/+0.10  +0.10/+0.10  +0.10/+0.10
+  station rung 1  (power 2) RIGHT: -0.07/+0.00  +0.02/+0.05  +0.10/+0.10  +0.10/+0.10  +0.10/+0.10  +0.10/+0.10  +0.10/+0.10
+                               WRONG: -0.20/-0.07  -0.05/+0.02  +0.10/+0.10  +0.10/+0.10  +0.10/+0.10  +0.10/+0.10  +0.10/+0.10
+  station rung 4 moderate (power 6) RIGHT: -0.40/-0.20  -0.32/-0.15  -0.23/-0.10  -0.15/-0.05  -0.07/+0.00  +0.02/+0.05  +0.10/+0.10
+                               WRONG: -0.80/-0.40  -0.65/-0.32  -0.50/-0.23  -0.35/-0.15  -0.20/-0.07  -0.05/+0.02  +0.10/+0.10
+  station rung 6 major (power 9) RIGHT: -0.60/-0.30  -0.53/-0.27  -0.47/-0.23  -0.40/-0.20  -0.32/-0.15  -0.23/-0.10  -0.15/-0.05
+                               WRONG: -1.20/-0.60  -1.07/-0.53  -0.93/-0.47  -0.80/-0.40  -0.65/-0.32  -0.50/-0.23  -0.35/-0.15
+
+== does Reason substitute for Grace? rung 4 moderate, Grace 1, Reason 1 vs 7 (right verdict)
+  Reason 1: legit -0.400 regard -0.200
+  Reason 7: legit -0.400 regard -0.200
+
+== simulated (drawn) judge, not played: the reception terms apply to a drawn verdict too? Grace 1 vs 7, rung 4 moderate
+  Grace 1: mean legit -0.512; share judged 'wrong' 0.28
+  Grace 7: mean legit +0.100; share judged 'wrong' 0.22
