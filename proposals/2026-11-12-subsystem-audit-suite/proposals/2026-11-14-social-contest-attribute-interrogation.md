@@ -460,7 +460,7 @@ influence by words.
 | E-14 | **The room is `speak`'s only.** `reception`/`proofs` are read only for `heard_by: bench` (`a matter`); `proofs` is 0 without a bench. | `sigma.py:213-218`, :565-566; `world_q.py:872-876` | No other influence verb has an audience or evidence term (C.2, C.4). |
 | E-15 | **The advantage channel carries only `effort`, and the shipped chooser forms no effort.** | `sigma.py:164`; H-244 | The one sigma door is idle in play; every new attribute term that is a mu-shift lands here. |
 | E-16 | **The verb table's header forbids a modifier from an office** (*"no verb exists only for office-holders, and none carries a modifier"*), against A-12 (*a seat carries a modifier*). | `verb_table.yaml:33-35` | A-12 has no place on the record today (`SocialContestInput` has no seat field, `inputs.py:85-101`). |
-| E-17 | **The contract row is stale**: `module_contracts.yaml` gives `social_contest` a `persuasion_track` state (:471) and a `doc:` into the quarantined v30 (:466); the live module keeps no state (`roll.py:10-14`). | `references/module_contracts.yaml:464-480` | A reader of the contract would expect a track. |
+| E-17 | **The contract row is stale**: `module_contracts.yaml` gives `social_contest` a `persuasion_track` state (:471) and a `doc:` into the quarantined v30 (:466); the live module keeps no state (`roll.py:8-12`). | `references/module_contracts.yaml:464-480` | A reader of the contract would expect a track. |
 | E-18 | **The pairs instrument models a bare person-vs-person record** (no room, no capability, no practice; `speak`/inquiries opposed by a person). | `pairs.py:147-164` | Its social slopes are of the record, not of the shipped act (B.2); a redesign with exchanges needs `social_pairs` to call the module's new entry rather than `roll`. |
 | E-19 | **`arrest` is a physical act on the social roll** (prize `a standing`, Coordination), marked [ASSUMPTION] by its own row. | `verb_table.yaml:187` | A body contest routed to the influence subsystem. |
 | E-20 | **S27.4's refusal on `arrest` is labelled with the counterparty's kind** though the actor's pool failed. | `verb_table.yaml:171-208` `refusal_note` | Minor. |
@@ -480,7 +480,7 @@ influence by words.
    is a loop around it), so the margin, ladder and S27.4 stay single-owned; (d) a stop: a bound on exchanges, a side
    yielding, or the state crossing a line. Whether the exchange belongs inside the module entry (one call returns one
    `Margin` after N internal draws) or in the season loop (N acts) is stage 2's; the module rule (*"keeps no state
-   between calls"*, `roll.py:10-14`; A-25) admits state inside one call. 
+   between calls"*, `roll.py:8-12`; A-25) admits state inside one call. 
 2. **J-12 — ANSWERED (Jordan, 2026-11-14):** *"drop threadsensitivity, keep existing prac.thread_sensitivity"*. No
    `attr.spirit.threadsensitivity`; ten attributes. For the record: `Person.thread_sensitivity` (`state/carriers.py:843`)
    is a whole number authored at build from a cast row's `ts:` (`data/cast.py:279-283`), never written in play, read by

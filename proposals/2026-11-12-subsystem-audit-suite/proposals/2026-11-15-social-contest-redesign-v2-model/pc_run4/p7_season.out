@@ -1,0 +1,15 @@
+== 3 seasons x 200 seeds; each season: the tolls trial (scholar v bully), the grain negotiation (diplomat v bully), a conversation (orator v bully); appeals heard
+  the trial carried by season: s1 0.465, s2 0.460, s3 0.445
+  snowball: season 3 after a season-1 win 0.473 (n=93), after a loss 0.421 (n=107)
+  regard change from the start: pairs involving the bully (they met) mean -0.234; pairs that never sat against each other -0.000
+    pressed by him 0..0 times: n=4797 mean regard toward him -0.003
+    pressed by him 1..1 times: n=11 mean regard toward him -0.046
+    pressed by him 2..3 times: n=105 mean regard toward him -0.257
+    pressed by him 4..98 times: n=1087 mean regard toward him -0.614
+  pinned at the clip: {'mid': 5689, '-1': 305, '+1': 6} of 6000 directed pairs; pair-level regard entries up 564, down 2500; greatest strain carried 1.00
+
+== recovery from a pin: pairs at -1 after 3 seasons that are above -1 after 6 (same seeds, 6-season runs), first 100 seeds
+  pinned at -1 after 3: 150; above -1 after 6: 0
+
+== determinism: the same seed twice
+  distinct world hashes over 2 runs of seed 7: 1 {'a5e22c416df53dc1'}

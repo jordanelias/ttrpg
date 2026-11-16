@@ -1,0 +1,36 @@
+
+== C1.1 the CHARGED side (accused b) under each regime; `for` carried, lower is better for him (all-mid, n=400)
+  trial        crown     rest 0.625  answer-else-rest 0.265  answer-else-argue 0.285  argue 0.285  press 0.598  auto 0.278  | rest - answer-else-rest +0.360 (z +11.0)
+  trial        theocracy rest 0.667  answer-else-rest 0.278  answer-else-argue 0.292  argue 0.292  press 0.630  auto 0.290  | rest - answer-else-rest +0.390 (z +12.0)
+  trial        commune   rest 0.297  answer-else-rest 0.268  answer-else-argue 0.343  argue 0.343  press 0.453  auto 0.323  | rest - answer-else-rest +0.030 (z +0.9)
+  inquisition  crown     rest 0.645  answer-else-rest 0.280  answer-else-argue 0.325  argue 0.325  press 0.300  auto 0.300  | rest - answer-else-rest +0.365 (z +11.1)
+  examination  crown     rest 0.562  answer-else-rest 0.225  answer-else-argue 0.245  argue 0.245  press 0.245  auto 0.245  | rest - answer-else-rest +0.338 (z +10.4)
+
+== C1.2 the BEARER (a) against an automatic opponent; `for` carried, higher is better for him (n=400)
+  trial        rest 0.037  argue 0.318  answer-else-argue 0.318  press 0.025  auto 0.275
+  inquisition  rest 0.068  argue 0.305  answer-else-argue 0.305  press 0.030  auto 0.263
+  questioning  rest 0.163  argue 0.325  answer-else-argue 0.325  press 0.105  auto 0.270
+  debate       rest 0.253  argue 0.287  answer-else-argue 0.287  press 0.240  auto 0.300
+  conversation rest 0.305  argue 0.352  answer-else-argue 0.352  press 0.278  auto 0.333
+  audience     rest 0.270  argue 0.302  answer-else-argue 0.302  press 0.297  auto 0.297
+
+== C1.3 nobody speaks (both rest every turn): `for` carried (n=400); the card's `unargued`
+  trial        0.145   card: unargued = 'it lapses: the bearer must put it, and his rest is priced as silence'; odds before an unmoved bench 0.277
+  inquisition  0.165   card: unargued = 'it lapses: the bearer must put it, and his rest is priced as silence'; odds before an unmoved bench 0.277
+  questioning  0.200   card: unargued = 'it lapses: the bearer must put it, and his rest is priced as silence'; odds before an unmoved bench 0.277
+  debate       0.235   card: unargued = 'it stands where the room starts'; odds before an unmoved bench 0.277
+
+== C1.4 mean move at those who decide, toward the speaker, per beat kind (all-mid, automatic, n=400 sittings)
+  trial: argue/raises n=1164 +0.38; argue/answers n=1014 +0.39; press/presses n=722 -0.30; concede/concedes n=50 -2.00; press/presses/evaded n=17 -1.42; rest/rests/evaded n=9 -2.50
+  debate: press/presses n=1229 -0.37; argue/raises n=809 +0.37; argue/answers n=385 +0.57; concede/concedes n=56 +0.45
+  questioning: argue/raises n=1450 +0.54; argue/answers n=686 +0.68; press/presses/evaded n=150 -0.79; rest/rests/evaded n=122 -0.47; press/presses n=109 -0.60; concede/concedes n=74 +0.11
+
+== C1.5 the dominance matrix: share of decision points where each option kind has the greatest TRUE worth (automatic sittings)
+  trial        raises 0.35  answers 0.35  press 0.24  rest 0.06  concede 0.00  (n=2128)
+  debate       press 0.47  rest 0.31  answers 0.12  raises 0.10  concede 0.00  (n=2027)
+  questioning  raises 0.55  answers 0.26  rest 0.09  press 0.06  concede 0.04  (n=1942)
+  inquisition  raises 0.45  answers 0.34  press 0.11  rest 0.11  (n=1062)
+  conversation raises 0.67  answers 0.15  press 0.07  rest 0.07  concede 0.04  (n=745)
+  negotiation  raises 0.60  answers 0.14  press 0.13  rest 0.07  concede 0.06  (n=1445)
+  audience     raises 0.60  answers 0.24  press 0.08  rest 0.08  (n=526)
+  rally        raises 1.00  (n=376)

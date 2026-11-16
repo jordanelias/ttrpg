@@ -1,0 +1,20 @@
+SPEAKER ATTUNEMENT, a argues on consequence every turn (frame chosen from his reading); listeners hold several wants
+  tell         shipped              carried A1 0.494 A4 0.530 A7 0.546 d=+0.052±0.025 | frame==true best: 0.84 0.94 1.00
+  tell         CONTROL read_blur=0  carried A1 0.564 A4 0.564 A7 0.564 d=+0.000±0.025 | frame==true best: 1.00 1.00 1.00
+  conversation shipped              carried A1 0.445 A4 0.480 A7 0.486 d=+0.041±0.025 | frame==true best: 0.84 0.96 1.00
+  conversation CONTROL read_blur=0  carried A1 0.495 A4 0.495 A7 0.495 d=+0.000±0.025 | frame==true best: 1.00 1.00 1.00
+  rally        shipped              carried A1 0.271 A4 0.291 A7 0.326 d=+0.055±0.023 | frame==true best: 0.59 0.74 0.99
+  rally        CONTROL read_blur=0  carried A1 0.341 A4 0.341 A7 0.341 d=+0.000±0.024 | frame==true best: 1.00 1.00 1.00
+  trial        shipped              carried A1 0.274 A4 0.286 A7 0.320 d=+0.046±0.023 | frame==true best: 0.43 0.57 0.97
+  trial        CONTROL read_blur=0  carried A1 0.299 A4 0.299 A7 0.299 d=+0.000±0.023 | frame==true best: 1.00 1.00 1.00
+ADJUDICATOR ATTUNEMENT (trial, judge j1 Attunement 1/4/7), scripted: a argues every turn, b rests
+  a strained liar                                  A1 0.391 A4 0.255 A7 0.171 d=-0.220±0.022
+  a comfortable honest man                         A1 0.391 A4 0.391 A7 0.391 d=+0.000±0.024
+  a HONEST but strained man (rattled twice before) A1 0.376 A4 0.326 A7 0.290 d=-0.086±0.023
+  a strained liar, CONTROL ploy_step 0             A1 0.378 A4 0.378 A7 0.378 d=+0.000±0.024
+  NPC policy: how often the liar argues at all (share of a's beats that are argue), judge A1 vs A7
+    judge A1: liar argues in 0.30 of his beats
+    judge A7: liar argues in 0.04 of his beats
+AWE on a peer: a and judge both rung 5 Crown moderate? (a as a peer: same office)
+  a Will 2 (power 7.0): awe 0.83
+  a Will 7 (power 7.0): awe 0.00

@@ -1,0 +1,15 @@
+
+== P5 roles: one person (merchant) as speaker, judge and hearer reads the same bearing
+  as speaker: side for decides False stake (0.9, 0.1, 0.0) care (0.9, 0.2, 0.4) power 4.0 start +0.67
+  as judge  : side None decides True stake (0.9, 0.1, 0.4) care (0.9, 0.2, 0.4) power 4.0 start +0.93
+  as hearer : side None decides False stake (0.9, 0.1, 0.4) care (0.9, 0.2, 0.4) power 4.0 start +0.93
+  (note: as the `for` speaker the matter's parties change, so bond differs by construction)
+
+== P5 a witness called from the audience (cast trial: the scholar's testimony is the clerk's; clerk on the floor)
+  sittings where the clerk spoke (voice) 300/300; where the bully then pressed the clerk 273/300; bully's regard for clerk -0.400
+
+== P5.4 bigger n: the tied judge steers? (trial, mid, bench j1, `for`=a), n=4000
+  neutral                      start +0.00 carried 0.328
+  client of b (tie .5)         start -0.33 carried 0.289
+  client+friend of b (tie 1)   start -0.67 carried 0.268
+  client+friend of a (tie 1)   start +0.67 carried 0.365

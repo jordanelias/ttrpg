@@ -1,0 +1,1 @@
+inquisition  (for, vs automatic; n=800, se~0.017): auto 0.305 | argue 0.249 | press 0.231 | rest 0.294 | concede 0.305 | answer_else_rest 0.280 | press_then_argue 0.287

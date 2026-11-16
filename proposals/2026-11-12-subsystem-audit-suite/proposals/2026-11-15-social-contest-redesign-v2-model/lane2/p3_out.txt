@@ -1,0 +1,10 @@
+(a) rank, precedence tie (0,0): ['a', 'b', 'a', 'b', 'a'] budget
+    rank, respondent outranks: ['b', 'a', 'b', 'a', 'b'] budget
+    rank, Will-1 respondent (resolve 2.5): sequences [(('ababa', 'budget'), 289), (('abab', 'yielded'), 7), (('ababa', 'yielded'), 4)]
+(b) questioning   rite=questioned order=scripted   : questioner Success+ 0.244  mean track -0.418 nx 4.00 presses {'a': 334} bands {'failure': 1253, 'overwhelming': 151, 'success': 338, 'partial': 258}
+(b) questioning   rite=contest    order=alternating: questioner Success+ 0.303  mean track +0.745 nx 3.88 presses {'b': 1434, 'a': 200} bands {'failure': 1085, 'partial': 309, 'overwhelming': 207, 'success': 399}
+(b) interrogation rite=questioned order=scripted   : questioner Success+ 0.004  mean track -0.469 nx 4.00 presses {'a': 450} bands {'failure': 1943, 'partial': 50, 'success': 7}
+(b) interrogation rite=contest    order=alternating: questioner Success+ 0.005  mean track +0.858 nx 3.86 presses {'b': 1690, 'a': 264} bands {'failure': 1909, 'partial': 81, 'success': 10}
+(c) audience order=free: bands {'partial': 150, 'failure': 1820, 'success': 30}  mean speech margin +2.102
+(c) audience order=written_only: bands {'partial': 156, 'failure': 1815, 'success': 29}  mean speech margin +2.109
+(d) free, two speakers: ['a', 'b', 'a'] budget

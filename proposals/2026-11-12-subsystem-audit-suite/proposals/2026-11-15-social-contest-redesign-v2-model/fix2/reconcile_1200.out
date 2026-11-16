@@ -1,0 +1,30 @@
+
+== R1 the adjudicator's Focus as the theatre filter: `for` (Will 2) argues, the other side presses him every turn; `for` carried by the judge's Focus (n=1200)
+  [shipped] judge's Focus 1 / 4 / 7: 0.555 / 0.599 / 0.635 (+0.080, z +4.0)
+  [control: a rattle moves nobody (rattle_gain 0)] judge's Focus 1 / 4 / 7: 0.637 / 0.637 / 0.637 (+0.000, z +0.0)
+  the theatre weight at judge's Focus 1: 2.00
+  the theatre weight at judge's Focus 7: 0.00
+
+== R2 the regime's gravity (one method with strife): the same case, crown against theocracy, standard held at the crown's; `for` carried (n=1200)
+  crown                                  gravity 0.00: carried 0.272
+  theocracy (gravity 0.5)                gravity 0.50: carried 0.216
+  theocracy, the delta at 0 (control)    gravity 0.00: carried 0.272
+
+== R3 `admit_step` isolated: the crown's trial, the standard fixed at 5, only the `silence` cell changed; the accused rests every turn (n=1200)
+  [shipped] `admits` 0.591 against `refusal` 0.547 (+0.043, z +2.1)
+  [admit_step 0] `admits` 0.547 against `refusal` 0.547 (+0.000, z +0.0)
+
+== R4 `grain` and `grudge` isolated: a broken man's beats (trial, `a` presses every turn), each setting at 0 against full (n=600)
+  W2 G2 who wants much and holds a grudge against `a` [full    ] broken beats 1903: press 0.16 argue 0.47 (consequence 0.40) concede 0.38
+  W2 G2 who wants much and holds a grudge against `a` [grain 0 ] broken beats 1911: press 0.39 argue 0.14 (consequence 0.28) concede 0.47
+  W2 G2 who wants much and holds a grudge against `a` [grudge 0] broken beats 1906: press 0.01 argue 0.57 (consequence 0.40) concede 0.42
+
+== R5 contumacy on the same n: the accused rests every turn in a crown trial; per sitting, over 1200 sittings
+  contumacy claims in the judge's ledger 2.23 a sitting; the judge's regard for the silent man -0.322
+
+== R6 appeals by the side a third party rigged FOR: the tilt is never among his grounds (gap 5, a lord rigs for `a`, rig 1; n=600)
+  `a` lost 355; appeal weights holding more than brute + wrong (i.e. any tilt): 0; he appealed 63
+
+== R7 a pinned pair: the scholar's regard for the bully set at -0.95 before the first season; 30 runs x 12 seasons of the driver
+  by season: s0 -0.67, s1 -0.44, s2 -0.34, s3 -0.26, s5 -0.23, s8 -0.22, s11 -0.21
+  share of runs back above -0.5 by season 3 / 11: 0.97 / 0.97

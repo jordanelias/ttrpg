@@ -1,0 +1,79 @@
+dials=shipped n=2000 keys per level, CRN; slope = d(carried share)/d(attribute point)
+private_abr   a   focus      slope=+0.0092 se=0.0009 z= +10.8       nonmono=[] shares[1..7]=0.665 0.685 0.698 0.705 0.711 0.718 0.726
+private_abr   a   reason     slope=+0.0502 se=0.0018 z= +28.2       nonmono=[] shares[1..7]=0.498 0.578 0.643 0.705 0.743 0.773 0.804
+private_abr   a   attunement slope=+0.0051 se=0.0007 z=  +7.6       nonmono=[] shares[1..7]=0.692 0.697 0.701 0.705 0.710 0.718 0.722
+private_abr   a   presence   slope=+0.0608 se=0.0019 z= +31.9       nonmono=[] shares[1..7]=0.497 0.577 0.649 0.705 0.777 0.824 0.858
+private_abr   a   grace      slope=+0.0133 se=0.0010 z= +12.7       nonmono=[] shares[1..7]=0.671 0.682 0.696 0.705 0.719 0.738 0.750
+private_abr   a   will       slope=+0.0031 se=0.0005 z=  +6.0       nonmono=[] shares[1..7]=0.696 0.699 0.704 0.705 0.709 0.711 0.715
+private_abr   dec focus      slope=+0.0000 se=0.0000 z=  +0.0 INERT nonmono=[] shares[1..7]=0.705 0.705 0.705 0.705 0.705 0.705 0.705
+private_abr   dec reason     slope=+0.0089 se=0.0011 z=  +8.3       nonmono=[] shares[1..7]=0.655 0.670 0.684 0.705 0.703 0.708 0.708
+private_abr   dec attunement slope=+0.0039 se=0.0011 z=  +3.7       nonmono=[] shares[1..7]=0.671 0.676 0.690 0.705 0.697 0.693 0.694
+private_abr   dec presence   slope=+0.0000 se=0.0000 z=  +0.0 INERT nonmono=[] shares[1..7]=0.705 0.705 0.705 0.705 0.705 0.705 0.705
+private_abr   dec grace      slope=-0.0047 se=0.0006 z=  -7.2       nonmono=[] shares[1..7]=0.722 0.719 0.711 0.705 0.702 0.699 0.695
+private_abr   dec will       slope=-0.0235 se=0.0014 z= -17.2       nonmono=[] shares[1..7]=0.780 0.760 0.737 0.705 0.684 0.663 0.643
+private_full  a   focus      slope=+0.0047 se=0.0006 z=  +7.4       nonmono=[] shares[1..7]=0.451 0.458 0.462 0.469 0.470 0.475 0.479
+private_full  a   reason     slope=+0.0287 se=0.0015 z= +18.9       nonmono=[] shares[1..7]=0.365 0.401 0.448 0.469 0.484 0.522 0.540
+private_full  a   attunement slope=+0.0119 se=0.0011 z= +11.1       nonmono=[] shares[1..7]=0.446 0.455 0.462 0.469 0.479 0.505 0.517
+private_full  a   presence   slope=+0.0284 se=0.0015 z= +18.6       nonmono=[] shares[1..7]=0.366 0.404 0.441 0.469 0.482 0.520 0.540
+private_full  a   grace      slope=+0.0074 se=0.0010 z=  +7.1       nonmono=[] shares[1..7]=0.440 0.449 0.459 0.469 0.480 0.480 0.480
+private_full  a   will       slope=+0.0074 se=0.0011 z=  +6.7       nonmono=[] shares[1..7]=0.414 0.429 0.470 0.469 0.469 0.459 0.464
+private_full  b   focus      slope=-0.0008 se=0.0002 z=  -3.4       nonmono=[] shares[1..7]=0.473 0.471 0.469 0.469 0.469 0.469 0.468
+private_full  b   reason     slope=+0.0132 se=0.0014 z=  +9.3       nonmono=[] shares[1..7]=0.408 0.423 0.442 0.469 0.457 0.464 0.499
+private_full  b   attunement slope=-0.0091 se=0.0011 z=  -7.9       nonmono=[] shares[1..7]=0.466 0.469 0.469 0.469 0.434 0.427 0.420
+private_full  b   presence   slope=+0.0062 se=0.0011 z=  +5.7       nonmono=[] shares[1..7]=0.483 0.469 0.459 0.469 0.492 0.505 0.505
+private_full  b   grace      slope=-0.0024 se=0.0010 z=  -2.4       nonmono=[] shares[1..7]=0.472 0.469 0.474 0.469 0.465 0.460 0.459
+private_full  b   will       slope=-0.0483 se=0.0018 z= -27.4       nonmono=[] shares[1..7]=0.600 0.549 0.514 0.469 0.416 0.358 0.309
+bench_abr     a   focus      slope=+0.0083 se=0.0008 z=  +9.9       nonmono=[] shares[1..7]=0.726 0.736 0.747 0.754 0.761 0.769 0.775
+bench_abr     a   reason     slope=+0.0540 se=0.0018 z= +30.0       nonmono=[] shares[1..7]=0.498 0.602 0.681 0.754 0.783 0.804 0.834
+bench_abr     a   attunement slope=+0.0046 se=0.0006 z=  +7.2       nonmono=[] shares[1..7]=0.739 0.744 0.750 0.754 0.760 0.762 0.765
+bench_abr     a   presence   slope=+0.0348 se=0.0015 z= +23.2       nonmono=[] shares[1..7]=0.591 0.697 0.720 0.754 0.776 0.805 0.824
+bench_abr     a   grace      slope=+0.0405 se=0.0016 z= +24.5       nonmono=[] shares[1..7]=0.534 0.618 0.690 0.754 0.764 0.772 0.784
+bench_abr     a   will       slope=+0.0025 se=0.0005 z=  +5.4       nonmono=[] shares[1..7]=0.746 0.750 0.752 0.754 0.756 0.759 0.761
+bench_abr     dec focus      slope=+0.0000 se=0.0000 z=  +0.0 INERT nonmono=[] shares[1..7]=0.754 0.754 0.754 0.754 0.754 0.754 0.754
+bench_abr     dec reason     slope=+0.0070 se=0.0010 z=  +7.2       nonmono=[] shares[1..7]=0.714 0.724 0.741 0.754 0.749 0.754 0.756
+bench_abr     dec attunement slope=+0.0034 se=0.0009 z=  +3.6       nonmono=[] shares[1..7]=0.721 0.734 0.739 0.754 0.749 0.745 0.743
+bench_abr     dec presence   slope=+0.0000 se=0.0000 z=  +0.0 INERT nonmono=[] shares[1..7]=0.754 0.754 0.754 0.754 0.754 0.754 0.754
+bench_abr     dec grace      slope=-0.0043 se=0.0006 z=  -6.9       nonmono=[] shares[1..7]=0.765 0.762 0.760 0.754 0.750 0.745 0.741
+bench_abr     dec will       slope=-0.0174 se=0.0012 z= -14.6       nonmono=[] shares[1..7]=0.801 0.788 0.772 0.754 0.734 0.719 0.699
+bench_full    a   focus      slope=+0.0002 se=0.0001 z=  +1.3 INERT nonmono=[] shares[1..7]=0.009 0.009 0.009 0.009 0.009 0.009 0.010
+bench_full    a   reason     slope=+0.0003 se=0.0003 z=  +0.8 INERT nonmono=[] shares[1..7]=0.007 0.008 0.010 0.009 0.009 0.010 0.009
+bench_full    a   attunement slope=-0.0001 se=0.0003 z=  -0.5 INERT nonmono=[] shares[1..7]=0.009 0.009 0.009 0.009 0.009 0.009 0.009
+bench_full    a   presence   slope=+0.0004 se=0.0002 z=  +2.2       nonmono=[] shares[1..7]=0.008 0.009 0.009 0.009 0.010 0.010 0.011
+bench_full    a   grace      slope=+0.0003 se=0.0003 z=  +1.1 INERT nonmono=[] shares[1..7]=0.006 0.008 0.009 0.009 0.009 0.009 0.009
+bench_full    a   will       slope=+0.0019 se=0.0005 z=  +3.7       nonmono=[] shares[1..7]=0.003 0.004 0.007 0.009 0.012 0.013 0.013
+bench_full    b   focus      slope=+0.0000 se=0.0000 z=  +0.0 INERT nonmono=[] shares[1..7]=0.009 0.009 0.009 0.009 0.009 0.009 0.009
+bench_full    b   reason     slope=-0.0011 se=0.0003 z=  -3.2       nonmono=[] shares[1..7]=0.013 0.013 0.011 0.009 0.009 0.008 0.007
+bench_full    b   attunement slope=+0.0004 se=0.0002 z=  +1.7 INERT nonmono=[] shares[1..7]=0.008 0.008 0.009 0.009 0.010 0.010 0.010
+bench_full    b   presence   slope=-0.0013 se=0.0004 z=  -3.2       nonmono=[] shares[1..7]=0.015 0.011 0.010 0.009 0.008 0.007 0.005
+bench_full    b   grace      slope=-0.0013 se=0.0004 z=  -3.5       nonmono=[] shares[1..7]=0.014 0.014 0.013 0.009 0.008 0.007 0.007
+bench_full    b   will       slope=-0.0001 se=0.0002 z=  -0.6 INERT nonmono=[] shares[1..7]=0.010 0.010 0.010 0.009 0.009 0.010 0.009
+bench_full    dec focus      slope=+0.0000 se=0.0000 z=  +0.0 INERT nonmono=[] shares[1..7]=0.009 0.009 0.009 0.009 0.009 0.009 0.009
+bench_full    dec reason     slope=+0.0005 se=0.0003 z=  +1.9 INERT nonmono=[] shares[1..7]=0.009 0.009 0.009 0.009 0.011 0.011 0.012
+bench_full    dec attunement slope=+0.0001 se=0.0002 z=  +0.4 INERT nonmono=[] shares[1..7]=0.010 0.009 0.009 0.009 0.010 0.010 0.010
+bench_full    dec presence   slope=+0.0000 se=0.0000 z=  +0.0 INERT nonmono=[] shares[1..7]=0.009 0.009 0.009 0.009 0.009 0.009 0.009
+bench_full    dec grace      slope=+0.0000 se=0.0000 z=  +0.0 INERT nonmono=[] shares[1..7]=0.009 0.009 0.009 0.009 0.009 0.009 0.009
+bench_full    dec will       slope=-0.0029 se=0.0005 z=  -5.8       nonmono=[] shares[1..7]=0.020 0.015 0.012 0.009 0.006 0.004 0.003
+crowd_full    a   focus      slope=+0.0080 se=0.0008 z=  +9.7       nonmono=[] shares[1..7]=0.354 0.364 0.372 0.379 0.388 0.397 0.403
+crowd_full    a   reason     slope=+0.0154 se=0.0011 z= +13.8       nonmono=[] shares[1..7]=0.308 0.336 0.356 0.379 0.388 0.394 0.403
+crowd_full    a   attunement slope=+0.0043 se=0.0006 z=  +6.8       nonmono=[] shares[1..7]=0.366 0.370 0.373 0.379 0.383 0.388 0.392
+crowd_full    a   presence   slope=+0.0854 se=0.0021 z= +39.7       nonmono=[] shares[1..7]=0.074 0.127 0.256 0.379 0.487 0.519 0.532
+crowd_full    a   grace      slope=+0.0107 se=0.0010 z= +11.3       nonmono=[] shares[1..7]=0.348 0.360 0.367 0.379 0.391 0.403 0.412
+crowd_full    a   will       slope=+0.0018 se=0.0004 z=  +4.5       nonmono=[] shares[1..7]=0.373 0.375 0.377 0.379 0.380 0.382 0.384
+crowd_full    dec focus      slope=+0.0000 se=0.0000 z=  +0.0 INERT nonmono=[] shares[1..7]=0.379 0.379 0.379 0.379 0.379 0.379 0.379
+crowd_full    dec reason     slope=+0.0220 se=0.0013 z= +16.6       nonmono=[] shares[1..7]=0.294 0.317 0.338 0.379 0.387 0.402 0.426
+crowd_full    dec attunement slope=+0.0014 se=0.0009 z=  +1.6 INERT nonmono=[] shares[1..7]=0.350 0.356 0.363 0.379 0.367 0.361 0.359
+crowd_full    dec presence   slope=+0.0000 se=0.0000 z=  +0.0 INERT nonmono=[] shares[1..7]=0.379 0.379 0.379 0.379 0.379 0.379 0.379
+crowd_full    dec grace      slope=-0.0043 se=0.0006 z=  -6.6       nonmono=[] shares[1..7]=0.393 0.389 0.383 0.379 0.374 0.371 0.367
+crowd_full    dec will       slope=-0.0604 se=0.0019 z= -31.7       nonmono=[] shares[1..7]=0.568 0.520 0.442 0.379 0.322 0.270 0.211
+question_full a   focus      slope=+0.0037 se=0.0006 z=  +6.5       nonmono=[] shares[1..7]=0.294 0.299 0.304 0.309 0.312 0.314 0.317
+question_full a   reason     slope=+0.0082 se=0.0011 z=  +7.3       nonmono=[] shares[1..7]=0.271 0.289 0.303 0.309 0.318 0.320 0.323
+question_full a   attunement slope=+0.0014 se=0.0008 z=  +1.7 INERT nonmono=[] shares[1..7]=0.315 0.314 0.313 0.309 0.317 0.321 0.322
+question_full a   presence   slope=+0.0164 se=0.0012 z= +13.8       nonmono=[] shares[1..7]=0.246 0.270 0.288 0.309 0.314 0.334 0.348
+question_full a   grace      slope=+0.0055 se=0.0008 z=  +6.5       nonmono=[] shares[1..7]=0.286 0.292 0.299 0.309 0.315 0.317 0.316
+question_full a   will       slope=+0.0121 se=0.0010 z= +11.9       nonmono=[] shares[1..7]=0.266 0.280 0.294 0.309 0.319 0.328 0.339
+question_full b   focus      slope=-0.0043 se=0.0006 z=  -7.0       nonmono=[] shares[1..7]=0.325 0.320 0.315 0.309 0.304 0.302 0.299
+question_full b   reason     slope=-0.0089 se=0.0011 z=  -7.8       nonmono=[] shares[1..7]=0.311 0.304 0.310 0.309 0.286 0.268 0.260
+question_full b   attunement slope=-0.0057 se=0.0009 z=  -6.1       nonmono=[] shares[1..7]=0.307 0.305 0.306 0.309 0.289 0.281 0.276
+question_full b   presence   slope=-0.0279 se=0.0014 z= -19.3       nonmono=[] shares[1..7]=0.407 0.364 0.333 0.309 0.277 0.255 0.238
+question_full b   grace      slope=-0.0091 se=0.0009 z= -10.1       nonmono=[] shares[1..7]=0.332 0.324 0.316 0.309 0.296 0.287 0.278
+question_full b   will       slope=-0.0507 se=0.0018 z= -28.4       nonmono=[] shares[1..7]=0.491 0.428 0.349 0.309 0.261 0.220 0.187

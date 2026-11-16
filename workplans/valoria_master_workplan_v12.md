@@ -363,7 +363,7 @@ No engine version is asserted anywhere in v12 (ED-GO-0002 is the owner).
 
 | batch | lane | ED block (declared + spare) | H block (declared + spare) |
 |---|---|---|---|
-| B24p-sc-proceeding | SC | ED-SC-0054..0056 (1+2) | H-861..H-914 (50+4) (allocated 2026-11-14 after B01a's block, on paper: `id_reservations.yaml` is bumped at the batch's opening, SC `next_free` 54 → 57; the fold map's H-856..H-909 assumed H-855 as the last id and B01a had taken H-856..H-860) |
+| B24p-sc-proceeding | SC | ED-SC-0054..0056 (1+2) | H-861..H-914 (54+0) (allocated 2026-11-14 after B01a's block, on paper: `id_reservations.yaml` is bumped at the batch's opening, SC `next_free` 54 → 57; the fold map's H-856..H-909 assumed H-855 as the last id and B01a had taken H-856..H-860) |
 | B13-pc-package | PC | ED-PC-0060..0061 (0+2) | H-404..H-408 (0+5) |
 | B16M-mb-engine-words | MB | ED-MB-0084..0085 (0+2) | H-409..H-413 (0+5) |
 | B04-capability-home | IN | ED-IN-0377..0378 (0+2) | H-414..H-419 (1+5) |

@@ -1,0 +1,47 @@
+
+== C3.1 a (for) arranges against b (no office): tilt, seats, watchers, turns, P(a carried), the price (n=400)
+  gap | rig | tilt | presiding | watchers | turns | P(a)  | price (legitimacy) 
+    0 | 0.0 | 0.00 | ['j1'] |  30 | 4 | 0.295 | 0.000
+    0 | 0.5 | 0.00 | ['j1'] |  30 | 4 | 0.295 | 0.000
+    0 | 1.0 | 0.00 | ['j1'] |  30 | 4 | 0.295 | 0.000
+    2 | 0.0 | 0.00 | ['j1'] |  30 | 4 | 0.318 | 0.000
+    2 | 0.5 | 0.38 | ['j2'] |  30 | 3 | 0.352 | 0.144
+    2 | 1.0 | 0.76 | ['j2'] |   0 | 2 | 0.438 | 0.578
+    5 | 0.0 | 0.00 | ['j1'] |  30 | 4 | 0.370 | 0.000
+    5 | 0.5 | 0.49 | ['j2'] |  30 | 3 | 0.378 | 0.240
+    5 | 1.0 | 0.99 | ['j2'] |   0 | 2 | 0.477 | 0.980
+
+== C3.2 every rig level best somewhere: the arranger's reckoning 2 x stake x P(carried) - price, by his case and his stake (gap 5)
+  a Reason 1: P(a) by rig 0.0: 0.237, 0.5: 0.347, 1.0: 0.320; best rig at stake 0.5/1/2/4: [0.0, 0.0, 0.5, 0.5]
+  a Reason 4: P(a) by rig 0.0: 0.318, 0.5: 0.450, 1.0: 0.417; best rig at stake 0.5/1/2/4: [0.0, 0.5, 0.5, 0.5]
+  a Reason 7: P(a) by rig 0.0: 0.440, 0.5: 0.573, 1.0: 0.550; best rig at stake 0.5/1/2/4: [0.0, 0.5, 0.5, 0.5]
+
+== C3.3 who arranges: tilt from power, not from a tie (the accused, rung 4, arranges against a commoner accuser)
+  b's tie to a -0.1: tilt 0.99, tilted against `for`, card names b
+  b's tie to a +0.0: tilt 0.99, tilted against `for`, card names b
+  b's tie to a +0.3: tilt 0.99, tilted against `for`, card names b
+  equals, a arranges at rig 1: tilt 0.0, the card names None
+
+== C3.4 after a rigged loss: who resents whom; who may appeal (gap 5, rig 1; n=400)
+  arranger a    a lost  -> the loser accept: 124
+  arranger a    a lost  -> the loser appeal: 37
+  arranger a    a lost  -> the loser retaliate: 7
+  arranger a    b lost  -> the loser retaliate: 180
+  arranger lord a lost  -> the loser accept: 139
+  arranger lord a lost  -> the loser appeal: 50
+  arranger lord a lost  -> the loser retaliate: 17
+  arranger lord b lost  -> the loser appeal: 140
+  arranger a    loser->judge   when a lost: mean regard -0.193 (n=168)
+  arranger a    loser->judge   when b lost: mean regard -0.193 (n=180)
+  arranger a    loser->winner  when a lost: mean regard -0.026 (n=168)
+  arranger a    loser->winner  when b lost: mean regard -0.370 (n=180)
+  arranger lord loser->judge   when a lost: mean regard -0.193 (n=206)
+  arranger lord loser->judge   when b lost: mean regard -0.193 (n=140)
+  arranger lord loser->winner  when a lost: mean regard -0.034 (n=206)
+  arranger lord loser->winner  when b lost: mean regard -0.056 (n=140)
+
+== C3.5 D1: the weak party's options before a tilted forum (gap 5): what he is shown and what he takes (n=100)
+  rig 0.5, b Reason 1: options [('accept', 0.131), ('contest', 0.038), ('elsewhere', 0.072)] -> accept (sits at rig 0.5)
+  rig 0.5, b Reason 7: options [('accept', 0.131), ('contest', 0.038), ('elsewhere', 0.072)] -> accept (sits at rig 0.5)
+  rig 1.0, b Reason 1: options [('accept', 0.116), ('contest', 0.031), ('elsewhere', 0.072)] -> accept (sits at rig 1.0)
+  rig 1.0, b Reason 7: options [('accept', 0.116), ('contest', 0.031), ('elsewhere', 0.072)] -> accept (sits at rig 1.0)

@@ -1,0 +1,36 @@
+rich tell         focus      1v7 a-beats  200 [drift:0.45 margin:0.45] | b-beats    0 [] desync 0/200
+rich tell         reason     1v7 a-beats  200 [relevance:1.00 margin:1.00] | b-beats    0 [] desync 0/200
+rich tell         attunement 1v7 a-beats  200 [] | b-beats    0 [] desync 0/200
+rich tell         presence   1v7 a-beats  200 [heard:1.00 margin:1.00] | b-beats    0 [] desync 0/200
+rich tell         grace      1v7 a-beats  200 [esteem:1.00 margin:1.00] | b-beats    0 [] desync 0/200
+rich tell         will       1v7 a-beats  200 [] | b-beats    0 [] desync 0/200
+rich conversation focus      1v7 a-beats  400 [drift:0.12 margin:0.12] | b-beats  400 [] desync 0/200
+rich conversation reason     1v7 a-beats  400 [relevance:1.00 margin:1.00] | b-beats  400 [] desync 0/200
+rich conversation attunement 1v7 a-beats  400 [] | b-beats  400 [] desync 0/200
+rich conversation presence   1v7 a-beats  400 [margin:1.00] | b-beats  400 [] desync 0/200
+rich conversation grace      1v7 a-beats  400 [drift:0.04 esteem:1.00 broke:0.28 margin:1.00] | b-beats  400 [esteem:1.00 margin:1.00 rattled:0.21] desync 0/200
+rich conversation will       1v7 a-beats  400 [drift:0.07 esteem:0.17 broke:0.28 margin:0.28] | b-beats  400 [esteem:0.17 margin:1.00 rattled:0.35] desync 0/200
+rich trial        focus      1v7 a-beats  400 [drift:0.16 margin:0.16] | b-beats  400 [drift:0.01 margin:0.12 rattled:0.01 evaded:0.02] desync 0/200
+rich trial        reason     1v7 a-beats  400 [drift:0.14 relevance:1.00 esteem:0.02 margin:1.00] | b-beats  400 [drift:0.25 esteem:0.02 margin:0.97 rattled:0.09 evaded:0.36] desync 0/200
+rich trial        attunement 1v7 a-beats  400 [drift:0.04 frame:0.51 esteem:0.00 margin:0.54] | b-beats  400 [drift:0.09 esteem:0.00 margin:0.60 rattled:0.01 evaded:0.03] desync 0/200
+rich trial        presence   1v7 a-beats  400 [drift:0.12 heard:1.00 esteem:0.01 margin:1.00] | b-beats  400 [drift:0.22 esteem:0.01 margin:0.95 rattled:0.07 evaded:0.27] desync 0/200
+rich trial        grace      1v7 a-beats  400 [drift:0.21 esteem:1.00 broke:0.29 margin:1.00] | b-beats  400 [drift:0.20 esteem:1.00 margin:1.00 rattled:0.38 evaded:0.24] desync 0/200
+rich trial        will       1v7 a-beats  400 [drift:0.13 esteem:0.21 broke:0.28 margin:0.50] | b-beats  400 [drift:0.07 esteem:0.21 margin:1.00 rattled:0.45 evaded:0.05] desync 0/200
+rich rally        focus      1v7 a-beats  400 [drift:0.10 margin:0.10] | b-beats    0 [] desync 0/200
+rich rally        reason     1v7 a-beats  400 [drift:0.10 relevance:1.00 margin:1.00] | b-beats    0 [] desync 0/200
+rich rally        attunement 1v7 a-beats  400 [drift:0.04 frame:0.38 margin:0.39] | b-beats    0 [] desync 0/200
+rich rally        presence   1v7 a-beats  400 [drift:0.11 heard:1.00 margin:1.00] | b-beats    0 [] desync 0/200
+rich rally        grace      1v7 a-beats  400 [drift:0.11 esteem:1.00 margin:1.00] | b-beats    0 [] desync 0/200
+rich rally        will       1v7 a-beats  400 [] | b-beats    0 [] desync 0/200
+rich questioning  focus      1v7 a-beats  400 [] | b-beats  400 [] desync 0/200
+rich questioning  reason     1v7 a-beats  400 [relevance:1.00 margin:1.00] | b-beats  400 [] desync 0/200
+rich questioning  attunement 1v7 a-beats  400 [] | b-beats  400 [] desync 0/200
+rich questioning  presence   1v7 a-beats  400 [margin:1.00] | b-beats  400 [] desync 0/200
+rich questioning  grace      1v7 a-beats  400 [esteem:1.00 margin:1.00] | b-beats  400 [esteem:1.00 margin:1.00] desync 0/200
+rich questioning  will       1v7 a-beats  400 [] | b-beats  400 [margin:1.00] desync 0/200
+rich debate       focus      1v7 a-beats  400 [drift:0.19 margin:0.19] | b-beats  400 [drift:0.01 margin:0.15 rattled:0.01] desync 0/200
+rich debate       reason     1v7 a-beats  400 [drift:0.16 relevance:1.00 esteem:0.03 margin:1.00] | b-beats  400 [drift:0.15 esteem:0.03 margin:0.97 rattled:0.07] desync 0/200
+rich debate       attunement 1v7 a-beats  400 [drift:0.07 frame:0.53 esteem:0.00 margin:0.56] | b-beats  400 [drift:0.05 esteem:0.00 margin:0.61 rattled:0.00] desync 0/200
+rich debate       presence   1v7 a-beats  400 [drift:0.16 heard:1.00 esteem:0.03 margin:1.00] | b-beats  400 [drift:0.16 esteem:0.03 margin:0.98 rattled:0.07] desync 0/200
+rich debate       grace      1v7 a-beats  400 [drift:0.20 esteem:1.00 broke:0.28 margin:1.00] | b-beats  400 [drift:0.12 esteem:1.00 margin:1.00 rattled:0.33] desync 0/200
+rich debate       will       1v7 a-beats  400 [drift:0.11 esteem:0.20 broke:0.27 margin:0.50] | b-beats  400 [drift:0.05 esteem:0.20 margin:1.00 rattled:0.42] desync 0/200

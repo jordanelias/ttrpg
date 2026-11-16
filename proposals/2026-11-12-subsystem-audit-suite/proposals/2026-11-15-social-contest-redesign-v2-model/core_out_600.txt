@@ -1,0 +1,94 @@
+
+== D1 a bench verdict reads the sitting (trial, all-mid, effort 3; control arm: track_step 0)
+  shipped                carried 0.333 | by the presiding seat's track: <=-3 n=111 0.081  (-3,0) n=167 0.168  [0,3) n=195 0.421  >=3 n=127 0.638
+  control track_step=0   carried 0.295 | by the presiding seat's track: <=-3 n=111 0.297  (-3,0) n=167 0.251  [0,3) n=195 0.303  >=3 n=127 0.339
+  excommunication (declared, quorum 2, three church seats): carried 0.223  [before: 0/2000]
+  R11 trial arm: speaker Reason 1/4/7 -> carried {1: 0.2816666666666667, 4: 0.31833333333333336, 7: 0.31833333333333336}  slope +0.0061 z +1.4
+
+== D2 the centre (abridged conversation = tell; equals, rank 1, routine)
+  shipped                      fail 0.562 partial 0.159 carried 0.279   [A-79: .59/.16/.25; before: carried .53-.70]
+  controls                     fail 0.562 partial 0.159 carried 0.279   [A-79: .59/.16/.25; before: carried .53-.70]
+  shipped, routine set to 0.8  fail 0.615 partial 0.139 carried 0.246   [A-79: .59/.16/.25; before: carried .53-.70]
+  full conversation  equals: carried 0.373
+  full trial         equals: carried 0.353
+  full rally         equals: carried 0.273
+  control equality: abridged margin == the one roll (dice.roll) on the same key: 200/200
+
+== D3 the rattle economy
+  shipped                            `for` carried when the respondent was rattled more: 0.462 (n=173); when `for` was: 0.160 (n=175)
+  trial vs a Will-2 Grace-2 respondent, `for` opens with one press, then argues    carried 0.578; control (a rattle does nothing) 0.490
+  trial vs a Will-2 Grace-2 respondent, `for` argues only                          carried 0.473; control (a rattle does nothing) 0.473
+  trial vs a Will-2 Grace-2 respondent, `for` presses only                         carried 0.742; control (a rattle does nothing) 0.530
+  questioner carried, questioned rite (only the questioner presses): 0.408   [before: .26 questioned vs .34 contest: the script helped the accused]
+  questioner carried, contest rite (both may press): 0.373   [before: .26 questioned vs .34 contest: the script helped the accused]
+  questioning a Will-2 Grace-2 man: ends {('budget', True): 199, ('yielded', True): 232, ('yielded', False): 79, ('rested', True): 48, ('budget', False): 42}  (yielded while rattled = 'broken'; before: unreachable)
+  dominance: P(`for` carried), rows = `for` chooser, cols = `against` chooser (view-only choosers)
+   conversation all-mid:          auto  smart  argue  press   rest random
+     for=auto    0.380  0.380  0.410  0.337  0.283  0.410
+     for=smart   0.380  0.380  0.410  0.337  0.283  0.410
+     for=argue   0.307  0.307  0.320  0.237  0.300  0.303
+     for=press   0.363  0.363  0.487  0.340  0.263  0.460
+     for=rest    0.303  0.303  0.313  0.327  0.263  0.387
+     for=random  0.270  0.270  0.320  0.257  0.223  0.313
+   conversation vs Will-2 Grace-2:          auto  smart  argue  press   rest random
+     for=auto    0.440  0.407  0.573  0.433  0.377  0.527
+     for=smart   0.440  0.407  0.573  0.433  0.377  0.527
+     for=argue   0.487  0.473  0.517  0.347  0.390  0.450
+     for=press   0.360  0.353  0.630  0.410  0.283  0.547
+     for=rest    0.303  0.317  0.483  0.367  0.263  0.430
+     for=random  0.340  0.340  0.470  0.303  0.257  0.397
+   trial all-mid:          auto  smart  argue  press   rest random
+     for=auto    0.337  0.337  0.557  0.450  0.243  0.467
+     for=smart   0.337  0.337  0.557  0.450  0.243  0.467
+     for=argue   0.170  0.170  0.363  0.153  0.197  0.340
+     for=press   0.277  0.277  0.600  0.373  0.180  0.453
+     for=rest    0.363  0.363  0.483  0.393  0.260  0.363
+     for=random  0.220  0.220  0.417  0.227  0.223  0.383
+
+== D4 strain carried does not ratchet (11 sittings, one rest between; the same pair)
+  strain carried in at each sitting (pressed every exchange): [0.0, 0.25, 0.5, 0.25, 0.5, 0.25, 0.5, 0.5, 0.5, 0.5, 0.25]   [before: 0 -> 5.8-9]
+
+== D5 who opens (conversation, all-mid, effort 3)
+  speeches over 300 trials: {'a': 1163, 'b': 1158}; `for` opens: carried 0.368; `against` opens: 0.280; diff +0.088 +- 0.028   [before: .433 vs .257]
+
+== D6 the act's margin under consent (negotiation)
+  graded Success or better: 218/600; of those with the other party's track against the actor: 0   [before: 198/2000]
+
+== D7 a type is not a name
+  bench rows: sittings whose band changes when a crowd is on the floor: {'trial': 72, 'debate': 55, 'inquisition': 0} of 300   [before: 0 of 200 on every bench row; inquisition's floor is closed]
+  per rite (cast, effort 3, automatic): moves, relations, ends, mean beats, carried
+   conversation  {'argue': 1319, 'concede': 190, 'press': 554, 'rest': 1} {'raises': 1247, 'concedes': 190, 'presses': 554, 'answers': 72, 'rests': 1} {'yielded': 190, 'budget': 210} beats 5.2 carried 0.42
+   negotiation   {'argue': 1124, 'press': 727, 'concede': 207, 'rest': 1} {'raises': 1028, 'presses': 727, 'answers': 96, 'concedes': 207, 'rests': 1} {'budget': 193, 'yielded': 207} beats 5.1 carried 0.37
+   questioning   {'argue': 2130, 'concede': 247, 'rest': 39, 'press': 2} {'raises': 1508, 'answers': 622, 'concedes': 247, 'rests': 39, 'presses': 2} {'yielded': 247, 'budget': 153} beats 6.0 carried 0.54
+   inquisition   {'argue': 2010, 'concede': 406, 'rest': 450, 'press': 24} {'raises': 1509, 'answers': 501, 'concedes': 406, 'rests': 450, 'presses': 24} {'yielded': 185, 'budget': 215} beats 7.2 carried 0.55
+   trial         {'argue': 1124, 'press': 1789, 'concede': 193, 'rest': 92} {'raises': 1050, 'presses': 1789, 'concedes': 193, 'answers': 74, 'rests': 92} {'budget': 391, 'yielded': 8, 'rested': 1} beats 8.0 carried 0.51
+   debate        {'argue': 444, 'concede': 287, 'press': 1421, 'rest': 71} {'raises': 428, 'concedes': 287, 'presses': 1421, 'answers': 16, 'rests': 71} {'yielded': 287, 'budget': 96, 'rested': 17} beats 5.6 carried 0.40
+   rally         {'argue': 1188, 'rest': 7} {'raises': 1188, 'rests': 7} {'budget': 393, 'rested': 7} beats 3.0 carried 0.48
+   audience      {'argue': 797, 'rest': 2} {'raises': 797, 'rests': 2} {'budget': 398, 'rested': 2} beats 2.0 carried 0.52
+  every move occurs: {'argue': 10136, 'concede': 1530, 'press': 4517, 'rest': 663}; every end occurs: {'yielded': 1124, 'budget': 2049, 'rested': 27}
+  settings: 39 of the proceeding's own; inert under perturbation over the battery: none   [before: 9 of 53]
+
+== D8 the decider's three, each on one operand; lean; saturation
+  decider reason     1/4/7 -> carried {1: 0.23, 4: 0.265, 7: 0.2966666666666667} slope +0.0111 z +2.6 | its own setting off: slope +0.0000 (dead operand reads 0: the gate cannot pass)
+  decider focus      1/4/7 -> carried {1: 0.23666666666666666, 4: 0.22666666666666666, 7: 0.22} slope -0.0028 z -0.7 | its own setting off: slope +0.0000 (dead operand reads 0: the gate cannot pass)
+  decider attunement 1/4/7 -> carried {1: 0.285, 4: 0.265, 7: 0.25333333333333335} slope -0.0053 z -1.2 | its own setting off: slope +0.0000 (dead operand reads 0: the gate cannot pass)
+  Reason steers both ways: a mannered speaker before the same decider: slope -0.0139 z -2.9
+  hearer's regard -1: sittings ending with his track in [3,5): 109; carried 0.541+-0.048   [before: .27 hostile vs .80 friendly at the same track]
+  hearer's regard +0: sittings ending with his track in [3,5): 56; carried 0.518+-0.067   [before: .27 hostile vs .80 friendly at the same track]
+  hearer's regard +1: sittings ending with his track in [3,5): 17; carried 0.294+-0.111   [before: .27 hostile vs .80 friendly at the same track]
+  no clamp: P(carried) by the decider's track [(0, 0.277), (3, 0.491), (6, 0.657), (9, 0.745), (12, 0.785)]   [before: one speech filled the track in 45-52% of openings]
+  sign of a concession: `for` conceding at every chance carries 0.118 vs 0.305 when he does not
+
+== ROLES the speaker's six (slope of carried per point; z) at the abridged conversation and in full sittings
+  tell (abridged)  focu +0.000(+0)  reas +0.049(+11)  attu +0.004(+1)  pres +0.020(+4)  grac +0.034(+8)  will +0.000(+0)
+  conversation     focu +0.006(+1)  reas +0.025(+5)  attu +0.003(+1)  pres +0.014(+3)  grac +0.012(+3)  will +0.026(+5)
+  trial            focu +0.006(+1)  reas +0.011(+2)  attu +0.000(+0)  pres +0.010(+2)  grac +0.013(+3)  will +0.011(+2)
+  rally            focu +0.000(+0)  reas +0.019(+4)  attu +0.002(+0)  pres +0.032(+7)  grac +0.019(+4)  will +0.000(+0)
+  the hearer's Will at the tell: slope -0.0494 z -12.1
+
+== DETERMINISM, DRAW COUNTS, MIRROR
+  same key, same outcome: 50/50; draw counts asserted in proceed/_close on every run above
+  mirror: equals, mean track +0.728 +- 0.428 (0 = neither side favoured)
+
+== R13 CONTINUITY and CARD invariants (every rite, cast, 300 sittings each, automatic and random choosers)
+  beats checked 12349; violations: {'chain': 0, 'no point': 0, 'answers nothing': 0, 'item not held': 0, 'item not admitted': 0, 'closed issue re-argued': 0, 'move not on the card': 0, 'evasion unpriced': 0, "over the card's turns": 0, 'deciders != card': 0, 'track != lean + beats': 0}

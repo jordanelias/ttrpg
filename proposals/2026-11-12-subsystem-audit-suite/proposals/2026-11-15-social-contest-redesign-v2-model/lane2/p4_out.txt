@@ -1,0 +1,9 @@
+(a/b) legal_trial [2,5], effort 7: (end1, nx1, end2, nx2, n2) counts:
+    ('budget', 5, 'budget', 0, 5) 175
+    ('yielded', 5, 'budget', 0, 5) 104
+    ('broken', 4, 'broken', 1, 5) 17
+    ('broken', 5, 'budget', 0, 5) 4
+    yielded sittings resumed -> (exchanges in resumed sitting, end): {(0, 'budget'): 673}
+    o1.state.n 5 sides resolve [1.0, 1.0]
+(c) no concede: recomputed track != module track in 0/500
+(c) concede p=.3: recomputed track != module track in 168/500

@@ -1,0 +1,1 @@
+rally        (for, vs automatic; n=800, se~0.017): auto 0.246 | argue 0.190 | press 0.246 | rest 0.287 | concede 0.246 | answer_else_rest 0.287 | press_then_argue 0.221
