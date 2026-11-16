@@ -714,7 +714,7 @@ Reading (hand-read): all seven are notes, not dependencies — each clause says 
 | `engine/dice_engine/fmath.py` | B06 | B06.01 |
 | `tools/export_oracle_draws.py` | struck (C3-L3) | none builds it; B06.02 names it |
 | `explain` / `Derivation` | B34 | B34.05 |
-| `DuelRoundInput`; `ProceedingInput`, `Speaker` | B16; B24 | B16.04; B24.05 |
+| `DuelRoundInput`; `Input`, `Present` | B16; B24 | B16.04; B24.05 |
 | the `entry:` kind for `combat.round`; the nested entry | B30 | B30 (`U5b_PC_rulings_in_the_fight` §1; the script's match on the generic token `entry:` is not a carrier) |
 | the seat row's `modifier:` | B05 | B05.06, B05.07 |
 | `person_q.present_persons`, `person_q.holders_named` | B11 | B11.08 |
