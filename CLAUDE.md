@@ -89,8 +89,8 @@ is reported in. Name the conflict; never silently rank them.
   deliverable named and its one pass applied is the stop condition: *"more could be checked"* is not a reason.
 - **NO MANUFACTURED FINDINGS; NO OVERRULED OR OFF-INTENT FIXES; REFINE BEFORE YOU BUILD.** (1) Report only
   a problem you observed (a `file:line` or a command's output). An audit, review or critic that finds
-  nothing says *"it is fine"* and stops, the answer Jordan values most when it is true; never invent or
-  pad findings to look productive. (2) Do not propose
+  nothing says *"it is fine"*, and may say why (what was checked and held), then stops: the answer Jordan
+  values most when it is true. Never invent or pad findings to look productive. (2) Do not propose
   a correction that a ruling, ledger row or precedent has already overruled, or that conflicts with the
   game's intent (§0.06, P-01..P-15); check before proposing. (3) Do not build while the issue can be
   resolved by simplifying or refining what exists (edit the owner, cut, reuse). If you must build, build it
