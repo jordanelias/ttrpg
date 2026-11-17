@@ -1371,6 +1371,11 @@ rosters:
     values: [gain, add, floor]
   capability_key_selectors:
     values: [verb, verb.base]
+  # B04.10 (DEF Edit 2): the keys a row's `when` may carry. `rank_at_least: <n>` holds when the holder's SKILL rank (the held rank
+  # on the row's `scale`, never a seat rank) in the row's `key` is at least `n`: it selects which of two rows on one key apply
+  # (`data/rosters.py::when_holds`), and is never a condition of attempting an act (A-11: a `gate` row takes no `when`).
+  capability_when_keys:
+    values: [rank_at_least]
 
   # A-11 (U1 §3 item 5): a `gate` row is closed to its one held value, at the two sites that gate on it.
   capability_gate_keys:

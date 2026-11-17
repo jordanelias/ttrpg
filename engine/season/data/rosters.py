@@ -1391,6 +1391,46 @@ def _capability_role_fields(roles) -> dict:
     return out
 
 
+def _refuse_when(i, row, when, when_keys, refuse) -> None:
+    """A row's `when`, closed against `capability_when_keys` (B04.10). `rank_at_least: n` names a whole skill rank on the row's
+    own scale, above its floor (every holder is at the floor) and at most its ceiling (nobody is above it), and the row's `key`
+    must be a skill: only a skill has a held rank. Nothing else about a skill's rank is read by a row."""
+    from engine.substrate import descriptors as _desc
+    unknown = [k for k in when if k not in when_keys]
+    if unknown:
+        refuse(i, row, f"has `when` key {unknown[0]!r}", f"only {sorted(when_keys)}",
+               "MAP §C -- the `when` keys are a closed roster; an unregistered one is a condition nothing reads")
+    if "rank_at_least" in when:
+        n, key = when["rank_at_least"], row["key"]
+        if key not in _desc.CAPABILITIES:
+            refuse(i, row, f"has `rank_at_least` on key {key!r}, which is not a skill", "a skill key",
+                   "DEF Edit 2 -- `rank_at_least` reads the holder's skill rank; only a skill has one")
+        cap = _desc.capability(key)
+        if isinstance(n, bool) or not isinstance(n, int) or not cap.floor < n <= cap.ceiling:
+            refuse(i, row, f"has `rank_at_least` {n!r}", f"a whole rank above {cap.floor} and at most {cap.ceiling} (the scale of {key!r})",
+                   "DEF Edit 2 -- a rank outside the row's `scale` selects nothing or everything")
+
+
+def when_holds(row: CapabilityUse, holder) -> bool:
+    """WHETHER `row`'s `when` holds for `holder` (B04.10) -- the one comparison, which a reader of the rows calls to select them.
+
+    A row with no `when` holds for everyone. `rank_at_least: n` holds when `holder.capability` -- his HELD skill ranks -- has
+    the row's `key` at `n` or more; a holder who holds no rank in the skill is at 0 and fails it. It reads the skill rank, never a
+    seat rank, and it is never a condition of attempting an act (A-11): it selects which rows apply, and the loader refuses it on
+    a `gate` row. The loader has closed `when` to `capability_when_keys`, so a key read here and not named is a refusal."""
+    when = row.when
+    if not when:
+        return True
+    for k, n in when.items():
+        if k != "rank_at_least":
+            raise Unspecified(f"`when` key {k!r} has no comparison", _CAPABILITY_USES_WHERE,
+                              needs=f"a comparison for {k!r} here, or remove it from `capability_when_keys`",
+                              law="MAP §C -- a closed `when` key is read by one function; a registered key nothing reads silently holds")
+        if ((getattr(holder, "capability", None) or {}).get(row.key, 0)) < n:
+            return False
+    return True
+
+
 def _load_capability_uses(rows, fixtures) -> tuple:
     """`tuple[CapabilityUse]`, every row refused by name if it is malformed (U1-A step 4; USES "Closed both ways"; MAP §G edit 2).
 
@@ -1405,6 +1445,7 @@ def _load_capability_uses(rows, fixtures) -> tuple:
     sides, pers, selectors = roster("capability_sides"), roster("capability_per"), roster("capability_key_selectors")
     gate_keys, gate_sites = roster("capability_gate_keys"), roster("capability_gate_sites")
     fixture_cols = roster("capability_fixture_columns", ordered=True)
+    when_keys = roster("capability_when_keys")
     if not isinstance(rows, (list, tuple)) or not rows:
         raise Unspecified("`tables: capability_uses` has no `rows:`", _CAPABILITY_USES_WHERE,
                           needs="the uses rows", law="ED-IN-0230 -- a declared-but-empty table is the defect the loaders refuse")
@@ -1458,6 +1499,8 @@ def _load_capability_uses(rows, fixtures) -> tuple:
             refuse(i, row, f"has against {row['against']!r}", "true or false", "U1 §3 item 3 -- `against` is a boolean")
         if "when" in row and not isinstance(row["when"], dict):
             refuse(i, row, "has a `when` that is not a mapping", "a mapping of condition keys", "MAP §C -- `when` is a condition")
+        if isinstance(row.get("when"), dict):
+            _refuse_when(i, row, row["when"], when_keys, refuse)
         for col in fixture_cols:
             if row.get(col) is not None and (not isinstance(row[col], str) or row[col] not in fixtures):
                 refuse(i, row, f"has {col} {row[col]!r}, which is not a registered Fixture",

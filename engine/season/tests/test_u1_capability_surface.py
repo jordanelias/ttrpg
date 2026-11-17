@@ -817,3 +817,57 @@ def test_an_authored_capability_wins_over_the_lifepath(monkeypatch):
     assert w.persons["p_npc_087"].capability == {"inquiry": 5, "arms": 4}
     assert w.persons["p_npc_084"].capability == {"inquiry": default}
     assert w.persons["p_npc_086"].capability == {}
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# B04.10 -- `rank_at_least` AS A `when` KEY (CAP A7; DEF Edit 2). The closed `when` roster is `rosters.yaml:
+# capability_when_keys`; the loader refuses a key outside it and a `rank_at_least` it cannot read; `rosters.when_holds` is the
+# one comparison, which the `edge` reader (B05) calls. No row ships, so each test plants the rows it reads. The tests read the
+# SELECTED ROWS from the comparison, not a roll: the arm that turns levels into sigma lands in B05.
+# ---------------------------------------------------------------------------------------------------------------------
+
+def _rank_rows(**when_for_second):
+    """Two `edge` rows on one skill at one site -- the first unconditioned, the second under the planted `when`."""
+    first = dict(use="social_roll", role="edge", key="inquiry", side="actor", per="rank", level="minor")
+    second = dict(first, level="strong", when=dict(when_for_second))
+    return [first, second]
+
+
+def test_rank_at_least_selects_a_second_use_row():
+    """FALSIFIER: "(d)'s two holders read alike". With a second row under `rank_at_least: 3`, a holder at skill rank 2 and one at
+    rank 3 select different rows, read as the level names (`==`, not `approx`); a person who holds no rank in the skill reads
+    as rank 0 and selects the unconditioned row alone; and the row with no `when` holds for everyone."""
+    from engine.season.data import rosters
+    loaded = rosters._load_capability_uses(_rank_rows(rank_at_least=3), _fixture_values())
+    assert [r.when for r in loaded] == [None, {"rank_at_least": 3}]
+    levels = lambda holder: [r.level for r in loaded if rosters.when_holds(r, holder)]
+    assert levels(_holder(inquiry=2)) == ["minor"]
+    assert levels(_holder(inquiry=3)) == ["minor", "strong"]
+    assert levels(_holder(inquiry=7)) == ["minor", "strong"]
+    assert levels(_holder()) == ["minor"] and levels(_holder(arms=7)) == ["minor"]
+    assert levels(_holder(inquiry=2)) != levels(_holder(inquiry=3))
+
+
+def test_a_rank_at_least_the_loader_cannot_read_is_refused():
+    """`rank_at_least` is a closed `when` key that names a skill rank on the row's scale: an unknown `when` key, a key that is no
+    skill (an attribute, a trait), a bool, a fraction or a numeric string, a rank outside the scale, and a `gate` row (which takes
+    no `when`: A-11) each refuse naming the row; the control rows load."""
+    from engine.season.data import rosters
+    ceiling = descriptors.capability("inquiry").ceiling
+    assert rosters.roster("capability_when_keys") == frozenset({"rank_at_least"})
+    assert _refused(_rank_rows(rank_at_least=ceiling)) is None and _refused(_rank_rows(rank_at_least=1)) is None
+    msg = _refused(_rank_rows(sunset=3))
+    assert msg is not None and "sunset" in msg and "when" in msg, msg
+    for bad in (True, 2.5, "3", None, 0, ceiling + 1):
+        msg = _refused(_rank_rows(rank_at_least=bad))
+        assert msg is not None and "rank_at_least" in msg, (bad, msg)
+    for key in (descriptors.attribute_key("Attunement"), "moved_by_evidence"):
+        rows = _rank_rows(rank_at_least=3)
+        rows[1]["key"] = key
+        if key in descriptors.TRAITS:
+            rows[1].update(per="held")
+        msg = _refused(rows)
+        assert msg is not None and "rank_at_least" in msg and key in msg, (key, msg)
+    gate = dict(_shipped_row("gate"), when={"rank_at_least": 3})
+    msg = _refused([gate])
+    assert msg is not None and "when" in msg, msg

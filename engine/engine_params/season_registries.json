@@ -2245,6 +2245,11 @@
             "verb.base"
           ]
         },
+        "capability_when_keys": {
+          "values": [
+            "rank_at_least"
+          ]
+        },
         "capability_gate_keys": {
           "values": [
             "prac.thread_sensitivity"
