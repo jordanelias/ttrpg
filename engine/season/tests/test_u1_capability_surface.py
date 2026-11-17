@@ -704,3 +704,25 @@ def test_a_refused_roll_carries_fed_by_too():
     out = _arrest_roll(DEFAULT_FIXTURES.sweep("obstacle_refusal_multiple", 0))
     assert out["status"] == "REFUSED"
     assert tuple((f[0], f[1]) for f in out["fed_by"]) == (("social_roll", "dice"), ("social_roll", "opposes"))
+
+
+# --- B04.14: one Endurance default in a fight -------------------------------------------------------------------
+
+def test_party_end_default_is_the_combat_exports(monkeypatch):
+    """`party_end` of a person who authors no Endurance, with no body bands, is the combat module's own default for
+    `end` as `engine/engine_params/combat_engine_v1.json: sections.attributes.end.default` exports it -- read off the
+    JSON here, not off the wrapper. FALSIFIER: patch the wrapper's one module-level read to 5 and the answer reads 5
+    (a literal `4` in `party_end` would ignore the patch)."""
+    import json
+    from engine.season.harness import probes as P
+    from engine.season.data.fixtures import DEFAULT_FIXTURES
+    from engine.season.seam.wrappers import combat
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "engine_params", "combat_engine_v1.json")
+    with open(path, encoding="utf-8") as fh:
+        exported = json.load(fh)["sections"]["attributes"]["end"]["default"]
+    w = P.tiny_world()
+    person = next(iter(w.persons.values()))
+    person.attributes.pop(combat._END_KEY, None)
+    assert combat.party_end(person, DEFAULT_FIXTURES) == exported
+    monkeypatch.setattr(combat, "_END_DEFAULT", 5)
+    assert combat.party_end(person, DEFAULT_FIXTURES) == 5
