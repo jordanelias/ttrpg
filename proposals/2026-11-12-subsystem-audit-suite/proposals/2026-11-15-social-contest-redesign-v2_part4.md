@@ -367,7 +367,7 @@ an inquisitor who presses instead of putting his charge is noted though his sile
 **The full battery against `v8_out.txt`** (`fix3/v9_out.txt`, after every item and cut, n = 300 an arm unless stated;
 its process stopped once at `bitems`, which called the old `conflict`; the call was moved to the new owner and the
 battery continued from that probe on the same model, as `checks_v8.py 300 bitems`). **Held:** every invariant 0
-(12,425 beats); the abridged form equals the plain roll at control, 200/200; 50 seeds, 50 hashes, the same seed twice
+(12,426 beats on the final model); the abridged form equals the plain roll at control, 200/200; 50 seeds, 50 hashes, the same seed twice
 the same hash; 6G+11 draws asserted on every exchange; A-139 (one man in both cells in 800 of 1,600 sittings, as
 before); A-146 (lane C's policy probe on the fixed model, `fix3/policies_after.out`: 5,074 beats with a broken
 temper, a rest where another move was legal in 0; no policy above 0.90 where the automatic one is below 0.80, in any
@@ -380,7 +380,7 @@ between equals at the shipped settings 0.302 -> 0.239 (at controls 0.302 both), 
 C3.2's P(a) at gap 5 and Reason 4 by rig 0.330 / 0.433 / 0.473 -> 0.333 / 0.377 / 0.413; (6) the commune: the accused
 who rests 0.302 -> 0.518, silence's cost to him +0.040 -> +0.213; (7) the card: the debate's odds 0.277 -> 0.187;
 (8) the seasons: appeals 429 -> 275 (three seasons) and 981 -> 428 (twelve), grievances docketed at the end 2.83 ->
-3.40 and 4.50 -> 5.80 (item 8's open grievance loop); (14) brute: Grace 4 at power 3 / 5, 0.41 / 0.49 -> 0.00 / 0.17;
+3.40 and 4.50 -> 5.80 (item 8's open grievance loop, closed in R3: 5.80 -> 1.44 a run); (14) brute: Grace 4 at power 3 / 5, 0.41 / 0.49 -> 0.00 / 0.17;
 (15) the gap: a trial with nobody against 0.287 -> 0.323; (18) the press: a debate's presses 591 -> 79 of its moves,
 and the battery's debate arms that provoke a man who has said nothing (A-146's debate arm, C4.1's grid) no longer
 fire (he rests; nothing stands against him): A-146 is read in the policy probe above and C4 in the trial (C4.3: 293

@@ -77,7 +77,7 @@ stood, kept in `fix2/before/`.
 | audience | 297 : 0 : 0 : 2 | 0 : 297 | budget 148, rested 2 | O 58, S 41, P 13, F 38 |
 
 Conversation (all-mid, n = 300): carried 0.353 (O 20, S 86, P 40, F 154). Negotiation (all-mid): accepted 45,
-withdrawn 19, impasse 236. Invariants over 12,712 beats (and 8,815 in the A-139 run, someone holding both cells in
+withdrawn 19, impasse 236. Invariants over 12,426 beats (and 8,629 in the A-139 run, someone holding both cells in
 800 of 1,600 sittings): **0 violations** of: the beats chain; an argued beat names its point; an answer addresses
 the other side's point; an item is held and admitted; no conceded issue is re-argued; no barred move; a priced
 beat moves the room; only a speaker who decides moves his own track; nobody exceeds the card's turns; the verdicts
