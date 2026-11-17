@@ -615,7 +615,7 @@ foreign_seats:
     revocation: null
     holder:     "NPC-089"
     obligees:   []
-    source:     "references/npc_registry.yaml NPC-089 (`role: Katepano (frontier governor)`; `arc_trajectory`: \"Decides whether Altonia probes, presses, or invades\")"
+    source:     "references/npc_registry.yaml NPC-089 (`role: Katepano (frontier governor)`; his former registry arc sentence: \"Decides whether Altonia probes, presses, or invades\", now a comment on his case entry in `cases/NPC5.yaml`)"
     note:       "[NEW]. The empire's head (`rosters.yaml: faction_leaders`). `conferral`/`revocation` null: canon names no way the empire fills or strips the post."
 
   - id:         off_kommerkiarios
@@ -628,5 +628,5 @@ foreign_seats:
     revocation: null
     holder:     "NPC-090"
     obligees:   []
-    source:     "references/npc_registry.yaml NPC-090 (`role: Kommerkiarios (trade prefect at Schoenland interface)`; `arc_trajectory`: \"Enforces ancient trade treaties\")"
+    source:     "references/npc_registry.yaml NPC-090 (`role: Kommerkiarios (trade prefect at Schoenland interface)`; his former registry arc sentence: \"Enforces ancient trade treaties\", now a comment on his case entry in `cases/NPC5.yaml`)"
     note:       "[NEW]. The Kommerkiarios, trade prefect at the Schoenland interface. FA-01 (not built here) names which seat offers the trade demand."

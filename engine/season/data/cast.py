@@ -81,6 +81,24 @@ _PAREN = re.compile(r"^(?P<base>[^(]+?)\s*\((?P<inner>[^)]*)\)?(?P<tail>.*)$")
 
 _CACHE: Optional[dict] = None
 
+#: Keys authored on the row that NO reader takes, declared so (B04.12, CAP A7 / DEF Edit 4): threadwork's tracks, with no reader
+#: until that lane builds one. A key leaves this tuple by gaining a reader (and joining the registry's `schema:` block) or by
+#: leaving the registry. The keys a row MAY carry are the registry's own `schema: required` + `optional` (`row_keys`); `_rows()`
+#: refuses a row carrying a key in neither those nor this tuple, so a fact authored on a row that nothing reads cannot sit there unseen.
+UNREAD_KEYS = ("certainty", "coherence")
+
+
+def row_keys(data: dict) -> frozenset:
+    """The keys a cast row may carry: the registry's `schema: required` + `optional`, read from the parsed file. Raises
+    `Unspecified` if either list is missing -- a registry that declares no keys would let every key through."""
+    schema = (data or {}).get("schema") or {}
+    lists = [schema.get(name) for name in ("required", "optional")]
+    if not all(isinstance(v, list) and v for v in lists):
+        raise Unspecified("the cast registry's `schema:` block", "references/npc_registry.yaml",
+                          needs="`schema: required` and `optional` as lists of row keys",
+                          law="CAP A7 / DEF Edit 4 -- the loader refuses a key it cannot check against a declared set")
+    return frozenset(str(k) for v in lists for k in v)
+
 
 def _rows() -> dict:
     """`{case_id: row}` from the registry, read once and kept.
@@ -99,7 +117,16 @@ def _rows() -> dict:
                 law="a cast read from nothing is a cast invented from a hash, which is the "
                     "behaviour this loader replaces") from exc
         data = load_yaml(text) or {}
-        _CACHE = {str(r["id"]): r for r in (data.get("characters") or []) if r.get("id")}
+        rows = {str(r["id"]): r for r in (data.get("characters") or []) if r.get("id")}
+        allowed = row_keys(data) | set(UNREAD_KEYS)
+        for cid, r in rows.items():
+            stray = [k for k in r if k not in allowed]
+            if stray:
+                raise Unspecified(
+                    f"cast row {cid} carries {stray}, which the registry's `schema:` block does not declare and `UNREAD_KEYS` does not list",
+                    "references/npc_registry.yaml", needs="a key in `schema: required`/`optional` (it has a reader) or in `cast.UNREAD_KEYS`, or no key",
+                    law="CAP A7 / DEF Edit 4 -- a cast row carries only keys a reader takes or that are declared unread")
+        _CACHE = rows
     return _CACHE
 
 
@@ -204,7 +231,7 @@ def pursuits_of(r: dict) -> dict:
     if isinstance(block, dict):
         for group, rows in block.items():
             if not isinstance(rows, list):
-                continue                # `cultural_label` / `self_other_initial` sit here too
+                continue
             for entry in rows:
                 if isinstance(entry, dict) and entry.get("conviction") is not None:
                     out[pursuit(str(entry["conviction"]))] = float(entry.get("weight") or 0.0)

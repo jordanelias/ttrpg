@@ -929,3 +929,49 @@ def test_a_bare_bundle_id_keeps_the_untrained_value(monkeypatch):
     monkeypatch.setattr(cast, "LIFEPATH_RANKS", ranks)
     for default in (2, 5):
         assert cast.capability_of({"id": "X", "lifepath": lp}, default) == {"inquiry": default, "arms": 4}
+
+
+# B04.12 -- THE CAST ROW'S UNREAD KEYS: READ, REMOVED OR LISTED (CAP A7; DEF Edit 4). `data/cast.py` refuses, when it reads the
+# registry, a row carrying a key that is neither declared by the registry's own `schema:` block (`row_keys`) nor listed as unread (`UNREAD_KEYS`).
+
+def _registry_with(tmp_path, monkeypatch, **extra_keys):
+    """Point the cast loader at a one-row registry carrying `extra_keys`, with the cache cleared (restored at teardown)."""
+    import yaml
+    from engine.season.data import cast
+    row = {"id": "NPC-X", "first_name": "A", "last_name": None, "faction": "Crown", "role": "r", "status": "canonical",
+           **extra_keys}
+    path = tmp_path / "npc_registry.yaml"
+    shipped = cast.load_yaml(cast.NPC_REGISTRY_YAML.read_text(encoding="utf-8"))
+    path.write_text(yaml.safe_dump({"schema": shipped["schema"], "characters": [row]}), encoding="utf-8")
+    monkeypatch.setattr(cast, "NPC_REGISTRY_YAML", path)
+    monkeypatch.setattr(cast, "_CACHE", None)
+    return cast
+
+
+def test_a_cast_row_key_neither_read_nor_unread_listed_is_refused(tmp_path, monkeypatch):
+    """FALSIFIER: a row carrying a key nothing reads and nothing declares unread that builds. The three keys DEF Edit 4 deletes
+    refuse (a deleted key that comes back is a key that invites a reader), a typo refuses, and each refusal names the row and the
+    key; the controls are a read key (`resonant_style`), the two listed-unread keys, and the shipped registry (every key it
+    carries is in one of the two sets, and the three deleted keys are gone from both of its levels)."""
+    from engine.season.gaps import Unspecified
+    for bad in ("arc_trajectory", "cultural_label", "self_other_initial", "resonant_stlye"):
+        cast = _registry_with(tmp_path, monkeypatch, **{bad: "x"})
+        with pytest.raises(Unspecified, match=bad) as e:
+            cast.row("NPC-X")
+        assert "NPC-X" in str(e.value)
+    cast = _registry_with(tmp_path, monkeypatch, resonant_style="Evidence", certainty=2, coherence=9)
+    assert cast.row("NPC-X")["certainty"] == 2
+    assert cast.UNREAD_KEYS == ("certainty", "coherence")
+    monkeypatch.setattr(cast, "NPC_REGISTRY_YAML", cast.files.NPC_REGISTRY_YAML)
+    monkeypatch.setattr(cast, "_CACHE", None)
+    rows = cast.load()
+    assert len(rows) >= 40
+    carried = {k for r in rows.values() for k in r}
+    shipped = cast.load_yaml(cast.NPC_REGISTRY_YAML.read_text(encoding="utf-8"))
+    assert carried <= cast.row_keys(shipped) | set(cast.UNREAD_KEYS)
+    assert not cast.row_keys(shipped) & {"arc_trajectory", "cultural_label", "self_other_initial"}
+    with pytest.raises(Unspecified, match="schema"):                  # a registry that declares no keys is refused, not waved through
+        cast.row_keys({"characters": []})
+    assert {"certainty", "coherence"} <= carried                       # the listed keys are still authored, so the list is not vacuous
+    assert not carried & {"arc_trajectory", "cultural_label", "self_other_initial"}
+    assert not {k for r in rows.values() for k in (r.get("convictions") or {})} & {"cultural_label", "self_other_initial"}

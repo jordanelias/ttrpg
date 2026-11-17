@@ -74,6 +74,7 @@
     - "UNCLEAR: no epistemic content is recorded for this character; the source does not say what she personally knows, keeps, or is asked to confirm."
   ends_when: "never specified -- no personal arc or end condition is authored for her"
 
+# NPC-080 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "Completes missions Sigrid aborts. TS 0 = can't see Thread collateral. Pre-germ-theory surgeon archetype — perceptual limitation, not malice. Cannot see Thread collateral (TS 0)."
 - id: NPC-080
   name: Vidar Haldorsen
   one_line: A covert-order operative with zero of the perceptual sense that would let him detect a category of harm his own completed missions cause, framed explicitly as ignorance rather than malice.
@@ -114,6 +115,7 @@
     - "UNCLEAR: whether his colleague or anyone else already knows about his perceptual blindness and is deliberately routing him toward the missions she refuses, or whether the pattern has arisen coincidentally, is unspecified."
   ends_when: "never specified -- no end condition is authored; the entry gestures at a hidden-capacity-revealed arc without stating what would trigger or resolve it"
 
+# NPC-081 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "IC seat #4. Succession candidate if Baralta falls (popular mandate). Niklaus von Flüe archetype — Swiss mediator at the Diet of Stans (1481), commune voice against city power-politics."
 - id: NPC-081
   name: Uta Falkenrath
   one_line: A council seat-holder representing communal rather than urban interests, named as a specific succession candidate should the current highest office-holder fall, via a distinctly popular rather than elite path.
@@ -158,6 +160,7 @@
     - "Any parties she mediates between would need to know she is acting as a neutral broker rather than an interested party for the mediation to function as described; the source does not specify how that neutrality is established or verified."
   ends_when: "never specified -- an ongoing council seat with a conditional succession subplot that only resolves if and when the triggering vacancy is authored"
 
+# NPC-082 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "Fights for Einhir, not Vaynard. Fracture line if Vaynard's ego diverges from cause. Einar Thambarskelfir archetype — conditional loyalty to the cause, not the person."
 - id: NPC-082
   name: Njal Torberg
   one_line: A military commander holding a council seat whose loyalty is explicitly tied to a cause rather than to the faction's current leader, creating a named fracture line if that leader's conduct diverges from the cause.
@@ -198,6 +201,7 @@
     - "UNCLEAR: whether the leader is aware that this subordinate's loyalty is conditional and could be lost, or believes the support to be personal and secure, is not stated."
   ends_when: "never specified -- persists as a standing fracture-line premise until, if ever, a break-or-no-break event is authored"
 
+# NPC-084 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "Internal opposition to Feldhaus. Pushes Mandate over Wealth. Katharina Schütz Zell archetype — guild-class communal advocate."
 - id: NPC-084
   name: Frieda Kessler
   one_line: A guild leader in named internal opposition to another named guild leader, arguing for a different priority resource than the one her faction's default strategic action actually uses.
@@ -237,6 +241,7 @@
     - "UNCLEAR: whether her opposition is openly declared within the council or conducted quietly, and how visible her communal-class support base is to her rival, is not stated."
   ends_when: "never specified -- an ongoing internal policy contest with no authored resolution condition"
 
+# NPC-085 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "Defends guild autonomy against Crown regulation. Bartolus de Saxoferrato archetype."
 - id: NPC-085
   name: Nessa Grindvold
   one_line: A legal advocate who defends guild autonomy against the ruling authority's regulatory action by arguing precedent at a formal court venue.
@@ -276,6 +281,7 @@
     - "UNCLEAR: whether a ruling is public and binding on future attempts, or can be quietly disregarded by the ruling authority afterward, is not specified."
   ends_when: "never specified -- an ongoing advocacy role with no authored end condition; individual cases presumably end at ruling but the office persists"
 
+# NPC-089 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "Decides whether Altonia probes, presses, or invades. Sincere imperialist. Basil Boioannes archetype."
 - id: NPC-089
   name: Zoe Palaiologina
   one_line: A frontier governor of a foreign empire who is the personal decision-point for whether that empire probes, pressures, or invades the peninsula, driven by a sincerely-held imperial conviction rather than cynicism.
@@ -314,6 +320,7 @@
     - "UNCLEAR: whether the neighboring side has any way to observe or estimate her empire's current posture level before it manifests as an action, or whether it is only visible in hindsight once she acts, is not stated."
   ends_when: "never specified -- an ongoing external-threat governance role with no stated resolution condition"
 
+# NPC-090 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "Enforces ancient trade treaties. Counterparty to Solberg. Book of the Eparch archetype."
 - id: NPC-090
   name: Stephanos Doukas
   one_line: A foreign empire's trade official enforcing a pre-existing treaty at a named interface, in an ongoing paired relationship with a specific named counterparty from the other side.
