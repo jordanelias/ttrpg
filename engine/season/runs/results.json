@@ -9910,7 +9910,7 @@
   "A5": {
    "id": "A5",
    "verdict": "PASS",
-   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 899 == 899 and the LOG CONTENT HASH matches (b44d81977e18...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
+   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 899 == 899 and the LOG CONTENT HASH matches (f1d9e7e90cfa...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
    "kind": null,
    "section": "S32",
    "title": "the fold is order-independent, and the float control actually fires",
@@ -10010,7 +10010,7 @@
   "A14": {
    "id": "A14",
    "verdict": "PASS",
-   "detail": "PASS: within ONE season, p_mid's ledger reads 0 claims in round 0 and 3 in round 1 after p_low's round-0 `utter`, against 0 in the control arm where p_low does nothing. R-03's channel: a deposit at one round's WITNESS is read by the next round's DELIBERATE. NOT SHOWN: a DELIBERATE nested inside RESOLVE (`H-56`'s other half)",
+   "detail": "PASS: within ONE season, p_mid's ledger reads 0 claims in lap 0 and 3 in lap 1 after p_low's lap-0 `utter`, against 0 in the control arm where p_low does nothing. R-03's channel: a deposit at one lap's WITNESS is read by the next lap's DELIBERATE. NOT SHOWN: a DELIBERATE nested inside RESOLVE (`H-56`'s other half)",
    "kind": null,
    "section": "S40.2",
    "title": "a person reacts within the season to what another just did",

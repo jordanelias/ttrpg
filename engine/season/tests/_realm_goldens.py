@@ -6,17 +6,17 @@ An item that moves the realm proves in its own commit that its revert reads the 
 records that in the commit message; the proof is not kept as a test.
 
 Read with `build_realm(s)` and `populated.run(1, s, w=w)` at `PYTHONHASHSEED=0`, seeds 0, 1, 2, on
-the tree of B03's last item (the hashes moved once in B03, by encoding: `Office.body_function` was
-deleted from a class `World.content_hash()` encodes, B03.28; acts, log length and the census below did
-not move): the shipped world, `DEFAULT_FIXTURES` as they stand, with no revert applied. A test support
+the tree of B04.99 (the hashes moved in B03, by encoding: `Office.body_function` was deleted from a
+class `World.content_hash()` encodes, B03.28; and in B04, by encoding: `Claim.round` became `Claim.lap`,
+B04.01, and `Person` gained `traits`, B04.07; acts, log length and the census below did not move): the shipped world, `DEFAULT_FIXTURES` as they stand, with no revert applied. A test support
 module beside `_scar_helpers.py`, not a registry: nothing but tests reads it.
 """
 
-BUILD = {0: "0ae5120651f2a8bc1790d418da2f1c70"}                      # build_realm(seed), unplayed
+BUILD = {0: "bf3064be8fe5830b8cb5e06ef93ee883"}                      # build_realm(seed), unplayed
 
-SHIPPED = {(0, 1): "51178937e774b133818b32cf217a89ce",                # (seed, seasons) at DEFAULT_FIXTURES
-           (1, 1): "e5701d55bfe933f7f6651f136c4bd8b1",
-           (2, 1): "87028bef3904a5d46df3091fbe6c491e"}
+SHIPPED = {(0, 1): "c7b1543008d3a7dac8255b6f3873dcea",                # (seed, seasons) at DEFAULT_FIXTURES
+           (1, 1): "1aa84707bd034b9e88fc456270cfe6a2",
+           (2, 1): "8f44e683e2b0fe281944614935f2c783"}
 
 #: What the one-season run leaves, beside its hash: `acts` is `populated.run`'s act count, `log` the
 #: length of the world's Event log, `census` the sha256 of `populated.run`'s return value as sorted
