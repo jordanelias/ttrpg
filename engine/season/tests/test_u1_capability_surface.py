@@ -654,3 +654,53 @@ def test_a_trait_never_enters_person_capability():
     assert styled == 18 and seen >= 46
     assert not any(set(p.capability) & set(descriptors.TRAITS) for p in w.persons.values())
     assert sum(1 for p in w.persons.values() if p.traits) == styled
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# B04.08 -- THE ROLL'S RECORD NAMES THE ROWS THAT FED IT (CAP A6 `fed_by`; MAP §G edit 6; D-U1-06: no `Event` field)
+# ---------------------------------------------------------------------------------------------------------------------
+def _arrest_roll(fixtures=None):
+    """A hand-built `arrest` (a contested verb that stays on the single roll; the influence verbs' record is the social
+    contest's V2 `Beat`, ED-IN-0378) resolved through the provider: `p_low` arrests `p_mid` on prize `a standing`."""
+    import random
+    from engine.season.harness import probes as P
+    from engine.season.loop.driver import SeasonDriver
+    from engine.season.seam.wrappers import sigma
+    w = P.tiny_world(fixtures) if fixtures is not None else P.tiny_world()
+    SeasonDriver(w)    # registers the module entry the prize row names
+    return sigma.resolve(w, ["p_low", "p_mid"], ["c"], "a standing", verb="arrest", subject="p_mid", rng=random.Random(3))
+
+
+def test_fed_by_on_an_arrest_lists_its_dice_and_opposes_rows():
+    """The record's `fed_by` is the `social_roll` rows that contributed, in table order: `==` on the `(use, role)` pairs,
+    and the row's own `(key, side)` beside them; a value read and a contribution for each (the opposition halved by the
+    module: `ob_terms`'s own term). The control is the table itself: the tuple is read off `capability_uses()`."""
+    from engine.season.data import rosters
+    out = _arrest_roll()
+    assert out["status"] == "RESOLVED"
+    assert tuple((f[0], f[1]) for f in out["fed_by"]) == (("social_roll", "dice"), ("social_roll", "opposes"))
+    assert tuple((f[0], f[1], f[2], f[3]) for f in out["fed_by"]) == tuple(
+        (r.use, r.role, r.key, r.side) for r in rosters.capability_uses() if r.use == "social_roll")
+    dice, opposes = out["fed_by"]
+    assert dice[5] == out["pool"] and isinstance(dice[4], int)
+    assert opposes[4] is not None and opposes[5] == out["ob_terms"]["opposition"]
+
+
+def test_fed_by_follows_the_table_rows_in_table_order(monkeypatch):
+    """FALSIFIER: a `fed_by` that names a row the roll did not read, or omits one it did, or fixes its own order. Swap the
+    two `social_roll` rows in a rebound table: the record lists them in the table's order, and drops a deleted row."""
+    def swap(rows):
+        i = next(i for i, r in enumerate(rows) if r["use"] == "social_roll" and r["role"] == "dice")
+        rows[i], rows[i + 1] = rows[i + 1], rows[i]
+    _rebound(monkeypatch, swap)
+    assert tuple((f[0], f[1]) for f in _arrest_roll()["fed_by"]) == (("social_roll", "opposes"), ("social_roll", "dice"))
+    _rebound(monkeypatch, lambda rows: rows.__delitem__(next(i for i, r in enumerate(rows) if r["use"] == "social_roll" and r["role"] == "opposes")))
+    assert tuple((f[0], f[1]) for f in _arrest_roll()["fed_by"]) == (("social_roll", "dice"),)
+
+
+def test_a_refused_roll_carries_fed_by_too():
+    """S27.4's refusal returns the same record shape: `fed_by` is on the `REFUSED` dict as on the `RESOLVED` one."""
+    from engine.season.data.fixtures import DEFAULT_FIXTURES
+    out = _arrest_roll(DEFAULT_FIXTURES.sweep("obstacle_refusal_multiple", 0))
+    assert out["status"] == "REFUSED"
+    assert tuple((f[0], f[1]) for f in out["fed_by"]) == (("social_roll", "dice"), ("social_roll", "opposes"))
