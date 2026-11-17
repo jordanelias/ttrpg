@@ -170,31 +170,28 @@ def _load_offices() -> dict:
                 "offices.yaml -- seats",
                 needs="a member of `descriptors.CAPABILITIES` (" + ", ".join(_CAPABILITIES) + ") or `null`",
                 law="`descriptors.CAPABILITIES` is the only skill definition in the engine; a seat row names one, it defines none")
+    # WHAT A COMPUTED FOUNDING DECLARES (B04.23): `founding:` carries `keeps:` (acts of `remit_acts`), `conferral:` (a member
+    # of `conferral_bases`) and `revocation:` (a member of `revocation_bases`). A missing block or key is refused, not
+    # defaulted: a founding that defaulted would silently found a seat the data never described.
+    founding = doc.get("founding")
+    if not isinstance(founding, dict):
+        raise Unspecified(
+            "offices.yaml has no `founding:` mapping", "offices.yaml -- founding",
+            needs="give `founding:` its `keeps:`, `conferral:` and `revocation:`",
+            law="B04.23 -- what a computed founding declares is data read at load, never a default in the loop")
+    for key, owner in (("keeps", "remit_acts"), ("conferral", "conferral_bases"), ("revocation", "revocation_bases")):
+        value = founding.get(key)
+        members = roster(owner)
+        singles = (value,) if key != "keeps" else value
+        if (key == "keeps" and not isinstance(value, list)) or (key != "keeps" and not isinstance(value, str)) \
+                or not all(isinstance(x, str) and x in members for x in singles):
+            raise Unspecified(
+                f"offices.yaml `founding: {key}` is {value!r}, which is not " +
+                ("a list of members" if key == "keeps" else "a member") + f" of `rosters.yaml: {owner}`",
+                "offices.yaml -- founding",
+                needs=f"{'a list of' if key == 'keeps' else 'one of'} " + ", ".join(sorted(members)),
+                law=f"B04.23 -- each `founding:` value is checked at load against its own roster (`{owner}`)")
     return doc
-
-
-_OFFICES_DOC = _load_offices()
-# Every authored seat, in file order. `boot/realm.py` is the caller (the `8a` overlay);
-# read directly rather than through a second index for anything that must see BOTH of NPC-020's
-# two rows (`off_king`, `off_duke_valorsmark`) -- `OFFICES_BY_HOLDER` below deliberately is not
-# that reader.
-OFFICES_SEATS = tuple(_OFFICES_DOC.get("seats") or ())
-# The seats of a FOREIGN faction (`rosters.yaml: foreign_cast`), authored in the same row shape under their own key
-# so the realm's own seat count stands (v9 IN-36). `build_realm(foreign=True)` reads them beside `OFFICES_SEATS`
-# and `foreign=False` reads neither them nor any goal about them; `data/goals.py` knows both, as a goal row's
-# `org: {seat:}` may name either; the orphan check below reads them too.
-FOREIGN_SEATS = tuple(_OFFICES_DOC.get("foreign_seats") or ())
-#: seat id -> its row over BOTH keys. The ids share one namespace (`_load_offices` refuses a repeat), so nothing is lost.
-SEAT_ROW_BY_ID = {s["id"]: s for s in (*OFFICES_SEATS, *FOREIGN_SEATS) if isinstance(s, dict) and "id" in s}
-# case id -> every seat row that names it as `holder`, so a caller matches on POST rather than
-# guessing which of a multi-seat holder's rows applies (NPC-020 holds two). A list, not a single
-# row, because `roster_map`'s single-mapping shape would silently keep the LAST of NPC-020's two
-# and make the choice invisible at the call site -- the same defect `load_yaml`'s duplicate-key
-# refusal exists to catch one layer up, avoided here by not building a lossy map at all.
-OFFICES_BY_HOLDER: dict = {}
-for _seat in OFFICES_SEATS:
-    OFFICES_BY_HOLDER.setdefault(_seat["holder"], []).append(_seat)
-del _seat
 
 
 def roster(name: str, ordered: bool = False):
@@ -334,6 +331,31 @@ def roster_map(name: str, key: str) -> dict:
             law="rosters.yaml -- the mapping is the DEFINITION. An absent one cannot be "
                 "substituted by an empty dict without inverting the answer it gives")
     return dict(m)
+
+
+# `_load_offices` is CALLED here, after `roster()` above: its `founding:` check reads three rosters (B04.23).
+_OFFICES_DOC = _load_offices()
+# Every authored seat, in file order. `boot/realm.py` is the caller (the `8a` overlay);
+# read directly rather than through a second index for anything that must see BOTH of NPC-020's
+# two rows (`off_king`, `off_duke_valorsmark`) -- `OFFICES_BY_HOLDER` below deliberately is not
+# that reader.
+OFFICES_SEATS = tuple(_OFFICES_DOC.get("seats") or ())
+# The seats of a FOREIGN faction (`rosters.yaml: foreign_cast`), authored in the same row shape under their own key
+# so the realm's own seat count stands (v9 IN-36). `build_realm(foreign=True)` reads them beside `OFFICES_SEATS`
+# and `foreign=False` reads neither them nor any goal about them; `data/goals.py` knows both, as a goal row's
+# `org: {seat:}` may name either; the orphan check below reads them too.
+FOREIGN_SEATS = tuple(_OFFICES_DOC.get("foreign_seats") or ())
+#: seat id -> its row over BOTH keys. The ids share one namespace (`_load_offices` refuses a repeat), so nothing is lost.
+SEAT_ROW_BY_ID = {s["id"]: s for s in (*OFFICES_SEATS, *FOREIGN_SEATS) if isinstance(s, dict) and "id" in s}
+# case id -> every seat row that names it as `holder`, so a caller matches on POST rather than
+# guessing which of a multi-seat holder's rows applies (NPC-020 holds two). A list, not a single
+# row, because `roster_map`'s single-mapping shape would silently keep the LAST of NPC-020's two
+# and make the choice invisible at the call site -- the same defect `load_yaml`'s duplicate-key
+# refusal exists to catch one layer up, avoided here by not building a lossy map at all.
+OFFICES_BY_HOLDER: dict = {}
+for _seat in OFFICES_SEATS:
+    OFFICES_BY_HOLDER.setdefault(_seat["holder"], []).append(_seat)
+del _seat
 
 
 def refusing_pole(axis: str) -> int:
@@ -822,6 +844,12 @@ LADDER_RUNGS = roster("ladder_rungs", ordered=True)
 # `has_conferral_basis`/`REVOCATION_RULES` read them.
 CONFERRAL_BASES = roster("conferral_bases")
 REVOCATION_BASES = roster("revocation_bases")
+# B04.23: WHAT A COMPUTED FOUNDING DECLARES (`offices.yaml: founding:`, validated against the three rosters above and
+# `REMIT_ACTS` in `_load_offices`); read by `loop/predicates.py::office_founded_by`. The [ASSUMPTION] mark on `keeps` is
+# in the file beside the value.
+FOUNDER_KEEPS = tuple(_OFFICES_DOC["founding"]["keeps"])
+FOUNDED_CONFERRAL = _OFFICES_DOC["founding"]["conferral"]
+FOUNDED_REVOCATION = _OFFICES_DOC["founding"]["revocation"]
 # v10 IN-61 (RS-27): `{seat: title}` -- which title a seat of conferral basis `inheritance` passes to
 # (`rosters.yaml: successions`). Read IN PLACE (never copied) by `state/gate.py`'s claim basis,
 # `loop/predicates.py::_req_succeed`, `loop/effects_governance.py::_eff_succeed` and

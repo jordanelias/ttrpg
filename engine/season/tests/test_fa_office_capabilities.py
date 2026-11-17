@@ -172,3 +172,39 @@ def test_a_seat_naming_a_skill_lifts_the_candidate_the_conferrer_believes_holds_
     monkeypatch.setitem(rosters.SEAT_ROW_BY_ID, _OFFICE, {"id": _OFFICE, "capability": "law"})
     assert _conferees(w, 1.0)[0] == "p_king"
     assert _conferees(w, 0.0)[0] == "p_low"
+
+
+def test_a_founding_value_outside_its_roster_is_refused(tmp_path, monkeypatch):
+    """B04.23 -- what a computed founding declares (`offices.yaml: founding:`) is data, each value checked at load against
+    its own roster: `keeps:` against `remit_acts`, `conferral:` against `conferral_bases`, `revocation:` against
+    `revocation_bases`. The controls: the unchanged file loads and exports the shipped three values, so a loader that
+    refused every file, or one that read nothing, cannot pass; a missing block is refused, not defaulted."""
+    real = _real()
+    assert len(_load_with(tmp_path, monkeypatch, real)["seats"]) == len(real["seats"])  # control: the unchanged file loads
+    assert rosters.FOUNDER_KEEPS == ("confer", "revoke")
+    assert (rosters.FOUNDED_CONFERRAL, rosters.FOUNDED_REVOCATION) == ("appointed", "rung_above_in_holdings")
+    assert set(rosters.FOUNDER_KEEPS) <= rosters.REMIT_ACTS
+    assert rosters.FOUNDED_CONFERRAL in rosters.CONFERRAL_BASES and rosters.FOUNDED_REVOCATION in rosters.REVOCATION_BASES
+
+    founding = real["founding"]
+    bad = [("keeps", ["confer", "fabricate"]), ("keeps", "confer"), ("keeps", [7]), ("conferral", "crowned"),
+           ("conferral", None), ("revocation", "by_acclaim"), ("revocation", ["rung_above_in_holdings"])]
+    for key, value in bad:
+        doc = dict(real, founding=dict(founding, **{key: value}))
+        with pytest.raises(Unspecified) as red:
+            _load_with(tmp_path, monkeypatch, doc)
+        assert "founding" in str(red.value) and key in str(red.value), (key, value, str(red.value))
+
+    for missing in (None, "keeps", "conferral", "revocation"):
+        if missing is None:
+            doc = {k: v for k, v in real.items() if k != "founding"}
+        else:
+            doc = dict(real, founding={k: v for k, v in founding.items() if k != missing})
+        with pytest.raises(Unspecified) as red:
+            _load_with(tmp_path, monkeypatch, doc)
+        assert "founding" in str(red.value), (missing, str(red.value))
+
+    # a different lawful value is read through, not ignored: the export follows the file
+    other = next(b for b in sorted(rosters.CONFERRAL_BASES) if b != founding["conferral"])
+    loaded = _load_with(tmp_path, monkeypatch, dict(real, founding=dict(founding, conferral=other)))
+    assert loaded["founding"]["conferral"] == other

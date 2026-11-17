@@ -949,6 +949,14 @@
           "Individual": "person"
         }
       },
+      "founding": {
+        "keeps": [
+          "confer",
+          "revoke"
+        ],
+        "conferral": "appointed",
+        "revocation": "rung_above_in_holdings"
+      },
       "seats": [
         {
           "id": "off_king",
