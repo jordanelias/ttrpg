@@ -28,7 +28,7 @@ SHIPPED = dict(
     room_level=0.5, concede_step=1.0, consent_at=2.5,
     crowd_at=12.0, crowd_lean=0.2, mood_scale=5.0, read_scale=1.0, read_blur=2.0, read_noise=0.3, bias_step=2.0, relevance=1, awe_step=0.5, comfort_step=0.5, rel_gain=0.5, flop=0.5, invite=0.5, track_step=0.2,
     temper_step=0.5, temper_break=0.75, temper_cool=0.5, grain=2.0, grudge=2.0, pride=2.0,
-    start_step=2.0, presume_step=2.0, sympathy_step=1.5, power_scale=2.0, strain_fade=0.5, recuse_at=0.25,
+    start_step=2.0, presume_step=2.0, power_scale=2.0, strain_fade=0.5, recuse_at=0.25,
 )
 CONTROL_ZERO = dict(fit_level=None, answer_level=None, repeat_step=0.0, esteem_step=0.0, off_step=0.0, ploy_step=0.0,
                     grain_strain=0.0, start_step=0.0, awe_step=0.0, crowd_lean=0.0, heckle=0.0, room_level=0.0, heard_step=0.0,
@@ -124,10 +124,10 @@ ALIASES = {
 ERAS = {"plain": {}, "age_of_faith": {"authority": 1.4, "consequence": 0.8}, "mercantile": {"consequence": 1.4, "authority": 0.8}}
 REGIMES = {
     "crown":     dict(unlawful=(), gravity=0.0, standard=0.0, reason_lean=0.0, admits_add=(), admits_drop=(), power={"polity": 1.0}, silence=None),
-    "theocracy": dict(unlawful=("debate",), gravity=0.5, standard=1.0, reason_lean=-0.1, admits_add=("confession", "oath"),
+    "theocracy": dict(unlawful=("debate", "parliamentary_debate", "council_of_state"), gravity=0.5, standard=1.0, reason_lean=-0.1, admits_add=("confession", "oath"),
                       admits_drop=("precedent",), power={"church": 2.0}, silence="admits"),
-    "commune":   dict(unlawful=("inquisition",), gravity=0.0, standard=-1.0, reason_lean=0.0, admits_add=("rumour",), admits_drop=(),
-                      power={"guild": 1.0}, floor="open", silence="free"),
+    "commune":   dict(unlawful=("inquisition", "inquisition_hearing", "examination"), gravity=0.0, standard=-1.0, reason_lean=0.0, admits_add=("rumour",), admits_drop=(),
+                      power={"guild": 1.0}, floor="open", silence=None),
 }
 STRIFE = {
     "peace":  dict(turns=0, unrest=0.0, gravity=0.0, care_want=0.0),
@@ -338,15 +338,6 @@ class Card:
                                # where the verdict is the speech itself (the abridged form: the option's own chance)
 
 
-def silence_cell(r: dict, R: dict) -> str:
-    """A-145: what silence means here, the rite's cell shifted by the regime. A regime may move it between `refusal`
-    and `admits`, and may grant a right to silence (`free`) where nothing must be answered; where the rite says a
-    point MUST be answered silence is never free: its floor is `refusal` (the regime's lower `standard` is what makes
-    it cheaper there: `silence_cost` scales with the occasion's formality)."""
-    cell = r["silence"] if (R["silence"] is None or r["silence"] == "free" and "must" not in r["reply"].values()) else R["silence"]
-    return "refusal" if (cell == "free" and "must" in r["reply"].values()) else cell
-
-
 def _silence_says(inp, rite) -> str:
     """the card's `silence`: the cell, and what a point left unanswered costs with those who decide (A-145)."""
     if rite.silence == "free":
@@ -361,30 +352,9 @@ def _silence_says(inp, rite) -> str:
 
 
 def lawful(regime: str, row: str) -> bool:
-    """B7: whether a row may sit under a regime, keyed on the row REQUESTED: a regime's `unlawful` list names a rite
-    or a row; a named row is unlawful outright; a named rite is unlawful in every row on it except a row of the
-    regime's own authority (a theocracy outlaws the polity's debate, not the Church's own deliberation on it)."""
-    rid, over = ALIASES.get(row, (row, {}))
-    bad = REGIMES[regime]["unlawful"]
-    return not (row in bad or (rid in bad and over.get("authority", RITES[rid]["authority"]) not in REGIMES[regime]["power"]))
-
-
-def _pack(cands, arr_id, t, people, keep=1):
-    """C3: one rule for bench and floor: the arranger drops the share `t` of them least tied to him, never below
-    `keep` (B2: a declared close never seats fewer than its quorum)."""
-    if t <= 0 or len(cands) <= keep:
-        return list(cands)
-    cands = sorted(cands, key=lambda p: -tie(p, arr_id, people))
-    return cands[:max(keep, len(cands) - int(t * (len(cands) - 1) + 0.5))]
-
-
-def packed_quorum(quorum: int, sat: int, kept: int) -> int:
-    """B2: packing changes who sits, not the arithmetic of the close: where `sat` seats were packed down to `kept`, the
-    quorum is a majority of the seats kept, and never a smaller share of them than the declared quorum was of the seats
-    that sat."""
-    if kept >= sat:
-        return quorum
-    return min(kept, max(kept // 2 + 1, math.ceil(quorum * kept / sat)))
+    """B7: whether a row may sit under a regime: the regime's `unlawful` list names the ROWS it outlaws (a theocracy
+    the polity's debates, not the Church's own deliberation on the debate rite)."""
+    return row not in REGIMES[regime]["unlawful"]
 
 
 def build(people: dict, rite_id: str, matter: dict, *, bench=(), floor=(), form="full", era="plain", regime="crown",
@@ -439,7 +409,7 @@ def build(people: dict, rite_id: str, matter: dict, *, bench=(), floor=(), form=
     turns = max(lo, min(hi, effort + 1) + S["turns"])          # C3: the rig no longer cuts turns (it cut the arranger's own case)
     if form == "abridged":
         moves, turns, close = {"for": ("argue",), "against": ()}, 1, "exchange"
-    # ---- who sits: the seats' own faction against the rite's authority; recusal (B6); the arranger packs a share t
+    # ---- who sits: the seats' own faction against the rite's authority; recusal (B6)
     seats = [people[b] for b in bench]
     if r["authority"] not in ("parties", "none"):
         seats = [p for p in seats if AUTHORITY_BY_FACTION.get((p.get("office") or {}).get("faction")) == r["authority"]]
@@ -447,30 +417,24 @@ def build(people: dict, rite_id: str, matter: dict, *, bench=(), floor=(), form=
     if close in ("bench", "declared"):
         seats.sort(key=lambda p: -(p.get("office") or {}).get("rung", 0))
         need = 1 if close == "bench" else (r.get("quorum") or 1)
-        for p in list(seats):                # a party who holds a seat steps down where another can sit (A-139: he may
-            c, _ = conflict(bearing(p, matter, people), (tie(p, fid, people), tie(p, aid, people)))   # (B6: then he
-                                                             # is partial, seen and priced)
-            if (p["id"] in (fid, aid) or c >= D["recuse_at"]) and len(seats) > need:
+        for p in list(seats):                                # a party who sits is partial by choice and seen (A-139)
+            c, _ = conflict(bearing(p, matter, people), (tie(p, fid, people), tie(p, aid, people)))
+            if p["id"] not in (fid, aid) and c >= D["recuse_at"] and len(seats) > need:
                 seats.remove(p); recused.append(p["id"])          # he steps down; a conflicted seat who cannot sits and pays
+        if close == "bench" and B is None and len(seats) > 1 and seats[0]["id"] == fid:
+            seats = seats[1:] + seats[:1]            # A10: the sole speaker is not his own only listener: the next seat presides
         if not seats:
             raise ValueError(f"refused[no_seat]: {rid}: no seat of authority {r['authority']} (party-gap refusal)")
         if len(seats) < need:
             raise ValueError(f"refused[short_bench]: {rid}: {len(seats)} seat(s) for a quorum of {need}")
-        sat = len(seats)
-        seats = _pack(seats, arr["id"], t, people, keep=need) if arr else seats
-        if close == "declared":
-            r["quorum"] = packed_quorum(need, sat, len(seats))
     fl = r["floor"] if "floor" not in R else R["floor"]
     fl_ids = [] if fl == "closed" else [f for f in floor if fl == "open" or people[f].get("office")]
     absent = set(matter.get("absent_in", {}).get(strife, ()))
     fl_ids = [f for f in fl_ids if f not in absent]
-    if arr is not None and t > 0:
-        fl_ids = [p["id"] for p in _pack([people[f] for f in fl_ids], arr["id"], t, people)] if len(fl_ids) > 1 else \
-            ([] if t >= 0.5 else fl_ids)
-    tiltable = [p["id"] for p in seats if close in ("bench", "declared") and p["id"] not in (fid, aid)] + list(fl_ids)
-    if t > 0 and not tiltable:               # B5: an arrangement tilts a forum, its seats and its watchers; where the
-        t, weak_side = 0.0, None             # rite has neither (a conversation, a questioning, a negotiation) there is
-                                             # nothing to tilt: no tilt shown, no price, no grudge
+    seated = seats[:1] if close == "bench" else seats if close == "declared" else fl_ids if close == "hearers" else []
+    if t > 0 and not [q for q in seated if (q if isinstance(q, str) else q["id"]) not in (fid, aid)]:
+        t, weak_side = 0.0, None             # B5: an arrangement tilts those who decide; where none but a party decides
+                                             # (a conversation, a questioning, a negotiation) there is nothing to tilt
     admits = tuple(dict.fromkeys(k for k in r["admits"] + R["admits_add"] if k not in R["admits_drop"]))   # once each
     eraw = ERAS[era]
     grounds = tuple((g, c, eraw.get(g, 1.0)) for g, c in GROUNDS)
@@ -479,20 +443,18 @@ def build(people: dict, rite_id: str, matter: dict, *, bench=(), floor=(), form=
                 reason_lean=r["reason_lean"] + R["reason_lean"], admits=admits, difficulty=DIFFICULTY[difficulty],
                 gravity=S["gravity"] + R["gravity"], quorum=r.get("quorum"), unrest=S["unrest"], bears=r["bears"],
                 weighs=tuple((i, tuple(ISSUE_GROUNDS[i].items())) for i in r["issues"] if i in ISSUE_GROUNDS),
-                silence=silence_cell(r, R))
+                silence=r["silence"] if (R["silence"] is None or r["silence"] == "free" and "must" not in r["reply"].values()) else R["silence"])
     speak_against = bool(moves.get("against")) and B is not None
     room, in_room = [], set()
 
     def present(p, side, decides):
         st = (0.0, 0.0, 0.0) if "bearing" in flat else bearing(p, matter, people)
         ln = D["start_step"] * sum(st) / 3.0
-        if decides and side is None:                              # a seat: the arrangement's presumption, and
-            if t > 0:                                             # D1: an appeal's grounds, seen by the higher bench
+        if decides and side is None:                              # a seat: the arrangement's presumption (the rig's
+            if t > 0:                                             # one lever, A-132), and D1: an appeal's grounds
                 ln += t * D["presume_step"] * SIGN[arr_side]
             if grounds_for:
                 ln += grounds_for[1] * D["presume_step"] * SIGN[grounds_for[0]]
-        elif t > 0 and side is None:                              # a watcher: sympathy against the arranger (never a seat)
-            ln -= t * D["sympathy_step"] * SIGN[arr_side] * (1.0 - max(0.0, tie(p, arr["id"], people)))
         a = p.get("attributes", {})
         its = tuple(p.get("items", ())) + (false_items(p, matter, side) if side else ())
         wt = p.get("weight", 1)

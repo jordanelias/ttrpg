@@ -1,6 +1,6 @@
 
-== [after] fuzz 1500 configs: ran 718; crashes 0 {}
-  refusals {'refused[abridged_resume]': 16, 'refused[abridged_self]': 4, 'refused[no_seat]': 408, 'refused[no_weight]': 54, 'refused[one_character]': 24, 'refused[one_party]': 27, 'refused[short_bench]': 63, 'refused[spent]': 12, 'refused[unlawful]': 174}
+== [after] fuzz 1500 configs: ran 716; crashes 0 {}
+  refusals {'refused[abridged_resume]': 16, 'refused[abridged_self]': 4, 'refused[no_seat]': 408, 'refused[no_weight]': 56, 'refused[one_character]': 24, 'refused[one_party]': 27, 'refused[short_bench]': 63, 'refused[spent]': 12, 'refused[unlawful]': 174}
   violations 0; determinism (every 25th re-run) {True: 24}
   abridged == the plain roll at control: 200/200
   A-139 one party twice: refused[one_party]

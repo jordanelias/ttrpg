@@ -24,19 +24,19 @@
   bench ('j1',)      decided ('j1',) recused () stake (0, 0, 0.0) start +0.00 | P(for) 0.272 +-0.036 | partial on a ledger 0/600 | priced 0/600
   bench ('a',)       decided ('a',) recused () stake (0, 0, 0.6) start +0.40 | P(for) 0.313 +-0.038 | partial on a ledger 600/600 | priced 188/600
   bench ('b',)       decided ('b',) recused () stake (0, 0, -0.6) start -0.40 | P(for) 0.268 +-0.036 | partial on a ledger 600/600 | priced 360/600
-  bench ('a', 'j1')  decided ('j1',) recused ('a',) stake (0, 0, 0.0) start +0.00 | P(for) 0.272 +-0.036 | partial on a ledger 0/600 | priced 0/600
+  bench ('a', 'j1')  decided ('a',) recused () stake (0, 0, 0.6) start +0.40 | P(for) 0.313 +-0.038 | partial on a ledger 600/600 | priced 188/600
 
 == [after] F2b a seated party's yield on a shared close (debate, quorum 2; tribunal)
   debate   bench ('j1', 'j2')     seats ('j1', 'j2') recused () | P(for) 0.123 +-0.027 | b yields 0.027, a yields 0.022
   debate   bench ('b', 'j1')      seats ('b', 'j1') recused () | P(for) 0.108 +-0.025 | b yields 0.027, a yields 0.022
   debate   bench ('a', 'j1')      seats ('a', 'j1') recused () | P(for) 0.123 +-0.027 | b yields 0.023, a yields 0.022
   debate   bench ('j1', 'j2', 'j3') seats ('j1', 'j2', 'j3') recused () | P(for) 0.252 +-0.035 | b yields 0.030, a yields 0.028
-  debate   bench ('b', 'j1', 'j2') seats ('j1', 'j2') recused ('b',) | P(for) 0.123 +-0.027 | b yields 0.027, a yields 0.022
+  debate   bench ('b', 'j1', 'j2') seats ('b', 'j1', 'j2') recused () | P(for) 0.238 +-0.035 | b yields 0.028, a yields 0.020
   tribunal bench ('j1', 'j2')     seats ('j1', 'j2') recused () | P(for) 0.118 +-0.026 | b yields 0.000, a yields 0.002
   tribunal bench ('b', 'j1')      seats ('b', 'j1') recused () | P(for) 0.127 +-0.027 | b yields 0.000, a yields 0.000
   tribunal bench ('a', 'j1')      seats ('a', 'j1') recused () | P(for) 0.118 +-0.026 | b yields 0.000, a yields 0.000
   tribunal bench ('j1', 'j2', 'j3') seats ('j1', 'j2', 'j3') recused () | P(for) 0.237 +-0.035 | b yields 0.000, a yields 0.002
-  tribunal bench ('b', 'j1', 'j2') seats ('j1', 'j2') recused ('b',) | P(for) 0.118 +-0.026 | b yields 0.000, a yields 0.002
+  tribunal bench ('b', 'j1', 'j2') seats ('b', 'j1', 'j2') recused () | P(for) 0.233 +-0.035 | b yields 0.000, a yields 0.002
 
 == [after] F2c the season driver's worths read the bearing's floor (acts._stake)
   a flat matter: stake of a 0.20, of b 0.20; effort_of a 0
