@@ -7,12 +7,9 @@ landing and were ACTIVATED to small grounded baselines in U10/ED-PC-0022 (routed
 These tests pin (1) the reader FORMULAE, (2) that the constants are now active + tradition-modulable, (3) the
 authored data's CI invariants, and (4) the grounded ordering of known blades.
 """
-import os
-import sys
 
 import pytest
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))   # the repository root: `modules.combat` is a package
 
 from modules.combat import weapon_physics as WP  # noqa: E402
 from modules.combat import combat_systems as S  # noqa: E402

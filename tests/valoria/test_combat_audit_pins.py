@@ -7,12 +7,9 @@ against a third. These are those pins.
 
 Full account: audit/2026-07-24-combat-four-dimension-audit/ (index + infill). EDs: ED-PC-0034, ED-PC-0035, ED-PC-0036, ED-PC-0037.
 """
-import os
-import sys
 
 import pytest
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))   # the repository root: `modules.combat` is a package
 
 from modules.combat import combat_systems as S  # noqa: E402
 from modules.combat import contact as CT  # noqa: E402

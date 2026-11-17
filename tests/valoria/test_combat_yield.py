@@ -12,15 +12,10 @@ The mapping decision is asserted too: a yielder is read by the EXISTING `combat_
 `Untouched`/`Wounded` (never `Felled`), and the surrender rides on the seam's result.
 """
 import functools
-import os
 import random
-import sys
 
 import pytest
 
-_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-if _ROOT not in sys.path:
-    sys.path.insert(0, _ROOT)   # `modules.combat` is a package
 
 from valoria import _draw_stream as DS          # noqa: E402  the single owner of the draw instrument (CLAUDE.md §8)
 

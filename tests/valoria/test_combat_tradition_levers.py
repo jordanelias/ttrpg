@@ -16,12 +16,10 @@ won, a grab de-hazarded) that aggregate winrate cannot see — the situational n
 the SURFACE (every lever site reaches ability_factor; default 1.0 = inert-safe) and the PER-EVENT effect — NOT an
 aggregate edge, which the review showed the abilities do not robustly confer.
 """
-import os
 import sys
 
 import pytest
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))   # the repository root: `modules.combat` is a package
 
 import random  # noqa: E402
 from modules.combat import ability_primitives as ABIL  # noqa: E402

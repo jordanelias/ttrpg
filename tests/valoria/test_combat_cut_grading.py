@@ -44,10 +44,7 @@ FALSIFIERS — mutations run against these guards, each naming its target:
   - make the benefit unconditional on material               -> guard 3 red.
   - make the PENALTY material-gated too                      -> guard 4 red.
 """
-import os
-import sys
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))   # the repository root: `modules.combat` is a package
 
 from modules.combat import combatant as C          # noqa: E402
 from modules.combat import core                    # noqa: E402

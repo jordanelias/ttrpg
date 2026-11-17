@@ -74,7 +74,6 @@ def test_reference_table_covers_the_whole_roster():
     odachi, naginata and staff — none of which any guard in the corpus was watching."""
     import json
     AP = _instrument()
-    sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))   # the repository root: `modules.combat` is a package
     from modules.combat.combatant import WEAPONS
     with open(AP.REFERENCE_PATH, encoding='utf-8') as f:
         ref = json.load(f)

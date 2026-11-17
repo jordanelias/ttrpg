@@ -9,10 +9,7 @@ selection this session — see systems.py's element_afforded docstring for the a
 safe integration (core.coupling's DELIVERY constants don't scale with percussion magnitude except against
 mail/plate, so a naive wiring made every two-handed sword prefer a weak pommel-strike over its own edge
 against UNARMOURED targets — backwards from the historical grounding)."""
-import os
-import sys
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))   # the repository root: `modules.combat` is a package
 
 from modules.combat import geometry as G  # noqa: E402
 from modules.combat import weapon_physics as WP  # noqa: E402

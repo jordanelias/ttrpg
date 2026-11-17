@@ -63,8 +63,7 @@ def test_the_combat_entry_fights_a_hand_built_record_as_the_engine_does_and_load
     loaded, out, oracle = probe(_PROBE, target, 300)
     module_dir = target.split(":", 1)[0].rsplit(".", 1)[0].replace(".", "/")
     allowed = {"engine/__init__.py", "engine/season/__init__.py", "engine/season/queries/__init__.py",
-               "engine/season/queries/inputs.py", "engine/substrate/__init__.py",
-               module_dir.split("/", 1)[0] + "/__init__.py"}
+               "engine/season/queries/inputs.py", module_dir.split("/", 1)[0] + "/__init__.py"}
     stray = [f for f in loaded
              if f not in allowed and not f.startswith("engine/dice_engine/")
              and not f.startswith(module_dir + "/")]

@@ -36,12 +36,9 @@ Falsifier, run at the build: `* str_arrest` deleted from the return reddens
 `test_a_strong_fighter_arrests_his_own_swing_sooner` and
 `test_a_strong_fighter_recovers_a_deep_commit_sooner_through_the_exposure`; with it present and ARREST_STR_K = 0
 the same two are red and the rest green."""
-import os
-import sys
 
 import pytest
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))   # the repository root: `modules.combat` is a package
 
 from modules.combat import combat_systems as S  # noqa: E402
 from modules.combat import core  # noqa: E402

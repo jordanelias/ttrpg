@@ -57,6 +57,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import ci_common  # noqa: E402
 
 REPO_ROOT = ci_common.REPO
+if REPO_ROOT not in sys.path:
+    sys.path.insert(0, REPO_ROOT)   # `modules.combat` is a package: derive() imports it by that name
 OUT_PATH = os.path.join(REPO_ROOT, 'engine', 'engine_params', 'combat_engine_v1.json')
 THREADWORK_PARAMS = os.path.join(REPO_ROOT, 'systems', 'threadwork', 'sim', 'params.py')
 THREADWORK_OUT_PATH = os.path.join(REPO_ROOT, 'engine', 'engine_params', 'threadwork_params.json')
@@ -130,7 +132,6 @@ def _kit_section(weapons, vocabulary, combatant):
 
 def derive():
     """Import the oracle and derive the export payload (deterministic)."""
-    sys.path.insert(0, REPO_ROOT)   # `modules.combat` is a package
     from modules.combat import config  # the Class-C oracle
     from modules.combat import core    # canonical resolution/damage/armour constants (OPT-AV-17 / ED-PC-0013)
     from modules.combat import combatant   # the Combatant's default kit (CP-T03-03)

@@ -16,15 +16,10 @@ The falsifiers are the plan position's own (v9 `_part7`, PC-10):
 The cross-TREE half of (1) -- the lethal fight equal to the pre-PC-10a engine's -- is the existing combat suite and
 the draw-stream pins, which this position does not move.
 """
-import os
 import random
-import sys
 
 import pytest
 
-_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-if _ROOT not in sys.path:
-    sys.path.insert(0, _ROOT)   # `modules.combat` is a package
 
 from valoria import _draw_stream as DS          # noqa: E402  the single owner of the draw instrument (CLAUDE.md §8)
 
@@ -166,11 +161,10 @@ def test_the_blood_assertions_observe_a_missing_stop(monkeypatch):
 def test_the_module_entry_reads_the_terms_off_the_typed_input():
     """`fight.py` passes `inp.terms` when the record carries it, the lethal default when it does not. The field is
     the season's to declare (PC-10b); a subclass stands in for it here."""
-    import importlib
     from dataclasses import dataclass
     from engine.season.queries.inputs import PersonalCombatInput
     from engine.season.seam.wrappers.combat import surrender_of
-    entry = importlib.import_module('modules.combat.fight')   # the composition row's `target:` module
+    from modules.combat import fight as entry   # the composition row's `target:` module
 
     @dataclass(frozen=True)
     class _Termed(PersonalCombatInput):

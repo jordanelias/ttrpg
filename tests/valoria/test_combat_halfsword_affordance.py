@@ -6,10 +6,7 @@ whitelist. These tests pin: (1) the byte-identical-at-parity acceptance (derived
 (2) that the formerly-DEAD `geo['halfsword']` coefficient + the new `grippable` field are now consumed, and
 (3) that `halfsword_target` is byte-identical to the retired name-gated logic across the whole roster.
 """
-import os
-import sys
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))   # the repository root: `modules.combat` is a package
 
 from modules.combat import combat_systems as S  # noqa: E402
 from modules.combat.combatant import WEAPONS, Combatant, HALFSWORD_FORM, HALFSWORD_BASE  # noqa: E402

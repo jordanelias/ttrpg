@@ -502,7 +502,7 @@ class Yield:
 # band is added (H-98). ⚠ What a term does NOT do: it does not reshape a blow. A strike that fells a fighter on the
 # beat it lands (a decisive blow crossing every gate, or the gate past the threshold) is a felling under any term;
 # the stop is read between beats, never inside a strike.
-DUEL_TERMS = ('yield', 'blood', 'death')   # closed set, this module's: a season roster (PC-10b, unbuilt) will name these and must be checked against this tuple, not re-declared unchecked
+DUEL_TERMS = ('yield', 'blood', 'death')   # closed set, this module's: the season's `duel_terms` and `challenge_terms` rosters are checked against it through the composition row `combat.duel_terms`, never re-declared
 LETHAL_TERMS = 'death'
 
 def _terms_crossed(c, terms, cfg):

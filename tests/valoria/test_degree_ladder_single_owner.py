@@ -131,7 +131,7 @@ def _massbattle_canon():
 
 
 def _combat_engine():
-    m = importlib.import_module('modules.combat.core')   # a package module: loaded by file path its relative imports have no parent
+    m = importlib.import_module('modules.combat.core')   # a package module: imported by dotted name, because loading it by file path would leave its relative imports no parent
     return lambda net, ob: band(m.degree(net, ob))
 
 

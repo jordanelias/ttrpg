@@ -5,12 +5,9 @@ negative once the reserve is drained, so the term lowers a DRAINED defender's re
 Falsifier (CLAUDE.md §0.1 pt 3), run at the build: the `sig += LAPSE_K*consistency(...)` line deleted from mode_sigma
 reddens `test_a_drained_defender_chooses_the_same_mode_with_a_worse_sigma` and `test_the_shipped_lapse_separates_a_drained_defender`
 (the sigmas come out equal); with it present and K = 0 the control tests stay green (`test_k_zero_is_the_pre_item_tree`)."""
-import os
-import sys
 
 import pytest
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))   # the repository root: `modules.combat` is a package
 
 from modules.combat import combat_systems as S  # noqa: E402
 from modules.combat import tradition as TR  # noqa: E402

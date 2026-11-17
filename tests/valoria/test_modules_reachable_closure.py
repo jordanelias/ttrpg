@@ -27,7 +27,7 @@ No such seam is declared now (`modules/combat/`, the last, became a package at C
 In a flat set one more failure is observable: a bare name that resolves to no file in the directory and
 to no standard-library or installed module is a file the set needs and does not hold (it would load
 from wherever `sys.path` happens to find it, or raise) -- reported beside the files left behind. The
-directories checked, of each shape, are printed (`-s`).
+directories checked are printed (`-s`).
 
 NOT CHECKED HERE: DATA a module reads by path, which an import walk cannot see. The one such read
 (`modules/mass_battle/terrain.py` opening the geography file) is gone: the host reads the file
@@ -150,7 +150,7 @@ def check(module_dir: str, roots: list, flat: bool = False) -> tuple:
 
 def test_every_module_is_exactly_its_entries_reachable_closure():
     roots = _entry_roots()
-    checked = {"package": [], "flat": []}
+    checked = []
     # What the walk below cannot see on its own: an entry row aimed outside `modules/`, a directory under
     # `modules/` that no entry row names, and a loose top-level file. Each would sit outside every closure.
     stray_targets = sorted(r for r, row in composition.ROLES.items() if row.get("entry")
@@ -165,12 +165,11 @@ def test_every_module_is_exactly_its_entries_reachable_closure():
         f"`{MODULES}/` holds directories no entry row names {unnamed} or loose files {loose}; "
         "it holds the reachable closure of the entries only")
     for module_dir, entry_modules in sorted(roots.items()):
-        flat = not os.path.isfile(os.path.join(module_dir, "__init__.py"))
         rel = os.path.relpath(module_dir, ROOT)
-        if flat:
+        if not os.path.isfile(os.path.join(module_dir, "__init__.py")):
             raise AssertionError(
                 f"{rel} is a flat module set; no path seam exists to load it (CI-09): give it an __init__.py")
-        unreached, left_behind, unresolved = check(module_dir, entry_modules, flat)
+        unreached, left_behind, _unresolved = check(module_dir, entry_modules, False)
         assert not unreached, (
             f"{rel}: files no entry reaches ({entry_modules}): "
             f"{_rel(unreached)}. `modules/` holds the reachable closure only (A-25); an unreached file goes "
@@ -178,15 +177,12 @@ def test_every_module_is_exactly_its_entries_reachable_closure():
         assert not left_behind, (
             f"{rel}: its closure reaches files left in `systems/`: "
             f"{_rel(left_behind)}. The closure moves whole")
-        assert not unresolved, (
-            f"{rel}: the flat set imports {sorted(unresolved)}, which it does not hold and nothing "
-            "installed provides. The closure moves whole")
-        checked["flat" if flat else "package"].append(rel)
+        checked.append(rel)
     print(f"SM-7 checked: {checked}")
-    assert os.path.join(MODULES, "mass_battle") in checked["package"], (
+    assert os.path.join(MODULES, "mass_battle") in checked, (
         f"the walk checked {checked} and not `modules/mass_battle`, the package `31c` moved; the roots "
         f"are read from the composition rows -- has its entry row lost `entry:`?")
-    assert os.path.join(MODULES, "combat") in checked["package"], (
+    assert os.path.join(MODULES, "combat") in checked, (
         f"the walk checked {checked} and not `modules/combat`, the package CI-09 made of the set `31b` moved")
 
 

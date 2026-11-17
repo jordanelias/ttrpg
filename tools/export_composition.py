@@ -60,9 +60,9 @@ _MISSING = object()
 
 #: A role resolves to a named module attribute. `callable` (the default) is the overwhelming
 #: majority and keeps the original assertion; `value` admits a module CONSTANT and is declared per
-#: row so the callable check is never lost silently. Added 2026-08-22 (plan S5a) for
-#: `systems.social_contest.sim.contest`'s side labels, which `engine/cross_scale/scene_dispatch.py`
-#: compares a verdict against — a constant, so no callable role could carry it, and no authored
+#: row so the callable check is never lost silently. Added 2026-08-22 (plan S5a) for the contest side
+#: labels (rows since retired); now `combat.duel_terms`, the closed set of duel terms a season roster is
+#: checked against — a constant, so no callable role could carry it, and no authored
 #: surface declares it either (the two EARLIER constant seams each had one: settlements' STAT_MIN/
 #: MAX are `set.order` in descriptor_registry.yaml, and the persuasion thresholds turned out to be
 #: re-derivation of a verdict the callee already returned). This is a widening of the ONE mechanism,

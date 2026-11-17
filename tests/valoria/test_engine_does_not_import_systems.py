@@ -276,9 +276,9 @@ def _relative_module_files(text, path):
     files.PC_ENGINE_DIR` was deleted 2026-09-25 when `combat_bridge.py` and `season/seam/wrappers/
     combat.py`'s loaders were consolidated into `engine/substrate/pc_engine.py`, whose own
     `PC_ENGINE_DIR` is a LOCAL assignment the chain below catches without this one-hop branch (that file was
-    deleted at CI-09; its `FORK:` row in `references/restructure_ledger.md` resolves it). No file in the current tree exercises the one-hop path, so
-    nothing plants a two-file hop to prove this branch still works if it broke — an honest gap
-    (`CLAUDE.md` §0.1 pt 2), not a claim that it is covered. Kept because the shape it catches
+    deleted at CI-09; its `FORK:` row in `references/restructure_ledger.md` resolves it). No file in the current tree exercises the one-hop path; the only
+    exerciser is the planted pair in `test_the_one_hop_relative_import_resolution_can_observe_the_seam_it_exists_to_catch`
+    (`CLAUDE.md` §0.1 pt 2). Kept because the shape it catches
     (an anchor consolidation moving a seam's literal one hop away) is a correct refactor pattern,
     not a one-time accident, and could recur.
 

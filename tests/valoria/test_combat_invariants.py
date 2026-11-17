@@ -26,7 +26,6 @@ ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'modules', 'combat'
 # What the import walk from `wrapper`/`combatant` did not reach (`capabilities.py`, `state_graph.py`) and the
 # workbench stayed where the engine was (plan position `31b`); `_engine_file` finds a module in either.
 LEFT = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))   # the repository root: `modules.combat` is a package
 
 
 def _engine_file(name):
