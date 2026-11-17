@@ -230,6 +230,38 @@
       }
     }
   },
+  "traits": {
+    "source": "U1 \u00a72a; A-98 (4), A-107 (2026-11-12); 02_CHAR_which_ground_moves_whom edit 1",
+    "scale": [
+      0,
+      1
+    ],
+    "seated_from": "npc_registry.yaml#resonant_style",
+    "names": [
+      "moved_by_evidence",
+      "moved_by_consequence",
+      "moved_by_authority",
+      "moved_by_solidarity"
+    ],
+    "rows": {
+      "moved_by_evidence": {
+        "gloss": "Yields to a case that cites something he can check.",
+        "seated_by": "evidence"
+      },
+      "moved_by_consequence": {
+        "gloss": "Yields when shown the harm his own position has already done.",
+        "seated_by": "consequence"
+      },
+      "moved_by_authority": {
+        "gloss": "Yields to one who stands over him or speaks for his creed.",
+        "seated_by": "authority"
+      },
+      "moved_by_solidarity": {
+        "gloss": "Yields to one he holds dear.",
+        "seated_by": "solidarity"
+      }
+    }
+  },
   "settlement_stats": {
     "set.legitimacy": {
       "name": "Legitimacy",

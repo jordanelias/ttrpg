@@ -283,6 +283,41 @@ def _capability_roster(reg, attribute_keys):
             'untrained': untrained_set, 'names': list(rows), 'rows': rows}
 
 
+def _trait_roster(reg, skill_names):
+    """The traits, defined once (B04.07; U1 §2a, A-107), beside `_capability_roster`. Refused, naming the row: a missing
+    or empty block, a `scale` other than `[0, 1]` (a trait is held or not), an empty `gloss`, a missing `seated_by`,
+    a `seated_by` value used by two rows (one `resonant_style` value seats one trait), and an id that is also a row of
+    `capabilities:` (one id, one roster). `skill_names` is the exported skill roster's ids."""
+    block = reg.get('traits')
+    if not isinstance(block, dict) or not block.get('rows'):
+        raise SystemExit('descriptor_registry.yaml: traits is missing or has no rows. It is the one definition of '
+                         'each trait; the engine reads it through engine/substrate/descriptors.py.')
+    if block.get('scale') != [0, 1]:
+        raise SystemExit(f'descriptor_registry.yaml: traits.scale is {block.get("scale")!r}; a trait is held or not, '
+                         f'so the scale is [0, 1] (A-98 (4)).')
+    rows, seated = {}, {}
+    for name, r in block['rows'].items():
+        where = f'descriptor_registry.yaml: traits.rows.{name}'
+        if not isinstance(r, dict):
+            raise SystemExit(f'{where} is not a mapping.')
+        if name in skill_names:
+            raise SystemExit(f'{where}: {name!r} is also a row of capabilities. One id, one roster (A-107): a trait '
+                             f'is never a skill.')
+        gloss = r.get('gloss')
+        if not isinstance(gloss, str) or not gloss.strip():
+            raise SystemExit(f'{where}: empty or missing gloss. Every trait carries a one-sentence gloss.')
+        by = r.get('seated_by')
+        if not isinstance(by, str) or not by.strip() or by != by.strip().lower():
+            raise SystemExit(f'{where}: seated_by {by!r} is not one lowercase resonant_style value.')
+        if by in seated:
+            raise SystemExit(f'{where}: seated_by {by!r} is already used by {seated[by]}. One resonant_style value '
+                             f'seats one trait.')
+        seated[by] = str(name)
+        rows[str(name)] = {'gloss': gloss.strip(), 'seated_by': by}
+    return {'source': block.get('source'), 'scale': [0, 1], 'seated_from': block.get('seated_from'),
+            'names': list(rows), 'rows': rows}
+
+
 def build():
     reg = ci_common.load_yaml(SRC, default=None)
     if not reg:
@@ -342,6 +377,8 @@ def build():
         'heritage_roster': _heritage_roster(reg, _affiliation_roster(reg)['concerns']),
         # THE SKILLS (B04.02), defined once: what each is, its attribute, what opposes it, how it grows.
         'capabilities': _capability_roster(reg, set(roster)),
+        # THE TRAITS (B04.07), defined once beside the skills: what a person is moved by; held or not, never dice.
+        'traits': _trait_roster(reg, _capability_roster(reg, set(roster))['rows']),
         'settlement_stats': _section(reg, 'settlement_stats'),
         'practitioner_stats': _section(reg, 'practitioner_stats'),
         'territory_stats': _section(reg, 'territory_stats'),

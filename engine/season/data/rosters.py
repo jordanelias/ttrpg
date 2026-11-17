@@ -1435,10 +1435,18 @@ def _load_capability_uses(rows, fixtures) -> tuple:
         if extra:
             refuse(i, row, f"carries `{extra[0]}`, which role {role!r} does not take",
                    f"only {sorted(role_fields[role])} beside the base columns", "MAP §C -- the role-field table")
-        if not (key in selectors or key in _desc.CAPABILITIES or key in _desc.ATTRIBUTES or key in _desc.PRACTITIONER_STATS):
-            refuse(i, row, f"has key {key!r}, which is none of a skill, an attribute, a practitioner stat or a selector",
-                   f"a skill {sorted(_desc.CAPABILITIES)}, an attribute, a practitioner stat, or {sorted(selectors)}",
-                   "U1 §3 item 1 -- a key resolves through the leaf reader; a trait key is B04.07's")
+        if key in _desc.TRAITS:
+            # A-107 (U1 §2a step 5): a trait is held or not and never gives dice -- it is read at `edge`, `per: held`, only.
+            if role != "edge":
+                refuse(i, row, f"keys the trait {key!r} at role {role!r}", "a trait key only at role `edge`",
+                       "A-107 -- a trait is held or not and never gives dice, a factor or a bound; a skill is the key of every other role")
+            if row.get("per") != "held":
+                refuse(i, row, f"keys the trait {key!r} with per {row.get('per')!r}", "`per: held` on a trait key",
+                       "A-107 -- a trait has no rank and no mid-point: it is held (1) or not (0)")
+        elif not (key in selectors or key in _desc.CAPABILITIES or key in _desc.ATTRIBUTES or key in _desc.PRACTITIONER_STATS):
+            refuse(i, row, f"has key {key!r}, which is none of a skill, a trait, an attribute, a practitioner stat or a selector",
+                   f"a skill {sorted(_desc.CAPABILITIES)}, a trait {sorted(_desc.TRAITS)}, an attribute, a practitioner stat, or {sorted(selectors)}",
+                   "U1 §3 item 1 -- a key resolves through the leaf reader")
         if row.get("side") is not None and row["side"] not in sides:
             refuse(i, row, f"has side {row['side']!r}", f"one of {sorted(sides)}", "U1 §3 item 3 -- `side` says whose sheet is read")
         if row.get("per") is not None and row["per"] not in pers:

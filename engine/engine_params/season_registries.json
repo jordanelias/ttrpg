@@ -7536,6 +7536,15 @@
         },
         {
           "kind": "Person",
+          "field": "traits",
+          "steps": [],
+          "class": "\u2014",
+          "social": "n/a",
+          "by": "B04.07 (A-107): `frozenset` of `descriptors.TRAITS` ids, seated at world build from the cast row's `resonant_style:` (`data/cast.py::traits_of`, `boot/realm.py::build_realm`) and written NOWHERE in play: no step, so the gate refuses any write (`(Proposition, *)`'s shape). A trait is held or not and never gives dice; it is never a key of `Person.capability`",
+          "emits": "\u2014"
+        },
+        {
+          "kind": "Person",
           "field": "conviction",
           "steps": [
             "RES",

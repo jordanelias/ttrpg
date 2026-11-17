@@ -80,6 +80,21 @@ capabilities:
     inquiry: {kind: skill, gloss: "Finds things out: from a record, a place or a watched person.", base: attr.mind.acuity, untrained: default, grows_by: [train, practice],      scale: [0, 7], source: "rosters.yaml vocation_attribute (CR-20)"}
     arms:    {kind: skill, gloss: "Fights with a weapon in hand.", base: attr.body.agility, untrained: default, grows_by: [train, practice, use], scale: [0, 7], source: "rosters.yaml vocation_attribute (CR-20); CP-T03-04 (iv)"}
 
+# TRAITS -- what a person IS MOVED BY, DEFINED ONCE (B04.07; U1 §2a, A-98 (4), A-107: a roster separate from `capabilities`).
+# A trait is held or not (scale [0, 1]) and never gives dice. `seated_by` is the ONE `resonant_style` value of
+# `references/npc_registry.yaml` that seats it (compared lowercase; that key keeps its name and its eighteen values).
+# `tools/export_descriptors.py::_trait_roster` validates this block; `engine/substrate/descriptors.py::TRAITS` reads it;
+# `engine/season/data/cast.py::traits_of` seats `Person.traits`; one id, one roster (no id is also a `capabilities` row).
+traits:
+  source: "U1 §2a; A-98 (4), A-107 (2026-11-12); 02_CHAR_which_ground_moves_whom edit 1"
+  scale: [0, 1]
+  seated_from: "npc_registry.yaml#resonant_style"
+  rows:
+    moved_by_evidence:    {seated_by: evidence,    gloss: "Yields to a case that cites something he can check."}
+    moved_by_consequence: {seated_by: consequence, gloss: "Yields when shown the harm his own position has already done."}
+    moved_by_authority:   {seated_by: authority,   gloss: "Yields to one who stands over him or speaks for his creed."}
+    moved_by_solidarity:  {seated_by: solidarity,  gloss: "Yields to one he holds dear."}
+
 # AGGREGATES (W2.8 PLACEHOLDERS) -- computed from category members; NOT yet wired into derived values.
 aggregates:
   entries:

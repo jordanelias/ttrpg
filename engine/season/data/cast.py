@@ -37,7 +37,7 @@ from . import files
 from .rosters import FACTION_ALIAS, FACTIONS, LIFEPATH_TEMPLATES, load_yaml
 from ..gaps import Unspecified
 from ...substrate.descriptors import (
-    ATTRIBUTE_CEILING, ATTRIBUTE_FLOOR, ATTRIBUTES, HERITAGES, PRACTITIONER_STATS, attribute_key,
+    ATTRIBUTE_CEILING, ATTRIBUTE_FLOOR, ATTRIBUTES, HERITAGES, PRACTITIONER_STATS, TRAITS, attribute_key,
 )
 
 NPC_REGISTRY_YAML = files.NPC_REGISTRY_YAML
@@ -359,6 +359,24 @@ def heritage_of(r: dict) -> Optional[str]:
         f"cast row {(r or {}).get('id', '?')}: heritage {v!r} is none of {', '.join(HERITAGES)}",
         "references/descriptor_registry.yaml", needs=f"one of {', '.join(HERITAGES)}, or no key",
         law="CR-30 -- a heritage outside the registry's roster is refused at build")
+
+
+def traits_of(r: dict) -> frozenset:
+    """`Person.traits`' authored source (B04.07, A-107): the row's `resonant_style:` value, read lowercase through
+    `descriptors.TRAITS[*].seated_by` -- the one trait that value seats -- as a one-member frozenset, or `frozenset()`
+    where nothing is authored (the key absent, `resonant_style: null`, or no row at all). No second roster is made, and
+    nothing is written into `Person.capability` (the skill map holds skills only). A value no trait row seats REFUSES,
+    naming the row (`heritage_of`'s shape)."""
+    v = (r or {}).get("resonant_style")
+    if v is None:
+        return frozenset()
+    seats = {t.seated_by: t.id for t in TRAITS.values()}
+    if isinstance(v, str) and v.strip().lower() in seats:
+        return frozenset({seats[v.strip().lower()]})
+    raise Unspecified(
+        f"cast row {(r or {}).get('id', '?')}: resonant_style {v!r} seats no trait; the traits seat {sorted(seats)}",
+        "references/descriptor_registry.yaml", needs=f"one of {sorted(seats)} (any case), or no key",
+        law="A-107 -- a resonant_style no trait row names is refused at build")
 
 
 def capability_of(r: dict, pool_default: int) -> dict:

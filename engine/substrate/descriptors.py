@@ -125,6 +125,34 @@ def capability(name) -> CapabilityRow:
             'then exported (tools/export_descriptors.py); do not add one anywhere else.') from None
 
 
+# ---------------------------------------------------------------------------
+# TRAITS -- B04.07 (U1 §2a, A-107). A SEPARATE ROSTER FROM THE SKILLS: a trait is held or not and never gives dice.
+# ---------------------------------------------------------------------------
+# `references/descriptor_registry.yaml: traits`, validated by the exporter's `_trait_roster`. `seated_by` is the one
+# lowercase `resonant_style` value that seats the trait (`data/cast.py::traits_of`); held on `Person.traits`.
+@dataclass(frozen=True)
+class TraitRow:
+    """One trait's definition: its `id`, a one-sentence `gloss`, and the `resonant_style` value that seats it."""
+    id: str
+    gloss: str
+    seated_by: str
+
+
+TRAITS: Mapping[str, TraitRow] = MappingProxyType({
+    name: TraitRow(name, r['gloss'], r['seated_by']) for name, r in _DATA['traits']['rows'].items()})
+
+
+def trait(id) -> TraitRow:
+    """The definition row of trait `id`; raises ValueError naming the roster, as `capability` does."""
+    try:
+        return TRAITS[id]
+    except (KeyError, TypeError):
+        raise ValueError(
+            f'unknown trait {id!r}. The roster is owned by references/descriptor_registry.yaml:traits and read here; '
+            f'the defined traits are: ' + ', '.join(TRAITS) + '. A trait is defined there once, then exported '
+            '(tools/export_descriptors.py); do not add one anywhere else.') from None
+
+
 #: {registry key -> {name, floor, ceiling}} for each declared domain.
 SETTLEMENT_STATS = _DATA['settlement_stats']
 PRACTITIONER_STATS = _DATA['practitioner_stats']

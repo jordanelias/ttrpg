@@ -514,3 +514,143 @@ def test_the_substrate_forms_and_scale_of():
     assert descriptors.scale_of(next(iter(descriptors.PRACTITIONER_STATS)))[0] == 0
     with pytest.raises(ValueError, match="scale"):
         descriptors.scale_of("no_such_key")
+
+
+# ======================================================================================
+# B04.07 -- THE TRAIT ROSTER: HOME, EXPORTER, READER, HOLDING, USES  (U1 §2a steps 1-5; A-107)
+# ======================================================================================
+# `descriptor_registry.yaml: traits` defines each trait once; `export_descriptors.py::_trait_roster` validates it;
+# `descriptors.TRAITS` reads it; `data/cast.py::traits_of` maps a cast row's `resonant_style:` through it into
+# `Person.traits` (a frozenset, never `Person.capability`); `_load_capability_uses` accepts a trait key only at
+# role `edge` with `per: held`. The shipped roster is the control in each test.
+
+_TRAIT_IDS = ("moved_by_evidence", "moved_by_consequence", "moved_by_authority", "moved_by_solidarity")
+
+
+def test_the_shipped_trait_roster_exports_and_the_leaf_reads_it():
+    """The control: four traits, one `resonant_style` value each; `trait(id)` names the roster on a miss."""
+    out = ed.build()["traits"]
+    assert tuple(out["rows"]) == _TRAIT_IDS and out["scale"] == [0, 1]
+    assert set(descriptors.TRAITS) == set(_TRAIT_IDS)
+    assert {r.seated_by for r in descriptors.TRAITS.values()} == {"evidence", "consequence", "authority", "solidarity"}
+    row = descriptors.trait("moved_by_evidence")
+    assert row.id == "moved_by_evidence" and row.seated_by == "evidence" and row.gloss.strip()
+    with pytest.raises(ValueError, match="traits"):
+        descriptors.trait("no_such_trait")
+
+
+def test_a_trait_id_that_is_also_a_skill_is_refused(monkeypatch):
+    """One id, one roster: a trait row named for a skill is refused at the exporter, naming both."""
+    def collide(reg):
+        reg["traits"]["rows"]["arms"] = dict(reg["traits"]["rows"]["moved_by_evidence"])
+        del reg["traits"]["rows"]["moved_by_evidence"]
+    _plant(monkeypatch, collide)
+    with pytest.raises(SystemExit, match="arms") as e:
+        ed.build()
+    assert "capabilities" in str(e.value)
+
+
+def test_a_trait_row_that_breaks_the_schema_is_refused_naming_it(monkeypatch):
+    """The other refusals of §2a step 2: an empty gloss, a `scale` other than [0, 1], a `seated_by` used twice."""
+    def empty(reg):
+        reg["traits"]["rows"]["moved_by_authority"]["gloss"] = " "
+    _plant(monkeypatch, empty)
+    with pytest.raises(SystemExit, match="moved_by_authority"):
+        ed.build()
+    monkeypatch.setattr(ed.ci_common, "load_yaml", _REAL_LOAD)
+    _plant(monkeypatch, lambda reg: reg["traits"].update(scale=[0, 2]))
+    with pytest.raises(SystemExit, match="scale"):
+        ed.build()
+    monkeypatch.setattr(ed.ci_common, "load_yaml", _REAL_LOAD)
+    _plant(monkeypatch, lambda reg: reg["traits"]["rows"]["moved_by_solidarity"].update(seated_by="evidence"))
+    with pytest.raises(SystemExit, match="evidence"):
+        ed.build()
+    monkeypatch.setattr(ed.ci_common, "load_yaml", _REAL_LOAD)
+    _plant(monkeypatch, lambda reg: reg.pop("traits"))
+    with pytest.raises(SystemExit, match="traits"):
+        ed.build()
+
+
+def _trait_use(role="edge", key="moved_by_evidence", **cols):
+    """A planted uses row at the `judgement` row's site, re-roled and re-keyed, then `cols` over it."""
+    from engine.season.data import rosters
+    base = _shipped_row("judgement")
+    row = {"use": base["use"], "role": role, "key": key}
+    if "side" in rosters._capability_role_fields(rosters.roster("capability_roles", ordered=True))[role]:
+        row["side"] = "actor"                            # only where the role takes it: the refusal tested is the key's
+    row.update(cols)
+    assert row["use"] in rosters.CAPABILITY_USE_SITES
+    return row
+
+
+def test_a_trait_key_at_role_edge_with_per_held_loads():
+    """The one place a trait key is accepted (U1 §2a step 5): the control for the refusals below."""
+    assert _refused([_trait_use("edge", per="held")]) is None
+
+
+def test_a_trait_key_outside_role_edge_is_refused():
+    """A trait key at any role but `edge` is refused naming the row and the key; the roles are the whole closed set."""
+    from engine.season.data import rosters
+    refused = 0
+    for role in rosters.roster("capability_roles", ordered=True):
+        if role == "edge":
+            continue
+        msg = _refused([_trait_use(role)])
+        assert msg is not None and "moved_by_evidence" in msg and "`edge`" in msg, (role, msg)
+        refused += 1
+    assert refused == 9
+
+
+def test_a_dice_use_of_a_trait_is_refused():
+    """MAP §G "Tests"; the falsifier of U1 §2a: a `dice` row keyed on a trait must not load."""
+    msg = _refused([_trait_use("dice")])
+    assert msg is not None and "moved_by_evidence" in msg and "dice" in msg and "`edge`" in msg, msg
+
+
+def test_a_trait_key_with_per_other_than_held_is_refused():
+    for per in ("rank", "mid"):
+        msg = _refused([_trait_use("edge", per=per)])
+        assert msg is not None and "moved_by_evidence" in msg and "held" in msg, (per, msg)
+    msg = _refused([_trait_use("edge")])                 # no `per` at all is not `held` either
+    assert msg is not None and "held" in msg, msg
+
+
+def test_a_key_in_neither_roster_is_still_refused():
+    msg = _refused([_trait_use("edge", key="moved_by_nobody", per="held")])
+    assert msg is not None and "moved_by_nobody" in msg, msg
+
+
+def test_an_unknown_resonant_style_is_refused():
+    """`traits_of` refuses a `resonant_style` value no trait row seats, naming the row; absent or null holds none."""
+    from engine.season.data import cast
+    from engine.season.gaps import ShapeGap
+    with pytest.raises(ShapeGap, match="Vengeance") as e:
+        cast.traits_of({"id": "NPC-X", "resonant_style": "Vengeance"})
+    assert "NPC-X" in str(e.value)
+    assert cast.traits_of({"id": "NPC-X"}) == frozenset() == cast.traits_of({"resonant_style": None}) == cast.traits_of({})
+    assert cast.traits_of({"resonant_style": "Evidence"}) == frozenset({"moved_by_evidence"})
+    assert cast.traits_of({"resonant_style": "solidarity"}) == frozenset({"moved_by_solidarity"})
+
+
+def test_a_trait_never_enters_person_capability():
+    """On the shipped world: every cast row carrying `resonant_style:` seats exactly one trait on its person, a row
+    without one seats none, `Person.traits` is a frozenset of defined trait ids, and no trait id is in any
+    `Person.capability`. (The falsifier of §2a: a cast row's trait found in `Person.capability`.)"""
+    from engine.season.boot.realm import build_realm, _slug
+    from engine.season.data import cast
+    w = build_realm(0)
+    seen = styled = 0
+    for cid, row in sorted(cast.load().items()):
+        p = w.persons.get(f"p_{_slug(cid)}")
+        if p is None:
+            continue
+        assert isinstance(p.traits, frozenset)
+        if row.get("resonant_style"):
+            assert len(p.traits) == 1 and p.traits <= set(descriptors.TRAITS), (cid, p.traits)
+            styled += 1
+        else:
+            assert p.traits == frozenset(), (cid, p.traits)
+        seen += 1
+    assert styled == 18 and seen >= 46
+    assert not any(set(p.capability) & set(descriptors.TRAITS) for p in w.persons.values())
+    assert sum(1 for p in w.persons.values() if p.traits) == styled

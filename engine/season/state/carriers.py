@@ -814,6 +814,12 @@ class Person:
     # write. ONE READER: `epistemic.py::_term_marks`, which deposits it TRUE and verbatim to every co-located
     # witness beside `who` (AX-7: no competence or prior-belief mediation).
     heritage: Optional[str] = None
+    # B04.07 (A-107): TRAITS -- what this person is MOVED BY, the members of `descriptors.TRAITS` he holds, each held or
+    # not and never giving dice. Filled ONCE at world build from a cast row's `resonant_style:`
+    # (`data/cast.py::traits_of`; `frozenset()` where unauthored), held APART from `capability` (the skill map holds
+    # skills only), and written at build only (`write_matrix.yaml`'s `Person.traits` row has no step). No reader reads it
+    # yet: the `edge` reader that will (U1-B step 4) reads 1 if the subject holds the trait, else 0.
+    traits: frozenset = frozenset()
     travel_leg: list[str] = field(default_factory=list)
     # ⚠ THE TENURE STORE IS HERE, as `Tenure`'s OWN DOCSTRING says: "S15 -- THE ONE EDGE. Owned by its
     # SUBJECT (S15.1)." `budget : (Person, View) -> int` reads "own `hold` Tenures" WITH NO WORLD
