@@ -29,6 +29,7 @@ from ..data.fixtures import DEFAULT_FIXTURES
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver
 from engine.substrate import composition
+from ..queries import person_q
 from ..seam import ladder
 from ..seam.wrappers import pool, sigma
 from ..state.carriers import Act, Claim
@@ -53,7 +54,7 @@ def _tell(to, actor="p_low"):
 
 def _claim(holder, subject, value, *, when=0, confidence=5):
     return Claim(id=f"c:{holder}:{subject}:{when}", holder=holder, subject=subject,
-                 predicate=sigma.CAPABILITY_CLAIM + KEY, value=value, when=when,
+                 predicate=person_q.CAPABILITY_CLAIM + KEY, value=value, when=when,
                  source="told", confidence=confidence, visibility="own")
 
 

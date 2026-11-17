@@ -37,7 +37,8 @@ from . import files
 from .rosters import FACTION_ALIAS, FACTIONS, LIFEPATH_RANKS, LIFEPATH_TEMPLATES, load_yaml, roster
 from ..gaps import Unspecified
 from ...substrate.descriptors import (
-    ATTRIBUTE_CEILING, ATTRIBUTE_FLOOR, ATTRIBUTES, CAPABILITIES, HERITAGES, PRACTITIONER_STATS, TRAITS, attribute_key,
+    ATTRIBUTE_CEILING, ATTRIBUTE_FLOOR, ATTRIBUTES, CAPABILITIES, HERITAGES, PRACTITIONER_STATS, TRAIT_BY_SEATING,
+    attribute_key, rank_in_scale,
 )
 
 NPC_REGISTRY_YAML = files.NPC_REGISTRY_YAML
@@ -399,7 +400,7 @@ def traits_of(r: dict) -> frozenset:
     v = (r or {}).get("resonant_style")
     if v is None:
         return frozenset()
-    seats = {t.seated_by: t.id for t in TRAITS.values()}
+    seats = TRAIT_BY_SEATING
     if isinstance(v, str) and v.strip().lower() in seats:
         return frozenset({seats[v.strip().lower()]})
     raise Unspecified(
@@ -432,7 +433,7 @@ def capabilities_of(r: dict) -> dict:
                 f"cast row {who}: capabilities key {name!r} names no defined skill",
                 "references/descriptor_registry.yaml", needs=f"one of {', '.join(CAPABILITIES)}",
                 law="CAP A7 -- a score under an id no definition row carries is refused")
-        if not isinstance(v, int) or isinstance(v, bool) or not row.floor <= v <= row.ceiling:
+        if not rank_in_scale(name, v):
             raise Unspecified(
                 f"cast row {who}: capabilities {name!r}: {v!r} -- magnitudes must be whole numbers from {row.floor} to "
                 f"{row.ceiling}", "references/npc_registry.yaml",

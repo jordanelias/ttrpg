@@ -30,7 +30,7 @@ from ..data.requires import (
 )
 from ..data.rosters import (
     CHALLENGE_KIND, CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, REMOVE_ORDINAL, SUCCESSIONS,
-    capability_uses, refusing_pole, require_member, require_use_site,
+    capability_rows, refusing_pole, require_member, require_use_site,
 )
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
@@ -1603,9 +1603,16 @@ def capability_factor(p: Person, use: str, fx) -> Optional[float]:
     (the caller reads it as the factor 1). The value is `p.attributes` at the row's `key`, on `substrate.descriptors.scale_of(key)`;
     the form is `about_mid`, its `gain` the Fixture the row names (`fx.get(row.gain)`): a sweep of that Fixture overrides
     the shipped value through `fx`, as every other sweep does, and the caller passes no gain of its own. `side: actor` is the only side a person-side reader reads: `p` is the actor. A use with several rows multiplies them."""
-    rows = [r for r in capability_uses() if r.use == use and r.role == "judgement"]
-    if not rows:
-        return None
+    return _judgement_factor(p, _judgement_rows(use), fx)
+
+
+def _judgement_rows(use: str) -> list:
+    """The `judgement` rows of site `use`, in table order."""
+    return [r for r in capability_rows(use) if r.role == "judgement"]
+
+
+def _judgement_factor(p: Person, rows: list, fx) -> Optional[float]:
+    """`capability_factor`'s product over `rows` (the `judgement` rows of one site); `None` where there are none or `p` holds no value at any key."""
     factor = None
     for row in rows:
         held = (getattr(p, "attributes", None) or {}).get(row.key)
@@ -1650,11 +1657,12 @@ def competence(p: Person, fx) -> float:
     alone knows which told claims are false, and to CR-83's design, which must give the separator before the
     gain is flipped live (a declared hash mover scheduled by that design, not by this function). CR-27's
     second falsifier is the guard on that flip."""
-    for row in capability_uses():
-        if row.use == TOLD_CLAIM_CREDIT and row.role == "judgement" and not 0.0 <= fx.get(row.gain) <= 1.0:
+    rows = _judgement_rows(TOLD_CLAIM_CREDIT)
+    for row in rows:
+        if not 0.0 <= fx.get(row.gain) <= 1.0:
             raise ValueError(f"{row.gain} {fx.get(row.gain)!r} is outside [0, 1] (H-200): a factor below 0 "
                              "would turn a deposit's confidence negative")
-    factor = capability_factor(p, TOLD_CLAIM_CREDIT, fx)
+    factor = _judgement_factor(p, rows, fx)
     return 1.0 if factor is None else min(1.0, factor)
 
 

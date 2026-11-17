@@ -21,7 +21,10 @@ from typing import Optional
 
 from . import files
 from ..gaps import Forbidden, Unspecified
-from engine.substrate.descriptors import ATTRIBUTES as _ATTRIBUTES, CAPABILITIES as _CAPABILITIES
+from engine.substrate.descriptors import (
+    ATTRIBUTES as _ATTRIBUTES, CAPABILITIES as _CAPABILITIES, PRACTITIONER_STATS as _PRACTITIONER_STATS, TRAITS as _TRAITS,
+    capability as _capability, rank_in_scale,
+)
 
 
 # ---------------------------------------------------------------------------
@@ -120,6 +123,27 @@ _ROSTERS, _TABLES = _load_rosters()
 OFFICES_YAML = files.OFFICES_YAML
 
 
+def require_member(value, roster, what: str, where: str, law: str, needs: str = "") -> None:
+    """THE ROSTER-MEMBERSHIP REFUSAL, IN ONE PLACE: test a runtime value against a bound roster,
+    and on a miss raise `Unspecified` naming the hole, the accepted members and the law.
+    `data/verbs._check_sparse_table` states the split used here -- centralise the mechanical
+    check, leave the LAW STRINGS per-caller "because what a violation means differs by table":
+    `what`, `where` and `law` stay the caller's words; the test and the rendering come here.
+
+    ⚠ THE RENDERING IS WORTH CENTRALISING. An ORDERED roster is a tuple and its order is semantic,
+    so it renders with `list()`; an unordered one is a frozenset and renders `sorted()` so the
+    message is stable. A caller needing prose instead passes `needs=`.
+    """
+    try:
+        if value in roster:
+            return
+    except TypeError:   # a value that cannot be hashed is no member of a set or a mapping: refused, not crashed
+        pass
+    raise Unspecified(
+        what, where, law=law,
+        needs=needs or f"one of {list(roster) if isinstance(roster, tuple) else sorted(roster)}")
+
+
 def _load_offices() -> dict:
     """`engine/season/offices.yaml`, parsed once at import -- world-gen content: the governance
     ladder's titles and the authored seats (`seats:`, and `foreign_seats:` for a foreign faction). Not a `rosters.yaml` row, so it does not go through `_load_rosters`'s
@@ -164,8 +188,9 @@ def _load_offices() -> dict:
     # `Seat` field (the key is `capability:`, not `vocation:`). It is read through `SEAT_ROW_BY_ID[id]["capability"]`;
     # a value that is not a member of `descriptors.CAPABILITIES` is refused here, naming the row.
     for row in (*doc["seats"], *(doc.get("foreign_seats") or ())):
-        if isinstance(row, dict) and row.get("capability") is not None and not (isinstance(row["capability"], str) and row["capability"] in _CAPABILITIES):
-            raise Unspecified(
+        if isinstance(row, dict) and row.get("capability") is not None:
+            require_member(
+                row["capability"], _CAPABILITIES,
                 f"offices.yaml row {row.get('id')!r} names `capability: {row['capability']!r}`, which is not a defined skill",
                 "offices.yaml -- seats",
                 needs="a member of `descriptors.CAPABILITIES` (" + ", ".join(_CAPABILITIES) + ") or `null`",
@@ -179,18 +204,17 @@ def _load_offices() -> dict:
             "offices.yaml has no `founding:` mapping", "offices.yaml -- founding",
             needs="give `founding:` its `keeps:`, `conferral:` and `revocation:`",
             law="B04.23 -- what a computed founding declares is data read at load, never a default in the loop")
-    for key, owner in (("keeps", "remit_acts"), ("conferral", "conferral_bases"), ("revocation", "revocation_bases")):
-        value = founding.get(key)
-        members = roster(owner)
-        singles = (value,) if key != "keeps" else value
-        if (key == "keeps" and not isinstance(value, list)) or (key != "keeps" and not isinstance(value, str)) \
-                or not all(isinstance(x, str) and x in members for x in singles):
-            raise Unspecified(
-                f"offices.yaml `founding: {key}` is {value!r}, which is not " +
-                ("a list of members" if key == "keeps" else "a member") + f" of `rosters.yaml: {owner}`",
-                "offices.yaml -- founding",
-                needs=f"{'a list of' if key == 'keeps' else 'one of'} " + ", ".join(sorted(members)),
-                law=f"B04.23 -- each `founding:` value is checked at load against its own roster (`{owner}`)")
+    for key, owner, many in (("keeps", "remit_acts", True), ("conferral", "conferral_bases", False),
+                             ("revocation", "revocation_bases", False)):
+        value, members = founding.get(key), roster(owner)
+        what = (f"offices.yaml `founding: {key}` is {value!r}, which is not " +
+                ("a list of members" if many else "a member") + f" of `rosters.yaml: {owner}`")
+        needs = ("a list of " if many else "one of ") + ", ".join(sorted(members))
+        law = f"B04.23 -- each `founding:` value is checked at load against its own roster (`{owner}`)"
+        if many and not isinstance(value, list):
+            raise Unspecified(what, "offices.yaml -- founding", needs=needs, law=law)
+        for member in (value if many else (value,)):
+            require_member(member, members, what, "offices.yaml -- founding", law, needs)
     return doc
 
 
@@ -458,24 +482,6 @@ def territory_id_of(rung_id: "str | None") -> "str | None":
     return s.removeprefix(_TERRITORY_RUNG_PREFIX) or None
 
 
-def require_member(value, roster, what: str, where: str, law: str, needs: str = "") -> None:
-    """THE ROSTER-MEMBERSHIP REFUSAL, IN ONE PLACE: test a runtime value against a bound roster,
-    and on a miss raise `Unspecified` naming the hole, the accepted members and the law.
-    `data/verbs._check_sparse_table` states the split used here -- centralise the mechanical
-    check, leave the LAW STRINGS per-caller "because what a violation means differs by table":
-    `what`, `where` and `law` stay the caller's words; the test and the rendering come here.
-
-    ⚠ THE RENDERING IS WORTH CENTRALISING. An ORDERED roster is a tuple and its order is semantic,
-    so it renders with `list()`; an unordered one is a frozenset and renders `sorted()` so the
-    message is stable. A caller needing prose instead passes `needs=`.
-    """
-    if value in roster:
-        return
-    raise Unspecified(
-        what, where, law=law,
-        needs=needs or f"one of {list(roster) if isinstance(roster, tuple) else sorted(roster)}")
-
-
 def table_meta(name: str) -> dict:
     """The table's own declarations -- `default_cell`, `row`, `keys`. Read rather than assumed, so
     a data edit that changes the sparse default cannot leave a stale constant in a body."""
@@ -601,46 +607,35 @@ if RECORD_KINDS & TENURE_KINDS:
             "shared word is two questions spelled one way")
 
 
-_BARE = object()    # the rank of a bare id: not `None`, which a mapping entry's rank may be (and is refused as off its scale)
-
-
 def _holds_entries(holds):
-    """One `holds:` list read as `[(skill id, rank or _BARE)]`, or `None` where it is no list. An entry is a bare id (`_BARE`:
-    held at `pool_default`, B04.11 keeps that) or a one-key mapping `{<id>: <rank>}`; any other entry reads as
-    `(entry, _BARE)` so the loader's own id check names it. The one place the two forms are told apart."""
+    """One `holds:` list read as a tuple of entries, or `None` where it is no list. An entry is `(skill id,)` for a bare id
+    (held at `pool_default`, B04.11 keeps that) or `(skill id, rank)` for a one-key mapping `{<id>: <rank>}` (a rank of `None`
+    is a rank, refused as off its scale); any other entry reads as `(entry,)` so the loader's own id check names it. The one
+    place the two forms are told apart."""
     if not isinstance(holds, list):
         return None
-    return [next(iter(h.items())) if isinstance(h, dict) and len(h) == 1 else (h, _BARE) for h in holds]
+    return tuple(tuple(next(iter(h.items()))) if isinstance(h, dict) and len(h) == 1 else (h,) for h in holds)
 
 
-def _rank_is_off_its_scale(skill, rank) -> bool:
-    """True where a `{skill: rank}` entry's rank is no whole number inside THAT skill's own `floor`..`ceiling`
-    (`descriptors.CAPABILITIES`, the leaf: the scale is the definition row's, never typed here)."""
-    row = _CAPABILITIES.get(skill) if isinstance(skill, str) else None
-    return row is None or not isinstance(rank, int) or isinstance(rank, bool) or not row.floor <= rank <= row.ceiling
-
-
-def _load_lifepath_templates(cells: dict, lifepaths, vocations) -> dict:
+def _load_lifepaths(cells: dict, lifepaths, vocations) -> tuple:
     """`rosters.yaml: tables: lifepath_templates`, CLOSED BOTH WAYS against `rosters: lifepaths` (v10 CR-33): a row
     for every lifepath and for nothing else, each `holds:` entry a defined skill (`descriptors.CAPABILITIES`, B04.04: read
     off the leaf because this module loads BEFORE the verb table and may not import it), each row carrying a `ground:`.
-    An entry is a bare id or `{<id>: <rank>}` (B04.11): the rank a whole number inside that skill's own scale; a bare id
-    keeps the untrained value. A template may grant a skill no verb yet tests (`data/verbs.py::skills_without_a_verb`
-    reports those). A template naming a key that is no defined skill would grant a capability nothing reads; a row for an
-    id outside the 34 would never be reached and would read as live. Refused
-    whole, naming the difference. Returns `{lifepath id: tuple of capability keys}` -- the lifepath id is the key of
-    this table and is stored on no `Person`; the ranks are `_lifepath_ranks`."""
-    out: dict = {}
-    for lid, cell in cells.items():
-        entries = _holds_entries(cell.get("holds") if isinstance(cell, dict) else None)
-        out[str(lid)] = None if entries is None else tuple(k for k, _ in entries)
-    entries_of = {str(k): _holds_entries(c.get("holds")) for k, c in cells.items() if isinstance(c, dict)}
+    An entry is a bare id or `{<id>: <rank>}` (B04.11): the rank a whole number inside that skill's own scale
+    (`descriptors.rank_in_scale`); a bare id keeps the untrained value. A template may grant a skill no verb yet tests
+    (`data/verbs.py::skills_without_a_verb` reports those). A template naming a key that is no defined skill would grant a
+    capability nothing reads; a row for an id outside the 34 would never be reached and would read as live. Refused
+    whole, naming the difference. Each `holds:` cell is read ONCE; returns `({lifepath id: tuple of capability keys},
+    {lifepath id: {skill id: rank}})` -- the lifepath id is the key of this table and is stored on no `Person`; the ranks
+    are the `{<id>: <rank>}` entries alone (a bare id has none and is held at `pool_default` by `data/cast.py::capability_of`)."""
+    held = {str(lid): _holds_entries(c.get("holds") if isinstance(c, dict) else None) for lid, c in cells.items()}
+    out = {lid: None if es is None else tuple(e[0] for e in es) for lid, es in held.items()}
     missing, extra = sorted(set(lifepaths) - set(out)), sorted(set(out) - set(lifepaths))
     malformed = sorted(k for k, v in out.items() if v is None)
     outside = sorted(f"{k}:{h}" for k, v in out.items() for h in (v or ()) if not isinstance(h, str) or h not in vocations)
     repeated = sorted(k for k, v in out.items() if v and len(set(map(str, v))) != len(v))
-    offscale = sorted(f"{k}:{h}={r}" for k, es in entries_of.items() for h, r in (es or ()) if r is not _BARE
-                      and (isinstance(h, str) and h in vocations) and _rank_is_off_its_scale(h, r))
+    offscale = sorted(f"{k}:{e[0]}={e[1]}" for k, es in held.items() for e in (es or ())
+                      if len(e) == 2 and isinstance(e[0], str) and e[0] in vocations and not rank_in_scale(*e))
     ungrounded = sorted(k for k, c in cells.items()
                         if not (isinstance(c, dict) and str(c.get("ground") or "").strip()))
     if missing or extra or malformed or outside or repeated or offscale or ungrounded:
@@ -651,21 +646,11 @@ def _load_lifepath_templates(cells: dict, lifepaths, vocations) -> dict:
             needs="exactly one row per `lifepaths` id, each `holds:` a list of `descriptors.CAPABILITIES` ids or "
                   "`{id: rank}` (the rank inside that skill's scale), each with a `ground:`",
             law="CR-33 -- which capability keys a lifepath's starting skills name is stated once, for every lifepath")
-    return out
-
-
-def _lifepath_ranks(cells: dict) -> dict:
-    """`{lifepath id: {skill id: rank}}`: only the `{<id>: <rank>}` entries of each `holds:` (B04.11); a bare id has no rank
-    here and is held at `pool_default` by `data/cast.py::capability_of`. Read over cells `_load_lifepath_templates` has
-    already refused or passed."""
-    return {str(lid): {k: r for k, r in (_holds_entries(c.get("holds")) or ()) if r is not _BARE}
-            for lid, c in cells.items() if isinstance(c, dict)}
+    return out, {lid: {e[0]: e[1] for e in es if len(e) == 2} for lid, es in held.items()}
 
 
 LIFEPATHS = roster("lifepaths")
-_LIFEPATH_CELLS = table("lifepath_templates")
-LIFEPATH_TEMPLATES = _load_lifepath_templates(_LIFEPATH_CELLS, LIFEPATHS, frozenset(_CAPABILITIES))
-LIFEPATH_RANKS = _lifepath_ranks(_LIFEPATH_CELLS)
+LIFEPATH_TEMPLATES, LIFEPATH_RANKS = _load_lifepaths(table("lifepath_templates"), LIFEPATHS, frozenset(_CAPABILITIES))
 # v9 FI-01 (`ED-FI-0009`, J-22 (A)): inquiry verb -> `{provider, module_entry}`, the roll that grades
 # it with no prize. Validated against the verb table at load (`data/verbs.py`) and against the prize
 # rows at driver construction (`manifest/registry.py::check_graded_inquiries`); read by
@@ -1472,17 +1457,16 @@ def _refuse_when(i, row, when, when_keys, refuse) -> None:
     """A row's `when`, closed against `capability_when_keys` (B04.10). `rank_at_least: n` names a whole skill rank on the row's
     own scale, above its floor (every holder is at the floor) and at most its ceiling (nobody is above it), and the row's `key`
     must be a skill: only a skill has a held rank. Nothing else about a skill's rank is read by a row."""
-    from engine.substrate import descriptors as _desc
     unknown = [k for k in when if k not in when_keys]
     if unknown:
         refuse(i, row, f"has `when` key {unknown[0]!r}", f"only {sorted(when_keys)}",
                "MAP §C -- the `when` keys are a closed roster; an unregistered one is a condition nothing reads")
     if "rank_at_least" in when:
         n, key = when["rank_at_least"], row["key"]
-        if key not in _desc.CAPABILITIES:
+        if key not in _CAPABILITIES:
             refuse(i, row, f"has `rank_at_least` on key {key!r}, which is not a skill", "a skill key",
                    "DEF Edit 2 -- `rank_at_least` reads the holder's skill rank; only a skill has one")
-        cap = _desc.capability(key)
+        cap = _capability(key)
         if isinstance(n, bool) or not isinstance(n, int) or not cap.floor < n <= cap.ceiling:
             refuse(i, row, f"has `rank_at_least` {n!r}", f"a whole rank above {cap.floor} and at most {cap.ceiling} (the scale of {key!r})",
                    "DEF Edit 2 -- a rank outside the row's `scale` selects nothing or everything")
@@ -1516,7 +1500,6 @@ def _load_capability_uses(rows, fixtures) -> tuple:
     does, since this module may not import the registry: `check_capability_fixtures` runs them). Each role's required
     field is refused where absent: a `judgement` or a `gate` row with no `gain`, an `edge` row with no `level`."""
     from engine.dice_engine.sigma_leverage import LEVEL_SIGMA as _LEVELS
-    from engine.substrate import descriptors as _desc
 
     roles = roster("capability_roles", ordered=True)
     sites = _capability_use_sites()
@@ -1555,7 +1538,7 @@ def _load_capability_uses(rows, fixtures) -> tuple:
         if extra:
             refuse(i, row, f"carries `{extra[0]}`, which role {role!r} does not take",
                    f"only {sorted(role_fields[role])} beside the base columns", "MAP §C -- the role-field table")
-        if key in _desc.TRAITS:
+        if key in _TRAITS:
             # A-107 (U1 §2a step 5): a trait is held or not and never gives dice -- it is read at `edge`, `per: held`, only.
             if role != "edge":
                 refuse(i, row, f"keys the trait {key!r} at role {role!r}", "a trait key only at role `edge`",
@@ -1563,9 +1546,9 @@ def _load_capability_uses(rows, fixtures) -> tuple:
             if row.get("per") != "held":
                 refuse(i, row, f"keys the trait {key!r} with per {row.get('per')!r}", "`per: held` on a trait key",
                        "A-107 -- a trait has no rank and no mid-point: it is held (1) or not (0)")
-        elif not (key in selectors or key in _desc.CAPABILITIES or key in _desc.ATTRIBUTES or key in _desc.PRACTITIONER_STATS):
+        elif not (key in selectors or key in _CAPABILITIES or key in _ATTRIBUTES or key in _PRACTITIONER_STATS):
             refuse(i, row, f"has key {key!r}, which is none of a skill, a trait, an attribute, a practitioner stat or a selector",
-                   f"a skill {sorted(_desc.CAPABILITIES)}, a trait {sorted(_desc.TRAITS)}, an attribute, a practitioner stat, or {sorted(selectors)}",
+                   f"a skill {sorted(_CAPABILITIES)}, a trait {sorted(_TRAITS)}, an attribute, a practitioner stat, or {sorted(selectors)}",
                    "U1 §3 item 1 -- a key resolves through the leaf reader")
         if row.get("side") is not None and row["side"] not in sides:
             refuse(i, row, f"has side {row['side']!r}", f"one of {sorted(sides)}", "U1 §3 item 3 -- `side` says whose sheet is read")
@@ -1584,14 +1567,15 @@ def _load_capability_uses(rows, fixtures) -> tuple:
             if role in roles_needing and row.get(need) is None:
                 refuse(i, row, f"is a `{role}` row with no `{need}`", f"a `{need}` on every `{role}` row",
                        f"MAP §C -- `{need}` is the one thing a `{role}` row says; a row without it reads nothing")
-        for col in fixture_cols:
-            if fixtures is not None and row.get(col) is not None and (not isinstance(row[col], str) or row[col] not in fixtures):
-                refuse(i, row, f"has {col} {row[col]!r}, which is not a registered Fixture",
-                       "a name in `Fixtures` (`data/fixtures.py`), graded and swept",
-                       "S42.2.1 -- an unregistered rate must REFUSE, never answer plausibly")
-        if fixtures is not None and role == "circumstance" and row.get("gain") is not None and fixtures[row["gain"]] < 0:
-            refuse(i, row, f"has a negative gain ({row['gain']} = {fixtures[row['gain']]})", "a non-negative Fixture",
-                   "A-25 -- `circumstance` carries hostile terms only; a favourable one is an `edge` row for the roller")
+        if fixtures is not None:
+            for col in fixture_cols:
+                if row.get(col) is not None and (not isinstance(row[col], str) or row[col] not in fixtures):
+                    refuse(i, row, f"has {col} {row[col]!r}, which is not a registered Fixture",
+                           "a name in `Fixtures` (`data/fixtures.py`), graded and swept",
+                           "S42.2.1 -- an unregistered rate must REFUSE, never answer plausibly")
+            if role == "circumstance" and row.get("gain") is not None and fixtures[row["gain"]] < 0:
+                refuse(i, row, f"has a negative gain ({row['gain']} = {fixtures[row['gain']]})", "a non-negative Fixture",
+                       "A-25 -- `circumstance` carries hostile terms only; a favourable one is an `edge` row for the roller")
         if role == "judgement" and (key not in _ATTRIBUTES or row.get("side", "actor") != "actor"):
             refuse(i, row, "is a `judgement` row its reader cannot read",
                    f"an attribute key ({sorted(_ATTRIBUTES)}) on `side: actor`",
@@ -1601,7 +1585,7 @@ def _load_capability_uses(rows, fixtures) -> tuple:
             refuse(i, row, "is a `gate` row off its one key or its gate sites",
                    f"key in {sorted(gate_keys)} at a site in {sorted(gate_sites)}",
                    "A-11 -- a gate is closed to Thread Sensitivity; no other skill is a condition of attempting an act")
-        out.append(CapabilityUse(**{c: row[c] for c in row}))
+        out.append(CapabilityUse(**row))
     return tuple(out)
 
 
@@ -1631,6 +1615,23 @@ def capability_uses() -> tuple:
     if _CAPABILITY_USES is None:
         _CAPABILITY_USES = _load_capability_uses((_TABLES.get("capability_uses") or {}).get("rows"), None)
     return _CAPABILITY_USES
+
+
+_USES_BY_SITE: tuple = (None, {})   # (the uses tuple the index was built from, `{site: its rows}`)
+
+
+def capability_rows(use: str) -> tuple:
+    """The shipped uses rows of site `use`, in table order, or `()` for a site with none: `capability_uses()` indexed ONCE by
+    site, so a reader of one site reads its rows without scanning the table. The index is built lazily and rebuilt when
+    `capability_uses()` returns another tuple, so a table rebound in a test is read, not a stale copy."""
+    global _USES_BY_SITE
+    rows = capability_uses()
+    if _USES_BY_SITE[0] is not rows:
+        by_site: dict = {}
+        for r in rows:
+            by_site.setdefault(r.use, []).append(r)
+        _USES_BY_SITE = (rows, {site: tuple(rs) for site, rs in by_site.items()})
+    return _USES_BY_SITE[1].get(use, ())
 
 
 def check_capability_fixtures(fixtures: dict) -> None:

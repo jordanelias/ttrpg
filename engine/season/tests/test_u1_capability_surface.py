@@ -950,7 +950,7 @@ def test_a_rank_at_least_the_loader_cannot_read_is_refused():
 # ---------------------------------------------------------------------------------------------------------------------
 # B04.11 -- A BUNDLE MAY GRANT A SKILL AT A RANK (CAP A7; DEF Edit 3). An entry of `lifepath_templates: holds:` is a bare id
 # (held at `pool_default`, as ever) or `{<id>: <rank>}`, the rank checked against that skill's own `floor`..`ceiling`
-# (`descriptors.CAPABILITIES`). `rosters._load_lifepath_templates` checks it; `cast.capability_of` expands it. No shipped
+# (`descriptors.CAPABILITIES`). `rosters._load_lifepaths` checks it; `cast.capability_of` expands it. No shipped
 # entry is a mapping, so each test plants the cells it reads.
 # ---------------------------------------------------------------------------------------------------------------------
 
@@ -965,8 +965,7 @@ def _bundle_cells(lifepath, holds):
 def _load_bundles(cells):
     """What the module does at import over `cells`: the id table and the rank table, from the one loader."""
     from engine.season.data import rosters
-    return (rosters._load_lifepath_templates(cells, rosters.LIFEPATHS, frozenset(descriptors.CAPABILITIES)),
-            rosters._lifepath_ranks(cells))
+    return rosters._load_lifepaths(cells, rosters.LIFEPATHS, frozenset(descriptors.CAPABILITIES))
 
 
 def test_a_bundle_rank_above_its_scale_is_refused():
@@ -993,7 +992,7 @@ def test_a_bare_bundle_id_keeps_the_untrained_value(monkeypatch):
     `capability_of`) to the bare id at `pool_default` and the ranked one at its rank; the shipped table, every entry a bare id,
     expands each key to `pool_default` and carries no rank."""
     from engine.season.data import cast, rosters
-    assert all(not r for r in rosters._lifepath_ranks(rosters.table("lifepath_templates")).values())
+    assert all(not r for r in rosters.LIFEPATH_RANKS.values())
     lp = "3-CH5"
     assert rosters.LIFEPATH_TEMPLATES[lp] == ("inquiry",)
     assert cast.capability_of({"id": "X", "lifepath": lp}, 2) == {"inquiry": 2}

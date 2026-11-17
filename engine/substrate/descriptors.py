@@ -110,15 +110,28 @@ CAPABILITIES: Mapping[str, CapabilityRow] = MappingProxyType({
     for name, r in _DATA['capabilities']['rows'].items()})
 
 
-def capability(name) -> CapabilityRow:
-    """The definition row of skill `name`; raises ValueError naming the roster, as `resolve_pursuit` does."""
+def _defined(rows, name, kind, block, noun):
+    """`rows[name]` or ValueError naming the roster, its owner and its members: the one refusal of `capability` and `trait`."""
     try:
-        return CAPABILITIES[name]
+        return rows[name]
     except (KeyError, TypeError):
         raise ValueError(
-            f'unknown capability {name!r}. The roster is owned by references/descriptor_registry.yaml:capabilities '
-            f'and read here; the defined skills are: ' + ', '.join(CAPABILITIES) + '. A skill is defined there once, '
-            'then exported (tools/export_descriptors.py); do not add one anywhere else.') from None
+            f'unknown {kind} {name!r}. The roster is owned by references/descriptor_registry.yaml:{block} and read here; '
+            f'the defined {noun}s are: ' + ', '.join(rows) + f'. A {noun} is defined there once, then exported '
+            '(tools/export_descriptors.py); do not add one anywhere else.') from None
+
+
+def capability(name) -> CapabilityRow:
+    """The definition row of skill `name`; raises ValueError naming the roster, as `resolve_pursuit` does."""
+    return _defined(CAPABILITIES, name, 'capability', 'capabilities', 'skill')
+
+
+def rank_in_scale(name, value) -> bool:
+    """True where `value` is a whole number (a bool is not one) inside skill `name`'s own `floor`..`ceiling`; False for a
+    value off it and for a `name` no definition row carries. THE ONE OWNER of what a held skill rank is, so the cast row's
+    authored score and a lifepath bundle's `{<id>: <rank>}` entry cannot disagree."""
+    row = CAPABILITIES.get(name) if isinstance(name, str) else None
+    return row is not None and isinstance(value, int) and not isinstance(value, bool) and row.floor <= value <= row.ceiling
 
 
 # ---------------------------------------------------------------------------
@@ -138,15 +151,13 @@ TRAITS: Mapping[str, TraitRow] = MappingProxyType({
     name: TraitRow(name, r['gloss'], r['seated_by']) for name, r in _DATA['traits']['rows'].items()})
 
 
+#: `{resonant_style value: trait id}` -- the one trait each value seats, inverted from `TRAITS` once (`data/cast.py::traits_of`).
+TRAIT_BY_SEATING: Mapping[str, str] = MappingProxyType({t.seated_by: t.id for t in TRAITS.values()})
+
+
 def trait(id) -> TraitRow:
     """The definition row of trait `id`; raises ValueError naming the roster, as `capability` does."""
-    try:
-        return TRAITS[id]
-    except (KeyError, TypeError):
-        raise ValueError(
-            f'unknown trait {id!r}. The roster is owned by references/descriptor_registry.yaml:traits and read here; '
-            f'the defined traits are: ' + ', '.join(TRAITS) + '. A trait is defined there once, then exported '
-            '(tools/export_descriptors.py); do not add one anywhere else.') from None
+    return _defined(TRAITS, id, 'trait', 'traits', 'trait')
 
 
 #: {registry key -> {name, floor, ceiling}} for each declared domain.

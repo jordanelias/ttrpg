@@ -49,7 +49,7 @@ from ..data.requires import (
     UNKNOWN, WORLD_ONLY_STEMS,
 )
 from ..data.rosters import (
-    AFFILIATIONS, DEGREE_STEP, DOMINANCE_KINDS, PURSUIT_AXES, RECORD_CONTENT, SEEN_PREDICATE, capability_uses, require_use_site, roster,
+    AFFILIATIONS, DEGREE_STEP, DOMINANCE_KINDS, PURSUIT_AXES, RECORD_CONTENT, SEEN_PREDICATE, capability_rows, require_use_site, roster,
     roster_map,
 )
 from ..state.carriers import Person, Said
@@ -1100,7 +1100,7 @@ OWN_STATE_GATE = require_use_site("own_state_gate")
 
 def _gate_row(use: str):
     """The one `gate` row of site `use`, or `None`: a site with no row reads NO CAPABILITY, never a default."""
-    rows = [r for r in capability_uses() if r.use == use and r.role == "gate"]
+    rows = [r for r in capability_rows(use) if r.role == "gate"]
     return rows[0] if rows else None
 
 

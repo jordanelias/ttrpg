@@ -75,11 +75,11 @@ def test_a_template_outside_the_closed_set_is_refused_at_import(mutate):
     cells = {k: dict(v) for k, v in _cells().items()}
     mutate(cells)
     with pytest.raises(Unspecified):
-        R._load_lifepath_templates(cells, R.LIFEPATHS, set(VERBS.VOCATIONS))
+        R._load_lifepaths(cells, R.LIFEPATHS, set(VERBS.VOCATIONS))
 
 
 def test_the_shipped_cells_pass_the_same_loader():
-    assert R._load_lifepath_templates(_cells(), R.LIFEPATHS, set(VERBS.VOCATIONS)) == R.LIFEPATH_TEMPLATES
+    assert R._load_lifepaths(_cells(), R.LIFEPATHS, set(VERBS.VOCATIONS)) == (R.LIFEPATH_TEMPLATES, R.LIFEPATH_RANKS)
 
 
 # ======================================================================================

@@ -218,17 +218,20 @@ def _heritage_roster(reg, concerns):
             'engages': {str(m): str(c) for m, c in engages.items()}}
 
 
+def _gloss(where, row, noun):
+    """`row`'s one-sentence gloss, stripped, or SystemExit naming `where`: the one check of an empty or missing gloss, for the
+    attributes, the skills and the traits alike."""
+    gloss = row.get('gloss')
+    if not isinstance(gloss, str) or not gloss.strip():
+        raise SystemExit(f'{where}: empty or missing gloss. Every {noun} carries a one-sentence gloss.')
+    return gloss.strip()
+
+
 def _attribute_glosses(reg):
     """`{attribute key: gloss}` over the ten, each gloss a non-empty string (B04.02, DEF Edit 1). One plain
     sentence per attribute, so `decision/sheet.py::describe` can show a player what a name means."""
-    out = {}
-    for e in descriptor_registry.all_attributes(reg):
-        gloss = e.get('gloss')
-        if not isinstance(gloss, str) or not gloss.strip():
-            raise SystemExit(f'descriptor_registry.yaml: attributes {e["key"]} has an empty or missing gloss. '
-                             f'Every attribute carries a one-sentence gloss.')
-        out[e['key']] = gloss.strip()
-    return out
+    return {e['key']: _gloss(f'descriptor_registry.yaml: attributes {e["key"]}', e, 'attribute')
+            for e in descriptor_registry.all_attributes(reg)}
 
 
 #: The row grammar of each defined roster: the keys a row may carry, no others. A stray key (a typo, or a column a producer
@@ -238,11 +241,16 @@ CAPABILITY_ROW_KEYS = ('kind', 'gloss', 'base', 'opposed_by', 'untrained', 'grow
 TRAIT_ROW_KEYS = ('gloss', 'seated_by')
 
 
-def _refuse_row_keys(where, row, allowed):
+def _row(where, row, allowed):
+    """`row`, if it is a mapping carrying no key outside `allowed`; else SystemExit naming `where`: the preamble of every row
+    of a defined roster."""
+    if not isinstance(row, dict):
+        raise SystemExit(f'{where} is not a mapping.')
     stray = sorted(str(k) for k in row if k not in allowed)
     if stray:
         raise SystemExit(f'{where}: carries {stray}, which is outside the row grammar {list(allowed)}. A key the exporter '
                          f'does not cook reaches no reader; drop it or add it to the grammar.')
+    return row
 
 
 def _capability_roster(reg, attribute_keys):
@@ -265,15 +273,11 @@ def _capability_roster(reg, attribute_keys):
     rows = {}
     for name, r in block['rows'].items():
         where = f'descriptor_registry.yaml: capabilities.rows.{name}'
-        if not isinstance(r, dict):
-            raise SystemExit(f'{where} is not a mapping.')
-        _refuse_row_keys(where, r, CAPABILITY_ROW_KEYS)
+        r = _row(where, r, CAPABILITY_ROW_KEYS)
         if r.get('kind') != 'skill':
             raise SystemExit(f'{where}: kind {r.get("kind")!r} is not skill. The one kind is skill (A-98 (4)); '
                              f'an aptitude or trait row is not a capability.')
-        gloss = r.get('gloss')
-        if not isinstance(gloss, str) or not gloss.strip():
-            raise SystemExit(f'{where}: empty or missing gloss. Every skill carries a one-sentence gloss.')
+        gloss = _gloss(where, r, 'skill')
         if r.get('base') not in attribute_keys:
             raise SystemExit(f'{where}: base {r.get("base")!r} is not one of the ten attribute keys.')
         opp = r.get('opposed_by')
@@ -289,7 +293,7 @@ def _capability_roster(reg, attribute_keys):
         if (not isinstance(sc, list) or len(sc) != 2
                 or any(isinstance(v, bool) or not isinstance(v, int) for v in sc) or sc[0] > sc[1]):
             raise SystemExit(f'{where}: scale {sc!r} is not [int, int] with floor <= ceiling.')
-        rows[str(name)] = {'kind': 'skill', 'gloss': gloss.strip(), 'base': r['base'],
+        rows[str(name)] = {'kind': 'skill', 'gloss': gloss, 'base': r['base'],
                            'opposed_by': opp, 'floor': sc[0], 'ceiling': sc[1],
                            'untrained': r['untrained'], 'grows_by': list(grows), 'source': r.get('source')}
     # `names` is DERIVED from the rows, never authored, so `rosters.yaml: capabilities: {from_descriptor: capabilities}`
@@ -313,15 +317,11 @@ def _trait_roster(reg, skill_names):
     rows, seated = {}, {}
     for name, r in block['rows'].items():
         where = f'descriptor_registry.yaml: traits.rows.{name}'
-        if not isinstance(r, dict):
-            raise SystemExit(f'{where} is not a mapping.')
-        _refuse_row_keys(where, r, TRAIT_ROW_KEYS)
+        r = _row(where, r, TRAIT_ROW_KEYS)
         if name in skill_names:
             raise SystemExit(f'{where}: {name!r} is also a row of capabilities. One id, one roster (A-107): a trait '
                              f'is never a skill.')
-        gloss = r.get('gloss')
-        if not isinstance(gloss, str) or not gloss.strip():
-            raise SystemExit(f'{where}: empty or missing gloss. Every trait carries a one-sentence gloss.')
+        gloss = _gloss(where, r, 'trait')
         by = r.get('seated_by')
         if not isinstance(by, str) or not by.strip() or by != by.strip().lower():
             raise SystemExit(f'{where}: seated_by {by!r} is not one lowercase resonant_style value.')
@@ -329,7 +329,7 @@ def _trait_roster(reg, skill_names):
             raise SystemExit(f'{where}: seated_by {by!r} is already used by {seated[by]}. One resonant_style value '
                              f'seats one trait.')
         seated[by] = str(name)
-        rows[str(name)] = {'gloss': gloss.strip(), 'seated_by': by}
+        rows[str(name)] = {'gloss': gloss, 'seated_by': by}
     return {'source': block.get('source'), 'scale': [0, 1], 'seated_from': block.get('seated_from'),
             'names': list(rows), 'rows': rows}
 

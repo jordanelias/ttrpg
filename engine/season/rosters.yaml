@@ -1426,7 +1426,7 @@ rosters:
     source: >-
       v10 CR-33: the 34 lifepaths (the Stage 3 vocations of `character_histories_v30.md`, archived), by the
       ids that file prints, `3-CR1` ... `3-CF6`. THE CLOSED SET `tables: lifepath_templates` is keyed by,
-      refused at import both ways (`data/rosters.py::_load_lifepath_templates`), and the set a cast row's
+      refused at import both ways (`data/rosters.py::_load_lifepaths`), and the set a cast row's
       `lifepath:` key is checked against (`data/cast.py::capability_of`). Four Niflhel ids (`3-NI1` ...
       `3-NI4`) are STRUCK in that file (it prints no row for them and sends their backstories to `3-CF6`) and
       are not members. Jordan's "34 vocations" counts these; in code "vocation" names a capability key
@@ -3424,7 +3424,7 @@ tables:
       3-HA3, 3-LO2, 3-LO4, and 3-CF4's Knot, which names copying). The wider reading (Appraise, strain
       and Regroup effects inside the contest also hold `argue`) is NOT adopted; it would add argue to
       3-CR3, 3-VA1, 3-VA4, 3-GU1, 3-LO3, 3-CF3 and 3-CF5.
-      CLOSED, BOTH WAYS (`data/rosters.py::_load_lifepath_templates`): a row for every id of `rosters:
+      CLOSED, BOTH WAYS (`data/rosters.py::_load_lifepaths`): a row for every id of `rosters:
       lifepaths` and for nothing else, each `holds:` entry a skill of `descriptors.CAPABILITIES`, a `ground:` on every row.
       [ASSUMPTION; medium; Jordan to correct; revert: delete the `lifepath:` keys from the cast rows (one
       re-pin); the key mapping is content.]

@@ -19,7 +19,6 @@ from ..decision import assemble
 from ..decision import choose as CH
 from ..gaps import Unspecified
 from ..queries import person_q, world_q
-from ..seam.wrappers import sigma
 from ..state.carriers import Claim
 from .test_g3_not_yours import _gov_world
 
@@ -147,7 +146,6 @@ def test_the_fit_term_is_the_third_of_score_terms_and_is_exactly_zero_at_weight_
 def test_believed_capability_reads_the_latest_held_claim_and_none_otherwise():
     king = _vacancy_world().persons["p_king"]
     assert person_q.believed_capability(king, "p_low", "law") is None  # no claim on `main` carries another's skill
-    assert sigma.CAPABILITY_CLAIM == person_q.CAPABILITY_CLAIM  # one owner for the predicate stem
 
     def claim(i, subject, key, value, when, lap=0, confidence=100):
         return Claim(f"c_cap{i}", "p_king", subject, person_q.CAPABILITY_CLAIM + key, value, when, "told", confidence,
