@@ -60,6 +60,35 @@ ATTRIBUTE_GLOSSES = dict(_DATA['attributes']['glosses'])
 
 
 # ---------------------------------------------------------------------------
+# THE TWO FACTOR FORMS OF THE USES TABLE (B04.06; U1 §3, `capability_roles`) -- a closed set of two, each implemented here once.
+# A third form is a code change. The decision layer reads a row of `rosters.yaml: tables.capability_uses` and calls one of these;
+# it names no attribute, no scale and no arithmetic of its own.
+# ---------------------------------------------------------------------------
+def scale_of(key):
+    """`(floor, ceiling)` of the scale a held value at `key` lives on: the attribute scale for an attribute key, the
+    registered bounds for a practitioner stat (`None` where the registry leaves that end open: `about_mid` on it raises). Raises
+    ValueError for any other key."""
+    if key in ATTRIBUTES:
+        return ATTRIBUTE_FLOOR, ATTRIBUTE_CEILING
+    stat = PRACTITIONER_STATS.get(key)
+    if stat is not None:
+        return stat['floor'], stat['ceiling']
+    raise ValueError(f"no scale for {key!r}: it is neither an attribute nor a practitioner stat")
+
+
+def about_mid(value, floor, ceiling, gain):
+    """ROLE `judgement`: `1 + gain * (value - mid) / (mid - floor)`, `mid = (floor + ceiling) / 2`. Exactly 1 at the mid-point
+    (and at `gain` 0), monotone in `value`, unbounded above: a caller that wants a cap applies its own."""
+    mid = (floor + ceiling) / 2
+    return 1.0 + gain * (value - mid) / (mid - floor)
+
+
+def at_least(value, threshold):
+    """ROLE `gate`: `value >= threshold`."""
+    return value >= threshold
+
+
+# ---------------------------------------------------------------------------
 # CAPABILITIES (SKILLS) -- B04.02. THE ONLY SKILL DEFINITION IN THE ENGINE.
 # ---------------------------------------------------------------------------
 # `references/descriptor_registry.yaml: capabilities`, validated by the exporter's `_capability_roster` and read here:

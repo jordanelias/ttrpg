@@ -35,7 +35,7 @@ import math
 from typing import Optional
 
 from engine.substrate.descriptors import (
-    AFFILIATION_CONCERNS, HERITAGE_ENGAGES, HERITAGES, PURSUITS,
+    AFFILIATION_CONCERNS, HERITAGE_ENGAGES, HERITAGES, PURSUITS, at_least,
 )
 
 from ..data import requires as _requires
@@ -49,7 +49,7 @@ from ..data.requires import (
     UNKNOWN, WORLD_ONLY_STEMS,
 )
 from ..data.rosters import (
-    AFFILIATIONS, DEGREE_STEP, DOMINANCE_KINDS, PURSUIT_AXES, RECORD_CONTENT, SEEN_PREDICATE, roster,
+    AFFILIATIONS, DEGREE_STEP, DOMINANCE_KINDS, PURSUIT_AXES, RECORD_CONTENT, SEEN_PREDICATE, capability_uses, roster,
     roster_map,
 )
 from ..state.carriers import Person, Said
@@ -1075,6 +1075,33 @@ class LedgerReader:
         return self._best(lambda _c: True)
 
 
+#: The site whose `gate` row names the held value and the threshold fixture the Thread gate reads (B04.06; U1 §8). It is the one
+#: site `capability_use_sites` registers to `OwnStateReader`; `told_retain`, the other gate site, has no reader on this tree.
+OWN_STATE_GATE = "own_state_gate"
+
+
+def _gate_row(use: str):
+    """The one `gate` row of site `use`, or `None`: a site with no row reads NO CAPABILITY, never a default."""
+    rows = [r for r in capability_uses() if r.use == use and r.role == "gate"]
+    return rows[0] if rows else None
+
+
+def _held_at(p: Person, key: str):
+    """The value `p` holds at a practitioner stat's registry key (`prac.thread_sensitivity`): the `Person` field of that name."""
+    return getattr(p, key.rpartition(".")[2], None)
+
+
+def capability_admits(p: Person, use: str, fx):
+    """WHETHER `p` CLEARS THE `gate` ROW OF SITE `use` (B04.06; U1 §8): `at_least(held, fixture)`, the held value at the row's
+    `key` against the Fixture the row's `gain` names. `UNKNOWN` when `use` has no row or `p` holds nothing at the key -- never 0,
+    so it refuses and does not pass a gate swept to 0. A-11 admits one gate (Thread Sensitivity); the loader closes the row to it."""
+    row = _gate_row(use)
+    if row is None:
+        return UNKNOWN
+    held = _held_at(p, row.key)
+    return UNKNOWN if held is None else at_least(held, fx.get(row.gain))
+
+
 class OwnStateReader:
     """THE QUESTIONS A PERSON ANSWERS OF HIMSELF (v9 PC-06 K-3, `H-85`) -- `OWN_STATE_STEMS`, and
     nothing else: every other predicate is UNKNOWN here.
@@ -1089,19 +1116,25 @@ class OwnStateReader:
       * `thread_sensitivity` -- the subject's own value, and ONLY when the subject is this person: a
         person reads nobody else's. `None` (nothing authored) is UNKNOWN, never 0, so it refuses at
         the fold and does not pass a gate swept to 0.
-      * `thread_sensitivity.gate` -- `Fixtures thread_sensitivity_gate`, the SECOND READ the value
-        is held against (`work`'s `floor`, `determine`'s `quorum`), the same for every subject."""
+      * `thread_sensitivity.gate` -- the Fixture the gate row names (`thread_sensitivity_gate`), the SECOND READ
+        the value is held against (`work`'s `floor`, `determine`'s `quorum`), the same for every subject.
+
+    ⚠ THE KEY AND THE FIXTURE ARE THE `own_state_gate` ROW'S (`rosters.yaml: tables.capability_uses`, B04.06); the two stems
+    are the verb table's grammar and stay. A site with no row answers UNKNOWN to both."""
 
     def __init__(self, p: Person, fx):
         self._p, self._fx = p, fx
 
     def read(self, subject, predicate: str):
         stem = str(predicate).partition(":")[0]
+        row = _gate_row(OWN_STATE_GATE)
+        if row is None:
+            return UNKNOWN
         if stem == "thread_sensitivity":
-            v = self._p.thread_sensitivity if subject == self._p.id else None
+            v = _held_at(self._p, row.key) if subject == self._p.id else None
             return UNKNOWN if v is None else v
         if stem == "thread_sensitivity.gate":
-            return self._fx.get("thread_sensitivity_gate")
+            return self._fx.get(row.gain)
         return UNKNOWN
 
 

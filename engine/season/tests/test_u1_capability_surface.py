@@ -408,3 +408,109 @@ def test_a_gain_add_or_floor_that_is_not_a_registered_fixture_is_refused():
         assert msg is not None and column in msg and "no_such_fixture" in msg, (column, msg)
         # control: a registered fixture name in the same cell loads
         assert _refused([dict(dice_row, **{column: gain_row["gain"]})]) is None, column
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# B04.06 -- THE DECISION LAYER READS THE TABLE. `decision/options.py::competence` reads its key from the `told_claim_credit`
+# row (through `capability_factor`), and `queries/person_q.py::OwnStateReader` reads the Thread gate's key and its threshold
+# fixture from the `own_state_gate` row (through `capability_admits`). The rebound table is the one the readers then see.
+# ---------------------------------------------------------------------------------------------------------------------
+
+def _rebound(monkeypatch, edit):
+    """Make `capability_uses()` return the shipped rows after `edit(rows)` has changed them, loaded by the real loader."""
+    from engine.season.data import rosters
+    rows = _shipped_rows()
+    edit(rows)
+    monkeypatch.setattr(rosters, "_CAPABILITY_USES", rosters._load_capability_uses(rows, _fixture_values()))
+
+
+def _hearer(**held):
+    """A hand-built hearer holding the named attributes (`held`: `{attribute name: score}`), nothing else authored."""
+    from engine.season.harness import probes as P
+    p = P.tiny_world().persons["p_mid"]
+    p.attributes = {descriptors.attribute_key(name): score for name, score in held.items()}
+    return p
+
+
+def _credit(p, gain=0.5):
+    """The confidence `p` credits a told claim held at 60, on one channel, at the competence gain `gain`."""
+    from engine.season.decision.options import refracted_confidence
+    from engine.season.state.carriers import Claim
+    c = Claim("c_x", "p_other", "Hh", "stores:grain", 8, 0, "told_by", 60, "own")
+    return refracted_confidence(p, c, "co_located", 0.5, competence_gain=gain)
+
+
+def test_repointing_told_claim_credit_moves_the_factor_with_no_decision_edit(monkeypatch):
+    """USES' falsifier: re-point the `told_claim_credit` row at Perception in a rebound table and a hand-built hearer's
+    refracted confidence follows Perception and ignores Attunement, with no edit under `decision/`."""
+    low_attunement = dict(Attunement=2, Perception=6)
+    low_perception = dict(Attunement=6, Perception=2)
+    # control: the shipped row reads Attunement
+    assert _credit(_hearer(**low_attunement)) < 60 and _credit(_hearer(**low_perception)) == 60
+
+    def to_perception(rows):
+        row = next(r for r in rows if r["use"] == "told_claim_credit")
+        row["key"] = descriptors.attribute_key("Perception")
+    _rebound(monkeypatch, to_perception)
+    assert _credit(_hearer(**low_attunement)) == 60, "Attunement still moves the credit after the row was re-pointed"
+    assert _credit(_hearer(**low_perception)) < 60, "Perception does not move the credit the re-pointed row names"
+
+
+def test_a_use_with_no_row_reads_no_capability(monkeypatch):
+    """`told_claim_credit` with no row is a factor of exactly 1 (a hearer who would be discounted is not), never a default."""
+    from engine.season.queries import person_q
+    low = _hearer(Attunement=2)
+    assert _credit(low) < 60
+    _rebound(monkeypatch, lambda rows: rows.__delitem__(next(i for i, r in enumerate(rows) if r["use"] == "told_claim_credit")))
+    assert _credit(low) == 60
+    gate = next(r for r in _shipped_rows() if r["role"] == "gate")["use"]
+    _rebound(monkeypatch, lambda rows: rows.__delitem__(next(i for i, r in enumerate(rows) if r["use"] == gate)))
+    ts = _hearer()
+    ts.thread_sensitivity = 99
+    reader = person_q.OwnStateReader(ts, _Fx())
+    assert reader.read(ts.id, "thread_sensitivity") is person_q.UNKNOWN
+    assert person_q.capability_admits(ts, gate, _Fx()) is person_q.UNKNOWN
+
+
+class _Fx:
+    """The Fixtures read the gate needs, as a bare `.get`."""
+    def get(self, name):
+        from engine.season.data.fixtures import DEFAULT_FIXTURES
+        return DEFAULT_FIXTURES.get(name)
+
+
+def test_capability_admits_reads_its_threshold_fixture_and_its_key_from_the_gate_row(monkeypatch):
+    """The gate's threshold is the row's `gain` fixture and its value is the row's key's held value: swapping the fixture
+    name in the row moves the answer with no edit under `queries/`."""
+    from engine.season.queries import person_q
+    row = next(r for r in _shipped_rows() if r["role"] == "gate")
+    p = _hearer()
+    gate = _Fx().get(row["gain"])
+    p.thread_sensitivity = gate
+    assert person_q.capability_admits(p, row["use"], _Fx()) is True
+    p.thread_sensitivity = gate - 1
+    assert person_q.capability_admits(p, row["use"], _Fx()) is False
+    p.thread_sensitivity = None
+    assert person_q.capability_admits(p, row["use"], _Fx()) is person_q.UNKNOWN
+    # the reader's two stems come from the same row
+    p.thread_sensitivity = gate
+    reader = person_q.OwnStateReader(p, _Fx())
+    assert reader.read(p.id, "thread_sensitivity") == gate and reader.read(p.id, "thread_sensitivity.gate") == gate
+    other = next(n for n in _fixture_values() if n != row["gain"] and isinstance(_fixture_values()[n], (int, float))
+                 and _fixture_values()[n] != gate)
+    _rebound(monkeypatch, lambda rows: next(r for r in rows if r["role"] == "gate").update(gain=other))
+    assert reader.read(p.id, "thread_sensitivity.gate") == _Fx().get(other)
+
+
+def test_the_substrate_forms_and_scale_of():
+    """`about_mid` is 1 at the mid-point and linear about it; `at_least` is the inclusive comparison; `scale_of` returns
+    the attribute scale and a practitioner stat's bounds, and refuses a key with neither."""
+    lo, hi = descriptors.ATTRIBUTE_FLOOR, descriptors.ATTRIBUTE_CEILING
+    mid = (lo + hi) / 2
+    assert descriptors.about_mid(mid, lo, hi, 1.0) == 1.0 and descriptors.about_mid(lo, lo, hi, 1.0) == 0.0
+    assert descriptors.about_mid(hi, lo, hi, 0.5) == 1.5 and descriptors.about_mid(lo, lo, hi, 0.0) == 1.0
+    assert descriptors.at_least(5, 5) is True and descriptors.at_least(4, 5) is False
+    assert descriptors.scale_of(descriptors.ATTRIBUTES[0]) == (lo, hi)
+    assert descriptors.scale_of(next(iter(descriptors.PRACTITIONER_STATS)))[0] == 0
+    with pytest.raises(ValueError, match="scale"):
+        descriptors.scale_of("no_such_key")

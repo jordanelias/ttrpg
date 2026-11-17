@@ -19,7 +19,7 @@ import pytest
 
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.matrix import WriteClass
-from ..decision.options import COMPETENCE_ATTRIBUTE
+from ..data.rosters import capability_uses
 from ..epistemic import observers_for
 from ..harness import populated as POP
 from ..boot.realm import build_realm
@@ -52,7 +52,7 @@ def _tell(regime: float, refraction: float = 0.0, held: int = HELD_CONF, convict
     for pid, conv in (conviction or {}).items():
         w.persons[pid].conviction = dict(conv)
     for pid, a in (attunement or {}).items():
-        w.persons[pid].attributes = {COMPETENCE_ATTRIBUTE: a}
+        w.persons[pid].attributes = {next(r.key for r in capability_uses() if r.use == "told_claim_credit"): a}
     w.persons[TELLER].ledger.append(
         Claim("c_held", TELLER, "Hh", "stores:grain", 8, 0, "firsthand", held, "own"))
     act = Act(id="a_tell_cr79", actor=TELLER, verb="tell",
