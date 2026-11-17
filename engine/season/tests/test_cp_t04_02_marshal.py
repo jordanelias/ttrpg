@@ -282,12 +282,12 @@ def test_the_role_is_not_gated_by_role_allowed():
     ROLE_SPEC, role_allowed = _mod("config").ROLE_SPEC, _mod("troop_types.registry").role_allowed
     mb = _mb()
     assert not role_allowed("infantry", "Shock") and "Shock" in ROLE_SPEC
-    ordered = mb._weighted_unit("a", 20, 5, SCALE, "Shock").subunits[0]
-    plain = mb._weighted_unit("a", 20, 5, SCALE).subunits[0]
+    ordered = mb._weighted_unit("a", 20, 5, SCALE, "Shock").units[0]
+    plain = mb._weighted_unit("a", 20, 5, SCALE).units[0]
     assert (ordered.role, ordered.shape, ordered.instructions) == ("Shock", "Arrowhead", ("charge",))
     assert (plain.role, plain.shape, plain.instructions) == (None, "Line", ())
     persons, _ = mb._person_unit("a", (5, 5), ("x", "y"), 5, SCALE, None, "ShieldWall")
-    assert [(s.role, s.shape) for s in persons.subunits] == [("ShieldWall", "Line")] * 2   # on the `person` arm too
+    assert [(s.role, s.shape) for s in persons.units] == [("ShieldWall", "Line")] * 2   # on the `person` arm too
     with pytest.raises(ValueError):
         mb._weighted_unit("a", 20, 5, SCALE, "Berserker")
 

@@ -28,7 +28,7 @@ os.environ.setdefault('LANCHESTER_ENABLED', '1')
 os.environ.setdefault('PER_CELL', '0')
 
 from modules.mass_battle.config import BLOCK_SIZE, TROOPS_PER_TIER   # [ED-MB-0050 / A6a] the annihilation threshold
-from systems.mass_battle.sim.engine import (Subunit, Unit, run_battle,
+from systems.mass_battle.sim.engine import (Unit, Army, run_battle,
                                 SIDE_A_START_ROW, SIDE_B_START_ROW, LANCHESTER_ENABLED)
 import modules.mass_battle.core.state as _state   # [ED-MB-0050 / A6a] patched by _rout_disabled below
 
@@ -69,7 +69,7 @@ _LINE_ANCHOR = {SMALL_TIER: 10, MIRROR_TIER: 9, BIG_TIER: 8}  # [JUSTIFIED: gaug
 def _mk(shape, tier, faction, unit_type='melee', stance='balanced', instructions=()):
     ad = -1 if faction == 'A' else 1
     sr = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
-    su = Subunit(shape=shape, troop_type='infantry', tier=tier,
+    su = Unit(shape=shape, troop_type='infantry', tier=tier,
                  starting_position=(sr, _LINE_ANCHOR.get(tier, 10)),
                  advance_dir=ad, unit_type=unit_type, instructions=tuple(instructions))
     # [canonical: tests/sim/sim_mb_06_v9_historical_spec.md — "The v9 targets above use uniform
@@ -78,9 +78,9 @@ def _mk(shape, tier, faction, unit_type='melee', stance='balanced', instructions
     # says exactly this, and it is also `gauge_mb.make_unit`'s default signature, so the harness and
     # the gauge share one baseline rather than two coincidentally-equal ones.
     p, cmd, disc, mor = 4, 4, 5, 6  # [canonical: tests/sim/sim_mb_06_v9_historical_spec.md §v9 targets — uniform P4/C4/D5/M6]
-    return Unit(name=faction, faction=faction, power=p, command=cmd,
+    return Army(name=faction, faction=faction, power=p, command=cmd,
                 discipline=disc, discipline_start=disc, morale=mor, morale_start=mor,
-                subunits=[su], dr=1, stance=stance, speed='Standard')
+                units=[su], dr=1, stance=stance, speed='Standard')
 
 
 def _sweep(big_tier, small_tier, unit_type, stance='balanced', instructions=()):
@@ -175,11 +175,11 @@ NO_ROUT_MORALE = 1e9   # [JUSTIFIED: a morale pin far above any reachable value 
 # ⚠ ED-MB-0050 (2026-07-29, A6a): the old value was `TRAJ_FLOOR = 0.25`, tagged
 #   `[canonical: mb_lanchester_design.md §4 — stop at 25% of one block remaining]`. TWO problems.
 #   (1) THE STOP WAS UNREACHABLE. `bs = hp_max / size_max` measures BLOCK_SIZE (=100), so the stop
-#       fired at hp<=25 — but `Unit.recalc_size` sets `size = floor(hp/BLOCK_SIZE)` and routs the unit
+#       fired at hp<=25 — but `Army.recalc_size` sets `size = floor(hp/BLOCK_SIZE)` and routs the unit
 #       outright at `size == 0`, i.e. at hp < 100. The engine therefore ALWAYS annihilation-routed
 #       ~4x before the trajectory's own floor could trigger. Measured with stochastic rout already
 #       disabled: side B routed at ticks 36/35/36 with hp 97.3/97.1/98.9, size 0, agg_morale 1e9,
-#       troop_total 400 (well above SUBUNIT_ROUT_FLOOR=80) — annihilation, not morale, not the
+#       troop_total 400 (well above UNIT_ROUT_FLOOR=80) — annihilation, not morale, not the
 #       casualty break-point. This is a THIRD truncation mechanism, beyond the two plan-v2 A6a named.
 #   (2) THE CITATION DOES NOT RESOLVE. `mb_lanchester_design.md` §4 is a five-item prose validation
 #       plan; it specifies no trajectory protocol, no floor, no tick budget, no fit grid and no
@@ -264,7 +264,7 @@ def _trajectory(big_tier, small_tier, unit_type, stance, diag=None, instructions
         # silent-no-op class that confounded the retracted MB_CELL_MORALE measurement (ED-MB-0042):
         # `eff_morale` reads the cells once seeded and never falls back to the scalar, so under the
         # flag this pin would set nothing, bodies would rout mid-signature, and the Lanchester
-        # exponent would be fitted on TRUNCATED battles. `Unit.set_morale` is the owner; unseeded
+        # exponent would be fitted on TRUNCATED battles. `Army.set_morale` is the owner; unseeded
         # (the shipped default) it reduces exactly to `unit.morale = value`, so this is
         # behaviour-identical at MB_CELL_MORALE=0 and correct at =1.
         #
@@ -287,7 +287,7 @@ def _trajectory(big_tier, small_tier, unit_type, stance, diag=None, instructions
         tr = []
         routed_here = False
         for _ in range(TRAJ_TICKS):
-            run_battle(ua, ub, max_turns=1)
+            run_battle(ua, ub, max_ticks=1)
             tr.append((ua.hp, ub.hp))
             # [ED-MB-0049 / A5a falsifier] The pin's WHOLE PURPOSE is "no rout, pure attrition".
             # Record whether it held, per trajectory, instead of assuming it. `checked` is the
@@ -296,7 +296,7 @@ def _trajectory(big_tier, small_tier, unit_type, stance, diag=None, instructions
             diag['checked'] += 1
             # [ED-MB-0050 / A6a] Order matters, and getting it wrong is how "40/40 routed" stayed
             # ambiguous. Reaching the attrition floor is a CLEAN stop — the trajectory has run out
-            # of the regime it was measuring. `Unit.recalc_size` also flips `routed` at that same
+            # of the regime it was measuring. `Army.recalc_size` also flips `routed` at that same
             # moment (size hits 0 just below one block), so testing `routed` first would score every
             # clean termination as a precondition violation. A violation is a rout that happens
             # while BOTH sides are still above the floor: that is the pin failing to do its job.

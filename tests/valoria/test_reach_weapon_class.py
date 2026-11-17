@@ -95,7 +95,7 @@ def _standing(ta, tb, n=12):
         a = build_unit('Line', 3, 'A', 'A', 9, troop_type=ta)
         b = build_unit('Line', 3, 'B', 'B', 9, troop_type=tb)
         h0a, h0b = a.hp, b.hp
-        _orch.run_battle(a, b, max_turns=18)
+        _orch.run_battle(a, b, max_ticks=18)
         ha += a.hp / h0a; hb += b.hp / h0b
     return round(ha / n, 4), round(hb / n, 4)
 
@@ -111,7 +111,7 @@ def _charge_vs_brace(def_type, n=16):
         c = build_unit('Line', 3, 'CAV', 'B', 9, troop_type='cavalry', speed='Fast',
                        instructions=('charge',))
         h0 = d.hp
-        _orch.run_battle(d, c, max_turns=18)
+        _orch.run_battle(d, c, max_ticks=18)
         tot += d.hp / h0
     return tot / n
 
@@ -182,7 +182,7 @@ def test_conservation_with_pike(field_path, seed):
     random.seed(seed)
     a = build_unit('Line', 3, 'PIKE', 'A', 9, troop_type='pike', instructions=('brace', 'hold'))
     b = build_unit('Line', 3, 'CAV', 'B', 9, troop_type='cavalry', speed='Fast', instructions=('charge',))
-    _orch.run_battle(a, b, max_turns=18)
+    _orch.run_battle(a, b, max_ticks=18)
     checked = assert_troop_conservation(a, b, context=f"seed={seed}")
     assert checked >= 2, f"seed={seed}: conservation checked {checked} units, expected both"
 
@@ -194,7 +194,7 @@ def test_determinism_with_pike(field_path):
         random.seed(808)
         a = build_unit('Line', 3, 'PIKE', 'A', 9, troop_type='pike', instructions=('brace', 'hold'))
         b = build_unit('Line', 3, 'CAV', 'B', 9, troop_type='cavalry', speed='Fast', instructions=('charge',))
-        res = _orch.run_battle(a, b, max_turns=18)
+        res = _orch.run_battle(a, b, max_ticks=18)
         return (res['winner'], res['turns'], round(a.hp, 6), round(b.hp, 6))
 
     assert _run() == _run()

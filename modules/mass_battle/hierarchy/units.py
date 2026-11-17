@@ -1,9 +1,9 @@
-"""modules.mass_battle.hierarchy.units — Subunit and Unit dataclasses (the unit/subunit hierarchy).
+"""modules.mass_battle.hierarchy.units — Unit and Army dataclasses (the army/unit hierarchy).
 Stage-1 behaviour-frozen extract from orchestration.py. The DATA model + the per-object geometry/
 movement/state methods. Depends only on LOWER layers — config, geometry (_oriented/footprint_for/
 cell_speed/octagon), core.exchange (derive_command/_stamina_pool_penalty/subunit_combat_pool),
 troop_types.registry (stats_for), percell (build_column_grid) — and never imports orchestration
-(no cycle). Re-imported by orchestration via star-import so every Subunit(...)/Unit(...) call site
+(no cycle). Re-imported by orchestration via star-import so every Unit(...)/Army(...) call site
 is unchanged. [canonical: mass_battle_v30.md §A.3b/§A.4; derived_stats unit composition]"""
 import math
 import random as _cell_random
@@ -56,7 +56,7 @@ MB_FACING_ROUT = (_hu_os.environ.get('MB_FACING_ROUT', '1') == '1')  # (d) route
 # which keywords the STANCE and FEINT primitives read (the 'stance:<s>' and 'feigned_retreat' rows, below);
 # its other rows are reference: where a literal keyword is read elsewhere, or (None, why it is unwired). A keyword drives only a primitive that already existed; where none could
 # honestly carry it, it stays unwired and says why, rather than gaining a fabricated effect.
-#   * rows read through this table: 'stance:<s>' rows via Subunit.eff_stance (the default posture a role
+#   * rows read through this table: 'stance:<s>' rows via Unit.eff_stance (the default posture a role
 #     sets when the stance was never written on purpose -- an explicit stance, 'balanced' included,
 #     always wins, as it does over every other role default in engine.build_army), and the 'feigned_retreat' row via
 #     unit_lures at orchestration.resolve_feigned_retreat. Both read live, so an order that rewrites
@@ -68,15 +68,15 @@ MB_ROLE_INSTRUCTIONS = (_hu_os.environ.get('MB_ROLE_INSTRUCTIONS', '1') == '1')
 ROLE_INSTRUCTION_PRIMITIVES = {
     # literal (pre-MB-04)
     'brace':   ('literal: brace', 'resolution._subunit_braced/_unit_braced (charge-shock floor, recoil); core.contact.check_orders (setup delay)'),
-    'envelop': ('literal: envelop path', 'Subunit._resolve_maneuver_goal -> _envelop_goal; Subunit.advance_cells'),
-    'sweep':   ('literal: sweep path', 'Subunit._resolve_maneuver_goal -> _sweep_goal; Subunit.advance_cells'),
-    'kite':    ('literal: kite standoff band', 'Subunit._resolve_maneuver_goal -> _kite_goal; Subunit.advance_cells'),
+    'envelop': ('literal: envelop path', 'Unit._resolve_maneuver_goal -> _envelop_goal; Unit.advance_cells'),
+    'sweep':   ('literal: sweep path', 'Unit._resolve_maneuver_goal -> _sweep_goal; Unit.advance_cells'),
+    'kite':    ('literal: kite standoff band', 'Unit._resolve_maneuver_goal -> _kite_goal; Unit.advance_cells'),
     'reserve': ('literal: reserve commitment', 'orchestration.unit_in_reserve'),
     # MB-04 -- the STANCE primitive (STANCE_SPEED_MOD movement, STANCE_COMMITMENT intent, MB_SHOCK_HOLD_BRACE)
-    'hold':    ('stance:hold', 'Subunit.eff_stance'),
-    'push':    ('stance:aggressive', 'Subunit.eff_stance'),
-    'charge':  ('stance:aggressive', 'Subunit.eff_stance'),
-    # MB-04 -- PP-256 Feigned Retreat (the same Unit-wide feint the 'feign_retreat' order pseudo-field declares)
+    'hold':    ('stance:hold', 'Unit.eff_stance'),
+    'push':    ('stance:aggressive', 'Unit.eff_stance'),
+    'charge':  ('stance:aggressive', 'Unit.eff_stance'),
+    # MB-04 -- PP-256 Feigned Retreat (the same Army-wide feint the 'feign_retreat' order pseudo-field declares)
     'lure':    ('feigned_retreat', 'unit_lures -> orchestration.resolve_feigned_retreat'),
     # unwired -- no existing primitive this keyword could honestly drive
     'pin':     (None, "pinning is emergent, not chosen: a body engaged in an enemy's front arc pins it "
@@ -104,13 +104,13 @@ _FEINT_KEYWORDS = frozenset(k for k, (p, _w) in ROLE_INSTRUCTION_PRIMITIVES.item
 
 def unit_lures(unit):
     """True if any subunit's instructions declare PP-256's Feigned Retreat (the 'lure' row above).
-    Read where the feint resolves, beside the order-set `Unit.feigned`; mirrors
+    Read where the feint resolves, beside the order-set `Army.feigned`; mirrors
     orchestration.unit_in_reserve. False whenever MB_ROLE_INSTRUCTIONS is off."""
-    return MB_ROLE_INSTRUCTIONS and any(k in _FEINT_KEYWORDS for a in getattr(unit, 'subunits', ())
+    return MB_ROLE_INSTRUCTIONS and any(k in _FEINT_KEYWORDS for a in getattr(unit, 'units', ())
                                         for k in getattr(a, 'instructions', ()))
 
 
-__all__ = ['Subunit', 'Unit', 'Order', 'Officer', 'clamp_command', 'unit_conceded', 'MB_ENVELOP_PATH', 'MB_SWEEP', 'FIELD_MOVEMENT', 'FIELD_CONTACT', 'CONTACT_REACH', 'COL_WIDTH',
+__all__ = ['Unit', 'Army', 'Order', 'Officer', 'clamp_command', 'unit_conceded', 'MB_ENVELOP_PATH', 'MB_SWEEP', 'FIELD_MOVEMENT', 'FIELD_CONTACT', 'CONTACT_REACH', 'COL_WIDTH',
            'MB_FACING_MODEL', 'MB_FACING_ATTENTION', 'MB_FACING_SLEW_BASE', 'MB_FACING_FOV_GATE', 'MB_FACING_ROUT',
            'MB_ROLE_INSTRUCTIONS', 'ROLE_INSTRUCTION_PRIMITIVES', 'unit_lures',
            'CELL_RADIUS', 'standoff_from_reach', 'standoff', 'resolve_toi_and_commit', 'separate_all_bodies', 'turn_to_face_aggressors']
@@ -238,18 +238,18 @@ _ORDER_SAFE_FIELDS = frozenset({
     # route; without it, a subunit re-routed after partially following an earlier route would start
     # the new one part-way through (or already "finished") at whatever index the old route left it at.
     'route', '_route_idx',
-    # [A4, ED-MB-0067 Part A] `fire_signal` is a PSEUDO-field: not a real Subunit attribute at all, so
-    # check_orders special-cases it (skips the generic setattr, adds the name to the issuing Unit's
+    # [A4, ED-MB-0067 Part A] `fire_signal` is a PSEUDO-field: not a real Unit attribute at all, so
+    # check_orders special-cases it (skips the generic setattr, adds the name to the issuing Army's
     # fired_signals set instead -- see check_orders' own comment). Listed here so an Order carrying it
     # passes construction-time validation like every other order-settable behavior key; it is the
     # order-writable path to fire a 'signal:' trigger from inside a battle, letting one order's OWN trigger
     # condition release a go-code for every OTHER pending order watching it, without messenger relay or
-    # cross-Unit broadcast (both still out of scope).
+    # cross-Army broadcast (both still out of scope).
     'fire_signal',
     # [C4, ED-MB-0067 Part C / ED-MB-0071] `feign_retreat` is ALSO a PSEUDO-field, same shape as
-    # `fire_signal` immediately above: not a real Subunit attribute, so check_orders special-cases it
-    # (skips the generic setattr, sets the ISSUING UNIT's `.feigned` instead of a Subunit field --
-    # PP-256's Feigned Retreat is a Unit-wide tactic, per `Unit.feigned`'s own declaration, not a
+    # `fire_signal` immediately above: not a real Unit attribute, so check_orders special-cases it
+    # (skips the generic setattr, sets the ISSUING ARMY's `.feigned` instead of a Unit field --
+    # PP-256's Feigned Retreat is an Army-wide tactic, per `Army.feigned`'s own declaration, not a
     # per-subunit one). Listed here for the same construction-time-validation reason as `fire_signal`.
     'feign_retreat',
 })
@@ -264,12 +264,12 @@ _ORDER_TRIGGER_KINDS = ('immediate', 'tick:', 'enemy_range:', 'ally_at:', 'own_s
 
 @dataclass
 class Order:
-    """[Stage C] A single timed/conditional instruction queued on a Subunit. trigger:
+    """[Stage C] A single timed/conditional instruction queued on a Unit. trigger:
     'immediate' | 'tick:N' | 'enemy_range:D' | 'ally_at:D' (needs waypoint_ref) |
     'own_strength:FRAC' (ED-MB-0030 — fires when this subunit's current troops fall to <= FRAC of its
     spawn count, e.g. 'own_strength:0.5' = "act once I'm down to half": withdraw a spent body, commit a
     weakened one, brace when thinned, etc.) | 'signal:NAME' (A4, ED-MB-0067 Part A — a go-code: fires
-    once NAME is in the issuing Unit's `fired_signals` set, e.g. a caller does
+    once NAME is in the issuing Army's `fired_signals` set, e.g. a caller does
     `unit.fired_signals.add('advance')` to release every pending order whose trigger is
     'signal:advance', on every subunit, in one act — see check_orders). behavior: a dict of
     attribute->value, applied via setattr when the trigger fires (e.g. {'stance':'balanced',
@@ -277,7 +277,7 @@ class Order:
     including escort_of/escort_offset -- a subunit can switch INTO escort mode mid-battle via an
     order), not geometry/troop-accounting fields (see _ORDER_SAFE_FIELDS's own note for why).
     behavior may also set 'feign_retreat': bool (C4, ED-MB-0067 Part C / ED-MB-0071) -- a pseudo-field,
-    not a real Subunit attribute: once this order's trigger fires, the ISSUING UNIT's `.feigned` is set
+    not a real Unit attribute: once this order's trigger fires, the ISSUING ARMY's `.feigned` is set
     to the given value, pre-declaring a Feigned Retreat (PP-256) before the unit's normal rout check
     ever runs. Inert unless MB_FEIGNED_RETREAT is ON; resolved at the pursuit call site by the
     already-shipped feigned_retreat_recognized / feigned_retreat_check, unchanged by this field."""
@@ -337,7 +337,7 @@ class Order:
 
 
 @dataclass
-class Subunit:
+class Unit:
     shape: str
     troop_type: str           # 'infantry'|'cavalry' etc. — anatomical type (v8 legacy)
     tier: int
@@ -405,7 +405,7 @@ class Subunit:
     # Theban deep wing at Leuctra). r=0 is the leading rank in the footprint. Sum over cells == troop_count.
     distribution: str = 'uniform'
     # Per-subunit quality stats (Jordan directive): a subunit is a homogeneous typed body
-    # with its OWN combat stats; None INHERITS the parent Unit (back-ref _unit set in Unit.__post_init__),
+    # with its OWN combat stats; None INHERITS the parent Army (back-ref _unit set in Army.__post_init__),
     # so single-subunit / homogeneous units stay byte-exact. Mixed units (e.g. a cavalry subunit + an
     # infantry subunit) differentiate per-subunit in the pool, casualty exchange, and charge/brace/morale sigma.
     power: Optional[int] = None
@@ -414,32 +414,32 @@ class Subunit:
     morale_start: Optional[int] = None
     dr: Optional[int] = None
     # Per-subunit stamina (Jordan directive): a subunit drains and rests its OWN stamina; None INHERITS
-    # the parent Unit (single-subunit / homogeneous units stay byte-exact via eff_stamina -> unit.stamina).
+    # the parent Army (single-subunit / homogeneous units stay byte-exact via eff_stamina -> unit.stamina).
     # An engaged subunit drains; a reserve subunit stays fresh -> line relief / depth-as-reserve becomes
     # mechanically real (triplex-acies line relief; Clausewitz reserves).
     stamina: Optional[float] = None
     stamina_max: Optional[float] = None
     # [A6, ED-MB-0067 Part A -- "Missile ammunition and resupply"] Per-subunit volley count, mirroring
-    # `stamina` immediately above EXACTLY: None INHERITS the parent Unit's own pool (single-subunit units
+    # `stamina` immediately above EXACTLY: None INHERITS the parent Army's own pool (single-subunit units
     # stay byte-exact via eff_volleys -> unit.volleys), an explicit value gives a subunit its OWN
-    # independent pool. Ammo belongs to the shooter, not to a column other subunits pass through (a column
-    # position is shared across whatever subunits currently occupy it, so ammo tracked there could
+    # independent pool. Ammo belongs to the shooter, not to a column other units pass through (a column
+    # position is shared across whatever units currently occupy it, so ammo tracked there could
     # regenerate for free or silently stop being metered, depending on MB_CLOSE_RANKS) -- see
     # percell._ColBlock's own note.
     volleys: Optional[float] = None
-    # Per-subunit rout lifecycle (Jordan directive 2026-06-17): a subunit tracks its OWN rout/broken
+    # Per-subunit rout lifecycle (Jordan directive 2026-06-17): a subunit tracks its OWN rout/disordered
     # state, so a heavily-hit subunit can break while a fresh sibling holds ("a section of the line
-    # breaks" — §A.12 Cannae/Hastings). routed = its eroding morale reached 0; broken = its discipline
+    # breaks" — §A.12 Cannae/Hastings). routed = its eroding morale reached 0; disordered = its discipline
     # reached 0 (formation gone, contributes 0 to combat). For a single-subunit unit these coincide with
-    # the parent Unit's routed/broken so the homogeneous gauge stays byte-exact. discipline_start mirrors
-    # morale_start (the per-subunit nominal start for degradation tracking); None inherits the Unit.
+    # the parent Army's routed/disordered so the homogeneous gauge stays byte-exact. discipline_start mirrors
+    # morale_start (the per-subunit nominal start for degradation tracking); None inherits the Army.
     routed: bool = False
-    broken: bool = False
+    disordered: bool = False
     discipline_start: Optional[int] = None
     # [DG-2, designs/proposals/mass_battle_fighting_withdrawal_v1.md, Jordan-ruled "build it now"
     # 2026-07-08] A yielding subunit gives ground under pressure but keeps FIGHTING and keeps FACING
     # the threat -- the mechanical distinction from `routed` (which turns away and stops fighting).
-    # Default False -> inert/byte-exact for every existing Subunit; entry is commanded-only this
+    # Default False -> inert/byte-exact for every existing Unit; entry is commanded-only this
     # pass (a 'yield' order's `behavior` dict sets this True directly via check_orders' existing
     # generic setattr application -- no new order-primitive code needed), gated on
     # `eff_discipline >= D_YIELD` at every CONSUMPTION site (movement/facing/combat pool), not at
@@ -453,7 +453,7 @@ class Subunit:
     pocketed: bool = False
     # [Stage C] Timed/conditional order queue -- fired in sequence by check_orders (core/contact.py),
     # called once per tick per side, before assign_targets. Empty tuple -> the consumer's loop body
-    # never executes for any existing Subunit (byte-exact).
+    # never executes for any existing Unit (byte-exact).
     orders: Tuple[Order, ...] = ()
     _order_idx: int = 0
     # [MB-04] True once the stance was WRITTEN on purpose (an Order's `stance` behavior, or a build spec's
@@ -461,8 +461,8 @@ class Subunit:
     _stance_explicit: bool = field(default=False, repr=False)
     # [Stage C] Escort / formation-relative positioning ("hold position in front of the marching
     # archers"): a subunit tracking a friendly's position instead of (or until) engaging an enemy.
-    # All default-inert -> byte-exact for any existing Subunit.
-    escort_of: Optional[object] = field(default=None, repr=False)   # live ref to the escorted friendly Subunit
+    # All default-inert -> byte-exact for any existing Unit.
+    escort_of: Optional[object] = field(default=None, repr=False)   # live ref to the escorted friendly Unit
     escort_offset: Tuple[float, float] = (0.0, 0.0)   # (dr, dc) in the escorted unit's LOCAL (facing-rotated) frame; +dr = ahead
     escort_engage_on_contact: bool = False    # False = keep screening indefinitely; True = one-shot latch to normal enemy-targeting once acquired
     _escort_engaged: bool = False             # the latch
@@ -483,19 +483,19 @@ class Subunit:
     # [A1, ED-MB-0067 Part A -- squad-engagement synthesis, "Routes with waypoints"] An ordered tuple
     # of absolute (r,c) waypoints to march through in sequence, ahead of whatever
     # _resolve_maneuver_goal's instruction-based branches or the plain target_centroid default would
-    # otherwise select -- see Subunit._resolve_route_goal. Set via an Order's behavior (Order may
+    # otherwise select -- see Unit._resolve_route_goal. Set via an Order's behavior (Order may
     # only set _ORDER_SAFE_FIELDS; `route` is clamped to the ruled path-length budget by
     # check_orders at the moment it is assigned, not re-clamped here). `_route_idx` is the read-fresh
     # cursor into it; both default to the empty/zero case, under which _resolve_route_goal returns
-    # None immediately -> byte-exact/inert for any existing Subunit that never receives a route.
+    # None immediately -> byte-exact/inert for any existing Unit that never receives a route.
     route: Tuple[Tuple[float, float], ...] = ()
     _route_idx: int = 0
     # [A3, ED-MB-0067 Part A / ED-1090's own queued reconciliation, ED-MB-0073] Names the Officer
-    # (by Officer.name, in the parent Unit's `officers`) commanding this subunit, or None for a
+    # (by Officer.name, in the parent Army's `officers`) commanding this subunit, or None for a
     # direct report to the general. Bookkeeping only -- validated once at build_army construction
     # time (see build_army's own docstring); nothing currently reads this at resolution time, same
     # inert-until-consumed shape as `role` before Stage D wired it. Default None -> byte-exact for
-    # every existing Subunit, which never sets it.
+    # every existing Unit, which never sets it.
     officer: Optional[str] = None
 
     def __post_init__(self):
@@ -505,20 +505,20 @@ class Subunit:
         # formations are unaffected (byte-exact). Bounds are checked on the initial formation
         # (cell_offsets are 0 here); dynamic movement past the edge is a separate concern.
         if self.shape not in CELL_PATTERN_FN:
-            raise ValueError(f"Subunit shape {self.shape!r} unknown; valid shapes: {sorted(CELL_PATTERN_FN)}")
+            raise ValueError(f"Unit shape {self.shape!r} unknown; valid shapes: {sorted(CELL_PATTERN_FN)}")
         # Continuous mode = troops set, with EITHER a density (concentration) OR an explicit width×depth
         # grid (ED-MB-0026). Legacy tier path = troops None (and no concentration/grid).
         _has_grid = self.width is not None and self.depth is not None
         if self.troops is None and (self.concentration is not None or _has_grid):
-            raise ValueError("Subunit: continuous mode (concentration or width×depth) needs troops set")
+            raise ValueError("Unit: continuous mode (concentration or width×depth) needs troops set")
         if self.troops is not None and self.concentration is None and not _has_grid:
-            raise ValueError("Subunit: continuous mode needs a concentration (density) or an explicit width×depth")
+            raise ValueError("Unit: continuous mode needs a concentration (density) or an explicit width×depth")
         if self.troops is None and self.tier not in TROOPS_PER_TIER:
-            raise ValueError(f"Subunit (shape={self.shape}) tier must be one of {sorted(TROOPS_PER_TIER)}, got {self.tier!r}")
+            raise ValueError(f"Unit (shape={self.shape}) tier must be one of {sorted(TROOPS_PER_TIER)}, got {self.tier!r}")
         for ar, ac in self.cells():
             if not (0 <= ar < BATTLEFIELD_SIZE and 0 <= ac < BATTLEFIELD_SIZE):
                 raise ValueError(
-                    f"Subunit (shape={self.shape}, tier={self.tier}) at anchor {self.starting_position} "
+                    f"Unit (shape={self.shape}, tier={self.tier}) at anchor {self.starting_position} "
                     f"places a cell at ({ar},{ac}) outside the {BATTLEFIELD_SIZE}x{BATTLEFIELD_SIZE} battlefield; "
                     f"move the anchor inward so the formation fits.")
         # Step 1 (cell-primary, Jordan directive 2026-06-03): per-cell troops are the SOURCE OF TRUTH.
@@ -539,18 +539,18 @@ class Subunit:
         else:
             _per = self.troop_count / len(_ids) if _ids else 0.0
             self.cell_troops = {pid: _per for pid in _ids}
-        self._unit = None                      # stat-inheritance back-ref (set by Unit.__post_init__)
+        self._unit = None                      # stat-inheritance back-ref (set by Army.__post_init__)
         self._start_troops = self.troop_count  # spawn troop count = per-subunit cohesion denominator
         # [ED-MB-0041 phase 1] Seed per-cell morale from the scalar, so the aggregate is IDENTICAL to the
         # scalar at t=0 and any divergence between cells is earned in play. Gated -> unseeded -> inert.
         #
         # [ED-MB-0042] `self.morale is not None` is LOAD-BEARING, not defensive. A subunit whose morale is None
-        # INHERITS it from its parent Unit, and the back-ref `_unit` is not set until `Unit.__post_init__` runs
-        # -- strictly AFTER this, because the Unit is constructed from an already-built subunit list. Seeding
+        # INHERITS it from its parent Army, and the back-ref `_unit` is not set until `Army.__post_init__` runs
+        # -- strictly AFTER this, because the Army is constructed from an already-built subunit list. Seeding
         # here would read `eff_morale`'s no-parent fallback of 0 and give every cell morale 0.0, i.e. **born
         # broken**: `cell_broken` is a <=0 test and `_pair_engaged_troops` excludes broken cells, so the body
         # would emit no combat weight and never recover (once cells exist `eff_morale` reads THEM and no
-        # longer falls through to the parent scalar). Subunits that inherit are seeded by Unit.__post_init__
+        # longer falls through to the parent scalar). Units that inherit are seeded by Army.__post_init__
         # instead.
         if MB_CELL_MORALE and self.morale is not None:
             self.seed_cell_morale()
@@ -562,11 +562,11 @@ class Subunit:
 
     @classmethod
     def of_type(cls, troop_type, shape, tier, starting_position, **kw):
-        """Construct a Subunit of a canonical troop type (mass_battle_v30 §B.2). The type's
+        """Construct a Unit of a canonical troop type (mass_battle_v30 §B.2). The type's
         power / discipline / morale (and morale_start = morale) are filled from
         TROOP_TYPE_STATS unless the caller overrides them in **kw; an unknown type fills
-        nothing (fields stay None -> inherit the parent Unit). This is the taxonomy's
-        'stat home'. It is purely additive: callers that build Subunit(...) directly are
+        nothing (fields stay None -> inherit the parent Army). This is the taxonomy's
+        'stat home'. It is purely additive: callers that build Unit(...) directly are
         unaffected, so single-subunit / homogeneous units stay byte-exact.
         NOTE: only STATS are mapped. unit_type (melee vs ranged) is a role, not a stat —
         a ranged type (archers / crossbow / sling) takes unit_type='ranged' via **kw."""
@@ -583,7 +583,7 @@ class Subunit:
     def troop_count(self):
         return self.troops if self.troops is not None else TROOPS_PER_TIER[self.tier]
 
-    # ── per-subunit effective stats: own value, else inherit parent Unit (byte-exact when None) ──
+    # ── per-subunit effective stats: own value, else inherit parent Army (byte-exact when None) ──
     def _u(self):
         return getattr(self, '_unit', None)
     @property
@@ -712,14 +712,14 @@ class Subunit:
         return u.stamina_max if u is not None else STAMINA_MAX
     def drain_stamina(self, amount):
         # Reduce effective stamina (floor 0). Writes to own stamina if set, else routes to the inherited
-        # Unit -> a single-subunit unit reproduces the old unit.stamina drain exactly (byte-exact).
+        # Army -> a single-subunit unit reproduces the old unit.stamina drain exactly (byte-exact).
         new = max(0, self.eff_stamina - amount)
         if self.stamina is not None: self.stamina = new
         else:
             u = self._u()
             if u is not None: u.stamina = new
     def recover_stamina(self, amount):
-        # Increase effective stamina, capped at eff_stamina_max; same own-else-inherited-Unit write routing.
+        # Increase effective stamina, capped at eff_stamina_max; same own-else-inherited-Army write routing.
         new = min(self.eff_stamina_max, self.eff_stamina + amount)
         if self.stamina is not None: self.stamina = new
         else:
@@ -727,14 +727,14 @@ class Subunit:
             if u is not None: u.stamina = new
     @property
     def eff_volleys(self):
-        """[A6, ED-MB-0067 Part A] Same own-else-inherited-Unit pattern as eff_stamina immediately
-        above. No-parent fallback is MB_VOLLEYS_START (an unseeded lone Subunit starts fresh),
+        """[A6, ED-MB-0067 Part A] Same own-else-inherited-Army pattern as eff_stamina immediately
+        above. No-parent fallback is MB_VOLLEYS_START (an unseeded lone Unit starts fresh),
         mirroring eff_stamina's own fallback to STAMINA_MAX."""
         if self.volleys is not None: return self.volleys
         u = self._u()
         return u.volleys if u is not None else MB_VOLLEYS_START
     def drain_volleys(self, amount):
-        # Reduce effective volleys (floor 0). Same own-else-inherited-Unit write routing as drain_stamina.
+        # Reduce effective volleys (floor 0). Same own-else-inherited-Army write routing as drain_stamina.
         new = max(0.0, self.eff_volleys - amount)
         if self.volleys is not None: self.volleys = new
         else:
@@ -771,7 +771,7 @@ class Subunit:
 
     def erode_morale(self, amount):
         # Reduce effective morale (may pass <=0 -> rout, matching the unit `morale -= loss`). Writes to own
-        # morale if set, else routes to the inherited Unit -> single-subunit reproduces the old unit erosion.
+        # morale if set, else routes to the inherited Army -> single-subunit reproduces the old unit erosion.
         # A body-wide loss is pressure on the WHOLE body, so it applies to every cell uniformly. Since
         # the aggregate is the weighted mean, subtracting `amount` from every cell lowers the aggregate
         # by exactly `amount` — the scalar and cellular models stay numerically identical for body-wide
@@ -786,13 +786,13 @@ class Subunit:
             u = self._u()
             if u is not None: u.morale = new
     def pull_morale(self, delta):
-        # [DG-4, ED-MB-0002, 2026-07-04 Jordan ruling: "Subunit morale combination of own morale
+        # [DG-4, ED-MB-0002, 2026-07-04 Jordan ruling: "[Unit] morale combination of own morale
         # and overall morale; more likely to wilt if other subunits losing, more likely to rally if
         # other subunits winning."] A CONTINUOUS, signed coupling toward siblings' state (called
         # from core/state.py's morale_check_phase every phase) -- distinct from erode_morale (a
         # one-directional casualty/exhaustion penalty) and cascade_morale_hit (a discrete, one-time
         # army-wide contagion event). delta>0 rallies (siblings trending better than this atom),
-        # delta<0 wilts (siblings trending worse). Same own-else-inherited-Unit write routing as
+        # delta<0 wilts (siblings trending worse). Same own-else-inherited-Army write routing as
         # erode_morale/degrade_discipline. Capped at eff_morale_start on the rally side (siblings'
         # strength cannot rally a subunit ABOVE its own pristine ceiling); no floor on the wilt
         # side, matching erode_morale's own unbounded-negative convention (rout is a <=0 threshold
@@ -813,14 +813,14 @@ class Subunit:
             u = self._u()
             if u is not None: u.morale = new
     def degrade_discipline(self):
-        # -1 discipline toward floor 0 (formation degradation); own-else-inherited-Unit write routing.
+        # -1 discipline toward floor 0 (formation degradation); own-else-inherited-Army write routing.
         new = max(0, self.eff_discipline - 1)
         if self.discipline is not None: self.discipline = new
         else:
             u = self._u()
             if u is not None: u.discipline = new
     def restore_discipline(self):
-        # +1 discipline toward the nominal start (Reform); own-else-inherited-Unit write routing.
+        # +1 discipline toward the nominal start (Reform); own-else-inherited-Army write routing.
         new = min(self.eff_discipline_start, self.eff_discipline + 1)
         if self.discipline is not None: self.discipline = new
         else:
@@ -832,14 +832,14 @@ class Subunit:
     @property
     def cohesion(self):
         u = self._u()
-        if u is not None and len(u.subunits) == 1:
+        if u is not None and len(u.units) == 1:
             return (u.hp / u.hp_max) if u.hp_max else 0.0   # exact match to unit base_combat_pool (byte-exact single-subunit path)
         start = getattr(self, '_start_troops', 0) or self.troop_count
         return (self.cur_troops / start) if start else 0.0
     @property
     def eff_size(self):
         u = self._u()
-        if u is not None and len(u.subunits) == 1:
+        if u is not None and len(u.units) == 1:
             return u.effective_size
         return self.cur_troops / BLOCK_SIZE
 
@@ -1156,7 +1156,7 @@ inert today.
         _resolve_maneuver_goal's instruction branches or the plain target_centroid default would
         otherwise select. Monotonic (_route_idx only ever increases), so unlike _envelop_goal's
         phase test this cannot oscillate between two goals. Default route=() -> _route_idx(0) >=
-        len(())(0) immediately -> None -> byte-exact/inert for any Subunit that never receives a
+        len(())(0) immediately -> None -> byte-exact/inert for any Unit that never receives a
         route.
 
         A pending route is ABANDONED, not suspended, when `yield_active` (`yielding and eff_discipline >=
@@ -1264,7 +1264,7 @@ inert today.
             return None
         # Gated behind the SAME toggles the legacy per-cell version uses (MB_ENVELOP_PATH/MB_SWEEP): a real kill
         # switch for the node-path behavior, without which V-ENVELOP/V-SWEEP's on/off comparison would be
-        # meaningless on the node path ('envelop'/'sweep' stay in Subunit.instructions regardless of the toggle).
+        # meaningless on the node path ('envelop'/'sweep' stay in Unit.instructions regardless of the toggle).
         if MB_ENVELOP_PATH and 'envelop' in self.instructions:
             return self._envelop_goal(enemy_cells)
         if MB_SWEEP and 'sweep' in self.instructions:
@@ -1447,7 +1447,7 @@ inert today.
         still close in row).
 
         [F7, ED-MB-0067 Part A] `far_bound` keys on `unit_type == 'ranged'` AND `eff_volleys > 0`: a kiter out of
-        ammo (Subunit.eff_volleys <= 0, once MB_AMMO_ENABLED is on) falls back to the melee `reach_for(troop_type)`
+        ammo (Unit.eff_volleys <= 0, once MB_AMMO_ENABLED is on) falls back to the melee `reach_for(troop_type)`
         bound a non-ranged kiter uses, so an empty kiter closes to melee instead of hovering at a volley-range band
         it can no longer fire from. Reads `self.eff_volleys` directly rather than gating on MB_AMMO_ENABLED: when
         ammo is disabled nothing ever drains eff_volleys, so this is byte-exact/inert whenever the flag is off, with
@@ -1600,17 +1600,17 @@ inert today.
             elif target_centroid:
                 # [step 4] Lateral file-holding: a plain advance with no active goal must not steer every subunit's column
                 # at the SAME enemy-centroid column (wide-placed wings would collapse inward before any maneuver could
-                # begin). A subunit that is one of several siblings in a multi-subunit Unit holds its OWN deployment file
+                # begin). A subunit that is one of several siblings in a multi-subunit Army holds its OWN deployment file
                 # (self._spawn_position's column) while its row still closes on the target; a solo subunit steers its
                 # column at the target directly.
                 #
                 # An ESCORT atom (escort_of set) is checked FIRST, before the sibling-count fallback below: orchestration.py
                 # already computes an escort-relative target_centroid[1] each tick (the escorted unit's live column + its
                 # rotated escort_offset -- see its cached_centroids pass, "so screening survives the escorted unit
-                # wheeling/enveloping/sweeping"). An escort is always one of >1 siblings in its Unit by construction, so
+                # wheeling/enveloping/sweeping"). An escort is always one of >1 siblings in its Army by construction, so
                 # without this check the sibling branch below would overwrite that live-tracking column with the escort's
                 # own fixed spawn file.
-                _siblings = getattr(getattr(self, '_unit', None), 'subunits', None)
+                _siblings = getattr(getattr(self, '_unit', None), 'units', None)
                 if self.escort_of is not None:
                     goal_c = target_centroid[1]
                 elif _siblings is not None and len(_siblings) > 1:
@@ -2062,7 +2062,7 @@ inert today.
     def propagate_cell_breaks(self):
         """[ED-MB-0041 phase 2] A broken cell shakes the cells beside it — contagion at cell scale.
 
-        The same du Picq mechanism `ROUT_CASCADE_FRAC` applies between subunits, one level down: men
+        The same du Picq mechanism `ROUT_CASCADE_FRAC` applies between units, one level down: men
         break because the men beside them broke, and a gap in the line spreads outward from where it
         opened rather than appearing uniformly across the body. Neighbours are lattice-adjacent cells
         (the 8-neighbourhood of the pattern coordinates), so the spread follows the formation's actual
@@ -2279,7 +2279,7 @@ def separate_all_bodies(unit_a, unit_b):
         return 0
     items = []
     for u in (unit_a, unit_b):
-        for atom in u.subunits:
+        for atom in u.units:
             if not hasattr(atom, '_node_pos'):
                 continue
             ids = [(o_r, o_c) for o_r, o_c, _x, _y in _oriented(atom)]
@@ -2322,7 +2322,7 @@ def turn_to_face_aggressors(unit_a, unit_b):
         return 0
     items = []
     for side, u in ((0, unit_a), (1, unit_b)):
-        for atom in u.subunits:
+        for atom in u.units:
             if not hasattr(atom, '_node_pos') or getattr(atom, 'routed', False):
                 continue
             ids = [(o_r, o_c) for o_r, o_c, _x, _y in _oriented(atom)]
@@ -2474,8 +2474,8 @@ def resolve_toi_and_commit(all_atoms_a, all_atoms_b):
 
 @dataclass
 class Officer:
-    """A subordinate commander, holding its own Cmd, fielded over one or more Subunits so a
-    general's own span-of-control counts OFFICERS rather than every Subunit directly (build_army's
+    """A subordinate commander, holding its own Cmd, fielded over one or more Units so a
+    general's own span-of-control counts OFFICERS rather than every Unit directly (build_army's
     `officers=`/per-spec `'officer'` param does the counting; this class only holds the stat).
 
     command defaults to 4 (tier-3 baseline) — the SAME default `build_army`'s own `command` parameter
@@ -2491,7 +2491,7 @@ class Officer:
     def __post_init__(self):
         if COMMAND_SIGMA_ENABLED and self.charisma is not None and self.cognition is not None:
             self.command = derive_command(self.charisma, self.cognition)
-        # SHARED clamp (core/exchange.clamp_command): one 1-7 clamp for Unit's and Officer's `command` alike (see
+        # SHARED clamp (core/exchange.clamp_command): one 1-7 clamp for Army's and Officer's `command` alike (see
         # clamp_command's own docstring).
         self.command = clamp_command(self.command)
 
@@ -2499,7 +2499,7 @@ class Officer:
 # ─── UNIT ────────────────────────────────────────────────────────────────────
 
 @dataclass
-class Unit:
+class Army:
     name: str
     faction: str
     power: int
@@ -2508,7 +2508,7 @@ class Unit:
     discipline_start: int
     morale: int
     morale_start: int
-    subunits: List[Subunit]
+    units: List[Unit]
     dr: int = 1
     h_per_size: int = 0
     size: int = 0
@@ -2516,7 +2516,7 @@ class Unit:
     hp: int = 0
     hp_max: int = 0
     routed: bool = False
-    broken: bool = False
+    disordered: bool = False
     # ED-MB-0022: Feigned Retreat (PP-256). `feigned` = this unit declared a Feigned Retreat and is
     # withdrawing to bait a pursuer (its "rout" is a ruse). `overextended` = a pursuer that failed the
     # PP-256 Discipline check while chasing a feigning enemy — its NEXT engagement pool is cut by
@@ -2539,37 +2539,37 @@ class Unit:
     # G-1: stamina (0–STAMINA_MAX). Drains per contact tick, recovers at phase boundary.
     stamina: int = STAMINA_MAX
     stamina_max: int = STAMINA_MAX
-    # [A6, ED-MB-0067 Part A] Unit-level volley pool, mirroring `stamina` immediately above exactly
-    # -- the inherited-else-own target every unseeded (volleys=None) Subunit's eff_volleys reads.
+    # [A6, ED-MB-0067 Part A] Army-level volley pool, mirroring `stamina` immediately above exactly
+    # -- the inherited-else-own target every unseeded (volleys=None) Unit's eff_volleys reads.
     volleys: float = MB_VOLLEYS_START
     # Jordan directive 2026-06-02: if both provided, Command is DERIVED (Cha primary + Cog secondary).
     charisma: int = None
     cognition: int = None
     # [A4, ED-MB-0067 Part A -- squad-engagement synthesis, "go-codes"] Names added here (e.g.
     # `unit.fired_signals.add('advance')`, or an order's own 'fire_signal' behavior key -- see
-    # check_orders) make every pending order on any of this Unit's subunits whose trigger is
+    # check_orders) make every pending order on any of this Army's units whose trigger is
     # 'signal:NAME' eligible to fire -- within the SAME check_orders call if that subunit's own
     # turn through the per-subunit loop has not yet been taken this tick, otherwise the next call
     # (see check_orders' 'signal:' branch). Per-UNIT, not synchronized across the several
-    # Units of one multi-unit side (run_multi_unit_battle's side_a/side_b are plain lists of Units,
+    # Units of one multi-unit side (run_multi_unit_battle's side_a/side_b are plain lists of Armies,
     # with no side-level container to hold shared state instead -- [ASSUMPTION: a go-code is scoped
-    # to the Unit it's issued on, not broadcast across a whole multi-unit side -- basis: no such
+    # to the Army it's issued on, not broadcast across a whole multi-unit side -- basis: no such
     # broadcast primitive exists today and the brief explicitly scoped this item to "the signal
     # trigger kind and the fired-signals bookkeeping", not messenger/relay, which is where a
-    # cross-Unit broadcast would naturally belong]). Default empty -> inert for any Unit that never
+    # cross-Army broadcast would naturally belong]). Default empty -> inert for any Army that never
     # has a signal added.
     fired_signals: Set[str] = field(default_factory=set)
-    # [A3, ED-MB-0067 Part A / ED-MB-0073] The officers fielded over this Unit's subunits (see
+    # [A3, ED-MB-0067 Part A / ED-MB-0073] The officers fielded over this Army's units (see
     # Officer, above, and build_army's `officers=` param). Bookkeeping only, recorded for
     # introspection/a future UI -- nothing at resolution time reads it. Default empty -> byte-exact
-    # for every existing Unit, which never sets it (matches `fired_signals`' own A4 precedent).
+    # for every existing Army, which never sets it (matches `fired_signals`' own A4 precedent).
     officers: Tuple['Officer', ...] = ()
     # [MB-05, A7 terrain] The dice the battle's A.9 terrain row moves, battle-wide, in A.6's own two
     # currencies: `terrain_off_d` shifts THIS unit's offence; `terrain_def_d` is defence, which this
     # engine spends the way INTENT_DEFENSE_D does -- it blunts the ENEMY's offence against this unit.
     # Set once, before the battle, by `massbattle._run_and_grade` from `terrain.py`'s row constants;
     # read in `orchestration.resolve_engagements` (sigma head: x SIGMA_PER_D, legacy path: whole dice
-    # on the pool). Default 0 -> inert, byte-exact for every Unit no terrain row touches.
+    # on the pool). Default 0 -> inert, byte-exact for every Army no terrain row touches.
     terrain_off_d: float = 0.0
     terrain_def_d: float = 0.0
 
@@ -2578,7 +2578,7 @@ class Unit:
         # Cognition (secondary) when both supplied; else the explicit command stat is used.
         if COMMAND_SIGMA_ENABLED and self.charisma is not None and self.cognition is not None:
             self.command = derive_command(self.charisma, self.cognition)
-        total = sum(a.troop_count for a in self.subunits)
+        total = sum(a.troop_count for a in self.units)
         self.size = max(1, total // TROOPS_PER_SIZE)
         self.size_max = self.size
         self.h_per_size = max(1, min(self.discipline, self.command) + self.dr)
@@ -2586,35 +2586,35 @@ class Unit:
         # [canonical: derived_stats architecture — "TroopCount = Size × block_size"]
         self.hp_max = float(total)   # step 1: hp_max = actual troops = Sum(cell troops); emergent from cells
         self.hp = float(self.hp_max)
-        self.ncells = sum(len(a.cells()) for a in self.subunits)  # step 3: cell count for all-fight per-cell density
+        self.ncells = sum(len(a.cells()) for a in self.units)  # step 3: cell count for all-fight per-cell density
         self.effective_size = float(self.size)  # v16: continuous, not floored
         self.stamina = STAMINA_MAX
         self.stamina_max = STAMINA_MAX
         # [A6, ED-MB-0067 Part A] Mirrors the stamina reset immediately above exactly.
         self.volleys = MB_VOLLEYS_START
-        for a in self.subunits:
+        for a in self.units:
             if a.stance == "balanced": a.stance = self.stance
             a._unit = self                     # stat-inheritance back-ref (per-subunit eff_* falls back here)
             # [ED-MB-0042] Seed any subunit that INHERITS its morale. This is the first moment that
             # value is knowable — the back-ref above is what makes `eff_morale` resolve to the parent's
             # scalar instead of the no-parent 0 — so it is the only correct place to seed an inheriting
-            # subunit. Explicit-morale subunits already seeded in their own __post_init__; the
+            # subunit. Explicit-morale units already seeded in their own __post_init__; the
             # `not a.cell_morale` guard keeps this from re-seeding (and so from silently discarding
-            # morale a subunit has already lost, if a Unit is ever rebuilt around live subunits).
+            # morale a subunit has already lost, if an Army is ever rebuilt around live units).
             if MB_CELL_MORALE and not a.cell_morale:
                 a.seed_cell_morale()
         # Increment 1: per-column block grid (state only; resolution wires in at Increment 2).
         self.col_grid = build_column_grid(self) if PER_CELL else None
 
-    def total_troops(self): return sum(a.troop_count for a in self.subunits)
+    def total_troops(self): return sum(a.troop_count for a in self.units)
 
     # Derived unit-level aggregates (Jordan directive): troop-weighted means of the
-    # subunits' effective stats. For a homogeneous unit these equal the unit's own stat; for a mixed
+    # units' effective stats. For a homogeneous unit these equal the unit's own stat; for a mixed
     # unit they are the genuine composite. Combat reads PER-SUBUNIT (below); these are the unit view.
     def _agg(self, attr):
-        tt = sum(a.troop_count for a in self.subunits)
+        tt = sum(a.troop_count for a in self.units)
         if tt <= 0: return getattr(self, attr.replace('eff_', ''), 0)
-        return sum(getattr(a, attr) * a.troop_count for a in self.subunits) / tt
+        return sum(getattr(a, attr) * a.troop_count for a in self.units) / tt
     def agg_power(self):      return self._agg('eff_power')
     def agg_discipline(self): return self._agg('eff_discipline')
     def agg_morale(self):     return self._agg('eff_morale')
@@ -2622,7 +2622,7 @@ class Unit:
     def agg_stamina(self):    return self._agg('eff_stamina')
 
     def _broken_share(self):
-        """[ED-MB-0041] Fraction of this unit's STARTING strength sitting in routed subunits.
+        """[ED-MB-0041] Fraction of this unit's STARTING strength sitting in routed units.
 
         Weighted by `_start_troops` -- the per-BATTLE strength snapshot, re-based at each campaign
         boundary by reset_morale_between_battles -- so a unit that enters its third battle already
@@ -2633,32 +2633,32 @@ class Unit:
         property this needs: the numerator must grow monotonically as sections break, and a live weight
         would let a collapsing army read as progressively more intact.
         """
-        tot = sum((getattr(a, '_start_troops', 0) or a.troop_count) for a in self.subunits)
+        tot = sum((getattr(a, '_start_troops', 0) or a.troop_count) for a in self.units)
         if tot <= 0:
-            return 1.0 if self.subunits else 0.0
+            return 1.0 if self.units else 0.0
         gone = sum((getattr(a, '_start_troops', 0) or a.troop_count)
-                   for a in self.subunits if a.routed)
+                   for a in self.units if a.routed)
         return gone / tot
 
     def derive_rout(self):
-        # Unit-level rout DERIVED from subunit state (per-subunit rout, Jordan directive): the unit routs
+        # Army-level rout DERIVED from subunit state (per-subunit rout, Jordan directive): the unit routs
         # when its general is gone (Command<=0), when the broken share of its spawn strength reaches
         # ROUT_CASCADE_FRAC, or when its troop-weighted
         # aggregate morale reaches 0 (the canonical Morale-0 rout, §A.4/§A.12, now read as the composite).
-        # A routed unit's subunits all rout (the whole body flees). Single-subunit: agg_morale == the lone
+        # A routed unit's units all rout (the whole body flees). Single-subunit: agg_morale == the lone
         # subunit's morale == unit.morale, so this fires exactly when the old `unit.morale<=0` did (byte-exact).
         if self.routed:
             return
         # [ED-MB-0041] The rout test is a contagion FRACTION of spawn strength -- see config.ROUT_CASCADE_FRAC for
-        # the mechanism. [A8, ED-MB-0067 Part A / ED-MB-0071] The threshold is live for any Unit with >1
-        # subunit (byte-exact only for a single-subunit Unit, where the share is a 0/1 step function regardless of
+        # the mechanism. [A8, ED-MB-0067 Part A / ED-MB-0071] The threshold is live for any Army with >1
+        # subunit (byte-exact only for a single-subunit Army, where the share is a 0/1 step function regardless of
         # the threshold's value -- see config.py's own comment for the sweep and its campaign-inertness caveat).
         # At threshold 1.0 specifically, `share >= 1.0` is exactly `all(a.routed ...)`, since the share can only
         # reach 1.0 when none are left unbroken -- `test_rout_contagion.py::test_threshold_1_0_is_inert` pins that
         # boundary directly.
         if self.command <= 0 or self._broken_share() >= ROUT_CASCADE_FRAC or self.agg_morale() <= 0:
             self.routed = True
-            for a in self.subunits:
+            for a in self.units:
                 a.routed = True
     def set_morale(self, value):
         """[ED-MB-0042 sweep] SINGLE OWNER of an ABSOLUTE morale write at UNIT scale.
@@ -2666,27 +2666,27 @@ class Unit:
         Writes the unit's own (inherited-default) pool, then pushes the value into every subunit that
         INHERITS it — because an inheriting subunit's cells hold their own copies, and `eff_morale` reads
         those cells, so writing only the unit pool leaves the body reporting its old morale forever.
-        Own-morale subunits are deliberately untouched: they do not read this pool, exactly as before.
+        Own-morale units are deliberately untouched: they do not read this pool, exactly as before.
 
         Unseeded (the shipped default) this reduces to `unit.morale = value` — the subunit loop finds no
-        cells to write and `Subunit.set_morale` just assigns a scalar those subunits never consult.
+        cells to write and `Unit.set_morale` just assigns a scalar those units never consult.
         """
         self.morale = value
-        for a in self.subunits:
+        for a in self.units:
             if a.morale is None and a.cell_morale:
                 for cid in a.cell_morale:
                     a.cell_morale[cid] = float(value)
 
     def cascade_morale_hit(self, amount):
-        # Unit-wide morale hit (§A.12 inter-unit cascade / contagion / flank erosion): erode the unit's
+        # Army-wide morale hit (§A.12 inter-unit cascade / contagion / flank erosion): erode the unit's
         # inherited-default morale ONCE (covers every subunit that INHERITS it -> no double-count for a
         # homogeneous unit) AND each subunit that carries its OWN morale, by `amount`. Single-subunit /
-        # homogeneous: exactly the old `unit.morale -= amount` (byte-exact). Mixed: own-morale subunits
+        # homogeneous: exactly the old `unit.morale -= amount` (byte-exact). Mixed: own-morale units
         # are eroded too, so the cascade is felt per-subunit consistently with the rest of the model.
         # [ED-MB-0042 sweep] Routed through erode_morale, which owns the RELATIVE write and applies it across the
         # cells.
         self.morale -= amount
-        for a in self.subunits:
+        for a in self.units:
             if a.morale is None and a.cell_morale:
                 a.erode_morale(amount)       # inheriting: the unit pool it reads is cellular now
             elif a.morale is not None:
@@ -2699,19 +2699,19 @@ class Unit:
         self.size = max(0, math.floor(self.effective_size))
         if self.size == 0:
             self.routed = True
-            for a in self.subunits:        # destruction routs the unit; mark subunits for per-subunit consumers
+            for a in self.units:        # destruction routs the unit; mark units for per-subunit consumers
                 a.routed = True
 
     def discipline_penalty(self):
         # SMOOTH (Jordan 2026-06-15 'fix discipline'): continuous linear penalty over the SAME range as the
-        # old tiers' endpoints (discipline>=5 -> 0, discipline 1 -> -2) -- no step/cliff. disc<=0 -> broken.
-        if self.discipline <= 0: return -99  # [canonical: mass_battle_v30.md §A.4 — sentinel: Disc<=0 formation-broken]
+        # old tiers' endpoints (discipline>=5 -> 0, discipline 1 -> -2) -- no step/cliff. disc<=0 -> disordered.
+        if self.discipline <= 0: return -99  # [canonical: mass_battle_v30.md §A.4 — sentinel: Disc<=0 formation-disordered]
         return -max(0.0, min(2.0, (5.0 - self.discipline) * 0.5))
 
     def base_combat_pool(self):
-        if self.routed or self.broken: return 0
+        if self.routed or self.disordered: return 0
         pen = self.discipline_penalty()
-        if pen == -99: self.broken = True; return 0  # [canonical: mass_battle_v30.md §A.4 — sentinel: -99 broken-formation flag]
+        if pen == -99: self.disordered = True; return 0  # [canonical: mass_battle_v30.md §A.4 — sentinel: -99 disordered-formation flag]
         # Pool uses continuous effective_size (float), floored for dice count.
         # [canonical: mass_battle_v30.md §A.4 Effective Combat Pool; live value =
         #  Command*(1+cohesion) (2*Command at full strength -> Command at annihilation,
@@ -2737,7 +2737,7 @@ class Unit:
         # re-engages at a bounded pool penalty. Gated by MB_FEIGNED_RETREAT (default ON). `.overextended` is set
         # only via resolve_feigned_retreat, which requires the feigning unit's `.feigned` (the 'feign_retreat'
         # order pseudo-field, C4, ED-MB-0067 Part C / ED-MB-0071) or a 'lure' instruction (`unit_lures`, MB-04)
-        # -- see Unit.feigned's own comment.
+        # -- see Army.feigned's own comment.
         # [canonical: mass_battle_v30.md §B.4 — Overextended -2D]
         if MB_FEIGNED_RETREAT and self.overextended:
             raw -= OVEREXTEND_PENALTY
@@ -2746,7 +2746,7 @@ class Unit:
     def check_drift(self):
         # per-subunit formation drift: each subunit's OWN Discipline governs whether it can hold its
         # shape (consistent with the per-subunit Discipline model); single-subunit == unit -> byte-exact.
-        for a in self.subunits:
+        for a in self.units:
             if a.eff_discipline < MIN_DISCIPLINE[a.shape] and a.shape != "Line":
                 # ED-1032: on drift, re-key cell_troops to the new shape's pattern so the sub-unit's
                 # troops re-inherit the (Line) formation instead of orphaning the wings -- preserves
@@ -2762,7 +2762,7 @@ class Unit:
                 # (keyed by the NEW ids) would fall through to their (0.0,0.0)/anchor setdefaults and cells would teleport
                 # to the battlefield corner or collapse onto the anchor. Only reachable when node state exists at all
                 # (MB_NODE_COHESION); the legacy grid path has no _node_pos.
-                # [ED-MB-0054 / B1c] The grid-path containers (`Subunit.rekey_cells`): runs on BOTH paths — the node path's
+                # [ED-MB-0054 / B1c] The grid-path containers (`Unit.rekey_cells`): runs on BOTH paths — the node path's
                 # position state is separately handled, but facing/halt/target live on both.
                 a.rekey_cells(new_ids)
                 if MB_NODE_COHESION and hasattr(a, '_node_pos'):
@@ -2777,7 +2777,7 @@ class Unit:
 
 def unit_conceded(unit):
     """CP-T04-03 (retreat in good order): True once EVERY subunit of the unit has either conceded (its `retreat_at` order
-    fired: `Subunit.conceded`, set by that order's behaviour dict alone) or routed, and at least one has conceded. Keyed on
+    fired: `Unit.conceded`, set by that order's behaviour dict alone) or routed, and at least one has conceded. Keyed on
     the order's own mark, not on the stance: a DG-2 fighting withdrawal (`yielding` + `stance: 'retreat'`, which "keeps
     FIGHTING", the entry leaving the `MB_YIELD_*` yield untouched) and an army's `fall_back_at` are never a concession, and
     an emergent `yielding` cannot hide one. It is read by `battle_loop.run_battle`'s stop test (the battle ends for it as a
@@ -2785,5 +2785,5 @@ def unit_conceded(unit):
     not read it (it ends a conceded turn a 'draw', and breaks only on `.routed`), a sim-path grading `_grade` does not
     share. It sets nothing, so a conceding side does not take rout's facing flip. A side no subunit of which has conceded
     is never conceded, so a battle in which no `retreat_at` order fired is exactly what it was."""
-    subs = getattr(unit, 'subunits', ())
+    subs = getattr(unit, 'units', ())
     return bool(subs) and all(a.routed or a.conceded for a in subs) and any(a.conceded for a in subs)

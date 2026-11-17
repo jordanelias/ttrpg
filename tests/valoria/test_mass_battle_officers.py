@@ -1,20 +1,20 @@
 """A3 + C5 (ED-MB-0067 Part A / Part C, ED-MB-0073) — subordinate-officer Cmd / span-of-control.
 
 ED-1090 (2026-07-02) left this open: the ratified Command formula clamps to 1..7, so
-`SUBUNIT_CAP=11` (`engine.py`) implies "a future Command-exceeding mechanism (e.g. subordinate
+`UNIT_CAP=11` (`engine.py`) implies "a future Command-exceeding mechanism (e.g. subordinate
 officers/lieutenancy) -- a future ED, not silently invented in the constructor." This is that ED.
 
 `Officer` (`hierarchy/units.py`) holds its own Command, derived the SAME way a general's is
 (`derive_command`, ED-899) -- no second formula one echelon down. `build_army`'s new `officers=`
 parameter (default `()`, zero behavior change for every existing caller) replaces the flat
-`SUBUNIT_CAP` ceiling with C5's ruled span-of-control ladder (ED-MB-0067 Part C, ruled 2026-09-25:
+`UNIT_CAP` ceiling with C5's ruled span-of-control ladder (ED-MB-0067 Part C, ruled 2026-09-25:
 "one ladder... max commanded = Command... at every echelon, including the new officer post") checked
 at TWO levels: each officer's own subunit count <= that officer's own Command, and the general's own
-direct reports (distinct officers used + any un-officered subunits) <= the general's own Command.
+direct reports (distinct officers used + any un-officered units) <= the general's own Command.
 """
 import pytest
 
-from systems.mass_battle.sim.engine import build_army, SUBUNIT_CAP
+from systems.mass_battle.sim.engine import build_army, UNIT_CAP
 from modules.mass_battle.hierarchy.units import Officer
 
 
@@ -34,7 +34,7 @@ def test_officer_command_defaults_to_tier3_baseline():
 
 
 def test_officer_command_derives_from_charisma_and_cognition_like_a_general():
-    """Same derivation a Unit's own Command uses (derive_command, ED-899) -- no second formula."""
+    """Same derivation an Army's own Command uses (derive_command, ED-899) -- no second formula."""
     from modules.mass_battle.core.exchange import derive_command
     o = Officer(name='Aulus', charisma=6, cognition=4)
     assert o.command == derive_command(6, 4)
@@ -47,35 +47,35 @@ def test_officer_command_clamps_to_1_7():
 
 
 def test_officers_default_is_backward_compatible_with_the_flat_cap():
-    """officers=() (the default) must reproduce ED-1090's exact flat SUBUNIT_CAP check, unchanged --
+    """officers=() (the default) must reproduce ED-1090's exact flat UNIT_CAP check, unchanged --
     every existing caller of build_army never passes officers, so this must be byte-exact."""
-    u = build_army([_line_spec() for _ in range(SUBUNIT_CAP)], 'Army', 'A', command=4)
+    u = build_army([_line_spec() for _ in range(UNIT_CAP)], 'Army', 'A', command=4)
     assert u.officers == ()
-    assert all(s.officer is None for s in u.subunits)
+    assert all(s.officer is None for s in u.units)
 
     with pytest.raises(ValueError, match='exceeds the videogame cap'):
-        build_army([_line_spec() for _ in range(SUBUNIT_CAP + 1)], 'TooMany', 'A', command=4)
+        build_army([_line_spec() for _ in range(UNIT_CAP + 1)], 'TooMany', 'A', command=4)
 
 
 def test_a_general_fields_more_than_command_subunits_through_officers():
     """THE 'DONE WHEN' CRITERION (Part A, A3): a general with Command c fields more than c
-    sub-units through officers. c=3 here; 12 subunits (already > SUBUNIT_CAP=11) fielded through
+    sub-units through officers. c=3 here; 12 units (already > UNIT_CAP=11) fielded through
     3 officers of Command 4 each -- each officer's own span (4) and the general's own direct
     reports (3 officers <= Command 3) both hold."""
     officers = [{'name': f'O{i}', 'command': 4} for i in range(3)]
     specs = [_line_spec(officer=f'O{i}') for i in range(3) for _ in range(4)]
-    assert len(specs) > SUBUNIT_CAP
+    assert len(specs) > UNIT_CAP
     u = build_army(specs, 'GeneralArmy', 'A', command=3, officers=officers)
-    assert len(u.subunits) == 12 > 3  # more subunits than the general's own Command
+    assert len(u.units) == 12 > 3  # more units than the general's own Command
     assert {o.name for o in u.officers} == {'O0', 'O1', 'O2'}
     assert all(o.command == 4 for o in u.officers)
     for i in range(3):
-        assigned = [s for s in u.subunits if s.officer == f'O{i}']
+        assigned = [s for s in u.units if s.officer == f'O{i}']
         assert len(assigned) == 4
 
 
 def test_an_officer_over_assigned_beyond_their_own_command_raises():
-    with pytest.raises(ValueError, match="commands 5 subunits, exceeding their own Command 3"):
+    with pytest.raises(ValueError, match="commands 5 units, exceeding their own Command 3"):
         build_army([_line_spec(officer='X') for _ in range(5)], 'Bad', 'A',
                    command=5, officers=[{'name': 'X', 'command': 3}])
 
@@ -94,8 +94,8 @@ def test_unofficered_subunits_count_as_direct_reports_alongside_officers():
     officers = [{'name': 'O0', 'command': 4}, {'name': 'O1', 'command': 4}]
     specs = [_line_spec(officer='O0'), _line_spec(officer='O1'), _line_spec()]
     u = build_army(specs, 'Mixed', 'A', command=3, officers=officers)
-    assert len(u.subunits) == 3
-    assert sum(1 for s in u.subunits if s.officer is None) == 1
+    assert len(u.units) == 3
+    assert sum(1 for s in u.units if s.officer is None) == 1
 
     # Same shape, but the general's own Command is now too small for 2 officers + 1 direct report.
     with pytest.raises(ValueError, match='general commands 3 direct reports \\(2 officers \\+ 1'):

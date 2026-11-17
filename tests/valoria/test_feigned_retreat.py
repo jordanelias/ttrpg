@@ -168,33 +168,33 @@ def test_feign_retreat_is_a_recognized_order_safe_field():
 
 
 def test_feign_retreat_order_sets_the_unit_flag_not_the_subunit():
-    """Must land on the ISSUING UNIT's `.feigned` (PP-256 is a Unit-wide tactic, not per-subunit),
-    and must never leak onto the Subunit as a real attribute -- same discipline as fire_signal's
+    """Must land on the ISSUING ARMY's `.feigned` (PP-256 is an Army-wide tactic, not per-subunit),
+    and must never leak onto the Unit as a real attribute -- same discipline as fire_signal's
     own leak test in test_mass_battle_signals.py."""
     _reload(on=True)
     from modules.mass_battle.core.contact import check_orders
-    from modules.mass_battle.hierarchy.units import Order, Subunit, Unit
-    su = Subunit(shape='Line', troop_type='infantry', tier=2, starting_position=(25, 25),
+    from modules.mass_battle.hierarchy.units import Order, Unit, Army
+    su = Unit(shape='Line', troop_type='infantry', tier=2, starting_position=(25, 25),
                  advance_dir=1, stance='balanced', unit_type='melee',
                  orders=(Order('tick:1', {'feign_retreat': True}),))
-    u = Unit(name='u', faction='A', power=4, command=4, discipline=5, discipline_start=5,
-             morale=6, morale_start=6, subunits=[su])
+    u = Army(name='u', faction='A', power=4, command=4, discipline=5, discipline_start=5,
+             morale=6, morale_start=6, units=[su])
     assert u.feigned is False
     check_orders(u, 1, [])
     assert u.feigned is True
     assert su._order_idx == 1
-    assert not hasattr(su, 'feign_retreat'), "'feign_retreat' must not leak onto the Subunit"
+    assert not hasattr(su, 'feign_retreat'), "'feign_retreat' must not leak onto the Unit"
 
 
 def test_feign_retreat_order_does_not_fire_before_its_own_trigger():
     _reload(on=True)
     from modules.mass_battle.core.contact import check_orders
-    from modules.mass_battle.hierarchy.units import Order, Subunit, Unit
-    su = Subunit(shape='Line', troop_type='infantry', tier=2, starting_position=(25, 25),
+    from modules.mass_battle.hierarchy.units import Order, Unit, Army
+    su = Unit(shape='Line', troop_type='infantry', tier=2, starting_position=(25, 25),
                  advance_dir=1, stance='balanced', unit_type='melee',
                  orders=(Order('tick:5', {'feign_retreat': True}),))
-    u = Unit(name='u', faction='A', power=4, command=4, discipline=5, discipline_start=5,
-             morale=6, morale_start=6, subunits=[su])
+    u = Army(name='u', faction='A', power=4, command=4, discipline=5, discipline_start=5,
+             morale=6, morale_start=6, units=[su])
     check_orders(u, 1, [])
     assert u.feigned is False, "must not pre-declare a feint before the order's own trigger fires"
     assert su._order_idx == 0
@@ -206,12 +206,12 @@ def test_feign_retreat_end_to_end_through_resolve_feigned_retreat():
     ratified mechanic was reachable before this order-writable path existed)."""
     _, O = _reload(on=True)
     from modules.mass_battle.core.contact import check_orders
-    from modules.mass_battle.hierarchy.units import Order, Subunit, Unit
-    su = Subunit(shape='Line', troop_type='infantry', tier=2, starting_position=(25, 25),
+    from modules.mass_battle.hierarchy.units import Order, Unit, Army
+    su = Unit(shape='Line', troop_type='infantry', tier=2, starting_position=(25, 25),
                  advance_dir=1, stance='balanced', unit_type='melee',
                  orders=(Order('immediate', {'feign_retreat': True}),))
-    feigning_unit = Unit(name='feigner', faction='A', power=4, command=4, discipline=1,
-                          discipline_start=1, morale=6, morale_start=6, subunits=[su])
+    feigning_unit = Army(name='feigner', faction='A', power=4, command=4, discipline=1,
+                          discipline_start=1, morale=6, morale_start=6, units=[su])
     pursuer = _Stub(discipline=1, command=1)
     assert O.resolve_feigned_retreat(pursuer, feigning_unit) is None, \
         "must be a no-op before the order fires -- .feigned still False"

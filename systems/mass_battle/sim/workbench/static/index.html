@@ -76,9 +76,9 @@ button.primary { background: var(--accent); color: #10141b; font-weight: 600; bo
       <select id="preset"></select>
       <h2>Side A</h2>
       <label>Shape</label>
-      <!-- [LC-8, ED-909] Horseshoe/RefusedFlank retired as Subunit.shape values -- only Line/Arrowhead/
+      <!-- [LC-8, ED-909] Horseshoe/RefusedFlank retired as Unit.shape values -- only Line/Arrowhead/
            GappedLine/Column remain valid single-subunit shapes; Envelopment/RefusedFlank now exist only
-           as Unit-level presets (see the composed-army option below and the Preset dropdown). -->
+           as Army-level presets (see the composed-army option below and the Preset dropdown). -->
       <select id="a-shape"><option value="__composed__" disabled>— composed army (see preset) —</option><option>Line</option><option>Arrowhead</option><option>GappedLine</option><option>Column</option></select>
       <label>Troop type</label>
       <select id="a-troop"><option value="infantry">infantry</option><option value="cavalry">cavalry</option></select>
@@ -216,7 +216,7 @@ function setActiveDeploySide(side) {
 
 function addRosterEntry(side, row, col) {
   const cap = rosterOptions.subunit_cap || 11;
-  if (roster[side].length >= cap) { alert(`Side ${side} is already at the cap of ${cap} subunits (ED-1090).`); return; }
+  if (roster[side].length >= cap) { alert(`Side ${side} is already at the cap of ${cap} units (ED-1090).`); return; }
   const troops = document.getElementById('d-troops').value;
   roster[side].push({
     id: nextRosterId++,

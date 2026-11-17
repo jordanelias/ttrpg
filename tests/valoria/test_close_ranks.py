@@ -3,7 +3,7 @@
 prescribed density; coverage shrinks as minimums aren't met — the internal-subunit version of
 rotating troops."
 
-Verifies the foundational primitive Subunit.close_ranks(): leading ranks are refilled toward spawn
+Verifies the foundational primitive Unit.close_ranks(): leading ranks are refilled toward spawn
 density from the rear, the rear depletes first, conservation holds, and it is inert when gated off.
 """
 import os
@@ -23,7 +23,7 @@ def _deep_subunit(width=3, depth=5, conc=100):
     spec = {'shape': 'Line', 'troop_type': 'infantry', 'unit_type': 'melee',
             'width': width, 'depth': depth, 'troops': width * depth * conc,
             'starting_position': (SIDE_A_START_ROW, 25)}
-    return build_army([spec], 'A', 'A').subunits[0]
+    return build_army([spec], 'A', 'A').units[0]
 
 
 @pytest.fixture

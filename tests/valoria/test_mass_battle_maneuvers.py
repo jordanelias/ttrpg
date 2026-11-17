@@ -13,7 +13,7 @@ path nothing runs by default anymore. This file makes both arms explicit and che
     test — if this goes red, a real mechanic broke.
   - test_*_node: the LIVE default path Jordan actually watches (the workbench, traced battles).
     Landed RED first (xfail(strict=True), commit 50247b1) as the acceptance target for fix-plan
-    step 7 (the waypoint primitive, hierarchy/units.py Subunit._resolve_maneuver_goal). Step 7
+    step 7 (the waypoint primitive, hierarchy/units.py Unit._resolve_maneuver_goal). Step 7
     landed the same session and both flipped GREEN for real (not just "no longer erroring" --
     verified the xfail was hiding a real bug in v_envelop/v_sweep's own seeds/turns forwarding
     before trusting the green). Now real regression tests, same standing as the grid arm.
@@ -55,7 +55,7 @@ def _movement_toggles():
     # mutates hierarchy.units' copies directly and always leaves them at False when a test function
     # returns (the off-arm runs last) -- contradicting this docstring's own claim to restore
     # everything. Added here so a future in-process test added later in this suite that constructs
-    # a Subunit with an 'envelop'/'sweep' instruction doesn't silently inherit a disabled maneuver
+    # a Unit with an 'envelop'/'sweep' instruction doesn't silently inherit a disabled maneuver
     # from whatever ran before it in the same pytest session -- exactly the class of silent-failure
     # this whole audit exists to catch.
     saved = {(mod, name): getattr(mod, name) for mod in (_hu, _orch)
@@ -111,7 +111,7 @@ def test_sweep_displaces_laterally_grid():
     strict=False)
 def test_envelop_reaches_rear_node():
     """Acceptance: V-ENVELOP on the LIVE default (node/field) path -- the path Jordan actually
-    watches in the workbench. Subunit._resolve_maneuver_goal/_envelop_goal (fix-plan step 7) gives
+    watches in the workbench. Unit._resolve_maneuver_goal/_envelop_goal (fix-plan step 7) gives
     _node_advance an anchor-level goal, modeled on the legacy per-cell two-state machine, when the
     'envelop' instruction is active and MB_ENVELOP_PATH is on.
 
@@ -168,7 +168,7 @@ def test_envelop_reaches_rear_node():
 
 
 def test_sweep_displaces_laterally_node():
-    """Acceptance: V-SWEEP on the LIVE default (node/field) path -- Subunit._resolve_maneuver_goal/
+    """Acceptance: V-SWEEP on the LIVE default (node/field) path -- Unit._resolve_maneuver_goal/
     _sweep_goal (fix-plan step 7), same mechanism as test_envelop_reaches_rear_node."""
     r = _val.v_sweep(path='node', seeds=_CI_SEEDS)
     assert r.passed, f"V-SWEEP (node) measured={r.measured} expected={r.expected}"

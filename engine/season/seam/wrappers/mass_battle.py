@@ -5,7 +5,7 @@ What is here is the HOST: the input builder `field_input` (`World` -> `queries/i
 each side's member weights, the place, its fortification, each side's stance, the walls fixture) and the
 adapter `resolve`, which keeps the PARTY-GAP refusals and the `Unopposed` branch, calls the module entry
 the prize row names (`module_entry:`, registered in `manifest.MODULE_ENTRIES` from its composition row,
-`entry: verb_call`, `verb: march`) and lifts what comes back. The fight itself -- the Units, the terrain
+`entry: verb_call`, `verb: march`) and lifts what comes back. The fight itself -- the Armies, the terrain
 row, the battle and its survivor-ratio grade -- is the module's, reached by string. `resolve` also asks
 `settlements.provision` (a `query` entry, through `composition.require`) how many of each side's troops
 its treasury can field, shipped OFF (`field_provisioning`, `H-241`). `loop/sides.py` is host too: it builds
@@ -43,7 +43,7 @@ attacking side's ORIGIN territory (`_origin_of`), each
 side's build-time LOYALTY row (`_side_stance` with `_creed_referent`), and the
 `field_morale_loyalty_gain` fixture.
 What a fortification DOES is `massbattle.resolve_field`'s and `terrain.py`'s: any positive value
-makes the field A.9's `WALLS` row, whose one number (defender +3 DR) the engine applies to `Unit.dr`
+makes the field A.9's `WALLS` row, whose one number (defender +3 DR) the engine applies to `Army.dr`
 1:1 (an ASSUMPTION about the unit, `H-150`). The number is canon's, not invented here -- `None` in the
 fixture leaves it where `terrain.py` authors it, and an int sweeps it -- which is why this
 module may carry the read without deciding anything -- `seam/wrappers/combat.py` derives a party the same way and calls the
@@ -226,8 +226,8 @@ def field_input(w: Any, claimants: list, other: list, rung: str,
     they do to the morale-start is `massbattle._morale_start`'s.
     REM-32: `troops_per_weight` is the `field_troops_per_weight` fixture (`H-250`), handed on unread.
     CP-T04-05: `walls_dr` is the `field_walls_dr` fixture times `fort_level`, floored; `None` stays `None`.
-    CP-T04-01: `members` are the person ids beside `weights` (the same test, so they align) and `subunits` is the
-    `field_subunits` fixture (`H-359`), handed on unread; the module reads them only on its `person` arm.
+    CP-T04-01: `members` are the person ids beside `weights` (the same test, so they align) and `units` is the
+    `field_units` fixture (`H-359`), handed on unread; the module reads them only on its `person` arm.
     ED-IN-0306 phase 3: `factions` is `(attacker, defender)`, each side's faction Proposition id or `None`;
     each side whose faction holds an army Record fights as that Record's order of battle
     (`_order_of_battle`). Neither side having one leaves `orders_of_battle` `None`, the record exactly as it was.
@@ -261,7 +261,7 @@ def field_input(w: Any, claimants: list, other: list, rung: str,
         orders_of_battle=None if oobs == (None, None) else oobs,
         troops_per_weight=w.fixtures.get("field_troops_per_weight"),
         members=(members(claimants), members(other)),
-        subunits=w.fixtures.get("field_subunits"),
+        units=w.fixtures.get("field_units"),
         orders=None if orders == (None, None) else orders)
 
 
@@ -316,7 +316,7 @@ def _fielded_by(inp: MassBattleInput) -> tuple:
 
 def _fed(w: Any, inp: MassBattleInput, treasuries: tuple) -> list:
     """v9 IN-52, THE LEVY-TO-FIELD FEED [LF-1..LF-3]: each side's fielded troops are `settlements.provision`'s
-    answer on its treasury, reached by role string; `resolve_field` sizes each Unit by them, and
+    answer on its treasury, reached by role string; `resolve_field` sizes each Army by them, and
     `_eff_march` debits each side's `consumed` from the treasury named beside it. With `field_provisioning`
     off (shipped) the entry returns `troops = Σ weight` and `consumed = ()`: the field and the world as
     they were. An unprovisioned side fields 0, which `resolve_field`'s crash floor lifts (A16).

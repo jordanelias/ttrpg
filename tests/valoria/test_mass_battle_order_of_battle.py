@@ -1,14 +1,14 @@
 """ED-IN-0306 phase 1 -- a faction's ORDER OF BATTLE reaches the mass-battle engine.
 
 `modules/mass_battle/orderofbattle.py` turns named units (troop type, size, role, posture) plus a strategy
-into the multi-subunit Unit the engine fights, and `massbattle.resolve_field` takes one per side from the input
+into the multi-subunit Army the engine fights, and `massbattle.resolve_field` takes one per side from the input
 record's `orders_of_battle`. What this proves, and the control beside each claim:
 
   * THE CONTROL: a record with no orders of battle is the field as it was (the single headcount line), so the
     existing goldens still bind it -- compared against an explicit `(None, None)`, and `_weighted_unit` is the path.
   * THE FALSIFIER: two orders of battle of EQUAL headcount and different troop types fight differently. If the
     types never reached the engine the two would be identical on every seed.
-  * Refusals at the boundary, deployment without overlap, strategy and tactic fields reaching the Subunit, and the
+  * Refusals at the boundary, deployment without overlap, strategy and tactic fields reaching the Unit, and the
     new generic roster (spearmen, skirmishers, light cavalry) carrying what makes it a different type.
 """
 import random
@@ -47,7 +47,7 @@ def test_no_orders_of_battle_is_the_field_as_it_was():
     plain = massbattle.resolve_field(_record(), random.Random(5))
     explicit = massbattle.resolve_field(_record(oobs=(None, None)), random.Random(5))
     assert plain == explicit
-    assert massbattle._weighted_unit("side_a", 10).subunits[0].troop_type == 'infantry', (
+    assert massbattle._weighted_unit("side_a", 10).units[0].troop_type == 'infantry', (
         "the control is vacuous if the headcount line stopped being the single infantry subunit")
 
 
@@ -109,7 +109,7 @@ def _mixed(strategy='line'):
 def test_deployment_puts_melee_front_ranged_behind_and_horse_on_the_flanks():
     for side, advance in (('A', -1), ('B', 1)):
         u = build_unit(_mixed(), 'u', side, morale_start=5)
-        by = {s.troop_type: s for s in u.subunits}
+        by = {s.troop_type: s for s in u.units}
         front_row = by['heavy_infantry'].starting_position[0]
         assert by['spearmen'].starting_position[0] == front_row
         # behind the line is opposite the direction of advance
@@ -125,7 +125,7 @@ def test_no_two_units_start_on_the_same_cell():
     for side in ('A', 'B'):
         u = build_unit(_mixed(), 'u', side, morale_start=5)
         seen = {}
-        for s in u.subunits:
+        for s in u.units:
             for cell in s.cells():
                 key = tuple(cell[:2])
                 assert key not in seen, f"{s.troop_type} and {seen[key]} both start on {key}"
@@ -134,8 +134,8 @@ def test_no_two_units_start_on_the_same_cell():
 
 
 def test_the_two_sides_start_on_opposite_rows():
-    a = build_unit(_line('heavy_infantry'), 'a', 'A', morale_start=5).subunits[0]
-    b = build_unit(_line('heavy_infantry'), 'b', 'B', morale_start=5).subunits[0]
+    a = build_unit(_line('heavy_infantry'), 'a', 'A', morale_start=5).units[0]
+    b = build_unit(_line('heavy_infantry'), 'b', 'B', morale_start=5).units[0]
     assert a.starting_position[0] > b.starting_position[0] and a.advance_dir == -1 and b.advance_dir == 1
 
 
@@ -143,16 +143,16 @@ def test_the_two_sides_start_on_opposite_rows():
 def test_strategy_sets_the_posture_of_each_class_and_an_explicit_posture_wins():
     for strategy, table in STRATEGIES.items():
         u = build_unit(_mixed(strategy), 'u', 'A', morale_start=5)
-        for s in u.subunits:
+        for s in u.units:
             assert s.stance == table[class_of(s.troop_type)], (strategy, s.troop_type)
     assert STRATEGIES['advance']['melee'] != STRATEGIES['defend']['melee'], "vacuous if two strategies are one"
     o = _oob(('w', 'heavy_infantry', 300, {'posture': 'hold'}), strategy='advance')
-    assert build_unit(o, 'u', 'A', morale_start=5).subunits[0].stance == 'hold'
+    assert build_unit(o, 'u', 'A', morale_start=5).units[0].stance == 'hold'
 
 
 def test_tactic_fields_reach_the_subunit():
     o = _oob(('w', 'light_cavalry', 300, {'target': 'weakest', 'fall_back_at': 0.4, 'role': 'Pursue'}))
-    s = build_unit(o, 'u', 'A', morale_start=5).subunits[0]
+    s = build_unit(o, 'u', 'A', morale_start=5).units[0]
     assert s.target_condition == 'weakest' and s.role == 'Pursue'
     assert [(od.trigger, od.behavior) for od in s.orders] == [('own_strength:0.4', {'stance': 'retreat'})]
 
@@ -160,18 +160,18 @@ def test_tactic_fields_reach_the_subunit():
 def test_a_mounted_archers_body_with_no_role_stands_off_as_kite_and_any_other_type_stays_a_plain_line():
     """ED-1095 (`build_army`'s implicit default) must survive the order-of-battle path, which names a shape for a body
     with no role. The control beside it: the same unit of another type has no role and no instructions."""
-    kite = build_unit(_oob(('m', 'mounted_archers', 300, {})), 'u', 'A', morale_start=5).subunits[0]
+    kite = build_unit(_oob(('m', 'mounted_archers', 300, {})), 'u', 'A', morale_start=5).units[0]
     assert kite.role == 'Kite' and kite.instructions, (kite.role, kite.instructions)
-    plain = build_unit(_oob(('c', 'light_cavalry', 300, {})), 'u', 'A', morale_start=5).subunits[0]
+    plain = build_unit(_oob(('c', 'light_cavalry', 300, {})), 'u', 'A', morale_start=5).units[0]
     assert plain.role is None and not plain.instructions
-    named = build_unit(_oob(('m', 'mounted_archers', 300, {'role': 'Harass'})), 'u', 'A', morale_start=5).subunits[0]
+    named = build_unit(_oob(('m', 'mounted_archers', 300, {'role': 'Harass'})), 'u', 'A', morale_start=5).units[0]
     assert named.role == 'Harass', "an explicit role still wins"
 
 
 def test_side_morale_reaches_every_subunit_and_the_type_stats_still_differ():
     u = build_unit(_mixed(), 'u', 'A', morale_start=3)
-    assert {s.eff_morale for s in u.subunits} == {3}
-    assert len({s.eff_power for s in u.subunits}) > 1
+    assert {s.eff_morale for s in u.units} == {3}
+    assert len({s.eff_power for s in u.units}) > 1
 
 
 # ----------------------------------------------------------------------------------- generic roster
@@ -222,7 +222,7 @@ def test_survivor_shares_of_an_order_of_battle_never_exceed_one():
 
 def _stance_of(sf, strategy='line'):
     unit = build_unit(OrderOfBattle((sf,), strategy), 'x', 'A', morale_start=5)
-    return unit.subunits[0].eff_stance
+    return unit.units[0].eff_stance
 
 
 def test_a_role_sets_the_posture_its_instructions_name_unless_the_unit_says_otherwise():
