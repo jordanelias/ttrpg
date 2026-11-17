@@ -1,0 +1,114 @@
+CARD trial | judicial | a charge borne by `for` | reply {'for': 'must', 'against': 'must'} | issues ('fact', 'definition', 'justification') | silence: refusal: a point owed an answer and left standing costs 3.12 with each who decides | unargued: it lapses: the bearer must put it, and his rest is priced as silence (3.12 with those who decide) | standard 5.0
+     arranged by custom (tilt 0.0) | stake detain | room (('scholar', 'speaks for', 0.0), ('diplomat', 'speaks against', 0.0), ('judge', 'judges', 6.0), ('guildsmen', 'attends', 0.0), ('toll_men', 'attends', 0.0), ('clerk', 'attends', 0.0)) | barred () | close bench by ('judge',) | 4 turns | ends when the turns are spent, a whole round rests, or a side yields | odds if nobody speaks 0.127
+[trial: a judicial proceeding on a charge, arranged by custom; decided by judge; silence: refusal: a point owed an answer and left standing costs 3.12 with each who decides; 4 turn(s) each]
+  1. [fact] scholar raises point 0 on fact on the proof, citing ledger_of_tolls: it half lands; his bearing tells against him. (room +0.02)
+  2. [fact] diplomat presses scholar as one of their own: scholar holds; his bearing tells for him. (room +0.22)
+  3. [fact] scholar raises point 1 on fact on the proof, citing ledger_of_tolls: it lands. (room +0.48)
+  4. [fact] diplomat answers scholar's point 1 (on the proof) from what is owed: it falls flat. (room +0.61)
+  5. [fact] scholar presses diplomat as one of their own: diplomat holds. (room +0.41)
+  6. [fact] diplomat answers scholar's point 1 (on the proof) as one of their own: it lands. (room +0.07)
+  7. [fact] scholar presses diplomat on the proof, with ledger_of_tolls: diplomat holds. (room -0.13)
+  8. [fact] diplomat answers scholar's point 1 (on the proof) from what it will bring: it falls flat. (room -0.11)
+  -> ended budget
+  => band failure; verdicts [('judge', -0.73)]; rattles []
+  => the world: ['case_file:stage', 'precedent', 'reception', 'record:acquittal', 'regard+', 'regard-']
+
+CARD negotiation | dyadic | a offer borne by `for` | reply {'for': 'may', 'against': 'may'} | issues ('the terms',) | silence: free: nothing here must be answered, and silence costs nothing | unargued: it stands where the room starts | standard 4.0
+     arranged by custom (tilt 0.0) | stake oblige | room (('orator', 'speaks for', 0.0), ('diplomat', 'speaks against', 0.0)) | barred () | close consent by accept | 3 turns | ends when the turns are spent, a whole round rests, or a side yields | odds if nobody speaks None
+[negotiation: a dyadic proceeding on an offer, arranged by custom; decided by each party's own accept; silence: free: nothing here must be answered, and silence costs nothing; 3 turn(s) each]
+  1. [the terms] orator raises point 0 on the terms as one of their own: it falls flat. (room -0.10)
+  2. [the terms] diplomat raises point 1 on the terms from what is owed (framed on commons): it falls flat. (room +0.12)
+  3. [the terms] orator presses diplomat as one of their own: diplomat is rattled. (room +0.22)
+  4. [the terms] diplomat raises point 2 on the terms as one of their own: it lands; he wanders from the point. (room -0.05)
+  5. [the terms] orator answers diplomat's point 2 (as one of their own) as one of their own: it lands. (room -0.05)
+  6. [the terms] diplomat rests. (room -0.05)
+  -> ended budget
+  => band None; verdicts []; rattles [('diplomat', 1)]
+  => the world: ['case_file:stage', 'docket:other_forum', 'regard-', 'strain_carried']
+
+CARD rally | deliberative | a theme borne by `for` | reply {'for': 'raise'} | issues ('the theme',) | silence: free: nothing here must be answered, and silence costs nothing | unargued: it stands where the room starts | standard 4.0
+     arranged by custom (tilt 0.0) | stake none | room (('orator', 'speaks for', 0.0), ('guildsmen', 'judges', 0.0), ('toll_men', 'judges', 0.0), ('townsfolk', 'judges', 0.0)) | barred (('for', 'press'), ('for', 'concede')) | close hearers by ('guildsmen', 'toll_men', 'townsfolk') | 3 turns | ends when the turns are spent, a whole round rests, or a side yields | odds if nobody speaks 0.188
+[rally: a deliberative proceeding on a theme, arranged by custom; decided by guildsmen, toll_men, townsfolk; silence: free: nothing here must be answered, and silence costs nothing; 3 turn(s) each]
+  1. [the theme] orator raises point 0 on the theme from what it will bring (framed on grain): it lands. (room +0.63)
+  2. [the theme] orator raises point 1 on the theme from what it will bring (framed on trade): it lands. (room +1.00)
+  3. [the theme] orator raises point 2 on the theme as one of their own: it lands. (room +1.00)
+  -> ended budget
+  => band success; verdicts [('guildsmen', 2.81), ('toll_men', -0.24), ('townsfolk', 2.68)]; rattles []
+  => the world: ['case_file:stage', 'pursuits+', 'regard+']
+
+CARD debate | deliberative | a motion borne by `for` | reply {'for': 'may', 'against': 'may'} | issues ('the question',) | silence: free: nothing here must be answered, and silence costs nothing | unargued: it stands where the room starts | standard 5.0
+     arranged by custom (tilt 0.0) | stake decree | room (('orator', 'speaks for', 0.0), ('diplomat', 'speaks against', 0.0), ('judge', 'judges', 6.0), ('judge2', 'judges', 4.0), ('judge3', 'judges', 4.0), ('guildsmen', 'attends', 0.0)) | barred () | close declared by ('judge', 'judge2', 'judge3') | 4 turns | ends when the turns are spent, a whole round rests, or a side yields | odds if nobody speaks 0.204
+[debate: a deliberative proceeding on a motion, arranged by custom; decided by judge, judge2, judge3; silence: free: nothing here must be answered, and silence costs nothing; 4 turn(s) each]
+  1. [the question] orator presses diplomat as one of their own: diplomat holds. (room -0.10)
+  2. [the question] diplomat presses orator from what it will bring on his trade: orator is rattled. (room -0.34)
+  3. [the question] orator rests. (room -0.34)
+  4. [the question] diplomat presses orator from what it will bring on his trade: orator is rattled; his bearing tells for him. (room -0.39)
+  5. [the question] orator presses diplomat from what it will bring on his trade: diplomat holds; he wanders from the point; his bearing tells against him. (room -1.00)
+  6. [the question] diplomat rests. (room -1.00)
+  7. [the question] orator concedes the question and yields. (room -1.00)
+  -> ended yielded by orator
+  => band failure; verdicts [('judge', -4.46), ('judge2', 0.13), ('judge3', 0.1)]; rattles [('orator', 2)]
+  => the world: ['case_file:stage', 'faction-', 'reception', 'record:defeated', 'regard+', 'regard-', 'strain_carried']
+
+CARD questioning | judicial | a question borne by `for` | reply {'for': 'may', 'against': 'must'} | issues ('the question',) | silence: refusal: he who owes the answer decides himself; leaving a point standing costs him only what it admits | unargued: it lapses: the bearer must put it, and his rest is priced as silence (1.88 with those who decide) | standard 4.0
+     arranged by custom (tilt 0.0) | stake yield | room (('fox', 'speaks for', 0.0), ('bully', 'speaks against', 3.5)) | barred (('for', 'concede'), ('against', 'press')) | close hearers by ('bully',) | 4 turns | ends when the turns are spent, a whole round rests, or a side yields | odds if nobody speaks 0.139
+[questioning: a judicial proceeding on a question, arranged by custom; decided by bully; silence: refusal: he who owes the answer decides himself; leaving a point standing costs him only what it admits; 4 turn(s) each]
+  1. [the question] fox raises point 0 on the question on the proof, citing forged_writ: it falls flat; it is not what he himself holds; his bearing tells for him. (room -0.47)
+  2. [the question] bully raises point 1 on the question as one of their own: it falls flat; his bearing tells against him. (room +0.27)
+  3. [the question] fox raises point 2 on the question as one of their own: it falls flat. (room +0.15)
+  4. [the question] bully raises point 3 on the question as one of their own: it falls flat. (room +0.46)
+  5. [the question] fox raises point 4 on the question on the proof, citing forged_writ: it lands; it is not what he himself holds. (room +1.00)
+  6. [the question] bully answers fox's point 4 (on the proof) from what it will bring: it lands. (room +0.67)
+  7. [the question] fox presses bully from what it will bring on his tolls: bully is rattled. (room +1.00)
+  8. [the question] bully concedes the question and yields. (room +1.00)
+  -> ended yielded by bully
+  => band success; verdicts [('bully', 1.27)]; rattles [('bully', 1)]
+  => the world: ['case_file:stage', 'claim:yielded', 'regard-', 'strain_carried']
+
+CARD inquisition | judicial | a charge borne by `for` | reply {'for': 'may', 'against': 'must'} | issues ('fact', 'justification') | silence: admits: a point owed an answer and left standing costs 3.38 with each who decides, and counts with him again as tacitly admitted | unargued: it stands where the room starts: the bearer decides it himself | standard 6.0
+     arranged by custom (tilt 0.0) | stake ban | room (('bishop', 'speaks for', 5.0), ('scholar', 'speaks against', 0.0)) | barred (('for', 'concede'), ('against', 'press')) | close bench by ('bishop',) | 4 turns | ends when the turns are spent, a whole round rests, or a side yields | odds if nobody speaks 0.304
+[inquisition: a judicial proceeding on a charge, arranged by custom; decided by bishop; silence: admits: a point owed an answer and left standing costs 3.38 with each who decides, and counts with him again as tacitly admitted; 4 turn(s) each]
+  1. [fact] bishop presses scholar from what it will bring on his learning: scholar holds; he has put nothing of his own and the room notes it. (room -0.12)
+  2. [fact] scholar raises point 0 on fact on the proof, citing ledger_of_tolls: it lands. (room -1.00)
+  3. [fact] bishop answers scholar's point 0 (on the proof) from what is owed: it lands. (room -0.42)
+  4. [fact] scholar raises point 1 on fact on the proof, citing ledger_of_tolls: it lands. (room -1.00)
+  5. [fact] bishop answers scholar's point 1 (on the proof) from what is owed: it lands. (room -0.42)
+  6. [fact] scholar raises point 2 on fact from what is owed (framed on faith): it lands. (room -1.00)
+  7. [fact] bishop presses scholar as one of their own: scholar is rattled; scholar's point 2 stands unanswered; he has put nothing of his own and the room notes it. (room -1.00)
+  8. [fact] scholar raises point 3 on fact on the proof, citing clerk_saw_it: it falls flat; he wanders from the point; his bearing tells against him. (room -0.83)
+  -> ended budget
+  => band failure; verdicts [('bishop', -6.04)]; rattles [('scholar', 1)]
+  => the world: ['case_file:stage', 'legitimacy-accuser', 'reception', 'record:acquittal', 'regard+', 'regard-', 'strain_carried']
+
+CARD audience | deliberative | a plea borne by `for` | reply {'for': 'may', 'against': 'may'} | issues ('the plea',) | silence: free: nothing here must be answered, and silence costs nothing | unargued: it stands where the room starts | standard 5.0
+     arranged by custom (tilt 0.0) | stake oblige | room (('scholar', 'speaks for', 0.0), ('judge', 'judges', 6.0)) | barred (('for', 'press'), ('for', 'concede'), ('against', 'concede')) | close bench by ('judge',) | 2 turns | ends when the turns are spent, a whole round rests, or a side yields | odds if nobody speaks 0.295
+[audience: a deliberative proceeding on a plea, arranged by custom; decided by judge; silence: free: nothing here must be answered, and silence costs nothing; 2 turn(s) each]
+  1. [the plea] scholar raises point 0 on the plea on the proof, citing ledger_of_tolls: it lands; his bearing tells against him. (room +0.61)
+  2. [the plea] scholar raises point 1 on the plea on the proof, citing ledger_of_tolls: it lands. (room +1.00)
+  -> ended budget
+  => band success; verdicts [('judge', 1.6)]; rattles []
+  => the world: ['case_file:stage', 'partial_paid', 'reception', 'regard+', 'tenure:oblige']
+
+CARD trial | judicial | a charge borne by `for` | reply {'for': 'must', 'against': 'must'} | issues ('fact', 'definition', 'justification') | silence: refusal: a point owed an answer and left standing costs 3.12 with each who decides | unargued: it lapses: the bearer must put it, and his rest is priced as silence (3.12 with those who decide) | standard 5.0
+     arranged by bully (tilt 0.94) | stake detain | room (('scholar', 'speaks for', 0.0), ('bully', 'speaks against', 3.5), ('judge', 'judges', 6.0), ('guildsmen', 'attends', 0.0), ('toll_men', 'attends', 0.0), ('clerk', 'attends', 0.0)) | barred () | close bench by ('judge',) | 4 turns | ends when the turns are spent, a whole round rests, or a side yields | odds if nobody speaks 0.072
+[trial: a judicial proceeding on a charge, arranged by bully (tilt 0.94); decided by judge; silence: refusal: a point owed an answer and left standing costs 3.12 with each who decides; 4 turn(s) each]
+  1. [fact] scholar raises point 0 on fact on the proof, citing ledger_of_tolls: it half lands; his bearing tells for him. (room +0.03)
+  2. [fact] bully answers scholar's point 0 (on the proof) as one of their own: it falls flat; his bearing tells against him. (room +0.08)
+  3. [fact] scholar presses bully on the proof, with ledger_of_tolls: bully holds. (room -0.12)
+  4. [fact] bully answers scholar's point 0 (on the proof) from what is owed: it falls flat. (room -0.06)
+  5. [fact] scholar raises point 1 on fact on the proof, citing ledger_of_tolls: it half lands. (room +0.12)
+  6. [fact] bully answers scholar's point 1 (on the proof) from what is owed: it half lands. (room +0.05)
+  7. [fact] scholar presses bully on the proof, with ledger_of_tolls: bully holds. (room -0.15)
+  8. [fact] bully answers scholar's point 1 (on the proof) from what it will bring: it falls flat. (room -0.12)
+  -> ended budget
+  => band failure; verdicts [('judge', -2.0)]; rattles []
+  => the world: ['case_file:stage', 'legitimacy-', 'precedent', 'reception', 'record:acquittal', 'regard+', 'regard-']
+
+CARD conversation | dyadic | a claim borne by `for` | reply {'for': 'may', 'against': 'may'} | issues ('the claim',) | silence: free: nothing here must be answered, and silence costs nothing | unargued: it stands where the room starts | standard 4.0
+     arranged by custom (tilt 0.0) | stake none | room (('orator', 'speaks for', 0.0), ('diplomat', 'judges', 0.0)) | barred (('for', 'press'), ('for', 'rest'), ('for', 'concede')) | close exchange by ('diplomat',) | 1 turns | ends when the turns are spent, a whole round rests, or a side yields | odds if nobody speaks None
+[conversation: a dyadic proceeding on a claim, arranged by custom; decided by diplomat; silence: free: nothing here must be answered, and silence costs nothing; 1 turn(s) each]
+  1. [the claim] orator raises point 0 on the claim as one of their own: it falls flat. (room -0.37)
+  -> ended budget
+  => band failure; verdicts [('diplomat', -3.4)]; rattles []
+  => the world: ['case_file:stage', 'regard-']
+

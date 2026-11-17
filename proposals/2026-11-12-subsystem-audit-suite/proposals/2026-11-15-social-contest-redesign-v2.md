@@ -134,7 +134,7 @@ So there are **seven structures and four rules**, and nothing else:
 | the **exchange** | one speech, one margin per listener, on `pool_of` against `even + opposed_ob` with signed leverage | part 2 §C |
 | the **close** | one draw per decider, his track as leverage; `declared` carries by its quorum-th seat; under consent, and where a party whose verdict alone is the close gives way or the bearer drops the matter, the act itself (one seat, one vote) | part 2 §D |
 | the **bearing** | one reading for stake, fit, aim, sincerity, credit, partiality, concession cost and verdict effect | part 2 §A |
-| the **arrangement** | `tilt = rig x max(0, tanh((power_arranger - power_other) / scale))` moves the rite's cells, where the rite has seats or watchers to tilt | part 2 §H |
+| the **arrangement** | `tilt = rig x max(0, tanh((power_arranger - power_other) / scale))` starts those who decide toward the arranger (its one lever), where someone other than a party decides | part 2 §H |
 
 **Where requirements pulled against each other, resolved once (the rungs):** game first against R13's continuity
 and against the simulation's richness: the sitting keeps **one live point a side and one issue**, and a player

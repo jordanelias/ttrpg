@@ -477,7 +477,7 @@ Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them
 
 | batch | lane | ED block (declared + spare) | H block (declared + spare) | against H1 §12 |
 |---|---|---|---|---|
-| B24p-sc-proceeding | SC | ED-SC-0054..0056 (1+2) | H-861..H-940 (80+0) | added 2026-11-14 after the table's last block (B01a's H-856..H-860, on top of B99's); `references/id_reservations.yaml` SC `next_free` 54 → 57 at the batch's opening, not by this plan; the hole register's next id after this block H-941 (the block grew from 54 at the V2 fold: V2's 55 settings, the fold's counted table of 24 and the `speech_blend` pointer row; `case_rows`' note row and the `audience_room` pointer row cut). The fold map's own range H-856..H-909 assumed H-855 as the last allocated id: B01a had taken H-856..H-860 first |
+| B24p-sc-proceeding | SC | ED-SC-0054..0056 (1+2) | H-861..H-939 (79+0; H-940 unused) | added 2026-11-14 after the table's last block (B01a's H-856..H-860, on top of B99's); `references/id_reservations.yaml` SC `next_free` 54 → 57 at the batch's opening, not by this plan; the hole register's next id after this block H-941 (the block grew from 54 at the V2 fold: V2's 55 settings, the fold's counted table of 24 and the `speech_blend` pointer row, then fell to 79 at the V2 stress-test pass, which cut `sympathy_step`; `case_rows`' note row and the `audience_room` pointer row cut). The fold map's own range H-856..H-909 assumed H-855 as the last allocated id: B01a had taken H-856..H-860 first |
 | B13-pc-package | PC | ED-PC-0060..0061 (0+2) | H-404..H-408 (0+5) | same |
 | B16M-mb-engine-words | MB | ED-MB-0084..0085 (0+2) | H-409..H-413 (0+5) | same |
 | B04-capability-home | IN | ED-IN-0377..0378 (0+2) | H-414..H-419 (1+5) | ED shifted |

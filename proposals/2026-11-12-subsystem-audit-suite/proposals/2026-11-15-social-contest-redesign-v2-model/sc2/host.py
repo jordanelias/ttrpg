@@ -347,6 +347,8 @@ def _silence_says(inp, rite) -> str:
     owes = _lead(inp, "against" if dict(rite.reply).get("against") == "must" else rite.bears) or ds[0]
     c = sum(silence_cost(inp, d, None, owes) for d in ds) / len(ds) if ds else 0.0     # (a man is not contemptuous
                                                                                       # of himself: a deciding party)
+    if c == 0.0:                                                       # he who owes the answer decides alone
+        return f"{rite.silence}: he who owes the answer decides himself; leaving a point standing costs him only what it admits"
     return f"{rite.silence}: a point owed an answer and left standing costs {c:.2f} with each who decides" \
         + (", and counts with him again as tacitly admitted" if rite.silence == "admits" else "")
 
@@ -505,7 +507,8 @@ def build(people: dict, rite_id: str, matter: dict, *, bench=(), floor=(), form=
                 live=r["live"], bears=r["bears"], reply=rite.reply, moves=rite.moves, barred=barred,
                 admits=admits, close=close, decided_by=tuple(p.id for p in room if p.decides), turns=turns,
                 issues=rite.issues, silence=_silence_says(inp, rite),
-                unargued=(f"it lapses: the bearer must put it, and his rest is priced as silence ({-unmoved:.2f} with those who decide)" if must_b
+                unargued=(f"it lapses: the bearer must put it, and his rest is priced as silence ({-unmoved:.2f} with those who decide)" if must_b and unmoved
+                          else "it stands where the room starts: the bearer decides it himself" if must_b
                           else "it stands where the room starts"),
                 ends="when the turns are spent, a whole round rests, or a side yields",
                 standard=rite.standard, unrest=rite.unrest, gravity=rite.gravity, reason_weight=rw,
@@ -775,9 +778,9 @@ _APPEAL = {"evidence": "on the proof", "consequence": "from what it will bring",
 
 
 def render(inp, card, out) -> str:
-    L = [f"[{card.kind}: a {card.genre} proceeding on a {card.live}, "
+    L = [f"[{card.kind}: a {card.genre} proceeding on {'an' if card.live[0] in 'aeiou' else 'a'} {card.live}, "
          + (f"arranged by {card.arranged_by} (tilt {card.tilt})" if card.arranged_by else "arranged by custom")
-         + f"; decided by {', '.join(card.decided_by) or 'each party`s own accept'}; silence: {card.silence};"
+         + f"; decided by {', '.join(card.decided_by) or "each party's own accept"}; silence: {card.silence};"
          f" {card.turns} turn(s) each]"]
     pts = {p.id: p for p in out.state.points}
     told = {}
@@ -808,9 +811,9 @@ def render(inp, card, out) -> str:
             s += "; he wanders from the point"
         must = dict(card.reply).get(b.side) == "must"
         if b.left is not None:
-            s += f"; {pts[b.left].by}'s point {b.left} stands unanswered" + (" and the room marks it" if (b.evaded and must) else "")
+            s += f"; {pts[b.left].by}'s point {b.left} stands unanswered" + (" and the room notes it" if (b.evaded and must) else "")
         if b.evaded and not (b.left is not None and must):
-            s += "; he has put nothing of his own and the room marks it"
+            s += "; he has put nothing of his own and the room notes it"
         sgn = (b.esteem >= 1.0) - (b.esteem <= -1.0)
         if b.move in ("argue", "press") and sgn and told.get(b.voice) != sgn:
             told[b.voice] = sgn                  # said once, and again only when it turns

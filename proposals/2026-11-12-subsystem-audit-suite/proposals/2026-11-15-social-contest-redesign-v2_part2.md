@@ -61,7 +61,7 @@ care = ( strongest pursuit or need, strongest conviction / scale_max, strongest 
 | read as | formula |
 |---|---|
 | his **stake** (whether he comes, which side, how hard) and his **start** (partiality) | `stake = bearing(p, matter)`; `start = start_step x mean(stake)`; **which side** a man not named by the matter takes is the sign of `mean(stake)` and **how hard** (`effort`, the turns he prepares) is `round(3 abs(mean(stake)) + 1)`, 0 where nothing bears (D4: `takes_side`, `effort_of`; where a rite has an opposing side and the matter names no one to it, the most opposed man on the floor comes to oppose). **A party's stake is at least `PARTY_STAKE` (0.2) toward his own side** (his bond raised as far as it goes: being a party is a stake, A-139, B6; the season driver's literal, moved to the bearing, its one owner); `effort` reads what the matter touches of his own beyond being a party (p4 §L 2) |
-| a decider's **conflict** (partiality) | `conflict = (abs(want) + abs(hold) + max(abs(bond), abs(tie to one party) + abs(tie to the other))) / 3`, `lean = sum stake / 3`: interests and ties on both sides are a conflict, never a cancellation (B6; A5: kin to both parties is a conflict as kin to one is; patronage is one record read from either man). A seat whose conflict reaches `recuse_at`, **or who is a party**, steps down where another seat of the authority can sit; one who cannot sits, the room holds a `partial` claim, and a ruling his own way is priced (§J) |
+| a decider's **conflict** (partiality) | `conflict = (abs(want) + abs(hold) + max(abs(bond), abs(tie to one party) + abs(tie to the other))) / 3`, `lean = sum stake / 3`: interests and ties on both sides are a conflict, never a cancellation (B6; A5: kin to both parties is a conflict as kin to one is; patronage is one record read from either man). A non-party seat whose conflict reaches `recuse_at` steps down where another seat of the authority can sit; one who cannot sits, and a party who holds a seat sits by choice (A-139: the inquisitor who accuses and judges, the seat who speaks and votes), the room holds a `partial` claim, and a ruling his own way is priced (§J) |
 | the **fit** of an argument to him | it reads the MATTER, at the **frame** the speaker chose (one pursuit, need or goal of his for `consequence`; one conviction or duty for `authority`): `landing = clip(side x weight[tag] x bears[tag] + 0.5 x (2 weight[tag] - 1))`, and -0.5 for a frame he does not hold at all (the SIGN is what the matter does to him; relevance adds magnitude in C.2, never sign); `clip(bond(him, speaker) + 0.5 x (2 care.bond - 1))` for `solidarity`; `credit(him, item)` for `evidence` |
 | the **aim** of a press on him | a press names its **object**, the held thing it hits (chosen from the presser's believed reading of him, as a frame is): `aim = clip(weight[tag] x (1 + abs(bears[tag])) - 1)`, -1 for a thing he does not hold: it bites by how much he holds it AND how far THIS matter bears on it, either way (B7; unsigned, so never the same number as the fit); on `solidarity` his bond in the matter; on `evidence`, what the item shows of him or of one he is bound to |
 | **credit** of an item | `clip(2 weight - 1 + bond(him, source) - max(0, bond(him, the one implicated)))` |
@@ -208,9 +208,9 @@ gap(V)    = gap_step x max(0, power(the other side) - power(V)) x (1 - (V.reason
   a concession is charged with each listener `silence_cost = contempt_step x (standard / mid) x (1 + his station /
   4, if he decides)` (refusal to engage: a disrespect that grows with the occasion and with whom he declines to
   answer), plus, where the rite's `silence` cell is `admits`, `admit_step x` how far the point stands with that
-  listener (tacit admission); `free` charges nothing, and **a rite whose reply is `must` is never `free`**: a regime
-  that grants a right to silence (the commune) moves its cell to `refusal`, made cheaper by the regime's lower
-  `standard`, never to nothing (p4 §L 6). A man is not contemptuous of himself: a party who decides
+  listener (tacit admission); `free` charges nothing, and **a rite whose reply is `must` is never `free`**: no regime
+  sets it so (the commune's `free` cell was cut, p4 §L 6: it acted only where an answer is owed, against A-145); a
+  commune's lower `standard` makes silence cheaper there, never nothing. A man is not contemptuous of himself: a party who decides
   pays only the admission on his own track. **The burden (C1; the same rule):** the bearer of a matter the other
   side must answer has to put it: while no point of his stands, his rest, or a press in place of a point, is a
   charge not pressed (a question not asked) and is priced as silence is, contempt only. So **an unargued charge
@@ -454,14 +454,16 @@ level(modifier) + the regime's weight for his authority`. `rig` is the arranger'
 arranger's side is his own where he is a party** (C3: an accused who arranges is tilted from his power, never from
 his tie to his accuser), else the side his ties favour; the card names an arranger only where there is a tilt, and
 names the side it works against (`tilted_against`); a third party leans to the side he is tied to, and tied to
-neither more, tilts nothing (p4 §L 11); **an arrangement tilts a forum's seats and watchers**, so where a rite has
-neither (a conversation, a questioning, a negotiation) there is no tilt, no price and no grudge (p4 §L 10). In the
-builder `tilt` drops the share `tilt` of the bench AND
-of the watchers least tied to him (one rule for both; a declared bench never below its quorum, the quorum then a
-majority of the seats kept and never a smaller share than declared; a bench offered fewer seats than its quorum is
-refused `short_bench`, p4 §L 9), starts those who decide `presume_step x tilt` toward him and those who watch, and
-only those, `sympathy_step x tilt x (1 - their tie to him)` against him (p4 §L 3). **It no longer cuts turns** (C3: the
-cut fell on the arranger's own case as hard as on the other's, so the full rig bought nothing over the half).
+neither more, tilts nothing (p4 §L 11). **The rig has one lever: those who decide start `presume_step x tilt`
+toward him** (the bench leans his way), so where none but a party decides (a conversation, a questioning, a
+negotiation) there is nothing to tilt: no tilt, no price, no grudge (p4 §L 10). **Cut by the stress-test pass (p4
+§L 3, §L 9):** packing (dropping the seats and watchers least tied to him) and the watchers' sympathy against him.
+Packing a declared bench changed its quorum arithmetic, not its lean, so it moved the verdict toward whoever did not
+bear, whichever side arranged; the sympathy offset the presumption on a seat and on a watcher who decides nothing; with
+both gone the rig moves every row toward its arranger and each rig level stays best somewhere. What a rig costs and
+how it is seen are the fold's (below). A bench offered fewer seats than its quorum is refused `short_bench`. **It no
+longer cuts turns** (C3: the cut fell on the arranger's own case as hard as on the other's, so the full rig bought
+nothing over the half).
 
 **The price (C3).** A rig is seen as plainly as it is pushed, and a shut door hides nothing (a closed court is
 itself a sign): the arranger's faction pays `rig_price x tilt^2` in legitimacy whoever is in the room. Monotone in
@@ -477,8 +479,8 @@ re-hearing before another authority, which reads the tilt as grounds. `contest` 
 ## I. Context: era, regime, strife (A-131)
 
 `arrangements.yaml: context`, read by the builder; no code per kind. **Era:** the weight of each ground. **Regime:**
-which rows are lawful (keyed on the row requested: a regime's `unlawful` names a rite or a row, and a rite it names
-stays lawful in a row of the regime's own authority, p4 §L 12), `standard`, `reason_lean`, kinds added to or dropped from `admits`, each authority's
+which rows are lawful (the regime's `unlawful` names the rows it outlaws: a theocracy the polity's debates, not the
+Church's own deliberation on the debate rite, p4 §L 12), `standard`, `reason_lean`, kinds added to or dropped from `admits`, each authority's
 weight in `power`, the floor, what silence means, `gravity`. **Strife:** `turns`, `unrest`, `gravity`, what the hungry want,
 who is absent. **Office, seat, faction:** `precedence`, `power`, `office.duty`, who sits, `bond`, and a shared
 faction is a tie (`tie` adds 0.3 for one of his own, so a solidarity argument lands with a partisan bench and a
@@ -487,7 +489,7 @@ sitting resolved, an office contested, precedent, a matter docketed in turn.
 
 **How era and regime act (requirement 8, decided by the ladder):** they act on PLAY, the choices men make: the era
 changes which ground a speaker reaches for where his listeners want and hold alike; a regime changes what silence
-means (a commune's right to silence makes it cheaper, never free where an answer is owed: p4 §L 6), what may be shown, what the occasion asks of
+means (a theocracy's silence admits; a commune's plainer occasion makes it cheaper, never free where an answer is owed: p4 §L 6), what may be shown, what the occasion asks of
 Grace, and which rites exist at all. **And a regime enters the close the same way strife does** (rung 4, the
 precedent of strife's `gravity`: one method for context's three inputs): each regime carries a `gravity` delta, so
 a change is graver under a theocracy (+0.5) than under a crown or a commune (0), and the same case is harder to
@@ -556,8 +558,9 @@ bounded quantity fades by `fade` and rattles age (strain carried, A.4). So "a lo
 
 ## K. The settings
 
-Fifty-five of the proceeding's own, each `[ASSUMPTION; Jordan to correct]`. (The design this replaces had 53 and
-three tables; this v2 had 54 before the second fix pass.) **54 - 1 + 2 = 55, for stated reasons:** `yield_track` is cut (a given-up matter goes as far as the close's
+Fifty-four of the proceeding's own, each `[ASSUMPTION; Jordan to correct]`. (The design this replaces had 53 and
+three tables; this v2 had 54 before the second fix pass and 55 after it; the stress-test pass cut `sympathy_step`
+with the watchers' sympathy, p4 §L 3: 55 - 1 = 54.) **54 - 1 + 2 = 55 at the second fix pass, for stated reasons:** `yield_track` is cut (a given-up matter goes as far as the close's
 leverage carries, `M_MAX / track_step`); `temper_cool` is added (C4: a temper must cool, and nothing else measured
 time within a sitting); `recuse_at` is added (B6: recusal was asserted and nothing carried it). The fold's
 coefficients were hard-coded and uncounted; they are now one table of 24 (`host.FOLD`, below), so what was hidden is
@@ -571,7 +574,7 @@ counted, not new.
 | the room and the reading | `crowd_at` 12, `crowd_lean` 0.2, `mood_scale` 5, `read_scale` 1, `read_blur` 2, `read_noise` 0.3, `bias_step` 2, `relevance` on |
 | the close | `track_step` 0.2 |
 | the NPC's temper | `temper_step` 0.5, `temper_break` 0.75, `temper_cool` 0.5 [an ordinary man breaks at a second rattle that follows the first closely; Will 1 Grace 2 at his first; Will 7 Grace 7 only after three in quick succession; nobody at none], `grain` 2.0, `grudge` 2.0, `pride` 2.0 |
-| the host | `start_step` 2.0, `presume_step` 2.0, `sympathy_step` 1.5, `power_scale` 2.0, `strain_fade` 0.5, `recuse_at` 0.25 |
+| the host | `start_step` 2.0, `presume_step` 2.0, `power_scale` 2.0, `strain_fade` 0.5, `recuse_at` 0.25 |
 | the fold (`host.FOLD`) | regard: `carried` 0.1, `accord` 0.15, `unmoved` 0.05, `accuser` 0.1, `acquitted` 0.2, `heard` 0.03, `contumacy` 0.1, `pressed` 0.1, `witness` 0.1, `lost` 0.05, `grudge_rig` 0.3, `reception` 0.1, `brute` 0.2, `wrong` 0.1; legitimacy and standing: `legit_ruling` 0.1, `legit_brute` 0.4, `legit_wrong` 0.2, `legit_fall` 0.5, `rig_price` 0.25, `partial_price` 0.5, `standing` 0.5; `strife_ease` 0.25; `merits_at` 1.0; `fade` 0.25 a season |
 
 Controls: the levels at none; `repeat_step`, `esteem_step`, `off_step`, `ploy_step`, `grain_strain`, `start_step`,
