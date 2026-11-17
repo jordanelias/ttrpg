@@ -172,7 +172,7 @@ def trial_vector(ua, ub, r):
 # 2026-07-04 entry.
 # ─── VOCABULARY, because this table's keys taught a session the wrong design fact ──────────────
 # [Jordan, 2026-08-14] "We have no 'grid' mode in mass battle. It always occurs on a coordinate
-# field. Only the units can be said to be a grid."
+# field. Only the subunits can be said to be a grid."
 #
 # MASS BATTLE HAS ONE MOVEMENT MODEL: the coordinate field. `FIELD_MOVEMENT` defaults to 1
 # (hierarchy/units.py:32). `FIELD_MOVEMENT=0` selects the pre-migration integer lattice — Chebyshev
@@ -703,7 +703,7 @@ def _mode_key(per_cell, field_movement, cell_morale):
     # across byte-for-byte. It is not a golden re-record and G11 does not apply.
     # [Jordan, 2026-08-14] 'grid' RENAMED TO 'legacy', because it named a mode that does not exist:
     #   "We have no 'grid' mode in mass battle. It always occurs on a coordinate field.
-    #    Only the units can be said to be a grid."
+    #    Only the subunits can be said to be a grid."
     # FIELD_MOVEMENT defaults to 1 (hierarchy/units.py:32) — the coordinate field IS the model.
     # FIELD_MOVEMENT=0 is the pre-migration integer-lattice path (Chebyshev distance, int rounding),
     # retained ONLY as a byte-exact regression arm; validators.py:220 already called it "the legacy

@@ -131,7 +131,7 @@ def check_orders(unit, t, enemy_cells):
                     continue
                 if k == 'feign_retreat':
                     # [C4, ED-MB-0067 Part C / ED-MB-0071] Same shape as fire_signal immediately above: not a real Unit
-                    # attribute, so it is set on the ISSUING UNIT instead -- PP-256's Feigned Retreat is a Army-wide tactic
+                    # attribute, so it is set on the ISSUING ARMY instead -- PP-256's Feigned Retreat is an Army-wide tactic
                     # (Army.feigned), not a per-subunit one. This is the trigger for PP-256's resolution machinery
                     # (feigned_retreat_recognized / feigned_retreat_check / resolve_feigned_retreat, all in orchestration.py).
                     unit.feigned = bool(v)

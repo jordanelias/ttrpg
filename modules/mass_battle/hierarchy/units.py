@@ -1,4 +1,4 @@
-"""modules.mass_battle.hierarchy.units — Unit and Army dataclasses (the unit/subunit hierarchy).
+"""modules.mass_battle.hierarchy.units — Unit and Army dataclasses (the army/unit hierarchy).
 Stage-1 behaviour-frozen extract from orchestration.py. The DATA model + the per-object geometry/
 movement/state methods. Depends only on LOWER layers — config, geometry (_oriented/footprint_for/
 cell_speed/octagon), core.exchange (derive_command/_stamina_pool_penalty/subunit_combat_pool),
@@ -248,8 +248,8 @@ _ORDER_SAFE_FIELDS = frozenset({
     'fire_signal',
     # [C4, ED-MB-0067 Part C / ED-MB-0071] `feign_retreat` is ALSO a PSEUDO-field, same shape as
     # `fire_signal` immediately above: not a real Unit attribute, so check_orders special-cases it
-    # (skips the generic setattr, sets the ISSUING UNIT's `.feigned` instead of a Unit field --
-    # PP-256's Feigned Retreat is a Army-wide tactic, per `Army.feigned`'s own declaration, not a
+    # (skips the generic setattr, sets the ISSUING ARMY's `.feigned` instead of a Unit field --
+    # PP-256's Feigned Retreat is an Army-wide tactic, per `Army.feigned`'s own declaration, not a
     # per-subunit one). Listed here for the same construction-time-validation reason as `fire_signal`.
     'feign_retreat',
 })
@@ -277,7 +277,7 @@ class Order:
     including escort_of/escort_offset -- a subunit can switch INTO escort mode mid-battle via an
     order), not geometry/troop-accounting fields (see _ORDER_SAFE_FIELDS's own note for why).
     behavior may also set 'feign_retreat': bool (C4, ED-MB-0067 Part C / ED-MB-0071) -- a pseudo-field,
-    not a real Unit attribute: once this order's trigger fires, the ISSUING UNIT's `.feigned` is set
+    not a real Unit attribute: once this order's trigger fires, the ISSUING ARMY's `.feigned` is set
     to the given value, pre-declaring a Feigned Retreat (PP-256) before the unit's normal rout check
     ever runs. Inert unless MB_FEIGNED_RETREAT is ON; resolved at the pursuit call site by the
     already-shipped feigned_retreat_recognized / feigned_retreat_check, unchanged by this field."""

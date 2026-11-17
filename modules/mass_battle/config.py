@@ -33,13 +33,13 @@ TROOPS_PER_SIZE = 100
 CELL_FLOOR = 40             # min troops/cell; below this a cell merges into a neighbour (lifecycle)  # [canonical: tests/coverage_matrix_archive.md §"2026-06-03 continuous-scale rework - step 1a" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/UNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000]
 CELL_CAP = 200              # max troops/cell that fight; beyond this, troops overflow to new cells  # [canonical: tests/coverage_matrix_archive.md §"2026-06-03 continuous-scale rework - step 1a" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/UNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000]
 # [ED-MB-0041, Tier-3 experiment under Jordan's 2026-07-25 permission] ARMY BREAKS BY CONTAGION, not
-# by fighting to the last section. `Army.derive_rout` requires ALL units routed before the unit
+# by fighting to the last section. `Army.derive_rout` requires ALL units routed before the army
 # breaks, so with per-subunit breaking at the historical 15-30% band, sections that have already broken
 # would sit on the field absorbing casualties while their siblings fight on. Armies come apart once a
 # decisive portion of the line goes, and the rest routs by contagion rather than being destroyed in
 # place (du Picq's central claim about the moral, not physical, end of a battle).
 #
-# This is the fraction of a unit's SPAWN strength that must sit in broken units before the whole body
+# This is the fraction of an army's SPAWN strength that must sit in broken units before the whole body
 # breaks. 1.0 reproduces the all-units behaviour exactly. The number that lands is CALIBRATED-DEBT
 # until something outside the engine supports it.
 # [ED-MB-0041, Jordan directive 2026-07-25: "the cell needs to be the primitive for morale, discipline,

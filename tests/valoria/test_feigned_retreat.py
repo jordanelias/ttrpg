@@ -168,7 +168,7 @@ def test_feign_retreat_is_a_recognized_order_safe_field():
 
 
 def test_feign_retreat_order_sets_the_unit_flag_not_the_subunit():
-    """Must land on the ISSUING UNIT's `.feigned` (PP-256 is a Army-wide tactic, not per-subunit),
+    """Must land on the ISSUING ARMY's `.feigned` (PP-256 is an Army-wide tactic, not per-subunit),
     and must never leak onto the Unit as a real attribute -- same discipline as fire_signal's
     own leak test in test_mass_battle_signals.py."""
     _reload(on=True)
