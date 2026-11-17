@@ -190,7 +190,7 @@ Not in this half, and where each is: `27_MB_A` 27A-5 (the four Command reads; af
 - FALSIFIER and CONTROL: a record without the new keys that validates differently than before. Control: golden digests equal (all absent).
 - GATE: `python -m pytest tests/valoria/test_mass_battle_army_record.py tests/valoria/test_army_verbs.py tests/valoria/test_mass_battle_order_of_battle.py -q` → pass; `python tools/ci_golden_modes_check.py` → digests equal to B19.03's.
 - HASH MOVERS: none (the keys are absent in every shipped world; a Record's `subject_matter` keys enter the content hash only where present).
-- DEPENDS ON: EXISTS-IN-TREE `hierarchy/units.py` (`_order_idx` at `:516`, `class Officer` at `:2752`), `armyrecord.py::KEYS`, `::order`, `::validate`, `armies.py::build_army`, `orderofbattle.py::_spec_for`; V12 Batch B16L @ae7955b7ad09ccd08df79409bed53ac0cfafc05e, Batch B16M (the names), B19.03.
+- DEPENDS ON: EXISTS-IN-TREE `hierarchy/units.py` (`_order_idx` at `:516`, `class Officer` at `:2752`), `armyrecord.py::KEYS`, `::order`, `::validate`, `armies.py::build_army`, `orderofbattle.py::_spec_for`; V12 Batch B16L @ae7955b7ad09ccd08df79409bed53ac0cfafc05e, Batch B16M @113003b1438f098f60568f2639bd6d3a5b18ae8b (the names), B19.03.
 - GLOSSARY: none (*commander*, *officer* rows already point at the MB lexicon D-5; their owner columns gain `armyrecord` `commander_post` and the unit row's `officer` in this commit).
 - NAMES: `Unit` → `Army`; `Subunit` → `Unit`; `Subformation` → `UnitRow`; Record key `subformations` → `units` (B16L, B16M; `V12_STRUCTURE_part2.md` §5.10).
 - COST and TIER: edit; `sonnet`, `high`.

@@ -25,7 +25,7 @@ GATE: Batch B03c-boot @544cf5719c620331b70aeda93c1672977b44e9ef
 GATE: Batch B16L-mb-words @ae7955b7ad09ccd08df79409bed53ac0cfafc05e
 GATE: Batch B03a-prose @ae7955b7ad09ccd08df79409bed53ac0cfafc05e
 GATE: Batch B13-pc-package
-GATE: Batch B16M-mb-engine-words
+GATE: Batch B16M-mb-engine-words @113003b1438f098f60568f2639bd6d3a5b18ae8b
 GATE: Batch B04-capability-home
 GATE: Batch B05-one-roll
 GATE: Batch B06-keyed-draw
