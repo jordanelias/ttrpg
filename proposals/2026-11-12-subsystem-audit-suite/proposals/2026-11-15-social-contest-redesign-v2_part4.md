@@ -385,3 +385,22 @@ who rests 0.302 -> 0.518, silence's cost to him +0.040 -> +0.213; (7) the card: 
 and the battery's debate arms that provoke a man who has said nothing (A-146's debate arm, C4.1's grid) no longer
 fire (he rests; nothing stands against him): A-146 is read in the policy probe above and C4 in the trial (C4.3: 293
 breaks, one claim each); the settings inert over the digest 8 -> 7 (`gap_step` now acts there).
+**The reconcile pass** (the three lanes re-tested the fixed model; one pass, the lanes' own scripts as the probes,
+before = their copy `sc_stress/model2`, after = this model; then the invariants once, `fix3/inv_final.out` and
+`fix3/v9_core_reconcile.txt`). No setting added or cut: 54 settings, H 79.
+
+| # | finding | rule (rung) | before -> after (n) |
+|---|---|---|---|
+| R1 | item 13 regressed: a judge whose only link to both parties is a shared faction was recorded partial in 300 of 300 sittings, and recused with a 0.2 pursuit | partiality reads person-to-person ties (relationship, kin, patronage, debts) and wants; a shared faction moves how he hears (its +0.3 in `tie`), never partiality (5; A-131) | shared faction only: conflict 0.2 -> 0, recorded 300 -> 0; with a 0.2 pursuit: recused 300 -> 0, priced 0 -> 76 of 300 (control without a faction 75); kin of both 0.333, kin and one-sided patron priced, conviction-only unpriced, as before (`f13_kin`, `f19_partial`) |
+| R2 | a sitting that ended `rested` resumed with everyone resting re-drew its close: band changed 106 / 170 / 164 of 300 (trial, debate, conversation) | `refused[closed]`: a sitting both sides rested is closed on what was said (the smaller edit; a `budget` sitting resumed under more turns still runs, as D5's adjournment) | 300 / 300 / 300 refused; control: resume before the same seat under more turns runs |
+| R3 | a failed grievance hearing re-listed itself (159 of 159; one matter heard 228 to 299 times in 30 seasons) | a grievance is settled by its one hearing whatever the outcome (`convene`'s `aired`, and any `grudge:` matter) (5: `after`'s own rule) | re-listed 159 -> 0; grievance hearings a season up to 43 -> up to 10, sittings a season up to 60 -> up to 32, flat; the docket at 30 seasons 27-41 -> 6-10 (grievances 1-3); the recurring negotiation's grievances 228-299 -> 39-43 (a new failure each season, each heard once) |
+| R4 | the card printed odds for a negotiation | none: the card's `odds` were already `None` under `consent` and the abridged exchange; the record now says "no verdict if nobody speaks"; a full conversation's odds are its addressed man's own draw and match what an all-rest sitting delivers (0.251 shown, 0.233 +- 0.042) | — |
+| R5 | the questioned man, sole decider, paid nothing for resting: resting 0.288 beat answering 0.315 | a deciding party who leaves a point owed an answer standing answers in his own ruling to the contempt of those present, at the floor (1; A-145) | his rest (the questioner carries, n = 600, 2 s.e. 0.037): questioning 0.288 -> 0.378, interrogation 0.293 -> 0.383 (automatic 0.317 / 0.282); control: every trial, tribunal, arbitration and examination row equal to the figure; a commune's questioning (the crowd decides) equal |
+| R6 | one sitting still pinned a pair at -1: "what he heard" wrote 0.03 x a 36-point track move | the move saturates as the room's stance does (`mood_scale`, 5 points) before it feeds regard (5) | the worst regard after one sitting -1.000 -> -0.498; pairs pinned 1 -> 0 of 300; outcome bands equal by construction (the fold writes after the close) |
+| R7 | the tell's centre with the party-stake floor | **kept** (DECIDED): the floor puts the carried rate on A-79's 0.25 (0.243, n = 3,000, 2 s.e. 0.016) where removing it gives 0.290; failure 0.626 against 0.59; the addressed man decides, so "only where a party decides" changes nothing in a tell | 0.626 / 0.131 / 0.243 with the floor; 0.567 / 0.143 / 0.290 without |
+
+Held after: fuzz 1,500, 0 crashes, 0 violations, determinism 25/25; abridged equality 200/200; 6G+11 asserted; A-139
+(one party twice refused; a party may judge). `recuse_at` now reads inert over the core digest (its cast's judges are
+no longer partial by faction); it acts in its own arm (kin of both steps down). Transcripts regenerated
+(`fix3/transcripts_v9_out.txt`): the rigged trial no longer charges the judge as partial (he shared the arranger's
+faction only); the record now says who arranged the forum and that his faction pays.

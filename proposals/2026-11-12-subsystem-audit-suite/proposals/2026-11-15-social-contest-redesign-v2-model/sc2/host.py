@@ -168,9 +168,10 @@ def _clip(x, lo=-1.0, hi=1.0):
     return max(lo, min(hi, x))
 
 
-def tie(p: dict, q, people: Optional[dict] = None) -> float:
+def tie(p: dict, q, people: Optional[dict] = None, faction: bool = True) -> float:
     """how another PERSON bears on him: relationships, kin, patronage, debts, and a shared faction. Own interior
-    only (the faction is his own and the other's public allegiance)."""
+    only (the faction is his own and the other's public allegiance). `faction=False`: the person-to-person tie only
+    (what partiality reads: a shared faction moves how he hears, it does not make him partial)."""
     if q is None or q == p["id"]:
         return 0.0
     L = p.get("layers", {})
@@ -179,7 +180,7 @@ def tie(p: dict, q, people: Optional[dict] = None) -> float:
     x += 0.5 * (q in L.get("kin", ())) + 0.5 * (q == L.get("patron") or p["id"] in Q.get("clients", ())) \
         + 0.5 * (q in L.get("clients", ()) or Q.get("patron") == p["id"])
     x += L.get("debts", {}).get(q, 0.0)                      # +: he owes q; -: q wronged him
-    if people is not None and p.get("faction") and people.get(q, {}).get("faction") == p["faction"]:
+    if faction and people is not None and p.get("faction") and people.get(q, {}).get("faction") == p["faction"]:
         x += 0.3                                             # one of his own (C: faction acts on play)
     return _clip(x)
 
@@ -255,16 +256,19 @@ def strain_carried(p: dict, D) -> float:
 
 
 def conflict(p: dict, matter: dict, people: dict) -> tuple:
-    """B6: PARTIALITY, (how far the matter is his own business, which way that leans): his persons (ties, kin,
-    patronage, faction, and being a party: the bearing's bond) and his WANT in it (pursuits, needs, goals, ambitions,
+    """B6: PARTIALITY, (how far the matter is his own business, which way that leans): his persons (relationship, kin,
+    patronage, debts, and being a party; a shared faction is not partiality, reconcile item 1) and his WANT in it (pursuits, needs, goals, ambitions,
     and his office's duty where it names what the matter bears on). A conviction is not partiality (finding 19: a judge
     who holds by the law was priced as partial in a third of trials): it moves how he hears (A-131), not whether he
     is conflicted. Opposite interests do not cancel, and neither do opposite ties (A5): the bond counts as the sum
     of his ties to each party where that is more than it nets to."""
     par = matter.get("parties", {})
     want, _, bond = bearing(p, matter, people)
+    tf, ta = (tie(p, par.get(k), people, faction=False) for k in ("for", "against"))
+    if p["id"] not in (par.get("for"), par.get("against")):          # a party keeps the bearing's bond (his floor)
+        bond = _clip(tf - ta + matter.get("factions", {}).get(p.get("faction"), 0.0))
     duty = _clip(sum((p.get("office") or {}).get("duty", {}).get(t, 0.0) * w for t, w in matter.get("bears", {}).items()))
-    ties = sum(abs(tie(p, par.get(k), people)) for k in ("for", "against"))
+    ties = abs(tf) + abs(ta)
     return (abs(want) + abs(duty) + max(abs(bond), min(1.0, ties))) / 3.0, (want + duty + bond) / 3.0
 
 
@@ -342,14 +346,15 @@ def _silence_says(inp, rite) -> str:
     """the card's `silence`: the cell, and what a point left unanswered costs with those who decide (A-145)."""
     if rite.silence == "free":
         return "free: nothing here must be answered, and silence costs nothing"
-    from .engine import silence_cost, _lead
+    from .engine import silence_cost, _lead, Point
     ds = [p for p in inp.room if p.decides]
-    owes = _lead(inp, "against" if dict(rite.reply).get("against") == "must" else rite.bears) or ds[0]
-    c = sum(silence_cost(inp, d, None, owes) for d in ds) / len(ds) if ds else 0.0     # (a man is not contemptuous
-                                                                                      # of himself: a deciding party)
-    if c == 0.0:                                                       # he who owes the answer decides alone
-        return f"{rite.silence}: he who owes the answer decides himself; leaving a point standing costs him only what it admits"
+    side = "against" if dict(rite.reply).get("against") == "must" else rite.bears
+    owes = _lead(inp, side) or ds[0]
+    pt = Point(-1, "for" if side == "against" else "against", "", "", None, "", ())     # a point owed an answer
+    c = sum(silence_cost(inp, d, pt, owes) for d in ds) / len(ds) if ds else 0.0
+    alone = ds == [owes]
     return f"{rite.silence}: a point owed an answer and left standing costs {c:.2f} with each who decides" \
+        + (" (he decides himself, and answers to the contempt of those present)" if alone else "") \
         + (", and counts with him again as tacitly admitted" if rite.silence == "admits" else "")
 
 
@@ -730,9 +735,10 @@ def fold(world, people, inp, card, out, matter):
                         world["ledgers"].setdefault(q.id, []).append(("partial", p.id, round(c, 2), round(ln, 2)))
         if p.side is None:                                 # B21: what a bystander heard, never a ruling
             mv = T[p.id] - p.start
-            reg(p.id, fid, F["heard"] * mv, "what he heard")
-            if aid and any(q.id == aid and q.side for q in inp.room):
-                reg(p.id, aid, -F["heard"] * mv, "what he heard")
+            felt = inp.dials["mood_scale"] * _clip(mv / inp.dials["mood_scale"])   # reconcile item 6: what he heard
+            reg(p.id, fid, F["heard"] * felt, "what he heard")                     # saturates as the room's stance
+            if aid and any(q.id == aid and q.side for q in inp.room):              # does: a 36-point move writes
+                reg(p.id, aid, -F["heard"] * felt, "what he heard")                # what a 5-point one does
             if not p.decides:
                 led.append(("heard", fid, matter["id"], round(mv, 2)))
     for d_id, dep in out.ruled:

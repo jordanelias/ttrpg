@@ -129,13 +129,17 @@ def _sits(people, rite, matter, kw) -> bool:
         raise
 
 
-def convene(world, people, rite, matter, key, appeal_kw=None, **kw):
+def convene(world, people, rite, matter, key, appeal_kw=None, aired=False, **kw):
     """one sitting: build, proceed, fold, and the loser's after-sitting act. `appeal_kw`: the forum an appeal would
-    sit before (None where the verdict is final: an appeal's own)."""
+    sit before (None where the verdict is final: an appeal's own). `aired`: this sitting IS a grievance's hearing
+    (as is any matter `after` opened as a grudge): it settles the grievance whatever the outcome, so the fold's
+    record of a failed hearing never re-lists it (reconcile item 3)."""
     pp = _carry_strain(people, world)
     inp, card = host.build(pp, rite, matter, **kw)
     out = proceed(inp, draw(key, "act", rite))
     band, writes = host.fold(world, pp, inp, card, out, matter)
+    if aired or str(matter["id"]).startswith("grudge:"):
+        world["docket"] = [d for d in world["docket"] if not (d["kind"] == "grievance" and d["matter"] == matter["id"])]
     act, _ = after(world, pp, inp, card, out, matter, band, appeal=appeal_kw is not None and _sits(pp, rite, matter, appeal_kw))
     return dict(rite=rite, matter=matter["id"], band=band, act=act, card=card, out=out, inp=inp)
 
@@ -182,7 +186,7 @@ def season(world, people, schedule, s, *, appeal_bench=(), grievance_rite="conve
                 res["reversed"] = False
         elif d["kind"] == "grievance" and d.get("against"):
             m = dict(id=d["matter"], parties={"for": d["party"], "against": d["against"]}, bears={})
-            _convene_or_skip(world, ran, s, "grievance", people, grievance_rite, m, (key, s, "griev", k), effort=2)
+            _convene_or_skip(world, ran, s, "grievance", people, grievance_rite, m, (key, s, "griev", k), effort=2, aired=True)
         elif d["kind"] in ("adjourned", "other_forum") and base:
             rite, m, kw = base
             if d["kind"] == "other_forum":

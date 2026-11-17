@@ -231,6 +231,8 @@ class Input:
         if self.state is not None:                # a resume continues THIS sitting: the same people, with turns left
             if self.rite.close == "exchange":
                 raise ValueError("refused[abridged_resume]: an abridged act is one speech; it is not resumed")
+            if self.state.ended == "rested":          # both sides had said all they would: the close was drawn on it
+                raise ValueError("refused[closed]: a sitting that ended `rested` was closed on what was said; its close is not drawn again")
             if {p.id for p in self.room} != {i for i, _ in self.state.tracks}:
                 raise ValueError("refused[room_changed]: a resumed sitting has the same people; a changed room is a new sitting")
             sp = _d(self.state.cond)
@@ -292,12 +294,16 @@ def silence_cost(inp, h, P, mover):
     """A-145: SILENCE IS NEVER FREE where the rite says a point must be answered (or a matter borne must be put).
     Each listener reads it as REFUSAL to engage: a disrespect growing with how formal the occasion is and with the
     station of one who decides; and, where the rite's `silence` cell is `admits`, as TACIT ADMISSION: the unanswered
-    point counts with him again by a share of how far it stands. A man is not contemptuous of himself: a party who
-    decides pays only the admission on his own track."""
+    point counts with him again by a share of how far it stands. A man is not contemptuous of himself, but he is not
+    alone: where he decides and leaves a point owed an answer standing, he answers in his own ruling to the contempt
+    of those present (at the floor, the occasion's formality, with no station: none of them decides), so his silence
+    is never free (A-145; reconcile item 5: the questioned man rested for nothing)."""
     D, r = inp.dials, inp.rite
     if r.silence == "free":
         return 0.0
-    c = 0.0 if h.id == mover.id else D["contempt_step"] * (r.standard / D["mid"]) * (1.0 + (h.power / 4.0 if h.decides else 0.0))
+    floor_ = D["contempt_step"] * (r.standard / D["mid"])
+    c = (floor_ if P is not None else 0.0) if h.id == mover.id \
+        else floor_ * (1.0 + (h.power / 4.0 if h.decides else 0.0))
     if r.silence == "admits" and P is not None:
         c += D["admit_step"] * max(0.0, SIGN[P.side] * _d(P.held).get(h.id, 0.0))
     return c

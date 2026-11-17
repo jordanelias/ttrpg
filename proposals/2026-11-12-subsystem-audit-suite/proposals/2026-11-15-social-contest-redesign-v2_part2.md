@@ -61,7 +61,7 @@ care = ( strongest pursuit or need, strongest conviction / scale_max, strongest 
 | read as | formula |
 |---|---|
 | his **stake** (whether he comes, which side, how hard) and his **start** (partiality) | `stake = bearing(p, matter)`; `start = start_step x mean(stake)`; **which side** a man not named by the matter takes is the sign of `mean(stake)` and **how hard** (`effort`, the turns he prepares) is `round(3 abs(mean(stake)) + 1)`, 0 where nothing bears (D4: `takes_side`, `effort_of`; where a rite has an opposing side and the matter names no one to it, the most opposed man on the floor comes to oppose). **A party's stake is at least `PARTY_STAKE` (0.2) toward his own side** (his bond raised as far as it goes: being a party is a stake, A-139, B6; the season driver's literal, moved to the bearing, its one owner); `effort` reads what the matter touches of his own beyond being a party (p4 §L 2) |
-| a decider's **conflict** (partiality) | `conflict = (abs(want) + abs(duty) + max(abs(bond), abs(tie to one party) + abs(tie to the other))) / 3`, `lean = (want + duty + bond) / 3`: partiality is his PERSONS (ties, kin, patronage, faction, being a party) and his WANT in the matter (pursuits, needs, goals, ambitions, his office's duty where it names what the matter bears on); **a conviction is not partiality** (it moves how he hears, A-131; p4 §L 19: a judge who holds by the law was priced as partial in a third of trials). Interests and ties on both sides are a conflict, never a cancellation (B6; A5: kin to both parties is a conflict as kin to one is; patronage is one record read from either man). A non-party seat whose conflict reaches `recuse_at` steps down where another seat of the authority can sit; one who cannot sits, and a party who holds a seat sits by choice (A-139: the inquisitor who accuses and judges, the seat who speaks and votes), the room holds a `partial` claim, and a ruling his own way is priced (§J) |
+| a decider's **conflict** (partiality) | `conflict = (abs(want) + abs(duty) + max(abs(bond), abs(tie to one party) + abs(tie to the other))) / 3`, `lean = (want + duty + bond) / 3`: partiality is his PERSONS (relationship, kin, patronage, debts, being a party; a shared faction is not partiality, it moves how he hears: p4 §L R1) and his WANT in the matter (pursuits, needs, goals, ambitions, his office's duty where it names what the matter bears on); **a conviction is not partiality** (it moves how he hears, A-131; p4 §L 19: a judge who holds by the law was priced as partial in a third of trials). Interests and ties on both sides are a conflict, never a cancellation (B6; A5: kin to both parties is a conflict as kin to one is; patronage is one record read from either man). A non-party seat whose conflict reaches `recuse_at` steps down where another seat of the authority can sit; one who cannot sits, and a party who holds a seat sits by choice (A-139: the inquisitor who accuses and judges, the seat who speaks and votes), the room holds a `partial` claim, and a ruling his own way is priced (§J) |
 | the **fit** of an argument to him | it reads the MATTER, at the **frame** the speaker chose (one pursuit, need or goal of his for `consequence`; one conviction or duty for `authority`): `landing = clip(side x weight[tag] x bears[tag] + 0.5 x (2 weight[tag] - 1))`, and -0.5 for a frame he does not hold at all (the SIGN is what the matter does to him; relevance adds magnitude in C.2, never sign); `clip(bond(him, speaker) + 0.5 x (2 care.bond - 1))` for `solidarity`; `credit(him, item)` for `evidence` |
 | the **aim** of a press on him | a press names its **object**, the held thing it hits (chosen from the presser's believed reading of him, as a frame is): `aim = clip(weight[tag] x (1 + abs(bears[tag])) - 1)`, -1 for a thing he does not hold: it bites by how much he holds it AND how far THIS matter bears on it, either way (B7; unsigned, so never the same number as the fit); on `solidarity` his bond in the matter; on `evidence`, what the item shows of him or of one he is bound to |
 | **credit** of an item | `clip(2 weight - 1 + bond(him, source) - max(0, bond(him, the one implicated)))` |
@@ -145,7 +145,8 @@ hold (B2); `frame` is the frame of an argument or the object of a press.
   sitting gives him the turns less what `cond.spoken` says he has had, the beats continue their count, the issue
   reached stands, and a sitting that ended `yielded` is not resumed (an adjourned one is). A resume continues THE
   SAME sitting: the same people with a turn left; anything else is refused, keyed (`room_changed`,
-  `abridged_resume`, `spent`: a close once drawn is not drawn again; p4 §L 1).
+  `abridged_resume`, `spent`, and `closed` for a sitting that ended `rested`: a close once drawn on what was said is
+  not drawn again; p4 §L 1, R2).
 - **One live point a side.** A raise makes the mover's point live; older points stay in the record.
 - **A track** is each person's own: `track[h] = h.start + the sum of the beats' moves on h` (asserted). `tracks`
   is kept in `Sitting` as that running value so a resume needs no replay; it is never a verdict.
@@ -212,8 +213,9 @@ gap(V)    = gap_step x max(0, power(the other side) - power(V)) x (1 - (V.reason
   answer), plus, where the rite's `silence` cell is `admits`, `admit_step x` how far the point stands with that
   listener (tacit admission); `free` charges nothing, and **a rite whose reply is `must` is never `free`**: no regime
   sets it so (the commune's `free` cell was cut, p4 §L 6: it acted only where an answer is owed, against A-145); a
-  commune's lower `standard` makes silence cheaper there, never nothing. A man is not contemptuous of himself: a party who decides
-  pays only the admission on his own track. **The burden (C1; the same rule):** the bearer of a matter the other
+  commune's lower `standard` makes silence cheaper there, never nothing. A man is not contemptuous of himself, but he is not alone: a party who
+  decides and leaves a point owed an answer standing answers in his own ruling to the contempt of those present, at
+  the floor (`contempt_step x standard / mid`), plus the admission (p4 §L R5: the questioned man rested for nothing). **The burden (C1; the same rule):** the bearer of a matter the other
   side must answer has to put it: while no point of his stands, his rest, or a press in place of a point, is a
   charge not pressed (a question not asked) and is priced as silence is, contempt only. So **an unargued charge
   lapses**: the card says so (`unargued`), and a trial where nobody speaks goes against the bearer instead of
@@ -555,7 +557,7 @@ strife B33.
 entry; the season driver (a labelled, minimal host loop in the model, `acts.season`; the real one is the season
 loop's) convenes them the next season: an appeal is re-heard before another authority with no rig and the grounds
 as a presumption toward the appellant, and a reversal removes the first disposal's tenure; **an appeal's verdict is
-final** and an appeal lies only to a forum that exists and may hear the matter; a sitting the builder refuses
+final**, a grievance is settled by its one hearing whatever its outcome (p4 §L R3) and an appeal lies only to a forum that exists and may hear the matter; a sitting the builder refuses
 (keyed: a vacated seat, a man who is gone) is skipped and recorded, and the season goes on (p4 §L 8); a grievance is a
 conversation between the two (and a grievance once aired cannot be carried again); an adjourned matter returns to
 its row; another forum is an arbitration. An entry not convened within two seasons lapses. Between seasons every
