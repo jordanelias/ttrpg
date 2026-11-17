@@ -218,8 +218,8 @@ rows:
         expects: "`check R3: n of n pass` on both lanes, `not True: none`, control `R3 False -> True`"
         holds: "yes"
         reading:
-          tree: "1c9238db4c46af9c92a842b1b11d0f2b3d499bdf"
-          date: "2026-11-15"
+          tree: "f22b1b606c1569f749cad8403e2caba8ee4b42b8"
+          date: "2026-11-17"
           seed: 0
           seasons: "2 (capped; `temporal.span_seasons` per case)"
           line: "     check R3: 97 of 97 pass"
@@ -241,11 +241,11 @@ rows:
         expects: "three seeds green; the witness-cut control reads 0"
         holds: "yes"
         reading:
-          tree: "72c288615e7f65ec683b4edbefa9fff8ff3bdf1f"
-          date: "2026-11-15"
+          tree: "f22b1b606c1569f749cad8403e2caba8ee4b42b8"
+          date: "2026-11-17"
           seed: "0, 1, 2"
           seasons: 1
-          line: "4 passed, 7 deselected in 23.58s"
+          line: "4 passed, 7 deselected in 24.95s"
           control: >-
             `test_r01_control_with_witness_cut_no_act_is_so_occasioned` (seed 0, witness cut): its
             assertions `landed > 0` (a `claim_landed` question still forms with the cut, so the zero is not by
@@ -262,16 +262,17 @@ rows:
         expects: "replay line `0`; removed line above 0 (`R-01.c  others' acts differing: <n>  (replay 0)`, n at least 1)"
         holds: "yes"
         reading:
-          tree: "1c9238db4c46af9c92a842b1b11d0f2b3d499bdf"
-          date: "2026-11-15"
+          tree: "f22b1b606c1569f749cad8403e2caba8ee4b42b8"
+          date: "2026-11-17"
           seed: "0, 1, 2"
           seasons: 2
           line: "R-01.c  others' acts differing: 277  (replay 0)"
           control: >-
             seed 0 shown (n 277); seeds 1 and 2 read n 303 and 227, each `(replay 0)`; at each
             seed the `[replay]` arm reads `differing=0 ... (EQUAL to the unperturbed)` and the
-            no-wrapper drive ends on the unperturbed hash; the `[draw-seed]` arm reads 2891, 2853,
-            2892 differing
+            no-wrapper drive ends on the unperturbed hash; the `[draw-seed]` arm reads 2885, 2853,
+            2892 differing (seed 0 read 2891 at 1c9238db and 2885 at efc9eb0, B04's open: the change
+            predates B04)
           does_not_show: >-
             one removed person a seed; an act "differing" is not an act caused by the removed
             choice, and a removal that touches 16 to 25 antecedents is not a tick-by-tick account;
@@ -293,11 +294,11 @@ rows:
         expects: "seeds 0-2 differ after a common prefix; the same seed twice is one sequence"
         holds: "yes"
         reading:
-          tree: "1c9238db4c46af9c92a842b1b11d0f2b3d499bdf"
-          date: "2026-11-15"
+          tree: "f22b1b606c1569f749cad8403e2caba8ee4b42b8"
+          date: "2026-11-17"
           seed: "0, 1, 2"
           seasons: 1
-          line: "4 passed, 7 deselected in 48.85s"
+          line: "4 passed, 7 deselected in 50.27s"
           control: >-
             `test_r02_control_one_seed_played_twice_is_one_sequence` (seed 0 twice at the shipped
             fixtures reads one sequence): passed, one of the four
@@ -313,8 +314,8 @@ rows:
         expects: "`R-02.b  differing at a later (season, round): <m>`, m at least 1"
         holds: "yes"
         reading:
-          tree: "1c9238db4c46af9c92a842b1b11d0f2b3d499bdf"
-          date: "2026-11-15"
+          tree: "f22b1b606c1569f749cad8403e2caba8ee4b42b8"
+          date: "2026-11-17"
           seed: "0, 1, 2"
           seasons: 2
           line: "R-02.b  differing at a later (season, round): 277"
@@ -345,13 +346,14 @@ rows:
         expects: "all pass, the one-lap arm among them"
         holds: "yes"
         reading:
-          tree: "72c288615e7f65ec683b4edbefa9fff8ff3bdf1f"
-          date: "2026-11-15"
+          tree: "f22b1b606c1569f749cad8403e2caba8ee4b42b8"
+          date: "2026-11-17"
           seed: "per test"
           seasons: "per test"
-          line: "5 passed in 10.96s"
+          line: "4 passed in 12.92s"
           control: >-
-            the one-lap arm resolves acts (`test_u2_the_one_round_arm_resolves_acts`), one of the five; it is no
+            the one-lap arm resolves acts (`test_u2_the_one_round_arm_resolves_acts`), one of the four (five at 72c28861;
+            four at efc9eb0, B04's open: the drop predates B04); it is no
             comparison against the pre-tick loop (the census that made it one was deleted, B02.01 D)
           does_not_show: >-
             a test reading on corpus-case worlds, not the shipped realm; run with `-n 2` and
@@ -362,8 +364,8 @@ rows:
         expects: "exits 0, prints `rounds=` per season"
         holds: "yes"
         reading:
-          tree: "1c9238db4c46af9c92a842b1b11d0f2b3d499bdf"
-          date: "2026-11-15"
+          tree: "f22b1b606c1569f749cad8403e2caba8ee4b42b8"
+          date: "2026-11-17"
           seed: 0
           seasons: 2
           line: "  season 0: rounds=5 acts=16 events=17 deposits=74"
