@@ -61,7 +61,7 @@ care = ( strongest pursuit or need, strongest conviction / scale_max, strongest 
 | read as | formula |
 |---|---|
 | his **stake** (whether he comes, which side, how hard) and his **start** (partiality) | `stake = bearing(p, matter)`; `start = start_step x mean(stake)`; **which side** a man not named by the matter takes is the sign of `mean(stake)` and **how hard** (`effort`, the turns he prepares) is `round(3 abs(mean(stake)) + 1)`, 0 where nothing bears (D4: `takes_side`, `effort_of`; where a rite has an opposing side and the matter names no one to it, the most opposed man on the floor comes to oppose). **A party's stake is at least `PARTY_STAKE` (0.2) toward his own side** (his bond raised as far as it goes: being a party is a stake, A-139, B6; the season driver's literal, moved to the bearing, its one owner); `effort` reads what the matter touches of his own beyond being a party (p4 §L 2) |
-| a decider's **conflict** (partiality) | `conflict = (abs(want) + abs(hold) + max(abs(bond), abs(tie to one party) + abs(tie to the other))) / 3`, `lean = sum stake / 3`: interests and ties on both sides are a conflict, never a cancellation (B6; A5: kin to both parties is a conflict as kin to one is; patronage is one record read from either man). A non-party seat whose conflict reaches `recuse_at` steps down where another seat of the authority can sit; one who cannot sits, and a party who holds a seat sits by choice (A-139: the inquisitor who accuses and judges, the seat who speaks and votes), the room holds a `partial` claim, and a ruling his own way is priced (§J) |
+| a decider's **conflict** (partiality) | `conflict = (abs(want) + abs(duty) + max(abs(bond), abs(tie to one party) + abs(tie to the other))) / 3`, `lean = (want + duty + bond) / 3`: partiality is his PERSONS (ties, kin, patronage, faction, being a party) and his WANT in the matter (pursuits, needs, goals, ambitions, his office's duty where it names what the matter bears on); **a conviction is not partiality** (it moves how he hears, A-131; p4 §L 19: a judge who holds by the law was priced as partial in a third of trials). Interests and ties on both sides are a conflict, never a cancellation (B6; A5: kin to both parties is a conflict as kin to one is; patronage is one record read from either man). A non-party seat whose conflict reaches `recuse_at` steps down where another seat of the authority can sit; one who cannot sits, and a party who holds a seat sits by choice (A-139: the inquisitor who accuses and judges, the seat who speaks and votes), the room holds a `partial` claim, and a ruling his own way is priced (§J) |
 | the **fit** of an argument to him | it reads the MATTER, at the **frame** the speaker chose (one pursuit, need or goal of his for `consequence`; one conviction or duty for `authority`): `landing = clip(side x weight[tag] x bears[tag] + 0.5 x (2 weight[tag] - 1))`, and -0.5 for a frame he does not hold at all (the SIGN is what the matter does to him; relevance adds magnitude in C.2, never sign); `clip(bond(him, speaker) + 0.5 x (2 care.bond - 1))` for `solidarity`; `credit(him, item)` for `evidence` |
 | the **aim** of a press on him | a press names its **object**, the held thing it hits (chosen from the presser's believed reading of him, as a frame is): `aim = clip(weight[tag] x (1 + abs(bears[tag])) - 1)`, -1 for a thing he does not hold: it bites by how much he holds it AND how far THIS matter bears on it, either way (B7; unsigned, so never the same number as the fit); on `solidarity` his bond in the matter; on `evidence`, what the item shows of him or of one he is bound to |
 | **credit** of an item | `clip(2 weight - 1 + bond(him, source) - max(0, bond(him, the one implicated)))` |
@@ -149,7 +149,9 @@ hold (B2); `frame` is the frame of an argument or the object of a press.
 - **One live point a side.** A raise makes the mover's point live; older points stay in the record.
 - **A track** is each person's own: `track[h] = h.start + the sum of the beats' moves on h` (asserted). `tracks`
   is kept in `Sitting` as that running value so a resume needs no replay; it is never a verdict.
-- **The beat** is the narrative record (no text field); `terms` (true values) is in the outcome only.
+- **The beat** is the narrative record (no text field); `terms` (true values) is in the outcome only. The record
+  names the room's stance in five bands of its mood (firmly with one side, leaning, hanging) and names it only at the
+  beat that turns it; the clamped number is never shown (p4 §L 20).
 
 ### C.2 The speech: one draw, one margin per listener
 
@@ -238,6 +240,10 @@ No draw is taken for any of them. **Decided (rung 5):** the ploy is carried by `
 claim; being pulled off the point is what a landed press and a heckling room do, and turning away prices it).
 
 ### C.4 The press and the rattle
+
+**A press lies only where something stands against the man pressed** (p4 §L 18): a live point of his own that
+stands, or a charge laid on him (his side is not the bearer's and must answer). A man who has said nothing and is
+charged with nothing is not cross-examined: the option is not on the menu.
 
 ```
 sigma  = level(fit_level) x era[g] x weighs[rung][g] x aim(T, g, i, object) + room_level x heat(T) + esteem_step x esteem(V)

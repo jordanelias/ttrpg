@@ -1,0 +1,138 @@
+== before
+n per rite = 300
+
+== trial: sittings 300, beats/sitting 8.0, refused/crash 0
+   opens with a press on a standing nothing: 0%; a press before any point was raised: 0%
+   one point answered 3+ times: 18%; ends on a press: 19%; endings {'budget': 298, 'yielded': 1, 'rested': 1}
+   room pinned at +-1 by half-time: 23%; dead beats (no visible effect) per sitting: 1.01
+   speech beats with NO referent (no frame, no item): 30%; of which 'as one of their own' with no referent: 30%; 'on the proof' with nothing cited: 0%
+   answers: 656; answered from a different ground than the point: 71%; such an answer LANDS: 32%; a proof beaten by solidarity: 3%
+   judge 'partial' paid: 37%; of those, with no tie and no shared faction (conviction only): 78; failure that costs legitimacy: 0/148
+
+== negotiation: sittings 300, beats/sitting 5.1, refused/crash 0
+   opens with a press on a standing nothing: 41%; a press before any point was raised: 41%
+   one point answered 3+ times: 3%; ends on a press: 19%; endings {'rested': 17, 'budget': 169, 'yielded': 114}
+   room pinned at +-1 by half-time: 1%; dead beats (no visible effect) per sitting: 0.06
+   speech beats with NO referent (no frame, no item): 26%; of which 'as one of their own' with no referent: 24%; 'on the proof' with nothing cited: 0%
+   answers: 224; answered from a different ground than the point: 75%; such an answer LANDS: 45%; a proof beaten by solidarity: 3%
+   judge 'partial' paid: 0%; of those, with no tie and no shared faction (conviction only): 0; failure that costs legitimacy: 0/0
+   negotiation sittings in which no beat carries any term: 1%
+
+== rally: sittings 300, beats/sitting 2.7, refused/crash 0
+   opens with a press on a standing nothing: 0%; a press before any point was raised: 0%
+   one point answered 3+ times: 0%; ends on a press: 0%; endings {'budget': 208, 'rested': 92}
+   room pinned at +-1 by half-time: 4%; dead beats (no visible effect) per sitting: 0.16
+   speech beats with NO referent (no frame, no item): 39%; of which 'as one of their own' with no referent: 39%; 'on the proof' with nothing cited: 0%
+   answers: 0; answered from a different ground than the point: 0%; such an answer LANDS: 0%; a proof beaten by solidarity: 0%
+   multi-seat verdict contradicts band: 45/300; sittings a yield decided over the seats' own verdicts: 0
+   judge 'partial' paid: 0%; of those, with no tie and no shared faction (conviction only): 0; failure that costs legitimacy: 0/0
+
+== debate: sittings 300, beats/sitting 7.6, refused/crash 0
+   opens with a press on a standing nothing: 55%; a press before any point was raised: 55%
+   one point answered 3+ times: 8%; ends on a press: 17%; endings {'budget': 230, 'rested': 30, 'yielded': 40}
+   room pinned at +-1 by half-time: 14%; dead beats (no visible effect) per sitting: 0.60
+   speech beats with NO referent (no frame, no item): 29%; of which 'as one of their own' with no referent: 29%; 'on the proof' with nothing cited: 0%
+   answers: 349; answered from a different ground than the point: 76%; such an answer LANDS: 35%; a proof beaten by solidarity: 5%
+   multi-seat verdict contradicts band: 38/260; sittings a yield decided over the seats' own verdicts: 40
+   judge 'partial' paid: 32%; of those, with no tie and no shared faction (conviction only): 73; failure that costs legitimacy: 0/164
+
+== questioning: sittings 300, beats/sitting 6.9, refused/crash 0
+   opens with a press on a standing nothing: 6%; a press before any point was raised: 6%
+   one point answered 3+ times: 4%; ends on a press: 0%; endings {'budget': 194, 'yielded': 99, 'rested': 7}
+   room pinned at +-1 by half-time: 26%; dead beats (no visible effect) per sitting: 0.94
+   speech beats with NO referent (no frame, no item): 32%; of which 'as one of their own' with no referent: 30%; 'on the proof' with nothing cited: 0%
+   answers: 524; answered from a different ground than the point: 73%; such an answer LANDS: 37%; a proof beaten by solidarity: 2%
+   judge 'partial' paid: 0%; of those, with no tie and no shared faction (conviction only): 0; failure that costs legitimacy: 0/0
+
+== inquisition: sittings 300, beats/sitting 7.9, refused/crash 0
+   opens with a press on a standing nothing: 0%; a press before any point was raised: 0%
+   one point answered 3+ times: 19%; ends on a press: 0%; endings {'budget': 287, 'yielded': 8, 'rested': 5}
+   room pinned at +-1 by half-time: 29%; dead beats (no visible effect) per sitting: 1.33
+   speech beats with NO referent (no frame, no item): 27%; of which 'as one of their own' with no referent: 27%; 'on the proof' with nothing cited: 0%
+   answers: 744; answered from a different ground than the point: 71%; such an answer LANDS: 30%; a proof beaten by solidarity: 4%
+   judge 'partial' paid: 24%; of those, with no tie and no shared faction (conviction only): 0; failure that costs legitimacy: 156/156
+
+== audience: sittings 300, beats/sitting 1.9, refused/crash 0
+   opens with a press on a standing nothing: 0%; a press before any point was raised: 0%
+   one point answered 3+ times: 0%; ends on a press: 0%; endings {'budget': 250, 'rested': 50}
+   room pinned at +-1 by half-time: 15%; dead beats (no visible effect) per sitting: 0.13
+   speech beats with NO referent (no frame, no item): 19%; of which 'as one of their own' with no referent: 17%; 'on the proof' with nothing cited: 0%
+   answers: 0; answered from a different ground than the point: 0%; such an answer LANDS: 0%; a proof beaten by solidarity: 0%
+   judge 'partial' paid: 41%; of those, with no tie and no shared faction (conviction only): 98; failure that costs legitimacy: 0/0
+
+== conversation: sittings 300, beats/sitting 1.0, refused/crash 0
+   opens with a press on a standing nothing: 0%; a press before any point was raised: 0%
+   one point answered 3+ times: 0%; ends on a press: 0%; endings {'budget': 300}
+   room pinned at +-1 by half-time: 7%; dead beats (no visible effect) per sitting: 0.00
+   speech beats with NO referent (no frame, no item): 30%; of which 'as one of their own' with no referent: 29%; 'on the proof' with nothing cited: 0%
+   answers: 0; answered from a different ground than the point: 0%; such an answer LANDS: 0%; a proof beaten by solidarity: 0%
+   judge 'partial' paid: 0%; of those, with no tie and no shared faction (conviction only): 0; failure that costs legitimacy: 0/0
+== after
+n per rite = 300
+
+== trial: sittings 300, beats/sitting 8.0, refused/crash 0
+   opens with a press on a standing nothing: 0%; a press before any point was raised: 0%
+   one point answered 3+ times: 20%; ends on a press: 0%; endings {'budget': 298, 'rested': 1, 'yielded': 1}
+   room pinned at +-1 by half-time: 27%; dead beats (no visible effect) per sitting: 1.02
+   speech beats with NO referent (no frame, no item): 32%; of which 'as one of their own' with no referent: 32%; 'on the proof' with nothing cited: 0%
+   answers: 740; answered from a different ground than the point: 71%; such an answer LANDS: 30%; a proof beaten by solidarity: 3%
+   judge 'partial' paid: 9%; of those, with no tie and no shared faction (conviction only): 0; failure that costs legitimacy: 0/147
+
+== negotiation: sittings 300, beats/sitting 4.9, refused/crash 0
+   opens with a press on a standing nothing: 0%; a press before any point was raised: 0%
+   one point answered 3+ times: 1%; ends on a press: 5%; endings {'rested': 33, 'budget': 133, 'yielded': 134}
+   room pinned at +-1 by half-time: 1%; dead beats (no visible effect) per sitting: 0.08
+   speech beats with NO referent (no frame, no item): 30%; of which 'as one of their own' with no referent: 28%; 'on the proof' with nothing cited: 0%
+   answers: 262; answered from a different ground than the point: 76%; such an answer LANDS: 45%; a proof beaten by solidarity: 2%
+   judge 'partial' paid: 0%; of those, with no tie and no shared faction (conviction only): 0; failure that costs legitimacy: 0/0
+   negotiation sittings in which no beat carries any term: 6%
+
+== rally: sittings 300, beats/sitting 2.7, refused/crash 0
+   opens with a press on a standing nothing: 0%; a press before any point was raised: 0%
+   one point answered 3+ times: 0%; ends on a press: 0%; endings {'budget': 208, 'rested': 92}
+   room pinned at +-1 by half-time: 4%; dead beats (no visible effect) per sitting: 0.16
+   speech beats with NO referent (no frame, no item): 39%; of which 'as one of their own' with no referent: 39%; 'on the proof' with nothing cited: 0%
+   answers: 0; answered from a different ground than the point: 0%; such an answer LANDS: 0%; a proof beaten by solidarity: 0%
+   multi-seat verdict contradicts band: 45/300; sittings a yield decided over the seats' own verdicts: 0
+   judge 'partial' paid: 0%; of those, with no tie and no shared faction (conviction only): 0; failure that costs legitimacy: 0/0
+
+== debate: sittings 300, beats/sitting 7.2, refused/crash 0
+   opens with a press on a standing nothing: 0%; a press before any point was raised: 0%
+   one point answered 3+ times: 3%; ends on a press: 4%; endings {'budget': 198, 'rested': 68, 'yielded': 34}
+   room pinned at +-1 by half-time: 21%; dead beats (no visible effect) per sitting: 0.69
+   speech beats with NO referent (no frame, no item): 37%; of which 'as one of their own' with no referent: 37%; 'on the proof' with nothing cited: 0%
+   answers: 458; answered from a different ground than the point: 73%; such an answer LANDS: 40%; a proof beaten by solidarity: 4%
+   multi-seat verdict contradicts band: 48/266; sittings a yield decided over the seats' own verdicts: 34
+   judge 'partial' paid: 6%; of those, with no tie and no shared faction (conviction only): 0; failure that costs legitimacy: 0/152
+
+== questioning: sittings 300, beats/sitting 7.1, refused/crash 0
+   opens with a press on a standing nothing: 6%; a press before any point was raised: 6%
+   one point answered 3+ times: 4%; ends on a press: 0%; endings {'budget': 207, 'yielded': 86, 'rested': 7}
+   room pinned at +-1 by half-time: 25%; dead beats (no visible effect) per sitting: 0.98
+   speech beats with NO referent (no frame, no item): 32%; of which 'as one of their own' with no referent: 30%; 'on the proof' with nothing cited: 0%
+   answers: 566; answered from a different ground than the point: 74%; such an answer LANDS: 37%; a proof beaten by solidarity: 2%
+   judge 'partial' paid: 0%; of those, with no tie and no shared faction (conviction only): 0; failure that costs legitimacy: 0/0
+
+== inquisition: sittings 300, beats/sitting 7.9, refused/crash 0
+   opens with a press on a standing nothing: 0%; a press before any point was raised: 0%
+   one point answered 3+ times: 19%; ends on a press: 0%; endings {'budget': 287, 'yielded': 7, 'rested': 6}
+   room pinned at +-1 by half-time: 28%; dead beats (no visible effect) per sitting: 1.27
+   speech beats with NO referent (no frame, no item): 28%; of which 'as one of their own' with no referent: 28%; 'on the proof' with nothing cited: 0%
+   answers: 753; answered from a different ground than the point: 70%; such an answer LANDS: 29%; a proof beaten by solidarity: 4%
+   judge 'partial' paid: 30%; of those, with no tie and no shared faction (conviction only): 0; failure that costs legitimacy: 0/160
+
+== audience: sittings 300, beats/sitting 2.0, refused/crash 0
+   opens with a press on a standing nothing: 0%; a press before any point was raised: 0%
+   one point answered 3+ times: 0%; ends on a press: 0%; endings {'budget': 274, 'rested': 26}
+   room pinned at +-1 by half-time: 18%; dead beats (no visible effect) per sitting: 0.17
+   speech beats with NO referent (no frame, no item): 18%; of which 'as one of their own' with no referent: 17%; 'on the proof' with nothing cited: 0%
+   answers: 0; answered from a different ground than the point: 0%; such an answer LANDS: 0%; a proof beaten by solidarity: 0%
+   judge 'partial' paid: 9%; of those, with no tie and no shared faction (conviction only): 0; failure that costs legitimacy: 0/0
+
+== conversation: sittings 300, beats/sitting 1.0, refused/crash 0
+   opens with a press on a standing nothing: 0%; a press before any point was raised: 0%
+   one point answered 3+ times: 0%; ends on a press: 0%; endings {'budget': 300}
+   room pinned at +-1 by half-time: 6%; dead beats (no visible effect) per sitting: 0.00
+   speech beats with NO referent (no frame, no item): 31%; of which 'as one of their own' with no referent: 29%; 'on the proof' with nothing cited: 0%
+   answers: 0; answered from a different ground than the point: 0%; such an answer LANDS: 0%; a proof beaten by solidarity: 0%
+   judge 'partial' paid: 0%; of those, with no tie and no shared faction (conviction only): 0; failure that costs legitimacy: 0/0

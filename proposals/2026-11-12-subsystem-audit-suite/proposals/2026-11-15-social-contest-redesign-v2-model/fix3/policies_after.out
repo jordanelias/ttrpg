@@ -1,0 +1,97 @@
+
+trial / for
+  [mid n/cell 150] auto 0.353 | best 0.353(+0.000) | argue 0.340(-0.013) | press 0.033(-0.320) | rest 0.067(-0.287) | concede 0.000(-0.353) | random 0.140(-0.213)
+  [x n/cell 200] auto 0.310 | best 0.310(+0.000) | argue 0.330(+0.020) | press 0.095(-0.215) | rest 0.105(-0.205) | concede 0.000(-0.310) | random 0.215(-0.095)
+  largest policy-over-auto gaps on single extreme casts (n=20 each): [(0.3, 'rest', 'x8', 0.3, 0.0), (0.1, 'argue', 'x3', 0.1, 0.0), (0.05, 'argue', 'x0', 0.55, 0.5)]
+  extreme casts where a policy wins > 0.90 while auto < 0.80: []
+
+trial / against
+  [mid n/cell 150] auto 0.553 | best 0.553(+0.000) | argue 0.540(-0.013) | press 0.393(-0.160) | rest 0.353(-0.200) | concede 0.147(-0.407) | random 0.393(-0.160)
+  [x n/cell 200] auto 0.600 | best 0.600(+0.000) | argue 0.605(+0.005) | press 0.510(-0.090) | rest 0.470(-0.130) | concede 0.130(-0.470) | random 0.485(-0.115)
+  largest policy-over-auto gaps on single extreme casts (n=20 each): [(0.25, 'argue', 'x9', 0.55, 0.3), (0.1, 'concede', 'x2', 0.25, 0.15), (0.05, 'argue', 'x3', 0.95, 0.9)]
+  extreme casts where a policy wins > 0.90 while auto < 0.80: []
+
+debate / for
+  [mid n/cell 150] auto 0.253 | best 0.253(+0.000) | argue 0.267(+0.013) | press 0.227(-0.027) | rest 0.207(-0.047) | concede 0.000(-0.253) | random 0.107(-0.147)
+  [x n/cell 200] auto 0.290 | best 0.290(+0.000) | argue 0.270(-0.020) | press 0.280(-0.010) | rest 0.210(-0.080) | concede 0.000(-0.290) | random 0.125(-0.165)
+  largest policy-over-auto gaps on single extreme casts (n=20 each): [(0.1, 'argue', 'x0', 0.55, 0.45), (0.1, 'argue', 'x4', 0.5, 0.4), (0.05, 'argue', 'x3', 0.2, 0.15)]
+  extreme casts where a policy wins > 0.90 while auto < 0.80: []
+
+debate / against
+  [mid n/cell 150] auto 0.613 | best 0.613(+0.000) | argue 0.620(+0.007) | press 0.560(-0.053) | rest 0.520(-0.093) | concede 0.067(-0.547) | random 0.360(-0.253)
+  [x n/cell 200] auto 0.590 | best 0.590(+0.000) | argue 0.555(-0.035) | press 0.525(-0.065) | rest 0.480(-0.110) | concede 0.080(-0.510) | random 0.375(-0.215)
+  largest policy-over-auto gaps on single extreme casts (n=20 each): [(0.1, 'rest', 'x8', 0.65, 0.55), (0.1, 'random', 'x8', 0.65, 0.55), (0.1, 'argue', 'x7', 0.95, 0.85)]
+  extreme casts where a policy wins > 0.90 while auto < 0.80: []
+
+audience / for
+  [mid n/cell 150] auto 0.213 | best 0.213(+0.000) | argue 0.247(+0.033) | press 0.213(+0.000) | rest 0.193(-0.020) | concede 0.213(+0.000) | random 0.233(+0.020)
+  [x n/cell 200] auto 0.340 | best 0.340(+0.000) | argue 0.300(-0.040) | press 0.340(+0.000) | rest 0.250(-0.090) | concede 0.340(+0.000) | random 0.255(-0.085)
+  largest policy-over-auto gaps on single extreme casts (n=20 each): [(0.15, 'argue', 'x6', 0.25, 0.1), (0.1, 'rest', 'x7', 0.4, 0.3), (0.1, 'random', 'x6', 0.2, 0.1)]
+  extreme casts where a policy wins > 0.90 while auto < 0.80: []
+
+audience / against
+  [mid n/cell 150] auto 0.667 | best 0.667(+0.000) | argue 0.640(-0.027) | press 0.627(-0.040) | rest 0.593(-0.073) | concede 0.667(+0.000) | random 0.600(-0.067)
+  [x n/cell 200] auto 0.510 | best 0.510(+0.000) | argue 0.515(+0.005) | press 0.495(-0.015) | rest 0.480(-0.030) | concede 0.510(+0.000) | random 0.505(-0.005)
+  largest policy-over-auto gaps on single extreme casts (n=20 each): [(0.15, 'rest', 'x9', 0.45, 0.3), (0.15, 'rest', 'x0', 0.5, 0.35), (0.1, 'random', 'x0', 0.45, 0.35)]
+  extreme casts where a policy wins > 0.90 while auto < 0.80: []
+
+questioning / for
+  [mid n/cell 150] auto 0.300 | best 0.300(+0.000) | argue 0.353(+0.053) | press 0.093(-0.207) | rest 0.127(-0.173) | concede 0.300(+0.000) | random 0.240(-0.060)
+  [x n/cell 200] auto 0.310 | best 0.310(+0.000) | argue 0.305(-0.005) | press 0.130(-0.180) | rest 0.120(-0.190) | concede 0.310(+0.000) | random 0.165(-0.145)
+  largest policy-over-auto gaps on single extreme casts (n=20 each): [(0.15, 'argue', 'x7', 0.3, 0.15), (0.05, 'random', 'x3', 0.1, 0.05), (0.05, 'rest', 'x5', 0.25, 0.2)]
+  extreme casts where a policy wins > 0.90 while auto < 0.80: []
+
+questioning / against
+  [mid n/cell 150] auto 0.627 | best 0.627(+0.000) | argue 0.700(+0.073) | press 0.627(+0.000) | rest 0.580(-0.047) | concede 0.000(-0.627) | random 0.300(-0.327)
+  [x n/cell 200] auto 0.670 | best 0.670(+0.000) | argue 0.710(+0.040) | press 0.670(+0.000) | rest 0.560(-0.110) | concede 0.000(-0.670) | random 0.370(-0.300)
+  largest policy-over-auto gaps on single extreme casts (n=20 each): [(0.2, 'argue', 'x2', 0.4, 0.2), (0.15, 'argue', 'x9', 0.5, 0.35), (0.1, 'rest', 'x9', 0.45, 0.35)]
+  extreme casts where a policy wins > 0.90 while auto < 0.80: []
+
+conversation / for
+  [mid n/cell 150] auto 0.367 | best 0.367(+0.000) | argue 0.407(+0.040) | press 0.373(+0.007) | rest 0.293(-0.073) | concede 0.000(-0.367) | random 0.233(-0.133)
+  [x n/cell 200] auto 0.250 | best 0.250(+0.000) | argue 0.215(-0.035) | press 0.240(-0.010) | rest 0.165(-0.085) | concede 0.000(-0.250) | random 0.120(-0.130)
+  largest policy-over-auto gaps on single extreme casts (n=20 each): [(0.1, 'rest', 'x3', 0.15, 0.05), (0.1, 'argue', 'x7', 0.3, 0.2), (0.05, 'rest', 'x9', 0.4, 0.35)]
+  extreme casts where a policy wins > 0.90 while auto < 0.80: []
+
+conversation / against
+  [mid n/cell 150] auto 0.547 | best 0.547(+0.000) | argue 0.633(+0.087) | press 0.493(-0.053) | rest 0.627(+0.080) | concede 0.000(-0.547) | random 0.367(-0.180)
+  [x n/cell 200] auto 0.675 | best 0.675(+0.000) | argue 0.725(+0.050) | press 0.605(-0.070) | rest 0.515(-0.160) | concede 0.000(-0.675) | random 0.460(-0.215)
+  largest policy-over-auto gaps on single extreme casts (n=20 each): [(0.25, 'argue', 'x5', 0.65, 0.4), (0.15, 'rest', 'x5', 0.55, 0.4), (0.15, 'argue', 'x0', 0.45, 0.3)]
+  extreme casts where a policy wins > 0.90 while auto < 0.80: []
+
+negotiation / for
+  [mid n/cell 150] auto 0.127 | best 0.127(+0.000) | argue 0.213(+0.087) | press 0.133(+0.007) | rest 0.007(-0.120) | concede 0.000(-0.127) | random 0.093(-0.033)
+  [x n/cell 200] auto 0.215 | best 0.215(+0.000) | argue 0.235(+0.020) | press 0.210(-0.005) | rest 0.020(-0.195) | concede 0.000(-0.215) | random 0.070(-0.145)
+  largest policy-over-auto gaps on single extreme casts (n=20 each): [(0.15, 'argue', 'x6', 0.25, 0.1), (0.05, 'argue', 'x7', 0.05, 0.0), (0.05, 'argue', 'x9', 0.3, 0.25)]
+  extreme casts where a policy wins > 0.90 while auto < 0.80: []
+
+negotiation / against
+  [mid n/cell 150] auto 0.040 | best 0.040(+0.000) | argue 0.053(+0.013) | press 0.047(+0.007) | rest 0.000(-0.040) | concede 0.000(-0.040) | random 0.047(+0.007)
+  [x n/cell 200] auto 0.255 | best 0.255(+0.000) | argue 0.310(+0.055) | press 0.240(-0.015) | rest 0.010(-0.245) | concede 0.010(-0.245) | random 0.200(-0.055)
+  largest policy-over-auto gaps on single extreme casts (n=20 each): [(0.35, 'argue', 'x1', 0.9, 0.55), (0.1, 'argue', 'x7', 0.35, 0.25), (0.05, 'random', 'x2', 0.05, 0.0)]
+  extreme casts where a policy wins > 0.90 while auto < 0.80: []
+
+inquisition / for
+  [mid n/cell 150] auto 0.280 | best 0.280(+0.000) | argue 0.293(+0.013) | press 0.027(-0.253) | rest 0.060(-0.220) | concede 0.280(+0.000) | random 0.127(-0.153)
+  [x n/cell 200] auto 0.410 | best 0.410(+0.000) | argue 0.385(-0.025) | press 0.105(-0.305) | rest 0.055(-0.355) | concede 0.410(+0.000) | random 0.230(-0.180)
+  largest policy-over-auto gaps on single extreme casts (n=20 each): [(0.15, 'argue', 'x3', 0.35, 0.2), (0.1, 'argue', 'x7', 0.3, 0.2), (0.05, 'random', 'x3', 0.25, 0.2)]
+  extreme casts where a policy wins > 0.90 while auto < 0.80: []
+
+inquisition / against
+  [mid n/cell 150] auto 0.613 | best 0.613(+0.000) | argue 0.600(-0.013) | press 0.613(+0.000) | rest 0.260(-0.353) | concede 0.187(-0.427) | random 0.433(-0.180)
+  [x n/cell 200] auto 0.465 | best 0.475(+0.010) | argue 0.480(+0.015) | press 0.475(+0.010) | rest 0.395(-0.070) | concede 0.130(-0.335) | random 0.350(-0.115)
+  largest policy-over-auto gaps on single extreme casts (n=20 each): [(0.25, 'rest', 'x1', 0.55, 0.3), (0.1, 'argue', 'x3', 0.65, 0.55), (0.05, 'rest', 'x2', 0.3, 0.25)]
+  extreme casts where a policy wins > 0.90 while auto < 0.80: []
+
+rally / for
+  [mid n/cell 150] auto 0.400 | best 0.400(+0.000) | argue 0.413(+0.013) | press 0.400(+0.000) | rest 0.347(-0.053) | concede 0.400(+0.000) | random 0.320(-0.080)
+  [x n/cell 200] auto 0.385 | best 0.385(+0.000) | argue 0.315(-0.070) | press 0.385(+0.000) | rest 0.275(-0.110) | concede 0.385(+0.000) | random 0.320(-0.065)
+  largest policy-over-auto gaps on single extreme casts (n=20 each): [(0.1, 'argue', 'x4', 0.2, 0.1), (0.05, 'rest', 'x1', 0.55, 0.5), (0.05, 'random', 'x7', 0.4, 0.35)]
+  extreme casts where a policy wins > 0.90 while auto < 0.80: []
+
+A-146: beats with a broken temper 5074; of them `rest` where another move was legal 0
+
+== hot vs composed (trial bench j1; A W/G vs B W/G; both automatic)
+  a W1G1 vs b W7G7: trial `for` carried 0.070  debate 0.027  (2se 0.053)
+  a W7G7 vs b W1G1: trial `for` carried 0.733  debate 0.713  (2se 0.053)
+  a W4G4 vs b W4G4: trial `for` carried 0.287  debate 0.250  (2se 0.053)

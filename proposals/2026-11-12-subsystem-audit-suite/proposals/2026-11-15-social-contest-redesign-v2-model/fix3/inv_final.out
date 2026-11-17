@@ -1,8 +1,8 @@
 
-== [after] fuzz 1500 configs: ran 716; crashes 0 {}
-  refusals {'refused[abridged_resume]': 16, 'refused[abridged_self]': 4, 'refused[no_seat]': 408, 'refused[no_weight]': 56, 'refused[one_character]': 24, 'refused[one_party]': 27, 'refused[short_bench]': 63, 'refused[spent]': 12, 'refused[unlawful]': 174}
-  violations 0; determinism (every 25th re-run) {True: 24}
+== [after] fuzz 1500 configs: ran 719; crashes 0 {}
+  refusals {'refused[abridged_resume]': 16, 'refused[abridged_self]': 4, 'refused[no_seat]': 408, 'refused[no_weight]': 56, 'refused[one_character]': 24, 'refused[one_party]': 27, 'refused[short_bench]': 63, 'refused[spent]': 9, 'refused[unlawful]': 174}
+  violations 0; determinism (every 25th re-run) {True: 25}
   abridged == the plain roll at control: 200/200
   A-139 one party twice: refused[one_party]
   A-139 a party who also judges (the accuser holds the one seat): ok: ('a',)
-  office power of the accuser (trial, n=300 each; monotone expected within 2 s.e. 0.053): none 0.380 | r2 0.423 | r3 0.440 | r4m 0.453 | r5M 0.470
+  office power of the accuser (trial, n=300 each; monotone expected within 2 s.e. 0.053): none 0.397 | r2 0.427 | r3 0.437 | r4m 0.437 | r5M 0.450

@@ -16,7 +16,7 @@ for lab, lay, crec in (("none", {}, None), ("kin of a", dict(kin=("a",)), None),
                        ("patron of a, written on a's record only", {}, ("a",))):
     pp = pp_(lay, crec)
     st = host.bearing(pp["j1"], m, pp)
-    c = host.conflict(st, (host.tie(pp["j1"], "a", pp), host.tie(pp["j1"], "b", pp))) if ARM == "after" else host.conflict(st)
+    c = host.conflict(pp["j1"], m, pp) if ARM == "after" else host.conflict(st)
     card2 = host.build(pp, "trial", m, bench=("j1", "j2"), effort=3)[1]
     part = 0
     for i in range(50):

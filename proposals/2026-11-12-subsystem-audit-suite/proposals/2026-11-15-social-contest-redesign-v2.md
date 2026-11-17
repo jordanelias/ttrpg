@@ -53,7 +53,7 @@ DECIDED, with the rung and the before and after figure.** No new ruling was need
 decision recorded there. **One battery, `checks_v8.py`, re-measures every figure these files state on the model as
 it now stands** (output `v8_out.txt`; n = 300 an arm unless stated; the fix pass's own probes are `fix2/*.py`, the
 model as it stood before is kept in `fix2/before/`). Part 3 §B and part 4 §E say plainly what is still open.
-**Fixed a third time, 2026-11-17**, after a stress test of the model: part 4 §L (seventeen items; the battery
+**Fixed a third time, 2026-11-17**, after a stress test of the model: part 4 §L (seventeen items and three from a transcript audit, each cut where the cut was free; the battery
 re-run as `fix3/v9_out.txt`; the model before it in `fix3/before/`). Where §L moved a figure stated elsewhere in
 these files, §L's is the current one.
 

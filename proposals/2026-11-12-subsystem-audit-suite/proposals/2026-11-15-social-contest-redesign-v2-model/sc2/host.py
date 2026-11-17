@@ -254,18 +254,18 @@ def strain_carried(p: dict, D) -> float:
     return 0.5 * sum(x / 2 ** k for k, x in enumerate(f))
 
 
-def conflict(stake, ties=()) -> tuple:
-    """B6: a stake is a CONFLICT however it nets: (how much the matter bears on him at all, which way it leans).
-    Opposite interests do not cancel to impartiality, and neither do opposite ties (A5): his bond counts as the sum of
-    his ties to each party (`ties`: his tie to the one and to the other), where that is more than the bond nets to."""
-    want, hold, bond = stake
-    return (abs(want) + abs(hold) + max(abs(bond), min(1.0, sum(abs(x) for x in ties)))) / 3.0, sum(stake) / 3.0
-
-
-def _ties(p, fid, aid):
-    """a Present's ties to the two parties, from his `bonds`."""
-    b = dict(p.bonds)
-    return (b.get(fid, 0.0), b.get(aid, 0.0) if aid else 0.0)
+def conflict(p: dict, matter: dict, people: dict) -> tuple:
+    """B6: PARTIALITY, (how far the matter is his own business, which way that leans): his persons (ties, kin,
+    patronage, faction, and being a party: the bearing's bond) and his WANT in it (pursuits, needs, goals, ambitions,
+    and his office's duty where it names what the matter bears on). A conviction is not partiality (finding 19: a judge
+    who holds by the law was priced as partial in a third of trials): it moves how he hears (A-131), not whether he
+    is conflicted. Opposite interests do not cancel, and neither do opposite ties (A5): the bond counts as the sum
+    of his ties to each party where that is more than it nets to."""
+    par = matter.get("parties", {})
+    want, _, bond = bearing(p, matter, people)
+    duty = _clip(sum((p.get("office") or {}).get("duty", {}).get(t, 0.0) * w for t, w in matter.get("bears", {}).items()))
+    ties = sum(abs(tie(p, par.get(k), people)) for k in ("for", "against"))
+    return (abs(want) + abs(duty) + max(abs(bond), min(1.0, ties))) / 3.0, (want + duty + bond) / 3.0
 
 
 def false_items(p: dict, matter: dict, side: str) -> tuple:
@@ -420,7 +420,7 @@ def build(people: dict, rite_id: str, matter: dict, *, bench=(), floor=(), form=
         seats.sort(key=lambda p: -(p.get("office") or {}).get("rung", 0))
         need = 1 if close == "bench" else (r.get("quorum") or 1)
         for p in list(seats):                                # a party who sits is partial by choice and seen (A-139)
-            c, _ = conflict(bearing(p, matter, people), (tie(p, fid, people), tie(p, aid, people)))
+            c, _ = conflict(p, matter, people)
             if p["id"] not in (fid, aid) and c >= D["recuse_at"] and len(seats) > need:
                 seats.remove(p); recused.append(p["id"])          # he steps down; a conflicted seat who cannot sits and pays
         if close == "bench" and B is None and len(seats) > 1 and seats[0]["id"] == fid:
@@ -590,6 +590,7 @@ def fold(world, people, inp, card, out, matter):
     fid, aid = matter["parties"]["for"], matter["parties"].get("against")
     if aid is None:
         aid = next((p.id for p in inp.room if p.side == "against"), None)
+    m_ = dict(matter, parties={"for": fid, "against": aid})     # the matter as it sat (who came to oppose included)
     writes, R = [], world["regard"]
 
     def w(kind, *a):
@@ -682,7 +683,7 @@ def fold(world, people, inp, card, out, matter):
         comp = round((1.0 + rec) / 2.0 * (0.6 if wrong else 1.0), 2)
         world["compliance"][matter["id"]] = comp
         world["reception"].append((j.id, round(rec, 2), wrong))
-        cj, lean = conflict(j.stake, _ties(j, fid, aid))
+        cj, lean = conflict(people[j.id], m_, people)
         favoured = (won and lean > 0) or (not won and band != "partial" and lean < 0)
         for p in inp.room:
             if p.id == j.id:
@@ -722,7 +723,7 @@ def fold(world, people, inp, card, out, matter):
         if card.tilt > 0 and p.id != card.arranged_by:
             led.append(("rigged", card.arranged_by, card.tilt))
         if p.decides:
-            c, ln = conflict(p.stake, _ties(p, fid, aid))
+            c, ln = conflict(people[p.id], m_, people)
             if c > 0:
                 for q in inp.room:
                     if q.id != p.id:
@@ -784,6 +785,12 @@ def render(inp, card, out) -> str:
          f" {card.turns} turn(s) each]"]
     pts = {p.id: p for p in out.state.points}
     told = {}
+    from .engine import _start, _lead
+    fn = (_lead(inp, "for") or inp.room[0]).id
+    an = (_lead(inp, "against").id if _lead(inp, "against") else
+          next((p.id for p in inp.room if p.decides and not p.side and inp.rite.close == "exchange"), None))
+    was = _stance(mood(inp, _start(inp)), fn, an, card.live)
+    L.append(f"  (the room {was} as it opens)")
     for b in out.beats:
         who = b.mover if b.voice == b.mover else f"{b.mover} calls {b.voice}, who"
         if b.move == "argue":
@@ -820,5 +827,21 @@ def render(inp, card, out) -> str:
             s += "; his bearing tells for him" if sgn > 0 else "; his bearing tells against him"
         if b.broke:
             s = ("(his temper gone, he gives way) " if b.move == "concede" else "(he can hold his tongue no longer) ") + s
-        L.append(f"  {b.n}. [{b.issue}] {s}. (room {b.mood:+.2f})")
-    return "\n".join(L + [f"  -> ended {out.ended}" + (f" by {out.ended_by}" if out.ended_by else "")])
+        now = _stance(b.mood, fn, an, card.live)
+        if now != was:                                     # finding 20: the record names the room's stance in bands,
+            s += f"; the room {now}"                       # and only where a beat turned it (no clamped number)
+            was = now
+        L.append(f"  {b.n}. [{b.issue}] {s}.")
+    end = f"  -> ended {out.ended}" + (f" by {out.ended_by}" if out.ended_by else "")
+    if out.ended == "yielded":
+        band, m, _ = act_band(inp, out)
+        end += (f": the yield decides it ({band}); the draws below are moot" if m is None and inp.rite.close != "consent"
+                else f": the {card.live} is given up, and those who decide still draw" if m is not None else "")
+    return "\n".join(L + [end])
+
+
+def _stance(m, fn, an, live):
+    """the room's stance as the record names it: five bands of the mood (toward `for`), named by the sides' men."""
+    to_a = f"{an}" if an else f"against the {live}"
+    return ("is firmly with " + fn if m >= 0.6 else "leans to " + fn if m >= 0.2 else "hangs" if m > -0.2
+            else ("leans to " if an else "leans ") + to_a if m > -0.6 else ("is firmly with " if an else "is firmly ") + to_a)
