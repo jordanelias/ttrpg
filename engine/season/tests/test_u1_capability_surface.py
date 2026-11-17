@@ -726,3 +726,27 @@ def test_party_end_default_is_the_combat_exports(monkeypatch):
     assert combat.party_end(person, DEFAULT_FIXTURES) == exported
     monkeypatch.setattr(combat, "_END_DEFAULT", 5)
     assert combat.party_end(person, DEFAULT_FIXTURES) == 5
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# B04.15 -- A RANK NEVER PASSES ITS ROW'S CEILING. `loop/effects_combat.py::raised_capability` reads the ceiling of
+# `descriptors.capability(key)` (the row's `scale`), the one place a rank is raised by `train` and by `_grown` alike.
+# ---------------------------------------------------------------------------------------------------------------------
+
+def _holder(**held):
+    """A hand-built person holding the named skills at the named ranks (`held`: `{skill: rank}`), nothing else changed."""
+    from engine.season.harness import probes as P
+    p = P.tiny_world().persons["p_mid"]
+    p.capability = dict(held)
+    return p
+
+
+def test_a_rank_at_its_ceiling_is_not_raised():
+    """FALSIFIER: a rank of 8 reachable by `train` or `_grown`. At the row's ceiling `raised_capability` returns `None`
+    (the answer for a key not held); one below it, it returns the rank raised by one whole point, the other keys kept."""
+    from engine.season.loop.effects_combat import raised_capability
+    ceiling = descriptors.capability("arms").ceiling
+    assert ceiling == 7
+    assert raised_capability(_holder(arms=ceiling), "arms") is None
+    assert raised_capability(_holder(arms=ceiling - 1, inquiry=2), "arms") == {"arms": ceiling, "inquiry": 2}
+    assert raised_capability(_holder(inquiry=2), "arms") is None

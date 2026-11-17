@@ -15,6 +15,8 @@ from __future__ import annotations
 
 from dataclasses import replace
 
+from engine.substrate import descriptors
+
 from ..data.rosters import (
     DECLARED, ENDING_FELLED, ENDING_UNDECIDED, ENDING_YIELDED, FELLED, FIELD_CASUALTY_MODELS, FIELD_WINNER_CASUALTY_ARMS, INVESTED, LOST, SUBTREE_OCCUPATION_KINDS, UNOPPOSED, UNTOUCHED, WON,
     WOUND_HARM_MODELS, BODY_MARK_MODELS, require_member,
@@ -237,10 +239,17 @@ GROWN_KINDS = matrix_row("Person", "capability").emits
 def raised_capability(p: "Person", key: str) -> "dict | None":
     """`p.capability` with `key` raised by ONE whole point, the unit of a dice count -- `_eff_train`'s write and
     `_grown`'s, one body. `None` where `p` does not already hold `key`: a key is NEVER MINTED, because a minted
-    `{arms: 1}` would replace `pool_default` in `faculty` and LOWER the pool of the man it meant to reward."""
+    `{arms: 1}` would replace `pool_default` in `faculty` and LOWER the pool of the man it meant to reward.
+
+    B04.15 -- A RANK NEVER PASSES ITS ROW'S CEILING: also `None` where the raised rank would pass
+    `descriptors.capability(key).ceiling`, the ceiling of the skill row's `scale` (7 for every row shipped), the answer
+    a key not held already gets; a rank at its ceiling is not raised, by `train` or by `_grown`."""
     if key not in (p.capability or {}):
         return None
-    return {**p.capability, key: int(p.capability[key]) + 1}
+    raised = int(p.capability[key]) + 1
+    if raised > descriptors.capability(key).ceiling:
+        return None
+    return {**p.capability, key: raised}
 
 
 def _grown(w: "World", a: "Act", parties, bands: dict, bodies: dict) -> dict:
