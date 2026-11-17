@@ -25,9 +25,9 @@ This module does not decide anything about combat. It derives two parties, hands
 engine with a deterministic RNG, and returns what the engine says. Every combat rule stays in
 the engine (`modules/combat/`), which this chain may read and may not edit.
 
-⚠ THE LOADER: `engine/substrate/pc_engine.py`, the one path seam into the engine, which the module
-entry calls. This module reads it only for `engine()`, the availability probe its tests skip on, and
-`load_error()`, the leaf's raise translated into a named reason. The adapter's typed refusal
+⚠ THE LOADER: `composition.require("combat.fight")`, the module entry's own row. This module reads it only for
+`engine()`, the availability probe its tests skip on, and `load_error()`, the resolver's raise translated into a
+named reason; the roster check below reads the closed set of terms through the row `combat.duel_terms`. The adapter's typed refusal
 `ENGINE-UNAVAILABLE` is the unregistered entry's (no driver constructed in the process), as in `sigma.py`.
 ⚠ THE PARTY DISCIPLINE FOLLOWS `combat_bridge.py` AS PRECEDENT (§0:
 *answered by precedent — the tree has already decided this shape somewhere else*): set a field only from
@@ -73,7 +73,7 @@ that exists rather than a mapping between types that do not meet.
 from __future__ import annotations
 
 import random
-from typing import Any, Optional
+from typing import Any, Callable, Optional
 
 from ...data.rosters import ESTIMATE_OUTCOMES, FELLED, WOUND_QUANTITIES
 from ...data.verbs import DUEL_TERMS_BY_VERB
@@ -84,6 +84,7 @@ from ...gaps import Forbidden, Unspecified
 from ...manifest.providers import provider
 from ...queries.inputs import PersonalCombatInput, PlayHost
 from ...queries.world_q import kit_of, stakes_of
+from ....substrate import composition
 from ....substrate.descriptors import attribute_key
 from ...state.ids import H
 from ..ladder import party_degree
@@ -99,18 +100,17 @@ PROVIDER = _PROVIDER                # the name `odds_of` asks `_rolled_as` for (
 
 
 def _probe() -> tuple:
-    """`(PCEngine, "")` or `(None, reason)`: the substrate leaf's RAISE, translated to a named reason.
-    `pc_engine.load()` caches a success itself; the import is deferred so the tracer still imports
-    where the engine tree is absent."""
+    """`(entry, "")` or `(None, reason)`: the entry is the module's `fight` callable, which the composition row
+    `combat.fight` resolves; its RAISE is translated to a named reason. `composition.require` caches a success
+    itself, and the resolution is lazy, so the tracer still imports where the engine tree is absent."""
     try:
-        from engine.substrate import pc_engine
-        return pc_engine.load(), ""         # a PCEngine: (wrapper, combatant) BY NAME
+        return composition.require("combat.fight"), ""
     except Exception as e:                  # a real load failure is a NAMED gap
         return None, f"{type(e).__name__}: {e}"
 
 
-def engine() -> Optional[tuple]:
-    """`(wrapper, combatant)` or `None` when the engine cannot load (`load_error()` says why). An
+def engine() -> Optional[Callable]:
+    """The module's `fight` entry, or `None` when it cannot resolve (`load_error()` says why). An
     AVAILABILITY PROBE only -- the adapter below never calls the engine through it."""
     return _probe()[0]
 
@@ -155,19 +155,20 @@ def duel_terms_of(verb: str, stakes: Optional[str] = None) -> Optional[str]:
     (no challenge, or a challenge naming no stakes) falls through to the verb's roster line.
 
     ⚠ THE CLOSED SET IS THE ENGINE'S, AND THE CHECK IS AGAINST IT, NEVER A COPY: the term must be a member of
-    `modules/combat/wrapper.py::DUEL_TERMS`, read off the loaded engine, and a value outside it REFUSES here naming
+    `modules/combat/wrapper.py::DUEL_TERMS`, read through the composition row `combat.duel_terms`, and a value outside it REFUSES here naming
     the roster (`engine/season/data` cannot import the module, so the seam, which may reach it, is the first place
     the roster meets the tuple). Engine absent: the unchecked term goes on and the call is refused as
     `ENGINE-UNAVAILABLE` by `entry_for`, so a bad term cannot reach a fight."""
     term = stakes if stakes is not None else DUEL_TERMS_BY_VERB.get(verb)
     where = "challenge_terms" if stakes is not None else "duel_terms"
-    loaded = engine()
-    if term is not None and loaded is not None and term not in loaded[0].DUEL_TERMS:
-        raise Forbidden(
-            f"`rosters.yaml: {where}` names {verb!r}: {term!r}, which is not one of the engine's "
-            f"{tuple(loaded[0].DUEL_TERMS)}", "rosters.yaml",
-            needs="a term in `modules/combat/wrapper.py::DUEL_TERMS`",
-            law="CP-T03-09 -- a season roster is checked against the engine's closed set, not re-declared")
+    if term is not None and engine() is not None:
+        closed = tuple(composition.require("combat.duel_terms"))
+        if term not in closed:
+            raise Forbidden(
+                f"`rosters.yaml: {where}` names {verb!r}: {term!r}, which is not one of the engine's "
+                f"{closed}", "rosters.yaml",
+                needs="a term in `modules/combat/wrapper.py::DUEL_TERMS`",
+                law="CP-T03-09 -- a season roster is checked against the engine's closed set, not re-declared")
     return term
 
 

@@ -19,11 +19,11 @@ reached module is reached too. The two directions:
 
 TWO SHAPES, TOLD APART BY SHAPE AND NOT BY NAME. A module directory WITH an `__init__.py` is a package
 whose files import each other by dotted name, which this walk follows (`social_contest`, `mass_battle`).
-A directory WITHOUT one is a FLAT script set loaded through a declared path seam (`modules/combat/`,
-loaded by `engine/substrate/pc_engine.py`, which puts the directory on `sys.path` and imports its
-`PCEngine._fields` by bare name): its entry reaches the engine by strings, so its roots are the entry
+A directory WITHOUT one is a FLAT script set loaded through a declared path seam, whose roots are the entry
 PLUS the names the seam itself declares, and a dot-free import resolves to `<directory>/<name>.py` first,
 as it does at load. A flat directory with no seam declaring its names fails rather than going unchecked.
+No such seam is declared now (`modules/combat/`, the last, became a package at CI-09), so `_seam_roots()` is
+empty and the flat branch is exercised on a planted tree only.
 In a flat set one more failure is observable: a bare name that resolves to no file in the directory and
 to no standard-library or installed module is a file the set needs and does not hold (it would load
 from wherever `sys.path` happens to find it, or raise) -- reported beside the files left behind. The
@@ -137,10 +137,9 @@ def _rel(paths) -> list:
 
 
 def _seam_roots() -> dict:
-    """{flat directory: [bare name, ...]} as each path seam declares them -- `pc_engine` puts
-    `PC_ENGINE_DIR` on `sys.path` and loads `PCEngine._fields` by name. Importing it mutates nothing."""
-    from engine.substrate import pc_engine
-    return {os.path.normpath(pc_engine.PC_ENGINE_DIR): list(pc_engine.PCEngine._fields)}
+    """{flat directory: [bare name, ...]} as each path seam declares them. None is declared: the last, the
+    personal-combat loader, went when `modules/combat/` became a package (CI-09)."""
+    return {}
 
 
 def check(module_dir: str, roots: list, flat: bool = False) -> tuple:
@@ -195,8 +194,8 @@ def test_every_module_is_exactly_its_entries_reachable_closure():
     assert os.path.join(MODULES, "mass_battle") in checked["package"], (
         f"the walk checked {checked} and not `modules/mass_battle`, the package `31c` moved; the roots "
         f"are read from the composition rows -- has its entry row lost `entry:`?")
-    assert os.path.join(MODULES, "combat") in checked["flat"], (
-        f"the walk checked {checked} and not `modules/combat`, the flat set `31b` moved")
+    assert os.path.join(MODULES, "combat") in checked["package"], (
+        f"the walk checked {checked} and not `modules/combat`, the package CI-09 made of the set `31b` moved")
 
 
 def test_the_walk_sees_a_planted_unreached_file_and_a_closure_left_behind(tmp_path, monkeypatch):

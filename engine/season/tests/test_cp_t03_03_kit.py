@@ -29,7 +29,7 @@ from unittest import mock
 
 import pytest
 
-from engine.substrate import combat_kit, pc_engine
+from engine.substrate import combat_kit
 
 from ..data.rosters import ARMS_AT_BUILD, ARMS_KINDS, _check_arms_at_build, _check_arms_kinds
 from ..gaps import Unspecified
@@ -86,11 +86,11 @@ def _world():
 # ---------------------------------------------------------------------------------------------------------------
 
 def test_the_export_is_the_engines_own_keys_and_default_kit():
-    engine = pc_engine.load()
-    import vocabulary, weapons    # the flat modules `pc_engine.load()` put on the path
+    # by name, inside the function: `test_importing_every_engine_module_pulls_in_no_subsystem` fails on a module-scope import and the ratchet counts a written one
+    combatant, vocabulary, weapons = (importlib.import_module(f"modules.combat.{n}") for n in ("combatant", "vocabulary", "weapons"))
     assert combat_kit.WEAPONS == frozenset(weapons.WEAPONS) and len(combat_kit.WEAPONS) > 10
     assert combat_kit.ARMOUR_TIERS == vocabulary.ARMOUR_TIERS == {"none", "light", "medium", "heavy"}
-    c = engine.combatant.Combatant("x")
+    c = combatant.Combatant("x")
     assert combat_kit.DEFAULTS == {"weapon": c.weapon, "armor": c.armor}, "the default kit is the Combatant's own"
     assert combat_kit.DEFAULTS["weapon"] in combat_kit.WEAPONS and combat_kit.DEFAULTS["armor"] in combat_kit.ARMOUR_TIERS
 

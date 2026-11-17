@@ -1,15 +1,14 @@
 """THE FIGHT -- the `combat` module's entry (A-25; plan position `31b`).
 
 `modules/combat/` is the personal-combat engine: the import closure of `wrapper` and `combatant`, moved
-from `systems/combat/combat_engine_v1/` at `31b` with its FLAT names kept (the files bare-import each other;
-`engine/substrate/pc_engine.py` is the one path seam that loads them, and this directory has no
-`__init__.py` on purpose -- it is a scripts directory, not a package of dotted modules). This file is the one
-module entry: the composition row whose target is `fight` below (`entry: verb_call`, `verb: fight`),
+from `systems/combat/combat_engine_v1/` at `31b`; it is a package (CI-09), its files import each other by
+dotted name, and the host reaches it by the composition rows `combat.fight` and `combat.duel_terms`, never by a
+path. This file is the one module entry: the composition row whose target is `fight` below (`entry: verb_call`, `verb: fight`),
 registered in `manifest.MODULE_ENTRIES` by the registrar at driver construction, and called by the host
 adapter `seam/wrappers/combat.py::resolve` -- the `@provider("contest", "personal_combat")` the prize row
 `the body` names, for every verb contesting that prize.
 
-It takes the host's typed input record and a seeded `rng`, and imports the path seam and the record type,
+It takes the host's typed input record and a seeded `rng`, and imports the record type,
 nothing else of the host. It never reads or writes `World`, holds no token and keeps no state between
 calls (A-25): the engine's `wrapper._TRACE` hook is set for the call and restored after it.
 
@@ -24,7 +23,7 @@ import random
 from typing import Callable, Optional
 
 from engine.season.queries.inputs import CombatTurnView, PersonalCombatInput
-from engine.substrate import pc_engine
+from . import wrapper, combatant
 
 _MISSING = object()   # `getattr`'s default for a tracker field the engine does not carry (None is a value)
 
@@ -47,7 +46,7 @@ def _attr_kw(authored) -> dict:
     `ends` (the seam composes it with the body bands), and `faculty`/`disp` have no registry key. `None` is none."""
     if not authored:
         return {}
-    import attributes as spec   # the flat module `pc_engine.load()` put on the path (`combatant` imports it the same way)
+    from . import attributes as spec   # the sibling module `combatant` imports the same way
     return {s.key: authored[s.registry_key] for s in spec.SPEC
             if s.key != "end" and s.registry_key is not None and s.registry_key in authored}
 
@@ -60,16 +59,14 @@ def fight(inp: PersonalCombatInput, rng: Optional[random.Random] = None,
     and the host refuses it by name).
 
     The `rng` is a parameter and is never constructed here (`04 §C.12` rejection 4): the host builds it
-    from its own seed and passes it down. `pc_engine.load()` RAISES on a missing engine, by its own
-    contract; a module whose directory is gone is refused earlier, at driver construction, by the
-    registrar resolving this file.
+    from its own seed and passes it down. A module whose directory is gone is refused earlier, at
+    driver construction, by the registrar resolving this file.
 
     `decide` (v10 REM-31, IN-46) is the host's PLAYABLE per-turn decider, forwarded to the engine's own
     turn loop (`wrapper.fight`'s `decide`), never re-implemented here. It crosses the module boundary
     OUTWARD, so it is handed a typed view, never a `Combatant`: `CombatTurnView` -- the turn index, the
     claimants and a fresh copy of each party's `inp.wound_quantities` (`_lift`, below). `None` (AUTOMATED,
     the default) is the engine's own engage-every-turn loop exactly."""
-    wrapper, combatant = pc_engine.load()
     a_id, b_id = inp.claimants
     a_end, b_end = inp.ends
     # THE KITS (CP-T03-03): each party's `(weapon, armor)` in `claimants` order, read off the typed input. A record

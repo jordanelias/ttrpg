@@ -47,12 +47,11 @@ FALSIFIERS — mutations run against these guards, each naming its target:
 import os
 import sys
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'modules', 'combat')
-sys.path.insert(0, ENGINE)
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))   # the repository root: `modules.combat` is a package
 
-import combatant as C          # noqa: E402
-import core                    # noqa: E402
-import vocabulary as V         # noqa: E402
+from modules.combat import combatant as C          # noqa: E402
+from modules.combat import core                    # noqa: E402
+from modules.combat import vocabulary as V         # noqa: E402
 
 NATIVE_CUT_HEADS = ('curved_cut', 'straight_cut')
 

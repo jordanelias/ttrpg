@@ -9,11 +9,10 @@ whitelist. These tests pin: (1) the byte-identical-at-parity acceptance (derived
 import os
 import sys
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'modules', 'combat')
-sys.path.insert(0, ENGINE)
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))   # the repository root: `modules.combat` is a package
 
-import combat_systems as S  # noqa: E402
-from combatant import WEAPONS, Combatant, HALFSWORD_FORM, HALFSWORD_BASE  # noqa: E402
+from modules.combat import combat_systems as S  # noqa: E402
+from modules.combat.combatant import WEAPONS, Combatant, HALFSWORD_FORM, HALFSWORD_BASE  # noqa: E402
 
 
 def test_affords_halfsword_emergent_set():
@@ -32,7 +31,7 @@ def test_pc2_capability_recorded_and_switch_wired():
     Was `test_pc2_capability_recorded_but_switch_held`, which pinned the 2026-07-22 hold; the hold's premise (a
     measured liability at medium) did not reproduce, and the ruling (ED-PC-0014) prescribes the unconditional switch.
     The every-afforder-has-a-form clause keeps the name table from silently re-acquiring a gating role."""
-    from combatant import HALFSWORD_FORM
+    from modules.combat.combatant import HALFSWORD_FORM
     for n in ('greatsword', 'flamberge'):
         form = f'{n}_halfsword'
         assert S.affords_halfsword(WEAPONS[n]), n            # capability recorded

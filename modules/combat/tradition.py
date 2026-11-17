@@ -8,10 +8,10 @@ This facade re-exports both so `import tradition as TR; TR.eff_cw(...)/TR.famili
 differentiation is bottom-up only — learned abilities + familiarity.
 """
 
-from traditions import (  # noqa: F401  the traditions dictionary
+from .traditions import (  # noqa: F401  the traditions dictionary
     TRADITIONS, FAMILIARITY_DEFAULT, FAMILIARITY_ADJACENT, ADJACENT,
     familiarity,
 )
-from ability_primitives import (  # noqa: F401  the ability primitives + the tradition->ability bundle index
+from .ability_primitives import (  # noqa: F401  the ability primitives + the tradition->ability bundle index
     ABILITIES, TRADITION_KIT, kit, ability_bonus, ability_factor, eff_cw,
 )

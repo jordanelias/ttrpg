@@ -1,13 +1,12 @@
 """wrapper.py — the personal-combat engine's orchestrator: `fight(A, B, ...)` runs a scene of up to `max_bouts`
 engagements and returns +1 / -1 / 0 (A won / B won / unresolved); `engagement(...)` is one burst of beats inside it.
 Inputs: two `combatant.Combatant` objects, `config.CFG` (or a `cfg` passed in) and the caller's `rng`; the host
-reaches it through `fight.py` (`engine/substrate/pc_engine.py` puts this directory on the path). Here `engagement`
+reaches it through `fight.py`. Here `engagement`
 assigns aggressor/defender ONCE per beat and passes Combatant objects to every subsystem (`combat_systems`, `core`,
 `contact`, `tradition`), the structural cure for the role-inversion bug class: nothing ever indexes raw 'A'/'B'."""
-import sys, os; sys.path.insert(0, os.path.dirname(__file__))
-import core, combat_systems as S, tradition as TR, contact as CT
-import vocabulary as V   # the token ALPHABET, owned once (ED-PC-0042)
-from config import CFG
+from . import core, combat_systems as S, tradition as TR, contact as CT
+from . import vocabulary as V   # the token ALPHABET, owned once (ED-PC-0042)
+from .config import CFG
 
 # ── TRACE SEAM (workbench / branch-explorer hook) ──────────────────────────────────────────────
 # _TRACE is None by default: every _emit() is a single is-None check, so the seam adds ~zero cost

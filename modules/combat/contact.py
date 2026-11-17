@@ -10,9 +10,8 @@ identical to the `clinch` scalar D9 deletes — explicitly forbidden.
 
 Callers (wrapper.py) own the `opening_created` flag: a real prior opening this beat (a bind, a
 beaten-aside/slip-inside displace, or a deep-commit reopen moment) — never re-derived here."""
-import sys, os; sys.path.insert(0, os.path.dirname(__file__))
-import combat_systems as S   # exposes S.core.logistic (single-source overflow-safe squash, ED-PC-0025)
-import ability_primitives as ABIL   # U10/ED-PC-0022: 'edge_grab' modulation (Ringen am Schwert seizes a live blade with less self-injury)
+from . import combat_systems as S   # exposes S.core.logistic (single-source overflow-safe squash, ED-PC-0025)
+from . import ability_primitives as ABIL   # U10/ED-PC-0022: 'edge_grab' modulation (Ringen am Schwert seizes a live blade with less self-injury)
 
 # ── contact axis (I7b) ──────────────────────────────────────────────────────────────────────────
 def _short_reach_exempt(c, cfg):

@@ -352,8 +352,8 @@ says where an old path went. Only what those cannot tell you:
 - **`engine/`** — the executable model (substrate leaf readers, `engine/dice_engine/`,
   `engine/engine_params/` typed exports, `engine/tests/` = CI job `sim-regression`). **It names
   no subsystem by import**: seams resolve through `engine/substrate/composition.py` (`engine/` names a
-  ROLE, `references/module_contracts.yaml` the registered MODULE). One `sys.path` seam, `substrate/pc_engine.py` into
-  `modules/combat/`, is in `PATH_SEAM_ALLOWED`, **shrink-only**; the execution artifact is
+  ROLE, `references/module_contracts.yaml` the registered MODULE). No `sys.path` seam remains
+  (`PATH_SEAM_ALLOWED` is empty); the execution artifact is
   `test_importing_every_engine_module_pulls_in_no_subsystem` (subprocess import, matching on FILE PATH).
   ⚠️ **Acyclic is not independence:** the engine still depends on subsystems, resolved by string.
 - **`engine/season/`** — **Layer 2, the game code**: the season loop plus the registries it opens **at
@@ -361,8 +361,8 @@ says where an old path went. Only what those cannot tell you:
   `python -m engine.season.harness.register --requirements` (against `engine/season/requirements.yaml`)
   before citing it as done. `engine/season/hole_register.yaml` is read by the corpus grader, not the loop.
 - **`modules/`** — **Layer 2, the game code**: the registered modules the loop reaches by composition row
-  (`composition_roles:` in `references/module_contracts.yaml`), not by import (`combat` alone loads by path, via
-  the seam above). A registered module takes typed input, returns typed outcome, holds no token, keeps no game state (`04` §A.2; `holonic_ARCHITECTURE.md` §43, §45).
+  (`composition_roles:` in `references/module_contracts.yaml`), not by import.
+  A registered module takes typed input, returns typed outcome, holds no token, keeps no game state (`04` §A.2; `holonic_ARCHITECTURE.md` §43, §45).
 - **`architecture/`** — **Layer 1.** Reference for game mechanism (§0.05), binding as agent instruction,
   resolving nothing at runtime. Scope: `architecture/meta/04_CODE_ARCHITECTURE.md`'s Status line (indexes: `CURRENT.md`'s Layer-1 row). Exempt from the size WARNING only.
 - **`canon/`** — foundations **P-01..P-15**, timeline, constraints, amendments; world truth only.

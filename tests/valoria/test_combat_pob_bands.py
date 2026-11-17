@@ -7,11 +7,10 @@ classes were NOT part of JD-1's ruling and are intentionally not asserted here (
 import os
 import sys
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'modules', 'combat')
-sys.path.insert(0, ENGINE)
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))   # the repository root: `modules.combat` is a package
 
-import weapon_physics as WP  # noqa: E402
-from combatant import WEAPONS  # noqa: E402
+from modules.combat import weapon_physics as WP  # noqa: E402
+from modules.combat.combatant import WEAPONS  # noqa: E402
 
 # (weapon, band_lo_cm, band_hi_cm) per JD-1's ratified default (consolidation_v1.md §6)
 RAPIER_BAND = (3.0, 11.0)

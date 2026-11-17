@@ -23,16 +23,14 @@ import sys
 import pytest
 
 _ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-_ENGINE = os.path.join(_ROOT, 'modules', 'combat')
-for _p in (_ROOT, _ENGINE):
-    if _p not in sys.path:
-        sys.path.insert(0, _p)
+if _ROOT not in sys.path:
+    sys.path.insert(0, _ROOT)   # `modules.combat` is a package
 
 from valoria import _draw_stream as DS          # noqa: E402  the single owner of the draw instrument (CLAUDE.md §8)
 
-import combatant as C                            # noqa: E402
-import wrapper                                   # noqa: E402
-from config import CFG                           # noqa: E402
+from modules.combat import combatant as C                            # noqa: E402
+from modules.combat import wrapper                                   # noqa: E402
+from modules.combat.config import CFG                           # noqa: E402
 
 _PAIRS = (('arming', 'arming'), ('spear', 'arming'), ('longsword', 'dagger'))
 

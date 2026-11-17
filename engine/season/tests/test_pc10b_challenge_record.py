@@ -23,6 +23,7 @@ the result (`surrender`), earning `duel.yielded` for the yielder alone, never a 
 from __future__ import annotations
 
 import dataclasses
+import importlib
 import types
 from unittest import mock
 
@@ -129,9 +130,10 @@ def _first_wound_not_decisive(trace) -> bool:
 def test_challenge_terms_equal_the_engines_duel_terms():
     """The roster is checked against the engine's closed set by this test alone; that no `engine/season/data` module
     reaches the engine is `tests/valoria/test_engine_does_not_import_systems.py`'s (a file-path subprocess probe)."""
-    engine = combat.engine()
-    assert engine is not None, combat.load_error()
-    assert set(CHALLENGE_TERMS) == set(engine[0].DUEL_TERMS), (CHALLENGE_TERMS, engine[0].DUEL_TERMS)
+    assert combat.engine() is not None, combat.load_error()
+    # by name, inside the function: `test_importing_every_engine_module_pulls_in_no_subsystem` fails on a module-scope import and the ratchet counts a written one
+    wrapper = importlib.import_module("modules.combat.wrapper")
+    assert set(CHALLENGE_TERMS) == set(wrapper.DUEL_TERMS), (CHALLENGE_TERMS, wrapper.DUEL_TERMS)
 
 
 def test_names_is_a_world_only_grammar_stem_and_not_a_cell():

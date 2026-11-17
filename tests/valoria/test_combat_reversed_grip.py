@@ -12,12 +12,11 @@ against UNARMOURED targets — backwards from the historical grounding)."""
 import os
 import sys
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'modules', 'combat')
-sys.path.insert(0, ENGINE)
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))   # the repository root: `modules.combat` is a package
 
-import geometry as G  # noqa: E402
-import weapon_physics as WP  # noqa: E402
-from combatant import WEAPONS  # noqa: E402
+from modules.combat import geometry as G  # noqa: E402
+from modules.combat import weapon_physics as WP  # noqa: E402
+from modules.combat.combatant import WEAPONS  # noqa: E402
 
 
 def test_mace_staff_no_thrust():
@@ -50,7 +49,7 @@ def test_thrust_factor_is_wired():
     fact kept for the downstream armour-defeat math) — the previously-dead thrust_factor is live. Checked
     directly against the formula (not a hand-picked weapon pair, since gap and thrust are close enough across
     the roster that no weapon reliably demonstrates the direction of the swap on its own)."""
-    import combat_systems as S
+    from modules.combat import combat_systems as S
     for n in ('longsword', 'arming', 'dagger', 'jian'):
         w = WEAPONS[n]
         assert w['head'] == 'cut_thrust', f"test premise: {n} must be cut_thrust-headed"

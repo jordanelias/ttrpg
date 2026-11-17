@@ -12,15 +12,14 @@ import sys
 
 import pytest
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'modules', 'combat')
-sys.path.insert(0, ENGINE)
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))   # the repository root: `modules.combat` is a package
 
-import weapon_physics as WP  # noqa: E402
-import combat_systems as S  # noqa: E402
-import ability_primitives as ABIL  # noqa: E402
-import tradition as TR  # noqa: E402
-from combatant import WEAPONS, Combatant  # noqa: E402
-from config import CFG  # noqa: E402
+from modules.combat import weapon_physics as WP  # noqa: E402
+from modules.combat import combat_systems as S  # noqa: E402
+from modules.combat import ability_primitives as ABIL  # noqa: E402
+from modules.combat import tradition as TR  # noqa: E402
+from modules.combat.combatant import WEAPONS, Combatant  # noqa: E402
+from modules.combat.config import CFG  # noqa: E402
 
 
 def _w(*edge_dicts):

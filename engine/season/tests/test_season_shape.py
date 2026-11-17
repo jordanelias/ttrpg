@@ -17,6 +17,7 @@ import dataclasses
 import contextlib
 import fcntl
 import hashlib
+import importlib
 import inspect
 import json
 import re
@@ -8302,12 +8303,12 @@ def _k1_combatants(w, monkeypatch):
     """The two `Combatant`s the module entry builds for `p_low` / `p_mid`, observed at `wrapper.fight`'s door."""
     from ..seam.wrappers import combat as C
     from ..seam.wrappers._entry import entry_for
-    from engine.substrate import pc_engine
     if C.engine() is None:
         pytest.fail(f"personal_combat engine unavailable: {C.load_error()}")
     SeasonDriver(P.tiny_world())   # registers the module entries a direct `entry_for` reads
     entry, _ = entry_for(C._PRIZE, C._PROVIDER)
-    wrapper = pc_engine.load().wrapper
+    # by name, inside the function: `test_importing_every_engine_module_pulls_in_no_subsystem` fails on a module-scope import and the ratchet counts a written one
+    wrapper = importlib.import_module("modules.combat.wrapper")
     seen, real = {}, wrapper.fight
 
     def spy(A, B, **kw):
@@ -8325,7 +8326,7 @@ def _k1_holds(w, monkeypatch) -> int:
     assertions it made (a predicate that asserts nothing observes nothing)."""
     w.persons["p_low"].attributes = {"attr.body.strength": 6, "attr.body.agility": 5, "attr.mind.perception": 2}
     inp, seen = _k1_combatants(w, monkeypatch)
-    import attributes as spec   # on the path once `_k1_combatants` has loaded the engine
+    spec = importlib.import_module("modules.combat.attributes")
     low, mid = seen["p_low"], seen["p_mid"]
     checked = 0
     for c, want in ((low, dict(strength=6, agi=5, att=2)), (mid, {})):
@@ -8351,8 +8352,8 @@ def test_k1_a_person_with_authored_strength_6_fights_as_strength_6(monkeypatch):
 def test_k1_planted_failure_with_the_mapping_removed_the_exit_reddens(monkeypatch):
     """The falsifier: the same predicate, with every spec entry's `registry_key` blanked, must fail."""
     w = P.tiny_world()
-    _k1_combatants(w, monkeypatch)   # loads the engine, which puts the flat `attributes` module on the path
-    import attributes as spec
+    _k1_combatants(w, monkeypatch)
+    spec = importlib.import_module("modules.combat.attributes")
     monkeypatch.setattr(spec, "SPEC", tuple(s._replace(registry_key=None) for s in spec.SPEC))
     with pytest.raises(AssertionError):
         _k1_holds(w, monkeypatch)
@@ -8365,8 +8366,8 @@ def test_k1_authored_endurance_is_the_base_the_body_band_penalty_comes_off():
     from ..seam.wrappers._entry import entry_for
     if C.engine() is None:
         pytest.fail(f"personal_combat engine unavailable: {C.load_error()}")
-    entry_for(C._PRIZE, C._PROVIDER)                 # loads the engine, which puts the flat `attributes` module on the path
-    import attributes as spec
+    entry_for(C._PRIZE, C._PROVIDER)
+    spec = importlib.import_module("modules.combat.attributes")
     default_end = spec.DEFAULT["end"]
     w = P.tiny_world()
     p, scale = w.persons["p_low"], w.fixtures.get("condition_scale")

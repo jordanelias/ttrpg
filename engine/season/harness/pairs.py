@@ -326,7 +326,7 @@ def main(argv: Optional[list] = None) -> int:
     n = args.n if args.n is not None else DEFAULT_N[args.contest]
     diff = args.diff or ("sheet" if args.contest == "duel" else "read")
     if args.contest == "duel":
-        known = tuple(combat.engine()[0].DUEL_TERMS)
+        known = tuple(composition.require("combat.duel_terms"))
         terms = tuple(args.terms) if args.terms else known
         for t in terms:
             if t not in known:

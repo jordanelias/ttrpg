@@ -47,7 +47,8 @@ loaded = sorted(os.path.relpath(m.__file__, {root!r}) for n, m in list(sys.modul
                 if n not in before and getattr(m, "__file__", None)
                 and os.path.abspath(m.__file__).startswith({root!r} + os.sep))
 # THE ORACLE: the engine called directly, the way the seam called it before `31b`.
-import wrapper, combatant
+pkg = mod_name.rsplit(".", 1)[0]
+wrapper, combatant = (importlib.import_module(pkg + "." + n) for n in ("wrapper", "combatant"))
 oracle = []
 for seed, ends, *_ in out:
     A, B = combatant.Combatant("p_a", end=ends[0]), combatant.Combatant("p_b", end=ends[1])
@@ -63,12 +64,12 @@ def test_the_combat_entry_fights_a_hand_built_record_as_the_engine_does_and_load
     module_dir = target.split(":", 1)[0].rsplit(".", 1)[0].replace(".", "/")
     allowed = {"engine/__init__.py", "engine/season/__init__.py", "engine/season/queries/__init__.py",
                "engine/season/queries/inputs.py", "engine/substrate/__init__.py",
-               "engine/substrate/pc_engine.py", module_dir.split("/", 1)[0] + "/__init__.py"}
+               module_dir.split("/", 1)[0] + "/__init__.py"}
     stray = [f for f in loaded
              if f not in allowed and not f.startswith("engine/dice_engine/")
              and not f.startswith(module_dir + "/")]
     assert not stray, (
-        f"{role} ({target}) loaded repository code beyond the engine it runs, the path seam and the record "
+        f"{role} ({target}) loaded repository code beyond the engine it runs and the record "
         f"type: {stray}. A-25: a module imports what it runs and the record types, nothing else of the host")
     assert "engine/season/queries/inputs.py" in loaded and f"{module_dir}/wrapper.py" in loaded, loaded
     checked = 0
@@ -83,3 +84,27 @@ def test_the_combat_entry_fights_a_hand_built_record_as_the_engine_does_and_load
     assert checked == 3, checked
     assert len({(o[3], repr(o[5])) for o in out}) > 1, (
         "every hand-built fight read the same; the comparison cannot tell the parties apart")
+
+
+_FLAT_PROBE = """
+import sys, random
+sys.path.insert(0, {root!r})
+from engine.substrate import composition
+fight = composition.require("combat.fight")
+from engine.season.queries.inputs import PersonalCombatInput
+inp = PersonalCombatInput(claimants=("p_a", "p_b"), ends=(4, 4),
+                          wound_quantities=("felled", "wounds", "max_wounds", "health_remaining", "health_full"))
+got = fight(inp, random.Random(7))
+flat = sorted({{"core", "config", "wrapper", "combatant", "weapons", "geometry"}} & set(sys.modules))
+print(repr((got["status"], flat, "modules.combat.core" in sys.modules)))
+"""
+
+
+def test_a_fight_leaves_no_flat_module_behind():
+    """CI-09: the engine is the package `modules.combat`; no sibling is also loaded under its flat name (two
+    identities for one file). A fresh interpreter resolves `combat.fight`, runs one fight on the input the tests
+    above build, and lists which flat names are in `sys.modules`."""
+    status, flat, packaged = probe(_FLAT_PROBE, "", 300)
+    assert status == "RESOLVED", status
+    assert not flat, f"flat module names loaded beside the package: {flat}"
+    assert packaged, "`modules.combat.core` was not loaded: the fight did not run through the package"

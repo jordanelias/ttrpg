@@ -28,16 +28,15 @@ import sys
 
 import pytest
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'modules', 'combat')
-sys.path.insert(0, ENGINE)
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))   # the repository root: `modules.combat` is a package
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1', 'workbench'))   # the workbench stayed at plan position `31b`
 
-import combatant as C          # noqa: E402
-import combat_systems as S     # noqa: E402
-import core                    # noqa: E402
-import tradition as TR         # noqa: E402
-import wrapper                 # noqa: E402
-from config import CFG         # noqa: E402
+from modules.combat import combatant as C          # noqa: E402
+from modules.combat import combat_systems as S     # noqa: E402
+from modules.combat import core                    # noqa: E402
+from modules.combat import tradition as TR         # noqa: E402
+from modules.combat import wrapper                 # noqa: E402
+from modules.combat.config import CFG         # noqa: E402
 import probabilities as P      # noqa: E402
 from engine.dice_engine import dice_engine as DE          # noqa: E402
 from engine.dice_engine import sigma_leverage as SL       # noqa: E402

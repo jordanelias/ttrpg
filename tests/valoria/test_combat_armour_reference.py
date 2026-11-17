@@ -25,8 +25,6 @@ import sys
 
 import pytest
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'modules', 'combat')
-
 # Tolerance sized from the two regressions this gate is built from. Because seeds are deterministic per (weapon,
 # tier), an unchanged engine reproduces the reference EXACTLY — the tolerance is absorbing legitimate small shifts in
 # the RNG trajectory from unrelated changes, not sampling noise. 0.15 comfortably catches both historical misses
@@ -76,8 +74,8 @@ def test_reference_table_covers_the_whole_roster():
     odachi, naginata and staff — none of which any guard in the corpus was watching."""
     import json
     AP = _instrument()
-    sys.path.insert(0, ENGINE)
-    from combatant import WEAPONS
+    sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))   # the repository root: `modules.combat` is a package
+    from modules.combat.combatant import WEAPONS
     with open(AP.REFERENCE_PATH, encoding='utf-8') as f:
         ref = json.load(f)
     missing = sorted(set(WEAPONS) - set(ref['table']))
