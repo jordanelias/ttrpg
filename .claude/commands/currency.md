@@ -20,7 +20,7 @@ CLAUDE.md §1's priority order, as commands. Run this **before the first edit**.
 
 5. **Where the milestone actually stands**, if that is the question — the only reading §0.2
    accepts:
-   - `python tools/m1_acceptance.py --summary` (its "all junctures execute" row is DOC-DERIVED —
+   - `python tools/m1_acceptance.py --summary` (its "The nine requirements met" row is DOC-DERIVED —
      bookkeeping, not evidence)
    - `python -m engine.season.harness.register --requirements` — THE NINE
 

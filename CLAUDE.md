@@ -17,8 +17,8 @@ the same commit and say what you added. **(RULED)** marks a rule as Jordan's, no
 
 **THE LAYERS (RULED by Jordan) — the canonical definition of a GOVERNANCE layer (how work is
 done). No other governance scheme may be spelled "Layer".** Not a licence to sweep:
-`godot/godot_architecture_specification.md`'s runtime layers and `systems/ui/`'s "Layer 3" UI tier are
-unrelated senses and stay.
+`godot/godot_architecture_specification.md`'s runtime layers and `.designs/systems/ui/`'s "Layer 3" UI
+tier are unrelated senses and stay.
 
 | | | binds |
 |---|---|---|
@@ -121,7 +121,7 @@ work. our design documents in .MD are reference and information only."*
   thing differently, name the ambiguity at the site and pick (`layer-conformance` B4).
 - **A FACT the engine uses must live where code reads it** — a typed artifact under
   `engine/engine_params/` behind an exporter, or a single Python owner. Constants still inside
-  `systems/` are the migration backlog (live count: `python tools/export_sim_params.py --build`).
+  `systems/` are the migration backlog (count `sim_params.json` rows under `systems/`; `--build` rewrites it).
 - ⚠ **A term, a roster, a closed set and a bound are facts exactly as a number is** (Jordan: *"all
   definitions/terms/etc need to come from code, never prose"*). Four clauses, one rule:
   1. **A `.md` is NEVER the authored head of a fact code reads.** The head is YAML/JSON under
@@ -346,8 +346,8 @@ says where an old path went. Only what those cannot tell you:
 
 - **`systems/`** — design source of truth for `combat`, `social_contest` and `mass_battle` (retained by
   ED-IN-0204). **One subsystem = one folder = one ID lane = one `CURRENT.md` row = one
-  `HANDOFF_<LANE>.md`.** Oracle scripts live in `sim/`, imported as `systems.<sub>.sim.*`. ⚠ **`systems/`
-  HOLDS NO `.md` AT ALL** — its design documents are in `.designs/systems/<sub>/`;
+  `HANDOFF_<LANE>.md`.** Oracle scripts, where a subsystem has them, are `systems/<sub>/sim/`; the code
+  the season loop runs is `modules/`. ⚠ **`systems/` HOLDS NO `.md` AT ALL** — its design documents are in `.designs/systems/<sub>/`;
   `tools/ci_design_prose_quarantine.py` is blocking and the invariant is **zero, not a ratchet**.
 - **`engine/`** — the executable model (substrate leaf readers, `engine/dice_engine/`,
   `engine/engine_params/` typed exports, `engine/tests/` = CI job `sim-regression`). **It names
@@ -446,13 +446,13 @@ canon via the ledger and re-export — never hand-edit a value into the `.gd` si
 `godot/godot_conversion_strategy_v1.md` is the conversion plan — **PROPOSED, Jordan-vetoable throughout**,
 with an open register and unexecuted Gate-0 preconditions; the season loop's ratified Godot mapping is `04` §C.12. `references/module_contracts.yaml` shows which
 modules have `doc: null` and which resolvers are `[ASSUMPTION]`-grade; porting beyond the combat slice
-waits on the port gate (B10-20 in the active master workplan, which `CURRENT.md` names). The older
+waits on the port gate (batch `B41-go-port-gate` of the active master workplan, which `CURRENT.md` names). The older
 `godot/` docs predate the `d+σ` model, carry `⚠️ STALE` banners and ship wrong schemas: implement from
 none of them.
 
 ## 7. Simulation / balance
 
-**Rule: the Python model (`engine/` + `systems/<sub>/sim/`) is the oracle the port validates against, and
+**Rule: the Python model (`engine/`, `modules/` + `systems/<sub>/sim/`) is the oracle the port validates against, and
 a campaign-level balance claim needs a campaign-level instrument.** The seeded hash pins under
 `engine/season/tests/` observe any output-moving change to season-reachable code but cannot separate a
 balance regression from noise (`engine/tests/goldens/` holds one pure-function dice table), and nothing
@@ -464,7 +464,7 @@ on a campaign-unreachable change (or, for `arms.py`, a season-unreachable one) i
 arms are identical by construction. Ledger provenance is advisory (schemas differ, provenance fields
 unchecked, no generating SHA pinned) — verify a cited `PP-NNN`/`ED-NNN` by hand.
 `engine/tests/` is CI job `sim-regression`; the reference model is partly stubbed (`NotImplementedError`)
-and its README's "all modules are stubs" line is stale — grep for the stubs.
+— grep for the stubs.
 
 ---
 
@@ -544,14 +544,14 @@ A fresh remote container has pyyaml only; run the provisioner. WHEN each runs is
 
 Set the model **per task**: subagents inherit the session model, so an un-annotated fan-out on an Opus
 session runs Opus *everywhere*. Actively tier down; reserve Opus for judgment. **This table is the single
-owner of the tier→ID binding**; for live pricing use the `claude-api` skill, not a figure written here.
+owner of the tier→model binding**: each tier is its family's LATEST model; live figures: `claude-api` skill.
 
-| Tier | Model ID | Context | Relative cost | Prompt-cache minimum |
-|---|---|---|---|---|
-| `haiku` | `claude-haiku-4-5` | 200K | **1×** | **4,096 tok** |
-| `sonnet` | `claude-sonnet-5` | 1M | **2×** | 1,024 tok |
-| `opus` | `claude-opus-5` | 1M | **5×** | 512 tok |
-| `fable` | `claude-fable-5-1` | 1M | **10×** | 512 tok |
+| Tier | Model | Relative cost |
+|---|---|---|
+| `haiku` | latest Haiku | **1×** |
+| `sonnet` | latest Sonnet | **20×** |
+| `opus` | latest Opus | **40×** |
+| `fable` | latest Fable | **80×** |
 
 **Delegating to `haiku` instead of `opus` pays only if the delegation overhead costs less than the tier
 drop saves.** Do that calculation for the task at hand; do not assert a tier.
@@ -592,9 +592,9 @@ for the READS.
    author can no longer recall a citation, **the claim without its line number beats the lost part**.
 3. **Parallel agents sharing a prefix cannot read each other's cache** until the first response *begins
    streaming*: **fire one, await its first token, then fan out the rest.**
-4. **`haiku`'s cache minimum is the largest on the roster; the floor is non-monotonic across tiers.** A
-   shared preamble under it **silently never caches**. **Switching model mid-conversation invalidates
-   the entire cache** — escalate at *phase* boundaries.
+4. **DO NOT RE-CRAWL, UNLESS THE EXTRACT IS INCOMPLETE.** Before dispatching, check whether a finished
+   agent's extract covers the ENTIRE file (not a truncated read); if it does, hand it down, and if it was
+   truncated, retrieve the file again. Escalate tier at *phase* boundaries.
 5. **The same arithmetic governs a SINGLE call.** Bound the page, name the fields, and re-send a large
    body only when the edit needs it.
 
