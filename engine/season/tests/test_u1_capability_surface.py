@@ -1055,11 +1055,12 @@ def test_a_cast_row_key_neither_read_nor_unread_listed_is_refused(tmp_path, monk
 # `attributes`, `thread_sensitivity`, `heritage` and `tenures`: the person's own state, copies only, no derived pool stored.
 
 def _sheet_of(person_id: str, mutate=None):
-    """Build the realm at seed 0, seat `person_id` at the development space, run one season, and return the first sheet it was shown
-    with what the stored Person held when it was shown (a season moves a person's tenures after DELIBERATE; `mutate(w)` plants state first)."""
+    """Build the realm at seed 0, seat `person_id` at the development space, run the season until the first sheet is shown, and
+    return it with what the stored Person held when it was shown (`mutate(w)` plants state first). The season stops at that
+    first pick: nothing after it is read (accretion pass, B04's close)."""
     from engine.season.boot.realm import build_realm
     from engine.season.decision import make_chooser
-    from engine.season.decision.sheet import creation_sheet, development_space, seat, take_ranked
+    from engine.season.decision.sheet import creation_sheet, development_space, seat
     from engine.season.harness.play_surface import dispatching_chooser
     from engine.season.loop.driver import SeasonDriver, resolvable_verbs
     from engine.season.state.ids import H, draw_factory
@@ -1070,15 +1071,21 @@ def _sheet_of(person_id: str, mutate=None):
     draw = draw_factory(w.world_seed, lambda: w.tick)
     seen: list = []
 
+    class _Shown(Exception):
+        pass
+
     def pick(sheet):
         q = w.persons[person_id]
         seen.append((sheet, {"thread_sensitivity": q.thread_sensitivity, "attributes": dict(q.attributes),
                              "tenures": tuple((t.kind, t.object) for t in q.tenures if t.until is None)}))
-        return take_ranked(sheet)
+        raise _Shown
     auto = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(), draw=draw)
     space = development_space(w.fixtures, mint, pick, verbs=resolvable_verbs(), draw=draw)
     choose = dispatching_chooser(auto, seat(creation_sheet(w.persons.values()), person_id, space))
-    SeasonDriver(w).season(choose, None, contest_max_depth=w.fixtures.get("contest_max_depth"))
+    try:
+        SeasonDriver(w).season(choose, None, contest_max_depth=w.fixtures.get("contest_max_depth"))
+    except _Shown:
+        pass
     assert seen, f"{person_id} was never shown a sheet; the test observed nothing"
     return seen[0]
 
