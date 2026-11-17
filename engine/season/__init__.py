@@ -8,14 +8,13 @@ that work under `tests/valoria/test_engine_does_not_import_systems.py`, which wa
 `engine/**/*.py` and imports it by dotted path. That insert bought a real repair and charged a real
 price, which the file it replaced named honestly: a module could be reached as `shape` AND as
 `engine.season.shape`, two module objects with two sets of module-level state in one process — the
-same second-identity hazard `CLAUDE.md` §3 records for `combat_engine_v1`.
+same second-identity hazard the personal-combat engine carried until CI-09 made `modules/combat/` a package.
 
 The decomposition pays that price off rather than carrying it. Every import inside this package is
 now relative, so there is exactly one identity per module and no path repair to perform. A package
 that repairs its own import path works from anywhere and therefore hides where it is being imported
-from; the `sys.path` mutations that remain are DECLARED SEAMS reaching OUT of this package — the
-repo root for `engine.dice_engine` and the degree sweep's own directory — each
-inside a function body, each with its reason at the site.
+from. No module of this package mutates `sys.path`; the inserts left are in its tests (the degree
+sweep's directory and `tools/`), each inside a test function with its reason at the site.
 
 Entry points are modules, not scripts:
 

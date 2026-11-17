@@ -19,9 +19,8 @@ reached module is reached too. The two directions:
 
 TWO SHAPES, TOLD APART BY SHAPE AND NOT BY NAME. A module directory WITH an `__init__.py` is a package
 whose files import each other by dotted name, which this walk follows (`social_contest`, `mass_battle`).
-A directory WITHOUT one is a FLAT script set loaded through a declared path seam, whose roots are the entry
-PLUS the names the seam itself declares, and a dot-free import resolves to `<directory>/<name>.py` first,
-as it does at load. A flat directory with no seam declaring its names fails rather than going unchecked.
+A directory WITHOUT one is a FLAT script set: there a dot-free import resolves to `<directory>/<name>.py`
+first, as it would at load.
 No such seam is declared now (`modules/combat/`, the last, became a package at CI-09), so a flat directory under
 `modules/` is refused outright; the flat branch of the walk is exercised on a planted tree only.
 In a flat set one more failure is observable: a bare name that resolves to no file in the directory and
