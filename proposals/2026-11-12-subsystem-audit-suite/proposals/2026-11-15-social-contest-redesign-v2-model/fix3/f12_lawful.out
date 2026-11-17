@@ -1,0 +1,16 @@
+
+== [before] F12 which rows sit, by regime (refusals keyed)
+  crown    : every row sits
+  crown    : kinds admitted twice: none
+  theocracy: debate refused[unlawful]; parliamentary_debate refused[unlawful]; council_of_state refused[unlawful]; excommunication_deliberation refused[unlawful]
+  theocracy: kinds admitted twice: [('conversation', 'oath'), ('negotiation', 'oath'), ('questioning', 'confession'), ('inquisition', 'confession'), ('trial', 'oath'), ('rally', 'oath'), ('audience', 'oath')]
+  commune  : inquisition refused[unlawful]; inquisition_hearing refused[unlawful]; examination refused[unlawful]
+  commune  : kinds admitted twice: [('conversation', 'rumour'), ('questioning', 'rumour'), ('debate', 'rumour'), ('rally', 'rumour')]
+
+== [after] F12 which rows sit, by regime (refusals keyed)
+  crown    : every row sits
+  crown    : kinds admitted twice: none
+  theocracy: debate refused[unlawful]; parliamentary_debate refused[unlawful]; council_of_state refused[unlawful]
+  theocracy: kinds admitted twice: none
+  commune  : inquisition refused[unlawful]; inquisition_hearing refused[unlawful]; examination refused[unlawful]
+  commune  : kinds admitted twice: none

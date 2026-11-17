@@ -1,0 +1,32 @@
+
+== [before] F4a a fair Grace-7 bench that acquits: mean legitimacy after one sitting, by (band, ruled right) and faction
+  tribunal                      (ban) a right acquittal (n=201): Crown -0.350, Church +0.000, Guild +0.000
+  trial                         (detain) a right acquittal (n=203): Crown +0.100, Church +0.000, Guild +0.000
+  excommunication_deliberation  (ban) a right acquittal (n=216): Crown +0.000, Church -0.350, Guild +0.000
+
+== [before] F4b a Church man in a Crown seat rules a trial (detain; success writes legitimacy+): whose legitimacy moves
+  judge's own faction Crown: factions written {'Crown': 80}
+  judge's own faction Church: factions written {'Church': 80}
+  judge's own faction None: factions written {'Crown': 80}
+
+== [before] F4c an arranger with a seat and no faction of his own (rig 1, trial): is the rig paid?
+  rigged sittings with a band 200; Parliament charged the price in 0
+
+== [before] F4d a decree carried by a seated mover with no faction of his own: standing raised?
+  carried 58; Parliament standing raised 0
+
+== [after] F4a a fair Grace-7 bench that acquits: mean legitimacy after one sitting, by (band, ruled right) and faction
+  tribunal                      (ban) a right acquittal (n=199): Crown +0.100, Church -0.500, Guild +0.000
+  trial                         (detain) a right acquittal (n=209): Crown +0.100, Church +0.000, Guild +0.000
+  excommunication_deliberation  (ban) a right acquittal (n=214): Crown +0.000, Church -0.350, Guild +0.000
+
+== [after] F4b a Church man in a Crown seat rules a trial (detain; success writes legitimacy+): whose legitimacy moves
+  judge's own faction Crown: factions written {'Crown': 80}
+  judge's own faction Church: factions written {'Crown': 80}
+  judge's own faction None: factions written {'Crown': 80}
+
+== [after] F4c an arranger with a seat and no faction of his own (rig 1, trial): is the rig paid?
+  rigged sittings with a band 200; Parliament charged the price in 200
+
+== [after] F4d a decree carried by a seated mover with no faction of his own: standing raised?
+  carried 68; Parliament standing raised 68

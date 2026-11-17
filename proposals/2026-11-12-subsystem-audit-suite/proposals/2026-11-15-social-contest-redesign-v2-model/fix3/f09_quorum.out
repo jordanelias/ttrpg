@@ -1,0 +1,16 @@
+
+== [before] F9 arranger r5M vs r2, Parliament parties; P(for), n=600
+  tribunal arranger a: rig 0.0: seats 3 quorum 2 P(for) 0.270 +-0.036 | rig 0.5: seats 2 quorum 2 P(for) 0.148 +-0.029 | rig 1.0: seats 1 quorum 2 P(for) 0.323 +-0.038
+  tribunal arranger b: rig 0.0: seats 3 quorum 2 P(for) 0.160 +-0.030 | rig 0.5: seats 2 quorum 2 P(for) 0.063 +-0.020 | rig 1.0: seats 1 quorum 2 P(for) 0.202 +-0.033
+  debate   arranger a: rig 0.0: seats 3 quorum 2 P(for) 0.242 +-0.035 | rig 0.5: seats 2 quorum 2 P(for) 0.128 +-0.027 | rig 1.0: seats 1 quorum 2 P(for) 0.330 +-0.038
+  debate   arranger b: rig 0.0: seats 3 quorum 2 P(for) 0.208 +-0.033 | rig 0.5: seats 2 quorum 2 P(for) 0.088 +-0.023 | rig 1.0: seats 1 quorum 2 P(for) 0.228 +-0.034
+  debate offered one seat: ok: ('j1',)
+  tribunal offered one seat: ok: ('j1',)
+
+== [after] F9 arranger r5M vs r2, Parliament parties; P(for), n=600
+  tribunal arranger a: rig 0.0: seats 3 quorum 2 P(for) 0.275 +-0.036 | rig 0.5: seats 2 quorum 2 P(for) 0.175 +-0.031 | rig 1.0: seats 2 quorum 2 P(for) 0.212 +-0.033
+  tribunal arranger b: rig 0.0: seats 3 quorum 2 P(for) 0.157 +-0.030 | rig 0.5: seats 2 quorum 2 P(for) 0.055 +-0.019 | rig 1.0: seats 2 quorum 2 P(for) 0.028 +-0.014
+  debate   arranger a: rig 0.0: seats 3 quorum 2 P(for) 0.245 +-0.035 | rig 0.5: seats 2 quorum 2 P(for) 0.160 +-0.030 | rig 1.0: seats 2 quorum 2 P(for) 0.228 +-0.034
+  debate   arranger b: rig 0.0: seats 3 quorum 2 P(for) 0.208 +-0.033 | rig 0.5: seats 2 quorum 2 P(for) 0.077 +-0.022 | rig 1.0: seats 2 quorum 2 P(for) 0.048 +-0.018
+  debate offered one seat: refused[short_bench]
+  tribunal offered one seat: refused[short_bench]

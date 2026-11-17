@@ -1,0 +1,16 @@
+
+== [before] F13 j1's conflict by tie pattern; recusal with a backup, the ledger when alone
+  none                                     tie a +0.0 b +0.0 conflict 0.000 lean +0.000 | with backup: decided ('j1',) recused () | alone: partial on a ledger 0/50, P(for) 0.277 +-0.037
+  kin of a                                 tie a +0.5 b +0.0 conflict 0.167 lean +0.167 | with backup: decided ('j1',) recused () | alone: partial on a ledger 50/50, P(for) 0.325 +-0.038
+  kin of a and b                           tie a +0.5 b +0.5 conflict 0.000 lean +0.000 | with backup: decided ('j1',) recused () | alone: partial on a ledger 0/50, P(for) 0.295 +-0.037
+  client of a, patron of b                 tie a +0.5 b +0.5 conflict 0.000 lean +0.000 | with backup: decided ('j1',) recused () | alone: partial on a ledger 0/50, P(for) 0.295 +-0.037
+  rel +1 a and +1 b                        tie a +1.0 b +1.0 conflict 0.000 lean +0.000 | with backup: decided ('j1',) recused () | alone: partial on a ledger 0/50, P(for) 0.312 +-0.038
+  patron of a, written on a's record only  tie a +0.0 b +0.0 conflict 0.000 lean +0.000 | with backup: decided ('j1',) recused () | alone: partial on a ledger 0/50, P(for) 0.277 +-0.037
+
+== [after] F13 j1's conflict by tie pattern; recusal with a backup, the ledger when alone
+  none                                     tie a +0.0 b +0.0 conflict 0.000 lean +0.000 | with backup: decided ('j1',) recused () | alone: partial on a ledger 0/50, P(for) 0.283 +-0.037
+  kin of a                                 tie a +0.5 b +0.0 conflict 0.167 lean +0.167 | with backup: decided ('j1',) recused () | alone: partial on a ledger 50/50, P(for) 0.317 +-0.038
+  kin of a and b                           tie a +0.5 b +0.5 conflict 0.333 lean +0.000 | with backup: decided ('j2',) recused ('j1',) | alone: partial on a ledger 50/50, P(for) 0.278 +-0.037
+  client of a, patron of b                 tie a +0.5 b +0.5 conflict 0.333 lean +0.000 | with backup: decided ('j2',) recused ('j1',) | alone: partial on a ledger 50/50, P(for) 0.278 +-0.037
+  rel +1 a and +1 b                        tie a +1.0 b +1.0 conflict 0.333 lean +0.000 | with backup: decided ('j2',) recused ('j1',) | alone: partial on a ledger 50/50, P(for) 0.307 +-0.038
+  patron of a, written on a's record only  tie a +0.5 b +0.0 conflict 0.167 lean +0.167 | with backup: decided ('j1',) recused () | alone: partial on a ledger 50/50, P(for) 0.317 +-0.038

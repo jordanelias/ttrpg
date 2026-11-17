@@ -228,6 +228,14 @@ class Input:
             raise ValueError("refused[nobody_speaks]: nobody speaks")
         if self.state is not None and self.state.ended == "yielded":
             raise ValueError("refused[resume_yielded]: a sitting that ended `yielded` is not resumed (an adjourned one is)")
+        if self.state is not None:                # a resume continues THIS sitting: the same people, with turns left
+            if self.rite.close == "exchange":
+                raise ValueError("refused[abridged_resume]: an abridged act is one speech; it is not resumed")
+            if {p.id for p in self.room} != {i for i, _ in self.state.tracks}:
+                raise ValueError("refused[room_changed]: a resumed sitting has the same people; a changed room is a new sitting")
+            sp = _d(self.state.cond)
+            if not any(p.side and _d(self.rite.moves).get(p.side) and sp[p.id].spoken < self.rite.turns for p in self.room):
+                raise ValueError("refused[spent]: no speaker has a turn left; a close once drawn is not drawn again")
 
 
 @dataclass(frozen=True)
@@ -582,12 +590,18 @@ def _voice(inp, mover, it):
 
 
 def _foe(inp, mover):
-    """whose circumstances he must account for: the other side's lead, else the weightiest of those who decide."""
+    """whose circumstances he must account for: the other side's lead; in an abridged act (`close: exchange`), the
+    one he addresses, who is the man opposite there though the act gives him no move. With nobody opposite there is
+    no foe and no gap (A9, A-144: the station of those who decide is awe on him, never an obstacle on his speech)."""
     o = _lead(inp, _other(mover.side))
-    if o:
-        return o
-    ds = [p for p in inp.room if p.decides and p.id != mover.id]
-    return max(ds, key=lambda p: p.power) if ds else None
+    if o is None and inp.rite.close == "exchange":
+        o = next((p for p in inp.room if p.decides and not p.side and p.id != mover.id), None)
+    return o
+
+
+def _sole(inp, p) -> bool:
+    """his verdict alone is the close: he decides and nobody else does (one seat, one vote)."""
+    return p.decides and not any(q.decides for q in inp.room if q.id != p.id)
 
 
 def _deciders_for(inp, mover):
@@ -646,6 +660,31 @@ def p_carried(inp, track):
     ob, _ = obstacle(x)
     mu = MU_PER_DIE * x.pool + net_boost(x.leverage, x.pool) - ob
     return 1 - _phi((1.0 - mu) / (SD_PER_DIE * math.sqrt(x.pool)))
+
+
+def close_odds(inp, tracks: Mapping) -> float:
+    """P(carried) of THE CLOSE ITSELF with each who decides at his own track (A-133: the card's odds are the
+    proceeding's own): `bench` the presiding seat's; `declared` at least the quorum of the seats carrying, each his
+    own draw (the quorum-th best margin); `hearers` the weight-mean margin, one normal per hearer. No draw."""
+    r = inp.rite
+    ds = sorted((p for p in inp.room if p.decides), key=lambda p: (-p.precedence, p.id))
+    if not ds or r.close in ("consent", "exchange"):
+        return 0.0
+    if r.close == "bench":
+        return p_carried(inp, tracks[ds[0].id])
+    if r.close == "declared":
+        q = min(len(ds), r.quorum or 1)
+        dist = [1.0]                                     # P(k seats carry), seat by seat
+        for d in ds:
+            p = p_carried(inp, tracks[d.id])
+            dist = [(dist[k] if k < len(dist) else 0.0) * (1 - p) + (dist[k - 1] * p if k > 0 else 0.0) for k in range(len(dist) + 1)]
+        return sum(dist[q:])
+    W = sum(d.weight for d in ds)
+    xs = [close_input(inp, tracks[d.id]) for d in ds]
+    pool, ob = xs[0].pool, obstacle(xs[0])[0]
+    mu = MU_PER_DIE * pool - ob + sum(d.weight * net_boost(x.leverage, pool) for d, x in zip(ds, xs)) / W
+    sd = SD_PER_DIE * math.sqrt(pool) * math.sqrt(sum(d.weight ** 2 for d in ds)) / W
+    return 1 - _phi((1.0 - mu) / sd)
 
 
 def believed_odds(inp, mood_seen):
@@ -776,9 +815,10 @@ def menu(inp, st, mover, turns_left, frames=None, objects=None, acc=1.0):
         elif row.effect == "yield":
             own = _d(st.tracks).get(mover.id, 0.0)
             last = st.issue >= len(inp.rite.issues) - 1
-            if inp.rite.concede == "accepts" or last:
-                ev = (-SIGN[mover.side] * own - D["consent_at"]) if (inp.rite.close == "consent" or mover.decides) \
-                    else (-_yield_to(D) * (1.0 + m_true))
+            if (inp.rite.concede == "accepts" or last) and (inp.rite.close == "consent" or _sole(inp, mover)):
+                ev = -SIGN[mover.side] * own - D["consent_at"]       # his accept IS the close: his own consent
+            elif inp.rite.concede == "accepts" or last:              # one seat, one vote: on a close others share,
+                ev = -_yield_to(D) * (1.0 + m_true)                  # his yield gives the matter up like any party's
             else:                                 # C1, C5: what descending buys: the next rung's better ground, fresh
                 st2 = replace(st, issue=st.issue + 1, live=(("for", None), ("against", None)),
                               used=tuple((k, v) for k, v in st.used if k[0] != mover.side))

@@ -25,7 +25,7 @@ F = host.FOLD
 
 
 def _stake(people, pid, matter):
-    return abs(sum(host.bearing(people[pid], matter, people)) / 3.0) or 0.2      # a party always has something at stake
+    return abs(sum(host.bearing(people[pid], matter, people)) / 3.0)     # a party's least stake is the bearing's own
 
 
 def _his_odds(inp, side, start):
@@ -59,9 +59,11 @@ def before(people, rite_id, matter, *, arranger, rig, alt_bench=(), choose: Opti
 
 
 # ------------------------------------------------------------------ D3: after a sitting that went against him
-def after(world, people, inp, card, out, matter, band, choose: Optional[Callable] = None):
+def after(world, people, inp, card, out, matter, band, choose: Optional[Callable] = None, appeal: bool = True):
     """-> (act, options). The loser's menu, each line with its believed worth and its price; the act's effect is
-    written to the world (a docket entry the season driver convenes, and regard)."""
+    written to the world (a docket entry the season driver convenes, and regard). `appeal`: whether an appeal lies
+    (C9: an appeal's own verdict is final, and an appeal lies only to a forum that exists and may hear the matter;
+    the caller, who knows the forum, says so)."""
     fid, aid = matter["parties"]["for"], matter["parties"].get("against")
     if aid is None or band in (None, "partial"):
         return None, ()
@@ -76,7 +78,7 @@ def after(world, people, inp, card, out, matter, band, choose: Optional[Callable
     grudge = -R.get((loser, winner), 0.0)
     other = any(d["matter"] == matter["id"] and d["kind"] == "other_forum" for d in world["docket"])
     opts = [("accept", -(1.0 - comp) * st, "the disposal holds")]
-    if inp.rite.close in ("bench", "declared"):
+    if appeal and inp.rite.close in ("bench", "declared"):
         opts.append(("appeal", 2.0 * st * _his_odds(inp, side, SIGN[side] * D["presume_step"] * aw) - F["contumacy"],
                      "the first judge's regard; standing if it fails"))
     if other:
@@ -116,14 +118,39 @@ def _carry_strain(people, world):
     return pp
 
 
-def convene(world, people, rite, matter, key, **kw):
-    """one sitting: build, proceed, fold, and the loser's after-sitting act."""
+def _sits(people, rite, matter, kw) -> bool:
+    """whether a forum exists and may hear the matter: the builder does not refuse it."""
+    try:
+        host.build(people, rite, matter, **kw)
+        return True
+    except ValueError as e:
+        if str(e).startswith("refused["):
+            return False
+        raise
+
+
+def convene(world, people, rite, matter, key, appeal_kw=None, **kw):
+    """one sitting: build, proceed, fold, and the loser's after-sitting act. `appeal_kw`: the forum an appeal would
+    sit before (None where the verdict is final: an appeal's own)."""
     pp = _carry_strain(people, world)
     inp, card = host.build(pp, rite, matter, **kw)
     out = proceed(inp, draw(key, "act", rite))
     band, writes = host.fold(world, pp, inp, card, out, matter)
-    act, _ = after(world, pp, inp, card, out, matter, band)
+    act, _ = after(world, pp, inp, card, out, matter, band, appeal=appeal_kw is not None and _sits(pp, rite, matter, appeal_kw))
     return dict(rite=rite, matter=matter["id"], band=band, act=act, card=card, out=out, inp=inp)
+
+
+def _convene_or_skip(world, ran, s, kind, *a, **kw):
+    """C2: a keyed refusal (a vacated seat, a man who is gone, a forum that cannot sit) skips THAT sitting and is
+    recorded (`world['refused']`); the season goes on. Anything else is a fault and is raised."""
+    try:
+        ran.append(convene(world, *a, **kw))
+        return ran[-1]
+    except ValueError as e:
+        if not str(e).startswith("refused["):
+            raise
+        world.setdefault("refused", []).append((s, kind, a[2]["id"], str(e).split("]")[0] + "]"))
+        return None
 
 
 def season(world, people, schedule, s, *, appeal_bench=(), grievance_rite="conversation", key="season"):
@@ -132,33 +159,34 @@ def season(world, people, schedule, s, *, appeal_bench=(), grievance_rite="conve
     toward him), grievances (a conversation between the two), adjourned matters (the same row), other forums
     (arbitration). Returns the season's sittings."""
     ran = []
+    up = lambda kw: dict(kw, bench=appeal_bench or kw.get("bench", ()), rig=0.0, arranger=None)   # where an appeal sits
     for k, (rite, m, kw) in enumerate(schedule):
         if m.get("strife") and m["strife"] not in world["strife"] and s == 0:
             world["strife"][m["strife"]] = 1.0                       # the world's own strife, seeded once, not by a sitting
-        ran.append(convene(world, people, rite, m, (key, s, "sched", k), **kw))
+        _convene_or_skip(world, ran, s, "sched", people, rite, m, (key, s, "sched", k), appeal_kw=up(kw), **kw)
     docket, world["docket"] = list(world["docket"]), []
     by_id = {m["id"]: (rite, m, kw) for rite, m, kw in schedule}
     for k, d in enumerate(docket):
         base = by_id.get(d["matter"])
         if d["kind"] == "appeal" and base:
             rite, m, kw = base
-            kw2 = dict(kw, bench=appeal_bench or kw.get("bench", ()), rig=0.0, arranger=None,
-                       grounds_for=("for" if d["party"] == m["parties"]["for"] else "against", d["weight"]))
-            res = convene(world, people, rite, m, (key, s, "appeal", k), **kw2)
+            kw2 = dict(up(kw), grounds_for=("for" if d["party"] == m["parties"]["for"] else "against", d["weight"]))
+            res = _convene_or_skip(world, ran, s, "appeal", people, rite, m, (key, s, "appeal", k), appeal_kw=None, **kw2)
+            if res is None:                                          # the appeal could not sit: the verdict stands
+                continue
             res["appeal"] = d
             if (res["band"] in ("success", "overwhelming")) == (d["party"] == m["parties"]["for"]):
                 world["tenures"] = [t for t in world["tenures"] if not (t[2] == m["id"] and t[1] == d["party"])]
                 res["reversed"] = True
             else:
                 res["reversed"] = False
-            ran.append(res)
         elif d["kind"] == "grievance" and d.get("against"):
             m = dict(id=d["matter"], parties={"for": d["party"], "against": d["against"]}, bears={})
-            ran.append(convene(world, people, grievance_rite, m, (key, s, "griev", k), effort=2))
+            _convene_or_skip(world, ran, s, "grievance", people, grievance_rite, m, (key, s, "griev", k), effort=2)
         elif d["kind"] in ("adjourned", "other_forum") and base:
             rite, m, kw = base
             if d["kind"] == "other_forum":
                 rite, kw = "arbitration", dict(kw, rig=0.0, arranger=None, bench=kw.get("bench") or appeal_bench)
-            ran.append(convene(world, people, rite, m, (key, s, d["kind"], k), **kw))
+            _convene_or_skip(world, ran, s, d["kind"], people, rite, m, (key, s, d["kind"], k), appeal_kw=up(kw), **kw)
     fade(world)
     return ran

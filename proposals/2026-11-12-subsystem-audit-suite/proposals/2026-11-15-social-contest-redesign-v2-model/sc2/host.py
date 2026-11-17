@@ -12,7 +12,7 @@ from typing import Optional
 from types import MappingProxyType
 
 from scmodel.dice import MU_PER_DIE, degree, level
-from .engine import (SIGN, Input, Item, Present, Rite, mood, p_carried)
+from .engine import (SIGN, Input, Item, Present, Rite, _sole, close_odds, mood, p_carried)
 
 ATTRS = ("focus", "reason", "attunement", "presence", "grace", "will")
 GROUNDS = (("evidence", 0.8), ("consequence", 0.7), ("authority", 0.4), ("solidarity", 0.2))   # (id, weight of Reason)
@@ -156,7 +156,7 @@ DISPOSAL = {
                "success": ("tenure:detain", "precedent", "legitimacy+"), "partial": ("tenure:oblige", "docket:adjourned"),
                "failure": ("record:acquittal", "precedent", "regard-accuser"), None: ("docket:adjourned",)},
     "ban":    {"overwhelming": ("tenure:ban", "office:stripped", "precedent"), "success": ("tenure:ban", "legitimacy+"),
-               "partial": ("tenure:oblige", "docket:adjourned"), "failure": ("record:acquittal", "legitimacy-"),
+               "partial": ("tenure:oblige", "docket:adjourned"), "failure": ("record:acquittal", "legitimacy-accuser"),
                None: ("docket:adjourned",)},
     "decree": {"overwhelming": ("record:decree", "faction+", "precedent", "legitimacy+"), "success": ("record:decree", "faction+"),
                "partial": ("docket:adjourned",), "failure": ("record:defeated", "faction-"), None: ("docket:adjourned",)},
@@ -174,18 +174,27 @@ def tie(p: dict, q, people: Optional[dict] = None) -> float:
     if q is None or q == p["id"]:
         return 0.0
     L = p.get("layers", {})
+    Q = ((people or {}).get(q) or {}).get("layers", {})      # A5: patronage is one record read both ways
     x = L.get("relationships", {}).get(q, 0.0)
-    x += 0.5 * (q in L.get("kin", ())) + 0.5 * (q == L.get("patron")) + 0.5 * (q in L.get("clients", ()))
+    x += 0.5 * (q in L.get("kin", ())) + 0.5 * (q == L.get("patron") or p["id"] in Q.get("clients", ())) \
+        + 0.5 * (q in L.get("clients", ()) or Q.get("patron") == p["id"])
     x += L.get("debts", {}).get(q, 0.0)                      # +: he owes q; -: q wronged him
     if people is not None and p.get("faction") and people.get(q, {}).get("faction") == p["faction"]:
         x += 0.3                                             # one of his own (C: faction acts on play)
     return _clip(x)
 
 
-def bearing(p: dict, ref: dict, people: dict) -> tuple:
+PARTY_STAKE = 0.2   # [ASSUMPTION; Jordan to correct] a party's least stake in his own case: the season driver's
+                    # literal (`acts._stake`, "a party always has something at stake"), moved here, its one owner
+
+
+def bearing(p: dict, ref: dict, people: dict, party: bool = True) -> tuple:
     """How a referent (a matter, an item, a person) BEARS on p: (want, hold, bond), each signed -1..1.
     `ref` carries `bears: {tag: signed weight}` and/or `parties: {for:, against:}` and/or `factions: {faction: sign}`.
-    want: pursuits, goals, ambitions, needs.  hold: convictions and his office's duty.  bond: persons and faction."""
+    want: pursuits, goals, ambitions, needs.  hold: convictions and his office's duty.  bond: persons and faction.
+    A PARTY to the matter has a stake in his own case (A-139, B6: a judge who is the accused is partial): his bond
+    is raised, as far as it goes, until his stake is at least PARTY_STAKE toward his own side. `party=False` reads
+    what the matter touches of his own beyond being a party (how hard he prepares, `effort_of`)."""
     L = p.get("layers", {})
     b = ref.get("bears", {})
     want = sum((L.get("pursuits", {}).get(t, 0.0) + L.get("needs", {}).get(t, 0.0)
@@ -195,7 +204,11 @@ def bearing(p: dict, ref: dict, people: dict) -> tuple:
     par = ref.get("parties", {})
     bond = tie(p, par.get("for"), people) - tie(p, par.get("against"), people)
     bond += ref.get("factions", {}).get(p.get("faction"), 0.0)
-    return (_clip(want), _clip(hold), _clip(bond))
+    want, hold, bond = _clip(want), _clip(hold), _clip(bond)
+    sg = 1.0 if p["id"] == par.get("for") else -1.0 if p["id"] == par.get("against") else 0.0
+    if party and sg and sg * (want + hold + bond) < 3.0 * PARTY_STAKE:
+        bond = _clip(sg * 3.0 * PARTY_STAKE - want - hold)
+    return (want, hold, bond)
 
 
 def holds(p: dict, ref: dict) -> tuple:
@@ -221,6 +234,13 @@ def care(p: dict, strife: str = "peace") -> tuple:
     return (w, h, f)
 
 
+def forum_faction(p: dict):
+    """the faction a man answers for in the world's ledgers (legitimacy, standing, a rig's price): the faction of the
+    seat he holds, else his own. A Church man in a Crown seat rules as the Crown; an office-holder with no faction of
+    his own still has his seat's (the one owner; every legitimacy and standing write reads it)."""
+    return (p.get("office") or {}).get("faction") or p.get("faction")
+
+
 def power(p: dict, regime: str = "crown") -> float:
     o = p.get("office") or {}
     auth = AUTHORITY_BY_FACTION.get(o.get("faction"))
@@ -234,10 +254,18 @@ def strain_carried(p: dict, D) -> float:
     return 0.5 * sum(x / 2 ** k for k, x in enumerate(f))
 
 
-def conflict(stake) -> tuple:
+def conflict(stake, ties=()) -> tuple:
     """B6: a stake is a CONFLICT however it nets: (how much the matter bears on him at all, which way it leans).
-    Opposite interests do not cancel to impartiality."""
-    return sum(abs(x) for x in stake) / 3.0, sum(stake) / 3.0
+    Opposite interests do not cancel to impartiality, and neither do opposite ties (A5): his bond counts as the sum of
+    his ties to each party (`ties`: his tie to the one and to the other), where that is more than the bond nets to."""
+    want, hold, bond = stake
+    return (abs(want) + abs(hold) + max(abs(bond), min(1.0, sum(abs(x) for x in ties)))) / 3.0, sum(stake) / 3.0
+
+
+def _ties(p, fid, aid):
+    """a Present's ties to the two parties, from his `bonds`."""
+    b = dict(p.bonds)
+    return (b.get(fid, 0.0), b.get(aid, 0.0) if aid else 0.0)
 
 
 def false_items(p: dict, matter: dict, side: str) -> tuple:
@@ -258,8 +286,10 @@ def takes_side(p: dict, matter: dict, people: dict) -> Optional[str]:
 
 
 def effort_of(p: dict, matter: dict, people: dict) -> int:
-    """D4 'how hard': the turns he prepares, from how much the matter bears on him: 0 a passing word .. 3."""
-    return int(min(3, round(3 * abs(sum(bearing(p, matter, people)) / 3.0) + 1))) if any(bearing(p, matter, people)) else 0
+    """D4 'how hard': the turns he prepares, from how much the matter touches his own (being a party is not
+    preparation: `party=False`): 0 a passing word .. 3."""
+    st = bearing(p, matter, people, party=False)
+    return int(min(3, round(3 * abs(sum(st) / 3.0) + 1))) if any(st) else 0
 
 
 # ------------------------------------------------------------------ arrangement by power
@@ -308,16 +338,53 @@ class Card:
                                # where the verdict is the speech itself (the abridged form: the option's own chance)
 
 
-def lawful(regime: str):
-    return tuple(r for r in RITES if r not in REGIMES[regime]["unlawful"])
+def silence_cell(r: dict, R: dict) -> str:
+    """A-145: what silence means here, the rite's cell shifted by the regime. A regime may move it between `refusal`
+    and `admits`, and may grant a right to silence (`free`) where nothing must be answered; where the rite says a
+    point MUST be answered silence is never free: its floor is `refusal` (the regime's lower `standard` is what makes
+    it cheaper there: `silence_cost` scales with the occasion's formality)."""
+    cell = r["silence"] if (R["silence"] is None or r["silence"] == "free" and "must" not in r["reply"].values()) else R["silence"]
+    return "refusal" if (cell == "free" and "must" in r["reply"].values()) else cell
 
 
-def _pack(cands, arr_id, t, people):
-    """C3: one rule for bench and floor: the arranger drops the share `t` of them least tied to him."""
-    if t <= 0 or len(cands) <= 1:
+def _silence_says(inp, rite) -> str:
+    """the card's `silence`: the cell, and what a point left unanswered costs with those who decide (A-145)."""
+    if rite.silence == "free":
+        return "free: nothing here must be answered, and silence costs nothing"
+    from .engine import silence_cost, _lead
+    ds = [p for p in inp.room if p.decides]
+    owes = _lead(inp, "against" if dict(rite.reply).get("against") == "must" else rite.bears) or ds[0]
+    c = sum(silence_cost(inp, d, None, owes) for d in ds) / len(ds) if ds else 0.0     # (a man is not contemptuous
+                                                                                      # of himself: a deciding party)
+    return f"{rite.silence}: a point owed an answer and left standing costs {c:.2f} with each who decides" \
+        + (", and counts with him again as tacitly admitted" if rite.silence == "admits" else "")
+
+
+def lawful(regime: str, row: str) -> bool:
+    """B7: whether a row may sit under a regime, keyed on the row REQUESTED: a regime's `unlawful` list names a rite
+    or a row; a named row is unlawful outright; a named rite is unlawful in every row on it except a row of the
+    regime's own authority (a theocracy outlaws the polity's debate, not the Church's own deliberation on it)."""
+    rid, over = ALIASES.get(row, (row, {}))
+    bad = REGIMES[regime]["unlawful"]
+    return not (row in bad or (rid in bad and over.get("authority", RITES[rid]["authority"]) not in REGIMES[regime]["power"]))
+
+
+def _pack(cands, arr_id, t, people, keep=1):
+    """C3: one rule for bench and floor: the arranger drops the share `t` of them least tied to him, never below
+    `keep` (B2: a declared close never seats fewer than its quorum)."""
+    if t <= 0 or len(cands) <= keep:
         return list(cands)
     cands = sorted(cands, key=lambda p: -tie(p, arr_id, people))
-    return cands[:max(1, len(cands) - int(t * (len(cands) - 1) + 0.5))]
+    return cands[:max(keep, len(cands) - int(t * (len(cands) - 1) + 0.5))]
+
+
+def packed_quorum(quorum: int, sat: int, kept: int) -> int:
+    """B2: packing changes who sits, not the arithmetic of the close: where `sat` seats were packed down to `kept`, the
+    quorum is a majority of the seats kept, and never a smaller share of them than the declared quorum was of the seats
+    that sat."""
+    if kept >= sat:
+        return quorum
+    return min(kept, max(kept // 2 + 1, math.ceil(quorum * kept / sat)))
 
 
 def build(people: dict, rite_id: str, matter: dict, *, bench=(), floor=(), form="full", era="plain", regime="crown",
@@ -328,9 +395,14 @@ def build(people: dict, rite_id: str, matter: dict, *, bench=(), floor=(), form=
     D = D or dials()
     if "context" in flat:
         era, regime, strife = "plain", "crown", "peace"
+    gone = [q for q in (matter["parties"].get("for"), matter["parties"].get("against"), arranger) if q and q not in people]
+    if gone:
+        raise ValueError(f"refused[absent]: {gone[0]} is not in the world (a party or arranger who is gone)")
+    bench = tuple(q for q in bench if q in people)          # a seat whose holder is gone sits empty, as a vacated one
+    floor = tuple(q for q in floor if q in people)
     rid, over = ALIASES.get(rite_id, (rite_id, {}))
-    if rid not in lawful(regime):
-        raise ValueError(f"refused[unlawful]: {rid} is not lawful under {regime}")
+    if not lawful(regime, rite_id):
+        raise ValueError(f"refused[unlawful]: {rite_id} is not lawful under {regime}")
     r = copy.deepcopy(RITES[rid]); r.update(over)
     R, S = REGIMES[regime], STRIFE[strife]
     fid, aid = matter["parties"]["for"], matter["parties"].get("against")
@@ -352,9 +424,12 @@ def build(people: dict, rite_id: str, matter: dict, *, bench=(), floor=(), form=
     arr = people[arranger] if arranger else (A if rig > 0 else None)      # the bearer convenes unless another does
     t, arr_side = 0.0, None
     if arr is not None:
-        arr_side = "for" if arr["id"] == fid else "against" if (B is not None and arr["id"] == aid) else \
-            ("for" if B is None or tie(arr, fid, people) >= tie(arr, aid, people) else "against")
-        weak = B if arr_side == "for" else A
+        if arr["id"] == fid or (B is not None and arr["id"] == aid):
+            arr_side = "for" if arr["id"] == fid else "against"
+        else:                                        # B9: a third party leans to the side he is tied to; tied to
+            lean = tie(arr, fid, people) - (tie(arr, aid, people) if B is not None else 0.0)    # neither more, no tilt
+            arr_side = "for" if lean > 0 else "against" if lean < 0 else None
+        weak = None if arr_side is None else (B if arr_side == "for" else A)
         if weak is not None and "power" not in flat:
             t = tilt(arr, weak, rig, regime, D)
     weak_side = None if t <= 0 else ("against" if arr_side == "for" else "for")
@@ -372,13 +447,19 @@ def build(people: dict, rite_id: str, matter: dict, *, bench=(), floor=(), form=
     if close in ("bench", "declared"):
         seats.sort(key=lambda p: -(p.get("office") or {}).get("rung", 0))
         need = 1 if close == "bench" else (r.get("quorum") or 1)
-        for p in list(seats):                                # a party who sits is partial by choice and seen (A-139)
-            c, _ = conflict(bearing(p, matter, people))
-            if p["id"] not in (fid, aid) and c >= D["recuse_at"] and len(seats) > need:
+        for p in list(seats):                # a party who holds a seat steps down where another can sit (A-139: he may
+            c, _ = conflict(bearing(p, matter, people), (tie(p, fid, people), tie(p, aid, people)))   # (B6: then he
+                                                             # is partial, seen and priced)
+            if (p["id"] in (fid, aid) or c >= D["recuse_at"]) and len(seats) > need:
                 seats.remove(p); recused.append(p["id"])          # he steps down; a conflicted seat who cannot sits and pays
-        seats = _pack(seats, arr["id"], t, people) if arr else seats
         if not seats:
             raise ValueError(f"refused[no_seat]: {rid}: no seat of authority {r['authority']} (party-gap refusal)")
+        if len(seats) < need:
+            raise ValueError(f"refused[short_bench]: {rid}: {len(seats)} seat(s) for a quorum of {need}")
+        sat = len(seats)
+        seats = _pack(seats, arr["id"], t, people, keep=need) if arr else seats
+        if close == "declared":
+            r["quorum"] = packed_quorum(need, sat, len(seats))
     fl = r["floor"] if "floor" not in R else R["floor"]
     fl_ids = [] if fl == "closed" else [f for f in floor if fl == "open" or people[f].get("office")]
     absent = set(matter.get("absent_in", {}).get(strife, ()))
@@ -386,7 +467,11 @@ def build(people: dict, rite_id: str, matter: dict, *, bench=(), floor=(), form=
     if arr is not None and t > 0:
         fl_ids = [p["id"] for p in _pack([people[f] for f in fl_ids], arr["id"], t, people)] if len(fl_ids) > 1 else \
             ([] if t >= 0.5 else fl_ids)
-    admits = tuple(k for k in r["admits"] + R["admits_add"] if k not in R["admits_drop"])
+    tiltable = [p["id"] for p in seats if close in ("bench", "declared") and p["id"] not in (fid, aid)] + list(fl_ids)
+    if t > 0 and not tiltable:               # B5: an arrangement tilts a forum, its seats and its watchers; where the
+        t, weak_side = 0.0, None             # rite has neither (a conversation, a questioning, a negotiation) there is
+                                             # nothing to tilt: no tilt shown, no price, no grudge
+    admits = tuple(dict.fromkeys(k for k in r["admits"] + R["admits_add"] if k not in R["admits_drop"]))   # once each
     eraw = ERAS[era]
     grounds = tuple((g, c, eraw.get(g, 1.0)) for g, c in GROUNDS)
     rite = Rite(id=rid, live=r["live"], reply=tuple(r["reply"].items()), issues=tuple(r["issues"]), concede=r["concede"],
@@ -394,22 +479,26 @@ def build(people: dict, rite_id: str, matter: dict, *, bench=(), floor=(), form=
                 reason_lean=r["reason_lean"] + R["reason_lean"], admits=admits, difficulty=DIFFICULTY[difficulty],
                 gravity=S["gravity"] + R["gravity"], quorum=r.get("quorum"), unrest=S["unrest"], bears=r["bears"],
                 weighs=tuple((i, tuple(ISSUE_GROUNDS[i].items())) for i in r["issues"] if i in ISSUE_GROUNDS),
-                silence=r["silence"] if (R["silence"] is None or r["silence"] == "free" and "must" not in r["reply"].values()) else R["silence"])
+                silence=silence_cell(r, R))
     speak_against = bool(moves.get("against")) and B is not None
     room, in_room = [], set()
 
     def present(p, side, decides):
         st = (0.0, 0.0, 0.0) if "bearing" in flat else bearing(p, matter, people)
         ln = D["start_step"] * sum(st) / 3.0
-        if t > 0 and decides and side is None:
-            ln += t * D["presume_step"] * SIGN[arr_side]
-        if grounds_for and decides and side is None:              # D1: an appeal's grounds, seen by the higher bench
-            ln += grounds_for[1] * D["presume_step"] * SIGN[grounds_for[0]]
-        elif t > 0 and side is None:
+        if decides and side is None:                              # a seat: the arrangement's presumption, and
+            if t > 0:                                             # D1: an appeal's grounds, seen by the higher bench
+                ln += t * D["presume_step"] * SIGN[arr_side]
+            if grounds_for:
+                ln += grounds_for[1] * D["presume_step"] * SIGN[grounds_for[0]]
+        elif t > 0 and side is None:                              # a watcher: sympathy against the arranger (never a seat)
             ln -= t * D["sympathy_step"] * SIGN[arr_side] * (1.0 - max(0.0, tie(p, arr["id"], people)))
         a = p.get("attributes", {})
         its = tuple(p.get("items", ())) + (false_items(p, matter, side) if side else ())
-        return Present(id=p["id"], weight=int(p.get("weight", 1)), side=side, decides=decides,
+        wt = p.get("weight", 1)
+        if isinstance(wt, bool) or not isinstance(wt, (int, float)) or wt != int(wt):
+            raise ValueError(f"refused[bad_weight]: {p['id']} weighs {wt!r}: a weight is a whole number of heads")
+        return Present(id=p["id"], weight=int(wt), side=side, decides=decides,
                        **{k: float(a.get(k, 4)) for k in ATTRS}, rank=float(p.get("rank", 0)),
                        care=(0.5, 0.5, 0.5) if "bearing" in flat else care(p, strife), stake=st,
                        bonds=() if "bearing" in flat else tuple((q, tie(p, q, people)) for q in people if q != p["id"] and tie(p, q, people)),
@@ -442,6 +531,10 @@ def build(people: dict, rite_id: str, matter: dict, *, bench=(), floor=(), form=
     from .engine import silence_cost, _lead
     bearer, ds_ = _lead(inp, rite.bears), [p for p in room if p.decides]
     unmoved = -sum(silence_cost(inp, d, None, bearer) for d in ds_) / len(ds_) if (must_b and bearer and ds_) else 0.0
+    # A-133: the card's odds are the close's own where nobody speaks: each who decides at his own start (bearing, the
+    # rig's presumption, an appeal's grounds; the packed bench as it sits), less the unput charge where the bearer must
+    # put it (his rest is priced as silence), drawn as the close draws (the quorum over the seats' own draws)
+    quiet = {d.id: d.start - (SIGN[rite.bears] * silence_cost(inp, d, None, bearer) if (must_b and bearer) else 0.0) for d in ds_}
     card = Card(kind=rite_id, genre=r["genre"], arranged_by=arr["id"] if (arr and t > 0) else None, tilt=round(t, 2),
                 tilted_against=weak_side,
                 stake=disp, outcomes=tuple(DISPOSAL[disp].items()),
@@ -449,13 +542,13 @@ def build(people: dict, rite_id: str, matter: dict, *, bench=(), floor=(), form=
                             round(p.power, 1)) for p in room),
                 live=r["live"], bears=r["bears"], reply=rite.reply, moves=rite.moves, barred=barred,
                 admits=admits, close=close, decided_by=tuple(p.id for p in room if p.decides), turns=turns,
-                issues=rite.issues, silence=rite.silence,
-                unargued=("it lapses: the bearer must put it, and his rest is priced as silence" if must_b
+                issues=rite.issues, silence=_silence_says(inp, rite),
+                unargued=(f"it lapses: the bearer must put it, and his rest is priced as silence ({-unmoved:.2f} with those who decide)" if must_b
                           else "it stands where the room starts"),
                 ends="when the turns are spent, a whole round rests, or a side yields",
                 standard=rite.standard, unrest=rite.unrest, gravity=rite.gravity, reason_weight=rw,
                 recused=tuple(recused),
-                odds=round(p_carried(inp, unmoved), 3) if close in ("bench", "declared", "hearers") else None)
+                odds=round(close_odds(inp, quiet), 3) if close in ("bench", "declared", "hearers") else None)
     return inp, card
 
 
@@ -470,8 +563,9 @@ def act_band(inp, out):
     neither is an impasse (band None). Never the actor's last exchange."""
     if out.ended == "yielded":                   # a yield that IS a decision: the bearer drops the matter (nothing is
         y = next(p for p in inp.room if p.id == out.ended_by)          # left to decide), or a party who decides gives
-        if inp.rite.close == "consent" or y.side == inp.rite.bears or y.decides:   # way (his own accept); otherwise
-            return ("success" if y.side != inp.rite.bears else "failure"), None, False   # the bench draws (A-14)
+        if inp.rite.close == "consent" or y.side == inp.rite.bears or _sole(inp, y):   # way and his verdict alone is
+            return ("success" if y.side != inp.rite.bears else "failure"), None, False   # the close (his own accept);
+                                                                         # otherwise the bench draws (A-14): one seat, one vote
     if inp.rite.close == "consent":
         return None, None, False
     w = {p.id: p.weight for p in inp.room}
@@ -489,13 +583,16 @@ def act_band(inp, out):
 
 def new_world():
     return dict(tenures=[], offices={}, case_files={}, ledgers={}, regard={}, pursuits={}, standing={}, legitimacy={},
-                strife={}, precedents=[], docket=[], rattled={}, events=[], compliance={}, appeal_weight={}, reception=[])
+                strife={}, precedents=[], docket=[], rattled={}, events=[], compliance={}, appeal_weight={}, reception=[],
+                refused=[])
 
 
 def bounded(x, d):
     """B9: a bounded quantity (regard, legitimacy, standing) moves by `d` toward its bound and never past it: a step
-    is worth less the nearer the bound it pushes, and nothing runs away."""
-    return x + d * (1.0 - x) if d > 0 else x + d * (1.0 + x)
+    is worth less the nearer the bound it pushes, and nothing runs away. The step is at most the whole way (|d| <= 1)
+    and the result stays in [-1, 1] whatever is handed in (A2, C8: a step over 1 overshot the bound)."""
+    x, d = _clip(x), _clip(d)
+    return _clip(x + d * (1.0 - x) if d > 0 else x + d * (1.0 + x))
 
 
 def merits(inp, out):
@@ -508,10 +605,15 @@ def merits(inp, out):
 
 
 def reception(inp, j):
-    """A-144(6), B5: `brute`, how far his station outstrips his respectability, both on 0..1: station as
-    tanh(power / power_scale), respectability as his Grace's share of the scale. A Grace-7 judge is never a brute."""
+    """A-144(6), B5: `brute`, how far his station outstrips his respectability, both read on ONE scale, the
+    attribute scale: his station is his power (a rung a point, as `power` counts it) held to floor..ceiling, his
+    respectability his Grace; the brute is the shortfall as a share of the scale, 0..1. Monotone in rung, modifier
+    and regime weight, and in Grace; a mid judge of a mid seat (Grace 4, rung 3 under a crown: power 4) is no brute,
+    a Grace-1 judge of the highest seat wholly one, and a Grace-7 judge never (A7: the old tanh station saturated at
+    any office, so every judge below Grace 5.6 was a brute)."""
     D = inp.dials
-    brute = max(0.0, math.tanh(j.power / D["power_scale"]) - (j.grace - D["floor"]) / (D["ceiling"] - D["floor"]))
+    station = min(D["ceiling"], max(D["floor"], j.power))
+    brute = max(0.0, station - j.grace) / (D["ceiling"] - D["floor"])
     return brute, 1.0 - brute
 
 
@@ -544,7 +646,7 @@ def fold(world, people, inp, card, out, matter):
     ruling = inp.rite.close in ("bench", "declared") and band is not None
     ds = sorted((p for p in inp.room if p.decides), key=lambda p: (-p.precedence, p.id))
     j = ds[0] if ruling else None
-    jf = (people[j.id].get("faction") or (people[j.id].get("office") or {}).get("faction")) if j else None
+    jf = forum_faction(people[j.id]) if j else None
     world["events"].append((matter["id"], card.kind, out.ended, band))
     world["case_files"].setdefault(matter["id"], []).append((card.kind, out.ended, band, len(out.beats)))
     w("case_file:stage", matter["id"])
@@ -570,10 +672,13 @@ def fold(world, people, inp, card, out, matter):
             if aid and any(x.mover == aid for x in out.beats):   # party spoke against him (a tell's listener did not)
                 world["docket"].append(dict(matter=matter["id"], kind="grievance", party=fid, against=aid, weight=0.0)); w(op, fid)
         elif op in ("faction+", "faction-"):
-            standing(people[fid].get("faction"), F["standing"] * (1 if op[-1] == "+" else -1)); w(op, people[fid].get("faction"))
-        elif op in ("legitimacy+", "legitimacy-"):
+            standing(forum_faction(people[fid]), F["standing"] * (1 if op[-1] == "+" else -1)); w(op, forum_faction(people[fid]))
+        elif op == "legitimacy+":
             if jf:                                         # the forum's authority, which ruled
-                legit(jf, F["legit_ruling"] * (1.0 - card.tilt) if op[-1] == "+" else -F["legit_fall"]); w(op, jf)
+                legit(jf, F["legit_ruling"] * (1.0 - card.tilt)); w(op, jf)
+        elif op == "legitimacy-accuser":                   # a charge that failed discredits whoever BROUGHT it (the same
+            legit(forum_faction(people[fid]), -F["legit_fall"]); w(op, forum_faction(people[fid]))   # shape as
+                                                           # `regard-accuser`); a right acquittal never discredits the court
         elif op == "regard+":
             for p in hearers:
                 reg(p.id, fid, F["carried"], "carried")
@@ -612,7 +717,7 @@ def fold(world, people, inp, card, out, matter):
         comp = round((1.0 + rec) / 2.0 * (0.6 if wrong else 1.0), 2)
         world["compliance"][matter["id"]] = comp
         world["reception"].append((j.id, round(rec, 2), wrong))
-        cj, lean = conflict(j.stake)
+        cj, lean = conflict(j.stake, _ties(j, fid, aid))
         favoured = (won and lean > 0) or (not won and band != "partial" and lean < 0)
         for p in inp.room:
             if p.id == j.id:
@@ -628,7 +733,7 @@ def fold(world, people, inp, card, out, matter):
             legit(jf, -F["partial_price"] * cj); w("partial_paid", j.id)
         if brute > 0:
             standing(jf, -F["brute"] * brute)
-        aw = brute + (0.5 if wrong else 0.0) + (card.tilt if (loser and _side_of(inp, loser) == card.tilted_against) else 0.0)
+        aw = brute + (0.5 if wrong else 0.0) + (card.tilt if (loser and _party_side(fid, aid, loser) == card.tilted_against) else 0.0)
         if loser:
             world["appeal_weight"][matter["id"]] = round(aw, 3)
         w("reception", j.id, round(rec, 2))
@@ -652,7 +757,7 @@ def fold(world, people, inp, card, out, matter):
         if card.tilt > 0 and p.id != card.arranged_by:
             led.append(("rigged", card.arranged_by, card.tilt))
         if p.decides:
-            c, ln = conflict(p.stake)
+            c, ln = conflict(p.stake, _ties(p, fid, aid))
             if c > 0:
                 for q in inp.room:
                     if q.id != p.id:
@@ -687,8 +792,8 @@ def fold(world, people, inp, card, out, matter):
         if inp.rite.close != "consent":
             reg(loser, winner, -F["lost"], "lost to him")
         if card.tilt > 0:
-            legit(people[card.arranged_by].get("faction"), -rig_price(card.tilt)); w("legitimacy-", card.arranged_by)
-            if _side_of(inp, loser) == card.tilted_against:
+            legit(forum_faction(people[card.arranged_by]), -rig_price(card.tilt)); w("legitimacy-", card.arranged_by)
+            if _party_side(fid, aid, loser) == card.tilted_against:      # B8: the PARTY rigged against, moves or none
                 reg(loser, card.arranged_by, -F["grudge_rig"] * card.tilt, "rigged against him")   # C3: the grievance
     if matter.get("strife") and band is not None and won and card.stake in ("decree", "oblige", "detain", "ban"):
         k = matter["strife"]                               # B3: only what the sitting RESOLVED moves a strife
@@ -697,11 +802,9 @@ def fold(world, people, inp, card, out, matter):
     return band, tuple(writes)
 
 
-def _side_of(inp, pid):
-    if pid is None:
-        return None
-    p = next((q for q in inp.room if q.id == pid), None)
-    return p.side if p else None
+def _party_side(fid, aid, pid):
+    """the side a man is a PARTY to (not the side he speaks: in a rally the opposing party has no moves)."""
+    return "for" if pid is not None and pid == fid else "against" if pid is not None and pid == aid else None
 
 
 # ------------------------------------------------------------------ the renderer (a TEST FIXTURE: beats -> a scene)

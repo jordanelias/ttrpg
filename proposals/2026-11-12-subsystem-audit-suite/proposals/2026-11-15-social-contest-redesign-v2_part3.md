@@ -2,6 +2,9 @@
 
 ## Status: PROPOSED (the third part of `2026-11-15-social-contest-redesign-v2.md`; read that file's head first; reference under CLAUDE.md §0.05, nothing reads it at runtime)
 
+The figures here are `v8_out.txt`'s. The stress-test fixes (part 4 §L) moved some, chief among them every row where a
+commune made silence `free` (it no longer can where an answer is owed): `fix3/v9_out.txt` holds them as they now are.
+
 ---
 
 ## A. Thematic, immersive, worldly
@@ -148,7 +151,7 @@ where it leans to manner. **Focus and Will: §B.6** (B14, B15).
 | the view leaks nothing | each perceived number has its own noise: among poor readers the errors of two options correlate -0.009, argue against press on one ground -0.054, an option and the mood -0.079, mood and their point +0.023; `esteem` is perceived (s.d. 0.41 about the truth); resting's worth, `awe`, the frame and the press's object have their own normals. No `Present`, track or `terms` |
 | contumacy recorded | the accused rests every turn in a crown trial (n = 1,200): 2.23 contumacy claims a sitting in the judge's ledger, the judge's regard for him -0.322 (the battery's single-sitting line, seed 0, records none: at that seed no point of the accuser stood when he rested) |
 | odds | the trial's card shows 0.141 (nobody speaking: the charge lapses); 0.132 delivered with both sides silent (n = 600); the abridged menu's chance to land 0.424 against 0.432 delivered |
-| refusals, each keyed | one character; one person as both parties; an abridged act whose only decider is the speaker; a rally with nobody on the floor; a cohort of weight 0; resuming a sitting that ended `yielded`; an unlawful rite; a bench rite with no seat of its authority. A two-turn sitting resumed under four turns runs four more beats |
+| refusals, each keyed | one character; one person as both parties; an abridged act whose only decider is the speaker; a rally with nobody on the floor; a cohort of weight 0; resuming a sitting that ended `yielded`; an unlawful rite; a bench rite with no seat of its authority; and, after the stress-test fixes (p4 §L), a resume in a changed room, of an abridged act, or with no turn left; a declared bench offered fewer seats than its quorum; a weight that is not a whole number; a party or arranger who is gone. A two-turn sitting resumed under four turns runs four more beats |
 
 ### B.5 Character, context, power, the world
 

@@ -1,0 +1,68 @@
+
+== [before] F7 card odds vs delivered when nobody speaks; n=400; seeds ('cd',row,rg,sf,i)
+  trial         crown     peace  rig0.0: card 0.141 delivered 0.120 (2se 0.035) close bench seats 1
+  trial         crown     peace  rig1.0: card 0.141 delivered 0.140 (2se 0.035) close bench seats 1
+  trial         theocracy peace  rig1.0: card 0.098 delivered 0.133 (2se 0.030) close bench seats 1  <-- outside 2 s.e.
+  trial         commune   war    rig1.0: card 0.215 delivered 0.265 (2se 0.041) close bench seats 1  <-- outside 2 s.e.
+  tribunal      crown     peace  rig0.0: card 0.141 delivered 0.045 (2se 0.035) close declared seats 3  <-- outside 2 s.e.
+  tribunal      crown     peace  rig1.0: card 0.141 delivered 0.175 (2se 0.035) close declared seats 1
+  tribunal      crown     war    rig0.0: card 0.102 delivered 0.030 (2se 0.030) close declared seats 3  <-- outside 2 s.e.
+  tribunal      theocracy peace  rig0.0: card 0.098 delivered 0.033 (2se 0.030) close declared seats 3  <-- outside 2 s.e.
+  tribunal      theocracy war    rig0.0: card 0.068 delivered 0.007 (2se 0.025) close declared seats 3  <-- outside 2 s.e.
+  tribunal      commune   peace  rig0.0: card 0.277 delivered 0.175 (2se 0.045) close declared seats 3  <-- outside 2 s.e.
+  tribunal      commune   war    rig0.0: card 0.215 delivered 0.098 (2se 0.041) close declared seats 3  <-- outside 2 s.e.
+  audience      crown     peace  rig0.0: card 0.277 delivered 0.250 (2se 0.045) close bench seats 1
+  audience      crown     peace  rig1.0: card 0.277 delivered 0.278 (2se 0.045) close bench seats 1
+  audience      crown     war    rig1.0: card 0.215 delivered 0.258 (2se 0.041) close bench seats 1  <-- outside 2 s.e.
+  debate        crown     peace  rig0.0: card 0.277 delivered 0.168 (2se 0.045) close declared seats 3  <-- outside 2 s.e.
+  debate        crown     peace  rig1.0: card 0.277 delivered 0.345 (2se 0.045) close declared seats 1  <-- outside 2 s.e.
+  debate        crown     war    rig0.0: card 0.215 delivered 0.128 (2se 0.041) close declared seats 3  <-- outside 2 s.e.
+  debate        commune   peace  rig0.0: card 0.277 delivered 0.170 (2se 0.045) close declared seats 3  <-- outside 2 s.e.
+  debate        commune   war    rig0.0: card 0.215 delivered 0.098 (2se 0.041) close declared seats 3  <-- outside 2 s.e.
+  inquisition   crown     peace  rig0.0: card 0.152 delivered 0.130 (2se 0.036) close bench seats 1
+  inquisition   crown     peace  rig1.0: card 0.152 delivered 0.147 (2se 0.036) close bench seats 1
+  examination   crown     peace  rig0.0: card 0.163 delivered 0.177 (2se 0.037) close bench seats 1
+  examination   crown     peace  rig1.0: card 0.163 delivered 0.195 (2se 0.037) close bench seats 1
+  examination   theocracy peace  rig0.0: card 0.112 delivered 0.150 (2se 0.032) close bench seats 1  <-- outside 2 s.e.
+  examination   theocracy peace  rig1.0: card 0.112 delivered 0.160 (2se 0.032) close bench seats 1  <-- outside 2 s.e.
+  arbitration   crown     peace  rig0.0: card 0.163 delivered 0.145 (2se 0.037) close bench seats 1
+  arbitration   crown     peace  rig1.0: card 0.163 delivered 0.158 (2se 0.037) close bench seats 1
+  arbitration   theocracy peace  rig1.0: card 0.112 delivered 0.160 (2se 0.032) close bench seats 1  <-- outside 2 s.e.
+  arbitration   commune   peace  rig1.0: card 0.277 delivered 0.330 (2se 0.045) close bench seats 1  <-- outside 2 s.e.
+  arbitration   commune   war    rig1.0: card 0.215 delivered 0.297 (2se 0.041) close bench seats 1  <-- outside 2 s.e.
+  rally         crown     peace  rig0.0: card 0.277 delivered 0.240 (2se 0.045) close hearers seats 3
+  rally         crown     peace  rig1.0: card 0.277 delivered 0.270 (2se 0.045) close hearers seats 2
+  rally         theocracy peace  rig1.0: card 0.215 delivered 0.282 (2se 0.041) close hearers seats 2  <-- outside 2 s.e.
+  questioning   crown     peace  rig0.0: card 0.174 delivered 0.188 (2se 0.038) close hearers seats 1
+  questioning   crown     peace  rig1.0: card 0.174 delivered 0.188 (2se 0.038) close hearers seats 1
+  conversation  crown     peace  rig0.0: card 0.277 delivered 0.270 (2se 0.045) close hearers seats 1
+  conversation  crown     peace  rig1.0: card 0.277 delivered 0.270 (2se 0.045) close hearers seats 1
+  conversation  commune   war    rig1.0: card 0.215 delivered 0.265 (2se 0.041) close hearers seats 2  <-- outside 2 s.e.
+  cells 108; outside 2 s.e. 21 (expected about 5 by chance); largest gap 0.117
+
+== [after] F7 card odds vs delivered when nobody speaks; n=400; seeds ('cd',row,rg,sf,i)
+  trial         crown     peace  rig0.0: card 0.141 delivered 0.120 (2se 0.035) close bench seats 1
+  trial         crown     peace  rig1.0: card 0.243 delivered 0.200 (2se 0.043) close bench seats 1  <-- outside 2 s.e.
+  trial         theocracy peace  rig1.0: card 0.179 delivered 0.217 (2se 0.038) close bench seats 1  <-- outside 2 s.e.
+  tribunal      crown     peace  rig0.0: card 0.054 delivered 0.045 (2se 0.023) close declared seats 3
+  tribunal      crown     peace  rig1.0: card 0.243 delivered 0.253 (2se 0.043) close declared seats 1
+  audience      crown     peace  rig0.0: card 0.277 delivered 0.250 (2se 0.045) close bench seats 1
+  audience      crown     peace  rig1.0: card 0.418 delivered 0.380 (2se 0.049) close bench seats 1
+  debate        crown     peace  rig0.0: card 0.187 delivered 0.168 (2se 0.039) close declared seats 3
+  debate        crown     peace  rig1.0: card 0.418 delivered 0.420 (2se 0.049) close declared seats 1
+  inquisition   crown     peace  rig0.0: card 0.152 delivered 0.130 (2se 0.036) close bench seats 1
+  inquisition   crown     peace  rig1.0: card 0.258 delivered 0.195 (2se 0.044) close bench seats 1  <-- outside 2 s.e.
+  examination   crown     peace  rig0.0: card 0.163 delivered 0.177 (2se 0.037) close bench seats 1
+  examination   crown     peace  rig1.0: card 0.275 delivered 0.290 (2se 0.045) close bench seats 1
+  examination   theocracy peace  rig0.0: card 0.112 delivered 0.150 (2se 0.032) close bench seats 1  <-- outside 2 s.e.
+  arbitration   crown     peace  rig0.0: card 0.163 delivered 0.145 (2se 0.037) close bench seats 1
+  arbitration   crown     peace  rig1.0: card 0.275 delivered 0.260 (2se 0.045) close bench seats 1
+  arbitration   commune   war    rig1.0: card 0.255 delivered 0.315 (2se 0.044) close bench seats 1  <-- outside 2 s.e.
+  rally         crown     peace  rig0.0: card 0.263 delivered 0.237 (2se 0.044) close hearers seats 3
+  rally         crown     peace  rig1.0: card 0.414 delivered 0.385 (2se 0.049) close hearers seats 2
+  questioning   crown     peace  rig0.0: card 0.156 delivered 0.152 (2se 0.036) close hearers seats 1
+  questioning   crown     peace  rig1.0: card 0.156 delivered 0.152 (2se 0.036) close hearers seats 1
+  conversation  crown     peace  rig0.0: card 0.251 delivered 0.233 (2se 0.043) close hearers seats 1
+  conversation  crown     peace  rig1.0: card 0.251 delivered 0.233 (2se 0.043) close hearers seats 1
+  conversation  commune   war    rig1.0: card 0.332 delivered 0.388 (2se 0.047) close hearers seats 2  <-- outside 2 s.e.
+  cells 108; outside 2 s.e. 6 (expected about 5 by chance); largest gap 0.063

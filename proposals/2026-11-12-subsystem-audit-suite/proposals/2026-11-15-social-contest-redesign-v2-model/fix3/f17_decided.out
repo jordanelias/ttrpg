@@ -1,0 +1,30 @@
+
+== [before] A8 a 30-head Guild bloc, matter.factions Guild +-1; P(for), n=800
+  trial  : no floor 0.253 +-0.031 | neutral 0.260 +-0.031 | +1 for a 0.261 +-0.031 | -1 for b 0.256 +-0.031
+  debate : no floor 0.241 +-0.030 | neutral 0.249 +-0.031 | +1 for a 0.255 +-0.031 | -1 for b 0.242 +-0.030
+  rally  : neutral 0.350 +-0.034 | +1 for a 0.381 +-0.034 | -1 for b 0.307 +-0.033
+
+== [before] B10 a conversation: the share of arguments on consequence, by era (n=800, common seeds)
+  plain        P(for) 0.314 +-0.033 consequence share 0.190 (of 1994)
+  age_of_faith P(for) 0.319 +-0.033 consequence share 0.212 (of 2069)
+  mercantile   P(for) 0.316 +-0.033 consequence share 0.150 (of 1909)
+
+== [before] C7 the respondent: automatic vs always-argue (P respondent wins), n=800
+  conversation auto 0.505 argue 0.579 diff +0.074 (2se 0.050)
+  questioning  auto 0.560 argue 0.623 diff +0.062 (2se 0.049)
+  trial        auto 0.635 argue 0.644 diff +0.009 (2se 0.048)
+
+== [after] A8 a 30-head Guild bloc, matter.factions Guild +-1; P(for), n=800
+  trial  : no floor 0.240 +-0.030 | neutral 0.255 +-0.031 | +1 for a 0.259 +-0.031 | -1 for b 0.251 +-0.031
+  debate : no floor 0.254 +-0.031 | neutral 0.259 +-0.031 | +1 for a 0.280 +-0.032 | -1 for b 0.239 +-0.030
+  rally  : neutral 0.350 +-0.034 | +1 for a 0.381 +-0.034 | -1 for b 0.307 +-0.033
+
+== [after] B10 a conversation: the share of arguments on consequence, by era (n=800, common seeds)
+  plain        P(for) 0.291 +-0.032 consequence share 0.190 (of 1989)
+  age_of_faith P(for) 0.294 +-0.032 consequence share 0.212 (of 2059)
+  mercantile   P(for) 0.297 +-0.032 consequence share 0.150 (of 1920)
+
+== [after] C7 the respondent: automatic vs always-argue (P respondent wins), n=800
+  conversation auto 0.537 argue 0.600 diff +0.062 (2se 0.049)
+  questioning  auto 0.585 argue 0.640 diff +0.055 (2se 0.049)
+  trial        auto 0.637 argue 0.635 diff -0.002 (2se 0.048)

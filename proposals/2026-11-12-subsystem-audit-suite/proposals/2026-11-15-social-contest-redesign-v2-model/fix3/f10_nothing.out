@@ -1,0 +1,12 @@
+
+== [before] F10 a (r5M) arranges against b (r2) at rig 1; n=400
+  conversation card at rig 1: tilt 0.99 arranged_by a | P(for) rig 0 0.463 rig 1 0.463 (2se 0.070) | priced 400/400
+  questioning  card at rig 1: tilt 0.99 arranged_by a | P(for) rig 0 0.450 rig 1 0.450 (2se 0.070) | priced 400/400
+  negotiation  card at rig 1: tilt 0.99 arranged_by a | P(for) rig 0 0.240 rig 1 0.240 (2se 0.060) | priced 120/400
+  trial        card at rig 1: tilt 0.99 arranged_by a | P(for) rig 0 0.335 rig 1 0.367 (2se 0.067) | priced 400/400
+
+== [after] F10 a (r5M) arranges against b (r2) at rig 1; n=400
+  conversation card at rig 1: tilt 0.0 arranged_by None | P(for) rig 0 0.420 rig 1 0.420 (2se 0.070) | priced 0/400
+  questioning  card at rig 1: tilt 0.0 arranged_by None | P(for) rig 0 0.393 rig 1 0.393 (2se 0.069) | priced 0/400
+  negotiation  card at rig 1: tilt 0.0 arranged_by None | P(for) rig 0 0.155 rig 1 0.155 (2se 0.051) | priced 0/400
+  trial        card at rig 1: tilt 0.99 arranged_by a | P(for) rig 0 0.338 rig 1 0.470 (2se 0.067) | priced 400/400
