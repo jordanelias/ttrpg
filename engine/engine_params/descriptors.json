@@ -168,7 +168,8 @@
       "copying",
       "argue",
       "inquiry",
-      "arms"
+      "arms",
+      "law"
     ],
     "rows": {
       "copying": {
@@ -227,6 +228,20 @@
           "use"
         ],
         "source": "rosters.yaml vocation_attribute (CR-20); CP-T03-04 (iv)"
+      },
+      "law": {
+        "kind": "skill",
+        "gloss": "Knows and applies the rules of a forum: procedure, definition, precedent.",
+        "base": "attr.mind.acuity",
+        "opposed_by": null,
+        "floor": 0,
+        "ceiling": 7,
+        "untrained": "default",
+        "grows_by": [
+          "train",
+          "practice"
+        ],
+        "source": "05_SC_hearing_capabilities (SC-B3); D-U1-03; U1 \u00a75 (FA's `judgment` is `law`)"
       }
     }
   },

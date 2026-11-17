@@ -33,10 +33,10 @@ def _plant(monkeypatch, edit) -> None:
     monkeypatch.setattr(ed.ci_common, "load_yaml", planted)
 
 
-def test_the_shipped_block_loads_the_four_skills():
-    """The control: the shipped `[skill]` roster exports, and the leaf reads the four rows it moved."""
+def test_the_shipped_block_loads_the_five_skills():
+    """The control: the shipped `[skill]` roster exports, and the leaf reads its five rows (the four B04.02 moved, and B04.18's `law`)."""
     out = ed.build()["capabilities"]
-    assert len(out["rows"]) == 4 and "arms" in out["rows"] and "inquiry" in out["rows"]
+    assert len(out["rows"]) == 5 and "arms" in out["rows"] and "inquiry" in out["rows"]
     assert out["kinds"] == ["skill"]
     assert set(descriptors.CAPABILITIES) == set(out["rows"])
     row = descriptors.capability("arms")
