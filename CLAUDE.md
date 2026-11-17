@@ -11,7 +11,7 @@ the one owner, and `project.godot` and the CI pin in that repo are owed a move t
 
 **This file holds rules only, and POINTERS, never figures** (§1). Reasoning and history live in
 `CLAUDE_RATIONALE.md` — reference, never binding, not required reading; the story goes there, the rule
-here. Open it when a rule here looks arbitrary and you are about to change it. **The cap is 640 lines
+here. Open it when a rule here looks arbitrary and you are about to change it. **The cap is 644 lines
 (`wc -l CLAUDE.md`), and that number is the cap.** Past it, cut something; if the rules genuinely no longer fit, raise the cap in
 the same commit and say what you added. **(RULED)** marks a rule as Jordan's, not agent-revisable.
 
