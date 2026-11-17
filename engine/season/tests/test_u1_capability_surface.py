@@ -326,6 +326,18 @@ def test_a_gate_row_at_a_site_that_is_not_a_gate_site_is_refused():
     assert msg is not None and "gate" in msg and other in msg, msg
 
 
+def test_a_judgement_row_its_reader_cannot_read_is_refused():
+    """Phase 2 (`/code-review`): `capability_factor` reads the actor's own `attributes` at the row's key, so a `judgement` row
+    keyed on a skill, or on `side: subject`, would load and read nothing. Each is refused naming the row."""
+    base = _shipped_row("judgement")
+    assert _refused([base]) is None                                    # control: the shipped row loads
+    skill = sorted(descriptors.CAPABILITIES)[0]
+    msg = _refused([dict(base, key=skill)])
+    assert msg is not None and "judgement" in msg and skill in msg, msg
+    msg = _refused([dict(base, side="subject")])
+    assert msg is not None and "judgement" in msg, msg
+
+
 def test_negative_circumstance_gain_is_refused():
     """A-25: `circumstance` carries hostile terms only; a negative gain would be a favourable one (an `edge` row's work)."""
     base = dict(_shipped_row("judgement"), role="circumstance")

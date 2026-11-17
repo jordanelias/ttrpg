@@ -348,6 +348,7 @@ def build():
     for domain in ('body', 'mind', 'spirit', 'social'):
         for key in (attrs.get(domain) or []):
             roster.append(key if isinstance(key, str) else key.get('key'))
+    capabilities = _capability_roster(reg, set(roster))
 
     return {
         '_generated': (
@@ -392,9 +393,9 @@ def build():
         # THE HERITAGE ROSTER (CR-30): what `Person.heritage` is one of, with the concern each engages.
         'heritage_roster': _heritage_roster(reg, _affiliation_roster(reg)['concerns']),
         # THE SKILLS (B04.02), defined once: what each is, its attribute, what opposes it, how it grows.
-        'capabilities': _capability_roster(reg, set(roster)),
+        'capabilities': capabilities,
         # THE TRAITS (B04.07), defined once beside the skills: what a person is moved by; held or not, never dice.
-        'traits': _trait_roster(reg, _capability_roster(reg, set(roster))['rows']),
+        'traits': _trait_roster(reg, capabilities['rows']),
         'settlement_stats': _section(reg, 'settlement_stats'),
         'practitioner_stats': _section(reg, 'practitioner_stats'),
         'territory_stats': _section(reg, 'territory_stats'),

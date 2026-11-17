@@ -21,7 +21,7 @@ from typing import Optional
 
 from . import files
 from ..gaps import Forbidden, Unspecified
-from engine.substrate.descriptors import CAPABILITIES as _CAPABILITIES
+from engine.substrate.descriptors import ATTRIBUTES as _ATTRIBUTES, CAPABILITIES as _CAPABILITIES
 
 
 # ---------------------------------------------------------------------------
@@ -663,8 +663,9 @@ def _lifepath_ranks(cells: dict) -> dict:
 
 
 LIFEPATHS = roster("lifepaths")
-LIFEPATH_TEMPLATES = _load_lifepath_templates(table("lifepath_templates"), LIFEPATHS, frozenset(_CAPABILITIES))
-LIFEPATH_RANKS = _lifepath_ranks(table("lifepath_templates"))
+_LIFEPATH_CELLS = table("lifepath_templates")
+LIFEPATH_TEMPLATES = _load_lifepath_templates(_LIFEPATH_CELLS, LIFEPATHS, frozenset(_CAPABILITIES))
+LIFEPATH_RANKS = _lifepath_ranks(_LIFEPATH_CELLS)
 # v9 FI-01 (`ED-FI-0009`, J-22 (A)): inquiry verb -> `{provider, module_entry}`, the roll that grades
 # it with no prize. Validated against the verb table at load (`data/verbs.py`) and against the prize
 # rows at driver construction (`manifest/registry.py::check_graded_inquiries`); read by
@@ -1591,6 +1592,11 @@ def _load_capability_uses(rows, fixtures) -> tuple:
         if fixtures is not None and role == "circumstance" and row.get("gain") is not None and fixtures[row["gain"]] < 0:
             refuse(i, row, f"has a negative gain ({row['gain']} = {fixtures[row['gain']]})", "a non-negative Fixture",
                    "A-25 -- `circumstance` carries hostile terms only; a favourable one is an `edge` row for the roller")
+        if role == "judgement" and (key not in _ATTRIBUTES or row.get("side", "actor") != "actor"):
+            refuse(i, row, "is a `judgement` row its reader cannot read",
+                   f"an attribute key ({sorted(_ATTRIBUTES)}) on `side: actor`",
+                   "decision/options.py::capability_factor reads the actor's own `attributes` at the row's key and no "
+                   "other side; any other key or side would load and read nothing")
         if role == "gate" and (key not in gate_keys or use not in gate_sites):
             refuse(i, row, "is a `gate` row off its one key or its gate sites",
                    f"key in {sorted(gate_keys)} at a site in {sorted(gate_sites)}",
