@@ -243,3 +243,18 @@
   leak: a poor reader's View.esteem against an opponent of Grace 7: mean -1.03, s.d. 0.41 (true -1.00)
 == A-145 SILENCE: the same matter and persons (trial, all-mid); `for` carried when the accused ...
   crown     (silence: refusal: a point owed an answer and left standing costs 2.50 with each who decides) [shipped] rests 0.595, argues 0.305, automatic 0.312 | [silence rule off] rests 0.310, argues 0.353, automatic 0.335
+  theocracy (silence: admits: a point owed an answer and left standing costs 2.62 with each who decides, and counts with him again as tacitly admitted) [shipped] rests 0.568, argues 0.242, automatic 0.252 | [silence rule off] rests 0.252, argues 0.292, automatic 0.278
+  commune   (silence: refusal: a point owed an answer and left standing costs 1.75 with each who decides) [shipped] rests 0.518, argues 0.298, automatic 0.308 | [silence rule off] rests 0.303, argues 0.347, automatic 0.330
+  recorded: contumacy claims the judge holds 0; the judge's regard for the silent man +0.07
+  a rally (nothing to answer): rest costs tempo only: card.silence = free: nothing here must be answered, and silence costs nothing
+  a party who decides and stays silent (the questioned man): the questioner gets it 0.287 when he is silent, 0.255 when he answers
+== A-146 a broken temper cannot hold its tongue: a debate; `for` puts a point, presses twice, then argues; the other man rests whenever he may
+  the provoked man ordinary (Will 4, Grace 4) [rule on] provoker carried 0.235; his beats made with temper broken 0.03; rested 0.97 | [rule off] provoker carried 0.238; his beats made with temper broken 0.00; rested 1.00   (2 s.e. of a difference 0.053)
+  the provoked man low (Will 2, Grace 2)      [rule on] provoker carried 0.532; his beats made with temper broken 0.39; rested 0.61 | [rule off] provoker carried 0.443; his beats made with temper broken 0.00; rested 1.00   (2 s.e. of a difference 0.053)
+  the provoked man high (Will 7, Grace 7)     [rule on] provoker carried 0.135; his beats made with temper broken 0.00; rested 1.00 | [rule off] provoker carried 0.135; his beats made with temper broken 0.00; rested 1.00   (2 s.e. of a difference 0.053)
+
+######## fix2/c1
+
+== C1.1 the CHARGED side (accused b) under each regime; `for` carried, lower is better for him (all-mid, n=300)
+  trial        crown     rest 0.633  answer-else-rest 0.283  answer-else-argue 0.300  argue 0.300  press 0.580  auto 0.297  | rest - answer-else-rest +0.350 (z +9.2)
+  trial        theocracy rest 0.620  answer-else-rest 0.233  answer-else-argue 0.237  argue 0.237  press 0.567  auto 0.230  | rest - answer-else-rest +0.387 (z +10.4)

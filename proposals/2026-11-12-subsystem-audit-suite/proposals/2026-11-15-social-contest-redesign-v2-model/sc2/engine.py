@@ -599,6 +599,13 @@ def _foe(inp, mover):
     return o
 
 
+def pressable(inp, side, P, S) -> bool:
+    """a press is cross-examination: it lies only where something stands against the man pressed, a live point of his
+    own that stands, or a charge laid on him (his side is not the bearer's and must answer). A man who has said nothing
+    and is charged with nothing is not pressed (finding 18: debates and negotiations opened by pressing a silence)."""
+    return (P is not None and S > 0) or (side != inp.rite.bears and _reply(inp, side) == "must")
+
+
 def _sole(inp, p) -> bool:
     """his verdict alone is the close: he decides and nobody else does (one seat, one vote)."""
     return p.decides and not any(q.decides for q in inp.room if q.id != p.id)
@@ -797,7 +804,7 @@ def menu(inp, st, mover, turns_left, frames=None, objects=None, acc=1.0):
                         ev = (1.0 - invited) * up - D["flop"] * dn - sc_a
                     out.append((mid, g, it.id if it else None, rel, ev, 1 - _phi(-mu / sd), frames.get(g)))
         elif row.effect == "strike":
-            if T is None:
+            if T is None or not pressable(inp, other_side, P, S):
                 continue
             ct = _d(st.cond)[T.id]
             for g, it in cands:
