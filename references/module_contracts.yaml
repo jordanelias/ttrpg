@@ -69,7 +69,7 @@ composition_roles:
   combat.duel_terms:
     target: "modules.combat.wrapper:DUEL_TERMS"
     kind: value
-    needed_by: "engine/season/seam/wrappers/combat.py — the roster check of `duel_terms` and `challenge_terms` against the engine's closed set."
+    needed_by: "engine/season/seam/wrappers/combat.py (the roster check of `duel_terms` and `challenge_terms` against the engine's closed set) and engine/season/harness/pairs.py (the same set, for the pairs report)."
 
   mass_battle.resolve_field:
     target: "modules.mass_battle.massbattle:resolve_field"

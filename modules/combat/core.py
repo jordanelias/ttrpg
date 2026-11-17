@@ -247,7 +247,7 @@ GAP_PREC_REF=0.65                                                   # neutral ga
 # losing to a weapon's own cut/thrust at low armour and only competitive vs rigid armour it cannot otherwise defeat.
 # SINGLE-OWNER BINDING (ED-PC-0042 rider I1b): PERC_AUTH_REF is the TOP OF THE PERCUSSION-AUTHORITY SCALE, which is
 # owned by the module that clamps to it — WP.PERC_CAP (weapon_physics.py), bound over core's
-# `import weapon_physics as WP` (no new dependency edge) so a PERC_SCALE/PERC_EXP re-fit cannot desync them.
+# `from . import weapon_physics as WP` (no new dependency edge) so a PERC_SCALE/PERC_EXP re-fit cannot desync them.
 # PERC_AUTH_REF_SOFT is NOT bound: it is a DIFFERENT anchor (bec_de_corbin's 6.51 live authority, the weakest
 # dedicated hammer — see the U2 block above), not the scale top.
 PERC_AUTH_REF=WP.PERC_CAP; PERC_AUTH_REF_SOFT=6.5; PERC_TRANSMIT_FLOOR=0.35

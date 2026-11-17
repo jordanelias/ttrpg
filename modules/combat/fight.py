@@ -23,7 +23,7 @@ import random
 from typing import Callable, Optional
 
 from engine.season.queries.inputs import CombatTurnView, PersonalCombatInput
-from . import wrapper, combatant
+from . import attributes as spec, combatant, wrapper
 
 _MISSING = object()   # `getattr`'s default for a tracker field the engine does not carry (None is a value)
 
@@ -46,7 +46,6 @@ def _attr_kw(authored) -> dict:
     `ends` (the seam composes it with the body bands), and `faculty`/`disp` have no registry key. `None` is none."""
     if not authored:
         return {}
-    from . import attributes as spec   # the sibling module `combatant` imports the same way
     return {s.key: authored[s.registry_key] for s in spec.SPEC
             if s.key != "end" and s.registry_key is not None and s.registry_key in authored}
 

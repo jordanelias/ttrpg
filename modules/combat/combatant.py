@@ -3,7 +3,7 @@ to every subsystem as `aggressor` or `defender`; no subsystem ever sees raw 'A'/
 fix for the frame-mapping bug class: roles are objects, not positional/dict keys."""
 
 # The weapons DICTIONARY + GEOMETRY live in weapons.py (the data layer); the DERIVATION in weapon_physics.py.
-# Re-exported here so existing `from combatant import WEAPONS` call-sites keep working (the canonical home is weapons.py).
+# Re-exported here so existing `from .combatant import WEAPONS` call-sites keep working (the canonical home is weapons.py).
 from .weapons import WEAPONS, GEOMETRY, HALFSWORD_FORM, HALFSWORD_BASE  # noqa: F401  (data lives in weapons.py)
 from . import attributes as _A   # the attribute spec, the one owner of which attributes exist (PC-14)
 from .config import CFG    # conc_max's coefficients when rederive() is given no cfg

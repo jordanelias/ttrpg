@@ -4,7 +4,7 @@ The tradition split lives in two modules now:
   · traditions.py        — the traditions DICTIONARY (aggregates + familiarity)
   · ability_primitives.py — the ABILITY PRIMITIVES (the atoms a tradition is built from + the equip modulators)
 
-This facade re-exports both so `import tradition as TR; TR.eff_cw(...)/TR.familiarity(...)` call-sites work. A tradition is a COGNITIVE MODE (a way of reading the same shared physics), NOT a separate rule-set;
+This facade re-exports both so `from . import tradition as TR; TR.eff_cw(...)/TR.familiarity(...)` call-sites work. A tradition is a COGNITIVE MODE (a way of reading the same shared physics), NOT a separate rule-set;
 differentiation is bottom-up only — learned abilities + familiarity.
 """
 

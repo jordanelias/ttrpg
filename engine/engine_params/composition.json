@@ -8,7 +8,7 @@
       "kind": "value",
       "entry": null,
       "verb": null,
-      "needed_by": "engine/season/seam/wrappers/combat.py \u2014 the roster check of `duel_terms` and `challenge_terms` against the engine's closed set."
+      "needed_by": "engine/season/seam/wrappers/combat.py (the roster check of `duel_terms` and `challenge_terms` against the engine's closed set) and engine/season/harness/pairs.py (the same set, for the pairs report)."
     },
     "combat.fight": {
       "target": "modules.combat.fight:fight",
