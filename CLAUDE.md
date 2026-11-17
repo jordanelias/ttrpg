@@ -11,7 +11,7 @@ the one owner, and `project.godot` and the CI pin in that repo are owed a move t
 
 **This file holds rules only, and POINTERS, never figures** (§1). Reasoning and history live in
 `CLAUDE_RATIONALE.md` — reference, never binding, not required reading; the story goes there, the rule
-here. Open it when a rule here looks arbitrary and you are about to change it. **The cap is 644 lines
+here. Open it when a rule here looks arbitrary and you are about to change it. **The cap is 645 lines
 (`wc -l CLAUDE.md`), and that number is the cap.** Past it, cut something; if the rules genuinely no longer fit, raise the cap in
 the same commit and say what you added. **(RULED)** marks a rule as Jordan's, not agent-revisable.
 
@@ -89,7 +89,8 @@ is reported in. Name the conflict; never silently rank them.
   deliverable named and its one pass applied is the stop condition: *"more could be checked"* is not a reason.
 - **NO MANUFACTURED FINDINGS; NO OVERRULED OR OFF-INTENT FIXES; REFINE BEFORE YOU BUILD.** (1) Report only
   a problem you observed (a `file:line` or a command's output). An audit, review or critic that finds
-  nothing says *"it is fine"* and stops; never invent or pad findings to look productive. (2) Do not propose
+  nothing says *"it is fine"* and stops, the answer Jordan values most when it is true; never invent or
+  pad findings to look productive. (2) Do not propose
   a correction that a ruling, ledger row or precedent has already overruled, or that conflicts with the
   game's intent (§0.06, P-01..P-15); check before proposing. (3) Do not build while the issue can be
   resolved by simplifying or refining what exists (edit the owner, cut, reuse). If you must build, build it
