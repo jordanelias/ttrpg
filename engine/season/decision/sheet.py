@@ -125,7 +125,8 @@ class DevelopmentSheet:
     """What the player sees for his person at one deliberation. `candidates` is `make_ranker`'s order --
     the shipped policy's ranking over his own candidate set -- shown, never imposed; `budget` is his
     season remainder (`ask_budget()`). The own-field copies are the inputs `make_chooser` admits
-    (`pursuits`, `stance`, `conviction`, `scar`) plus `body` and `capability`; derived lines
+    (`pursuits`, `stance`, `conviction`, `scar`) plus `body` and `capability`, and (B04.13) `attributes`, `thread_sensitivity`, `heritage` and `tenures` (his live edges as
+    `(kind, object)`: seats, oaths, commits, residence); derived lines
     (`confliction`, `crisis_weights`' shifted weights) stay derived and are not stored here."""
     person_id: str
     view: View
@@ -138,6 +139,12 @@ class DevelopmentSheet:
     conviction: Mapping
     scar: Mapping
     body: int
+    # B04.13 (CAP A8): the person's own state the play surface shows, copies only. No derived pool is stored: the play surface
+    # asks `View.odds` per candidate, as the chooser does.
+    attributes: Mapping
+    thread_sensitivity: Optional[int]
+    heritage: Optional[str]
+    tenures: tuple
 
 
 def development_space(fx: Any, mint: Callable[[str, str, str], str],
@@ -163,7 +170,8 @@ def development_space(fx: Any, mint: Callable[[str, str, str], str],
         n = ask_budget()
         sheet = DevelopmentSheet(p.id, v, q, tuple(copy.deepcopy(c) for c in cands), n, frozen(p.capability),
                                  frozen(p.pursuits), tuple(p.stance), frozen(p.conviction),
-                                 frozen(p.scar), p.body)
+                                 frozen(p.scar), p.body, frozen(p.attributes), p.thread_sensitivity, p.heritage,
+                                 tuple((t.kind, t.object) for t in p.tenures if t.live))
         chosen = [int(i) for i in pick(sheet)]
         if len(set(chosen)) != len(chosen) or any(not 0 <= i < len(cands) for i in chosen):
             raise Forbidden(f"{p.id}'s pick {chosen} is not a selection from the {len(cands)} candidates "

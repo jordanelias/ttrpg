@@ -877,6 +877,7 @@ class PersonInterior:
     tenures: tuple
     ledger: tuple
     weight: int = 1       # S9: a cohort is a Person at weight > 1; a chooser's callback may ask (harness/probes.py P21)
+    heritage: Optional[str] = None   # B04.13: read by `decision/sheet.py`'s development sheet, as `thread_sensitivity` is
 
 
 def frozen(d) -> Mapping:
@@ -890,7 +891,7 @@ def interior_of(p: Person) -> PersonInterior:
         p.id, p.name, frozen(p.capability), frozen(p.pursuits), frozen(p.conviction), frozen(p.scar),
         frozen(p.attributes),
         p.body, p.thread_sensitivity, tuple(p.stance), tuple(p.travel_leg), tuple(p.tenures), tuple(p.ledger),
-        p.weight)
+        p.weight, p.heritage)
 
 
 @dataclass

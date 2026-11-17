@@ -975,3 +975,59 @@ def test_a_cast_row_key_neither_read_nor_unread_listed_is_refused(tmp_path, monk
     assert {"certainty", "coherence"} <= carried                       # the listed keys are still authored, so the list is not vacuous
     assert not carried & {"arc_trajectory", "cultural_label", "self_other_initial"}
     assert not {k for r in rows.values() for k in (r.get("convictions") or {})} & {"cultural_label", "self_other_initial"}
+
+
+# B04.13 -- THE DEVELOPMENT SHEET SHOWS THE PERSON (CAP A8; CORE Edit 6, DEF Edit 5). `decision/sheet.py::DevelopmentSheet` gains
+# `attributes`, `thread_sensitivity`, `heritage` and `tenures`: the person's own state, copies only, no derived pool stored.
+
+def _sheet_of(person_id: str, mutate=None):
+    """Build the realm at seed 0, seat `person_id` at the development space, run one season, and return the first sheet it was shown
+    with what the stored Person held when it was shown (a season moves a person's tenures after DELIBERATE; `mutate(w)` plants state first)."""
+    from engine.season.boot.realm import build_realm
+    from engine.season.decision import make_chooser
+    from engine.season.decision.sheet import creation_sheet, development_space, seat, take_ranked
+    from engine.season.harness.play_surface import dispatching_chooser
+    from engine.season.loop.driver import SeasonDriver, resolvable_verbs
+    from engine.season.state.ids import H, draw_factory
+    w = build_realm(0)
+    if mutate is not None:
+        mutate(w)
+    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+    draw = draw_factory(w.world_seed, lambda: w.tick)
+    seen: list = []
+
+    def pick(sheet):
+        q = w.persons[person_id]
+        seen.append((sheet, {"thread_sensitivity": q.thread_sensitivity, "attributes": dict(q.attributes),
+                             "tenures": tuple((t.kind, t.object) for t in q.tenures if t.until is None)}))
+        return take_ranked(sheet)
+    auto = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(), draw=draw)
+    space = development_space(w.fixtures, mint, pick, verbs=resolvable_verbs(), draw=draw)
+    choose = dispatching_chooser(auto, seat(creation_sheet(w.persons.values()), person_id, space))
+    SeasonDriver(w).season(choose, None, contest_max_depth=w.fixtures.get("contest_max_depth"))
+    assert seen, f"{person_id} was never shown a sheet; the test observed nothing"
+    return seen[0]
+
+
+def test_development_sheet_shows_thread_sensitivity_heritage_and_tenures():
+    """`p_npc_001` reads Thread Sensitivity 75 (DEF Edit 5 (c); her registry row's `ts: 75-80`). The sheet carries her attributes (a
+    frozen copy, as `CreationRow` does), her heritage, and her live tenures as `(kind, object)` pairs in the order held; a closed
+    tenure is not shown. FALSIFIER: a sheet field that reads a value not the person's own, or a live object a pick could write
+    through. The controls are the stored person's own fields, equal to the sheet's, and the planted closed tenure that is absent."""
+    from engine.season.state.carriers import Tenure
+
+    def plant(w):
+        p = w.persons["p_npc_001"]
+        p.tenures.append(Tenure("t_b0413_open", p.id, "o_b0413_a", "hold", 0))
+        p.tenures.append(Tenure("t_b0413_shut", p.id, "o_b0413_b", "commit", 0, until=0))
+        p.heritage = "altonian"
+    sheet, held = _sheet_of("p_npc_001", plant)
+    assert sheet.thread_sensitivity == 75 == held["thread_sensitivity"]
+    assert sheet.heritage == "altonian"
+    assert dict(sheet.attributes) == held["attributes"] and len(sheet.attributes) == 10
+    assert sheet.tenures == held["tenures"]
+    assert ("hold", "o_b0413_a") in sheet.tenures and all(o != "o_b0413_b" for _, o in sheet.tenures)
+    assert all(isinstance(e, tuple) and len(e) == 2 for e in sheet.tenures)
+    with pytest.raises(TypeError):
+        sheet.attributes["attr.mind.acuity"] = 9               # a copy, read-only
+    assert not hasattr(sheet, "pool"), "a derived pool is stored on the sheet; the play surface asks View.odds"
