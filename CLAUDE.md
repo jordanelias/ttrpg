@@ -87,6 +87,13 @@ is reported in. Name the conflict; never silently rank them.
   adversarial pass runs ONCE per deliverable; its fixes are not themselves audited, and its findings do not
   seed a second fan-out. (3) Before any second wave of agents, STOP and report what the first found. (4) The
   deliverable named and its one pass applied is the stop condition: *"more could be checked"* is not a reason.
+- **NO MANUFACTURED FINDINGS; NO OVERRULED OR OFF-INTENT FIXES; REFINE BEFORE YOU BUILD.** (1) Report only
+  a problem you observed (a `file:line` or a command's output). An audit, review or critic that finds
+  nothing says *"it is fine"* and stops; never invent or pad findings to look productive. (2) Do not propose
+  a correction that a ruling, ledger row or precedent has already overruled, or that conflicts with the
+  game's intent (§0.06, P-01..P-15); check before proposing. (3) Do not build while the issue can be
+  resolved by simplifying or refining what exists (edit the owner, cut, reuse). If you must build, build it
+  as lightly and flexibly as the need allows, on the existing primitives.
 - **Max effort on the deliverable named by the current milestone** (done = **the behaviour executes**,
   §0.2): the most thorough path *that deliverable* warrants, verified over plausible, finished rather
   than sampled. **Work is this session's work if Jordan asked for it this session, or it traces to an
