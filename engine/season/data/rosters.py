@@ -16,7 +16,7 @@ beside `write_matrix.yaml`'s loader because `season.data.matrix` needs it and
 
 from __future__ import annotations
 
-from dataclasses import dataclass as _dataclass, fields as _fields
+from dataclasses import MISSING as _MISSING, dataclass as _dataclass, fields as _fields
 from typing import Optional
 
 from . import files
@@ -1312,6 +1312,177 @@ def _load_modules(members: dict, kinds) -> dict:
 
 
 MODULES = _load_modules(roster_map("modules", "members"), MODULE_KINDS)
+
+
+# ---------------------------------------------------------------------------
+# THE CAPABILITY USES TABLE (B04.05; MAP §C, U1 §3) -- where a skill is USED.
+#
+# `rosters.yaml: capability_roles` names the ten ways a skill changes an outcome, `capability_use_sites` maps each SITE to
+# the one function that reads its rows, and `tables.capability_uses` is the rows. This loader is the closure of both ways:
+# a row naming no registered site, role or key is refused, and so is a site with no reader. NOTHING READS THE ROWS BEFORE
+# B04.06 -- the table is data, the refusals are the mechanism.
+#
+# LAZY, NOT AT IMPORT: a `gain`, `add` or `floor` must be a registered Fixture, and `data/fixtures.py` imports this module,
+# so the shipped rows are loaded on first read (`capability_uses()`) and by `data.load_all()`, which every driver runs.
+#
+# "A reader whose `use` has no row reads NO CAPABILITY -- a factor of exactly 1, or UNKNOWN for a gate -- never a default."
+# ---------------------------------------------------------------------------
+@_dataclass(frozen=True)
+class CapabilityUse:
+    """One `tables.capability_uses` row. ITS FIELDS ARE THE ROW GRAMMAR (U1 §3's columns), so the column set is written
+    once, here: the three without a default are the columns every row carries; `capability_roles: fields:` says which of the
+    rest each role takes."""
+    use: str
+    role: str
+    key: str
+    side: Optional[str] = None
+    when: Optional[dict] = None
+    level: Optional[str] = None
+    per: Optional[str] = None
+    against: bool = False
+    gain: Optional[str] = None
+    add: Optional[str] = None
+    floor: Optional[str] = None
+
+
+_CAPABILITY_USE_COLUMNS = tuple(f.name for f in _fields(CapabilityUse))
+_CAPABILITY_USE_BASE = tuple(f.name for f in _fields(CapabilityUse) if f.default is _MISSING)
+_CAPABILITY_USES_WHERE = "rosters.yaml -- tables: capability_uses"
+
+
+def _capability_use_sites() -> dict:
+    """`{site: reader}`, refused if a site has no reader. Read from `_ROSTERS` at call time, so the shipped map is checked
+    at import (`CAPABILITY_USE_SITES` below) and a planted one is checked at the load that reads it."""
+    sites = _ROSTERS.get("capability_use_sites")
+    if not isinstance(sites, dict) or not sites:
+        raise Unspecified(
+            "roster 'capability_use_sites' is absent, empty or not a site -> reader map", "rosters.yaml",
+            needs="a map from each site to the one function that reads its rows",
+            law="U1 §3 item 7 -- a site is a place with ONE reader; a table with no site map has no reader to close it against")
+    for site, reader in sites.items():
+        if not isinstance(reader, str) or not reader.strip():
+            raise Unspecified(
+                f"`capability_use_sites` site {site!r} has no reader ({reader!r})", "rosters.yaml",
+                needs="the one host function (or typed-input field) that reads the site's rows, or delete the site",
+                law="U1 §3 item 7 -- a use that no reader registers is refused at import; a row nothing reads is a column "
+                    "that silently does nothing")
+    return {str(s): r for s, r in sites.items()}
+
+
+def _capability_role_fields(roles) -> dict:
+    """`{role: frozenset of the columns it takes}` from `capability_roles: fields:`, closed against the ten roles and the
+    row grammar."""
+    fields = (_ROSTERS.get("capability_roles") or {}).get("fields")
+    if not isinstance(fields, dict) or set(fields) != set(roles):
+        raise Unspecified(
+            "`capability_roles: fields:` is absent or does not name exactly the roles", "rosters.yaml",
+            needs=f"one row of columns per role in {list(roles)}",
+            law="MAP §C -- the role-field table is closed both ways: every role says which columns it takes")
+    extras = _CAPABILITY_USE_COLUMNS
+    out = {}
+    for role, cols in fields.items():
+        bad = [c for c in (cols or []) if c not in extras or c in _CAPABILITY_USE_BASE]
+        if bad:
+            raise Unspecified(
+                f"`capability_roles: fields:` role {role!r} names {bad}, which are not optional columns of a uses row",
+                "rosters.yaml", needs=f"columns from {[c for c in extras if c not in _CAPABILITY_USE_BASE]}",
+                law="MAP §C -- a role takes columns the row grammar has")
+        out[role] = frozenset(cols or [])
+    return out
+
+
+def _load_capability_uses(rows, fixtures) -> tuple:
+    """`tuple[CapabilityUse]`, every row refused by name if it is malformed (U1-A step 4; USES "Closed both ways"; MAP §G edit 2).
+
+    `fixtures` is `{registered Fixture name: its shipped value}` -- a `gain`, `add` or `floor` must be one, and a
+    `circumstance` row's gain must not be negative."""
+    from engine.dice_engine.sigma_leverage import LEVEL_SIGMA as _LEVELS
+    from engine.substrate import descriptors as _desc
+
+    roles = roster("capability_roles", ordered=True)
+    sites = _capability_use_sites()
+    role_fields = _capability_role_fields(roles)
+    sides, pers, selectors = roster("capability_sides"), roster("capability_per"), roster("capability_key_selectors")
+    gate_keys, gate_sites = roster("capability_gate_keys"), roster("capability_gate_sites")
+    fixture_cols = roster("capability_fixture_columns", ordered=True)
+    if not isinstance(rows, (list, tuple)) or not rows:
+        raise Unspecified("`tables: capability_uses` has no `rows:`", _CAPABILITY_USES_WHERE,
+                          needs="the uses rows", law="ED-IN-0230 -- a declared-but-empty table is the defect the loaders refuse")
+
+    def refuse(i, row, what, needs, law):
+        label = "/".join(str(row.get(c)) for c in _CAPABILITY_USE_BASE) if isinstance(row, dict) else repr(row)
+        raise Unspecified(f"`capability_uses` row {i} ({label}) {what}", _CAPABILITY_USES_WHERE, needs=needs, law=law)
+
+    out = []
+    for i, row in enumerate(rows):
+        if not isinstance(row, dict):
+            refuse(i, row, "is not a mapping", "a mapping with `use`, `role` and `key`", "U1 §3 -- a row is a mapping of the columns")
+        unknown = [c for c in row if c not in _CAPABILITY_USE_COLUMNS]
+        if unknown:
+            refuse(i, row, f"carries unknown column(s) {unknown}", f"only {list(_CAPABILITY_USE_COLUMNS)}",
+                   "U1 §3 -- a column nobody reads silently does nothing (04 §B.13 #10)")
+        missing = [c for c in _CAPABILITY_USE_BASE if c not in row]
+        if missing:
+            refuse(i, row, f"has no {missing}", f"every row carries {list(_CAPABILITY_USE_BASE)}", "U1 §3 -- the base columns")
+        role, use, key = row["role"], row["use"], row["key"]
+        if role not in roles:
+            refuse(i, row, f"has role {role!r}, which is not a `capability_roles` member", f"one of {list(roles)}",
+                   "MAP §A -- the ten roles are closed")
+        if use not in sites:
+            refuse(i, row, f"names site {use!r}, which `capability_use_sites` does not register", f"one of {sorted(sites)}",
+                   "U1 §3 item 7 -- a row is read by its site's one reader; a site with no reader is not a site")
+        extra = [c for c in row if c not in _CAPABILITY_USE_BASE and c not in role_fields[role]]
+        if extra:
+            refuse(i, row, f"carries `{extra[0]}`, which role {role!r} does not take",
+                   f"only {sorted(role_fields[role])} beside the base columns", "MAP §C -- the role-field table")
+        if not (key in selectors or key in _desc.CAPABILITIES or key in _desc.ATTRIBUTES or key in _desc.PRACTITIONER_STATS):
+            refuse(i, row, f"has key {key!r}, which is none of a skill, an attribute, a practitioner stat or a selector",
+                   f"a skill {sorted(_desc.CAPABILITIES)}, an attribute, a practitioner stat, or {sorted(selectors)}",
+                   "U1 §3 item 1 -- a key resolves through the leaf reader; a trait key is B04.07's")
+        if row.get("side") is not None and row["side"] not in sides:
+            refuse(i, row, f"has side {row['side']!r}", f"one of {sorted(sides)}", "U1 §3 item 3 -- `side` says whose sheet is read")
+        if row.get("per") is not None and row["per"] not in pers:
+            refuse(i, row, f"has per {row['per']!r}", f"one of {sorted(pers)}", "U1 §3 item 2 -- `per` is closed")
+        if row.get("level") is not None and row["level"] not in _LEVELS:
+            refuse(i, row, f"has level {row['level']!r}, which is not a `LEVEL_SIGMA` name", f"one of {sorted(_LEVELS)}",
+                   "MAP §C -- a level is the named level `sigma_leverage.LEVEL_SIGMA` owns")
+        if "against" in row and not isinstance(row["against"], bool):
+            refuse(i, row, f"has against {row['against']!r}", "true or false", "U1 §3 item 3 -- `against` is a boolean")
+        if "when" in row and not isinstance(row["when"], dict):
+            refuse(i, row, "has a `when` that is not a mapping", "a mapping of condition keys", "MAP §C -- `when` is a condition")
+        for col in fixture_cols:
+            if row.get(col) is not None and (not isinstance(row[col], str) or row[col] not in fixtures):
+                refuse(i, row, f"has {col} {row[col]!r}, which is not a registered Fixture",
+                       "a name in `Fixtures` (`data/fixtures.py`), graded and swept",
+                       "S42.2.1 -- an unregistered rate must REFUSE, never answer plausibly")
+        if role == "circumstance" and row.get("gain") is not None and fixtures[row["gain"]] < 0:
+            refuse(i, row, f"has a negative gain ({row['gain']} = {fixtures[row['gain']]})", "a non-negative Fixture",
+                   "A-25 -- `circumstance` carries hostile terms only; a favourable one is an `edge` row for the roller")
+        if role == "gate" and (key not in gate_keys or use not in gate_sites):
+            refuse(i, row, "is a `gate` row off its one key or its gate sites",
+                   f"key in {sorted(gate_keys)} at a site in {sorted(gate_sites)}",
+                   "A-11 -- a gate is closed to Thread Sensitivity; no other skill is a condition of attempting an act")
+        out.append(CapabilityUse(**{c: row[c] for c in row}))
+    return tuple(out)
+
+
+CAPABILITY_ROLES = roster("capability_roles", ordered=True)
+CAPABILITY_USE_SITES = _capability_use_sites()
+_CAPABILITY_USES: Optional[tuple] = None
+
+
+def capability_uses() -> tuple:
+    """The shipped uses rows, loaded and checked once against `DEFAULT_FIXTURES`'s registered names. Lazy (see above)."""
+    global _CAPABILITY_USES
+    if _CAPABILITY_USES is None:
+        from .fixtures import DEFAULT_FIXTURES
+        _CAPABILITY_USES = _load_capability_uses((_TABLES.get("capability_uses") or {}).get("rows"), dict(DEFAULT_FIXTURES._v))
+    return _CAPABILITY_USES
+
+
+def load() -> tuple:
+    """`data.load_all()`'s hook: force the lazy uses table so a bad row refuses at driver construction."""
+    return capability_uses()
 
 
 # ---------------------------------------------------------------------------

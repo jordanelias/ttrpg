@@ -245,3 +245,166 @@ def test_derived_vocation_maps_equal_the_retired_rosters():
     from engine.season.data.verbs import VERB_TABLE
     assert [v for v, r in VERB_TABLE.items() if r.capability == "none"] == ["lie", "march"] \
         and "lie" not in verb_capability and "march" not in verb_capability
+
+
+# ======================================================================================
+# B04.05 -- THE TEN ROLES, THE SITE MAP AND THE USES TABLE, WITH ITS LOADER
+# ======================================================================================
+# `rosters.yaml: capability_roles` (closed, ordered), `capability_use_sites` (a MAP: site -> its one reader) and
+# `tables.capability_uses` (the rows) are read by `data/rosters.py::_load_capability_uses`. Each refusal test plants the
+# defect in a copy of the shipped rows (or the shipped roster the loader reads) and observes the loader refuse it, naming
+# the row; the shipped table is the control. Planted rows are `dict(shipped_row, field=...)`, never a literal row: the
+# hardcoded-definition scan in `test_season_shape.py` refuses a literal collection of three or more strings.
+
+def _shipped_rows():
+    import copy as _copy
+    from engine.season.data import rosters
+    return _copy.deepcopy(list(rosters._TABLES["capability_uses"]["rows"]))
+
+
+def _fixture_values():
+    from engine.season.data.fixtures import DEFAULT_FIXTURES
+    return dict(DEFAULT_FIXTURES._v)
+
+
+def _shipped_row(role):
+    """The first shipped row of `role` -- the base a test plants a defect into."""
+    rows = [r for r in _shipped_rows() if r["role"] == role]
+    assert rows, role
+    return rows[0]
+
+
+def _refused(rows, fixtures=None):
+    """Load `rows` through the loader and return the refusal's text (None if it loaded)."""
+    from engine.season.data import rosters
+    from engine.season.gaps import ShapeGap
+    try:
+        rosters._load_capability_uses(rows, _fixture_values() if fixtures is None else fixtures)
+    except ShapeGap as e:
+        return str(e)
+    return None
+
+
+def test_the_shipped_uses_table_loads_and_every_site_has_its_reader():
+    """The control: every shipped row loads, its role is one of the ten, its site is registered with a reader."""
+    from engine.season.data import rosters
+    roles = rosters.roster("capability_roles", ordered=True)
+    assert len(roles) == 10 and len(set(roles)) == 10
+    rows = _shipped_rows()
+    loaded = rosters._load_capability_uses(rows, _fixture_values())
+    assert len(rows) >= 8 and len(loaded) == len(rows)
+    checked = 0
+    for row in loaded:
+        assert row.role in roles and row.use in rosters.CAPABILITY_USE_SITES
+        assert rosters.CAPABILITY_USE_SITES[row.use].strip()
+        checked += 1
+    assert checked == len(rows)
+    assert rosters.capability_uses() == loaded
+    # the roles that ship a row are roles, and most of the ten ship none
+    assert {r.role for r in loaded} <= set(roles)
+    assert len({r.role for r in loaded}) >= 5
+
+
+def test_a_gate_row_on_another_capability_is_refused():
+    """CAP Part A's falsifier: a `gate` row keyed on anything but Thread Sensitivity is refused at load."""
+    base = _shipped_row("gate")
+    msg = _refused([dict(base, key="inquiry")])
+    assert msg is not None and "gate" in msg and "inquiry" in msg, msg
+    msg = _refused([dict(base, key=descriptors.ATTRIBUTES[0])])
+    assert msg is not None and "gate" in msg and descriptors.ATTRIBUTES[0] in msg, msg
+    # control: the same row, untouched, loads
+    assert _refused([base]) is None
+
+
+def test_a_gate_row_at_a_site_that_is_not_a_gate_site_is_refused():
+    """The other half of the falsifier: a `gate` row at any site but `own_state_gate` and `told_retain`."""
+    from engine.season.data import rosters
+    base = _shipped_row("gate")
+    other = next(s for s in sorted(rosters.CAPABILITY_USE_SITES) if s != base["use"])
+    msg = _refused([dict(base, use=other)])
+    assert msg is not None and "gate" in msg and other in msg, msg
+
+
+def test_negative_circumstance_gain_is_refused():
+    """A-25: `circumstance` carries hostile terms only; a negative gain would be a favourable one (an `edge` row's work)."""
+    base = dict(_shipped_row("judgement"), role="circumstance")
+    gain = base["gain"]
+    fx = _fixture_values()
+    assert fx[gain] >= 0                       # control: at its shipped value the row loads
+    assert _refused([base], fx) is None
+    fx[gain] = -0.5
+    msg = _refused([base], fx)
+    assert msg is not None and "circumstance" in msg and gain in msg and "negative" in msg, msg
+
+
+def test_a_use_with_no_registered_reader_is_refused(monkeypatch):
+    """USES: a site the map carries with no reader -- a row nothing would read -- is refused, naming the site."""
+    from engine.season.data import rosters
+    sites = dict(rosters.CAPABILITY_USE_SITES)
+    site = next(iter(sites))
+    for blank in ("", "   ", None):
+        monkeypatch.setitem(rosters._ROSTERS, "capability_use_sites", dict(sites, **{site: blank}))
+        msg = _refused(_shipped_rows())
+        assert msg is not None and site in msg and "reader" in msg, (blank, msg)
+    monkeypatch.setitem(rosters._ROSTERS, "capability_use_sites", sites)
+    assert _refused(_shipped_rows()) is None
+
+
+def test_capability_use_with_an_unregistered_site_is_refused():
+    base = _shipped_row("dice")
+    msg = _refused([dict(base, use="no_such_site")])
+    assert msg is not None and "no_such_site" in msg and "capability_use_sites" in msg, msg
+
+
+def test_a_level_outside_level_sigma_is_refused():
+    """MAP: an `edge` row's `level` is a `sigma_leverage.LEVEL_SIGMA` name."""
+    from engine.dice_engine.sigma_leverage import LEVEL_SIGMA
+    base = dict(_shipped_row("dice"), role="edge", level="moderate", per="held")
+    for name in LEVEL_SIGMA:                   # control: every name in the owner's table loads
+        assert _refused([dict(base, level=name)]) is None, name
+    msg = _refused([dict(base, level="enormous")])
+    assert msg is not None and "level" in msg and "enormous" in msg, msg
+
+
+def test_an_unknown_role_or_key_is_refused():
+    base = _shipped_row("dice")
+    msg = _refused([dict(base, role="no_such_role")])
+    assert msg is not None and "no_such_role" in msg and "capability_roles" in msg, msg
+    msg = _refused([dict(base, key="no_such_key")])
+    assert msg is not None and "no_such_key" in msg, msg
+    # a key is a skill, an attribute, a practitioner key or a selector: each loads
+    for key in (*sorted(descriptors.CAPABILITIES), descriptors.ATTRIBUTES[0], *sorted(descriptors.PRACTITIONER_STATS),
+                "verb", "verb.base"):
+        assert _refused([dict(base, key=key)]) is None, key
+
+
+def test_a_field_the_role_does_not_take_is_refused():
+    """MAP §C's role-field table: `level` is an `edge` field; a `dice` row naming one is refused."""
+    base = _shipped_row("dice")
+    msg = _refused([dict(base, level="moderate")])
+    assert msg is not None and "level" in msg and "dice" in msg, msg
+    msg = _refused([dict(base, no_such_field=1)])
+    assert msg is not None and "no_such_field" in msg, msg
+
+
+def test_a_per_outside_held_rank_mid_is_refused():
+    base = dict(_shipped_row("dice"), role="edge", level="minor", per="held")
+    from engine.season.data import rosters
+    pers = sorted(rosters.roster("capability_per"))
+    assert len(pers) == 3
+    for per in pers:
+        assert _refused([dict(base, per=per)]) is None, per
+    msg = _refused([dict(base, per="twice")])
+    assert msg is not None and "per" in msg and "twice" in msg, msg
+
+
+def test_a_gain_add_or_floor_that_is_not_a_registered_fixture_is_refused():
+    gain_row = _shipped_row("judgement")
+    msg = _refused([dict(gain_row, gain="no_such_fixture")])
+    assert msg is not None and "no_such_fixture" in msg and "Fixture" in msg, msg
+    dice_row = _shipped_row("dice")
+    for column in ("add", "floor"):
+        msg = _refused([dict(dice_row, **{column: "no_such_fixture"})])
+        assert msg is not None and column in msg and "no_such_fixture" in msg, (column, msg)
+        # control: a registered fixture name in the same cell loads
+        assert _refused([dict(dice_row, **{column: gain_row["gain"]})]) is None, column

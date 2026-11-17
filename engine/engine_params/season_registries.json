@@ -2154,6 +2154,108 @@
         "capabilities": {
           "from_descriptor": "capabilities"
         },
+        "capability_roles": {
+          "values": [
+            "dice",
+            "addend",
+            "opposes",
+            "edge",
+            "circumstance",
+            "resource",
+            "threshold",
+            "rate",
+            "judgement",
+            "gate"
+          ],
+          "fields": {
+            "dice": [
+              "side",
+              "add",
+              "floor"
+            ],
+            "addend": [
+              "when"
+            ],
+            "opposes": [
+              "side"
+            ],
+            "edge": [
+              "side",
+              "when",
+              "level",
+              "per",
+              "against"
+            ],
+            "circumstance": [
+              "side",
+              "when",
+              "gain"
+            ],
+            "resource": [
+              "side"
+            ],
+            "threshold": [
+              "side"
+            ],
+            "rate": [
+              "when",
+              "gain"
+            ],
+            "judgement": [
+              "side",
+              "gain"
+            ],
+            "gate": [
+              "side",
+              "gain"
+            ]
+          }
+        },
+        "capability_use_sites": {
+          "social_roll": "seam/wrappers/sigma.py::contest_input",
+          "fight": "seam/wrappers/combat.py::combat_input",
+          "kit": "combat_systems.act_cost's caller (host-side shortfall)",
+          "told_claim_credit": "decision/options.py::competence",
+          "own_state_gate": "queries/person_q.py::OwnStateReader (capability_admits)"
+        },
+        "capability_sides": {
+          "values": [
+            "actor",
+            "subject",
+            "each"
+          ]
+        },
+        "capability_per": {
+          "values": [
+            "held",
+            "rank",
+            "mid"
+          ]
+        },
+        "capability_fixture_columns": {
+          "values": [
+            "gain",
+            "add",
+            "floor"
+          ]
+        },
+        "capability_key_selectors": {
+          "values": [
+            "verb",
+            "verb.base"
+          ]
+        },
+        "capability_gate_keys": {
+          "values": [
+            "prac.thread_sensitivity"
+          ]
+        },
+        "capability_gate_sites": {
+          "values": [
+            "own_state_gate",
+            "told_retain"
+          ]
+        },
         "task_difficulty": {
           "source": "B11 lane A (Jordan, 2026-11-12, relayed: *\"social contest obstacle is defined by the difficulty of the task and all associated modifiers\"*; RULED 2026-08-14, `dice_engine.degree_from_net`'s docstring: an opposed obstacle is *\"their corresponding score/2 plus whatever specific modifiers exist for them in that instance\"*).",
           "note": "THE DIFFICULTY OF EACH TASK THE SOCIAL ROLL DEALS -- `verb: number`, the obstacle's first term before any modifier. `modules/social_contest/roll.py::obstacle_terms` composes Ob = difficulty + the opposing person's `score / 2` (the ruled term, kept as one modifier, unchanged) - the room's terms (`reception`, `proofs`) + an examined document's `forgery_quality`, under the ceiling (H-213), and names every term on the roll's record (`seam/wrappers/sigma.py::resolve`, `ob_terms`). WHERE THE RULING AND THIS MEET: for a person opponent the ruled form is the score term plus the instance's modifiers, and the task's difficulty is one of those modifiers; at difficulty 0 the obstacle is the ruled form exactly. CLOSED: a row for every verb the social roll deals (a `contests:` prize the `social_contest` provider resolves, or a `graded_inquiries` route to it) and for nothing else, refused at import (`data/verbs.py::_load_task_difficulty`) -- a task with no difficulty is a loud gap, never `obstacle_default`. THE SHIPPED VALUES ARE A CALIBRATION, NOT A DESIGN: a contest against a person is 1.0, so an opponent at the shipped score (2) composes 2.0, the realm's obstacle before this row; an inquiry, which no person opposes, is 2.0, its obstacle before this row (`obstacle_default`). The differences between tasks (a lie against a truth, an arrest against an argument) are Jordan's to author. [ASSUMPTION; medium; Jordan to correct; revert: `Fixtures obstacle_model: stand_in`, the control arm.]",
@@ -3314,6 +3416,60 @@
         }
       },
       "tables": {
+        "capability_uses": {
+          "rows": [
+            {
+              "use": "social_roll",
+              "role": "dice",
+              "key": "verb",
+              "side": "actor"
+            },
+            {
+              "use": "social_roll",
+              "role": "opposes",
+              "key": "verb",
+              "side": "subject"
+            },
+            {
+              "use": "fight",
+              "role": "dice",
+              "key": "verb",
+              "side": "each"
+            },
+            {
+              "use": "fight",
+              "role": "opposes",
+              "key": "verb",
+              "side": "each"
+            },
+            {
+              "use": "fight",
+              "role": "resource",
+              "key": "attr.body.endurance",
+              "side": "each"
+            },
+            {
+              "use": "kit",
+              "role": "threshold",
+              "key": "attr.body.strength",
+              "side": "each"
+            },
+            {
+              "use": "told_claim_credit",
+              "role": "judgement",
+              "key": "attr.social.attunement",
+              "side": "actor",
+              "gain": "competence_gain"
+            },
+            {
+              "use": "own_state_gate",
+              "role": "gate",
+              "key": "prac.thread_sensitivity",
+              "side": "actor",
+              "gain": "thread_sensitivity_gate"
+            }
+          ]
+        },
         "site_yield": {
           "source": "`W8` / `H-93`. #353 \u00a725 lists `yield` as written at MATTER and *blocked on `season_factor`'s distribution* (\u00a722.3); it never says what a place produces.",
           "row": "H-93",

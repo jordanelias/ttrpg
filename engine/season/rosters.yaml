@@ -1328,6 +1328,56 @@ rosters:
   capabilities:
     from_descriptor: capabilities
 
+  # B04.05 (U1 §3, MAP §A and §C): where a skill is USED. `capability_roles` is the ten ways a skill (or an attribute or a
+  # practitioner stat) changes an outcome -- closed and ordered; `fields` is each role's row of the role-field table (the
+  # columns of `tables.capability_uses` that role takes, beside the three every row carries: `use`, `role`, `key`).
+  # `capability_use_sites` is a MAP from a site to its ONE reader (U1 §3 item 7); only the sites with a reader on this tree.
+  # `choice_temper` is absent: its reader `decision/choose.py::temper` does not exist (B10 lands both). The rows are
+  # `tables.capability_uses`; the loader is `data/rosters.py::_load_capability_uses`, which refuses a row naming a site no
+  # reader registers, an unknown role or key, a field its role does not take, a `circumstance` row with a negative gain, a
+  # `gate` row on any key but Thread Sensitivity or at any site but the two gate sites, a `level` outside `LEVEL_SIGMA`, a
+  # `per` outside its roster and a `gain`, `add` or `floor` that is not a registered Fixture. A reader whose `use` has no row
+  # reads no capability (a factor of exactly 1, UNKNOWN for a gate), never a default.
+  capability_roles:
+    values: [dice, addend, opposes, edge, circumstance, resource, threshold, rate, judgement, gate]
+    fields:
+      dice: [side, add, floor]
+      addend: [when]
+      opposes: [side]
+      edge: [side, when, level, per, against]
+      circumstance: [side, when, gain]
+      resource: [side]
+      threshold: [side]
+      rate: [when, gain]
+      judgement: [side, gain]
+      gate: [side, gain]
+
+  capability_use_sites:
+    social_roll: seam/wrappers/sigma.py::contest_input
+    fight: seam/wrappers/combat.py::combat_input        # applied by the module
+    kit: "combat_systems.act_cost's caller (host-side shortfall)"
+    told_claim_credit: decision/options.py::competence
+    own_state_gate: queries/person_q.py::OwnStateReader (capability_admits)
+
+  # `side`: whose sheet a row reads -- not who benefits (U1 §3 item 3). `per`: once when held, once per rank, or signed steps
+  # of the held value from its scale's mid-point (U1 §3 item 2). `key` selectors: the skill the act's verb names (`verb`)
+  # and that skill's governing attribute (`verb.base`) (U1 §3 item 1).
+  capability_sides:
+    values: [actor, subject, each]
+  capability_per:
+    values: [held, rank, mid]
+  # the columns whose value names a registered `Fixtures` entry (a `gain`, and a `dice` row's pool rule)
+  capability_fixture_columns:
+    values: [gain, add, floor]
+  capability_key_selectors:
+    values: [verb, verb.base]
+
+  # A-11 (U1 §3 item 5): a `gate` row is closed to its one held value, at the two sites that gate on it.
+  capability_gate_keys:
+    values: [prac.thread_sensitivity]
+  capability_gate_sites:
+    values: [own_state_gate, told_retain]
+
   task_difficulty:
     source: >-
       B11 lane A (Jordan, 2026-11-12, relayed: *"social contest obstacle is defined by the difficulty of the task and all
@@ -3234,6 +3284,22 @@ rosters:
     values: [leap, weave, pull, past_pull, lock, dissolve, mend]
 
 tables:
+
+  # B04.05 (MAP §C, U1 §3): the uses table -- today's rules restated, one row per place a skill changes an outcome. Read by
+  # `data/rosters.py::capability_uses()`; no reader reads it before B04.06. The `dice` rows carry no `add:`/`floor:` yet (those
+  # name `pool_add` and `pool_floor`, which B05 creates). No row ships for `edge`, `circumstance`, `addend` or `rate`.
+  # The `social_roll` rows are the single roll's (`seam/wrappers/sigma.py::contest_input`); a proceeding's dice and opposition
+  # are the social contest's (V2), not rows here.
+  capability_uses:
+    rows:
+      - {use: social_roll,       role: dice,      key: verb, side: actor}
+      - {use: social_roll,       role: opposes,   key: verb, side: subject}
+      - {use: fight,             role: dice,      key: verb, side: each}
+      - {use: fight,             role: opposes,   key: verb, side: each}
+      - {use: fight,             role: resource,  key: attr.body.endurance, side: each}
+      - {use: kit,               role: threshold, key: attr.body.strength,  side: each}
+      - {use: told_claim_credit, role: judgement, key: attr.social.attunement,  side: actor, gain: competence_gain}
+      - {use: own_state_gate,    role: gate,      key: prac.thread_sensitivity, side: actor, gain: thread_sensitivity_gate}
 
   site_yield:
     source: "`W8` / `H-93`. #353 §25 lists `yield` as written at MATTER and *blocked on `season_factor`'s distribution* (§22.3); it never says what a place produces."
