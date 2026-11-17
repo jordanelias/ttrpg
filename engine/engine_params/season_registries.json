@@ -4287,6 +4287,8 @@
         {
           "verb": "argue",
           "stratum": "social",
+          "capability": "argue",
+          "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (`argue` is its own vocation, v10 REM-30).",
           "eligibility": [
             "own"
           ],
@@ -4353,6 +4355,8 @@
         {
           "verb": "arrest",
           "stratum": "contested_physical",
+          "capability": "arms",
+          "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (lane A's row, D-U1-07).",
           "eligibility": [
             "remit:dispatch"
           ],
@@ -4675,6 +4679,8 @@
           "scale": "settlement",
           "scale_note": "a sitting decides at the venue's rung",
           "stratum": "binding_decision",
+          "capability": "argue",
+          "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (lane A's row, D-U1-07).",
           "eligibility": [
             "remit:determine"
           ],
@@ -4965,6 +4971,8 @@
         {
           "verb": "lie",
           "stratum": "social",
+          "capability": "none",
+          "capability_note": "undeclared at authoring; every person rolls the untrained default. No `deception` skill: a lie is an `argue` whose item is the liar's own false word (the social contest's V2, B24p.16; ED-IN-0378).",
           "eligibility": [
             "own"
           ],
@@ -5255,6 +5263,8 @@
         {
           "verb": "fight",
           "stratum": "contested_physical",
+          "capability": "arms",
+          "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (CP-T03-04, B10-11: the three rows contesting `the body` draw on `arms`).",
           "eligibility": [
             "own"
           ],
@@ -5333,6 +5343,8 @@
         {
           "verb": "capture",
           "stratum": "contested_physical",
+          "capability": "arms",
+          "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (CP-T03-04, B10-11; added beside `fight` and `accept` because it opens the same fight through the same `combat_input`, CR-85 design \u00a75).",
           "eligibility": [
             "remit:dispatch"
           ],
@@ -5480,6 +5492,8 @@
         {
           "verb": "accept",
           "stratum": "contested_physical",
+          "capability": "arms",
+          "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (CP-T03-04, B10-11).",
           "eligibility": [
             "own"
           ],
@@ -5637,6 +5651,8 @@
           "scale": "settlement",
           "scale_note": "a march targets a Rung (a settlement or, since ED-IN-0306 phase 4, a territory: `march_target_kinds`) -- the place marched on IS the subject, matching `requisition`'s own scale/scale_note shape for the same reason: the write and the fight both land on a place, not on the actor.",
           "stratum": "contested_physical",
+          "capability": "none",
+          "capability_note": "undeclared at authoring; every person rolls the untrained default. The field's skill enters at the `field` site, on the commander's record (`27_MB_A`).",
           "eligibility": [
             "remit:dispatch"
           ],
@@ -6336,6 +6352,8 @@
         {
           "verb": "speak",
           "stratum": "social",
+          "capability": "copying",
+          "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability`; which skill a verb tests is stated nowhere in the design.",
           "eligibility": [
             "own"
           ],
@@ -6487,6 +6505,8 @@
         {
           "verb": "tell",
           "stratum": "social",
+          "capability": "copying",
+          "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (`03 \u00a7A.2`, `#353 \u00a79.2`: the verb names a skill, the skill supplies the dice and gates nothing); which skill a verb tests is stated nowhere in the design.",
           "eligibility": [
             "own"
           ],
@@ -6555,6 +6575,8 @@
         {
           "verb": "examine",
           "stratum": "contested_physical",
+          "capability": "inquiry",
+          "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (REM-30, B10-10).",
           "stratum_note": "\u00a727's strata are a RESOLUTION-ORDER band over what an act touches, and they are not the `contests:` column -- these six declare no prize (see the block comment). This splits them three ways on what each act TOUCHES -- the physical world, a conversation, or the actor's own held evidence. The split is not derived from `fieldwork_v30.md:353-355` (*EACH investigation action faces: base Ob (from Depth) + Concealment Ob*: canon makes ALL SIX contestable, and conditions concealment on the concealer being PRESENT IN THE SCENE, not on the act being physical); it may still be right for resolution ORDER, which is all a stratum decides, and it is graded with the row.",
           "eligibility": [
             "own",
@@ -6631,6 +6653,8 @@
         {
           "verb": "interrogate",
           "stratum": "social",
+          "capability": "inquiry",
+          "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (lane A's row, D-U1-07).",
           "eligibility": [
             "remit:determine"
           ],
@@ -6679,6 +6703,8 @@
         {
           "verb": "research",
           "stratum": "uncontested_material",
+          "capability": "inquiry",
+          "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (REM-30, B10-10: the three inquiries `research`, `examine`, `surveil` draw on `inquiry`).",
           "eligibility": [
             "own",
             "presence:<site>"
@@ -6719,6 +6745,8 @@
         {
           "verb": "surveil",
           "stratum": "contested_physical",
+          "capability": "inquiry",
+          "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (REM-30, B10-10).",
           "eligibility": [
             "own",
             "presence:<rung>"

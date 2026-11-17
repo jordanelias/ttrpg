@@ -91,7 +91,7 @@ Columns: the wave and step as the structure had them, and now (a change in bold)
 |---|---|---|---|---|---|---|---|---|---|
 | B13-pc-package | PC | W6 | S6 | 0 | 6_cont | 2 (B2) | EQUAL | 3.3 | B00, B01, B02, B03, B03a, B03g +R1 |
 | B16M-mb-engine-words | MB | W6 | S6 | 0 | 6_cont | 4 (B4) | EQUAL | 4.1 | B16L, B03a |
-| B04-capability-home | IN | W6 | S6 | 0 | 7 | 27 (B24 P2 C1) | MOVER (encoding 2) | 13.3 | B00, B01, B02, B03g, B03c, B03a |
+| B04-capability-home | IN | W6 | S6 | 0 | 7 | 27 (B22 P4 C1; B04.17, B04.19 BUILD → POINTER, V2 fold, ED-IN-0378) | MOVER (encoding 2) | 13.3 | B00, B01, B02, B03g, B03c, B03a |
 | B05-one-roll | IN | W7 | S7 | 0 | 8, 8_cont, 9 | 41 (B36 P3 R1 DF1; +B05.24 DF, +B05.25 B, 2026-11-13) | MOVER (behaviour 13, encoding 1; B05.16 EQUAL after B01a, 2026-11-14) | 20.9 | B00, B01, B01a (B01a.05), B02, B03a, B13, B16M, B04 |
 | B06-keyed-draw | IN | W8 | S8 | 0 | 10 | 8 (B7 P1) | MOVER (behaviour 1) | 5.7 | B00, B01, B02, B03, B05 |
 | B07-task-draw | IN | W9 | S9 | 0 | 10_cont2 | 10 (B5 P5) | MOVER (behaviour 1) | 6.5 | B00, B01, B02, B05, B06 |

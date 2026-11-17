@@ -487,7 +487,7 @@ verbs:
   - verb:        "lie"
     stratum:     "social"
     capability:  "none"
-    capability_note: "undeclared at authoring; every person rolls the untrained default. Re-pointed to `deception` when that definition row lands (B04.19)."
+    capability_note: "undeclared at authoring; every person rolls the untrained default. No `deception` skill: a lie is an `argue` whose item is the liar's own false word (the social contest's V2, B24p.16; ED-IN-0378)."
     eligibility: ["own"]
     beneficiary: "subject"
     requires:    "the liar holds a claim on the subject, and the person told is with the liar"

@@ -178,7 +178,7 @@ Not items, and where each is: `05_SC_playable_hearing.md`, `05_SC_evidence_and_r
 - FALSIFIER and CONTROL: "a rolled move the loader admits with no skill" (HCAP). Control: realm hashes at seeds 0 to 2, one season, equal to B24.03's.
 - GATE: `PYTHONHASHSEED=0 python -m pytest engine/season/tests/test_sc_hearing_capabilities.py -q` → pass; realm hash (`HASH READING`) at seed 0 → equal.
 - HASH MOVERS: none.
-- DEPENDS ON: V12 B24.03; V12 B24p.01 (the `capability:` column); V12 Batch B04-capability-home (`law`, `insight`, `deception` rows, `descriptors.CAPABILITIES`; B04.18).
+- DEPENDS ON: V12 B24.03; V12 B24p.01 (the `capability:` column); V12 Batch B04-capability-home (the `law` row, `descriptors.CAPABILITIES`; B04.18; `insight` and `deception` are not defined since the social contest's V2 fold, ED-IN-0378).
 - GLOSSARY: none.
 - COST and TIER: edit; `sonnet`, `high`.
 - LANDS IT: B24's producer; `Item: B24.04`, `[skip ci]`.
