@@ -260,8 +260,7 @@ re-run from a hunch; reasoning in `CLAUDE_RATIONALE.md` §0.3.
 
 Timings: `CLAUDE_RATIONALE.md` §0.4 — re-measure rather than quote them.
 
-1. **The full suite runs AT MOST once per commit, and only when it can observe something CI will not
-   (RULED).**
+1. **The full suite runs AT MOST once per commit, and only when it can observe something CI will not (RULED).**
    CI runs it on every push not marked `[skip ci]`. Name what a local run would catch first; a diff of prose, ledgers, skills
    or links runs only the test files that read what it touched (`grep -rl <path> tests/`).
 2. **Mid-session, run only the file covering what you touched.** If you cannot name it, find it. At the close, `python tools/tests_for_diff.py` names the suites your edits call for (`-m combat|mass_battle|social_contest` when only that subsystem changed).
@@ -270,12 +269,13 @@ Timings: `CLAUDE_RATIONALE.md` §0.4 — re-measure rather than quote them.
    when you believe you are done. Red is not a licence to loop the gate.
 5. **`tools/valoria_local.py --staged` does not run pytest** (local-green ≠ CI-green). It is cheap; run
    it freely. The expensive thing is pytest, and only pytest.
+6. **SIZE THE RUN TO THE QUESTION.** Whether a verb fires or a rule binds needs ONE season (or a hand-built world calling the
+   entry): write the specific test; never run 3+ seasons hoping to see it. Multi-season runs are for what only accumulates (drift, balance, a hash pin).
 
 **This governs EVERY pytest gate** — `engine/season/tests` and `engine/tests` too: at the close, once,
 only the ones your change can reach. ⚠ **Learn your container's known-red BEFORE you debug it:** run
 the failing file on `main`'s tree first; `cat .git/shallow` says whether the clone can reach the commits
-`FORK:` rows name. **NO GUARD MAY BE BUILT FOR
-THIS SUBSECTION** (§0.1 pt 5).
+`FORK:` rows name. **NO GUARD MAY BE BUILT FOR THIS SUBSECTION** (§0.1 pt 5).
 
 ---
 
