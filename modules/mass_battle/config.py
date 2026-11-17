@@ -394,7 +394,7 @@ MB_AMMO_ENABLED = _sigma_os.environ.get('MB_AMMO_ENABLED', '1') == '1'
 # battle -- so the column-sharing defect the move fixes never had anything to bite on HERE; the fix
 # matters for other, moving/multi-subunit scenarios, not this one). RE-MEASURED AGAIN after the F4
 # fix (engine.build_army/gauge_mb.make_mixed_unit seeding a ranged subunit its own pool instead of
-# inheriting a Army shared with its siblings): also unchanged here, because this specific bat.py
+# inheriting an Army shared with its siblings): also unchanged here, because this specific bat.py
 # row builds its archer via bat.py's own single-subunit `make_unit`, a path F4's fix does not touch
 # at all (a lone subunit already reads its parent Army's pool 1:1 -- no sibling to share with, so
 # it was never affected by the bug F4 closed). The shipped cell_field configuration -- the one

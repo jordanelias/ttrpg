@@ -21,7 +21,7 @@ omission cannot recur silently.
 
 WHY NOT THE FULL BATTERY, restated correctly this time. `Army.derive_rout`'s cascade condition
 (`self._broken_share() >= ROUT_CASCADE_FRAC`) is evaluated per-Army over that Army's OWN units.
-For a Army with exactly one subunit, `_broken_share()` is a 0/1 step function (0 before that subunit
+For an Army with exactly one subunit, `_broken_share()` is a 0/1 step function (0 before that subunit
 breaks, 1.0 after), so ANY threshold in (0, 1] clears at the same instant regardless of its value —
 PROVABLY inert, not merely unmeasured. `_faction_to_unit` (`massbattle.py`, the only function
 building Armies for the live campaign) builds exactly one subunit per faction, so this sweep's choice

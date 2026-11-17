@@ -118,7 +118,7 @@ These are the two tables `V12_STRUCTURE_part3.md` §7.2 asks of part 2 and lane 
 | 80 | `populated.build_realm` → `boot.realm.build_realm` | B37.14 | — |
 | 81 | `populated.py::seat_guards` → `boot/realm.py::seat_guards` | B37.14 | — |
 | 82 | `dice_engine.LEVEL_SIGMA` → `engine/dice_engine/sigma_leverage.py::LEVEL_SIGMA` | B37.15 | — |
-| 83 | `SUBUNIT_ROUT_FLOOR` → `UNIT_ROUT_FLOOR` | B22.24 | — |
+| 83 | `SUBUNIT_ROUT_FLOOR` → `UNIT_ROUT_FLOOR` | B16M.03 | B22.24 |
 | 84 | `("round", person)` → `("lap", person)` | B28.21 | — |
 | 85 | `populated.py::resolve_anchor` → `boot/realm.py::resolve_anchor` | B32.17 | — |
 | 86 | `loop/effects_shared.py::occupying_faction` → `queries/world_q.py::occupying_faction` | B23.04 | — |

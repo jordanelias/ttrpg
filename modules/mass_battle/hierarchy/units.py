@@ -2600,7 +2600,7 @@ class Army:
             # scalar instead of the no-parent 0 — so it is the only correct place to seed an inheriting
             # subunit. Explicit-morale units already seeded in their own __post_init__; the
             # `not a.cell_morale` guard keeps this from re-seeding (and so from silently discarding
-            # morale a subunit has already lost, if a Army is ever rebuilt around live units).
+            # morale a subunit has already lost, if an Army is ever rebuilt around live units).
             if MB_CELL_MORALE and not a.cell_morale:
                 a.seed_cell_morale()
         # Increment 1: per-column block grid (state only; resolution wires in at Increment 2).

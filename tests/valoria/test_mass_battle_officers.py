@@ -34,7 +34,7 @@ def test_officer_command_defaults_to_tier3_baseline():
 
 
 def test_officer_command_derives_from_charisma_and_cognition_like_a_general():
-    """Same derivation a Army's own Command uses (derive_command, ED-899) -- no second formula."""
+    """Same derivation an Army's own Command uses (derive_command, ED-899) -- no second formula."""
     from modules.mass_battle.core.exchange import derive_command
     o = Officer(name='Aulus', charisma=6, cognition=4)
     assert o.command == derive_command(6, 4)

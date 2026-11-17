@@ -143,7 +143,7 @@ _MVP_UNIT_COMMAND = dict(
 )
 
 
-#: A season `Person` carries no troop-density signal at all -- `power` is a Army-level QUALITY
+#: A season `Person` carries no troop-density signal at all -- `power` is an Army-level QUALITY
 #: stat (baseline for a subunit with no per-subunit override; `eff_power`'s own fallback, cited
 #: there as "[canonical: sim_mb_06_v9_historical_spec.md -- P4 tier baseline default]"), not
 #: something army headcount should feed. Re-used here rather than derived from weight -- headcount
@@ -424,7 +424,7 @@ def _grade(unit_a, unit_b, by_troops=False):
 
 def resolve_field(inp, rng=None, *, troops_a=None, troops_b=None):
     """THE SEASON-FACING ENTRY POINT, AND THE `mass_battle` MODULE'S ENTRY (A-25, plan position `31c`) --
-    `04 §C.5.1`'s roster contract, reconciled with this module's OWN requirement for a `Army` to hand
+    `04 §C.5.1`'s roster contract, reconciled with this module's OWN requirement for an `Army` to hand
     `run_battle`.
 
     THE ENTRY. The composition row `mass_battle.resolve_field` (`references/module_contracts.yaml`,
@@ -440,10 +440,10 @@ def resolve_field(inp, rng=None, *, troops_a=None, troops_b=None):
     §C.5.1: *"units = PersonId[] at weight — one type. There is NO unit class, at any scale."* The
     record's `weights` are each side's `Person.weight`s (`state/carriers.py`: "A COHORT IS A PERSON AT
     weight > 1"); no `Army`/`Faction`-shaped object crosses this boundary. Internally, `run_battle` still
-    needs a `Army` -- that requirement does not go away because the caller's contract changed -- and
+    needs an `Army` -- that requirement does not go away because the caller's contract changed -- and
     headcount is a SIZE fact, not a quality one (see `_weighted_unit` and `_SEASON_FORCE_POWER`'s note). "No unit
     class, at any scale" is honoured at the SEAM this function's signature draws; it does not reach inside an
-    adapter whose whole job is to become a `Army` for the engine that only speaks one.
+    adapter whose whole job is to become an `Army` for the engine that only speaks one.
 
     ⚠ **AN EMPTY DEFENDING SIDE gets `_MIN_TROOPS`' crash-avoidance floor, not an invented auto-win.**
     What an empty defending force MEANS is eligibility policy for whichever verb calls this (open,

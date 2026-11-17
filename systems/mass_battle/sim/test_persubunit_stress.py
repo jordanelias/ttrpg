@@ -47,14 +47,14 @@ def mk_unit(subs, command=4, discipline=5, morale=6, power=4, fac='A'):
 def test_of_type_presets():
     print("S1 — of_type reproduces §B.2 presets; unknown inherits; override wins; ranged via kw")
     for tt, exp in TROOP_TYPE_STATS.items():
-        su = Unit.of_type(tt, 'Line', 1, (SIDE_A_START_ROW, 8))  # [FORK: 14f691e]
+        su = Unit.of_type(tt, 'Line', 1, (SIDE_A_START_ROW, 8))  # [JUSTIFIED: test-fixture literal, unchanged by the B16M rename]
         _ok(f"S1 {tt}", (su.power, su.discipline, su.morale, su.morale_start)
             == (exp['power'], exp['discipline'], exp['morale'], exp['morale']))
-    unk = Unit.of_type('griffon_rider', 'Line', 1, (SIDE_A_START_ROW, 8))  # [FORK: 14f691e]
+    unk = Unit.of_type('griffon_rider', 'Line', 1, (SIDE_A_START_ROW, 8))  # [JUSTIFIED: test-fixture literal, unchanged by the B16M rename]
     _ok("S1 unknown -> None (inherit)", (unk.power, unk.discipline, unk.morale) == (None, None, None))
-    ov = Unit.of_type('levy', 'Line', 1, (SIDE_A_START_ROW, 8), power=9, morale=7)  # [FORK: 14f691e]
+    ov = Unit.of_type('levy', 'Line', 1, (SIDE_A_START_ROW, 8), power=9, morale=7)  # [JUSTIFIED: test-fixture literal, unchanged by the B16M rename]
     _ok("S1 override beats preset", ov.power == 9 and ov.morale == 7 and ov.discipline == 1)
-    rg = Unit.of_type('archers', 'Line', 1, (SIDE_A_START_ROW, 8), unit_type='ranged')  # [FORK: 14f691e]
+    rg = Unit.of_type('archers', 'Line', 1, (SIDE_A_START_ROW, 8), unit_type='ranged')  # [JUSTIFIED: test-fixture literal, unchanged by the B16M rename]
     _ok("S1 ranged: stats from preset, role via kw", rg.unit_type == 'ranged' and rg.power == 3)
 
 
@@ -77,8 +77,8 @@ def test_single_subunit_morale0_routs():
 
 def test_extreme_spread():
     print("S4 — Levy(D1) + Knights Templar(D6): pool differentiates; levy breaks, templar holds")
-    lv = Unit.of_type('levy', 'Line', 1, (SIDE_A_START_ROW, 8))  # [FORK: 14f691e]
-    kt = Unit.of_type('knights_templar', 'Line', 1, (SIDE_A_START_ROW, 9))  # [FORK: 14f691e]
+    lv = Unit.of_type('levy', 'Line', 1, (SIDE_A_START_ROW, 8))  # [JUSTIFIED: test-fixture literal, unchanged by the B16M rename]
+    kt = Unit.of_type('knights_templar', 'Line', 1, (SIDE_A_START_ROW, 9))  # [JUSTIFIED: test-fixture literal, unchanged by the B16M rename]
     u = mk_unit([lv, kt], command=6)
     _ok("S4 templar pool > levy pool", subunit_combat_pool(u, kt) > subunit_combat_pool(u, lv))
     for _ in range(3):
@@ -155,15 +155,15 @@ def test_restore_cap():
 def test_fidelity_own_loss():
     print("S11 — Discipline degrades from the sub-unit's OWN loss, not the unit's (roll-input fidelity)")
     def su3(tt, col):
-        return Unit(shape='Line', troop_type=tt, tier=3, starting_position=(SIDE_A_START_ROW, col),  # [FORK: 14f691e]
+        return Unit(shape='Line', troop_type=tt, tier=3, starting_position=(SIDE_A_START_ROW, col),  # [JUSTIFIED: test-fixture literal, unchanged by the B16M rename]
                        advance_dir=-1, discipline=5, discipline_start=5)
     s0 = su3('heavy_infantry', 8); s1 = su3('levy', 9)
-    a = Army(name='A', faction='A', power=4, command=4, discipline=5, discipline_start=5,  # [FORK: 14f691e]
-             morale=6, morale_start=6, units=[s0, s1], dr=1)  # [FORK: 14f691e]
-    bsu = Unit(shape='Line', troop_type='heavy_infantry', tier=3,  # [FORK: 14f691e]
+    a = Army(name='A', faction='A', power=4, command=4, discipline=5, discipline_start=5,  # [JUSTIFIED: test-fixture literal, unchanged by the B16M rename]
+             morale=6, morale_start=6, units=[s0, s1], dr=1)  # [JUSTIFIED: test-fixture literal, unchanged by the B16M rename]
+    bsu = Unit(shape='Line', troop_type='heavy_infantry', tier=3,  # [JUSTIFIED: test-fixture literal, unchanged by the B16M rename]
                   starting_position=(SIDE_B_START_ROW, 8), advance_dir=1, discipline=5, discipline_start=5)
-    b = Army(name='B', faction='B', power=4, command=4, discipline=5, discipline_start=5,  # [FORK: 14f691e]
-             morale=6, morale_start=6, units=[bsu], dr=1)  # [FORK: 14f691e]
+    b = Army(name='B', faction='B', power=4, command=4, discipline=5, discipline_start=5,  # [JUSTIFIED: test-fixture literal, unchanged by the B16M rename]
+             morale=6, morale_start=6, units=[bsu], dr=1)  # [JUSTIFIED: test-fixture literal, unchanged by the B16M rename]
     for k in s0.cell_troops:                 # gut s0's own troops; s1 stays fresh
         s0.cell_troops[k] *= 0.5
     a.hp = s0.cur_troops + s1.cur_troops      # unit-level loss large -> OLD code would degrade BOTH
@@ -174,11 +174,11 @@ def test_fidelity_own_loss():
 
 def test_of_type_wiring():
     print("S12 — of_type construction (as make_mixed_unit now builds) draws B.2 presets (taxonomy wiring)")
-    kt = Unit.of_type('knights_templar', 'Line', 1, (SIDE_A_START_ROW, 8))  # [FORK: 14f691e]
+    kt = Unit.of_type('knights_templar', 'Line', 1, (SIDE_A_START_ROW, 8))  # [JUSTIFIED: test-fixture literal, unchanged by the B16M rename]
     _ok("S12 canonical type draws preset", (kt.power, kt.discipline, kt.morale) == (5, 6, 6))
-    ov = Unit.of_type('knights_templar', 'Line', 1, (SIDE_A_START_ROW, 8), discipline=3)  # [FORK: 14f691e]
+    ov = Unit.of_type('knights_templar', 'Line', 1, (SIDE_A_START_ROW, 8), discipline=3)  # [JUSTIFIED: test-fixture literal, unchanged by the B16M rename]
     _ok("S12 caller override beats preset", ov.discipline == 3 and ov.power == 5)
-    inf = Unit.of_type('infantry', 'Line', 1, (SIDE_A_START_ROW, 8))  # [FORK: 14f691e]
+    inf = Unit.of_type('infantry', 'Line', 1, (SIDE_A_START_ROW, 8))  # [JUSTIFIED: test-fixture literal, unchanged by the B16M rename]
     _ok("S12 non-canonical inherits", (inf.power, inf.discipline, inf.morale) == (None, None, None))
 
 
