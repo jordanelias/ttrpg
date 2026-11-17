@@ -352,7 +352,7 @@ says where an old path went. Only what those cannot tell you:
 - **`engine/`** — the executable model (substrate leaf readers, `engine/dice_engine/`,
   `engine/engine_params/` typed exports, `engine/tests/` = CI job `sim-regression`). **It names
   no subsystem by import**: seams resolve through `engine/substrate/composition.py` (`engine/` names a
-  ROLE, `references/module_contracts.yaml` the registered MODULE). No `sys.path` seam remains
+  ROLE, `references/module_contracts.yaml` the registered MODULE). No `sys.path` seam into a code root remains
   (`PATH_SEAM_ALLOWED` is empty); the execution artifact is
   `test_importing_every_engine_module_pulls_in_no_subsystem` (subprocess import, matching on FILE PATH).
   ⚠️ **Acyclic is not independence:** the engine still depends on subsystems, resolved by string.

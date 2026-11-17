@@ -46,8 +46,9 @@ composition_roles:
   # validates it beside `kind:` (`_ENTRIES`); `engine/season/manifest/registrar.py` registers every row that
   # carries one into `MODULE_ENTRIES` at driver construction, resolving the target by string, and refuses a
   # `verb:` that names no verb row and an entry registered twice. A row with no `entry:` is not a module
-  # entry. Since `31c` every row here carries one: `mass_battle.resolve_field`, the last without, was
-  # re-keyed `entry: verb_call`, `verb: march` with its target moved to `modules/mass_battle/`.
+  # entry. `combat.duel_terms` (CI-09) carries none: it is a `kind: value` read by
+  # `require()`, not an entry. `mass_battle.resolve_field`, the last entry-less callable, was re-keyed
+  # `entry: verb_call`, `verb: march` at `31c` with its target moved to `modules/mass_battle/`.
 
   social_contest.roll:
     target: "modules.social_contest.roll:roll"

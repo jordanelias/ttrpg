@@ -28,8 +28,8 @@ provider is registered.
 
 
 ⚠ **A WRAPPER'S IMPORTS STAY RELATIVE.** `tests/valoria/test_engine_does_not_import_systems.py`'s
-`_relative_module_files` follows relative imports only, so an absolute import here makes the
-declared `sys.path` seam invisible to the scan that bounds it.
+`_relative_module_files` follows relative imports only, so an absolute import here would hide from
+that scan any `sys.path` seam a wrapper's relative sibling declared.
 """
 
 # Importing them IS the registration: each module carries `@provider(role, module)` on its

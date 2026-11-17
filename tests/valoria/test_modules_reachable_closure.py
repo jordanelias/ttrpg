@@ -22,8 +22,8 @@ whose files import each other by dotted name, which this walk follows (`social_c
 A directory WITHOUT one is a FLAT script set loaded through a declared path seam, whose roots are the entry
 PLUS the names the seam itself declares, and a dot-free import resolves to `<directory>/<name>.py` first,
 as it does at load. A flat directory with no seam declaring its names fails rather than going unchecked.
-No such seam is declared now (`modules/combat/`, the last, became a package at CI-09), so `_seam_roots()` is
-empty and the flat branch is exercised on a planted tree only.
+No such seam is declared now (`modules/combat/`, the last, became a package at CI-09), so a flat directory under
+`modules/` is refused outright; the flat branch of the walk is exercised on a planted tree only.
 In a flat set one more failure is observable: a bare name that resolves to no file in the directory and
 to no standard-library or installed module is a file the set needs and does not hold (it would load
 from wherever `sys.path` happens to find it, or raise) -- reported beside the files left behind. The
@@ -136,11 +136,6 @@ def _rel(paths) -> list:
     return sorted(os.path.relpath(p, ROOT) for p in paths)
 
 
-def _seam_roots() -> dict:
-    """{flat directory: [bare name, ...]} as each path seam declares them. None is declared: the last, the
-    personal-combat loader, went when `modules/combat/` became a package (CI-09)."""
-    return {}
-
 
 def check(module_dir: str, roots: list, flat: bool = False) -> tuple:
     """`(unreached, left_behind, unresolved)` for one module: files under `module_dir` the walk from
@@ -155,7 +150,6 @@ def check(module_dir: str, roots: list, flat: bool = False) -> tuple:
 
 def test_every_module_is_exactly_its_entries_reachable_closure():
     roots = _entry_roots()
-    seams = _seam_roots()
     checked = {"package": [], "flat": []}
     # What the walk below cannot see on its own: an entry row aimed outside `modules/`, a directory under
     # `modules/` that no entry row names, and a loose top-level file. Each would sit outside every closure.
@@ -174,10 +168,8 @@ def test_every_module_is_exactly_its_entries_reachable_closure():
         flat = not os.path.isfile(os.path.join(module_dir, "__init__.py"))
         rel = os.path.relpath(module_dir, ROOT)
         if flat:
-            assert os.path.normpath(module_dir) in seams, (
-                f"{rel} is a flat module set and no path seam this walk knows declares its names: "
-                f"{sorted(seams)}")
-            entry_modules = entry_modules + seams[os.path.normpath(module_dir)]
+            raise AssertionError(
+                f"{rel} is a flat module set; no path seam exists to load it (CI-09): give it an __init__.py")
         unreached, left_behind, unresolved = check(module_dir, entry_modules, flat)
         assert not unreached, (
             f"{rel}: files no entry reaches ({entry_modules}): "

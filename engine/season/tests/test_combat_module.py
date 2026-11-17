@@ -95,7 +95,9 @@ from engine.season.queries.inputs import PersonalCombatInput
 inp = PersonalCombatInput(claimants=("p_a", "p_b"), ends=(4, 4),
                           wound_quantities=("felled", "wounds", "max_wounds", "health_remaining", "health_full"))
 got = fight(inp, random.Random(7))
-flat = sorted({{"core", "config", "wrapper", "combatant", "weapons", "geometry"}} & set(sys.modules))
+import os
+pkg = os.path.join({root!r}, "modules", "combat") + os.sep
+flat = sorted(n for n, m in list(sys.modules.items()) if str(getattr(m, "__file__", "") or "").startswith(pkg) and not n.startswith("modules.combat"))
 print(repr((got["status"], flat, "modules.combat.core" in sys.modules)))
 """
 
@@ -103,7 +105,8 @@ print(repr((got["status"], flat, "modules.combat.core" in sys.modules)))
 def test_a_fight_leaves_no_flat_module_behind():
     """CI-09: the engine is the package `modules.combat`; no sibling is also loaded under its flat name (two
     identities for one file). A fresh interpreter resolves `combat.fight`, runs one fight on the input the tests
-    above build, and lists which flat names are in `sys.modules`."""
+    above build, and lists every module in `sys.modules` whose file is under `modules/combat/` and whose name is not `modules.combat.*`
+    (by path, so no roster of names can miss a sibling)."""
     status, flat, packaged = probe(_FLAT_PROBE, "", 300)
     assert status == "RESOLVED", status
     assert not flat, f"flat module names loaded beside the package: {flat}"

@@ -275,8 +275,8 @@ def _relative_module_files(text, path):
     ⚠ THE CONCRETE CASE THIS WAS BUILT FOR IS GONE, AND THE MECHANISM STAYS ANYWAY. `_PC =
     files.PC_ENGINE_DIR` was deleted 2026-09-25 when `combat_bridge.py` and `season/seam/wrappers/
     combat.py`'s loaders were consolidated into `engine/substrate/pc_engine.py`, whose own
-    `PC_ENGINE_DIR` is a LOCAL assignment the chain below catches without this one-hop branch (see
-    `PATH_SEAM_ALLOWED`'s docstring). No file in the current tree exercises the one-hop path, so
+    `PC_ENGINE_DIR` is a LOCAL assignment the chain below catches without this one-hop branch (that file was
+    deleted at CI-09; its `FORK:` row in `references/restructure_ledger.md` resolves it). No file in the current tree exercises the one-hop path, so
     nothing plants a two-file hop to prove this branch still works if it broke — an honest gap
     (`CLAUDE.md` §0.1 pt 2), not a claim that it is covered. Kept because the shape it catches
     (an anchor consolidation moving a seam's literal one hop away) is a correct refactor pattern,
@@ -451,7 +451,7 @@ def test_importing_every_engine_module_pulls_in_no_subsystem():
 @pytest.mark.slow
 def test_the_one_declared_path_seam_is_still_the_only_one():
     """`engine/` holds no `sys.path` insert naming a code root: `PATH_SEAM_ALLOWED` is empty (the test keeps
-    its name, which CI and `pytest.ini` select by; the last seam, the personal-combat loader, went when `modules/combat/` became a package). A seam that cannot move yet is
+    its name, kept because `pytest.ini`:25, `valoria-ci.yml`:304 and the IN ledgers cite it in prose; no seam remains: the last, the personal-combat loader, went when `modules/combat/` became a package). A seam that cannot move yet is
     added to the set deliberately, with its reason, never as a drive-by.
 
     Scans for the mechanism rather than the module: any `sys.path` mutation in `engine/` that names
@@ -459,11 +459,13 @@ def test_the_one_declared_path_seam_is_still_the_only_one():
     the class that hid for two days. (`PATH_SEAM_ALLOWED` is keyed by the INSERTING FILE; see above.)
     """
     offenders = {}
+    scanned = 0
     for path in sorted((REPO / 'engine').rglob('*.py')):
         rel = path.relative_to(REPO / 'engine').as_posix()
         if rel.startswith('tests/') or '__pycache__' in rel:
             continue
         text = path.read_text(encoding='utf-8')
+        scanned += 1
         # ⚠ TWO DEFECTS FOUND AT THE 2026-09-05 ADOPTION, BOTH IN THIS PREDICATE.
         # (1) It was `"'systems'" in text` — a SINGLE-QUOTED literal only — so
         #     `season/combat_seam.py`'s `_REPO / "systems" / ...` was invisible and this guard
@@ -479,6 +481,7 @@ def test_the_one_declared_path_seam_is_still_the_only_one():
         # `sys.path.insert/append`, following one level of local assignment.
         if _inserts_a_systems_path(text, path):
             offenders[rel] = True
+    assert scanned >= 20, f'only {scanned} engine files scanned: the walk is broken, and an empty offender set would read as clean'
     assert set(offenders) == PATH_SEAM_ALLOWED, (
         f'sys.path seams into a code root (systems/, modules/) are now {sorted(offenders)}, declared {sorted(PATH_SEAM_ALLOWED)}. '
         f'A NEW one is the invisible-seam class: it defeats both regexes above AND the import probe, '
