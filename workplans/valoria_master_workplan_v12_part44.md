@@ -24,7 +24,7 @@ GATE: Batch B03g-go-early-landings @048724cd545117255e71d04a583d99c6cb5fe3a9
 GATE: Batch B03c-boot @544cf5719c620331b70aeda93c1672977b44e9ef
 GATE: Batch B16L-mb-words @2d9590e75fd253d1d88612e2d42674e2fdb5db96
 GATE: Batch B03a-prose @871a9b81eab42e31963b21b487d698f8552a1cc5
-GATE: Batch B13-pc-package
+GATE: Batch B13-pc-package @1727b462d8e25d654af6b689f6ec059d20659cd4
 GATE: Batch B16M-mb-engine-words
 GATE: Batch B04-capability-home
 GATE: Batch B05-one-roll
