@@ -133,7 +133,7 @@ Each binds every batch. Source in the right column; nothing here is decided by t
 | cite by symbol | Items cite code by `path::symbol`, never by line; a line number into a file edited at or before B03a is dropped and the symbol kept. | CIP part 2 §5 note 2; the structure §5.4 |
 | a test the source does not name | An item may name it (`test_…` in `engine/season/tests/…py`) with `[ASSUMPTION: test name; the item creates it]`; the item's first step creates it. | E-3 |
 | per-item and per-batch readings | Per item: the covering test files and, for a mover, the seed-0 hash. At `.99`: seeds 0 to 2, the batch's declared readings and the one full-suite run. | E-2 |
-| the hash reading | One command, written once here and as each block's `HASH READING:` line, under its `GATE:` lines; an item gate that reads "the realm hash" cites it as `` (`HASH READING`) ``: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons (`<k>` = 1 unless the gate names two; `<k>` = 0 the build hash); per item `<s>` = 0, at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`. Before B03c moved the builder (landed `@544cf5719c620331b70aeda93c1672977b44e9ef`), `build_realm` was imported from `engine.season.harness.populated` (B00 to B03; B03g, landed `@048724cd545117255e71d04a583d99c6cb5fe3a9`). `[ASSUMPTION: `run(k, s, w=w)` advances `w` in place — basis: `harness/populated.py::run` builds its driver on the passed world, `valoria_master_workplan_v12_part6.md` head]` | B02.01 (the recipe, item A); `valoria_master_workplan_v12_part6.md` head; repair lane R1 (K3 F3) |
+| the hash reading | One command, written once here and as each block's `HASH READING:` line, under its `GATE:` lines; an item gate that reads "the realm hash" cites it as `` (`HASH READING`) ``: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons (`<k>` = 1 unless the gate names two; `<k>` = 0 the build hash); per item `<s>` = 0, at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`. Before B03c moved the builder (landed `@544cf5719c620331b70aeda93c1672977b44e9ef`), `build_realm` was imported from `engine.season.harness.populated` (B00 to B03; B03g, landed `@048724cd545117255e71d04a583d99c6cb5fe3a9`). `[ASSUMPTION: `run(k, s, w=w)` advances `w` in place — basis: `harness/populated.py::run` builds its driver on the passed world, `valoria_master_workplan_v12_part6.md` head (deleted; `FORK:cdc312aef`)]` | B02.01 (the recipe, item A); `valoria_master_workplan_v12_part6.md` head (deleted; `FORK:cdc312aef`); repair lane R1 (K3 F3) |
 | the register's opening reading | `python -m engine.season.harness.register --check` exits 1 at the tree (the audit's reading at `601e715`: R2 27 violations, G6 3, H-47, H-48, H-59; re-read at B00's open and quoted there). So no gate reads it as exit 0: every gate reads **each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`)**; a gate about a row the batch itself edits keeps its own sentence beside that. | B03.51's form (`FORK:61b37b8d:workplans/valoria_master_workplan_v12_part5.md`, B03.51 GATE); K4 F1; repair lane R1 |
 | the corpus reading | Before B99 every gate or reading that runs the corpus runs `python -m engine.season.harness.corpus_run [seed] --seasons 2` (B02.39 adds the cap; without it each case plays its own span, clamped at `MAX_SEASONS`); B99's re-take runs it without the cap, the case's own span: B99.01's step 0 re-points every capped conjunct `argv` (corpus and `aperture`) to its source horizon before it reads (repair lane V1; `valoria_master_workplan_v12_part44_cont3.md`). | D-17; B02.39; K1 F3, K3 F2; repair lane R1 |
 | a dead edit | A source edit whose target another item removes is not carried; the item says so in `UNDECIDED` with the reason. | `V12_STRUCTURE_part4.md`, "What the pilots found" |
@@ -246,7 +246,7 @@ For a step with one batch the two texts below agree. For a step with several, th
 | step | open at once |
 |---|---|
 | S0–S3 | B00 · B01 · B02 · B03, one each (IN); ⚠ 2026-11-14: B01a opens at S2, between B01 and B02, and every later row moves one step (part 2 §1.2) |
-| S6 | B04 (IN), B13 (PC) |
+| S6 | B04 (IN) |
 | S7 | B05 (IN), alone: it edits IN, SC, PC and MB code |
 | S8 | B06 (IN), B14 (PC) |
 | S9 | B07 (IN), B17 (MB) |
@@ -364,7 +364,6 @@ No engine version is asserted anywhere in v12 (ED-GO-0002 is the owner).
 | batch | lane | ED block (declared + spare) | H block (declared + spare) |
 |---|---|---|---|
 | B24p-sc-proceeding | SC | ED-SC-0054..0056 (1+2) | H-861..H-940 (80+0) (allocated 2026-11-14 after B01a's block, on paper: `id_reservations.yaml` is bumped at the batch's opening, SC `next_free` 54 → 57; the fold map's H-856..H-909 assumed H-855 as the last id and B01a had taken H-856..H-860; 80 NUMBER rows since the V2 fold: 55 settings, the fold's 24, the `speech_blend` pointer row) |
-| B13-pc-package | PC | ED-PC-0060..0061 (0+2) | H-404..H-408 (0+5) |
 | B04-capability-home | IN | ED-IN-0377..0378 (0+2) | H-414..H-419 (1+5) |
 | B05-one-roll | IN | ED-IN-0379..0380 (0+2); ED-SC-0041..0044 (2+2) | H-420..H-439 (15+5) |
 | B06-keyed-draw | IN | ED-IN-0381..0382 (0+2) | H-440..H-444 (0+5) |
@@ -453,7 +452,6 @@ Each is also stated where it is invoked (the batch block's lines, the item's fie
 
 | batch | file(s) under `master/workplan_v12/` |
 |---|---|
-| B13-pc-package | `valoria_master_workplan_v12_part6_cont.md` |
 | B04-capability-home | `valoria_master_workplan_v12_part7.md` |
 | B05-one-roll | `valoria_master_workplan_v12_part8.md`, `_part8_cont.md`, `_part9.md` |
 | B06-keyed-draw | `valoria_master_workplan_v12_part10.md` |

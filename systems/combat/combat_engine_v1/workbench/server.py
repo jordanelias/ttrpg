@@ -14,13 +14,13 @@ Endpoints (all JSON except GET /):
 import sys, os, json
 sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', 'modules', 'combat'))  # the engine, moved at plan position `31b`
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '..')))  # the repository root: `modules.combat` is a package
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 import random
-import wrapper
-from combatant import Combatant
-import attributes   # the combat attribute spec (PC-14)
+from modules.combat import wrapper
+from modules.combat.combatant import Combatant
+from modules.combat import attributes   # the combat attribute spec (PC-14)
 import presets, probabilities as P
 from commentary import commentate
 from trace import run_traced_fight

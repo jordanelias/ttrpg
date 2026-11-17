@@ -445,7 +445,7 @@ GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01a-attributes-generated @cbca1ad4fcee656f908d8a75e99bf79213ddeeab (B01a.05: PROVISIONAL until re-read with `harness/pairs.py duel`: the duel grid this batch's instrument measures is run over fighters with generated attributes, and its cells are read as curves by attribute difference, not at the class defaults alone; `valoria_master_workplan_v12.md` §3.B, "generated attributes, and curves not centres")
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
-GATE: Batch B16M-mb-engine-words @113003b1438f098f60568f2639bd6d3a5b18ae8b
+GATE: Batch B16M-mb-engine-words @bc1397322
 GATE: Batch B14-pc-outcome
 GATE: Batch B15-pc-calibration
 GATE: Batch B16-pc-round
@@ -524,7 +524,7 @@ Not in this batch, and where each is: MBA-02 stage 2 (`--missile`) and MBA-09 (B
 - FALSIFIER and CONTROL: "a measured table whose mirror cells disagree beyond their intervals …; a table that differs when `--workers` changes. Controls: the mirror cells; `--workers 1` against `--workers 4` on 10 cells, byte-identical."
 - GATE: "`python tools/calibrate_mb_contact.py --trust` prints seven `ok` lines; `--spot 20` prints 20 `inside` lines; `--cell` on one pilot cell (`spear light 3 / arming light 3`) reproduces its stored row. Expected (the pilot on today's engine; B19a's reading is the one recorded): mirror win shares within 0.03; mean rounds a mirror duel at least 2."
 - HASH MOVERS: none.
-- DEPENDS ON: V12 B19a.01; V12 Batch B13 (D-09's import), B14, B15, B16 (`fight_round`; MBA §5.1); EXISTS-IN-TREE `systems/combat/combat_engine_v1/workbench/balance.py::winrate`, `modules/combat/attributes.py`.
+- DEPENDS ON: V12 B19a.01; V12 Batch B13 @1727b462d8e25d654af6b689f6ec059d20659cd4 (D-09's import), B14, B15, B16 (`fight_round`; MBA §5.1); EXISTS-IN-TREE `systems/combat/combat_engine_v1/workbench/balance.py::winrate`, `modules/combat/attributes.py`.
 - NAMES: `pc_engine.load()` → `from modules.combat import wrapper, combatant` (D-09); `engagement_end` → `round_end` (PCR-3); `faculty` → the skill score (B15, `IS-PC-05`).
 - GLOSSARY: *felling chance*, MBA §8.3's row (owner `mb_contact.json`, B19a.03); *duel round* unchanged (A-101).
 - COST and TIER: small build; `sonnet`, `high`; the run `haiku`-supervised; a `--trust` failure read by `opus`.

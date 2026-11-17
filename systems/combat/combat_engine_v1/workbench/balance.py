@@ -13,18 +13,18 @@ single source) — not re-declared. CLI:  python workbench/balance.py [weapon|at
 import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', 'modules', 'combat'))  # the engine, moved at plan position `31b`
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '..')))  # the repository root: `modules.combat` is a package
 import random
 import zlib
-import wrapper, config
+from modules.combat import wrapper, config
 
 
 def _seed(key):
     """Deterministic per-cell seed (run-to-run reproducible). `hash()` is PYTHONHASHSEED-salted, so a matrix used as
     the re-baseline reference must NOT seed from it (audit finding). crc32 of the repr is stable across processes."""
     return zlib.crc32(repr(key).encode()) % 9999
-from combatant import Combatant
-import attributes   # the combat attribute spec (PC-14)
+from modules.combat.combatant import Combatant
+from modules.combat import attributes   # the combat attribute spec (PC-14)
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../../../tests/sim/v32-combat-balance'))  # measurement harness reaches into the FROZEN v32 validation station BY DESIGN (dev tooling; doctrine container-hygiene exclusion, ED-1085)
 import r8_parity_harness as r8   # Class-M method constants: FINAL_TRIALS, WILSON_Z, BAND_LO/HI
 

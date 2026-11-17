@@ -782,7 +782,10 @@ def test_the_engines_reading_counts_an_entry_it_can_see():
     lines = A.engine_lines({"engines": counts, "engines_why": None})
     assert sum(1 for ln in lines if ln.startswith("    settlements.")) == sum(
         1 for r in counts if r.startswith("settlements."))
-    assert lines[-1].strip() == f"rows entered 1 of {len(counts)}"
+    # a `kind: value` row (`combat.duel_terms`) has no code object to enter, so it is printed and not counted
+    callable_rows = sum(1 for c in counts.values() if c != A.VALUE_ROW)
+    assert callable_rows < len(counts), "the composition has a value row, and the total must leave it out"
+    assert lines[-1].strip() == f"rows entered 1 of {callable_rows}"
 
 
 def _built(w, d) -> dict:

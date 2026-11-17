@@ -13,12 +13,13 @@ state-graph node it gates, so the table reads as "which technique each weapon ca
 """
 import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
-_ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'modules', 'combat')   # the engine, moved at plan position `31b`
-sys.path.insert(0, _ENGINE)
-import vocabulary as V   # the token ALPHABET (ED-PC-0042) — a zero-import leaf, so own-sourcing the head/mode
+_REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
+sys.path.insert(0, _REPO)   # the repository root: `modules.combat` is a package
+_ENGINE = os.path.join(_REPO, 'modules', 'combat')   # the engine, moved at plan position `31b`; read as source below
+from modules.combat import vocabulary as V   # the token ALPHABET (ED-PC-0042) — a zero-import leaf, so own-sourcing the head/mode
                          # tokens here does NOT breach this module's no-systems/core-at-module-scope discipline.
-from combatant import WEAPONS, HALFSWORD_FORM, HALFSWORD_BASE   # pure data; no systems/core at module scope (cycle-free)
-from config import CFG   # pure data (GRAB_SHORT_REACH_M); no cycle risk
+from modules.combat.combatant import WEAPONS, HALFSWORD_FORM, HALFSWORD_BASE   # pure data; no systems/core at module scope (cycle-free)
+from modules.combat.config import CFG   # pure data (GRAB_SHORT_REACH_M); no cycle risk
 
 def _affords_point(w):
     """Local import (combat_systems.py sits above this module in the dependency order — importing it at module
@@ -28,7 +29,7 @@ def _affords_point(w):
     its spike mode_element (an explicit point-tokened striking element, morphology-rearch Phase B2) affords a
     genuine point, and combat_systems.select_mode already lets it SELECT that spike vs plate armour at runtime (the
     situational gap game) — so the static-head-only check under-reports this capability for it."""
-    import combat_systems as S
+    from modules.combat import combat_systems as S
     return V.HEAD_POINT in S.afforded_heads(w)
 
 
@@ -98,10 +99,10 @@ if __name__ == '__main__':
         sys.stdout.reconfigure(encoding='utf-8', errors='replace')
     except Exception:
         pass
-    from combatant import Combatant
-    import combat_systems as S   # imported here (not at module scope) so the registry stays cycle-free and pure
-    import core
-    import contact as CT
+    from modules.combat.combatant import Combatant
+    from modules.combat import combat_systems as S   # imported here (not at module scope) so the registry stays cycle-free and pure
+    from modules.combat import core
+    from modules.combat import contact as CT
     checks, rule = [], '=' * 64
     print("capabilities.py — affordance gates verified against the live engine"); print(rule)
 

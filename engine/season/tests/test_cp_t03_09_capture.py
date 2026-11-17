@@ -20,6 +20,7 @@ plus ONE `detain` edge, captive -> the act's `via` seat, where the scene's `surr
 from __future__ import annotations
 
 import dataclasses
+import importlib
 import random
 from unittest import mock
 
@@ -135,9 +136,9 @@ def test_person_captured_has_one_emitter_and_it_is_mapped():
 
 def test_duel_terms_names_capture_and_accept_and_is_checked_against_the_engines_tuple_not_redeclared():
     assert DUEL_TERMS_BY_VERB == {"capture": "yield", "accept": "blood"}     # v11 CR-87 added `accept: blood`
-    engine = combat.engine()
-    assert engine is not None, "the combat engine did not load"
-    wrapper = engine[0]
+    assert combat.engine() is not None, "the combat engine did not load"
+    # by name, inside the function: `test_importing_every_engine_module_pulls_in_no_subsystem` fails on a module-scope import and the ratchet counts a written one
+    wrapper = importlib.import_module("modules.combat.wrapper")
     assert all(t in wrapper.DUEL_TERMS for t in DUEL_TERMS_BY_VERB.values())
     w, _ = _world()
     with mock.patch.dict(DUEL_TERMS_BY_VERB, {"capture": "mercy"}):          # a term the engine does not name
@@ -157,7 +158,8 @@ def test_duel_terms_names_capture_and_accept_and_is_checked_against_the_engines_
 # ---------------------------------------------------------------------------------------------------------------
 
 def test_the_default_terms_is_the_string_death_and_a_none_default_would_raise():
-    wrapper = combat.engine()[0]
+    # by name, inside the function: `test_importing_every_engine_module_pulls_in_no_subsystem` fails on a module-scope import and the ratchet counts a written one
+    wrapper = importlib.import_module("modules.combat.wrapper")
     inp = PersonalCombatInput(claimants=(ACTOR, CAPTIVE), ends=(4, 4), wound_quantities=("felled", "wounds"))
     assert inp.terms == "death" == wrapper.LETHAL_TERMS and isinstance(inp.terms, str)
     w, _ = _world()

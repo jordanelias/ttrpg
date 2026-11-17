@@ -27,7 +27,6 @@ from collections import Counter
 
 import pytest
 
-from engine.substrate import pc_engine
 
 from ..data import rosters as R
 from ..data import verbs as VERBS
@@ -98,7 +97,8 @@ def test_nobody_holds_arms_at_landing_in_the_realm_the_overlay_or_a_lifepath():
 # ---- (ii) the one input path ------------------------------------------------------------------------------------
 
 def _spy(monkeypatch) -> Counter:
-    core = pc_engine.load()[0].core
+    # by name, inside the function: `test_importing_every_engine_module_pulls_in_no_subsystem` fails on a module-scope import and the ratchet counts a written one
+    core = importlib.import_module("modules.combat.core")
     seen, real = Counter(), core.resolve
 
     def spy(pool, net_sigma, rng, ob):

@@ -42,10 +42,10 @@ _CACHE = {}
 def require(role):
     """Return the module attribute `references/` binds to `role`. Raises if the role is undeclared.
 
-    Almost every role is a CALLABLE — a resolver, a builder, a state class. Two (`contest_side.a`
-    and `contest_side.b`) declare `kind: value` and resolve to a module CONSTANT: the side labels
-    `engine/cross_scale/scene_dispatch.py` compares a contest verdict against, which no callable
-    role could carry and which no authored surface declares. The kind is recorded per row so the
+    Almost every role is a CALLABLE — a resolver, a builder, a state class. One (`combat.duel_terms`)
+    declares `kind: value` and resolves to a module CONSTANT: the closed set of duel terms
+    (`modules/combat/wrapper.py::DUEL_TERMS`) a season roster is checked against, which no callable
+    role could carry. The kind is recorded per row so the
     exporter's callable check stays on for everything that did not opt out; see
     `tools/export_composition.py`'s `_KINDS`.
 

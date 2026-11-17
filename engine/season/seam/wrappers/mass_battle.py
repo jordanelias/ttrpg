@@ -62,7 +62,7 @@ a marker this function already derives is not that.
 composition row `mass_battle.resolve_field` (`references/module_contracts.yaml`) names it, the registrar
 resolves it at driver construction into `MODULE_ENTRIES`, and `resolve` below looks it up there by the
 role its prize row names -- `engine/` never imports module code. `PATH_SEAM_ALLOWED`
-(`tests/valoria/test_engine_does_not_import_systems.py`) keeps its one entry: the moved closure's own
+(`tests/valoria/test_engine_does_not_import_systems.py`) is empty and gains no entry: the moved closure's own
 imports are dotted `modules.mass_battle.*`, a package, so it needs no path seam.
 """
 from __future__ import annotations

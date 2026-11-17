@@ -140,7 +140,6 @@ These are the two tables `V12_STRUCTURE_part3.md` §7.2 asks of part 2 and lane 
 |---|---|---|---|---|
 | 1 | `engine/season/tests/test_b11a_duel_reach.py` | test file | B01.01 | — |
 | 2 | `engine/season/tests/test_b11a_scores_and_obstacle.py` | test file | B01.02 | — |
-| 41 | `modules/combat/__init__.py` | module | B13.01 | — |
 | 42 | `engine/season/tests/test_u1_capability_surface.py` | test file | B04.02 | — |
 | 43 | `engine/season/tests/test_sc_hearing_capabilities.py` | test file | B04.18 | — |
 | 44 | `engine/season/tests/test_fa_office_capabilities.py` | test file | B04.19 | — |

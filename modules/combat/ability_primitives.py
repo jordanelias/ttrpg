@@ -70,7 +70,7 @@ ABILITIES = {
 
 # The tradition roster (read by `_generics` and by THE BUNDLE below). One-way import (traditions has no dependency on
 # this module), so no cycle.
-from traditions import TRADITIONS as _TRADITIONS
+from .traditions import TRADITIONS as _TRADITIONS
 
 # ── GENERIC CALIBRATION ABILITIES (PC-17, ED-PC-0059; PROVISIONAL) ────────────────────────────────────────────────
 # Jordan, 2026-11-01: "a spread of generics for now so that we have more calibration data". Instruments, not

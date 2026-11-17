@@ -33,16 +33,16 @@ import sys, os, json, inspect
 
 sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', 'modules', 'combat'))  # the engine, moved at plan position `31b`
-import core
-import combat_systems as S
-import weapon_physics as WP
-import geometry as G
-import weapons as W
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '..')))  # the repository root: `modules.combat` is a package
+from modules.combat import core
+from modules.combat import combat_systems as S
+from modules.combat import weapon_physics as WP
+from modules.combat import geometry as G
+from modules.combat import weapons as W
 import capabilities as CAP
-from config import CFG
-from combatant import Combatant
-import attributes   # the combat attribute spec (PC-14)
+from modules.combat.config import CFG
+from modules.combat.combatant import Combatant
+from modules.combat import attributes   # the combat attribute spec (PC-14)
 
 TIERS = ('none', 'light', 'medium', 'heavy')
 NEUTRAL = dict(attributes.DEFAULT)   # the neutral FIGHTER is the default fighter: the spec's defaults (PC-14)

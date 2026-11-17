@@ -6,16 +6,11 @@ Stage 1a / D0-2) so every subsystem resolves identically. No A/B knowledge here.
 at 1e-9 — engine/tests/test_sigma_leverage_parity.py); the engine's own combat-state constants live here / in
 combatant.py. The RNG contract: `rng` is a stdlib random.Random (rng.gauss). The continuous engine's distribution
 is Normal(mu*N, sigma*sqrt(N)), same per-die TN table."""
-import sys, os
-sys.path.insert(0, os.path.dirname(__file__))
-_REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))   # modules/combat/ (plan position `31b`)
-if _REPO_ROOT not in sys.path:
-    sys.path.insert(0, _REPO_ROOT)          # resolve `engine.dice_engine` (below) when core is imported flat, outside the repo root
 import functools
 from math import tanh, exp
 from engine.dice_engine import sigma_leverage as SL
 from engine.dice_engine import dice_engine as DE   # THE degree ladder's owner (degree() below routes through it)
-import vocabulary as V   # the token ALPHABET (ED-PC-0042) — a zero-import leaf, so weapon_physics and
+from . import vocabulary as V   # the token ALPHABET (ED-PC-0042) — a zero-import leaf, so weapon_physics and
                          # capabilities (neither of which may import core) own-source the same tokens.
                          # This module owns the TABLES keyed by it; the asserts below pin the two together.
 
@@ -33,7 +28,7 @@ def logistic(x):
     if x < -_LOGISTIC_CLAMP: x = -_LOGISTIC_CLAMP
     elif x > _LOGISTIC_CLAMP: x = _LOGISTIC_CLAMP
     return 1.0 / (1.0 + exp(-x))
-import weapon_physics as WP   # percussion authority lives ONCE in WP (the credited derived value);
+from . import weapon_physics as WP   # percussion authority lives ONCE in WP (the credited derived value);
                               # core.strike reads WP.percussion_authority (the sigma path systems.adef_cap already does).
                               # WP imports only math + the zero-import `vocabulary` leaf at module scope (cycle-free),
                               # so this import is safe.
@@ -252,7 +247,7 @@ GAP_PREC_REF=0.65                                                   # neutral ga
 # losing to a weapon's own cut/thrust at low armour and only competitive vs rigid armour it cannot otherwise defeat.
 # SINGLE-OWNER BINDING (ED-PC-0042 rider I1b): PERC_AUTH_REF is the TOP OF THE PERCUSSION-AUTHORITY SCALE, which is
 # owned by the module that clamps to it — WP.PERC_CAP (weapon_physics.py), bound over core's
-# `import weapon_physics as WP` (no new dependency edge) so a PERC_SCALE/PERC_EXP re-fit cannot desync them.
+# `from . import weapon_physics as WP` (no new dependency edge) so a PERC_SCALE/PERC_EXP re-fit cannot desync them.
 # PERC_AUTH_REF_SOFT is NOT bound: it is a DIFFERENT anchor (bec_de_corbin's 6.51 live authority, the weakest
 # dedicated hammer — see the U2 block above), not the scale top.
 PERC_AUTH_REF=WP.PERC_CAP; PERC_AUTH_REF_SOFT=6.5; PERC_TRANSMIT_FLOOR=0.35

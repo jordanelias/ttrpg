@@ -46,8 +46,9 @@ composition_roles:
   # validates it beside `kind:` (`_ENTRIES`); `engine/season/manifest/registrar.py` registers every row that
   # carries one into `MODULE_ENTRIES` at driver construction, resolving the target by string, and refuses a
   # `verb:` that names no verb row and an entry registered twice. A row with no `entry:` is not a module
-  # entry. Since `31c` every row here carries one: `mass_battle.resolve_field`, the last without, was
-  # re-keyed `entry: verb_call`, `verb: march` with its target moved to `modules/mass_battle/`.
+  # entry. `combat.duel_terms` (CI-09) carries none: it is a `kind: value` read by
+  # `require()`, not an entry. `mass_battle.resolve_field`, the last entry-less callable, was re-keyed
+  # `entry: verb_call`, `verb: march` at `31c` with its target moved to `modules/mass_battle/`.
 
   social_contest.roll:
     target: "modules.social_contest.roll:roll"
@@ -64,6 +65,11 @@ composition_roles:
     entry: verb_call
     verb: fight
     needed_by: "engine/season/seam/wrappers/combat.py — the host adapter `@provider(\"contest\", \"personal_combat\")` builds the typed input record (`combat_input`) and calls this entry through `manifest.MODULE_ENTRIES` (plan position `31b`, A-25). The prize row `the body` (`engine/season/rosters.yaml` `contest_subsystems`) names it in `module_entry:`, and `manifest/registry.py::check_contest_prizes` refuses at driver construction a prize row whose `module_entry:` no composition row declares, or one that disagrees with it. `verb: fight` is the registrar's one verb per row; `accept`, which contests the same prize, reaches this entry through the prize row, not through a second row (the registrar refuses one target under two roles)."
+
+  combat.duel_terms:
+    target: "modules.combat.wrapper:DUEL_TERMS"
+    kind: value
+    needed_by: "engine/season/seam/wrappers/combat.py (the roster check of `duel_terms` and `challenge_terms` against the engine's closed set) and engine/season/harness/pairs.py (the same set, for the pairs report)."
 
   mass_battle.resolve_field:
     target: "modules.mass_battle.massbattle:resolve_field"

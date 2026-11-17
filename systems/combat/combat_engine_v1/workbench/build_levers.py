@@ -23,10 +23,10 @@ import sys, os, random, zlib
 
 sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', 'modules', 'combat'))  # the engine, moved at plan position `31b`
-import wrapper
-from config import CFG
-from combatant import Combatant
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '..')))  # the repository root: `modules.combat` is a package
+from modules.combat import wrapper
+from modules.combat.config import CFG
+from modules.combat.combatant import Combatant
 
 WILSON_Z = 1.96          # same constant balance.py imports from r8_parity_harness (Class-M method)
 BASE = dict(weapon='arming', armor='light', tradition='none')
