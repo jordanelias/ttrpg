@@ -20,7 +20,7 @@ IN-FLIGHT ROW: registers/handoffs/HANDOFF_MB.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
-GATE: Batch B16L-mb-words @2d9590e75fd253d1d88612e2d42674e2fdb5db96
+GATE: Batch B16L-mb-words @ae7955b7ad09ccd08df79409bed53ac0cfafc05e
 GATE: Batch B05-one-roll
 GATE: Batch B15-pc-calibration
 GATE: Batch B16-pc-round

@@ -16,22 +16,19 @@ won, a grab de-hazarded) that aggregate winrate cannot see — the situational n
 the SURFACE (every lever site reaches ability_factor; default 1.0 = inert-safe) and the PER-EVENT effect — NOT an
 aggregate edge, which the review showed the abilities do not robustly confer.
 """
-import os
 import sys
 
 import pytest
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'modules', 'combat')
-sys.path.insert(0, ENGINE)
 
 import random  # noqa: E402
-import ability_primitives as ABIL  # noqa: E402
-import combat_systems as S  # noqa: E402
-import contact as CT  # noqa: E402
-import tradition as TR  # noqa: E402
-import wrapper as W  # noqa: E402
-from combatant import Combatant  # noqa: E402
-from config import CFG  # noqa: E402
+from modules.combat import ability_primitives as ABIL  # noqa: E402
+from modules.combat import combat_systems as S  # noqa: E402
+from modules.combat import contact as CT  # noqa: E402
+from modules.combat import tradition as TR  # noqa: E402
+from modules.combat import wrapper as W  # noqa: E402
+from modules.combat.combatant import Combatant  # noqa: E402
+from modules.combat.config import CFG  # noqa: E402
 
 
 def test_surface_exists_and_is_inert_by_default():

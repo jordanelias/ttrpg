@@ -19,10 +19,7 @@ D_MASS 0 matched the old file exactly.
 import json
 import math
 import os
-import sys
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'modules', 'combat')
-sys.path.insert(0, ENGINE)
 
 GOLDEN_PATH = os.path.join(os.path.dirname(__file__), 'r3_identity_golden.json')
 TOL = 1e-9
@@ -30,10 +27,10 @@ GRIPS = (0.0, 0.25, 0.5, 0.75, 1.0)
 
 
 def _mods():
-    import combatant as C
-    import combat_systems as S
-    import weapon_physics as WP
-    from config import CFG
+    from modules.combat import combatant as C
+    from modules.combat import combat_systems as S
+    from modules.combat import weapon_physics as WP
+    from modules.combat.config import CFG
     return C, S, WP, CFG
 
 

@@ -30,7 +30,7 @@ def _subunit():
     army = build_army([{'shape': 'Line', 'troop_type': 'infantry', 'troops': 300.0,
                         'concentration': 100.0, 'starting_position': (SIDE_A_START_ROW, 20)}],
                       'A', 'A')
-    return army.subunits[0]
+    return army.units[0]
 
 
 def _close(su):

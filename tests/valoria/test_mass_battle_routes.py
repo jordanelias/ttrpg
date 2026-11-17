@@ -1,13 +1,13 @@
 """A1, ED-MB-0067 Part A (proposals/2026-09-25-squad-engagement-synthesis.md) — waypoint routes.
 
-`Subunit.route`/`_route_idx` (hierarchy/units.py) + `_resolve_route_goal` (composed on
+`Unit.route`/`_route_idx` (hierarchy/units.py) + `_resolve_route_goal` (composed on
 `_resolve_maneuver_goal`, checked ahead of its enemy-cells gate so a route is followed with no
 enemy in sight) + `check_orders`' path-length clamp (core/contact.py, `0.5*speed*max-ticks`,
 ROUTE_BUDGET_TICKS/ROUTE_WAYPOINT_EPS in config.py). Also pins the two integration fixes this needed:
 `_node_advance`'s target_centroid gate (hierarchy/units.py) and `run_battle`'s moving_a/moving_b
 atom selection (orchestration.py), both widened with an `or` clause for an unfinished route.
 
-Default route=() on every existing Subunit -> every assertion here is about a NEWLY-exercised path;
+Default route=() on every existing Unit -> every assertion here is about a NEWLY-exercised path;
 byte-exactness for the untouched default is covered separately by bat.py --check (no BATTERY row
 sets a route).
 
@@ -28,20 +28,20 @@ import modules.mass_battle.orchestration as _orch
 from modules.mass_battle.config import (SIDE_A_START_ROW, SIDE_B_START_ROW, TICKS_PER_PHASE,
                                              MB_CAVALRY_SPEED_MULT, ROUTE_BUDGET_TICKS)
 from modules.mass_battle.core.contact import check_orders
-from modules.mass_battle.hierarchy.units import Order, Subunit, Unit
+from modules.mass_battle.hierarchy.units import Order, Unit, Army
 from modules.mass_battle.orchestration import run_battle
 from modules.mass_battle.resolution import tracing
 
 
 def _bare_subunit(faction='A', col=25, troop_type='infantry', target_condition=None):
     sr = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
-    return Subunit(shape='Line', troop_type=troop_type, tier=2,
+    return Unit(shape='Line', troop_type=troop_type, tier=2,
                    starting_position=(sr, col), advance_dir=(-1 if faction == 'A' else 1),
                    stance='balanced', unit_type='melee', target_condition=target_condition)
 
 
 def _route_unit_from_offsets(col_offsets, faction='A', target_condition=None, col=25):
-    """Build a disc-5 (disc_mult=1.0) single-subunit Unit whose ONE 'immediate' order sets a route
+    """Build a disc-5 (disc_mult=1.0) single-subunit Army whose ONE 'immediate' order sets a route
     of waypoints along the sub-unit's own anchor ROW, each `col_offsets[i]` columns to the side of
     its LIVE anchor column (not the raw starting_position column -- see module docstring). Returns
     (unit, subunit, anchor, route) so a test can assert against the exact, already-known distances
@@ -53,9 +53,9 @@ def _route_unit_from_offsets(col_offsets, faction='A', target_condition=None, co
     route = tuple((ar, ac - off) for off in col_offsets)
     su = _bare_subunit(faction=faction, col=col, target_condition=target_condition)
     su.orders = (Order('immediate', {'route': route}),)
-    u = Unit(name=f'{faction}_route', faction=faction, power=4, command=4,
-             discipline=5, discipline_start=5, morale=6, morale_start=6, subunits=[su])
-    assert u.subunits[0]._node_anchor == (ar, ac), "control: two identically-constructed Subunits must anchor identically"
+    u = Army(name=f'{faction}_route', faction=faction, power=4, command=4,
+             discipline=5, discipline_start=5, morale=6, morale_start=6, units=[su])
+    assert u.units[0]._node_anchor == (ar, ac), "control: two identically-constructed Units must anchor identically"
     return u, su, (ar, ac), route
 
 
@@ -135,7 +135,7 @@ def test_route_moves_a_subunit_with_no_enemy_in_sight():
     calls advance_cells at all."""
     ua, sa, spawn, _route = _route_unit_from_offsets((2, 4), faction='A', target_condition='in_range:1')
     ub, _sb, _spawn_b, _route_b = _route_unit_from_offsets((), faction='B')   # plain far-side unit; no route of its own
-    run_battle(ua, ub, max_turns=6)
+    run_battle(ua, ub, max_ticks=6)
     assert sa.target_atom is None, "control: the enemy must still be out of the in_range:1 gate after 6 ticks"
     assert sa._route_idx >= 1 or sa._node_anchor != spawn, \
         "the route-holder never moved: run_battle's moving_a/moving_b must have excluded it"
@@ -147,7 +147,7 @@ def test_route_order_does_not_crash_on_the_legacy_lattice_arm():
     """Regression: a route order at MB_NODE_COHESION=0 (the legacy lattice arm -- documented
     elsewhere in this codebase, bat.py's own comment, as "not a way the game can be played", kept
     only as the byte-exact grid regression oracle) used to raise
-    `AttributeError: 'Subunit' object has no attribute '_node_anchor'` the instant check_orders
+    `AttributeError: 'Unit' object has no attribute '_node_anchor'` the instant check_orders
     tried to clamp the route (_clamp_route_to_budget dereferenced _node_anchor unconditionally).
     Must now be an explicit, harmless no-op: check_orders completes, the route is left unclamped
     (dead data -- _resolve_route_goal is unreachable on this arm via the normal call chain), and
@@ -157,9 +157,9 @@ def test_route_order_does_not_crash_on_the_legacy_lattice_arm():
     try:
         su = _bare_subunit()
         su.orders = (Order('immediate', {'route': ((30, 20),)}),)
-        assert not hasattr(su, '_node_anchor'), "control: this Subunit must genuinely be on the legacy (non-node) arm"
-        u = Unit(name='A', faction='A', power=4, command=4, discipline=5, discipline_start=5,
-                 morale=6, morale_start=6, subunits=[su])
+        assert not hasattr(su, '_node_anchor'), "control: this Unit must genuinely be on the legacy (non-node) arm"
+        u = Army(name='A', faction='A', power=4, command=4, discipline=5, discipline_start=5,
+                 morale=6, morale_start=6, units=[su])
         check_orders(u, 1, [])   # must not raise
         assert su.route == ((30, 20),), "unclamped (no node position to measure a budget from), but present -- not silently discarded either"
         su.advance_cells(su.eff_discipline, (30, 20), enemy_cells=None)   # must not raise

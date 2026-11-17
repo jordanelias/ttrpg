@@ -27,7 +27,6 @@ from collections import Counter
 
 import pytest
 
-from engine.substrate import pc_engine
 
 from ..boot.realm import build_realm
 from ..harness.populated import run
@@ -56,7 +55,8 @@ def _drop_the_read(monkeypatch):
 
 def _spy(monkeypatch) -> Counter:
     """Count every `(pool, ob)` the engine's `core.resolve` is called with."""
-    core = pc_engine.load()[0].core
+    # by name, inside the function: `test_importing_every_engine_module_pulls_in_no_subsystem` fails on a module-scope import and the ratchet counts a written one
+    core = importlib.import_module("modules.combat.core")
     seen, real = Counter(), core.resolve
 
     def spy(pool, net_sigma, rng, ob):

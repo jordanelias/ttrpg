@@ -14,14 +14,11 @@ go away without recording why.
 """
 import json
 import os
-import sys
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'modules', 'combat')
-sys.path.insert(0, ENGINE)
 
-import core  # noqa: E402
-import weapon_physics as WP  # noqa: E402
-from combatant import WEAPONS  # noqa: E402
+from modules.combat import core  # noqa: E402
+from modules.combat import weapon_physics as WP  # noqa: E402
+from modules.combat.combatant import WEAPONS  # noqa: E402
 
 GOLDEN = os.path.join(os.path.dirname(__file__), 'golden_heft_percussion_snapshot.json')
 TOL = 1e-6

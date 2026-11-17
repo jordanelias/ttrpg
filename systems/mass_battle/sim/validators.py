@@ -41,7 +41,7 @@ from collections import namedtuple
 
 import modules.mass_battle.orchestration as _orch
 import modules.mass_battle.hierarchy.units as _hu
-from systems.mass_battle.sim.engine import Subunit, Unit, run_battle
+from systems.mass_battle.sim.engine import Unit, Army, run_battle
 
 GoalResult = namedtuple("GoalResult", "name passed measured expected anchor note")
 
@@ -69,15 +69,15 @@ _DET_WIDE_COL = 42     # [canonical: class-B test-fixture: detachment deploy col
 
 
 def _line(faction, row, advance_dir, troops, stance, col=_COL):
-    return Subunit(shape='Line', troop_type='infantry', tier=_TIER,
+    return Unit(shape='Line', troop_type='infantry', tier=_TIER,
                    starting_position=(row, col), advance_dir=advance_dir,
                    unit_type='melee', stance=stance, troops=troops, concentration=_CONC)
 
 
-def _unit(name, faction, subunits, stance):
-    return Unit(name=name, faction=faction, power=_PWR, command=_CMD,
+def _unit(name, faction, units, stance):
+    return Army(name=name, faction=faction, power=_PWR, command=_CMD,
                 discipline=_DISC, discipline_start=_DISC, morale=_MOR, morale_start=_MOR,
-                subunits=subunits, dr=_DR, stance=stance, speed='Standard')
+                units=units, dr=_DR, stance=stance, speed='Standard')
 
 
 def _defender(stance='hold', disc=_DISC):
@@ -86,8 +86,8 @@ def _defender(stance='hold', disc=_DISC):
     balanced + disc4 = a typical line (shattered). [du Picq: order and depth absorb the moral
     impulse; a loose line does not.]"""
     su = _line('B', _DEF_ROW, _FWD, _DEF_TROOPS, stance)
-    return Unit(name='D', faction='B', power=_PWR, command=_CMD, discipline=disc,
-                discipline_start=disc, morale=_MOR, morale_start=_MOR, subunits=[su],
+    return Army(name='D', faction='B', power=_PWR, command=_CMD, discipline=disc,
+                discipline_start=disc, morale=_MOR, morale_start=_MOR, units=[su],
                 dr=_DR, stance=stance, speed='Standard')
 
 
@@ -116,7 +116,7 @@ def _attacker_retained(pin, fix, shock, def_stance='hold', def_disc=_DISC,
         random.seed(s)
         a = _attacker(pin)
         d = _defender(def_stance, def_disc)
-        run_battle(a, d, max_turns=turns)
+        run_battle(a, d, max_ticks=turns)
         out.append(a.hp / a.hp_max if a.hp_max else 0.0)
     return out
 
@@ -202,7 +202,7 @@ def _attacker_envelop():
     'envelop' instruction -- the build-C maneuver routes it around to the enemy's rear.
 
     [2026-07-04 fix, ED-MB-0002 §2 step 1] The wide column must be supplied to _line() at
-    CONSTRUCTION time, not assigned to .starting_position afterward -- Subunit.__post_init__
+    CONSTRUCTION time, not assigned to .starting_position afterward -- Unit.__post_init__
     already initializes node state (_node_pos/_node_anchor) from starting_position, and
     reassigning the attribute post-construction does not retroactively move that state. The
     detachment previously deployed (and simulated) at _COL every time, silently making its own
@@ -216,14 +216,14 @@ def _attacker_envelop():
 
 
 def _set_movement_path(path):
-    """[movement audit fix-plan step 6, ED-1096/1097] Toggle which movement path new Subunits
+    """[movement audit fix-plan step 6, ED-1096/1097] Toggle which movement path new Units
     constructed AFTER this call will run on. 'grid' = the legacy integer path (where 'envelop'/
     'sweep' are actually implemented); 'node' = the coordinate-field path (the live default since
     ED-1089, where they are confirmed dead -- movement audit findings 1.1-1.4). Sets the module-
     level booleans on every module that star-imported its own bound copy and is read at a relevant
-    call site: hierarchy.units (Subunit.__post_init__'s _init_node_state gate, advance_cells'
+    call site: hierarchy.units (Unit.__post_init__'s _init_node_state gate, advance_cells'
     early-return) and orchestration (run_battle's FIELD_MOVEMENT=>MB_NODE_COHESION assert, the
-    pre-contact halt's node/legacy branch). Must be called BEFORE constructing the Subunits being
+    pre-contact halt's node/legacy branch). Must be called BEFORE constructing the Units being
     measured -- MB_NODE_COHESION is read once at construction (__post_init__) to decide whether
     node state is initialized at all; flipping it back after construction cannot retroactively
     add node state to an atom built without it."""
@@ -237,7 +237,7 @@ def _envelop_reach(path_on, path='grid', seeds=_SEEDS, turns=_TURNS):
     """Per-seed signed (detachment_row - defender_row). Negative => the detachment is BEHIND the
     defender (its rear, since the defender faces +row). MB_ENVELOP_PATH toggled in-process; the
     detachment always carries the 'envelop' instruction, so off = the maneuver disabled. `path`
-    ('grid'|'node') selects which movement path the constructed Subunits run on -- see
+    ('grid'|'node') selects which movement path the constructed Units run on -- see
     _set_movement_path."""
     _set_movement_path(path)
     _orch.MB_ENVELOP_PATH = path_on; _hu.MB_ENVELOP_PATH = path_on  # consumer (advance_cells) now lives in hierarchy.units
@@ -245,8 +245,8 @@ def _envelop_reach(path_on, path='grid', seeds=_SEEDS, turns=_TURNS):
     for s in range(seeds):
         random.seed(s)
         a = _attacker_envelop(); d = _defender('hold', _VULN_DISC)
-        run_battle(a, d, max_turns=turns)
-        det = a.subunits[1]; dfn = d.subunits[0]
+        run_battle(a, d, max_ticks=turns)
+        det = a.units[1]; dfn = d.units[0]
         diffs.append(det.centroid()[0] - dfn.centroid()[0])
     return diffs
 
@@ -321,13 +321,13 @@ def _archer_pair(target_idx):
     """An archer (faction A, ranged, held) facing a two-subunit enemy -- a NEAR line and a FAR line,
     both inside volley range. target_idx=None -> no order (fires nearest); target_idx=1 -> ordered at
     the FAR subunit. Held on both sides so only the volley acts (no melee), isolating fire distribution."""
-    arch = Subunit(shape='Line', troop_type='infantry', tier=_TIER,
+    arch = Unit(shape='Line', troop_type='infantry', tier=_TIER,
                    starting_position=(_MAIN_ROW, _COL), advance_dir=_BACK,
                    unit_type='ranged', stance='hold', troops=_DET_TROOPS, concentration=_CONC,
                    order_target_idx=target_idx)
     A = _unit('A', 'A', [arch], 'hold')
     near = _line('B', _DEF_ROW, _FWD, _DEF_TROOPS, 'hold')
-    far = Subunit(shape='Line', troop_type='infantry', tier=_TIER,
+    far = Unit(shape='Line', troop_type='infantry', tier=_TIER,
                   starting_position=(_FAR_ROW, _COL), advance_dir=_FWD,
                   unit_type='melee', stance='hold', troops=_DEF_TROOPS, concentration=_CONC)
     B = _unit('B', 'B', [near, far], 'hold')
@@ -343,10 +343,10 @@ def _archer_far_loss(target_idx, on, seeds=_SEEDS, turns=6):  # [canonical: vali
     for s in range(seeds):
         random.seed(s)
         a, b = _archer_pair(target_idx)
-        far0 = sum(b.subunits[1].cell_troops.values())
-        run_battle(a, b, max_turns=turns)
-        far1 = sum(b.subunits[1].cell_troops.values())
-        cellsum = sum(sum(su.cell_troops.values()) for su in b.subunits)
+        far0 = sum(b.units[1].cell_troops.values())
+        run_battle(a, b, max_ticks=turns)
+        far1 = sum(b.units[1].cell_troops.values())
+        cellsum = sum(sum(su.cell_troops.values()) for su in b.units)
         assert abs(cellsum - b.hp) < 1, "cell==hp invariant broken under ordered volley"
         losses.append(far0 - far1)
     return losses
@@ -390,9 +390,9 @@ def _sweep_disp(sweep_on, path='grid', seeds=_SEEDS, turns=_TURNS):
     for s in range(seeds):
         random.seed(s)
         a = _attacker_sweep(); d = _defender('hold', _VULN_DISC)
-        c0 = a.subunits[0].centroid()[1]
-        run_battle(a, d, max_turns=turns)
-        c1 = a.subunits[0].centroid()[1]
+        c0 = a.units[0].centroid()[1]
+        run_battle(a, d, max_ticks=turns)
+        c1 = a.units[0].centroid()[1]
         out.append(abs(c1 - c0))
     return out
 

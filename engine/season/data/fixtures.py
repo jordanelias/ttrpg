@@ -663,7 +663,7 @@ DEFAULT_FIXTURES = Fixtures(
     # `seam/wrappers/mass_battle.py::field_input` into the record's `loyalty_gain`.
     field_morale_loyalty_gain=0,  # `H-148`, swept 0 (control, SHIPPED) / 0.4 / 1
     # `H-150`. THE DEFENDER DR A WALLED FIELD ADDS -- A.9's one Walls number,
-    # applied 1:1 to the engine's own `Unit.dr` (an ASSUMPTION about the unit, which is why it is
+    # applied 1:1 to the engine's own `Army.dr` (an ASSUMPTION about the unit, which is why it is
     # swept). `None` IS THE DEFAULT AND IT MEANS A.9's NUMBER, NOT "NO WALLS": `engine/` cannot name
     # `systems/`, so the 3 stays authored once, at `terrain.WALLS_DEFENDER_DR`, and the engine reads it
     # when this is `None` -- a literal 3 here would be a second copy that drifts the day A.9 is
@@ -672,7 +672,7 @@ DEFAULT_FIXTURES = Fixtures(
     # difference between a walled and an open field removed), `1` the middle arm. Injection site: this
     # line, read by `seam/wrappers/mass_battle.py::field_input` into the record's `walls_dr` (`31c`).
     field_walls_dr=None,     # `H-150`, swept 3 (A.9, = the default) / 0 (control) / 1
-    # REM-32 (`H-250`, JQ-4). THE WEIGHT -> TROOPS SCALE OF A SEASON FIELD: each headcount side's Unit is sized
+    # REM-32 (`H-250`, JQ-4). THE WEIGHT -> TROOPS SCALE OF A SEASON FIELD: each headcount side's Army is sized
     # `troops = max(weight * this, _MIN_TROOPS)` (`massbattle._weighted_unit`). `1` IS SHIPPED AND IS THE
     # IDENTITY -- `troops = weight`, the field as it was, on which a realm force routs on contact; the value
     # is Jordan's to name at JQ-4 and is not invented here. Injection site: this line, read by
@@ -686,10 +686,10 @@ DEFAULT_FIXTURES = Fixtures(
     # and `_eff_march` scales each loser by HIS subunit's ratio and names, on the band Event, the loser whose subunit
     # broke first. A side that holds an order of battle, or faces one, is unchanged by either value. The flip to
     # `person` is its own declared-mover commit. Injection site: this line, read by
-    # `seam/wrappers/mass_battle.py::field_input` into the record's `subunits`; the module refuses any other string.
-    field_subunits="side",  # `H-359`, swept side (control, SHIPPED) / person
+    # `seam/wrappers/mass_battle.py::field_input` into the record's `units`; the module refuses any other string.
+    field_units="side",  # `H-359`, swept side (control, SHIPPED) / person
     # CR-24 (`H-360`). WHAT A FOUGHT FIELD COSTS THE WINNER: `engine` IS SHIPPED -- each winner's `body` is scaled by his own
-    # side's (or, under `field_subunits: person`, his own subunit's) survivor ratio from the engine's result, `body` ONLY: a
+    # side's (or, under `field_units: person`, his own subunit's) survivor ratio from the engine's result, `body` ONLY: a
     # winner earns no stance row (no grudge, no morale hit) and is never in `touched`. `off` is the field as it was (the
     # winner is not written), and is the control. Read by `loop/effects_combat.py::_eff_march`, which refuses any other
     # string (`rosters.yaml` `field_winner_casualty_arms`).

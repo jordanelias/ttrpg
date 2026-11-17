@@ -37,13 +37,13 @@ import collections
 
 sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', 'modules', 'combat'))  # the engine, moved at plan position `31b`
-import core
-import wrapper
-import combat_systems as S
-import weapons as W
-from combatant import Combatant, WEAPONS
-from config import CFG
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '..')))  # the repository root: `modules.combat` is a package
+from modules.combat import core
+from modules.combat import wrapper
+from modules.combat import combat_systems as S
+from modules.combat import weapons as W
+from modules.combat.combatant import Combatant, WEAPONS
+from modules.combat.config import CFG
 
 REFERENCE = 'arming'   # the uniform opponent every cell is measured against, as in workbench/balance.py
 

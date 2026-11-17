@@ -124,8 +124,8 @@ GOALS_YAML = PACKAGE_DIR / "goals.yaml"
 DEGREE_SWEEP_DIR = ENGINE_DIR / "reference" / "degree-sweep"
 
 # ---------------------------------------------------------------------------
-# THE REPOSITORY. The flat personal-combat module set is NOT anchored here: it is loaded by the
-# one path seam, engine/substrate/pc_engine.py (2026-09-25), which seam/wrappers/combat.py calls.
+# THE REPOSITORY. The personal-combat module is NOT anchored here: it is the package `modules.combat`,
+# reached by the composition rows `combat.fight` and `combat.duel_terms` (seam/wrappers/combat.py).
 # ---------------------------------------------------------------------------
 SYSTEMS_DIR = REPO_ROOT / "systems"
 # The world map: `provinces:` (territories, their `anchor`s), `terrain:` polygons and `water:`.

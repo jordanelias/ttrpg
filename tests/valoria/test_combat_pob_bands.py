@@ -4,14 +4,10 @@ Pins the ratified JD-1 bands (`designs/audit/2026-07-04-weapon-morphology-granul
 §6) for the weapon classes the fork actually named — rapier, 1H swords (arming/longsword), greatsword,
 poleaxe-class polearms (poleaxe/bec_de_corbin/lucerne_hammer), and staff. Weapons outside these five named
 classes were NOT part of JD-1's ruling and are intentionally not asserted here (no invented bands)."""
-import os
-import sys
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'modules', 'combat')
-sys.path.insert(0, ENGINE)
 
-import weapon_physics as WP  # noqa: E402
-from combatant import WEAPONS  # noqa: E402
+from modules.combat import weapon_physics as WP  # noqa: E402
+from modules.combat.combatant import WEAPONS  # noqa: E402
 
 # (weapon, band_lo_cm, band_hi_cm) per JD-1's ratified default (consolidation_v1.md §6)
 RAPIER_BAND = (3.0, 11.0)

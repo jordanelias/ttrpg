@@ -53,7 +53,7 @@ def _visible_enemy_cells(sub, enemy_cells):
 
 
 def check_orders(unit, t, enemy_cells):
-    """[Stage C] Fire each subunit's pending orders (Subunit.orders, a Tuple[Order,...]) whose trigger
+    """[Stage C] Fire each subunit's pending orders (Unit.orders, a Tuple[Order,...]) whose trigger
     condition is met this tick. Called once per tick per side, BEFORE assign_targets (an order's
     behavior dict may itself set target_condition/target_delay_ticks/etc., so orders must land first).
     Orders fire in sequence -- a later order cannot fire before an earlier one's trigger is satisfied.
@@ -62,19 +62,19 @@ def check_orders(unit, t, enemy_cells):
 
     Triggers: 'immediate' | 'tick:N' (t >= N) | 'enemy_range:D' (within D of the nearest OBSERVED
     enemy cell -- filtered per-sub-unit through _visible_enemy_cells, see A2) | 'ally_at:D' (within D
-    of order.waypoint_ref's centroid -- the allied Subunit to watch) | 'own_strength:FRAC' (this
+    of order.waypoint_ref's centroid -- the allied Unit to watch) | 'own_strength:FRAC' (this
     subunit's own casualty fraction) | 'signal:NAME' (A4 -- NAME is in `unit.fired_signals`).
-    behavior may also set 'fire_signal': NAME (A4) -- a pseudo-field, not a real Subunit attribute:
-    once THIS order's own trigger condition fires, NAME is added to the issuing Unit's
+    behavior may also set 'fire_signal': NAME (A4) -- a pseudo-field, not a real Unit attribute:
+    once THIS order's own trigger condition fires, NAME is added to the issuing Army's
     fired_signals, the one real order-writable path to release a 'signal:NAME' trigger from inside
     a battle. behavior may also set 'feign_retreat': bool (C4, ED-MB-0067 Part C / ED-MB-0071) --
-    another pseudo-field: sets the issuing Unit's `.feigned` (PP-256), pre-declaring a Feigned
+    another pseudo-field: sets the issuing Army's `.feigned` (PP-256), pre-declaring a Feigned
     Retreat before the unit's normal rout check runs -- the order-writable path that mechanic (fully
     built in orchestration.py) was missing.
 
-    Byte-exact: Subunit.orders defaults to () -- the while loop body never executes for any existing
-    Subunit, the identical safe-default pattern as the already-shipped target_delay_ticks: int = 0."""
-    for sub in unit.subunits:
+    Byte-exact: Unit.orders defaults to () -- the while loop body never executes for any existing
+    Unit, the identical safe-default pattern as the already-shipped target_delay_ticks: int = 0."""
+    for sub in unit.units:
         while sub._order_idx < len(sub.orders):
             order = sub.orders[sub._order_idx]
             fired = False
@@ -108,7 +108,7 @@ def check_orders(unit, t, enemy_cells):
                 fired = start > 0 and (sub.troop_total() / start) <= frac
             elif order.trigger.startswith('signal:'):
                 # [A4, ED-MB-0067 Part A] Go-code: fires once NAME has been added to the issuing
-                # Unit's `fired_signals` set (see Unit.fired_signals and Order's own docstring). A
+                # Army's `fired_signals` set (see Army.fired_signals and Order's own docstring). A
                 # signal never fired keeps the order pending forever, the same "correctly never
                 # met" semantics every other trigger already has (an unmet enemy_range, an
                 # unreached own_strength threshold).
@@ -118,21 +118,21 @@ def check_orders(unit, t, enemy_cells):
                 break
             for k, v in order.behavior.items():
                 if k == 'fire_signal':
-                    # [A4, ED-MB-0067 Part A] Not a real Subunit attribute -- a PSEUDO-field consumed here directly, adding
-                    # the name to the ISSUING Unit's fired_signals set (per-Unit, see Unit.fired_signals' own note) instead of
+                    # [A4, ED-MB-0067 Part A] Not a real Unit attribute -- a PSEUDO-field consumed here directly, adding
+                    # the name to the ISSUING Army's fired_signals set (per-Army, see Army.fired_signals' own note) instead of
                     # being setattr-ed onto the subunit. This is the one real, order-writable path to fire a 'signal:'
                     # trigger from inside a battle: once THIS order's own trigger condition is met (any kind), it releases
-                    # every other pending order (on any subunit of this same Unit) watching for the same name -- WITHIN THIS
-                    # SAME tick's check_orders call if that other subunit's own turn through the `for sub in unit.subunits`
-                    # loop below has not yet been taken, otherwise on the next call. Subunit ITERATION ORDER decides which of
+                    # every other pending order (on any subunit of this same Army) watching for the same name -- WITHIN THIS
+                    # SAME tick's check_orders call if that other subunit's own turn through the `for sub in unit.units`
+                    # loop below has not yet been taken, otherwise on the next call. Unit ITERATION ORDER decides which of
                     # the two happens, and no messenger latency is modelled (out of scope for A4) -- so "at most one tick's
                     # delay, never more" is the honest guarantee, not "always next call".
                     unit.fired_signals.add(v)
                     continue
                 if k == 'feign_retreat':
-                    # [C4, ED-MB-0067 Part C / ED-MB-0071] Same shape as fire_signal immediately above: not a real Subunit
-                    # attribute, so it is set on the ISSUING UNIT instead -- PP-256's Feigned Retreat is a Unit-wide tactic
-                    # (Unit.feigned), not a per-subunit one. This is the trigger for PP-256's resolution machinery
+                    # [C4, ED-MB-0067 Part C / ED-MB-0071] Same shape as fire_signal immediately above: not a real Unit
+                    # attribute, so it is set on the ISSUING ARMY instead -- PP-256's Feigned Retreat is an Army-wide tactic
+                    # (Army.feigned), not a per-subunit one. This is the trigger for PP-256's resolution machinery
                     # (feigned_retreat_recognized / feigned_retreat_check / resolve_feigned_retreat, all in orchestration.py).
                     unit.feigned = bool(v)
                     continue
@@ -141,7 +141,7 @@ def check_orders(unit, t, enemy_cells):
                 setattr(sub, k, v)
             # [A1, ED-MB-0067 Part A] Clamp a freshly-assigned route to Jordan's ruled path-length
             # budget (0.5*speed*max-ticks) THE MOMENT it is assigned, using the sub-unit's position
-            # at THIS tick as the route's start point -- see Subunit._clamp_route_to_budget. Applying
+            # at THIS tick as the route's start point -- see Unit._clamp_route_to_budget. Applying
             # this here (not inside _resolve_route_goal, which reads the route fresh every tick
             # without re-deriving it) means the budget is a fixed planning bound set at order-issue
             # time, not one that silently grows if the sub-unit is later shoved backward by combat
@@ -201,8 +201,8 @@ def assign_targets(unit_a, unit_b):
         else:
             my = atom.centroid()
             return min(enemies, key=lambda e: math.hypot(my[0]-e.centroid()[0], my[1]-e.centroid()[1]))
-    for atom in unit_a.subunits: atom.target_atom = _pick(atom, unit_b.subunits)
-    for atom in unit_b.subunits: atom.target_atom = _pick(atom, unit_a.subunits)
+    for atom in unit_a.units: atom.target_atom = _pick(atom, unit_b.units)
+    for atom in unit_b.units: atom.target_atom = _pick(atom, unit_a.units)
 
 # ─── CONTACTS ────────────────────────────────────────────────────────────────
 
@@ -242,7 +242,7 @@ def resolve_cross_side_contention(unit_a, unit_b):
     def collect(unit):
         """abs_pos -> [(subunit, orig_coord, contention_speed)]"""
         result = {}
-        for su in unit.subunits:
+        for su in unit.units:
             op = _oriented(su)
             for orig_r, orig_c, or_r, or_c in op:
                 ar = (su.starting_position[0] + or_r
@@ -314,10 +314,10 @@ def find_contacts(unit_a, unit_b):
         return _find_contacts_standoff(unit_a, unit_b)
     if not _u.FIELD_CONTACT:
         pairs = []
-        a_cells = {id(a): set(a.cells()) for a in unit_a.subunits}
-        b_cells = {id(b): set(b.cells()) for b in unit_b.subunits}
-        for atom_a in unit_a.subunits:
-            for atom_b in unit_b.subunits:
+        a_cells = {id(a): set(a.cells()) for a in unit_a.units}
+        b_cells = {id(b): set(b.cells()) for b in unit_b.units}
+        for atom_a in unit_a.units:
+            for atom_b in unit_b.units:
                 ca = a_cells[id(atom_a)]
                 cb = b_cells[id(atom_b)]
                 contact_cells_a, contact_cells_b, contact_cols = [], [], set()
@@ -358,11 +358,11 @@ def _find_contacts_standoff(unit_a, unit_b):
     # fires on reach_reaches (a's reach body meets b's body, or b's meets a's). The bodies are built by
     # _u.cell_bodies_for, index-aligned with cells_float() and heading/reach-identical to the bodies
     # resolve_toi_and_commit stops on, so contact and the collision stop share one touch surface exactly.
-    af = {id(a): (a.cells_float(), _u.cell_bodies_for(a, _u.reach_for(a.troop_type))) for a in unit_a.subunits}
-    bf = {id(b): (b.cells_float(), _u.cell_bodies_for(b, _u.reach_for(b.troop_type))) for b in unit_b.subunits}
-    for atom_a in unit_a.subunits:
+    af = {id(a): (a.cells_float(), _u.cell_bodies_for(a, _u.reach_for(a.troop_type))) for a in unit_a.units}
+    bf = {id(b): (b.cells_float(), _u.cell_bodies_for(b, _u.reach_for(b.troop_type))) for b in unit_b.units}
+    for atom_a in unit_a.units:
         fa, bodies_a = af[id(atom_a)]
-        for atom_b in unit_b.subunits:
+        for atom_b in unit_b.units:
             fb, bodies_b = bf[id(atom_b)]
             # Sets, not lists: the engagement envelope is wide enough that one cell can meet several enemy cells at
             # once, which would otherwise append the SAME snapped identity multiple times and over-count stamina drain
@@ -417,12 +417,12 @@ def _find_contacts_field(unit_a, unit_b):
     NOTE: reach>0 widening of the SET predicate is UNSPECIFIED and pending Jordan; ships reach=0.0 only."""
     _reach = _u.CONTACT_REACH  # exercised only when a ratified non-zero reach lands; 0.0 => OFF adjacency
     pairs = []
-    af = {id(a): a.cells_float() for a in unit_a.subunits}
-    bf = {id(b): b.cells_float() for b in unit_b.subunits}
-    for atom_a in unit_a.subunits:
+    af = {id(a): a.cells_float() for a in unit_a.units}
+    bf = {id(b): b.cells_float() for b in unit_b.units}
+    for atom_a in unit_a.units:
         fa = af[id(atom_a)]
         ca_snap = set((int(round(r)), int(round(c))) for (r, c) in fa)
-        for atom_b in unit_b.subunits:
+        for atom_b in unit_b.units:
             fb = bf[id(atom_b)]
             cb_snap = set((int(round(r)), int(round(c))) for (r, c) in fb)
             contact_cells_a, contact_cells_b, contact_cols = [], [], set()

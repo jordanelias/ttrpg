@@ -8,9 +8,9 @@ import math  # noqa: F401  (read by the nested helpers below, as `orchestration`
 from modules.mass_battle.hierarchy.units import unit_conceded
 
 
-def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md §A.7 — 18-tick battle (3 phases x 6)]
+def run_battle(unit_a, unit_b, max_ticks=18):  # [canonical: mass_battle_v30.md §A.7 — 18-tick battle (3 phases x 6)]
     """Run one engagement turn (up to 3 phases = 18 ticks).
-    max_turns=18 = one battle turn's engagement cap (3 phases).
+    max_ticks=18 = one battle turn's engagement cap (3 phases).
     Multi-turn battles call this repeatedly with persistent unit state.
     [canonical: Jordan direction — "limit of three phases per simultaneous
      engagement per turn"]
@@ -24,7 +24,7 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
     from modules.mass_battle.orchestration import (
         CASCADING_ENABLED, COL_WIDTH, FIELD_MOVEMENT, LANCHESTER_ENABLED, MB_CELL_DAMAGE, MB_CLOSE_RANKS,
         MB_ENVELOP_SHOCK, MB_FRONTAGE_BLEND, MB_FRONTAGE_REF, MB_NODE_COHESION, PER_CELL,
-        STAMINA_DRAIN_PER_CONTACT_CELL, SUBUNIT_ROUT_FLOOR, TICKS_PER_PHASE, VOLLEY_LETHALITY_SCALE, _draw_friction,
+        STAMINA_DRAIN_PER_CONTACT_CELL, UNIT_ROUT_FLOOR, TICKS_PER_PHASE, VOLLEY_LETHALITY_SCALE, _draw_friction,
         _engaged_cols, _is_moving_atom, _oriented, _unit_snapshot, apply_to_subunit, assign_targets,
         attribute_hp_loss, check_orders, discipline_check_cascade, distribute_casualties,
         distribute_casualties_cellwise, find_contacts, phase_boundary, reach_for, resolve_cross_side_contention,
@@ -48,7 +48,7 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
     # `random` stream so determinism (I2) holds; enabling it shifts the stream (field goldens re-record).
     _draw_friction(unit_a)
     _draw_friction(unit_b)
-    turns = 0
+    ticks = 0
     current_phase = 0
     separate_all_bodies(unit_a, unit_b)   # an army is deployed clear of itself and of the enemy
     # [ED-MB-0048 / A3] battle-scoped totals for the sub-phase truncation counter; see
@@ -57,8 +57,8 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
     trunc_groups = trunc_pairs = 0
     trunc_troops = 0.0
     max_groups = 0
-    for t in range(1, max_turns + 1):
-        turns = t
+    for t in range(1, max_ticks + 1):
+        ticks = t
         trace_event('tick', t=t)
         if unit_a.routed or unit_b.routed: break
         # CP-T04-03: a side every subunit of which has retreated or routed has conceded the field; the battle stops for
@@ -73,7 +73,7 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         volley_dmg_b = vol["loss_b"]
         # Pre-movement contacts -> halt
         pre_pairs = find_contacts(unit_a, unit_b)
-        for atom in unit_a.subunits + unit_b.subunits:
+        for atom in unit_a.units + unit_b.units:
             atom.halted_cells = set()
         for p in pre_pairs:
             # [migration H] recompute abs from _node_pos (file-binned) on ON so it matches find_contacts'
@@ -96,8 +96,8 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
                             _atom.halted_cells.add((orig_r, orig_c)); break
         # [Stage C] check_orders BEFORE assign_targets -- a fired order's behavior dict may itself set
         # target_condition/target_delay_ticks/stance/instructions, so orders must land first.
-        b_cells_set = set(c for sub in unit_b.subunits for c in sub.cells())
-        a_cells_set = set(c for sub in unit_a.subunits for c in sub.cells())
+        b_cells_set = set(c for sub in unit_b.units for c in sub.cells())
+        a_cells_set = set(c for sub in unit_a.units for c in sub.cells())
         check_orders(unit_a, t, b_cells_set)
         check_orders(unit_b, t, a_cells_set)
         assign_targets(unit_a, unit_b)
@@ -106,7 +106,7 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         # centroid: a first-argument bias).
         # [canonical: params/mass_combat.md PP-233 — "Damage is simultaneous"]
         cached_centroids = {}
-        for atom in unit_a.subunits + unit_b.subunits:
+        for atom in unit_a.units + unit_b.units:
             if atom.target_atom:
                 cached_centroids[id(atom)] = atom.target_atom.centroid()
 
@@ -130,7 +130,7 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
             mag = math.hypot(fr, fc)
             return (fr / mag, fc / mag) if mag > 1e-9 else (float(sub.advance_dir), 0.0)  # [canonical: epsilon: float magnitude guard]
 
-        for atom in unit_a.subunits + unit_b.subunits:
+        for atom in unit_a.units + unit_b.units:
             if (atom.escort_of is not None and atom.escort_engage_on_contact
                     and not atom._escort_engaged and atom.target_atom is not None):
                 atom._escort_engaged = True
@@ -150,7 +150,7 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
                 cached_centroids[id(atom)] = (_ex + _dr * _fr - _dc * _fc, _ey + _dr * _fc + _dc * _fr)
 
         def _cells_float_of(unit):
-            return [(r, c, reach_for(sub.troop_type)) for sub in unit.subunits for (r, c) in sub.cells_float()]
+            return [(r, c, reach_for(sub.troop_type)) for sub in unit.units for (r, c) in sub.cells_float()]
 
         # [TOI refactor] b_cells_float/a_cells_float are consulted by _node_advance ONLY for truthiness -- a
         # non-empty list signals "defer to the cross-side TOI resolve rather than commit immediately" (see
@@ -171,8 +171,8 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         # goal/_resolve_maneuver_goal chain is what actually supplies the route as the goal.
         # [F5] The route clause is gated on the node path actually being active -- see _is_moving_atom's own
         # docstring.
-        moving_a = [atom for atom in unit_a.subunits if _is_moving_atom(atom)]
-        moving_b = [atom for atom in unit_b.subunits if _is_moving_atom(atom)]
+        moving_a = [atom for atom in unit_a.units if _is_moving_atom(atom)]
+        moving_b = [atom for atom in unit_b.units if _is_moving_atom(atom)]
         for atom in moving_a:
             # per-subunit formation-hold: each subunit advances on its OWN Discipline
             # (single-subunit inherits -> == unit.discipline -> byte-exact)
@@ -187,16 +187,16 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         # the cross-side continuous-collision time-of-impact ONCE, across both sides together (not per-atom, not
         # sequential), and commit final positions now.
         #
-        # Pass ALL subunits (unit_a.subunits/unit_b.subunits), not just moving_a/moving_b: a subunit with no
+        # Pass ALL units (unit_a.units/unit_b.units), not just moving_a/moving_b: a subunit with no
         # target yet (a reserve, or gated by target_delay_ticks/target_condition) never called advance_cells and
         # so has no pending proposal, but its cells are real, occupied positions that the OTHER side's moving
         # cells must still treat as obstacles -- resolve_toi_and_commit reads such atoms' current true positions
         # directly.
         if FIELD_MOVEMENT:
-            resolve_toi_and_commit(unit_a.subunits, unit_b.subunits)
+            resolve_toi_and_commit(unit_a.units, unit_b.units)
         # v11: vector halt-at-contact — prevent over-run that creates paradoxical angles
-        for atom in unit_a.subunits: atom.halt_before_enemy(unit_b)
-        for atom in unit_b.subunits: atom.halt_before_enemy(unit_a)
+        for atom in unit_a.units: atom.halt_before_enemy(unit_b)
+        for atom in unit_b.units: atom.halt_before_enemy(unit_a)
         # Cross-side cell contention (speed → size → random priority).
         # After both sides have advanced, cells from opposing sides may occupy the
         # same abs position. Resolve per Jordan design 2026-05-12: higher-speed
@@ -215,8 +215,8 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
             for u in [unit_a, unit_b]:
                 if u.routed:
                     continue
-                for atom in u.subunits:
-                    if atom.routed or atom.broken:
+                for atom in u.units:
+                    if atom.routed or atom.disordered:
                         continue
                     cic = 0
                     for p in pairs:
@@ -259,7 +259,7 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
                 opp = unit_b if u is unit_a else unit_a
                 opp_cells_contact = set()
                 opp_total = 0
-                for sub in opp.subunits:
+                for sub in opp.units:
                     opp_total += len(list(sub.cells()))
                     for p in pairs:
                         if p.get('atom_a') is sub:
@@ -340,9 +340,9 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
                 # stays simultaneous — neither side's reflow sees the other mid-tick), rear cells step up
                 # to refill the leading ranks toward spawn density, depleting from the back. Re-sync the
                 # emergent column grid from the moved cell state. Gated OFF -> byte-exact (skipped entirely).
-                for _a in unit_a.subunits:
+                for _a in unit_a.units:
                     _a.close_ranks()
-                for _a in unit_b.subunits:
+                for _a in unit_b.units:
                     _a.close_ranks()
                 sync_col_grid(unit_a)
                 sync_col_grid(unit_b)
@@ -353,7 +353,7 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         # Discipline degradation runs at phase_boundary (D-6). Per-tick integer Size changes are rare at
         # TroopCount HP scale. check_drift still runs per-tick for formation coherence.
         for u in [unit_a, unit_b]:
-            if not u.routed and not u.broken:
+            if not u.routed and not u.disordered:
                 u.check_drift()
         # SIMULTANEOUS MORALE — compute erosion for both units, then check rout for both, so ordering cannot
         # affect which unit routs first within a single tick.
@@ -382,7 +382,7 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         if MB_ENVELOP_SHOCK:
             for u, _shocked, _dmg in ((unit_a, result.get("shocked_a", False), result["dmg_a"]),
                                        (unit_b, result.get("shocked_b", False), result["dmg_b"])):
-                if not _shocked or u.routed or u.broken:
+                if not _shocked or u.routed or u.disordered:
                     continue
                 _sdisc = u.agg_discipline()
                 if _sdisc > 0 and u.command > 0 and not discipline_check_cascade(u):
@@ -390,15 +390,15 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
 
         # Rout check AFTER both erosions applied — per-subunit, then derive the unit rout
         # [ED-MB-0041 Tier-2] The two rout triggers share one clock: morale collapse and the annihilation
-        # trigger (troop_total below SUBUNIT_ROUT_FLOOR) are both checked here, per TICK, since both mean "this
+        # trigger (troop_total below UNIT_ROUT_FLOOR) are both checked here, per TICK, since both mean "this
         # body has stopped being a body". rout_resolution still runs the same check at the phase boundary
         # (setting an already-set flag is harmless), so its canonical §A.12 sequencing is untouched.
         for u in [unit_a, unit_b]:
             if u.routed:
                 continue
-            for atom in u.subunits:
+            for atom in u.units:
                 if not atom.routed and (atom.eff_morale <= 0
-                                        or atom.troop_total() < SUBUNIT_ROUT_FLOOR):
+                                        or atom.troop_total() < UNIT_ROUT_FLOOR):
                     atom.routed = True
             u.derive_rout()   # single-subunit: fires iff old `u.morale<=0` did (byte-exact)
         # v15: phase boundary — stamina_check, morale_check_phase, rout_resolution
@@ -414,8 +414,8 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
             trace_event('positions', t=t, a=_unit_snapshot(unit_a), b=_unit_snapshot(unit_b))
     winner = ("A" if not unit_a.routed and unit_b.routed else
               "B" if not unit_b.routed and unit_a.routed else "draw")
-    tick_in_phase = turns % TICKS_PER_PHASE if turns else 0
-    return {"winner": winner, "turns": turns,
+    tick_in_phase = ticks % TICKS_PER_PHASE if ticks else 0
+    return {"winner": winner, "turns": ticks,
             "phases": current_phase, "tick_in_phase": tick_in_phase,
             "a_stamina": unit_a.agg_stamina(), "b_stamina": unit_b.agg_stamina(),
             "a_hp_pct": round(unit_a.hp / unit_a.hp_max * 100, 1) if unit_a.hp_max else 0,

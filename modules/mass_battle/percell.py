@@ -10,9 +10,9 @@ class _ColBlock:
     """One file/column of a unit's formation: a depleting troop density + stamina + depth (rank count).
     Depth is the reserve queue (refill + fatigue rotation + flank-refusal in later increments).
 
-    [A6, ED-MB-0067 Part A] Ammunition is not held here: a column block is shared by whatever subunits currently
+    [A6, ED-MB-0067 Part A] Ammunition is not held here: a column block is shared by whatever units currently
     occupy that absolute column (see build_column_grid/sync_col_grid, keyed on column position, not identity),
-    so ammo lives on the shooter (`Subunit.volleys`, hierarchy/units.py)."""
+    so ammo lives on the shooter (`Unit.volleys`, hierarchy/units.py)."""
     __slots__ = ('col', 'density', 'start_density', 'stamina', 'depth')
     def __init__(self, col, density, depth):
         self.col = col
@@ -30,7 +30,7 @@ def build_column_grid(unit):
     frontage = distinct columns; per column: troops = (#cells in column) * troops/cell; depth = #ranks.
     Returns list[_ColBlock] ordered left->right. State only — resolution wires in at Increment 2."""
     bycol = {}
-    for a in unit.subunits:
+    for a in unit.units:
         for _pid, (r, c), troops in a.iter_cells():
             bycol.setdefault(c, []).append(troops)
     if not bycol:
@@ -46,7 +46,7 @@ def sync_col_grid(unit):
     — carrying each surviving column's fatigue forward.
     [arch: column = emergent view, rebuilt from cells after they change.]
 
-    [ED-MB-0041 Tier-2] `col_grid` is built once, in `Unit.__post_init__`, from the spawn footprint; this
+    [ED-MB-0041 Tier-2] `col_grid` is built once, in `Army.__post_init__`, from the spawn footprint; this
     rebuilds its membership so a body that wheeled or drifted laterally reads live columns (an empty grid reads
     `_fatigue_sigma` 0.0 and `_defender_depth` 0.0).
 
@@ -58,7 +58,7 @@ def sync_col_grid(unit):
     if grid is None:
         return
     bycol = {}
-    for a in unit.subunits:
+    for a in unit.units:
         for _pid, (r, c), troops in a.iter_cells():
             if troops <= 0:
                 continue   # an emptied cell is not a live rank: it must not pad the column's depth
@@ -79,7 +79,7 @@ def sync_col_grid(unit):
 def _engaged_cols(unit, pairs):
     """Absolute columns of `unit` that are in contact this tick (from find_contacts pairs)."""
     cols = set()
-    sub_ids = {id(a) for a in unit.subunits}
+    sub_ids = {id(a) for a in unit.units}
     for p in pairs:
         if id(p.get("atom_a")) in sub_ids:
             cols.update(c for (r, c) in p.get("a_cells", []))
@@ -124,13 +124,13 @@ def distribute_casualties(unit, dmg, pairs):
     proportional to each engaged column's current density. Keeps sum(col densities) == hp:
     the same total `dmg` run_battle subtracts from unit.hp is subtracted here across columns.
 
-    [D4] The engaged-column filter is computed PER SUBUNIT, not unioned across the whole Unit: a subunit's
+    [D4] The engaged-column filter is computed PER SUBUNIT, not unioned across the whole Army: a subunit's
     own cells count as engaged only against THAT subunit's own contact columns, so one subunit's engaged
     column cannot reach an unengaged subunit's cells that share the same absolute column value."""
     if dmg <= 0:
         return
     eng_by_sub = {}
-    sub_ids = {id(a) for a in unit.subunits}
+    sub_ids = {id(a) for a in unit.units}
     for p in pairs:
         aid = id(p.get("atom_a"))
         if aid in sub_ids:
@@ -138,18 +138,18 @@ def distribute_casualties(unit, dmg, pairs):
         bid = id(p.get("atom_b"))
         if bid in sub_ids:
             eng_by_sub.setdefault(bid, set()).update(c for (_r, c) in p.get("b_cells", []))
-    # `any_engaged`: if NOTHING in the whole Unit is in contact this tick (no pairs reference any of its
-    # subunits at all), spread dmg over every living cell. Once ANYTHING is engaged, a subunit only
+    # `any_engaged`: if NOTHING in the whole Army is in contact this tick (no pairs reference any of its
+    # units at all), spread dmg over every living cell. Once ANYTHING is engaged, a subunit only
     # contributes cells if IT SPECIFICALLY has contact this tick.
     any_engaged = bool(eng_by_sub)
     cells = []   # (subunit, cell_id, troops) over the ENGAGED front
-    for a in unit.subunits:
+    for a in unit.units:
         eng = eng_by_sub.get(id(a))
         for pid, (r, c), troops in a.iter_cells():
             if troops > 0 and (not any_engaged or (eng and c in eng)):
                 cells.append((a, pid, troops))
     if not cells:                                  # fallback: spread over all living cells
-        for a in unit.subunits:
+        for a in unit.units:
             for pid, (r, c), troops in a.iter_cells():
                 if troops > 0:
                     cells.append((a, pid, troops))

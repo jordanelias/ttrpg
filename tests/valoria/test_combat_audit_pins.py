@@ -7,21 +7,16 @@ against a third. These are those pins.
 
 Full account: audit/2026-07-24-combat-four-dimension-audit/ (index + infill). EDs: ED-PC-0034, ED-PC-0035, ED-PC-0036, ED-PC-0037.
 """
-import os
-import sys
 
 import pytest
 
-ENGINE = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
-                      'modules', 'combat')
-sys.path.insert(0, ENGINE)
 
-import combat_systems as S  # noqa: E402
-import contact as CT  # noqa: E402
-import core  # noqa: E402
-import tradition as TR  # noqa: E402
-from combatant import WEAPONS, Combatant  # noqa: E402
-from config import CFG  # noqa: E402
+from modules.combat import combat_systems as S  # noqa: E402
+from modules.combat import contact as CT  # noqa: E402
+from modules.combat import core  # noqa: E402
+from modules.combat import tradition as TR  # noqa: E402
+from modules.combat.combatant import WEAPONS, Combatant  # noqa: E402
+from modules.combat.config import CFG  # noqa: E402
 
 # Every field the wrapper writes onto a combatant per beat. The represent gate must be blind to ALL of them.
 _CIRCUMSTANCE = ('sel_head', 'sel_gap', 'sel_perc', 'sel_pc', 'sel_eff', 'grip_position', 'range_avail', 'lunge_depth')

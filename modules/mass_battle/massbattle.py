@@ -1,12 +1,12 @@
 """Season-facing adapter: `resolve_field` -> the canon mass-battle engine (it was the strategic-layer faction adapter).
 
 The engine lives beside this file (`orchestration.py`, `hierarchy/`, `core/`, `geometry.py`, `percell.py`,
-...). Its entry point is TACTICAL -- `run_battle(unit_a, unit_b, max_turns=18)` takes constructed Units --
+...). Its entry point is TACTICAL -- `run_battle(unit_a, unit_b, max_ticks=18)` takes constructed Armies --
 while the season's is STRATEGIC. This module is the adapter between them: `resolve_field`, `_weighted_unit`,
 `_run_and_grade` and the survivor-ratio -> degree map.
 
 `resolve_field` builds each side one of three ways: from an order of battle when either side carries one
-(`_oob_unit`, ED-IN-0306); one subunit per commanding person when `field_subunits` is `'person'`
+(`_oob_unit`, ED-IN-0306); one subunit per commanding person when `field_units` is `'person'`
 (`_person_unit`, CP-T04-01); else the minimum-viable default, one Line subunit (`_weighted_unit`: tier 2,
 command 4, discipline 5, power `_SEASON_FORCE_POWER`). Morale and terrain come from season
 state: `resolve_field` takes each side's morale-start from its mean stance toward its own faction (the
@@ -24,7 +24,7 @@ import math
 
 from modules.mass_battle import rngsource
 from modules.mass_battle.config import CELL_CAP, ROLE_SPEC
-from modules.mass_battle.hierarchy.units import Order, Subunit, Unit, unit_conceded
+from modules.mass_battle.hierarchy.units import Order, Unit, Army, unit_conceded
 from modules.mass_battle.orchestration import run_battle
 from modules.mass_battle.orderofbattle import OrderOfBattle, UnitRow, build_unit as _build_oob_unit
 from modules.mass_battle.troop_types.recruitment import under_arms_cap
@@ -118,11 +118,11 @@ def _morale_start(stance, loyalty=0.0, gain=0):
 #:  VALUES BELOW ARE NOT CANON AND THIS COMMENT DOES NOT CLAIM THEY ARE. They are the pre-port
 #:  adapter's minimum-viable defaults, carried over FIELD-FOR-FIELD so the engine swap is a
 #:  single-variable experiment, and the [GAP] on both this module's construction paths is the
-#:  honest status: no canonical spec exists for army -> Unit construction of ANY kind. The
+#:  honest status: no canonical spec exists for army -> Army construction of ANY kind. The
 #:  fabrication gate is right to ask; the answer is "inherited, with a recorded gap", not
 #:  "derived".] SHARED, until `29b` deleted `_faction_to_unit`, BY THAT FUNCTION AND `_weighted_unit` (§8:
 #: one owner for the MVP shape); `_weighted_unit` is now the only user. `concentration` is deliberately
-#: NOT here -- it is continuous-mode-only (`_weighted_unit` sets it; the deleted tier-sized Subunit
+#: NOT here -- it is continuous-mode-only (`_weighted_unit` sets it; the deleted tier-sized Unit
 #: did not).
 _MVP_SUBUNIT_SHAPE = dict(
     shape='Line',
@@ -143,7 +143,7 @@ _MVP_UNIT_COMMAND = dict(
 )
 
 
-#: A season `Person` carries no troop-density signal at all -- `power` is a Unit-level QUALITY
+#: A season `Person` carries no troop-density signal at all -- `power` is an Army-level QUALITY
 #: stat (baseline for a subunit with no per-subunit override; `eff_power`'s own fallback, cited
 #: there as "[canonical: sim_mb_06_v9_historical_spec.md -- P4 tier baseline default]"), not
 #: something army headcount should feed. Re-used here rather than derived from weight -- headcount
@@ -152,10 +152,10 @@ _MVP_UNIT_COMMAND = dict(
 _SEASON_FORCE_POWER = 4  # [canonical: sim_mb_06_v9_historical_spec.md — P4 tier baseline default, eff_power's own fallback]
 
 #: [known risk, disclosed rather than fixed: `resolve_field` has no ratified person-weight ->
-#: troop-count conversion, and this module is not the place to invent one.] `Subunit.troops` is
+#: troop-count conversion, and this module is not the place to invent one.] `Unit.troops` is
 #: fed the RAW weight sum with no scale factor -- honest as a NUMBER (weight is the one quantity a
 #: season Person carries that is a headcount), but this engine's own calibration
-#: (`config.py: SUBUNIT_ROUT_FLOOR`, "a subunit routs below SUBUNIT_ROUT_FLOOR total") targets
+#: (`config.py: UNIT_ROUT_FLOOR`, "a subunit routs below UNIT_ROUT_FLOOR total") targets
 #: battles of hundreds of troops, and a real corpus faction's weight sum (single/double digits,
 #: measured against the realm `boot/realm.py` builds) routs on contact regardless of who wins.
 #: A season-Person-weight -> troop-count conversion is open work this function does not invent one
@@ -163,7 +163,7 @@ _SEASON_FORCE_POWER = 4  # [canonical: sim_mb_06_v9_historical_spec.md — P4 ti
 #: calibrated to the engine's own battle scale.
 #: REM-32: the scale is now a fixture (`troops_per_weight`, `hole_register.yaml` H-250, Jordan's value at JQ-4),
 #: shipped at 1 -- the raw weight sum above. At 1 the disclosure stands as written.
-_MIN_TROOPS = 1.0  # floor only -- `Unit.total_troops() == 0` divides by zero deep in
+_MIN_TROOPS = 1.0  # floor only -- `Army.total_troops() == 0` divides by zero deep in
                    # `orchestration.resolve_engagements`; this is the smallest value that avoids
                    # that crash, not a claim about what a minimal army is.
 
@@ -181,7 +181,7 @@ ORDER_RETREAT_AT = ('none', '0.5', '0.25')
 
 
 def _role_fields(role):
-    """CP-T04-02: the `Subunit` fields a standing order's `role` sets, from `config.ROLE_SPEC` (shape and instruction
+    """CP-T04-02: the `Unit` fields a standing order's `role` sets, from `config.ROLE_SPEC` (shape and instruction
     package, as `armies.build_army` takes them), at CONSTRUCTION -- the footprint is generated from the shape, so a
     shape written afterwards would change nothing. `None` is `{}`: the subunit exactly as it was. A role outside
     `ROLE_SPEC` is refused here, naming the set."""
@@ -194,7 +194,7 @@ def _role_fields(role):
 
 
 def _retreat_orders(retreat_at):
-    """CP-T04-03: a standing order's `retreat_at` as the Orders each of the side's subunits carries -- one
+    """CP-T04-03: a standing order's `retreat_at` as the Orders each of the side's units carries -- one
     `own_strength:FRAC` Order whose action is the `retreat` stance (the primitive `orderofbattle`'s `fall_back_at` writes,
     `hierarchy/units.py::Order`) AND the order's own mark `conceded` (which `fall_back_at` and a DG-2 withdrawal do not set):
     once THIS subunit is down to FRAC of its starting troops it turns and gives ground. A
@@ -209,17 +209,17 @@ def _retreat_orders(retreat_at):
 
 
 def _weighted_unit(name, weight, morale_start=_MORALE_START_BASE, troops_per_weight=1, role=None, retreat_at=None):
-    """One `Unit`, one `Subunit`, sized by `troops=` (the Jordan-directed continuous-scale field,
+    """One `Army`, one `Unit`, sized by `troops=` (the Jordan-directed continuous-scale field,
     `hierarchy/units.py`: "when `troops` is set the footprint is generated from (troops,
     concentration) ... `tier` becomes vestigial") rather than by `tier`'s fixed lookup table.
 
-    `_MVP_SUBUNIT_SHAPE`'s `tier=2` is still passed because `Subunit.__post_init__` requires SOME
+    `_MVP_SUBUNIT_SHAPE`'s `tier=2` is still passed because `Unit.__post_init__` requires SOME
     tier even in continuous mode; it is inert here (troops overrides it). `concentration` is set
     to `config.CELL_CAP` -- pack as densely as the engine allows before it would open a second
     cell, the smallest-footprint reading available and not a claim about real troop density.
     `morale_start` is `_morale_start`'s value for this side (the base when omitted); `morale` starts
-    equal to it, and the Subunit sets neither, so its `eff_morale` falls through to the Unit's.
-    Every other Subunit/Unit field is the non-canonical inherited default of the pre-port adapter, carried
+    equal to it, and the Unit sets neither, so its `eff_morale` falls through to the Army's.
+    Every other Unit/Army field is the non-canonical inherited default of the pre-port adapter, carried
     via `_MVP_SUBUNIT_SHAPE`/`_MVP_UNIT_COMMAND`.
 
     REM-32: `troops_per_weight` is the weight -> troops SCALE, handed in on the record (`MassBattleInput.
@@ -229,23 +229,23 @@ def _weighted_unit(name, weight, morale_start=_MORALE_START_BASE, troops_per_wei
 
     CP-T04-02: `role`, the side's standing order (`_role_fields`); `None` is the side as it was. CP-T04-03: `retreat_at`,
     the order's second key (`_retreat_orders`); `None` or `'none'` is the side as it was."""
-    sub = Subunit(**{**_MVP_SUBUNIT_SHAPE, **_role_fields(role)}, orders=_retreat_orders(retreat_at),
+    sub = Unit(**{**_MVP_SUBUNIT_SHAPE, **_role_fields(role)}, orders=_retreat_orders(retreat_at),
                   troops=max(float(weight) * troops_per_weight, _MIN_TROOPS), concentration=float(CELL_CAP))
-    return Unit(name=name, faction=name, power=_SEASON_FORCE_POWER, **_MVP_UNIT_COMMAND,
+    return Army(name=name, faction=name, power=_SEASON_FORCE_POWER, **_MVP_UNIT_COMMAND,
                 morale=morale_start, morale_start=morale_start,
-                subunits=[sub])
+                units=[sub])
 
 
-#: CP-T04-01 (`H-359`): the two shapes a headcount side takes, the fixture `field_subunits`' closed set. `side` is the
+#: CP-T04-01 (`H-359`): the two shapes a headcount side takes, the fixture `field_units`' closed set. `side` is the
 #: side as it was, ONE subunit sized by Σ weight; `person` is one subunit per commanding person, sized by his own weight.
 SUBUNIT_ARMS = ('side', 'person')
 
 
-class _PersonSubunit(Subunit):
-    """A `Subunit` that remembers WHEN it broke, for the field's cause (CP-T04-01). `routed` is a plain bool on the
-    engine's `Subunit` and the engine records no order of breaking; this subclass logs the person onto `broke_log` the
-    first time the flag is set while the Unit around it is still standing, i.e. when the SUBUNIT broke on its own
-    account (its morale reached 0, or it fell below `SUBUNIT_ROUT_FLOOR`), not when `Unit.derive_rout` or
+class _PersonSubunit(Unit):
+    """A `Unit` that remembers WHEN it broke, for the field's cause (CP-T04-01). `routed` is a plain bool on the
+    engine's `Unit` and the engine records no order of breaking; this subclass logs the person onto `broke_log` the
+    first time the flag is set while the Army around it is still standing, i.e. when the SUBUNIT broke on its own
+    account (its morale reached 0, or it fell below `UNIT_ROUT_FLOOR`), not when `Army.derive_rout` or
     `recalc_size` routed the whole body and swept every subunit after it. It changes no value the engine reads."""
     person = None
     broke_log = None
@@ -265,12 +265,12 @@ class _PersonSubunit(Subunit):
 
 def _person_unit(name, weights, members, morale_start=_MORALE_START_BASE, troops_per_weight=1, fed=None, role=None,
                  retreat_at=None):
-    """CP-T04-01: the `person` arm of a headcount side -- ONE `Unit`, ONE `Subunit` PER COMMANDING PERSON, each sized by
+    """CP-T04-01: the `person` arm of a headcount side -- ONE `Army`, ONE `Unit` PER COMMANDING PERSON, each sized by
     that person's own `weight * troops_per_weight` (REM-32's scale, floored at `_MIN_TROOPS` as `_weighted_unit` floors
     the side). `fed`, when the host provisioned the field (v9 IN-52), is the side's fielded troops standing in for
     Σ weight: it is spread over the persons in proportion to their weights, so the side's total is what it was. Every
-    subunit has `_weighted_unit`'s shape and the Unit its command and morale; the engine's `separate_all_bodies`
-    deploys them clear of each other. Returns `(unit, broke_log)`; `broke_log` is the persons whose subunits broke,
+    subunit has `_weighted_unit`'s shape and the Army its command and morale; the engine's `separate_all_bodies`
+    deploys them clear of each other. Returns `(unit, broke_log)`; `broke_log` is the persons whose units broke,
     in the order they broke. CP-T04-02: `role`, the side's standing order, is every subunit's (`_role_fields`).
     CP-T04-03: so is `retreat_at` (`_retreat_orders`): each subunit retreats on its OWN strength."""
     total = float(sum(weights))
@@ -283,8 +283,8 @@ def _person_unit(name, weights, members, morale_start=_MORALE_START_BASE, troops
                              concentration=float(CELL_CAP))
         sub.person, sub.broke_log = pid, log
         subs.append(sub)
-    unit = Unit(name=name, faction=name, power=_SEASON_FORCE_POWER, **_MVP_UNIT_COMMAND,
-                morale=morale_start, morale_start=morale_start, subunits=subs)
+    unit = Army(name=name, faction=name, power=_SEASON_FORCE_POWER, **_MVP_UNIT_COMMAND,
+                morale=morale_start, morale_start=morale_start, units=subs)
     return unit, log
 
 
@@ -295,7 +295,7 @@ def _person_report(units, members, logs):
     that side, `None` where none broke on its own account."""
     out = {}
     for unit, pids in zip(units, members):
-        for sub, pid in zip(unit.subunits, pids):
+        for sub, pid in zip(unit.units, pids):
             out[pid] = (sub.cur_troops / max(1.0, sub._start_troops), bool(sub.routed))
     return {'subunits': out, 'broke_first': tuple(log[0] if log else None for log in logs)}
 
@@ -304,13 +304,13 @@ def _person_report(units, members, logs):
 #: stand-in for `_MVP_SUBUNIT_SHAPE`'s bare 'infantry' (which has no stat preset): one line of light infantry, sized by
 #: the side's headcount. NOT `levy`, though a levy is what a side that raised nothing could call up: measured at 300 a
 #: side over twelve seeds, a levy line closes to contact in 0 of them and every other infantry or mounted type in 11-12
-#: (`Unit` discipline 1), so a levy fallback would make a field against a headcount side a standing-still draw. [ASSUMPTION; medium; Jordan to correct -- ED-IN-0306 phase 5 gives every faction a real
+#: (`Army` discipline 1), so a levy fallback would make a field against a headcount side a standing-still draw. [ASSUMPTION; medium; Jordan to correct -- ED-IN-0306 phase 5 gives every faction a real
 #: preset order of battle, after which this fallback is reached only by a hand-built record.]
 _HEADCOUNT_LINE_TYPE = 'light_infantry'
 
 
 def _oob_unit(oob, weight, side, morale_start):
-    """The Unit for a side when the field carries orders of battle (ED-IN-0306). `oob` None -> a single
+    """The Army for a side when the field carries orders of battle (ED-IN-0306). `oob` None -> a single
     `_HEADCOUNT_LINE_TYPE` `UnitRow`, so both sides deploy by the same rule. Its size is the most the side's
     `weight` could put under arms, `under_arms_cap(weight)` (`troop_types/recruitment.py`), NOT the bare weight:
     an order of battle counts troops (a weight-12 cohort raises up to 120) and a season weight counts households,
@@ -339,15 +339,15 @@ def _run_and_grade(unit_a, unit_b, terrain, rng, walls_dr=None, by_troops=False,
     FOREST_BROKEN's speed half is INERT -- `run_battle` never reads `.speed` (only
     `orchestration.pursuit_damage` and `run_multi_unit_battle` do, and neither is reachable from here).
     WALLS (plan position `20-iv`, the garrisoned march target) adds `terrain.WALLS_DEFENDER_DR` to the
-    DEFENDER's `dr`, read live at every melee and rout hit (`eff_dr` falls through to the Unit;
+    DEFENDER's `dr`, read live at every melee and rout hit (`eff_dr` falls through to the Army;
     `h_per_size`, the one field derived from `dr` at construction, has no reader), so mutating it here is
     the same in-place shape the speed half uses. WALLS' other clauses, "no flanking; Slow cannot
     advance", are NOT applied: this engine's one-subunit season units have no flank or advance order to
     forbid. UPHILL and RIVER_CROSSING (MB-05) are dice rows: their A.9 dice go onto
-    `Unit.terrain_off_d`/`terrain_def_d` (`terrain.py`'s constants, which say how a die reaches the
+    `Army.terrain_off_d`/`terrain_def_d` (`terrain.py`'s constants, which say how a die reaches the
     engine -- `config.SIGMA_PER_D`, calibrated debt); RIVER_CROSSING also steps the crosser one
     `SPEED_TIERS` slower (inert, as forest's is). NARROW_PASS is identified and NOT applied, and it is
-    not a deferral: "1 engagement per side; Fibonacci impossible" restricts how many subunits engage and
+    not a deferral: "1 engagement per side; Fibonacci impossible" restricts how many units engage and
     the Concentration tactic, and a season unit is ONE subunit with no tactic -- both clauses already
     hold on every field this function fights, so applying them would change nothing. DEGREE: the bands
     below are the bespoke survivor-ratio thresholds carried over from the pre-port adapter, not
@@ -377,7 +377,7 @@ def _run_and_grade(unit_a, unit_b, terrain, rng, walls_dr=None, by_troops=False,
 
     with rngsource.using(rng):
         # [canonical: mass_battle_v30.md §A.7 — 18-tick battle (3 phases x 6), the canon engine's own default]
-        run_battle(unit_a, unit_b, max_turns=18)
+        run_battle(unit_a, unit_b, max_ticks=18)
 
     graded = _grade(unit_a, unit_b, by_troops)
     if persons is not None:
@@ -424,7 +424,7 @@ def _grade(unit_a, unit_b, by_troops=False):
 
 def resolve_field(inp, rng=None, *, troops_a=None, troops_b=None):
     """THE SEASON-FACING ENTRY POINT, AND THE `mass_battle` MODULE'S ENTRY (A-25, plan position `31c`) --
-    `04 §C.5.1`'s roster contract, reconciled with this module's OWN requirement for a `Unit` to hand
+    `04 §C.5.1`'s roster contract, reconciled with this module's OWN requirement for an `Army` to hand
     `run_battle`.
 
     THE ENTRY. The composition row `mass_battle.resolve_field` (`references/module_contracts.yaml`,
@@ -439,11 +439,11 @@ def resolve_field(inp, rng=None, *, troops_a=None, troops_b=None):
 
     §C.5.1: *"units = PersonId[] at weight — one type. There is NO unit class, at any scale."* The
     record's `weights` are each side's `Person.weight`s (`state/carriers.py`: "A COHORT IS A PERSON AT
-    weight > 1"); no `Unit`/`Faction`-shaped object crosses this boundary. Internally, `run_battle` still
-    needs a `Unit` -- that requirement does not go away because the caller's contract changed -- and
+    weight > 1"); no `Army`/`Faction`-shaped object crosses this boundary. Internally, `run_battle` still
+    needs an `Army` -- that requirement does not go away because the caller's contract changed -- and
     headcount is a SIZE fact, not a quality one (see `_weighted_unit` and `_SEASON_FORCE_POWER`'s note). "No unit
     class, at any scale" is honoured at the SEAM this function's signature draws; it does not reach inside an
-    adapter whose whole job is to become a `Unit` for the engine that only speaks one.
+    adapter whose whole job is to become an `Army` for the engine that only speaks one.
 
     ⚠ **AN EMPTY DEFENDING SIDE gets `_MIN_TROOPS`' crash-avoidance floor, not an invented auto-win.**
     What an empty defending force MEANS is eligibility policy for whichever verb calls this (open,
@@ -455,7 +455,7 @@ def resolve_field(inp, rng=None, *, troops_a=None, troops_b=None):
     and this function does not invent the missing conversion.
 
     THE RECORD'S FIELDS (plan position `20-iv` and after), each a plain value the host read off the world:
-      `weights` -- `(attacker, defender)`, each side's member weights, SUMMED here into its Unit's troops.
+      `weights` -- `(attacker, defender)`, each side's member weights, SUMMED here into its Army's troops.
       `territory`, `fort_level` -- the geography territory id of the place fought over and its
           fortification (`world_q.fortification_of`, `[0.0, 1.0]`), turned into ONE A.9 row by
           `terrain_row_for_territory` and applied in `_run_and_grade`. The second side is the DEFENDER,
@@ -479,7 +479,7 @@ def resolve_field(inp, rng=None, *, troops_a=None, troops_b=None):
 
     v9 IN-52 (the levy-to-field feed): `troops_a`/`troops_b` are each side's FIELDED troops when the host
     provisioned the field (`settlements.provision`, read by the adapter), `None` -- the default -- meaning
-    the side's Σ weight, the field before the feed. They size the Unit in the weight's place and nothing
+    the side's Σ weight, the field before the feed. They size the Army in the weight's place and nothing
     else; `_MIN_TROOPS`' floor still applies, so an unprovisioned side (`0`) fields the crash floor.
 
     REM-32: `inp.troops_per_weight` multiplies whatever stands in the weight's place -- Σ weight or the fed
@@ -487,17 +487,17 @@ def resolve_field(inp, rng=None, *, troops_a=None, troops_b=None):
     only (`_weighted_unit`), so only on a field where NEITHER side holds an order of battle. A side with one is sized
     by that order's own headcounts, and the headcount side facing it by `under_arms_cap`: the scale touches neither.
 
-    CP-T04-01 (`H-359`): `inp.subunits` is the `field_subunits` fixture. `side`, shipped, is the side as it was. `person`
+    CP-T04-01 (`H-359`): `inp.units` is the `field_units` fixture. `side`, shipped, is the side as it was. `person`
     builds a headcount side as one subunit per member of `inp.members` (`_person_unit`) and the return then carries each
     person's survivor ratio and rout and the person who broke first on each side (`_person_report`); a side that holds an
-    order of battle, or faces one, is unchanged by it (its subunits are the order's, not persons').
+    order of battle, or faces one, is unchanged by it (its units are the order's, not persons').
 
     CP-T04-02 (`H-361`): `inp.orders` is `(attacker, defender)`, each a record with `role` (a `ROLE_SPEC` name) and
     `retreat_at`, or `None`. A side's `role` is the shape and instruction package of every subunit of its headcount line,
-    on either `subunits` arm (`_role_fields`); a side with `None` is the line it always was, so no order held is today's
+    on either `units` arm (`_role_fields`); a side with `None` is the line it always was, so no order held is today's
     field. A side that holds an army's order of battle, or faces one, fights as that order says and an order of battle
-    here is not read. CP-T04-03: a side's `retreat_at` is each of its headcount line's subunits' `own_strength` retreat Order
-    (`_retreat_orders`), on either `subunits` arm; `'none'`, or no order, is no Order. `_grade` reads the side's concession.
+    here is not read. CP-T04-03: a side's `retreat_at` is each of its headcount line's units' `own_strength` retreat Order
+    (`_retreat_orders`), on either `units` arm; `'none'`, or no order, is no Order. `_grade` reads the side's concession.
 
     Returns exactly what `_run_and_grade` returns."""
     weight_a, weight_b = (sum(side) for side in inp.weights)
@@ -517,10 +517,10 @@ def resolve_field(inp, rng=None, *, troops_a=None, troops_b=None):
     role_b = None if order_b is None else order_b.role
     retreat_a = None if order_a is None else order_a.retreat_at
     retreat_b = None if order_b is None else order_b.retreat_at
-    if inp.subunits not in SUBUNIT_ARMS:
-        raise ValueError(f"field_subunits {inp.subunits!r} is not one of {SUBUNIT_ARMS}")
+    if inp.units not in SUBUNIT_ARMS:
+        raise ValueError(f"field_units {inp.units!r} is not one of {SUBUNIT_ARMS}")
     persons = None
-    if not armies and inp.subunits == 'person':
+    if not armies and inp.units == 'person':
         # CP-T04-01: one subunit per commanding person. `members` is `weights`' own order, so zip pairs a person with
         # his weight. A provisioned side (`troops_a`/`troops_b`) is spread over its persons by weight.
         unit_a, log_a = _person_unit("side_a", inp.weights[0], inp.members[0], morale_a, inp.troops_per_weight,

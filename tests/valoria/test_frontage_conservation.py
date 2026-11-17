@@ -174,7 +174,7 @@ def test_field_pairs_carry_continuous_frontage(field_path):
 
     _orch.resolve_engagements_cascading = _spy
     try:
-        _orch.run_battle(a, b, max_turns=18)
+        _orch.run_battle(a, b, max_ticks=18)
     finally:
         _orch.resolve_engagements_cascading = real
     assert seen_front, "field pairs did not carry a_front/b_front -> Stage D not wired"
@@ -197,7 +197,7 @@ def test_conservation_under_continuous_frontage(field_path, seed):
     random.seed(seed)
     a = build_unit('Line', 3, 'A', 'A', 9)
     b = build_unit('Line', 3, 'B', 'B', 9)
-    _orch.run_battle(a, b, max_turns=18)
+    _orch.run_battle(a, b, max_ticks=18)
     checked = assert_troop_conservation(a, b, context=f"seed={seed}")
     assert checked >= 2, f"seed={seed}: conservation checked {checked} units, expected both"
 
@@ -211,7 +211,7 @@ def test_determinism_same_seed(field_path):
         random.seed(555)
         a = build_unit('Line', 3, 'A', 'A', 9)
         b = build_unit('Line', 3, 'B', 'B', 9)
-        res = _orch.run_battle(a, b, max_turns=18)
+        res = _orch.run_battle(a, b, max_ticks=18)
         return (res['winner'], res['turns'], round(a.hp, 6), round(b.hp, 6))
 
     assert _run() == _run()

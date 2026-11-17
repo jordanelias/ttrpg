@@ -232,13 +232,13 @@ class MassBattleInput:
       * `loyalty_gain` -- the `field_morale_loyalty_gain` fixture (`H-148`'s site); `0` is the control,
                        battle history only;
       * `troops_per_weight` -- REM-32: the `field_troops_per_weight` fixture (`H-250`), the scale from a side's
-                       weight to its Unit's troops on the headcount path (`massbattle._weighted_unit`). `1`, the
+                       weight to its Army's troops on the headcount path (`massbattle._weighted_unit`). `1`, the
                        default, is `troops = weight`: the field as it was. The host always passes the fixture;
                        the default is the identity of the multiplication, not a value for the scale;
       * `members`   -- CP-T04-01: `(attacker, defender)`, each a tuple of person ids, ONE PER ENTRY OF `weights`, in the
                        same order (`field_input` filters both by the same test). Read only on the `person` arm;
                        `((), ())`, the default, names nobody;
-      * `subunits`  -- CP-T04-01: the `field_subunits` fixture (`H-359`), `side` or `person`. `side`, the default, is
+      * `units`  -- CP-T04-01: the `field_units` fixture (`H-359`), `side` or `person`. `side`, the default, is
                        the side as it was: one subunit sized by Σ weight. `person` is one subunit per member;
       * `orders`    -- CP-T04-02 (`H-361`): `(attacker, defender)`, each a `FieldOrder` or `None`, the standing order
                        `field_input` read for that side (the `standing_order` Record its faction's seat holds
@@ -265,7 +265,7 @@ class MassBattleInput:
     orders_of_battle: Optional[tuple] = None
     troops_per_weight: float = 1
     members: tuple = ((), ())
-    subunits: str = "side"
+    units: str = "side"
     orders: Optional[tuple] = None
 
 

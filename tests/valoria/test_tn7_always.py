@@ -278,7 +278,7 @@ def test_the_hand_rolled_scan_actually_reaches_a_hand_roller():
     its own — `f = rngsource.get().randint(1, 10)` at resolution.py:50, the canonical
     pool-roller every non-volley MB resolution calls through — which is the live example that
     keeps this honest. `units.py` was the anchor until ED-MB-0057's re-adjudicated disposition
-    deleted `Subunit.resolve_internal_collisions` (its only hand-rolled d10, zero call sites
+    deleted `Unit.resolve_internal_collisions` (its only hand-rolled d10, zero call sites
     since 2026-05-29) at plan position `11`, 2026-09-29 — re-pointed here rather than left
     naming a file the scan can no longer reach. Note orchestration.py is deliberately NOT the
     anchor either: ED-MB-0066 removed its hand-rolled volley loop, which is exactly the outcome
